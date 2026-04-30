@@ -82,7 +82,7 @@ class RegistryMergeTests(unittest.TestCase):
             ],
             "high_signal_claims": [
                 {"section": "folding", "score": 9, "label": "a"},
-                {"section": "spg", "score": 2, "label": "b"},
+                {"section": "spg", "score": 2, "label": "b", "snippet": "x" * 1000},
             ],
             "existing_distillation_claims": [
                 {"section": "recursive_addressing", "score": 8, "label": "x"},
@@ -109,6 +109,10 @@ class RegistryMergeTests(unittest.TestCase):
             ["physical_spacetime_skeleton", "spg"],
         )
         self.assertEqual(compact["high_signal_claims"][0]["section"], "spg")
+        self.assertLessEqual(
+            len(compact["high_signal_claims"][0]["snippet"]),
+            distill.ORACLE_EVIDENCE_SNIPPET_CHARS + 3,
+        )
         self.assertEqual(
             compact["existing_distillation_claims"][0]["section"],
             "physical_spacetime_skeleton",

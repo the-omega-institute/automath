@@ -108,16 +108,17 @@ SEMANTIC_SCAN_CONTEXT_CHARS = 4500
 SEMANTIC_SCAN_ACCEPT_THRESHOLD = 0.55
 GLOBAL_EVIDENCE_MAX_CLAIMS = 80
 GLOBAL_EVIDENCE_MAX_INTERFACES = 50
-ORACLE_EVIDENCE_MAX_SECTION_INDEX = 12
-ORACLE_EVIDENCE_MAX_CLAIMS = 8
-ORACLE_EVIDENCE_MAX_EXISTING = 6
-ORACLE_EVIDENCE_MAX_INTERFACES = 6
-ORACLE_EVIDENCE_MAX_MEMORY = 4
+ORACLE_EVIDENCE_MAX_SECTION_INDEX = 6
+ORACLE_EVIDENCE_MAX_CLAIMS = 4
+ORACLE_EVIDENCE_MAX_EXISTING = 3
+ORACLE_EVIDENCE_MAX_INTERFACES = 3
+ORACLE_EVIDENCE_MAX_MEMORY = 3
 ORACLE_SECTION_CONTEXT_CHARS = 40000
 ORACLE_DEEPENING_SECTION_CONTEXT_CHARS = int(
-    os.environ.get("ORACLE_DEEPENING_SECTION_CONTEXT_CHARS", "8000")
+    os.environ.get("ORACLE_DEEPENING_SECTION_CONTEXT_CHARS", "3000")
 )
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
+ORACLE_EVIDENCE_SNIPPET_CHARS = int(os.environ.get("ORACLE_EVIDENCE_SNIPPET_CHARS", "240"))
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
@@ -3337,6 +3338,43 @@ def _global_evidence_for_state(state: DistillState) -> dict[str, Any]:
     return pack
 
 
+def _prompt_snippet(text: Any, max_chars: int) -> str:
+    """Return a compact single-string prompt snippet."""
+    value = str(text or "").strip()
+    if len(value) <= max_chars:
+        return value
+    return value[:max_chars].rstrip() + "..."
+
+
+def _oracle_compact_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep only target-routing fields needed by the browser Oracle prompt."""
+    compact: dict[str, Any] = {}
+    for key in ("section", "tex_file", "type", "label", "term", "score", "python_score"):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    matched_terms = _unique_strings(row.get("matched_terms", []))[:6]
+    if matched_terms:
+        compact["matched_terms"] = matched_terms
+    snippet = _prompt_snippet(row.get("snippet", ""), ORACLE_EVIDENCE_SNIPPET_CHARS)
+    if snippet:
+        compact["snippet"] = snippet
+    return compact
+
+
+def _oracle_compact_section_index_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep section-index rows short enough for ChatGPT browser injection."""
+    compact: dict[str, Any] = {}
+    for key in ("section", "best_file", "python_score", "coverage"):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    triggers = _unique_strings(row.get("unique_triggers", []))[:6]
+    if triggers:
+        compact["unique_triggers"] = triggers
+    return compact
+
+
 def _oracle_relevant_evidence_pack(
     global_evidence_pack: dict[str, Any],
     focused_family: Optional[dict[str, Any]],
@@ -3363,7 +3401,7 @@ def _oracle_relevant_evidence_pack(
     def _trim_rows(key: str, limit: int) -> list[dict[str, Any]]:
         rows = [row for row in global_evidence_pack.get(key, []) if isinstance(row, dict)]
         rows.sort(key=_row_rank, reverse=True)
-        return rows[:limit]
+        return [_oracle_compact_evidence_row(row) for row in rows[:limit]]
 
     section_index = [row for row in global_evidence_pack.get("section_index", []) if isinstance(row, dict)]
     section_index.sort(
@@ -3383,7 +3421,10 @@ def _oracle_relevant_evidence_pack(
             {
                 "name": str(item.get("name", "")).strip(),
                 "target_sections": _unique_strings(item.get("target_sections", [])),
-                "key_results": _unique_strings(item.get("key_results", []))[:3],
+                "key_results": [
+                    _prompt_snippet(result, 220)
+                    for result in _unique_strings(item.get("key_results", []))[:3]
+                ],
             }
         )
 
@@ -3401,7 +3442,10 @@ def _oracle_relevant_evidence_pack(
         "terms": _unique_strings(global_evidence_pack.get("terms", []))[:20],
         "focused_target_sections": sorted(target_sections),
         "source_theorem_families": theorem_families[:8],
-        "section_index": section_index[:ORACLE_EVIDENCE_MAX_SECTION_INDEX],
+        "section_index": [
+            _oracle_compact_section_index_row(row)
+            for row in section_index[:ORACLE_EVIDENCE_MAX_SECTION_INDEX]
+        ],
         "high_signal_claims": _trim_rows("high_signal_claims", ORACLE_EVIDENCE_MAX_CLAIMS),
         "existing_distillation_claims": _trim_rows(
             "existing_distillation_claims",
@@ -3411,7 +3455,18 @@ def _oracle_relevant_evidence_pack(
             "frontier_interfaces",
             ORACLE_EVIDENCE_MAX_INTERFACES,
         ),
-        "distillation_memory": memory_rows[:ORACLE_EVIDENCE_MAX_MEMORY],
+        "distillation_memory": [
+            {
+                "id": str(row.get("id", "")).strip(),
+                "kind": str(row.get("kind", "")).strip(),
+                "status": str(row.get("status", "")).strip(),
+                "title": _prompt_snippet(row.get("title", ""), 160),
+                "target_sections": _unique_strings(row.get("target_sections", [])),
+                "reason": _prompt_snippet(row.get("reason", ""), 240),
+                "reuse_guidance": _prompt_snippet(row.get("reuse_guidance", ""), 240),
+            }
+            for row in memory_rows[:ORACLE_EVIDENCE_MAX_MEMORY]
+        ],
     }
 
 
