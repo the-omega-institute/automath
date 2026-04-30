@@ -123,6 +123,7 @@ import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.HDQCD1EdgeFromChi2
 import Omega.Zeta.DefectEntropySchurConcavity
 import Omega.Zeta.XiQ5UnsolvableByRadicals
+import Omega.Zeta.XiQ5GaloisS5
 import Omega.Zeta.XiTimePart69SameExponentialRateInfiniteMixingFamily
 import Omega.Zeta.XiTimePart69FiniteCharacterPrimeLedgerFiniteDepth
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
@@ -1426,6 +1427,7 @@ import Omega.Zeta.XiLissajousCyclicOrbitAliasLattice
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
 import Omega.Zeta.XiTwoParamDisjointnessResultantIntegerFibonacci
 import Omega.Zeta.XiTwoParamDisjointnessSpectrumDisjointness
+import Omega.Zeta.XiTwoParameterMinimalComplexMomentRigidity
 import Omega.Zeta.XiTimePart60ab2StableSpectrumSelfreciprocalCenter
 import Omega.Zeta.XiTimePart60ab2StableSpectrumFourierPhaseLocking
 import Omega.Zeta.XiTimePart60ab2ExactDarkModeArithmeticCriterion
