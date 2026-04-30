@@ -1642,6 +1642,49 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  locally introduced in the statement.",
             ]
         )
+    if family_slug == "sum_product_obstruction_classification":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has repeatedly failed when ordinary finite-ring,",
+                "  denominator, CRT, orbit-stabilizer, injectivity, or Kneser-style",
+                "  observations were relabeled as Bourgain sum-product content.",
+                "  Do not output such writebacks.",
+                "- Output at most 1-2 writebacks. Prefer one locally anchored result",
+                "  with a genuine growth lower bound or a genuine arithmetic",
+                "  obstruction over broad target coverage.",
+                "- A valid writeback must contain a nontrivial sum-product statement:",
+                "  either an explicit finite-field/finite-ring growth alternative",
+                "  of the form |A+A|+|A\\cdot A| >= |A|^{1+epsilon} under stated",
+                "  non-subfield/non-subring hypotheses, or a structural obstruction",
+                "  that uses the target's specific arithmetic carrier and proves why",
+                "  simultaneous additive and multiplicative stability forces that",
+                "  carrier into a named proper subring, quotient, representation",
+                "  block, or denominator class.",
+                "- The proof must use both addition and multiplication in an essential",
+                "  way. Reject yourself if the argument would remain true after",
+                "  deleting multiplication, after replacing multiplication by an",
+                "  arbitrary second operation, or if it only says that a finite set",
+                "  closed under ring operations generates a finite subring.",
+                "- Do not target the Fibonacci congruence file unless the snippet",
+                "  constructs an intrinsic local ring/finite-field projection from",
+                "  the supplied context. The monoid quotient D/\\equiv \\cong \\NN is",
+                "  not by itself a sum-product carrier.",
+                "- In the Z_34 representation target, do not identify real rotation",
+                "  planes with complex characters without handling conjugate pairs.",
+                "  Tensor products of real planes must account for both i+j and i-j",
+                "  escape indices, or the result must avoid character-product claims.",
+                "- In the zeta/Serrin flux target, denominator clearing or factorization",
+                "  through a finite residue map is not enough. The statement must use",
+                "  an analytic or arithmetic property visible in the local context,",
+                "  not merely the fact that rational coordinates have finite",
+                "  denominators.",
+                "- If no supplied target supports a genuine statement of this kind,",
+                "  return a single narrow conditional lemma whose hypotheses explicitly",
+                "  introduce the finite arithmetic carrier and the non-subring",
+                "  condition; do not overstate it as an intrinsic Omega theorem.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(

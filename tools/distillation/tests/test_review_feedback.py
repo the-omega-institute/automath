@@ -76,6 +76,15 @@ class ReviewFeedbackTests(unittest.TestCase):
         self.assertIn("Packet terminology is ungrounded", block)
         self.assertIn("Define packet in target vocabulary", block)
 
+    def test_sum_product_family_contract_rejects_tautological_obstructions(self):
+        contract = distill._family_specific_deepening_contract(
+            {"name": "sum-product obstruction classification"}
+        )
+
+        self.assertIn("nontrivial sum-product statement", contract)
+        self.assertIn("finite set", contract)
+        self.assertIn("Z_34", contract)
+
 
 if __name__ == "__main__":
     unittest.main()
