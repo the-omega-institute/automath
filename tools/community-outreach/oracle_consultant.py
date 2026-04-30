@@ -37,6 +37,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import os
 import re
 import subprocess
 import sys
@@ -45,7 +46,7 @@ import urllib.request
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Callable, Iterable, Optional
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 # OUTREACH-SPECIFIC: separate server (port 8766) from the paper-pipeline oracle (8765).
@@ -54,6 +55,7 @@ ORACLE_SERVER = "http://localhost:8766"
 TARGETS_DIR = REPO_ROOT / "tools/community-outreach/targets"
 ORACLE_LOGS_DIR = REPO_ROOT / "tools/community-outreach/logs/oracle"
 STATE_DIR = REPO_ROOT / "tools/community-outreach/outreach_state"
+COMMUNITY_PROMPTS_DIR = REPO_ROOT / "tools/community-outreach/prompts"
 DEFAULT_TIMEOUT = 7200  # 2 hours; ChatGPT Pro thinking can run 60+ min
 DEFAULT_POLL_INTERVAL = 30
 DEFAULT_WRITE_PAPER_LATEX_PROMPT = r"""You have reached a substantive result. Now write the full paper as LaTeX.
@@ -72,6 +74,10 @@ Length target: 8-15 pages. No outline-only content.
 # Reuse the dispatch board parser
 sys.path.insert(0, str(Path(__file__).parent))
 from dispatch_worktree import parse_board, BOARD_PATH_DEFAULT, TodoSpec  # noqa: E402
+
+_DISTILL_LOG_DIR = None
+_distill_codex_exec = None
+_CODEX_EXEC_IMPORT_ERROR = None
 
 
 # ---------------------------------------------------------------------------
@@ -542,6 +548,7 @@ class OracleConsultant:
     def deep_reasoning(self, todo: TodoSpec, initial_prompt: str, *,
                        max_turns: int = 10,
                        follow_up_prompts: Optional[list[str]] = None,
+                       prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None = None,
                        per_turn_timeout: int = DEFAULT_TIMEOUT,
                        stop_breakthrough_re: str = r"\bBREAKTHROUGH\b|\bPROVED\b|\bQ\.E\.D\.?\b",
                        stop_stuck_re: str = r"\bSTUCK\b|\bdead end\b|\bcannot proceed\b",
@@ -567,7 +574,7 @@ class OracleConsultant:
         Returns dict:
           {
             'todo_id', 'conversation_id', 'chatgpt_url',
-            'turns': [ {turn, prompt, response, response_chars, elapsed_seconds, error} ],
+            'turns': [ {turn, prompt, prompt_source, response, response_chars, elapsed_seconds, error} ],
             'final_verdict': 'BREAKTHROUGH' | 'STUCK' | 'EXHAUSTED' | 'FAILED',
             'total_elapsed_seconds', 'stopped_at_turn',
           }
@@ -599,7 +606,9 @@ class OracleConsultant:
         stop_stuck = re.compile(stop_stuck_re, re.IGNORECASE)
         verdict = "EXHAUSTED"
         total_start = time.time()
+        previous_response_text = ""
         for turn_idx in range(max_turns):
+            prompt_source = "initial"
             if turn_idx == 0:
                 prompt = initial_prompt
                 review = self._submit_turn(initial_prompt, conversation_id="",
@@ -607,7 +616,23 @@ class OracleConsultant:
             else:
                 # Rotate through follow-up prompts; cycle if max_turns > prompts
                 fup_idx = (turn_idx - 1) % len(follow_up_prompts)
-                prompt = follow_up_prompts[fup_idx]
+                template_prompt = follow_up_prompts[fup_idx]
+                prompt = template_prompt
+                prompt_source = "template"
+                if prompt_generator is not None:
+                    try:
+                        generated = (prompt_generator(turn_idx, previous_response_text, turns, todo)
+                                     or "").strip()
+                    except Exception:
+                        generated = ""
+                    fallback_prompt = DEFAULT_DEEPENING_PROMPTS[
+                        (turn_idx - 1) % len(DEFAULT_DEEPENING_PROMPTS)
+                    ]
+                    if generated == fallback_prompt:
+                        prompt = generated
+                    elif generated and generated != template_prompt:
+                        prompt = generated
+                        prompt_source = "codex_driven"
                 review = self._submit_turn(prompt, conversation_id=conversation_id,
                                            todo=todo, timeout=per_turn_timeout)
             if not conversation_id and review.conversation_id:
@@ -623,6 +648,7 @@ class OracleConsultant:
                 "elapsed_seconds": review.elapsed_seconds,
                 "task_id": review.task_id,
                 "error": review.error or "",
+                "prompt_source": prompt_source,
             }
             turns.append(turn_record)
             # Read actual response text (we wrote it to disk; cheaper than passing around)
@@ -631,6 +657,7 @@ class OracleConsultant:
                                  if review.response_log_path else "")
             except Exception:
                 response_text = ""
+            previous_response_text = response_text
             if review.error:
                 verdict = "FAILED"
                 break
@@ -666,6 +693,7 @@ class OracleConsultant:
                 "task_id": terminal_review.task_id,
                 "error": terminal_review.error or "",
                 "terminal": "WRITE_PAPER_LATEX",
+                "prompt_source": "terminal",
             })
             try:
                 terminal_response = (
@@ -914,6 +942,206 @@ DEFAULT_DEEPENING_PROMPTS: list[str] = [
 ]
 
 
+OMEGA_CAPABILITIES_BLURB = (
+    "Lean 4 mathlib formalization, ETDS/JFM-grade analytic proofs, "
+    "numerical verification scripts, oracle-driven research cycles."
+)
+
+
+def _fallback_deepening_prompt(turn: int) -> str:
+    return DEFAULT_DEEPENING_PROMPTS[(turn - 1) % len(DEFAULT_DEEPENING_PROMPTS)]
+
+
+def _load_distill_codex_exec() -> bool:
+    global _DISTILL_LOG_DIR, _distill_codex_exec, _CODEX_EXEC_IMPORT_ERROR
+    if _distill_codex_exec is not None:
+        return True
+    if _CODEX_EXEC_IMPORT_ERROR is not None:
+        return False
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    try:
+        from tools.distillation.distill import LOG_DIR as distill_log_dir  # noqa: PLC0415
+        from tools.distillation.distill import codex_exec as distill_codex_exec  # noqa: PLC0415
+    except Exception as exc:  # noqa: BLE001
+        _CODEX_EXEC_IMPORT_ERROR = exc
+        return False
+    _DISTILL_LOG_DIR = distill_log_dir
+    _distill_codex_exec = distill_codex_exec
+    return True
+
+
+def _compact_excerpt(text: str, limit: int) -> str:
+    squashed = re.sub(r"\s+", " ", text or "").strip()
+    if len(squashed) <= limit:
+        return squashed
+    return squashed[: max(0, limit - 3)].rstrip() + "..."
+
+
+def _turn_response_text(turn: dict) -> str:
+    response = str(turn.get("response", "") or "")
+    if response:
+        try:
+            path = Path(response)
+            if path.exists() and path.is_file():
+                return path.read_text(encoding="utf-8", errors="replace")
+        except (OSError, ValueError):
+            return response
+        except Exception:
+            return ""
+    return response
+
+
+def _prior_turns_summary(all_turns: list[dict], *, limit: int = 2000) -> str:
+    parts: list[str] = []
+    for idx, turn in enumerate(all_turns):
+        turn_no = turn.get("turn", idx)
+        prompt = _compact_excerpt(str(turn.get("prompt", "") or ""), 200)
+        response = _compact_excerpt(_turn_response_text(turn), 300)
+        parts.append(f"T{turn_no} prompt: {prompt} -> response: {response}")
+    summary = " | ".join(parts)
+    return _compact_excerpt(summary, limit) or "(no prior turns)"
+
+
+def _read_distill_codex_artifact(log_tag: str, suffix: str) -> str:
+    if _DISTILL_LOG_DIR is None:
+        return ""
+    codex_dir = Path(_DISTILL_LOG_DIR) / "codex"
+    matches = sorted(
+        codex_dir.glob(f"{log_tag}_*.{suffix}"),
+        key=lambda p: p.stat().st_mtime if p.exists() else 0,
+        reverse=True,
+    )
+    if not matches:
+        return ""
+    try:
+        return matches[0].read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return ""
+
+
+def _write_codex_driver_log(
+    *,
+    log_path: Path,
+    log_tag: str,
+    prompt: str,
+    parsed_output: str,
+    error: str = "",
+) -> None:
+    stdout = _read_distill_codex_artifact(log_tag, "stdout.jsonl")
+    stderr = _read_distill_codex_artifact(log_tag, "stderr.txt")
+    out_file = _read_distill_codex_artifact(log_tag, "out.txt")
+    sections = [
+        f"log_tag: {log_tag}",
+        f"created_at: {datetime.now(timezone.utc).isoformat(timespec='seconds')}",
+        "",
+        "=== prompt ===",
+        prompt,
+        "",
+        "=== codex_exec parsed output ===",
+        parsed_output,
+        "",
+        "=== stdout.jsonl ===",
+        stdout,
+        "",
+        "=== stderr.txt ===",
+        stderr,
+        "",
+        "=== output.txt ===",
+        out_file,
+    ]
+    if error:
+        sections.extend(["", "=== error ===", error])
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text("\n".join(sections).rstrip() + "\n", encoding="utf-8")
+
+
+def _normalize_codex_followup(text: str) -> str:
+    cleaned = (text or "").strip()
+    cleaned = re.sub(r"^```(?:text)?\s*|\s*```$", "", cleaned, flags=re.IGNORECASE).strip()
+    cleaned = re.sub(r"(?i)^\s*(?:question|follow-up question)\s*:\s*", "", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned[:1200].strip()
+
+
+def codex_driven_prompt_generator(turn: int, last_response: str, all_turns: list[dict],
+                                   todo: TodoSpec, *, timeout_s: int = 300) -> str:
+    """Spawn codex CLI to read transcript + last oracle response, return next deepening prompt.
+
+    Imports tools.distillation.distill.codex_exec — uses its JSONL fallback + process
+    tree cleanup. Returns a single-line/short paragraph follow-up question.
+    Falls back to DEFAULT_DEEPENING_PROMPTS[(turn-1) % 10] on codex failure/empty/timeout.
+    """
+    fallback = _fallback_deepening_prompt(turn)
+    task_id = f"{_safe_outreach_slug(todo.slug())}_turn{turn}_{int(time.time() * 1000)}"
+    log_path = ORACLE_LOGS_DIR / f"codex_driver_{task_id}.txt"
+    template_path = COMMUNITY_PROMPTS_DIR / "codex_driver_followup.txt"
+
+    try:
+        template = template_path.read_text(encoding="utf-8")
+    except Exception as exc:  # noqa: BLE001
+        _write_codex_driver_log(
+            log_path=log_path,
+            log_tag=f"community_followup_{task_id}",
+            prompt=f"(failed to load template {template_path})",
+            parsed_output="",
+            error=str(exc),
+        )
+        return fallback
+
+    prompt = template.format(
+        turn_number=str(turn),
+        problem_statement=_compact_excerpt(todo.statement or todo.title or "", 4000),
+        prior_turns_summary=_prior_turns_summary(all_turns, limit=2000),
+        last_oracle_response=_compact_excerpt(last_response, 6000),
+        omega_capabilities=OMEGA_CAPABILITIES_BLURB,
+    )
+    log_tag = f"community_followup_{task_id}"
+
+    if not _load_distill_codex_exec():
+        _write_codex_driver_log(
+            log_path=log_path,
+            log_tag=log_tag,
+            prompt=prompt,
+            parsed_output="",
+            error=f"codex_exec import failed: {_CODEX_EXEC_IMPORT_ERROR}",
+        )
+        return fallback
+
+    try:
+        assert _distill_codex_exec is not None
+        output = _distill_codex_exec(
+            prompt,
+            work_dir=REPO_ROOT,
+            timeout_seconds=timeout_s,
+            log_tag=log_tag,
+        )
+    except Exception as exc:  # noqa: BLE001
+        _write_codex_driver_log(
+            log_path=log_path,
+            log_tag=log_tag,
+            prompt=prompt,
+            parsed_output="",
+            error=str(exc),
+        )
+        return fallback
+
+    _write_codex_driver_log(
+        log_path=log_path,
+        log_tag=log_tag,
+        prompt=prompt,
+        parsed_output=output,
+    )
+
+    followup = _normalize_codex_followup(output)
+    if (not followup
+        or followup.startswith("(codex-exec-failed")
+        or followup.startswith("(start-failed)")
+        or followup.startswith("(dry run")):
+        return fallback
+    return followup
+
+
 class _PromptHolder:
     """Internal: lets `deep_reasoning` reuse `review`-style submit logic with raw prompt."""
     def __init__(self, prompt: str):
@@ -1022,6 +1250,178 @@ def generate_outreach_paper(
     if _has_cjk(polished):
         raise ValueError(f"codex polish did not enforce English/no-Chinese policy: {path}")
     return path
+
+
+_PROGRAM_BOARD_JOURNAL_EXPAND = {
+    "ergodic th. dyn. sys.": "Ergodic Theory and Dynamical Systems",
+    "etds": "Ergodic Theory and Dynamical Systems",
+    "ann. pure appl. logic": "Annals of Pure and Applied Logic",
+    "apal": "Annals of Pure and Applied Logic",
+    "trans. ams": "Transactions of the American Mathematical Society",
+    "j. funct. anal.": "Journal of Functional Analysis",
+    "jfa": "Journal of Functional Analysis",
+    "j. spectral theory": "Journal of Spectral Theory",
+    "dynamical systems": "Ergodic Theory and Dynamical Systems",
+    "imrn": "International Mathematics Research Notices",
+}
+
+
+def _normalize_program_board_journal(raw: str) -> str:
+    journal = re.sub(r"\*+", "", raw or "").strip().strip("`")
+    if not journal or journal == "—":
+        return ""
+    return _PROGRAM_BOARD_JOURNAL_EXPAND.get(journal.lower(), journal)
+
+
+def _target_journal_from_program_board(paper_dir: Path, *, repo_root: Path = REPO_ROOT) -> str:
+    board = repo_root / "papers/publication/PROGRAM_BOARD.md"
+    if not board.exists():
+        return ""
+    try:
+        text = board.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return ""
+
+    slug = paper_dir.name
+    slug_norm = re.sub(r"[^a-z0-9]+", "_", slug.lower()).strip("_")
+    for line in text.splitlines():
+        if "|" not in line or "`" not in line:
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 2:
+            continue
+        dir_name = cells[0].strip().strip("`")
+        dir_norm = re.sub(r"[^a-z0-9]+", "_", dir_name.lower()).strip("_")
+        if not dir_norm:
+            continue
+        if dir_name == slug or dir_norm == slug_norm or dir_norm in slug_norm or slug_norm in dir_norm:
+            return _normalize_program_board_journal(cells[1])
+    return ""
+
+
+def _newest_pdf_in_paper_dir(paper_dir: Path) -> Path | None:
+    candidates: list[Path] = []
+    candidates.extend(p for p in paper_dir.glob("*.pdf") if p.is_file())
+    build_dir = paper_dir / "build"
+    if build_dir.exists():
+        candidates.extend(p for p in build_dir.rglob("*.pdf") if p.is_file())
+    if not candidates:
+        return None
+    return max(candidates, key=lambda p: p.stat().st_mtime)
+
+
+def _parse_pipeline_stages(stdout: str) -> list[str]:
+    seen: list[str] = []
+    for match in re.finditer(r"\b(?:STAGE|Stage)\s+([FABCD])\b", stdout or ""):
+        stage = match.group(1).upper()
+        if stage not in seen:
+            seen.append(stage)
+    return seen
+
+
+def _timeout_text(value: object) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return str(value)
+
+
+def run_paper_pipeline(paper_dir: Path, *,
+                       target_journal: str | None = None,
+                       repo_root: Path = REPO_ROOT,
+                       log_dir: Path | None = None,
+                       continuous: bool = False) -> dict:
+    """Spawn `python3 tools/chatgpt-oracle/oracle_pipeline.py --paper <paper_dir>`.
+
+    - Pulls target_journal from PROGRAM_BOARD.md if not provided; falls back to
+      "arXiv preprint" with ETDS-style profile.
+    - Captures stdout/stderr to log_dir/<slug>.{out,err}.log.
+    - Returns:
+      {"paper_dir": str, "pdf_path": str, "pipeline_log": str,
+       "stages_completed": list[str], "exit_code": int, "error": str}
+    - Default continuous=False so pipeline stops at first user-gate (no auto-publish).
+    - Times out at 6 hours.
+    """
+    root = Path(repo_root)
+    paper_path = Path(paper_dir)
+    if not paper_path.is_absolute():
+        paper_path = root / paper_path
+    slug = _safe_outreach_slug(paper_path.name)
+    logs = log_dir or (root / "tools/community-outreach/logs/ship_paper")
+    logs.mkdir(parents=True, exist_ok=True)
+    out_log = logs / f"{slug}.out.log"
+    err_log = logs / f"{slug}.err.log"
+
+    journal = target_journal or _target_journal_from_program_board(paper_path, repo_root=root)
+    if not journal:
+        journal = "arXiv preprint"
+
+    pipeline_script = root / "tools/chatgpt-oracle/oracle_pipeline.py"
+    cmd = [
+        "python3",
+        str(pipeline_script),
+        "--paper",
+        str(paper_path),
+        "--target-journal",
+        journal,
+    ]
+    if continuous:
+        cmd.append("--continuous")
+    else:
+        cmd.extend(["--stop-after", "A"])
+
+    env = os.environ.copy()
+    env.setdefault("ORACLE_PAPER_TIME_BUDGET_HOURS", "6")
+
+    exit_code = 0
+    error = ""
+    stdout = ""
+    stderr = ""
+    try:
+        completed = subprocess.run(
+            cmd,
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=6 * 60 * 60,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+            env=env,
+        )
+        exit_code = completed.returncode
+        stdout = completed.stdout or ""
+        stderr = completed.stderr or ""
+        if completed.returncode != 0:
+            detail = (stderr or stdout).strip()
+            error = f"oracle_pipeline.py exited rc={completed.returncode}: {detail[:1200]}"
+    except subprocess.TimeoutExpired as exc:
+        exit_code = -9
+        stdout = _timeout_text(exc.stdout)
+        stderr = _timeout_text(exc.stderr)
+        error = "oracle_pipeline.py timed out after 21600s"
+    except Exception as exc:  # noqa: BLE001
+        exit_code = -1
+        error = str(exc)
+
+    out_log.write_text(stdout, encoding="utf-8")
+    err_log.write_text(stderr, encoding="utf-8")
+
+    pdf = _newest_pdf_in_paper_dir(paper_path)
+    pdf_path = str(pdf) if pdf else ""
+    if not pdf_path:
+        missing = "no PDF found in paper_dir or paper_dir/build"
+        error = f"{error}; {missing}" if error else missing
+
+    return {
+        "paper_dir": str(paper_path),
+        "pdf_path": pdf_path,
+        "pipeline_log": str(out_log),
+        "stages_completed": _parse_pipeline_stages(stdout),
+        "exit_code": exit_code,
+        "error": error,
+    }
 
 
 def build_paper_digest(

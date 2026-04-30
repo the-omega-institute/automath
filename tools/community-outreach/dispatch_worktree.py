@@ -962,7 +962,8 @@ def _run_oracle_review(todo: TodoSpec, profile, *, repo_root: Path, oracle_timeo
 
 def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
                      state_dir: Path, oracle_timeout: int, max_turns: int,
-                     write_latex: bool) -> dict | None:
+                     write_latex: bool, codex_driver: bool = False,
+                     ship_paper: bool = False) -> dict | None:
     """Stage B-oracle-deep: multi-turn deep-reasoning loop (oracle as primary worker).
 
     Builds the initial framing prompt from the TODO's research.md (if present)
@@ -973,6 +974,9 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
         from oracle_consultant import (  # noqa: PLC0415
             DEFAULT_WRITE_PAPER_LATEX_PROMPT,
             OracleConsultant,
+            codex_driven_prompt_generator,
+            generate_outreach_paper,
+            run_paper_pipeline,
         )
     except Exception as exc:  # noqa: BLE001
         print(f"[oracle-deep] import failed: {exc}", file=sys.stderr)
@@ -989,10 +993,11 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
     print(f"[oracle-deep] dispatching {todo.todo_id} max_turns={max_turns} "
           f"per-turn-timeout={oracle_timeout}s; this can take up to "
           f"{max_turns} × {oracle_timeout}s = {max_turns * oracle_timeout // 60}min "
-          f"write_latex={write_latex}")
+          f"write_latex={write_latex} codex_driver={codex_driver}")
     run = consultant.deep_reasoning(
         todo, initial,
         max_turns=max_turns,
+        prompt_generator=codex_driven_prompt_generator if codex_driver else None,
         per_turn_timeout=oracle_timeout,
         terminal_prompt=DEFAULT_WRITE_PAPER_LATEX_PROMPT if write_latex else None,
         slug=profile.slug,
@@ -1004,7 +1009,100 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
         print(f"[oracle-deep] LaTeX saved: {run['latex_path']}")
     elif run.get("terminal_latex_error"):
         print(f"[oracle-deep] LaTeX not saved: {run['terminal_latex_error']}", file=sys.stderr)
+    if write_latex and ship_paper:
+        latex_path = run.get("latex_path") or ""
+        if not latex_path:
+            print("[ship-paper] skipped: no LaTeX path from oracle deep run", file=sys.stderr)
+        else:
+            try:
+                polished = generate_outreach_paper(Path(latex_path))
+                paper_result = run_paper_pipeline(
+                    polished.parent,
+                    log_dir=repo_root / "tools/community-outreach/logs/ship_paper",
+                )
+                run["paper_pipeline"] = paper_result
+                _persist_ship_paper_result(
+                    state_dir=state_dir,
+                    slug=profile.slug,
+                    result=paper_result,
+                )
+                if paper_result.get("pdf_path") and paper_result.get("exit_code") == 0:
+                    _append_outreach_log_transition(
+                        repo_root=repo_root,
+                        slug=profile.slug,
+                        result=paper_result,
+                    )
+                print(f"[ship-paper] pipeline rc={paper_result['exit_code']} "
+                      f"pdf={paper_result.get('pdf_path','') or '(none)'}")
+            except Exception as exc:  # noqa: BLE001
+                paper_result = {
+                    "paper_dir": str(Path(latex_path).parent),
+                    "pdf_path": "",
+                    "pipeline_log": "",
+                    "stages_completed": [],
+                    "exit_code": -1,
+                    "error": str(exc),
+                }
+                run["paper_pipeline"] = paper_result
+                _persist_ship_paper_result(
+                    state_dir=state_dir,
+                    slug=profile.slug,
+                    result=paper_result,
+                )
+                print(f"[ship-paper] failed: {exc}", file=sys.stderr)
     return run
+
+
+def _persist_ship_paper_result(*, state_dir: Path, slug: str, result: dict) -> None:
+    state_dir.mkdir(parents=True, exist_ok=True)
+    path = state_dir / f"{slug}.json"
+    try:
+        state = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    except json.JSONDecodeError:
+        state = {}
+    state["outreach_paper_pdf"] = result.get("pdf_path", "")
+    state["paper_pipeline_log"] = result.get("pipeline_log", "")
+    state["paper_pipeline_exit_code"] = result.get("exit_code", -1)
+    state["paper_pipeline_error"] = result.get("error", "")
+    state["paper_pipeline_stages_completed"] = result.get("stages_completed", [])
+    history = state.setdefault("action_history", [])
+    if isinstance(history, list):
+        history.append({
+            "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "stage": "ship-paper",
+            "round": 0,
+            "action": "oracle paper pipeline",
+            "detail": (f"rc={result.get('exit_code', -1)} "
+                       f"pdf={result.get('pdf_path', '')} "
+                       f"log={result.get('pipeline_log', '')}"),
+        })
+    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8")
+
+
+def _append_outreach_log_transition(*, repo_root: Path, slug: str, result: dict) -> None:
+    pdf_path = result.get("pdf_path", "") or ""
+    pdf_size = 0
+    if pdf_path:
+        try:
+            pdf_size = Path(pdf_path).stat().st_size
+        except OSError:
+            pdf_size = 0
+    timestamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    entry = (f"- {timestamp} {slug}: paper_drafted -> paper_pdf_ready "
+             f"(pdf={pdf_path}, size={pdf_size}B)")
+    log_path = repo_root / "tools/community-outreach/OUTREACH_LOG.md"
+    if log_path.exists():
+        text = log_path.read_text(encoding="utf-8")
+    else:
+        text = "# Automath Outreach Log\n"
+    if not text.strip():
+        text = "# Automath Outreach Log\n"
+    if "## Status Transitions" in text:
+        text = text.rstrip() + "\n" + entry + "\n"
+    else:
+        text = text.rstrip() + "\n\n## Status Transitions\n\n" + entry + "\n"
+    log_path.write_text(text, encoding="utf-8")
 
 
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str) -> str:
@@ -1070,6 +1168,8 @@ def supervise_board(
     oracle_deep: bool = False,
     oracle_max_turns: int = 10,
     write_latex: bool = False,
+    codex_driver: bool = False,
+    ship_paper: bool = False,
 ) -> int:
     todos = parse_board(board_path)
     if not todos:
@@ -1138,6 +1238,8 @@ def supervise_board(
                 state_dir=state_dir,
                 oracle_timeout=oracle_timeout, max_turns=oracle_max_turns,
                 write_latex=write_latex,
+                codex_driver=codex_driver,
+                ship_paper=ship_paper,
             )
             if deep_run is not None:
                 analysis["oracle_deep"] = deep_run
@@ -1248,6 +1350,12 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--write-latex", action="store_true",
                         help="With --oracle-deep or --oracle-discover-then-deep, send the terminal "
                              "WRITE_PAPER_LATEX turn after BREAKTHROUGH and save theory/2026_outreach_<slug>/main.tex.")
+    parser.add_argument("--codex-driver", action="store_true",
+                        help="Use codex to generate each follow-up prompt instead of templated rotation. "
+                             "Each turn ~30-60s extra latency.")
+    parser.add_argument("--ship-paper", action="store_true",
+                        help="With --oracle-deep and --write-latex, polish the saved LaTeX and run the "
+                             "paper pipeline to the first user gate.")
     parser.add_argument("--oracle-max-turns", type=int, default=10,
                         help="With --oracle-deep, max rounds of deepening (default 10)")
     parser.add_argument("--oracle-timeout", type=int, default=7200,
@@ -1312,6 +1420,8 @@ def main(argv: Iterable[str] | None = None) -> int:
                 oracle_deep=True,
                 oracle_max_turns=args.oracle_max_turns,
                 write_latex=args.write_latex,
+                codex_driver=args.codex_driver,
+                ship_paper=args.ship_paper,
             )
         return 0
 
@@ -1332,6 +1442,8 @@ def main(argv: Iterable[str] | None = None) -> int:
             oracle_deep=args.oracle_deep,
             oracle_max_turns=args.oracle_max_turns,
             write_latex=args.write_latex,
+            codex_driver=args.codex_driver,
+            ship_paper=args.ship_paper,
         )
 
     if args.list or not args.todo_id:
