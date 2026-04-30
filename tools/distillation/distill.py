@@ -1724,6 +1724,31 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  of construction/rigidity separation.",
             ]
         )
+    if family_slug == "descent_to_closure_theorem_chains":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has failed when the same Cech/descent dichotomy was",
+                "  repeated in multiple target files. Output at most 1-2 writebacks,",
+                "  and each writeback must add a distinct mathematical mechanism.",
+                "- Do not target conclusion unless the result strictly strengthens an",
+                "  existing conclusion theorem. Rephrasing an existing phase-channel",
+                "  crowding lower bound in descent language is not enough.",
+                "- A valid descent-to-closure theorem must include one concrete",
+                "  descent datum, one closure or cocycle compatibility condition,",
+                "  and one non-tautological consequence: a glueability criterion,",
+                "  obstruction witness, base-change stability implication, or",
+                "  certificate-survival statement.",
+                "- Avoid broad slogans such as closure chain, universal invariant, or",
+                "  descent obstruction unless the finite carrier, cover, transition",
+                "  maps, and obstruction class are all locally defined.",
+                "- Do not introduce blank lines inside display math. In particular,",
+                "  keep definitions such as \\widetilde N_\\alpha := b_\\alpha^{-1}N_\\alpha",
+                "  on contiguous display lines.",
+                "- Prefer a short proposition with a real proof over a multi-file batch",
+                "  of parallel Cech dichotomies.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(

@@ -132,6 +132,15 @@ class ReviewFeedbackTests(unittest.TestCase):
         self.assertIn("register-cardinality lower bound", contract)
         self.assertIn("infinite-budget leak", contract)
 
+    def test_descent_family_contract_rejects_duplicate_cech_dichotomies(self):
+        contract = distill._family_specific_deepening_contract(
+            {"name": "descent-to-closure theorem chains"}
+        )
+
+        self.assertIn("same Cech/descent dichotomy", contract)
+        self.assertIn("Do not target conclusion", contract)
+        self.assertIn("blank lines inside display math", contract)
+
 
 if __name__ == "__main__":
     unittest.main()
