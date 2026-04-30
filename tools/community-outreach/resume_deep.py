@@ -88,6 +88,17 @@ def main():
     p.add_argument("--max-turns", type=int, default=8)
     p.add_argument("--per-turn-timeout", type=int, default=7200)
     p.add_argument("--board", default=str(REPO_ROOT / "tools/community-outreach/RESEARCH_BOARD.md"))
+    p.add_argument("--write-latex", action="store_true",
+                   help="If any prior turn already contains BREAKTHROUGH (per fixed "
+                        "regex), skip the deep loop entirely and just send the "
+                        "WRITE_PAPER_LATEX terminal turn. Saves the result to "
+                        "theory/2026_outreach_<slug>/main.tex.")
+    p.add_argument("--polish", action="store_true",
+                   help="With --write-latex, also run codex polish (generate_outreach_paper) "
+                        "after saving the oracle LaTeX.")
+    p.add_argument("--ship-paper", action="store_true",
+                   help="With --write-latex --polish, also drive the polished paper "
+                        "through the full P0-P7 publication pipeline.")
     args = p.parse_args()
 
     sess_path = SESS_DIR / f"{args.conv}.json"
@@ -197,6 +208,81 @@ def main():
         last_response = response
 
     print(f"\n[resume] done. Final turn count: {len(turns)}")
+
+    # --write-latex pipeline: if any prior turn already had BREAKTHROUGH (per
+    # fixed regex), short-circuit further follow-ups and send the
+    # WRITE_PAPER_LATEX terminal turn now to capture the paper draft.
+    if args.write_latex:
+        had_break = any(STOP_BREAKTHROUGH.search(t.get("response","")) for t in turns)
+        if not had_break:
+            print("[write-latex] no BREAKTHROUGH found in any prior turn — skipping LaTeX phase")
+            return 0
+        print("[write-latex] BREAKTHROUGH found; sending WRITE_PAPER_LATEX terminal turn...")
+        terminal_prompt = oc.DEFAULT_WRITE_PAPER_LATEX_PROMPT
+        submit_resp = submit_followup(terminal_prompt, args.conv,
+                                      tag=f"{args.target}:write_latex")
+        if "error" in submit_resp:
+            print(f"[write-latex] submit failed: {submit_resp.get('error')}", file=sys.stderr)
+            return 3
+        task_id = submit_resp.get("task_id","")
+        print(f"[write-latex] submitted {task_id}; polling (timeout={args.per_turn_timeout}s)...")
+        response = oc.oracle_poll(task_id, timeout=args.per_turn_timeout)
+        if not response:
+            print("[write-latex] empty response — Oracle didn't write LaTeX", file=sys.stderr)
+            return 3
+        latex_body, plain_summary = oc.extract_latex_from_response(response)
+        if not latex_body:
+            print("[write-latex] response had no fenced LaTeX block; saving raw response",
+                  file=sys.stderr)
+            print(f"[write-latex] response[:400]: {response[:400]}", file=sys.stderr)
+            return 3
+        slug = oc._safe_outreach_slug(todo.slug())
+        latex_out = oc._outreach_latex_path(slug)
+        latex_out.parent.mkdir(parents=True, exist_ok=True)
+        latex_out.write_text(latex_body, encoding="utf-8")
+        print(f"[write-latex] saved {len(latex_body)} chars → {latex_out}")
+        if plain_summary:
+            (latex_out.parent / "plain_summary.txt").write_text(plain_summary, encoding="utf-8")
+
+        # Persist the terminal turn into session
+        turn_record = {
+            "turn": len(turns) + 1,
+            "task_id": task_id,
+            "prompt": terminal_prompt,
+            "prompt_source": "terminal_write_latex",
+            "response": response,
+            "response_chars": len(response),
+            "completed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        }
+        try:
+            disk_sess = json.loads(sess_path.read_text())
+        except Exception:
+            disk_sess = sess
+        dt = disk_sess.get("turns", []) or []
+        dt.append(turn_record)
+        disk_sess["turns"] = dt
+        sess_path.write_text(json.dumps(disk_sess, indent=2, ensure_ascii=False))
+
+        if args.polish:
+            print(f"[polish] running codex on {latex_out}...")
+            try:
+                oc.generate_outreach_paper(latex_out, timeout=3600)
+                print(f"[polish] done")
+            except Exception as exc:
+                print(f"[polish] failed: {exc}", file=sys.stderr)
+                return 4
+
+        if args.ship_paper and args.polish:
+            print(f"[ship] running paper pipeline on {latex_out.parent}...")
+            try:
+                result = oc.run_paper_pipeline(latex_out.parent)
+                print(f"[ship] exit={result.get('exit_code')} pdf={result.get('pdf_path','')}")
+                if result.get("error"):
+                    print(f"[ship] error: {result['error']}", file=sys.stderr)
+            except Exception as exc:
+                print(f"[ship] failed: {exc}", file=sys.stderr)
+                return 5
+
     return 0
 
 
