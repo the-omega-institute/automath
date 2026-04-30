@@ -1,5 +1,7 @@
 import Omega.Conclusion.BinfoldEscortFullFdivCollapse
 import Omega.Conclusion.DyadicAuditIncompleteZetaEntropyComplete
+import Omega.Conclusion.PrimesliceOptimalImplementationSchurConcavity
+import Omega.Conclusion.LocalizedAdditiveSystemsMaximalOnecircleClass
 import Omega.Conclusion.AnchorResidualPluckerGeometry
 import Omega.Conclusion.BoundaryPrimeTailBlindness
 import Omega.Conclusion.BoundarySolenoidOverBaseRigidity
