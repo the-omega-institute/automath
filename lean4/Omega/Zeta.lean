@@ -3508,3 +3508,5 @@ import Omega.Zeta.XiTimePart9zbbFoldpiGoldenTwoscaleStirling
 import Omega.Zeta.XiReplicaSoftcoreFullSpectrumDirectSum
 import Omega.Zeta.XiFoldbinGaugeConstantRecoversAllBernoulli
 import Omega.Zeta.XiTimePart70abExtremalFibersTerminalBitLocalization
+import Omega.Zeta.XiFibonacciLeyangHaarEquidistribution
+import Omega.Zeta.XiFibonacciLeyangNaturalBoundary
