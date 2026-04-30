@@ -3397,3 +3397,4 @@ import Omega.Zeta.XiZeroTemperatureParryIrreversibleInfiniteEntropyProduction
 import Omega.Zeta.XiExceptionalIntegerModelMqRank1Decomposition
 import Omega.Zeta.XiTimePart9pbBranchLatticeCumulantGevreyOscillation
 import Omega.Zeta.XiS4IsotypicPeriodMapMaximalDegeneration
+import Omega.Zeta.XiRhCriticalBeforeNearestComplexBranch
