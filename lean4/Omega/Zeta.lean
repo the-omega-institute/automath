@@ -3372,3 +3372,4 @@ import Omega.Zeta.XiSymqGoldenCqMod5SecondDifferenceSmith
 import Omega.Zeta.XiFixedFreezingConeEscortRenyiPlateau
 import Omega.Zeta.XiFoldHiddenLogmultiplicityLaplaceCumulantClosed
 import Omega.Zeta.XiTimePart9tFourierTvGapPositiveFloor
+import Omega.Zeta.CyclicLiftResolutionLaw

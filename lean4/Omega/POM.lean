@@ -1470,3 +1470,4 @@ import Omega.POM.CollisionRenyiPerronClosure
 import Omega.POM.AnomAllMomentsCollapseToTwo
 import Omega.POM.FiberLatticeSquarefreePrimeRegisterGcdLcm
 import Omega.POM.AnomTorsionEliminabilityMinOrder
+import Omega.POM.FiberDecompose
