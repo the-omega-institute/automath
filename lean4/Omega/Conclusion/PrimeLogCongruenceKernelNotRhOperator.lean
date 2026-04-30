@@ -12,3 +12,12 @@ theorem paper_conclusion_prime_log_congruence_kernel_not_rh_operator
   exact hmissing (hneeded K hgate)
 
 end Omega.Conclusion
+
+/-- Paper label: `cor:conclusion-prime-log-congruence-kernel-not-rh-operator`. -/
+theorem paper_conclusion_prime_log_congruence_kernel_not_rh_operator
+    (modCountKernel rhTargetOperator centeredPrimeLogPotential : Prop)
+    (hFail : modCountKernel -> ¬ rhTargetOperator)
+    (hPotential : centeredPrimeLogPotential)
+    (hKernel : modCountKernel) :
+    ¬ rhTargetOperator ∧ centeredPrimeLogPotential := by
+  exact ⟨hFail hKernel, hPotential⟩

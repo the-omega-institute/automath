@@ -120,6 +120,7 @@ import Omega.Conclusion.LeyangDoublingSolenoidExtension
 import Omega.Conclusion.LeyangDominantEdgeQuadraticResolventMinus111
 import Omega.Conclusion.TorusExtensionPontryaginClassification
 import Omega.Conclusion.XiDyadicPhaseRegisterLowerBound
+import Omega.Conclusion.VisibleThresholdResonanceCodimOneModel
 import Omega.Conclusion.XiDyadicZeroPhaseDrift
 import Omega.Conclusion.XiDyadicShellEnvelopeLaw
 import Omega.Conclusion.ScaledLawUniqueFromRecoverabilityProfile

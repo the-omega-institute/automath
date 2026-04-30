@@ -122,6 +122,7 @@ import Omega.Zeta.XiEdPlaneQuadraticBirationalEquivalence
 import Omega.Zeta.XiEdResultantRamificationIntrinsic
 import Omega.Zeta.XiPrimeRegisterCanonicalFixedzeroSectionSparsity
 import Omega.Zeta.XiTimePart56SolenoidTerminalPrimeRegisterRecovery
+import Omega.Zeta.XiTimePart9zbjPurePointPoissonJacobiWaveTrace
 import Omega.Zeta.XiPrimeHardcoreGibbsCltT1Explicit
 import Omega.Zeta.XiTimePart9pbRhTransitionAnalyticNotBranch
 import Omega.Zeta.CollisionPressureRationalMonotoneBranch
