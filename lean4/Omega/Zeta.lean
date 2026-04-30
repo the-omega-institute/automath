@@ -1,6 +1,8 @@
 import Omega.Zeta.XiCauchyPoissonKLRenormalizedMonotoneApproach
 import Omega.Zeta.XiTimePart59abResonanceLogderivativeMittagLeffler
 import Omega.Zeta.XiScaleCauchySchwarz
+import Omega.Zeta.XiFdeltaChar31TotalCollapse
+import Omega.Zeta.XiWindow6LRSwapCanonicalCenterMod
 import Omega.Zeta.XiPickPoissonSchurFluxLedger
 import Omega.Zeta.XiDyadicFibonacciCompletionCantorIdempotentSkeleton
 import Omega.Zeta.XiScanToeplitzConditioningBySeparation
