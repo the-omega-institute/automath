@@ -1,6 +1,7 @@
 import Omega.Zeta.XiEndpointFluxComputableByFiniteCMV
 import Omega.Zeta.XiGridScanAliasingThreshold
 import Omega.Zeta.XiBinfoldCapacityAtomicMeasureUniqueRecovery
+import Omega.Zeta.XiJoukowskyCapacityEquilibriumMeasure
 import Omega.Zeta.XiCauchyPoissonKLRenormalizedMonotoneApproach
 import Omega.Zeta.XiTimePart59abResonanceLogderivativeMittagLeffler
 import Omega.Zeta.XiScaleCauchySchwarz
