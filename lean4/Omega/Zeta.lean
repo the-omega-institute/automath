@@ -70,6 +70,7 @@ import Omega.Zeta.XiGaugeVolumeBoltzmannStirlingExponential
 import Omega.Zeta.XiRhCohomologicalReductionHolonomy
 import Omega.Zeta.XiJacobiSturmNestedLocalization
 import Omega.Zeta.XiFiniteTimeNaturalExtensionActiveBranchBudget
+import Omega.Zeta.XiBulkHorizonDefectVisibilityDinf
 import Omega.Zeta.XiLocalizedFinitePrimeAuditExponentialIncompleteness
 import Omega.Zeta.XiHorizonWeightedExplicitFormula
 import Omega.Zeta.XiHorizonUnitarySpectralRealization
@@ -86,6 +87,7 @@ import Omega.Zeta.XiAtomicWittEnergyResidueL2Law
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
 import Omega.Zeta.XiFoldbinFDivergenceTwoPointExperiment
 import Omega.Zeta.XiAsymptoticFDivergenceFunctionalTwoAtomRigidity
+import Omega.Zeta.XiAverageDefectVsPeakIndexBudget
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
 import Omega.Zeta.XiLeyangNormOneUnitExplicit3Torsion
 import Omega.Zeta.XiSymqGoldenCqModPiQuadraticPhaseTransition
