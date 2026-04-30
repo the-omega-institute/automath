@@ -246,6 +246,7 @@ import Omega.Zeta.XiZm4MomentKernelResidueAsymptotics
 import Omega.Zeta.XiWindow6BoundaryParityUniqueMinimalFaithfulQuotient
 import Omega.Zeta.XiTimePart9obEscortQuantilePhaseDiagram
 import Omega.Zeta.CertificateComplexityHyperbolicExponentialLaw
+import Omega.Zeta.XiPoissonCauchyLocationScaleKlSharpM2
 import Omega.Zeta.XiTimePart9zmAmbiguityShellExactMemoryDepth
 import Omega.Zeta.XiTimePart9obEscortTwoSidedLocalKl
 import Omega.Zeta.XiSymqHankelSylvesterBridge
