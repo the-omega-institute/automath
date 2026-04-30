@@ -4,9 +4,13 @@
 
 | Target | Channel | Status | Backflow | Best Score | Last Update |
 |---|---|---|---|---|---|
-| google-deepmind/formal-conjectures | GitHub PR | Stage B (incomplete) | — | manual | 2026-04-18 |
+| google-deepmind/formal-conjectures | GitHub PR | Stage B hold — source/publication gate | — | 3/10 | 2026-04-29 |
+| Erdős #475 / Graham valid orderings | erdosproblems forum/PR (gated) | draft ready, Claude-reviewed — p≤23 certificates verified, p=29 samples 500/500 | — | 8/10 | 2026-04-30 |
+| Erdős #199 / Minimum Overlap | erdosproblems forum/arXiv (gated) | supervised — White-style certificate engine needed | — | 7/10 | 2026-04-30 |
+| OPG Lucas mod m complete residues | OPG/email (gated) | Stage C ready — local verifier m≤100000, 0 mismatches | — | 8/10 | 2026-04-30 |
 | Heath Sanchez | SAIR Zulip | draft ready | — | — | 2026-04-18 |
 | Israel Cazares | SAIR Zulip | draft ready | — | — | 2026-04-19 |
+| Israel (bytepro.ai) — single-prompt ceiling × structural invariants | Email (hello@bytepro.ai) | sent 2026-04-30 — collab proposal + arXiv endorsement ask (math.DS / math.CO / math.LO / cs.AI), reply pending | — | — | 2026-04-30 |
 | Terence Tao | Email | planned wk3-4 | — | — | — |
 
 ## Completed
@@ -45,8 +49,8 @@
 
 | Metric | Value |
 |---|---|
-| Pipeline version | v23 (+ backflow language gate, Claude review integration) |
+| Pipeline version | v23 (+ backflow language gate, Claude review integration, research-board supervisor) |
 | Total submissions | 8 (4 ETP, 1 analysis, 1 automath, 1 mysticflounder, 1 PR) |
 | Backflows to paper | 8 appendix sections |
 | Pending | 1 (c62ec partial, holding) |
-| Active targets | 4 (formal-conjectures, 2 Zulip, Tao email) |
+| Active targets | 7 (formal-conjectures, T-01, T-02, T-08, 2 Zulip, Tao email) |
