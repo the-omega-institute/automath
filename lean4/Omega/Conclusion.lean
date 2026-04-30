@@ -2845,3 +2845,5 @@ import Omega.Conclusion.CoverKernelMinPrimeLedgerSignature
 import Omega.Conclusion.FixedAlphaRenyiEntropyGapSatHard
 import Omega.Conclusion.ValLawvereEquivalenceFirstfitCollapse
 import Omega.Conclusion.XiZeroCertificationLogarithmicDepth
+import Omega.Conclusion.CoprimeResidueFlatnessRigidityCollapse
+import Omega.Conclusion.GodelFilamentConnectedLieBlindness
