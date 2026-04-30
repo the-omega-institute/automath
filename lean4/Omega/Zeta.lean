@@ -1,4 +1,6 @@
 import Omega.Zeta.XiScanToeplitzConditioningBySeparation
+import Omega.Zeta.XiLeyangNearestConjugatePairDiscriminantEstimator
+import Omega.Zeta.XiS4BoundaryVanishingCycleInducedModule
 import Omega.Zeta.XiComovingScanExponentialSpectralSeparation
 import Omega.Zeta.XiBasepointScanPsl2rCovariance
 import Omega.Zeta.XiBernoulliTwoPeriodizationNoLpDensity
