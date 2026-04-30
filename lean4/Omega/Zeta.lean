@@ -2646,6 +2646,7 @@ import Omega.Zeta.XiBasepointScanKernelUniqueness
 import Omega.Zeta.XiScanDensitySpectralShiftPhaseDerivative
 import Omega.Zeta.XiDoubleLogTimeHyperbolicAdditivity
 import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
+import Omega.Zeta.XiBasepointScanInversionUniqueness
 import Omega.Zeta.XiBinomialToeplitzDominantPoleResponse
 import Omega.Zeta.XiBinomialToeplitzTwoEndpointPoleInversion
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
