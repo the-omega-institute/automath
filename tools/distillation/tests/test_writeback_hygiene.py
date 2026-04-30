@@ -52,6 +52,66 @@ class WritebackHygieneTests(unittest.TestCase):
 
         self.assertEqual(errors, [])
 
+    def test_writeback_application_emits_no_pipeline_markers(self):
+        content = r"""
+\begin{lemma}[markerless application]
+\label{lem:distill-hygiene}
+publication body only.
+\end{lemma}
+\begin{proof}
+proof body only.
+\end{proof}
+""".strip()
+
+        plan, errors = distill._plan_writeback_application(
+            [
+                {
+                    "tex_file": "target.tex",
+                    "label": "lem:distill-hygiene",
+                    "content": content,
+                }
+            ]
+        )
+
+        self.assertEqual(errors, [])
+        self.assertEqual(len(plan), 1)
+        self.assertNotIn("Distillation writeback", plan[0]["new_text"])
+
+    def test_writeback_application_replaces_markerless_duplicate_label(self):
+        existing = r"""
+\begin{lemma}[old application]
+\label{lem:distill-hygiene}
+old body.
+\end{lemma}
+\begin{proof}
+old proof.
+\end{proof}
+"""
+        (self.core_body / "target.tex").write_text(existing, encoding="utf-8")
+        content = r"""
+\begin{lemma}[new application]
+\label{lem:distill-hygiene}
+new body.
+\end{lemma}
+\begin{proof}
+new proof.
+\end{proof}
+""".strip()
+
+        plan, errors = distill._plan_writeback_application(
+            [
+                {
+                    "tex_file": "target.tex",
+                    "label": "lem:distill-hygiene",
+                    "content": content,
+                }
+            ]
+        )
+
+        self.assertEqual(errors, [])
+        self.assertNotIn("old body", plan[0]["new_text"])
+        self.assertEqual(plan[0]["new_text"].count("\\label{lem:distill-hygiene}"), 1)
+
     def test_rejects_english_only_main_paper_content(self):
         content = r"""
 \begin{lemma}[Stable restriction]
@@ -135,6 +195,26 @@ The assertion follows by checking every coordinate.
 \begin{proof}
 逐项限制即可。
 \end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertTrue(
+            any("pipeline metadata" in error for error in errors),
+            errors,
+        )
+
+    def test_rejects_pipeline_metadata_distillation_writeback_marker(self):
+        content = r"""
+% --- Distillation writeback ---
+\begin{lemma}[marker]
+\label{lem:distill-hygiene}
+body.
+\end{lemma}
+\begin{proof}
+proof.
+\end{proof}
+% --- End distillation writeback ---
 """.strip()
 
         _, errors = self._validate(content)

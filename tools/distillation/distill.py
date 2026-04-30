@@ -86,6 +86,7 @@ PIPELINE_METADATA_RE = re.compile(
     r"\\textbf\{[^}]*?(?:dependency\s+status|date[- ]?time|"
     r"distillation\s+timestamp|family\s*:)[^}]*\}"
     r"|(?:dependency\s+status|date[- ]?time|distillation\s+timestamp)\s*:"
+    r"|(?:end\s+)?distillation\s+writeback"
     r")"
     r"|\\textbf\{[^}]*?(?:\u4f9d\u8d56\u72b6\u6001|"
     r"\u65e5\u671f\u65f6\u95f4|\u7ed3\u679c\s*[0-9]+)[^}]*\}"
@@ -5205,6 +5206,21 @@ def _remove_conflicting_distill_blocks(text: str, labels: list[str]) -> str:
     return _DISTILL_BLOCK_RE.sub(replace, text)
 
 
+def _remove_conflicting_claim_blocks(text: str, labels: list[str]) -> str:
+    """Remove prior theorem-style blocks carrying incoming labels."""
+    markers = [f"\\label{{{label}}}" for label in labels if label]
+    if not markers:
+        return text
+
+    def replace(match: re.Match[str]) -> str:
+        block = match.group(0)
+        if any(marker in block for marker in markers):
+            return "\n"
+        return block
+
+    return CLAIM_BLOCK_RE.sub(replace, text)
+
+
 def _plan_writeback_application(
     writebacks: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], list[str]]:
@@ -5227,20 +5243,21 @@ def _plan_writeback_application(
             continue
         old_text = read_text(path)
 
-        # Build one distillation block per item so later replacements do not
-        # delete unrelated writebacks in the same file.
+        # Insert only publication text. Source-level pipeline markers are
+        # forbidden by the post-cleanup paper hygiene contract.
         blocks = []
         for item in items:
-            block_lines = ["", "% --- Distillation writeback ---"]
-            block_lines.append(item["content"].strip())
-            block_lines.append("")
-            block_lines.append("% --- End distillation writeback ---")
-            blocks.append("\n".join(block_lines).rstrip())
+            blocks.append(item["content"].strip())
         insert_block = "\n".join(blocks).rstrip() + "\n"
 
-        # Idempotent: only replace blocks containing incoming labels.
+        # Idempotent: remove legacy marked blocks or markerless claim blocks
+        # containing incoming labels before inserting fresh publication text.
         base_text = _remove_conflicting_distill_blocks(
             old_text,
+            [item["label"] for item in items],
+        )
+        base_text = _remove_conflicting_claim_blocks(
+            base_text,
             [item["label"] for item in items],
         )
 
