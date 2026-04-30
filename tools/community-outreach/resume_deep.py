@@ -45,6 +45,42 @@ def submit_followup(prompt: str, conv_id: str, tag: str) -> dict:
     return oc.http_post(f"{oc.ORACLE_SERVER}/submit", body, timeout=10)
 
 
+def fresh_response_from_server(task_id: str, fallback: str = "") -> str:
+    """Pull the latest extracted response for `task_id` from server's result
+    store. Server's /result is more authoritative than the local session JSON,
+    which can lag behind because the userscript may re-extract a previously
+    truncated response after Pro-thinking false-stable triggered an early
+    capture. Use this whenever feeding context to codex.
+    """
+    try:
+        r = oc.http_get(f"{oc.ORACLE_SERVER}/result/{task_id}", timeout=10)
+        if r.get("status") == "completed":
+            text = r.get("response") or ""
+            if text:
+                return text
+    except Exception:
+        pass
+    return fallback
+
+
+def enrich_turns_with_fresh(turns: list[dict]) -> list[dict]:
+    """Return a copy of `turns` with each turn's response replaced by the
+    fresh server-side version (when newer / longer). Does not mutate input.
+    """
+    out = []
+    for t in turns:
+        t2 = dict(t)
+        old = t2.get("response") or ""
+        tid = t2.get("task_id") or ""
+        if tid:
+            fresh = fresh_response_from_server(tid, fallback=old)
+            if len(fresh) > len(old):
+                t2["response"] = fresh
+                t2["response_chars"] = len(fresh)
+        out.append(t2)
+    return out
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--conv", required=True, help="conversation_id of the deep run to resume")
@@ -72,6 +108,13 @@ def main():
     if not consultant.is_alive():
         print(f"ERR: oracle server down at {oc.ORACLE_SERVER}", file=sys.stderr)
         return 2
+
+    # Enrich session turns with fresh server-side response text. Bypasses any
+    # stale truncated-response captures that the userscript may have written
+    # before the Pro-thinking re-extract completed.
+    turns = enrich_turns_with_fresh(turns)
+    for i, t in enumerate(turns, 1):
+        print(f"[resume] turn {i}: {t.get('response_chars',0)} chars (post-enrich)")
 
     last_response = (turns[-1].get("response") or "") if turns else ""
     starting_turn = len(turns) + 1
@@ -106,7 +149,10 @@ def main():
             break
         print(f"[turn {turn_no}] {len(response)} chars received")
 
-        # Append to session
+        # Append to session — reload from disk to pick up any concurrent
+        # server writes (e.g. /done landing for our task), then append our
+        # turn record on top of the fresh disk view. Avoids overwriting
+        # server-side updates we made in parallel.
         turn_record = {
             "turn": turn_no,
             "task_id": task_id,
@@ -116,10 +162,24 @@ def main():
             "response_chars": len(response),
             "completed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         }
-        turns.append(turn_record)
-        sess["turns"] = turns
-        sess_path.write_text(json.dumps(sess, indent=2, ensure_ascii=False))
-        print(f"[turn {turn_no}] session updated → {sess_path.name}")
+        try:
+            disk_sess = json.loads(sess_path.read_text())
+        except Exception:
+            disk_sess = sess  # fallback to in-memory
+        # Dedupe: if disk already has a turn with this task_id, replace; else append.
+        disk_turns = disk_sess.get("turns", []) or []
+        existing_idx = next((i for i, t in enumerate(disk_turns)
+                             if t.get("task_id") == task_id), None)
+        if existing_idx is not None:
+            disk_turns[existing_idx] = turn_record
+        else:
+            disk_turns.append(turn_record)
+        disk_sess["turns"] = disk_turns
+        sess_path.write_text(json.dumps(disk_sess, indent=2, ensure_ascii=False))
+        # Sync our in-memory view from the freshly-written disk state
+        turns = list(disk_turns)
+        sess = disk_sess
+        print(f"[turn {turn_no}] session updated → {sess_path.name} ({len(turns)} turns total)")
 
         # Stop conditions
         if STOP_BREAKTHROUGH.search(response):
