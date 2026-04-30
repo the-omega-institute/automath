@@ -199,6 +199,7 @@ import Omega.Zeta.XiFoldbinFiberWallcrossingRepresentation
 import Omega.Zeta.XiFoldRenyiConstantSpectrumClosedForm
 import Omega.Zeta.XiWindow6ResetGapFibCoupling
 import Omega.Zeta.XiWindow6ResetClockGapFrequencies
+import Omega.Zeta.XiSchurEliminationEntropyPermutationInvariantBottleneck
 import Omega.Zeta.XiWindow6ReciprocalFluxBoson12
 import Omega.Zeta.XiWindow6BoundaryMinimalLinearVisibleDimension
 import Omega.Zeta.XiWindow6PSFaithfulCanonicalDescentUnique
