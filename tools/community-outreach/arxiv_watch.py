@@ -72,6 +72,15 @@ _GENERIC_MATH_TERMS = frozenset({
     "theory", "theoretic", "study", "studies", "result", "results", "method", "methods",
     "approach", "approaches", "model", "models", "version", "versions", "variant",
     "variants", "regime", "regimes",
+    # Expanded after T-19 noise audit (free/game/capture/family etc were
+    # passing the specific-match gate when paired with another generic term).
+    "free", "capture", "game", "games", "family", "families", "function", "functions",
+    "equation", "equations", "space", "spaces", "point", "points", "problem", "problems",
+    "rate", "rates", "growth", "decay", "sum", "sums", "length", "lengths",
+    "distance", "distances", "range", "ranges", "region", "regions", "type", "types",
+    "term", "terms", "value", "values", "size", "sizes", "case", "cases",
+    "form", "forms", "level", "levels", "order", "orders", "class", "classes",
+    "active", "passive", "first", "second", "third", "main", "single",
 })
 
 
@@ -273,14 +282,17 @@ def scan_board(
             continue
         for paper in papers:
             score, matched = keyword_overlap(paper, keywords)
-            # Two acceptance paths:
-            #   A. score >= min_overlap AND has at least one non-generic term.
-            #   B. score == 2 AND a distinctive term is present (auto-promote).
-            if score < 2:
+            # Acceptance rule (post T-19 noise audit):
+            #   - score must meet `min_overlap`
+            #   - matched keywords must include at least one DISTINCTIVE term
+            #     (proper noun OR ≥6 chars AND not in _GENERIC_MATH_TERMS)
+            # Single rule replaces the prior dual-path acceptance, which let
+            # generic-pair matches like ['free','bound'] or ['capture','lower']
+            # leak through when min_overlap was lowered to 2 for Round 1
+            # injection.
+            if score < min_overlap:
                 continue
-            accept_a = score >= min_overlap and has_specific_match(matched)
-            accept_b = score >= 2 and has_distinctive_term(matched)
-            if not (accept_a or accept_b):
+            if not has_distinctive_term(matched):
                 continue
             hits.append(WatchHit(
                 todo_id=tid,
