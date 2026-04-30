@@ -3337,3 +3337,4 @@ import Omega.Zeta.FoldbinRenyi2ProjectionEntropyConstantGap
 import Omega.Zeta.XiTimePart9zbcFoldpiHankelStrictPositivity
 import Omega.Zeta.XiTimePart9zbhaCenteredCompletionCompleteBernsteinRh
 import Omega.Zeta.XiTimePart62dSolenoidKroneckerRoseLissajousLift
+import Omega.Zeta.XiResonancePencilReconstruction

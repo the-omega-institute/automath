@@ -2854,3 +2854,5 @@ import Omega.Conclusion.ValLawvereEquivalenceFirstfitCollapse
 import Omega.Conclusion.XiZeroCertificationLogarithmicDepth
 import Omega.Conclusion.CoprimeResidueFlatnessRigidityCollapse
 import Omega.Conclusion.GodelFilamentConnectedLieBlindness
+import Omega.Conclusion.FiniteStageExactHolographyLimitLearningSplit
+import Omega.Conclusion.MixedHiddenStatePrimeByPrimeMinimalSupport
