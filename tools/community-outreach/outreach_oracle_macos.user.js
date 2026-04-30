@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.3
+// @version      1.4
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -33,7 +33,7 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.3";
+  const SCRIPT_VERSION = "outreach-1.4";
 
   let busy = false;
   // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
@@ -71,33 +71,13 @@
   let panel = null;
   let panelExpanded = false;  // user can click badge to force expand even when paused
 
-  function detectSiblingCorner() {
-    // Walk all fixed-position elements (other than ours). Return "br"/"bl"/
-    // "tr"/"tl" for the corner a sibling occupies, or null. Used to flip our
-    // anchor automatically.
-    try {
-      const fixed = Array.from(document.querySelectorAll("*"))
-        .filter(el => el.id !== "outreach-oracle-panel"
-          && getComputedStyle(el).position === "fixed"
-          && el.offsetWidth >= 60 && el.offsetHeight >= 20
-          && /oracle|bedc|automath|distill/i.test(el.textContent || el.id || ""));
-      if (!fixed.length) return null;
-      const r = fixed[0].getBoundingClientRect();
-      const vw = window.innerWidth, vh = window.innerHeight;
-      const right = (vw - r.right) < (r.left);  // closer to right edge
-      const bottom = (vh - r.bottom) < (r.top);
-      return (bottom ? "b" : "t") + (right ? "r" : "l");
-    } catch { return null; }
-  }
-
+  // v1.4 — sibling-corner detection removed (could hang on huge DOMs and
+  // potentially blocked init in some Tampermonkey contexts). Outreach panel
+  // always docks top-right; BEDC / publication scripts default to bottom-right.
+  // Two scripts in the same tab no longer overlap because the corners differ.
   function preferredCorner() {
-    // If a sibling occupies bottom-right (default), move us to top-right.
-    const siblingCorner = detectSiblingCorner();
-    if (siblingCorner === "br") return { top: "12px", right: "12px", bottom: "auto", left: "auto" };
-    if (siblingCorner === "tr") return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
-    if (siblingCorner === "bl") return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
-    if (siblingCorner === "tl") return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
-    return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
+    // Fixed top-right anchor — distinct from BEDC's bottom-right default.
+    return { top: "12px", right: "12px", bottom: "auto", left: "auto" };
   }
 
   function ensurePanel() {
