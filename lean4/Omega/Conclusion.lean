@@ -3039,3 +3039,5 @@ import Omega.Conclusion.MaxNoncontractibleFiberExponentialRate
 import Omega.Conclusion.Window6GaussianCompatibleOddDecoupling
 import Omega.Conclusion.FiniteModalCollisionEnergyIncompleteness
 import Omega.Conclusion.ThreeEndCertificateOrthotopeRigidity
+import Omega.Conclusion.ZGExactZeroDenseSpectrumCoexistence
+import Omega.Conclusion.ResonanceShellSnfFiniteReconstruction
