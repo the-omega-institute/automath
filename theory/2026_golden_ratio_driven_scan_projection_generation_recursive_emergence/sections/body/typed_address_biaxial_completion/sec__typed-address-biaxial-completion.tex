@@ -97,6 +97,92 @@ G_j:=\sum_{\sigma\in\Sigma_j\setminus X_j}e_{j,\sigma}.
 
 反过来，若某条有限证书链在上述审计语义下首次被拒绝，则存在最小尺度 \(j<J\) 与某个 \(\sigma\in\Sigma_j\)，使拒绝见证属于以下有限类型之一：类型化地址或相位投影不相容；局部门估计失败；某个 sector 或 slab 标签纤维超预算；某个子地址纤维 sticky；某个 prefix/Frostman 测试集超预算；或例外 spill 超出 \(r_j\)。因此，在该有限审计语言内，失败不会以未标记异常出现，而必带有一个可枚举的 typed-address、sector/slab、sticky、Frostman 或 spill 见证。
 \end{theorem}
+
+% --- Distillation writeback ---
+\begin{theorem}[构造尾段不降低刚性秩与终端寄存器下界]\label{distill:bourgain-entropy_increment_closure-construction-tail-rigidity-rank-propagation}
+固定素数 \(p\)，有限维 \(\mathbb F_p\)-向量空间 \(A\)，以及有限链
+\[
+E_i\xleftarrow{\rho_{i+1,i}}E_{i+1}\xleftarrow{}\cdots\xleftarrow{\rho_{N,N-1}}E_N
+\]
+其中每个 \(E_j\) 非空且每个 \(\rho_{j+1,j}\) 满射。设在第 \(i\) 层给定构造 carrier
+\[
+c_i:E_i\longrightarrow C_i
+\]
+与刚性标记
+\[
+\Theta_i:E_i\longrightarrow A.
+\]
+对 \(j\ge i\) 定义
+\[
+\rho_{j,i}:=\rho_{i+1,i}\circ\cdots\circ\rho_{j,j-1},
+\qquad
+c_j:=c_i\circ\rho_{j,i},
+\qquad
+\Theta_j:=\Theta_i\circ\rho_{j,i}.
+\]
+对每个 \(c\in c_i(E_i)\)，任选基点 \(e_c\in E_i\cap c_i^{-1}(c)\)，并任选其一个提升 \(\widetilde e_c\in E_N\) 满足 \(\rho_{N,i}(\widetilde e_c)=e_c\)。定义
+\[
+W_i(c):=\operatorname{Span}_{\mathbb F_p}\{\Theta_i(e)-\Theta_i(e_c):e\in E_i\cap c_i^{-1}(c)\}\subseteq A,
+\]
+\[
+W_N(c):=\operatorname{Span}_{\mathbb F_p}\{\Theta_N(x)-\Theta_N(\widetilde e_c):x\in E_N\cap c_N^{-1}(c)\}\subseteq A.
+\]
+则
+\[
+W_N(c)=W_i(c)
+\qquad(c\in c_i(E_i)).
+\]
+特别地，刚性秩
+\[
+L_i:=\max_{c\in c_i(E_i)}\dim_{\mathbb F_p}W_i(c)
+\]
+在任何只作上述满射构造提升的尾段中不下降。进一步，若存在终端线性寄存器
+\[
+r:E_N\longrightarrow (\mathbb F_p)^B
+\]
+以及线性映射 \(D_c:(\mathbb F_p)^B\to A\)，使得对所有 \(c\in c_i(E_i)\) 与所有 \(x\in E_N\cap c_N^{-1}(c)\) 有
+\[
+\Theta_N(x)-\Theta_N(\widetilde e_c)
+=
+D_c\bigl(r(x)-r(\widetilde e_c)\bigr),
+\]
+则必有
+\[
+B\ge L_i.
+\]
+\end{theorem}
+\begin{proof}
+先证明 \(W_N(c)\subseteq W_i(c)\)。若 \(x\in E_N\cap c_N^{-1}(c)\)，令 \(e:=\rho_{N,i}(x)\)。由 \(c_N=c_i\circ\rho_{N,i}\) 得 \(e\in E_i\cap c_i^{-1}(c)\)。又由 \(\Theta_N=\Theta_i\circ\rho_{N,i}\) 与 \(\rho_{N,i}(\widetilde e_c)=e_c\)，有
+\[
+\Theta_N(x)-\Theta_N(\widetilde e_c)
+=\Theta_i(e)-\Theta_i(e_c),
+\]
+故每个生成元都属于 \(W_i(c)\)。
+
+反向包含由满射性给出。取任意 \(e\in E_i\cap c_i^{-1}(c)\)。由于 \(\rho_{N,i}\) 是满射，存在 \(x\in E_N\) 使 \(\rho_{N,i}(x)=e\)。于是
+\[
+c_N(x)=c_i(\rho_{N,i}(x))=c_i(e)=c,
+\]
+且
+\[
+\Theta_i(e)-\Theta_i(e_c)
+=\Theta_N(x)-\Theta_N(\widetilde e_c).
+\]
+因此 \(W_i(c)\subseteq W_N(c)\)。两边相等成立，取维数最大值得到 \(L_i\) 在构造尾段中不下降。
+
+现在设终端寄存器与线性解码器满足题设等式。对固定 \(c\)，上述等式表明 \(W_N(c)\) 的每个生成元都属于 \(\operatorname{im}D_c\)。故
+\[
+W_i(c)=W_N(c)\subseteq \operatorname{im}D_c.
+\]
+于是
+\[
+\dim_{\mathbb F_p}W_i(c)\le \dim_{\mathbb F_p}\operatorname{im}D_c\le B.
+\]
+对所有 \(c\in c_i(E_i)\) 取最大值，得到 \(B\ge L_i\)。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 对固定尺度 \(j\)，将 \(\mathsf E_{j+1}\) 按父层元素分解，得
 \[

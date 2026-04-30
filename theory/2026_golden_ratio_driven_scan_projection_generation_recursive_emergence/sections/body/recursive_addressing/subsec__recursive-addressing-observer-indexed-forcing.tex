@@ -298,6 +298,62 @@ X\setminus T^{-(t+j)}C_i^{(L)},& a_{j,i}=0.
 \end{enumerate}
 因此，递归地址化中的派生概念先由有限旧层原子构造，再由包含或相交关系进行谓词化；任何 incidence 断言均可回溯到同一张有限 Boolean 账本。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[地址歧义的条件熵降与无界寄存器泄漏]\label{distill:bourgain-entropy_increment_closure-address-ambiguity-entropy-leak}
+固定状态 \(p\) 与已对象化地址 \(a\in A(p)\)。设
+\[
+E\subseteq \Gamma_p(a)
+\]
+为一族有限候选局部截面，\(\mathfrak m\) 为 \(E\) 上满支撑概率测度，\(\rho:E\to Y\) 为当前协议已经登记的有限可见读出。用自然对数定义 Shannon 熵，并记
+\[
+\mathsf H_\rho(E):=H_{\mathfrak m}(E\mid \rho)
+=
+\sum_{y\in\rho(E)}\mathfrak m(\rho^{-1}(y))H(\mathfrak m_y),
+\]
+其中 \(\mathfrak m_y\) 是 \(\rho^{-1}(y)\) 上的条件测度。称有限映射 \(\chi:E\to Z\) 为相对于 \(\rho\) 的授权细化判别器，若其图可由某个共同细化状态 \(q\le p\) 登记，且不改变地址对象 \(a\)。令
+\[
+\rho^\chi:E\longrightarrow Y\times Z,
+\qquad
+\rho^\chi(e):=(\rho(e),\chi(e)).
+\]
+则：
+\begin{enumerate}
+  \item 条件熵满足精确降公式
+  \[
+  \mathsf H_{\rho^\chi}(E)
+  =\mathsf H_\rho(E)-H_{\mathfrak m}(\chi\mid \rho).
+  \]
+  特别地，\(\mathsf H_{\rho^\chi}(E)<\mathsf H_\rho(E)\) 当且仅当存在正 \(\mathfrak m\)-质量的 \(\rho\)-纤维使 \(\chi\) 在其上非常值。
+  \item 若 \(\rho^\chi\) 在 \(\mathfrak m\) 的支撑上为终端读出，即每个正质量 \(\rho^\chi\)-纤维均为单点，则地址 \(a\) 在对应细化状态 \(q\) 上由 \(E\) 给出单值且非 \(\mathsf{NULL}\) 的局部读出证书。
+  \item 设 \((E_N,\mathfrak m_N,\rho_N)_{N\ge0}\) 是同一地址 \(a\) 的一列有限歧义审计，并假设每个授权细化判别器都在每条正 \(\mathfrak m_N\)-质量的 \(\rho_N\)-纤维上为常值。置
+  \[
+  M_N:=\max_{y\in\rho_N(E_N)}\bigl|E_N\cap\rho_N^{-1}(y)\bigr|.
+  \]
+  若 \(\sup_N M_N=\infty\)，则满足如下量化泄漏性质：对每个 \(B\in\NN\)，存在 \(N\) 与一条正质量纤维 \(F\subseteq E_N\)，使得任意 \(|R|\le B\) 的有限寄存器读出 \(r:F\to R\) 都不能把 \(F\) 终端分离。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+因为 \(\chi\) 是 \(E\) 的函数，条件熵链式法则给出
+\[
+H_{\mathfrak m}(E\mid \rho)
+=H_{\mathfrak m}(\chi,E\mid \rho)
+=H_{\mathfrak m}(\chi\mid \rho)+H_{\mathfrak m}(E\mid \rho,\chi).
+\]
+而 \(H_{\mathfrak m}(E\mid \rho,\chi)=\mathsf H_{\rho^\chi}(E)\)，于是得到第一条公式。有限概率空间上，条件熵 \(H_{\mathfrak m}(\chi\mid \rho)\) 为零当且仅当在每条正质量 \(\rho\)-纤维上 \(\chi\) 的条件分布为 Dirac 测度，也即 \(\chi\) 为常值；严格性判据随之成立。
+
+若 \(\rho^\chi\) 的每条正质量纤维均为单点，则每个可见读出值至多对应一个候选局部截面。由于 \(E\subseteq\Gamma_p(a)\)，且 \(q\le p\) 只是在同一地址对象上登记额外判别信息，已存在的局部截面证书不因细化而被撤销。由推论 \ref{cor:observer-indexed-nonnull-criterion}，地址已对象化且存在唯一可核验局部截面时给出非 \(\mathsf{NULL}\) 读出，第二条成立。
+
+对第三条，任取 \(B\in\NN\)。由 \(\sup_N M_N=\infty\)，可取 \(N\) 与 \(y\in\rho_N(E_N)\) 使
+\[
+F:=E_N\cap\rho_N^{-1}(y),
+\qquad |F|>B.
+\]
+若某个 \(|R|\le B\) 的寄存器读出 \(r:F\to R\) 终端分离 \(F\)，则 \(r\) 必须在 \(F\) 上单射；否则两个不同候选截面具有相同寄存器值而仍未被区分。单射性给出 \(|R|\ge |F|>B\)，与 \(|R|\le B\) 矛盾。假设中授权细化判别器均在正质量歧义纤维上为常值，故这类纤维不能通过内部细化产生第一条中的严格熵降。量化泄漏性质得证。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 第一条只是把条件
 \[

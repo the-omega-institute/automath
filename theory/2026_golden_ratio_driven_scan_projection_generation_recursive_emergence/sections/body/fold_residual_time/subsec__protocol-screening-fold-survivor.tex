@@ -136,6 +136,74 @@ r_j:E_j\longrightarrow R\qquad(j\ge0)
 
 因此，若某候选折叠接口在每个有限前缀上都通过同一个 \(B\)-维寄存器筛选，却不存在全深度 \(B\)-寄存器 survivor，则失败不属于有限寄存器 strictification 本身；它必须被记录为额外的 holonomic 闭包条件、粘接条件或协议外提升条件的失败。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[fold-aware 密度增量重构的有限停机]\label{distill:bourgain-entropy_increment_closure-fold-aware-density-increment-stopping}
+设
+\[
+E_0\xleftarrow{\rho_{1,0}}E_1\xleftarrow{\rho_{2,1}}\cdots\xleftarrow{\rho_{J,J-1}}E_J
+\]
+为一列非空有限 active 族，所有 \(\rho_{j+1,j}\) 均为协议登记的 fold-aware 跨分辨率比较映射。对每个 \(j\) 给定密度函数
+\[
+\delta_j:E_j\longrightarrow [0,1]
+\]
+以及终端证书集合 \(\mathsf{Ter}_j\subseteq E_j\)。固定 \(\eta>0\)，并假设如下密度增量备择成立：对任意 \(0\le j<J\) 与任意 \(e\in E_j\setminus\mathsf{Ter}_j\)，存在 \(e'\in\rho_{j+1,j}^{-1}(e)\) 使
+\[
+\delta_{j+1}(e')\ge \delta_j(e)+\eta.
+\]
+则从任意 \(e_0\in E_0\) 出发的任一非终端增量链
+\[
+e_0\xleftarrow{}e_1\xleftarrow{}\cdots\xleftarrow{}e_n,
+\qquad
+\rho_{i+1,i}(e_{i+1})=e_i,\quad e_i\notin\mathsf{Ter}_i\ (0\le i<n),
+\]
+必满足
+\[
+n\le \left\lfloor \frac{1-\delta_0(e_0)}{\eta}\right\rfloor.
+\]
+特别地，若
+\[
+J>\frac{1-\delta_0(e_0)}{\eta},
+\]
+则任何按上述备择递归选择的链在某个深度 \(j\le J\) 命中 \(\mathsf{Ter}_j\)。该终端元素与复合映射 \(\rho_{j,i}\) 共同给出 \(e_0\) 的有限 dyadic reconstruction 证书。
+\end{theorem}
+\begin{proof}
+只需证明非终端链的长度估计。若
+\[
+e_0\xleftarrow{}e_1\xleftarrow{}\cdots\xleftarrow{}e_n
+\]
+在前 \(n\) 步均按密度增量备择选择，则由归纳得
+\[
+\delta_i(e_i)\ge \delta_0(e_0)+i\eta
+\qquad(0\le i\le n).
+\]
+事实上 \(i=0\) 平凡；若结论对 \(i\) 成立且 \(e_i\notin\mathsf{Ter}_i\)，则备择给出所选子元素 \(e_{i+1}\) 满足
+\[
+\delta_{i+1}(e_{i+1})
+\ge \delta_i(e_i)+\eta
+\ge \delta_0(e_0)+(i+1)\eta.
+\]
+由于每个 \(\delta_i\) 的取值均不超过 \(1\)，在 \(i=n\) 得
+\[
+\delta_0(e_0)+n\eta\le 1,
+\]
+即
+\[
+n\le \frac{1-\delta_0(e_0)}{\eta}.
+\]
+取整数部分得到所示估计。
+
+若 \(J>(1-\delta_0(e_0))/\eta\) 而递归选择链在所有深度 \(0,
+\ldots,J\) 均未命中终端证书，则上式应用于 \(n=J\) 给出矛盾，故某个最小深度 \(j\le J\) 满足 \(e_j\in\mathsf{Ter}_j\)。由于所有比较映射均为 fold-aware，复合
+\[
+\rho_{j,i}:=\rho_{i+1,i}\circ\cdots\circ\rho_{j,j-1}
+\qquad(0\le i<j)
+\]
+保留协议登记的跨分辨率语义；终端元素 \(e_j\) 连同这些复合比较关系，正是一份从深层稳定代表回推到 \(e_0\) 的有限重构账本。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 对每个 \(j\)，集合 \(R^{E_j}\) 有限。故乘积
 \[
