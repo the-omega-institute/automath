@@ -305,3 +305,144 @@ D^{(a)}_{n\to m}(\omega)
 \par
 因此在 \(\mathbb Z_2\)-上同调的抽象口径下，“折叠--截断的不交换曲率”与“二进进位缺陷”可视为同一类对象的两种实例：二者均由逐位进位/溢出机制生成，并作为取值于 \(\mathbb Z_2\) 的障碍类刻画跨尺度可交换性的失配。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[有限折叠探针的可表示性、累积曲率与最小 phantom 深度]\label{distill:grothendieck-probe_representability_and_reconstruction-pom-finite-probe-minimal-phantom-depth}
+固定整数 \(N\ge2\) 与 \(\eta\in\Omega_N\)。对 \(1\le m\le N\) 置
+\[
+x_m^\tau(\eta):=\Fold_m(\tau_{N\to m}(\eta)),\qquad
+x_m^{\mathrm{st}}(\eta):=\pi_{N\to m}(\Fold_N(\eta)),
+\]
+其中 \(\pi_{N\to N}:=\operatorname{id}_{X_N}\)。称朴素有限探针锥
+\[
+\mathsf P^\tau_{\le N}(\eta):=(x_m^\tau(\eta))_{1\le m\le N}
+\]
+在第 \(N\) 层可表示，若存在 \(z\in X_N\) 使
+\[
+x_m^\tau(\eta)=\pi_{N\to m}(z)\qquad(1\le m\le N).
+\]
+则成立如下结论。
+\begin{enumerate}
+  \item 可表示时代表元唯一，且只能为 \(z=\Fold_N(\eta)\)。并且
+  \[
+  \mathsf P^\tau_{\le N}(\eta)\text{ 在第 }N\text{ 层可表示}
+  \quad\Longleftrightarrow\quad
+  D_{N\to m}(\eta)=0\quad(1\le m<N).
+  \]
+  \item 对每个 \(1\le m<N\)，多尺度缺陷具有精确的投影曲率展开
+  \[
+  \boxed{\;
+  D_{N\to m}(\eta)
+  =
+  \bigoplus_{k=m}^{N-1}
+  \pi_{k\to m}\!\left(
+  \kappa_{k+1\to k}(\tau_{N\to k+1}(\eta))
+  \right)
+  \;}
+  \]
+  于 \((\ZZ/2)^m\) 中成立，其中 \(\pi_{m\to m}:=\operatorname{id}\)。
+  \item 若 \(\mathsf P^\tau_{\le N}(\eta)\) 不可表示，并令
+  \[
+  d_\eta:=\min\{\,m<N:D_{N\to m}(\eta)\ne0\,\},
+  \]
+  则
+  \[
+  x_m^\tau(\eta)=x_m^{\mathrm{st}}(\eta)\qquad(1\le m<d_\eta),
+  \]
+  而
+  \[
+  x_{d_\eta}^\tau(\eta)\ne x_{d_\eta}^{\mathrm{st}}(\eta).
+  \]
+  因此，\(d_\eta\) 是该朴素探针锥相对于稳定第 \(N\) 层对象的最小 phantom 可见深度；等价地，它是上述投影曲率和首次非零的深度。
+  \item 更一般地，令 \(E\subset\Omega_N\) 为非空有限候选族，令 \(1\le B<N\)，并定义有限窗口探针与终端稳定读出
+  \[
+  \mathsf P_B:E\longrightarrow\prod_{m=1}^{B}X_m,\qquad
+  \mathsf P_B(\eta):=(\Fold_m(\tau_{N\to m}(\eta)))_{1\le m\le B},
+  \]
+  \[
+  \mathsf S_N:E\longrightarrow X_N,\qquad
+  \mathsf S_N(\eta):=\Fold_N(\eta).
+  \]
+  若有限寄存器 \(r:E\to R\) 使 \((\mathsf P_B,r)\) 能重构终端稳定对象，即
+  \[
+  \mathsf P_B(\eta)=\mathsf P_B(\eta'),\quad r(\eta)=r(\eta')
+  \quad\Longrightarrow\quad
+  \mathsf S_N(\eta)=\mathsf S_N(\eta'),
+  \]
+  则必有显式残差预算下界
+  \[
+  |R|\ge
+  \mu_B(E):=\max_{u\in\mathsf P_B(E)}
+  \left|\mathsf S_N\bigl(E\cap\mathsf P_B^{-1}(u)\bigr)\right|.
+  \]
+  反之，存在某个寄存器 \(r:E\to\{1,\ldots,\mu_B(E)\}\) 达到该下界并满足上述重构条件。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先证第一项。若存在 \(z\in X_N\) 表示 \(\mathsf P^\tau_{\le N}(\eta)\)，则取 \(m=N\) 得
+\[
+z=x_N^\tau(\eta)=\Fold_N(\eta),
+\]
+故代表元唯一。于是对 \(m<N\)，可表示条件正是
+\[
+\Fold_m(\tau_{N\to m}(\eta))
+=\pi_{N\to m}(\Fold_N(\eta)),
+\]
+这与 \(D_{N\to m}(\eta)=0\) 的定义完全相同。反向亦然：若所有这些缺陷均为零，则 \(z=\Fold_N(\eta)\) 表示整个有限探针锥。
+
+第二项由缺陷余圈组合律归纳得到。当 \(N=m+1\) 时，等式就是
+\[
+D_{m+1\to m}(\eta)=\kappa_{m+1\to m}(\eta),
+\]
+即局部曲率向量的定义。设 \(N>m+1\)，并把引理 \ref{lem:pom-truncation-defect-cocycle} 应用于三元组 \(N\ge N-1\ge m\)，得
+\[
+D_{N\to m}(\eta)
+=
+D_{N-1\to m}(\tau_{N\to N-1}(\eta))
+\oplus
+\pi_{N-1\to m}(D_{N\to N-1}(\eta)).
+\]
+由归纳假设，第一项等于
+\[
+\bigoplus_{k=m}^{N-2}
+\pi_{k\to m}\!\left(
+\kappa_{k+1\to k}(\tau_{N\to k+1}(\eta))
+\right),
+\]
+而第二项等于
+\[
+\pi_{N-1\to m}\!\left(
+\kappa_{N\to N-1}(\eta)
+\right).
+\]
+合并即得所述公式。该公式记录的是所有一阶曲率事件向第 \(m\) 层投影后的异或和，因此自动包含可能出现的低层抵消。
+
+第三项中，不可表示性与第一项合并说明集合
+\(\{m<N:D_{N\to m}(\eta)\ne0\}\) 非空，故 \(d_\eta\) 有定义。若 \(m<d_\eta\)，则按最小性有 \(D_{N\to m}(\eta)=0\)，即
+\(x_m^\tau(\eta)=x_m^{\mathrm{st}}(\eta)\)。而在 \(m=d_\eta\) 处，\(D_{N\to d_\eta}(\eta)\ne0\)，两种读出不同。第二项又把此首次分离深度识别为投影曲率和首次非零的深度。于是所有小于 \(d_\eta\) 的有限窗口探针均无法区分朴素锥与稳定锥，而第 \(d_\eta\) 层首次给出可核验分离；这正是有限探针意义下的最小 phantom 深度。
+
+最后证明第四项。固定 \(u\in\mathsf P_B(E)\)，记
+\[
+E_u:=E\cap\mathsf P_B^{-1}(u).
+\]
+若 \(\eta,\eta'\in E_u\) 且 \(\mathsf S_N(\eta)\ne\mathsf S_N(\eta')\)，则任何满足重构条件的寄存器必须有 \(r(\eta)\ne r(\eta')\)；否则同一有限窗口读出与同一寄存器值会推出错误的终端稳定对象相等。因此，\(r\) 在 \(\mathsf S_N(E_u)\) 的任意代表元集合上为单射，给出
+\[
+|R|\ge |\mathsf S_N(E_u)|.
+\]
+对 \(u\) 取最大值得到 \(|R|\ge\mu_B(E)\)。
+
+反向构造如下。对每个 \(u\in\mathsf P_B(E)\)，任选一个编号
+\[
+\iota_u:\mathsf S_N(E_u)\hookrightarrow\{1,\ldots,\mu_B(E)\}.
+\]
+定义
+\[
+r(\eta):=\iota_{\mathsf P_B(\eta)}(\mathsf S_N(\eta)).
+\]
+若 \(\mathsf P_B(\eta)=\mathsf P_B(\eta')=u\) 且 \(r(\eta)=r(\eta')\)，则 \(\iota_u\) 的单射性给出
+\(\mathsf S_N(\eta)=\mathsf S_N(\eta')\)。故该寄存器达到下界并完成重构。
+
+综上，有限窗口探针只有同时满足缺陷相容性与纤维内终端分离时才可表示稳定 Omega 对象；相容性失败产生最小 phantom 深度，而纤维内未分离部分精确给出有限 residual register 的必要且充分预算。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
