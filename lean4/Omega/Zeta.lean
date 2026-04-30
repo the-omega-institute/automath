@@ -227,6 +227,8 @@ import Omega.Zeta.XiTimePart9xgParityWallVersusCofinalPrimeTwists
 import Omega.Zeta.DephysStieltjesInversionScaleEntropy
 import Omega.Zeta.XiCauchyPoissonMomentGapDissipation
 import Omega.Zeta.XiCauchyPoissonTwoChannelOrthogonalLeading
+import Omega.Zeta.XiTimePart9faScreenKernelTopHomology
+import Omega.Zeta.XiPoissonDefectMeasureSuperquarticIffM2zero
 import Omega.Zeta.CauchyPoissonTwoChannelRigidity
 import Omega.Zeta.XiJetLowOrderInequalities
 import Omega.Zeta.XiTimePart53daRootWeightCommonRefinementFiveAtoms
