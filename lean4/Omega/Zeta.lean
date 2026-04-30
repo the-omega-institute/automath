@@ -3487,3 +3487,4 @@ import Omega.Zeta.XiTimePart62dTripleFrobeniusClassfunctionTensorIndependence
 import Omega.Zeta.XiTimePart9zbbFoldpiGoldenTwoscaleStirling
 import Omega.Zeta.XiReplicaSoftcoreFullSpectrumDirectSum
 import Omega.Zeta.XiFoldbinGaugeConstantRecoversAllBernoulli
+import Omega.Zeta.XiTimePart70abExtremalFibersTerminalBitLocalization
