@@ -1469,3 +1469,4 @@ import Omega.POM.FoldPrimeLiftInjective
 import Omega.POM.CollisionRenyiPerronClosure
 import Omega.POM.AnomAllMomentsCollapseToTwo
 import Omega.POM.FiberLatticeSquarefreePrimeRegisterGcdLcm
+import Omega.POM.AnomTorsionEliminabilityMinOrder

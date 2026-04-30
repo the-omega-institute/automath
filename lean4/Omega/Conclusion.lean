@@ -2880,3 +2880,4 @@ import Omega.Conclusion.SquarefreePrimeRegisterHaltingReduction
 import Omega.Conclusion.BinfoldRelativeDensityNormalizedMotherLaw
 import Omega.Conclusion.SmithLocalZetaCompleteInvariant
 import Omega.Conclusion.XiDyadicBudgetVerticalSuperexpContraction
+import Omega.Conclusion.ResonanceWindowGapVsMod2TerminalMemoryIndependent
