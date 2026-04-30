@@ -201,6 +201,7 @@ import Omega.Zeta.XiTimePart60aComovingDefectMinimalSamplingSharp
 import Omega.Zeta.XiAnchoredCapacityThreeProperties
 import Omega.Zeta.XiEqualityPattern2nCompleteIdentifiability
 import Omega.Zeta.XiRhUnitCircleReciprocal
+import Omega.Zeta.FoldPiZetaRankJump
 import Omega.Zeta.XiRhCayleyHyperbolicity
 import Omega.Zeta.IdealLatticeMultichainPrimeStratification
 import Omega.Zeta.PickKernelGaugeRigidity
