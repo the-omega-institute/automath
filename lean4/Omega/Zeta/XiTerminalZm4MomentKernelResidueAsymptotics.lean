@@ -62,7 +62,7 @@ def xi_zm4_moment_kernel_residue_asymptotics_statement : Prop :=
       Real.log xi_zm4_moment_kernel_residue_asymptotics_rho
 
 /-- Paper label: `thm:xi-zm4-moment-kernel-residue-asymptotics`. -/
-theorem paper_xi_zm4_moment_kernel_residue_asymptotics :
+theorem paper_xi_terminal_zm4_moment_kernel_residue_asymptotics :
     xi_zm4_moment_kernel_residue_asymptotics_statement := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · decide
