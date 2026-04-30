@@ -442,6 +442,7 @@ import Omega.POM.CompleteHomogeneousLinearRecurrence
 import Omega.POM.CompleteHomogeneousPFInfty
 import Omega.POM.ConclusionHankelShiftPadicPrecisionSlope
 import Omega.POM.ConclusionLocalCurvatureKlSizebias
+import Omega.POM.ConclusionPomThirdObstructionCurvatureEnvelope
 import Omega.POM.ConclusionPomSizeBiasMonotonicity
 import Omega.POM.ConclusionGoldenSprtEsscherBoundarySymmetry
 import Omega.POM.CountertermAnomalyCancellation
