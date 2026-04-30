@@ -37,6 +37,7 @@ import Omega.Conclusion.Window6FullRenyiThermodynamicsClosed
 import Omega.Conclusion.ZetaRegularizedPrimeIndependenceMaxent
 import Omega.Conclusion.PrimeLogRhOperatorCountablePrimeRank
 import Omega.Conclusion.PrimeLogCalibrationPrimeSparsity
+import Omega.Conclusion.PrimesliceV2LayerSpreadInventory
 import Omega.Conclusion.Window6LongBulkEqualMassThirdLaw
 import Omega.Conclusion.PronyStepConditioningDichotomy
 import Omega.Conclusion.DecoupledSquareSpectrumFiniteSampling
