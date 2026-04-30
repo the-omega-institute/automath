@@ -227,6 +227,7 @@ import Omega.Zeta.XiPoissonCauchyMetricRigidityAtomicOnly
 import Omega.Zeta.XiPoissonRelativeEntropyContraction
 import Omega.Zeta.XiCoarsegrainingIllposednessExponentialLaw
 import Omega.Zeta.XiStieltjesCoarsegrainingIllposednessPolynomial
+import Omega.Zeta.XiOperatorAdamsRotatedEndpointProbeCyclotomic
 import Omega.Zeta.XiPoissonCauchyMultipoleInvisibilityConstruction
 import Omega.Zeta.XiScanTwoSourceMinDiscriminant
 import Omega.Zeta.XiScanTwoSourceStabilityGap
