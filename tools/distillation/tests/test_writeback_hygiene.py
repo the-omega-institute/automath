@@ -172,6 +172,25 @@ The assertion follows by checking every coordinate.
 
         self.assertEqual(selected_names, ["subsec__inverse-limit.tex"])
 
+    def test_oracle_context_limit_covers_under_budget_target_files(self):
+        target = self.core_body / "long_target.tex"
+        long_line = (
+            "中文数学上下文用于保留 Oracle 写回和 Claude 审核所需的目标文件内容。"
+            "该行模拟未超过六百行预算的正文片段。"
+        )
+        target.write_text(
+            "\n".join(f"{i}: {long_line}" for i in range(520)),
+            encoding="utf-8",
+        )
+
+        context = distill._collect_section_contexts(
+            [{"tex_file": "long_target.tex"}],
+            max_chars_per_file=distill.ORACLE_SECTION_CONTEXT_CHARS,
+        )
+
+        self.assertIn("519: 中文数学上下文", context)
+        self.assertNotIn("[context truncated by distill.py]", context)
+
 
 if __name__ == "__main__":
     unittest.main()
