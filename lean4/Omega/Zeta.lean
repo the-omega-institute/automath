@@ -12,6 +12,7 @@ import Omega.Zeta.XiWindow6ParityChargeTrigradingB3
 import Omega.Zeta.XiTimePart59abPeriodizedLogEnergyFib
 import Omega.Zeta.XiOutputPotentialActivatedBranchRigidity
 import Omega.Zeta.XiPickPoissonEnergyStabilizerCovariance
+import Omega.Zeta.XiPickPoissonEnergyBalanceEquations
 import Omega.Zeta.XiTerminalZmStokesAmplitudeSquareCubicRigidity
 import Omega.Zeta.XiTerminalZmStokesAmplitudeDegree6Minpoly
 import Omega.Zeta.XiTerminalZmStokesTEllipticBranchCoordinate
@@ -189,6 +190,7 @@ import Omega.Zeta.XiTimePart28CEndpointFluxExponentialCylinderContinuity
 import Omega.Zeta.XiTimePart28cStabilizedEndpointFluxCauchyModulus
 import Omega.Zeta.XiCauchyPoissonKLVarianceReadout
 import Omega.Zeta.XiCauchyPoissonKLRigidity
+import Omega.Zeta.XiPoissonCauchyMetricRigidityAtomicOnly
 import Omega.Zeta.XiPoissonRelativeEntropyContraction
 import Omega.Zeta.XiCoarsegrainingIllposednessExponentialLaw
 import Omega.Zeta.XiStieltjesCoarsegrainingIllposednessPolynomial

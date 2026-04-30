@@ -1390,6 +1390,7 @@ import Omega.Conclusion.CircleLieFactorSquareRootThresholdObstruction
 import Omega.Conclusion.JensenDefectEnergyReverseklIdentity
 import Omega.Conclusion.PoissonJensenGapReversekl
 import Omega.Conclusion.JensenDefectZeroStockIdentity
+import Omega.Conclusion.JensenDefectEntropySaturationExclusion
 import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.PrimesliceMinimalAlphabetRamanujanPlateau
