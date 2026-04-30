@@ -1607,6 +1607,7 @@ import Omega.Zeta.XiTimePart75TripleFrobeniusBooleanIndependence
 import Omega.Zeta.XiTimePart75P10ShadowUniversalRamificationShielding
 import Omega.Zeta.XiTimePart9zWindow6EscortProjectiveIdentifiability
 import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
+import Omega.Zeta.XiEndpointProbeFiniteHankelRankFiniteConjugatePairs
 import Omega.Zeta.EndpointAbsorptionInversionUniqueness
 import Omega.Zeta.SelfdualSSFodd
 import Omega.Zeta.XiEndpointProfilePronyInvertibility
