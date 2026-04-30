@@ -134,6 +134,20 @@ DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "claude")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
     DEFAULT_REVIEW_BACKEND = "claude"
 
+
+def _reconfigure_stdio_for_utf8() -> None:
+    """Keep redirected Windows logs from failing on reviewer Unicode text."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if not callable(reconfigure):
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="backslashreplace")
+        except (OSError, ValueError):
+            continue
+
+
+_reconfigure_stdio_for_utf8()
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
 logger.setLevel(logging.INFO)
