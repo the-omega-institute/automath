@@ -1021,7 +1021,8 @@ def _run_oracle_review(todo: TodoSpec, profile, *, repo_root: Path, oracle_timeo
 def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
                      state_dir: Path, oracle_timeout: int, max_turns: int,
                      write_latex: bool, codex_driver: bool = False,
-                     ship_paper: bool = False) -> dict | None:
+                     ship_paper: bool = False,
+                     arxiv_hits: list[dict] | None = None) -> dict | None:
     """Stage B-oracle-deep: multi-turn deep-reasoning loop (oracle as primary worker).
 
     Builds the initial framing prompt from the TODO's research.md (if present)
@@ -1047,7 +1048,7 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
     research_text = ""
     if research_md.exists():
         research_text = research_md.read_text(encoding="utf-8")
-    initial = _build_deep_initial_prompt(todo, research_text)
+    initial = _build_deep_initial_prompt(todo, research_text, arxiv_hits=arxiv_hits)
     print(f"[oracle-deep] dispatching {todo.todo_id} max_turns={max_turns} "
           f"per-turn-timeout={oracle_timeout}s; this can take up to "
           f"{max_turns} × {oracle_timeout}s = {max_turns * oracle_timeout // 60}min "
@@ -1163,7 +1164,8 @@ def _append_outreach_log_transition(*, repo_root: Path, slug: str, result: dict)
     log_path.write_text(text, encoding="utf-8")
 
 
-def _build_deep_initial_prompt(todo: TodoSpec, research_text: str) -> str:
+def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
+                               *, arxiv_hits: list[dict] | None = None) -> str:
     sub = todo.submission_target()
     parts = [
         "You are the primary mathematical worker on this Omega Project outreach target.",
@@ -1193,6 +1195,28 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str) -> str:
         "\n".join(f"- {step}" for step in (todo.attack_plan or [])) or "- (open to your suggestion)",
         "",
     ]
+    if arxiv_hits:
+        parts += [
+            "## Recent arXiv literature (last 14 days, freshness watch)",
+            "Papers whose titles/abstracts overlap our keyword space. **Treat as candidates",
+            "for prior-art / first-mover risk, not confirmed competition** — most matches",
+            "are coincidental keyword overlap, but skim them and call out any that genuinely",
+            "advance our specific sub-goal so we can re-scope if needed.",
+            "",
+        ]
+        for h in arxiv_hits[:8]:
+            paper = h.get("paper", {}) if isinstance(h, dict) else {}
+            title = (paper.get("title") or "").strip()[:120]
+            pub = (paper.get("published") or "")[:10]
+            arxiv_id = (paper.get("arxiv_id") or "").strip()
+            authors = paper.get("authors", []) or []
+            author_str = ", ".join(authors[:3]) + (" et al." if len(authors) > 3 else "")
+            matched = ",".join((h.get("matched_keywords") or [])[:5])
+            parts.append(
+                f"- {arxiv_id} ({pub}) :: {title}\n  authors: {author_str}\n  "
+                f"matched=[{matched}], score={h.get('overlap_score','?')}"
+            )
+        parts.append("")
     if research_text:
         parts += [
             "## research.md drafted by Codex (verbose; treat as background, not gospel)",
@@ -1301,6 +1325,7 @@ def supervise_board(
 
         # Stage B-oracle-deep: oracle as primary worker, multi-turn iteration.
         if oracle_deep:
+            stage0_hits = (arxiv_summary or {}).get("hits") if arxiv_summary else None
             deep_run = _run_oracle_deep(
                 todo, profile, repo_root=repo_root,
                 state_dir=state_dir,
@@ -1308,6 +1333,7 @@ def supervise_board(
                 write_latex=write_latex,
                 codex_driver=codex_driver,
                 ship_paper=ship_paper,
+                arxiv_hits=stage0_hits,
             )
             if deep_run is not None:
                 analysis["oracle_deep"] = deep_run
