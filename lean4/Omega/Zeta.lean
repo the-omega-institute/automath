@@ -441,6 +441,8 @@ import Omega.Zeta.XiLeakageZeroOffsetSum
 import Omega.Zeta.XiWindow6DbinCoordinateQuadrupleStratification
 import Omega.Zeta.XiLocalZeroCountClosureBudget
 import Omega.Zeta.XiWindow6B3C3WeylAverageMeasureSecondMoment
+import Omega.Zeta.XiWindow6B3C3OrbitwiseLanglandsDuality
+import Omega.Zeta.XiRiemannSiegelAdjacentLevelZeroHomotopy
 import Omega.Zeta.XiWindow6BoundaryParityC3EquivariantIdempotents
 import Omega.Zeta.XiWindow6BoundaryTwoSheetPermutationDecomposition
 import Omega.Zeta.XiWindow6CompleteFiniteScaleSpectrum
