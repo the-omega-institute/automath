@@ -245,6 +245,8 @@ import Omega.Zeta.XiTimePart9obEscortQuantilePhaseDiagram
 import Omega.Zeta.CertificateComplexityHyperbolicExponentialLaw
 import Omega.Zeta.XiTimePart9zmAmbiguityShellExactMemoryDepth
 import Omega.Zeta.XiTimePart9obEscortTwoSidedLocalKl
+import Omega.Zeta.XiSymqHankelSylvesterBridge
+import Omega.Zeta.XiDeltaFlowNonclosure
 import Omega.Zeta.XiTimePart9saFdivTwoPointEvaluationClosure
 import Omega.Zeta.XiTimePart9zmFiniteStateRightInverseMinimalLag
 import Omega.Zeta.XiTimeLawvereNullIncompleteness
