@@ -266,6 +266,8 @@ import Omega.Zeta.XiCompletedZetaRemainderPhaseLaw
 import Omega.Zeta.XiTimePart65cOutputEdgeworthFirstCorrection
 import Omega.Zeta.XiTimePart65cEdgeworthLocalLdpSignLock
 import Omega.Zeta.XiTimePart70dAnomalySignatureSaturation
+import Omega.Zeta.XiFoldbinEscortRenyiKlTwoPointClosure
+import Omega.Zeta.XiFourpiEntropyNormalizationUniqueness
 import Omega.Zeta.XiDefectEntropyHeightBudgetExponentialLaw
 import Omega.Zeta.XiCrossEnergyLowerBoundByMinSeparation
 import Omega.Zeta.XiPickPoissonFiniteMayerClusterFactorization
