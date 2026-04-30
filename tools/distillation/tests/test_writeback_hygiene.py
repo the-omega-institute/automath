@@ -218,6 +218,21 @@ The assertion follows by checking every coordinate.
         self.assertIn("519: 中文数学上下文", context)
         self.assertNotIn("[context truncated by distill.py]", context)
 
+    def test_oracle_deepening_context_uses_compact_browser_budget(self):
+        target = self.core_body / "oracle_long_target.tex"
+        long_line = "oracle browser prompt context budget line " + ("x" * 120)
+        target.write_text(
+            "\n".join(f"{i}: {long_line}" for i in range(180)),
+            encoding="utf-8",
+        )
+
+        context = distill._collect_oracle_deepening_contexts(
+            [{"tex_file": "oracle_long_target.tex"}],
+        )
+
+        self.assertIn("[context truncated by distill.py]", context)
+        self.assertNotIn("179: oracle browser prompt context budget line", context)
+
 
 if __name__ == "__main__":
     unittest.main()

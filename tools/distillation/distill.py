@@ -114,6 +114,9 @@ ORACLE_EVIDENCE_MAX_EXISTING = 6
 ORACLE_EVIDENCE_MAX_INTERFACES = 6
 ORACLE_EVIDENCE_MAX_MEMORY = 4
 ORACLE_SECTION_CONTEXT_CHARS = 40000
+ORACLE_DEEPENING_SECTION_CONTEXT_CHARS = int(
+    os.environ.get("ORACLE_DEEPENING_SECTION_CONTEXT_CHARS", "8000")
+)
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
@@ -4068,6 +4071,14 @@ def _collect_section_contexts(
     return "\n\n".join(chunks)
 
 
+def _collect_oracle_deepening_contexts(targets: list[dict[str, Any]]) -> str:
+    """Collect a compact target context for browser-based Oracle prompts."""
+    return _collect_section_contexts(
+        targets,
+        max_chars_per_file=ORACLE_DEEPENING_SECTION_CONTEXT_CHARS,
+    )
+
+
 def _dry_writebacks(targets: list[dict[str, Any]], name: str) -> list[dict[str, str]]:
     """Build deterministic writeback proposals for dry-run execution."""
     slug = _slugify(name)
@@ -5237,13 +5248,14 @@ def run_stage_w(
     family_specific_contract = _family_specific_deepening_contract(focused_family)
     oracle_deepening_context: dict[str, Any] = {"status": "disabled"}
     if oracle_deepening:
+        oracle_section_contexts = _collect_oracle_deepening_contexts(targets)
         oracle_deepening_context = _oracle_deepening_research(
             state,
             payload,
             raw_research,
             focused_family,
             targets,
-            section_contexts,
+            oracle_section_contexts,
             global_evidence_pack,
             prior_feedback_block,
             dry_run,
