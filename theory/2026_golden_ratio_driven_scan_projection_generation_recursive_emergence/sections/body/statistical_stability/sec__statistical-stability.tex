@@ -55,6 +55,334 @@ Y_t^{(m)}:=\Fold_m(W_t^{(m)})\in X_m.
 \]
 \end{definition}
 
+% --- Distillation writeback ---
+\begin{definition}[fold-aware Frostman 账本与首次破裂尺度]\label{distill:bourgain-frostman_stability_thresholds-fold-aware-frostman-ledger}
+固定分辨率 \(m\ge1\)，并取一条 active 尺度链
+\[
+0=h_0<h_1<\cdots<h_J=m,
+\qquad X_{h_0}:=\{\ast\}.
+\]
+对 \(0\le i\le j\le J\)，记
+\[
+\rho^{\mathrm{st}}_{h_j,h_i}:X_{h_j}\longrightarrow X_{h_i}
+\]
+为第 \ref{sec:folding} 节中的 fold-aware 稳定限制；在黄金折叠语法中它是稳定代表的前缀投影，而不是原始微态字的朴素截断。设 \((\sigma_j)_{0\le j\le J}\) 是一族满支撑参考分布，满足
+\[
+(\rho^{\mathrm{st}}_{h_j,h_i})_\#\sigma_j=\sigma_i
+\qquad(0\le i\le j\le J).
+\]
+在统计稳定性应用中可取 \(\sigma_j\) 为 Parry 基线 \(\pi_{h_j}\)，或取某个已登记理论折叠输出分布在尺度 \(h_j\) 上的 fold-aware 推前。
+
+对任意 \(\nu\in\Delta(X_m)\)，置
+\[
+\nu_j:=(\rho^{\mathrm{st}}_{m,h_j})_\#\nu\in\Delta(X_{h_j}).
+\]
+若 \(a\in X_{h_j}\)，记其父前缀为
+\[
+\bar a:=\rho^{\mathrm{st}}_{h_j,h_{j-1}}(a),
+\]
+并称
+\[
+[a]^{\mathrm{st}}_m:=(\rho^{\mathrm{st}}_{m,h_j})^{-1}(a)
+\]
+为 \(m\)-层上的稳定柱。若 \(\nu_j(a)>0\)，定义一步 Frostman 密度增量
+\[
+R_j^\nu(a):=
+\frac{\nu_j(a)}{\nu_{j-1}(\bar a)}
+\frac{\sigma_{j-1}(\bar a)}{\sigma_j(a)}.
+\]
+若 \(\nu_j(a)=0\)，令 \(R_j^\nu(a):=0\)。对常数 \(K\ge1\)，称 \(\nu\) 在 active 尺度链上通过 \(K\)-Frostman 账本，若
+\[
+\nu_j(a)\le K\sigma_j(a)
+\qquad(0\le j\le J,\ a\in X_{h_j}).
+\]
+其首次破裂尺度定义为
+\[
+j_{\mathrm{br}}(\nu;K):=\min\{j:\exists a\in X_{h_j}\text{ such that }\nu_j(a)>K\sigma_j(a)\},
+\]
+若集合为空则记为 \(\infty\)。
+\end{definition}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{theorem}[Frostman 账本的尺度因子分解与坏例子定位]\label{distill:bourgain-frostman_stability_thresholds-multiscale-density-increment-classification}
+沿用定义 \ref{distill:bourgain-frostman_stability_thresholds-fold-aware-frostman-ledger}。令 \(\nu\in\Delta(X_m)\)。对 \(a\in X_{h_j}\) 且 \(\nu_j(a)>0\)，置
+\[
+a_i:=\rho^{\mathrm{st}}_{h_j,h_i}(a)
+\qquad(0\le i\le j).
+\]
+则有精确分解
+\[
+\frac{\nu_j(a)}{\sigma_j(a)}=\prod_{i=1}^{j}R_i^\nu(a_i).
+\]
+因此 \(\nu\) 未通过 \(K\)-Frostman 账本，当且仅当存在某个稳定前缀 \(a\in X_{h_j}\) 使
+\[
+\prod_{i=1}^{j}R_i^\nu(a_i)>K.
+\]
+进一步，令
+\[
+\mathcal E_\nu(a):=\{1\le i\le j:R_i^\nu(a_i)>1\}.
+\]
+则 \(a\) 是一个 \(K\)-坏稳定柱，亦即 \(\nu_j(a)>K\sigma_j(a)\)，当且仅当
+\[
+\sum_{i\in\mathcal E_\nu(a)}\log R_i^\nu(a_i)
+>
+\log K+\sum_{i\notin\mathcal E_\nu(a)}\log\bigl(R_i^\nu(a_i)^{-1}\bigr),
+\]
+其中第二个求和只对 \(R_i^\nu(a_i)\le1\) 的指标解释。特别地，任何 Frostman 失败都不是无结构的全局偏差；它必然由一组正的一步密度增量尺度承载，并且全部负增量只以右端的抵消项出现。
+
+若 \(j_\ast=j_{\mathrm{br}}(\nu;K)<\infty\)，则存在 \(a_\ast\in X_{h_{j_\ast}}\) 使
+\[
+\nu_{j_\ast}(a_\ast)>K\sigma_{j_\ast}(a_\ast),
+\]
+且其父前缀 \(\bar a_\ast\) 满足
+\[
+\nu_{j_\ast-1}(\bar a_\ast)\le K\sigma_{j_\ast-1}(\bar a_\ast),
+\qquad
+R_{j_\ast}^\nu(a_\ast)>1.
+\]
+因此首次破裂尺度给出一份确定性的 density-increment 证书：在所有更粗 active 尺度仍通过 Frostman 审计的条件下，质量第一次集中到稳定子柱 \([a_\ast]^{\mathrm{st}}_m\) 中。
+\end{theorem}
+\begin{proof}
+由于 \(\nu_j=(\rho^{\mathrm{st}}_{h_i,h_j})_\#\nu_i\) 且 \(\sigma_j=(\rho^{\mathrm{st}}_{h_i,h_j})_\#\sigma_i\)，对 \(a_i\) 的父子链有
+\[
+\nu_i(a_i)>0\Longrightarrow \nu_{i-1}(a_{i-1})>0.
+\]
+于是定义中的比值均有意义，并且
+\[
+\prod_{i=1}^{j}R_i^\nu(a_i)
+=\prod_{i=1}^{j}
+\left(
+\frac{\nu_i(a_i)}{\nu_{i-1}(a_{i-1})}
+\frac{\sigma_{i-1}(a_{i-1})}{\sigma_i(a_i)}
+\right).
+\]
+右端望远镜相消，得到
+\[
+\prod_{i=1}^{j}R_i^\nu(a_i)=\frac{\nu_j(a_j)}{\sigma_j(a_j)}=\frac{\nu_j(a)}{\sigma_j(a)}.
+\]
+这证明尺度因子分解。
+
+由定义，\(K\)-Frostman 账本失败等价于存在 \(j,a\) 使 \(\nu_j(a)/\sigma_j(a)>K\)。代入刚证明的乘积分解，即得乘积判据。对乘积取对数，并把正项 \(R_i^\nu(a_i)>1\) 与非正项 \(R_i^\nu(a_i)\le1\) 分开，得到
+\[
+\log\frac{\nu_j(a)}{\sigma_j(a)}
+=\sum_{i\in\mathcal E_\nu(a)}\log R_i^\nu(a_i)
+-\sum_{i\notin\mathcal E_\nu(a)}\log\bigl(R_i^\nu(a_i)^{-1}\bigr).
+\]
+因此 \(\nu_j(a)>K\sigma_j(a)\) 等价于所列严格不等式。这说明所谓表观稳定性的失败精确地由正增量尺度集承载，而非由终端层的未分类噪声承载。
+
+最后设 \(j_\ast<\infty\)。按定义可取 \(a_\ast\in X_{h_{j_\ast}}\) 使 \(\nu_{j_\ast}(a_\ast)>K\sigma_{j_\ast}(a_\ast)\)。若 \(j_\ast>0\)，由首次性，所有 \(h_{j_\ast-1}\)-尺度稳定柱均满足 Frostman 账本，故其父前缀 \(\bar a_\ast\) 满足
+\[
+\nu_{j_\ast-1}(\bar a_\ast)\le K\sigma_{j_\ast-1}(\bar a_\ast).
+\]
+于是
+\[
+R_{j_\ast}^\nu(a_\ast)
+=\frac{\nu_{j_\ast}(a_\ast)/\sigma_{j_\ast}(a_\ast)}
+{\nu_{j_\ast-1}(\bar a_\ast)/\sigma_{j_\ast-1}(\bar a_\ast)}
+>1.
+\]
+当 \(j_\ast=0\) 时只有根尺度，结论退化为根账本自身的失败。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{proposition}[有限分辨率稳定性强制稳定柱 Frostman 条件]\label{distill:bourgain-frostman_stability_thresholds-scale-stability-forces-no-heavy-ball}
+沿用定义 \ref{distill:bourgain-frostman_stability_thresholds-fold-aware-frostman-ledger}。设参考分布满足某个 Frostman 型稳定柱上界：存在 \(\alpha\ge0\) 与 \(C_0>0\)，使对所有 active 尺度与稳定前缀均有
+\[
+\sigma_j(a)\le C_0\,2^{-\alpha h_j}
+\qquad(0\le j\le J,\ a\in X_{h_j}).
+\]
+若 \(\nu\in\Delta(X_m)\) 的 fold-aware 尺度推前满足
+\[
+D_{\mathrm{TV}}(\nu_j,\sigma_j)\le \varepsilon_j
+\qquad(0\le j\le J),
+\]
+则对每个稳定柱 \([a]^{\mathrm{st}}_m\) 有
+\[
+\nu\bigl([a]^{\mathrm{st}}_m\bigr)=\nu_j(a)\le C_0\,2^{-\alpha h_j}+\varepsilon_j.
+\]
+特别地，若 \(\varepsilon_j\le C_1\,2^{-\alpha h_j}\) 对所有 \(j\) 成立，则 \(\nu\) 满足
+\[
+\nu\bigl([a]^{\mathrm{st}}_m\bigr)\le (C_0+C_1)\,2^{-\alpha h_j}
+\qquad(0\le j\le J,\ a\in X_{h_j}).
+\]
+反过来，若某个稳定柱满足
+\[
+\nu_j(a)>C_0\,2^{-\alpha h_j}+\eta
+\qquad(\eta>0),
+\]
+则任一包含该尺度稳定柱指示函数的有限分辨率稳定性审计都必须在尺度 \(h_j\) 上输出失败，并且
+\[
+D_{\mathrm{TV}}(\nu_j,\sigma_j)>\eta.
+\]
+\end{proposition}
+\begin{proof}
+固定 \(j\) 与 \(a\in X_{h_j}\)。由全变差距离的变分刻画，对单点事件 \(\{a\}\subset X_{h_j}\) 有
+\[
+\nu_j(a)\le \sigma_j(a)+D_{\mathrm{TV}}(\nu_j,\sigma_j).
+\]
+结合假设得到
+\[
+\nu_j(a)\le C_0\,2^{-\alpha h_j}+\varepsilon_j.
+\]
+又因为 \([a]^{\mathrm{st}}_m=(\rho^{\mathrm{st}}_{m,h_j})^{-1}(a)\)，故
+\[
+\nu([a]^{\mathrm{st}}_m)=(\rho^{\mathrm{st}}_{m,h_j})_\#\nu(a)=\nu_j(a),
+\]
+从而得到第一项结论。若 \(\varepsilon_j\le C_1 2^{-\alpha h_j}\)，代入即得统一 Frostman 上界。
+
+反向命题同样只用同一个稳定柱指示函数。若
+\[
+\nu_j(a)>C_0\,2^{-\alpha h_j}+\eta
+\]
+且 \(\sigma_j(a)\le C_0\,2^{-\alpha h_j}\)，则
+\[
+\nu_j(a)-\sigma_j(a)>\eta.
+\]
+由全变差距离对事件 \(\{a\}\) 的下界，
+\[
+D_{\mathrm{TV}}(\nu_j,\sigma_j)\ge \abs{\nu_j(a)-\sigma_j(a)}>\eta.
+\]
+因此任何把稳定柱指示函数作为合法测试的有限分辨率审计，都不能同时声称尺度 \(h_j\) 稳定。这里使用的是 fold-aware 稳定限制 \(\rho^{\mathrm{st}}_{m,h_j}\)，故结论不依赖也不允许把原始微态前缀的朴素截断误认为跨分辨率不变量。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{proposition}[平均型表观正则性的例外尺度等价式]\label{distill:bourgain-frostman_stability_thresholds-average-regularity-exceptional-scale-equivalence}
+沿用定义 \ref{distill:bourgain-frostman_stability_thresholds-fold-aware-frostman-ledger}，并固定 \(K\ge1\)。对 \(0\le j\le J\) 定义归一化尺度过载量
+\[
+\mathcal O_j(\nu;K):=\max_{a\in X_{h_j}}\frac{\nu_j(a)}{K\sigma_j(a)}.
+\]
+于是 \(K\)-Frostman 账本通过当且仅当
+\[
+\max_{0\le j\le J}\mathcal O_j(\nu;K)\le1.
+\]
+令 \(w_0,\dots,w_J>0\) 且 \(\sum_jw_j=1\)，并考虑平均型表观正则性判据
+\[
+\mathcal A_w(\nu;K):=\sum_{j=0}^{J}w_j\mathcal O_j(\nu;K)\le1.
+\]
+则平均判据通过而 Frostman 账本失败，当且仅当例外尺度集
+\[
+\mathcal E:=\{j:\mathcal O_j(\nu;K)>1\}
+\]
+非空，且满足精确平衡式
+\[
+\sum_{j\in\mathcal E}w_j\bigl(\mathcal O_j(\nu;K)-1\bigr)
+\le
+\sum_{j\notin\mathcal E}w_j\bigl(1-\mathcal O_j(\nu;K)\bigr).
+\]
+特别地，若 \(\mathcal A_w(\nu;K)\le1\) 且某个尺度满足 \(\mathcal O_{j_0}(\nu;K)=M>1\)，则必有
+\[
+w_{j_0}\le M^{-1}.
+\]
+因此，任何只报告加权平均残差的实验，都至多证明例外尺度的加权质量受控；它不能替代逐 active 尺度的 Frostman 账本。真正的有限分辨率稳定性必须报告 \(j_{\mathrm{br}}(\nu;K)\)，而不是只报告 \(\mathcal A_w\)。
+\end{proposition}
+\begin{proof}
+第一句直接来自定义：\(K\)-Frostman 账本通过等价于对每个 \(j,a\) 有 \(\nu_j(a)\le K\sigma_j(a)\)，这又等价于每个 \(\mathcal O_j(\nu;K)\le1\)。
+
+记 \(O_j:=\mathcal O_j(\nu;K)\)。由于 \(\sum_jw_j=1\)，恒等式
+\[
+\mathcal A_w(\nu;K)-1=\sum_{j=0}^{J}w_j(O_j-1)
+\]
+成立。把右端按 \(O_j>1\) 与 \(O_j\le1\) 分开，得到
+\[
+\mathcal A_w(\nu;K)-1
+=\sum_{j\in\mathcal E}w_j(O_j-1)
+-\sum_{j\notin\mathcal E}w_j(1-O_j).
+\]
+平均判据通过即左端不正；Frostman 账本失败即 \(\mathcal E\ne\varnothing\)。二者合并正是所列平衡式。
+
+若 \(O_{j_0}=M>1\) 且 \(\mathcal A_w\le1\)，则
+\[
+1\ge\mathcal A_w=\sum_jw_jO_j\ge w_{j_0}M,
+\]
+从而 \(w_{j_0}\le M^{-1}\)。这说明平均正则性允许高过载尺度存在的唯一方式，是该尺度在平均账本中的权重足够小，或由其它尺度的低残差提供抵消。因此它只刻画例外尺度集合的加权隐藏，而不构成逐尺度 Frostman 稳定证书。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{proposition}[有限样本 Frostman 首次破裂证书]\label{distill:bourgain-frostman_stability_thresholds-finite-sample-first-break-certificate}
+沿用定义 \ref{def:source-and-fold-output} 与定义 \ref{distill:bourgain-frostman_stability_thresholds-fold-aware-frostman-ledger}。令真实折叠输出分布为 \(\nu\in\Delta(X_m)\)，经验直方图为 \(\hat\pi_{m,N}\)，并置
+\[
+\hat\pi_{j,N}:=(\rho^{\mathrm{st}}_{m,h_j})_\#\hat\pi_{m,N},
+\qquad
+\nu_j:=(\rho^{\mathrm{st}}_{m,h_j})_\#\nu.
+\]
+固定 \(K\ge1\)。设给定一组非负误差半径 \(r_j(a)\) ，并且在某个已认证事件 \(\mathcal G_N\) 上同时满足
+\[
+\abs{\hat\pi_{j,N}(a)-\nu_j(a)}
+\le r_j(a)
+\qquad(0\le j\le J,\ a\in X_{h_j}).
+\]
+定义经验可证首次破裂尺度
+\[
+\widehat j_{\mathrm{br}}
+:=
+\min\{j:\exists a\in X_{h_j}\text{ such that }
+\hat\pi_{j,N}(a)-r_j(a)>K\sigma_j(a)\},
+\]
+若集合为空则记为 \(\infty\)。则在 \(\mathcal G_N\) 上成立：
+\begin{enumerate}
+\item 若 \(\widehat j_{\mathrm{br}}<\infty\)，则真实 Frostman 账本在尺度 \(h_{\widehat j_{\mathrm{br}}}\) 失败；相应的 \(a\) 是一份确定性稳定柱过载证书。
+\item 若真实首次破裂尺度 \(j_\ast=j_{\mathrm{br}}(\nu;K)<\infty\)，且存在 \(a_\ast\in X_{h_{j_\ast}}\) 满足
+\[
+\nu_{j_\ast}(a_\ast)>K\sigma_{j_\ast}(a_\ast)+2r_{j_\ast}(a_\ast),
+\]
+则 \(\widehat j_{\mathrm{br}}=j_\ast\)。
+\item 若对所有 \(j,a\) 都有
+\[
+\nu_j(a)\le K\sigma_j(a)-r_j(a),
+\]
+则 \(\widehat j_{\mathrm{br}}=\infty\)。
+\end{enumerate}
+因此，有限样本实验的稳定性报告应输出 \(\widehat j_{\mathrm{br}}\) 及其稳定柱见证，而不是只输出终端层 TV/KL 偏差或跨尺度平均残差。
+\end{proposition}
+\begin{proof}
+在事件 \(\mathcal G_N\) 上，若 \(\widehat j_{\mathrm{br}}<\infty\)，则存在 \(a\in X_{h_{\widehat j_{\mathrm{br}}}}\) 使
+\[
+\hat\pi_{\widehat j_{\mathrm{br}},N}(a)-r_{\widehat j_{\mathrm{br}}}(a)>K\sigma_{\widehat j_{\mathrm{br}}}(a).
+\]
+又由误差半径的定义，
+\[
+\nu_{\widehat j_{\mathrm{br}}}(a)\ge
+\hat\pi_{\widehat j_{\mathrm{br}},N}(a)-r_{\widehat j_{\mathrm{br}}}(a),
+\]
+故
+\[
+\nu_{\widehat j_{\mathrm{br}}}(a)>K\sigma_{\widehat j_{\mathrm{br}}}(a),
+\]
+真实账本在该尺度失败。这证明第一项。
+
+设真实首次破裂尺度为 \(j_\ast<\infty\)，且存在所述有间隔见证 \(a_\ast\)。由 \(\mathcal G_N\)，
+\[
+\hat\pi_{j_\ast,N}(a_\ast)\ge
+\nu_{j_\ast}(a_\ast)-r_{j_\ast}(a_\ast)
+>K\sigma_{j_\ast}(a_\ast)+r_{j_\ast}(a_\ast).
+\]
+于是
+\[
+\hat\pi_{j_\ast,N}(a_\ast)-r_{j_\ast}(a_\ast)>K\sigma_{j_\ast}(a_\ast),
+\]
+故 \(\widehat j_{\mathrm{br}}\le j_\ast\)。另一方面，若 \(\widehat j_{\mathrm{br}}<j_\ast\)，由第一项可知真实账本在更粗尺度已经失败，这与 \(j_\ast\) 的首次性矛盾。因此 \(\widehat j_{\mathrm{br}}=j_\ast\)。
+
+最后，若对所有 \(j,a\) 有 \(\nu_j(a)\le K\sigma_j(a)-r_j(a)\)，则在 \(\mathcal G_N\) 上
+\[
+\hat\pi_{j,N}(a)\le \nu_j(a)+r_j(a)\le K\sigma_j(a),
+\]
+从而不可能出现
+\[
+\hat\pi_{j,N}(a)-r_j(a)>K\sigma_j(a).
+\]
+故经验可证首次破裂尺度为空，即 \(\widehat j_{\mathrm{br}}=\infty\)。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 若 $S$ 平稳且遍历，则对任意固定 $m$ 与任意 $u\in X_m$ 有
 \[
 \hat{\pi}_{m,N}(u)\ \xrightarrow[N\to\infty]{}\ \pi_m^{\mathrm{fold}}(u)
