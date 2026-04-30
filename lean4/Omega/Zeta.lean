@@ -180,6 +180,7 @@ import Omega.Zeta.XiJensenDefectEntropyEnergyIdentity
 import Omega.Zeta.XiPoissonOptimalCauchyRescalingKLConstant
 import Omega.Zeta.XiPoissonTwoParameterSixthRigidityComplexThird
 import Omega.Zeta.XiFdeltaSubresultantUniqueDoubleRoot
+import Omega.Zeta.XiScaleEntropyPageThreshold
 import Omega.Zeta.XiTimePart74LeyangAmplitudeSixthIrreducibility
 import Omega.Zeta.XiTimePart74LeyangAmplitudeFieldSignature
 import Omega.Zeta.XiTimePart9zblFoldpiGoldenOperatorSplitting
