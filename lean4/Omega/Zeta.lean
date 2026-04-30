@@ -3426,3 +3426,5 @@ import Omega.Zeta.XiPoissonCauchyToeplitzPronyAtomicRecovery
 import Omega.Zeta.XiWindow6StayIndices227
 import Omega.Zeta.LocalizedConnectedLieQuotientCircleRigidity
 import Omega.Zeta.TailOffsetsMaxfiberTripleClosure
+import Omega.Zeta.XiScanFingerprintMinimalContractionRealization
+import Omega.Zeta.XiRiemannSiegelAttractionRate
