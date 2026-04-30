@@ -18,6 +18,8 @@ import Omega.Zeta.XiBasepointScanAnchorAngleConcentration
 import Omega.Zeta.XiLeyangUBSquareCommonQuadraticResolvent
 import Omega.Zeta.XiLeyangAmplitudeBTrueQuadraticCover
 import Omega.Zeta.XiOutputPotentialLargeOddPrimesBad
+import Omega.Zeta.XiOutputPotentialBadModuliDensityOne
+import Omega.Zeta.XiTwoConceptCoherenceTimeDensityLaw
 import Omega.Zeta.XiWindow6ParityChargeTrigradingB3
 import Omega.Zeta.XiTimePart59abPeriodizedLogEnergyFib
 import Omega.Zeta.XiOutputPotentialActivatedBranchRigidity
