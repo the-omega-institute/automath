@@ -2206,6 +2206,8 @@ import Omega.Zeta.XiTimePart62aLeyangBranchArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
 import Omega.Zeta.XiTimePart62dhLeyangBranchSpectrumForestIhara
 import Omega.Zeta.XiTimePart62dLeyangBranchKirchhoffForest
+import Omega.Zeta.XiTimePart62dLeyangBranchAdjacencyCharpolyHeat
+import Omega.Zeta.XiTimePart62dLeyangBranchIharaZeta
 import Omega.Zeta.DerivedLeyangFouraryRigidity
 import Omega.Zeta.DerivedLeyangProfiniteRigidity
 import Omega.Zeta.DerivedPickPoissonClusteredQuadraticCoerciveLowerBound
