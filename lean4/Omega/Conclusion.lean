@@ -1,4 +1,6 @@
 import Omega.Conclusion.AnchorResidualPluckerGeometry
+import Omega.Conclusion.BoundaryPrimeTailBlindness
+import Omega.Conclusion.BoundarySolenoidOverBaseRigidity
 import Omega.Conclusion.Window6BoundaryF8RationalObservableDecoderFails
 import Omega.Conclusion.ProtocolAcceptableGoldenDelayRigidity
 import Omega.Conclusion.FixedresolutionMomentRatioTopgap
