@@ -111,6 +111,7 @@ import Omega.Zeta.ChebotarevQuotientMonotonicityErrorExponent
 import Omega.Zeta.XiBasepointScanHeineStieltjesOde
 import Omega.Zeta.XiBasepointScanVanVleckLeadingCoeffs
 import Omega.Zeta.XiBasepointScanVanVleckResidueMoment2
+import Omega.Zeta.XiBasepointScanRealTranslationB1AffineTransfer
 import Omega.Zeta.XiAtomicWittEnergyResidueL2Law
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
 import Omega.Zeta.XiFoldbinFDivergenceTwoPointExperiment
@@ -1411,6 +1412,7 @@ import Omega.Zeta.XiEndpointAbsorptionJetMoments
 import Omega.Zeta.XiLeyangSexticPerfectPowerCollapse
 import Omega.Zeta.XiLeyangHankelSingularSlopeDetectsModuli
 import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
+import Omega.Zeta.XiEndpointHeatProbeAdaptiveExtrapolation
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiTimePart76LeyangBranchHypercubeSpectrumHeat
 import Omega.Zeta.XiTimePart75ResonanceAnomalyRigidCoreInfiniteTail
