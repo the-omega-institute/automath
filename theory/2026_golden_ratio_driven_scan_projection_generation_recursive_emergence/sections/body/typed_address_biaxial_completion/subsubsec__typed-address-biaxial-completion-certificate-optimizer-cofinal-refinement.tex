@@ -1,0 +1,433 @@
+\subsubsection{证书优化器与共终细化}\label{subsubsec:typed-address-biaxial-completion-certificate-optimizer-cofinal-refinement}
+局部小值弧现在拥有多种可验证上界：单中心上界、packet 的 Hölder 上界、split 解析上界以及有限弧求积上界。优化层的任务不是提供额外数学不等式，而是在这些已验证局部证书之间选择 winner，并以严格区间算术闭合 Jensen 排斥阈值。
+
+固定 \(0<R<r<1\)。令
+\[
+\mathcal T_{r,R}:=\log\frac rR,
+\]
+并把所有可调选择记为
+\[
+\Xi=
+\left(
+\mathcal P_\theta,\,
+\mathcal C_{\mathrm{packet}},\,
+\mathcal S_{\mathrm{cell}},\,
+\mathcal M_{\mathrm{method}},\,
+\mathcal T_{\mathrm{quad}},\,
+p_{\mathrm{Taylor}},\,
+b_{\mathrm{round}},\,
+\mathcal Z_{\mathrm{box}}
+\right).
+\]
+这些分量分别表示圆周弧划分、packet 聚类、cell 切分、局部上界方法、求积子区间、Taylor 阶数、区间算术位数以及零点参数盒。对应的全局上界写为
+\[
+\mathcal U(\Xi)
+:=
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA}}^+(\Xi).
+\]
+证书裕度必须以区间端点核验：
+\[
+\mathfrak m(\Xi)
+:=
+\left[\mathcal T_{r,R}\right]^-
+-
+\left[\mathcal U(\Xi)\right]^+.
+\]
+只有
+\[
+\mathfrak m(\Xi)>0
+\]
+才允许输出通过。
+
+\begin{definition}[优化证书]\label{def:typed-address-biaxial-completion-optimization-certificate}
+一份优化证书记为
+\[
+\mathsf{OptCert}_{r,R}
+:=
+\left(
+r,R,\delta,
+\mathcal P_\theta,
+\mathcal L_{\mathrm{local}},
+B_{\mathrm{ZA,opt}}^+,
+\mathcal U^+,
+\mathfrak m,
+\mathsf{TranscriptHash}
+\right),
+\]
+其中
+\[
+\mathcal L_{\mathrm{local}}
+:=
+\{(I,\mathsf{LocalCert}_I,B_I^+):I\in\mathcal I_{\mathrm{bad}}\}.
+\]
+每个局部证书属于
+\[
+\mathsf{LocalCert}_I
+\in
+\{
+\mathsf{SingleZeroCert},
+\mathsf{PacketCert},
+\mathsf{SplitCert},
+\mathsf{IQCert}
+\}.
+\]
+若同一弧 \(I\) 存在多个已验证候选，则最终 ledger 只使用
+\[
+B_I^+
+=
+\min
+\left\{
+B_{I,\alpha}^+:
+\mathsf{LocalCert}_{I,\alpha}\text{ 已通过验证}
+\right\}.
+\]
+\end{definition}
+
+优化器可以使用启发式评分、随机搜索或非严格预测模型；这些选择不进入数学正确性。确定性验证器
+\[
+\mathsf{VerifyOpt}(\mathsf{OptCert}_{r,R})
+\in
+\{\mathrm{PASS},\mathrm{FAIL}\}
+\]
+只检查有限数据：局部证书逐个通过、弧覆盖正确、每个 \(B_I^+\) 是对应局部证书的严格上界、总和的区间算术正确，以及
+\[
+\mathcal U^+<\left[\log\frac rR\right]^-.
+\]
+
+\begin{theorem}[优化证书的零点排斥语义]\label{thm:typed-address-biaxial-completion-optimized-jensen-rejection-certificate}
+若
+\[
+\mathsf{VerifyOpt}(\mathsf{OptCert}_{r,R})=\mathrm{PASS},
+\]
+则
+\[
+\Phi_a(w)\ne0
+\qquad(|w|\le R).
+\]
+\end{theorem}
+\begin{proof}
+每个局部 winner 给出
+\[
+B_I\le B_I^+.
+\]
+求和得到
+\[
+B_{\mathrm{ZA}}\le B_{\mathrm{ZA,opt}}^+.
+\]
+验证器又确认
+\[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA,opt}}^+
+<
+\log\frac rR
+\]
+以严格区间算术成立。于是前述 zero-aware Jensen 排斥链给出 \(|w|\le R\) 内无零点。证毕。
+\end{proof}
+
+\begin{definition}[细化偏序]\label{def:typed-address-biaxial-completion-refinement-preorder}
+若 \(\Xi'\) 相比 \(\Xi\) 只进行以下操作，则记为 \(\Xi'\preceq\Xi\)：弧划分细化；零点盒收缩；packet 被拆分或保留；cell 被二分或保留；求积子区间被二分或 Taylor 阶数增加；区间算术精度增加；局部模型加强，即
+\[
+c_K'\ge c_K,
+\qquad
+d'\le d.
+\]
+\end{definition}
+
+单次细化后的数值上界未必单调下降。区间自动微分可能在某些小 cell 上更宽，高阶 Taylor 项也可能携带更大的舍入包络。因此优化层必须保留 incumbent ledger：
+\[
+B_I^{\mathrm{best}}(t+1)
+:=
+\min\left\{
+B_I^{\mathrm{best}}(t),
+B_{I}^{\mathrm{cand}}(t+1)
+\right\}.
+\]
+于是
+\[
+B_{\mathrm{ZA}}^{\mathrm{best}}(t+1)
+\le
+B_{\mathrm{ZA}}^{\mathrm{best}}(t).
+\]
+该单调性来自历史最优保留，而不是来自任一细化动作本身。
+
+同一弧上的候选还可按支配关系压缩。若两个已验证局部证书 \(C_1,C_2\) 满足
+\[
+B^+(C_1)\le B^+(C_2),
+\qquad
+\mathrm{size}(C_1)\le\mathrm{size}(C_2),
+\]
+且 \(C_1\) 的依赖数据不强于 \(C_2\)，则 \(C_2\) 可从候选池删除。未被支配的局部候选构成 Pareto frontier：
+\[
+\mathcal F_I
+:=
+\{C:C\text{ 未被其他已验证局部证书支配}\}.
+\]
+最终只需保留
+\[
+\min_{C\in\mathcal F_I}B^+(C).
+\]
+
+优化动作分为四类：
+\[
+\mathsf{Act}
+=
+\mathsf{Act}_{\mathrm{geo}}
+\cup
+\mathsf{Act}_{\mathrm{zero}}
+\cup
+\mathsf{Act}_{\mathrm{quad}}
+\cup
+\mathsf{Act}_{\mathrm{arith}}.
+\]
+几何动作包括弧二分、packet 拆分和 cell 二分，目标是提高 inactive shield 下界；零点盒动作收缩 \(\Theta_\ell,\Gamma_\ell\)，目标是降低 log budget；求积动作二分 \(J_j\) 或提高 Taylor 阶数，目标是降低余项
+\[
+\frac{2M_{j,p+1}h_j^{p+2}}{(p+1)!(p+2)};
+\]
+算术动作提高 \(b_{\mathrm{round}}\)，用于处理舍入导致的 strict margin 损失。
+
+预算分配给出调度压力。定义可用于小值弧的局部预算
+\[
+T_{\mathrm{loc}}
+:=
+\log\frac rR
+-
+J_r^+
+-
+\log\frac{A_0^+}{A_0^-}
+-
+\frac12m(E_0)\log\left(1+\frac{\delta}{m_0}\right).
+\]
+取配额 \(\tau_I>0\)，满足
+\[
+\sum_I\tau_I=T_{\mathrm{loc}}.
+\]
+可按弧长分配，也可按预测真实贡献 \(\widehat B_I\) 分配。局部超额与压力为
+\[
+s_I:=B_I^{\mathrm{best}}-\tau_I,
+\]
+\[
+\mathsf{Press}(I)
+:=
+s_I^+
++
+\alpha_{\mathrm{err}}E_I
++
+\alpha_{\mathrm{box}}W_I
++
+\alpha_{\mathrm{round}}R_I.
+\]
+这里 \(E_I\) 表示求积余项或区间宽度，\(W_I\) 表示零点盒宽度导致的对数预算过剩，\(R_I\) 表示舍入宽度。调度器优先处理压力最大的弧；该排序只影响搜索效率，不影响证明。
+
+对动作 \(a\) 可定义预测单位成本收益
+\[
+\rho(a)
+:=
+\frac{\widehat\Delta(a)}
+{\mathrm{cost}(a)+\varepsilon},
+\]
+其中
+\[
+\mathrm{cost}(a)
+=
+c_1\Delta N_{\mathrm{cell}}
++
+c_2\Delta N_{\mathrm{AD}}
++
+c_3\Delta p
++
+c_4\Delta b_{\mathrm{round}}.
+\]
+\(\rho(a)\) 只用于调度；最终证书完全由已验证数据承担。
+
+\begin{definition}[共终搜索族]\label{def:typed-address-biaxial-completion-cofinal-search-family}
+令
+\[
+\mathfrak C
+:=
+\bigcup_{N,p,b}\mathfrak C(N,p,b),
+\]
+其中 \(N\) 控制最大 cell 数，\(p\) 控制最大 Taylor 阶数，\(b\) 控制区间算术精度。若调度满足
+\[
+\forall C\in\mathfrak C,\qquad C\text{ eventually generated},
+\]
+则称该调度对 \(\mathfrak C\) 共终。
+\end{definition}
+
+一个可实现的调度是按总等级
+\[
+N+p+\log_2 b
+\]
+做 dovetailing，同时在每个等级内按压力和预测收益排序。实际搜索可采用 best-first heuristic 加 cofinal fairness guard：大多数步骤追逐当前收益，周期性强制推进低等级尚未访问的 refinement。
+
+\begin{theorem}[共终优化器的有限完备性]\label{thm:typed-address-biaxial-completion-cofinal-optimizer-completeness}
+假设：
+\begin{enumerate}
+  \item 局部证书生成族对有限弧划分、packet 划分、cell splitting、Taylor degree 与 precision 共终；
+  \item 所有局部 verifier 均 sound；
+  \item 存在某个有限证书 \(\Xi_\star\)，其严格裕度满足 \(\mathfrak m_\star>0\)；
+  \item 提高区间算术精度可使初等函数 enclosure 宽度趋于 \(0\)；
+  \item 零点盒细化可达到 \(\Xi_\star\) 所需精度；
+  \item 对 peeled smooth remainder 的区间 Taylor 求积上界收敛到真实积分。
+\end{enumerate}
+则任一 fair cofinal optimizer 在有限步内输出 \(\mathrm{PASS}\)。
+\end{theorem}
+\begin{proof}
+由 \(\mathfrak m_\star>0\)，取 \(0<\eta<\mathfrak m_\star\)。只要所有局部上界与基点、阈值等区间量的总误差小于 \(\eta\)，严格不等式仍保持。共终性保证某个时刻会生成不粗于 \(\Xi_\star\) 的组合结构。零点盒细化、区间算术收敛与 Taylor 求积收敛保证对应数值包络进入 \(\eta\)-邻域。于是某一步有 \(\mathfrak m>0\)，验证器输出 \(\mathrm{PASS}\)。证毕。
+\end{proof}
+
+资源受限时，优化器输出 failure frontier，而非数学否证。定义
+\[
+\mathsf{OptFail}_{r,R}
+:=
+\left(
+\mathrm{Caps},
+\mathcal F_{\mathrm{frontier}},
+\Omega,
+\mathcal B_{\mathrm{bottleneck}},
+\mathcal A_{\mathrm{blocked}}
+\right),
+\]
+其中
+\[
+\Omega:=\mathcal U^+-\left[\mathcal T_{r,R}\right]^-.
+\]
+\(\mathcal F_{\mathrm{frontier}}\) 记录每个弧当前最优局部证书与 failure mode；
+\[
+\mathcal B_{\mathrm{bottleneck}}
+:=
+\{I:s_I>0\}
+\]
+记录瓶颈弧；\(\mathcal A_{\mathrm{blocked}}\) 记录被上限阻止的动作，如 \(p=p_{\max}\)、\(N_{\mathrm{cell}}=N_{\max}\) 或 \(b=b_{\max}\)。若尚未穷举 caps 内全部候选，则语义为 \(\mathrm{FrontierFail}\)；若指定 caps 内所有候选均已枚举且未通过，则语义为 \(\mathrm{CappedExhaustiveFail}\)，只能说明 caps 内不存在通过证书。
+
+优化层失败类型可细分为
+\[
+\mathsf{OptFailType}
+\in
+\{
+\mathrm{GlobalMarginFail},
+\mathrm{LocalBudgetFail},
+\mathrm{ZeroBoxFail},
+\mathrm{PacketGeometryFail},
+\mathrm{QuadratureFail},
+\mathrm{RoundoffFail},
+\mathrm{CertificateSizeFail},
+\mathrm{ExhaustedCapsFail}
+\}.
+\]
+\(\mathrm{GlobalMarginFail}\) 表示
+\[
+\log\frac rR
+-
+J_r^+
+-
+\log\frac{A_0^+}{A_0^-}
+\le0.
+\]
+\(\mathrm{LocalBudgetFail}\) 记录 \(B_I^{\mathrm{best}}>\tau_I\) 的瓶颈弧。\(\mathrm{ZeroBoxFail}\) 指向 \(\Theta_\ell,\Gamma_\ell\) 宽度造成的 log budget 过剩。\(\mathrm{PacketGeometryFail}\) 指向过弱的 inactive shield 或过小的 \(C_K\)。\(\mathrm{QuadratureFail}\) 记录最大 \(E_j\) 的求积子区间。\(\mathrm{RoundoffFail}\) 记录 \(b_{\mathrm{round}}\)、\(\operatorname{wid}(\mathcal U)\) 与 \(\mathfrak m\)。\(\mathrm{CertificateSizeFail}\) 记录 size ledger。
+
+Branch-and-bound 只作为效率工具。若对某搜索分支可证明乐观下界
+\[
+\underline B_{\mathrm{branch}}
+\le
+\inf_{\Xi\in\mathrm{branch}}B_{\mathrm{ZA}}^+(\Xi),
+\]
+并且
+\[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+\underline B_{\mathrm{branch}}
+\ge
+\log\frac rR,
+\]
+则该分支不可能通过，可以剪枝。这里必须使用下界而非上界；剪枝不是正确性必需项。
+
+Packet clustering 也应共终枚举。若一个弧内零点按角度排序为 \(z_1,\ldots,z_N\)，任一 packet clustering 是区间划分
+\[
+[1,a_1]\sqcup[a_1+1,a_2]\sqcup\cdots\sqcup[a_s+1,N].
+\]
+共有 \(2^{N-1}\) 种。启发式可按 gap score
+\[
+g_j
+:=
+\frac{\operatorname{dist}(\Theta_j,\Theta_{j+1})}
+{\operatorname{diam}\Theta_j+\operatorname{diam}\Theta_{j+1}
++\Gamma_j^++\Gamma_{j+1}^+}
+\]
+优先切开大 gap，但 cofinal guard 必须保证所有有序 packet 划分最终被尝试。
+
+方法切换的安全规则为
+\[
+B_K^{\mathrm{best}}
+:=
+\min
+\left\{
+B_{K,\mathrm{Holder}}^+,\,
+B_{K,\mathrm{split}}^+,\,
+B_{K,\mathrm{IQ}}^+
+\right\}_{\mathrm{verified}}.
+\]
+未通过的方法只留下调度信息，不进入证明 ledger。最终证书只需输出每个弧的 winner
+\[
+C_I^\star:=\arg\min_jB^+(C_{I,j})
+\]
+以及 transcript hash；大量搜索候选不必进入数学证明核心。
+
+所有标量必须以区间形式输出。全局通过条件采用
+\[
+\left[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA,opt}}^+
+\right]^+
+<
+\left[\log\frac rR\right]^-.
+\]
+定义 roundoff slack
+\[
+\mathfrak r
+:=
+\left[\log\frac rR\right]^-
+-
+\left[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA,opt}}^+
+\right]^+.
+\]
+必须有 \(\mathfrak r>0\)。若中点裕度为正但 \(\mathfrak r\le0\)，输出 \(\mathrm{RoundoffFail}\)，而非通过。
+
+优化层的最终接入为
+\[
+B_{\mathrm{ZA,opt}}^+
+:=
+\frac12m(E_0)\log\left(1+\frac{\delta}{m_0}\right)
++
+\sum_I B_I^{\mathrm{best}}.
+\]
+于是整体链条为
+\[
+\mathsf{RTCert}
+\Longrightarrow
+\mathsf{PACert}
+\Longrightarrow
+\mathsf{LocalCert}^{\star}
+\Longrightarrow
+\mathsf{OptCert}
+\Longrightarrow
+\mathsf{ZACert}_{\mathrm{opt}}
+\Longrightarrow
+\text{Jensen 排斥证书}.
+\]

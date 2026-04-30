@@ -1,0 +1,445 @@
+\subsubsection{Jensen 缺陷与 Toeplitz--PSD 的共同核}\label{subsubsec:typed-address-biaxial-completion-jensen-toeplitz-fusion-common-kernel}
+半径扫描证书只使用圆周均值
+\[
+M_F(t)=
+\frac1{2\pi}
+\int_0^{2\pi}\log|F(e^te^{i\theta})|\,d\theta,
+\]
+即角向 Fourier 模态的零阶项。Toeplitz--PSD 链保留全部有限角向模态。二者的共同对象是一份由零点诱导的正缺陷测度；Jensen 标量缺陷是其总质量，Toeplitz 矩阵是其有限 Fourier 矩阵。
+
+设 \(F\) 在单位圆盘中解析且 \(F(0)\ne0\)。对三圆窗口
+\[
+W=(\alpha,\tau,\beta),
+\qquad
+\alpha<\tau<\beta,
+\]
+令 \(h_W=h_{\alpha,\tau,\beta}\) 为前述三角帽函数。若零点写作
+\[
+\zeta=e^x e^{i\phi},
+\qquad
+x=\log|\zeta|<0,
+\]
+定义单位圆上的 hat 缺陷测度
+\[
+\mu_W
+:=
+\sum_{\zeta:F(\zeta)=0}
+m_\zeta\,h_W(\log|\zeta|)\,
+\delta_{e^{i\arg\zeta}}.
+\]
+这是正测度，并且
+\[
+\mu_W(\mathbb T)
+=
+\sum_\zeta m_\zeta h_W(\log|\zeta|)
+=
+D_F(\alpha,\tau,\beta).
+\]
+因此 Jensen 的三圆缺陷不是孤立标量，而是 \(\mu_W\) 的总质量。
+
+定义 Fourier 矩
+\[
+c_k(W)
+:=
+\int_{\mathbb T}z^{-k}\,d\mu_W(z)
+=
+\sum_\zeta
+m_\zeta h_W(\log|\zeta|)
+e^{-ik\arg\zeta},
+\qquad
+k\in\mathbb Z.
+\]
+则
+\[
+c_{-k}=\overline{c_k},
+\qquad
+c_0=D_F(\alpha,\tau,\beta).
+\]
+由这些矩构造 Toeplitz 矩阵
+\[
+T_K(c):=(c_{j-k})_{0\le j,k\le K}.
+\]
+任意 \(q=(q_0,\ldots,q_K)\in\mathbb C^{K+1}\) 满足
+\[
+q^*T_K(c)q
+=
+\int_{\mathbb T}
+\left|\sum_{j=0}^Kq_jz^j\right|^2d\mu_W(z)
+\ge0.
+\]
+故
+\[
+T_K(c)\succeq0.
+\]
+
+\begin{theorem}[Jensen--Toeplitz 共同核]\label{thm:typed-address-biaxial-completion-jensen-toeplitz-common-kernel}
+在上述设定下：
+\begin{enumerate}
+  \item Jensen hat defect 等于零阶矩：
+  \[
+  D_F(\alpha,\tau,\beta)=c_0(W).
+  \]
+  \item 对每个 \(K\ge0\)，Toeplitz 矩阵 \(T_K(c)\) 正半定。
+  \item 对任意非负三角多项式
+  \[
+  Q(e^{i\theta})=\sum_{|k|\le K}q_ke^{ik\theta},
+  \qquad
+  Q\ge0,
+  \]
+  有
+  \[
+  \int_{\mathbb T}Q\,d\mu_W
+  =
+  \sum_{|k|\le K}q_kc_{-k}
+  \ge0.
+  \]
+\end{enumerate}
+因此 Jensen 缺陷链与 Toeplitz--PSD 链分别是同一正缺陷测度的总质量投影与有限模态投影。
+\end{theorem}
+\begin{proof}
+第一项由 \(\mu_W(\mathbb T)=D_F\) 直接给出。第二项由上式二次型表示得到。第三项先对平方模三角多项式显然成立；一般非负三角多项式由 Fej\'er--Riesz 分解写作平方模，或由正测度积分的非负性直接推出。证毕。
+\end{proof}
+
+为了从圆周积分编译 \(c_k(W)\)，定义 Fourier 模态
+\[
+u_k(t)
+:=
+\frac1{2\pi}
+\int_0^{2\pi}
+\log|F(e^te^{i\theta})|e^{-ik\theta}\,d\theta.
+\]
+于是 \(u_0(t)=M_F(t)\)，且 \(u_{-k}(t)=\overline{u_k(t)}\)。在分布意义下，
+\[
+(\partial_t^2+\partial_\theta^2)
+\log|F(e^te^{i\theta})|
+=
+2\pi
+\sum_\zeta
+m_\zeta
+\delta(t-\log|\zeta|)
+\delta(\theta-\arg\zeta).
+\]
+取 \(\theta\)-Fourier 系数得到
+\[
+(\partial_t^2-k^2)u_k(t)
+=
+\sum_\zeta
+m_\zeta e^{-ik\arg\zeta}
+\delta(t-\log|\zeta|).
+\]
+因此
+\[
+c_k(W)=
+\left\langle
+h_W,\,
+(\partial_t^2-k^2)u_k
+\right\rangle.
+\]
+分部积分给出有限窗口公式
+\[
+c_k(W)
+=
+\lambda_-u_k(\alpha)
++
+\lambda_+u_k(\beta)
+-
+u_k(\tau)
+-
+k^2\int_\alpha^\beta h_W(t)u_k(t)\,dt,
+\]
+其中
+\[
+\lambda_-=\frac{\beta-\tau}{\beta-\alpha},
+\qquad
+\lambda_+=\frac{\tau-\alpha}{\beta-\alpha}.
+\]
+当 \(k=0\) 时，径向积分项消失，正好退化为
+\[
+c_0(W)
+=
+\lambda_-M_F(\alpha)
++
+\lambda_+M_F(\beta)
+-
+M_F(\tau)
+=
+D_F(\alpha,\tau,\beta).
+\]
+
+\begin{definition}[有限模态圆周证书]\label{def:typed-address-biaxial-completion-mode-certificate}
+一份有限模态圆周证书记为
+\[
+\mathsf{ModeCert}_{t,K}
+:=
+\left(
+t,\rho=e^t,K,
+\mathcal P_\theta,
+\{u_k(t)^-,u_k(t)^+\}_{|k|\le K},
+\mathsf{QuadLedger},
+\mathsf{RoundHash}
+\right),
+\]
+并证明
+\[
+u_k(t)\in[u_k(t)^-,u_k(t)^+],
+\qquad
+|k|\le K.
+\]
+该证书复用圆周均值证书的局部积分机制，只是在每个局部积分块中同时保留权重 \(e^{-ik\theta}\)。
+\end{definition}
+
+\begin{definition}[hat 模态证书]\label{def:typed-address-biaxial-completion-hat-mode-certificate}
+对窗口 \(W=(\alpha,\tau,\beta)\) 与模态阶数 \(K\)，定义
+\[
+\mathsf{HatModeCert}_{W,K}
+:=
+\left(
+W,K,
+\mathsf{ModeCert}_{\alpha,K},
+\mathsf{ModeCert}_{\tau,K},
+\mathsf{ModeCert}_{\beta,K},
+\mathsf{RadialQuadCert}_{W,K},
+\{c_k^-,c_k^+\}_{|k|\le K}
+\right).
+\]
+其中 \(\mathsf{RadialQuadCert}_{W,K}\) 给出
+\[
+\int_\alpha^\beta h_W(t)u_k(t)\,dt
+\]
+的区间上下界，并用上述 Fourier--Jensen 公式通过向外舍入区间算术得到 \(c_k(W)\) 的区间。
+\end{definition}
+
+给定矩区间 \(c_k\in[c_k^-,c_k^+]\)，构造中点矩阵
+\[
+\widetilde T_K=(\widetilde c_{j-k})_{0\le j,k\le K}.
+\]
+若真实矩阵满足
+\[
+T_K(c)=\widetilde T_K+E_K,
+\qquad
+\|E_K\|_2\le\varepsilon_K,
+\]
+且
+\[
+\lambda_{\min}(\widetilde T_K)>\varepsilon_K,
+\]
+则 \(T_K(c)\succ0\)。
+
+\begin{definition}[Toeplitz--PSD 证书]\label{def:typed-address-biaxial-completion-toeplitz-psd-certificate}
+一份 Toeplitz--PSD 证书记为
+\[
+\mathsf{ToeplitzPSDCert}_{W,K}
+:=
+\left(
+W,K,
+\{[c_k^-,c_k^+]\}_{|k|\le K},
+\widetilde T_K,
+\varepsilon_K,
+\gamma_K,
+\mathsf{LDLHash}
+\right),
+\]
+其中
+\[
+\gamma_K\le
+\lambda_{\min}(\widetilde T_K)-\varepsilon_K.
+\]
+若 \(\gamma_K>0\)，则该证书通过。等价地，可用有理 \(LDL^*\) 分解替代浮点谱分解，只检查矩阵恒等式、对角裕度与区间范数界。
+\end{definition}
+
+若存在向量 \(q\ne0\) 与 \(\eta>0\)，使得区间数据严格推出
+\[
+q^*T_K(c)q\le-\eta,
+\]
+则得到负见证
+\[
+\mathsf{PSDNegWitness}_{W,K}:=(q,\eta).
+\]
+它说明当前矩表不可能来自正缺陷测度；语义上应归入上游数值证书错误、区间误差不足或被假设的正缺陷对象不存在，而不是直接解释为零点排斥失败。
+
+Toeplitz 矩允许角向局部排斥。设目标径向窗口为 \([u,v]\subset(\alpha,\beta)\)，角向集合为 \(A\subset\mathbb T\)。若存在零点满足
+\[
+\log|\zeta|\in[u,v],
+\qquad
+e^{i\arg\zeta}\in A,
+\]
+则
+\[
+\mu_W(A)\ge\eta_W(u,v),
+\qquad
+\eta_W(u,v):=\inf_{x\in[u,v]}h_W(x).
+\]
+取三角多项式
+\[
+Q_A(e^{i\theta})
+=
+\sum_{|k|\le K}q_ke^{ik\theta}
+\]
+满足
+\[
+Q_A\ge0\quad\text{on }\mathbb T,
+\qquad
+Q_A\ge1\quad\text{on }A.
+\]
+则
+\[
+\mu_W(A)\le\int_{\mathbb T}Q_A\,d\mu_W
+=
+\sum_{|k|\le K}q_kc_{-k}.
+\]
+令 \(B_A^+\) 为右侧的向上舍入上界。若
+\[
+B_A^+<\eta_W^-(u,v),
+\]
+则目标径向--角向盒中无零点。
+
+\begin{definition}[Toeplitz 扇区排斥证书]\label{def:typed-address-biaxial-completion-toeplitz-sector-reject-certificate}
+一份扇区排斥证书记为
+\[
+\mathsf{ToeplitzSectorRejectCert}
+:=
+\left(
+W,K,[u,v],A,
+\mathsf{HatModeCert}_{W,K},
+\mathsf{ToeplitzPSDCert}_{W,K},
+Q_A,
+\mathsf{MajorantCert}_{Q_A,A},
+B_A^+,\eta_W^-,
+\mathfrak m_A
+\right),
+\]
+其中
+\[
+\mathfrak m_A:=\eta_W^- - B_A^+.
+\]
+若 \(\mathfrak m_A>0\)，则该证书通过，并推出
+\[
+F(w)\ne0
+\qquad
+(e^u\le |w|\le e^v,\ \arg w\in A).
+\]
+\end{definition}
+
+当 \(A=\mathbb T\)、\(Q_A\equiv1\)、\(K=0\) 时，
+\[
+B_A^+=c_0^+=D_F^+,
+\]
+于是 Toeplitz 扇区排斥退化为上一节的全角环带排斥。故
+\[
+\mathsf{AnnulusReject}
+\]
+是
+\[
+\mathsf{ToeplitzSectorReject}
+\]
+在零阶模态和全角集合上的特例。
+
+若标量 annulus reject 因 \(c_0\) 过大而失败，Toeplitz 模态仍可通过角向 majorant 区分缺陷测度的位置。取有限扇区 \(A_{j,\ell}\) 覆盖单位圆，并对每个径向--角向盒
+\[
+[u_j,v_j]\times A_{j,\ell}
+\]
+生成扇区排斥证书，便得到二维覆盖证书
+\[
+\mathsf{Cover2DCert}
+:=
+\left(
+[T_0,T_N],
+\{[u_j,v_j]\times A_{j,\ell}\}_{j,\ell},
+\mathsf{RadialOverlapLedger},
+\mathsf{AngularCoverLedger}
+\right).
+\]
+它检查径向区间覆盖与每个 \(j\) 上的角向覆盖
+\[
+\mathbb T\subseteq\bigcup_\ell A_{j,\ell}.
+\]
+
+\begin{definition}[Jensen--Toeplitz 融合证书]\label{def:typed-address-biaxial-completion-jensen-toeplitz-fusion-certificate}
+定义
+\[
+\mathsf{JensenToeplitzFusionCert}_{[R_0,R_N]}
+:=
+\left(
+\mathsf{CoreReject}_{R_0},
+\mathsf{Cover2DCert},
+\{\mathsf{HatModeCert}_{W_j,K_j}\}_j,
+\{\mathsf{ToeplitzPSDCert}_{W_j,K_j}\}_j,
+\{\mathsf{ToeplitzSectorRejectCert}_{j,\ell}\}_{j,\ell},
+\mathsf{ModeCache},
+\mathsf{TranscriptHash}
+\right).
+\]
+验证器检查 core reject、所有模态证书、Fourier--Jensen 矩公式、Toeplitz--PSD 裕度、三角 majorant、扇区 margin、二维覆盖与缓存哈希。
+\end{definition}
+
+\begin{theorem}[有限 Jensen--Toeplitz 融合排斥]\label{thm:typed-address-biaxial-completion-finite-jensen-toeplitz-fusion-rejection}
+若
+\[
+\mathsf{JensenToeplitzFusionCert}_{[R_0,R_N]}
+\]
+通过验证，则
+\[
+F(w)\ne0
+\qquad
+(|w|\le R_N).
+\]
+\end{theorem}
+\begin{proof}
+core 证书排除 \(|w|\le R_0\)。若外层存在零点 \(w_0=e^xe^{i\theta}\)，其中 \(\log R_0\le x\le\log R_N\)，则二维覆盖把 \((x,e^{i\theta})\) 放入某个 \([u_j,v_j]\times A_{j,\ell}\)。该零点对 \(\mu_{W_j}(A_{j,\ell})\) 的贡献至少为 \(\eta_{j,\ell}^-\)。但对应扇区证书给出
+\[
+\mu_{W_j}(A_{j,\ell})
+\le
+B_{j,\ell}^+
+<
+\eta_{j,\ell}^-,
+\]
+矛盾。证毕。
+\end{proof}
+
+Toeplitz--PSD 层级允许共终端稀疏化。若
+\[
+K_1<K_2<\cdots,
+\qquad
+K_\ell\to\infty,
+\]
+并且 \(T_{K_\ell}(c)\succeq0\) 对所有 \(\ell\) 成立，则任意有限 \(K\) 都嵌入某个 \(K_\ell\)，而 \(T_K(c)\) 是 \(T_{K_\ell}(c)\) 的主子矩阵，故 \(T_K(c)\succeq0\)。因此共终模态子序列足以核验整个 Toeplitz 正性层级。
+
+融合证书失败时输出
+\[
+\mathsf{FusionFail}
+:=
+(W,K,A,[u,v],\mathrm{FailType},\Omega,\mathsf{Witness}),
+\qquad
+\Omega:=B_A^+-\eta^-.
+\]
+失败类型包括
+\[
+\mathrm{ModeCertFail},\quad
+\mathrm{RadialQuadFail},\quad
+\mathrm{ToeplitzPSDGapFail},\quad
+\mathrm{PSDNegativeWitness},\quad
+\mathrm{MajorantFail},\quad
+\mathrm{SectorMassTooLarge},\quad
+\mathrm{Cover2DGap},\quad
+\mathrm{RoundoffFail},\quad
+\mathrm{CacheMismatch}.
+\]
+其中 \(\mathrm{PSDNegativeWitness}\) 对应 \(q^*T_Kq<0\) 的有限负向量见证；\(\mathrm{MajorantFail}\) 表示 \(Q_A\ge1_A\) 或 \(Q_A\ge0\) 的证书失败；\(\mathrm{SectorMassTooLarge}\) 表示 \(B_A^+\ge\eta^-\)，即该扇区暂时不能排斥。
+
+由此，Jensen 与 Toeplitz 的互译关系可压缩为
+\[
+\mathsf{JensenDefectCert}
+\Longrightarrow
+c_0\text{ interval}
+\Longrightarrow
+T_0(c)\succeq0,
+\]
+以及
+\[
+\mathsf{ToeplitzPSDCert}_{K}
+\Longrightarrow
+c_0\text{ interval}
+\Longrightarrow
+\mathsf{JensenDefectCert}.
+\]
+若只关心全角环带排斥，可忘却高阶矩而保留 \(c_0\)；若关心角向扇区排斥，则必须保留 \(c_{\pm1},\ldots,c_{\pm K}\)。因此，Jensen 是 Toeplitz 缺陷矩的 scalar shadow，而 Toeplitz 是 Jensen 缺陷测度的 finite-mode lift。

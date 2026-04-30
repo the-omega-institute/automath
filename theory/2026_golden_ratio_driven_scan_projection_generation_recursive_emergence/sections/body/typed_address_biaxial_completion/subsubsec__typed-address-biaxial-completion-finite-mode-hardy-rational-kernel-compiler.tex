@@ -1,0 +1,570 @@
+\subsubsection{有限模态 Hardy 投影与有理核编译器}\label{subsubsec:typed-address-biaxial-completion-finite-mode-hardy-rational-kernel-compiler}
+Jensen--Toeplitz 融合证书需要核验的基本量，是
+\[
+u_k(t)
+:=
+\frac1{2\pi}
+\int_0^{2\pi}
+\log |F(e^te^{i\theta})|
+e^{-ik\theta}\,d\theta
+\]
+以及由三圆窗口 \(W=(\alpha,\tau,\beta)\) 编译出的缺陷矩
+\[
+c_k(W)
+=
+\lambda_-u_k(\alpha)
++\lambda_+u_k(\beta)
+-u_k(\tau)
+-k^2\int_\alpha^\beta h_W(t)u_k(t)\,dt .
+\]
+因此，离线验证器真正需要复算的是 \(\log|F|\) 对有限个显式核的线性泛函。角向 Fourier 核、有限 Szeg\H{o} 核、hat 径向核、Toeplitz 矩核与扇区 majorant 核，均可写成有限分块上的 Laurent 或有理核。
+
+设
+\[
+g_t(\theta):=\log|F(e^te^{i\theta})|.
+\]
+因为 \(g_t\) 为实值函数，
+\[
+u_{-k}(t)=\overline{u_k(t)}.
+\]
+定义有限 Hardy 投影
+\[
+\mathcal H_K[g_t](z)
+:=
+u_0(t)+2\sum_{k=1}^K u_k(t)z^k .
+\]
+则在 \(z=e^{i\theta}\) 上，
+\[
+\operatorname{Re}\mathcal H_K[g_t](e^{i\theta})
+=
+\sum_{|k|\le K}u_k(t)e^{ik\theta}.
+\]
+Toeplitz 证书只需有限向量
+\[
+\bigl(u_0(t),u_1(t),\ldots,u_K(t)\bigr),
+\]
+因而有限 Hardy 投影是模态端的最小保存对象。
+
+在 Laurent 变量中，
+\[
+u_k(t)
+=
+\frac1{2\pi i}
+\oint_{|z|=1}
+\log|F(e^tz)|z^{-k-1}\,dz .
+\]
+有限 Szeg\H{o} 核为
+\[
+\mathcal S_K(w,z)
+:=
+\sum_{k=0}^K w^kz^{-k-1}
+=
+\frac{1-(w/z)^{K+1}}{z-w}.
+\]
+于是
+\[
+\sum_{k=0}^K u_k(t)w^k
+=
+\frac1{2\pi i}
+\oint_{|z|=1}
+\log|F(e^tz)|\mathcal S_K(w,z)\,dz .
+\]
+实 Fourier 截断所用 Dirichlet 核
+\[
+D_K(q)=\sum_{k=-K}^K q^k
+\]
+同样是 Laurent 有理对象。由此，有限模态计算可被统一编译为有理核积分。
+
+\begin{lemma}[单零点的 Hardy--Green 核]\label{lem:typed-address-biaxial-completion-single-zero-hardy-green-kernel}
+令
+\[
+\zeta=e^xe^{i\phi},
+\qquad x=\log|\zeta|,
+\]
+并置
+\[
+g_\zeta(t,\theta):=
+\log|e^te^{i\theta}-e^xe^{i\phi}|.
+\]
+其 Fourier 系数
+\[
+u_k^\zeta(t):=
+\frac1{2\pi}\int_0^{2\pi}
+g_\zeta(t,\theta)e^{-ik\theta}\,d\theta
+\]
+满足
+\[
+u_0^\zeta(t)=\max(t,x),
+\]
+且对 \(k>0\) 有
+\[
+u_k^\zeta(t)
+=
+-\frac1{2k}
+e^{-ik\phi}e^{-k|t-x|}.
+\]
+因此
+\[
+(\partial_t^2-k^2)u_k^\zeta(t)
+=
+e^{-ik\phi}\delta(t-x)
+\qquad(k>0).
+\]
+\end{lemma}
+\begin{proof}
+若 \(t>x\)，则
+\[
+g_\zeta(t,\theta)
+=
+t+\log|1-e^{x-t}e^{i(\phi-\theta)}|.
+\]
+展开
+\[
+\log|1-re^{i\psi}|
+=
+-\sum_{n\ge1}\frac{r^n}{n}\cos(n\psi),
+\qquad |r|<1,
+\]
+并提取 \(e^{-ik\theta}\) 系数，得到
+\[
+u_k^\zeta(t)
+=
+-\frac1{2k}e^{-ik\phi}e^{-k(t-x)}.
+\]
+若 \(t<x\)，将 \(e^x\) 提出并作同一展开，得到
+\[
+u_k^\zeta(t)
+=
+-\frac1{2k}e^{-ik\phi}e^{-k(x-t)}.
+\]
+零阶模态为 Jensen 平均，等于 \(\max(t,x)\)。分布恒等式由 \(e^{-k|t-x|}\) 的二阶导数直接给出。证毕。
+\end{proof}
+
+若 \(\rho=e^t\)、\(r=e^x=|\zeta|\)，则对 \(k>0\)
+\[
+e^{-k|t-x|}
+=
+\begin{cases}
+(r/\rho)^k,& r<\rho,\\
+(\rho/r)^k,& r>\rho.
+\end{cases}
+\]
+因此
+\[
+u_k^\zeta(t)
+=
+-\frac1{2k}
+\begin{cases}
+\overline{\zeta}^{\,k}\rho^{-k},& |\zeta|<\rho,\\
+\rho^k\zeta^{-k},& |\zeta|>\rho.
+\end{cases}
+\]
+在半径排序已经由证书固定的块中，零点 packet 对有限模态的贡献可以由有理单项式的区间包围给出。尖锐的 \(\log|z-\zeta|\) 项因而可被替换为 Hardy--Green rational contribution；剩余零点自由项再由常规区间积分处理。
+
+令
+\[
+W=(\alpha,\tau,\beta),
+\qquad
+\lambda_-:=\frac{\beta-\tau}{\beta-\alpha},
+\qquad
+\lambda_+:=\frac{\tau-\alpha}{\beta-\alpha}.
+\]
+定义径向分布核
+\[
+\mathscr K_{W,k}
+:=
+\lambda_-\delta_\alpha
++\lambda_+\delta_\beta
+-\delta_\tau
+-k^2h_W(t)\,dt .
+\]
+则 Fourier--Jensen 编译公式可写作
+\[
+c_k(W)
+=
+\frac1{2\pi}
+\int
+\int_0^{2\pi}
+\log|F(e^te^{i\theta})|
+e^{-ik\theta}\,d\theta\,d\mathscr K_{W,k}(t).
+\]
+当 \(k=0\) 时，
+\[
+\mathscr K_{W,0}
+=
+\lambda_-\delta_\alpha+\lambda_+\delta_\beta-\delta_\tau,
+\]
+从而
+\[
+c_0(W)
+=
+\lambda_-M_F(\alpha)+\lambda_+M_F(\beta)-M_F(\tau),
+\]
+即三圆 Jensen hat defect。对 \(k>0\)，项 \(-k^2h_W(t)\,dt\) 正是 radial Helmholtz operator 的补偿项。
+
+为了避免依赖平台三角函数，角向积分块使用 Cayley 坐标。给定
+\[
+I=[a,b]\subset(c-\pi,c+\pi),
+\qquad
+x=\tan\frac{\theta-c}{2},
+\]
+则
+\[
+e^{i\theta}
+=
+e^{ic}\frac{1+ix}{1-ix},
+\qquad
+d\theta=\frac{2\,dx}{1+x^2}.
+\]
+因此
+\[
+e^{-ik\theta}\,d\theta
+=
+R_{k,c}(x)\,dx,
+\]
+其中
+\[
+R_{k,c}(x)
+:=
+\frac{2e^{-ikc}(1-ix)^k}
+{(1+ix)^k(1+x^2)} .
+\]
+每个块上的模态积分转化为
+\[
+I_{B,k}(t)
+=
+\frac1{2\pi}
+\int_{x_a}^{x_b}
+\log\left|
+F\left(
+e^t e^{ic}\frac{1+ix}{1-ix}
+\right)
+\right|R_{k,c}(x)\,dx .
+\]
+核验器只需检查 Cayley 覆盖、上述有理恒等式以及块积分区间。
+
+块级 \(\log|F|\) 包围分为 regular 与 peeled 两类。regular block 上，证书给出
+\[
+|F(z)|\ge m_B>0
+\]
+并以区间 Taylor 或 Bernstein 包围
+\[
+|F(z)|^2\in[S_B^-,S_B^+],
+\qquad S_B^->0.
+\]
+于是
+\[
+\log|F(z)|=\frac12\log |F(z)|^2
+\]
+由 elementary interval ledger 包围。peeled block 上，证书给出局部分解
+\[
+F(z)=P_B(z)G_B(z),
+\qquad
+P_B(z)=\prod_{\nu=1}^{q_B}(z-\zeta_\nu)^{m_\nu},
+\qquad
+|G_B(z)|\ge m_B>0.
+\]
+于是
+\[
+\log|F(z)|
+=
+\sum_{\nu=1}^{q_B}m_\nu\log|z-\zeta_\nu|
++\log|G_B(z)|.
+\]
+其中 \(\log|G_B|\) 按 regular block 处理，而 singular packet 由闭式 logarithmic kernel 或 Hardy--Green rational contribution 处理。
+
+\begin{definition}[Hardy 模态有理核证书]\label{def:typed-address-biaxial-completion-hardy-mode-kernel-cert}
+称
+\[
+\mathsf{HardyModeKernelCert}_{t,K}
+\]
+为半径 \(e^t\) 上的有限模态有理核证书，若它包含
+\[
+\left(
+t,K,\rho=e^t,
+\mathcal P_\theta,
+\mathsf{ChartLedger},
+\mathsf{RatKernelLedger},
+\{\mathsf{BlockCert}_{B,K}\}_{B\in\mathcal P_\theta},
+\{[u_k^-,u_k^+]\}_{0\le k\le K},
+\mathsf{RoundHash},
+\mathsf{TranscriptHash}
+\right).
+\]
+其中 \(\mathcal P_\theta\) 是角向分块；\(\mathsf{ChartLedger}\) 证明 Cayley chart 覆盖；\(\mathsf{RatKernelLedger}\) 证明 \(e^{-ik\theta}d\theta=R_{k,c}(x)dx\)；每个 \(\mathsf{BlockCert}_{B,K}\) 给出
+\[
+I_{B,k}\in[I_{B,k}^-,I_{B,k}^+],
+\qquad 0\le k\le K.
+\]
+最终区间由 outward-rounded 求和定义：
+\[
+[u_k^-,u_k^+]
+\supseteq
+\sum_{B\in\mathcal P_\theta}[I_{B,k}^-,I_{B,k}^+].
+\]
+\end{definition}
+
+\begin{theorem}[模态有理核证书的可靠性]\label{thm:typed-address-biaxial-completion-mode-kernel-soundness}
+若
+\[
+\mathsf{HardyModeKernelCert}_{t,K}
+\]
+通过离线验证，则对每个 \(0\le k\le K\) 均有
+\[
+u_k(t)\in[u_k^-,u_k^+].
+\]
+\end{theorem}
+\begin{proof}
+角向分块 ledger 证明 \([0,2\pi]\) 被各块覆盖且端点重叠对积分无贡献。Cayley ledger 证明每个块中
+\[
+e^{i\theta}=e^{ic_B}\frac{1+ix}{1-ix},
+\qquad
+d\theta=\frac{2\,dx}{1+x^2}.
+\]
+有理核 ledger 证明
+\[
+e^{-ik\theta}d\theta=R_{k,c_B}(x)\,dx.
+\]
+于是真实块积分等于 \(\mathsf{BlockCert}_{B,K}\) 所包围的 \(I_{B,k}\)。对所有块作区间求和，即得所列模态区间。证毕。
+\end{proof}
+
+径向 hat 项需要二维核验。定义
+\[
+J_k(W):=\int_\alpha^\beta h_W(t)u_k(t)\,dt .
+\]
+相应证书
+\[
+\mathsf{RadialHardyKernelCert}_{W,K}
+\]
+包含径向划分 \(\mathcal P_t\)、角向划分 \(\mathcal P_\theta\)、tensor chart ledger、tensor block certs 以及区间
+\[
+J_k(W)\in[J_k^-,J_k^+],
+\qquad 0\le k\le K.
+\]
+每个 tensor block \(B=T\times I_\theta\) 在 \((t,x)\) 坐标中核验
+\[
+\frac1{2\pi}
+\int_T\int_{x_a}^{x_b}
+h_W(t)L_B(t,x)R_{k,c}(x)\,dx\,dt,
+\]
+其中
+\[
+L_B(t,x)=
+\log\left|
+F\left(
+e^t e^{ic}\frac{1+ix}{1-ix}
+\right)
+\right|.
+\]
+
+\begin{definition}[hat moment 编译器]\label{def:typed-address-biaxial-completion-hat-moment-compiler}
+给定
+\[
+\mathsf{HardyModeKernelCert}_{\alpha,K},\quad
+\mathsf{HardyModeKernelCert}_{\tau,K},\quad
+\mathsf{HardyModeKernelCert}_{\beta,K},
+\quad
+\mathsf{RadialHardyKernelCert}_{W,K},
+\]
+\(\mathsf{HatMomentCompiler}_{W,K}\) 以区间算术计算
+\[
+c_k(W)
+=
+\lambda_-u_k(\alpha)
++\lambda_+u_k(\beta)
+-u_k(\tau)
+-k^2J_k(W)
+\]
+并输出
+\[
+c_k(W)\in[c_k^-,c_k^+],
+\qquad 0\le k\le K.
+\]
+对 \(k=0\)，最后一项消失，故输出的 \(c_0\) 即 Jensen defect 区间。
+该编译输出连同输入哈希与舍入 ledger 记为
+\[
+\mathsf{HatMomentCert}_{W,K}.
+\]
+\end{definition}
+
+由区间矩构造 Toeplitz interval matrix
+\[
+T_K(c)=(c_{j-k})_{0\le j,k\le K}.
+\]
+取中点矩阵 \(\widetilde T_K\)，并记
+\[
+T_K(c)=\widetilde T_K+E,
+\qquad
+\|E\|_2\le\varepsilon_K.
+\]
+
+\begin{definition}[区间 LDL 证书]\label{def:typed-address-biaxial-completion-interval-ldl-cert}
+称
+\[
+\mathsf{IntervalLDLCert}_{W,K}
+=
+(\widetilde T_K,\varepsilon_K,R_K,L,D,\gamma_K,\mathsf{LDLHash})
+\]
+为 Toeplitz 区间矩的 LDL 证书，若验证器能够核验
+\[
+\widetilde T_K-R_K=LDL^*,
+\]
+\[
+D\succeq\gamma_K I,
+\]
+以及
+\[
+\gamma_K-\|R_K\|_2-\varepsilon_K>0.
+\]
+通过时得到
+\[
+T_K(c)\succeq0.
+\]
+\end{definition}
+
+对角向扇区 \(A\subset\mathbb T\)，取三角多项式
+\[
+Q_A(e^{i\theta})=\sum_{|k|\le K}q_ke^{ik\theta}.
+\]
+证书 \(\mathsf{MajorantCert}_{A,K}\) 证明
+\[
+Q_A\ge0\quad(\mathbb T),
+\qquad
+Q_A\ge1\quad(A).
+\]
+核验可以使用 Fej\'er--Riesz 平方模表示，也可以使用 Cayley 或 \(\cos(\theta-\theta_0)\) 坐标下的 Bernstein/Sturm 区间非负性。扇区质量上界由
+\[
+B_A^+
+\ge
+\left(
+\sum_{|k|\le K}q_kc_{-k}
+\right)^+
+\]
+给出。
+
+\begin{definition}[有理核融合证书]\label{def:typed-address-biaxial-completion-rational-fusion-cert}
+完整的有理核融合证书记为
+\[
+\mathsf{RationalFusionCert}_{[R_0,R_N]}.
+\]
+其数据包括
+\[
+\left(
+\mathsf{CoreReject}_{R_0},
+\mathsf{Cover2DCert}_{[R_0,R_N]},
+\{\mathsf{HardyModeKernelCert}_{t,K_j}\},
+\{\mathsf{RadialHardyKernelCert}_{W_j,K_j}\},
+\{\mathsf{HatMomentCert}_{W_j,K_j}\},
+\{\mathsf{IntervalLDLCert}_{W_j,K_j}\},
+\{\mathsf{MajorantCert}_{A_{j,\ell},K_j}\},
+\{\mathsf{SectorRejectLedger}_{j,\ell}\},
+\mathsf{EvalOracleDigest},
+\mathsf{ModeCache},
+\mathsf{TranscriptHash}
+\right).
+\]
+每个 sector ledger 记录
+\[
+B_{j,\ell}^+,\qquad
+\eta_{j,\ell}^-,
+\qquad
+\mathfrak m_{j,\ell}:=\eta_{j,\ell}^- - B_{j,\ell}^+.
+\]
+通过条件为
+\[
+\mathfrak m_{j,\ell}>0
+\qquad
+\text{for all }j,\ell.
+\]
+\end{definition}
+
+离线验证器
+\[
+\mathsf{VerifyRationalFusion}
+\]
+依次检查输入函数 digest、core reject、二维覆盖、endpoint 模态证书、径向 hat 证书、hat moment 区间、Toeplitz LDL 裕度、majorant 非负性与 \(Q_A\ge1_A\)，并以区间矩复算所有 \(B_A^+\)。全部扇区满足
+\[
+B_A^+<\eta^-
+\]
+时输出 \(\mathrm{PASS}\)。
+
+\begin{theorem}[有理核融合证书的可靠性]\label{thm:typed-address-biaxial-completion-rational-kernel-fusion-soundness}
+若
+\[
+\mathsf{VerifyRationalFusion}
+(\mathsf{RationalFusionCert}_{[R_0,R_N]})
+=
+\mathrm{PASS},
+\]
+则
+\[
+F(w)\ne0
+\qquad
+(|w|\le R_N).
+\]
+\end{theorem}
+\begin{proof}
+模态核证书给出所有 endpoint 模态 \(u_k(\alpha_j),u_k(\tau_j),u_k(\beta_j)\) 的正确区间；径向核证书给出 \(J_k(W_j)\) 的正确区间；hat moment 编译器因此给出 \(c_k(W_j)\) 的正确区间。区间 LDL 证书保证对应 Toeplitz 矩可视为正缺陷测度的有限矩数据。majorant 证书给出 \(Q_{j,\ell}\ge1_{A_{j,\ell}}\) 且 \(Q_{j,\ell}\ge0\)，于是
+\[
+\mu_{W_j}(A_{j,\ell})
+\le
+\int Q_{j,\ell}\,d\mu_{W_j}
+=
+\sum_{|k|\le K_j}q_{j,\ell,k}c_{j,-k}
+\le
+B_{j,\ell}^+.
+\]
+若某个零点 \(w_0=e^xe^{i\theta}\) 落入盒
+\[
+[u_j,v_j]\times A_{j,\ell},
+\]
+则其对 \(\mu_{W_j}(A_{j,\ell})\) 的贡献至少为 \(\eta_{j,\ell}^-\)，与
+\[
+B_{j,\ell}^+<\eta_{j,\ell}^-
+\]
+矛盾。二维覆盖排除 \(R_0\le|w|\le R_N\) 内全部零点；core reject 排除 \(|w|\le R_0\)。证毕。
+\end{proof}
+
+这给出固定格式的核验链：
+\[
+\log|F|
+\xrightarrow{\text{rational kernels}}
+u_k(t)
+\xrightarrow{\text{hat radial kernel}}
+c_k(W)
+\xrightarrow{\text{Toeplitz}}
+T_K(c)\succeq0
+\xrightarrow{\text{majorant}}
+\mu_W(A)<\eta
+\xrightarrow{\text{cover}}
+\text{zero exclusion}.
+\]
+每一步只提交有限分块、有理核、区间积分与线性代数裕度；证书搜索过程不进入数学正确性核心。
+
+融合验证失败时输出
+\[
+\mathsf{RationalFusionFail}
+:=
+(\mathrm{FailType},W,K,B,\Omega,\mathsf{Witness}).
+\]
+失败类型包括
+\[
+\mathrm{ChartCoverFail},\quad
+\mathrm{RatKernelIdentityFail},\quad
+\mathrm{LogLowerBoundFail},\quad
+\mathrm{PeelCertFail},\quad
+\mathrm{TaylorRemainderFail},\quad
+\mathrm{RadialTensorFail},
+\]
+\[
+\mathrm{HatMomentFail},\quad
+\mathrm{LDLGapFail},\quad
+\mathrm{MajorantFail},\quad
+\mathrm{SectorMarginFail},\quad
+\mathrm{TranscriptMismatch}.
+\]
+其中 \(\mathrm{LDLGapFail}\) 表示
+\[
+\gamma_K-\|R_K\|_2-\varepsilon_K\le0,
+\]
+\(\mathrm{SectorMarginFail}\) 表示 \(B_A^+\ge\eta^-\)，而 \(\mathrm{PeelCertFail}\) 表示零点 packet 分解或 residual lower bound 未通过。

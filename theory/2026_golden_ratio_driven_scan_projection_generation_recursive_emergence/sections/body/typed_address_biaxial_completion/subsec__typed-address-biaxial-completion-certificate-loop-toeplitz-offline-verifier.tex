@@ -157,6 +157,128 @@ S_r(w):=S(rw),
 
 因此，Toeplitz 证书并不要求完美精确的矩系数输入；它真正需要的是一组可以被第三方复核的有限矩阵数据、明确的算子范数误差上界，以及足以封口的谱裕度。这与 Jensen 缺陷证书中“半径 + 区间包络 + 禁入半径”的格式完全同型。
 
+\subsubsection{固定半径的 Schur--Cohn 证书}\label{subsubsec:typed-address-biaxial-completion-fixed-radius-schur-cohn-certificate}
+前述 Toeplitz--PSD 链是边界 Carath\'eodory 数据的正性证书；若只要求核验某个固定半径层内的零点禁入，还可以使用更直接的 Schur--Cohn 多项式证书。固定 \(a>0\)，令
+\[
+s_a(w):=\frac12+a\frac{1+w}{1-w},
+\qquad
+F_a(w):=\xi(s_a(w)),
+\qquad
+r_q:=1-2^{-q}.
+\]
+设
+\[
+G_{a,q}(z):=F_a(r_qz)
+\]
+并在单位圆盘内取 Taylor 截断
+\[
+P_{q,N}(z):=\sum_{k=0}^{N}c_k^{(q)}z^k.
+\]
+记
+\[
+E_{q,N}:=\sup_{|z|=1}|G_{a,q}(z)-P_{q,N}(z)|,
+\qquad
+m_q:=\min_{|z|=1}|G_{a,q}(z)|.
+\]
+
+对任意多项式
+\[
+P(z)=b_0+b_1z+\cdots+b_nz^n,
+\qquad b_0b_n\ne0,
+\]
+定义两个 \(n\times n\) 下三角 Toeplitz 矩阵
+\[
+A(P)_{ij}:=
+\begin{cases}
+b_{i-j},& i\ge j,\\
+0,& i<j,
+\end{cases}
+\qquad
+B(P)_{ij}:=
+\begin{cases}
+\overline{b_{n-i+j}},& i\ge j,\\
+0,& i<j,
+\end{cases}
+\]
+其中 \(0\le i,j\le n-1\)，并置
+\[
+\mathfrak C(P):=A(P)^*A(P)-B(P)^*B(P).
+\]
+
+\begin{theorem}[固定半径 Schur--Cohn 证书]\label{thm:typed-address-biaxial-completion-fixed-radius-schur-cohn-certificate}
+若存在 \(N\ge1\) 使
+\[
+E_{q,N}<m_q
+\]
+且
+\[
+\mathfrak C(P_{q,N})\succ0,
+\]
+则 \(F_a\) 在 \(|w|<r_q\) 内无零点。若 \(E_{q,N}<m_q\)，且 Schur--Cohn 递归或等价惯性计算给出 \(P_{q,N}\) 在 \(|z|<1\) 内至少一个零点的严格见证，则 \(G_{a,q}\) 与 \(P_{q,N}\) 在单位圆盘内具有相同的正零点数，从而给出 \(|w|<r_q\) 内的零点见证。若任一严格不等式缺少可核验裕度，或 Schur--Cohn 矩阵只表现为退化而没有内部零点见证，则该层输出 \(\mathrm{NULL}\)。
+\end{theorem}
+\begin{proof}
+由 \(E_{q,N}<m_q\)，在 \(|z|=1\) 上有
+\[
+|G_{a,q}(z)-P_{q,N}(z)|<|G_{a,q}(z)|.
+\]
+Rouch\'e 定理给出 \(G_{a,q}\) 与 \(P_{q,N}\) 在 \(|z|<1\) 内零点数相同。按上述矩阵约定，Schur--Cohn 判据表明
+\[
+\mathfrak C(P)\succ0
+\iff
+P\text{ 在 }|z|\le1\text{ 内无零点}.
+\]
+因此正定情形推出 \(G_{a,q}\) 在 \(\DD\) 内无零点，等价于 \(F_a\) 在 \(|w|<r_q\) 内无零点。反向情形中，一旦 Schur--Cohn 侧给出 \(P_{q,N}\) 的严格内部零点见证，Rouch\'e 定理便把同一零点数传递给 \(G_{a,q}\)；若只得到边界退化而无内部零点见证，则不能作为失败证书，只能保留为 \(\mathrm{NULL}\)。证毕。
+\end{proof}
+
+定理 \ref{thm:typed-address-biaxial-completion-fixed-radius-schur-cohn-certificate} 把固定半径任务压成一份有限数据对象
+\[
+\mathsf{SC}(q,N)
+=
+\bigl(P_{q,N},\,E_{q,N}^+,\,m_q^-,\,\lambda_{q,N}^-\bigr),
+\]
+其中
+\[
+E_{q,N}\le E_{q,N}^+,
+\qquad
+m_q\ge m_q^-,
+\qquad
+\lambda_{\min}\mathfrak C(P_{q,N})\ge \lambda_{q,N}^-.
+\]
+一旦
+\[
+E_{q,N}^+<m_q^-,
+\qquad
+\lambda_{q,N}^->0,
+\]
+该固定半径证书即可通过。由于任意盘内零点都会被某个共终半径序列 \(r_q\uparrow1\) 捕捉，RH 等价于对所有 \(q\) 均存在某个 \(N\) 使上述固定半径证书通过。
+
+\input{subsubsec__typed-address-biaxial-completion-gamma-renormalized-endpoint-budget}
+\input{subsubsec__typed-address-biaxial-completion-renormalized-jensen-defect-certificate}
+\input{subsubsec__typed-address-biaxial-completion-outer-majorant-jensen-certificate}
+\input{subsubsec__typed-address-biaxial-completion-finite-fourier-toeplitz-outer-certificate}
+\input{subsubsec__typed-address-biaxial-completion-haar-fejer-riesz-dual-certificate}
+\input{subsubsec__typed-address-biaxial-completion-zero-aware-regularization-gap-certificate}
+\input{subsubsec__typed-address-biaxial-completion-rouche-taylor-local-zero-certificate}
+\input{subsubsec__typed-address-biaxial-completion-packet-aware-regularization-certificate}
+\input{subsubsec__typed-address-biaxial-completion-finite-arc-quadrature-product-kernel-certificate}
+\input{subsubsec__typed-address-biaxial-completion-certificate-optimizer-cofinal-refinement}
+\input{subsubsec__typed-address-biaxial-completion-radial-sweep-annulus-chain}
+\input{subsubsec__typed-address-biaxial-completion-jensen-toeplitz-fusion-common-kernel}
+\input{subsubsec__typed-address-biaxial-completion-finite-mode-hardy-rational-kernel-compiler}
+\input{subsubsec__typed-address-biaxial-completion-endpoint-heat-kernel-blindspot-complement}
+\input{subsubsec__typed-address-biaxial-completion-comoving-tomography-blindspot-resolution}
+\input{subsubsec__typed-address-biaxial-completion-orthogonal-trislice-decision-closure}
+\input{subsubsec__typed-address-biaxial-completion-cech-obstacle-projective-quantum-structure}
+\input{subsubsec__typed-address-biaxial-completion-open-quantum-channel-continuous-time-closure}
+\input{subsubsec__typed-address-biaxial-completion-sync-cost-propagation-cone-discrete-curvature-lorentz-structure}
+\input{subsubsec__typed-address-biaxial-completion-admissible-four-dimensional-einstein-closure}
+\input{subsubsec__typed-address-biaxial-completion-quantum-spacetime-interface-semiclassical-source-closure}
+\input{subsubsec__typed-address-biaxial-completion-effective-action-stationary-phase-double-limit}
+\input{subsubsec__typed-address-biaxial-completion-heat-kernel-zeta-counterterm-classification}
+\input{subsubsec__typed-address-biaxial-completion-eft-truncation-wilson-rg-observable-error}
+\input{subsubsec__typed-address-biaxial-completion-lorentzian-in-in-causal-backreaction-closure}
+\input{subsubsec__typed-address-biaxial-completion-measurement-decoherence-classical-record-closure}
+
 \subsubsection{两条证书链的共同核：缺陷标量与负惯性测量同一缺陷}\label{subsubsec:typed-address-biaxial-completion-common-defect-kernel}
 缺陷链与 Toeplitz 链之所以能够互译，并不是因为它们偶然给出同一个真值，而是因为二者在有限型点状缺陷口径下审计同一对象。
 

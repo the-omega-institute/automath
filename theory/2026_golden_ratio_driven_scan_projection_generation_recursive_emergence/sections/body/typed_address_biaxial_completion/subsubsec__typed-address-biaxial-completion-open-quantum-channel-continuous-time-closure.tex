@@ -1,0 +1,550 @@
+\subsubsection{量子信道、完全正实现与连续时间闭包}\label{subsubsec:typed-address-biaxial-completion-open-quantum-channel-continuous-time-closure}
+射影 lift 与正定重叠核给出有限维 Hilbert 载体、射影态、效果算子、Born 读出与离散等距演化。可见读出协议还必须容纳混合态、粗粒化、环境遗忘、测量态变换与连续时间演化。相应闭合链为
+\[
+\text{projective Hilbert skeleton}
+\Longrightarrow
+\text{CPTP channel skeleton}
+\Longrightarrow
+\text{Stinespring dilation}
+\Longrightarrow
+\text{continuous-time group or semigroup}
+\Longrightarrow
+L^2(X,\nu)\text{ representation}.
+\]
+其语义原则是
+\[
+\boxed{
+\text{visible irreversibility}
+=
+\text{hidden reversible realization}
++
+\text{partial trace or conditional expectation}.
+}
+\]
+
+\paragraph{正常态与效果读出。}
+有限维 Hilbert 空间 \(\mathcal H\) 上的态为密度算子
+\[
+\rho\in\mathcal B(\mathcal H),
+\qquad
+\rho\ge0,
+\qquad
+\operatorname{tr}\rho=1.
+\]
+纯态 \([\psi]\) 对应
+\[
+\rho_\psi=
+\frac{|\psi\rangle\langle\psi|}
+{\langle\psi,\psi\rangle}.
+\]
+效果算子满足
+\[
+0\le E\le I,
+\]
+Born 读出统一写成
+\[
+\boxed{
+\mathbb P(E|\rho)=\operatorname{tr}(\rho E).
+}
+\]
+
+\begin{definition}[正常态证书]\label{def:typed-address-biaxial-completion-state-normal-cert}
+称 \(\mathsf{StateNormalCert}\) 为正常态证书，若它包含 \(\mathcal H\)、矩阵 \(\rho\)、Hermitian ledger、PSD interval cert、trace-one cert、rank ledger、purity ledger 与 round hash。验证器检查
+\[
+\rho=\rho^*,
+\qquad
+\rho\succeq0,
+\qquad
+\operatorname{tr}\rho=1.
+\]
+纯度读出为
+\[
+\gamma(\rho):=\operatorname{tr}(\rho^2).
+\]
+若 \(\gamma(\rho)\) 的区间跨越 \(1\) 且无法判定是否为纯态，输出 \(\mathsf{PurityNull}\)。若 Hermitian、PSD 或迹条件失败，输出 \(\mathsf{StateFail}\)。
+\end{definition}
+
+\paragraph{完全正信道。}
+令 \(\mathcal H_{\rm in}\) 与 \(\mathcal H_{\rm out}\) 为有限维 Hilbert 空间。Schr\"odinger 图像中的量子信道是线性映射
+\[
+\Phi_{\ast}:\mathcal T(\mathcal H_{\rm in})
+\to
+\mathcal T(\mathcal H_{\rm out})
+\]
+并满足完全正与迹保持。Heisenberg 图像中的对偶映射
+\[
+\Phi:\mathcal B(\mathcal H_{\rm out})
+\to
+\mathcal B(\mathcal H_{\rm in})
+\]
+满足完全正与单位保持
+\[
+\Phi(I_{\rm out})=I_{\rm in}.
+\]
+两种图像通过
+\[
+\boxed{
+\operatorname{tr}(\Phi_{\ast}(\rho)A)
+=
+\operatorname{tr}(\rho\,\Phi(A))
+}
+\]
+相连。复合系统稳定性要求
+\[
+(\operatorname{id}_r\otimes\Phi_{\ast})(X)\ge0
+\]
+对任意辅助维数 \(r\) 与任意 \(X\ge0\) 成立，因此需要完全正性而不只是正性。
+
+取 \(\mathcal H_{\rm in}\) 的正交基 \(\{|i\rangle\}_{i=1}^d\)，令 \(E_{ij}=|i\rangle\langle j|\)。Choi 矩阵为
+\[
+\boxed{
+C_{\Phi_{\ast}}
+=
+\sum_{i,j=1}^{d}
+E_{ij}\otimes\Phi_{\ast}(E_{ij}).
+}
+\]
+有限维 Choi 判据给出
+\[
+\Phi_{\ast}\text{ completely positive}
+\quad\Longleftrightarrow\quad
+C_{\Phi_{\ast}}\succeq0,
+\]
+迹保持条件为
+\[
+\operatorname{tr}_{\rm out} C_{\Phi_{\ast}}=I_{\rm in}.
+\]
+
+\begin{definition}[Choi 信道证书]\label{def:typed-address-biaxial-completion-channel-choi-cert}
+称 \(\mathsf{ChannelChoiCert}\) 为 Choi 信道证书，若它包含输入输出空间、映射或 Choi 矩阵、basis ledger、Choi construction ledger、Choi PSD interval cert、trace-preserving cert、Kraus rank ledger 与 round hash。验证器检查
+\[
+C_{\Phi_{\ast}}=C_{\Phi_{\ast}}^*,
+\qquad
+C_{\Phi_{\ast}}\succeq0,
+\qquad
+\operatorname{tr}_{\rm out}C_{\Phi_{\ast}}=I_{\rm in}.
+\]
+若操作为 trace-nonincreasing，则最后一项替换为
+\[
+\operatorname{tr}_{\rm out}C_{\Phi_{\ast}}\le I_{\rm in}.
+\]
+若存在向量 \(\xi\) 使 \(\langle\xi,C_{\Phi_{\ast}}\xi\rangle<0\)，输出 \(\mathsf{ChoiPSDFail}\)。迹保持不成立时输出 \(\mathsf{TracePreservingFail}\)；区间宽度不足时输出相应 NULL。
+\end{definition}
+
+\begin{theorem}[Kraus 表示]\label{thm:typed-address-biaxial-completion-kraus-representation}
+有限维线性映射 \(\Phi_{\ast}:\mathcal B(\mathcal H_{\rm in})\to\mathcal B(\mathcal H_{\rm out})\) 完全正，当且仅当存在算子
+\[
+K_\alpha:\mathcal H_{\rm in}\to\mathcal H_{\rm out}
+\]
+使
+\[
+\boxed{
+\Phi_{\ast}(\rho)=
+\sum_{\alpha=1}^{r}K_\alpha\rho K_\alpha^*.
+}
+\]
+若 \(\Phi_{\ast}\) 迹保持，则
+\[
+\boxed{
+\sum_{\alpha=1}^{r}K_\alpha^*K_\alpha=I_{\rm in}.
+}
+\]
+最小 Kraus 数等于 \(\operatorname{rank}C_{\Phi_{\ast}}\)。
+\end{theorem}
+\begin{proof}
+Kraus 表示显然在任意旁观系统上保持正性，因此给出完全正映射。反过来，若 \(C_{\Phi_{\ast}}\succeq0\)，取谱分解
+\[
+C_{\Phi_{\ast}}=\sum_{\alpha=1}^{r}|\eta_\alpha\rangle\langle\eta_\alpha|.
+\]
+将 \(\eta_\alpha\in\mathcal H_{\rm in}\otimes\mathcal H_{\rm out}\) reshape 为算子 \(K_\alpha:\mathcal H_{\rm in}\to\mathcal H_{\rm out}\)，由 Choi 反演得到 Kraus 表示。迹保持等价于 \(\sum_\alpha K_\alpha^*K_\alpha=I_{\rm in}\)。证毕。
+\end{proof}
+
+\begin{definition}[Kraus 信道证书]\label{def:typed-address-biaxial-completion-kraus-channel-cert}
+称 \(\mathsf{KrausChannelCert}\) 为 Kraus 信道证书，若它包含 \(\{K_\alpha\}\)、dimension ledger、Kraus completeness cert、Choi reconstruction ledger、trace-preserving interval cert 与 round hash。验证器检查维度相容，并检查
+\[
+\sum_\alpha K_\alpha^*K_\alpha=I_{\rm in}.
+\]
+若完备关系跨越误差阈值，输出 \(\mathsf{KrausCompletenessNull}\)；若偏离超出预算，输出 \(\mathsf{KrausCompletenessFail}\)。
+\end{definition}
+
+\paragraph{Stinespring 扩张与可见不可逆性。}
+\begin{theorem}[Stinespring 扩张]\label{thm:typed-address-biaxial-completion-stinespring-dilation}
+若 \(\Phi_{\ast}\) 是 CPTP 信道，则存在环境 Hilbert 空间 \(\mathcal E\) 与等距算子
+\[
+V:\mathcal H_{\rm in}\to\mathcal H_{\rm out}\otimes\mathcal E,
+\qquad
+V^*V=I_{\rm in},
+\]
+使
+\[
+\boxed{
+\Phi_{\ast}(\rho)
+=
+\operatorname{tr}_{\mathcal E}(V\rho V^*).
+}
+\]
+若 \(\Phi_{\ast}(\rho)=\sum_{\alpha=1}^{r}K_\alpha\rho K_\alpha^*\)，可取 \(\mathcal E=\mathbb C^r\) 并令
+\[
+V\psi=\sum_{\alpha=1}^{r}K_\alpha\psi\otimes|\alpha\rangle.
+\]
+\end{theorem}
+\begin{proof}
+由 Kraus 完备关系，
+\[
+V^*V=\sum_\alpha K_\alpha^*K_\alpha=I_{\rm in}.
+\]
+对 \(V\rho V^*\) 作环境偏迹，正交基 \(\{|\alpha\rangle\}\) 消去环境指标，得到 \(\sum_\alpha K_\alpha\rho K_\alpha^*\)。证毕。
+\end{proof}
+
+Stinespring 形式把可见不可逆性解释为隐藏环境遗忘：
+\[
+\rho\mapsto V\rho V^*
+\]
+在总系统上保持信息，而
+\[
+\operatorname{tr}_{\mathcal E}
+\]
+丢弃环境自由度。该结构与有限折叠条件期望平行。若 \(f:\Omega\to X\) 为有限满射，交换代数嵌入
+\[
+\iota:L^\infty(X)\hookrightarrow L^\infty(\Omega),
+\qquad
+(\iota g)(\omega)=g(f(\omega))
+\]
+以及纤维平均
+\[
+(Eh)(x)=
+\frac1{|f^{-1}(x)|}
+\sum_{\omega\in f^{-1}(x)}h(\omega)
+\]
+满足
+\[
+E\circ\iota=\operatorname{id}.
+\]
+有限维交换 \(C^*\)-代数中正映射自动完全正，所以 \(E\) 是 Heisenberg 图像下的 UCP 映射。若存在非平凡纤维，则 \(E\) 非单射，不可能是 \(*\)-自同构。
+
+\begin{definition}[Stinespring 扩张证书]\label{def:typed-address-biaxial-completion-stinespring-dilation-cert}
+称 \(\mathsf{StinespringDilationCert}\) 为扩张证书，若它包含输入输出空间、环境 \(\mathcal E\)、等距算子 \(V\)、isometry cert、partial trace ledger、channel reconstruction ledger、environment dimension ledger、minimality ledger 与 round hash。验证器检查
+\[
+V^*V=I_{\rm in},
+\qquad
+\Phi_{\ast}(\rho)=\operatorname{tr}_{\mathcal E}(V\rho V^*),
+\]
+并检查最小环境维数
+\[
+\dim\mathcal E_{\min}=\operatorname{rank}C_{\Phi_{\ast}}.
+\]
+环境维数小于 Choi 秩时输出 \(\mathsf{EnvironmentDimensionFail}\)，等距条件不可判定时输出 \(\mathsf{IsometryNull}\)，重构不相容时输出 \(\mathsf{DilationFail}\)。
+\end{definition}
+
+\begin{definition}[可见完全正实现证书]\label{def:typed-address-biaxial-completion-visible-cp-realization-cert}
+称 \(\mathsf{VisibleCPRealizationCert}\) 为可见 CP 实现证书，若它包含可见代数 \(\mathcal A_{\rm vis}\)、总代数 \(\mathcal A_{\rm tot}\)、嵌入 \(\iota\)、回缩 \(E\)、inclusion ledger、CP map cert、unital cert、retraction cert、state compatibility ledger 与 round hash。验证器检查
+\[
+\iota\text{ is a }*\text{-monomorphism},
+\qquad
+E\text{ is CP},
+\qquad
+E(I)=I,
+\qquad
+E(\iota(A))=A
+\]
+在生成元上成立。若映射只正而非完全正，输出 \(\mathsf{PositiveButNotCPFail}\)；若回缩恒等式不可判定，输出 \(\mathsf{RetractionNull}\)。
+\end{definition}
+
+\paragraph{测量仪器、组合与可逆性。}
+POVM 为效果族
+\[
+E_y\ge0,
+\qquad
+\sum_yE_y=I.
+\]
+若
+\[
+E_y=\sum_\alpha M_{y,\alpha}^*M_{y,\alpha},
+\]
+选择测量的未归一化后验态为
+\[
+\rho_y'=
+\sum_\alpha M_{y,\alpha}\rho M_{y,\alpha}^*,
+\qquad
+p_y=\operatorname{tr}\rho_y'.
+\]
+当 \(p_y>0\) 时，归一化后验态为 \(\rho_y=\rho_y'/p_y\)。非选择测量为 CPTP 信道
+\[
+\Phi_{\ast}(\rho)=
+\sum_{y,\alpha}M_{y,\alpha}\rho M_{y,\alpha}^*.
+\]
+
+\begin{definition}[测量仪器证书]\label{def:typed-address-biaxial-completion-measurement-instrument-cert}
+称 \(\mathsf{MeasurementInstrumentCert}\) 为测量仪器证书，若它包含 outcome 集 \(Y\)、Kraus 算子 \(\{M_{y,\alpha}\}\)、效果 \(\{E_y\}\)、effect decomposition ledger、POVM completeness cert、outcome probability ledger、posterior state ledger 与 round hash。验证器检查
+\[
+E_y=\sum_\alpha M_{y,\alpha}^*M_{y,\alpha},
+\qquad
+\sum_yE_y=I.
+\]
+若 \(p_y\) 跨零，输出 \(\mathsf{PosteriorNormalizationNull}\)；若 POVM 完备性失败，输出 \(\mathsf{POVMFail}\)。
+\end{definition}
+
+信道组合与张量积在 Kraus 表示中封闭。若
+\[
+\Phi_{\ast}(\rho)=\sum_\alpha K_\alpha\rho K_\alpha^*,
+\qquad
+\Psi_{\ast}(\sigma)=\sum_\beta L_\beta\sigma L_\beta^*,
+\]
+则
+\[
+(\Psi_{\ast}\circ\Phi_{\ast})(\rho)
+=
+\sum_{\alpha,\beta}
+L_\beta K_\alpha\rho K_\alpha^*L_\beta^*.
+\]
+张量积信道的 Kraus 算子为 \(K_\alpha\otimes L_\beta\)。
+
+\begin{definition}[信道组合证书]\label{def:typed-address-biaxial-completion-channel-composition-cert}
+称 \(\mathsf{ChannelCompositionCert}\) 为信道组合证书，若它包含两个信道、domain-codomain ledger、Kraus composition ledger、Choi composition ledger、trace-preservation ledger 与 round hash。验证器检查
+\[
+\operatorname{codom}(\Phi_{\ast})=\operatorname{dom}(\Psi_{\ast}),
+\qquad
+M_{\beta,\alpha}=L_\beta K_\alpha,
+\]
+并检查组合 Kraus 完备性。维度不匹配时输出 \(\mathsf{ChannelDomainFail}\)，组合后不保持迹时输出 \(\mathsf{CompositeTPFail}\)。
+\end{definition}
+
+若有限维全矩阵代数上的 CPTP 信道有 CPTP 双边逆，则它由酉共轭给出。Choi 秩为 \(1\) 的迹保持信道具有单 Kraus 表示
+\[
+\Phi_{\ast}(\rho)=K\rho K^*,
+\qquad
+K^*K=I.
+\]
+若输入输出维数相等，则 \(K\) 为酉算子。Choi 秩大于 \(1\) 表示真正开放的可见动力学。
+
+\begin{definition}[信道可逆性证书]\label{def:typed-address-biaxial-completion-channel-reversibility-cert}
+称 \(\mathsf{ChannelReversibilityCert}\) 为可逆性证书，若它包含 \(C_{\Phi_{\ast}}\)、Choi rank ledger、unitary Kraus ledger、inverse channel ledger 与 round hash。验证器检查 Choi 秩是否为 \(1\)，并在维数相等时检查单 Kraus 算子满足
+\[
+K^*K=KK^*=I.
+\]
+若 \(\operatorname{rank}C_{\Phi_{\ast}}>1\) 且声称可逆，输出 \(\mathsf{ReversibilityFail}\)；秩区间跨越 \(1\) 时输出 \(\mathsf{ChoiRankNull}\)。
+\end{definition}
+
+\paragraph{连续时间闭合。}
+闭系统连续时间演化由强连续一参数酉群 \(U(t)\) 给出：
+\[
+U(0)=I,\qquad
+U(t+s)=U(t)U(s),\qquad
+U(t)^*U(t)=I.
+\]
+
+\begin{theorem}[Stone 定理]\label{thm:typed-address-biaxial-completion-stone-theorem}
+若 \(U(t)\) 是强连续一参数酉群，则存在唯一自伴算子 \(H=H^*\) 使
+\[
+\boxed{
+U(t)=e^{-itH}.
+}
+\]
+反过来，任意自伴算子生成这样的酉群。
+\end{theorem}
+
+\begin{definition}[连续酉演化证书]\label{def:typed-address-biaxial-completion-continuous-unitary-cert}
+称 \(\mathsf{ContinuousUnitaryCert}\) 为连续酉演化证书，若它包含 \(\mathcal H\)、Hamiltonian \(H\)、采样算子 \(\{U(t_j)\}\)、self-adjoint cert、exponential approximation ledger、group-law interval cert、unitarity interval cert、strong-continuity ledger 与 round hash。验证器检查
+\[
+H=H^*,
+\qquad
+U(t_j)\approx e^{-it_jH},
+\qquad
+U(t_j)^*U(t_j)\approx I,
+\]
+以及网格群律。若 \(H\) 非自伴，输出 \(\mathsf{HamiltonianSelfAdjointFail}\)；群律不可判定时输出 \(\mathsf{GroupLawNull}\)。
+\end{definition}
+
+开放系统连续时间演化为 CPTP 半群 \(\{\Phi_{t,\ast}\}_{t\ge0}\)。有限维范数连续情形下，生成元具有 GKSL/Lindblad 形式
+\[
+\boxed{
+\mathcal L_{\ast}(\rho)
+=
+-i[H,\rho]
++
+\sum_\alpha
+\left(
+L_\alpha\rho L_\alpha^*
+-
+\frac12\{L_\alpha^*L_\alpha,\rho\}
+\right),
+}
+\]
+其中 \(H=H^*\)。于是
+\[
+\Phi_{t,\ast}=e^{t\mathcal L_{\ast}}.
+\]
+
+\begin{definition}[量子 Markov 半群证书]\label{def:typed-address-biaxial-completion-quantum-markov-semigroup-cert}
+称 \(\mathsf{QuantumMarkovSemigroupCert}\) 为量子 Markov 半群证书，若它包含 \(H\)、跳跃算子 \(\{L_\alpha\}\)、生成元 \(\mathcal L_{\ast}\)、采样信道 \(\{\Phi_{t_j,\ast}\}\)、Hamiltonian cert、Lindblad form ledger、trace-preservation ledger、Choi PSD for times ledger、semigroup-law interval cert 与 round hash。验证器检查 Lindblad 公式、\(\operatorname{tr}\mathcal L_{\ast}(\rho)=0\)、采样指数重构、Choi PSD 与半群律。若 Lindblad 结构缺失但采样 Choi 仍为正，输出 \(\mathsf{GeneratorFormNull}\)；若某个采样时间出现 Choi 负方向，输出 \(\mathsf{SemigroupCPFail}\)。
+\end{definition}
+
+给定离散信道 \(\Phi_{\ast}\)，若存在 Lindblad 生成元 \(\mathcal L_{\ast}\) 使
+\[
+\Phi_{\ast}=e^{\mathcal L_{\ast}},
+\]
+则离散信道可嵌入连续 Markov 半群。矩阵对数多值，必须记录 branch ledger。
+
+\begin{definition}[连续嵌入证书]\label{def:typed-address-biaxial-completion-continuous-embedding-cert}
+称 \(\mathsf{ContinuousEmbeddingCert}\) 为连续嵌入证书，若它包含 \(\Phi_{\ast}\)、候选生成元 \(\mathcal L_{\ast}\)、matrix-log ledger、Lindblad form cert、exponential reconstruction cert、branch choice ledger 与 round hash。验证器检查
+\[
+e^{\mathcal L_{\ast}}=\Phi_{\ast}
+\]
+以及 \(\mathcal L_{\ast}\) 的 Lindblad 形式。若分支无法稳定选择，输出 \(\mathsf{LogBranchNull}\)；若无合法 GKSL 对数，输出 \(\mathsf{EmbeddingFail}\)。
+\end{definition}
+
+\paragraph{连续谱与 Schr\"odinger 扇区。}
+若细化极限形成测度空间 \((X,\mathcal B,\nu)\)，则 Hilbert 空间可表示为
+\[
+\mathcal H=L^2(X,\nu).
+\]
+态向量 \(\psi\in L^2(X,\nu)\) 的事件 \(A\in\mathcal B\) 读出为
+\[
+\boxed{
+\mathbb P(A|\psi)=
+\frac{\int_A|\psi(x)|^2\,d\nu(x)}
+{\int_X|\psi(x)|^2\,d\nu(x)}.
+}
+\]
+可测集合对应投影
+\[
+(P_A\psi)(x)=1_A(x)\psi(x).
+\]
+
+\begin{definition}[谱表示证书]\label{def:typed-address-biaxial-completion-spectral-representation-cert}
+称 \(\mathsf{SpectralRepresentationCert}\) 为连续谱表示证书，若它包含 \(X,\mathcal B,\nu\)、\(\mathcal H=L^2(X,\nu)\)、生成环上的投影 \(\{P_A\}\)、sigma-algebra ledger、measure cert、projection-valued measure ledger、Born integral ledger 与 round hash。验证器检查
+\[
+P_A^2=P_A,\qquad P_A^*=P_A,\qquad P_{A\cap B}=P_AP_B,
+\]
+\[
+P_\emptyset=0,\qquad P_X=I,
+\qquad
+P_{A\sqcup B}=P_A+P_B
+\]
+在不交并上成立。需要 \(\sigma\)-闭包时，必须提交单调收敛 ledger。测度或积分预算不足时输出 \(\mathsf{SpectralMeasureNull}\)，投影值测度关系失败时输出 \(\mathsf{PVMeasureFail}\)。
+\end{definition}
+
+在 \(X=\mathbb R^d\)、\(\nu=dx\) 时，取实势函数 \(V\) 并形式定义
+\[
+\boxed{
+H=-\frac12\Delta+V(x).
+}
+\]
+若 \(H\) 自伴，则
+\[
+i\partial_t\psi(t)=H\psi(t),
+\qquad
+\psi(t)=e^{-itH}\psi(0),
+\]
+且 \(\|\psi(t)\|_2=\|\psi(0)\|_2\)。
+
+\begin{definition}[Schr\"odinger 扇区证书]\label{def:typed-address-biaxial-completion-schr-sector-cert}
+称 \(\mathsf{SchrSectorCert}\) 为 Schr\"odinger 扇区证书，若它包含 \(X=\mathbb R^d\)、\(\nu=dx\)、实势 \(V\)、Hamiltonian \(H=-\frac12\Delta+V\)、domain ledger、self-adjointness cert、unitary group cert、norm conservation ledger、Born density ledger 与 round hash。验证器检查 \(V\) 实值、\(H\) 自伴或 essential self-adjoint，并检查 \(e^{-itH}\) 的幺正性。自伴性不足时输出 \(\mathsf{HamiltonianDomainNull}\)，非自伴导致守恒失败时输出 \(\mathsf{SchrSectorFail}\)。
+\end{definition}
+
+形式替换 \(t=-i\tau\) 给出 Euclidean heat semigroup \(e^{-\tau H}\)。该分支需要额外条件，而非由 Hilbert 结构自动推出：
+\[
+H\succeq0,
+\qquad
+e^{-(\tau+\sigma)H}=e^{-\tau H}e^{-\sigma H},
+\qquad
+\|e^{-\tau H}\|\le1,
+\]
+以及在需要重构 Hilbert 动力学时的 reflection positivity。
+
+\begin{definition}[Euclidean 扇区证书]\label{def:typed-address-biaxial-completion-euclidean-sector-cert}
+称 \(\mathsf{EuclideanSectorCert}\) 为 Euclidean 扇区证书，若它包含 \(H\)、采样半群 \(\{e^{-\tau_jH}\}\)、positivity ledger、contraction semigroup cert、heat kernel ledger、必要时的 reflection positivity cert 与 round hash。缺少 reflection positivity 时输出 \(\mathsf{EuclideanReconstructionNull}\)，若 \(H\) 有负谱且无重整化说明，输出 \(\mathsf{EuclideanSemigroupFail}\)。
+\end{definition}
+
+\paragraph{开放量子融合证书。}
+\begin{definition}[开放量子融合证书]\label{def:typed-address-biaxial-completion-open-quantum-fusion-cert}
+称
+\[
+\mathsf{OpenQuantumFusionCert}
+\]
+为开放量子融合证书，若它包含 \(\mathsf{ProjectiveQuantumFusionCert}\)、\(\mathsf{StateNormalCerts}\)、\(\mathsf{ChannelChoiCerts}\)、\(\mathsf{KrausChannelCerts}\)、\(\mathsf{StinespringDilationCerts}\)、\(\mathsf{VisibleCPRealizationCerts}\)、\(\mathsf{MeasurementInstrumentCerts}\)、\(\mathsf{ChannelCompositionCerts}\)，并按声明包含 \(\mathsf{ContinuousUnitaryCert}\)、\(\mathsf{QuantumMarkovSemigroupCert}\)、\(\mathsf{ContinuousEmbeddingCert}\)、\(\mathsf{SpectralRepresentationCert}\)、\(\mathsf{SchrSectorCert}\) 或 \(\mathsf{EuclideanSectorCert}\)，以及 null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifyOpenQuantumFusion}\) 依次检查 Hilbert 载体、密度算子、效果与 POVM、Choi PSD、迹保持、Kraus 完备、Stinespring 等距与偏迹、CP 回缩、测量仪器、连续酉群、Lindblad 半群、连续嵌入、谱表示、Schr\"odinger 扇区与 Euclidean 扇区。NULL 类型包括
+\[
+\mathsf{ChoiPSDNull},\quad
+\mathsf{TracePreservingNull},\quad
+\mathsf{KrausCompletenessNull},\quad
+\mathsf{IsometryNull},\quad
+\mathsf{LogBranchNull},
+\]
+\[
+\mathsf{HamiltonianDomainNull},\quad
+\mathsf{SpectralMeasureNull},\quad
+\mathsf{EuclideanReconstructionNull}.
+\]
+FAIL 类型包括
+\[
+\mathsf{ChoiPSDFail},\quad
+\mathsf{TracePreservingFail},\quad
+\mathsf{PositiveButNotCPFail},\quad
+\mathsf{DilationFail},\quad
+\mathsf{SemigroupCPFail},
+\]
+\[
+\mathsf{HamiltonianSelfAdjointFail},\quad
+\mathsf{SchrSectorFail},\quad
+\mathsf{PVMeasureFail}.
+\]
+
+\begin{theorem}[开放量子融合的可靠性]\label{thm:typed-address-biaxial-completion-open-quantum-fusion-soundness}
+若
+\[
+\mathsf{VerifyOpenQuantumFusion}
+(\mathsf{OpenQuantumFusionCert})
+=
+\mathsf{PASS},
+\]
+则存在一个量子操作模型，包含 Hilbert 空间 \(\mathcal H\)、正常态族 \(\rho_s\)、效果或 POVM 族 \(E_\alpha\)、CPTP 信道族 \(\Phi_{\ast}\) 或连续半群 \(\Phi_{t,\ast}\)，以及在提交扩张证书时的隐藏环境 \(\mathcal E\) 与等距实现 \(V\)，使所有提交可见概率均由
+\[
+\boxed{
+p_{\alpha,s}
+=
+\operatorname{tr}\bigl(\Phi_{\ast}(\rho_s)E_\alpha\bigr)
+}
+\]
+或等价 Heisenberg 图像
+\[
+\boxed{
+p_{\alpha,s}
+=
+\operatorname{tr}\bigl(\rho_s\,\Phi(E_\alpha)\bigr)
+}
+\]
+给出。若连续闭系统证书通过，则存在自伴 \(H\) 使 \(U(t)=e^{-itH}\)。若开放半群证书通过，则存在 Lindblad 生成元 \(\mathcal L_{\ast}\) 使 \(\Phi_{t,\ast}=e^{t\mathcal L_{\ast}}\)。若连续谱证书通过，则该模型可表示为 \(L^2(X,\nu)\) 上的谱测度模型。
+\end{theorem}
+\begin{proof}
+第一个输入证书给出第 \ref{subsubsec:typed-address-biaxial-completion-cech-obstacle-projective-quantum-structure} 节中的 Hilbert 载体与效果算子。正常态证书保证输入态为密度算子。Choi 证书保证信道完全正，迹保持证书保证其为 CPTP。Kraus 与 Stinespring 证书分别给出操作元表示与隐藏环境偏迹实现。测量仪器证书保证 outcome 概率与后验态合法。连续酉证书由自伴 Hamiltonian 生成群；Markov 半群证书由 Lindblad 形式保证 CPTP 半群；谱表示证书给出 \(L^2(X,\nu)\) 与 PVM。将这些验证项按 Born 配对组合，即得全部提交概率和态变换的共同实现。证毕。
+\end{proof}
+
+该闭合把射影 Hilbert 骨架提升为开放量子操作骨架：
+\[
+\boxed{
+\text{density operators}
++
+\text{effects}
++
+\text{CPTP channels}
++
+\text{Stinespring environments}
++
+\text{continuous time}
+}
+\]
+并把折叠非单射、环境偏迹和可见 CP 回缩归入同一可审计语义：
+\[
+\boxed{
+\text{non-injective visible readout}
++
+\text{CP retraction}
++
+\text{Stinespring dilation}
+\Longrightarrow
+\text{auditable open quantum mechanics}.
+}
+\]

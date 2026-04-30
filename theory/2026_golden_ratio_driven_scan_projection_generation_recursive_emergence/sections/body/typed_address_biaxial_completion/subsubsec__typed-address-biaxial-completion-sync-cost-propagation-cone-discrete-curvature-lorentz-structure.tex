@@ -1,0 +1,504 @@
+\subsubsection{同步成本、传播锥与离散曲率到 Lorentz 结构}\label{subsubsec:typed-address-biaxial-completion-sync-cost-propagation-cone-discrete-curvature-lorentz-structure}
+开放量子操作闭包给出态、效果、信道、环境与连续时间。时空侧的相应任务不是预设 Lorentz 流形，而是从观察者状态、区域支撑、同步代价、共同细化与闭路 residual 中抽取可审计前几何。基本链条为
+\[
+\text{state refinement}
++
+\text{shared support}
++
+\text{synchronization cost}
+\Longrightarrow
+\text{causal preorder},
+\]
+\[
+\text{finite propagation bound}
+\Longrightarrow
+\text{local causal cone},
+\qquad
+\frac{\text{loop residual}}{\text{loop area}}
+\Longrightarrow
+\text{discrete curvature}.
+\]
+Lorentz 结构只作为附加候选出现：必须另行证明锥场稳定、维数稳定且可由惯性为 \((1,d)\) 的二次型表示。
+
+\paragraph{同步成本与支撑比较。}
+设观察者时空逻辑数据为
+\[
+\mathsf{LOST}=(P,\le,\Vdash,\lambda,\operatorname{supp},I,\iota,X,\preceq_X,\mathcal U,\operatorname{Cov},\operatorname{Com},C_K).
+\]
+其中 \(P\) 是状态集，\(\iota:P\to I\) 给出观察者索引，\(\lambda:P\to X\) 给出事件定位，\(\operatorname{supp}:P\to\mathcal U\) 给出区域支撑。同步路径
+\[
+\gamma:p\leadsto q
+\]
+是一列内部精化、通信、共同支撑 lift 或证书细化步骤
+\[
+p=p_0\to p_1\to\cdots\to p_N=q.
+\]
+每条边 \(e\) 携带资源向量
+\[
+c(e)\in\mathbb R_{\ge0}^r,
+\]
+其分量可记录时间延迟、内存、前缀深度、通信位数、residual 轴成本或证书深度。给定权重 \(w\in\mathbb R_{>0}^r\)，定义有向同步成本
+\[
+\boxed{
+\Delta_w^+(p,q):=
+\inf_{\gamma:p\to q}\langle w,\sum_{e\in\gamma}c(e)\rangle.
+}
+\]
+若无有向同步路径，则 \(\Delta_w^+(p,q)=+\infty\)。
+
+\begin{definition}[同步成本证书]\label{def:typed-address-biaxial-completion-sync-cost-cert}
+称 \(\mathsf{SyncCostCert}\) 为同步成本证书，若它包含有向同步边集 \(\mathcal E_{\rm sync}\)、边成本 \(c:\mathcal E_{\rm sync}\to\mathbb R_{\ge0}^r\)、权重 \(w\)、edge-type ledger、nonnegative-cost cert、path-composition ledger、infimum approximation ledger 与 round hash。验证器检查
+\[
+c(e)\ge0,
+\qquad
+\langle w,c(e)\rangle\ge0,
+\]
+以及路径拼接满足成本相加。若存在负成本边，输出 \(\mathsf{NegativeSyncCostFail}\)。若声称有限成本但无路径，输出 \(\mathsf{SyncPathFail}\)。搜索深度不足时输出 \(\mathsf{SyncPathNull}\)。
+\end{definition}
+
+区域支撑比较由覆盖图给出。支撑路径
+\[
+\beta:\operatorname{supp}(p)\leadsto\operatorname{supp}(q)
+\]
+是一列区域
+\[
+U_0=\operatorname{supp}(p),U_1,\ldots,U_M=\operatorname{supp}(q)
+\]
+且每步存在非空交叠或共同细化。给区域邻接边代价 \(s(U,V)\ge0\)，定义
+\[
+\boxed{
+D(p,q):=
+\inf_{\beta}
+\sum_{(U,V)\in\beta}s(U,V).
+}
+\]
+方向无关口径中使用
+\[
+D_{\rm sym}(p,q)=\frac12(D^+(p,q)+D^+(q,p)).
+\]
+
+\begin{definition}[支撑比较证书]\label{def:typed-address-biaxial-completion-support-comparison-cert}
+称 \(\mathsf{SupportComparisonCert}\) 为支撑比较证书，若它包含覆盖 \(\mathcal U\)、邻接图、边代价 \(s\)、overlap ledger、common-refinement ledger、symmetrization ledger 与 round hash。验证器检查 \(s(U,V)\ge0\)，并对每个可比较邻接检查
+\[
+U\cap V\neq\varnothing
+\]
+或验证提交的共同细化 \(W\subseteq U\cap V\)。无法判定连通性时输出 \(\mathsf{SupportDisconnectedNull}\)，明确断连时输出 \(\mathsf{SupportDisconnectedFail}\)，负代价时输出 \(\mathsf{NegativeSupportCostFail}\)。
+\end{definition}
+
+\paragraph{因果前序与传播上界。}
+定义因果可达关系
+\[
+\boxed{
+p\preceq_{\rm cau}q
+\iff
+\Delta_w^+(p,q)<\infty
+\quad\text{and}\quad
+\lambda(p)\preceq_X\lambda(q).
+}
+\]
+若要求传播约束，则定义
+\[
+\boxed{
+p\preceq_{\rm prop}q
+\iff
+p\preceq_{\rm cau}q
+\quad\text{and}\quad
+D(p,q)\le c_\ast\Delta_w^+(p,q).
+}
+\]
+
+\begin{definition}[因果前序证书]\label{def:typed-address-biaxial-completion-causal-preorder-cert}
+称 \(\mathsf{CausalPreorderCert}\) 为因果前序证书，若它包含 \(P,\lambda,\preceq_X,\Delta_w^+\)、reachability ledger、reflexivity cert、transitivity cert、acyclicity-or-cycle ledger 与 round hash。验证器检查反身性与传递性。若要求偏序，还检查
+\[
+p\preceq_{\rm cau}q,\quad q\preceq_{\rm cau}p
+\Longrightarrow
+p\sim q
+\]
+其中 \(\sim\) 是同一事件或同一 gauge 类。若出现非平凡闭合因果环，输出 \(\mathsf{CausalCycleFail}\)。若只能证明前序而不能排除环，输出 \(\mathsf{CausalAntisymmetryNull}\)。
+\end{definition}
+
+当 \(\Delta_w^+(p,q)>0\) 时，定义同步--支撑比
+\[
+\boxed{
+v_w(p,q):=\frac{D(p,q)}{\Delta_w^+(p,q)}.
+}
+\]
+若 \(D(p,q)>0\) 而 \(\Delta_w^+(p,q)=0\)，令 \(v_w(p,q)=+\infty\)。传播上界为
+\[
+\boxed{
+c_w:=\sup_{p\prec q}v_w(p,q).
+}
+\]
+有限 \(c_w\) 表示可见协议具有有限传播速度。
+
+\begin{definition}[传播上界证书]\label{def:typed-address-biaxial-completion-propagation-bound-cert}
+称 \(\mathsf{PropagationBoundCert}\) 为传播上界证书，若它包含 \(D,\Delta_w^+,c_w\)、ratio ledger、supremum cert、outlier ledger、finite-bound cert 与 round hash。验证器检查
+\[
+D(p,q)\le c_w\Delta_w^+(p,q)
+\]
+对所有提交可达对成立。若存在违反该不等式的对，输出 \(\mathsf{PropagationBoundFail}\)。若 \(\Delta_w^+(p,q)=0\) 且 \(D(p,q)>0\)，输出 \(\mathsf{InfiniteSpeedFail}\)。若 supremum 无法稳定估计，输出 \(\mathsf{PropagationSupremumNull}\)。
+\end{definition}
+
+\paragraph{局部传播锥与 Lorentz 二次型候选。}
+固定状态 \(p\)。设 \(T_p^{\rm disc}\) 为从 \(p\) 出发的局部可达增量集合。每个增量 \(v\) 有时间型读出与空间型读出
+\[
+\Delta_p(v):=\Delta_w^+(p,p+v),
+\qquad
+S_p(v):=D(p,p+v).
+\]
+定义局部未来传播锥
+\[
+\boxed{
+\mathcal C_p^+
+=
+\{v\in T_p^{\rm disc}:
+\Delta_p(v)\ge0,\ S_p(v)\le c_w\Delta_p(v)\}.
+}
+\]
+若该离散锥在局部线性化 \(T_p\) 中收敛为闭凸尖锥，则得到连续光锥候选。
+
+\begin{definition}[局部锥证书]\label{def:typed-address-biaxial-completion-local-cone-cert}
+称 \(\mathsf{LocalConeCert}\) 为局部锥证书，若它包含 \(p,T_p^{\rm disc},\Delta_p,S_p,c_w,\mathcal C_p^+\)、membership ledger、convexity cert、closure cert、pointedness cert 与 round hash。验证器检查正线性组合在误差预算内保持于锥内，并检查
+\[
+\mathcal C_p^+\cap(-\mathcal C_p^+)=\{0\}.
+\]
+若存在非零 \(v\) 同时属于未来与过去锥，输出 \(\mathsf{ConePointednessFail}\)。凸性不可判定时输出 \(\mathsf{ConeConvexityNull}\)。
+\end{definition}
+
+若传播锥可由二次型表示，则存在对称双线性型 \(g_p:T_p\times T_p\to\mathbb R\) 与时间取向 \(1\)-形式 \(\theta_p\)，使
+\[
+\boxed{
+\mathcal C_p^+
+=
+\{v:g_p(v,v)\le0,\ \theta_p(v)>0\}.
+}
+\]
+采用符号约定 \(\operatorname{sign}(g_p)=(-,+,\ldots,+)\)。局部坐标 \(v=(\tau,\xi)\) 中可写为
+\[
+\boxed{
+g_p(v,v)=
+-\tau^2+\frac{1}{c_p^2}\xi^\top G_p\xi,
+\qquad
+G_p\succ0.
+}
+\]
+
+\begin{definition}[Lorentz 锥候选证书]\label{def:typed-address-biaxial-completion-lorentz-cone-candidate-cert}
+称 \(\mathsf{LorentzConeCandidateCert}\) 为 Lorentz 锥候选证书，若它包含 \(T_p,\theta_p,g_p,\mathcal C_p^+\)、signature cert、cone-representation cert、time-orientation cert、nondegeneracy cert 与 round hash。验证器检查
+\[
+g_p=g_p^\top,
+\qquad
+\operatorname{inertia}(g_p)=(1,d),
+\]
+以及
+\[
+v\in\mathcal C_p^+
+\Longleftrightarrow
+g_p(v,v)\le0,\ \theta_p(v)>0
+\]
+在误差预算内成立。惯性错误时输出 \(\mathsf{LorentzSignatureFail}\)。锥存在但无法证明由二次型表示时输出 \(\mathsf{QuadraticConeNull}\)。
+\end{definition}
+
+Lorentz 候选还要求维数稳定。若 \(T_p\) 的时间方向为一维，空间方向维数为
+\[
+d_p:=\dim T_p-1,
+\]
+则在区域 \(U\) 上要求 \(d_p=d\) 恒定，且过渡映射保持秩。
+
+\begin{definition}[维数稳定证书]\label{def:typed-address-biaxial-completion-dimension-stability-cert}
+称 \(\mathsf{DimensionStabilityCert}\) 为维数稳定证书，若它包含 \(\{T_p\}_{p\in U}\)、\(\{d_p\}\)、rank ledger、local-basis transition ledger、stability margin cert 与 round hash。验证器检查
+\[
+\dim T_p=d+1
+\]
+在 \(U\) 上恒定，并检查过渡映射满秩。维数跳跃时输出 \(\mathsf{DimensionJumpFail}\)，秩区间不稳定时输出 \(\mathsf{DimensionStabilityNull}\)。
+\end{definition}
+
+\paragraph{锥过渡、holonomy 与离散曲率。}
+设覆盖 \(\{U_\alpha\}\) 上有局部锥场 \(\mathcal C_{\alpha,p}^+\)。重叠上给出线性过渡
+\[
+A_{\alpha\beta}(p):T_{\alpha,p}\to T_{\beta,p}.
+\]
+锥兼容要求
+\[
+\boxed{
+A_{\alpha\beta}(p)\mathcal C_{\alpha,p}^+
+=
+\mathcal C_{\beta,p}^+.
+}
+\]
+若已有 Lorentz 二次型，则 conformal compatibility 为
+\[
+\boxed{
+A_{\alpha\beta}(p)^\top g_{\beta,p}A_{\alpha\beta}(p)
+=
+\Omega_{\alpha\beta}(p)^2g_{\alpha,p},
+\qquad
+\Omega_{\alpha\beta}(p)>0.
+}
+\]
+
+\begin{definition}[锥过渡证书]\label{def:typed-address-biaxial-completion-cone-transition-cert}
+称 \(\mathsf{ConeTransitionCert}\) 为锥过渡证书，若它包含覆盖、过渡映射、局部锥、局部二次型、尺度 \(\Omega_{\alpha\beta}\)、overlap ledger、cone-preservation cert、conformal-compatibility cert、cocycle ledger 与 round hash。验证器检查锥保持与 conformal compatibility。在三重重叠上检查
+\[
+A_{\alpha\gamma}=A_{\beta\gamma}A_{\alpha\beta}
+\]
+或记录 residual
+\[
+R_{\alpha\beta\gamma}
+=
+A_{\gamma\alpha}A_{\beta\gamma}A_{\alpha\beta}.
+\]
+非平凡 residual 进入 holonomy 与曲率账本。
+\end{definition}
+
+局部截面 \(s_\alpha\) 在重叠上由转移函数 \(g_{\alpha\beta}:U_{\alpha\beta}\to G\) 连接：
+\[
+s_\beta=s_\alpha g_{\alpha\beta}.
+\]
+闭路
+\[
+\ell=(\alpha_0,\alpha_1,\ldots,\alpha_k=\alpha_0)
+\]
+的 holonomy 为
+\[
+\boxed{
+H_\ell
+=
+g_{\alpha_0\alpha_1}
+g_{\alpha_1\alpha_2}
+\cdots
+g_{\alpha_{k-1}\alpha_k}.
+}
+\]
+给定群上的共轭不变距离 \(d_G\)，闭路 residual 大小为
+\[
+h(\ell):=d_G(H_\ell,e).
+\]
+
+\begin{definition}[holonomy 闭路证书]\label{def:typed-address-biaxial-completion-holonomy-loop-cert}
+称 \(\mathsf{HolonomyLoopCert}\) 为 holonomy 闭路证书，若它包含闭路 \(\ell\)、边转移函数、\(H_\ell\)、loop-closure cert、transition-compatibility ledger、group-product ledger、residual-norm ledger 与 round hash。验证器检查 \(\alpha_k=\alpha_0\)、相邻重叠非空，并复算 \(H_\ell\)。若声称平坦但 \(H_\ell\neq e\)，输出 \(\mathsf{HolonomyNontrivialFail}\)。若乘积不可判定，输出 \(\mathsf{HolonomyNull}\)。
+\end{definition}
+
+曲率是单位面积 residual 密度。给小闭路 \(\ell\) 的支撑面积 \(A(\ell)>0\)，定义
+\[
+\boxed{
+\mathcal K(\ell):=
+\frac{d_G(H_\ell,e)}{A(\ell)}.
+}
+\]
+若 \(G\) 为 Lie 群且 \(H_\ell\) 落在对数邻域中，可取
+\[
+F(\ell):=\frac{\log H_\ell}{A(\ell)}\in\mathfrak g.
+\]
+
+\begin{definition}[离散曲率证书]\label{def:typed-address-biaxial-completion-discrete-curvature-cert}
+称 \(\mathsf{DiscreteCurvatureCert}\) 为离散曲率证书，若它包含闭路族、holonomy、面积、\(\mathcal K(\ell)\)、area ledger、log-branch ledger、normalization ledger、refinement-limit ledger 与 round hash。验证器检查
+\[
+A(\ell)>0,
+\qquad
+\mathcal K(\ell)=\frac{d_G(H_\ell,e)}{A(\ell)}.
+\]
+若使用 Lie 对数，还检查分支选择与 BCH 误差预算。面积趋零而 residual 不按面积缩放时，输出 \(\mathsf{CurvatureBlowupNull}\) 或在明确发散时输出 \(\mathsf{CurvatureLimitFail}\)。
+\end{definition}
+
+若 curvature 来自 connection-like transition data，小三维盒子 \(B\) 的六个面 holonomy 应满足离散 Bianchi 约束
+\[
+\boxed{
+\prod_{\square\subset\partial B}
+H_{\square}^{\epsilon(\square)}
+\approx e,
+}
+\]
+非交换情形需指定面排序与基点运输。
+
+\begin{definition}[Bianchi 证书]\label{def:typed-address-biaxial-completion-bianchi-cert}
+称 \(\mathsf{BianchiCert}\) 为 Bianchi 证书，若它包含盒子 \(B\)、边界面、面 holonomy、face-orientation ledger、basepoint-transport ledger、product-to-identity cert 与 round hash。验证器检查有向面乘积近似单位元。偏差超过预算时输出 \(\mathsf{BianchiFail}\)，非交换排序缺失时输出 \(\mathsf{BianchiOrderingNull}\)。
+\end{definition}
+
+\paragraph{空间型度规、时间尺度与 Lorentz 候选。}
+支撑成本先给出准度规。取对称化 \(D_{\rm sym}\)，并商去零距离等价
+\[
+p\sim_Dq
+\iff
+D_{\rm sym}(p,q)=0.
+\]
+若局部二阶展开存在
+\[
+\bar D(p,p+v)^2=v^\top G_pv+o(|v|^2),
+\qquad
+G_p\succ0,
+\]
+则 \(G_p\) 是空间型度规候选。
+
+\begin{definition}[空间度规候选证书]\label{def:typed-address-biaxial-completion-spatial-metric-cert}
+称 \(\mathsf{SpatialMetricCert}\) 为空间度规候选证书，若它包含 \(D_{\rm sym}\)、零距离商、\(\bar D\)、矩阵 \(G_p\)、metric-axiom ledger、quotient ledger、second-variation ledger、positive-definite cert 与 round hash。验证器检查 \(\bar D\) 在商上分离点，并以离散差分核验 \(G_p\succ0\)。若 \(G_p\) 有负特征值，输出 \(\mathsf{SpatialMetricFail}\)；Hessian 不稳定时输出 \(\mathsf{SpatialMetricNull}\)。
+\end{definition}
+
+同步成本给出时间尺度。若存在时间函数 \(t:P\to\mathbb R\) 与 \(N_p>0\)，使同支撑附近
+\[
+\Delta(p,q)=N_p|t(q)-t(p)|+o(|t(q)-t(p)|),
+\]
+则 \(N_p\) 是 lapse 候选。带 shift 的 ADM 型 Lorentz 候选写作
+\[
+\boxed{
+g_p(v,v)=
+-N_p^2(\delta t)^2
++
+G_{p,ij}(\delta x^i+N_p^i\delta t)(\delta x^j+N_p^j\delta t).
+}
+\]
+
+\begin{definition}[时间尺度证书]\label{def:typed-address-biaxial-completion-time-scale-cert}
+称 \(\mathsf{TimeScaleCert}\) 为时间尺度证书，若它包含 \(t:P\to\mathbb R\)、\(\Delta_w^+\)、lapse \(N_p\)、可选 shift \(N_p^i\)、monotonic-time cert、local-expansion ledger、positive-lapse cert 与 round hash。验证器检查
+\[
+p\preceq q\Longrightarrow t(p)\le t(q),
+\qquad
+N_p>0.
+\]
+若因果路径上时间下降，输出 \(\mathsf{TimeOrientationFail}\)。若 lapse 非正，输出 \(\mathsf{LapseFail}\)。
+\end{definition}
+
+\begin{definition}[Lorentz 度规候选证书]\label{def:typed-address-biaxial-completion-lorentz-metric-candidate-cert}
+称 \(\mathsf{LorentzMetricCandidateCert}\) 为 Lorentz 度规候选证书，若它包含局部图表、\(N_\alpha,N_\alpha^i,G_{\alpha,ij},g_\alpha\)、signature cert、cone-match cert、transition-compatibility cert、scale ledger 与 round hash。验证器检查
+\[
+N_\alpha>0,
+\qquad
+G_\alpha\succ0,
+\qquad
+\operatorname{inertia}(g_\alpha)=(1,d).
+\]
+若 \(g_\alpha\) 与传播锥不匹配，输出 \(\mathsf{ConeMetricMismatchFail}\)。若只得到 conformal class，输出 \(\mathsf{ConformalOnlyPass}\) 而不是完整 metric pass。
+\end{definition}
+
+\paragraph{连接、挠率与连续极限。}
+邻接状态 \(p\sim q\) 的运输映射
+\[
+\Pi_{pq}:T_p\to T_q
+\]
+构成离散连接边。要求
+\[
+\Pi_{pp}=I,
+\qquad
+\Pi_{qp}\Pi_{pq}\approx I,
+\]
+并要求度规相容或 conformal 相容：
+\[
+\Pi_{pq}^\top g_q\Pi_{pq}\approx g_p.
+\]
+
+\begin{definition}[连接运输证书]\label{def:typed-address-biaxial-completion-connection-transport-cert}
+称 \(\mathsf{ConnectionTransportCert}\) 为连接运输证书，若它包含 \(\{T_p\},\{g_p\},\{\Pi_{pq}\}\)、adjacency ledger、invertibility cert、metric-compatibility cert、holonomy ledger 与 round hash。验证器检查 \(\Pi_{pq}\) 为线性同构、反向边近似逆，并检查度规或 conformal 相容。若不保持锥，输出 \(\mathsf{ConeTransportFail}\)；若只保持 conformal class，输出 \(\mathsf{ConformalTransportPass}\)。
+\end{definition}
+
+小平行四边形端点缺陷的面积归一化给出 torsion 候选。若该候选在细化极限中为零，连接无挠。
+
+\begin{definition}[torsion 证书]\label{def:typed-address-biaxial-completion-torsion-cert}
+称 \(\mathsf{TorsionCert}\) 为 torsion 证书，若它包含局部方向、运输映射、小平行四边形 ledger、endpoint-defect ledger、area-normalization ledger、zero-torsion cert 与 round hash。若 torsion 非零，输出 \(\mathsf{TorsionNonzeroPass}\)，除非系统声称 Levi--Civita。声称 Levi--Civita 而 torsion 非零时输出 \(\mathsf{LeviCivitaTorsionFail}\)。
+\end{definition}
+
+度规相容与无挠同时成立时得到 Levi--Civita 候选。
+
+\begin{definition}[Levi--Civita 候选证书]\label{def:typed-address-biaxial-completion-levi-civita-candidate-cert}
+称 \(\mathsf{LeviCivitaCandidateCert}\) 为 Levi--Civita 候选证书，若它包含 Lorentz 度规候选、连接运输证书、torsion 证书、metric-compatibility ledger、refinement-limit ledger 与 round hash。验证器检查
+\[
+\nabla g\to0,
+\qquad
+T\to0.
+\]
+若仅有 conformal metric 而未提交 Weyl connection 数据，输出 \(\mathsf{ConformalConnectionNull}\)。
+\end{definition}
+
+连续极限需要分辨率族 \(m\to\infty\)，每层有
+\[
+(P_m,D_m,\Delta_m,\mathcal C_{m,p},g_{m,p},F_m).
+\]
+极限口径要求状态空间、维数、锥场、度规或 conformal class、曲率候选按提交拓扑收敛。
+
+\begin{definition}[连续极限证书]\label{def:typed-address-biaxial-completion-continuum-limit-cert}
+称 \(\mathsf{ContinuumLimitCert}\) 为连续极限证书，若它包含 \(\{P_m\},\{D_m\},\{\Delta_m\},\{\mathcal C_{m,p}\},\{g_{m,p}\},\{F_m\}\)、极限对象 \(M\)、topology convergence ledger、dimension stability cert、cone convergence cert、metric convergence cert、curvature convergence cert 与 round hash。输出可为 \(\mathsf{DiscreteOnlyPass}\)、\(\mathsf{WeakContinuumPass}\) 或 \(\mathsf{SmoothLorentzPass}\)。锥极限不存在时输出 \(\mathsf{ConeLimitNull}\)，维数不稳定时输出 \(\mathsf{ContinuumDimensionFail}\)。
+\end{definition}
+
+\paragraph{前时空融合证书。}
+\begin{definition}[前时空证书]\label{def:typed-address-biaxial-completion-spacetime-pregeometry-cert}
+称
+\[
+\mathsf{SpacetimePregeometryCert}
+\]
+为前时空证书，若它包含 \(\mathsf{LOST}\)、\(\mathsf{SyncCostCert}\)、\(\mathsf{SupportComparisonCert}\)、\(\mathsf{CausalPreorderCert}\)、\(\mathsf{PropagationBoundCert}\)、\(\mathsf{LocalConeCerts}\)、按声明提交的空间度规、时间尺度、Lorentz 锥、锥过渡、holonomy、离散曲率、Bianchi、连接、torsion、Levi--Civita、连续极限证书，以及 null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifySpacetimePregeometry}\) 依次检查观察者状态与 forcing 结构、同步代价、支撑比较、因果前序、传播上界、局部锥、Lorentz 二次型惯性、锥过渡、闭路 holonomy、面积归一化曲率、Bianchi 约束、连接运输、无挠与度规相容、连续极限。NULL 类型包括
+\[
+\mathsf{SyncPathNull},\quad
+\mathsf{SupportDisconnectedNull},\quad
+\mathsf{PropagationSupremumNull},\quad
+\mathsf{ConeConvexityNull},\quad
+\mathsf{QuadraticConeNull},
+\]
+\[
+\mathsf{DimensionStabilityNull},\quad
+\mathsf{HolonomyNull},\quad
+\mathsf{CurvatureLimitNull},\quad
+\mathsf{ConeLimitNull}.
+\]
+FAIL 类型包括
+\[
+\mathsf{NegativeSyncCostFail},\quad
+\mathsf{NegativeSupportCostFail},\quad
+\mathsf{CausalCycleFail},\quad
+\mathsf{InfiniteSpeedFail},\quad
+\mathsf{PropagationBoundFail},
+\]
+\[
+\mathsf{ConePointednessFail},\quad
+\mathsf{LorentzSignatureFail},\quad
+\mathsf{ConeMetricMismatchFail},\quad
+\mathsf{BianchiFail},\quad
+\mathsf{LeviCivitaTorsionFail}.
+\]
+
+\begin{theorem}[前 Lorentz 时空证书的可靠性]\label{thm:typed-address-biaxial-completion-spacetime-pregeometry-soundness}
+若
+\[
+\mathsf{VerifySpacetimePregeometry}
+(\mathsf{SpacetimePregeometryCert})
+=
+\mathsf{PASS},
+\]
+则存在可审计前时空结构
+\[
+(P,\preceq_{\rm cau},D,\Delta,\{\mathcal C_p^+\},\{H_\ell\},\{\mathcal K(\ell)\})
+\]
+满足：\(\preceq_{\rm cau}\) 由同步可达与事件因果顺序诱导；\(D\) 是共同支撑比较代价；\(\Delta\) 是同步延迟；存在有限传播上界 \(c_w\) 使
+\[
+D(p,q)\le c_w\Delta(p,q);
+\]
+每个状态有局部传播锥
+\[
+\mathcal C_p^+=\{v:S_p(v)\le c_w\Delta_p(v)\};
+\]
+闭路 residual 给出 holonomy \(H_\ell\)，面积归一化 holonomy 给出离散曲率 \(\mathcal K(\ell)\)。若 Lorentz 锥候选证书也通过，则存在惯性为 \((1,d)\) 的局部二次型 \(g_p\)，并且
+\[
+\mathcal C_p^+=\{v:g_p(v,v)\le0,\ \theta_p(v)>0\}.
+\]
+若连续极限证书通过，则该离散结构在提交口径下收敛为弱或光滑 Lorentz 前几何。
+\end{theorem}
+\begin{proof}
+\(\mathsf{SyncCostCert}\) 与 \(\mathsf{SupportComparisonCert}\) 分别给出非负且可组合的同步成本与支撑成本。\(\mathsf{CausalPreorderCert}\) 把有向同步可达和事件顺序组合为前序。\(\mathsf{PropagationBoundCert}\) 给出有限 \(c_w\)，从而定义传播锥。\(\mathsf{LocalConeCert}\) 证明这些锥具备闭凸尖结构。\(\mathsf{LorentzConeCandidateCert}\) 若通过，则提供惯性为 \((1,d)\) 的二次型并验证其非正锥与传播锥一致。\(\mathsf{ConeTransitionCert}\) 使重叠上的锥结构相容。\(\mathsf{HolonomyLoopCert}\) 与 \(\mathsf{DiscreteCurvatureCert}\) 给出闭路 residual 和面积归一化曲率。\(\mathsf{ContinuumLimitCert}\) 若通过，则把离散对象送入指定极限口径。各证书项正是结论中结构分量的验证条件，故结论成立。证毕。
+\end{proof}
+
+该结构只推出可审计前几何，而不无条件推出光滑 Lorentz 流形或 Einstein 方程。可压缩为
+\[
+\boxed{\text{time}=\text{synchronization depth}},
+\qquad
+\boxed{\text{space}=\text{shared support comparison}},
+\]
+\[
+\boxed{\text{causality}=\text{admissible refinement/communication preorder}},
+\qquad
+\boxed{\text{light cone}=\text{finite propagation cone}},
+\]
+\[
+\boxed{\text{curvature}=\text{loop residual}/\text{loop area}}.
+\]
+完整 Lorentz 度规、Levi--Civita 连接与动力学方程需要额外的维数、平滑性、无挠、度规相容、曲率收缩与应力能量账本。

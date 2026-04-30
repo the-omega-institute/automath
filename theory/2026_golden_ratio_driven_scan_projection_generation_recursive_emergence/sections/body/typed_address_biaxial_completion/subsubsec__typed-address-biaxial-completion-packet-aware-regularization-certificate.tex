@@ -1,0 +1,414 @@
+\subsubsection{Packet 感知乘积型正则化证书}\label{subsubsec:typed-address-biaxial-completion-packet-aware-regularization-certificate}
+Rouch\'e--Taylor 局部证书在单个重零点情形下给出单中心幂型小值下界。若局部小值来自多个彼此接近的简单零点或低重数零点，则必须保留乘积结构；否则可能把零点 packet 错误压缩为一个不存在的高阶中心零点，并破坏下界的方向。
+
+设在小弧 \(I\) 附近，局部证书给出零点 packet
+\[
+\alpha_\ell=\rho_\ell e^{i\theta_\ell},
+\qquad
+\mu_\ell\in\mathbb{N},
+\qquad
+1\le\ell\le q,
+\]
+并有
+\[
+f(z)=h(z)\prod_{\ell=1}^q(z-\alpha_\ell)^{\mu_\ell},
+\qquad
+|h(z)|\ge H.
+\]
+记
+\[
+\gamma_\ell:=|1-\rho_\ell|,
+\qquad
+\nu:=\sum_{\ell=1}^q\mu_\ell.
+\]
+由引理 \ref{lem:typed-address-biaxial-completion-circle-zero-distance-lower-bound}，若 \(\rho_\ell\ge\rho_{\ell,-}>0\)，则
+\[
+|e^{i\theta}-\alpha_\ell|^2
+\ge
+\kappa_\ell
+\left(
+\mathrm{wrap}(\theta-\theta_\ell)^2+\gamma_\ell^2
+\right),
+\qquad
+\kappa_\ell:=
+\min\left\{1,\frac{4\rho_{\ell,-}}{\pi^2}\right\}.
+\]
+因此在 \(I\) 上有乘积型下界
+\[
+W_r(e^{i\theta})
+\ge
+C
+\prod_{\ell=1}^q
+q_\ell(\theta)^{\mu_\ell},
+\]
+其中
+\[
+q_\ell(\theta):=
+\mathrm{wrap}(\theta-\theta_\ell)^2+\gamma_\ell^2,
+\qquad
+C:=
+H^2\prod_{\ell=1}^q\kappa_\ell^{\mu_\ell}.
+\]
+局部正则化贡献为
+\[
+B_I
+:=
+\frac12\int_I
+\log\left(1+\frac{\delta}{W_r(e^{i\theta})}\right)\,dm(\theta)
+=
+\frac1{4\pi}
+\int_I
+\log\left(1+\frac{\delta}{W_r(e^{i\theta})}\right)\,d\theta.
+\]
+乘积下界给出
+\[
+B_I
+\le
+\frac1{4\pi}
+\int_I
+\log\left(
+1+
+\frac{\delta}{
+C\prod_{\ell=1}^q q_\ell(\theta)^{\mu_\ell}
+}
+\right)d\theta.
+\]
+
+多个不同角向位置的零点不能无条件合并为单中心模型。例如两个边界零点位于 \(-s\) 与 \(s\) 时，乘积型小值为 \(|\theta+s|^2|\theta-s|^2\)，而单中心二重模型 \(|\theta|^4\) 在 \(\theta=s\) 附近给出正下界，方向错误。只有证书确认这些零点确为同一重零点，或确认 packet 压缩不削弱所需下界，才可使用单中心幂型模型。
+
+\begin{lemma}[乘积型 Hölder 降维]\label{lem:typed-address-biaxial-completion-packet-holder-reduction}
+令
+\[
+a:=
+\left(\frac{\delta}{C}\right)^{1/(2\nu)}.
+\]
+则对所有 \(\theta\)，
+\[
+\log\left(
+1+
+\frac{\delta}{
+C\prod_{\ell=1}^q q_\ell(\theta)^{\mu_\ell}
+}
+\right)
+\le
+\sum_{\ell=1}^q
+\frac{\mu_\ell}{\nu}
+\log\left(
+1+
+\frac{a^{2\nu}}{q_\ell(\theta)^\nu}
+\right).
+\]
+\end{lemma}
+\begin{proof}
+设
+\[
+y_\ell(\theta):=
+\left(\frac{a^2}{q_\ell(\theta)}\right)^\nu,
+\qquad
+w_\ell:=\frac{\mu_\ell}{\nu}.
+\]
+则 \(\sum_\ell w_\ell=1\)，并且
+\[
+\frac{\delta}{C\prod_\ell q_\ell^{\mu_\ell}}
+=
+\prod_{\ell=1}^q y_\ell^{w_\ell}.
+\]
+函数 \(x\mapsto\log(1+e^x)\) 为凸函数，故 Jensen 不等式给出
+\[
+\log\left(1+\prod_\ell y_\ell^{w_\ell}\right)
+\le
+\sum_\ell w_\ell\log(1+y_\ell).
+\]
+证毕。
+\end{proof}
+
+\begin{definition}[单中心积分核]\label{def:typed-address-biaxial-completion-single-center-packet-kernel}
+对 \(\nu\in\mathbb{N}\)、\(a>0\)、\(\gamma\ge0\) 与弧长 \(L>0\)，定义
+\[
+\mathfrak S_\nu(a,\gamma;L)
+:=
+\min\mathcal U_\nu(a,\gamma;L),
+\]
+其中候选集合 \(\mathcal U_\nu\) 总包含边界零点型上界
+\[
+\frac{a}{2\sin\left(\frac{\pi}{2\nu}\right)}.
+\]
+当 \(\gamma>0\) 时，另加入两个 shield 上界：
+\[
+\frac{L}{4\pi}
+\log\left(1+\left(\frac{a}{\gamma}\right)^{2\nu}\right),
+\]
+以及
+\[
+\frac{\Gamma(\nu-\frac12)}
+{4\sqrt{\pi}\Gamma(\nu)}
+\frac{a^{2\nu}}{\gamma^{2\nu-1}}.
+\]
+\end{definition}
+
+上述三个上界分别来自整条实线积分、有限弧上的一致下界，以及 \(\log(1+x)\le x\) 后的径向 shield 积分：
+\[
+\int_{\mathbb R}\log\left(1+\frac{a^{2\nu}}{|t|^{2\nu}}\right)dt
+=
+\frac{2\pi a}{\sin\left(\frac{\pi}{2\nu}\right)},
+\]
+\[
+\int_{\mathbb R}\frac{dt}{(t^2+\gamma^2)^\nu}
+=
+\frac{\sqrt{\pi}\Gamma(\nu-\frac12)}
+{\Gamma(\nu)\gamma^{2\nu-1}}.
+\]
+外侧因子均为 \(1/(4\pi)\)。
+
+\begin{proposition}[不分裂 packet 上界]\label{prop:typed-address-biaxial-completion-unsplit-packet-bound}
+若 \(W_r\) 在 \(I\) 上满足上述乘积型下界，则
+\[
+B_I
+\le
+B_{\mathrm{Holder}}^+(I)
+:=
+\sum_{\ell=1}^q
+\frac{\mu_\ell}{\nu}
+\mathfrak S_\nu(a,\gamma_\ell;|I|),
+\qquad
+a=\left(\frac{\delta}{C}\right)^{1/(2\nu)}.
+\]
+\end{proposition}
+\begin{proof}
+由引理 \ref{lem:typed-address-biaxial-completion-packet-holder-reduction} 把乘积型对数核压成单中心核的凸组合。对每一项在弧 \(I\) 上使用定义 \ref{def:typed-address-biaxial-completion-single-center-packet-kernel} 的三种上界，得到所述不等式。证毕。
+\end{proof}
+
+当 packet 中的零点具有可验证角向分离时，可以在局部 cell 上把远离该 cell 的零点因子作为 inactive 因子吸收到常数中。令
+\[
+I=\bigsqcup_{s=1}^S K_s
+\]
+为有限子弧划分。对每个 \(K_s\)，选择 active 集合
+\[
+A_s\subseteq\{1,\ldots,q\}.
+\]
+若 \(m\notin A_s\)，验证器需给出
+\[
+q_m(\theta)\ge L_{s,m}>0
+\qquad(\theta\in K_s).
+\]
+定义
+\[
+C_s:=
+C\prod_{m\notin A_s}L_{s,m}^{\mu_m}.
+\]
+若 \(A_s\ne\varnothing\)，置
+\[
+\nu_s:=\sum_{\ell\in A_s}\mu_\ell,
+\qquad
+a_s:=\left(\frac{\delta}{C_s}\right)^{1/(2\nu_s)},
+\]
+并定义
+\[
+B_s^+
+:=
+\sum_{\ell\in A_s}
+\frac{\mu_\ell}{\nu_s}
+\mathfrak S_{\nu_s}(a_s,\gamma_\ell;|K_s|).
+\]
+若 \(A_s=\varnothing\)，则取
+\[
+B_s^+
+:=
+\frac{|K_s|}{4\pi}
+\log\left(
+1+
+\frac{\delta}{
+C\prod_{m=1}^qL_{s,m}^{\mu_m}
+}
+\right).
+\]
+于是
+\[
+B_{\mathrm{split}}^+(I)
+:=
+\sum_{s=1}^SB_s^+.
+\]
+
+\begin{proposition}[分裂型 packet 上界]\label{prop:typed-address-biaxial-completion-split-packet-bound}
+若上述 cell 覆盖、active 集合与 inactive 因子下界均通过验证，则
+\[
+B_I\le B_{\mathrm{split}}^+(I).
+\]
+因此可取
+\[
+B_{\mathrm{packet}}^+(I)
+:=
+\min\left\{
+B_{\mathrm{Holder}}^+(I),\,
+B_{\mathrm{split}}^+(I)
+\right\}.
+\]
+\end{proposition}
+\begin{proof}
+在每个 \(K_s\) 上，inactive 下界给出
+\[
+W_r(e^{i\theta})
+\ge
+C_s\prod_{\ell\in A_s}q_\ell(\theta)^{\mu_\ell}.
+\]
+若 \(A_s\ne\varnothing\)，按引理 \ref{lem:typed-address-biaxial-completion-packet-holder-reduction} 的同一证明，只在 active 集合上使用总重数 \(\nu_s\)，再套用单中心积分核，即得 \(K_s\) 上的贡献不超过 \(B_s^+\)。若 \(A_s=\varnothing\)，则全体零点因子均已被正下界吸收到常数，直接得到定义中的均匀上界。对 \(s\) 求和即得。证毕。
+\end{proof}
+
+inactive 因子的下界本身是有限可核验的。若零点角位置与径向距离只以区间盒给出
+\[
+\theta_m\in\Theta_m,
+\qquad
+\gamma_m\in\Gamma_m,
+\]
+则对子弧 \(K_s\) 可取
+\[
+d_{s,m}^-:=\operatorname{dist}_{\mathbb T}(K_s,\Theta_m),
+\qquad
+\gamma_m^-:=\inf\Gamma_m,
+\]
+并置
+\[
+L_{s,m}:=(d_{s,m}^-)^2+(\gamma_m^-)^2.
+\]
+当 \(L_{s,m}>0\) 时，第 \(m\) 个零点可在 \(K_s\) 上作为 inactive 因子；若 \(L_{s,m}=0\)，则该零点必须进入 \(A_s\)，否则该 cell 的分裂证书无效。
+
+\begin{definition}[packet 感知正则化证书]\label{def:typed-address-biaxial-completion-packet-aware-regularization-certificate}
+一份乘积型 packet 证书记为
+\[
+\mathsf{PACert}_{I}
+:=
+\left(
+I,\,
+\{(\Theta_\ell,\Gamma_\ell,\mu_\ell)\}_{\ell=1}^q,\,
+C,\,
+\{K_s,A_s,L_{s,m},B_s^+\}_{s,m}
+\right).
+\]
+验证器检查：
+\begin{enumerate}
+  \item cell 覆盖：
+  \[
+  I=\bigsqcup_{s=1}^S K_s.
+  \]
+  \item 零点盒由 Rouch\'e--Taylor 证书确认，并覆盖该 packet 的相关零点。
+  \item 乘积型下界：
+  \[
+  W_r(e^{i\theta})
+  \ge
+  C
+  \prod_{\ell=1}^q
+  \left(
+  \mathrm{wrap}(\theta-\theta_\ell)^2+\gamma_\ell^2
+  \right)^{\mu_\ell}
+  \qquad(\theta\in I).
+  \]
+  \item 对所有 \(m\notin A_s\)，均有
+  \[
+  q_m(\theta)\ge L_{s,m}>0
+  \qquad(\theta\in K_s).
+  \]
+  \item 每个 \(B_s^+\) 按上述 split 公式计算，并与不分裂 Hölder 上界共同给出
+  \(B_{\mathrm{packet}}^+(I)\)。
+\end{enumerate}
+通过后，输出
+\[
+B_I\le B_{\mathrm{packet}}^+(I).
+\]
+\end{definition}
+
+该证书与单中心证书兼容。若 \(q=1\)，则 \(\nu=\mu_1\)，
+\[
+B_{\mathrm{Holder}}^+(I)
+=
+\mathfrak S_{\mu_1}(a,\gamma_1;|I|),
+\qquad
+a=\left(\frac{\delta}{C}\right)^{1/(2\mu_1)},
+\]
+正是单零点或单重零点的零点敏感上界。因此
+\[
+\mathsf{ZeroLocalCert}
+\subset
+\mathsf{PACert}
+\]
+在证书语义上成立。
+
+packet 分裂还应保留结构化失败见证。定义
+\[
+\mathsf{PAFail}_I
+\in
+\{
+\mathrm{PacketCoverFail},
+\mathrm{ZeroBoxFail},
+\mathrm{ProductLowerFail},
+\mathrm{InactiveLowerFail},
+\mathrm{CellCoverFail},
+\mathrm{SplitBudgetFail},
+\mathrm{ClusterAmbiguityFail}
+\}.
+\]
+其中 \(\mathrm{PacketCoverFail}\) 表示 Rouch\'e--Taylor 证书不能确认 packet 覆盖了小值弧中的全部相关零点；\(\mathrm{ZeroBoxFail}\) 表示某个零点盒无法被验证；\(\mathrm{ProductLowerFail}\) 表示乘积型下界缺失；\(\mathrm{InactiveLowerFail}\) 表示某个 inactive 下界 \(L_{s,m}>0\) 无法成立；\(\mathrm{CellCoverFail}\) 表示子弧划分存在缺口或不可接受重叠；\(\mathrm{SplitBudgetFail}\) 表示证书形式正确但 \(B_{\mathrm{packet}}^+\) 仍过大；\(\mathrm{ClusterAmbiguityFail}\) 表示零点过近，既不能可靠分裂，也不能证明为同一重零点，只能保留较粗的 packet Hölder 上界或继续加深局部精度。
+
+全局正则化缺陷证书可以同时接收单中心局部项与 packet 局部项。对每个小值弧 \(I_j\)，令
+\[
+B_{I_j}^+
+=
+\begin{cases}
+B_{\mathrm{single}}^+(I_j),&\text{单零点或重零点局部证书},\\
+B_{\mathrm{packet}}^+(I_j),&\text{乘积型 packet 证书}.
+\end{cases}
+\]
+定义
+\[
+B_{\mathrm{ZA,packet}}^+
+:=
+\frac12m(E_0)\log\left(1+\frac{\delta}{m_0}\right)
++
+\sum_j B_{I_j}^+.
+\]
+若
+\[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA,packet}}^+
+<
+\log\frac rR,
+\]
+则与前述 Jensen 排斥链合并后推出
+\[
+\Phi_a(w)\ne0
+\qquad(|w|\le R).
+\]
+证书链因此细化为
+\[
+\mathsf{RTCert}
+\Longrightarrow
+\mathsf{PACert}
+\Longrightarrow
+\mathsf{ZACert}_{\mathrm{packet}}
+\Longrightarrow
+\text{Jensen 排斥证书}.
+\]
+
+分裂的收益由角向分离与径向 shield 决定。若在第 \(\ell\) 个零点附近有
+\[
+q_m(\theta)\gtrsim
+(\theta_\ell-\theta_m)^2+\gamma_m^2
+\qquad(m\ne\ell),
+\]
+则有效常数近似为
+\[
+C_\ell^{\mathrm{eff}}
+\approx
+C
+\prod_{m\ne\ell}
+\left((\theta_\ell-\theta_m)^2+\gamma_m^2\right)^{\mu_m}.
+\]
+对应局部尺度为
+\[
+a_\ell
+\approx
+\left(\frac{\delta}{C_\ell^{\mathrm{eff}}}\right)^{1/(2\mu_\ell)}.
+\]
+当零点间距远大于不分裂尺度时，split 上界显著优于总重数 Hölder 上界；当零点间距与 \((\delta/C)^{1/(2\nu)}\) 同阶或更小，则应视为同一 packet，并保留乘积型 Hölder 处理。
