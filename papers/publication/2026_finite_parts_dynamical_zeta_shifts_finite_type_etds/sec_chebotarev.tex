@@ -1,0 +1,1837 @@
+\section{Adams--M\"obius primitive inversion for finite-group extensions}
+\label{sec:chebotarev}
+
+This section proves the finite-group theorem spine. Twisted matrices
+\(A_\varrho\) first linearise periodic data in Peter--Weyl coordinates;
+the Adams--M\"obius identity then removes repetitions of primitive
+orbits, where labels change from \(g\) to \(g^m\). We use standard
+character-ring and Adams-operation formalism as in Serre
+\cite{Serre1977LinearRepresentations}, together with the classical
+Witt-vector and necklace formalism for passing from repeated to
+primitive data \cite{MetropolisRota1983Necklaces,%
+Wehrhahn1990AperiodicRings}.
+
+The proof is organised in two labelled blocks. The first block,
+\Cref{lem:twisted-trace-identity,thm:class-function-linearisation,%
+cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant,%
+cor:primitive-peter-weyl-trace},
+is Main Theorem~I: it is the Adams--M\"obius determinant and coefficient
+mechanism and does not use a twisted spectral gap. The second block,
+\Cref{thm:class-mertens-explicit,prop:class-mertens-deviations,%
+thm:class-mertens-fourier}, is Main Theorem~II: it starts only after the twisted spectral gap
+\(\eta=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda\) is imposed
+and converts the primitive channels into the class-indexed constants
+\(\mathcal M_C(A,\tau;G)\), from which the channels are read back by
+non-abelian character orthogonality. The
+intervening class-decomposition formulas are bridge statements between
+these two blocks.
+
+\subsection{Main Theorem I: Adams--M\"obius primitive determinant
+linearisation}
+
+The first main block has five steps. The twisted trace identity converts
+matrices into periodic Peter--Weyl sums. The determinant linearisation
+packages those sums as logarithms of twisted determinants. The
+Adams--M\"obius inversion then removes repetitions of primitive orbits,
+and the irreducible-channel formula rewrites the result entirely in
+terms of the determinant data. Finally, coefficient extraction gives the
+primitive Peter--Weyl trace formula. The preliminary class-indicator and
+block-diagonalisation propositions below set up this mechanism; they
+are not separate main results.
+
+For a conjugacy class \(C\subset G\), we write \(\chi_\varrho(C)\) for
+the common value of \(\chi_\varrho\) on \(C\), and \(\mathbf 1_C\) for
+the indicator function of \(C\). If \(x\in\operatorname{Fix}(\sigma^n)\)
+corresponds to the closed edge path \(e_0\cdots e_{n-1}\), define
+\[
+  \tau_n(x):=\tau(e_0)\cdots\tau(e_{n-1})\in G.
+\]
+For a class function \(\phi:G\to\CC\), set
+\begin{equation}\label{eq:class-logarithm-def}
+  T_{\phi,n}:=\sum_{x\in\operatorname{Fix}(\sigma^n)}\phi(\tau_n(x)),
+  \qquad
+  \mathcal L_\phi(z):=\sum_{n\ge 1}\frac{T_{\phi,n}}{n}z^n,
+\end{equation}
+and
+\begin{equation}\label{eq:primitive-class-series-def}
+  \Pi_\phi(z):=\sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}.
+\end{equation}
+Since \(\phi\) is bounded and \(p_n(A)\ll \lambda^n/n\), the series
+\(\Pi_\phi(z)\) converges absolutely for \(|z|<\lambda^{-1}\).
+These symbols are generating functions for deterministic orbit data.
+They are not transition kernels or probabilities attached to repeated
+measurements.
+
+\medskip
+\noindent\textbf{Fourier convention.}
+\textbf{All Fourier coefficients in this section use the Hermitian
+character convention}
+\[
+  \widehat\phi(\varrho)
+  =\frac{1}{|G|}\sum_{g\in G}\phi(g)\overline{\chi_\varrho(g)}.
+\]
+\textbf{Thus every class-indicator expansion and every later Fourier
+readout uses the fixed forward class coefficient
+\(\chi_\varrho^\ast(C):=\overline{\chi_\varrho(C)}\).
+For unitary characters this is also \(\chi_\varrho(C^{-1})\).
+We keep this \(\ast\)-notation throughout, and the inverse readout is
+always written separately with \(\chi_\sigma(C)\).}
+
+\medskip
+\noindent\textbf{Logarithm convention for \S\ref{sec:chebotarev}.}
+For each \(\varrho\in\Irr(G)\) and each \(|z|<\lambda^{-1}\), we set
+\[
+  \log\det(I-zA_\varrho)^{-1}
+  :=
+  \sum_{n\ge 1}\frac{\Tr(A_\varrho^n)}{n}z^n,
+\]
+the analytic branch normalized by
+\(\log\det(I-0\cdot A_\varrho)^{-1}=0\). This is well defined on
+\(|z|<\lambda^{-1}\) because \(\rho(A_\varrho)\le \lambda\) by
+\Cref{prop:twisted-spectral-radius-bound}. Every determinant logarithm
+on the disc \(|z|<\lambda^{-1}\) is taken in this branch. If later the
+twisted spectral gap
+\(\eta=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda\) is assumed,
+then for every non-trivial \(\varrho\) the matrix \(I-zA_\varrho\) is
+invertible on the closed disc \(|z|\le \lambda^{-1}\); the same analytic
+branch therefore extends to a neighbourhood of that closed disc, and
+\(\log\det(I-\lambda^{-1}A_\varrho)^{-1}\) means this continuation value.
+Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
+\(\log\det(I-\lambda^{-m}A_\sigma)^{-1}\) is the same branch evaluated at
+\(z=\lambda^{-m}\). We never evaluate
+\(\log\det(I-\lambda^{-1}A_{\mathbf 1})^{-1}\), since
+\(I-\lambda^{-1}A\) is singular.
+
+\begin{proposition}[Conjugacy-class expansion]
+  \label{prop:class-indicator-expansion}
+  For every conjugacy class \(C\subset G\) and every \(g\in G\),
+  \[
+    \mathbf 1_C(g)
+    =\frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)\,\chi_\varrho(g)
+  \]
+\end{proposition}
+
+\begin{proof}
+  The irreducible characters form an orthonormal basis of the class
+  functions on \(G\) for the Hermitian inner product
+  \[
+    \langle f,h\rangle
+    :=\frac{1}{|G|}\sum_{g\in G}f(g)\overline{h(g)}.
+  \]
+  Hence
+  \[
+    \mathbf 1_C
+    =\sum_{\varrho\in\Irr(G)}
+      \langle \mathbf 1_C,\chi_\varrho\rangle \chi_\varrho.
+  \]
+  Since \(\chi_\varrho\) is constant on \(C\),
+  \[
+    \langle \mathbf 1_C,\chi_\varrho\rangle
+    =\frac{1}{|G|}\sum_{g\in C}\overline{\chi_\varrho(g)}
+    =\frac{|C|}{|G|}\chi_\varrho^\ast(C).
+  \]
+  This gives the claim.
+\end{proof}
+
+\begin{proposition}[Peter--Weyl determinant factorisation]
+  \label{prop:kernel-peter-weyl-block-diagonalisation}
+  Let \(\widetilde A\) be the adjacency matrix of the skew-product
+  extension attached to \(\tau\). Let matrices act on row vectors. With
+  the right regular action \(R_h\delta_g=\delta_{gh}\) on \(\CC[G]\), one
+  has
+  \[
+    \widetilde A
+    =
+    \sum_{e\in E_A} E_{o(e),t(e)}\otimes R_{\tau(e)},
+  \]
+  and under the Fourier--Wedderburn decomposition
+  \[
+    \CC[G]\cong \bigoplus_{\varrho\in\Irr(G)}M_{d_\varrho}(\CC),
+    \qquad d_\varrho:=\dim\varrho,
+  \]
+  the operator \(R_h\) becomes, on the \(\varrho\)-summand, right
+  multiplication \(X\mapsto X\varrho(h)\). Equivalently, \(\widetilde A\)
+  is similar to the direct sum, over \(\varrho\in\Irr(G)\), of
+  \(d_\varrho\) copies of \(A_\varrho\). In particular,
+  \[
+    \det(I-z\widetilde A)
+    =
+    \prod_{\varrho\in\Irr(G)}
+      \det(I-zA_\varrho)^{\dim\varrho}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Let \(\{\delta_g\}_{g\in G}\) be the standard row basis of \(\CC[G]\),
+  and let \(E_{ij}\) denote the matrix units acting on row vectors in
+  \(\CC^V\), so that \(e_iE_{ij}=e_j\). By definition of the skew
+  product, an edge \(e:i\to j\) sends \((i,g)\) to \((j,g\tau(e))\).
+  Hence the corresponding adjacency operator on row vectors in
+  \(\CC^V\otimes\CC[G]\) is
+  \[
+    \widetilde A
+    =
+    \sum_{e\in E_A} E_{o(e),t(e)}\otimes R_{\tau(e)},
+  \]
+  where \(R_h\delta_g=\delta_{gh}\) is the right regular action.
+
+  For each \(\varrho\in\Irr(G)\), define the Fourier coefficient map
+  \[
+    \mathcal F_\varrho:\CC[G]\to M_{d_\varrho}(\CC),
+    \qquad
+    \mathcal F_\varrho\!\left(\sum_{g\in G}a_g\delta_g\right)
+    :=\sum_{g\in G}a_g\,\varrho(g).
+  \]
+  Then for every \(h\in G\),
+  \[
+    \mathcal F_\varrho\bigl((\sum_g a_g\delta_g)R_h\bigr)
+    =\sum_g a_g\,\varrho(gh)
+    =\mathcal F_\varrho\!\left(\sum_g a_g\delta_g\right)\varrho(h).
+  \]
+  Thus right multiplication by \(h\) becomes right multiplication by
+  \(\varrho(h)\) on the \(\varrho\)-summand. The standard
+  Fourier--Wedderburn theorem gives a vector-space isomorphism
+  \[
+    \mathcal F:\CC[G]\xrightarrow{\sim}
+    \bigoplus_{\varrho\in\Irr(G)}M_{d_\varrho}(\CC)
+  \]
+  intertwining the right regular action with the direct sum of the maps
+  \(X\mapsto X\varrho(h)\).
+
+  Now write a matrix \(X\in M_{d_\varrho}(\CC)\) by its rows. Right
+  multiplication \(X\mapsto X\varrho(h)\) acts independently on each row,
+  so it is the direct sum of \(d_\varrho\) copies of \(\varrho(h)\). After
+  tensoring with \(\CC^V\), the operator induced by \(\widetilde A\) on
+  the \(\varrho\)-summand is therefore the direct sum of \(d_\varrho\)
+  copies of
+  \[
+    \sum_{e\in E_A} E_{o(e),t(e)}\otimes \varrho(\tau(e))
+    =
+    A_\varrho.
+  \]
+  Hence \(\widetilde A\) is similar to
+  \(\bigoplus_{\varrho\in\Irr(G)}A_\varrho^{\oplus d_\varrho}\). Taking
+  determinants gives
+  \[
+    \det(I-z\widetilde A)
+    =
+    \prod_{\varrho\in\Irr(G)}
+      \det(I-zA_\varrho)^{\dim\varrho},
+  \]
+  as claimed.
+\end{proof}
+
+\begin{lemma}[Twisted gap as a skew-product peripheral-spectrum condition]
+  \label{lem:twisted-gap-skew-product-peripheral}
+  Let \(\widetilde A\) be the skew-product adjacency matrix attached to
+  \(\tau\), and set
+  \[
+    \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho).
+  \]
+  Then
+  \[
+    \spec(\widetilde A)
+    =
+    \bigsqcup_{\varrho\in\Irr(G)}
+      \spec(A_\varrho)^{\sqcup \dim\varrho},
+  \]
+  where the union is taken with algebraic multiplicity. Consequently,
+  the following are equivalent:
+  \begin{enumerate}[label=\rm(\roman*)]
+  \item \(\eta<\lambda\).
+  \item Every eigenvalue of every non-trivial Peter--Weyl block
+    \(A_\varrho\) (\(\varrho\neq\mathbf 1\)) has modulus strictly less
+    than \(\lambda\).
+  \item The peripheral spectral multiset of \(\widetilde A\) is exactly
+    the single eigenvalue \(\lambda\) with algebraic multiplicity \(1\).
+  \item \(\widetilde A\) has a simple strictly dominant Perron
+    eigenvalue \(\lambda\).
+  \end{enumerate}
+  If, in addition, \(\widetilde A\) is irreducible, then these
+  conditions are also equivalent to primitivity of \(\widetilde A\).
+\end{lemma}
+
+\begin{proof}
+  By
+  \Cref{prop:kernel-peter-weyl-block-diagonalisation},
+  \(\widetilde A\) is similar to
+  \(\bigoplus_{\varrho\in\Irr(G)}A_\varrho^{\oplus\dim\varrho}\). Hence
+  the multiset of eigenvalues of \(\widetilde A\) is exactly
+  \[
+    \bigsqcup_{\varrho\in\Irr(G)}
+      \spec(A_\varrho)^{\sqcup \dim\varrho},
+  \]
+  which is the displayed spectral decomposition. The trivial
+  representation contributes the block \(A_{\mathbf 1}=A\). Since \(A\)
+  is primitive, Perron--Frobenius theory gives
+  \[
+    \spec(A)\cap\{z\in\CC:\abs{z}=\lambda\}=\{\lambda\},
+  \]
+  and the eigenvalue \(\lambda\) is simple.
+
+  Therefore \(\eta<\lambda\) holds exactly when every non-trivial block
+  \(A_\varrho\) has spectral radius strictly less than \(\lambda\).
+  Since every eigenvalue of \(A_\varrho\) has modulus at most
+  \(\rho(A_\varrho)\), this is equivalent to saying that every
+  eigenvalue of every non-trivial block has modulus strictly less than
+  \(\lambda\), which is statement \rm(ii). Because the trivial block
+  contributes exactly one peripheral eigenvalue, namely the simple
+  eigenvalue \(\lambda\), statement \rm(ii) is equivalent to saying
+  that the peripheral spectral multiset of \(\widetilde A\) consists of
+  that single copy of \(\lambda\). This is statement \rm(iii). A mere
+  point-set identity
+  \(\spec(\widetilde A)\cap\{z\in\CC:\abs{z}=\lambda\}=\{\lambda\}\)
+  would not exclude extra copies of \(\lambda\) coming from
+  non-trivial blocks, so multiplicity is essential. Finally,
+  statement \rm(iii) says precisely that \(\widetilde A\) has spectral
+  radius \(\lambda\), that \(\lambda\) is algebraically simple, and
+  that every other eigenvalue has modulus strictly less than
+  \(\lambda\), which is statement \rm(iv).
+
+  Finally, if \(\widetilde A\) is irreducible, then Perron--Frobenius
+  theory for irreducible non-negative matrices says that irreducibility
+  together with the absence of any peripheral eigenvalue other than the
+  simple Perron eigenvalue is equivalent to primitivity. Thus, under
+  irreducibility, statements \rm(i)--\rm(iv) are also equivalent to
+  primitivity of \(\widetilde A\).
+\end{proof}
+
+\begin{proposition}[Twisted spectral-radius bound]
+  \label{prop:twisted-spectral-radius-bound}
+  For every irreducible unitary representation
+  \(\sigma\in\Irr(G)\),
+  \[
+    \rho(A_\sigma)\le \lambda.
+  \]
+\end{proposition}
+
+\begin{proof}
+  By \Cref{prop:kernel-peter-weyl-block-diagonalisation}, matrices act
+  on row vectors throughout this subsection. Let \(\alpha\) be an
+  eigenvalue of \(A_\sigma\), and choose a non-zero left eigenvector
+  \(v=(v_i)_{i\in V}\) with
+  \(vA_\sigma=\alpha v\). With the block convention
+  \[
+    (A_\sigma)_{ij}=\sum_{e:i\to j}\sigma(\tau(e)),
+  \]
+  this means
+  \[
+    \alpha v_j
+    =
+    \sum_i\sum_{e:i\to j}v_i\sigma(\tau(e))
+    \qquad (j\in V).
+  \]
+  Now collect the block norms into the column vector
+  \(w=(w_j)_{j\in V}^{\mathsf T}\), where \(w_j:=\|v_j\|\). Since
+  \(\sigma(\tau(e))\) is unitary for every edge \(e\),
+  \[
+    |\alpha|\,w_j
+    =
+    \left\|\sum_i\sum_{e:i\to j}v_i\sigma(\tau(e))\right\|
+    \le \sum_i\sum_{e:i\to j}\|v_i\|
+    =\sum_i A_{ij}w_i
+    =(A^{\mathsf T}w)_j.
+  \]
+  Hence \(w\ge 0\), \(w\neq 0\), and
+  \[
+    |\alpha|\,w\le A^{\mathsf T}w
+  \]
+  coordinatewise. Let \(r>0\) be a right Perron vector of \(A\), so
+  \(Ar=\lambda r\), equivalently
+  \(r^{\mathsf T}A^{\mathsf T}=\lambda r^{\mathsf T}\). Left-multiplying
+  the last inequality by \(r^{\mathsf T}\) gives
+  \[
+    |\alpha|\,r^{\mathsf T}w
+    \le
+    r^{\mathsf T}A^{\mathsf T}w
+    =
+    \lambda\,r^{\mathsf T}w.
+  \]
+  Because \(r>0\) and \(w\neq 0\), one has \(r^{\mathsf T}w>0\), and
+  therefore \(|\alpha|\le \lambda\). This holds for every eigenvalue
+  \(\alpha\) of \(A_\sigma\), so \(\rho(A_\sigma)\le \lambda\).
+\end{proof}
+
+\noindent
+Up to this point, the material is representation-theoretic
+infrastructure. The specific content of the present paper begins when
+the determinant data are pushed to the primitive level by
+Adams--M\"obius inversion.
+
+The next lemma fixes the trace convention used throughout the rest of
+the section. It is the only place where the twisted matrices are
+identified with fixed-point sums; afterwards all primitive formulas are
+obtained by class-function expansion and Adams--M\"obius inversion.
+Together with the determinant linearisation and its primitive
+corollaries below, it forms Main Theorem~I from the introduction.
+The point of spelling it out separately is that the passage from
+determinants to primitive data has two genuinely distinct stages:
+matrix traces first give periodic Peter--Weyl sums, and only then does
+Adams--M\"obius inversion remove repetitions of primitive orbits.
+Thus the identity in \Cref{lem:twisted-trace-identity} is not a
+primitive-orbit statement; it is the periodic input on which the
+primitive inversion operates.
+
+\begin{lemma}[Twisted trace identity]
+  \label{lem:twisted-trace-identity}
+  For every irreducible representation \(\varrho\in\Irr(G)\) and every
+  \(n\ge 1\),
+  \[
+    \Tr(A_\varrho^n)
+    =
+    \sum_{x\in\operatorname{Fix}(\sigma^n)}
+      \chi_\varrho(\tau_n(x)).
+  \]
+\end{lemma}
+
+\begin{proof}
+  View \(A_\varrho\) as a block matrix indexed by vertices, with
+  \((i,j)\)-block
+  \[
+    (A_\varrho)_{ij}=\sum_{e:i\to j}\varrho(\tau(e))
+    \in\End(V_\varrho).
+  \]
+  The \((i_0,i_0)\)-block of \(A_\varrho^n\) is obtained by multiplying
+  blocks along all length-\(n\) paths which start and end at \(i_0\):
+  \[
+    (A_\varrho^n)_{i_0i_0}
+    =
+    \sum_{\substack{e_0\cdots e_{n-1}\\
+          e_k:i_k\to i_{k+1},\ i_n=i_0}}
+      \varrho(\tau(e_0))\cdots\varrho(\tau(e_{n-1})).
+  \]
+  Since \(\varrho\) is a representation, the product in each summand is
+  \[
+    \varrho(\tau(e_0)\cdots\tau(e_{n-1})).
+  \]
+  Taking the matrix trace means summing the ordinary trace of the
+  diagonal vertex blocks:
+  \[
+    \Tr(A_\varrho^n)
+    =
+    \sum_{i_0}
+    \sum_{\substack{e_0\cdots e_{n-1}\\
+          e_k:i_k\to i_{k+1},\ i_n=i_0}}
+      \operatorname{tr}_{V_\varrho}
+      \varrho(\tau(e_0)\cdots\tau(e_{n-1})).
+  \]
+  The ordinary trace on \(V_\varrho\) is the character
+  \(\chi_\varrho\). Finally, because the base is presented by the
+  directed multigraph underlying \(A\), a choice of \(i_0\) and of a closed
+  length-\(n\) admissible edge path based at \(i_0\) is exactly a
+  fixed point of \(\sigma^n\) with its time-zero coordinate fixed. No
+  quotient by cyclic rotation is taken here; fixed points are
+  basepointed closed paths, and this is why there is no primitive-orbit
+  factor \(1/n\) in the trace identity. Equivalently, in the edge-shift
+  presentation this is the usual basepointed closed path. The product
+  \(\tau(e_0)\cdots\tau(e_{n-1})\) is exactly \(\tau_n(x)\). Hence the
+  last display is
+  \[
+    \sum_{x\in\operatorname{Fix}(\sigma^n)}
+      \chi_\varrho(\tau_n(x)),
+  \]
+  as claimed.
+\end{proof}
+
+\begin{theorem}[Main Theorem I(a): class-function determinant
+  linearisation]
+  \label{thm:class-function-linearisation}
+  Let \(\phi:G\to\CC\) be a class function and write
+  \[
+    \phi=\sum_{\varrho\in\Irr(G)}\widehat\phi(\varrho)\chi_\varrho
+  \]
+  as in \eqref{eq:class-function-fourier}. Then, for \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-logarithm-determinant-linearisation}
+    \mathcal L_\phi(z)
+    =
+    \sum_{\varrho\in\Irr(G)}
+      \widehat\phi(\varrho)\,
+      \log\det(I-zA_\varrho)^{-1}.
+  \end{equation}
+  Here each determinant logarithm is taken in the branch fixed by the
+  logarithm convention above.
+\end{theorem}
+
+\begin{proof}
+  For \(n\ge 1\), expanding \(\phi\) in the irreducible character basis
+  gives
+  \[
+    T_{\phi,n}
+    =\sum_{x\in\operatorname{Fix}(\sigma^n)}
+      \sum_{\varrho\in\Irr(G)}
+        \widehat\phi(\varrho)\chi_\varrho(\tau_n(x))
+    =\sum_{\varrho\in\Irr(G)}
+      \widehat\phi(\varrho)\Tr(A_\varrho^n),
+  \]
+  by \Cref{lem:twisted-trace-identity}. Therefore,
+  \[
+    \mathcal L_\phi(z)
+    =\sum_{n\ge 1}\frac{z^n}{n}
+      \sum_{\varrho\in\Irr(G)}
+        \widehat\phi(\varrho)\Tr(A_\varrho^n).
+  \]
+  Moreover,
+  \[
+    \sum_{n\ge 1}\frac{|z|^n}{n}\abs{T_{\phi,n}}
+    \le
+    \norm{\phi}_\infty
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^n
+    =
+    \norm{\phi}_\infty \log\det(I-|z|A)^{-1}
+    <\infty
+  \]
+  for \(|z|<\lambda^{-1}\). Since
+  \[
+    \abs{T_{\phi,n}}
+    \le \norm{\phi}_\infty \#\operatorname{Fix}(\sigma^n)
+    =\norm{\phi}_\infty \Tr(A^n),
+  \]
+  the series is absolutely convergent for \(|z|<\lambda^{-1}\), and we
+  may exchange the order of summation to obtain
+  \[
+    \mathcal L_\phi(z)
+    =
+    \sum_{\varrho\in\Irr(G)}
+      \widehat\phi(\varrho)
+      \sum_{n\ge 1}\frac{\Tr(A_\varrho^n)}{n}z^n
+    =
+    \sum_{\varrho\in\Irr(G)}
+      \widehat\phi(\varrho)\,
+      \log\det(I-zA_\varrho)^{-1}.
+  \]
+  The last equality uses the power-series definition of the determinant
+  logarithm. It is valid in this disc because
+  \(\rho(A_\varrho)\le \lambda\) by
+  \Cref{prop:twisted-spectral-radius-bound}, so
+  \(I-zA_\varrho\) is invertible for \(|z|<\lambda^{-1}\).
+  This proves \eqref{eq:class-logarithm-determinant-linearisation}.
+\end{proof}
+
+\begin{lemma}[Primitive expansion of class-function logarithms]
+  \label{lem:class-logarithm-primitive-expansion}
+  For every class function \(\phi:G\to\CC\) and every
+  \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-logarithm-primitive-expansion}
+    \mathcal L_\phi(z)
+    =
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{\phi(\tau(\gamma)^r)}{r}z^{r|\gamma|}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Every fixed point of \(\sigma^n\) lies on a unique primitive orbit
+  \(\gamma\) whose length \(\ell=|\gamma|\) divides \(n\). Writing
+  \(n=r\ell\), the \(r\)-fold repetition of \(\gamma\) contributes
+  exactly \(\ell\) fixed points to \(\operatorname{Fix}(\sigma^n)\), one
+  for each starting edge of \(\gamma\). If
+  \(g=\tau(e_0)\cdots\tau(e_{\ell-1})\) is the label from one starting
+  point and \(h=\tau(e_0)\cdots\tau(e_{a-1})\) is the prefix leading to
+  another starting point, then the new primitive label is conjugate to
+  \(g\), namely \(h^{-1}gh\). Its \(r\)-fold repeated label is therefore
+  conjugate to \(g^r\). Since \(\phi\) is a class function, all these
+  \(\ell\) fixed points have the same value, namely
+  \(\phi(\tau(\gamma)^r)\). Their total contribution to
+  \(T_{\phi,n}z^n/n\) is therefore
+  \[
+    \frac{\ell}{r\ell}\phi(\tau(\gamma)^r)z^{r\ell}
+    =
+    \frac{\phi(\tau(\gamma)^r)}{r}z^{r|\gamma|}.
+  \]
+  Summing over primitive orbits and repetitions gives
+  \eqref{eq:class-logarithm-primitive-expansion}.
+
+  The rearrangement is justified by absolute convergence. Indeed,
+  \[
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{|z|^{r|\gamma|}}{r}
+    =
+    \sum_{n\ge 1}\frac{\#\operatorname{Fix}(\sigma^n)}{n}|z|^n
+    \le
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^n
+    <\infty
+  \]
+  for \(|z|<\lambda^{-1}\).
+\end{proof}
+
+\begin{remark}[Where ordinary M\"obius inversion stops]
+  \label{rem:ordinary-mobius-stops}
+  If \(\phi=\mathbf 1\), the factor
+  \(\phi(\tau(\gamma)^r)\) in
+  \eqref{eq:class-logarithm-primitive-expansion} is independent of
+  \(r\), and \Cref{cor:class-function-adams-mobius} reduces to the
+  usual scalar M\"obius inversion for primitive orbit counts. For a
+  non-trivial class function this independence fails: the \(r\)-fold
+  repetition changes the label from \(g\) to \(g^r\). The Adams operator
+  \(\psi^r\) is exactly the bookkeeping needed for this change. Thus the
+  primitive finite-group step below is not obtained by applying the
+  scalar formula representation by representation; it uses the Adams
+  action on the character ring before M\"obius inversion can remove
+  repetitions. For the general ``primitive from repetitions'' viewpoint,
+  compare the necklace/Witt formalism in
+  \cite{MetropolisRota1983Necklaces,Wehrhahn1990AperiodicRings}.
+\end{remark}
+
+\begin{corollary}[Main Theorem I(b): Adams--M\"obius primitive
+  inversion]
+  \label{cor:class-function-adams-mobius}
+  For every class function \(\phi:G\to\CC\) and every \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-adams-mobius-inversion}
+    \Pi_\phi(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\,
+      \mathcal L_{\psi^m\phi}(z^m).
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  For each \(m\ge 1\), apply
+  \Cref{lem:class-logarithm-primitive-expansion} to \(\psi^m\phi\) and
+  then substitute \(z^m\). Since
+  \((\psi^m\phi)(\tau(\gamma)^r)=\phi(\tau(\gamma)^{mr})\), one gets
+  \[
+    \mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{\phi(\tau(\gamma)^{mr})}{r}z^{mr|\gamma|}.
+  \]
+  Multiply by \(\mu(m)/m\) and sum over \(m\ge 1\). The resulting
+  \(m,r,\gamma\) series may be rearranged absolutely: since \(\phi\) is
+  bounded,
+  \[
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{\gamma\in\cP}\sum_{r\ge 1}
+        \frac{\abs{\phi(\tau(\gamma)^{mr})}}{r}|z|^{mr|\gamma|}
+    \le
+    \norm{\phi}_\infty
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn},
+  \]
+  where the inner identity
+  \[
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}\frac{|z|^{mr|\gamma|}}{r}
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
+  \]
+  is \eqref{eq:class-logarithm-primitive-expansion} with
+  \(\phi=\mathbf 1\). Tonelli's theorem then gives
+  \[
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
+      \bigl(-\log(1-|z|^n)\bigr).
+  \]
+  By \Cref{lem:pf-trace-bound},
+  \(\Tr(A^n)\le C_A\lambda^n\) for some \(C_A>0\), and
+  \[
+    -\log(1-|z|^n)\le \frac{|z|^n}{1-|z|^n}\le \frac{|z|^n}{1-|z|}.
+  \]
+  Hence the majorant is bounded by
+  \[
+    \frac{C_A}{1-|z|}
+    \sum_{n\ge 1}\frac{(\lambda|z|)^n}{n},
+  \]
+  which converges for \(|z|<\lambda^{-1}\). Therefore
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\sum_{m,r\ge 1}
+      \frac{\mu(m)}{mr}\phi(\tau(\gamma)^{mr})z^{mr|\gamma|}.
+  \]
+  Now set \(s:=mr\). For fixed \(\gamma\) and \(s\), the coefficient of
+  \(\phi(\tau(\gamma)^s)z^{s|\gamma|}\) is
+  \[
+    \sum_{m\mid s}\frac{\mu(m)}{m(s/m)}
+    =
+    \frac{1}{s}\sum_{m\mid s}\mu(m).
+  \]
+  Hence
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\sum_{s\ge 1}
+      \frac{\phi(\tau(\gamma)^s)}{s}z^{s|\gamma|}
+      \sum_{m\mid s}\mu(m).
+  \]
+  The divisor sum is \(1\) when \(s=1\) and \(0\) when \(s>1\), so only
+  the primitive term remains:
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}
+    =
+    \Pi_\phi(z).
+  \]
+  This is \eqref{eq:class-adams-mobius-inversion}.
+\end{proof}
+
+\begin{remark}[Relation to necklace/Witt inversion and twisted-zeta
+  precedents]
+  \label{rem:adams-mobius-literature-position}
+  The cancellation in
+  \Cref{cor:class-function-adams-mobius} is the finite-group analogue
+  of the classical ``primitive from repetitions'' mechanism in the
+  necklace and Witt-vector literature
+  \cite{MetropolisRota1983Necklaces,Wehrhahn1990AperiodicRings}. What
+  is specific here is the finite-state cocycle input:
+  repetitions replace a primitive label \(g\) by \(g^m\), so the
+  relevant correction is not scalar M\"obius inversion alone but the
+  Adams operation \(\psi^m\phi(g)=\phi(g^m)\) inside the character ring
+  of one fixed finite-group extension. Twisted periodic-point formulas
+  and determinant identities also appear in Fried's work
+  \cite{Fried1983PeriodicPointsTwistedCoefficients,%
+  Fried1983HomologicalIdentitiesClosedOrbits} and in the dynamical-zeta
+  treatment of Parry--Pollicott \cite{ParryPollicott1990Zeta}. Those
+  works provide determinant and orbit-counting frameworks, but they do
+  not carry out the finite-state Adams--M\"obius primitive inversion and
+  classwise Perron-point constant extraction developed here.
+\end{remark}
+
+\subsection{Primitive Peter--Weyl series}
+
+Applying \Cref{cor:class-function-adams-mobius} to irreducible
+characters produces the primitive Peter--Weyl coefficients directly
+from the twisted determinants.
+
+For \(\varrho\in\Irr(G)\), define
+\begin{equation}\label{eq:primitive-peter-weyl-series}
+  \Pi_\varrho(z):=\Pi_{\chi_\varrho}(z)
+  =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)z^n,
+  \qquad
+  \pi_{n,\varrho}(A,\tau)
+  :=\sum_{\substack{\gamma\in\cP\\ |\gamma|=n}}
+    \chi_\varrho(\tau(\gamma)).
+\end{equation}
+For \(m\ge 1\), write
+\begin{equation}\label{eq:adams-character-decomposition}
+  \psi^m\chi_\varrho
+  =\sum_{\sigma\in\Irr(G)}a_{\varrho,\sigma}^{(m)}\chi_\sigma
+\end{equation}
+for the Adams decomposition in the character ring.
+
+\begin{lemma}\label{lem:adams-coefficients-bounded}
+  For every \(\varrho,\sigma\in\Irr(G)\) and every \(m\ge 1\),
+  \[
+    \abs{a_{\varrho,\sigma}^{(m)}}\le \dim\varrho.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since the irreducible characters are orthonormal,
+  \[
+    a_{\varrho,\sigma}^{(m)}
+    =\langle \psi^m\chi_\varrho,\chi_\sigma\rangle.
+  \]
+  Hence
+  \[
+    \abs{a_{\varrho,\sigma}^{(m)}}
+    \le \norm{\psi^m\chi_\varrho}_2\norm{\chi_\sigma}_2
+    =\norm{\psi^m\chi_\varrho}_2.
+  \]
+  Moreover,
+  \[
+    \norm{\psi^m\chi_\varrho}_2^2
+    =\frac{1}{|G|}\sum_{g\in G}\abs{\chi_\varrho(g^m)}^2
+    \le (\dim\varrho)^2,
+  \]
+  because \(\abs{\chi_\varrho(h)}\le \dim\varrho\) for all \(h\in G\).
+  Taking the square root gives the claim.
+\end{proof}
+
+\begin{remark}[Periodicity of Adams coefficients]
+  \label{rem:adams-coefficients-periodic}
+  Let \(\exp(G)\) denote the exponent of \(G\). Since
+  \(g^{m+\exp(G)}=g^m\) for every \(g\in G\), one has
+  \[
+    \psi^{m+\exp(G)}\chi_\varrho=\psi^m\chi_\varrho.
+  \]
+  Consequently
+  \(a_{\varrho,\sigma}^{(m+\exp(G))}=a_{\varrho,\sigma}^{(m)}\) for all
+  \(m\), so only finitely many Adams coefficient vectors occur. In the
+  estimates below we use this finiteness only through the uniform bound
+  of \Cref{lem:adams-coefficients-bounded}.
+\end{remark}
+
+\begin{corollary}[Main Theorem I(c): irreducible-channel determinant
+  formula]
+  \label{cor:primitive-peter-weyl-determinant}
+  For every \(\varrho\in\Irr(G)\) and every \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:primitive-peter-weyl-determinant}
+    \Pi_\varrho(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \sum_{\sigma\in\Irr(G)}
+        a_{\varrho,\sigma}^{(m)}
+        \log\det(I-z^mA_\sigma)^{-1}.
+  \end{equation}
+  Again the determinant logarithms are taken in the branch fixed by the
+  logarithm convention for this section.
+\end{corollary}
+
+\begin{proof}
+  Apply \Cref{cor:class-function-adams-mobius} with
+  \(\phi=\chi_\varrho\). Then
+  \[
+    \Pi_\varrho(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \mathcal L_{\psi^m\chi_\varrho}(z^m).
+  \]
+  By \eqref{eq:adams-character-decomposition} and the determinant
+  linearisation \eqref{eq:class-logarithm-determinant-linearisation},
+  \[
+    \mathcal L_{\psi^m\chi_\varrho}(z^m)
+    =
+    \sum_{\sigma\in\Irr(G)}
+      a_{\varrho,\sigma}^{(m)}
+      \log\det(I-z^mA_\sigma)^{-1}.
+  \]
+  Substituting this identity proves
+  \eqref{eq:primitive-peter-weyl-determinant}.
+\end{proof}
+
+\noindent
+The determinant identity above is the generating-function part of Main
+Theorem~I. The coefficient form is obtained next by taking traces from
+the same determinant expansion; neither the twisted spectral gap nor
+cyclic root-of-unity reconstruction enters this first main package.
+
+\begin{remark}[Abelian toy model: the cyclic lift]
+  \label{rem:abelian-toy-model-cyclic}
+  Let \(G=\ZZ/q\ZZ\), and let \(\chi_j(h)=\omega_q^{jh}\) be its
+  irreducible characters. The canonical cyclic-lift cocycle is the
+  special cocycle \(\tau_q:E_A\to\ZZ/q\ZZ\) with
+  \(\tau_q(e)=1\) on every edge; its skew-product adjacency matrix is
+  \(A\otimes P_q\). For this cocycle, and not for a general
+  \(\ZZ/q\ZZ\)-valued edge labelling, one has
+  \(A_{\chi_j}=\omega_q^jA\), and therefore
+  \[
+    \mathcal L_{\chi_j}(z)=\log\det(I-\omega_q^j zA)^{-1}.
+  \]
+  The Adams--M\"obius inversion
+  \eqref{eq:class-adams-mobius-inversion} then reduces to the ordinary
+  Fourier decomposition on the \(q\)-th roots of unity. This is the
+  concrete bridge between the abelian formulas of
+  \Cref{sec:finite-part} and the present finite-group formalism, but
+  only after the original cocycle has been replaced by this canonical
+  cyclic-lift cocycle.
+  This model is also not an example of the twisted spectral gap used
+  later when \(q>1\): for every non-trivial character \(\chi_j\),
+  \(\rho(A_{\chi_j})=\rho(A)=\lambda\), so the non-trivial twisted
+  radius is \(\eta=\lambda\), not \(<\lambda\). The cyclic-lift layer is
+  therefore a finite-matrix comparison case, not a source of
+  Perron-point non-trivial-channel constants.
+\end{remark}
+
+\begin{corollary}[Main Theorem I(d): primitive Peter--Weyl trace formula]
+  \label{cor:primitive-peter-weyl-trace}
+  For every \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
+  \begin{equation}\label{eq:primitive-peter-weyl-trace}
+    \pi_{n,\varrho}(A,\tau)
+    =
+    \frac{1}{n}\sum_{m\mid n}\mu(m)
+      \sum_{\sigma\in\Irr(G)}
+        a_{\varrho,\sigma}^{(m)}
+        \Tr(A_\sigma^{n/m}).
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  Extract the coefficient of \(z^n\) in
+  \eqref{eq:primitive-peter-weyl-determinant}. Since
+  \[
+    [z^n]\log\det(I-z^mA_\sigma)^{-1}
+    =
+    \begin{cases}
+      \Tr(A_\sigma^{n/m})/(n/m), & m\mid n, \\
+      0, & m\nmid n,
+    \end{cases}
+  \]
+  the stated formula follows immediately.
+\end{proof}
+
+\noindent
+This completes Main Theorem~I in the sense used in the introduction.
+The trace lemma supplies the periodic input, the linearisation theorem
+rewrites it as twisted determinant data, the Adams--M\"obius corollary
+removes repetitions, and the determinant and trace corollaries give the
+primitive Peter--Weyl series and coefficients.
+
+\subsection{Bridge to classes and Main Theorem II}
+
+The primitive Peter--Weyl coefficients determine the conjugacy-class
+counts by Fourier inversion on \(G\). The next proposition is a bridge: it
+translates the primitive channels of Main Theorem~I into class counts,
+but it does not add a new independent main theorem.
+
+\begin{proposition}[Conjugacy-class primitive decomposition]
+  \label{thm:class-primitive-decomposition}
+  Let \(C\subset G\) be a conjugacy class. If \(p_{n,C}\) denotes the
+  number of primitive orbits of length \(n\) whose \(G\)-label lies in
+  \(C\), then for \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-primitive-generating-function}
+    \sum_{n\ge 1}p_{n,C}z^n
+    =
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(z),
+  \end{equation}
+  and therefore
+  \begin{equation}\label{eq:class-primitive-coefficients}
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  By definition,
+  \[
+    \sum_{n\ge 1}p_{n,C}z^n
+    =
+    \sum_{\gamma\in\cP}\mathbf 1_C(\tau(\gamma))z^{|\gamma|}.
+  \]
+  Applying \Cref{prop:class-indicator-expansion} to the class function
+  \(\mathbf 1_C\) and using the linearity of \(\Pi_\phi\) yields
+  \eqref{eq:class-primitive-generating-function}. Comparing coefficients
+  gives \eqref{eq:class-primitive-coefficients}.
+\end{proof}
+
+\begin{corollary}[Conjugacy-class Artin--M\"obius trace formula]
+  \label{cor:class-artin-mobius-trace}
+  For every conjugacy class \(C\subset G\) and every \(n\ge 1\),
+  \begin{equation}\label{eq:class-artin-mobius-trace}
+    p_{n,C}
+    =
+    \frac{|C|}{|G|\,n}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)
+        \sum_{m\mid n}\mu(m)
+          \sum_{\sigma\in\Irr(G)}
+            a_{\varrho,\sigma}^{(m)}
+            \Tr(A_\sigma^{n/m}).
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  Substitute \eqref{eq:primitive-peter-weyl-trace} into
+  \eqref{eq:class-primitive-coefficients}.
+\end{proof}
+
+From this point onward in the Perron-point part of Main Theorem~II we
+assume \(\lambda>1\) and impose the stated twisted spectral-gap
+hypothesis
+\[
+  \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda.
+\]
+Thus the formal determinant identities
+\Cref{thm:class-function-linearisation,cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant,cor:primitive-peter-weyl-trace}
+are unconditional in the open Perron disc, while the estimates and
+constants from \Cref{lem:nontrivial-peter-weyl-channel-bound} through
+\Cref{thm:class-mertens-fourier} are conditional on \(\lambda>1\) and
+the displayed gap.
+The only scalar input used below is the trivial-channel
+orbit-Mertens constant \(\mathcal M(A)\); its finite-matrix formula is
+proved independently in \Cref{sec:finite-part}.
+
+The class Mertens theorem below is the analytic part of Main
+Theorem~II from the introduction. The leading density term is included
+to identify the constant term and normalisation; the new ingredient in
+this section is the passage from the twisted determinant channels to the
+primitive Perron-point class profile. The later Fourier formula is a
+readout of the constants by character orthogonality. The proof is
+assembled from the next five lemmas:
+class decomposition, the non-trivial channel estimate, absolute
+convergence at the Perron point, a geometric-harmonic tail bound, and
+the trivial Perron-channel contribution.
+
+\begin{lemma}[Trivial and non-trivial class decomposition]
+  \label{lem:class-primitive-trivial-split}
+  For every conjugacy class \(C\subset G\) and every \(n\ge 1\),
+  \[
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}p_n(A)
+    +\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Separate the trivial representation from
+  \eqref{eq:class-primitive-coefficients}. Since
+  \(\chi_{\mathbf 1}^\ast(C)=1\) and
+  \(\pi_{n,\mathbf 1}(A,\tau)=p_n(A)\), the displayed identity follows.
+\end{proof}
+
+\begin{lemma}[Non-trivial Peter--Weyl channel bound]
+  \label{lem:nontrivial-peter-weyl-channel-bound}
+  For every non-trivial \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}
+    \le
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho}{n}
+      \left(\sum_{\sigma\in\Irr(G)}\dim\sigma\right)
+      \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m},
+  \]
+  and therefore
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}
+    \le
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho}{n}
+      \left(\sum_{\sigma\in\Irr(G)}\dim\sigma\right)
+      \frac{\lambda^{n/2+1}}{\lambda-1}.
+  \]
+  In particular,
+  \[
+    \pi_{n,\varrho}(A,\tau)
+    =O\!\left(\frac{\max\{\eta^n,\lambda^{n/2}\}}{n}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Fix \(\varrho\neq\mathbf 1\). For each
+  \(\sigma\in\Irr(G)\), let
+  \(\mu_{\sigma,1},\dots,\mu_{\sigma,|V|\dim\sigma}\) be the eigenvalues
+  of \(A_\sigma\), repeated with algebraic multiplicity. By
+  \Cref{prop:twisted-spectral-radius-bound},
+  \[
+    \abs{\mu_{\sigma,j}}\le \rho(A_\sigma)\le \lambda
+    \qquad
+    (\sigma\in\Irr(G)),
+  \]
+  and for the present non-trivial \(\varrho\) the twisted gap gives
+  \[
+    \abs{\mu_{\varrho,j}}\le \rho(A_\varrho)\le \eta.
+  \]
+  Therefore
+  \[
+    \abs{\Tr(A_\varrho^n)}
+    =
+    \left|\sum_{j=1}^{|V|\dim\varrho}\mu_{\varrho,j}^n\right|
+    \le |V|\,\dim\varrho\,\eta^n,
+  \]
+  and, for every \(\sigma\in\Irr(G)\) and every \(\ell\ge 1\),
+  \[
+    \abs{\Tr(A_\sigma^\ell)}
+    =
+    \left|\sum_{j=1}^{|V|\dim\sigma}\mu_{\sigma,j}^\ell\right|
+    \le |V|\,\dim\sigma\,\lambda^\ell.
+  \]
+
+  By \Cref{cor:primitive-peter-weyl-trace},
+  \[
+    \pi_{n,\varrho}(A,\tau)
+    =
+    \frac{1}{n}\Tr(A_\varrho^n)
+    +\frac{1}{n}
+      \sum_{\substack{m\mid n\\ m>1}}\mu(m)
+        \sum_{\sigma\in\Irr(G)}
+          a_{\varrho,\sigma}^{(m)}\Tr(A_\sigma^{n/m}).
+  \]
+  Taking absolute values, the first term is bounded by
+  \(|V|\,\dim\varrho\,\eta^n/n\). For the divisor sum, use
+  \Cref{lem:adams-coefficients-bounded} together with the trace bound
+  above:
+  \begin{align*}
+    \abs{
+      \sum_{\sigma\in\Irr(G)}
+        a_{\varrho,\sigma}^{(m)}\Tr(A_\sigma^{n/m})
+    }
+    &\le
+    \sum_{\sigma\in\Irr(G)}
+      \dim\varrho\,|V|\,\dim\sigma\,\lambda^{n/m} \\
+    &=
+    |V|\,\dim\varrho
+      \left(\sum_{\sigma\in\Irr(G)}\dim\sigma\right)\lambda^{n/m}.
+  \end{align*}
+  This proves the first displayed estimate. Since \(n/m\le n/2\) for
+  \(m>1\),
+  \[
+    \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m}
+    \le \sum_{k=1}^{\lfloor n/2\rfloor}\lambda^k
+    \le \frac{\lambda^{\lfloor n/2\rfloor+1}}{\lambda-1}
+    \le \frac{\lambda^{n/2+1}}{\lambda-1}.
+  \]
+  Substituting this into the first estimate gives the second displayed
+  bound, and the \(O\)-estimate follows.
+\end{proof}
+
+\begin{lemma}[Absolute convergence at the Perron point]
+  \label{lem:nontrivial-perron-point-convergence}
+  Assume \(\lambda>1\) and \(\eta<\lambda\). Then, for every non-trivial
+  \(\varrho\in\Irr(G)\), the series
+  \[
+    \Pi_\varrho(\lambda^{-1})
+    =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)\lambda^{-n}
+  \]
+  converges absolutely.
+\end{lemma}
+
+\begin{proof}
+  Let
+  \[
+    \vartheta:=\max\{\eta/\lambda,\lambda^{-1/2}\}\in(0,1).
+  \]
+  By \Cref{lem:nontrivial-peter-weyl-channel-bound},
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}\lambda^{-n}
+    =O\!\left(\frac{\vartheta^n}{n}\right),
+  \]
+  and the series \(\sum_{n\ge 1}\vartheta^n/n\) converges.
+\end{proof}
+
+\begin{lemma}[Abel limit equals the ordinary correction sum]
+  \label{lem:abel-correction-sum}
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\). If
+  \[
+    \sum_{n\ge 1}\left|\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right|
+    <\infty,
+  \]
+  then
+  \[
+    \FP(A)
+    =
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
+  \]
+  Equivalently, for every \(0\le r<1\),
+  \[
+    P_A(r)+\log(1-r)
+    =
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)r^n,
+  \]
+  and the limit \(r\uparrow 1\) may be passed termwise.
+\end{lemma}
+
+\begin{proof}
+  For \(0\le r<1\), the harmonic-series identity
+  \[
+    -\log(1-r)=\sum_{n\ge 1}\frac{r^n}{n}
+  \]
+  gives
+  \[
+    P_A(r)+\log(1-r)
+    =
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)r^n.
+  \]
+  The right-hand side is dominated by the absolutely summable majorant
+  \[
+    \sum_{n\ge 1}\left|\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right|,
+  \]
+  so dominated convergence allows \(r\uparrow 1\) termwise. By the
+  definition of \(\FP(A)\), the limit equals \(\FP(A)\), proving the
+  stated ordinary-sum formula.
+\end{proof}
+
+\begin{lemma}[Geometric-harmonic tails]
+  \label{lem:geometric-harmonic-tail}
+  If \(0<\vartheta<1\), then for every \(N\ge 1\),
+  \[
+    \sum_{n>N}\frac{\vartheta^n}{n}
+    \le
+    \frac{\vartheta^{N+1}}{(N+1)(1-\vartheta)}.
+  \]
+  In particular, if \(b_n=O(\vartheta^n/n)\), then
+  \[
+    \sum_{n>N}b_n=O\!\left(\frac{\vartheta^N}{N}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(n\ge N+1\) throughout the tail,
+  \[
+    \sum_{n>N}\frac{\vartheta^n}{n}
+    \le
+    \frac{1}{N+1}\sum_{n>N}\vartheta^n
+    =
+    \frac{\vartheta^{N+1}}{(N+1)(1-\vartheta)}.
+  \]
+  The second statement is immediate.
+\end{proof}
+
+\begin{lemma}[Harmonic-log remainder bound]
+  \label{lem:harmonic-log-remainder}
+  For every \(N\ge 1\),
+  \[
+    0
+    <
+    H_N-\log N-\gamma
+    \le
+    \frac{1}{N+1}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since
+  \[
+    \log(N+1)-\log N
+    =
+    \log\!\left(1+\frac{1}{N}\right)
+  \]
+  and \(\frac{x}{1+x}\le \log(1+x)\le x\) for \(x>-1\), one has
+  \[
+    \frac{1}{N+1}
+    \le
+    \log\!\left(1+\frac{1}{N}\right)
+    \le
+    \frac{1}{N}.
+  \]
+  Therefore
+  \[
+    0
+    \le
+    \frac{1}{N}-\log\!\left(1+\frac{1}{N}\right)
+    \le
+    \frac{1}{N(N+1)}.
+  \]
+  Using the defining limit
+  \(\gamma=\lim_{M\to\infty}(H_M-\log M)\), we obtain
+  \begin{align*}
+    H_N-\log N-\gamma
+    &=
+    \sum_{m>N}
+      \left(
+        \frac{1}{m}-\log\!\left(1+\frac{1}{m}\right)
+      \right) \\
+    &\le
+    \sum_{m>N}\frac{1}{m(m+1)}
+    =
+    \frac{1}{N+1}.
+  \end{align*}
+  Each summand is strictly positive, so the left-hand inequality follows.
+\end{proof}
+
+\begin{lemma}[Perron-channel contribution]
+  \label{lem:perron-channel-contribution}
+  Assume \(\lambda>1\), \(\eta<\lambda\), and set
+  \[
+    \Lambda_*:=\max\{\Lambda(A),\eta,\lambda^{1/2}\}.
+  \]
+  Then \(\vartheta_*:=\Lambda_*/\lambda\in(0,1)\), and
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\mathcal M(A)-\gamma
+    +O\!\left(\frac{\vartheta_*^N}{N}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(\Lambda(A)<\lambda\), \(\eta<\lambda\), and
+  \(\lambda^{1/2}<\lambda\), one has \(\vartheta_*\in(0,1)\). By
+  \Cref{lem:primitive-orbit-asymptotic},
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}
+    +O\!\left(\frac{\vartheta_*^n}{n}\right).
+  \]
+  Hence the correction series
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely, and \Cref{lem:abel-correction-sum} gives
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+    =
+    \FP(A)
+    =
+    \mathcal M(A)-\gamma.
+  \]
+  Therefore
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\mathcal M(A)-\gamma
+    -\sum_{n>N}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
+  \]
+  The tail is \(O(\vartheta_*^N/N)\) by
+  \Cref{lem:geometric-harmonic-tail}.
+\end{proof}
+
+\begin{theorem}[Main Theorem II(a): class Mertens theorem under the
+  stated twisted spectral gap]
+  \label{thm:class-mertens-explicit}
+  Assume that \(\lambda>1\) and
+  \[
+    \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda,
+    \qquad
+    \Lambda_*:=\max\{\Lambda(A),\eta,\lambda^{1/2}\}.
+  \]
+  Write \(\theta:=\Lambda_*/\lambda\in(0,1)\).
+  Then, for every conjugacy class \(C\subset G\),
+  \begin{equation}\label{eq:class-primitive-asymptotic}
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}\frac{\lambda^n}{n}
+    +O\!\left(\frac{\Lambda_*^n}{n}\right).
+  \end{equation}
+  In particular, for all sufficiently large \(n\),
+  \begin{equation}\label{eq:class-chebotarev-density}
+    \frac{p_{n,C}}{p_n(A)}
+    =
+    \frac{|C|}{|G|}
+    +O\!\left(\left(\frac{\Lambda_*}{\lambda}\right)^n\right).
+  \end{equation}
+  Moreover, the series \(\Pi_\varrho(\lambda^{-1})\) converges
+  absolutely for every non-trivial \(\varrho\), and
+  \begin{equation}\label{eq:class-mertens-harmonic}
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \frac{|C|}{|G|}H_N
+    +\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\gamma
+    +O\!\left(\frac{(\Lambda_*/\lambda)^N}{N}\right),
+  \end{equation}
+  where \(H_N=\sum_{n\le N}1/n\) and the corresponding class-indexed
+  constant is
+  \begin{equation}\label{eq:class-mertens-constant}
+    \mathcal M_C(A,\tau;G)
+    =
+    \frac{|C|}{|G|}\mathcal M(A)
+    +\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}).
+  \end{equation}
+  Let \(K_{\mathrm{PF}}(A)\) and \(K_{\mathrm{tr}}(A)\) be the base
+  constants from \Cref{lem:primitive-orbit-asymptotic}. Then
+  \begin{equation}\label{eq:class-mertens-base-constant}
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}
+      \frac{\lambda^{n/2}}{n}
+    \qquad (n\ge 1),
+  \end{equation}
+  Define
+  \[
+    K_{\mathrm{base}}(A)
+    :=
+    K_{\mathrm{PF}}(A)
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}.
+  \]
+  Then
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{base}}(A)}{n}
+      \max\{\Lambda(A)^n,\lambda^{n/2}\}.
+  \]
+  Set
+  \[
+    D_G:=\sum_{\sigma\in\Irr(G)}\dim\sigma,
+    \qquad
+    S_G:=\sum_{\varrho\neq\mathbf 1}(\dim\varrho)^2.
+  \]
+  Define
+  \begin{equation}\label{eq:class-mertens-explicit-constant}
+    C_{\mathrm{cls}}(A,\tau;G)
+    :=
+    K_{\mathrm{base}}(A)
+    +|V|\,S_G
+    +\frac{\lambda |V|\,D_G}{\lambda-1}\,S_G.
+  \end{equation}
+  Then, for every conjugacy class \(C\subset G\) and every \(n\ge 1\),
+  \begin{equation}\label{eq:class-primitive-explicit-bound}
+    \abs{
+      p_{n,C}
+      -\frac{|C|}{|G|}\frac{\lambda^n}{n}
+    }
+    \le
+    \frac{|C|}{|G|}
+    \frac{C_{\mathrm{cls}}(A,\tau;G)\Lambda_*^n}{n}.
+  \end{equation}
+  In particular,
+  \begin{equation}\label{eq:class-mertens-log}
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \frac{|C|}{|G|}\log N+\mathcal M_C(A,\tau;G)+O(N^{-1}).
+  \end{equation}
+  More explicitly, for every \(N\ge 1\),
+  \begin{equation}\label{eq:class-mertens-log-explicit}
+    \abs{
+      \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+      -\frac{|C|}{|G|}\log N
+      -\mathcal M_C(A,\tau;G)
+    }
+    \le
+    \frac{|C|}{|G|}
+    \left(
+      \frac{1}{N+1}
+      +
+      \frac{
+        C_{\mathrm{cls}}(A,\tau;G)\theta^{N+1}
+      }{
+        (N+1)(1-\theta)
+      }
+    \right).
+  \end{equation}
+  The displayed constant in
+  \eqref{eq:class-primitive-explicit-bound} is uniform in the conjugacy
+  class \(C\) and in \(n\), and
+  \eqref{eq:class-mertens-log-explicit} gives the corresponding
+  class-uniform summatory remainder. The adjective ``stated'' refers
+  only to the finite-dimensional spectral-gap input \(\eta\) and
+  \(\Lambda_*\).
+\end{theorem}
+
+\begin{proof}
+  Set \(\vartheta_*:=\theta=\Lambda_*/\lambda\in(0,1)\). By
+  \Cref{lem:class-primitive-trivial-split},
+  \[
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}p_n(A)
+    +\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+  \]
+  The two inputs are
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{base}}(A)}{n}\max\{\Lambda(A)^n,\lambda^{n/2}\}
+  \]
+  from \eqref{eq:class-mertens-base-constant}, and, for each
+  non-trivial \(\varrho\),
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}
+    \le
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho\,D_G}{n}
+      \frac{\lambda^{n/2+1}}{\lambda-1}
+  \]
+  from \Cref{lem:nontrivial-peter-weyl-channel-bound}. Since
+  \(\abs{\chi_\varrho(C)}\le \dim\varrho\) and
+  \(\Lambda_*=\max\{\Lambda(A),\eta,\lambda^{1/2}\}\), one has
+  \[
+    \max\{\Lambda(A)^n,\lambda^{n/2}\}\le \Lambda_*^n,
+    \qquad
+    \eta^n\le \Lambda_*^n,
+    \qquad
+    \lambda^{n/2+1}\le \lambda\Lambda_*^n.
+  \]
+  Therefore
+  \[
+    \abs{
+      p_{n,C}
+      -\frac{|C|}{|G|}\frac{\lambda^n}{n}
+    }
+    \le
+    \frac{|C|}{|G|}
+    \frac{\Lambda_*^n}{n}
+    \left(
+      K_{\mathrm{base}}(A)
+      +|V|\,S_G
+      +\frac{\lambda |V|\,D_G}{\lambda-1}\,S_G
+    \right),
+  \]
+  which is \eqref{eq:class-primitive-explicit-bound}. In particular,
+  \[
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}\frac{\lambda^n}{n}
+    +O\!\left(\frac{\Lambda_*^n}{n}\right),
+  \]
+  which is \eqref{eq:class-primitive-asymptotic}.
+  Since
+  \[
+    p_n(A)=\frac{\lambda^n}{n}+O\!\left(\frac{\Lambda_*^n}{n}\right),
+  \]
+  equivalently
+  \(p_n(A)=\frac{\lambda^n}{n}\bigl(1+O(\vartheta_*^n)\bigr)\) with
+  \(0<\vartheta_*<1\), one has \(p_n(A)>0\) (hence \(p_n(A)\neq 0\))
+  for all sufficiently large \(n\). Therefore
+  dividing \eqref{eq:class-primitive-asymptotic} by \(p_n(A)\) yields
+  \eqref{eq:class-chebotarev-density} for all sufficiently large \(n\).
+
+  By \Cref{lem:nontrivial-perron-point-convergence}, the series
+  \(\Pi_\varrho(\lambda^{-1})\) is absolutely convergent for every
+  non-trivial \(\varrho\). Since
+  \eqref{eq:class-primitive-explicit-bound} gives
+  \[
+    \abs{
+      \frac{p_{n,C}}{\lambda^n}
+      -\frac{|C|}{|G|}\frac{1}{n}
+    }
+    \le
+    \frac{|C|}{|G|}
+    \frac{C_{\mathrm{cls}}(A,\tau;G)\vartheta_*^n}{n},
+  \]
+  the correction series
+  \[
+    \sum_{n\ge 1}
+      \left(
+        \frac{p_{n,C}}{\lambda^n}
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right)
+  \]
+  converges absolutely. Using the Peter--Weyl decomposition termwise,
+  together with \Cref{lem:abel-correction-sum} and the definition of
+  \(\Pi_\varrho(\lambda^{-1})\), we obtain
+  \begin{align*}
+    \sum_{n\ge 1}
+      \left(
+        \frac{p_{n,C}}{\lambda^n}
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right)
+    &=
+    \frac{|C|}{|G|}
+      \sum_{n\ge 1}
+        \left(
+          \frac{p_n(A)}{\lambda^n}-\frac{1}{n}
+        \right) \\
+    &\quad
+    +
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)
+        \sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)\lambda^{-n} \\
+    &=
+    \frac{|C|}{|G|}\bigl(\mathcal M(A)-\gamma\bigr)
+    +\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}),
+  \end{align*}
+  which is exactly
+  \eqref{eq:class-mertens-constant}. Therefore, for every \(N\ge 1\),
+  \[
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \frac{|C|}{|G|}H_N
+    +\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\gamma
+    -\sum_{n>N}
+      \left(
+        \frac{p_{n,C}}{\lambda^n}
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right).
+  \]
+  Applying \Cref{lem:geometric-harmonic-tail} to the explicit
+  correction bound above yields
+  \[
+    \abs{
+      \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+      -\frac{|C|}{|G|}H_N
+      -\mathcal M_C(A,\tau;G)+\frac{|C|}{|G|}\gamma
+    }
+    \le
+    \frac{|C|}{|G|}
+    \frac{
+      C_{\mathrm{cls}}(A,\tau;G)\vartheta_*^{N+1}
+    }{
+      (N+1)(1-\vartheta_*)
+    },
+  \]
+  which implies \eqref{eq:class-mertens-harmonic}. Finally,
+  \Cref{lem:harmonic-log-remainder} gives
+  \[
+    \abs{
+      H_N-\log N-\gamma
+    }
+    \le
+    \frac{1}{N+1},
+  \]
+  so
+  \eqref{eq:class-mertens-log-explicit} follows from the previous
+  display. In particular, \eqref{eq:class-mertens-log} holds.
+\end{proof}
+
+\begin{remark}[Comparison with classical Mertens and Chebotarev
+  asymptotics]
+  \label{rem:class-mertens-comparison}
+  The conclusion of \Cref{thm:class-mertens-explicit} should be read as
+  a finite-state classwise constant formula under an already stated
+  twisted spectral gap. It does not supply a new Tauberian proof of a
+  Mertens theorem of the type proved by Sharp
+  \cite{Sharp1991Mertens}, nor a new leading-density Chebotarev theorem
+  of the type proved for Axiom~A or homogeneous extensions in
+  \cite{ParryPollicott1986Chebotarev,NooraniParry1992ChebotarevShifts}.
+  Its extra output is the explicit determinant expression for the
+  class-indexed constant term \(\mathcal M_C(A,\tau;G)\) after the leading
+  \(\frac{|C|}{|G|}\log N\) behaviour has already been separated. In
+  this sense \(\mathcal M_C(A,\tau;G)\) is a classwise finite-state
+  analogue of the constant term in classical orbit-counting asymptotics,
+  not a new Tauberian theorem of Sharp type.
+\end{remark}
+
+\begin{proposition}[Main Theorem II bridge: class-constant deviations
+  and Perron-point determinant evaluation]
+  \label{prop:class-mertens-deviations}
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, define
+  \[
+    \Delta_C(A,\tau;G)
+    :=\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\mathcal M(A).
+  \]
+  Then the classwise deviations \(\Delta_C(A,\tau;G)\) are well
+  defined, and
+  \begin{equation}\label{eq:class-mertens-fourier-expansion}
+    \Delta_C(A,\tau;G)
+    =
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}).
+  \end{equation}
+  In the boundary determinant evaluation below, every logarithm
+  \(\log\det(I-\lambda^{-m}A_\sigma)^{-1}\) is taken in the analytic
+  branch fixed by the logarithm convention at the start of
+  \Cref{sec:chebotarev}: for \(m=1\) and non-trivial \(\sigma\) this
+  means the continuation of the branch from \(z=0\) to the Perron point
+  \(z=\lambda^{-1}\) through the zero-free region given by the twisted
+  spectral gap, and for \(m\ge 2\) it is the same branch evaluated at
+  \(z=\lambda^{-m}\).
+  Moreover, for every non-trivial \(\varrho\),
+  \begin{equation}\label{eq:class-mertens-determinant}
+    \Pi_\varrho(\lambda^{-1})
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \sum_{\sigma\in\Irr(G)}
+        a_{\varrho,\sigma}^{(m)}
+        \log\det(I-\lambda^{-m}A_\sigma)^{-1}.
+  \end{equation}
+  The determinant logarithms are taken in the branch fixed above; for
+  \(m=1\) this is the continued non-trivial value at \(z=\lambda^{-1}\).
+\end{proposition}
+
+\begin{proof}
+  Subtract \((|C|/|G|)\mathcal M(A)\) from
+  \eqref{eq:class-mertens-constant} to obtain
+  \eqref{eq:class-mertens-fourier-expansion}.
+
+  For \(\varrho\neq\mathbf 1\), one has
+  \(a_{\varrho,\mathbf 1}^{(1)}=0\) because
+  \(\psi^1\chi_\varrho=\chi_\varrho\) is itself non-trivial. Hence the
+  \(m=1\) term in \eqref{eq:primitive-peter-weyl-determinant} involves
+  only non-trivial \(\sigma\). The twisted gap gives
+  \(\rho(A_\sigma)<\lambda\) for those \(\sigma\), so
+  \(I-\lambda^{-1}A_\sigma\) is invertible. For \(m\ge 2\), the point
+  \(\lambda^{-m}\) lies strictly inside the Perron disc for every
+  \(\sigma\), because
+  \(\lambda^{-m}\rho(A_\sigma)\le\lambda^{1-m}<1\).
+
+  It remains only to justify convergence of the determinant expansion at
+  the boundary. By the logarithm convention for this section, all
+  determinant logarithms in \eqref{eq:class-mertens-determinant} are
+  evaluated in the branch continued from \(z=0\) along the zero-free
+  region determined by the preceding spectral-radius bounds. By
+  \Cref{lem:adams-coefficients-bounded} the Adams
+  coefficients are uniformly bounded. Since the matrices \(A_\sigma\)
+  range over a finite set and
+  \(\lambda^{-m}\rho(A_\sigma)\le\lambda^{1-m}\), the absolutely
+  convergent power-series expansion of the determinant logarithm gives,
+  uniformly in \(\sigma\),
+  \[
+    \log\det(I-\lambda^{-m}A_\sigma)^{-1}
+    =O(\lambda^{1-m})
+    \qquad (m\ge 2).
+  \]
+  Thus the tail over \(m\ge 2\) is dominated by
+  \(\sum_{m\ge 2}\lambda^{1-m}/m\), and the finitely many \(m=1\)
+  terms are regular by the gap. Therefore
+  \eqref{eq:primitive-peter-weyl-determinant} may be evaluated at
+  \(z=\lambda^{-1}\), yielding \eqref{eq:class-mertens-determinant}.
+\end{proof}
+
+\begin{remark}[On the twisted spectral-gap hypothesis]
+  \label{rem:twisted-spectral-gap-role}
+  The condition
+  \[
+    \eta=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda
+  \]
+  does not enter the determinant identities themselves: the formulas of
+  \Cref{thm:class-function-linearisation,cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant}
+  are valid throughout the disc \(|z|<\lambda^{-1}\) without it. The
+  role of the hypothesis is exactly to permit evaluation at the Perron
+  point \(z=\lambda^{-1}\) in the non-trivial channels and to convert
+  the primitive Peter--Weyl series into the class-indexed constants
+  \(\mathcal M_C(A,\tau;G)\). From the dynamical point of view this is the
+  representation-by-representation analogue of the usual separation of
+  the Perron eigenvalue from the rest of the spectrum. The corresponding
+  Chebotarev-type asymptotics for finite homogeneous extensions were
+  already established by Noorani--Parry
+  \cite{NooraniParry1992ChebotarevShifts}; for further homogeneous-
+  extension background, including ergodicity and weak-mixing criteria
+  with applications to Markov shifts, compare Noorani
+  \cite{Noorani1997HomogeneousExtensionsMarkov}. See also the earlier
+  Axiom~A setting of \cite{ParryPollicott1986Chebotarev}, whose title
+  uses ``Chebotarov'' for this Chebotarev analogy, Parry's
+  non-abelian Liv\v{s}ic theorem \cite{Parry1999LivsicNonAbelian}, and
+  the compact-group Liv\v{s}ic context of
+  \cite{ParryPollicott1997LivsicCompactLie}, the skew-product
+  reciprocity analogues of
+  \cite{ParryPollicott2008BauerSkewProducts,%
+  PollicottSharp2008ArtinReciprocitySkewProducts}, the homology-class
+  counting results of
+  \cite{KatsudaSunada1990ClosedOrbitsHomology,%
+  Sharp1993ClosedOrbitsHomologyAnosov,%
+  PollicottSharp2007Chebotarev}, and the analysis of Parry and
+  Liv\v{s}ic obstructions in
+  \cite{BoyleSchmieding2017FiniteGroupExtensions}. In the present paper
+  the hypothesis is kept as a separate stated assumption because the
+  theorem package only needs this exact spectral input to pass from the
+  open disc to the Perron point. In the present finite-state setting it
+  is already an explicit finite-dimensional condition:
+  \Cref{lem:twisted-gap-skew-product-peripheral} identifies it with the
+  absence of non-trivial peripheral spectrum in the skew-product
+  adjacency \(\widetilde A\), equivalently with \(\widetilde A\) having
+  a simple strictly dominant Perron eigenvalue, and, when
+  \(\widetilde A\) is irreducible, with primitivity of
+  \(\widetilde A\). What remains outside the present argument is not
+  finite-matrix verification itself but structural criteria on the
+  cocycle \(\tau\) that imply this spectral condition without first
+  building and testing the full skew-product matrix. The new step here
+  is the finite-state Adams--M\"obius calculus at the level of
+  primitive constants and the explicit class-indexed constant term
+  \(\mathcal M_C(A,\tau;G)\), not a new leading-density theorem of the
+  type considered in
+  \cite{Lalley1987DistributionPeriodicOrbits,%
+  Coles2025VassilievWritheAxiomA}.
+\end{remark}
+
+\subsection{Readout}
+
+The class-indexed constants \(\mathcal M_C(A,\tau;G)\) therefore encode
+more than the leading
+term of the class-counting asymptotic: by
+\Cref{prop:class-mertens-deviations} their deviations from the trivial
+average are already well-defined Fourier coefficients of the non-trivial
+Peter--Weyl channels at the Perron point. The statement below records
+the readout that completes Main Theorem~II. It uses the full
+non-abelian character basis and no cyclic one-layer sampling hypothesis.
+The inversion step itself is the standard orthogonality relation for
+irreducible characters; the substantive input is that the previous
+Adams--M\"obius and spectral-gap arguments have produced the convergent
+Perron-point coefficients to which the inversion can be applied.
+
+\begin{theorem}[Main Theorem II(b): class-constant readout]
+  \label{thm:class-mertens-fourier}
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, let
+  \(\Delta_C(A,\tau;G)\) be as in \Cref{prop:class-mertens-deviations}.
+  Thus the boundary values \(\Pi_\sigma(\lambda^{-1})\) appearing below
+  are the Perron-point channel values supplied by
+  \Cref{prop:class-mertens-deviations} with that same fixed analytic
+  branch convention.
+  Then
+  for every non-trivial \(\sigma\in\Irr(G)\),
+  \begin{equation}\label{eq:class-mertens-fourier-inversion}
+    \Pi_\sigma(\lambda^{-1})
+    =
+    \sum_{C\subset G}\Delta_C(A,\tau;G)\chi_\sigma(C),
+  \end{equation}
+  where the sum runs over conjugacy classes. Moreover,
+  \begin{equation}\label{eq:class-mertens-plancherel}
+    \sum_{C\subset G}\frac{|G|}{|C|}\abs{\Delta_C(A,\tau;G)}^2
+    =
+    \sum_{\varrho\neq\mathbf 1}
+      \abs{\Pi_\varrho(\lambda^{-1})}^2.
+  \end{equation}
+  Equivalently, this is Fourier inversion and Parseval for the Hermitian
+  class-function inner product
+  \[
+    \langle f,h\rangle_{\mathrm{cl}}
+    :=
+    \sum_{C\subset G}\frac{|C|}{|G|}f(C)\overline{h(C)},
+  \]
+  so the forward coefficient is
+  \[
+    \chi_\varrho^\ast(C).
+  \]
+  In the inverse readout, this coefficient is paired with the
+  unconjugated class character \(\chi_\sigma(C)\).
+\end{theorem}
+
+\begin{proof}
+  This is Fourier inversion in the full class-function space of \(G\).
+  No cyclic quotient and no root-of-unity sampling condition is involved:
+  the inputs are the class-indexed constants
+  \(\mathcal M_C(A,\tau;G)\) for all conjugacy classes, and the basis is
+  the full irreducible character basis.
+  Multiply \eqref{eq:class-mertens-fourier-expansion} by
+  \(\chi_\sigma(C)\) and sum over conjugacy classes:
+  \[
+    \sum_{C\subset G}\Delta_C(A,\tau;G)\chi_\sigma(C)
+    =
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,
+        \Pi_\varrho(\lambda^{-1})\chi_\sigma(C).
+  \]
+  The orthogonality relation
+  \[
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      \chi_\varrho^\ast(C)\,\chi_\sigma(C)
+    =\delta_{\varrho,\sigma}
+  \]
+  yields \eqref{eq:class-mertens-fourier-inversion}.
+
+  For the Parseval identity, multiply
+  \eqref{eq:class-mertens-fourier-expansion} by \(|G|/|C|\), take the
+  modulus squared, and sum over conjugacy classes. Since
+  \[
+    |\Delta_C(A,\tau;G)|^2
+    =
+    \left(\frac{|C|}{|G|}\right)^2
+    \left|\sum_{\varrho\neq\mathbf 1}
+      \chi_\varrho^\ast(C)\,
+      \Pi_\varrho(\lambda^{-1})\right|^2,
+  \]
+  one obtains
+  \[
+    \sum_{C\subset G}\frac{|G|}{|C|}|\Delta_C(A,\tau;G)|^2
+    =
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      \left|\sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,
+        \Pi_\varrho(\lambda^{-1})\right|^2.
+  \]
+  Expanding the modulus square gives
+  \[
+    \sum_{\varrho,\sigma\neq\mathbf 1}
+      \Pi_\varrho(\lambda^{-1})
+      \overline{\Pi_\sigma(\lambda^{-1})}
+      \sum_{C\subset G}\frac{|C|}{|G|}
+        \chi_\varrho^\ast(C)\,\chi_\sigma(C).
+  \]
+  The inner sum is exactly
+  \[
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      \chi_\varrho^\ast(C)\,\chi_\sigma(C)
+    =\delta_{\varrho,\sigma}.
+  \]
+  Therefore only the diagonal terms remain, which
+  yields \eqref{eq:class-mertens-plancherel}.
+\end{proof}
+
+\noindent
+Together with \Cref{thm:class-mertens-explicit} and
+\Cref{prop:class-mertens-deviations}, this proves Main Theorem~II from
+the introduction. The determinant and Adams--M\"obius work has already
+produced the Perron-point primitive channels; the final step above is
+the standard character-orthogonality readout on class functions, not the
+one-layer DFT calculation used later for the canonical cyclic-lift
+comparison.
+
+\begin{remark}
+  \Cref{thm:class-mertens-fourier} has the same formal readout shape as
+  the root-of-unity reconstruction results from \Cref{sec:finite-part}.
+  In the separate canonical cyclic-lift comparison case, one
+  root-of-unity layer recovers the reduced spectral data by ordinary
+  Fourier inversion.
+  Here the full family of
+  conjugacy-class Mertens constants \(\mathcal M_C(A,\tau;G)\) recovers
+  the non-trivial twisted
+  primitive values \(\Pi_\varrho(\lambda^{-1})\) by non-abelian
+  character orthogonality. The analogy is only at the final readout
+  step: the class-indexed constants being inverted here have first been
+  produced by the
+  Adams--M\"obius determinant mechanism and the twisted gap, whereas
+  the one-layer statement of \Cref{sec:finite-part} is polynomial
+  coefficient recovery.
+\end{remark}

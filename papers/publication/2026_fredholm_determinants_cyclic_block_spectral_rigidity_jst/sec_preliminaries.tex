@@ -1,0 +1,214 @@
+\section{Finite-State \texorpdfstring{$\zeta$}{zeta}-Functions, Primitive Orbit Counts, and the Trace-Class Obstruction}
+\label{sec:preliminaries}
+
+\subsection{Primitive orbit counts}
+
+Let \(\mathcal A\) be a finite alphabet and let
+\(A\in\{0,1\}^{\mathcal A\times\mathcal A}\) be a primitive adjacency
+matrix. The associated one-sided subshift of finite type is
+\[
+  X_A^+
+  =\bigl\{(x_n)_{n\ge 0}\in \mathcal A^{\NN}:
+    A_{x_n,x_{n+1}}=1\ \text{for all }n\ge 0\bigr\},
+\]
+equipped with the left shift \(\sigma\). We write
+\[
+  a_n(A):=\Tr(A^n)
+  =\#\Fix(\sigma^n)
+\]
+for the number of points of period dividing \(n\). The number of
+primitive orbits of least period \(n\) is
+\begin{equation}\label{eq:primitive-mobius}
+  p_n(A)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(A),
+\end{equation}
+and the inverse necklace relation is
+\begin{equation}\label{eq:trace-primitive-identity}
+  a_n(A)=\sum_{d\mid n}d\,p_d(A).
+\end{equation}
+These are the usual necklace/Witt inversion identities
+\cite{MetropolisRota1983} in the finite symbolic setting.
+The corresponding dynamical \(\zeta\)-function is the finite-state
+instance of the Artin--Mazur periodic-point generating function
+\cite{ArtinMazur1965}.
+
+\begin{proposition}[Trace, primitive orbits, and Euler product]
+  \label{prop:prelim-trace-primitive}
+  For a primitive adjacency matrix \(A\) with Perron root \(\lambda\),
+  \[
+    \zeta_A(z)
+    :=\exp\!\left(\sum_{n\ge 1}\frac{a_n(A)}{n}z^n\right)
+    =\det(I-zA)^{-1}
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}
+  \]
+  for every \(|z|<\lambda^{-1}\). The Euler product identity is an
+  equality of holomorphic germs at \(z=0\); equivalently, it is an
+  identity of formal power series. In particular,
+  \[
+    \log\det(I-zA)^{-1}
+    =\sum_{n\ge 1}\frac{a_n(A)}{n}z^n
+    \qquad (|z|<\lambda^{-1}).
+  \]
+\end{proposition}
+
+\begin{proof}
+  The determinant formula for shifts of finite type is classical; see
+  \cite{BowenLanford1970Zeta,LindMarcus1995}. Since \(A\) is a finite
+  matrix, we can also verify directly the exact identity needed here.
+  Let \(\lambda_1,\dots,\lambda_d\) be the eigenvalues of \(A\), counted
+  with algebraic multiplicity. Primitivity gives
+  \(|\lambda_i|\le\lambda\) for every \(i\), so for \(|z|<\lambda^{-1}\)
+  one has \(|z\lambda_i|<1\) and therefore
+  \[
+    -\log(1-z\lambda_i)=\sum_{n\ge1}\frac{(\lambda_i z)^n}{n},
+  \]
+  with the principal branch. Summing over \(i\) yields
+  \begin{align*}
+    \log\det(I-zA)^{-1}
+    &=-\sum_{i=1}^d\log(1-z\lambda_i) \\
+    &=\sum_{n\ge1}\frac{z^n}{n}\sum_{i=1}^d\lambda_i^n
+      =\sum_{n\ge1}\frac{\Tr(A^n)}{n}z^n
+      =\sum_{n\ge1}\frac{a_n(A)}{n}z^n.
+  \end{align*}
+  Exponentiating gives
+  \[
+    \zeta_A(z)=\det(I-zA)^{-1}
+    =\exp\!\left(\sum_{n\ge1}\frac{a_n(A)}{n}z^n\right).
+  \]
+
+  For the Euler product, \eqref{eq:trace-primitive-identity} gives
+  \(a_n(A)=\sum_{d\mid n} d\,p_d(A)\). Hence, for \(|z|<\lambda^{-1}\le1\),
+  \begin{align*}
+    \sum_{n\ge1}\frac{a_n(A)}{n}z^n
+    &=\sum_{n\ge1}\sum_{d\mid n}\frac{d\,p_d(A)}{n}z^n \\
+    &=\sum_{m\ge1}\sum_{r\ge1}\frac{p_m(A)}{r}z^{mr}
+      =-\sum_{m\ge1}p_m(A)\log(1-z^m),
+  \end{align*}
+  again using the principal branch on \(|z|<1\). Exponentiating gives
+  \[
+    \det(I-zA)^{-1}
+    =\prod_{m\ge1}(1-z^m)^{-p_m(A)}.
+  \]
+  This is precisely an identity of holomorphic germs at \(0\), hence also
+  of formal power series.
+\end{proof}
+
+\begin{remark}[The full \(k\)-shift lies outside the summable cyclic-block regime]
+  \label{ex:full-k-shift-obstruction}
+  Let \(k\ge 2\), and let \(A_k=[1]_{i,j=1}^k\) be the adjacency matrix
+  of the full \(k\)-shift. Then \(a_n(A_k)=\Tr(A_k^n)=k^n\) for every
+  \(n\ge1\), so
+  \[
+    \zeta_{A_k}(z)
+    =\exp\!\left(\sum_{n\ge1}\frac{k^n}{n}z^n\right)
+    =(1-kz)^{-1}
+  \]
+  for \(|z|<k^{-1}\). The primitive-orbit counts are therefore
+  \[
+    p_n(A_k)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,k^{n/d},
+  \]
+  and \Cref{thm:primitive-symbolic-exclusion} yields
+  \[
+    \sum_{n\ge1} n\,p_n(A_k)=\infty.
+  \]
+  Thus even for the full \(k\)-shift, the primitive-orbit Euler product
+  \[
+    (1-kz)^{-1}
+    =\prod_{n\ge1}(1-z^n)^{-p_n(A_k)}
+  \]
+  is used in this paper only as a germ at \(z=0\), not as a summable
+  cyclic zero divisor in the trace-class realization theorem of
+  \Cref{thm:cyclic-fredholm-realisation}.
+\end{remark}
+
+\begin{remark}[Finite-state arithmetic]
+  \label{rem:finite-state-arithmetic}
+  For primitive finite matrices, the numbers \(p_n(A)\) are
+  non-negative integers because they count primitive periodic orbits.
+  This arithmetic feature belongs to the finite-state category and will
+  not survive after passage to general trace-class operators.
+\end{remark}
+
+\begin{theorem}[Primitive symbolic Euler data are not trace-class summable]
+  \label{thm:primitive-symbolic-exclusion}
+  Let \(A\) be a primitive adjacency matrix, and let \(p_n(A)\) be the
+  primitive-orbit counts from \eqref{eq:primitive-mobius}. Then
+  \[
+    \sum_{n\ge1} n\,p_n(A)<\infty
+    \qquad\Longleftrightarrow\qquad
+    A=[1].
+  \]
+  Equivalently, if \(A\neq [1]\), then
+  \[
+    \sum_{n\ge1} n\,p_n(A)=\infty.
+  \]
+  Therefore the finite-state Euler data
+  \[
+    \mathcal D_A:=\{(n,1,p_n(A))\}_{n\ge1}
+  \]
+  satisfy the trace-class threshold
+  \(
+    \sum_n n\,p_n(A)<\infty
+  \)
+  only for the trivial one-symbol fixed-point shift. For every nontrivial
+  primitive finite-state shift, the product
+  \[
+    \prod_{n\ge1}(1-z^n)^{-p_n(A)}
+  \]
+  from \Cref{prop:prelim-trace-primitive} is thus used here only as a
+  holomorphic germ at \(0\) with this specific cyclic-factor packaging,
+  not as a summable cyclic zero divisor for the trace-class realization
+  theorem of \Cref{thm:cyclic-fredholm-realisation}.
+\end{theorem}
+
+\begin{proof}
+  If \(A=[1]\), then \(a_n(A)=1\) for every \(n\), so
+  \eqref{eq:primitive-mobius} gives \(p_1(A)=1\) and \(p_n(A)=0\) for
+  \(n\ge2\). Hence \(\sum_n n\,p_n(A)=1\).
+
+  Now assume \(A\neq[1]\). Since \(A\) is primitive, some power
+  \(B:=A^k\) has all entries strictly positive. Because \(A\neq[1]\), the
+  alphabet has size at least \(2\), so every row sum of \(B\) is at least
+  \(2\). For the Perron root \(\lambda=\rho(A)\), this implies
+  \[
+    \lambda^k=\rho(B)\ge \min_i \sum_j B_{ij}\ge 2,
+  \]
+  hence \(\lambda>1\).
+
+  Let \(\lambda=\lambda_1,\lambda_2,\dots,\lambda_d\) be the eigenvalues
+  of \(A\), counted with algebraic multiplicity. By the
+  Perron--Frobenius theorem for primitive matrices
+  \cite{LindMarcus1995,Kitchens1998}, \(\lambda\) is simple and
+  \(|\lambda_i|<\lambda\) for \(i\ge2\). Choose \(r<\lambda\) such that
+  \(|\lambda_i|\le r\) for \(i\ge2\). Then
+  \[
+    a_n(A)=\Tr(A^n)=\sum_{i=1}^d \lambda_i^n
+    =\lambda^n+\sum_{i=2}^d \lambda_i^n,
+  \]
+  so
+  \[
+    a_n(A)\ge \lambda^n-(d-1)r^n.
+  \]
+  Since \(r<\lambda\), the right-hand side tends to \(+\infty\). In
+  particular, \(\{a_n(A)\}_{n\ge1}\) is unbounded.
+
+  Suppose for contradiction that
+  \(S:=\sum_{n\ge1} n\,p_n(A)<\infty\). Then the inverse necklace
+  relation \eqref{eq:trace-primitive-identity} and the non-negativity of
+  \(p_n(A)\) yield
+  \[
+    a_n(A)=\sum_{d\mid n} d\,p_d(A)\le \sum_{d\ge1} d\,p_d(A)=S
+    \qquad (n\ge1),
+  \]
+  contradicting the unboundedness of \(a_n(A)\). Therefore
+  \(\sum_{n\ge1} n\,p_n(A)=\infty\) whenever \(A\neq[1]\).
+
+  For the final claim, the cyclic data \(\mathcal D_A\) have
+  \((n,\beta,m)=(n,1,p_n(A))\), so the trace-class condition in
+  \Cref{thm:cyclic-fredholm-realisation} becomes exactly
+  \[
+    \sum_{n\ge1} n\,p_n(A)\abs{1}^{1/n}
+    =\sum_{n\ge1} n\,p_n(A)<\infty.
+  \]
+  The equivalence already proved shows that this happens only for
+  \(A=[1]\).
+\end{proof}

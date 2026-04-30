@@ -1,0 +1,437 @@
+\section{Preliminaries}\label{sec:preliminaries}
+
+The notation in this section follows the hierarchy of the paper. We
+first fix primitive orbit counts for the base shift, then the
+finite-group extension and Adams operations used in the main theorem
+package. The reduced determinant, finite part, and cyclic-lift notation
+come afterwards because they serve only as scalar normalisation and
+canonical cyclic-lift comparison data.
+
+\subsection{Mixing subshifts and primitive orbit counts}
+
+Our standing symbolic system is a finite directed multigraph
+\(\Gamma=(V,E_A)\).  We write \(o(e)\) and \(t(e)\) for the initial and
+terminal vertices of an edge and
+\[
+  A_{ij}:=\#\{e\in E_A:o(e)=i,\ t(e)=j\}
+\]
+for its non-negative integer adjacency matrix.  The matrix \(A\) is
+assumed primitive.  The associated one-sided edge shift is
+\[
+  X_A^+
+  =
+  \bigl\{(e_n)_{n\ge 0}\in E_A^{\NN}:
+    t(e_n)=o(e_{n+1})\ \text{for all }n\ge 0\bigr\},
+\]
+equipped with the left shift \(\sigma\).  Thus closed length-\(n\) edge
+paths are the same as fixed points of \(\sigma^n\), and we write
+\[
+  a_n(A):=\Tr(A^n)=\#\operatorname{Fix}(\sigma^n)
+\]
+for the number of points of period dividing \(n\). The number of
+primitive orbits of least period \(n\) is
+\begin{equation}\label{eq:primitive-mobius}
+  p_n(A)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(A),
+\end{equation}
+and the necklace identity reads
+\begin{equation}\label{eq:trace-primitive-identity}
+  a_n(A)=\sum_{d\mid n}d\,p_d(A).
+\end{equation}
+
+This is the convention in the finite-group sections: \(E_A\) is an edge
+set and primitive orbits are orbits in the edge shift.  In the scalar
+finite-matrix sections and appendices we also allow \(A\) to be an
+arbitrary primitive non-negative real matrix.  There \(p_n(A)\) denotes
+the algebraic M\"obius coefficient in \eqref{eq:primitive-mobius}; it is
+an actual non-negative orbit count only when \(A\) is the adjacency
+matrix of a finite directed multigraph.
+
+\begin{proposition}[Trace, primitive orbits, and Euler product]
+  \label{prop:prelim-trace-primitive}
+  For the adjacency matrix \(A\) of a primitive finite directed
+  multigraph, the dynamical \(\zeta\)-function
+  satisfies
+  \begin{equation}\label{eq:zeta-def}
+    \zeta_A(z)
+    :=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n\right)
+    =\frac{1}{\det(I-zA)}
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}.
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  The last equality follows from \eqref{eq:trace-primitive-identity},
+  since
+  \[
+    \sum_{n\ge 1}\frac{a_n(A)}{n}z^n
+    =\sum_{m\ge 1}\sum_{k\ge 1}\frac{p_m(A)}{k}z^{mk}
+    =-\sum_{m\ge 1}p_m(A)\log(1-z^m).
+  \]
+  The determinant identity is standard for finite matrices.
+\end{proof}
+
+The finite-group Adams--M\"obius arguments only need the following
+uniform Perron--Frobenius trace bound, which remains valid even when
+\(\lambda=1\).
+
+\begin{lemma}[Perron--Frobenius trace bound]
+  \label{lem:pf-trace-bound}
+  Let \(A\) be a primitive non-negative \(d\times d\) matrix with
+  Perron root \(\lambda=\rho(A)\). Then
+  \[
+    \abs{\Tr(A^n)}\le d\,\lambda^n
+    \qquad (n\ge 1).
+  \]
+  In particular, there is a constant \(C_A>0\) such that
+  \[
+    \abs{\Tr(A^n)}\le C_A\lambda^n
+    \qquad (n\ge 1).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Let \(\lambda,\mu_2,\dots,\mu_d\) be the eigenvalues of \(A\), counted
+  with algebraic multiplicity. Since \(A\) is primitive,
+  Perron--Frobenius theory gives \(\lambda>0\), the eigenvalue
+  \(\lambda\) is simple, and \(|\mu_j|<\lambda\) for \(j\ge 2\). Hence
+  \[
+    \abs{\Tr(A^n)}
+    =
+    \abs{\lambda^n+\sum_{j=2}^d\mu_j^n}
+    \le
+    \lambda^n+\sum_{j=2}^d|\mu_j|^n
+    \le
+    d\,\lambda^n,
+  \]
+  which proves the claim.
+\end{proof}
+
+If \(\lambda=\rho(A)\) is the Perron root and \(\lambda>1\), then
+\[
+  \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\},
+\]
+with the maximum interpreted as \(0\) if there are no non-Perron
+eigenvalues,
+then the M\"obius coefficients \(p_n(A)\) enjoy the usual square-root
+loss from the higher divisors in \eqref{eq:primitive-mobius}.
+
+\begin{lemma}[Primitive M\"obius asymptotic]
+  \label{lem:primitive-orbit-asymptotic}
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\), and let
+  \[
+    \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\}.
+  \]
+  If the set is empty, put \(\Lambda(A)=0\).
+  Then
+  \[
+    \Tr(A^n)=\lambda^n+O(\Lambda(A)^n)
+  \]
+  and
+  \[
+    K_{\mathrm{PF}}(A)
+    :=
+    \begin{cases}
+      \displaystyle
+      \sup_{n\ge 1}
+        \frac{\abs{\Tr(A^n)-\lambda^n}}{\Lambda(A)^n},
+      & \Lambda(A)>0, \\[2ex]
+      0,
+      & \Lambda(A)=0,
+    \end{cases}
+    \qquad
+    K_{\mathrm{tr}}(A)
+    :=
+    \sup_{\ell\ge 1}\frac{\abs{\Tr(A^\ell)}}{\lambda^\ell}
+  \]
+  are finite. Moreover,
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{K_{\mathrm{tr}}(A)}{n}
+      \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m}
+  \]
+  and therefore
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}
+      \frac{\lambda^{n/2}}{n}.
+  \]
+  Hence
+  \[
+    p_n(A)
+    =
+    \frac{\lambda^n}{n}
+    +O\!\left(
+      \frac{\max\{\Lambda(A)^n,\lambda^{n/2}\}}{n}
+    \right).
+  \]
+  Consequently, with
+  \[
+    \vartheta_A:=\max\{\Lambda(A)/\lambda,\lambda^{-1/2}\}<1,
+  \]
+  one has
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}+O\!\left(\frac{\vartheta_A^n}{n}\right),
+  \]
+  and the series
+  \[
+    \sum_{n\ge 1}
+      \left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely.
+\end{lemma}
+
+\begin{proof}
+  List the eigenvalues of \(A\) with algebraic multiplicity as
+  \(\lambda,\mu_2,\dots,\mu_d\). Since \(A\) is primitive,
+  Perron--Frobenius theory gives that \(\lambda\) is simple and
+  \(|\mu_j|<\lambda\) for \(j\ge 2\). For a finite matrix,
+  the trace of \(A^n\) is the sum of the \(n\)-th powers of its
+  eigenvalues, counted with algebraic multiplicity. Hence
+  \[
+    \Tr(A^n)
+    =
+    \lambda^n+\sum_{j=2}^d\mu_j^n
+    =
+    \lambda^n+O(\Lambda(A)^n).
+  \]
+  If \(\Lambda(A)=0\), then every non-Perron eigenvalue is \(0\), so
+  \(\Tr(A^n)=\lambda^n\) for all \(n\ge 1\), and the convention
+  \(K_{\mathrm{PF}}(A)=0\) is exact. If \(\Lambda(A)>0\), then
+  \[
+    \frac{\abs{\Tr(A^n)-\lambda^n}}{\Lambda(A)^n}
+    \le
+    \sum_{j=2}^d\left|\frac{\mu_j}{\Lambda(A)}\right|^n
+    \le d-1,
+  \]
+  so \(K_{\mathrm{PF}}(A)<\infty\). The trace bound from
+  \Cref{lem:pf-trace-bound} gives \(K_{\mathrm{tr}}(A)\le d\), so
+  \(K_{\mathrm{tr}}(A)<\infty\).
+
+  Insert this estimate into the M\"obius formula
+  \[
+    p_n(A)=\frac{1}{n}\sum_{m\mid n}\mu(m)\Tr(A^{n/m}).
+  \]
+  The divisor \(m=1\) contributes \(\lambda^n/n\), with error bounded
+  by \(K_{\mathrm{PF}}(A)\Lambda(A)^n/n\). For the remaining divisors,
+  \(m>1\) implies \(n/m\le n/2\), and the definition of
+  \(K_{\mathrm{tr}}(A)\) gives
+  \[
+    \sum_{\substack{m\mid n\\ m>1}}\abs{\Tr(A^{n/m})}
+    \le
+    K_{\mathrm{tr}}(A)\sum_{1\le k\le n/2}\lambda^k
+    \le
+    \frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}\lambda^{n/2}.
+  \]
+  Dividing by \(n\) gives the two explicit displayed bounds and hence
+  the stated M\"obius-coefficient asymptotic.
+  Since \(\Lambda(A)<\lambda\) and \(\lambda>1\), the number
+  \(\vartheta_A\) lies in \((0,1)\), and the final two assertions follow
+  by dividing the asymptotic by \(\lambda^n\).
+\end{proof}
+
+\begin{definition}[Square-root bound]\label{def:kernel-rh}
+We say that \(A\) satisfies the \emph{square-root bound} if
+\[
+  \Lambda(A)\le \lambda^{1/2}.
+\]
+\end{definition}
+
+\subsection{Finite-group extensions and Adams operations}
+
+Let \(G\) be a finite group, let \(\tau:E_A\to G\) be an edge cocycle,
+and let \(\widetilde\Gamma\) be the skew-product extension on vertex set
+\(V\times G\), with one edge
+\[
+  (i,g)\longrightarrow (j,g\tau(e))
+  \qquad \text{for each } e\in E_A \text{ with } o(e)=i,\ t(e)=j.
+\]
+Its adjacency matrix is denoted by \(\widetilde A\).
+
+For an irreducible unitary representation
+\(\varrho:G\to U(V_\varrho)\) with character \(\chi_\varrho\), define
+the twisted transition matrix
+\begin{equation}\label{eq:twisted-matrix-def}
+  (A_\varrho)_{ij}:=\sum_{e:i\to j}\varrho(\tau(e)),
+\end{equation}
+viewed as an operator on \(\CC^V\otimes V_\varrho\).
+
+If \(\gamma=e_1\cdots e_n\) is a primitive orbit, write
+\[
+  \tau(\gamma)=\tau(e_1)\cdots\tau(e_n)\in G
+\]
+for its group label. A different choice of the initial edge conjugates
+this element by a prefix product, so the conjugacy class of
+\(\tau(\gamma)\) is intrinsic. All orbit-level evaluations below are
+therefore made with class functions. For a class function
+\(\phi:G\to\CC\), write
+\begin{equation}\label{eq:class-function-fourier}
+  \phi
+  =\sum_{\varrho\in\Irr(G)}\widehat\phi(\varrho)\chi_\varrho,
+  \qquad
+  \widehat\phi(\varrho)
+  :=\frac{1}{|G|}\sum_{g\in G}\phi(g)\overline{\chi_\varrho(g)}.
+\end{equation}
+With this Hermitian Fourier convention, the coefficient attached to a
+conjugacy class \(C\subset G\) is the conjugated character value. We
+fix the notation
+\[
+  \chi^\ast(C):=\overline{\chi(C)}
+\]
+for every character \(\chi\) and every conjugacy class \(C\subset G\).
+For unitary characters one also has
+\(\chi^\ast(C)=\chi(C^{-1})\).
+Thus every forward class expansion below uses \(\chi_\varrho^\ast(C)\),
+while inversion and orthogonality pair it against the unconjugated
+\(\chi_\sigma(C)\). We do not identify \(\chi(C)\) with \(\chi^\ast(C)\)
+unless \(\chi\) is real-valued.
+For \(m\ge 1\), define the Adams operation on class functions by
+\begin{equation}\label{eq:adams-class-function}
+  (\psi^m\phi)(g):=\phi(g^m).
+\end{equation}
+
+\subsection{Reduced determinants and finite parts}
+
+Let \(z_\ast=\lambda^{-1}\). Since \(\lambda\) is a simple eigenvalue,
+\(\zeta_A\) has a simple pole at \(z_\ast\), and we define the residue
+constant
+\begin{equation}\label{eq:residue-constant-def}
+  C(A):=\lim_{z\to z_\ast}(1-\lambda z)\zeta_A(z).
+\end{equation}
+If \(\mu_2,\dots,\mu_d\) are the non-Perron eigenvalues, then
+\begin{equation}\label{eq:reduced-det-poly}
+  F_A(t):=\frac{\det(I-tA/\lambda)}{1-t}
+  =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}t\right).
+\end{equation}
+We call \(F_A\) the \emph{reduced spectral polynomial}. Moreover,
+\begin{equation}\label{eq:reduced-det-constant}
+  C(A)=\det\nolimits'(I-A/\lambda)^{-1}=F_A(1)^{-1}.
+\end{equation}
+
+\begin{lemma}[Reduced constant at a simple eigenvalue]
+  \label{lem:simple-eigenvalue-reduced-constant}
+  Let \(M\) be a complex square matrix and let
+  \(\alpha\neq 0\) be a simple eigenvalue of \(M\). Define
+  \[
+    C_\alpha(M)
+    :=\lim_{z\to \alpha^{-1}}
+      (1-\alpha z)\det(I-zM)^{-1}.
+  \]
+  Then the limit exists and
+  \[
+    C_\alpha(M)
+    =
+    \prod_{\substack{\nu\in\spec(M)\\ \nu\neq\alpha}}
+      \left(1-\frac{\nu}{\alpha}\right)^{-1},
+  \]
+  with algebraic multiplicities in the product. In particular, if \(A\)
+  is primitive with Perron root \(\lambda\), then
+  \(C(A)=C_\lambda(A)\).
+\end{lemma}
+
+\begin{proof}
+  Since \(\alpha\) has algebraic multiplicity one,
+  \[
+    \det(I-zM)
+    =(1-\alpha z)
+      \prod_{\substack{\nu\in\spec(M)\\ \nu\neq\alpha}}(1-\nu z),
+  \]
+  where the remaining eigenvalues are listed with algebraic
+  multiplicity. Multiplying by \(1-\alpha z\) after inverting and then
+  taking \(z\to \alpha^{-1}\) gives the displayed formula. For a
+  primitive matrix, the Perron root is simple, so the definition agrees
+  with \eqref{eq:residue-constant-def}.
+\end{proof}
+
+When \(\lambda>1\), define the primitive Abel generating series
+\[
+  P_A(r):=\sum_{n\ge 1}p_n(A)\lambda^{-n}r^n,
+  \qquad 0\le r<1.
+\]
+By \Cref{lem:primitive-orbit-asymptotic},
+\(p_n(A)\lambda^{-n}=1/n+O(\vartheta^n/n)\) for some
+\(\vartheta\in(0,1)\), the renormalised expression
+\[
+  P_A(r)+\log(1-r)
+\]
+has a finite limit as \(r\uparrow 1\).
+
+\begin{definition}[Abel finite-part constant]\label{def:abel-finite-part}
+For a primitive matrix \(A\) with Perron root \(\lambda>1\), we write
+\[
+  \FP(A):=\lim_{r\uparrow 1}\bigl(P_A(r)+\log(1-r)\bigr).
+\]
+The associated orbit-Mertens constant is
+\[
+  \mathcal M(A):=\gamma+\FP(A).
+\]
+\end{definition}
+
+\subsection{Cyclic lifts}
+
+For \(q\ge 1\) let \(P_q\) be the \(q\)-cycle permutation matrix and
+define the cyclic lift
+\begin{equation}\label{eq:cyclic-lift-def}
+  A^{\langle q\rangle}:=A\otimes P_q.
+\end{equation}
+The basic spectral identity
+\[
+  \spec(A^{\langle q\rangle})
+  =\{\mu\,\omega_q^j:\mu\in\spec(A),\ 0\le j\le q-1\}
+\]
+will be used repeatedly. In particular,
+\(\rho(A^{\langle q\rangle})=\rho(A)\). For \(q>1\) this cyclic lift is
+typically periodic rather than primitive, but \(\lambda=\rho(A)\) is
+still a simple eigenvalue of \(A^{\langle q\rangle}\). We therefore use
+the branch-lifted logarithmic record
+\[
+  \Psi_q(A):=
+  -\sum_{j=2}^d
+    \Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right)
+\]
+to encode the non-Perron spectrum. Since \(|\mu_j|<\lambda\), every
+factor \(1-(\mu_j/\lambda)^q\) lies in the open right half-plane, so the
+principal branch \(\Log\) is well defined here. By
+\Cref{lem:simple-eigenvalue-reduced-constant},
+\[
+  \exp(\Psi_q(A))=q\,C_\lambda(A^{\langle q\rangle}),
+\]
+so the reduced constants determine only the exponentiated values unless
+a branch choice is included as part of the data.
+When interpreted as a \(\ZZ/q\ZZ\)-extension, this is the special
+all-edges-label-\(1\) cocycle; it is not the same object as an arbitrary
+cyclic quotient of a later finite-group cocycle.
+
+\begin{definition}[Spectral fingerprints]
+  \label{def:spectral-fingerprints}
+  The \emph{cyclic spectral fingerprint} of \(A\) is the sequence
+  \[
+    \{\Psi_q(A)\}_{q\ge 1}.
+  \]
+  For each \(q\ge 1\), the \emph{\(q\)-torsion spectral fingerprint} is
+  the root-of-unity layer
+  \[
+    \{F_A(\omega_q^j)\}_{0\le j\le q-1}.
+  \]
+  The associated \emph{exponential fingerprint} is the growth rate
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}.
+  \]
+\end{definition}
+
+\subsection{Standing notation}
+
+Throughout the paper \(\omega_q=e^{2\pi i/q}\) denotes a primitive
+\(q\)th root of unity, and \(\Phi_q\) the \(q\)th cyclotomic
+polynomial. We reserve the notation \(\varrho\) for irreducible
+representations of finite groups and keep \(\rho(\cdot)\) for spectral
+radii. Sections~\ref{sec:chebotarev} and~\ref{sec:shadows} use the
+graph and cocycle picture for finite-group extensions. The later scalar
+section, Section~\ref{sec:finite-part}, uses only the primitive matrix
+formalism and cyclic lifts.

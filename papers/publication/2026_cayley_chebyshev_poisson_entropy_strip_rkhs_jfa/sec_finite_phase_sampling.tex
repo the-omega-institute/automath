@@ -1,0 +1,159 @@
+% sec_finite_phase_sampling.tex -- finite phase sampling
+\section{Finite Phase Sampling for Cayley Coefficients}%
+\label{sec:finite-phase-sampling}
+
+\subsection{Root-of-unity grids}
+
+The Cayley chart isolates the circle as the visible phase coordinate.  The
+finite phase results below give the root-of-unity sampling interface used
+later to recover Cayley Fourier coefficients and to verify the finite mode
+integrals in the entropy expansion.
+
+\begin{definition}[Finite phase grids]\label{def:finite-phase-grid}
+For an integer $N\ge1$ set
+\[
+\mu_N:=\{z\in\TT:\ z^N=1\}.
+\]
+\end{definition}
+
+\begin{proposition}[Phase-coordinate interface]%
+\label{prop:phase-coordinate-interface}
+Let
+\[
+z(\theta):=\iota(\tan\theta)=e^{2\ii\theta}
+\qquad\bigl(-\pi/2<\theta<\pi/2\bigr).
+\]
+Then the analytic phase modes used in
+Theorem~\ref{thm:cayley-chebyshev-mode} are the real and imaginary parts
+of the circle characters:
+\[
+\cos(2k\theta)=\operatorname{Re} z(\theta)^k,
+\qquad
+\sin(2k\theta)=\operatorname{Im} z(\theta)^k
+\qquad(k\ge1).
+\]
+If $K<N$, then normalized averaging over the same phase grid
+$\mu_N$ agrees with Haar averaging on every trigonometric monomial of
+Fourier degree at most~$K$:
+\[
+\frac1N\sum_{\zeta\in\mu_N}\zeta^\ell
+=\int_{\TT} z^\ell\,\dd m_{\TT}(z)
+=
+\begin{cases}
+1,& \ell=0,\\
+0,& 0<|\ell|\le K.
+\end{cases}
+\]
+Consequently, the finite phase averages used in the entropy section are
+ordinary circle-character averages for the same Cayley phase coordinate
+whose analytic Fourier characters drive the entropy and RKHS arguments
+below.
+\end{proposition}
+
+\begin{proof}
+The identity $z(\theta)=e^{2\ii\theta}$ follows immediately from
+\eqref{eq:cayley-embed} with $x=\tan\theta$.  Taking real and imaginary
+parts of $z(\theta)^k=e^{2k\ii\theta}$ gives the displayed formulas for
+$\cos(2k\theta)$ and $\sin(2k\theta)$.
+
+For the grid average, the geometric sum gives
+\[
+\frac1N\sum_{\zeta\in\mu_N}\zeta^\ell
+=
+\begin{cases}
+1,& N\mid \ell,\\
+0,& N\nmid \ell.
+\end{cases}
+\]
+If $0<|\ell|\le K<N$, then $N\nmid\ell$, while the case $\ell=0$ gives
+one.  The Haar integral of the character $z^\ell$ has the same value for
+these $\ell$.  Since any monomial $z^m\overline z^{\,n}$ equals
+$z^{m-n}$, the assertion covers all monomials with
+$0\le m,n\le K$.
+\end{proof}
+
+\begin{proposition}[Finite-grid coefficient recovery and aliasing]%
+\label{prop:finite-grid-coefficient-recovery}
+Let $f$ be a continuous function on~$\TT$ with absolutely convergent
+Fourier series
+\[
+f(z)=\sum_{m\in\ZZ}\widehat f(m)z^m,
+\qquad
+\sum_{m\in\ZZ}|\widehat f(m)|<\infty,
+\]
+where
+\[
+\widehat f(m):=\int_{\TT}f(z)z^{-m}\,\dd m_{\TT}(z).
+\]
+For $N\ge1$ and $k\in\ZZ$ define the finite phase-grid coefficient recovery
+\[
+\widehat f_N(k):=\frac1N\sum_{\zeta\in\mu_N}f(\zeta)\zeta^{-k}.
+\]
+Then
+\begin{equation}\label{eq:finite-grid-aliasing}
+\widehat f_N(k)=\sum_{q\in\ZZ}\widehat f(k+qN),
+\end{equation}
+and hence
+\begin{equation}\label{eq:finite-grid-aliasing-bound}
+\bigl|\widehat f_N(k)-\widehat f(k)\bigr|
+\le
+\sum_{\substack{q\in\ZZ\\q\ne0}}\bigl|\widehat f(k+qN)\bigr|.
+\end{equation}
+In particular, if $K<N$ and
+\[
+\widehat f(m)=0\qquad\text{whenever } |m-k|>K,
+\]
+then the Fourier support of $z^{-k}f(z)$ lies below the grid scale and the
+recovery is exact:
+\[
+\widehat f_N(k)=\widehat f(k).
+\]
+For a real phase profile $F(\theta)=f(e^{2\ii\theta})$ on
+$(-\pi/2,\pi/2)$, put
+\[
+\mathcal C_k(F):=2\operatorname{Re}\widehat f(k),
+\qquad
+\mathcal S_k(F):=-2\operatorname{Im}\widehat f(k),
+\]
+and define $\mathcal C_{k,N}(F),\mathcal S_{k,N}(F)$ by the same formulas
+with $\widehat f_N(k)$ in place of $\widehat f(k)$.  Then
+\[
+|\mathcal C_{k,N}(F)-\mathcal C_k(F)|
++|\mathcal S_{k,N}(F)-\mathcal S_k(F)|
+\le
+4\sum_{\substack{q\in\ZZ\\q\ne0}}\bigl|\widehat f(k+qN)\bigr|.
+\]
+Thus finite phase grids recover the phase-Fourier coefficients used later
+in Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}
+exactly for finite mode polynomials below the explicit $K<N$ barrier, and
+with only the displayed aliasing tail for general absolutely summable
+profiles.
+\end{proposition}
+
+\begin{proof}
+The absolute convergence assumption permits termwise averaging:
+\[
+\widehat f_N(k)
+=\sum_{m\in\ZZ}\widehat f(m)
+\left(\frac1N\sum_{\zeta\in\mu_N}\zeta^{m-k}\right).
+\]
+The inner average is $1$ when $m-k$ is divisible by~$N$ and is $0$
+otherwise.  This proves \eqref{eq:finite-grid-aliasing}.  Removing the
+$q=0$ term and applying the triangle inequality gives
+\eqref{eq:finite-grid-aliasing-bound}.
+
+If the Fourier support of $z^{-k}f$ is contained in $\{-K,\dots,K\}$, then
+$\widehat f(k+qN)=0$ for every $q\ne0$, because
+$|k+qN-k|=|q|N\ge N>K$.  The exact recovery follows.
+
+Finally,
+\[
+\int_{-\pi/2}^{\pi/2}F(\theta)e^{-2\ii k\theta}\,\frac{\dd\theta}{\pi}
+=\widehat f(k),
+\]
+so for real $F$ the cosine and sine coefficients are
+$2\operatorname{Re}\widehat f(k)$ and $-2\operatorname{Im}\widehat f(k)$.
+The same identities with the grid coefficient give the finite recoveries, and
+the two displayed coefficient bounds follow from
+\eqref{eq:finite-grid-aliasing-bound}.
+\end{proof}

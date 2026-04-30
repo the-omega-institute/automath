@@ -1,0 +1,370 @@
+
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{generated/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{assumption}{assumption}{assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+\crefname{definition}{definition}{definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[mathlines,switch]{lineno}
+\IfFileExists{orcidlink.sty}{\usepackage{orcidlink}}{}
+
+\hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
+\setstretch{1.07}
+\setlength{\parskip}{0.38em}
+\setlength{\parindent}{1.25em}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{unnumberedlemma}{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+
+\title{A conditional note on fixed calibrated response-model shells from a classical sampled counter with later UDW-rate calibration in static KMS spacetimes}
+\author{Haobo Ma\thanks{CHRONOAI PTE. LTD., Singapore. Email: \href{mailto:auric@aelf.io}{auric@aelf.io}.}
+\and
+Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}.}}
+\date{}
+
+\begin{document}
+\modulolinenumbers[1]
+\linenumbers
+\maketitle
+
+\begin{abstract}
+We study a UDW-rate-calibrated sampled counter, by which we mean one specific classical sampled interval instrument whose binary law is fixed at the readout level and whose internal attempt rate is identified with the stationary excitation rate of a two-level Unruh--DeWitt detector only through the explicit calibration closure $\Gamma=\Gamma_+$. At theorem level, all stochastic statements concern only the resulting classical sampled hidden Markov model and its visible binary output. No derivation from general UDW measurement theory is claimed. The theorem-level contribution is the exact analysis of two record selectors for that sampled HMM. With ideal one-step dead time, the record is the golden-mean Markov chain and attains the Parry benchmark exactly when $\Gamma\Delta\tau=\log\varphi$. With a sampled effective recovery model, namely the sampled one-recovery-opportunity boundary-reset rule, the zero-run law has full support on $\mathbb N_0$, the zero-run hazard is strictly increasing, and the visible record becomes exact $1$-dependent exactly at the unique rate where the hidden eigenvalue vanishes. Relative to the continuous intra-bin recovery comparator, the click kernel differs by a post-click return-to-ready leakage of order $\frac12\Gamma\kappa_{\mathrm r}(\Delta\tau)^2$ from an initially ready bin and order $\frac16\Gamma\kappa_{\mathrm r}^2(\Delta\tau)^3$ from an initially refractory bin. The same sampled HMM therefore gives a full-support renewal process with a dependence-transition selector rather than an entropy benchmark.
+
+Section~4 keeps only the fixed-response locus theorem in the main text. The
+threshold-specific response-locus package, the default transport law, and the
+later homogeneous-shell, near-horizon, fixed-radius, and Schwarzschild
+extensions are moved to appendices as abstract calibrated toy-model
+corollaries. Assume a fixed calibrated response function
+\[
+R_\Omega(x)=\lambda_{\mathrm{sw}}^2\widehat W_x(\Omega)
+=
+\lambda_{\mathrm{sw}}^2\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1},
+\]
+and write the two classical targets as the response loci
+\[
+R_\Omega^{-1}(\gamma_\varphi),
+\qquad
+R_\Omega^{-1}(\gamma_{\mathrm{mem}}).
+\]
+They are called shells only after the target lies in the range of $R_\Omega$
+and $dR_\Omega\neq0$ on the relevant level set. The later homogeneous,
+near-horizon, and fixed-radius inverse/sensitivity statements are therefore
+kept only as abstract calibrated toy-model algebra inside that fixed response
+model, with additional range, regularity, Jacobian, small-shell, and external
+ratio-data hypotheses imposed where needed. KMS detailed balance fixes only
+the thermal ratio $\Gamma_-/\Gamma_+$; it does not by itself produce the
+loci, shells, or inverse map.
+\end{abstract}
+
+\noindent\textbf{Keywords:} UDW detector, KMS state, static spacetime, symbolic dynamics, detector thermality
+
+\section{Introduction}
+
+Transition rates, detailed balance, and Tolman redshift are the standard observables used to characterize Unruh and Hawking thermality \cite{Tolman1930,TolmanEhrenfest1930,Unruh1976,DeWitt1979,BirDav1982,Takagi1986,CrispinoHiguchiMatsas2008,LoukoSatz2006,LoukoSatz2008}. A sampled readout, however, produces a binary time series rather than a rate alone. Once a field-facing detector core is monitored at regular proper-time intervals by a classical counter, the experiment yields a record with its own grammar, waiting-time law, and lag correlations. The question in this paper is whether exact record-level thresholds of that sampled output, after one fixes a detector response profile, select response-model loci that a rate-only summary would miss. The paper-level object is a \emph{UDW-rate-calibrated sampled counter}: one specific classical sampled interval instrument whose attempt rate is matched to the stationary UDW excitation rate only through the explicit calibration closure $\Gamma=\Gamma_+$. This naming is meant to keep the logical order visible from the outset. The sampled counter is fixed first, the UDW input enters only through rate calibration, and no claim is made that general UDW measurement theory derives that instrument.
+
+The answer has two layers, and the first one carries the main new mathematics. In the ideal one-step dead-time mode the record is the golden-mean Markov chain, with Parry benchmark exactly at $\Gamma\Delta\tau=\log\varphi$. In the sampled one-recovery-opportunity boundary-reset mode the visible process is instead a full-support renewal law. Its zero-run hazard is strictly increasing, every finite binary word remains admissible, and the visible record becomes exact $1$-dependent exactly when the hidden eigenvalue vanishes, at the unique rate $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. The memory threshold is therefore not an entropy benchmark but an exact dependence transition inside a renewal family that still supports the full binary grammar.
+
+After these two record thresholds are fixed, Section~4 keeps only the
+fixed-response locus theorem for the calibrated stationary response profile
+\[
+R_\Omega(x)=\lambda_{\mathrm{sw}}^2\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}.
+\]
+The threshold substitutions themselves are then recorded separately in the
+appendix corollary package: for one calibrated response function and one common
+detector core, the ideal and memory target equations define two response loci,
+and \Cref{thm:response-locus-main} explains that they are called shells only
+after the range check and the regularity condition $dR_\Omega\neq0$ are
+verified. The exact transport identity of \Cref{cor:spectral-transport-main}
+is then written between points on those loci. The later homogeneous quotient,
+near-horizon, and fixed-radius inverse/sensitivity and admissibility
+statements are moved to appendices and presented only as abstract calibrated
+toy-model corollaries obtained after additional calibration, Jacobian, and
+external ratio-data hypotheses are imposed. They remain conditional
+response-model statements rather than new detector-dynamics theorems.
+The finite-record theorem on the record side estimates only the fixed-setting
+covariance $\gamma_2=\operatorname{Cov}(A_0,A_2)$ and its variance. Any
+shell-location or ratio-coordinate asymptotic requires separate scan or
+external ratio-data input beyond that one-record CLT.
+
+This problem sits near hidden-Markov process theory, finite-dependence asymptotics, dead-time counting, stationary UDW response theory, detector regularization, and detector-based QFT measurement theory, but it does not make the same claims as any of those literatures. The stochastic comparison classes matter for the sampled-record theorems; the detector and AQFT comparison classes matter for the later conditional shell and fixed-radius inverse/admissibility statements. To keep the main text focused on the theorem chain, the standing hypothesis map, claim-layer map, and broader category-by-category literature comparison are collected in Appendix Tables~\ref{tab:hypothesis-ledger}--\ref{tab:literature-comparison}, while \Cref{subsec:jmp-search-note} records a dated recent-\emph{J. Math. Phys.} search note used only for orientation. The appendix therefore now does both jobs explicitly: it records the broader process, detector-response, and measurement comparison classes, and it preserves a reproducible recent-\emph{J. Math. Phys.} screen without turning that screen into a theorem-by-theorem scorecard.
+
+Two additional related-work boundaries are important enough to state in the main text. On the output-statistics side, Glauber's coherence theory, Mandel--Wolf's photon-counting framework, Srinivas--Davies continuous photodetection, and the later trajectory/filtering treatments of Carmichael, Wiseman--Milburn, and Barchielli--Gregoratti already explain how waiting-time laws, coincidence rates, and output spectra arise from microscopic quantum measurement models \cite{Glauber1963,MandelWolf1995,SrinivasDavies1981,Carmichael1993Book,WisemanMilburn2009,BarchielliGregoratti2009}. Those references delimit the record-side claims made here: this paper does not derive the sampled binary law from a microscopic quantum-optical or quantum-filtering model, and it does not prove a general theorem for continuously monitored quantum outputs. It fixes one classical sampled interval instrument and then proves exact theorems for its visible record. On the QFT-measurement side, the later appendicial shell and inverse/admissibility statements remain narrower than the general measurement frameworks developed in AQFT and localized-detector work \cite{Sorkin1993,FewsterVerch2020,Fewster2020,PoloGomezEtAl2022,PercheLocalized2023,PranziniKeskiVakkuri2025AQFT,Oeckl2025CausalMeasurement}: they are conditional level-set and inverse statements inside one fixed calibrated response model, not new theorems about general detector back-action or locality.
+
+Dead time and recovery are also physically natural. In nuclear and photon counting, refractory effects have been central since the earliest pulse detectors and remain standard in modern single-photon models \cite{Muller1973,CantorTeich1975,Hadfield2009,EisamanEtAl2011}. The observables used here---grammar, hazard, dependence class, covariance tail, and low-frequency noise---therefore belong to the standard counting-statistics fingerprint of a sampled detector output. Their role is not to replace the local rate, but to show that keeping the full record produces exact thresholds that can later be lifted to response-model level sets.
+
+The paper is organized accordingly. \Cref{sec:operational} and
+\Cref{sec:records} carry the main theorem chain: they define the record-level
+observables and prove the exact-clock and memory-transition thresholds together
+with their operational signatures for the classical sampled counter.
+\Cref{sec:kms-shells} then gives the fixed-response locus theorem for one
+stationary response function, with the actual threshold substitutions recorded
+afterward as appendix corollaries and the shell upgrade stated only after the
+range and regularity checks. The appendices then collect the abstract
+calibrated toy-model homogeneous, near-horizon, fixed-radius, and
+Schwarzschild specializations, together with the bookkeeping tables,
+edge-case formulas, finite-counting identities, and the ambient residual-graph
+statements that are not themselves local ratio-map inverse theorems from
+nearby shell records. To reduce the symbol load before the technical record
+and response calculations, Tables~\ref{tab:notation-record}--\ref{tab:notation-inverse}
+split the recurring notation into record, response, and inverse/estimator
+layers for Section~\ref{sec:records}, Section~\ref{sec:kms-shells}, and the
+abstract calibrated toy-model appendices.
+
+\section{Operational setting and record-level observables}\label{sec:operational}
+
+We consider a two-level Unruh--DeWitt detector sampled at proper-time intervals of length $\Delta\tau$ along a stationary worldline. The visible output is a stationary binary process
+\[
+A_0,A_1,A_2,\dots \in \{0,1\},
+\]
+where $A_n=1$ denotes a click in the $n$th sampling interval. Compressing this record to the empirical click frequency recovers only the one-point observable
+\[
+\widehat\rho_N=\frac{1}{N}\sum_{n=0}^{N-1}A_n.
+\]
+The full record, however, carries more. In particular, one may ask:
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.0em,itemsep=0.25em]
+\item what words belong to the support of the stationary law;
+\item how the zero-run lengths between clicks are distributed;
+\item whether the click hazard after a long run of zeros remembers the run length;
+\item how the low-lag covariance profile behaves;
+\item what counting noise remains after coarse time averaging.
+\end{enumerate}
+\begin{definition}[Record benchmarks]\label{def:record-benchmarks-main}
+For a stationary binary record $(A_n)_{n\in\mathbb Z}$, a \emph{zero-run length} is the number $G$ of consecutive zeros following a click and preceding the next click. If the zero-run law has full support, its hazard is
+\[
+h_k=\PP(G=k\mid G\ge k),\qquad k\ge0 .
+\]
+The ideal record is on the \emph{Parry benchmark} when its stationary law is the Parry measure on the golden-mean shift, i.e. the unique measure of maximal entropy subject to the grammar constraint $11\notin\operatorname{supp}\mu$. A stationary record is \emph{exact $1$-dependent} when, for every $m$, the sigma algebras generated by $\{A_j:j\le m\}$ and $\{A_j:j\ge m+2\}$ are independent.
+Equivalently, one leaves the intermediate sample at time $m+1$ unobserved: a block ending at time $m$ is tested for independence from a block beginning at time $m+2$, not conditioned on the middle sample.
+\end{definition}
+
+\begin{assumption}[Homogeneous spectral-weight regime]\label{ass:homogeneous-spectral-main}
+When the static response regularity and calibration of \Cref{ass:kms-response-main} are imposed at a fixed gap $\Omega$ on a region $U$, the homogeneous spectral-weight regime means
+\[
+\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)>0\qquad(x\in U).
+\]
+This is a calibration hypothesis on the response model, not a consequence of KMS detailed balance. In shell-pair statements it is used together with a common field-facing detector core, so that the same positive response amplitude $\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)$ enters the ideal-benchmark and memory-transition source equations.
+It holds exactly at the amplitude level in the symmetry model of \Cref{prop:symmetry-homogeneous-main}, although that ultrastatic example has constant lapse and hence no nontrivial shell geometry by itself. Accordingly, the later nonconstant-lapse homogeneous shell arguments are used only as calibrated level-set algebra for a fixed response function, while \Cref{prop:spectral-stability-main,cor:asymptotic-horizon-main} record the slow-variation substitute used when the shell pair is only asymptotically homogeneous.
+\end{assumption}
+
+\begin{definition}[Common-core shell data]\label{def:common-core-shell-data-main}
+A shell pair is \emph{common-core} when the two records use the same field-facing detector core: gap, coupling scale, detector profile, and field state are fixed, while the counter mode is changed from ideal one-step blanking to the sampled one-recovery-opportunity boundary-reset mode. A two-mode radius record is a \emph{full common-core shell record} only when the undivided shell equations recover one positive common response amplitude for all ideal-benchmark and memory-transition members and the four radii lie in the allowed exterior coordinate range of the background family. The weaker ratio equations alone give only ratio-admissible data.
+\end{definition}
+
+These observables are not themselves rate observables, yet in the explicit readout models below they reduce to sharp thresholds in the excitation rate. That reduction is important: the geometry enters only after the stochastic-record benchmark has already fixed the target rate.
+
+We also separate the field-facing detector core from the classical counter mode. The core consists of the gap $\Omega$, coupling scale $\lambda_c$, detector profile, field state, and stationary excitation rate supplied by the UDW response. The counter mode is the readout layer: ideal one-step blanking for the Parry selector, or sampled one-recovery-opportunity boundary reset at rate $\kappa_{\mathrm r}$ for the memory selector. The two selectors are therefore obtained from two operating modes of the same field-facing core, not from a single record that is simultaneously ideal and sampled-boundary-reset. The shell-pair cancellation results require this shared core and a common response amplitude at the two shell points; they do not identify the ideal and sampled boundary-reset records as the same stochastic law.
+
+It is useful to keep the construction in three logically separate steps.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item A counter model determines a stationary word law and a record-level benchmark: the Parry law in the ideal case, exact $1$-dependence in the sampled boundary-reset case.
+\item For the two models studied here, that benchmark is first equivalent to a scalar internal counter-rate condition, respectively $\Gamma\Delta\tau=\log\varphi$ and $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. Under the paper's calibration closure $\Gamma=\Gamma_+$, these become $\Gamma_+\Delta\tau=\log\varphi$ and $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+\item Substitution of the specified static KMS response then turns those rate conditions into level-set equations for the detector response.
+\end{enumerate}
+Thus the shells are not claimed to be new detector-independent geometric invariants, nor are they derived from static KMS detailed balance alone. They are response-model level sets whose constants are selected by full-record statistics. This ordering of the argument is important: detailed balance supplies the thermal rate ratio, the readout law supplies the record benchmark, the positive spectral weight supplies the remaining one-gap response datum, and only their combination supplies the shell equation.
+
+The two detector regimes studied in this work are illustrated schematically in \cref{fig:scheme}. The ideal model imposes a hard symbolic grammar, while the sampled one-recovery-opportunity boundary-reset model produces a renewal law whose zero-run distribution has full support and hence allows every finite binary word. The thresholds associated with the two regimes are therefore intrinsically different: one is entropic and grammar-based, the other is correlation-based.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners=4pt, align=center, fill=blue!4, minimum width=4.4cm, minimum height=1.5cm},
+  widebox/.style={draw, rounded corners=4pt, align=center, fill=green!6, minimum width=6.3cm, minimum height=1.55cm},
+  outbox/.style={draw, rounded corners=4pt, align=center, fill=orange!8, minimum width=3.2cm, minimum height=1.15cm},
+  arr/.style={-Latex, thick}
+]
+\node[box] (ideal) at (0,1.8) {Ideal one-step dead time\\[2pt] golden-mean grammar\\[2pt] Parry benchmark at $\Gamma_+\Delta\tau=\log\varphi$};
+\node[box] (finite) at (6.2,1.8) {Sampled one-recovery\\[2pt] boundary-reset renewal law\\[2pt] exact $1$-dependence at $\Gamma_+=\Gamma_c$};
+\node[widebox] (kms) at (3.1,-0.2) {Static KMS response\\[2pt] $\displaystyle \Gamma_+(x,\Omega)=\lambda_{\mathrm{sw}}^2\,
+\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}$};
+\node[outbox] (phi) at (0,-2.1) {$\Sigma_{\varphi}$\\ ideal-benchmark response locus};
+\node[outbox] (mem) at (6.2,-2.1) {$\Sigma_{\mathrm{mem}}$\\ memory-transition response locus};
+\draw[arr] (ideal.south) -- ($(kms.north west)+(0.8,0)$);
+\draw[arr] (finite.south) -- ($(kms.north east)+(-0.8,0)$);
+\draw[arr] ($(kms.south west)+(1.0,0)$) -- (phi.north);
+\draw[arr] ($(kms.south east)+(-1.0,0)$) -- (mem.north);
+\end{tikzpicture}
+\caption{Two record-level thresholds and their conditional lift to calibrated response loci. The exact-clock selector is tied to the Parry benchmark in the ideal model, while the memory selector is tied to exact $1$-dependence in the sampled one-recovery-opportunity boundary-reset renewal law. In a specified static KMS response model, both thresholds define response-model level sets, and these become codimension-one shells only when the $C^1$ defining functions are regular. The shell-pair quotient convention is fixed later in Appendix~\ref{sec:inverse}.}
+\label{fig:scheme}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Record-level observables that distinguish the two detector regimes.}
+\label{tab:signatures}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth}}
+\toprule
+Regime & Output law & Distinguished threshold & Finite-record signature \\
+\midrule
+Ideal dead time & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma_+\Delta\tau=\log\varphi$ & No consecutive clicks; Parry law at threshold \\
+Sampled one-recovery-opportunity boundary reset & Renewal process with infinite symbolic memory; zero-run law supported on all $k\ge0$, hence every finite binary word is allowed & $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ & Exact $1$-dependence at threshold; covariance phase change; sub-Poisson counting \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Record-layer notation used repeatedly in Section~\ref{sec:records}.}
+\label{tab:notation-record}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.64\textwidth}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$\Gamma$ & Classical attempt rate of the sampled counter before the closure $\Gamma=\Gamma_+(x,\Omega)$ is imposed. \\
+$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ & Unique critical rate at which the sampled boundary-reset record becomes exact $1$-dependent. \\
+$p,\ q,\ a,\ b,\ c$ & One-bin kernel parameters: $p=e^{-\Gamma\Delta\tau}$, $q=1-p$, $c=e^{-\kappa_{\mathrm r}\Delta\tau}$, and $a,b$ are the refractory-bin click/no-click probabilities after one recovery opportunity. \\
+$\rho$ & Stationary click density $\PP(A_0=1)$. \\
+$\lambda_{\mathrm{hid}}$ & Hidden-mode eigenvalue $p-b$ governing the geometric covariance tail. \\
+$g_k,\ S_k,\ h_k$ & Zero-run law, survival tail, and hazard of the renewal record after a click. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Response-layer notation used repeatedly in Section~\ref{sec:kms-shells} and the abstract calibrated toy-model appendices.}
+\label{tab:notation-response}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.64\textwidth}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$\Gamma_\pm(x,\Omega)$ & Excitation/de-excitation rates of the stationary UDW detector at gap $\Omega$. \\
+$\gamma_\varphi,\ \gamma_{\mathrm{mem}}$ & Record-selected response targets $\log\varphi/\Delta\tau$ and $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. \\
+$\lambda_c,\ \lambda_{\mathrm{sw}}$ & Bare detector coupling and switched effective coupling, with $\lambda_{\mathrm{sw}}^2=\lambda_c^2\|\chi\|_2^2$ for the fixed switching convention. \\
+$\mathcal S_x(\Omega),\ \mathcal S(\Omega)$ & One-gap spectral weight and its homogeneous specialization. \\
+$R_\Omega(x)$ & Fixed calibrated response function $\lambda_{\mathrm{sw}}^2\mathcal S_x(\Omega)/(e^{\beta_\infty N(x)\Omega}-1)$. \\
+$\beta_\infty,\ \beta_{\mathrm{loc}}(x)$ & Global KMS inverse temperature and local Tolman inverse temperature $\beta_{\mathrm{loc}}(x)=\beta_\infty N(x)$. \\
+$N(x)$ & Static lapse function. In the homogeneous specialization the response loci become lapse level sets. \\
+$A$ & Common positive homogeneous amplitude $A=\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)$ entering both source equations. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Inverse and covariance-transport notation used in Appendix~\ref{sec:inverse}.}
+\label{tab:notation-inverse}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.64\textwidth}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$D_\varphi,\ D_{\mathrm{mem}}$ & Planck denominators $e^{\beta_\infty\Omega N(r_\varphi)}-1$ and $e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1$. \\
+$Q_{\varphi/\mathrm{mem}}$ & Denominator quotient $D_\varphi/D_{\mathrm{mem}}$ for one response-locus pair. \\
+$C_D$ & Detector-side constant $C_D=\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)/\log\varphi$. \\
+$\mathcal R_\eta,\ \mathcal F_\eta$ & Fixed-radius ratio map and full undivided shell-data map at the radius record $\eta$. \\
+$C,\ b$ & Ratio target vector and full undivided shell target vector for fixed detector settings. \\
+$\Sigma_y,\ \Sigma_\theta$ & Asymptotic covariance of the externally supplied ratio datum and its transport through the local inverse branch. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\input{sec_records}
+
+\input{sec_kms_shells}
+
+\section{Discussion}\label{sec:discussion}
+
+The main mathematical contribution is the sampled boundary-reset recovery theorem: one explicit sampled counter law produces a full-support renewal record with strictly increasing hazard, universal antibunching, and a unique exact-$1$-dependence threshold at the zero of the hidden eigenmode. The ideal Parry point remains the benchmark comparison rather than the main theorem. Two operational signatures sharpen that distinction: the sampled law approaches the ideal grammar only singularly, with consecutive-click violations $O((\Delta\tau)^2)$ on fixed windows, and it remains strictly sub-Poissonian across the parameter range. At the paper level, this record law is carried into the response sections only through the UDW-rate-calibrated sampled counter convention fixed already in the abstract and introduction: the record instrument is chosen first, and the only UDW input is the calibration closure $\Gamma=\Gamma_+(x,\Omega)$.
+
+The response-side theorem chain is intentionally narrower. Once the sampled
+instrument and the fixed stationary response profile have been chosen,
+\Cref{thm:response-locus-main} gives the main fixed-response locus theorem, the
+appendix corollary \Cref{thm:shells-general-main} performs the two target
+substitutions, and \Cref{cor:spectral-transport-main} then gives the default
+physical transport law between the corresponding locus points. The
+later quotient, horizon, and fixed-radius results are kept only in the
+appendices as abstract calibrated toy-model corollaries obtained after the
+explicit homogeneous, small-shell, admissibility, Jacobian, and external
+ratio-data assumptions are imposed. KMS detailed balance still fixes only the
+thermal ratio $\Gamma_-/\Gamma_+$; the positive one-gap spectral weight and the
+later fixed-radius inverse-data inputs remain calibration hypotheses inside the
+chosen response model.
+
+The novelty claim is therefore split on purpose. The genuinely new theorem-level content is the sampled-record process theory, while the shell and fixed-radius inverse/admissibility statements describe what that record theory implies after one has fixed the closure $\Gamma=\Gamma_+(x,\Omega)$ and a calibrated response profile. Appendix Tables~\ref{tab:hypothesis-ledger}--\ref{tab:literature-comparison} collect the bookkeeping and broader literature positioning, while \Cref{subsec:jmp-search-note} records the dated recent-\emph{J. Math. Phys.} screen only as a reproducible orientation note.
+In particular, the paper does not claim a new UDW response theorem, a new
+general QFT measurement framework, or a new stationary-trajectory
+classification. The high-novelty claim is the exact sampled boundary-reset
+dependence-transition theorem and the conditional response-model consequences
+built from it.
+
+\section*{Funding}
+
+No specific funding was received for this work.
+
+\section*{Data availability}
+
+No new data were created or analysed in this study. The article is
+theoretical, and all calculations needed to reproduce the reported results are
+contained in the manuscript and appendices. In particular,
+\Cref{subsec:numerical-recipe} gives a deterministic paper-local recipe for
+solving $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and regenerating
+\Cref{fig:shell-radii,fig:hazard-cov,fig:spectrum-fano,tab:worked}
+directly from the displayed formulas.
+
+\clearpage
+\appendix
+\newcommand{\SUPPLEMENTARYAPPENDIX}{}
+\input{app_abstract_homogeneous.tex}
+
+\clearpage
+\input{sec_inverse}
+
+\clearpage
+\input{supplementary.tex}
+
+\clearpage
+\input{references.tex}
+
+\end{document}

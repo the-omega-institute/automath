@@ -1,0 +1,163 @@
+\section{Compatibility in the window length}
+
+We next compare the folds at different window lengths.  The results of this
+section show that admissible restriction and finite-window normalization are
+compatible with one another.
+
+\subsection{Restriction maps}
+
+\begin{definition}[Prefix restrictions]
+\label{def:prefix-restriction}
+For integers $n\ge m\ge 1$ define
+\[
+\pi_{n\to m}:X_n\to X_m,
+\qquad
+\pi_{n\to m}(x_1\cdots x_n):=x_1\cdots x_m.
+\]
+\end{definition}
+
+\begin{lemma}[Functoriality of admissible restrictions]
+\label{lem:pi-functorial}
+If $n\ge \ell\ge m\ge 1$, then
+\[
+\pi_{n\to m}=\pi_{\ell\to m}\circ \pi_{n\to \ell}.
+\]
+Moreover, for every $c\in \Xfin$ and every $n\ge m$,
+\[
+\pi_{n\to m}(\pi_n(c))=\pi_m(c).
+\]
+\leanverified{paper_resolution_folding_pi_functorial}
+\end{lemma}
+
+\begin{proof}
+All maps involved are literal prefix truncations, so both identities are
+immediate.
+\end{proof}
+
+\begin{theorem}[Inverse-limit identification]
+\label{thm:inverse-limit-golden}
+Let
+\[
+\Xinf
+:=
+\{c=(c_1,c_2,\ldots)\in\{0,1\}^{\NN}:c_kc_{k+1}=0\text{ for all }k\ge 1\}.
+\]
+Then there is a natural bijection
+\[
+\Xinf\cong \varprojlim (X_m,\pi_{m+1\to m}).
+\]
+\leanverified{paper_resolution_folding_inverse_limit_golden}
+\end{theorem}
+
+\begin{proof}
+Given $c\in \Xinf$, its prefix family
+\[
+(\pi_m(c))_{m\ge 1}
+\]
+is compatible under the restriction maps, hence defines an element of the
+inverse limit.  Conversely, given a compatible family
+\[
+(x^{(m)})_{m\ge 1}\in \varprojlim (X_m,\pi_{m+1\to m}),
+\]
+define $c_k:=x_k^{(m)}$ for any $m\ge k$.  Compatibility ensures that this is
+independent of the choice of $m$.  Since every finite prefix $x^{(m)}$ avoids
+$11$, the resulting sequence $c$ lies in $\Xinf$.  The two constructions are
+inverse to one another.
+\end{proof}
+
+\begin{remark}
+The object in Theorem~\ref{thm:inverse-limit-golden} is one sided because the
+resolution tower is indexed by prefix length.  It should not be confused with
+the two-sided image shift $Y_m$ introduced later at the sequence level.
+\end{remark}
+
+\subsection{Compatibility with raw windows}
+
+If one truncates a raw window directly, folding does not in general commute
+with restriction.  Let
+\[
+r_{m+1\to m}:\Omega_{m+1}\to\Omega_m,
+\qquad
+r_{m+1\to m}(\omega_1\cdots\omega_{m+1})=\omega_1\cdots\omega_m.
+\]
+For $m=1$ and $\omega=11$ one has
+\[
+(\Fold_1\circ r_{2\to 1})(11)=\Fold_1(1)=1,
+\]
+whereas
+\[
+(\pi_{2\to 1}\circ \Fold_2)(11)=0,
+\]
+since $N(11)=F_2+F_3=F_4$ and hence $\Fold_2(11)=00$.
+
+The correct raw-level restriction is therefore the folded one.
+
+\begin{definition}[Fold-compatible raw restriction]
+\label{def:fold-compatible-restriction}
+For $m\ge 1$ define
+\[
+\widetilde r_{m+1\to m}:\Omega_{m+1}\to\Omega_m,
+\qquad
+\widetilde r_{m+1\to m}(\omega):=\pi_{m+1\to m}(\Fold_{m+1}(\omega)).
+\]
+\end{definition}
+
+\begin{proposition}[Commuting diagram for fold-compatible restriction]
+\label{prop:fold-omega-commute}
+For every $m\ge 1$ and every $\omega\in\Omega_{m+1}$,
+\[
+\Fold_m(\widetilde r_{m+1\to m}(\omega))
+=
+\pi_{m+1\to m}(\Fold_{m+1}(\omega)).
+\]
+Equivalently, the diagram
+\[
+\begin{CD}
+\Omega_{m+1} @>{\Fold_{m+1}}>> X_{m+1}\\
+@V{\widetilde r_{m+1\to m}}VV @VV{\pi_{m+1\to m}}V\\
+\Omega_m @>{\Fold_m}>> X_m
+\end{CD}
+\]
+commutes.
+\end{proposition}
+
+\begin{proof}
+By definition,
+\[
+\widetilde r_{m+1\to m}(\omega)=\pi_{m+1\to m}(\Fold_{m+1}(\omega))\in X_m.
+\]
+Applying Proposition~\ref{prop:fold-basic}(ii) to this admissible word gives
+\[
+\Fold_m(\widetilde r_{m+1\to m}(\omega))
+=
+\widetilde r_{m+1\to m}(\omega)
+=
+\pi_{m+1\to m}(\Fold_{m+1}(\omega)).
+\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Two raw-level restriction examples]
+\label{rem:restriction-examples}
+The discrepancy between direct restriction and folded restriction already
+appears at the smallest scale, where $m=1$ and $\omega=11$:
+\[
+(\Fold_1\circ r_{2\to 1})(11)=1,
+\qquad
+(\Fold_1\circ \widetilde r_{2\to 1})(11)=0.
+\]
+At the next nontrivial scale one may take $m=3$ and $\omega=1101$.  Then
+\[
+r_{4\to 3}(1101)=110,
+\qquad
+\Fold_3(110)=001,
+\]
+whereas Remark~\ref{rem:two-fold-examples} gives $\Fold_4(1101)=0000$, so
+\[
+\widetilde r_{4\to 3}(1101)=000,
+\qquad
+\Fold_3(\widetilde r_{4\to 3}(1101))=000.
+\]
+Thus the naive truncation retains a visible carry that disappears once one
+first folds at the larger resolution and only then restricts.
+\end{remark}

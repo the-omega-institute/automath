@@ -1,0 +1,491 @@
+\section{Auxiliary fixed-resolution and reflector identities}
+\label{app:auxiliary}
+
+This appendix collects two exact but non-structural complements to the main
+theorem chain.  The first reconstructs the full multiplicity spectrum from the
+moment sequence when the window length \(m\) is fixed.  The second records the
+reflector identities behind the visible coarse-graining formalism of
+Section~\ref{sec:ledger}.  Neither block is used in the proofs of
+Theorems~A--F.
+
+\subsection{Fixed-resolution recovery from the moment sequence}
+
+\begin{theorem}[Truncated-sum curve and tail inversion]
+\label{thm:truncated-sum-curve}
+Fix \(m\ge 1\), and define
+\[
+  \mathcal C_m(u):=\sum_{x\in X_m}\min\{d_m(x),u\}
+  \qquad (u\ge 0),
+\]
+and
+\[
+  N_m(u):=\card{\{x\in X_m:\ d_m(x)>u\}}
+  \qquad (u\ge 0).
+\]
+Then
+\[
+  \mathcal C_m(u)=\int_0^u N_m(v)\,\mathrm{d}v.
+\]
+In particular, \(\mathcal C_m\) is piecewise linear and concave, its slope
+jumps occur exactly at the distinct multiplicity values of \(d_m\), and those
+jumps recover the full multiplicity spectrum.
+\end{theorem}
+
+\begin{proof}
+For every \(d,u\ge 0\),
+\[
+  \min\{d,u\}=\int_0^u \mathbf{1}_{\{v<d\}}\,\mathrm{d}v.
+\]
+Summing over \(x\in X_m\) gives
+\begin{align*}
+  \mathcal C_m(u)
+  &=
+  \sum_{x\in X_m}\int_0^u \mathbf{1}_{\{v<d_m(x)\}}\,\mathrm{d}v \\
+  &=
+  \int_0^u
+  \Bigl(\sum_{x\in X_m}\mathbf{1}_{\{d_m(x)>v\}}\Bigr)\,\mathrm{d}v \\
+  &=
+  \int_0^u N_m(v)\,\mathrm{d}v.
+\end{align*}
+Since \(N_m\) is a decreasing step function, \(\mathcal C_m\) is piecewise
+linear and concave.  If \(a\) is an integer, then the jump of the slope at
+\(u=a\) equals
+\[
+  N_m(a^-)-N_m(a^+)
+  =
+  \card{\{x\in X_m:\ d_m(x)=a\}},
+\]
+which recovers the multiplicity spectrum.
+\end{proof}
+
+\begin{theorem}[Rational fiber-spectrum resolvent]
+\label{thm:fiber-resolvent}
+Fix \(m\ge 1\), and let \(a_1<\cdots<a_{R_m}\) be the distinct values of the
+multiplicity function \(d_m\), with
+\[
+  c_j:=\card{\{x\in X_m:\ d_m(x)=a_j\}}.
+\]
+Define the generating function
+\[
+  \mathcal H_m(u):=\sum_{q=0}^{\infty} S_q(m)u^q.
+\]
+Then
+\[
+  \mathcal H_m(u)=\sum_{j=1}^{R_m}\frac{c_j}{1-a_ju}.
+\]
+In particular, \(\mathcal H_m\) is rational, its poles are precisely the points
+\(u=1/a_j\), and the residue at \(1/a_j\) equals \(c_j/a_j\).
+\end{theorem}
+
+\begin{proof}
+Since
+\[
+  S_q(m)=\sum_{j=1}^{R_m} c_j a_j^q,
+\]
+\[
+  \mathcal H_m(u)
+  =
+  \sum_{j=1}^{R_m} c_j \sum_{q=0}^{\infty}(a_ju)^q
+  =
+  \sum_{j=1}^{R_m}\frac{c_j}{1-a_ju}.
+\]
+\end{proof}
+
+\begin{corollary}[Stieltjes logarithmic derivative]
+\label{cor:stieltjes-log-derivative}
+In the notation of \Cref{thm:fiber-resolvent}, define
+\[
+  Z_m(t):=\prod_{x\in X_m}(1+t\,d_m(x))
+  =\prod_{j=1}^{R_m}(1+t\,a_j)^{c_j}.
+\]
+Then
+\[
+  \frac{\mathrm{d}}{\mathrm{d}t}\log Z_m(t)
+  =
+  \sum_{j=1}^{R_m}\frac{c_j a_j}{1+t\,a_j}.
+\]
+Hence the logarithmic derivative of \(Z_m\) is a rational Stieltjes function
+whose poles determine the distinct multiplicities \(a_j\) and whose residues
+recover the counts \(c_j\).
+\end{corollary}
+
+\begin{proof}
+Differentiate the displayed product formula for \(Z_m(t)\).
+\end{proof}
+
+\begin{theorem}[Exact finite reconstruction at fixed resolution]
+\label{thm:fiber-reconstruction}
+In the notation of \Cref{thm:fiber-resolvent}, the first \(2R_m\) moments
+\[
+  S_0(m),S_1(m),\dots,S_{2R_m-1}(m)
+\]
+determine the entire multiplicity spectrum
+\(\{(a_j,c_j)\}_{j=1}^{R_m}\) uniquely.
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+  Q_m(t):=\prod_{j=1}^{R_m}(t-a_j)
+  =t^{R_m}+b_{R_m-1}t^{R_m-1}+\cdots+b_0.
+\]
+Then the moment sequence satisfies the linear recurrence
+\[
+  S_{q+R_m}(m)+b_{R_m-1}S_{q+R_m-1}(m)+\cdots+b_0S_q(m)=0
+  \qquad (q\ge 0).
+\]
+Writing this recurrence for \(q=0,\dots,R_m-1\) gives a linear system
+\[
+  H_m b=-h_m,
+\]
+where
+\[
+  H_m=[S_{i+j}(m)]_{0\le i,j\le R_m-1},
+  \qquad
+  h_m=(S_{R_m}(m),\dots,S_{2R_m-1}(m))^{\mathsf T}.
+\]
+The Hankel matrix factors as
+\[
+  H_m=V^{\mathsf T}\operatorname{diag}(c_1,\dots,c_{R_m})V,
+\]
+with Vandermonde matrix \(V_{j\ell}=a_j^{\ell-1}\).  Because the \(a_j\) are
+distinct and the \(c_j\) are positive, \(H_m\) is invertible.  Hence the
+coefficients of \(Q_m\) are uniquely determined by the first \(2R_m\) moments.
+
+The roots of \(Q_m\) recover the nodes \(a_j\), and the first \(R_m\) moment
+equations \(S_q(m)=\sum_j c_j a_j^q\) determine the weights \(c_j\) by an
+invertible Vandermonde system.
+\end{proof}
+
+\begin{theorem}[Sharpness of the \texorpdfstring{$2R$}{2R} threshold]
+\label{thm:fiber-threshold-sharp}
+For every integer \(R\ge 2\) there exist two distinct \(R\)-atomic spectra
+\[
+  \{(a_i,n_i)\}_{i=1}^R\neq \{(a'_i,n'_i)\}_{i=1}^R,
+\]
+with positive integer nodes and weights, such that
+\[
+  \sum_{i=1}^R n_i a_i^k
+  =
+  \sum_{i=1}^R n'_i (a'_i)^k
+  \qquad (0\le k\le 2R-2),
+\]
+but the two spectra differ at moment \(k=2R-1\).  Hence the
+\(2R\)-moment threshold of \Cref{thm:fiber-reconstruction} is optimal in
+general.
+\end{theorem}
+
+\begin{proof}
+Set \(n=2R-1\).  Define two spectra by
+\[
+  a_i:=2i-1,
+  \qquad
+  n_i:=\binom{n}{2i-2}
+  \qquad (1\le i\le R),
+\]
+and
+\[
+  a'_i:=2i,
+  \qquad
+  n'_i:=\binom{n}{2i-1}
+  \qquad (1\le i\le R).
+\]
+For every polynomial \(p\) of degree at most \(n-1\), the \(n\)-th finite
+difference identity gives
+\[
+  \sum_{j=0}^{n}(-1)^j\binom{n}{j}p(j+1)=0.
+\]
+Taking \(p(t)=t^k\) with \(0\le k\le n-1\) and separating even and odd indices
+yields the claimed equality of the first \(2R-1\) moments.  For \(k=n\), the
+\(n\)-th finite difference of \(t^n\) is nonzero, so the spectra differ at the
+next moment.
+\end{proof}
+
+\begin{proposition}[Minimal Hankel realization]
+\label{prop:hankel-realization}
+Fix \(q\ge 2\), and suppose the tail sequence \(b_n:=S_q(n+n_0)\) satisfies a
+minimal linear recurrence of order \(d\).  Let
+\[
+  H_0:=(b_{i+j})_{0\le i,j\le d-1},
+  \qquad
+  H_1:=(b_{i+j+1})_{0\le i,j\le d-1}.
+\]
+Then \(H_0\) is invertible, and the matrix
+\[
+  A:=H_0^{-1}H_1
+\]
+yields a minimal rational realization
+\[
+  b_n=\alpha^{\mathsf T}A^n\beta
+  \qquad (n\ge 0)
+\]
+for suitable vectors \(\alpha,\beta\in\QQ^d\).  If all \(b_n\) are integers,
+then every denominator appearing in \(A\) divides \(\det(H_0)\).
+\end{proposition}
+
+\begin{proof}
+Minimality of the recurrence implies that the first \(d\) Hankel columns are
+linearly independent, hence \(H_0\) is invertible.  The state vector
+\((b_n,\dots,b_{n+d-1})^{\mathsf T}\) evolves linearly, and the companion action
+in this basis is exactly \(A=H_0^{-1}H_1\).  Taking
+\(\alpha=(1,0,\dots,0)^{\mathsf T}\) and
+\(\beta=(b_0,\dots,b_{d-1})^{\mathsf T}\) gives the realization.
+
+If the \(b_n\) are integers, then \(H_0\) and \(H_1\) have integer entries and
+\[
+  A=\frac{\operatorname{adj}(H_0)H_1}{\det(H_0)},
+\]
+so every denominator divides \(\det(H_0)\).
+\end{proof}
+
+\begin{theorem}[Smith-normal-form denominator formula]
+\label{thm:smith-denominator}
+In the setting of \Cref{prop:hankel-realization}, assume that
+\(H_0,H_1\in M_d(\ZZ)\).  Let
+\[
+  UH_0V=\operatorname{diag}(s_1,\dots,s_d),
+  \qquad
+  s_1\mid s_2\mid\cdots\mid s_d,
+\]
+be the Smith normal form of \(H_0\), and set \(C:=UH_1\).  For each row of
+\(C\), let
+\[
+  g_i:=\gcd(C_{i1},\dots,C_{id}),
+  \qquad
+  e_i:=\frac{s_i}{\gcd(s_i,g_i)}.
+\]
+Then the smallest positive integer \(N_*\) such that \(N_*A\) has integral
+entries is
+\[
+  N_* = \operatorname{lcm}(e_1,\dots,e_d).
+\]
+In particular,
+\[
+  N_*\mid s_d\mid \det(H_0).
+\]
+\end{theorem}
+
+\begin{proof}
+Because \(H_0^{-1}=V\operatorname{diag}(s_1^{-1},\dots,s_d^{-1})U\), one has
+\[
+  A
+  =
+  H_0^{-1}H_1
+  =
+  V\operatorname{diag}(s_1^{-1},\dots,s_d^{-1})C.
+\]
+Thus the integrality of \(N_*A\) is equivalent to the condition that every row
+of \(\operatorname{diag}(N_*/s_1,\dots,N_*/s_d)C\) be integral.  For a fixed
+row \(i\), this means precisely that \(s_i\) divides \(N_* g_i\), or
+equivalently that \(e_i\mid N_*\).  Therefore the smallest common choice is
+\[
+  N_*=\operatorname{lcm}(e_1,\dots,e_d).
+\]
+Since \(e_i\mid s_i\mid s_d\) for every \(i\), one obtains
+\[
+  N_*\mid s_d.
+\]
+Finally, \(s_d\mid s_1\cdots s_d=\det(H_0)\).
+\end{proof}
+
+\subsection{Reflector identities for the visible coarse-graining}
+
+\begin{definition}[Visible divergence and visible metric]
+\label{def:visible-divergence}
+For \(\mu,\nu\in\Delta(\Omega_m)\), define
+\[
+  D_{\mathrm{vis},m}(\mu\|\nu)
+  :=
+  D_{\mathrm{KL}}(P_m\mu\|P_m\nu)
+\]
+and
+\[
+  \delta_{\mathrm{vis},m}(\mu,\nu)
+  :=
+  \frac12\sum_{x\in X_m}\bigl|(P_m\mu)(x)-(P_m\nu)(x)\bigr|.
+\]
+\end{definition}
+
+\begin{proposition}[Visible contraction]
+\label{prop:visible-contraction}
+For all \(\mu,\nu\in\Delta(\Omega_m)\),
+\[
+  D_{\mathrm{vis},m}(\mu\|\nu)\le D_{\mathrm{KL}}(\mu\|\nu)
+\]
+and
+\[
+  \delta_{\mathrm{vis},m}(\mu,\nu)
+  =
+  \frac12\sum_{\omega\in\Omega_m}
+  \bigl|(K_m\mu)(\omega)-(K_m\nu)(\omega)\bigr|.
+\]
+\end{proposition}
+
+\begin{proof}
+The KL inequality is the data-processing inequality for the map \(P_m\).  For
+the total-variation identity, write
+\[
+  \pi:=P_m\mu,
+  \qquad
+  \eta:=P_m\nu.
+\]
+Then \(K_m\mu=Q_m\pi\) and \(K_m\nu=Q_m\eta\).  Hence
+\begin{align*}
+  \frac12\sum_{\omega\in\Omega_m}
+  \bigl|(K_m\mu)(\omega)-(K_m\nu)(\omega)\bigr|
+  &=
+  \frac12\sum_{x\in X_m}
+  \sum_{\Fold_m(\omega)=x}
+  \left|\frac{\pi(x)}{d_m(x)}-\frac{\eta(x)}{d_m(x)}\right| \\
+  &=
+  \frac12\sum_{x\in X_m}\bigl|\pi(x)-\eta(x)\bigr| \\
+  &=
+  \delta_{\mathrm{vis},m}(\mu,\nu).
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Fiberwise entropy decomposition]
+\label{thm:entropy-identity}
+Fix \(m\ge 1\), let \(\mu\in\Delta(\Omega_m)\), and write
+\[
+  \pi:=P_m\mu\in\Delta(X_m).
+\]
+Then
+\[
+  H(\mu)
+  =
+  H(\pi)+\EE_\pi[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|K_m\mu).
+\]
+\end{theorem}
+
+\begin{proof}
+By definition,
+\[
+  D_{\mathrm{KL}}(\mu\|K_m\mu)
+  =
+  -H(\mu)-\sum_{\omega\in\Omega_m}\mu(\omega)\log (K_m\mu)(\omega).
+\]
+Since
+\[
+  (K_m\mu)(\omega)=\frac{\pi(\Fold_m(\omega))}{d_m(\Fold_m(\omega))},
+\]
+we obtain
+\begin{align*}
+  \sum_{\omega}\mu(\omega)\log (K_m\mu)(\omega)
+  &=
+  \sum_{\omega}\mu(\omega)\log\pi(\Fold_m(\omega)) \\
+  &\qquad
+  -\sum_{\omega}\mu(\omega)\log d_m(\Fold_m(\omega)).
+\end{align*}
+Grouping by fibers gives
+\[
+  \sum_{\omega}\mu(\omega)\log\pi(\Fold_m(\omega))
+  =
+  \sum_{x\in X_m}\pi(x)\log \pi(x)
+  =
+  -H(\pi),
+\]
+and similarly
+\[
+  \sum_{\omega}\mu(\omega)\log d_m(\Fold_m(\omega))
+  =
+  \sum_{x\in X_m}\pi(x)\log d_m(x)
+  =
+  \EE_\pi[\log d_m(X)].
+\]
+Substitute these identities into the definition of
+\(D_{\mathrm{KL}}(\mu\|K_m\mu)\).
+\end{proof}
+
+\begin{corollary}[Maximum entropy on a visible fiber]
+\label{cor:max-entropy-visible}
+Fix \(\pi\in\Delta(X_m)\).  Among all \(\mu\in\Delta(\Omega_m)\) such that
+\[
+  P_m\mu=\pi,
+\]
+the unique entropy maximizer is \(Q_m\pi\), and its entropy is
+\[
+  H(Q_m\pi)=H(\pi)+\EE_\pi[\log d_m(X)].
+\]
+\end{corollary}
+
+\begin{proof}
+If \(P_m\mu=\pi\), then \Cref{thm:entropy-identity} gives
+\[
+  H(\mu)
+  =
+  H(\pi)+\EE_\pi[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|Q_m\pi).
+\]
+The right-hand side is maximized exactly when \(\mu=Q_m\pi\).
+\end{proof}
+
+\begin{theorem}[Fiberwise KL decomposition]
+\label{thm:kl-pythagorean}
+For all \(\mu,\nu\in\Delta(\Omega_m)\),
+\[
+  D_{\mathrm{KL}}(\mu\|K_m\nu)
+  =
+  D_{\mathrm{KL}}(\mu\|K_m\mu)+D_{\mathrm{vis},m}(\mu\|\nu).
+\]
+\end{theorem}
+
+\begin{proof}
+Write
+\[
+  \pi:=P_m\mu,
+  \qquad
+  \eta:=P_m\nu.
+\]
+Since \(K_m\nu=Q_m\eta\),
+\[
+  D_{\mathrm{KL}}(\mu\|K_m\nu)
+  =
+  -H(\mu)-\sum_{\omega}\mu(\omega)\log\frac{\eta(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\]
+Grouping by fibers as in \Cref{thm:entropy-identity} yields
+\[
+  D_{\mathrm{KL}}(\mu\|K_m\nu)
+  =
+  -H(\mu)-\sum_{x\in X_m}\pi(x)\log \eta(x)
+  +\EE_\pi[\log d_m(X)].
+\]
+Applying the same formula with \(\nu=\mu\) gives
+\[
+  D_{\mathrm{KL}}(\mu\|K_m\mu)
+  =
+  -H(\mu)-\sum_{x\in X_m}\pi(x)\log \pi(x)
+  +\EE_\pi[\log d_m(X)].
+\]
+Subtracting these identities, we obtain
+\[
+  D_{\mathrm{KL}}(\mu\|K_m\nu)-D_{\mathrm{KL}}(\mu\|K_m\mu)
+  =
+  \sum_{x\in X_m}\pi(x)\log \frac{\pi(x)}{\eta(x)}
+  =
+  D_{\mathrm{KL}}(\pi\|\eta).
+\]
+This is exactly \(D_{\mathrm{vis},m}(\mu\|\nu)\).
+\end{proof}
+
+\begin{corollary}[Information projection onto the visible model]
+\label{cor:i-projection}
+For every \(\mu\in\Delta(\Omega_m)\), the law \(K_m\mu\) is the unique minimizer
+of
+\[
+  \nu\longmapsto D_{\mathrm{KL}}(\mu\|\nu)
+\]
+over \(\nu\in\mathcal E_m\).
+\end{corollary}
+
+\begin{proof}
+Every \(\nu\in\mathcal E_m\) has the form \(K_m\eta\) for some
+\(\eta\in\Delta(\Omega_m)\) by \Cref{prop:reflector}.  Then
+\Cref{thm:kl-pythagorean} gives
+\[
+  D_{\mathrm{KL}}(\mu\|\nu)
+  =
+  D_{\mathrm{KL}}(\mu\|K_m\mu)+D_{\mathrm{vis},m}(\mu\|\eta),
+\]
+and the second term vanishes if and only if \(P_m\eta=P_m\mu\), equivalently
+\(\nu=K_m\mu\).
+\end{proof}

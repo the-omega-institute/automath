@@ -1,0 +1,95 @@
+\section{Second moments of the finite fibers}\label{sec:fiber-spectrum}
+
+The threshold and conjugacy theorems do not require the full fiber spectrum. One statistic will be useful below and satisfies a closed recurrence: the second moment
+\[
+\Sigma_m:=\sum_{x\in X_m}d_m(x)^2,
+\]
+equivalently, up to the factor $2^{-2m}$, the collision probability of the stabilized law under uniform raw input.
+
+\subsection{Second moment and collision probability}\label{sec:fiber-collision}
+
+\begin{theorem}[Second-moment linear recurrence]\label{prop:second-moment-recurrence}
+For all $m\ge 4$,
+\begin{equation}\label{eq:sigma-recurrence}
+\Sigma_m=2\,\Sigma_{m-1}+2\,\Sigma_{m-2}-2\,\Sigma_{m-3},
+\end{equation}
+with $\Sigma_1=2$, $\Sigma_2=6$, $\Sigma_3=14$.
+\end{theorem}
+
+\begin{proof}
+The second moment counts raw pairs sharing a residue modulo $F_{m+2}$. Write $\epsilon_k:=\omega_k-\omega_k'\in\{-1,0,1\}$ with multiplicity weights $w(\pm1)=1$, $w(0)=2$, and define
+\[
+f(n,t):=\text{weighted count of }\epsilon\in\{-1,0,1\}^n\text{ with }\sum_{k=1}^n \epsilon_kF_{k+1}=t.
+\]
+Since
+\[
+\Bigl|\sum_{k=1}^m \epsilon_kF_{k+1}\Bigr|\le \sum_{k=1}^mF_{k+1}=F_{m+3}-2<2F_{m+2},
+\]
+only the values $0,\pm F_{m+2}$ contribute, so by symmetry
+\begin{equation}\label{eq:sigma-split}
+\Sigma_m=f(m,0)+2f(m,F_{m+2}).
+\end{equation}
+
+Conditioning on the last digit gives
+\[
+f(m,F_{m+2})=2f(m-1,F_{m+2})+f(m-1,F_m)+f(m-1,F_{m+3}),
+\]
+and the first and third terms vanish by the same range bound. Hence
+\[
+f(m,F_{m+2})=f(m-1,F_m).
+\]
+Conditioning once more at level $m-1$ yields
+\[
+f(m-1,F_m)=2f(m-2,F_m)+f(m-2,0),
+\]
+because the term at $2F_m$ is out of range for $m\ge4$. Using \eqref{eq:sigma-split} at window $m-2$, this is exactly $\Sigma_{m-2}$.
+
+Likewise,
+\[
+f(m,0)=2f(m-1,0)+2f(m-1,F_{m+1})=f(m-1,0)+\Sigma_{m-1}.
+\]
+Writing $a_m:=f(m,0)$, one has $a_m=\Sigma_m-2\Sigma_{m-2}$ and $a_{m-1}=\Sigma_{m-1}-2\Sigma_{m-3}$. Eliminating $a_m$ gives \eqref{eq:sigma-recurrence}. The initial values are obtained by direct enumeration.
+\end{proof}
+
+\begin{proposition}[Uniform visible law and collision probability]\label{prop:uniform-collision}
+Let $\mu_m^{\mathrm{unif}}$ be the uniform distribution on $\{0,1\}^m$, and let $\pi_m^{\mathrm{unif}}:=(\Fold_m)_*\mu_m^{\mathrm{unif}}$ be the induced distribution on $X_m$. Then for every $x\in X_m$,
+\[
+\pi_m^{\mathrm{unif}}(x)=\frac{d_m(x)}{2^m},
+\]
+and therefore
+\begin{equation}\label{eq:col-unif-second-moment}
+\Col_{\mathrm{unif}}(m):=\sum_{x\in X_m}\pi_m^{\mathrm{unif}}(x)^2
+=\frac{1}{2^{2m}}\sum_{x\in X_m} d_m(x)^2.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For $x\in X_m$, the fiber $\mathcal{F}_m(x)$ has cardinality $d_m(x)$ by definition. Since $\mu_m^{\mathrm{unif}}$ assigns mass $2^{-m}$ to each raw word,
+\[
+\pi_m^{\mathrm{unif}}(x)=\mu_m^{\mathrm{unif}}(\mathcal{F}_m(x))=\frac{d_m(x)}{2^m}.
+\]
+Substituting into $\Col_{\mathrm{unif}}(m)=\sum_x \pi_m^{\mathrm{unif}}(x)^2$ gives \eqref{eq:col-unif-second-moment}.
+\end{proof}
+
+\subsection{Finite enumerations}\label{sec:fiber-enumerations}
+
+Table~\ref{tab:sanity-fibers} lists representative exact values from the enumeration up to $m=22$. Throughout, $F_1=F_2=1$ and $|X_m|=F_{m+2}$. Since the minimum fiber size is always $1$, only the maximal fiber size and the second moment $\Sigma_m$ are recorded.
+
+\begin{table}[t]
+\centering
+\caption{Representative exact fiber data. The second moment $\Sigma_m$ is the quantity appearing in Theorem~\ref{thm:fiber-dft} and Theorem~\ref{prop:second-moment-recurrence}.}
+\label{tab:sanity-fibers}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{rrrr}
+\toprule
+$m$ & $|X_m|$ & $\max d_m$ & $\Sigma_m$ \\
+\midrule
+3 & 5 & 2 & 14 \\
+5 & 13 & 4 & 88 \\
+12 & 377 & 21 & 51216 \\
+22 & 46368 & 233 & 452899840 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The full enumeration up to $m=22$ agrees with the recurrence in Theorem~\ref{prop:second-moment-recurrence}. An independent shifted-weight computation gives the same values, as predicted by Theorem~\ref{thm:affine-transfer}.

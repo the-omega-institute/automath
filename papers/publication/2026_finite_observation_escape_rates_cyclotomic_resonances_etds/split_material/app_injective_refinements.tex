@@ -1,0 +1,213 @@
+\section{Supplementary note on injective refinements}
+\label{app:injective-refinements}
+
+If a visible quotient collapses the survivor collision spectrum, then any
+injective refinement that restores the microscopic R\'enyi profile must
+pay exactly the hidden conditional entropy.  All entropies and
+divergences in this appendix are taken with natural logarithms.
+
+\begin{theorem}[Entropy ledger for finite refinements]
+\label{thm:entropy-ledger}
+Let \(f_m:\Sigma^m\to \mathcal{Y}_m\) be a map into a finite set.  Let
+\(U_m\) be any \(\Sigma^m\)-valued random variable with law \(u_m\), and
+define
+\[
+  Y_m:=f_m(U_m).
+\]
+For \(y\in \mathcal{Y}_m\), write
+\[
+  d_m(y):=\card{f_m^{-1}(y)},
+\]
+and define the fibre-uniform lift
+\[
+  \widetilde u_m(\omega)
+  := \frac{\PP(Y_m=f_m(\omega))}
+           {d_m(f_m(\omega))}.
+\]
+Then
+\[
+  H(U_m)
+  = H(Y_m)+\EE[\log d_m(Y_m)]-D(u_m\Vert \widetilde u_m),
+\]
+equivalently,
+\[
+  H(U_m\mid Y_m)
+  = \EE[\log d_m(Y_m)]-D(u_m\Vert \widetilde u_m)
+  \leq \EE[\log d_m(Y_m)].
+\]
+If \(r_m:\Sigma^m\to R_m\) is any map such that
+\[
+  \omega\longmapsto \bigl(f_m(\omega),r_m(\omega)\bigr)
+\]
+is injective, then
+\[
+  H(r_m(U_m)\mid Y_m)=H(U_m\mid Y_m).
+\]
+In particular,
+\[
+  H(U_m\mid Y_m)\leq \log\card{R_m}.
+\]
+\leanverified{paper_scan_projection_address_entropy_ledger}
+\end{theorem}
+
+\begin{proof}
+Since \(Y_m=f_m(U_m)\), the fibre-uniform lift is a probability law on
+\(\Sigma^m\).  Expanding the relative entropy gives
+\begin{align*}
+  D(u_m\Vert \widetilde u_m)
+  &= \sum_{\omega\in\Sigma^m}
+      u_m(\omega)\log\frac{u_m(\omega)}{\widetilde u_m(\omega)} \\
+  &= -H(U_m)
+     - \sum_{\omega\in\Sigma^m}
+        u_m(\omega)\log \PP(Y_m=f_m(\omega)) \\
+  &\quad
+     + \sum_{\omega\in\Sigma^m}
+        u_m(\omega)\log d_m(f_m(\omega)).
+\end{align*}
+The middle term is \(H(Y_m)\), because \(\PP(Y_m=f_m(\omega))\) is
+constant on each fibre, and the last term is
+\(\EE[\log d_m(Y_m)]\).  Rearranging yields the first identity, hence
+also the conditional-entropy formula and its upper bound by
+non-negativity of relative entropy.
+
+If \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then
+\(U_m\) is measurable with respect to \((Y_m,r_m(U_m))\), while
+\((Y_m,r_m(U_m))\) is measurable with respect to \(U_m\).  Thus
+\[
+  H(U_m\mid Y_m,r_m(U_m))=0,
+  \qquad
+  H(Y_m,r_m(U_m))=H(U_m),
+\]
+and therefore
+\[
+  H(r_m(U_m)\mid Y_m)=H(U_m)-H(Y_m)=H(U_m\mid Y_m).
+\]
+The bound \(H(U_m\mid Y_m)\le \log\card{R_m}\) is immediate.
+\end{proof}
+
+\begin{corollary}[Register lower bound]
+\label{thm:register-lower-bound}
+Let \(f_m:\Sigma^m\to \mathcal{Y}_m\) be a map into a finite set, and set
+\[
+  D_m:=\max_{y\in \mathcal{Y}_m}\card{f_m^{-1}(y)}.
+\]
+If \(r_m:\Sigma^m\to R_m\) is any map such that
+\(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then
+\[
+  \card{R_m}\geq D_m.
+\]
+If, in addition, \(U_m\) is uniform on \(\Sigma^m\), then
+\[
+  \log_2\card{R_m}
+  \geq m-H_2(Y_m)\geq m-\log_2\card{\mathcal{Y}_m},
+\]
+where \(H_2(Y_m):=H(Y_m)/\log 2\).  In particular, if
+\(\card{\mathcal{Y}_m}\leq C\kappa^m\) for some \(C>0\) and
+\(\kappa<2\), then
+\[
+  \log_2\card{R_m}
+  \geq \left(\log_2\frac{2}{\kappa}\right)m-\log_2 C.
+\]
+\leanverified{paper_scan_projection_address_register_lower_bound}
+\end{corollary}
+
+\begin{proof}
+Choose \(y_\ast\in \mathcal{Y}_m\) such that
+\(\card{f_m^{-1}(y_\ast)}=D_m\).  Injectivity of
+\(\omega\mapsto(f_m(\omega),r_m(\omega))\) forces \(r_m\) to be
+injective on \(f_m^{-1}(y_\ast)\), hence \(\card{R_m}\geq D_m\).
+
+If \(U_m\) is uniform on \(\Sigma^m\), then \(H(U_m)=m\log 2\).  Apply
+Theorem~\ref{thm:entropy-ledger} to obtain
+\[
+  \log\card{R_m}\geq H(U_m\mid Y_m)=m\log 2-H(Y_m).
+\]
+Divide by \(\log 2\) to get
+\[
+  \log_2\card{R_m}\geq m-H_2(Y_m).
+\]
+Since \(H_2(Y_m)\leq \log_2\card{\mathcal{Y}_m}\), the remaining
+estimates follow.
+\end{proof}
+
+\begin{theorem}[Injective refinements restore the microscopic collision profile]
+\label{thm:collision-profile-restoration}
+Let \(f_m:\Sigma^m\to \mathcal{Y}_m\) be a map into a finite set, let
+\(U_m\) be any \(\Sigma^m\)-valued random variable with law \(u_m\), and
+set \(Y_m:=f_m(U_m)\).  For \(r\geq 1\), define
+\[
+  S_r(U_m):=\sum_{\omega\in\Sigma^m}u_m(\omega)^r,
+  \qquad
+  S_r(Y_m):=\sum_{y\in\mathcal{Y}_m}\PP(Y_m=y)^r.
+\]
+Then
+\[
+  S_r(Y_m)\geq S_r(U_m)
+  \qquad (r\geq 1),
+\]
+with equality for some \(r>1\) if and only if \(f_m\) is injective on
+\(\supp u_m\).
+
+Now let \(r_m:\Sigma^m\to R_m\) be any auxiliary register such that
+\[
+  \omega\longmapsto \bigl(f_m(\omega),r_m(\omega)\bigr)
+\]
+is injective, and define the refined address
+\[
+  Z_m:=\bigl(Y_m,r_m(U_m)\bigr).
+\]
+Then for every \(r\geq 1\),
+\[
+  S_r(Z_m)=S_r(U_m).
+\]
+In particular, the refined address restores the full collision entropy
+profile of the microscopic source:
+\[
+  -\log S_2(Z_m)=-\log S_2(U_m).
+\]
+Hence the collision term in
+Theorem~\ref{thm:double-budget-poisson}, applied to the refined labels,
+is governed by \(S_2(U_m)\) rather than \(S_2(Y_m)\).  At the same
+time, Theorem~\ref{thm:entropy-ledger} yields
+\[
+  H(r_m(U_m)\mid Y_m)=H(U_m\mid Y_m).
+\]
+Thus every injective refinement simultaneously restores the microscopic
+birthday scale and pays exactly the full hidden conditional entropy.
+
+If \(U_m\) is uniform on \(\Sigma^m\), then
+\[
+  S_2(Z_m)=2^{-m},
+\]
+so the refined labels recover the full birthday threshold
+\[
+  N_m\asymp 2^{m/2}.
+\]
+\leanverified{paper_scan_projection_address_collision_profile_restoration}
+\end{theorem}
+
+\begin{proof}
+Write
+\[
+  p_y:=\PP(Y_m=y)=\sum_{\omega\in f_m^{-1}(y)}u_m(\omega).
+\]
+For \(r\geq 1\), convexity of \(x\mapsto x^r\) on \([0,\infty)\) gives
+\[
+  p_y^r
+  = \left(\sum_{\omega\in f_m^{-1}(y)}u_m(\omega)\right)^r
+  \geq \sum_{\omega\in f_m^{-1}(y)}u_m(\omega)^r.
+\]
+Summing over \(y\in\mathcal Y_m\) gives \(S_r(Y_m)\geq S_r(U_m)\).  For
+\(r>1\), equality holds exactly when each fibre contains at most one
+point of positive \(u_m\)-mass, i.e.\ when \(f_m\) is injective on
+\(\supp u_m\).
+
+If \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then the
+atoms of \(Z_m\) are in bijection with those of \(U_m\), with the same
+probability weights.  Hence \(S_r(Z_m)=S_r(U_m)\) for every \(r\geq 1\).
+The collision statement is then immediate from
+Theorem~\ref{thm:double-budget-poisson}, and the entropy identity is the
+second conclusion of Theorem~\ref{thm:entropy-ledger}.  In the uniform
+case \(S_2(U_m)=2^{-m}\), so \(S_2(Z_m)=2^{-m}\) and the birthday scale
+is \(N_m\asymp 2^{m/2}\).
+\end{proof}

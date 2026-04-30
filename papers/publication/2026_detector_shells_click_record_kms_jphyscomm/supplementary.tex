@@ -1,0 +1,1113 @@
+\ifdefined\SUPPLEMENTARYAPPENDIX
+\section*{Supplementary calculations}
+\addcontentsline{toc}{section}{Supplementary calculations}
+\newcommand{\supplementaryenddocument}{}
+\else
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{setspace}
+\usepackage{xcolor}
+\ifdefined\SUPPLEMENTARYAPPENDIX
+\else
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\fi
+
+\hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
+\setstretch{1.06}
+\setlength{\parskip}{0.3em}
+\setlength{\parindent}{1.2em}
+\newcommand{\RR}{\mathbb{R}}
+
+\begin{document}
+\newcommand{\supplementaryenddocument}{\end{document}}
+
+\begin{center}
+{\LARGE\bfseries Supplementary calculations}\par
+\vspace{0.5em}
+{\large for ``A conditional note on fixed calibrated response-model shells from a classical sampled counter with later UDW-rate calibration in static KMS spacetimes''}\par
+\end{center}
+\fi
+
+The main article carries the sampled-counter theorem chain, the fixed-response
+locus theorem, and the default transport identity. The appendices then collect
+the abstract calibrated toy-model specializations, the hypothesis and
+literature bookkeeping, the edge-case formulas, the finite-counting checks, and
+the numerical example. They are not a second proof ledger for a new
+nonconstant-lapse detector theorem.
+
+\section{Hypothesis map and literature positioning}
+
+To keep the main article focused on the counter theorem and the default
+fixed-response transport law, the standing hypothesis map, the layer-by-layer
+claim map, and the broader literature comparison are collected here.
+\Cref{tab:literature-comparison} keeps the category-by-category comparison,
+including a separate row for quantum-output statistics and continuous
+measurement so that those sources are not folded into either dead-time
+hardware papers or AQFT measurement work. A brief dated
+\emph{J. Math. Phys.} search note is recorded below only for reproducibility
+and orientation; it is not used as a row-by-row novelty scorecard.
+
+\begin{table}[t]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\caption{Conditional hypothesis map. Secondary modelling, calibration, and scope qualifications are consolidated here. The status column separates setup choices, proved consequences, modelling inputs, and calibration hypotheses; a modelling or calibration row is never inferred from the rows above it, and the theorem named in the last column is conditional on that row.}
+\label{tab:hypothesis-ledger}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth} >{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.33\textwidth}}
+\toprule
+Hypothesis or construction & Status in the paper & Where used & Consequence under the stated input \\
+\midrule
+Stationary worldline and proper-time sampling by $\Delta\tau$ & Setup choice for the record process & \Cref{sec:operational,sec:records} and all shell lifts & Defines the binary stationary record; no claim is made for nonstationary sampling or finite switching records. \\
+UDW-rate-calibrated sampled counter: sampled interval instrument with thresholded binary readout, sampled one-recovery-opportunity boundary reset, and stationary closure $\Gamma=\Gamma_+$ & Paper-level framing in the abstract and introduction, plus model specification in \Cref{prop:instrument-kernels-main}; not claimed as universal UDW measurement theory & \Cref{prop:ideal-main,lem:renewal-gap-main,lem:one-dep-criterion-main,prop:recovery-main} and shell lifts through \Cref{thm:shells-general-main} & Derives the labelled kernels $T_0,T_1$; \Cref{rem:continuous-comparator-main} contrasts them with the true continuous intra-bin recovery kernels, and once the sampled kernels are fixed the support, hazard, covariance, exact-dependence, and finite-record diagnostics are consequences of those kernels. \\
+Ideal one-step blanking after a click & Counter-mode definition inside the readout layer & \Cref{prop:ideal-main} and the ideal-benchmark part of \Cref{thm:shells-general-main} & Gives the golden-mean Markov chain; the Parry benchmark occurs exactly at $\Gamma_+\Delta\tau=\log\varphi$. \\
+One-recovery-opportunity sampled boundary reset after a click and positive parameters & Counter-mode definition inside the readout layer & \Cref{lem:renewal-gap-main,cor:word-support-main,lem:kernel-factorization-main,lem:one-dep-criterion-main,prop:recovery-main} & Gives a renewal law with full support on zero-run lengths and hence on every finite binary word; exact $1$-dependence occurs exactly at $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. \\
+Long-time stationary UDW response for the fixed detector profile & Standard weak-coupling response fact under \Cref{ass:long-time-switch-main}, including absolute continuity with continuous density near $\pm\Omega$ and no atom there & \Cref{sec:kms-shells} & Supplies $\Gamma_\pm=\lambda_{\mathrm{sw}}^2\widehat W_x(\pm\Omega)$ from the gap density before any shell equation is introduced. \\
+Static KMS detailed balance and Tolman scaling & Standard KMS consequence for static pullbacks, used at one fixed gap & \Cref{prop:stationary-udw-response-main,lem:local-kms-spectral-main,ass:kms-response-main} & Fixes $\Gamma_-/\Gamma_+=e^{\beta_\infty N(x)\Omega}$ on that gap-regular absolutely continuous sector, but not the absolute positive-frequency response. \\
+Positive spectral weight $x\mapsto\mathcal S_x(\Omega)$ with stated regularity & Response-model calibration/regularity hypothesis, together with $\widehat W_x(\Omega)>0$ and no atom at $\pm\Omega$, not a KMS consequence & \Cref{ass:kms-response-main,thm:response-locus-main,thm:shells-general-main} & Turns the two target rates into response-level loci; different calibrated weights give different loci with the same detailed-balance ratio. \\
+Homogeneous spectral weight and common field-facing detector core & Additional calibration and protocol hypothesis beyond the default spectral-transport statement & \Cref{ass:homogeneous-spectral-main,thm:ratio-main,prop:order-main} & Specializes the physical shell-pair transport law to the abstract homogeneous quotient corollary $D_\varphi/D_{\mathrm{mem}}=\Delta\tau\,\Gamma_c/\log\varphi$ and yields the detector-controlled ordering. \\
+Target-rate range condition for the fixed response function & Verifiable only after the calibrated $R_\Omega$ or the lapse range is known & \Cref{thm:response-locus-main,thm:shells-general-main,prop:existence-main} & Determines whether the ideal-benchmark and memory-transition response loci are nonempty at all. \\
+Regular level-set condition $dR_\Omega\ne0$ & Geometric regularity hypothesis checked after calibration & \Cref{thm:response-locus-main,thm:shells-general-main,prop:existence-main} & Upgrades a nonempty response locus to a smooth codimension-one shell; otherwise the level set may be singular or only a response locus. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\caption{Conditional hypothesis map (continued).}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth} >{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.33\textwidth}}
+\toprule
+Hypothesis or construction & Status in the paper & Where used & Consequence under the stated input \\
+\midrule
+Nonextremal Hartle--Hawking horizon expansion $N(\rho)=\kappa_{\mathrm H}\rho+O(\rho^3)$ with $\beta_\infty=2\pi/\kappa_{\mathrm H}$ & Background-specific black-hole hypothesis; not generic for arbitrary static KMS spacetimes & \Cref{lem:varying-gap-denominator-main,lem:exact-collar-ratio-main,thm:horizon-main} & Supplies the Gaussian-normal collar expansion used in the near-horizon shell-pair analysis. \\
+Small-shell family $\epsilon(t)\downarrow0$ & Additional asymptotic family hypothesis & \Cref{ass:small-shell-main,lem:exact-collar-ratio-main,thm:horizon-main} & Gives the exact nonlinear near-horizon collar ratio for a shell pair entering the horizon collar. \\
+Dimensionless small-gap condition $\Omega(t)\epsilon(t)\to0$ & Extra asymptotic linearization input, stronger than the shell law alone & \Cref{lem:varying-gap-denominator-main,thm:horizon-main,cor:asymptotic-horizon-main} & Further linearizes the exact collar ratio to the proper-distance and area-excess hierarchy; without it no such linear ratio is asserted. \\
+Fixed-radius ratio map, Schwarzschild branch reduction, common-amplitude admissibility, nonsingular Jacobian/derivative tests, and an external ratio-data CLT & Additional fixed-radius inverse/sensitivity and admissibility hypotheses & \Cref{lem:ratio-admissibility-main,thm:two-mode-main,ass:ratio-data-clt-main,prop:two-mode-delta-main,cor:schwarzschild-branch-main} & With the radius record held fixed, one deterministic fixed-radius theorem gives the exact fixed-target shell constraint together with the local inverse branch in abstract ratio space, and the external ratio-data CLT then feeds a separate delta-method transport theorem. On the physical Schwarzschild branch this further reduces to a one-parameter inverse with the second ratio used only as a residual consistency check. Exact full fixed-setting shell data still occur only at the detector-selected target. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Where the mathematical content enters. The entries separate standard benchmark calculations from the sampled boundary-reset recovery and response-conditional parts of the argument.}
+\label{tab:contribution-ledger}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.34\textwidth} >{\raggedright\arraybackslash}p{0.31\textwidth}}
+\toprule
+Result layer & Mathematical status & Role in the paper \\
+\midrule
+Ideal exact-clock threshold & Standard Perron--Frobenius/Parry calculation for the golden-mean Markov chain once the ideal counter law is fixed & Provides a transparent detector-clock benchmark and the comparison point for the sampled boundary-reset recovery law \\
+Sampled boundary-reset memory threshold & Main record-theoretic calculation: renewal law, strictly increasing hazard, one-mode covariance transfer, and rank-one labelled-kernel factorization at $\lambda_{\mathrm{hid}}=0$ & Supplies the exact $1$-dependence selector and the covariance phase change \\
+Response loci & Conditional substitution of the fixed record-selected rates into a specified stationary UDW response function & Turns target rates into response-model level sets; no claim is made that KMS detailed balance alone determines them \\
+Abstract homogeneous ratio, horizon, and inverse/admissibility corollaries & Algebraic consequences of a common field-facing core and calibrated homogeneous spectral weight, plus the stated regularity and small-shell hypotheses & Specializes the physical spectral-transport law to amplitude-cancelling algebra, then extracts the exact small-shell collar ratio, the further small-gap hierarchy, and local ratio-map inverse/sensitivity statements within the calibrated response model \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\caption{Literature comparison by comparison class. The table separates exact finite dependence, hidden-Markov/renewal output laws, dead-time counting, detector regularization and stationary response, and detector-based QFT measurement work. The last column states the precise increment and its scope boundary in the manuscript. The dated recent-\emph{J. Math. Phys.} screen used only for orientation is recorded separately in \Cref{subsec:jmp-search-note}.}
+\label{tab:literature-comparison}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.15\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.31\textwidth}}
+\toprule
+Comparison class & Representative literature & Closest overlap with this paper & Increment here and explicit boundary \\
+\midrule
+Exact finite dependence and its limit theory & Hoeffding--Robbins \cite{HoeffdingRobbins1948}, Diananda \cite{Diananda1955}, Holroyd--Liggett \cite{HolroydLiggett2016} & Finite dependence, its CLTs, and natural non-block-factor finitely dependent processes are studied abstractly & \Cref{lem:kernel-factorization-main,lem:one-dep-criterion-main,thm:cycle-block-main} identify an explicit sampled dead-time record whose exact-$1$-dependence point is calculable and accompanied by a lag-two inference formula. The paper does not claim a structure theorem for arbitrary finitely dependent processes. \\
+Hidden-Markov process theory and renewal outputs & Blackwell \cite{Blackwell1957}, Baum--Petrie \cite{BaumPetrie1966}, Diananda \cite{Diananda1955} & Hidden states can generate non-Markov visible laws, and regeneration can make waiting-time analysis explicit & \Cref{lem:renewal-gap-main,prop:recovery-main} give a concrete sampled dead-time hidden-Markov/renewal law with full-support zero runs, strictly increasing hazard, and a closed covariance tail. The paper does not claim a general theorem for arbitrary hidden-Markov outputs. \\
+Dead-time counting and antibunching diagnostics & M\"uller \cite{Muller1973}, Cantor--Teich \cite{CantorTeich1975}, Hadfield \cite{Hadfield2009}, Eisaman \emph{et al.} \cite{EisamanEtAl2011}, Brandes \cite{Brandes2008} & Recovery, waiting times, and suppressed short-time reclicking are standard counting observables & The contribution is not a new hardware model. It is the exact sampled one-recovery-opportunity boundary-reset law and its record consequences: strictly increasing zero-run hazard, covariance phase change, and sub-Poisson counting across the parameter range. \\
+Stationary trajectories and UDW regularization & Letaw \cite{Letaw1981}, Schlicht \cite{Schlicht2004}, Satz \cite{Satz2007}, Louko--Satz \cite{LoukoSatz2006,LoukoSatz2008} & These works fix the stationary-trajectory response setting and regularize the transition rate by spatial profile or smooth switching & \Cref{ass:long-time-switch-main,prop:stationary-udw-response-main} take that response framework as standard input. The manuscript does not claim a new detector regularization; it uses those inputs only to evaluate one fixed calibrated response profile at the selected rates. \\
+Stationary UDW response and KMS thermality & Fewster--Ju\'arez-Aubry--Louko \cite{FewsterJuarezLouko2016}, Ju\'arez-Aubry--Moustos \cite{JuarezAubryMoustos2022}, Perche \cite{PercheTherm2022}, Bunney \cite{Bunney2024StationaryTraj}, Mistry--Pinzul \cite{MistryPinzul2024DiamondTemp} & Stationary detector rates, smooth switching, and thermal ratio identities for KMS states & \Cref{prop:stationary-udw-response-main,cor:spectral-transport-main,thm:horizon-main} use those standard response inputs only to fix one calibrated stationary response profile and then insert the record-selected target rates. The shell statements are therefore conditional level-set algebra inside a chosen response model, not new detector-dynamics theorems. \\
+Quantum output statistics and continuous measurement & Glauber \cite{Glauber1963}, Mandel--Wolf \cite{MandelWolf1995}, Srinivas--Davies \cite{SrinivasDavies1981}, Carmichael \cite{Carmichael1993Book}, Wiseman--Milburn \cite{WisemanMilburn2009}, Barchielli--Gregoratti \cite{BarchielliGregoratti2009} & These works derive photocount laws, correlation functions, trajectories, and output spectra from microscopic measurement models and continuous monitoring schemes & \Cref{prop:recovery-main,prop:spectrum-main,thm:cycle-block-main} study observables from the same broad output-statistics family, but only after one classical sampled interval instrument has been fixed explicitly. The manuscript does not derive that instrument from a microscopic quantum-optical or quantum-filtering model, and it does not claim a general theorem for continuously monitored quantum outputs. \\
+Detector-based QFT measurement and AQFT locality & Sorkin \cite{Sorkin1993}, Fewster--Verch \cite{FewsterVerch2020}, Fewster \cite{Fewster2020}, Polo-G\'omez \emph{et al.} \cite{PoloGomezEtAl2022}, Perche--Mart\'in-Mart\'inez--Louko \cite{PercheLocalized2023}, Pranzini--Keski-Vakkuri \cite{PranziniKeskiVakkuri2025AQFT}, Oeckl \cite{Oeckl2025CausalMeasurement} & These works ask what localized measurements in QFT and AQFT should mean, and where ideal-measurement intuition fails & \Cref{thm:two-mode-main,ass:ratio-data-clt-main,prop:two-mode-delta-main,cor:schwarzschild-branch-main} do not propose a general QFT measurement framework. They give one conditional fixed-radius deterministic inverse/admissibility theorem for denominator ratios inside one fixed calibrated homogeneous response model, followed by a separate covariance-transport theorem under an external ratio-data CLT, with exact shell data still constrained by the undivided equations and one common positive amplitude. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Related-work boundary.}
+The nearby literature splits into four roles that the paper keeps separate.
+On the stochastic side, the record-law results belong beside exact finite
+dependence, hidden-Markov outputs, renewal processes, and dead-time counting
+\cite{HoeffdingRobbins1948,Diananda1955,Blackwell1957,BaumPetrie1966,HolroydLiggett2016,Muller1973,CantorTeich1975,Hadfield2009,EisamanEtAl2011,Brandes2008}.
+On the response side, the stationary UDW inputs and KMS ratio identities come
+from the standard stationary-trajectory and regularized-detector literature
+\cite{Letaw1981,Schlicht2004,Satz2007,LoukoSatz2006,LoukoSatz2008,FewsterJuarezLouko2016,JuarezAubryMoustos2022,PercheTherm2022,Bunney2024StationaryTraj,MistryPinzul2024DiamondTemp}.
+On the measurement side, microscopic output-statistics and AQFT measurement
+frameworks set the scope boundary
+\cite{Glauber1963,SrinivasDavies1981,MandelWolf1995,Carmichael1993Book,WisemanMilburn2009,BarchielliGregoratti2009,Sorkin1993,FewsterVerch2020,Fewster2020,PoloGomezEtAl2022,PercheLocalized2023,PranziniKeskiVakkuri2025AQFT,Oeckl2025CausalMeasurement}.
+Against those backgrounds, the theorem-level claim here remains narrow: one
+explicit sampled boundary-reset record law is analyzed exactly, and the later
+response-side statements are conditional level-set and inverse consequences
+inside a fixed calibrated response model rather than new detector-dynamics or
+general QFT-measurement theorems.
+
+\subsection{Recent \emph{J. Math. Phys.} search note}\label{subsec:jmp-search-note}
+For reproducibility, a dated orientation screen of recent \emph{J. Math.
+Phys.} articles was run on April~24,~2026. It covered research papers
+published from January~1,~2021 through that date. The screen used three steps:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item scan titles and abstracts for overlap with the paper's comparison
+classes: counting statistics, stationary detector response, local-temperature
+or black-hole QFT, and QFT measurement;
+\item inspect the full paper when that topical screen suggested a potentially
+close comparison; and
+\item retain a paper in the note only when it helps orient the surrounding
+literature without being presented as a theorem-by-theorem novelty match.
+\end{enumerate}
+This screen identified Girotti \emph{et al.} \cite{GirottiEtAl2022AtomMaser},
+Bunney \cite{Bunney2024StationaryTraj}, Mistry--Pinzul
+\cite{MistryPinzul2024DiamondTemp}, and Oeckl
+\cite{Oeckl2025CausalMeasurement} as nearby recent \emph{J. Math. Phys.}
+orientation references for the counting, stationary-response, local-temperature, and
+measurement comparison classes already summarized in
+\Cref{tab:literature-comparison}. The same dated screen also checked the 2026
+black-hole-QFT papers of Klein \cite{Klein2026RotatingBH} and Alford
+\cite{Alford2026Hawking}. They remain useful background references for quantum
+state construction and Hawking-radiation asymptotics, but they are not used as
+direct comparators for the paper's detector-selected response loci, shell-pair
+quotients, or fixed-radius inverse statements.
+
+\section{Critical-rate branch and equal-rate limits}
+
+Let
+\[
+p=e^{-\Gamma\Delta\tau},\qquad
+c=e^{-\kappa_{\mathrm r}\Delta\tau},\qquad
+s=\kappa_{\mathrm r}\Delta\tau,\qquad
+x=\frac{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\kappa_{\mathrm r}} .
+\]
+The non-removable critical-rate equation is
+\[
+\log x=s(x-1),
+\qquad\text{equivalently}\qquad
+x e^{-sx}=e^{-s}.
+\]
+Thus, away from the meeting point $s=1$,
+\[
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+=-\frac{1}{\Delta\tau}
+W_k\!\left(-\kappa_{\mathrm r}\Delta\tau\,e^{-\kappa_{\mathrm r}\Delta\tau}\right),
+\qquad
+k=\begin{cases}
+-1,&0<s<1,\\
+0,&s>1.
+\end{cases}
+\]
+The other real branch gives the removable solution $x=1$ of the multiplied
+equation. At $s=1$ the two branches meet and $\Gamma_c=\kappa_{\mathrm r}$.
+
+When $\kappa_{\mathrm r}=\Gamma$ the distinct-root formulas for the renewal
+law are interpreted by continuity. With $\alpha=\Gamma\Delta\tau$ and
+$p=e^{-\alpha}$,
+\[
+\mathbb P(G=k)=
+p^k\bigl[(1-p)+\alpha(k(1-p)-p)\bigr],
+\qquad
+\mathbb P(G\ge k)=p^k(1+\alpha k),
+\]
+and hence
+\[
+h_k=
+\frac{(1-p)+\alpha(k(1-p)-p)}{1+\alpha k},
+\qquad
+(h_{k+1}-h_k)=\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
+\]
+The hidden eigenvalue on the equal-rate line is
+\[
+\lambda_{\mathrm{hid}}=e^{-\Gamma\Delta\tau}(1-\Gamma\Delta\tau).
+\]
+
+For fast sampling at fixed $\kappa_{\mathrm r}$, the same critical equation
+gives
+\[
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+=
+\frac{L+\log L+o(1)}{\Delta\tau},
+\qquad
+L=\log\frac{1}{\kappa_{\mathrm r}\Delta\tau},
+\qquad
+\Delta\tau\downarrow0 .
+\]
+
+\section{Finite-counting identity}
+
+The main text proves the covariance tail
+\[
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},\qquad n\ge1,
+\]
+with $a<\rho$ and $|\lambda_{\mathrm{hid}}|<1$. For the block count
+$N_N=\sum_{t=0}^{N-1}A_t$, stationarity gives
+\[
+\operatorname{Var}(N_N)
+=N\rho(1-\rho)+2\sum_{n=1}^{N-1}(N-n)\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}.
+\]
+Evaluating the geometric sum yields the finite-$N$ identity
+\[
+\operatorname{Var}(N_N)
+=
+N\rho(1-\rho)
++
+\frac{2\rho(a-\rho)}{(1-\lambda_{\mathrm{hid}})^2}
+\bigl(N(1-\lambda_{\mathrm{hid}})-1+\lambda_{\mathrm{hid}}^N\bigr).
+\]
+Dividing by $\mathbb E N_N=N\rho$ and letting $N\to\infty$ gives the
+sub-Poisson Fano limit displayed in the main text.
+
+\section{Ambient residual graph for ratio inversion}
+
+For ambient algebraic radius bookkeeping, write
+\[
+\mathsf e=(\eta,c),\qquad c=(c_1,c_2),
+\]
+and define
+\begin{equation}\label{eq:two-mode-phi-main}
+\Phi_m(\theta,\mathsf e)=R_m(\theta;\eta)-c_m,\qquad
+\Phi=(\Phi_1,\Phi_2).
+\end{equation}
+For the physical detector settings, $c=C$ and
+\[
+\Phi(\theta,(\eta,C))=H(\theta,\eta).
+\]
+Exact generated data at the true parameter are denoted
+\[
+\eta_*=(r_{\varphi,1},r_{{\mathrm{mem}},1},
+        r_{\varphi,2},r_{{\mathrm{mem}},2}),
+\qquad
+\mathsf e_*=(\eta_*,C),
+\]
+and on the fixed-detector slice we write
+\[
+\Phi_C(\theta,\eta)=\Phi(\theta,(\eta,C))=H(\theta,\eta).
+\]
+
+\begin{lemma}[Data-dependent residual graph]
+Let $U_0\subset\RR^2$ and $W_0\subset\RR^q$ be open sets and let
+$G:U_0\times W_0\to\RR^2$ be $C^1$. If $G(\theta_0,w_0)=0$ and
+$D_\theta G(\theta_0,w_0)$ is nonsingular, then there are neighbourhoods
+$U\subset U_0$ of $\theta_0$ and $W\subset W_0$ of $w_0$ and a unique
+$C^1$ map $\Psi:W\to U$ such that $\Psi(w_0)=\theta_0$ and
+\[
+G(\Psi(w),w)=0\qquad(w\in W).
+\]
+After shrinking $U$ and $W$ if necessary, every solution of
+$G(\theta,w)=0$ in $U\times W$ lies on this graph. Freezing the data first
+would give only local uniqueness of a zero of $\theta\mapsto G(\theta,w_0)$;
+the data-to-parameter map is the graph obtained with $w$ retained as the
+parameter.
+\end{lemma}
+
+\begin{proof}
+This is the parameter-dependent implicit function theorem \cite{KrantzParks2002},
+applied with $\theta$ as the unknown and $w$ as the parameter.
+\end{proof}
+
+\begin{corollary}[Ambient residual graph, not a shell-data inverse]\label{cor:ambient-ratio-graph-app-main}
+In the two-mode inverse notation of the main text, let
+\[
+\mathcal E\subset\mathcal D\times(0,\infty)^2
+\]
+be the open algebraic data set on which \eqref{eq:two-mode-phi-main} is
+defined, and fix $(\theta_*,\mathsf e_*)$ with $\Phi(\theta_*,\mathsf e_*)=0$.
+Assume $D_\theta\Phi(\theta_*,\mathsf e_*)$ is nonsingular.
+
+Then there are neighborhoods $U\subset\Theta$ of $\theta_*$ and
+$W\subset\mathcal E$ of $\mathsf e_*$ and a unique $C^1$ map
+\[
+\Psi:W\to U,\qquad \Psi(\mathsf e_*)=\theta_*,
+\]
+such that
+\[
+\Phi(\Psi(\mathsf e),\mathsf e)=0\qquad(\mathsf e\in W).
+\]
+After shrinking $U$ and $W$, every solution in $U\times W$ lies on this graph.
+On the fixed-detector slice
+\[
+W_C=\{\eta\in\mathcal D:(\eta,C)\in W\},
+\qquad
+\Psi_C(\eta)=\Psi((\eta,C)),
+\]
+there is an identity
+\[
+\Phi_C(\Psi_C(\eta),\eta)=0\qquad(\eta\in W_C),
+\]
+and if $\theta\in U$ and $\Phi_C(\theta,\eta)=0$ for some $\eta\in W_C$, then
+$\theta=\Psi_C(\eta)$. This is only an ambient residual graph for the two ratio
+equations. It does not assert that the radius quadruples in $W_C$ are physical
+common-core shell data.
+\end{corollary}
+
+\begin{proof}
+Apply the preceding lemma with $G=\Phi$ and $w=\mathsf e$.
+\end{proof}
+
+\begin{corollary}[Fixed-record local full-shell subset]\label{thm:full-shell-subset-main}
+In the setting of \Cref{cor:ambient-ratio-graph-app-main}, shrink $W_C$ if
+necessary so that the four radii remain in the coordinate range where the
+background family and the response factors are defined. For $\eta\in W_C$ set
+\[
+\theta(\eta)=\Psi_C(\eta),
+\]
+and define the two mode amplitudes along the ratio graph by
+\[
+\mathcal A_m(\eta)=
+\mathcal A_{\varphi,m}(\theta(\eta);\eta)
+=
+\mathcal A_{{\mathrm{mem}},m}(\theta(\eta);\eta),
+\qquad m=1,2,
+\]
+where the equality is the within-mode equality forced by
+$\Phi_C(\theta(\eta),\eta)=0$. Let
+\[
+E_C(\eta)=\mathcal A_1(\eta)-\mathcal A_2(\eta).
+\]
+Then the nearby full common-core shell records in the fixed-detector slice are
+exactly
+\begin{equation}\label{eq:full-shell-subset-main}
+\mathcal P_C
+=
+\{\eta\in W_C:E_C(\eta)=0,\ \mathcal A_1(\eta)>0,
+\text{ and the four radii are exterior-admissible}\}.
+\end{equation}
+The function $E_C$ is $C^1$. In particular, if the exact datum $\eta_*$ is
+exterior-admissible and
+\[
+dE_C(\eta_*)\neq0
+\]
+as a covector on the ambient radius-record space $W_C$, then
+$\mathcal P_C$ is, near $\eta_*$, a nonempty $C^1$ codimension-one submanifold
+of $W_C$. If this transversality fails, the theorem still gives the exact local
+zero-set characterization \eqref{eq:full-shell-subset-main}, but no manifold
+structure is asserted.
+\end{corollary}
+
+\begin{proof}
+For every $\eta\in W_C$, the defining property of the ambient graph gives
+\[
+\Phi_C(\theta(\eta),\eta)=0,
+\]
+which is the pair of physical ratio equations $H_m(\theta(\eta),\eta)=0$.
+\Cref{lem:ratio-admissibility-main} says that each of these two ratio equations
+is equivalent to equality of the ideal-benchmark and memory amplitude estimates
+within the same mode. Hence the displayed definitions of
+$\mathcal A_m(\eta)$ are unambiguous along the graph.
+
+A full common-core shell record requires exactly one positive homogeneous
+hardware prefactor for all four undivided shell equations, together with the
+exterior-range restrictions. Along the ratio graph the two estimates within
+each mode are already equal, so the only remaining cross-mode amplitude
+condition is
+\[
+\mathcal A_1(\eta)=\mathcal A_2(\eta),
+\]
+which is $E_C(\eta)=0$. Positivity of the common amplitude and exterior
+admissibility are the other two conditions in
+\Cref{lem:ratio-admissibility-main}. This proves the set identity
+\eqref{eq:full-shell-subset-main}.
+
+The maps $\Psi_C$, $N$, and $\beta_\infty$ are $C^1$ on the neighbourhoods in
+question, and the amplitude estimates are compositions of $C^1$ functions with
+the smooth exponential function. Therefore $\mathcal A_m$ and $E_C$ are $C^1$.
+At exact generated data, the common-core hypothesis gives
+$E_C(\eta_*)=0$, so $\eta_*\in\mathcal P_C$ after shrinking to preserve
+exterior admissibility and positivity. If $dE_C(\eta_*)\neq0$, the regular
+level-set theorem makes $E_C^{-1}(0)$ a $C^1$ codimension-one submanifold of
+$W_C$ near $\eta_*$. Positivity and exterior admissibility are open conditions,
+so intersecting with them leaves the same local submanifold structure. Without
+the nonvanishing derivative, only the proved zero-set characterization remains.
+\end{proof}
+
+\begin{corollary}[Restriction to full common-core shell records]\label{cor:full-shell-restriction-main}
+In the setting of \Cref{thm:full-shell-subset-main}, let
+$\mathcal P_C\subset W_C$ be the full common-core subset characterized in
+\eqref{eq:full-shell-subset-main}.
+For every $\eta\in\mathcal P_C$, the parameter $\Psi_C(\eta)$ is the unique
+local background parameter in $U$ compatible with the corresponding full
+common-core shell data, and the common amplitude is obtained by evaluating any
+one of the four equal undivided amplitude estimates. Conversely, if
+$\eta\in W_C$ is compatible with full common-core shell equations at some
+$\theta\in U$, then $\theta=\Psi_C(\eta)$ and $\eta\in\mathcal P_C$.
+\end{corollary}
+
+\begin{proof}
+If $\eta\in\mathcal P_C$, then by definition the ratio equations hold at
+$\Psi_C(\eta)$ and the undivided amplitude, positivity, and exterior-range
+checks also hold there. Hence the full shell equations are satisfied with one
+positive common amplitude. If another $\theta\in U$ satisfied the same full
+shell equations, division within each mode would give
+$\Phi_C(\theta,\eta)=0$, so the uniqueness part of
+\Cref{cor:ambient-ratio-graph-app-main} gives $\theta=\Psi_C(\eta)$. The converse is
+the same argument in reverse: full common-core shell equations imply the ratio
+equations and the admissibility checks, hence the local root is $\Psi_C(\eta)$
+and $\eta$ belongs to $\mathcal P_C$.
+\end{proof}
+
+\begin{remark}[Ratio admissibility and amplitude consistency]\label{rem:amplitude-consistency-main}
+\Cref{thm:two-mode-main},
+\Cref{cor:ambient-ratio-graph-app-main}, and
+\Cref{lem:ratio-admissibility-main} separate checks that are sometimes
+conflated. The fixed-radius map $\mathcal R_{\eta_*}$ contains the two
+ratio-level observables and no unknown common amplitude; the main-text theorem
+is the deterministic local inverse branch for those two values together with the fixed-record test
+for whether the recovered parameter still yields one positive common amplitude.
+If the radius record is also varied, the only general statement is the ambient residual graph in
+\Cref{cor:ambient-ratio-graph-app-main}. \Cref{cor:full-shell-restriction-main}
+is the step that restricts that graph to full shell data. A candidate
+ratio-level solution is a full common-core solution only if the four undivided
+amplitude estimates
+\[
+\mathcal A_{\varphi,1}(\theta;\eta),\quad
+\mathcal A_{{\mathrm{mem}},1}(\theta;\eta),\quad
+\mathcal A_{\varphi,2}(\theta;\eta),\quad
+\mathcal A_{{\mathrm{mem}},2}(\theta;\eta)
+\]
+are positive and equal to one common value in the exact model. Thus
+amplitude-free ratio inversion means that the amplitude is not needed to solve
+the two ratio equations; it does not mean that arbitrary radius records
+automatically come from one physical detector core.
+\end{remark}
+
+\section{Compressed abstract calibrated toy-model Schwarzschild specialization}\label{app:schwarzschild-toy}
+
+All Schwarzschild insertions are collected here, away from the main theorem
+chain. They are only abstract calibrated toy-model calculations inside the
+fixed response profile: the lapse profile is inserted into the homogeneous
+response equations, and no exact nonconstant-lapse detector-field realization
+with $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ is claimed.
+
+\subsection{Near-horizon Schwarzschild expansions}
+
+For Schwarzschild with $r_H=2M$ and $h=r-r_H$, the proper distance from the
+horizon is
+\[
+\rho=\int_{r_H}^{r_H+h}\frac{dr}{\sqrt{1-r_H/r}}
+=2\sqrt{r_Hh}+O(h^{3/2}).
+\]
+Consequently
+\[
+h=\frac{\rho^2}{4r_H}+O(\rho^4),
+\]
+and the area excess of an areal sphere satisfies
+\[
+A-A_H=4\pi\bigl((r_H+h)^2-r_H^2\bigr)
+=2\pi\rho^2+O(\rho^4).
+\]
+Together with the small-gap linearized proper-distance ratio from
+\Cref{thm:horizon-main}, this gives the appendix Schwarzschild area-excess specialization
+\begin{equation}\label{eq:area-ratio-main}
+\frac{A_{\varphi}(t)-A_H}{A_{\mathrm{mem}}(t)-A_H}
+=
+C_D(t)^2\Bigl(1+O(\eta(t))+O(\epsilon(t)^2)\Bigr),
+\end{equation}
+under the hypotheses of \Cref{thm:horizon-main}.
+
+\subsection{Homogeneous Schwarzschild toy specialization}
+
+The following formulas are only computations inside the toy calibrated
+homogeneous response function
+\[
+R_\Omega(x)=\frac{A}{e^{\beta_\infty\Omega N(x)}-1}
+\]
+from \Cref{lem:abstract-homogeneous-specialization-main}.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.1cm},
+  width=0.44\textwidth,
+  height=0.30\textwidth,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  title style={font=\footnotesize, align=center},
+  legend style={font=\footnotesize, draw=none, fill=none},
+  every axis plot/.append style={line width=0.95pt},
+  xmin=0.15,
+  xmax=4.0
+]
+\nextgroupplot[
+  xlabel={\shortstack{$\kappa_{\mathrm r}\Delta\tau$\\\scriptsize toy calibrated homogeneous\\\scriptsize response model only}},
+  ylabel={\shortstack{$N$\\\scriptsize toy calibrated homogeneous\\\scriptsize response model only}},
+  title={(a) Toy calibrated homogeneous response model only},
+  ymin=0,
+  ymax=0.26,
+  legend pos=north west
+]
+\addplot[color=blue!70!black] coordinates {(0.25,0.015025) (0.50,0.027658) (0.75,0.038558) (1.00,0.048144) (1.25,0.056697) (1.50,0.064420) (1.75,0.071460) (2.00,0.077927) (2.50,0.089470) (3.00,0.099548) (3.50,0.108493) (4.00,0.116533)};
+\addplot[color=orange!80!black] coordinates {(0.25,0.003018) (0.50,0.008581) (0.75,0.016521) (1.00,0.026776) (1.25,0.039187) (1.50,0.053502) (1.75,0.069411) (2.00,0.086588) (2.50,0.123589) (3.00,0.162646) (3.50,0.202626) (4.00,0.242932)};
+\legend{$N_\varphi$,$N_{\mathrm{mem}}$}
+
+\nextgroupplot[
+  xlabel={\shortstack{$\kappa_{\mathrm r}\Delta\tau$\\\scriptsize toy calibrated homogeneous\\\scriptsize response model only}},
+  ylabel={\shortstack{$\rho_\varphi/\rho_{\mathrm{mem}}$\\\scriptsize toy calibrated homogeneous\\\scriptsize response model only}},
+  title={(b) Toy calibrated homogeneous response model only},
+  ymin=0.4,
+  ymax=5.2,
+  legend pos=north east
+]
+\addplot[color=blue!70!black] coordinates {(0.25,4.978345) (0.50,3.224523) (0.75,2.335776) (1.00,1.799963) (1.25,1.448461) (1.50,1.205102) (1.75,1.029719) (2.00,0.899108) (2.50,0.720381) (3.00,0.605203) (3.50,0.524766) (4.00,0.464775)};
+\addplot[dashed,color=black] coordinates {(0.25,5.375311) (0.50,3.650017) (0.75,2.701930) (1.00,2.078087) (1.25,1.632934) (1.50,1.300430) (1.75,1.044817) (2.00,0.844484) (2.50,0.557734) (3.00,0.371065) (3.50,0.247403) (4.00,0.164812)};
+\legend{Exact ratio,Leading-order prediction}
+\end{groupplot}
+\end{tikzpicture}
+\caption{Toy calibrated homogeneous response model only on the Schwarzschild lapse profile. Here $r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2$, and $\kappa_{\mathrm r}=5$. These curves are bookkeeping inside the fixed calibrated toy model only, not a separately derived exact nonconstant-lapse UDW model. (a)~Lapse values $N_\varphi$ and $N_{\mathrm{mem}}$ as functions of $\kappa_{\mathrm r}\Delta\tau$; the ordering reversal agrees with \Cref{prop:order-main}. (b)~Proper-distance ratio $\rho_\varphi/\rho_{\mathrm{mem}}$ (solid) compared with the small-gap linearization of \Cref{thm:horizon-main} (dashed).}
+\label{fig:shell-radii}
+\end{figure}
+
+For the Schwarzschild insertion used in \Cref{fig:shell-radii},
+\[
+N(r)=\sqrt{1-\frac{r_{\mathrm s}}{r}},
+\qquad r_{\mathrm s}=1.
+\]
+For every exterior radius $r>r_{\mathrm s}$ one has
+\[
+0<N(r)<1.
+\]
+Hence any displayed target value $N_\star\in(0,1)$ determines a unique
+exterior radius through
+\[
+r_\star=\frac{r_{\mathrm s}}{1-N_\star^2}>r_{\mathrm s},
+\qquad
+\star\in\{\varphi,\mathrm{mem}\},
+\]
+and the Schwarzschild regularity derivative is
+\[
+N'(r)=\frac{r_{\mathrm s}}{2r^2N(r)}\neq0
+\qquad\text{for }r>r_{\mathrm s}.
+\]
+Thus every displayed target lapse in $(0,1)$ gives a unique exterior shell and
+satisfies the regular level-set condition. Across the plotted window one reads
+off
+\[
+0.003018\le N_\star\le 0.242932<1,
+\qquad
+\star\in\{\varphi,\mathrm{mem}\},
+\]
+so every plotted point satisfies the range check $0<N_\star<1$. For each
+plotted ideal or memory value, the corresponding radius is the unique exterior
+solution of $N(r)=N_\star$, namely
+\[
+r_\star=\frac{r_{\mathrm s}}{1-N_\star^2}>r_{\mathrm s},
+\qquad
+N'(r_\star)=\frac{r_{\mathrm s}}{2r_\star^2N_\star}>0.
+\]
+Hence every plotted point is an exterior regular shell of this toy
+specialization rather than only a formal response-locus value.
+
+\begin{proposition}[Abstract calibrated toy-model corollary: Schwarzschild algebra]\label{prop:schw-main}
+Assume a fixed calibrated $R_\Omega$. The homogeneous Schwarzschild toy
+specialization yields the following algebraic identities.
+Work under the standing convention for the fixed-radius inverse results, and
+assume the calibrated homogeneous spectral-weight regime, so that the fixed
+calibrated response function $R_\Omega$ is homogeneous. Define the detector
+constants
+\begin{equation}\label{eq:beta-constants-main}
+\beta_{\varphi}(D)=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)\Delta\tau}{\log\varphi}\right),
+\qquad
+\beta_{\mathrm{mem}}(D)=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)}
+{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}\right).
+\end{equation}
+If model-admissible shell data generated by the same response amplitude occur
+at distinct radii $r_{\varphi}\neq r_{\mathrm{mem}}$ in Schwarzschild, then
+\begin{equation}\label{eq:beta-infty-main}
+\beta_\infty^2=
+\frac{\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}}
+{r_{\varphi}-r_{\mathrm{mem}}},
+\end{equation}
+and
+\begin{equation}\label{eq:mass-main}
+M=
+\frac{r_{\varphi}r_{\mathrm{mem}}\bigl(\beta_{\varphi}(D)^2-\beta_{\mathrm{mem}}(D)^2\bigr)}
+{2\bigl(\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}\bigr)}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+In Schwarzschild,
+\[
+N(r)^2=1-\frac{2M}{r}.
+\]
+The two homogeneous shell equations are
+\[
+\frac{\beta_{\varphi}(D)^2}{\beta_\infty^2}=1-\frac{2M}{r_\varphi},
+\qquad
+\frac{\beta_{\mathrm{mem}}(D)^2}{\beta_\infty^2}=1-\frac{2M}{r_{\mathrm{mem}}}.
+\]
+Equivalently,
+\[
+\beta_\infty^2-\frac{2M\beta_\infty^2}{r_\varphi}=\beta_{\varphi}(D)^2,
+\qquad
+\beta_\infty^2-\frac{2M\beta_\infty^2}{r_{\mathrm{mem}}}=\beta_{\mathrm{mem}}(D)^2.
+\]
+This is a nonsingular linear system for $\beta_\infty^2$ and
+$2M\beta_\infty^2$ when $r_\varphi\neq r_{\mathrm{mem}}$. Solving it gives
+\eqref{eq:beta-infty-main} and \eqref{eq:mass-main}. The model-admissibility
+hypothesis is what guarantees that the displayed right-hand sides are positive
+and correspond to a shell outside the horizon; arbitrary pairs of radii and
+detector constants need not do so.
+\end{proof}
+
+Proposition~\ref{prop:schw-main} is exact algebra only within this toy
+calibrated model. It is not amplitude-free, because $\beta_\varphi(D)$ and
+$\beta_{\mathrm{mem}}(D)$ still contain the common response amplitude.
+
+\begin{corollary}[Abstract calibrated toy-model corollary: Schwarzschild branch inverse and residual check]\label{cor:schwarzschild-branch-main}
+Assume a fixed calibrated $R_\Omega$. The Schwarzschild branch reduction has
+the following one-parameter inverse and residual-check form inside the toy
+calibrated model.
+Assume the same fixed calibrated homogeneous response-model setting as in
+\Cref{thm:two-mode-main}, and assume further that the background family
+contains a Hartle--Hawking Schwarzschild branch
+\[
+\iota_{\mathrm{Schw}}:I_M\to\Theta,
+\qquad
+\iota_{\mathrm{Schw}}(M)=(8\pi M,M),
+\]
+defined on an open interval $I_M\subset(0,\infty)$. Fix an exact radius record
+$\eta_*$ produced at some $M_*\in I_M$ by admissible full common-core shell
+data on that branch with one positive shared amplitude $\mathcal A_*>0$, so
+that
+\[
+\theta_*=\iota_{\mathrm{Schw}}(M_*),
+\qquad
+\mathcal R_{\eta_*}(\theta_*)=C
+\]
+and
+\[
+\mathcal A_{\varphi,1}(\theta_*;\eta_*)
+=\mathcal A_{{\mathrm{mem}},1}(\theta_*;\eta_*)
+=\mathcal A_{\varphi,2}(\theta_*;\eta_*)
+=\mathcal A_{{\mathrm{mem}},2}(\theta_*;\eta_*)
+=\mathcal A_*>0,
+\]
+with all four radii lying in the exterior coordinate range at $\theta_*$.
+Choose one detector mode $j\in\{1,2\}$ as the estimation mode and let
+$k\in\{1,2\}\setminus\{j\}$ be the remaining mode. Define the reduced
+Schwarzschild branch ratio functions
+\[
+G_{m,\eta_*}(M)=R_m(\iota_{\mathrm{Schw}}(M);\eta_*),
+\qquad m=1,2.
+\]
+Assume that the fixed radii in $\eta_*$ remain exterior-admissible on a
+neighbourhood of $M_*$ in $I_M$ and that
+\begin{equation}\label{eq:schwarzschild-branch-derivative-main}
+\frac{d}{dM}G_{j,\eta_*}(M_*)\neq0.
+\end{equation}
+Then there are neighbourhoods $I_*\subset I_M$ of $M_*$ and
+$Y_j\subset(0,\infty)$ of $C_j$, together with a unique $C^1$ inverse branch
+\[
+\mathcal J_{\eta_*,j}:Y_j\to I_*,
+\qquad
+\mathcal J_{\eta_*,j}(C_j)=M_*,
+\]
+such that
+\[
+G_{j,\eta_*}(\mathcal J_{\eta_*,j}(y_j))=y_j
+\qquad(y_j\in Y_j).
+\]
+Hence nearby estimated values of the single ratio coordinate $y_j$ recover the
+physical Schwarzschild parameter through
+\[
+\widehat M=\mathcal J_{\eta_*,j}(y_j),
+\qquad
+\widehat\beta_\infty=8\pi\,\widehat M.
+\]
+The second ratio does not provide an independent free coordinate on the
+physical Schwarzschild branch; instead it gives the residual consistency check
+\begin{equation}\label{eq:schwarzschild-branch-residual-main}
+\mathfrak c_{\eta_*,k|j}(y_j,y_k)
+=G_{k,\eta_*}(\mathcal J_{\eta_*,j}(y_j))-y_k.
+\end{equation}
+At the exact physical record one has
+\[
+\mathfrak c_{\eta_*,k|j}(C_j,C_k)=0.
+\]
+Moreover, if exact full fixed-setting shell data occur at the same detector
+settings for a pair $(y_j,y_k)$ with $y_j\in Y_j$, then
+\[
+y_j=C_j,\qquad y_k=C_k,
+\qquad
+\mathfrak c_{\eta_*,k|j}(y_j,y_k)=0,
+\]
+by \Cref{thm:two-mode-main}. Thus on the physical
+Hartle--Hawking Schwarzschild branch the inverse statement is genuinely
+one-parameter, and the remaining ratio is a residual compatibility test rather
+than a second independent inverse coordinate.
+
+If, in addition, a scalar ratio estimator satisfies
+\[
+\sqrt{N}\,(\widehat y_{j,N}-C_j)\Longrightarrow \mathcal N(0,\sigma_j^2),
+\]
+then with
+$
+\widehat M_N=\mathcal J_{\eta_*,j}(\widehat y_{j,N})
+$
+and
+$
+\widehat\beta_{\infty,N}=8\pi\widehat M_N
+$
+one has
+\[
+\sqrt{N}\,(\widehat M_N-M_*)
+\Longrightarrow
+\mathcal N\!\left(0,
+\frac{\sigma_j^2}{\bigl(G_{j,\eta_*}'(M_*)\bigr)^2}\right),
+\]
+and
+\[
+\sqrt{N}\,(\widehat\beta_{\infty,N}-8\pi M_*)
+\Longrightarrow
+\mathcal N\!\left(0,
+\frac{(8\pi)^2\sigma_j^2}{\bigl(G_{j,\eta_*}'(M_*)\bigr)^2}\right).
+\]
+\end{corollary}
+
+\begin{proof}
+Because $\iota_{\mathrm{Schw}}$, $\beta_\infty$, $N$, and the exponential map
+are $C^1$, each $G_{m,\eta_*}$ is a $C^1$ function of $M$ on the
+exterior-admissible branch interval. The exact shell-data hypothesis gives
+$G_{j,\eta_*}(M_*)=C_j$. The nonvanishing derivative in
+\eqref{eq:schwarzschild-branch-derivative-main} is precisely the one-variable
+inverse-function condition, so the ordinary one-dimensional inverse function
+theorem yields the neighbourhoods $I_*,Y_j$ and the unique $C^1$ inverse
+branch $\mathcal J_{\eta_*,j}$.
+
+The residual formula \eqref{eq:schwarzschild-branch-residual-main} is the
+remaining ratio equation evaluated along that recovered branch. At the exact
+record it vanishes because $G_{k,\eta_*}(M_*)=C_k$. If exact full fixed-setting
+shell data were to occur at the same detector settings for some
+$(y_j,y_k)$, then the recovered parameter would be
+$\theta=\iota_{\mathrm{Schw}}(\mathcal J_{\eta_*,j}(y_j))$ and
+\Cref{thm:two-mode-main} would force the full ratio datum to
+equal the unique fixed target $C$, proving the stated necessity of
+$y_j=C_j,y_k=C_k$.
+
+The final two limits are the one-dimensional delta method applied to the $C^1$
+map $\mathcal J_{\eta_*,j}$ at $C_j$, together with the linear relation
+$\beta_\infty=8\pi M$ on the Hartle--Hawking Schwarzschild branch.
+\end{proof}
+
+\subsection{Abstract calibrated homogeneous Schwarzschild-lapse worked example}\label{subsec:worked-example}
+
+The following worked example is only bookkeeping inside the toy calibrated
+homogeneous response function
+$R_\Omega(x)=A/(e^{\beta_\infty\Omega N(x)}-1)$ of
+\Cref{lem:abstract-homogeneous-specialization-main}.
+
+Table~\ref{tab:worked} inserts the Schwarzschild lapse profile into the same
+toy model with $r_{\mathrm s}=2M=1$ (so $\beta_\infty=4\pi$), $\Omega=1$, and
+$\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2$. Two detector modes
+$D_1=(\Omega,\lambda_{\mathrm{sw}},0.5,\,8.0)$ and
+$D_2=(\Omega,\lambda_{\mathrm{sw}},1.2,\,3.0)$ are listed. For each mode, the
+critical rate $\Gamma_c$ comes from \eqref{eq:gamma-c-main}, the shell radii
+come from \Cref{cor:homogeneous-main}, the quotient check uses
+\eqref{eq:ratio-main}, and \Cref{prop:schw-main} is then applied to the $D_1$
+pair to recover $\beta_\infty$ and $M$. The table is bookkeeping for the
+calibrated specialization only.
+
+For the four tabulated shell values, the Schwarzschild shell calculation is
+explicit:
+\[
+N(r)=\sqrt{1-\frac{r_{\mathrm s}}{r}},
+\qquad
+0<N(r)<1 \quad\text{for } r>r_{\mathrm s},
+\]
+\[
+r=\frac{r_{\mathrm s}}{1-N^2}>r_{\mathrm s}
+\qquad\text{for every }N\in(0,1),
+\]
+\[
+N'(r)=\frac{r_{\mathrm s}}{2r^2N(r)}\neq0
+\qquad\text{for }r>r_{\mathrm s}.
+\]
+Therefore any displayed target $N_\star\in(0,1)$ produces a unique exterior
+shell radius
+\[
+r_\star=\frac{r_{\mathrm s}}{1-N_\star^2}>r_{\mathrm s},
+\qquad
+\star\in\{\varphi,\mathrm{mem}\},
+\]
+and satisfies the regular level-set condition. The table records the four
+interval checks for $N_\varphi$ and $N_{\mathrm{mem}}$ in both detector modes,
+together with the corresponding derivative values
+\[
+N'(r_\star)=\frac{r_{\mathrm s}}{2r_\star^2N_\star}>0.
+\]
+The table records these derivative values numerically, so each tabulated locus
+is a genuine exterior regular shell inside the toy Schwarzschild
+specialization.
+
+For the physical Hartle--Hawking Schwarzschild inverse problem, however, the
+parameter family is already constrained by $\beta_\infty=8\pi M$. The relevant
+one-parameter statement is therefore the branch corollary
+\Cref{cor:schwarzschild-branch-main}, not the ambient two-parameter Jacobian.
+Using $D_1$ as the estimation mode, the branch function
+\[
+G_{1,\eta_*}(M)=R_1\bigl((8\pi M,M);\eta_*\bigr)
+\]
+has derivative
+\[
+G_{1,\eta_*}'(M_*)\approx -24.10,
+\]
+so nearby estimates of the first ratio coordinate recover $M$ and hence
+$\beta_\infty=8\pi M$ locally. The second mode is then checked through the
+residual
+\[
+\mathfrak c_{\eta_*,2|1}(y_1,y_2)
+=G_{2,\eta_*}(\mathcal J_{\eta_*,1}(y_1))-y_2,
+\]
+which vanishes at the exact target pair up to the displayed table rounding.
+
+For comparison with the abstract fixed-radius ratio map,
+\Cref{thm:two-mode-main} can still be evaluated at the same fixed radius record
+$\eta_*$ in the ambient coordinate chart $\theta=(\beta_\infty,M)$, giving
+\[
+\det D_\theta\mathcal R_{\eta_*}(\theta_*)\approx-2.97\times10^{-1}.
+\]
+That determinant confirms the abstract inverse branch of
+\Cref{thm:two-mode-main} for nearby ratio values at fixed $\eta_*$. It is
+ambient ratio-map bookkeeping, not the physical Hartle--Hawking branch
+statement.
+
+\input{generated/tab_worked_example}
+
+\section{Numerical bookkeeping}
+
+The figures and the worked Schwarzschild table use the same detector constants
+as the main text: $r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, and
+$\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2$. For mode $m$ the ratio target tabulated in the
+worked example is
+\[
+C_m=\frac{\Delta\tau_m\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)}
+{\log\varphi}.
+\]
+The numerical values in the table are generated from the critical-rate branch
+above and the homogeneous lapse-level equations in the article. The fixed-radius
+ratio inverse check treats $(\beta_\infty,M)$ as independent coordinates
+before imposing any Hartle--Hawking relation.
+
+\subsection{Deterministic numerical reproduction recipe}\label{subsec:numerical-recipe}
+
+The numerical items in the manuscript are deterministic evaluations of the
+closed formulas already proved in the main text. No stochastic simulation or
+external fit is used. This subsection records a paper-local recipe for
+reproducing
+\Cref{fig:hazard-cov,fig:spectrum-fano,fig:shell-radii,tab:worked}
+directly from those formulas. Throughout, use a
+root-solve tolerance of $10^{-12}$ and round displayed table entries to six
+decimal places.
+
+\paragraph{Step 1: solve the critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.}
+Given positive $\kappa_{\mathrm r}$ and $\Delta\tau$, set
+\[
+s=\kappa_{\mathrm r}\Delta\tau,
+\qquad
+H_s(x)=\log x-s(x-1).
+\]
+If $|s-1|<10^{-12}$, use the equal-rate value
+$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)=\kappa_{\mathrm r}$. Otherwise solve
+$H_s(x)=0$ for the non-removable root $x_c\neq1$ from
+\Cref{lem:critical-rate-main}. A deterministic bisection scheme is:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item If $0<s<1$, set $x_{\mathrm{lo}}=1+10^{-12}$ and
+$x_{\mathrm{hi}}=2$. While $H_s(x_{\mathrm{hi}})\ge0$, replace
+$x_{\mathrm{hi}}$ by $2x_{\mathrm{hi}}$.
+\item If $s>1$, set $x_{\mathrm{hi}}=1-10^{-12}$ and
+$x_{\mathrm{lo}}=1/2$. While $H_s(x_{\mathrm{lo}})\ge0$, replace
+$x_{\mathrm{lo}}$ by $x_{\mathrm{lo}}/2$.
+\item Bisect the resulting bracket until both the bracket width and the
+residual in \eqref{eq:gamma-c-main} are below $10^{-12}$, and then set
+\[
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)=\kappa_{\mathrm r}x_c.
+\]
+\end{enumerate}
+The Lambert-$W$ form in \Cref{rem:edge-cases} gives the same answer and may be
+used as an independent cross-check. After this common rate computation, the
+remaining targets are listed below in the final manuscript numbering:
+\Cref{fig:hazard-cov,fig:spectrum-fano,fig:shell-radii,tab:worked}.
+
+\paragraph{Target A: \Cref{fig:hazard-cov} (hazard and covariance plot).}
+Fix $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$, and the three rates
+\[
+\Gamma\in\{1.2,\Gamma_c(5,0.3),3.2\}.
+\]
+For each $\Gamma$:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item Compute $p$ and $c$ from \eqref{eq:p-c-recall-main}, then $a$ and $b$
+from \eqref{eq:a-b-recall-main}, $\rho$ from \eqref{eq:rho-main}, and
+$\lambda_{\mathrm{hid}}$ from \eqref{eq:lambda-hid-main}.
+\item For panel~(a), evaluate the hazard $h_k$ for $k=0,\dots,8$ from
+\eqref{eq:hazard-main}; only if $\Gamma=\kappa_{\mathrm r}$ should the
+equal-rate formula \eqref{eq:equal-rate-survival-hazard-main} be used instead.
+\item For panel~(b), evaluate
+\[
+\frac{\operatorname{Cov}(A_0,A_n)}
+     {\left|\operatorname{Cov}(A_0,A_1)\right|}
+\]
+for $n=1,\dots,8$ from \eqref{eq:cov-main}. No Monte Carlo sampling is needed;
+the curve is a direct plot of the closed covariance formula.
+\end{enumerate}
+
+\paragraph{Target B: \Cref{fig:spectrum-fano} (spectrum and Fano plot).}
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item For panel~(a), fix $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$, and use
+\[
+\Gamma\Delta\tau\in\{0.3,0.6,1.0\},
+\qquad
+\theta\in\left\{0,\frac{\pi}{12},\frac{2\pi}{12},\dots,\pi\right\}.
+\]
+For each of the three values of $\Gamma$, compute the same
+$p,c,a,b,\rho,\lambda_{\mathrm{hid}}$ from
+\eqref{eq:p-c-recall-main}, \eqref{eq:a-b-recall-main}, \eqref{eq:rho-main},
+and \eqref{eq:lambda-hid-main}, and evaluate the spectral
+density $f(\theta)$ from \eqref{eq:spectrum-main}.
+\item For panel~(b), use the dimensionless grid
+\[
+\Gamma\Delta\tau\in\{0.1,0.2,\dots,2.0\},
+\qquad
+\kappa_{\mathrm r}\Delta\tau\in\{0.5,1.0,1.5\}.
+\]
+Because the formula depends only on these two dimensionless combinations, one
+may set $\Delta\tau=1$, $\Gamma=\Gamma\Delta\tau$, and
+$\kappa_{\mathrm r}=\kappa_{\mathrm r}\Delta\tau$ when evaluating the curve.
+For each pair, compute
+\[
+F=
+1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}},
+\]
+the asymptotic Fano factor from \Cref{prop:spectrum-main}, and plot the
+reference line $F=1$ for the Poisson benchmark.
+\end{enumerate}
+
+\paragraph{Target C: \Cref{fig:shell-radii} (shell-radii plot).}
+Use the deterministic grid
+\[
+\kappa_{\mathrm r}\Delta\tau\in
+\{0.25,0.50,0.75,1.00,1.25,1.50,1.75,2.00,2.50,3.00,3.50,4.00\}
+\]
+with $\kappa_{\mathrm r}=5$, hence $\Delta\tau=s/5$. For each grid value:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item Compute $\Gamma_c$ by Step~1 and
+$\Gamma_\varphi=\log\varphi/\Delta\tau$.
+\item Compute $\beta_\varphi$ and $\beta_{\mathrm{mem}}$ from
+\eqref{eq:betaphi-betamem-main} with $\Omega=1$ and
+$\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2$, then set
+\[
+N_\varphi=\beta_\varphi/\beta_\infty,
+\qquad
+N_{\mathrm{mem}}=\beta_{\mathrm{mem}}/\beta_\infty,
+\qquad
+\beta_\infty=4\pi.
+\]
+These are the plotted lapse values in panel~(a).
+\item In the Schwarzschild lapse specialization with $r_{\mathrm s}=1$,
+invert $N(r)^2=1-r_{\mathrm s}/r$ to obtain
+\[
+r_\star=\frac{1}{1-N_\star^2},
+\qquad
+\star\in\{\varphi,\mathrm{mem}\}.
+\]
+\item Compute the exact proper distances from the horizon by the radial line
+element
+\[
+\rho(r)=\int_{1}^{r}\frac{dr'}{\sqrt{1-1/r'}} ,
+\]
+using any deterministic quadrature with absolute error below $10^{-12}$, and
+plot the exact ratio
+$\rho_\varphi/\rho_{\mathrm{mem}}$ for panel~(b).
+\item Plot the dashed small-gap predictor in panel~(b) as
+\[
+C_D=\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi},
+\]
+the leading-order ratio from \Cref{thm:horizon-main}.
+\end{enumerate}
+
+\paragraph{Target D: \Cref{tab:worked} (worked Schwarzschild table).}
+The following Schwarzschild calculations are not claimed to arise from an
+independently derived exact UDW response with
+$\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$. They are computations inside the
+abstract calibrated homogeneous response function
+$R_\Omega(x)=A/(e^{\beta_\infty\Omega N(x)}-1)$ of
+\Cref{lem:abstract-homogeneous-specialization-main}.
+
+Use the same abstract homogeneous Schwarzschild-lapse specialization as in the
+table caption:
+\[
+r_{\mathrm s}=1,\qquad
+\beta_\infty=4\pi,\qquad
+\Omega=1,\qquad
+\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2,
+\]
+with detector modes
+\[
+D_1:\ (\Delta\tau,\kappa_{\mathrm r})=(0.5,8.0),
+\qquad
+D_2:\ (\Delta\tau,\kappa_{\mathrm r})=(1.2,3.0).
+\]
+Then:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item For each mode $m$, compute $\Gamma_c$ by Step~1,
+$\Gamma_\varphi=\log\varphi/\Delta\tau_m$, and
+$C_m=\Delta\tau_m\Gamma_c/\log\varphi$.
+\item Compute $\beta_\varphi(D_m)$ and $\beta_{\mathrm{mem}}(D_m)$ from
+\eqref{eq:beta-constants-main}, then
+$N_\varphi=\beta_\varphi/\beta_\infty$ and
+$N_{\mathrm{mem}}=\beta_{\mathrm{mem}}/\beta_\infty$.
+\item Convert those lapse values to shell radii with
+$r_\star=1/(1-N_\star^2)$, $\star\in\{\varphi,\mathrm{mem}\}$, and verify the
+ratio-check row from \eqref{eq:ratio-main}.
+\item Recover $\beta_\infty^2$ and $M$ from the $D_1$ shell pair using
+\eqref{eq:beta-infty-main} and \eqref{eq:mass-main}.
+\item Form the fixed radius record $\eta_*$ from the four tabulated radii and
+set $\theta_*=(4\pi,1/2)$. Evaluate the branch derivative and residual in
+\Cref{cor:schwarzschild-branch-main} by
+\[
+G'_{1,\eta_*}(M_*)
+\approx
+\frac{G_{1,\eta_*}(M_*+h)-G_{1,\eta_*}(M_*-h)}{2h},
+\qquad
+h=10^{-6},
+\]
+and
+\[
+\mathfrak c_{\eta_*,2|1}(C_1,C_2)
+=
+G_{2,\eta_*}(\mathcal J_{\eta_*,1}(C_1))-C_2.
+\]
+\item Evaluate the ambient fixed-radius ratio-map Jacobian of
+\Cref{thm:two-mode-main} at $\theta_*$ by centered finite differences with the
+same step size $h=10^{-6}$ in the $(\beta_\infty,M)$ coordinates.
+\end{enumerate}
+With those steps, the rows of \Cref{tab:worked} are reproduced to the stated
+rounding directly from the formulas in the paper.
+
+\ifdefined\SUPPLEMENTARYAPPENDIX
+\else
+\input{references.tex}
+\fi
+\supplementaryenddocument

@@ -1,0 +1,150 @@
+\section{Symbolic source models}\label{sec:readout}
+
+We next pass from the source layer to the symbolic input. The Sturmian rotation model supplies the golden-mean grammar, while a nondegenerate local readout explains why the normalization has to be defined on the full cube $\{0,1\}^m$ rather than only on the admissible Sturmian language.
+
+\subsection{Coding map and induced law}\label{sec:readout:maps}
+
+Only the induced symbolic law will be used. We therefore introduce the source dynamics through a measurable finite-alphabet coding.
+
+\begin{definition}[Finite-alphabet readout]\label{def:readout}
+Fix a measurable map $R:H\to\mathcal{A}$ into a finite alphabet $\mathcal{A}$. Given a scan sequence $(h_t)_{t\in\NN}\subset H$ (typically $h_t=h_0+t\alpha$), the \emph{readout process} is the symbolic sequence
+\[
+(A_t)_{t\in\NN},\qquad A_t:=R(h_t)\in\mathcal{A}.
+\]
+\end{definition}
+
+When $\mathcal{A}=\{0,1\}$ and $R(h)=\mathbf{1}_W(h)$, this is the usual binary indicator coding. Finite-resolution variants replace the sharp indicator by a smoothed kernel converging to $\mathbf{1}_W$ as the resolution parameter tends to zero.
+
+\begin{definition}[Coding map and induced input law]\label{def:coding-law}
+Let $(H,\mathcal{B},\mu,T)$ be the scan dynamics at the source layer, where $\mu$ is $T$-invariant. The \emph{coding map} induced by $R$ is
+\[
+\iota_R:H\to\mathcal{A}^{\NN},\qquad
+\iota_R(h):=\bigl(R(T^t h)\bigr)_{t\ge 0}.
+\]
+Let $\sigma:\mathcal{A}^{\NN}\to\mathcal{A}^{\NN}$ denote the left shift. The \emph{induced input law} on symbolic sequences is the pushforward
+\[
+\nu_R:=(\iota_R)_*\mu.
+\]
+\end{definition}
+
+\begin{proposition}[Stationarity and ergodicity of the induced law]\label{prop:induced-law}
+The induced law $\nu_R$ is $\sigma$-invariant. If $\mu$ is ergodic for $T$, then $\nu_R$ is ergodic for $\sigma$.
+\end{proposition}
+
+\begin{proof}
+For a cylinder $[a_0\cdots a_{m-1}]$ in $\mathcal{A}^{\NN}$,
+\[
+\nu_R(\sigma^{-1}[a_0\cdots a_{m-1}])
+=\mu\bigl(\{h:\ R(T^{t+1}h)=a_t,\ t=0,\dots,m-1\}\bigr).
+\]
+By $T$-invariance of $\mu$, this equals
+\[
+\mu\bigl(\{h:\ R(T^{t}h)=a_t,\ t=0,\dots,m-1\}\bigr)=\nu_R([a_0\cdots a_{m-1}]),
+\]
+so $\nu_R$ is shift-invariant. Ergodicity is preserved under factors \cite{Walters1982}.
+\end{proof}
+
+\subsection{The Fibonacci--Sturmian model}\label{sec:readout:sturmian}
+
+When the scan dynamics is an irrational circle rotation and the readout is a two-interval coding, the resulting process is Sturmian \cite{MorseHedlund1940,Lothaire2002,Queffelec2010}. We use only two standard features of this model: minimal aperiodic binary complexity and, in the golden regime, compatibility with the grammar used for stabilization.
+
+\begin{proposition}[Rotation-to-grammar bridge in the golden regime]\label{prop:sturmian-no11}
+Let $T:\TT^1\to\TT^1$ be the rotation $T(\theta)=\theta+\alpha\pmod{1}$ and take the readout
+\[
+R(\theta):=\mathbf{1}_{[0,\,1-\alpha)}(\theta).
+\]
+If $\alpha\ge \tfrac12$, then the induced symbolic process $A_t:=R(T^t\theta_0)$ is $11$-free, hence belongs to the binary subshift that forbids the word $11$. In particular this holds for the golden slope $\alpha=\varphi^{-1}$, where $\varphi=(1+\sqrt5)/2$.
+\end{proposition}
+
+\begin{proof}
+If $A_t=1$, then $\theta_t:=T^t\theta_0\in[0,1-\alpha)$, so $\theta_{t+1}=\theta_t+\alpha\in[\alpha,1)$. When $\alpha\ge\tfrac12$ the intervals $[0,1-\alpha)$ and $[\alpha,1)$ are disjoint, so $A_{t+1}=0$.
+\end{proof}
+
+\begin{remark}[Sturmian input]
+Proposition~\ref{prop:sturmian-no11} shows that a noiseless Fibonacci source lies in the admissible language~$X_m$. Together with Proposition~\ref{thm:fold-suite}(ii), this means that local stabilization acts as the identity on the noiseless source. The model remains useful because it supplies the grammar of the normalization, and its linear word complexity gives the total-variation bound in Section~\ref{sec:fp:tv}.
+\end{remark}
+
+\subsection{Passage to the full cube}\label{sec:readout:noise}
+
+The noiseless Fibonacci source does not populate the full cube. The following elementary observation explains why the full cube appears as soon as a nondegenerate finite readout is applied.
+
+\begin{proposition}[Positive local noise gives full support]\label{thm:noise-full-support}
+Let $B=(B_t)_{t\in\NN}$ be the ideal Fibonacci/Sturmian process from Proposition~\ref{prop:sturmian-no11}, taken under its stationary rotation law. Let $A=(A_t)_{t\in\NN}$ be obtained from $B$ through a strictly positive local binary channel $Q=(Q_{ba})_{a,b\in\{0,1\}}$ in the sense that, conditional on any raw block $b_0\cdots b_{m-1}$,
+\[
+\PP(A_0\cdots A_{m-1}=a_0\cdots a_{m-1}\mid B_0\cdots B_{m-1}=b_0\cdots b_{m-1})
+=
+\prod_{t=0}^{m-1} Q_{b_t a_t},
+\]
+and assume $Q_{ba}>0$ for all $a,b\in\{0,1\}$. Then for every $m\ge 1$ and every word $\omega\in\{0,1\}^m$,
+\[
+\PP(A_0\cdots A_{m-1}=\omega)>0.
+\]
+In particular, the noisy length-$m$ output law has support equal to the full ambient cube $\{0,1\}^m$.
+\end{proposition}
+
+\begin{proof}
+Fix $m\ge 1$ and $\omega\in\{0,1\}^m$. The stationary Sturmian block law has at least one length-$m$ word in its support, so there exists a word $x=x_0\cdots x_{m-1}$ with
+\[
+\PP(B_0\cdots B_{m-1}=x)>0.
+\]
+Conditioning on that event gives
+\[
+\PP(A_0\cdots A_{m-1}=\omega)
+\ge
+\PP(B_0\cdots B_{m-1}=x)\prod_{t=0}^{m-1}Q_{x_t\omega_t},
+\]
+and the right-hand side is strictly positive because every channel entry is positive.
+\end{proof}
+
+\begin{proposition}[Finite-radius detector realization of full support]\label{prop:detector-realization}
+Let $B=(B_t)_{t\in\mathbb Z}$ be the stationary two-sided version of the ideal Fibonacci/Sturmian process. Fix an interaction radius $L\ge 0$, coefficients $\rho_{-L},\dots,\rho_L\ge 0$ with $\sum_{j=-L}^L\rho_j>0$, a threshold $\tau\in\RR$, and i.i.d.\ detector noises $(\xi_t)_{t\in\mathbb Z}$ independent of $B$, whose common law has a density that is strictly positive on $\RR$. Define the finite-resolution signal and binary output by
+\[
+S_t:=\sum_{j=-L}^L \rho_j B_{t+j},
+\qquad
+A_t:=\mathbf{1}_{\{S_t+\xi_t\ge \tau\}}.
+\]
+Then, conditional on any neighborhood block
+$b_{-L}\cdots b_{m-1+L}\in\{0,1\}^{m+2L}$ whose source cylinder has positive probability, the output block law factorizes as
+\begin{equation*}
+\begin{aligned}
+\PP(&A_0\cdots A_{m-1}=a_0\cdots a_{m-1}
+\mid B_{-L}\cdots B_{m-1+L}=b_{-L}\cdots b_{m-1+L})
+\\
+&=
+\prod_{t=0}^{m-1} p_t(b)^{a_t}(1-p_t(b))^{1-a_t}
+\end{aligned}
+\end{equation*}
+for some probabilities $p_t(b)\in(0,1)$. Consequently every word $\omega\in\{0,1\}^m$ has positive probability under the measured output process.
+\end{proposition}
+
+\begin{proof}
+Fix a neighborhood block $b:=b_{-L}\cdots b_{m-1+L}$ with positive source probability. For each $t=0,\dots,m-1$, the analog signal
+\[
+s_t(b):=\sum_{j=-L}^L \rho_j b_{t+j}
+\]
+is a deterministic real number. Since the common noise law of $\xi_t$ has a density that is strictly positive on $\RR$, the tail probability
+\[
+p_t(b):=\PP(\xi_t\ge \tau-s_t(b))
+\]
+lies strictly between $0$ and $1$. Independence of the detector noises therefore gives the displayed product formula.
+
+Now fix $\omega\in\{0,1\}^m$. Choose any neighborhood block $b$ with
+\[
+\PP(B_{-L}\cdots B_{m-1+L}=b)>0;
+\]
+such a block exists because the support of the source process is nonempty. Conditioning on that event and using the product formula yields
+\[
+\PP(A_0\cdots A_{m-1}=\omega)
+\ge
+\PP(B_{-L}\cdots B_{m-1+L}=b)\prod_{t=0}^{m-1} p_t(b)^{\omega_t}(1-p_t(b))^{1-\omega_t}>0.
+\]
+Thus the finite-radius detector gives full support on the ambient cube. When $L=0$ this is the one-symbol strictly positive channel of Proposition~\ref{thm:noise-full-support}; for $L>0$ it is the finite-neighborhood analogue, and the same conditioning argument gives the support conclusion.
+\end{proof}
+
+\begin{remark}
+Proposition~\ref{thm:noise-full-support} gives the memoryless statement, while Proposition~\ref{prop:detector-realization} gives the finite-radius analogue. Thus, after strictly positive local uncertainty is introduced at the readout layer, length-$m$ words need not remain in the Sturmian language.
+\end{remark}
+
+\subsection{Empirical block laws for the model}\label{sec:readout:empirical}
+
+For each depth $m$, the induced law $\nu_R$ determines a raw-word marginal on $\{0,1\}^m$. In the irrational-rotation model these marginals are obtained from the partition of $\TT^1$ into nonempty depth-$m$ Sturmian atoms, whose number is at most $m+1$. This linear complexity is the only source-specific input used in Section~\ref{sec:fp:tv}.
