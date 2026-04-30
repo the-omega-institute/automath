@@ -154,4 +154,10 @@ theorem paper_minMatrix_full_package :
     (Matrix.of (fun (i j : Fin 3) => (min (i.val + 1) (j.val + 1) : ℤ))) * minMatrix_inv_3 = 1 :=
   ⟨minMatrix_det_eq_one, minMatrix_mul_inv_2, minMatrix_mul_inv_3⟩
 
+/-- Paper wrapper for the determinant half of the sine-product normalization.
+    cor:pom-Kk-det-sine-product-normalization -/
+theorem paper_pom_kk_det_sine_product_normalization (k : Nat) (hk : 1 ≤ k) :
+    (Matrix.of (fun (i j : Fin k) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1 := by
+  exact minMatrix_det_eq_one k hk
+
 end Omega
