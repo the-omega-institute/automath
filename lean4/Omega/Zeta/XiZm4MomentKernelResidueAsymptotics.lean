@@ -10,7 +10,7 @@ namespace Omega.Zeta
 
 An exponentially accurate pole-coefficient asymptotic forces the logarithmic growth rate
 `log rho`. -/
-theorem paper_xi_zm4_moment_kernel_residue_asymptotics
+theorem xi_zm4_moment_kernel_residue_asymptotics_log_growth_from_exponential_error
     (a : ℕ → ℝ) (r rho C alpha B : ℝ) (hr : 0 < r ∧ r < 1) (hrho : rho = r⁻¹)
     (hC : 0 < C) (ha : 0 < alpha ∧ alpha < rho) (hB : 0 ≤ B)
     (hasymp : ∀ m : ℕ, |a m - C * rho ^ m| ≤ B * alpha ^ m)
