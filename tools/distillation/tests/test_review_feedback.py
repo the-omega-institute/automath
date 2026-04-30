@@ -141,6 +141,16 @@ class ReviewFeedbackTests(unittest.TestCase):
         self.assertIn("Do not target conclusion", contract)
         self.assertIn("blank lines inside display math", contract)
 
+    def test_probe_representability_contract_prefers_strong_local_pom(self):
+        contract = distill._family_specific_deepening_contract(
+            {"name": "probe representability and reconstruction"}
+        )
+
+        self.assertIn("strong POM", contract)
+        self.assertIn("para__spg-coordinate-bundle-screen-audit-closure.tex", contract)
+        self.assertIn("Konig", contract)
+        self.assertIn("finite-probe residual-budget", contract)
+
 
 if __name__ == "__main__":
     unittest.main()

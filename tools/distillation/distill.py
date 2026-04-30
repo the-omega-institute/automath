@@ -1724,6 +1724,36 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  of construction/rigidity separation.",
             ]
         )
+    if family_slug == "probe_representability_and_reconstruction":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has failed when a strong POM reconstruction result was",
+                "  diluted by generic SPG inverse-limit material or CDIM protocol",
+                "  restatement. Output at most 1-2 writebacks, and it is acceptable",
+                "  to output only the strong POM writeback if it closes the family.",
+                "- Treat the POM curvature/minimal-phantom-depth writeback as the",
+                "  preferred primary shape: it should define two finite cones or",
+                "  probes, identify the first depth where their readings differ,",
+                "  and prove a real minimal phantom or reconstruction obstruction.",
+                "- Do not target para__spg-coordinate-bundle-screen-audit-closure.tex.",
+                "  SPG is allowed only if the supplied local context already discusses",
+                "  abstract screen probe descent, pro-representability, or a named",
+                "  probe tower with restriction maps. A generic finite-branching tree",
+                "  or Konig lemma argument is not enough by itself.",
+                "- CDIM is allowed only for a compact finite-probe residual-budget",
+                "  theorem with an explicit finite candidate set, probe map, maximum",
+                "  fibre size, and register lower bound. Do not append verifier",
+                "  semantics or protocol-only conclusions as an extra enumerated",
+                "  item.",
+                "- A valid proof must use the target's local objects to prove one",
+                "  non-tautological representability/reconstruction consequence:",
+                "  minimal phantom depth, uniqueness from separating probes, a finite",
+                "  residual-budget lower bound, or failure of reconstruction from a",
+                "  named obstruction. Reject yourself if the theorem would remain true",
+                "  as a generic statement about arbitrary finite sets.",
+            ]
+        )
     if family_slug == "descent_to_closure_theorem_chains":
         return "\n".join(
             [
