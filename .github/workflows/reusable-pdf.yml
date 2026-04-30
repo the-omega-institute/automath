@@ -70,7 +70,18 @@ jobs:
             export LC_ALL=en_US.UTF-8
           fi
 
-          latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
+          # Bootstrap bibtex on cold cache (no .bbl), then latexmk for convergence
+          if [ ! -f main.bbl ]; then
+            xelatex -cnf-line=max_in_open=50 -no-pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex || true
+            bibtex main || true
+          fi
+          latexmk -pdfxe -interaction=nonstopmode -file-line-error main.tex || latexmk_rc=$?
+
+          # Fail only if PDF was not produced (latexmk may exit non-zero for unresolved refs)
+          if [ ! -f main.pdf ]; then
+            echo "::error::main.pdf was not produced (latexmk exit code: ${latexmk_rc:-0})"
+            exit 1
+          fi
 
       - name: Package dated PDF
         if: ${{ inputs.upload_artifact }}

@@ -1,0 +1,468 @@
+\documentclass[11pt,a4paper]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[mathscr]{euscript}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{enumitem}
+\usepackage{booktabs,array}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{mathtools}
+\raggedbottom
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\disc}{Disc}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\Rot}{Rot}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Irr}{Irr}
+\DeclareMathOperator{\Li}{Li}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\FP}{FP}
+\DeclareMathOperator{\Log}{Log}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\TT}{\mathbb{T}}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\title[Adams--M\"obius primitive inversion]{Adams--M\"obius primitive inversion for finite-group extensions of shifts of finite type}
+
+\author{Haobo Ma}
+\address{Research Department, CHRONOAI PTE.\ LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981, Singapore}
+\email{haobo@chronoai.co}
+
+\date{}
+
+\begin{document}
+
+\begin{abstract}
+For finite-group extensions of mixing subshifts of finite type, we
+develop a primitive determinant calculus in Peter--Weyl coordinates. The
+theorem package is finite-group theoretic. First, twisted
+determinants, which record periodic labels, are converted into primitive
+Peter--Weyl series by an Adams--M\"obius inversion that accounts for the
+operations \(g\mapsto g^m\) produced by repetitions of primitive
+orbits. Second, under the stated twisted spectral gap, those primitive
+series have well-defined Perron-point values, giving conjugacy-class
+Mertens constants; Hermitian character orthogonality then reads off the
+non-trivial primitive channels from the constant deviations. The
+linear span of cyclic quotient observables is the one-dimensional shadow
+of the full primitive class profile at the Perron point, under
+\(\eta<\lambda\). The root-of-unity layer used for
+scalar sampling is separate: it appears only after replacing the cocycle
+by the canonical cyclic lift. The orthogonal complement is a genuine
+non-abelian defect. In the \(S_3\) model the vanishing sign trace is the
+quadratic one-dimensional Adams obstruction, while the standard
+two-dimensional channel gives a certified non-zero non-abelian
+contribution. The scalar finite part of
+\(\zeta_A(z)=\det(I-zA)^{-1}\) and the canonical cyclic-lift comparison
+are auxiliary finite-matrix inputs: they provide the trivial-channel
+normalisation and a separate fixed-matrix scalar recovery model, not a
+parallel theorem chain.
+\end{abstract}
+
+\subjclass[2020]{37B10, 37D35, 11M41, 20C15}
+\keywords{Dynamical $\zeta$-function, subshift of finite type, Adams operation,
+primitive orbit, finite-group extension, finite-part constant}
+
+\maketitle
+
+\input{sec_introduction}
+\input{sec_preliminaries}
+\input{sec_chebotarev}
+\input{sec_secondary_term}
+\input{sec_eta_gap}
+\input{sec_holder_transfer}
+\input{sec_shadows}
+\input{sec_finite_part}
+\input{sec_conclusion}
+\appendix
+\input{sec_appendices}
+
+\begin{thebibliography}{99}
+
+\bibitem{Baladi2000PositiveTransfer}
+V.~Baladi,
+\textit{Positive Transfer Operators and Decay of Correlations},
+Advanced Series in Nonlinear Dynamics, vol.~16,
+World Scientific, River Edge, NJ, 2000.
+
+\bibitem{Baladi2018ZetaDeterminants}
+V.~Baladi,
+\textit{Dynamical Zeta Functions and Dynamical Determinants for Hyperbolic Maps:
+A Functional Approach},
+Ergebnisse der Mathematik und ihrer Grenzgebiete. 3. Folge / A Series of Modern Surveys in Mathematics, vol.~68,
+Springer, Cham, 2018.
+
+\bibitem{AdachiSunada1987TwistedPF}
+T.~Adachi and T.~Sunada,
+Twisted {P}erron--{F}robenius theorem and {$L$}-functions,
+\textit{J. Funct. Anal.} \textbf{71} (1987), no.~1, 1--46.
+
+\bibitem{AdlerKitchensMarcus1985FiniteGroupActions}
+R.~L.~Adler, B.~Kitchens and B.~H.~Marcus,
+Finite group actions on shifts of finite type,
+\textit{Ergodic Theory Dynam. Systems} \textbf{5} (1985), no.~1, 1--25,
+doi:10.1017/S0143385700002728.
+
+\bibitem{Bass1992Ihara}
+H.~Bass,
+The {I}hara--{S}elberg zeta function of a tree lattice,
+\textit{Internat. J. Math.} \textbf{3} (1992), no.~6, 717--797.
+
+\bibitem{BowenLanford1970Zeta}
+R.~Bowen and O.~E.~Lanford, III,
+Zeta functions of restrictions of the shift transformation,
+in \textit{Global Analysis},
+Proc. Sympos. Pure Math., vol.~14,
+Amer. Math. Soc., Providence, RI, 1970, pp.~43--49.
+
+\bibitem{BoyleSchmieding2017FiniteGroupExtensions}
+M.~Boyle and S.~Schmieding,
+Finite group extensions of shifts of finite type: {$K$}-theory, {P}arry and {L}iv\v{s}ic,
+\textit{Ergodic Theory Dynam. Systems} \textbf{37} (2017), no.~4, 1026--1059,
+doi:10.1017/etds.2015.87.
+
+\bibitem{BoyleCarlsenEilers2020FlowEquivalenceGSFT}
+M.~Boyle, T.~M.~Carlsen and S.~Eilers,
+Flow equivalence of {$G$}-{SFT}s,
+\textit{Trans. Amer. Math. Soc.} \textbf{373} (2020), no.~4, 2591--2657,
+doi:10.1090/tran/7981.
+
+\bibitem{ChoeKwakParkSato2007Bartholdi}
+Y.-B.~Choe, J.~H.~Kwak, Y.~S.~Park and I.~Sato,
+Bartholdi zeta and {$L$}-functions of weighted digraphs, their coverings and products,
+\textit{Adv. Math.} \textbf{213} (2007), no.~2, 865--886.
+
+\bibitem{Coles2025VassilievWritheAxiomA}
+S.~Coles,
+Vassiliev invariants and writhe for periodic orbits of {A}xiom {A} flows,
+\textit{Ergodic Theory Dynam. Systems} \textbf{45} (2025), no.~9,
+2659--2671,
+doi:10.1017/etds.2025.7.
+
+\bibitem{CrismaleDelVecchioGrisetaRossi2025NoncommutativeSkewProduct}
+V.~Crismale, S.~Del Vecchio, M.~E.~Griseta and S.~Rossi,
+Non-commutative skew-product extension dynamical systems,
+\textit{Ergodic Theory Dynam. Systems} \textbf{45} (2025), no.~9,
+2672--2694,
+doi:10.1017/etds.2025.9.
+
+\bibitem{Jezequel2019ParameterRegularity}
+M.~J\'ez\'equel,
+Parameter regularity of dynamical determinants of expanding maps of the circle and an application to linear response,
+\textit{Discrete Contin. Dyn. Syst.} \textbf{39} (2019), no.~2, 927--958.
+
+\bibitem{Hashimoto1989ZetaFiniteGraphs}
+K.-I.~Hashimoto,
+Zeta functions of finite graphs and representations of {$p$}-adic groups,
+in \textit{Automorphic Forms and Geometry of Arithmetic Varieties},
+Adv. Stud. Pure Math., vol.~15,
+Academic Press, Boston, MA, 1989, pp.~211--280.
+
+\bibitem{Hashimoto1990ZetaLFunctionsFiniteGraphs}
+K.-I.~Hashimoto,
+On zeta and {$L$}-functions of finite graphs,
+\textit{Internat. J. Math.} \textbf{1} (1990), no.~4, 381--396,
+doi:10.1142/S0129167X90000204.
+
+\bibitem{Hashimoto1992ArtinDensityPrimeCycles}
+K.-I.~Hashimoto,
+Artin type {$L$}-functions and the density theorem for prime cycles on
+finite graphs,
+\textit{Internat. J. Math.} \textbf{3} (1992), no.~6, 809--826,
+doi:10.1142/S0129167X92000370.
+
+\bibitem{Fiebig1993PeriodicFiniteGroupActions}
+U.-R.~Fiebig,
+Periodic points and finite group actions on shifts of finite type,
+\textit{Ergodic Theory Dynam. Systems} \textbf{13} (1993), no.~3, 485--514,
+doi:10.1017/S0143385700007495.
+
+\bibitem{Fried1983PeriodicPointsTwistedCoefficients}
+D.~Fried,
+Periodic points and twisted coefficients,
+in \textit{Geometric Dynamics},
+Lecture Notes in Math., vol.~1007,
+Springer, Berlin, Heidelberg, 1983, pp.~261--293,
+doi:10.1007/BFb0061419.
+
+\bibitem{Fried1983HomologicalIdentitiesClosedOrbits}
+D.~Fried,
+Homological identities for closed orbits,
+\textit{Invent. Math.} \textbf{71} (1983), no.~2, 419--442,
+doi:10.1007/BF01389105.
+
+\bibitem{SilverWilliams2005InvariantFiniteGroupActions}
+D.~S.~Silver and S.~G.~Williams,
+An invariant of finite group actions on shifts of finite type,
+\textit{Ergodic Theory Dynam. Systems} \textbf{25} (2005), no.~6, 1985--1996,
+doi:10.1017/S0143385705000246.
+
+\bibitem{Horton2007IharaDigraphs}
+M.~D.~Horton,
+Ihara zeta functions of digraphs,
+\textit{Linear Algebra Appl.} \textbf{425} (2007), no.~1, 130--142.
+
+\bibitem{Humbert2025FirstRuelleResonance}
+T.~Humbert,
+First {R}uelle resonance for an {A}nosov flow with smooth potential,
+\textit{Ergodic Theory Dynam. Systems} \textbf{45} (2025), no.~8,
+2439--2475,
+doi:10.1017/etds.2024.131.
+
+\bibitem{LindMarcus1995}
+D.~Lind and B.~Marcus,
+\textit{An Introduction to Symbolic Dynamics and Coding},
+Cambridge University Press, Cambridge, 1995.
+
+\bibitem{Lind1996ZetaZdActions}
+D.~A.~Lind,
+A zeta function for {$\mathbb Z^d$}-actions,
+in \textit{Ergodic Theory of {$\mathbb Z^d$} Actions},
+London Math. Soc. Lecture Note Ser., vol.~228,
+Cambridge University Press, Cambridge, 1996, pp.~433--450,
+doi:10.1017/CBO9780511662812.019.
+
+\bibitem{KatsudaSunada1988HomologyClosedGeodesics}
+A.~Katsuda and T.~Sunada,
+Homology and closed geodesics in a compact {R}iemann surface,
+\textit{Amer. J. Math.} \textbf{110} (1988), no.~1, 145--156,
+doi:10.2307/2374542.
+
+\bibitem{KatsudaSunada1990ClosedOrbitsHomology}
+A.~Katsuda and T.~Sunada,
+Closed orbits in homology classes,
+\textit{Publ. Math. Inst. Hautes \'Etudes Sci.} \textbf{71} (1990),
+5--32,
+doi:10.1007/BF02699875.
+
+\bibitem{KotaniSunada2000ZetaFiniteGraphs}
+M.~Kotani and T.~Sunada,
+Zeta functions of finite graphs,
+\textit{J. Math. Sci. Univ. Tokyo} \textbf{7} (2000), no.~1, 7--25.
+
+\bibitem{Lalley1987DistributionPeriodicOrbits}
+S.~P.~Lalley,
+Distribution of periodic orbits of symbolic and {A}xiom {A} flows,
+\textit{Adv. in Appl. Math.} \textbf{8} (1987), no.~2, 154--193,
+doi:10.1016/0196-8858(87)90012-1.
+
+\bibitem{Manning1971Axiom}
+A.~Manning,
+Axiom {A} diffeomorphisms have rational zeta functions,
+\textit{Bull. London Math. Soc.} \textbf{3} (1971), 215--220.
+
+\bibitem{MizunoSato2001ZetaDigraphs}
+H.~Mizuno and I.~Sato,
+Zeta functions of digraphs,
+\textit{Linear Algebra Appl.} \textbf{336} (2001), 181--190.
+
+\bibitem{MizunoSato2000ZetaGraphCoverings}
+H.~Mizuno and I.~Sato,
+Zeta functions of graph coverings,
+\textit{J. Combin. Theory Ser. B} \textbf{80} (2000), no.~2, 247--257,
+doi:10.1006/jctb.2000.1983.
+
+\bibitem{ArtinMazur1965PeriodicPoints}
+M.~Artin and B.~Mazur,
+On periodic points,
+\textit{Ann. of Math. (2)} \textbf{81} (1965), no.~1, 82--99,
+doi:10.2307/1970384.
+
+\bibitem{Parry1983PrimeOrbit}
+W.~Parry,
+An analogue of the prime number theorem for closed orbits of shifts of
+finite type and their suspensions,
+\textit{Israel J. Math.} \textbf{45} (1983), no.~1, 41--52,
+doi:10.1007/BF02760669.
+
+\bibitem{Sharp1991Mertens}
+R.~Sharp,
+An analogue of {M}ertens' theorem for closed orbits of {A}xiom {A} flows,
+\textit{Bol. Soc. Brasil. Mat. (N.S.)} \textbf{21} (1991), no.~2,
+205--229,
+doi:10.1007/BF01237365.
+
+\bibitem{MetropolisRota1983Necklaces}
+N.~Metropolis and G.-C.~Rota,
+Witt vectors and the algebra of necklaces,
+\textit{Adv. Math.} \textbf{50} (1983), no.~2, 95--125,
+doi:10.1016/0001-8708(83)90035-X.
+
+\bibitem{PakapongpunWard2009FunctorialOrbit}
+A.~Pakapongpun and T.~Ward,
+Functorial orbit counting,
+\textit{J. Integer Seq.} \textbf{12} (2009), Article 09.2.4.
+
+\bibitem{Pollicott1992AgmonTauberian}
+M.~Pollicott,
+{A}gmon's complex {T}auberian theorem and closed orbits for hyperbolic
+and geodesic flows,
+\textit{Proc. Amer. Math. Soc.} \textbf{114} (1992), no.~4, 1105--1108,
+doi:10.1090/S0002-9939-1992-1045147-X.
+
+\bibitem{NooraniParry1992ChebotarevShifts}
+M.~S.~M.~Noorani and W.~Parry,
+A {C}hebotarev theorem for finite homogeneous extensions of shifts,
+\textit{Bol. Soc. Brasil. Mat.} \textbf{23} (1992), no.~1--2, 137--151,
+doi:10.1007/BF02584816.
+
+\bibitem{Noorani1997HomogeneousExtensionsMarkov}
+M.~S.~M.~Noorani,
+Ergodicity and weak-mixing of homogeneous extensions of measure-preserving transformations with applications to {M}arkov shifts,
+\textit{Monatsh. Math.} \textbf{123} (1997), no.~2, 149--170,
+doi:10.1007/BF01305969.
+
+\bibitem{OHare2025FiniteDataRigidity}
+T.~A.~O'Hare,
+Finite data rigidity for one-dimensional expanding maps,
+\textit{Ergodic Theory Dynam. Systems} \textbf{45} (2025), no.~5,
+1597--1618,
+doi:10.1017/etds.2024.83.
+
+\bibitem{Parry1999LivsicNonAbelian}
+W.~Parry,
+The {L}iv\v{s}ic periodic point theorem for non-abelian cocycles,
+\textit{Ergodic Theory Dynam. Systems} \textbf{19} (1999), no.~3, 687--701,
+doi:10.1017/S0143385799146789.
+
+\bibitem{Parry1997SkewProductsCompactLie}
+W.~Parry,
+Skew products of shifts with a compact {L}ie group,
+\textit{J. London Math. Soc. (2)} \textbf{56} (1997), no.~2, 395--404,
+doi:10.1112/S0024610797005462.
+
+\bibitem{ParryPollicott1997LivsicCompactLie}
+W.~Parry and M.~Pollicott,
+The {L}iv\v{s}ic cocycle equation for compact {L}ie group extensions of
+hyperbolic systems,
+\textit{J. London Math. Soc. (2)} \textbf{56} (1997), no.~2, 405--416,
+doi:10.1112/S0024610797005474.
+
+\bibitem{ParryPollicott1986Chebotarev}
+W.~Parry and M.~Pollicott,
+The {C}hebotarov theorem for {G}alois coverings of {A}xiom {A} flows,
+\textit{Ergodic Theory Dynam. Systems} \textbf{6} (1986), no.~1, 133--148,
+doi:10.1017/S0143385700003333.
+
+\bibitem{ParryPollicott1990Zeta}
+W.~Parry and M.~Pollicott,
+\textit{Zeta Functions and the Periodic Orbit Structure of Hyperbolic Dynamics},
+Ast\'erisque, nos.~187--188,
+Soci\'et\'e Math\'ematique de France, 1990.
+Available at \url{https://www.numdam.org/item/AST_1990__187-188__1_0/}.
+
+\bibitem{ParryPollicott2008BauerSkewProducts}
+W.~Parry and M.~Pollicott,
+An analogue of {B}auer's theorem for closed orbits of skew products,
+\textit{Ergodic Theory Dynam. Systems} \textbf{28} (2008), no.~2,
+535--546,
+doi:10.1017/S0143385707000557.
+
+\bibitem{PollicottSharp2007Chebotarev}
+M.~Pollicott and R.~Sharp,
+Chebotarev-type theorems in homology classes,
+\textit{Proc. Amer. Math. Soc.} \textbf{135} (2007), no.~10, 3323--3332,
+doi:10.1090/S0002-9939-07-08923-X.
+
+\bibitem{PollicottSharp2008ArtinReciprocitySkewProducts}
+M.~Pollicott and R.~Sharp,
+Addendum: an analogue of {A}rtin reciprocity for closed orbits of skew
+products,
+\textit{Ergodic Theory Dynam. Systems} \textbf{28} (2008), no.~2,
+547--552,
+doi:10.1017/S0143385707000569.
+
+\bibitem{Sharp1993ClosedOrbitsHomologyAnosov}
+R.~Sharp,
+Closed orbits in homology classes for {A}nosov flows,
+\textit{Ergodic Theory Dynam. Systems} \textbf{13} (1993), no.~2,
+387--408,
+doi:10.1017/S0143385700007434.
+
+\bibitem{Sunada1986LFunctionsGeometry}
+T.~Sunada,
+{$L$}-functions in geometry and some applications,
+in \textit{Curvature and Topology of Riemannian Manifolds (Katata,
+1985)},
+Lecture Notes in Math., vol.~1201,
+Springer, Berlin, 1986, pp.~266--284,
+doi:10.1007/BFb0075662.
+
+\bibitem{Wehrhahn1990AperiodicRings}
+R.~Wehrhahn,
+Aperiodic rings, necklace rings, and Witt vectors,
+\textit{Adv. Math.} \textbf{81} (1990), no.~1, 1--29,
+doi:10.1016/0001-8708(90)90002-5.
+
+\bibitem{Ruelle1976ZetaExpanding}
+D.~Ruelle,
+Zeta-functions for expanding maps and {A}nosov flows,
+\textit{Invent. Math.} \textbf{34} (1976), 231--242.
+
+\bibitem{Ruelle1978Thermodynamic}
+D.~Ruelle,
+\textit{Thermodynamic Formalism},
+Addison-Wesley, Reading, MA, 1978.
+
+\bibitem{Sato2008WeightedBartholdiCoverings}
+I.~Sato,
+Weighted {B}artholdi zeta functions of graphs and their coverings,
+\textit{Internat. J. Math.} \textbf{19} (2008), 1443--1462.
+
+\bibitem{StarkTerras1996FiniteGraphsCoverings}
+H.~M.~Stark and A.~A.~Terras,
+Zeta functions of finite graphs and coverings,
+\textit{Adv. Math.} \textbf{121} (1996), no.~1, 124--165.
+
+\bibitem{StarkTerras2000FiniteGraphsCoveringsII}
+H.~M.~Stark and A.~A.~Terras,
+Zeta functions of finite graphs and coverings, {Part} {II},
+\textit{Adv. Math.} \textbf{154} (2000), no.~1, 132--195.
+
+\bibitem{StarkTerras2007FiniteGraphsCoveringsIII}
+H.~M.~Stark and A.~A.~Terras,
+Zeta functions of finite graphs and coverings, {III},
+\textit{Adv. Math.} \textbf{208} (2007), no.~1, 467--489.
+
+\bibitem{Shen2023ComplexValuedAnalyticTorsion}
+S.~Shen,
+Complex valued analytic torsion and dynamical zeta function on locally symmetric spaces,
+\textit{Int. Math. Res. Not. IMRN} \textbf{2023} (2023), no.~5, 3676--3745.
+
+\bibitem{Serre1977LinearRepresentations}
+J.-P.~Serre,
+\textit{Linear Representations of Finite Groups},
+Graduate Texts in Mathematics, vol.~42,
+Springer-Verlag, New York-Heidelberg, 1977.
+
+\end{thebibliography}
+
+\end{document}

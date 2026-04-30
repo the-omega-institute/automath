@@ -118,6 +118,264 @@ p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
 \leanverified{paper\_recursive\_addressing\_observer\_indexed\_reading\_of\_emergent\_arithmetic}
 \end{corollary}
 
+\begin{proposition}[对象层等式的有限 forcing 账本正规形]\label{distill:euclid_elements-finite_construction_certificate_families-forcing-equality-ledger-normal-form}
+固定信息状态 \(p\)。考虑由下列 primitive 语法生成的对象层等式证明：
+\begin{enumerate}
+  \item 已在某个共同细化状态 \(q\le p\) 上非 \(\mathsf{NULL}\) 的读出 \(\mathrm{Read}_{\mathrm{US},q}(a)\)；
+  \item 定义 \ref{def:observer-indexed-value-preserving-rewrite} 意义下已登记的值保持重写；
+  \item common-notion 规则：自反、对称、传递以及对已定义对象层值的替换。
+\end{enumerate}
+称一份有限 equality ledger 为一棵有限有向无环证明树，其叶节点只允许是同一非 \(\mathsf{NULL}\) 读出的对象层同一性或已登记值保持重写，其内节点只允许使用上述 common-notion 规则。则在该语法内：
+\begin{enumerate}
+  \item 若参与复合表达式的各读出没有共同细化状态使其落在同一类型化域中，则该表达式在状态 \(p\) 上不定义；
+  \item 任一有限 equality ledger 的根结论
+  \[
+  t=t'
+  \]
+  都满足
+  \[
+  p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
+  \]
+  对所有使两侧已定义的地址--值环境 \(\eta\) 成立；
+  \item 反过来，凡是在上述 primitive 语法中推出的对象层等式，都可整理为一份有限 equality ledger。因此，在该语法内，等式不能由图示相似性或规范化步骤凭空产生；它必须回指到某个非 \(\mathsf{NULL}\) 读出、某条值保持重写或一条 common-notion 规则。
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[随机分支读出的确定性冻结与提升门控]\label{prop:distill-bourgain-forcing-random-certificate-extraction}
+固定信息状态 \(p\)，有限指标集 \(I\)，以及对每个 \(i\in I\) 的细化状态 \(q_i\le p\)。令 \(\mathcal E\) 表示一个对象层等式断言 \(t=t'\)。假设给定有限审计数据
+\[
+(\lambda_i,L_i,\sigma_i,\pi_i)_{i\in I},
+\]
+其中 \(\lambda_i\in\QQ_{\ge0}\)、\(\sum_i\lambda_i=1\)，\(L_i\) 是一份候选有限 equality ledger 或空符号，\(\sigma_i,\pi_i\in\{0,1\}\)。这些数据的语义规定如下：若 \(\sigma_i=1\)，则 \(L_i\) 是在状态 \(q_i\) 上证明 \(\mathcal E\) 的有限 equality ledger，因而对所有使两侧在 \(q_i\) 上已定义的地址--值环境 \(\eta\) 有
+\[
+q_i\Vdash \operatorname{Val}_{q_i,\eta}(t)=\operatorname{Val}_{q_i,\eta}(t').
+\]
+若 \(\pi_i=1\)，则验证器还显式登记了提升规则
+\[
+(q_i,L_i,\mathcal E)\leadsto_p \mathcal E,
+\]
+其含义正是
+\[
+p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
+\]
+对所有使两侧在 \(p\) 上已定义的环境 \(\eta\) 成立。定义该有限随机分支族的可提升成功质量为
+\[
+M_p(I):=\sum_{i\in I}\lambda_i\sigma_i\pi_i.
+\]
+则：
+\begin{enumerate}
+  \item 若 \(M_p(I)>0\)，则存在 \(i_\ast\in I\) 使 \(\lambda_{i_\ast}>0\)、\(\sigma_{i_\ast}=1\)、\(\pi_{i_\ast}=1\)。冻结三元组 \((q_{i_\ast},L_{i_\ast},\mathcal E)\) 后得到状态 \(p\) 上的一份确定性对象层等式证书；
+  \item 若 \(\sum_i\lambda_i\sigma_i>0\)，则至少存在某个细化状态 \(q_i\) 上的确定性等式 ledger；但除非相应 \(π_i=1\)，该 ledger 只停留在 \(q_i\) 层，不能自动升级为 \(p\) 上的 forcing 结论；
+  \item 若 \(M_p(I)=0\)，则只能推出当前抽样分支族中没有同时满足成功与提升登记的分支。它不推出 \(p\) 上 \(\mathcal E\) 为假，也不排除存在未列入 \(I\) 的其它确定性证明账本。
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[局部证书提升的反向单调性缺口]\label{prop:distill-gromov-forcing-local-certificate-promotion-gate}
+固定信息状态 \(p\)、对象层断言 \(\mathcal E\)，以及有限个真细化状态
+\[
+q_i\le p\qquad(i\in I),
+\]
+其中 \(I\ne\varnothing\)，且没有 \(p\le q_i\) 的等价退化。假设在每个 \(q_i\) 上都已经登记一份有限 forcing ledger \(L_i\)，证明
+\[
+q_i\Vdash \mathcal E.
+\]
+在只允许使用下列规则的语法内：
+\begin{enumerate}
+  \item 非 \(\mathsf{NULL}\) 读出、值保持重写与有限 equality ledger；
+  \item 命题 \ref{prop:observer-indexed-readout-forcing-criterion} 的细化方向单调性；
+  \item 已显式登记的提升规则 \((q,L,\mathcal E)\leadsto_p\mathcal E\)，
+\end{enumerate}
+若不存在任何以某个 \(L_i\) 为输入的提升规则 \((q_i,L_i,\mathcal E)\leadsto_p\mathcal E\)，也不存在直接位于状态 \(p\) 的有限 equality ledger 证明 \(\mathcal E\)，则这些局部证书不能推出
+\[
+p\Vdash \mathcal E.
+\]
+等价地，局部证书族给出的只是形式局部实例化；把它升级为状态 \(p\) 上的对象层事实，需要额外的提升账本。
+\end{proposition}
+
+\begin{theorem}[同界有限窗口闭包失败的极限骨架判别]\label{distill:gromov-coarse_limit_obstruction_families-forcing-uniform-window-limit-skeleton}
+固定信息状态 \(p\)、对象层断言 \(\mathcal E\)，以及整数 \(B\ge1\)。对每个深度 \(b\ge0\)，令
+\[
+\mathcal L_b^{\le B}(p,\mathcal E)
+\]
+为一个有限集合，其元素解释为深度 \(b\) 内、复杂度不超过 \(B\) 的形式闭包账本；这里复杂度只允许计数非 \(\mathsf{NULL}\) 读出、值保持重写、common-notion 步骤以及已经登记的提升规则。假设这些账本带有有限窗口限制映射
+\[
+\rho_{b',b}:\mathcal L_{b'}^{\le B}(p,\mathcal E)\longrightarrow
+\mathcal L_b^{\le B}(p,\mathcal E)\qquad(b'\ge b)
+\]
+并满足
+\[
+\rho_{b,b}=\mathrm{id},\qquad
+\rho_{b'',b}=\rho_{b',b}\circ\rho_{b'',b'}\qquad(b''\ge b'\ge b).
+\]
+再假设同界有限窗口闭包成立，即
+\[
+\rho_{b',b}\bigl(\mathcal L_{b'}^{\le B}(p,\mathcal E)\bigr)
+=\mathcal L_b^{\le B}(p,\mathcal E)\ne\varnothing
+\qquad(b'\ge b).
+\]
+定义同界形式极限骨架空间
+\[
+\mathfrak S_B(p,
+\mathcal E):=\varprojlim_b\mathcal L_b^{\le B}(p,\mathcal E).
+\]
+最后设有一个谓词 \(\mathsf{Hol}\subseteq\mathfrak S_B(p,\mathcal E)\)，其语义是该兼容形式账本族可由当前 primitive 语法中的单一状态 \(p\) 全局闭包账本编译而来，并要求其健全性为：若 \(s\in\mathsf{Hol}\)，则当前语法确实给出状态 \(p\) 上的全局闭包证书。
+
+若当前 primitive 语法下不存在状态 \(p\) 上的全局闭包账本证明 \(\mathcal E\)，则
+\[
+\mathfrak S_B(p,\mathcal E)\setminus\mathsf{Hol}\ne\varnothing.
+\]
+特别地，在所有有限窗口都满足同一个分辨率界 \(B\) 的前提下，任何全局闭包失败都不能表现为某个有限窗口的局部缺陷；它必然表现为一个兼容的、但不可 holonomic 编译的非平凡极限骨架。
+\end{theorem}
+
+\begin{proposition}[forcing 账本的 \texorpdfstring{\v Cech}{Cech} 提升判据]\label{distill:cech_cohomology-local_to_global_certificate_descent-forcing-cech-promotion-criterion}
+固定信息状态 \(p\)、对象层断言 \(\mathcal E\)，以及有限覆盖型细化族
+\[
+q_i\le p\qquad(i\in I).
+\]
+设每个 \(q_i\) 上均有一份非 \(\mathsf{NULL}\) 的局部 forcing 账本 \(L_i\) 证明 \(q_i\Vdash\mathcal E\)。令 \(A\) 为阿贝尔规范修正群，并假设在每个非空共同细化重叠 \(q_i\wedge q_j\) 上，局部账本 \(L_i,L_j\) 的差由唯一元素
+\[
+\alpha_{ij}\in A
+\]
+记录，且在三重共同细化上满足余循环条件
+\[
+\alpha_{ij}+\alpha_{jk}+\alpha_{ki}=0.
+\]
+记 \(\alpha\in Z^1(N;A)\)，其中 \(N\) 是该有限细化图解的 nerve。设当前 primitive 语法允许的反向提升规则恰为下列形式：在某个允许的共同细化 \(r:N'\to N\) 上，若 \(r^\ast\alpha\) 是余边界，则可先以顶点 \(A\)-规范重置局部账本，再把重置后的相容局部账本编译为 \(p\Vdash\mathcal E\)；若 \(r^\ast\alpha\) 不是余边界，则该提升规则不可使用。
+
+则：
+\begin{enumerate}
+  \item 若存在允许细化 \(r:N'\to N\) 使
+  \[
+  [r^\ast\alpha]=0\in\check H^1(N';A),
+  \]
+  则当前语法给出状态 \(p\) 上的确定性 forcing 证书
+  \[
+  p\Vdash\mathcal E;
+  \]
+  \item 若对所有允许细化 \(r\) 均有
+  \[
+  [r^\ast\alpha]\ne0,
+  \]
+  且不存在直接位于 \(p\) 层的有限账本证明 \(\mathcal E\)，则局部账本族 \((L_i)_{i\in I}\) 不能推出 \(p\Vdash\mathcal E\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}[有限读出不变量的细化稳定判别与缺口账本]\label{distill:cech_cohomology-refinement_stability_separation-recursive-readout-refinement-gap-ledger}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 中的有限满射逆系统
+\[
+(\mathcal A_b,\pi_{c\to b})_{c\ge b\ge0}
+\]
+及其逆极限 \(\mathcal A_\infty\)，并记
+\[
+p_b:\mathcal A_\infty\to\mathcal A_b
+\]
+为第 \(b\) 层投影。固定 \(c\ge b\)、有限集合 \(S\)、粗层读出
+\(I_b:\mathcal A_b\to S\) 与细层候选读出 \(J_c:\mathcal A_c\to S\)。定义细化缺口账本
+\[
+\mathfrak G_{c,b}(J_c,I_b)
+:=\{\,x\in\mathcal A_c:\ J_c(x)\ne I_b(\pi_{c\to b}(x))\,\}.
+\]
+则下列断言成立：
+\begin{enumerate}
+  \item \(J_c\) 与 \(I_b\) 表示同一个对象层有限不变量，当且仅当
+  \[
+  \mathfrak G_{c,b}(J_c,I_b)=\varnothing,
+  \]
+  等价地 \(J_c=I_b\circ\pi_{c\to b}\)。此时二者在逆极限上给出同一个柱读出
+  \[
+  J_c\circ p_c=I_b\circ p_b.
+  \]
+  \item 若 \(\mathfrak G_{c,b}(J_c,I_b)\ne\varnothing\)，则不存在函数
+  \(K:\mathcal A_\infty\to S\) 同时满足
+  \[
+  K=I_b\circ p_b,\qquad K=J_c\circ p_c.
+  \]
+  因而该失配只能作为有限分辨率缺口账本记录，不能作为状态 \(p\) 上的对象层刚性结论或值保持重写使用。
+  \item 更一般地，若一条 forcing equality ledger 同时调用 \(I_b\) 与 \(J_c\)，则它必须先给出
+  \(\mathfrak G_{c,b}(J_c,I_b)=\varnothing\) 的细化相容证书；否则该 ledger 在对象层不闭合。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一项只是细化相容性的定义展开。若缺口账本为空，则对每个 \(x\in\mathcal A_c\) 都有
+\(J_c(x)=I_b(\pi_{c\to b}(x))\)，即 \(J_c=I_b\circ\pi_{c\to b}\)。与逆极限投影恒等式
+\(p_b=\pi_{c\to b}\circ p_c\) 复合，得到
+\[
+J_c\circ p_c=I_b\circ\pi_{c\to b}\circ p_c=I_b\circ p_b.
+\]
+反过来，若 \(J_c=I_b\circ\pi_{c\to b}\)，则定义中的不等式从不发生，故缺口账本为空。
+
+证明第二项。取 \(x\in\mathfrak G_{c,b}(J_c,I_b)\)。由于逆系统的限制映射满射，有限节点 \(x\in\mathcal A_c\) 可延拓为某个稳定地址 \(a\in\mathcal A_\infty\)，满足 \(p_c(a)=x\)。于是
+\[
+(J_c\circ p_c)(a)=J_c(x)\ne I_b(\pi_{c\to b}(x))=(I_b\circ p_b)(a).
+\]
+故同一个函数 \(K\) 不可能同时等于这两个柱读出。该结论只说明两个有限覆盖读出之间缺少细化相容性；它没有给出任何非 \(\mathsf{NULL}\) 读出的对象层等式，也没有给出值保持重写。因此按命题 \ref{prop:observer-indexed-value-preserving-no-creation} 与推论 \ref{cor:observer-indexed-explicit-lifting} 的语义，它只能进入 gap ledger。
+
+第三项由前两项和有限 equality ledger 的叶节点规则推出。ledger 的叶节点必须回指到同一非 \(\mathsf{NULL}\) 对象层读出或已登记的值保持重写；若 \(I_b\) 与 \(J_c\) 尚未通过细化相容证书识别为同一柱读出，则它们只是两个不同有限分辨率观察。把这种失配直接写成等式会把有限覆盖伪不变量提升为对象层事实，违反 forcing 的显式提升原则。证毕。
+\end{proof}
+
+\begin{proof}
+若 \([r^\ast\alpha]=0\)，则存在 \(0\)-上链 \(\beta\in C^0(N';A)\) 使 \(r^\ast\alpha=\delta\beta\)。将每个拉回局部账本按对应顶点的 \(-\beta\) 作规范重置。对任意重叠边，其新的差为
+\[
+(r^\ast\alpha)_{vw}-\beta_w+\beta_v=0.
+\]
+因此重置后的局部账本在全部共同细化重叠上一致。由命题中规定的 primitive 反向提升规则，这一相容族可编译为状态 \(p\) 上的有限 forcing 证书，故 \(p\Vdash\mathcal E\)。
+
+反过来，假设所有允许细化上的类均非零，并且不存在直接位于 \(p\) 层的有限账本证明。当前语法中，从真细化层回到 \(p\) 层的唯一通道，是某个允许细化上由余边界条件触发的 \v Cech 提升规则。若局部账本族仍能推出 \(p\Vdash\mathcal E\)，则该推导不能来自直接 \(p\)-层账本，只能来自某个细化 \(r\) 上的提升规则。按规则的必要条件，必须有 \([r^\ast\alpha]=0\)，与假设矛盾。故这些局部证书只能证明各细化片上的局部 forcing 事实；它们不自动构成 \(p\) 层事实。证毕。
+\end{proof}
+
+\begin{proof}
+每个 \(\mathcal L_b^{\le B}(p,\mathcal E)\) 为有限离散空间，故紧。考虑乘积空间
+\[
+\mathcal K:=\prod_{b\ge0}\mathcal L_b^{\le B}(p,\mathcal E).
+\]
+由 Tychonoff 定理，\(\mathcal K\) 紧；在本处也可只用有限离散空间的 Cantor 型紧性。对每个 \(b'\ge b\)，条件
+\[
+\rho_{b',b}(L_{b'})=L_b
+\]
+定义 \(\mathcal K\) 中的闭开子集。因此 \(\mathfrak S_B(p,\mathcal E)\) 是闭集。为了证明它非空，只需验证有限交性质。给定有限多条相容方程，只涉及某个最大深度 \(N\)。由有限窗口闭包假设，取任意
+\[
+L_N\in\mathcal L_N^{\le B}(p,\mathcal E),
+\]
+并令 \(L_b:=\rho_{N,b}(L_N)\) 对所有涉及的 \(b\le N\) 成立，即得到这些有限方程的一个解。故所有闭约束具有有限交性质，紧性给出
+\[
+\mathfrak S_B(p,\mathcal E)\ne\varnothing.
+\]
+
+若反设 \(\mathfrak S_B(p,\mathcal E)\subseteq\mathsf{Hol}\)，则任取 \(s\in\mathfrak S_B(p,\mathcal E)\)，由 \(s\in\mathsf{Hol}\) 与 \(\mathsf{Hol}\) 的健全性，得到一个状态 \(p\) 上的全局闭包账本证明 \(\mathcal E\)。这与假设矛盾。因此必有
+\[
+\mathfrak S_B(p,\mathcal E)\setminus\mathsf{Hol}\ne\varnothing.
+\]
+该点在每个有限深度上都投影为合法形式闭包账本，但作为整体不能由单一全局账本编译。于是它正是本文 forcing 语义下的极限骨架：有限窗口层只看见形式局部闭包，真正的失败发生在从形式族提升为 holonomic 对象层证书的步骤中。证毕。
+\end{proof}
+
+\begin{proof}
+令 \(\mathcal P\) 为当前 forcing 状态的预序，并定义
+\[
+T:=\{\,s\in\mathcal P:\exists i\in I\text{ 使 }s\le q_i\,\}.
+\]
+由于每个 \(q_i\) 都是真细化，按假设 \(p\notin T\)。并且 \(T\) 向下封闭：若 \(s\in T\) 且 \(r\le s\)，则存在 \(i\) 使 \(s\le q_i\)，故 \(r\le q_i\)，从而 \(r\in T\)。
+
+构造一个只检验该断言 \(\mathcal E\) 的 forcing 解释：规定 \(s\Vdash \mathcal E\) 当且仅当 \(s\in T\)。这个解释满足细化方向单调性，因为 \(T\) 向下封闭；并且它使每个 \(q_i\Vdash\mathcal E\) 成立，所以所有局部 ledger \(L_i\) 都被解释为有效。但 \(p\notin T\)，故在该解释中 \(p\nVdash\mathcal E\)。
+
+若仅由局部 ledger、值保持重写和细化单调性便能推出 \(p\Vdash\mathcal E\)，则该推出应在所有满足这些规则的解释中有效；上面的解释给出反例。剩余可用的唯一反向通道正是显式登记的提升规则，或直接位于 \(p\) 层的有限 equality ledger。二者均被假设排除，故结论成立。证毕。
+\end{proof}
+
+\begin{proof}
+第一条由有限和的正性直接给出：若每个正权分支都满足 \(\sigma_i\pi_i=0\)，则 \(M_p(I)=0\)，与假设矛盾。因此可取 \(i_\ast\) 使 \(\lambda_{i_\ast}>0\) 且 \(\sigma_{i_\ast}=\pi_{i_\ast}=1\)。由 \(\sigma_{i_\ast}=1\)，\(L_{i_\ast}\) 是 \(q_{i_\ast}\) 上的有限 equality ledger；再由 \(\pi_{i_\ast}=1\) 的定义，登记的提升规则把该 ledger 编译为状态 \(p\) 上的对象层等式证书。
+
+第二条同理，\(\sum_i\lambda_i\sigma_i>0\) 给出一个正权成功分支，但该结论只使用 \(\sigma_i\) 的语义，因此只得到 \(q_i\) 层 forcing。forcing 的通常细化单调性并不提供从 \(q_i\le p\) 回到 \(p\) 的反向提升；反向提升恰由 \(\pi_i=1\) 单独登记。
+
+第三条只是对有限审计域的否定陈述。\(M_p(I)=0\) 说明在已列出的有限分支中没有正权分支同时通过成功位与提升位；该命题没有量化所有可能 ledger，故不能推出对象层断言在 \(p\) 上不可证或为假。证毕。
+\end{proof}
+
+\begin{proof}
+第一条正是推论 \ref{cor:observer-indexed-explicit-lifting}：复合表达式要求所有子项在同一可比较域中解释；若不存在共同细化状态，则没有统一对象层评价函数，故表达式不定义。
+
+第二条对 ledger 的高度作归纳。高度为零时，叶节点分两类。若叶节点是同一非 \(\mathsf{NULL}\) 读出的对象层同一性，则由定义 \ref{def:observer-indexed-typed-readout} 的第三条，读出类已经唯一确定，故等式成立。若叶节点是已登记的值保持重写，则结论正是定义 \ref{def:observer-indexed-value-preserving-rewrite}。归纳步中，自反、对称与传递保持对象层等式；替换规则只在已定义对象层值上使用，因而由等式的相容性保持强制成立。故 ledger 根结论被 \(p\) 强制。
+
+第三条由语法本身的有限生成性给出。任一推导只有有限多步；把其原始读出同一性与值保持重写作为叶节点，把每次 common-notion 应用作为内节点，即得到有限有向无环证明树。命题 \ref{prop:observer-indexed-value-preserving-no-creation} 进一步保证值保持重写不能从未定义项创造对象层值；因此任何合法等式推导都不可能越过 \(\mathsf{NULL}\) 或未构造地址而生成事实。证毕。
+\end{proof}
+
 \begin{proof}
 由推论 \ref{cor:observer-indexed-nonnull-criterion}，对象层算术的合法输入首先必须是非 \(\mathsf{NULL}\) 的地址--值对；
 由命题 \ref{prop:observer-indexed-value-preserving-no-creation}，值保持重写只能在已定义对象上改变表示；

@@ -1,0 +1,479 @@
+% ------------------------------------------------------------------
+%  Section 6: Survivor Renyi spectra and collision thresholds
+% ------------------------------------------------------------------
+\section{Secondary pressure corollaries and iid collisions}\label{sec:double-budget}
+
+This short section records secondary consequences of the pressure-gap
+calculation from Section~\ref{sec:open-system}.  The survivor
+R\'enyi spectrum comes from the same killed-matrix path sum with power
+weights, and the collision threshold then follows from Chen--Stein.  The
+pressure identity itself is standard; the point of recording it here is
+only to keep the finite-observation collision estimates tied to the same
+killed survivor matrix used in the central theorem.  All collision
+limits in this section are iid sampling statements: the sampled prefixes
+are independent with the displayed common law.  No Poisson theorem for a
+single orbit or for a weakly dependent sampling scheme is asserted here.
+
+\subsection{Survivor R\'enyi pressure identity}
+
+The finite-dimensional input is the following killed-matrix identity.
+It is the survivor version of the usual \(L^s\)-spectrum calculation for
+Gibbs cylinder weights: power sums are represented by a finite matrix
+whose survivor block is conjugate to the transfer matrix for the scaled
+potential.  This classical viewpoint underlies R\'enyi and
+generalized-dimension spectra
+\citep{Renyi1961,HentschelProcaccia1983,Pesin1997}; here it is used only
+after conditioning on survival, because that is the input needed for the
+finite-observation collision threshold.  No residue modulus and no
+two-terminal reachability condition enter this pressure calculation.
+
+\begin{lemma}[Power-weight killed matrix identity]
+\label{lem:survivor-renyi-matrix}
+Let \(Y\subseteq A^{\NNzero}\) be a topologically mixing one-step
+subshift of finite type, and let \(\nu_\varphi\) be the fully supported
+equilibrium Markov measure of a one-step potential \(\varphi\).  Write
+\(\pi\) for its stationary vector, \(K=(K_{ij})_{i,j\in A}\) for its
+transition matrix, and \(M=(M_{ij})_{i,j\in A}\) for the adjacency
+matrix of \(Y\).  Let \(A_{\mathrm{hole}}\subsetneq A\) be a non-empty
+proper subset, set
+\[
+  H:=\bigcup_{h\in A_{\mathrm{hole}}}[h],
+  \qquad
+  \mathcal S:=A\setminus A_{\mathrm{hole}},
+\]
+let
+\[
+  \tau_H(y):=\inf\set{n\geq0:\sigma^n y\in H},
+\]
+and assume that the survivor subshift
+\[
+  Y_H:=\set{y\in Y:\sigma^n y\notin H\text{ for every }n\geq0}
+\]
+is topologically mixing.  Let
+\[
+  \mathcal S_\infty
+  :=\set{i\in\mathcal S:\exists\,y\in Y_H,\ y_0=i},
+  \qquad
+  \mathcal T:=\mathcal S\setminus\mathcal S_\infty.
+\]
+For \(m\geq1\), let \(\mathcal L_m^H\) denote the set of admissible words
+\(a=a_0\cdots a_{m-1}\in A^m\) such that \(a_t\in\mathcal S\) for every
+\(0\leq t<m\), equivalently the set of length-\(m\) words whose cylinder
+is contained in \(\{\tau_H\geq m\}\).  For \(s>0\) and \(m\geq 1\),
+define
+\[
+  \mathcal Z_{H,m}(s)
+  := \sum_{a\in\mathcal L_m^H}\nu_\varphi([a])^s.
+\]
+Let
+\[
+  u_s(i):=\pi_i^s,
+  \qquad
+  B_{H,s}(i,j):=K_{ij}^s\mathbf 1_{\{j\in\mathcal S\}}
+  \qquad (i,j\in\mathcal S).
+\]
+Then
+\[
+  \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1
+  \qquad (m\geq 1).
+\]
+Moreover,
+after ordering \(\mathcal S=\mathcal S_\infty\sqcup\mathcal T\),
+\[
+  B_{H,s}=
+  \begin{pmatrix}
+    B_{\infty,s} & C_s\\
+    0 & Q_s
+  \end{pmatrix},
+\]
+where \(Q_s\) is nilpotent and
+\(B_{\infty,s}:=B_{H,s}|_{\mathcal S_\infty}\) is primitive.  If \(h>0\)
+is a Perron right eigenvector of the ambient transfer matrix
+\[
+  L_\varphi(i,j):=M_{ij}e^{\varphi(i,j)},
+\]
+and
+\[
+  D_s(i,i):=h_i^s,
+  \qquad
+  L_{s\varphi,H}(i,j)
+  := M_{ij}e^{s\varphi(i,j)}\mathbf 1_{\{j\in\mathcal S_\infty\}}
+  \qquad (i,j\in\mathcal S_\infty),
+\]
+then
+\[
+  B_{\infty,s}
+  = e^{-sP_Y(\varphi)}D_s^{-1}L_{s\varphi,H}D_s.
+\]
+Consequently
+\[
+  \rho(B_{H,s})
+  = e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
+\]
+\end{lemma}
+
+\begin{proof}
+For \(a=a_0\cdots a_{m-1}\in\mathcal L_m^H\), the Markov property gives
+\[
+  \nu_\varphi([a])
+  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}}.
+\]
+Therefore
+\[
+  \nu_\varphi([a])^s
+  = u_s(a_0)\,
+    B_{H,s}(a_0,a_1)\cdots B_{H,s}(a_{m-2},a_{m-1}),
+\]
+and summing over all safe words of length \(m\) yields
+\[
+  \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1.
+\]
+
+There is no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\):
+otherwise an infinite survivor path beginning at the \(\mathcal S_\infty\)
+endpoint would give an infinite survivor path beginning at the
+\(\mathcal T\) state.  The directed graph on \(\mathcal T\) is acyclic,
+because a cycle in \(\mathcal T\) could be repeated indefinitely to
+produce a survivor orbit through a \(\mathcal T\) symbol.  Since
+\(\mathcal T\) is finite, the \(\mathcal T\)-block is nilpotent.  The
+block \(B_{\infty,s}\) is primitive because it has the support of the
+mixing survivor subshift.  Hence the block decomposition above holds and
+\(\rho(B_{H,s})=\rho(B_{\infty,s})\).
+
+For \(i,j\in\mathcal S_\infty\),
+\[
+  K_{ij}
+  = M_{ij}e^{\varphi(i,j)-P_Y(\varphi)}\frac{h_j}{h_i}.
+\]
+Thus
+\[
+  B_{\infty,s}(i,j)
+  = M_{ij}e^{s\varphi(i,j)-sP_Y(\varphi)}
+    \frac{h_j^s}{h_i^s}
+  = \bigl(e^{-sP_Y(\varphi)}D_s^{-1}
+     L_{s\varphi,H}D_s\bigr)(i,j),
+\]
+which proves the conjugacy.  The usual pressure formula for the mixing
+survivor subshift gives
+\(\rho(L_{s\varphi,H})=e^{P_{Y_H}(s\varphi)}\), and therefore
+\[
+  \rho(B_{H,s})
+  =e^{-sP_Y(\varphi)}\rho(L_{s\varphi,H})
+  =e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
+\]
+\end{proof}
+
+\begin{corollary}[Secondary survivor R\'enyi pressure corollary]
+\label{cor:survivor-renyi-pressure}
+\label{cor:main-renyi}
+Under the hypotheses and notation of
+Lemma~\ref{lem:survivor-renyi-matrix},
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log \mathcal Z_{H,m}(s)
+  = sP_Y(\varphi)-P_{Y_H}(s\varphi).
+\]
+If
+\[
+  \lambda_m^H(a)
+  := \frac{\nu_\varphi([a])}{\nu_\varphi(\tau_H\ge m)},
+  \qquad a\in\mathcal L_m^H,
+\]
+denotes the survivor-prefix law conditioned on survival to depth \(m\),
+then
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log
+  \sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s
+  = sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
+\]
+In particular,
+\[
+  h_{2,H}:=2P_{Y_H}(\varphi)-P_{Y_H}(2\varphi)
+\]
+is the R\'enyi-\(2\) entropy rate of the conditioned survivor law, while
+the ambient two-sample exponent for simultaneous survival and visible
+collision is
+\[
+  \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
+        = 2\gamma_H(\varphi)+h_{2,H}.
+\]
+Here \(\gamma_H(\varphi):=P_Y(\varphi)-P_{Y_H}(\varphi)\).
+\end{corollary}
+
+\begin{proof}
+The block form in Lemma~\ref{lem:survivor-renyi-matrix}, primitivity of
+\(B_{\infty,s}\), and nilpotence of \(Q_s\) show that
+\(\rho(B_{H,s})\) is a simple isolated eigenvalue of
+\(B_{H,s}\) and that the rest of the spectrum lies in a smaller disc.
+Since \(u_s\) and \(\mathbf 1\) are non-negative and non-zero on
+\(\mathcal S_\infty\), the corresponding spectral coefficient is
+positive.  Therefore finite-dimensional Perron--Frobenius theory gives
+\[
+  \mathcal Z_{H,m}(s)
+  = c_s\,\rho(B_{H,s})^{m-1}+O(\vartheta_s^m)
+\]
+for some \(c_s>0\) and \(0\leq \vartheta_s<\rho(B_{H,s})\).  This proves
+the first limit.
+
+For the conditioned law,
+\[
+  \sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s
+  = \frac{\mathcal Z_{H,m}(s)}
+         {\nu_\varphi(\tau_H\ge m)^s}.
+\]
+But
+\[
+  \nu_\varphi(\tau_H\geq m)
+  = \sum_{a\in\mathcal L_m^H}\nu_\varphi([a])
+  = \mathcal Z_{H,m}(1),
+\]
+so the first limit at \(s=1\) gives
+\[
+  -\frac1m\log \nu_\varphi(\tau_H\ge m)\longrightarrow \gamma_H(\varphi)
+  = P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Subtracting \(s\gamma_H(\varphi)\) from the first limit gives
+\[
+  sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
+\]
+The formulas for \(h_{2,H}\) and \(\chi_H\) are the special case
+\(s=2\).
+\end{proof}
+
+\begin{corollary}[IID collision consequences of the survivor spectrum]
+\label{cor:survivor-spectrum-collision}
+Under the hypotheses and notation of
+Corollary~\ref{cor:survivor-renyi-pressure}, let
+\((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes,
+all of depth \(m\) and all with common law \(\lambda_m^H\).  Write
+\[
+  S_r^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^r.
+\]
+Then
+\[
+  S_2^H(m)=e^{-m h_{2,H}+o(m)},
+  \qquad
+  S_3^H(m)
+  = e^{-m h_{3,H}+o(m)},
+  \qquad
+  h_{3,H}:=3P_{Y_H}(\varphi)-P_{Y_H}(3\varphi).
+\]
+In particular, if
+\[
+  \binom{N_m}{2}S_2^H(m)\to\tau\in[0,\infty)
+  \qquad\text{and}\qquad
+  N_m^3S_3^H(m)\to 0,
+\]
+then the collision count of the labels \(X_m^{H,(i)}\) converges to
+\(\mathrm{Poisson}(\tau)\).  Thus the iid birthday threshold for
+surviving samples lies on the scale
+  \[
+    \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1.
+  \]
+On the pure exponential scale \(N_m=e^{(h_{2,H}/2+o(1))m}\), the
+third-moment condition is the pressure inequality
+\[
+  h_{3,H}>\frac32 h_{2,H}.
+\]
+\end{corollary}
+
+\begin{proof}
+The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
+and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  Apply
+Proposition~\ref{thm:double-budget-poisson} with deterministic synchronization
+time \(T_m\equiv 0\), so that \(q_m=0\) and
+\(\Lambda_m=\binom{N_m}{2}S_2^H(m)\).
+\end{proof}
+
+\subsection{Poisson thresholds for collision failure}
+
+Fix a resolution \(m\geq 1\).  Let \((T_m,X_m)\) be a random pair,
+where \(T_m\) is the synchronization time and \(X_m\in A_m\) is the
+visible address available at resolution \(m\).  Let \(\lambda_m\) be the
+law of \(X_m\), and for \(r\geq 2\) define
+\[
+  S_r(m):=\sum_{a\in A_m}\lambda_m(a)^r.
+\]
+
+\begin{proposition}[IID collision threshold]
+\label{thm:double-budget-poisson}
+Let \(n_m,N_m\in\NN\).  Let
+\((T_m^{(i)},X_m^{(i)})_{1\leq i\leq N_m}\) be independent copies with
+common law equal to that of \((T_m,X_m)\), and let
+\(\mathsf{Fail}_{m,n_m,N_m}\) be the event that
+some object has not synchronized by time \(n_m\) or that two objects
+with synchronization times at most \(n_m\) receive the same visible
+\(m\)-address.  Set
+\[
+  q_m:=\PP(T_m>n_m),
+  \qquad
+  \Lambda_m:=\binom{N_m}{2}S_2(m),
+\]
+and define the collision count
+\[
+  W_m:=\sum_{1\leq i<j\leq N_m}
+       \mathbf{1}_{\{X_m^{(i)}=X_m^{(j)}\}}.
+\]
+Then the following hold.
+\begin{enumerate}[label=(\roman*)]
+  \item If \(N_m q_m\to 0\) and \(\Lambda_m\to 0\), then
+    \[
+      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 0.
+    \]
+  \item If \(N_m q_m\to 0\), \(\Lambda_m\to\tau\in(0,\infty)\), and
+    \(N_m^3S_3(m)\to 0\), then
+    \[
+      W_m \Rightarrow \mathrm{Poisson}(\tau),
+      \qquad
+      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 1-e^{-\tau}.
+    \]
+  \item If \(N_m q_m\to 0\), \(\Lambda_m\to\infty\), and
+    \(N_m^3S_3(m)=o(\Lambda_m^2)\), then
+    \[
+      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 1.
+    \]
+\end{enumerate}
+In particular, for this iid sampling model the collision threshold lies
+on the scale
+\[
+  \binom{N_m}{2}S_2(m)\asymp 1,
+  \qquad\text{equivalently}\qquad
+  2\log N_m \asymp -\log S_2(m).
+\]
+\end{proposition}
+
+\begin{proof}
+Let
+\[
+  U_m:=\bigcup_{i=1}^{N_m}\{T_m^{(i)}>n_m\}
+\]
+be the event that some object has not synchronized by time \(n_m\).
+On \(U_m^c\), every object has synchronized, so
+\[
+  \mathsf{Fail}_{m,n_m,N_m}\cap U_m^c
+  = \{W_m\geq 1\}\cap U_m^c.
+\]
+Therefore
+\[
+  \bigl|
+    \PP(\mathsf{Fail}_{m,n_m,N_m})
+    - \PP(W_m\geq 1)
+  \bigr|
+  \leq \PP(U_m)
+  \leq N_m q_m.
+\]
+
+For part~(i), Markov's inequality gives
+\[
+  \PP(W_m\geq 1)\leq \EE[W_m]=\Lambda_m,
+\]
+so \(\PP(\mathsf{Fail}_{m,n_m,N_m})\to 0\).
+
+For parts~(ii) and~(iii), index unordered pairs by
+\[
+  \mathcal{I}_m:=\set{\{i,j\}:1\leq i<j\leq N_m},
+  \qquad
+  I_\alpha:=\mathbf{1}_{\{X_m^{(i)}=X_m^{(j)}\}}
+  \quad (\alpha=\{i,j\}),
+\]
+so \(W_m=\sum_{\alpha\in\mathcal{I}_m}I_\alpha\).  Then
+\[
+  \EE[I_\alpha]=S_2(m),
+  \qquad
+  \EE[W_m]=\Lambda_m.
+\]
+Disjoint pairs are independent, whereas pairs sharing one index satisfy
+\[
+  \EE[I_\alpha I_\beta]=S_3(m).
+\]
+With the usual dependency graph on intersecting pairs,
+\citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
+\[
+  d_{\mathrm{TV}}
+   \bigl(W_m,\mathrm{Poisson}(\Lambda_m)\bigr)
+  \leq \min\{1,\Lambda_m^{-1}\}(b_1+b_2),
+\]
+where
+\[
+  b_1=O\bigl(N_m^3S_2(m)^2\bigr),
+  \qquad
+  b_2=O\bigl(N_m^3S_3(m)\bigr).
+\]
+Since \(S_2(m)^2\leq S_3(m)\) by Cauchy--Schwarz,
+\[
+  \Bigl(\sum_a\lambda_m(a)^2\Bigr)^2
+  \leq \Bigl(\sum_a\lambda_m(a)\Bigr)
+      \Bigl(\sum_a\lambda_m(a)^3\Bigr)
+  = S_3(m),
+\]
+the hypothesis \(N_m^3S_3(m)\to 0\) forces \(b_1+b_2\to 0\), and
+therefore
+\[
+  W_m \Rightarrow \mathrm{Poisson}(\tau).
+\]
+Hence
+\[
+  \PP(W_m\geq 1)\longrightarrow 1-e^{-\tau},
+\]
+and the same limit holds for \(\PP(\mathsf{Fail}_{m,n_m,N_m})\).
+
+For part~(iii), the same pair decomposition gives
+\[
+  \Var(W_m)
+  \leq \EE[W_m] + O\bigl(N_m^3S_3(m)\bigr)
+  = \Lambda_m + O\bigl(N_m^3S_3(m)\bigr).
+\]
+Thus
+\[
+  \frac{\Var(W_m)}{\Lambda_m^2}\longrightarrow 0.
+\]
+Chebyshev's inequality implies \(W_m/\Lambda_m\to 1\) in probability, so
+\[
+  \PP(W_m=0)\leq
+  \PP\!\left(\abs{W_m-\Lambda_m}\geq \frac{\Lambda_m}{2}\right)
+  \longrightarrow 0.
+\]
+Therefore \(\PP(W_m\geq 1)\to 1\), and the same is true for
+\(\PP(\mathsf{Fail}_{m,n_m,N_m})\).
+\end{proof}
+
+\begin{corollary}[Subcritical capacity region]
+\label{cor:capacity-region}
+Suppose that
+\[
+  q_m\leq C_m e^{-\gamma_m n_m}
+  \qquad\text{and}\qquad
+  S_2(m)=e^{-h_2m+o(m)}
+\]
+for some sequences \(C_m>0\), \(\gamma_m>0\), and some \(h_2>0\).
+Assume also that
+\[
+  \log C_m=o\bigl(\min\{\gamma_m n_m,m\}\bigr).
+\]
+Fix \(\eta\in(0,1)\).  If
+\[
+  \log N_m
+  \leq (1-\eta)\min\bigl\{\gamma_m n_m,\tfrac12 h_2m\bigr\}
+\]
+for all sufficiently large \(m\), then
+\[
+  \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 0.
+\]
+\end{corollary}
+
+\begin{proof}
+The synchronization term satisfies
+\[
+  N_m q_m
+  \leq \exp\bigl(\log C_m+\log N_m-\gamma_m n_m\bigr)
+  \longrightarrow 0,
+\]
+and the collision term satisfies
+\[
+  \Lambda_m
+  = \exp\bigl(2\log N_m-h_2m+o(m)\bigr)
+  \longrightarrow 0.
+\]
+Apply part~(i) of Proposition~\ref{thm:double-budget-poisson}.
+\end{proof}

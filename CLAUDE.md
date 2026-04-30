@@ -28,7 +28,41 @@
 ## 项目结构
 
 - `lean4/` — Lean 4 形式化证明(Omega 库, 依赖 mathlib)
-- `theory/` — 数学论文, 含可复现的 Python 脚本管线(`scripts/` → `sections/generated/`)
+- `theory/` — 中文核心数学论文, 含可复现的 Python 脚本管线(`scripts/` → `sections/generated/`)
+- `papers/publication/` — 英文投稿论文(从 theory/ 提取, 面向各期刊)
+- `tools/chatgpt-oracle/` — 管线主控脚本和 Oracle 桥接
+
+## 出版管线架构（必读）
+
+**主控脚本**: `tools/chatgpt-oracle/oracle_pipeline.py`（全部流程编排在此）
+**辅助工具**: `papers/publication/backflow.py`（scan/review/diff/mark）
+**辅助工具**: `papers/publication/pipeline_auto.py`（状态查询, 不控制流程）
+
+### Stage 定义（F→A→B→C→D→DONE）
+
+定义在 `oracle_pipeline.py` 顶部注释, 不要自行发明新命名:
+
+| Stage | 谁做 | 做什么 | 轮次上限 |
+|-------|------|--------|:--------:|
+| F | Codex 评估 + Claude 审 | 期刊方向适配(fit ≥ 6 通过) | 1 |
+| A | Codex 写 + Claude 审计 | 内容补全、去重、修证明、拆文件 | 8 |
+| B | Oracle 审 + Codex 改 | ChatGPT referee 循环 | 无上限(须 accept/minor) |
+| C | Oracle + Claude 联合终审 | 最终确认 | 无上限(须双方通过) |
+| D | Codex 做 + Claude 审 + /killo-golden | 回流到 theory/ 中文核心论文 | — |
+
+### 角色分工（铁律）
+
+- **Codex 做, Claude 审**: Claude 不直接写论文内容或回流内容, Codex 出初版, Claude 审阅和打磨
+- **Oracle 是 ChatGPT Pro**: 通过 `oracle_dispatch.py` + Tampermonkey 浏览器桥接调用
+- 三者不可混淆: Codex 编辑, Claude 验证(独立), ChatGPT 是外部 Oracle
+
+### 状态持久化
+
+- 每篇论文的 pipeline state: `tools/chatgpt-oracle/pipeline_state/<paper>.json`
+- 包含: 当前 stage、轮次、所有 verdicts/scores 历史、累积 issues
+- Agent 记忆通过 prompt 注入, 不通过对话历史:
+  - `fresh_review`: 无记忆, 干净审阅
+  - `contextual_execution`: 有记忆, 看 issues + scope + 前序上下文
 
 ---
 

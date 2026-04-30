@@ -1,0 +1,297 @@
+\subsection{The natural right-resolving presentation}
+
+We now return to the subset construction.  The exact decoding theorem shows
+that the determinized presentation has a finite transient ambiguity shell and
+that its essential core is already visible in the explicit graph $G_m$.  The
+next results quantify the resulting deterministic presentation size on the
+natural folded alphabet $X_m$.
+
+\begin{definition}[Deterministic candidate-set presentation]
+\label{def:Phi-m-right-resolving}
+For a nonempty subset $S\subset V_m$ and a label $a\in X_m$, define
+\[
+\delta_m(S,a):=
+\{v'\in V_m:\exists\, e:v\to v' \text{ with } v\in S \text{ and } \ell_m(e)=a\}.
+\]
+Starting from the state $V_m$, take all reachable nonempty subsets of $V_m$ and
+add labeled edges
+\[
+S\xrightarrow{a}\delta_m(S,a)
+\]
+whenever $\delta_m(S,a)\neq \varnothing$.  The resulting finite labeled graph
+is denoted $H_m^{\mathrm{det}}$.
+\end{definition}
+
+\begin{proposition}[Deterministic right-resolving presentation]
+\label{prop:Phi-m-right-resolving}
+The graph $H_m^{\mathrm{det}}$ is right-resolving and presents the same labeled
+language as $G_m$.  Consequently its edge shift has label image $Y_m$.
+\end{proposition}
+
+\begin{proof}
+By construction, for a fixed state $S$ and label $a$, there is at most one
+outgoing edge with label $a$, so $H_m^{\mathrm{det}}$ is right-resolving.  The
+subset construction preserves the accepted labeled language of a finite
+automaton, hence $H_m^{\mathrm{det}}$ and $G_m$ present the same set of finite
+label words.  Their bi-infinite label shifts therefore coincide, and by
+Theorem~\ref{thm:Phi-m-sofic-graph} this common image is $Y_m$.
+\end{proof}
+
+\begin{proposition}[The singleton core]
+\label{prop:deterministic-singleton-core}
+Let $m\ge 3$.  Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item every state of $H_m^{\mathrm{det}}$ reached after at least $m$ input
+symbols is a singleton;
+\item the reachable singleton states are exactly the sets $\{v\}$ with
+$v\in V_m$;
+\item the labeled subgraph induced by the singleton states is canonically
+labeled-isomorphic to $G_m$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Take any block
+\[
+a_1\cdots a_m\in\mathcal L_m(Y_m).
+\]
+By Theorem~\ref{thm:length-m-block-unique-lift}, this block has a unique raw
+lift, hence a unique length-$m$ path in $G_m$ carrying that label word.  Its
+terminal vertex is therefore uniquely determined by the block.  Consequently,
+every reachable state after reading $m$ symbols is a singleton.  Since
+singletons are forward closed under the subset construction, every state reached
+after at least $m$ symbols is again a singleton.  This proves
+\textup{(i)}.
+
+For \textup{(ii)}, it remains to show that every singleton $\{v\}$ with
+$v\in V_m$ is reachable.  By
+Theorem~\ref{thm:alternating-single-symbol-synchronizing}, the symbol $b_m$
+sends the full candidate set to a singleton.  The
+underlying directed graph of $G_m$ is the binary de Bruijn graph on words of
+length $m-1$, so it is strongly connected.  Thus for every $v\in V_m$ there
+exists a path in $G_m$ from that singleton state to $v$, and reading its label
+from the singleton yields $\{v\}$.
+
+Finally, \textup{(iii)} is immediate from the definitions: for singleton states,
+\[
+\delta_m(\{v\},a)=\{v'\}
+\]
+if and only if $G_m$ has an edge $v\to v'$ labeled $a$.  Hence the singleton
+subgraph is exactly a relabeling of $G_m$.
+\end{proof}
+
+\begin{proposition}[The ambiguity shell is transient]
+\label{prop:deterministic-ambiguity-transient}
+Let $m\ge 3$.  Every non-singleton state of $H_m^{\mathrm{det}}$ is transient.
+Equivalently, the subgraph induced by the non-singleton states is acyclic.
+\end{proposition}
+
+\begin{proof}
+Suppose there were a directed cycle consisting entirely of non-singleton states.
+Since every state of $H_m^{\mathrm{det}}$ is reachable from the initial state
+$V_m$, one could first reach that cycle and then traverse it often enough to
+obtain a path of length at least $m$ ending at a non-singleton state.  This
+contradicts Proposition~\ref{prop:deterministic-singleton-core}\textup{(i)}.
+Hence no such cycle exists, and every non-singleton state is transient.
+\end{proof}
+
+\begin{proposition}[Exact nilpotency of the ambiguity shell]
+\label{prop:ambiguity-shell-nilpotency}
+Let $m\ge 3$.  Order the states of $H_m^{\mathrm{det}}$ by placing the
+non-singleton states first and the singleton core last.  Then the adjacency
+matrix of $H_m^{\mathrm{det}}$ has the form
+\[
+A(H_m^{\mathrm{det}})
+=
+\begin{pmatrix}
+N_m & R_m\\
+0 & A(G_m)
+\end{pmatrix}
+\]
+for some matrix $R_m$, and
+\[
+N_m^m=0,
+\qquad
+N_m^{m-1}\neq 0.
+\]
+Consequently
+\[
+\det(I-zA(H_m^{\mathrm{det}}))=\det(I-zA(G_m)).
+\]
+\end{proposition}
+
+\begin{proof}
+By Proposition~\ref{prop:deterministic-singleton-core}\textup{(iii)}, the
+singleton states induce a labeled copy of $G_m$.  Since singleton states are
+forward closed, there are no edges from the singleton core back into the
+non-singleton shell, so the adjacency matrix has the displayed block upper
+triangular form.
+
+By Proposition~\ref{prop:deterministic-singleton-core}\textup{(i)}, every path
+of length $m$ in $H_m^{\mathrm{det}}$ ends in a singleton.  Hence there is no
+path of length $m$ contained entirely in the non-singleton shell, which is
+equivalent to $N_m^m=0$.
+
+By Corollary~\ref{cor:uniform-synchronizing-length}, there exists a
+non-synchronizing block of length $m-1$.  Reading that block from the initial
+state $V_m$ yields a path of length $m-1$ ending at a non-singleton state.
+Because singleton states are forward closed, every intermediate state on that
+path is also non-singleton.  Therefore the shell contains a path of length
+$m-1$, so $N_m^{m-1}\neq 0$.
+
+Finally,
+\[
+\det(I-zA(H_m^{\mathrm{det}}))
+=
+\det(I-zN_m)\det(I-zA(G_m)).
+\]
+Since $N_m$ is nilpotent, $\det(I-zN_m)=1$, and the determinant identity
+follows.
+\end{proof}
+
+\begin{proposition}[The explicit graph is follower separated]
+\label{prop:G-m-follower-separated}
+Let $m\ge 3$.  Distinct vertices of $G_m$ have distinct follower sets.
+\end{proposition}
+
+\begin{proof}
+Let
+\[
+b_m=u_1\cdots u_m
+\]
+be the alternating symbol from
+Definition~\ref{def:alternating-extremal-words}.  For each vertex
+\[
+v=v_1\cdots v_{m-1}\in V_m,
+\]
+consider the length-$m$ path obtained by appending the fixed bit word
+$u_1\cdots u_m$.  Let
+\[
+\Lambda(v)\in\mathcal L_m(Y_m)
+\]
+denote its label word.
+
+We claim that $\Lambda(v)$ is carried by exactly one path in $G_m$, namely the
+one that starts at $v$ and appends $u_1,\ldots,u_m$.  Indeed, the last symbol
+of $\Lambda(v)$ is $b_m$, and by
+Theorem~\ref{thm:alternating-single-symbol-synchronizing}, the symbol $b_m$ is
+carried by a unique edge.  Thus the final edge of any path carrying
+$\Lambda(v)$ is fixed.  Since $G_m$ is one-step left-resolving by
+Proposition~\ref{prop:one-step-left-resolving}, the penultimate label then
+determines the penultimate edge uniquely; iterating this backward reconstruction
+shows that the whole path carrying $\Lambda(v)$ is unique.
+
+In particular, its initial vertex is uniquely determined by $\Lambda(v)$.
+Hence if $v\neq w$, the word $\Lambda(v)$ belongs to the follower set of $v$
+but not to that of $w$.  Therefore distinct vertices have distinct follower
+sets.
+\end{proof}
+
+\begin{corollary}[The graph $G_m$ is the canonical minimal right-resolving presentation]
+\label{cor:G-m-fischer-cover}
+\leanverified{paper_resolution_folding_g_m_fischer_cover}
+For every $m\ge 3$, the canonical minimal right-resolving presentation of
+$Y_m$ is labeled-isomorphic to $G_m$.  Equivalently, $G_m$ is the right
+Fischer cover of $Y_m$.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:Phi-m-conjugacy-threshold}, the shift $Y_m$ is irreducible
+(indeed conjugate to the full two-shift).  Proposition~\ref{prop:Phi-m-right-resolving}
+gives a deterministic right-resolving presentation of $Y_m$.  By
+Proposition~\ref{prop:deterministic-ambiguity-transient}, the only essential
+component of that presentation is the singleton core from
+Proposition~\ref{prop:deterministic-singleton-core}, which is labeled-isomorphic
+to $G_m$.  Proposition~\ref{prop:G-m-follower-separated} shows that this core is
+already follower separated.  The standard construction of the canonical
+minimal right-resolving presentation, equivalently of the right Fischer cover,
+as the follower-separated essential component of a deterministic
+right-resolving presentation therefore leaves $G_m$ unchanged; see
+\cite[Chs.~3--4]{LindMarcus1995} and \cite[Ch.~4]{Kitchens1998SymbolicDynamics}.
+\end{proof}
+
+\begin{theorem}[Size of the right-resolving presentation]
+\label{thm:natural-state-complexity-gap}
+\leanverified{paper_resolution_folding_natural_state_complexity_gap}
+For every $m\ge 3$, the canonical minimal right-resolving presentation of
+$Y_m$ over the folded alphabet $X_m$ has exactly
+\[
+\lvert V(G_m)\rvert=2^{m-1},
+\qquad
+\lvert E(G_m)\rvert=2^m
+\]
+states and edges.  In particular, no right-resolving presentation of $Y_m$
+over $X_m$ uses fewer than $2^{m-1}$ states.  Since
+\[
+\lvert X_m\rvert=F_{m+2},
+\]
+one has
+\[
+\frac{\lvert V(G_m)\rvert}{\lvert X_m\rvert}
+=
+\frac{2^{m-1}}{F_{m+2}}
+\sim
+\frac{\sqrt5}{2\varphi^2}\Bigl(\frac{2}{\varphi}\Bigr)^m,
+\qquad
+\varphi=\frac{1+\sqrt5}{2}.
+\]
+Thus, although every $Y_m$ with $m\ge 3$ is conjugate to the full two-shift,
+its canonical deterministic presentation over the natural folded alphabet has
+exponentially growing state complexity, even relative to the alphabet size.
+\end{theorem}
+
+\begin{proof}
+Corollary~\ref{cor:G-m-fischer-cover} identifies $G_m$ as the canonical minimal
+right-resolving presentation of $Y_m$.  The state and edge counts are therefore
+those of $G_m$, and Definition~\ref{def:G-m} gives
+\[
+\lvert V(G_m)\rvert=2^{m-1},
+\qquad
+\lvert E(G_m)\rvert=2^m.
+\]
+Minimality of the Fischer cover yields the state lower bound for all
+right-resolving presentations over $X_m$.
+
+The alphabet size is
+\[
+\lvert X_m\rvert=F_{m+2}
+\]
+by Corollary~\ref{cor:stable-syntax-counting}.  Using the Binet asymptotic
+$F_{m+2}\sim \varphi^{m+2}/\sqrt5$ gives
+\[
+\frac{2^{m-1}}{F_{m+2}}
+\sim
+\frac{2^{m-1}\sqrt5}{\varphi^{m+2}}
+=
+\frac{\sqrt5}{2\varphi^2}\Bigl(\frac{2}{\varphi}\Bigr)^m,
+\]
+which proves the claimed representation gap.
+\end{proof}
+
+\begin{corollary}[Coincidence of decoding and presentation scales]
+\label{cor:local-complexity-scale-coincidence}
+\leanverified{paper_resolution_folding_local_complexity_scale_coincidence}
+For every $m\ge 3$, the following quantities are exact and all equal to the
+same scale:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item the finite-type order of $Y_m$ over the alphabet $X_m$ is $m$;
+\item the minimal synchronizing length of the presentation $G_m$ is $m$;
+\item the nilpotency index of the ambiguity-shell matrix $N_m$ is $m$;
+\item the minimal memory of a one-sided sliding-block inverse of $\Phi_m$ is
+$m-1$.
+\end{enumerate}
+In particular, although the shifts $Y_m$ with $m\ge 3$ are all conjugate to the
+full two-shift, their natural presentations over the folded alphabets $X_m$
+still reflect the window length.  Theorem~\ref{thm:exact-markov-order-bernoulli}
+shows that the same threshold is also the Markov memory under every transported
+Bernoulli law, while
+Theorem~\ref{thm:natural-state-complexity-gap} quantifies the accompanying
+exponential presentation gap on the natural alphabet.
+\end{corollary}
+
+\begin{proof}
+Part \textup{(i)} is Theorem~\ref{thm:Y-m-exact-SFT-order},
+part \textup{(ii)} is Corollary~\ref{cor:uniform-synchronizing-length},
+part \textup{(iii)} is Proposition~\ref{prop:ambiguity-shell-nilpotency}, and
+part \textup{(iv)} is Corollary~\ref{cor:Phi-m-memory-threshold-exact}.
+\end{proof}

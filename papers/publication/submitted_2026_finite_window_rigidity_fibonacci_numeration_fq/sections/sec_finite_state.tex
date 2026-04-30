@@ -1,0 +1,544 @@
+\section{Finite-state structure of normalized windows}
+
+This section records the explicit suffix graph attached to the folded language.
+It will be used throughout the reconstruction arguments in the final section.
+
+\subsection{The graph \texorpdfstring{$G_m$}{Gm}}
+
+\begin{definition}[Suffix-state graph]
+\label{def:G-m}
+For $m\ge 1$, let
+\[
+V_m:=\{0,1\}^{m-1}.
+\]
+For each $v=v_1\cdots v_{m-1}\in V_m$ and each $b\in\{0,1\}$ define an edge
+\[
+e=(v,b):v\to v':=v_2\cdots v_{m-1}b,
+\]
+labeled by
+\[
+\ell_m(e):=\Fold_m(v_1\cdots v_{m-1}b)\in X_m.
+\]
+The resulting finite labeled graph is denoted
+\[
+G_m=(V_m,E_m,\ell_m).
+\]
+It has $\lvert V_m\rvert=2^{m-1}$ vertices and $\lvert E_m\rvert=2^m$ edges.
+\end{definition}
+
+\begin{theorem}[Suffix-graph presentation of the folded language]
+\label{thm:Phi-m-sofic-graph}
+Let $Z_m\subset E_m^{\ZZ}$ be the two-sided edge shift of $G_m$, and let
+\[
+\mathcal L_m:Z_m\to X_m^{\ZZ}
+\]
+be the edge-label map.  Then
+\[
+Y_m=\mathcal L_m(Z_m).
+\]
+In particular $G_m$ presents the folded language $Y_m$.
+\end{theorem}
+
+\begin{proof}
+Take any $s\in\{0,1\}^{\ZZ}$ and define
+\[
+v_t:=s_t\cdots s_{t+m-2}\in V_m,
+\qquad
+e_t:=(v_t,s_{t+m-1})\in E_m.
+\]
+The compatibility of successive windows implies that $(e_t)_{t\in\ZZ}$ is a
+bi-infinite path in $G_m$, and by construction
+\[
+(\mathcal L_m(e))_t
+=
+\ell_m(e_t)
+=
+\Fold_m(s_t\cdots s_{t+m-1})
+=
+(\Phi_m(s))_t.
+\]
+Hence $Y_m\subset \mathcal L_m(Z_m)$.
+
+Conversely, let $e=(e_t)_{t\in\ZZ}\in Z_m$.  Writing each edge as
+$e_t=(v_t,b_t)$, path compatibility says that $v_{t+1}$ is obtained from $v_t$
+by deleting its first symbol and appending $b_t$.  Therefore the family of
+suffixes $v_t$ and appended bits $b_t$ determines a unique binary sequence
+$s\in\{0,1\}^{\ZZ}$ such that
+\[
+s_t\cdots s_{t+m-1}=v_tb_t
+\]
+for all $t$.  Then
+\[
+(\Phi_m(s))_t
+=
+\Fold_m(v_tb_t)
+=
+\ell_m(e_t)
+=
+(\mathcal L_m(e))_t.
+\]
+Thus $\mathcal L_m(Z_m)\subset Y_m$, proving equality.
+\end{proof}
+
+\begin{corollary}[The image shift is sofic]
+\label{prop:Y-m-sofic}
+For every $m\ge 1$, the image shift $Y_m$ is a sofic shift.
+\end{corollary}
+
+\begin{proof}
+This is immediate from Theorem~\ref{thm:Phi-m-sofic-graph}, which gives an
+explicit finite labeled graph presenting $Y_m$.
+\end{proof}
+
+\subsection{Deterministic structure of the presentation}
+
+We begin with the one-step resolving properties of the graph $G_m$.
+
+\begin{proposition}[One-step distinguishability]
+\label{prop:one-step-right-resolving}
+For every $m\ge 2$ and every $v\in\{0,1\}^{m-1}$,
+\[
+\Fold_m(v0)\neq \Fold_m(v1).
+\]
+Consequently $G_m$ is right-resolving: the two outgoing edges from any fixed
+vertex carry distinct labels.
+\end{proposition}
+
+\begin{proof}
+Let $\omega_0:=v0$ and $\omega_1:=v1$.  Then
+\[
+N(\omega_1)-N(\omega_0)=F_{m+1}.
+\]
+If $\Fold_m(\omega_0)=\Fold_m(\omega_1)$, then
+Corollary~\ref{cor:visible-value-overflow} implies
+\[
+\begin{aligned}
+N(\omega_1)-N(\omega_0)
+&=
+\bigl(b(\omega_1)-b(\omega_0)\bigr)F_{m+2}\\
+&\in\{-F_{m+2},0,F_{m+2}\},
+\end{aligned}
+\]
+because the visible value $V_m(\Fold_m(\omega_i))$ would be the same for
+$i=0,1$ and only the overflow bit could differ.  This contradicts
+$F_{m+1}>0$ and $F_{m+1}\neq F_{m+2}$.  Hence the two labels are distinct.
+\end{proof}
+
+\begin{proposition}[One-step left-resolving property]
+\label{prop:one-step-left-resolving}
+For every $m\ge 2$ and every $v\in\{0,1\}^{m-1}$,
+\[
+\Fold_m(0v)\neq \Fold_m(1v).
+\]
+Consequently the two incoming edges to any fixed vertex of $G_m$ carry
+distinct labels.
+\end{proposition}
+
+\begin{proof}
+Let $\omega_0:=0v$ and $\omega_1:=1v$.  Then
+\[
+N(\omega_1)-N(\omega_0)=F_2=1.
+\]
+If $\Fold_m(\omega_0)=\Fold_m(\omega_1)$, then
+Corollary~\ref{cor:visible-value-overflow} implies
+\[
+N(\omega_1)-N(\omega_0)
+=
+\bigl(b(\omega_1)-b(\omega_0)\bigr)F_{m+2}
+\in\{-F_{m+2},0,F_{m+2}\},
+\]
+which is impossible because $F_{m+2}\ge 2$ for $m\ge 2$.  Hence the labels are
+distinct.  Applied to the two incoming edges of a fixed vertex
+$v=v_1\cdots v_{m-1}$, this says the edges labeled by the windows
+$0v_1\cdots v_{m-1}$ and $1v_1\cdots v_{m-1}$ are distinguished.
+\end{proof}
+
+\begin{corollary}[Entropy of the image shift]
+\label{cor:Phi-m-entropy}
+For every $m\ge 2$,
+\[
+h_{\mathrm{top}}(Y_m)=\log 2.
+\]
+\leanverified{paper_resolution_folding_phi_m_entropy}
+\end{corollary}
+
+\begin{proof}
+Since $\Phi_m$ is a factor of the full two-shift,
+\[
+h_{\mathrm{top}}(Y_m)\le \log 2.
+\]
+On the other hand, every vertex of $G_m$ has exactly two outgoing edges, so the
+number of length-$n$ paths starting from any fixed vertex is $2^n$.  By
+Proposition~\ref{prop:one-step-right-resolving}, two such paths cannot have the
+same label sequence.  Hence $Y_m$ has at least $2^n$ allowed blocks of length
+$n$, so $h_{\mathrm{top}}(Y_m)\ge \log 2$.
+\end{proof}
+
+\subsection{Fibres and synchronizing blocks}
+
+For $m\ge 1$ and $0\le r\le \lfloor m/2\rfloor$ define
+\[
+z_{m,0}:=0^m,
+\qquad
+z_{m,r}:=0^{m-2r}11(01)^{r-1}
+\quad (1\le r\le \lfloor m/2\rfloor).
+\]
+
+\begin{proposition}[The zero fibre of $0^m$]
+\label{prop:zero-fiber-explicit}
+For every $m\ge 1$,
+\[
+\Fold_m^{-1}(0^m)=\{z_{m,r}:0\le r\le \lfloor m/2\rfloor\}.
+\]
+In particular,
+\[
+\bigl|\Fold_m^{-1}(0^m)\bigr|=\lfloor m/2\rfloor+1.
+\]
+\end{proposition}
+
+\begin{proof}
+By Corollary~\ref{cor:visible-value-overflow},
+\[
+\Fold_m(\omega)=0^m
+\quad\Longleftrightarrow\quad
+N(\omega)\in\{0,F_{m+2}\}.
+\]
+The case $N(\omega)=0$ forces $\omega=0^m$, so it remains to classify
+\[
+A_m:=\{\omega\in\Omega_m:N(\omega)=F_{m+2}\}.
+\]
+
+For $m=1$ the set $A_1$ is empty, since the only available values are $0$ and
+$F_2=1<F_3$.  Fix now $m\ge 2$ and let $\omega\in A_m$.  Then
+\[
+\sum_{k=1}^{m-1}\omega_kF_{k+1}\le \sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2<F_{m+2},
+\]
+so necessarily $\omega_m=1$.  If also $\omega_{m-1}=1$, then
+\[
+\sum_{k=1}^{m-2}\omega_kF_{k+1}
+=
+F_{m+2}-F_{m+1}-F_m
+=
+0,
+\]
+hence $\omega=0^{m-2}11$.  If instead $\omega_{m-1}=0$, write $\omega=u01$
+with $u\in\Omega_{m-2}$.  Then
+\[
+N(u)=F_{m+2}-F_{m+1}=F_m,
+\]
+so $u\in A_{m-2}$.  Therefore, for every $m\ge 2$,
+\[
+A_m=\{0^{m-2}11\}\cup\{u01:u\in A_{m-2}\}.
+\]
+
+Starting from $A_1=\varnothing$ and $A_2=\{11\}$ and unwinding this recursion
+gives
+\[
+A_m=\{z_{m,r}:1\le r\le \lfloor m/2\rfloor\}.
+\]
+Adding the zero word yields the stated formula for $\Fold_m^{-1}(0^m)$.  The
+cardinality follows immediately.
+\end{proof}
+
+\begin{definition}[Alternating extremal words]
+\label{def:alternating-extremal-words}
+For each $m\ge 1$, let $a_m,b_m\in X_m$ denote the unique alternating
+admissible words of length $m$ ending respectively in $0$ and $1$.  Thus
+\[
+a_1=0,
+\qquad
+b_1=1,
+\]
+and for $m\ge 2$,
+\[
+a_m=b_{m-1}0,
+\qquad
+b_m=a_{m-1}1.
+\]
+\end{definition}
+
+\begin{lemma}[Extremal values of the alternating words]
+\label{lem:alternating-extremal-values}
+For every $m\ge 1$ one has
+\[
+V_m(a_m)=F_{m+1}-1,
+\qquad
+V_m(b_m)=F_{m+2}-1.
+\]
+\end{lemma}
+
+\begin{proof}
+We argue by induction on $m$.  For $m=1$ the claim is
+\[
+V_1(a_1)=0=F_2-1,
+\qquad
+V_1(b_1)=1=F_3-1.
+\]
+
+Assume now that $m\ge 2$ and the claim is known for $m-1$.  Since $a_m=b_{m-1}0$,
+one has
+\[
+V_m(a_m)=V_{m-1}(b_{m-1})=F_{m+1}-1.
+\]
+Likewise, using $b_m=a_{m-1}1$,
+\[
+V_m(b_m)=V_{m-1}(a_{m-1})+F_{m+1}
+=(F_m-1)+F_{m+1}
+=F_{m+2}-1.
+\]
+\end{proof}
+
+\begin{proposition}[Singleton fibres of the alternating symbols]
+\label{prop:alternating-singleton-fibres}
+For every $m\ge 1$,
+\[
+\Fold_m^{-1}(a_m)=\{a_m\},
+\qquad
+\Fold_m^{-1}(b_m)=\{b_m\}.
+\]
+\end{proposition}
+
+\begin{proof}
+The case $m=1$ is immediate.  Fix $m\ge 2$.
+
+Suppose first that $\Fold_m(\omega)=a_m$.  By
+Lemma~\ref{lem:alternating-extremal-values} and
+Corollary~\ref{cor:visible-value-overflow},
+\[
+N(\omega)\in\{F_{m+1}-1,\;F_{m+1}+F_{m+2}-1\}.
+\]
+But
+\[
+F_{m+1}+F_{m+2}-1=F_{m+3}-1>F_{m+3}-2\ge N(\omega),
+\]
+so necessarily $N(\omega)=F_{m+1}-1$.  In particular $N(\omega)<F_{m+1}$, and
+therefore $\omega_m=0$.  Writing $\omega=u0$ with $u\in\Omega_{m-1}$, we get
+\[
+N(u)=F_{m+1}-1.
+\]
+By the induction hypothesis, $u=b_{m-1}$.  Hence $\omega=b_{m-1}0=a_m$.
+
+Now suppose that $\Fold_m(\omega)=b_m$.  Again by
+Lemma~\ref{lem:alternating-extremal-values} and
+Corollary~\ref{cor:visible-value-overflow},
+\[
+N(\omega)\in\{F_{m+2}-1,\;2F_{m+2}-1\}.
+\]
+Since
+\[
+2F_{m+2}-1
+>
+F_{m+2}+F_{m+1}-2
+=
+F_{m+3}-2
+\ge
+N(\omega),
+\]
+one must have $N(\omega)=F_{m+2}-1$.  The contribution of the first $m-1$
+digits is at most
+\[
+\sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2,
+\]
+so necessarily $\omega_m=1$.  Writing $\omega=u1$ with $u\in\Omega_{m-1}$, we
+obtain
+\[
+N(u)=F_{m+2}-1-F_{m+1}=F_m-1.
+\]
+By the induction hypothesis, $u=a_{m-1}$.  Therefore
+\[
+\omega=a_{m-1}1=b_m.
+\]
+\end{proof}
+
+\begin{theorem}[Single-symbol synchronization]
+\label{thm:alternating-single-symbol-synchronizing}
+For every $m\ge 1$, each of the symbols $a_m$ and $b_m$ labels exactly one edge
+of $G_m$.  Consequently both $a_m$ and $b_m$ are synchronizing words for the
+presentation $G_m$ of $Y_m$.
+\leanverified{paper_resolution_folding_alternating_single_symbol_synchronizing}
+\end{theorem}
+
+\begin{proof}
+An edge of $G_m$ is labeled by $x\in X_m$ precisely when its defining raw word
+lies in $\Fold_m^{-1}(x)$.  Proposition~\ref{prop:alternating-singleton-fibres}
+shows that $\Fold_m^{-1}(a_m)$ and $\Fold_m^{-1}(b_m)$ are singletons.  Hence
+each of $a_m$ and $b_m$ occurs on exactly one edge of $G_m$.  Any label carried
+by exactly one edge is synchronizing, since reading that label collapses the
+candidate vertex set to the terminal vertex of the unique edge.
+\end{proof}
+
+\begin{corollary}[The image language has synchronizing symbols]
+\label{cor:Y-m-synchronized}
+For every $m\ge 1$, the symbols $a_m$ and $b_m$ are synchronizing for the
+presentation $G_m$.  In particular, the image language $Y_m$ is synchronized.
+\leanverified{paper_resolution_folding_y_m_synchronized}
+\end{corollary}
+
+\begin{proof}
+By Proposition~\ref{prop:one-step-right-resolving}, the graph $G_m$ is a
+right-resolving presentation of $Y_m$.  By
+Theorem~\ref{thm:alternating-single-symbol-synchronizing}, that presentation
+admits a synchronizing symbol.  Hence $Y_m$ is synchronized; see
+\cite[Ch.~3]{LindMarcus1995} or \cite[Ch.~4]{Kitchens1998SymbolicDynamics}.
+\end{proof}
+
+\subsection{A lower bound for one-sided inversion}
+
+\begin{proposition}[A lower bound for one-sided inversion]
+\label{prop:one-sided-inverse-memory-lower-bound}
+Let $m\ge 3$, and define finite binary words
+\[
+u_m:=0^m10^{m-2},
+\qquad
+v_m:=0^{m-2}110^{m-1}
+\]
+of length $2m-1$.  Let $U_m,V_m\in\{0,1\}^{\ZZ}$ be their zero extensions on
+the coordinates $\{1,\ldots,2m-1\}$.  Also define
+\[
+e_{m,0}:=0^m,
+\qquad
+e_{m,j}:=0^{m-j}10^{j-1}
+\quad (1\le j\le m-1).
+\]
+Then
+\[
+(\Phi_m(U_m))_t=(\Phi_m(V_m))_t=e_{m,t-1}
+\qquad (1\le t\le m-1),
+\]
+while
+\[
+(\Phi_m(U_m))_m=010^{m-2}\neq 10^{m-1}=(\Phi_m(V_m))_m.
+\]
+Consequently, if
+\[
+\Psi:Y_m\to\{0,1\}^{\ZZ}
+\]
+is a sliding block code with memory $q$ and anticipation $0$ such that
+\[
+\Psi\circ\Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},
+\]
+then necessarily $q\ge m-1$.
+\end{proposition}
+
+\begin{proof}
+For $U_m$, the $t$th raw window is $e_{m,t-1}\in X_m$ for every
+$1\le t\le m-1$, so
+\[
+(\Phi_m(U_m))_t=e_{m,t-1}
+\qquad (1\le t\le m-1).
+\]
+
+For $V_m$, the first raw window is $0^{m-2}11=z_{m,1}$, so
+Proposition~\ref{prop:zero-fiber-explicit} gives
+\[
+(\Phi_m(V_m))_1=0^m=e_{m,0}.
+\]
+For $2\le t\le m-1$, the $t$th raw window of $V_m$ is
+\[
+0^{m-t-1}110^{t-1}.
+\]
+A single application of the local rule \eqref{eq:rewrite-adjacent} transforms
+this word into $e_{m,t-1}=0^{m-t+1}10^{t-2}\in X_m$, so
+Corollary~\ref{cor:fold-order-independent} yields
+\[
+(\Phi_m(V_m))_t=e_{m,t-1}
+\qquad (2\le t\le m-1).
+\]
+Thus the first $m-1$ output symbols of $\Phi_m(U_m)$ and $\Phi_m(V_m)$ agree.
+
+At time $t=m$, the two raw windows are
+\[
+010^{m-2}
+\qquad\text{and}\qquad
+10^{m-1}.
+\]
+Both words already lie in $X_m$, and they are distinct, proving the displayed
+inequality at time $m$.
+
+Now suppose that $\Psi$ has memory $q$ and anticipation $0$ and satisfies
+$\Psi\circ\Phi_m=\mathrm{id}$.  Set
+\[
+\widetilde U_m:=\sigma^{m-1}U_m,
+\qquad
+\widetilde V_m:=\sigma^{m-1}V_m.
+\]
+Then
+\[
+(\widetilde U_m)_0=0,
+\qquad
+(\widetilde V_m)_0=1,
+\]
+because $u_m$ and $v_m$ first differ at their $(m-1)$st coordinate.  By
+Proposition~\ref{prop:Phi-m-equivariant}, the output sequences
+$\Phi_m(\widetilde U_m)$ and $\Phi_m(\widetilde V_m)$ agree on the coordinates
+$-(m-2),\ldots,0$.  If $q<m-1$, then the local rule defining $\Psi(\cdot)_0$
+reads only a block contained in those common coordinates, so
+\[
+\Psi(\Phi_m(\widetilde U_m))_0=\Psi(\Phi_m(\widetilde V_m))_0.
+\]
+Since $\Psi\circ\Phi_m=\mathrm{id}$, this would force
+$(\widetilde U_m)_0=(\widetilde V_m)_0$, a contradiction.  Therefore
+$q\ge m-1$.
+\end{proof}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{cccc}
+\toprule
+state $v$ & appended bit $b$ & label $\ell_3(v,b)$ & next state \\
+\midrule
+$00$ & $0$ & $000$ & $00$ \\
+$00$ & $1$ & $001$ & $01$ \\
+$01$ & $0$ & $010$ & $10$ \\
+$01$ & $1$ & $000$ & $11$ \\
+$10$ & $0$ & $100$ & $00$ \\
+$10$ & $1$ & $101$ & $01$ \\
+$11$ & $0$ & $001$ & $10$ \\
+$11$ & $1$ & $100$ & $11$ \\
+\bottomrule
+\end{tabular}
+\caption{The labeled graph $G_3$.}
+\label{tab:G3}
+\end{table}
+
+\begin{proposition}[Base case at length $3$]
+\label{prop:G3-base-case}
+Every block
+\[
+a_1a_2a_3\in\mathcal L_3(Y_3)
+\]
+has a unique raw lift
+\[
+\omega_1\cdots\omega_5\in\Omega_5
+\]
+satisfying
+\[
+\Fold_3(\omega_j\omega_{j+1}\omega_{j+2})=a_j
+\qquad (1\le j\le 3).
+\]
+Consequently there is a well-defined map
+\[
+\Theta_{3,3}:\mathcal L_3(Y_3)\to X_1=\{0,1\},
+\qquad
+\Theta_{3,3}(a_1a_2a_3):=\omega_3.
+\]
+\end{proposition}
+
+\begin{proof}
+Table~\ref{tab:G3} gives the complete labeled graph $G_3$.  A block
+$a_1a_2a_3\in\mathcal L_3(Y_3)$ is carried by some length-$3$ path in $G_3$.
+Since $G_3$ has four states and two outgoing edges from each state, there are
+\[
+4\cdot 2^3=32
+\]
+length-$3$ paths in total.  A direct inspection of the $32$ paths encoded by
+Table~\ref{tab:G3} shows that no two distinct length-$3$ paths carry the same
+label word.  Hence every admissible block $a_1a_2a_3$ determines a unique
+length-$3$ path in $G_3$.
+
+If the initial vertex of that path is $\omega_1\omega_2$ and its successive
+appended bits are $\omega_3,\omega_4,\omega_5$, then the path corresponds to
+the unique raw lift $\omega_1\cdots\omega_5$.  The central bit $\omega_3$ is
+therefore uniquely determined, and this defines $\Theta_{3,3}$.
+\end{proof}

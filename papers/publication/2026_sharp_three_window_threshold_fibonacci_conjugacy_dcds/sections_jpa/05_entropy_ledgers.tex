@@ -1,0 +1,85 @@
+\section{Finite-window entropy}\label{sec:entropy-ledger}
+
+The preceding sections concern overlapping windows. The complementary single-window identity separates the entropy of the stabilized word, the logarithmic size of its fiber, and the non-uniformity inside that fiber.
+
+\subsection{Fiber-uniform lift}\label{sec:entropy-ledger:lifts}
+
+\begin{definition}[Fiber-uniform lift]\label{def:fiber-lift}
+For a distribution $\pi\in\Delta(X_m)$ on stabilized types, the \emph{fiber-uniform lift} is the probability measure $\mu^e\in\Delta(\{0,1\}^m)$ given by
+\[
+\mu^e(\omega):=\frac{\pi(\Fold_m(\omega))}{|\mathcal{F}_m(\Fold_m(\omega))|},
+\qquad \omega\in\{0,1\}^m.
+\]
+\end{definition}
+
+\begin{remark}
+The normalization is immediate:
+\[
+\sum_{\omega\in\{0,1\}^m}\mu^e(\omega)
+=
+\sum_{x\in X_m}\sum_{\omega\in\mathcal{F}_m(x)}\frac{\pi(x)}{|\mathcal{F}_m(x)|}
+=
+\sum_{x\in X_m}\pi(x)=1.
+\]
+\end{remark}
+
+\subsection{Exact entropy decomposition}\label{sec:entropy-ledger:identity}
+
+\begin{proposition}[Entropy decomposition over fibers]\label{thm:kl-ledger}
+Let $\mu\in\Delta(\{0,1\}^m)$ be any distribution on raw words, $\pi:=(\Fold_m)_*\mu\in\Delta(X_m)$ its pushforward under stabilization, and $\mu^e$ the fiber-uniform lift of $\pi$. Write $d_m(x):=|\mathcal{F}_m(x)|$. Then
+\begin{equation}\label{eq:kl-ledger}
+H(\mu)=H(\pi)+\EE_\pi[\log d_m(X)]-D_{\KL}(\mu\|\mu^e),
+\end{equation}
+where $H(\cdot)$ denotes Shannon entropy and $D_{\KL}$ the Kullback--Leibler divergence.
+\end{proposition}
+
+\begin{proof}
+By definition,
+\[
+D_{\KL}(\mu\|\mu^e)
+=
+-H(\mu)-\sum_{\omega\in\{0,1\}^m}\mu(\omega)\log \mu^e(\omega).
+\]
+For $\omega\in\mathcal{F}_m(x)$ one has $\log\mu^e(\omega)=\log\pi(x)-\log d_m(x)$. Grouping the sum by fibers gives
+\[
+\sum_{\omega}\mu(\omega)\log\pi(\Fold_m(\omega))
+=
+\sum_{x\in X_m}\pi(x)\log\pi(x)
+=
+-H(\pi),
+\]
+and
+\[
+\sum_{\omega}\mu(\omega)\log d_m(\Fold_m(\omega))
+=
+\sum_{x\in X_m}\pi(x)\log d_m(x)
+=
+\EE_\pi[\log d_m(X)].
+\]
+Substituting these identities and rearranging yields \eqref{eq:kl-ledger}.
+\end{proof}
+
+\begin{corollary}[Entropy increase under fiber equilibration]\label{cor:entropy-increase}
+Let $\mu^e$ be the fiber-uniform lift of $(\Fold_m)_*\mu$. Then
+\begin{equation}\label{eq:entropy-increase}
+H(\mu^e)-H(\mu)=D_{\KL}(\mu\|\mu^e).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Directly from Definition~\ref{def:fiber-lift},
+\[
+H(\mu^e)=H(\pi)+\EE_\pi[\log d_m(X)].
+\]
+Subtracting \eqref{eq:kl-ledger} gives \eqref{eq:entropy-increase}.
+\end{proof}
+
+\subsection{Consequences for finite-window laws}\label{sec:entropy-ledger:consequences}
+
+\begin{remark}
+Identity \eqref{eq:kl-ledger} separates three contributions: the visible entropy $H(\pi)$ of the stabilized type, the logarithmic fiber size $\EE_\pi[\log d_m(X)]$, and the within-fiber divergence $D_{\KL}(\mu\|\mu^e)$. For uniform input on $\{0,1\}^m$, one has $\pi_m^{\mathrm{unif}}(x)=d_m(x)/2^m$; hence the fiber counts determine both the visible law and the collision probability in Section~\ref{sec:fiber-spectrum}.
+\end{remark}
+
+\begin{remark}
+Proposition~\ref{thm:kl-ledger} is a fixed-window identity. For $m\ge3$, Theorem~\ref{thm:two-sided-conjugacy} shows that this local multiplicity does not imply loss of information on path space, because the overlapping process has a finite-memory inverse.
+\end{remark}

@@ -1,0 +1,265 @@
+\section{Auxiliary scalar normalisation}
+\label{sec:finite-part}
+
+Throughout this section, \(A\) denotes a primitive non-negative real
+matrix with Perron root \(\lambda>1\). The symbols \(p_n(A)\) denote the
+algebraic M\"obius coefficients of \eqref{eq:primitive-mobius}; they are
+primitive orbit counts only in the integer multigraph case fixed in
+\Cref{sec:preliminaries}. The only scalar input needed later for the
+finite-group theorem spine is the trivial-channel finite part
+\(\mathcal M(A)\). We therefore keep the finite-part formula in full and
+record the canonical cyclic-lift comparison only in a compressed fixed-
+matrix form; its determinant manipulations and supporting proofs are
+deferred to \Cref{app:cyclic-lift-package}.
+
+\subsection{Finite parts and reduced determinants}
+
+\begin{proposition}[Primitive-orbit closed form for the finite part]
+  \label{thm:finite-part-primitive-closed-form}
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\). Then
+  \begin{equation}\label{eq:finite-part-determinant-mobius}
+    \FP(A)
+    =
+    \log C(A)
+    +\sum_{m\ge 2}\frac{\mu(m)}{m}
+      \log\det(I-\lambda^{-m}A)^{-1}.
+  \end{equation}
+  Equivalently,
+  \begin{equation}\label{eq:finite-part-primitive-closed}
+    \FP(A)
+    =
+    \log C(A)
+    +\sum_{n\ge 1}p_n(A)
+      \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
+  \end{equation}
+  Both series converge absolutely. In particular, if
+  \[
+    \psi(x):=-x-\log(1-x)=\sum_{k\ge 2}\frac{x^k}{k},
+    \qquad 0<x<1,
+  \]
+  then
+  \begin{equation}\label{eq:finite-part-gap-series}
+    \log C(A)-\FP(A)
+    =
+    \sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}).
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  Put \(\zeta_A(z)=\det(I-zA)^{-1}\). For \(|z|<\lambda^{-1}\), the
+  Euler product and the determinant trace expansion give
+  \[
+    \log\zeta_A(z)
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n
+    =
+    \sum_{\ell\ge 1}p_\ell(A)\sum_{k\ge 1}\frac{z^{k\ell}}{k}.
+  \]
+  Therefore, still for \(|z|<\lambda^{-1}\),
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\log\zeta_A(z^m)
+    =
+    \sum_{\ell\ge 1}p_\ell(A)
+      \sum_{q\ge 1}
+        \frac{z^{q\ell}}{q}\sum_{m\mid q}\mu(m)
+    =
+    \sum_{\ell\ge 1}p_\ell(A)z^\ell.
+  \]
+  The last equality uses
+  \(\sum_{m\mid q}\mu(m)=1\) for \(q=1\) and \(0\) otherwise.
+  With \(z=r/\lambda\), this says
+  \[
+    P_A(r)
+    =
+    \log\zeta_A(r/\lambda)
+    +\sum_{m\ge 2}\frac{\mu(m)}{m}
+      \log\zeta_A\bigl((r/\lambda)^m\bigr).
+  \]
+  Since
+  \[
+    \log\zeta_A(r/\lambda)+\log(1-r)
+    =
+    \log\bigl((1-r)\zeta_A(r/\lambda)\bigr)
+    \longrightarrow \log C(A)
+  \]
+  as \(r\uparrow 1\), it remains only to pass to the limit in the
+  \(m\ge2\) sum. This is justified by the spectral-radius bound
+  \[
+    \log\zeta_A(\lambda^{-m})
+    =
+    \sum_{j\ge 1}\frac{\Tr(A^j)}{j}\lambda^{-mj}
+    =
+    O(\lambda^{1-m}),
+    \qquad m\ge 2,
+  \]
+  so the determinant series is absolutely summable. Letting
+  \(r\uparrow1\) gives \eqref{eq:finite-part-determinant-mobius}.
+
+  For the primitive-orbit form, write the same Euler product at
+  \(z=r/\lambda\) as
+  \[
+    \log\zeta_A(r/\lambda)
+    =
+    P_A(r)
+    +\sum_{n\ge 1}p_n(A)\sum_{k\ge 2}
+      \frac{r^{kn}\lambda^{-kn}}{k}.
+  \]
+  By \Cref{lem:primitive-orbit-asymptotic},
+  \(\abs{p_n(A)}=O(\lambda^n/n)\). Since
+  \(\sum_{k\ge 2}\lambda^{-kn}/k=O(\lambda^{-2n})\), the double tail is
+  absolutely summable at \(r=1\). Hence
+  \[
+    \FP(A)
+    =
+    \log C(A)
+    -\sum_{n\ge 1}p_n(A)\sum_{k\ge 2}\frac{\lambda^{-kn}}{k}.
+  \]
+  Finally,
+  \[
+    -\sum_{k\ge 2}\frac{x^k}{k}=x+\log(1-x),
+    \qquad |x|<1,
+  \]
+  with \(x=\lambda^{-n}\), which proves
+  \eqref{eq:finite-part-primitive-closed}. The displayed gap formula is
+  the same identity rewritten with \(\psi\).
+\end{proof}
+
+\begin{proposition}[Reduced determinant identity]
+  \label{prop:finite-part-residue-reduced-determinant}
+  Let \(\mu_2,\dots,\mu_d\) be the non-Perron eigenvalues of \(A\). Then
+  \[
+    C(A)
+    =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}\right)^{-1}
+    =\det\nolimits'(I-A/\lambda)^{-1}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Factor
+  \[
+    \det(I-zA)
+    =(1-\lambda z)\prod_{j=2}^d(1-\mu_j z).
+  \]
+  Multiplying by \(1-\lambda z\) and letting \(z\to\lambda^{-1}\) gives
+  the claim.
+\end{proof}
+
+\begin{corollary}[Orbit-Mertens asymptotic]
+  \label{cor:finite-part-mertens-asymptotic}
+  \leavevmode\par\noindent
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\). Then
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =\log N+\mathcal M(A)+o(1)
+    \qquad (N\to\infty),
+  \]
+  where \(\mathcal M(A)=\gamma+\FP(A)\).
+\end{corollary}
+
+\begin{proof}
+  By \Cref{lem:primitive-orbit-asymptotic}, there exists
+  \(\vartheta\in(0,1)\) such that
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}+O\!\left(\frac{\vartheta^n}{n}\right).
+  \]
+  Hence the correction series
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely, and \Cref{lem:abel-correction-sum} gives
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+    =
+    \FP(A).
+  \]
+  Therefore
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\FP(A)
+    -\sum_{n>N}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
+  \]
+  The tail is \(O(\vartheta^N/N)\) by
+  \Cref{lem:geometric-harmonic-tail}, while
+  \(H_N=\log N+\gamma+o(1)\). Since \(\mathcal M(A)=\gamma+\FP(A)\),
+  the claimed asymptotic follows.
+\end{proof}
+
+\subsection{Brief cyclic-lift comparison}
+
+The remaining scalar material concerns the canonical cyclic lift
+\(A^{\langle q\rangle}=A\otimes P_q\) from
+\Cref{eq:cyclic-lift-def}. This is a separate fixed-matrix comparison
+model. Its input is the branch-lifted logarithmic record
+\(\{\Psi_q(A)\}_{q\ge 1}\) from
+\Cref{def:spectral-fingerprints}, not merely the exponentiated reduced
+determinants \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\); without a
+chosen branch the latter determine only \(\exp(\Psi_q(A))\). We state
+only the reconstruction outputs needed for orientation and leave the
+determinant identities, M\"obius inversion on multiples, and the fixed-
+layer calculation to \Cref{app:cyclic-lift-package}.
+
+\begin{theorem}[Auxiliary fixed-matrix cyclic-lift recovery of the
+  reduced spectrum]
+  \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
+  For one fixed primitive non-negative matrix \(A\in M_d(\RR)\), the
+  full branch-lifted logarithmic record \(\{\Psi_q(A)\}_{q\ge 1}\)
+  determines the reduced spectral polynomial \(F_A\) of that same
+  matrix and hence the
+  relative non-Perron spectrum
+  \(\{\mu_j/\lambda\}_{j=2}^d\) with algebraic multiplicity. If
+  \(\lambda\) is supplied as additional data, then the unnormalised
+  non-Perron spectrum \(\{\mu_j\}_{j=2}^d\) is also recovered.
+  Moreover,
+  \[
+    \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right),
+  \]
+  with the explicit bound from
+  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}, and
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+\end{theorem}
+
+\begin{proof}
+  The proof combines the cyclic-lift determinant identity, M\"obius
+  inversion on multiples, Newton's identities, and the finite
+  exponential-sum limsup lemma; see
+  \Cref{app:cyclic-lift-package,%
+  prop:finite-part-cyclic-lift-dirichlet-multiple-sum,%
+  prop:finite-part-cyclic-lift-mobius-inversion,%
+  lem:finite-part-exponential-sum-limsup}.
+\end{proof}
+
+\begin{corollary}[Auxiliary fixed-layer discrete Fourier recovery]
+  \label{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}
+  Write
+  \[
+    F_A(t)=\sum_{n=0}^{d-1}a_n t^n
+    \qquad\text{with } a_0=1.
+  \]
+  If \(q\ge d\), then for this fixed \(q\) the values
+  \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\) determine every coefficient
+  \(a_n\). More precisely,
+  \[
+    a_n=\frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jn}
+    \qquad (0\le n\le d-1).
+  \]
+\end{corollary}
+
+\begin{proof}
+  This is the fixed-layer discrete Fourier inversion recorded in
+  \Cref{app:cyclic-lift-package}.
+\end{proof}
+
+\noindent
+Thus the one-layer statement is exactly finite Fourier inversion for a
+degree-\((d-1)\) polynomial. It is included only to identify the
+canonical cyclic-lift comparison case and is not used in the
+Adams--M\"obius finite-group arguments.

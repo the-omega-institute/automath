@@ -85,4 +85,285 @@ a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
 其严格含义是：每一种 \(\mathsf{NULL}\) 来源都必须被编译为可审计的门条件与缺陷账本项，并在必要时通过外置正交记录轴恢复可逆性。
 正交三分律与不可替代性（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}；定理 \ref{thm:cdim-budget-failure-separation}）正是该闭环的类型化表达。
 
+\begin{proposition}[slab 低复杂度的投影词维数与 Hankel 秩证书]\label{prop:distill-cdim-slab-hankel-rank-certificate}
+沿定义 \ref{def:distill-cdim-frostman-slab-data}。对 \(E\subset\mathcal A_m\) 与 \(q\in Q_m\)，记
+\[
+d_q(E):=|q(E)|.
+\]
+则 \(d_q(E)\le D\) 是有限投影词子范畴维数证书：证书只需列出不超过 \(D\) 个元素组成的集合 \(S\subset\Pi_q\)，并逐项核验 \(q(E)\subset S\)。
+
+进一步，设该地址族 \(E\) 具有有限 Markov 表示：存在有限标记图 \((\Gamma_E,\widetilde\ell_E)\)、一个有限闭路审计族 \(\mathcal C_E\)、以及满射 \(\rho:\mathcal C_E\twoheadrightarrow E\)，使得 \(q(\rho(\gamma))\) 由闭路 \(\gamma\) 的投影词标记决定。令 \(K\subset\mathbb R\) 为子域，并给定单射 \(\beta:q(E)\to K\) 与正权 \(a_x\in K_{>0}\)（\(x\in E\)）。定义
+\[
+h_r:=\sum_{x\in E}a_x\beta(q(x))^r\qquad(r\ge 0),
+\qquad
+H_D(E,q):=(h_{i+j})_{0\le i,j\le D}.
+\]
+则对每个整数 \(D\ge 1\)，
+\[
+d_q(E)\le D
+\quad\Longleftrightarrow\quad
+\operatorname{rank}_K H_D(E,q)\le D.
+\]
+若 \(E\) 来自标记时间 \(\zeta\) 的有限系数窗口，则这些矩 \(h_0,\dots,h_{2D}\) 可由命题 \ref{prop:distill-xi-sector-marked-hankel-detector} 的标记迹系数读出。因此，投影词 slab 塌缩既可由 \(d_q(E)\) 的有限枚举证明，也可由精确 Hankel 秩下降证明。
+\end{proposition}
+\begin{proof}
+第一项是有限集合核验：给定 \(S\)，逐个 \(x\in E\) 计算 \(q(x)\) 并检查其属于 \(S\)，即可证明 \(|q(E)|\le |S|\le D\)。反向若 \(d_q(E)\le D\)，取 \(S=q(E)\) 即得证书。
+
+对 Hankel 判别，将 \(E\) 按 \(q\)-值分组。因 \(\beta\) 在 \(q(E)\) 上单射，\(\beta(q(E))\) 的不同取值数正好为 \(d_q(E)\)。每个取值 \(\lambda\) 的聚合权重为
+\[
+A_\lambda:=\sum_{x\in E,\ \beta(q(x))=\lambda}a_x,
+\]
+且由 \(a_x>0\) 得 \(A_\lambda>0\)。于是 \(h_r=\sum_\lambda A_\lambda\lambda^r\)，这正是命题 \ref{prop:distill-xi-sector-marked-hankel-detector} 的 Hankel 型矩序列。该命题给出 \(\operatorname{rank}_K H_D(E,q)\le D\) 当且仅当不同 \(\lambda\) 的个数至多为 \(D\)，即 \(d_q(E)\le D\)。若闭路审计族 \(\mathcal C_E\) 由标记时间 \(\zeta\) 的有限系数窗口切出，则同一命题的迹系数公式给出所需矩的有限读出。证毕。
+\end{proof}
+
+\begin{proposition}[container-shadow overload is a conditional Hard-axis support witness]\label{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-authorized-hard-axis-witness}
+设 \((m,n,\mathfrak S,\tau)\) 是定义 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-exact-container-shadow} 中的 exact container shadow，并设 \(E\subset\mathcal A_m\) 为非空有限地址族。记
+\[
+A_E:=\operatorname{Supp}_{m,n}^{\tau}(E)=\tau(E).
+\]
+若所有 container budgets 均通过，即
+\[
+\operatorname{Occ}_{\mathcal K}^{\tau}(E)\le B_{\mathcal K}\qquad(\mathcal K\in\mathfrak C_m),
+\]
+则
+\[
+|A_E|\ge S.
+\]
+若相反 \(|A_E|<S\)，则存在具体 \(\mathcal K_\ast\in\mathfrak C_m\) 使
+\[
+\operatorname{Occ}_{\mathcal K_\ast}^{\tau}(E)>B_{\mathcal K_\ast}.
+\]
+并且，当且仅当该 exact container shadow 已被 \(\mathcal V_{\mathrm{Hard}}(q)\) 注册为查询 \(q\) 的 authorized Hard-axis verifier 时，元组
+\[
+(m,n,\tau,\mathcal K_\ast,B_{\mathcal K_\ast},
+\operatorname{Occ}_{\mathcal K_\ast}^{\tau}(E))
+\]
+可作为 \(q\) 的 \(\mathrm{Hard}\)-型失败见证中的支撑预算分量；在未授权情形下，它只证明 support-budget overload，而不自动推出 \(q\) 的读出为 \(\mathsf{NULL}\)。
+\end{proposition}
+\begin{proof}
+由 exact shadow 的定义，\(A_E\in\mathscr A_m\)，并且对每个 \(\mathcal K\in\mathfrak C_m\) 有
+\[
+\operatorname{Occ}_{\mathcal K}^{\tau}(E)=|A_E\cap\mathcal K|.
+\]
+令
+\[
+f_{A_E}:=\sum_{\mathbf k\in A_E}\ind_{C_{\mathbf k}}\in\mathcal V_m.
+\]
+如定理 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-spg-budget-forces-support} 的证明所示，
+\[
+L_{\mathcal K}(f_{A_E})=|A_E\cap\mathcal K|=\operatorname{Occ}_{\mathcal K}^{\tau}(E).
+\]
+因此全部 shadow budgets 通过等价于 \(A_E\) 在 SPG 端满足全部 Wolff-style container budgets。由定理 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-spg-budget-forces-support} 得 \(|A_E|\ge S\)。若 \(|A_E|<S\)，同一定理给出某个 overloaded container \(\mathcal K_\ast\) 满足
+\[
+L_{\mathcal K_\ast}(f_{A_E})>B_{\mathcal K_\ast},
+\]
+即
+\[
+\operatorname{Occ}_{\mathcal K_\ast}^{\tau}(E)>B_{\mathcal K_\ast}.
+\]
+最后，定义 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-exact-container-shadow} 已把 authorized 条件规定为：该支撑预算审计必须被 \(\mathcal V_{\mathrm{Hard}}(q)\) 明确纳入查询 \(q\) 的 Hard-axis pass/fail 机制。故在授权情形下，上述 overloaded container 正是 Hard witness 的支撑预算分量；未授权时，它只是独立的 finite-resolution overload 证据，不能越过定义 \ref{def:cdim-null-witness-tag} 的类型边界而自行成为 \(\mathsf{NULL}\) 见证。证毕。
+\end{proof}
+
+\begin{proposition}[授权投影 x-ray 乘积与有限 overload 二择]\label{distill:wang_zahl-projection_multiplicity_product-cdim-authorized-xray-product-hard-witness}
+设 \(Q\) 为固定的 unitary-slice 查询，并假设其 Hard-axis verifier
+\(
+\mathcal V_{\mathrm{Hard}}(Q)
+\)
+已显式注册如下有限 support-budget 审计数据：
+\[
+(E,C,Y,\pi,q,B_{\mathrm{occ}},B_{\mathrm{fib}}),
+\]
+其中 \(E\neq\varnothing\) 为有限可见地址族，\(C\) 与 \(Y\) 为有限集合，
+\[
+\pi:E\to C,\qquad q:E\to Y
+\]
+分别为粗载体映射与投影/x-ray 读出，且
+\(B_{\mathrm{occ}},B_{\mathrm{fib}}\in\mathbb N_{>0}\) 为已注册的 occupied-carrier 与 fibre 预算。
+对 \(y\in q(E)\)，令
+\[
+E_y:=E\cap q^{-1}(y),\qquad
+C_y:=\pi(E_y),
+\]
+对 \(c\in C_y\)，令
+\[
+E_{c,y}:=E\cap\pi^{-1}(c)\cap q^{-1}(y).
+\]
+定义三个有限重数
+\[
+M_{\mathrm{glob}}:=\max_{y\in q(E)} |E_y|,
+\qquad
+M_{\mathrm{occ}}:=\max_{y\in q(E)} |C_y|,
+\qquad
+M_{\mathrm{fib}}:=\max_{\substack{y\in q(E)\\ c\in C_y}} |E_{c,y}|.
+\]
+则
+\[
+M_{\mathrm{glob}}\le M_{\mathrm{occ}}\,M_{\mathrm{fib}}.
+\]
+进而，若
+\[
+M_{\mathrm{glob}}>B_{\mathrm{occ}}B_{\mathrm{fib}},
+\]
+则下述两类有限 overload 证书至少有一个成立：
+\begin{enumerate}
+  \item 粗载体 overload：存在 \(y_\ast\in q(E)\) 使
+  \[
+  |C_{y_\ast}|>B_{\mathrm{occ}};
+  \]
+  \item 精细 fibre overload：存在对 \((c_\ast,y_\ast)\)，其中 \(y_\ast\in q(E)\)、\(c_\ast\in C_{y_\ast}\)，使
+  \[
+  |E_{c_\ast,y_\ast}|>B_{\mathrm{fib}}.
+  \]
+\end{enumerate}
+在上述注册假设下，相应的元组
+\[
+(Q,E,C,Y,\pi,q,\mathrm{coarse},y_\ast,B_{\mathrm{occ}},|C_{y_\ast}|)
+\]
+或
+\[
+(Q,E,C,Y,\pi,q,\mathrm{fine},c_\ast,y_\ast,B_{\mathrm{fib}},|E_{c_\ast,y_\ast}|)
+\]
+构成 \(Q\) 的 \(\mathrm{Hard}\)-型失败见证中的合法 support-budget 分量。若该数据未在 \(\mathcal V_{\mathrm{Hard}}(Q)\) 中显式注册，则同一元组仅证明有限 projection-budget overload，不能单独推出 \(Q\) 的读出为 \(\mathsf{NULL}\)。
+\end{proposition}
+\begin{proof}
+对每个固定的 \(y\in q(E)\)，集合 \(E_{c,y}\)（\(c\in C_y\)）两两不交，且其并恰为 \(E_y\)。因此
+\[
+|E_y|=\sum_{c\in C_y}|E_{c,y}|\le |C_y|\,M_{\mathrm{fib}}\le M_{\mathrm{occ}}M_{\mathrm{fib}}.
+\]
+对 \(y\in q(E)\) 取最大值即得
+\(
+M_{\mathrm{glob}}\le M_{\mathrm{occ}}M_{\mathrm{fib}}
+\)。
+
+设 \(M_{\mathrm{glob}}>B_{\mathrm{occ}}B_{\mathrm{fib}}\)。若所列两类 overload 均不成立，则对每个 \(y\in q(E)\) 有 \(|C_y|\le B_{\mathrm{occ}}\)，且对每个占用的 fibre 对有 \(|E_{c,y}|\le B_{\mathrm{fib}}\)。由第一部分可得
+\[
+M_{\mathrm{glob}}\le B_{\mathrm{occ}}B_{\mathrm{fib}},
+\]
+与假设矛盾。故至少有一类 overload 成立。
+
+最后，Hard-axis verifier 的唯一角色是类型纪律。由于审计数据与两个通过不等式均已被假定注册于 \(\mathcal V_{\mathrm{Hard}}(Q)\)，一个具体的已注册失败不等式即为 \(\mathrm{Hard}\)-型失败见证的有限离线可核验 support-budget 分量。若同一有限不等式未被注册于 \(Q\)，它仍是有效的有限 x-ray overload 证书，但尚未跨越定义 \ref{def:cdim-null-witness-tag} 所要求的类型边界。命题得证。\qedhere
+\end{proof}
+
+\begin{proposition}[条件性全倍数标度审计与 denominator gap ledger]\label{distill:euclid_elements-proportion_and_denominator_spectrum_families-cdim-all-multiple-gap-ledger}
+设 \(Q\) 为固定的 unitary-slice 查询，并假设其 visible 或 Hard-axis verifier 已注册如下有限 normalized-ratio 审计数据
+\[
+\mathfrak R=(I,\{(N_i,D_i)\}_{i\in I},\mathcal M),
+\]
+其中 \(I\) 为有限集，\(N_i,D_i\in\mathbb N_{>0}\)，且 \(\mathcal M\subset\mathbb N_{>0}\) 为 verifier 的原始文法所允许的非空可容许公倍标度因子集。对 \(i,j\in I\)，令
+\[
+\Delta_{ij}:=N_iD_j-N_jD_i .
+\]
+则下述两条等价：
+\begin{enumerate}
+  \item 归一化读出 \(N_i/D_i\) 与 \(N_j/D_j\) 通过 Euclidean 全倍数相等检验：对所有 \(a,b\in\mathbb N_{>0}\) 与所有 \(m\in\mathcal M\)，
+  \[
+  a\,(mN_i)(mD_j)-b\,(mN_j)(mD_i)
+  \]
+  的三分号与 \(a-b\) 的三分号一致；
+  \item \(\Delta_{ij}=0\)。
+\end{enumerate}
+与相等性无关，每个已构造的比较均在公倍标度下忠实传输：
+\[
+\operatorname{sgn}\!\bigl(a\,(mN_i)(mD_j)-b\,(mN_j)(mD_i)\bigr)
+=\operatorname{sgn}\!\bigl(aN_iD_j-bN_jD_i\bigr)
+\]
+对所有 \(a,b\in\mathbb N_{>0}\) 与 \(m\in\mathcal M\) 成立。若 \(\Delta_{ij}\ne0\)，则没有可容许的公倍因子能修复失败的相等性：对每个 \(m\in\mathcal M\)，传输后的 denominator gap 为
+\[
+\Delta_{ij}^{(m)}:=(mN_i)(mD_j)-(mN_j)(mD_i)=m^2\Delta_{ij},
+\]
+故其符号不变，绝对值只会放大。因此，归一化标度传输的失败并非取整误差，而是有限 ledger 条目
+\[
+(i,j,N_i,D_i,N_j,D_j,\Delta_{ij})
+\]
+注册于被尝试比较所在的支撑轴上。若数据 \(\mathfrak R\) 未被注册于 \(Q\)，则同一计算仅证明外部 denominator-gap 证书，不能单独推出 \(Q\) 具有 \(\mathrm{Hard}\)-标记的 \(\mathsf{NULL}\) 读出。
+\end{proposition}
+\begin{proof}
+对任意 \(m\in\mathcal M\) 与任意 \(a,b\in\mathbb N_{>0}\)，直接展开得
+\[
+ a\,(mN_i)(mD_j)-b\,(mN_j)(mD_i)
+ =m^2\bigl(aN_iD_j-bN_jD_i\bigr).
+\]
+因 \(m^2>0\)，乘以 \(m^2\) 保持三种符号 \(<,=,>\) 不变。此即证明每个已构造比较的忠实传输。
+
+先设 \(\Delta_{ij}=0\)。则 \(N_iD_j=N_jD_i=:C\)，其中 \(C>0\)，从而
+\[
+ a\,(mN_i)(mD_j)-b\,(mN_j)(mD_i)=m^2C(a-b).
+\]
+其符号恰为 \(a-b\) 的符号，故全倍数相等检验通过。反之，若全倍数相等检验通过，取 \(a=b=1\)。对任意 \(m\in\mathcal M\)，所需符号为 \(0\) 的符号，故
+\[
+(mN_i)(mD_j)-(mN_j)(mD_i)=m^2\Delta_{ij}=0.
+\]
+因 \(m>0\)，必有 \(\Delta_{ij}=0\)。
+
+当 \(\Delta_{ij}\ne0\) 时，取 \(a=b=1\) 代入上式得 \(\Delta_{ij}^{(m)}=m^2\Delta_{ij}\)。故公倍标度不能改变符号或消去障碍。该障碍是有限且离线可核验的，因为它仅由两个已注册的整数代表元及其交叉积之差构成。这正是此处所强制的 Omega 区分：合法的公倍数传输已构造的比率比较，而 denominator drift 产生类型化的 gap ledger。最后一句是原始可容许性边界：若未在 \(Q\) 的 verifier 中注册，该元组尚未跨越 Hard-axis 失败见证所要求的类型边界。证毕。
+\end{proof}
+
+\begin{theorem}[可见前缀坏例的条件性穷竭三分律]\label{distill:euclid_elements-exhaustion_and_finite_budget_closure_families-cdim-visible-prefix-residual-trichotomy}
+设 \(Q\) 为固定的 unitary-slice 查询。考虑一条 fold-aware 的非空有限可见前缀族逆链
+\[
+E_1\xleftarrow{\rho_{2,1}}E_2\xleftarrow{\rho_{3,2}}E_3\xleftarrow{}\cdots,
+\qquad
+\rho_{j+1,j}\text{ surjective},
+\]
+以及满足 \((\rho_{j+1,j})_\#\nu_{j+1}=\nu_j\) 的概率测度 \(\nu_j\)。对每一层 \(j\)，假设 \(Q\) 的离线 verifier 已注册两个有限几何 ledger：
+\[
+\mathcal F_j\subset\{(U,\beta):U\subset E_j,\ 0\le\beta\le1\},
+\qquad
+\mathcal S_j\subset\{(q,D):q:E_j\to\Pi_q\text{ finite},\ D\in\NN\}.
+\]
+第一个 ledger 记录 Frostman 型 cap \(\nu_j(U)\le\beta\)；第二个记录 slab-collapse 检验 \(|q(E_j)|>D\)。定义
+\[
+\mathfrak R_F(j):=\max_{(U,\beta)\in\mathcal F_j}\bigl(\nu_j(U)-\beta\bigr)_+,
+\]
+\[
+\mathfrak R_S(j):=\max_{(q,D)\in\mathcal S_j}\bigl(D+1-|q(E_j)|\bigr)_+,
+\]
+约定 \(\max\varnothing=0\)。最后，令
+\[
+B_j^\ast(Q,E_j)\in\NN\cup\{\infty\}
+\]
+为在第 \(j\) 层严格化 \(Q\) 剩余读出歧义所需的最小已注册 Hard-axis 辅助预算，并假设 fold-aware 单调性
+\[
+B_j^\ast(Q,E_j)\le B_{j+1}^\ast(Q,E_{j+1}).
+\]
+假设该注册 verifier 满足如下有限预算闭合公理：若 \(\mathfrak R_F(j)=\mathfrak R_S(j)=0\) 对所有充分大的 \(j\) 成立，且 \(\sup_j B_j^\ast(Q,E_j)<\infty\)，则该逆链承载 \(Q\) 的稳定有限非 \(\mathsf{NULL}\) 证书。
+
+若该链不承载 \(Q\) 的稳定有限非 \(\mathsf{NULL}\) 证书，则下述字典序排列的三种情形恰好有一种成立。
+\begin{enumerate}
+  \item \textbf{Frostman 失败。}存在无穷多个 \(j\) 使 \(\mathfrak R_F(j)>0\)。对每个这样的 \(j\)，存在已注册的 cap \((U_j,\beta_j)\in\mathcal F_j\) 给出有限证书
+  \[
+  \nu_j(U_j)>\beta_j.
+  \]
+  \item \textbf{Slab 集中。}Frostman 失败仅发生有限次，但存在无穷多个 \(j\) 使 \(\mathfrak R_S(j)>0\)。对每个这样的 \(j\)，存在已注册的 slab 检验 \((q_j,D_j)\in\mathcal S_j\) 给出
+  \[
+  |q_j(E_j)|\le D_j.
+  \]
+  若命题 \ref{prop:distill-cdim-slab-hankel-rank-certificate} 的 Markov/Hankel 接口对 \((E_j,q_j)\) 可用，则同一有限塌缩等价地由相应 Hankel 矩阵的秩下降证明。
+  \item \textbf{无界预算障碍。}两个几何残差最终消失，
+  \[
+  \mathfrak R_F(j)=\mathfrak R_S(j)=0\qquad(j\gg1),
+  \]
+  而 Hard-axis 预算无界：
+  \[
+  B_j^\ast(Q,E_j)\longrightarrow\infty.
+  \]
+  因此，剩余的 \(\mathsf{NULL}\) 并非由有限 Frostman cap 或有限 slab 塌缩引起，而是由不存在任何能稳定读出的有界已注册外部预算所强制。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+该链按假设为 fold-aware，故每一层都是同一逆系统对象的合法前缀商；没有使用朴素截断作为不变量。现按已注册残差机制进行穷竭论证。
+
+若 \(\mathfrak R_F(j)>0\) 对无穷多个 \(j\) 成立，则第一种情形成立。由于每个 \(\mathcal F_j\) 有限且最大值为正，该最大值由某个 \((U_j,\beta_j)\) 实现，给出 \(\nu_j(U_j)>\beta_j\)。这是有限 Frostman 失败见证。
+
+设第一种情形不成立。则 \(\mathfrak R_F(j)=0\) 对所有充分大的 \(j\) 成立。若 \(\mathfrak R_S(j)>0\) 对无穷多个 \(j\) 成立，则第二种情形成立。同理，\(\mathcal S_j\) 的有限性给出取最大值的对 \((q_j,D_j)\)。因 \(|q_j(E_j)|\) 与 \(D_j\) 为整数，
+\[
+D_j+1-|q_j(E_j)|
+\]
+为正等价于 \(|q_j(E_j)|\le D_j\)。这正是有限投影词 slab 集中证书。在命题 \ref{prop:distill-cdim-slab-hankel-rank-certificate} 所述的附加 Markov/Hankel 假设下，该命题将同一不等式等同于所述 Hankel 秩下降。
+
+最后处理前两种情形均不发生的情况。此时 \(\mathfrak R_F(j)\) 与 \(\mathfrak R_S(j)\) 对所有充分大的 \(j\) 均消失。若 \(\sup_j B_j^\ast(Q,E_j)<\infty\)，则有限预算闭合公理给出 \(Q\) 的稳定有限非 \(\mathsf{NULL}\) 证书，与假设矛盾。故预算无界。因序列 \(B_j^\ast(Q,E_j)\) 在 \(\NN\cup\{\infty\}\) 中单调不减，无界等价于 \(B_j^\ast(Q,E_j)\to\infty\)。这恰是无界预算障碍。
+
+三种情形按构造字典序穷竭：先路由持续的 Frostman 失败，再路由 Frostman 稳定后持续的 slab 塌缩，最后处理几何残差有界的尾部。从而每个坏逆系统例子都被强制归入某种已注册的有限机制，或归入显式无界的 Hard-axis 预算。定理得证。
+\end{proof}
+
 \endinput

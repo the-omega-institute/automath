@@ -1,0 +1,238 @@
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 似然比的全倍数审计]\label{prop:distill-euclid-elements-window6-likelihood-allmultiples-audit}
+\textbf{Dependency status: rigidity.}
+沿用命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline} 中的
+\[
+L_6(w)=\frac{21\,d_6^{\mathrm{bin}}(w)}{64}.
+\]
+对每个 \(w\in X_6\)，将 \(L_6(w)=a(w)/q(w)\) 写成最低项分数，其中 \(a(w),q(w)\in\NN\) 且 \(\gcd(a(w),q(w))=1\)。则
+\[
+q(w)\in\{32,64,16\},
+\qquad
+\operatorname{lcm}_{w\in X_6}q(w)=64.
+\]
+更精确地，对任意 \(w,w'\in X_6\)，令
+\[
+\ell(w,w'):=\operatorname{lcm}\bigl(q(w),q(w')\bigr).
+\]
+则对任意正整数 \(N\) 满足 \(\ell(w,w')\mid N\) 时，
+\[
+L_6(w)\le L_6(w')
+\quad\Longleftrightarrow\quad
+N L_6(w)\le N L_6(w')
+\]
+且右端是整数账本中的比较。若 \(N\) 不被 \(\ell(w,w')\) 整除，则 \(N\) 不是这对似然比的可接受共同倍数；此时失败应记录为 denominator-spectrum failure，而不是数值舍入误差。
+\end{proposition}
+
+\begin{proposition}[重锁定门后的跨尺度 boundary 读出正规形]\label{distill:euclid_elements-finite_construction_certificate_families-crossscale-relocking-normal-form}
+固定 \(m\ge 6\)，并沿用命题 \ref{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate} 中的 boundary uplift 增量集
+\[
+\Delta_m^{\mathrm{bdry}}
+:=
+\{n-V_m(w):\ n\in \Fold_m^{\mathrm{bin}}{}^{-1}(w)\}.
+\]
+称尺度 \(m\) 上的一条跨尺度 boundary parity 读出是 \(\Gamma_m\)-可采纳的，若其有限证书链中先包含一个重锁定门
+\[
+\Gamma_m:\Delta_m^{\mathrm{bdry}}\longrightarrow \widehat\Delta_m^{\mathrm{bdry}}
+\]
+以及一个有限读出映射
+\[
+\widehat\sigma_m:\widehat\Delta_m^{\mathrm{bdry}}\longrightarrow S,
+\]
+并且对象层 parity 断言只允许通过复合
+\[
+\sigma_m^{\Gamma}:=\widehat\sigma_m\circ\Gamma_m
+\]
+出现。则成立：
+\begin{enumerate}
+  \item 若证书链中没有指定 \(\Gamma_m\)，则任何形如更大窗口已经带有与 window-\(6\) 同坐标的 boundary parity 的断言，都不是可采纳对象层读出；
+  \item 一旦 \(\Gamma_m\) 被指定，所有后续 equality 或 incidence 断言都必须因子化为 \(\widehat\Delta_m^{\mathrm{bdry}}\) 上的等式或包含关系；换言之，\(\delta,\delta'\in\Delta_m^{\mathrm{bdry}}\) 在当前读出下可区分的必要条件是
+  \[
+  \Gamma_m(\delta)\ne \Gamma_m(\delta');
+  \]
+  \item 对已固定的 \(\Gamma_m\)，恰有两种结构情形：若 \(\Gamma_m\) 在 \(\Delta_m^{\mathrm{bdry}}\) 上单射，则它给出忠实重锁定读出；若 \(\Gamma_m\) 非单射，则任取
+  \[
+  \delta\ne\delta',\qquad \Gamma_m(\delta)=\Gamma_m(\delta')
+  \]
+  便得到一个有限 collision 见证，并且每个 \(\Gamma_m\)-可采纳读出都满足
+  \[
+  \sigma_m^{\Gamma}(\delta)=\sigma_m^{\Gamma}(\delta').
+  \]
+\end{enumerate}
+因此，跨尺度 parity 的合法结论不是从图形相似性直接外推而来，而是先构造重锁定门，再在该门的纤维上审计忠实性或 collision。
+\end{proposition}
+
+\begin{proposition}[window-\texorpdfstring{$6$}{6} congruence transfer 的三类失败见证]\label{distill:euclid_elements-lifted_congruence_and_residual_rigidity_families-window6-congruence-transfer-trichotomy}
+\textbf{Dependency status: conditional audit.}
+在 window-\(6\) 上，称一份 projected congruence transfer 审计数据为
+\[
+\mathfrak D=(\omega,\omega',w,\lambda_w,\eta_\partial,B_{\rm av},B_{\rm req}),
+\]
+其中
+\[
+\omega,\omega'\in\Omega_6,\qquad
+w=\Fold_6^{\mathrm{bin}}(\omega)=\Fold_6^{\mathrm{bin}}(\omega'),
+\]
+\(\lambda_w:\Fold_6^{\mathrm{bin}}{}^{-1}(w)\to R_w\) 是当前协议登记的 hidden-fibre 选层读出，
+\[
+\eta_\partial\in C_{\partial}/P_6^{\mathrm{geo}}
+\]
+是 boundary overlap audit 后得到的几何不可吸收类，\(B_{\rm av}\in\NN\) 是可用有限预算，而
+\[
+B_{\rm req}\in\{0,1,2,3,21,+\infty\}
+\]
+是当前 transfer 任务登记的最小预算层级。称 \(\mathfrak D\) 通过 lifted congruence transfer，若同时满足
+\[
+\lambda_w(\omega)=\lambda_w(\omega'),\qquad
+\eta_\partial=0,\qquad
+B_{\rm req}<+\infty,\quad B_{\rm av}\ge B_{\rm req}.
+\]
+若 projected congruence 成立但上述 transfer 未通过，则按以下互斥优先规则得到一个规范失败见证：
+\begin{enumerate}
+  \item 若 \(\lambda_w(\omega)\ne\lambda_w(\omega')\)，输出 \(\mathrm{StickyRes}\)；
+  \item 否则若 \(\eta_\partial\ne0\in C_{\partial}/P_6^{\mathrm{geo}}\)，输出 \(\mathrm{HolDef}\)；
+  \item 否则必有 \(B_{\rm req}=+\infty\) 或 \(B_{\rm av}<B_{\rm req}\)，输出 \(\mathrm{BudOverflow}\)。
+\end{enumerate}
+反过来，三类见证中的任意一类一旦出现，都分别阻止 projected congruence 被当前协议提升为 canonical lifted equality。
+\end{proposition}
+
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 固定 quotient boundary ledger 的相对闭合判别]
+\label{distill:euclid_elements-diagrammatic_compatibility_audit_families-window6-quotient-ledger-relative-classification}
+沿用命题 \ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates} 的记号，并固定
+\[
+Q_{\partial}:=C_{\partial}/P_6^{\mathrm{geo}}\cong(\ZZ/2\ZZ)^2.
+\]
+所谓相对于该 quotient 的一份 boundary overlap diagram，是指一个有限图 \(\Gamma=(V,E)\) 与一条类型化边账本
+\[
+\lambda:E^{\rm or}\longrightarrow Q_{\partial},
+\qquad
+\lambda(\bar e)=\lambda(e),
+\]
+其中等式按 \(\FF_2\)-系数理解。对 \(\FF_2\)-循环 \(z=\sum_{e\in E} \epsilon_e e\in Z_1(\Gamma;\FF_2)\)，定义 quotient monodromy
+\[
+\operatorname{Hol}_{\lambda}([z])
+:=
+\sum_{e\in E}\epsilon_e\lambda(e)\in Q_{\partial}.
+\]
+则 \(\operatorname{Hol}_{\lambda}:H_1(\Gamma;\FF_2)\to Q_{\partial}\) 是良定义线性映射，并且：
+\begin{enumerate}
+  \item 存在顶点势 \(\alpha:V\to Q_{\partial}\) 使
+  \[
+  \lambda(uv)=\alpha(u)+\alpha(v)\qquad(uv\in E)
+  \]
+  当且仅当 \(\operatorname{Hol}_{\lambda}=0\)；
+  \item 若 \(H_1(\Gamma;\FF_2)=0\)，则任意类型化 \(Q_{\partial}\)-边账本均可由顶点势闭合；
+  \item 若 \(\operatorname{Hol}_{\lambda}\ne0\)，则在这份固定 quotient ledger 内，其障碍秩只能为
+  \[
+  \operatorname{rank}_{\FF_2}\operatorname{im}(\operatorname{Hol}_{\lambda})\in\{1,2\}.
+  \]
+  秩 \(1\) 表示只剩一位 quotient boundary monodromy，秩 \(2\) 表示两位 \(Q_{\partial}\)-残差均被实际检测到；该分类仅针对给定的 \(Q_{\partial}\)-账本，不声称覆盖所有可能的 boundary 失败机制。
+\end{enumerate}
+进一步，若某个 reduced readout 只杀死子空间 \(K\le Q_{\partial}\)，则该 readout 能闭合当前图解当且仅当
+\[
+\operatorname{im}(\operatorname{Hol}_{\lambda})\subseteq K.
+\]
+因此，在固定 \(Q_{\partial}\)-ledger 口径下，杀死当前 boundary monodromy 所需的最小 quotient bit 数恰为 \(\operatorname{rank}_{\FF_2}\operatorname{im}(\operatorname{Hol}_{\lambda})\)。
+\end{proposition}
+\begin{proof}
+因为 \(Q_{\partial}\) 是 \(\FF_2\)-向量空间，边的方向反转不改变标签，故对循环代表元求和只依赖于其边集的 \(\FF_2\)-同调类；图的一维复形没有非零二维边界，所以 \(\operatorname{Hol}_{\lambda}\) 是良定义线性映射。
+
+若存在顶点势 \(\alpha\) 且 \(z=\sum_e\epsilon_e e\) 是循环，则每个顶点在循环中出现偶数次，于是
+\[
+\sum_e\epsilon_e\lambda(e)
+=\sum_{uv}\epsilon_{uv}(\alpha(u)+\alpha(v))=0.
+\]
+故 \(\operatorname{Hol}_{\lambda}=0\)。
+
+反过来，假设 \(\operatorname{Hol}_{\lambda}=0\)。在每个连通分支中选取一个根顶点 \(o\)，并对顶点 \(v\) 取任意从 \(o\) 到 \(v\) 的路径 \(p_v\)，定义
+\[
+\alpha(v):=\sum_{e\in p_v}\lambda(e).
+\]
+若换取另一条路径，则两条路径的对称差给出一个 \(\FF_2\)-循环；其 \(\lambda\)-和由 \(\operatorname{Hol}_{\lambda}=0\) 消失，所以 \(\alpha(v)\) 与路径选择无关。对任意边 \(uv\)，路径 \(p_u\)、边 \(uv\) 与路径 \(p_v\) 的对称差是一个循环，因此
+\[
+\alpha(u)+\lambda(uv)+\alpha(v)=0,
+\]
+即 \(\lambda(uv)=\alpha(u)+\alpha(v)\)。这证明第一条。第二条由 \(H_1(\Gamma;\FF_2)=0\) 时唯一线性映射 \(H_1\to Q_{\partial}\) 必为零立即推出。
+
+若 \(\operatorname{Hol}_{\lambda}\ne0\)，其像是 \(Q_{\partial}\cong\FF_2^2\) 的非零子空间，因此秩只能为 \(1\) 或 \(2\)。最后，reduced readout 杀死子空间 \(K\) 后，残余 monodromy 正是复合
+\[
+H_1(\Gamma;\FF_2)\xrightarrow{\operatorname{Hol}_{\lambda}}Q_{\partial}\longrightarrow Q_{\partial}/K.
+\]
+该复合为零当且仅当 \(\operatorname{im}(\operatorname{Hol}_{\lambda})\subseteq K\)。最小可行 \(K\) 的维数因此等于 \(\operatorname{im}(\operatorname{Hol}_{\lambda})\) 的维数。该证明把 window-\(6\) 的 boundary 图示相容性严格降为 typed incidence ledger、cycle monodromy 与 quotient bit budget 三项有限数据。证毕。
+\end{proof}
+
+\begin{proof}
+由定义，projected congruence 只断言两点具有同一个可见折叠值 \(w\)。要把它提升为当前协议中的 canonical lifted equality，协议还必须核验三件互不替代的事实：hidden fibre 选层一致、boundary overlap 的几何不可吸收类为零、以及当前任务所需预算已经登记并被可用预算覆盖。
+
+若第一项失败，即
+\(\lambda_w(\omega)\ne\lambda_w(\omega')\)，则两点虽投影到同一 \(w\)，但仍处在同一可见纤维中的不同 residual 层。这正是 sticky residual：它不会被 \(w\) 的 projected congruence 看见，却直接否定 lifted equality。因此输出 \(\mathrm{StickyRes}\) 且 transfer 不可通过。
+
+若第一项通过而第二项失败，则 hidden fibre 选层本身不再是障碍；失败来自 boundary overlap audit 中的类
+\(\eta_\partial\)。命题
+\ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates}
+给出
+\[
+C_{\partial}/P_6^{\mathrm{geo}}\cong(\ZZ/2\ZZ)^2,
+\]
+这正是局域几何无法吸收的 boundary holonomy 商。因此 \(\eta_\partial\ne0\) 表明局部相等数据沿重叠闭路运输后没有回到同一 lift，故输出 \(\mathrm{HolDef}\) 且 transfer 不可通过。
+
+若前两项都通过而 transfer 仍失败，则唯一剩余的失败条件是预算项：要么任务本身登记为当前协议下无有限忠实外置，即
+\(B_{\rm req}=+\infty\)；要么所需有限预算未被覆盖，即
+\(B_{\rm av}<B_{\rm req}\)。命题
+\ref{prop:typed-address-biaxial-completion-window6-audit-budget-split}
+已经把 window-\(6\) 的预算层级固定为精确回放、boundary 分辨、anomaly 完备与无限 prime-register 方向的分裂层级，因此这种失败不能被解释成数值误差，而只能输出 \(\mathrm{BudOverflow}\)。
+
+三条判断按优先级排列，故互斥且穷尽所有未通过情形。反向断言逐项由通过条件的合取定义给出：任一失败见证都否定合取中的某一项，因此阻止 projected congruence 被当前协议提升为 canonical lifted equality。证毕。
+\end{proof}
+
+\begin{proof}
+第一条只是 primitive-admissibility filtering 的直接后果。当前协议允许的 primitive 数据中，尺度 \(m\) 的 boundary 坐标并不自动与 window-\(6\) 的二层 parity 同名；若没有先把 \(\Delta_m^{\mathrm{bdry}}\) 送入某个已声明的坐标集 \(\widehat\Delta_m^{\mathrm{bdry}}\)，则不存在对象层函数可供后续谓词调用。
+
+第二条来自 construction-before-predication。按定义，\(\Gamma_m\)-可采纳读出只能通过复合 \(\widehat\sigma_m\circ\Gamma_m\) 产生。因此，若两个增量在 \(\Gamma_m\) 下同像，则任何只依赖该证书链的谓词都只能看到同一个 \(\widehat\Delta_m^{\mathrm{bdry}}\) 坐标；若后续证明仍把二者分开，它必然使用了未登记的额外 primitive，而不再属于该重锁定协议。
+
+第三条是有限集合映射的二分。任一映射在其定义域上或者单射，或者存在一对不同元素同像。单射时，\(\Gamma_m\) 本身保留了全部增量点，故给出忠实重锁定。非单射时，同像对 \((\delta,\delta')\) 是一个完全有限的 collision 证书；对任意 \(\widehat\sigma_m\)，复合值满足
+\[
+(\widehat\sigma_m\circ\Gamma_m)(\delta)
+=
+\widehat\sigma_m(\Gamma_m(\delta))
+=
+\widehat\sigma_m(\Gamma_m(\delta'))
+=
+(\widehat\sigma_m\circ\Gamma_m)(\delta').
+\]
+这正把 diagram-to-ledger conversion 落到跨尺度 parity 的有限 incidence ledger 上。证毕。
+\end{proof}
+
+\begin{proof}
+由命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline}，
+\[
+d_6^{\mathrm{bin}}(w)\in\{2,3,4\}.
+\]
+因此
+\[
+\frac{21d_6^{\mathrm{bin}}(w)}{64}\in
+\left\{\frac{42}{64},\frac{63}{64},\frac{84}{64}\right\}
+=
+\left\{\frac{21}{32},\frac{63}{64},\frac{21}{16}\right\}.
+\]
+这给出最低项分母集合 \(\{32,64,16\}\)，其最小公倍数为 \(64\)。
+固定 \(w,w'\)。当 \(\ell(w,w')\mid N\) 时，\(NL_6(w)\) 与 \(NL_6(w')\) 均为整数；又因 \(N>0\)，乘以 \(N\) 保持有理数的序关系，故得到所示等价。若 \(N\) 不被 \(\ell(w,w')\) 整除，则至少一个乘积不是整数，因而不能作为整数倍数账本中的共同尺度比较项。证毕。
+\end{proof}
+
+\begin{proof}
+前四条分别只是把命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline}、命题 \ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates}、命题 \ref{prop:typed-address-biaxial-completion-window6-audit-budget-split} 与定义 \ref{def:typed-address-biaxial-completion-window6-audit-rough-sampling} 的逻辑顺序改写成停机规则。
+最后一条则直接来自命题 \ref{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate}。证毕。
+\end{proof}
+
+\subsubsection{小结}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-summary}
+至此，window-\(6\) 的最小实例簇已经第一次被压成一套可证伪、可停机、可复算的研究协议。
+这套协议并不从"大模拟"开始，而是严格按如下顺序推进：
+\begin{enumerate}
+  \item 先审计固定窗闭式；
+  \item 再审计 boundary holonomy；
+  \item 然后审计回放预算与异常预算的裂分；
+  \item 继而审计表观随机的 fixed-window 与大窗统计证书；
+  \item 随后才允许进入粗糙可见量的采样协议；
+  \item 最后再以协议门限制跨尺度外推。
+\end{enumerate}
+只有这六层全部按顺序通过，window-\(6\) 才有资格被说成最小可审计粗糙时空样例；否则，它至多只是一个尚未与现有闭式链对齐的离散模型。
+下一步最自然的工作，则是把这一协议对应的首批图表、表格与 JSON 证书说明逐项固定下来，并把落图顺序直接嵌回正文层。

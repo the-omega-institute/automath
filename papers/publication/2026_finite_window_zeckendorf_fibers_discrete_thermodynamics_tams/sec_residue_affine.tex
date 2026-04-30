@@ -1,0 +1,421 @@
+\section{Affine transfer and partition differences}\label{sec:residue-affine}
+
+\subsection{Fourier formulas for the fibers}
+
+\begin{theorem}[Residue fibers]
+\label{thm:residue-fibers}
+For every \(x\in X_m\), with \(r_x:=V_m(x)\),
+\[
+  d_m(x)
+  =
+  \card{\Bigl\{\omega\in\Omega_m:
+  \sum_{j=1}^m\omega_jF_{j+1}\equiv r_x \pmod{F_{m+2}}\Bigr\}}.
+\]
+\end{theorem}
+
+\begin{proof}
+This is exactly \Cref{cor:residue-characterization}.
+\end{proof}
+
+\begin{theorem}[Fourier inversion]
+\label{thm:fourier-inversion}
+Let \(\zeta=e^{2\pi i/F_{m+2}}\).  Then for every \(x\in X_m\),
+\[
+  d_m(x)=\frac{1}{F_{m+2}}
+  \sum_{a=0}^{F_{m+2}-1}
+  \zeta^{-ar_x}\prod_{j=1}^m(1+\zeta^{aF_{j+1}}).
+\]
+Consequently, if
+\[
+  \Sigma_m:=\sum_{x\in X_m}d_m(x)^2,
+\]
+then
+\[
+  \Sigma_m=
+  \frac{1}{F_{m+2}}
+  \sum_{a=0}^{F_{m+2}-1}
+  \left|
+    \prod_{j=1}^m(1+\zeta^{aF_{j+1}})
+  \right|^2.
+\]
+\end{theorem}
+
+\begin{proof}
+In the finite cyclic group \(\ZZ/F_{m+2}\ZZ\),
+\[
+  \mathbf{1}_{n\equiv r_x}
+  =
+  \frac{1}{F_{m+2}}
+  \sum_{a=0}^{F_{m+2}-1}\zeta^{a(n-r_x)}.
+\]
+Therefore
+\[
+  d_m(x)
+  =
+  \sum_{\omega\in\Omega_m}\mathbf{1}_{N_m(\omega)\equiv r_x}
+  =
+  \frac{1}{F_{m+2}}
+  \sum_{a=0}^{F_{m+2}-1}
+  \zeta^{-ar_x}
+  \sum_{\omega\in\Omega_m}\zeta^{aN_m(\omega)}.
+\]
+Since \(N_m(\omega)=\sum_{j=1}^m \omega_jF_{j+1}\),
+\[
+  \sum_{\omega\in\Omega_m}\zeta^{aN_m(\omega)}
+  =
+  \prod_{j=1}^m\sum_{\omega_j\in\{0,1\}}\zeta^{a\omega_jF_{j+1}}
+  =
+  \prod_{j=1}^m(1+\zeta^{aF_{j+1}}),
+\]
+which proves the first formula.
+
+For the second formula, use that \(d_m(x)\in\RR\), so
+\(\Sigma_m=\sum_{x\in X_m}|d_m(x)|^2\).  Multiply the first identity by its
+complex conjugate and sum over \(x\in X_m\):
+\[
+  \Sigma_m
+  =
+  \frac{1}{F_{m+2}^2}
+  \sum_{a,b=0}^{F_{m+2}-1}
+  \left(
+    \prod_{j=1}^m(1+\zeta^{aF_{j+1}})
+  \right)
+  \overline{
+    \left(
+      \prod_{j=1}^m(1+\zeta^{bF_{j+1}})
+    \right)
+  }
+  \sum_{x\in X_m}\zeta^{(b-a)r_x}.
+\]
+Because \(V_m\) is a bijection onto \(\{0,\dots,F_{m+2}-1\}\), the residues
+\(\{r_x:x\in X_m\}\) are exactly the full residue system.  Hence the character
+orthogonality relation
+\[
+  \sum_{x\in X_m}\zeta^{(b-a)r_x}
+  =
+  \sum_{r=0}^{F_{m+2}-1}\zeta^{(b-a)r}
+  =
+  \begin{cases}
+    F_{m+2}, & a=b,\\
+    0, & a\neq b
+  \end{cases}
+\]
+eliminates the cross terms and gives
+\[
+  \Sigma_m
+  =
+  \frac{1}{F_{m+2}}
+  \sum_{a=0}^{F_{m+2}-1}
+  \left|
+    \prod_{j=1}^m(1+\zeta^{aF_{j+1}})
+  \right|^2,
+\]
+as claimed.
+\end{proof}
+
+\subsection{Affine transfer to Fibonacci subset sums}
+
+\begin{definition}[Shifted subset-sum spectrum]
+\label{def:shifted-spectrum}
+Define
+\[
+  \widetilde N_m(\omega):=\sum_{j=1}^m \omega_jF_j
+  \qquad (\omega\in\Omega_m),
+\]
+and
+\[
+  \widetilde d_m(r):=
+  \card{\{\omega\in\Omega_m:\ \widetilde N_m(\omega)=r\}},
+  \qquad 0\le r<F_{m+2}.
+\]
+Because \(\sum_{j=1}^m F_j=F_{m+2}-1\), no reduction modulo \(F_{m+2}\) is
+needed in this definition.
+\end{definition}
+
+\begin{definition}[The affine residue permutation]
+\label{def:affine-map}
+Define \(\tau_m\colon \Omega_m\to\Omega_m\) by
+\[
+  (\tau_m(\omega))_k=
+  \begin{cases}
+    \omega_{m+1-k}, & k\equiv m \pmod 2,\\[4pt]
+    1-\omega_{m+1-k}, & k\not\equiv m \pmod 2,
+  \end{cases}
+  \qquad 1\le k\le m.
+\]
+Define
+\[
+  C_m:=\sum_{\substack{1\le k\le m\\ k\not\equiv m \,(\mathrm{mod}\,2)}}F_{k+1},
+  \qquad
+  \pi_m(r)\equiv F_{m+1}r+C_m \pmod{F_{m+2}}.
+\]
+\end{definition}
+
+\begin{lemma}[Closed form for the translation term]
+\label{lem:Cm-closed}
+For every \(m\ge 1\),
+\[
+  C_m=F_{m+1}-1.
+\]
+\end{lemma}
+
+\begin{proof}
+If \(m=2q\), then
+\[
+  C_m=F_2+F_4+\cdots+F_{2q}=F_{2q+1}-1=F_{m+1}-1.
+\]
+If \(m=2q+1\), then
+\[
+  C_m=F_3+F_5+\cdots+F_{2q+1}=F_{2q+2}-1=F_{m+1}-1.
+\]
+\end{proof}
+
+\begin{theorem}[Affine transfer principle]
+\label{thm:affine-transfer}
+For every \(m\ge 1\), the map \(\pi_m\) is a permutation of
+\(\ZZ/F_{m+2}\ZZ\), and
+\[
+  \widetilde d_m(r)=d_m^\#(\pi_m(r)),
+  \qquad
+  d_m^\#(s):=d_m(V_m^{-1}(s)).
+\]
+Equivalently, the multiset of fiber multiplicities of \(\Fold_m\) agrees with
+the coefficient multiset of
+\[
+  \prod_{j=1}^m(1+z^{F_j})
+\]
+up to the explicit affine permutation \(\pi_m\).
+\end{theorem}
+
+\begin{proof}
+We use d'Ocagne's identity
+\[
+  F_uF_{v+1}-F_{u+1}F_v=(-1)^vF_{u-v}.
+\]
+Taking \(u=m+1\) and \(v=j-1\) gives
+\[
+  F_{m+1}F_j-F_{m+2}F_{j-1}=(-1)^{j-1}F_{m+2-j},
+\]
+hence
+\begin{equation}\label{eq:docagne-window}
+  F_{m+1}F_j\equiv (-1)^{j-1}F_{m+2-j}\pmod{F_{m+2}}.
+\end{equation}
+
+Now
+\[
+  N_m(\tau_m(\omega))
+  =
+  \sum_{\substack{1\le k\le m\\ k\equiv m \,(\mathrm{mod}\,2)}}
+  \omega_{m+1-k}F_{k+1}
+  +
+  \sum_{\substack{1\le k\le m\\ k\not\equiv m \,(\mathrm{mod}\,2)}}
+  (1-\omega_{m+1-k})F_{k+1}.
+\]
+Separate the constant term:
+\[
+  N_m(\tau_m(\omega))
+  =
+  \sum_{k=1}^m(-1)^{m-k}\omega_{m+1-k}F_{k+1}+C_m.
+\]
+After the change of variables \(j=m+1-k\),
+\[
+  N_m(\tau_m(\omega))
+  =
+  \sum_{j=1}^m(-1)^{j-1}\omega_jF_{m+2-j}+C_m.
+\]
+Applying \eqref{eq:docagne-window} term by term yields
+\[
+  N_m(\tau_m(\omega))
+  \equiv
+  F_{m+1}\sum_{j=1}^m \omega_jF_j + C_m
+  =
+  F_{m+1}\widetilde N_m(\omega)+C_m
+  \pmod{F_{m+2}}.
+\]
+Thus
+\begin{equation}\label{eq:tau-congruence}
+  N_m(\tau_m(\omega))\equiv \pi_m(\widetilde N_m(\omega))\pmod{F_{m+2}}.
+\end{equation}
+
+Since \(\gcd(F_{m+1},F_{m+2})=1\), multiplication by \(F_{m+1}\) is invertible
+modulo \(F_{m+2}\), so \(\pi_m\) is a permutation.  Because \(\tau_m\) is also
+a bijection of \(\Omega_m\), for every residue \(r\),
+\begin{align*}
+  \widetilde d_m(r)
+  &=
+  \card{\{\omega\in\Omega_m:\ \widetilde N_m(\omega)=r\}} \\
+  &=
+  \card{
+    \left\{
+      \omega\in\Omega_m:
+      N_m(\tau_m(\omega))\equiv \pi_m(r)\pmod{F_{m+2}}
+    \right\}
+  }.
+\end{align*}
+By \Cref{thm:residue-fibers}, the last quantity is precisely
+\(d_m^\#(\pi_m(r))\).
+\end{proof}
+
+\begin{corollary}[Coefficient-spectrum form of the fibers]
+\label{cor:coefficient-spectrum}
+As multisets,
+\[
+  \{d_m(x):x\in X_m\}
+  =
+  \Bigl\{
+    [z^r]\prod_{j=1}^m(1+z^{F_j}) : 0\le r<F_{m+2}
+  \Bigr\}.
+\]
+\end{corollary}
+
+\begin{proof}
+The coefficient \([z^r]\prod_{j=1}^m(1+z^{F_j})\) is exactly
+\(\widetilde d_m(r)\).  Apply \Cref{thm:affine-transfer}.
+\end{proof}
+
+\subsection{The partition-difference formula}
+
+\begin{definition}[Fibonacci partition functions]
+\label{def:partition-functions}
+Let \(R(n)\) denote the number of partitions of \(n\) into distinct Fibonacci
+numbers, where the two unit weights \(F_1=F_2=1\) are not distinguished, and
+set \(R(n)=0\) for \(n<0\).  Following the indexed model in which the two unit
+weights are distinguished, define
+\[
+  R^\dagger(n):=R(n)+R(n-1)
+  \qquad (n\in\ZZ).
+\]
+\end{definition}
+
+\begin{theorem}[Partition-difference formula]
+\label{thm:partition-difference}
+For every integer \(n\) with \(0\le n<F_{m+2}\),
+\[
+  d_m^\#(\pi_m(n))
+  =
+  R^\dagger(n)-R^\dagger(n-F_{m+1}).
+\]
+Equivalently,
+\[
+  d_m^\#(\pi_m(n))
+  =
+  R(n)+R(n-1)-R(n-F_{m+1})-R(n-F_{m+1}-1).
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{thm:affine-transfer},
+\[
+  d_m^\#(\pi_m(n))=\widetilde d_m(n),
+\]
+where \(\widetilde d_m(n)\) is the coefficient of \(z^n\) in
+\[
+  \mathcal P_m(z):=\prod_{j=1}^m(1+z^{F_j}).
+\]
+Thus
+\begin{equation}\label{eq:shifted-coefficient}
+  d_m^\#(\pi_m(n))=[z^n]\mathcal P_m(z).
+\end{equation}
+
+The ordinary Fibonacci partition function has generating series
+\[
+  \sum_{n\ge 0}R(n)z^n=(1+z)\prod_{j\ge 3}(1+z^{F_j}),
+\]
+because the unit weight occurs only once.  Hence
+\begin{equation}\label{eq:indexed-generating}
+  \sum_{n\ge 0}R^\dagger(n)z^n
+  =
+  (1+z)\sum_{n\ge 0}R(n)z^n
+  =
+  \prod_{j\ge 1}(1+z^{F_j}).
+\end{equation}
+If \(0\le n<F_{m+2}\), then the coefficient of \(z^n\) in the infinite product
+\(\prod_{j\ge 1}(1+z^{F_j})\) depends only on the factors with \(j\le m+1\),
+since \(F_{m+2}\) and all later Fibonacci numbers exceed \(n\).  Therefore
+\[
+  R^\dagger(n)
+  =
+  [z^n](1+z^{F_{m+1}})\mathcal P_m(z)
+  =
+  [z^n]\mathcal P_m(z)+[z^{n-F_{m+1}}]\mathcal P_m(z).
+\]
+The second coefficient is \(R^\dagger(n-F_{m+1})\), since
+\(n-F_{m+1}<F_{m+1}<F_{m+2}\).  Using \eqref{eq:shifted-coefficient}, we
+obtain
+\[
+  d_m^\#(\pi_m(n))
+  =
+  R^\dagger(n)-R^\dagger(n-F_{m+1}),
+\]
+where the second term is interpreted as \(0\) for \(n<F_{m+1}\).  Expanding
+\(R^\dagger(t)=R(t)+R(t-1)\) yields the four-term formula.
+\end{proof}
+
+\begin{example}[A four-digit window]
+\label{ex:m4-partition-difference}
+Take \(m=4\).  Then \(F_5=5\), \(F_6=8\), and
+\[
+  \pi_4(n)\equiv 5n+4 \pmod 8.
+\]
+Moreover,
+\[
+  \prod_{j=1}^4(1+z^{F_j})
+  =
+  (1+z)^2(1+z^2)(1+z^3)
+  =
+  1+2z+2z^2+3z^3+3z^4+2z^5+2z^6+z^7,
+\]
+so the difference spectrum is
+\[
+  \bigl(R^\dagger(n)-R^\dagger(n-5)\bigr)_{n=0}^{7}
+  =
+  (1,2,2,3,3,2,2,1).
+\]
+Applying \(\pi_4\) sends \(0,1,\dots,7\) to \(4,1,6,3,0,5,2,7\), and hence
+\[
+  \bigl(d_4^\#(r)\bigr)_{r=0}^{7}
+  =
+  (3,2,2,3,1,2,2,1).
+\]
+Thus the affine permutation simply reindexes the coefficient list of
+\(\prod_{j=1}^4(1+z^{F_j})\) into the finite-window fiber spectrum.
+\end{example}
+
+\begin{remark}[Single-fiber formulas from classical partition theory]
+\label{rem:single-fiber-literature}
+Theorem~\ref{thm:partition-difference} identifies each fiber multiplicity with
+a Fibonacci-lag difference of the classical partition function.  Hence the
+exact Zeckendorf formulas of Chow and Slattery \cite{ChowSlattery2021} apply
+directly to \(d_m^\#(\pi_m(n))\).
+\end{remark}
+
+\begin{proposition}[Complement symmetry]
+\label{prop:complement-symmetry}
+Let
+\[
+  B_m:=\sum_{j=1}^mF_{j+1}=F_{m+3}-2.
+\]
+Then, as a function on \(\ZZ/F_{m+2}\ZZ\),
+\[
+  d_m^\#(r)=d_m^\#(B_m-r).
+\]
+\end{proposition}
+
+\begin{proof}
+Let \(\iota(\omega)_j:=1-\omega_j\).  Then \(\iota\) is a bijection of
+\(\Omega_m\), and
+\[
+  N_m(\iota(\omega))
+  =
+  \sum_{j=1}^m (1-\omega_j)F_{j+1}
+  =
+  B_m-N_m(\omega).
+\]
+Hence
+\[
+  N_m(\omega)\equiv r \pmod{F_{m+2}}
+  \iff
+  N_m(\iota(\omega))\equiv B_m-r \pmod{F_{m+2}}.
+\]
+Apply \Cref{thm:residue-fibers}.
+\end{proof}

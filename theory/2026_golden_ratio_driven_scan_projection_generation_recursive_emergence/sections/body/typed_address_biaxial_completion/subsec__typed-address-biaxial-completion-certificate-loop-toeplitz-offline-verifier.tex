@@ -259,6 +259,150 @@ S_r(w):=S(rw),
 \end{enumerate}
 \leanverified{paper\_typed\_address\_biaxial\_completion\_sparsification\_depth}
 \end{proposition}
+
+\begin{proposition}[branch-pure strictification 的寄存器下界]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-branch-pure-strictification-register-lower-bound}
+沿用定义 \ref{def:distill-typed-branch-pure-certificate-corridor}。令 \(E_N\subset\mathcal E_N^\tau\) 为非空 active fine certificate set，并记
+\[
+\pi:=\pi_{N,M}^\tau|_{E_N}:E_N\to C_M(E_N),
+\qquad
+\mu:=\mu_{N|M}^\tau(E_N).
+\]
+称有限寄存器 \(R\) 与映射 \(r:E_N\to R\) 在该 branch-pure 走廊上 strictify coarse ambiguity，若
+\[
+E_N\longrightarrow C_M(E_N)\times R,
+\qquad
+e\longmapsto (\pi(e),r(e))
+\]
+为单射。则任何这样的 strictification 都满足
+\[
+|R|\ge\mu.
+\]
+特别地，若 \(R=(\mathbb F_p)^B\)，则
+\[
+B\ge \left\lceil\log_p\mu\right\rceil.
+\]
+进一步，设存在某个 coarse certificate \(c\in C_M(E_N)\)、有限向量空间 \(A_L=(\mathbb F_p)^L\)、以及 fibre mark
+\[
+\theta:E_N\cap\pi^{-1}(c)\to A_L
+\]
+满足：对某个 \(e_0\in E_N\cap\pi^{-1}(c)\)，差集
+\[
+\{\theta(e)-\theta(e_0):e\in E_N\cap\pi^{-1}(c)\}
+\]
+张成维数为 \(L_0\) 的子空间；并且 \(\theta\) 通过线性寄存器读出实现，即存在 \(\mathbb F_p\)-线性映射 \(\rho:(\mathbb F_p)^B\to A_L\) 使
+\[
+\theta(e)=\rho(r(e))
+\qquad(e\in E_N\cap\pi^{-1}(c)).
+\]
+则必有
+\[
+B\ge L_0.
+\]
+这些下界只使用 branch-pure 的有限 coarse map 与同分支 fibre，不假设证书对象形成 torsor、层或可粘接对象；因而它们是统一离线验证器语法中的纯预算障碍。
+\end{proposition}
+
+\begin{definition}[有限证书环路的 filling 预算]\label{def:distill-gromov-typed-certificate-loop-filling-budget}
+令 \(K\) 为有限二维胞腔复形，记其整系数链群为 \(C_j(K;\mathbb Z)\)，边界算子为 \(\partial\)。称
+\[
+z\in Z_1(K;\mathbb Z):=\ker(\partial:C_1(K;\mathbb Z)\to C_0(K;\mathbb Z))
+\]
+为一条有限证书环路。给定二胞腔权重
+\[
+\omega:K_2\to\mathbb N_{>0},
+\]
+对 \(c=\sum_{\sigma\in K_2}n_\sigma\sigma\in C_2(K;\mathbb Z)\) 定义
+\[
+\|c\|_\omega:=\sum_{\sigma\in K_2}|n_\sigma|\omega(\sigma).
+\]
+证书环路 \(z\) 的 filling 成本定义为
+\[
+\operatorname{Fill}_\omega(z):=\min\{\,\|c\|_\omega:c\in C_2(K;\mathbb Z),\ \partial c=z\,\},
+\]
+若不存在这样的 \(c\)，则记 \(\operatorname{Fill}_\omega(z)=\infty\)。
+\end{definition}
+
+\begin{theorem}[filling 预算与外置同调账本下界]\label{thm:distill-gromov-typed-certificate-loop-filling-ledger-lower-bound}
+沿用定义 \ref{def:distill-gromov-typed-certificate-loop-filling-budget}。固定有限证书环路族
+\[
+\mathcal L\subset Z_1(K;\mathbb Z),
+\]
+预算 \(B\in\mathbb N\)，以及素数 \(p\)。设
+\[
+\mathcal L_{>B}:=\{\,z\in\mathcal L:\operatorname{Fill}_\omega(z)>B\,\},
+\]
+其中 \(\infty>B\)。令 \([z]_p\) 表示 \(z\) 在 \(H_1(K;\mathbb F_p)\) 中的同调类，并定义超预算环路张成的同调障碍空间
+\[
+W_{B,p}:=\operatorname{Span}_{\mathbb F_p}\{\,[z]_p:z\in\mathcal L_{>B}\,\}\subseteq H_1(K;\mathbb F_p).
+\]
+则成立：
+\begin{enumerate}
+  \item 若某个环路 \(z\in\mathcal L\) 附带 filling 证书 \(c\in C_2(K;\mathbb Z)\)，满足
+  \[
+  \partial c=z,\qquad \|c\|_\omega\le B,
+  \]
+  则 \([z]_p=0\)。
+  \item 设统一离线验证器对所有 \(z\in\mathcal L_{>B}\) 外置一个线性同调账本
+  \[
+  r:\mathcal L_{>B}\to(\mathbb F_p)^b
+  \]
+  以及线性解码器
+  \[
+  \rho:(\mathbb F_p)^b\to H_1(K;\mathbb F_p),
+  \]
+  并要求
+  \[
+  \rho(r(z))=[z]_p\qquad(z\in\mathcal L_{>B}).
+  \]
+  则必有
+  \[
+  b\ge \dim_{\mathbb F_p}W_{B,p}.
+  \]
+\end{enumerate}
+因此，低于预算 \(B\) 的环路闭合必须由实际 filling 证书承担；超过该预算后，若仍要保持离线验证器对环路失败类型的同调可分辨性，则至少需要 \(\dim_{\mathbb F_p}W_{B,p}\) 个 \(p\)-线性外置坐标。该下界不能由 Toeplitz 谱裕度、Jensen 半径裕度或其它正交数值容忍阈值替代。
+\end{theorem}
+\begin{proof}
+若 \(\partial c=z\)，则 \(z\) 是整系数边界。模 \(p\) 后仍为边界，故其在 \(H_1(K;\mathbb F_p)\) 中的同调类为零。这证明第一条；其中 \(\|c\|_\omega\le B\) 只是说明该闭合处于当前预算内。
+
+对第二条，由假设可知每个生成元 \([z]_p\ (z\in\mathcal L_{>B})\) 都落在 \(\operatorname{im}\rho\) 中，因此
+\[
+W_{B,p}\subseteq \operatorname{im}\rho.
+\]
+于是
+\[
+\dim_{\mathbb F_p}W_{B,p}\le \dim_{\mathbb F_p}\operatorname{im}\rho\le b.
+\]
+这给出所需下界。最后一句只是上述两条的类型纪律解释：subcritical 闭合由显式二链 filling 证明，supercritical 剩余若要被区分，只能通过承载其同调像的外置账本，而线性代数端或解析端的数值裕度并不改变 \(H_1(K;\mathbb F_p)\) 中的维数不等式。证毕。
+\end{proof}
+
+\begin{proof}
+取 \(c_\ast\in C_M(E_N)\) 使
+\[
+|E_N\cap\pi^{-1}(c_\ast)|=\mu.
+\]
+若 \(e,e'\in E_N\cap\pi^{-1}(c_\ast)\) 且 \(r(e)=r(e')\)，则
+\[
+(\pi(e),r(e))=(c_\ast,r(e))=(c_\ast,r(e'))=(\pi(e'),r(e')).
+\]
+由 strictification 的单射性得 \(e=e'\)。故 \(r\) 在该 fibre 上单射，从而
+\[
+|R|\ge |E_N\cap\pi^{-1}(c_\ast)|=\mu.
+\]
+当 \(R=(\mathbb F_p)^B\) 时，\(|R|=p^B\)，于是 \(p^B\ge\mu\)，即
+\[
+B\ge\lceil\log_p\mu\rceil.
+\]
+
+对最后的线性 mark 断言，固定 \(e_0\)。由假设，所有差
+\[
+\theta(e)-\theta(e_0)=\rho(r(e))-\rho(r(e_0))=\rho(r(e)-r(e_0))
+\]
+都属于 \(\operatorname{im}\rho\)。这些差张成维数 \(L_0\) 的子空间，故
+\[
+L_0\le \dim_{\mathbb F_p}\operatorname{im}\rho\le B.
+\]
+这给出 \(B\ge L_0\)。整个证明只涉及同一 summand \(\tau\) 内的有限 fibre 与寄存器读出，没有使用任何跨分支粘接或 torsor 结构。证毕。
+\end{proof}
+
 \begin{proof}
 前两条分别是定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification} 与定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 的直接重述；第三条的不可判定性由定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable} 给出，而深度作为硬资源的制度解释则已在小节 \ref{subsec:typed-address-biaxial-completion-boundary-joint-budget}、小节 \ref{subsec:typed-address-biaxial-completion-jensen-defect-repulsion-blindspot} 与命题 \ref{prop:typed-address-biaxial-completion-nonnull-requires-three-axes} 中固定。证毕。
 \end{proof}

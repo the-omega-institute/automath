@@ -1,100 +1,98 @@
-% ══════════════════════════════════════════════════════════
 \section{Introduction}\label{sec:intro}
-% ══════════════════════════════════════════════════════════
 
-The idea that a single primitive can generate a rich family of
-objects is a recurring structural motif in mathematics and logic.
-In Boolean algebra the Sheffer stroke (NAND) suffices to express
-every truth function~\cite{Sheffer1913}.
-In the $\lambda$-calculus a single variable-binding construct
-generates all computable functions~\cite{Church1936}.
-In combinatory logic two combinators $S$ and~$K$ are enough;
-with Sch\"onfinkel's encoding even a single combinator
-suffices~\cite{Schonfinkel1924}.
+Universality statements often hide a difference in kind.  The
+Sheffer stroke generates the Boolean operations \cite{Sheffer1913};
+lambda abstraction gives a calculus of effective computation
+\cite{Church1936}; and combinatory logic replaces variables by a
+finite stock of combinators \cite{Schonfinkel1924}.  In such
+examples it matters whether the assertion is merely that expressions
+exist, or also that representatives can be chosen and compared
+effectively.
 
-A recent and striking addition to this lineage is
-Odrzywołek's demonstration that \emph{every} elementary function
-available on a standard scientific calculator---the 36-element
-basis comprising arithmetic, algebraic, trigonometric, hyperbolic,
-and logarithmic operations---can be reconstructed from a single
-binary operator
-\begin{equation}\label{eq:eml-def-intro}
-  \eml(x,y) \;=\; e^{x} - \ln y
-\end{equation}
-together with the constant~$1$, using the minimal context-free
-grammar $S \to 1 \mid \eml(S,S)$~\cite{Odrzywołek2026}.
-This collapses the \emph{expression library} to a uniform binary
-tree syntax---we call this \textbf{expression universality}.
+The same distinction occurs for recent one-operation presentations
+of elementary functions.  Odrzywo{\l}ek showed that
+\[
+  \eml(x,y)=e^x-\operatorname{Log}y
+\]
+together with the constant \(1\) represents the operations in a
+standard scientific-calculator basis \cite{Odrzywolek2026}.  Thus a
+large elementary language can be encoded by binary trees with a
+single internal label.  This is a useful expression theorem, but it
+does not itself choose a normal form among the many trees defining
+the same function.
 
-The present note identifies expression universality as the bottom
-rung of a three-level hierarchy whose upper levels are qualitatively
-stronger.
+We shall distinguish three levels.  First, expression universality
+only asks for some term over a single binary operation.  Second,
+protocol universality asks in addition for computable normal forms
+and readout maps.  Our model example uses Zeckendorf normal forms:
+after normalization, the elementary Church-iteration identities read
+addition and multiplication on \(\NN=\{0,1,2,\ldots\}\) at two
+successive composition levels.  Third, one may attach finite
+certificates to the fibers of a normalizing map.  Hankel positivity
+and finite Prony reconstruction are then automatic finite-fiber
+facts, whereas a finite-state transfer formula for the same moments
+is extra structure.
 
-\begin{enumerate}[label=\textbf{L\arabic*},leftmargin=2.5em]
-\item \textbf{Expression universality} (Odrzywołek):
-  a diverse function library is collapsed to a single operator and
-  a tree grammar.  The operations of composition and evaluation
-  remain external to the formalism.
-\item \textbf{Protocol universality} (this paper, building on
-  \cite{OmegaSPG2026}):
-  integer arithmetic operations---addition and multiplication
-  themselves---are not primitive but \emph{emerge} from a single
-  scan--projection protocol.  The unique primitive is function
-  composition~$\circ$, and $+$~and~$\times$ are its level-0 and
-  level-1 readouts.  Canonical forms are computable, and the word
-  problem for projection-word equivalence is decidable.
-\item \textbf{Certificate universality} (this paper, building on
-  \cite{OmegaSPG2026}):
-  the fold fibers carry collision-moment sequences
-  $\{S_q(m)\}_{q \ge 0}$ whose Hankel matrices are positive
-  semi-definite.  A finite Prony--Hankel reconstruction recovers
-  the full multiplicity spectrum from $2r$ moments, yielding an
-  auditable, finite-dimensional spectral certificate at each
-  resolution~$m$.
+The results below are separations of these structures, not new
+proofs of Zeckendorf arithmetic, Church iteration, elementary
+function identities, or finite moment reconstruction.  The EML
+operation is expression-universal for Odrzywo{\l}ek's basis, but
+Richardson's theorem rules out a computable canonical form on the
+translated Richardson fragment when equality is understood as
+equality of real functions.  In the Zeckendorf protocol, addition is
+read on a free monogenic orbit, while multiplication cannot be read
+there by the ambient product, even after injectively recoding the
+positive integers.  Finally, finite Hankel--Prony certificates do
+not imply a finite-state transfer law: one can replace the finite
+sets over the same normal forms by computable finite-fiber covers,
+leaving the arithmetic readouts unchanged and forcing the second
+collision moments to grow faster than any exponential sequence.
+
+Section~\ref{sec:L0} records the expression-level EML input.
+Section~\ref{sec:L1} gives the Zeckendorf protocol and the
+level-zero obstruction for multiplication.  Section~\ref{sec:L2}
+sets up the finite-fiber certificates.  Section~\ref{sec:strictness}
+proves the separations.  The appendix collects several standard
+consequences of the finite fiber measure.
+
+\begin{theorem}[Main hierarchy theorem]\label{thm:main-hierarchy}
+With the definitions made below, the following hierarchy statements
+hold.  In the protocol and certificate clauses, \(A\) is any
+nonempty set and \(g\colon A\to A\) is any endomorphism of infinite
+order.
+\begin{enumerate}
+\item The EML system \((\eml,1)\) is expression-universal for
+  Odrzywo{\l}ek's scientific-calculator basis
+  \(\mathcal B_{36}\).
+\item The Zeckendorf address system, equipped with its stable normal
+  forms and the two composition readouts
+  \(c_n\mapsto g^{\circ n}\) and \(c_n\mapsto I_n\), is
+  protocol-universal for \(\{+,\times\}\) on \(\NN\).
+\item Multiplication on \(\NN_{\ge1}\) cannot be read from the
+  ambient product on one free monogenic orbit, even after an
+  injective recoding of the positive integers.
+\item On the principal-branch EML translation of Richardson's real
+  elementary fragment, no computable normal form into a decidable
+  finite-object codomain can classify equality of the transported
+  real functions.
+\item The Zeckendorf fold system is certificate-universal in the
+  finite-fiber sense.  Nevertheless finite-fiber certificate
+  universality is strictly weaker than finite-state certificate
+  universality: computable finite-fiber covers can preserve the
+  normal forms and readouts while forcing the second collision
+  moment to grow faster than every exponential sequence.
 \end{enumerate}
+\end{theorem}
 
-\begin{table}[ht]
-\centering\small
-\caption{Three levels of single-primitive universality.}
-\label{tab:hierarchy}
-\begin{tabular}{@{}llll@{}}
-\toprule
-Level & What is unified & Primitive & Canonical form \\
-\midrule
-L0: Expression  & function library  & $\eml + 1$  & none intrinsic \\
-L1: Protocol    & arithmetic ops    & $\circ$ (composition) & Zeckendorf NF \\
-L2: Certificate & audit structure   & finite-state kernel & spectral fingerprint \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The relationships between levels are directional rather than
-strict class containments (\Cref{sec:strictness}):
-\begin{itemize}[nosep]
-\item \textbf{L0 vs L1.}  EML and the SPG protocol are
-  \emph{incomparable} as classes---EML is expression-universal
-  but not protocol-universal (the word problem is undecidable;
-  \Cref{thm:separation}), and protocol universality is not
-  entailed by expression universality.  When a
-  semantically-compatible evaluator exists
-  (\Cref{prop:L1-compiles-L0}), L1 strictly strengthens L0
-  by providing decidable canonical forms.
-\item \textbf{L1 vs L2.}  Clauses~(a) and~(b) of~L2
-  (Hankel PSD, finite Prony reconstruction) are generic for
-  protocol-universal systems with finite fibers
-  (\Cref{rem:hankel-psd-generic}).  Clause~(c) (polynomial-
-  dimension transfer-operator computability) is the
-  non-trivial structural content of L2, witnessed in the
-  SPG setting by \Cref{thm:star-kernel}.  Whether this
-  clause fails for some protocol-universal system---hence
-  witnessing a strict class containment---is left open
-  (\Cref{rem:L1-L2-strictness-open}).
-\end{itemize}
-
-\paragraph{Relation to the main work.}
-The protocol and certificate layers are developed in full
-generality in~\cite{OmegaSPG2026}.  The purpose of this note is
-narrower: to make the hierarchy explicit, to state the
-level-by-level structural relations cleanly, and to anchor
-the comparison with Odrzywołek's EML operator as a concrete
-external reference point.
+\begin{proof}
+The expression input is \Cref{thm:eml-universality}.  The positive
+protocol construction is \Cref{thm:zeckendorf-protocol-univ}, and
+the monogenic-orbit obstruction is
+\Cref{thm:level-zero-obstruction}.  The Richardson obstruction is
+proved in \Cref{thm:separation}, using the effective translation
+lemma \Cref{lem:richardson-translation}.  The finite-fiber
+certificate assertion is \Cref{prop:zeckendorf-cert-univ}; the
+strictness from finite-state transfer is
+\Cref{thm:finite-state-strictness}, with preservation of the
+underlying protocol supplied by \Cref{lem:cover-preserves-protocol}.
+\end{proof}

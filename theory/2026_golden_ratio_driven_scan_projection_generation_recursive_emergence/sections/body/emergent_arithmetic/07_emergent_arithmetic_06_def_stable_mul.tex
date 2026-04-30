@@ -242,3 +242,68 @@ a=q\otimes b\ \oplus\ r,
 \leanverified{paper\_zeckendorf\_arith\_computable}
 对任意 $c,d\in X_\infty$，$c\oplus d$ 与 $c\otimes d$ 可由有限步算法计算：先在值层执行整数加法/乘法得到 $\mathrm{Val}(c)\pm\mathrm{Val}(d)$ 或 $\mathrm{Val}(c)\mathrm{Val}(d)$，再以 Zeckendorf 贪心算法取唯一规范形（附录 C）。
 \end{proposition}
+
+\begin{theorem}[有限乘法表的细化相容性判别]\label{distill:cech_cohomology-refinement_stability_separation-ea-finite-multiplication-shadow-criterion}
+令
+\[
+r_m:X_\infty\longrightarrow X_m
+\]
+为取前 \(m\) 个稳定 Fibonacci 数字的有限分辨率投影，并在 \(X_\infty\) 上使用定义 \ref{def:stable-mul} 的稳定乘法 \(\otimes\)。给定任意有限二元运算
+\[
+\star_m:X_m\times X_m\longrightarrow X_m,
+\]
+称 \(\star_m\) 为 \(\otimes\) 的深度 \(m\) 可采纳阴影，若对所有 \(c,d\in X_\infty\) 均有
+\[
+r_m(c\otimes d)=r_m(c)\star_m r_m(d).
+\]
+则 \(\star_m\) 可采纳当且仅当下列两项同时成立：
+\begin{enumerate}
+  \item 乘法对深度 \(m\) 等价关系相容：若
+  \[
+  r_m(c)=r_m(c'),\qquad r_m(d)=r_m(d'),
+  \]
+  则
+  \[
+  r_m(c\otimes d)=r_m(c'\otimes d');
+  \]
+  \item 对任意 \(x,y\in X_m\)，若取任意提升 \(c,d\in X_\infty\) 满足
+  \(r_m(c)=x\)、\(r_m(d)=y\)，则
+  \[
+  x\star_m y=r_m(c\otimes d).
+  \]
+\end{enumerate}
+若第一项失败，则存在四元缺口账本
+\[
+(c,c',d,d')
+\]
+具有相同的有限输入读出而给出不同的有限乘积读出。若第一项成立而第二项失败，则存在表格缺口账本
+\[
+(x,y,c,d)
+\]
+使 \(x=r_m(c)\)、\(y=r_m(d)\)，但 \(x\star_m y\ne r_m(c\otimes d)\)。在任一失败情形中，\(\star_m\) 都只能被记录为有限分辨率算术 artifact，不能作为第 \ref{sec:emergent-arithmetic} 节中值保持重写或稳定乘法的对象层替代品。
+\end{theorem}
+\begin{proof}
+先设 \(\star_m\) 可采纳。若
+\(r_m(c)=r_m(c')\) 且 \(r_m(d)=r_m(d')\)，则由可采纳性，
+\[
+r_m(c\otimes d)=r_m(c)\star_m r_m(d)
+=r_m(c')\star_m r_m(d')=r_m(c'\otimes d'),
+\]
+故第一项成立。再取 \(x,y\in X_m\) 及其提升 \(c,d\)。由可采纳性直接得到
+\[
+x\star_m y=r_m(c)\star_m r_m(d)=r_m(c\otimes d),
+\]
+即第二项成立。
+
+反过来，假设两项成立。任取 \(c,d\in X_\infty\)，令
+\(x=r_m(c)\)、\(y=r_m(d)\)。第二项应用于这组提升，给出
+\[
+x\star_m y=r_m(c\otimes d).
+\]
+这正是 \(\star_m\) 的可采纳性。第一项保证第二项中右端与提升选择无关，因此该有限表格不是任意代表元选择的产物。
+
+若第一项失败，则按其否定即存在 \(c,c',d,d'\) 满足相同有限输入读出而有限乘积读出不同。这说明深度 \(m\) 的输入数据不足以决定深度 \(m\) 的乘积读出，因而任何只依赖 \(X_m\times X_m\) 的表格都不可能表示稳定乘法。若第一项成立而第二项失败，则提升选择已经无歧义，但给定表格没有取该唯一值；这只是表格登记错误或有限实现层 artifact。
+
+在两种失败情形中，均没有得到定义 \ref{def:observer-indexed-value-preserving-rewrite} 所要求的对象层值保持等式。由命题 \ref{prop:observer-indexed-value-preserving-no-creation}，这样的表格不能创造或替代稳定乘法事实；它必须被送入有限分辨率 gap ledger，直到给出上述细化相容证书为止。证毕。
+\end{proof}
+
