@@ -181,6 +181,141 @@ u\in\Delta(X_{m'})\)，若 \(\rho_\#\mu=\rho_\#\nu\)，则
 \]
 于是 \(\delta_x\) 与 \(\delta_{x'}\) 在深度 \(m\) 的全部余类谓词、全部粗层测试以及任意 \(X_m\)-可测统计上完全不可分，但它们在 \(B'\) 上取值不同。该见证证明的是跨分辨率下降失败；除非另有细化相容证书，它不得被解释为深度 \(m\) 的结构性筛分刚性。
 \end{theorem}
+
+% --- Distillation writeback ---
+\begin{proposition}[抽样命中事件的确定性选择子]\label{distill:bourgain-random_to_deterministic_certificate_extraction-finite-transcript-selector}
+设 \(E\) 为有限包集，\(A\subseteq E\) 为当前分辨率上已经通过随机抵消门的好包集合，并固定样本数 \(N\ge1\)。把完整实验记录写成
+\[
+\mathbf e=(e_1,\ldots,e_N)\in E^N,
+\qquad
+H_A:=\{\mathbf e\in E^N:\exists i\text{ 使 }e_i\in A\}.
+\]
+在 \(H_A\) 上定义确定性选择子
+\[
+\operatorname{Sel}_A(\mathbf e):=e_{i_\ast},
+\qquad
+ i_\ast:=\min\{i:e_i\in A\}.
+\]
+则成立如下三点。
+\begin{enumerate}
+  \item 若 \(e_i\) 独立同分布于概率测度 \(\nu\in\Delta(E)\)，则
+  \[
+  \mathbb P_\nu(H_A)=1-(1-\nu(A))^N.
+  \]
+  因而大偏差或重复抽样至多给出 \(H_A\) 的高概率发生，即好包存在；可复核的对象层证书必须是某个确定包 \(\operatorname{Sel}_A(\mathbf e)\in A\)。
+  \item 设实验只保存压缩日志
+  \[
+  L:E^N\longrightarrow Y
+  \]
+  而不保存完整 transcript。则 \(L\) 足以恢复确定性好包证书，当且仅当存在映射
+  \[
+  s_L:L(H_A)\longrightarrow A
+  \]
+  使得
+  \[
+  \operatorname{Sel}_A=s_L\circ L\qquad\text{于 }H_A\text{ 上}.
+  \]
+  等价地，对任意 \(\mathbf e,\mathbf e'\in H_A\)，若 \(L(\mathbf e)=L(\mathbf e')\)，则
+  \[
+  \operatorname{Sel}_A(\mathbf e)=\operatorname{Sel}_A(\mathbf e').
+  \]
+  \item 更一般地，若 \(\tau:E\to T\) 为有限算术标签，例如同余类、denominator spectrum 类型或 arithmetic resonance 标签，则 \(L\) 足以恢复所选好包的标签，当且仅当 \(\tau\circ\operatorname{Sel}_A\) 在 \(H_A\) 上经由 \(L\) 因子化。若该因子化失败，则存在两份具有同一压缩日志的命中 transcript，它们通过同一随机抵消门，却给出不同的确定性算术标签；于是任何只依赖 \(L\) 的推广规则都不能把随机抵消命中解释为算术共振排除。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一项由独立性直接给出：未命中 \(A\) 的概率为 \((1-\nu(A))^N\)，取补即得公式。
+
+第二项是有限集合上的因子化判别。若存在 \(s_L\) 使 \(\operatorname{Sel}_A=s_L\circ L\)，则同一 \(L\)-纤维中的两个 transcript 必有相同选择子。反过来，若该纤维常值条件成立，则对每个 \(y\in L(H_A)\) 任取 \(\mathbf e\in H_A\) 且 \(L(\mathbf e)=y\)，定义
+\[
+s_L(y):=\operatorname{Sel}_A(\mathbf e).
+\]
+纤维常值性保证该定义与代表元无关，并立刻给出 \(\operatorname{Sel}_A=s_L\circ L\)。
+
+第三项完全相同，只需把选择子 \(\operatorname{Sel}_A\) 替换为复合标签 \(\tau\circ\operatorname{Sel}_A\)。若因子化失败，则存在 \(\mathbf e,\mathbf e'\in H_A\) 满足 \(L(\mathbf e)=L(\mathbf e')\) 但
+\[
+\tau(\operatorname{Sel}_A(\mathbf e))\ne
+\tau(\operatorname{Sel}_A(\mathbf e')).
+\]
+这两份 transcript 对压缩日志给出完全相同的随机抵消证据，却在算术标签上分离。因此，随机命中事件本身不能承担 deterministic certificate 的角色；Omega 层必须保存所选包，或保存一个在相关日志纤维上足以分离所选包标签的确定性商证书。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{theorem}[随机通过谓词的确定性细化存活判据]\label{distill:bourgain-random_to_deterministic_certificate_extraction-refinement-survival-gate}
+设
+\[
+m_0<m_1<m_2<\cdots
+\]
+为一条 fold-aware 分辨率链。对每个 \(j\ge0\)，令 \(E_j\) 为有限确定性包证书集，并给定限制映射
+\[
+\rho_{j,i}:E_j\longrightarrow E_i\qquad(0\le i\le j)
+\]
+满足
+\[
+\rho_{i,i}=\mathrm{id},
+\qquad
+\rho_{k,i}=\rho_{j,i}\circ\rho_{k,j}\qquad(0\le i\le j\le k).
+\]
+令 \(C_j\subseteq E_j\) 为随机抵消或大偏差实验在第 \(j\) 层可命中的通过包集合，令 \(R_j\subseteq E_j\) 为第 \(j\) 层算术共振集合，并置
+\[
+A_j:=C_j\setminus R_j.
+\]
+称 \(A_j\) 为第 \(j\) 层可提升确定性证书集合。对 \(J\ge0\) 定义有限前缀存活集
+\[
+K_J:=\left\{(e_0,\ldots,e_J)\in\prod_{j=0}^{J}A_j:
+\rho_{j,i}(e_j)=e_i\ (0\le i\le j\le J)\right\}.
+\]
+则以下条件等价：
+\begin{enumerate}
+  \item 存在稳定确定性证书链 \((e_j)_{j\ge0}\) 满足
+  \[
+  e_j\in A_j,\qquad \rho_{j,i}(e_j)=e_i\qquad(0\le i\le j).
+  \]
+  \item 对每个 \(J\ge0\)，有限前缀存活集 \(K_J\) 非空。
+  \item 对每个 \(J\ge0\)，存在 \(e_J\in A_J\) 使得
+  \[
+  \rho_{J,i}(e_J)\in A_i\qquad(0\le i\le J).
+  \]
+\end{enumerate}
+特别地，逐层随机命中
+\[
+A_j\ne\varnothing\qquad(j\ge0)
+\]
+并不足以给出可推广的 Omega 证书；有限实验只有在上述每个前缀存活集均非空时，才可提升为跨尺度对象层证书。
+\end{theorem}
+\begin{proof}
+第一项推出第二项，只需截断稳定链 \((e_j)_{j\ge0}\) 到前 \(J\) 层，即得 \((e_0,
+\ldots,e_J)\in K_J\)。第二项推出第三项也显然：从 \(K_J\) 中取任一前缀，其末端坐标 \(e_J\) 的各层限制正是前面坐标，故均落在相应 \(A_i\) 中。第三项推出第二项同样由相容性给出；若 \(e_J\in A_J\) 的所有限制均落在 \(A_i\)，则
+\[
+(\rho_{J,0}(e_J),\rho_{J,1}(e_J),\ldots,
+\rho_{J,J}(e_J))
+\in K_J.
+\]
+
+现在证明第二项推出第一项。考虑由所有有限相容前缀组成的树
+\[
+\mathcal T:=\bigsqcup_{J\ge0}K_J,
+\]
+其中长度 \(J+1\) 的节点通过删除末端坐标投影到长度 \(J\) 的节点。每一层 \(K_J\) 都是有限集，并由假设非空。由于每个节点只有有限多个后继，可用有限分支树的无穷路径引理得到一条无穷路径。为保持论证自足，具体构造如下：在有限集 \(K_0\) 中选择一个节点，该节点是无穷多个更长前缀的首坐标；否则 \(K_0\) 的有限并只能支撑有限多层非空前缀，矛盾。已选择长度 \(r+1\) 的前缀且它具有无穷多个延拓时，它的后继集合有限，故至少一个后继仍具有无穷多个延拓。递归选择得到相容序列 \((e_j)_{j\ge0}\)，且每个有限截断都属于相应 \(K_J\)。于是 \(e_j\in A_j\)，并满足全部限制方程。
+
+最后说明逐层命中不足。令 \(E_j=\{0,1\}\)，并定义
+\[
+\rho_{j,i}(x)=
+\begin{cases}
+ x,&j-i\text{ 为偶数},\\
+ 1-x,&j-i\text{ 为奇数}.
+\end{cases}
+\]
+这些映射满足上面的相容方程。取 \(C_j=\{0\}\)、\(R_j=\varnothing\)，于是 \(A_j=\{0\}\) 对每个 \(j\) 均非空；甚至每层用点质量抽样都以概率一命中 \(A_j\)。然而
+\[
+\rho_{1,0}(0)=1\notin A_0,
+\]
+故 \(K_1=\varnothing\)，不存在稳定确定性证书链。该例表明，随机抵消门 \(C_j\) 与算术共振排除门 \(R_j\) 必须在每个有限前缀中同时存活；单层通过不能替代跨分辨率细化相容证书。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 若 \(B'=\rho^{-1}(B)\)，则每条 \(\rho\)-纤维显然要么整个落在 \(B'\) 中，要么整个落在其补集中，故第一项推出第二项。
 
