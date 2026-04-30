@@ -364,6 +364,66 @@ t-t'=\partial b\ \text{对某 }b:V\to h\mathbb Z
 并且“对所有闭环”的检验可缩减为对任意生成 \(H_1(\Gamma;\mathbb Z)\) 的有限基本循环族即可：取任一生成树 \(T\)，对每条弦边 \(e\in E\setminus T\) 所形成的基本循环 \(\gamma_e\) 构成整数循环空间一组基，检查有限多条 \(\{\gamma_e\}\) 的时间和相等即推出同调等价。
 \end{proposition}
 
+% --- Distillation writeback ---
+\begin{theorem}[Smith 缺口余商的双层塌缩判据]\label{distill:grothendieck-cohomological_gap_filtration-zeta-smith-gap-collapse}
+沿用命题 \ref{prop:xi-time-defect-smith-reduction} 的整数缺陷矩阵 \(B\in\ZZ^{r\times d}\)，令
+\[
+\mathfrak H:=\operatorname{im}(B)\subset\ZZ^d,
+\qquad
+Q_B:=\ZZ^d/\mathfrak H .
+\]
+取 Smith 标准形
+\[
+UBV=\operatorname{diag}(s_1,\ldots,s_k,0,\ldots,0),
+\qquad s_i\mid s_{i+1},
+\]
+其中 \(s_i>0\)。定义 Smith 缺口滤过
+\[
+0\subset F^1Q_B:=\operatorname{Tor}(Q_B)\subset F^0Q_B:=Q_B,
+\]
+其分级层为
+\[
+\operatorname{gr}^1 Q_B\cong\bigoplus_{i=1}^{k}\ZZ/s_i\ZZ,
+\qquad
+\operatorname{gr}^0 Q_B\cong\ZZ^{d-k},
+\]
+其中 \(s_i=1\) 的直和因子理解为零。则：
+\begin{enumerate}
+  \item 有限 torsion 层消失当且仅当所有 \(s_i=1\)。等价地，定理 \ref{thm:xi-time-torsion-spectral-fingerprint} 中 torsion 指数 \(q\) 等于 \(1\)。在该定理适用的计数模型中，此时有限周期调制层退化为常数层。
+  \item 终端自由层消失当且仅当 \(d-k=0\)。在命题 \ref{prop:xi-defect-free-rank-identifiable-by-covariance-kernel} 的平衡态假设下，这又等价于 \(\ker\Sigma=0\)。
+  \item 全 Smith 缺口余商塌缩 \(Q_B=0\) 当且仅当前两层同时消失，即 \(k=d\) 且 \(s_1=\cdots=s_d=1\)。
+  \item 若 \(d-k>0\)，则任何有限个只经由有限阿贝尔商的 Euler/character 审计读出都不可能忠实杀死终端自由层：对任意有限族同态 \(\psi_\alpha:Q_B\to A_\alpha\)（\(A_\alpha\) 有限），存在非零 \(x\in\operatorname{gr}^0Q_B\) 的提升，使 \(\psi_\alpha(x)=0\) 对所有 \(\alpha\) 同时成立。
+\end{enumerate}
+因此，torsion 层正是有限部周期伪影，终端自由层正是无限预算型算术障碍；前者消失不推出闭合，除非后者亦被杀死。
+\end{theorem}
+\begin{proof}
+Smith 标准形给出可逆整数基变换。在该基下，\(\mathfrak H\) 由
+\[
+s_1e_1,\ldots,s_ke_k
+\]
+生成，并且后 \(d-k\) 个坐标没有被像子群约束。因此
+\[
+Q_B\cong\bigoplus_{i=1}^{k}\ZZ/s_i\ZZ\oplus\ZZ^{d-k}.
+\]
+其 torsion 子群正是有限直和 \(\bigoplus_i\ZZ/s_i\ZZ\)，自由余商正是 \(\ZZ^{d-k}\)。这证明了所列滤过及分级层的公式。
+
+第一项随即成立：torsion 子群为零当且仅当每个 \(\ZZ/s_i\ZZ\) 平凡，即每个 \(s_i=1\)。有限阿贝尔群的指数为其不变因子的最小公倍数；在 Smith 链中因 \(s_i\mid s_{i+1}\)，该指数为最后一个非平凡 \(s_i\)，故指数等于 \(1\) 当且仅当 torsion 子群为零。定理 \ref{thm:xi-time-torsion-spectral-fingerprint} 正把该指数读作有限周期调制的控制周期，因此在其适用条件下 \(q=1\) 给出常数调制层。
+
+第二项也由分解直接得到：自由层为 \(\ZZ^{d-k}\)，故其消失等价于 \(d-k=0\)。在命题 \ref{prop:xi-defect-free-rank-identifiable-by-covariance-kernel} 的附加假设下，已有
+\[
+\dim\ker\Sigma=d-k,
+\]
+故终端自由层消失当且仅当 \(\ker\Sigma=0\)。第三项是第一、第二项的合取，因为一个有限生成阿贝尔群为零当且仅当其 torsion 子群和自由商同时为零。
+
+最后证明有限审计读出的不忠实性。设 \(d-k>0\)，并把自由分级层记为 \(L\cong\ZZ^{d-k}\)。给定有限族 \(\psi_\alpha:Q_B\to A_\alpha\)，限制到 \(L\) 并取乘积得到同态
+\[
+\psi:L\longrightarrow\prod_\alpha A_\alpha .
+\]
+右端为有限群，故 \(\ker\psi\) 是 \(L\) 的有限指数子群。由于 \(L\) 的秩正，任何有限指数子群均非零，于是可取 \(0\ne x\in\ker\psi\)。把 \(x\) 视为 \(Q_B\) 中自由层的提升，便有 \(\psi_\alpha(x)=0\) 对所有 \(\alpha\) 成立。故有限阿贝尔商窗口至多能记录有限部周期伪影，不能以有限族方式证明终端自由层已经消失。定理得证。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 必要性由闭环上 \(\sum\partial b=0\) 直接得出。
 反向方向是有限图上 \(1\)-上同调的标准刻画：若两余圈在一组循环基上的配对一致，则其差在 \(H^1\) 中为零，从而为余边界。
