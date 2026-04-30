@@ -433,6 +433,7 @@ import Omega.Zeta.XiRoucheTaylorZeroTransfer
 import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiWindow6SmEnvelopeCenter2torsionObstruction
 import Omega.Zeta.XiTerminalZm4MomentKernelS5
+import Omega.Zeta.XiTerminalZm4MomentKernelResidueAsymptotics
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
 import Omega.Zeta.XiKernelDirichletEulerRationalSmithCompleteness
 import Omega.Zeta.XiEndpointHeatProbeDyadicExponentReadout
@@ -672,6 +673,7 @@ import Omega.Zeta.XiChainInteriorDirichletMobiusCharacteristicClosure
 import Omega.Zeta.FibCongruenceDiffusionInverseClosed
 import Omega.Zeta.XiOracleCapacityLayercakeTailCompleteness
 import Omega.Zeta.XiTimePart9m3CapacityResidualCoherenceCompleteTomography
+import Omega.Zeta.XiTimePart9m3CapacityDefectResidualCoherenceMellin
 import Omega.Zeta.XiPisotBernoulliFibonacciDirectionNonrajchman
 import Omega.Zeta.XiPisotBernoulliFibonacciDirectionLogEnergy
 import Omega.Zeta.XiTimePart9zbhFoldpiQuarterLineCompletion
