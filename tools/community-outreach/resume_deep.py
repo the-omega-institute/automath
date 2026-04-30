@@ -29,7 +29,7 @@ from dispatch_worktree import parse_board  # noqa: E402
 
 SESS_DIR = REPO_ROOT / "tools/community-outreach/outreach_oracle/sessions"
 
-STOP_BREAKTHROUGH = re.compile(r"\bBREAKTHROUGH\b|\bPROVED\b|\bQ\.E\.D\.?\b")
+STOP_BREAKTHROUGH = re.compile(r"(?:BREAKTHROUGH|PROVED|Q\.E\.D\.?)\b")
 STOP_STUCK = re.compile(r"\bSTUCK\b|\bdead end\b|\bcannot proceed\b")
 
 

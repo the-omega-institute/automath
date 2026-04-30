@@ -550,7 +550,17 @@ class OracleConsultant:
                        follow_up_prompts: Optional[list[str]] = None,
                        prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None = None,
                        per_turn_timeout: int = DEFAULT_TIMEOUT,
-                       stop_breakthrough_re: str = r"\bBREAKTHROUGH\b|\bPROVED\b|\bQ\.E\.D\.?\b",
+                       # Drop the leading word-boundary entirely on the
+                       # all-caps markers — ChatGPT 5.5 Pro frequently emits
+                       # "Thought for 39m 33sBREAKTHROUGH:" with no space
+                       # between the timestamp and the marker, so any
+                       # left-boundary check (\\b or negative-letter
+                       # lookbehind) misses the signal. The all-caps tokens
+                       # (BREAKTHROUGH, PROVED, Q.E.D.) are not substrings of
+                       # any English word, so dropping the left-side
+                       # constraint is safe. Right-side \\b still required so
+                       # we don't match noise.
+                       stop_breakthrough_re: str = r"(?:BREAKTHROUGH|PROVED|Q\.E\.D\.?)\b",
                        stop_stuck_re: str = r"\bSTUCK\b|\bdead end\b|\bcannot proceed\b",
                        stuck_streak_threshold: int = 2,
                        terminal_prompt: str | None = None,
