@@ -1152,6 +1152,111 @@ def codex_driven_prompt_generator(turn: int, last_response: str, all_turns: list
     return followup
 
 
+def codex_evaluate_progress(
+    turn: int,
+    last_response: str,
+    all_turns: list[dict],
+    objective: str,
+    *,
+    timeout_s: int = 300,
+) -> dict:
+    """Spawn codex CLI to (a) summarise the new contribution this Oracle turn
+    made, (b) decide complete / continue / stuck against the original objective,
+    and (c) propose the next follow-up question if continue.
+
+    Returns a dict with keys: contribution, verdict, verdict_reason,
+    next_question. On any failure (codex import, timeout, malformed JSON),
+    falls back to verdict='continue', empty contribution, and
+    next_question=DEFAULT_DEEPENING_PROMPTS[turn % 10] so the loop survives.
+
+    Designed for use in resume_deep / supervise loops that want
+    objective-completion termination instead of a hard turn count, and that
+    want per-turn contribution recorded in the session JSON for downstream
+    paper composition + audit.
+    """
+    fallback = {
+        "contribution": "",
+        "verdict": "continue",
+        "verdict_reason": "evaluator failed; loop continues with templated follow-up",
+        "next_question": _fallback_deepening_prompt(turn),
+    }
+    task_id = f"eval_turn{turn}_{int(time.time() * 1000)}"
+    log_path = ORACLE_LOGS_DIR / f"codex_evaluator_{task_id}.txt"
+    template_path = COMMUNITY_PROMPTS_DIR / "codex_evaluator.txt"
+
+    try:
+        template = template_path.read_text(encoding="utf-8")
+    except Exception as exc:  # noqa: BLE001
+        _write_codex_driver_log(
+            log_path=log_path, log_tag=f"evaluator_{task_id}",
+            prompt=f"(failed to load template {template_path})",
+            parsed_output="", error=str(exc),
+        )
+        return fallback
+
+    prompt = template.format(
+        objective=_compact_excerpt(objective or "(no explicit objective)", 4000),
+        prior_turns_summary=_prior_turns_summary(all_turns, limit=2000),
+        last_oracle_response=_compact_excerpt(last_response, 6000),
+        omega_capabilities=OMEGA_CAPABILITIES_BLURB,
+    )
+    log_tag = f"evaluator_{task_id}"
+
+    if not _load_distill_codex_exec():
+        _write_codex_driver_log(
+            log_path=log_path, log_tag=log_tag, prompt=prompt,
+            parsed_output="", error=f"codex_exec import failed: {_CODEX_EXEC_IMPORT_ERROR}",
+        )
+        return fallback
+
+    try:
+        assert _distill_codex_exec is not None
+        output = _distill_codex_exec(
+            prompt, work_dir=REPO_ROOT,
+            timeout_seconds=timeout_s, log_tag=log_tag,
+        )
+    except Exception as exc:  # noqa: BLE001
+        _write_codex_driver_log(
+            log_path=log_path, log_tag=log_tag, prompt=prompt,
+            parsed_output="", error=str(exc),
+        )
+        return fallback
+
+    _write_codex_driver_log(
+        log_path=log_path, log_tag=log_tag, prompt=prompt, parsed_output=output,
+    )
+
+    # Parse the JSON. Codex sometimes wraps output in ```json fences or in
+    # surrounding prose; strip those before json.loads.
+    cleaned = (output or "").strip()
+    if cleaned.startswith("```"):
+        # remove leading ```[json]? and trailing ```
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
+        cleaned = re.sub(r"\s*```\s*$", "", cleaned)
+    # Find the JSON object — first { to last }
+    first_brace = cleaned.find("{")
+    last_brace = cleaned.rfind("}")
+    if first_brace < 0 or last_brace <= first_brace:
+        return fallback
+    json_blob = cleaned[first_brace : last_brace + 1]
+    try:
+        parsed = json.loads(json_blob)
+    except json.JSONDecodeError:
+        return fallback
+    verdict = parsed.get("verdict", "continue")
+    if verdict not in ("complete", "continue", "stuck"):
+        verdict = "continue"
+    next_q = parsed.get("next_question", "") or ""
+    if verdict == "continue" and not next_q.strip():
+        next_q = _fallback_deepening_prompt(turn)
+    return {
+        "contribution": (parsed.get("contribution") or "").strip(),
+        "verdict": verdict,
+        "verdict_reason": (parsed.get("verdict_reason") or "").strip(),
+        "next_question": next_q.strip(),
+    }
+
+
 class _PromptHolder:
     """Internal: lets `deep_reasoning` reuse `review`-style submit logic with raw prompt."""
     def __init__(self, prompt: str):

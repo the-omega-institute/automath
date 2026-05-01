@@ -85,12 +85,21 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--conv", required=True, help="conversation_id of the deep run to resume")
     p.add_argument("--target", required=True, help="TODO id (e.g. T-20)")
-    p.add_argument("--max-turns", type=int, default=8)
+    p.add_argument("--max-turns", type=int, default=50,
+                   help="Hard safety cap to prevent runaway loops (default: 50). "
+                        "In codex-evaluator mode this is rarely reached — codex "
+                        "decides when the original objective has been met.")
     p.add_argument("--per-turn-timeout", type=int, default=7200)
     p.add_argument("--board", default=str(REPO_ROOT / "tools/community-outreach/RESEARCH_BOARD.md"))
+    p.add_argument("--objective", default=None,
+                   help="Original objective to drive codex evaluator. If omitted, "
+                        "uses the prompt of the first turn from the session.")
+    p.add_argument("--no-evaluator", action="store_true",
+                   help="Bypass the codex evaluator and use the legacy regex-based "
+                        "BREAKTHROUGH/STUCK detection (only kept for backwards "
+                        "compatibility — not recommended).")
     p.add_argument("--write-latex", action="store_true",
-                   help="If any prior turn already contains BREAKTHROUGH (per fixed "
-                        "regex), skip the deep loop entirely and just send the "
+                   help="On 'complete' verdict (or any prior BREAKTHROUGH), send the "
                         "WRITE_PAPER_LATEX terminal turn. Saves the result to "
                         "theory/2026_outreach_<slug>/main.tex.")
     p.add_argument("--polish", action="store_true",
@@ -129,55 +138,89 @@ def main():
 
     last_response = (turns[-1].get("response") or "") if turns else ""
     starting_turn = len(turns) + 1
-    print(f"[resume] starting at turn {starting_turn}, max_turns={args.max_turns}")
+    # Derive objective: explicit --objective wins; otherwise use the prompt of
+    # the first turn (it contains the sub-goal block). Codex evaluator uses
+    # this as the "did we get there?" anchor.
+    if args.objective:
+        objective = args.objective
+    elif turns:
+        objective = turns[0].get("prompt") or todo.statement or todo.title
+    else:
+        objective = todo.statement or todo.title or ""
+    print(f"[resume] starting at turn {starting_turn}, safety_cap={args.max_turns}, "
+          f"evaluator={'on' if not args.no_evaluator else 'off (legacy regex mode)'}")
+    if objective:
+        print(f"[resume] objective[:200]: {objective[:200]}{'...' if len(objective) > 200 else ''}")
 
     stuck_streak = 0
+    next_followup = None  # populated by evaluator on the next iteration
+
     for turn_no in range(starting_turn, args.max_turns + 1):
-        # Codex generates next follow-up from the last response
-        print(f"\n[turn {turn_no}] generating follow-up via codex...")
-        followup = oc.codex_driven_prompt_generator(
-            turn_no - 1,  # codex sees "turn N done, generate prompt for turn N+1"
-            last_response,
-            turns,
-            todo,
-            timeout_s=300,
-        )
-        print(f"[turn {turn_no}] follow-up ({len(followup)} chars):")
+        # 1. Generate next follow-up. First iteration: legacy codex generator.
+        # Subsequent: evaluator output from the previous turn.
+        if next_followup is not None:
+            followup = next_followup
+            print(f"\n[turn {turn_no}] follow-up from evaluator ({len(followup)} chars):")
+        else:
+            print(f"\n[turn {turn_no}] generating follow-up via codex (initial)...")
+            followup = oc.codex_driven_prompt_generator(
+                turn_no - 1, last_response, turns, todo, timeout_s=300,
+            )
+            print(f"[turn {turn_no}] follow-up ({len(followup)} chars):")
         print(f"  {followup[:240]}{'...' if len(followup) > 240 else ''}")
 
-        # Submit as follow-up to existing conversation
-        submit_resp = submit_followup(followup, args.conv, tag=f"{args.target}:deep_resume:t{turn_no}")
+        # 2. Submit as follow-up to existing conversation
+        submit_resp = submit_followup(followup, args.conv,
+                                      tag=f"{args.target}:deep_resume:t{turn_no}")
         if "error" in submit_resp:
             print(f"[turn {turn_no}] submit failed: {submit_resp.get('error')}", file=sys.stderr)
             break
         task_id = submit_resp.get("task_id", "")
         print(f"[turn {turn_no}] submitted task={task_id} (conv={args.conv[:12]})")
 
-        # Poll for response
+        # 3. Poll for response
         response = oc.oracle_poll(task_id, timeout=args.per_turn_timeout)
         if not response:
             print(f"[turn {turn_no}] empty response (timeout/extraction failure)", file=sys.stderr)
             break
         print(f"[turn {turn_no}] {len(response)} chars received")
 
-        # Append to session — reload from disk to pick up any concurrent
-        # server writes (e.g. /done landing for our task), then append our
-        # turn record on top of the fresh disk view. Avoids overwriting
-        # server-side updates we made in parallel.
+        # 4. Codex evaluator: contribution + verdict + next_question
+        eval_result = None
+        if not args.no_evaluator:
+            print(f"[turn {turn_no}] running codex evaluator...")
+            eval_result = oc.codex_evaluate_progress(
+                turn_no, response, turns, objective, timeout_s=300,
+            )
+            print(f"[turn {turn_no}] verdict={eval_result['verdict']}: "
+                  f"{eval_result['verdict_reason'][:120]}")
+            print(f"[turn {turn_no}] contribution: {eval_result['contribution'][:200]}"
+                  f"{'...' if len(eval_result['contribution']) > 200 else ''}")
+            next_followup = eval_result["next_question"] if eval_result["verdict"] == "continue" else None
+        else:
+            next_followup = None  # legacy mode — let next iteration call codex driver
+
+        # 5. Append to session
         turn_record = {
             "turn": turn_no,
             "task_id": task_id,
             "prompt": followup,
-            "prompt_source": "codex_resume",
+            "prompt_source": "evaluator" if (eval_result is None and next_followup is None) else "codex_resume",
             "response": response,
             "response_chars": len(response),
             "completed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         }
+        if eval_result is not None:
+            turn_record["evaluator"] = {
+                "contribution": eval_result["contribution"],
+                "verdict": eval_result["verdict"],
+                "verdict_reason": eval_result["verdict_reason"],
+            }
+
         try:
             disk_sess = json.loads(sess_path.read_text())
         except Exception:
-            disk_sess = sess  # fallback to in-memory
-        # Dedupe: if disk already has a turn with this task_id, replace; else append.
+            disk_sess = sess
         disk_turns = disk_sess.get("turns", []) or []
         existing_idx = next((i for i, t in enumerate(disk_turns)
                              if t.get("task_id") == task_id), None)
@@ -187,25 +230,39 @@ def main():
             disk_turns.append(turn_record)
         disk_sess["turns"] = disk_turns
         sess_path.write_text(json.dumps(disk_sess, indent=2, ensure_ascii=False))
-        # Sync our in-memory view from the freshly-written disk state
         turns = list(disk_turns)
         sess = disk_sess
         print(f"[turn {turn_no}] session updated → {sess_path.name} ({len(turns)} turns total)")
 
-        # Stop conditions
-        if STOP_BREAKTHROUGH.search(response):
-            print(f"[turn {turn_no}] BREAKTHROUGH detected, stopping")
-            break
-        if STOP_STUCK.search(response):
-            stuck_streak += 1
-            print(f"[turn {turn_no}] STUCK marker (streak={stuck_streak})")
-            if stuck_streak >= 2:
-                print(f"[turn {turn_no}] STUCK streak ≥ 2, stopping")
+        # 6. Stop logic
+        if eval_result is not None:
+            verdict = eval_result["verdict"]
+            if verdict == "complete":
+                print(f"[turn {turn_no}] COMPLETE — objective achieved per evaluator. Stopping.")
                 break
+            if verdict == "stuck":
+                print(f"[turn {turn_no}] STUCK — evaluator says no Oracle bypass. Stopping.")
+                break
+            # else "continue" — loop again
         else:
-            stuck_streak = 0
+            # Legacy regex mode
+            if STOP_BREAKTHROUGH.search(response):
+                print(f"[turn {turn_no}] BREAKTHROUGH detected (regex), stopping")
+                break
+            if STOP_STUCK.search(response):
+                stuck_streak += 1
+                print(f"[turn {turn_no}] STUCK marker (streak={stuck_streak})")
+                if stuck_streak >= 2:
+                    print(f"[turn {turn_no}] STUCK streak ≥ 2, stopping")
+                    break
+            else:
+                stuck_streak = 0
 
         last_response = response
+
+    if turn_no >= args.max_turns:
+        print(f"\n[resume] WARN: hit safety cap max_turns={args.max_turns} without "
+              f"explicit complete/stuck verdict. Bump --max-turns or inspect transcripts.")
 
     print(f"\n[resume] done. Final turn count: {len(turns)}")
 
