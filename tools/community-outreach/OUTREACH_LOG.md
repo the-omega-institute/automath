@@ -11,6 +11,9 @@
 | Heath Sanchez | SAIR Zulip | draft ready | — | — | 2026-04-18 |
 | Israel Cazares | SAIR Zulip | draft ready | — | — | 2026-04-19 |
 | Israel (bytepro.ai) — single-prompt ceiling × structural invariants | Email (hello@bytepro.ai) | sent 2026-04-30 — collab proposal + arXiv endorsement ask (math.DS / math.CO / math.LO / cs.AI), reply pending | — | — | 2026-04-30 |
+| Tong Niu (arxiv:2604.25214 author, independent) — T-20 Sidon-extension follow-up | Email (mrnt0810@gmail.com) | draft saved to Apple Mail Drafts 2026-05-01 — collab on q=41 + larger q + arXiv endorsement ask, pending user send | T-20 paper attached + PROGRAM_BOARD link | 8/10 | 2026-05-01 |
+| Thomas Bloom (erdosproblems.com maintainer) — T-20 + Omega outreach pipeline | Email + erdosproblems forum | planned next, real math.CO endorser candidate | — | — | — |
+| Daniel G. Mixon (Alexeev-Mixon disproof) — T-20 directly extends his line | Email | planned next, directly relevant | — | — | — |
 | Terence Tao | Email | planned wk3-4 | — | — | — |
 
 ## Completed
