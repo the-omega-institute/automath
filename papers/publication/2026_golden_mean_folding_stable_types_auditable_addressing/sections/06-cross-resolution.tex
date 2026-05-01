@@ -1,0 +1,68 @@
+\section{Cross-resolution compatibility}
+\label{sec:cross-resolution}
+
+Stable types must be comparable across depths.  A naive approach would truncate the length-\((m+1)\) word to length \(m\) and then fold.  This generally fails: a carry generated at depth \(m+1\) can change the normalized lower-depth representative.  Thus, in general,
+\[
+\Trunc_{m+1,m}\circ\Fold_{m+1}
+\ne
+\Fold_m\circ\Trunc_{m+1,m}.
+\]
+
+\begin{definition}[Fold-aware restriction]
+\label{def:fold-aware-restriction}
+A fold-aware restriction is a map
+\[
+r_{m+1,m}:X_{m+1}\to X_m
+\]
+together with a typed microstate restriction
+\[
+\rho^{\Aware}_{m+1,m}:\Om_{m+1}\to\Om_m
+\]
+such that
+\[
+r_{m+1,m}\circ \Fold_{m+1}
+=
+\Fold_m\circ \rho^{\Aware}_{m+1,m}.
+\]
+Equivalently, the square
+\[
+\begin{tikzcd}
+\Om_{m+1} \arrow[r,"\Fold_{m+1}"] \arrow[d,"\rho^{\Aware}_{m+1,m}"'] & X_{m+1} \arrow[d,"r_{m+1,m}"]\\
+\Om_m \arrow[r,"\Fold_m"'] & X_m
+\end{tikzcd}
+\]
+commutes.
+\end{definition}
+
+\begin{theorem}[Cross-resolution compatibility]
+\label{thm:cross-resolution-compatibility}
+Assume fold-aware restrictions \(r_{n,m}:X_n\to X_m\) are defined for \(n\ge m\) and satisfy
+\[
+r_{m,m}=\id,
+\qquad
+r_{\ell,m}\circ r_{n,\ell}=r_{n,m}
+\quad(n\ge \ell\ge m).
+\]
+Then \((X_m,r_{m+1,m})\) is an inverse system of stable type spaces.  If the squares in \Cref{def:fold-aware-restriction} commute, folding and scale reduction are compatible in the stable-type layer.
+\end{theorem}
+
+\begin{proof}
+The displayed equations are the inverse-system axioms.  The commuting square states that folding before restriction and aware restriction before folding produce the same stable type.  Hence the stable layer, rather than the raw microstate layer, carries the cross-resolution comparison.
+\end{proof}
+
+\begin{definition}[Naive truncation defect]
+\label{def:naive-truncation-defect}
+The finite-resolution truncation defect is the failure of the naive square,
+\[
+\Delta_m^{\rm naive}(\omega)=
+d\!\left(
+\Trunc_{m+1,m}\Fold_{m+1}(\omega),
+\Fold_m\Trunc_{m+1,m}(\omega)
+\right),
+\]
+for a chosen finite metric \(d\) on \(X_m\).
+\end{definition}
+
+\begin{remark}
+The truncation defect is not a contradiction.  It records the fact that normalization carries can cross the visible boundary.  The defect should be measured as a canonical finite-resolution discrepancy rather than silently treated as an error term.
+\end{remark}

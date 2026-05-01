@@ -1,0 +1,66 @@
+\section{Reproducible experiments}
+\label{sec:experiments}
+
+The experiments are not used as proofs of the main theorems.  They serve as audit interfaces for the finite objects constructed above.  Each experiment reports a fixed input protocol, a deterministic output object, and a comparison statistic.
+
+\subsection{Folded histogram audit}
+The first experiment samples or enumerates words \(\omega\in\Om_m\), applies the folding map, and records
+\[
+H_m(x)=|\{\omega\in\Om_m:\Fold_m(\omega)=x\}|,
+\qquad x\in X_m.
+\]
+For exhaustive enumeration, the empirical folded distribution is
+\[
+\widehat\nu_m(x)=\frac{H_m(x)}{2^m}.
+\]
+One may compare \(\widehat\nu_m\) with a specified baseline \(\nu_m\), such as the uniform distribution on \(X_m\) or the Parry/Perron--Frobenius baseline of a graph presentation, using
+\[
+\TV(\widehat\nu_m,\nu_m).
+\]
+
+\subsection{Cross-resolution residual audit}
+The second experiment compares folded representatives across adjacent resolutions.  For the fold-aware version, define
+\[
+\Delta_m(\omega)=
+d\!\left(
+r_{m+1,m}\Fold_{m+1}(\omega),
+\Fold_m\rho^{\Aware}_{m+1,m}(\omega)
+\right).
+\]
+The certificate target is
+\[
+\Delta_m(\omega)=0
+\]
+for all typed inputs.  The naive truncation residual is
+\[
+\Delta_m^{\rm naive}(\omega)=
+d\!\left(
+\Trunc_{m+1,m}\Fold_{m+1}(\omega),
+\Fold_m\Trunc_{m+1,m}(\omega)
+\right),
+\]
+and is reported as a finite-resolution normalization defect rather than as a failure of the fold-aware construction.
+
+\subsection{Clarity profile audit}
+The third experiment fixes an event \(P\in\mathcal F_\infty\) and computes
+\[
+\varepsilon_m(P;\mu)=
+\sum_{C\in\mathcal C_m}
+\min\{\mu(P\cap C),\mu(C\setminus P)\}.
+\]
+The output is the curve
+\[
+m\longmapsto \varepsilon_m(P;\mu),
+\]
+together with the finite-depth slope
+\[
+-\frac1m\log \varepsilon_m(P;\mu)
+\]
+when the error is nonzero.  The audit compares this decay with boundary-cylinder counts \(N_m(\partial P)\).
+
+\subsection{Reproducibility package}
+The publication package should include
+\[
+(\text{code},\text{data},\text{configuration},\text{random seed},\text{environment},\text{output hashes}).
+\]
+Statistical claims should record \(m\), \(N\), \(N_{\mathrm{eff}}\), the distance used, the uncertainty radius, the model tolerance, and the decision rule.  A figure without the data and script needed to reproduce it is not an audit certificate.
