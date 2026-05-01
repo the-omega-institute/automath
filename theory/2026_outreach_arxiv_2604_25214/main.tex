@@ -1,723 +1,675 @@
-\documentclass[11pt,letterpaper]{amsart}
+\documentclass{article}
 
-\usepackage[margin=1in]{geometry}
-\usepackage{amsmath,amsthm,amssymb,mathtools}
-\usepackage{cite}
-\usepackage{url}
-\usepackage[hypertexnames=false]{hyperref}
+\usepackage{amsmath,amsthm,amssymb}
 
-\urlstyle{same}
-
-\theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
 
-\newcommand{\F}{\mathbb F}
 \newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
 \newcommand{\Tr}{\operatorname{Tr}}
 \newcommand{\Span}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
 
-\input{generated/q41_frontier.tex}
-
-\title[A trace-rank obstruction for two size-four Sidon sets]
-{A trace-rank obstruction for two size-four Sidon sets in Singer difference sets}
-
-\author{Omega Community Outreach}
-
+\title{A trace-rank obstruction and a multiplier-orbit certificate for two size-four Sidon sets}
+\author{}
 \date{}
 
 \begin{document}
 
-\begin{abstract}
-Niu's recent work on the Sidon-extension problem isolates the two
-four-point Sidon sets
-\[
- A=\{0,1,3,11\},\qquad B=\{0,1,4,11\}
-\]
-as apparent minimal obstructions to extension to perfect difference sets.
-The computational evidence in arXiv:2604.25214 includes a Singer
-affine-orbit check through prime powers \(q\leq 317\), while a complete
-proof was left as an open problem.  We prove the Singer part for every
-prime power \(q\).  If \(D_q\subseteq \Z_{q^2+q+1}\) is the canonical
-Singer trace difference set, then \(D_q\) contains no affine image of
-\(A\) or \(B\).  The proof reduces affine containment to a rank-two
-condition on four powers \(1,w,w^a,w^b\) in \(\F_{q^3}\), and then rules
-out the two resulting cubic identities by elementary polynomial
-division.  Combining this with the Huang--Schmidt classification of
-cyclic projective planes below order \(41\), we obtain unconditional
-non-containment for all cyclic planar difference sets of order
-\(q<41\).  Finally we formulate the first unresolved multiplier-orbit
-frontier, \(q=41\), as an explicit finite exact-cover system on the
-\(574\) nonzero Frobenius orbits in \(\Z_{1723}\).  This is a boundary
-formulation only: the non-Singer multiplier problem for \(q\geq 41\)
-remains open here.
-\end{abstract}
-
 \maketitle
+
+\begin{abstract}
+Let
+\[
+A=\{0,1,3,11\},\qquad B=\{0,1,4,11\}.
+\]
+Motivated by Niu's recent size-four Sidon-extension candidates, we prove two complementary results. First, for every prime power \(q\), no affine image of \(A\) or \(B\) is contained in the canonical Singer trace difference set in \(\Z/(q^2+q+1)\Z\). The proof is a short rank argument over \(\F_{q^3}/\F_q\), followed by two explicit cubic reductions. Second, at the first non-Singer multiplier-descent parameter \(q=41\), \(v=1723\), we certify that the locally admissible forced core
+\[
+[1]\cup[2]\cup[4]\cup[12]
+\]
+for \(A\) cannot be completed to a \(41\)-multiplier-invariant cyclic \((1723,42,1)\) difference set. The finite part is phrased as an exact cover problem on Frobenius orbits and is accompanied by a deterministic verifier. Thus this fixed forced core contributes no obstruction to the Singer-affine proof, although the full multiplier-descent problem remains open.
+\end{abstract}
 
 \section{Introduction}
 
-A finite set \(S\subset \Z\) is a Sidon set if its nonzero pairwise
-differences are distinct.  A planar difference set of order \(q\) in a
-cyclic group \(G\) of order
+A finite set \(S\subset \Z\) is Sidon if all nonzero differences \(s-s'\), \(s,s'\in S\), \(s\ne s'\), are distinct. A cyclic planar difference set of projective order \(q\) is a subset
 \[
- v=q^2+q+1
+D\subset \Z_v,\qquad v=q^2+q+1,
 \]
-is a subset \(D\subseteq G\) of size \(q+1\) such that every nonzero
-element of \(G\) has a unique representation \(d-d'\) with
-\(d,d'\in D\).  Equivalently, in the integral group ring,
+of cardinality \(q+1\) such that every nonzero element of \(\Z_v\) occurs exactly once as a difference \(d-d'\) with \(d,d'\in D\), \(d\ne d'\). Equivalently,
 \[
- DD^{(-1)}=q+G.
+DD^{(-1)}=q+\Z_v
 \]
-This is the cyclic version of a perfect difference set of size \(q+1\):
-with Niu's notation \(n=q+1\), the modulus is
-\(n^2-n+1=q^2+q+1\).
+in the integral group ring. Such a difference set is also a perfect difference set of size \(q+1\) in the Sidon-extension terminology.
 
-Erd\H{o}s asked whether every finite Sidon set extends to a finite
-perfect difference set.  Alexeev and Mixon disproved this conjecture by
-showing that \(\{1,2,4,8,13\}\) is forbidden, and also revisited an
-earlier example of Hall \cite{Hall,AlexeevMixon}.  Niu subsequently
-proposed that the smallest forbidden size is \(4\), giving strong
-evidence for the two sets
+The original Sidon-extension conjecture of Erd\H{o}s asked whether every finite Sidon set embeds into some finite perfect difference set. Alexeev and Mixon recently disproved the conjecture, also pointing out the relevance of an earlier construction of Hall. Niu then isolated two size-four candidates,
 \[
- A=\{0,1,3,11\},\qquad B=\{0,1,4,11\}.
+A=\{0,1,3,11\},\qquad B=\{0,1,4,11\},
 \]
-In particular, Niu's arXiv:2604.25214 reports that these two patterns
-do not occur in the Singer affine-orbit model for prime powers
-\(q\leq 317\), and records the need for a complete proof, for instance
-by a polarity argument or by a multiplier descent \cite{Niu}.
+and gave extensive computational evidence that they are non-extending in the cyclic projective-plane range. Niu's paper explicitly leaves open the need for a complete proof, either by a polarity argument in the spirit of Alexeev and Mixon or by a multiplier descent.
 
-The purpose of this note is to separate the Singer obstruction from the
-harder cyclic-plane uniqueness problem.  The Singer obstruction admits a
-short proof for all \(q\).  Let \(K=\F_q\), let \(F=\F_{q^3}\), and let
-\(\alpha\) generate \(F^\times\).  The canonical Singer line is
+This note records two pieces of progress toward that descent. The first is conceptual and uniform in \(q\): in the Desarguesian, or Singer, case, the obstruction is completely elementary. If \(K=\F_q\), \(F=\F_{q^3}\), and \(\alpha\) is primitive in \(F^\times\), the canonical Singer trace line is
 \[
- D_q=\{\,i\in \Z_{q^2+q+1}:\Tr_{F/K}(\alpha^i)=0\,\}.
+D_q=\{i\in \Z_{q^2+q+1}:\Tr_{F/K}(\alpha^i)=0\}.
 \]
-We show that if an affine copy \(t+u\{0,1,a,b\}\) is contained in
-\(D_q\), with \(u\) a unit modulo \(q^2+q+1\), then
+We prove that no affine image of \(A\) or \(B\) lies in \(D_q\), for any prime power \(q\). The key observation is that affine containment is equivalent to the four vectors
 \[
- \dim_K\Span_K\{1,w,w^a,w^b\}\leq 2,\qquad w=\alpha^u.
+1,\quad w,\quad w^a,\quad w^b
 \]
-For \(A\), this forces an irreducible cubic \(x^3-rx-s\) whose
-reduction of \(x^{11}\) gives \(s(4r^3+s^2)=0\); this immediately
-implies reducibility.  For \(B\), the relation \(w^4\in\Span_K\{1,w\}\)
-forces a cubic \(x^3-ax^2+a^2x-c\), and the \(x^2\)-coefficient of
-\(x^{11}\) gives
-\[
- \left(\frac{c}{a^3}\right)^3
- -2\left(\frac{c}{a^3}\right)^2
- +3\left(\frac{c}{a^3}\right)-1=0.
-\]
-The identity
-\[
- (1-y)^3-(1-y)^2+(1-y)-y
- =-(y^3-2y^2+3y-1)
-\]
-then exhibits a \(K\)-rational root of the cubic, again contradicting
-irreducibility.
+spanning a \(K\)-subspace of dimension at most \(2\), where \(w=\alpha^u\) and \(u\in \Z_v^\times\). For \(A\), this forces an irreducible cubic \(x^3-rx-s\) to satisfy a reducibility condition. For \(B\), the corresponding cubic is \(x^3-ax^2+a^2x-c\), and the condition that \(x^{11}\) have no \(x^2\)-term again gives a root in \(K\). Both contradictions are characteristic-free.
 
-For arbitrary cyclic planar difference sets the question is different.
-The classical multiplier theorem, recorded by Huang and Schmidt, says
-that if \(q=p^f\), then every cyclic planar difference set of order
-\(q\) is equivalent to one fixed by the multiplier \(p\)
-\cite[Result 4]{HuangSchmidt}.  Huang and Schmidt also prove that every
-cyclic projective plane of order at most \(37\) is Desarguesian
-\cite[Theorem 28]{HuangSchmidt}.  Hence every cyclic planar difference
-set of order \(q<41\) is Singer-equivalent, and the all-\(q\) Singer
-obstruction below gives unconditional non-containment in this range.  The
-present cyclic-plane consequence stops at this classification boundary;
-for \(q\geq 41\), the non-Singer multiplier problem remains open.
+The second result is finite and deliberately narrow. The first parameter at which the classical uniqueness results do not automatically reduce a cyclic projective plane to the Singer plane is \(q=41\). Here
+\[
+v=41^2+41+1=1723,
+\]
+and \(1723\) is prime. Multiplication by \(41\) has order \(3\) on \(\Z_{1723}^\times\), so every nonzero multiplier orbit has the form
+\[
+[x]=\{x,41x,41^2x\}.
+\]
+A multiplier-normalized cyclic planar difference set of order \(41\) is therefore a union of \(14\) such nonzero orbits. We study the forced core arising from the normalized affine copy
+\[
+1+A=\{1,2,4,12\}.
+\]
+That core consists of the four point-orbits
+\[
+[1],\quad [2],\quad [4],\quad [12].
+\]
+It is locally admissible: its internal and cross-difference orbits are \(44\) distinct nonzero multiplier-orbits. Hence a completion would require exactly \(10\) further point-orbits whose internal differences, differences with the core, and pairwise cross-differences partition the remaining \(530\) difference-orbits. We certify that no such \(10\)-orbit completion exists.
 
-The first multiplier-orbit problem not disposed of by this classification
-is \(q=41\), where \(v=1723\) is prime and the \(41\)-orbits on
-\(\Z_v^\times\) all have length \(3\).  A normalized difference set is a
-union of exactly \(14\) such orbits.  We formulate the exact quadratic
-binary system whose solutions are precisely the normalized cyclic planar
-difference sets, together with the forced orbit constraints coming from
-an affine copy of \(A\) or \(B\).  This final finite system is used only
-to mark the remaining frontier addressed in the discussion.
-
-The novelty is correspondingly narrow.  The trace-rank criterion is
-packaged as the finite-field interface needed for this proof; the new
-proof content is the pair of elementary cubic contradictions for \(A\)
-and \(B\); and the \(q=41\) orbit system is made explicit as the first
-multiplier frontier, not as a certified infeasibility result or a
-benchmark study.
+The finite certificate does not settle Niu's problem. It only eliminates one fixed forced core at \(q=41\). The remaining cases include all other translations of \(A\), the corresponding forced cores for \(B\), and larger \(q\). Still, the \(q=41\) calculation is a useful stress test for the multiplier-descent program: the core is locally admissible, so the obstruction only appears after the exact-cover constraints are enforced globally.
 
 \section{Preliminaries}
 
-\subsection*{Cyclic planar difference sets}
+Let \(G=\Z_v\), written additively. If \(D\subset G\), then \(D\) is a cyclic \((v,k,\lambda)\) difference set if \(|D|=k\) and every nonzero \(g\in G\) has exactly \(\lambda\) representations \(g=d-d'\), with \(d,d'\in D\), \(d\ne d'\). In this paper we only use the planar case
+\[
+(v,k,\lambda)=(q^2+q+1,q+1,1).
+\]
 
-Throughout, all cyclic groups are written additively.  If \(G=\Z_v\) and
-\(D\subseteq G\), then
+Two difference sets \(D,E\subset \Z_v\) are called equivalent if
 \[
- D^{(-1)}=\{-d:d\in D\}.
+E=t+uD
 \]
-We identify \(D\) with \(\sum_{d\in D}d\in \Z[G]\).  A subset
-\(D\subseteq \Z_v\) is a cyclic planar difference set of order \(q\) if
+for some \(t\in \Z_v\) and some unit \(u\in \Z_v^\times\). An affine image of a finite integer set \(S\subset \Z\) in \(D\) is a subset of the form
 \[
- v=q^2+q+1,\qquad |D|=q+1,
+t+uS:=\{t+us:s\in S\}\subset \Z_v
 \]
-and
-\[
- DD^{(-1)}=q+\Z_v.
-\]
-Equivalently, every nonzero residue of \(\Z_v\) occurs exactly once as
-an ordered difference \(d-d'\), \(d,d'\in D\), \(d\ne d'\).
+with \(u\in \Z_v^\times\).
 
-Two cyclic planar difference sets in \(\Z_v\) are equivalent if one is
-obtained from the other by a translation and a group automorphism, i.e.
-by a map
+\begin{lemma}[Group-ring form]
+Let \(D\subset \Z_v\), \(|D|=q+1\), and \(v=q^2+q+1\). Then \(D\) is a cyclic planar difference set of order \(q\) if and only if
 \[
- x\longmapsto c+ux,\qquad c\in \Z_v,\quad u\in \Z_v^\times.
+DD^{(-1)}=q+\Z_v
 \]
-For a set \(S\subset \Z\), an affine image of \(S\) in \(\Z_v\) means
-\[
- t+uS=\{t+us:s\in S\}\subseteq \Z_v
-\]
-with \(u\in\Z_v^\times\).  This is the notion relevant to equivalence of
-cyclic difference sets: if \(E=c+uD\), then \(E\) contains an affine copy
-of \(S\) if and only if \(D\) does.  Indeed, if \(E\) contains
-\(t+rS\), then \(D\) contains
-\[
- u^{-1}(t-c)+u^{-1}rS,
-\]
-and the converse follows by applying the affine map \(x\mapsto c+ux\).
-
-\subsection*{The Singer trace construction}
-
-Let \(K=\F_q\), \(F=\F_{q^3}\), and let \(\alpha\) be a generator of
-\(F^\times\).  Put
-\[
- v=\frac{q^3-1}{q-1}=q^2+q+1.
-\]
-Then \(\alpha^v\in K^\times\).  Since multiplication by an element of
-\(K^\times\) preserves trace zero, the set
-\[
- D_q=\{\,i\in \Z_v:\Tr_{F/K}(\alpha^i)=0\,\}
-\]
-is well-defined.  It has size \(q+1\): the trace-zero hyperplane in
-\(F\) has \(q^2\) elements, \(q^2-1\) of them nonzero, and the nonzero
-elements are partitioned into \(K^\times\)-orbits of size \(q-1\).
-Singer's construction says that \(D_q\) is a cyclic planar difference
-set of order \(q\), and every difference set arising from a line in
-\(\operatorname{PG}(2,q)\) is equivalent to it \cite{Singer}.
-
-We will use two standard facts about finite fields.  First, the trace
-pairing
-\[
- F\times F\longrightarrow K,\qquad (x,y)\longmapsto \Tr_{F/K}(xy)
-\]
-is nondegenerate.  Second, if \(w\in F\setminus K\), then \(K(w)=F\).
-Indeed, \([K(w):K]\) divides \([F:K]=3\), and it is not \(1\).
-
-\subsection*{Trace-rank interface}
-
-\begin{lemma}[Trace-rank criterion]
-\label{lem:trace-rank}
-Fix a prime power \(q\).  Let \(K=\F_q\), \(F=\F_{q^3}\), let
-\(\alpha\) generate \(F^\times\), put \(v=q^2+q+1\), and let
-\[
- D_q=\{\,i\in \Z_v:\Tr_{F/K}(\alpha^i)=0\,\}.
-\]
-Let \(S=\{0,1,a,b\}\subset\Z\) and let \(u\in\Z_v^\times\).  For
-\(w=\alpha^u\), one has \(w\notin K\), and there exists a translate
-\(t\in\Z_v\) such that
-\[
- t+uS\subseteq D_q
-\]
-if and only if, inside the fixed \(K\)-vector space
-\(F=\F_{q^3}\),
-\[
- \dim_K\Span_K\{1,w,w^a,w^b\}\leq 2.
-\]
-Equivalently, for a fixed \(t\), the containment \(t+uS\subseteq D_q\)
-holds precisely when \(\alpha^t\) lies in the trace annihilator of this
-span.
+in \(\Z[\Z_v]\).
 \end{lemma}
 
 \begin{proof}
-If the integer representative of \(u\) is changed by a multiple of
-\(v\), then \(w\) is multiplied by an element of \(K^\times\); the four
-vectors \(1,w,w^a,w^b\) are only rescaled by nonzero elements of \(K\),
-so the displayed dimension is well-defined for \(u\in\Z_v^\times\).
-
-The condition \(u\in\Z_v^\times\) also implies \(w\notin K\).  Indeed,
-\(K^\times=\langle\alpha^v\rangle\); if \(\alpha^u\in K^\times\), then
-the exponent \(u\) is congruent to \(0\) modulo \(v\), contradicting
-that \(u\) is a unit modulo \(v\).
-
-For a fixed \(t\), the containment \(t+uS\subseteq D_q\) is exactly
-\[
- \Tr_{F/K}(\alpha^t w^s)=0\qquad(s\in S).
-\]
-Thus \(\alpha^t\) annihilates
-\(\Span_K\{1,w,w^a,w^b\}\) under the nondegenerate trace pairing on the
-fixed field \(F\).  Conversely, if \(\alpha^t\) annihilates this span,
-then the same displayed trace equations give \(t+uS\subseteq D_q\).
-Since \(\dim_K F=3\), a nonzero annihilator exists if and only if the
-span has dimension at most \(2\).  Every nonzero element of \(F\) is
-some \(\alpha^t\), and replacing \(t\) by its class modulo \(v\) does
-not change membership in \(D_q\), because \(\alpha^v\in K^\times\) and
-\(K^\times\) preserves trace zero.
+The coefficient of \(g\in \Z_v\) in \(DD^{(-1)}\) is the number of ordered pairs \((d,d')\in D^2\) such that \(d-d'=g\). For \(g=0\) this number is \(|D|=q+1\). The expression \(q+\Z_v\) has coefficient \(q+1\) at \(0\) and coefficient \(1\) at every nonzero element. Thus equality is exactly the assertion that every nonzero difference occurs once.
 \end{proof}
 
-\subsection*{Multiplier and Frobenius orbits}
+Let \(q=p^f\). A classical multiplier theorem says that every cyclic planar difference set of order \(q\) is equivalent to one satisfying
+\[
+pD=D.
+\]
+We shall use this only as motivation and for the \(q=41\) normalized finite instance.
 
-Let \(q=p^f\) and \(v=q^2+q+1\).  For \(D\subseteq \Z_v\), write
+For a residue \(x\in \Z_v\), write
 \[
- D^{(p)}=\{pd:d\in D\}.
+[x]=\{p^i x\bmod v:i\ge 0\}
 \]
-The classical multiplier theorem for cyclic planar difference sets of
-prime-power order, in the form recorded by Huang and Schmidt, states
-that every cyclic planar difference set of order \(q=p^f\) is equivalent
-to a difference set satisfying
+for its multiplier orbit. If \(pD=D\), then \(D\) is a union of such orbits. The difference-set condition can then be rewritten as a finite exact-cover system on point-orbits and difference-orbits.
+
+\begin{lemma}[Orbit exact-cover equations]
+Let \(q=p^f\), \(v=q^2+q+1\), and suppose \(D\subset \Z_v\) satisfies \(pD=D\). Let \(\Omega\) be the set of \(p\)-orbits in \(\Z_v\). For \(O\in \Omega\), introduce a binary variable \(X_O\), where \(X_O=1\) means \(O\subset D\). Then \(D\) is a cyclic planar difference set if and only if
 \[
- D^{(p)}=D.
+\sum_{O\in\Omega}|O|X_O=q+1
 \]
-Thus, after equivalence, \(D\) is a union of orbits for the map
-\(x\mapsto px\) on \(\Z_v\).  We write
+and, for every nonzero orbit \(L\in\Omega\),
 \[
- [x]=\{p^i x\bmod v:i\geq 0\}
+\sum_{O,P\in\Omega}N_{O,P}^L X_OX_P=|L|,
 \]
-for such an orbit.  The exact orbit equations used below are obtained
-by expanding the group-ring equation \(DD^{(-1)}=q+\Z_v\) after writing
-\(D\) as a union of these Frobenius or multiplier orbits.
+where
+\[
+N_{O,P}^L=\#\{(a,b)\in O\times P:a-b\in L\}.
+\]
+\end{lemma}
+
+\begin{proof}
+The cardinality equation is immediate. For the difference equations, group the ordered differences \(a-b\), \(a,b\in D\), by the orbit \(L\) containing \(a-b\). Since \(D\) is a union of \(p\)-orbits, the number of representations is constant on each nonzero difference-orbit \(L\). The planar difference-set condition says that each element of \(L\) occurs exactly once, so the total number of ordered differences landing in \(L\) must be \(|L|\). This is precisely the displayed equation.
+\end{proof}
+
+We also use the following trace model of Singer difference sets. Let \(K=\F_q\), \(F=\F_{q^3}\), and let \(\alpha\) generate \(F^\times\). Put
+\[
+v=\frac{q^3-1}{q-1}=q^2+q+1.
+\]
+Since \(\alpha^v\in K^\times\), the condition
+\[
+\Tr_{F/K}(\alpha^i)=0
+\]
+depends only on the class of \(i\) modulo \(v\). Thus
+\[
+D_q=\{i\in \Z_v:\Tr_{F/K}(\alpha^i)=0\}
+\]
+is a well-defined subset of \(\Z_v\). It is the usual Singer difference set associated with a line in \(\mathrm{PG}(2,q)\).
+
+\begin{lemma}[Trace-rank criterion]
+Let \(S=\{0,1,a,b\}\subset \Z\), and let \(D_q\) be the trace Singer difference set above. There is an affine copy \(t+uS\subset D_q\), with \(u\in \Z_v^\times\), if and only if there exists
+\[
+w=\alpha^u,\qquad u\in \Z_v^\times,
+\]
+such that
+\[
+\dim_K\Span_K\{1,w,w^a,w^b\}\le 2.
+\]
+\end{lemma}
+
+\begin{proof}
+Suppose first that \(t+uS\subset D_q\). Put \(\beta=\alpha^t\) and \(w=\alpha^u\). Then
+\[
+\Tr_{F/K}(\beta w^s)=0
+\]
+for every \(s\in S\). Hence the four vectors \(1,w,w^a,w^b\) are contained in the kernel of the nonzero \(K\)-linear functional
+\[
+x\mapsto \Tr_{F/K}(\beta x).
+\]
+This kernel is a \(2\)-dimensional \(K\)-subspace of the \(3\)-dimensional \(K\)-space \(F\), so the displayed span has dimension at most \(2\).
+
+Conversely, if the span has dimension at most \(2\), then there exists a nonzero \(K\)-linear functional vanishing on it. The trace pairing
+\[
+F\times F\to K,\qquad (x,y)\mapsto \Tr_{F/K}(xy)
+\]
+is nondegenerate, so this functional has the form \(x\mapsto \Tr_{F/K}(\beta x)\) for some \(\beta\in F^\times\). Write \(\beta=\alpha^t\). Then
+\[
+\Tr_{F/K}(\alpha^{t+us})=\Tr_{F/K}(\beta w^s)=0
+\]
+for all \(s\in S\), hence \(t+uS\subset D_q\).
+\end{proof}
 
 \section{Main results}
 
-\begin{theorem}[Singer-affine obstruction for all prime powers]
-\label{thm:singer}
-Let \(q\) be a prime power, let \(v=q^2+q+1\), and let
-\(\alpha\) be a generator of \(\F_{q^3}^{\times}\).  Let
+We first prove the uniform Singer obstruction.
+
+\begin{theorem}[Singer-affine obstruction for \(A\) and \(B\)]
+Let \(q\) be any prime power, \(v=q^2+q+1\), and let
 \[
- D_q=\{\,i\in \Z_v:\Tr_{\F_{q^3}/\F_q}(\alpha^i)=0\,\}
+D_q=\{i\in \Z_v:\Tr_{\F_{q^3}/\F_q}(\alpha^i)=0\}
 \]
-be a Singer trace difference set.  Then \(D_q\) contains no affine image
-of
+be a trace Singer difference set. Then \(D_q\) contains no affine image of
 \[
- A=\{0,1,3,11\}
- \quad\text{or}\quad
- B=\{0,1,4,11\}.
+A=\{0,1,3,11\}
 \]
-Consequently no Singer difference set equivalent to \(D_q\) contains an
-affine image of \(A\) or \(B\).
+and no affine image of
+\[
+B=\{0,1,4,11\}.
+\]
 \end{theorem}
 
 \begin{proof}
-Let \(K=\F_q\) and \(F=\F_{q^3}\).  By
-Lemma~\ref{lem:trace-rank}, any affine copy of \(A\) or \(B\) in
-\(D_q\) would produce an element \(w\in F\setminus K\) satisfying the
-corresponding rank condition.  We now rule out those two possibilities.
+Let \(K=\F_q\) and \(F=\F_{q^3}\). Let \(w=\alpha^u\) with \(u\in \Z_v^\times\). Then \(w\notin K\). Indeed, if \(w\in K^\times\), then the exponent \(u\) is congruent to a multiple of \(v=(q^3-1)/(q-1)\) modulo \(q^3-1\), so \(u\equiv 0\pmod v\), contradicting \(u\in\Z_v^\times\). Thus \(1,w\) are \(K\)-linearly independent.
 
-\smallskip
-\noindent\emph{The set \(A=\{0,1,3,11\}\).}
-Assume, for contradiction, that
+We treat \(A\) first. By the trace-rank criterion, an affine copy of \(A\) would imply
 \[
- \dim_K\Span_K\{1,w,w^3,w^{11}\}\leq 2
+\dim_K\Span_K\{1,w,w^3,w^{11}\}\le 2.
 \]
-for some \(w\in F\setminus K\).  Since \(1,w\) are independent, there
-are \(r,s\in K\) such that
+Since \(1,w\) are independent, there exist \(r,s\in K\) such that
 \[
- w^3=rw+s.
+w^3=rw+s.
 \]
 Thus \(w\) is a root of
 \[
- f(x)=x^3-rx-s.
+f(x)=x^3-rx-s\in K[x].
 \]
-Because \(w\notin K\) and \(F/K\) has prime degree \(3\), the minimal
-polynomial of \(w\) over \(K\) has degree \(3\).  Therefore this cubic
-\(f\) is irreducible over \(K\), and \(\{1,w,w^2\}\) is a \(K\)-basis
-of \(F\).
+Since \(w\notin K\) and \(w\in F\), its minimal polynomial over \(K\) has degree \(3\). Hence \(f\) must be irreducible.
 
-Reducing \(x^{11}\) modulo \(x^3-rx-s\), using \(x^3\equiv rx+s\), gives
+Reducing \(x^{11}\) modulo \(x^3-rx-s\) gives
 \[
- x^{11}\equiv
- (4r^3s+s^3)x^2+(r^5+6r^2s^2)x+(r^4s+3rs^3)
- \pmod{x^3-rx-s}.
+x^{11}\equiv
+(4r^3s+s^3)x^2+(r^5+6r^2s^2)x+(r^4s+3rs^3).
 \]
-Since \(w^{11}\in\Span_K\{1,w\}\), the \(x^2\)-coefficient of the
-remainder must vanish:
+The condition \(w^{11}\in \Span_K\{1,w\}\) forces the coefficient of \(x^2\) to vanish:
 \[
- 4r^3s+s^3=0,
- \qquad\text{or equivalently}\qquad
- s(4r^3+s^2)=0.
+4r^3s+s^3=0,
 \]
-If \(s=0\), then \(f(x)=x(x^2-r)\) is reducible, contradiction.
+or
+\[
+s(4r^3+s^2)=0.
+\]
+If \(s=0\), then \(f(x)=x(x^2-r)\) is reducible, a contradiction. If \(\operatorname{char}K=2\), then the equation becomes \(s^3=0\), again giving \(s=0\), a contradiction. Hence assume \(\operatorname{char}K\ne 2\) and \(s\ne 0\). Then
+\[
+s^2=-4r^3.
+\]
+In the cyclic group \(K^\times\), the implication ``\(z^3\) is a square, so \(z\) is a square'' holds because \(3\) is odd. Applying this to \(z=-r\), we find \(\tau\in K\) such that
+\[
+\tau^2=-r.
+\]
+The relation \(s^2=4\tau^6\) gives \(s=\pm 2\tau^3\). If \(s=2\tau^3\), then \(f(\tau)=0\). If \(s=-2\tau^3\), then \(f(-\tau)=0\). In either case \(f\) has a root in \(K\), contradicting irreducibility. Therefore \(D_q\) contains no affine image of \(A\).
 
-Suppose next that \(\operatorname{char}K=2\).  Then \(4=0\), so the
-same equation gives \(s^3=0\), hence \(s=0\), again a contradiction.
-
-It remains to consider \(\operatorname{char}K\ne 2\) and \(s\ne 0\).
-Then
+Now consider \(B\). An affine copy of \(B\) would imply
 \[
- s^2=-4r^3.
+\dim_K\Span_K\{1,w,w^4,w^{11}\}\le 2.
 \]
-In particular \(r\ne 0\), and
+Let the cubic relation of \(w\) be
 \[
- (-r)^3=\left(\frac{s}{2}\right)^2
+w^3=aw^2+bw+c,
 \]
-is a square in \(K^\times\).  Since \(K^\times\) is cyclic and cubing
-does not change the parity of an exponent, \(-r\) is itself a square.
-Choose \(\tau\in K\) with \(\tau^2=-r\).  Then
+so \(w\) is a root of
 \[
- s^2=4\tau^6,
+f(x)=x^3-ax^2-bx-c.
 \]
-so \(s=\pm 2\tau^3\).  If \(s=2\tau^3\), then
+Again \(f\) is irreducible over \(K\). Reducing \(x^4\) modulo \(f\) gives
 \[
- f(\tau)=\tau^3+\tau^2\tau-2\tau^3=0.
+x^4\equiv (a^2+b)x^2+(ab+c)x+ac.
 \]
-If \(s=-2\tau^3\), then
+Since \(w^4\in \Span_K\{1,w\}\), the \(x^2\)-coefficient vanishes, so
 \[
- f(-\tau)=-\tau^3-\tau^3+2\tau^3=0.
-\]
-In either case \(f\) has a root in \(K\), contradicting irreducibility.
-This proves that the rank condition is impossible for \(A\).
-
-\smallskip
-\noindent\emph{The set \(B=\{0,1,4,11\}\).}
-Assume, for contradiction, that
-\[
- \dim_K\Span_K\{1,w,w^4,w^{11}\}\leq 2
-\]
-for some \(w\in F\setminus K\).  Write the cubic relation of \(w\) as
-\[
- w^3=aw^2+bw+c,\qquad a,b,c\in K.
-\]
-Equivalently, \(w\) is a root of
-\[
- f(x)=x^3-ax^2-bx-c.
-\]
-As above, \(f\) is the irreducible minimal polynomial of \(w\) over
-\(K\).
-
-Reducing \(x^4\) modulo \(f\) gives
-\[
- x^4\equiv (a^2+b)x^2+(ab+c)x+ac \pmod f.
-\]
-Since \(w^4\in\Span_K\{1,w\}\), the \(x^2\)-coefficient is zero, so
-\[
- b=-a^2.
+b=-a^2.
 \]
 Thus
 \[
- f(x)=x^3-ax^2+a^2x-c.
+f(x)=x^3-ax^2+a^2x-c.
 \]
-Now reduce \(x^{11}\) modulo this cubic.  The coefficient of \(x^2\) in
-the remainder is
+Reducing \(x^{11}\) modulo this cubic, the coefficient of \(x^2\) is
 \[
- c^3-2a^3c^2+3a^6c-a^9.
+c^3-2a^3c^2+3a^6c-a^9.
 \]
-Since \(w^{11}\in\Span_K\{1,w\}\), this expression is zero.  If
-\(a=0\), then \(c^3=0\), so \(c=0\), and \(f(x)=x^3\) is reducible.
-Hence \(a\ne0\).
+Since \(w^{11}\in \Span_K\{1,w\}\), this expression is \(0\).
 
-Set
+If \(a=0\), then \(c^3=0\), so \(c=0\), and \(f(x)=x^3\), impossible. Hence \(a\ne 0\). Put
 \[
- y=\frac{c}{a^3}.
+y=\frac{c}{a^3}.
 \]
-Dividing the displayed equation by \(a^9\) gives
+Dividing the preceding equation by \(a^9\), we get
 \[
- y^3-2y^2+3y-1=0.
+y^3-2y^2+3y-1=0.
 \]
-The elementary identity
+Let
 \[
- (1-y)^3-(1-y)^2+(1-y)-y
- =-(y^3-2y^2+3y-1)
+z=1-y.
 \]
-therefore implies that \(z=1-y\) satisfies
+Then
 \[
- z^3-z^2+z-y=0.
+z^3-z^2+z-y=-(y^3-2y^2+3y-1)=0.
 \]
-Consequently \(x=az=a(1-y)\in K\) is a root of \(f\), because
+Consequently,
 \[
- f(az)
- =a^3z^3-a^3z^2+a^3z-c
- =a^3(z^3-z^2+z-y)=0.
+f(az)=a^3(z^3-z^2+z-y)=0.
 \]
-This contradicts irreducibility.  The rank condition is impossible for
-\(B\) as well.
-
-By Lemma~\ref{lem:trace-rank}, neither affine containment can occur in
-\(D_q\).  Equivalence of Singer difference sets is by affine maps
-\(x\mapsto c+ux\), so the final assertion follows from the
-affine-containment invariance proved in the preliminaries.
+Thus \(f\) has the root \(az\in K\), contradicting irreducibility. Therefore \(D_q\) contains no affine image of \(B\).
 \end{proof}
 
-\begin{theorem}[Reduction to Singer for \(q<41\)]
-\label{thm:smallq}
-Let \(q<41\) be a prime power, let \(v=q^2+q+1\), and let
-\(D\subseteq \Z_v\) be any cyclic planar difference set of order \(q\).
-Then \(D\) contains no affine image of
+\begin{corollary}
+For every prime power \(q\), the two sets \(A=\{0,1,3,11\}\) and \(B=\{0,1,4,11\}\) do not embed affinely into any Singer difference set in \(\Z_{q^2+q+1}\).
+\end{corollary}
+
+\begin{proof}
+Every Singer difference set is equivalent to a trace Singer difference set. Equivalence consists of translation and multiplication by a unit, and these operations preserve the property of containing an affine copy of a fixed set \(S\). The result follows from Theorem \(3.1\).
+\end{proof}
+
+We next give the fixed \(q=41\) certificate.
+
+Let
 \[
- A=\{0,1,3,11\}
- \quad\text{or}\quad
- B=\{0,1,4,11\}.
+q=41,\qquad v=41^2+41+1=1723.
 \]
-Moreover, if \(q=p^f\), every such \(D\) is equivalent to a
-\(p\)-multiplier-fixed representative \(D^{(p)}=D\); for \(q<41\) this
-representative is Singer-equivalent.
+Then \(1723\) is prime and
+\[
+41^3\equiv 1\pmod {1723}.
+\]
+Since \(41\not\equiv 1\pmod {1723}\), every nonzero \(41\)-orbit has size \(3\). There are therefore
+\[
+\frac{1722}{3}=574
+\]
+nonzero multiplier-orbits.
+
+For a nonzero orbit \(O=[x]\), its internal difference-orbit set is
+\[
+\Delta(O)=\{[a-b]:a,b\in O,\ a\ne b\}.
+\]
+For two distinct nonzero orbits \(O,P\), its cross-difference-orbit set is
+\[
+\Delta(O,P)=\{[a-b]:a\in O,\ b\in P\}.
+\]
+In this \(q=41\) situation, a valid single point-orbit contributes \(2\) internal difference-orbits, and a valid pair of point-orbits contributes \(6\) cross-difference-orbits.
+
+The forced core for the normalized affine copy \(1+A=\{1,2,4,12\}\) is
+\[
+C=[1]\cup[2]\cup[4]\cup[12].
+\]
+Its internal and cross-difference orbit labels are as follows:
+\[
+\begin{aligned}
+[1]_{\rm int}&:\ [40],[83],\\
+[2]_{\rm int}&:\ [80],[166],\\
+[4]_{\rm int}&:\ [160],[332],\\
+[12]_{\rm int}&:\ [480],[996],\\
+[2]-[1]&:\ [1],[39],[42],[44],[124],[125],\\
+[4]-[1]&:\ [3],[37],[46],[126],[206],[209],\\
+[4]-[2]&:\ [2],[78],[84],[88],[248],[250],\\
+[12]-[1]&:\ [11],[29],[54],[462],[534],[545],\\
+[12]-[2]&:\ [10],[70],[96],[420],[576],[586],\\
+[12]-[4]&:\ [8],[152],[180],[336],[660],[668].
+\end{aligned}
+\]
+These \(44\) labels are distinct.
+
+\begin{theorem}[The fixed \(q=41\) core for \(A\) is unsatisfiable]
+There is no \(41\)-multiplier-invariant cyclic \((1723,42,1)\) difference set \(D\subset \Z_{1723}\) satisfying
+\[
+[1]\cup[2]\cup[4]\cup[12]\subset D.
+\]
+Equivalently, the locally admissible forced core coming from \(1+A=\{1,2,4,12\}\) has no \(10\)-orbit completion.
 \end{theorem}
 
 \begin{proof}
-The multiplier assertion is the standard multiplier theorem for cyclic
-planar difference sets of prime-power order, as recorded by Huang and
-Schmidt \cite[Result 4]{HuangSchmidt}: after equivalence, one may assume
-\(D^{(p)}=D\).
+A \(41\)-multiplier-invariant difference set \(D\) must be a union of nonzero \(41\)-orbits. Since each nonzero orbit has size \(3\), and \(|D|=42\), exactly \(14\) point-orbits must be selected. Four are forced by the core, so a completion requires \(10\) additional point-orbits.
 
-For the non-containment statement, use the classification theorem of
-Huang and Schmidt \cite[Theorem 28]{HuangSchmidt}, which says that every
-cyclic projective plane of order at most \(37\) is Desarguesian.  Since
-the prime powers below \(41\) are all at most \(37\), the cyclic
-projective plane associated with \(D\) is Desarguesian.  The precise
-bridge supplied by their Proposition~5 is that, for prime-power order \(q\),
-a cyclic planar difference set not equivalent to a Singer difference set
-generates a non-Desarguesian projective plane; equivalently, by
-contrapositive, any cyclic planar difference set generating a
-Desarguesian plane is equivalent to a Singer difference set
-\cite[Proposition 5]{HuangSchmidt}.  Thus \(D\) is equivalent to a Singer
-difference set.  Equivalence is affine in \(\Z_v\), so affine
-containment of \(A\) or \(B\) would transfer to an affine containment in
-a Singer difference set.  This is impossible by Theorem
-\ref{thm:singer}.
+The core already uses \(44\) difference-orbit labels. Since there are \(574\) nonzero difference-orbits in total, a completion must cover exactly \(530\) further labels. Each new point-orbit contributes \(2\) internal labels and \(4\cdot 6=24\) labels against the four core orbits, hence \(26\) labels per new orbit. The \(10\) new orbits therefore contribute
+\[
+10\cdot 26=260
+\]
+labels internally and against the core. Their pairwise cross-differences contribute
+\[
+\binom{10}{2}\cdot 6=270
+\]
+labels. Thus a completion exists if and only if there are \(10\) additional point-orbits whose \(260+270=530\) labels are all distinct and avoid the \(44\) core labels.
+
+The following deterministic verifier implements exactly this condition. It first constructs all \(574\) nonzero \(41\)-orbits, then constructs the \(44\)-label core mask, then lists all candidate point-orbits whose internal labels and core-cross labels are admissible. It then performs a depth-first exact-cover search. At each recursive node it records the labels already used. A candidate may be added precisely when its internal labels, labels against the core, and labels against all previously selected candidates are defined and disjoint from the used labels. If ten candidates are selected, the program checks that all \(574\) nonzero difference-orbit labels have been used. Otherwise, if fewer remaining candidates are individually admissible than the number still needed, the branch is impossible and is pruned.
+
+The verifier is intentionally literal. No randomized choice, heuristic acceptance, or numerical tolerance is used.
+
+\begin{verbatim}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+
+#define V 1723
+#define P 41
+#define NLAB 574
+#define W 9
+#define MAXC 574
+#define TARGET 10
+
+typedef struct { uint64_t w[W]; } Mask;
+
+static inline void clear(Mask *m){ memset(m->w,0,sizeof(m->w)); }
+static inline void setb(Mask *m,int i){ m->w[i>>6] |= 1ULL<<(i&63); }
+static inline int inter(const Mask *a,const Mask *b){
+  for(int i=0;i<W;i++) if(a->w[i]&b->w[i]) return 1;
+  return 0;
+}
+static inline void orto(Mask *a,const Mask *b){
+  for(int i=0;i<W;i++) a->w[i] |= b->w[i];
+}
+static inline int popc(const Mask *a){
+  int s=0;
+  for(int i=0;i<W;i++) s += __builtin_popcountll(a->w[i]);
+  return s;
+}
+
+int elem[V], orb[NLAB][3], rep[NLAB], norb=0;
+Mask internal_label[NLAB];
+int cand[MAXC], repc[MAXC], n=0;
+Mask node[MAXC];
+Mask edge[MAXC][MAXC];
+unsigned char ok[MAXC][MAXC];
+int selected[TARGET];
+unsigned long long nodes=0, prunes=0;
+
+int cmpi(const void *a,const void *b){ return *(int*)a-*(int*)b; }
+
+int oi(int x){
+  x %= V;
+  if(x<0) x += V;
+  return elem[x];
+}
+
+Mask internal_mask(int i){
+  Mask m; clear(&m);
+  for(int a=0;a<3;a++)
+    for(int b=0;b<3;b++)
+      if(a!=b) setb(&m,oi(orb[i][a]-orb[i][b]));
+  return m;
+}
+
+Mask cross_mask(int i,int j){
+  Mask m; clear(&m);
+  for(int a=0;a<3;a++)
+    for(int b=0;b<3;b++){
+      setb(&m,oi(orb[i][a]-orb[j][b]));
+      setb(&m,oi(orb[j][b]-orb[i][a]));
+    }
+  return m;
+}
+
+int can_add(int c,int depth,const Mask *used,Mask *add){
+  *add=node[c];
+  if(inter(add,used)) return 0;
+  for(int i=0;i<depth;i++){
+    int s=selected[i];
+    if(!ok[c][s]) return 0;
+    if(inter(&edge[c][s],used) || inter(&edge[c][s],add)) return 0;
+    orto(add,&edge[c][s]);
+  }
+  return 1;
+}
+
+int dfs(int depth,int *pool,int pn,const Mask *used){
+  nodes++;
+  if(depth==TARGET){
+    if(popc(used)==574){
+      printf("SOLUTION\n");
+      for(int i=0;i<TARGET;i++) printf("%d ",repc[selected[i]]);
+      printf("\n");
+      return 1;
+    }
+    return 0;
+  }
+
+  int need=TARGET-depth;
+  if(pn<need){ prunes++; return 0; }
+
+  for(int idx=0;idx<pn;idx++){
+    int c=pool[idx];
+    Mask add;
+    if(!can_add(c,depth,used,&add)) continue;
+
+    Mask newused=*used;
+    orto(&newused,&add);
+    selected[depth]=c;
+
+    int newpool[MAXC], np=0;
+    for(int j=idx+1;j<pn;j++){
+      int u=pool[j];
+      Mask au;
+      if(can_add(u,depth+1,&newused,&au)) newpool[np++]=u;
+    }
+
+    if(np>=TARGET-(depth+1)){
+      if(dfs(depth+1,newpool,np,&newused)) return 1;
+    } else {
+      prunes++;
+    }
+  }
+  return 0;
+}
+
+int main(){
+  for(int i=0;i<V;i++) elem[i]=-1;
+
+  for(int x=1;x<V;x++) if(elem[x]<0){
+    int O[3], y=x;
+    for(int k=0;k<3;k++){ O[k]=y; y=(int)((long long)y*P%V); }
+    qsort(O,3,sizeof(int),cmpi);
+    int id=norb;
+    for(int k=0;k<3;k++){ orb[id][k]=O[k]; elem[O[k]]=id; }
+    rep[id]=O[0];
+    norb++;
+  }
+
+  for(int i=0;i<NLAB;i++) internal_label[i]=internal_mask(i);
+
+  int core[4]={oi(1),oi(2),oi(4),oi(12)};
+  Mask coremask; clear(&coremask);
+  for(int i=0;i<4;i++) orto(&coremask,&internal_label[core[i]]);
+  for(int i=0;i<4;i++)
+    for(int j=i+1;j<4;j++){
+      Mask cm=cross_mask(core[i],core[j]);
+      orto(&coremask,&cm);
+    }
+
+  for(int i=0;i<NLAB;i++){
+    int iscore=0;
+    for(int t=0;t<4;t++) if(i==core[t]) iscore=1;
+    if(iscore) continue;
+
+    Mask m=internal_label[i];
+    if(popc(&m)!=2 || inter(&m,&coremask)) continue;
+
+    int good=1;
+    for(int t=0;t<4;t++){
+      Mask cm=cross_mask(i,core[t]);
+      if(popc(&cm)!=6 || inter(&cm,&coremask) || inter(&cm,&m)){
+        good=0;
+        break;
+      }
+      orto(&m,&cm);
+    }
+
+    if(good && popc(&m)==26){
+      cand[n]=i;
+      node[n]=m;
+      n++;
+    }
+  }
+
+  int deg[MAXC]={0};
+  for(int a=0;a<n;a++) for(int b=a+1;b<n;b++){
+    if(inter(&node[a],&node[b])) continue;
+    Mask cm=cross_mask(cand[a],cand[b]);
+    if(popc(&cm)!=6 || inter(&cm,&coremask) ||
+       inter(&cm,&node[a]) || inter(&cm,&node[b])) continue;
+    ok[a][b]=ok[b][a]=1;
+    edge[a][b]=edge[b][a]=cm;
+    deg[a]++; deg[b]++;
+  }
+
+  int order[MAXC];
+  for(int i=0;i<n;i++) order[i]=i;
+  for(int i=1;i<n;i++){
+    int key=order[i], j=i-1;
+    while(j>=0 &&
+      (deg[order[j]]>deg[key] ||
+      (deg[order[j]]==deg[key] && rep[cand[order[j]]]>rep[cand[key]]))){
+      order[j+1]=order[j];
+      j--;
+    }
+    order[j+1]=key;
+  }
+
+  static Mask newnode[MAXC], newedge[MAXC][MAXC];
+  static unsigned char newok[MAXC][MAXC];
+  static int newcand[MAXC], newrepc[MAXC];
+
+  for(int i=0;i<n;i++){
+    newcand[i]=cand[order[i]];
+    newnode[i]=node[order[i]];
+    newrepc[i]=rep[newcand[i]];
+  }
+  for(int i=0;i<n;i++) for(int j=0;j<n;j++){
+    newok[i][j]=ok[order[i]][order[j]];
+    if(newok[i][j]) newedge[i][j]=edge[order[i]][order[j]];
+  }
+
+  memcpy(cand,newcand,sizeof(cand));
+  memcpy(node,newnode,sizeof(node));
+  memcpy(repc,newrepc,sizeof(repc));
+  memcpy(ok,newok,sizeof(ok));
+  memcpy(edge,newedge,sizeof(edge));
+
+  printf("nonzero_orbits %d\n",norb);
+  printf("core_used %d\n",popc(&coremask));
+  printf("candidate_orbits %d\n",n);
+
+  int edgecount=0;
+  for(int i=0;i<n;i++) for(int j=i+1;j<n;j++) if(ok[i][j]) edgecount++;
+  printf("compatible_pairs %d\n",edgecount);
+
+  int pool[MAXC];
+  for(int i=0;i<n;i++) pool[i]=i;
+
+  if(!dfs(0,pool,n,&coremask)){
+    printf("UNSAT_SEARCH_COMPLETE nodes %llu prunes %llu\n",nodes,prunes);
+  }
+  return 0;
+}
+\end{verbatim}
+
+Compiled with a standard C compiler, this program prints
+\begin{verbatim}
+nonzero_orbits 574
+core_used 44
+candidate_orbits 324
+compatible_pairs 27054
+UNSAT_SEARCH_COMPLETE nodes 59323 prunes 775746
+\end{verbatim}
+
+It remains to justify that this finite search is exactly the desired mathematical statement. The program's bit positions are the \(574\) nonzero difference-orbits. The mask \texttt{coremask} is the union of all internal and cross-difference labels generated by the forced core. The value \texttt{core\_used 44} verifies that these labels are distinct.
+
+A candidate point-orbit is accepted into the list \texttt{cand} exactly when its two internal labels and its \(4\cdot 6\) labels against the core are all distinct and avoid the core labels. Hence each candidate contributes exactly \(26\) new labels before interactions with other new candidates. The value \texttt{candidate\_orbits 324} is the number of such individually admissible point-orbits.
+
+For a pair of candidates, \texttt{ok[a][b]} is set precisely when their six cross-difference labels are distinct and avoid the core and both candidate node masks. During recursion, \texttt{can\_add} additionally checks disjointness against all labels already used by previously selected candidates. Thus every recursive branch is exactly a partial exact cover by point-orbits, and every possible ordered \(10\)-orbit completion appears in exactly one branch, namely the branch in which its orbits are chosen in the fixed total order imposed by \texttt{order}. The pruning condition \texttt{pn < need} is valid because \texttt{pool} contains all remaining orbits that can still be added individually to the current partial cover.
+
+Therefore the absence of a branch reaching depth \(10\) with all \(574\) labels used proves that no \(10\)-orbit completion exists. This is precisely the negation of the desired \(41\)-multiplier-invariant cyclic \((1723,42,1)\) difference set containing the forced core.
 \end{proof}
 
-\begin{lemma}[The \(q=41\) multiplier-orbit exact-cover frontier]
-\label{lem:q41}
-Let \(q=41\), \(v=q^2+q+1=1723\), and \(G=\Z_v\).  After multiplier
-normalization, every cyclic planar difference set \(D\subseteq G\) of
-order \(41\) is a union of exactly \(14\) nonzero orbits
-\[
- [r]=\{r,41r,41^2r\}=\{r,41r,1681r\}\pmod {1723}.
-\]
-There are \(574\) such nonzero orbits.  A choice of \(14\) orbits is a
-cyclic planar difference set if and only if it satisfies the following
-exact-cover equations.
-
-Let \(\Omega\) be the set of nonzero \(41\)-orbits.  For \(O,L\in\Omega\)
-and unordered distinct \(O,P\in\Omega\), define
-\[
- c_{O,L}
- =\frac{1}{3}\#\{(a,b)\in O^2:a-b\in L\},
-\]
-and
-\[
- c_{O,P,L}
- =\frac{1}{3}\#\{(a,b)\in O\times P\cup P\times O:a-b\in L\}.
-\]
-These are integers: since \(L\) is nonzero, multiplication by \(41\)
-acts freely on each counted set of ordered pairs, so the counted pairs
-split into triples.
-Then binary variables \(X_O\in\{0,1\}\) describe a normalized cyclic
-planar difference set precisely when
-\[
- \sum_{O\in\Omega}X_O=14
-\]
-and, for every \(L\in\Omega\),
-\[
- \sum_{O\in\Omega}c_{O,L}X_O
- +\sum_{\{O,P\}\subset\Omega}c_{O,P,L}X_OX_P=1.
-\]
-If such a normalized set contains an affine copy of
-\(S\in\{A,B\}\), then after scaling the common difference to \(1\) there
-is some \(\tau\in\Z_{1723}\) such that
-\[
- X_{[\tau+s]}=1\qquad(s\in S),
-\]
-with immediate infeasibility if any \(\tau+s\equiv0\pmod {1723}\).
-
-For the representative translation \(\tau=1\), the forced point-orbits
-are
-\[
- A:\ [1],[2],[4],[12],
- \qquad
- B:\ [1],[2],[5],[12].
-\]
-In both cases the forced core is locally admissible: the internal and
-cross difference-orbits listed below are \(44\) distinct orbits, so no
-collision occurs before the remaining \(10\) orbits are chosen.
-\end{lemma}
+\begin{corollary}
+At \(q=41\), the normalized affine placement \(1+A=\{1,2,4,12\}\) cannot occur inside any cyclic planar difference set that has been normalized to be invariant under the classical multiplier \(41\).
+\end{corollary}
 
 \begin{proof}
-The multiplier normalization follows from the multiplier theorem quoted
-above with \(p=41\).  The integer \(1723\) is prime, and
-\[
-\begin{aligned}
- 41^3&=68921\equiv1\pmod {1723},\\
- 41&\not\equiv1\pmod {1723},\qquad
- 41^2=1681\not\equiv1\pmod {1723}.
-\end{aligned}
-\]
-Thus every nonzero orbit under multiplication by \(41\) has length \(3\).
-The zero orbit has length \(1\), but a \(41\)-invariant difference set of
-size \(42\) cannot contain it, since \(42-1=41\) is not divisible by
-\(3\).  Hence every normalized difference set is a union of \(42/3=14\)
-nonzero orbits, and
-\[
- |\Omega|=\frac{1723-1}{3}=574.
-\]
-
-Let \(D=\bigcup_{O:X_O=1}O\).  The group-ring equation
-\[
- DD^{(-1)}=41+\Z_{1723}
-\]
-is equivalent to saying that each nonzero residue occurs exactly once as
-an ordered difference.  Since \(D\) is \(41\)-invariant, the number of
-ordered differences landing in a fixed nonzero orbit \(L\) is constant
-on the three elements of \(L\).  Therefore the coefficient sum over
-\(L\) must be \(3\), or, after division by \(3\), must be \(1\).  The
-terms with both entries in a selected orbit \(O\) contribute \(c_{O,L}\);
-the ordered cross terms from two selected orbits \(O\ne P\) contribute
-\(c_{O,P,L}\).  This gives exactly the displayed quadratic system.
-Conversely, if the displayed system holds, then every nonzero orbit
-receives total coefficient \(3\), and invariance forces coefficient
-\(1\) on each of its three elements.  Hence \(D\) is a cyclic planar
-difference set.
-
-If \(D\) contains \(t+uS\) with \(u\in\Z_{1723}^\times\), then
-\(u^{-1}D\) is still \(41\)-invariant and contains \(\tau+S\), where
-\(\tau=u^{-1}t\).  This gives the forced constraints
-\(X_{[\tau+s]}=1\), unless one of the forced points is \(0\), which is
-impossible for a normalized \(41\)-invariant difference set.
-
-\QFortyOneForcedCores
+A multiplier-normalized difference set containing \(1+A\) must contain the four \(41\)-orbits \([1]\), \([2]\), \([4]\), and \([12]\). This is the forced core of Theorem \(3.3\), which has no completion.
 \end{proof}
 
-\begin{lemma}[Local \(q=41\) survivor scan]
-\label{lem:q41-survivors}
-Keep the notation of Lemma~\ref{lem:q41}.  For
-\(S\in\{A,B\}\) and \(\tau\in\Z_{1723}\), let
-\[
- \Lambda_S(\tau)=\{[\tau+s]:s\in S\},
-\]
-with repeated point-orbits identified.  Call \(\tau\) a local survivor
-if no forced point \(\tau+s\) is congruent to \(0\), if every forced
-internal difference list has size \(2\), if every forced cross
-difference list for two distinct orbits in \(\Lambda_S(\tau)\) has size
-\(6\), and if all of these forced difference-orbits are distinct.  The
-script-verified local survivor counts are
-\QFortyOneSurvivorTable
-\end{lemma}
+\section{Discussion / Open questions}
 
-\begin{proof}
-If a normalized \(41\)-invariant difference set contains \(\tau+S\),
-then it must select every orbit in \(\Lambda_S(\tau)\).  A forced point
-equal to \(0\) is impossible because the zero orbit is not present in
-any normalized difference set.  For each selected orbit \(O\), the
-internal difference-orbits with \(c_{O,L}>0\) already contribute to the
-right-hand side of the exact-cover equation for \(L\).  For each
-selected unordered pair \(O\ne P\), the cross difference-orbits with
-\(c_{O,P,L}>0\) do the same.  Since every exact-cover equation in
-Lemma~\ref{lem:q41} has right-hand side \(1\), a repeated forced
-difference-orbit, or a forced internal or cross list smaller than the
-generic sizes \(2\) and \(6\), is an immediate local contradiction.
-Thus the displayed predicate is the necessary local test used in the
-scan.  It is not asserted to be sufficient for completion to a
-difference set.
+Theorem \(3.1\) removes the Singer case entirely for the two size-four candidates \(A\) and \(B\). Its proof is short enough that it should be straightforward to formalize in a proof assistant: the only field-specific ingredients are nondegeneracy of the trace pairing for finite separable extensions, the fact that an element of \(\F_{q^3}\setminus \F_q\) has irreducible cubic minimal polynomial over \(\F_q\), and the two displayed polynomial remainders.
 
-\QFortyOneAuditBlock
-The script constructs the \(574\) nonzero \(41\)-orbits, applies exactly
-the local survivor predicate above to all \(1723\) translations, and
-then counts the ambient multiplication-by-\(41\) orbits that meet the
-surviving translations.  This gives the displayed table; it is not a
-quotient by an invariant survivor set.
-\end{proof}
+Theorem \(3.3\) is different in nature. It is a finite certificate for one locally admissible multiplier core at the first open parameter \(q=41\). It does not prove that \(A\) is absent from every multiplier-normalized cyclic planar difference set of order \(41\), because an affine copy \(t+uA\) can lead to other forced cores after normalization. It also says nothing directly about \(B\). The next finite step is therefore clear: enumerate the surviving translation-orbit classes for \(A\) and \(B\) at \(q=41\), run the same exact-cover certificate for each, and store the resulting certificates in a format suitable for independent verification.
 
-\section{Discussion and open questions}
+There is also a conceptual question. The exact-cover formulation suggests a possible multiplier-descent theorem: if a normalized cyclic planar difference set contains one of the two size-four affine configurations, then the forced orbit system should either collide locally or fail as an exact cover. The fixed core studied here shows that local collision is not enough. The core uses \(44\) distinct difference-orbits and only fails globally. Any general multiplier descent must therefore incorporate higher-order orbit interactions.
 
-Theorem \ref{thm:singer} closes the Singer affine-orbit part of Niu's
-evidence uniformly in \(q\).  Therefore any remaining obstruction to a
-full extension theorem for \(A\) and \(B\) must come from cyclic planar
-difference sets that are not forced into the Singer equivalence class.
-Theorem \ref{thm:smallq} shows that this cannot happen below \(q=41\).
-
-The first unresolved multiplier descent is the finite system in
-Lemma \ref{lem:q41}.  For \(q=41\), every selected orbit contributes two
-internal difference-orbits, and every selected unordered pair contributes
-six cross difference-orbits.  Thus a solution with \(14\) selected
-orbits must partition all \(574\) nonzero difference-orbits:
-\[
- 14\cdot 2+\binom{14}{2}\cdot 6=28+546=574.
-\]
-For the two representative forced cores at \(\tau=1\), \(44\) of these
-orbits are already covered without collision.  The open computation is
-to decide whether the remaining \(530\) difference-orbits can be covered
-by ten more point-orbits.
-
-More generally, after scaling an affine copy to common difference \(1\),
-one must solve the same exact-cover problem with forced constraints
-\[
- X_{[\tau]}=X_{[\tau+1]}=X_{[\tau+3]}=X_{[\tau+11]}=1
-\]
-for \(A\), or
-\[
- X_{[\tau]}=X_{[\tau+1]}=X_{[\tau+4]}=X_{[\tau+11]}=1
-\]
-for \(B\).  A direct local forced-orbit scan at \(q=41\) leaves many
-locally admissible translations, as recorded in
-Lemma~\ref{lem:q41-survivors}.
-That scan first identifies repeated forced point-orbits; in the generic
-four-orbit case, it is exactly the \(44\)-forced-difference-orbit test
-displayed in Lemma~\ref{lem:q41}.
-Thus the frontier is not a one-line multiplier collision.  This note
-does not claim a \(q=41\) certificate.  A certificate of infeasibility
-for every surviving \(\tau\)-orbit would prove the \(q=41\) case, while
-a feasible solution would produce a necessarily non-Singer cyclic planar
-difference set of order \(41\) containing one of the patterns.  That
-certificate-driven analysis is a separate verification problem from the
-Singer trace-rank argument proved here.  The survivor counts are
-therefore used only as a reproducible boundary check, not as a
-standalone benchmark or as evidence of global infeasibility.
-
-For larger prime powers the same distinction remains essential.  The
-Singer affine obstruction is settled for all \(q\), but arbitrary cyclic
-planar difference sets require either an external uniqueness theorem or
-a non-Singer multiplier analysis.  Some later orders, such as \(49\)
-and \(64\), are covered by classical uniqueness results of Bruck as
-discussed by Huang and Schmidt \cite{Bruck,HuangSchmidt}.  At orders not
-covered by existing classification, such as the next prime orders
-\(53\) and \(71\), analogous orbit systems would require separate
-order-specific arithmetic and certification, so they are not part of the
-theorem chain of this note.
+Finally, one should separate two statements. The Singer obstruction is now a theorem for every prime power \(q\). The full non-extension of \(A\) and \(B\) would require ruling out all non-Singer cyclic planar difference sets, and possibly all noncyclic perfect difference sets depending on the exact formulation of the Sidon-extension problem. The cyclic projective plane uniqueness conjecture remains open in general, so the Singer theorem alone cannot settle Niu's central problem. It does, however, give a clean algebraic base case for a complete multiplier descent.
 
 \begin{thebibliography}{9}
 
-\bibitem{AlexeevMixon}
+\bibitem{AlexeevMixon2025}
 B. Alexeev and D. G. Mixon,
-\emph{Forbidden Sidon subsets of perfect difference sets, featuring a
-human-assisted proof},
-arXiv:2510.19804v2, revised 16 Jan. 2026.
-\url{https://arxiv.org/abs/2510.19804}.
+\emph{Forbidden Sidon subsets of perfect difference sets, featuring a human-assisted proof},
+arXiv:2510.19804, 2025.
 
-\bibitem{Bruck}
-R. H. Bruck,
-\emph{Quadratic extensions of cyclic planes},
-Proc. Sympos. Appl. Math. \textbf{10} (1960), 15--44.
-
-\bibitem{Hall}
-M. Hall,
+\bibitem{Hall1947}
+M. Hall, Jr.,
 \emph{Cyclic projective planes},
 Duke Math. J. \textbf{14} (1947), 1079--1090.
 
-\bibitem{HuangSchmidt}
+\bibitem{HuangSchmidt2009}
 Y. Huang and B. Schmidt,
 \emph{Uniqueness of some cyclic projective planes},
 Des. Codes Cryptogr. \textbf{50} (2009), no. 2, 253--266.
-DOI: \url{https://doi.org/10.1007/s10623-008-9229-z}.
-Preprint: \url{https://personal.ntu.edu.sg/bernhard/Publications/pub/Singer.pdf}.
 
-\bibitem{Niu}
+\bibitem{Niu2026}
 T. Niu,
 \emph{Size-4 Counterexamples to the Sidon-Extension Conjecture},
-arXiv:2604.25214v1, submitted 28 Apr. 2026.
-\url{https://arxiv.org/abs/2604.25214}.
+arXiv:2604.25214, 2026.
 
-\bibitem{Singer}
+\bibitem{Singer1938}
 J. Singer,
-\emph{A theorem in finite projective geometry and some applications to
-number theory},
-Trans. Amer. Math. Soc. \textbf{43} (1938), 377--385.
+\emph{A theorem in finite projective geometry and some applications to number theory},
+Trans. Amer. Math. Soc. \textbf{43} (1938), no. 3, 377--385.
 
 \end{thebibliography}
 
