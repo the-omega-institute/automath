@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.4
+// @version      1.5
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -33,7 +33,7 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.4";
+  const SCRIPT_VERSION = "outreach-1.5";
 
   let busy = false;
   // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
@@ -923,8 +923,14 @@
     // waitForResponse. ChatGPT 5.5 triggers a full page reload when the URL
     // first changes from chatgpt.com/ to chatgpt.com/c/<uuid>, which loses
     // our in-memory state but the in-flight task survives.
+    //
+    // Fix v1.5: this guard now applies to follow-up tasks too. Earlier the
+    // condition was `!is_followup`, which let a page reload during a follow-up
+    // (e.g. WRITE_PAPER_LATEX terminal turn) trigger duplicate prompt entry —
+    // observed visually as the same prompt block appearing twice in the
+    // ChatGPT chat for T-20.
     const onConvPage = /\/c\/[a-f0-9-]{6,}/.test(window.location.href);
-    if (getInFlightTaskId() === task_id && onConvPage && !is_followup) {
+    if (getInFlightTaskId() === task_id && onConvPage) {
       log(`=== Task: ${task_id} [RESUMING on existing chat ${currentChatUrl().slice(-40)}] ===`);
       try { await serverPost("/ack", { task_id, agent_id: agentId() }); } catch {}
       setTaskPhase("processing");
