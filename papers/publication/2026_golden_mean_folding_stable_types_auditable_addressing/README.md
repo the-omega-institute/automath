@@ -31,11 +31,11 @@ It does **not** claim to derive quantum mechanics, spacetime, Einstein equations
 - `main.tex`: manuscript entry point.
 - `preamble.tex`: LaTeX definitions.
 - `sections/`: twelve-section submission structure.
-- `appendices/`: A--F submission appendices for rewriting, inverse systems, clarity proofs, finite graph certificates, reproducibility, and examples.
+- `appendices/`: A--F submission appendices for local normalization, finite-state Markov covers, statistical fold-histogram audits, deterministic fiber ledgers, reproducibility, and examples.
 - `references.bib`: local references drawn from existing publication tracks.
 - `SOURCE_MAP.md`: mapping from the monograph plan to this paper.
 - `THEOREM_LIST.md`: main theorem package.
 
 ## Intended status
 
-Draft V1 for Stage 38. The text is submission-shaped and compiles, but Stage 39 should still audit which theorem statements are fully proved in-line, which rely on appendix obligations, and which should be downgraded before journal submission.
+Draft V2 through Stage 46. The main proof chain has been audited through the Zeckendorf residue-section definition of `Fold_m`; Appendix B records the finite automata, right-resolving Markov cover, entropy, Parry baseline, and cover-zeta interface; Appendix C records the statistical audit protocol for empirical folded histograms; Appendix D records fold multiplicities, the IID-uniform fiber law, deterministic information ledgers, and collision/Renyi fingerprints; Appendix E specifies the exact reproducibility package, file schemas, hash policy, script pipeline, and pass/fail rules.

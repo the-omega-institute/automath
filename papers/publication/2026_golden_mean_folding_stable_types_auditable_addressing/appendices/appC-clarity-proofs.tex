@@ -1,8 +1,558 @@
-\section{Scan error profile proofs}
-\label{app:clarity-proofs}
+\section{Statistical audit protocol for fold histograms}
+\label{app:statistical-audit}
 
-The scan error profile is an ordinary finite Bayes decision problem on the cylinder partition \(\mathcal C_m\).  On each cylinder \(C\), every \(\mathcal F_m\)-measurable binary classifier is constant.  The optimal choice is \(1\) when \(\mu(P\cap C)\ge \mu(C\setminus P)\) and \(0\) otherwise.  The cylinder contribution to the error is therefore
+This appendix gives a reproducible statistical protocol for empirical folded histograms.  For a binary data stream
 \[
-\min\{\mu(P\cap C),\mu(C\setminus P)\}.
+x=(x_t)_{t\ge0}\in\{0,1\}^{\NN},
 \]
-Summing over all cylinders gives \Cref{prop:cylinder-decomposition}.  The boundary-dimension estimate follows by observing that non-boundary cylinders contribute zero and boundary cylinders contribute at most \(\mu(C)/2\).
+and a fixed resolution \(m\), define the length-\(m\) window
+\[
+W_t^{(m)}:=x_tx_{t+1}\cdots x_{t+m-1}\in\Om_m.
+\]
+The folded stable type at time \(t\) is
+\[
+Z_t^{(m)}:=\Fold_m(W_t^{(m)})\in X_m.
+\]
+Given \(N\) observed windows, the empirical folded histogram is
+\[
+\widehat\pi_{m,N}(z)
+:=
+\frac1N\sum_{t=0}^{N-1}\one\{Z_t^{(m)}=z\},
+\qquad z\in X_m.
+\]
+The protocol compares \(\widehat\pi_{m,N}\) with three distinct objects: the source-induced folded law, the exact IID-uniform fiber law, and the golden-mean Parry baseline of \Cref{app:golden-parry-baseline}.  The central separation is
+\[
+\text{sampling error}\quad+\quad\text{model-difference error}.
+\]
+The protocol never assumes that \(\widehat\pi_{m,N}\) converges to the Parry baseline \(q_m\).  It tests and reports the discrepancy.
+
+\subsection{Objects being estimated}
+
+Let \(\PP\) be a stationary law for the input stream.  The source-induced folded law at resolution \(m\) is
+\[
+\pi_m^{\PP}(z)
+:=
+\PP\!\left(\Fold_m(X_0X_1\cdots X_{m-1})=z\right),
+\qquad z\in X_m.
+\]
+Thus \(\widehat\pi_{m,N}\) estimates \(\pi_m^{\PP}\), not automatically the Parry baseline.
+
+For IID uniform binary input, the folded law is exactly computable from fiber sizes:
+\[
+p_m^{\mathrm{fib}}(z)=\frac{d_m(z)}{2^m},
+\qquad
+d_m(z):=\left|\Fold_m^{-1}(z)\right|.
+\]
+For the golden-mean maximum-entropy baseline, \Cref{app:golden-parry-baseline} defines
+\[
+q_m(z)=\pi_{z_1}^{\mathrm{GM}}\prod_{i=1}^{m-1}
+P_{\mathrm{GM}}(z_i,z_{i+1}),
+\qquad z=z_1\cdots z_m\in X_m.
+\]
+The three laws have different roles:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+distribution & meaning & computation\\
+\midrule
+\(\pi_m^{\PP}\) & source-induced folded law & unknown; estimated from data\\
+\(p_m^{\mathrm{fib}}\) & exact IID-uniform fold law & exact fiber count\\
+\(q_m\) & golden-mean Parry baseline & exact PF formula\\
+\bottomrule
+\end{tabular}
+\end{center}
+The empirical comparison should report \(D(\widehat\pi_{m,N},q_m)\) together with a finite-sample envelope for \(D(\widehat\pi_{m,N},\pi_m^{\PP})\).
+
+\subsection{Discrepancy metrics}
+
+The primary discrepancy metric is total variation:
+\[
+\TV(p,q)=\frac12\sum_{z\in X_m}|p(z)-q(z)|.
+\]
+The secondary metric is Kullback--Leibler divergence:
+\[
+\KL(p\mid q)=\sum_{z\in X_m}p(z)\log\frac{p(z)}{q(z)}.
+\]
+Since \(q_m(z)>0\) for every \(z\in X_m\), \(\KL(p\mid q_m)\) is finite for every distribution \(p\in\Delta(X_m)\).
+
+For the uniform-fiber law define
+\[
+\TV^{\mathrm{fib}}(m,N):=\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}}),
+\]
+and for the Parry baseline define
+\[
+\TV^{\mathrm{Parry}}(m,N):=\TV(\widehat\pi_{m,N},q_m),
+\qquad
+\KL^{\mathrm{Parry}}(m,N):=\KL(\widehat\pi_{m,N}\mid q_m).
+\]
+The reporting rule is:
+\[
+\TV^{\mathrm{Parry}}(m,N)
+\text{ is a baseline discrepancy, not a convergence error unless }
+q_m=\pi_m^{\PP}.
+\]
+
+\subsection{Exact fold-fiber statistics}
+
+For every \(z\in X_m\), compute
+\[
+d_m(z)=|\Fold_m^{-1}(z)|.
+\]
+Let
+\[
+D_m:=\max_{z\in X_m}d_m(z).
+\]
+Define the hidden-volume statistic
+\[
+\kappa_m(p):=\sum_{z\in X_m}p(z)\log d_m(z),
+\qquad p\in\Delta(X_m).
+\]
+Since \(0\le\log d_m(z)\le\log D_m\), the deterministic Lipschitz bound
+\[
+|\kappa_m(p)-\kappa_m(q)|
+\le
+2\log D_m\,\TV(p,q)
+\]
+holds for all distributions \(p,q\) on \(X_m\).  Thus, if
+\[
+\TV(\widehat\pi_{m,N},\pi_m^{\PP})\le\tau,
+\]
+then
+\[
+|\kappa_m(\widehat\pi_{m,N})-\kappa_m(\pi_m^{\PP})|
+\le
+2\log D_m\,\tau.
+\]
+
+\subsection{Finite-sample TV envelope}
+
+Let
+\[
+K_m:=|X_m|=F_{m+2}.
+\]
+For overlapping windows, \((Z_t^{(m)})_{t\ge0}\) is generally dependent even when the input symbols are IID.  The certified envelope must therefore be stated with a dependence correction.  Assume that the folded process satisfies a concentration inequality with pseudo-spectral gap parameter
+\[
+\gamma_{\mathrm{ps}}^{(m)}>0.
+\]
+A conservative coordinate-union envelope is:
+\[
+\PP\!\left(\TV(\widehat\pi_{m,N},\pi_m^{\PP})>\tau\right)\le\delta
+\]
+provided
+\[
+\boxed{
+N
+\ge
+\frac{K_m^2}{2\gamma_{\mathrm{ps}}^{(m)}\tau^2}
+\log\frac{2K_m}{\delta}.
+}
+\]
+This is the Markov-TV confidence envelope used for sample-budget calculations.  On this event,
+\[
+\TV(\widehat\pi_{m,N},\pi_m^{\PP})\le\tau
+\]
+and
+\[
+|\kappa_m(\widehat\pi_{m,N})-\kappa_m(\pi_m^{\PP})|
+\le
+2\log D_m\,\tau.
+\]
+The audit output should report the pair
+\[
+\left(\tau,\ 2\log D_m\,\tau\right)
+\]
+as the TV and hidden-volume confidence radii.
+
+\subsection{Sampling/model decomposition against the Parry baseline}
+
+The empirical Parry discrepancy decomposes as
+\[
+\TV(\widehat\pi_{m,N},q_m)
+\le
+\TV(\widehat\pi_{m,N},\pi_m^{\PP})
++
+\TV(\pi_m^{\PP},q_m).
+\]
+Therefore, on the TV confidence event,
+\[
+\TV(\pi_m^{\PP},q_m)
+\ge
+\TV(\widehat\pi_{m,N},q_m)-\tau.
+\]
+Equivalently,
+\[
+\boxed{
+\bigl[\TV(\widehat\pi_{m,N},q_m)-\tau\bigr]_+
+\le
+\TV(\pi_m^{\PP},q_m)
+\le
+\TV(\widehat\pi_{m,N},q_m)+\tau.
+}
+\]
+Thus a persistent nonzero Parry gap should be interpreted as a source--baseline model difference, not as sampling noise, once it lies outside the sampling envelope.
+
+\subsection{KL certificate}
+
+Let
+\[
+q_{\min,m}:=\min_{z\in X_m}q_m(z)>0.
+\]
+If \(\TV(p,r)\le\tau\) and \(0<2\tau<1\), a conservative finite-alphabet continuity modulus is
+\[
+\Psi_m(\tau)
+:=
+2\tau\log\frac1{q_{\min,m}}
++
+2\tau\log\frac{K_m-1}{2\tau}.
+\]
+Then, on the TV confidence event,
+\[
+\KL(\pi_m^{\PP}\mid q_m)
+\ge
+\KL(\widehat\pi_{m,N}\mid q_m)-\Psi_m(\tau).
+\]
+The KL certificate is therefore:
+\[
+\KL(\widehat\pi_{m,N}\mid q_m)>\Psi_m(\tau)
+\quad\Longrightarrow\quad
+\KL(\pi_m^{\PP}\mid q_m)>0.
+\]
+For numerical stability, a smoothed empirical law may be used:
+\[
+\widehat\pi_{m,N}^{(\varepsilon)}
+:=
+(1-\varepsilon)\widehat\pi_{m,N}+\varepsilon q_m,
+\qquad 0<\varepsilon\ll1.
+\]
+The report must state whether raw or smoothed KL was used.
+
+\subsection{Cross-resolution consistency residual}
+
+Let
+\[
+\pi_{m+1\to m}:X_{m+1}\to X_m
+\]
+be stable prefix restriction, and let \((\pi_{m+1\to m})_\#\) denote distributional pushforward.  Define the empirical cross-resolution residual
+\[
+\boxed{
+E_{m,N}:=
+\TV\!\left(
+\widehat\pi_{m,N},
+(\pi_{m+1\to m})_\#\widehat\pi_{m+1,N}
+\right).
+}
+\]
+Let the population residual be
+\[
+E_m^{\PP}:=
+\TV\!\left(
+\pi_m^{\PP},
+(\pi_{m+1\to m})_\#\pi_{m+1}^{\PP}
+\right).
+\]
+Since total variation contracts under pushforward,
+\[
+E_{m,N}
+\le
+E_m^{\PP}
++
+\TV(\widehat\pi_{m,N},\pi_m^{\PP})
++
+\TV(\widehat\pi_{m+1,N},\pi_{m+1}^{\PP}).
+\]
+Thus, if TV confidence events hold at both \(m\) and \(m+1\) with radii \(\tau_m\) and \(\tau_{m+1}\), then
+\[
+E_m^{\PP}
+\ge
+\left[E_{m,N}-\tau_m-\tau_{m+1}\right]_+.
+\]
+The audit must report
+\[
+\left(
+E_{m,N},\ \tau_m+\tau_{m+1},\
+[E_{m,N}-\tau_m-\tau_{m+1}]_+
+\right).
+\]
+
+\subsection{Rotation-source audit}
+
+For a Kronecker rotation source, fix
+\[
+\alpha\in(0,1)\setminus\mathbb Q,
+\qquad
+X_t=\one_{[1-\beta,1)}(\{x_0+t\alpha\}).
+\]
+The default experimental branch may use \(\alpha=\varphi^{-1}\), with declared \(\beta\) and \(x_0\).  For each \(z\in X_m\), define
+\[
+A_z^{(m)}
+:=
+\left\{
+y\in\mathbb T:
+\Fold_m\bigl(
+\one_{[1-\beta,1)}(y)
+\cdots
+\one_{[1-\beta,1)}(y+(m-1)\alpha)
+\bigr)=z
+\right\}.
+\]
+Then
+\[
+\pi_m^{\mathrm{rot}}(z)=\operatorname{Leb}(A_z^{(m)}).
+\]
+The empirical law is
+\[
+\widehat\pi_{m,N}^{\mathrm{rot}}(z)
+=
+\frac1N\sum_{t=0}^{N-1}\one\{\{x_0+t\alpha\}\in A_z^{(m)}\}.
+\]
+If each \(A_z^{(m)}\) is represented as a union of at most \(B_m(z)\) intervals, then the star discrepancy \(D_N^*(\alpha,x_0)\) gives
+\[
+\left|
+\widehat\pi_{m,N}^{\mathrm{rot}}(z)-\pi_m^{\mathrm{rot}}(z)
+\right|
+\le
+B_m(z)D_N^*(\alpha,x_0),
+\]
+and hence
+\[
+\TV\!\left(
+\widehat\pi_{m,N}^{\mathrm{rot}},
+\pi_m^{\mathrm{rot}}
+\right)
+\le
+\frac12\sum_{z\in X_m}B_m(z)D_N^*(\alpha,x_0).
+\]
+The audit output should report both an analytic upper bound \(D_N^{*,\mathrm{upper}}\) and, when computed directly by sorting orbit points, an exact value \(D_N^{*,\mathrm{exact}}\).
+
+\subsection{IID and Markov-source audit}
+
+For IID Bernoulli input with \(\PP(X_t=1)=p\), the population folded law is exactly
+\[
+\pi_m^p(z)
+=
+\sum_{\omega\in\Fold_m^{-1}(z)}
+p^{|\omega|_1}(1-p)^{m-|\omega|_1}.
+\]
+For \(p=1/2\), this reduces to
+\[
+\pi_m^{1/2}(z)=p_m^{\mathrm{fib}}(z)=\frac{d_m(z)}{2^m}.
+\]
+For a stationary binary Markov source with transition matrix
+\[
+P=
+\begin{pmatrix}
+P_{00}&P_{01}\\
+P_{10}&P_{11}
+\end{pmatrix}
+\]
+and stationary distribution \(\lambda\), the population law is
+\[
+\pi_m^P(z)
+=
+\sum_{\omega\in\Fold_m^{-1}(z)}
+\lambda_{\omega_1}\prod_{i=1}^{m-1}P_{\omega_i,\omega_{i+1}}.
+\]
+Thus IID and finite Markov input laws do not require simulation to compute the population folded distribution.  Simulation checks empirical convergence and pipeline correctness.
+
+\subsection{Dependent-window caution}
+
+The windows \(W_t^{(m)}=X_t\cdots X_{t+m-1}\) overlap.  Hence \(Z_t^{(m)}\) is generally dependent even when \(X_t\) is IID.  The default finite-sample envelope should not be described as an IID multinomial bound unless non-overlapping windows are used.  Two acceptable audit modes are:
+\begin{enumerate}[label=(C\arabic*)]
+\item overlapping-window Markov or mixing envelope, with \(\gamma_{\mathrm{ps}}^{(m)}\) or another explicit dependence parameter;
+\item non-overlapping block audit, using windows \(W_{jm}^{(m)}\), which are independent under IID input.
+\end{enumerate}
+If block bootstrap is used, the block length must be reported, and the interval should be labeled empirical rather than certified.
+
+\subsection{Reproducible output schema}
+
+For each configuration, the audit table should include
+\[
+(m,N,\text{source},\text{parameters},\text{seed})
+\]
+and the following fields:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+field & definition\\
+\midrule
+\texttt{K\_m} & \(|X_m|=F_{m+2}\)\\
+\texttt{D\_m} & \(\max_z d_m(z)\)\\
+\texttt{unique\_types} & \(\#\{z:\widehat\pi_{m,N}(z)>0\}\)\\
+\texttt{tv\_to\_parry} & \(\TV(\widehat\pi_{m,N},q_m)\)\\
+\texttt{kl\_to\_parry} & \(\KL(\widehat\pi_{m,N}\mid q_m)\)\\
+\texttt{tv\_to\_fiber} & \(\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}})\)\\
+\texttt{kappa\_hat} & \(\kappa_m(\widehat\pi_{m,N})\)\\
+\texttt{tv\_radius} & \(\tau\)\\
+\texttt{kappa\_radius} & \(2\log D_m\,\tau\)\\
+\texttt{tv\_multiscale\_residual} & \(E_{m,N}\)\\
+\texttt{multiscale\_radius} & \(\tau_m+\tau_{m+1}\)\\
+\texttt{DN\_star\_upper\_bound} & analytic star-discrepancy upper bound\\
+\texttt{DN\_star\_exact} & exact sorted-orbit discrepancy, when available\\
+\bottomrule
+\end{tabular}
+\end{center}
+For deterministic exact computations, the script should additionally output hashes for
+\[
+\Fold_m,\qquad d_m,\qquad q_m,\qquad p_m^{\mathrm{fib}}.
+\]
+
+\subsection{Fold-histogram audit algorithm}
+
+\begin{definition}[Fold-histogram audit]
+\label{def:fold-histogram-audit}
+The fold-histogram audit for input
+\[
+(m,N,\text{source model},\text{source parameters},\delta,\tau)
+\]
+is the following deterministic protocol, conditional on the declared data stream or random seed.
+\begin{enumerate}[label=(C\arabic*)]
+\item Build exact finite objects:
+\[
+X_m,\quad \Fold_m,\quad d_m(z),\quad D_m,\quad p_m^{\mathrm{fib}},\quad q_m.
+\]
+\item Generate or read the data stream from the declared source.
+\item Fold windows:
+\[
+Z_t^{(m)}=\Fold_m(X_t\cdots X_{t+m-1}),
+\qquad 0\le t<N.
+\]
+\item Form the empirical histogram \(\widehat\pi_{m,N}\).
+\item Compute \(\TV(\widehat\pi_{m,N},q_m)\), \(\KL(\widehat\pi_{m,N}\mid q_m)\), \(\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}})\), and \(\kappa_m(\widehat\pi_{m,N})\).
+\item Compute the finite-sample envelope and report whether \(N\) meets the declared budget.
+\item If the \(m+1\) run is available, compute \(E_{m,N}\).
+\item Emit all parameters, metrics, confidence radii, and hashes.
+\end{enumerate}
+\end{definition}
+
+\subsection{Pass/fail rules}
+
+The experiment is not designed to pass by matching Parry.  It passes by satisfying reproducibility and interpretability requirements.
+
+\paragraph{Computational pass.}
+A run passes the computational audit if \(\Fold_m\), \(d_m\), \(q_m\), and \(p_m^{\mathrm{fib}}\) match their stored hashes and all histograms sum to one within numerical tolerance.
+
+\paragraph{Sampling pass.}
+A run passes the sampling audit if the reported sample size satisfies the declared envelope condition \(N\ge N_{\min}\).  If this fails, the run may still be exploratory, but it should not be labeled certified.
+
+\paragraph{Parry mismatch certificate.}
+A run certifies non-Parry behavior at resolution \(m\) if
+\[
+\TV(\widehat\pi_{m,N},q_m)>\tau.
+\]
+The certified lower bound is
+\[
+\TV(\pi_m^{\PP},q_m)
+\ge
+\TV(\widehat\pi_{m,N},q_m)-\tau.
+\]
+
+\paragraph{KL mismatch certificate.}
+A run certifies KL mismatch if
+\[
+\KL(\widehat\pi_{m,N}\mid q_m)>\Psi_m(\tau),
+\]
+with certified lower bound
+\[
+\KL(\pi_m^{\PP}\mid q_m)
+\ge
+\KL(\widehat\pi_{m,N}\mid q_m)-\Psi_m(\tau).
+\]
+
+\paragraph{Cross-resolution inconsistency certificate.}
+A run certifies cross-resolution inconsistency if
+\[
+E_{m,N}>\tau_m+\tau_{m+1}.
+\]
+The certified lower bound is
+\[
+E_m^{\PP}\ge E_{m,N}-\tau_m-\tau_{m+1}.
+\]
+
+\subsection{Recommended figures and tables}
+
+\begin{itemize}
+\item Table C.1: exact fold statistics, with columns \(m\), \(|X_m|\), \(D_m\), \(\sum_zd_m(z)^2\), and \(\kappa_m(p_m^{\mathrm{fib}})\).
+\item Table C.2: finite-sample budget, with columns \(m\), \(|X_m|\), \(D_m\), \(\tau\), \(\delta\), \(\gamma_{\mathrm{ps}}^{(m)}\), \(N_{\min}\), and \(2\log D_m\,\tau\).
+\item Table C.3: empirical Parry discrepancy, with columns \(m\), \(N\), source, \(\TV(\widehat\pi,q_m)\), \(\KL(\widehat\pi\mid q_m)\), \(\tau\), and certified lower TV gap.
+\item Figure C.1: \(\TV(\widehat\pi_{m,N},q_m)\) versus \(N\), with the declared confidence envelope \(\tau(N)\).
+\item Figure C.2: cross-resolution residual \(m\mapsto E_{m,N}\), with radius \(\tau_m+\tau_{m+1}\).
+\end{itemize}
+
+\subsection{Main decomposition theorem}
+
+\begin{theorem}[Statistical audit decomposition for folded histograms]
+\label{thm:statistical-audit-decomposition}
+Let \(\widehat\pi_{m,N}\) be the empirical folded histogram at resolution \(m\), and let \(\pi_m^{\PP}\) be the source-induced folded law.  Suppose that, with probability at least \(1-\delta\),
+\[
+\TV(\widehat\pi_{m,N},\pi_m^{\PP})\le\tau.
+\]
+Then:
+\begin{enumerate}[label=(\roman*)]
+\item the Parry baseline discrepancy satisfies
+\[
+\bigl[\TV(\widehat\pi_{m,N},q_m)-\tau\bigr]_+
+\le
+\TV(\pi_m^{\PP},q_m)
+\le
+\TV(\widehat\pi_{m,N},q_m)+\tau;
+\]
+\item the hidden-volume statistic satisfies
+\[
+|\kappa_m(\widehat\pi_{m,N})-\kappa_m(\pi_m^{\PP})|
+\le
+2\log D_m\,\tau;
+\]
+\item if TV confidence events hold at both \(m\) and \(m+1\), then the population cross-resolution residual satisfies
+\[
+E_m^{\PP}
+\ge
+\left[E_{m,N}-\tau_m-\tau_{m+1}\right]_+.
+\]
+\end{enumerate}
+Consequently, empirical deviation from the Parry baseline decomposes into finite-sample error and source--baseline model difference, and both must be reported.
+\end{theorem}
+
+\begin{proof}
+The first claim follows from the triangle inequality:
+\[
+\TV(\widehat\pi,q)
+\le
+\TV(\widehat\pi,\pi)+\TV(\pi,q)
+\]
+and
+\[
+\TV(\pi,q)
+\le
+\TV(\pi,\widehat\pi)+\TV(\widehat\pi,q).
+\]
+Using \(\TV(\widehat\pi,\pi)\le\tau\) gives the two-sided bound.
+
+For the second claim,
+\[
+\kappa_m(p)=\sum_zp(z)\log d_m(z)
+\]
+is a bounded linear functional with \(0\le\log d_m(z)\le\log D_m\).  Hence
+\[
+|\kappa_m(p)-\kappa_m(q)|
+\le
+\sum_z|p(z)-q(z)|\log D_m
+=
+2\log D_m\,\TV(p,q).
+\]
+Apply this with \(p=\widehat\pi_{m,N}\) and \(q=\pi_m^{\PP}\).
+
+For the third claim, use the triangle inequality and contraction of total variation under pushforward:
+\[
+\TV\!\left(
+(\pi_{m+1\to m})_\#\widehat\pi_{m+1,N},
+(\pi_{m+1\to m})_\#\pi_{m+1}^{\PP}
+\right)
+\le
+\TV(\widehat\pi_{m+1,N},\pi_{m+1}^{\PP}).
+\]
+Combining the two sampling envelopes yields
+\[
+E_{m,N}\le E_m^{\PP}+\tau_m+\tau_{m+1},
+\]
+which rearranges to the stated lower bound.
+\end{proof}

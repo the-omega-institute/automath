@@ -1,68 +1,99 @@
 \section{Cross-resolution compatibility}
 \label{sec:cross-resolution}
 
-Stable types must be comparable across depths.  A naive approach would truncate the length-\((m+1)\) word to length \(m\) and then fold.  This generally fails: a carry generated at depth \(m+1\) can change the normalized lower-depth representative.  Thus, in general,
-\[
-\Trunc_{m+1,m}\circ\Fold_{m+1}
-\ne
-\Fold_m\circ\Trunc_{m+1,m}.
-\]
+Stable type spaces should be comparable across adjacent resolutions.  The correct comparison is not raw truncation.  Raw truncation may discard a digit before a Fibonacci carry has been normalized.  Stable comparison must normalize first and restrict second.
 
-\begin{definition}[Fold-aware restriction]
-\label{def:fold-aware-restriction}
-A fold-aware restriction is a map
+For stable words, define the stable prefix restriction
 \[
-r_{m+1,m}:X_{m+1}\to X_m
+\pi_{m+1\to m}:X_{m+1}\to X_m
 \]
-together with a typed microstate restriction
+by
 \[
-\rho^{\Aware}_{m+1,m}:\Om_{m+1}\to\Om_m
+\pi_{m+1\to m}(z_1\cdots z_mz_{m+1})=z_1\cdots z_m.
 \]
-such that
-\[
-r_{m+1,m}\circ \Fold_{m+1}
-=
-\Fold_m\circ \rho^{\Aware}_{m+1,m}.
-\]
-Equivalently, the square
-\[
-\begin{tikzcd}
-\Om_{m+1} \arrow[r,"\Fold_{m+1}"] \arrow[d,"\rho^{\Aware}_{m+1,m}"'] & X_{m+1} \arrow[d,"r_{m+1,m}"]\\
-\Om_m \arrow[r,"\Fold_m"'] & X_m
-\end{tikzcd}
-\]
-commutes.
-\end{definition}
+This is well-defined because every prefix of a Zeckendorf-legal word is again Zeckendorf-legal.
 
-\begin{theorem}[Cross-resolution compatibility]
+Define the fold-aware restriction
+\[
+\boxed{
+\widetilde\rho_{m+1,m}:=
+\pi_{m+1\to m}\circ\Fold_{m+1}:
+\Om_{m+1}\to X_m.
+}
+\]
+Thus a raw length-\((m+1)\) word is first folded at resolution \(m+1\), and only then restricted to resolution \(m\).
+
+\begin{theorem}[Fold-aware restriction stability]
 \label{thm:cross-resolution-compatibility}
-Assume fold-aware restrictions \(r_{n,m}:X_n\to X_m\) are defined for \(n\ge m\) and satisfy
+For every \(m\ge1\),
 \[
-r_{m,m}=\id,
-\qquad
-r_{\ell,m}\circ r_{n,\ell}=r_{n,m}
-\quad(n\ge \ell\ge m).
+\Fold_m\circ\widetilde\rho_{m+1,m}
+=
+\widetilde\rho_{m+1,m}.
 \]
-Then \((X_m,r_{m+1,m})\) is an inverse system of stable type spaces.  If the squares in \Cref{def:fold-aware-restriction} commute, folding and scale reduction are compatible in the stable-type layer.
 \end{theorem}
 
 \begin{proof}
-The displayed equations are the inverse-system axioms.  The commuting square states that folding before restriction and aware restriction before folding produce the same stable type.  Hence the stable layer, rather than the raw microstate layer, carries the cross-resolution comparison.
+For every \(\omega\in\Om_{m+1}\), \(\Fold_{m+1}(\omega)\in X_{m+1}\).  Since prefixes of legal words are legal,
+\[
+\widetilde\rho_{m+1,m}(\omega)=\pi_{m+1\to m}(\Fold_{m+1}(\omega))\in X_m.
+\]
+By \Cref{thm:golden-fold-normal-form}, \(\Fold_m\) fixes every element of \(X_m\).  Hence
+\[
+\Fold_m(\widetilde\rho_{m+1,m}(\omega))
+=
+\widetilde\rho_{m+1,m}(\omega).
+\]
 \end{proof}
 
-\begin{definition}[Naive truncation defect]
-\label{def:naive-truncation-defect}
-The finite-resolution truncation defect is the failure of the naive square,
+\begin{proposition}[Naive truncation need not commute with folding]
+\label{prop:naive-truncation-failure}
+Let \(\tau_{m+1,m}:\Om_{m+1}\to\Om_m\) be raw prefix truncation.  In general,
 \[
-\Delta_m^{\rm naive}(\omega)=
-d\!\left(
-\Trunc_{m+1,m}\Fold_{m+1}(\omega),
-\Fold_m\Trunc_{m+1,m}(\omega)
-\right),
+\tau_{m+1,m}\circ\Fold_{m+1}
+\ne
+\Fold_m\circ\tau_{m+1,m}.
 \]
-for a chosen finite metric \(d\) on \(X_m\).
-\end{definition}
+\end{proposition}
 
-\begin{remark}
-The truncation defect is not a contradiction.  It records the fact that normalization carries can cross the visible boundary.  The defect should be measured as a canonical finite-resolution discrepancy rather than silently treated as an error term.
-\end{remark}
+\begin{proof}
+It suffices to give one example.  Let \(m=2\) and take \(\omega=011\in\Om_3\).  With weights \(F_2=1\), \(F_3=2\), and \(F_4=3\), we get
+\[
+N_3(011)=F_3+F_4=2+3=5.
+\]
+Since \(F_{3+2}=F_5=5\), we have
+\[
+N_3(011)\bmod F_5=0,
+\]
+so \(\Fold_3(011)=000\).  Therefore
+\[
+\tau_{3,2}(\Fold_3(011))=\tau_{3,2}(000)=00.
+\]
+On the other hand,
+\[
+\tau_{3,2}(011)=01.
+\]
+The word \(01\) is legal in length \(2\), so \(\Fold_2(01)=01\).  Hence
+\[
+\tau_{3,2}\Fold_3(011)=00
+\quad\text{but}\quad
+\Fold_2\tau_{3,2}(011)=01.
+\]
+Thus raw truncation and folding do not commute.
+\end{proof}
+
+\begin{proposition}[Stable restrictions form an inverse system]
+\label{prop:stable-restrictions-inverse-system}
+For \(n\ge m\), let \(\pi_{n\to m}:X_n\to X_m\) be stable prefix restriction.  Then
+\[
+\pi_{m\to m}=\id_{X_m},
+\]
+and for \(\ell\ge n\ge m\),
+\[
+\pi_{\ell\to m}=\pi_{n\to m}\circ\pi_{\ell\to n}.
+\]
+\end{proposition}
+
+\begin{proof}
+All maps are defined by deleting stable digits after a given position.  Deleting from length \(\ell\) directly to length \(m\) gives the same prefix as first deleting to length \(n\), and then deleting to length \(m\).  The identity property is immediate.
+\end{proof}

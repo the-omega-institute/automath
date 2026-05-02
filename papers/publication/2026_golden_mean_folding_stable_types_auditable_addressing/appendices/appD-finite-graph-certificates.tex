@@ -1,13 +1,537 @@
-\section{Finite graph and entropy certificates}
+\section{Fold multiplicity, fiber law, and information ledger}
+\label{app:fiber-ledger}
 \label{app:finite-graph-certificates}
 
-A finite graph certificate for \(X_m\) should specify:
-\begin{itemize}
-\item the state set and transition relation;
-\item the accepted stable language at depth \(m\);
-\item the adjacency matrix \(A_m\);
-\item the Perron--Frobenius eigenvalue when used;
-\item the entropy or pressure statistic being reported;
-\item the baseline distribution, such as the Parry measure, and its support.
+This appendix records the deterministic finite objects attached to the fold
+\[
+\Fold_m:\Om_m\to X_m,\qquad \Om_m=\{0,1\}^m .
+\]
+For each stable type \(z\in X_m\), define its fold fiber
+\[
+F_m(z):=\Fold_m^{-1}(z)\subseteq \Om_m
+\]
+and its multiplicity
+\[
+d_m(z):=\abs{F_m(z)}.
+\]
+Since \(\Fold_m\) fixes \(X_m\), every \(d_m(z)\) is positive.  The quantities in this appendix are exact deterministic functions of the fold table, not statistical estimates.
+
+\subsection{Exact fiber profile}
+
+The fiber profile is the multiset
+\[
+\mathcal D_m:=\{d_m(z):z\in X_m\}.
+\]
+Equivalently, define the multiplicity counting function
+\[
+B_m(r):=\#\{z\in X_m:d_m(z)=r\},\qquad r\in\NN .
+\]
+Then
+\[
+\sum_{r\ge1}B_m(r)=\abs{X_m},
+\qquad
+\sum_{r\ge1}rB_m(r)=2^m.
+\]
+The maximal fiber multiplicity and average fiber size are
+\[
+D_m:=\max_{z\in X_m}d_m(z),
+\qquad
+\overline d_m:=\frac{2^m}{\abs{X_m}}.
+\]
+Thus
+\[
+D_m\ge \frac{2^m}{\abs{X_m}}.
+\]
+For the golden-mean stable grammar, \(\abs{X_m}=F_{m+2}\), so
+\[
+D_m\ge \frac{2^m}{F_{m+2}},
+\qquad
+\log D_m\ge m\log2-\log F_{m+2}.
+\]
+Using Binet's formula, this gives
+\[
+\log D_m\ge m\log\frac2\varphi+O(1).
+\]
+Thus the largest fold fiber grows at least exponentially at rate \(\log(2/\varphi)\).
+
+\subsection{The IID-uniform fiber law}
+
+Let \(U_m\) be the uniform law on \(\Om_m\):
+\[
+U_m(\omega)=2^{-m}.
+\]
+The pushforward of \(U_m\) by the fold is the exact IID-uniform fiber law
+\[
+p_m^{\mathrm{fib}}:=(\Fold_m)_\# U_m.
+\]
+Equivalently,
+\[
+\boxed{
+p_m^{\mathrm{fib}}(z)=\frac{d_m(z)}{2^m}.
+}
+\]
+This is the exact output law of a single length-\(m\) window under IID fair Bernoulli input.  It is not the same object as the golden-mean Parry law \(q_m\) from \Cref{app:golden-parry-baseline}.  The former is a pushforward of the uniform microstate law; the latter is a maximum-entropy law on the stable grammar.  Hence
+\[
+\TV(p_m^{\mathrm{fib}},q_m)
+\]
+is a deterministic baseline mismatch, not a sampling error.
+
+\subsection{Uniform fiber lift}
+
+Let \(p\in\Delta(X_m)\) be a probability law on stable types.  Define its uniform fiber lift \(\mathcal L_m(p)\in\Delta(\Om_m)\) by
+\[
+\mathcal L_m(p)(\omega)=\frac{p(z)}{d_m(z)}
+\quad\text{if }\omega\in F_m(z).
+\]
+Then
+\[
+(\Fold_m)_\#\mathcal L_m(p)=p.
+\]
+The lift \(\mathcal L_m(p)\) is the unique distribution on \(\Om_m\) that has visible marginal \(p\) and is uniform inside every fold fiber.
+
+\subsection{Hidden-volume functional}
+
+For \(p\in\Delta(X_m)\), define
+\[
+H(p):=-\sum_{z\in X_m}p(z)\log p(z)
+\]
+and
+\[
+\kappa_m(p):=\sum_{z\in X_m}p(z)\log d_m(z).
+\]
+Then the entropy of the uniform lift is
+\[
+\boxed{
+H(\mathcal L_m(p))=H(p)+\kappa_m(p).
+}
+\]
+Indeed,
+\[
+\begin{aligned}
+H(\mathcal L_m(p))
+&=
+-\sum_{z\in X_m}\sum_{\omega\in F_m(z)}
+\frac{p(z)}{d_m(z)}
+\log\frac{p(z)}{d_m(z)}  \\
+&=
+-\sum_z p(z)\log p(z)
++\sum_z p(z)\log d_m(z)  \\
+&=H(p)+\kappa_m(p).
+\end{aligned}
+\]
+For the exact fiber law \(p_m^{\mathrm{fib}}\), this gives the IID-fair information ledger
+\[
+\boxed{
+m\log2=H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}}).
+}
+\]
+
+\subsection{General microstate laws and residual information}
+
+Let \(\mu\in\Delta(\Om_m)\) be any microstate law, and let
+\[
+\pi:=(\Fold_m)_\#\mu
+\]
+be its folded visible law.  For each \(z\in X_m\) with \(\pi(z)>0\), define the conditional law inside the fiber
+\[
+\mu_z(\omega):=\mu(\omega\mid \Fold_m(\omega)=z),
+\qquad \omega\in F_m(z).
+\]
+Let \(u_z\) denote the uniform law on \(F_m(z)\).  Define the within-fiber residual
+\[
+R_m(\mu):=
+\sum_{z\in X_m}\pi(z)\KL(\mu_z\mid u_z).
+\]
+Then \(R_m(\mu)\ge0\), with equality if and only if \(\mu\) is uniform inside every fold fiber.
+
+\begin{theorem}[Exact information ledger]
+\label{thm:exact-information-ledger}
+For every \(\mu\in\Delta(\Om_m)\), with \(\pi=(\Fold_m)_\#\mu\),
+\[
+\boxed{
+H(\mu)=H(\pi)+\kappa_m(\pi)-R_m(\mu).
+}
+\]
+Moreover, if \(U_m\) is the uniform law on \(\Om_m\), then
+\[
+\boxed{
+\KL(\mu\mid U_m)
+=
+\KL(\pi\mid p_m^{\mathrm{fib}})
++R_m(\mu).
+}
+\]
+\end{theorem}
+
+\begin{proof}
+The entropy chain rule for the deterministic map \(W\mapsto Z=\Fold_m(W)\) gives
+\[
+H(\mu)=H(\pi)+\sum_z\pi(z)H(\mu_z).
+\]
+Since \(u_z\) is uniform on \(F_m(z)\),
+\[
+\KL(\mu_z\mid u_z)=\log d_m(z)-H(\mu_z).
+\]
+Thus
+\[
+\sum_z\pi(z)H(\mu_z)
+=
+\sum_z\pi(z)\log d_m(z)
+-
+\sum_z\pi(z)\KL(\mu_z\mid u_z)
+=
+\kappa_m(\pi)-R_m(\mu).
+\]
+This proves the entropy identity.
+
+For the KL identity, apply the chain rule for relative entropy to the same deterministic map.  Since \((\Fold_m)_\#U_m=p_m^{\mathrm{fib}}\), and the conditional law of \(U_m\) inside each fiber is \(u_z\),
+\[
+\KL(\mu\mid U_m)
+=
+\KL(\pi\mid p_m^{\mathrm{fib}})
++\sum_z\pi(z)\KL(\mu_z\mid u_z).
+\]
+The second term is \(R_m(\mu)\).
+\end{proof}
+
+\subsection{Maximum-entropy lift}
+
+\begin{theorem}[Maximum-entropy lift]
+\label{thm:maximum-entropy-lift}
+Fix \(p\in\Delta(X_m)\).  Among all microstate laws \(\mu\in\Delta(\Om_m)\) satisfying
+\[
+(\Fold_m)_\#\mu=p,
+\]
+the unique entropy maximizer is \(\mathcal L_m(p)\).  The maximal entropy is
+\[
+H(p)+\kappa_m(p).
+\]
+\end{theorem}
+
+\begin{proof}
+If \((\Fold_m)_\#\mu=p\), then \Cref{thm:exact-information-ledger} gives
+\[
+H(\mu)=H(p)+\kappa_m(p)-R_m(\mu).
+\]
+Since \(R_m(\mu)\ge0\), the entropy is maximized exactly when \(R_m(\mu)=0\), i.e. exactly when every conditional law inside a fold fiber is uniform.  This is precisely \(\mu=\mathcal L_m(p)\).
+\end{proof}
+
+\subsection{Visible distances and lifted distances}
+
+For \(p,r\in\Delta(X_m)\), their uniform fiber lifts satisfy
+\[
+\TV(\mathcal L_m(p),\mathcal L_m(r))=\TV(p,r).
+\]
+If \(p\ll r\), then also
+\[
+\KL(\mathcal L_m(p)\mid\mathcal L_m(r))=\KL(p\mid r).
+\]
+Indeed,
+\[
+\sum_{\omega\in F_m(z)}
+\frac{p(z)}{d_m(z)}
+\log
+\frac{p(z)/d_m(z)}{r(z)/d_m(z)}
+=
+p(z)\log\frac{p(z)}{r(z)},
+\]
+and summing over \(z\) gives the KL identity.  The TV identity follows from the same fiberwise cancellation.  Thus \(\mathcal L_m\) preserves the visible TV and KL discrepancies under the uniform-lift convention.
+
+\subsection{The \texorpdfstring{\(\kappa_m\)}{kappa m} Lipschitz bound}
+
+For any \(p,r\in\Delta(X_m)\),
+\[
+\begin{aligned}
+\abs{\kappa_m(p)-\kappa_m(r)}
+&=
+\abs{\sum_z(p(z)-r(z))\log d_m(z)}  \\
+&\le
+\sum_z\abs{p(z)-r(z)}\log D_m  \\
+&=
+2\log D_m\,\TV(p,r).
+\end{aligned}
+\]
+Therefore, if a sampling audit gives
+\[
+\TV(\widehat\pi_{m,N},\pi_m^\PP)\le \tau,
+\]
+then
+\[
+\abs{\kappa_m(\widehat\pi_{m,N})-\kappa_m(\pi_m^\PP)}
+\le
+2\log D_m\,\tau.
+\]
+This is the hidden-volume confidence radius used in \Cref{app:statistical-audit}.
+
+\subsection{Fiber moments and collision probabilities}
+
+For \(q>0\), define the \(q\)-th fiber moment
+\[
+M_{m,q}:=\sum_{z\in X_m}d_m(z)^q.
+\]
+For integer \(q\ge2\), this moment has a collision interpretation.
+
+\begin{theorem}[Collision moments and Renyi entropy]
+\label{thm:collision-renyi}
+Let \(W_1,\ldots,W_q\) be independent uniform microstates in \(\Om_m\), and set \(Z_j=\Fold_m(W_j)\).  For every integer \(q\ge2\),
+\[
+\PP(Z_1=\cdots=Z_q)=2^{-mq}\sum_z d_m(z)^q.
+\]
+Equivalently, if
+\[
+C_{m,q}:=\sum_{z\in X_m}\left(p_m^{\mathrm{fib}}(z)\right)^q,
+\]
+then
+\[
+C_{m,q}=2^{-mq}M_{m,q}.
+\]
+The order-\(q\) Renyi entropy of \(p_m^{\mathrm{fib}}\) is
+\[
+H_q(p_m^{\mathrm{fib}})
+=
+\frac1{1-q}\left(\log M_{m,q}-mq\log2\right).
+\]
+\end{theorem}
+
+\begin{proof}
+For fixed \(z\),
+\[
+\PP(Z_j=z)=\frac{d_m(z)}{2^m}.
+\]
+Independence gives
+\[
+\PP(Z_1=\cdots=Z_q=z)
+=
+\left(\frac{d_m(z)}{2^m}\right)^q.
+\]
+Summing over \(z\in X_m\) gives
+\[
+\PP(Z_1=\cdots=Z_q)
+=
+\sum_z\left(\frac{d_m(z)}{2^m}\right)^q
+=
+2^{-mq}M_{m,q}.
+\]
+The Renyi formula follows from
+\[
+H_q(p)=\frac1{1-q}\log\sum_zp(z)^q .
+\]
+\end{proof}
+
+\subsection{Projection entropy rates}
+
+Define the finite-\(m\) Renyi projection entropy rate by
+\[
+h_{m,q}^{\mathrm{fib}}:=\frac1m H_q(p_m^{\mathrm{fib}})
+\qquad(q\ne1),
+\]
+and use the Shannon limit
+\[
+h_{m,1}^{\mathrm{fib}}:=\frac1m H(p_m^{\mathrm{fib}}).
+\]
+The order-\(q\) projection loss rate is
+\[
+\ell_{m,q}^{\mathrm{fib}}:=\log2-h_{m,q}^{\mathrm{fib}}.
+\]
+For Shannon entropy, the exact ledger gives
+\[
+\boxed{
+\ell_{m,1}^{\mathrm{fib}}
+=
+\frac1m\kappa_m(p_m^{\mathrm{fib}}).
+}
+\]
+Thus the Shannon projection loss rate equals the average hidden fiber volume per input bit.
+
+\subsection{Visible and size-biased fiber laws}
+
+There are two natural ways to sample fiber sizes.  If \(Z\) is chosen uniformly from \(X_m\), then
+\[
+\PP_{\mathrm{vis}}(d_m(Z)=r)=\frac{B_m(r)}{\abs{X_m}}.
+\]
+If \(W\) is chosen uniformly from \(\Om_m\), and \(Z=\Fold_m(W)\), then
+\[
+\PP_{\mathrm{mic}}(d_m(Z)=r)=\frac{rB_m(r)}{2^m}.
+\]
+The second law is the size-biased version of the first:
+\[
+\PP_{\mathrm{mic}}(d=r)
+=
+\frac{r}{\overline d_m}\PP_{\mathrm{vis}}(d=r),
+\qquad
+\overline d_m=\frac{2^m}{\abs{X_m}}.
+\]
+The microstate-sampled law is the relevant one for
+\[
+\kappa_m(p_m^{\mathrm{fib}})
+=
+\sum_z\frac{d_m(z)}{2^m}\log d_m(z)
+=
+\EE_{\mathrm{mic}}[\log d_m(Z)].
+\]
+
+\subsection{Source-specific folded laws}
+
+Let \(\mu_m\in\Delta(\Om_m)\) be the length-\(m\) law of a source.  Its folded source law is
+\[
+\pi_m^\mu(z)=\sum_{\omega\in F_m(z)}\mu_m(\omega).
+\]
+
+\paragraph{Bernoulli source.}
+For Bernoulli input with \(\PP(X_i=1)=p\),
+\[
+\mu_m^p(\omega)=p^{\abs{\omega}_1}(1-p)^{m-\abs{\omega}_1},
+\]
+so
+\[
+\pi_m^p(z)=
+\sum_{\omega\in F_m(z)}
+p^{\abs{\omega}_1}(1-p)^{m-\abs{\omega}_1}.
+\]
+For \(p=1/2\), this becomes
+\[
+\pi_m^{1/2}(z)=p_m^{\mathrm{fib}}(z).
+\]
+
+\paragraph{Stationary Markov source.}
+For a stationary two-state Markov source with transition matrix \(P\) and stationary law \(\lambda\),
+\[
+\mu_m^P(\omega)=
+\lambda_{\omega_1}\prod_{i=1}^{m-1}P_{\omega_i,\omega_{i+1}},
+\]
+and hence
+\[
+\pi_m^P(z)=
+\sum_{\omega\in F_m(z)}
+\lambda_{\omega_1}\prod_{i=1}^{m-1}P_{\omega_i,\omega_{i+1}}.
+\]
+
+\paragraph{Rotation source.}
+For a rotation source
+\[
+x_t=\one_{[1-\beta,1)}(\{x_0+t\alpha\}),
+\]
+the population law is
+\[
+\pi_m^{\mathrm{rot}}(z)
+=
+\operatorname{Leb}
+\set{
+y\in\mathbb T:
+\Fold_m\bigl(
+\one_{[1-\beta,1)}(y),
+\ldots,
+\one_{[1-\beta,1)}(y+(m-1)\alpha)
+\bigr)=z
+}.
+\]
+This law is generally neither \(p_m^{\mathrm{fib}}\) nor \(q_m\).  Empirical audits should therefore report the gaps to every exact baseline that is being used.
+
+\subsection{Deterministic cross-resolution fiber residual}
+
+Let \(\pi_{m+1\to m}:X_{m+1}\to X_m\) be the stable prefix restriction.  Define the deterministic fiber-law cross-resolution residual
+\[
+G_m^{\mathrm{fib}}
+:=
+\TV\left(
+p_m^{\mathrm{fib}},
+(\pi_{m+1\to m})_\#p_{m+1}^{\mathrm{fib}}
+\right).
+\]
+This exact quantity measures whether the uniform microstate law at resolution \(m\) is compatible with the pushforward of the uniform microstate law at resolution \(m+1\) under the selected stable restriction.  The manuscript should not assume \(G_m^{\mathrm{fib}}=0\) unless that identity has been proved for the selected protocol.
+
+\subsection{Deterministic output schema}
+
+For every \(m\), the deterministic fiber ledger should report:
+\begin{itemize}[leftmargin=2em]
+\item \(m\), \(\abs{X_m}=F_{m+2}\), and \(\abs{\Om_m}=2^m\);
+\item the table \(z\mapsto d_m(z)\), the maximum \(D_m\), and the histogram \(r\mapsto B_m(r)\);
+\item the exact law \(p_m^{\mathrm{fib}}\);
+\item \(H(p_m^{\mathrm{fib}})\), \(\kappa_m(p_m^{\mathrm{fib}})\), and the ledger residual
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})-m\log2;
+\]
+\item moments \(M_{m,q}\), collision values \(C_{m,q}\), and Renyi entropies \(H_q(p_m^{\mathrm{fib}})\);
+\item deterministic baseline gaps such as \(\TV(p_m^{\mathrm{fib}},q_m)\), \(\KL(p_m^{\mathrm{fib}}\mid q_m)\), and \(G_m^{\mathrm{fib}}\);
+\item hashes of the fold table, fiber table, fiber law, and moment table.
 \end{itemize}
-These objects are certificate interfaces.  They support auditing of stable type generation but do not identify the data-generating mechanism by themselves.
+The ledger residual is an implementation check.  Failure of the exact identity
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})=m\log2
+\]
+should be treated as a deterministic computation error, not as a statistical effect.
+
+\subsection{Algorithmic construction}
+
+\begin{definition}[Exact fiber-ledger construction]
+\label{def:exact-fiber-ledger-construction}
+Given \(m\) and a maximum moment order \(q_{\max}\):
+\begin{enumerate}[leftmargin=2em]
+\item enumerate \(\Om_m=\{0,1\}^m\);
+\item compute \(z=\Fold_m(\omega)\) for every \(\omega\in\Om_m\);
+\item accumulate the counts \(d_m(z)\);
+\item set \(p_m^{\mathrm{fib}}(z)=d_m(z)2^{-m}\);
+\item compute \(H(p_m^{\mathrm{fib}})\), \(\kappa_m(p_m^{\mathrm{fib}})\), and the ledger residual;
+\item for \(q=2,\ldots,q_{\max}\), compute \(M_{m,q}\), \(C_{m,q}\), and \(H_q(p_m^{\mathrm{fib}})\);
+\item if \(q_m\) is available, compute \(\TV(p_m^{\mathrm{fib}},q_m)\) and \(\KL(p_m^{\mathrm{fib}}\mid q_m)\);
+\item if the ledger for \(m+1\) is available, compute \(G_m^{\mathrm{fib}}\).
+\end{enumerate}
+\end{definition}
+
+\subsection{Pass/fail rules}
+
+A deterministic fiber-ledger run passes if all of the following checks hold within the declared numerical tolerance:
+\begin{enumerate}[leftmargin=2em]
+\item mass conservation:
+\[
+\sum_z d_m(z)=2^m;
+\]
+\item fiber-law normalization:
+\[
+\sum_zp_m^{\mathrm{fib}}(z)=1;
+\]
+\item entropy ledger:
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})=m\log2;
+\]
+\item moment identity:
+\[
+C_{m,q}=2^{-mq}M_{m,q}
+\]
+for every reported \(q\);
+\item hash stability for \(\Fold_m\), \(d_m\), \(p_m^{\mathrm{fib}}\), and the reported moment table.
+\end{enumerate}
+These are deterministic checks.  Failure indicates an implementation or bookkeeping error.
+
+\subsection{Relation to the statistical audit}
+
+Appendix~\ref{app:statistical-audit} gives empirical sampling and model-comparison rules.  This appendix supplies the deterministic ledger required by those rules:
+\[
+D_m
+\quad\Longrightarrow\quad
+2\log D_m\,\tau
+\]
+for the \(\kappa_m\)-confidence radius,
+\[
+p_m^{\mathrm{fib}}
+\quad\Longrightarrow\quad
+\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}})
+\]
+for the IID-uniform fold baseline,
+\[
+M_{m,q}
+\quad\Longrightarrow\quad
+C_{m,q},\ H_q(p_m^{\mathrm{fib}})
+\]
+for collision and Renyi fingerprints, and
+\[
+G_m^{\mathrm{fib}}
+\quad\Longrightarrow\quad
+\text{a deterministic cross-resolution baseline}.
+\]
+Thus Appendix~\ref{app:fiber-ledger} gives the exact fold ledger, while Appendix~\ref{app:statistical-audit} gives the empirical audit around that ledger.  Appendix~\ref{app:reproducibility} specifies the executable package that writes these objects to files such as \texttt{fiber\_ledger.csv}, \texttt{fiber\_ledger\_summary.csv}, and \texttt{moment\_spectrum.csv}, and verifies the identities
+\[
+\sum_zd_m(z)=2^m,\qquad
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})=m\log2,\qquad
+C_{m,q}=2^{-mq}M_{m,q}.
+\]

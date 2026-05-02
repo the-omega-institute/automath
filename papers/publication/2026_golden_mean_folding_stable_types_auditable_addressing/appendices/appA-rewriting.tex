@@ -1,14 +1,18 @@
-\section{Rewriting system: termination and confluence}
+\section{Local Zeckendorf normalization}
 \label{app:rewriting}
 
-This appendix records the proof obligations for the golden carry-elimination system used in \Cref{thm:golden-fold-normal-form}.  A full formal audit file should verify:
+The main definition of \(\Fold_m\) is the residue-section formula
+\[
+\Fold_m(\omega)=s_m(N_m(\omega)\bmod F_{m+2}).
+\]
+Local carry elimination is an implementation layer.  A full formal audit of that implementation should verify:
 \begin{enumerate}[label=(A\arabic*)]
 \item every rewrite rule preserves Fibonacci value;
 \item the boundary convention for carries leaving the visible window is deterministic;
 \item rewriting terminates by a well-founded measure on illegal adjacent pairs and carry height;
 \item all critical overlaps of adjacent carry rules are locally confluent;
 \item Newman's lemma applies, yielding global confluence;
-\item the unique normal word is the Zeckendorf prefix of \(N_m(\omega)\).
+\item after reduction modulo \(F_{m+2}\), the unique normal word is the finite Zeckendorf section \(s_m(N_m(\omega)\bmod F_{m+2})\).
 \end{enumerate}
 
-The main text uses these obligations in theorem form because the first submission is organized around the stable-type generator rather than around a complete catalog of rewrite traces.
+The main text does not rely on these local diagrams for the definition of \(\Fold_m\); it relies on the finite Zeckendorf section.  This appendix records how an executable normalizer can be audited without exposing the main theorem to boundary-carry ambiguities.

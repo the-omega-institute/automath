@@ -1,49 +1,75 @@
-\section{Golden syntax and Zeckendorf normal forms}
+\section{Fibonacci syntax and finite Zeckendorf sections}
 \label{sec:golden-syntax}
 
-Let \(F_1=1\), \(F_2=2\), and
+Throughout the paper we use the Fibonacci convention
 \[
-F_{k+1}=F_k+F_{k-1}\qquad(k\ge2).
+F_1=F_2=1,\qquad F_{k+1}=F_k+F_{k-1}\quad(k\ge2).
 \]
-A binary word is Zeckendorf-legal if it has no adjacent ones.  We set
+Thus \(1,1,2,3,5,8,\ldots\) is the Fibonacci sequence.
+
+A binary word \(z=z_1\cdots z_m\in\{0,1\}^m\) is called \emph{Zeckendorf-legal} if it contains no adjacent ones:
 \[
-X_m=\{x\in\{0,1\}^m:x_ix_{i+1}\ne 11\text{ for all }1\le i<m\}.
+z_kz_{k+1}\ne 11\qquad(1\le k<m).
 \]
-The cardinality is
+The stable type space at resolution \(m\) is
 \[
-|X_m|=F_{m+1},
+X_m:=\{z\in\{0,1\}^m:z_kz_{k+1}\ne 11\text{ for all }1\le k<m\}.
 \]
-and therefore
+
+For \(z\in\{0,1\}^m\), define its shifted Fibonacci value by
 \[
-\lim_{m\to\infty}\frac1m\log |X_m|=\log\varphi,
+V_m(z):=\sum_{k=1}^{m}z_kF_{k+1}.
+\]
+The shift by one index is chosen so that legal words of length \(m\) represent exactly the interval
+\[
+\{0,1,\ldots,F_{m+2}-1\}.
+\]
+
+\begin{lemma}[Finite Zeckendorf section]
+\label{lem:finite-zeckendorf-section}
+For every \(m\ge1\), the map
+\[
+V_m:X_m\to\{0,1,\ldots,F_{m+2}-1\},
 \qquad
-\varphi=\frac{1+\sqrt5}{2}.
+V_m(z)=\sum_{k=1}^{m}z_kF_{k+1},
 \]
-
-For \(\omega=(\omega_1,\ldots,\omega_m)\in\Om_m\), define its Fibonacci value by
+is a bijection.  In particular,
 \[
-N_m(\omega)=\sum_{k=1}^m \omega_kF_k.
+|X_m|=F_{m+2}.
 \]
-Zeckendorf's theorem states that every nonnegative integer has a unique Fibonacci expansion with no adjacent ones \cite{Lekkerkerker1952,Zeckendorf1972,Fraenkel1985}.  We write \(Z(N)\) for this normalized digit sequence and \(\pi_mZ(N)\) for its visible length-\(m\) prefix.
-
-\begin{definition}[Golden folding map]
-\label{def:golden-folding-map}
-The depth-\(m\) golden folding map is
-\[
-\Fold_m:\Om_m\to X_m,\qquad
-\Fold_m(\omega)=\pi_mZ(N_m(\omega)).
-\]
-\end{definition}
-
-\begin{proposition}[Fixed points]
-\label{prop:fold-fixed-points}
-Every \(x\in X_m\) is fixed by \(\Fold_m\).
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
-If \(x\in X_m\), then \(x\) is already a legal Zeckendorf prefix for its Fibonacci value.  Normalizing and truncating returns the same visible digits.
+We argue by induction on \(m\).  For \(m=1\), \(X_1=\{0,1\}\), and
+\[
+V_1(0)=0,\qquad V_1(1)=F_2=1.
+\]
+Thus \(V_1(X_1)=\{0,1\}=\{0,\ldots,F_3-1\}\).
+
+Assume the claim for all smaller lengths.  Partition \(X_m\) according to the last digit.  If \(z_m=0\), then the prefix \(z_1\cdots z_{m-1}\) is an arbitrary element of \(X_{m-1}\).  By induction, the possible values are
+\[
+0,1,\ldots,F_{m+1}-1.
+\]
+If \(z_m=1\), legality forces \(z_{m-1}=0\).  The first \(m-2\) digits form an arbitrary word in \(X_{m-2}\).  Hence the value is
+\[
+F_{m+1}+r,\qquad 0\le r<F_m.
+\]
+This case gives precisely
+\[
+F_{m+1},F_{m+1}+1,\ldots,F_{m+1}+F_m-1.
+\]
+Since \(F_{m+1}+F_m=F_{m+2}\), the two cases cover \(\{0,1,\ldots,F_{m+2}-1\}\) without overlap.  Therefore \(V_m\) is bijective.
 \end{proof}
 
+\begin{definition}[Finite Zeckendorf section]
+\label{def:finite-zeckendorf-section}
+The inverse of \(V_m\) is denoted
+\[
+s_m:\{0,1,\ldots,F_{m+2}-1\}\to X_m.
+\]
+We call \(s_m\) the finite Zeckendorf section.
+\end{definition}
+
 \begin{remark}[Role of \(\varphi\)]
-The role of \(\varphi\) in this paper is grammatical rather than physical: it determines the legal syntax of stable representatives and the local carry-elimination rules.  The golden mean is used as a canonical anti-resonant normalization baseline, not as a postulate about nature.
+The asymptotic growth rate of \(|X_m|\) is \(\varphi=(1+\sqrt5)/2\).  The role of \(\varphi\) in this paper is grammatical: it determines the legal syntax of stable representatives and the normalization section.  No physical interpretation is assumed.
 \end{remark}
