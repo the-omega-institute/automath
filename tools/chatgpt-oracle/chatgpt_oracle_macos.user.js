@@ -215,17 +215,46 @@
 
   // ── DOM helpers for ChatGPT UI ───────────────────────────────────────
 
+  function isUsablePromptInput(el) {
+    if (!el) return false;
+    const style = window.getComputedStyle(el);
+    if (style.display === "none" || style.visibility === "hidden") return false;
+    const rect = el.getBoundingClientRect();
+    if (rect.width < 40 || rect.height < 12) return false;
+    const disabled = el.getAttribute("aria-disabled") === "true" || el.disabled;
+    return !disabled;
+  }
+
   function findPromptInput() {
-    // ChatGPT 2024-2025 uses ProseMirror contenteditable div
+    // ChatGPT 2024-2026 uses ProseMirror/contenteditable composer variants.
     for (const sel of [
       "#prompt-textarea",
+      "textarea#prompt-textarea",
+      "textarea[data-testid='prompt-textarea']",
+      "[data-testid='prompt-textarea']",
+      "[data-testid='composer-text-input']",
       "div.ProseMirror[contenteditable='true']",
+      "div.ProseMirror[contenteditable='plaintext-only']",
       "[id='prompt-textarea']",
       "div[contenteditable='true'][role='textbox']",
+      "div[contenteditable='plaintext-only'][role='textbox']",
+      "[role='textbox'][contenteditable]",
+      "[aria-label='Ask anything']",
+      "[aria-label='Message ChatGPT']",
+      "form textarea",
+      "main form textarea",
+      "main form [contenteditable='true']",
+      "main form [contenteditable='plaintext-only']",
       "div[contenteditable='true']",
+      "div[contenteditable='plaintext-only']",
     ]) {
-      const el = document.querySelector(sel);
-      if (el) return el;
+      for (const el of document.querySelectorAll(sel)) {
+        if (isUsablePromptInput(el)) return el;
+      }
+    }
+    const active = document.activeElement;
+    if (active && active.matches && active.matches("[contenteditable], textarea")) {
+      if (isUsablePromptInput(active)) return active;
     }
     return null;
   }
@@ -1355,12 +1384,15 @@
 
       // Wait for prompt input to appear
       let retries = 0;
-      while (!findPromptInput() && retries < 30) {
+      while (!findPromptInput() && retries < 60) {
+        if (retries > 0 && retries % 10 === 0) {
+          await postPhase(task_id, "waiting_prompt_input", foregroundState());
+        }
         await sleep(1000);
         retries++;
       }
       if (!findPromptInput()) {
-        throw new Error("Prompt input not found after 30s wait");
+        throw new Error("Prompt input not found after 60s wait");
       }
       log("Page ready");
       if (!isForegroundReady()) {
