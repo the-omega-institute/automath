@@ -304,6 +304,7 @@ A_{\mathrm{vis}}^\omega:=A/K_\omega.
 \end{definition}
 
 \begin{proposition}[严格隐藏子群与内禀隐藏子群]\label{prop:prefix-site-strict-vs-intrinsic-hidden}
+\leanverified{paper\_prefix\_site\_strict\_vs\_intrinsic\_hidden}
 在定义 \ref{def:prefix-site-intrinsic-visible-quotient} 的设定下，
 \[
 H_\alpha=\operatorname{Im}(\widetilde\alpha),
@@ -320,6 +321,7 @@ K_\omega=\operatorname{Im}(\overline\alpha)\subseteq H_\alpha.
 \end{proof}
 
 \begin{corollary}[内禀可见商到严格可见商的自然满射]\label{cor:prefix-site-intrinsic-to-strict-visible}
+\leanverified{paper\_prefix\_site\_intrinsic\_to\_strict\_visible}
 存在自然满射
 \[
 A_{\mathrm{vis}}^\omega=A/K_\omega\twoheadrightarrow A/H_\alpha=A_{\mathrm{vis}}.
@@ -370,6 +372,7 @@ A/K_\omega\twoheadrightarrow A/H_\alpha.
 :=\{\chi\in\widehat A:\ \chi(h)=1\ \forall h\in H_\alpha\}.
 \]
 并且 \(\chi\in H_\alpha^\perp\) 当且仅当 \(\chi(\alpha_{ijk})=1\) 对所有 \(C_{b_{ijk}}\neq\varnothing\) 成立。
+\leanverified{paper\_prefix\_site\_visible\_characters\_annihilator}
 \par
 另一方面，内禀可见角色由
 \[
@@ -411,6 +414,7 @@ H_\alpha^\perp\subseteq K_\omega^\perp,
   \item 若 \(K_\omega=0\) 而 \([\alpha]\neq 0\)，则全部字符通道在类级上都可能允许通过，而障碍仍然非平凡；此时 phase-shadow 或 character-channel 的审计会严格漏检 genuine 的粘合障碍。该“pure-\(\operatorname{Ext}\)/character-blind”盲区在配套 APAL 论文中被完全刻画，见 \cite{MaZhang2026StateForcingSemantics}。
 \end{enumerate}
 \end{theorem}
+\leanverified{paper\_prefix\_site\_spectral\_definability\_avis}
 
 \begin{proof}
 由命题 \ref{prop:prefix-site-projective-rep-twist}，沿不同复合路径得到的线性化实现相差乘子 \(\chi(\alpha_{ijk})\)。
@@ -421,272 +425,4 @@ H_\alpha^\perp\subseteq K_\omega^\perp,
 证毕。
 \end{proof}
 
-\subsection{观察者索引、信息状态与 forcing 语义}\label{subsec:observer-indexed-forcing}
-前述“地址先于取值”“\(\mathsf{NULL}\) 的局部截面判据”与“多轴前缀提升可读性”本质上都属于对象层可断言性的组织问题。
-为把这三条链压缩到同一语义框架中，本小节把对象层事实统一放回\emph{观察者索引的信息状态}上：全局层只保留推理规则，而对象层命题是否成立，则由局部信息状态上的 forcing 关系给出。
-
-\begin{definition}[观察者索引的信息状态框架]\label{def:observer-indexed-information-frame}
-称八元组
-\[
-\mathfrak F=(P,\le,\iota,\tau,\mathrm{Cov},\mathrm{Upd},D,V)
-\]
-为一个观察者索引的信息状态框架，若满足下列条件：
-\begin{enumerate}
-  \item \(P\) 为信息状态集合；每个 \(p\in P\) 表示一个局部可访问的信息条件，而非无索引的全局世界。
-  \item \(\le\) 为 \(P\) 上的预序；若 \(q\le p\)，则称 \(q\) 是 \(p\) 的细化，表示 \(q\) 在 \(p\) 的基础上拥有更多记录、更细的区分能力或更强的分类结构。
-  \item \(\iota:P\to I\) 为观察者索引映射，\(\tau:P\to T\) 为时间索引映射，并满足
-  \[
-  q\le p \Longrightarrow \iota(q)=\iota(p),\qquad \tau(q)\ge \tau(p).
-  \]
-  \item 对每个 \(p\in P\)，\(\mathrm{Cov}(p)\) 给出 \(p\) 的覆盖族；每个覆盖
-  \[
-  \{p_k\to p\}_{k\in K}
-  \]
-  满足 \(p_k\le p\)，并且覆盖在细化下稳定：若 \(q\le p\) 且 \(\{p_k\to p\}_{k\in K}\in\mathrm{Cov}(p)\)，则存在 \(\{q_\ell\to q\}_{\ell\in L}\in\mathrm{Cov}(q)\) 及映射 \(\lambda:L\to K\)，使得 \(q_\ell\le p_{\lambda(\ell)}\) 对一切 \(\ell\in L\) 成立。
-  \item 对每个更新动作 \(\alpha\)，\(\mathrm{Upd}_\alpha(p)\subseteq P\) 为在 \(p\) 上执行 \(\alpha\) 后可到达的合法后继状态，并满足与细化的双向相容性：若 \(q\le p\)，则
-  \[
-  r\in \mathrm{Upd}_\alpha(q)\Rightarrow \exists s\in \mathrm{Upd}_\alpha(p)\ \text{使}\ r\le s,
-  \]
-  \[
-  s\in \mathrm{Upd}_\alpha(p)\Rightarrow \exists r\in \mathrm{Upd}_\alpha(q)\ \text{使}\ r\le s.
-  \]
-  \item \(D\) 为对象域；对每个原子命题 \(A\)，赋值 \(V(A)\subseteq P\) 为下闭集，即
-  \[
-  p\in V(A),\ q\le p \Longrightarrow q\in V(A).
-  \]
-\end{enumerate}
-\end{definition}
-
-\begin{definition}[forcing 关系]\label{def:observer-indexed-forcing}
-在框架 \(\mathfrak F\) 上，定义对象层可断言关系
-\[
-p\Vdash \varphi
-\]
-如下：
-\begin{enumerate}
-  \item 对原子命题 \(A\)，规定
-  \[
-  p\Vdash A \Longleftrightarrow p\in V(A).
-  \]
-  \item 对合取，规定
-  \[
-  p\Vdash \varphi\land\psi
-  \Longleftrightarrow
-  p\Vdash \varphi\ \text{且}\ p\Vdash \psi.
-  \]
-  \item 对蕴含，规定
-  \[
-  p\Vdash \varphi\to\psi
-  \Longleftrightarrow
-  \forall q\le p,\ \bigl(q\Vdash \varphi \Rightarrow q\Vdash \psi\bigr).
-  \]
-  \item 对否定，规定
-  \[
-  p\Vdash \neg\varphi
-  \Longleftrightarrow
-  \forall q\le p,\ q\nVdash \varphi.
-  \]
-  \item 对析取，规定 \(p\Vdash \varphi\lor\psi\) 当且仅当存在某个覆盖 \(\{p_k\to p\}_{k\in K}\in\mathrm{Cov}(p)\)，使得对每个 \(k\in K\)，均有
-  \[
-  p_k\Vdash \varphi\quad \text{或}\quad p_k\Vdash \psi.
-  \]
-  \item 对全称量词，规定
-  \[
-  p\Vdash \forall x\,\varphi(x)
-  \Longleftrightarrow
-  \forall q\le p,\ \forall d\in D,\ q\Vdash \varphi(d).
-  \]
-  \item 对存在量词，规定 \(p\Vdash \exists x\,\varphi(x)\) 当且仅当存在某个覆盖 \(\{p_k\to p\}_{k\in K}\in\mathrm{Cov}(p)\)，并可为每个 \(k\in K\) 选取 \(d_k\in D\)，使得
-  \[
-  p_k\Vdash \varphi(d_k).
-  \]
-  \item 对更新模态，规定
-  \[
-  p\Vdash [\alpha]\varphi
-  \Longleftrightarrow
-  \forall q\in \mathrm{Upd}_\alpha(p),\ q\Vdash \varphi,
-  \]
-  \[
-  p\Vdash \langle\alpha\rangle\varphi
-  \Longleftrightarrow
-  \exists q\in \mathrm{Upd}_\alpha(p),\ q\Vdash \varphi.
-  \]
-\end{enumerate}
-\end{definition}
-
-\begin{definition}[已决定]\label{def:observer-indexed-decided}
-称命题 \(\varphi\) 在状态 \(p\) 上\emph{已决定}，若
-\[
-p\Downarrow \varphi
-\quad:\Longleftrightarrow\quad
-p\Vdash \varphi\ \text{或}\ p\Vdash \neg\varphi.
-\]
-若既无 \(p\Vdash \varphi\)，又无 \(p\Vdash \neg\varphi\)，则称 \(\varphi\) 在 \(p\) 上未决定。
-\end{definition}
-
-\begin{proposition}[forcing 的单调性]\label{prop:observer-indexed-forcing-monotonicity}
-若 \(q\le p\) 且 \(p\Vdash \varphi\)，则 \(q\Vdash \varphi\)。
-\end{proposition}
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_forcing\_monotonicity}
-\leanverified{paper\_observer\_indexed\_forcing\_monotonicity}
-
-\begin{proof}
-对公式复杂度作归纳。
-原子情形由 \(V(A)\) 的下闭性直接得到；合取情形平凡。
-蕴含、否定与全称量词情形都只需注意：定义中对一切 \(r\le p\) 的量化在 \(q\le p\) 下仍有效。
-析取与存在量词情形由覆盖在细化下的稳定性推出：\(p\) 上的任一合法覆盖都可沿 \(q\le p\) 限制为 \(q\) 的合法覆盖。
-对更新模态，\([\alpha]\) 的情形由后继状态与细化的前向相容性推出；\(\langle\alpha\rangle\) 的情形则由后继状态与细化的后向相容性推出。
-故结论成立。
-\end{proof}
-
-\begin{corollary}[细化不推翻已建立的对象事实]\label{cor:observer-indexed-no-retraction}
-若某命题在较粗状态 \(p\) 上已可断言，则在任何后续细化状态 \(q\le p\) 上仍可断言。
-因此，信息细化的作用不是撤销对象层事实，而是缩小未决定域。
-\end{corollary}
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_no\_retraction}
-\leanverified{paper\_observer\_indexed\_no\_retraction}
-
-\begin{proof}
-这是命题 \ref{prop:observer-indexed-forcing-monotonicity} 的直接推论。
-\end{proof}
-
-\begin{proposition}[全局层只统一推理规则]\label{prop:observer-indexed-global-layer-logic-only}
-设 \(\Gamma\vdash \varphi\) 是与定义 \ref{def:observer-indexed-forcing} 相容的演算层推理。
-则对任意状态 \(p\in P\)，若
-\[
-p\Vdash \gamma
-\qquad (\forall \gamma\in \Gamma),
-\]
-则
-\[
-p\Vdash \varphi.
-\]
-因此，全局层统一的是推理规则，而对象层事实始终由具体信息状态上的 forcing 给出。
-\end{proposition}
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_global\_layer\_logic\_only}
-
-\begin{proof}
-这是 forcing 语义对相应演算层的标准可靠性陈述；证明对推导长度作归纳即可。
-证毕。
-\end{proof}
-
-\begin{definition}[地址对象与局部截面]\label{def:observer-indexed-address-local-sections}
-沿用定义 \ref{def:prefix-site}--\ref{def:prefix-sheaf-readout} 的前缀站点与协议可接受读出层。
-对每个信息状态 \(p\)，记
-\[
-A(p)\subseteq \mathcal{A}_{\mathrm{adm}}
-\]
-为在 \(p\) 上已对象化且协议允许的地址集合。
-对每个 \(a\in A(p)\)，记
-\[
-\Gamma_p(a)\subseteq \mathscr{F}(a)
-\]
-为在状态 \(p\) 上、地址 \(a\) 处全部协议允许、类型意义下单值且可核验的局部截面之集合。
-若 \(a\notin A(p)\)，则称该地址在 \(p\) 上尚未对象化；若 \(a\in A(p)\) 但 \(\Gamma_p(a)=\varnothing\)，则称该地址在 \(p\) 上尚无合法局部读出。
-\end{definition}
-
-\begin{proposition}[地址先于取值]\label{prop:observer-indexed-address-before-value}
-对任意状态 \(p\) 与地址符号 \(a\)，若 \(a\notin A(p)\)，则一切形如“\(a\) 的值为 \(v\)”的对象层命题在 \(p\) 上都不能成立；
-若 \(a\in A(p)\) 但 \(\Gamma_p(a)=\varnothing\)，则“\(a\) 在当前类型中可被单值读出”的命题在 \(p\) 上不能成立。
-\end{proposition}
-\leanverified{paper\_observer\_indexed\_address\_before\_value\_seeds}
-\leanverified{paper\_observer\_indexed\_address\_before\_value\_package}
-\leanverified{paper\_observer\_indexed\_address\_before\_value}
-
-\begin{proof}
-对象层取值命题要成立，前提是存在合法指称对象与相应的局部截面。
-若地址对象尚未形成，则命题缺乏对象语义支撑；若地址已对象化但局部截面为空，则读出命题缺乏证书支撑。
-因此两种情形下相关命题都不能在 \(p\) 上被强制。
-\end{proof}
-
-\begin{corollary}[非 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的 forcing 判据]\label{cor:observer-indexed-nonnull-criterion}
-在状态 \(p\) 上，地址 \(a\) 的读出为非 \(\mathsf{NULL}\) 当且仅当
-\[
-a\in A(p)
-\qquad\text{且}\qquad
-\Gamma_p(a)\neq \varnothing.
-\]
-因此，非 \(\mathsf{NULL}\) 不是一个值域元素，而是局部截面的存在性条件。
-\end{corollary}
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_nonnull\_criterion}
-
-\begin{proof}
-由命题 \ref{prop:observer-indexed-address-before-value} 立即得到。
-\end{proof}
-
-\begin{definition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的状态化三分解]\label{def:observer-indexed-null-trichotomy}
-在状态 \(p\) 上，地址 \(a\) 的 \(\mathsf{NULL}\) 分为三类：
-\begin{enumerate}
-  \item \textbf{语义空值：} \(a\notin A(p)\)。此时对象层尚未形成合法指称。
-  \item \textbf{协议空值：} \(a\in A(p)\) 但由于当前可见域、类型约束或协议纪律的限制，\(\Gamma_p(a)=\varnothing\)。此时有地址而无合法读出。
-  \item \textbf{碰撞空值：} 地址与协议均合法，但底层读出仍存在不可消解的多对一压缩；在未补足足够残差轴、未提升到单射层级之前，\(\Gamma_p(a)=\varnothing\)。
-\end{enumerate}
-\end{definition}
-
-\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的结构性]\label{prop:observer-indexed-null-structural}
-\(\mathsf{NULL}\) 不是值域中的一个普通元素，而是对象层 forcing 失败的结构性形式。
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_null\_structural}
-\end{proposition}
-
-\begin{proof}
-由推论 \ref{cor:observer-indexed-nonnull-criterion}，非 \(\mathsf{NULL}\) 的充要条件是局部截面的非空存在。
-故 \(\mathsf{NULL}\) 的本质不是某个特殊值被读出，而是相关读出命题未能在当前状态上被强制成立。
-\end{proof}
-
-\begin{definition}[多轴前缀与公共细化]\label{def:observer-indexed-common-refinement}
-设 \(u\) 与 \(v\) 是两个协议兼容的前缀轴，并记 \(p_u,p_v\in P\) 为分别只包含单轴 \(u,v\) 信息的状态。
-若存在状态 \(p_{u\otimes v}\in P\) 使
-\[
-p_{u\otimes v}\le p_u,
-\qquad
-p_{u\otimes v}\le p_v,
-\]
-则称 \(p_{u\otimes v}\) 为它们的联合前缀状态或公共细化。
-\end{definition}
-
-\begin{proposition}[多轴前缀提升可断言性]\label{prop:observer-indexed-common-refinement-decidability}
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_common\_refinement\_decidability}
-在定义 \ref{def:observer-indexed-common-refinement} 的前提下，联合前缀不会降低任何已建立的对象层事实。
-并且，凡依赖于额外残差轴才能消解的碰撞命题，都可能在公共细化状态上首次变为已决定。
-\end{proposition}
-
-\begin{proof}
-第一部分是命题 \ref{prop:observer-indexed-forcing-monotonicity} 的直接结果。
-第二部分则来自公共细化对不可区分候选读出的进一步切分：原先在单轴状态上混合在一起的候选项，经附加轴区分后，可能首次形成单值且可核验的局部截面，从而把未决定命题推进到已决定状态。
-\end{proof}
-
-\begin{definition}[延迟分类]\label{def:observer-indexed-delayed-classification}
-设 \(s\le \tau(p)\)，且 \(A_s\) 为一个关于较早时刻 \(s\) 的命题。
-若在状态 \(p\) 上
-\[
-p\nVdash A_s,
-\qquad
-p\nVdash \neg A_s,
-\]
-但存在某个更新动作 \(\alpha\) 与某个后继状态 \(q\in \mathrm{Upd}_\alpha(p)\)，使得
-\[
-q\Downarrow A_s,
-\]
-则称 \(A_s\) 在 \(p\to q\) 的更新过程中发生了延迟分类。
-\end{definition}
-
-\begin{proposition}[延迟分类不改写过去]\label{prop:observer-indexed-delayed-classification-not-retrocausal}
-在定义 \ref{def:observer-indexed-delayed-classification} 的情形下，更新所改变的是关于时刻 \(s\) 之命题的当前可断言性，而不是时刻 \(s\) 的对象层内容本身。
-\end{proposition}
-
-\begin{proof}
-命题 \(A_s\) 的时间索引 \(s\) 在更新前后保持不变；变化的只是信息状态由 \(p\) 细化为某个可达后继 \(q\)。
-因此，延迟分类表达的是“关于过去对象的命题在更强信息状态上首次被定解”，而非“过去被回写为另一个对象层事实”。
-\end{proof}
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_delayed\_classification\_not\_retrocausal}
-
-\begin{corollary}[观察更新的对象层意义]\label{cor:observer-indexed-update-decides-not-create}
-观察、再分类、增加残差轴、拼接证书对象等操作，在对象层上的统一作用，是把某些命题从未决定推进到已决定，而不是凭空创造事实。
-\leanverified{paper\_recursive\_addressing\_observer\_indexed\_update\_decides\_not\_create}
-\end{corollary}
-
-\begin{proof}
-由命题 \ref{prop:observer-indexed-common-refinement-decidability} 与命题 \ref{prop:observer-indexed-delayed-classification-not-retrocausal} 联立即得。
-\end{proof}
-
-\input{subsubsec__recursive-addressing-observer-indexed-forcing-continuation}
+\input{subsec__recursive-addressing-observer-indexed-forcing}

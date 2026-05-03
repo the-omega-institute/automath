@@ -1,0 +1,280 @@
+\section{Arithmetic reformulations and consequences}
+
+The results of the preceding sections admit purely number-theoretic
+formulations that do not refer to shift spaces, factor maps, or finite-state
+presentations.  Throughout this section fix $m\ge 3$, $n\ge m$, and write
+$L:=n+m-1$.
+
+\subsection{Local Fibonacci congruence rigidity}
+
+For a binary block $\omega=\omega_1\cdots\omega_L\in\{0,1\}^L$ and
+$1\le t\le n$, define the $t$-th local Fibonacci weighted sum
+\[
+S_t^{(m)}(\omega):=\sum_{j=0}^{m-1}\omega_{t+j}F_{j+2},
+\]
+and its standard residue modulo $F_{m+2}$,
+\[
+R_t^{(m)}(\omega)\in\{0,1,\ldots,F_{m+2}-1\},
+\qquad
+R_t^{(m)}(\omega)\equiv S_t^{(m)}(\omega)\pmod{F_{m+2}}.
+\]
+Collect all local residues into a vector
+\[
+\mathcal R_{m,n}(\omega):=
+\bigl(R_1^{(m)}(\omega),\ldots,R_n^{(m)}(\omega)\bigr)
+\in\{0,1,\ldots,F_{m+2}-1\}^n.
+\]
+
+The key observation is that by Corollary~\ref{cor:visible-value-overflow},
+\[
+R_t^{(m)}(\omega)=V_m\bigl(\Fold_m(\omega_t\cdots\omega_{t+m-1})\bigr),
+\]
+where $V_m:X_m\to\{0,1,\ldots,F_{m+2}-1\}$ is the bijection from
+Proposition~\ref{prop:visible-value-parametrization}.
+
+\begin{theorem}[Local Fibonacci congruence rigidity]
+\label{thm:congruence-rigidity}
+The map
+$\mathcal R_{m,n}:\{0,1\}^L\to\{0,1,\ldots,F_{m+2}-1\}^n$
+is injective.  Equivalently, for any
+$(r_1,\ldots,r_n)\in\{0,1,\ldots,F_{m+2}-1\}^n$,
+the congruence system
+\[
+\sum_{j=0}^{m-1}\omega_{t+j}F_{j+2}\equiv r_t\pmod{F_{m+2}}
+\qquad (1\le t\le n)
+\]
+has at most one solution $\omega\in\{0,1\}^L$.
+The image $\mathcal R_{m,n}(\{0,1\}^L)$ has exactly $2^L=2^{n+m-1}$ elements.
+\leanverified{paper_resolution_folding_congruence_rigidity}
+\end{theorem}
+
+\begin{proof}
+Take any $\omega\in\{0,1\}^L$.  For each $t$, set
+$a_t:=\Fold_m(\omega_t\cdots\omega_{t+m-1})\in X_m$.  By
+Corollary~\ref{cor:visible-value-overflow},
+$V_m(a_t)\equiv S_t^{(m)}(\omega)\pmod{F_{m+2}}$, and since $V_m(a_t)$
+already lies in $\{0,1,\ldots,F_{m+2}-1\}$, one has
+$V_m(a_t)=R_t^{(m)}(\omega)$.  Thus
+\[
+\mathcal R_{m,n}(\omega)=\bigl(V_m(a_1),\ldots,V_m(a_n)\bigr).
+\]
+
+Suppose $\mathcal R_{m,n}(\omega)=\mathcal R_{m,n}(\omega')$.  Then
+$V_m(a_t)=V_m(a_t')$ for each $t$.  Since $V_m$ is a bijection
+(Proposition~\ref{prop:visible-value-parametrization}), $a_t=a_t'$ for every
+$1\le t\le n$.  Hence $\omega$ and $\omega'$ produce the same length-$n$
+folded block under $B_{m,n}$.  By
+Theorem~\ref{thm:block-bijection-threshold}, $B_{m,n}$ is a bijection, so
+$\omega=\omega'$.  The image has $2^L$ elements because $\mathcal R_{m,n}$ is
+an injection from a set of size $2^L$.
+\end{proof}
+
+\subsection{Fingerprint separation of equi-valued representations}
+
+\begin{corollary}[Fingerprint separation]
+\label{cor:fingerprint-separation}
+For each integer $N$, let
+\[
+\Omega_L(N):=
+\Bigl\{
+\omega\in\{0,1\}^L:
+\sum_{k=1}^L\omega_kF_{k+1}=N
+\Bigr\}.
+\]
+Then $\mathcal R_{m,n}$ restricted to $\Omega_L(N)$ is still injective:
+\[
+\lvert\Omega_L(N)\rvert
+=
+\bigl\lvert\{\mathcal R_{m,n}(\omega):\omega\in\Omega_L(N)\}\bigr\rvert.
+\]
+\leanverified{paper_resolution_folding_fingerprint_separation}
+\end{corollary}
+
+\begin{proof}
+Since $\mathcal R_{m,n}$ is injective on all of $\{0,1\}^L$
+(Theorem~\ref{thm:congruence-rigidity}), it is injective on every subset.
+\end{proof}
+
+In other words, all length-$L$ binary Fibonacci representations of a single
+integer $N$ have mutually distinct overlapping local Zeckendorf fingerprints.
+
+\subsection{Exact bit recovery from residue windows}
+
+Write
+$\mathfrak R_{m,\ell}:=\mathcal R_{m,\ell}(\{0,1\}^{\ell+m-1})$
+for the set of realizable local residue vectors of length $\ell$.
+
+\begin{theorem}[Bit recovery from local congruence data]
+\label{thm:bit-recovery-residues}
+\leanverified{paper_resolution_folding_bit_recovery_from_local_congruence_data}
+For each $0\le s\le m-1$, there exists a function
+$\rho_{m,s}:\mathfrak R_{m,m}\to\{0,1\}$ such that for every
+$\omega\in\{0,1\}^{n+m-1}$ and every $1\le t\le n-m+1$,
+\[
+\omega_{t+s}
+=
+\rho_{m,s}\bigl(
+R_t^{(m)}(\omega),R_{t+1}^{(m)}(\omega),\ldots,R_{t+m-1}^{(m)}(\omega)
+\bigr).
+\]
+In particular, taking $s=m-1$ gives a one-sided decoding rule
+$g_m:=\rho_{m,m-1}$ with
+\[
+\omega_t=g_m\bigl(R_{t-m+1}^{(m)}(\omega),\ldots,R_t^{(m)}(\omega)\bigr).
+\]
+No rule using fewer than $m$ consecutive residues can recover all input bits.
+\end{theorem}
+
+\begin{proof}
+For any admissible $m$-tuple $(r_1,\ldots,r_m)\in\mathfrak R_{m,m}$, set
+$a_i:=V_m^{-1}(r_i)\in X_m$ and define
+\[
+\rho_{m,s}(r_1,\ldots,r_m):=\kappa_{m,s}(a_1\cdots a_m),
+\]
+where $\kappa_{m,s}$ is the local inverse rule from
+Theorem~\ref{thm:Phi-m-conjugacy-threshold}.
+
+Now take any $\omega\in\{0,1\}^{n+m-1}$ and fix $t$.  Set
+$a_j:=\Fold_m(\omega_j\cdots\omega_{j+m-1})$ for $t\le j\le t+m-1$.  Then
+$R_j^{(m)}(\omega)=V_m(a_j)$, so $a_j=V_m^{-1}(R_j^{(m)}(\omega))$.  By
+Theorem~\ref{thm:Phi-m-conjugacy-threshold}, the folded block
+$a_t\cdots a_{t+m-1}$ has unique raw lift
+$\omega_t\cdots\omega_{t+2m-2}$, and $\kappa_{m,s}$ reads its $(s+1)$-st
+bit.  Therefore
+\[
+\rho_{m,s}\bigl(R_t^{(m)}(\omega),\ldots,R_{t+m-1}^{(m)}(\omega)\bigr)
+=
+\kappa_{m,s}(a_t\cdots a_{t+m-1})
+=
+\omega_{t+s}.
+\]
+
+For the optimality claim, suppose a rule using only $k+1<m$ consecutive
+residues existed.  Since $V_m$ is a symbol-by-symbol bijection, this would
+yield a sliding-block left inverse $\Psi:Y_m\to\{0,1\}^{\ZZ}$ with memory
+$k<m-1$, contradicting
+Corollary~\ref{cor:Phi-m-memory-threshold-exact}.
+\end{proof}
+
+\subsection{Distribution of random local residue vectors}
+
+\begin{theorem}[Exact distribution of random local residues]
+\label{thm:random-residue-distribution}
+\leanverified{paper_resolution_folding_random_residue_distribution}
+Let $X_1,\ldots,X_L$ be independent with
+$\mathbb P(X_i=1)=p$ and $\mathbb P(X_i=0)=1-p$,
+where $0<p<1$.  Define the random local residue vector
+$\mathbf R_{m,n}:=\mathcal R_{m,n}(X_1\cdots X_L)$.  Then for every
+$\mathbf r=(r_1,\ldots,r_n)\in\{0,1,\ldots,F_{m+2}-1\}^n$,
+\[
+\mathbb P(\mathbf R_{m,n}=\mathbf r)=
+\begin{cases}
+p^{|\omega(\mathbf r)|_1}(1-p)^{L-|\omega(\mathbf r)|_1},
+& \mathbf r\in\mathfrak R_{m,n},\\[4pt]
+0,& \mathbf r\notin\mathfrak R_{m,n},
+\end{cases}
+\]
+where $\omega(\mathbf r)$ is the unique preimage guaranteed by
+Theorem~\textup{\ref{thm:congruence-rigidity}}.  When $p=\tfrac12$,
+$\mathbf R_{m,n}$ is uniformly distributed on $\mathfrak R_{m,n}$:
+\[
+\mathbb P(\mathbf R_{m,n}=\mathbf r)=2^{-L}
+\qquad (\mathbf r\in\mathfrak R_{m,n}).
+\]
+\end{theorem}
+
+\begin{proof}
+If $\mathbf r\notin\mathfrak R_{m,n}$, then no
+$\omega\in\{0,1\}^L$ satisfies $\mathcal R_{m,n}(\omega)=\mathbf r$, so the
+probability is $0$.
+
+Suppose $\mathbf r\in\mathfrak R_{m,n}$.  Set
+$a_t:=V_m^{-1}(r_t)\in X_m$ for $1\le t\le n$.  The event
+$\{\mathbf R_{m,n}=\mathbf r\}$ is equivalent to the folded block being
+$a_1\cdots a_n$.  By Theorem~\ref{thm:block-bijection-threshold}, this
+folded block has a unique raw lift $\omega(\mathbf r)\in\{0,1\}^L$.  Hence
+\[
+\{\mathbf R_{m,n}=\mathbf r\}
+=
+\{(X_1,\ldots,X_L)=\omega(\mathbf r)\}.
+\]
+Since $X_1,\ldots,X_L$ are independent Bernoulli$(p)$,
+\[
+\mathbb P(\mathbf R_{m,n}=\mathbf r)
+=
+p^{|\omega(\mathbf r)|_1}(1-p)^{L-|\omega(\mathbf r)|_1}.
+\]
+When $p=\tfrac12$, every $\omega\in\{0,1\}^L$ has probability $2^{-L}$.
+\end{proof}
+
+\begin{corollary}[Entropy of random local residues]
+\label{cor:entropy-random-residues}
+\leanverified{paper_resolution_folding_entropy_random_residues}
+Under the assumptions of Theorem~\textup{\ref{thm:random-residue-distribution}},
+for every $n\ge m$,
+\[
+H(\mathbf R_{m,n})=(n+m-1)h_2(p),
+\]
+where $h_2(p):=-p\log_2 p-(1-p)\log_2(1-p)$.  In particular, when
+$p=\tfrac12$, $H(\mathbf R_{m,n})=n+m-1$.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:random-residue-distribution}, the distribution of
+$\mathbf R_{m,n}$ is the image of a length-$L$ Bernoulli block under the
+bijection $\mathcal R_{m,n}$.  Entropy is invariant under bijective relabeling,
+so $H(\mathbf R_{m,n})=H(X_1,\ldots,X_L)=Lh_2(p)=(n+m-1)h_2(p)$.
+\end{proof}
+
+\subsection{Markov order of the residue process}
+
+\begin{theorem}[Exact Markov order of the local residue process]
+\label{thm:residue-markov-order}
+\leanverified{paper_resolution_folding_residue_markov_order}
+Let $(X_t)_{t\in\ZZ}$ be a two-sided Bernoulli$(p)$ process with $0<p<1$.
+Define
+\[
+R_t:=
+\biggl(\sum_{j=0}^{m-1}X_{t+j}F_{j+2}\biggr)\bmod F_{m+2},
+\qquad
+R_t\in\{0,1,\ldots,F_{m+2}-1\}.
+\]
+Then $(R_t)_{t\in\ZZ}$ is an exact $m$-step Markov process: given any
+realizable block $(r_{t-m+1},\ldots,r_t)$, the conditional law of $R_{t+1}$
+depends only on these $m$ values, and no $(m-1)$-step Markov law can describe
+$(R_t)$.
+
+More precisely, let $a_i:=V_m^{-1}(r_{t-m+i})\in X_m$,
+$\beta:=a_1\cdots a_m\in\mathcal L_m(Y_m)$, and let
+$v(\beta)\in\{0,1\}^{m-1}$ be the terminal suffix of the unique raw lift of
+$\beta$.  Then for each $b\in\{0,1\}$,
+\[
+\mathbb P\!\left(
+R_{t+1}=V_m(\Fold_m(v(\beta)b))
+\;\middle\vert\;
+R_{t-m+1}=r_{t-m+1},\ldots,R_t=r_t
+\right)
+=
+p^b(1-p)^{1-b}.
+\]
+\end{theorem}
+
+\begin{proof}
+Set $Y_t:=\Fold_m(X_t\cdots X_{t+m-1})\in X_m$.  By
+Corollary~\ref{cor:visible-value-overflow} and
+Proposition~\ref{prop:visible-value-parametrization}, $R_t=V_m(Y_t)$ for all $t$.
+Since $V_m$ is a bijection, $(R_t)$ and $(Y_t)$ are related by a
+symbol-by-symbol relabeling.
+
+Theorem~\ref{thm:exact-markov-order-bernoulli} states that $(Y_t)$ is an exact
+$m$-step Markov process under $\mu_{m,p}$, with the displayed transition
+probabilities.  Translating through $V_m$ yields the same conclusion for
+$(R_t)$: the event $\{Y_j=a_{j-(t-m)}\}$ is equivalent to $\{R_j=r_j\}$
+because $R_j=V_m(Y_j)$ and $V_m$ is invertible.  Likewise
+$Y_{t+1}=\Fold_m(v(\beta)b)$ if and only if
+$R_{t+1}=V_m(\Fold_m(v(\beta)b))$.
+
+If $(R_t)$ were $(m-1)$-step Markov, then $(Y_t)=V_m^{-1}(R_t)$ would also be
+$(m-1)$-step Markov, contradicting
+Theorem~\ref{thm:exact-markov-order-bernoulli}.
+\end{proof}

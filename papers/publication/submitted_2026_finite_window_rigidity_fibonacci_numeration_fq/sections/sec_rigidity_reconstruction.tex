@@ -1,0 +1,740 @@
+\subsection{Reconstruction from overlaps}
+
+Here $\mathcal L_n(Y_m)$ denotes the set of length-$n$ blocks occurring in
+$Y_m$.
+
+\begin{lemma}[A signed Fibonacci gap shifts by one index]
+\label{lem:signed-fibonacci-gap-shift}
+Let $m\ge 2$ and let $d_1,\ldots,d_{m-1}\in\{-1,0,1\}$.  If
+\[
+\sum_{k=1}^{m-1} d_kF_{k+1}=F_m,
+\]
+then
+\[
+\sum_{k=1}^{m-1} d_kF_k=F_{m-1}.
+\]
+If instead
+\[
+\sum_{k=1}^{m-1} d_kF_{k+1}=-F_m,
+\]
+then
+\[
+\sum_{k=1}^{m-1} d_kF_k=-F_{m-1}.
+\]
+\end{lemma}
+
+\begin{proof}
+It is enough to prove the positive case, since the negative case follows by
+replacing each $d_k$ with $-d_k$.
+
+Let
+\[
+\varphi:=\frac{1+\sqrt5}{2},
+\qquad
+\psi:=\frac{1-\sqrt5}{2}.
+\]
+By Binet's formula,
+\[
+F_n=\frac{\varphi^n-\psi^n}{\sqrt5}
+\qquad (n\ge 1).
+\]
+Define
+\[
+P(z):=\sum_{k=1}^{m-1} d_kz^k.
+\]
+The hypothesis reads
+\[
+\frac{\varphi P(\varphi)-\psi P(\psi)}{\sqrt5}=F_m
+=
+\frac{\varphi^m-\psi^m}{\sqrt5},
+\]
+so
+\[
+C:=\varphi P(\varphi)-\varphi^m
+=
+\psi P(\psi)-\psi^m.
+\]
+The first expression is an algebraic integer in $\ZZ[\varphi]$, while the
+second is its Galois conjugate.  Since they are equal, $C$ is fixed by
+conjugation and therefore lies in $\mathbb{Q}$; hence $C$ is an ordinary
+integer.
+
+On the other hand,
+\[
+|C|
+\le
+\sum_{k=1}^{m-1} |\psi|^{k+1}+|\psi|^m
+<
+\sum_{j=2}^{\infty} |\psi|^j
+=
+1.
+\]
+Thus the integer $C$ satisfies $|C|<1$, so $C=0$.  Therefore
+\[
+\varphi P(\varphi)=\varphi^m,
+\qquad
+\psi P(\psi)=\psi^m,
+\]
+and hence
+\[
+P(\varphi)=\varphi^{m-1},
+\qquad
+P(\psi)=\psi^{m-1}.
+\]
+Applying Binet's formula again gives
+\[
+\sum_{k=1}^{m-1} d_kF_k
+=
+\frac{P(\varphi)-P(\psi)}{\sqrt5}
+=
+\frac{\varphi^{m-1}-\psi^{m-1}}{\sqrt5}
+=
+F_{m-1}.
+\]
+\end{proof}
+\leanverified{paper_resolution_folding_signed_fibonacci_gap_shift}
+
+\begin{proposition}[Pairwise overlap reduction]
+\label{prop:pair-overlap-reduction}
+For every $m\ge 3$ there is a well-defined map
+\[
+\Theta_m:\mathcal L_2(Y_m)\to X_{m-1}
+\]
+with the following property.  If
+\[
+a=\Fold_m(pr),
+\qquad
+b=\Fold_m(rq)
+\]
+for some bits $p,q\in\{0,1\}$ and some overlap word
+$r=r_1\cdots r_{m-1}\in\Omega_{m-1}$, then
+\[
+\Theta_m(ab)=\Fold_{m-1}(r).
+\]
+\end{proposition}
+
+\begin{proof}
+Take two raw words
+\[
+prq,\qquad p'r'q'
+\]
+of length $m+1$ such that
+\[
+\Fold_m(pr)=\Fold_m(p'r'),
+\qquad
+\Fold_m(rq)=\Fold_m(r'q').
+\]
+Write
+\[
+\Delta:=N(r)-N(r').
+\]
+Since $r,r'\in\Omega_{m-1}$, one has
+\[
+|\Delta|\le \sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2<F_{m+2}.
+\]
+By Corollary~\ref{cor:visible-value-overflow}, equality of the second folded
+symbols implies
+\[
+\Delta+(q-q')F_{m+1}\in\{-F_{m+2},0,F_{m+2}\}.
+\]
+Because $q-q'\in\{-1,0,1\}$ and $F_{m+2}=F_{m+1}+F_m$, this forces
+\[
+\Delta\in\{0,\pm F_m,\pm F_{m+1}\}.
+\]
+
+We claim that the cases $\Delta=\pm F_m$ are impossible.  Suppose first that
+\[
+\Delta=F_m.
+\]
+Set
+\[
+d_k:=r_k-r_k'\in\{-1,0,1\}
+\qquad (1\le k\le m-1).
+\]
+Then
+\[
+\sum_{k=1}^{m-1} d_kF_{k+1}=F_m,
+\]
+so Lemma~\ref{lem:signed-fibonacci-gap-shift} gives
+\[
+\sum_{k=1}^{m-1} d_kF_k=F_{m-1}.
+\]
+Hence
+\[
+\begin{aligned}
+N(pr)-N(p'r')
+&=
+(p-p')+\sum_{k=1}^{m-1} d_kF_{k+2}\\
+&=
+(p-p')+\sum_{k=1}^{m-1} d_k(F_{k+1}+F_k)\\
+&=
+(p-p')+F_m+F_{m-1}\\
+&=
+(p-p')+F_{m+1}.
+\end{aligned}
+\]
+This lies in
+\[
+\{F_{m+1}-1,F_{m+1},F_{m+1}+1\},
+\]
+which is disjoint from $\{-F_{m+2},0,F_{m+2}\}$ because
+$F_{m+2}=F_{m+1}+F_m>F_{m+1}+1$.  By
+Corollary~\ref{cor:visible-value-overflow}, the first folded symbols cannot be
+equal, a contradiction.  The case $\Delta=-F_m$ is identical after changing
+signs.
+
+Therefore
+\[
+\Delta\in\{0,\pm F_{m+1}\}.
+\]
+By Corollary~\ref{cor:visible-value-overflow} at length $m-1$, this is exactly
+the condition
+\[
+\Fold_{m-1}(r)=\Fold_{m-1}(r').
+\]
+Thus the folded overlap depends only on the pair of output symbols, and the map
+$\Theta_m$ is well defined.
+\end{proof}
+
+\begin{remark}
+The restriction $m\ge 3$ is essential.  For $m=2$, both raw words $00$ and
+$11$ fold to $00$, so the pair $(00,00)\in\mathcal L_2(Y_2)$ does not
+determine the overlapping bit.
+\end{remark}
+
+\begin{definition}[Recursive overlap decoders]
+\label{def:recursive-overlap-decoder}
+For integers $m\ge 3$ and $1\le n\le m$, define
+\[
+\Theta_{m,n}:\mathcal L_n(Y_m)\to X_{m-n+1}
+\]
+as follows.  For $n=1$, set
+\[
+\Theta_{m,1}(a_1):=a_1.
+\]
+For $(m,n)=(3,2)$, set
+\[
+\Theta_{3,2}(a_1a_2):=\Theta_3(a_1a_2).
+\]
+For $(m,n)=(3,3)$, let $\omega_1\cdots\omega_5$ be the unique raw lift from
+Proposition~\ref{prop:G3-base-case} and define
+\[
+\Theta_{3,3}(a_1a_2a_3):=\omega_3.
+\]
+For $m\ge 4$ and $2\le n\le m$, define
+\[
+\Theta_{m,n}(a_1\cdots a_n)
+:=
+\Theta_{m-1,n-1}\bigl(
+\Theta_m(a_1a_2)\,
+\Theta_m(a_2a_3)\cdots
+\Theta_m(a_{n-1}a_n)
+\bigr).
+\]
+\end{definition}
+
+\begin{proposition}[Common-overlap decoding]
+\label{prop:common-overlap-decoder}
+Let $m\ge 3$ and $1\le n\le m$.  Suppose
+\[
+\omega=\omega_1\cdots\omega_{m+n-1}\in\Omega_{m+n-1},
+\qquad
+a_j:=\Fold_m(\omega_j\cdots\omega_{j+m-1})
+\quad (1\le j\le n).
+\]
+Then
+\[
+\Theta_{m,n}(a_1\cdots a_n)
+=
+\Fold_{m-n+1}(\omega_n\cdots\omega_m).
+\]
+Thus $\Theta_{m,n}$ recovers the fold of the common overlap of the $n$
+consecutive raw windows.
+\end{proposition}
+
+\begin{proof}
+We argue by induction on $m$.
+
+If $m=3$, there are three cases.  For $n=1$, the claim is the definition of
+$\Theta_{3,1}$.  For $n=2$, it is exactly
+Proposition~\ref{prop:pair-overlap-reduction}.  For $n=3$,
+Proposition~\ref{prop:G3-base-case} gives a unique raw lift
+\[
+\omega_1\cdots\omega_5
+\]
+of $a_1a_2a_3$, and by definition
+\[
+\Theta_{3,3}(a_1a_2a_3)=\omega_3.
+\]
+Since $X_1=\{0,1\}$ and $\Fold_1$ fixes admissible words by
+Proposition~\ref{prop:fold-basic}\textup{(ii)}, this is
+\[
+\Fold_1(\omega_3).
+\]
+Thus the statement holds for $m=3$.
+
+Now assume $m\ge 4$ and that the proposition is known at level $m-1$ for every
+admissible block length.  The case $n=1$ is again the definition.  Assume
+$n\ge 2$.  By Proposition~\ref{prop:pair-overlap-reduction}, for each
+$1\le j\le n-1$ one has
+\[
+\Theta_m(a_ja_{j+1})
+=
+\Fold_{m-1}(\omega_{j+1}\cdots\omega_{j+m-1}).
+\]
+These are precisely the $(m-1)$-folds of the $n-1$ consecutive length-$(m-1)$
+windows cut from the raw block
+\[
+\omega_2\cdots\omega_{m+n-2}.
+\]
+Applying the induction hypothesis at level $m-1$ to the $n-1$ folded
+length-$(m-1)$ windows yields
+\[
+\Theta_{m,n}(a_1\cdots a_n)
+=
+\Theta_{m-1,n-1}\bigl(
+\Theta_m(a_1a_2)\cdots\Theta_m(a_{n-1}a_n)
+\bigr)
+=
+\Fold_{m-n+1}(\omega_n\cdots\omega_m),
+\]
+as claimed.
+\end{proof}
+
+\begin{theorem}[Unique lift of a length-$m$ output block]
+\label{thm:length-m-block-unique-lift}
+Let $m\ge 3$.  Every block
+\[
+a_1\cdots a_m\in\mathcal L_m(Y_m)
+\]
+has a unique raw lift
+\[
+\omega_1\cdots\omega_{2m-1}\in\Omega_{2m-1}
+\]
+satisfying
+\[
+\Fold_m(\omega_j\cdots\omega_{j+m-1})=a_j
+\qquad (1\le j\le m).
+\]
+\leanverified{paper_resolution_folding_length_m_block_unique_lift}
+\end{theorem}
+
+\begin{proof}
+Existence is immediate from the definition of $\mathcal L_m(Y_m)$.
+
+For uniqueness, suppose
+\[
+\omega_1\cdots\omega_{2m-1}
+\]
+is any lift of the given output block.  For $1\le k\le m$ define
+\[
+L_k:=\Theta_{m,m-k+1}(a_1\cdots a_{m-k+1}),
+\qquad
+R_k:=\Theta_{m,m-k+1}(a_k\cdots a_m).
+\]
+By Proposition~\ref{prop:common-overlap-decoder},
+\[
+L_k=\Fold_k(\omega_{m-k+1}\cdots\omega_m),
+\qquad
+R_k=\Fold_k(\omega_m\cdots\omega_{m+k-1}).
+\]
+
+For $k=1$ this gives
+\[
+L_1=R_1=\omega_m\in\{0,1\},
+\]
+so the central bit is determined.
+
+Now fix $2\le k\le m$ and assume inductively that the central blocks
+\[
+\omega_{m-k+2}\cdots\omega_m,
+\qquad
+\omega_m\cdots\omega_{m+k-2}
+\]
+have already been determined.  The word $L_k$ is the fold of the raw $k$-block
+\[
+\omega_{m-k+1}\omega_{m-k+2}\cdots\omega_m,
+\]
+whose suffix of length $k-1$ is known.  By
+Proposition~\ref{prop:one-step-left-resolving}, applied with $k$ in place of
+$m$, the two possible prepended bits $0$ and $1$ produce distinct folds.
+Therefore $L_k$ determines the new left bit $\omega_{m-k+1}$ uniquely.
+
+Similarly, $R_k$ is the fold of
+\[
+\omega_m\cdots\omega_{m+k-2}\omega_{m+k-1},
+\]
+whose prefix of length $k-1$ is known.  By
+Proposition~\ref{prop:one-step-right-resolving}, again with $k$ in place of
+$m$, the appended bit is uniquely determined by $R_k$.  Hence $\omega_{m+k-1}$
+is fixed as well.
+
+Proceeding outward from $k=1$ to $k=m$ reconstructs all bits
+\[
+\omega_1,\ldots,\omega_{2m-1}
+\]
+uniquely.
+\end{proof}
+
+\begin{corollary}[Uniform synchronizing length]
+\label{cor:uniform-synchronizing-length}
+Let $m\ge 3$.  Every block in $\mathcal L_m(Y_m)$ is synchronizing for the
+presentation $G_m$.  Moreover the block
+\[
+e_{m,0}e_{m,1}\cdots e_{m,m-2}
+\]
+of length $m-1$ is not synchronizing.  Consequently the minimal synchronizing
+length of $G_m$ is exactly $m$.
+\leanverified{paper_resolution_folding_uniform_synchronizing_length}
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:length-m-block-unique-lift}, every block in
+$\mathcal L_m(Y_m)$ is carried by exactly one length-$m$ path in $G_m$, hence
+is synchronizing.
+
+For the second claim, Proposition~\ref{prop:one-sided-inverse-memory-lower-bound}
+constructs two sequences $U_m$ and $V_m$ whose first $m-1$ output symbols are
+\[
+e_{m,0}e_{m,1}\cdots e_{m,m-2}
+\]
+and coincide there.  The corresponding length-$(m-1)$ paths in $G_m$ end at the
+suffix vertices
+\[
+010^{m-3}
+\qquad\text{and}\qquad
+10^{m-2},
+\]
+which are distinct.  Thus the block admits at least two lifts with different
+terminal vertices, so it is not synchronizing.  The distinct $m$th output
+symbols constructed in Proposition~\ref{prop:one-sided-inverse-memory-lower-bound}
+show in particular that these two lifts do not merge after one further step.
+\end{proof}
+
+\begin{theorem}[Finite-block losslessness in Fibonacci numeration]
+\label{thm:block-bijection-threshold}
+Let $m\ge 3$ and $n\ge m$.  Define
+\[
+B_{m,n}:\Omega_{n+m-1}\to\mathcal L_n(Y_m),
+\qquad
+B_{m,n}(\omega_1\cdots\omega_{n+m-1}):=a_1\cdots a_n,
+\]
+where
+\[
+a_j:=\Fold_m(\omega_j\cdots\omega_{j+m-1})
+\qquad (1\le j\le n).
+\]
+Then $B_{m,n}$ is a bijection.
+\leanverified{paper_resolution_folding_block_bijection_threshold}
+\end{theorem}
+
+\begin{proof}
+Surjectivity is immediate from the definition of $\mathcal L_n(Y_m)$.
+
+For injectivity, fix a block
+\[
+a_1\cdots a_n\in\mathcal L_n(Y_m).
+\]
+Its prefix
+\[
+a_1\cdots a_m\in\mathcal L_m(Y_m)
+\]
+has a unique raw lift by Theorem~\ref{thm:length-m-block-unique-lift}, hence it
+is carried by a unique length-$m$ path in $G_m$.  Since $G_m$ is right-resolving
+by Proposition~\ref{prop:one-step-right-resolving}, each subsequent symbol
+$a_{m+1},\ldots,a_n$ determines the next edge uniquely.  Thus the whole block
+$a_1\cdots a_n$ is carried by a unique length-$n$ path in $G_m$.
+
+Now a length-$n$ path in $G_m$ is uniquely determined by its initial vertex
+$v=v_1\cdots v_{m-1}\in V_m$ together with the appended bits
+$b_1,\ldots,b_n\in\{0,1\}$.  Equivalently, it is uniquely determined by the raw
+word
+\[
+v_1\cdots v_{m-1}b_1\cdots b_n\in\Omega_{n+m-1}.
+\]
+By construction of the labels in $G_m$, this raw word is precisely the unique
+length-$(n+m-1)$ block whose consecutive folded windows are
+$a_1,\ldots,a_n$.  Therefore $B_{m,n}$ is injective.
+\end{proof}
+
+\begin{corollary}[Exact block counts above the threshold]
+\label{cor:block-counts-threshold}
+For every $m\ge 3$ and $n\ge m$,
+\[
+\lvert\mathcal L_n(Y_m)\rvert=2^{n+m-1}.
+\]
+In particular,
+\[
+\lvert\mathcal L_m(Y_m)\rvert=2^{2m-1}.
+\]
+\leanverified{paper_resolution_folding_block_counts_threshold}
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:block-bijection-threshold} identifies $\mathcal L_n(Y_m)$
+with $\Omega_{n+m-1}=\{0,1\}^{n+m-1}$, whose cardinality is $2^{n+m-1}$.
+\end{proof}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{ccc}
+\toprule
+$(m,n)$ & direct enumeration of $\lvert\mathcal L_n(Y_m)\rvert$ & $2^{n+m-1}$ \\
+\midrule
+$(3,3)$ & $32$ & $32$ \\
+$(3,4)$ & $64$ & $64$ \\
+$(3,5)$ & $128$ & $128$ \\
+$(4,4)$ & $128$ & $128$ \\
+$(4,5)$ & $256$ & $256$ \\
+$(4,6)$ & $512$ & $512$ \\
+\bottomrule
+\end{tabular}
+\caption{Small-scale verification of Corollary~\ref{cor:block-counts-threshold}
+obtained by brute-force enumeration of all raw blocks in $\Omega_{n+m-1}$ and
+folding each consecutive length-$m$ window.}
+\label{tab:small-block-counts}
+\end{table}
+
+\begin{corollary}[Higher-block identification with the full two-shift]
+\label{cor:higher-block-identification}
+Let $m\ge 3$ and $n\ge m$.  The bijection $B_{m,n}$ identifies the
+$n$-block presentation of $Y_m$ with the $(n+m-1)$-block presentation of the
+full binary shift.  Equivalently, consecutive blocks in $\mathcal L_n(Y_m)$
+correspond exactly to consecutive overlapping blocks in $\Omega_{n+m-1}$.
+\end{corollary}
+
+\begin{proof}
+Let
+\[
+a=a_1\cdots a_n,
+\qquad
+a'=a_2\cdots a_{n+1}
+\]
+be consecutive $n$-blocks in some point of $Y_m$.  If
+\[
+B_{m,n}^{-1}(a)=\omega_1\cdots\omega_{n+m-1},
+\qquad
+B_{m,n}^{-1}(a')=\omega'_1\cdots\omega'_{n+m-1},
+\]
+then both raw words are lifts of the same length-$(n+1)$ output block
+$a_1\cdots a_{n+1}\in\mathcal L_{n+1}(Y_m)$.  By
+Theorem~\ref{thm:block-bijection-threshold}, that length-$(n+1)$ output block
+has a unique raw lift in $\Omega_{n+m}$, so necessarily
+\[
+\omega'_1\cdots\omega'_{n+m-2}=\omega_2\cdots\omega_{n+m-1}.
+\]
+Thus adjacency of $n$-blocks in $Y_m$ is exactly overlap by $n+m-2$ bits of
+their raw lifts in $\Omega_{n+m-1}$, which is the adjacency rule in the
+$(n+m-1)$-block presentation of the full binary shift.  Hence the two
+higher-block presentations are canonically identified.
+\leanverified{paper_resolution_folding_higher_block_identification}
+\end{proof}
+
+\begin{corollary}[Linear-time finite-block decoding]
+\label{cor:linear-time-block-decoding}
+Fix $m\ge 3$.  For every $n\ge m$, a block
+\[
+a_1\cdots a_n\in\mathcal L_n(Y_m)
+\]
+can be decoded to its unique raw lift in deterministic time $O_m(n)$ and
+working space $O(m)$ beyond the space used to store the output.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:length-m-block-unique-lift}, the initial block
+$a_1\cdots a_m$ determines the unique raw lift
+\[
+\omega_1\cdots\omega_{2m-1}.
+\]
+This fixes the current suffix vertex
+\[
+\omega_{m+1}\cdots\omega_{2m-1}\in V_m.
+\]
+For each $j=m+1,\ldots,n$, the current suffix vertex together with the next
+symbol $a_j$ determines a unique outgoing edge of $G_m$ by
+Proposition~\ref{prop:one-step-right-resolving}; following that edge reveals
+the next appended bit $\omega_{j+m-1}$.  Repeating this step decodes the entire
+raw lift.  Since $m$ is fixed, the initialization cost is $O_m(1)$, each new
+output symbol is processed in constant time, and only the current
+length-$(m-1)$ suffix together with the already decoded raw word must be
+stored.
+\end{proof}
+\leanverified{paper_resolution_folding_linear_time_block_decoding}
+
+\begin{remark}[Small decoding examples]
+\label{rem:small-decoding-examples}
+For $m=3$, the output block
+\[
+(a_1,a_2,a_3)=(001,010,100)
+\]
+has unique raw lift $00100$.  Thus the central-bit inverse returns
+\[
+\kappa_{3,1}(001,010,100)=1.
+\]
+For $m=4$, the output block
+\[
+(a_1,a_2,a_3,a_4)=(1001,0010,1000,0000)
+\]
+has unique raw lift $1110000$.  Hence the position-parameterized inverse family
+reads off
+\[
+\kappa_{4,0}=1,\qquad
+\kappa_{4,1}=1,\qquad
+\kappa_{4,2}=1,\qquad
+\kappa_{4,3}=0
+\]
+on this single normalized block.  The first example is already fully
+admissible, while the second passes through nontrivial local normalization
+before decoding.
+\end{remark}
+
+\begin{theorem}[Exact finite-type order over the folded alphabet]
+\label{thm:Y-m-exact-SFT-order}
+For every $m\ge 3$, the shift $Y_m$ is an $m$-step shift of finite type over
+the alphabet $X_m$, and it is not an $(m-1)$-step shift of finite type.
+\leanverified{paper_resolution_folding_y_m_exact_sft_order}
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+y=(y_t)_{t\in\ZZ}\in X_m^{\ZZ}
+\]
+be such that every length-$(m+1)$ block of $y$ lies in
+$\mathcal L_{m+1}(Y_m)$.  For each $t\in\ZZ$, the length-$m$ block
+\[
+b_t:=y_{t-m+1}\cdots y_t
+\]
+belongs to $\mathcal L_m(Y_m)$ and is therefore synchronizing by
+Corollary~\ref{cor:uniform-synchronizing-length}.  Let $v_t$ denote the unique
+terminal vertex of a path in $G_m$ labeled by $b_t$.
+
+Now fix $t$.  Since
+\[
+y_{t-m+1}\cdots y_ty_{t+1}\in\mathcal L_{m+1}(Y_m),
+\]
+there exists a path in $G_m$ carrying this length-$(m+1)$ block.  Its prefix
+of length $m$ is labeled by $b_t$, so by uniqueness its terminal vertex is
+$v_t$.  Its suffix of length $m$ is labeled by
+\[
+b_{t+1}=y_{t-m+2}\cdots y_{t+1},
+\]
+so by the same uniqueness statement its terminal vertex is $v_{t+1}$.  Hence
+the last edge of that path is an edge
+\[
+v_t\xrightarrow{\,y_{t+1}\,}v_{t+1}.
+\]
+Thus the vertices $(v_t)_{t\in\ZZ}$ form a bi-infinite path in $G_m$ labeled by
+$y$, and therefore $y\in Y_m$.  This proves that $Y_m$ is $m$-step.
+
+To show that $Y_m$ is not $(m-1)$-step, let
+\[
+b:=e_{m,0}e_{m,1}\cdots e_{m,m-2}\in\mathcal L_{m-1}(Y_m).
+\]
+By Corollary~\ref{cor:uniform-synchronizing-length}, the block $b$ is not
+synchronizing, so reading $b$ in $G_m$ can end at at least two distinct
+vertices.  By Proposition~\ref{prop:one-sided-inverse-memory-lower-bound}, the
+length-$m$ block
+\[
+bc=b\,010^{m-2}
+\]
+belongs to $\mathcal L_m(Y_m)$.  By
+Theorem~\ref{thm:length-m-block-unique-lift}, this length-$m$ block is carried
+by exactly one path in $G_m$.  Consequently, among the terminal vertices
+reached by reading $b$, exactly one admits an outgoing edge labeled
+$010^{m-2}$.  Since $b$ is not synchronizing, at least one other terminal
+vertex reached by $b$ does not admit that label.
+
+Every finite path in $G_m$ occurs in some bi-infinite labeled path because the
+underlying graph is the binary de Bruijn graph on words of length $m-1$ and is
+therefore strongly connected.  Hence there exist two occurrences of the same
+length-$(m-1)$ block $b$ in points of $Y_m$ such that one occurrence may be
+followed by $010^{m-2}$ and another may not.  Thus the admissible next symbol
+after $b$ depends on more than the last $m-1$ output symbols, so $Y_m$ is not
+an $(m-1)$-step shift of finite type.
+\end{proof}
+
+\begin{theorem}[Local inverse rules]
+\label{thm:Phi-m-conjugacy-threshold}
+For every $m\ge 3$ and every $0\le r\le m-1$, let
+\[
+\kappa_{m,r}:\mathcal L_m(Y_m)\to\{0,1\}
+\]
+send a block $a_1\cdots a_m$ to the $(r+1)$st bit of its unique raw lift from
+Theorem~\ref{thm:length-m-block-unique-lift}.  Define
+\[
+\Psi_m^{(r)}:Y_m\to\{0,1\}^{\ZZ},
+\qquad
+(\Psi_m^{(r)}(y))_t:=\kappa_{m,r}(y_{t-r}\cdots y_{t-r+m-1}).
+\]
+Then $\Psi_m^{(r)}$ is a sliding block code with memory $r$ and anticipation
+$m-1-r$, and
+\[
+\Psi_m^{(r)}\circ\Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},
+\qquad
+\Phi_m\circ\Psi_m^{(r)}=\mathrm{id}_{Y_m}.
+\]
+Equivalently, each length-$m$ observation window yields an exact inverse rule
+for $\Phi_m:\{0,1\}^{\ZZ}\to Y_m$, and $\Phi_m$ is a topological conjugacy
+between the full binary shift and the image shift $Y_m$.
+\leanverified{paper_resolution_folding_phi_m_conjugacy_threshold}
+\end{theorem}
+
+\begin{proof}
+By definition, $(\Psi_m^{(r)}(y))_t$ depends only on the block
+$y_{t-r}\cdots y_{t-r+m-1}$, so $\Psi_m^{(r)}$ has memory $r$ and anticipation
+$m-1-r$.
+
+Let $s\in\{0,1\}^{\ZZ}$ and set $y:=\Phi_m(s)$.  For each $t\in\ZZ$, applying
+Theorem~\ref{thm:length-m-block-unique-lift} to the output block
+\[
+y_{t-r}\cdots y_{t-r+m-1}
+\]
+shows that its unique raw lift is
+\[
+s_{t-r}\cdots s_{t-r+2m-2}.
+\]
+Therefore the $(r+1)$st bit of that lift is $s_t$, so
+\[
+(\Psi_m^{(r)}(y))_t=s_t.
+\]
+Hence
+\[
+\Psi_m^{(r)}(\Phi_m(s))=s,
+\]
+so $\Psi_m^{(r)}\circ\Phi_m=\mathrm{id}$.
+
+Now let $y\in Y_m$.  By definition of $Y_m$ there exists
+$s\in\{0,1\}^{\ZZ}$ with $\Phi_m(s)=y$.  Applying the first identity to this
+$s$ gives
+\[
+\Psi_m^{(r)}(y)=\Psi_m^{(r)}(\Phi_m(s))=s,
+\]
+and therefore
+\[
+\Phi_m(\Psi_m^{(r)}(y))=\Phi_m(s)=y.
+\]
+Thus $\Phi_m$ and $\Psi_m^{(r)}$ are mutual inverses.
+\end{proof}
+
+\begin{corollary}[The one-sided memory threshold is exact]
+\label{cor:Phi-m-memory-threshold-exact}
+Let $m\ge 3$.  Among all sliding block codes
+\[
+\Psi:Y_m\to\{0,1\}^{\ZZ}
+\]
+with anticipation $0$ and
+\[
+\Psi\circ\Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},
+\]
+the smallest possible memory is exactly $m-1$.
+\leanverified{paper_resolution_folding_phi_m_memory_threshold_exact}
+\end{corollary}
+
+\begin{proof}
+The endpoint inverse $\Psi_m^{(m-1)}$ from
+Theorem~\ref{thm:Phi-m-conjugacy-threshold} has memory $m-1$, while
+Proposition~\ref{prop:one-sided-inverse-memory-lower-bound} shows that no
+one-sided left inverse can use smaller memory.
+\end{proof}

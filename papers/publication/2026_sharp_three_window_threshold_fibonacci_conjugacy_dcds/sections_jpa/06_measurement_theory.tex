@@ -1,0 +1,198 @@
+\section{Consequences of the finite-memory conjugacy}\label{sec:measurement}
+
+We now record the consequences of Theorem~\ref{thm:two-sided-conjugacy} for
+finite blocks, path-space laws and continuous potentials. These are consequences
+of the conjugacy; the arithmetic input has already been isolated in
+Section~\ref{sec:stab:conjugacy}.
+
+\subsection{Block presentations above threshold}\label{sec:measurement:sufficiency}
+
+Fix $m\ge 3$ and $n\ge m$.  Write
+\[
+\mathcal Y_{m,n}:=\Phi_{m,n}\bigl(\{0,1\}^{n+m-1}\bigr)\subset X_m^n
+\]
+for the legal length-$n$ stabilized output blocks, and let
+\[
+\Psi_{m,n}:\mathcal Y_{m,n}\to\{0,1\}^{n+m-1}
+\]
+denote the inverse of $\Phi_{m,n}$ from Theorem~\ref{thm:block-invertibility}.
+
+\begin{theorem}[Equivalence of block presentations above threshold]\label{thm:exact-sufficiency}
+Let $\{P_u:u\in\mathcal U\}$ be any family of probability laws on the raw block
+space $\{0,1\}^{n+m-1}$, and let
+\[
+Q_u:=(\Phi_{m,n})_*P_u
+\]
+be the induced family on $\mathcal Y_{m,n}$. Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item If $A^{(n)}\sim P_u$ and $Y^{(n)}:=\Phi_{m,n}(A^{(n)})$, then
+  \[
+  A^{(n)}=\Psi_{m,n}(Y^{(n)})\qquad P_u\text{-a.s.},
+  \]
+  and consequently $H_{P_u}(A^{(n)}\mid Y^{(n)})=0$.
+  \item For any random parameter $U$ with conditional law
+  $A^{(n)}\mid\{U=u\}\sim P_u$,
+  \[
+  I(U;Y^{(n)})=I(U;A^{(n)}).
+  \]
+  \item The raw-block and stabilized-block experiments are deterministically
+  equivalent in the sense of Blackwell comparison \cite{Blackwell1953}. In particular, for every $u,v\in\mathcal U$,
+  \[
+  D_{\KL}(P_u\|P_v)=D_{\KL}(Q_u\|Q_v),
+  \qquad
+  D_{\TV}(P_u,P_v)=D_{\TV}(Q_u,Q_v),
+  \]
+  and every decision problem has the same optimal risk after transporting
+  decision rules by $\Phi_{m,n}$ and $\Psi_{m,n}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:block-invertibility} states that $\Phi_{m,n}$ is injective.
+Thus $\Psi_{m,n}$ is well defined on $\mathcal Y_{m,n}$ and satisfies
+\[
+\Psi_{m,n}(\Phi_{m,n}(a))=a
+\qquad\text{for every }a\in\{0,1\}^{n+m-1}.
+\]
+This proves (i).  For (ii), $Y^{(n)}$ is a deterministic function of
+$A^{(n)}$, while (i) makes $A^{(n)}$ a deterministic function of $Y^{(n)}$.
+The two data-processing inequalities are therefore equalities.
+
+For (iii), each $Q_u$ is the pushforward of $P_u$ under a bijection between
+the raw block space and $\mathcal Y_{m,n}$.  Rewriting the finite sums through
+$a=\Psi_{m,n}(y)$ gives the displayed divergence identities.  The same
+transport sends any decision rule for one experiment to a rule for the other
+with the identical loss distribution, and hence with the same risk.
+\end{proof}
+
+\subsection{Path-space equivalence}
+
+The same inverse is local on two-sided trajectories. Thus the many-to-one
+character of $\Fold_m$ on isolated windows does not lead to a loss of
+path-space information for $m\ge3$.
+
+\begin{corollary}[Path-space equivalence and relative entropy rates]\label{cor:path-space-divergence}
+Assume $m\ge 3$, let $\{\nu_u:u\in\mathcal U\}$ be a family of shift-invariant
+Borel probability measures on $\{0,1\}^{\mathbb Z}$, and write
+\[
+\eta_u:=(\Phi_m)_*\nu_u
+\]
+for their images on $Y_m$.  Then $\Phi_m$ is a measurable isomorphism between
+the path-space experiments $(\{0,1\}^{\mathbb Z},\nu_u)$ and
+$(Y_m,\eta_u)$.  Moreover, for every $u,v\in\mathcal U$, the finite-block
+Kullback--Leibler divergences agree under the block identification
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\to\mathcal Y_{m,n},
+\]
+namely, writing $\nu_u^{[i,j]}$ and $\eta_u^{[i,j]}$ for the corresponding
+coordinate marginals,
+\[
+D_{\KL}\!\left(\nu_u^{[0,n+m-2]}\middle\|\nu_v^{[0,n+m-2]}\right)
+=
+D_{\KL}\!\left(\eta_u^{[0,n-1]}\middle\|\eta_v^{[0,n-1]}\right),
+\qquad n\ge m,
+\]
+and therefore
+\[
+h(\nu_u\|\nu_v)=h(\eta_u\|\eta_v)
+\]
+whenever the corresponding block relative entropy rates exist.
+\end{corollary}
+
+\begin{proof}
+The path-space isomorphism is Theorem~\ref{thm:two-sided-conjugacy}(i)--(ii).
+For every $n\ge m$, the length-$n$ stabilized marginal of $\eta_u$ is the
+pushforward under $\Phi_{m,n}$ of the length-$(n+m-1)$ raw marginal of
+$\nu_u$.  Since $\Phi_{m,n}$ is injective, rewriting the finite sums through
+the inverse block map gives the displayed identity.  Normalization by $n$ or
+by $n+m-1$ gives the same limiting rate, because $(n+m-1)/n\to1$.
+\end{proof}
+
+\begin{remark}[Local fibers versus trajectory information]
+The entropy identity in Proposition~\ref{thm:kl-ledger} concerns a single
+window and records unresolved multiplicity inside the finite fibers of
+$\Fold_m$. Corollary~\ref{cor:path-space-divergence} is a different statement:
+overlapping windows carry enough consistency information to reconstruct the
+whole trajectory above the threshold.
+\end{remark}
+
+\subsection{Continuous potentials and finite-range interactions}\label{sec:measurement:renorm}
+
+We finally state the thermodynamic consequence of the conjugacy. This is the
+standard transport of potentials through a topological conjugacy, written here
+to identify the induced finite-range interaction explicitly.
+
+\begin{theorem}[Transport of continuous potentials under the conjugacy]\label{thm:continuous-potentials}
+Assume $m\ge 3$, let $\varphi:\{0,1\}^{\mathbb Z}\to\RR$ be continuous, and
+define
+\[
+\widetilde\varphi:=\varphi\circ \Phi_m^{-1}:Y_m\to\RR.
+\]
+Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item for every shift-invariant Borel probability measure $\mu$ on
+  $\{0,1\}^{\mathbb Z}$,
+  \[
+  \int_{Y_m}\widetilde\varphi\,d(\Phi_{m*}\mu)=\int \varphi\,d\mu,
+  \qquad
+  h_{\Phi_{m*}\mu}(\sigma)=h_\mu(\sigma);
+  \]
+  \item the topological pressures agree:
+  \[
+  P_{Y_m}(\widetilde\varphi)=P_{\{0,1\}^{\mathbb Z}}(\varphi);
+  \]
+  \item $\mu$ is an equilibrium state for $\varphi$ if and only if
+  $\Phi_{m*}\mu$ is an equilibrium state for $\widetilde\varphi$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:two-sided-conjugacy}(i) states that $\Phi_m$ is a topological
+conjugacy onto $Y_m$, so $\Phi_m^{-1}$ is continuous and
+$\widetilde\varphi$ is continuous.  The integral identity is the definition of
+pushforward, and the entropy identity is
+Proposition~\ref{prop:measure-entropy-preservation}.  Hence the variational
+functional
+\[
+\mu\longmapsto h_\mu(\sigma)+\int\varphi\,d\mu
+\]
+is preserved under $\mu\mapsto\Phi_{m*}\mu$.  Taking suprema over invariant
+measures gives the pressure identity by the variational principle, and the
+equilibrium-state correspondence follows from equality of the same functional.
+\end{proof}
+
+\begin{proposition}[Finite-range energetics under local inversion]\label{prop:finite-range-renorm}
+Assume $m\ge 3$. Let $\phi:\{0,1\}^r\to\mathbb R$ be a finite-range
+interaction of range $r\ge 1$ on the raw shift. Define the induced interaction
+on $Y_m$ by
+\[
+\widetilde{\phi}(y_t,\dots,y_{t+r+m-2})
+:=
+\phi\bigl(\psi_m(y_t,\dots,y_{t+m-1}),\dots,
+\psi_m(y_{t+r-1},\dots,y_{t+r+m-2})\bigr).
+\]
+Then $\widetilde{\phi}$ has range $r+m-1$ on $Y_m$, and for every
+$a\in\{0,1\}^{\mathbb Z}$, $y:=\Phi_m(a)$, and $n\ge 1$,
+\[
+\sum_{t=0}^{n-1}\phi(a_t,\dots,a_{t+r-1})
+=
+\sum_{t=0}^{n-1}\widetilde{\phi}(y_t,\dots,y_{t+r+m-2}).
+\]
+\end{proposition}
+
+\begin{proof}
+For every $t\in\mathbb Z$, Theorem~\ref{thm:two-sided-conjugacy}(ii) gives
+\[
+a_t=\psi_m(y_t,\dots,y_{t+m-1}).
+\]
+Substituting this identity into each summand
+$\phi(a_t,\dots,a_{t+r-1})$ gives the stated equality term by term.
+\end{proof}
+
+\begin{remark}[Prototype observables]
+Taking $\phi(a_0):=a_0$ gives exact recovery of occupancy sums, and taking
+$\phi(a_0,a_1):=a_0a_1$ gives exact recovery of nearest-neighbour pair sums.
+Thus the occupancy and nearest-neighbour energy examples used below are
+instances of Proposition~\ref{prop:finite-range-renorm}; they do not require
+additional thermodynamic assumptions.
+\end{remark}

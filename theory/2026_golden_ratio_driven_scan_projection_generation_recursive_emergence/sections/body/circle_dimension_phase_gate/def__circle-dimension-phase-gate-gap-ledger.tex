@@ -31,3 +31,142 @@
 \leanverified{firstHittingTime\_eq\_top\_of\_forall\_ge}
 \leanverified{separationDepth\_eq\_zero\_of\_distinguish\_zero}
 \end{definition}
+
+\begin{theorem}[亚临界相位门的有限剩余纤维正规形]\label{distill:gromov-dimension_waist_projection_families-cdim-subcritical-phase-gate-residual-ledger}
+设 \(E\) 为非空有限 fold-aware 地址包，\(\mu:E\to\RR_{\ge0}\) 为概率权重，并令 \(A:=\{e\in E:\mu(e)>0\}\)。设
+\[
+q:E\longrightarrow \Theta
+\]
+为当前协议已授权的有限相位门投影，且所有可见谓词均通过 \(q\) 下降；这里不把任意连续圆坐标视为有限证书，只使用该 quotient-compatible 的有限读出。记
+\[
+A_\theta:=A\cap q^{-1}(\theta),\qquad
+K:=|q(A)|,\qquad
+M_q(A):=\max_{\theta\in q(A)}|A_\theta|.
+\]
+若一个有限残差寄存器 \(R\) 与映射 \(r:E\to R\) 使
+\[
+e\longmapsto (q(e),r(e))
+\]
+在 \(A\) 上单射，则
+\[
+|R|\ge M_q(A)\ge \left\lceil \frac{|A|}{K}\right\rceil .
+\]
+特别地，\(q\) 本身在 active 地址上无残差当且仅当 \(M_q(A)=1\)。若 \(K<|A|\)，则存在不可消去的 active 投影纤维，且任何相位门后继账本必须在定义 \ref{def:cdim-gap-ledger} 的补偿账中记录至少 \(M_q(A)\) 个同纤维可分支。若进一步存在 \(\alpha>0\) 使 \(\mu(e)\ge\alpha\) 对所有 \(e\in A\) 成立，则任意单代表相位 lift \(s:q(A)\to A\) 满足 \(q(s(\theta))=\theta\) 时都有
+\[
+\mu\bigl(A\setminus s(q(A))\bigr)
+\ge \alpha\bigl(|A|-K\bigr).
+\]
+若 \(R=(\mathbb F_p)^B\)，则任意这样的 strictification 还满足
+\[
+B\ge \left\lceil \log_p M_q(A)\right\rceil .
+\]
+\end{theorem}
+
+\begin{theorem}[后继相位门的 holonomy--leakage--外置宽度门控]\label{distill:cech_cohomology-holonomy_residue_classification-cdim-gap-holonomy-width-ledger}
+固定素数 \(p\)。设
+\[
+\bigl(K_b,r_{b',b}\bigr)_{b'\ge b\ge b_0}
+\]
+是一族 fold-aware 的有限协议 nerve 及其允许细化映射。对每个 \(b\)，令 \(A_b=(\FF_p)^{d_b}\)，并设有线性嵌入 \(i_{b,b'}:A_b\hookrightarrow A_{b'}\)。设
+\[
+h_b\in Z^1(K_b;A_b)
+\]
+为第 \(b\) 层 reduced overlap 余循环，并令
+\[
+\mathcal S_b\subset H^1(K_b;A_b)
+\]
+为该层已登记的 slab/sector leakage 子空间，即由支撑在已标记 slab 或 sector 边上的余循环类张成。假设对 \(b'\ge b\) 有
+\[
+[i_{b,b'}\,r_{b',b}^{\ast}h_b]-[h_{b'}]\in \mathcal S_{b'},
+\qquad
+ i_{b,b'}\,r_{b',b}^{\ast}\mathcal S_b\subseteq\mathcal S_{b'},
+\]
+并且诱导映射
+\[
+\overline r_{b',b}:
+H^1(K_b;A_b)/\mathcal S_b
+\longrightarrow
+H^1(K_{b'};A_{b'})/\mathcal S_{b'}
+\]
+在所讨论的 reduced holonomy 类上保持零性。记
+\[
+\bar\eta_b:=[h_b]\bmod \mathcal S_b.
+\]
+通过自然同构
+\[
+H^1(K_b;A_b)\cong H^1(K_b;\FF_p)\otimes_{\FF_p} A_b
+\]
+定义 reduced holonomy 宽度
+\[
+w_b:=\min\Bigl\{\dim_{\FF_p}P:\ P\subseteq A_b,
+\ \bar\eta_b\in \operatorname{im}\bigl(H^1(K_b;\FF_p)\otimes P\to H^1(K_b;A_b)/\mathcal S_b\bigr)\Bigr\}.
+\]
+其中 \(w_b=0\) 当且仅当 \(\bar\eta_b=0\)。则在删去有限初始层后，后继相位门的闭路残差按下列优先规则落入恰好一种账本：
+\begin{enumerate}
+  \item 若 \([h_b]=0\) 最终恒成立，则残差为 trivial gauge；
+  \item 若 \([h_b]\ne0\) 在无穷多层出现而 \(\bar\eta_b=0\) 最终恒成立，则残差完全落入已登记 slab/sector leakage；
+  \item 若 \(\bar\eta_b\ne0\) 最终恒成立且 \(\sup_b w_b<\infty\)，则剩余部分为有限宽度的 \v Cech holonomy；任何 faithfully 记录该 reduced holonomy 的 \(p\)-寄存器 \((\FF_p)^B\) 必满足
+  \[
+  B\ge \sup_b w_b;
+  \]
+  \item 若 \(\sup_b w_b=\infty\)，则不存在固定有限秩 \(p\)-寄存器能够在所有充分深层 faithfully 记录 reduced holonomy；该残差必须进入定义 \ref{def:cdim-gap-ledger} 的补偿账，表现为无限外置预算 residue。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先说明宽度定义与寄存器下界。由于系数为域 \(\FF_p\) 上的有限维向量空间，逐坐标计算上链复形给出自然同构
+\[
+H^1(K_b;A_b)\cong H^1(K_b;\FF_p)\otimes_{\FF_p}A_b.
+\]
+因此 \(\bar\eta_b\) 的系数支撑维数可以在 quotient
+\[
+H^1(K_b;A_b)/\mathcal S_b
+\]
+中按最小系数子空间 \(P\subseteq A_b\) 定义，这正是 \(w_b\)。特别地，\(w_b=0\) 等价于 \(P=0\) 可行，亦即 \(\bar\eta_b=0\)。这说明 reduced 宽度为零时，所有非零残差若存在，只能已经落在登记的 slab/sector leakage 子空间中。
+
+称秩为 \(B\) 的 \(p\)-寄存器 faithfully 记录第 \(b\) 层 reduced holonomy，是指存在线性映射
+\[
+\rho_b:A_b\to (\FF_p)^B,\qquad
+\sigma_b:(\FF_p)^B\to A_b
+\]
+使得在 quotient 中
+\[
+(\mathrm{id}\otimes \sigma_b\rho_b)(\bar\eta_b)=\bar\eta_b.
+\]
+于是 \(\bar\eta_b\) 落入
+\[
+H^1(K_b;\FF_p)\otimes \operatorname{im}(\sigma_b)
+\]
+在 quotient 中的像，而 \(\dim\operatorname{im}(\sigma_b)\le B\)。由 \(w_b\) 的最小性得到
+\[
+B\ge w_b.
+\]
+对所有充分深的 \(b\) 取上确界，即得第三项中的统一下界；若 \(\sup_b w_b=\infty\)，则任意固定 \(B\) 都会在某个深层违反该不等式，故固定有限秩寄存器不可能 faithful。
+
+现在证明分类。第一项是 coboundary gauge 情形：\([h_b]=0\) 最终恒成立时，所有足够深层的 reduced overlap cocycle 均可由顶点规范消去。若第一项不成立而 \(\bar\eta_b=0\) 最终恒成立，则足够深层的非零残差在 quotient 后消失，因而全部属于已登记 slab/sector leakage 子空间，这正是第二项。若 \(\bar\eta_b\) 最终非零，则 \(w_b>0\) 最终成立；此时 \(\sup_b w_b\) 或有限或无限。有限时得到第三项及其寄存器下界，无限时得到第四项及无限预算结论。由于这些判断按优先规则依次排除，四类互斥且覆盖所有可能。
+
+最后，细化相容假设保证 \(\bar\eta_b\) 的零性不是某个孤立分辨率的伪不变量：被允许细化拉回后，除已登记的 slab/sector leakage 外，同一 reduced holonomy 类在后继层中保持其账本身份。因此该判别正是定义 \ref{def:cdim-gap-ledger} 中补偿账的 \v Cech 版本：trivial gauge 不进入补偿账，slab/sector leakage 进入已登记几何泄漏账，有限宽度 holonomy 需要相应有限 \(p\)-寄存器，而无界宽度则强制无限外置预算。证毕。
+\end{proof}
+
+\begin{proof}
+固定 \(\theta\in q(A)\)。若 \((q,r)\) 在 \(A\) 上单射，则其限制在单个纤维 \(A_\theta\) 上仍为单射。由于 \(q\) 在该纤维上恒等于 \(\theta\)，单射性只能由 \(r|_{A_\theta}\) 提供。因此 \(|R|\ge |A_\theta|\)。对所有 \(\theta\in q(A)\) 取最大值得
+\[
+|R|\ge M_q(A).
+\]
+另一方面，\(A\) 是 \(K\) 个非空集合 \(A_\theta\) 的不交并，故抽屉原理给出
+\[
+M_q(A)\ge \left\lceil |A|/K\right\rceil .
+\]
+于是第一组不等式成立。
+
+若 \(M_q(A)=1\)，每个 active 纤维至多含一个点，故 \(q|_A\) 单射，无需残差寄存器。反之若 \(q|_A\) 单射，则每个 \(A_\theta\) 至多一元，而 \(\theta\in q(A)\) 时非空，故 \(M_q(A)=1\)。因此 \(q\) 本身无残差等价于 \(M_q(A)=1\)。若 \(K<|A|\)，则 \(M_q(A)\ge2\)，所以至少有一个相位投影纤维含有两个 active 地址；这些地址在所有通过 \(q\) 下降的可见谓词下不可区分，只能进入补偿账。
+
+设 \(s:q(A)\to A\) 为单代表 lift。它在每个 active 可见纤维中至多保留一个地址，因此在纤维 \(A_\theta\) 中遗漏 \(|A_\theta|-1\) 个 active 地址。由 \(\mu(e)\ge\alpha\) 得
+\[
+\mu\bigl(A\setminus s(q(A))\bigr)
+=\sum_{\theta\in q(A)}\sum_{e\in A_\theta\setminus\{s(\theta)\}}\mu(e)
+\ge \alpha\sum_{\theta\in q(A)}(|A_\theta|-1)
+=\alpha(|A|-K).
+\]
+最后若 \(R=(\mathbb F_p)^B\)，则 \(|R|=p^B\)。结合 \(|R|\ge M_q(A)\) 得 \(p^B\ge M_q(A)\)，等价于所示对 \(B\) 的下界。证毕。
+\end{proof}
+

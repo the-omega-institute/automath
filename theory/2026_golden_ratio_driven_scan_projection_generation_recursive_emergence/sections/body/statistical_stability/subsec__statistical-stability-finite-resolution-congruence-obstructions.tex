@@ -81,6 +81,225 @@ S_P\ :=\ \{n\in\NN:\ a_P(n)=1\}.
 \leanverified{paper\_fixed\_resolution\_prime\_sieve\_precision\_to\_zero}
 \end{theorem}
 
+\begin{theorem}[有限测试秩缺陷的稀疏余类盲点]\label{distill:gromov-random_sparse_obstruction_families-stat-stability-sparse-residue-rank-blindspot}
+固定 \(m\ge 1\)，令 \(M:=F_{m+2}\)，并令 \(\mathcal T\subset\mathcal P(X_m)\) 为一族有限分辨率测试谓词。把每个谓词视为 \(X_m\) 上的指示函数，并定义测试线性包络
+\[
+\mathscr V_m(\mathcal T)
+:=\Span_{\RR}\Bigl(\ind_{X_m},\{\ind_T:T\in\mathcal T\}\Bigr)
+\subseteq \RR^{X_m},
+\]
+以及测试秩缺陷
+\[
+\mathrm{def}_m(\mathcal T):=\card{X_m}-\dim_{\RR}\mathscr V_m(\mathcal T).
+\]
+对任意 \(B\subseteq X_m\)，记
+\[
+R_B:=\{v_m(x)\bmod M:x\in B\}\subseteq\ZZ/M\ZZ,
+\qquad
+S_B:=\{n\in\NN:n\bmod M\in R_B\}.
+\]
+则以下断言成立。
+\begin{enumerate}
+  \item 对固定的 \(B\subseteq X_m\)，下列二者等价：
+  \[
+  \text{任意 }\mu,\nu\in\Delta(X_m)\text{ 若满足 }\mu(T)=\nu(T)\ (T\in\mathcal T),\text{ 则 }\mu(B)=\nu(B),
+  \]
+  与
+  \[
+  \ind_B\in\mathscr V_m(\mathcal T).
+  \]
+  \item 若 \(\ind_B\notin\mathscr V_m(\mathcal T)\)，则存在有理概率测度 \(\mu_+,\mu_-\in\Delta(X_m)\) 使得
+  \[
+  \mu_+(T)=\mu_-(T)\qquad(T\in\mathcal T),
+  \]
+  但
+  \[
+  \mu_+(B)\ne\mu_-(B).
+  \]
+  因而存在某个 \(N\in\NN\) 与整数多重度 \(a_x^\pm\in\NN\)（\(x\in X_m\)）满足 \(\sum_xa_x^+=\sum_xa_x^-=N\)，并且
+  \[
+  \sum_{x\in T}a_x^+=\sum_{x\in T}a_x^-\qquad(T\in\mathcal T),
+  \]
+  但
+  \[
+  \sum_{x\in B}a_x^+\ne\sum_{x\in B}a_x^-.
+  \]
+  \item 若 \(\mathrm{def}_m(\mathcal T)>0\)，则存在一个单点谓词 \(B=\{x\}\subseteq X_m\) 满足上一项。因此，任何声称对所有非空 \(s\)-稀疏余类残差 \(B\subseteq X_m\)、\(\card B\le s\) 均稳定的有限测试协议（其中 \(s\ge1\)）都必须满足
+  \[
+  \mathscr V_m(\mathcal T)=\RR^{X_m},
+  \qquad\text{等价地}\qquad
+  \mathrm{def}_m(\mathcal T)=0.
+  \]
+\end{enumerate}
+这里的 \(S_B\) 正是由同余筛 \(R_B\) 诱导的有限分辨率接受集合；故上述整数多重度见证给出的是同一 \(X_m\) 层内局部合法、但被当前测试族完全遮蔽的稀疏余类残差。
+\end{theorem}
+
+\begin{proposition}[辅助重叠审计的有限秩界与测试缺陷分离]\label{distill:cech_cohomology-finite_nerve_obstruction_bounds-stat-auxiliary-overlap-audit-rank-split}
+固定分辨率 \(m\) 与有限测试族 \(\mathcal T\subset\mathcal P(X_m)\)，并令
+\[
+\mathscr V_m(\mathcal T)
+:=\Span_{\RR}\bigl(\ind_{X_m},\{\ind_T:T\in\mathcal T\}\bigr)
+\subseteq \RR^{X_m}.
+\]
+所谓该有限分辨率测试的一个辅助 \v Cech 重叠审计接口，是指额外给定有限 nerve \(\mathcal N\)、系数空间 \(A=(\FF_p)^d\)、次数 \(q\ge1\)、一族已登记残差谓词 \(\mathcal B_{\rm aux}\subseteq\mathcal P(X_m)\)，以及映射
+\[
+\Theta:\mathcal B_{\rm aux}\longrightarrow Z^q(\mathcal N;A).
+\]
+这里 \(\Theta\) 只是协议登记的辅助 overlap ledger，不被假定为所有有限分辨率测试谓词的内在不变量。定义辅助 holonomy 子空间
+\[
+\mathsf H_{\rm aux}:=\Span_{\FF_p}\{[\Theta(B)]:B\in\mathcal B_{\rm aux}\}
+\subseteq \check H^q(\mathcal N;A).
+\]
+则
+\[
+\dim_{\FF_p}\mathsf H_{\rm aux}\le d\,\dim_{\FF_p}\check H^q(\mathcal N;\FF_p).
+\]
+特别地，若 \(\check H^q(\mathcal N;A)=0\)，则任何由 \(\ind_B\notin\mathscr V_m(\mathcal T)\) 导致的有限测试盲点，不能在该辅助接口内被归因于非平凡 \v Cech holonomy。
+\end{proposition}
+
+\begin{theorem}[跨分辨率谓词的下降判别与分裂纤维见证]\label{distill:cech_cohomology-refinement_stability_separation-stat-cross-resolution-predicate-descent}
+设 \(m'\ge m\ge1\)，并给定 fold-aware 稳定限制映射
+\[
+\rho:X_{m'}\longrightarrow X_m.
+\]
+对任意谓词 \(B'\subseteq X_{m'}\)，以下条件等价：
+\begin{enumerate}
+  \item \(B'\) 是深度 \(m\) 谓词的拉回，即存在 \(B\subseteq X_m\) 使
+  \[
+  B'=\rho^{-1}(B).
+  \]
+  \item \(B'\) 在 \(\rho\)-纤维上不分裂：对每个 \(y\in X_m\)，纤维 \(\rho^{-1}(y)\) 要么包含于 \(B'\)，要么与 \(B'\) 不交。
+  \item 对任意 \(\mu,
+u\in\Delta(X_{m'})\)，若 \(\rho_\#\mu=\rho_\#\nu\)，则
+  \[
+  \mu(B')=\nu(B').
+  \]
+\end{enumerate}
+若这些条件失败，则存在 \(x,x'\in X_{m'}\) 使
+\[
+\rho(x)=\rho(x'),\qquad \ind_{B'}(x)\ne\ind_{B'}(x').
+\]
+于是 \(\delta_x\) 与 \(\delta_{x'}\) 在深度 \(m\) 的全部余类谓词、全部粗层测试以及任意 \(X_m\)-可测统计上完全不可分，但它们在 \(B'\) 上取值不同。该见证证明的是跨分辨率下降失败；除非另有细化相容证书，它不得被解释为深度 \(m\) 的结构性筛分刚性。
+\end{theorem}
+\begin{proof}
+若 \(B'=\rho^{-1}(B)\)，则每条 \(\rho\)-纤维显然要么整个落在 \(B'\) 中，要么整个落在其补集中，故第一项推出第二项。
+
+若第二项成立，令
+\[
+B:=\{\,y\in X_m:\rho^{-1}(y)\subseteq B'\,\}.
+\]
+由纤维不分裂性，对任意 \(x\in X_{m'}\)，有
+\[
+x\in B'\quad\Longleftrightarrow\quad \rho(x)
+\in B,
+\]
+从而 \(B'=\rho^{-1}(B)\)。故第二项推出第一项。
+
+第一项推出第三项：若 \(B'=\rho^{-1}(B)\)，则
+\[
+\mu(B')=\rho_\#\mu(B).
+\]
+因此 \(\rho_\#\mu=\rho_\#\nu\) 时必有 \(\mu(B')=\nu(B')\)。
+
+第三项推出第二项用反证。若某条纤维分裂，则存在 \(x,x'\in X_{m'}\) 满足
+\(\rho(x)=\rho(x')\)、\(x\in B'\)、\(x'\notin B'\)。取点质量
+\(\mu=\delta_x\)、\(\nu=\delta_{x'}\)。二者推前同为 \(\delta_{\rho(x)}\)，但
+\(\mu(B')=1\)、\(\nu(B')=0\)，与第三项矛盾。
+
+失败情形的两点见证已在上段构造。由于任意深度 \(m\) 的测试谓词 \(T\subseteq X_m\) 都满足
+\[
+\delta_x(\rho^{-1}(T))=\delta_{x'}(\rho^{-1}(T)),
+\]
+这两个样本对所有粗层统计完全相同。它们只在未能下降的细层谓词 \(B'\) 上分离。因此该分离是有限分辨率 artifact 或需要额外细化账本的 residual，而不是粗层协议已经证明的稳定筛分结论。证毕。
+\end{proof}
+
+\begin{proof}
+第一部分完全是有限上同调的线性代数。由于
+\[
+C^\bullet(\mathcal N;A)\cong C^\bullet(\mathcal N;\FF_p)\otimes_{\FF_p}A,
+\]
+有
+\[
+\check H^q(\mathcal N;A)\cong \check H^q(\mathcal N;\FF_p)\otimes_{\FF_p}A.
+\]
+故
+\[
+\dim_{\FF_p}\check H^q(\mathcal N;A)=d\,\dim_{\FF_p}\check H^q(\mathcal N;\FF_p).
+\]
+而 \(\mathsf H_{\rm aux}\) 是该有限维空间的子空间，维数界随即成立。
+
+现在假设 \(\check H^q(\mathcal N;A)=0\)，并取 \(B\subseteq X_m\) 满足 \(\ind_B\notin\mathscr V_m(\mathcal T)\)。令
+\[
+L:\RR^{X_m}\longrightarrow \RR^{\{\ast\}\sqcup\mathcal T},\qquad
+L\sigma:=\left(\sum_{x\in X_m}\sigma(x),\left(\sum_{x\in T}\sigma(x)\right)_{T\in\mathcal T}\right).
+\]
+则 \(L\) 的行空间正是 \(\mathscr V_m(\mathcal T)\)。由行空间与核的正交关系，存在 \(\sigma\in\ker L\) 使
+\[
+\sum_{x\in B}\sigma(x)\ne0.
+\]
+因 \(L\) 的矩阵系数为整数，可取这样的 \(\sigma\) 为有理向量。令 \(u\) 为 \(X_m\) 上的均匀概率测度，并取足够小的正有理数 \(\varepsilon\)，使
+\[
+\mu_\pm:=u\pm\varepsilon\sigma
+\]
+仍为概率测度。于是 \(\mu_+\) 与 \(\mu_-\) 在总质量及所有 \(T\in\mathcal T\) 上取值相同，但在 \(B\) 上取值不同。这说明 \(B\) 的不可判定性已经由有限测试秩缺陷给出。
+
+另一方面，由 \(\check H^q(\mathcal N;A)=0\)，若 \(B\in\mathcal B_{\rm aux}\)，则 \([\Theta(B)]=0\)；若 \(B\notin\mathcal B_{\rm aux}\)，该辅助接口根本没有为 \(B\) 登记 \v Cech 类。因此在两种情况下，该盲点都不能由当前辅助 overlap ledger 中的非零 \v Cech holonomy 类解释。它只能作为有限测试线性包络缺陷、采样预算缺口、Frostman 型非集中失败，或未登记外部接口的信息记录。证毕。
+\end{proof}
+
+\begin{proof}
+将概率测度写成 \(X_m\) 上的向量，并令
+\[
+A:\RR^{X_m}\longrightarrow \RR^{\{\ast\}\sqcup\mathcal T},
+\qquad
+A\sigma:=\left(\sum_{x\in X_m}\sigma(x),\ \left(\sum_{x\in T}\sigma(x)\right)_{T\in\mathcal T}\right).
+\]
+则 \(A\) 的行空间正是 \(\mathscr V_m(\mathcal T)\)。
+
+先证明第一项。若 \(\ind_B\in\mathscr V_m(\mathcal T)\)，则存在实数 \(c_0\) 与有限多个 \(c_T\) 使
+\[
+\ind_B=c_0\ind_{X_m}+\sum_{T\in\mathcal T}c_T\ind_T.
+\]
+任意 \(\mu,\nu\in\Delta(X_m)\) 若在所有 \(T\in\mathcal T\) 上取同值，则由于 \(\mu(X_m)=\nu(X_m)=1\)，立刻得到 \(\mu(B)=\nu(B)\)。
+
+反过来，设 \(\ind_B\notin\mathscr V_m(\mathcal T)\)。由有限维线性代数中行空间与核的正交关系，存在 \(\sigma\in\ker A\) 使
+\[
+\langle \ind_B,\sigma\rangle\ne0.
+\]
+因为 \(A\) 的矩阵元素均为整数，\(\ker A\) 有有理基；若上述不等式对某个实向量成立，则也可取满足同一不等式的有理向量 \(\sigma\in\ker A\cap\QQ^{X_m}\)。于是
+\[
+\sum_{x\in X_m}\sigma(x)=0,
+\qquad
+\sum_{x\in T}\sigma(x)=0\quad(T\in\mathcal T),
+\qquad
+\sum_{x\in B}\sigma(x)\ne0.
+\]
+取 \(u\) 为 \(X_m\) 上的均匀概率测度。选择足够小的正有理数 \(\varepsilon\)，使
+\[
+\mu_\pm:=u\pm\varepsilon\sigma
+\]
+仍为非负向量。由 \(\sum_x\sigma(x)=0\)，二者均为概率测度；由 \(\sigma\in\ker A\)，二者在全部 \(T\in\mathcal T\) 上取同值；而由 \(\sum_{x\in B}\sigma(x)\ne0\)，二者在 \(B\) 上取值不同。这同时证明了第一项的逆否命题与第二项中的有理概率测度存在性。
+
+由于 \(\mu_+\) 与 \(\mu_-\) 均为有理概率测度，可取共同分母 \(N\) 使
+\[
+a_x^\pm:=N\mu_\pm(x)\in\NN\qquad(x\in X_m).
+\]
+于是 \(\sum_xa_x^\pm=N\)，并且对每个 \(T\in\mathcal T\)，
+\[
+\sum_{x\in T}a_x^+-\sum_{x\in T}a_x^-
+=N\bigl(\mu_+(T)-\mu_-(T)\bigr)=0,
+\]
+而
+\[
+\sum_{x\in B}a_x^+-\sum_{x\in B}a_x^-
+=N\bigl(\mu_+(B)-\mu_-(B)\bigr)\ne0.
+\]
+这给出整数多重度形式的有限样本见证。
+
+最后，若 \(\mathrm{def}_m(\mathcal T)>0\)，则 \(\mathscr V_m(\mathcal T)\ne\RR^{X_m}\)。若所有单点指示函数 \(\ind_{\{x\}}\) 都属于 \(\mathscr V_m(\mathcal T)\)，它们将张成整个 \(\RR^{X_m}\)，矛盾。因此存在 \(x\in X_m\) 使 \(\ind_{\{x\}}\notin\mathscr V_m(\mathcal T)\)，应用第二项即得单点稀疏见证。
+
+若某协议要对所有非空 \(s\)-稀疏 \(B\) 稳定且 \(s\ge1\)，则特别必须对所有单点 \(B=\{x\}\) 稳定。由第一项，每个 \(\ind_{\{x\}}\) 都必须属于 \(\mathscr V_m(\mathcal T)\)，故 \(\mathscr V_m(\mathcal T)=\RR^{X_m}\)，即 \(\mathrm{def}_m(\mathcal T)=0\)。反向蕴含显然成立，因为若测试线性包络已为整个函数空间，则任意谓词指示函数均在其中。证毕。
+\end{proof}
+
 \begin{proof}
 记 \(U_M:=\{a\in\ZZ/M\ZZ:\gcd(a,M)=1\}\)。
 由算术级数中的素数定理（参见 \cite{Titchmarsh1986RiemannZeta}），对每个 \(a\in R_P\cap U_M\) 有

@@ -27,6 +27,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
 from collections import deque
+from urllib.parse import unquote
 
 PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
@@ -41,6 +42,12 @@ results: dict[str, dict] = {}  # task_id -> result
 pending_tasks: dict[str, dict] = {}   # agent_id -> task
 # Track when each task was dispatched (for timeout cleanup)
 dispatch_times: dict[str, float] = {}  # agent_id -> timestamp
+
+
+def _is_extraction_failure_response(response: str) -> bool:
+    """Detect userscript diagnostics that are not substantive reviews."""
+    cleaned = response.strip()
+    return cleaned.startswith("ERROR: Response too short or empty")
 
 
 class OracleHandler(BaseHTTPRequestHandler):
@@ -85,10 +92,19 @@ class OracleHandler(BaseHTTPRequestHandler):
             agent_id = (qs.get("agent", [None])[0]
                         or qs.get("agent_id", [None])[0]
                         or "default")
+            resume_task_id = qs.get("resume", [""])[0]
 
             if agent_id in pending_tasks:
                 # Already has a task — return it (idempotent poll)
-                self._send_json(pending_tasks[agent_id])
+                task = pending_tasks[agent_id]
+                if resume_task_id and resume_task_id == task.get("task_id"):
+                    self._send_json(task)
+                else:
+                    self._send_json({
+                        "status": "busy",
+                        "assigned_agent": agent_id,
+                        "elapsed": int(time.time() - dispatch_times.get(agent_id, time.time())),
+                    })
             elif task_queue and len(pending_tasks) < MAX_AGENTS:
                 # Assign next task from queue to this agent
                 task = task_queue.popleft()
@@ -110,11 +126,42 @@ class OracleHandler(BaseHTTPRequestHandler):
             }
             self._send_json({
                 "queue_length": len(task_queue),
+                "queued": [t["task_id"] for t in task_queue],
                 "agents_busy": len(pending_tasks),
                 "max_agents": MAX_AGENTS,
                 "agents": agents_info,
                 "completed": len(results),
             })
+
+        elif parsed.path.startswith("/task_status/"):
+            task_id = unquote(parsed.path.split("/task_status/", 1)[1])
+            if task_id in results:
+                data = dict(results[task_id])
+                data.setdefault("phase", data.get("status", "result"))
+                self._send_json(data)
+                return
+
+            for aid, task in pending_tasks.items():
+                if task.get("task_id") == task_id:
+                    self._send_json({
+                        "task_id": task_id,
+                        "phase": "active",
+                        "agent_id": aid,
+                        "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                    })
+                    return
+
+            for idx, task in enumerate(task_queue, start=1):
+                if task.get("task_id") == task_id:
+                    self._send_json({
+                        "task_id": task_id,
+                        "phase": "queued",
+                        "position": idx,
+                        "queue_length": len(task_queue),
+                    })
+                    return
+
+            self._send_json({"task_id": task_id, "phase": "not_found"}, 404)
 
         elif parsed.path.startswith("/result/"):
             task_id = parsed.path.split("/result/")[1]
@@ -167,27 +214,80 @@ class OracleHandler(BaseHTTPRequestHandler):
             self._send_json({"status": "queued", "task_id": task_id,
                              "position": len(task_queue)})
 
+        elif self.path == "/cancel":
+            # Pipeline agents use this when their own oracle wait budget expires.
+            # This frees the browser slot and drops queued retries instead of
+            # letting orphaned work occupy all workers indefinitely.
+            task_id = data.get("task_id", "")
+            reason = data.get("reason", "cancelled")
+            if not task_id:
+                self._send_json({"error": "need task_id"}, 400)
+                return
+
+            removed_queue = 0
+            kept: deque[dict] = deque()
+            while task_queue:
+                task = task_queue.popleft()
+                if task.get("task_id") == task_id:
+                    removed_queue += 1
+                else:
+                    kept.append(task)
+            task_queue.extend(kept)
+
+            removed_agents: list[str] = []
+            for aid, task in list(pending_tasks.items()):
+                if task.get("task_id") == task_id:
+                    del pending_tasks[aid]
+                    dispatch_times.pop(aid, None)
+                    removed_agents.append(aid)
+
+            results[task_id] = {
+                "task_id": task_id,
+                "response": "",
+                "timestamp": datetime.now().isoformat(),
+                "model": "",
+                "status": "cancelled",
+                "reason": reason,
+            }
+
+            print(f"[server] Cancelled {task_id}: queue={removed_queue}, "
+                  f"agents={removed_agents or '-'} ({reason})")
+            self._send_json({
+                "status": "cancelled",
+                "task_id": task_id,
+                "removed_queue": removed_queue,
+                "removed_agents": removed_agents,
+            })
+
         elif self.path == "/result":
             # Browser tab posts the ChatGPT response
-            task_id = data.get("task_id", "")
             response = data.get("response", "")
             agent_id = data.get("agent_id", "")
+            # Use the task_id from the agent's pending task (pipeline's stable ID),
+            # NOT the userscript's task_id which may be stale/different
+            task_id = data.get("task_id", "")
+            if agent_id and agent_id in pending_tasks:
+                task_id = pending_tasks[agent_id]["task_id"]
 
             if not task_id or not response:
                 self._send_json({"error": "need task_id and response"}, 400)
                 return
 
-            # Save result
+            extraction_failed = _is_extraction_failure_response(response)
+
+            # Save result.  Extraction failures are terminal for this browser
+            # task, but they are infrastructure failures, not referee reports.
             results[task_id] = {
                 "task_id": task_id,
                 "response": response,
                 "timestamp": datetime.now().isoformat(),
                 "model": data.get("model", ""),
-                "status": "completed",
+                "status": "failed" if extraction_failed else "completed",
+                "reason": "extraction_failure" if extraction_failed else "",
             }
 
             # Save to file
-            done_dir = ORACLE_DIR / "done"
+            done_dir = ORACLE_DIR / ("bad" if extraction_failed else "done")
             done_dir.mkdir(parents=True, exist_ok=True)
             out_file = done_dir / f"{task_id}.md"
             metadata = {
@@ -210,7 +310,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                     freed = f" (freed {aid})"
                     break
 
-            print(f"[server] Result: {task_id} ({len(response)} chars){freed} "
+            kind = "Extraction failure" if extraction_failed else "Result"
+            print(f"[server] {kind}: {task_id} ({len(response)} chars){freed} "
                   f"— agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
             print(f"[server] Saved to: {out_file}")
             self._send_json({"status": "saved", "task_id": task_id})

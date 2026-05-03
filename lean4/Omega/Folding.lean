@@ -4,6 +4,7 @@ import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.BernoulliHalfDefect36Explicit
 import Omega.Folding.BernoulliHalfEndpoints
+import Omega.Folding.BernoulliHalfEndpointsOscillation
 import Omega.Folding.BernoulliHalfFixedDefectBoundaryLdp
 import Omega.Folding.BernoulliHalfFixedDefectGrowth
 import Omega.Folding.BernoulliHalfFixedDefectFibonacciJordanFilter
@@ -54,6 +55,7 @@ import Omega.Folding.FoldGaugeAnomalyDeckTrivialMobiusRigidity
 import Omega.Folding.FoldGaugeAnomalyQuotientJacobiansIsotypic
 import Omega.Folding.FoldGaugeAnomalyCubicResolventDiscriminant
 import Omega.Folding.FoldGaugeAnomalySpectralQuarticNoLowGenusMapsNsRank1
+import Omega.Folding.FoldGaugeAnomalyZeroBlockMinimaxAbsError
 import Omega.Folding.GaugeAnomalyTrigonalBranchSplittingField
 import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationConditionalLengthShiftedNB
@@ -109,6 +111,11 @@ import Omega.Folding.FoldBinSaturationResidueWindow
 import Omega.Folding.SaturationSmoothDichotomy
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
+import Omega.Folding.SignedCompanionDet
+import Omega.Folding.SignedCompanionQ6Q7
+import Omega.Folding.SignedCompanionLucasCertificate
+import Omega.Folding.SignedCompanionFusionObstruction
+import Omega.Folding.SignedCompanionQ5CoincidenceSplit
 import Omega.Folding.CollisionZeta
 import Omega.Folding.CollisionZetaOperator
 import Omega.Folding.ComplementPhaseLockingFixedpoints
@@ -174,6 +181,8 @@ import Omega.Folding.FiberFusion
 import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
 import Omega.Folding.FoldTopAffineWindowControlsFiniteFreezing
 import Omega.Folding.FoldResonanceEntireLp
+import Omega.Folding.KilloFoldResonancePerronIndependenceQ12_17
+import Omega.Folding.KilloFoldResonanceLogLinearIndependenceQ12_17
 import Omega.Folding.FoldResonanceJensenHyperbolicity
 import Omega.Folding.FoldResonanceCartwrightIndicator
 import Omega.Folding.FoldResonanceImagAsymptoticTypePi
@@ -256,6 +265,8 @@ import Omega.Folding.KilloLeyangUnifiedDigitRigidity
 import Omega.Folding.KilloVisibleEntropyDensityAreaControl
 import Omega.Folding.KilloNoFiniteAdditiveRegisterLinearization
 import Omega.Folding.KilloFoldMaxNoncontractibleFiberMod6
+import Omega.Folding.ResonanceDiscSquareclassIndependenceQ12Q17
+import Omega.Folding.KilloFoldResonanceDiscCharactersQ1217
 import Omega.Folding.KilloSingleReservoirFiberLinearVCLowerBound
 import Omega.Folding.KilloLeyangBranchGraphAutomorphismWreath
 import Omega.Folding.KilloLeyangTwoBranchFieldsProductGalois
@@ -266,6 +277,9 @@ import Omega.Folding.KilloFoldCollisionMetricTensorSeparation
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
 import Omega.Folding.KilloS4Genus49JacobianComputableIsogeny
 import Omega.Folding.KilloFoldThreeModeWitnessCriticalGap
+import Omega.Folding.KilloFoldResonanceGapSimpleModule
+import Omega.Folding.KilloFoldResonanceSimultaneousIrreducibleDensityQ12_17
+import Omega.Folding.KilloFoldResonanceGapNotGaloisDegeneracy
 import Omega.Folding.KilloFoldCollisionBowenFranksQ5Break
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloZGDirichletMatrixEuler
@@ -381,6 +395,7 @@ import Omega.Folding.GaugeAnomalyP10ModpSplittingDensities
 import Omega.Folding.FoldGaugeAnomalyP9GaloisDiscriminant
 import Omega.Folding.FoldGaugeAnomalyP9DiscriminantSquareFiniteness
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
+import Omega.Folding.GaugeAnomalyP10P9LinearDisjointness
 import Omega.Folding.FoldGaugeAnomalyP10P9ChebotarevIndependence
 import Omega.Folding.FoldGaugeAnomalyP10GaloisDiscriminant
 import Omega.Folding.FoldGaugeAnomalyP10UniqueQuadraticSubfield
@@ -661,6 +676,7 @@ import Omega.Folding.PhiEquivariantPublication
 import Omega.Folding.P10LeyangIrreducibleRootSplitDensities
 import Omega.Folding.PhiMEntropy
 import Omega.Folding.PhiMEntropyNoDrop
+import Omega.Folding.PhiMEquivariant
 import Omega.Folding.PhiMFactorOnSubshift
 import Omega.Folding.PhiMParry
 import Omega.Folding.PhiMParryPushforward
@@ -683,6 +699,7 @@ import Omega.Folding.S3Recurrence
 import Omega.Folding.SecondCharacterReflectionAnnihilation
 import Omega.Folding.SecondMaxFiberGapConstant
 import Omega.Folding.ShiftDynamics
+import Omega.Folding.SignedCompanionCollisionAudit
 import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.StableArithmeticComplexity
@@ -708,6 +725,7 @@ import Omega.Folding.Value
 import Omega.Folding.VisibleValueOverflow
 import Omega.Folding.Weight
 import Omega.Folding.Window6
+import Omega.Folding.Window6CountermodelCertificate
 import Omega.Folding.Window6VariableLengthExactInversionRateGap
 import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityMainSingularityStar
@@ -724,6 +742,7 @@ import Omega.Folding.YmScanLengthAsymptotic
 import Omega.Folding.YmSingletonEssentialFiniteDelay
 import Omega.Folding.YmSofic
 import Omega.Folding.YmSyncTail
+import Omega.Folding.YmUnsyncPrefixPFSharp
 import Omega.Folding.YmSyncTailPfSharp
 import Omega.Folding.YmSynchronized
 import Omega.Folding.YmUnsyncStarPoleCluster
@@ -733,6 +752,7 @@ import Omega.Folding.Zeckendorf
 import Omega.Folding.ZeckendorfModDecompositionUnique
 import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.ZeroBlockMemoryDepth
+import Omega.Folding.Window6EquationalSpectrum
 import Omega.Folding.ZeroBlockMinimaxAbsError
 import Omega.Folding.ZeroCosetRigidity
 import Omega.Folding.ZeroFiberLinear

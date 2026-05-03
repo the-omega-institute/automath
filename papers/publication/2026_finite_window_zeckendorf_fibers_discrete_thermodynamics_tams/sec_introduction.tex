@@ -1,0 +1,283 @@
+\section{Introduction}\label{sec:introduction}
+
+Every positive integer has a unique representation as a sum of
+non-consecutive Fibonacci numbers \cite{Lekkerkerker1952,Zeckendorf1972}.
+An arbitrary binary word $\omega\in\{0,1\}^m$ determines a Fibonacci-weighted
+integer $N_m(\omega)=\sum_{j=1}^m\omega_jF_{j+1}$ that generally violates the
+adjacency constraint; reducing modulo $F_{m+2}$ and inverting the standard
+bijection $V_m\colon X_m\to\{0,\dots,F_{m+2}-1\}$ yields the finite-window
+fold
+\[
+  \Fold_m(\omega):=V_m^{-1}\bigl(N_m(\omega)\bmod F_{m+2}\bigr).
+\]
+The fiber multiplicity $d_m(x):=|\Fold_m^{-1}(x)|$ records how many raw words
+stabilize to a given visible word~$x$.
+
+A natural question arises: what structure does this fiber spectrum carry, and
+how does it connect to the classical theory of Fibonacci partitions?  We show
+that the answer is highly structured.  After an explicit affine permutation
+of residues, each fiber multiplicity equals a Fibonacci-lag discrete
+derivative of the classical partition function.  This single identity converts
+the fiber spectrum into a discrete thermodynamic system whose pressures are the
+Fibonacci partition constants of Sanna~\cite{Sanna2025}, and whose
+kernel-certified recurrence polynomials carry arithmetic content in a
+computable window.
+
+The paper makes three contributions.  First, it identifies the finite-window
+fiber multiplicities with an explicit affine reindexing of Fibonacci partition
+differences, so single fibers inherit the exact formulas of Chow and
+Slattery~\cite{ChowSlattery2021}.  Second, it transfers the full moment
+sequence to Sanna's partition constants and realizes those constants as Perron
+roots of finite-state kernels, yielding algebraicity, convex pressure,
+canonical concentration, and zero-temperature asymptotics.  Third, in the
+arithmetic window \(q=9,\dots,17\), exact finite certificate records, isolated
+as a separate certificate theorem, imply
+irreducibility and full symmetric Galois groups for recurrence polynomials
+derived from the exact finite-state kernels by residual certificates with an a
+priori order bound, together with linear disjointness and product Chebotarev
+densities for the block \(q\in\{12,13,14,15\}\).
+
+\subsection{Main results}
+
+Let $R(n)$ be the number of partitions of~$n$ into distinct Fibonacci numbers
+(with $F_1=F_2=1$ not distinguished), set $R^\dagger(n):=R(n)+R(n-1)$, and
+write $T_q^\dagger(N):=\sum_{n=0}^{N-1}R^\dagger(n)^q$.  For integers
+$q\ge 1$, set $S_q(m):=\sum_{x\in X_m}d_m(x)^q$.
+
+\begin{theoremA}
+For every pair of integers $m\ge 1$ and $n$ with $0\le n<F_{m+2}$,
+\[
+  d_m^\#(\pi_m(n))
+  =
+  R^\dagger(n)-R^\dagger(n-F_{m+1}).
+\]
+\end{theoremA}
+
+\noindent
+The fiber spectrum is the Fibonacci-lag discrete derivative of the indexed
+partition function.  Exact Zeckendorf formulas of Chow and
+Slattery~\cite{ChowSlattery2021} therefore apply directly to individual fibers.
+
+\begin{theoremB}
+For every pair of integers $m\ge 1$ and $q\ge 1$,
+\[
+  T_q^\dagger(F_{m+1})\le S_q(m)\le T_q^\dagger(F_{m+2}),
+\]
+and consequently $S_q(m)\asymp_q \lambda_q^m$, where $\lambda_q$ is the
+partition constant of Sanna~\cite[Thm.~1.1]{Sanna2025}.
+\end{theoremB}
+
+\begin{theoremC}
+For $q\ge 2$, the Perron root of the finite-state collision kernel of
+Section~\ref{sec:moment-kernel} equals $\lambda_q$.  More precisely,
+$\lambda_q$ is the spectral radius of a nonnegative integer matrix of
+dimension polynomial in~$q$; in particular, $\lambda_q$ is an algebraic
+integer.  The pressure sequence $P_0:=\log\varphi$,
+$P_q:=\log\lambda_q$ is convex, and its discrete slopes
+$\Delta_q:=P_q-P_{q-1}$ satisfy $\Delta_q\nearrow\frac12\log\varphi$.
+\end{theoremC}
+
+\begin{theoremD}
+For each fixed integer $q\ge 1$ and every $\varepsilon>0$, the $q$-canonical law
+$\mu_{m,q}\propto d_m(x)^q$ is exponentially concentrated on the adjacent
+pressure-slope band $[\Delta_q,\Delta_{q+1}]$:
+\[
+  \mu_{m,q}\bigl\{x:m^{-1}\log d_m(x)\notin
+  [\Delta_q-\varepsilon,\,\Delta_{q+1}+\varepsilon]\bigr\}
+  \le \exp\bigl(-(\varepsilon+o(1))m\bigr).
+\]
+\end{theoremD}
+
+\begin{theoremE}
+For each fixed integer $q\ge 1$ and every $\varepsilon>0$, the canonical band
+$B_{m,q}(\varepsilon)$ of Theorem~D satisfies two-sided
+exponential estimates for both its cardinality $|B_{m,q}(\varepsilon)|$ and its
+visible mass $p_m(B_{m,q}(\varepsilon))$, with exponents determined by
+$P_q,\Delta_q,\Delta_{q+1}$.
+\end{theoremE}
+
+\begin{theoremF}
+Every integer sequence of diverging tilts $q(m)\to\infty$ selects the
+zero-temperature thickness \(\frac12\log\varphi\):
+\[
+  D_m^{1/m}\to\sqrt{\varphi},
+  \qquad
+  \log S_{q(m)}(m)
+  =
+  \bigl(\tfrac12\log\varphi+o(1)\bigr)m\,q(m).
+\]
+\end{theoremF}
+
+\medskip\noindent
+The escalation summarized by Theorems~A--F proceeds as follows.
+Theorem~A identifies single fibers with partition differences.
+Theorem~B transfers the moment growth to Fibonacci windows of Sanna's
+power sums.  Theorem~C realizes the partition constants as finite-state
+Perron roots and extracts a convex pressure function.  Theorems~D and~E
+use the pressure geometry for canonical concentration and microcanonical
+band bounds.  Theorem~F passes to the zero-temperature limit.  These six
+results do not use the arithmetic-window certificates of
+Section~\ref{sec:chebotarev}; the latter enter only the Galois and
+Chebotarev statements, where the recurrences are certified from exact kernel
+matrices in Appendix~\ref{app:certification}.
+
+The hypotheses in this chain are only the displayed finite-window and moment
+parameters plus the standard deterministic Fibonacci normalizer used to build
+the kernels: Theorem~A is pointwise in \(m\ge1\) and
+\(0\le n<F_{m+2}\); Theorem~B is pointwise in \(m\ge1\) and \(q\ge1\);
+Theorem~C uses the collision kernel obtained from the deterministic
+subsequential Fibonacci normalizer for \(q\ge2\); and Theorems~D--F use the
+pressure sequence already identified in Theorems~B--C.  No arithmetic-window
+recurrence, Galois, or Chebotarev certificate is used in the proofs of
+Theorems~A--F.
+For clarity, the only exact certificate records in the paper enter after this
+main theorem chain: Section~\ref{sec:chebotarev} uses the certificate records of
+Theorem~\ref{thm:arithmetic-window-certificates}, the
+recurrence soundness theorem \Cref{prop:kernel-derived-recurrences}, the Smith-form
+certificates of Table~\ref{tab:appendix-principalization-q9-17}, and the finite-field
+factorization and discriminant certificates displayed in its tables.  The
+recurrence certificate consists of the exact residual identity defining
+\(\mathsf W_q(P_q)=\mathrm{accept}\) in the finite certificate-record format of
+Appendix~\ref{app:certification}.  The
+coefficient row and this residual certificate are inseparable: the coefficient
+row states the polynomial, while the residual certificate is the proof that the
+polynomial annihilates the tail.  It is a kernel identity in the exact
+histogram matrix \(\widetilde A_q\): with
+\[
+  R_q=
+  \begin{bmatrix}
+  \widetilde u_q^{\mathsf T}\widetilde A_q^2\\
+  \widetilde u_q^{\mathsf T}\widetilde A_q^3\\
+  \vdots\\
+  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}
+  \end{bmatrix},
+  \qquad N_q=\dim\widetilde A_q,
+\]
+the residual certificate asserts that the displayed row polynomial satisfies
+\[
+  R_qP_q(\widetilde A_q)\widetilde v_q=0.
+\]
+This is a block of \(N_q\) exact residual zeros after \(P_q\) has been
+substituted into the kernel.  Because the residual sequence is a scalar
+coefficient of the same \(N_q\times N_q\) matrix, Cayley--Hamilton propagates
+that block to the whole recurrence tail.  The appendix also records additional
+rank identities for the observable quotient, but those ranks are not required
+to prove the all-tail recurrence.  No finite window of scalar moment values is
+used as a stand-alone recurrence proof, and a row of the coefficient table is
+not cited anywhere below without this residual-verifier theorem.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Logical dependency map for the main results and the arithmetic
+window.  ``Exact residual verifier'' means the finite kernel identity
+\(\mathsf W_q(P_q)=\mathrm{accept}\) in the exact histogram matrix, propagated
+by the a priori order bound \(N_q=\dim\widetilde A_q\).}
+\label{tab:intro-dependency-map}
+\begin{tabular}{@{}p{0.16\textwidth}p{0.36\textwidth}p{0.36\textwidth}@{}}
+\toprule
+Result & Range & Proven inputs and certificate status \\
+\midrule
+Theorem A & \(m\ge1\), \(0\le n<F_{m+2}\) &
+Affine transfer and the generating-function identity for \(R^\dagger\). \\
+Theorem B & \(m\ge1\), \(q\ge1\) &
+Theorem A, nonnegativity of fiber multiplicities, and Sanna's power-sum
+asymptotic. \\
+Theorem C & \(q\ge2\) &
+Theorem B, Frougny's deterministic subsequential Fibonacci normalizer, and the
+finite-state collision kernel of Section~\ref{sec:moment-kernel}. \\
+Theorems D--E & fixed \(q\ge1\) &
+Theorems B--C, pressure convexity, and elementary exponential Markov bounds. \\
+Theorem F & \(q(m)\to\infty\) &
+Theorem B and the zero-temperature largest-fiber estimate. \\
+Section~\ref{sec:chebotarev} & \(q=9,\dots,17\) &
+Exact residual-verifier identities for \(P_q\), Smith forms, mod-\(p\)
+factorizations,
+and discriminant squareclasses, isolated in
+Theorem~\ref{thm:arithmetic-window-certificates}; only this row uses finite certificate
+records, and its recurrence soundness is the exact-kernel theorem
+\Cref{thm:apriori-exact-kernel-certification}. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All entries in the first five rows of
+Table~\ref{tab:intro-dependency-map} are proved in the body of the paper from the
+displayed hypotheses and the cited standard inputs.  The last row is the only
+certificate-record row: its recurrence input is the exact residual certificate
+of Theorem~\ref{thm:arithmetic-window-certificates}, where the relevant
+residual sequence has the a priori order bound \(N_q=\dim\widetilde A_q\), and
+its Galois inputs are finite algebra certificates over \(\ZZ\) and finite
+fields.  Thus the
+arithmetic window has a separate, explicit certificate layer rather than an
+implicit assumption in Theorems~A--F.  Within that layer, the recurrence rows
+are used only after the exact kernel residual verifier has accepted and the
+a priori certification theorem has converted the finite residual block into an
+all-tail recurrence.
+
+Thus the arithmetic statements in Section~\ref{sec:chebotarev} are proved from
+the finite exact certificate records stated in
+Theorem~\ref{thm:arithmetic-window-certificates}; they do not rest on a finite numerical
+fit.  Their recurrence input is the exact
+residual-verifier certificate in the kernel, and the remaining computational
+inputs are finite-field and Smith-form certificates displayed in
+Section~\ref{sec:chebotarev} and Appendix~\ref{app:certification}.  Theorems~A--F
+and the entropy ledger are independent of those arithmetic certificates.
+
+Beyond the thermodynamic formalism, the same partition constants carry
+arithmetic content.  The quadratic case $q=2$ yields the cubic
+$\lambda^3-2\lambda^2-2\lambda+2$, in agreement with Chow and
+Jones~\cite{ChowJones2024}.  In the arithmetic window $q=9,\dots,17$, the
+kernel-certified recurrence polynomials of $S_q(m)$ are, using the exact
+certificate records of Theorem~\ref{thm:arithmetic-window-certificates},
+irreducible over~$\QQ$ with full symmetric Galois groups $S_{d_q}$
+(Section~\ref{sec:chebotarev}); irreducibility then identifies them with the
+minimal recurrence polynomials.  For $q\in\{12,13,14,15\}$ the splitting
+fields are linearly disjoint, yielding product Chebotarev densities.
+
+\subsection{Related work}
+
+Zeckendorf~\cite{Zeckendorf1972} and Lekkerkerker~\cite{Lekkerkerker1952}
+established the uniqueness of Fibonacci representations.  Earlier analyses of
+the Fibonacci partition function and its extremal structure include
+Robbins~\cite{Robbins1996}, Weinstein~\cite{Weinstein2016}, and
+Kempton~\cite{Kempton2023}; Kempton's dynamical viewpoint is especially close
+to the partition-function side of Sections~\ref{sec:residue-affine}--
+\ref{sec:moment-kernel}.  Chow and Slattery~\cite{ChowSlattery2021} gave exact
+formulas for $R(n)$ via the Zeckendorf expansion; our Theorem~A shows that
+finite-window fiber
+multiplicities are, after an explicit affine permutation, the Fibonacci-lag
+discrete derivatives of these same partition counts.  Chow and
+Jones~\cite{ChowJones2024} identified the cubic governing the variance of
+$R(n)$; our cubic recurrence for $S_2(m)$ gives a finite-window explanation.
+Sanna~\cite[Thm.~1.1]{Sanna2025} proved that $\sum_{n<N}R(n)^q\asymp_q
+N^{(\log\lambda_q)/\log\varphi}$; Theorem~B transfers these constants to the
+collision moments.  The finite-state realization of
+Section~\ref{sec:moment-kernel} draws on classical Perron--Frobenius theory
+\cite{Seneta2006,LindMarcus1995} and a bounded-delay transducer model for
+Fibonacci normalization
+\cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.  Its
+automata-theoretic certification viewpoint is close in spirit to the general
+Fibonacci-representation framework of Shallit and
+Shan~\cite{ShallitShan2023}, which provides a direct methodological comparator
+for the transducer and certificate constructions in the appendices.
+
+\subsection{Organization}
+
+Section~\ref{sec:preliminaries} defines the finite-window fold and records
+its basic properties.  Section~\ref{sec:residue-affine} proves the affine
+transfer principle and the partition-difference formula.
+Section~\ref{sec:second-collision} establishes the Fibonacci-window moment
+transfer and treats the explicit quadratic case.
+Section~\ref{sec:moment-kernel} develops the finite-state realization, convex
+pressure geometry, canonical selection, and zero-temperature concentration.
+Section~\ref{sec:ledger} deduces the R\'enyi entropy-rate spectrum of the
+visible law.  Section~\ref{sec:chebotarev} proves, from the exact certificate
+records, irreducibility, full symmetric Galois groups, and Chebotarev density
+results for the recurrence polynomials in the arithmetic window
+$q=9,\dots,17$.
+Section~\ref{sec:conclusion} summarizes.  Appendix~\ref{app:transducer}
+gives the transducer construction for the collision kernels, and
+Appendix~\ref{app:certification} records the exact recurrence, Smith-form, and
+finite-field certificates.

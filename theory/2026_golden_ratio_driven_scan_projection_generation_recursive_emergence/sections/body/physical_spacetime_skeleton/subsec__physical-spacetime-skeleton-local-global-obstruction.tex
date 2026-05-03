@@ -199,6 +199,161 @@ g_{i_0 i_1}g_{i_1 i_2}\cdots g_{i_{m-1}i_m}.
   \item \textbf{障碍层阻断闭包升级：}因此，只要存在非平凡三重障碍元或非平凡 holonomy，局域骨架就不能被提升为后续全局 untwisted skeleton；在此之前，不得调用定理 \ref{thm:physical-spacetime-admissible-einstein-closure-main} 所要求的 admissible 全局 Einstein 闭包。
 \end{enumerate}
 \end{proposition}
+
+\begin{proposition}[有限一维骨架上的 reduced holonomy 平凡化门控]\label{prop:distill-gromov-physical-finite-reduced-holonomy-promotion-gate}
+令 \(\Gamma=(V,E)\) 为有限连通无向图，并为每条无向边选取两个相反的有向边记号 \(e,\bar e\)。设 \(G\) 为群，且给定边标记
+\[
+g_e\in G,\qquad g_{\bar e}=g_e^{-1}.
+\]
+对有向路径 \(\gamma=e_1\cdots e_r\)，采用约定
+\[
+H_g(\gamma):=g_{e_1}g_{e_2}\cdots g_{e_r}.
+\]
+取一棵生成树 \(T\subset\Gamma\) 与根顶点 \(o\)。对每条不属于 \(T\) 的有向边 \(e=(u,v)\)，令
+\[
+\ell_e:=P_{o,u}\,e\,P_{v,o}
+\]
+其中 \(P_{a,b}\) 表示树 \(T\) 中从 \(a\) 到 \(b\) 的唯一有向路径。则以下三条等价：
+\begin{enumerate}
+  \item 对所有 \(e\notin T\)，有 \(H_g(\ell_e)=1_G\)；
+  \item 对任意闭合有向路径 \(\gamma\)，有 \(H_g(\gamma)=1_G\)；
+  \item 存在顶点规范 \(a_v\in G\ (v\in V)\)，使每条有向边 \(e=(u,v)\) 满足
+  \[
+  g_e=a_u^{-1}a_v.
+  \]
+\end{enumerate}
+因此，在本小节的局部读出覆盖上，若边过渡先经某个商群或 reduced register 后得到这样的 \(g_e\)，则只需核验生成树外的基本闭路 holonomy；全部通过时，reduced 边过渡可被提升为全局平凡化数据。若某个基本闭路未通过，则它给出阻断该 reduced 平凡化的有限 holonomy 见证。
+\end{proposition}
+
+\begin{proposition}[约化 holonomy 通过后的核残差审计]\label{distill:gromov-formal_versus_genuine_realization_families-physical-reduced-kernel-holonomy-audit}
+令 \(\Gamma=(V,E)\) 为有限连通无向图，并为每条无向边选取两个相反的有向边记号 \(e,\bar e\)。令
+\[
+\kappa:G\twoheadrightarrow \overline G
+\]
+为交换群之间的满同态，并记 \(K:=\ker\kappa\)。设给定 \(G\)-值边过渡
+\[
+g_e\in G,
+\qquad
+g_{\bar e}=-g_e.
+\]
+记 \(\bar g_e:=\kappa(g_e)\)。假设约化 holonomy 审计已经通过，即存在顶点规范 \(\bar a_v\in\overline G\) 使每条有向边 \(e=(u,v)\) 满足
+\[
+\bar g_e=\bar a_v-\bar a_u.
+\]
+任取顶点 lift
+\[
+a_v\in G,
+\qquad
+\kappa(a_v)=\bar a_v,
+\]
+并定义核残差边账本
+\[
+k_e:=g_e-(a_v-a_u)\in G
+\qquad(e=(u,v)).
+\]
+则：
+\begin{enumerate}
+  \item 每个 \(k_e\) 实际属于 \(K\)，且 \(k_{\bar e}=-k_e\)。对任意闭合有向路径 \(\gamma=e_1\cdots e_m\)，有
+  \[
+  \sum_{r=1}^m g_{e_r}=\sum_{r=1}^m k_{e_r}\in K.
+  \]
+  \item 原边过渡存在 \(G\)-值全局平凡化，即存在 \(b_v\in G\) 使每条有向边 \(e=(u,v)\) 满足
+  \[
+  g_e=b_v-b_u,
+  \]
+  当且仅当核残差 \((k_e)\) 是 \(K\)-值余边界，即存在 \(c_v\in K\) 使
+  \[
+  k_e=c_v-c_u\qquad(e=(u,v)).
+  \]
+  等价地，取任意生成树 \(T\subset\Gamma\) 后，只需核验所有树外边给出的基本闭路上的核残差和均为零。
+  \item 因此，约化 holonomy 审计只证明了边过渡在商群 \(\overline G\) 中可平凡化；若某个基本闭路具有非零核残差和，则它是阻断完整 \(G\)-值全局平凡化的有限 holonomy 见证，必须进入本小节意义下的离散障碍账本，而不能被约化通过结论吸收。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+先证第一项。若 \(e=(u,v)\)，则
+\[
+\kappa(k_e)=\kappa(g_e)-\kappa(a_v-a_u)=\bar g_e-(\bar a_v-
+\bar a_u)=0,
+\]
+故 \(k_e\in K\)。反向边满足
+\[
+k_{\bar e}=g_{\bar e}-(a_u-a_v)=-g_e+a_v-a_u=-k_e.
+\]
+若闭合路径写作 \(e_r=(v_{r-1},v_r)\)，且 \(v_m=v_0\)，则
+\[
+\sum_{r=1}^m g_{e_r}
+=\sum_{r=1}^m \bigl((a_{v_r}-a_{v_{r-1}})+k_{e_r}\bigr)
+=\sum_{r=1}^m k_{e_r},
+\]
+因为顶点项沿闭路望远镜相消。右端属于 \(K\)，第一项得证。
+
+再证第二项。若存在 \(b_v\in G\) 使 \(g_e=b_v-b_u\)，令
+\[
+d_v:=b_v-a_v.
+\]
+对边 \(e=(u,v)\)，有
+\[
+k_e=g_e-(a_v-a_u)=(b_v-b_u)-(a_v-a_u)=d_v-d_u.
+\]
+由于
+\[
+\kappa(d_v)-\kappa(d_u)=\kappa(k_e)=0,
+\]
+并且 \(\Gamma\) 连通，\(\kappa(d_v)\) 与 \(v\) 无关。固定根顶点 \(o\)，令
+\[
+c_v:=d_v-d_o.
+\]
+则 \(c_v\in K\)，且
+\[
+k_e=c_v-c_u.
+\]
+故核残差为 \(K\)-值余边界。
+
+反过来，若存在 \(c_v\in K\) 使 \(k_e=c_v-c_u\)，定义
+\[
+b_v:=a_v+c_v.
+\]
+则对每条有向边 \(e=(u,v)\)，
+\[
+b_v-b_u=(a_v-a_u)+(c_v-c_u)=(a_v-a_u)+k_e=g_e.
+\]
+于是原边过渡在 \(G\) 中全局平凡化。
+
+最后说明基本闭路核验。对任意 \(K\)-值边账本 \((k_e)\)，若它是余边界，则任意闭合路径上的和显然为零。反之，取生成树 \(T\) 与根 \(o\)，定义
+\[
+c_v:=\sum_{e\in P_{o,v}} k_e,
+\]
+其中 \(P_{o,v}\) 为树中从 \(o\) 到 \(v\) 的唯一有向路径。对树边，立刻有 \(k_{(u,v)}=c_v-c_u\)。若 \(e=(u,v)\notin T\)，其基本闭路为 \(P_{o,u}eP_{v,o}\)。该闭路核残差和为零等价于
+\[
+c_u+k_e-c_v=0,
+\]
+即 \(k_e=c_v-c_u\)。故所有树外基本闭路通过当且仅当 \((k_e)\) 为余边界。
+
+第三项只是上述等价性的审计解释：商群中的平凡化不能自动消去 \(K\)-方向的闭路残差；完整全局平凡化必须再核验核残差类为零。证毕。
+\end{proof}
+
+\begin{proof}
+先证 (3) 推 (2)。若 \(\gamma=e_1\cdots e_r\) 为闭合路径，写 \(e_j=(v_{j-1},v_j)\) 且 \(v_r=v_0\)。由 (3) 得
+\[
+H_g(\gamma)=a_{v_0}^{-1}a_{v_1}a_{v_1}^{-1}a_{v_2}\cdots a_{v_{r-1}}^{-1}a_{v_r}=1_G.
+\]
+于是 (2) 推 (1) 显然成立。
+
+再证 (1) 推 (3)。对每个顶点 \(v\)，定义
+\[
+a_v:=H_g(P_{o,v}).
+\]
+若 \(e=(u,v)\) 是树边，则树路径满足 \(P_{o,v}=P_{o,u}e\) 或等价地在相反方向使用 \(g_{\bar e}=g_e^{-1}\)，故总有
+\[
+a_v=a_u g_e,\qquad\text{即}\qquad g_e=a_u^{-1}a_v.
+\]
+若 \(e=(u,v)\) 不在树中，则由假设
+\[
+1_G=H_g(P_{o,u}eP_{v,o})=a_u g_e a_v^{-1},
+\]
+从而同样得到 \(g_e=a_u^{-1}a_v\)。故 (3) 成立。证毕。
+\end{proof}
+
 \begin{proof}
 \textbf{(1)} 这只是重述“局部可读”的定义：每个 \(U_i\) 上的 \(s_i\) 都是合法局部代表，因此局域骨架已被构造出来。
 

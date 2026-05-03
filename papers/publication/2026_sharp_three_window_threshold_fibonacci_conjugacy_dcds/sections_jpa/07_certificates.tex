@@ -1,0 +1,269 @@
+\section{Sturmian discrepancy estimates}\label{sec:fp:tv}
+
+The rotation model gives deterministic estimates for the finite-window laws considered above. The argument combines standard discrepancy bounds with deterministic pushforward under $\Phi_{m,n}$.
+
+\subsection{Stabilized block laws from discrepancy}
+
+Fix a stabilization aperture $m$ and a stabilized block length $n\ge 1$. Here $\Phi_{m,n}$ denotes the finite-block sliding map
+\[
+\Phi_{m,n}(a_0\ldots a_{m+n-2})
+:=
+\bigl(\Fold_m(a_t\ldots a_{t+m-1})\bigr)_{t=0}^{n-1}.
+\]
+For the first $N$ starting positions $\{x_0+t\alpha\}_{t=0}^{N-1}$ under the standard two-interval rotation coding, let $\hat{\mu}_{m+n-1,N}$ denote the empirical distribution of raw words of length $m+n-1$ beginning at those positions, and let $\mu_{m+n-1}$ be the corresponding limiting raw-word distribution obtained from Lebesgue measure on the depth-$(m+n-1)$ Sturmian atoms. Define the empirical stabilized $n$-block law and its limit by
+\[
+\hat{\eta}_{m,n,N}:=(\Phi_{m,n})_*\hat{\mu}_{m+n-1,N},
+\qquad
+\eta_{m,n}:=(\Phi_{m,n})_*\mu_{m+n-1}.
+\]
+For $n=1$ these are exactly the empirical folded histogram and its limit:
+\[
+\hat{\eta}_{m,1,N}=\hat{\pi}_{m,N},
+\qquad
+\eta_{m,1}=\pi_m^{\mathrm{fold}}.
+\]
+Let
+\[
+\mathcal Y_{m,n}:=\Phi_{m,n}(\{0,1\}^{m+n-1})
+\]
+denote the finite support of these stabilized $n$-block laws.
+
+\begin{theorem}[Stabilized block law from discrepancy]\label{thm:tv-certificate}
+In the rotation readout model with slope $\alpha$, initial phase $x_0$, and empirical stabilized $n$-block law $\hat{\eta}_{m,n,N}$, one has
+\begin{equation}\label{eq:tv-certificate}
+D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)\le(m+n)\,D_N^*(\alpha;x_0),
+\end{equation}
+where $D_N^*(\alpha;x_0)$ is the star discrepancy of the orbit segment $\{x_0+t\alpha\}_{t=0}^{N-1}$.
+\end{theorem}
+
+\begin{proof}
+Let $\mathcal{I}_{m+n-1}$ be the partition of $\TT^1$ into the nonempty depth-$(m+n-1)$ Sturmian atoms. Standard Sturmian complexity gives $|\mathcal{I}_{m+n-1}|\le m+n$, and each atom $I\in\mathcal{I}_{m+n-1}$ is a half-open circle interval. The empirical law $\hat{\mu}_{m+n-1,N}$ and the limiting law $\mu_{m+n-1}$ are exactly the empirical and Lebesgue masses of these atoms, so
+\[
+D_{\TV}\bigl(\hat{\mu}_{m+n-1,N},\mu_{m+n-1}\bigr)
+=
+\frac12\sum_{I\in\mathcal{I}_{m+n-1}}\bigl|\hat{\lambda}_N(I)-\lambda(I)\bigr|,
+\]
+where $\hat{\lambda}_N$ is the empirical orbit measure and $\lambda$ is Lebesgue measure on $\TT^1$.
+
+For any half-open circle interval $I\subset\TT^1$,
+\[
+\bigl|\hat{\lambda}_N(I)-\lambda(I)\bigr|\le 2D_N^*(\alpha;x_0).
+\]
+Indeed, if $I=[a,b)$ in the chosen coordinate, then
+\[
+\bigl|\hat{\lambda}_N(I)-\lambda(I)\bigr|
+\le
+\bigl|\hat{\lambda}_N([0,b))-\lambda([0,b))\bigr|
++
+\bigl|\hat{\lambda}_N([0,a))-\lambda([0,a))\bigr|
+\le 2D_N^*(\alpha;x_0).
+\]
+If $I$ crosses the origin, write it as $[a,1)\cup[0,b)$ and apply the same estimate to the complementary interval $[b,a)$.
+Thus
+\[
+D_{\TV}\bigl(\hat{\mu}_{m+n-1,N},\mu_{m+n-1}\bigr)
+\le
+\frac12 |\mathcal{I}_{m+n-1}| \cdot 2D_N^*(\alpha;x_0)
+\le
+(m+n)D_N^*(\alpha;x_0).
+\]
+Since $\Phi_{m,n}$ is deterministic, data processing gives
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
+\le
+D_{\TV}\bigl(\hat{\mu}_{m+n-1,N},\mu_{m+n-1}\bigr),
+\]
+which proves \eqref{eq:tv-certificate}.
+\end{proof}
+
+\begin{corollary}[Bound for bounded stabilized-block observables]\label{cor:observable-certificate}
+Let $G:\mathcal Y_{m,n}\to\RR$ be any bounded observable. Then
+\begin{equation}\label{eq:observable-certificate}
+\Bigl|
+\sum_{y\in \mathcal Y_{m,n}}G(y)\bigl(\hat{\eta}_{m,n,N}(y)-\eta_{m,n}(y)\bigr)
+\Bigr|
+\le
+2\|G\|_\infty D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
+\le
+2(m+n)\|G\|_\infty D_N^*(\alpha;x_0).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+For the signed measure
+\[
+\rho:=\hat{\eta}_{m,n,N}-\eta_{m,n}
+\]
+on the finite set $\mathcal Y_{m,n}$ one has
+\[
+\Bigl|\sum_{y\in \mathcal Y_{m,n}}G(y)\rho(y)\Bigr|
+\le
+\|G\|_\infty \sum_{y\in \mathcal Y_{m,n}}|\rho(y)|
+\le
+2\|G\|_\infty D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr),
+\]
+and Theorem~\ref{thm:tv-certificate} gives the second inequality in \eqref{eq:observable-certificate}.
+\end{proof}
+
+\subsection{Boundary-layer stability for stabilized blocks}\label{sec:fp:tv:boundary}
+
+Let $R_0:H\to\{0,1\}$ denote the sharp indicator readout and let $R_\rho:H\to\{0,1\}$ be a binary finite-resolution readout obtained from a smoothed kernel with resolution parameter $\rho$. Write
+\[
+\varepsilon_\rho
+:=
+\mu\bigl(\{h\in H:\ R_\rho(h)\neq R_0(h)\}\bigr)
+\]
+for the boundary-layer mass. Let $\mu_{m+n-1}^{(0)}$ and $\mu_{m+n-1}^{(\rho)}$ be the corresponding raw-word marginals on $\{0,1\}^{m+n-1}$, and let
+\[
+\eta_{m,n}^{(0)}:=(\Phi_{m,n})_*\mu_{m+n-1}^{(0)},
+\qquad
+\eta_{m,n}^{(\rho)}:=(\Phi_{m,n})_*\mu_{m+n-1}^{(\rho)}
+\]
+be the stabilized $n$-block laws.
+
+\begin{proposition}[Boundary-layer control for raw and stabilized block laws]\label{prop:boundary-layer}
+For every $m,n\ge 1$,
+\[
+D_{\TV}\bigl(\mu_{m+n-1}^{(\rho)},\mu_{m+n-1}^{(0)}\bigr)\le (m+n-1)\varepsilon_\rho,
+\qquad
+D_{\TV}\bigl(\eta_{m,n}^{(\rho)},\eta_{m,n}^{(0)}\bigr)\le (m+n-1)\varepsilon_\rho.
+\]
+\end{proposition}
+
+\begin{proof}
+Couple the two readout laws by sampling the same source point $h\sim\mu$ and reading the two raw words
+\[
+W_{m+n-1}^{(0)}(h):=\bigl(R_0(T^t h)\bigr)_{t=0}^{m+n-2},
+\qquad
+W_{m+n-1}^{(\rho)}(h):=\bigl(R_\rho(T^t h)\bigr)_{t=0}^{m+n-2}.
+\]
+If these two words differ, then for at least one time $t\in\{0,\dots,m+n-2\}$ one has $R_\rho(T^t h)\neq R_0(T^t h)$. By the union bound and $T$-invariance of $\mu$,
+\[
+\PP\bigl(W_{m+n-1}^{(\rho)}\neq W_{m+n-1}^{(0)}\bigr)
+\le
+\sum_{t=0}^{m+n-2}\mu\bigl(\{h:\ R_\rho(T^t h)\neq R_0(T^t h)\}\bigr)
+=
+(m+n-1)\varepsilon_\rho.
+\]
+The coupling inequality gives the raw-word bound. The stabilized-block bound then follows from data processing under the deterministic map $\Phi_{m,n}$.
+\end{proof}
+
+\begin{corollary}[Resolution/discrepancy certificate]\label{cor:resolution-certificate}
+Assume that the blurred readout $R_\rho$ is still a two-interval coding of the same irrational rotation, or more generally that its depth-$(m+n-1)$ atoms satisfy the same interval discrepancy bound used in Theorem~\ref{thm:tv-certificate}. Then, for the empirical stabilized $n$-block law $\hat{\eta}_{m,n,N}^{(\rho)}$ and its limit $\eta_{m,n}^{(\rho)}$,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N}^{(\rho)},\eta_{m,n}^{(0)}\bigr)
+\le
+(m+n)D_N^*(\alpha;x_0)+(m+n-1)\varepsilon_\rho.
+\]
+\end{corollary}
+
+\begin{proof}
+By the triangle inequality,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N}^{(\rho)},\eta_{m,n}^{(0)}\bigr)
+\le
+D_{\TV}\bigl(\hat{\eta}_{m,n,N}^{(\rho)},\eta_{m,n}^{(\rho)}\bigr)
++
+D_{\TV}\bigl(\eta_{m,n}^{(\rho)},\eta_{m,n}^{(0)}\bigr).
+\]
+The first term is bounded by Theorem~\ref{thm:tv-certificate}, and the second by Proposition~\ref{prop:boundary-layer}.
+\end{proof}
+
+\subsection{Recovery of finite-range observables}
+
+\begin{theorem}[Recovery of finite-range observables from stabilized blocks]\label{thm:operational-observable-recovery}
+Assume $m\ge 3$ and let $g:\{0,1\}^r\to\RR$ be a bounded local observable of range $r\ge 1$. Define the transported observable on stabilized blocks of length $r+m-1$ by
+\[
+\widetilde g(y_t,\dots,y_{t+r+m-2})
+:=
+g\bigl(\psi_m(y_t,\dots,y_{t+m-1}),\dots,\psi_m(y_{t+r-1},\dots,y_{t+r+m-2})\bigr).
+\]
+Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item For every matched trajectory $Y=\Phi_m(A)$ and every $t\ge 0$,
+  \[
+  g(A_t,\dots,A_{t+r-1})=\widetilde g(Y_t,\dots,Y_{t+r+m-2}).
+  \]
+  Hence every finite-range empirical average on the raw measured process is exactly recoverable from the stabilized trajectory.
+  \item In the sharp irrational-rotation readout,
+  \begin{equation*}
+  \begin{aligned}
+  \Bigl|
+  \frac1N\sum_{t=0}^{N-1} &g(A_t,\dots,A_{t+r-1})
+  -
+  \sum_{y\in \mathcal Y_{m,r+m-1}}\widetilde g(y)\eta_{m,r+m-1}(y)
+  \Bigr|
+  \\
+  &\le
+  2(r+2m-1)\|g\|_\infty D_N^*(\alpha;x_0).
+  \end{aligned}
+  \end{equation*}
+  \item In the blurred two-interval readout of the same irrational rotation,
+  \begin{equation*}
+  \begin{aligned}
+  \Bigl|
+  \frac1N\sum_{t=0}^{N-1} &g(A_t^{(\rho)},\dots,A_{t+r-1}^{(\rho)})
+  -
+  \sum_{y\in \mathcal Y_{m,r+m-1}}\widetilde g(y)\eta_{m,r+m-1}^{(0)}(y)
+  \Bigr|
+  \\
+  &\le
+  2\|g\|_\infty\Bigl((r+2m-1)D_N^*(\alpha;x_0)+(r+2m-2)\varepsilon_\rho\Bigr).
+  \end{aligned}
+  \end{equation*}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Item~(i) is a direct substitution of the local inverse from Theorem~\ref{thm:two-sided-conjugacy}(ii). For item~(ii), set $n:=r+m-1$ and define $G:=\widetilde g$ on $\mathcal Y_{m,n}$. The empirical average of $g$ along the raw trajectory agrees with the empirical average of $G$ under the stabilized $n$-block law by item~(i), and Corollary~\ref{cor:observable-certificate} gives
+\[
+\Bigl|
+\frac1N\sum_{t=0}^{N-1} g(A_t,\dots,A_{t+r-1})
+-
+\sum_{y\in \mathcal Y_{m,n}}G(y)\eta_{m,n}(y)
+\Bigr|
+\le
+2(m+n)\|G\|_\infty D_N^*(\alpha;x_0).
+\]
+Since $n=r+m-1$ and $\|G\|_\infty=\|g\|_\infty$, this is exactly the displayed bound in (ii).
+
+For item~(iii), item~(i) again identifies the raw empirical average with the empirical average of $G=\widetilde g$ under the blurred stabilized $n$-block law. Applying the same bounded-observable estimate to the signed measure $\hat{\eta}_{m,n,N}^{(\rho)}-\eta_{m,n}^{(0)}$ and then using Corollary~\ref{cor:resolution-certificate} yields
+\begin{equation*}
+\begin{aligned}
+\Bigl|
+\frac1N\sum_{t=0}^{N-1} &g(A_t^{(\rho)},\dots,A_{t+r-1}^{(\rho)})
+-
+\sum_{y\in \mathcal Y_{m,n}}G(y)\eta_{m,n}^{(0)}(y)
+\Bigr|
+\\
+&\le
+2\|G\|_\infty\Bigl((m+n)D_N^*(\alpha;x_0)+(m+n-1)\varepsilon_\rho\Bigr),
+\end{aligned}
+\end{equation*}
+which reduces to the stated formula after substituting $n=r+m-1$.
+\end{proof}
+
+\begin{corollary}[Bounded-type slopes]\label{cor:tv-bounded-type}
+Assume $m\ge 3$ and that the rotation slope $\alpha$ has bounded partial quotients. Then there exists a constant $C_\alpha>0$, depending only on the continued-fraction data of $\alpha$, such that for every bounded local observable $g:\{0,1\}^r\to\RR$ and every $N\ge 2$,
+\[
+\Bigl|
+\frac1N\sum_{t=0}^{N-1} g(A_t,\dots,A_{t+r-1})
+-
+\sum_{y\in \mathcal Y_{m,r+m-1}}\widetilde g(y)\eta_{m,r+m-1}(y)
+\Bigr|
+\le
+2(r+2m-1)\|g\|_\infty C_\alpha\frac{\log N}{N}.
+\]
+\end{corollary}
+
+\begin{proof}
+For irrational rotations of bounded type, standard discrepancy estimates give
+\[
+D_N^*(\alpha;x_0)\le C_\alpha\frac{\log N}{N}
+\]
+uniformly in the initial phase $x_0$ \cite{KuipersNiederreiter1974,DrmotaTichy1997}. Substituting this into Theorem~\ref{thm:operational-observable-recovery}(ii) gives the claim.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:operational-observable-recovery} and Corollary~\ref{cor:resolution-certificate} quantify the rotation source law after the conjugacy has been established. The finite-sample error terms are the orbit discrepancy and the boundary-layer mass.
+\end{remark}

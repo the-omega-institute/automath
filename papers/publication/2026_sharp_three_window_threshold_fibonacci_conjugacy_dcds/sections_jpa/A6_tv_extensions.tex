@@ -1,0 +1,107 @@
+\section{Further consequences of the total-variation bound}\label{app:tv-extensions}
+
+We record two extensions of the total-variation estimate from Section~\ref{sec:fp:tv}.
+
+\begin{theorem}[Bound for a coarse free-energy functional]\label{thm:free-energy-certificate}
+Let $E:X_m\to[-M,M]$ be a bounded coarse energy function on the stabilized types---for instance, one may take $E(x)$ to be any function of the Fibonacci valuation $\Val_m(x)$---and let $\beta\in\RR\setminus\{0\}$ be an inverse temperature. For any probability vector $\rho\in\Delta(X_m)$ define the observational partition functional and observational free-energy functional by
+\[
+Z_{\beta,E}(\rho):=\sum_{x\in X_m} e^{-\beta E(x)}\rho(x),
+\qquad
+\mathcal F_{\beta,E}(\rho):=-\frac{1}{\beta}\log Z_{\beta,E}(\rho).
+\]
+We use the term ``free energy'' only in this observational sense.
+Then
+\begin{equation}\label{eq:free-energy-certificate}
+\bigl|
+\mathcal F_{\beta,E}(\hat{\pi}_{m,N})
+-
+\mathcal F_{\beta,E}(\pi_m^{\mathrm{fold}})
+\bigr|
+\le
+\frac{2e^{2|\beta|M}}{|\beta|}\,
+D_{\TV}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\le
+\frac{2e^{2|\beta|M}}{|\beta|}(m+1)\,D_N^*(\alpha;x_0).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+f_{\beta,E}(x):=e^{-\beta E(x)}.
+\]
+Since $|E(x)|\le M$ for all $x$, one has
+\[
+e^{-|\beta|M}\le f_{\beta,E}(x)\le e^{|\beta|M}.
+\]
+Therefore
+\[
+\bigl|Z_{\beta,E}(\hat{\pi}_{m,N})-Z_{\beta,E}(\pi_m^{\mathrm{fold}})\bigr|
+\le
+2e^{|\beta|M}\,D_{\TV}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\]
+by Corollary~\ref{cor:observable-certificate} applied to $G=f_{\beta,E}$. Since both partition functionals are at least $e^{-|\beta|M}$, the mean-value theorem for $\log$ gives
+\[
+\bigl|
+\log Z_{\beta,E}(\hat{\pi}_{m,N})
+-
+\log Z_{\beta,E}(\pi_m^{\mathrm{fold}})
+\bigr|
+\le
+e^{|\beta|M}
+\bigl|Z_{\beta,E}(\hat{\pi}_{m,N})-Z_{\beta,E}(\pi_m^{\mathrm{fold}})\bigr|.
+\]
+Combining the two inequalities yields
+\[
+\bigl|
+\log Z_{\beta,E}(\hat{\pi}_{m,N})
+-
+\log Z_{\beta,E}(\pi_m^{\mathrm{fold}})
+\bigr|
+\le
+2e^{2|\beta|M}\,D_{\TV}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}}),
+\]
+and dividing by $|\beta|$ proves the first bound in \eqref{eq:free-energy-certificate}. The second follows from Theorem~\ref{thm:tv-certificate}.
+\end{proof}
+
+\begin{corollary}[Golden-branch optimality among metallic means]\label{cor:golden-optimal}
+For constant-type continued fractions $\alpha_A=[0;A,A,\dots]$ with $\lambda_A=(A+\sqrt{A^2+4})/2$, one has
+\[
+D_{\TV}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\le
+(m+1)\frac{\kappa(A)\log N+C(A)}{N},
+\]
+and therefore, for every bounded observable $G:X_m\to\RR$ and every bounded coarse energy $E:X_m\to[-M,M]$,
+\[
+\Bigl|
+\sum_{x\in X_m}G(x)\bigl(\hat{\pi}_{m,N}(x)-\pi_m^{\mathrm{fold}}(x)\bigr)
+\Bigr|
+\le
+2(m+1)\|G\|_\infty\frac{\kappa(A)\log N+C(A)}{N},
+\]
+\[
+\bigl|
+\mathcal F_{\beta,E}(\hat{\pi}_{m,N})
+-
+\mathcal F_{\beta,E}(\pi_m^{\mathrm{fold}})
+\bigr|
+\le
+\frac{2e^{2|\beta|M}}{|\beta|}(m+1)\frac{\kappa(A)\log N+C(A)}{N}.
+\]
+Here $\kappa(A):=A/\log\lambda_A$ is strictly increasing in $A\ge 1$. Hence the golden ratio ($A=1$, $\lambda_1=\varphi$) uniquely minimizes the leading coefficient $\kappa(1)=1/\log\varphi$ among metallic means simultaneously for the total-variation, observable, and observational free-energy certificates.
+\end{corollary}
+
+\begin{proof}
+For constant-type $\alpha_A$, standard discrepancy bounds for badly approximable numbers give \cite{Cassels1957,KuipersNiederreiter1974,DrmotaTichy1997}
+\[
+D_N^*(\alpha_A;x_0)\le \frac{\kappa(A)\log N+C(A)}{N}.
+\]
+Combining this estimate with Theorem~\ref{thm:tv-certificate}, Corollary~\ref{cor:observable-certificate}, and Theorem~\ref{thm:free-energy-certificate} proves the displayed bounds. The strict monotonicity of $\kappa(A)=A/\log\lambda_A$ on $A\ge 1$ is a direct calculus exercise. Figure~\ref{fig:tv-convergence} compares the empirical convergence rates for the golden and silver ratios.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures_jpa/fig_tv_convergence.pdf}
+\caption{Empirical total-variation distance $D_{\TV}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})$ between the finite-sample stabilized histogram and its limit, plotted against sample size $N$ for window length $m=6$. Circles: golden-ratio slope $\alpha=\varphi^{-1}$ ($\kappa=1/\log\varphi\approx 2.078$). Squares: silver-ratio slope $\alpha=(\sqrt{2}+1)^{-1}$ ($\kappa=2/\log(1+\sqrt{2})\approx 2.268$). Solid and dashed lines show the theoretical upper bounds $(m+1)\kappa(A)\log N/N$ from Corollary~\ref{cor:golden-optimal}. The golden ratio achieves uniformly faster convergence, consistent with its unique minimization of the discrepancy coefficient $\kappa(A)$ among metallic means.}
+\label{fig:tv-convergence}
+\end{figure}

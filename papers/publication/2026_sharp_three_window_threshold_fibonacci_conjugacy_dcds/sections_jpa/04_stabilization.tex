@@ -1,0 +1,431 @@
+\section{Finite-window Fibonacci stabilization}\label{sec:stabilization}
+
+We now define the local arithmetic map. Stabilization reduces the Fibonacci valuation modulo $F_{m+2}$ and then selects the unique admissible representative. Its fibers are the finite objects behind both the threshold theorem and the two-window branch locus.
+
+\subsection{Admissible language and Fibonacci valuation}\label{sec:stab:golden}
+
+Let $(F_n)_{n\ge 1}$ be the Fibonacci sequence with $F_1=F_2=1$ and $F_{n+2}=F_{n+1}+F_n$.
+
+\begin{definition}[Golden-mean legal language]\label{def:Xm}
+For $m\ge 1$, let
+\[
+X_m := \Bigl\{x=(x_1,\dots,x_m)\in\{0,1\}^m : x_i x_{i+1}=0\ \text{for all }1\le i<m\Bigr\}.
+\]
+\end{definition}
+
+\begin{definition}[Fibonacci valuation]\label{def:valuation}
+For $\omega=(\omega_1,\dots,\omega_m)\in\{0,1\}^m$, define
+\[
+\Val_m(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
+\]
+\end{definition}
+
+\begin{proposition}[Finite-window Zeckendorf range]\label{prop:finite-window-range}
+For every $m\ge 1$, the restriction
+\[
+\Val_m|_{X_m}:X_m\longrightarrow \{0,1,\dots,F_{m+2}-1\}
+\]
+is a bijection.
+\end{proposition}
+
+\begin{proof}
+By Zeckendorf's theorem, every integer $N\ge 0$ has a unique expansion
+\[
+N=\sum_{k\ge 1}\varepsilon_k F_{k+1},\qquad \varepsilon_k\in\{0,1\},\qquad \varepsilon_k\varepsilon_{k+1}=0
+\]
+\cite{Zeckendorf1972,Lothaire2002}. If $0\le N < F_{m+2}$, then the largest Fibonacci weight that can appear is at most $F_{m+1}$, so the Zeckendorf expansion of $N$ has length at most $m$ and defines a unique element of $X_m$. Thus $\Val_m|_{X_m}$ is surjective.
+
+To prove injectivity, let $x,y\in X_m$ with $\Val_m(x)=\Val_m(y)$. Then $x$ and $y$ are two Zeckendorf expansions of the same integer using weights up to $F_{m+1}$, hence $x=y$ by uniqueness.
+
+Thus admissible words of length $m$ realize the residue classes $0,1,\dots,F_{m+2}-1$ exactly once.
+\end{proof}
+
+\begin{remark}
+Proposition~\ref{prop:finite-window-range} is the finite-window form of Zeckendorf uniqueness which makes the stabilization map canonical at the right boundary. It is the finite-window counterpart of the finite-automaton normalization viewpoint for Fibonacci numeration developed in \cite{Frougny1992,Berstel2001}.
+\end{remark}
+
+\subsection{Canonical finite-window stabilization}\label{sec:stab:fold}
+
+\begin{definition}[Canonical stabilization map]\label{def:fold}
+For $m\ge 1$, define
+\[
+\Fold_m:\{0,1\}^m\longrightarrow X_m
+\]
+by the rule
+\[
+\Fold_m(\omega)
+:=
+\bigl(\Val_m|_{X_m}\bigr)^{-1}\!\Bigl(\Val_m(\omega)\pmod{F_{m+2}}\Bigr),
+\]
+where the residue is taken in $\{0,1,\dots,F_{m+2}-1\}$.
+\end{definition}
+
+\begin{remark}
+The map $\Fold_m$ is the finite-window canonicalization compatible with Fibonacci numeration: compute the raw Fibonacci-weighted value $\Val_m(\omega)$, reduce it modulo $F_{m+2}$, and write the residue in its unique length-$m$ Zeckendorf form. Local carry rewrites such as $11\mapsto 100$ realize the same residue-class operation.
+\end{remark}
+
+\begin{proposition}[Basic properties of $\Fold_m$]\label{thm:fold-suite}
+\leanverified{paper_fibonacci_stabilization_fold_suite}
+For every $m\ge 1$, the stabilization map $\Fold_m:\{0,1\}^m\to X_m$ satisfies:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item \textbf{Well-definedness.} $\Fold_m$ is well-defined.
+  \item \textbf{Idempotence on admissible words.} If $x\in X_m$, then $\Fold_m(x)=x$.
+  \item \textbf{Surjectivity.} $\Fold_m$ is onto $X_m$.
+  \item \textbf{Fiber partition.} The fibers
+  \[
+  \mathcal{F}_m(x):=\Fold_m^{-1}(\{x\}),\qquad x\in X_m,
+  \]
+  form a partition of $\{0,1\}^m$. In particular,
+  \[
+  \sum_{x\in X_m} d_m(x)=2^m,
+  \qquad
+  d_m(x):=|\mathcal{F}_m(x)|.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) follows from Proposition~\ref{prop:finite-window-range}, which gives a unique admissible representative for each residue class modulo $F_{m+2}$.
+
+(ii) If $x\in X_m$, then $\Val_m(x)\in\{0,\dots,F_{m+2}-1\}$ and $\bigl(\Val_m|_{X_m}\bigr)^{-1}(\Val_m(x))=x$.
+
+(iii) Every $x\in X_m$ is a fixed point of $\Fold_m$, so $x$ lies in the image.
+
+(iv) Since $\Fold_m$ is a function on the finite set $\{0,1\}^m$, its inverse images form a partition. Summing the cardinalities of the fibers gives the cardinality of the domain.
+\end{proof}
+
+\subsection{Residue fibers and Fourier formula}\label{sec:stab:fiber}
+
+\begin{proposition}[Residue characterization of fibers]\label{thm:fiber-residue}
+Let $x\in X_m$ and write
+\[
+r_x:=\Val_m(x)\in\{0,\dots,F_{m+2}-1\}.
+\]
+Then
+\[
+\mathcal{F}_m(x)
+=
+\Bigl\{\omega\in\{0,1\}^m:
+\Val_m(\omega)\equiv r_x \pmod{F_{m+2}}
+\Bigr\}.
+\]
+Equivalently,
+\[
+d_m(x)
+=
+\#\Bigl\{\omega\in\{0,1\}^m:
+\sum_{k=1}^m \omega_k F_{k+1}\equiv r_x \pmod{F_{m+2}}
+\Bigr\}.
+\]
+\end{proposition}
+
+\begin{proof}
+By definition,
+\[
+\Fold_m(\omega)=x
+\iff
+\bigl(\Val_m|_{X_m}\bigr)^{-1}\!\Bigl(\Val_m(\omega)\pmod{F_{m+2}}\Bigr)=x.
+\]
+Since $\Val_m|_{X_m}$ is bijective, this is equivalent to
+\[
+\Val_m(\omega)\equiv \Val_m(x)\pmod{F_{m+2}}.
+\]
+This proves the claim.
+\end{proof}
+
+\begin{remark}[Example at $m=5$]
+At $m=5$ the admissible language $X_5$ has $F_7=13$ words. The raw word $\omega=11010$ has valuation
+\[
+\Val_5(11010)=F_2+F_3+F_5=1+2+5=8.
+\]
+The unique admissible word of length five with residue $8$ modulo $13$ is $00001$, since $\Val_5(00001)=F_6=8$. Thus
+\[
+\Fold_5(11010)=00001.
+\]
+In fact
+\[
+\mathcal F_5(00001)=\{00001,\ 00110,\ 11010\}.
+\]
+This is the local ambiguity studied below. Isolated windows can fold together, but overlap removes the ambiguity for $m\ge3$.
+\end{remark}
+
+\begin{theorem}[Discrete Fourier formula for the fiber cardinalities]\label{thm:fiber-dft}
+Let $\zeta:=e^{2\pi i/F_{m+2}}$. For every $x\in X_m$ with $r_x=\Val_m(x)$,
+\begin{equation}\label{eq:fiber-dft}
+d_m(x)
+=
+\frac{1}{F_{m+2}}
+\sum_{j=0}^{F_{m+2}-1}
+\zeta^{-j r_x}
+\prod_{k=1}^m \bigl(1+\zeta^{jF_{k+1}}\bigr).
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:fiber-second-moment}
+\sum_{x\in X_m} d_m(x)^2
+=
+\frac{1}{F_{m+2}}
+\sum_{j=0}^{F_{m+2}-1}
+\Bigl|
+\prod_{k=1}^m \bigl(1+\zeta^{jF_{k+1}}\bigr)
+\Bigr|^2.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{thm:fiber-residue},
+\[
+d_m(x)
+=
+\sum_{\omega\in\{0,1\}^m}
+\ind_{\{\Val_m(\omega)\equiv r_x \pmod{F_{m+2}}\}}.
+\]
+Use the finite Fourier inversion formula on $\mathbb{Z}/F_{m+2}\mathbb{Z}$:
+\[
+\ind_{\{n\equiv r_x\}}
+=
+\frac{1}{F_{m+2}}
+\sum_{j=0}^{F_{m+2}-1} \zeta^{j(n-r_x)}.
+\]
+Therefore
+\[
+d_m(x)
+=
+\frac{1}{F_{m+2}}
+\sum_{j=0}^{F_{m+2}-1}
+\zeta^{-jr_x}
+\sum_{\omega\in\{0,1\}^m}
+\zeta^{j\Val_m(\omega)}.
+\]
+Since
+\[
+\Val_m(\omega)=\sum_{k=1}^m \omega_k F_{k+1},
+\]
+the inner sum factorizes:
+\[
+\sum_{\omega\in\{0,1\}^m}\zeta^{j\Val_m(\omega)}
+=
+\prod_{k=1}^m \sum_{\omega_k\in\{0,1\}}\zeta^{j\omega_k F_{k+1}}
+=
+\prod_{k=1}^m (1+\zeta^{jF_{k+1}}).
+\]
+This proves \eqref{eq:fiber-dft}.
+
+For \eqref{eq:fiber-second-moment}, square \eqref{eq:fiber-dft}, sum over $x\in X_m$, and use that $r_x$ runs through the complete residue system $\{0,\dots,F_{m+2}-1\}$ by Proposition~\ref{prop:finite-window-range}. Orthogonality of characters collapses the double sum.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:fiber-dft} makes $d_m(x)$ an explicit arithmetic object. These cardinalities enter the entropy decomposition of Section~\ref{sec:entropy-ledger} and the uniform collision statistic of Proposition~\ref{prop:uniform-collision}. Representative exact values are given in Section~\ref{sec:fiber-enumerations}.
+\end{remark}
+
+\subsection{Affine transfer to a shifted-weight residue model}\label{sec:stab:transfer}
+
+We shall also compare the canonical valuation
+\[
+\Val_m(\omega)=\sum_{j=1}^m \omega_j F_{j+1}
+\]
+with the shifted-weight residue model
+\[
+\widetilde{\Val}_m(\omega):=\sum_{j=1}^m \omega_j F_j
+\qquad\text{in }\ZZ/F_{m+2}\ZZ.
+\]
+By Proposition~\ref{prop:finite-window-range}, every residue $r\in\{0,\dots,F_{m+2}-1\}$ has a unique canonical representative
+\[
+x_r:=\bigl(\Val_m|_{X_m}\bigr)^{-1}(r)\in X_m.
+\]
+Accordingly we write
+\[
+d_m^\sharp(r):=d_m(x_r)
+\]
+for the canonical fiber size indexed by residue, and
+\[
+\widetilde d_m(r):=\#\bigl\{\omega\in\{0,1\}^m:\widetilde{\Val}_m(\omega)\equiv r \pmod{F_{m+2}}\bigr\}
+\]
+for the shifted-weight fiber count.
+
+\begin{lemma}[Fibonacci cross-multiplication modulo $F_{m+2}$]\label{lem:cross-multiplication}
+Extend the Fibonacci sequence by $F_0:=0$. Then for every $m\ge 1$ and $1\le j\le m$,
+\[
+F_{m+1}F_j \equiv (-1)^{j-1}F_{m+2-j}\pmod{F_{m+2}}.
+\]
+\end{lemma}
+
+\begin{proof}
+Use d'Ocagne's identity
+\[
+F_uF_{v+1}-F_{u+1}F_v = (-1)^vF_{u-v}
+\]
+with $(u,v)=(m+1,j-1)$. This gives
+\[
+F_{m+1}F_j-F_{m+2}F_{j-1}=(-1)^{j-1}F_{m+2-j}.
+\]
+Reducing modulo $F_{m+2}$ proves the claim.
+\end{proof}
+
+\begin{theorem}[Affine transfer principle]\label{thm:affine-transfer}
+For every $m\ge 1$, define
+\[
+C_m:=\sum_{\substack{1\le k\le m\\k\not\equiv m\!\!\!\pmod 2}} F_{k+1}
+\]
+and the affine residue map
+\[
+\pi_m(r):=F_{m+1}r+C_m \pmod{F_{m+2}}.
+\]
+Then $\pi_m$ is a bijection of $\ZZ/F_{m+2}\ZZ$, and
+\[
+\widetilde d_m(r)=d_m^\sharp\bigl(\pi_m(r)\bigr)\qquad\text{for all }r\in\ZZ/F_{m+2}\ZZ.
+\]
+In particular, the canonical and shifted-weight models have identical fiber multisets.
+\end{theorem}
+
+\begin{proof}
+Define a map $\tau_m:\{0,1\}^m\to\{0,1\}^m$ by
+\[
+\tau_m(\omega)_k :=
+\begin{cases}
+\omega_{m+1-k}, & k\equiv m\!\!\!\pmod 2,\\[1mm]
+1-\omega_{m+1-k}, & k\not\equiv m\!\!\!\pmod 2.
+\end{cases}
+\]
+It is a composition of bit reversal with parity-selective bit flips, hence a bijection.
+
+We now compute $\Val_m(\tau_m(\omega))$ modulo $F_{m+2}$. By the definition of $\tau_m$,
+\[
+\Val_m(\tau_m(\omega))
+=
+\sum_{\substack{1\le k\le m\\k\equiv m\!\!\!\pmod 2}} \omega_{m+1-k}F_{k+1}
+{}+\sum_{\substack{1\le k\le m\\k\not\equiv m\!\!\!\pmod 2}} (1-\omega_{m+1-k})F_{k+1}.
+\]
+Separating the constant part gives
+\[
+\Val_m(\tau_m(\omega))
+=
+\sum_{k=1}^m (-1)^{m-k}\omega_{m+1-k}F_{k+1}+C_m.
+\]
+Re-index with $j=m+1-k$:
+\[
+\Val_m(\tau_m(\omega))
+=
+\sum_{j=1}^m (-1)^{j-1}\omega_jF_{m+2-j}+C_m.
+\]
+Applying Lemma~\ref{lem:cross-multiplication} termwise to $\widetilde{\Val}_m(\omega)=\sum_{j=1}^m \omega_jF_j$ yields
+\[
+F_{m+1}\widetilde{\Val}_m(\omega)
+\equiv
+\sum_{j=1}^m (-1)^{j-1}\omega_jF_{m+2-j}
+\pmod{F_{m+2}}.
+\]
+Comparing with the previous display gives the intertwining identity
+\[
+\Val_m(\tau_m(\omega))\equiv F_{m+1}\widetilde{\Val}_m(\omega)+C_m
+=
+\pi_m\bigl(\widetilde{\Val}_m(\omega)\bigr)
+\pmod{F_{m+2}}.
+\]
+
+Since consecutive Fibonacci numbers are coprime, $\gcd(F_{m+1},F_{m+2})=1$, so multiplication by $F_{m+1}$ is invertible modulo $F_{m+2}$ and $\pi_m$ is a bijection. Therefore, for every residue $r$,
+\begin{align*}
+\widetilde d_m(r)
+&=
+\#\bigl\{\omega:\widetilde{\Val}_m(\omega)\equiv r \pmod{F_{m+2}}\bigr\}\\
+&=
+\#\bigl\{\omega:\Val_m(\tau_m(\omega))\equiv \pi_m(r) \pmod{F_{m+2}}\bigr\}\\
+&=
+\#\bigl\{u:\Val_m(u)\equiv \pi_m(r) \pmod{F_{m+2}}\bigr\}\\
+&=
+d_m^\sharp\bigl(\pi_m(r)\bigr),
+\end{align*}
+where the third equality uses that $\tau_m$ is a bijection and the last equality is Proposition~\ref{thm:fiber-residue} written in residue coordinates. This proves the theorem.
+\end{proof}
+
+\begin{corollary}[Transfer of multiset-based statistics]\label{cor:affine-transfer-stats}
+For every $m\ge 1$, the shifted-weight model and the canonical model have the same multiset of fiber sizes. In particular they have the same:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item maximal fiber size,
+  \item maximal-fiber multiplicity,
+  \item second moment $\sum_x d_m(x)^2$,
+  \item every statistic that depends only on the unordered fiber multiset.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:affine-transfer} identifies the two residue-count functions up to the permutation $\pi_m$.
+\end{proof}
+
+\begin{remark}[Closed form of the affine offset]
+The parity sum in Theorem~\ref{thm:affine-transfer} simplifies to
+\[
+C_m=F_{m+1}-1.
+\]
+Indeed, for $m=2q$ one has
+\[
+C_{2q}=F_2+F_4+\cdots+F_{2q}=F_{2q+1}-1=F_{m+1}-1,
+\]
+and for $m=2q+1$ one has
+\[
+C_{2q+1}=F_3+F_5+\cdots+F_{2q+1}=F_{2q+2}-1=F_{m+1}-1.
+\]
+Thus the affine transfer may also be written as
+\[
+\pi_m(r)=F_{m+1}(r+1)-1 \pmod{F_{m+2}}.
+\]
+\end{remark}
+
+\begin{proposition}[Affine reflection symmetry of the canonical fiber spectrum]\label{prop:fiber-reflection}
+Let
+\[
+B_m:=\sum_{k=1}^m F_{k+1}=F_{m+3}-2.
+\]
+Then for every residue $r\in \ZZ/F_{m+2}\ZZ$,
+\[
+d_m^\sharp(r)=d_m^\sharp(B_m-r).
+\]
+Equivalently, the canonical residue-indexed fiber spectrum is invariant under the affine reflection
+\[
+r\longmapsto B_m-r
+\qquad\text{in }\ZZ/F_{m+2}\ZZ.
+\]
+\end{proposition}
+
+\begin{proof}
+Consider the bitwise complement involution
+\[
+\iota:\{0,1\}^m\to\{0,1\}^m,\qquad
+\iota(\omega)_k:=1-\omega_k.
+\]
+It is a bijection, and
+\[
+\Val_m(\iota(\omega))
+=
+\sum_{k=1}^m (1-\omega_k)F_{k+1}
+=
+\sum_{k=1}^m F_{k+1}-\Val_m(\omega)
+\equiv
+B_m-\Val_m(\omega)
+\pmod{F_{m+2}}.
+\]
+Therefore $\iota$ sends the preimage of residue $r$ bijectively onto the preimage of residue $B_m-r$. By the definition of $d_m^\sharp$, this proves
+\[
+d_m^\sharp(r)=d_m^\sharp(B_m-r).
+\]
+\end{proof}
+
+\begin{corollary}[Symmetry of the uniform visible law]\label{cor:uniform-visible-symmetry}
+Let $\mu_m^{\mathrm{unif}}$ be the uniform law on $\{0,1\}^m$ and let
+\[
+\pi_m^{\mathrm{unif}}:=(\Fold_m)_*\mu_m^{\mathrm{unif}}
+\]
+be the induced visible law on $X_m$. Then
+\[
+\pi_m^{\mathrm{unif}}(x_r)=\pi_m^{\mathrm{unif}}(x_{B_m-r})
+\qquad\text{for every }r\in\ZZ/F_{m+2}\ZZ.
+\]
+Thus the uniform visible law is invariant under the same affine reflection of residue coordinates.
+\end{corollary}
+
+\begin{proof}
+Directly from the definition of the pushforward,
+\[
+\pi_m^{\mathrm{unif}}(x_r)=\frac{d_m^\sharp(r)}{2^m}.
+\]
+The claim now follows from Proposition~\ref{prop:fiber-reflection}.
+\end{proof}

@@ -1,0 +1,736 @@
+\section{Finite-state realizations, convex pressure, and canonical selection}
+\label{sec:moment-kernel}
+
+This section studies the collision moments \(S_q(m)\) through their finite-state
+realizations in the length variable \(m\).  The language of symbolic dynamics
+and Perron--Frobenius theory used below is standard; see
+\cite{LindMarcus1995,Seneta2006}.  The pressure and large-deviation
+perspective follows the thermodynamic formalism of
+\cite{DemboZeitouni2010}.  Combined with \Cref{thm:all-q-transfer}, the
+finite-state realizations turn Sanna's constants \(\lambda_q\) into
+Perron roots, yielding algebraicity, convex pressure geometry, canonical
+selection bands, and zero-temperature concentration.  The transducer
+mechanism behind the kernel construction is recorded in
+Appendix~\ref{app:transducer}.
+
+\subsection{Finite-state realizations of the collision moments}
+
+\begin{definition}[Collision moments]
+\label{def:collision-moments}
+For integers \(m\ge 0\) and \(q\ge 0\), define
+\[
+  S_q(m):=\sum_{x\in X_m} d_m(x)^q.
+\]
+Thus \(S_0(m)=\card{X_m}=F_{m+2}\), \(S_1(m)=2^m\), and for \(q\ge 2\),
+\[
+  S_q(m)
+  =
+  \card{\bigl\{(\omega^{(1)},\dots,\omega^{(q)})\in\Omega_m^q:
+  \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(q)})\bigr\}}.
+\]
+In particular, \(S_q(0)=1\) for every \(q\ge0\).
+\end{definition}
+
+\begin{theorem}[Finite-state collision kernels]
+\label{thm:collision-kernel}
+\leanverified{paper_projection_collision_kernel}
+For every integer \(q\ge 2\), there exist a finite nonnegative integer matrix
+\(A_q\) and nonnegative integer vectors \(u_q,v_q\) such that
+\[
+  S_q(m)=u_q^{\mathsf T}A_q^m v_q
+  \qquad (m\ge 0).
+\]
+Moreover, \(A_q\) may be chosen trim: every state of the underlying automaton
+lies on a directed path from the initial state to an accepting terminal state.
+\end{theorem}
+
+\begin{proof}
+Appendix~\ref{app:transducer} makes the construction explicit.  Choose the
+hash-pinned padded deterministic subsequential normalizer on reversed Fibonacci
+words, and identify the finite-window fold with the fixed-width normalized
+output after deleting its unique possible overflow digit; see
+\Cref{thm:pinned-padded-normalizer-soundness,thm:appendix-fixed-width-overflow}.  By
+\Cref{lem:appendix-prefix-stability}, once a prefix has been read, only a
+bounded suffix of the visible output can still be altered by any further
+continuation.  The synchronized collision automaton of
+\Cref{prop:appendix-collision-automaton} stores exactly this unresolved suffix,
+checks equality of the newly committed visible blocks at each step, and accepts
+precisely those \(q\)-tuples with common finite-window fold.  Its adjacency
+matrix is a finite nonnegative integer matrix \(A_q\), and the initial and
+terminal conditions are encoded by nonnegative integer vectors \(u_q,v_q\).
+Deleting any state that is not reachable from the initial synchronized state or
+cannot reach an accepting terminal state does not change the accepted path
+count.  Thus the automaton may be taken trim.  Let \(A_q\) be the adjacency
+matrix of this trim automaton, let \(u_q\) select the initial state, and let
+\(v_q\) mark the accepting terminal states.  Then
+\[
+  S_q(m)=u_q^{\mathsf T}A_q^m v_q
+  \qquad (m\ge 0).
+\]
+\end{proof}
+
+\begin{theorem}[Symmetric compression]
+\label{thm:symmetric-compression}
+\leanverified{paper_projection_symmetric_compression}
+Let \(k\) be the number of states of the one-copy augmented fold automaton from
+Appendix~\ref{app:transducer}.  The kernel \(A_q\) of
+\Cref{thm:collision-kernel} admits a symmetric quotient
+\(\widetilde A_q\) acting on histogram states of cardinality
+\[
+  \binom{k+q-1}{k-1},
+\]
+such that
+\[
+  S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q
+  \qquad\text{and}\qquad
+  \rho(\widetilde A_q)=\rho(A_q)=r_q.
+\]
+In particular, for fixed \(k\) the state-space dimension grows polynomially in
+\(q\).
+\end{theorem}
+
+\begin{proof}
+Let \(\widehat Q\) be the one-copy augmented state set from
+\Cref{prop:appendix-collision-automaton}, so \(k=\card{\widehat Q}\).  The
+symmetric group \(\mathfrak S_q\) acts on the synchronized state space
+\(\widehat Q^q\) by permuting the \(q\) coordinates.  The transition relation
+and the collision condition are invariant under this action, so the kernel
+descends to the orbit space.  If \(s=(s_1,\dots,s_q)\in \widehat Q^q\), its
+orbit is determined by the histogram
+\[
+  \eta_s(t):=\card{\{1\le i\le q:\ s_i=t\}}
+  \qquad (t\in \widehat Q),
+\]
+namely a weak composition of \(q\) into \(k\) parts.  Hence the orbit space has
+cardinality \(\binom{k+q-1}{k-1}\).
+
+Because the synchronized update rule of
+\Cref{prop:appendix-collision-automaton} is coordinatewise and depends only on
+whether the newly committed visible blocks agree across the \(q\) coordinates,
+orbit sums produce a nonnegative integer quotient matrix \(\widetilde A_q\)
+with the stated realization formula.  The symmetric subspace of
+\(\RR^{\widehat Q^q}\) is \(A_q\)-invariant and is naturally identified with
+the histogram state space, so \(\widetilde A_q\) is precisely the restriction
+of \(A_q\) to that invariant subspace.  Averaging a Perron eigenvector of
+\(A_q\) over \(\mathfrak S_q\) produces a nonzero symmetric eigenvector with
+the same eigenvalue, and therefore \(\rho(\widetilde A_q)=\rho(A_q)\).
+\end{proof}
+
+\begin{corollary}[Algebraic realization of the partition constants]
+\label{cor:lambda-algebraic}
+\leanverified{paper_projection_lambda_algebraic}
+For every integer \(q\ge 2\), the partition constant \(\lambda_q\) of
+\Cref{thm:all-q-transfer} is the spectral radius of a nonnegative integer
+matrix.  More precisely,
+\[
+  \lambda_q=\rho(A_q)=\rho(\widetilde A_q),
+\]
+where \(\widetilde A_q\) may be chosen to have dimension polynomial in \(q\).
+In particular, \(\lambda_q\) is an algebraic integer.
+\end{corollary}
+
+\begin{proof}
+By \Cref{thm:all-q-transfer}, \(\lambda_q=r_q\) for \(q\ge 2\).  The claimed
+matrix realizations are exactly those of \Cref{thm:collision-kernel} and
+\Cref{thm:symmetric-compression}.  Since \(\widetilde A_q\) is an integer
+matrix, its spectral radius is a root of its characteristic polynomial.
+\end{proof}
+
+\begin{proposition}[Hankel positivity and cross-moment convexity]
+\label{prop:hankel-psd}
+For fixed \(m\), the Hankel matrix
+\[
+  H_r^{(m)}:=[S_{i+j}(m)]_{0\le i,j\le r}
+\]
+is positive semidefinite for every \(r\ge 0\).  Consequently, for all integers
+\(q\ge r\ge 1\),
+\[
+  S_q(m)^2\le S_{q-r}(m)S_{q+r}(m).
+\]
+\end{proposition}
+
+\begin{proof}
+For \(c=(c_0,\dots,c_r)\in\RR^{r+1}\),
+\[
+  c^{\mathsf T}H_r^{(m)}c
+  =
+  \sum_{x\in X_m}\left(\sum_{i=0}^r c_i d_m(x)^i\right)^2\ge 0.
+\]
+This proves positive semidefiniteness.  The cross-moment inequality follows by
+applying Cauchy--Schwarz to the sequences
+\(d_m(x)^{(q-r)/2}\) and \(d_m(x)^{(q+r)/2}\).
+\end{proof}
+
+\begin{corollary}[Adjacent pressure convexity]
+\label{cor:cross-q-logconvex}
+\leanverified{paper_projection_adjacent_pressure_convexity}
+For every \(q\ge 2\), the partition constants satisfy
+\[
+  \lambda_q^2\le \lambda_{q-1}\lambda_{q+1}.
+\]
+\end{corollary}
+
+\begin{proof}
+By \Cref{prop:hankel-psd},
+\(S_q(m)^2\le S_{q-1}(m)S_{q+1}(m)\) for every \(m\).  Take logarithms, divide
+by \(m\), and let \(m\to\infty\), using \Cref{thm:all-q-transfer}.
+\end{proof}
+
+\subsection{Pressure geometry and the zero-temperature regime}
+
+\begin{theorem}[Global pressure convexity]
+\label{thm:global-pressure-convexity}
+\leanverified{paper_projection_global_pressure_convexity}
+Let \(1\le p<q<r\) be integers, and set \(\theta=(q-p)/(r-p)\).  Then
+\[
+  S_q(m)\le S_p(m)^{1-\theta}S_r(m)^\theta
+  \qquad (m\ge 1).
+\]
+Consequently,
+\[
+  \lambda_q\le \lambda_p^{1-\theta}\lambda_r^\theta.
+\]
+If \(p,q,r\ge 2\), then equivalently
+\[
+  r_q\le r_p^{1-\theta}r_r^\theta.
+\]
+\end{theorem}
+
+\begin{proof}
+For fixed \(m\), write \(b_x:=d_m(x)\ge 0\).  Then
+\[
+  S_q(m)
+  =
+  \sum_{x\in X_m}
+  \bigl(b_x^p\bigr)^{1-\theta}\bigl(b_x^r\bigr)^\theta.
+\]
+H\"older's inequality yields
+\[
+  S_q(m)\le S_p(m)^{1-\theta}S_r(m)^\theta.
+\]
+Take logarithms, divide by \(m\), and send \(m\to\infty\).  The
+\(\lambda\)-version follows from \Cref{thm:all-q-transfer}, and the
+\(r\)-version follows for \(p,q,r\ge 2\) because \(r_j=\lambda_j\).
+\end{proof}
+
+\begin{corollary}[Endpoint law for the partition constants]
+\label{cor:renyi-endpoint}
+\leanverified{paper_projection_renyi_endpoint}
+The sequence \(q\mapsto \lambda_q^{1/q}\) is decreasing and satisfies
+\[
+  \lim_{q\to\infty}\lambda_q^{1/q}=\varphi^{1/2}.
+\]
+For \(q\ge 2\), equivalently,
+\[
+  \lim_{q\to\infty}r_q^{1/q}=\varphi^{1/2}.
+\]
+\end{corollary}
+
+\begin{proof}
+For fixed \(m\), monotonicity of \(\ell^p\)-norms gives
+\[
+  S_q(m)^{1/q}\le S_p(m)^{1/p}
+  \qquad (q>p\ge 1).
+\]
+Take logarithms, divide by \(m\), and let \(m\to\infty\).  This proves the
+monotonicity of \(\lambda_q^{1/q}\).  The limit is Sanna's theorem
+\cite{Sanna2025}, and \(r_q=\lambda_q\) for \(q\ge 2\) by
+\Cref{thm:all-q-transfer}.
+\end{proof}
+
+\begin{definition}[Pressure data and canonical laws]
+\label{def:pressure-slopes}
+Set
+\[
+  P_0:=\log\varphi,
+  \qquad
+  P_q:=\log\lambda_q
+  \qquad (q\ge 1),
+\]
+and define
+\[
+  \Delta_q:=P_q-P_{q-1}
+  \qquad (q\ge 1).
+\]
+For each integer \(q\ge 1\), let
+\[
+  \mu_{m,q}(x):=\frac{d_m(x)^q}{S_q(m)}
+  \qquad (x\in X_m)
+\]
+be the \(q\)-canonical law on the fiber space \(X_m\).
+\end{definition}
+
+\begin{lemma}[Adjacent moment ratios]
+\label{lem:adjacent-moment-ratios}
+For every fixed integer \(q\ge1\),
+\[
+  \frac{S_{q+1}(m)}{S_q(m)}
+  =
+  \exp\bigl((\Delta_{q+1}+o(1))m\bigr).
+\]
+Moreover, for \(q\ge2\),
+\[
+  \frac{S_{q-1}(m)}{S_q(m)}
+  =
+  \exp\bigl((-\Delta_q+o(1))m\bigr),
+\]
+and for \(q=1\),
+\[
+  \frac{S_0(m)}{S_1(m)}
+  =
+  \exp\bigl((-\Delta_1+o(1))m\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+For fixed \(j\ge1\), \Cref{thm:all-q-transfer} gives
+\[
+  S_j(m)=\exp\bigl((P_j+o(1))m\bigr).
+\]
+Taking quotients with \(j=q+1,q\) gives the first display, and taking
+quotients with \(j=q-1,q\) gives the second when \(q\ge2\).  For \(q=1\),
+\[
+  S_0(m)=F_{m+2}=\exp\bigl((P_0+o(1))m\bigr),
+  \qquad
+  S_1(m)=2^m=\exp(P_1m),
+\]
+so \(S_0(m)/S_1(m)=\exp((P_0-P_1+o(1))m)\), which is the final display.
+\end{proof}
+
+\begin{corollary}[Pressure slopes]
+\label{cor:pressure-slopes}
+\leanverified{paper_projection_pressure_slopes}
+The discrete slopes \((\Delta_q)_{q\ge 1}\) form an increasing sequence and
+satisfy
+\[
+  \lim_{q\to\infty}\Delta_q=\frac12\log\varphi.
+\]
+\end{corollary}
+
+\begin{proof}
+The monotonicity is exactly the convexity statement of
+\Cref{thm:global-pressure-convexity}.  Moreover,
+\[
+  \frac{P_q-P_0}{q}
+  =
+  \frac1q\sum_{j=1}^q \Delta_j.
+\]
+By \Cref{cor:renyi-endpoint},
+\[
+  \frac{P_q}{q}
+  =
+  \log\bigl(\lambda_q^{1/q}\bigr)
+  \to
+  \frac12\log\varphi,
+\]
+and \(P_0/q\to 0\).  Hence the Ces\`aro means of the increasing sequence
+\((\Delta_q)\) converge to \(\frac12\log\varphi\), which forces the sequence
+itself to converge to the same limit.
+\end{proof}
+
+\begin{theorem}[Discrete Gibbs selection]
+\label{thm:gibbs-selection}
+\leanverified{paper_projection_gibbs_selection}
+Fix an integer \(q\ge 1\).  For every \(\varepsilon>0\),
+\[
+  \mu_{m,q}\!\left\{
+    x\in X_m:\ \frac1m\log d_m(x)\le \Delta_q-\varepsilon
+  \right\}
+  \le
+  \exp\bigl(-(\varepsilon+o(1))m\bigr),
+\]
+and
+\[
+  \mu_{m,q}\!\left\{
+    x\in X_m:\ \frac1m\log d_m(x)\ge \Delta_{q+1}+\varepsilon
+  \right\}
+  \le
+  \exp\bigl(-(\varepsilon+o(1))m\bigr).
+\]
+Equivalently, the \(q\)-canonical ensemble is exponentially concentrated on the
+pressure-slope band \([\Delta_q,\Delta_{q+1}]\).
+\end{theorem}
+
+\begin{proof}
+For the upper tail, if \(d_m(x)\ge e^{\alpha m}\), then
+\[
+  d_m(x)^q\le e^{-\alpha m}d_m(x)^{q+1}.
+\]
+Hence
+\[
+  \mu_{m,q}\!\left\{
+    x:\frac1m\log d_m(x)\ge \alpha
+  \right\}
+  \le
+  e^{-\alpha m}\frac{S_{q+1}(m)}{S_q(m)}.
+\]
+Choose \(\alpha=\Delta_{q+1}+\varepsilon\).  Since
+\Cref{lem:adjacent-moment-ratios} gives
+\[
+  \frac{S_{q+1}(m)}{S_q(m)}
+  =
+  \exp\bigl((\Delta_{q+1}+o(1))m\bigr),
+\]
+the claimed upper-tail estimate follows.
+
+For the lower tail, if \(d_m(x)\le e^{\alpha m}\), then
+\[
+  d_m(x)^q\le e^{\alpha m}d_m(x)^{q-1}.
+\]
+Therefore
+\[
+  \mu_{m,q}\!\left\{
+    x:\frac1m\log d_m(x)\le \alpha
+  \right\}
+  \le
+  e^{\alpha m}\frac{S_{q-1}(m)}{S_q(m)}.
+\]
+When \(q\ge 2\), choose \(\alpha=\Delta_q-\varepsilon\) and use
+\[
+  \frac{S_{q-1}(m)}{S_q(m)}
+  =
+  \exp\bigl((-\Delta_q+o(1))m\bigr).
+\]
+When \(q=1\), the same argument gives
+\[
+  \mu_{m,1}\!\left\{
+    x:\frac1m\log d_m(x)\le \alpha
+  \right\}
+  \le
+  e^{\alpha m}\frac{S_0(m)}{S_1(m)}.
+\]
+By \Cref{lem:adjacent-moment-ratios},
+\[
+  \frac{S_0(m)}{S_1(m)}
+  =
+  \exp\bigl((-\Delta_1+o(1))m\bigr),
+\]
+so choosing \(\alpha=\Delta_1-\varepsilon\) again yields
+\(\exp(-(\varepsilon+o(1))m)\).
+\end{proof}
+
+\begin{theorem}[Microcanonical band bounds]
+\label{thm:microcanonical-bands}
+\leanverified{paper_projection_microcanonical_band_bounds}
+Fix an integer \(q\ge 1\) and \(\varepsilon>0\), and define
+\[
+  B_{m,q}(\varepsilon)
+  :=
+  \left\{
+    x\in X_m:
+    \Delta_q-\varepsilon\le \frac1m\log d_m(x)\le \Delta_{q+1}+\varepsilon
+  \right\}.
+\]
+Then
+\[
+  \mu_{m,q}\bigl(B_{m,q}(\varepsilon)\bigr)
+  =
+  1-\exp\bigl(-(\varepsilon+o(1))m\bigr).
+\]
+Moreover,
+\[
+  P_q-q(\Delta_{q+1}+\varepsilon)
+  \le
+  \liminf_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|,
+\]
+\[
+  \limsup_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|
+  \le
+  P_q-q(\Delta_q-\varepsilon),
+\]
+and
+\[
+  P_q-\log 2-(q-1)(\Delta_{q+1}+\varepsilon)
+  \le
+  \liminf_{m\to\infty}\frac1m\log p_m\bigl(B_{m,q}(\varepsilon)\bigr),
+\]
+\[
+  \limsup_{m\to\infty}\frac1m\log p_m\bigl(B_{m,q}(\varepsilon)\bigr)
+  \le
+  P_q-\log 2-(q-1)(\Delta_q-\varepsilon),
+\]
+where \(p_m(x):=d_m(x)/2^m\).
+\end{theorem}
+
+\begin{proof}
+The concentration statement follows immediately from
+\Cref{thm:gibbs-selection}.  Equivalently,
+\[
+  \sum_{x\in B_{m,q}(\varepsilon)} d_m(x)^q
+  =
+  \Bigl(1-\exp\bigl(-(\varepsilon+o(1))m\bigr)\Bigr)S_q(m)
+  =
+  \exp\bigl((P_q+o(1))m\bigr).
+\]
+If \(x\in B_{m,q}(\varepsilon)\), then
+\[
+  e^{q(\Delta_q-\varepsilon)m}\le d_m(x)^q\le e^{q(\Delta_{q+1}+\varepsilon)m}.
+\]
+Comparing these bounds with the last display yields
+\[
+  |B_{m,q}(\varepsilon)|\,e^{q(\Delta_q-\varepsilon)m}
+  \le
+  \sum_{x\in B_{m,q}(\varepsilon)} d_m(x)^q
+  \le
+  |B_{m,q}(\varepsilon)|\,e^{q(\Delta_{q+1}+\varepsilon)m},
+\]
+which is equivalent to the claimed bounds for the cardinality.
+
+For the visible mass, write
+\[
+  p_m\bigl(B_{m,q}(\varepsilon)\bigr)
+  =
+  2^{-m}\sum_{x\in B_{m,q}(\varepsilon)} d_m(x)^q d_m(x)^{1-q}.
+\]
+On the same band one has
+\[
+  e^{-(q-1)(\Delta_{q+1}+\varepsilon)m}
+  \le
+  d_m(x)^{1-q}
+  \le
+  e^{-(q-1)(\Delta_q-\varepsilon)m},
+\]
+so
+\[
+  2^{-m}e^{-(q-1)(\Delta_{q+1}+\varepsilon)m}
+  \sum_{x\in B_{m,q}(\varepsilon)} d_m(x)^q
+  \le
+  p_m\bigl(B_{m,q}(\varepsilon)\bigr)
+\]
+and
+\[
+  p_m\bigl(B_{m,q}(\varepsilon)\bigr)
+  \le
+  2^{-m}e^{-(q-1)(\Delta_q-\varepsilon)m}
+  \sum_{x\in B_{m,q}(\varepsilon)} d_m(x)^q.
+\]
+Using \(2^{-m}=\exp(-(\log 2)m)\) and the asymptotic for the
+\(q\)-moment carried by the band completes the proof.
+\end{proof}
+
+\begin{definition}[Largest fiber]
+\label{def:max-fiber}
+Set
+\[
+  D_m:=\max_{x\in X_m} d_m(x).
+\]
+\end{definition}
+
+\begin{theorem}[Zero-temperature law for the largest fiber]
+\label{thm:max-fiber}
+\leanverified{paper_projection_max_fiber}
+One has
+\[
+  \lim_{m\to\infty} D_m^{1/m}=\varphi^{1/2}.
+\]
+\end{theorem}
+
+\begin{proof}
+For every \(q\ge 1\),
+\[
+  D_m^q\le S_q(m)\le \card{X_m}\,D_m^q=F_{m+2}D_m^q.
+\]
+Therefore
+\[
+  \limsup_{m\to\infty} D_m^{1/m}\le \lambda_q^{1/q}
+  \qquad (\forall q\ge 1),
+\]
+by \Cref{thm:all-q-transfer}.  Letting \(q\to\infty\) and applying
+\Cref{cor:renyi-endpoint} gives
+\[
+  \limsup_{m\to\infty} D_m^{1/m}\le \varphi^{1/2}.
+\]
+
+The same inequality implies
+\[
+  D_m\ge \left(\frac{S_q(m)}{F_{m+2}}\right)^{1/q}.
+\]
+Take \(\liminf_{m\to\infty}\) and use \(S_q(m)\asymp_q \lambda_q^m\) together
+with \(F_{m+2}^{1/m}\to\varphi\) to obtain
+\[
+  \liminf_{m\to\infty} D_m^{1/m}\ge \left(\frac{\lambda_q}{\varphi}\right)^{1/q}.
+\]
+Let \(q\to\infty\) and use \Cref{cor:renyi-endpoint} once more.
+\end{proof}
+
+\begin{theorem}[Diagonal high-moment law]
+\label{thm:diagonal-high-moments}
+\leanverified{paper_projection_diagonal_high_moments}
+Let \(q=q(m)\) be any integer sequence with \(q(m)\to\infty\).  Then
+\[
+  \log S_{q(m)}(m)
+  =
+  \Bigl(\frac12\log\varphi+o(1)\Bigr)m\,q(m).
+\]
+In particular,
+\[
+  S_m(m)=\varphi^{m^2/2+o(m^2)}.
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{def:max-fiber},
+\[
+  D_m^{q(m)}\le S_{q(m)}(m)\le F_{m+2}D_m^{q(m)}.
+\]
+Taking logarithms and dividing by \(m\,q(m)\) gives
+\[
+  \frac{1}{m}\log D_m
+  \le
+  \frac{1}{m\,q(m)}\log S_{q(m)}(m)
+  \le
+  \frac{1}{m}\log D_m+\frac{\log F_{m+2}}{m\,q(m)}.
+\]
+Since \(q(m)\to\infty\), the final term tends to \(0\).  Now use
+\Cref{thm:max-fiber}.
+\end{proof}
+
+\begin{theorem}[Zero-temperature concentration of diverging tilts]
+\label{thm:zero-temp-concentration}
+\leanverified{paper_projection_zero_temp_concentration}
+Let \(q=q(m)\) be any integer sequence with \(q(m)\to\infty\), and define
+\[
+  \nu_m(x):=\frac{d_m(x)^{q(m)}}{S_{q(m)}(m)}
+  \qquad (x\in X_m).
+\]
+Then for every \(\varepsilon>0\),
+\[
+  \nu_m\!\left\{
+    x\in X_m:
+    \left|\frac1m\log d_m(x)-\frac12\log\varphi\right|>\varepsilon
+  \right\}\to 0.
+\]
+\end{theorem}
+
+\begin{proof}
+Set \(\alpha_\ast:=\frac12\log\varphi\).  By \Cref{thm:max-fiber}, for every
+\(\varepsilon>0\) one has
+\[
+  D_m<e^{(\alpha_\ast+\varepsilon)m}
+\]
+for all sufficiently large \(m\).  Hence
+\[
+  \nu_m\!\left\{
+    x:\frac1m\log d_m(x)\ge \alpha_\ast+\varepsilon
+  \right\}=0
+\]
+eventually.
+
+For the lower tail, again by \Cref{thm:max-fiber}, eventually
+\[
+  D_m\ge e^{(\alpha_\ast-\varepsilon/2)m}.
+\]
+Therefore
+\begin{align*}
+  \nu_m\!\left\{
+    x:\frac1m\log d_m(x)\le \alpha_\ast-\varepsilon
+  \right\}
+  &=
+  \frac{\sum_{d_m(x)\le e^{(\alpha_\ast-\varepsilon)m}} d_m(x)^{q(m)}}{S_{q(m)}(m)} \\
+  &\le
+  \frac{F_{m+2}\,e^{(\alpha_\ast-\varepsilon)m q(m)}}{D_m^{q(m)}} \\
+  &\le
+  F_{m+2}\,e^{-\varepsilon m q(m)/2}.
+\end{align*}
+Since \(F_{m+2}=\exp((\log\varphi+o(1))m)\) and \(q(m)\to\infty\), the last
+expression tends to \(0\).  This proves the claim.
+\end{proof}
+
+\begin{corollary}[Exchange of thermodynamic and zero-temperature limits]
+\label{cor:double-limit}
+\leanverified{paper_projection_double_limit}
+\[
+  \lim_{q\to\infty}\lim_{m\to\infty}\frac{1}{m q}\log S_q(m)
+  =
+  \lim_{m\to\infty}\lim_{q\to\infty}\frac{1}{m q}\log S_q(m)
+  =
+  \frac12\log\varphi.
+\]
+\end{corollary}
+
+\begin{proof}
+For the left-hand side, first let \(m\to\infty\) and use
+\Cref{thm:all-q-transfer} to obtain \((1/q)\log \lambda_q\), then apply
+\Cref{cor:renyi-endpoint}.  For the right-hand side, first let \(q\to\infty\)
+and use the bounds
+\[
+  D_m^q\le S_q(m)\le F_{m+2}D_m^q,
+\]
+which give \(\lim_{q\to\infty} (1/q)\log S_q(m)=\log D_m\), and then apply
+\Cref{thm:max-fiber}.
+\end{proof}
+
+\subsection{One-sided thick-fiber envelopes}
+
+\begin{definition}[Exponential thick fibers]
+\label{def:thick-fibers}
+For \(\alpha\ge 0\), define
+\[
+  \mathcal N_m(\alpha)
+  :=
+  \card{\{x\in X_m:\ d_m(x)\ge e^{\alpha m}\}}.
+\]
+\end{definition}
+
+\begin{corollary}[Discrete pressure upper envelope for thick fibers]
+\label{cor:thick-fiber-envelope}
+\leanverified{paper_projection_thick_fiber_envelope}
+For every \(\alpha\ge 0\),
+\[
+  \limsup_{m\to\infty}\frac{1}{m}\log \mathcal N_m(\alpha)
+  \le
+  \min\left\{
+    \log\varphi,\,
+    \inf_{q\ge 1}\bigl(\log \lambda_q-q\alpha\bigr)
+  \right\},
+\]
+where the infimum runs over positive integers \(q\).  Setting
+\[
+  \alpha_\ast:=\frac12\log\varphi,
+\]
+this barrier is sharp in the sense that
+\[
+  \alpha>\alpha_\ast
+  \Longrightarrow
+  \mathcal N_m(\alpha)=0 \text{ for all sufficiently large }m,
+\]
+whereas
+\[
+  0\le \alpha<\alpha_\ast
+  \Longrightarrow
+  \mathcal N_m(\alpha)\ge 1 \text{ for all sufficiently large }m.
+\]
+\end{corollary}
+
+\begin{proof}
+Fix \(\alpha\ge 0\), and let \(q\ge 1\) be an integer.  Every
+\(x\in X_m\) counted by \(\mathcal N_m(\alpha)\) contributes at least
+\(e^{q\alpha m}\) to \(S_q(m)\), so
+\[
+  e^{q\alpha m}\mathcal N_m(\alpha)
+  \le
+  \sum_{\substack{x\in X_m\\ d_m(x)\ge e^{\alpha m}}} d_m(x)^q
+  \le
+  S_q(m).
+\]
+Hence
+\[
+  \limsup_{m\to\infty}\frac{1}{m}\log \mathcal N_m(\alpha)
+  \le
+  \log\lambda_q-q\alpha
+\]
+by \Cref{thm:all-q-transfer}.  Taking the infimum over \(q\ge 1\) gives the
+pressure bound.  Since \(\mathcal N_m(\alpha)\le \card{X_m}=F_{m+2}\), we also
+have
+\[
+  \limsup_{m\to\infty}\frac{1}{m}\log \mathcal N_m(\alpha)\le \log\varphi.
+\]
+
+For the threshold statement, \Cref{thm:max-fiber} gives
+\(
+\frac{1}{m}\log D_m\to \alpha_\ast.
+\)
+If \(\alpha>\alpha_\ast\), then eventually \(D_m<e^{\alpha m}\), so
+\(\mathcal N_m(\alpha)=0\).  If \(0\le \alpha<\alpha_\ast\), then eventually
+\(D_m\ge e^{\alpha m}\), so at least one fiber is counted.
+\end{proof}

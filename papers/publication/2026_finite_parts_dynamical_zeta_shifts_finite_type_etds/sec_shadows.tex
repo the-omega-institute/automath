@@ -1,0 +1,1211 @@
+\section[Quotient shadows, cyclic detection, and the S3 model]{Quotient shadows,
+  cyclic detection, and the \texorpdfstring{$S_3$}{S3} model}
+\label{sec:shadows}
+
+This section proves the structural consequences of the finite-group
+theorems. Quotient functoriality gives the abelianised primitive profile;
+the Peter--Weyl splitting then separates the one-dimensional shadow from
+the higher-dimensional defect. The final \(S_3\) model distinguishes the
+quadratic sign-channel Adams effect from the certified standard-channel
+non-abelian defect. Cyclic quotients of the fixed cocycle are kept
+separate from the canonical cyclic-lift root-of-unity layer used later
+in \Cref{sec:finite-part}.
+Throughout this section, ``boundary'' means the exact linear-algebraic
+boundary of what cyclic quotients can detect inside the class-function
+space of \(G\).
+
+\subsection{Quotient functoriality and the abelian shadow}
+
+\begin{definition}[Normalised primitive class profile]
+  \label{def:normalised-primitive-class-profile}
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, define the
+  class function
+  \[
+    \mathcal B_{A,\tau;G}(C):=\frac{|G|}{|C|}\Delta_C(A,\tau;G),
+  \]
+  where \(\Delta_C(A,\tau;G)=\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\mathcal M(A)\).
+  If the target group is a quotient \(Q\) and the cocycle is
+  \(\bar\tau:E_A\to Q\), we write
+  \(\mathcal B_{A,\bar\tau;Q}\) for the same normalised profile computed
+  with \(Q\) and \(\bar\tau\).
+\end{definition}
+
+By \Cref{prop:class-mertens-deviations},
+\begin{equation}\label{eq:normalised-primitive-class-profile}
+  \mathcal B_{A,\tau;G}(C)
+  =
+  \sum_{\varrho\neq \mathbf 1}
+    \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}).
+\end{equation}
+
+When the target group matters, we write superscripts \(G\) and \(Q\) on
+\(\mathcal L_\phi\), \(\Pi_\phi\), and \(p_{n,C}\) to indicate whether
+they are computed with respect to the original cocycle \(\tau:E_A\to G\)
+or to a quotient cocycle \(\bar\tau:E_A\to Q\).
+
+\begin{theorem}[Structural consequence: quotient functoriality]
+  \label{thm:quotient-functoriality}
+  Let \(q:G\twoheadrightarrow Q\) be a surjective homomorphism, and let
+  \(\bar\tau:=q\circ\tau\). For every class function \(f:Q\to\CC\), let
+  \(q^\ast f:=f\circ q\). Then, for \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:quotient-functoriality-log}
+    \mathcal L_{q^\ast f}^{G}(z)=\mathcal L_f^{Q}(z),
+    \qquad
+    \Pi_{q^\ast f}^{G}(z)=\Pi_f^{Q}(z).
+  \end{equation}
+  If \(D\subset Q\) is a conjugacy class and
+  \[
+    p^q_{n,D}:=\sum_{\substack{C\subset G\\ q(C)=D}}p_{n,C},
+  \]
+  then
+  \begin{equation}\label{eq:quotient-primitive-class-decomposition}
+    \sum_{n\ge 1}p^q_{n,D}z^n
+    =
+    \frac{|D|}{|Q|}
+      \sum_{\sigma\in\Irr(Q)}
+        \chi_\sigma^\ast(D)\,\Pi_\sigma^{Q}(z).
+  \end{equation}
+\end{theorem}
+
+\begin{proof}
+  For every periodic point \(x\in\operatorname{Fix}(\sigma^n)\),
+  \[
+    (q^\ast f)(\tau_n(x))=f(\bar\tau_n(x)).
+  \]
+  Therefore
+  \[
+    T^{G}_{q^\ast f,n}
+    =
+    \sum_{x\in\operatorname{Fix}(\sigma^n)}(q^\ast f)(\tau_n(x))
+    =
+    \sum_{x\in\operatorname{Fix}(\sigma^n)}f(\bar\tau_n(x))
+    =T^{Q}_{f,n},
+  \]
+  and hence \(\mathcal L_{q^\ast f}^{G}(z)=\mathcal L_f^{Q}(z)\).
+
+  The Adams operations commute with pullback:
+  \[
+    \psi^m(q^\ast f)(g)
+    =(q^\ast f)(g^m)
+    =f(q(g)^m)
+    =q^\ast(\psi^m f)(g).
+  \]
+  Applying \Cref{cor:class-function-adams-mobius} therefore gives
+  \[
+    \Pi_{q^\ast f}^{G}(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\,
+      \mathcal L_{\psi^m(q^\ast f)}^{G}(z^m)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\,
+      \mathcal L_{\psi^m f}^{Q}(z^m)
+    =\Pi_f^{Q}(z),
+  \]
+  which proves \eqref{eq:quotient-functoriality-log}.
+
+  Now take \(f=\mathbf 1_D\). Since
+  \[
+    q^\ast\mathbf 1_D=\sum_{\substack{C\subset G\\ q(C)=D}}\mathbf 1_C,
+  \]
+  the left-hand side of \eqref{eq:quotient-functoriality-log} becomes
+  \[
+    \Pi_{q^\ast\mathbf 1_D}^{G}(z)
+    =
+    \sum_{n\ge 1}p^q_{n,D}z^n.
+  \]
+  Applying \Cref{thm:class-primitive-decomposition} to the quotient
+  cocycle \(\bar\tau\) yields
+  \eqref{eq:quotient-primitive-class-decomposition}.
+\end{proof}
+
+\noindent
+The abelian shadow is the one-dimensional part of the expansion
+\eqref{eq:normalised-primitive-class-profile}; the non-abelian defect is
+the complementary higher-dimensional part:
+\begin{equation}\label{eq:abelian-shadow-defect}
+  \begin{aligned}
+    \mathcal B_{A,\tau;G}^{\mathrm{ab}}(C)
+    &:=
+    \sum_{\substack{\chi\in\Irr(G)\\ \dim\chi=1,\ \chi\neq \mathbf 1}}
+      \chi^\ast(C)\,\Pi_\chi(\lambda^{-1}), \\
+    \mathcal B_{A,\tau;G}^{\mathrm{na}}(C)
+    &:=
+    \sum_{\substack{\varrho\in\Irr(G)\\ \dim\varrho>1}}
+      \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}).
+  \end{aligned}
+\end{equation}
+Thus
+\begin{equation}\label{eq:abelian-shadow-defect-sum}
+  \mathcal B_{A,\tau;G}=\mathcal B_{A,\tau;G}^{\mathrm{ab}}+\mathcal B_{A,\tau;G}^{\mathrm{na}}.
+\end{equation}
+
+\noindent
+We now fix the separation between two cyclic operations. First, one may
+quotient the fixed cocycle \(\tau:E_A\to G\). If
+\(q_{\mathrm{ab}}:G\twoheadrightarrow G_{\mathrm{ab}}\) is the
+abelianisation map and
+\(r:G_{\mathrm{ab}}\twoheadrightarrow\ZZ/q\ZZ\) is cyclic, the inherited
+cocycle \(r\circ q_{\mathrm{ab}}\circ\tau\) keeps the original edge
+labels after reduction modulo \(q\). Its twisted matrices depend on the
+matrices of reduced edge-label counts. Second, and independently, one
+may change the data by discarding the inherited labels and resetting the
+target to \(\ZZ/q\ZZ\) with the canonical cyclic-lift cocycle
+\(\tau_q(e)=1\) on every edge, as in
+\Cref{rem:abelian-toy-model-cyclic}. Only this reset model produces the
+root-of-unity determinant channels
+\(\log\det(I-\omega_q^j zA)^{-1}\) from the scalar matrix \(A\) alone.
+
+\begin{corollary}[Abelianisation pullback, not cyclic sampling]
+  \label{cor:abelian-cyclic-shadow}
+  Let \(q_{\mathrm{ab}}:G\twoheadrightarrow G_{\mathrm{ab}}\) be the
+  abelianisation map. Then the one-dimensional component of
+  \(\mathcal B_{A,\tau;G}\) is the pullback of the primitive profile of the
+  abelianised cocycle:
+  \begin{equation}\label{eq:abelian-shadow-pullback}
+    \mathcal B_{A,\tau;G}^{\mathrm{ab}}(C)
+    =
+    \mathcal B_{A,q_{\mathrm{ab}}\circ\tau;G_{\mathrm{ab}}}
+      \bigl(q_{\mathrm{ab}}(C)\bigr)
+    \qquad (C\subset G).
+  \end{equation}
+  If, in addition, the data are replaced by the canonical cyclic-lift
+  cocycle \(\tau_q:E_A\to\ZZ/q\ZZ\), \(\tau_q(e)=1\), of
+  \Cref{rem:abelian-toy-model-cyclic}, then the corresponding
+  one-dimensional twisted determinant channels are
+  \[
+    \log\det(I-\omega_q^j zA)^{-1},
+    \qquad 0\le j\le q-1,
+  \]
+  and these are the root-of-unity layers of \Cref{sec:finite-part}.
+  This final statement is a separate canonical cyclic-lift model, not a
+  consequence of passing from \(q_{\mathrm{ab}}\circ\tau\) to an arbitrary
+  cyclic quotient. Such a quotient gives the primitive profile of its
+  inherited cyclic edge-labelling.
+\end{corollary}
+
+\begin{proof}
+  The characters of \(G_{\mathrm{ab}}\), pulled back along
+  \(q_{\mathrm{ab}}\), are precisely the one-dimensional characters of
+  \(G\). The abelianised cocycle inherits the Perron-point gap from the
+  original system:
+  if \(\chi\in\Irr(G_{\mathrm{ab}})\) is non-trivial, then
+  \(\chi\circ q_{\mathrm{ab}}\) is a non-trivial character of \(G\), and
+  the quotient twisted matrix satisfies
+  \[
+    A_{\chi}^{q_{\mathrm{ab}}\circ\tau}
+    =
+    A_{\chi\circ q_{\mathrm{ab}}}.
+  \]
+  Hence
+  \[
+    \max_{\chi\neq\mathbf 1}
+      \rho\!\left(A_{\chi}^{q_{\mathrm{ab}}\circ\tau}\right)
+    \le
+    \max_{\varrho\neq\mathbf 1}\rho(A_\varrho)
+    <\lambda,
+  \]
+  so \(\mathcal B_{A,q_{\mathrm{ab}}\circ\tau;G_{\mathrm{ab}}}\) is
+  defined by \Cref{thm:class-mertens-explicit}. Applying
+  \Cref{thm:quotient-functoriality} to \(q_{\mathrm{ab}}\)
+  gives
+  \[
+    \Pi^{G}_{\chi\circ q_{\mathrm{ab}}}(z)
+    =
+    \Pi^{G_{\mathrm{ab}}}_{\chi}(z)
+    \qquad
+    \bigl(\chi\in\Irr(G_{\mathrm{ab}})\bigr).
+  \]
+  Substituting this identity into
+  \eqref{eq:normalised-primitive-class-profile} gives the displayed
+  pullback formula \eqref{eq:abelian-shadow-pullback}.
+
+  For the final assertion, specialize instead to the canonical cyclic
+  lift. If \(\chi_j(h)=\omega_q^{jh}\) and \(\tau_q(e)=1\) for every
+  edge, then
+  \[
+    (A_{\chi_j}^{\tau_q})_{uv}
+    =
+    \sum_{e:u\to v}\chi_j(\tau_q(e))
+    =
+    \omega_q^j A_{uv}.
+  \]
+  Hence \(A_{\chi_j}^{\tau_q}=\omega_q^jA\), which gives the displayed
+  determinant channels. For an inherited quotient
+  \(r\circ q_{\mathrm{ab}}\circ\tau\), the same computation gives a
+  Fourier sum over the inherited edge-label count matrices, so it
+  satisfies the displayed canonical identity only in the special case
+  where all reduced labels are \(1\).
+\end{proof}
+
+\begin{proposition}[Canonical cyclic-lift root-of-unity layer and gap
+  failure]
+  \label{prop:canonical-cyclic-lift-root-layer}
+  Let \(q\ge 1\), let \(G=\ZZ/q\ZZ\), and let
+  \(\tau_q:E_A\to\ZZ/q\ZZ\) be the canonical cyclic-lift cocycle
+  \(\tau_q(e)=1\) from \Cref{rem:abelian-toy-model-cyclic}. For
+  \(\chi_j(h)=\omega_q^{jh}\),
+  \[
+    A_{\chi_j}^{\tau_q}=\omega_q^jA
+    \qquad (0\le j\le q-1).
+  \]
+  Hence the corresponding determinant channels are exactly
+  \[
+    \log\det(I-zA_{\chi_j}^{\tau_q})^{-1}
+    =
+    \log\det(I-\omega_q^jzA)^{-1},
+  \]
+  which are the root-of-unity layers used in \Cref{sec:finite-part}.
+  This conclusion uses the reset hypothesis \(\tau_q(e)=1\) from
+  \Cref{rem:abelian-toy-model-cyclic}. It is not obtained by applying an
+  arbitrary cyclic quotient to \(q_{\mathrm{ab}}\circ\tau\).
+  If \(q>1\), this same canonical model does not satisfy the non-trivial
+  twisted spectral gap: its non-trivial twisted spectral radius is
+  \[
+    \max_{1\le j\le q-1}\rho(A_{\chi_j}^{\tau_q})=\lambda.
+  \]
+\end{proposition}
+
+\begin{proof}
+  This is the special cocycle singled out in
+  \Cref{rem:abelian-toy-model-cyclic}. Since every edge has label \(1\),
+  for vertices \(u,v\) one has
+  \[
+    (A_{\chi_j}^{\tau_q})_{uv}
+    =
+    \sum_{e:u\to v}\chi_j(1)
+    =
+    \omega_q^j A_{uv}.
+  \]
+  Therefore \(A_{\chi_j}^{\tau_q}=\omega_q^jA\), which gives the
+  determinant identity. For \(q>1\) there are non-trivial characters
+  \(\chi_j\), and
+  \(\rho(A_{\chi_j}^{\tau_q})=\rho(\omega_q^jA)=\rho(A)=\lambda\).
+  Thus the required strict inequality \(\eta<\lambda\) fails in this
+  canonical comparison model.
+\end{proof}
+
+\begin{lemma}[Inherited cyclic quotients are not root-of-unity samples]
+  \label{lem:cyclic-quotient-versus-root-layer}
+  Let \(\bar\tau:E_A\to\ZZ/q\ZZ\) be any cyclic quotient cocycle and set
+  \[
+    (N_h)_{uv}:=\#\{e:u\to v:\bar\tau(e)=h\},
+    \qquad h\in\ZZ/q\ZZ.
+  \]
+  Then \(A=\sum_hN_h\), and for \(\chi_j(h)=\omega_q^{jh}\)
+  \[
+    A_{\chi_j}^{\bar\tau}
+    =
+    \sum_{h\in\ZZ/q\ZZ}\omega_q^{jh}N_h.
+  \]
+  Hence the twisted matrices are controlled by the inherited edge-label
+  count matrices \(N_h\), not by \(A\) alone. For \(q>1\), the full
+  root-of-unity identity
+  \(A_{\chi_j}^{\bar\tau}=\omega_q^jA\) for all \(j\) holds if and only
+  if \(N_1=A\) and \(N_h=0\) for every \(h\neq1\), i.e. precisely when
+  the cyclic labelling is the canonical cyclic lift at the level of edge
+  counts. Thus, when
+  \(\bar\tau=r\circ q_{\mathrm{ab}}\circ\tau\) for a cyclic quotient
+  \(r:G_{\mathrm{ab}}\twoheadrightarrow\ZZ/q\ZZ\), the quotient supplies
+  its own primitive profile for the inherited labels
+  \(r(q_{\mathrm{ab}}(\tau(e)))\). Without the additional canonical
+  reset \(\tau_q(e)=1\) from \Cref{rem:abelian-toy-model-cyclic}, it is
+  not one of the root-of-unity layers of \Cref{sec:finite-part}.
+\end{lemma}
+
+\begin{proof}
+  The displayed formula is the definition of the twisted matrix attached
+  to the character \(\chi_j\), grouped according to the label
+  \(h=\bar\tau(e)\). If \(A_{\chi_j}^{\bar\tau}=\omega_q^jA\) for every
+  \(j\), then Fourier inversion on the finite cyclic group gives
+  \[
+    N_h=\frac1q\sum_{j=0}^{q-1}\omega_q^{-jh}A_{\chi_j}^{\bar\tau}
+    =
+    \frac1q\sum_{j=0}^{q-1}\omega_q^{j(1-h)}A.
+  \]
+  The last sum is \(A\) for \(h=1\) and \(0\) otherwise. The converse is
+  immediate by substituting \(N_1=A\) and \(N_h=0\) for \(h\neq1\) in the
+  displayed expression for \(A_{\chi_j}^{\bar\tau}\).
+\end{proof}
+
+\subsection{Abelian shadow and genuine non-abelian defect}
+
+The decomposition
+\eqref{eq:abelian-shadow-defect-sum} is canonical: it is precisely the
+orthogonal splitting of the primitive class profile into the
+one-dimensional and higher-dimensional Peter--Weyl sectors.
+
+\begin{theorem}[Structural consequence: abelian shadow and genuine
+  non-abelian defect]
+  \label{thm:abelian-shadow-defect}
+  Equip the class functions on \(G\) with the Hermitian inner product
+  \[
+    \langle F,H\rangle_G
+    :=
+    \sum_{C\subset G}\frac{|C|}{|G|}F(C)\overline{H(C)}.
+  \]
+  Let \(\norm{\cdot}_G\) denote the induced norm.
+  With respect to this inner product,
+  \(\mathcal B_{A,\tau;G}^{\mathrm{ab}}\) and \(\mathcal B_{A,\tau;G}^{\mathrm{na}}\)
+  are orthogonal, and
+  \begin{equation}\label{eq:abelian-shadow-defect-energy}
+    \norm{\mathcal B_{A,\tau;G}^{\mathrm{ab}}}_G^2
+    =
+    \sum_{\substack{\chi\in\Irr(G)\\ \dim\chi=1,\ \chi\neq \mathbf 1}}
+      \abs{\Pi_\chi(\lambda^{-1})}^2,
+    \qquad
+    \norm{\mathcal B_{A,\tau;G}^{\mathrm{na}}}_G^2
+    =
+    \sum_{\substack{\varrho\in\Irr(G)\\ \dim\varrho>1}}
+      \abs{\Pi_\varrho(\lambda^{-1})}^2.
+  \end{equation}
+  Moreover, the following are equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\mathcal B_{A,\tau;G}\) factors through the abelianisation
+      \(q_{\mathrm{ab}}:G\twoheadrightarrow G_{\mathrm{ab}}\);
+    \item \(\mathcal B_{A,\tau;G}^{\mathrm{na}}\equiv 0\);
+    \item \(\Pi_\varrho(\lambda^{-1})=0\) for every
+      \(\varrho\in\Irr(G)\) with \(\dim\varrho>1\).
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  The orthonormal basis vectors here are the forward class coefficients
+  \(C\mapsto \chi_\varrho^\ast(C)\), where
+  \(\chi_\varrho^\ast(C)=\overline{\chi_\varrho(C)}\); for unitary
+  characters this is equivalently \(\chi_\varrho(C^{-1})\).
+  These basis vectors are orthonormal for this Hermitian inner product,
+  since
+  \[
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      \chi_\varrho^\ast(C)\,\overline{\chi_\sigma^\ast(C)}
+    =
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      \chi_\varrho^\ast(C)\,\chi_\sigma(C)
+    =
+    \delta_{\varrho,\sigma}.
+  \]
+  Therefore the one-dimensional and higher-dimensional parts of the
+  expansion \eqref{eq:abelian-shadow-defect-sum} are orthogonal, and
+  the squared norms are exactly the sums of squared moduli of their
+  Fourier coefficients. This gives
+  \eqref{eq:abelian-shadow-defect-energy}.
+
+  If \(\mathcal B_{A,\tau;G}\) factors through \(G_{\mathrm{ab}}\), then it
+  belongs to the subspace spanned by the pullbacks of the irreducible
+  characters of \(G_{\mathrm{ab}}\), that is, by the one-dimensional
+  characters of \(G\). Hence all higher-dimensional Fourier coefficients
+  in \eqref{eq:normalised-primitive-class-profile} vanish, which proves
+  \((i)\Rightarrow(iii)\). The implication \((iii)\Rightarrow(ii)\) is
+  immediate from \eqref{eq:abelian-shadow-defect}. Finally,
+  \((ii)\Rightarrow(i)\) because a class function whose irreducible
+  expansion involves only one-dimensional characters factors through the
+  abelianisation.
+\end{proof}
+
+\subsection{The exact boundary of cyclic detection}
+
+The previous theorem identifies the canonical splitting. The next
+statement concerns the span obtained by using all cyclic quotient
+observables together. It says that this aggregate cyclic information is
+exactly the one-dimensional sector. An individual cyclic quotient sees
+only the one-dimensional characters that factor through that quotient;
+here we take the span over all cyclic quotients. This concerns quotient
+pullbacks on the fixed cocycle, not the canonical cyclic lift of
+\Cref{sec:finite-part}.
+
+For later use, write \(\mathscr C_{\mathrm{cyc}}(G)\) for the linear
+span of the pullbacks \(q^\ast f\), where \(q:G\twoheadrightarrow \ZZ/m\ZZ\)
+ranges over all cyclic quotients and \(f\) ranges over the class
+functions on \(\ZZ/m\ZZ\).
+
+\begin{lemma}[Cyclic quotients and one-dimensional characters]
+  \label{lem:cyclic-quotients-one-dimensional-characters}
+  One has
+  \[
+    \mathscr C_{\mathrm{cyc}}(G)
+    =
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Let \(q:G\twoheadrightarrow \ZZ/m\ZZ\) be a cyclic quotient and let
+  \(f\) be a class function on \(\ZZ/m\ZZ\). Since \(\ZZ/m\ZZ\) is
+  abelian, its irreducible characters form a basis of its class
+  functions, so
+  \[
+    f=\sum_{\psi\in\widehat{\ZZ/m\ZZ}}\widehat f(\psi)\psi.
+  \]
+  Pulling back gives
+  \[
+    q^\ast f
+    =
+    \sum_{\psi\in\widehat{\ZZ/m\ZZ}}
+      \widehat f(\psi)(\psi\circ q),
+  \]
+  and each \(\psi\circ q\) is a one-dimensional character of \(G\).
+  Hence
+  \[
+    \mathscr C_{\mathrm{cyc}}(G)
+    \subset
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+
+  Conversely, let \(\chi\in\Irr(G)\) be one-dimensional. Its image
+  \(\chi(G)\subset\CC^\times\) is a finite subgroup of the multiplicative
+  group of complex numbers, hence cyclic. Let
+  \(q_\chi:G\twoheadrightarrow \chi(G)\) be the induced quotient map,
+  and let \(\iota_\chi:\chi(G)\hookrightarrow \CC^\times\) be the
+  tautological character. Then
+  \[
+    \chi=q_\chi^\ast\iota_\chi,
+  \]
+  so \(\chi\in\mathscr C_{\mathrm{cyc}}(G)\). This proves the reverse
+  inclusion.
+\end{proof}
+
+\begin{theorem}[Structural consequence: exact boundary of cyclic
+  detection]
+  \label{thm:cyclic-detection-boundary}
+  With \(\mathscr C_{\mathrm{cyc}}(G)\) as above,
+  \[
+    \mathscr C_{\mathrm{cyc}}(G)
+    =
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+  If \(P_{\mathrm{cyc}}\) denotes the orthogonal projection onto
+  \(\mathscr C_{\mathrm{cyc}}(G)\), then
+  \[
+    P_{\mathrm{cyc}}\mathcal B_{A,\tau;G}=\mathcal B_{A,\tau;G}^{\mathrm{ab}},
+    \qquad
+    (I-P_{\mathrm{cyc}})\mathcal B_{A,\tau;G}=\mathcal B_{A,\tau;G}^{\mathrm{na}}.
+  \]
+  Equivalently, for every cyclic quotient \(q:G\twoheadrightarrow \ZZ/m\ZZ\)
+  and every class function \(f\) on \(\ZZ/m\ZZ\),
+  \[
+    \langle \mathcal B_{A,\tau;G}^{\mathrm{na}},q^\ast f\rangle_G=0.
+  \]
+  In particular, under the hypotheses of
+  \Cref{thm:class-mertens-explicit}, the full primitive class profile at
+  the Perron point is generated by cyclic quotient shadows if and only if
+  \(\mathcal B_{A,\tau;G}^{\mathrm{na}}\equiv 0\).
+\end{theorem}
+
+\begin{proof}
+  Set
+  \[
+    V_{\mathrm{ab}}(G)
+    :=
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+  \Cref{lem:cyclic-quotients-one-dimensional-characters} gives
+  \(\mathscr C_{\mathrm{cyc}}(G)=V_{\mathrm{ab}}(G)\).
+  Theorem~\ref{thm:abelian-shadow-defect} identifies
+  \(\mathcal B_{A,\tau;G}^{\mathrm{ab}}\) and \(\mathcal B_{A,\tau;G}^{\mathrm{na}}\) as
+  the orthogonal projections of \(\mathcal B_{A,\tau;G}\) onto the
+  one-dimensional and higher-dimensional Peter--Weyl sectors. Since the
+  first sector is exactly \(\mathscr C_{\mathrm{cyc}}(G)\), the
+  projection identities and orthogonality follow immediately.
+\end{proof}
+
+\subsection{A cyclic group test for complex-character conventions}
+
+Before the \(S_3\) model we record a minimal check of the conjugation
+conventions using \(G=C_3=\langle a\rangle\) with \(|a|=3\). This
+example has only non-real characters and therefore exposes the
+Hermitian inner-product requirement directly.
+
+\begin{proposition}[Class indicator for \(C_3\)]
+  \label{prop:c3-class-indicator-check}
+  Let \(G=C_3=\{1,a,a^2\}\) with dual group
+  \(\widehat{C_3}=\{\psi_0,\psi_1,\psi_2\}\), where
+  \(\psi_k(a^j)=\omega_3^{kj}\) and \(\omega_3=e^{2\pi i/3}\).
+  Then for any \(g\in G\),
+  \[
+    \mathbf 1_{\{a\}}(g)
+    =\frac{1}{3}\sum_{k=0}^{2}\overline{\psi_k(a)}\,\psi_k(g)
+    =\frac{1}{3}\sum_{k=0}^{2}\psi_k(a^{-1})\,\psi_k(g),
+  \]
+  whereas the formula without conjugation gives the wrong answer:
+  \[
+    \frac{1}{3}\sum_{k=0}^{2}\psi_k(a)\,\psi_k(g)
+    =\mathbf 1_{\{a^{-1}\}}(g)
+    \ne \mathbf 1_{\{a\}}(g).
+  \]
+\end{proposition}
+
+\begin{proof}
+  Since \(\psi_k(a)=\omega_3^k\), we have \(\overline{\psi_k(a)}=\omega_3^{-k}=\psi_k(a^{-1})\).
+  The expansion with conjugate evaluates as
+  \[
+    \frac{1}{3}\sum_{k=0}^{2}\omega_3^{-k}\omega_3^{kj}
+    =\frac{1}{3}\sum_{k=0}^{2}\omega_3^{k(j-1)}
+    =\mathbf 1_{\{j\equiv 1\bmod 3\}}
+    =\mathbf 1_{\{a\}}(a^j).
+  \]
+  Without conjugation, the same calculation with
+  \(\psi_k(a)=\omega_3^k\) gives
+  \[
+    \tfrac{1}{3}\sum_k\omega_3^{k(j+1)}
+    =\mathbf 1_{\{j\equiv -1\bmod 3\}}
+    =\mathbf 1_{\{a^{-1}\}}(a^j).
+  \]
+\end{proof}
+
+\begin{remark}
+  \Cref{prop:c3-class-indicator-check} is precisely the counterexample
+  described in the proof of \Cref{prop:class-indicator-expansion}: for
+  \(G=C_3\), the correct class-indicator formula requires the conjugate
+  (or equivalently the group inverse), and the failure without it sends
+  every class \(\{a\}\) to the wrong class \(\{a^{-1}\}\). In the
+  subsequent \(S_3\) example all characters happen to be real-valued,
+  so this failure does not manifest there; the \(C_3\) check is therefore
+  the minimal test that can detect a conjugation error.
+\end{remark}
+
+\subsection{The \texorpdfstring{$S_3$}{S3} model and a quadratic Adams mechanism}
+
+\begin{proposition}[Quadratic Adams obstruction]
+  \label{thm:quadratic-adams-obstruction}
+  Let \(\chi\) be a non-trivial quadratic character of \(G\). Then, for
+  \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:quadratic-adams-obstruction}
+    \Pi_\chi(z)
+    =
+    \sum_{\substack{m\ge 1\\ m\ \mathrm{odd}}}
+      \frac{\mu(m)}{m}\,\mathcal L_\chi(z^m)
+    +
+    \sum_{\substack{m\ge 1\\ m\ \mathrm{even}}}
+      \frac{\mu(m)}{m}\,\mathcal L_{\mathbf 1}(z^m).
+  \end{equation}
+  In particular, if \(\mathcal L_\chi\equiv 0\), then
+  \begin{equation}\label{eq:quadratic-adams-obstruction-special}
+    \Pi_\chi(z)
+    =
+    -\frac{1}{2}
+      \sum_{\substack{r\ge 1\\ r\ \mathrm{odd}}}
+        \frac{\mu(r)}{r}\,
+        \mathcal L_{\mathbf 1}(z^{2r}),
+  \end{equation}
+  and hence \(\Pi_\chi\) need not vanish.
+\end{proposition}
+
+\begin{proof}
+  Since \(\chi\) is quadratic, \(\chi^m=\chi\) for \(m\) odd and
+  \(\chi^m=\mathbf 1\) for \(m\) even. The Adams--M\"obius inversion
+  formula \eqref{eq:class-adams-mobius-inversion} therefore gives
+  \eqref{eq:quadratic-adams-obstruction}. If \(\mathcal L_\chi\equiv 0\),
+  only the even terms remain. Writing \(m=2r\), and using the identity
+  \(\mu(2r)=-\mu(r)\) for odd squarefree \(r\), yields
+  \eqref{eq:quadratic-adams-obstruction-special}.
+\end{proof}
+
+\begin{remark}
+  \Cref{thm:quadratic-adams-obstruction} isolates the mechanism that is
+  absent from the periodic-point level. A vanishing quadratic channel
+  for the periodic traces does not force the corresponding primitive
+  channel to vanish, because the even Adams powers feed the trivial
+  representation back into the primitive inversion.
+\end{remark}
+
+Consider the full two-shift
+\[
+  A=
+  \begin{pmatrix}
+    1 & 1 \\
+    1 & 1
+  \end{pmatrix},
+  \qquad
+  \lambda=\rho(A)=2,
+\]
+and label the four allowed edges by
+\begin{equation}\label{eq:s3-example-edge-labels}
+  \begin{aligned}
+    \tau(0\to 0)&=(23), & \tau(0\to 1)&=e, \\
+    \tau(1\to 0)&=(12), & \tau(1\to 1)&=(123).
+  \end{aligned}
+\end{equation}
+Let \(T\) be the transposition class and \(K\) the \(3\)-cycle class in
+\(S_3\). The character table is
+\begin{equation}\label{eq:s3-character-table}
+  \begin{array}{c|ccc}
+    & e & T & K \\ \hline
+    \mathbf 1 & 1 & 1 & 1 \\
+    \varepsilon & 1 & -1 & 1 \\
+    \rho & 2 & 0 & -1
+  \end{array}
+\end{equation}
+where \(\varepsilon\) is the sign character and \(\rho\) the standard
+two-dimensional representation.
+
+In the basis
+\[
+  v_1=e_1-e_2,\qquad v_2=e_1+e_2-2e_3,
+\]
+the standard representation matrices of the generators appearing in
+\eqref{eq:s3-example-edge-labels} are
+\begin{equation}\label{eq:s3-standard-representation-matrices}
+  \rho((12))
+  =
+  \begin{pmatrix}
+    -1 & 0 \\
+    0 & 1
+  \end{pmatrix},
+  \qquad
+  \rho((23))
+  =
+  \begin{pmatrix}
+    \frac12 & \frac32 \\
+    \frac12 & -\frac12
+  \end{pmatrix},
+  \qquad
+  \rho((123))
+  =
+  \begin{pmatrix}
+    -\frac12 & -\frac32 \\
+    \frac12 & -\frac12
+  \end{pmatrix}.
+\end{equation}
+These matrices are written in a convenient equivalent real basis, not
+necessarily a unitary one; the character identities, conjugation
+relations, and spectral-radius statements used below are invariant under
+equivalence of representations.
+
+\begin{proposition}[Twisted channels for the \(S_3\)-example]
+  \label{prop:s3-example-channels}
+  One has
+  \begin{equation}\label{eq:s3-example-aeps}
+    A_\varepsilon=
+    \begin{pmatrix}
+      -1 & 1 \\
+      -1 & 1
+    \end{pmatrix},
+    \qquad
+    A_\varepsilon^2=0,
+    \qquad
+    \det(I-zA_\varepsilon)=1.
+  \end{equation}
+  Moreover,
+  \begin{equation}\label{eq:s3-example-arho}
+    A_\rho=
+    \begin{pmatrix}
+      \frac12 & \frac32 & 1 & 0 \\
+      \frac12 & -\frac12 & 0 & 1 \\
+      -1 & 0 & -\frac12 & -\frac32 \\
+      0 & 1 & \frac12 & -\frac12
+    \end{pmatrix},
+  \end{equation}
+  and
+  \begin{equation}\label{eq:s3-example-arho-charpoly}
+    \chi_{A_\rho}(t)=t^3(t+1),
+    \qquad
+    \det(I-zA_\rho)=1+z.
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:s3-example-logarithms}
+    \mathcal L_\varepsilon(z)=0,
+    \qquad
+    \mathcal L_\rho(z)=\log\det(I-zA_\rho)^{-1}=-\log(1+z).
+  \end{equation}
+  If \(a_{n,C}\) denotes the number of period-\(n\) points whose
+  \(S_3\)-label lies in \(C\), then
+  \begin{equation}\label{eq:s3-example-periodic-classes}
+    a_{n,e}=\frac{2^n+2(-1)^n}{6},
+    \qquad
+    a_{n,T}=2^{n-1},
+    \qquad
+    a_{n,K}=\frac{2^n-(-1)^n}{3}.
+  \end{equation}
+  In particular, the transposition class is exactly equidistributed at
+  every period length:
+  \begin{equation}\label{eq:s3-example-periodic-equidistribution}
+    a_{n,T}=\frac{|T|}{|S_3|}\,2^n
+    \qquad \text{for every } n\ge 1.
+  \end{equation}
+  Moreover,
+  \begin{equation}\label{eq:s3-example-eta-check}
+    \rho(A_\varepsilon)=0,
+    \qquad
+    \rho(A_\rho)=1,
+    \qquad
+    \eta=1<2=\lambda.
+  \end{equation}
+  In particular, the hypothesis of
+  \Cref{thm:class-mertens-explicit} holds for this example.
+\end{proposition}
+
+\begin{proof}
+  The sign matrix is obtained by substituting
+  \(\varepsilon((23))=-1\), \(\varepsilon(e)=1\),
+  \(\varepsilon((12))=-1\), and \(\varepsilon((123))=1\) into the
+  \(2\times2\) block matrix of edge labels. This gives
+  \[
+    A_\varepsilon
+    =
+    \begin{pmatrix}
+      -1 & 1 \\
+      -1 & 1
+    \end{pmatrix},
+    \qquad
+    A_\varepsilon^2=0,
+  \]
+  and therefore \(\det(I-zA_\varepsilon)=1\).
+
+  For the standard channel, \eqref{eq:s3-standard-representation-matrices}
+  yields the block form
+  \[
+    A_\rho
+    =
+    \begin{pmatrix}
+      \rho((23)) & I_2 \\
+      \rho((12)) & \rho((123))
+    \end{pmatrix},
+  \]
+  which is exactly \eqref{eq:s3-example-arho}. To compute its
+  characteristic polynomial, write
+  \[
+    tI_4-A_\rho
+    =
+    \begin{pmatrix}
+      tI_2-\rho((23)) & -I_2 \\
+      -\rho((12)) & tI_2-\rho((123))
+    \end{pmatrix}.
+  \]
+  Since the upper-right block \(-I_2\) commutes with the lower-right
+  block, the block determinant identity gives
+  \[
+    \det(tI_4-A_\rho)
+    =
+    \det\!\bigl((tI_2-\rho((123)))(tI_2-\rho((23)))-\rho((12))\bigr).
+  \]
+  A direct multiplication using
+  \eqref{eq:s3-standard-representation-matrices} shows that
+  \[
+    (tI_2-\rho((123)))(tI_2-\rho((23)))-\rho((12))
+    =
+    \begin{pmatrix}
+      t^2 & 0 \\
+      -t & t(t+1)
+    \end{pmatrix}.
+  \]
+  Hence
+  \[
+    \chi_{A_\rho}(t)=\det(tI_4-A_\rho)=t^3(t+1),
+  \]
+  so the eigenvalues of \(A_\rho\) are \(0,0,0,-1\). This gives
+  \(\rho(A_\rho)=1\), \(\det(I-zA_\rho)=1+z\), and
+  \(\Tr(A_\rho^n)=(-1)^n\) for every \(n\ge 1\).
+
+  Since \(\Tr(A^n)=2^n\), \(\Tr(A_\varepsilon^n)=0\), and
+  \(\Tr(A_\rho^n)=(-1)^n\), the logarithmic channels are
+  \[
+    \mathcal L_\varepsilon(z)=\log\det(I-zA_\varepsilon)^{-1}=0,
+    \qquad
+    \mathcal L_\rho(z)=\log\det(I-zA_\rho)^{-1}=-\log(1+z).
+  \]
+  The class-counting formula from
+  \Cref{prop:class-indicator-expansion} gives
+  \[
+    \begin{aligned}
+      a_{n,C}
+      &=
+      \frac{|C|}{|S_3|}
+        \Bigl(
+          \Tr(A^n)
+          +\chi_\varepsilon^\ast(C)\Tr(A_\varepsilon^n)
+          +\chi_\rho^\ast(C)\Tr(A_\rho^n)
+        \Bigr) \\
+      &=
+      \frac{|C|}{|S_3|}
+        \Bigl(2^n+\chi_\rho^\ast(C)(-1)^n\Bigr),
+    \end{aligned}
+  \]
+  from which \eqref{eq:s3-example-periodic-classes} follows.
+\end{proof}
+
+\begin{proposition}[Primitive channels for the \(S_3\)-example]
+  \label{prop:s3-example-primitive-channels}
+  The sign channel satisfies
+  \begin{equation}\label{eq:s3-example-pi-eps}
+    \Pi_\varepsilon(z)
+    =
+    -\frac12
+      \sum_{\substack{r\ge 1\\ r\ \mathrm{odd}}}
+        \frac{\mu(r)}{r}\log(1-2z^{2r})^{-1},
+  \end{equation}
+  with the Perron-point certificate recorded in
+  \Cref{lem:s3-example-perron-certificates}.
+
+  For the standard representation,
+  \begin{equation}\label{eq:s3-example-adams-rho}
+    \psi^m\rho=
+    \begin{cases}
+      \rho, & m\equiv \pm 1 \pmod 6, \\
+      \mathbf 1-\varepsilon+\rho, & m\equiv \pm 2 \pmod 6, \\
+      \mathbf 1+\varepsilon, & m\equiv 3 \pmod 6, \\
+      2\mathbf 1, & 6\mid m,
+    \end{cases}
+  \end{equation}
+  and therefore
+  \begin{equation}\label{eq:s3-example-pi-rho}
+    \Pi_\rho(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \Bigl(
+        \alpha(m)\log(1-2z^m)^{-1}
+        -\beta(m)\log(1+z^m)
+      \Bigr),
+  \end{equation}
+  where
+  \begin{equation}\label{eq:s3-example-alpha-beta}
+    (\alpha(m),\beta(m))=
+    \begin{cases}
+      (0,1), & m\equiv \pm 1 \pmod 6, \\
+      (1,1), & m\equiv \pm 2 \pmod 6, \\
+      (1,0), & m\equiv 3 \pmod 6, \\
+      (2,0), & 6\mid m,
+    \end{cases}
+  \end{equation}
+  with the Perron-point certificate again recorded in
+  \Cref{lem:s3-example-perron-certificates}.
+\end{proposition}
+
+\begin{proof}
+  Since \(\varepsilon\) is quadratic and
+  \(\mathcal L_\varepsilon(z)=0\), \Cref{thm:quadratic-adams-obstruction}
+  gives \eqref{eq:s3-example-pi-eps}. The series converges absolutely
+  at \(z=1/2\), and the certified non-zero interval is established in
+  \Cref{lem:s3-example-perron-certificates}.
+
+  For \(\rho\), one computes the Adams powers from the character table
+  \eqref{eq:s3-character-table} by evaluating
+  \(g\mapsto \chi_\rho(g^m)\) on the three conjugacy classes. Since a
+  transposition has \(m\)-th power in \(T\) for \(m\) odd and in
+  \(\{e\}\) for \(m\) even, while a \(3\)-cycle has \(m\)-th power in
+  \(K\) when \(3\nmid m\) and in \(\{e\}\) when \(3\mid m\), the class
+  values of \(\psi^m\rho\) are therefore
+  \[
+    \begin{array}{c|ccc|c}
+      m \bmod 6
+      & (\psi^m\chi_\rho)(e)
+      & (\psi^m\chi_\rho)(T)
+      & (\psi^m\chi_\rho)(K)
+      & \psi^m\rho \\ \hline
+      \pm 1 & 2 & 0 & -1 & \rho \\
+      \pm 2 & 2 & 2 & -1 & \mathbf 1-\varepsilon+\rho \\
+      3 & 2 & 0 & 2 & \mathbf 1+\varepsilon \\
+      0 & 2 & 2 & 2 & 2\mathbf 1
+    \end{array}
+  \]
+  and decomposing these four class functions in the basis
+  \(\{\mathbf 1,\varepsilon,\rho\}\) gives
+  \eqref{eq:s3-example-adams-rho}. Substituting the decomposition into
+  \Cref{cor:primitive-peter-weyl-determinant}, and using
+  \eqref{eq:s3-example-logarithms}, yields
+  \eqref{eq:s3-example-pi-rho} and \eqref{eq:s3-example-alpha-beta}.
+  The resulting series again converges absolutely at \(z=1/2\), and the
+  certified non-zero interval is established in
+  \Cref{lem:s3-example-perron-certificates}.
+\end{proof}
+
+\begin{lemma}[Certified non-vanishing in the \(S_3\)-example]
+  \label{lem:s3-example-perron-certificates}
+  For the \(S_3\)-extension above, the Perron-point primitive channels
+  satisfy the certified inequalities
+  \begin{equation}\label{eq:s3-example-certified-intervals}
+    -\frac{342}{1000}
+    <\Pi_\varepsilon(1/2)<-\frac{341}{1000},
+    \qquad
+    -\frac{719}{1000}
+    <\Pi_\rho(1/2)<-\frac{718}{1000}.
+  \end{equation}
+  Hence both primitive channels are bounded away from zero, and the
+  higher-dimensional term in the non-abelian defect from
+  \Cref{thm:abelian-shadow-defect} is genuinely present in this
+  example.
+\end{lemma}
+
+\begin{proof}
+  Appendix~\ref{app:s3-log-certificates} proves exact rational bounds
+  for the finite sums \(E_7\) and \(R_{15}\), together with the tail
+  estimates in
+  \eqref{eq:s3-example-epsilon-tail-certificate} and
+  \eqref{eq:s3-example-rho-tail-certificate}. In particular, the
+  appendix derives the sharper windows
+  \[
+    -\frac{341079}{10^6}-\frac{1}{1105920}
+    <\Pi_\varepsilon(1/2)<
+    -\frac{341071}{10^6}+\frac{1}{1105920},
+  \]
+  and
+  \[
+    -\frac{718352}{10^6}-\frac{9}{524288}
+    <\Pi_\rho(1/2)<
+    -\frac{718351}{10^6}+\frac{9}{524288}.
+  \]
+  These intervals are contained in
+  \eqref{eq:s3-example-certified-intervals}. The concluding statement
+  then follows immediately.
+\end{proof}
+
+\begin{corollary}[Primitive profile and deviations for the
+  \(S_3\)-example]
+  \label{cor:s3-example-profile}
+  For the \(S_3\)-extension defined above, one has
+  \begin{equation}\label{eq:s3-example-primitive-sign-coefficients}
+    \pi_{n,\varepsilon}(A,\tau)
+    =
+    \frac{1}{n}
+      \sum_{\substack{m\mid n\\ 2\mid m}}
+        \mu(m)\,2^{n/m},
+  \end{equation}
+  and
+  \begin{equation}\label{eq:s3-example-primitive-rho-coefficients}
+    \pi_{n,\rho}(A,\tau)
+    =
+    \frac{1}{n}
+      \sum_{m\mid n}
+        \mu(m)\Bigl(
+          \alpha(m)2^{n/m}+\beta(m)(-1)^{n/m}
+        \Bigr).
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:s3-example-primitive-classes}
+    \begin{aligned}
+      p_{n,e}
+      &=\frac{p_n(A)+\pi_{n,\varepsilon}(A,\tau)+2\pi_{n,\rho}(A,\tau)}{6}, \\
+      p_{n,T}
+      &=\frac{p_n(A)-\pi_{n,\varepsilon}(A,\tau)}{2}, \\
+      p_{n,K}
+      &=\frac{p_n(A)+\pi_{n,\varepsilon}(A,\tau)-\pi_{n,\rho}(A,\tau)}{3}.
+    \end{aligned}
+  \end{equation}
+  where
+  \begin{equation}\label{eq:s3-example-full-two-shift-primitive}
+    p_n(A)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,2^{n/d}.
+  \end{equation}
+  The first primitive class triples are
+  \begin{equation}\label{eq:s3-example-primitive-first-terms}
+    (p_{n,e},p_{n,T},p_{n,K})
+    =(0,1,1),(0,1,0),(0,1,1),(0,2,1),(1,3,2),(1,5,3),\ldots
+  \end{equation}
+  Finally,
+  \begin{equation}\label{eq:s3-example-delta-values}
+    \begin{aligned}
+      \Delta_e(A,\tau;S_3)
+      &=\frac16\Pi_\varepsilon(1/2)+\frac13\Pi_\rho(1/2), \\
+      \Delta_T(A,\tau;S_3)
+      &=-\frac12\Pi_\varepsilon(1/2), \\
+      \Delta_K(A,\tau;S_3)
+      &=\frac13\Pi_\varepsilon(1/2)-\frac13\Pi_\rho(1/2).
+    \end{aligned}
+  \end{equation}
+  and the Perron-point windows imply
+  \begin{equation}\label{eq:s3-example-delta-certified-windows}
+    -\frac{89}{300}
+    <\Delta_e(A,\tau;S_3)<-\frac{1777}{6000},
+    \qquad
+    \frac{341}{2000}
+    <\Delta_T(A,\tau;S_3)<\frac{171}{1000},
+  \end{equation}
+  \begin{equation}\label{eq:s3-example-delta-k-certified-window}
+    \frac{47}{375}
+    <\Delta_K(A,\tau;S_3)<\frac{63}{500}.
+  \end{equation}
+  Equivalently, the class-constant deviations split as
+  \begin{equation}\label{eq:s3-example-abelian-shadow}
+    \Delta^{\mathrm{ab}}
+    =
+    \Bigl(
+      \frac16\Pi_\varepsilon(1/2),
+      -\frac12\Pi_\varepsilon(1/2),
+      \frac13\Pi_\varepsilon(1/2)
+    \Bigr),
+  \end{equation}
+  \begin{equation}\label{eq:s3-example-nonabelian-defect}
+    \Delta^{\mathrm{na}}
+    =
+    \Bigl(
+      \frac13\Pi_\rho(1/2),
+      0,
+      -\frac13\Pi_\rho(1/2)
+    \Bigr).
+  \end{equation}
+  In particular,
+  \begin{equation}\label{eq:s3-example-energy-ratio}
+    \frac{\norm{\mathcal B_{A,\tau;G}^{\mathrm{na}}}_G^2}
+         {\norm{\mathcal B_{A,\tau;G}^{\mathrm{ab}}}_G^2}
+    =
+    \frac{\abs{\Pi_\rho(1/2)}^2}
+         {\abs{\Pi_\varepsilon(1/2)}^2}
+    >4,
+  \end{equation}
+  so that the genuine non-abelian primitive bias is certified to be more
+  than four times stronger than the abelian shadow.
+\end{corollary}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}p{0.16\textwidth}p{0.32\textwidth}p{0.36\textwidth}@{}}
+\toprule
+Channel / observable & Periodic-level behaviour & Certified primitive information \\
+\midrule
+\(\varepsilon\) &
+\(\mathcal L_\varepsilon(z)=0\) &
+\(-\frac{342}{1000}<\Pi_\varepsilon(1/2)<-\frac{341}{1000}\) \\
+\(\rho\) &
+\(\mathcal L_\rho(z)=-\log(1+z)\) &
+\(-\frac{719}{1000}<\Pi_\rho(1/2)<-\frac{718}{1000}\) \\
+\(T\) &
+\(a_{n,T}=2^{n-1}\) for all \(n\) &
+\(\frac{341}{2000}<\Delta_T(A,\tau;S_3)<\frac{171}{1000}\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{proof}
+  Expanding \(\log(1-2z^{2r})^{-1}=\sum_{k\ge 1}2^k z^{2rk}/k\) in
+  \eqref{eq:s3-example-pi-eps} and reading off the coefficient of
+  \(z^n\) gives \eqref{eq:s3-example-primitive-sign-coefficients}.
+  Likewise, coefficient extraction in \eqref{eq:s3-example-pi-rho}
+  yields \eqref{eq:s3-example-primitive-rho-coefficients}. The class formulas
+  \eqref{eq:s3-example-primitive-classes} are precisely the
+  conjugacy-class decomposition from
+  \Cref{thm:class-primitive-decomposition}, specialised with the
+  character table \eqref{eq:s3-character-table}. Evaluating these
+  formulas for \(n=1,\dots,6\) yields
+  \eqref{eq:s3-example-primitive-first-terms}.
+
+  The constant formulas are obtained from
+  \Cref{prop:class-mertens-deviations} and the character table
+  \eqref{eq:s3-character-table}, namely
+  \[
+    \begin{aligned}
+      \Delta_e(A,\tau;S_3)
+      &=\frac{1}{6}\Pi_\varepsilon(1/2)+\frac{1}{3}\Pi_\rho(1/2), \\
+      \Delta_T(A,\tau;S_3)
+      &=-\frac{1}{2}\Pi_\varepsilon(1/2), \\
+      \Delta_K(A,\tau;S_3)
+      &=\frac{1}{3}\Pi_\varepsilon(1/2)-\frac{1}{3}\Pi_\rho(1/2).
+    \end{aligned}
+  \]
+  Combining the certified intervals in
+  \Cref{lem:s3-example-perron-certificates} with these formulas gives
+  \eqref{eq:s3-example-delta-certified-windows} and
+  \eqref{eq:s3-example-delta-k-certified-window}. The signs and
+  non-vanishing of these three deviations follow immediately.
+  The decomposition into
+  \eqref{eq:s3-example-abelian-shadow} and
+  \eqref{eq:s3-example-nonabelian-defect} is exactly the splitting from
+  \Cref{thm:abelian-shadow-defect}. Finally,
+  \eqref{eq:s3-example-energy-ratio} is the corresponding norm identity,
+  and the bound \(>4\) follows from
+  \eqref{eq:s3-example-certified-intervals}, since
+  \((718/342)^2>4\).
+\end{proof}
+
+\begin{theorem}[Certified separation of the \(S_3\) obstruction]
+  \label{thm:s3-certified-nonabelian-defect}
+  In the \(S_3\)-extension above, the obstruction splits into two
+  independent Peter--Weyl sectors.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item The non-trivial cyclic quotient shadow is exactly the sign
+      line. More precisely,
+      \[
+        \mathscr C_{\mathrm{cyc}}(S_3)
+        =
+        \operatorname{span}\{\mathbf 1,\varepsilon\},
+        \qquad
+        \mathcal B_{A,\tau;G}^{\mathrm{ab}}(C)
+        =
+        \varepsilon^\ast(C)\,\Pi_\varepsilon(1/2).
+      \]
+      The identity \(\mathcal L_\varepsilon(z)\equiv0\) and the
+      certified inequality
+      \[
+        -\frac{342}{1000}
+        <\Pi_\varepsilon(1/2)<-\frac{341}{1000}
+      \]
+      are therefore a quadratic Adams obstruction in the sign line.
+    \item The genuine non-abelian defect is the standard channel:
+      \[
+        \mathcal B_{A,\tau;G}^{\mathrm{na}}(C)
+        =
+        \chi_\rho^\ast(C)\,\Pi_\rho(1/2),
+        \qquad
+        -\frac{719}{1000}
+        <\Pi_\rho(1/2)<-\frac{718}{1000}.
+      \]
+      Consequently \(\mathcal B_{A,\tau;G}^{\mathrm{na}}\neq0\), it is
+      orthogonal to every cyclic quotient observable, and the primitive
+      class profile does not factor through the abelianisation
+      \(S_3\twoheadrightarrow C_2\).
+  \end{enumerate}
+  Thus the vanishing sign trace is not itself the non-abelian defect;
+  it is the one-dimensional Adams effect. The certified
+  higher-dimensional obstruction is the non-zero standard-channel value
+  \(\Pi_\rho(1/2)\).
+\end{theorem}
+
+\begin{proof}
+  The abelianisation of \(S_3\) is \(C_2\), and its non-trivial character
+  pulls back to the sign character \(\varepsilon\). Hence
+  \Cref{lem:cyclic-quotients-one-dimensional-characters} gives
+  \[
+    \mathscr C_{\mathrm{cyc}}(S_3)
+    =
+    \operatorname{span}\{\mathbf 1,\varepsilon\}.
+  \]
+  Since \(\varepsilon\) is the only non-trivial one-dimensional
+  character of \(S_3\), the definition
+  \eqref{eq:abelian-shadow-defect} gives
+  \[
+    \mathcal B_{A,\tau;G}^{\mathrm{ab}}(C)
+    =
+    \varepsilon^\ast(C)\,\Pi_\varepsilon(1/2).
+  \]
+  The vanishing \(\mathcal L_\varepsilon\equiv0\) is
+  \eqref{eq:s3-example-logarithms}, and the displayed certified interval
+  for \(\Pi_\varepsilon(1/2)\) is
+  \eqref{eq:s3-example-certified-intervals}. By
+  \Cref{thm:quadratic-adams-obstruction}, this is precisely the
+  quadratic one-dimensional Adams mechanism.
+
+  The only irreducible representation of \(S_3\) of dimension greater
+  than one is the standard representation \(\rho\). Therefore
+  \eqref{eq:abelian-shadow-defect} gives
+  \[
+    \mathcal B_{A,\tau;G}^{\mathrm{na}}(C)
+    =
+    \chi_\rho^\ast(C)\,\Pi_\rho(1/2).
+  \]
+  The certified interval for \(\Pi_\rho(1/2)\) is again
+  \eqref{eq:s3-example-certified-intervals}, so this higher-dimensional
+  component is non-zero. Orthogonality to all cyclic quotient observables
+  follows from \Cref{thm:cyclic-detection-boundary}. Finally,
+  \Cref{thm:abelian-shadow-defect} says that a primitive profile factors
+  through the abelianisation if and only if its higher-dimensional
+  component vanishes. Since \(\mathcal B_{A,\tau;G}^{\mathrm{na}}\neq0\), the
+  \(S_3\) profile does not factor through \(C_2\).
+\end{proof}
+
+\begin{remark}
+  The \(S_3\)-example exhibits two distinct failures of periodic-level
+  intuition. The sign trace channel vanishes identically by
+  \eqref{eq:s3-example-logarithms}, but
+  \(\Pi_\varepsilon(1/2)\neq 0\); this is the one-dimensional quadratic
+  Adams obstruction of \Cref{thm:quadratic-adams-obstruction}. Separately,
+  the standard channel has the certified non-zero value
+  \(\Pi_\rho(1/2)\), so the primitive profile has a genuine
+  higher-dimensional component. The exact periodic equidistribution of
+  the transposition class in
+  \eqref{eq:s3-example-periodic-equidistribution} therefore does not
+  imply that the primitive profile is detected by cyclic quotients.
+  Accordingly, this section isolates a finite-state obstruction inside a
+  fixed symbolic skew product; it is not an orbit-distribution theorem
+  of the type studied in
+  \cite{Lalley1987DistributionPeriodicOrbits,%
+  Coles2025VassilievWritheAxiomA}. What the example contributes is a
+  concrete separation between a one-dimensional quadratic Adams effect
+  and an independent higher-dimensional non-abelian defect.
+\end{remark}

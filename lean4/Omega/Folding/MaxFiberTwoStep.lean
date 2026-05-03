@@ -874,6 +874,13 @@ theorem Fold_ne_of_first_bit_flip {m : Nat} (w : Word m) (hm : 2 ≤ m) :
     Fold (Function.update w ⟨0, by omega⟩ true) :=
   Fold_ne_of_bit_flip w ⟨0, by omega⟩
 
+/-- Paper-facing left-resolving wrapper.
+    thm:pom-left-resolving -/
+theorem paper_pom_left_resolving {m : Nat} (w : Word m) (hm : 2 ≤ m) :
+    Fold (Function.update w ⟨0, by omega⟩ false) ≠
+    Fold (Function.update w ⟨0, by omega⟩ true) :=
+  Fold_ne_of_first_bit_flip w hm
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R29: hiddenBitCount density bound
 -- ══════════════════════════════════════════════════════════════

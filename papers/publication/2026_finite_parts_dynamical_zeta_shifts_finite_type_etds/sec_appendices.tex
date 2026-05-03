@@ -1,0 +1,903 @@
+\section{Detailed proofs for the cyclic-lift comparison package}
+\label{app:cyclic-lift-package}
+
+This appendix collects the scalar cyclic-lift reconstruction arguments
+that are auxiliary to the finite-group theorem spine. The main text
+records only the fixed-matrix outputs; the determinant identities,
+M\"obius inversion on multiples, and the one-layer Fourier calculations
+are placed here to keep the finite-group results in the foreground.
+
+\subsection{Logarithm convention for the cyclic-lift package}
+
+Throughout this appendix, \(\Log\) denotes the principal branch on
+\(\CC\setminus(-\infty,0]\). For every \(j\ge 2\) and every \(|t|\le 1\),
+\[
+  \Re\!\left(1-\frac{\mu_j}{\lambda}t\right)
+  \ge 1-\left|\frac{\mu_j}{\lambda}t\right|
+  \ge 1-\frac{|\mu_j|}{\lambda}
+  >0.
+\]
+Hence each factor \(1-(\mu_j/\lambda)t\) stays in the right half-plane,
+so its principal logarithm is defined on the whole closed unit disc. We
+therefore set, for \(|t|\le 1\),
+\[
+  \log F_A(t)
+  :=
+  \sum_{j=2}^d \Log\!\left(1-\frac{\mu_j}{\lambda}t\right).
+\]
+This is a continuous branch of the logarithm of \(F_A\) on \(|t|\le 1\),
+normalized by \(\log F_A(0)=0\). If \(|z|<1\), then
+\(\Re(1-z)\ge 1-|z|>0\), so
+\[
+  -\Log(1-z)=\sum_{n\ge 1}\frac{z^n}{n}.
+\]
+Applying this with \(z=(\mu_j/\lambda)e^{i\theta}\) and summing over the
+finitely many non-Perron eigenvalues gives
+\[
+  -\log F_A(e^{i\theta})
+  =
+  \sum_{n\ge 1}\frac{u_n(A)e^{in\theta}}{n}.
+\]
+This branch is defined factorwise; we do not invoke the principal
+logarithm of the product \(F_A(t)\). Likewise, for every \(q\ge 1\) we
+set
+\[
+  \Psi_q(A)
+  :=
+  -\sum_{j=2}^d
+    \Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+\]
+All determinant logarithms in this appendix use the indicated branches.
+
+We also write
+\[
+  \Lambda_{\mathrm{rel}}(A):=\Lambda(A)/\lambda\in[0,1)
+\]
+and
+\[
+  u_n(A):=\sum_{j=2}^d\left(\frac{\mu_j}{\lambda}\right)^n
+  \qquad (n\ge 1).
+\]
+
+\subsection{Reduced determinants and multiple sums}
+
+\begin{proposition}[A formula for the reduced determinants of cyclic lifts]
+  \label{thm:finite-part-cyclic-lift-reduced-constant-closed}
+  For every \(q\ge 1\),
+  \[
+    C_\lambda(A^{\langle q\rangle})
+    =\frac{1}{q}\prod_{j=2}^d
+      \left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right)^{-1}.
+  \]
+  Equivalently,
+  \[
+    \exp(\Psi_q(A))
+    =
+    q\,C_\lambda(A^{\langle q\rangle}).
+  \]
+\end{proposition}
+
+\begin{proof}
+  The spectrum of \(A^{\langle q\rangle}=A\otimes P_q\) is
+  \[
+    \{\mu\,\omega_q^k:\mu\in\spec(A),\ 0\le k\le q-1\}.
+  \]
+  The eigenvalue \(\lambda\) of \(A^{\langle q\rangle}\) is simple.
+  Applying \Cref{lem:simple-eigenvalue-reduced-constant} to this
+  eigenvalue yields
+  \[
+    C_\lambda(A^{\langle q\rangle})
+    =\prod_{k=1}^{q-1}(1-\omega_q^k)^{-1}
+      \prod_{j=2}^d\prod_{k=0}^{q-1}
+        \left(1-\frac{\mu_j}{\lambda}\omega_q^k\right)^{-1}.
+  \]
+  The first product equals \(1/q\), while
+  \[
+    \prod_{k=0}^{q-1}(1-x\omega_q^k)=1-x^q.
+  \]
+  Substituting \(x=\mu_j/\lambda\) proves the claim.
+\end{proof}
+
+\begin{proposition}[Multiple-sum expansion for cyclic lifts with
+  explicit exponential remainder]
+  \label{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
+  For every \(q\ge 1\),
+  \[
+    \Psi_q(A)=\sum_{m\ge 1}\frac{u_{qm}(A)}{m},
+  \]
+  and therefore
+  \[
+    \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right)
+    \qquad (q\to\infty).
+  \]
+  More precisely,
+  \[
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  By \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed},
+  \[
+    \Psi_q(A)
+    =-\sum_{j=2}^d\Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+  \]
+  Expanding \(-\Log(1-x)=\sum_{m\ge 1}x^m/m\) for \(|x|<1\) and
+  exchanging the finite sum over \(j\) with the absolutely convergent
+  series over \(m\) gives the first identity. The remainder estimate
+  follows from
+  \[
+    |u_{qm}(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^{qm}.
+  \]
+  Indeed,
+  \[
+    \begin{aligned}
+      \abs{\Psi_q(A)-u_q(A)}
+      &\le
+      \sum_{m\ge 2}\frac{\abs{u_{qm}(A)}}{m} \\
+      &\le
+      \frac{d-1}{2}\sum_{m\ge 2}\Lambda_{\mathrm{rel}}(A)^{qm} \\
+      &\le
+      \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+      \Lambda_{\mathrm{rel}}(A)^{2q}.
+    \end{aligned}
+  \]
+\end{proof}
+
+\begin{proposition}[M\"obius inversion on multiples]
+  \label{prop:finite-part-cyclic-lift-mobius-inversion}
+  For every \(n\ge 1\),
+  \[
+    \frac{u_n(A)}{n}
+    =\sum_{m\ge 1}\frac{\mu(m)}{mn}\,\Psi_{mn}(A).
+  \]
+\end{proposition}
+
+\begin{lemma}[Absolute convergence for multiples inversion]
+  \label{lem:finite-part-cyclic-lift-mobius-absolute}
+  Let \(b_n:=u_n(A)/n\). Then, for every \(n\ge 1\),
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}<\infty.
+  \]
+\end{lemma}
+
+\begin{proof}
+  For every \(k\ge 1\),
+  \[
+    \abs{u_k(A)}
+    \le (d-1)\Lambda_{\mathrm{rel}}(A)^k,
+  \]
+  so
+  \[
+    \abs{b_k}
+    \le \frac{d-1}{k}\Lambda_{\mathrm{rel}}(A)^k.
+  \]
+  Therefore
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
+    =
+    \sum_{s\ge 1}
+      \#\{(m,r)\in \NN^2:mr=s\}\,\abs{b_{ns}}.
+  \]
+  Since every factorization \(mr=s\) is determined by the divisor \(m\),
+  the multiplicity \(\#\{(m,r)\in \NN^2:mr=s\}\) is at most \(s\). Hence
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
+    \le
+    \sum_{s\ge 1}s\,\abs{b_{ns}}
+    \le
+    \frac{d-1}{n}\sum_{s\ge 1}\Lambda_{\mathrm{rel}}(A)^{ns}
+    <\infty,
+  \]
+  because \(0\le \Lambda_{\mathrm{rel}}(A)<1\).
+\end{proof}
+
+\begin{proof}[Proof of \Cref{prop:finite-part-cyclic-lift-mobius-inversion}]
+  Set \(b_n:=u_n(A)/n\). Then
+  \[
+    \frac{\Psi_q(A)}{q}
+    =\sum_{m\ge 1}b_{qm}
+  \]
+  by \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. By
+  \Cref{lem:finite-part-cyclic-lift-mobius-absolute},
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{\mu(m)b_{mnr}}
+    \le
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
+    <\infty,
+  \]
+  so Tonelli--Fubini applies to the double series below. Hence
+  \begin{align*}
+    \sum_{m\ge 1}\frac{\mu(m)}{mn}\Psi_{mn}(A)
+    &=
+    \sum_{m\ge 1}\mu(m)\sum_{r\ge 1}b_{mnr} \\
+    &=
+    \sum_{s\ge 1}b_{ns}\sum_{m\mid s}\mu(m)
+    =b_n,
+  \end{align*}
+  since \(\sum_{m\mid s}\mu(m)=0\) unless \(s=1\).
+\end{proof}
+
+\begin{lemma}[Limsup of a finite exponential sum]
+  \label{lem:finite-part-exponential-sum-limsup}
+  Let
+  \[
+    f_q=\sum_{\beta\in B} d_\beta \beta^q
+    \qquad (q\ge 1),
+  \]
+  where \(B\subset\CC\) is finite and nonempty, the numbers \(\beta\) are
+  pairwise distinct, and \(d_\beta\in\CC\setminus\{0\}\) for every
+  \(\beta\in B\).
+  Then
+  \[
+    \limsup_{q\to\infty}\abs{f_q}^{1/q}
+    =\max_{\beta\in B}\abs{\beta}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Set
+  \[
+    R:=\max_{\beta\in B}\abs{\beta}.
+  \]
+  The upper bound
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
+  \[
+    \abs{f_q}
+    \le \sum_{\beta\in B}\abs{d_\beta}\,\abs{\beta}^q
+    \le \left(\sum_{\beta\in B}\abs{d_\beta}\right)R^q.
+  \]
+  If \(R=0\), then \(B=\{0\}\), so \(f_q=0\) for all \(q\ge 1\), and the
+  asserted equality is immediate.
+
+  Let
+  \[
+    B_R:=\{\beta\in B:\abs{\beta}=R\},
+    \qquad
+    g_q:=\sum_{\beta\in B_R} d_\beta (\beta/R)^q.
+  \]
+  Since \(B\) is finite, there exists \(\vartheta\in[0,1)\) such that
+  \(\abs{\beta}\le \vartheta R\) for every \(\beta\in B\setminus B_R\).
+  Hence
+  \[
+    f_q
+    =
+    R^q\left(g_q+\sum_{\beta\in B\setminus B_R}d_\beta(\beta/R)^q\right)
+    =
+    R^q\bigl(g_q+O(\vartheta^q)\bigr).
+  \]
+  The numbers \(\beta/R\) with \(\beta\in B_R\) lie on \(\TT\) and are
+  pairwise distinct. Therefore
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    =
+    \sum_{\beta,\gamma\in B_R}
+      d_\beta\overline{d_\gamma}\,
+      \frac{1}{N}\sum_{q=1}^N
+        \left(\frac{\beta\overline{\gamma}}{R^2}\right)^q.
+  \]
+  As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
+  \(\beta=\gamma\) and to \(0\) otherwise. Hence
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    \longrightarrow
+    \sum_{\beta\in B_R}\abs{d_\beta}^2>0.
+  \]
+  Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
+  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge 2c\). Along
+  that subsequence,
+  \[
+    \abs{f_q}\ge cR^q
+  \]
+  for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
+  yields
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\ge R\), completing the proof.
+\end{proof}
+
+\subsection{Proofs of the reconstruction outputs}
+
+\begin{proof}[Proof of \Cref{thm:finite-part-cyclic-lift-spectrum-identifiability}]
+  By \Cref{prop:finite-part-cyclic-lift-mobius-inversion}, the cyclic
+  data determine every power sum \(u_n(A)\). Write
+  \[
+    \alpha_j:=\frac{\mu_j}{\lambda},
+    \qquad
+    P_A(x):=\prod_{j=2}^d(x-\alpha_j)
+    =x^{d-1}F_A(x^{-1}).
+  \]
+  Then \(P_A\) is monic of degree \(d-1\), even when some
+  \(\alpha_j=0\). Newton's identities recover the coefficients of this
+  monic degree-\((d-1)\) polynomial from the first \(d-1\) power sums
+  \(u_n(A)=\sum_{j=2}^d\alpha_j^n\), and hence from the full sequence
+  \(\{u_n(A)\}_{n\ge 1}\). Therefore the multiset
+  \(\{\alpha_2,\dots,\alpha_d\}\), including \(0\) with algebraic
+  multiplicity, is determined. Equivalently,
+  \[
+    F_A(t)=\prod_{j=2}^d(1-\alpha_j t)
+  \]
+  is determined. Its ordinary degree counts the nonzero \(\alpha_j\), so
+  the multiplicity of the zero non-Perron eigenvalue is exactly
+  \(d-1-\deg F_A\). This reconstructs the relative non-Perron spectrum
+  with algebraic multiplicity. Multiplying by \(\lambda\) would recover
+  the unnormalised eigenvalues \(\mu_j\), but that requires \(\lambda\)
+  as additional data beyond the cyclic-lift record itself. The argument
+  is purely fixed-record: it recovers one polynomial \(F_A\) from the
+  one sequence attached to the same matrix \(A\).
+
+  For the exponential growth rate, let
+  \[
+    B:=\{\alpha_j:2\le j\le d,\ \alpha_j\neq 0\}
+  \]
+  be the set of distinct nonzero values among the relative eigenvalues,
+  and for each \(\beta\in B\) let \(m_\beta\ge 1\) be its algebraic
+  multiplicity among \(\alpha_2,\dots,\alpha_d\). Then
+  \[
+    u_q(A)=\sum_{\beta\in B}m_\beta\beta^q.
+  \]
+  If \(B=\varnothing\), then \(u_q(A)=0\) for every \(q\ge 1\), so
+  \(\Lambda_{\mathrm{rel}}(A)=0\) and the asserted limsup identity is
+  immediate. Assume henceforth that \(B\neq\varnothing\). Since the
+  frequencies in \(B\) are pairwise distinct and each coefficient
+  \(m_\beta\) is a positive integer, no cancellation can occur after
+  grouping equal frequencies, and
+  \Cref{lem:finite-part-exponential-sum-limsup} gives
+  \[
+    \limsup_{q\to\infty}\abs{u_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+  The explicit remainder bound from
+  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} shows that
+  \[
+    \Psi_q(A)-u_q(A)
+    =O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right).
+  \]
+  If \(\Lambda_{\mathrm{rel}}(A)=0\), then both sequences are
+  eventually zero. Otherwise the error term has strictly smaller
+  exponential rate than \(u_q(A)\), so
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}]
+  The polynomial identity
+  \[
+    F_A(\omega_q^j)=\sum_{n=0}^{d-1}a_n\omega_q^{jn}
+  \]
+  holds for \(0\le j\le q-1\). Averaging against
+  \(\omega_q^{-jm}\) and using discrete orthogonality gives
+  \[
+    \frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jm}
+    =
+    \sum_{n=0}^{d-1}a_n
+      \frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{j(n-m)}.
+  \]
+  Since \(q\ge d\), the inner sum equals \(1\) when \(n=m\) and \(0\)
+  otherwise.
+\end{proof}
+
+\section{Auxiliary holomorphic variation and effective truncation}
+\label{app:variation}
+
+This appendix records two auxiliary scalar consequences of
+\Cref{sec:finite-part}: holomorphic variation and an explicit
+truncation bound for the finite part. They concern the fixed-matrix
+normalisation \(\mathcal M(A)\) and are not used in the proof of Main
+Theorems~I and~II.
+
+\subsection{Holomorphic variation and effective truncation}
+
+\begin{theorem}[Holomorphic variation formula]
+  \label{thm:finite-part-holomorphic-variation}
+  Let \(U\subset\CC\) be simply connected and let
+  \(\theta\mapsto A_\theta\) be a holomorphic family of complex
+  \(d\times d\) matrices. Assume that there is a holomorphic simple
+  eigenvalue \(\lambda(\theta)\) such that
+  \[
+    |\lambda(\theta)|>1,
+    \qquad
+    |\nu|<|\lambda(\theta)|
+    \quad
+    (\nu\in\spec(A_\theta)\setminus\{\lambda(\theta)\})
+  \]
+  for every \(\theta\in U\). Let \(P_\theta\) be the spectral projection
+  of \(A_\theta\) for \(\lambda(\theta)\), and let \(R_\theta\) be the
+  reduced inverse of \(I-A_\theta/\lambda(\theta)\), characterized by
+  \(R_\theta P_\theta=P_\theta R_\theta=0\) and
+  \[
+    R_\theta\bigl(I-A_\theta/\lambda(\theta)\bigr)
+    =
+    \bigl(I-A_\theta/\lambda(\theta)\bigr)R_\theta
+    =
+    I-P_\theta .
+  \]
+  After choosing the logarithm branches determined at one base point,
+  set
+  \[
+    \mathfrak F(\theta)
+    :=
+    \Log C_{\lambda(\theta)}(A_\theta)
+    +
+    \sum_{m\ge2}\frac{\mu(m)}{m}
+      \Log\det\bigl(I-\lambda(\theta)^{-m}A_\theta\bigr)^{-1}.
+  \]
+  For \(m\ge2\), put
+  \[
+    D_{m,\theta}
+    :=
+    \lambda(\theta)^{-m}\dot A_\theta
+    -m\dot\lambda(\theta)\lambda(\theta)^{-m-1}A_\theta .
+  \]
+  Then \(\mathfrak F\) is holomorphic on \(U\), and
+  \begin{align*}
+    \frac{\dd}{\dd\theta}\mathfrak F(\theta)
+    &=
+    \Tr\!\left[
+      R_\theta\left(
+        \lambda(\theta)^{-1}\dot A_\theta
+        -\dot\lambda(\theta)\lambda(\theta)^{-2}A_\theta
+      \right)
+    \right] \\
+    &\quad+
+    \sum_{m\ge2}\frac{\mu(m)}{m}
+    \Tr\!\left[
+      \bigl(I-\lambda(\theta)^{-m}A_\theta\bigr)^{-1}
+      D_{m,\theta}
+    \right],
+  \end{align*}
+  where dots denote \(\theta\)-derivatives. At every parameter for which
+  \(A_\theta\) is primitive non-negative and \(\lambda(\theta)>1\) is its
+  Perron root, \(\mathfrak F(\theta)=\FP(A_\theta)\).
+\end{theorem}
+
+\begin{proof}
+  Put
+  \[
+    B_\theta:=I-A_\theta/\lambda(\theta).
+  \]
+  The simple eigenvalue hypothesis and the finite-dimensional Riesz
+  projection formula imply that \(P_\theta\) is holomorphic locally in
+  \(\theta\). Hence \(B_\theta+P_\theta\) is holomorphic and invertible:
+  on \(\operatorname{im}P_\theta\) it is the identity, while on
+  \(\ker P_\theta\) it is \(B_\theta\). Therefore
+  \[
+    C_{\lambda(\theta)}(A_\theta)
+    =
+    \det(B_\theta+P_\theta)^{-1}
+  \]
+  is a non-vanishing holomorphic function. Since \(U\) is simply
+  connected, the chosen value at the base point determines a holomorphic
+  branch of \(\Log C_{\lambda(\theta)}(A_\theta)\).
+
+  On the same splitting,
+  \[
+    (B_\theta+P_\theta)^{-1}=R_\theta+P_\theta .
+  \]
+  Differentiating the logarithmic determinant gives
+  \[
+    \frac{\dd}{\dd\theta}\Log C_{\lambda(\theta)}(A_\theta)
+    =
+    -\Tr\bigl[(R_\theta+P_\theta)(\dot B_\theta+\dot P_\theta)\bigr].
+  \]
+  The projection identity \(P_\theta^2=P_\theta\) gives
+  \(P_\theta\dot P_\theta P_\theta=0\) and
+  \((I-P_\theta)\dot P_\theta(I-P_\theta)=0\). Also
+  \(B_\theta P_\theta=P_\theta B_\theta=0\), so
+  \(B_\theta\), \(R_\theta\), and \(P_\theta\) are block diagonal for the
+  decomposition
+  \(\operatorname{im}P_\theta\oplus\ker P_\theta\), whereas \(\dot P_\theta\)
+  has only off-diagonal blocks. Thus the trace terms containing
+  \(\dot P_\theta\) vanish. Differentiating
+  \(P_\theta B_\theta P_\theta=0\) gives
+  \(P_\theta\dot B_\theta P_\theta=0\), and hence
+  \(\Tr(P_\theta\dot B_\theta)=0\). Consequently
+  \[
+    \frac{\dd}{\dd\theta}\Log C_{\lambda(\theta)}(A_\theta)
+    =
+    -\Tr(R_\theta\dot B_\theta)
+    =
+    \Tr\!\left[
+      R_\theta\left(
+        \lambda(\theta)^{-1}\dot A_\theta
+        -\dot\lambda(\theta)\lambda(\theta)^{-2}A_\theta
+      \right)
+    \right].
+  \]
+
+  For \(m\ge2\), the spectral hypothesis gives
+  \[
+    \rho\bigl(\lambda(\theta)^{-m}A_\theta\bigr)
+    \le |\lambda(\theta)|^{1-m}<1,
+  \]
+  so \(I-\lambda(\theta)^{-m}A_\theta\) is invertible. Its determinant is
+  therefore non-zero and has a holomorphic logarithm on \(U\). On each
+  compact \(K\subset U\), one has \(|\lambda(\theta)|\ge 1+\delta\) and
+  the matrices \(A_\theta,\dot A_\theta\) and the scalar \(\dot\lambda\)
+  are bounded. The determinant logarithms are then
+  \(O((1+\delta)^{-m})\), and their derivatives are also
+  \(O((1+\delta/2)^{-m})\), after increasing the implicit constant to
+  handle the finitely many small \(m\). Hence the series defining
+  \(\mathfrak F\) and the differentiated series converge locally
+  uniformly.
+
+  Finally, for
+  \[
+    B_{m,\theta}:=I-\lambda(\theta)^{-m}A_\theta
+  \]
+  we have
+  \[
+    \dot B_{m,\theta}
+    =
+    -\lambda(\theta)^{-m}\dot A_\theta
+    +m\dot\lambda(\theta)\lambda(\theta)^{-m-1}A_\theta,
+  \]
+  and therefore
+  \[
+    \frac{\dd}{\dd\theta}\Log\det(B_{m,\theta})^{-1}
+    =
+    -\Tr(B_{m,\theta}^{-1}\dot B_{m,\theta})
+    =
+    \Tr\!\left[
+      \bigl(I-\lambda(\theta)^{-m}A_\theta\bigr)^{-1}
+      D_{m,\theta}
+    \right].
+  \]
+  Combining this identity with the reduced-determinant derivative gives
+  the displayed formula. At a primitive non-negative parameter, the
+  determinant expression for \(\mathfrak F\) is exactly the scalar
+  finite-part formula of \Cref{thm:finite-part-primitive-closed-form}.
+\end{proof}
+
+\begin{theorem}[Truncation bound]
+  \label{thm:logM-truncation-bound}
+  Let \(A\) be a primitive non-negative \(d\times d\) matrix with
+  Perron root \(\lambda>1\), and define
+  \[
+    \FP_K(A)
+    :=\log C(A)
+      +\sum_{n\le K}p_n(A)
+       \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
+  \]
+  Then
+  \[
+    \abs{\FP(A)-\FP_K(A)}
+    \le
+    \frac{d\,\lambda^{-(K+1)}}{(K+1)(1-\lambda^{-1})^3}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  By \Cref{thm:finite-part-primitive-closed-form},
+  \[
+    \abs{\FP(A)-\FP_K(A)}
+    \le \sum_{n>K} \abs{p_n(A)}\psi(\lambda^{-n}).
+  \]
+  Since
+  \[
+    \psi(x)=-x-\log(1-x)\le \sum_{m\ge 2}x^m=\frac{x^2}{1-x},
+  \]
+  and
+  \[
+    \abs{p_n(A)}
+    \le
+    \frac{1}{n}\sum_{m\mid n}\abs{\Tr(A^{n/m})}
+    \le
+    \frac{d}{n}\sum_{k=1}^n\lambda^k
+    \le
+    \frac{d\,\lambda^n}{n(1-\lambda^{-1})},
+  \]
+  one obtains
+  \[
+    \abs{p_n(A)}\psi(\lambda^{-n})
+    \le
+    \frac{d}{n}\frac{\lambda^{-n}}
+      {(1-\lambda^{-1})(1-\lambda^{-n})}
+    \le
+    \frac{d}{n}\frac{\lambda^{-n}}{(1-\lambda^{-1})^2}.
+  \]
+  Summing over \(n>K\) gives
+  \[
+    \abs{\FP(A)-\FP_K(A)}
+    \le \frac{d}{(1-\lambda^{-1})^2}
+      \sum_{n>K}\frac{\lambda^{-n}}{n}
+    \le
+      \frac{d\,\lambda^{-(K+1)}}{(K+1)(1-\lambda^{-1})^3}.
+  \]
+\end{proof}
+
+\section{Boundary remarks for auxiliary scalar directions}
+\label{app:scalar-boundaries}
+
+\subsection{Parameter-varying records}
+\label{app:record-boundary}
+
+The reconstruction statements of \Cref{sec:finite-part} are fixed-matrix
+statements: they recover data either from the full record
+\(\{\Psi_q(A)\}_{q\ge1}\) of one primitive matrix \(A\) or from one
+fixed layer \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\) with \(q\ge d\).
+For a holomorphic family \(\theta\mapsto A_\theta\),
+\Cref{thm:finite-part-holomorphic-variation} therefore produces only the
+induced record maps in \(\theta\); no inverse theorem on an ambient
+parameter space is claimed here.
+
+\subsection{Arithmetic boundary}
+\label{app:arithmetic}
+
+The cyclic-lift formulas in \Cref{sec:finite-part} are used only to
+recover \(F_A\) and the relative non-Perron spectrum from scalar
+root-of-unity data. Any finer arithmetic refinements of the same data
+remain scalar statements about the canonical cyclic lift and should be
+kept separate from \Cref{sec:shadows}, where cyclic quotients are
+pullbacks along quotient maps and detect only the one-dimensional
+Peter--Weyl sector of the fixed cocycle.
+
+\subsection{Growing-family boundary}
+\label{app:rigidity}
+
+The finite-part identities also yield separate estimates for growing
+families of primitive matrices under additional hypotheses on
+\(\Lambda(A)/\lambda\), \(d\), and \(\lambda\). Those directions are not
+used in the main theorem packages here, which require only the fixed-
+matrix normalisation \(\mathcal M(A)=\gamma+\FP(A)\) and the canonical
+cyclic-lift comparison from \Cref{sec:finite-part}.
+
+\section[Exact rational verification for the S3 certificates]{Exact
+  rational verification for the \texorpdfstring{$S_3$}{S3}
+  certificates}
+\label{app:s3-log-certificates}
+
+This appendix contains the exact finite-sum and tail bounds underlying
+\Cref{lem:s3-example-perron-certificates}. The main text keeps only the
+coarse certified non-vanishing windows; here we record the truncations,
+tail estimates, and the final rational enclosures. The intermediate
+termwise rational arithmetic is straightforward and can be compressed to
+the final finite-sum windows.
+
+\begin{lemma}[Exact rational certificate for the \(S_3\)-channels]
+  \label{lem:appendix-s3-sharp-certificates}
+  Define
+  \begin{equation}\label{eq:s3-example-epsilon-certificate-sum}
+    \Pi_\varepsilon(1/2)=E_7+\Theta_\varepsilon,
+  \end{equation}
+  where
+  \[
+    E_7
+    =
+    -\frac12\log 2
+    +\frac16\log\frac{32}{31}
+    +\frac1{10}\log\frac{512}{511}
+    +\frac1{14}\log\frac{8192}{8191},
+  \]
+  and
+  \begin{equation}\label{eq:s3-example-epsilon-tail-certificate}
+    \abs{\Theta_\varepsilon}\le \frac{1}{1105920}.
+  \end{equation}
+  Also define
+  \begin{equation}\label{eq:s3-example-rho-certificate-sum}
+    \Pi_\rho(1/2)=R_{15}+\Theta_\rho,
+  \end{equation}
+  where
+  \[
+  \begin{aligned}
+    R_{15}
+    ={}&
+    -\log\frac32
+    -\frac12\log\frac85
+    -\frac13\log\frac43
+    +\frac15\log\frac{33}{32}
+    +\frac13\log\frac{32}{31}
+    +\frac17\log\frac{129}{128} \\
+    &+\frac1{10}\log\frac{512\cdot 1024}{511\cdot 1025}
+    +\frac1{11}\log\frac{2049}{2048}
+    +\frac1{13}\log\frac{8193}{8192} \\
+    &+\frac1{14}\log\frac{8192\cdot 16384}{8191\cdot 16385}
+    +\frac1{15}\log\frac{16384}{16383},
+  \end{aligned}
+  \]
+  and
+  \begin{equation}\label{eq:s3-example-rho-tail-certificate}
+    \abs{\Theta_\rho}\le \frac{9}{524288}.
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:s3-example-certified-intervals-sharp}
+    -\frac{341079}{10^6}-\frac{1}{1105920}
+    <\Pi_\varepsilon(1/2)<
+    -\frac{341071}{10^6}+\frac{1}{1105920},
+  \end{equation}
+  and
+  \begin{equation}\label{eq:s3-example-certified-intervals-sharp-rho}
+    -\frac{718352}{10^6}-\frac{9}{524288}
+    <\Pi_\rho(1/2)<
+    -\frac{718351}{10^6}+\frac{9}{524288}.
+  \end{equation}
+  Hence the coarse windows of
+  \Cref{lem:s3-example-perron-certificates} follow.
+\end{lemma}
+
+\begin{proof}
+  The expression for \(E_7\) is obtained from
+  \eqref{eq:s3-example-pi-eps} by retaining the odd indices
+  \(r=1,3,5,7\). For the tail, put
+  \(x_r=2^{1-2r}\). Since \(r\ge 9\) implies \(x_r\le 2^{-17}\),
+  \[
+    -\log(1-x_r)\le \frac{x_r}{1-x_r}\le 2x_r.
+  \]
+  Therefore
+  \[
+    \abs{\Theta_\varepsilon}
+    \le
+    \sum_{\substack{r\ge 9\\ r\ \mathrm{odd}}}\frac{2^{1-2r}}{r}
+    \le
+    \frac19\sum_{j\ge 0}2^{1-2(9+2j)}
+    =
+    \frac{1}{1105920}.
+  \]
+
+  The expression for \(R_{15}\) is obtained from
+  \eqref{eq:s3-example-pi-rho} by retaining the squarefree indices
+  \(m\le 15\). For \(m\ge 16\), set \(y_m=2^{1-m}\). Then
+  \(y_m\le 2^{-15}\), and
+  \[
+    \log(1-y_m)^{-1}\le 2y_m,
+    \qquad
+    \log(1+2^{-m})\le 2^{-m}.
+  \]
+  Since \(0\le \alpha(m)\le 2\) and \(0\le \beta(m)\le 1\), this gives
+  \[
+    \abs{\Theta_\rho}
+    \le
+    \sum_{m\ge 16}\frac{9\,2^{-m}}{m}
+    \le
+    \frac{9}{16}\sum_{m\ge 16}2^{-m}
+    =
+    \frac{9}{524288}.
+  \]
+
+  For each rational \(q>1\) appearing in \(E_7\) or \(R_{15}\), put
+  \[
+    u_q:=\frac{q-1}{q+1},
+    \qquad
+    L_3(q):=2\sum_{j=0}^{3}\frac{u_q^{2j+1}}{2j+1},
+  \]
+  and
+  \[
+    U_3(q):=L_3(q)+\frac{2u_q^9}{9(1-u_q^2)}.
+  \]
+  Since
+  \[
+    \log q
+    =
+    2\sum_{j\ge 0}\frac{u_q^{2j+1}}{2j+1}
+    =
+    L_3(q)+2\sum_{j\ge 4}\frac{u_q^{2j+1}}{2j+1},
+  \]
+  the tail is positive and satisfies
+  \[
+    0<\log q-L_3(q)
+    <
+    \frac{2u_q^9}{9}\sum_{j\ge 0}u_q^{2j}
+    =
+    \frac{2u_q^9}{9(1-u_q^2)}.
+  \]
+  Therefore
+  \[
+    L_3(q)<\log q<U_3(q).
+  \]
+  Equivalently, for every real coefficient \(c\),
+  \[
+    c>0:\qquad cL_3(q)<c\log q<cU_3(q),
+  \]
+  and
+  \[
+    c<0:\qquad cU_3(q)<c\log q<cL_3(q).
+  \]
+  Applying these inequalities termwise gives exact rational endpoints
+  \begin{align*}
+    E_7^-
+    :={}&
+    -\frac12\,U_3(2)
+    +\frac16\,L_3(32/31)
+    +\frac1{10}\,L_3(512/511) \\
+    &+\frac1{14}\,L_3(8192/8191), \\
+    E_7^+
+    :={}&
+    -\frac12\,L_3(2)
+    +\frac16\,U_3(32/31)
+    +\frac1{10}\,U_3(512/511) \\
+    &+\frac1{14}\,U_3(8192/8191),
+  \end{align*}
+  and
+  \begin{align*}
+    R_{15}^-
+    :={}&
+    -U_3(3/2)
+    -\frac12\,U_3(8/5)
+    -\frac13\,U_3(4/3)
+    +\frac15\,L_3(33/32)
+    +\frac13\,L_3(32/31) \\
+    &+\frac17\,L_3(129/128)
+    +\frac1{10}\,L_3(524288/523775)
+    +\frac1{11}\,L_3(2049/2048) \\
+    &+\frac1{13}\,L_3(8193/8192)
+    +\frac1{14}\,L_3(134217728/134209535) \\
+    &+\frac1{15}\,L_3(16384/16383), \\
+    R_{15}^+
+    :={}&
+    -L_3(3/2)
+    -\frac12\,L_3(8/5)
+    -\frac13\,L_3(4/3)
+    +\frac15\,U_3(33/32)
+    +\frac13\,U_3(32/31) \\
+    &+\frac17\,U_3(129/128)
+    +\frac1{10}\,U_3(524288/523775)
+    +\frac1{11}\,U_3(2049/2048) \\
+    &+\frac1{13}\,U_3(8193/8192)
+    +\frac1{14}\,U_3(134217728/134209535) \\
+    &+\frac1{15}\,U_3(16384/16383).
+  \end{align*}
+  Then \(E_7^-<E_7<E_7^+\) and \(R_{15}^-<R_{15}<R_{15}^+\). Since
+  every \(L_3(q)\) and \(U_3(q)\) is rational, these endpoints are exact
+  rational numbers. Direct exact simplification gives
+  \begingroup
+  \scriptsize\ttfamily
+  \begin{flushleft}
+  \(E_7^-=\)\,
+  -438200435306780174 716970389320325953\\
+  \phantom{\(E_7^-=\)\,}975970079222095302 287033\\
+  \phantom{\(E_7^-=\)\,}/128475118008059625 301915805047880212\\
+  \phantom{\(E_7^-=\)\,}529051783495419213 0061400.\\[2pt]
+  \(E_7^+=\)\,
+  -965888425313560038 575652582055430263\\
+  \phantom{\(E_7^+=\)\,}997373714410841875 5503149960896501\\
+  \phantom{\(E_7^+=\)\,}/283192187856420359 695208849391493833\\
+  \phantom{\(E_7^+=\)\,}229242079316956387 05879995604172800.\\[2pt]
+  \(R_{15}^-=\)\,
+  -796338852539564774 617845165067706992 454265942716157028\\
+  \phantom{\(R_{15}^-=\)\,}787763560438013749 584068502275959437 811722196152036558\\
+  \phantom{\(R_{15}^-=\)\,}194959586219837542 660508320281016949 496960492811756628\\
+  \phantom{\(R_{15}^-=\)\,}807654236105380368 068975205240119625 445191923\\
+  \phantom{\(R_{15}^-=\)\,}/110856372913386203 926254440121235540 631075391856642544\\
+  \phantom{\(R_{15}^-=\)\,}316375507075815987 497571847525243880 661920239642591775\\
+  \phantom{\(R_{15}^-=\)\,}241793414401029698 385032746958034034 485143407158460983\\
+  \phantom{\(R_{15}^-=\)\,}990606342304140693 778114580796592044 6462500000.\\[2pt]
+  \(R_{15}^+=\)\,
+  -300274414652029140 495577420115062013 127871983623385969\\
+  \phantom{\(R_{15}^+=\)\,}678998975352519662 534721562754517710 806827741493017479\\
+  \phantom{\(R_{15}^+=\)\,}917913598125066800 483683778609052802 669231294905780585\\
+  \phantom{\(R_{15}^+=\)\,}940256108875856791 974656083534997815 162740216794298560\\
+  \phantom{\(R_{15}^+=\)\,}97217018947129479\\
+  \phantom{\(R_{15}^+=\)\,}/418004823621932223 005274340092062947 475463024386781147\\
+  \phantom{\(R_{15}^+=\)\,}283705958099506909 370026442742168244 673092101264250539\\
+  \phantom{\(R_{15}^+=\)\,}922691619467916605 996579421307762878 317831441585514389\\
+  \phantom{\(R_{15}^+=\)\,}159299984845131546 034290604588763982 360664460466103020\\
+  \phantom{\(R_{15}^+=\)\,}50920038400000000.
+  \end{flushleft}
+  \endgroup
+  Hence
+  \begin{equation}\label{eq:s3-example-finite-sum-windows}
+    \begin{aligned}
+      -\frac{341079}{10^6}
+      &<E_7^-<E_7<E_7^+<-\frac{341071}{10^6}, \\
+      -\frac{718352}{10^6}
+      &<R_{15}^-<R_{15}<R_{15}^+<-\frac{718351}{10^6}.
+    \end{aligned}
+  \end{equation}
+  Combining these finite-sum bounds with
+  \eqref{eq:s3-example-epsilon-tail-certificate} and
+  \eqref{eq:s3-example-rho-tail-certificate} gives
+  \eqref{eq:s3-example-certified-intervals-sharp} and
+  \eqref{eq:s3-example-certified-intervals-sharp-rho}. These sharp
+  intervals lie respectively in
+  \[
+    \left(-\frac{342}{1000},-\frac{341}{1000}\right)
+    \qquad\text{and}\qquad
+    \left(-\frac{719}{1000},-\frac{718}{1000}\right),
+  \]
+  which is exactly the certification quoted in
+  \Cref{lem:s3-example-perron-certificates}.
+\end{proof}
