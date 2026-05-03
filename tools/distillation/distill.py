@@ -18,6 +18,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
+try:
+    from tools.distillation import lifecycle
+except ModuleNotFoundError:  # pragma: no cover - supports direct script imports
+    import lifecycle
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent          # tools/distillation/../../ = repo root
@@ -859,6 +864,11 @@ class DistillState:
     open_debts: list[dict[str, Any]] = field(default_factory=list)
     split_candidates: list[dict[str, Any]] = field(default_factory=list)
     blocked: dict[str, Any] = field(default_factory=dict)
+    failure_kind: str = "unknown"
+    attempts: int = 1
+    retry_budget: int = 0
+    next_action: str = "run_pipeline"
+    lifecycle_flags: dict[str, Any] = field(default_factory=dict)
 
 
 def _state_dir(name: str) -> Path:
@@ -898,6 +908,11 @@ def load_state(name: str) -> DistillState:
         open_debts=list(data.get("open_debts") or []),
         split_candidates=list(data.get("split_candidates") or []),
         blocked=dict(data.get("blocked") or {}),
+        failure_kind=str(data.get("failure_kind", "unknown")),
+        attempts=int(data.get("attempts", 1) or 1),
+        retry_budget=int(data.get("retry_budget", 0) or 0),
+        next_action=str(data.get("next_action", "run_pipeline")),
+        lifecycle_flags=dict(data.get("lifecycle_flags") or {}),
     )
 
 
@@ -2718,13 +2733,42 @@ def _policy_model(state: DistillState) -> tuple[dict[str, Any], dict[str, Any], 
     return scope, inventory, action
 
 
-def refresh_policy_state(state: DistillState, *, persist: bool = True) -> dict[str, Any]:
+def _lifecycle_snapshot(
+    state: DistillState,
+    inventory: dict[str, Any],
+    action: dict[str, Any],
+) -> dict[str, Any]:
+    """Build the compact lifecycle snapshot consumed by lifecycle.py."""
+    return {
+        "name": state.name,
+        "current_stage": state.current_stage,
+        "attempts": state.attempts,
+        "next_policy_action": action,
+        "blocked": state.blocked or inventory.get("blocked_artifact", {}),
+        "done_contract": inventory.get("done_contract", {}),
+        "oracle_status": inventory.get("oracle_status", {}),
+        "inventory": {
+            "artifacts": inventory.get("artifacts", {}),
+            "payload_error_count": len(inventory.get("payload_errors", [])),
+            "writeback_status": inventory.get("writeback_status", ""),
+            "open_debt_count": len(_open_debts_from_inventory(inventory)),
+            "split_candidate_count": len(inventory.get("split_candidates", [])),
+        },
+    }
+
+
+def refresh_policy_state(
+    state: DistillState,
+    *,
+    persist: bool = True,
+    update_memory: bool = True,
+) -> dict[str, Any]:
     """Persist the local policy snapshot and return the next action."""
     scope, inventory, action = _policy_model(state)
     state.scope_contract = scope
     state.open_debts = _open_debts_from_inventory(inventory)
     state.split_candidates = inventory.get("split_candidates", [])
-    if persist:
+    if persist and update_memory:
         _upsert_distillation_memory(_memory_entries_from_split_candidates(state))
     state.blocked = (
         {
@@ -2754,6 +2798,14 @@ def refresh_policy_state(state: DistillState, *, persist: bool = True) -> dict[s
             "split_candidate_count": len(state.split_candidates),
             "done_contract": inventory.get("done_contract", {}),
         },
+    }
+    lifecycle_state = lifecycle.annotate(_lifecycle_snapshot(state, inventory, action))
+    state.failure_kind = str(lifecycle_state.get("failure_kind", "unknown"))
+    state.retry_budget = int(lifecycle_state.get("retry_budget", 0) or 0)
+    state.next_action = str(lifecycle_state.get("next_action", "retry_resume"))
+    state.lifecycle_flags = {
+        "needs_user_intervention": bool(lifecycle_state.get("needs_user_intervention")),
+        "covered_by_existing_content": bool(lifecycle_state.get("covered_by_existing_content")),
     }
     if persist:
         save_state(state)
@@ -6422,6 +6474,7 @@ def _status_lines(name: Optional[str] = None) -> list[str]:
     for item_name in names:
         state = reconcile_state_contract(load_state(item_name))
         _scope, inventory, action = _policy_model(state)
+        lifecycle_state = lifecycle.annotate(_lifecycle_snapshot(state, inventory, action))
         done, reason = _pipeline_done_contract(state)
         family_count = len(_theorem_family_names(state))
         debt_count = len(_open_debts_from_inventory(inventory))
@@ -6432,6 +6485,7 @@ def _status_lines(name: Optional[str] = None) -> list[str]:
             f"families={len(state.completed_families)}/{family_count} "
             f"debts={debt_count} splits={len(inventory.get('split_candidates', []))} "
             f"next={next_action} gate={action.get('gate')} "
+            f"failure={lifecycle_state.get('failure_kind')}/{lifecycle_state.get('next_action')} "
             f"done_contract={done} ({reason}) "
             f"updated={state.updated_at}"
         )
