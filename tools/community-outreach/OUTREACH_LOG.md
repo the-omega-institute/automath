@@ -11,9 +11,10 @@
 | Heath Sanchez | SAIR Zulip | draft ready | — | — | 2026-04-18 |
 | Israel Cazares | SAIR Zulip | draft ready | — | — | 2026-04-19 |
 | Israel (bytepro.ai) — single-prompt ceiling × structural invariants | Email (hello@bytepro.ai) | sent 2026-04-30 — collab proposal + arXiv endorsement ask (math.DS / math.CO / math.LO / cs.AI), reply pending | — | — | 2026-04-30 |
-| Tong Niu (arxiv:2604.25214 author, independent) — T-20 Sidon-extension follow-up | Email (mrnt0810@gmail.com) | draft saved to Apple Mail Drafts 2026-05-01 — collab on q=41 + larger q + arXiv endorsement ask, pending user send | T-20 paper attached + PROGRAM_BOARD link | 8/10 | 2026-05-01 |
-| Thomas Bloom (erdosproblems.com maintainer) — T-20 + Omega outreach pipeline | Email + erdosproblems forum | planned next, real math.CO endorser candidate | — | — | — |
-| Daniel G. Mixon (Alexeev-Mixon disproof) — T-20 directly extends his line | Email | planned next, directly relevant | — | — | — |
+| Tong Niu (arxiv:2604.25214 author, independent) — T-20 Sidon-extension follow-up | Email (mrnt0810@gmail.com) | replied 2026-05-03 — 小牛狼星: math validated, endorsement declined (advised NUS internal route), collab on soft hold pending q=41 verifier read | T-20 paper attached + PROGRAM_BOARD link | 8/10 | 2026-05-03 |
+| Thomas Bloom (erdosproblems.com maintainer, @thomasfbloom on X) — T-20 + Omega outreach portfolio | Registry email + Public X post + erdosproblems forum (multi-channel) | drafts saved 2026-05-01: (a) bloom_registry_email.md saved to Apple Mail Drafts → erdosproblemsonline@gmail.com, framed as #475/#199/OPG submission with T-20 as bonus context (no endorsement ask in this channel); (b) bloom_x_public.md = 3 public X options (quote-tweet, standalone tag, reply under recent tweet) — user picks tone; (c) bloom_forum_post.md = public forum post for Erdős #707 / Sidon-extension thread. Endorsement ask routed to X/forum, not the registry inbox. | T-20 paper attached (registry email) + PROGRAM_BOARD link | 8/10 | 2026-05-01 |
+| Daniel G. Mixon (Alexeev-Mixon disproof) — T-20 directly extends his line | Email (mixon.23@osu.edu) | sent 2026-05-01 17:30 — endorsement + collab on q=41 surviving classes / larger q, reply pending | T-20 paper attached + PROGRAM_BOARD link | 8/10 | 2026-05-01 |
+| Tolmetes (Tolmeton on GH, ORCID 0009-0008-1784-9883) — co-author proposal on the-omega-institute/automath#38 | GitHub issue comment | sent 2026-05-03 — co-author offer (fold OR standalone), no-arxiv-endorsement disclosure, all-q first-target as Theorem 2; awaiting his choice on publication form | — | — | 2026-05-03 |
 | Terence Tao | Email | planned wk3-4 | — | — | — |
 
 ## Completed
@@ -23,6 +24,7 @@
 | teorth/analysis | GitHub issue | [#494](https://github.com/teorth/analysis/issues/494) | 2026-04-24 |
 | teorth/equational_theories #364 — countermodel | GitHub issue comment | [comment](https://github.com/teorth/equational_theories/issues/364#issuecomment-4313955597) | 2026-04-24 |
 | teorth/equational_theories #364 — affine closure + non-affine witness | GitHub issue comment | [comment](https://github.com/teorth/equational_theories/issues/364#issuecomment-4313957801) | 2026-04-24 |
+| the-omega-institute/automath #38 — Tolmeton co-author proposal: fold-or-standalone, no-arxiv-disclosure, all-q first target Theorem 2 frame | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4366252023) | 2026-05-03 |
 | the-omega-institute/automath #38 — Tolmeton reply: BF citation diagram + co-author probe | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4353065430) | 2026-04-30 |
 | the-omega-institute/automath #38 — nonneg lift follow-up | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4313959985) | 2026-04-24 |
 | the-omega-institute/automath #38 — signed companion audit | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4298430964) | 2026-04-23 |
