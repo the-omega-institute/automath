@@ -23,7 +23,7 @@ import json
 import sys
 import threading
 import time
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
 from collections import deque
@@ -429,7 +429,8 @@ def wait_for_result(task_id: str, timeout: int = 900) -> str:
 
 
 def main():
-    server = HTTPServer(("127.0.0.1", PORT), OracleHandler)
+    server = ThreadingHTTPServer(("127.0.0.1", PORT), OracleHandler)
+    server.daemon_threads = True
     print(f"[server] Oracle server running on http://localhost:{PORT}")
     print(f"[server] Max {MAX_AGENTS} concurrent agents")
     print(f"[server] Open browser tabs:")
