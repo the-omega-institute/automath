@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.8
+// @version      5.9
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.8";
+  const SCRIPT_VERSION = "5.9";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -214,6 +214,7 @@
     GM_setValue(GM_KEY("task_phase"), "");
     GM_setValue(GM_KEY("sent_prompt"), "");
     GM_setValue(GM_KEY("post_send_lines"), "");
+    GM_setValue(GM_KEY("post_send_text"), "");
     GM_setValue(GM_KEY("sent_url"), "");
   }
 
@@ -823,6 +824,7 @@
   // Set of text lines present AFTER clicking send (before response appears)
   // Any new lines that appear later = the response
   let postSendLines = new Set();
+  let postSendText = "";
 
   function setSentPrompt(text) {
     sentPromptText = text;
@@ -869,17 +871,21 @@
   function capturePostSendState() {
     const main = document.querySelector("main");
     const text = main ? (main.innerText || "").trim() : "";
+    postSendText = text;
     postSendLines = new Set(text.split("\n").map(l => l.trim()).filter(l => l.length > 0));
+    GM_setValue(GM_KEY("post_send_text"), postSendText);
     GM_setValue(GM_KEY("post_send_lines"), JSON.stringify(Array.from(postSendLines)));
-    log(`Post-send captured: ${postSendLines.size} lines`);
+    log(`Post-send captured: ${postSendLines.size} lines, ${postSendText.length} chars`);
   }
 
   function restorePostSendState() {
     try {
+      postSendText = GM_getValue(GM_KEY("post_send_text"), "") || "";
       const raw = GM_getValue(GM_KEY("post_send_lines"), "");
       const lines = raw ? JSON.parse(raw) : [];
       postSendLines = new Set(Array.isArray(lines) ? lines : []);
     } catch {
+      postSendText = "";
       postSendLines = new Set();
     }
   }
@@ -1059,6 +1065,33 @@
     out = extractJsonEnvelopeIfObvious(out);
     out = stripChromeSuffix(out);
     return out.trim();
+  }
+
+  function commonPrefixLength(a, b) {
+    const max = Math.min(a.length, b.length);
+    let i = 0;
+    while (i < max && a.charCodeAt(i) === b.charCodeAt(i)) i++;
+    return i;
+  }
+
+  function extractAfterPostSendSnapshot(currentText) {
+    if (!currentText || !postSendText || postSendText.length < 50) return "";
+    const current = normalizeAssistantText(currentText);
+    const snapshot = normalizeAssistantText(postSendText);
+    if (current.length <= snapshot.length + 50) return "";
+
+    if (current.startsWith(snapshot)) {
+      const after = normalizeAssistantText(current.slice(snapshot.length));
+      if (after.length > 50 && !looksLikePromptEcho(after)) return after;
+    }
+
+    const prefix = commonPrefixLength(current, snapshot);
+    if (prefix >= Math.min(500, Math.floor(snapshot.length * 0.6))) {
+      const after = normalizeAssistantText(current.slice(prefix));
+      if (after.length > 50 && !looksLikePromptEcho(after)) return after;
+    }
+
+    return "";
   }
 
   function extractAfterLastAssistantMarker(text) {
@@ -1279,9 +1312,9 @@
         const t = l.trim();
         return t.length > 0 && !postSendLines.has(t) && !isChromeLine(t);
       });
-      if (newLines.length > 3) {
+      if (newLines.length > 0) {
         const diffText = normalizeAssistantText(newLines.join("\n"));
-        if (diffText.length > 20 && !looksLikePromptEcho(diffText)) {
+        if (diffText.length > 50 && !looksLikePromptEcho(diffText)) {
           return diffText;
         }
       }
@@ -1289,6 +1322,14 @@
 
     const markerText = extractAfterLastAssistantMarker(fullText);
     if (markerText.length >= 20) return markerText;
+
+    const snapshotText = extractAfterPostSendSnapshot(fullText);
+    if (snapshotText.length >= 50) return snapshotText;
+
+    const fallbackFullText = normalizeAssistantText(fullText);
+    if (fallbackFullText.length >= 500 && !looksLikePromptEcho(fallbackFullText)) {
+      return fallbackFullText;
+    }
 
     return "";
   }
