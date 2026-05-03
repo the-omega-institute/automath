@@ -191,6 +191,76 @@ P_{\mathcal G}(n):=\sum_{u,v\in V}(A_{\mathcal G}^n)_{uv}\qquad(n\ge0).
   \item 因而筛选后的 survivor 只可能落入三类：无圈时为有限终止；\(\lambda=1\) 时为有界或多项式增长，其中 \(d=1\) 给出最终周期有界账本，\(d>1\) 给出次数 \(d-1\) 的多项式账本；\(\lambda>1\) 时为指数 survivor 账本。
 \end{enumerate}
 \end{proposition}
+\begin{theorem}[transition-growth 账本的临界核心修剪]\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-finite_descent_to_folded_core-transition-growth-critical-core-trimming}
+沿用定义 \ref{def:distill-stallings-fold-survivor-transition-growth-ledger} 的有限
+transition-growth 账本 \(\mathcal G=(V,E)\) 与路径数 \(P_{\mathcal G}(n)\)。令
+\(\mathscr Q(\mathcal G)\) 为强连通分量的凝聚有向无环图。对强连通块 \(B\) 记其邻接子矩阵谱半径为
+\(\lambda_B\)，并令 \(\lambda=\lambda(\mathcal G)\)。若 \(\lambda=0\)，定义临界增长核心
+\(\mathcal G^{\rm gr}\) 为空账本。若 \(\lambda>0\)，称 \(B\) 为临界块，当且仅当
+\(\lambda_B=\lambda\)。记 \(\mathscr Q_{\max}\) 为 \(\mathscr Q(\mathcal G)\) 中所有位于某条有向块路径
+\(\gamma\) 上的顶点与边的并，其中 \(\gamma\) 经过的临界块个数等于
+\(d(\mathcal G)\)。定义 \(\mathcal G^{\rm gr}\) 为由这些块中的全部原顶点、块内全部原边，以及对应于
+\(\mathscr Q_{\max}\) 中块间边的全部原边生成的子账本。
+则：
+\begin{enumerate}
+  \item \(\lambda(\mathcal G^{\rm gr})=\lambda(\mathcal G)\)，且
+  \(d(\mathcal G^{\rm gr})=d(\mathcal G)\)。
+  \item 若 \(\lambda>0\)，并置
+  \[
+  P_{\rm out}(n):=P_{\mathcal G}(n)-P_{\mathcal G^{\rm gr}}(n),
+  \]
+  则存在常数 \(C>0\) 与 \(0\le \theta<\lambda\)，使得对充分大的 \(n\) 有
+  \[
+  P_{\rm out}(n)\le
+  C\bigl(n^{d(\mathcal G)-2}\lambda^n+n^{|V|}\theta^n\bigr),
+  \]
+  其中当 \(d(\mathcal G)=1\) 时第一项省略。因而 \(\mathcal G^{\rm gr}\) 保留
+  transition-growth audit 的主指数与主多项式次数，而被修剪部分只贡献低阶项。
+  \item 任何子账本若不再含有经过 \(d(\mathcal G)\) 个临界块的块路径，则不能保留上述主阶账本：它要么谱半径小于
+  \(\lambda\)，要么谱半径仍为 \(\lambda\) 但临界串接数小于 \(d(\mathcal G)\)。
+  \item 该核心不是脱离读出接口的绝对 canonical core。它在固定有向边标签、邻接矩阵、路径读出
+  \(P_{\mathcal G}(n)\)、Frobenius reduction 与上述 pruning 规则后才是规范对象；若更换读出或修剪规则，非核心尾部与桥接边的可见性可能改变。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若 \(\lambda=0\)，命题 \ref{prop:distill-stallings-fold-survivor-transition-growth-ledger} 已说明
+\(\mathcal G\) 无有向圈，所有足够长路径消失；空核心保留的正是有限终止分类。
+以下设 \(\lambda>0\)。
+
+按强连通分量把邻接矩阵写成 Frobenius 块上三角形。命题
+\ref{prop:distill-stallings-fold-survivor-transition-growth-ledger} 的证明给出如下精确机制：一条块路径的主贡献由其经过的谱半径等于
+\(\lambda\) 的临界块个数决定；经过 \(r\) 个临界块的项至多贡献
+\(O(n^{r-1}\lambda^n)\)，而只经过谱半径严格小于 \(\lambda\) 的块的项被某个
+\(n^{|V|}\theta^n\) 控制，其中 \(\theta<\lambda\)。由 \(d(\mathcal G)\) 的定义，存在并且只可能存在经过至多
+\(d(\mathcal G)\) 个临界块的块路径；\(\mathscr Q_{\max}\) 正是所有达到该最大值的路径支撑之并。因此
+\(\mathcal G^{\rm gr}\) 仍含有一条经过 \(d(\mathcal G)\) 个临界块的块路径，故
+\[
+\lambda(\mathcal G^{\rm gr})=\lambda,\qquad
+ d(\mathcal G^{\rm gr})=d(\mathcal G).
+\]
+反向不等式显然成立，因为 \(\mathcal G^{\rm gr}\) 是 \(\mathcal G\) 的子账本，故第一项成立。
+
+考虑未完全落在 \(\mathcal G^{\rm gr}\) 中的路径。若其块路径经过
+\(d(\mathcal G)\) 个临界块，则该块路径的每个块与每条块间边都按定义属于
+\(\mathscr Q_{\max}\)，从而整条路径已被 \(\mathcal G^{\rm gr}\) 承载，矛盾。因此任何外部路径要么经过至多
+\(d(\mathcal G)-1\) 个临界块，要么只在谱半径严格小于 \(\lambda\) 的块中贡献主指数。有限多个块路径求和后，得到
+\[
+P_{\rm out}(n)\le
+C\bigl(n^{d(\mathcal G)-2}\lambda^n+n^{|V|}\theta^n\bigr),
+\]
+并在 \(d(\mathcal G)=1\) 时删除第一项。这证明第二项。
+
+第三项只是同一块路径判据的逆向读出。若某子账本没有经过 \(d(\mathcal G)\) 个临界块的块路径，则所有保留下来的块路径或者完全避开全局临界块，从而谱半径降到
+\(<\lambda\)；或者仍含临界块但最多含 \(d(\mathcal G)-1\) 个，于是谱半径可为
+\(\lambda\)，但主多项式次数下降。故它不能保留原 transition-growth audit 的主阶。
+
+最后说明相对规范性。取两个顶点 \(u,v\)，在 \(u\) 与 \(v\) 上各放一条自环，并再放一条桥边
+\(u\to v\)。对路径读出 \(P_{\mathcal G}(n)=\sum_{x,y}(A^n)_{xy}\)，该桥边允许路径先在
+\(u\) 上停留、再过桥、再在 \(v\) 上停留，给出线性多项式因子；此时
+\(\lambda=1\) 且 \(d=2\)，桥边属于上述临界增长核心。若把读出改为闭路读出
+\(L(n)=\operatorname{Tr}(A^n)\)，同一桥边不属于任何闭路，对闭路语言完全不可见，按闭路修剪规则应被删除。故所谓修剪后核心必须相对于已固定的标签、基读出、reduction 与 pruning 规则陈述；脱离这些接口的绝对 canonical core 不是不变量。证毕。
+\end{proof}
+
 \begin{proof}
 第一项是有限有向图的基本事实：无有向圈等价于凝聚图中所有强连通块均为单点且无自环，故任意有向路径长度小于 \(|V|\)；反之有向圈可重复绕行，给出任意长路径，从而 \(A_{\mathcal G}\) 非幂零且谱半径非零。
 

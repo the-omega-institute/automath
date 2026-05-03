@@ -234,6 +234,94 @@ q(\iota_m(\omega))=q(\iota_m(\omega'))
 \textup{(\ref{rule:fold:adj})--(\ref{rule:fold:dedupk})} 的有限重写链生成的商都自动满足上述可采纳性。
 \leanverified{paper_stallings_foldings_local_fold_preserves_represented_object_stable_core_quotient_worst_witness}
 \end{proposition}
+\begin{theorem}[可见尾影响的局部支撑骨架]\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-finite_descent_to_folded_core-visible-tail-causal-core}
+沿用小节 \ref{subsec:fold-local-rewrite} 的局部重写规则族
+\(\mathcal R_{\rm Fib}\)。对一步重写 \(u\to v\)，记
+\[
+\operatorname{Supp}(u,v):=\{j:u_j\ne v_j\}.
+\]
+令
+\[
+D_{\rm Fib}:=\max\{\max S-\min S:S=\operatorname{Supp}(u,v),\ u\to v\text{ 为允许一步重写}\}.
+\]
+则 \(D_{\rm Fib}\le 3\)。对 \(M\ge1\) 记
+\[
+a_{\le M}:=\sum_{1\le k\le M}a_k e_k .
+\]
+固定 \(q\le M\)，并令
+\[
+\tau:\quad a=a^{(0)}\to a^{(1)}\to\cdots\to a^{(L)}=\mathrm{NF}(a)
+\]
+为任一合法归一化链。构造一个有限无向图
+\(\mathsf C_{q\mid M}(\tau,a)\)：其顶点由两个形式顶点
+\(\star_R,\star_T\)、步骤顶点 \(s_1,\ldots,s_L\)，以及所有坐标顶点
+\[
+c_j\qquad j\in \operatorname{supp}(a)\cup\bigcup_{i=1}^L
+\operatorname{Supp}(a^{(i-1)},a^{(i)})
+\]
+组成；若 \(j\in\operatorname{Supp}(a^{(i-1)},a^{(i)})\)，连边 \(c_j-s_i\)；若
+\(j\le q\)，连边 \(\star_R-c_j\)；若 \(j>M\) 且 \(a_j>0\)，连边
+\(\star_T-c_j\)。
+若
+\[
+\pi_q\mathrm{NF}(a)\ne \pi_q\mathrm{NF}(a_{\le M}),
+\]
+则对每一条合法归一化链 \(\tau\)，顶点 \(\star_R\) 与 \(\star_T\) 在
+\(\mathsf C_{q\mid M}(\tau,a)\) 中属于同一连通分支。并且任一连接二者的路径若经过
+\(s\) 个步骤顶点，则
+\[
+s\ge \left\lceil \frac{M+1-q}{D_{\rm Fib}}\right\rceil .
+\]
+等价地，若某条归一化链的 \(\star_R\)-分支不含 \(\star_T\)，则 \(M\) 之外的初始尾部相对于读出
+\(\pi_q\mathrm{NF}(-)\) 是可修剪的 transient tail，并有
+\[
+\pi_q\mathrm{NF}(a)=\pi_q\mathrm{NF}(a_{\le M}).
+\]
+这里的一步重写正是本文语境中的 admissible local fold；上述连通分支是相对于基读出
+\(\pi_q\) 的 folded visible core，而其余分支是由该读出与修剪规则共同确定的非核心尾部。
+\end{theorem}
+\begin{proof}
+各规则支撑的直径可直接读出：规则 \textup{(\ref{rule:fold:adj})} 与
+\textup{(\ref{rule:fold:dedup2})} 的支撑包含在长度为 \(3\) 的坐标区间内，规则
+\textup{(\ref{rule:fold:dedup1})} 的支撑直径为 \(1\)，规则
+\textup{(\ref{rule:fold:dedupk})} 的支撑包含在
+\([k-2,k+1]\) 中，故 \(D_{\rm Fib}\le3\)。命题
+\ref{prop:fold-rewrite-newman} 给出终止性、合流性与正规形的唯一性，因此可在任意合法归一化链上讨论同一终态
+\(\mathrm{NF}(a)\)。
+
+先证连通性断言的逆否命题。设对某条链 \(\tau\)，\(\star_R\) 与 \(\star_T\) 不连通。令
+\(K\) 为 \(\star_R\) 所在连通分支。若步骤顶点 \(s_i\in K\) 而 \(s_j\notin K\)，则
+\[
+\operatorname{Supp}(a^{(i-1)},a^{(i)})\cap
+\operatorname{Supp}(a^{(j-1)},a^{(j)})=\varnothing,
+\]
+否则二者会经由某个坐标顶点相连。故 \(K\) 内步骤与 \(K\) 外步骤的作用支撑两两不交。每条局部规则的适用性与效果只由其支撑中的坐标决定，所以 \(K\) 内步骤可与 \(K\) 外步骤交换次序，并且其在 \(K\) 内坐标上的演化不受 \(K\) 外步骤影响。
+
+又因 \(\star_T\notin K\)，凡 \(j>M\) 且 \(a_j>0\) 的初始尾坐标均不属于 \(K\)。于是从 \(a\) 改为
+\(a_{\le M}\) 不改变 \(K\) 内所有坐标的初值。按 \(\tau\) 中出现的相对次序执行全部 \(K\) 内步骤，在输入 \(a\) 与输入
+\(a_{\le M}\) 上得到完全相同的 \(K\) 内坐标演化；特别地，坐标 \(1,\ldots,q\) 的结果相同。
+
+在完整链 \(\tau\) 中，\(K\) 外步骤不触及 \(K\)，故从该时刻到终态
+\(\mathrm{NF}(a)\) 为止，坐标 \(1,\ldots,q\) 不再改变。另一方面，把初始尾部删去只会把 \(K\) 外的若干数字减小为零，不会在穿越
+\(K\) 与其补集的边界处制造新的相邻 \(11\) 或新的重数 \(\ge2\)；若某条后续归约需要触及 \(K\)，则在原链终态中已有同一局部非法模式，矛盾于
+\(\mathrm{NF}(a)\in X_\infty\)。因此 \(a_{\le M}\) 的任意归一化补全均不再改变坐标
+\(1,\ldots,q\)。由合流性，该补全的终态为 \(\mathrm{NF}(a_{\le M})\)，从而
+\[
+\pi_q\mathrm{NF}(a)=\pi_q\mathrm{NF}(a_{\le M}).
+\]
+这证明了若两端读出不同，则每条归一化链中 \(\star_R\) 与 \(\star_T\) 必连通。
+
+最后证明预算下界。取一条从 \(\star_R\) 到 \(\star_T\) 的简单路径，并按路径顺序列出其中出现的步骤顶点
+\(s_{i_1},\ldots,s_{i_s}\)。路径从某个坐标 \(\le q\) 进入第一个步骤支撑，最后从某个初始尾坐标
+\(\ge M+1\) 离开最后一个步骤支撑；相邻步骤支撑之间经由坐标顶点相连，因而相交。每个步骤支撑的直径至多为
+\(D_{\rm Fib}\)。一串两两相继相交、直径至多为 \(D_{\rm Fib}\) 的支撑若从坐标
+\(\le q\) 连接到坐标 \(\ge M+1\)，其步骤数 \(s\) 必满足
+\[
+sD_{\rm Fib}\ge M+1-q.
+\]
+取上整数即得所示下界。证毕。
+\end{proof}
+
 \begin{proof}
 先证前四项等价。第一项正是说 \(\kappa_m|_E\) 在 \(q\) 的每条纤维上常值，因此可定义
 \[
