@@ -241,6 +241,50 @@ def refresh_source_queue_if_needed(args: argparse.Namespace) -> dict[str, Any]:
     return result
 
 
+def commit_source_queue(args: argparse.Namespace, message: str) -> None:
+    if args.dry_run:
+        return
+    commit_result = commit_paths([source_queue.SOURCE_QUEUE_PATH], message)
+    _log(f"source-queue commit: {commit_result}")
+    if commit_result.get("status") == "committed":
+        push_result = push_current_branch(args.branch)
+        _log(f"source-queue push: {push_result}")
+
+
+def promote_and_run_source_queue_candidate(args: argparse.Namespace) -> bool:
+    if not args.auto_promote_source_queue:
+        return True
+    if args.dry_run:
+        candidate = source_queue.next_open_candidate()
+        _log(
+            "source-queue dry-run: would promote %s"
+            % (candidate.get("id") if candidate else "none")
+        )
+        return True
+    candidate = source_queue.claim_candidate(args.source_queue_candidate)
+    if not candidate:
+        _log("source-queue: no open candidate to promote")
+        return True
+    source_name = str(candidate.get("distillation_source_name") or candidate.get("proposed_source"))
+    queue_id = str(candidate.get("id", ""))
+    _log(f"source-queue: promoted {queue_id} -> {source_name}")
+    commit_source_queue(args, "chore: claim distillation source candidate")
+    ok = run_source(source_name, args)
+    state = distill.load_state(source_name)
+    source_queue.finalize_candidate(
+        queue_id,
+        success=ok,
+        failure_kind=state.failure_kind,
+        detail=state.next_action,
+    )
+    commit_source_queue(
+        args,
+        "chore: complete distillation source candidate" if ok
+        else "chore: block distillation source candidate",
+    )
+    return ok
+
+
 def _increment_attempt_for_retry(name: str) -> None:
     state = distill.load_state(name)
     if state.next_action == "retry_resume" and state.failure_kind not in {"none", "incomplete"}:
@@ -296,8 +340,9 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
                 queue_result.get("oracle_status", {}).get("status", queue_result.get("status")),
             )
         )
+        promoted_ok = promote_and_run_source_queue_candidate(args)
         _log("no runnable sources; supervisor pass complete")
-        return True
+        return promoted_ok
 
     ok = True
     for record in runnable:
@@ -326,6 +371,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--oracle-source-queue", action="store_true", help="Use Oracle to enrich source queue seeds")
     parser.add_argument("--source-queue-seed-limit", type=int, default=source_queue.DEFAULT_SEED_LIMIT)
     parser.add_argument("--source-queue-oracle-limit", type=int, default=source_queue.DEFAULT_ORACLE_LIMIT)
+    parser.add_argument(
+        "--auto-promote-source-queue",
+        action="store_true",
+        help="Claim the highest-priority open source queue candidate and run distillation",
+    )
+    parser.add_argument("--source-queue-candidate", help="Specific source queue candidate id to promote")
     parser.add_argument("--supervised", action="store_true", help="Prompt before applying writebacks")
     parser.add_argument(
         "--review-backend",

@@ -219,6 +219,41 @@ class SourceQueueTests(unittest.TestCase):
 
         self.assertEqual(counts, {"open": 2, "needs_oracle": 1})
 
+    def test_next_open_candidate_picks_highest_priority(self):
+        candidate = source_queue.next_open_candidate(
+            {
+                "candidates": [
+                    {"id": "low", "status": "open", "priority": 10, "proposed_source": "B"},
+                    {"id": "closed", "status": "done", "priority": 99, "proposed_source": "C"},
+                    {"id": "high", "status": "open", "priority": 90, "proposed_source": "A"},
+                ]
+            }
+        )
+
+        self.assertEqual(candidate["id"], "high")
+
+    def test_candidate_state_payload_keeps_oracle_context(self):
+        payload = source_queue._candidate_state_payload(
+            {
+                "id": "oracle:1",
+                "proposed_source": "Stallings foldings",
+                "source_type": "topic_cluster",
+                "priority": 99,
+                "oracle_rank": 1,
+                "target_sections": ["folding"],
+                "omega_mechanisms": ["folding"],
+                "source_material": ["Stallings 1983"],
+                "first_distillation_prompt": "Run Stage R on foldings.",
+                "rationale": "literal fold source",
+                "risks": ["free-group-specific"],
+                "outreach_angle": "visible graph foldings",
+            }
+        )
+
+        self.assertEqual(payload["queue_id"], "oracle:1")
+        self.assertEqual(payload["proposed_source"], "Stallings foldings")
+        self.assertEqual(payload["source_material"], ["Stallings 1983"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -464,3 +464,103 @@ def format_queue_summary(queue: dict[str, Any], *, limit: int = 8) -> str:
             )
         )
     return "\n".join(lines)
+
+
+def next_open_candidate(queue: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    """Return the highest-priority open source candidate."""
+    data = queue if queue is not None else read_queue()
+    candidates = [
+        item for item in data.get("candidates", [])
+        if isinstance(item, dict) and item.get("status") == "open"
+    ]
+    if not candidates:
+        return None
+    return sorted(
+        candidates,
+        key=lambda item: (
+            -int(item.get("priority", 0) or 0),
+            str(item.get("proposed_source", "")),
+        ),
+    )[0]
+
+
+def _candidate_state_payload(candidate: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "queue_id": candidate.get("id", ""),
+        "proposed_source": candidate.get("proposed_source", ""),
+        "source_type": candidate.get("source_type", ""),
+        "priority": candidate.get("priority", 0),
+        "oracle_rank": candidate.get("oracle_rank"),
+        "target_sections": distill._unique_strings(candidate.get("target_sections", [])),
+        "omega_mechanisms": distill._unique_strings(candidate.get("omega_mechanisms", [])),
+        "source_material": distill._unique_strings(candidate.get("source_material", [])),
+        "first_distillation_prompt": str(candidate.get("first_distillation_prompt", "")).strip(),
+        "rationale": str(candidate.get("rationale", "")).strip(),
+        "risks": distill._unique_strings(candidate.get("risks", [])),
+        "outreach_angle": str(candidate.get("outreach_angle", "")).strip(),
+    }
+
+
+def claim_candidate(candidate_id: str | None = None) -> dict[str, Any] | None:
+    """Mark an open queue candidate as running and create its local state seed."""
+    queue = read_queue()
+    candidate = None
+    if candidate_id:
+        for item in queue.get("candidates", []):
+            if isinstance(item, dict) and item.get("id") == candidate_id:
+                candidate = item
+                break
+    else:
+        candidate = next_open_candidate(queue)
+    if not candidate or candidate.get("status") != "open":
+        return None
+
+    now = _now_iso()
+    source_name = str(candidate.get("proposed_source", "")).strip()
+    if not source_name:
+        return None
+    for item in queue.get("candidates", []):
+        if isinstance(item, dict) and item.get("id") == candidate.get("id"):
+            item["status"] = "running"
+            item["claimed_at"] = now
+            item["distillation_source_name"] = source_name
+            item["next_step"] = "run_distillation_pipeline"
+            break
+    write_queue(queue)
+
+    state = distill.load_state(source_name)
+    state.current_stage = state.current_stage or "R"
+    distill.write_json(
+        distill._artifact_path(state, "source_candidate.json"),
+        _candidate_state_payload(candidate),
+    )
+    distill.save_state(state)
+    claimed = dict(candidate)
+    claimed["status"] = "running"
+    claimed["distillation_source_name"] = source_name
+    return claimed
+
+
+def finalize_candidate(
+    candidate_id: str,
+    *,
+    success: bool,
+    failure_kind: str = "",
+    detail: str = "",
+) -> dict[str, Any]:
+    """Mark a running source candidate as done or blocked."""
+    queue = read_queue()
+    now = _now_iso()
+    for item in queue.get("candidates", []):
+        if not isinstance(item, dict) or item.get("id") != candidate_id:
+            continue
+        item["status"] = "done" if success else "blocked"
+        item["finished_at"] = now
+        item["next_step"] = "complete" if success else "inspect_failure"
+        if failure_kind:
+            item["failure_kind"] = failure_kind
+        if detail:
+            item["detail"] = detail
+        break
+    write_queue(queue)
+    return queue

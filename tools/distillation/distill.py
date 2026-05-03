@@ -2970,6 +2970,30 @@ def _dry_raw_research(name: str) -> dict[str, Any]:
     }
 
 
+def _source_queue_context_block(state: DistillState) -> str:
+    """Return optional Oracle source-queue context for Stage R prompts."""
+    data = _read_artifact_json_or_none(state, "source_candidate.json")
+    if not isinstance(data, dict) or not data:
+        return "None."
+    compact = {
+        "queue_id": data.get("queue_id", ""),
+        "proposed_source": data.get("proposed_source", state.name),
+        "source_type": data.get("source_type", ""),
+        "target_sections": _unique_strings(data.get("target_sections", [])),
+        "omega_mechanisms": _unique_strings(data.get("omega_mechanisms", [])),
+        "source_material": _unique_strings(data.get("source_material", [])),
+        "first_distillation_prompt": str(data.get("first_distillation_prompt", "")).strip(),
+        "rationale": str(data.get("rationale", "")).strip(),
+        "risks": _unique_strings(data.get("risks", [])),
+        "outreach_angle": str(data.get("outreach_angle", "")).strip(),
+    }
+    return (
+        "This source was promoted from the Oracle-enriched source queue. "
+        "Use this context as the concrete source contract for Stage R:\n"
+        + _json_block(compact)
+    )
+
+
 def run_stage_r(
     state: DistillState,
     dry_run: bool = False,
@@ -2994,12 +3018,14 @@ def run_stage_r(
         "router_triggers",
     ]
     feedback = ""
+    source_queue_context = _source_queue_context_block(state)
     for attempt in range(1, 4):
         if dry_run:
             data = _dry_raw_research(state.name)
         elif oracle_research and attempt == 1:
             prompt = _load_prompt("oracle_research").format(
                 mathematician=state.name,
+                source_queue_context=source_queue_context,
                 current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
                 section_list=_section_list(),
                 euclid_example=_euclid_example(),
@@ -3039,6 +3065,7 @@ def run_stage_r(
         else:
             prompt = _load_prompt("research").format(
                 mathematician=state.name,
+                source_queue_context=source_queue_context,
                 section_list=_section_list(),
                 euclid_example=_euclid_example(),
                 schema=_research_schema(),
