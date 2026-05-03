@@ -33,11 +33,13 @@ SERVER = "http://127.0.0.1:8765"
 
 
 def submit(prompt: str, pdf_path: Path | None = None, name: str | None = None,
-           timeout: int = 1800) -> str:
+           timeout: int = 1800, min_response_length: int | None = None) -> str:
     """Submit task, wait for response, return text."""
     task_id = name or f"ask_{int(time.time())}"
 
     payload: dict = {"task_id": task_id, "prompt": prompt}
+    if min_response_length is not None:
+        payload["min_response_length"] = min_response_length
     if pdf_path and pdf_path.exists():
         payload["pdf_base64"] = base64.b64encode(pdf_path.read_bytes()).decode("ascii")
         payload["pdf_name"] = pdf_path.name
@@ -86,6 +88,7 @@ def main():
     parser.add_argument("--pdf", type=Path, help="Attach a PDF file")
     parser.add_argument("--name", "-n", type=str, help="Task name (default: auto)")
     parser.add_argument("--timeout", "-t", type=int, default=1800, help="Timeout seconds (default: 1800)")
+    parser.add_argument("--min-response-length", type=int, help="Minimum response length for browser completion detection")
     args = parser.parse_args()
 
     if args.file:
@@ -96,7 +99,7 @@ def main():
         print("Error: provide a prompt or --file", file=sys.stderr)
         sys.exit(1)
 
-    response = submit(prompt, args.pdf, args.name, args.timeout)
+    response = submit(prompt, args.pdf, args.name, args.timeout, args.min_response_length)
     if response:
         # Safe print for Windows
         out = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")

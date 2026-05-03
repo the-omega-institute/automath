@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.6
+// @version      5.7
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.6";
+  const SCRIPT_VERSION = "5.7";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -192,9 +192,10 @@
   }
 
   // ── Persistent task state (survives page navigation, namespaced per agent) ──
-  function saveTaskState(task) {
+  function saveTaskState(task, phase = "pending") {
     GM_setValue(GM_KEY("current_task"), JSON.stringify(task));
-    GM_setValue(GM_KEY("task_phase"), "pending");
+    GM_setValue(GM_KEY("task_phase"), phase);
+    if (task && task.prompt) GM_setValue(GM_KEY("sent_prompt"), task.prompt);
   }
   function loadTaskState() {
     try {
@@ -211,6 +212,9 @@
   function clearTaskState() {
     GM_setValue(GM_KEY("current_task"), "");
     GM_setValue(GM_KEY("task_phase"), "");
+    GM_setValue(GM_KEY("sent_prompt"), "");
+    GM_setValue(GM_KEY("post_send_lines"), "");
+    GM_setValue(GM_KEY("sent_url"), "");
   }
 
   // ── DOM helpers for ChatGPT UI ───────────────────────────────────────
@@ -822,6 +826,7 @@
 
   function setSentPrompt(text) {
     sentPromptText = text;
+    GM_setValue(GM_KEY("sent_prompt"), text || "");
   }
 
   function looksLikePromptEcho(text) {
@@ -865,7 +870,18 @@
     const main = document.querySelector("main");
     const text = main ? (main.innerText || "").trim() : "";
     postSendLines = new Set(text.split("\n").map(l => l.trim()).filter(l => l.length > 0));
+    GM_setValue(GM_KEY("post_send_lines"), JSON.stringify(Array.from(postSendLines)));
     log(`Post-send captured: ${postSendLines.size} lines`);
+  }
+
+  function restorePostSendState() {
+    try {
+      const raw = GM_getValue(GM_KEY("post_send_lines"), "");
+      const lines = raw ? JSON.parse(raw) : [];
+      postSendLines = new Set(Array.isArray(lines) ? lines : []);
+    } catch {
+      postSendLines = new Set();
+    }
   }
 
   // Chrome/UI lines to always strip
@@ -1009,6 +1025,37 @@
     return lines.join("").trim().length < 20;
   }
 
+  function stripThinkingPreamble(t) {
+    return (t || "")
+      .replace(/^ChatGPT\s*(?:said|说)[：:]?\s*/i, "")
+      .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
+      .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
+      .trim();
+  }
+
+  function extractAfterLastAssistantMarker(text) {
+    if (!text) return "";
+    const markers = [
+      /ChatGPT\s*(?:said|说)[：:]?/gi,
+      /Assistant[：:]?/gi,
+    ];
+    let last = -1;
+    let markerLen = 0;
+    for (const re of markers) {
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index >= last) {
+          last = m.index;
+          markerLen = m[0].length;
+        }
+      }
+    }
+    if (last < 0) return "";
+    const after = stripThinkingPreamble(cleanText(text.slice(last + markerLen)));
+    if (after.length >= 20 && !looksLikePromptEcho(after)) return after;
+    return "";
+  }
+
   function extractResponseText() {
     // ═══ Strategy S0: Shadow DOM extraction (ChatGPT 5.4 Pro) ═══
     // ChatGPT 5.4 Pro renders conversation inside a shadow root.
@@ -1059,23 +1106,16 @@
         // Take the last (most recent) assistant message
         const lastAssistant = assistantEls[assistantEls.length - 1];
         const text = cleanText(shadowInnerText(lastAssistant));
-        if (text.length > 100 && !looksLikePromptEcho(text)) {
+        if (text.length > 20 && !looksLikePromptEcho(text)) {
           return text;
         }
       }
 
-      // Helper: strip ChatGPT thinking preamble from extracted text
-      function stripThinkingPreamble(t) {
-        return t
-          .replace(/^ChatGPT said:\s*/i, "")
-          .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
-          .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
-          .trim();
-      }
-
       // Fallback: get all text from shadow, stripped of CSS/JS
       const shadowText = shadowInnerText(el.shadowRoot);
-      if (shadowText.length < 500) continue;
+      const markerText = extractAfterLastAssistantMarker(shadowText);
+      if (markerText.length >= 20) return markerText;
+      if (shadowText.length < 200) continue;
 
       // Try tail-anchor split
       if (sentPromptText.length > 50) {
@@ -1115,7 +1155,7 @@
       }
       if (idx >= 0) {
         const after = cleanText(fullText.slice(idx + tailAnchor.length));
-        if (after.length > 100) {
+        if (after.length > 20) {
           return after;
         }
       }
@@ -1126,14 +1166,14 @@
     const allBlocks = main.querySelectorAll("div, article, section");
     for (const el of allBlocks) {
       const text = extractTextWithMath(el);
-      if (text.length < 200) continue;
+      if (text.length < 20) continue;
       candidates.push({ el, text, len: text.length });
     }
     candidates.sort((a, b) => b.len - a.len);
 
     for (const cand of candidates) {
       const cleaned = cleanText(cand.text);
-      if (cleaned.length < 200) continue;
+      if (cleaned.length < 20) continue;
 
       // Skip full-page candidate if smaller candidates exist
       const pageLen = fullText.length;
@@ -1172,7 +1212,7 @@
         for (let i = els.length - 1; i >= 0; i--) {
           const text = extractTextWithMath(els[i]);
           const cleaned = cleanText(text);
-          if (cleaned.length < 200) continue;
+          if (cleaned.length < 20) continue;
           if (looksLikePromptEcho(cleaned)) continue;
           if (sentPromptText.length > 30) {
             const ps = sentPromptText.slice(0, 40).trim();
@@ -1185,7 +1225,7 @@
 
     // ═══ Strategy C: Full-page text minus prompt (absolute fallback) ═══
     // fullText already declared at top of function; just re-check length
-    if (fullText.length < 100) return "";
+    if (fullText.length < 20) return "";
 
     // Try to locate prompt in page text and take everything after it
     if (sentPromptText.length > 30) {
@@ -1200,7 +1240,7 @@
             if (tailIdx >= 0) endIdx = Math.max(endIdx, tailIdx + tail.length);
           }
           const after = cleanText(fullText.slice(endIdx));
-          if (after.length > 100) return after;
+          if (after.length > 20) return after;
         }
       }
     }
@@ -1213,11 +1253,14 @@
       });
       if (newLines.length > 3) {
         const diffText = newLines.join("\n").trim();
-        if (diffText.length > 100 && !looksLikePromptEcho(diffText)) {
+        if (diffText.length > 20 && !looksLikePromptEcho(diffText)) {
           return diffText;
         }
       }
     }
+
+    const markerText = extractAfterLastAssistantMarker(fullText);
+    if (markerText.length >= 20) return markerText;
 
     return "";
   }
@@ -1437,14 +1480,41 @@
     return lastText;
   }
 
+  async function finishTaskFromCurrentPage(task) {
+    const { task_id, prompt, min_response_length } = task;
+    const parsedMinResponseLength = Number(min_response_length);
+    const minResponseLength = min_response_length !== undefined
+      && min_response_length !== null
+      && Number.isFinite(parsedMinResponseLength)
+      ? parsedMinResponseLength
+      : DEFAULT_MIN_RESPONSE_LENGTH;
+    setSentPrompt(GM_getValue(GM_KEY("sent_prompt"), "") || prompt || "");
+    restorePostSendState();
+    setTaskPhase("waiting_response");
+    await postPhase(task_id, "waiting_response", `resume=true; url=${window.location.href.slice(-80)}`);
+
+    const response = await waitForResponse(task_id, minResponseLength);
+    if (!response || response.length < 5) {
+      throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
+    }
+
+    await serverPost("/result", {
+      task_id,
+      response,
+      model: task.model || "unknown",
+      agent_id: AGENT_ID,
+    });
+
+    log(`DONE: ${task_id} (${response.length} chars)`);
+    clearTaskState();
+  }
+
   // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
-    const { task_id, prompt, pdf_base64, pdf_name, min_response_length } = task;
-    const minResponseLength = Number.isFinite(Number(min_response_length))
-      ? Number(min_response_length)
-      : DEFAULT_MIN_RESPONSE_LENGTH;
+    const { task_id, prompt, pdf_base64, pdf_name } = task;
     log(`=== Task: ${task_id} ===`);
     busy = true;
+    saveTaskState(task, "processing");
     updatePanel();
 
     try {
@@ -1461,7 +1531,7 @@
         // Mark that WE are about to navigate (not the user)
         GM_setValue(GM_KEY("oracle_navigating"), true);
         GM_setValue(GM_KEY("nav_task_id"), task_id);
-        setTaskPhase("navigating");
+        saveTaskState(task, "navigating");
         const agentNum = AGENT_ID.replace("oracle_", "");
         log(`Not on fresh chat — navigating to chatgpt.com ...`);
         busy = false;
@@ -1534,6 +1604,8 @@
       if (!sent) {
         throw new Error("Failed to click send");
       }
+      setTaskPhase("waiting_response");
+      GM_setValue(GM_KEY("sent_url"), window.location.href);
       await postPhase(task_id, "sent", foregroundState());
 
       // Wait for URL change — ChatGPT redirects from chatgpt.com to
@@ -1563,25 +1635,25 @@
 
       // Capture page state NOW (on the conversation page, not homepage)
       capturePostSendState();
-      await postPhase(task_id, "waiting_response", `url=${window.location.href.slice(-80)}`);
-      const response = await waitForResponse(task_id, minResponseLength);
-
-      if (!response || response.length < 5) {
-        throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
-      }
-
-      // Post result
-      await serverPost("/result", {
-        task_id,
-        response,
-        model: task.model || "unknown",
-        agent_id: AGENT_ID,
-      });
-
-      log(`DONE: ${task_id} (${response.length} chars)`);
-      clearTaskState();
+      await finishTaskFromCurrentPage(task);
     } catch (err) {
       log(`ERROR: ${err.message}`);
+      if (getTaskPhase() === "waiting_response") {
+        const recovered = extractResponseText();
+        if (recovered && recovered.length >= 5 && !looksLikePromptEcho(recovered)) {
+          log(`Recovered response after error: ${recovered.length} chars`);
+          try {
+            await serverPost("/result", {
+              task_id,
+              response: recovered,
+              model: task.model || "unknown",
+              agent_id: AGENT_ID,
+            });
+            clearTaskState();
+            return;
+          } catch {}
+        }
+      }
       try {
         await serverPost("/result", {
           task_id,
@@ -1641,13 +1713,27 @@
     const navTaskId = GM_getValue(GM_KEY("nav_task_id"), "");
     const oracleNav = GM_getValue(GM_KEY("oracle_navigating"), false);
     const urlHasOracleFlag = /[?&]oracle=\d/.test(window.location.search);
+    const savedTask = loadTaskState();
+
+    if (phase === "waiting_response" && savedTask && savedTask.task_id) {
+      log(`Resuming response capture for task: ${savedTask.task_id}`);
+      busy = true;
+      updatePanel();
+      try {
+        await finishTaskFromCurrentPage(savedTask);
+      } catch (e) {
+        log(`Response resume failed: ${e.message}`);
+      } finally {
+        busy = false;
+        updatePanel();
+      }
+    }
 
     // Only resume task processing if this navigation was initiated by this agent
     if (phase === "navigating" && navTaskId && (oracleNav || urlHasOracleFlag)) {
       log(`Resuming after navigation for task: ${navTaskId}`);
       GM_setValue(GM_KEY("nav_task_id"), "");
       GM_setValue(GM_KEY("oracle_navigating"), false);
-      clearTaskState();
 
       // Clean oracle flag from URL without triggering navigation
       if (urlHasOracleFlag) {
@@ -1659,7 +1745,7 @@
 
       // Re-fetch this agent's pending task from the server
       try {
-        const task = await serverGet(`/task?agent=${AGENT_ID}`);
+        const task = await serverGet(`/task?agent=${AGENT_ID}&resume=${encodeURIComponent(navTaskId)}`);
         if (task && task.task_id && task.status !== "idle") {
           log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
           await processTask(task);

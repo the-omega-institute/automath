@@ -121,7 +121,10 @@ class OracleHandler(BaseHTTPRequestHandler):
             self._cleanup_stale_agents()
             agents_info = {
                 aid: {"task_id": t["task_id"],
-                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time()))}
+                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                      "phase": t.get("phase", "active"),
+                      "detail": t.get("detail", ""),
+                      "last_seen": t.get("last_seen", "")}
                 for aid, t in pending_tasks.items()
             }
             self._send_json({
@@ -145,9 +148,11 @@ class OracleHandler(BaseHTTPRequestHandler):
                 if task.get("task_id") == task_id:
                     self._send_json({
                         "task_id": task_id,
-                        "phase": "active",
+                        "phase": task.get("phase", "active"),
                         "agent_id": aid,
                         "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                        "detail": task.get("detail", ""),
+                        "last_seen": task.get("last_seen", ""),
                     })
                     return
 
@@ -194,6 +199,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
+            if data.get("min_response_length") is not None:
+                task["min_response_length"] = data.get("min_response_length")
 
             # Handle PDF: either base64 data or file path
             if "pdf_base64" in data:
@@ -320,18 +327,57 @@ class OracleHandler(BaseHTTPRequestHandler):
             # Browser tab acknowledges it picked up the task
             task_id = data.get("task_id", "")
             agent_id = data.get("agent_id", "?")
+            phase = data.get("phase", "ack")
             # Refresh dispatch time to prevent timeout
             if agent_id in dispatch_times:
                 dispatch_times[agent_id] = time.time()
+            if agent_id in pending_tasks:
+                pending_tasks[agent_id]["phase"] = phase
+                pending_tasks[agent_id]["detail"] = data.get("detail", "")
+                pending_tasks[agent_id]["last_seen"] = datetime.now().isoformat()
             print(f"[server] Ack: {task_id} by {agent_id}")
             self._send_json({"status": "ok"})
+
+        elif self.path == "/phase":
+            task_id = data.get("task_id", "")
+            agent_id = data.get("agent_id", "?")
+            phase = data.get("phase", "active")
+            detail = data.get("detail", "")
+            if agent_id in pending_tasks:
+                task = pending_tasks[agent_id]
+                if not task_id or task.get("task_id") == task_id:
+                    task["phase"] = phase
+                    task["detail"] = detail
+                    task["last_seen"] = datetime.now().isoformat()
+                    dispatch_times[agent_id] = time.time()
+            self._send_json({"status": "ok"})
+
+        elif self.path == "/release":
+            task_id = data.get("task_id", "")
+            agent_id = data.get("agent_id", "?")
+            reason = data.get("reason", "released")
+            released = False
+            if agent_id in pending_tasks:
+                task = pending_tasks[agent_id]
+                if not task_id or task.get("task_id") == task_id:
+                    task = pending_tasks.pop(agent_id)
+                    dispatch_times.pop(agent_id, None)
+                    task.pop("assigned_agent", None)
+                    task["status"] = "queued"
+                    task["phase"] = "released"
+                    task["detail"] = reason
+                    task_queue.appendleft(task)
+                    released = True
+                    print(f"[server] Released {task['task_id']} from {agent_id}: {reason}")
+            self._send_json({"status": "released" if released else "not_found"})
 
         else:
             self._send_json({"error": "unknown endpoint"}, 404)
 
 
 def submit_task(prompt: str, pdf_path: Path | None = None,
-                task_id: str | None = None, model: str = "chatgpt-5.4-pro"):
+                task_id: str | None = None, model: str = "chatgpt-5.4-pro",
+                min_response_length: int | None = None):
     """Submit a task to the server (called by agents)."""
     import urllib.request
 
@@ -343,6 +389,8 @@ def submit_task(prompt: str, pdf_path: Path | None = None,
         "prompt": prompt,
         "model": model,
     }
+    if min_response_length is not None:
+        data["min_response_length"] = min_response_length
 
     if pdf_path and pdf_path.exists():
         data["pdf_path"] = str(pdf_path)
