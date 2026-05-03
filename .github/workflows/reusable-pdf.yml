@@ -55,13 +55,11 @@ jobs:
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.aux
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.bbl
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.blg
-            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.fdb_latexmk
-            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.fls
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.out
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.toc
-          key: ${{ runner.os }}-latex-aux-${{ hashFiles('theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/latexmkrc', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/*.bib', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/**/*.tex') }}
+          key: ${{ runner.os }}-latex-aux-v2-${{ hashFiles('theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/latexmkrc', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/*.bib', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/**/*.tex') }}
           restore-keys: |
-            ${{ runner.os }}-latex-aux-
+            ${{ runner.os }}-latex-aux-v2-
 
       - name: Build main.pdf
         run: |
@@ -70,7 +68,13 @@ jobs:
             export LC_ALL=en_US.UTF-8
           fi
 
-          latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
+          rm -f main.fdb_latexmk main.fls main.xdv main.pdf
+          latexmk -g -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
+
+          if [ ! -f main.pdf ]; then
+            echo "::error::main.pdf was not produced"
+            exit 1
+          fi
 
       - name: Package dated PDF
         if: ${{ inputs.upload_artifact }}
