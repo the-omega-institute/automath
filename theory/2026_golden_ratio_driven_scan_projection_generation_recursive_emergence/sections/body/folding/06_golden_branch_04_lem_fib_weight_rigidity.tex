@@ -145,6 +145,155 @@ w_k+w_{k+1}=w_{k+2}\qquad(k\ge 1),
 \leanverified{Fold\_idempotent}
 \leanverified{Fold\_surjective}
 \end{proposition}
+\begin{definition}[局部重写证书读出]\label{def:distill-stallings-local-rewrite-certified-readout}
+令 \(S\) 为集合。称映射 \(R:\mathcal D\to S\) 为局部重写证书读出，若对每条允许的局部重写 \(a\to b\) 都有
+\[
+R(a)=R(b).
+\]
+固定 \(m\ge1\)。若 \(R\) 还满足：对任意 \(c,c'\in X_\infty\)，只要 \(\pi_m(c)=\pi_m(c')\) 就有 \(R(c)=R(c')\)，则称 \(R\) 为 \(m\)-核心读出。
+\end{definition}
+
+\begin{proposition}[局部证书读出只能经过折叠核心]\label{prop:distill-stallings-local-rewrite-certified-readout-factorization}
+设 \(R:\mathcal D\to S\) 为任意映射。
+\begin{enumerate}
+  \item \(R\) 是局部重写证书读出，当且仅当存在唯一映射
+  \[
+  \widehat R:X_\infty\to S
+  \]
+  使得
+  \[
+  R=\widehat R\circ\mathrm{NF}.
+  \]
+  \item 固定 \(m\ge1\)。\(R\) 是 \(m\)-核心读出，当且仅当存在唯一映射
+  \[
+  \bar R:X_m\to S
+  \]
+  使得
+  \[
+  R=\bar R\circ\pi_m\circ\mathrm{NF}.
+  \]
+\end{enumerate}
+因此，任何只登记局部重写保持性的读出，都不能把中间冗余数字、重写路径或可修剪尾部当作稳定对象；若还要求分辨率 \(m\) 可见，则它必须经由稳定前缀 \(\pi_m(\mathrm{NF}(-))\)。
+\end{proposition}
+\begin{proposition}[稳定核心商的可采纳性判别与最坏坏例]
+\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-local_fold_preserves_represented_object-stable-core-quotient-worst-witness}
+固定 \(m\ge1\)，并记
+\[
+\kappa_m:\mathcal D\longrightarrow X_m,
+\qquad
+\kappa_m(a):=\pi_m(\mathrm{NF}(a)).
+\]
+令 \(E\subset\mathcal D\) 为非空有限集合，令 \(q:E\twoheadrightarrow Q\) 为一个有限商映射。以下条件等价：
+\begin{enumerate}
+  \item \(q\) 是稳定核心可采纳的，即
+  \[
+  q(a)=q(b)\quad\Longrightarrow\quad \kappa_m(a)=\kappa_m(b)
+  \qquad(a,b\in E);
+  \]
+  \item 存在唯一映射 \(\bar\kappa:Q\to X_m\)，使
+  \[
+  \kappa_m|_E=\bar\kappa\circ q;
+  \]
+  \item 对任意集合 \(S\) 与任意 \(m\)-核心读出
+  \[
+  R:E\to S,
+  \qquad
+  R=\bar R\circ\kappa_m|_E
+  \quad(\bar R:X_m\to S),
+  \]
+  存在唯一 \(\widetilde R:Q\to S\) 使
+  \[
+  R=\widetilde R\circ q;
+  \]
+  \item 对每个子集 \(A\subseteq X_m\)，谓词
+  \[
+  a\longmapsto \mathbf 1_A(\kappa_m(a))
+  \]
+  都可下降到 \(Q\)。
+\end{enumerate}
+若这些条件失败，则存在二点坏例
+\[
+ a,b\in E,
+ \qquad q(a)=q(b),
+ \qquad \kappa_m(a)\ne\kappa_m(b),
+\]
+并且单点稳定谓词
+\[
+A=\{\kappa_m(a)\}\subseteq X_m
+\]
+已经检测到该失败：\(\mathbf 1_A\circ\kappa_m\) 不能下降到 \(Q\)。
+
+特别地，若 \(B\subseteq\Omega_m\) 且 \(E=\iota_m(B)\)，则上述可采纳性等价于
+\[
+q(\iota_m(\omega))=q(\iota_m(\omega'))
+\quad\Longrightarrow\quad
+\Fold_m(\omega)=\Fold_m(\omega') .
+\]
+因此，窗口层的分支识别保存的不是原始配置 \(\omega\)，而是经由
+\(\Fold_m\) 的稳定核心读出。另一方面，任何由规则
+\textup{(\ref{rule:fold:adj})--(\ref{rule:fold:dedupk})} 的有限重写链生成的商都自动满足上述可采纳性。
+\leanverified{paper_stallings_foldings_local_fold_preserves_represented_object_stable_core_quotient_worst_witness}
+\end{proposition}
+\begin{proof}
+先证前四项等价。第一项正是说 \(\kappa_m|_E\) 在 \(q\) 的每条纤维上常值，因此可定义
+\[
+\bar\kappa(q(a)):=\kappa_m(a).
+\]
+该定义良定当且仅当第一项成立；唯一性来自 \(q\) 的满射性。这证明第一项与第二项等价。
+
+若第二项成立，并且 \(R=\bar R\circ\kappa_m|_E\)，则
+\[
+R=\bar R\circ\bar\kappa\circ q,
+\]
+故可取 \(\widetilde R:=\bar R\circ\bar\kappa\)。唯一性仍由 \(q\) 满射给出。故第二项推出第三项。反过来，在第三项中取 \(S=X_m\) 与 \(R=\kappa_m|_E\)，便得到 \(\kappa_m|_E\) 经由 \(q\) 因子化，故第三项推出第二项。
+
+第三项显然推出第四项，因为每个 \(\mathbf 1_A\circ\kappa_m\) 都是 \(m\)-核心读出。若第四项成立且 \(q(a)=q(b)\)，取
+\(A=\{\kappa_m(a)\}\)。下降性给出
+\[
+1=\mathbf 1_A(\kappa_m(a))=\mathbf 1_A(\kappa_m(b)),
+\]
+于是 \(\kappa_m(b)=\kappa_m(a)\)。故第四项推出第一项。
+
+若可采纳性失败，则按第一项的否定可取 \(a,b\in E\) 满足
+\(q(a)=q(b)\) 但 \(\kappa_m(a)\ne\kappa_m(b)\)。令
+\(A=\{\kappa_m(a)\}\)，则
+\[
+\mathbf 1_A(\kappa_m(a))=1,
+\qquad
+\mathbf 1_A(\kappa_m(b))=0.
+\]
+同一商纤维上取值不同，故该谓词不能下降到 \(Q\)。这给出所述二点坏例。
+
+若 \(E=\iota_m(B)\)，由推论 \ref{cor:foldm-order-indep}，对每个 \(\omega\in\Omega_m\) 有
+\[
+\kappa_m(\iota_m(\omega))
+=\pi_m(\mathrm{NF}(\iota_m(\omega)))
+=\Fold_m(\omega),
+\]
+从而可采纳性等价于 \(\Fold_m\) 在商纤维上常值。
+
+最后，若 \(a,b\) 由一条有限重写链连接，则命题 \ref{prop:fold-rewrite-newman} 的合流性给出
+\(\mathrm{NF}(a)=\mathrm{NF}(b)\)，因而
+\(\kappa_m(a)=\kappa_m(b)\)。所以由这些局部重写链生成的商只会识别同一稳定核心纤维内的点，自动满足第一项。证毕。
+\end{proof}
+
+\begin{proof}
+先证第一项。若 \(R\) 对每条局部重写不变，则由命题 \ref{prop:fold-rewrite-newman}，任意 \(a\in\mathcal D\) 有有限归约链
+\[
+a=a^{(0)}\to a^{(1)}\to\cdots\to a^{(N)}=\mathrm{NF}(a).
+\]
+沿链逐步使用不变性，得
+\[
+R(a)=R(\mathrm{NF}(a)).
+\]
+于是可定义 \(\widehat R(c):=R(c)\) 对 \(c\in X_\infty\)，并有 \(R=\widehat R\circ\mathrm{NF}\)。唯一性来自 \(\mathrm{NF}|_{X_\infty}=\mathrm{id}\)。反之，若 \(R=\widehat R\circ\mathrm{NF}\)，且 \(a\to b\)，则合流性给出 \(\mathrm{NF}(a)=\mathrm{NF}(b)\)，故 \(R(a)=R(b)\)。
+
+第二项中，若 \(R\) 为 \(m\)-核心读出，则第一项给出 \(R=\widehat R\circ\mathrm{NF}\)。定义
+\[
+\bar R(x):=\widehat R(c),\qquad c\in X_\infty,\ \pi_m(c)=x.
+\]
+这是良定义的，因为 \(m\)-核心条件正是说 \(\widehat R\) 在 \(\pi_m\)-纤维上常值。于是 \(R=\bar R\circ\pi_m\circ\mathrm{NF}\)，且唯一性由 \(\pi_m:X_\infty\to X_m\) 的满射性给出。反向显然：任何经由 \(\pi_m\circ\mathrm{NF}\) 的读出既保持局部重写，又在不可约项的同一 \(m\)-前缀纤维上常值。证毕。
+\end{proof}
 
 \begin{proof}
 \textbf{（规范性）}由定义 \ref{def:fold-word}，$Z(N(\omega))\in X_\infty$，故 $\pi_m(Z(N(\omega)))\in X_m$。

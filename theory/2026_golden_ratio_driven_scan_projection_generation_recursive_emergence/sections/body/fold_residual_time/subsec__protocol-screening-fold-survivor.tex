@@ -166,6 +166,39 @@ J>\frac{1-\delta_0(e_0)}{\eta},
 \]
 则任何按上述备择递归选择的链在某个深度 \(j\le J\) 命中 \(\mathsf{Ter}_j\)。该终端元素与复合映射 \(\rho_{j,i}\) 共同给出 \(e_0\) 的有限 dyadic reconstruction 证书。
 \end{theorem}
+\begin{definition}[fold survivor 的 transition-growth 账本]\label{def:distill-stallings-fold-survivor-transition-growth-ledger}
+称一份有限 transition-growth 账本为有限有向多重图
+\[
+\mathcal G=(V,E)
+\]
+及其邻接矩阵 \(A_{\mathcal G}\in M_V(\NN)\)，其中 \((A_{\mathcal G})_{uv}\) 记录从 \(u\) 到 \(v\) 的有向边数。定义长度 \(n\) 的 survivor 路径数为
+\[
+P_{\mathcal G}(n):=\sum_{u,v\in V}(A_{\mathcal G}^n)_{uv}\qquad(n\ge0).
+\]
+令 \(\lambda(\mathcal G)\) 为 \(A_{\mathcal G}\) 的谱半径。若 \(\lambda(\mathcal G)>0\)，把 \(A_{\mathcal G}\) 按强连通分量作 Frobenius 块上三角分解，并令 \(d(\mathcal G)\) 为在凝聚有向无环图的一条有向路径上可遇到的、谱半径等于 \(\lambda(\mathcal G)\) 的对角块的最大个数；若 \(\lambda(\mathcal G)=0\)，置 \(d(\mathcal G)=0\)。
+\end{definition}
+
+\begin{proposition}[survivor transition 账本的增长分类]\label{prop:distill-stallings-fold-survivor-transition-growth-ledger}
+对任意有限 transition-growth 账本 \(\mathcal G\)，成立以下分类。
+\begin{enumerate}
+  \item \(\lambda(\mathcal G)=0\) 当且仅当 \(\mathcal G\) 无有向圈；此时存在 \(N\le |V|\) 使 \(P_{\mathcal G}(n)=0\) 对所有 \(n\ge N\) 成立。
+  \item 若 \(\lambda(\mathcal G)>0\)，则存在常数 \(C_1,C_2>0\) 与 \(n_0\)，使对所有 \(n\ge n_0\) 有
+  \[
+  C_1 n^{d(\mathcal G)-1}\lambda(\mathcal G)^n
+  \le P_{\mathcal G}(n)\le
+  C_2 n^{d(\mathcal G)-1}\lambda(\mathcal G)^n.
+  \]
+  \item 因而筛选后的 survivor 只可能落入三类：无圈时为有限终止；\(\lambda=1\) 时为有界或多项式增长，其中 \(d=1\) 给出最终周期有界账本，\(d>1\) 给出次数 \(d-1\) 的多项式账本；\(\lambda>1\) 时为指数 survivor 账本。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一项是有限有向图的基本事实：无有向圈等价于凝聚图中所有强连通块均为单点且无自环，故任意有向路径长度小于 \(|V|\)；反之有向圈可重复绕行，给出任意长路径，从而 \(A_{\mathcal G}\) 非幂零且谱半径非零。
+
+对第二项，将 \(A_{\mathcal G}\) 置于 Frobenius 块上三角形。每个对角强连通块由 Perron--Frobenius 定理控制：其路径数的指数主阶为该块的谱半径。块上三角矩阵的幂展开把一条从块到块的路径分解为若干对角块内停留段与块间跳转；只有谱半径等于全局 \(\lambda(\mathcal G)\) 的临界块能贡献主阶。若一条凝聚路径经过 \(d\) 个临界块，则长度 \(n\) 在这些块间的分配有 \(\asymp n^{d-1}\) 种，且每种分配贡献 \(\lambda^n\) 的主指数阶；经过少于 \(d\) 个临界块或经过非临界块的项均被吸收到较低阶上界中。取达到最大 \(d(\mathcal G)\) 的块路径给出下界，汇总所有块路径给出上界。
+
+第三项只是第二项的读出分类。若 \(\lambda=1\)，临界强连通块的非负整数邻接矩阵谱半径为 \(1\)，故其循环部分为置换型；当 \(d=1\) 时只剩有限周期振荡，路径数有界并最终周期。若 \(d>1\)，块间串接提供多项式分配因子。若 \(\lambda>1\)，第二项给出指数增长。证毕。
+\end{proof}
+
 \begin{proof}
 只需证明非终端链的长度估计。若
 \[
