@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.4
+// @version      5.5
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
