@@ -23,6 +23,30 @@ class SourceQueueTests(unittest.TestCase):
         self.assertEqual(seeds[0]["next_step"], "oracle_source_discovery")
         self.assertEqual(seeds[0]["target_sections"], ["pom"])
 
+    def test_discovery_seeds_deduplicate_same_source_section(self):
+        seeds = source_queue.discovery_seeds_from_memory(
+            [
+                {
+                    "id": "memory:1",
+                    "kind": "split_candidate",
+                    "status": "open",
+                    "source": "Euclid Elements",
+                    "target_sections": ["folding"],
+                    "reason": "first",
+                },
+                {
+                    "id": "memory:2",
+                    "kind": "split_candidate",
+                    "status": "open",
+                    "source": "Euclid-Elements",
+                    "target_sections": ["folding"],
+                    "reason": "second",
+                },
+            ]
+        )
+
+        self.assertEqual(len(seeds), 1)
+
     def test_normalize_oracle_candidate_filters_low_scores(self):
         candidate = source_queue._normalize_oracle_candidate(
             {
@@ -81,6 +105,35 @@ class SourceQueueTests(unittest.TestCase):
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0]["created_at"], "old-time")
         self.assertEqual(merged[0]["priority"], 30)
+
+    def test_merge_candidates_collapses_duplicate_seed_rows(self):
+        merged = source_queue._merge_candidates(
+            [
+                {
+                    "id": "seed:1",
+                    "status": "needs_oracle",
+                    "source_type": "discovery_seed",
+                    "priority": 20,
+                    "seed_source": "Gromov",
+                    "target_sections": ["pom"],
+                    "origin_entry_ids": ["a"],
+                },
+                {
+                    "id": "seed:2",
+                    "status": "needs_oracle",
+                    "source_type": "discovery_seed",
+                    "priority": 30,
+                    "seed_source": "Gromov",
+                    "target_sections": ["pom"],
+                    "origin_entry_ids": ["b"],
+                },
+            ],
+            [],
+        )
+
+        self.assertEqual(len(merged), 1)
+        self.assertEqual(merged[0]["priority"], 30)
+        self.assertEqual(merged[0]["origin_entry_ids"], ["a", "b"])
 
     def test_queue_counts_groups_statuses(self):
         counts = source_queue.queue_counts(

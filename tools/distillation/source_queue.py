@@ -108,11 +108,12 @@ def discovery_seeds_from_memory(
             continue
         source = str(entry.get("source", "")).strip() or "unknown source"
         origin_id = str(entry.get("id", "")).strip()
+        semantic_key = f"{distill._slugify(source)}|{','.join(sections)}"
+        if semantic_key in seen:
+            continue
         proposed = f"Oracle source discovery for {', '.join(sections)} after {source}"
         candidate_id = _candidate_id("seed", proposed, sections, origin_id)
-        if candidate_id in seen:
-            continue
-        seen.add(candidate_id)
+        seen.add(semantic_key)
         seeds.append(
             {
                 "id": candidate_id,
@@ -299,14 +300,45 @@ def _merge_candidates(existing: list[dict[str, Any]], incoming: list[dict[str, A
         else:
             combined["updated_at"] = now
         merged[item_id] = combined
+    collapsed: dict[tuple[Any, ...], dict[str, Any]] = {}
+    for item in merged.values():
+        key = _semantic_candidate_key(item)
+        previous = collapsed.get(key)
+        if not previous:
+            collapsed[key] = item
+            continue
+        combined = {**previous, **item}
+        combined["id"] = previous.get("id") or item.get("id")
+        combined["priority"] = max(
+            int(previous.get("priority", 0) or 0),
+            int(item.get("priority", 0) or 0),
+        )
+        combined["origin_entry_ids"] = distill._unique_strings(
+            list(previous.get("origin_entry_ids", []) or [])
+            + list(item.get("origin_entry_ids", []) or [])
+        )
+        combined["created_at"] = previous.get("created_at") or item.get("created_at") or now
+        combined["updated_at"] = now
+        collapsed[key] = combined
     return sorted(
-        merged.values(),
+        collapsed.values(),
         key=lambda item: (
             str(item.get("status", "")) != "open",
             -int(item.get("priority", 0) or 0),
             str(item.get("proposed_source", "")),
         ),
     )
+
+
+def _semantic_candidate_key(item: dict[str, Any]) -> tuple[Any, ...]:
+    status = str(item.get("status", ""))
+    source_type = str(item.get("source_type", ""))
+    sections = tuple(distill._unique_strings(item.get("target_sections", [])))
+    if status == "needs_oracle" and source_type == "discovery_seed":
+        return ("seed", distill._slugify(str(item.get("seed_source", ""))), sections)
+    if str(item.get("origin", "")) == "oracle_source_queue":
+        return ("oracle", distill._slugify(str(item.get("proposed_source", ""))), sections)
+    return ("id", str(item.get("id", "")))
 
 
 def refresh_source_queue(
