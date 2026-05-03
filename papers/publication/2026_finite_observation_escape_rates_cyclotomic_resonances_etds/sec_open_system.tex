@@ -1,0 +1,928 @@
+\section{Escape rates and quasistationary amplitudes}
+\label{sec:open-system}
+
+\subsection{First-entry residue events and escape rates}
+
+This section contains the main dynamical theorem of the paper.  It
+applies the weighted boundary transfer theorem to first-entry residue
+events of Markov holes, so that the boundary matrix becomes the killed
+transfer matrix.  Degenerate residue classes are classified below:
+they are eventually decided on the relevant residue subsequence, while
+all remaining subsequences have the killed survivor exponent.  In the
+two-terminal non-degenerate case the finite-observation exponent becomes
+the escape rate, and the normalized survivor left eigenvector supplies
+the residuewise ambiguity amplitude.  The central statement is
+Theorem~\ref{thm:first-entry-escape-rate}, which collects those
+conclusions in one place.  The later
+Theorem~\ref{thm:quasistationary-ambiguity} is retained only to isolate
+the finite-dimensional Perron--Frobenius calculation behind the final
+ratio formula.  The finite-observation step is the exact identification
+of the Bayes error with a killed path sum carrying residue-dependent
+terminal weights; the subsequent exponent and amplitude estimates use
+finite-dimensional Perron--Frobenius theory for that killed matrix.  The
+quasistationary terminology used here is the classical finite absorbing
+Markov-chain terminology of \citet{DarrochSeneta1965}, specialized to the
+substochastic killed transition matrix introduced below.  The study of
+escape rates through holes in dynamical systems
+originates with
+\citet{PianigianiYorke1979}; the transfer-operator approach for
+topological Markov chains was developed by
+\citet{ColletMartinezSchmitt1997}.  For spectral characterizations of
+escape rates and conditionally invariant measures, see
+\citet{DemersYoung2006,FroylandStancevic2010,DemersWrightYoung2012} and
+\citet{KellerLiverani2009}; for the Gibbs-measure setting, see
+\citet{FergusonPollicott2012}.  Related topological, symbolic, and
+combinatorial treatments of systems with holes include
+\citet{BundfussKrugerTroubetzkoy2011},
+\citet{CheriyathAgarwal2023,BonannoCristadoroLenci2022} and
+\citet{AgarwalCheriyathTikekar2024}.  Since any finite union of
+cylinders becomes a one-step Markov hole after a sufficiently high block
+presentation, there is no loss in working directly on a one-step shift
+over a finite alphabet \(A\); compare \citet{LindMarcus1995,Bowen2008}.
+In this section the finite observation alphabet from
+Section~\ref{sec:preliminaries} is specialized to \(\Sigma=A\), the
+observation partition is the one-symbol cylinder partition of \(Y\), and
+the cylinder \(C_a\) from the general Bayes-error formulas is written as
+the symbolic cylinder \([a]\).
+
+\begin{lemma}[Residue reachability criterion]
+\label{lem:residue-reachability}
+Let \(A=\mathcal S\sqcup A_{\mathrm{hole}}\) be a finite irreducible
+Markov alphabet with \(A_{\mathrm{hole}}\neq\emptyset\), transition
+matrix \(K\), and \(K_{ij}>0\) exactly on the admissible directed edges.
+Fix \(q\geq2\) and
+\(\emptyset\neq R\subsetneq\ZZ/q\ZZ\).  Form the \(q\)-cyclic directed
+graph \(\mathcal G_{H,q}\) with vertices
+\[
+  \mathcal S\times\ZZ/q\ZZ
+  \quad\text{and}\quad
+  \star_R,\ \star_{R^c}.
+\]
+There is an edge
+\[
+  (i,r)\longrightarrow(j,r+1)
+\]
+whenever \(j\in\mathcal S\) and \(K_{ij}>0\), with residues read modulo
+\(q\).  There is an edge \((i,r)\to\star_R\) if
+\(K_{ih}>0\) for some \(h\in A_{\mathrm{hole}}\) and \(r+1\in R\), and
+an edge \((i,r)\to\star_{R^c}\) if \(K_{ih}>0\) for some
+\(h\in A_{\mathrm{hole}}\) and \(r+1\notin R\).
+
+Let \(\PP_i\) be the Markov law started at \(i\), and let
+\[
+  \tau_H^+:=\inf\{n\geq1:y_n\in A_{\mathrm{hole}}\}.
+\]
+For
+\[
+  p_{i,r}:=\PP_i(r+\tau_H^+\in R\bmod q),
+  \qquad
+  \beta_{i,r}:=\min\{p_{i,r},1-p_{i,r}\},
+\]
+one has \(0<p_{i,r}<1\) if and only if both terminal vertices
+\(\star_R\) and \(\star_{R^c}\) are reachable from \((i,r)\) in
+\(\mathcal G_{H,q}\).  Consequently the uniform residue
+non-degeneracy condition
+\[
+  \inf_{i\in\mathcal S,\ r\in\ZZ/q\ZZ}\beta_{i,r}>0
+\]
+is equivalent to this two-terminal reachability condition at every
+safe-residue vertex.
+\end{lemma}
+
+\begin{proof}[Proof of Theorem~\ref{thm:first-entry-escape-rate} except for the final ratio clause]
+A directed path
+\[
+  (i,r)=(i_0,r)\to(i_1,r+1)\to\cdots
+  \to(i_{k-1},r+k-1)\to\star_R
+\]
+is exactly an admissible first-hit word
+\[
+  i=i_0,\ i_1,\ldots,i_{k-1}\in\mathcal S,\qquad
+  h\in A_{\mathrm{hole}},
+\]
+with \(K_{i_{t-1}i_t}>0\), \(K_{i_{k-1}h}>0\), and \(r+k\in R\).
+The corresponding cylinder has positive \(\PP_i\)-probability, so
+reachability of \(\star_R\) is equivalent to \(p_{i,r}>0\).  The same
+argument with \(\star_{R^c}\) is equivalent to positive probability of a
+finite first hit with residue outside \(R\).
+
+\(A_{\mathrm{hole}}\) is non-empty and the ambient Markov graph is
+finite and irreducible, so Lemma~\ref{lem:future-entry-estimate}
+implies \(\PP_i(\tau_H^+<\infty)=1\) for every \(i\in\mathcal S\).
+Thus the complement of the event \(\{r+\tau_H^+\in R\}\) is, up to a
+null set, exactly the union of finite first hits with residue outside
+\(R\).  Therefore \(p_{i,r}<1\) is equivalent to reachability of
+\(\star_{R^c}\).  Since \(\mathcal S\times\ZZ/q\ZZ\) is finite,
+pointwise positivity of all \(\beta_{i,r}\) is the same as a positive
+uniform lower bound.
+\end{proof}
+
+\noindent
+We call the equivalent finite graph conditions in
+Lemma~\ref{lem:residue-reachability} the
+\emph{two-terminal residue reachability hypothesis}.
+
+\begin{lemma}[Strong-Markov future-entry estimate]
+\label{lem:future-entry-estimate}
+Let \(A=\mathcal S\sqcup A_{\mathrm{hole}}\) be a finite irreducible
+Markov alphabet with \(A_{\mathrm{hole}}\neq\emptyset\), and let
+\((K_{ij})\) be a transition matrix with \(K_{ij}>0\) exactly on the
+admissible directed edges.  For
+\[
+  \tau_H^+:=\inf\{n\geq1:y_n\in A_{\mathrm{hole}}\},
+\]
+there are constants \(N\geq1\) and \(\eta>0\) such that, for every
+\(i\in\mathcal S\) and \(k\geq0\),
+\[
+  \PP_i(\tau_H^+>kN)\leq (1-\eta)^k.
+\]
+In particular \(\PP_i(\tau_H^+<\infty)=1\) for every \(i\in\mathcal S\),
+and the convergence is uniform in \(i\).
+\end{lemma}
+
+\begin{proof}
+For each \(i\in\mathcal S\), irreducibility gives an admissible path
+from \(i\) to \(A_{\mathrm{hole}}\).  Stop this path at its first visit
+to the hole:
+\[
+  i=i_0,\ i_1,\ldots,i_{\ell_i-1}\in\mathcal S,\qquad
+  i_{\ell_i}\in A_{\mathrm{hole}} .
+\]
+Let
+\[
+  N:=\max_{i\in\mathcal S}\ell_i,
+  \qquad
+  \eta:=\min_{i\in\mathcal S}
+       K_{i_0i_1}K_{i_1i_2}\cdots K_{i_{\ell_i-1}i_{\ell_i}} .
+\]
+The minimum is positive because only finitely many positive transition
+probabilities occur in the selected paths.  Hence from every safe state
+there is probability at least \(\eta\) of entering
+\(A_{\mathrm{hole}}\) within the next \(N\) steps.
+
+On the event \(\{\tau_H^+>kN\}\), the state \(y_{kN}\) is still in
+\(\mathcal S\).  Applying the strong Markov property after this failed
+block,
+\[
+  \PP_i(\tau_H^+>(k+1)N)
+  =
+  \EE_i\!\left[
+    \ind_{\{\tau_H^+>kN\}}
+    \PP_{y_{kN}}(\tau_H^+>N)
+  \right]
+  \leq
+  (1-\eta)\PP_i(\tau_H^+>kN).
+\]
+Iteration gives the displayed geometric bound, and then
+\(\PP_i(\tau_H^+=\infty)=0\) follows by letting \(k\to\infty\).
+\end{proof}
+
+\begin{theorem}[Central finite-state theorem]
+\label{thm:first-entry-escape-rate}
+Let \(Y\subseteq A^{\NNzero}\) be a topologically mixing one-step
+subshift of finite type, and let \(\nu_\varphi\) be the fully supported
+equilibrium Markov measure of a one-step potential \(\varphi\).  Write
+\(\pi\) for the stationary vector and \(K=(K_{ij})_{i,j\in A}\) for the
+transition matrix.  Let \(M=(M_{ij})_{i,j\in A}\) be the adjacency
+matrix of \(Y\).  Let \(A_{\mathrm{hole}}\subsetneq A\) be a non-empty proper
+subset, and set
+\[
+  H:=\bigcup_{h\in A_{\mathrm{hole}}}[h],
+  \qquad
+  \mathcal S:=A\setminus A_{\mathrm{hole}}.
+\]
+Let
+\[
+  Y_H:=\set{y\in Y:\sigma^n y\notin H\text{ for every }n\geq 0}
+\]
+be the survivor subshift, and assume that \(Y_H\) is topologically
+mixing.  Let
+\[
+  \mathcal S_\infty
+  := \set{i\in\mathcal S:\exists\,y\in Y_H,\ y_0=i}
+\]
+be the survivor alphabet, i.e.\ the set of states that actually appear
+in \(Y_H\).  Since \(Y_H\) is a one-step subshift of finite type, its
+adjacency matrix restricted to \(\mathcal S_\infty\) is irreducible;
+mixing further implies primitivity.  Set
+\[
+  \mathcal T:=\mathcal S\setminus\mathcal S_\infty.
+\]
+The distinction between \(\mathcal S\) and \(\mathcal S_\infty\) is
+essential: a state can avoid the hole for finitely many steps without
+supporting an infinite survivor orbit.
+States in \(\mathcal T\) are transient: from any such state, every
+admissible path eventually enters \(A_{\mathrm{hole}}\).
+Define the first entry time
+\[
+  \tau_H(y):=\inf\set{n\geq 0:\sigma^n y\in H}.
+\]
+Fix \(q\geq 2\) and a non-empty proper subset
+\(R\subsetneq \ZZ/q\ZZ\), and define
+\[
+  \mathsf{P}_R
+  := \set{y\in Y:
+      \tau_H(y)<\infty,\
+      \tau_H(y)\bmod q\in R }.
+\]
+
+For \(i\in\mathcal S\), let \(\PP_i\) be the Markov law on \(Y\)
+conditioned to start at state \(i\), and let
+\[
+  \tau_H^+
+  := \inf\set{n\geq 1:y_n\in A_{\mathrm{hole}}}.
+\]
+Thus \(\tau_H\) is the ambient first-entry time, whereas \(\tau_H^+\) is
+the remaining first-entry time after one has already read a safe prefix
+and restarted at its terminal state.
+For \(r\in\ZZ/q\ZZ\), define
+\[
+  p_{i,r}:=\PP_i\bigl(r+\tau_H^+\in R \bmod q\bigr),
+  \qquad
+  \beta_{i,r}:=\min\set{p_{i,r},1-p_{i,r}}.
+\]
+Assume the two-terminal residue reachability hypothesis, equivalently
+the residue non-degeneracy conditions of
+Lemma~\ref{lem:residue-reachability}: for every
+\(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\), the two terminal vertices
+\(\star_R\) and \(\star_{R^c}\) are reachable from \((i,r)\) in the
+\(q\)-cyclic graph \(\mathcal G_{H,q}\).  Equivalently, there are
+admissible future paths starting at \(i\) whose first entry into
+\(A_{\mathrm{hole}}\) occurs at residues both in \(R-r\) and in
+\((\ZZ/q\ZZ\setminus R)-r\).  Then there exists \(\theta>0\) such that
+\[
+  0<\theta\leq \beta_{i,r}\leq \frac12
+  \qquad
+  \text{for every } i\in\mathcal S,\ r\in\ZZ/q\ZZ.
+\]
+
+Define the killed matrix \(B_H\) on \(\mathcal S\) by
+\[
+  B_H(i,j):=K_{ij}\mathbf{1}_{\{j\in\mathcal S\}},
+  \qquad i,j\in\mathcal S,
+\]
+let \(u\in\RR^{\mathcal S}\) be given by
+\[
+  u_i:=\pi_i,
+\]
+and for \(r\in\ZZ/q\ZZ\) let \(b_r\in\RR^{\mathcal S}\) be the vector
+\[
+  b_r(i):=\beta_{i,r}.
+\]
+Then for every \(m\geq 1\),
+\[
+  \varepsilon_m(\mathsf{P}_R;\nu_\varphi)
+  = u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+Moreover,
+\[
+  \theta\,\nu_\varphi(\tau_H\geq m)
+  \leq \varepsilon_m(\mathsf{P}_R;\nu_\varphi)
+  \leq \frac12\,\nu_\varphi(\tau_H\geq m),
+\]
+where
+\[
+  \nu_\varphi(\tau_H\geq m)
+  = u^{\mathsf T}B_H^{m-1}\mathbf{1}.
+\]
+If \(\rho_H:=\rho(B_H)\), then
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log\varepsilon_m(\mathsf{P}_R;\nu_\varphi)
+  = -\log\rho_H.
+\]
+Finally, if
+\[
+  L_{\varphi,H}(i,j):=M_{ij}e^{\varphi(i,j)}\mathbf{1}_{\{j\in\mathcal S_\infty\}},
+  \qquad i,j\in\mathcal S_\infty,
+\]
+then
+\[
+  -\log\rho_H
+  = P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Moreover, if \(\ell_\infty>0\) is a left Perron--Frobenius eigenvector
+of \(B_\infty:=B_H|_{\mathcal S_\infty}\), and if
+\[
+  \ell_H^{\mathsf T}
+  :=
+  \bigl(
+    \ell_\infty^{\mathsf T},
+    \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
+  \bigr),
+  \qquad
+  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1},
+\]
+where \(B_H\) is written in block form
+\[
+  B_H=
+  \begin{pmatrix}
+    B_\infty & C\\
+    0 & Q
+  \end{pmatrix}
+\]
+after ordering \(\mathcal S=\mathcal S_\infty\sqcup\mathcal T\), then
+for every residue class \(r\in\ZZ/q\ZZ\),
+\[
+  \lim_{n\to\infty}
+  \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
+       {\nu_\varphi(\tau_H\ge nq+r+1)}
+  = \xi_H^{\mathsf T}b_r.
+\]
+Thus the finite-observation exponent of \(\mathsf{P}_R\) coincides with
+the escape rate of the open system \((Y,\sigma,H)\), and the residuewise
+leading constant is the quasistationary ambiguity amplitude
+\(\xi_H^{\mathsf T}b_r\).
+\end{theorem}
+
+\begin{proof}
+Let \(a=a_0\cdots a_{m-1}\in A^m\).  If \(a_t\in A_{\mathrm{hole}}\) for some
+\(0\leq t\leq m-1\), then \(\tau_H\leq m-1\) on the cylinder \([a]\), so
+the truth value of \(\mathsf{P}_R\) is already decided on \([a]\), and
+\([a]\) contributes \(0\) to
+\(\varepsilon_m(\mathsf{P}_R;\nu_\varphi)\).
+
+Assume therefore that \(a_t\in\mathcal S\) for every
+\(0\leq t\leq m-1\).  By the Markov property, conditioned on \([a]\) the
+future depends on the prefix only through the terminal state
+\(a_{m-1}\).  Since the prefix is safe through time \(m-1\), the
+absolute first-hit time is
+\[
+  \tau_H=(m-1)+\tau_H^+
+\]
+for the restarted chain at \(a_{m-1}\), on the event of a future hit.
+Lemma~\ref{lem:future-entry-estimate} shows that this future-hit event
+has full probability under the restarted law \(\PP_{a_{m-1}}\).  Indeed,
+the conditional law after the observed safe prefix is the Markov law
+started at \(a_{m-1}\), and
+\[
+  \PP_{a_{m-1}}(\tau_H^+<\infty)=1
+\]
+by Lemma~\ref{lem:future-entry-estimate}.
+Therefore
+\[
+  \nu_\varphi(\mathsf P_R\mid[a])
+  =
+  \PP_{a_{m-1}}\bigl((m-1)+\tau_H^+\in R\bmod q\bigr)
+  =
+  p_{a_{m-1},\,m-1\bmod q}.
+\]
+This is the only indexing point in the formula: an observed safe prefix
+of length \(m\) ends at time \(m-1\), and the restarted first-hit time
+\(\tau_H^+\) counts the next symbol as time \(1\).  Thus the ambiguity
+vector is evaluated at the residue \(m-1\bmod q\), not at \(m\bmod q\).
+Hence the Bayes factor on \([a]\) is
+\(\beta_{a_{m-1},\,m-1\bmod q}\).  The residue
+non-degeneracy hypothesis guarantees \(0<\beta_{i,r}\leq \tfrac12\), and
+since the state space \(\mathcal S\times \ZZ/q\ZZ\) is finite, the lower
+bound can be chosen uniformly.
+
+Thus the boundary cylinders for \(\mathsf{P}_R\) are exactly the
+non-empty length-\(m\) cylinders \([a]\) with
+\(a_t\in\mathcal S\) for every \(t<m\): on such cylinders both
+\(\mathsf{P}_R\) and its complement have positive conditional measure,
+whereas every cylinder that already meets the hole before time \(m\) is
+decided.  Hence
+Proposition~\ref{prop:scan-error-cylinder} gives
+\[
+  \varepsilon_m(\mathsf{P}_R;\nu_\varphi)
+  = \sum_{\substack{a\in A^m\\ a_t\in\mathcal S\ \forall t<m}}
+      \nu_\varphi([a])\,
+      \beta_{a_{m-1},\,m-1\bmod q}.
+\]
+Since \(\nu_\varphi\) is Markov,
+\[
+  \nu_\varphi([a])
+  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}},
+\]
+and summing first over survivor words with fixed terminal state \(j\)
+gives
+\[
+  \sum_{\substack{a\in A^m\\
+                  a_t\in\mathcal S\ \forall t<m\\
+                  a_{m-1}=j}}
+      \nu_\varphi([a])
+  =
+  \sum_{a_0,\ldots,a_{m-2}\in\mathcal S}
+      \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}j}
+  =
+  (u^{\mathsf T}B_H^{m-1})_j .
+\]
+Here \(B_H\) records exactly the safe transitions, so the power
+\(B_H^{m-1}\) contains the \(m-1\) transitions inside the observed safe
+word, from time \(0\) to time \(m-1\).
+Therefore
+\[
+  \varepsilon_m(\mathsf{P}_R;\nu_\varphi)
+  = u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+The same path sum with terminal weight \(\mathbf{1}\) gives
+\[
+  \nu_\varphi(\tau_H\geq m)
+  = u^{\mathsf T}B_H^{m-1}\mathbf{1}.
+\]
+The two-sided comparison with survivor mass follows immediately from the
+uniform bounds on \(\beta_{i,r}\).
+
+Set \(B_\infty:=B_H|_{\mathcal S_\infty}\).  Since \(Y_H\) is
+topologically mixing, \(B_\infty\) is primitive.  Reorder the states in
+\(\mathcal S\) so that those in \(\mathcal S_\infty\) come first and
+those in \(\mathcal T\) come last.  Then
+\[
+  B_H=
+  \begin{pmatrix}
+    B_\infty & C\\
+    0 & Q
+  \end{pmatrix}.
+\]
+There is no edge from \(\mathcal T\) into \(\mathcal S_\infty\), which
+explains the zero block: if \(i\in\mathcal T\) and \(B_H(i,j)>0\) for
+some \(j\in\mathcal S_\infty\), then following an infinite survivor path
+from \(j\) would produce an element of \(Y_H\) starting at \(i\), a
+contradiction.  Moreover the directed graph on \(\mathcal T\) is
+acyclic.  Indeed, a directed cycle inside \(\mathcal T\) could be
+repeated indefinitely to produce an infinite admissible path avoiding
+\(H\), so its initial state would belong to \(\mathcal S_\infty\), again
+a contradiction.  Since \(\mathcal T\) is finite, acyclicity implies
+that \(Q\) is nilpotent.  Hence
+\[
+  \rho_H=\rho(B_H)=\max\set{\rho(B_\infty),\rho(Q)}=\rho(B_\infty).
+\]
+
+Let \(u_\infty\) and \(b_{r,\infty}\) denote the restrictions of \(u\)
+and \(b_r\) to \(\mathcal S_\infty\).  These vectors are strictly
+positive because \(\pi_i>0\) for every \(i\in A\) and
+\(\beta_{i,r}\geq \theta\).  Perron--Frobenius therefore gives, for each
+\(r\in\ZZ/q\ZZ\),
+\[
+  u_\infty^{\mathsf T}B_\infty^{m-1}b_{r,\infty}
+  = c_r\rho_H^{m-1}+O(\vartheta^m)
+\]
+with \(c_r>0\) and \(0\leq \vartheta<\rho_H\).  Since all matrices and
+vectors are non-negative,
+\[
+  u^{\mathsf T}B_H^{m-1}b_r
+  \geq
+  u_\infty^{\mathsf T}B_\infty^{m-1}b_{r,\infty}.
+\]
+On the other hand, for every \(\epsilon>0\), finite-dimensional spectral
+theory yields a constant \(C_\epsilon>0\) such that
+\[
+  \norm{B_H^{m-1}}\leq C_\epsilon(\rho_H+\epsilon)^{m-1}
+  \qquad (m\geq 1).
+\]
+Because \(q\) is finite, the vectors \(b_r\) take only finitely many
+values.  The Perron--Frobenius asymptotic therefore yields constants
+\(c_\ast>0\) and \(m_\ast\) such that
+\[
+  u_\infty^{\mathsf T}B_\infty^{m-1}b_{m-1\bmod q,\infty}
+  \geq c_\ast\rho_H^{m-1}
+  \qquad (m\geq m_\ast).
+\]
+Combining this with the norm bound, and then taking \(r=m-1\bmod q\),
+shows that
+\[
+  c\,\rho_H^{m-1}
+  \leq u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}
+  \leq C_\epsilon'(\rho_H+\epsilon)^{m-1}
+\]
+for all sufficiently large \(m\) and suitable constants
+\(c>0\) and \(C_\epsilon'>0\).  Hence
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log\varepsilon_m(\mathsf{P}_R;\nu_\varphi)
+  = -\log\rho_H.
+\]
+
+Let \(h>0\) be a Perron right eigenvector of the ambient transfer matrix
+\(L_\varphi(i,j):=M_{ij}e^{\varphi(i,j)}\).  The normalized transition
+matrix satisfies
+\[
+  K_{ij}
+  = M_{ij}e^{\varphi(i,j)-P_Y(\varphi)}\frac{h_j}{h_i}.
+\]
+If \(D\) denotes the diagonal matrix on \(\mathcal S_\infty\) with
+\(D_{ii}=h_i\), then the restriction to \(\mathcal S_\infty\) satisfies
+\[
+  B_H|_{\mathcal S_\infty}=e^{-P_Y(\varphi)}D^{-1}L_{\varphi,H}D.
+\]
+Consequently
+\[
+  \rho_H
+  = \rho(B_H|_{\mathcal S_\infty})
+  = e^{-P_Y(\varphi)}\rho(L_{\varphi,H}).
+\]
+Since \(Y_H\) is a topologically mixing one-step subshift with alphabet
+\(\mathcal S_\infty\), standard thermodynamic formalism identifies
+\(\log\rho(L_{\varphi,H})\) with \(P_{Y_H}(\varphi)\); see, for example,
+\citet{Bowen2008,Ruelle1978}.  Therefore
+\[
+  -\log\rho_H
+  = P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+The escape-rate interpretation follows from the comparison with
+\(\nu_\varphi(\tau_H\geq m)\).  This proves every claim of the theorem
+except the final residuewise ratio formula.
+\end{proof}
+
+\begin{proposition}[Degenerate residue dichotomy]
+\label{prop:degenerate-residue-dichotomy}
+Assume the finite Markov-hole setting of
+Theorem~\ref{thm:first-entry-escape-rate}, including the mixing survivor
+subshift, but do not assume the two-terminal residue reachability
+condition.  Define \(p_{i,r}\), \(\beta_{i,r}\), \(b_r\), \(B_H\), and
+\(u\) as in that theorem.  Order
+\(\mathcal S=\mathcal S_\infty\sqcup\mathcal T\) and write
+\[
+  B_H=
+  \begin{pmatrix}
+    B_\infty & C\\
+    0 & Q
+  \end{pmatrix},
+\]
+where \(B_\infty=B_H|_{\mathcal S_\infty}\).  Let
+\(\rho_H=\rho(B_\infty)\), let \(\ell_\infty>0\) be a left
+Perron--Frobenius eigenvector of \(B_\infty\), and set
+\[
+  \ell_H^{\mathsf T}
+  :=
+  \bigl(
+    \ell_\infty^{\mathsf T},
+    \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
+  \bigr),
+  \qquad
+  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
+\]
+For every \(m\geq1\),
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+For each \(r\in\ZZ/q\ZZ\), put
+\[
+  a_r:=\xi_H^{\mathsf T}b_r.
+\]
+Then exactly one of the following alternatives holds on the subsequence
+\(m=nq+r+1\):
+\begin{enumerate}[label=(\roman*)]
+  \item If \(a_r>0\), then
+  \[
+    \lim_{n\to\infty}
+    \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
+         {\nu_\varphi(\tau_H\ge nq+r+1)}
+    =a_r,
+  \]
+  and this subsequence has escape exponent \(-\log\rho_H\).
+  \item If \(a_r=0\), then
+  \[
+    \varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)=0
+  \]
+  for all sufficiently large \(n\).  Thus the residue event is eventually
+  decided by every safe prefix in that congruence class.
+\end{enumerate}
+Consequently the full sequence recovers the escape exponent
+\(-\log\rho_H=P_Y(\varphi)-P_{Y_H}(\varphi)\) precisely when
+\(a_r>0\) for every \(r\).  The two-terminal reachability hypothesis of
+Theorem~\ref{thm:first-entry-escape-rate} is a finite graph condition
+which implies this positivity for every residue class.
+\end{proposition}
+
+\begin{proof}
+The cylinder computation in the proof of
+Theorem~\ref{thm:first-entry-escape-rate} does not use the positive lower
+bound on the ambiguities.  If a length-\(m\) cylinder has already met the
+hole, the truth value of \(\mathsf P_R\) is decided and its contribution
+to the Bayes error is \(0\).  If the cylinder is safe through time
+\(m-1\), then the conditional law after this safe prefix is the restarted
+Markov law at \(a_{m-1}\), and
+\[
+  \PP_{a_{m-1}}(\tau_H^+<\infty)=1
+\]
+by Lemma~\ref{lem:future-entry-estimate}.  Hence
+\[
+  \nu_\varphi(\mathsf P_R\mid[a])
+  =
+  p_{a_{m-1},\,m-1\bmod q},
+\]
+so Proposition~\ref{prop:scan-error-cylinder} gives
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  \sum_{\substack{a\in A^m\\ a_t\in\mathcal S\ \forall t<m}}
+      \nu_\varphi([a])\,
+      \beta_{a_{m-1},\,m-1\bmod q}
+  =
+  u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+
+As in the proof of Theorem~\ref{thm:first-entry-escape-rate}, there is
+no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\), and the
+directed graph on \(\mathcal T\) is acyclic.  Hence \(Q\) is nilpotent,
+\(\rho_H I-Q\) is invertible, and
+\(\ell_H^{\mathsf T}B_H=\rho_H\ell_H^{\mathsf T}\).
+Let \(r_H>0\) be the right Perron--Frobenius eigenvector of
+\(B_\infty\), normalized by
+\(\ell_\infty^{\mathsf T}r_H=1\).  If \(Q^M=0\), then for \(N\geq M\)
+and \(v=(v_\infty,v_T)\),
+\[
+  u^{\mathsf T}B_H^N v
+  =
+  u_\infty^{\mathsf T}B_\infty^N v_\infty
+  + \sum_{j=0}^{M-1}
+      u_\infty^{\mathsf T}B_\infty^{N-1-j}CQ^j v_T.
+\]
+Perron--Frobenius theory for the primitive matrix \(B_\infty\) gives
+a number \(0<\vartheta<\rho_H\) and matrices \(R_k\) with
+\(\norm{R_k}=O(\vartheta^k)\) such that
+\[
+  B_\infty^k
+  =
+  \rho_H^k r_H\ell_\infty^{\mathsf T}+R_k
+  \qquad (k\geq0).
+\]
+Substituting this expansion in each term of the displayed finite sum gives
+\begin{align*}
+  u^{\mathsf T}B_H^N v
+  &=
+    (u_\infty^{\mathsf T}r_H)\rho_H^N
+    \left(
+      \ell_\infty^{\mathsf T}v_\infty
+      + \sum_{j=0}^{M-1}
+          \rho_H^{-j-1}\ell_\infty^{\mathsf T}CQ^j v_T
+    \right)
+    +O(\vartheta^N).
+\end{align*}
+The error remains \(O(\vartheta^N)\) because the index \(j\) ranges over
+the fixed finite set \(0\leq j<M\), so
+\(\vartheta^{N-1-j}=O(\vartheta^N)\).  Since \(Q^M=0\),
+\[
+  (\rho_H I-Q)^{-1}
+  =\sum_{j=0}^{M-1}\rho_H^{-j-1}Q^j,
+\]
+and the coefficient in parentheses is \(\ell_H^{\mathsf T}v\).  Hence
+\[
+  u^{\mathsf T}B_H^N v
+  =
+  (u_\infty^{\mathsf T}r_H)(\ell_H^{\mathsf T}v)\rho_H^N
+  +O(\vartheta^N).
+\]
+Taking \(v=b_r\) and \(v=\mathbf1\) proves the displayed ratio limit
+whenever \(a_r>0\), and hence the escape exponent on that subsequence.
+
+It remains to prove that \(a_r=0\) forces eventual zero error.  Since
+\(\ell_H\geq0\) and \(b_r\geq0\), the equality
+\(\ell_H^{\mathsf T}b_r=0\) implies \(b_r(i)=0\) for every state
+\(i\) with \(\ell_H(i)>0\).  The support
+\[
+  \mathcal R_\infty:=\set{i\in\mathcal S:\ell_H(i)>0}
+\]
+is forward invariant for the safe graph: if \(i\in\mathcal R_\infty\)
+and \(B_H(i,j)>0\), then
+\[
+  0<\ell_H(i)B_H(i,j)\leq(\ell_H^{\mathsf T}B_H)_j
+  =\rho_H\ell_H(j),
+\]
+so \(j\in\mathcal R_\infty\).  It contains
+\(\mathcal S_\infty\), because \(\ell_\infty>0\).  Thus every safe path
+which starts in \(\mathcal S_\infty\) ends in \(\mathcal R_\infty\),
+where \(b_r\) vanishes.  A safe path which starts in
+\(\mathcal T\setminus\mathcal R_\infty\) either enters
+\(\mathcal R_\infty\), after which the same conclusion applies, or stays
+inside the acyclic graph on \(\mathcal T\setminus\mathcal R_\infty\);
+the latter can happen for only uniformly bounded length.  Hence, for all
+sufficiently large \(N\), every non-zero path contributing to
+\(u^{\mathsf T}B_H^N b_r\) has terminal state in
+\(\mathcal R_\infty\), and its terminal weight is \(0\).  Therefore
+\(u^{\mathsf T}B_H^N b_r=0\) for all sufficiently large \(N\), which is
+the asserted eventual vanishing with \(N=nq+r\).
+
+The pressure identity
+\(-\log\rho_H=P_Y(\varphi)-P_{Y_H}(\varphi)\) is the one proved in
+Theorem~\ref{thm:first-entry-escape-rate}; it uses only the killed
+matrix restricted to \(\mathcal S_\infty\), not residue
+non-degeneracy.  Finally, if the two terminal vertices are reachable
+from every \((i,r)\), Lemma~\ref{lem:residue-reachability} gives
+\(b_r(i)>0\) for all \(i,r\), and hence \(a_r>0\) for every \(r\).
+\end{proof}
+
+\begin{corollary}[Immediate pressure corollary]
+\label{cor:survivor-pressure-recovery}
+Under the hypotheses of
+Theorem~\ref{thm:first-entry-escape-rate},
+\[
+  P_{Y_H}(\varphi)
+  = P_Y(\varphi)
+    + \lim_{m\to\infty}\frac1m
+      \log \varepsilon_m(\mathsf{P}_R;\nu_\varphi).
+\]
+In particular, for the Parry measure of maximal entropy
+\cite{Parry1964},
+\[
+  h_{\mathrm{top}}(Y_H)
+  = h_{\mathrm{top}}(Y)
+    + \lim_{m\to\infty}\frac1m
+      \log \varepsilon_m(\mathsf{P}_R;\nu_{\max}).
+\]
+\end{corollary}
+
+\begin{proof}
+This is a rearrangement of the pressure identity in
+Theorem~\ref{thm:first-entry-escape-rate}.
+\end{proof}
+
+\subsection{Quasistationary amplitudes}
+
+The next theorem is auxiliary to
+Theorem~\ref{thm:first-entry-escape-rate}.  It isolates the finite
+killed-chain ratio asymptotic that supplies the final clause of the
+central theorem.  The normalized left eigenvector \(\xi_H\) is a
+quasistationary distribution for the substochastic matrix \(B_H\) in the
+finite-state sense of \citet{DarrochSeneta1965}: conditioned on one safe
+step, a chain started with law \(\xi_H\) has law \(\xi_H\) again, and the
+one-step survival probability is \(\rho_H\).
+
+\begin{theorem}[Auxiliary quasistationary ratio theorem]
+\label{thm:quasistationary-ambiguity}
+Under the hypotheses of Theorem~\ref{thm:first-entry-escape-rate},
+choose an ordering of \(\mathcal S\) for which
+\[
+  B_H=
+  \begin{pmatrix}
+    B_\infty & C\\
+    0 & Q
+  \end{pmatrix},
+\]
+where \(B_\infty=B_H|_{\mathcal S_\infty}\) and \(Q\) is nilpotent.  Let
+\(r_H\) and \(\ell_\infty\) be the Perron right and left eigenvectors of
+\(B_\infty\), normalized by
+\[
+  B_\infty r_H=\rho_H r_H,
+  \qquad
+  \ell_\infty^{\mathsf T}B_\infty=\rho_H\ell_\infty^{\mathsf T},
+  \qquad
+  \ell_\infty^{\mathsf T}r_H=1.
+\]
+Define a row vector on the whole safe alphabet by
+\[
+  \ell_H^{\mathsf T}
+  :=
+  \bigl(
+    \ell_\infty^{\mathsf T},
+    \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
+  \bigr),
+  \qquad
+  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
+\]
+Then \(\ell_H^{\mathsf T}B_H=\rho_H\ell_H^{\mathsf T}\), and for every
+\(r\in\ZZ/q\ZZ\),
+\[
+  \lim_{n\to\infty}
+  \frac{
+    \varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)
+  }{
+    \nu_\varphi(\tau_H\ge nq+r+1)
+  }
+  = \xi_H^{\mathsf T}b_r.
+\]
+Equivalently,
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  = \bigl(\xi_H^{\mathsf T}b_{m-1\bmod q}+o(1)\bigr)\,
+    \nu_\varphi(\tau_H\ge m).
+\]
+\end{theorem}
+
+\begin{proof}
+The eigenvector identity follows from the block form of \(B_H\).  Using
+\[
+  (\rho_H I-Q)^{-1}Q=\rho_H(\rho_H I-Q)^{-1}-I,
+\]
+we obtain
+\begin{align*}
+  \ell_H^{\mathsf T}B_H
+  &= \bigl(
+       \ell_\infty^{\mathsf T}B_\infty,\,
+       \ell_\infty^{\mathsf T}C
+       + \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}Q
+     \bigr) \\
+  &= \bigl(
+       \rho_H\ell_\infty^{\mathsf T},\,
+       \rho_H\ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
+     \bigr)
+   = \rho_H\ell_H^{\mathsf T}.
+\end{align*}
+
+Since \(Q\) is nilpotent, there exists \(M\geq 1\) such that \(Q^M=0\).
+Let \(u_\infty\) be the restriction of \(u\) to \(\mathcal S_\infty\).
+For every \(N\geq 1\),
+\[
+  B_H^N=
+  \begin{pmatrix}
+    B_\infty^N &
+    \sum_{j=0}^{N-1}B_\infty^{N-1-j}CQ^j\\
+    0 & Q^N
+  \end{pmatrix},
+\]
+and therefore for \(N\geq M\) and every vector
+\(v=(v_\infty,v_T)\in\RR^{\mathcal S_\infty}\times\RR^{\mathcal T}\),
+\[
+  u^{\mathsf T}B_H^N v
+  =
+  u_\infty^{\mathsf T}B_\infty^N v_\infty
+  + \sum_{j=0}^{M-1}
+      u_\infty^{\mathsf T}B_\infty^{N-1-j}CQ^j v_T.
+\]
+
+By Perron--Frobenius, there are \(0<\vartheta<\rho_H\) and matrices
+\(R_k\), \(k\geq0\), with \(\norm{R_k}=O(\vartheta^k)\) such that
+\[
+  B_\infty^k
+  = \rho_H^k r_H\ell_\infty^{\mathsf T}+R_k .
+\]
+Substituting this expansion into the \(B_\infty^N v_\infty\) term and
+every occurrence of \(B_\infty^{N-1-j}\) in the finite off-diagonal sum
+gives
+\begin{align*}
+  u^{\mathsf T}B_H^N v
+  &=
+    (u_\infty^{\mathsf T}r_H)\rho_H^N
+    \left(
+      \ell_\infty^{\mathsf T}v_\infty
+      + \sum_{j=0}^{M-1}
+          \rho_H^{-j-1}\ell_\infty^{\mathsf T}CQ^j v_T
+    \right)
+    + O(\vartheta^N).
+\end{align*}
+Here the \(j\)-sum is finite and \(j<M\), so the shifted remainders
+\(R_{N-1-j}\) are still \(O(\vartheta^N)\), after changing only the
+implicit constant.
+Because \(Q^M=0\),
+\[
+  (\rho_H I-Q)^{-1}
+  = \sum_{j=0}^{M-1}\rho_H^{-j-1}Q^j.
+\]
+Hence the coefficient in parentheses is exactly \(\ell_H^{\mathsf T}v\),
+and
+\[
+  u^{\mathsf T}B_H^N v
+  =
+  (u_\infty^{\mathsf T}r_H)(\ell_H^{\mathsf T}v)\rho_H^N
+  + O(\vartheta^N).
+\]
+Taking \(N=nq+r\), \(v=b_r\), and using
+Theorem~\ref{thm:first-entry-escape-rate} gives
+\[
+  \varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)
+  =
+  (u_\infty^{\mathsf T}r_H)(\ell_H^{\mathsf T}b_r)\rho_H^{nq+r}
+  + O(\vartheta^{nq+r}).
+\]
+Taking \(v=\mathbf 1\) gives
+\[
+  \nu_\varphi(\tau_H\ge nq+r+1)
+  =
+  (u_\infty^{\mathsf T}r_H)(\ell_H^{\mathsf T}\mathbf 1)\rho_H^{nq+r}
+  + O(\vartheta^{nq+r}).
+\]
+Since \(u_\infty>0\), \(r_H>0\), and \(\ell_H^{\mathsf T}\mathbf 1>0\),
+the ratio tends to
+\[
+  \frac{\ell_H^{\mathsf T}b_r}{\ell_H^{\mathsf T}\mathbf 1}
+  = \xi_H^{\mathsf T}b_r.
+\]
+The equivalent statement is immediate on writing \(m-1=nq+r\).
+\end{proof}
+
+\begin{proof}[Completion of the proof of Theorem~\ref{thm:first-entry-escape-rate}]
+The preceding proof of Theorem~\ref{thm:first-entry-escape-rate}
+established the exact killed-matrix formula, the comparison with
+survivor mass, and the pressure identity.  Theorem
+~\ref{thm:quasistationary-ambiguity} proves the remaining residuewise
+ratio limit
+\[
+  \lim_{n\to\infty}
+  \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
+       {\nu_\varphi(\tau_H\ge nq+r+1)}
+  = \xi_H^{\mathsf T}b_r,
+\]
+so the proof of the central finite-state theorem is complete.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main-amplitude}]
+Theorem~\ref{thm:first-entry-escape-rate} already gives the exact
+killed-matrix formula for \(\varepsilon_m(\mathsf P_R;\nu_\varphi)\),
+the comparison with survivor mass, the pressure identity, and the
+residuewise quasistationary ratio limit.  In particular,
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log\varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Theorem~\ref{thm:quasistationary-ambiguity} is exactly the auxiliary
+finite-matrix computation used for the last clause of
+Theorem~\ref{thm:first-entry-escape-rate}.  Hence
+Theorem~\ref{thm:main-amplitude} is just the introductory restatement of
+that central finite-state theorem.
+\end{proof}

@@ -3,94 +3,39 @@
 The later sections use only one abstract idea: a higher semantic layer may add coordinates or structure without changing the behavior of formulas already present below. The definitions in this section isolate that invariance principle and nothing more.
 
 \begin{definition}[Logic layer]\label{def:logic-layer}
-A \emph{logic layer} is a tuple
-\[
-\mathbb{L}=(\Sigma,\mathrm{Form},\Mod,\St,\Vdash,\models),
-\]
-where $\Sigma$ is a signature, $\mathrm{Form}$ is the class of well-formed $\Sigma$-formulas, $\Mod$ is a class of admissible models, $\St$ assigns to every $M\in\Mod$ a nonempty set $\St(M)$ of states, $\Vdash$ is a forcing relation on model-state pairs, and $\models$ is the induced consequence relation defined by
-\[
-\Gamma\models\varphi
-\quad:\Longleftrightarrow\quad
-\forall M\in\Mod\;\forall p\in\St(M)\,
-\bigl(M,p\Vdash\Gamma \Rightarrow M,p\Vdash\varphi\bigr).
-\]
-Here and below, $M,p\Vdash\Gamma$ means $M,p\Vdash\gamma$ for every $\gamma\in\Gamma$.
+See \cite[Definition~2.1]{HomologicalVisibilityGluingObstructions2026}.
 \end{definition}
 
 The forcing relation is the primitive semantic notion. Consequence is derived from uniform preservation of forcing across all admissible models and states.
 
 \begin{definition}[Conservative extension]\label{def:conservative-extension}
-Let
-\[
-\mathbb{L}_m=(\Sigma_m,\mathrm{Form}_m,\Mod_m,\St_m,\Vdash_m,\models_m)
-\quad\text{and}\quad
-\mathbb{L}_n=(\Sigma_n,\mathrm{Form}_n,\Mod_n,\St_n,\Vdash_n,\models_n)
-\]
-with $m<n$. We say that $\mathbb{L}_n$ is a \emph{conservative extension} of $\mathbb{L}_m$, written $\mathbb{L}_m\preceq\mathbb{L}_n$, if there exist
-\begin{enumerate}[label=(\roman*),nosep]
-\item a language embedding $e_{m,n}:\Sigma_m\hookrightarrow\Sigma_n$,
-\item a forgetful functor $U_{n,m}:\Mod_n\to\Mod_m$,
-\item for every $M\in\Mod_n$, a state projection
-\[
-\pi^M_{n,m}:\St_n(M)\to \St_m\bigl(U_{n,m}(M)\bigr),
-\]
-\end{enumerate}
-such that for every $\varphi\in \mathrm{Form}_m$, every $M\in\Mod_n$, and every $p\in\St_n(M)$,
-\begin{equation}\label{eq:conservative-extension}
-M,p\Vdash_n \varphi
-\quad\Longleftrightarrow\quad
-U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \varphi.
-\end{equation}
+See \cite[Definition~2.2]{HomologicalVisibilityGluingObstructions2026}.
 \end{definition}
 
 Thus a higher layer may add expressive power, state coordinates, or geometric constraints, but it may not alter the forcing behavior of formulas that already belonged to a lower layer.
 
 \begin{proposition}[Composition of conservative extensions]\label{prop:conservative-composition}
-If $\mathbb{L}_\ell\preceq\mathbb{L}_m$ and $\mathbb{L}_m\preceq\mathbb{L}_n$, then $\mathbb{L}_\ell\preceq\mathbb{L}_n$.
+See \cite[Proposition~2.3]{HomologicalVisibilityGluingObstructions2026}.
 \end{proposition}
 
-\begin{proof}
-Compose the language embeddings and forgetful functors:
-\[
-e_{\ell,n}:=e_{m,n}\circ e_{\ell,m},
-\qquad
-U_{n,\ell}:=U_{m,\ell}\circ U_{n,m}.
-\]
-For every $M\in\Mod_n$, define
-\[
-\pi^M_{n,\ell}:=
-\pi^{\,U_{n,m}(M)}_{m,\ell}\circ \pi^M_{n,m}.
-\]
-If $\varphi\in\mathrm{Form}_\ell$ and $p\in\St_n(M)$, then
-\[
-M,p\Vdash_n\varphi
-\Longleftrightarrow
-U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m\varphi
-\Longleftrightarrow
-U_{n,\ell}(M),\pi^M_{n,\ell}(p)\Vdash_\ell\varphi,
-\]
-by two applications of \Cref{def:conservative-extension}. This is exactly the required conservativity condition.
-\end{proof}
-
 \begin{corollary}[Finite-chain invariance]\label{cor:whole-chain-invariance}
-If
-\[
-\mathbb{L}_0\preceq\mathbb{L}_1\preceq\cdots\preceq\mathbb{L}_n,
-\]
-then every formula belonging to any lower layer keeps the same forcing behavior when interpreted in any later layer and projected back down.
-\leanverified{paper_gluing_failure_whole_chain_invariance_apal}
+See \cite[Corollary~2.4]{HomologicalVisibilityGluingObstructions2026}.
 \end{corollary}
 
-\begin{proof}
-Apply \Cref{prop:conservative-composition} repeatedly along the chain.
-\end{proof}
-
-The constructions used in the present paper fit into the finite chain
+The constructions used later fit into the finite chain
 \[
 \mathbb{L}_0
 \preceq
 \mathbb{L}_1
 \preceq
-\mathbb{L}_2.
+\mathbb{L}_2
+\preceq
+\mathbb{L}_3
+\preceq
+\mathbb{L}_4.
 \]
-Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer (\Cref{sec:information-states}), and $\mathbb{L}_2$ adds local references, local objects, and the sheaf/gerbe machinery used to express gluing failure (\Cref{sec:null-decomposition,sec:gerbe-obstruction,sec:homological-visibility}). By \Cref{cor:whole-chain-invariance}, the passage up the chain is cumulative rather than revisionary: each later layer preserves the forcing behavior already fixed below. Further layers (e.g., structural-absence bookkeeping, refinement dynamics) can be adjoined conservatively by the same mechanism, but are not needed here.
+Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer, $\mathbb{L}_2$ adds local references and local objects, $\mathbb{L}_3$ adds structural absence and, only when a suitable realization prestack has been separately supplied or constructed, gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage up the chain is cumulative rather than revisionary: each later layer preserves the forcing behavior already fixed below.
+
+The conditional clause in the description of $\mathbb{L}_3$ is part of the formal bookkeeping. An $\mathbb{L}_2$-model may contain a local-object presheaf and an intended abelian band without carrying any fibred groupoid of realizations. In that case the structural absence predicates attached to $F_{p,s}$ still make sense, but component gerbes, branch obstruction classes, and visible quotients do not. Those higher objects enter only after the additional stack-banded realization data required in \Cref{def:realization-prestack,def:gluing-sensitive-realization-input} have been supplied, or after the separated split-lift criterion of \Cref{prop:split-realization-prestack} has constructed them.
+
+This five-layer chain is the complete formal setting of the present paper. Standard site-theoretic, descent-theoretic, and homological inputs are cited at the points where they are used.

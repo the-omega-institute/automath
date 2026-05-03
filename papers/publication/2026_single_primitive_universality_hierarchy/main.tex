@@ -1,17 +1,17 @@
-\documentclass[11pt,a4paper]{amsart}
+\documentclass{amsart}
 
-% ── Packages ──────────────────────────────────────────────
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage[utf8]{inputenc}
+\IfFileExists{stmaryrd.sty}{%
+  \usepackage{stmaryrd}%
+}{%
+  \newcommand{\llbracket}{\mathopen{[\![}}%
+  \newcommand{\rrbracket}{\mathclose{]\!]}}%
+}
 \usepackage{hyperref}
 \usepackage{cleveref}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{tikz-cd}
-\usepackage[backend=biber,style=alphabetic,maxbibnames=9]{biblatex}
-\addbibresource{references.bib}
+\newcommand{\printreferences}{\bibliographystyle{amsplain}\bibliography{references}}
+\emergencystretch=2em
 
-% ── Theorem environments ──────────────────────────────────
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -21,9 +21,10 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-% ── Operators ─────────────────────────────────────────────
 \DeclareMathOperator{\eml}{eml}
 \DeclareMathOperator{\Fold}{Fold}
 \DeclareMathOperator{\Val}{Val}
@@ -34,49 +35,48 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
-\newcommand{\one}{\mathbf{1}}
+\newcommand{\dom}{\operatorname{dom}}
 
-% ── Title ─────────────────────────────────────────────────
-\title{Beyond Expression Collapse:\\
-  A Three-Level Hierarchy of Single-Primitive Universality}
+\title[A Single-Primitive Universality Hierarchy]
+{A Single-Primitive Universality Hierarchy}
 
-\author{The Omega Institute}
-\date{\today}
+\author[The Omega Institute]{The Omega Institute}
+\date{}
+\subjclass[2020]{Primary 03D35; Secondary 11B39, 68Q42, 47A57}
+\keywords{single-primitive universality, Zeckendorf numeration,
+canonical forms, moment problem, Richardson theorem}
 
 \begin{document}
 \begin{abstract}
-A recent result of Odrzywołek shows that every elementary function
-on a scientific calculator can be reconstructed from a single binary
-operator $\eml(x,y)=e^{x}-\ln y$ and the constant~$1$.
-We situate this \emph{expression universality} as the bottom level
-of a three-level hierarchy.
-At the \emph{protocol level}, we show that integer arithmetic
-itself---addition and multiplication---is not primitive but emerges
-from a single scan--projection protocol with Zeckendorf fold
-normalization: the unique operation is function composition~$\circ$,
-read at two categorical levels.
-At the \emph{certificate level}, the same fold structure yields
-collision-moment sequences whose Hankel matrices are positive
-semi-definite, giving a finite, auditable spectral fingerprint for
-each resolution layer.
-We prove the hierarchy is strict: protocol universality implies
-expression universality but not conversely, and the separation
-is witnessed by decidability of the canonical-form word problem---
-a property that holds in the protocol setting but fails generically
-for expression trees.
+We separate three kinds of structure that are easily conflated in
+single-primitive representation results.  Expression universality
+requires only terms over one binary operation; Odrzywo{\l}ek's
+operation \(e^x-\operatorname{Log}y\) gives such terms for a
+standard elementary library.  Protocol universality adds computable
+normal forms and readout maps.  With Zeckendorf normal forms and the
+classical Church-iteration identities we obtain a protocol for
+\(+\) and \(\times\) on \(\NN\), and we show that multiplication
+cannot be read on one free monogenic orbit by the ambient product,
+even after an injective recoding.  Finite fibers give
+Hankel-positive collision moments and finite Prony reconstruction,
+but they do not force a finite-state transfer law: computable
+finite-fiber covers may preserve the normal forms and readouts while
+having second moments of superexponential growth.  Richardson's
+theorem gives the corresponding obstruction to computable canonical
+forms for the EML translation of a real elementary fragment.
 \end{abstract}
 
 \maketitle
-\tableofcontents
 
 \input{sections/sec01_introduction}
 \input{sections/sec02_expression_universality}
 \input{sections/sec03_protocol_universality}
 \input{sections/sec04_certificate_universality}
 \input{sections/sec05_hierarchy_strictness}
-\input{sections/sec07_derived_consequences}
 \input{sections/sec06_discussion}
+\appendix
+\input{sections/sec07_derived_consequences}
 
-\printbibliography
+\printreferences
 
 \end{document}

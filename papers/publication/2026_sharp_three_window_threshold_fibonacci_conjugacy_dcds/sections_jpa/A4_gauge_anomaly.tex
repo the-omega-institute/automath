@@ -1,0 +1,187 @@
+\section{Truncation--stabilization anomaly}\label{app:gauge}
+
+Stabilization and truncation do not commute: the mismatch between truncating a raw word and truncating after stabilization measures how strongly a one-step change of resolution can reorganize the visible output.
+
+\begin{definition}[Naive truncation and stabilized truncation]\label{def:gauge-anomaly}
+For $\omega=(\omega_1,\dots,\omega_{m+1})\in\{0,1\}^{m+1}$ define
+\[
+r_{m+1\to m}(\omega):=(\omega_1,\dots,\omega_m),
+\]
+\[
+\bar r_{m+1\to m}(\omega):=\pi_{m+1\to m}\bigl(\Fold_{m+1}(\omega)\bigr),
+\]
+where $\pi_{m+1\to m}$ deletes the last coordinate. The \emph{truncation--stabilization anomaly} is
+\[
+G_m(\omega):=d_H\!\bigl(r_{m+1\to m}(\omega),\bar r_{m+1\to m}(\omega)\bigr),
+\]
+with $d_H$ the Hamming distance.
+\end{definition}
+
+\begin{proposition}[On-shell vanishing of the truncation--stabilization anomaly]\label{prop:gauge-onshell}
+If $\omega\in X_{m+1}$ is already admissible, then $G_m(\omega)=0$.
+\end{proposition}
+
+\begin{proof}
+If $\omega\in X_{m+1}$ then $\Fold_{m+1}(\omega)=\omega$ by idempotence (Theorem~\ref{thm:fold-suite}(ii)). Hence
+$\bar r_{m+1\to m}(\omega)=\pi_{m+1\to m}(\omega)=r_{m+1\to m}(\omega)$, so the Hamming distance is $0$.
+\end{proof}
+
+\begin{theorem}[Worst-case truncation--stabilization anomaly]\label{thm:worst-gauge}
+For every $m\ge 1$ there exists $\omega^\ast(m)\in\{0,1\}^{m+1}$ such that
+\[
+G_m(\omega^\ast(m))=m.
+\]
+Hence the non-commutativity between truncation and stabilization can be extensive: all $m$ visible bits may flip under a one-step change of resolution.
+\end{theorem}
+
+\begin{proof}
+Write $n:=m+1$ and let $q:=\lfloor n/3\rfloor$.
+
+We define $\omega^\ast(n)$ by cases:
+\[
+\omega^\ast(n)=
+\begin{cases}
+(110)^q, & n=3q,\\[2mm]
+(110)^q 0, & n=3q+1,\\[2mm]
+(110)^q 11, & n=3q+2.
+\end{cases}
+\]
+Define the admissible comparison word
+\[
+z^\ast(n)=
+\begin{cases}
+(001)^q, & n=3q,\\[2mm]
+(001)^q 0, & n=3q+1,\\[2mm]
+(001)^q 00, & n=3q+2.
+\end{cases}
+\]
+We claim that $\Fold_n(\omega^\ast(n))=z^\ast(n)$.
+
+For $n=3q$, each block $110$ has the same Fibonacci value as $001$, since
+\[
+F_{k+1}+F_{k+2}=F_{k+3}.
+\]
+Hence $\Val_n((110)^q)=\Val_n((001)^q)$, and by uniqueness of the admissible representative,
+\[
+\Fold_n((110)^q)=(001)^q.
+\]
+
+For $n=3q+1$, the same blockwise identity gives
+\[
+\Val_n((110)^q0)=\Val_n((001)^q0),
+\]
+so again $\Fold_n(\omega^\ast(n))=z^\ast(n)$.
+
+For $n=3q+2$, the first $3q$ positions still match blockwise, and the trailing suffix contributes
+\[
+F_{3q+2}+F_{3q+3}=F_{3q+4}=F_{n+2}.
+\]
+Therefore
+\[
+\Val_n((110)^q11)\equiv \Val_n((001)^q00)\pmod{F_{n+2}},
+\]
+and by the definition of $\Fold_n$ as residue-class stabilization,
+\[
+\Fold_n((110)^q11)=(001)^q00.
+\]
+
+In every case, the first $m=n-1$ bits of $\omega^\ast(n)$ and $z^\ast(n)$ are complementary on every visible $110/001$ block; the chosen trailing completion guarantees that this remains true at the boundary. Hence
+\[
+d_H\!\Bigl(r_{n\to n-1}(\omega^\ast(n)),\,\pi_{n\to n-1}(z^\ast(n))\Bigr)=n-1=m.
+\]
+This proves $G_m(\omega^\ast(m))=m$.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:worst-gauge} is a worst-case statement. Quantitative tail bounds for $G_m$ under Sturmian or Gibbs readout measures would require a separate probabilistic analysis.
+\end{remark}
+
+\subsection{Uniform-input anomaly benchmark and an open recurrence problem}\label{app:gauge-rate}
+
+Theorem~\ref{thm:worst-gauge} shows that the worst-case anomaly saturates at $G_m=m$. Exact enumeration through $m=22$ suggests a precise average behavior, but at present this remains an open recurrence problem.
+
+\begin{conjecture}[Empirical recurrence for the uniform anomaly sequence]\label{thm:gauge-rate}
+Let $S_m:=\sum_{\omega\in\{0,1\}^{m+1}}G_m(\omega)$ denote the total truncation--stabilization anomaly over all $(m{+}1)$-bit words. Then for every $m\ge 6$,
+\begin{equation}\label{eq:gauge-recurrence}
+S_m = 3S_{m-1}+S_{m-2}-7S_{m-3}+4S_{m-5},
+\end{equation}
+with initial values $S_1=1$, $S_2=4$, $S_3=14$, $S_4=41$, $S_5=109$. The characteristic polynomial of this recurrence factors over $\QQ$ as
+\begin{equation}\label{eq:gauge-charpoly}
+\lambda^5-3\lambda^4-\lambda^3+7\lambda^2-4
+=
+(\lambda-2)^2(\lambda-1)(\lambda+1)^2.
+\end{equation}
+If the recurrence holds for all~$m$, the unique solution matching the initial values is
+\begin{equation}\label{eq:gauge-closed}
+S_m
+=
+\Bigl(-\frac{29}{27}+\frac{8m}{9}\Bigr)2^m
++\frac{5}{4}
++\Bigl(-\frac{19}{108}+\frac{m}{18}\Bigr)(-1)^m,
+\end{equation}
+and the expected anomaly under uniform input satisfies
+\begin{equation}\label{eq:gauge-slope}
+\EE_{\mathrm{unif}}[G_m]
+=
+\frac{S_m}{2^{m+1}}
+=
+\frac{4}{9}\,m
+-\frac{29}{54}
++O\!\bigl(2^{-m}\bigr).
+\end{equation}
+\end{conjecture}
+
+The remainder of this subsection presents the evidence for Conjecture~\ref{thm:gauge-rate} and identifies the obstacle to an unconditional proof.
+
+\paragraph{Numerical evidence.}
+Write $z(\omega):=\Fold_{m+1}(\omega)$ and decompose
+\[
+S_m
+=
+\sum_{k=1}^{m}\;\sum_{\omega\in\{0,1\}^{m+1}}
+\bigl|\omega_k-z_k(\omega)\bigr|
+=
+\sum_{k=1}^{m} N_k(m),
+\]
+where $N_k(m):=\bigl|\bigl\{\omega\in\{0,1\}^{m+1}:\omega_k\neq z_k(\omega)\bigr\}\bigr|$. Exact enumeration of all $2^{m+1}$ input words (Table~\ref{tab:uniform-benchmarks}) gives $S_m$ for $m=1,\ldots,22$. The recurrence~\eqref{eq:gauge-recurrence} is satisfied with zero residual for all $m=6,\ldots,22$ (17 consecutive values). The closed form~\eqref{eq:gauge-closed} matches every tabulated entry.
+
+\paragraph{Zeckendorf normalization transducer.}
+The Zeckendorf normalization $\omega\mapsto z(\omega)=\Fold_{m+1}(\omega)$ is computable by a finite transducer $\mathcal{T}$ processing bits from the least significant position upward \cite{Frougny1992}. The transducer state at position~$k$ is the pair $(c_k,z_{k-1})\in\{0,1\}^2$, where $c_k$ is a carry from applying $F_{k}+F_{k+1}=F_{k+2}$ and $z_{k-1}$ is the previous output bit. On input $\omega_k$, the transducer computes $t_k:=\omega_k+c_k\in\{0,1,2\}$ and produces:
+\begin{itemize}[itemsep=1pt,leftmargin=*]
+\item $t_k=0$: output $z_k=0$, next carry $c_{k+1}=0$.
+\item $t_k=1$ and $z_{k-1}=0$: output $z_k=1$, next carry $c_{k+1}=0$.
+\item $t_k=1$ and $z_{k-1}=1$: apply $F_k+F_{k+1}=F_{k+2}$ to set $z_k=0$, $c_{k+1}=1$. The carry propagates to position $k{+}1$, where it compensates at the valuation level via the standard carry-absorption mechanism~\cite{Frougny1992}.
+\item $t_k=2$: output $z_k=0$, $c_{k+1}=1$.
+\end{itemize}
+The constraint $z_{k-1}=1\Rightarrow c_k=0$ eliminates the state $(1,1)$, yielding exactly $3$ reachable states:
+\begin{equation}\label{eq:transducer-states}
+\mathcal{S}_{\mathcal{T}}=\bigl\{(c,z_{\mathrm{prev}})\bigr\}=\{(0,0),\;(0,1),\;(1,0)\}.
+\end{equation}
+The complete transition table is:
+\[
+\begin{array}{cccccc}
+\toprule
+\text{State} & \omega_k & t_k & z_k & \text{Next state} & \omega_k\neq z_k \\
+\midrule
+(0,0) & 0 & 0 & 0 & (0,0) & \text{no} \\
+(0,0) & 1 & 1 & 1 & (0,1) & \text{no} \\
+(0,1) & 0 & 0 & 0 & (0,0) & \text{no} \\
+(0,1) & 1 & 1 & 0 & (1,0) & \text{yes} \\
+(1,0) & 0 & 1 & 1 & (0,1) & \text{yes} \\
+(1,0) & 1 & 2 & 0 & (1,0) & \text{yes} \\
+\bottomrule
+\end{array}
+\]
+
+\paragraph{Recurrence discovery and minimality.}
+No recurrence of order~$4$ fits the data: the unique order-$4$ candidate determined by $S_1,\ldots,S_8$ has non-integer coefficients ($\alpha_1=\tfrac{57}{41}$, etc.) and predicts $S_9=\tfrac{433721}{123}\notin\ZZ$. The order-$5$ candidate~\eqref{eq:gauge-recurrence} is determined by $S_1,\ldots,S_{10}$ and matches all $22$ tabulated values with zero residual.
+
+\paragraph{Closed form derivation (conditional on the recurrence).}
+The factorization~\eqref{eq:gauge-charpoly} is verified by direct expansion. All five roots are rational integers: $\{2,2,1,-1,-1\}$. The general solution is $S_m=(a+bm)\,2^m+e+(c+dm)\,(-1)^m$, and the five initial values determine $a=-29/27$, $b=8/9$, $c=-19/108$, $d=1/18$, $e=5/4$.
+
+\paragraph{Obstacle to an unconditional proof.}
+Lemma~\ref{lem:bootstrap} requires $N>K+d$ data points, where $K$ is an upper bound on the true recurrence order and $d$ is the candidate order. The $3$-state transducer gives a heuristic basis for expecting $S_m$ to satisfy a low-order recurrence, but the cumulative sum $S_m=\sum_{k=1}^m N_k(m)$ depends on the global Zeckendorf normalization $\Fold_{m+1}$ rather than on the per-position transducer output alone. Rigorously bounding the recurrence order of $\{S_m\}$ requires a complete transfer-matrix analysis of the interaction between the transducer carry chain and the finite-word boundary condition. Absent such a bound, the bootstrapping lemma cannot be applied, and the recurrence remains conjectural.
+
+\begin{remark}[Rationality of the conjectured slope]\label{rem:rational-slope}
+The conjectured asymptotic slope $4/9$ is a rational number, in contrast to the $\varphi$-dominated constants that govern most other quantities in the Fibonacci stabilization framework (fiber growth rates, entropy thresholds, discrepancy coefficients). This rationality is consistent with the observation that the characteristic roots $\{2,2,1,-1,-1\}$ are all rational integers, suggesting that the anomaly rate is governed by the combinatorics of carry propagation rather than by the Pisot eigenvalue of the substitution.
+\end{remark}

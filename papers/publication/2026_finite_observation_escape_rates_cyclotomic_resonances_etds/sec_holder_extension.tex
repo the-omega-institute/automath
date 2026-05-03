@@ -1,0 +1,1040 @@
+% ------------------------------------------------------------------
+%  Holder Gibbs finite-cylinder holes: block recoding and pressure
+% ------------------------------------------------------------------
+
+\section{H\"older cylinder holes after block recoding}
+\label{app:holder-finite-cylinder}
+
+This appendix is independent of the finite-state resolvent proposition.  It
+has two limited purposes.  First, for a one-step Markov presentation with
+a one-step cylinder hole it records the actual H\"older
+transfer-operator statement on the Banach space
+\(C^\alpha\): the open operator is defined explicitly, its leading
+eigenvalue and adjoint eigenfunctional are obtained from the survivor
+Ruelle--Perron--Frobenius theorem, and the complementary part is shown to
+have smaller spectral radius.  Second, after a finite block recoding
+whose block length also dominates an ambient Markov memory, it proves the
+finite-prefix Bayes-error comparison needed for general Gibbs weights.
+No statement in this appendix is a hypothesis for the finite-state
+cyclotomic resolvent statement.  At the operator level, this appendix is
+closest in spirit to the open-transfer frameworks of
+\citet{KellerLiverani2009,FroylandStancevic2010,AtnipFroylandGonzalezTokmanVaienti2023},
+but it is used here only as supporting finite-cylinder material rather
+than as the source of the finite-state cyclotomic proposition.
+
+The Bayes-error comparison has four finite steps.  First, Gibbs
+distortion gives uniform lower bounds for bounded-length continuations.
+Second, a finite two-terminal reachability condition gives uniform
+conditional ambiguity on every surviving prefix.  Third, a safe-prefix
+decomposition identifies the Bayes error with a survivor-cylinder sum.
+Fourth, the standard pressure formula for the closed survivor subshift
+gives the exponential rate of that sum.
+
+Throughout the one-step part of this appendix, a one-step Markov
+presentation means that the ambient shift is given by a finite directed
+graph on its symbols and the hole is determined by a subset of symbols.
+The safe edges used below are precisely the admissible directed edges of
+this one-step presentation whose endpoints are safe.  For a general
+finite-cylinder hole, Lemma~\ref{lem:holder-block-reduction} first passes
+to a higher-block presentation whose block length is large enough both to
+make the ambient SFT one-step and to make the hole a one-step symbol
+hole.
+
+We use the following standard form of the Gibbs property.  If \(Z\) is a
+topologically mixing one-sided subshift of finite type, \(\psi\) is
+H\"older, and \(\nu_\psi\) is its equilibrium state, then there are
+constants \(C_G\geq1\) and \(V_\psi<\infty\) such that for every
+admissible word \(w=w_0\cdots w_{n-1}\) and every \(x\in[w]\),
+\[
+  C_G^{-1}e^{S_n\psi(x)-nP_Z(\psi)}
+  \leq \nu_\psi([w])
+  \leq
+  C_G e^{S_n\psi(x)-nP_Z(\psi)},
+\]
+and \(\abs{S_n\psi(x)-S_n\psi(y)}\leq V_\psi\) whenever
+\(x,y\in[w]\).
+
+\begin{lemma}[Uniform Gibbs continuation]
+\label{lem:holder-gibbs-continuation}
+Let \(Z,\psi,\nu_\psi\) be as above.  For every integer \(L\geq1\) there
+is a constant \(c_L>0\) such that, whenever \(w\) and \(v\) are
+admissible words, \(\abs{v}\leq L\), and the concatenation \(wv\) is
+admissible,
+\[
+  \frac{\nu_\psi([wv])}{\nu_\psi([w])}\geq c_L .
+\]
+\end{lemma}
+
+\begin{proof}
+Write \(n=\abs w\) and \(k=\abs v\leq L\), and choose
+\(x\in[wv]\).  The Gibbs estimate applied to \(wv\), and then to \(w\),
+gives
+\[
+  \frac{\nu_\psi([wv])}{\nu_\psi([w])}
+  \geq
+  C_G^{-2}
+  \exp\bigl(S_{n+k}\psi(x)-(n+k)P_Z(\psi)
+            -\sup_{y\in[w]}(S_n\psi(y)-nP_Z(\psi))\bigr).
+\]
+Since \(x\in[w]\), the Bowen distortion bound gives
+\[
+  S_n\psi(x)-\sup_{y\in[w]}S_n\psi(y)\geq -V_\psi.
+\]
+The remaining \(k\) iterates are bounded below by
+\(-L\norm{\psi}_\infty\), while \(-kP_Z(\psi)\geq -L\abs{P_Z(\psi)}\).
+Thus
+\[
+  \frac{\nu_\psi([wv])}{\nu_\psi([w])}
+  \geq
+  C_G^{-2}
+  \exp\bigl(-V_\psi-L\norm{\psi}_\infty
+              -L\abs{P_Z(\psi)}\bigr),
+\]
+which is positive and depends only on \(L\), \(Z\), and \(\psi\).
+\end{proof}
+
+\begin{lemma}[Uniform finite-prefix ambiguity]
+\label{lem:holder-extension-ambiguity}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(\psi\) be a H\"older potential, and let \(\nu_\psi\) be its
+equilibrium state.  Let \(H\) be a non-empty proper one-step Markov hole
+with safe alphabet \(\mathcal S\).  Fix \(q\geq2\) and
+\(\emptyset\neq R\subsetneq\ZZ/q\ZZ\).  Assume the finite two-terminal
+residue reachability condition on the graph
+\[
+  \mathcal S\times\ZZ/q\ZZ,\qquad \star_R,\quad\star_{R^c},
+\]
+where safe edges increase the residue by one along admissible safe
+transitions, and a terminal edge records the residue of the first
+admissible transition into \(H\): both terminal vertices are reachable
+from every safe-residue vertex.
+
+Let
+\[
+  \tau_H(z):=\inf\{n\geq0:z_n\notin\mathcal S\},
+  \qquad
+  \mathsf P_R:=\{z:\tau_H(z)<\infty,\ \tau_H(z)\in R\bmod q\}.
+\]
+Then there is \(c_0>0\) such that, for every admissible safe word
+\(w=w_0\cdots w_{n-1}\) of length \(n\geq1\),
+\[
+  c_0
+  \leq
+  \nu_\psi(\mathsf P_R\mid[w])
+  \leq
+  1-c_0 .
+\]
+\end{lemma}
+
+\begin{proof}
+For each pair \((i,r)\in\mathcal S\times\ZZ/q\ZZ\), the reachability
+condition gives two admissible first-hit continuations from \(i\): one
+whose first hit has residue in \(R-r\), and one whose first hit has
+residue in \((\ZZ/q\ZZ\setminus R)-r\).  Concretely, these are finite
+words \(v^{R}_{i,r}\) and \(v^{R^c}_{i,r}\), appended after the symbol
+\(i\), whose intermediate symbols are safe, whose last symbol lies in
+the hole, and whose first-hit residues force \(\mathsf P_R\) and
+\(\mathsf P_R^c\), respectively.  There are only finitely many
+\((i,r)\), so let \(L\) be the maximum of the two continuation lengths.
+
+Let \(w=w_0\cdots w_{n-1}\) be safe, put \(i=w_{n-1}\), and put
+\(r=n-1\bmod q\).  The cylinders \([wv^{R}_{i,r}]\) and
+\([wv^{R^c}_{i,r}]\) are contained in \([w]\), and they force
+\(\mathsf P_R\) and \(\mathsf P_R^c\), respectively.  Lemma
+\ref{lem:holder-gibbs-continuation} gives a constant \(c_L>0\) such that
+\[
+  \nu_\psi([wv^{R}_{i,r}]\mid[w])\geq c_L,
+  \qquad
+  \nu_\psi([wv^{R^c}_{i,r}]\mid[w])\geq c_L .
+\]
+Taking \(c_0=\min\{c_L,\tfrac12\}\) gives
+\[
+  \nu_\psi(\mathsf P_R\mid[w])\geq c_0,
+  \qquad
+  \nu_\psi(\mathsf P_R^c\mid[w])\geq c_0,
+\]
+which is the claimed two-sided ambiguity bound.
+\end{proof}
+
+\begin{lemma}[Safe-prefix Bayes decomposition]
+\label{lem:holder-safe-prefix-bayes-decomposition}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(\nu\) be a fully supported probability measure on its
+cylinders, and let \(H\) be a one-step Markov hole with safe alphabet
+\(\mathcal S\).  Fix \(q\geq2\), a non-empty proper
+\(R\subsetneq\ZZ/q\ZZ\), and
+\[
+  \tau_H(z):=\inf\{n\geq0:z_n\notin\mathcal S\},
+  \qquad
+  \mathsf P_R:=\{z:\tau_H(z)<\infty,\ \tau_H(z)\in R\bmod q\}.
+\]
+Then for every \(n\geq1\),
+\[
+  \varepsilon_n(\mathsf P_R;\nu)
+  =
+  \sum_{\substack{w\in\mathcal L_n(Z)\\
+                  w_0,\ldots,w_{n-1}\in\mathcal S}}
+    \nu([w])\,
+    \min\{
+      \nu(\mathsf P_R\mid[w]),
+      1-\nu(\mathsf P_R\mid[w])
+    \}.
+\]
+\end{lemma}
+
+\begin{proof}
+Apply the cylinder Bayes formula
+Proposition~\ref{prop:scan-error-cylinder} to the length-\(n\) cylinder
+partition.  If \(w=w_0\cdots w_{n-1}\) contains a symbol outside
+\(\mathcal S\), let \(t<n\) be its first such position.  Then
+\(\tau_H=t\) on the whole cylinder \([w]\), so the truth value of
+\(\mathsf P_R\) is already known from the prefix and the corresponding
+Bayes factor is zero.  The remaining cylinders are exactly the safe
+prefixes in the displayed sum.
+\end{proof}
+
+\begin{lemma}[Safe-word pressure]
+\label{lem:holder-safe-word-pressure}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(\psi\) be a H\"older potential, and let \(\nu_\psi\) be its
+equilibrium state.  Let \(H\) be a non-empty proper one-step Markov hole
+with safe alphabet \(\mathcal S\), and assume that the survivor subshift
+\[
+  Z_H:=\{z\in Z:z_n\in\mathcal S\text{ for all }n\geq0\}
+\]
+is topologically mixing.  Then
+\[
+  \lim_{n\to\infty}
+  -\frac1n\log \nu_\psi(\tau_H\geq n)
+  =
+  P_Z(\psi)-P_{Z_H}(\psi).
+\]
+\end{lemma}
+
+\begin{proof}
+Let \(\mathcal L_n^{\mathrm{safe}}\) be the admissible length-\(n\)
+words all of whose symbols lie in \(\mathcal S\), and set
+\[
+  Z_n^{\mathrm{safe}}(\psi)
+  :=
+  \sum_{w\in\mathcal L_n^{\mathrm{safe}}}
+    \exp\bigl(\sup_{[w]}S_n\psi\bigr).
+\]
+The Gibbs estimate gives constants \(C_1,C_2>0\) such that
+\[
+  C_1e^{-nP_Z(\psi)}Z_n^{\mathrm{safe}}(\psi)
+  \leq
+  \nu_\psi(\tau_H\geq n)
+  \leq
+  C_2e^{-nP_Z(\psi)}Z_n^{\mathrm{safe}}(\psi).
+\]
+It remains to compute the exponential growth of
+\(Z_n^{\mathrm{safe}}(\psi)\).
+
+Let \(\mathcal S_\infty\subseteq\mathcal S\) be the symbols that occur
+in \(Z_H\), and put \(\mathcal T=\mathcal S\setminus\mathcal S_\infty\).
+There is no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\);
+otherwise an infinite survivor path beginning in \(\mathcal S_\infty\)
+could be appended after that edge, placing the initial transient symbol
+in \(Z_H\).  The directed graph on \(\mathcal T\) is acyclic, since a
+cycle in \(\mathcal T\) could be repeated indefinitely to produce a
+survivor orbit through a transient symbol.  Hence there is a number
+\(K\) such that every safe word is a survivor word over
+\(\mathcal S_\infty\), possibly followed by a transient suffix of length
+at most \(K\).  Words of total length at most \(K\) are irrelevant for
+the limit.
+
+Let
+\[
+  Z_n^{H}(\psi)
+  :=
+  \sum_{\substack{w\text{ admissible in }Z,\ \abs w=n\\
+                  w_0,\ldots,w_{n-1}\in\mathcal S_\infty}}
+    \exp\bigl(\sup_{[w]\cap Z_H}S_n\psi\bigr)
+\]
+be the usual survivor partition sum.  Since survivor words are safe,
+\(Z_n^{\mathrm{safe}}(\psi)\geq Z_n^H(\psi)\).  Conversely, if
+\(w=uv\) with \(u\) a survivor word and \(v\) a transient suffix of
+length \(k\leq K\), then
+\[
+  \exp\bigl(\sup_{[w]}S_n\psi\bigr)
+  \leq
+  e^{V_\psi+K\norm{\psi}_\infty}
+  \exp\bigl(\sup_{[u]\cap Z_H}S_{n-k}\psi\bigr).
+\]
+Here the factor \(e^{V_\psi}\) compares the ambient supremum over the
+survivor prefix cylinder \([u]\) with the supremum over
+\([u]\cap Z_H\); the latter is non-empty because \(u\) is a word in the
+mixing survivor subshift.
+There are only finitely many possible transient suffixes of length at
+most \(K\).  Therefore, for a constant \(C_3<\infty\),
+\[
+  Z_n^{\mathrm{safe}}(\psi)
+  \leq
+  C_3\sum_{k=0}^{K} Z_{n-k}^{H}(\psi)
+\]
+for all large \(n\).  Because \(Z_H\) is a mixing subshift of finite type
+and \(\psi|_{Z_H}\) is H\"older,
+\[
+  \lim_{n\to\infty}\frac1n\log Z_n^H(\psi)
+  =
+  P_{Z_H}(\psi)
+\]
+by the standard pressure formula for H\"older potentials on mixing SFTs
+\citep{Bowen2008,Ruelle1978}.  The preceding lower and upper bounds show
+that \(Z_n^{\mathrm{safe}}(\psi)\) has the same exponential growth rate.
+Combining this with the Gibbs comparison for
+\(\nu_\psi(\tau_H\geq n)\) proves the displayed escape exponent.
+\end{proof}
+
+\begin{lemma}[Lipschitz retraction onto the survivor subshift]
+\label{lem:holder-survivor-extension}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(H\) be a non-empty proper one-step Markov hole with safe
+alphabet \(\mathcal S\), and assume that the survivor subshift
+\[
+  Z_H=\{z\in Z:z_n\in\mathcal S\text{ for all }n\geq0\}
+\]
+is topologically mixing.  Let \(\mathcal S_\infty\subseteq\mathcal S\)
+be the alphabet of symbols that occur in \(Z_H\).  For each
+\(i\in\mathcal S_\infty\), choose a point
+\(\omega^{(i)}\in Z_H\cap[i]\), and choose one base point
+\(\omega^\ast\in Z_H\).
+
+Then there is a \(1\)-Lipschitz retraction
+\[
+  \pi_H:Z\longrightarrow Z_H
+\]
+with \(\pi_H|_{Z_H}=\mathrm{id}_{Z_H}\).  Consequently
+\[
+  \mathcal J_H:\mathcal B_\theta(Z_H)\longrightarrow \mathcal B_\theta(Z),
+  \qquad
+  \mathcal J_H g:=g\circ\pi_H,
+\]
+is a bounded linear extension operator satisfying
+\[
+  \mathcal R\mathcal J_H=\mathrm{id}_{\mathcal B_\theta(Z_H)},
+  \qquad
+  \norm{\mathcal J_H g}_\infty=\norm{g}_\infty,
+  \qquad
+  \abs{\mathcal J_H g}_\theta\leq\abs{g}_\theta .
+\]
+\end{lemma}
+
+\begin{proof}
+For \(x\in Z\), let
+\[
+  n(x):=\inf\{m\geq0:x_m\notin\mathcal S_\infty\},
+\]
+with the convention \(n(x)=\infty\) if the set is empty.  Because \(Z\)
+is one-step and every symbol in \(\mathcal S_\infty\) lies in a safe
+infinite path, a point belongs to \(Z_H\) exactly when all of its
+symbols lie in \(\mathcal S_\infty\).  Thus \(n(x)=\infty\) if and only
+if \(x\in Z_H\).
+
+Define \(\pi_H(x)\) as follows.
+\begin{enumerate}[label=(\roman*)]
+  \item If \(n(x)=\infty\), set \(\pi_H(x)=x\).
+  \item If \(n(x)=0\), set \(\pi_H(x)=\omega^\ast\).
+  \item If \(1\leq n(x)<\infty\), write \(n=n(x)\) and
+  \(i=x_{n-1}\in\mathcal S_\infty\), and set
+  \[
+    \pi_H(x):=
+    x_0x_1\cdots x_{n-1}\omega^{(i)}_1\omega^{(i)}_2\cdots .
+  \]
+\end{enumerate}
+This point lies in \(Z_H\), and \(\pi_H(x)=x\) for \(x\in Z_H\), so
+\(\pi_H\) is a retraction.
+
+To prove the Lipschitz bound, let \(x,y\in Z\) agree in their first
+\(N\geq0\) symbols.  If both \(n(x)\) and \(n(y)\) are at least \(N\),
+then \(\pi_H(x)\) and \(\pi_H(y)\) share the same first \(N\) symbols,
+so \(d_\theta(\pi_H(x),\pi_H(y))\leq\theta^N=d_\theta(x,y)\).  If, say,
+\(n(x)<N\), then \(x_{n(x)}\notin\mathcal S_\infty\), hence also
+\(y_{n(x)}=x_{n(x)}\notin\mathcal S_\infty\).  Therefore
+\(n(y)=n(x)\).  In that case the definitions use the same initial word
+and the same reference tail, so \(\pi_H(x)=\pi_H(y)\).  Thus
+\(d_\theta(\pi_H(x),\pi_H(y))\leq d_\theta(x,y)\) in all cases.
+
+Now let \(g\in\mathcal B_\theta(Z_H)\).  Linearity of \(\mathcal J_H\)
+is immediate.  Since \(\pi_H\) is a retraction,
+\(\mathcal R\mathcal J_H g=g\).  The sup-norm is preserved because
+\(\pi_H(Z)=Z_H\), and the Lipschitz seminorm estimate follows from the
+\(1\)-Lipschitz property of \(\pi_H\):
+\[
+  \abs{\mathcal J_H g(x)-\mathcal J_H g(y)}
+  =
+  \abs{g(\pi_Hx)-g(\pi_Hy)}
+  \leq
+  \abs{g}_\theta\,d_\theta(\pi_Hx,\pi_Hy)
+  \leq
+  \abs{g}_\theta\,d_\theta(x,y).
+\]
+\end{proof}
+
+\begin{lemma}[Spectral comparison through a complemented quotient]
+\label{lem:holder-quotient-spectrum}
+Let \(X,Y\) be Banach spaces, let
+\(R:X\to Y\) be a bounded surjection, and let
+\(J:Y\to X\) be a bounded right inverse of \(R\), so
+\(RJ=\mathrm{id}_Y\).
+Set \(E:=\ker R\).  Let \(T\in\mathcal B(X)\) and
+\(S\in\mathcal B(Y)\) satisfy
+\[
+  RT=SR .
+\]
+Then \(E\) is \(T\)-invariant.  Write \(T_E:=T|_E\).  The following hold.
+\begin{enumerate}[label=(\roman*)]
+  \item If \(\lambda\notin\spec(T_E)\cup\spec(S)\), then
+  \(\lambda\notin\spec(T)\).  More precisely,
+  \[
+    (T-\lambda)^{-1}u
+    =
+    J(S-\lambda)^{-1}Ru
+    +
+    (T_E-\lambda)^{-1}
+    \bigl(u-(T-\lambda)J(S-\lambda)^{-1}Ru\bigr).
+  \]
+  \item If \(\lambda\notin\spec(T_E)\) and \(\lambda\notin\spec(T)\),
+  then \(\lambda\notin\spec(S)\).
+  \item Consequently
+  \[
+    \spec(T)\setminus\spec(T_E)
+    =
+    \spec(S)\setminus\spec(T_E).
+  \]
+  \item If \(\lambda\notin\spec(T_E)\) and \(\lambda\) is an isolated
+  eigenvalue of \(S\) of algebraic multiplicity one, then \(\lambda\) is
+  an isolated eigenvalue of \(T\) of algebraic multiplicity one.
+  Moreover the restriction map
+  \[
+    R:\ker(T-\lambda)\longrightarrow\ker(S-\lambda)
+  \]
+  is an isomorphism, and \(T\) has no non-zero generalized eigenvector
+  at \(\lambda\).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+If \(e\in E\), then \(RTe=SRe=0\), so \(Te\in E\).  Thus \(E\) is
+\(T\)-invariant.
+
+For (i), fix \(u\in X\) and set \(y:=(S-\lambda)^{-1}Ru\),
+\(x_0:=Jy\).  Then
+\[
+  R\bigl(u-(T-\lambda)x_0\bigr)
+  =
+  Ru-(S-\lambda)y
+  =
+  0,
+\]
+so \(e:=u-(T-\lambda)x_0\) lies in \(E\).  Since
+\(\lambda\notin\spec(T_E)\), the element
+\[
+  x:=x_0+(T_E-\lambda)^{-1}e
+\]
+is well defined and satisfies \((T-\lambda)x=u\).  This gives the
+displayed inverse formula, and every factor in it is bounded.
+
+For (ii), assume \(\lambda\notin\spec(T_E)\) and \(T-\lambda\) is
+invertible on \(X\).  If \(e\in E\), then the equation
+\((T-\lambda)x=e\) has a unique solution \(x=(T-\lambda)^{-1}e\) in
+\(X\).  It also has a unique solution in \(E\), namely
+\((T_E-\lambda)^{-1}e\).  By uniqueness these two solutions coincide, so
+\((T-\lambda)^{-1}E\subseteq E\).  Therefore \(T-\lambda\) induces a
+bounded bijection on the quotient \(X/E\), whose inverse is induced by
+\((T-\lambda)^{-1}\).  Since \(R\) identifies \(X/E\) with \(Y\), the
+induced quotient map is exactly \(S-\lambda\).  Hence \(S-\lambda\) is
+invertible.
+
+Assertion (iii) is immediate from (i) and (ii).
+
+For (iv), assertion (iii) shows that \(\lambda\) is isolated in
+\(\spec(T)\) whenever it is isolated in \(\spec(S)\).  If
+\(x\in\ker(T-\lambda)\) and \(Rx=0\), then \(x\in E\) and
+\((T_E-\lambda)x=0\), hence \(x=0\) because
+\(\lambda\notin\spec(T_E)\).  Thus the restriction map \(R\) is
+injective on \(\ker(T-\lambda)\).
+
+Now let \(y\in\ker(S-\lambda)\).  Put \(x_0:=Jy\).  Then
+\[
+  R\bigl((\lambda-T)x_0\bigr)
+  =
+  (\lambda-S)y
+  =
+  0,
+\]
+so \((\lambda-T)x_0\in E\).  Define
+\[
+  x:=x_0+(T_E-\lambda)^{-1}(\lambda-T)x_0 .
+\]
+Because \(T_E-\lambda=-(\lambda-T_E)\) on \(E\), this satisfies
+\((T-\lambda)x=0\), while \(Rx=y\) because the correction term lies in
+\(E\).  Therefore
+\[
+  R:\ker(T-\lambda)\longrightarrow\ker(S-\lambda)
+\]
+is surjective, hence an isomorphism.  In particular the eigenspace of
+\(T\) at \(\lambda\) is one-dimensional when the eigenspace of \(S\) is.
+
+Finally, let \(v\neq0\) be an eigenvector of \(T\) at \(\lambda\), and
+suppose that \((T-\lambda)x=v\) for some \(x\in X\).  Applying \(R\)
+gives
+\[
+  (S-\lambda)Rx=Rv .
+\]
+Since \(\lambda\) has algebraic multiplicity one for \(S\), the operator
+\(S\) has no non-zero generalized eigenvector at \(\lambda\), so the
+right-hand side must vanish: \(Rv=0\).  But then \(v\in E\) and
+\((T_E-\lambda)v=0\), contradicting \(\lambda\notin\spec(T_E)\).  Thus
+\(T\) has no non-zero generalized eigenvector at \(\lambda\).
+\end{proof}
+
+\begin{theorem}[Open transfer operator on the H\"older space]
+\label{thm:holder-open-transfer}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(\psi\) be a H\"older potential, and let \(H\) be a
+non-empty proper one-step Markov hole with safe alphabet \(\mathcal S\).
+Assume that the survivor subshift
+\[
+  Z_H=\{z\in Z:z_n\in\mathcal S\text{ for all }n\geq0\}
+\]
+is topologically mixing.  Choose a standard symbolic metric
+\(d_\theta\), \(0<\theta<1\), for which \(\psi\) is Lipschitz, and set
+\[
+  \mathcal B_\theta(Z):=
+  \{f:Z\to\mathbb C:\norm{f}_\theta<\infty\},
+  \qquad
+  \norm{f}_\theta:=\norm{f}_\infty+
+  \sup_{x\neq y}\frac{\abs{f(x)-f(y)}}{d_\theta(x,y)} .
+\]
+Define the open Ruelle operator
+\[
+  (\mathcal L_{\psi,H}f)(x)
+  :=
+  \sum_{\substack{\sigma y=x\\ y_0\in\mathcal S}}
+    e^{\psi(y)}f(y),
+  \qquad f\in\mathcal B_\theta(Z).
+\]
+Then \(\mathcal L_{\psi,H}\) is a bounded operator on
+\(\mathcal B_\theta(Z)\).  With
+\[
+  \lambda_H:=e^{P_{Z_H}(\psi)},
+\]
+there exist \(h_H\in\mathcal B_\theta(Z)\), a non-zero positive
+functional \(\eta_H\in\mathcal B_\theta(Z)^*\), and a bounded operator
+\(\mathcal N_H\) on \(\mathcal B_\theta(Z)\) such that
+\[
+  \mathcal L_{\psi,H}h_H=\lambda_H h_H,\qquad
+  \mathcal L_{\psi,H}^*\eta_H=\lambda_H\eta_H,\qquad
+  \eta_H(h_H)=1,
+\]
+\[
+  \mathcal L_{\psi,H}^n f
+  =
+  \lambda_H^n\eta_H(f)h_H+\mathcal N_H^n f,
+  \qquad
+  \rho(\mathcal N_H)<\lambda_H .
+\]
+Equivalently, for every \(f\in\mathcal B_\theta(Z)\) and every
+\(\Lambda\in\mathcal B_\theta(Z)^*\),
+\[
+  \lambda_H^{-n}\Lambda(\mathcal L_{\psi,H}^n f)
+  \longrightarrow
+  \Lambda(h_H)\eta_H(f).
+\]
+Thus the leading open spectral data on the H\"older Banach space are
+conclusions of the theorem, not hypotheses.
+\end{theorem}
+
+\begin{proof}
+Write \(\abs{f}_\theta\) for the Lipschitz seminorm associated to
+\(d_\theta\), and let \(p\) be a memory for the SFT \(Z\).  Boundedness is
+the standard Ruelle estimate, and we recall the argument because the same
+pairing is used below.  If \(x,x'\) agree for \(N\geq p\) symbols, then
+every admissible safe one-step preimage of \(x\) is paired with the
+preimage obtained by prepending the same safe symbol to \(x'\).  The
+paired preimages agree for \(N+1\) symbols, and the Lipschitz property of
+\(\psi\) gives
+\[
+  \abs{e^{\psi(y)}-e^{\psi(y')}}\leq C_\psi d_\theta(x,x').
+\]
+Since the number of one-step preimages is uniformly bounded,
+\[
+  \norm{\mathcal L_{\psi,H}f}_\theta
+  \leq C\norm{f}_\theta
+\]
+for a constant \(C\) depending only on \(Z,\psi,H\), and \(\theta\).  The
+finitely many cases \(N<p\) are absorbed by the sup-norm bound, since
+\(d_\theta(x,x')\geq\theta^{p-1}\) there.
+
+Let
+\[
+  \mathcal R:\mathcal B_\theta(Z)\longrightarrow
+  \mathcal B_\theta(Z_H),
+  \qquad
+  \mathcal R f=f|_{Z_H},
+\]
+let \(\mathcal E:=\ker\mathcal R\), and let
+\(\mathcal J_H:\mathcal B_\theta(Z_H)\to\mathcal B_\theta(Z)\) be the
+bounded extension operator from
+Lemma~\ref{lem:holder-survivor-extension}.  In particular
+\(\mathcal R\mathcal J_H=\mathrm{id}\), so \(\mathcal R\) is onto.  Moreover
+\[
+  \mathcal R\mathcal L_{\psi,H}
+  =
+  \mathcal L_{\psi|Z_H}\mathcal R,
+\]
+where \(\mathcal L_{\psi|Z_H}\) is the ordinary Ruelle operator on the
+closed survivor subshift.  Indeed, if \(x\in Z_H\), every safe preimage
+of \(x\) is again in \(Z_H\); a preimage from a transient safe symbol
+would give that symbol an infinite safe continuation.  The classical
+Ruelle--Perron--Frobenius theorem on the mixing SFT \(Z_H\) gives a
+simple isolated eigenvalue
+\(\lambda_H=e^{P_{Z_H}(\psi)}\) for
+\(\mathcal L_{\psi|Z_H}\), with the rest of its spectrum contained in a
+disk of radius \(r_H<\lambda_H\)
+\citep{Bowen2008,Ruelle1978,Walters1975GMeasures}.
+
+It remains to check that the part of the open operator acting on
+\(\mathcal E\) has smaller spectral radius.  Let
+\(\mathcal S_\infty\) be the survivor alphabet and
+\(\mathcal T=\mathcal S\setminus\mathcal S_\infty\).  As in the proof of
+Lemma~\ref{lem:holder-safe-word-pressure}, there is no safe edge from
+\(\mathcal T\) to \(\mathcal S_\infty\), and the graph on
+\(\mathcal T\) is acyclic.  Hence there is \(K\) such that every
+sufficiently long safe word is a word over \(\mathcal S_\infty\) followed
+by a transient suffix of length at most \(K\).
+
+For later use set
+\[
+  W_n(x):=
+  \sum_{\substack{\sigma^n y=x\\ y_0,\ldots,y_{n-1}\in\mathcal S}}
+  e^{S_n\psi(y)} .
+\]
+The finite-suffix decomposition just recalled, bounded distortion, and
+the Ruelle--Perron--Frobenius bound for the survivor system give a
+constant \(C_W<\infty\) such that
+\[
+  W_n(x)\leq C_W\lambda_H^n
+  \qquad (x\in Z,\ n\geq1).
+\]
+Indeed, for \(n>K\), decompose any safe \(n\)-prefix \(u\) as \(u=sv\),
+where \(s\) is a word in the survivor alphabet and \(v\) is a transient
+suffix of length \(k\leq K\).  For fixed \(v\), the contribution of the
+last \(k\) symbols is bounded by \(e^{K\norm{\psi}_\infty}\).  Since
+\([s]\cap Z_H\neq\emptyset\), bounded distortion compares the first
+\(n-k\) iterates along \(svx\) with
+\(\sup_{[s]\cap Z_H}S_{n-k}\psi\), up to a uniform multiplicative
+constant.  Summing over the finitely many possible suffixes \(v\) gives
+an upper bound by a constant times
+\[
+  \sum_{k=0}^{K} Z_{n-k}^H(\psi),
+\]
+where \(Z_N^H(\psi)\) is the survivor partition sum from
+Lemma~\ref{lem:holder-safe-word-pressure}.  The
+Ruelle--Perron--Frobenius theorem on the mixing survivor subshift gives
+\(Z_N^H(\psi)\leq C\lambda_H^N\).  This proves the displayed bound for
+\(n>K\), and increasing \(C_W\) covers the finitely many smaller \(n\).
+
+Take \(f\in\mathcal E\).  If \(y\) occurs in an \(n\)-step summand of
+\(\mathcal L_{\psi,H}^n f(x)\), then \(y_0,\ldots,y_{n-1}\) are safe.
+For \(n>K\), the first \(n-K\) symbols of \(y\) form a survivor word.
+Choose \(\bar y\in Z_H\) with the same first \(n-K\) symbols.  Since
+\(f|_{Z_H}=0\),
+\[
+  \abs{f(y)}
+  =
+  \abs{f(y)-f(\bar y)}
+  \leq
+  \norm{f}_\theta\,\theta^{n-K}.
+\]
+Together with the preceding bound on \(W_n(x)\), this gives
+\[
+  \norm{\mathcal L_{\psi,H}^n f}_\infty
+  \leq
+  C_2\theta^n e^{nP_{Z_H}(\psi)}\norm{f}_\theta .
+\]
+
+The H\"older seminorm satisfies the same bound.  Suppose first that
+\(x,x'\) agree for \(N\geq p\) symbols, so \(d_\theta(x,x')=\theta^N\).
+Pair the \(n\)-step safe preimages by the same safe prefix:
+\(y=ux\) and \(y'=ux'\), \(\abs u=n\).  Then \(y\) and \(y'\) agree for
+\(n+N\) symbols.  Hence
+\[
+  \abs{f(y)-f(y')}
+  \leq
+  \abs{f}_\theta\,\theta^{n+N}
+  =
+  \abs{f}_\theta\,\theta^n d_\theta(x,x').
+\]
+Also, by the previous comparison with \(Z_H\),
+\[
+  \abs{f(y')} \leq \norm{f}_\theta\theta^{n-K}.
+\]
+Finally the Bowen distortion estimate along the paired \(n\)-blocks gives
+\[
+  \abs{S_n\psi(y)-S_n\psi(y')}
+  \leq
+  C_\psi d_\theta(x,x'),
+\]
+and therefore
+\[
+  \abs{e^{S_n\psi(y)}-e^{S_n\psi(y')}}
+  \leq
+  C_\psi e^{S_n\psi(y)}d_\theta(x,x')
+\]
+after increasing \(C_\psi\).  For each paired summand,
+\[
+\begin{aligned}
+ &\abs{e^{S_n\psi(y)}f(y)-e^{S_n\psi(y')}f(y')}        \\
+ &\qquad\leq
+  C e^{S_n\psi(y)}\norm{f}_\theta
+  \theta^n d_\theta(x,x').
+\end{aligned}
+\]
+Summing over safe prefixes and using \(W_n(x)\leq C_W\lambda_H^n\)
+therefore yields
+\[
+  \abs{\mathcal L_{\psi,H}^n f}_\theta
+  \leq
+  C_3\theta^n e^{nP_{Z_H}(\psi)}\norm{f}_\theta .
+\]
+If \(N<p\), the same estimate follows from the sup-norm bound divided by
+the lower bound \(d_\theta(x,x')\geq\theta^{p-1}\).  Thus the displayed
+seminorm estimate holds for all \(x\neq x'\).
+Thus
+\[
+  \rho\bigl(\mathcal L_{\psi,H}|_{\mathcal E}\bigr)
+  \leq
+  \theta e^{P_{Z_H}(\psi)}
+  < \lambda_H .
+\]
+
+Now apply Lemma~\ref{lem:holder-quotient-spectrum} with
+\[
+  X=\mathcal B_\theta(Z),\qquad
+  Y=\mathcal B_\theta(Z_H),\qquad
+  T=\mathcal L_{\psi,H},\qquad
+  S=\mathcal L_{\psi|Z_H},\qquad
+  R=\mathcal R,\qquad
+  J=\mathcal J_H .
+\]
+Since \(\rho(T_{\mathcal E})<\lambda_H\), the number \(\lambda_H\) does
+not belong to \(\spec(T_{\mathcal E})\).  The survivor
+Ruelle--Perron--Frobenius theorem gives that \(\lambda_H\) is a simple
+isolated eigenvalue of \(S\), with the rest of \(\spec(S)\) contained in
+the disk \(\{z:\abs z\leq r_H\}\).  Therefore
+Lemma~\ref{lem:holder-quotient-spectrum}(iii) shows that every spectral
+value of \(T\) outside the disk of radius
+\(\max\{\rho(T_{\mathcal E}),r_H\}\) comes from \(S\), and
+Lemma~\ref{lem:holder-quotient-spectrum}(iv) gives that \(\lambda_H\) is
+an isolated eigenvalue of \(T\) of algebraic multiplicity one.
+
+Let \(h_H^0\in\mathcal B_\theta(Z_H)\) be a non-zero eigenfunction of
+\(S\) with \(Sh_H^0=\lambda_Hh_H^0\).  The lifting formula in
+Lemma~\ref{lem:holder-quotient-spectrum}(iv) gives an eigenfunction
+\[
+  h_H
+  :=
+  \mathcal J_Hh_H^0
+  +
+  (T_{\mathcal E}-\lambda_H)^{-1}
+  (\lambda_H-T)\mathcal J_Hh_H^0
+\]
+for \(T\), and \(\mathcal R h_H=h_H^0\), so \(h_H\neq0\).  If
+\(\eta_H^0\) is the positive
+Ruelle--Perron--Frobenius eigenfunctional on
+\(\mathcal B_\theta(Z_H)\), then
+\[
+  \eta_H(f):=\eta_H^0(\mathcal Rf)
+\]
+is a non-zero positive eigenfunctional for \(T^*\).  Normalizing
+\(h_H\) so that \(\eta_H(h_H)=1\), the operator
+\[
+  \Pi_H f:=\eta_H(f)h_H
+\]
+is the rank-one spectral projection of \(T\) at \(\lambda_H\), and
+\(T\Pi_H=\Pi_H T=\lambda_H\Pi_H\).  Setting
+\[
+  \mathcal N_H:=T(I-\Pi_H),
+\]
+the spectrum of \(\mathcal N_H\) is the spectrum of \(T\) with the
+simple eigenvalue \(\lambda_H\) removed, so
+\(\rho(\mathcal N_H)<\lambda_H\), and the displayed spectral
+decomposition follows.
+\end{proof}
+
+\begin{lemma}[One-step Gibbs error-survival comparison]
+\label{lem:holder-one-step-error-comparison}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(\psi\) be a H\"older potential, and let \(\nu_\psi\) be its
+equilibrium state.  Let \(H\) be a non-empty proper one-step Markov hole
+with safe alphabet \(\mathcal S\).  Assume that the survivor subshift
+\[
+  Z_H:=\{z\in Z:z_n\in\mathcal S\text{ for all }n\geq0\}
+\]
+is topologically mixing, and assume the finite two-terminal residue
+reachability condition from
+Lemma~\ref{lem:holder-extension-ambiguity}.  For
+\[
+  \tau_H(z):=\inf\{n\geq0:z_n\notin\mathcal S\},
+  \qquad
+  \mathsf P_R:=\{z:\tau_H(z)<\infty,\ \tau_H(z)\in R\bmod q\},
+\]
+there is \(\theta_0>0\) such that, for every \(n\geq1\),
+\[
+  \theta_0\,\nu_{\psi}(\tau_H\geq n)
+  \leq
+  \varepsilon_n(\mathsf P_R;\nu_{\psi})
+  \leq
+  \frac12\,\nu_{\psi}(\tau_H\geq n).
+\]
+Consequently
+\[
+  \lim_{n\to\infty}
+  -\frac1n\log\varepsilon_n(\mathsf P_R;\nu_\psi)
+  =
+  P_Z(\psi)-P_{Z_H}(\psi).
+\]
+\end{lemma}
+
+\begin{proof}
+Lemma~\ref{lem:holder-extension-ambiguity} gives a constant \(c_0>0\),
+uniform in the safe word \(w\), such that for every admissible safe
+length-\(n\) word \(w\),
+\[
+  c_0
+  \leq
+  \nu_\psi(\mathsf P_R\mid[w])
+  \leq
+  1-c_0 .
+\]
+Hence
+\[
+  c_0
+  \leq
+  \min\{
+    \nu_\psi(\mathsf P_R\mid[w]),
+    1-\nu_\psi(\mathsf P_R\mid[w])
+  \}
+  \leq \frac12 .
+\]
+The safe-prefix decomposition
+Lemma~\ref{lem:holder-safe-prefix-bayes-decomposition} therefore gives
+\[
+  \varepsilon_n(\mathsf P_R;\nu_\psi)
+  =
+  \sum_{\substack{w\in\mathcal L_n(Z)\\
+                  w_0,\ldots,w_{n-1}\in\mathcal S}}
+    \nu_\psi([w])\,
+    \min\{
+      \nu_\psi(\mathsf P_R\mid[w]),
+      1-\nu_\psi(\mathsf P_R\mid[w])
+    \}.
+\]
+The sum of the cylinder weights over safe words is
+\(\nu_\psi(\tau_H\geq n)\).  Taking \(\theta_0=c_0\) proves the
+two-sided comparison.
+
+Lemma~\ref{lem:holder-safe-word-pressure} gives
+\[
+  \lim_{n\to\infty}
+  -\frac1n\log\nu_\psi(\tau_H\geq n)
+  =
+  P_Z(\psi)-P_{Z_H}(\psi),
+\]
+and the comparison transfers the same exponential rate to
+\(\varepsilon_n(\mathsf P_R;\nu_\psi)\).
+\end{proof}
+
+\begin{lemma}[Finite-cylinder block reduction]
+\label{lem:holder-block-reduction}
+Let \(Y\) be a topologically mixing one-sided subshift of finite type,
+let \(\varphi\) be H\"older, and let \(\nu_\varphi\) be its equilibrium
+state.  Let \(p_Y\geq1\) be a Markov memory for \(Y\), meaning that
+any word of length at least \(p_Y+1\) is admissible if and only if all
+of its subwords of length \(p_Y+1\) are admissible.  Suppose that
+\(H\subset Y\) is a finite union of cylinders and choose
+\(\ell\geq p_Y\) such that \(H\) is a union of \(\ell\)-cylinders.
+Let
+\[
+  \Pi_\ell:Y\longrightarrow Y^{(\ell)}
+\]
+be the \(\ell\)-block conjugacy, let
+\(\psi:=\varphi\circ\Pi_\ell^{-1}\), and let \(H^{(\ell)}\) be the
+one-step hole in \(Y^{(\ell)}\) whose symbols are the \(\ell\)-blocks
+contained in \(H\).  Then \(Y^{(\ell)}\) is a topologically mixing
+one-step subshift of finite type, and:
+\begin{enumerate}[label=(\roman*)]
+  \item \((\Pi_\ell)_\ast\nu_\varphi\) is the equilibrium state
+    \(\nu_\psi\) of \(\psi\) on \(Y^{(\ell)}\);
+  \item \(P_{Y^{(\ell)}}(\psi)=P_Y(\varphi)\), and the survivor subshift
+    of \(H^{(\ell)}\) is conjugate to \(Y_H\), so its pressure is
+    \(P_{Y_H}(\varphi)\);
+  \item if \(m\geq\ell\) and \(n=m-\ell+1\), then the
+    length-\(m\) cylinder \(\sigma\)-algebra on \(Y\) is the pullback of
+    the length-\(n\) cylinder \(\sigma\)-algebra on \(Y^{(\ell)}\);
+  \item first entry into \(H\) at time \(t\) is exactly first entry into
+    \(H^{(\ell)}\) at block time \(t\).  Consequently first-entry residue
+    events correspond under \(\Pi_\ell\), and their depth-\(m\) and
+    depth-\(n\) Bayes errors are equal.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The map \(\Pi_\ell\) sends \(y\) to the sequence of overlapping blocks
+\((y_t\cdots y_{t+\ell-1})_{t\geq0}\).  This is a topological conjugacy
+from \(Y\) to the usual \(\ell\)-block presentation.  Since
+\(\ell\geq p_Y\), an allowable sequence of overlapping \(\ell\)-blocks
+is admissible exactly when each adjacent pair of block symbols is
+admissible in \(Y\).  Hence \(Y^{(\ell)}\) is a one-step SFT, and it is
+topologically mixing because it is conjugate to \(Y\).
+The variational principle is invariant under conjugacy, so the
+pushforward of the equilibrium state of \(\varphi\) is the equilibrium
+state of \(\psi=\varphi\circ\Pi_\ell^{-1}\), and the two ambient
+pressures agree.
+The same conjugacy sends points that avoid \(H\) at every time precisely
+to points whose block symbols avoid \(H^{(\ell)}\) at every time, giving
+the pressure identity on the survivor subsystem.
+
+A length-\(m\) word \(y_0\cdots y_{m-1}\), with \(m\geq\ell\), determines
+exactly the \(n=m-\ell+1\) consecutive \(\ell\)-blocks
+\[
+  y_0\cdots y_{\ell-1},\;
+  y_1\cdots y_\ell,\;\ldots,\;
+  y_{m-\ell}\cdots y_{m-1},
+\]
+and the admissibility constraints in the block presentation recover the
+original word from those blocks.  Thus the finite observation
+\(\sigma\)-algebras coincide under pullback.  Finally,
+\(\sigma^t y\in H\) if and only if the \(t\)-th block of
+\(\Pi_\ell y\) belongs to \(H^{(\ell)}\).  The first-entry time and its
+residue are therefore preserved, and the Bayes errors computed on the
+corresponding finite \(\sigma\)-algebras are identical.
+\end{proof}
+
+\begin{theorem}[Block-coded H\"older operator and Gibbs escape comparison]
+\label{thm:holder-finite-cylinder-escape}
+Let \(Y\) be a topologically mixing one-sided subshift of finite type,
+let \(\varphi\) be a H\"older potential, and let \(\nu_\varphi\) be its
+equilibrium state.  Let \(H\subset Y\) be a non-empty proper finite union
+of cylinders, and define
+\[
+  Y_H:=\{y\in Y:\sigma^n y\notin H\text{ for every }n\geq0\}.
+\]
+Fix \(q\geq 2\) and a non-empty proper subset
+\(R\subsetneq \ZZ/q\ZZ\), and set
+\[
+  \tau_H(y):=\inf\{n\geq0:\sigma^n y\in H\},
+  \qquad
+  \mathsf P_R:=\{y:\tau_H(y)<\infty,\ \tau_H(y)\in R\bmod q\}.
+\]
+Let \(p_Y\geq1\) be a Markov memory for \(Y\), and choose
+\(\ell\geq p_Y\) so that \(H\) is a union of \(\ell\)-cylinders.  Let
+\((Y^{(\ell)},\sigma^{(\ell)})\) be the resulting one-step
+\(\ell\)-block presentation of \(Y\), let \(\psi\) be the lifted
+H\"older potential, and let \(H^{(\ell)}\) be the corresponding one-step
+hole.  Let
+\(\mathcal S\) be the safe block alphabet.
+
+Assume the following two finite hypotheses.
+\begin{enumerate}[label=(G\arabic*)]
+  \item The survivor subshift of \(H^{(\ell)}\) is topologically mixing.
+  \item In the directed graph with vertices
+\[
+  \mathcal S\times\ZZ/q\ZZ,\qquad \star_R,\quad\star_{R^c},
+\]
+with safe edges
+\((i,r)\to(j,r+1)\) for admissible safe transitions \(i\to j\), and with
+terminal edges \((i,r)\to\star_R\) or \((i,r)\to\star_{R^c}\) according
+as an admissible next block enters the hole with residue \(r+1\) in
+\(R\) or in \(R^c\), both terminal vertices are reachable from every
+\((i,r)\in\mathcal S\times\ZZ/q\ZZ\).
+\end{enumerate}
+
+Choose a symbolic metric \(d_\theta\) on \(Y^{(\ell)}\) for which
+\(\psi\) is Lipschitz, and let
+\[
+  (\mathcal L_{\psi,H^{(\ell)}}f)(x)
+  :=
+  \sum_{\substack{\sigma^{(\ell)} y=x\\ y_0\in\mathcal S}}
+    e^{\psi(y)}f(y)
+\]
+be the open Ruelle operator on
+\(\mathcal B_\theta(Y^{(\ell)})=C^\alpha(Y^{(\ell)})\).  Then
+\(\mathcal L_{\psi,H^{(\ell)}}\) has the spectral decomposition from
+Theorem~\ref{thm:holder-open-transfer}, with leading eigenvalue
+\[
+  \lambda_H
+  =
+  e^{P_{(Y^{(\ell)})_{H^{(\ell)}}}(\psi)}
+  =
+  e^{P_{Y_H}(\varphi)}.
+\]
+
+For the first-entry residue event \(\mathsf P_R^{(\ell)}\) in the block
+system, let
+\(\varepsilon_n^{(\ell)}(\mathsf P_R^{(\ell)};\nu_{\psi})\) denote the
+Bayes error computed from block prefixes of length \(n\).  Then, for
+every \(m\geq\ell\), with \(n=m-\ell+1\),
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  \varepsilon_n^{(\ell)}
+    (\mathsf P_R^{(\ell)};\nu_{\psi}).
+\]
+There is \(\theta_0>0\), depending only on \(Y,\varphi,H,q,R\) and the
+chosen block presentation, such that, for every \(n\geq1\),
+\[
+  \theta_0\,\nu_{\psi}(\tau_{H^{(\ell)}}\geq n)
+  \leq
+  \varepsilon_n^{(\ell)}
+    (\mathsf P_R^{(\ell)};\nu_{\psi})
+  \leq
+  \frac12\,\nu_{\psi}(\tau_{H^{(\ell)}}\geq n).
+\]
+Consequently
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+The operator assertion is the explicit \(C^\alpha\)-space statement
+above applied to the block presentation.  The finite-observation
+assertion is only the finite-prefix comparison and escape exponent; it
+does not claim a Banach-space cyclotomic resolvent.
+\end{theorem}
+
+\begin{proof}
+The equality of Bayes errors and the pressure identifications under
+block recoding are exactly Lemma~\ref{lem:holder-block-reduction}.  The
+operator statement is Theorem~\ref{thm:holder-open-transfer} applied to
+the block system \(Y^{(\ell)}\), the H\"older potential \(\psi\), and the
+one-step hole \(H^{(\ell)}\); the block pressure identity in
+Lemma~\ref{lem:holder-block-reduction} gives the displayed value of
+\(\lambda_H\).
+
+Apply Lemma~\ref{lem:holder-one-step-error-comparison} to the block
+system \(Y^{(\ell)}\), the potential \(\psi\), and the one-step hole
+\(H^{(\ell)}\).  Its two-sided comparison is exactly the displayed
+comparison for
+\(\varepsilon_n^{(\ell)}(\mathsf P_R^{(\ell)};\nu_\psi)\), and it also
+gives
+\[
+  \lim_{n\to\infty}
+  -\frac1n\log
+  \varepsilon_n^{(\ell)}(\mathsf P_R^{(\ell)};\nu_\psi)
+  =
+  P_{Y^{(\ell)}}(\psi)
+  -P_{(Y^{(\ell)})_{H^{(\ell)}}}(\psi).
+\]
+The fixed shift \(n=m-\ell+1\) does not affect the exponential rate.
+Block conjugacy preserves pressure and identifies
+\((Y^{(\ell)})_{H^{(\ell)}}\) with \(Y_H\).  Hence the last displayed
+quantity is \(P_Y(\varphi)-P_{Y_H}(\varphi)\), and the block-recoding
+equality gives the claimed limit for
+\(\varepsilon_m(\mathsf P_R;\nu_\varphi)\).
+\end{proof}

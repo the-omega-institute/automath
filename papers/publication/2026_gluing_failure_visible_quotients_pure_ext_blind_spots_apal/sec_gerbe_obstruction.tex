@@ -1,139 +1,699 @@
-\section{Conditional Component Gerbes and Cover-Relative Gluing Obstructions}\label{sec:gerbe-obstruction}
+\section{Component Gerbes and Branched Gluing Obstructions}\label{sec:gerbe-obstruction}
 
-The stackification $\mathfrak L_r$ may have several global connected-component sections over $a$. Cohomological obstruction theory therefore belongs, in general, not to a single gerbe attached to $r$, but to the component gerbes indexed by the visible value classes of $r$.
+The stackification $\mathfrak L_r$ may have several global connected
+components over $a$. Cohomological obstruction theory therefore belongs, in
+general, not to a single gerbe attached to $r$, but to the component gerbes
+indexed by the visible value classes of $r$.
 
-Throughout this section we fix a conditional datum $\mathbf D=(r,p,\mathfrak P_r,\Band,v,\mathcal U,A,\omega)$ in the sense of \Cref{def:conditional-datum}; in particular, $\mathfrak P_r$ is gluing-sensitive at $a$, $v$ is a visible value class, and $\mathcal U$ is a gerbe-adapted cover equipped with a finite abelian trivialization of the band.
-
-\begin{definition}[Component gerbes and cover-relative branch obstruction classes]\label{def:compatible-realization-stack}\label{def:cech-gluing-obstruction}
-Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write
+Throughout this section a chosen realization input means the tuple
 \[
-a=[r]_p,
+(\mathfrak P_r,\mathfrak L_r,\iota_r,\Band,
+\{\beta^{\mathfrak L}_x\}_{x\in\mathfrak L_r})
 \]
-and assume that $r$ admits a gluing-sensitive realization prestack $\mathfrak P_r$ (in the sense of \Cref{def:gluing-sensitive}) with stackification $\mathfrak L_r$ and band $\Band$ as in \Cref{def:realization-prestack}. For a visible value class
+of \Cref{def:realization-prestack}. Thus the band in the gerbe arguments is
+already a stack-level band of $\mathfrak L_r$. A prestack-level family
+$\{\beta^{\mathfrak P}_y\}_{y\in\mathfrak P_r}$ is used here only through the
+descent theorem \Cref{prop:stackification-band-descends}, which produces the
+displayed stack-level family. The exact handoff from this stack-level band to a
+connected-component subcategory is
+\Cref{prop:banded-stack-handoff,cor:no-prestack-only-component-band}.
+
+\begin{definition}[Branch component subcategories]\label{def:compatible-realization-stack}
+For an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, put $a=[r]_p$ and
+work on the slice $\mathcal C_a=\mathcal C_{p,s}/a$. Assume that a stack-banded realization prestack $\mathfrak P_r$ has been
+chosen as in \Cref{def:realization-prestack}. Its stackification $\mathfrak L_r$
+therefore carries the stack-level banding
+\[
+\beta^{\mathfrak L}_x:\Band|_U\xrightarrow{\sim}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+\qquad (x\in\mathfrak L_r(U)),
+\]
+compatible with restriction and conjugation.
+
+For a visible value class
 \[
 v\in \Vis_{p,s}(r)\cong \pi_0(\mathfrak L_r)(a),
 \]
-define the \emph{component substack}
+define the \emph{component fibred subcategory}
 \[
 \mathfrak G_v(U):=\{x\in \mathfrak L_r(U)\mid [x]=v|_U\in \pi_0(\mathfrak L_r)(U)\}
 \]
 for each object $U$ of $\mathcal C_{p,s}/a$. When \Cref{thm:component-gerbe-decomposition} applies, $\mathfrak G_v$ is called the \emph{component gerbe} of the visible branch $v$.
-
-A cover
-\[
-\mathcal U=\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)
-\]
-is called \emph{gerbe-adapted for $v$} if its \v{C}ech nerve exists in $\mathcal C_{p,s}/a$ and
-\begin{enumerate}[label=(\roman*),nosep]
-\item for every $i$, $H^1(\mathcal C_a/a_i,\Band)=0$;
-\item for every $i,j$, $H^1(\mathcal C_a/(a_i\wedge a_j),\Band)=0$.
-\end{enumerate}
-Whenever such a cover $\mathcal U$ has been chosen, \Cref{thm:cech-bridge-compatible-realizations} yields a class
-\[
-[\omega_v(\mathcal U)]\in\Cech^2(\mathcal U,\Band),
-\]
-called the \emph{cover-relative branch obstruction class} of $v$ on $\mathcal U$.
 \end{definition}
 
-\begin{remark}[Why the obstruction is defined cover-by-cover]\label{rem:cover-relative-obstruction}
-No general directed or cofinal family of gerbe-adapted covers is assumed here. The paper works instead with a chosen adapted cover for each branch, and uses refinement only in classes where the induced maps on cohomology or homology are explicitly controlled. If one is given additional site hypotheses producing a directed cofinal family and a \v{C}ech-to-derived comparison isomorphism, then the classes $[\omega_v(\mathcal U)]$ may be assembled into an intrinsic class; that extra hypothesis is not built into the present definitions.
+\begin{remark}
+The sibling split-prestack result fixes the same admitted-reference slice
+\cite[Proposition~4.34]{HomologicalVisibilityGluingObstructions2026}. The
+concrete increment here is that, after choosing a stack-banded realization
+stack, the visible-value classes index full fibred component subcategories whose
+banding is inherited from stackification rather than from the split prestack.
 \end{remark}
 
-\begin{remark}[\v{C}ech refinement maps]\label{rem:cech-refinement-maps}
-For a refinement $\mathcal V=\{b_j\to a\}_{j\in J}$ of $\mathcal U=\{a_i\to a\}_{i\in I}$ via an index map $\lambda:J\to I$ with $b_j\sqsubseteq_{p,s}a_{\lambda(j)}$, define
+\begin{proposition}[Hypothesis map for the gerbe layer]\label{prop:gerbe-layer-hypothesis-map}
+The gerbe-level constructions in this section have the following dependencies.
+\begin{enumerate}[label=(\roman*),nosep]
+\item The set-valued local-object functor $F_{p,s}$ is used only to define
+compatible local presentations and the sheaf of visible value classes
+$a_{p,s}F_{p,s}$.
+\item The identification
 \[
-(r_{\mathcal V\mathcal U}h)_{jk}:=h_{\lambda(j)\lambda(k)}\big|_{b_j\wedge b_k}
-\qquad
-\text{for }h=(h_{ij})\in\check C^1(\mathcal U,\Band),
+\Vis_{p,s}(r)\cong\pi_0(\mathfrak L_r)(a)
 \]
+uses the chosen realization prestack through
+\Cref{prop:stackification-components}; it does not supply a band.
+\item The component-gerbe theorem below assumes the stack-level banding of
+\Cref{def:realization-prestack}, item~\textup{(ii)}, equivalently the family isolated
+in
+\Cref{prop:realization-stack-already-banded,prop:band-lives-on-stackification,prop:banded-stack-handoff,cor:no-prestack-only-component-band}.
+Thus the automorphism sheaf of every object $x\in\mathfrak L_r(U)$, including
+every object of a component subcategory $\mathfrak G_v(U)$, is already
+identified with $\Band|_U$.
+\item The branch classes $\omega_v$ require, in addition, the cofinal
+gerbe-adapted covers and local $H^1$-vanishing hypotheses of
+\Cref{thm:cech-bridge-compatible-realizations}. The finite visible quotients of
+\Cref{sec:homological-visibility} require the extra finite-nerve presentation of
+\Cref{def:finite-nerve-presentation}.
+\end{enumerate}
+Consequently, no statement in this section is a construction of a banded gerbe
+from the bare pair $(F_{p,s},\Band)$. The band used here is already a band of
+the stackification $\mathfrak L_r$.
+\end{proposition}
+
+\begin{proof}
+Items \textup{(i)} and \textup{(ii)} are
+\Cref{thm:sheafification-characterization,thm:visible-value-components} and
+\Cref{prop:stackification-components}. Item \textup{(iii)} is exactly the
+stackification banding required in
+\Cref{def:realization-prestack}, item~\textup{(ii)} and restated in
+\Cref{prop:realization-stack-already-banded,prop:band-lives-on-stackification,prop:banded-stack-handoff,cor:no-prestack-only-component-band}.
+Item \textup{(iv)} is the additional cover and finite-presentation data appearing in
+\Cref{def:cech-gluing-obstruction,thm:cech-bridge-compatible-realizations,def:finite-nerve-presentation}.
+\end{proof}
+
+\begin{lemma}[The stack band restricts to a component]\label{lem:component-inherits-stack-band}
+In the setting of \Cref{def:compatible-realization-stack}, fix
+$v\in\pi_0(\mathfrak L_r)(a)$. For every object $U$ of $\mathcal C_a$ and every
+$x\in\mathfrak G_v(U)$, including objects represented only after descent, the
+inclusion
 \[
-(r_{\mathcal V\mathcal U}g)_{jkl}:=g_{\lambda(j)\lambda(k)\lambda(l)}\big|_{b_j\wedge b_k\wedge b_l}
-\qquad
-\text{for }g=(g_{ijk})\in\check C^2(\mathcal U,\Band).
+\mathfrak G_v\hookrightarrow \mathfrak L_r
 \]
-These maps commute with coboundaries and satisfy
+identifies automorphism sheaves on the slice:
 \[
-r_{\mathcal W\mathcal V}\circ r_{\mathcal V\mathcal U}=r_{\mathcal W\mathcal U}
+\underline{\mathrm{Aut}}_{\mathfrak G_v}(x)
+=
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x).
 \]
-for every further refinement $\mathcal W$ of $\mathcal V$, so they descend to cohomology.
-\end{remark}
+Consequently, once $\mathfrak G_v$ is known to be a stack, the stack-level
+banding
+\[
+\beta^{\mathfrak L}_x:\Band|_U\xrightarrow{\sim}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+\]
+restricts to a stack-level $\Band$-banding of $\mathfrak G_v$, namely
+\[
+\beta^{\mathfrak G_v}_x:\Band|_U
+\xrightarrow{\beta^{\mathfrak L}_x}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+=
+\underline{\mathrm{Aut}}_{\mathfrak G_v}(x).
+\]
+If the original input supplied only a compatible prestack-level banding, this
+map is the restriction of the descended map of
+\Cref{prop:stackification-band-descends}; it is not obtained by applying a
+prestack-only automorphism identification to $x$.
+\end{lemma}
+
+\begin{proof}
+This is the special case of \Cref{prop:banded-stack-handoff} with
+$U_0=a$ and $\xi=v$. Concretely, the component condition defining
+$\mathfrak G_v$ is a condition on objects only, and $\mathfrak G_v(U)$ is a full
+subcategory of $\mathfrak L_r(U)$ for every $U$. Therefore an automorphism of
+$x$ in the component fibre is exactly an automorphism of the same object in
+$\mathfrak L_r(U)$, and the same equality holds after every restriction
+$V\to U$. The restriction and conjugation compatibilities are then precisely the
+compatibilities already included in the stack-level banding of $\mathfrak L_r$
+from \Cref{def:realization-prestack}, item~\textup{(ii)}.
+\end{proof}
+
+\begin{proposition}[Component bands are stackification bands]\label{prop:component-bands-are-stackification-bands}
+In the setting of \Cref{def:compatible-realization-stack}, suppose
+$\mathfrak G_v$ is a stack for some
+$v\in\pi_0(\mathfrak L_r)(a)$. Then the band of $\mathfrak G_v$ is the family
+\[
+\beta^{\mathfrak G_v}_x:\Band|_U\xrightarrow{\sim}
+\underline{\mathrm{Aut}}_{\mathfrak G_v}(x)
+\qquad (U\in\mathcal C_a,\ x\in\mathfrak G_v(U))
+\]
+defined by restricting $\beta^{\mathfrak L}_x$ along the full inclusion
+$\mathfrak G_v\hookrightarrow\mathfrak L_r$. This family is defined for every
+component object $x$, not only for objects in the essential image of
+$\mathfrak P_r(U)$. Hence all later branch obstruction classes are formed with
+the stackification banding of $\mathfrak L_r$.
+\end{proposition}
+
+\begin{proof}
+This is \Cref{lem:component-inherits-stack-band} with the restricted banding
+written as a named family. The restriction and conjugation compatibilities are
+those of the stack-level banding of $\mathfrak L_r$, and fullness identifies the
+component automorphism sheaf with the ambient automorphism sheaf on every slice.
+\end{proof}
+
+\begin{lemma}[Local meaning of stack connected components]\label{lem:pi0-stack-local-meaning}
+Let $\mathfrak X$ be a stack in groupoids on a site $\mathcal C$, and let
+$\pi_0(\mathfrak X)$ denote the sheafification of the presheaf
+$U\mapsto\Ob(\mathfrak X(U))/\!\cong$. For every object $U$ of $\mathcal C$:
+\begin{enumerate}[label=(\roman*),nosep]
+\item every section $\xi\in\pi_0(\mathfrak X)(U)$ is locally represented by
+actual objects: there is a cover $\{U_i\to U\}$ and objects
+$x_i\in\mathfrak X(U_i)$ with $[x_i]=\xi|_{U_i}$;
+\item if $x,y\in\mathfrak X(U)$ and $[x]=[y]$ in $\pi_0(\mathfrak X)(U)$, then
+there is a cover $\{U_i\to U\}$ such that
+$x|_{U_i}\cong y|_{U_i}$ for every $i$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Both assertions are the defining local behavior of an associated sheaf. A
+section of the sheafification is locally in the image of the presheaf of
+isomorphism classes, which proves \textup{(i)}. Equality of two presheaf sections
+after sheafification is local, so the equality $[x]=[y]$ in the sheaf
+$\pi_0(\mathfrak X)$ gives a cover on which the two ordinary isomorphism classes
+in $\Ob(\mathfrak X(U_i))/\!\cong$ are equal. Equality of those ordinary classes
+is precisely the existence of an isomorphism
+$x|_{U_i}\cong y|_{U_i}$.
+\end{proof}
 
 \begin{theorem}[Component gerbes of visible branches]\label{thm:component-gerbe-decomposition}
-Assume $\mathfrak P_r$ is a gluing-sensitive realization prestack at $a$ in the sense of \Cref{def:gluing-sensitive}. Then for every
+\leanverified{paper_conservative_extension_component_gerbe_decomposition_focused}
+In the setting of \Cref{def:compatible-realization-stack}, assume in particular
+the stackification banding
+\[
+\beta^{\mathfrak L}_x:\Band|_U\xrightarrow{\sim}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+\qquad (U\in\mathcal C_a,\ x\in\mathfrak L_r(U))
+\]
+from \Cref{def:realization-prestack}, item~\textup{(ii)}. Then, for every
 \[
 v\in \Vis_{p,s}(r)\cong \pi_0(\mathfrak L_r)(a),
 \]
-the full substack $\mathfrak G_v$ is a banded $\Band$-gerbe over $\mathcal C_{p,s}/a$.
-\leanverified{paper_gluing_failure_component_gerbe_decomposition}
+the full fibred subcategory $\mathfrak G_v$ is a banded $\Band$-gerbe over
+$\mathcal C_{p,s}/a$. The band is the restriction of the displayed stack-level
+banding; an object of $\mathfrak G_v(U)$ is not assumed to come from an object of
+$\mathfrak P_r(U)$.
+
+Thus the theorem has two independent inputs: the component argument uses the
+sheaf $\pi_0(\mathfrak L_r)$, and the band argument uses the already supplied
+or descended stackification banding of $\mathfrak L_r$. A prestack-level
+banding on objects of $\mathfrak P_r$ is not an input to the last sentence
+unless \Cref{prop:stackification-band-descends} has first converted it into the
+displayed family on all objects of $\mathfrak L_r$.
 \end{theorem}
 
 \begin{proof}
-Since $\mathfrak L_r$ is a stack in groupoids and $\mathfrak G_v$ is a full substack, $\mathfrak G_v$ is again a stack in groupoids. Local nonemptiness follows from \Cref{lem:component-local-nonempty}: for every object $U$ of $\mathcal C_{p,s}/a$, there exists a cover $\{U_i\to U\}$ and objects $x_i\in\mathfrak L_r(U_i)$ with $[x_i]=v|_{U_i}$, so $(\mathfrak G_v)(U_i)\neq\varnothing$ for all $i$.
+We separate the stack and band arguments. The first part uses only connected
+components of the stack $\mathfrak L_r$; no object of $\mathfrak G_v(U)$ is
+replaced by an object of $\mathfrak P_r(U)$.
 
-Now let $x,y\in \mathfrak G_v(U)$. Then $[x]=[y]=v|_U\in \pi_0(\mathfrak L_r)(U)$. By the definition of the sheaf of connected components, there exists a cover $\{U_i\to U\}$ such that
+First, $\mathfrak G_v$ is a full substack of $\mathfrak L_r$. Let
+$\{U_i\to U\}$ be a cover and let $(x_i,\psi_{ij})$ be descent data in
+$\mathfrak G_v$. After forgetting the component condition, this is descent data
+in the stack $\mathfrak L_r$, so it has an effective descent object
+$x\in\mathfrak L_r(U)$ with isomorphisms $x|_{U_i}\cong x_i$. Since
+$[x_i]=v|_{U_i}$ and $\pi_0(\mathfrak L_r)$ is a sheaf, the sections
+$[x]$ and $v|_U$ agree after restriction to the cover and hence agree over $U$.
+Thus $x$ lies in $\mathfrak G_v(U)$. Morphism descent is inherited from
+$\mathfrak L_r$ because every fibre $\mathfrak G_v(U)$ is a full subcategory of
+$\mathfrak L_r(U)$.
+
+Second, $\mathfrak G_v$ is locally nonempty. For any object $U$ of
+$\mathcal C_{p,s}/a$, the section
+$v|_U\in\pi_0(\mathfrak L_r)(U)$ is locally represented by actual objects by
+\Cref{lem:pi0-stack-local-meaning}, item~\textup{(i)}. Hence there is a cover
+$\{U_i\to U\}$ and objects $x_i\in\mathfrak L_r(U_i)$ with
+$[x_i]=v|_{U_i}$. By definition these $x_i$ are objects of
+$\mathfrak G_v(U_i)$.
+
+Third, $\mathfrak G_v$ is locally connected. If $x,y\in\mathfrak G_v(U)$, then
 \[
-x|_{U_i}\cong y|_{U_i}
+[x]=[y]=v|_U
 \]
-for every $i$. Thus any two objects of $\mathfrak G_v(U)$ are locally isomorphic, so $\mathfrak G_v$ is a gerbe \cite[Tag 06NY]{StacksProject}. The banding is inherited from $\mathfrak L_r$: since $\mathfrak G_v$ is a full substack, the automorphism sheaf of any object $x\in \mathfrak G_v(U)$ coincides with its automorphism sheaf in $\mathfrak L_r(U)$, hence is identified with $\Band|_U$.
+in the sheaf $\pi_0(\mathfrak L_r)(U)$. By
+\Cref{lem:pi0-stack-local-meaning}, item~\textup{(ii)}, after a cover
+$\{U_i\to U\}$ the restrictions $x|_{U_i}$ and $y|_{U_i}$ are isomorphic. Thus
+$\mathfrak G_v$ is a gerbe over $\mathcal C_{p,s}/a$
+\cite[Tag 06NY]{StacksProject}.
+
+It remains only to identify its band. The needed identification is the
+stackification-to-component handoff of
+\Cref{prop:banded-stack-handoff,cor:no-prestack-only-component-band}. For
+$x\in\mathfrak G_v(U)$, fullness gives equality of automorphism sheaves
+\[
+\underline{\mathrm{Aut}}_{\mathfrak G_v}(x)
+=
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+\]
+on the slice, as in \Cref{lem:component-inherits-stack-band}. The displayed
+stackification banding therefore restricts to
+\[
+\Band|_U\xrightarrow{\beta^{\mathfrak L}_x}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+=
+\underline{\mathrm{Aut}}_{\mathfrak G_v}(x).
+\]
+By \Cref{prop:component-bands-are-stackification-bands}, this is the component
+banding $\beta^{\mathfrak G_v}_x$. It is a stack-level statement: it applies to
+arbitrary objects $x\in\mathfrak G_v(U)\subseteq\mathfrak L_r(U)$, including
+descent objects that do not lie in the essential image of $\mathfrak P_r(U)$. If
+the input began with a prestack-level banding, the displayed
+$\beta^{\mathfrak L}_x$ is the descended banding constructed in
+\Cref{prop:stackification-band-descends}; if the input was given directly as a
+stack-banded realization prestack, it is part of
+\Cref{def:realization-prestack}, item~\textup{(ii)}. No prestack-only automorphism
+identification is used at this step. Hence $\mathfrak G_v$ is a banded
+$\Band$-gerbe.
 \end{proof}
 
-\begin{definition}[Branch constancy]\label{def:branch-constancy}
-In the setting of \Cref{def:compatible-realization-stack}, we say that $\pi_0(\mathfrak L_r)$ is \emph{branch-constant over $a$} if for every object $U$ of $\mathcal C_{p,s}/a$, the restriction map
+\begin{corollary}[Branch obstructions use the stackified band]\label{cor:branch-obstruction-uses-stack-band}
+In the setting of \Cref{def:compatible-realization-stack}, the band used on every
+component gerbe is the restriction of the stack-level banding
 \[
-\rho_U:\pi_0(\mathfrak L_r)(a)\longrightarrow \pi_0(\mathfrak L_r)(U)
+\beta^{\mathfrak L}_x:\Band|_U\xrightarrow{\sim}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+\qquad (x\in\mathfrak L_r(U)).
 \]
-is bijective.
-\end{definition}
-
-\begin{corollary}[Global branch decomposition under branch constancy]\label{cor:branch-decomposition}
-Assume branch constancy over $a$ in the sense of \Cref{def:branch-constancy}. Then the canonical functor
+Equivalently, for each visible branch $v$, object $U$ of $\mathcal C_a$, and
+$x\in\mathfrak G_v(U)$, the component-gerbe band is the composite
 \[
-\coprod_{v\in \Vis_{p,s}(r)} \mathfrak G_v\longrightarrow \mathfrak L_r
+\Band|_U\xrightarrow{\beta^{\mathfrak L}_x}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+=
+\underline{\mathrm{Aut}}_{\mathfrak G_v}(x).
 \]
-is an equivalence of stacks in groupoids.
+Thus any branch \v{C}ech class later denoted $\omega_v$ is formed from the
+stackification banding on arbitrary objects of $\mathfrak L_r$, not from a
+prestack-only automorphism identification.
 \end{corollary}
 
 \begin{proof}
-Let $U\in \mathcal C_{p,s}/a$ and $x\in \mathfrak L_r(U)$. Put $\xi:=[x]\in \pi_0(\mathfrak L_r)(U)$. By surjectivity of $\rho_U$, there exists $v\in \pi_0(\mathfrak L_r)(a)$ such that $\rho_U(v)=\xi$. Hence $x\in \mathfrak G_v(U)$, so the displayed functor is essentially surjective on every fibre.
-
-For full faithfulness, let $x\in \mathfrak G_v(U)$ and $y\in \mathfrak G_w(U)$, and suppose there is a morphism $f:x\to y$ in $\mathfrak L_r(U)$. Any morphism in a groupoid is an isomorphism, hence $[x]=[y]$ in $\pi_0(\mathfrak L_r)(U)$. Therefore $\rho_U(v)=\rho_U(w)$. By injectivity of $\rho_U$, one gets $v=w$. Thus there are no morphisms in $\mathfrak L_r(U)$ between objects of distinct summands, and within each summand the morphism sets coincide because $\mathfrak G_v$ is a full substack.
+The displayed equality of automorphism sheaves is
+\Cref{lem:component-inherits-stack-band}, and the prohibition on applying only
+prestack-level maps to component objects is
+\Cref{cor:no-prestack-only-component-band}. The named component banding is
+\Cref{prop:component-bands-are-stackification-bands}. Theorem
+\Cref{thm:component-gerbe-decomposition} proves that $\mathfrak G_v$ is a gerbe
+and that this equality transports the stack-level $\Band$-banding of
+$\mathfrak L_r$ to $\mathfrak G_v$. The cocycle construction of
+\Cref{thm:cech-bridge-compatible-realizations} uses precisely those
+automorphism sheaves of local objects in $\mathfrak G_v$.
 \end{proof}
 
-\begin{proposition}[Constructing the \v{C}ech obstruction of a branch gerbe]\label{thm:cech-bridge-compatible-realizations}
-Assume $\mathfrak P_r$ is a gluing-sensitive realization prestack at $a$, and let $\mathfrak G_v$ be a banded component gerbe with band $\Band$ in the sense of \Cref{def:compatible-realization-stack}. Let
+\begin{definition}[Gerbe-adapted covers and the \v{C}ech comparison]\label{def:gerbe-adapted-cech-comparison}
+Let $\mathfrak G_v$ be a banded component gerbe over
 \[
-\mathcal U=\{a_i\to a\}_{i\in I}\in \Cov_{p,s}(a)
+\mathcal C_a=\mathcal C_{p,s}/a
 \]
-be a gerbe-adapted cover for $v$ in the sense of \Cref{def:cech-gluing-obstruction}, and write
+with band $\Band$. A cover
 \[
-U_{i_0\cdots i_n}
+\mathcal U=\{U_i\to a\}_{i\in I}
 \]
-for the corresponding simplices. Assume
+is \emph{gerbe-adapted for $\mathfrak G_v$} if its \v{C}ech nerve exists in
+$\mathcal C_a$, if $\mathfrak G_v(U_i)\neq\varnothing$ for every $i$, and if
 \[
-H^1(\mathcal C_a/U_i,\\Band)=0
-\qquad\text{and}\qquad
-H^1(\mathcal C_a/U_{ij},\\Band)=0
+H^1(U_i,\Band)=0,
+\qquad
+H^1(U_{ij},\Band)=0
 \]
-for all $i,j\in I$. Choose objects
+for all $i,j$. Here $U_{ij}$ denotes the corresponding pairwise object in the
+\v{C}ech nerve.
+
+For a filtered family $\mathcal A_v$ of gerbe-adapted covers, ordered by
+refinement, define
 \[
-x_i\in \mathfrak G_v(U_i).
+\check H^2_{\mathcal A_v}(\mathcal C_a,\Band)
+:=
+\varinjlim_{\mathcal U\in\mathcal A_v}\Cech^2(\mathcal U,\Band).
 \]
+The \emph{\v{C}ech-to-derived comparison map} used in this paper is the
+canonical homomorphism
+\[
+\kappa^2_{\mathcal A_v}:
+\check H^2_{\mathcal A_v}(\mathcal C_a,\Band)
+\longrightarrow
+H^2(\mathcal C_a,\Band)
+\]
+induced by the usual maps from cover \v{C}ech cohomology to sheaf cohomology.
+We say that $\mathcal A_v$ is \emph{$H^2$-detecting} if
+$\kappa^2_{\mathcal A_v}$ is injective, and \emph{$H^2$-computing} if
+$\kappa^2_{\mathcal A_v}$ is an isomorphism.
+\end{definition}
+
+\begin{definition}[Branch obstruction classes]\label{def:cech-gluing-obstruction}
+Work in the setting of \Cref{def:compatible-realization-stack}. For every
+visible branch
+\[
+v\in \Vis_{p,s}(r)\cong \pi_0(\mathfrak L_r)(a),
+\]
+first form the banded component gerbe $\mathfrak G_v$ by
+\Cref{thm:component-gerbe-decomposition}. Assume moreover that, for every such
+$v$, the gerbe-adapted covers of
+\Cref{def:gerbe-adapted-cech-comparison} contain a nonempty filtered cofinal
+family $\mathcal A_v$ in $\Cov_{p,s}(a)$. The filtered \v{C}ech class obtained
+from the branch gerbe
+$\mathfrak G_v$ and the restricted stackification banding of
+\Cref{cor:branch-obstruction-uses-stack-band} is denoted
+\[
+\omega_v\in
+\varinjlim_{\mathcal U\in\mathcal A_v}\Cech^2(\mathcal U,\Band)
+=:\Cech^2(\mathcal C_{p,s}/a,\Band)
+\]
+and is called the \emph{branch obstruction class} of $v$.
+
+This definition is downstream from the component-gerbe theorem. The notation
+$\omega_v$ is available only after the chosen realization prestack has supplied
+the stack-level maps
+\[
+\beta^{\mathfrak L}_x:\Band|_U\xrightarrow{\sim}
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(x)
+\qquad (x\in\mathfrak L_r(U)),
+\]
+and after those maps have been restricted to the already-proved gerbe
+$\mathfrak G_v$. No canonical obstruction class is attached to the bare
+set-valued functor $F_{p,s}$, nor to a prestack-only diagonal banding.
+\end{definition}
+
+\begin{definition}[Branch constancy]\label{def:branch-constancy}
+In the setting of \Cref{def:compatible-realization-stack}, for every object
+$U$ of $\mathcal C_a$ write
+\[
+\rho_U:\pi_0(\mathfrak L_r)(a)\longrightarrow \pi_0(\mathfrak L_r)(U),
+\qquad
+v\longmapsto v|_U
+\]
+for the restriction map in the sheaf of connected components. We say that
+$\pi_0(\mathfrak L_r)$ is \emph{branch-constant over $a$} if every $\rho_U$ is
+bijective.
+
+Equivalently, every local connected component of $\mathfrak L_r$ over $U$ is
+the restriction of a unique global visible branch
+\[
+v\in \Vis_{p,s}(r)\cong \pi_0(\mathfrak L_r)(a).
+\]
+\end{definition}
+
+\begin{corollary}[Global branch decomposition under branch constancy]\label{cor:branch-decomposition}
+Assume branch constancy over $a$ in the sense of
+\Cref{def:branch-constancy}. Then the canonical functor
+\[
+\Phi:\coprod_{v\in\Vis_{p,s}(r)}\mathfrak G_v\longrightarrow \mathfrak L_r,
+\]
+induced by the inclusions $\mathfrak G_v\hookrightarrow \mathfrak L_r$, is an
+equivalence of stacks in groupoids over $\mathcal C_a$.
+\end{corollary}
+
+\begin{proof}
+For each visible branch $v$, \Cref{thm:component-gerbe-decomposition} shows
+that $\mathfrak G_v$ is a stack, and the inclusion
+$\mathfrak G_v\hookrightarrow \mathfrak L_r$ is a morphism of stacks. These
+inclusions assemble to a morphism of fibred categories $\Phi$ as displayed.
+Since the target $\mathfrak L_r$ is already a stack, it is enough to prove that
+for every object $U$ of $\mathcal C_a$ the induced functor on fibres
+\[
+\Phi_U:\coprod_{v\in\Vis_{p,s}(r)}\mathfrak G_v(U)\longrightarrow \mathfrak L_r(U)
+\]
+is an equivalence of groupoids.
+
+We first prove full faithfulness. If
+$x\in \mathfrak G_v(U)$ and $y\in \mathfrak G_w(U)$ with $v=w$, then
+$\Phi_U$ is fully faithful on that summand because $\mathfrak G_v(U)$ is a full
+subcategory of $\mathfrak L_r(U)$ by definition. If instead $v\neq w$ and
+there were a morphism $x\to y$ in $\mathfrak L_r(U)$, then $x$ and $y$ would be
+isomorphic in $\mathfrak L_r(U)$, hence would define the same section of
+$\pi_0(\mathfrak L_r)(U)$. But
+\[
+[x]=v|_U=\rho_U(v),
+\qquad
+[y]=w|_U=\rho_U(w),
+\]
+so injectivity of $\rho_U$ from branch constancy would force $v=w$, a
+contradiction. Thus there are no morphisms in $\mathfrak L_r(U)$ between the
+images of distinct summands, exactly as in the coproduct groupoid. Hence
+$\Phi_U$ is fully faithful.
+
+We next prove essential surjectivity. Let $x\in \mathfrak L_r(U)$ and put
+$\xi=[x]\in\pi_0(\mathfrak L_r)(U)$. By surjectivity of $\rho_U$, there exists
+a unique
+\[
+v\in\pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r)
+\]
+with $\rho_U(v)=\xi$. By definition of $\mathfrak G_v(U)$ this means exactly
+that $x\in \mathfrak G_v(U)$, so $x$ lies in the image of $\Phi_U$.
+
+Thus every $\Phi_U$ is an equivalence. Therefore $\Phi$ is an equivalence of
+fibred categories over $\mathcal C_a$, and hence an equivalence of stacks in
+groupoids.
+\end{proof}
+
+\begin{theorem}[Unique-branch banded-gerbe reduction]\label{thm:unique-branch-banded-gerbe}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction}. Suppose moreover
+that $\pi_0(\mathfrak L_r)$ is branch-constant over $a$ and that
+\[
+\Vis_{p,s}(r)=\{v\}.
+\]
+Then the inclusion
+\[
+\mathfrak G_v\hookrightarrow \mathfrak L_r
+\]
+is an equivalence of $\Band$-banded stacks over $\mathcal C_a$. In particular,
+the realization stack $\mathfrak L_r$ is itself a banded $\Band$-gerbe, with
+band the stackification banding of \Cref{def:realization-prestack},
+item~\textup{(ii)}.
+
+If, in addition, the realization prestack is globally conservative at $a$, then
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\mathfrak L_r\ \text{is neutral over }a
+\quad\Longleftrightarrow\quad
+\mathfrak G_v\ \text{is neutral over }a.
+\]
+Consequently,
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\mathfrak L_r\ \text{is non-neutral over }a.
+\]
+If the chosen gerbe-adapted system $\mathcal A_v$ is $H^2$-detecting, these
+non-neutrality conditions are further equivalent to
+\[
+\omega_v\neq 0.
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{cor:branch-decomposition}, branch constancy gives an equivalence
+\[
+\coprod_{w\in\Vis_{p,s}(r)}\mathfrak G_w\simeq \mathfrak L_r.
+\]
+Since $\Vis_{p,s}(r)=\{v\}$, this equivalence is just the inclusion
+$\mathfrak G_v\hookrightarrow\mathfrak L_r$. The band on $\mathfrak G_v$ is, by
+\Cref{cor:branch-obstruction-uses-stack-band}, the restriction of the
+stack-level banding of $\mathfrak L_r$, so the equivalence respects the
+$\Band$-bandings. The stack $\mathfrak G_v$ is a banded gerbe by
+\Cref{thm:component-gerbe-decomposition}; hence the equivalent stack
+$\mathfrak L_r$ is a banded gerbe as well.
+
+Assume now global conservativity at $a$. The second equivalence follows because
+equivalent stacks have equivalent terminal fibres, so the terminal fibre
+$\mathfrak G_v(a)$ is nonempty exactly when $\mathfrak L_r(a)$ is nonempty.
+For a gerbe, neutrality over $a$ is precisely nonemptiness of the terminal
+fibre. The first equivalence is then \Cref{prop:no-new-global-objects}. Since
+the visible set is the singleton $\{v\}$, \Cref{thm:gerbe-null-semantics} identifies
+$\Null^{\mathrm{glue}}_s(r)$ with non-neutrality of the unique component gerbe,
+and the displayed equivalence transfers that condition to $\mathfrak L_r$.
+Finally, under the $H^2$-detecting hypothesis,
+\Cref{prop:cech-comparison-detects-nonneutrality} identifies non-neutrality of
+$\mathfrak G_v$ with $\omega_v\neq 0$.
+\end{proof}
+
+We use one sign and action convention for the rest of this section. Composition
+of arrows is written right-to-left. For multiplicative \v{C}ech cochains,
+\[
+(\delta h)_{ijk}=h_{jk}\,h_{ik}^{-1}\,h_{ij}.
+\]
+Edge isomorphisms are changed by source precomposition in the form
+\[
+\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}.
+\]
+With these two choices together, the new cocycle is multiplied by the inverse
+coboundary:
+\[
+g'_{ijk}=h_{ik}\,h_{jk}^{-1}\,h_{ij}^{-1}\,g_{ijk}
+=
+(\delta h)_{ijk}^{-1}g_{ijk}.
+\]
+Thus the displayed change $\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}$ never gives
+multiplication by the non-inverted coboundary under this convention. It gives
+$g'=(\delta h)^{-1}g$. Consequently, when a representative satisfies
+$g=\delta h$, this particular change of edge isomorphisms sends $g$ to the
+identity cocycle. Changing the edge isomorphisms by $\phi_{ij}\circ h_{ij}$
+instead, or replacing $h$ by $h^{-1}$, reverses the displayed inverse. The
+source-action convention fixed here is the convention used in every subsequent
+neutralization and independence argument. In particular, all later statements
+with the displayed edge change use the identity
+\[
+\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}
+\quad\Longrightarrow\quad
+g'=(\delta h)^{-1}g,
+\]
+not the non-inverted formula.
+
+\begin{lemma}[Change of edge trivializations]\label{lem:change-edge-trivializations}
+Let $\mathfrak G_v$ be a banded component gerbe with abelian band $\Band$, and let
+\[
+\phi_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim}x_j|_{U_{ij}}
+\]
+be edge isomorphisms on a cover $\mathcal U=\{U_i\to a\}$. Define
+\[
+g_{ijk}:=\phi_{ik}^{-1}|_{U_{ijk}}\circ \phi_{jk}|_{U_{ijk}}\circ \phi_{ij}|_{U_{ijk}}.
+\]
+Use the source-action convention in which a $1$-cochain acts on the edge isomorphism $\phi_{ij}$ by precomposition with an automorphism of its source. Thus, if $h=(h_{ij})\in \check C^1(\mathcal U,\Band)$ and
+\[
+\phi'_{ij}:=\phi_{ij}\circ h_{ij}^{-1},
+\]
+where $h_{ij}$ is viewed as an automorphism of the source $x_i|_{U_{ij}}$, then, with the multiplicative \v{C}ech convention
+\[
+(\delta h)_{ijk}=h_{jk}\,h_{ik}^{-1}\,h_{ij},
+\]
+so that, because $\Band$ is abelian,
+\[
+(\delta h)_{ijk}^{-1}=h_{ik}\,h_{jk}^{-1}\,h_{ij}^{-1},
+\]
+the cocycle $g'$ defined from the $\phi'_{ij}$ satisfies
+\[
+g'_{ijk}=h_{ik}\,h_{jk}^{-1}\,h_{ij}^{-1}\,g_{ijk}
+\]
+on every triple overlap. Equivalently,
+\[
+g'=(\delta h)^{-1}g.
+\]
+Thus changing the edge trivializations by precomposition with the source automorphisms $h_{ij}^{-1}$ changes the representative by the inverse of the \v{C}ech coboundary of $h$.
+With the opposite convention $\phi''_{ij}:=\phi_{ij}\circ h_{ij}$, the sign is reversed. The inverse convention above is the one used throughout this section, so a representative $g=\delta h$ is killed because
+\[
+g'=(\delta h)^{-1}g=(\delta h)^{-1}(\delta h)=1.
+\]
+\end{lemma}
+
+\begin{proof}
+All terms are restricted to $U_{ijk}$, and composition is written right-to-left. The inverse in the definition of $\phi'_{ij}$ is part of the convention: changing by $\phi_{ij}\circ h_{ij}^{-1}$ produces an inverse coboundary with the displayed definition of $\delta$. The raw composite is
+\[
+\begin{aligned}
+g'_{ijk}
+&=(\phi_{ik}\circ h_{ik}^{-1})^{-1}
+\circ(\phi_{jk}\circ h_{jk}^{-1})
+\circ(\phi_{ij}\circ h_{ij}^{-1})\\
+&=h_{ik}\circ\phi_{ik}^{-1}\circ\phi_{jk}\circ h_{jk}^{-1}\circ\phi_{ij}\circ h_{ij}^{-1}.
+\end{aligned}
+\]
+Let $\overline{h}_{jk}$ denote the transport of the source automorphism $h_{jk}$ of $x_j|_{U_{ijk}}$ to an automorphism of $x_i|_{U_{ijk}}$ along $\phi_{ij}$. Then
+\[
+h_{jk}^{-1}\circ \phi_{ij}
+=
+\phi_{ij}\circ \overline{h}_{jk}^{-1}.
+\]
+The banding identifies $\overline{h}_{jk}$ with the same section $h_{jk}$ of the abelian sheaf $\Band$; similarly $h_{ij}$ and $h_{ik}$ are already source automorphisms of $x_i$ after restriction to $U_{ijk}$. After this transport, all factors $h_{ik}$, $h_{jk}^{-1}$, $h_{ij}^{-1}$, and $g_{ijk}$ are automorphisms of $x_i|_{U_{ijk}}$, so the abelian banding permits the displayed reordering. Therefore
+\[
+\begin{aligned}
+g'_{ijk}
+&=h_{ik}\circ
+(\phi_{ik}^{-1}\circ\phi_{jk}\circ\phi_{ij})
+\circ \overline{h}_{jk}^{-1}
+\circ h_{ij}^{-1}\\
+&=h_{ik}\,g_{ijk}\,h_{jk}^{-1}\,h_{ij}^{-1}\\
+&=h_{ik}\,h_{jk}^{-1}\,h_{ij}^{-1}\,g_{ijk}\\
+&=(\delta h)_{ijk}^{-1}g_{ijk}.
+\end{aligned}
+\]
+\end{proof}
+
+\begin{corollary}[Neutralizing a coboundary representative]\label{cor:neutralizing-coboundary-representative}
+Use the convention of \Cref{lem:change-edge-trivializations}. Assume that the
+cocycle representative defined from the edge isomorphisms $\phi_{ij}$ satisfies
+\[
+g=\delta h
+\]
+for some $1$-cochain $h$. Then the changed edge isomorphisms
+\[
+\phi'_{ij}:=\phi_{ij}\circ h_{ij}^{-1}
+\]
+have obstruction cocycle equal to the identity. In particular, under this
+convention the inverse in $\phi_{ij}\circ h_{ij}^{-1}$ is the sign that kills a
+coboundary representative.
+\end{corollary}
+
+\begin{proof}
+By \Cref{lem:change-edge-trivializations}, the changed representative is
+\[
+g'=(\delta h)^{-1}g.
+\]
+If $g=\delta h$, then $g'=(\delta h)^{-1}(\delta h)=1$.
+\end{proof}
+
+\begin{remark}[Sign audit for edge changes]\label{rem:edge-change-sign-audit}
+The convention above is the one used in \Cref{thm:cech-bridge-compatible-realizations}. Thus the displayed change
+\[
+\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}
+\]
+does not produce multiplication by the non-inverted coboundary with our
+differential
+\[
+(\delta h)_{ijk}=h_{jk}h_{ik}^{-1}h_{ij}.
+\]
+It produces
+\[
+g'=(\delta h)^{-1}g.
+\]
+Equivalently, in additive notation the same calculation reads
+$g'=g-\delta h$. Any formula with the opposite additive sign for this same edge change
+uses the opposite action convention or the opposite sign for the \v{C}ech
+differential.
+\end{remark}
+
+\begin{theorem}[Stack-banded \v{C}ech obstruction of a branch gerbe]\label{thm:cech-bridge-compatible-realizations}
+Assume that $\mathfrak G_v$ is the banded component gerbe constructed in
+\Cref{thm:component-gerbe-decomposition}, with its band obtained by restricting
+the stackification banding as in \Cref{cor:branch-obstruction-uses-stack-band}.
+Let $\mathcal U=\{a_i\to a\}_{i\in I}$ be a cover in $\Cov_{p,s}(a)$ with
+\v{C}ech nerve in $\mathcal C_a$, denoting its simplices by
+$U_{i_0\cdots i_n}$. Assume $H^1(U_i,\Band)=H^1(U_{ij},\Band)=0$ for all
+$i,j\in I$, and choose $x_i\in\mathfrak G_v(U_i)$.
 Then:
 \begin{enumerate}[label=(\roman*),nosep]
-\item for every pair $(i,j)$ there exists an isomorphism
-\[
-\phi_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim} x_j|_{U_{ij}};
-\]
-\item on each triple overlap $U_{ijk}$, the element
-\[
-g_{ijk}:=\phi_{ik}^{-1}|_{U_{ijk}}\circ \phi_{jk}|_{U_{ijk}}\circ \phi_{ij}|_{U_{ijk}}
-\in \Band(U_{ijk})
-\]
-defines a Cech $2$-cocycle $g=(g_{ijk})\in \check Z^2(\mathcal U,\Band)$;
-\item for a fixed cover $\mathcal U$, the class $[g]\in \Cech^2(\mathcal U,\Band)$ depends only on the branch gerbe $\mathfrak G_v$ and on $\mathcal U$; we denote it by $[\omega_v(\mathcal U)]$. Moreover, if $\mathcal V$ refines $\mathcal U$, then the class obtained on $\mathcal V$ from the pulled-back local data is exactly $r_{\mathcal V\mathcal U}([\omega_v(\mathcal U)])$;
+\item edge isomorphisms
+$\phi_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim}x_j|_{U_{ij}}$ exist for all pairs;
+\item the composites
+$g_{ijk}:=\phi_{ik}^{-1}|_{U_{ijk}}\circ\phi_{jk}|_{U_{ijk}}\circ\phi_{ij}|_{U_{ijk}}$
+form a \v{C}ech $2$-cocycle with values in $\Band$;
+\item the class $[g]\in\Cech^2(\mathcal U,\Band)$ is determined by the branch
+gerbe, the stack-banded realization data, and the cover. With the source-action
+edge change $\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}$, the new representative
+satisfies $g'_{ijk}=h_{ik}h_{jk}^{-1}h_{ij}^{-1}g_{ijk}$, equivalently
+$g'=(\delta h)^{-1}g$; changing the local objects has the same inverse-coboundary
+effect after transport;
 \item the class $[g]$ vanishes if and only if the branch gerbe $\mathfrak G_v$ is neutral over $a$.
 \end{enumerate}
-\end{proposition}
+\leanverified{paper_gluing_failure_cech_bridge_compatible_realizations}
+\end{theorem}
+
+\begin{remark}
+The sibling acyclic-cover construction is
+\cite[Proposition~4.50]{HomologicalVisibilityGluingObstructions2026}. The
+concrete increments here are that the cocycle is formed using the restricted
+stackification banding of \Cref{cor:branch-obstruction-uses-stack-band}, and that
+the source-action convention is fixed explicitly so an edge change
+$\phi_{ij}\mapsto\phi_{ij}\circ h_{ij}^{-1}$ changes the representative by
+$g'=(\delta h)^{-1}g$.
+\end{remark}
 
 \begin{proof}
 Because $\mathfrak G_v$ is a banded gerbe, the sheaf
@@ -142,7 +702,7 @@ Because $\mathfrak G_v$ is a banded gerbe, the sheaf
 \]
 is a $\Band|_{U_{ij}}$-torsor for every pair $(i,j)$. By the standard classification of torsors by $H^1$ \cite[Chap.~III]{MacLaneMoerdijk1994}, \cite[Sec.~11]{StacksProject}, the vanishing
 \[
-H^1(\mathcal C_a/U_{ij},\\Band)=0
+H^1(U_{ij},\Band)=0
 \]
 forces this torsor to be trivial. Hence global sections exist, which gives the isomorphisms $\phi_{ij}$ and proves \textup{(i)}.
 
@@ -150,53 +710,65 @@ For \textup{(ii)}, the composite
 \[
 \phi_{ik}^{-1}|_{U_{ijk}}\circ \phi_{jk}|_{U_{ijk}}\circ \phi_{ij}|_{U_{ijk}}
 \]
-is an automorphism of $x_i|_{U_{ijk}}$, hence a section of $\Band(U_{ijk})$. The usual associativity calculation on quadruple overlaps shows that $(g_{ijk})$ satisfies the Cech cocycle identity \cite[Chap.~IV]{Giraud1971}, \cite[Sec.~11]{StacksProject}.
+is an automorphism of $x_i|_{U_{ijk}}$, hence a section of $\Band(U_{ijk})$. The usual associativity calculation on quadruple overlaps shows that $(g_{ijk})$ satisfies the \v{C}ech cocycle identity \cite[Chap.~IV]{Giraud1971}, \cite[Sec.~11]{StacksProject}.
+With the convention
+\[
+(\delta g)_{ijkl}=g_{jkl}\,g_{ikl}^{-1}\,g_{ijl}\,g_{ijk}^{-1},
+\]
+this identity is obtained by comparing the two composites from
+$x_i|_{U_{ijkl}}$ to $x_l|_{U_{ijkl}}$:
+\[
+(\phi_{kl}\circ\phi_{jk})\circ\phi_{ij}
+\qquad\text{and}\qquad
+\phi_{kl}\circ(\phi_{jk}\circ\phi_{ij}).
+\]
+After substituting
+\[
+\phi_{jk}\circ\phi_{ij}=\phi_{ik}\circ g_{ijk}
+\]
+and the analogous identities for the other triples, associativity gives
+\[
+g_{jkl}\,g_{ikl}^{-1}\,g_{ijl}\,g_{ijk}^{-1}=1.
+\]
+Thus $g\in\check Z^2(\mathcal U,\Band)$ with the same sign convention used below.
 
-For \textup{(iii)}, first change the $\phi_{ij}$ while keeping the objects $x_i$ fixed. Any other choice has the form
+For \textup{(iii)}, first change the $\phi_{ij}$ while keeping the objects $x_i$ fixed. With the source-action convention fixed above, any other choice may be written uniquely in the form
 \[
 \phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}
 \]
-for a $1$-cochain $h=(h_{ij})\in \check C^1(\mathcal U,\Band)$, and the corresponding cocycle is
+for a $1$-cochain $h=(h_{ij})\in \check C^1(\mathcal U,\Band)$, where $h_{ij}$ is viewed, via the banding, as an automorphism of $x_i|_{U_{ij}}$. By \Cref{lem:change-edge-trivializations}, the corresponding cocycle is
 \[
-g'=(\delta h)\, g.
+g'=(\delta h)^{-1}g.
 \]
-Thus the Cech class is unchanged.
+Equivalently, on each triple overlap,
+\[
+g'_{ijk}
+=h_{ik}\,h_{jk}^{-1}\,h_{ij}^{-1}\,g_{ijk},
+\]
+after transporting the $h_{jk}$-factor along $\phi_{ij}$ and using the abelian
+banding. Thus the change $\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}$ gives the
+inverse coboundary with the present source-action convention, not $\delta h$.
+Thus the \v{C}ech class is unchanged, since multiplication by an inverse coboundary represents the same cohomology class. The inverse is also essential for the neutralization direction: with this convention, if $g=\delta h$, then the replacement $\phi_{ij}\mapsto \phi_{ij}\circ h_{ij}^{-1}$ gives $g'=(\delta h)^{-1}g=1$.
 
 Next change the local objects. If $x'_i\in \mathfrak G_v(U_i)$ is another choice, then
 \[
 \mathrm{Isom}(x_i,x'_i)
 \]
-is a $\Band|_{U_i}$-torsor. Since $H^1(\mathcal C_a/U_i,\\Band)=0$, this torsor is trivial, so we may choose an isomorphism
+is a $\Band|_{U_i}$-torsor. Since $H^1(U_i,\Band)=0$, this torsor is trivial, so we may choose an isomorphism
 \[
 \psi_i:x_i\xrightarrow{\sim} x'_i.
 \]
-Transporting the $\phi_{ij}$ across the $\psi_i$ shows that the cocycle attached to $(x'_i)$ differs from $g$ by a coboundary.
-
-Now let $\mathcal V=\{b_j\to a\}_{j\in J}$ be a refinement of $\mathcal U$ via $\lambda:J\to I$. Pull back the local data by setting
+Transport the edge isomorphisms by setting
 \[
-y_j:=x_{\lambda(j)}|_{b_j},
-\qquad
-\theta_{jk}:=\phi_{\lambda(j)\lambda(k)}|_{b_j\wedge b_k}.
+\widetilde\phi_{ij}:=\psi_j|_{U_{ij}}\circ \phi_{ij}\circ \psi_i^{-1}|_{U_{ij}}.
 \]
-The cocycle attached to $(y_j,\theta_{jk})$ is
-\[
-(r_{\mathcal V\mathcal U}g)_{jkl}
-=
-g_{\lambda(j)\lambda(k)\lambda(l)}\big|_{b_j\wedge b_k\wedge b_l},
-\]
-exactly as in \Cref{rem:cech-refinement-maps}. The identities
-\[
-r_{\mathcal W\mathcal V}\circ r_{\mathcal V\mathcal U}=r_{\mathcal W\mathcal U},
-\qquad
-r_{\mathcal V\mathcal U}(\delta h)=\delta(r_{\mathcal V\mathcal U}h)
-\]
-show that the induced cohomology classes are functorial under further refinement and remain independent of the auxiliary choices.
+The cocycle attached to $(x'_i,\widetilde\phi_{ij})$ is the conjugate of $g$ by the $\psi_i$ and hence represents the same $\Band$-valued cochain under the banding. Any independently chosen edge isomorphisms for the $x'_i$ differ from the $\widetilde\phi_{ij}$ by a $1$-cochain, so \Cref{lem:change-edge-trivializations} shows that the resulting cocycle differs from $g$ by multiplication by an inverse coboundary. Finally, passage to a refinement pulls the cocycle back along the refinement map, so the induced class is stable in the filtered \v{C}ech system.
 
 If the gerbe is neutral, choose a global object $x\in \mathfrak G_v(a)$. Then each
 \[
 \mathrm{Isom}(x|_{U_i},x_i)
 \]
-is a $\Band|_{U_i}$-torsor, hence trivial by $H^1(\mathcal C_a/U_i,\\Band)=0$. Choose isomorphisms
+is a $\Band|_{U_i}$-torsor, hence trivial by $H^1(U_i,\Band)=0$. Choose isomorphisms
 \[
 \psi_i:x|_{U_i}\xrightarrow{\sim} x_i.
 \]
@@ -204,7 +776,7 @@ With
 \[
 \phi_{ij}:=\psi_j|_{U_{ij}}\circ \psi_i^{-1}|_{U_{ij}},
 \]
-the resulting cocycle is identically zero. Thus neutrality implies $[g]=0$.
+the resulting cocycle is the identity cocycle. Thus neutrality implies $[g]=0$.
 
 Conversely, if $[g]=0$, choose a $1$-cochain $h=(h_{ij})$ with
 \[
@@ -214,39 +786,88 @@ Replacing $\phi_{ij}$ by
 \[
 \phi'_{ij}:=\phi_{ij}\circ h_{ij}^{-1},
 \]
-we obtain isomorphisms satisfying the exact cocycle condition on triple overlaps. Since $\mathfrak G_v$ is a stack, the descent datum $(x_i,\phi'_{ij})$ is effective and glues to a global object over $a$. Hence the gerbe is neutral.
+the neutralization calculation of
+\Cref{cor:neutralizing-coboundary-representative} gives
+\[
+g'=1.
+\]
+Thus the new edge isomorphisms satisfy the exact cocycle condition on triple
+overlaps. Since $\mathfrak G_v$ is a stack, the descent datum
+$(x_i,\phi'_{ij})$ is effective and glues to a global object over $a$. Hence the
+gerbe is neutral.
 \end{proof}
 
-\begin{theorem}[Branched gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
-Assume that $\mathfrak P_r$ is a gluing-sensitive realization prestack at $a$ in the sense of \Cref{def:gluing-sensitive}. Then, for the admitted reference $r:\mathsf{Ref}_s$ under consideration,
+\begin{proposition}[Comparison detects non-neutral branch gerbes]\label{prop:cech-comparison-detects-nonneutrality}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction} for a visible
+branch $v$, and let
 \[
-M,p\Vdash \CompSec_s(r)
+\gamma(\mathfrak G_v)\in H^2(\mathcal C_a,\Band)
+\]
+be the Giraud cohomology class of the banded gerbe $\mathfrak G_v$. Then the
+comparison map of \Cref{def:gerbe-adapted-cech-comparison} sends the filtered
+branch class to the gerbe class:
+\[
+\kappa^2_{\mathcal A_v}(\omega_v)=\gamma(\mathfrak G_v).
+\]
+Consequently, if $\mathcal A_v$ is $H^2$-detecting, then
+\[
+\omega_v=0
 \quad\Longleftrightarrow\quad
-\Vis_{p,s}(r)\neq\varnothing.
+\mathfrak G_v\ \text{is neutral over }a,
 \]
-Moreover,
+and therefore
 \[
-M,p\Vdash \Sec_s(r)
+\omega_v\neq 0
 \quad\Longleftrightarrow\quad
-\exists v\in \Vis_{p,s}(r)\ \text{such that}\ \mathfrak G_v\ \text{is neutral}.
+\mathfrak G_v\ \text{is non-neutral over }a.
 \]
-Consequently,
+\end{proposition}
+
+\begin{proof}
+For every gerbe-adapted cover $\mathcal U\in\mathcal A_v$, the cocycle
+constructed in \Cref{thm:cech-bridge-compatible-realizations} is the standard
+\v{C}ech cocycle of the banded gerbe obtained from local objects and edge
+isomorphisms. The canonical map from cover \v{C}ech cohomology to derived
+sheaf cohomology sends this cocycle to the Giraud class of the gerbe
+\cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. This construction
+is compatible with refinement by \Cref{thm:cech-bridge-compatible-realizations}
+\textup{(iii)}, so it passes to the filtered colimit and gives
 \[
-M,p\Vdash \Null^{\mathrm{glue}}_s(r)
-\quad\Longleftrightarrow\quad
-\Vis_{p,s}(r)\neq\varnothing
-\ \text{and}\
-\forall v\in \Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral}.
+\kappa^2_{\mathcal A_v}(\omega_v)=\gamma(\mathfrak G_v).
 \]
-If, in addition, for each visible branch $v$ one chooses a gerbe-adapted cover $\mathcal U_v$ in the sense of \Cref{def:cech-gluing-obstruction}, then the last condition is equivalent to
+The classification of banded gerbes says that $\mathfrak G_v$ is neutral over
+$a$ exactly when $\gamma(\mathfrak G_v)=0$
+\cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. If
+$\kappa^2_{\mathcal A_v}$ is injective, then
 \[
-\Vis_{p,s}(r)\neq\varnothing
-\ \text{and}\
-[\,\omega_v(\mathcal U_v)\,]\neq 0\ \text{for every}\ v\in \Vis_{p,s}(r).
+\omega_v=0
+\Longleftrightarrow
+\kappa^2_{\mathcal A_v}(\omega_v)=0
+\Longleftrightarrow
+\gamma(\mathfrak G_v)=0,
 \]
+which proves the claim.
+\end{proof}
+
+\begin{theorem}[Branchwise gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
+\leanverified{paper_conservative_extension_gerbe_null_semantics_focused}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction} for the chosen stack-banded realization prestack $\mathfrak P_r$, together with global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then, for the admitted reference under consideration, compatible local sectionability is equivalent to $\Vis_{p,s}(r)\neq\varnothing$, global sectionability is equivalent to the existence of a neutral visible component gerbe, and gluing-level absence is equivalent to nonempty visibility together with non-neutrality of every visible component gerbe.
+If, in addition, for every visible branch $v$ the chosen gerbe-adapted system
+$\mathcal A_v$ is $H^2$-detecting in the sense of
+\Cref{def:gerbe-adapted-cech-comparison} (in particular, if it is
+$H^2$-computing), then the gluing-level condition is equivalently
+$\Vis_{p,s}(r)\neq\varnothing$ and $\omega_v\neq 0$ for every visible branch.
 In particular, the single obstruction class picture is recovered precisely when $|\Vis_{p,s}(r)|=1$.
-\leanverified{paper_gluing_failure_gerbe_null_semantics}
 \end{theorem}
+
+\begin{remark}
+The sibling neutral-component comparison is
+\cite[Proposition~4.55]{HomologicalVisibilityGluingObstructions2026}. The
+concrete increment here is the branchwise gluing-null classification: compatible
+local existence, neutral component gerbes, and $H^2$-detected obstruction
+nonvanishing are combined to characterize exactly when every visible branch is
+non-neutral.
+\end{remark}
 
 \begin{proof}
 The first equivalence is the combination of \Cref{thm:sheafification-characterization,thm:visible-value-components}. Indeed, compatible local sectionability is equivalent to the nonemptiness of $(a_{p,s}F_{p,s})(a)$, and this set is exactly $\Vis_{p,s}(r)$.
@@ -269,5 +890,12 @@ Since $r$ is admitted, the definition
 \]
 now yields the third equivalence immediately.
 
-For the final claim, \Cref{thm:cech-bridge-compatible-realizations}(iv) identifies the vanishing of each cover-relative class $[\omega_v(\mathcal U_v)]$ with neutrality of the corresponding component gerbe. If $|\Vis_{p,s}(r)|=1$, there is therefore only one chosen branch obstruction class to test.
+For the final claim, \Cref{prop:cech-comparison-detects-nonneutrality} says
+that injectivity of the comparison map
+\[
+\kappa^2_{\mathcal A_v}:
+\check H^2_{\mathcal A_v}(\mathcal C_a,\Band)\to H^2(\mathcal C_a,\Band)
+\]
+identifies $\omega_v\neq 0$ with non-neutrality of the corresponding component
+gerbe. Applying this branch by branch gives the displayed equivalence.
 \end{proof}

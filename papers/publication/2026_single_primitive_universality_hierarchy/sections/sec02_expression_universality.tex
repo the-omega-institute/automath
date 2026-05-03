@@ -1,125 +1,98 @@
-% ══════════════════════════════════════════════════════════
-\section{Expression Universality: The EML Paradigm}\label{sec:L0}
-% ══════════════════════════════════════════════════════════
+\section{Expression universality}\label{sec:L0}
 
-We recall the main result of~\cite{Odrzywołek2026} and
-extract from it a precise definition of expression universality.
-
-% ── 2.1  The EML operator ─────────────────────────────────
-\subsection{The EML operator and the 36-element basis}
+We begin with the expression-level input.  Throughout this section
+\(\operatorname{Log}\) denotes the principal branch of the complex
+logarithm.
 
 \begin{definition}[EML operator]\label{def:eml}
-The \emph{Exp-Minus-Log} binary operator is
+The \emph{Exp-Minus-Log} operation is the partial binary operation
+on \(\CC\) with domain \(\CC\times\CC^*\) given by
 \[
-  \eml \colon \CC \times \CC^{*} \;\longrightarrow\; \CC,
+  \eml \colon \CC\times\CC^*\longrightarrow \CC,
   \qquad
-  \eml(x,y) \;=\; e^{x} - \operatorname{Log} y,
+  \eml(x,y)=e^x-\operatorname{Log}y .
 \]
-where $\operatorname{Log}$ denotes the principal-branch
-logarithm on~$\CC^{*}$.
-(The complex domain is essential: constants such as~$i$
-and trigonometric functions are generated via Euler's
-formula; see~\cite{Odrzywołek2026}.)
 \end{definition}
 
-Odrzywołek identifies a 36-element \emph{scientific calculator
-basis}~$\mathcal{B}_{36}$ comprising 8~constants (including
-$\pi,e,i,-1,1,2$ and input variables), 20~unary functions
-(exp, ln, reciprocal, square root, square, trigonometric,
-inverse trigonometric, hyperbolic, inverse hyperbolic, and the
-sigmoid), and 8~binary operations ($+,-,\times,\div$, logarithm,
-power, average, hypotenuse).
+The complex domain is part of the convention.  Constants such as
+\(i\), and hence the trigonometric functions, are obtained from the
+usual exponential identities.  All branch choices below are made in
+this principal-branch sense.  Thus an EML term is interpreted only at
+points where every second argument of \(\eml\) is nonzero and the
+principal-branch identities used in its construction are valid.  We
+do not assert a branch-independent calculus of arbitrary elementary
+expressions.
 
-\begin{theorem}[Odrzywołek {\cite[Thm.~1]{Odrzywołek2026}}]
+\begin{proposition}[Odrzywo{\l}ek]
 \label{thm:eml-universality}
-Every function in~$\mathcal{B}_{36}$ is representable, on a
-suitable domain of definition for the principal-branch
-logarithm, as a finite composition of\/ $\eml$ and the
-constant~$1$.  Explicitly, for $x$ in the right half-plane
-$\{\Re(x) > 0\}$:
+Let \(\mathcal B_{36}\) be Odrzywo{\l}ek's scientific-calculator
+basis, consisting of the indicated constants and variables, the
+usual elementary unary functions, and the standard binary operations
+\(+,-,\times,\div\), logarithm, power, average, and hypotenuse.
+Then each operation in \(\mathcal B_{36}\) is represented, on its
+corresponding principal-branch domain, by a finite expression built
+from \(\eml\) and the constant \(1\)
+\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
+In particular, for \(x\) in the right half-plane,
 \begin{align}
-  e^{x}  &= \eml(x,\, 1), \label{eq:eml-exp}\\
-  \operatorname{Log} x
-         &= \eml\!\bigl(1,\;
-            \eml(\eml(1,x),\,1)\bigr), \label{eq:eml-ln}\\
-  e      &= \eml(1,1). \label{eq:eml-e}
+  e^x &= \eml(x,1), \label{eq:eml-exp}\\
+  \operatorname{Log}x
+      &= \eml\!\bigl(1,\eml(\eml(1,x),1)\bigr),
+         \label{eq:eml-ln}\\
+  e   &= \eml(1,1). \label{eq:eml-e}
 \end{align}
-Outside the principal domain, the identities hold up to the
-branch structure of\/ $\operatorname{Log}$; for example,
-at~$x=-1$ the right-hand side of~\eqref{eq:eml-ln} returns
-$-i\pi$, whereas $\operatorname{Log}(-1) = i\pi$, reflecting
-the standard branch cut along the negative real axis.
-From these three identities, the remaining 33 elements
-of~$\mathcal{B}_{36}$ follow by further nesting,
-domain-by-domain.
-\end{theorem}
+Away from the principal domain the same formulas have the expected
+branch dependence.  For instance, the right side of
+\eqref{eq:eml-ln} gives \(-i\pi\) at \(x=-1\), while
+\(\operatorname{Log}(-1)=i\pi\).
+\end{proposition}
 
-The representation space is governed by the context-free grammar
+The induced syntax has the form
 \begin{equation}\label{eq:eml-grammar}
-  S \;\longrightarrow\; 1 \;\mid\; \eml(S,\,S),
+  S\longrightarrow 1 \mid x_i \mid \eml(S,S),
 \end{equation}
-so that every representable function corresponds to a finite binary
-tree with $\eml$ at each internal node and~$1$ (or an input
-variable) at each leaf.
-
-% ── 2.2  Definition of expression universality ────────────
-\subsection{Formal definition}
+where the \(x_i\) are input variables.
 
 \begin{definition}[Expression universality]\label{def:expr-univ}
-Let $\mathcal{F}$ be a family of functions and
-$\sigma \colon D^{2} \to D$ a binary operator on a domain~$D$
-containing a distinguished element~$c_0 \in D$.
-We say the pair $(\sigma, c_0)$ is
-\emph{expression-universal for~$\mathcal{F}$} if every $f \in
-\mathcal{F}$ can be written as a term in the grammar
+Let \(\mathcal F\) be a family of functions.  Let
+\(\sigma\colon\dom(\sigma)\subseteq D^2\to D\) be a partial binary
+operation on a set \(D\), and let \(c_0\in D\).  Terms in the
+grammar
 \[
-  S \;\longrightarrow\; c_0 \;\mid\; x_i
-    \;\mid\; \sigma(S,\,S)
+  S\longrightarrow c_0 \mid x_i \mid \sigma(S,S).
 \]
-where $x_i$ range over input variables.
+are interpreted on their admissible domains.  We say that the pair
+\((\sigma,c_0)\) is \emph{expression-universal for
+\(\mathcal F\)} if, for every \(f\in\mathcal F\), some such term
+agrees with \(f\) on the specified domain of \(f\).
 \end{definition}
 
-\begin{remark}\label{rem:no-canon}
-Expression universality is purely \emph{existential}:
-it asserts that a representation exists, but provides no intrinsic
-canonical form.  Two distinct trees may compute the same function,
-and deciding their equivalence requires external reasoning
-(simplification rules, numerical evaluation, etc.) that is not part
-of the grammar~\eqref{eq:eml-grammar}.
-\end{remark}
+The definition is deliberately existential.  It asserts that a term
+exists, but does not select one.  The grammar
+\eqref{eq:eml-grammar} therefore gives no word problem, no canonical
+representative, and no internal operation on semantic equivalence
+classes.  For example, the identity function can be written as
+\[
+  x=\eml(\operatorname{Log}x,\eml(1,x))
+\]
+on the corresponding principal domain.  Substituting the EML term
+for \(\operatorname{Log}x\) from \eqref{eq:eml-ln} gives a tree in
+the grammar.  Further representatives are obtained by inserting
+cancelling subexpressions.
 
 \begin{remark}\label{rem:eml-variants}
-Odrzywołek also identifies the variant
-$\mathrm{edl}(x,y) = e^{x}/\ln y$ paired with~$e$ as another
-expression-universal operator, and notes the negated form
-$-\!\eml(y,x) = \ln x - e^{y}$ paired with~$-\infty$.
-The universality phenomenon is thus not an isolated accident but a
-structural feature of $\exp$--$\ln$ duality.
+Odrzywo{\l}ek also gives closely related one-operation
+representations, for instance
+\(\mathrm{edl}(x,y)=e^x/\ln y\) paired with \(e\), and the negated
+form \(-\eml(y,x)=\ln x-e^y\) paired with \(-\infty\)
+\cite{Odrzywolek2026}.  The phenomenon is a feature of the
+\(\exp\)--\(\log\) pair rather than of one isolated formula.
 \end{remark}
 
-% ── 2.3  Structural limits of L0 ─────────────────────────
-\subsection{Structural boundaries}
-
-Expression universality collapses the function \emph{library} but
-leaves two layers untouched:
-
-\begin{enumerate}[label=(\roman*)]
-\item \textbf{Operations are external.}
-  The act of composing two EML trees, evaluating a tree at a point,
-  or deciding whether two trees represent the same function---none
-  of these is internal to the grammar.
-  Composition is meta-level tree grafting; evaluation is an external
-  interpreter.
-
-\item \textbf{No canonical forms.}
-  The function $x \mapsto x$ can be represented as
-  $\eml(\ln x, \eml(1,x))$ or via many other trees.
-  There is no finite, computable normalization procedure
-  that maps every EML tree to a unique representative of its
-  equivalence class.  (This will be the key separation from~L1
-  in~\Cref{sec:strictness}.)
-\end{enumerate}
-
-These boundaries are not defects of the EML construction; they are
-intrinsic to expression universality as defined.  Overcoming them
-requires moving to a qualitatively different kind of universality.
+\begin{remark}\label{rem:no-canon}
+Expression universality supplies no analytic normalization.  This is
+not merely a missing step in the construction: by
+\Cref{thm:separation}, the EML representatives obtained from
+Richardson's elementary fragment cannot carry a computable canonical
+form for their transported real semantics.
+\end{remark}

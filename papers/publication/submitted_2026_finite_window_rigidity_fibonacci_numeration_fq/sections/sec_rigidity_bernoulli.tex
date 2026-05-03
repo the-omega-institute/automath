@@ -1,0 +1,214 @@
+\subsection{Bernoulli measures and block statistics}
+
+We now pass from exact block transport to explicit probability laws.  The block
+bijection $B_{m,n}$ identifies each admissible folded block with one raw
+binary block of length $n+m-1$, so Bernoulli product measures push forward to
+closed cylinder laws on the folded alphabet.
+
+\begin{theorem}[Bernoulli transport and exact cylinder law]
+\label{thm:bernoulli-transport-cylinder-law}
+Fix $m\ge 3$ and let $\nu_p$ be the Bernoulli product measure on
+$\{0,1\}^{\ZZ}$ with parameter $p\in(0,1)$.  Set
+\[
+\mu_{m,p}:=(\Phi_m)_*\nu_p.
+\]
+For a finite word $w$ in either shift space, write $[w]_0$ for the cylinder on
+the coordinates $0,\ldots,\lvert w\rvert-1$.  Then for every $n\ge m$ and
+every $a\in\mathcal L_n(Y_m)$,
+\[
+\mu_{m,p}([a]_0)
+=
+\nu_p([\omega(a)]_0)
+=
+p^{|\omega(a)|_1}(1-p)^{n+m-1-|\omega(a)|_1},
+\qquad
+\omega(a):=B_{m,n}^{-1}(a),
+\]
+where $|\omega(a)|_1$ denotes the number of $1$'s in the raw block
+$\omega(a)$.
+
+In particular, when $p=\tfrac12$ one has
+\[
+\mu_{m,1/2}([a]_0)=2^{-(n+m-1)}
+\qquad (a\in\mathcal L_n(Y_m),\ n\ge m),
+\]
+so every admissible folded block of length $n\ge m$ is equally likely.
+\end{theorem}
+
+\begin{proof}
+By definition of the pushforward measure,
+\[
+\mu_{m,p}([a]_0)=\nu_p(\Phi_m^{-1}([a]_0)).
+\]
+Now $\Phi_m(s)\in[a]_0$ means precisely that the raw block
+$s_0\cdots s_{n+m-2}\in\Omega_{n+m-1}$ maps to $a$ under $B_{m,n}$.  Since
+Theorem~\ref{thm:block-bijection-threshold} makes $B_{m,n}$ bijective, this is
+equivalent to
+\[
+s_0\cdots s_{n+m-2}=\omega(a):=B_{m,n}^{-1}(a).
+\]
+Hence
+\[
+\Phi_m^{-1}([a]_0)=[\omega(a)]_0.
+\]
+The Bernoulli product law of that raw cylinder is
+\[
+\nu_p([\omega(a)]_0)
+=
+p^{|\omega(a)|_1}(1-p)^{n+m-1-|\omega(a)|_1},
+\]
+which proves the formula.  The case $p=\tfrac12$ is immediate.
+\end{proof}
+
+\begin{corollary}[Exact entropy profile and excess entropy]
+\label{cor:exact-entropy-profile}
+Let $(Y_t)_{t\in\ZZ}$ be the coordinate process on $Y_m$ under $\mu_{m,p}$, and
+write
+\[
+h_2(p):=-p\log_2 p-(1-p)\log_2(1-p).
+\]
+Then for every $n\ge m$,
+\[
+H_{\mu_{m,p}}(Y_0^{n-1})=(n+m-1)h_2(p).
+\]
+Consequently
+\[
+h_{\mu_{m,p}}(\sigma)=h_2(p),
+\qquad
+E(\mu_{m,p})=(m-1)h_2(p),
+\]
+where $E(\mu_{m,p})$ denotes the excess entropy.  In particular, for
+$p=\tfrac12$ one has
+\[
+H_{\mu_{m,1/2}}(Y_0^{n-1})=n+m-1,
+\qquad
+E(\mu_{m,1/2})=m-1.
+\]
+\end{corollary}
+
+\begin{proof}
+Fix $n\ge m$.  By Theorem~\ref{thm:bernoulli-transport-cylinder-law}, the map
+$a\mapsto \omega(a)=B_{m,n}^{-1}(a)$ is a bijection from $\mathcal L_n(Y_m)$
+onto $\Omega_{n+m-1}$, and the probability of the cylinder $[a]_0$ under
+$\mu_{m,p}$ is exactly the Bernoulli probability of the raw cylinder
+$[\omega(a)]_0$.  Therefore
+\[
+H_{\mu_{m,p}}(Y_0^{n-1})
+=
+-\sum_{a\in\mathcal L_n(Y_m)}\mu_{m,p}([a]_0)\log_2\mu_{m,p}([a]_0)
+\]
+equals the Shannon entropy of a Bernoulli block of length $n+m-1$, namely
+$(n+m-1)h_2(p)$.
+
+Dividing by $n$ and letting $n\to\infty$ gives
+$h_{\mu_{m,p}}(\sigma)=h_2(p)$.  The exact linear formula also yields
+\[
+E(\mu_{m,p})
+=
+\lim_{n\to\infty}\bigl(H_{\mu_{m,p}}(Y_0^{n-1})-nh_{\mu_{m,p}}(\sigma)\bigr)
+=(m-1)h_2(p).
+\]
+The case $p=\tfrac12$ follows from $h_2(\tfrac12)=1$.
+\end{proof}
+
+\begin{theorem}[Exact Markov order under Bernoulli transport]
+\label{thm:exact-markov-order-bernoulli}
+\leanverified{paper_resolution_folding_exact_markov_order_bernoulli}
+Fix $m\ge 3$ and $p\in(0,1)$.  For every block
+\[
+\beta=a_1\cdots a_m\in\mathcal L_m(Y_m),
+\]
+let $v(\beta)\in V_m$ denote the terminal suffix state of the unique path in
+$G_m$ carrying $\beta$.  Then for every $t\in\ZZ$ and every $b\in\{0,1\}$,
+\[
+\mu_{m,p}\bigl(
+Y_{t+1}=\Fold_m(v(\beta)b)\,\big|\,Y_{t-m+1}\cdots Y_t=\beta
+\bigr)
+=
+p^b(1-p)^{1-b}.
+\]
+In particular, under $\mu_{m,p}$ the coordinate process $(Y_t)_{t\in\ZZ}$ is
+an $m$-step Markov process.  It is not an $(m-1)$-step Markov process.
+\end{theorem}
+
+\begin{proof}
+By shift invariance it suffices to prove the conditional formula at time
+$t=m-1$.  Fix
+\[
+\beta=a_1\cdots a_m\in\mathcal L_m(Y_m),
+\]
+and let
+\[
+\omega(\beta)=\omega_1\cdots\omega_{2m-1}:=B_{m,m}^{-1}(\beta).
+\]
+The terminal suffix state of the unique path carrying $\beta$ is therefore
+\[
+v(\beta)=\omega_{m+1}\cdots\omega_{2m-1}\in V_m.
+\]
+By Theorem~\ref{thm:bernoulli-transport-cylinder-law}, the event
+$\{Y_0\cdots Y_{m-1}=\beta\}$ pulls back under $\Phi_m$ to the raw cylinder
+\[
+\{S_0\cdots S_{2m-2}=\omega(\beta)\},
+\]
+where $(S_t)_{t\in\ZZ}$ is the coordinate process on the Bernoulli shift.
+Conditioned on that raw cylinder, the bits
+$S_m,\ldots,S_{2m-2}$ are fixed and equal to $v(\beta)$, while the next raw bit
+$S_{2m-1}$ remains independent of the past with
+\[
+\nu_p(S_{2m-1}=b)=p^b(1-p)^{1-b}.
+\]
+The next folded symbol is exactly
+\[
+Y_m=\Fold_m(v(\beta)S_{2m-1}),
+\]
+so
+\[
+\mu_{m,p}\bigl(
+Y_m=\Fold_m(v(\beta)b)\,\big|\,Y_0\cdots Y_{m-1}=\beta
+\bigr)
+=
+p^b(1-p)^{1-b}.
+\]
+This proves the displayed formula.  Since Proposition~\ref{prop:one-step-right-resolving}
+shows that the two labels $\Fold_m(v(\beta)0)$ and $\Fold_m(v(\beta)1)$ are
+distinct, the law of the next symbol is determined entirely by the last $m$
+output symbols.  Hence $(Y_t)$ is $m$-step Markov under $\mu_{m,p}$.
+
+To see that the Markov order is not smaller, suppose instead that $(Y_t)$ were
+an $(m-1)$-step Markov process.  Theorem~\ref{thm:bernoulli-transport-cylinder-law}
+shows that every admissible cylinder in $Y_m$ has positive $\mu_{m,p}$-measure,
+so $\mu_{m,p}$ has full support on $Y_m$.  For a stationary process with full
+support, an $(m-1)$-step Markov law has support equal to the
+$(m-1)$-step shift of finite type obtained by declaring a length-$m$ block
+admissible exactly when it has positive measure: by repeated conditioning, a
+longer block has positive probability if and only if each of its consecutive
+length-$m$ subblocks does.  Because every admissible length-$m$ block of $Y_m$
+has positive measure, that support would be $Y_m$ itself.  This contradicts
+Theorem~\ref{thm:Y-m-exact-SFT-order}, which states that $Y_m$ is not an
+$(m-1)$-step shift of finite type.  Therefore the Markov order is exactly $m$.
+\end{proof}
+
+\begin{corollary}[Conjugacy invariants]
+\label{cor:Y-m-conjugacy-collapse}
+\leanverified{paper_resolution_folding_y_m_conjugacy_collapse}
+For every $m,n\ge 3$, the shifts $Y_m$ and $Y_n$ are topologically conjugate.
+In particular, for every $m\ge 3$,
+\[
+h_{\mathrm{top}}(Y_m)=\log 2,
+\qquad
+\#\mathrm{Fix}(\sigma^n|_{Y_m})=2^n
+\quad (n\ge 1),
+\qquad
+\zeta_{Y_m}(z)=\frac{1}{1-2z}.
+\]
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:Phi-m-conjugacy-threshold}, every $Y_m$ with $m\ge 3$ is
+conjugate to the full two-shift.  The conjugacy
+\[
+Y_m\xrightarrow{\ \Psi_m^{(m-1)}\ }\{0,1\}^{\ZZ}\xrightarrow{\ \Phi_n\ }Y_n
+\]
+gives the first claim, and the entropy, fixed-point counts, and zeta function
+are the corresponding invariants of the full two-shift.
+\end{proof}
