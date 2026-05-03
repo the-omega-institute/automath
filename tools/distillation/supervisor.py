@@ -220,8 +220,11 @@ def format_dashboard(records: list[dict[str, Any]], *, branch: str, sync: dict[s
 def refresh_source_queue_if_needed(args: argparse.Namespace) -> dict[str, Any]:
     if not args.refresh_source_queue:
         return {"status": "disabled"}
+    queue_before = source_queue.read_queue()
+    open_candidate = source_queue.next_open_candidate(queue_before)
+    use_oracle = bool(args.oracle_source_queue and not open_candidate)
     result = source_queue.refresh_source_queue(
-        use_oracle=args.oracle_source_queue,
+        use_oracle=use_oracle,
         seed_limit=args.source_queue_seed_limit,
         oracle_limit=args.source_queue_oracle_limit,
         oracle_timeout=args.oracle_timeout,
@@ -331,6 +334,10 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
     print(format_dashboard(records, branch=args.branch, sync=sync_result), flush=True)
     runnable = runnable_records(records)
     if not runnable:
+        if args.auto_promote_source_queue and source_queue.next_open_candidate():
+            promoted_ok = promote_and_run_source_queue_candidate(args)
+            _log("no runnable sources; promoted existing source-queue candidate")
+            return promoted_ok
         queue_result = refresh_source_queue_if_needed(args)
         _log(
             "source-queue: seeds=%s oracle=%s status=%s"
