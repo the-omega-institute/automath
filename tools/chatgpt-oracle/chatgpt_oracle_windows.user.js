@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.7
+// @version      5.8
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.7";
+  const SCRIPT_VERSION = "5.8";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -1033,6 +1033,34 @@
       .trim();
   }
 
+  function stripChromeSuffix(t) {
+    return (t || "")
+      .replace(/\s*:?\s*Pro\s*(?:ChatGPT\s*(?:can make mistakes|也可能会犯错)[\s\S]*)$/i, "")
+      .replace(/\s*(?:ChatGPT\s*(?:can make mistakes|也可能会犯错)|Check important info|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)[\s\S]*$/i, "")
+      .trim();
+  }
+
+  function extractJsonEnvelopeIfObvious(t) {
+    const text = (t || "").trim();
+    const first = text.indexOf("{");
+    const last = text.lastIndexOf("}");
+    if (first < 0 || last <= first) return text;
+    const before = text.slice(0, first).trim();
+    const after = text.slice(last + 1).trim();
+    const beforeOk = !before || /^(ChatGPT\s*(?:said|说)[：:]?|Thought for \d+[sm]?\s*\d*[sm]?|Pro|[:：\s])+$/i.test(before);
+    const afterOk = !after || /^[:：]?\s*Pro\s*(?:ChatGPT\s*(?:can make mistakes|也可能会犯错)|Check important info|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)[\s\S]*$/i.test(after);
+    return beforeOk && afterOk ? text.slice(first, last + 1).trim() : text;
+  }
+
+  function normalizeAssistantText(t) {
+    let out = cleanText(stripSSRGarbage(t || ""));
+    out = stripThinkingPreamble(out);
+    out = stripChromeSuffix(out);
+    out = extractJsonEnvelopeIfObvious(out);
+    out = stripChromeSuffix(out);
+    return out.trim();
+  }
+
   function extractAfterLastAssistantMarker(text) {
     if (!text) return "";
     const markers = [
@@ -1051,7 +1079,7 @@
       }
     }
     if (last < 0) return "";
-    const after = stripThinkingPreamble(cleanText(text.slice(last + markerLen)));
+    const after = normalizeAssistantText(text.slice(last + markerLen));
     if (after.length >= 20 && !looksLikePromptEcho(after)) return after;
     return "";
   }
@@ -1105,7 +1133,7 @@
       if (assistantEls.length > 0) {
         // Take the last (most recent) assistant message
         const lastAssistant = assistantEls[assistantEls.length - 1];
-        const text = cleanText(shadowInnerText(lastAssistant));
+        const text = normalizeAssistantText(shadowInnerText(lastAssistant));
         if (text.length > 20 && !looksLikePromptEcho(text)) {
           return text;
         }
@@ -1122,14 +1150,14 @@
         const tail = sentPromptText.slice(-80).trim();
         const idx = shadowText.lastIndexOf(tail);
         if (idx >= 0) {
-          const after = stripThinkingPreamble(cleanText(shadowText.slice(idx + tail.length)));
+          const after = normalizeAssistantText(shadowText.slice(idx + tail.length));
           if (after.length > 100) return after;
         }
       }
 
       // Last resort: take second 60% (prompt first, response second)
       const halfPoint = Math.floor(shadowText.length * 0.4);
-      const secondHalf = stripThinkingPreamble(cleanText(shadowText.slice(halfPoint)));
+      const secondHalf = normalizeAssistantText(shadowText.slice(halfPoint));
       if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
         return secondHalf;
       }
@@ -1154,7 +1182,7 @@
         idx = fullText.lastIndexOf(tailAnchor.slice(-50));
       }
       if (idx >= 0) {
-        const after = cleanText(fullText.slice(idx + tailAnchor.length));
+        const after = normalizeAssistantText(fullText.slice(idx + tailAnchor.length));
         if (after.length > 20) {
           return after;
         }
@@ -1172,7 +1200,7 @@
     candidates.sort((a, b) => b.len - a.len);
 
     for (const cand of candidates) {
-      const cleaned = cleanText(cand.text);
+      const cleaned = normalizeAssistantText(cand.text);
       if (cleaned.length < 20) continue;
 
       // Skip full-page candidate if smaller candidates exist
@@ -1211,7 +1239,7 @@
         if (els.length === 0) continue;
         for (let i = els.length - 1; i >= 0; i--) {
           const text = extractTextWithMath(els[i]);
-          const cleaned = cleanText(text);
+          const cleaned = normalizeAssistantText(text);
           if (cleaned.length < 20) continue;
           if (looksLikePromptEcho(cleaned)) continue;
           if (sentPromptText.length > 30) {
@@ -1239,7 +1267,7 @@
             const tailIdx = fullText.indexOf(tail, idx);
             if (tailIdx >= 0) endIdx = Math.max(endIdx, tailIdx + tail.length);
           }
-          const after = cleanText(fullText.slice(endIdx));
+          const after = normalizeAssistantText(fullText.slice(endIdx));
           if (after.length > 20) return after;
         }
       }
@@ -1252,7 +1280,7 @@
         return t.length > 0 && !postSendLines.has(t) && !isChromeLine(t);
       });
       if (newLines.length > 3) {
-        const diffText = newLines.join("\n").trim();
+        const diffText = normalizeAssistantText(newLines.join("\n"));
         if (diffText.length > 20 && !looksLikePromptEcho(diffText)) {
           return diffText;
         }
