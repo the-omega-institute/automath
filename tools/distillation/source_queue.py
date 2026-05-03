@@ -32,9 +32,7 @@ def _stable_for_compare(data: dict[str, Any]) -> dict[str, Any]:
     stable = json.loads(_json(data))
     if isinstance(stable, dict):
         stable.pop("updated_at", None)
-        oracle = stable.get("oracle_source_queue")
-        if isinstance(oracle, dict):
-            oracle.pop("updated_at", None)
+        stable.pop("oracle_source_queue", None)
     return stable
 
 
