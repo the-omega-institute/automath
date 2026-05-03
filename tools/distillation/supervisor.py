@@ -19,10 +19,11 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from tools.distillation import distill, lifecycle
+    from tools.distillation import distill, lifecycle, source_queue
 except ModuleNotFoundError:  # pragma: no cover - supports direct script imports
     import distill
     import lifecycle
+    import source_queue
 
 
 DEFAULT_BRANCH = os.environ.get("DISTILL_SUPERVISOR_BRANCH", "distill-clean")
@@ -128,6 +129,22 @@ def push_current_branch(branch: str) -> dict[str, Any]:
     return {"status": "push_failed", "branch": branch, "reason": stderr}
 
 
+def commit_paths(paths: list[Path], message: str) -> dict[str, Any]:
+    existing = [str(path) for path in paths if path.exists()]
+    if not existing:
+        return {"status": "nothing_to_commit"}
+    add = _git(["add"] + existing, timeout=30)
+    if add.returncode != 0:
+        return {"status": "add_failed", "reason": add.stderr.strip()}
+    diff = _git(["diff", "--cached", "--quiet"], timeout=30)
+    if diff.returncode == 0:
+        return {"status": "nothing_to_commit"}
+    commit = _git(["commit", "-m", message], timeout=120)
+    if commit.returncode != 0:
+        return {"status": "commit_failed", "reason": commit.stderr.strip()}
+    return {"status": "committed", "commit": commit.stdout.strip().splitlines()[-1:]}
+
+
 def source_record(name: str, *, persist: bool = True) -> dict[str, Any]:
     state = distill.reconcile_state_contract(distill.load_state(name))
     action = distill.refresh_policy_state(state, persist=persist, update_memory=False)
@@ -200,6 +217,30 @@ def format_dashboard(records: list[dict[str, Any]], *, branch: str, sync: dict[s
     return "\n".join(lines)
 
 
+def refresh_source_queue_if_needed(args: argparse.Namespace) -> dict[str, Any]:
+    if not args.refresh_source_queue:
+        return {"status": "disabled"}
+    result = source_queue.refresh_source_queue(
+        use_oracle=args.oracle_source_queue,
+        seed_limit=args.source_queue_seed_limit,
+        oracle_limit=args.source_queue_oracle_limit,
+        oracle_timeout=args.oracle_timeout,
+        oracle_model=args.oracle_model,
+        dry_run=args.dry_run,
+    )
+    print(source_queue.format_queue_summary(result["queue"]), flush=True)
+    if result.get("changed") and not args.dry_run:
+        commit_result = commit_paths(
+            [source_queue.SOURCE_QUEUE_PATH],
+            "chore: refresh distillation source queue",
+        )
+        _log(f"source-queue commit: {commit_result}")
+        if commit_result.get("status") == "committed":
+            push_result = push_current_branch(args.branch)
+            _log(f"source-queue push: {push_result}")
+    return result
+
+
 def _increment_attempt_for_retry(name: str) -> None:
     state = distill.load_state(name)
     if state.next_action == "retry_resume" and state.failure_kind not in {"none", "incomplete"}:
@@ -246,6 +287,15 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
     print(format_dashboard(records, branch=args.branch, sync=sync_result), flush=True)
     runnable = runnable_records(records)
     if not runnable:
+        queue_result = refresh_source_queue_if_needed(args)
+        _log(
+            "source-queue: seeds=%s oracle=%s status=%s"
+            % (
+                queue_result.get("seed_count", 0),
+                queue_result.get("oracle_count", 0),
+                queue_result.get("oracle_status", {}).get("status", queue_result.get("status")),
+            )
+        )
         _log("no runnable sources; supervisor pass complete")
         return True
 
@@ -271,6 +321,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--dry-run", action="store_true", help="Avoid model calls and core writes")
     parser.add_argument("--sync-dev", dest="sync_dev", action="store_true", default=True)
     parser.add_argument("--no-sync-dev", dest="sync_dev", action="store_false")
+    parser.add_argument("--refresh-source-queue", dest="refresh_source_queue", action="store_true", default=True)
+    parser.add_argument("--no-refresh-source-queue", dest="refresh_source_queue", action="store_false")
+    parser.add_argument("--oracle-source-queue", action="store_true", help="Use Oracle to enrich source queue seeds")
+    parser.add_argument("--source-queue-seed-limit", type=int, default=source_queue.DEFAULT_SEED_LIMIT)
+    parser.add_argument("--source-queue-oracle-limit", type=int, default=source_queue.DEFAULT_ORACLE_LIMIT)
     parser.add_argument("--supervised", action="store_true", help="Prompt before applying writebacks")
     parser.add_argument(
         "--review-backend",
