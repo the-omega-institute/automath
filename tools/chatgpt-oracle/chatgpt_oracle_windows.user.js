@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.5
+// @version      5.6
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.4";
+  const SCRIPT_VERSION = "5.6";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -225,6 +225,83 @@
     return !disabled;
   }
 
+  function deepRoots() {
+    const roots = [];
+    const seen = new Set();
+    function visit(root) {
+      if (!root || seen.has(root)) return;
+      seen.add(root);
+      roots.push(root);
+      let nodes = [];
+      try {
+        nodes = Array.from(root.querySelectorAll("*"));
+      } catch {}
+      for (const node of nodes) {
+        if (node.shadowRoot) visit(node.shadowRoot);
+      }
+    }
+    visit(document);
+    return roots;
+  }
+
+  function querySelectorAllDeep(selector) {
+    const out = [];
+    for (const root of deepRoots()) {
+      try {
+        out.push(...root.querySelectorAll(selector));
+      } catch {}
+    }
+    return out;
+  }
+
+  function querySelectorDeep(selector) {
+    for (const root of deepRoots()) {
+      try {
+        const el = root.querySelector(selector);
+        if (el) return el;
+      } catch {}
+    }
+    return null;
+  }
+
+  function deepActiveElement() {
+    let active = document.activeElement;
+    while (active && active.shadowRoot && active.shadowRoot.activeElement) {
+      active = active.shadowRoot.activeElement;
+    }
+    return active;
+  }
+
+  function inputTextLength(el) {
+    if (!el) return 0;
+    if (typeof el.value === "string") return el.value.length;
+    return (el.textContent || "").length;
+  }
+
+  function promptDomDebug() {
+    const selectors = [
+      "#prompt-textarea",
+      "[data-testid='prompt-textarea']",
+      "[data-testid='composer-text-input']",
+      "[contenteditable]",
+      "[role='textbox']",
+      "textarea",
+      "form",
+      "main",
+    ];
+    const parts = selectors.map((sel) => `${sel}:${querySelectorAllDeep(sel).length}`);
+    let shadowCount = 0;
+    let shadowMax = 0;
+    for (const root of deepRoots()) {
+      if (root !== document) {
+        shadowCount++;
+        shadowMax = Math.max(shadowMax, (root.textContent || "").length);
+      }
+    }
+    const bodyLen = (document.body?.innerText || document.body?.textContent || "").length;
+    return `${parts.join(", ")}, shadows=${shadowCount}(max=${shadowMax}), body=${bodyLen}, url=${window.location.href.slice(-80)}`;
+  }
+
   function findPromptInput() {
     // ChatGPT 2024-2026 uses ProseMirror/contenteditable composer variants.
     for (const sel of [
@@ -248,11 +325,11 @@
       "div[contenteditable='true']",
       "div[contenteditable='plaintext-only']",
     ]) {
-      for (const el of document.querySelectorAll(sel)) {
+      for (const el of querySelectorAllDeep(sel)) {
         if (isUsablePromptInput(el)) return el;
       }
     }
-    const active = document.activeElement;
+    const active = deepActiveElement();
     if (active && active.matches && active.matches("[contenteditable], textarea")) {
       if (isUsablePromptInput(active)) return active;
     }
@@ -270,12 +347,12 @@
       "button[aria-label='Send message']",
       "button[aria-label='Submit']",
     ]) {
-      const el = document.querySelector(sel);
+      const el = querySelectorDeep(sel);
       if (el && (allowDisabled || !el.disabled)) return el;
     }
 
     // Layer 2: Find by partial data-testid containing "send"
-    for (const btn of document.querySelectorAll("button[data-testid]")) {
+    for (const btn of querySelectorAllDeep("button[data-testid]")) {
       const tid = btn.getAttribute("data-testid") || "";
       if (tid.toLowerCase().includes("send") && (allowDisabled || !btn.disabled)) return btn;
     }
@@ -292,10 +369,10 @@
 
     // Layer 3: Find SVG arrow icon inside form buttons (the send icon is typically an up-arrow)
     const formAreas = [
-      document.querySelector("form"),
-      document.querySelector("[class*='composer']"),
-      document.querySelector("[class*='input-area']"),
-      document.querySelector("[class*='prompt']")?.closest("div[class]"),
+      querySelectorDeep("form"),
+      querySelectorDeep("[class*='composer']"),
+      querySelectorDeep("[class*='input-area']"),
+      querySelectorDeep("[class*='prompt']")?.closest("div[class]"),
     ].filter(Boolean);
 
     for (const area of formAreas) {
@@ -333,7 +410,7 @@
 
   function findFileInput() {
     // ChatGPT has a hidden file input
-    return document.querySelector("input[type='file']");
+    return querySelectorDeep("input[type='file']");
   }
 
   function isOnNewChatPage() {
@@ -511,10 +588,26 @@
 
     let success = false;
 
+    if (typeof input.value === "string") {
+      try {
+        input.value = text;
+        input.dispatchEvent(new InputEvent("input", {
+          bubbles: true, cancelable: true,
+          inputType: "insertText", data: text,
+        }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        await sleep(500);
+        success = input.value.length > 10;
+        if (success) log("Prompt: set textarea value with input event");
+      } catch (e) {
+        log(`Textarea value insert failed: ${e.message}`);
+      }
+    }
+
     // Strategy 1: execCommand insertText — BEST for ProseMirror
     // This goes through the browser's native editing API which ProseMirror hooks into,
     // so React/ProseMirror internal state stays in sync → send button enables correctly.
-    try {
+    if (!success) try {
       input.focus();
       // For long text, insert in chunks to avoid browser limits
       const CHUNK = 4000;
@@ -527,7 +620,7 @@
         }
       }
       await sleep(500);
-      if ((input.textContent || "").length > 10) {
+      if (inputTextLength(input) > 10) {
         success = true;
         log("Prompt: inserted via execCommand (ProseMirror-native)");
       }
@@ -542,7 +635,7 @@
         input.focus();
         document.execCommand("paste");
         await sleep(500);
-        if ((input.textContent || "").length > 10) {
+        if (inputTextLength(input) > 10) {
           success = true;
           log("Prompt: pasted via clipboard API");
         }
@@ -560,7 +653,7 @@
           bubbles: true, cancelable: true, clipboardData: clipData,
         }));
         await sleep(500);
-        if ((input.textContent || "").length > 10) {
+        if (inputTextLength(input) > 10) {
           success = true;
           log("Prompt: pasted via synthetic ClipboardEvent");
         }
@@ -605,7 +698,7 @@
       log("Prompt: forced React sync (space+delete)");
     }
 
-    const visible = (input.textContent || "").length;
+    const visible = inputTextLength(input);
     log(`Prompt visible: ${visible} chars, success=${success}`);
     return success;
   }
@@ -1384,15 +1477,15 @@
 
       // Wait for prompt input to appear
       let retries = 0;
-      while (!findPromptInput() && retries < 60) {
+      while (!findPromptInput() && retries < 120) {
         if (retries > 0 && retries % 10 === 0) {
-          await postPhase(task_id, "waiting_prompt_input", foregroundState());
+          await postPhase(task_id, "waiting_prompt_input", `${foregroundState()}; ${promptDomDebug()}`);
         }
         await sleep(1000);
         retries++;
       }
       if (!findPromptInput()) {
-        throw new Error("Prompt input not found after 60s wait");
+        throw new Error(`Prompt input not found after 120s wait; ${promptDomDebug()}`);
       }
       log("Page ready");
       if (!isForegroundReady()) {
