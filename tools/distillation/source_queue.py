@@ -18,6 +18,7 @@ SOURCE_QUEUE_PATH = distill.BACKFLOW_DIR / "source_queue.json"
 QUEUE_VERSION = 1
 DEFAULT_SEED_LIMIT = 24
 DEFAULT_ORACLE_LIMIT = 12
+TERMINAL_SEED_STATUSES = {"covered_by_oracle", "accepted", "running", "done", "rejected"}
 
 
 def _now_iso() -> str:
@@ -208,12 +209,14 @@ def _normalize_oracle_candidate(raw: dict[str, Any]) -> dict[str, Any] | None:
     if fit < 7 or novelty < 6:
         return None
     candidate_id = _candidate_id("oracle", proposed, target_sections, ",".join(seed_ids))
-    priority = int(raw.get("priority", 50) or 50)
+    raw_priority = int(raw.get("priority", 50) or 50)
+    priority = 100 - raw_priority if 1 <= raw_priority <= 12 else raw_priority
     priority = max(1, min(100, priority))
     return {
         "id": candidate_id,
         "status": "open",
         "priority": priority,
+        "oracle_rank": raw_priority if 1 <= raw_priority <= 100 else None,
         "proposed_source": proposed,
         "source_type": str(raw.get("source_type", "topic_cluster") or "topic_cluster"),
         "origin": "oracle_source_queue",
@@ -290,6 +293,14 @@ def _merge_candidates(existing: list[dict[str, Any]], incoming: list[dict[str, A
             continue
         previous = merged.get(item_id, {})
         combined = {**previous, **item}
+        if (
+            previous.get("source_type") == "discovery_seed"
+            and item.get("status") == "needs_oracle"
+            and previous.get("status") in TERMINAL_SEED_STATUSES
+        ):
+            combined["status"] = previous.get("status")
+            combined["next_step"] = previous.get("next_step")
+            combined["covered_by_candidates"] = previous.get("covered_by_candidates", [])
         combined.setdefault("created_at", previous.get("created_at") or now)
         previous_compare = {k: v for k, v in previous.items() if k != "updated_at"}
         combined_compare = {k: v for k, v in combined.items() if k != "updated_at"}
@@ -328,6 +339,34 @@ def _merge_candidates(existing: list[dict[str, Any]], incoming: list[dict[str, A
     )
 
 
+def mark_covered_seeds(
+    seeds: list[dict[str, Any]],
+    oracle_candidates: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Mark discovery seeds answered by accepted Oracle candidates."""
+    covered: dict[str, list[str]] = {}
+    for candidate in oracle_candidates:
+        candidate_id = str(candidate.get("id", "")).strip()
+        if not candidate_id:
+            continue
+        for seed_id in distill._unique_strings(candidate.get("origin_entry_ids", [])):
+            covered.setdefault(seed_id, []).append(candidate_id)
+    if not covered:
+        return seeds
+    marked = []
+    for seed in seeds:
+        seed_id = str(seed.get("id", "")).strip()
+        if seed_id not in covered:
+            marked.append(seed)
+            continue
+        updated = dict(seed)
+        updated["status"] = "covered_by_oracle"
+        updated["next_step"] = "distill_source_candidate_opened"
+        updated["covered_by_candidates"] = sorted(set(covered[seed_id]))
+        marked.append(updated)
+    return marked
+
+
 def _semantic_candidate_key(item: dict[str, Any]) -> tuple[Any, ...]:
     status = str(item.get("status", ""))
     source_type = str(item.get("source_type", ""))
@@ -363,6 +402,7 @@ def refresh_source_queue(
             model=oracle_model,
             dry_run=dry_run,
         )
+        seeds = mark_covered_seeds(seeds, oracle_candidates)
     queue = {
         "version": QUEUE_VERSION,
         "description": old_queue.get(

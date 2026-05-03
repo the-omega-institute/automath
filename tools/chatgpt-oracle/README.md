@@ -10,7 +10,12 @@ client script --POST--> oracle_server.py <--poll-- Tampermonkey userscript
 ## Quick Start
 
 1. Install Tampermonkey.
-2. Install `chatgpt_oracle.user.js`.
+2. Install the platform script:
+   - Windows: `chatgpt_oracle_windows.user.js`
+   - macOS: `chatgpt_oracle_macos.user.js`
+
+   `chatgpt_oracle.user.js` is only a compatibility stub; do not install it as
+   the active Oracle script.
 3. Start the local server:
 
 ```bash
@@ -26,6 +31,9 @@ https://chatgpt.com/?oracle=3
 ```
 
 Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
+
+After updating the userscript file, open Tampermonkey, replace the installed
+script content, save it, and reload every dedicated Oracle tab.
 
 ## Protocol
 

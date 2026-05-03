@@ -78,7 +78,24 @@ class SourceQueueTests(unittest.TestCase):
         self.assertIsNotNone(candidate)
         self.assertEqual(candidate["status"], "open")
         self.assertEqual(candidate["priority"], 91)
+        self.assertEqual(candidate["oracle_rank"], 91)
         self.assertEqual(candidate["next_step"], "distill_source")
+
+    def test_normalize_oracle_candidate_converts_small_rank_to_high_priority(self):
+        candidate = source_queue._normalize_oracle_candidate(
+            {
+                "proposed_source": "Stallings foldings",
+                "source_type": "topic_cluster",
+                "fit_score": 10,
+                "novelty_score": 7,
+                "priority": 1,
+                "target_sections": ["folding"],
+            }
+        )
+
+        self.assertIsNotNone(candidate)
+        self.assertEqual(candidate["priority"], 99)
+        self.assertEqual(candidate["oracle_rank"], 1)
 
     def test_merge_candidates_preserves_existing_created_at(self):
         merged = source_queue._merge_candidates(
@@ -134,6 +151,60 @@ class SourceQueueTests(unittest.TestCase):
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0]["priority"], 30)
         self.assertEqual(merged[0]["origin_entry_ids"], ["a", "b"])
+
+    def test_merge_candidates_preserves_covered_seed_status(self):
+        merged = source_queue._merge_candidates(
+            [
+                {
+                    "id": "seed:1",
+                    "status": "covered_by_oracle",
+                    "source_type": "discovery_seed",
+                    "seed_source": "Gromov",
+                    "target_sections": ["pom"],
+                    "covered_by_candidates": ["oracle:1"],
+                    "next_step": "distill_source_candidate_opened",
+                }
+            ],
+            [
+                {
+                    "id": "seed:1",
+                    "status": "needs_oracle",
+                    "source_type": "discovery_seed",
+                    "seed_source": "Gromov",
+                    "target_sections": ["pom"],
+                    "next_step": "oracle_source_discovery",
+                }
+            ],
+        )
+
+        self.assertEqual(merged[0]["status"], "covered_by_oracle")
+        self.assertEqual(merged[0]["covered_by_candidates"], ["oracle:1"])
+
+    def test_mark_covered_seeds_links_oracle_candidates(self):
+        marked = source_queue.mark_covered_seeds(
+            [
+                {
+                    "id": "seed:1",
+                    "status": "needs_oracle",
+                    "next_step": "oracle_source_discovery",
+                },
+                {
+                    "id": "seed:2",
+                    "status": "needs_oracle",
+                    "next_step": "oracle_source_discovery",
+                },
+            ],
+            [
+                {
+                    "id": "oracle:1",
+                    "origin_entry_ids": ["seed:1"],
+                }
+            ],
+        )
+
+        self.assertEqual(marked[0]["status"], "covered_by_oracle")
+        self.assertEqual(marked[0]["covered_by_candidates"], ["oracle:1"])
+        self.assertEqual(marked[1]["status"], "needs_oracle")
 
     def test_queue_counts_groups_statuses(self):
         counts = source_queue.queue_counts(
