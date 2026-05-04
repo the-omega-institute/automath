@@ -4,7 +4,7 @@
 | 来源 | 状态 | 目标章节 | 写回数 | 待扩张数 |
 |---|---|---|---:|---:|
 | `bourgain` | 进行中 | recursive_addressing, fold_residual_time, typed_address_biaxial_completion, circle_dimension_phase_gate, spg, zeta_finite_part, emergent_arithmetic, statistical_stability, group_unification | 17 | 6 |
-| `breuillard_green_tao_approximate_groups_helfgott_growth` | 进行中 | group_unification, fold_residual_time, recursive_addressing, folding, finite_field_equational_saturation, emergent_arithmetic | 11 | 9 |
+| `breuillard_green_tao_approximate_groups_helfgott_growth` | 进行中 | group_unification, fold_residual_time, recursive_addressing, folding, finite_field_equational_saturation, emergent_arithmetic | 13 | 9 |
 | `cech_cohomology` | 进行中 | typed_address_biaxial_completion, physical_spacetime_skeleton, circle_dimension_phase_gate, recursive_addressing, pom, folding, conclusion, fold_residual_time, spg, zeta_finite_part | 17 | 8 |
 | `connes_consani_arithmetic_site` | 进行中 | circle_dimension_phase_gate, zeta_finite_part, typed_address_biaxial_completion, spg, physical_spacetime_skeleton, emergent_arithmetic, statistical_stability, folding, recursive_addressing | 6 | 8 |
 | `connes_spectral_triples_chamseddine_connes_spectral_action` | 进行中 | typed_address_biaxial_completion, spg, circle_dimension_phase_gate, statistical_stability, fold_residual_time, group_unification | 13 | 6 |
