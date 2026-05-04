@@ -5,7 +5,7 @@
 |---|---|---|---:|---:|
 | `bourgain` | 进行中 | recursive_addressing, fold_residual_time, typed_address_biaxial_completion, circle_dimension_phase_gate, spg, zeta_finite_part, emergent_arithmetic, statistical_stability, group_unification | 17 | 6 |
 | `cech_cohomology` | 进行中 | typed_address_biaxial_completion, physical_spacetime_skeleton, circle_dimension_phase_gate, recursive_addressing, pom, folding, conclusion, fold_residual_time, spg, zeta_finite_part | 17 | 8 |
-| `connes_consani_arithmetic_site` | 进行中 | circle_dimension_phase_gate, zeta_finite_part, typed_address_biaxial_completion, spg, physical_spacetime_skeleton, emergent_arithmetic, statistical_stability, folding, recursive_addressing | 3 | 8 |
+| `connes_consani_arithmetic_site` | 进行中 | circle_dimension_phase_gate, zeta_finite_part, typed_address_biaxial_completion, spg, physical_spacetime_skeleton, emergent_arithmetic, statistical_stability, folding, recursive_addressing | 4 | 8 |
 | `euclid_elements` | 进行中 | pom, folding, emergent_arithmetic, circle_dimension_phase_gate, physical_spacetime_skeleton, typed_address_biaxial_completion, recursive_addressing, fold_residual_time, spg, zeta_finite_part, conclusion, group_unification | 40 | 10 |
 | `gromov_coarse_filling_holonomic_obstruction` | 进行中 | recursive_addressing, fold_residual_time, physical_spacetime_skeleton, typed_address_biaxial_completion, circle_dimension_phase_gate, spg, folding, logic_expansion_chain, conclusion | 19 | 6 |
 | `grothendieck_relative_descent_probe_obstruction` | 进行中 | typed_address_biaxial_completion, recursive_addressing, physical_spacetime_skeleton, folding, circle_dimension_phase_gate, spg, fold_residual_time, zeta_finite_part, conclusion | 16 | 7 |
