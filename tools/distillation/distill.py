@@ -2119,6 +2119,25 @@ def _source_specific_writeback_contract(
 ) -> str:
     """Return last-mile writeback guidance for source-level failure modes."""
     source_slug = _slugify(state.name)
+    if source_slug == "persistent_homology_persistence_modules_and_constructible_sheaf_persistence":
+        family_name = str((focused_family or {}).get("name", "")).strip()
+        family_line = f"- Focused family: {family_name}." if family_name else ""
+        lines = [
+            "PERSISTENT-HOMOLOGY LAST-MILE CONTRACT:",
+            family_line,
+            "- For POM functorial persistence, use the dedicated host",
+            "  pom/parts/subsubsec__pom-persistence-module-ledger.tex.",
+            "- Do not target the strong-stationary-time, separation-distance,",
+            "  Markov-kernel, diagonal-rate, or refresh files with homology,",
+            "  sheaf, barcode, or interleaving machinery.",
+            "- Define the legal parameter, transition maps, and finite carrier",
+            "  before naming a stable residue. Do not import H_q, Cech, sheaf,",
+            "  or Vec notation unless it is explicitly bound in the statement.",
+            "- Prefer one narrow theorem/proposition with a proof over a broad",
+            "  batch. If the local target does not support the source mechanism,",
+            "  output no writeback for that target.",
+        ]
+        return "\n".join(line for line in lines if line)
     if source_slug != "connes_consani_arithmetic_site":
         return ""
     family_name = str((focused_family or {}).get("name", "")).strip()
@@ -4857,6 +4876,14 @@ def _source_specific_writeback_targets(
             / section
             / "subsec__physical-spacetime-skeleton-nonretroactive-resolution.tex"
         )
+        if path.exists() and not _is_wrapper_tex_file(path):
+            return [_target_file_descriptor(section, path)]
+    if (
+        source_slug == "persistent_homology_persistence_modules_and_constructible_sheaf_persistence"
+        and family_slug == "functorial_persistence_construction"
+    ):
+        section = "pom"
+        path = CORE_BODY / section / "parts" / "subsubsec__pom-persistence-module-ledger.tex"
         if path.exists() and not _is_wrapper_tex_file(path):
             return [_target_file_descriptor(section, path)]
     return []

@@ -104,6 +104,22 @@ class PromptTemplateTests(unittest.TestCase):
         )
         self.assertNotIn("grand-chain", targets[0]["tex_file"])
 
+    def test_persistent_functorial_family_uses_persistence_module_host(self):
+        state = distill.DistillState(
+            "Persistent homology, persistence modules, and constructible sheaf persistence"
+        )
+
+        targets = distill._source_specific_writeback_targets(
+            state,
+            {"name": "Functorial persistence construction"},
+        )
+
+        self.assertEqual(len(targets), 1)
+        self.assertEqual(
+            targets[0]["tex_file"],
+            "pom/parts/subsubsec__pom-persistence-module-ledger.tex",
+        )
+
     def test_connes_source_contract_blocks_heavy_tautological_writebacks(self):
         state = distill.DistillState("Connes-Consani arithmetic site")
 
@@ -120,6 +136,20 @@ class PromptTemplateTests(unittest.TestCase):
         state = distill.DistillState("Generic Source")
 
         self.assertEqual(distill._source_specific_writeback_contract(state, None), "")
+
+    def test_persistent_source_contract_blocks_markov_hosts(self):
+        state = distill.DistillState(
+            "Persistent homology, persistence modules, and constructible sheaf persistence"
+        )
+
+        contract = distill._source_specific_writeback_contract(
+            state,
+            {"name": "Functorial persistence construction"},
+        )
+
+        self.assertIn("PERSISTENT-HOMOLOGY LAST-MILE CONTRACT", contract)
+        self.assertIn("subsubsec__pom-persistence-module-ledger.tex", contract)
+        self.assertIn("Do not target the strong-stationary-time", contract)
 
     def test_review_prompts_do_not_let_target_language_override_chinese(self):
         for prompt_name in ("review_codex", "review_claude"):
