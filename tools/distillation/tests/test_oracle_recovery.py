@@ -281,6 +281,14 @@ class OracleUserscriptTests(unittest.TestCase):
         )
         self.assertNotIn('document.visibilityState === "visible" && document.hasFocus()', script)
 
+    def test_windows_script_clears_server_cancelled_tasks(self):
+        script = self._windows_script()
+
+        self.assertIn("function isServerCancelledTaskState", script)
+        self.assertIn("/task_status/${encodeURIComponent(task_id)}", script)
+        self.assertIn("Task cancelled by server", script)
+        self.assertIn("clearTaskState();", script)
+
 
 if __name__ == "__main__":
     unittest.main()

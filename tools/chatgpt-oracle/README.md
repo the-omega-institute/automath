@@ -39,6 +39,10 @@ Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
 After updating the userscript file, open Tampermonkey, replace the installed
 script content, save it, and reload every dedicated Oracle tab.
 
+Windows script `v5.18` also checks `/task_status/<id>` while waiting for a
+response, so a task cancelled by the supervisor clears local tab state and the
+tab resumes polling without a manual refresh.
+
 ## Protocol
 
 | Endpoint | Method | Purpose |

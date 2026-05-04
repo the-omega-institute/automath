@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.17
+// @version      5.18
 // @description  Multi-agent oracle bridge — open project/chatgpt URLs with ?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -20,7 +20,7 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.17";
+  const SCRIPT_VERSION = "5.18";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -187,6 +187,30 @@
     clearTaskState();
     busy = false;
     updatePanel();
+  }
+
+  function isServerCancelledTaskState(state) {
+    const status = String(state?.status || "").toLowerCase();
+    const phase = String(state?.phase || "").toLowerCase();
+    return status === "cancelled" || phase === "cancelled" || phase === "not_found";
+  }
+
+  function serverCancelledError(state) {
+    const status = String(state?.status || state?.phase || "unknown");
+    return new Error(`Task cancelled by server (${status})`);
+  }
+
+  function isServerCancelledError(err) {
+    return String(err?.message || "").startsWith("Task cancelled by server");
+  }
+
+  async function throwIfTaskCancelledOnServer(task_id) {
+    try {
+      const state = await serverGet(`/task_status/${encodeURIComponent(task_id)}`);
+      if (isServerCancelledTaskState(state)) throw serverCancelledError(state);
+    } catch (err) {
+      if (isServerCancelledError(err)) throw err;
+    }
   }
 
   function sleep(ms) {
@@ -1496,6 +1520,7 @@
         const phase = generating ? "waiting_response" : "response_observed";
         const detail = `elapsed=${elapsed}s; extracted=${responseText.length}; page=${mainLen}; stable=${stableCount}; gen=${generating}`;
         try { await postPhase(task_id, phase, detail); } catch {}
+        await throwIfTaskCancelledOnServer(task_id);
       }
 
       // Periodic status log (every 2 min)
@@ -1641,7 +1666,17 @@
     setTaskPhase("waiting_response");
     await postPhase(task_id, "waiting_response", `resume=true; url=${window.location.href.slice(-80)}`);
 
-    const response = await waitForResponse(task_id, minResponseLength);
+    let response = "";
+    try {
+      response = await waitForResponse(task_id, minResponseLength);
+    } catch (err) {
+      if (isServerCancelledError(err)) {
+        log(`${err.message}; clearing local task state`);
+        clearTaskState();
+        return;
+      }
+      throw err;
+    }
     if (!response || response.length < 5) {
       throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
     }
@@ -1786,6 +1821,11 @@
       capturePostSendState();
       await finishTaskFromCurrentPage(task);
     } catch (err) {
+      if (isServerCancelledError(err)) {
+        log(`${err.message}; clearing local task state`);
+        clearTaskState();
+        return;
+      }
       log(`ERROR: ${err.message}`);
       if (getTaskPhase() === "waiting_response") {
         const recovered = extractResponseText();
