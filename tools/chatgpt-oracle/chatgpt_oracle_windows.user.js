@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.13
+// @version      5.14
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.13";
+  const SCRIPT_VERSION = "5.14";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -485,10 +485,20 @@
     }
   }
 
+  function isProjectStartPage(task) {
+    if (!isOnProjectContext(task)) return false;
+    if (/\/c\/[a-f0-9-]+/.test(window.location.pathname)) return false;
+    return true;
+  }
+
   function taskStartUrl(task) {
-    const projectUrl = normalizedProjectUrl(task);
-    if (projectUrl) return projectUrl;
     const agentNum = AGENT_ID.replace("oracle_", "");
+    const projectUrl = normalizedProjectUrl(task);
+    if (projectUrl) {
+      const url = new URL(projectUrl);
+      url.searchParams.set("oracle", agentNum);
+      return url.href;
+    }
     return `https://chatgpt.com/?oracle=${agentNum}`;
   }
 
@@ -1664,7 +1674,7 @@
       // IMPORTANT: Only redirect if we're actively processing a task.
       // Never hijack the user's normal ChatGPT browsing.
       const inProjectContext = isOnProjectContext(task);
-      if (!inProjectContext || !isOnNewChatPage()) {
+      if (!inProjectContext || (!isOnNewChatPage() && !isProjectStartPage(task))) {
         // Mark that WE are about to navigate (not the user)
         GM_setValue(GM_KEY("oracle_navigating"), true);
         GM_setValue(GM_KEY("nav_task_id"), task_id);

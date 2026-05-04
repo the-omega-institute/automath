@@ -185,5 +185,22 @@ class OracleBridgeStatusTests(unittest.TestCase):
         self.assertEqual(stale[0][0], "oracle_2")
 
 
+class OracleUserscriptTests(unittest.TestCase):
+    def _windows_script(self) -> str:
+        path = distill.REPO_ROOT / "tools" / "chatgpt-oracle" / "chatgpt_oracle_windows.user.js"
+        return path.read_text(encoding="utf-8")
+
+    def test_windows_project_navigation_preserves_agent_query_flag(self):
+        script = self._windows_script()
+
+        self.assertIn('url.searchParams.set("oracle", agentNum);', script)
+
+    def test_windows_project_start_page_does_not_navigation_loop(self):
+        script = self._windows_script()
+
+        self.assertIn("function isProjectStartPage(task)", script)
+        self.assertIn("!isProjectStartPage(task)", script)
+
+
 if __name__ == "__main__":
     unittest.main()
