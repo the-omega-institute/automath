@@ -74,6 +74,19 @@ class PromptTemplateTests(unittest.TestCase):
         self.assertIn("Do not translate it into", contract)
         self.assertIn("Zeckendorf", contract)
         self.assertIn("subsec__folding-map.tex", contract)
+        self.assertIn("subsec__group-unification-audit-pointers.tex", contract)
+        self.assertIn("A={a}", contract)
+
+    def test_stallings_subgroup_family_uses_group_unification_section_host(self):
+        targets = distill._family_specific_writeback_targets(
+            {"name": "subgroup reconstruction from canonical finite automata"}
+        )
+
+        self.assertEqual(len(targets), 1)
+        self.assertEqual(
+            targets[0]["tex_file"],
+            "group_unification/subsec__group-unification-spectral-alignment.tex",
+        )
 
 
 if __name__ == "__main__":

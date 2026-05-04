@@ -1942,6 +1942,20 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  represented readouts, and quotient/core reconstruction. Target",
                 "  folding only for a short auxiliary graph-folding lemma. Do not",
                 "  target subsec__folding-map.tex with cyclic subgroup arithmetic.",
+                "- Do not target subsec__group-unification-audit-pointers.tex or",
+                "  cor__foldbin6-geo-mask-34.tex for this family. Prior attempts",
+                "  failed there as wrong-host or duplicate n|34/cyclic-legality",
+                "  restatements.",
+                "- Do not use the rank-one alphabet A={a}, sigma_geo, rho_n,",
+                "  omega_1+omega_5, n|34, or the two-vertex parity core as the",
+                "  main result. That is only the cyclic special case and does not",
+                "  close subgroup reconstruction from canonical finite automata.",
+                "- If the result is an abstract Stallings-core interface theorem,",
+                "  place it only in",
+                "  group_unification/subsec__group-unification-spectral-alignment.tex",
+                "  and state it as a formal admissibility gate for registered",
+                "  observable-channel labels such as the local \\mathcal R_{\\mathrm{obs}}",
+                "  interface, not as a theorem about an audit script.",
                 "- Keep labels short and unique. Put any Omega interpretation in a",
                 "  separate remark after the proof; theorem and proof environments",
                 "  must contain only the formal graph/automaton reconstruction claim.",
@@ -4529,6 +4543,22 @@ def _select_target_files(
     return selected[:MAX_WRITEBACK_TARGET_FILES]
 
 
+def _family_specific_writeback_targets(
+    focused_family: Optional[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return explicit target overrides for families with known bad hosts."""
+    family_slug = _slugify(str((focused_family or {}).get("name", "")))
+    if family_slug == "subgroup_reconstruction_from_canonical_finite_automata":
+        path = (
+            CORE_BODY
+            / "group_unification"
+            / "subsec__group-unification-spectral-alignment.tex"
+        )
+        if path.exists() and not _is_wrapper_tex_file(path):
+            return [_target_file_descriptor("group_unification", path)]
+    return []
+
+
 def _collect_section_contexts(
     targets: list[dict[str, Any]],
     *,
@@ -5741,6 +5771,13 @@ def run_stage_w(
                 present_sections.add(sec)
         if focused_targets:
             targets = focused_targets
+        family_targets = _family_specific_writeback_targets(focused_family)
+        if family_targets:
+            logger.info(
+                "Stage W using family-specific target override: %s",
+                [item["tex_file"] for item in family_targets],
+            )
+            targets = family_targets
 
     if not targets:
         logger.error("Stage W could not select target files")
