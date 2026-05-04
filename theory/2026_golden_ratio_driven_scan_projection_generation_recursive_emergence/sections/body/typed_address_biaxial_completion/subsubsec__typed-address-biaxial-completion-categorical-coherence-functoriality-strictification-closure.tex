@@ -1,0 +1,564 @@
+\subsubsection{范畴化、函子自然性、2-态射、证书组合律、Beck--Chevalley 条件、异常上同调与 strictification 闭包}\label{subsubsec:typed-address-biaxial-completion-categorical-coherence-functoriality-strictification-closure}
+局部证书可以通过，并不自动说明证书体系可组合、语义保真或可严格化。范畴口径要核验对象、态射、2-态射、组合律、自然性、base change、异常 residual 与 quotient/extension，而不是只把图画成箭头。核心链条为
+\[
+\boxed{
+\mathsf{Object}
+\to
+\mathsf{Morphism}
+\to
+\mathsf{2Morphism}
+\to
+\mathsf{Naturality}
+\to
+\mathsf{BeckChevalley}
+\to
+\mathsf{AnomalyCocycle}
+\to
+\mathsf{Strictification}.
+}
+\]
+单个局部图通过，只能给出局部 commuting certificate；全局函子性、自然性与 strictification 都需要额外账本。
+
+\paragraph{三层对象。}
+第一层为对象 \(A,B,C,\ldots\)，可表示 typed address、stable type、certificate object、local section、Hilbert carrier、boundary code 等。第二层为态射
+\[
+\boxed{f:A\to B,}
+\]
+表示 projection、readout、restriction、fold、coarse-graining、decoder、pushforward、pullback 或 rewrite step。第三层为 2-态射
+\[
+\boxed{\alpha:f\Rightarrow g,}
+\]
+表示两条实现路径之间的等价、重写证书、同伦、自然同构、异常修正、成本比较或 residual ledger。基本禁令是
+\[
+\boxed{
+f=g\not\equiv f\Rightarrow g.
+}
+\]
+若把存在 2-态射直接写成一阶态射相等，输出 \(\mathsf{TwoMorphismAsEqualityFail}\)。
+
+\begin{definition}[typed ledger 证书]\label{def:typed-address-biaxial-completion-typed-ledger-cert}
+称 \(\mathsf{TypedLedgerCert}\) 为 typed ledger 证书，若每个对象带 \(\mathsf{Type}(A)\)，每个态射带 \(\mathsf{dom}(f),\mathsf{cod}(f)\)，每个 2-态射带
+\[
+\alpha:f\Rightarrow g,\qquad f,g:A\to B.
+\]
+若 \(f:A\to B\) 与 \(g:C\to D\) 不平行却写 \(f\Rightarrow g\)，输出 \(\mathsf{NonParallelTwoMorphismFail}\)。态射源目标不匹配时输出 \(\mathsf{IllTypedMorphismFail}\)。
+\end{definition}
+
+\paragraph{投影词范畴与组合律。}
+投影词字母表写作
+\[
+\Sigma_{\rm PW}
+=
+\{\mathsf{Fold},\mathsf{Read},\mathsf{Restrict},\mathsf{Lift},
+\mathsf{Project},\mathsf{Normalize},\mathsf{Ledger},\mathsf{Decode},\ldots\}.
+\]
+投影词 \(w=a_1\cdots a_k\) 只有在每个字母有类型
+\[
+a_i:X_{i-1}\to X_i
+\]
+时才可组合。
+
+\begin{definition}[投影词范畴证书]\label{def:typed-address-biaxial-completion-projection-word-category-cert}
+称 \(\mathsf{ProjectionWordCategoryCert}\) 为投影词范畴证书，若它包含 \(\mathsf{Obj},\Sigma_{\rm PW},s,t,\circ,\operatorname{id}\)、composition ledger、identity ledger 与 round hash，并验证结合律
+\[
+h\circ(g\circ f)=(h\circ g)\circ f
+\]
+及单位律
+\[
+f\circ\operatorname{id}_A=f,\qquad \operatorname{id}_B\circ f=f.
+\]
+若只给可组合字母表，却未证明结合律与单位律，输出 \(\mathsf{SemigroupNotationAsCategoryFail}\)。
+\end{definition}
+
+\paragraph{重写作为 2-态射。}
+投影词重写
+\[
+w\to w'
+\]
+不应直接理解为 \(w=w'\)，而应理解为存在
+\[
+\boxed{\rho:w\Rightarrow w'.}
+\]
+若 rewrite system 终止且合流，则每个投影词有正规形 \(\operatorname{NF}(w)\)。
+
+\begin{definition}[rewrite 2-态射证书]\label{def:typed-address-biaxial-completion-rewrite-two-morphism-cert}
+称 \(\mathsf{RewriteTwoMorphismCert}\) 为 rewrite 2-态射证书，若它包含 \(w,w',\rho\)、termination ledger、confluence ledger、normal-form ledger 与 round hash。若只证明若干 rewrite 例子，却声明全局正规形，输出 \(\mathsf{SampleRewriteAsConfluenceFail}\)。
+\end{definition}
+
+\paragraph{2-范畴结构。}
+定义
+\[
+\boxed{\mathcal{PW}_2}
+\]
+为投影词 2-范畴候选。数据包括 objects、hom-categories、2-homs、水平组合 \(\ast\)、垂直组合 \(\circ_v\) 与 identities。核心要求是 interchange law：
+\[
+\boxed{
+(\beta'\circ_v\beta)\ast(\alpha'\circ_v\alpha)
+=
+(\beta'\ast\alpha')\circ_v(\beta\ast\alpha).
+}
+\]
+若只定义 1-态射与若干 rewrite arrows，却未给水平/垂直组合律，输出 \(\mathsf{RewriteGraphAsTwoCategoryFail}\)。
+
+\paragraph{代价半环与代价函子。}
+代价值域为半环预序
+\[
+\boxed{
+\mathbb K=(K,\oplus,\otimes,0,1,\preceq).
+}
+\]
+\(\oplus\) 表示并行或选择成本，\(\otimes\) 表示串行组合成本。若代价比较不传递或组合不单调，输出 \(\mathsf{IllFormedCostPreorderFail}\)。
+
+代价函子写作
+\[
+\boxed{
+\mathsf{Cost}:\mathcal{PW}_2\to\mathbb K.
+}
+\]
+要求
+\[
+\mathsf{Cost}(\operatorname{id}_A)=1,
+\]
+以及
+\[
+\mathsf{Cost}(g\circ f)=\mathsf{Cost}(g)\otimes\mathsf{Cost}(f)
+\]
+或 lax 版本
+\[
+\mathsf{Cost}(g\circ f)\preceq
+\mathsf{Cost}(g)\otimes\mathsf{Cost}(f).
+\]
+若只给生成元赋成本而未证明组合一致，输出 \(\mathsf{GeneratorCostAsFunctorFail}\)。资源预序 \(f\preceq_{\rm res}g\) 不能当作同构；若混用，输出 \(\mathsf{PreorderAsIsomorphismFail}\)。
+
+\paragraph{语义函子与保守性。}
+语义范畴可为 \(\mathsf{Set}\)、\(\mathsf{Meas}\)、\(\mathsf{Hilb}\)、\(\mathsf{C^*Alg}\)、\(\mathsf{Prob}\)、\(\mathsf{Man}\)、\(\mathsf{Graph}\) 或 \(\mathsf{ChainComplex}\)。语义解释必须给函子
+\[
+\boxed{
+\mathsf{Sem}:\mathcal{PW}_2\to\mathcal S
+}
+\]
+并满足
+\[
+\mathsf{Sem}(\operatorname{id})=\operatorname{id},
+\qquad
+\mathsf{Sem}(g\circ f)=\mathsf{Sem}(g)\circ\mathsf{Sem}(f).
+\]
+若只给每个投影词一个解释，却未证明组合保持，输出 \(\mathsf{InterpretationAsFunctorFail}\)。
+
+保守性为
+\[
+\boxed{
+\mathsf{Sem}(f)\ {\rm is\ iso}
+\Rightarrow
+f\ {\rm is\ equivalence\ certified}.
+}
+\]
+faithful、full 与 conservative 必须分开。semantic equality 推出 syntactic equality 需要 faithful 证书；若只用 conservative 就推出 \(f=g\)，输出 \(\mathsf{ConservativeAsFaithfulFail}\) 或 \(\mathsf{SemanticEqualityAsSyntacticEqualityFail}\)。
+
+\paragraph{自然变换与自然同构。}
+给定 \(F,G:\mathcal C\to\mathcal D\)，自然变换 \(\eta:F\Rightarrow G\) 由分量
+\[
+\eta_A:F(A)\to G(A)
+\]
+组成，并满足所有态射 \(f:A\to B\) 上的自然性方块
+\[
+\boxed{
+G(f)\circ\eta_A=\eta_B\circ F(f).
+}
+\]
+若只在对象上给分量，却未检查生成态射的自然性，输出 \(\mathsf{ComponentMapAsNaturalTransformationFail}\)。若各分量可逆且自然性成立，才是自然同构；逐点同构但无自然性时输出 \(\mathsf{PointwiseIsoWithoutNaturalityFail}\)。
+
+\paragraph{交换图与 Beck--Chevalley。}
+图
+\[
+\begin{array}{ccc}
+A & \xrightarrow{f} & B\\
+\downarrow g & & \downarrow h\\
+C & \xrightarrow{k} & D
+\end{array}
+\]
+交换的内容是
+\[
+\boxed{
+h\circ f=k\circ g.
+}
+\]
+只画图不证明该等式时输出 \(\mathsf{DiagramDrawnAsProofFail}\)。
+
+对 pullback square
+\[
+\begin{array}{ccc}
+A' & \xrightarrow{g'} & A\\
+\downarrow f' & & \downarrow f\\
+B' & \xrightarrow{g} & B
+\end{array}
+\]
+若存在 \(f^*\dashv f_*\)、\(g^*\dashv g_*\)，Beck--Chevalley 条件要求 base-change map
+\[
+\boxed{
+g^*f_*\Rightarrow f'_*g'^*
+}
+\]
+为自然同构。若该 map 不是同构，必须记录
+\[
+\mathsf{BCDefect}
+=
+\operatorname{cofib}(g^*f_*\to f'_*g'^*)
+\]
+或数值缺陷
+\[
+\Delta_{\rm BC}=\|g^*f_*-f'_*g'^*\|.
+\]
+隐藏缺陷时输出 \(\mathsf{BeckChevalleyDefectHiddenFail}\)。
+
+\paragraph{fold base change 与条件期望塔。}
+fold-aware restriction
+\[
+\operatorname{Fold}_m\circ\pi_{m+1,m}
+=
+\rho_{m+1,m}\circ\operatorname{Fold}_{m+1}
+\]
+是 base-change 方块。若 raw truncation 与 folded restriction 不形成自然方块，输出 \(\mathsf{FoldBaseChangeFail}\)。
+
+条件期望塔律写作
+\[
+\boxed{
+E_AE_B=E_A\qquad(A\subseteq B).
+}
+\]
+若 \(E_AE_B-E_A\ne0\)，必须记录 \(\mathsf{TowerDefectCert}\)。把 approximate tower law 当 exact tower law 时输出 \(\mathsf{ApproxTowerAsExactFail}\)。
+
+\paragraph{push/pull typing。}
+必须区分
+\[
+f^*:\mathcal F(B)\to\mathcal F(A),
+\qquad
+f_*:\mathcal F(A)\to\mathcal F(B),
+\qquad
+f_!:\mathcal F(A)\to\mathcal F(B).
+\]
+\(f^*\) 是 pullback，\(f_*\) 是 direct image，\(f_!\) 是 compact-support 或 integration pushforward。混用 \(f_*\) 与 \(f_!\) 时输出 \(\mathsf{PushforwardAmbiguityFail}\)。
+
+\paragraph{异常 cocycle 与可消异常。}
+弱函子组合 residual 写作
+\[
+\omega(f,g):F(g)F(f)\Rightarrow F(gf).
+\]
+若满足
+\[
+\boxed{
+\omega(g,hf)\cdot\omega(h,f)
+=
+\omega(hg,f)\cdot\omega(h,g),
+}
+\]
+则 \(\omega\) 是 2-cocycle。若不满足 cocycle identity，输出 \(\mathsf{AnomalyNotCocycleFail}\)。
+
+若存在 1-cochain \(\lambda(f)\) 使
+\[
+\boxed{
+\omega(f,g)=\lambda(g)\lambda(f)\lambda(gf)^{-1},
+}
+\]
+则异常为 coboundary，可被 trivialization 消去。局部可消不等于全局可消；若混用，输出 \(\mathsf{LocalGaugeAsGlobalTrivializationFail}\)。
+
+异常类写作
+\[
+\boxed{
+[\omega]\in H^2(\mathcal C,\mathcal A).
+}
+\]
+若只证明某个 representative 非零，却声称 cohomology class 非平凡，需要另证其不是 coboundary；否则输出 \(\mathsf{NonzeroCocycleAsNontrivialClassFail}\)。
+
+\paragraph{strictification 与 quotient。}
+strictification 试图把
+\[
+F(g)F(f)\xRightarrow{\omega(f,g)}F(gf)
+\]
+替换为严格等式。充分条件是 \([\omega]=0\)，或引入 extension category 吸收异常。未检查 anomaly class 就 strictify 时输出 \(\mathsf{StrictificationWithoutAnomalyCheckFail}\)。
+
+若通过 quotient
+\[
+\mathcal C_{\rm strict}=\mathcal C/ {\sim_\omega}
+\]
+严格化，必须证明等价关系与组合相容、商范畴良定义、语义函子下降、代价函子下降或给出损失账本。直接把 residual 设为 0 时输出 \(\mathsf{ResidualErasedInsteadOfQuotientedFail}\)。商后若仍声称 faithful，需证明 kernel 为零；否则输出 \(\mathsf{StrictificationInformationLossHiddenFail}\)。
+
+\paragraph{非交换 Stokes 与范畴曲率。}
+闭路 \(\gamma=f_k\cdots f_1\) 的 holonomy residual 为
+\[
+\boxed{
+\operatorname{Hol}(\gamma)
+=
+F(f_k)\cdots F(f_1)F(\gamma)^{-1}.
+}
+\]
+非交换 Stokes 需要把边界 holonomy 表为面 residual 的有序乘积：
+\[
+\operatorname{Hol}(\partial\Sigma)
+=
+\prod_{\sigma\subset\Sigma}\Omega(\sigma).
+\]
+若闭路 residual 未证明可由面 residual 组合，输出 \(\mathsf{BoundaryHolonomyWithoutStokesFail}\)。
+
+对可交换方块 \(gf=f'g'\)，连接数据 \(\nabla(f)\) 的曲率 residual 为
+\[
+\boxed{
+\mathcal R(f,g,f',g')
+=
+\nabla(f')\nabla(g')-\nabla(g)\nabla(f)
+}
+\]
+或乘法形式
+\[
+\Omega=\nabla(f')\nabla(g')\nabla(f)^{-1}\nabla(g)^{-1}.
+\]
+若只得到闭路乘积非平凡，却未区分 gauge 与 curvature，输出 \(\mathsf{HolonomyAsCurvatureWithoutGaugeFixFail}\)。
+
+\paragraph{局部到全局：descent、stack 与 groupoid。}
+局部 trivializations \(\lambda_i\) 在重叠上的 transition residual 为
+\[
+g_{ij}=\lambda_i\lambda_j^{-1}.
+\]
+三重重叠需满足
+\[
+g_{ij}g_{jk}g_{ki}=1.
+\]
+否则存在 Čech obstruction。局部 trivialization 存在就声称全局 trivial 时输出 \(\mathsf{LocalTrivialAsGlobalTrivialFail}\)。若 \(a_{ijk}=g_{ij}g_{jk}g_{ki}\ne1\) 却继续声称 gluing，输出 \(\mathsf{CechGluingFail}\)。
+
+局部对象 \(X_i\) 要 descent 成全局对象，需要重叠同构 \(\phi_{ij}\) 与 cocycle condition。没有重叠同构时输出 \(\mathsf{LocalObjectsWithoutDescentFail}\)，同构不满足 cocycle 时输出 \(\mathsf{DescentCocycleFail}\)。
+
+若对象只局部存在且 gluing up to isomorphism，应使用 stack/prestack，而不是 ordinary sheaf。把 stack object 当 sheaf section 时输出 \(\mathsf{StackObjectAsSheafSectionFail}\)。若局部对象有 nontrivial automorphisms，语义目标应为 groupoid；只取 isomorphism classes 并丢掉 automorphism group 时输出 \(\mathsf{AutomorphismGroupErasedFail}\)。Morita equivalence 不等于 isomorphism，混用时输出 \(\mathsf{MoritaAsIsomorphismFail}\)。
+
+\paragraph{语义结构：算子代数、dagger、monoidal、trace。}
+在 \(C^*\mathsf{Alg}\) 中，态射可能是 \(*\)-homomorphism、UCP map、CP map、conditional expectation 或 bimodule map。把 CP map 当作 \(*\)-hom 时输出 \(\mathsf{CPMapAsStarHomFail}\)。
+
+在 Hilb 中若使用 dagger，需满足
+\[
+(f^\dagger)^\dagger=f,\qquad
+(g\circ f)^\dagger=f^\dagger\circ g^\dagger.
+\]
+任意 linear map 被当作 unitary 时输出 \(\mathsf{LinearMapAsUnitaryFail}\)。
+
+并行协议需要 monoidal structure \((\mathcal C,\otimes,\mathbb I,\alpha,\lambda,\rho)\)。若只是 weak monoidal，却忽略 associator，输出 \(\mathsf{WeakMonoidalAsStrictFail}\)。braiding 不等于 symmetry；只有
+\[
+\beta_{B,A}\circ\beta_{A,B}=\operatorname{id}
+\]
+才是 symmetric，混用时输出 \(\mathsf{BraidedAsSymmetricFail}\)。闭环、feedback 或 trace 需要 traced monoidal category；把闭环图形当普通组合时输出 \(\mathsf{TraceOperationUntypedFail}\)。
+
+\paragraph{伴随、monad、partial readout 与 Markov 语义。}
+伴随 \(F\dashv G\) 需要 unit、counit 与 triangle identities。只有双向 maps 却称 adjunction 时输出 \(\mathsf{BidirectionalMapsAsAdjunctionFail}\)。由伴随产生的 monad \(T=GF\) 需要 multiplication \(\mu:T^2\to T\)、unit \(\eta:\operatorname{id}\to T\) 与 monad laws；只有 endofunctor 时输出 \(\mathsf{EndofunctorAsMonadFail}\)。
+
+ReadUS 是 partial readout 时应使用 Kleisli category。NULL 可由 exception monad
+\[
+T(X)=X+\mathsf{NullType}
+\]
+捕获，并用 Kleisli composition。偏函数被写成 total function 时输出 \(\mathsf{PartialReadoutAsTotalFail}\)。NULL 被当作 ordinary value 且不区分来源时输出 \(\mathsf{NullAsOrdinaryValueFail}\)。
+
+随机读出为 Markov kernel \(K:X\rightsquigarrow Y\)，组合为
+\[
+(K_2\circ K_1)(x,dz)=\int_YK_2(y,dz)K_1(x,dy).
+\]
+随机核被当作 deterministic function 时输出 \(\mathsf{KernelAsFunctionFail}\)。
+
+\paragraph{信息、熵与证书组合。}
+信息账本可作为 lax functor
+\[
+\mathsf{Info}:\mathcal C\to(\mathbb R_{\ge0},\le)
+\]
+并满足链式不等式。信息损失、residual information 与 visible entropy 无链式规则时输出 \(\mathsf{InformationLedgerIncoherentFail}\)。熵通常不是严格函子；把 entropy 当普通 functor 而无 chain rule ledger 时输出 \(\mathsf{EntropyAsFunctorFail}\)。
+
+若 \(C_f\) certifies \(f\)，\(C_g\) certifies \(g\)，则 composite certificate \(C_{g\circ f}\) 需要检查类型、误差组合、成本组合、residual 组合、NULL 传播与语义保持。只把两个 PASS 串联时输出 \(\mathsf{PassConcatenationAsCompositePassFail}\)。
+
+近似交换应表示为
+\[
+\alpha_\epsilon:f\Rightarrow g,
+\qquad
+d(f,g)\le\epsilon.
+\]
+组合误差需满足加法、乘法或稳定性规则。近似交换图被写成严格交换图时输出 \(\mathsf{ApproximateDiagramAsExactFail}\)。
+
+\paragraph{coherence、quotient 与审计 trace。}
+多重 associator、unitor 与 braiding 需要 coherence theorem。未声明 coherence theorem 却随意重括号或换序时输出 \(\mathsf{CoherenceAssumedWithoutProofFail}\)。associator 需满足 pentagon，braiding 与 associator 需满足 hexagon；缺失时分别输出 \(\mathsf{AssociatorPentagonMissingFail}\) 与 \(\mathsf{BraidingHexagonMissingFail}\)。
+
+证书等价 \(C\sim C'\) 若由可逆 2-态射给出，商 \(\mathsf{Cert}/\!\sim\) 需证明 congruence：
+\[
+C_1\sim C_1',\quad C_2\sim C_2'
+\Rightarrow
+C_2\circ C_1\sim C_2'\circ C_1'.
+\]
+否则输出 \(\mathsf{CertificateQuotientNotCongruentFail}\)。
+
+audit trace 应满足
+\[
+\mathsf{Trace}(g\circ f)=
+\mathsf{Trace}(f)\ast\mathsf{Trace}(g)
+\]
+或 anomaly 版本。审计记录不可组合时输出 \(\mathsf{AuditTraceNonFunctorialFail}\)。hash chain 也需自然性：
+\[
+h(C_g\circ C_f)=H(h(C_f),h(C_g),\mathsf{meta}).
+\]
+局部 hash 不能验证组合完整性时输出 \(\mathsf{LocalHashWithoutCompositeIntegrityFail}\)。
+
+\paragraph{proof object、proof relevance 与 higher anomaly。}
+proof object 与 certificate object 不同；需要 extraction functor
+\[
+\mathsf{Extract}:\mathsf{Proof}\to\mathsf{Cert}.
+\]
+把 narrative proof 当作 machine-checkable certificate 时输出 \(\mathsf{NarrativeProofAsCertificateFail}\)。
+
+若证书等价只看结论，会丢失 cost、error、anomaly、random seed 与 implementation path。将证明同一结论的证书强行等同时输出 \(\mathsf{ProofIrrelevanceErasesAuditFail}\)。
+
+若 2-cocycle strictification 仍在三重组合中失败，需记录 3-cocycle higher anomaly \(\alpha(f,g,h)\)。只检查二阶异常却在三重组合中失败时输出 \(\mathsf{TripleCompositionAnomalyFail}\)。
+
+\paragraph{locality、fibered category 与 pro-continuum。}
+局部范畴随 open set 反变：
+\[
+\mathcal C:\mathsf{Open}(X)^{op}\to\mathsf{Cat}.
+\]
+这通常是 pseudofunctor；若
+\[
+\rho_{V,W}\rho_{U,V}\cong\rho_{U,W}
+\]
+只是 up to isomorphism，却写作等式，输出 \(\mathsf{PseudofunctorAsStrictFunctorFail}\)。restriction 只对对象定义、未对态射定义时输出 \(\mathsf{ObjectRestrictionWithoutMorphismFail}\)。
+
+观察者、状态或区域纤维可写 indexed category \(\mathcal E:\mathcal B^{op}\to\mathsf{Cat}\) 或 Grothendieck fibration \(p:\int\mathcal E\to\mathcal B\)。缺 reindexing functor 时输出 \(\mathsf{FiberCollectionWithoutFibrationFail}\)。把总空间写成 disjoint union 而无态射结构时输出 \(\mathsf{DisjointUnionAsFibrationFail}\)。
+
+limit/colimit 声明必须给 universal cone/cocone。只给集合并或集合交时输出 \(\mathsf{SetUnionAsColimitFail}\) 或 \(\mathsf{SetIntersectionAsLimitFail}\)。inverse systems 应先视为 pro-object；把 pro-object 当 actual limit 时输出 \(\mathsf{ProObjectAsLimitObjectFail}\)。若无 realization functor
+\[
+\mathsf{Real}:\mathsf{Pro}(\mathcal C)\to\mathcal D,
+\]
+却把 pro-object 当 continuum，输出 \(\mathsf{ProObjectAsContinuumFail}\)。
+
+\paragraph{categorical RG、QEC、holography 与 zero knowledge。}
+RG flow 是 endofunctor 或半群作用
+\[
+R_t:\mathcal C\to\mathcal C,
+\qquad
+R_{s+t}=R_sR_t.
+\]
+若只在对象上定义 RG，输出 \(\mathsf{RGOnObjectsOnlyFail}\)。observable functor 与 RG 兼容需自然变换；只比较数值序列时输出 \(\mathsf{RGNumericsAsNaturalityFail}\)。
+
+QEC 可写为
+\[
+\mathsf{Enc}:\mathcal L\to\mathcal P,\quad
+\mathsf N:\mathcal P\to\mathcal P,\quad
+\mathsf R:\mathcal P\to\mathcal L,
+\]
+并要求
+\[
+\mathsf R\mathsf N\mathsf{Enc}\Rightarrow\operatorname{id}_{\mathcal L}
+\]
+为自然的近似同构。只对单个态验证 recovery 时输出 \(\mathsf{PointwiseRecoveryAsFunctorialQECFail}\)。
+
+体--界字典
+\[
+D:\mathcal C_{\rm bulk}\to\mathcal C_{\partial}
+\]
+必须声明是否 full、faithful、conservative、monoidal，是否 preserve limits/colimits，是否 commute with continuum realization。只给对象层映射时输出 \(\mathsf{BulkBoundaryObjectMapOnlyFail}\)。只恢复对象而不恢复 morphism structure 时输出 \(\mathsf{HolographicObjectRecoveryOnlyFail}\)。
+
+horizon ledger 可作为 functor \(\mathsf H:\mathcal C_{\rm bulk}\to\mathcal C_{\rm ledger}\)。若它压缩 bulk 信息，应记录 fiber \(\mathsf H^{-1}(h)\)。压缩后仍声称 full recovery 时输出 \(\mathsf{LedgerCompressionAsFullRecoveryFail}\)。
+
+zero knowledge 可写为 leakage functor \(\mathsf L\) 与 simulator output 的自然不可区分。只给单一 transcript 泄漏界时输出 \(\mathsf{PointwiseLeakageAsZKNaturalityFail}\)。
+
+\paragraph{可计算范畴与 word problem。}
+若范畴对象、态射、2-态射可计算，需要 object code、morphism code、composition procedure 与 equality verifier。态射相等不可判定却要求 automatic strictification 时输出 \(\mathsf{UndecidableEqualityStrictificationFail}\)。
+
+投影词 word problem \(w\stackrel{?}=w'\) 需给判定或半判定证书。若 word problem 不可判定却声称统一正规形，输出 \(\mathsf{UndecidableWordProblemAsNormalFormFail}\)。若正规形函子 \(\mathsf{NF}\) 被称为 reflector，需要 \(\mathsf{NF}\dashv i\) 的 universal property；只有 NF procedure 时输出 \(\mathsf{AlgorithmicNFAsReflectorFail}\)。rewrite 正规形需 termination、local confluence、Newman lemma 或等价工具；只证明 termination 未证明 confluence 时输出 \(\mathsf{TerminationWithoutConfluenceFail}\)。
+
+\paragraph{总证书与输出。}
+称 \(\mathsf{CategoricalCoherenceClosureCert}\) 为范畴一致性总证书，若它合并 \(\mathsf{CategoryObjectCert}\)、\(\mathsf{MorphismTypingCert}\)、\(\mathsf{CompositionLawCert}\)、\(\mathsf{IdentityLawCert}\)、\(\mathsf{FunctorialityCert}\)、\(\mathsf{NaturalTransformationCert}\)、\(\mathsf{TwoMorphismCert}\)、\(\mathsf{CoherenceDiagramCert}\)、\(\mathsf{BeckChevalleyCert}\)、\(\mathsf{AnomalyCocycleCert}\)、\(\mathsf{CoboundaryTrivializationCert}\)、\(\mathsf{StrictificationCert}\) 与 \(\mathsf{CategoricalFailureWitnessCert}\)。
+
+允许 PASS 包括 \(\mathsf{CategoryPass}\)、\(\mathsf{TwoCategoryPass}\)、\(\mathsf{FunctorialityPass}\)、\(\mathsf{NaturalityPass}\)、\(\mathsf{BeckChevalleyPass}\)、\(\mathsf{AnomalyCocyclePass}\) 与 \(\mathsf{StrictificationPass}\)。允许 NULL 包括 \(\mathsf{NaturalityNull}\)、\(\mathsf{BeckChevalleyNull}\)、\(\mathsf{AnomalyClassNull}\)、\(\mathsf{StrictificationNull}\) 与 \(\mathsf{WordProblemNull}\)。允许 FAIL 包括 \(\mathsf{IllTypedMorphismFail}\)、\(\mathsf{DiagramDrawnAsProofFail}\)、\(\mathsf{ComponentMapAsNaturalTransformationFail}\)、\(\mathsf{ConservativeAsFaithfulFail}\)、\(\mathsf{BeckChevalleyDefectHiddenFail}\)、\(\mathsf{StrictificationWithoutAnomalyCheckFail}\) 与 \(\mathsf{MoritaAsIsomorphismFail}\)。
+
+\begin{theorem}[categorical coherence 的可靠性]\label{thm:typed-address-biaxial-completion-categorical-coherence-soundness}
+若
+\[
+\mathsf{VerifyCategoricalCoherenceClosure}
+(\mathsf{CategoricalCoherenceClosureCert})
+=
+\mathsf{CategoricalCoherencePass},
+\]
+则存在类型良定的 2-范畴或弱 2-范畴 \(\mathcal C_2\)、语义函子
+\[
+\mathsf{Sem}:\mathcal C_2\to\mathcal S,
+\]
+代价函子或 lax 代价函子
+\[
+\mathsf{Cost}:\mathcal C_2\to\mathbb K,
+\]
+以及异常账本
+\[
+[\omega]\in H^2(\mathcal C,\mathcal A),
+\]
+使声明的组合、rewrite、自然性、base-change、strictification 与语义保真均在对应类型层上成立。
+\end{theorem}
+
+\begin{proof}
+\(\mathsf{TypedLedgerCert}\) 与 composition/identity ledgers 给出基础范畴。
+\(\mathsf{TwoCategoryCert}\) 给出水平、垂直组合与 interchange law。
+\(\mathsf{SemanticFunctorCert}\) 与 \(\mathsf{CostFunctorCert}\) 保证语义和代价与组合相容。
+\(\mathsf{NaturalTransformationCert}\) 与 \(\mathsf{BeckChevalleyCert}\) 处理图交换和 base change。
+\(\mathsf{AnomalyCocycleCert}\) 与 \(\mathsf{StrictificationCert}\) 区分可消 residual、非平凡异常和合法 quotient/extension。
+故投影词系统成为可组合证书系统，而不是散列表。
+\end{proof}
+
+\begin{theorem}[单个方块不推出自然性]\label{thm:typed-address-biaxial-completion-single-square-not-naturality}
+若只知道某个态射 \(f:A\to B\) 上
+\[
+G(f)\eta_A=\eta_BF(f),
+\]
+则只能得到该 \(f\) 上的自然性。除非对所有生成态射验证，并证明这些生成态射生成全范畴，否则不能推出 \(\eta:F\Rightarrow G\)。缺失时输出
+\[
+\boxed{\mathsf{SingleSquareAsNaturalityFail}.}
+\]
+\end{theorem}
+
+\begin{proof}
+自然变换的量词覆盖 \(\mathcal C\) 的全部态射。单个方块只验证一个态射；若未说明生成元与关系，无法把局部交换延拓到任意复合态射。
+\end{proof}
+
+\begin{theorem}[strictification 需要异常平凡化或扩张]\label{thm:typed-address-biaxial-completion-anomaly-strictification}
+若复合 residual 定义
+\[
+\omega\in Z^2(\mathcal C,\mathcal A),
+\]
+则在原范畴中无损 strictification 的充分条件为 \([\omega]=0\)。若 \([\omega]\ne0\)，只能通过扩张范畴或外置 ledger 实现 strictification，而不能直接删除 residual。
+\end{theorem}
+
+\begin{proof}
+\([\omega]=0\) 时存在 1-cochain \(\lambda\) 使 \(\omega=\delta\lambda\)，可由 coherent gauge change 消去 residual。若 cohomology class 非零，则不存在全局 1-cochain 消去该 residual；直接 strictify 会改变组合信息或丢失异常。
+\end{proof}
+
+\begin{theorem}[保守语义只反映等价]\label{thm:typed-address-biaxial-completion-conservative-semantics}
+若 \(\mathsf{Sem}\) 为 conservative，则
+\[
+\mathsf{Sem}(f)\ {\rm is\ iso}
+\Rightarrow
+f\ {\rm is\ equivalence\ certified}.
+\]
+但不能推出
+\[
+\mathsf{Sem}(f)=\mathsf{Sem}(g)\Rightarrow f=g.
+\]
+后者需要 faithful 证书。混用时输出 \(\mathsf{ConservativeAsFaithfulFail}\)。
+\end{theorem}
+
+\begin{proof}
+conservative functor 只反映同构，不保证 hom-set map 单射。faithfulness 才控制不同态射在语义层是否可被区分。
+\end{proof}
+
+\paragraph{原稿表述的替换。}
+若原稿写“两个投影词等价”，应改为：两个投影词之间存在可逆 2-态射；若要降为等式，还需 strictification 或 quotient certificate。
+
+若原稿写“图交换显然成立”，应改为：该图交换等价于指定复合态射相等；在近似情形应给 \(\mathsf{ApproximateTwoMorphismCert}\)。
+
+若原稿写“异常可以被规范消去”，应改为：异常 residual 定义 2-cocycle；若其 cohomology class 为零，则可由 1-cochain trivialization 消去，否则需保留外置 ledger 或扩张范畴。
+
+若原稿写“投影词语义是保守的，因此语义相同即词相同”，应改为：保守语义函子只反映同构/等价；语义相同推出语法相同需要 faithful 证书。
+
+最终主句为：
+\[
+\boxed{
+\text{categorification certifies objects, morphisms, 2-morphisms, composition, naturality, anomaly, cost, and semantic preservation; it is not merely drawing arrows.}
+}
+\]

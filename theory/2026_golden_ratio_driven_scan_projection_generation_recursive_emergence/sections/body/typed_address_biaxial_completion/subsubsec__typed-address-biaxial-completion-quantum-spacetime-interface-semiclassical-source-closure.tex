@@ -1,0 +1,432 @@
+\subsubsection{量子--时空接口、Hilbert 场局域化与半经典源项闭包}\label{subsubsec:typed-address-biaxial-completion-quantum-spacetime-interface-semiclassical-source-closure}
+开放量子闭包给出 Hilbert 载体、效果算子、Born 读出、完全正信道、Stinespring 环境与连续时间结构。admissible Einstein 闭包给出最大四维证书域 \(M_{\mathrm{adm}}\) 上的 Lorentz 度规、Levi--Civita 连接、Einstein tensor 与经典源项。二者的接口不能把抽象量子力学直接等同于局域量子场论，而必须先建立量子自由度在 \(M_{\mathrm{adm}}\) 上的局域化、局部代数网、态正则性、应力张量重整化与回授一致性。
+
+因此引入量子 admissible 子域
+\[
+M_{\mathrm{qadm}}\subseteq M_{\mathrm{adm}},
+\]
+并只在该子域上讨论半经典源项闭包：
+\[
+\boxed{
+G_{\mu\nu}+\Lambda g_{\mu\nu}
+=
+\kappa\Bigl(
+T^{\rm cl}_{\mu\nu}
++
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+\Bigr).
+}
+\]
+若重整化要求高阶几何 counterterm，则对应结论应降为 higher-curvature semiclassical closure，而不是 minimal Einstein closure。
+
+\paragraph{量子局域化。}
+量子侧首先需要区域到量子地址的局域化映射
+\[
+\operatorname{Loc}:\mathcal O(M_{\mathrm{adm}})\to\mathsf{Addr}_{\rm q},
+\]
+其中 \(\mathcal O(M_{\mathrm{adm}})\) 是 admissible 开区域族。若 \(U\subseteq V\)，则应有
+\[
+\operatorname{Loc}(U)\preceq\operatorname{Loc}(V)
+\]
+在地址细化预序中成立。spacelike separated 区域的地址支撑不得被迫重叠，除非提交纠缠或公共制备账本；即便存在纠缠，局部可观测代数仍须满足微因果性。
+
+\begin{definition}[量子局域化证书]\label{def:typed-address-biaxial-completion-quantum-localization-cert}
+称 \(\mathsf{QuantumLocalizationCert}\) 为量子局域化证书，若它包含 \(M_{\mathrm{adm}},M_{\mathrm{qadm}}\)、区域族 \(\mathcal O(M_{\mathrm{qadm}})\)、局域化映射 \(\operatorname{Loc}\)、region-address ledger、causal-support ledger、chart-compatibility ledger 与 round hash。验证器检查区域包含关系与地址细化相容，并检查定位支撑与第 \ref{subsubsec:typed-address-biaxial-completion-admissible-four-dimensional-einstein-closure} 节的因果锥一致。若抽象 Hilbert 自由度无法定位到时空区域，输出 \(\mathsf{QuantumLocalizationNull}\)。若定位支撑与 \(g\)-causal cone 冲突，输出 \(\mathsf{QuantumCausalSupportFail}\)。
+\end{definition}
+
+\paragraph{局部可观测代数网。}
+在每个 \(U\subseteq M_{\mathrm{qadm}}\) 上给出局部 \(C^*\)-代数或 von Neumann 代数
+\[
+U\longmapsto\mathcal A(U).
+\]
+其基本要求为 isotony：
+\[
+U\subseteq V\Longrightarrow \mathcal A(U)\subseteq\mathcal A(V),
+\]
+以及 microcausality：
+\[
+U\perp V,\quad A\in\mathcal A(U),\quad B\in\mathcal A(V)
+\Longrightarrow
+[A,B]=0.
+\]
+这里 \(U\perp V\) 由 \(g\) 的 causal cone 判定。若 \(\varphi:U\to V\) 是 admissible diffeomorphism，还应有局部协变同构
+\[
+\alpha_\varphi:\mathcal A(U)\to\mathcal A(V).
+\]
+
+\begin{definition}[局部代数网证书]\label{def:typed-address-biaxial-completion-local-algebra-net-cert}
+称 \(\mathsf{LocalAlgebraNetCert}\) 为局部代数网证书，若它包含区域族、局部代数 \(\{\mathcal A(U)\}\)、嵌入 \(\iota_{UV}:\mathcal A(U)\to\mathcal A(V)\)、isotony ledger、locality ledger、covariance ledger、operational event ledger 与 round hash。验证器检查
+\[
+\iota_{VW}\circ\iota_{UV}=\iota_{UW}
+\qquad(U\subseteq V\subseteq W),
+\]
+并在 \(U\perp V\) 时检查
+\[
+[\mathcal A(U),\mathcal A(V)]=0.
+\]
+局部代数事件无法回接开放量子事件接口时输出 \(\mathsf{LocalEventInterfaceNull}\)。spacelike separated 可观测量不对易时输出 \(\mathsf{MicrocausalityFail}\)。
+\end{definition}
+
+\paragraph{Hilbert 场、表示与态。}
+局部代数网需要局部表示
+\[
+\pi_U:\mathcal A(U)\to\mathcal B(\mathcal H_U).
+\]
+若 \(U\subseteq V\)，则表示之间应有嵌入或 intertwiner
+\[
+J_{UV}\pi_U(A)
+=
+\pi_V(\iota_{UV}A)J_{UV}.
+\]
+全局 Hilbert 空间不是强制输入；局部代数网可以先于单一全局表示。
+
+\begin{definition}[Hilbert 场证书]\label{def:typed-address-biaxial-completion-hilbert-bundle-cert}
+称 \(\mathsf{HilbertBundleCert}\) 为 Hilbert 场证书，若它包含局部 Hilbert 空间 \(\{\mathcal H_U\}\)、表示 \(\{\pi_U\}\)、嵌入或 intertwiner \(\{J_{UV}\}\)、representation ledger、intertwiner ledger、gluing ledger、可选 global Hilbert ledger 与 round hash。验证器检查
+\[
+\pi_U(AB)=\pi_U(A)\pi_U(B),
+\qquad
+\pi_U(A^*)=\pi_U(A)^*,
+\]
+以及 intertwiner 关系。局部表示无法粘接时输出 \(\mathsf{HilbertGluingNull}\)。声称全局 Hilbert 空间但嵌入不相容时输出 \(\mathsf{GlobalHilbertGluingFail}\)。
+\end{definition}
+
+代数态是正归一线性泛函
+\[
+\omega:\mathcal A(M_{\mathrm{qadm}})\to\mathbb C,
+\qquad
+\omega(I)=1,\qquad
+\omega(A^*A)\ge0.
+\]
+局部态为 \(\omega_U=\omega|_{\mathcal A(U)}\)，并须满足
+\[
+\omega_V(\iota_{UV}A)=\omega_U(A).
+\]
+
+\begin{definition}[量子态证书]\label{def:typed-address-biaxial-completion-quantum-state-cert}
+称 \(\mathsf{QuantumStateCert}\) 为量子态证书，若它包含 \(\omega\)、局部态族、可选密度算子 \(\rho\)、可选纯态向量 \(\psi\)、positivity ledger、normalization ledger、local restriction ledger、compatibility ledger 与 round hash。验证器检查 \(\omega(I)=1\)、\(\omega(A^*A)\ge0\) 以及局部 restriction 相容。positivity 失败时输出 \(\mathsf{QuantumStatePositivityFail}\)。局部态无法拼成相容态族时输出 \(\mathsf{StateGluingNull}\)。
+\end{definition}
+
+\paragraph{态正则性与场算子。}
+并非任意态都给出良定义的 \(\langle\widehat T_{\mu\nu}\rangle\)。采用正则性层级
+\[
+\mathsf{Algebraic},\quad
+\mathsf{FiniteEnergy},\quad
+\mathsf{HadamardLike},\quad
+\mathsf{SmoothKernel},\quad
+\mathsf{RenormalizableStress}.
+\]
+半经典源项至少要求 \(\mathsf{RenormalizableStress}\)。等价地，二点函数
+\[
+W_2(x,y)=\omega(\widehat\phi(x)\widehat\phi(y))
+\]
+在 \(x\to y\) 的奇异部分必须可由局部几何 counterterm 或 subtraction kernel 消去。这里 \(\widehat\phi(x)\) 只作形式记号；可审计对象是 smeared field
+\[
+\widehat\phi_U(f)\in\mathcal A(U),
+\qquad
+f\in C_c^\infty(U).
+\]
+
+\begin{definition}[态正则性证书]\label{def:typed-address-biaxial-completion-state-regularity-cert}
+称 \(\mathsf{StateRegularityCert}\) 为态正则性证书，若它包含 \(\omega\)、正则层级、two-point kernel ledger、wavefront-or-singularity ledger、finite-energy ledger、renormalizability ledger 与 round hash。验证器检查二点核的奇异部分可被提交的局部几何 subtraction 消去。若态存在但不足以定义 \(\langle\widehat T\rangle_{\rm ren}\)，输出 \(\mathsf{StateRegularityNull}\)。若态导致不可重整化发散却声称半经典闭包，输出 \(\mathsf{StateRegularityFail}\)。
+\end{definition}
+
+\begin{definition}[场算子证书]\label{def:typed-address-biaxial-completion-field-operator-cert}
+称 \(\mathsf{FieldOperatorCert}\) 为场算子证书，若它包含 smeared field \(\widehat\phi_U(f)\)、test-function-space ledger、smearing ledger、field-equation ledger、commutation ledger、domain ledger 与 round hash。验证器检查 \(\operatorname{supp}(f)\subseteq U\) 时 \(\widehat\phi(f)\in\mathcal A(U)\)，并在 spacelike separated supports 上检查
+\[
+[\widehat\phi(f),\widehat\phi(h)]=0.
+\]
+若声称场方程 \(P_g\widehat\phi=0\)，则以 smeared 形式检查 \(\widehat\phi(P_gf)=0\)。使用点态场算子且未提交分布解释时输出 \(\mathsf{PointFieldOperatorNull}\)。
+\end{definition}
+
+\paragraph{局域演化。}
+曲率背景上通常没有全局 Killing 时间，因而不能默认全局 Hamiltonian \(H\)。若 \(M_{\mathrm{qadm}}\) 有 foliation
+\[
+M_{\mathrm{qadm}}=\bigcup_t\Sigma_t,
+\]
+可提交 \(\alpha_{t,s}:\mathcal A(\Sigma_s)\to\mathcal A(\Sigma_t)\)。若没有全局 slicing，则只允许局部 covariant evolution。
+
+\begin{definition}[演化局域化证书]\label{def:typed-address-biaxial-completion-evolution-localization-cert}
+称 \(\mathsf{EvolutionLocalizationCert}\) 为演化局域化证书，若它包含 \(M_{\mathrm{qadm}},g\)、time parameter type、可选 foliation \(\{\Sigma_t\}\)、演化族 \(\{\alpha_{t,s}\}\)、generator ledger、unitarity-or-CP ledger、causal propagation ledger 与 round hash。若声称 unitary evolution，验证器检查 \(\alpha_{t,s}(A)=U_{t,s}^*AU_{t,s}\) 与 \(U_{t,s}^*U_{t,s}=I\)。若声称 open-system channel，则检查完全正与迹保持。若无全局 Hamiltonian 支撑却声称 \(e^{-itH}\) 全局有效，输出 \(\mathsf{GlobalHamiltonianUnsupportedFail}\)。
+\end{definition}
+
+\paragraph{应力张量算子与重整化期望。}
+形式应力张量来自作用量变分
+\[
+T_{\mu\nu}
+=
+-\frac{2}{\sqrt{|g|}}
+\frac{\delta S}{\delta g^{\mu\nu}},
+\]
+量子化后得到 composite operator，需要由
+\[
+\widehat T_{\mu\nu}^{\rm bare}
+\longrightarrow
+\widehat T_{\mu\nu}^{\rm ren}
+\]
+的 ledger 支撑。半经典方程中实际使用的是期望值
+\[
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren,\omega}.
+\]
+
+\begin{definition}[应力张量算子证书]\label{def:typed-address-biaxial-completion-stress-tensor-operator-cert}
+称 \(\mathsf{StressTensorOperatorCert}\) 为应力张量算子证书，若它包含 bare 与 renormalized stress operator、classical variation ledger、composite operator ledger、symmetry ledger、local covariance ledger、smearing ledger 与 round hash。验证器检查 \(\widehat T_{\mu\nu}=\widehat T_{\nu\mu}\) 在 quadratic form 或 distribution sense 成立。只有 formal product 而无 composite operator ledger 时输出 \(\mathsf{StressOperatorCompositeNull}\)。tensor transformation law 失败时输出 \(\mathsf{StressOperatorCovarianceFail}\)。
+\end{definition}
+
+重整化期望可由 point-splitting 型公式表达：
+\[
+\boxed{
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+=
+\lim_{y\to x}
+D_{\mu\nu}(x,y)\bigl(W_2(x,y)-H_g(x,y)\bigr)
++
+C_{\mu\nu}(g).
+}
+\]
+其中 \(H_g\) 是局部几何奇异核，\(C_{\mu\nu}(g)\) 是允许的本地几何 counterterm。
+
+\begin{definition}[重整化期望证书]\label{def:typed-address-biaxial-completion-renormalized-expectation-cert}
+称 \(\mathsf{RenormalizedExpectationCert}\) 为重整化期望证书，若它包含 \(\omega,g,\widehat T_{\mu\nu}\)、\(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\)、point-splitting ledger、subtraction-kernel ledger、counterterm ledger、limit-existence ledger、scheme-dependence ledger 与 round hash。验证器检查上述极限在提交拓扑中存在，并检查结果对称。若重整化方案改变只导致允许的本地几何项变化，输出 \(\mathsf{RenormalizationSchemeEquivalentPass}\)。重整化后仍发散时输出 \(\mathsf{StressRenormalizationFail}\)。重整化自由度未纳入引力账本时输出 \(\mathsf{RenormalizationAmbiguityNull}\)。
+\end{definition}
+
+\paragraph{counterterm 与守恒。}
+重整化可能产生本地几何项 \(C^{(a)}_{\mu\nu}(g)\)。若这些项可吸收到 \(\Lambda\)、\(\kappa\) 或 \(T^{\rm cl}\)，则仍处于 minimal Einstein class；若需要 \(R^2\)、\(R_{\mu\nu}R^{\mu\nu}\) 等高阶曲率变分项，则必须升级为 higher-curvature class。
+
+\begin{definition}[重整化引力类证书]\label{def:typed-address-biaxial-completion-renormalized-gravity-class-cert}
+称 \(\mathsf{RenormalizedGravityClassCert}\) 为重整化引力类证书，若它包含 \(G_{\mu\nu},g_{\mu\nu},\Lambda,\kappa\)、counterterm 张量族 \(C^{(a)}_{\mu\nu}(g)\)、系数 \(\alpha_a\)、counterterm absorption ledger、minimal class ledger、higher-curvature ledger 与 round hash。若所有 counterterm 可吸收到 minimal Einstein class，输出 \(\mathsf{EinsteinMinimalRenormalizedPass}\)。若需要高阶曲率项，输出 \(\mathsf{HigherCurvatureSemiclassicalPass}\)。counterterm 未分类时输出 \(\mathsf{GravityCountertermNull}\)。
+\end{definition}
+
+半经典方程要求量子源项协变守恒：
+\[
+\boxed{
+\nabla^\mu\langle\widehat T_{\mu\nu}\rangle_{\rm ren}=0.
+}
+\]
+trace anomaly 不等于 conservation anomaly。若
+\[
+g^{\mu\nu}\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+=
+\mathcal A_{\rm tr}
+\]
+但 divergence 为零，则半经典方程仍可成立；改变的是 trace equation。
+
+\begin{definition}[量子守恒证书]\label{def:typed-address-biaxial-completion-quantum-conservation-cert}
+称 \(\mathsf{QuantumConservationCert}\) 为量子守恒证书，若它包含 \(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\)、\(g,\nabla\)、Ward identity ledger、divergence ledger、anomaly ledger、counterterm conservation ledger 与 round hash。验证器检查
+\[
+\nabla^\mu\langle\widehat T_{\mu\nu}\rangle_{\rm ren}=0.
+\]
+若存在 divergence anomaly 且未被账本吸收，输出 \(\mathsf{QuantumConservationAnomalyFail}\)。仅弱意义守恒时输出 \(\mathsf{WeakQuantumConservationPass}\)。
+\end{definition}
+
+\begin{definition}[trace anomaly 证书]\label{def:typed-address-biaxial-completion-trace-anomaly-cert}
+称 \(\mathsf{TraceAnomalyCert}\) 为 trace anomaly 证书，若它包含 \(g^{\mu\nu}\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\)、\(\mathcal A_{\rm tr}\)、classical trace ledger、quantum trace ledger、trace equation ledger 与 round hash。验证器检查 trace anomaly 等式在提交 scheme 中成立。把 trace anomaly 错判为 divergence failure 或反向混淆时输出 \(\mathsf{TraceDivergenceConfusionFail}\)。
+\end{definition}
+
+\paragraph{半经典源项与回授。}
+定义总源项
+\[
+\boxed{
+T^{\rm tot}_{\mu\nu}
+:=
+T^{\rm cl}_{\mu\nu}
++
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}.
+}
+\]
+它必须对称且守恒。由于 \(\langle\widehat T\rangle_{\rm ren}\) 依赖 \(g\)，半经典闭包还要求 fixed point，而不是固定背景上的单向计算：
+\[
+g\mapsto\omega[g]\mapsto
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}[g,\omega[g]]
+\mapsto G_{\mu\nu}[g].
+\]
+
+\begin{definition}[半经典源项账本证书]\label{def:typed-address-biaxial-completion-semiclassical-source-ledger-cert}
+称 \(\mathsf{SemiclassicalSourceLedgerCert}\) 为半经典源项账本证书，若它包含 \(T^{\rm cl}_{\mu\nu}\)、\(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\)、\(T^{\rm tot}_{\mu\nu}\)、classical source ledger、quantum source ledger、symmetry ledger、total conservation ledger 与 round hash。验证器检查 \(T^{\rm tot}_{\mu\nu}=T^{\rm tot}_{\nu\mu}\) 与 \(\nabla^\mu T^{\rm tot}_{\mu\nu}=0\)。总源项不守恒时输出 \(\mathsf{SemiclassicalSourceConservationFail}\)。
+\end{definition}
+
+\begin{definition}[回授 fixed-point 证书]\label{def:typed-address-biaxial-completion-backreaction-fixed-point-cert}
+称 \(\mathsf{BackreactionFixedPointCert}\) 为回授 fixed-point 证书，若它包含 \(g,\omega[g]\)、\(T^{\rm tot}_{\mu\nu}[g,\omega]\)、\(G_{\mu\nu}[g]\)、metric-dependence ledger、state-dependence ledger、fixed-point residual ledger、可选 stability ledger 与 round hash。定义
+\[
+\mathcal S_{\mu\nu}
+:=
+G_{\mu\nu}[g]+\Lambda g_{\mu\nu}
+-
+\kappa T^{\rm tot}_{\mu\nu}[g,\omega].
+\]
+classical pass 要求 \(\mathcal S_{\mu\nu}=0\)。未检查 fixed point 时输出 \(\mathsf{BackreactionFixedPointNull}\)。residual 非零时输出 \(\mathsf{BackreactionResidualFail}\)。
+\end{definition}
+
+\begin{definition}[半经典 Einstein 闭包证书]\label{def:typed-address-biaxial-completion-semiclassical-einstein-closure-cert}
+称 \(\mathsf{SemiclassicalEinsteinClosureCert}\) 为半经典 Einstein 闭包证书，若它包含 \(M_{\mathrm{qadm}},g,\nabla,G_{\mu\nu},\Lambda,\kappa,T^{\rm cl}_{\mu\nu}\)、\(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\)、\(T^{\rm tot}_{\mu\nu}\)、半经典源项账本、重整化引力类证书、回授 fixed-point 证书、semiclassical residual ledger、regularity mode 与 round hash。minimal residual 为
+\[
+\boxed{
+\mathcal Q_{\mu\nu}
+:=
+G_{\mu\nu}
++
+\Lambda g_{\mu\nu}
+-
+\kappa\Bigl(
+T^{\rm cl}_{\mu\nu}
++
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+\Bigr).
+}
+\]
+minimal pass 要求 \(\mathcal Q_{\mu\nu}=0\)。若含高阶曲率项，则 residual 改为
+\[
+\mathcal Q^{\rm ext}_{\mu\nu}
+:=
+G_{\mu\nu}
++
+\Lambda g_{\mu\nu}
++
+\sum_a\alpha_a C^{(a)}_{\mu\nu}
+-
+\kappa T^{\rm tot}_{\mu\nu}.
+\]
+若 \(\|\mathcal Q\|\le\varepsilon\)，输出 \(\mathsf{ApproxSemiclassicalPass}(\varepsilon)\)。缺重整化源项时输出 \(\mathsf{SemiclassicalClosureNull}\)。
+\end{definition}
+
+\paragraph{测量、纠缠与涨落的边界。}
+局部事件 \(E\in\mathcal A(U)\) 的 Born 读出为
+\[
+p_\omega(E)=\omega(E).
+\]
+若 \(U\perp V\)，\(U\) 上本地操作不得改变 \(V\) 上可观测统计，除非 communication ledger 说明该影响处于未来因果域。
+
+\begin{definition}[测量--时空一致性证书]\label{def:typed-address-biaxial-completion-measurement-spacetime-consistency-cert}
+称 \(\mathsf{MeasurementSpacetimeConsistencyCert}\) 为测量--时空一致性证书，若它包含 \(\mathcal A(U),\omega_U,\{E_i\}\)、Born rule ledger、POVM ledger、local operation ledger、no-superluminal-signalling ledger 与 round hash。验证器检查
+\[
+p_i=\omega(E_i)\ge0,
+\qquad
+\sum_i p_i=1.
+\]
+若 spacelike local operation 改变远端统计且无因果通信账本，输出 \(\mathsf{NoSignallingFail}\)。
+\end{definition}
+
+纠缠本身不是几何源项。若 \(\omega_{UV}\neq\omega_U\otimes\omega_V\)，只能记录 correlation；要把 entropy 或 correlation 映到 \(\Delta G_{\mu\nu}\)，必须提交显式 map。
+
+\begin{definition}[纠缠--几何边界证书]\label{def:typed-address-biaxial-completion-entanglement-geometry-boundary-cert}
+称 \(\mathsf{EntanglementGeometryBoundaryCert}\) 为纠缠--几何边界证书，若它包含 \(\omega_{UV},\omega_U,\omega_V\)、\(S_{\rm ent}(U:V)\)、correlation ledger、可选 stress-contribution ledger、可选 geometry-map ledger 与 round hash。只证明非 product 态时输出 \(\mathsf{EntanglementCorrelationPass}\)。若声称 \(S_{\rm ent}\Rightarrow\Delta G_{\mu\nu}\) 但缺显式 map，输出 \(\mathsf{EntanglementGeometryNull}\)。
+\end{definition}
+
+半经典方程只使用平均应力张量。若噪声核
+\[
+N_{\mu\nu\rho\sigma}(x,y)
+=
+\frac12\omega\bigl(\{\widehat t_{\mu\nu}(x),\widehat t_{\rho\sigma}(y)\}\bigr)
+\]
+在提交范数中不可忽略，则需要 stochastic semiclassical closure。
+
+\begin{definition}[应力涨落证书]\label{def:typed-address-biaxial-completion-stress-fluctuation-cert}
+称 \(\mathsf{StressFluctuationCert}\) 为应力涨落证书，若它包含 noise kernel、可选 stochastic source \(\xi_{\mu\nu}\)、noise-kernel ledger、variance-bound ledger、semiclassical-validity ledger 与 round hash。若噪声在提交范数中足够小，输出 \(\mathsf{MeanFieldSemiclassicalValidPass}\)。涨落未估计而使用平均场方程时输出 \(\mathsf{StressFluctuationValidityNull}\)。纳入随机源时输出 \(\mathsf{StochasticSemiclassicalPass}\)。
+\end{definition}
+
+\paragraph{量子 admissible 域与总证书。}
+\begin{definition}[最大量子 admissible 域证书]\label{def:typed-address-biaxial-completion-maximal-quantum-admissible-domain-cert}
+称 \(\mathsf{MaximalQuantumAdmissibleDomainCert}\) 为最大量子 admissible 域证书，若它包含 \(M_{\mathrm{adm}},M_{\mathrm{qadm}}\)、quantum patch ledger、algebra compatibility ledger、state compatibility ledger、renormalization compatibility ledger、backreaction compatibility ledger、excluded-region ledger 与 round hash。被排除区域必须给出类型化原因：
+\[
+\mathsf{NoLocalAlgebra},\quad
+\mathsf{MicrocausalityFail},\quad
+\mathsf{StateRegularityFail},\quad
+\mathsf{StressRenormalizationFail},\quad
+\mathsf{ConservationFail},\quad
+\mathsf{BackreactionFail}.
+\]
+\end{definition}
+
+\begin{definition}[量子--时空接口证书]\label{def:typed-address-biaxial-completion-quantum-spacetime-interface-cert}
+称 \(\mathsf{QuantumSpacetimeInterfaceCert}\) 为量子--时空接口证书，若它包含开放量子闭包证书、admissible Einstein 闭包证书、最大量子 admissible 域证书、量子局域化证书、局部代数网证书、Hilbert 场证书、量子态证书、态正则性证书、场算子证书、演化局域化证书、应力张量算子证书、重整化期望证书、重整化引力类证书、量子守恒证书、可选 trace anomaly 证书、半经典源项账本、回授 fixed-point 证书、测量--时空一致性证书、可选纠缠--几何边界证书、可选应力涨落证书、半经典 Einstein 闭包证书、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifyQuantumSpacetimeInterface}\) 载入开放量子闭包和 admissible Einstein 闭包，构造 \(M_{\mathrm{qadm}}\)，检查局部代数网、isotony、microcausality、Hilbert 表示或 algebraic state、态正则性、smeared field、stress tensor operator、renormalized expectation、counterterm 分类、量子守恒、总源项守恒、回授 fixed point、semiclassical residual、Born-rule consistency、no-signalling ledger 与可选涨落账本。输出可为
+\[
+\mathsf{MinimalSemiclassicalEinsteinPass},\quad
+\mathsf{HigherCurvatureSemiclassicalPass},\quad
+\mathsf{StochasticSemiclassicalPass},\quad
+\mathsf{QuantumOnFixedBackgroundPass},\quad
+\mathsf{NULL},\quad
+\mathsf{FAIL}.
+\]
+
+NULL 类型包括
+\[
+\mathsf{QuantumLocalizationNull},\quad
+\mathsf{LocalEventInterfaceNull},\quad
+\mathsf{HilbertGluingNull},\quad
+\mathsf{StateGluingNull},\quad
+\mathsf{StateRegularityNull},
+\]
+\[
+\mathsf{PointFieldOperatorNull},\quad
+\mathsf{StressOperatorCompositeNull},\quad
+\mathsf{RenormalizationAmbiguityNull},\quad
+\mathsf{GravityCountertermNull},\quad
+\mathsf{BackreactionFixedPointNull},\quad
+\mathsf{StressFluctuationValidityNull}.
+\]
+FAIL 类型包括
+\[
+\mathsf{QuantumCausalSupportFail},\quad
+\mathsf{MicrocausalityFail},\quad
+\mathsf{GlobalHilbertGluingFail},\quad
+\mathsf{QuantumStatePositivityFail},\quad
+\mathsf{StateRegularityFail},
+\]
+\[
+\mathsf{GlobalHamiltonianUnsupportedFail},\quad
+\mathsf{StressOperatorCovarianceFail},\quad
+\mathsf{StressRenormalizationFail},\quad
+\mathsf{QuantumConservationAnomalyFail},\quad
+\mathsf{TraceDivergenceConfusionFail},
+\]
+\[
+\mathsf{SemiclassicalSourceConservationFail},\quad
+\mathsf{BackreactionResidualFail},\quad
+\mathsf{NoSignallingFail},\quad
+\mathsf{SemiclassicalResidualFail}.
+\]
+
+\begin{theorem}[量子--时空半经典闭包的可靠性]\label{thm:typed-address-biaxial-completion-quantum-spacetime-semiclassical-closure-soundness}
+若
+\[
+\mathsf{VerifyQuantumSpacetimeInterface}
+(\mathsf{QuantumSpacetimeInterfaceCert})
+=
+\mathsf{MinimalSemiclassicalEinsteinPass},
+\]
+则存在 \(M_{\mathrm{qadm}}\subseteq M_{\mathrm{adm}}\)，使其继承四维 Lorentz 结构；每个 admissible 区域 \(U\subseteq M_{\mathrm{qadm}}\) 具有局部可观测代数 \(\mathcal A(U)\)；代数网满足 isotony 与 microcausality；存在正归一且局部相容的量子态 \(\omega\)；场算子以 smeared 或 distribution 形式定义；存在对称、协变且守恒的重整化应力期望
+\[
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren};
+\]
+总源项
+\[
+T^{\rm tot}_{\mu\nu}
+=
+T^{\rm cl}_{\mu\nu}
++
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+\]
+对称且守恒；并且在 \(M_{\mathrm{qadm}}\) 上成立
+\[
+\boxed{
+G_{\mu\nu}
++
+\Lambda g_{\mu\nu}
+=
+\kappa
+\Bigl(
+T^{\rm cl}_{\mu\nu}
++
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+\Bigr).
+}
+\]
+若输出为 \(\mathsf{HigherCurvatureSemiclassicalPass}\)，则相应高阶曲率修正方程成立。若输出为 \(\mathsf{StochasticSemiclassicalPass}\)，则带噪声源的随机半经典闭包成立。
+\end{theorem}
+\begin{proof}
+admissible Einstein 闭包给出 \(M_{\mathrm{adm}}\) 上的 \(g,\nabla,G_{\mu\nu}\) 与经典源项。最大量子 admissible 域证书筛出满足量子局域化、局部代数、态正则性、重整化与回授条件的 \(M_{\mathrm{qadm}}\)。局部代数网证书给出 isotony 与 microcausality，因此量子局域结构与 \(g\)-causal cone 相容。量子态证书保证 \(\omega\) 正归一且局部 restriction 相容。态正则性证书、应力张量算子证书与重整化期望证书保证 \(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\) 存在、对称且协变。量子守恒证书给出其协变 divergence 为零；经典源项守恒已由 Einstein admissible closure 提供，因此总源项守恒。重整化引力类证书说明 counterterms 仍属 minimal Einstein class，或明确升级为 higher-curvature class。回授 fixed-point 证书保证 \(g\) 与 \(\omega[g]\) 是同一半经典系统的解，而非固定背景单向计算。最后半经典 Einstein 闭包证书检查 residual \(\mathcal Q_{\mu\nu}=0\)。故 minimal pass 的方程成立；高阶与随机版本由对应 residual ledger 给出。证毕。
+\end{proof}
+
+该接口的边界同样是证书语义的一部分：抽象 Hilbert 结构不自动给出局域量子场；局部场不是普通点函数；应力张量是 composite operator；重整化 counterterm 可能改变引力类；trace anomaly 不等于 divergence anomaly；半经典闭包需要 fixed point；整个结论只是 \(M_{\mathrm{qadm}}\) 上的半经典量子源项闭包，而不是无条件量子引力。

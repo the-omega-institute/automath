@@ -1,0 +1,430 @@
+\subsubsection{半径扫描与环带排斥链}\label{subsubsec:typed-address-biaxial-completion-radial-sweep-annulus-chain}
+固定
+\[
+F(w):=\Phi_a(w),
+\qquad
+F(0)\ne0.
+\]
+优化型 Jensen 排斥证书给出单个半径对 \((r,R)\) 的整盘禁入。为了覆盖一段半径范围，尤其是靠近单位圆边界的外层区域，更适合使用圆周均值的凸性构造环带证书，并把多个环带证书串联。
+
+引入对数半径变量
+\[
+t=\log\rho,
+\qquad
+\rho=e^t,
+\]
+并定义圆周均值
+\[
+M_F(t)
+:=
+\frac1{2\pi}
+\int_0^{2\pi}
+\log |F(e^t e^{i\theta})|\,d\theta.
+\]
+Jensen 公式给出
+\[
+M_F(t)
+=
+\log|F(0)|
++
+\sum_{\zeta:F(\zeta)=0}
+m_\zeta\,(t-\log|\zeta|)_+,
+\]
+其中 \((x)_+=\max\{x,0\}\)。因此 \(M_F\) 是关于 \(t\) 的凸函数，零点在 \(t=\log|\zeta|\) 处产生折角。
+
+取
+\[
+\alpha<\tau<\beta,
+\qquad
+\lambda_-:=\frac{\beta-\tau}{\beta-\alpha},
+\qquad
+\lambda_+:=\frac{\tau-\alpha}{\beta-\alpha}.
+\]
+定义三圆 hat defect
+\[
+D_F(\alpha,\tau,\beta)
+:=
+\lambda_-M_F(\alpha)
++
+\lambda_+M_F(\beta)
+-
+M_F(\tau).
+\]
+凸性给出 \(D_F(\alpha,\tau,\beta)\ge0\)。单个零点 \(x=\log|\zeta|\) 对 \(D_F\) 的贡献为三角帽函数
+\[
+h_{\alpha,\tau,\beta}(x)
+:=
+\lambda_-(\alpha-x)_+
++
+\lambda_+(\beta-x)_+
+-
+(\tau-x)_+.
+\]
+直接计算得
+\[
+h_{\alpha,\tau,\beta}(x)=
+\begin{cases}
+0,&x\le\alpha,\\[3pt]
+\dfrac{(\beta-\tau)(x-\alpha)}{\beta-\alpha},
+&\alpha<x\le\tau,\\[9pt]
+\dfrac{(\tau-\alpha)(\beta-x)}{\beta-\alpha},
+&\tau<x<\beta,\\[9pt]
+0,&x\ge\beta.
+\end{cases}
+\]
+于是
+\[
+D_F(\alpha,\tau,\beta)
+=
+\sum_{\zeta}
+m_\zeta\,
+h_{\alpha,\tau,\beta}(\log|\zeta|).
+\]
+
+若目标对数环带 \([u,v]\subset(\alpha,\beta)\)，定义帽高下界
+\[
+\eta_{\alpha,\tau,\beta}(u,v)
+:=
+\inf_{x\in[u,v]}h_{\alpha,\tau,\beta}(x).
+\]
+由于 \(h\) 在 \([\alpha,\tau]\) 上单调上升、在 \([\tau,\beta]\) 上单调下降，若 \([u,v]\subset(\alpha,\beta)\)，则
+\[
+\eta_{\alpha,\tau,\beta}(u,v)
+=
+\min\left\{
+h_{\alpha,\tau,\beta}(u),
+h_{\alpha,\tau,\beta}(v)
+\right\}.
+\]
+任何零点满足 \(\log|\zeta|\in[u,v]\) 时均贡献至少 \(\eta_{\alpha,\tau,\beta}(u,v)\)。因此有环带排斥判据
+\[
+D_F(\alpha,\tau,\beta)
+<
+\eta_{\alpha,\tau,\beta}(u,v)
+\Longrightarrow
+F(w)\ne0
+\quad(e^u\le |w|\le e^v).
+\]
+
+\begin{definition}[圆周均值证书]\label{def:typed-address-biaxial-completion-circle-mean-certificate}
+一份圆周均值证书记为
+\[
+\mathsf{MeanCert}_t
+:=
+\left(
+t,\rho=e^t,
+\mathcal P_\theta,
+\mathcal L_{\mathrm{local}},
+M_t^-,M_t^+,
+\mathsf{RoundHash}
+\right),
+\]
+并证明
+\[
+M_t^-\le M_F(t)\le M_t^+.
+\]
+该证书由圆周上的局部积分上下界组成；若圆周上存在小值弧，可复用 packet clustering、logarithmic peeling、finite-arc quadrature 与优化层中的区间求和机制。环带缺陷需要端点圆的上界与中间圆的下界。
+\end{definition}
+
+\begin{definition}[环带排斥证书]\label{def:typed-address-biaxial-completion-annulus-reject-certificate}
+一份环带排斥证书记为
+\[
+\mathsf{AnnulusRejectCert}_j
+:=
+\left(
+\alpha_j,\tau_j,\beta_j,
+u_j,v_j,
+\mathsf{MeanCert}_{\alpha_j},
+\mathsf{MeanCert}_{\tau_j},
+\mathsf{MeanCert}_{\beta_j},
+D_j^+,\eta_j^-,
+\mathfrak m_j
+\right),
+\]
+其中
+\[
+\alpha_j<u_j\le v_j<\beta_j,
+\qquad
+\alpha_j<\tau_j<\beta_j.
+\]
+证书用区间算术验证
+\[
+D_j^+
+\ge
+\lambda_-M_{\alpha_j}^+
++
+\lambda_+M_{\beta_j}^+
+-
+M_{\tau_j}^-,
+\]
+以及
+\[
+0<\eta_j^-\le\eta_{\alpha_j,\tau_j,\beta_j}(u_j,v_j).
+\]
+局部裕度为
+\[
+\mathfrak m_j:=\eta_j^- -D_j^+.
+\]
+若 \(\mathfrak m_j>0\)，则该证书通过。
+\end{definition}
+
+\begin{theorem}[环带排斥证书的正确性]\label{thm:typed-address-biaxial-completion-annulus-reject-soundness}
+若 \(\mathsf{AnnulusRejectCert}_j\) 通过，则
+\[
+F(w)\ne0
+\qquad
+(e^{u_j}\le |w|\le e^{v_j}).
+\]
+\end{theorem}
+\begin{proof}
+由圆周均值证书与向外舍入，
+\[
+D_F(\alpha_j,\tau_j,\beta_j)
+\le D_j^+.
+\]
+通过条件给出 \(D_j^+<\eta_j^-\le\eta_{\alpha_j,\tau_j,\beta_j}(u_j,v_j)\)。若目标环带中存在零点，则该零点对 \(D_F\) 的贡献至少为 \(\eta_{\alpha_j,\tau_j,\beta_j}(u_j,v_j)\)，与上述严格不等式矛盾。证毕。
+\end{proof}
+
+覆盖证书只处理对数半径区间。给定目标区间
+\[
+[T_0,T_N]=[\log R_0,\log R_N],
+\]
+选择有限个目标子环带 \([u_j,v_j]\)。覆盖可用重叠链核验：
+\[
+u_1^-\le T_0^-,
+\qquad
+v_j^+\ge u_{j+1}^-,
+\qquad
+v_N^+\ge T_N^+.
+\]
+定义
+\[
+\mathsf{CoverCert}_{[T_0,T_N]}
+:=
+\left(
+[T_0,T_N],
+\{[u_j,v_j]\}_{j=1}^N,
+\mathsf{OverlapLedger}
+\right).
+\]
+验证器只检查区间端点序关系。
+
+\begin{definition}[半径扫描证书]\label{def:typed-address-biaxial-completion-radial-sweep-certificate}
+半径扫描证书记为
+\[
+\mathsf{RadialSweepCert}_{[R_0,R_N]}
+:=
+\left(
+R_0,R_N,
+\mathsf{CoreReject}_{R_0},
+\mathsf{CoverCert}_{[\log R_0,\log R_N]},
+\{\mathsf{AnnulusRejectCert}_j\}_{j=1}^N,
+\mathsf{CacheMean},
+\mathsf{TranscriptHash}
+\right).
+\]
+其中 \(\mathsf{CoreReject}_{R_0}\) 证明 \(|w|\le R_0\) 内无零点；每个 \(\mathsf{AnnulusRejectCert}_j\) 证明对应环带无零点；\(\mathsf{CacheMean}\) 存储被多个窗口复用的 \(\mathsf{MeanCert}_t\) 及其哈希。
+\end{definition}
+
+\begin{theorem}[有限半径扫描排斥]\label{thm:typed-address-biaxial-completion-finite-radial-sweep-rejection}
+若 \(\mathsf{RadialSweepCert}_{[R_0,R_N]}\) 满足：\(\mathsf{CoreReject}_{R_0}\) 通过；每个环带排斥证书通过；覆盖证书通过；所有数值比较均使用向外舍入区间算术，则
+\[
+F(w)\ne0
+\qquad
+(|w|\le R_N).
+\]
+\end{theorem}
+\begin{proof}
+core 证书排除 \(|w|\le R_0\)。定理 \ref{thm:typed-address-biaxial-completion-annulus-reject-soundness} 排除每个 \([e^{u_j},e^{v_j}]\) 环带。覆盖证书说明 \([\log R_0,\log R_N]\) 被这些对数环带覆盖。拼接即得 \(|w|\le R_N\) 内无零点。证毕。
+\end{proof}
+
+验证器
+\[
+\mathsf{VerifyRadialSweep}
+(\mathsf{RadialSweepCert})
+\in
+\{\mathrm{PASS},\mathrm{FAIL}\}
+\]
+检查：core 证书通过；所有均值证书通过；每个三圆 defect 的区间算术正确；每个 \(\eta_j^-\) 是合法帽高下界；所有 \(\eta_j^- -D_j^+>0\)；覆盖链无缺口；共享均值证书的缓存哈希一致；全部比较采用向外舍入。通过时调用定理 \ref{thm:typed-address-biaxial-completion-finite-radial-sweep-rejection}。
+
+整盘证书与环带证书互补。若只需排除 \(|w|\le R\)，可直接使用 \(\mathsf{DiskReject}_{r,R}\)。若已有 core 排斥，外层更适合用三圆 hat defect，因为常数项 \(\log|F(0)|\) 在
+\[
+\lambda_-\log|F(0)|
++
+\lambda_+\log|F(0)|
+-
+\log|F(0)|
+\]
+中自动消去，证书只检测目标环带内是否存在折角。
+
+窗口设计影响证书裕度。若采用对称窗口
+\[
+\tau=\frac{\alpha+\beta}{2},
+\]
+则
+\[
+h_{\alpha,\tau,\beta}(x)
+=
+\begin{cases}
+\dfrac{x-\alpha}{2},&\alpha<x\le\tau,\\[6pt]
+\dfrac{\beta-x}{2},&\tau<x<\beta.
+\end{cases}
+\]
+若目标环带到窗口端点的 guard 为
+\[
+g:=\min\{u-\alpha,\beta-v\},
+\]
+则
+\[
+\eta_{\alpha,\tau,\beta}(u,v)\ge \frac g2.
+\]
+增加 guard 可提高帽高下界，但也扩大均值证书的半径跨度；缩小窗口则更局部，但帽高变小。
+
+半径网格可在对数半径 \(T=\log R\) 上均匀取点，也可在靠近边界时按
+\[
+1-R_j=(1-R_0)q^j,
+\qquad
+0<q<1,
+\]
+或
+\[
+1-R_j=(1-R_0)\varphi^{-j}
+\]
+细化。后一种黄金细化只作为尺度调度策略，不进入正确性假设。
+
+圆周均值证书可缓存复用。若
+\[
+\mathsf{CacheMean}
+:=
+\{t_k\mapsto\mathsf{MeanCert}_{t_k}\}_{k=1}^K,
+\]
+则每个环带窗口只记录索引
+\[
+(\alpha_j,\tau_j,\beta_j)
+=
+(t_{a(j)},t_{b(j)},t_{c(j)}).
+\]
+验证器比较缓存哈希即可，避免重复存储相同半径上的局部小值证书。
+
+半径扫描优化状态可写为
+\[
+\mathcal R
+:=
+\left(
+\mathcal G_T,
+\mathcal W,
+\mathsf{MeanCache},
+\mathsf{AnnulusLedger},
+\mathsf{CoverageLedger}
+\right).
+\]
+其中 \(\mathcal G_T\) 是已尝试的对数半径集合，\(\mathcal W\) 是窗口集合，\(\mathsf{AnnulusLedger}\) 记录每个环带当前裕度，\(\mathsf{CoverageLedger}\) 记录目标区间中已覆盖部分。细化动作包括：
+\[
+\mathrm{SplitRadius},\quad
+\mathrm{MoveMidpoint},\quad
+\mathrm{WidenGuard},\quad
+\mathrm{RefineMean},\quad
+\mathrm{SwitchDisk},\quad
+\mathrm{TailParametrize}.
+\]
+它们分别对应半径段二分、中点移动、增加 guard、加强均值证书、对短环带改用 disk reject，以及把无限尾部压成参数化证书。
+
+若目标是趋近单位边界，取
+\[
+0<R_0<R_1<R_2<\cdots<1,
+\qquad
+R_j\uparrow1.
+\]
+对任意有限 \(N\)，有限扫描证书给出 \(|w|\le R_N\) 内无零点。为了把无限族压缩为有限对象，可定义
+\[
+\mathsf{CofinalRadialCert}
+:=
+\left(
+\mathsf{FiniteHead}_{0\le j<J},
+\mathsf{TailRule}_{j\ge J},
+\mathsf{TailProof}
+\right).
+\]
+其中 \(\mathsf{TailRule}\) 以闭式给出 \(R_j,\alpha_j,\tau_j,\beta_j,u_j,v_j\)，而 \(\mathsf{TailProof}\) 给出统一界
+\[
+D_j^+\le\mathcal D(j),
+\qquad
+\eta_j^-\ge\mathcal E(j),
+\qquad
+\mathcal D(j)<\mathcal E(j)
+\quad(j\ge J).
+\]
+
+\begin{theorem}[共终半径排斥]\label{thm:typed-address-biaxial-completion-cofinal-radial-exclusion}
+设 \(R_j\uparrow1\)。若存在有限对象 \(\mathsf{CofinalRadialCert}\) 证明 \(|w|\le R_0\) 内无零点，并证明所有环带 \(R_j\le |w|\le R_{j+1}\) 无零点，则
+\[
+F(w)\ne0
+\qquad
+(|w|<1).
+\]
+\end{theorem}
+\begin{proof}
+任取 \(|w|<1\)。由于 \(R_j\uparrow1\)，存在 \(N\) 使 \(|w|\le R_N\)。有限头部与尾部规则共同给出从 \(R_0\) 到 \(R_N\) 的排斥链，故该点不能为零点。证毕。
+\end{proof}
+
+若采用 \(1-R_j=Cq^j\)，则
+\[
+\log R_j=-Cq^j+O(q^{2j}),
+\]
+相邻环带的对数宽度为 \(O(q^j)\)。对称窗口的帽高也通常为 \(O(q^j)\)。因此参数化尾证书需要证明
+\[
+D_j^+\le c_1q^j,
+\qquad
+\eta_j^-\ge c_2q^j,
+\qquad
+c_1<c_2,
+\]
+即三圆缺陷必须在同一尺度上严格小于帽高下界。
+
+环带失败也保留 frontier，而不是解释为函数存在零点。定义
+\[
+\mathsf{AnnulusFail}_j
+:=
+\left(
+[u_j,v_j],
+(\alpha_j,\tau_j,\beta_j),
+D_j^+,\eta_j^-,
+\Omega_j,
+\mathsf{FailType}_j
+\right),
+\qquad
+\Omega_j:=D_j^+-\eta_j^-.
+\]
+失败类型包括
+\[
+\mathrm{MeanUpperFail},\quad
+\mathrm{MeanLowerFail},\quad
+\mathrm{HatTooSmall},\quad
+\mathrm{GuardTooThin},\quad
+\mathrm{RadiusCoverageGap},\quad
+\mathrm{RoundoffFail},\quad
+\mathrm{TailUniformFail},\quad
+\mathrm{MeanCacheMismatch}.
+\]
+端点圆上界过粗对应 \(\mathrm{MeanUpperFail}\)；中间圆下界过低对应 \(\mathrm{MeanLowerFail}\)；帽高不足对应 \(\mathrm{HatTooSmall}\) 或 \(\mathrm{GuardTooThin}\)；覆盖链有缺口对应 \(\mathrm{RadiusCoverageGap}\)；尾部统一不等式失败对应 \(\mathrm{TailUniformFail}\)。
+
+整体接口为
+\[
+\mathsf{LocalCert}
+\Longrightarrow
+\mathsf{OptCert}_t
+\Longrightarrow
+\mathsf{MeanCert}_t
+\Longrightarrow
+\mathsf{AnnulusRejectCert}_j
+\Longrightarrow
+\mathsf{RadialSweepCert}.
+\]
+若再接入参数化趋一尾证书，则得到
+\[
+\mathsf{RadialSweepCert}_{[R_0,R_N]}
+\Longrightarrow
+\mathsf{CofinalRadialCert}
+\Longrightarrow
+F(w)\ne0\qquad(|w|<1).
+\]

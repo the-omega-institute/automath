@@ -1,0 +1,350 @@
+\subsubsection{\v{C}ech 障碍到射影量子结构}\label{subsubsec:typed-address-biaxial-completion-cech-obstacle-projective-quantum-structure}
+正交判定闭合把非平凡 \(U(1)\) residual 解释为严格标量粘接的障碍。若读出协议只依赖射影类，则该障碍不必终止判定；它可以作为相位 residual 进入射影态、干涉项与 Hilbert 型载体。相应闭合链为
+\[
+\text{local lift}
++
+U(1)\text{ residual}
++
+\text{multi-lift collision}
++
+\text{positive overlap kernel}
+\Longrightarrow
+\text{Hilbert-type quantum skeleton}.
+\]
+
+\paragraph{严格粘接与射影粘接。}
+令 \(\mathcal U=\{U_i\}_{i\in I}\) 为有限覆盖。每个 \(U_i\) 上有局部 lift
+\[
+\sigma_i\in\mathcal F(U_i),
+\]
+在重叠上存在 \(U(1)\)-valued residual
+\[
+g_{ij}:U_i\cap U_j\to U(1),
+\qquad
+\sigma_i=g_{ij}\cdot\sigma_j.
+\]
+严格粘接要求存在局部相位 \(h_i:U_i\to U(1)\) 使
+\[
+g_{ij}=h_i h_j^{-1}.
+\]
+此时 \(\widetilde\sigma_i=h_i^{-1}\sigma_i\) 在重叠上一致，得到全局标量截面。若不存在这样的 \(h_i\)，则 \(\{g_{ij}\}\) 仍可作为复线丛或 \(U(1)\)-torsor 的过渡数据，局部对象粘接为线丛截面
+\[
+\sigma\in\Gamma(L).
+\]
+若只关心射影类，则
+\[
+\sigma_i\sim e^{i\alpha_i}\sigma_i
+\]
+在重叠上给出
+\[
+[\sigma_i]=[\sigma_j].
+\]
+因此 \(\mathsf{CechGluingNull}\) 在标量协议下是 NULL，但在射影协议下可提升为
+\[
+\mathsf{ProjectiveLiftRequired}.
+\]
+
+写
+\[
+g_{ij}=e^{i\varphi_{ij}},
+\qquad
+\varphi_{ij}\in\mathbb R/2\pi\mathbb Z.
+\]
+局部规范变换 \(\sigma_i\mapsto e^{i\psi_i}\sigma_i\) 使
+\[
+\varphi_{ij}\mapsto
+\varphi_{ij}+\psi_i-\psi_j
+\quad(\mathrm{mod}\ 2\pi).
+\]
+沿闭路 \(\Gamma=(i_0,i_1,\ldots,i_m=i_0)\) 的 holonomy 相位为
+\[
+\Phi_\Gamma
+:=
+\sum_{r=0}^{m-1}\varphi_{i_ri_{r+1}}
+\quad(\mathrm{mod}\ 2\pi),
+\]
+且在规范变换下不变。
+
+\begin{theorem}[有限图上的相位平凡化判据]\label{thm:typed-address-biaxial-completion-phase-trivialization-finite-graph}
+令 \(G=(V,E)\) 是覆盖神经的有限连通图。给每条有向边 \(i\to j\) 赋相位 \(g_{ij}\in U(1)\)，且 \(g_{ji}=g_{ij}^{-1}\)。则下列两项等价：
+\[
+\exists\,h_i\in U(1)\quad g_{ij}=h_i h_j^{-1}\ \text{for all edges};
+\]
+\[
+\operatorname{Hol}_\Gamma=1\quad\text{for every closed loop }\Gamma.
+\]
+\end{theorem}
+\begin{proof}
+若 \(g_{ij}=h_i h_j^{-1}\)，则沿任意闭路的乘积望远镜相消，holonomy 为 \(1\)。反过来，取生成树并固定根点 \(i_0\)，令 \(h_{i_0}=1\)。对任意顶点 \(i\)，沿树路径定义 \(h_i^{-1}\) 为边相位乘积。全部闭路 holonomy 为 \(1\) 保证定义与路径无关。任意边 \(i\to j\) 与两段树路径组成闭路，由 holonomy 平凡得到 \(g_{ij}=h_i h_j^{-1}\)。证毕。
+\end{proof}
+
+\begin{definition}[射影 lift 证书]\label{def:typed-address-biaxial-completion-projective-lift-cert}
+称
+\[
+\mathsf{ProjectiveLiftCert}
+\]
+为射影 lift 证书，若它包含覆盖 \(\mathcal U\)、局部 lift \(\{\sigma_i\}\)、过渡 residual \(\{g_{ij}\}\)、overlap compatibility ledger、cocycle ledger、loop holonomy ledger、gauge equivalence ledger 与 round hash。验证器检查
+\[
+\sigma_i=g_{ij}\sigma_j,\qquad
+g_{ij}g_{ji}=1,
+\]
+以及三重重叠上的 cocycle 条件
+\[
+g_{ij}g_{jk}g_{ki}=1
+\]
+或离散图协议中的闭路 holonomy 账本。若标量平凡化存在，输出 \(\mathsf{ScalarGluingPass}\)。若平凡化不存在但 cocycle 合法，输出 \(\mathsf{ProjectiveLiftRequired}\)。若 cocycle 失败，输出 \(\mathsf{CocycleFail}\)。
+\end{definition}
+
+\paragraph{多重 lift 与干涉项。}
+令
+\[
+\pi:X\to Y
+\]
+为可见投影。可见端点 \(y\in Y\) 的 lift 纤维为
+\[
+\mathcal L_y:=\pi^{-1}(y).
+\]
+给每个 lift \(\ell\in\mathcal L_y\) 赋振幅
+\[
+a_\ell=r_\ell e^{i\phi_\ell},
+\qquad r_\ell\ge0.
+\]
+合成振幅与平方型读出定义为
+\[
+A(y):=\sum_{\ell\in\mathcal L_y}a_\ell,
+\qquad
+\boxed{
+I(y)=|A(y)|^2.
+}
+\]
+展开得
+\[
+I(y)=
+\sum_\ell r_\ell^2
++
+2\sum_{\ell<k}r_\ell r_k\cos(\phi_\ell-\phi_k).
+\]
+第二项是同一可见端点上多重 lift 的相位差干涉项。
+
+\begin{theorem}[干涉项不可由概率权重推出]\label{thm:typed-address-biaxial-completion-interference-not-determined-by-weights}
+设 \(y\) 有两个 lift \(\ell_1,\ell_2\)，且 \(r_1,r_2>0\)。只给定权重 \(p_i=r_i^2\) 不能唯一决定
+\[
+I(y)=|r_1e^{i\phi_1}+r_2e^{i\phi_2}|^2.
+\]
+\end{theorem}
+\begin{proof}
+令 \(\Delta=\phi_1-\phi_2\)。则
+\[
+I(y)=r_1^2+r_2^2+2r_1r_2\cos\Delta.
+\]
+\(\Delta=0\) 给出 \((r_1+r_2)^2\)，而 \(\Delta=\pi\) 给出 \((r_1-r_2)^2\)。两者权重相同而读出一般不同。证毕。
+\end{proof}
+
+\begin{definition}[干涉证书]\label{def:typed-address-biaxial-completion-interference-cert}
+称 \(\mathsf{InterferenceCert}_y\) 为可见端点 \(y\) 的干涉证书，若它包含 lift 纤维 \(\mathcal L_y\)、振幅模长区间、相位区间、lift collision ledger、phase transport ledger、holonomy ledger、读出区间 \([I_y^-,I_y^+]\) 与 round hash。验证器检查 \(\pi(\ell)=y\)，核验相位差由 transport 或 holonomy 支持，并以区间算术计算
+\[
+I(y)=\left|
+\sum_{\ell\in\mathcal L_y}
+r_\ell e^{i\phi_\ell}
+\right|^2.
+\]
+相位差不可读时输出 \(\mathsf{InterferencePhaseNull}\)，lift 纤维无法完整枚举时输出 \(\mathsf{LiftFiberNull}\)，振幅账本与平方读出矛盾时输出 \(\mathsf{InterferenceFail}\)。
+\end{definition}
+
+\paragraph{可见态类与正定重叠核。}
+预算包 \(B\) 下的有限可见态集合记为 \(\mathcal S_B\)。每个态由
+\[
+s=(y,\mathcal L_y,\{r_\ell e^{i\phi_\ell}\}_{\ell\in\mathcal L_y})
+\]
+给出，但按全局相位取等价类
+\[
+\psi_s\sim e^{i\alpha}\psi_s.
+\]
+因此可见态是射影类
+\[
+[s]=[\psi_s]\in\mathbb P(\mathcal A_y),
+\qquad
+\mathcal A_y:=\mathbb C^{\mathcal L_y}.
+\]
+若不同可见端点之间存在相位运输，这些局部振幅空间由 \(U(1)\) cocycle 组织为线丛或射影丛。
+
+重叠核
+\[
+K:\mathcal S_B\times\mathcal S_B\to\mathbb C
+\]
+要求 Hermitian 且正定：
+\[
+K(s,t)=\overline{K(t,s)},
+\qquad
+\sum_{a,b}\overline{c_a}c_bK(s_a,s_b)\ge0.
+\]
+局部振幅向量给出自然核 \(K(s,t)=\langle\psi_s,\psi_t\rangle\)。在规范变换
+\[
+\psi_s\mapsto e^{i\alpha_s}\psi_s
+\]
+下，Gram 矩阵作对角酉共轭，故 PSD、秩、零空间与 Born 概率不变。
+
+\begin{definition}[正定核证书]\label{def:typed-address-biaxial-completion-kernel-positive-cert}
+称 \(\mathsf{KernelPositiveCert}\) 为正定核证书，若它包含有限态集、核区间 \(\{[K_{ab}^-,K_{ab}^+]\}\)、Hermitian ledger、gauge frame ledger、PSD interval cert、rank ledger、null radical ledger 与 round hash。验证器检查
+\[
+K_{ab}=\overline{K_{ba}},
+\qquad
+K_N=(K_{ab})\succeq0.
+\]
+PSD 可由 Cholesky、LDL 或主子式证书给出。若无法证明 PSD 且无负方向，输出 \(\mathsf{KernelPSDNull}\)；若存在 \(c^*K_Nc<0\)，输出 \(\mathsf{KernelPSDFail}\)。
+\end{definition}
+
+\begin{theorem}[正定核生成 Hilbert 载体]\label{thm:typed-address-biaxial-completion-positive-kernel-generates-hilbert-carrier}
+给定有限集合 \(\mathcal S=\{s_1,\ldots,s_N\}\) 与 Hermitian 正定核 \(K\)，存在有限维 Hilbert 空间 \(\mathcal H_K\) 与向量 \(|s_a\rangle\in\mathcal H_K\)，使
+\[
+\langle s_a|s_b\rangle=K(s_a,s_b).
+\]
+该表示在酉同构下唯一。
+\end{theorem}
+\begin{proof}
+取自由复向量空间 \(\mathbb C[\mathcal S]\)，定义半内积
+\[
+\left\langle\sum_a c_ae_a,\sum_b d_be_b\right\rangle_K
+=
+\sum_{a,b}\overline{c_a}d_bK(s_a,s_b).
+\]
+正定性给出非负半内积。商去零空间 \(\mathcal N=\{v:\langle v,v\rangle_K=0\}\)，得 \(\mathcal H_K=\mathbb C[\mathcal S]/\mathcal N\)，并令 \(|s_a\rangle=[e_a]\)。任何另一实现由 \(|s_a\rangle\mapsto|\widetilde s_a\rangle\) 给出保持 Gram 矩阵的酉同构。证毕。
+\end{proof}
+
+\paragraph{Born 读出与效果算子。}
+在 \(\mathcal H_K\) 上，事件为效果算子
+\[
+0\le E\le I.
+\]
+纯射影态 \([\psi]\) 的 Born 配对为
+\[
+\boxed{
+\mathbb P(E|[\psi])
+=
+\frac{\langle\psi,E\psi\rangle}{\langle\psi,\psi\rangle}.
+}
+\]
+密度算子 \(\rho\ge0\)、\(\operatorname{tr}\rho=1\) 时，
+\[
+\mathbb P(E|\rho)=\operatorname{tr}(\rho E).
+\]
+
+\begin{definition}[Born 读出证书]\label{def:typed-address-biaxial-completion-born-readout-cert}
+称 \(\mathsf{BornReadoutCert}\) 为 Born 读出证书，若它包含 Hilbert carrier、射影态、效果算子、state norm ledger、effect PSD interval cert、effect upper-bound cert、概率区间 \([p^-,p^+]\)、probability margin ledger 与 round hash。验证器检查
+\[
+\langle\psi,\psi\rangle>0,\qquad
+E=E^*,\qquad
+E\succeq0,\qquad
+I-E\succeq0,
+\]
+并计算
+\[
+p=\frac{\langle\psi,E\psi\rangle}{\langle\psi,\psi\rangle}\in[p^-,p^+].
+\]
+效果 PSD 不可判定时输出 \(\mathsf{EffectPSDNull}\)，概率跨阈值时输出 \(\mathsf{BornMarginNull}\)，概率越界或 PSD 矛盾时输出 \(\mathsf{BornReadoutFail}\)。
+\end{definition}
+
+\begin{theorem}[平方型读出的 Born 形式]\label{thm:typed-address-biaxial-completion-quadratic-readout-born-form}
+设有限维复向量空间上的读出 \(Q\) 满足相位不变、二次齐次、极化后给出正半定 Hermitian 型，且作为事件概率时满足 \(0\le Q(\psi)\le\|\psi\|^2\)。则存在唯一效果算子 \(0\le E\le I\) 使
+\[
+Q(\psi)=\langle\psi,E\psi\rangle.
+\]
+\end{theorem}
+\begin{proof}
+由极化恒等式，\(Q\) 唯一确定 Hermitian sesquilinear form \(B\)。有限维 Riesz 表示定理给出唯一算子 \(E\) 满足 \(B(\psi,\varphi)=\langle\psi,E\varphi\rangle\)。正半定性给出 \(E\succeq0\)，而 \(Q(\psi)\le\|\psi\|^2\) 给出 \(I-E\succeq0\)。证毕。
+\end{proof}
+
+\paragraph{演化、事件代数与复合体系。}
+若可读时间推进 \(T:\mathcal S_B\to\mathcal S_B\) 保持核
+\[
+K(Ts,Tt)=K(s,t),
+\]
+则 \(U_T|s\rangle=|Ts\rangle\) 是等距映射；若在张成空间上满射，则为酉算子。带相位核保持
+\[
+K(Ts,Tt)=\overline{\chi(s)}\chi(t)K(s,t)
+\]
+可由 gauge 修正为严格核保持。
+
+\begin{definition}[离散幺正演化证书]\label{def:typed-address-biaxial-completion-unitary-evolution-cert}
+称 \(\mathsf{UnitaryEvolutionCert}\) 为演化证书，若它包含 \(T\)、有限态集、核、相位 \(\chi_a\)、kernel transport ledger、矩阵 \(U_T\)、unitarity interval cert 与 round hash。验证器检查
+\[
+K(Ts_a,Ts_b)=\overline{\chi_a}\chi_bK(s_a,s_b),
+\qquad
+U_T^*U_T=I,
+\]
+并在要求满射时检查 \(U_TU_T^*=I\)。只有等距而非满射时输出 \(\mathsf{IsometryOnly}\)。
+\end{definition}
+
+两个效果算子 \(E,F\) 若满足 \(EF=FE\)，则可共同对角化并近似 classical Boolean 结构。若
+\[
+[E,F]:=EF-FE\ne0,
+\]
+则输出非交换见证 \(\mathsf{NonCommutationCert}(E,F)\)，由 commutator ledger 给出 \(\|EF-FE\|^->0\)。
+
+复合系统由乘积核
+\[
+K_{AB}((a,b),(a',b'))=K_A(a,a')K_B(b,b')
+\]
+给出，且
+\[
+\mathcal H_{AB}\cong\mathcal H_A\otimes\mathcal H_B.
+\]
+若 \(\Psi=\sum_{i,j}c_{ij}e_i\otimes f_j\) 的系数矩阵存在非零 \(2\times2\) 子式，则为纠缠态。
+
+\begin{definition}[张量纠缠证书]\label{def:typed-address-biaxial-completion-tensor-entanglement-cert}
+称 \(\mathsf{TensorEntanglementCert}\) 为张量与纠缠证书，若它包含 \(K_A,K_B,K_{AB}\)、product kernel ledger、态 \(\Psi\)、系数矩阵 \(C\)、Schmidt rank ledger、minor nonzero cert 与 round hash。验证器检查 \(K_{AB}=K_A\otimes K_B\)。所有 \(2\times2\) 子式为零时输出 \(\mathsf{ProductStatePass}\)；存在子式区间避开零时输出 \(\mathsf{EntanglementPass}\)；子式跨零且预算不足时输出 \(\mathsf{EntanglementMarginNull}\)。
+\end{definition}
+
+\paragraph{射影量子融合证书。}
+标量粘接失败现在分裂为结构矛盾与射影闭合两类：
+\[
+\mathsf{ScalarGluingNull}
+\leadsto
+\mathsf{ProjectiveLiftRequired}
+\leadsto
+\mathsf{ProjectiveQuantumPass}
+\]
+仅在 cocycle 合法、kernel PSD、Born 读出和相关 margin 通过时成立。
+
+\begin{definition}[射影量子融合证书]\label{def:typed-address-biaxial-completion-projective-quantum-fusion-cert}
+射影量子融合证书记为
+\[
+\mathsf{ProjectiveQuantumFusionCert}.
+\]
+它由地址、预算、覆盖、\(\mathsf{ProjectiveLiftCert}\)、干涉证书族、\(\mathsf{KernelPositiveCert}\)、Hilbert carrier ledger、Born readout 证书族、\(\mathsf{UnitaryEvolutionCert}\) 或 \(\mathsf{IsometryOnly}\)、event algebra ledger、复合系统中的 \(\mathsf{TensorEntanglementCert}\)、null/fail ledger 与 transcript hash 组成。
+\end{definition}
+
+验证器 \(\mathsf{VerifyProjectiveQuantumFusion}\) 检查局部 lift 与 residual、cocycle 或 holonomy、标量平凡化或射影分支、多重 lift 纤维、相位运输与干涉项、重叠核 PSD、Hilbert 载体、效果算子、Born 概率、时间推进核保持以及复合系统张量结构。根据 margin 输出 \(\mathsf{PASS}\)、\(\mathsf{NULL}\) 或 \(\mathsf{FAIL}\)。
+
+\begin{theorem}[射影量子融合证书的可靠性]\label{thm:typed-address-biaxial-completion-projective-quantum-fusion-soundness}
+若
+\[
+\mathsf{VerifyProjectiveQuantumFusion}
+(\mathsf{ProjectiveQuantumFusionCert})
+=
+\mathsf{PASS},
+\]
+则存在有限维 Hilbert 空间 \(\mathcal H\)、一族射影态 \([\psi_s]\in\mathbb P(\mathcal H)\)、一族效果算子 \(0\le E_\alpha\le I\)，以及在演化证书通过时的等距或酉算子 \(U_T\)，使提交的全部可见平方型读出均由 Born 配对给出：
+\[
+\mathbb P(E_\alpha|[\psi_s])
+=
+\frac{\langle\psi_s,E_\alpha\psi_s\rangle}{\langle\psi_s,\psi_s\rangle}.
+\]
+所有干涉项由同一可见端点上的多重 lift 相位差或闭路 holonomy 支撑。
+\end{theorem}
+\begin{proof}
+PASS 给出局部 lift 与 residual 的相容性。若标量平凡化失败，合法 \(U(1)\) cocycle 仍给出射影 lift。多重 lift 纤维、振幅与相位差均有预算内证书，故平方型读出有有限区间。重叠核经验证为 Hermitian PSD，由定理 \ref{thm:typed-address-biaxial-completion-positive-kernel-generates-hilbert-carrier} 生成 Hilbert 载体。效果算子满足 \(0\le E_\alpha\le I\)，由 Born 配对给出合法概率。演化证书通过时，核保持诱导等距或酉演化。因此所有提交读出在同一 Hilbert 型结构中实现，且 residual 相位正是干涉项来源。证毕。
+\end{proof}
+
+本接口增加的 NULL 类型包括 \(\mathsf{ProjectivePhaseFrameNull}\)、\(\mathsf{LiftFiberNull}\)、\(\mathsf{InterferencePhaseNull}\)、\(\mathsf{KernelPSDNull}\)、\(\mathsf{EffectPSDNull}\)、\(\mathsf{BornMarginNull}\) 与 \(\mathsf{EntanglementMarginNull}\)。FAIL 类型包括 \(\mathsf{CocycleFail}\)、\(\mathsf{KernelPSDFail}\)、\(\mathsf{BornReadoutFail}\)、\(\mathsf{EvolutionFail}\) 与 \(\mathsf{TensorProductFail}\)。
+
+因此，非平凡 \v{C}ech residual 具有两种语义：在标量协议下输出 \(\mathsf{CechGluingNull}\)；在射影协议下，若 cocycle 与正定核证书通过，则输出 \(\mathsf{ProjectiveLiftRequired}\) 并进入 Hilbert 型载体。凝练地说，
+\[
+\text{nontrivial }U(1)\text{ holonomy}
++
+\text{multi-lift collision}
++
+\text{PSD overlap kernel}
+\Longrightarrow
+\text{finite Hilbert-type quantum skeleton}.
+\]
