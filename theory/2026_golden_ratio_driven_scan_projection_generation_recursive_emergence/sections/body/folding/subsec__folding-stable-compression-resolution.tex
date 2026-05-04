@@ -153,6 +153,113 @@ R\bigl(\Env_{\mathcal E_m}(P)\bigr)
 \]
 则 \(h|_{\Env^{\Fold}_{\mathcal E_m}(P)}\) 不能经由 \(X_m\) 因子化。
 \end{proposition}
+\begin{theorem}[fold-aware 纤维证书的 definable-envelope replacement、stabilizer extraction 与外置账本下界]\label{distill:hrushovski_zilber_zariski_geometries_and_elekes_szabo_group_extraction-definable_envelope_and_stabilizer_theorem_schema-fold-aware-fiber-envelope-ledger}
+固定 \(m\) 与 \(x\in X_m\)，令 \(F_x:=\Fold_m^{-1}(x)\)。
+设 \(H\le\operatorname{Sym}(F_x)\) 为有限 fold-aware gauge 群，即对任意 \(h\in H\) 与 \(\omega\in F_x\) 均有 \(h\omega\in F_x\)。
+设 \(S\subseteq H\) 满足 \(e\in S=S^{-1}\)，生成 \(H\)，在 \(H\) 的共轭作用下不变，并且 \(H\) 关于 \(S\) 的词直径至多为 \(L\)。
+若 \(Y\subseteq F_x\) 满足
+\[
+\card{sY\triangle Y}\le \varepsilon\card{F_x}\qquad(s\in S),
+\]
+则对 \(H\)-轨道集 \(\mathcal O_H(F_x)\) 中每个轨道 \(O\) 记
+\[
+p_O:=\frac{\card{Y\cap O}}{\card O},
+\qquad
+\theta_H:F_x\to\mathcal O_H(F_x)
+\]
+为轨道 tag，并定义
+\[
+\operatorname{Env}_H(Y):=\theta_H^{-1}\{O\in\mathcal O_H(F_x):p_O>1/2\}.
+\]
+则：
+\begin{enumerate}
+  \item \(\operatorname{Env}_H(Y)\) 为 \(H\)-饱和的 fold-aware 包络，且
+  \[
+  \card{Y\triangle\operatorname{Env}_H(Y)}
+  \le L\varepsilon\card{F_x}.
+  \]
+  \item 对任意 \(0<\alpha\le1/2\)，混合轨道的总质量满足
+  \[
+  \sum_{\substack{O\in\mathcal O_H(F_x)\\ \alpha\le p_O\le1-\alpha}}\card O
+  \le
+  \frac{L\varepsilon}{2\alpha(1-\alpha)}\card{F_x}.
+  \]
+  \item 若 \(Z:=\operatorname{Env}_H(Y)\) 非空，且 \(\rho:Z\to\mathcal R\) 是任意有限值 readout，并在每个 \(H\)-轨道上为常值，则对 \(Z\) 上均匀随机的 \(\omega\)，以 bit 计的 Shannon 条件熵满足
+  \[
+  \mathrm H_2(\omega\mid x,\rho(\omega))
+  \ge
+  \sum_{\substack{O\in\mathcal O_H(F_x)\\ O\subset Z}}
+  \frac{\card O}{\card Z}\log_2\card O.
+  \]
+  特别地，若 \(Z\) 中每个 \(H\)-轨道的大小至少为 \(M\)，则
+  \[
+  \mathrm H_2(\omega\mid x,\rho(\omega))\ge\log_2 M.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先把生成元上的近不变性传播到整个 \(H\)。
+任取 \(h\in H\)，由词直径假设可写 \(h=s_r\cdots s_1\)，其中 \(s_k\in S\) 且 \(r\le L\)。
+记 \(g_0=e\)、\(g_k=s_k\cdots s_1\)。
+由于对称差在双射下保持基数，且 \(S\) 对共轭封闭，
+\[
+\card{g_kY\triangle g_{k-1}Y}
+=\card{(g_{k-1}^{-1}s_kg_{k-1})Y\triangle Y}
+\le \varepsilon\card{F_x}.
+\]
+对 \(k=1,
+\ldots,r\) 求和得
+\[
+\card{hY\triangle Y}\le L\varepsilon\card{F_x}\qquad(h\in H).
+\]
+于是
+\[
+\frac1{\card H}\sum_{h\in H}\card{hY\triangle Y}
+\le L\varepsilon\card{F_x}.
+\]
+固定一个 \(H\)-轨道 \(O\)，令 \(A:=Y\cap O\)、\(N:=\card O\)。
+对任意 \(a,b\in O\)，满足 \(h a=b\) 的 \(h\in H\) 的个数均为 \(\card H/N\)。
+因此
+\[
+\frac1{\card H}\sum_{h\in H}\card{A\cap hA}
+=\frac{\card A^2}{N}=Np_O^2.
+\]
+从而
+\[
+\frac1{\card H}\sum_{h\in H}\card{A\triangle hA}
+=2Np_O(1-p_O).
+\]
+对所有轨道求和，得到
+\[
+2\sum_{O\in\mathcal O_H(F_x)}\card O\,p_O(1-p_O)
+\le L\varepsilon\card{F_x}.
+\]
+另一方面，按多数包络的定义，
+\[
+\card{Y\triangle\operatorname{Env}_H(Y)}
+=\sum_{O\in\mathcal O_H(F_x)}\card O\,\min(p_O,1-p_O).
+\]
+利用 \(\min(p,1-p)\le2p(1-p)\)，得到第一项结论。
+若 \(\alpha\le p_O\le1-\alpha\)，则 \(p_O(1-p_O)\ge\alpha(1-\alpha)\)，代入上一平均不等式即得混合轨道总质量界。
+
+最后证明外置账本下界。
+由于 \(x\) 已固定，条件 \(x\) 不改变 \(Z\) 上的均匀分布。
+设 \(\mathcal P\) 为 readout \(\rho\) 的纤维划分。
+因 \(\rho\) 在每个 \(H\)-轨道上为常值，每个 \(P\in\mathcal P\) 都是若干 \(H\)-轨道的并。
+于是
+\[
+\mathrm H_2(\omega\mid x,\rho(\omega))
+=\sum_{P\in\mathcal P}\frac{\card P}{\card Z}\log_2\card P.
+\]
+对每个 \(P\)，若 \(O\subset P\) 为其中的 \(H\)-轨道，则 \(\card P\ge\card O\)，故
+\[
+\card P\log_2\card P
+=\sum_{O\subset P}\card O\log_2\card P
+\ge\sum_{O\subset P}\card O\log_2\card O.
+\]
+对 \(P\) 求和即得所需下界。若所有相关轨道大小至少为 \(M\)，右端至少为 \(\log_2 M\)。证毕。
+\end{proof}
+
 \begin{proof}
 首先，由 \(\mathcal E_m\) 对有限交封闭且包含 \(\Omega_m\)，集合
 \(\Env_{\mathcal E_m}(P)\) 属于 \(\mathcal E_m\) 并包含 \(P\)。由饱和封闭性，
