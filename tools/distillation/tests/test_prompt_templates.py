@@ -104,6 +104,22 @@ class PromptTemplateTests(unittest.TestCase):
             self.assertIn("move it to a separate remark outside the formal environment", collapsed)
             self.assertIn("include an existence witness or make existence an explicit hypothesis", collapsed)
 
+    def test_writeback_prompts_block_decorative_source_mechanisms(self):
+        for prompt_name in ("writeback", "deepen"):
+            text = distill._load_prompt(prompt_name)
+            collapsed = " ".join(text.split())
+            self.assertIn("source mechanism is active in the proof", collapsed)
+            self.assertIn("source theory is only decorative", collapsed)
+            self.assertIn("mechanical parameter substitution", collapsed)
+            self.assertIn("conclusion follows immediately from the definition", collapsed)
+
+    def test_review_prompts_do_not_hard_block_on_truncated_context_line_budget(self):
+        for prompt_name in ("review_codex", "review_claude"):
+            text = distill._load_prompt(prompt_name)
+            collapsed = " ".join(text.split())
+            self.assertIn("Do not reject solely because supplied section context is truncated", collapsed)
+            self.assertIn("line-count gate is enforced by the application planner", collapsed)
+
 
 if __name__ == "__main__":
     unittest.main()
