@@ -2112,6 +2112,47 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
     )
 
 
+def _source_specific_writeback_contract(
+    state: DistillState,
+    focused_family: Optional[dict[str, Any]],
+) -> str:
+    """Return last-mile writeback guidance for source-level failure modes."""
+    source_slug = _slugify(state.name)
+    if source_slug != "connes_consani_arithmetic_site":
+        return ""
+    family_name = str((focused_family or {}).get("name", "")).strip()
+    family_line = f"- Focused family: {family_name}." if family_name else ""
+    lines = [
+        "CONNES--CONSANI LAST-MILE CONTRACT:",
+        family_line,
+        "- Output at most one writeback. Omit every other target instead of",
+        "  filling a broad batch with standard algebra, kernel quotients,",
+        "  connecting homomorphisms, soft-max limits, pigeonhole counts, or",
+        "  mechanical parameter substitution.",
+        "- Do not introduce a new action category, topos, observer-fiber site,",
+        "  or heavy categorical framework unless the supplied target context",
+        "  already contains matching local objects. In the current",
+        "  typed-address context, use the existing Sem/C/T^(2) framework rather",
+        "  than replacing it with an external category.",
+        "- The accepted theorem must be non-tautological: it must prove a",
+        "  checkable condition, obstruction, bound, or descent consequence that",
+        "  is not one of the axioms in the definition and does not follow",
+        "  immediately from the definition.",
+        "- If the proof needs a first-break fiber, minimal observer, scale",
+        "  defect, or correspondence obstruction, define it inside the snippet",
+        "  using visible local notation before using it.",
+        "- Preferred shapes are narrow conditional lemmas: either a Frobenius-",
+        "  style correspondence ledger for nonretroactive updates with explicit",
+        "  source, target, multiplicity, composition, and obstruction data, or",
+        "  an action-site/stable-value lemma that proves a concrete descent",
+        "  criterion in existing emergent_arithmetic notation.",
+        "- Do not use zeta or arithmetic-site motivation as a theorem claim.",
+        "  Zeta material is allowed only as a finite trace or orbit-budget",
+        "  diagnostic with all multiplicities and error terms defined locally.",
+    ]
+    return "\n".join(line for line in lines if line)
+
+
 def _theorem_family_names(state: DistillState) -> list[str]:
     """Return theorem-family names from raw research, preserving order."""
     try:
@@ -6032,6 +6073,7 @@ def run_stage_w(
     )
     prior_feedback_block = _build_prior_feedback_block(state)
     family_specific_contract = _family_specific_deepening_contract(focused_family)
+    source_specific_contract = _source_specific_writeback_contract(state, focused_family)
     oracle_deepening_context: dict[str, Any] = {"status": "disabled"}
     if oracle_deepening:
         oracle_section_contexts = _collect_oracle_deepening_contexts(targets)
@@ -6094,6 +6136,8 @@ def run_stage_w(
                 prompt += "\n\n" + prior_feedback_block
             if family_specific_contract:
                 prompt += "\n\n" + family_specific_contract
+            if source_specific_contract:
+                prompt += "\n\n" + source_specific_contract
             if feedback:
                 prompt += (
                     "\n\nPrevious writeback failed validation or review. "

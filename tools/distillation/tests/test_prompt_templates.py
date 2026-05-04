@@ -88,6 +88,23 @@ class PromptTemplateTests(unittest.TestCase):
             "group_unification/subsec__group-unification-spectral-alignment.tex",
         )
 
+    def test_connes_source_contract_blocks_heavy_tautological_writebacks(self):
+        state = distill.DistillState("Connes-Consani arithmetic site")
+
+        contract = distill._source_specific_writeback_contract(state, None)
+
+        self.assertIn("CONNES--CONSANI LAST-MILE CONTRACT", contract)
+        self.assertIn("Output at most one writeback", contract)
+        self.assertIn("Do not introduce a new action category", contract)
+        self.assertIn("Sem/C/T^(2)", contract)
+        self.assertIn("non-tautological", contract)
+        self.assertIn("first-break fiber", contract)
+
+    def test_source_contract_is_empty_for_generic_source(self):
+        state = distill.DistillState("Generic Source")
+
+        self.assertEqual(distill._source_specific_writeback_contract(state, None), "")
+
     def test_review_prompts_do_not_let_target_language_override_chinese(self):
         for prompt_name in ("review_codex", "review_claude"):
             text = distill._load_prompt(prompt_name)
