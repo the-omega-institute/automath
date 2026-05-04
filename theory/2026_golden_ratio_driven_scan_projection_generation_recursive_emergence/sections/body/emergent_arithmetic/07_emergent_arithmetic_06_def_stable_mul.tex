@@ -282,6 +282,63 @@ r_m(c\otimes d)=r_m(c)\star_m r_m(d).
 \]
 使 \(x=r_m(c)\)、\(y=r_m(d)\)，但 \(x\star_m y\ne r_m(c\otimes d)\)。在任一失败情形中，\(\star_m\) 都只能被记录为有限分辨率算术 artifact，不能作为第 \ref{sec:emergent-arithmetic} 节中值保持重写或稳定乘法的对象层替代品。
 \end{theorem}
+\begin{definition}[有限乘法阴影的 incidence-coordinate 见证]\label{def:distill-ea-finite-mul-shadow-incidence-witness}
+设 \(U,V\subseteq X_\infty\) 为有限集合，并设
+\(\Gamma\subseteq U\times V\times X_\infty\) 为一个有限三元关系。称 \(\Gamma\) 在 \(U\times V\) 上由加法链见证，若满足：
+\begin{enumerate}
+  \item 对每个 \((c,d)\in U\times V\)，存在 \(e\in X_\infty\) 使 \((c,d,e)\in\Gamma\)；
+  \item 对每个 \((c,d,e)\in\Gamma\)，令 \(N:=\mathrm{Val}(d)\)，存在序列
+  \[
+  u_0,u_1,\ldots,u_N\in X_\infty
+  \]
+  使
+  \[
+  u_0=0_X,\qquad u_{j+1}=u_j\oplus c\quad(0\le j<N),\qquad u_N=e.
+  \]
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[有限乘法阴影的 incidence 唯一性]\label{prop:distill-ea-finite-mul-shadow-incidence-uniqueness}
+若 \(\Gamma\subseteq U\times V\times X_\infty\) 在 \(U\times V\) 上由加法链见证，则
+\[
+\Gamma=\{(c,d,c\otimes d):c\in U,\ d\in V\}.
+\]
+反之，上式右端给出的稳定乘法图在 \(U\times V\) 上由加法链见证。因而任何有限乘法阴影只要通过该 incidence-coordinate 测试，便没有额外的非函数性分支，也不能偏离定义 \ref{def:stable-mul} 的稳定乘法。
+\end{proposition}
+\begin{proof}
+先设 \((c,d,e)\in\Gamma\)，并取定义 \ref{def:distill-ea-finite-mul-shadow-incidence-witness} 中的见证链。由定理 \ref{thm:add-definitional}，
+\(\mathrm{Val}\) 保持 \(\oplus\)，故归纳得
+\[
+\mathrm{Val}(u_j)=j\,\mathrm{Val}(c)\qquad(0\le j\le N).
+\]
+在 \(j=0\) 时这是 \(u_0=0_X\)；若已知 \(j\) 阶成立，则
+\[
+\mathrm{Val}(u_{j+1})=\mathrm{Val}(u_j\oplus c)
+=\mathrm{Val}(u_j)+\mathrm{Val}(c)
+=(j+1)\mathrm{Val}(c).
+\]
+取 \(j=N=\mathrm{Val}(d)\)，得
+\[
+\mathrm{Val}(e)=\mathrm{Val}(c)\mathrm{Val}(d)=\mathrm{Val}(c\otimes d),
+\]
+其中最后一步用定义 \ref{def:stable-mul}。由于 \(\mathrm{Val}\) 为双射，故 \(e=c\otimes d\)。这说明
+\(\Gamma\subseteq\{(c,d,c\otimes d):c\in U,d\in V\}\)。另一方面，见证定义的第一项保证每个 \((c,d)\) 至少出现一个 \(e\)，而刚才已证明该 \(e\) 必为 \(c\otimes d\)，故反向包含也成立。
+
+反过来，给定 \((c,d)\in U\times V\)，令 \(N=\mathrm{Val}(d)\)，并设
+\[
+u_j:=\mathrm{Val}^{-1}(j\,\mathrm{Val}(c))\qquad(0\le j\le N).
+\]
+则 \(\nu_0=0_X\)，且由 \(\mathrm{Val}\) 对加法的定义性同构可知
+\[
+\mathrm{Val}(\nu_j\oplus c)=(j+1)\mathrm{Val}(c)=\mathrm{Val}(\nu_{j+1}),
+\]
+故 \(\nu_{j+1}=\nu_j\oplus c\)。同时
+\[
+\nu_N=\mathrm{Val}^{-1}(\mathrm{Val}(c)\mathrm{Val}(d))=c\otimes d.
+\]
+这给出稳定乘法图的加法链见证。证毕。
+\end{proof}
+
 \begin{proof}
 先设 \(\star_m\) 可采纳。若
 \(r_m(c)=r_m(c')\) 且 \(r_m(d)=r_m(d')\)，则由可采纳性，

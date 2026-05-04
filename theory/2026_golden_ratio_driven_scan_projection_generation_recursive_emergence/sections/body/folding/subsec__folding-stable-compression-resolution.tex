@@ -116,6 +116,73 @@ B_j:=\{y\in C_{m,h}(E):2^{-(j+1)}<p_y\le 2^{-j}\},
 \end{enumerate}
 因此，在给定 carrier 映射后，任意非 sticky 的候选坏例子并非弥散地失败；经过 dyadic pigeonholing 后，它必须在某个可审计质量层上显影为大量同阶 occupied carrier 的尺度失衡。
 \end{theorem}
+\begin{definition}[fold-aware 有限 envelope]\label{def:distill-folding-fold-aware-envelope}
+固定 \(m\)。对 \(Y\subseteq\Omega_m\) 记其折叠饱和为
+\[
+\Sat_m(Y):=\Fold_m^{-1}(\Fold_m(Y)).
+\]
+设 \(\mathcal E_m\) 是 \(\Omega_m\) 的一个非空有限子集族，满足
+\(\Omega_m\in\mathcal E_m\)，对有限交封闭，并且对每个 \(Y\in\mathcal E_m\) 有
+\(\Sat_m(Y)\in\mathcal E_m\)。对任意样本 \(P\subseteq\Omega_m\) 定义
+\[
+\Env_{\mathcal E_m}(P):=\bigcap\{Y\in\mathcal E_m:P\subseteq Y\},
+\]
+以及最小 fold-aware envelope
+\[
+\Env^{\Fold}_{\mathcal E_m}(P)
+:=\bigcap\{Y\in\mathcal E_m:P\subseteq Y,\ \Sat_m(Y)=Y\}.
+\]
+\end{definition}
+
+\begin{proposition}[有限 envelope 的折叠饱和审计]\label{prop:distill-folding-fold-aware-envelope-saturation}
+沿用定义 \ref{def:distill-folding-fold-aware-envelope}。对任意 \(P\subseteq\Omega_m\)，有
+\[
+\Env^{\Fold}_{\mathcal E_m}(P)=\Sat_m\bigl(\Env_{\mathcal E_m}(P)\bigr).
+\]
+进一步，若 \(S\) 为集合且 \(R:\Omega_m\to S\) 是 stable-type 读出，即存在
+\(\bar R:X_m\to S\) 使 \(R=\bar R\circ\Fold_m\)，则
+\[
+R\bigl(\Env_{\mathcal E_m}(P)\bigr)
+=R\bigl(\Env^{\Fold}_{\mathcal E_m}(P)\bigr).
+\]
+因此，任何只通过 stable-type 下降的读出都不能区分原始有限 envelope 与其 fold-aware 饱和；若某个微态读出
+\(h:\Omega_m\to T\) 在 \(\Env^{\Fold}_{\mathcal E_m}(P)\) 内存在
+\(\omega,\omega'\) 满足
+\[
+\Fold_m(\omega)=\Fold_m(\omega'),\qquad h(\omega)\ne h(\omega'),
+\]
+则 \(h|_{\Env^{\Fold}_{\mathcal E_m}(P)}\) 不能经由 \(X_m\) 因子化。
+\end{proposition}
+\begin{proof}
+首先，由 \(\mathcal E_m\) 对有限交封闭且包含 \(\Omega_m\)，集合
+\(\Env_{\mathcal E_m}(P)\) 属于 \(\mathcal E_m\) 并包含 \(P\)。由饱和封闭性，
+\(\Sat_m(\Env_{\mathcal E_m}(P))\in\mathcal E_m\)，且它是折叠饱和并包含 \(P\)。故
+\[
+\Env^{\Fold}_{\mathcal E_m}(P)\subseteq \Sat_m(\Env_{\mathcal E_m}(P)).
+\]
+反过来，若 \(Y\in\mathcal E_m\)、\(P\subseteq Y\)、且 \(\Sat_m(Y)=Y\)，则由
+\(\Env_{\mathcal E_m}(P)\subseteq Y\) 得
+\[
+\Sat_m(\Env_{\mathcal E_m}(P))\subseteq \Sat_m(Y)=Y.
+\]
+对所有这样的 \(Y\) 取交，得到
+\[
+\Sat_m(\Env_{\mathcal E_m}(P))\subseteq \Env^{\Fold}_{\mathcal E_m}(P),
+\]
+从而第一式成立。
+
+若 \(R=\bar R\circ\Fold_m\)，则任意 \(Y\subseteq\Omega_m\) 满足
+\[
+R(\Sat_m(Y))=\bar R(\Fold_m(\Fold_m^{-1}(\Fold_m(Y))))=\bar R(\Fold_m(Y))=R(Y).
+\]
+取 \(Y=\Env_{\mathcal E_m}(P)\)，并用第一式，即得两个读出像相等。
+
+最后，若 \(h|_{\Env^{\Fold}_{\mathcal E_m}(P)}\) 能经由 \(X_m\) 因子化，则存在
+\(\bar h:\Fold_m(\Env^{\Fold}_{\mathcal E_m}(P))\to T\) 使
+\(h=\bar h\circ\Fold_m\) 在该 envelope 上成立。于是同一折叠类型的 \(\omega,\omega'\) 必有
+\(h(\omega)=h(\omega')\)，与假设矛盾。证毕。
+\end{proof}
+
 \begin{proof}
 由于 \(E\) 非空，集合 \(C_{m,h}(E)\) 非空且 \(p_y>0\) 对其中每个 \(y\) 成立，并且
 \[
