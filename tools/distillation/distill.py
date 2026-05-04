@@ -123,6 +123,15 @@ ORACLE_SECTION_CONTEXT_CHARS = 40000
 ORACLE_DEEPENING_SECTION_CONTEXT_CHARS = int(
     os.environ.get("ORACLE_DEEPENING_SECTION_CONTEXT_CHARS", "1000")
 )
+W_SECTION_CONTEXT_CHARS = int(os.environ.get("DISTILL_W_SECTION_CONTEXT_CHARS", "8000"))
+W_DEEPENING_SECTION_CONTEXT_CHARS = int(
+    os.environ.get("DISTILL_W_DEEPENING_SECTION_CONTEXT_CHARS", "5000")
+)
+W_PROMPT_MAX_CHARS = int(os.environ.get("DISTILL_W_PROMPT_MAX_CHARS", "120000"))
+ORACLE_PROMPT_MAX_CHARS = int(os.environ.get("ORACLE_PROMPT_MAX_CHARS", "45000"))
+PROMPT_TRUNCATION_TAIL_CHARS = int(
+    os.environ.get("DISTILL_PROMPT_TRUNCATION_TAIL_CHARS", "12000")
+)
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 ORACLE_EVIDENCE_SNIPPET_CHARS = int(os.environ.get("ORACLE_EVIDENCE_SNIPPET_CHARS", "160"))
 POLICY_VERSION = 1
@@ -1092,6 +1101,7 @@ def chatgpt_oracle_exec(
     dry_run: bool = False,
 ) -> str:
     """Submit a prompt to the local ChatGPT Oracle bridge and wait for a result."""
+    prompt = _limit_prompt_chars(prompt, ORACLE_PROMPT_MAX_CHARS, f"oracle:{log_tag}")
     if dry_run:
         logger.info(
             "[DRY RUN] ChatGPT Oracle task=%s model=%s prompt=%s",
@@ -1121,6 +1131,7 @@ def chatgpt_oracle_exec(
         status_before.get("max_agents", "?"),
         status_before.get("completed", "?"),
     )
+    logger.info("ChatGPT Oracle prompt length: %d chars", len(prompt))
 
     task_id = f"{_slugify(state.name)}_{log_tag}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     payload: dict[str, Any] = {
@@ -1243,6 +1254,39 @@ def _unique_strings(items: Any) -> list[str]:
 def _json_block(data: Any) -> str:
     """Format a JSON value for inclusion in a prompt."""
     return json.dumps(data, ensure_ascii=False, indent=2, default=str)
+
+
+def _limit_prompt_chars(prompt: str, max_chars: int, label: str) -> str:
+    """Bound oversized prompts while preserving the final instruction block."""
+    if max_chars <= 0 or len(prompt) <= max_chars:
+        return prompt
+
+    marker = f"\n[distill.py prompt truncated: {label}]\n"
+    tail_budget = min(
+        PROMPT_TRUNCATION_TAIL_CHARS,
+        max(12, max_chars // 3),
+        max(0, len(prompt) // 2),
+    )
+    head_budget = max_chars - len(marker) - tail_budget
+    if head_budget < 1:
+        marker = "\n[prompt truncated]\n"
+        tail_budget = min(max(12, max_chars // 3), max(0, len(prompt) // 2))
+        head_budget = max_chars - len(marker) - tail_budget
+    if head_budget < 1:
+        return prompt[:max_chars]
+
+    limited = prompt[:head_budget] + marker + prompt[-tail_budget:]
+    if len(limited) > max_chars:
+        overflow = len(limited) - max_chars
+        head_budget = max(1, head_budget - overflow)
+        limited = prompt[:head_budget] + marker + prompt[-tail_budget:]
+    logger.warning(
+        "Prompt truncated for %s: %d -> %d chars",
+        label,
+        len(prompt),
+        len(limited),
+    )
+    return limited
 
 
 def _research_schema() -> str:
@@ -3701,6 +3745,19 @@ def _oracle_relevant_evidence_pack(
     }
 
 
+def _writeback_relevant_evidence_pack(
+    global_evidence_pack: dict[str, Any],
+    focused_family: Optional[dict[str, Any]],
+    targets: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Use the target-focused evidence summary for W prompts.
+
+    The full evidence pack can be hundreds of kilobytes and is meant as a
+    durable artifact, not as browser or model prompt input.
+    """
+    return _oracle_relevant_evidence_pack(global_evidence_pack, focused_family, targets)
+
+
 def _oracle_payload_summary(
     payload: dict[str, Any],
     focused_family: Optional[dict[str, Any]],
@@ -5540,10 +5597,16 @@ def run_stage_w(
     section_contexts = _collect_section_contexts(
         targets,
         max_chars_per_file=(
-            ORACLE_SECTION_CONTEXT_CHARS if oracle_deepening else 16000
+            W_DEEPENING_SECTION_CONTEXT_CHARS if focused_family
+            else W_SECTION_CONTEXT_CHARS
         ),
     )
     global_evidence_pack = _global_evidence_for_state(state)
+    writeback_evidence_pack = _writeback_relevant_evidence_pack(
+        global_evidence_pack,
+        focused_family,
+        targets,
+    )
     prior_feedback_block = _build_prior_feedback_block(state)
     family_specific_contract = _family_specific_deepening_contract(focused_family)
     oracle_deepening_context: dict[str, Any] = {"status": "disabled"}
@@ -5586,7 +5649,7 @@ def run_stage_w(
                     method_operators=_json_block(raw_research.get("method_operators", [])),
                     targets=_json_block(targets),
                     section_contexts=section_contexts,
-                    global_evidence_pack=_json_block(global_evidence_pack),
+                    global_evidence_pack=_json_block(writeback_evidence_pack),
                     oracle_deepening_context=_json_block(oracle_deepening_context),
                     completed_families=", ".join(state.completed_families or ["none"]),
                     deep_research_directive=_deep_research_directive(),
@@ -5600,7 +5663,7 @@ def run_stage_w(
                     payload=_json_block(payload),
                     targets=_json_block(targets),
                     section_contexts=section_contexts,
-                    global_evidence_pack=_json_block(global_evidence_pack),
+                    global_evidence_pack=_json_block(writeback_evidence_pack),
                     oracle_deepening_context=_json_block(oracle_deepening_context),
                     schema=_writeback_schema(),
                 )
@@ -5641,6 +5704,12 @@ def run_stage_w(
                     "rather than rephrasing it.\n"
                 )
             w_timeout = 2400 if low_rounds >= 2 else 1800
+            prompt = _limit_prompt_chars(
+                prompt,
+                W_PROMPT_MAX_CHARS,
+                f"W:{_slugify(state.name)}:attempt{attempt}",
+            )
+            logger.info("Stage W prompt length: %d chars", len(prompt))
             response = _codex_exec_with_infra_retries(
                 prompt,
                 work_dir=CORE_BODY,

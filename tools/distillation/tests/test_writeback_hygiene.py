@@ -333,6 +333,70 @@ proof.
         self.assertIn("[context truncated by distill.py]", context)
         self.assertNotIn("179: oracle browser prompt context budget line", context)
 
+    def test_prompt_limiter_preserves_tail_and_marks_middle(self):
+        prompt = ("A" * 40) + ("B" * 240) + "CRITICAL_TAIL"
+
+        limited = distill._limit_prompt_chars(prompt, 96, "unit-test")
+
+        self.assertLessEqual(len(limited), 96)
+        self.assertIn("prompt truncated", limited)
+        self.assertTrue(limited.endswith("CRITICAL_TAIL"))
+        self.assertTrue(limited.startswith("A"))
+
+    def test_writeback_evidence_pack_is_target_focused_and_compact(self):
+        long_snippet = "x" * 2000
+        pack = {
+            "terms": [f"term-{i}" for i in range(50)],
+            "source_theorem_families": [
+                {
+                    "name": "illegal-turn elimination and train-track normal form",
+                    "target_sections": ["folding"],
+                    "key_results": [long_snippet],
+                },
+                {
+                    "name": "unrelated family",
+                    "target_sections": ["spg"],
+                    "key_results": [long_snippet],
+                },
+            ],
+            "section_index": [
+                {"section": "spg", "best_file": "spg/a.tex", "python_score": 99},
+                {"section": "folding", "best_file": "folding/b.tex", "python_score": 1},
+            ],
+            "high_signal_claims": [
+                {"section": "spg", "score": 100, "snippet": long_snippet},
+                {"section": "folding", "score": 10, "snippet": long_snippet},
+            ],
+            "existing_distillation_claims": [
+                {"section": "folding", "score": 1, "snippet": long_snippet},
+            ],
+            "frontier_interfaces": [
+                {"section": "folding", "score": 1, "snippet": long_snippet},
+            ],
+            "distillation_memory": [
+                {
+                    "id": "mem:folding",
+                    "kind": "oracle_sidecar",
+                    "status": "active",
+                    "title": long_snippet,
+                    "target_sections": ["folding"],
+                    "reason": long_snippet,
+                    "reuse_guidance": long_snippet,
+                },
+            ],
+        }
+
+        compact = distill._writeback_relevant_evidence_pack(
+            pack,
+            {"name": "illegal-turn elimination and train-track normal form", "target_sections": ["folding"]},
+            [{"section": "folding", "tex_file": "folding/b.tex"}],
+        )
+        encoded = distill._json_block(compact)
+
+        self.assertLess(len(encoded), 12000)
+        self.assertIn("folding", encoded)
+        self.assertNotIn(long_snippet, encoded)
+
 
 if __name__ == "__main__":
     unittest.main()
