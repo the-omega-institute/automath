@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.12
+// @version      5.13
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.12";
+  const SCRIPT_VERSION = "5.13";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -189,6 +189,16 @@
 
   function sleep(ms) {
     return new Promise((r) => setTimeout(r, ms));
+  }
+
+  function withTimeout(promise, timeoutMs, label) {
+    let timer = null;
+    const timeout = new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${label} timed out after ${timeoutMs}ms`)), timeoutMs);
+    });
+    return Promise.race([promise, timeout]).finally(() => {
+      if (timer) clearTimeout(timer);
+    });
   }
 
   // ── Persistent task state (survives page navigation, namespaced per agent) ──
@@ -617,8 +627,13 @@
   }
 
   // ── Enter prompt text into ProseMirror ───────────────────────────────
-  async function enterPrompt(text) {
+  async function enterPrompt(text, task_id = "") {
     log(`Entering prompt (${text.length} chars)...`);
+    const phase = async (name, detail = "") => {
+      if (!task_id) return;
+      await postPhase(task_id, name, detail || foregroundState());
+    };
+    await phase("enter_prompt_start", `chars=${text.length}; ${foregroundState()}`);
 
     const input = findPromptInput();
     if (!input) {
@@ -638,6 +653,7 @@
 
     if (typeof input.value === "string") {
       try {
+        await phase("enter_prompt_textarea", `chars=${text.length}; ${foregroundState()}`);
         input.value = text;
         input.dispatchEvent(new InputEvent("input", {
           bubbles: true, cancelable: true,
@@ -656,6 +672,7 @@
     // This goes through the browser's native editing API which ProseMirror hooks into,
     // so React/ProseMirror internal state stays in sync → send button enables correctly.
     if (!success) try {
+      await phase("enter_prompt_execcommand", `chars=${text.length}; ${foregroundState()}`);
       input.focus();
       // For long text, insert in chunks to avoid browser limits
       const CHUNK = 4000;
@@ -664,6 +681,9 @@
       } else {
         for (let i = 0; i < text.length; i += CHUNK) {
           document.execCommand("insertText", false, text.slice(i, i + CHUNK));
+          if (i > 0 && i % (CHUNK * 2) === 0) {
+            await phase("enter_prompt_execcommand", `inserted=${Math.min(i + CHUNK, text.length)}/${text.length}; ${foregroundState()}`);
+          }
           await sleep(50);
         }
       }
@@ -679,7 +699,8 @@
     // Strategy 2: Clipboard API paste
     if (!success) {
       try {
-        await navigator.clipboard.writeText(text);
+        await phase("enter_prompt_clipboard", `chars=${text.length}; ${foregroundState()}`);
+        await withTimeout(navigator.clipboard.writeText(text), 5000, "clipboard.writeText");
         input.focus();
         document.execCommand("paste");
         await sleep(500);
@@ -695,6 +716,7 @@
     // Strategy 3: Synthetic ClipboardEvent paste
     if (!success) {
       try {
+        await phase("enter_prompt_synthetic_paste", `chars=${text.length}; ${foregroundState()}`);
         const clipData = new DataTransfer();
         clipData.setData("text/plain", text);
         input.dispatchEvent(new ClipboardEvent("paste", {
@@ -712,6 +734,7 @@
 
     // Strategy 4: Direct innerHTML + InputEvent (last resort — may not enable send button)
     if (!success) {
+      await phase("enter_prompt_innerhtml", `chars=${text.length}; ${foregroundState()}`);
       const escaped = text
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -748,6 +771,7 @@
 
     const visible = inputTextLength(input);
     log(`Prompt visible: ${visible} chars, success=${success}`);
+    await phase("enter_prompt_done", `visible=${visible}; success=${success}; ${foregroundState()}`);
     return success;
   }
 
@@ -1686,7 +1710,7 @@
       }
 
       // Enter prompt
-      const entered = await enterPrompt(prompt);
+      const entered = await enterPrompt(prompt, task_id);
       if (!entered) {
         throw new Error("Failed to enter prompt text");
       }

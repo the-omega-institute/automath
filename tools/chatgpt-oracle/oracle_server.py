@@ -47,7 +47,7 @@ dispatch_times: dict[str, float] = {}  # agent_id -> timestamp
 def _is_extraction_failure_response(response: str) -> bool:
     """Detect userscript diagnostics that are not substantive reviews."""
     cleaned = response.strip()
-    return cleaned.startswith("ERROR: Response too short or empty")
+    return cleaned.startswith("ERROR:")
 
 
 class OracleHandler(BaseHTTPRequestHandler):
