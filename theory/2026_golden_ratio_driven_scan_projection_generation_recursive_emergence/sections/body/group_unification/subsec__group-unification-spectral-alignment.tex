@@ -28,6 +28,88 @@ g_{\mathrm{tw}}(u):=\log\!\left(\frac{\lambda_1(u)}{\eta(u)}\right)
 \]
 （与定理 \ref{thm:kernel-chebotarev-exp} 的 \(\eta(u)\) 一致）。
 \end{definition}
+\begin{definition}[扭曲寄存器的折叠读出核]\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-subgroup_reconstruction_from_canonical_finite_automata-core-def}
+设定义 \ref{def:kernel-group-twist} 中的有限核支撑可写为有限有向转移集 \(\mathcal E_K\)，其每条转移 \(e\) 具有起点 \(o(e)\)、终点 \(t(e)\)、非负权重 \(w_e(u)\) 以及群寄存器 \(\gamma(e)\in G\)，并且对每个表示 \(\varrho\) 有
+\[
+M_{K,\varrho}(u)=\sum_{e\in\mathcal E_K}w_e(u)E_{t(e),o(e)}\otimes \varrho(\gamma(e)).
+\]
+令 \(S_K=\gamma(\mathcal E_K)\subseteq G\)，令 \(\mathcal A_K=\{a_s:s\in S_K\}\)，并令
+\[
+\phi_K:\mathbb F(\mathcal A_K)\longrightarrow \langle S_K\rangle\leq G,
+\qquad \phi_K(a_s)=s.
+\]
+对非空有限通道族 \(B\subseteq\mathcal R_{\mathrm{obs}}\)，定义联合不可见子群
+\[
+H_B:=\bigcap_{\varrho\in B}\ker(\varrho\circ\phi_K)\leq \mathbb F(\mathcal A_K),
+\qquad Q_B:=\mathbb F(\mathcal A_K)/H_B.
+\]
+若 \(\bar a\) 表示 \(a\) 在 \(Q_B\) 中的像，则定义基点标号有向图 \(\mathscr C_B\) 如下：顶点集为 \(Q_B\)，基点为单位元，且对每个 \(q\in Q_B\) 与 \(a\in\mathcal A_K^{\pm1}\) 放置唯一一条标号为 \(a\) 的有向边
+\[
+q\longrightarrow q\bar a .
+\]
+称 \(\mathscr C_B\) 为 \(B\) 的扭曲寄存器折叠读出核。
+\end{definition}
+
+\begin{theorem}[可观测通道的折叠核重构与约化正则谱包络]\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-subgroup_reconstruction_from_canonical_finite_automata-core}
+沿用定义 \ref{distill:stallings_foldings_and_bestvina_handel_train_tracks-subgroup_reconstruction_from_canonical_finite_automata-core-def}。假设每个 \(\varrho\in B\) 在 \(\langle S_K\rangle\) 上非平凡。则：
+
+\(1\) \(\mathscr C_B\) 是有限、基点化、确定性的折叠标号图；无两个同顶点出发的边具有相同标号，并且 core trimming 不删除任何顶点。其基点处接受的约化闭路语言恰为
+\[
+L(\mathscr C_B)=H_B\subseteq \mathbb F(\mathcal A_K).
+\]
+因此，有限折叠核完全重构联合不可见子群 \(H_B\)，并通过各标号边在顶点集上的置换重构有限商 \(Q_B\)。
+
+\(2\) 若从 \(H_B\) 的任一有限生成词表构造基点 bouquet，并对其施行任意终止的 illegal-turn fold 序列，再删除不在接受闭路上的树尾与瞬态分支，则所得终端折叠核心与 \(\mathscr C_B\) 基点保标号同构。换言之，在该有限指标寄存器情形中，折叠顺序不影响可观测通道的规范读出核。
+
+\(3\) 记 \(R_B\) 为 \(Q_B\) 在 \(\ell^2(Q_B)\) 上的右正则表示，记 \(R_B^\circ\) 为其在常数函数正交补 \(\ell^2(Q_B)^\circ\) 上的约化部分，并定义约化正则扭曲核
+\[
+T_B^\circ(u):=\sum_{e\in\mathcal E_K}w_e(u)E_{t(e),o(e)}\otimes R_B^\circ(\overline{a_{\gamma(e)}}).
+\]
+令 \(\eta_B^\circ(u):=\rho(T_B^\circ(u))\)。则对所有 \(\varrho\in B\)，
+\[
+\eta_{\varrho}(u)\leq \eta_B^\circ(u),
+\qquad
+g_{\varrho}(u)\geq \log\!\left(\frac{\lambda_1(u)}{\eta_B^\circ(u)}\right).
+\]
+特别地，若 \(\eta_B^\circ(u)\leq \lambda_1(u)e^{-\varepsilon}\)，则整块 \(B\) 的所有可观测通道均满足 \(g_{\varrho}(u)\geq\varepsilon\)。反之，若存在 \(\varrho\in B\) 使 \(g_{\varrho}(u)<\varepsilon\)，则该谱隙失败已经在折叠核 \(\mathscr C_B\) 的约化正则表示中出现：\(\eta_B^\circ(u)>\lambda_1(u)e^{-\varepsilon}\)。
+\end{theorem}
+
+\begin{proof}
+先证 \((1)\)。由于 \(G\) 有限，\(\langle S_K\rangle\) 有限，而 \(Q_B\) 是 \(\mathbb F(\mathcal A_K)\) 在有限群 \(\prod_{\varrho\in B}\varrho(\langle S_K\rangle)\) 中的像，故 \(Q_B\) 有限。图 \(\mathscr C_B\) 的确定性由构造立即得到：给定顶点 \(q\) 与标号 \(a\)，唯一可能的终点是 \(q\bar a\)。因此不存在同一顶点出发、标号相同而终点不同的 illegal turn。
+
+任取约化词 \(w=a_1\cdots a_r\in\mathbb F(\mathcal A_K)\)。从基点出发按 \(w\) 读图，终点依次为
+\[
+1,\ \bar a_1,\ \bar a_1\bar a_2,\ \ldots,\ \bar a_1\cdots\bar a_r.
+\]
+故 \(w\) 标号一条基点闭路当且仅当 \(\bar w=1\in Q_B\)，即当且仅当 \(w\in H_B\)。这给出 \(L(\mathscr C_B)=H_B\)。
+
+又因每个顶点 \(q\in Q_B\) 都由某个词 \(p\in\mathbb F(\mathcal A_K)\) 从基点到达；同时 \(Q_B\) 有限，故存在非空约化词 \(c\) 使 \(q\bar c=q\)。于是该顶点位于从基点出发、经过 \(p\)、绕行 \(c\)、再沿 \(p^{-1}\) 返回的闭路支撑中；必要时将相邻反向边约去，所得仍为同一图中的约化闭路支撑。因此 core trimming 无树尾或瞬态分支可删。最后，有限商 \(Q_B\) 由顶点集及各标号边诱导的置换恢复，\(H_B\) 由接受闭路语言恢复，故 \((1)\) 成立。
+
+证 \((2)\)。取 \(H_B\) 的任一有限生成词表，构造以这些词为闭路的有限 bouquet。一次 illegal-turn fold 只识别同一顶点处具有同一标号的两个出芽边；这正是表示保持商：任一原 bouquet 闭路在商图中仍读为同一自由群元素，反过来商图中新产生的闭路可提升为原图中若干生成闭路及其逆的约化乘积。因此每次 fold 保持接受子群为 \(H_B\)。删除不处于接受闭路上的树尾或瞬态分支亦不改变基点约化闭路语言。终端图 \(\mathscr D\) 因而是接受语言为 \(H_B\) 的有限折叠核心。
+
+由于 \(H_B\) 在 \(\mathbb F(\mathcal A_K)\) 中有限指标，\(\mathscr D\) 必为完整的 \(\mathcal A_K^{\pm1}\)-标号覆盖图。事实上，设 \(v\) 是 \(\mathscr D\) 中由约化词 \(p\) 到达的顶点，且某个标号 \(a\) 在 \(v\) 处无出边；取 \(a\) 使 \(pa\) 约化。有限指标性给出某个约化词 \(r\)，使自由约化后的 \(par\in H_B\)。该词必须被 \(\mathscr D\) 作为基点闭路接受，故其读入过程在读完 \(p\) 后必须存在标号 \(a\) 的出边，矛盾。因此每个顶点处每个标号均有唯一出边。
+
+于是可定义映射
+\[
+\Psi:V(\mathscr D)\longrightarrow Q_B,\qquad
+\Psi(v)=H_B p,
+\]
+其中 \(p\) 为任一从基点到 \(v\) 的约化路径标号。若 \(p,p'\) 到达同一顶点，则 \(pp'^{-1}\) 标号 \(\mathscr D\) 中的基点闭路，故 \(pp'^{-1}\in H_B\)，从而 \(H_Bp=H_Bp'\)，映射良定义。完整确定性给出 \(\Psi(v\xrightarrow{a}v')=\Psi(v)\bar a\)，故 \(\Psi\) 是保标号图态射。每个陪集由某个词到达，故 \(\Psi\) 满；若 \(\Psi(v)=\Psi(v')\)，取从基点到二者的路径标号 \(p,p'\)，则 \(pp'^{-1}\in H_B\)，所以 \(pp'^{-1}\) 是 \(\mathscr D\) 中的闭路；确定性迫使读完 \(p\) 与读完 \(p'\) 到达同一顶点，故 \(v=v'\)。于是 \(\Psi\) 为基点保标号同构，\(\mathscr D\cong\mathscr C_B\)。
+
+证 \((3)\)。由 \(H_B\subseteq\ker(\varrho\circ\phi_K)\)，每个 \(\varrho\in B\) 唯一分解为 \(Q_B\) 的表示 \(\widetilde\varrho\) 与商映射的复合。又因 \(\varrho\) 在 \(\langle S_K\rangle\) 上非平凡，\(\widetilde\varrho\) 不是平凡表示。有限群正则表示的 Fourier 分解给出
+\[
+\ell^2(Q_B)^\circ\cong\bigoplus_{\sigma\in\widehat{Q_B},\ \sigma\ne\mathbf 1} V_\sigma^{\oplus\dim V_\sigma},
+\]
+并且在此分解下 \(T_B^\circ(u)\) 分解为各个非平凡 \(\sigma\) 的扭曲核 \(M_{K,\sigma\circ q_B}(u)\) 的直和及重数和，其中 \(q_B:\mathbb F(\mathcal A_K)\to Q_B\) 为商映射。特别地，每个 \(M_{K,\varrho}(u)=M_{K,\widetilde\varrho\circ q_B}(u)\) 均作为该直和的一个子块出现。因此
+\[
+\eta_\varrho(u)=\rho(M_{K,\varrho}(u))\leq\rho(T_B^\circ(u))=\eta_B^\circ(u).
+\]
+将此不等式代入定义 \(g_\varrho(u)=\log(\lambda_1(u)/\eta_\varrho(u))\)，即得谱隙下界及其等价的失败见证命题。
+\end{proof}
+
+\begin{remark}[谱隙对齐中的伪不变量剔除]\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-subgroup_reconstruction_from_canonical_finite_automata-pseudo}
+定理 \ref{distill:stallings_foldings_and_bestvina_handel_train_tracks-subgroup_reconstruction_from_canonical_finite_automata-core} 给出的对象不是把 \(\mathcal R_{\mathrm{obs}}\) 重新命名为自由群词表，而是从扭曲矩阵 \(M_{K,\varrho}(u)\) 实际使用的群寄存器 \(\gamma(e)\) 构造自由寄存器 \(\mathbb F(\mathcal A_K)\)，再用 \(H_B\) 记录所有通道共同不可见的关系。因而，若两个通道块 \(B,B'\) 满足 \(H_B=H_{B'}\)，则它们具有同一个折叠读出核、同一个有限商 \(Q_B\)、以及同一个约化正则谱包络 \(\eta_B^\circ(u)=\eta_{B'}^\circ(u)\)。任何仅依赖寄存器词及其 fold/core trimming 正规形的块选择器，都不能在 \(B\) 与 \(B'\) 之间产生可注册的代数区分；若仍出现数值谱隙差异，该差异必须来自具体表示块在同一正则包络中的 Fourier 分量，而不是来自新的折叠核不变量。
+\end{remark}
 
 \begin{remark}[谱隙对齐的 minimax 统一判据]\label{rem:spec-gap-minimax-unification}
 令 \(\mathcal{R}_{\mathrm{obs}}\subseteq \widehat G\) 为一组“可观测通道”的表示族（例如由具体读出门所激活的扭曲坐标族给出）。
