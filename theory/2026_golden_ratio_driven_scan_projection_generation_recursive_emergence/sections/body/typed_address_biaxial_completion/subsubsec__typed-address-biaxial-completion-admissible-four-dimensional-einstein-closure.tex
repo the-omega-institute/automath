@@ -1,0 +1,452 @@
+\subsubsection{admissible 四维域、Levi--Civita 闭包与 Einstein 方程接口}\label{subsubsec:typed-address-biaxial-completion-admissible-four-dimensional-einstein-closure}
+同步成本、共同支撑代价、传播上界、局部锥场、holonomy residual 与离散曲率只给出 Lorentz 前几何。要得到 Einstein 型闭包，必须额外筛出四维稳定、平滑、度规尺度已固定、局部 exact、可全局粘接、源项可审计的区域。相应目标不是全域无条件结论，而是在最大相容证书域
+\[
+M_{\mathrm{adm}}
+\]
+上建立
+\[
+(M_{\mathrm{adm}},g,\nabla,R,G,T)
+\]
+以及
+\[
+\boxed{
+G_{\mu\nu}+\Lambda g_{\mu\nu}
+=
+\kappa T_{\mu\nu}.
+}
+\]
+
+\paragraph{admissible patch。}
+令 \(U\) 为前时空空间中的局部区域。称 \(U\) 为 admissible patch，若下列条件均可证书化：
+\[
+\dim T_p=4\qquad(p\in U),
+\]
+\[
+\mathcal C_p^+=\{v:g_p(v,v)\le0,\ \theta_p(v)>0\},
+\]
+局部图表
+\[
+\phi_\alpha:U_\alpha\to\mathbb R^4
+\]
+具有足够正则的过渡映射，度规候选 \(g_m\) 在提交拓扑中收敛到 \(g\)，holonomy 面积归一化极限存在，并且局部 residual 可由 connection curvature 表示。classical curvature 口径至少要求
+\[
+g\in C^2_{\rm loc}.
+\]
+
+\begin{definition}[admissible patch 证书]\label{def:typed-address-biaxial-completion-admissible-patch-cert}
+称 \(\mathsf{AdmissiblePatchCert}(U)\) 为 admissible patch 证书，若它包含 \(U\)、局部覆盖、图表、切空间、局部度规、局部锥、\(\mathsf{DimensionFourCert}\)、\(\mathsf{SmoothAtlasCert}\)、Lorentz signature cert、cone-metric match cert、curvature limit cert、local exactness cert 与 round hash。验证器检查
+\[
+\dim T_p=4,
+\qquad
+\operatorname{inertia}(g_p)=(1,3),
+\]
+以及
+\[
+g_p(v,v)\le0
+\Longleftrightarrow
+v\in\mathcal C_p^+
+\]
+在误差预算内成立。重叠上检查
+\[
+g_\alpha=(\phi_\beta\circ\phi_\alpha^{-1})^*g_\beta.
+\]
+若只得到 conformal class，则输出 \(\mathsf{ConformalOnlyNull}\)。
+\end{definition}
+
+\paragraph{最大 admissible 域。}
+令
+\[
+\mathcal A=\{U:\mathsf{AdmissiblePatchCert}(U)=\mathsf{PASS}\}.
+\]
+若 \(U,V\in\mathcal A\) 在交叠上满足
+\[
+g_U=g_V,\qquad
+\nabla^U=\nabla^V,
+\qquad
+T^U=T^V
+\]
+在相应对象已提交时成立，则称二者 compatible。令 \(\mathcal A_{\rm comp}\) 为当前证书语言下的最大相容族，并定义
+\[
+\boxed{
+M_{\mathrm{adm}}
+:=
+\bigcup_{U\in\mathcal A_{\rm comp}}U.
+}
+\]
+该最大性只相对于当前审计种子、局部 exactness 与粘接证书成立，不表示所有潜在区域均已纳入。
+
+\begin{definition}[最大 admissible 域证书]\label{def:typed-address-biaxial-completion-maximal-admissible-domain-cert}
+称 \(\mathsf{MaximalAdmissibleDomainCert}\) 为最大 admissible 域证书，若它包含 \(\mathcal A,\mathcal A_{\rm comp},M_{\mathrm{adm}}\)、patch pass ledger、overlap compatibility ledger、chain-union ledger、maximality witness ledger、excluded patch ledger 与 round hash。验证器检查相容 patch 的 metric、connection 与 source ledger 在重叠上相等。若某 patch 不能加入，excluded ledger 必须给出类型化原因：
+\[
+\mathsf{DimensionMismatch},\quad
+\mathsf{ConeMismatch},\quad
+\mathsf{MetricScaleMismatch},\quad
+\mathsf{CurvatureLimitFail},\quad
+\mathsf{StressLedgerMismatch},\quad
+\mathsf{GluingObstruction}.
+\]
+无法证明最大性时输出 \(\mathsf{MaximalityNull}\)。
+\end{definition}
+
+\begin{definition}[四维稳定证书]\label{def:typed-address-biaxial-completion-dimension-four-cert}
+称 \(\mathsf{DimensionFourCert}\) 为四维稳定证书，若它包含 \(M_{\mathrm{adm}}\)、切空间族、rank ledger、chart-dimension ledger、resolution-stability ledger 与 round hash。验证器检查
+\[
+\dim T_pM_{\mathrm{adm}}=4
+\]
+在整个提交域上成立。若存在维数跳跃，输出 \(\mathsf{DimensionFourFail}\)。若只在采样点上可见四维而不能跨图表稳定，输出 \(\mathsf{DimensionFourNull}\)。
+\end{definition}
+
+\paragraph{图表正则性与尺度固定。}
+设正则层级为
+\[
+\mathsf{Discrete},\quad
+\mathsf{C0Lorentz},\quad
+\mathsf{C1Connection},\quad
+\mathsf{C2Curvature},\quad
+\mathsf{WeakSobolev},\quad
+\mathsf{Smooth}.
+\]
+classical Einstein 方程要求至少 \(\mathsf{C2Curvature}\)。弱形式可在 Sobolev 或分布口径下定义，但需要单独 ledger。
+
+\begin{definition}[平滑图册证书]\label{def:typed-address-biaxial-completion-smooth-atlas-cert}
+称 \(\mathsf{SmoothAtlasCert}\) 为平滑图册证书，若它包含图表 \(\{U_\alpha,\phi_\alpha\}\)、过渡映射、阶数 \(k\)、transition smoothness ledger、metric regularity ledger、可选 weak regularity ledger 与 round hash。验证器检查
+\[
+\phi_\beta\circ\phi_\alpha^{-1}\in C^{k+1}.
+\]
+若声称 classical curvature，则检查 \(g_{\mu\nu}\in C^2_{\rm loc}\)。若仅有 \(C^0\) 度规，输出 \(\mathsf{CurvatureRegularityNull}\)。图表过渡不相容时输出 \(\mathsf{AtlasCompatibilityFail}\)。
+\end{definition}
+
+光锥只确定 conformal class \([g]\)。Einstein tensor 需要实际度规 \(g\)。因此必须提交尺度固定
+\[
+g_\alpha=\Omega_\alpha^2\widehat g_\alpha,
+\qquad
+\Omega_\alpha>0,
+\]
+其中尺度可由同步钟归一、proper-time 校准、resource lapse、内部审计种子或物质钟参考给出。
+
+\begin{definition}[度规尺度固定证书]\label{def:typed-address-biaxial-completion-metric-scale-fixing-cert}
+称 \(\mathsf{MetricScaleFixingCert}\) 为度规尺度固定证书，若它包含 conformal class、代表 \(g\)、尺度函数 \(\Omega_\alpha\)、clock-normalization ledger、lapse-normalization ledger、overlap-scale compatibility ledger 与 round hash。验证器检查
+\[
+g_\alpha=\Omega_\alpha^2\widehat g_\alpha
+\]
+以及重叠上的实际度规一致性。若只有 \([g]\)，输出 \(\mathsf{ConformalOnlyNull}\)。重叠尺度不一致时输出 \(\mathsf{MetricScaleMismatchFail}\)。
+\end{definition}
+
+\begin{definition}[全局 Lorentz 粘接证书]\label{def:typed-address-biaxial-completion-global-lorentz-gluing-cert}
+称 \(\mathsf{GlobalLorentzGluingCert}\) 为全局 Lorentz 粘接证书，若它包含覆盖、局部度规、过渡矩阵 \(A_{\alpha\beta}\)、metric-overlap ledger、cocycle ledger、\v{C}ech residual ledger、global metric object 与 round hash。验证器检查
+\[
+A_{\alpha\beta}^{\top}g_\beta A_{\alpha\beta}=g_\alpha
+\]
+以及三重重叠上的 cocycle 条件。若只满足 conformal 关系，输出 \(\mathsf{ConformalGluingPass}\) 而非 full metric pass。metric residual 非零时输出 \(\mathsf{MetricCechObstructionFail}\)。
+\end{definition}
+
+\paragraph{Levi--Civita 闭包与曲率收缩。}
+给定全局 Lorentz 度规 \(g\)，Levi--Civita 连接是唯一满足
+\[
+\nabla_\lambda g_{\mu\nu}=0,
+\qquad
+\Gamma^\rho_{\mu\nu}=\Gamma^\rho_{\nu\mu}
+\]
+的连接。局部 Christoffel 符号为
+\[
+\boxed{
+\Gamma^\rho_{\mu\nu}
+=
+\frac12g^{\rho\sigma}
+\bigl(
+\partial_\mu g_{\nu\sigma}
++
+\partial_\nu g_{\mu\sigma}
+-
+\partial_\sigma g_{\mu\nu}
+\bigr).
+}
+\]
+
+\begin{definition}[Levi--Civita 闭包证书]\label{def:typed-address-biaxial-completion-levi-civita-closure-cert}
+称 \(\mathsf{LeviCivitaClosureCert}\) 为 Levi--Civita 闭包证书，若它包含 \(M_{\mathrm{adm}},g,\nabla\)、Christoffel 符号、metric compatibility ledger、torsion-zero ledger、Christoffel formula ledger、discrete transport limit ledger 与 round hash。验证器检查
+\[
+\nabla_\lambda g_{\mu\nu}=0,
+\qquad
+\Gamma^\rho_{\mu\nu}=\Gamma^\rho_{\nu\mu},
+\]
+以及 Christoffel 公式。torsion 非零时输出 \(\mathsf{LeviCivitaTorsionFail}\)，\(\nabla g\neq0\) 时输出 \(\mathsf{MetricCompatibilityFail}\)，尺度未定时输出 \(\mathsf{LeviCivitaScaleNull}\)。
+\end{definition}
+
+Riemann 曲率由
+\[
+[\nabla_\mu,\nabla_\nu]V^\rho
+=
+R^\rho{}_{\sigma\mu\nu}V^\sigma
+\]
+定义，坐标表达为
+\[
+\boxed{
+R^\rho{}_{\sigma\mu\nu}
+=
+\partial_\mu\Gamma^\rho_{\nu\sigma}
+-
+\partial_\nu\Gamma^\rho_{\mu\sigma}
++
+\Gamma^\rho_{\mu\lambda}\Gamma^\lambda_{\nu\sigma}
+-
+\Gamma^\rho_{\nu\lambda}\Gamma^\lambda_{\mu\sigma}.
+}
+\]
+收缩得到
+\[
+R_{\mu\nu}=R^\rho{}_{\mu\rho\nu},
+\qquad
+R=g^{\mu\nu}R_{\mu\nu},
+\qquad
+\boxed{
+G_{\mu\nu}=R_{\mu\nu}-\frac12Rg_{\mu\nu}.
+}
+\]
+
+\begin{definition}[曲率收缩证书]\label{def:typed-address-biaxial-completion-curvature-contraction-cert}
+称 \(\mathsf{CurvatureContractionCert}\) 为曲率收缩证书，若它包含 \(g,\nabla,R^\rho{}_{\sigma\mu\nu},R_{\mu\nu},R,G_{\mu\nu}\)、Riemann formula ledger、Ricci contraction ledger、scalar contraction ledger、Einstein tensor ledger、discrete curvature limit ledger 与 round hash。验证器检查上述收缩公式，并检查离散 holonomy 曲率极限与 Levi--Civita Riemann curvature 在提交表示中一致。若二者不一致，输出 \(\mathsf{CurvatureRepresentationMismatchFail}\)。正则性不足导致收缩不可定义时输出 \(\mathsf{CurvatureContractionNull}\)。
+\end{definition}
+
+第二 Bianchi 恒等式缩并给出
+\[
+\boxed{
+\nabla^\mu G_{\mu\nu}=0.
+}
+\]
+因此任何 Einstein 型右侧源项都必须协变守恒。
+
+\begin{definition}[Bianchi 守恒证书]\label{def:typed-address-biaxial-completion-bianchi-conservation-cert}
+称 \(\mathsf{BianchiConservationCert}\) 为 Bianchi 守恒证书，若它包含 \(R^\rho{}_{\sigma\mu\nu},G_{\mu\nu},g_{\mu\nu}\)、second Bianchi ledger、contracted Bianchi ledger、divergence-zero ledger 与 round hash。验证器检查
+\[
+\nabla_{[\lambda}R^\rho{}_{|\sigma|\mu\nu]}=0,
+\qquad
+\nabla^\mu G_{\mu\nu}=0.
+\]
+若 contracted Bianchi 失败，输出 \(\mathsf{BianchiFail}\)。若只有离散 Bianchi product 而无连续 contraction，输出 \(\mathsf{BianchiContinuumNull}\)。
+\end{definition}
+
+\paragraph{源项账本与最小引力类。}
+源项 \(T_{\mu\nu}\) 必须来自可审计账本。它可以由作用量变分
+\[
+\boxed{
+T_{\mu\nu}
+=
+-\frac{2}{\sqrt{|g|}}
+\frac{\delta S_{\rm vis}}{\delta g^{\mu\nu}}
+}
+\]
+给出，也可以是离散资源流极限或外部 symmetric conserved source ledger。最低要求为
+\[
+T_{\mu\nu}=T_{\nu\mu},
+\qquad
+\nabla^\mu T_{\mu\nu}=0.
+\]
+
+\begin{definition}[应力能量账本证书]\label{def:typed-address-biaxial-completion-stress-energy-ledger-cert}
+称 \(\mathsf{StressEnergyLedgerCert}\) 为应力能量账本证书，若它包含 \(T_{\mu\nu}\)、source origin type、可选 action-variation ledger、可选 discrete-resource-limit ledger、symmetry ledger、conservation ledger、可选 energy-condition ledger 与 round hash。验证器检查
+\[
+T_{\mu\nu}=T_{\nu\mu},
+\qquad
+\nabla^\mu T_{\mu\nu}=0.
+\]
+非对称时输出 \(\mathsf{StressTensorSymmetryFail}\)，不守恒时输出 \(\mathsf{StressEnergyConservationFail}\)，缺源项账本时输出 \(\mathsf{StressEnergyLedgerNull}\)。
+\end{definition}
+
+令 \(E_{\mu\nu}(g)\) 为 gravitational closure tensor。最小二阶四维闭包要求其 symmetric、local metric expression、divergence-free、二阶、平直无源归一且与曲率收缩账本相容。在该类中采用
+\[
+\boxed{
+E_{\mu\nu}=G_{\mu\nu}+\Lambda g_{\mu\nu}.
+}
+\]
+
+\begin{definition}[最小引力类证书]\label{def:typed-address-biaxial-completion-minimal-gravity-class-cert}
+称 \(\mathsf{MinimalGravityClassCert}\) 为最小引力类证书，若它包含 \(E_{\mu\nu},G_{\mu\nu},g_{\mu\nu},\Lambda\)、symmetry cert、divergence-free cert、second-order locality ledger、flat-vacuum normalization ledger、tensor-basis reduction ledger 与 round hash。验证器检查
+\[
+E_{\mu\nu}=G_{\mu\nu}+\Lambda g_{\mu\nu}.
+\]
+若提交更高阶曲率项，输出 \(\mathsf{HigherCurvatureExtensionPass}\) 而非 Einstein minimal pass。缺 minimality 证据时输出 \(\mathsf{GravityClassNull}\)。
+\end{definition}
+
+耦合常数 \(\kappa\) 不是由光锥自动决定。若使用弱场 Newtonian 校准，令
+\[
+g_{\mu\nu}=\eta_{\mu\nu}+h_{\mu\nu},
+\qquad
+g_{00}\approx-(1+2\Phi/c_\ast^2),
+\]
+并要求
+\[
+\nabla^2\Phi=4\pi G_{\rm eff}\rho,
+\]
+则
+\[
+\boxed{
+\kappa=\frac{8\pi G_{\rm eff}}{c_\ast^4}.
+}
+\]
+
+\begin{definition}[耦合校准证书]\label{def:typed-address-biaxial-completion-coupling-calibration-cert}
+称 \(\mathsf{CouplingCalibrationCert}\) 为耦合校准证书，若它包含 \(c_\ast,G_{\rm eff},\kappa\)、unit-normalization ledger、weak-field expansion ledger、Poisson-limit ledger、calibration error budget 与 round hash。验证器检查
+\[
+\kappa=\frac{8\pi G_{\rm eff}}{c_\ast^4}.
+\]
+缺 \(G_{\rm eff}\) 校准时输出 \(\mathsf{CouplingConstantNull}\)，弱场极限与 Poisson 方程不一致时输出 \(\mathsf{WeakFieldCalibrationFail}\)。
+\end{definition}
+
+\paragraph{Einstein residual 与协变性。}
+定义 Einstein residual
+\[
+\boxed{
+\mathcal E_{\mu\nu}
+:=
+G_{\mu\nu}+\Lambda g_{\mu\nu}-\kappa T_{\mu\nu}.
+}
+\]
+
+\begin{definition}[Einstein 闭包证书]\label{def:typed-address-biaxial-completion-einstein-closure-cert}
+称 \(\mathsf{EinsteinClosureCert}\) 为 Einstein 闭包证书，若它包含 \(M_{\mathrm{adm}},g,\nabla,G_{\mu\nu},T_{\mu\nu},\Lambda,\kappa\)、\(\mathsf{MinimalGravityClassCert}\)、\(\mathsf{StressEnergyLedgerCert}\)、可选 \(\mathsf{CouplingCalibrationCert}\)、Einstein residual ledger、regularity mode 与 round hash。classical pass 要求
+\[
+\mathcal E_{\mu\nu}=0
+\]
+逐点成立。weak pass 要求对紧支撑测试张量 \(\varphi^{\mu\nu}\) 有
+\[
+\int_{M_{\mathrm{adm}}}
+\mathcal E_{\mu\nu}\varphi^{\mu\nu}\,d{\rm vol}_g=0.
+\]
+若 residual 非零，输出 \(\mathsf{EinsteinResidualFail}\)。若只证明 \(\|\mathcal E\|\le\varepsilon\)，输出 \(\mathsf{ApproxEinsteinPass}(\varepsilon)\)。缺源项或最小引力类时输出 \(\mathsf{EinsteinClosureNull}\)。
+\end{definition}
+
+真空域
+\[
+M_{\rm vac}:=\{p\in M_{\mathrm{adm}}:T_{\mu\nu}(p)=0\}
+\]
+上方程化为
+\[
+G_{\mu\nu}+\Lambda g_{\mu\nu}=0.
+\]
+若 \(\Lambda=0\)，则 \(R_{\mu\nu}=0\)。Ricci flat 不等于 flat；Weyl curvature 仍可非零。
+
+\begin{definition}[真空扇区证书]\label{def:typed-address-biaxial-completion-vacuum-sector-cert}
+称 \(\mathsf{VacuumSectorCert}\) 为真空扇区证书，若它包含 \(M_{\rm vac},T_{\mu\nu},R_{\mu\nu},\Lambda,g_{\mu\nu}\)、zero-source ledger、Ricci-equation ledger、Weyl-curvature ledger 与 round hash。验证器检查
+\[
+T_{\mu\nu}=0,
+\qquad
+R_{\mu\nu}=\Lambda g_{\mu\nu}.
+\]
+若声称 flat，还需检查 \(R^\rho{}_{\sigma\mu\nu}=0\)。Ricci flat 但 Weyl 非零时输出 \(\mathsf{RicciFlatNonFlatPass}\)。
+\end{definition}
+
+\begin{definition}[操作一致性证书]\label{def:typed-address-biaxial-completion-operational-consistency-cert}
+称 \(\mathsf{OperationalConsistencyCert}\) 为操作一致性证书，若它包含 \(D,\Delta,c_\ast,\mathcal C^+,g\)、cone-match ledger、proper-time sync ledger、propagation-bound metric ledger、holonomy-curvature match ledger 与 round hash。验证器检查
+\[
+\mathcal C_p^+=\{v:g_p(v,v)\le0,\theta_p(v)>0\},
+\]
+同步深度在尺度校准后收敛到 proper time，并检查
+\[
+\lim_{\ell\to p}\frac{\log H_\ell}{A(\ell)}=R(p)
+\]
+在提交表示中成立。metric causal structure 与同步传播锥不一致时输出 \(\mathsf{OperationalMetricMismatchFail}\)，proper-time 尺度未校准时输出 \(\mathsf{ProperTimeScaleNull}\)。
+\end{definition}
+
+协变性分为固定图表张量相容、admissible diffeomorphism 相容与 full diffeomorphism 相容。默认目标是 admissible diffeomorphism 级别。
+
+\begin{definition}[协变性证书]\label{def:typed-address-biaxial-completion-covariance-cert}
+称 \(\mathsf{CovarianceCert}\) 为协变性证书，若它包含 \(M_{\mathrm{adm}},\mathrm{Diff}_{\rm adm},g,\nabla,G,T\)、tensor-transformation ledger、admissible-diffeomorphism ledger、equation-invariance ledger 与 round hash。验证器检查对任意 \(\varphi\in\mathrm{Diff}_{\rm adm}\)，若
+\[
+G+\Lambda g=\kappa T,
+\]
+则
+\[
+\varphi^*G+\Lambda\varphi^*g=\kappa\varphi^*T.
+\]
+若只在固定坐标中成立，输出 \(\mathsf{CoordinateOnlyNull}\)。变换律错误时输出 \(\mathsf{CovarianceFail}\)。
+\end{definition}
+
+\paragraph{admissible Einstein 闭包证书。}
+\begin{definition}[admissible Einstein 闭包证书]\label{def:typed-address-biaxial-completion-einstein-admissible-closure-cert}
+称
+\[
+\mathsf{EinsteinAdmissibleClosureCert}
+\]
+为 admissible Einstein 闭包证书，若它包含 \(\mathsf{SpacetimePregeometryCert}\)、admissible patch 证书族、最大域证书、四维稳定证书、平滑图册证书、尺度固定证书、全局 Lorentz 粘接证书、Levi--Civita 闭包证书、曲率收缩证书、Bianchi 守恒证书、应力能量账本、最小引力类证书、可选耦合校准证书、Einstein 闭包证书、操作一致性证书、协变性证书、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifyEinsteinAdmissibleClosure}\) 依次检查前时空证书、admissible patch 筛选、patch 相容、最大域构造、四维稳定、图册正则性、尺度固定、全局度规粘接、Levi--Civita 条件、曲率收缩、Bianchi 守恒、源项账本、最小引力类、耦合校准、Einstein residual、操作一致性与协变性。输出可为
+\[
+\mathsf{ClassicalEinsteinPass},\qquad
+\mathsf{WeakEinsteinPass},\qquad
+\mathsf{ApproxEinsteinPass}(\varepsilon),\qquad
+\mathsf{NULL},\qquad
+\mathsf{FAIL}.
+\]
+
+NULL 类型包括
+\[
+\mathsf{MaximalityNull},\quad
+\mathsf{DimensionFourNull},\quad
+\mathsf{CurvatureRegularityNull},\quad
+\mathsf{ConformalOnlyNull},\quad
+\mathsf{LeviCivitaScaleNull},
+\]
+\[
+\mathsf{CurvatureContractionNull},\quad
+\mathsf{StressEnergyLedgerNull},\quad
+\mathsf{GravityClassNull},\quad
+\mathsf{CouplingConstantNull},\quad
+\mathsf{ProperTimeScaleNull}.
+\]
+FAIL 类型包括
+\[
+\mathsf{DimensionFourFail},\quad
+\mathsf{AtlasCompatibilityFail},\quad
+\mathsf{MetricScaleMismatchFail},\quad
+\mathsf{MetricCechObstructionFail},\quad
+\mathsf{MetricCompatibilityFail},
+\]
+\[
+\mathsf{LeviCivitaTorsionFail},\quad
+\mathsf{CurvatureRepresentationMismatchFail},\quad
+\mathsf{BianchiFail},\quad
+\mathsf{StressTensorSymmetryFail},\quad
+\mathsf{StressEnergyConservationFail},
+\]
+\[
+\mathsf{EinsteinResidualFail},\quad
+\mathsf{OperationalMetricMismatchFail},\quad
+\mathsf{CovarianceFail}.
+\]
+
+\begin{theorem}[admissible Einstein 闭包的可靠性]\label{thm:typed-address-biaxial-completion-admissible-einstein-closure-soundness}
+若
+\[
+\mathsf{VerifyEinsteinAdmissibleClosure}
+(\mathsf{EinsteinAdmissibleClosureCert})
+=
+\mathsf{ClassicalEinsteinPass},
+\]
+则存在四维 smooth Lorentz manifold \((M_{\mathrm{adm}},g)\)，满足：
+\[
+\dim M_{\mathrm{adm}}=4,
+\qquad
+\operatorname{sign}(g)=(-,+,+,+),
+\]
+metric causal cone 与同步传播锥一致；存在唯一 Levi--Civita 连接
+\[
+\nabla g=0,\qquad
+T^\rho{}_{\mu\nu}=0;
+\]
+holonomy residual 的面积归一化极限与 Riemann curvature 相容；Riemann、Ricci、scalar curvature 与 Einstein tensor 定义良好；contracted Bianchi identity 成立；源项账本给出对称守恒张量 \(T_{\mu\nu}\)；并且在 \(M_{\mathrm{adm}}\) 上有
+\[
+\boxed{
+G_{\mu\nu}+\Lambda g_{\mu\nu}
+=
+\kappa T_{\mu\nu}.
+}
+\]
+若输出为 \(\mathsf{WeakEinsteinPass}\)，该等式在指定弱拓扑或分布意义下成立。若输出为 \(\mathsf{ApproxEinsteinPass}(\varepsilon)\)，则 residual 在提交范数中不超过 \(\varepsilon\)。
+\end{theorem}
+\begin{proof}
+admissible patch 证书给出局部四维 Lorentz 候选、锥--度规匹配、曲率极限与 local exactness。最大域证书把所有相容 patch 粘接为 \(M_{\mathrm{adm}}\)。四维证书、平滑图册证书与尺度固定证书把 conformal 锥数据提升为具有足够正则性的实际 Lorentz metric。全局粘接证书保证局部度规下降为全局 \(g\)。Levi--Civita 证书给出 \(\nabla g=0\) 与 torsion-free 条件，因此连接唯一。曲率收缩证书定义 \(R^\rho{}_{\sigma\mu\nu},R_{\mu\nu},R,G_{\mu\nu}\)，并与离散 holonomy 曲率极限相容。Bianchi 证书给出 \(\nabla^\mu G_{\mu\nu}=0\)。源项账本给出对称且守恒的 \(T_{\mu\nu}\)。最小引力类证书把左侧约化为 \(G_{\mu\nu}+\Lambda g_{\mu\nu}\)。Einstein 闭包证书最终检查 residual 为零。因此所述 classical pass 结论成立；弱与近似版本由 residual ledger 的相应口径直接给出。证毕。
+\end{proof}
+
+该接口的边界是结构性的：Lorentz cone 不自动给出 Einstein 方程；conformal class 不自动给出 metric；一般 connection transport 不自动是 Levi--Civita；离散曲率不自动是 Riemann curvature；源项必须由 stress-energy ledger 审计；Einstein 型方程只在 \(M_{\mathrm{adm}}\) 上作为最小二阶、守恒、四维 Lorentz 闭包成立。

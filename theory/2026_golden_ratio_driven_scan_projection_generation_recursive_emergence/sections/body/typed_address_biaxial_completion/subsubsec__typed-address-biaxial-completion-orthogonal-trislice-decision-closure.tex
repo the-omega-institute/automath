@@ -1,0 +1,363 @@
+\subsubsection{正交切片与判定闭合}\label{subsubsec:typed-address-biaxial-completion-orthogonal-trislice-decision-closure}
+Jensen 半径族、Toeplitz--PSD 端点热核与共动 Fourier--Laplace 层析分别给出三类读出：盘内零点、端点载荷与边界层缺陷测度。判定层必须进一步说明这些读出是否来自同一个解析对象，哪些读出能够粘接，哪些预算不足只能给出 \(\mathrm{NULL}\)，以及何时证书矛盾应输出 \(\mathrm{FAIL}\)。相应的最小闭包由三条正交切片组成：
+\[
+\text{visible modulus slice},
+\qquad
+\text{Blaschke zero slice},
+\qquad
+\text{endpoint singular/load slice}.
+\]
+它们分别记录可见模长、盘内零点与端点奇异载荷，且互不抵偿。
+
+\paragraph{解析对象的三因子分解。}
+令 \(F\) 是单位圆盘 \(\mathbb D\) 上的非零解析对象，处于 Hardy/Smirnov 型口径中。设边界极限满足
+\[
+h(\theta):=\log|F^*(e^{i\theta})|\in L^1(\partial\mathbb D).
+\]
+盘内零点记为
+\[
+\mathcal Z:=\sum_j m_j\delta_{a_j},
+\qquad
+a_j\in\mathbb D,
+\]
+并满足 Blaschke 条件
+\[
+\sum_jm_j(1-|a_j|)<\infty.
+\]
+端点或边界奇异载荷记为有限正奇异测度 \(\mu_\partial\)。内外分解给出
+\[
+\boxed{
+F(w)=
+e^{i\alpha}
+O_h(w)
+B_{\mathcal Z}(w)
+S_{\mu_\partial}(w).
+}
+\]
+其中
+\[
+O_h(w)
+=
+\exp\left\{
+\frac1{2\pi}
+\int_0^{2\pi}
+\frac{e^{i\theta}+w}{e^{i\theta}-w}
+h(\theta)\,d\theta
+\right\},
+\]
+\[
+B_{\mathcal Z}(w)
+=
+\prod_j
+\left(
+\frac{|a_j|}{a_j}
+\frac{a_j-w}{1-\overline a_j w}
+\right)^{m_j},
+\]
+零点 \(a_j=0\) 时取相应规范形式，并且
+\[
+S_{\mu_\partial}(w)
+=
+\exp\left\{
+-\int_{\partial\mathbb D}
+\frac{\zeta+w}{\zeta-w}\,d\mu_\partial(\zeta)
+\right\}.
+\]
+定义
+\[
+\boxed{
+\mathsf{TriSlice}(F):=(h,\mathcal Z,\mu_\partial).
+}
+\]
+全局相位 \(e^{i\alpha}\) 是 \(U(1)\) 规范自由度，单独记入 \(\mathsf{PhaseGauge}\)。
+
+\begin{theorem}[正交三切片唯一性]\label{thm:typed-address-biaxial-completion-orthogonal-trislice-uniqueness}
+在上述 admissible 类中，若非零解析对象 \(F,G\) 满足
+\[
+h_F=h_G,
+\qquad
+\mathcal Z_F=\mathcal Z_G,
+\qquad
+\mu_{\partial,F}=\mu_{\partial,G},
+\]
+则存在 \(\alpha\in\mathbb R\)，使得
+\[
+F=e^{i\alpha}G.
+\]
+\end{theorem}
+\begin{proof}
+由内外分解，
+\[
+F=e^{i\alpha_F}O_hB_{\mathcal Z}S_{\mu_\partial},
+\qquad
+G=e^{i\alpha_G}O_hB_{\mathcal Z}S_{\mu_\partial}.
+\]
+相除得到 \(F/G=e^{i(\alpha_F-\alpha_G)}\)。证毕。
+\end{proof}
+
+定义投影
+\[
+\Pi_{\rm mod}(F):=h=\log|F^*|,
+\qquad
+\Pi_{\rm zero}(F):=\mathcal Z,
+\qquad
+\Pi_{\rm end}(F):=\mu_\partial.
+\]
+边界模长由 Hardy 投影、有理核与有限 Fourier 模态恢复；盘内零点由 Jensen 缺陷半径族恢复：
+\[
+J_F(r)
+=
+\frac1{2\pi}
+\int_0^{2\pi}\log|F(re^{i\theta})|\,d\theta
+-\log|F(0)|
+=
+\sum_{|a_j|<r}m_j\log\frac r{|a_j|}.
+\]
+在无零半径处，
+\[
+\frac{d}{d\log r}J_F(r)=N_F(r).
+\]
+端点载荷由 Toeplitz--PSD、Carath\'eodory 正性、端点热核或近端 Poisson 核恢复。若 \(K_N(\eta,\zeta)\) 是以 \(\eta\in\partial\mathbb D\) 为中心的正近似单位核，则
+\[
+H_N(\eta):=\int_{\partial\mathbb D}K_N(\eta,\zeta)\,d\mu_\partial(\zeta)
+\longrightarrow
+\mu_\partial(\{\eta\})
+\]
+在标准局部化条件下成立。
+
+\paragraph{三切片不可替代。}
+Blaschke 因子与奇异内因子满足
+\[
+|B_{\mathcal Z}^*(e^{i\theta})|=1,
+\qquad
+|S_{\mu_\partial}^*(e^{i\theta})|=1
+\]
+对 Lebesgue 几乎处处边界点成立，因此 \(\Pi_{\rm mod}\) 对内因子盲。外函数的圆周平均满足调和平均恒等式；奇异内因子满足
+\[
+\frac1{2\pi}\int_0^{2\pi}
+\log|S_{\mu_\partial}(re^{i\theta})|\,d\theta
+=
+\log|S_{\mu_\partial}(0)|.
+\]
+故 Jensen 缺陷的半径导数只读盘内零点。端点载荷则可在边界模长几乎处处不变、盘内零点不变的情况下改变：若
+\[
+\mu_\partial'=\mu_\partial+\tau\delta_\eta,
+\qquad \tau>0,
+\]
+则零点切片不变，边界模长仍为 \(1\) 的内因子模长，而端点热核在 \(\eta\) 处的极限增加 \(\tau\)。
+
+\begin{theorem}[三预算不可抵偿]\label{thm:typed-address-biaxial-completion-trislice-budgets-noncompensating}
+存在三组对象，使得任意两个切片相同而第三个切片不同。因此，模长、零点与端点载荷三类预算互不抵偿。
+\end{theorem}
+\begin{proof}
+固定 \(h,\mu_\partial\)，取两个不同 Blaschke 因子，得到零点切片不同而其余两切片相同。固定 \(h,\mathcal Z\)，把 \(\mu_\partial\) 改为 \(\mu_\partial+\tau\delta_\eta\)，得到端点切片不同而其余两切片相同。固定 \(\mathcal Z,\mu_\partial\)，取两个不同的 \(h\in L^1\)，得到模长切片不同而其余两切片相同。证毕。
+\end{proof}
+
+\begin{definition}[可见模长证书]\label{def:typed-address-biaxial-completion-modulus-slice-cert}
+称 \(\mathsf{ModulusSliceCert}_M\) 为可见模长证书，若它包含边界分割 \(\{I_q\}_{q=1}^Q\)、区间包络 \(\{[h_q^-,h_q^+]\}_{q=1}^Q\)、boundary sampling ledger、Fourier tail ledger、outer reconstruction ledger 与 round hash，并证明
+\[
+\|h-h_M\|_{L^1}\le\varepsilon_{\rm mod}.
+\]
+若给定范数 \(\mathcal H\) 下外函数重构满足
+\[
+\|O_h-O_{h_M}\|_{\mathcal H}
+\le
+C_{\rm out}\varepsilon_{\rm mod},
+\]
+则该误差进入外因子预算。若边界分辨率不足以稳定确定 \(h\)，输出 \(\mathsf{ModulusResolutionNull}\)。
+\end{definition}
+
+\begin{definition}[零点切片证书]\label{def:typed-address-biaxial-completion-zero-slice-cert}
+称 \(\mathsf{ZeroSliceCert}\) 为零点切片证书，若它包含半径 \(\{\rho_j\}_{j=1}^M\)、区间 \(\{[J(\rho_j)^-,J(\rho_j)^+]\}_{j=1}^M\)、Jensen circle average ledger、log-radius derivative ledger、零点盒 \(\{([a_\ell],m_\ell)\}_{\ell=1}^L\)、zero-box separation ledger、residual ledger 与 round hash。验证器核验
+\[
+J(\rho_j)
+=
+\frac1{2\pi}
+\int_0^{2\pi}\log|F(\rho_je^{i\theta})|\,d\theta
+-\log|F(0)|
+\]
+以及差分导数与提交计数区间相容。若零点盒贴近半径阈值，输出 \(\mathsf{RadiusThresholdNull}\)；若当前前缀无法分离零点盒，输出 \(\mathsf{ZeroCollisionNull}\)。
+\end{definition}
+
+\begin{definition}[端点载荷证书]\label{def:typed-address-biaxial-completion-endpoint-load-cert}
+称 \(\mathsf{EndpointLoadCert}_{N,\eta}\) 为端点载荷证书，若它包含矩区间 \(\{[m_k^-,m_k^+]\}_{|k|\le N}\)、Toeplitz PSD interval cert、heat kernel ledger、区间 \([H_N(\eta)^-,H_N(\eta)^+]\)、endpoint tail ledger 与 round hash，其中
+\[
+m_k=\int_{\partial\mathbb D}\zeta^{-k}\,d\mu_\partial(\zeta)
+\]
+且
+\[
+T_N=(m_{j-k})_{0\le j,k\le N}\succeq0.
+\]
+若核族给出近似单位，则
+\[
+H_N(\eta)=\mu_\partial(\{\eta\})+O(\varepsilon_N).
+\]
+谱隙不足或热核阶数不够时输出 \(\mathsf{EndpointHeatDepthNull}\)。Toeplitz 区间无法证明 PSD 时输出 \(\mathsf{ToeplitzPSDNull}\)，若存在负谱见证则输出 \(\mathsf{ToeplitzPSDFail}\)。
+\end{definition}
+
+\begin{definition}[正交三切片证书]\label{def:typed-address-biaxial-completion-orthogonal-trislice-cert}
+称
+\[
+\mathsf{OrthogonalTriSliceCert}
+\]
+为三切片总证书，若它由
+\[
+\mathsf{ModulusSliceCert},\quad
+\mathsf{ZeroSliceCert},\quad
+\mathsf{EndpointLoadCert},\quad
+\mathsf{PhaseGaugeLedger},\quad
+\mathsf{FactorizationResidualLedger},\quad
+\mathsf{OrthogonalBudgetLedger},\quad
+\mathsf{TranscriptHash}
+\]
+组成，并证明重构对象
+\[
+F_{\rm rec}(w)
+=
+e^{i\alpha}O_{\widehat h}(w)
+B_{\widehat{\mathcal Z}}(w)
+S_{\widehat\mu}(w)
+\]
+满足
+\[
+\|F-F_{\rm rec}\|_{\mathcal H}\le\varepsilon_{\rm tri},
+\]
+或在只读协议下满足所有投影一致性约束。总误差账本为
+\[
+\varepsilon_{\rm tri}
+=
+\varepsilon_{\rm mod}
++\varepsilon_{\rm zero}
++\varepsilon_{\rm end}
++\varepsilon_{\rm phase}
++\varepsilon_{\rm fact}.
+\]
+该式是误差求和，不表示预算可互相替代。
+\end{definition}
+
+\paragraph{三值读出。}
+令地址对象为
+\[
+a=(L,\theta,b,\mathsf{Mode})
+\]
+并令预算包为
+\[
+B=(\Delta_\rho,b,N,E_\tau,\Omega,\Lambda,L_{\rm Hankel},C_{\rm cond},\varepsilon).
+\]
+定义统一读出偏函数
+\[
+\boxed{
+\mathsf{ReadUS}_B(a)
+\in
+\{\mathsf{VAL}(v),\mathsf{NULL}(\tau,W),\mathsf{FAIL}(R)\}.
+}
+\]
+\(\mathsf{VAL}(v)\) 表示值被稳定读出；\(\mathsf{NULL}(\tau,W)\) 表示协议内不可定义或不可决定，并给出类型与见证；\(\mathsf{FAIL}(R)\) 表示提交证书与验证规则矛盾。因此 \(\mathsf{NULL}\ne\mathsf{FAIL}\)。
+
+NULL 见证分为六类：
+\[
+\mathsf{DomainOutNull},\quad
+\mathsf{LocalEmptyNull},\quad
+\mathsf{CechGluingNull},\quad
+\mathsf{HardThresholdNull},\quad
+\mathsf{CollisionNull},\quad
+\mathsf{ValueMarginNull}.
+\]
+其中 Čech 粘接障碍由闭路 holonomy 给出。若局部截面 \(\sigma_i\in\mathcal F(U_i)\) 在重叠上满足
+\[
+\sigma_i=g_{ij}\cdot\sigma_j,
+\]
+严格粘接要求存在局部规范 \(h_i\) 使
+\[
+g_{ij}=h_i h_j^{-1}.
+\]
+若闭路
+\[
+\Gamma=(i_0,i_1,\ldots,i_m=i_0)
+\]
+满足
+\[
+\operatorname{Hol}_\Gamma
+:=
+g_{i_0i_1}g_{i_1i_2}\cdots g_{i_{m-1}i_m}
+\ne e,
+\]
+则输出 \(\mathsf{CechGluingNull}\)。
+
+\begin{definition}[非 NULL 证书]\label{def:typed-address-biaxial-completion-not-null-cert}
+称 \(\mathsf{NotNullCert}_B(a)\) 为非 NULL 证书，若它包含 domain membership cert、local section cert、Čech trivialization cert、OrthogonalTriSliceCert、budget pass cert、collision separation cert、value margin cert 与 round hash。它证明 \(a\in\mathsf{AdmAddr}_B\)、局部截面存在、\(g_{ij}=h_i h_j^{-1}\)、三切片均通过、预算达标、候选 lift 已分离，并给出值区间
+\[
+v\in[v^-,v^+],
+\qquad v^+-v^-<\varepsilon.
+\]
+阈值谓词 \(v\le\Theta\) 还必须有严格 margin：
+\[
+v^+<\Theta
+\quad\text{or}\quad
+v^->\Theta.
+\]
+若缺少 margin，则输出 \(\mathsf{ValueMarginNull}\)。
+\end{definition}
+
+\begin{theorem}[NULL 与非 NULL 的有限判定闭合]\label{thm:typed-address-biaxial-completion-null-not-null-finite-closure}
+固定有限协议包 \(B\)、有限覆盖 \(\mathcal U\)、有限证书语言和有限误差阈值。若验证器包含 domain、local section、Čech、tri-slice、budget、collision 与 margin 七个 gate，则对任意地址 \(a\)，\(\mathsf{ReadUS}_B(a)=\mathsf{NULL}\) 或 \(\mathsf{ReadUS}_B(a)=\mathsf{VAL}(v)\) 均有有限证书；若提交证书内部矛盾，则输出 \(\mathsf{FAIL}\)。
+\end{theorem}
+\begin{proof}
+固定 \(B\) 后，每个 gate 均是有限验证对象。域检查失败给出 \(\mathsf{DomainOutNull}\)；局部片不可截面化给出 \(\mathsf{LocalEmptyNull}\)；局部截面存在但 Čech residual 具有非平凡闭路 holonomy，给出 \(\mathsf{CechGluingNull}\)；三切片或预算不足给出 \(\mathsf{HardThresholdNull}\)；存在同可见 lift 而目标值不同，给出 \(\mathsf{CollisionNull}\)；阈值无裕度给出 \(\mathsf{ValueMarginNull}\)。若这些障碍均不存在，则域内、局部截面存在、粘接平凡、三切片通过、预算达标、碰撞分离且 margin 成立，故值由有限证书唯一确定。证书声称通过而复算不支持时，输出 \(\mathsf{FAIL}\)。证毕。
+\end{proof}
+
+\begin{definition}[正交判定融合证书]\label{def:typed-address-biaxial-completion-orthogonal-decision-fusion-cert}
+最终判定证书记为
+\[
+\mathsf{OrthogonalDecisionFusionCert}.
+\]
+其数据为
+\[
+\left(
+a,B,\mathcal P,
+\mathsf{OrthogonalTriSliceCert},
+\mathsf{CechTrivializationCert}\ \text{or}\ \mathsf{CechObstacleCert},
+\mathsf{NotNullCert}\ \text{or}\ \mathsf{NullCert},
+\mathsf{DecisionMarginLedger},
+\mathsf{RejectLedger},
+\mathsf{TranscriptHash}
+\right).
+\]
+其中 \(\mathsf{NullCert}\) 必须属于上列六类 NULL 之一。
+\end{definition}
+
+验证器 \(\mathsf{VerifyOrthogonalDecisionFusion}\) 检查地址类型、局部截面、Čech 粘接、三切片、三端预算、碰撞分离以及目标谓词区间。若目标谓词在三端误差盒
+\[
+\mathcal H_{\rm tri}
+=
+\mathcal H_{\rm mod}\times\mathcal H_{\rm zero}\times\mathcal H_{\rm end}
+\]
+中不跨阈值，则输出相应判定；若跨阈值，则输出 \(\mathsf{ValueMarginNull}\)。
+
+\begin{theorem}[正交判定融合证书的可靠性]\label{thm:typed-address-biaxial-completion-orthogonal-decision-fusion-soundness}
+若
+\[
+\mathsf{VerifyOrthogonalDecisionFusion}
+(\mathsf{OrthogonalDecisionFusionCert})
+=
+\mathrm{PASS},
+\]
+则目标谓词 \(\mathcal P(F)\) 在当前 admissible 类与预算 \(B\) 下成立。若输出 \(\mathsf{NULL}(\tau,W)\)，则 \(W\) 是当前协议内无法给出唯一 PASS/FAIL 的有限见证；若输出 \(\mathsf{FAIL}(R)\)，则提交证书与验证规则冲突。
+\end{theorem}
+\begin{proof}
+PASS 表示地址在 typed domain 内，局部截面存在，Čech residual 已平凡化，三切片证书分别通过，预算达标且碰撞已分离，并且目标谓词在整个三端误差盒中具有同一真值。故 \(\mathcal P(F)\) 成立。NULL 情形由某个 gate 的有限见证触发，表示当前协议不能唯一读出目标值；FAIL 情形才表示等式、PSD、holonomy、预算或残差不被验证器接受。证毕。
+\end{proof}
+
+前述端点热核融合证书嵌入 \(\mathsf{EndpointLoadCert}\)；共动层析融合证书为 \(\mathsf{ZeroSliceCert}\) 与 \(\mathsf{EndpointLoadCert}\) 提供局部增强。最终判定仍需要 Čech trivialization 或 Čech obstacle：局部数据即使全部正确，也未必能粘接为全局对象。
+
+若过渡群为 \(U(1)\)，则 residual 写为
+\[
+g_{ij}=e^{i\varphi_{ij}},
+\]
+闭路 holonomy 为
+\[
+\operatorname{Hol}_\Gamma
+=
+\exp\left(i\sum_{(i,j)\in\Gamma}\varphi_{ij}\right).
+\]
+若 \(\operatorname{Hol}_\Gamma\ne1\)，则不能同时选取局部相位消去所有 residual。该情形输出 \(\mathsf{CechGluingNull}\)，或在允许射影化的协议中输出 \(\mathsf{ProjectiveLiftRequired}\)。这把相位接口解释为粘接 residual 的可见投影。

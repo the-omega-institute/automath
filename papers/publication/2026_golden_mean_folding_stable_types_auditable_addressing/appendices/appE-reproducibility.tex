@@ -1,0 +1,554 @@
+\section{Exact reproducibility package and script-level audit schema}
+\label{app:reproducibility}
+
+This appendix specifies the reproducibility package used to audit the fold map
+\[
+\Fold_m:\Om_m\to X_m,\qquad \Om_m=\{0,1\}^m,
+\]
+the deterministic fiber ledger
+\[
+d_m(z),\quad D_m,\quad p_m^{\mathrm{fib}}(z),\quad
+\kappa_m,\quad M_{m,q},
+\]
+and the empirical folded histograms
+\[
+\widehat\pi_{m,N}.
+\]
+The package has three goals.  First, it makes all deterministic fold outputs reproducible from a finite specification of the grammar and fold rule.  Second, it separates deterministic identities from empirical sampling claims.  Third, it gives a script-level schema for regenerating every table, figure, hash, and pass/fail certificate reported in the manuscript.
+
+The central rule is:
+\[
+\boxed{\text{No empirical run is allowed to modify the deterministic ledger.}}
+\]
+The deterministic ledger is computed first.  Sampling audits are then compared against it.
+
+\subsection{Directory structure}
+
+The reproducibility package should have the following minimal structure.
+\begin{verbatim}
+reproducibility_package/
+  README.md
+  run_manifest.yaml
+  environment/
+    requirements.txt
+    requirements-lock.txt
+    environment.yml
+    Dockerfile
+  config/
+    grammar_spec.yaml
+    fold_spec.yaml
+    source_models.yaml
+    audit_config.yaml
+  data_deterministic/
+    stable_words.csv
+    fold_table.json
+    restriction_table.json
+    fiber_ledger.csv
+    fiber_ledger_summary.csv
+    parry_baseline.csv
+    moment_spectrum.csv
+    cross_resolution_fib.csv
+  data_empirical/
+    sample_windows.csv
+    folded_histogram.csv
+    histogram_audit.csv
+    audit_summary.csv
+    cross_resolution_audit.csv
+  hashes/
+    deterministic_hashes.json
+    empirical_hashes.json
+    manifest_hash.txt
+  scripts/
+    00_build_stable_words.py
+    01_build_fold_table.py
+    02_build_restriction_table.py
+    03_build_fiber_ledger.py
+    04_build_parry_baseline.py
+    05_build_moment_spectrum.py
+    06_generate_source_samples.py
+    07_fold_samples.py
+    08_build_histogram_audit.py
+    09_build_cross_resolution_audit.py
+    10_verify_identities.py
+    11_verify_hashes.py
+    12_make_tables.py
+    13_make_figures.py
+    rebuild_all.py
+  outputs/
+    tables/
+    figures/
+    logs/
+    failures/
+\end{verbatim}
+The package is considered reproducible only if the following commands recreate the declared deterministic files and pass all identity checks:
+\begin{verbatim}
+python scripts/rebuild_all.py --manifest run_manifest.yaml
+python scripts/10_verify_identities.py --manifest run_manifest.yaml
+python scripts/11_verify_hashes.py --manifest run_manifest.yaml
+\end{verbatim}
+
+\subsection{Deterministic and empirical files}
+
+The package has two file classes.
+
+\paragraph{Deterministic files.}
+These files are exact outputs of the fold rule and grammar:
+\[
+\begin{gathered}
+\texttt{stable\_words.csv},\quad
+\texttt{fold\_table.json},\quad
+\texttt{restriction\_table.json},\quad
+\texttt{fiber\_ledger.csv},\\
+\texttt{parry\_baseline.csv},\quad
+\texttt{moment\_spectrum.csv},\quad
+\texttt{cross\_resolution\_fib.csv}.
+\end{gathered}
+\]
+They must be identical across runs, platforms, and random seeds, up to the declared canonical serialization.
+
+\paragraph{Empirical files.}
+These files depend on source models, sampling length, random-number generator, and seed:
+\[
+\begin{gathered}
+\texttt{sample\_windows.csv},\quad
+\texttt{folded\_histogram.csv},\quad
+\texttt{histogram\_audit.csv},\\
+\texttt{audit\_summary.csv},\quad
+\texttt{cross\_resolution\_audit.csv}.
+\end{gathered}
+\]
+They are reproducible conditional on the manifest.  Thus the audit reports two statuses:
+\[
+\texttt{deterministic\_status: PASS/FAIL},
+\qquad
+\texttt{empirical\_status: PASS/FAIL/NOT\_RUN}.
+\]
+A deterministic failure is an implementation error.  An empirical deviation may be a statistical event, a model mismatch, or a sampling bug, depending on the declared confidence envelope.
+
+\subsection{Canonical object encoding}
+
+All words are encoded as bitstrings.  For
+\[
+\omega=(\omega_1,\ldots,\omega_m)\in\{0,1\}^m,
+\]
+write
+\[
+\texttt{omega = "010101"}
+\]
+with length exactly \(m\).  Stable types \(z\in X_m\) use the same bitstring convention.  Every row containing a bitstring must include an explicit length field:
+\begin{verbatim}
+m,word
+6,010101
+\end{verbatim}
+This prevents the ambiguity between \(\texttt{00101}\) and \(\texttt{101}\) after parsing.
+
+\subsection{Canonical serialization and hash convention}
+
+All deterministic hash values are computed after canonical serialization.
+
+\paragraph{CSV convention.}
+CSV files use UTF-8 encoding, LF line endings, comma delimiters, a header row, lexicographic sorting by the declared key, no trailing spaces, base-10 integers, and either exact rational fields or fixed scientific notation for floating values.
+
+\paragraph{JSON convention.}
+JSON files use UTF-8 encoding, sorted object keys, no insignificant whitespace, exact integers, bitstrings stored as strings, and arrays sorted by the declared key.  A canonical JSON byte string is hashed by
+\[
+\operatorname{SHA256}(\text{canonical bytes}).
+\]
+
+\paragraph{Hash files.}
+The deterministic hash file should contain hashes for stable words, fold tables, restriction tables, fiber ledgers, Parry baselines, moment spectra, cross-resolution fiber residuals, and a deterministic bundle hash.  The empirical hash file should contain hashes for sampled windows, folded histograms, histogram audits, audit summaries, cross-resolution audits, and an empirical bundle hash.  The deterministic bundle hash is the SHA256 hash of the ordered list of deterministic file hashes.  The empirical bundle hash is the SHA256 hash of the ordered list of empirical file hashes together with the random seed block.
+
+\subsection{Run manifest}
+
+The file \texttt{run\_manifest.yaml} is the root of the reproducibility package.  It contains all parameters needed to regenerate the run.
+\begin{verbatim}
+project:
+  title: "Golden-mean fold audit"
+  manuscript_version: "2026-05-03"
+  package_version: "1.0.0"
+
+environment:
+  python_version: "3.x"
+  os: "declared-by-runner"
+  package_lock_file: "environment/requirements-lock.txt"
+  container_file: "environment/Dockerfile"
+
+serialization:
+  canonical_json: true
+  csv_line_ending: "LF"
+  encoding: "UTF-8"
+  hash_algorithm: "SHA256"
+
+grammar:
+  family: "golden_mean"
+  forbidden_words: ["11"]
+  stable_count_formula: "F_{m+2}"
+
+fold:
+  fold_spec_file: "config/fold_spec.yaml"
+  fold_rule_name: "Zeckendorf_residue_section"
+  require_idempotence: true
+  require_stable_output: true
+
+resolution:
+  m_min: 1
+  m_max: 20
+  q_orders: [2, 3, 4, 5]
+
+restriction:
+  restriction_rule_name: "stable_prefix_restriction"
+  require_cross_resolution_table: true
+
+baselines:
+  compute_fiber_law: true
+  compute_parry_law: true
+  parry_exact_field: "Q(sqrt(5))"
+
+statistics:
+  tv_confidence_level: 0.95
+  union_bound_across_m: true
+  kl_smoothing: "none_for_exact_positive_support"
+  kappa_radius_rule: "2 log(D_m) tau"
+\end{verbatim}
+The manifest should be stored in the final package and cited in every table caption generated from the run.
+
+\subsection{Deterministic table schemas}
+
+\paragraph{Stable words.}
+The file \texttt{stable\_words.csv} contains the grammar \(X_m\).  Required fields are \(m\), \texttt{type}, lexicographic rank, stability flag, and grammar label.  For the golden-mean grammar every row must satisfy
+\[
+z_i z_{i+1}\ne 11,
+\]
+and the pass check is
+\[
+\#\{z\in X_m\}=F_{m+2}.
+\]
+
+\paragraph{Fold table.}
+The file \texttt{fold\_table.json} contains the complete deterministic map \(\Fold_m:\Om_m\to X_m\).  It must include the resolution \(m\), domain size \(2^m\), codomain size \(F_{m+2}\), and entries of the form
+\[
+\texttt{\{"microstate": "000001", "folded\_type": "000001"\}}.
+\]
+The deterministic checks are
+\[
+\abs{\Om_m}=2^m,\qquad
+\Fold_m(\omega)\in X_m,\qquad
+\Fold_m(z)=z\ (z\in X_m),\qquad
+\Fold_m^2=\Fold_m.
+\]
+
+\paragraph{Restriction table.}
+The file \texttt{restriction\_table.json} contains the stable cross-resolution map
+\[
+\pi_{m+1\to m}:X_{m+1}\to X_m.
+\]
+The required check is
+\[
+\pi_{m+1\to m}(z)\in X_m
+\qquad(z\in X_{m+1}).
+\]
+If a stronger commuting diagram is claimed for a selected raw restriction protocol, the package must verify that diagram explicitly.  Otherwise it must report the corresponding residual table instead of silently assuming zero residual.
+
+\paragraph{Fiber ledger.}
+The file \texttt{fiber\_ledger.csv} stores \(d_m(z)\), \(p_m^{\mathrm{fib}}(z)\), \(D_m\), \(\abs{X_m}\), and \(\abs{\Om_m}\).  The exact relation is
+\[
+p_m^{\mathrm{fib}}(z)=\frac{d_m(z)}{2^m}.
+\]
+Thus numerator and denominator fields should store \(d_m(z)\) and \(2^m\) before reduction.  The pass checks are
+\[
+\sum_{z\in X_m}d_m(z)=2^m,\qquad
+D_m=\max_z d_m(z),\qquad
+\sum_zp_m^{\mathrm{fib}}(z)=1.
+\]
+
+\paragraph{Information ledger summary.}
+The file \texttt{fiber\_ledger\_summary.csv} records \(H(p_m^{\mathrm{fib}})\), \(\kappa_m(p_m^{\mathrm{fib}})\), \(m\log2\), and the residual
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})-m\log2.
+\]
+The exact identity is
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})=m\log2.
+\]
+A recommended double-precision tolerance is \(10^{-12}\), while exact integer checks use zero tolerance.
+
+\paragraph{Parry baseline.}
+The file \texttt{parry\_baseline.csv} contains the maximum-entropy law \(q_m\) on \(X_m\).  For the golden-mean grammar it is generated from the Perron--Frobenius data of the golden-mean adjacency matrix.  The package must not treat \(p_m^{\mathrm{fib}}\) and \(q_m\) as the same object.  It should report the deterministic model gaps
+\[
+\TV(p_m^{\mathrm{fib}},q_m),
+\qquad
+\KL(p_m^{\mathrm{fib}}\mid q_m).
+\]
+
+\paragraph{Moment spectrum.}
+The file \texttt{moment\_spectrum.csv} stores
+\[
+M_{m,q}:=\sum_zd_m(z)^q,\qquad
+C_{m,q}:=2^{-mq}M_{m,q},
+\]
+and \(H_q(p_m^{\mathrm{fib}})\).  The exact pass check is
+\[
+C_{m,q}=2^{-mq}M_{m,q}.
+\]
+
+\paragraph{Deterministic cross-resolution residual.}
+The file \texttt{cross\_resolution\_fib.csv} stores
+\[
+G_m^{\mathrm{fib}}
+=
+\TV\left(
+p_m^{\mathrm{fib}},
+(\pi_{m+1\to m})_\#p_{m+1}^{\mathrm{fib}}
+\right).
+\]
+This file prevents the common error of assuming cross-resolution consistency without proving or reporting it.
+
+\subsection{Empirical table schemas}
+
+\paragraph{Source models.}
+The file \texttt{source\_models.yaml} declares every empirical source.  For each source, the package should state whether an exact population folded law \(\pi_m^\PP\) is available.  If it is unavailable, the population comparison must be marked \(\texttt{NOT\_AVAILABLE}\), not replaced by the Parry law.
+
+\paragraph{Sample windows.}
+The file \texttt{sample\_windows.csv} stores sampled windows before folding.  Required fields are run identifier, source identifier, seed, resolution \(m\), sample index, and microstate bitstring.  The script must verify
+\[
+\texttt{length(microstate)}=m
+\]
+for every row.
+
+\paragraph{Folded histogram.}
+The file \texttt{folded\_histogram.csv} stores empirical folded counts.  It must include run identifier, source identifier, seed, resolution, type, count, total sample size \(N\), and empirical probability \(\widehat\pi_{m,N}(z)\).  The exact checks are
+\[
+\sum_z\texttt{count}(z)=N,\qquad
+\widehat\pi_{m,N}(z)=\frac{\texttt{count}(z)}{N},\qquad
+\sum_z\widehat\pi_{m,N}(z)=1.
+\]
+All stable types must be present, including those with zero empirical count.
+
+\paragraph{Histogram audit.}
+The file \texttt{histogram\_audit.csv} joins empirical data with deterministic and model baselines.  It should contain \(\widehat\pi_{m,N}\), exact source law when available, \(p_m^{\mathrm{fib}}\), \(q_m\), \(d_m(z)\), and \(\log d_m(z)\).  This table is the main bridge between empirical audits and the deterministic ledger.
+
+\paragraph{Audit summary.}
+The file \texttt{audit\_summary.csv} stores one row per run and resolution.  Required quantities include
+\[
+\TV(\widehat\pi_{m,N},\pi_m^\PP),\quad
+\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}}),\quad
+\TV(\widehat\pi_{m,N},q_m),
+\]
+the corresponding KL values when supported, \(\kappa_m(\widehat\pi_{m,N})\), \(D_m\), the declared TV confidence radius \(\tau\), and the hidden-volume radius
+\[
+2\log D_m\,\tau.
+\]
+
+\paragraph{Cross-resolution empirical audit.}
+The file \texttt{cross\_resolution\_audit.csv} contains
+\[
+E_{m,N}:=
+\TV\left(
+\widehat\pi_{m,N},
+(\pi_{m+1\to m})_\#\widehat\pi_{m+1,N}
+\right),
+\]
+the deterministic residual \(G_m^{\mathrm{fib}}\), restriction-table hash, and pass/fail status.
+
+\subsection{Failure witnesses}
+
+Failures should be recorded in a JSON-lines file:
+\[
+\texttt{outputs/failures/audit\_failures.jsonl}.
+\]
+Each line is one failure witness with a check identifier, severity, resolution, expected identity, observed value, tolerance, source file, row filter, and message.  Severity levels are:
+\[
+\texttt{ERROR},\qquad \texttt{WARNING},\qquad \texttt{INFO}.
+\]
+A deterministic \(\texttt{ERROR}\) should stop the build.
+
+\subsection{Script-level pipeline}
+
+The reproducibility pipeline should run in the following order:
+\begin{enumerate}[leftmargin=2em]
+\item build stable words and verify \(\abs{X_m}=F_{m+2}\);
+\item build the fold table and verify totality, stable output, fixed stable words, and idempotence;
+\item build the restriction table and verify stable output;
+\item build the fiber ledger and verify mass conservation and the entropy ledger;
+\item build the Parry baseline and verify normalization and positive support;
+\item build the moment spectrum and verify \(C_{m,q}=2^{-mq}M_{m,q}\);
+\item generate empirical samples, if requested;
+\item fold empirical samples and verify count normalization;
+\item build histogram audit tables and TV/KL summaries;
+\item build cross-resolution deterministic and empirical residuals;
+\item verify identities and emit failure witnesses;
+\item verify canonical hashes;
+\item build publication tables and figures from saved tables only.
+\end{enumerate}
+Figure scripts should not call a random-number generator, resample data, or recompute the fold table.
+
+\subsection{Deterministic pass/fail rules}
+
+A deterministic build passes only if all of the following checks hold:
+\begin{enumerate}[leftmargin=2em]
+\item stable grammar count: \(\abs{X_m}=F_{m+2}\);
+\item stable grammar validity: no adjacent \(11\) occurs in \(X_m\);
+\item fold totality: \(\Fold_m(\omega)\) is defined for every \(\omega\in\Om_m\);
+\item fold stability: \(\Fold_m(\omega)\in X_m\);
+\item fold idempotence: \(\Fold_m^2=\Fold_m\);
+\item stable fixed-point property: \(\Fold_m(z)=z\) for \(z\in X_m\);
+\item fiber mass conservation: \(\sum_zd_m(z)=2^m\);
+\item fiber-law normalization: \(\sum_zp_m^{\mathrm{fib}}(z)=1\);
+\item entropy ledger:
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})-m\log2=0;
+\]
+\item moment identity: \(C_{m,q}=2^{-mq}M_{m,q}\);
+\item Parry normalization: \(\sum_zq_m(z)=1\);
+\item hash stability for all deterministic files.
+\end{enumerate}
+Any failure in these checks is an implementation failure, not a statistical result.
+
+\subsection{Empirical pass/fail rules}
+
+An empirical audit passes relative to a declared source law if
+\[
+\TV(\widehat\pi_{m,N},\pi_m^\PP)\le \tau_{m,N,\alpha}
+\]
+for the declared confidence level.  If the exact population law is unavailable, the empirical audit must not claim population convergence.  It may still report distances to \(p_m^{\mathrm{fib}}\) and \(q_m\).  The rule is:
+\[
+\boxed{\text{Distance to Parry is not evidence of sampling failure unless Parry is the declared source law.}}
+\]
+
+\subsection{Exact arithmetic, tolerances, and randomness}
+
+The quantities
+\[
+d_m(z),\quad D_m,\quad M_{m,q},\quad 2^m,\quad 2^{mq},\quad \text{counts}
+\]
+should be stored as exact integers.  The probabilities
+\[
+p_m^{\mathrm{fib}}(z)=\frac{d_m(z)}{2^m},
+\qquad
+C_{m,q}=\frac{M_{m,q}}{2^{mq}}
+\]
+should be stored as numerator-denominator pairs.  Parry probabilities may be stored in \(\mathbb Q(\sqrt5)\) or as high-precision decimals with declared precision and rounding mode.
+
+Recommended default tolerances are:
+\[
+\texttt{exact\_integer}=0,\quad
+\texttt{probability\_sum}=10^{-12},\quad
+\texttt{entropy\_ledger}=10^{-12},
+\]
+\[
+\texttt{tv\_distance}=10^{-12},\quad
+\texttt{kl\_distance}=10^{-10},\quad
+\texttt{plot\_rounding}=10^{-8}.
+\]
+Every empirical run must declare the random-number generator algorithm, seed, stream identifier, and stream-splitting policy if parallel sampling is used.  Without this declaration, empirical hashes are noncanonical.
+
+\subsection{Recommended generated figures}
+
+The package should generate figures only from saved tables:
+\begin{itemize}[leftmargin=2em]
+\item fiber multiplicity histograms from \texttt{fiber\_ledger.csv};
+\item entropy ledger plots from \texttt{fiber\_ledger\_summary.csv};
+\item Renyi collision spectra from \texttt{moment\_spectrum.csv};
+\item empirical TV audit plots from \texttt{audit\_summary.csv};
+\item cross-resolution residual plots from \texttt{cross\_resolution\_audit.csv}.
+\end{itemize}
+Every figure caption should cite the data file and hash used to generate the figure.
+
+\subsection{Reproducibility sufficiency}
+
+\begin{theorem}[Reproducibility sufficiency]
+\label{thm:reproducibility-sufficiency}
+Suppose the package provides canonical serialized deterministic inputs, deterministic scripts for grammar, fold, restriction, fiber, Parry, and moment tables, exact integer checks for mass, multiplicity, and moment identities, declared floating-point tolerances for entropy and KL computations, and complete random seed and RNG declarations for empirical runs.  Then the deterministic outputs are reproducible up to the declared canonical hashes.  The empirical outputs are reproducible conditional on the declared RNG policy.
+\end{theorem}
+
+\begin{proof}
+The deterministic part contains no random input.  Each deterministic output is a function of the grammar specification, fold specification, restriction specification, resolution \(m\), and maximum moment order \(q_{\max}\).  Canonical serialization removes representation ambiguity.  Therefore rerunning the deterministic scripts produces the same canonical bytes and hence the same SHA256 hashes.
+
+For the empirical part, the sample path is a deterministic function of the source model, \(N\), \(m\), RNG algorithm, seed, and stream policy.  Conditional on those declarations, the empirical rows and empirical hashes are reproducible.
+\end{proof}
+
+\begin{theorem}[Deterministic-statistical separation]
+\label{thm:deterministic-statistical-separation}
+A failure of any deterministic identity in the pass/fail list above cannot be explained by sampling variability.
+\end{theorem}
+
+\begin{proof}
+The deterministic identities involve only exact outputs of the fold table:
+\[
+\Fold_m,\quad X_m,\quad d_m,\quad p_m^{\mathrm{fib}},\quad M_{m,q}.
+\]
+They do not depend on samples, seeds, source models, or empirical frequencies.  Therefore, if any deterministic identity fails, the error must arise from implementation, serialization, arithmetic, or specification mismatch.
+\end{proof}
+
+\begin{theorem}[Empirical audit consistency]
+\label{thm:empirical-audit-consistency}
+Let \(\widehat\pi_{m,N}\) be the empirical folded law computed from \texttt{folded\_histogram.csv}.  If the histogram count check passes and the table joins with \texttt{fiber\_ledger.csv} and \texttt{parry\_baseline.csv} are exact on the stable type key, then every reported value
+\[
+\kappa_m(\widehat\pi_{m,N}),\qquad
+\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}}),\qquad
+\TV(\widehat\pi_{m,N},q_m)
+\]
+is a deterministic function of the saved audit tables.
+\end{theorem}
+
+\begin{proof}
+The histogram count check gives
+\[
+\widehat\pi_{m,N}(z)=\frac{\texttt{count}(z)}{N}.
+\]
+The join with \texttt{fiber\_ledger.csv} supplies \(d_m(z)\) and \(p_m^{\mathrm{fib}}(z)\).  The join with \texttt{parry\_baseline.csv} supplies \(q_m(z)\).  Hence
+\[
+\kappa_m(\widehat\pi_{m,N})
+=
+\sum_z\widehat\pi_{m,N}(z)\log d_m(z),
+\]
+\[
+\TV(\widehat\pi_{m,N},p_m^{\mathrm{fib}})
+=
+\frac12\sum_z\abs{\widehat\pi_{m,N}(z)-p_m^{\mathrm{fib}}(z)},
+\]
+and
+\[
+\TV(\widehat\pi_{m,N},q_m)
+=
+\frac12\sum_z\abs{\widehat\pi_{m,N}(z)-q_m(z)}.
+\]
+Thus the reported values are deterministic functions of the saved tables.
+\end{proof}
+
+\subsection{Minimal reviewer workflow}
+
+A reviewer should be able to run:
+\begin{verbatim}
+cd reproducibility_package
+python scripts/rebuild_all.py --manifest run_manifest.yaml
+python scripts/10_verify_identities.py --manifest run_manifest.yaml
+python scripts/11_verify_hashes.py --manifest run_manifest.yaml
+\end{verbatim}
+and obtain:
+\begin{verbatim}
+DETERMINISTIC STATUS: PASS
+EMPIRICAL STATUS: PASS / NOT_RUN
+HASH STATUS: PASS
+\end{verbatim}
+If empirical samples are not regenerated, the package should support a deterministic-only mode that rebuilds stable words, fold tables, restriction tables, fiber ledgers, Parry baselines, moment spectra, and deterministic cross-resolution residuals.
+
+\subsection{Minimal package README}
+
+The package README should state the main commands, deterministic outputs, empirical outputs, core identities, and failure policy.  At minimum it should list:
+\[
+\sum_zd_m(z)=2^m,\qquad
+p_m^{\mathrm{fib}}(z)=\frac{d_m(z)}{2^m},
+\]
+\[
+H(p_m^{\mathrm{fib}})+\kappa_m(p_m^{\mathrm{fib}})=m\log2,
+\qquad
+C_{m,q}=2^{-mq}M_{m,q},
+\qquad
+\Fold_m^2=\Fold_m.
+\]
+The README should explicitly state that a deterministic identity failure is an implementation error, while an empirical deviation is interpreted relative to the declared source model and confidence envelope.
+
+\subsection{Common implementation errors caught by the package}
+
+The package is designed to catch: confusing \(p_m^{\mathrm{fib}}\) with \(q_m\); computing fiber multiplicities from samples rather than from the deterministic fold table; silently dropping stable types with zero empirical count; computing KL divergence on mismatched support; assuming cross-resolution consistency without reporting \(G_m^{\mathrm{fib}}\); using noncanonical JSON order and expecting stable hashes; changing random-number generator behavior through undeclared parallel execution; and plotting recomputed data rather than saved audit tables.

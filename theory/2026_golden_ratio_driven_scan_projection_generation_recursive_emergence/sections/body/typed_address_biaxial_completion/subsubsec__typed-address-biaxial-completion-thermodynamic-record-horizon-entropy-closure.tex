@@ -1,0 +1,578 @@
+\subsubsection{热力学、熵、Landauer 成本、记录不可逆性与视界熵接口闭包}\label{subsubsec:typed-address-biaxial-completion-thermodynamic-record-horizon-entropy-closure}
+经典可见记录一旦被写入、保存、复制、擦除或穿过 causal boundary，就不再只是 Born 概率账本中的 outcome。它还携带 memory、coarse-graining、environment leakage、reset 与 boundary entropy 的热力学账本。记录链因此继续延伸为
+\[
+\boxed{
+R_{\rm cl}
+\longrightarrow
+\text{memory}
+\longrightarrow
+\text{coarse-graining}
+\longrightarrow
+\text{erasure/reset}
+\longrightarrow
+\text{entropy production}
+\longrightarrow
+\text{boundary/horizon ledger}.
+}
+\]
+该接口不把 second law、Landauer cost 或 horizon entropy 当作无前提结论；它们只在对应的 bath、reset、coarse-graining、renormalization 与 boundary data 通过时成立。
+
+\paragraph{三类熵。}
+必须区分 fine-grained von Neumann entropy、classical record entropy 与 coarse-grained entropy。第一类为
+\[
+\boxed{
+S(\rho)=-{\rm Tr}(\rho\log\rho).
+}
+\]
+若总系统闭合并幺正演化，
+\[
+\rho'_{\rm tot}=U\rho_{\rm tot}U^\dagger,
+\]
+则
+\[
+\boxed{
+S(\rho'_{\rm tot})=S(\rho_{\rm tot}).
+}
+\]
+因此闭合量子系统的 fine-grained 熵不会因幺正动力学自动增加。
+
+第二类是 classical record distribution 的 Shannon entropy：
+\[
+\boxed{
+H(R)=-\sum_rp(r)\log p(r).
+}
+\]
+若使用 bits，
+\[
+H(R)=H_2(R)\ln2.
+\]
+
+第三类来自 coarse-graining。若
+\[
+\pi:\mathsf R_{\rm micro}\to\mathsf R_{\rm vis},
+\qquad
+p(\bar r)=\sum_{r:\pi(r)=\bar r}p(r),
+\]
+则
+\[
+\boxed{
+H(R_{\rm micro})
+=
+H(R_{\rm vis})+H(R_{\rm micro}|R_{\rm vis}).
+}
+\]
+条件熵 \(H(R_{\rm micro}|R_{\rm vis})\) 记录被可见读出隐藏的 fiber residual。
+
+\begin{definition}[熵账本]\label{def:typed-address-biaxial-completion-entropy-ledger}
+称 \(\mathsf{EntropyLedger}\) 为熵账本，若它包含 \(\rho,\rho_{\rm tot},p(r),\pi\)、\(S(\rho)\)、\(S(\rho_{\rm tot})\)、\(H(R)\)、\(H(R_{\rm vis})\)、\(H(R_{\rm micro}|R_{\rm vis})\)、\(I(S:R)\)、log-base ledger、fine-grained ledger、coarse-grained ledger、correlation ledger 与 round hash。验证器检查
+\[
+S(\rho)\ge0,\qquad H(R)\ge0,
+\]
+以及 coarse-graining entropy identity。混用 natural logs 与 bits 时输出 \(\mathsf{LogBaseMismatchFail}\)。把 fine-grained entropy 与 coarse-grained entropy 视为同一对象时输出 \(\mathsf{FineCoarseEntropyMixingFail}\)。
+\end{definition}
+
+\paragraph{记录形成与 memory。}
+记录形成可分为可逆相关建立与实际 classicalization。可逆层可由全局幺正实现；不可逆成本通常来自忽略环境、粗粒化、稳定复制、写入 memory 与 reset cycle。若 memory register \(M\) 具有正交 classical states \(\{|m_r\rangle\}_{r\in\mathsf R}\)，写入协议为
+\[
+\mathsf{Write}:\ |r\rangle_R|m_0\rangle_M
+\longmapsto
+|r\rangle_R|m_r\rangle_M.
+\]
+记录态为
+\[
+\rho_M=\sum_rp(r)|m_r\rangle\langle m_r|.
+\]
+在正交 classical register 情形下，
+\[
+\boxed{
+S(\rho_M)=H(R).
+}
+\]
+
+\begin{definition}[记录 memory 证书]\label{def:typed-address-biaxial-completion-record-memory-cert}
+称 \(\mathsf{RecordMemoryCert}\) 为记录 memory 证书，若它包含 \(M,\{|m_r\rangle\},\rho_M\)、orthogonal-record-state ledger、write-protocol ledger、memory-capacity ledger、persistence ledger 与 round hash。若 memory states 不可区分却按 classical record 计熵，输出 \(\mathsf{NonOrthogonalMemoryAsClassicalFail}\)。
+\end{definition}
+
+记录形成产生 correlation。classical-quantum record state 写作
+\[
+\boxed{
+\rho_{SR}
+=
+\sum_rp(r)\rho_{S|r}\otimes |r\rangle\langle r|.
+}
+\]
+mutual information 为
+\[
+\boxed{
+I(S:R)=S(\rho_S)+H(R)-S(\rho_{SR}),
+}
+\]
+也可写为 Holevo 形式
+\[
+I(S:R)
+=
+S\!\left(\sum_rp(r)\rho_{S|r}\right)
+-\sum_rp(r)S(\rho_{S|r}).
+\]
+
+\begin{definition}[记录形成熵证书]\label{def:typed-address-biaxial-completion-record-formation-entropy-cert}
+称 \(\mathsf{RecordFormationEntropyCert}\) 为记录形成熵证书，若它包含 \(\rho_{SR}\)、\(\{p(r),\rho_{S|r}\}\)、\(H(R)\)、\(I(S:R)\)、Holevo ledger、capacity ledger 与 round hash。验证器检查
+\[
+0\le I(S:R)\le H(R).
+\]
+若记录声称携带信息而 \(I(S:R)=0\)，输出 \(\mathsf{UninformativeRecordFail}\)。若 \(I(S:R)>H(R)\)，输出 \(\mathsf{RecordInformationCapacityFail}\)。
+\end{definition}
+
+\begin{definition}[coarse-graining 熵证书]\label{def:typed-address-biaxial-completion-coarse-graining-entropy-cert}
+称 \(\mathsf{CoarseGrainingEntropyCert}\) 为 coarse-graining 熵证书，若它包含 \(\pi,p(r),p(\bar r)\)、\(H(R_{\rm micro})\)、\(H(R_{\rm vis})\)、\(H(R_{\rm micro}|R_{\rm vis})\)、hidden-residual ledger、resolution ledger 与 round hash。验证器检查
+\[
+H(R_{\rm micro})=H(R_{\rm vis})+H(R_{\rm micro}|R_{\rm vis}).
+\]
+从 \(R_{\rm vis}\) 反推唯一 micro-record 时输出 \(\mathsf{CoarseEntropyInversionFail}\)。
+\end{definition}
+
+\paragraph{热浴、自由能与 Landauer 成本。}
+Landauer cost 需要热浴与 reset 协议。热浴态为
+\[
+\boxed{
+\tau_B=\frac{e^{-\beta H_B}}{Z_B},
+\qquad
+\beta=(k_BT)^{-1}.
+}
+\]
+必须声明 \(H_B,T,\beta,Z_B\)、coupling、initial correlation 与 finite-bath corrections。
+
+\begin{definition}[热浴温度证书]\label{def:typed-address-biaxial-completion-heat-bath-temperature-cert}
+称 \(\mathsf{HeatBathTemperatureCert}\) 为热浴温度证书，若它包含 \(B,H_B,\tau_B,T,\beta\)、thermal-state ledger、weak-coupling ledger、initial-correlation ledger、finite-bath-correction ledger 与 round hash。无热浴或温度却声称 Landauer heat cost 时输出 \(\mathsf{ThermalBathNull}\)。热浴非 thermal state 却按 \(\tau_B\) 使用时输出 \(\mathsf{NonThermalBathFail}\)。
+\end{definition}
+
+给定 Hamiltonian \(H\)，nonequilibrium free energy 为
+\[
+\boxed{
+F_\beta(\rho)={\rm Tr}(\rho H)-\beta^{-1}S(\rho).
+}
+\]
+在 standard thermal operation 前提下，受控过程 \(\rho\to\sigma\) 的功满足
+\[
+\boxed{
+W\ge \Delta F_\beta=F_\beta(\sigma)-F_\beta(\rho).
+}
+\]
+
+\begin{definition}[自由能与功账本]\label{def:typed-address-biaxial-completion-free-energy-work-ledger}
+称 \(\mathsf{FreeEnergyWorkLedger}\) 为自由能与功账本，若它包含 \(H,\rho,\sigma,\beta\)、\(F_\beta(\rho),F_\beta(\sigma)\)、\(W,\Delta F_\beta\)、Hamiltonian ledger、work-storage ledger、thermal-operation ledger 与 round hash。无 Hamiltonian 却报告 free energy 时输出 \(\mathsf{HamiltonianNull}\)。
+\end{definition}
+
+Memory reset 为
+\[
+\rho_M\longrightarrow |m_0\rangle\langle m_0|.
+\]
+若 memory 是 classical register、无可用 side information、能级退化且 reset 到标准态，则
+\[
+\boxed{
+Q_B\ge k_BT\,H(R)
+}
+\]
+其中 \(H(R)\) 使用 natural logarithm。若使用 bits，
+\[
+\boxed{
+Q_B\ge k_BT\ln2\,H_2(R).
+}
+\]
+一般量子口径为
+\[
+W_{\rm erase}\ge
+F_\beta(|m_0\rangle\langle m_0|)-F_\beta(\rho_M).
+\]
+
+\begin{definition}[Landauer 擦除证书]\label{def:typed-address-biaxial-completion-landauer-erasure-cert}
+称 \(\mathsf{LandauerErasureCert}\) 为 Landauer 擦除证书，若它包含 \(M,\rho_M,|m_0\rangle,\beta\)、\(H(R),S(\rho_M)\)、\(Q_B,W_{\rm erase}\)、reset-map ledger、bath ledger、side-information ledger、free-energy ledger 与 round hash。只有写入记录而无 reset 时声称 Landauer heat 必已耗散，输出 \(\mathsf{LandauerWithoutResetFail}\)。执行 reset 却未计入最低热成本时输出 \(\mathsf{ErasureCostOmissionFail}\)。
+\end{definition}
+
+若 controller 持有 side information \(Y\)，擦除成本取决于
+\[
+\boxed{
+H(R|Y).
+}
+\]
+在 classical side information 情形下，
+\[
+Q_B\ge k_BT\,H(R|Y).
+\]
+若 \(Y\) 完全确定 \(R\)，条件熵可为零；但 \(Y\) 的保存、获得与最终 reset 仍需进入 global memory ledger。
+
+\begin{definition}[side information 擦除证书]\label{def:typed-address-biaxial-completion-side-information-erasure-cert}
+称 \(\mathsf{SideInformationErasureCert}\) 为 side information 擦除证书，若它包含 \(R,Y,H(R|Y)\)、side-memory ledger、conditional-reset ledger 与 round hash。存在 side information 却按 \(H(R)\) 过度计费时输出 \(\mathsf{SideInformationOmissionWarning}\)。利用 side information 而未计入其 memory cost 时输出 \(\mathsf{DemonMemoryCostOmissionFail}\)。
+\end{definition}
+
+\paragraph{feedback 与 entropy production。}
+测量结果 \(r\) 可驱动 feedback 操作 \(\Lambda_r\)：
+\[
+\rho'=\sum_rp(r)\Lambda_r(\rho_r).
+\]
+可利用信息 \(I_{\rm fb}\le I(S:R)\)，信息可提取功满足
+\[
+\boxed{
+W_{\rm ext}^{\rm info}\le k_BT\,I_{\rm fb}.
+}
+\]
+但完整 Maxwell demon cycle 必须包括 measurement、record、memory 与 erase/reset 成本。
+
+\begin{definition}[feedback 信息证书]\label{def:typed-address-biaxial-completion-feedback-information-cert}
+称 \(\mathsf{FeedbackInformationCert}\) 为 feedback 信息证书，若它包含 \(r,\rho_r,\Lambda_r\)、\(I(S:R),I_{\rm fb}\)、\(W_{\rm ext}^{\rm info}\)、control-protocol ledger、demon-memory ledger、cycle-closure ledger 与 round hash。只计算 feedback 得功而未闭合 memory cycle 时输出 \(\mathsf{MaxwellDemonCycleOpenFail}\)。
+\end{definition}
+
+设初态为 \(\rho_S\otimes\tau_B\)，全局幺正后为 \(\rho'_{SB}\)。热浴吸收热量
+\[
+Q_B={\rm Tr}[H_B(\rho'_B-\tau_B)].
+\]
+系统熵变为
+\[
+\Delta S_S=S(\rho'_S)-S(\rho_S).
+\]
+定义 entropy production
+\[
+\boxed{
+\Sigma=\Delta S_S+\beta Q_B.
+}
+\]
+在初始乘积热浴前提下，
+\[
+\boxed{
+\Sigma=I(S':B')+D(\rho'_B\|\tau_B)\ge0.
+}
+\]
+
+\begin{definition}[熵产生证书]\label{def:typed-address-biaxial-completion-entropy-production-cert}
+称 \(\mathsf{EntropyProductionCert}\) 为熵产生证书，若它包含 \(\rho_S,\tau_B,U,\rho'_{SB}\)、\(Q_B,\Delta S_S,\Sigma\)、\(I(S':B')\)、\(D(\rho'_B\|\tau_B)\)、initial-product ledger、heat-sign-convention ledger、relative-entropy ledger 与 round hash。若 \(\Sigma<0\) 且无 feedback、initial correlation 或 work convention 修正，输出 \(\mathsf{NegativeEntropyProductionFail}\)。
+\end{definition}
+
+\paragraph{记录不可逆性与选择性熵。}
+记录 cycle 为
+\[
+\mathsf{Cycle}
+=
+\mathsf{PrepareBlank}\circ
+\mathsf{Measure}\circ
+\mathsf{WriteRecord}\circ
+\mathsf{UseRecord}\circ
+\mathsf{EraseReset}.
+\]
+总 entropy production 可分解为
+\[
+\boxed{
+\Sigma_{\rm cycle}
+=
+\Sigma_{\rm meas}
++\Sigma_{\rm write}
++\Sigma_{\rm feedback}
++\Sigma_{\rm erase}
++\Sigma_{\rm leak}.
+}
+\]
+擦除不可逆性指标为
+\[
+\boxed{
+\mathcal I_{\rm erase}:=\beta Q_B-H(R|Y)\ge0.
+}
+\]
+
+\begin{definition}[记录不可逆性证书]\label{def:typed-address-biaxial-completion-record-irreversibility-cert}
+称 \(\mathsf{RecordIrreversibilityCert}\) 为记录不可逆性证书，若它包含 cycle、\(\Sigma_{\rm meas},\Sigma_{\rm write},\Sigma_{\rm feedback},\Sigma_{\rm erase},\Sigma_{\rm leak}\)、\(\mathcal I_{\rm irr},\mathcal I_{\rm erase}\)、cycle-closure ledger 与 round hash。cycle 未闭合却声称 second law violation 时输出 \(\mathsf{OpenCycleSecondLawClaimFail}\)。
+\end{definition}
+
+选择性后态与非选择性后态也有不同熵账本。给定 ensemble \(\{p(r),\rho_r\}\)，平均后态为
+\[
+\bar\rho'=\sum_rp(r)\rho_r.
+\]
+Holevo information 为
+\[
+\boxed{
+\chi=S(\bar\rho')-\sum_rp(r)S(\rho_r).
+}
+\]
+已知结果 \(r\) 时使用 \(S(\rho_r)\)；只知道 ensemble 时使用 \(S(\bar\rho')\)。
+
+\begin{definition}[选择性熵账本]\label{def:typed-address-biaxial-completion-selective-entropy-ledger}
+称 \(\mathsf{SelectiveEntropyLedger}\) 为选择性熵账本，若它包含 \(\{p(r),\rho_r\}\)、\(\bar\rho'\)、\(\sum_rp(r)S(\rho_r)\)、\(S(\bar\rho')\)、\(\chi\)、selective/nonselective ledger 与 round hash。把 \(\sum_rp(r)S(\rho_r)\) 与 \(S(\sum_rp(r)\rho_r)\) 混为同一量时输出 \(\mathsf{SelectiveEntropyMixingFail}\)。
+\end{definition}
+
+退相干 channel 若为 projective dephasing
+\[
+\mathcal D(\rho)=\sum_rP_r\rho P_r,
+\]
+通常是 unital，因此 \(S(\mathcal D(\rho))\ge S(\rho)\)。但一般 CPTP channel 不具备无条件 entropy monotonicity。
+
+\begin{definition}[channel 熵单调证书]\label{def:typed-address-biaxial-completion-channel-entropy-monotonicity-cert}
+称 \(\mathsf{ChannelEntropyMonotonicityCert}\) 为 channel 熵单调证书，若它包含 channel class、unitality ledger、dephasing ledger、entropy-change ledger 与 round hash。对任意 CPTP channel 声称 entropy monotonicity 时输出 \(\mathsf{CPTPEntropyMonotonicityOverclaimFail}\)。
+\end{definition}
+
+\paragraph{fluctuation theorem 与时间箭头。}
+若 stochastic work protocol、初始平衡态与正反过程均已声明，可附加 fluctuation theorem 账本：
+\[
+\langle e^{-\beta W}\rangle=e^{-\beta\Delta F},
+\qquad
+\langle W\rangle\ge\Delta F.
+\]
+无 work protocol 却报告 Jarzynski equality 时输出 \(\mathsf{FluctuationProtocolNull}\)。热力学时间箭头可写为 coarse-grained record entropy 的统计序
+\[
+t_1\preceq_{\rm th}t_2
+\iff
+S_{\rm cg}(t_2)\ge S_{\rm cg}(t_1)-\epsilon_{\rm th},
+\]
+并需与同步时间、记录持久性和 coarse-graining 深度相容。
+
+\paragraph{边界记录、视界熵与 generalized entropy。}
+边界读出可表示为
+\[
+\mathsf{Bd}:\Omega_{\rm bulk}\to\Omega_\partial.
+\]
+若 \(\mathsf{Bd}\) 非单射，则 fiber \(\mathsf{Bd}^{-1}(b)\) 承载 hidden residual entropy：
+\[
+\boxed{
+S_{\rm fiber}(b)
+=
+-\sum_{x:\mathsf{Bd}(x)=b}p(x|b)\log p(x|b).
+}
+\]
+
+\begin{definition}[边界记录账本证书]\label{def:typed-address-biaxial-completion-boundary-record-ledger-cert}
+称 \(\mathsf{BoundaryRecordLedgerCert}\) 为边界记录账本证书，若它包含 \(\Omega_{\rm bulk},\Omega_\partial,\mathsf{Bd}\)、boundary record \(b\)、fiber \(\mathsf{Bd}^{-1}(b)\)、\(S_{\rm fiber}(b)\)、boundary-code ledger、hidden-residual ledger、external-register ledger 与 round hash。边界码非单射却声称 exact bulk reconstruction 时输出 \(\mathsf{BoundaryNonInjectiveReconstructionFail}\)。
+\end{definition}
+
+若 boundary screen 面积为 \(A_\partial\)，可声明容量
+\[
+\boxed{
+S_\partial^{\rm cap}
+=
+\frac{k_BA_\partial}{4G\hbar}.
+}
+\]
+该式在此处是 capacity ledger，而非 exact reconstruction theorem：
+\[
+H(R_\partial)\le S_\partial^{\rm cap}/k_B+\epsilon_\partial.
+\]
+
+\begin{definition}[边界熵容量证书]\label{def:typed-address-biaxial-completion-boundary-entropy-capacity-cert}
+称 \(\mathsf{BoundaryEntropyCapacityCert}\) 为边界熵容量证书，若它包含 \(A_\partial,G,\hbar,k_B\)、\(S_\partial^{\rm cap}\)、boundary-capacity ledger、cutoff ledger、unit ledger 与 round hash。缺少面积、单位或 cutoff 却写 \(A/(4G\hbar)\) 时输出 \(\mathsf{BoundaryAreaLedgerNull}\)。把 capacity bound 当作 exact isomorphism 时输出 \(\mathsf{CapacityAsIsomorphismFail}\)。
+\end{definition}
+
+若存在 horizon 截面面积 \(A_H\)，Bekenstein--Hawking 型 entropy 为
+\[
+\boxed{
+S_H=\frac{k_BA_H}{4G\hbar}.
+}
+\]
+Generalized entropy 写作
+\[
+\boxed{
+S_{\rm gen}
+=
+\frac{k_BA_H}{4G\hbar}
++S_{\rm out}^{\rm ren}
++S_{\rm ct}.
+}
+\]
+
+\begin{definition}[视界熵接口证书]\label{def:typed-address-biaxial-completion-horizon-entropy-interface-cert}
+称 \(\mathsf{HorizonEntropyInterfaceCert}\) 为视界熵接口证书，若它包含 horizon \(H\)、area \(A_H\)、\(G,\hbar,k_B\)、\(S_H,S_{\rm out}^{\rm ren},S_{\rm ct},S_{\rm gen}\)、horizon-definition ledger、area-measurement ledger、renormalization ledger、scheme-dependence ledger 与 round hash。horizon 未定义却引用 \(S_H\) 时输出 \(\mathsf{HorizonNull}\)。outside entropy divergence 未重整化时输出 \(\mathsf{EntanglementEntropyDivergenceFail}\)。
+\end{definition}
+
+Generalized second law interface 为
+\[
+\boxed{
+\Delta S_{\rm gen}\ge-\epsilon_{\rm GSL}.
+}
+\]
+
+\begin{definition}[generalized second law 证书]\label{def:typed-address-biaxial-completion-generalized-second-law-cert}
+称 \(\mathsf{GeneralizedSecondLawCert}\) 为 generalized second law 证书，若它包含 \(A_H(t_1),A_H(t_2)\)、\(S_{\rm out}^{\rm ren}(t_1),S_{\rm out}^{\rm ren}(t_2)\)、\(S_{\rm gen}(t_1),S_{\rm gen}(t_2)\)、\(\epsilon_{\rm GSL}\)、energy-condition ledger、quantum-correction ledger、renormalization-scheme ledger 与 round hash。只计算 matter entropy 而忽略 area term 时输出 \(\mathsf{HorizonAreaTermOmissionFail}\)。只计算 area term 而忽略 outside entropy 时输出 \(\mathsf{OutsideEntropyOmissionFail}\)。
+\end{definition}
+
+\paragraph{记录穿越视界与条件化 generalized entropy。}
+若记录 \(R\) 从外部可见区域进入 horizon 内部，外部 observer 的记录变为
+\[
+R_{\rm out}=\pi_{\rm hor}(R).
+\]
+外部丢失信息为
+\[
+H(R|R_{\rm out}).
+\]
+若 horizon area 增加 \(\Delta A_H\)，容量增量为
+\[
+\Delta S_H=\frac{k_B\Delta A_H}{4G\hbar}.
+\]
+记录穿越的 generalized entropy ledger 要求
+\[
+\Delta S_H+\Delta S_{\rm out}^{\rm ren}\ge-\epsilon.
+\]
+
+\begin{definition}[视界记录穿越证书]\label{def:typed-address-biaxial-completion-horizon-record-crossing-cert}
+称 \(\mathsf{HorizonRecordCrossingCert}\) 为视界记录穿越证书，若它包含 \(R,R_{\rm out},\pi_{\rm hor}\)、\(H(R|R_{\rm out})\)、\(\Delta A_H,\Delta S_H\)、\(\Delta S_{\rm out}^{\rm ren}\)、causal-accessibility ledger、record-loss ledger、area-increase ledger 与 round hash。外部不可访问记录仍被当作 external classical record 时输出 \(\mathsf{HorizonInaccessibleRecordFail}\)。
+\end{definition}
+
+Landauer cost 与 horizon entropy 不可混同：
+\[
+\boxed{
+S_H=A/4G\hbar
+\ne
+\text{ordinary memory reset cost}.
+}
+\]
+二者可通过 horizon temperature 与 first-law relation 接口，但不能被视为同一机制。
+
+\begin{definition}[Landauer--horizon 分离证书]\label{def:typed-address-biaxial-completion-landauer-horizon-separation-cert}
+称 \(\mathsf{LandauerHorizonSeparationCert}\) 为 Landauer--horizon 分离证书，若它包含 memory reset ledger、thermal bath ledger、horizon entropy ledger、horizon-temperature ledger、first-law-interface ledger 与 round hash。把黑洞面积熵直接当作 ordinary memory erasure entropy 时输出 \(\mathsf{LandauerHorizonConflationFail}\)。
+\end{definition}
+
+若 horizon 有温度 \(T_H\) 且 first-law interface 存在，
+\[
+\delta E
+=
+T_H\delta S_H+\Omega\delta J+\Phi\delta Q+\cdots.
+\]
+
+\begin{definition}[horizon first-law 账本]\label{def:typed-address-biaxial-completion-horizon-first-law-ledger}
+称 \(\mathsf{HorizonFirstLawLedger}\) 为 horizon first-law 账本，若它包含 \(T_H,E,J,Q,\Omega,\Phi\)、work-term ledger、charge ledger、angular-momentum ledger 与 round hash。存在 angular momentum 或 charge 而只写 \(\delta E=T\delta S\) 时输出 \(\mathsf{HorizonWorkTermOmissionFail}\)。
+\end{definition}
+
+若 record-conditioned geometry 为 \(g_r,\rho_r\)，则 generalized entropy 也应条件化：
+\[
+\boxed{
+S_{\rm gen}^{(r)}
+=
+\frac{k_BA_H^{(r)}}{4G\hbar}
++S_{\rm out}^{\rm ren}[\rho_r,g_r]
++S_{\rm ct}^{(r)}.
+}
+\]
+
+\begin{definition}[record-conditioned generalized entropy 证书]\label{def:typed-address-biaxial-completion-record-conditioned-generalized-entropy-cert}
+称 \(\mathsf{RecordConditionedGeneralizedEntropyCert}\) 为 record-conditioned generalized entropy 证书，若它包含 \(r,\rho_r,g_r,A_H^{(r)}\)、\(S_{\rm out}^{\rm ren}[\rho_r,g_r]\)、\(S_{\rm ct}^{(r)}\)、\(S_{\rm gen}^{(r)}\)、conditioning ledger 与 round hash。使用 \(\rho_r\) 却使用 unconditioned \(A_H\) 时输出 \(\mathsf{EntropyGeometryConditioningMismatchFail}\)。
+\end{definition}
+
+\paragraph{量子信息与可见代数熵。}
+对 bipartite state \(\rho_{AB}\)，
+\[
+S(A)=-{\rm Tr}\rho_A\log\rho_A,
+\qquad
+I(A:B)=S(A)+S(B)-S(AB).
+\]
+Entanglement entropy 只有在给出 coarse-graining、bath 或 accessible algebra ledger 后才可解释为热熵。若可见代数由 \(\mathfrak A_{\rm full}\to\mathfrak A_{\rm vis}\) 给出，则 \(\omega_{\rm vis}=\omega|_{\mathfrak A_{\rm vis}}\)。非交换代数上直接使用 classical Shannon decomposition 时输出 \(\mathsf{NoncommutativeEntropyClassicalizationFail}\)，将 entanglement entropy 直接等同于 heat entropy 时输出 \(\mathsf{EntanglementThermalEntropyConflationFail}\)。
+
+\paragraph{总预算与总证书。}
+完整 record thermodynamics budget 可写为
+\[
+\boxed{
+\Sigma_{\rm total}
+=
+\Sigma_{\rm meas}+\Sigma_{\rm dec}+\Sigma_{\rm write}
++\Sigma_{\rm coarse}+\Sigma_{\rm erase}
++\Sigma_{\rm bath}+\Sigma_{\rm horizon}+\Sigma_{\rm leak}.
+}
+\]
+其中 \(\Sigma_{\rm erase}=\beta Q_B-H(R|Y)\)，\(\Sigma_{\rm coarse}\) 对应 hidden residual，\(\Sigma_{\rm horizon}\) 对应 \(\Delta S_{\rm gen}\)，\(\Sigma_{\rm leak}\) 记录未审计环境泄漏。总误差 \(\epsilon_{\rm thermo}\) 汇总 bath、reset、calibration、coarse-graining、renormalization 与 horizon 误差，验证条件为
+\[
+\boxed{\Sigma_{\rm total}\ge-\epsilon_{\rm thermo}.}
+\]
+
+\begin{definition}[热力学记录--视界闭包证书]\label{def:typed-address-biaxial-completion-thermodynamic-record-horizon-closure-cert}
+称 \(\mathsf{ThermodynamicRecordHorizonClosureCert}\) 为热力学记录--视界闭包证书，若它包含测量退相干记录闭包证书、classical record algebra 证书、coarse-graining record 证书、record-conditioned backreaction 证书、\(\mathsf{EntropyLedger}\)、\(\mathsf{RecordMemoryCert}\)、\(\mathsf{RecordFormationEntropyCert}\)、\(\mathsf{CoarseGrainingEntropyCert}\)、\(\mathsf{HeatBathTemperatureCert}\)、\(\mathsf{FreeEnergyWorkLedger}\)、\(\mathsf{LandauerErasureCert}\)、\(\mathsf{SideInformationErasureCert}\)、\(\mathsf{FeedbackInformationCert}\)、\(\mathsf{EntropyProductionCert}\)、\(\mathsf{RecordIrreversibilityCert}\)、\(\mathsf{SelectiveEntropyLedger}\)、\(\mathsf{BoundaryRecordLedgerCert}\)、\(\mathsf{HorizonEntropyInterfaceCert}\)、\(\mathsf{GeneralizedSecondLawCert}\)、\(\mathsf{RecordConditionedGeneralizedEntropyCert}\)、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+主要通过标签为
+\[
+\mathsf{EntropyAccountingPass},\ \mathsf{RecordMemoryPass},\
+\mathsf{LandauerErasurePass},\ \mathsf{EntropyProductionPass},\
+\mathsf{BoundaryEntropyLedgerPass},\
+\mathsf{GeneralizedEntropyPass},\
+\mathsf{GeneralizedSecondLawPass}.
+\]
+主要 NULL 包括 \(\mathsf{ThermalBathNull}\)、\(\mathsf{ResetProtocolNull}\)、\(\mathsf{HamiltonianNull}\)、\(\mathsf{SideInformationNull}\)、\(\mathsf{HorizonNull}\)、\(\mathsf{AreaLedgerNull}\)、\(\mathsf{RenormalizedEntropyNull}\)。主要 FAIL 包括 \(\mathsf{FineGrainedEntropyIncreaseOverclaimFail}\)、\(\mathsf{FineCoarseEntropyMixingFail}\)、\(\mathsf{LandauerWithoutResetFail}\)、\(\mathsf{ErasureCostOmissionFail}\)、\(\mathsf{DemonMemoryCostOmissionFail}\)、\(\mathsf{CPTPEntropyMonotonicityOverclaimFail}\)、\(\mathsf{BoundaryNonInjectiveReconstructionFail}\)、\(\mathsf{LandauerHorizonConflationFail}\)、\(\mathsf{HorizonAreaTermOmissionFail}\)、\(\mathsf{OutsideEntropyOmissionFail}\)、\(\mathsf{EntropyGeometryConditioningMismatchFail}\)。
+
+\begin{theorem}[热力学记录闭包的可靠性]\label{thm:typed-address-biaxial-completion-thermodynamic-record-closure-soundness}
+若
+\[
+\mathsf{VerifyThermodynamicRecordHorizonClosure}
+(\mathsf{ThermodynamicRecordHorizonClosureCert})
+=
+\mathsf{ThermodynamicRecordHorizonPass},
+\]
+则存在 classical record \(R_{\rm cl}\)、memory register \(M\)、thermal bath \(B\)、thermal state \(\tau_B\) 与 reset protocol，使得 record entropy、memory entropy、coarse-grained residual、erasure cost 与 entropy production 均有一致账本：
+\[
+H(R)=-\sum_rp(r)\log p(r),
+\qquad
+S(\rho_M)=H(R)
+\]
+在正交 classical memory 情形成立，
+\[
+H(R_{\rm micro})
+=
+H(R_{\rm vis})+H(R_{\rm micro}|R_{\rm vis}),
+\]
+若执行 reset，则
+\[
+Q_B\ge k_BT\,H(R|Y),
+\qquad
+\beta Q_B\ge H(R|Y).
+\]
+在初始乘积热浴前提下，
+\[
+\Sigma
+=
+\Delta S_S+\beta Q_B
+=
+I(S':B')+D(\rho'_B\|\tau_B)
+\ge0.
+\]
+\end{theorem}
+\begin{proof}
+记录 memory 证书给出正交 memory states 与 \(\rho_M\)，故 \(S(\rho_M)=H(R)\)。Coarse-graining 熵证书给出条件熵分解。热浴温度证书与 Landauer 擦除证书给出 thermal bath、temperature 与 reset map，故 Landauer lower bound 可验证。熵产生证书在初始乘积热浴与全局幺正前提下给出 \(\Sigma=I+D\ge0\)。因此 record formation、use、coarse-graining 与 erasure 的热力学成本被闭合到同一 entropy ledger。证毕。
+\end{proof}
+
+\begin{theorem}[record-conditioned generalized entropy 接口的可靠性]\label{thm:typed-address-biaxial-completion-record-conditioned-generalized-entropy-soundness}
+若 \(\mathsf{RecordConditionedGeneralizedEntropyCert}\) 输出 \(\mathsf{GeneralizedEntropyPass}\)，且记录条件化几何 \(g_r,\rho_r\) 已通过，则存在
+\[
+\boxed{
+S_{\rm gen}^{(r)}
+=
+\frac{k_BA_H^{(r)}}{4G\hbar}
++S_{\rm out}^{\rm ren}[\rho_r,g_r]
++S_{\rm ct}^{(r)}.
+}
+\]
+若 generalized second law 证书通过，则
+\[
+\boxed{
+\Delta S_{\rm gen}^{(r)}\ge-\epsilon_{\rm GSL}.
+}
+\]
+因此，记录 \(r\) 对半经典 geometry 的影响与 horizon entropy ledger 同步条件化；不能在 conditioned record 与 ensemble geometry 之间混用。
+\end{theorem}
+\begin{proof}
+Record-conditioned generalized entropy 证书把 \(r,\rho_r,g_r,A_H^{(r)}\) 放入同一 conditioning ledger。视界熵接口证书给出 area term、outside entropy 与 counterterm ledger。Generalized second law 证书检查两时刻的 \(S_{\rm gen}\) 差值。若通过，则所示不等式在声明误差预算内成立。证毕。
+\end{proof}
+
+于是，Born 概率不只决定记录分布，也决定 memory reset 的最低成本：
+\[
+\boxed{
+p(r)={\rm Tr}(\rho E_r)
+\Rightarrow
+H(R)=-\sum_rp(r)\log p(r)
+\Rightarrow
+Q_B\ge k_BT\,H(R|Y).
+}
+\]
+涉及时空边界时，记录链扩展为
+\[
+\boxed{
+r
+\Rightarrow
+\rho_r,g_r
+\Rightarrow
+A_H^{(r)}
+\Rightarrow
+S_{\rm gen}^{(r)}.
+}
+\]
+记录的不可逆性因此不来自 Born rule 本身，而来自 stable classical record 在 coarse-graining、memory reset、environment leakage 与 boundary/horizon ledger 中产生的熵账本。

@@ -1,0 +1,592 @@
+\subsubsection{量子纠错、冗余记录、边界重构、全息码与 code-subspace interface 闭包}\label{subsubsec:typed-address-biaxial-completion-quantum-error-correction-holographic-code-interface-closure}
+测量记录与视界熵账本闭合之后，还必须说明同一 bulk 信息被写入多个 boundary、screen 或环境片段时，哪些信息可稳定恢复，哪些只恢复 quotient，哪些需要量子纠错条件。该接口把
+\[
+\boxed{
+\text{bulk information}
+\longrightarrow
+\text{redundant boundary records}
+\longrightarrow
+\text{error correction}
+\longrightarrow
+\text{reconstruction}
+\longrightarrow
+\text{holographic/code-subspace ledger}
+}
+\]
+写成可核验结构，而不是把 ``holography'' 当作无条件的重构原则。
+
+\paragraph{code subspace 与编码等距。}
+可被 boundary 编码的对象通常不是整个 bulk Hilbert space，而是一个受 cutoff、energy window 与 semiclassical sector 约束的 code subspace：
+\[
+\boxed{
+\mathcal H_{\rm code}\subseteq \mathcal H_{\rm bulk}.
+}
+\]
+编码映射为
+\[
+\boxed{
+V:\mathcal H_{\rm code}\to\mathcal H_{\partial},
+\qquad
+V^\dagger V=I_{\rm code}.
+}
+\]
+对应 channel 记为
+\[
+\mathcal V(\rho)=V\rho V^\dagger .
+\]
+
+\begin{definition}[code-subspace 证书]\label{def:typed-address-biaxial-completion-qec-code-subspace-cert}
+称 \(\mathsf{CodeSubspaceCert}\) 为 code-subspace 证书，若它包含 \(\mathcal H_{\rm bulk}\)、\(\mathcal H_{\rm code}\)、\(\Pi_{\rm code}\)、\(\mathcal H_{\partial}\)、\(V\)、\(V^\dagger V\)、dimension ledger、energy-cutoff ledger、semiclassical-sector ledger 与 round hash。未声明 \(\mathcal H_{\rm code}\) 却声称 boundary 可恢复全部 bulk 时输出 \(\mathsf{CodeSubspaceNull}\)。若
+\[
+V^\dagger V\ne I_{\rm code},
+\]
+输出 \(\mathsf{EncodingIsometryFail}\)。
+\end{definition}
+
+\paragraph{boundary factorization 与可见代数。}
+最简单的 erasure 口径写作
+\[
+\mathcal H_{\partial}=\mathcal H_A\otimes\mathcal H_{\bar A}.
+\]
+但在 gauge theory 与 gravity 中，Hilbert factorization 往往需要 edge modes 或 center sectors。更稳健的写法是声明 region algebra：
+\[
+\boxed{
+\mathcal A_A,\mathcal A_{\bar A}\subseteq \mathcal B(\mathcal H_\partial),
+\qquad
+[\mathcal A_A,\mathcal A_{\bar A}]=0
+}
+\]
+在相应域内成立。
+
+\begin{definition}[boundary algebra 证书]\label{def:typed-address-biaxial-completion-boundary-algebra-cert}
+称 \(\mathsf{BoundaryAlgebraCert}\) 为 boundary algebra 证书，若它包含 \(A,\bar A\)、可用时的 \(\mathcal H_A,\mathcal H_{\bar A}\)、\(\mathcal A_A,\mathcal A_{\bar A}\)、factorization ledger、center ledger、gauge-constraint ledger、edge-mode ledger 与 round hash。Hilbert factorization 不存在却强行使用 \(\mathcal H_A\otimes\mathcal H_{\bar A}\) 时输出 \(\mathsf{FalseBoundaryFactorizationFail}\)。
+\end{definition}
+
+\paragraph{误差模型与 recovery channel。}
+边界重构必须说明误差或 erasure。对 region \(\bar A\) 的 erasure noise，可写
+\[
+\boxed{
+\mathcal N_{\bar A}(\rho)=\operatorname{Tr}_{\bar A}\rho.
+}
+\]
+一般误差模型由 noise channel \(\mathcal N\) 或 error set \(\mathcal E=\{E_a\}\) 给出。
+
+\begin{definition}[error-model 证书]\label{def:typed-address-biaxial-completion-error-model-cert}
+称 \(\mathsf{ErrorModelCert}\) 为 error-model 证书，若它包含 \(\mathcal N,\mathcal E,A,\bar A\)、erasure ledger、noise-channel ledger、error-weight ledger、locality ledger 与 round hash。没有误差模型却声称纠错成功时输出 \(\mathsf{ErrorModelNull}\)。
+\end{definition}
+
+recovery channel 是 CPTP map：
+\[
+\boxed{
+\mathcal R_A:\mathcal B(\mathcal H_A)\to\mathcal B(\mathcal H_{\rm code}).
+}
+\]
+精确纠错要求
+\[
+\boxed{
+\mathcal R_A\circ\mathcal N_{\bar A}\circ\mathcal V
+=
+\operatorname{id}_{\rm code}.
+}
+\]
+近似纠错要求
+\[
+\boxed{
+\left\|
+\mathcal R_A\circ\mathcal N_{\bar A}\circ\mathcal V
+-
+\operatorname{id}_{\rm code}
+\right\|_\diamond
+\le
+\epsilon_{\rm QEC}.
+}
+\]
+
+\begin{definition}[recovery-channel 证书]\label{def:typed-address-biaxial-completion-recovery-channel-cert}
+称 \(\mathsf{RecoveryChannelCert}\) 为 recovery-channel 证书，若它包含 \(\mathcal R_A,\mathcal N_{\bar A},\mathcal V\)、diamond-norm ledger、CPTP ledger、implementation ledger、\(\epsilon_{\rm QEC}\) 与 round hash。若 \(\mathcal R_A\) 不是 CPTP map，却被当作 recovery channel，输出 \(\mathsf{RecoveryNotCPTPFail}\)。
+\end{definition}
+
+\paragraph{Knill--Laflamme 条件与 decoupling。}
+精确量子纠错可由 Knill--Laflamme 条件表达：
+\[
+\boxed{
+\Pi_{\rm code}E_a^\dagger E_b\Pi_{\rm code}
+=
+\alpha_{ab}\Pi_{\rm code}
+\qquad
+\forall a,b.
+}
+\]
+近似版本要求
+\[
+\left\|
+\Pi E_a^\dagger E_b\Pi-\alpha_{ab}\Pi
+\right\|
+\le
+\epsilon_{\rm KL}.
+\]
+
+\begin{definition}[Knill--Laflamme 证书]\label{def:typed-address-biaxial-completion-knill-laflamme-cert}
+称 \(\mathsf{KnillLaflammeCert}\) 为 Knill--Laflamme 证书，若它包含 \(\Pi_{\rm code},\{E_a\},\alpha_{ab}\)、matrix-norm ledger、error-basis ledger、\(\epsilon_{\rm KL}\) 与 round hash。若环境在 error syndrome 中学到 logical information，输出 \(\mathsf{EnvironmentLearnedLogicalInfoFail}\)。
+\end{definition}
+
+对 erasure \(\bar A\)，纠错等价于被擦除区域不携带 reference information。令 \(R\) 与 code maximally entangled，
+\[
+|\Psi\rangle_{R\partial}
+=
+(I_R\otimes V)|\Phi\rangle_{R{\rm code}}.
+\]
+若 \(\bar A\) 可被擦除而仍可恢复，则
+\[
+\boxed{
+\rho_{R\bar A}=\rho_R\otimes\rho_{\bar A}
+}
+\]
+或近似地
+\[
+\boxed{
+\|\rho_{R\bar A}-\rho_R\otimes\rho_{\bar A}\|_1
+\le
+\epsilon_{\rm dec}.
+}
+\]
+若 \(\bar A\) 仍携带 logical information，输出 \(\mathsf{ErasedRegionContainsLogicalInfoFail}\)。
+
+\paragraph{operator reconstruction。}
+bulk logical operator \(O_{\rm bulk}\) 在 boundary region \(A\) 上可重构，含义是存在 \(O_A\in\mathcal A_A\) 使
+\[
+\boxed{
+O_A V=V O_{\rm bulk}.
+}
+\]
+等价地，
+\[
+\boxed{
+V^\dagger O_A V=O_{\rm bulk}.
+}
+\]
+近似重构要求
+\[
+\|O_A V-VO_{\rm bulk}\|\le\epsilon_{\rm op}.
+\]
+
+\begin{definition}[operator 重构证书]\label{def:typed-address-biaxial-completion-operator-reconstruction-cert}
+称 \(\mathsf{OperatorReconstructionCert}\) 为 operator 重构证书，若它包含 \(O_{\rm bulk},O_A,V\)、support ledger、norm ledger、\(\epsilon_{\rm op}\) 与 round hash。若 \(O_A\) 实际支撑在 \(A\cup B\) 上，却声称只支撑在 \(A\)，输出 \(\mathsf{SupportOverclaimFail}\)。
+\end{definition}
+
+\paragraph{algebraic QEC 与 complementary recovery。}
+在 gauge/gravity 口径中，某一区域通常只能恢复 logical algebra
+\[
+\boxed{
+\mathcal M_{\rm code}\subseteq\mathcal B(\mathcal H_{\rm code}),
+}
+\]
+而不是整代数 \(\mathcal B(\mathcal H_{\rm code})\)。algebraic QEC 要求
+\[
+\boxed{
+\forall O\in\mathcal M_{\rm code},\quad
+\exists O_A\in\mathcal A_A:\ O_AV=VO.
+}
+\]
+
+\begin{definition}[operator-algebra QEC 证书]\label{def:typed-address-biaxial-completion-operator-algebra-qec-cert}
+称 \(\mathsf{OperatorAlgebraQECCert}\) 为 operator-algebra QEC 证书，若它包含 \(\mathcal M_{\rm code}\)、\(\mathcal A_A\)、\(\mathcal A_{\bar A}\)、\(V\)、center ledger、commutant ledger、conditional-expectation ledger、modular ledger 与 round hash。若只可恢复 center，却声称恢复全部 noncommutative algebra，输出 \(\mathsf{CenterAsFullAlgebraFail}\)。
+\end{definition}
+
+若 \(\mathcal M_{\rm code}\) 可在 \(A\) 上恢复，而 commutant \(\mathcal M_{\rm code}'\) 可在 \(\bar A\) 上恢复，则为 complementary recovery：
+\[
+\boxed{
+\mathcal M_{\rm code}\leftrightarrow A,
+\qquad
+\mathcal M_{\rm code}'\leftrightarrow\bar A.
+}
+\]
+同一 noncommuting logical algebra 若被两个 disjoint 且 operationally independent regions 完整恢复，则输出 \(\mathsf{NoCloningViolationFail}\)。
+
+\paragraph{classical redundancy 与 no-cloning 分离。}
+第 29 节的 pointer record 可由许多环境片段冗余携带。若
+\[
+E=E_1E_2\cdots E_N,
+\qquad
+I(R:E_i)\ge(1-\delta)H(R)
+\]
+对许多 disjoint fragments 成立，则定义 classical record redundancy
+\[
+\boxed{
+\mathcal R_\delta
+=
+\max\{N_{\rm disjoint}:I(R:E_i)\ge(1-\delta)H(R)\}.
+}
+\]
+这不会违反 no-cloning，因为 \(R\) 是 commuting classical record。把 classical redundancy 误称为 unknown quantum state cloning 时输出 \(\mathsf{ClassicalRedundancyAsQuantumCloningFail}\)；把 unknown quantum state 的多份独立恢复当作 classical redundancy 时输出 \(\mathsf{QuantumNoCloningViolationFail}\)。
+
+\paragraph{secret sharing 与授权区域。}
+把 boundary 分为 shares
+\[
+\partial=A_1\cup\cdots\cup A_N.
+\]
+授权集族 \(\mathcal Q\subseteq2^{\{1,\ldots,N\}}\) 满足
+\[
+S\in\mathcal Q
+\Rightarrow
+\exists\mathcal R_S:
+\mathcal R_S\circ\mathcal N_{\bar S}\circ\mathcal V
+=
+\operatorname{id}_{\rm code},
+\]
+非授权集则满足 decoupling：
+\[
+S\notin\mathcal Q
+\Rightarrow
+\rho_{RS}\approx\rho_R\otimes\rho_S.
+\]
+若 unauthorized share 携带 logical information，输出 \(\mathsf{UnauthorizedShareLeakFail}\)。
+
+\paragraph{tensor-network 与 entanglement-wedge 口径。}
+有限图或张量网络 code 由
+\[
+\Gamma=(V_\Gamma,E_\Gamma),
+\qquad
+V_\Gamma:\mathcal H_{\rm bulk}\to\mathcal H_\partial
+\]
+描述，仍需检查
+\[
+\boxed{
+V_\Gamma^\dagger V_\Gamma=I_{\rm code}.
+}
+\]
+若 tensor network 不是 isometry 却被当作 exact code，输出 \(\mathsf{TensorNetworkIsometryFail}\)。
+
+在 semiclassical holographic interface 中，region \(A\) 的 entanglement wedge \(\mathcal W_E[A]\) 与 QES 面 \(\gamma_A\) 由 generalized entropy ledger 控制：
+\[
+\boxed{
+S_{\rm gen}(\gamma_A)
+=
+\frac{{\rm Area}(\gamma_A)}{4G\hbar}
++S_{\rm bulk}(\Sigma_A)
++S_{\rm ct}.
+}
+\]
+若 \(x\in\mathcal W_E[A]\)，bulk operator \(O_x\) 可候选重构为 \(O_A\)。若 \(x\notin\mathcal W_E[A]\) 却声称由 \(A\) 重构，输出 \(\mathsf{OutsideWedgeReconstructionFail}\)。
+
+\begin{definition}[QES 稳定证书]\label{def:typed-address-biaxial-completion-qes-stability-cert}
+称 \(\mathsf{QESStabilityCert}\) 为 QES 稳定证书，若它包含 \(A,\gamma_A,S_{\rm gen}(\gamma_A)\)、gap ledger、phase-transition ledger、\(\epsilon_{\rm qes}\) 与 round hash。若两个候选面满足
+\[
+|S_{\rm gen}(\gamma_1)-S_{\rm gen}(\gamma_2)|
+\le
+\Delta_{\rm qec},
+\]
+则 wedge 重构必须标为 unstable 或 approximate。QES phase transition 附近仍声称 fixed exact wedge 时输出 \(\mathsf{WedgePhaseTransitionOverclaimFail}\)。
+\end{definition}
+
+\paragraph{entropy capacity 与 code dimension。}
+第 30 节的 generalized entropy 在这里进入 capacity ledger，而不是 ordinary RAM 计数。若 code subspace 维数为
+\[
+d_{\rm code}=\dim\mathcal H_{\rm code},
+\]
+则必要容量条件为
+\[
+\boxed{
+\log d_{\rm code}
+\le
+\frac{S_{\rm gen}}{k_B}
++\epsilon_{\rm cap}.
+}
+\]
+若 code dimension 超过 capacity ledger，却声称 exact encoding，输出 \(\mathsf{CodeDimensionCapacityFail}\)。把 generalized entropy 直接当成普通 memory register 维数时输出 \(\mathsf{GeneralizedEntropyAsRAMFail}\)。
+
+\paragraph{distance、syndrome 与 decoder complexity。}
+finite-dimensional code 的 distance 可写为
+\[
+\boxed{
+d=\min\{\operatorname{wt}(E):\Pi E\Pi\not\propto\Pi\}.
+}
+\]
+纠正 \(t\) 个 unknown local errors 需要 \(d\ge2t+1\)，纠正 \(e\) 个 erasures 需要 \(d\ge e+1\)。不足时输出 \(\mathsf{DistanceBoundFail}\)。
+
+若采用 stabilizer code，需要 commuting stabilizers \(\mathcal S\subset\mathcal P_n\) 且 \(-I\notin\mathcal S\)。code space 为
+\[
+\boxed{
+\mathcal H_{\rm code}
+=
+\{|\psi\rangle:S|\psi\rangle=|\psi\rangle,\ \forall S\in\mathcal S\}.
+}
+\]
+syndrome decoder \(D:s\mapsto\hat e\) 还需声明 failure probability；存在 recovery 不等于 efficient decoder。只证明 recovery 存在却声称 efficient reconstruction 时输出 \(\mathsf{ExistenceAsEfficientDecoderFail}\)。
+
+\paragraph{visible-hidden split、Fold 与 screen exactification。}
+原稿中的 boundary map 可写为
+\[
+\mathsf{Bd}:\Omega_{\rm bulk}\to\Omega_\partial.
+\]
+若 \(\mathsf{Bd}\) 非单射，则 boundary record 只确定 fiber
+\[
+\boxed{
+\mathcal F_b=\mathsf{Bd}^{-1}(b),
+}
+\]
+即只恢复 quotient \([x]_{\mathsf{Bd}}\)。若需要 exact reconstruction，必须给 residual ledger
+\[
+r:\Omega_{\rm bulk}\to\mathcal R
+\]
+使
+\[
+(\mathsf{Bd},r):\Omega_{\rm bulk}\to\Omega_\partial\times\mathcal R
+\]
+单射，并满足
+\[
+\boxed{
+\log|\mathcal R|
+\ge
+\log\max_b|\mathcal F_b|.
+}
+\]
+忽略 nontrivial hidden fiber 时输出 \(\mathsf{HiddenFiberIgnoredFail}\)。
+
+同理，finite window fold
+\[
+\operatorname{Fold}_m:\Omega_m\to X_m
+\]
+给出 stable visible quotient。若 \(\operatorname{Fold}_m\) 非单射却被称为 lossless code，输出 \(\mathsf{FoldAsLosslessCodeFail}\)。加入 residual \(r_m\) 后，\((\operatorname{Fold}_m,r_m)\) 才可成为 exact code。
+
+\paragraph{conditional expectation 与 finite index。}
+可见代数 coarse-graining 可写成 conditional expectation
+\[
+\boxed{
+E:\mathcal A_{\rm full}\to\mathcal A_{\rm vis},
+\qquad
+E^2=E,
+\qquad
+E(a)=a\quad(a\in\mathcal A_{\rm vis}).
+}
+\]
+\(\ker E\) 是被可见化抹去的方向。若 \(E\) 不是 projection，却被当作 conditional expectation，输出 \(\mathsf{ConditionalExpectationProjectionFail}\)。若 \(E\) finite-index，则 \({\rm Ind}(E)\) 可作为 hidden multiplicity 或 code overhead 的非交换账本；index 发散却使用 finite-code capacity 公式时输出 \(\mathsf{InfiniteIndexAsFiniteFail}\)。
+
+\paragraph{重构模式三分。}
+统一地，encoding 与 reconstruction 写作
+\[
+\mathsf{Enc}:X\to Y,
+\qquad
+\mathsf{Rec}:Y\to X.
+\]
+exact reconstruction 要求
+\[
+\boxed{
+\mathsf{Rec}\circ\mathsf{Enc}=\operatorname{id}_X.
+}
+\]
+stable reconstruction 要求
+\[
+\|\eta\|\le\epsilon
+\Rightarrow
+\|\mathsf{Rec}(\mathsf{Enc}(x)+\eta)-x\|\le C\epsilon.
+\]
+approximate reconstruction 要求
+\[
+d(\mathsf{Rec}\circ\mathsf{Enc}(x),x)\le\epsilon.
+\]
+若实际只恢复 quotient
+\[
+\mathsf{Rec}\circ\mathsf{Enc}=\pi:X\to X/{\sim},
+\]
+却声称恢复 full object，输出 \(\mathsf{QuotientAsFullReconstructionFail}\)。混用 exact、stable 与 approximate 时输出 \(\mathsf{ReconstructionModeMixingFail}\)。
+
+\paragraph{zero-knowledge boundary transcript。}
+``视界零知识'' 可写为 boundary transcript 验证 validity 而不泄露 hidden logical data。令 \(T\) 为 transcript、\(L\) 为 secret logical variable，则要求
+\[
+\boxed{
+I(L:T)\le\epsilon_{\rm ZK}.
+}
+\]
+同时有 completeness 与 soundness：
+\[
+P[\mathsf{Verify}(T)=1\mid{\rm valid}]\ge1-\epsilon_c,
+\]
+\[
+P[\mathsf{Verify}(T)=1\mid{\rm invalid}]\le\epsilon_s.
+\]
+若 transcript 泄露 hidden logical data，却声称 zero knowledge，输出 \(\mathsf{ZeroKnowledgeLeakFail}\)。
+
+\paragraph{总证书。}
+称 \(\mathsf{QuantumErrorCorrectionHolographicClosureCert}\) 为量子纠错-全息接口总证书，若它合并
+\[
+\mathsf{CodeSubspaceCert},\quad
+\mathsf{EncodingIsometryCert},\quad
+\mathsf{BoundaryAlgebraCert},\quad
+\mathsf{ErrorModelCert},\quad
+\mathsf{RecoveryChannelCert},
+\]
+\[
+\mathsf{KnillLaflammeCert},\quad
+\mathsf{OperatorReconstructionCert},\quad
+\mathsf{OperatorAlgebraQECCert},\quad
+\mathsf{NoCloningCompatibilityCert},
+\]
+\[
+\mathsf{EntanglementWedgeReconstructionCert},\quad
+\mathsf{HolographicCodeCapacityCert},\quad
+\mathsf{HiddenFiberReconstructionCert}
+\]
+以及 decoder-complexity ledger。允许输出
+\[
+\boxed{\mathsf{QuantumErrorCorrectionHolographicPass}},
+\qquad
+\boxed{\mathsf{ApproximateQuantumErrorCorrectionHolographicPass}},
+\qquad
+\boxed{\mathsf{QuantumErrorCorrectionHolographicFail}}.
+\]
+常见 NULL 包括
+\[
+\mathsf{CodeSubspaceNull},\quad
+\mathsf{EncodingNull},\quad
+\mathsf{BoundaryAlgebraNull},\quad
+\mathsf{ErrorModelNull},\quad
+\mathsf{RecoveryNull},\quad
+\mathsf{WedgeNull},\quad
+\mathsf{DecoderComplexityNull}.
+\]
+常见 FAIL 包括
+\[
+\mathsf{EncodingIsometryFail},\quad
+\mathsf{FalseBoundaryFactorizationFail},\quad
+\mathsf{RecoveryNotCPTPFail},\quad
+\mathsf{DistanceBoundFail},\quad
+\mathsf{QuantumNoCloningViolationFail},
+\]
+\[
+\mathsf{FoldAsLosslessCodeFail},\quad
+\mathsf{HiddenFiberIgnoredFail},\quad
+\mathsf{SupportOverclaimFail},\quad
+\mathsf{CodeDimensionCapacityFail},\quad
+\mathsf{ExistenceAsEfficientDecoderFail}.
+\]
+
+\begin{theorem}[量子纠错重构的可靠性]\label{thm:typed-address-biaxial-completion-qec-reconstruction-soundness}
+若
+\[
+\mathsf{VerifyQuantumErrorCorrectionHolographicClosure}
+(\mathsf{QuantumErrorCorrectionHolographicClosureCert})
+=
+\mathsf{QuantumErrorCorrectionHolographicPass},
+\]
+则存在 \(\mathcal H_{\rm code}\)、等距编码 \(V:\mathcal H_{\rm code}\to\mathcal H_\partial\)、noise channel \(\mathcal N\) 与 CPTP recovery \(\mathcal R\)，使
+\[
+V^\dagger V=I_{\rm code},
+\]
+并且
+\[
+\boxed{
+\mathcal R\circ\mathcal N\circ\mathcal V
+=
+\operatorname{id}_{\rm code}
+}
+\]
+或在近似情形
+\[
+\boxed{
+\|
+\mathcal R\circ\mathcal N\circ\mathcal V
+-
+\operatorname{id}_{\rm code}
+\|_\diamond
+\le
+\epsilon_{\rm QEC}.
+}
+\]
+进一步，所有通过 operator reconstruction ledger 的 logical operator \(O\) 都存在指定 boundary support 上的 \(O_A\) 满足
+\[
+\boxed{
+O_A V=VO.
+}
+\]
+因此 boundary reconstruction 是由 code subspace、encoding、boundary algebra、error model、recovery channel 与 support ledger 共同定义的可审计纠错接口。
+\end{theorem}
+
+\begin{proof}
+\(\mathsf{CodeSubspaceCert}\) 与 \(\mathsf{EncodingIsometryCert}\) 给出 \(\mathcal H_{\rm code}\) 与 \(V^\dagger V=I_{\rm code}\)。
+\(\mathsf{ErrorModelCert}\) 指定 \(\mathcal N\) 或 \(\{E_a\}\)。
+\(\mathsf{RecoveryChannelCert}\) 给出 CPTP recovery 与 diamond-norm bound。
+\(\mathsf{KnillLaflammeCert}\) 或 decoupling ledger 说明 error environment 不携带可区分 logical information。
+\(\mathsf{OperatorReconstructionCert}\) 再把 state recovery 推到 logical operator support statement。
+故得到声明的重构等式或近似等式。
+\end{proof}
+
+\begin{theorem}[冗余重构与 no-cloning 相容性]\label{thm:typed-address-biaxial-completion-no-cloning-compatibility}
+若两个 disjoint boundary regions \(A,B\) 都声称恢复同一 logical content，则至少必须满足以下一项：恢复对象是 classical commuting record；恢复对象是 mutually commuting logical algebra；二者是 complementary recovery；二者 operational domains 不独立；或其中一个 recovery 是 approximate/state-dependent 且误差已入 ledger。否则验证器输出
+\[
+\boxed{
+\mathsf{QuantumNoCloningViolationFail}.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+若 \(A\) 与 \(B\) 独立且都能恢复整代数 \(\mathcal B(\mathcal H_{\rm code})\)，则任意 unknown logical state 可由两个 disjoint accessible systems 分别恢复，给出 cloning channel，与量子 no-cloning theorem 冲突。若恢复对象为 commuting classical record，则可复制；若为 complementary algebra，则二者不包含同一 noncommuting logical content；若有 operational dependence 或 approximation ledger，则 no-cloning 结论的前提被相应削弱。
+\end{proof}
+
+\begin{theorem}[hidden-fiber exactification]\label{thm:typed-address-biaxial-completion-hidden-fiber-exactification}
+设
+\[
+\mathsf{Bd}:\Omega_{\rm bulk}\to\Omega_\partial
+\]
+非单射，并令 \(\mathcal F_b=\mathsf{Bd}^{-1}(b)\)。若存在 residual ledger \(r:\Omega_{\rm bulk}\to\mathcal R\) 使 \((\mathsf{Bd},r)\) 单射，则
+\[
+\boxed{
+|\mathcal R|
+\ge
+\max_b|\mathcal F_b|.
+}
+\]
+因此
+\[
+\boxed{
+\log|\mathcal R|
+\ge
+\log\max_b|\mathcal F_b|.
+}
+\]
+没有 residual ledger 时，boundary-only reconstruction 至多恢复 quotient \([x]_{\mathsf{Bd}}\)。
+\end{theorem}
+
+\begin{proof}
+固定 \(b\)。若 \((\mathsf{Bd},r)\) 单射，则不同 \(x,x'\in\mathcal F_b\) 必须有 \(r(x)\ne r(x')\)。故 \(r\) 在每个 fiber 上 injective，于是 \(|\mathcal R|\ge|\mathcal F_b|\)。对所有 \(b\) 取最大值得到容量下界。
+\end{proof}
+
+\begin{theorem}[entropy-capacity consistency]\label{thm:typed-address-biaxial-completion-entropy-capacity-consistency}
+若第 30 节给出 generalized entropy ledger
+\[
+S_{\rm gen}
+=
+\frac{k_BA}{4G\hbar}
++S_{\rm out}^{\rm ren}
++S_{\rm ct},
+\]
+且某 boundary region 声称可恢复 code subspace \(\mathcal H_{\rm code}\)，则必须满足
+\[
+\boxed{
+\log\dim\mathcal H_{\rm code}
+\le
+\frac{S_{\rm gen}}{k_B}
++\epsilon_{\rm cap}.
+}
+\]
+若该不等式失败，输出 \(\mathsf{CodeDimensionCapacityFail}\)。
+\end{theorem}
+
+\begin{proof}
+可恢复 code subspace 的可区分 logical sectors 不得超过 boundary entropy/capacity ledger 所允许的有效维数；否则存在多于 capacity 的 orthogonal logical states 被同一区域 exact recovered，与 capacity bound 冲突。该论断只把 \(S_{\rm gen}\) 用作 gravitational reconstruction capacity ledger，不把它等同于普通 memory bits。
+\end{proof}
+
+\paragraph{原稿表述的替换。}
+若原稿写“边界记录恢复 bulk 信息”，应改为：边界记录恢复的是 code subspace 中、相对于指定 error model 与 recovery channel 可纠正的 logical information；若边界映射非单射，则只能恢复 quotient，除非加入 residual ledger。
+
+若原稿写“多个边界区域都包含同一信息”，应改为：classical commuting records 可冗余复制；unknown quantum logical information 的多区域恢复必须通过 complementary recovery、commuting algebra 或非独立操作域避免 no-cloning 冲突。
+
+若原稿写“全息码由面积熵给出”，应改为：面积项提供 gravitational capacity ledger；具体全息码还需要 code subspace、encoding isometry、boundary algebra、error model 与 recovery channel。
+
+最终主句是：
+\[
+\boxed{
+\text{boundary visible layer gives a stable quotient; QEC gives recoverable logical information only after the code subspace, error model, recovery channel, and residual ledger close.}
+}
+\]

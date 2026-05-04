@@ -1,0 +1,503 @@
+\subsubsection{概率、统计推断、经验过程、有限样本证书、Bayes/频率双口径、模型差异、可证伪预测与实验审计闭包}\label{subsubsec:typed-address-biaxial-completion-statistical-audit-finite-sample-falsifiability-closure}
+范畴化证书可组合，并不意味着经验数据已经支持对应机制。统计审计处理的是
+\[
+\boxed{
+\text{data}
+\to
+\text{estimator}
+\to
+\text{uncertainty}
+\to
+\text{model discrepancy}
+\to
+\text{falsifiable certificate}.
+}
+\]
+其主链为
+\[
+\boxed{
+\mathsf{Source}
+\to
+\mathsf{Window}
+\to
+\mathsf{Fold}
+\to
+\mathsf{Histogram}
+\to
+\mathsf{Estimator}
+\to
+\mathsf{ConfidenceSet}
+\to
+\mathsf{Discrepancy}
+\to
+\mathsf{Decision}
+\to
+\mathsf{ReproducibleAudit}.
+}
+\]
+经验拟合不是机制识别；有限样本不拒绝也不是理论证明。
+
+\paragraph{输入对象与四类分布。}
+固定分辨率 \(m\) 时，
+\[
+\Omega_m=\{0,1\}^m,\qquad
+\mathsf{Fold}_m:\Omega_m\to X_m.
+\]
+令
+\[
+w_t=\mathsf{Fold}_m(\omega_m(x;t))\in X_m
+\]
+并定义经验折叠直方图
+\[
+\boxed{
+\widehat\pi_{m,N}(u)
+=
+\frac1{N_{\rm obs}}
+\sum_{t\in\mathcal T}\mathbf 1\{w_t=u\},
+\qquad u\in X_m.
+}
+\]
+必须记录 sampling window set \(\mathcal T\)、\(N_{\rm obs}=|\mathcal T|\) 与 \(N_{\rm eff}\)。只给直方图而无采样协议时输出 \(\mathsf{HistogramWithoutSamplingProtocolFail}\)。
+
+四类分布不能混用：
+\[
+\boxed{\pi_m^{\rm true}},\qquad
+\boxed{\widehat\pi_{m,N}},\qquad
+\boxed{\pi_m(\theta)},\qquad
+\boxed{\pi_m^{\rm base}}.
+\]
+其中 \(\pi_m^{\rm Parry}\) 是 Parry/PF 最大熵或转移图基线，不是任意数据源的自动真值。若写
+\[
+\widehat\pi_{m,N}\approx\pi_m^{\rm Parry}
+\Rightarrow
+\text{source is Parry},
+\]
+输出 \(\mathsf{BaselineFitAsMechanismFail}\) 或 \(\mathsf{ParryFitAsParrySourceFail}\)。
+
+\begin{definition}[统计证书]\label{def:typed-address-biaxial-completion-statistical-certificate}
+称 \(\mathsf{StatisticalCertificate}\) 为统计证书，若它包含
+\[
+(m,N,N_{\rm eff},\widehat\pi_{m,N},\pi_m^{\rm ref},d,\epsilon,\delta,\mathsf{Decision},\mathsf{Seed},\mathsf{CodeHash}).
+\]
+其中 \(d\) 是距离或散度，\(\epsilon\) 是误差半径，\(\delta\) 是失败概率，\(\mathsf{Decision}\in\{\mathsf{PASS},\mathsf{NULL},\mathsf{FAIL}\}\)。
+\end{definition}
+
+\paragraph{有效样本量与滑窗依赖。}
+若窗口不重叠且样本独立，\(N_{\rm eff}=N_{\rm obs}\)。长度 \(m\) 的重叠滑窗共享 \(m-1\) 个符号，不能按独立样本计数。保守口径为
+\[
+\boxed{
+N_{\rm eff}=\left\lfloor\frac{N_{\rm obs}}{m}\right\rfloor.
+}
+\]
+直接把重叠滑窗数量当独立样本数时输出 \(\mathsf{OverlappingWindowsAsIIDFail}\) 或 \(\mathsf{SlidingWindowDependenceHiddenFail}\)。若使用 Markov、mixing 或 block bootstrap 修正，必须记录 mixing ledger 或 block length。
+
+\paragraph{TV 置信半径与判别规则。}
+有限状态空间 \(X_m\) 上可使用
+\[
+\boxed{
+\epsilon_{\rm TV}
+=
+\frac12
+\sqrt{
+\frac{2}{N_{\rm eff}}
+\left(
+|X_m|\log2+\log\frac1\delta
+\right)
+}.
+}
+\]
+以概率至少 \(1-\delta\),
+\[
+\boxed{
+D_{\rm TV}(\widehat\pi_{m,N},\pi_m^{\rm true})
+\le
+\epsilon_{\rm TV}.
+}
+\]
+若 \(|X_m|\) 大而 \(N_{\rm eff}\) 不足，使 \(\epsilon_{\rm TV}\) 接近 \(1\)，输出 \(\mathsf{SampleSizeInsufficientNull}\)。
+
+给定参考分布 \(\pi_m^{\rm ref}\)，令
+\[
+\widehat d_{\rm TV}
+=
+D_{\rm TV}(\widehat\pi_{m,N},\pi_m^{\rm ref}).
+\]
+若
+\[
+\widehat d_{\rm TV}>\epsilon_{\rm TV}+\tau_{\rm model},
+\]
+输出 \(\mathsf{ReferenceRejectedFail}\)。若
+\[
+\widehat d_{\rm TV}\le\epsilon_{\rm TV},
+\]
+只能输出 \(\mathsf{ReferenceNotRejectedNull}\)，不能输出 \(\mathsf{ReferenceTruePass}\)。若把不拒绝当作支持证据，输出 \(\mathsf{NoEvidenceAsEvidenceFail}\)。
+
+\paragraph{模型差异下界。}
+三角不等式给出
+\[
+D_{\rm TV}(\widehat\pi_{m,N},\pi_m^{\rm ref})
+\le
+D_{\rm TV}(\widehat\pi_{m,N},\pi_m^{\rm true})
++
+D_{\rm TV}(\pi_m^{\rm true},\pi_m^{\rm ref}).
+\]
+因此
+\[
+\boxed{
+D_{\rm TV}(\pi_m^{\rm true},\pi_m^{\rm ref})
+\ge
+\widehat d_{\rm TV}-\epsilon_{\rm TV}.
+}
+\]
+若右端为正，即得 finite-sample model discrepancy lower bound。对应证书为 \(\mathsf{ModelDiscrepancyLowerBoundCert}\)。
+
+\paragraph{KL 与其他散度。}
+经验 KL 写作
+\[
+D_{\rm KL}(\widehat\pi\|\pi^{\rm ref})
+=
+\sum_{u\in X_m}
+\widehat\pi(u)\log\frac{\widehat\pi(u)}{\pi^{\rm ref}(u)}.
+\]
+支撑条件为
+\[
+\widehat\pi(u)>0\Rightarrow \pi^{\rm ref}(u)>0.
+\]
+否则 \(D_{\rm KL}=\infty\)。若使用平滑
+\[
+\widehat\pi_\alpha(u)=
+\frac{n_u+\alpha}{N+\alpha|X_m|},
+\]
+必须记录 \(\alpha\)。未处理零频、零概率或平滑方式时输出 \(\mathsf{KLUndefinedSupportFail}\)。
+
+经验 KL 不是 population KL；把 \(D_{\rm KL}(\widehat\pi\|\pi^{\rm ref})\) 当作 \(D_{\rm KL}(\pi^{\rm true}\|\pi^{\rm ref})\) 时输出 \(\mathsf{EmpiricalKLAsPopulationKLFail}\)。Pinsker 只给
+\[
+D_{\rm TV}(\mu,\nu)
+\le
+\sqrt{\frac12D_{\rm KL}(\mu\|\nu)};
+\]
+反向需最小质量下界。把 TV 小当 KL 小时输出 \(\mathsf{TVAsKLFail}\)。
+
+Hellinger、\(\chi^2\)、Rényi 等散度均需 support ledger。多个散度并列但无统一支撑条件时输出 \(\mathsf{DivergenceLedgerIncoherentFail}\)。
+
+\paragraph{频率口径与 Bayes 口径。}
+频率证书输出
+\[
+\boxed{
+\mathbb P_{\pi^{\rm true}}
+\left(
+\pi_m^{\rm true}\in C_{m,N,\delta}
+\right)
+\ge
+1-\delta.
+}
+\]
+\(\pi_m^{\rm true}\) 不是随机变量，随机的是数据。若写
+\[
+\mathbb P(\pi_m^{\rm true}\in C\mid{\rm data})=0.95
+\]
+并称为频率置信，输出 \(\mathsf{FrequentistConfidenceAsPosteriorFail}\)。
+
+Bayes 证书需要先验 \(\Pi(\pi_m)\)。例如
+\[
+\pi_m\sim{\rm Dirichlet}(\alpha_u)_{u\in X_m},
+\qquad
+\pi_m\mid{\rm data}\sim{\rm Dirichlet}(\alpha_u+n_u)_{u\in X_m}.
+\]
+隐藏先验时输出 \(\mathsf{PriorHiddenFail}\)。把 credible interval 当 confidence interval 时输出 \(\mathsf{CredibleAsConfidenceFail}\)。
+
+\paragraph{源模型与集中界。}
+源模型可为 IID、Markov、stationary ergodic、mixing、rotation、sofic 或 hidden Markov。平稳遍历只给固定 \(m,u\) 上
+\[
+\widehat\pi_{m,N}(u)\to\pi_m(u)\quad a.s.
+\]
+这不是 finite-sample confidence bound。把渐近一致性当有限样本证书时输出 \(\mathsf{AsymptoticConsistencyAsFiniteCertFail}\)。若要指数界，需要 Markov/mixing/bounded-dependence ledger。只说 Markov 源却不给 transition matrix、mixing bound 或 \(N_{\rm eff}\) 修正时输出 \(\mathsf{MarkovSourceWithoutMixingLedgerFail}\)。
+
+\paragraph{跨分辨率一致性。}
+若有 restriction
+\[
+\rho_{m+1,m}:X_{m+1}\to X_m,
+\]
+理论一致性要求
+\[
+\boxed{
+(\rho_{m+1,m})_\#\pi_{m+1}=\pi_m.
+}
+\]
+经验残差为
+\[
+\boxed{
+R_{m,N}
+=
+D_{\rm TV}
+\left(
+(\rho_{m+1,m})_\#\widehat\pi_{m+1,N},
+\widehat\pi_{m,N}
+\right).
+}
+\]
+若严格一致为目标，且
+\[
+R_{m,N}>\epsilon_{m+1}+\epsilon_m+\tau,
+\]
+输出 \(\mathsf{CrossResolutionConsistencyFail}\)。
+
+\paragraph{Parry/PF、IID 与 rotation 基线。}
+Parry/PF 基线适合作为 \(\mathsf{ComplexityBaseline}\)、\(\mathsf{MaxEntropyReference}\) 或 \(\mathsf{NullModel}\)。有限样本 TV 接近只说明数据未显著偏离该基线，不能识别生成源。
+
+rotation source
+\[
+x_t=x_0+t\alpha\pmod1,\qquad s_t=\mathbf1_W(x_t)
+\]
+与 IID source
+\[
+s_t\sim{\rm Bernoulli}(p)
+\]
+可能有相似一阶直方图，但 block distribution、transition kernel、correlation spectrum 与 spectral fingerprint 不同。只比较一阶直方图就判定机制时输出 \(\mathsf{OnePointHistogramAsMechanismFail}\)。
+
+机制判别按层升级：
+\[
+\boxed{
+\mathsf{Histogram}
+\to
+\mathsf{BlockDistribution}
+\to
+\mathsf{TransitionKernel}
+\to
+\mathsf{CorrelationSpectrum}
+\to
+\mathsf{ZetaFingerprint}
+\to
+\mathsf{MomentKernel}.
+}
+\]
+低层不可辨却声称高层机制已确定时输出 \(\mathsf{UnderidentifiedMechanismFail}\)。
+
+\paragraph{多重检验、选择偏差与参数拟合。}
+同时测试多个 \(m\)、多个散度或多个模型时，需要 Bonferroni、FDR 或等价 correction ledger。选择最显著结果而不修正时输出 \(\mathsf{MultipleTestingHiddenFail}\)。
+
+若先看数据再选择 \(m\)，应预注册 \(\mathcal M_{\rm test}\) 或使用 holdout。事后选择分辨率但按单一 \(m\) 报告时输出 \(\mathsf{PostHocResolutionFail}\)。
+
+若 \(\theta\) 由同一数据估计，再用同一数据测试
+\[
+D(\widehat\pi,\pi_{\widehat\theta}),
+\]
+需 fit/test split、bootstrap 或 parametric correction。缺修正时输出 \(\mathsf{FitAndTestOnSameDataFail}\)。
+
+\paragraph{bootstrap 与 randomization。}
+Bootstrap 证书包含
+\[
+(B,\mathsf{Seed},T,q_{1-\delta},\mathsf{Method}).
+\]
+依赖数据应使用 block bootstrap；对 Markov 或滑窗数据使用 IID bootstrap 时输出 \(\mathsf{IIDBootstrapOnDependentDataFail}\)。Permutation test 需可交换性；不满足时输出 \(\mathsf{InvalidRandomizationFail}\)。
+
+\paragraph{可证伪预测、效应量与功效。}
+每个模型声明必须给出
+\[
+\boxed{
+\mathsf{PredictionSet}
+=
+\{(m,N,T,\tau,\delta,\mathsf{ExpectedOutcome})\}.
+}
+\]
+若观测违反预注册 rejection region，则输出 \(\mathsf{FalsifiedAt}(m,N,\delta)\)。没有 metric、threshold、sample protocol 与 failure rule 时输出 \(\mathsf{UnfalsifiableClaimFail}\) 或 \(\mathsf{PredictionWithoutRejectionRegionFail}\)。
+
+统计显著不等于实际重要，需给 effect threshold \(\tau_{\rm effect}>0\)。只给 p-value 时输出 \(\mathsf{PValueWithoutEffectSizeFail}\)。样本量需满足量级
+\[
+N_{\rm eff}\gtrsim
+\frac{|X_m|+\log(1/\delta)}{\tau^2}.
+\]
+功效不足却声称模型相等时输出 \(\mathsf{UnderpoweredEquivalenceClaimFail}\)。若目标是证明接近，应使用 equivalence test：
+\[
+H_0:D(\pi,\pi^{\rm ref})\ge\tau,
+\qquad
+H_1:D(\pi,\pi^{\rm ref})<\tau.
+\]
+普通不显著被解释为等价时输出 \(\mathsf{NonSignificantAsEquivalentFail}\)。
+
+\paragraph{多尺度包络与可辨识性。}
+对 \(m\in\mathcal M\)，多尺度置信包络为
+\[
+\boxed{
+\mathcal C=
+\prod_{m\in\mathcal M}
+B_{\rm TV}(\widehat\pi_{m,N},\epsilon_m)
+}
+\]
+并要求
+\[
+\mathbb P\left(
+\forall m\in\mathcal M:
+\pi_m^{\rm true}\in
+B_{\rm TV}(\widehat\pi_{m,N},\epsilon_m)
+\right)
+\ge1-\delta.
+\]
+可用 \(\delta_m=\delta/|\mathcal M|\)。
+
+模型族接受集合为
+\[
+\boxed{
+\Theta_{\rm acc}
+=
+\{\theta:
+D(\widehat\pi,\pi(\theta))
+\le
+\epsilon+\tau\}.
+}
+\]
+若 \(\Theta_{\rm acc}=\varnothing\)，模型族被拒绝。若 \(|\Theta_{\rm acc}|>1\)，机制不可唯一识别；此时声称唯一机制，输出 \(\mathsf{NonuniqueAcceptedModelFail}\)。
+
+有限 \(m\) 上可能有混淆类
+\[
+\boxed{
+[M]_m=\{M':\pi_m(M')=\pi_m(M)\}.
+}
+\]
+只在有限边缘不可区分，不能说 process equality。违者输出 \(\mathsf{FiniteMarginalAsProcessEqualityFail}\)。
+
+\paragraph{谱指纹与 moment-kernel。}
+谱指纹证书包含
+\[
+\zeta(z),\quad P(q,u),\quad \lambda(q,u),\quad
+\mathsf{PrimitiveCounts},\quad
+\mathsf{MomentKernel}.
+\]
+若谱对象来自 cover 而非 intrinsic system，必须记录 \(\mathsf{CoverIntrinsicSeparationLedger}\)。把 cover spectrum 当 intrinsic spectrum 时输出 \(\mathsf{CoverSpectrumAsIntrinsicFail}\)。
+
+碰撞矩
+\[
+M_q=\sum_{u\in X_m}\pi_m(u)^q
+\]
+的 plug-in estimator
+\[
+\widehat M_q=\sum_u\widehat\pi(u)^q
+\]
+通常有偏。需使用 U-statistic 或 bias correction；隐藏偏差时输出 \(\mathsf{PluginMomentBiasHiddenFail}\)。
+
+Rényi entropy rate
+\[
+h_q=\lim_{m\to\infty}\frac1mH_q(\pi_m)
+\]
+不能由单个 finite block entropy 直接给出。缺 finite-size scaling 时输出 \(\mathsf{FiniteBlockEntropyAsEntropyRateFail}\)。只画趋势线时输出 \(\mathsf{TrendlineAsScalingLawFail}\)。
+
+\paragraph{实验注册与复现包。}
+实验注册包为
+\[
+\boxed{
+\mathsf{ExperimentRegistry}
+=
+(\mathsf{Hypothesis},\mathsf{DataSource},\mathsf{SamplingProtocol},
+\mathsf{mRange},\mathsf{Metrics},\mathsf{Thresholds},
+\mathsf{Correction},\mathsf{DecisionRules}).
+}
+\]
+事后定义 hypothesis 时输出 \(\mathsf{PostHocHypothesisFail}\)。
+
+复现包为
+\[
+\boxed{
+\mathsf{ReproPackage}
+=
+(\mathsf{Code},\mathsf{Data},\mathsf{Config},\mathsf{Seed},
+\mathsf{Environment},\mathsf{OutputHash}).
+}
+\]
+只给图而不给数据与脚本时输出 \(\mathsf{FigureWithoutReproPackageFail}\)。输出 hash chain 为
+\[
+H_{\rm all}=H(h_1,\ldots,h_k,\mathsf{Config}).
+\]
+重跑 hash 不同则输出 \(\mathsf{ReproducibilityHashMismatchFail}\)。
+
+探索与确认数据应分离。把 exploration 当 confirmation 时输出 \(\mathsf{ExplorationAsConfirmationFail}\)。预注册失败项不得删除；只展示成功结果时输出 \(\mathsf{SelectiveReportingFail}\)。
+
+\paragraph{统计 NULL 与证据等级。}
+统计 NULL 是样本不足、功效不足或不可识别：
+\[
+N_{\rm eff}\ {\rm insufficient},\qquad
+\epsilon_{\rm TV}\ {\rm too\ large},\qquad
+|\Theta_{\rm acc}|>1.
+\]
+它不同于 semantic/protocol/gluing NULL。混用时输出 \(\mathsf{SemanticNullAsStatisticalNullFail}\)。
+
+证据等级从 Level 0 到 Level 6：可运行脚本、直方图复现、有限样本置信证书、多尺度一致性证书、机制判别证书、holdout 可证伪预测、独立数据或独立实现复现。只有低等级证据却声称高等级时输出 \(\mathsf{EvidenceLevelInflationFail}\)。
+
+\paragraph{总证书与输出。}
+称 \(\mathsf{StatisticalAuditClosureCert}\) 为统计审计总证书，若它合并 sampling protocol、effective-sample ledger、fold histogram、TV/KL/Hellinger/moment certificates、multiple-testing correction、cross-resolution residual、baseline/model ledger、identifiability ledger、prediction registry 与 reproducibility package。
+
+允许输出
+\[
+\mathsf{StatisticalAuditPass},\quad
+\mathsf{ReferenceNotRejectedNull},\quad
+\mathsf{UnderpoweredNull},\quad
+\mathsf{MechanismUnidentifiedNull},\quad
+\mathsf{ReferenceRejectedFail},\quad
+\mathsf{ReproducibilityFail}.
+\]
+PASS 表示有限样本声明在预设误差内通过；NULL 表示样本、功效或可辨识性不足；FAIL 表示预设声明被拒绝。把 NULL 写成 PASS 时输出 \(\mathsf{NoEvidenceAsEvidenceFail}\)。
+
+\begin{theorem}[有限样本统计可靠性]\label{thm:typed-address-biaxial-completion-finite-sample-statistical-soundness}
+若
+\[
+\mathsf{VerifyStatisticalAuditClosure}
+(\mathsf{StatisticalAuditClosureCert})
+=
+\mathsf{StatisticalAuditPass},
+\]
+则存在明确记录的 \(m,N,N_{\rm eff},\delta,\epsilon\) 与参考模型 \(\pi_m^{\rm ref}\)，使所有 PASS 声明均在预设距离、误差半径与失败概率下成立。因此 PASS 是可复核的有限样本统计事件，但不推出生成机制唯一正确。
+\end{theorem}
+
+\begin{proof}
+sampling ledger 给出 \(\widehat\pi_{m,N}\) 与 \(N_{\rm eff}\)。concentration ledger 给出 \(\epsilon,\delta\)。decision ledger 使用预设阈值比较经验距离与置信半径。reproducibility ledger 固定 code、data、seed、environment 与 hash。故 PASS 只在这些有限样本条件下有效。
+\end{proof}
+
+\begin{theorem}[有限边缘拟合不识别过程]\label{thm:typed-address-biaxial-completion-finite-marginal-nonidentification}
+若
+\[
+\pi_m(M_1)=\pi_m(M_2),
+\]
+则只能推出 \(M_1\sim_m M_2\)，不能推出 \(M_1=M_2\)。若要过程等价，必须对所有 \(m\) 或对生成机制给出可辨识条件。
+\end{theorem}
+
+\begin{proof}
+有限 block distribution 只约束长度 \(m\) 的边缘。不同过程可共享同一有限边缘而在更长 block、transition structure 或 spectrum 上不同。
+\end{proof}
+
+\begin{theorem}[Parry 基线不是 oracle]\label{thm:typed-address-biaxial-completion-parry-baseline-not-oracle}
+若
+\[
+D_{\rm TV}(\widehat\pi_{m,N},\pi_m^{\rm Parry})
+\le
+\epsilon_{\rm TV}+\tau,
+\]
+则只能推出数据在该有限样本与阈值内未显著偏离 Parry/PF 基线。不能推出 \(\pi_m^{\rm true}=\pi_m^{\rm Parry}\)，更不能推出生成过程为 Parry source。
+\end{theorem}
+
+\begin{proof}
+TV bound 控制经验分布与基线的有限样本距离；它既受 sampling error 影响，也不包含机制可辨识性。许多机制可在该 \(m\) 上给出同一或近似分布。
+\end{proof}
+
+\begin{theorem}[可证伪声明需要拒绝域]\label{thm:typed-address-biaxial-completion-falsifiability-rejection-region}
+若模型声明没有给出 metric、threshold、sample protocol 与 failure rule，则它不是统计可证伪声明。缺失时输出
+\[
+\boxed{\mathsf{PredictionWithoutRejectionRegionFail}.}
+\]
+\end{theorem}
+
+\begin{proof}
+没有 metric 无法定义偏差；没有 threshold 无法判定偏差是否足够大；没有 sampling protocol 无法确定数据分布；没有 failure rule 则任何结果都可事后解释。故该声明不构成可证伪统计证书。
+\end{proof}
+
+\paragraph{原稿表述的替换。}
+若原稿写“实验显示折叠分布收敛到 Parry 分布”，应改为：在预设分辨率、采样协议与 TV 置信半径下，经验折叠直方图未显著偏离 Parry/PF 基线；该结论不等价于机制识别。
+
+若原稿写“KL 证书证明旋转微态不同于 IID”，应改为：在给定平滑、支撑条件与有限样本误差账本下，经验 KL、TV 或 block-distribution 差异给出旋转源与 IID 基线的可审计区分证据。
+
+若原稿写“实验可复现”，应改为：实验输出由 \(\mathsf{ReproPackage}=(\mathsf{code},\mathsf{data},\mathsf{config},\mathsf{seed},\mathsf{environment},\mathsf{output\ hash})\) 再生成，并由 hash chain 核验。
+
+最终主句为：
+\[
+\boxed{
+\text{empirical claims require sampling protocol, effective sample size, uncertainty radius, discrepancy rule, identifiability ledger, and reproducible hashes; plots alone are not audit certificates.}
+}
+\]

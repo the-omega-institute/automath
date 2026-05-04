@@ -1,0 +1,563 @@
+\subsubsection{端点热核探针与 Jensen 盲区正交补读}\label{subsubsec:typed-address-biaxial-completion-endpoint-heat-kernel-blindspot-complement}
+有理核融合验证器把
+\[
+\log|F|
+\longrightarrow
+u_k(t)
+\longrightarrow
+c_k(W)
+\longrightarrow
+T_K(c)
+\longrightarrow
+\text{sector reject}
+\]
+编译成有限核验对象。端点压缩情形还需要另一类读出：当缺陷承载被推向边界端点时，有限半径 Jensen 采样与有限角向 majorant 可能同时变钝；此时应从 Toeplitz 矩数据中直接抽取端点原子质量。
+
+令 \(\mu\) 为单位圆上的有限正测度，矩为
+\[
+c_h=\int_{\mathbb T}\xi^{-h}\,d\mu(\xi),
+\qquad h\in\mathbb Z.
+\]
+对端点 \(\eta\in\mathbb T\)，定义 endpoint heat probe
+\[
+H_{N,\eta}(\xi)
+:=
+\left|
+\frac{1+\overline{\eta}\xi}{2}
+\right|^{2N}.
+\]
+则
+\[
+0\le H_{N,\eta}\le1,
+\qquad
+H_{N,\eta}(\eta)=1,
+\qquad
+H_{N,\eta}(\xi)\to0\quad(\xi\ne\eta).
+\]
+置
+\[
+a_N(\eta):=\int_{\mathbb T}H_{N,\eta}(\xi)\,d\mu(\xi).
+\]
+对文稿中常用端点 \(\eta=-1\)，有
+\[
+H_{N,-1}(\xi)
+=
+\left|\frac{1-\xi}{2}\right|^{2N},
+\qquad
+a_N(-1)
+=
+\int_{\mathbb T}
+\left|\frac{1-\xi}{2}\right|^{2N}
+d\mu(\xi).
+\]
+
+\paragraph{Toeplitz 二次型实现。}
+令
+\[
+T_N=(c_{j-k})_{0\le j,k\le N}.
+\]
+定义向量
+\[
+v^{(N,\eta)}_k
+:=
+\binom Nk\overline{\eta}^{\,k},
+\qquad 0\le k\le N.
+\]
+则
+\[
+\sum_{k=0}^N v^{(N,\eta)}_k\xi^k
+=
+(1+\overline{\eta}\xi)^N.
+\]
+由 Toeplitz 二次型恒等式，
+\[
+\left(v^{(N,\eta)}\right)^*T_Nv^{(N,\eta)}
+=
+\int_{\mathbb T}
+\left|(1+\overline{\eta}\xi)^N\right|^2\,d\mu(\xi).
+\]
+因此
+\[
+\boxed{
+a_N(\eta)
+=
+4^{-N}
+\left(v^{(N,\eta)}\right)^*
+T_N
+v^{(N,\eta)}.
+}
+\]
+当 \(\eta=-1\) 时，
+\[
+v^{(N,-1)}_k=(-1)^k\binom Nk,
+\]
+即二项式向量
+\[
+b^{(N)}_k:=(-1)^k\binom Nk,
+\]
+并且
+\[
+a_N(-1)=4^{-N}(b^{(N)})^*T_Nb^{(N)}.
+\]
+端点热核探针因而不需要额外积分 oracle；它只调用已经编译出的 Toeplitz 矩区间。
+
+\begin{theorem}[端点热核的单调抽取]\label{thm:typed-address-biaxial-completion-endpoint-heat-monotone-extraction}
+设 \(\mu\) 为 \(\mathbb T\) 上有限正 Borel 测度。则
+\[
+a_N(\eta)\downarrow \mu(\{\eta\})
+\qquad(N\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(\xi\in\mathbb T\)，
+\[
+0\le
+\left|
+\frac{1+\overline{\eta}\xi}{2}
+\right|
+\le1,
+\]
+且等号为 \(1\) 当且仅当 \(\xi=\eta\)。因此 \(H_{N,\eta}\) 随 \(N\) 单调下降，并逐点收敛到 \(1_{\{\eta\}}\)。对 \(1-H_{N,\eta}\) 使用普通单调收敛定理，即得
+\[
+\lim_{N\to\infty}a_N(\eta)
+=
+\int_{\mathbb T}1_{\{\eta\}}\,d\mu
+=
+\mu(\{\eta\}).
+\]
+证毕。
+\end{proof}
+
+\paragraph{谱隙误差。}
+热核截断给出上界
+\[
+\mu(\{\eta\})\le a_N(\eta).
+\]
+若要得到双边包围，需要端点外支撑的间隔信息。设 \(K\subset\mathbb T\setminus\{\eta\}\) 为闭集，并定义
+\[
+q_\eta(K)
+:=
+\sup_{\xi\in K}
+\left|
+\frac{1+\overline{\eta}\xi}{2}
+\right|<1.
+\]
+若
+\[
+\operatorname{supp}\mu\subset\{\eta\}\cup K,
+\]
+则
+\[
+0\le a_N(\eta)-\mu(\{\eta\})
+\le
+q_\eta(K)^{2N}\mu(K).
+\]
+更一般地，若允许端点邻域尾部
+\[
+R:=\mathbb T\setminus(\{\eta\}\cup K),
+\]
+则
+\[
+0\le a_N(\eta)-\mu(\{\eta\})
+\le
+q_\eta(K)^{2N}\mu(K)+\mu(R).
+\]
+当 \(\eta=-1\)、\(\xi=e^{i\theta}\)，且 \(\operatorname{dist}_{\mathbb T}(\xi,-1)\ge\sigma\) 时，
+\[
+\left|\frac{1-\xi}{2}\right|
+=
+|\sin(\theta/2)|
+\le
+\cos(\sigma/2).
+\]
+因而可取 \(q=\cos(\sigma/2)\)。在 \(\sigma\ll1\) 时，
+\[
+-2\log\cos(\sigma/2)
+=
+\frac{\sigma^2}{4}+O(\sigma^4),
+\]
+所以将误差压至 \(\varepsilon\) 的深度满足
+\[
+N\gtrsim
+\frac{4}{\sigma^2}\log\frac{\mu(K)}{\varepsilon}.
+\]
+
+\begin{definition}[端点热核二次型证书]\label{def:typed-address-biaxial-completion-endpoint-heat-kernel-cert}
+称
+\[
+\mathsf{EndpointHeatKernelCert}_{\eta,N}
+\]
+为端点热核二次型证书，若它包含
+\[
+\left(
+\eta,N,
+\{[c_h^-,c_h^+]\}_{|h|\le N},
+\mathsf{ToeplitzPSDRef},
+v^{(N,\eta)},
+[a_N^-,a_N^+],
+\mathsf{QuadraticFormLedger},
+\mathsf{RoundHash},
+\mathsf{TranscriptHash}
+\right).
+\]
+其中 \(\mathsf{ToeplitzPSDRef}\) 引用 \(\mathsf{IntervalLDLCert}\) 或等价 Toeplitz--PSD 证书。验证器以区间算术复算
+\[
+a_N(\eta)
+=
+4^{-N}
+\left(v^{(N,\eta)}\right)^*T_Nv^{(N,\eta)}
+\]
+并证明
+\[
+a_N(\eta)\in[a_N^-,a_N^+].
+\]
+\end{definition}
+
+\begin{definition}[端点谱隙证书]\label{def:typed-address-biaxial-completion-endpoint-gap-cert}
+称
+\[
+\mathsf{EndpointGapCert}_{\eta,N,\sigma}
+\]
+为端点谱隙证书，若它包含
+\[
+\left(
+\eta,N,\sigma,
+q=\cos(\sigma/2),
+[M_K^-,M_K^+],
+[M_R^-,M_R^+],
+\mathsf{SupportLedger},
+[\varepsilon_N^-,\varepsilon_N^+],
+\mathsf{RoundHash}
+\right).
+\]
+令
+\[
+K_\sigma:=\{\xi\in\mathbb T:
+\operatorname{dist}_{\mathbb T}(\xi,\eta)\ge\sigma\},
+\qquad
+R_\sigma:=\mathbb T\setminus(\{\eta\}\cup K_\sigma).
+\]
+证书给出
+\[
+\mu(K_\sigma)\le M_K^+,
+\qquad
+\mu(R_\sigma)\le M_R^+,
+\]
+并以
+\[
+\varepsilon_N^+
+:=
+q^{2N}M_K^+ + M_R^+
+\]
+包围热核尾误差。通过时，端点原子
+\[
+A_\eta:=\mu(\{\eta\})
+\]
+满足
+\[
+A_\eta
+\in
+[a_N^- - \varepsilon_N^+,\ a_N^+].
+\]
+\end{definition}
+
+端点能量门槛写作
+\[
+\mathsf{EndpointEnergyGate}_{\eta,\Theta}.
+\]
+若理论接口证明某坏事件 \(\mathcal B_\eta\) 强制
+\[
+\mathcal B_\eta
+\Longrightarrow
+\mu(\{\eta\})\ge\Theta,
+\]
+则
+\[
+a_N^+<\Theta^-
+\quad\Longrightarrow\quad
+\mathcal B_\eta\text{ 被排除}.
+\]
+若提交 \(\mathsf{EndpointGapCert}\)，则可使用双边端点区间
+\[
+A_\eta^-:=a_N^- - \varepsilon_N^+,
+\qquad
+A_\eta^+:=a_N^+.
+\]
+当
+\[
+A_\eta^->0
+\]
+时，验证器输出端点承载见证，而不是将其误判为排斥证书。
+
+\paragraph{三类盲区预算。}
+固定最大采样半径 \(\rho_{\max}<1\)。仅依赖
+\[
+\{D(\rho_j):\rho_j\le\rho_{\max}\}
+\]
+的有限 Jensen 证书，不能直接读取
+\[
+\mathsf{RadialBlindZone}(\rho_{\max})
+:=
+\{a\in\mathbb D:|a|>\rho_{\max}\}.
+\]
+在端点压缩尺度
+\[
+1-\rho\asymp\delta/\gamma^2
+\]
+下，若
+\[
+1-\rho_{\max}\gg\delta/\gamma^2,
+\]
+则该偏移仍可落入半径盲区。增加固定半径采样点数不能替代提升 \(\rho_{\max}\)。
+
+第二类预算是 dyadic 地址深度。若端点高度窗为 \(t\in(T,2T]\)，紧化坐标为 \(u_e(t)\)，并取地址
+\[
+A_b(t):=\lfloor2^bu_e(t)\rfloor,
+\]
+则地址分离通常要求
+\[
+2^b\gtrsim T^2\log T,
+\]
+即
+\[
+b\ge
+2\log_2T+\log_2\log T-O(1).
+\]
+第三类预算是热核深度。若端点外支撑与端点距离至少 \(\sigma\)，且 \(q=\cos(\sigma/2)\)，则
+\[
+q^{2N}M\le\varepsilon
+\]
+要求
+\[
+N\ge\frac{\log(M/\varepsilon)}{-2\log q}
+\sim
+\frac{4}{\sigma^2}\log\frac{M}{\varepsilon}.
+\]
+三条预算轴
+\[
+\Delta_\rho:=1-\rho_{\max},
+\qquad b,
+\qquad N
+\]
+分别约束半径显影、地址分离与端点原子提取。它们不是可加预算，而是三个独立门条件：
+\[
+\Delta_\rho\le\Delta_\rho^{\max},
+\qquad
+b\ge b_{\min},
+\qquad
+N\ge N_{\min}.
+\]
+
+\begin{definition}[盲区预算证书]\label{def:typed-address-biaxial-completion-blind-budget-cert}
+称
+\[
+\mathsf{BlindBudgetCert}
+\]
+为盲区预算证书，若它包含
+\[
+\left(
+\mathsf{RadiusBudgetCert},
+\mathsf{AddressDepthCert},
+\mathsf{EndpointHeatBudgetCert},
+\mathsf{OrthogonalityLedger},
+\mathsf{FailureWitnessPolicy},
+\mathsf{RoundHash}
+\right).
+\]
+其中
+\[
+\mathsf{RadiusBudgetCert}
+=
+(\rho_{\max},\Delta_\rho,\delta,\gamma,\mathfrak r_\rho)
+\]
+验证
+\[
+\Delta_\rho\le C_\rho\delta/\gamma^2
+\]
+或输出半径盲区见证；
+\[
+\mathsf{AddressDepthCert}
+=
+(b,T,\mathfrak r_b)
+\]
+验证
+\[
+2^b\ge C_bT^2\log T
+\]
+或输出地址碰撞见证；
+\[
+\mathsf{EndpointHeatBudgetCert}
+=
+(N,\sigma,M,\varepsilon,\mathfrak r_N)
+\]
+验证
+\[
+q^{2N}M\le\varepsilon,
+\qquad q=\cos(\sigma/2),
+\]
+或输出热核深度不足见证。
+\end{definition}
+
+\begin{definition}[端点热核融合证书]\label{def:typed-address-biaxial-completion-endpoint-heat-fusion-cert}
+端点热核融合证书记为
+\[
+\mathsf{EndpointHeatFusionCert}.
+\]
+其数据为
+\[
+\left(
+\mathsf{RationalFusionCert},
+\{\mathsf{EndpointHeatKernelCert}_{\eta_\ell,N_\ell}\}_\ell,
+\{\mathsf{EndpointGapCert}_{\eta_\ell,N_\ell,\sigma_\ell}\}_\ell,
+\{\mathsf{EndpointEnergyGate}_{\eta_\ell,\Theta_\ell}\}_\ell,
+\mathsf{BlindBudgetCert},
+\mathsf{ThreeAxisRejectLedger},
+\mathsf{TranscriptHash}
+\right).
+\]
+每个端点 ledger 记录
+\[
+a_{N,\ell}^+,\qquad
+\varepsilon_{N,\ell}^+,\qquad
+A_{\eta_\ell}^-:=a_{N,\ell}^- - \varepsilon_{N,\ell}^+,
+\qquad
+A_{\eta_\ell}^+:=a_{N,\ell}^+.
+\]
+\end{definition}
+
+验证器
+\[
+\mathsf{VerifyEndpointHeatFusion}
+\in\{\mathrm{PASS},\mathrm{FAIL},\mathrm{NULL}\}
+\]
+先调用 \(\mathsf{VerifyRationalFusion}\)。随后对每个端点 \(\eta_\ell\)，从矩区间
+\[
+[c_h^-,c_h^+],
+\qquad |h|\le N_\ell,
+\]
+构造 \(T_{N_\ell}\)，并复算
+\[
+a_{N_\ell}(\eta_\ell)
+=
+4^{-N_\ell}
+(v^{(N_\ell,\eta_\ell)})^*
+T_{N_\ell}
+v^{(N_\ell,\eta_\ell)}.
+\]
+若提交谱隙证书，则检查
+\[
+A_{\eta_\ell}
+\in
+[a_{N_\ell}^- - \varepsilon_{N_\ell}^+,\ a_{N_\ell}^+].
+\]
+然后检查能量门槛
+\[
+A_{\eta_\ell}^+<\Theta_\ell^-
+\]
+以及三轴预算
+\[
+\Delta_\rho\le\Delta_\rho^{\max},
+\qquad
+b\ge b_{\min},
+\qquad
+N\ge N_{\min}.
+\]
+全部必要坏事件被排除时输出 \(\mathrm{PASS}\)。若某预算轴不足且正交性 ledger 证明其不能被其他轴补偿，则输出带见证的 \(\mathrm{NULL}\)。若算术、PSD、gap、二次型或 transcript 不一致，则输出 \(\mathrm{FAIL}\)。
+
+\begin{theorem}[端点热核融合证书的可靠性]\label{thm:typed-address-biaxial-completion-endpoint-heat-fusion-soundness}
+若
+\[
+\mathsf{VerifyEndpointHeatFusion}
+(\mathsf{EndpointHeatFusionCert})
+=
+\mathrm{PASS},
+\]
+并且对每个待排除坏事件 \(\mathcal B_\ell\)，理论接口已经证明
+\[
+\mathcal B_\ell
+\Longrightarrow
+\mu(\{\eta_\ell\})\ge\Theta_\ell,
+\]
+则所有 \(\mathcal B_\ell\) 均不发生。
+\end{theorem}
+\begin{proof}
+Rational fusion 证书给出有限 Toeplitz 矩数据的正确区间与 PSD 证书，因此端点热核二次型可解释为某个正测度 \(\mu\) 的积分。EndpointHeatKernelCert 给出
+\[
+a_N(\eta)
+=
+\int_{\mathbb T}
+\left|
+\frac{1+\overline{\eta}\xi}{2}
+\right|^{2N}d\mu(\xi)
+\in[a_N^-,a_N^+].
+\]
+由于 \(0\le H_{N,\eta}\le1\) 且 \(H_{N,\eta}(\eta)=1\)，有
+\[
+\mu(\{\eta\})\le a_N(\eta)\le a_N^+.
+\]
+若提交谱隙证书，则还得到相应双边区间。能量门槛给出
+\[
+A_\eta^+<\Theta^-,
+\]
+故
+\[
+\mu(\{\eta\})<\Theta.
+\]
+若 \(\mathcal B_\ell\) 发生，则接口假设给出
+\[
+\mu(\{\eta_\ell\})\ge\Theta_\ell,
+\]
+矛盾。证毕。
+\end{proof}
+
+sector reject 使用 \(Q_A\ge1_A\) 得到
+\[
+\mu(A)\le\int Q_A\,d\mu,
+\]
+适合排除角向扇区内的有限质量。端点热核探针使用
+\[
+H_{N,\eta}\downarrow1_{\{\eta\}}
+\]
+读取
+\[
+\mu(\{\eta\})=\lim_{N\to\infty}a_N(\eta).
+\]
+二者分别是空间覆盖型与端点极限型读出。组合结构为
+\[
+\mathsf{RationalFusionVerifier}
++
+\mathsf{EndpointHeatKernelCert}
++
+\mathsf{EndpointGapCert}
++
+\mathsf{BlindBudgetCert}
+=
+\mathsf{EndpointHeatFusionVerifier}.
+\]
+
+失败对象写为
+\[
+\mathsf{EndpointHeatFail}
+:=
+(\mathrm{FailType},\eta,N,\Omega,\mathsf{Witness}).
+\]
+类型包括
+\[
+\mathrm{ToeplitzInputFail},\quad
+\mathrm{QuadraticFormFail},\quad
+\mathrm{EndpointMonotonicityFail},\quad
+\mathrm{EndpointGapFail},\quad
+\mathrm{HeatDepthFail},
+\]
+\[
+\mathrm{EndpointMarginFail},\quad
+\mathrm{RadiusBlindFail},\quad
+\mathrm{AddressCollisionFail},\quad
+\mathrm{BudgetOrthogonalityViolation},\quad
+\mathrm{EndpointLoadDetected}.
+\]
+其中 \(\mathrm{EndpointLoadDetected}\) 是检测输出：若
+\[
+A_\eta^->0,
+\]
+验证器应报告端点承载非零，而不将其归类为通过或失败。

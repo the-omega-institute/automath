@@ -1,0 +1,238 @@
+\subsubsection{外多项式上包络与 Jensen 缺陷证书}\label{subsubsec:typed-address-biaxial-completion-outer-majorant-jensen-certificate}
+重整化 Jensen 缺陷把零点排斥条件压成
+\[
+J_a(r)<\log\frac rR
+\quad\Longrightarrow\quad
+\Phi_a(w)\ne0\qquad(|w|\le R).
+\]
+本段把 \(J_a(r)\) 的上界进一步编译为有限外多项式证书。固定 \(0<R<r<1\)，并写
+\[
+f_r(z):=\Phi_a(rz).
+\]
+则
+\[
+J_a(r)=
+\frac1{2\pi}\int_0^{2\pi}\log|f_r(e^{i\theta})|\,\dd\theta
+-\log|\Phi_a(0)|.
+\]
+
+\begin{definition}[外多项式上包络证书]\label{def:typed-address-biaxial-completion-outer-majorant-certificate}
+称一份有限数据
+\[
+\mathcal C_{\mathrm{out}}(a;r,R)
+:=
+\bigl(q,\mathsf{Out},\mathsf{Maj},\mathsf{Base}\bigr)
+\]
+为外多项式上包络证书，若 \(q(z)=q_0+\cdots+q_Nz^N\) 为显式多项式，且以下条件均带有严格可核验裕度：
+\begin{enumerate}
+  \item \(\mathsf{Out}\) 证明 \(q(z)\ne0\) 对所有 \(|z|<1\) 成立；
+  \item \(\mathsf{Maj}\) 证明
+  \[
+  |q(e^{i\theta})|^2-|f_r(e^{i\theta})|^2\ge0
+  \qquad(0\le\theta<2\pi);
+  \]
+  \item \(\mathsf{Base}\) 给出 \(A_0^->0\)，使
+  \[
+  A_0^-\le |\Phi_a(0)|.
+  \]
+\end{enumerate}
+若进一步有
+\[
+\log|q(0)|-\log A_0^-<\log\frac rR,
+\]
+则称该证书通过。
+\end{definition}
+
+\begin{theorem}[外多项式上包络的零点排斥语义]\label{thm:typed-address-biaxial-completion-outer-majorant-repulsion}
+若定义 \ref{def:typed-address-biaxial-completion-outer-majorant-certificate} 中的证书通过，则
+\[
+\Phi_a(w)\ne0\qquad(|w|\le R).
+\]
+\end{theorem}
+\begin{proof}
+由上包络条件，
+\[
+\log|f_r(e^{i\theta})|
+\le
+\log|q(e^{i\theta})|
+\]
+在圆周上成立；若两侧同时为零点处的 \(-\infty\)，则按可积对数的极限意义理解。积分得
+\[
+\frac1{2\pi}\int_0^{2\pi}\log|f_r(e^{i\theta})|\,\dd\theta
+\le
+\frac1{2\pi}\int_0^{2\pi}\log|q(e^{i\theta})|\,\dd\theta.
+\]
+由于 \(q\) 在单位圆盘内无零点，Jensen 公式给出
+\[
+\frac1{2\pi}\int_0^{2\pi}\log|q(e^{i\theta})|\,\dd\theta
+=
+\log|q(0)|.
+\]
+因此
+\[
+J_a(r)\le \log|q(0)|-\log|\Phi_a(0)|
+\le
+\log|q(0)|-\log A_0^-.
+\]
+若右端小于 \(\log(r/R)\)，则由命题 \ref{prop:typed-address-biaxial-completion-renormalized-jensen-repulsion-certificate} 得到 \(|w|\le R\) 内的零点排斥。证毕。
+\end{proof}
+
+该证书只要求从上方覆盖边界模长，不要求给出 \(\min_{|z|=1}|f_r(z)|\) 的正下界。边界附近的近零点会降低 \(|f_r|\)，不会破坏上包络验证；真正进入证书合成的问题，是以尽可能小的 \(|q(0)|\) 构造外多项式上包络。
+
+\begin{proposition}[上包络条件的 Toeplitz--PSD 读法]\label{prop:typed-address-biaxial-completion-outer-majorant-toeplitz-psd}
+令
+\[
+Q(e^{i\theta}):=|q(e^{i\theta})|^2.
+\]
+则 \(Q\) 是非负三角多项式，且可写为
+\[
+Q(e^{i\theta})
+=
+v(e^{i\theta})^*Gv(e^{i\theta}),
+\qquad
+G=bb^*\succeq0,
+\]
+其中
+\[
+v(e^{i\theta})=(1,e^{i\theta},\ldots,e^{iN\theta})^T,
+\qquad
+b=(q_0,\ldots,q_N)^T.
+\]
+更一般地，任意有限非负三角上包络都可由 Fej\'er--Riesz 分解转写为某个外多项式平方模。因而定义 \ref{def:typed-address-biaxial-completion-outer-majorant-certificate} 的 \(\mathsf{Maj}\) 项可作为 Toeplitz--PSD 上包络约束，而 \(\mathsf{Out}\) 项可由 Schur--Cohn/Jury 型有限矩阵正定证书给出。
+\end{proposition}
+\begin{proof}
+秩一表示由
+\[
+|q(e^{i\theta})|^2
+=
+\left|\sum_{j=0}^{N}q_je^{ij\theta}\right|^2
+\]
+直接展开得到。一般非负三角多项式的平方模分解是 Fej\'er--Riesz 定理。多项式在单位圆盘内无零点的有限判据由 Schur--Cohn/Jury 判据给出，形式上表现为由系数构造的 Hermitian 矩阵具有严格正定裕度。证毕。
+\end{proof}
+
+\begin{definition}[连续外函数最优值]\label{def:typed-address-biaxial-completion-outer-majorant-optimum}
+在固定 \(r\) 下，令 \(\mathcal O_r\) 为所有外函数 \(Q\) 的集合，其满足
+\[
+|Q(e^{i\theta})|\ge |f_r(e^{i\theta})|
+\quad\text{a.e. on }\TT.
+\]
+定义
+\[
+\mathcal M_a(r)
+:=
+\inf_{Q\in\mathcal O_r}
+\left(\log|Q(0)|-\log|\Phi_a(0)|\right).
+\]
+\end{definition}
+
+\begin{proposition}[外函数最优值等于 Jensen 缺陷]\label{prop:typed-address-biaxial-completion-outer-optimum-equals-jensen}
+若 \(f_r\) 在 \(|z|=1\) 上无零点，则
+\[
+\mathcal M_a(r)=J_a(r).
+\]
+\end{proposition}
+\begin{proof}
+因 \(f_r\) 在闭圆盘邻域内解析且边界无零点，单位圆盘内零点有限。作内外分解
+\[
+f_r(z)=B_r(z)O_r(z),
+\]
+其中 \(B_r\) 为有限 Blaschke 乘积，\(O_r\) 为外函数。圆周上 \(|B_r|=1\)，故
+\[
+|O_r(e^{i\theta})|=|f_r(e^{i\theta})|.
+\]
+并且外函数满足
+\[
+\log|O_r(0)|
+=
+\frac1{2\pi}\int_0^{2\pi}\log|f_r(e^{i\theta})|\,\dd\theta.
+\]
+于是 \(O_r\) 给出 \(\mathcal M_a(r)\le J_a(r)\)。反过来，任意 \(Q\in\mathcal O_r\) 满足
+\[
+\log|Q(0)|
+=
+\frac1{2\pi}\int_0^{2\pi}\log|Q(e^{i\theta})|\,\dd\theta
+\ge
+\frac1{2\pi}\int_0^{2\pi}\log|f_r(e^{i\theta})|\,\dd\theta,
+\]
+从而 \(\log|Q(0)|-\log|\Phi_a(0)|\ge J_a(r)\)。取下确界即得等号。证毕。
+\end{proof}
+
+\begin{theorem}[严格间隙下的有限外多项式证书存在性]\label{thm:typed-address-biaxial-completion-strict-gap-finite-outer-certificate}
+设 \(0<R<r<1\)，且 \(f_r\) 在 \(|z|=1\) 上无零点。若
+\[
+J_a(r)<\log\frac rR,
+\]
+则存在某个外多项式上包络证书 \(\mathcal C_{\mathrm{out}}(a;r,R)\) 通过。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:typed-address-biaxial-completion-outer-optimum-equals-jensen}，外因子 \(O_r\) 的中心值实现 \(J_a(r)\)。取 \(\epsilon>0\)，使
+\[
+J_a(r)+\epsilon<\log\frac rR.
+\]
+由于 \(f_r\) 在圆周上无零点，\(O_r\) 在闭圆盘邻域内解析且无零点，并有
+\[
+m:=\min_{|z|=1}|O_r(z)|>0.
+\]
+取 \(O_r\) 的 Taylor 多项式 \(p_N\) 使其在 \(|z|\le1\) 上一致逼近 \(O_r\)。当逼近误差足够小时，Rouch\'e 定理保证 \(p_N\) 在单位圆盘内无零点。再取常数 \(1+\delta>1\)，并令
+\[
+q_N:=(1+\delta)p_N.
+\]
+通过先取 \(\delta\) 足够小、再取 \(N\) 足够大，可同时保证
+\[
+|q_N(e^{i\theta})|\ge |O_r(e^{i\theta})|=|f_r(e^{i\theta})|
+\]
+以及
+\[
+\log|q_N(0)|-\log|\Phi_a(0)|
+<
+J_a(r)+\epsilon.
+\]
+于是阈值不等式成立，证书通过。证毕。
+\end{proof}
+
+\begin{corollary}[dyadic 外多项式证书形式]\label{cor:typed-address-biaxial-completion-dyadic-outer-majorant-certificate}
+固定 \(0<\eta<1\)，令
+\[
+R_q:=1-2^{-q},
+\qquad
+r_q:=1-\eta2^{-q}.
+\]
+若存在多项式 \(q_q\) 满足
+\[
+|q_q(e^{i\theta})|\ge|\Phi_a(r_qe^{i\theta})|
+\quad(0\le\theta<2\pi),
+\]
+\[
+q_q(z)\ne0\qquad(|z|<1),
+\]
+以及
+\[
+\log|q_q(0)|-\log|\Phi_a(0)|
+<
+\log\frac{1-\eta2^{-q}}{1-2^{-q}},
+\]
+则
+\[
+\Phi_a(w)\ne0\qquad(|w|\le1-2^{-q}).
+\]
+此外，RH 等价于：对所有充分大的 \(q\)，存在通过的第 \(q\) 层外多项式上包络证书。
+\end{corollary}
+\begin{proof}
+第一句是定理 \ref{thm:typed-address-biaxial-completion-outer-majorant-repulsion} 的 dyadic 代入。若这些证书对所有充分大 \(q\) 通过，则闭盘 \(|w|\le1-2^{-q}\) 共终穷尽 \(\DD\)，故 \(\Phi_a\) 在单位圆盘内无零点，RH 成立。反之，若 RH 成立，则 \(J_a(r_q)=0\)，且 \(\Phi_a\) 在 \(|z|=r_q\) 上无零点，而阈值 \(\log(r_q/R_q)\) 严格为正；由定理 \ref{thm:typed-address-biaxial-completion-strict-gap-finite-outer-certificate} 得到通过证书。证毕。
+\end{proof}
+
+确定性离线验证器因此只需处理有限数据：基点区间下界 \(A_0^-\)、Schur--Cohn/Jury 外性裕度、圆周分割上的区间算术上包络验证，以及中心值阈值
+\[
+\log|q(0)|-\log A_0^-<\log\frac rR.
+\]
+通过时输出子盘零点禁入；不通过只表示当前外多项式或区间精度不足，而不构成反例。该接口把
+\[
+\text{外多项式上包络}
+\Longrightarrow
+J_a(r)\text{ 上界}
+\Longrightarrow
+\text{排斥半径}
+\Longrightarrow
+\text{零点禁入}
+\]
+压成有限 Toeplitz--PSD、Schur--Cohn 与区间算术共同核验的证书对象。
