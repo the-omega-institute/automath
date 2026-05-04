@@ -4,4 +4,117 @@ barcode、interleaving 或构造层化语言来解释 POM 时，写回必须先�
 合法参数、转移映射与可见残差对象列成有限账本，然后才允许谈论稳定残差。
 因此，本段不复用强平稳时刻、分离距离或特定 Markov 核的局部记号；那些对象
 属于概率谱闭包，而非持久模的默认承载结构。
+\begin{definition}[有限合法 POM 持久账本]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-functorial_persistence_construction-finite-legal-pom-persistence-ledger}
+固定交换环 \(R\)。一个有限合法 POM 持久账本是由数据
+\[
+   \mathfrak L=(\Lambda,\mathcal C_\Omega,X,\Phi)
+\]
+组成的四元组，满足如下条件：\((\Lambda,\leq)\) 是有限偏序集，称为合法参数；\(\mathcal C_\Omega\) 是由有限 POM 承载对象及其允许的包含、覆盖精化、fold-aware restriction、筛选协议转移或证书转移构成的范畴；\(X:\Lambda\to\mathcal C_\Omega\) 是过滤函子，记
+\[
+   X_\lambda=X(\lambda),\qquad
+   \iota_{\lambda\mu}=X(\lambda\leq \mu):X_\lambda\longrightarrow X_\mu ;
+\]
+\(\Phi:\mathcal C_\Omega\to R\text{-}\mathsf{Mod}\) 是可读出函子。若实际使用的读出原本反变，例如固定次数的上同调、覆盖截面限制或局部障碍账本的限制映射，则将相应承载范畴替换为其反范畴，并把所得方向作为合法参数的一部分；在账本内只使用已经定向后的函子 \(\Phi\)。
 
+由此得到的 POM 持久模记为
+\[
+   M_{\mathfrak L}:\Lambda\longrightarrow R\text{-}\mathsf{Mod},\qquad
+   M_\lambda=\Phi(X_\lambda),\qquad
+   T_{\lambda\mu}=\Phi(\iota_{\lambda\mu}) .
+\]
+对 \(\alpha\leq\beta\)，终端幸存子模定义为
+\[
+   \operatorname{Surv}_{\alpha,\beta}(\mathfrak L)
+   :=\operatorname{im}T_{\alpha\beta}\subseteq M_\beta,
+\]
+即由所有 \(T_{\alpha\beta}(m)\), \(m\in M_\alpha\), 生成的 \(R\)-子模。一个跨窗口 \([\alpha,\beta]\) 的 POM 稳定残差只能指 \(\operatorname{Surv}_{\alpha,\beta}(\mathfrak L)\) 中的元素，或指满足 \(T_{\alpha\lambda}(m)\neq 0\) 对每个 \(\alpha\leq\lambda\leq\beta\) 成立的祖先元素 \(m\in M_\alpha\)。
+\end{definition}
+\begin{theorem}[合法过滤的函子化、精化自然性与转移擦除坏骨架]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-functorial_persistence_construction-legal-filtration-refinement-and-transition-erasure}
+设 \(\mathfrak L=(\Lambda,\mathcal C_\Omega,X,\Phi)\) 是有限合法 POM 持久账本。则下列断言成立。
+
+\(1\) 数据 \(M_\lambda=\Phi(X_\lambda)\) 与 \(T_{\lambda\mu}=\Phi(\iota_{\lambda\mu})\) 构成从合法参数 \(\Lambda\) 到 \(R\text{-}\mathsf{Mod}\) 的持久模。特别地，任何由同调、上同调、有限覆盖截面或障碍账本给出的 POM 可读出，只要已按定义定向为函子 \(\Phi\)，都会把合法过滤转化为持久模。
+
+\(2\) 设 \(\mathfrak L'=(\Lambda',\mathcal C_\Omega,X',\Phi)\) 是同一读出函子下的另一账本。若存在保序映射 \(\rho:\Lambda'\to\Lambda\) 以及承载态射
+\[
+   \eta_\nu:X_{\rho(\nu)}\longrightarrow X'_\nu\qquad (\nu\in\Lambda')
+\]
+满足对任意 \(\nu\leq\nu'\) 有
+\[
+   \eta_{\nu'}\circ \iota_{\rho(\nu),\rho(\nu')}
+   =\iota'_{\nu\nu'}\circ \eta_\nu,
+\]
+则 \(A_\nu:=\Phi(\eta_\nu)\) 给出自然变换
+\[
+   A:M_{\mathfrak L}\circ\rho\Longrightarrow M_{\mathfrak L'} .
+\]
+并且对任意 \(\nu\leq\nu'\)，有
+\[
+   A_{\nu'}\bigl(\operatorname{Surv}_{\rho(\nu),\rho(\nu')}(\mathfrak L)\bigr)
+   \subseteq \operatorname{Surv}_{\nu,\nu'}(\mathfrak L').
+\]
+若这些 \(A_\nu\) 均为同构且其逆族也满足同样的转移相容式，则上述包含为等号，有限窗口内的 birth--death 幸存判定被保持。
+
+\(3\) 仅保留逐层可见模而擦除转移映射，不能定义对所有合法 POM 账本相容的稳定残差谓词。更精确地，设 \(\mathfrak L\) 与 \(\mathfrak N\) 是同一有限偏序上的两个账本，并给定逐层同构 \(u_\lambda:M_\lambda\to N_\lambda\)。对固定窗口 \(\alpha\leq\beta\)，\(u_\beta\) 保持终端稳定残差，当且仅当
+\[
+   u_\beta\bigl(\operatorname{im}T^M_{\alpha\beta}\bigr)
+   =\operatorname{im}T^N_{\alpha\beta} .
+\]
+若该等式失败，则失败必然落入下列两类有限坏骨架之一：或者存在 \(x\in M_\alpha\) 使
+\[
+   u_\beta T^M_{\alpha\beta}x\notin \operatorname{im}T^N_{\alpha\beta},
+\]
+即旧账本中的 transported residue 在新账本中成为伪幸存者；或者存在 \(y\in N_\alpha\) 使
+\[
+   T^N_{\alpha\beta}y\notin u_\beta(\operatorname{im}T^M_{\alpha\beta}),
+\]
+即新账本中的合法幸存者被逐层擦除规则遗漏。两类坏骨架已经出现在二层有限障碍账本中：在任意域 \(\Bbbk\) 上取 \(0<1\)、逐层模均为 \(\Bbbk\)，一账本的转移为 \(\operatorname{id}_{\Bbbk}\)，另一账本的转移为 \(0\)，则二者逐层完全相同而
+\[
+   \operatorname{Surv}_{0,1}=\Bbbk\quad\text{与}\quad \operatorname{Surv}_{0,1}=0
+\]
+不同。
+\end{theorem}
+\begin{proof}
+对 \(\lambda\leq\mu\leq\gamma\)，过滤函子给出
+\[
+   \iota_{\mu\gamma}\circ\iota_{\lambda\mu}=\iota_{\lambda\gamma},
+   \qquad \iota_{\lambda\lambda}=\operatorname{id}_{X_\lambda} .
+\]
+施加 \(\Phi\) 后得到
+\[
+   T_{\mu\gamma}T_{\lambda\mu}
+   =\Phi(\iota_{\mu\gamma})\Phi(\iota_{\lambda\mu})
+   =\Phi(\iota_{\lambda\gamma})
+   =T_{\lambda\gamma},
+   \qquad T_{\lambda\lambda}=\operatorname{id}_{M_\lambda} .
+\]
+这正是 \(\Lambda\)-持久模的转移律。由于同调、上同调、截面与障碍账本在本定义中只在已定向为函子 \(\Phi\) 后使用，同一计算同时覆盖这些 POM 可读出。
+
+设 \(\nu\leq\nu'\)。由精化相容式
+\[
+   \eta_{\nu'}\circ \iota_{\rho(\nu),\rho(\nu')}
+   =\iota'_{\nu\nu'}\circ\eta_\nu
+\]
+施加 \(\Phi\)，得
+\[
+   A_{\nu'}T_{\rho(\nu),\rho(\nu')}
+   =T'_{\nu\nu'}A_\nu .
+\]
+这正是自然变换方块的交换性。若
+\(z\in\operatorname{Surv}_{\rho(\nu),\rho(\nu')}(\mathfrak L)\)，则存在 \(m\in M_{\rho(\nu)}\) 使
+\(z=T_{\rho(\nu),\rho(\nu')}m\)。于是
+\[
+   A_{\nu'}z
+   =A_{\nu'}T_{\rho(\nu),\rho(\nu')}m
+   =T'_{\nu\nu'}A_\nu m
+   \in\operatorname{Surv}_{\nu,\nu'}(\mathfrak L') .
+\]
+若 \(A_\nu\) 及其逆族均满足同样相容式，则对逆精化重复上述论证，得到反向包含，故幸存子模相等；非零祖先在有限窗口内的 birth--death 判定也随这些同构逐层保持。
+
+最后证明转移擦除断言。对固定 \(\alpha\leq\beta\)，终端稳定残差的定义就是终端模中的子模 \(\operatorname{im}T_{\alpha\beta}\)。因此逐层同构 \(u_\beta\) 保持该谓词，当且仅当它把第一个子模精确送到第二个子模。若等式失败，则或者
+\(u_\beta(\operatorname{im}T^M_{\alpha\beta})\not\subseteq\operatorname{im}T^N_{\alpha\beta}\)，此时可取
+\(u_\beta T^M_{\alpha\beta}x\) 为相应差异元素；或者
+\(\operatorname{im}T^N_{\alpha\beta}\not\subseteq u_\beta(\operatorname{im}T^M_{\alpha\beta})\)，此时取
+\(T^N_{\alpha\beta}y\) 为相应差异元素。二者穷尽了两个子模不相等的所有可能。
+
+二层例子由有限障碍账本的过滤到模转换给出：令承载范畴为有限维 \(\Bbbk\)-线性障碍账本及线性转移，令 \(\Phi\) 为恒等读出。取两个过滤均在两层上等于 \(\Bbbk\)，但一者的唯一非平凡转移为 \(\operatorname{id}_{\Bbbk}\)，另一者为零映射。两账本的逐层可见对象同构，然而前者从 \(0\) 到 \(1\) 的终端幸存子模为 \(\Bbbk\)，后者为 \(0\)。故任何只依赖逐层对象、而不依赖合法参数转移映射的规则，不能同时等于二者的稳定残差谓词。
+\end{proof}

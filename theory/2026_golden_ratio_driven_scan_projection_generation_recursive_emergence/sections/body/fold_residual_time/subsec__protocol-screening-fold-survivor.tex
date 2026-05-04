@@ -222,6 +222,69 @@ transition-growth 账本 \(\mathcal G=(V,E)\) 与路径数 \(P_{\mathcal G}(n)\)
   \(P_{\mathcal G}(n)\)、Frobenius reduction 与上述 pruning 规则后才是规范对象；若更换读出或修剪规则，非核心尾部与桥接边的可见性可能改变。
 \end{enumerate}
 \end{theorem}
+\begin{definition}[合法折深持久账本]\label{def:distill-persistent-fold-depth-ledger}
+固定域 \(\mathbb K\) 与整数 \(J\ge 0\)。一条\textbf{合法折深持久账本}由有限维 \(\mathbb K\)-向量空间
+\[
+V_0,V_1,\ldots,V_J
+\]
+和线性转移映射
+\[
+T_{j+1,j}:V_j\longrightarrow V_{j+1}\qquad(0\le j<J)
+\]
+组成，并令 \(T_{v,u}:=T_{v,v-1}\cdots T_{u+1,u}\)（\(u<v\)）及 \(T_{u,u}:=\mathrm{Id}\)。此外，每层配有有限 carrier 集 \(C_j\)、满射
+\[
+q_j:\mathbb K^{C_j}\twoheadrightarrow V_j
+\]
+以及线性提升
+\[
+\widehat T_{j+1,j}:\mathbb K^{C_j}\longrightarrow \mathbb K^{C_{j+1}}
+\]
+使得
+\[
+q_{j+1}\widehat T_{j+1,j}=T_{j+1,j}q_j .
+\]
+对 \(c\in C_u\)，\(\widehat T_{v,u}e_c\) 的非零支撑称为 \(c\) 在深度 \(v\) 的后代支撑。若 \(x\in V_b\setminus\{0\}\)，称 \(x\) 在 \(b\) 出生，若 \(b=0\) 或 \(x\notin \operatorname{im}T_{b,b-1}\)。其死亡深度定义为
+\[
+d(x):=\min\{d>b:T_{d,b}x=0\},
+\]
+若集合为空则记 \(d(x):=J+1\)，并称该类在终端被删失。
+\end{definition}
+
+\begin{theorem}[折深持久账本的墙映射归因]\label{thm:distill-persistent-fold-depth-ledger-attribution}
+设 \((V_j,T_{j+1,j},C_j,q_j,\widehat T_{j+1,j})\) 为定义 \ref{def:distill-persistent-fold-depth-ledger} 的合法折深持久账本。对每个墙 \(j\to j+1\)，存在正合列
+\[
+0\longrightarrow \ker T_{j+1,j}\longrightarrow V_j
+\xrightarrow{\ T_{j+1,j}\ } V_{j+1}
+\longrightarrow \operatorname{coker}T_{j+1,j}\longrightarrow 0 .
+\]
+因此该墙上的事件具有如下完全归因：
+\begin{enumerate}
+  \item \(x\in V_j\) 在该墙死亡当且仅当 \(x\in\ker T_{j+1,j}\)。若 \(x,y\in V_j\) 满足 \(x\ne y\) 且 \(T_{j+1,j}x=T_{j+1,j}y\)，则 \(x-y\in\ker T_{j+1,j}\) 是二者在墙后合并的核见证。
+  \item \(z\in V_{j+1}\) 不能由上一深度传来当且仅当其像 \([z]\in\operatorname{coker}T_{j+1,j}\) 非零；该余核类是 \(z\) 在墙后出生的见证。
+  \item 若 \(x=q_j(\xi)\) 且 \(T_{j+1,j}x\ne0\)，则 \(\widehat T_{j+1,j}\xi\) 的支撑给出 \(T_{j+1,j}x\) 的合法后代标签。两个前代标签在墙后不可区分，当且仅当其差在 \(q_j^{-1}(\ker T_{j+1,j})\) 中；故祖先归因的失真由核见证而非未标记异常承担。
+\end{enumerate}
+进一步，作为一参数有限维持久模，存在有限区间族 \(\mathcal I\) 及分解
+\[
+V_j\cong\bigoplus_{I\in\mathcal I,\ j\in I}\mathbb K e_I
+\]
+使每个 \(T_{j+1,j}\) 在同一区间内把 \(e_I\) 送到 \(e_I\)，在区间右端把 \(e_I\) 送到 \(0\)。于是任一折深幸存者均有确定的出生深度、死亡深度或终端删失；只有长度超过给定折深误差预算的区间，才可作为预算以上的稳定幸存者候选。
+\end{theorem}
+\begin{proof}
+前述正合列是线性映射 \(T_{j+1,j}\) 的核、像与余核正合列。于是 \(T_{j+1,j}x=0\) 等价于 \(x\in\ker T_{j+1,j}\)，而 \(T_{j+1,j}x=T_{j+1,j}y\) 等价于 \(x-y\in\ker T_{j+1,j}\)。同理，\(z\) 属于 \(\operatorname{im}T_{j+1,j}\) 当且仅当其余核类为零，所以非零余核类正是墙后出生的有限见证。
+
+提升方块的交换性给出
+\[
+q_{j+1}(\widehat T_{j+1,j}\xi)=T_{j+1,j}q_j(\xi),
+\]
+故 carrier 支撑在通过墙时确实运输到同一折深类。若两个前代标签 \(\xi,\xi'\) 给出相同后代，则
+\[
+T_{j+1,j}q_j(\xi-\xi')=q_{j+1}\widehat T_{j+1,j}(\xi-\xi')=0,
+\]
+即 \(q_j(\xi-\xi')\in\ker T_{j+1,j}\)；反向蕴含相同。
+
+最后的区间分解是有限线性链 \(V_0\to\cdots\to V_J\) 的标准一参数条码分解。为自洽，可按总维数归纳：取最早非零层中的一个不来自前一层的向量，沿转移映射推进直到首次为零或终端；这些非零像张成一个区间子模。逐层取补空间后得到商持久模，并对商重复。有限维性保证过程终止。所得区间的左右端正是上述余核出生与核死亡墙，预算判定随区间长度立即得到。
+\end{proof}
+
 \begin{proof}
 若 \(\lambda=0\)，命题 \ref{prop:distill-stallings-fold-survivor-transition-growth-ledger} 已说明
 \(\mathcal G\) 无有向圈，所有足够长路径消失；空核心保留的正是有限终止分类。

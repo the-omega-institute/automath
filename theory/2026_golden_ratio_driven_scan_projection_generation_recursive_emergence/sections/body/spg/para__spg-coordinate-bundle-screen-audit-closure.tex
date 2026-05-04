@@ -228,5 +228,46 @@ k\log(E+1)\ge 2^{m(n-s)}\log p.
 
 \noindent
 因此，坐标遗漏的代价在 dyadic 屏幕模型中并非仅呈数量级增长，而是严格满足每遗漏一个坐标方向便乘上一个 \(2^m\) 因子的闭式律；而当全部内部坐标方向均已可见时，唯一剩余缺口只是与外部参考相连的整体常值模，并且任一外边界面都足以将其消去。换言之，在定理 \ref{thm:spg-screen-rank-matroid-supermodularity} 所给出的行拟阵语言中，\(S_{[n]}^{\mathrm{int}}\) 恰处于亏秩 \(1\) 的位置，而任一外边界面都构成其达到精确屏幕的单步补足。
+\begin{proposition}[坐标束闭合缺口的区间分解]\label{prop:distill-spg-coordinate-bundle-defect-intervals}
+沿用定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 的记号，并假设 \(J\subseteq\{1,\ldots,n\}\) 非空，\(s=|J|\)。令 \(\mathcal C(J)\) 为屏幕图 \(\Gamma_{S_J^{\mathrm{int}}}\) 的内部连通分量集合；于是
+\[
+\card\mathcal C(J)=2^{m(n-s)}.
+\]
+取一条外边界审计链
+\[
+B_0\subseteq B_1\subseteq\cdots\subseteq B_T
+\]
+其中每个 \(B_t\) 为外边界面族。对 \(C\in\mathcal C(J)\)，定义
+\[
+d(C):=\min\{t: B_t\text{ 中某张外边界面与 }C\text{ 相接}\},
+\]
+若集合为空则令 \(d(C):=T+1\)。令
+\[
+D_t:=\bigoplus_{C\in\mathcal C(J),\ d(C)>t}\mathbb K e_C
+\]
+并定义转移 \(\tau_{t+1,t}:D_t\to D_{t+1}\) 为
+\[
+\tau_{t+1,t}(e_C)=
+\begin{cases}
+e_C,&d(C)>t+1,\\
+0,&d(C)=t+1.
+\end{cases}
+\]
+则 \((D_t,\tau_{t+1,t})_{0\le t\le T}\) 是一参数有限维持久模，且分解为
+\[
+D_\bullet\cong\bigoplus_{C\in\mathcal C(J)}\mathbb K_{[0,d(C))}.
+\]
+并且对每个 \(t\)，扩张屏幕 \(S_J^{\mathrm{int}}\cup B_t\) 的剩余最小外边界闭合条数恰为
+\[
+\dim_{\mathbb K}D_t=\#\{C\in\mathcal C(J):d(C)>t\}.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form}，内部坐标束屏幕的内部连通分量正由补坐标标记，数目为 \(2^{m(n-s)}\)。因为 \(J\ne\varnothing\)，推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure} 表明每个内部连通分量均可由某张外边界面接到外部顶点 \(\infty\)，且一张外边界面只接入一个内部连通分量。
+
+映射 \(\tau_{t+1,t}\) 显然满足 \(\tau_{u,t}=\tau_{u,u-1}\cdots\tau_{t+1,t}\)，因为每个基向量 \(e_C\) 只在首次接触尺度 \(d(C)\) 被杀死一次，之后不再出现。因此 \((D_t,\tau_{t+1,t})\) 是合法的一参数持久模。对固定 \(C\)，向量 \(e_C\) 在 \(t<d(C)\) 时存在，在 \(t\ge d(C)\) 时为零，故它贡献区间模 \(\mathbb K_{[0,d(C))}\)。对所有 \(C\) 取直和得到所示条码分解。
+
+在尺度 \(t\)，已经接触 \(B_t\) 的内部连通分量与 \(\infty\) 同属一个连通块；未接触者仍各自与 \(\infty\) 分离。由推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure}，要使屏幕精确，必须且只须给每个未接触分量再选一张外边界面。因此剩余闭合条数等于未死亡区间的数目，即 \(\dim_{\mathbb K}D_t\)。
+\end{proof}
 
 \endinput
