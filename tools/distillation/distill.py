@@ -164,6 +164,7 @@ DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
 ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
 ORACLE_AGENT_STALE_TIMEOUT = int(os.environ.get("ORACLE_AGENT_STALE_TIMEOUT", "300"))
+ORACLE_NO_EXTRACT_TIMEOUT = int(os.environ.get("ORACLE_NO_EXTRACT_TIMEOUT", "600"))
 CODEX_INFRA_RETRIES = int(os.environ.get("DISTILL_CODEX_INFRA_RETRIES", "3"))
 CODEX_INFRA_RETRY_SLEEP = int(os.environ.get("DISTILL_CODEX_INFRA_RETRY_SLEEP", "20"))
 REVIEW_BACKENDS = ("codex", "codex-claude", "claude")
@@ -1091,6 +1092,54 @@ def _oracle_stale_agent_claims(
     return stale
 
 
+def _oracle_detail_int(detail: Any, key: str) -> Optional[int]:
+    """Parse integer key=value fields from browser Oracle phase details."""
+    match = re.search(rf"(?:^|[;,\s]){re.escape(key)}=([0-9]+)", str(detail or ""))
+    if not match:
+        return None
+    try:
+        return int(match.group(1))
+    except ValueError:
+        return None
+
+
+def _oracle_detail_bool(detail: Any, key: str) -> Optional[bool]:
+    """Parse boolean key=value fields from browser Oracle phase details."""
+    match = re.search(
+        rf"(?:^|[;,\s]){re.escape(key)}=(true|false)",
+        str(detail or ""),
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    return match.group(1).lower() == "true"
+
+
+def _oracle_zero_extract_agent_stalls(
+    status: dict[str, Any],
+    task_id: str,
+    no_extract_timeout: int = ORACLE_NO_EXTRACT_TIMEOUT,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return claimed agents stuck waiting with no extracted response text."""
+    stalled: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in _oracle_claimed_agent_infos(status, task_id):
+        phase = str(info.get("phase", ""))
+        if phase not in {"waiting_response", "response_observed"}:
+            continue
+        detail = str(info.get("detail", ""))
+        elapsed = _oracle_detail_int(detail, "elapsed")
+        extracted = _oracle_detail_int(detail, "extracted")
+        generating = _oracle_detail_bool(detail, "gen")
+        if (
+            elapsed is not None
+            and elapsed >= no_extract_timeout
+            and extracted == 0
+            and generating is False
+        ):
+            stalled.append((agent_id, info))
+    return stalled
+
+
 _ORACLE_METADATA_RE = re.compile(r"^\s*<!--\s*oracle metadata:\s*.*?-->\s*", re.DOTALL)
 _ORACLE_METADATA_JSON_RE = re.compile(
     r"^\s*<!--\s*oracle metadata:\s*(.*?)-->\s*",
@@ -1288,6 +1337,25 @@ def chatgpt_oracle_exec(
                 ORACLE_AGENT_STALE_TIMEOUT,
                 task_id,
                 stale_detail,
+            )
+            return ""
+        zero_extract_stalls = _oracle_zero_extract_agent_stalls(status, task_id)
+        if (
+            claimed_by
+            and zero_extract_stalls
+            and len(zero_extract_stalls) == len(claimed_infos)
+        ):
+            stall_detail = ", ".join(
+                f"{agent_id}:phase={info.get('phase', '?')}:detail={info.get('detail', '')}"
+                for agent_id, info in zero_extract_stalls
+            )
+            _oracle_cancel_task(task_id, "zero_extraction_browser_agent")
+            logger.warning(
+                "ChatGPT Oracle task produced no extracted response text after %ss; "
+                "continuing without Oracle: %s (%s)",
+                ORACLE_NO_EXTRACT_TIMEOUT,
+                task_id,
+                stall_detail,
             )
             return ""
         if elapsed > 0 and elapsed % 60 == 0:

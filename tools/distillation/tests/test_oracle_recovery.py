@@ -184,6 +184,47 @@ class OracleBridgeStatusTests(unittest.TestCase):
         self.assertEqual(len(stale), 1)
         self.assertEqual(stale[0][0], "oracle_2")
 
+    def test_zero_extraction_response_wait_is_stalled(self):
+        status = {
+            "agents": {
+                "oracle_3": {
+                    "task_id": "task",
+                    "phase": "response_observed",
+                    "elapsed": 8,
+                    "detail": "elapsed=601s; extracted=0; page=25705; stable=0; gen=false",
+                }
+            }
+        }
+
+        stalled = distill._oracle_zero_extract_agent_stalls(
+            status,
+            "task",
+            no_extract_timeout=600,
+        )
+
+        self.assertEqual(len(stalled), 1)
+        self.assertEqual(stalled[0][0], "oracle_3")
+
+    def test_zero_extraction_response_wait_continues_while_generating(self):
+        status = {
+            "agents": {
+                "oracle_3": {
+                    "task_id": "task",
+                    "phase": "waiting_response",
+                    "elapsed": 8,
+                    "detail": "elapsed=900s; extracted=0; page=25705; stable=0; gen=true",
+                }
+            }
+        }
+
+        stalled = distill._oracle_zero_extract_agent_stalls(
+            status,
+            "task",
+            no_extract_timeout=600,
+        )
+
+        self.assertEqual(stalled, [])
+
 
 class OracleUserscriptTests(unittest.TestCase):
     def _windows_script(self) -> str:
