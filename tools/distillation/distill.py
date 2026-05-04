@@ -2146,6 +2146,10 @@ def _source_specific_writeback_contract(
         "  source, target, multiplicity, composition, and obstruction data, or",
         "  an action-site/stable-value lemma that proves a concrete descent",
         "  criterion in existing emergent_arithmetic notation.",
+        "- For the Frobenius-correspondence spacetime skeleton family, integrate",
+        "  into the nonretroactive causal-order body context. Do not target the",
+        "  grand-chain synthesis/conclusion file with a standalone technical",
+        "  theorem.",
         "- Do not use zeta or arithmetic-site motivation as a theorem claim.",
         "  Zeta material is allowed only as a finite trace or orbit-budget",
         "  diagnostic with all multiplicities and error terms defined locally.",
@@ -4835,6 +4839,28 @@ def _family_specific_writeback_targets(
     return []
 
 
+def _source_specific_writeback_targets(
+    state: DistillState,
+    focused_family: Optional[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return explicit target overrides for source/family routing failures."""
+    source_slug = _slugify(state.name)
+    family_slug = _slugify(str((focused_family or {}).get("name", "")))
+    if (
+        source_slug == "connes_consani_arithmetic_site"
+        and family_slug == "frobenius_correspondence_spacetime_skeleton"
+    ):
+        section = "physical_spacetime_skeleton"
+        path = (
+            CORE_BODY
+            / section
+            / "subsec__physical-spacetime-skeleton-nonretroactive-resolution.tex"
+        )
+        if path.exists() and not _is_wrapper_tex_file(path):
+            return [_target_file_descriptor(section, path)]
+    return []
+
+
 def _collect_section_contexts(
     targets: list[dict[str, Any]],
     *,
@@ -6054,6 +6080,13 @@ def run_stage_w(
                 [item["tex_file"] for item in family_targets],
             )
             targets = family_targets
+        source_targets = _source_specific_writeback_targets(state, focused_family)
+        if source_targets:
+            logger.info(
+                "Stage W using source-specific target override: %s",
+                [item["tex_file"] for item in source_targets],
+            )
+            targets = source_targets
 
     if not targets:
         logger.error("Stage W could not select target files")

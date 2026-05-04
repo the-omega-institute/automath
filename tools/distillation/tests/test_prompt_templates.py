@@ -88,6 +88,22 @@ class PromptTemplateTests(unittest.TestCase):
             "group_unification/subsec__group-unification-spectral-alignment.tex",
         )
 
+    def test_connes_frobenius_family_avoids_grand_chain_conclusion_host(self):
+        state = distill.DistillState("Connes-Consani arithmetic site")
+
+        targets = distill._source_specific_writeback_targets(
+            state,
+            {"name": "Frobenius-correspondence spacetime skeleton"},
+        )
+
+        self.assertEqual(len(targets), 1)
+        self.assertEqual(
+            targets[0]["tex_file"],
+            "physical_spacetime_skeleton/"
+            "subsec__physical-spacetime-skeleton-nonretroactive-resolution.tex",
+        )
+        self.assertNotIn("grand-chain", targets[0]["tex_file"])
+
     def test_connes_source_contract_blocks_heavy_tautological_writebacks(self):
         state = distill.DistillState("Connes-Consani arithmetic site")
 
