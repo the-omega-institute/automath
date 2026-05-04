@@ -96,6 +96,136 @@ X_\infty \hookrightarrow \mathcal{D}
 是一个可计算的截面（选择规范代表）。这正是”折叠（folding）= 取不变量/取商 + 选规范形”的抽象机制在 Fibonacci 情形下的具体实现。
 \leanverified{paper\_ea\_fold\_as\_section}
 \end{corollary}
+\begin{theorem}[有限观察逆系统的折叠下降与坏例预算]\label{distill:connes_consani_arithmetic_site-emergent_arithmetic_from_action_site_sections-finite-observer-descent-budget}
+对每个整数 \(q\ge 2\)，定义有限分类观察截面
+\[
+\rho_q:\mathcal{D}\longrightarrow \mathbb{Z}/q\mathbb{Z},
+\qquad
+\rho_q(a):=\left[\mathrm{Val}(a)\right]_q
+=\left[\sum_{k\ge 1}a_kF_{k+1}\right]_q .
+\]
+当 \(q\mid q'\) 时，记 \(r_{q',q}:\mathbb{Z}/q'\mathbb{Z}\to \mathbb{Z}/q\mathbb{Z}\) 为自然约化映射。令
+\[
+L_M:=\operatorname{lcm}(2,3,\dots,M)\qquad (M\ge 2),
+\]
+并称 \(a,b\in\mathcal{D}\) 为 \(M\)-不可分辨，如果 \(\rho_q(a)=\rho_q(b)\) 对所有 \(2\le q\le M\) 成立。则以下结论成立。
+\begin{enumerate}
+  \item 每个 \(\rho_q\) 都是 \(\mathcal{D}\) 的平移作用上的加法截面读数：对任意 \(a,c\in\mathcal{D}\)，
+  \[
+  \rho_q(a+c)=\rho_q(a)+\rho_q(c).
+  \]
+  且 \(\rho_q\) 与 Fibonacci 折叠关系相容：
+  \[
+  \rho_q(e_2)=\rho_q(2e_1),
+  \qquad
+  \rho_q(e_{k+2})=\rho_q(e_{k+1}+e_k)\quad(k\ge 1).
+  \]
+  因此 \(\rho_q\) 下降为商上的截面
+  \[
+  \overline{\rho}_q:\mathcal{D}/\!\equiv\longrightarrow \mathbb{Z}/q\mathbb{Z},
+  \]
+  并且这些截面对观察覆盖的细化构成稳定逆系统：若 \(q\mid q'\)，则
+  \[
+  r_{q',q}\circ \overline{\rho}_{q'}=\overline{\rho}_q.
+  \]
+  \item 对任意 \(a,b\in\mathcal{D}\)，\(a,b\) 为 \(M\)-不可分辨，当且仅当
+  \[
+  \mathrm{Val}(a)-\mathrm{Val}(b)\in L_M\mathbb{Z}.
+  \]
+  特别地，若 \(a,b\) 为 \(M\)-不可分辨且 \(a\not\equiv b\)，则
+  \[
+  \bigl|\mathrm{Val}(a)-\mathrm{Val}(b)\bigr|\ge L_M.
+  \]
+  \item 设 \(B<L_M\)，并令
+  \[
+  \mathcal{D}_{\le B}:=\{a\in\mathcal{D}:\mathrm{Val}(a)\le B\}.
+  \]
+  则有限观察覆盖 \(\{\rho_q:2\le q\le M\}\) 在 \(\mathcal{D}_{\le B}\) 上已经充分：若 \(a,b\in\mathcal{D}_{\le B}\) 且 \(a,b\) 为 \(M\)-不可分辨，则 \(a\equiv b\)。
+  \item 在同一预算假设 \(B<L_M\) 下，令
+  \[
+  \mathsf{Add}_q(a,b):=\rho_q(a)+\rho_q(b),
+  \qquad
+  \mathsf{Mul}_q(a,b):=\rho_q(a)\rho_q(b)
+  \]
+  为 \(\mathbb{Z}/q\mathbb{Z}\) 中的局部加法与乘法读数。若 \(\mathrm{Val}(a)+\mathrm{Val}(b)\le B\)，且 \(u\in\mathcal{D}_{\le B}\) 满足
+  \[
+  \rho_q(u)=\mathsf{Add}_q(a,b)\qquad(2\le q\le M),
+  \]
+  则 \(u\equiv a+b\)。若 \(\mathrm{Val}(a)\mathrm{Val}(b)\le B\)，且 \(u\in\mathcal{D}_{\le B}\) 满足
+  \[
+  \rho_q(u)=\mathsf{Mul}_q(a,b)\qquad(2\le q\le M),
+  \]
+  则
+  \[
+  u\equiv \bigl(\mathrm{Val}(a)\mathrm{Val}(b)\bigr)e_1.
+  \]
+  因而，在固定稳定值预算内，加法、乘法与同余判定均由平移作用、Fibonacci 折叠相容性、有限分类观察截面及其逆系统细化唯一重构。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+首先，\(\mathrm{Val}\) 是交换幺半群同态，故对任意 \(a,c\in\mathcal{D}\) 有
+\[
+\rho_q(a+c)=[\mathrm{Val}(a+c)]_q
+=[\mathrm{Val}(a)+\mathrm{Val}(c)]_q
+=\rho_q(a)+\rho_q(c).
+\]
+这正是 \(\mathcal{D}\) 对自身平移作用下的截面相容性。对折叠生成元，利用本节 Fibonacci 标定，得到
+\[
+\rho_q(e_2)=[F_3]_q=[2F_2]_q=\rho_q(2e_1),
+\]
+且对所有 \(k\ge 1\)，
+\[
+\rho_q(e_{k+2})=[F_{k+3}]_q=[F_{k+2}+F_{k+1}]_q
+=\rho_q(e_{k+1}+e_k).
+\]
+因此 \(\rho_q\) 对生成同余关系取相同值，并由同余对加法封闭可知 \(\rho_q\) 在 \(\mathcal{D}/\!\equiv\) 上诱导良定义映射 \(\overline{\rho}_q\)。若 \(q\mid q'\)，则对任意 \(a\in\mathcal{D}\)，
+\[
+(r_{q',q}\circ\rho_{q'})(a)=r_{q',q}([\mathrm{Val}(a)]_{q'})=[\mathrm{Val}(a)]_q=\rho_q(a),
+\]
+所以下降后仍有 \(r_{q',q}\circ\overline{\rho}_{q'}=\overline{\rho}_q\)。这证明第一项。
+
+接着，\(a,b\) 为 \(M\)-不可分辨，当且仅当对每个 \(2\le q\le M\)，
+\[
+[\mathrm{Val}(a)-\mathrm{Val}(b)]_q=0,
+\]
+也即每个 \(q\in\{2,\dots,M\}\) 都整除整数 \(\mathrm{Val}(a)-\mathrm{Val}(b)\)。这等价于其最小公倍数 \(L_M\) 整除该差值，即
+\[
+\mathrm{Val}(a)-\mathrm{Val}(b)\in L_M\mathbb{Z}.
+\]
+若同时 \(a\not\equiv b\)，由定理 \ref{thm:monoid-quotient-is-N}，商类由 \(\mathrm{Val}\) 完全刻画，故 \(\mathrm{Val}(a)\ne \mathrm{Val}(b)\)。于是该非零差值是 \(L_M\) 的整数倍，从而其绝对值至少为 \(L_M\)。第二项得证。
+
+若 \(a,b\in\mathcal{D}_{\le B}\) 且 \(B<L_M\)，则
+\[
+\bigl|\mathrm{Val}(a)-\mathrm{Val}(b)\bigr|\le B<L_M.
+\]
+若 \(a,b\) 为 \(M\)-不可分辨，第二项给出 \(L_M\mid \mathrm{Val}(a)-\mathrm{Val}(b)\)，因此只能有 \(\mathrm{Val}(a)=\mathrm{Val}(b)\)。再由定理 \ref{thm:monoid-quotient-is-N}，得到 \(a\equiv b\)。第三项得证。
+
+最后证明局部运算读数的唯一性。若 \(\mathrm{Val}(a)+\mathrm{Val}(b)\le B\) 且 \(u\in\mathcal{D}_{\le B}\) 满足 \(\rho_q(u)=\mathsf{Add}_q(a,b)\) 对所有 \(2\le q\le M\) 成立，则由 \(\rho_q\) 的加法性，
+\[
+\rho_q(u)=\rho_q(a)+\rho_q(b)=\rho_q(a+b).
+\]
+同时 \(a+b\in\mathcal{D}_{\le B}\)。由第三项应用于 \(u\) 与 \(a+b\)，得 \(u\equiv a+b\)。
+
+若 \(\mathrm{Val}(a)\mathrm{Val}(b)\le B\)，令
+\[
+v:=\bigl(\mathrm{Val}(a)\mathrm{Val}(b)\bigr)e_1\in\mathcal{D}.
+\]
+由于本节标定下 \(F_2=1\)，有
+\[
+\mathrm{Val}(v)=\mathrm{Val}(a)\mathrm{Val}(b)\le B.
+\]
+并且对每个 \(q\)，
+\[
+\rho_q(v)=[\mathrm{Val}(a)\mathrm{Val}(b)]_q
+=[\mathrm{Val}(a)]_q[\mathrm{Val}(b)]_q
+=\rho_q(a)\rho_q(b)=\mathsf{Mul}_q(a,b).
+\]
+若 \(u\in\mathcal{D}_{\le B}\) 具有相同的乘法局部读数，则 \(u\) 与 \(v\) 在所有 \(2\le q\le M\) 的观察截面上不可分辨。第三项给出 \(u\equiv v\)，即
+\[
+u\equiv \bigl(\mathrm{Val}(a)\mathrm{Val}(b)\bigr)e_1.
+\]
+同余判定本身即第三项。第四项随之成立。\end{proof}
 
 \textbf{证明：}
 由定理 \ref{thm:monoid-quotient-is-N} 的同构性与唯一规范代表结论直接推出。
