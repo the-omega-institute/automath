@@ -1071,11 +1071,45 @@ def _oracle_stale_agent_claims(
 
 
 _ORACLE_METADATA_RE = re.compile(r"^\s*<!--\s*oracle metadata:\s*.*?-->\s*", re.DOTALL)
+_ORACLE_METADATA_JSON_RE = re.compile(
+    r"^\s*<!--\s*oracle metadata:\s*(.*?)-->\s*",
+    re.DOTALL,
+)
 
 
 def _strip_oracle_response_metadata(text: str) -> str:
     """Remove local oracle metadata comments from persisted browser responses."""
     return _ORACLE_METADATA_RE.sub("", text or "", count=1).lstrip()
+
+
+def _oracle_response_metadata(text: str) -> dict[str, Any]:
+    """Parse the leading oracle metadata comment, if present."""
+    match = _ORACLE_METADATA_JSON_RE.match(text or "")
+    if not match:
+        return {}
+    try:
+        data = json.loads(match.group(1).strip())
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _normalize_oracle_project_url(value: Any) -> str:
+    return str(value or "").strip().rstrip("/")
+
+
+def _oracle_project_matches(value: Any) -> bool:
+    expected = _normalize_oracle_project_url(ORACLE_PROJECT_URL)
+    if not expected:
+        return True
+    return _normalize_oracle_project_url(value) == expected
+
+
+def _mark_oracle_project(data: dict[str, Any], project_url: Any = None) -> dict[str, Any]:
+    value = _normalize_oracle_project_url(project_url if project_url is not None else ORACLE_PROJECT_URL)
+    if value:
+        data["_oracle_project_url"] = value
+    return data
 
 
 def _read_oracle_done_response(task_id: str) -> str:
@@ -4789,6 +4823,8 @@ def _has_usable_oracle_deepening(data: Any) -> bool:
     """Return true for cached Oracle data that should not be overwritten."""
     if not isinstance(data, dict):
         return False
+    if not _oracle_project_matches(data.get("_oracle_project_url") or data.get("project_url")):
+        return False
     status = str(data.get("status", "")).strip().lower()
     if status in {"parse_failed", "invalid", "unavailable", "error"}:
         return False
@@ -4824,9 +4860,17 @@ def _recover_oracle_deepening_from_done(
     )
     for path in candidates:
         try:
-            response = _strip_oracle_response_metadata(read_text(path)).strip()
+            raw_text = read_text(path)
         except OSError:
             continue
+        metadata = _oracle_response_metadata(raw_text)
+        if not _oracle_project_matches(metadata.get("project_url")):
+            logger.info(
+                "Skipping Oracle done file from different project context: %s",
+                path,
+            )
+            continue
+        response = _strip_oracle_response_metadata(raw_text).strip()
         if not response:
             continue
         try:
@@ -4834,6 +4878,7 @@ def _recover_oracle_deepening_from_done(
         except (ValueError, json.JSONDecodeError):
             raw_data = _raw_oracle_deepening_context(response, "No parseable JSON found")
             if not _oracle_deepening_quality_issues(raw_data, response):
+                _mark_oracle_project(raw_data, metadata.get("project_url"))
                 return raw_data, path, response
             continue
         if not isinstance(parsed, dict):
@@ -4842,11 +4887,13 @@ def _recover_oracle_deepening_from_done(
                 "Parsed JSON was not an object",
             )
             if not _oracle_deepening_quality_issues(raw_data, response):
+                _mark_oracle_project(raw_data, metadata.get("project_url"))
                 return raw_data, path, response
             continue
         parsed.setdefault("status", "ok")
         parsed.setdefault("main_theorem_chain", [])
         if not _oracle_deepening_quality_issues(parsed, response):
+            _mark_oracle_project(parsed, metadata.get("project_url"))
             return parsed, path, response
     return None
 
@@ -4992,6 +5039,7 @@ def _oracle_deepening_research(
                 )
             data.setdefault("status", "ok")
             data.setdefault("main_theorem_chain", [])
+            _mark_oracle_project(data)
             issues = _oracle_deepening_quality_issues(data, response)
         attempts.append(
             {
@@ -5060,6 +5108,7 @@ def _oracle_deepening_research(
         "last_response": last_data,
         "attempts": attempts,
     }
+    _mark_oracle_project(fallback)
     _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}.json", fallback)
     _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}_attempts.json", attempts)
     return fallback

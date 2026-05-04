@@ -283,6 +283,11 @@ class OracleHandler(BaseHTTPRequestHandler):
                 return
 
             extraction_failed = _is_extraction_failure_response(response)
+            task_project_url = data.get("project_url", "")
+            for task in pending_tasks.values():
+                if task.get("task_id") == task_id:
+                    task_project_url = task.get("project_url", task_project_url)
+                    break
 
             # Save result.  Extraction failures are terminal for this browser
             # task, but they are infrastructure failures, not referee reports.
@@ -291,6 +296,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "response": response,
                 "timestamp": datetime.now().isoformat(),
                 "model": data.get("model", ""),
+                "project_url": task_project_url,
                 "status": "failed" if extraction_failed else "completed",
                 "reason": "extraction_failure" if extraction_failed else "",
             }
@@ -304,6 +310,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "model": data.get("model", "chatgpt-5.4-pro"),
                 "response_length": len(response),
                 "agent_id": agent_id,
+                "project_url": task_project_url,
             }
             out_file.write_text(
                 f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",

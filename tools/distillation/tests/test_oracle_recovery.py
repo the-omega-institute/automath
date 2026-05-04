@@ -33,6 +33,65 @@ class OracleRecoveryTests(unittest.TestCase):
         text = '<!-- oracle metadata: {"task_id":"x"} -->\n\n{"status":"ok"}'
         self.assertEqual(distill._strip_oracle_response_metadata(text), '{"status":"ok"}')
 
+    def test_project_mode_rejects_cache_without_matching_project_url(self):
+        old_project_url = distill.ORACLE_PROJECT_URL
+        try:
+            distill.ORACLE_PROJECT_URL = "https://chatgpt.com/g/g-p-test/project"
+            cached = {
+                "status": "ok_raw",
+                "raw_research_text": (
+                    "Theorem. Assume a bad example skeleton. "
+                    "Proof. The bad example is localized, classified, "
+                    "budgeted, and closed. "
+                    * 40
+                ),
+            }
+
+            self.assertFalse(distill._has_usable_oracle_deepening(cached))
+
+            cached["_oracle_project_url"] = distill.ORACLE_PROJECT_URL
+            self.assertTrue(distill._has_usable_oracle_deepening(cached))
+        finally:
+            distill.ORACLE_PROJECT_URL = old_project_url
+
+    def test_recover_requires_matching_project_metadata_in_project_mode(self):
+        state = distill.DistillState("Wang-Zahl")
+        state.depth_cycle = 2
+        old_done_dir = distill.ORACLE_DONE_DIR
+        old_project_url = distill.ORACLE_PROJECT_URL
+        project_url = "https://chatgpt.com/g/g-p-test/project"
+        try:
+            distill.ORACLE_PROJECT_URL = project_url
+            with distill._temporary_directory(prefix="oracle_recovery_project_") as tmp:
+                done_dir = Path(tmp)
+                distill.ORACLE_DONE_DIR = done_dir
+                stale = done_dir / "wang_zahl_W_oracle_deepen_cycle2_a1_20260423_000000.md"
+                fresh = done_dir / "wang_zahl_W_oracle_deepen_cycle2_a1_20260423_010000.md"
+                stale.write_text(
+                    '<!-- oracle metadata: {"task_id":"stale"} -->\n\n'
+                    + oracle_body("stale theorem"),
+                    encoding="utf-8",
+                )
+                time.sleep(0.01)
+                fresh.write_text(
+                    '<!-- oracle metadata: {"task_id":"fresh", '
+                    f'"project_url":"{project_url}"'
+                    '} -->\n\n'
+                    + oracle_body("fresh theorem"),
+                    encoding="utf-8",
+                )
+
+                recovered = distill._recover_oracle_deepening_from_done(state, 2)
+        finally:
+            distill.ORACLE_DONE_DIR = old_done_dir
+            distill.ORACLE_PROJECT_URL = old_project_url
+
+        self.assertIsNotNone(recovered)
+        data, source_path, _ = recovered
+        self.assertEqual(source_path.name, fresh.name)
+        self.assertEqual(data["_oracle_project_url"], project_url)
+        self.assertEqual(data["main_theorem_chain"][0]["proposed_title"], "fresh theorem")
+
     def test_recover_skips_newer_invalid_done_file(self):
         state = distill.DistillState("Wang-Zahl")
         state.depth_cycle = 2
