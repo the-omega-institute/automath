@@ -153,6 +153,11 @@ class PromptTemplateTests(unittest.TestCase):
             self.assertIn("Do not reject solely because supplied section context is truncated", collapsed)
             self.assertIn("line-count gate is enforced by the application planner", collapsed)
 
+    def test_writeback_prompt_default_cap_stays_below_huge_context_regime(self):
+        self.assertLessEqual(distill.W_SECTION_CONTEXT_CHARS, 5000)
+        self.assertLessEqual(distill.W_DEEPENING_SECTION_CONTEXT_CHARS, 3000)
+        self.assertLessEqual(distill.W_PROMPT_MAX_CHARS, 65000)
+
 
 if __name__ == "__main__":
     unittest.main()
