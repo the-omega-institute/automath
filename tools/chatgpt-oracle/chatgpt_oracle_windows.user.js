@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.10
+// @version      5.11
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.10";
+  const SCRIPT_VERSION = "5.11";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -445,6 +445,9 @@
     try {
       const url = new URL(raw);
       if (!/^https:\/\/(chatgpt\.com|chat\.openai\.com)$/.test(url.origin)) return "";
+      url.pathname = url.pathname.replace(/\/c\/[a-z0-9-]+\/?$/i, "");
+      url.search = "";
+      url.hash = "";
       return url.href;
     } catch {
       return "";
