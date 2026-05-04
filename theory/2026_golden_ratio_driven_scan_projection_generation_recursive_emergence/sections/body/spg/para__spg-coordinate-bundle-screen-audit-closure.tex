@@ -269,5 +269,81 @@ D_\bullet\cong\bigoplus_{C\in\mathcal C(J)}\mathbb K_{[0,d(C))}.
 
 在尺度 \(t\)，已经接触 \(B_t\) 的内部连通分量与 \(\infty\) 同属一个连通块；未接触者仍各自与 \(\infty\) 分离。由推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure}，要使屏幕精确，必须且只须给每个未接触分量再选一张外边界面。因此剩余闭合条数等于未死亡区间的数目，即 \(\dim_{\mathbb K}D_t\)。
 \end{proof}
+下述有限化使用 Interleaving stability 算子：扰动预算不比较外边界面本身，而比较其在坐标束屏幕图连通分量载体上的首次闭合时间。
+\begin{theorem}[坐标束闭合审计的载体死亡时间稳定定理]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-stability_and_interleaving-spg-coordinate-bundle-carrier-death-stability}
+沿用定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 与推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure} 的记号，并假设 \(J\neq\varnothing\)。置
+\[
+\Lambda_J:=\{0,\dots,2^m-1\}^{J^c}.
+\]
+若 \(b\) 是一个外边界取向面，记 \(Q_a\) 为与 \(b\) 相接的唯一顶维 dyadic 立方体，并定义其坐标束载体为
+\[
+\kappa(b):=(a_i)_{i\in J^c}\in \Lambda_J.
+\]
+设 \(L\ge 1\)，称递增外边界面族
+\[
+B_0\subseteq B_1\subseteq\cdots\subseteq B_L
+\]
+为闭合有限外边界审计协议，如果对每个 \(u\in\Lambda_J\) 都存在 \(b\in B_L\) 满足 \(\kappa(b)=u\)。定义载体 \(u\) 的首次闭合时间
+\[
+\tau_B(u):=\min\{t\in\{0,\dots,L\}:\exists b\in B_t\text{ with }\kappa(b)=u\}.
+\]
+令 \(\mathbb F\) 为任意域，并定义有限审计 ledger
+\[
+M_B(t):=\operatorname{span}_{\mathbb F}\{e_u:u\in\Lambda_J,\ t<\tau_B(u)\},\qquad 0\le t\le L,
+\]
+其中 \(M_B(t)\to M_B(t')\) 对 \(t\le t'\) 为删去已死亡基向量的坐标投影。
+
+若两个闭合审计协议 \(B\) 与 \(C\) 满足如下 \(\rho\)-载体交错条件：对所有 \(0\le t\le L\)，
+\[
+\{u:\tau_B(u)\le t\}\subseteq \{u:\tau_C(u)\le \min(L,t+\rho)\},
+\]
+且同一包含式在交换 \(B,C\) 后仍成立，则
+\[
+|\tau_B(u)-\tau_C(u)|\le \rho
+\qquad\text{for every }u\in\Lambda_J.
+\]
+特别地，若
+\[
+d_{\mathrm{death}}(B,C):=\min_{\sigma\in\operatorname{Sym}(\Lambda_J)}\max_{u\in\Lambda_J}|\tau_B(u)-\tau_C(\sigma(u))|,
+\]
+则
+\[
+d_{\mathrm{death}}(B,C)\le \rho.
+\]
+此外，对任意截止深度 \(r\in\{0,\dots,L\}\)，两个审计 ledger 在 \(r\) 处的生存判决只能在 \(B\)-死亡时间的 \(\rho\)-邻域内不同：
+\[
+\{u:(e_u\in M_B(r))\not\Longleftrightarrow(e_u\in M_C(r))\}
+\subseteq
+\{u:r-\rho<\tau_B(u)\le r+\rho\}.
+\]
+因此，若某载体 \(u\) 在 \(B\) 中满足 \(\tau_B(u)>r+\rho\)，则它在所有与 \(B\) \(\rho\)-载体交错的闭合协议 \(C\) 中仍满足 \(e_u\in M_C(r)\)；若 \(\tau_B(u)\le r-\rho\)，则在所有此类 \(C\) 中均有 \(e_u\notin M_C(r)\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 的证明，\(S_J^{\mathrm{int}}\) 的内部连通分量正由补坐标 \(u\in\Lambda_J\) 标记。由于 \(J\neq\varnothing\)，固定补坐标后，允许变化的 \(J\)-坐标形成一个非空坐标方向上的有限网格；该网格与外边界相接。因此一个外边界面 \(b\) 的载体 \(\kappa(b)\) 正好指定它闭合的内部连通分量。
+
+闭合协议的假设给出 \(\tau_B(u),\tau_C(u)\in\{0,\dots,L\}\)。取任意 \(u\in\Lambda_J\)，并在 \(\rho\)-载体交错条件中令 \(t=\tau_B(u)\)。因 \(u\in\{v:\tau_B(v)\le t\}\)，得到
+\[
+\tau_C(u)\le \min(L,\tau_B(u)+\rho)\le \tau_B(u)+\rho.
+\]
+交换 \(B,C\) 后同理得到
+\[
+\tau_B(u)\le \tau_C(u)+\rho.
+\]
+两式合并即为 \(|\tau_B(u)-\tau_C(u)|\le\rho\)。取置换 \(\sigma=\operatorname{id}_{\Lambda_J}\) 便得 \(d_{\mathrm{death}}(B,C)\le\rho\)。
+
+再固定截止深度 \(r\)。按定义，\(e_u\in M_B(r)\) 当且仅当 \(r<\tau_B(u)\)，而 \(e_u\notin M_B(r)\) 当且仅当 \(\tau_B(u)\le r\)。若 \(\tau_B(u)\le r-\rho\)，则由上段不等式
+\[
+\tau_C(u)\le \tau_B(u)+\rho\le r,
+\]
+故 \(e_u\notin M_C(r)\)，不会发生生存判决差异。若 \(\tau_B(u)>r+\rho\)，则
+\[
+\tau_C(u)\ge \tau_B(u)-\rho>r,
+\]
+故 \(e_u\in M_C(r)\)，同样不会发生差异。于是任何差异载体必须满足
+\[
+r-\rho<\tau_B(u)\le r+\rho.
+\]
+最后两项断言正是这两个排除情形的重述。推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure} 保证这里的每个载体死亡都对应一个内部连通分量被外边界闭合，故该死亡时间判据正是坐标束屏幕审计闭合的有限稳定判据。证毕。
+\end{proof}
 
 \endinput
