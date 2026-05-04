@@ -167,6 +167,42 @@ The assertion follows by checking every coordinate.
             errors,
         )
 
+    def test_allows_ordinary_new_object_language(self):
+        content = r"""
+\begin{lemma}[有限寄存器见证]
+\label{lem:distill-hygiene}
+若闭路缺陷需要新增有限 scale-register 群才能被见证，则其阶给出一个可检查下界。
+\end{lemma}
+\begin{proof}
+由群同态像的阶整除性立得。
+\end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertFalse(
+            any("killo-golden" in error for error in errors),
+            errors,
+        )
+
+    def test_rejects_new_result_patch_phrase(self):
+        content = r"""
+\begin{lemma}[新增结果]
+\label{lem:distill-hygiene}
+新增如下：相容证书在限制后仍相容。
+\end{lemma}
+\begin{proof}
+逐项限制即可。
+\end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertTrue(
+            any("killo-golden" in error for error in errors),
+            errors,
+        )
+
     def test_rejects_manual_conclusion_ordinal(self):
         content = r"""
 \begin{lemma}[结论 1: 稳定限制]

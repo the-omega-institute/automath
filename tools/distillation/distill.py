@@ -79,7 +79,8 @@ SECTIONING_COMMAND_RE = re.compile(
 CJK_RE = re.compile(r"[\u3400-\u9fff]")
 KILLO_GOLDEN_TRACE_RE = re.compile(
     r"(?:"
-    r"\u65b0\u589e|\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
+    r"\u65b0\u589e\s*(?:\u5982\u4e0b|\u7ed3\u679c|[:\uff1a])|"
+    r"\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
     r"\u4fee\u6539\u8bb0\u5f55|\u52a0\u5165\u5982\u4e0b|"
     r"(?:\u7ed3\u8bba|\u95ed\u73af|\u8865\u5145)\s*"
     r"(?:[A-Z]|[0-9]+|[一二三四五六七八九十]+)\s*(?=[\]\}:：]|$)|"
@@ -1817,7 +1818,7 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  were stated as Omega reconstruction obstructions. Output at most",
                 "  1-2 conservative writebacks, and omit any target whose local",
                 "  Omega carrier is not fully defined in the supplied context.",
-                "- Absolutely do not include the visible style tokens 新增, 本次,",
+                "- Absolutely do not include visible patch/log phrases such as 新增如下, 新增结果, 本次,",
                 "  本轮, 上一轮, 修改记录, 加入如下, 补充 A, 结论 1, or 闭环 1",
                 "  anywhere in a title, statement, proof, or explanatory sentence.",
                 "- For statistical_stability, quantify explicitly over all probability",
@@ -1946,7 +1947,7 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  paragraphs beginning with therefore/this means/in the forcing",
                 "  semantics inside theorem or proof bodies. Move such material into",
                 "  precise hypotheses or omit it.",
-                "- Avoid visible patch/log wording, especially 新增, 本次, 本轮,",
+                "- Avoid visible patch/log wording, especially 新增如下, 新增结果, 本次, 本轮,",
                 "  修改记录, 加入如下, 补充 A, 结论 1, and 闭环 1.",
                 "- Prefer 1-2 locally anchored writebacks over broad coverage. The",
                 "  recursive_addressing writeback should expose an entropy decrement",
