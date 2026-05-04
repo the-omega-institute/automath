@@ -225,6 +225,26 @@ class OracleBridgeStatusTests(unittest.TestCase):
 
         self.assertEqual(stalled, [])
 
+    def test_sentinel_iframe_claim_is_detected(self):
+        status = {
+            "agents": {
+                "oracle_3": {
+                    "task_id": "task",
+                    "phase": "waiting_prompt_input",
+                    "elapsed": 79,
+                    "detail": (
+                        "visibility=hidden; url=https://chatgpt.com/"
+                        "backend-api/sentinel/frame.html?sv=20260423af3c"
+                    ),
+                }
+            }
+        }
+
+        sentinel = distill._oracle_sentinel_iframe_claims(status, "task")
+
+        self.assertEqual(len(sentinel), 1)
+        self.assertEqual(sentinel[0][0], "oracle_3")
+
 
 class OracleUserscriptTests(unittest.TestCase):
     def _windows_script(self) -> str:

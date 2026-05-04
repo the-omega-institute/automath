@@ -1092,6 +1092,19 @@ def _oracle_stale_agent_claims(
     return stale
 
 
+def _oracle_sentinel_iframe_claims(
+    status: dict[str, Any],
+    task_id: str,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return claimed agents that are running inside ChatGPT sentinel iframes."""
+    sentinel: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in _oracle_claimed_agent_infos(status, task_id):
+        detail = str(info.get("detail", "")).lower()
+        if "backend-api/sentinel/frame" in detail or "sentinel/frame.html" in detail:
+            sentinel.append((agent_id, info))
+    return sentinel
+
+
 def _oracle_detail_int(detail: Any, key: str) -> Optional[int]:
     """Parse integer key=value fields from browser Oracle phase details."""
     match = re.search(rf"(?:^|[;,\s]){re.escape(key)}=([0-9]+)", str(detail or ""))
@@ -1322,6 +1335,24 @@ def chatgpt_oracle_exec(
                 "ChatGPT Oracle task not claimed after %ss; continuing without Oracle: %s",
                 ORACLE_CLAIM_TIMEOUT,
                 task_id,
+            )
+            return ""
+        sentinel_claims = _oracle_sentinel_iframe_claims(status, task_id)
+        if (
+            claimed_by
+            and sentinel_claims
+            and len(sentinel_claims) == len(claimed_infos)
+        ):
+            sentinel_detail = ", ".join(
+                f"{agent_id}:phase={info.get('phase', '?')}:detail={info.get('detail', '')}"
+                for agent_id, info in sentinel_claims
+            )
+            _oracle_cancel_task(task_id, "sentinel_iframe_browser_agent")
+            logger.warning(
+                "ChatGPT Oracle task claimed by ChatGPT sentinel iframe; "
+                "continuing without Oracle: %s (%s)",
+                task_id,
+                sentinel_detail,
             )
             return ""
         stale_claims = _oracle_stale_agent_claims(status, task_id)
