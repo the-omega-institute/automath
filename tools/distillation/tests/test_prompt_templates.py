@@ -95,6 +95,15 @@ class PromptTemplateTests(unittest.TestCase):
             self.assertIn("Do not require translation to English", collapsed)
             self.assertIn("Chinese writeback rule overrides target-file language", collapsed)
 
+    def test_writeback_prompts_keep_heuristics_out_of_formal_environments(self):
+        for prompt_name in ("writeback", "deepen"):
+            text = distill._load_prompt(prompt_name)
+            collapsed = " ".join(text.split())
+            self.assertIn("Do not put heuristic or interpretive commentary inside", collapsed)
+            self.assertIn("definition, theorem, lemma, proposition, or proof environments", collapsed)
+            self.assertIn("move it to a separate remark outside the formal environment", collapsed)
+            self.assertIn("include an existence witness or make existence an explicit hypothesis", collapsed)
+
 
 if __name__ == "__main__":
     unittest.main()
