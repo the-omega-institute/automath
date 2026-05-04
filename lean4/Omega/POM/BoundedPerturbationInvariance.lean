@@ -31,6 +31,14 @@ theorem paper_bounded_multiplicative_perturbation_squeeze
     rw [← Real.log_mul (ne_of_gt hC) (ne_of_gt ha)]
     exact Real.log_le_log hb hub
 
+/-- Paper label: `lem:pom-bounded-multiplicative-perturbation-invariance`. -/
+theorem paper_pom_bounded_multiplicative_perturbation_invariance
+    (a b c C : Real) (hc : 0 < c) (hC : 0 < C) (ha : 0 < a)
+    (hlb : c * a <= b) (hub : b <= C * a) :
+    Real.log c + Real.log a <= Real.log b ∧
+      Real.log b <= Real.log C + Real.log a := by
+  exact paper_bounded_multiplicative_perturbation_squeeze a b c C hc hC ha hlb hub
+
 /-- Dividing the squeeze by m > 0 gives the per-step version:
     (1/m) log c + (1/m) log a ≤ (1/m) log b ≤ (1/m) log C + (1/m) log a.
     As m → ∞, the (1/m) log c and (1/m) log C terms vanish, forcing equality.

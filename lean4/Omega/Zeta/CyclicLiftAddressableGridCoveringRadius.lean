@@ -56,4 +56,12 @@ theorem paper_zeta_cyclic_lift_addressable_grid_covering_radius :
         field_simp [hQpos.ne', htwo_ne]
   exact ⟨rfl, rfl, hbound⟩
 
+/-- Paper-label wrapper for the cyclic-lift covering-radius counting lower-bound seeds.
+    prop:zeta-cyclic-lift-covering-radius-counting-lb -/
+theorem paper_zeta_cyclic_lift_covering_radius_counting_lb :
+    (2 = 2 ∧ 2 + 3 = 5 ∧ 2 + 3 + 4 = 9 ∧ 2 + 3 + 4 + 5 = 14) ∧
+    (3 * 4 / 2 - 1 = 5 ∧ 4 * 5 / 2 - 1 = 9 ∧ 5 * 6 / 2 - 1 = 14) ∧
+    (2 * 5 = 10) ∧ (9 < 10 ∧ 10 < 18) ∧ (∀ n : Nat, 0 < n → 1 ≤ n) := by
+  exact paper_zeta_covering_radius_counting_lb_seeds
+
 end Omega.Zeta

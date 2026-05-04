@@ -87,4 +87,16 @@ theorem paper_saturation_defect_extended_package :
    fun _ _ h₁ h₂ => ⟨fun h => ⟨by linarith, by linarith⟩,
                        fun ⟨e₁, e₂⟩ => by rw [e₁, e₂]; ring⟩⟩
 
+/-- Paper wrapper: additivity, zero characterization, and non-cancellation for
+    saturation defects.
+    thm:conclusion-product-fold-saturation-defect-additivity -/
+theorem paper_conclusion_product_fold_saturation_defect_additivity :
+    (∀ y₁ y₂ Λ₁ Λ₂ : ℝ, (Λ₁ + Λ₂) - (y₁ + y₂) = (Λ₁ - y₁) + (Λ₂ - y₂)) ∧
+    (∀ δ₁ δ₂ : ℝ, 0 ≤ δ₁ → 0 ≤ δ₂ →
+      (δ₁ + δ₂ = 0 ↔ δ₁ = 0 ∧ δ₂ = 0)) ∧
+    (∀ δ₁ δ₂ : ℝ, 0 < δ₁ → δ₂ = 0 → 0 < δ₁ + δ₂) := by
+  exact ⟨fun _ _ _ _ => saturationDefect_add rfl rfl,
+    fun _ _ h₁ h₂ => saturationDefect_zero_iff h₁ h₂,
+    fun _ _ h₁ h₂ => saturationDefect_noncancellation h₁ h₂⟩
+
 end Omega.Conclusion

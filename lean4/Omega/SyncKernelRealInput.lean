@@ -134,3 +134,4 @@ import Omega.SyncKernelRealInput.GmNonresonantExpSumCurvature
 import Omega.SyncKernelRealInput.GMMidEnergyElimination
 import Omega.SyncKernelRealInput.P7ProjectiveBranchGenusTacnode
 import Omega.SyncKernelRealInput.GMMultifractalPressureLegendre
+import Omega.SyncKernelRealInput.XiRealInput40CongruenceSquareRootBarrierSynthesis

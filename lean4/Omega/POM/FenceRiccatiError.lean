@@ -254,6 +254,15 @@ theorem paper_pom_Lk_boundary_riccati_recursion_package (k : Nat) :
   · exact paper_pom_Lk_t1_error_closed_form k
   · exact riccati_error_pos k
 
+/-- Paper: `prop:pom-Lk-boundary-riccati-recursion`. -/
+theorem paper_pom_lk_boundary_riccati_recursion (k : Nat) :
+    qT1 (k + 1) = (fenceDet k : ℝ) / fenceDet (k + 1) ∧
+    qT1 (k + 1) = (Nat.fib (2 * k + 1) : ℝ) / Nat.fib (2 * k + 3) ∧
+    qT1 k - phiInvSq =
+      (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k) / (1 + phiInvSq ^ (2 * k + 1)) ∧
+    0 < qT1 k - phiInvSq := by
+  exact paper_pom_Lk_boundary_riccati_recursion_package k
+
 /-- Paper: `cor:pom-Lk-t1-error-summable`. Golden tier truncation error summability:
     the error `qT1 k - phiInvSq` is positive and bounded above by a geometric sequence
     `(1 - phiInvSq²) * phiInvSq^(2k)`, which is summable since `phiInvSq² < 1`.

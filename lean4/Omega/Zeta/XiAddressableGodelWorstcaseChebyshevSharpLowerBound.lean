@@ -25,4 +25,20 @@ theorem paper_xi_addressable_godel_worstcase_chebyshev_sharp_lower_bound {T q : 
       nlinarith
     _ ≤ L s := hL s
 
+/-- Paper label: `cor:xi-addressable-witness-no-asymptotically-linear-bitlength`. -/
+theorem paper_xi_addressable_witness_no_asymptotically_linear_bitlength
+    (T : ℕ → ℕ) (maxBit lower refined : ℕ → ℝ)
+    (hbase : ∀ n, lower n ≤ maxBit n)
+    (hsuper : ∀ C : ℝ, ∃ n, C * (T n : ℝ) < lower n)
+    (hrefined : ∀ n, refined n ≤ lower n) :
+    (∀ n, lower n ≤ maxBit n) ∧
+      (∀ C : ℝ, ∃ n, C * (T n : ℝ) < maxBit n) ∧
+        (∀ n, refined n ≤ maxBit n) := by
+  refine ⟨hbase, ?_, ?_⟩
+  · intro C
+    rcases hsuper C with ⟨n, hn⟩
+    exact ⟨n, lt_of_lt_of_le hn (hbase n)⟩
+  · intro n
+    exact le_trans (hrefined n) (hbase n)
+
 end Omega.Zeta

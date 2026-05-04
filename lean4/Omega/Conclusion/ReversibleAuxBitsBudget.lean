@@ -91,4 +91,11 @@ theorem paper_conclusion_reversible_aux_bits_log_budget_package (b k : ℕ) :
     (∃ f : Fin b → Fin (2 ^ k), Function.Injective f) ↔ b ≤ 2 ^ k :=
   injection_exists_iff b k
 
+/-- Exact reversible auxiliary-bit budget: `Nat.clog 2 b` is the least exponent whose
+    binary address space has size at least `b`.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem paper_conclusion_reversible_aux_bits_equals_log_budget (b : ℕ) (hb : 0 < b) :
+    b ≤ 2 ^ Nat.clog 2 b ∧ ∀ k : ℕ, b ≤ 2 ^ k → Nat.clog 2 b ≤ k := by
+  exact ⟨pow_clog2_ge b hb, fun _ h => Nat.clog_le_of_le_pow h⟩
+
 end Omega.Conclusion.ReversibleAuxBitsBudget

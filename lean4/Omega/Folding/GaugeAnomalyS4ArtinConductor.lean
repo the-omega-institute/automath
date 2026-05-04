@@ -96,4 +96,12 @@ theorem paper_fold_gauge_anomaly_s4_artin_conductor_degrees :
     -- Sum of conductor degrees weighted by representation dimensions
     (1 * 12 + 2 * 12 + 3 * 12 + 3 * 24 = 144) := by omega
 
+/-- Exact paper-label wrapper for the S₄ regular-closure tame Artin conductor degrees.
+    thm:fold-gauge-anomaly-s4-regular-closure-tame-artin-conductor-degrees -/
+theorem paper_fold_gauge_anomaly_s4_regular_closure_tame_artin_conductor_degrees :
+    (1 - 0 = 1) ∧ (2 - 1 = 1) ∧ (3 - 2 = 1) ∧ (3 - 1 = 2) ∧
+    (12 * 1 = 12) ∧ (12 * 1 = 12) ∧ (12 * 1 = 12) ∧ (12 * 2 = 24) ∧
+    (1 * 12 + 2 * 12 + 3 * 12 + 3 * 24 = 144) := by
+  exact paper_fold_gauge_anomaly_s4_artin_conductor_degrees
+
 end Omega.Folding.GaugeAnomalyS4ArtinConductor

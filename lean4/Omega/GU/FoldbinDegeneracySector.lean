@@ -21,4 +21,19 @@ theorem paper_gut_foldbin_degeneracy_sector_lastbit_interval_seeds :
          ⟨by decide, by decide⟩, ⟨by omega, by omega⟩,
          ⟨by decide, by omega⟩⟩
 
+/-- Paper wrapper: equal endpoint cardinalities in an antitone tail family force every
+    intermediate tail cardinality to match the same value.
+    thm:gut-foldbin-degeneracy-sector-lastbit-interval -/
+theorem paper_gut_foldbin_degeneracy_sector_lastbit_interval {β : Type*} [DecidableEq β]
+    (tail : Bool → ℕ → Finset β)
+    (hanti : ∀ b v v', v ≤ v' → tail b v' ⊆ tail b v) :
+    ∀ b v₁ v₂ v₃ d, v₁ ≤ v₂ → v₂ ≤ v₃ → (tail b v₁).card = d →
+      (tail b v₃).card = d → (tail b v₂).card = d := by
+  intro b v₁ v₂ v₃ d hv₁₂ hv₂₃ h₁ h₃
+  have h₂₁ : tail b v₂ ⊆ tail b v₁ := hanti b v₁ v₂ hv₁₂
+  have h₃₂ : tail b v₃ ⊆ tail b v₂ := hanti b v₂ v₃ hv₂₃
+  have hle₂₁ : (tail b v₂).card ≤ (tail b v₁).card := Finset.card_le_card h₂₁
+  have hle₃₂ : (tail b v₃).card ≤ (tail b v₂).card := Finset.card_le_card h₃₂
+  omega
+
 end Omega.GU

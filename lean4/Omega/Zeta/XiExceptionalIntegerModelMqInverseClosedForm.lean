@@ -22,6 +22,12 @@ def exceptionalIntegerModelMqInv (q : Nat) : Matrix (Fin (q + 1)) (Fin (q + 1)) 
   Matrix.diagonal fun i =>
     if i = 0 then ((xi_exceptional_integer_model_mq_det_snf_sign q : ℚ) / 2) else 1
 
+/-- Concrete statement for
+`thm:xi-exceptional-integer-model-Mq-inverse-closed-form`. -/
+def xi_exceptional_integer_model_mq_inverse_closed_form_statement (q : Nat) : Prop :=
+  (exceptionalIntegerModelMq q * exceptionalIntegerModelMqInv q = 1) ∧
+    (exceptionalIntegerModelMqInv q * exceptionalIntegerModelMq q = 1)
+
 /-- Integer form of the exceptional matrix used for determinant and parity calculations. -/
 def xi_exceptional_integer_model_mq_det_snf_integer_matrix (q : Nat) :
     Matrix (Fin (q + 1)) (Fin (q + 1)) ℤ :=
@@ -131,5 +137,18 @@ theorem paper_xi_exceptional_integer_model_mq_det_snf (q : Nat) (hq : 2 <= q) :
             _ = m + m := by ring
         simpa [xi_exceptional_integer_model_mq_det_snf_integer_matrix] using hdiag
       · simp [hi]
+
+/-- Paper label: `thm:xi-exceptional-integer-model-Mq-inverse-closed-form`. -/
+theorem paper_xi_exceptional_integer_model_mq_inverse_closed_form (q : ℕ) (hq : 2 ≤ q) :
+    xi_exceptional_integer_model_mq_inverse_closed_form_statement q := by
+  exact paper_xi_exceptional_integer_model_Mq_inverse_closed_form q hq
+
+/-- Paper label: `cor:xi-exceptional-integer-model-Mq-diophantine-parity`. -/
+theorem paper_xi_exceptional_integer_model_mq_diophantine_parity
+    (q : ℕ) (hq : 2 ≤ q) (b : Fin (q + 1) → ℤ) :
+    (∃ x : Fin (q + 1) → ℤ,
+      (xi_exceptional_integer_model_mq_det_snf_integer_matrix q).mulVec x = b) ↔
+      Even (b 0) := by
+  exact (paper_xi_exceptional_integer_model_mq_det_snf q hq).2.2 b
 
 end Omega.Zeta

@@ -87,4 +87,13 @@ theorem paper_zeckendorf_val_invariant :
           (∀ x y : Quotient fibCongruenceSetoid, f (x + y) = f x + f y) := by
   exact paper_zeckendorf_val_invariant_seeds
 
+/-- Paper-label wrapper for `prop:val-invariant`. -/
+theorem paper_val_invariant :
+    (∀ a b : DigitCfg, FibCongruence a b → value a = value b) ∧
+      ∃ f : Quotient fibCongruenceSetoid → Nat,
+        (∀ a : DigitCfg, f ⟦a⟧ = value a) ∧
+          f 0 = 0 ∧
+          (∀ x y : Quotient fibCongruenceSetoid, f (x + y) = f x + f y) := by
+  exact paper_zeckendorf_val_invariant
+
 end Omega.EA

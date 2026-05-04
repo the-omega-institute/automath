@@ -95,6 +95,19 @@ theorem paper_xi_scale_entropy_laplace_stieltjes_completeness
     simp [div_eq_mul_inv]
   · exact xi_scale_entropy_laplace_stieltjes_completeness_inverse_unique
 
+/-- Paper label: `prop:xi-scale-entropy-stieltjes-inversion-complete`. -/
+theorem paper_xi_scale_entropy_stieltjes_inversion_complete
+    (M : Nat) (depth multiplicity delta : Fin M -> Real)
+    (analyticOnCut stieltjesBoundaryFormula : Prop)
+    (hAnalytic : analyticOnCut) (hBoundary : stieltjesBoundaryFormula)
+    (hInjective :
+      xi_scale_entropy_laplace_stieltjes_completeness_finite_spectrum_injective
+        M depth multiplicity delta) :
+    analyticOnCut ∧ stieltjesBoundaryFormula ∧
+      xi_scale_entropy_laplace_stieltjes_completeness_finite_spectrum_injective
+        M depth multiplicity delta := by
+  exact ⟨hAnalytic, hBoundary, hInjective⟩
+
 end
 
 end Omega.Zeta

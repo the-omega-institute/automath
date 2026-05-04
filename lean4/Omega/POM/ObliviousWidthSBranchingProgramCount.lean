@@ -41,4 +41,10 @@ theorem paper_pom_oblivious_widthS_branching_program_count (m S n : Nat) :
   rw [obliviousWidthSFunctionCount, obliviousWidthSOutputMapCount_eq,
     obliviousWidthSTransitionTableCount_eq]
 
+/-- Lowercase paper-label wrapper for
+`thm:pom-oblivious-widthS-branching-program-count`. -/
+theorem paper_pom_oblivious_widths_branching_program_count (m S n : Nat) :
+    obliviousWidthSFunctionCount m S n <= n ^ S * S ^ (2 * S * m) := by
+  exact paper_pom_oblivious_widthS_branching_program_count m S n
+
 end Omega.POM

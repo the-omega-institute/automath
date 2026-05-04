@@ -138,6 +138,18 @@ theorem paper_cdim_denominator_growth_finite_S :
       N_S S B ≤ (Nat.log 2 B + 1) ^ S.card) :=
   ⟨N_S_le_B, N_S_zero, @N_S_mono, N_S_le_two_pow_log, N_S_le_prod_log, N_S_le_log2_pow_card⟩
 
+/-- Lowercase paper-label wrapper for `prop:cdim-denominator-growth-finite-S`. -/
+theorem paper_cdim_denominator_growth_finite_s :
+    (∀ (S : Finset ℕ) (B : ℕ), N_S S B ≤ B) ∧
+    (∀ S : Finset ℕ, N_S S 0 = 0) ∧
+    (∀ (S : Finset ℕ) {B₁ B₂ : ℕ}, B₁ ≤ B₂ → N_S S B₁ ≤ N_S S B₂) ∧
+    (∀ (S : Finset ℕ) (B : ℕ), N_S S B ≤ 2 ^ (Nat.log 2 B + 1)) ∧
+    (∀ (S : Finset ℕ) (B : ℕ), (∀ p ∈ S, 2 ≤ p) →
+      N_S S B ≤ ∏ p ∈ S, (Nat.log p B + 1)) ∧
+    (∀ (S : Finset ℕ) (B : ℕ), (∀ p ∈ S, 2 ≤ p) →
+      N_S S B ≤ (Nat.log 2 B + 1) ^ S.card) :=
+  paper_cdim_denominator_growth_finite_S
+
 -- Phase R607: N_S monotonicity in S and seeds
 -- ══════════════════════════════════════════════════════════════
 

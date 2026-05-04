@@ -44,6 +44,7 @@ import Omega.Folding.BernoulliPMismatchStrictThirdOrderMarkov
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPOutputMismatchEliminationCurve
 import Omega.Folding.ReverseKlControlledByGenus2Partition
+import Omega.Folding.RencontresFixedPointDensity
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPPressureCycleEquation
 import Omega.Folding.BernoulliPPressureQuartic
@@ -774,3 +775,4 @@ import Omega.Folding.FoldSubmaximalRecoveryWindowGroundstateDegeneracy
 import Omega.Folding.FoldCondexpIndexMaxFiber
 import Omega.Folding.FoldBinSaturationWindowDensity
 import Omega.Folding.FoldInfonceK2CollisionRecurrenceClosure
+import Omega.Folding.XiFoldbinFiberwiseSaturationSectorCriterion

@@ -44,5 +44,16 @@ theorem paper_xi_unitary_slice_zero_count_spectral_flow
     xi_unitary_slice_zero_count_spectral_flow_data.spectralFlow,
     D.positive_transversal_crossing]
 
+/-- Paper label: `thm:xi-hardy-slice-spectral-flow-counting`. Branchwise kernel
+multiplicity agrees with the zero-phase indicator, so its total count is the same
+unitary-slice zero count that is identified with spectral flow. -/
+theorem paper_xi_hardy_slice_spectral_flow_counting
+    (D : xi_unitary_slice_zero_count_spectral_flow_data)
+    (kernelMultiplicity : Fin D.branchCount → Int)
+    (hkernel : ∀ i, kernelMultiplicity i = if D.eigenphaseAtSlice i = 0 then 1 else 0) :
+    D.zeroCount = D.spectralFlow ∧ (Finset.univ.sum kernelMultiplicity) = D.zeroCount := by
+  refine ⟨paper_xi_unitary_slice_zero_count_spectral_flow D, ?_⟩
+  simp [xi_unitary_slice_zero_count_spectral_flow_data.zeroCount, hkernel]
+
 end
 end Omega.Zeta

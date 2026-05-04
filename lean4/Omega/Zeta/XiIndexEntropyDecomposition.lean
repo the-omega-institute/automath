@@ -118,4 +118,23 @@ theorem paper_xi_index_entropy_decomposition (D : xi_index_entropy_decomposition
             rw [D.xi_index_entropy_decomposition_windingIndexMass_eq]
             ring
 
+/-- Paper label: `con:xi-index-entropy-strict-separation`. The finite defect entropy separates
+as the raw integer multiplicity sum minus the reciprocal depth penalty. -/
+theorem paper_xi_index_entropy_strict_separation (D : xi_index_entropy_decomposition_data) :
+    D.xi_index_entropy_decomposition_defectEntropy =
+      (∑ j, D.xi_index_entropy_decomposition_defectMultiplicity j) -
+        ∑ j,
+          D.xi_index_entropy_decomposition_defectMultiplicity j *
+            (1 + D.xi_index_entropy_decomposition_defectDelta j)⁻¹ := by
+  calc
+    D.xi_index_entropy_decomposition_defectEntropy =
+        D.xi_index_entropy_decomposition_closedFormEntropyInvariant := by
+        exact xi_index_entropy_decomposition_defectEntropy_closed D
+    _ =
+        (∑ j, D.xi_index_entropy_decomposition_defectMultiplicity j) -
+          ∑ j,
+            D.xi_index_entropy_decomposition_defectMultiplicity j *
+              (1 + D.xi_index_entropy_decomposition_defectDelta j)⁻¹ := by
+        exact xi_index_entropy_decomposition_closedForm_sum_sub D
+
 end Omega.Zeta

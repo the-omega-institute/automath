@@ -729,13 +729,25 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
             # 1. Fetch latest remote state
             run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
 
-            # 2. Fast-forward local BASE_BRANCH from origin if origin is ahead.
-            #    git merge --ff-only works on a checked-out branch (unlike git fetch .).
-            #    Silently no-ops if local is already at or ahead of origin.
-            run_cmd(
+            # 2. Incorporate origin before rebasing the worktree. Fast-forward
+            # when possible; if a builder/manual fix landed on origin while
+            # local parallel rounds accumulated, create an ordinary merge commit
+            # so local-only round commits remain pushable without force.
+            ff_origin = run_cmd(
                 ["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
                 cwd=REPO_ROOT, timeout=30,
             )
+            if ff_origin.returncode != 0:
+                merge_origin = run_cmd(
+                    ["git", "merge", "--no-edit", f"origin/{BASE_BRANCH}"],
+                    cwd=REPO_ROOT, timeout=180,
+                )
+                if merge_origin.returncode != 0:
+                    logger.error(
+                        f"Could not merge origin/{BASE_BRANCH} into {BASE_BRANCH}: "
+                        f"{merge_origin.stderr[:300]}"
+                    )
+                    return False
 
             # 3. Rebase worktree onto LOCAL BASE_BRANCH (includes local-only commits)
             rebase = run_cmd(
@@ -1411,7 +1423,11 @@ def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
         # For each newly-introduced symbol, check if it exists elsewhere
         # on base_sha under lean4/Omega/ (excluding this same file).
         for sym in new_syms:
-            # Escape regex metacharacters in symbol (dots are legal in Lean names)
+            # Use PCRE (-P). macOS git grep -E uses BSD ERE which silently
+            # rejects \s, \b, and (?:...) with "repetition-operator operand
+            # invalid" and returns exit=128, which we would miscount as "no
+            # match" — Gate 5 would then pass every round. PCRE works
+            # identically on all platforms.
             pattern = (
                 r"^\s*(?:@\[[^]]*\]\s*)*"
                 r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
@@ -1420,11 +1436,20 @@ def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
             )
             try:
                 g = run_cmd(
-                    ["git", "grep", "-l", "-E", pattern,
+                    ["git", "grep", "-l", "-P", pattern,
                      wt.base_sha, "--", "lean4/Omega/"],
                     cwd=wt.path, check=False,
                 )
             except Exception:
+                continue
+            # returncode: 0 = matches found, 1 = no match, 128 = regex/other
+            # error. Only 0 indicates a hit; 128 we treat as "skip this sym"
+            # (regex was invalid, warn but don't false-positive the round).
+            if g.returncode not in (0, 1):
+                logger.warning(
+                    f"[R{wt.round_number}] Gate 5: git grep returned {g.returncode} "
+                    f"for symbol '{sym}' (stderr: {(g.stderr or '')[:200]})"
+                )
                 continue
             hits = [l.strip() for l in (g.stdout or "").splitlines() if l.strip()]
             # git grep returns "<sha>:<path>" — strip the sha prefix

@@ -41,4 +41,11 @@ theorem paper_gut_fixed_precision_exponential_multiplicity
       _ = m * fiberSize y := by simp [fiberSize]
   simpa [fiberSize, ge_iff_le] using havg
 
+/-- Paper-facing wrapper for the group-JG label.
+    thm:group-jg-fixed-precision-exponential-multiplicity -/
+theorem paper_group_jg_fixed_precision_exponential_multiplicity
+    (k m : Nat) (bucket : Finset (Fin k) → Fin m) (hm : 0 < m) :
+    ∃ y : Fin m, m * Fintype.card {s : Finset (Fin k) // bucket s = y} ≥ 2 ^ k := by
+  exact paper_gut_fixed_precision_exponential_multiplicity k m bucket hm
+
 end Omega.GU

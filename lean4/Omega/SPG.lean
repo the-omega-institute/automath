@@ -43,6 +43,7 @@ import Omega.SPG.CoarsegrainingL2DistinguishabilityArea
 import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.CompactBoundaryContinuousDecoderTrivial
 import Omega.SPG.ComputableSectionCannotHitTypicalFiber
+import Omega.SPG.ConclusionCoordinatebundlePoissonGumbelCriticalWindow
 import Omega.SPG.ContractionEstimate
 import Omega.SPG.CoordinateBundleScreenClosure
 import Omega.SPG.CoordinateBundleScreenCount

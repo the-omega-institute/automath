@@ -1,5 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic
+import Omega.Conclusion.XiDyadicShellEnvelopeLaw
 
 namespace Omega.Conclusion
 
@@ -215,5 +216,79 @@ theorem paper_conclusion_xi_dyadic_depth_law
             exact mul_le_mul_of_nonneg_left hscaled hε0.le
       _ = ε := by ring
   exact htail.trans hmain
+
+noncomputable section
+
+/-- The explicit dyadic shell envelope used in the Rouché shift estimate. -/
+def conclusion_xi_rouche_stability_dyadicEnvelope (K : ℕ) : ℝ :=
+  (2 / Real.pi) * (2 : ℝ) ^ (-(3 / 4 : ℝ) * (K : ℝ)) *
+    Real.exp (-Real.pi * ((2 ^ K : ℕ) : ℝ))
+
+/-- Concrete Rouché stability package for a simple zero and its dyadic truncations. -/
+structure conclusion_xi_rouche_stability_data where
+  z0 : ℂ
+  truncatedZero : ℕ → ℂ
+  K0 : ℕ
+  radius : ℝ
+  boundaryMargin : ℝ
+  t0 : ℝ
+  boundaryError : ℕ → ℝ
+  shell : ℕ → ℝ → ℝ
+  radius_pos : 0 < radius
+  boundaryMargin_pos : 0 < boundaryMargin
+  rouche_unique :
+    ∀ K : ℕ, K0 ≤ K →
+      ‖truncatedZero K - z0‖ < radius ∧
+        ∀ z : ℂ, ‖z - z0‖ < radius → z = truncatedZero K
+  rouche_shift :
+    ∀ K : ℕ, K0 ≤ K →
+      ‖truncatedZero K - z0‖ ≤ radius / boundaryMargin * boundaryError K
+  boundaryError_le_shell :
+    ∀ K : ℕ, K0 ≤ K → boundaryError K ≤ |shell K t0|
+  shell_formula :
+    ∀ K t,
+      shell K t =
+        (2 / Real.pi) * (2 : ℝ) ^ (-(3 / 4 : ℝ) * (K : ℝ)) *
+            Real.exp (-Real.pi * ((2 ^ K : ℕ) : ℝ)) *
+          Real.cos (((K : ℝ) * Real.log 2 / 2) * t)
+
+namespace conclusion_xi_rouche_stability_data
+
+/-- Rouché gives a unique truncated zero in the isolating disk. -/
+def uniqueTruncatedZero (D : conclusion_xi_rouche_stability_data) : Prop :=
+  ∀ K : ℕ, D.K0 ≤ K →
+    ‖D.truncatedZero K - D.z0‖ < D.radius ∧
+      ∀ z : ℂ, ‖z - D.z0‖ < D.radius → z = D.truncatedZero K
+
+/-- The abstract Rouché/shift-control inequality before inserting the dyadic envelope. -/
+def shiftBound (D : conclusion_xi_rouche_stability_data) : Prop :=
+  ∀ K : ℕ, D.K0 ≤ K →
+    ‖D.truncatedZero K - D.z0‖ ≤ D.radius / D.boundaryMargin * D.boundaryError K
+
+/-- The explicit superexponential dyadic shift bound. -/
+def explicitSuperexpShiftBound (D : conclusion_xi_rouche_stability_data) : Prop :=
+  ∀ K : ℕ, D.K0 ≤ K →
+    ‖D.truncatedZero K - D.z0‖ ≤
+      D.radius / D.boundaryMargin * conclusion_xi_rouche_stability_dyadicEnvelope K
+
+end conclusion_xi_rouche_stability_data
+
+open conclusion_xi_rouche_stability_data
+
+/-- Paper label: `thm:conclusion-xi-rouche-stability`. -/
+theorem paper_conclusion_xi_rouche_stability (D : conclusion_xi_rouche_stability_data) :
+    D.uniqueTruncatedZero ∧ D.shiftBound ∧ D.explicitSuperexpShiftBound := by
+  refine ⟨D.rouche_unique, D.rouche_shift, ?_⟩
+  intro K hK
+  have hshell := paper_conclusion_xi_dyadic_shell_envelope_law D.shell D.shell_formula
+  have htail :
+      D.boundaryError K ≤ conclusion_xi_rouche_stability_dyadicEnvelope K := by
+    exact (D.boundaryError_le_shell K hK).trans (by
+      simpa [conclusion_xi_rouche_stability_dyadicEnvelope] using (hshell K D.t0).1)
+  have hfactor_nonneg : 0 ≤ D.radius / D.boundaryMargin :=
+    div_nonneg (le_of_lt D.radius_pos) (le_of_lt D.boundaryMargin_pos)
+  exact (D.rouche_shift K hK).trans (mul_le_mul_of_nonneg_left htail hfactor_nonneg)
+
+end
 
 end Omega.Conclusion

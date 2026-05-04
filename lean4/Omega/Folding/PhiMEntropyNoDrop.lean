@@ -15,4 +15,12 @@ theorem paper_Phi_m_entropy_no_drop (m : Nat) (hTopZ hTopY : ℝ)
     hTopY = hTopZ := hFactor hmFactor
     _ = Real.log 2 := hConj hmConj
 
+/-- Lowercase paper-label wrapper for `cor:Phi_m-entropy-no-drop`. -/
+theorem paper_phi_m_entropy_no_drop (m : Nat) (hTopZ hTopY : ℝ)
+    (conjToFullShift finiteToOneFactor : Prop)
+    (hConj : conjToFullShift -> hTopZ = Real.log 2)
+    (hFactor : finiteToOneFactor -> hTopY = hTopZ) :
+    2 <= m -> conjToFullShift -> finiteToOneFactor -> hTopY = Real.log 2 := by
+  exact paper_Phi_m_entropy_no_drop m hTopZ hTopY conjToFullShift finiteToOneFactor hConj hFactor
+
 end Omega.Folding

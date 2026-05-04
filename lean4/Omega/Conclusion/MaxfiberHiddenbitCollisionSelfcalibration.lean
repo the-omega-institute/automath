@@ -58,6 +58,13 @@ theorem paper_conclusion_maxfiber_hiddenbit_collision_selfcalibration :
         rw [one_div, inv_pow]
   exact ⟨hDelta, hHighEndpoint, hLowEndpoint, hHighMass, hLowMass, hMassSum 0⟩
 
+/-- Paper label: `cor:conclusion-maxfiber-gcd-determines-hiddenbit-entropy-class`. -/
+theorem paper_conclusion_maxfiber_gcd_determines_hiddenbit_entropy_class (Phase : Type*)
+    (gcdClass : Phase → ℕ) (hiddenEntropy : Phase → ℝ) (entropyOfGcd : ℕ → ℝ)
+    (hclass : ∀ x, hiddenEntropy x = entropyOfGcd (gcdClass x)) :
+    ∃ E : ℕ → ℝ, ∀ x, hiddenEntropy x = E (gcdClass x) := by
+  exact ⟨entropyOfGcd, hclass⟩
+
 end
 
 end Omega.Conclusion

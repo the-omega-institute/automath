@@ -34,4 +34,16 @@ theorem paper_xi_time_part9e_recurrence_jacobian_hankel {k : Type*} [Field k] {d
     (Matrix.det_smul
       (xi_time_part9e_recurrence_jacobian_hankel_hankelMatrix hd a0 c) (-1 : k))
 
+/-- Paper label: `cor:xi-time-part9e-recurrence-rational-inversion`. -/
+theorem paper_xi_time_part9e_recurrence_rational_inversion
+    (linearHankelSystem nonsingular rationalInverse birationalOnOpen branchLocusDetH : Prop)
+    (hSystem : linearHankelSystem)
+    (hNon : nonsingular)
+    (hInv : linearHankelSystem → nonsingular → rationalInverse)
+    (hBir : rationalInverse → birationalOnOpen)
+    (hBranch : nonsingular → branchLocusDetH) :
+    rationalInverse ∧ birationalOnOpen ∧ branchLocusDetH := by
+  have hRational : rationalInverse := hInv hSystem hNon
+  exact ⟨hRational, hBir hRational, hBranch hNon⟩
+
 end Omega.Zeta

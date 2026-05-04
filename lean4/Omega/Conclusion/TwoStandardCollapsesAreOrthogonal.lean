@@ -45,4 +45,16 @@ theorem paper_conclusion_two_standard_collapses_are_orthogonal :
   · norm_num [conclusion_two_standard_collapses_are_orthogonal_unit_class_a3,
       conclusion_two_standard_collapses_are_orthogonal_unit_class_a4_two]
 
+/-- Paper label: `cor:conclusion-loworder-bare-k-theory-unitclass-fork`. -/
+theorem paper_conclusion_loworder_bare_k_theory_unitclass_fork :
+    conclusion_two_standard_collapses_are_orthogonal_bare_k0_size_a3 =
+        conclusion_two_standard_collapses_are_orthogonal_bare_k0_size_a4_two ∧
+      conclusion_two_standard_collapses_are_orthogonal_bare_k1_rank_a3 =
+        conclusion_two_standard_collapses_are_orthogonal_bare_k1_rank_a4_two ∧
+      conclusion_two_standard_collapses_are_orthogonal_unit_class_a3 ≠
+        conclusion_two_standard_collapses_are_orthogonal_unit_class_a4_two := by
+  refine ⟨rfl, rfl, ?_⟩
+  norm_num [conclusion_two_standard_collapses_are_orthogonal_unit_class_a3,
+    conclusion_two_standard_collapses_are_orthogonal_unit_class_a4_two]
+
 end Omega.Conclusion
