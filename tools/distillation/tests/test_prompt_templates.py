@@ -65,6 +65,16 @@ class PromptTemplateTests(unittest.TestCase):
         self.assertIn("subsec__group-unification-audit-pointers.tex", contract)
         self.assertIn("transition matrix", contract)
 
+    def test_stallings_subgroup_contract_blocks_zeckendorf_cyclic_route(self):
+        contract = distill._family_specific_deepening_contract(
+            {"name": "subgroup reconstruction from canonical finite automata"}
+        )
+
+        self.assertIn("folded labelled core graph", contract)
+        self.assertIn("Do not translate it into", contract)
+        self.assertIn("Zeckendorf", contract)
+        self.assertIn("subsec__folding-map.tex", contract)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1918,6 +1918,35 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  train-track content.",
             ]
         )
+    if family_slug == "subgroup_reconstruction_from_canonical_finite_automata":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This Stallings family is about reconstructing a finitely generated",
+                "  subgroup of a free group from the finite deterministic automaton",
+                "  carried by a folded labelled core graph. Do not translate it into",
+                "  Zeckendorf words, Fibonacci moduli, cyclic groups, gcd subgroup",
+                "  formulas, or the operations op_m / zeta_m / V_m. Those are the",
+                "  wrong object layer for this source.",
+                "- A valid writeback must explicitly define or use a finite labelled",
+                "  directed graph with a base vertex, reduced edge labels in a finite",
+                "  alphabet A^{+-1}, accepted reduced loops, trimming of vertices not",
+                "  lying on accepted loops, and the deterministic/folded condition",
+                "  that no two outgoing edges at a vertex have the same label.",
+                "- Preferred theorem shape: if a finite based labelled graph is folded",
+                "  and core-trimmed, then its accepted reduced loop labels form a",
+                "  finitely generated subgroup; conversely a finite labelled bouquet",
+                "  for finitely many generators can be folded and trimmed to a finite",
+                "  deterministic core accepting exactly the subgroup they generate.",
+                "- Target group_unification if it can host labels, paths, basepoints,",
+                "  represented readouts, and quotient/core reconstruction. Target",
+                "  folding only for a short auxiliary graph-folding lemma. Do not",
+                "  target subsec__folding-map.tex with cyclic subgroup arithmetic.",
+                "- Keep labels short and unique. Put any Omega interpretation in a",
+                "  separate remark after the proof; theorem and proof environments",
+                "  must contain only the formal graph/automaton reconstruction claim.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(
