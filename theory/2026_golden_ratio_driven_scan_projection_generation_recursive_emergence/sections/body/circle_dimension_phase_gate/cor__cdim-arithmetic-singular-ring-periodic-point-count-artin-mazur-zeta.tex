@@ -150,6 +150,150 @@ E(k)=D^{[n]}_{S}(k)
 \]
 但当某个 \(p\in S\) 满足 \(p\nmid n\) 时，引理 \ref{lem:distill-cdim-scaling-denominator-subexponential} 表明 \(v_p(D^{[n]}_{S}(k))=v_p(n^k-1)\) 沿一列 \(k\) 无界，这与 \(E\) 的 \(B\)-有界性矛盾。证毕。
 \end{proof}
+\begin{definition}[有限迹对象与 primitive 预算账本]\label{distill:connes_consani_arithmetic_site-zeta_shadow_periodic_count_templates-finite-trace-ledger}
+沿推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 的记号。固定整数 \(N\ge1\)。称三元组
+\[
+\mathcal T_{\le N}=(\mathcal O_{\le N},\pi,m)
+\]
+为一个 \(N\)-级有限迹对象，若 \(\mathcal O_{\le N}\) 为有限集，
+\[
+\pi:\mathcal O_{\le N}\to\{1,\ldots,N\},\qquad
+m:\mathcal O_{\le N}\to\mathbb Z_{>0},
+\]
+并且其第 \(k\) 级迹数定义为
+\[
+\operatorname{Tr}_{\mathcal T}(k)
+:=\sum_{\substack{\omega\in\mathcal O_{\le N}\\ \pi(\omega)\mid k}}
+\pi(\omega)m(\omega)
+\qquad(1\le k\le N).
+\]
+这里 \(\pi(\omega)\) 是 primitive 周期，\(m(\omega)\) 是该 primitive 轨道或固定对应分量的 multiplicity。本文在此处使用方法算子 \emph{count through geometric zeta shadows} 时，仅指这样的有限迹对象及其形式迹级数；不附加任何 Riemann--\(\zeta\) 型解析断言。
+\end{definition}
+
+\begin{theorem}[有限 zeta-shadow 的 primitive 预算门与有界分母首障碍]\label{distill:connes_consani_arithmetic_site-zeta_shadow_periodic_count_templates-finite-trace-primitive-budget-gate}
+设 \(S\subset\mathbb P\) 为有限素数集，\(s=|S|\ge1\)，\(n\ge2\)，并令
+\[
+A_{S,n}(k):=|\operatorname{Fix}([n]^k)|
+\]
+为推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 的周期定点计数。记 \(\mu_{\rm Mob}\) 为 Möbius 函数，并定义
+\[
+P_{S,n}(d):=\frac1d\sum_{e\mid d}\mu_{\rm Mob}(e)A_{S,n}(d/e)
+\qquad(d\ge1).
+\]
+则对每个 \(d\ge1\)，\(P_{S,n}(d)\in\mathbb Z_{\ge0}\)，且它等于 \([n]\) 在 \(\mathfrak R_S\) 上 exact primitive 周期为 \(d\) 的轨道数。
+
+更精确地，对任意 \(N\ge1\)，令 \(\mathcal O_{S,n,\le N}\) 为 exact primitive 周期不超过 \(N\) 的 \([n]\)-轨道集合，令 \(\pi\) 为其周期，令 \(m\equiv1\)。则
+\[
+\mathcal T_{S,n,\le N}:=(\mathcal O_{S,n,\le N},\pi,1)
+\]
+是一个有限迹对象，并满足
+\[
+A_{S,n}(k)=\operatorname{Tr}_{\mathcal T_{S,n,\le N}}(k)
+=\sum_{d\mid k}dP_{S,n}(d)
+\qquad(1\le k\le N).
+\]
+因此有形式同余
+\[
+\exp\!\left(\sum_{k=1}^{N}\frac{A_{S,n}(k)}kz^k\right)
+\equiv
+\prod_{d=1}^{N}(1-z^d)^{-P_{S,n}(d)}
+\pmod{z^{N+1}}.
+\]
+反过来，若任一有限迹对象 \(\mathcal T_{\le N}\) 满足
+\[
+\operatorname{Tr}_{\mathcal T}(k)=A_{S,n}(k)\qquad(1\le k\le N),
+\]
+则对每个 \(d\le N\)，其周期为 \(d\) 的总 multiplicity 必为 \(P_{S,n}(d)\)。因此，候选 zeta-shadow 在第 \(N\) 级以前通过有限轨道预算审计，当且仅当其 trace 数列的 Möbius primitive 预算为非负整数并逐周期等于上述 \(P_{S,n}(d)\)。
+
+此外，若存在 \(p\in S\) 使 \(p\nmid n\)，并给定整数 \(B\ge0\)，定义
+\[
+\kappa_{p,B}:=
+\begin{cases}
+\rho_p p^{B+1},& p\text{ 为奇素数，且 }\rho_p\text{ 为 }n\text{ 在 }(\mathbb Z/p\mathbb Z)^\times\text{ 中的阶},\\
+2^{B+1},& p=2.
+\end{cases}
+\]
+若 \(N\ge\kappa_{p,B}\)，则不存在 \(B\)-有界的 \(S\)-分母账本
+\[
+E(k)=\prod_{q\in S}q^{e_q(k)},\qquad 0\le e_q(k)\le B,
+\]
+使得
+\[
+\operatorname{Tr}_{\mathcal T}(k)=\frac{(n^k-1)^s}{E(k)}=A_{S,n}(k)
+\qquad(1\le k\le N)
+\]
+对某个有限迹对象 \(\mathcal T_{\le N}\) 成立。换言之，有界分母的错误 orbit budget 在有限阶 \(\kappa_{p,B}\) 以前已经被迫显形，不能留待全局闭包阶段修补。
+\end{theorem}
+\begin{proof}
+对任意自映射，点 \(x\) 的 exact 周期为 \(d\) 当且仅当 \([n]^d(x)=x\) 且不存在真因子 \(r\mid d\) 满足 \([n]^r(x)=x\)。由于推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 已给出每个 \(\operatorname{Fix}([n]^k)\) 的有限基数，exact 周期为 \(d\) 的点集有限，并分解为若干长度正好为 \(d\) 的 \([n]\)-轨道。设这些轨道数为 \(Q(d)\)。则对每个 \(k\ge1\)，一个 primitive 周期为 \(d\) 的轨道对 \(\operatorname{Fix}([n]^k)\) 的贡献为 \(d\) 当且仅当 \(d\mid k\)，否则贡献为 \(0\)。因此
+\[
+A_{S,n}(k)=\sum_{d\mid k}dQ(d).
+\]
+对该卷积恒等式作 Möbius 反演，得到
+\[
+dQ(d)=\sum_{e\mid d}\mu_{\rm Mob}(e)A_{S,n}(d/e),
+\]
+故 \(Q(d)=P_{S,n}(d)\)。这同时证明 \(P_{S,n}(d)\in\mathbb Z_{\ge0}\)，并证明其为 exact primitive 周期轨道数。
+
+取 \(\mathcal O_{S,n,\le N}\) 为 exact primitive 周期不超过 \(N\) 的轨道集合时，上述贡献公式立刻给出
+\[
+\operatorname{Tr}_{\mathcal T_{S,n,\le N}}(k)=\sum_{d\mid k}dP_{S,n}(d)=A_{S,n}(k)
+\qquad(1\le k\le N).
+\]
+再由形式展开
+\[
+-\log(1-z^d)=\sum_{r\ge1}\frac{z^{dr}}r
+\]
+可得
+\[
+\log\prod_{d=1}^{N}(1-z^d)^{-P_{S,n}(d)}
+=\sum_{d=1}^{N}P_{S,n}(d)\sum_{r\ge1}\frac{z^{dr}}r.
+\]
+取 \(z^k\) 的系数且只看 \(k\le N\)，其值为
+\[
+\frac1k\sum_{d\mid k}dP_{S,n}(d)=\frac{A_{S,n}(k)}k.
+\]
+故两边指数级数在 \(z^N\) 以前系数相同，即得所述模 \(z^{N+1}\) 同余。
+
+若 \(\mathcal T_{\le N}\) 是任意满足 \(\operatorname{Tr}_{\mathcal T}(k)=A_{S,n}(k)\) 的有限迹对象，记
+\[
+M_{\mathcal T}(d):=\sum_{\substack{\omega\in\mathcal O_{\le N}\\ \pi(\omega)=d}}m(\omega).
+\]
+则按定义有
+\[
+A_{S,n}(k)=\operatorname{Tr}_{\mathcal T}(k)=\sum_{d\mid k}dM_{\mathcal T}(d)
+\qquad(1\le k\le N).
+\]
+对 \(1\le d\le N\) 再作 Möbius 反演，得到 \(M_{\mathcal T}(d)=P_{S,n}(d)\)。这证明了 primitive multiplicity 预算的唯一性，也说明任何有限 zeta-shadow 审计必须先通过该 Möbius primitive 门。
+
+最后证明有界分母首障碍。由定理 \ref{thm:distill-cdim-scaling-denominator-shadow-radius}，对所有 \(k\ge1\) 有精确分解
+\[
+A_{S,n}(k)=\frac{(n^k-1)^s}{D^{[n]}_{S}(k)},
+\qquad
+D^{[n]}_{S}(k)=\prod_{q\in S}q^{v_q(n^k-1)}.
+\]
+若某个 \(B\)-有界账本 \(E\) 在 \(1\le k\le N\) 上满足
+\[
+\frac{(n^k-1)^s}{E(k)}=A_{S,n}(k),
+\]
+则因 \(n^k-1\ne0\)，必有 \(E(k)=D^{[n]}_{S}(k)\)。
+
+当 \(p\) 为奇素数时，取 \(k=\kappa_{p,B}=\rho_p p^{B+1}\)。提升指数引理给出
+\[
+v_p(n^k-1)=v_p(n^{\rho_p}-1)+v_p(p^{B+1})
+=v_p(n^{\rho_p}-1)+B+1>B.
+\]
+当 \(p=2\) 时，\(n\) 为奇数，取 \(k=2^{B+1}\)，同一提升指数公式的二进制形式给出
+\[
+v_2(n^k-1)=v_2(n^2-1)+v_2(k)-1
+=v_2(n^2-1)+B>B,
+\]
+因为奇数 \(n\) 满足 \(v_2(n^2-1)\ge3\)。于是只要 \(N\ge\kappa_{p,B}\)，在该 \(k\le N\) 处有
+\[
+v_p(D^{[n]}_{S}(k))>B,
+\]
+这与 \(E\) 的 \(B\)-有界性矛盾。故错误的有界分母 trace 模板必在有限阶 \(\kappa_{p,B}\) 以前失败。证毕。
+\end{proof}
 
 \endinput
 
