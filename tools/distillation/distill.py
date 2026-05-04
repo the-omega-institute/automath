@@ -14,7 +14,7 @@ import time
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Optional
 
@@ -168,6 +168,7 @@ ORACLE_AGENT_STALE_TIMEOUT = int(os.environ.get("ORACLE_AGENT_STALE_TIMEOUT", "3
 ORACLE_NO_EXTRACT_TIMEOUT = int(os.environ.get("ORACLE_NO_EXTRACT_TIMEOUT", "600"))
 CODEX_INFRA_RETRIES = int(os.environ.get("DISTILL_CODEX_INFRA_RETRIES", "3"))
 CODEX_INFRA_RETRY_SLEEP = int(os.environ.get("DISTILL_CODEX_INFRA_RETRY_SLEEP", "20"))
+CLAUDE_QUOTA_WAIT_MAX_SECONDS = int(os.environ.get("CLAUDE_QUOTA_WAIT_MAX_SECONDS", "7200"))
 REVIEW_BACKENDS = ("codex", "codex-claude", "claude")
 DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "claude")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
@@ -601,6 +602,31 @@ def _find_claude() -> str:
 CLAUDE_PATH = _find_claude()
 
 
+def _claude_quota_reset_delay(text: str, now: Optional[datetime] = None) -> Optional[int]:
+    """Return seconds until Claude quota reset, plus a small safety buffer."""
+    lowered = str(text or "").lower()
+    if "out of extra usage" not in lowered and "usage limit" not in lowered:
+        return None
+    match = re.search(
+        r"resets?\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?",
+        lowered,
+    )
+    if not match:
+        return 15 * 60
+    current = now or datetime.now().astimezone()
+    hour = int(match.group(1))
+    minute = int(match.group(2) or "0")
+    suffix = match.group(3)
+    if suffix == "pm" and hour < 12:
+        hour += 12
+    elif suffix == "am" and hour == 12:
+        hour = 0
+    target = current.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    if target <= current:
+        target = target + timedelta(days=1)
+    return max(0, int((target - current).total_seconds()) + 60)
+
+
 def claude_exec(
     prompt: str,
     *,
@@ -625,38 +651,59 @@ def claude_exec(
 
     cmd = [str(claude_bin), "-p", "--dangerously-skip-permissions"]
     use_shell = IS_WINDOWS and str(claude_bin).lower().endswith(".cmd")
-    start = time.monotonic()
-    result: Optional[subprocess.CompletedProcess[str]] = None
     # Strip CLAUDECODE env var to allow nested Claude CLI invocation
     clean_env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
-    try:
-        result = subprocess.run(
-            cmd,
-            input=prompt,
-            capture_output=True,
-            text=True,
-            timeout=timeout_seconds,
-            cwd=str(target_dir),
-            env=clean_env,
-            shell=use_shell,
-            encoding="utf-8",
-            errors="replace",
-        )
-    except subprocess.TimeoutExpired:
-        logger.warning("Claude CLI timed out after %ss", timeout_seconds)
-        return "(timeout)"
-    finally:
-        elapsed = time.monotonic() - start
-        rc = result.returncode if result else "?"
-        logger.info("Claude CLI completed in %.1fs rc=%s", elapsed, rc)
+    quota_waited = False
+    while True:
+        start = time.monotonic()
+        result: Optional[subprocess.CompletedProcess[str]] = None
+        try:
+            result = subprocess.run(
+                cmd,
+                input=prompt,
+                capture_output=True,
+                text=True,
+                timeout=timeout_seconds,
+                cwd=str(target_dir),
+                env=clean_env,
+                shell=use_shell,
+                encoding="utf-8",
+                errors="replace",
+            )
+        except subprocess.TimeoutExpired:
+            logger.warning("Claude CLI timed out after %ss", timeout_seconds)
+            return "(timeout)"
+        finally:
+            elapsed = time.monotonic() - start
+            rc = result.returncode if result else "?"
+            logger.info("Claude CLI completed in %.1fs rc=%s", elapsed, rc)
 
-    output = result.stdout or ""
-    if result.returncode != 0:
-        logger.warning("Claude CLI error: %s", (result.stderr or "")[:500])
-        if not output:
-            logger.warning("Claude produced no stdout; falling back to codex_exec")
-            return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
-    return output
+        output = result.stdout or ""
+        error = result.stderr or ""
+        combined = "\n".join(part for part in (output.strip(), error.strip()) if part)
+        if result.returncode == 0:
+            return output
+
+        logger.warning("Claude CLI error: %s", (combined or "<empty>")[:500])
+        quota_delay = _claude_quota_reset_delay(combined)
+        if (
+            quota_delay is not None
+            and not quota_waited
+            and quota_delay <= CLAUDE_QUOTA_WAIT_MAX_SECONDS
+        ):
+            logger.warning(
+                "Claude quota unavailable; sleeping %ss until reset before retrying",
+                quota_delay,
+            )
+            time.sleep(quota_delay)
+            quota_waited = True
+            continue
+        if output:
+            return output
+        if combined:
+            return combined
+        logger.warning("Claude produced no output; falling back to codex_exec")
+        return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
 
 
 def _load_prompt(name: str) -> str:
@@ -5070,6 +5117,7 @@ def _parse_score_response(response: str) -> dict[str, Any]:
     unavailable_markers = (
         "you've hit your limit",
         "you have hit your limit",
+        "out of extra usage",
         "usage limit",
         "rate limit",
         "try again later",
