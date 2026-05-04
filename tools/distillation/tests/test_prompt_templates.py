@@ -56,6 +56,15 @@ class PromptTemplateTests(unittest.TestCase):
             },
         )
 
+    def test_stallings_growth_contract_blocks_wrong_target_hosts(self):
+        contract = distill._family_specific_deepening_contract(
+            {"name": "growth-classification from legal survivors"}
+        )
+
+        self.assertIn("subsec__protocol-screening-fold-survivor.tex", contract)
+        self.assertIn("subsec__group-unification-audit-pointers.tex", contract)
+        self.assertIn("transition matrix", contract)
+
 
 if __name__ == "__main__":
     unittest.main()

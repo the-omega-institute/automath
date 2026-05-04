@@ -1891,6 +1891,33 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  of parallel Cech dichotomies.",
             ]
         )
+    if family_slug == "growth_classification_from_legal_survivors":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This Stallings family has repeatedly failed by placing a generic",
+                "  nonnegative-matrix growth classification into the wrong host file.",
+                "  Do not target subsec__protocol-screening-fold-survivor.tex or",
+                "  subsec__group-unification-audit-pointers.tex. Those sections are",
+                "  protocol-screening and audit-interface sections, not venues for a",
+                "  new transition matrix framework.",
+                "- A valid writeback must be locally anchored in a target context that",
+                "  already discusses growth dynamics, transition matrix analysis,",
+                "  spectral radius, Perron-Frobenius data, legal survivor paths, or",
+                "  train-track transition matrices. If no supplied target context",
+                "  contains such objects, output no writeback for that target.",
+                "- The theorem must use a named transition matrix or explicitly defined",
+                "  legal-survivor directed graph from the local context. Do not invent",
+                "  survivor ledgers S_m, audit matrices T_m, address readouts a_m,",
+                "  witness carriers, or microstate update maps unless the statement",
+                "  defines them and the proof actually uses them.",
+                "- The Stallings/Bestvina-Handel connection must be mathematical, not",
+                "  cosmetic: either prove a classification for a local transition",
+                "  matrix/graph already present in the target, or explicitly state the",
+                "  result as a conservative transition matrix lemma without claiming",
+                "  train-track content.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(
