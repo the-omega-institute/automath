@@ -275,18 +275,46 @@ def promote_and_run_source_queue_candidate(args: argparse.Namespace) -> bool:
     commit_source_queue(args, "chore: claim distillation source candidate")
     ok = run_source(source_name, args)
     state = distill.load_state(source_name)
-    source_queue.finalize_candidate(
-        queue_id,
-        success=ok,
-        failure_kind=state.failure_kind,
-        detail=state.next_action,
-    )
-    commit_source_queue(
-        args,
-        "chore: complete distillation source candidate" if ok
-        else "chore: block distillation source candidate",
-    )
+    if ok:
+        source_queue.finalize_candidate(queue_id, success=True)
+        commit_source_queue(args, "chore: complete distillation source candidate")
+    elif SUPERVISOR_STOP_FILE.exists() or distill.STOP_FILE.exists():
+        _log(f"source-queue: paused {queue_id}; leaving candidate running")
+    else:
+        source_queue.finalize_candidate(
+            queue_id,
+            success=False,
+            failure_kind=state.failure_kind,
+            detail=state.next_action,
+        )
+        commit_source_queue(args, "chore: block distillation source candidate")
     return ok
+
+
+def reconcile_running_source_queue_candidates(args: argparse.Namespace, records: list[dict[str, Any]]) -> None:
+    if args.dry_run:
+        return
+    record_by_name = {str(record.get("name", "")): record for record in records}
+    queue = source_queue.read_queue()
+    changed = False
+    now = _now_iso()
+    for item in queue.get("candidates", []):
+        if not isinstance(item, dict) or item.get("status") != "running":
+            continue
+        source_name = str(item.get("distillation_source_name") or item.get("proposed_source") or "")
+        record = record_by_name.get(source_name)
+        if not record or not record.get("done"):
+            continue
+        item["status"] = "done"
+        item["finished_at"] = now
+        item["next_step"] = "complete"
+        item.pop("failure_kind", None)
+        item.pop("detail", None)
+        changed = True
+        _log(f"source-queue: reconciled running candidate {item.get('id')} -> done")
+    if changed:
+        source_queue.write_queue(queue)
+        commit_source_queue(args, "chore: complete distillation source candidate")
 
 
 def _increment_attempt_for_retry(name: str) -> None:
@@ -338,6 +366,7 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
 
     names = selected_names(args)
     records = source_records(names)
+    reconcile_running_source_queue_candidates(args, records)
     print(format_dashboard(records, branch=args.branch, sync=sync_result), flush=True)
     runnable = runnable_records(records)
     if not runnable:
