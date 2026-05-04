@@ -265,5 +265,43 @@ W=(\mathsf{tag},\ \mathsf{loc},\ \mathsf{lb},\ \mathsf{aux}),
   \item \textbf{端点承载条件：}若协议同时要求对端点承载强度作独立审计，则 Toeplitz 截断阶 \(N\) 必须足以把 \(a_N\) 的误差界压至目标阈值内；在端点外谱隙存在时该条件可指数满足，否则必须外置更大模式轴或引入更强假设（\S\ref{subsubsec:cdim-blindspot-budget-endpoint-atom}，\S\ref{subsec:cdim-quantifier-elimination-spectral-surrogate}）。
 \end{enumerate}
 该联合条件的制度含义为：在 unitary slice 的最小闭包中，“排除离线偏移”不属于单一证书族的职责，而是三端资源的并行闭包；任何拒绝外置其中之一的协议都会在类型层产生可核验的失败见证，并按 \S\ref{subsec:cdim-failure-witness-output-format} 的格式输出。
+\begin{definition}[有限窗口谱增长账本]\label{def:distill-connes-finite-window-spectral-growth-ledger}
+一个深度 \(M\) 的有限窗口谱增长账本由以下数据组成：有限维 Hilbert 空间 \(H_{\le M}\)，正自伴算子 \(D_{\le M}\in\mathrm{End}(H_{\le M})\)，以及统一离线验证器 \(\mathrm{Ver}^{\mathrm{uni}}\) 在深度 \(M\) 内实际读取的有限证书数据 \(\mathcal C_{\le M}\)。
+
+称正自伴紧预解算子 \((H,D)\) 是该账本的一个谱增长扩张，若存在等距嵌入 \(H_{\le M}\subset H\)，使 \(H_{\le M}\) 对 \(D\) 不变且 \(D|_{H_{\le M}}=D_{\le M}\)，并且 \(\mathcal C_{\le M}\) 的所有算子读出均只作用在 \(H_{\le M}\) 上。其谱维读出定义为
+\[
+\delta(D):=\inf\{s>0:\operatorname{Tr}((1+D)^{-s})<\infty\}.
+\]
+两个扩张若在 \((H_{\le M},D_{\le M},\mathcal C_{\le M})\) 上相同，则称为有限窗口等价。
+\end{definition}
+
+\begin{proposition}[有限窗口不能决定谱维读出]\label{prop:distill-connes-finite-window-spectral-mirage}
+固定定义 \ref{def:distill-connes-finite-window-spectral-growth-ledger} 的深度 \(M\) 账本。对任意 \(\alpha\ge0\)，存在该账本的谱增长扩张 \((H^{(\alpha)},D^{(\alpha)})\)，使得
+\[
+\delta(D^{(\alpha)})=\alpha.
+\]
+因此，若一个断言只依赖 \(\mathcal C_{\le M}\)、相位分母、有限阶 Toeplitz--PSD 数据或有限 Jacobi 寄存器读出，则它不能在所有谱增长扩张上唯一决定 \(\delta(D)\)，除非额外假设了跨尺度特征值计数、热迹或可和性比较账本。
+\end{proposition}
+\begin{proof}
+令 \(K^{(\alpha)}\) 为具有正交分解
+\[
+K^{(\alpha)}=\bigoplus_{r=1}^{\infty}K_r^{(\alpha)},\qquad
+\dim K_r^{(\alpha)}=m_r^{(\alpha)}:=\max\{1,\lceil 2^{\alpha r}\rceil\},
+\]
+的 Hilbert 空间，并在 \(K_r^{(\alpha)}\) 上令 \(T^{(\alpha)}=2^r\mathrm{Id}\)。定义
+\[
+H^{(\alpha)}:=H_{\le M}\oplus K^{(\alpha)},\qquad
+D^{(\alpha)}:=D_{\le M}\oplus T^{(\alpha)}.
+\]
+由于 \(D_{\le M}\) 为有限维正算子，而 \(T^{(\alpha)}\) 的特征值趋于无穷，\(D^{(\alpha)}\) 为正自伴紧预解算子，并且它显然扩张给定有限窗口。所有 \(\mathcal C_{\le M}\) 的读出仍只见 \(H_{\le M}\)，故不同 \(\alpha\) 的扩张有限窗口等价。
+
+计算谱和：
+\[
+\operatorname{Tr}((1+D^{(\alpha)})^{-s})<\infty
+\quad\Longleftrightarrow\quad
+\sum_{r=1}^{\infty}m_r^{(\alpha)}(1+2^r)^{-s}<\infty.
+\]
+当 \(s>\alpha\) 时，取 \(\rho>0\) 使 \(\alpha+\rho<s\)，则充分大 \(r\) 有 \(m_r^{(\alpha)}\le 2^{(\alpha+\rho)r}\)，故该级数由 \(\sum_r2^{(\alpha+\rho-s)r}\) 控制而收敛。当 \(0<s<\alpha\) 时，取 \(\rho>0\) 使 \(s<\alpha-\rho\)，充分大 \(r\) 有 \(m_r^{(\alpha)}\ge2^{(\alpha-\rho)r}\)，故一般项不趋于零，级数发散。若 \(\alpha=0\)，则对每个 \(s>0\) 有 \(m_r^{(0)}=1\) 且 \(\sum_r(1+2^r)^{-s}<\infty\)，故谱维读出为 \(0\)。综上 \(\delta(D^{(\alpha)})=\alpha\)。取两个不同的 \(\alpha\) 即得有限窗口不可决定性。证毕。
+\end{proof}
 
 \endinput
