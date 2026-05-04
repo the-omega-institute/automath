@@ -11,13 +11,16 @@
 // @connect      localhost
 // @connect      127.0.0.1
 // @run-at       document-start
+// @noframes
 // ==/UserScript==
 
 (function () {
   "use strict";
 
+  if (window.self !== window.top) return;
+
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.14";
+  const SCRIPT_VERSION = "5.15";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds

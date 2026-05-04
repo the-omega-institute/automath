@@ -242,6 +242,15 @@ class OracleUserscriptTests(unittest.TestCase):
         self.assertIn("function isProjectStartPage(task)", script)
         self.assertIn("!isProjectStartPage(task)", script)
 
+    def test_windows_script_does_not_run_inside_chatgpt_iframes(self):
+        script = self._windows_script()
+
+        self.assertIn("// @noframes", script)
+        self.assertLess(
+            script.index("if (window.self !== window.top) return;"),
+            script.index("function detectAgentId()"),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
