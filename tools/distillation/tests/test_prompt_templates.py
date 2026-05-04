@@ -88,6 +88,13 @@ class PromptTemplateTests(unittest.TestCase):
             "group_unification/subsec__group-unification-spectral-alignment.tex",
         )
 
+    def test_review_prompts_do_not_let_target_language_override_chinese(self):
+        for prompt_name in ("review_codex", "review_claude"):
+            text = distill._load_prompt(prompt_name)
+            collapsed = " ".join(text.split())
+            self.assertIn("Do not require translation to English", collapsed)
+            self.assertIn("Chinese writeback rule overrides target-file language", collapsed)
+
 
 if __name__ == "__main__":
     unittest.main()
