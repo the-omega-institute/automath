@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.16
-// @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
+// @version      5.17
+// @description  Multi-agent oracle bridge — open project/chatgpt URLs with ?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -20,13 +20,13 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.16";
+  const SCRIPT_VERSION = "5.17";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
   const DEFAULT_MIN_RESPONSE_LENGTH = 1000;
-  const REQUIRE_FOREGROUND_TO_CLAIM = true;
+  const REQUIRE_FOREGROUND_TO_CLAIM = false;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
   // Open chatgpt.com/?oracle=1  → agent "oracle_1"
@@ -168,8 +168,7 @@
   }
 
   function isForegroundReady() {
-    if (!REQUIRE_FOREGROUND_TO_CLAIM) return true;
-    return document.visibilityState === "visible";
+    return !REQUIRE_FOREGROUND_TO_CLAIM || document.visibilityState === "visible";
   }
 
   async function postPhase(task_id, phase, detail = "") {

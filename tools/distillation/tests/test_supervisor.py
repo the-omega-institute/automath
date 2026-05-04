@@ -60,6 +60,26 @@ class SupervisorSelectionTests(unittest.TestCase):
         self.assertIn("expansion backlog: 1 source", text)
         self.assertIn("Grothendieck", text)
 
+    def test_oracle_project_url_cli_updates_distill_runtime(self):
+        old_project_url = supervisor.distill.ORACLE_PROJECT_URL
+        try:
+            args = supervisor.build_parser().parse_args(
+                [
+                    "--once",
+                    "--oracle-project-url",
+                    "https://chatgpt.com/g/g-p-test/project",
+                ]
+            )
+
+            supervisor.apply_runtime_config(args)
+
+            self.assertEqual(
+                supervisor.distill.ORACLE_PROJECT_URL,
+                "https://chatgpt.com/g/g-p-test/project",
+            )
+        finally:
+            supervisor.distill.ORACLE_PROJECT_URL = old_project_url
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -22,13 +22,17 @@ client script --POST--> oracle_server.py <--poll-- Tampermonkey userscript
 python oracle_server.py
 ```
 
-4. Open one or more dedicated Oracle tabs:
+4. Open one or more dedicated Oracle tabs. For Automath Project mode, use:
 
 ```text
-https://chatgpt.com/?oracle=1
-https://chatgpt.com/?oracle=2
-https://chatgpt.com/?oracle=3
+https://chatgpt.com/g/g-p-69f858a02c188191ae7f489459bbf866-automathzheng-liu/project?oracle=1
+https://chatgpt.com/g/g-p-69f858a02c188191ae7f489459bbf866-automathzheng-liu/project?oracle=2
+https://chatgpt.com/g/g-p-69f858a02c188191ae7f489459bbf866-automathzheng-liu/project?oracle=3
 ```
+
+Generic non-Project tabs also work with `https://chatgpt.com/?oracle=N`,
+but Project mode is preferred when the task should use uploaded PDFs or Project
+context.
 
 Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
 

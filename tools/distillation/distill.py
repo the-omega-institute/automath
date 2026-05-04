@@ -7188,6 +7188,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Model label passed to the ChatGPT Oracle bridge",
     )
     parser.add_argument(
+        "--oracle-project-url",
+        default=ORACLE_PROJECT_URL,
+        help="ChatGPT Project URL for Oracle tasks; overrides CHATGPT_ORACLE_PROJECT_URL",
+    )
+    parser.add_argument(
         "--oracle-pdf",
         type=Path,
         help="Optional project PDF to attach to ChatGPT Oracle research",
@@ -7197,8 +7202,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[list[str]] = None) -> int:
     """Run the distillation command-line interface."""
+    global ORACLE_PROJECT_URL
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.oracle_project_url:
+        ORACLE_PROJECT_URL = str(args.oracle_project_url).strip()
     supervised = bool(args.supervised and not args.auto_apply)
 
     if args.status:

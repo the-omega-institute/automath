@@ -27,6 +27,7 @@ except ModuleNotFoundError:  # pragma: no cover - supports direct script imports
 
 
 DEFAULT_BRANCH = os.environ.get("DISTILL_SUPERVISOR_BRANCH", "distill-clean")
+DEFAULT_ORACLE_PROJECT_URL = os.environ.get("CHATGPT_ORACLE_PROJECT_URL", "").strip()
 SUPERVISOR_STOP_FILE = distill.SCRIPT_DIR / ".supervisor.stop"
 SUPERVISOR_LOG_DIR = distill.LOG_DIR / "supervisor"
 
@@ -310,6 +311,12 @@ def run_source(name: str, args: argparse.Namespace) -> bool:
     )
 
 
+def apply_runtime_config(args: argparse.Namespace) -> None:
+    project_url = str(getattr(args, "oracle_project_url", "") or "").strip()
+    if project_url:
+        distill.ORACLE_PROJECT_URL = project_url
+
+
 def selected_names(args: argparse.Namespace) -> list[str]:
     if args.name:
         return args.name
@@ -395,12 +402,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--oracle-deepening", action="store_true", help="Use Oracle in Stage W")
     parser.add_argument("--oracle-timeout", type=int, default=distill.DEFAULT_ORACLE_TIMEOUT)
     parser.add_argument("--oracle-model", default=distill.DEFAULT_ORACLE_MODEL)
+    parser.add_argument(
+        "--oracle-project-url",
+        default=DEFAULT_ORACLE_PROJECT_URL,
+        help="ChatGPT Project URL for Oracle tabs; overrides CHATGPT_ORACLE_PROJECT_URL",
+    )
     parser.add_argument("--oracle-pdf", type=Path)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    apply_runtime_config(args)
     while True:
         try:
             ok = supervisor_pass(args)

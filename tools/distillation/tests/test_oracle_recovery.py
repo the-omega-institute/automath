@@ -271,11 +271,14 @@ class OracleUserscriptTests(unittest.TestCase):
             script.index("function detectAgentId()"),
         )
 
-    def test_windows_script_requires_visible_tab_before_claiming_tasks(self):
+    def test_windows_script_claims_tasks_without_foreground_requirement(self):
         script = self._windows_script()
 
-        self.assertIn("const REQUIRE_FOREGROUND_TO_CLAIM = true;", script)
-        self.assertIn('return document.visibilityState === "visible";', script)
+        self.assertIn("const REQUIRE_FOREGROUND_TO_CLAIM = false;", script)
+        self.assertIn(
+            'return !REQUIRE_FOREGROUND_TO_CLAIM || document.visibilityState === "visible";',
+            script,
+        )
         self.assertNotIn('document.visibilityState === "visible" && document.hasFocus()', script)
 
 
