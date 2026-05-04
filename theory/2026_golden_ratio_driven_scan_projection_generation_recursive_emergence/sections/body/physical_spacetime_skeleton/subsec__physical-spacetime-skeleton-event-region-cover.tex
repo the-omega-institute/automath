@@ -211,6 +211,126 @@ P_\bullet\cong\bigoplus_{\gamma\in\operatorname{Bar}(P_\bullet)}\mathbb I[b_\gam
 \]
 因此非零类 \([\alpha_j]\ne0\) 只阻碍 holonomy 的整体规范平凡化；它不否定局部证书在顶点与边上的相容性。Barcode 对 \(P_\bullet\) 的同构类是完全不变量，但它只在这一有限一参向量空间范畴内完全：若把代表 cocycle、局部证书、覆盖本身或诱导同一 cohomology 映射的细化选择一并作为数据，则 barcode 只记录其通过 \(P_\bullet\) 后的影子。
 \end{theorem}
+\begin{remark}
+以下定理把 \emph{Sheaf-local obstruction assembly} 算子具体化为事件覆盖 nerve 上的有限 \v Cech \(1\)-余循环，把 \emph{Constructible stratification} 算子具体化为覆盖细化塔中非零 holonomy 类的稳定区间与细化消失墙。局部可解只表示余循环兼容；全局可去扭表示该余循环为余边界。
+\end{remark}
+
+\begin{theorem}[事件覆盖塔的有限 holonomy 骨架与细化判别]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-sheaf_and_cosheaf_persistence-event-cover-tower-holonomy-skeleton}
+令 \(U\) 为区域，令
+\[
+\mathfrak U^{(0)},\mathfrak U^{(1)},\dots,\mathfrak U^{(M)}
+\]
+为有限事件覆盖塔，并记
+\[
+K_m:=N(\mathfrak U^{(m)})
+\]
+为其 nerve。假设每个 \(\mathfrak U^{(m+1)}\) 细化 \(\mathfrak U^{(m)}\)，并固定与细化相容的单纯映射
+\[
+r_{m+1,m}:K_{m+1}\to K_m .
+\]
+令 \(A\) 为阿贝尔证书规范群。对每个 \(m\)，设局部证书族在两两重叠上的规范差由一个 \(A\)-值有向 \(1\)-余链
+\[
+\alpha_m\in C^1(K_m;A)
+\]
+记录；约定 \(\alpha_m(j,i)=-\alpha_m(i,j)\)，且对有向三角形 \((i,j,k)\) 有
+\[
+(d\alpha_m)(i,j,k)=\alpha_m(j,k)-\alpha_m(i,k)+\alpha_m(i,j).
+\]
+假设每个层级满足局部兼容条件
+\[
+d\alpha_m=0.
+\]
+再假设细化只允许 fold-aware gauge 改写，即对每个 \(m<M\) 存在 \(0\)-余链 \(\beta_{m+1,m}\in C^0(K_{m+1};A)\)，使
+\[
+\alpha_{m+1}=r_{m+1,m}^{*}\alpha_m+d\beta_{m+1,m},
+\]
+其中若某条边在 \(r_{m+1,m}\) 下退化为顶点，则其拉回值按 \(0\) 计。记
+\[
+\xi_m:=[\alpha_m]\in H^1(K_m;A).
+\]
+则下列结论成立：
+\begin{enumerate}
+  \item 在第 \(m\) 层，存在单点规范 \(g_m\in C^0(K_m;A)\) 使所有重叠规范差同时归零，当且仅当
+  \[
+  \xi_m=0.
+  \]
+  因而 \(\xi_m\neq 0\) 不否定局部兼容性 \(d\alpha_m=0\)，而只障碍全局去扭或任何要求重叠规范差可同时归零的强化闭合谓词。
+
+  \item 若 \(\xi_m\neq 0\)，则存在 \(K_m\) 的 \(1\)-骨架中的闭有向边路
+  \[
+  \gamma=(v_0,v_1,\dots,v_L=v_0)
+  \]
+  使其 holonomy
+  \[
+  \operatorname{Hol}_{\alpha_m}(\gamma)
+  :=\sum_{\ell=0}^{L-1}\alpha_m(v_\ell,v_{\ell+1})
+  \]
+  非零。反之，若每条闭有向边路的 holonomy 都为零，则 \(\xi_m=0\)。因此任一局部可解但全局不可去扭的坏例，必压缩到有限 nerve 中的一条闭路 holonomy 骨架上。
+
+  \item 对任意 \(0\le a\le b\le M\)，令
+  \[
+  r_{b,a}:=r_{a+1,a}\circ r_{a+2,a+1}\circ\cdots\circ r_{b,b-1}:K_b\to K_a.
+  \]
+  则
+  \[
+  \xi_b=r_{b,a}^{*}\xi_a.
+  \]
+  特别地，覆盖尺度记忆在区间 \([a,b]\) 上保持为非零障碍，当且仅当
+  \[
+  r_{t,a}^{*}\xi_a\neq 0\qquad(a\le t\le b).
+  \]
+  若 \(\xi_a\neq0\) 但 \(r_{b,a}^{*}\xi_a=0\)，则存在唯一的最早指标 \(c\in\{a,\dots,b-1\}\)，使
+  \[
+  r_{c,a}^{*}\xi_a\neq0,
+  \qquad
+  r_{c+1,c}^{*}r_{c,a}^{*}\xi_a=0.
+  \]
+  该指标是细化消失墙；穿过该墙后所得对象不能作为覆盖尺度稳定障碍发布。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一项只是把局部规范差的 \v Cech 记账写成精确条件。若存在 \(g_m\in C^0(K_m;A)\) 使调整后的重叠规范差全为零，则对每条有向边 \((i,j)\) 有
+\[
+\alpha_m(i,j)=g_m(j)-g_m(i)=(dg_m)(i,j),
+\]
+故 \(\alpha_m\) 为余边界，\(\xi_m=0\)。反过来，若 \(\xi_m=0\)，则 \(\alpha_m=dg_m\) 对某个 \(g_m\) 成立，用 \(g_m\) 调整各顶点局部证书后，所有边上的规范差同时归零。条件 \(d\alpha_m=0\) 只保证三重重叠上的 cocycle 兼容，故它本身不包含余边界平凡性。
+
+证明第二项。若 \(\alpha_m=dg_m\)，则任意闭有向边路 \(\gamma=(v_0,\dots,v_L=v_0)\) 满足
+\[
+\operatorname{Hol}_{\alpha_m}(\gamma)
+=\sum_{\ell=0}^{L-1}\bigl(g_m(v_{\ell+1})-g_m(v_\ell)\bigr)=0,
+\]
+即 holonomy 沿闭路望远镜相消。反之，假设每条闭有向边路的 holonomy 都为零。对 \(K_m\) 的每个连通分量选取根顶点 \(o\)。对同一连通分量内任意顶点 \(v\)，取一条从 \(o\) 到 \(v\) 的有向边路 \(p\)，并定义
+\[
+g_m(v):=\operatorname{Hol}_{\alpha_m}(p).
+\]
+若 \(p'\) 是另一条从 \(o\) 到 \(v\) 的边路，则 \(p\) 后接 \(p'\) 的反向边路是一条闭路；闭路 holonomy 为零，故上述定义与路径选择无关。于是对任意有向边 \((v,w)\)，由从 \(o\) 到 \(v\) 的路径再接 \((v,w)\) 得到从 \(o\) 到 \(w\) 的路径，故
+\[
+g_m(w)-g_m(v)=\alpha_m(v,w).
+\]
+因此 \(\alpha_m=dg_m\)，从而 \(\xi_m=0\)。取逆否命题即得：\(\xi_m\neq0\) 时必有闭路 holonomy 非零。
+
+第三项由 fold-aware 细化等式推出。因为
+\[
+\alpha_{m+1}=r_{m+1,m}^{*}\alpha_m+d\beta_{m+1,m},
+\]
+两边取 \v Cech 上同调类得
+\[
+\xi_{m+1}=r_{m+1,m}^{*}\xi_m.
+\]
+迭代即得
+\[
+\xi_b=r_{b,a}^{*}\xi_a.
+\]
+因此非零障碍能否作为覆盖尺度记忆留存，完全由这些合法拉回是否保持非零决定。若 \(\xi_a\neq0\) 而 \(r_{b,a}^{*}\xi_a=0\)，有限集合 \(\{a,\dots,b\}\) 中存在最早的首次变零位置；将其前一层记为 \(c\)，便满足
+\[
+r_{c,a}^{*}\xi_a\neq0,
+\qquad
+r_{c+1,c}^{*}r_{c,a}^{*}\xi_a=0.
+\]
+最早性给出唯一性。由第二项，消失墙之前的非零类具有有限闭路 holonomy 见证；消失墙之后该类已成为可去扭对象，故不能再被解释为跨细化稳定的全局障碍。证毕。
+\end{proof}
+
 \begin{proof}
 首先，单纯映射 \(r_{j+1,j}:N_{j+1}\to N_j\) 诱导 cochain 拉回
 \[
