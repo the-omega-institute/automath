@@ -136,6 +136,7 @@ GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 ORACLE_EVIDENCE_SNIPPET_CHARS = int(os.environ.get("ORACLE_EVIDENCE_SNIPPET_CHARS", "160"))
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
+ORACLE_PROJECT_URL = os.environ.get("CHATGPT_ORACLE_PROJECT_URL", "").strip()
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
 ORACLE_DONE_DIR = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle" / "done"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
@@ -1139,6 +1140,8 @@ def chatgpt_oracle_exec(
         "prompt": prompt,
         "model": model,
     }
+    if ORACLE_PROJECT_URL:
+        payload["project_url"] = ORACLE_PROJECT_URL
     if pdf_path:
         path = Path(pdf_path)
         if path.exists():
@@ -1173,6 +1176,7 @@ def chatgpt_oracle_exec(
             "prompt_length": len(prompt),
             "response_length": len(response),
             "pdf_path": str(pdf_path) if pdf_path else "",
+            "project_url": ORACLE_PROJECT_URL,
             "oracle_status_before": status_before,
             "oracle_status_after": _oracle_server_status(),
             "source": source,

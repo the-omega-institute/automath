@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.9
+// @version      5.10
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,7 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.9";
+  const SCRIPT_VERSION = "5.10";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -439,6 +439,41 @@
   }
 
   // ── Wait for PDF upload to finish ─────────────────────────────────
+  function normalizedProjectUrl(task) {
+    const raw = (task && task.project_url ? String(task.project_url) : "").trim();
+    if (!raw) return "";
+    try {
+      const url = new URL(raw);
+      if (!/^https:\/\/(chatgpt\.com|chat\.openai\.com)$/.test(url.origin)) return "";
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function isOnProjectContext(task) {
+    const projectUrl = normalizedProjectUrl(task);
+    if (!projectUrl) return true;
+    try {
+      const current = new URL(window.location.href);
+      const target = new URL(projectUrl);
+      const targetPath = target.pathname.replace(/\/+$/, "");
+      const currentPath = current.pathname.replace(/\/+$/, "");
+      if (current.origin !== target.origin) return false;
+      if (!targetPath) return true;
+      return currentPath.startsWith(targetPath);
+    } catch {
+      return false;
+    }
+  }
+
+  function taskStartUrl(task) {
+    const projectUrl = normalizedProjectUrl(task);
+    if (projectUrl) return projectUrl;
+    const agentNum = AGENT_ID.replace("oracle_", "");
+    return `https://chatgpt.com/?oracle=${agentNum}`;
+  }
+
   async function waitForUploadComplete(timeoutMs = 60000) {
     log("Waiting for PDF upload to complete...");
     const start = Date.now();
@@ -1593,19 +1628,20 @@
       }
       await postPhase(task_id, "foreground_claimed", foregroundState());
 
-      // Navigate to a fresh chat page if we're not already on one.
+      // Navigate to the requested Project/new-chat page if needed.
       // IMPORTANT: Only redirect if we're actively processing a task.
       // Never hijack the user's normal ChatGPT browsing.
-      if (!isOnNewChatPage()) {
+      const inProjectContext = isOnProjectContext(task);
+      if (!inProjectContext || !isOnNewChatPage()) {
         // Mark that WE are about to navigate (not the user)
         GM_setValue(GM_KEY("oracle_navigating"), true);
         GM_setValue(GM_KEY("nav_task_id"), task_id);
         saveTaskState(task, "navigating");
-        const agentNum = AGENT_ID.replace("oracle_", "");
-        log(`Not on fresh chat — navigating to chatgpt.com ...`);
+        const destination = taskStartUrl(task);
+        log(`${inProjectContext ? "Not on fresh chat" : "Not in task Project"} - navigating ...`);
         busy = false;
         updatePanel();
-        window.location.href = `https://chatgpt.com/?oracle=${agentNum}`;
+        window.location.href = destination;
         return; // Script re-inits on new page, resumes from init()
       }
 

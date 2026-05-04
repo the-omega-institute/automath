@@ -199,6 +199,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
+            if data.get("project_url"):
+                task["project_url"] = data.get("project_url")
             if data.get("min_response_length") is not None:
                 task["min_response_length"] = data.get("min_response_length")
 
