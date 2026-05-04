@@ -349,6 +349,161 @@ w_j(h):=\min_{\gamma\in h}\#\{e\in E_j^+:\gamma(e)\ne0\},
 \]
 墙前类被送为零正是属于核；墙后类不在像中正是余核类非零。故构造性跳墙账本由有限稳定段、核死亡见证与余核出生见证组成。
 \end{proof}
+\begin{definition}[周期点分母过滤的有限 persistence 模]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-module-definition}
+沿推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 与定义 \ref{def:distill-cdim-scaling-denominator-ledger} 的记号，固定域 \(\mathbb F\) 与整数 \(K\ge1\)。对 \(1\le k\le K\) 记
+\[
+\nu_S(k):=(v_p(n^k-1))_{p\in S}\in\mathbb Z_{\ge0}^{S},
+\qquad
+U_{K,p}:=\max_{1\le k\le K}v_p(n^k-1).
+\]
+令
+\[
+B_K:=\prod_{p\in S}\{0,1,\ldots,U_{K,p}\}
+\]
+带有逐坐标偏序，并令有限 carrier 为
+\[
+\mathcal C_K:=\{(k,x):1\le k\le K,\ x\in\operatorname{Fix}([n]^k)\}.
+\]
+对 \(u=(u_p)_{p\in S}\in B_K\)，定义
+\[
+\mathsf M_{S,n,K}(u)
+:=\bigoplus_{\substack{(k,x)\in\mathcal C_K\\ \nu_S(k)\le u}}
+\mathbb F e_{k,x}.
+\]
+若 \(u\le u'\)，则 \(\iota_{u,u'}:\mathsf M_{S,n,K}(u)\to\mathsf M_{S,n,K}(u')\) 定义为由同名基向量诱导的包含映射。称 \(\mathsf M_{S,n,K}\) 为 \(S\)-尺度分母账本 \(D_S^{[n]}\) 在有限 carrier \(\mathcal C_K\) 上的 filtration-to-module conversion。记
+\[
+\mathcal W_K:=\{\nu_S(k):1\le k\le K\}\subset B_K
+\]
+为其临界 birth 值集。对 \(a\in B_K\)，令
+\[
+\mathsf B_K(a):=\mathsf M_{S,n,K}(a)
+\Big/
+\sum_{\substack{p\in S\\ a_p>0}}
+\iota_{a-\mathbf e_p,a}\bigl(\mathsf M_{S,n,K}(a-\mathbf e_p)\bigr),
+\]
+其中 \(\mathbf e_p\) 为第 \(p\) 个坐标向量。
+\end{definition}
+
+\begin{theorem}[周期点分母 persistence 账本的构造性跃迁分层]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-constructible-stratification}
+对任意域 \(\mathbb F\) 与 \(K\ge1\)，上面的 \(\mathsf M_{S,n,K}\) 是 \(B_K\) 上的点态有限维 persistence 模。并且有自然同构
+\[
+\mathsf M_{S,n,K}\cong
+\bigoplus_{(k,x)\in\mathcal C_K}\mathbb F_{\uparrow \nu_S(k)},
+\]
+其中
+\[
+\mathbb F_{\uparrow a}(u)=
+\begin{cases}
+\mathbb F,& a\le u,\\
+0,& a\nleq u,
+\end{cases}
+\]
+且支撑内的结构映射为恒等映射。特别地，令
+\[
+r_K(u):=\dim_{\mathbb F}\mathsf M_{S,n,K}(u)
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)\le u}}A_{S,n}(k),
+\]
+则每个临界值 \(a\in B_K\) 的 birth 重数为
+\[
+\dim_{\mathbb F}\mathsf B_K(a)
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)=a}}A_{S,n}(k).
+\]
+若约定当某坐标为负时 \(r_K(w)=0\)，并令 \(\mathbf 1_T\in\{0,1\}^S\) 为子集 \(T\subseteq S\) 的特征向量，则该重数亦由秩函数的有限差分唯一恢复：
+\[
+\dim_{\mathbb F}\mathsf B_K(a)
+=\sum_{T\subseteq S}(-1)^{|T|}r_K(a-\mathbf 1_T).
+\]
+此外，把 \(\mathsf M_{S,n,K}\) 延拓到
+\(X_K:=\prod_{p\in S}(0,U_{K,p}+1)\subset\mathbb R^S\) 上，令
+\[
+\overline{\mathsf M}_{S,n,K}(t):=\mathsf M_{S,n,K}\bigl((\lfloor t_p\rfloor)_{p\in S}\bigr),
+\]
+则 \(\overline{\mathsf M}_{S,n,K}\) 在有限墙集
+\[
+\Sigma_K:=\bigcup_{p\in S}\bigcup_{j=1}^{U_{K,p}}\{t\in X_K:t_p=j\}
+\]
+的补集的每个连通分支上局部常值；所有非平凡跃迁均由 \(\mathcal W_K\) 上的上述 birth 商记录。这给出该有限周期点分母账本的 constructible stratification。
+\end{theorem}
+
+\begin{proof}
+首先，推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 给出每个 \(\operatorname{Fix}([n]^k)\) 的有限性，因此 \(\mathcal C_K\) 有限，且 \(\mathsf M_{S,n,K}(u)\) 点态有限维。若 \(u\le u'\le u''\)，则同名基向量的包含满足
+\[
+\iota_{u',u''}\circ\iota_{u,u'}=\iota_{u,u''},
+\]
+故 \(\mathsf M_{S,n,K}\) 是从偏序 \(B_K\) 到 \(\mathbb F\)-向量空间范畴的函子。
+
+对每个 carrier 元素 \((k,x)\)，定义主上集模 \(\mathbb F_{\uparrow\nu_S(k)}\)。在参数 \(u\) 处，把该直和中由 \((k,x)\) 标记的基向量送到 \(\mathsf M_{S,n,K}(u)\) 中的 \(e_{k,x}\)，若 \(\nu_S(k)\le u\)；否则两边该 summand 均为零。此映射逐参数为线性同构，并与所有包含映射交换，因此得到所述自然同构。
+
+由该分解，\(r_K(u)\) 正是满足 \(\nu_S(k)\le u\) 的周期点 carrier 的个数，按周期 \(k\) 分组即为
+\[
+r_K(u)=\sum_{\substack{1\le k\le K\\ \nu_S(k)\le u}}|\operatorname{Fix}([n]^k)|
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)\le u}}A_{S,n}(k).
+\]
+再看 birth 商。一个基向量 \(e_{k,x}\in\mathsf M_{S,n,K}(a)\) 落入
+\(\sum_{a_p>0}\iota_{a-\mathbf e_p,a}\mathsf M_{S,n,K}(a-\mathbf e_p)\) 当且仅当存在 \(p\in S\) 使 \(a_p>0\) 且 \(\nu_S(k)\le a-\mathbf e_p\)。这等价于 \(\nu_S(k)\le a\) 但 \(\nu_S(k)\ne a\)。故商中留下的恰为满足 \(\nu_S(k)=a\) 的所有 \((k,x)\)，其维数为
+\[
+\sum_{\substack{1\le k\le K\\ \nu_S(k)=a}}|\operatorname{Fix}([n]^k)|
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)=a}}A_{S,n}(k).
+\]
+
+有限差分公式由逐 carrier 的包含排除给出。固定 \((k,x)\)，其对
+\(\sum_{T\subseteq S}(-1)^{|T|}r_K(a-\mathbf 1_T)\) 的贡献为
+\[
+\sum_{\substack{T\subseteq S\\ \nu_S(k)\le a-\mathbf 1_T}}(-1)^{|T|}.
+\]
+若 \(\nu_S(k)=a\)，只有 \(T=\varnothing\) 可贡献，和为 \(1\)。若 \(\nu_S(k)\le a\) 但不等于 \(a\)，令
+\(P:=\{p\in S:\nu_S(k)_p<a_p\}\)，则可贡献的 \(T\) 正是 \(P\) 的子集，交错和为 \((1-1)^{|P|}=0\)。若 \(\nu_S(k)\nleq a\)，无贡献。按所有 carrier 求和即得公式。
+
+最后，若 \(t\in X_K\setminus\Sigma_K\)，则每个坐标 \(\lfloor t_p\rfloor\) 在 \(t\) 的某个邻域内不变，因此 \(\overline{\mathsf M}_{S,n,K}\) 在该邻域内等于同一个 \(\mathsf M_{S,n,K}(u)\)，从而局部常值。前述 birth 商已经证明所有新 carrier 只能在某个 \(a=\nu_S(k)\in\mathcal W_K\) 处出现，并且其重数完全由 \(\mathsf B_K(a)\) 记录。定理得证。
+\end{proof}
+\begin{proposition}[fold-aware 读出中的 plateau--wall 分离]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-fold-aware-plateau-wall-readout}
+保持定理 \ref{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-constructible-stratification} 的记号。设
+\(\lambda:\{0,1,\ldots,N\}\to B_K\) 是非降映射，并称其为一个合法的 fold-aware \(S\)-预算读出。令
+\[
+\mathsf N_i:=\mathsf M_{S,n,K}(\lambda(i)),
+\qquad
+\alpha_i:=\iota_{\lambda(i-1),\lambda(i)}:\mathsf N_{i-1}\to\mathsf N_i
+\quad(1\le i\le N),
+\]
+并设
+\[
+J_\lambda:=\{1\le i\le N:\text{存在 }(k,x)\in\mathcal C_K
+\text{ 使 }\nu_S(k)\le\lambda(i)\text{ 但 }\nu_S(k)\nleq\lambda(i-1)\}.
+\]
+则一参数模 \(\mathsf N_\bullet\) 有分解
+\[
+\mathsf N_\bullet\cong
+\bigoplus_{\substack{(k,x)\in\mathcal C_K\\ b(k,x)<\infty}}
+\mathbb F_{[b(k,x),N]},
+\qquad
+b(k,x):=\min\{i:\nu_S(k)\le\lambda(i)\},
+\]
+其中 \(\mathbb F_{[b,N]}\) 为链 \(\{0,\ldots,N\}\) 上支撑于 \([b,N]\) 的区间模。因此 \(\alpha_i\) 为同构当且仅当 \(i\notin J_\lambda\)。
+
+进一步，若给定有限维商读出
+\(\pi_i:\mathsf N_i\twoheadrightarrow Q_i\) 与线性映射
+\(g_i:Q_{i-1}\to Q_i\)，满足
+\[
+g_i\circ\pi_{i-1}=\pi_i\circ\alpha_i
+\qquad(1\le i\le N),
+\]
+并且在 \(i\notin J_\lambda\) 时 \(g_i\) 为同构，则 \((Q_i^\vee,g_i^\vee)\) 在每个 plateau 上构成稳定逆系统；任何读出维数、秩或同构类不变量只能在 \(J_\lambda\) 中改变。在墙 \(i\in J_\lambda\) 处，正合列
+\[
+0\longrightarrow\ker g_i\longrightarrow Q_{i-1}\xrightarrow{\ g_i\ }Q_i
+\longrightarrow\operatorname{coker}g_i\longrightarrow0
+\]
+分别记录该墙上的 death 或 merge 空间 \(\ker g_i\) 与 birth 空间 \(\operatorname{coker}g_i\)。特别地，若两个读出类 \(q,q'\in Q_{i-1}\) 在第 \(i\) 步后被识别，则 \(q-q'\in\ker g_i\)；反之亦然。
+\end{proposition}
+
+\begin{proof}
+把定理 \ref{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-constructible-stratification} 的主上集分解沿 \(\lambda\) 拉回。对固定 \((k,x)\in\mathcal C_K\)，该 summand 在时刻 \(i\) 非零当且仅当 \(\nu_S(k)\le\lambda(i)\)。由于 \(\lambda\) 非降，一旦该条件成立，此后恒成立；若从不成立，则该 summand 在拉回模中为零。故非零 summand 恰为区间模 \(\mathbb F_{[b(k,x),N]}\)，得到所述分解。
+
+由该区间分解，\(\alpha_i\) 不是同构当且仅当存在某个 summand 在 \(i-1\) 处为零而在 \(i\) 处为 \(\mathbb F\)，这正是 \(i\in J_\lambda\) 的定义。故 \(J_\lambda\) 的补集为稳定 plateau，且在其中所有结构映射均为同构。
+
+设再给定商读出 \((Q_i,g_i)\)。当 \(i\notin J_\lambda\) 时，假设给出 \(g_i\) 为同构，于是其对偶 \(g_i^\vee:Q_i^\vee\to Q_{i-1}^\vee\) 亦为同构；沿任一不遇到 \(J_\lambda\) 的时间区间复合这些对偶同构，即得到 plateau 上的稳定逆系统。因此任何只依赖于 \(Q_i\) 同构类的量在该区间内不变。
+
+最后，任意线性映射 \(g_i:Q_{i-1}\to Q_i\) 都给出显示的正合列。\(\operatorname{coker}g_i\) 是 \(Q_i\) 中不能从 \(Q_{i-1}\) 推来的商空间，故精确记录该墙后新出现的读出类；\(\ker g_i\) 是在通过该墙时被送为零的读出空间，并且 \(g_i(q)=g_i(q')\) 当且仅当 \(q-q'\in\ker g_i\)，故它同时记录 death 与 merge。命题得证。
+\end{proof}
 
 \endinput
 
