@@ -1,4 +1,6 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 
 from tools.distillation import distill
@@ -25,6 +27,32 @@ class DistillCommitPolicyTests(unittest.TestCase):
         )
 
         self.assertIsNone(distill._batch_commit_label_after_stage("W", state))
+
+    def test_existing_stallings_growth_content_closes_growth_family(self):
+        with TemporaryDirectory() as tmp:
+            body_root = Path(tmp)
+            target = body_root / "fold_residual_time" / "subsec__protocol-screening-fold-survivor.tex"
+            target.parent.mkdir(parents=True)
+            target.write_text(
+                "\\label{def:distill-stallings-fold-survivor-transition-growth-ledger}\n"
+                "\\label{prop:distill-stallings-fold-survivor-transition-growth-ledger}\n"
+                "\\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-"
+                "finite_descent_to_folded_core-transition-growth-critical-core-trimming}\n",
+                encoding="utf-8",
+            )
+            state = SimpleNamespace(
+                name="Stallings foldings and Bestvina-Handel train tracks"
+            )
+
+            completed = distill._existing_content_completed_families(
+                state,
+                body_root=body_root,
+            )
+
+        self.assertEqual(
+            completed,
+            ["growth-classification from legal survivors"],
+        )
 
 
 if __name__ == "__main__":

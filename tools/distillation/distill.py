@@ -1994,6 +1994,45 @@ def _prune_completed_families(state: DistillState) -> bool:
     return True
 
 
+def _existing_content_completed_families(
+    state: DistillState,
+    *,
+    body_root: Path = CORE_BODY,
+) -> list[str]:
+    """Return family completions already supported by durable paper content."""
+    if state.name != "Stallings foldings and Bestvina-Handel train tracks":
+        return []
+    target = body_root / "fold_residual_time" / "subsec__protocol-screening-fold-survivor.tex"
+    try:
+        text = read_text(target)
+    except OSError:
+        return []
+    required = [
+        "def:distill-stallings-fold-survivor-transition-growth-ledger",
+        "prop:distill-stallings-fold-survivor-transition-growth-ledger",
+        "distill:stallings_foldings_and_bestvina_handel_train_tracks-"
+        "finite_descent_to_folded_core-transition-growth-critical-core-trimming",
+    ]
+    if all(label in text for label in required):
+        return ["growth-classification from legal survivors"]
+    return []
+
+
+def _mark_existing_content_completed_families(state: DistillState) -> bool:
+    """Add completion markers for families already present in paper text."""
+    allowed = set(_theorem_family_names(state))
+    changed = False
+    for family in _existing_content_completed_families(state):
+        if family in allowed and family not in state.completed_families:
+            state.completed_families.append(family)
+            changed = True
+            logger.info(
+                "Marked family '%s' complete from existing paper content",
+                family,
+            )
+    return changed
+
+
 def _invalidate_after_stage_r(state: DistillState) -> None:
     """A new scope contract invalidates all downstream local artifacts."""
     _remove_artifacts_if_exists(
@@ -2133,6 +2172,9 @@ def reconcile_state_contract(state: DistillState) -> DistillState:
     """Repair impossible stage states using local artifacts as source of truth."""
     artifacts_changed = _invalidate_stale_artifact_chain(state)
     family_markers_changed = _prune_completed_families(state)
+    family_markers_changed = (
+        _mark_existing_content_completed_families(state) or family_markers_changed
+    )
     if state.current_stage not in STAGE_ORDER:
         old_stage = state.current_stage
         state.current_stage = _resume_stage_from_artifacts(state)
