@@ -6483,6 +6483,13 @@ def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = N
     _git_commit_batch(name, f"stage {stage} ({STAGE_NAMES.get(stage, stage)}) complete")
 
 
+def _batch_commit_label_after_stage(stage: str, state: DistillState) -> str | None:
+    """Return an intermediate batch commit label after a stage completes."""
+    if stage != "E" or state.current_stage != "W" or not state.completed_families:
+        return None
+    return f"family {state.completed_families[-1]} complete"
+
+
 def run_pipeline(
     name: str,
     skip_to: Optional[str] = None,
@@ -6590,6 +6597,10 @@ def run_pipeline(
         if not dry_run:
             _git_stage_files(name, stage)
         state = reconcile_state_contract(load_state(name))
+        if not dry_run:
+            label = _batch_commit_label_after_stage(stage, state)
+            if label:
+                _git_commit_batch(name, label)
         refresh_policy_state(state)
     # Batch commit all accumulated stages at DONE
     if not dry_run:
