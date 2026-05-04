@@ -112,6 +112,27 @@ PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
 SEMANTIC_SCAN_ACCEPT_THRESHOLD = 0.55
+SEMANTIC_SCAN_PROMPT_MAX_CHARS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_CHARS", "90000")
+)
+SEMANTIC_SCAN_PROMPT_MAX_TERMS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_TERMS", "40")
+)
+SEMANTIC_SCAN_PROMPT_MAX_SECTIONS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_SECTIONS", "24")
+)
+SEMANTIC_SCAN_PROMPT_MAX_CLAIMS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_CLAIMS", "24")
+)
+SEMANTIC_SCAN_PROMPT_MAX_DISTILL_CLAIMS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_DISTILL_CLAIMS", "16")
+)
+SEMANTIC_SCAN_PROMPT_MAX_INTERFACES = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_INTERFACES", "16")
+)
+SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS", "320")
+)
 GLOBAL_EVIDENCE_MAX_CLAIMS = 80
 GLOBAL_EVIDENCE_MAX_INTERFACES = 50
 ORACLE_EVIDENCE_MAX_SECTION_INDEX = 3
@@ -3771,6 +3792,113 @@ def _prompt_snippet(text: Any, max_chars: int) -> str:
     return value[:max_chars].rstrip() + "..."
 
 
+def _semantic_compact_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep only fields Stage S needs for prompt-facing relevance judgment."""
+    compact: dict[str, Any] = {}
+    for key in (
+        "section",
+        "tex_file",
+        "best_file",
+        "type",
+        "label",
+        "term",
+        "score",
+        "python_score",
+        "coverage",
+        "file_count",
+    ):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    for key in ("counts",):
+        value = row.get(key)
+        if isinstance(value, dict) and value:
+            compact[key] = value
+    for key in ("matched_terms", "unique_triggers"):
+        values = _unique_strings(row.get(key, []))[:8]
+        if values:
+            compact[key] = values
+    snippet = _prompt_snippet(
+        row.get("snippet", ""),
+        SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS,
+    )
+    if snippet:
+        compact["snippet"] = snippet
+    return compact
+
+
+def _semantic_compact_family_row(row: Any) -> Any:
+    """Trim source theorem-family notes before they enter Stage S prompts."""
+    if not isinstance(row, dict):
+        return _prompt_snippet(row, SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS)
+    compact: dict[str, Any] = {}
+    for key in ("name", "target_sections"):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    for key in ("key_results", "method_operators", "failure_modes"):
+        values = row.get(key)
+        if isinstance(values, list):
+            trimmed = [
+                _prompt_snippet(item, SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS)
+                for item in values[:5]
+            ]
+            if trimmed:
+                compact[key] = trimmed
+        elif values not in (None, "", []):
+            compact[key] = _prompt_snippet(values, SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS)
+    return compact
+
+
+def _semantic_scan_prompt_evidence_pack(
+    global_evidence_pack: dict[str, Any],
+) -> dict[str, Any]:
+    """Compress whole-article evidence before Stage S model reranking.
+
+    The full artifact remains on disk for downstream stages; this prompt view
+    keeps Stage S from injecting hundreds of kilobytes of repeated snippets.
+    """
+    if not isinstance(global_evidence_pack, dict):
+        return {}
+    return {
+        "terms": _unique_strings(global_evidence_pack.get("terms", []))[
+            :SEMANTIC_SCAN_PROMPT_MAX_TERMS
+        ],
+        "source_theorem_families": [
+            _semantic_compact_family_row(row)
+            for row in global_evidence_pack.get("source_theorem_families", [])[:8]
+        ],
+        "section_index": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("section_index", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_SECTIONS
+            ]
+            if isinstance(row, dict)
+        ],
+        "high_signal_claims": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("high_signal_claims", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_CLAIMS
+            ]
+            if isinstance(row, dict)
+        ],
+        "existing_distillation_claims": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("existing_distillation_claims", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_DISTILL_CLAIMS
+            ]
+            if isinstance(row, dict)
+        ],
+        "frontier_interfaces": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("frontier_interfaces", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_INTERFACES
+            ]
+            if isinstance(row, dict)
+        ],
+    }
+
+
 def _oracle_compact_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
     """Keep only target-routing fields needed by the browser Oracle prompt."""
     compact: dict[str, Any] = {}
@@ -4008,11 +4136,19 @@ def _semantic_scan(
         mathematician=state.name,
         raw_research=_json_block(raw_research),
         deterministic_scores=_json_block(candidates),
-        global_evidence_pack=_json_block(global_evidence_pack),
+        global_evidence_pack=_json_block(
+            _semantic_scan_prompt_evidence_pack(global_evidence_pack)
+        ),
         candidate_contexts=_scan_candidate_contexts(section_scores),
         deep_research_directive=_deep_research_directive(),
         schema=_semantic_scan_schema(),
     )
+    prompt = _limit_prompt_chars(
+        prompt,
+        SEMANTIC_SCAN_PROMPT_MAX_CHARS,
+        f"semantic-scan:{_slugify(state.name)}",
+    )
+    logger.info("Stage S+ semantic prompt length: %d chars", len(prompt))
     response = _codex_exec_with_infra_retries(
         prompt,
         work_dir=REPO_ROOT,

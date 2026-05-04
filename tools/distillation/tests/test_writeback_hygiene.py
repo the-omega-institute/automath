@@ -397,6 +397,43 @@ proof.
         self.assertIn("folding", encoded)
         self.assertNotIn(long_snippet, encoded)
 
+    def test_semantic_scan_evidence_pack_is_prompt_compact(self):
+        long_snippet = "x" * 5000
+        pack = {
+            "terms": [f"term-{i}" for i in range(100)],
+            "source_theorem_families": [
+                {"name": "incidence surplus", "key_results": [long_snippet]},
+            ],
+            "section_index": [
+                {
+                    "section": f"section-{i}",
+                    "best_file": f"section-{i}/target.tex",
+                    "python_score": i,
+                    "unique_triggers": [f"trigger-{j}" for j in range(20)],
+                }
+                for i in range(40)
+            ],
+            "high_signal_claims": [
+                {"section": "group_unification", "score": i, "snippet": long_snippet}
+                for i in range(80)
+            ],
+            "existing_distillation_claims": [
+                {"section": "emergent_arithmetic", "score": i, "snippet": long_snippet}
+                for i in range(80)
+            ],
+            "frontier_interfaces": [
+                {"section": "logic_expansion_chain", "score": i, "snippet": long_snippet}
+                for i in range(50)
+            ],
+        }
+
+        compact = distill._semantic_scan_prompt_evidence_pack(pack)
+        encoded = distill._json_block(compact)
+
+        self.assertLess(len(encoded), 45000)
+        self.assertIn("group_unification", encoded)
+        self.assertNotIn(long_snippet, encoded)
+
 
 if __name__ == "__main__":
     unittest.main()
