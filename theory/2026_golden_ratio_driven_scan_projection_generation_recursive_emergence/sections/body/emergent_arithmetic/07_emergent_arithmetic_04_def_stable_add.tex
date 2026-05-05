@@ -113,6 +113,151 @@ c\longmapsto (\mu_0(c),\mu_1(c),\ldots,\mu_{2R-1}(c))
 \]
 并且，对任意定义在恢复顶点集上的 valuation \(\eta\)，初始支撑 \(\operatorname{in}_\eta\mathcal N(c,d)\) 及其权重完全由上述有限矩列决定。
 \end{theorem}
+\begin{definition}[fewnomial 加法缺陷与内部 Fibonacci 证书]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-certificate}
+令 \(\mathbf e_k\) 表示第 \(k\) 个地址的标准基元。对有限支撑向量
+\[
+ u=\sum_{k\ge1}u_k\mathbf e_k\in \mathbb Z^{(\NN_{\ge1})}
+\]
+定义
+\[
+ \operatorname{supp}u:=\{k:\ u_k\ne0\},\qquad
+ \operatorname{Val}_{\mathbb Z}(u):=\sum_{k\ge1}u_kF_{k+1},\qquad
+ \|u\|_\infty:=\max_k |u_k|.
+\]
+若 \(I=[a,b]\cap\NN_{\ge1}\) 为有限地址区间，置
+\[
+ \rho_k:=\mathbf e_k+\mathbf e_{k+1}-\mathbf e_{k+2}\qquad(a\le k\le b-2),
+\]
+并定义内部 Fibonacci 关系模
+\[
+ \mathcal L(I):=\left\langle \rho_k:\ a\le k\le b-2\right\rangle_{\mathbb Z}\subset \mathbb Z^I,
+\]
+其中当 \(b-a\le1\) 时生成集为空。对 \(c,d,e\in X_\infty\)，定义稳定加法缺陷
+\[
+ \partial(c,d;e):=\sum_{k\ge1}(c_k+d_k-e_k)\mathbf e_k.
+\]
+\end{definition}
+
+\begin{theorem}[有限 active-address 加法缺陷的内部闭包判别]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-internal-closure}
+设 \(I=[a,b]\cap\NN_{\ge1}\)，\(\ell:=b-a\)，并记
+\[
+ H_\ell:=\max\{1,F_\ell\}.
+\]
+令 \(B,C\ge1\)。若有限支撑向量 \(u\in\mathbb Z^I\) 满足
+\[
+ |\operatorname{supp}u|\le B,\qquad \|u\|_\infty\le C,\qquad
+ \operatorname{Val}_{\mathbb Z}(u)=0,\qquad
+ C B H_\ell < F_{a+1},
+\]
+则
+\[
+ u\in\mathcal L(I).
+\]
+因此任何满足上述非退化位置不等式的 value-zero fewnomial 缺陷，都可以仅用区间 \(I\) 内的相邻 Fibonacci 关系闭合；证书不需要引入 \(I\) 外的新地址。特别地，若 \(c,d,e\in X_\infty\)，\(u=\partial(c,d;e)\) 支撑于 \(I\)，\(|\operatorname{supp}u|\le B\)，且
+\[
+ 2B H_\ell < F_{a+1},
+\]
+则
+\[
+ e=c\oplus d
+ \quad\Longleftrightarrow\quad
+ \partial(c,d;e)\in\mathcal L(I).
+\]
+\end{theorem}
+\begin{proof}
+先证明一个区间关系模的代数刻画。约定 \(F_{-1}=1\)、\(F_0=0\)。对 \(u\in\mathbb Z^I\) 定义两个边界坐标
+\[
+ P_I(u):=\sum_{t=0}^{\ell}u_{a+t}F_{t-1},\qquad
+ Q_I(u):=\sum_{t=0}^{\ell}u_{a+t}F_t.
+\]
+由 Fibonacci 递推可得，对所有 \(t\ge0\)，
+\[
+ F_{a+t+1}=F_{t-1}F_{a+1}+F_tF_{a+2}.
+\]
+于是
+\[
+ \operatorname{Val}_{\mathbb Z}(u)=P_I(u)F_{a+1}+Q_I(u)F_{a+2}.
+\]
+并且每个 \(\rho_k\) 在 \((P_I,Q_I)\) 下为零，因为 \(F_{j+1}+F_{j+2}-F_{j+3}=0\)。故
+\[
+ \mathcal L(I)\subseteq \ker(P_I,Q_I).
+\]
+反过来，若 \((P_I(u),Q_I(u))=(0,0)\)，则可从最高地址向下消元。若 \(b-a\le1\)，定义式直接给出剩余坐标为零。若 \(b-a\ge2\)，设最高坐标为 \(m=u_b\)。由于 \(\rho_{b-2}\) 在地址 \(b\) 的系数为 \(-1\)，向量 \(u+m\rho_{b-2}\) 的最高坐标为零，且其 \((P_I,Q_I)\) 仍为 \((0,0)\)。对较短区间归纳，得到 \(u+m\rho_{b-2}\in\langle \rho_a,\ldots,\rho_{b-3}\rangle_{\mathbb Z}\)，从而 \(u\in\mathcal L(I)\)。因此
+\[
+ \ker(P_I,Q_I)=\mathcal L(I).
+\]
+
+现在设 \(\operatorname{Val}_{\mathbb Z}(u)=0\)。上式给出
+\[
+ P_I(u)F_{a+1}+Q_I(u)F_{a+2}=0.
+\]
+由于相邻 Fibonacci 数互素，若 \((P_I(u),Q_I(u))\ne(0,0)\)，则存在非零整数 \(s\) 使
+\[
+ P_I(u)=sF_{a+2},\qquad Q_I(u)=-sF_{a+1}.
+\]
+于是
+\[
+ \max\{|P_I(u)|,|Q_I(u)|\}\ge F_{a+1}.
+\]
+另一方面，由 \(|\operatorname{supp}u|\le B\)、\(\|u\|_\infty\le C\) 以及 \(F_{t-1},F_t\le H_\ell\) 可得
+\[
+ |P_I(u)|\le C B H_\ell,\qquad |Q_I(u)|\le C B H_\ell.
+\]
+这与 \(CBH_\ell<F_{a+1}\) 矛盾。因此 \((P_I(u),Q_I(u))=(0,0)\)，由前述刻画可知 \(u\in\mathcal L(I)\)。
+
+最后取 \(u=\partial(c,d;e)\)。此时 \(\|u\|_\infty\le2\)。若 \(e=c\oplus d\)，则
+\[
+ \operatorname{Val}_{\mathbb Z}(u)=\mathrm{Val}(c)+\mathrm{Val}(d)-\mathrm{Val}(e)=0,
+\]
+故由已证部分得 \(u\in\mathcal L(I)\)。反之，若 \(u\in\mathcal L(I)\)，则每个生成元 \(\rho_k\) 的 \(\operatorname{Val}_{\mathbb Z}\) 为零，所以 \(\mathrm{Val}(e)=\mathrm{Val}(c)+\mathrm{Val}(d)\)。由于 \(e\in X_\infty\) 且 Zeckendorf 代表唯一，按定义 \(e=c\oplus d\)。证毕。
+\end{proof}
+
+\begin{definition}[有限 active-address 加法账本]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-ledger}
+固定 \(B\ge1\) 以及一族有限地址区间 \(\mathfrak I\)。称三元组 \((c,d;e)\in X_\infty^3\) 被账本 \(\mathsf{Cl}_{B,\mathfrak I}\) 闭合，若对 \(u:=\partial(c,d;e)\) 有 \(u=0\)，或同时满足
+\[
+ |\operatorname{supp}u|\le B
+ \quad\text{且存在 } I\in\mathfrak I \text{ 使得 } \operatorname{supp}u\subset I,\ u\in\mathcal L(I).
+\]
+\end{definition}
+
+\begin{proposition}[有限 active-address 账本的坏例子三分]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-bad-example-trichotomy}
+固定 \(B\ge1\) 与有限地址区间族 \(\mathfrak I\)。账本 \(\mathsf{Cl}_{B,\mathfrak I}\) 对稳定加法是可靠的：若 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 成立，则 \(e=c\oplus d\)。
+
+反过来，若 \(e=c\oplus d\) 但 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 不成立，记 \(u:=\partial(c,d;e)\)。则必有下列三种机制之一发生：
+\[
+ \text{\rm (i)}\quad |\operatorname{supp}u|>B;
+\]
+\[
+ \text{\rm (ii)}\quad \text{不存在 } I\in\mathfrak I \text{ 使 } \operatorname{supp}u\subset I;
+\]
+\[
+ \text{\rm (iii)}\quad \text{对每个 } I=[a,b]\cap\NN_{\ge1}\in\mathfrak I \text{ 且 } \operatorname{supp}u\subset I,
+ \quad 2B\max\{1,F_{b-a}\}\ge F_{a+1}.
+\]
+因此，在固定 fold-aware 地址图册 \(\mathfrak I\) 内，真正的加法闭包失败只能表现为 active support 增长、支撑切换到图册外，或区间位置退化到允许边界共振的范围。
+\end{proposition}
+\begin{proof}
+若 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 成立，则或者 \(u=0\)，或者存在 \(I\in\mathfrak I\) 使 \(u\in\mathcal L(I)\)。两种情形都给出
+\[
+ \operatorname{Val}_{\mathbb Z}(u)=0,
+\]
+因为 \(\operatorname{Val}_{\mathbb Z}(\rho_k)=F_{k+1}+F_{k+2}-F_{k+3}=0\)。于是
+\[
+ \mathrm{Val}(e)=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+由 \(e\in X_\infty\) 的 Zeckendorf 唯一性，得到 \(e=c\oplus d\)。可靠性得证。
+
+现设 \(e=c\oplus d\) 且账本不闭合。若 (i) 不成立，则 \(|\operatorname{supp}u|\le B\)。若 (ii) 也不成立，则存在 \(I=[a,b]\cap\NN_{\ge1}\in\mathfrak I\) 包含 \(\operatorname{supp}u\)。若对某个这样的 \(I\) 还有
+\[
+ 2B\max\{1,F_{b-a}\}<F_{a+1},
+\]
+则由定理 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-internal-closure} 应用于 \(C=2\) 得 \(u\in\mathcal L(I)\)，从而 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 成立，矛盾。因此每个包含 \(\operatorname{supp}u\) 的图册区间均满足 (iii)。三分命题成立。证毕。
+\end{proof}
+
+\begin{remark}[Newtonization、valuation face selection 与 fewnomial budget 的局部化]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-operator-bridge}
+上述判别把加法缺陷先 Newton 化为有限地址支撑 \(\operatorname{supp}u\) 及其区间 hull \(I=[a,b]\)，再用 \((B,C)\) 记录 active coefficient budget。证明中的边界坐标 \((P_I,Q_I)\) 是对区间 Fibonacci 递推商的 valuation-face 读出：所有内部相邻关系被折叠掉以后，唯一可能残留的非局部共振是 \((F_{a+2},-F_{a+1})\) 方向。非退化不等式 \(CBH_{b-a}<F_{a+1}\) 正是 fewnomial budget 排除该边界共振的有限 active-address 条件。
+\end{remark}
+
 \begin{proof}
 记 \(A(c,d)=\{x_1<\cdots <x_r\}\)，并令对应权重为 \(b_1,\ldots,b_r\)，其中每个 \(b_\ell\in\{1,2\}\)。于是
 \[
