@@ -35,6 +35,146 @@ m:=\max\{k:\ c_k=1\text{ 或 }d_k=1\}
 \)
 为有效分辨率。则存在一个仅对 Zeckendorf 数字进行局部有限操作的算法（等价地：一个确定的有限状态换能器/有限延迟顺序换能器），在时间 $O(m)$ 内直接从 $(c_1,\dots,c_m)$ 与 $(d_1,\dots,d_m)$ 计算出 $c\oplus d$ 的 Zeckendorf 数字输出，而不需要显式构造整数 $\mathrm{Val}(c),\mathrm{Val}(d)$。
 \end{theorem}
+\begin{definition}[active-address 矩探针]\label{def:distill-khovanskii-active-address-moments}
+对 \(c\in X_\infty\) 与 \(j\ge0\)，定义有限支撑矩
+\[
+\mu_j(c):=\sum_{k\ge1}c_kF_{k+1}^{\,j}.
+\]
+对 \(c,d\in X_\infty\)，定义二者的 signed active support 为
+\[
+S(c,d):=\{k\ge1:\ c_k\ne d_k\}.
+\]
+其大小 \(|S(c,d)|\) 是 fewnomial 口径下的活动地址数，而不是最大地址或 ambient degree。
+\end{definition}
+
+\begin{proposition}[活动支撑决定有限探针深度]\label{prop:distill-khovanskii-active-address-moment-separation}
+令 \(c,d\in X_\infty\)，并设 \(r:=|S(c,d)|\)。若
+\[
+\mu_j(c)=\mu_j(d)\qquad(0\le j\le r-1),
+\]
+则 \(c=d\)。特别地，对任意 \(R\ge0\)，集合
+\[
+\mathcal X_R:=\{c\in X_\infty:\ |\operatorname{supp}(c)|\le R\}
+\]
+上的映射
+\[
+\mathcal X_R\longrightarrow \mathbb Z^{2R},\qquad
+c\longmapsto (\mu_0(c),\mu_1(c),\ldots,\mu_{2R-1}(c))
+\]
+是单射。
+\end{proposition}
+\begin{definition}[稳定加法的加权 Newton 支撑骨架]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-support_to_skeleton_reduction-weighted-raw-newton-skeleton}
+对 \(c,d\in X_\infty\)，置
+\[
+ a_k(c,d):=c_k+d_k\in\{0,1,2\},\qquad
+ A(c,d):=\{F_{k+1}:\ a_k(c,d)>0\}.
+\]
+若 \(A(c,d)=\{x_1<\cdots <x_r\}\)，则定义 \((c,d)\) 的加权 Newton 支撑骨架 \(\mathcal N(c,d)\) 为如下有限格复形：顶点集为 \(A(c,d)\)，相邻顶点 \(x_i,x_{i+1}\) 之间带有一条一维胞腔，面关系由端点包含给出，且顶点 \(x_i=F_{k_i+1}\) 携带权重 \(a_{k_i}(c,d)\)。同时定义混合 active 矩
+\[
+ M_j(c,d):=\mu_j(c)+\mu_j(d)=\sum_{k\ge1}a_k(c,d)F_{k+1}^{\,j}\qquad(j\ge0).
+\]
+若 \(\eta:A(c,d)\to\Gamma\) 是取值于全序集的 valuation，则 \(\eta\)-初始支撑 \(\operatorname{in}_\eta\mathcal N(c,d)\) 指由所有使 \(\eta\) 取最小值的顶点及其继承权重组成的诱导子复形。
+\end{definition}
+
+\begin{theorem}[fewnomial 预算内的混合矩 Newton 骨架刚性]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-support_to_skeleton_reduction-mixed-moment-newton-skeleton-rigidity}
+令 \(R\ge1\)，并设 \(c,d\in X_\infty\) 满足
+\[
+ r:=|A(c,d)|\le R.
+\]
+则有限矩列
+\[
+ \bigl(M_0(c,d),M_1(c,d),\ldots,M_{2R-1}(c,d)\bigr)
+\]
+唯一决定加权 Newton 支撑骨架 \(\mathcal N(c,d)\)。更精确地，设
+\[
+ H_R(c,d):=\bigl(M_{i+j}(c,d)\bigr)_{0\le i,j\le R-1}.
+\]
+则 \(r=\operatorname{rank}H_R(c,d)\)。当 \(r>0\) 时，唯一的首一多项式
+\[
+ Q_{c,d}(T)=T^r+q_{r-1}T^{r-1}+\cdots+q_0
+\]
+满足
+\[
+ \sum_{i=0}^{r-1}q_iM_{i+j}(c,d)=-M_{r+j}(c,d)\qquad(0\le j\le r-1),
+\]
+并且其根恰为 \(A(c,d)\)。顶点权重 \(a_k(c,d)\) 随后由 Vandermonde 方程
+\[
+ \sum_{\ell=1}^r b_\ell x_\ell^{\,j}=M_j(c,d)\qquad(0\le j\le r-1)
+\]
+唯一恢复，其中 \(x_1<\cdots<x_r\) 为 \(Q_{c,d}\) 的根，且 \(b_\ell=a_{k_\ell}(c,d)\in\{1,2\}\)。
+
+因此，若另一对 \(c',d'\in X_\infty\) 也满足 \(|A(c',d')|\le R\)，且
+\[
+ M_j(c,d)=M_j(c',d')\qquad(0\le j\le 2R-1),
+\]
+则 \(a_k(c,d)=a_k(c',d')\) 对所有 \(k\) 成立，特别地
+\[
+ c\oplus d=c'\oplus d'.
+\]
+并且，对任意定义在恢复顶点集上的 valuation \(\eta\)，初始支撑 \(\operatorname{in}_\eta\mathcal N(c,d)\) 及其权重完全由上述有限矩列决定。
+\end{theorem}
+\begin{proof}
+记 \(A(c,d)=\{x_1<\cdots <x_r\}\)，并令对应权重为 \(b_1,\ldots,b_r\)，其中每个 \(b_\ell\in\{1,2\}\)。于是
+\[
+ M_j(c,d)=\sum_{\ell=1}^r b_\ell x_\ell^{\,j}\qquad(j\ge0).
+\]
+若 \(r=0\)，全部混合矩为零，骨架为空，结论显然成立。以下设 \(r>0\)。
+
+令 \(V_R=(x_\ell^{\,i})_{0\le i\le R-1,\,1\le\ell\le r}\)，并置 \(B=\operatorname{diag}(b_1,\ldots,b_r)\)。则
+\[
+ H_R(c,d)=V_RBV_R^{\mathsf T}.
+\]
+由于 \(x_1,\ldots,x_r\) 两两不同且 \(R\ge r\)，矩阵 \(V_R\) 的列秩为 \(r\)；又 \(B\) 可逆，故 \(\operatorname{rank}H_R(c,d)=r\)。这说明 active 支撑数本身已经由有限矩 Hankel 阵读出，而不是由最大地址或 ambient degree 读出。
+
+考虑首一多项式
+\[
+ Q(T)=\prod_{\ell=1}^r(T-x_\ell)=T^r+q_{r-1}T^{r-1}+\cdots+q_0.
+\]
+对任意 \(j\ge0\)，有
+\[
+ \sum_{i=0}^r q_iM_{i+j}(c,d)
+ =\sum_{\ell=1}^r b_\ell x_\ell^{\,j}Q(x_\ell)=0,
+\]
+其中 \(q_r=1\)。因此 \(Q\) 满足定理中的线性方程。反过来，若另一首一多项式 \(P(T)=T^r+p_{r-1}T^{r-1}+\cdots+p_0\) 满足同一组方程，则 \(P-Q\) 的系数向量 \((p_0-q_0,\ldots,p_{r-1}-q_{r-1})\) 被方阵
+\[
+ H_r(c,d)=\bigl(M_{i+j}(c,d)\bigr)_{0\le i,j\le r-1}
+\]
+消去。由上一段同样的分解，\(H_r=V_rBV_r^{\mathsf T}\)，其中 \(V_r\) 是可逆 Vandermonde 矩阵，故 \(H_r\) 可逆，因而 \(P=Q\)。于是 \(Q_{c,d}\) 唯一，且其根正是 \(A(c,d)\)。由于 Fibonacci 权重 \(F_{k+1}\) 随 \(k\ge1\) 严格递增，每个根 \(x_\ell\) 唯一恢复对应地址 \(k_\ell\)。
+
+顶点恢复后，权重由
+\[
+ \sum_{\ell=1}^r b_\ell x_\ell^{\,j}=M_j(c,d)\qquad(0\le j\le r-1)
+\]
+唯一确定，因为系数矩阵仍是可逆 Vandermonde 矩阵。由原始构造知所得权重必为 \(1\) 或 \(2\)。故顶点、相邻关系、面关系与权重全部恢复，即 \(\mathcal N(c,d)\) 唯一确定。
+
+若 \((c',d')\) 有相同的前 \(2R\) 个混合矩，则上述过程给出同一个多项式、同一组根与同一组权重，所以 \(a_k(c,d)=a_k(c',d')\) 对所有 \(k\) 成立。因此
+\[
+ \mathrm{Val}(c)+\mathrm{Val}(d)=\sum_k a_k(c,d)F_{k+1}
+ =\sum_k a_k(c',d')F_{k+1}
+ =\mathrm{Val}(c')+\mathrm{Val}(d'),
+\]
+再由稳定加法的定义得到 \(c\oplus d=c'\oplus d'\)。最后，任意 valuation \(\eta\) 的初始支撑只依赖于已恢复的有限顶点集及顶点权重，故 \(\operatorname{in}_\eta\mathcal N(c,d)\) 亦由同一有限矩列决定。由此，稳定加法在 fixed fewnomial 预算下先经过支撑骨架与 valuation 面选择，再进入归一化；在该预算内不存在隐藏于同一混合矩 Newton 骨架中的稳定和坏例子。
+\end{proof}
+
+\begin{proof}
+若 \(r=0\)，则 \(S(c,d)=\varnothing\)，结论显然成立。设 \(r>0\)，并将
+\[
+S(c,d)=\{k_1,\ldots,k_r\},\qquad x_i:=F_{k_i+1},\qquad
+\varepsilon_i:=c_{k_i}-d_{k_i}\in\{-1,1\}
+\]
+写出。矩相等给出线性方程组
+\[
+\sum_{i=1}^r\varepsilon_i x_i^j=0\qquad(0\le j\le r-1).
+\]
+由于 Fibonacci 权重 \(x_i\) 两两不同，Vandermonde 行列式
+\[
+\det(x_i^{j})_{0\le j\le r-1,\,1\le i\le r}
+=\prod_{1\le i<\ell\le r}(x_\ell-x_i)
+\]
+非零。因此唯一解为 \(\varepsilon_i=0\) 对所有 \(i\)，与 \(k_i\in S(c,d)\) 矛盾。故 \(r\) 必为零，进而 \(c=d\)。
+
+若 \(c,d\in\mathcal X_R\)，则 \(|S(c,d)|\le2R\)。若二者的前 \(2R\) 个矩相同，则上一段应用于 \(r\le2R\) 给出 \(c=d\)。这说明在固定活动地址预算内，读出深度由 active support 控制，而不由最大 Fibonacci 位号控制。
+\end{proof}
 
 \begin{proof}
 这是 Zeckendorf/黄金比例 Ostrowski 数制的标准“归一化可由有限自动机实现”结论在加法特例下的表述：加法可视为先逐位相加得到字母表 $\{0,1,2\}$ 上的非规范数字，再执行一个保持值不变的规范化（消去 $2$ 与相邻 $11$）得到唯一 Zeckendorf 形式。Pisot 基（特别是黄金比例）情形下，这类规范化映射可由有限自动机/顺序换能器实现，从而给出线性时间算法（见 \cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}；对 Zeckendorf 情形的显式高效算法与实现细节可参见 \cite{AhlbachUsatineFrougnyPippenger2013}；Ostrowski 三遍扫描算法的黄金比例特例亦见 \cite{HieronymiTerry2018OstrowskiAddition}）。
