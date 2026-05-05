@@ -265,5 +265,189 @@ W=(\mathsf{tag},\ \mathsf{loc},\ \mathsf{lb},\ \mathsf{aux}),
   \item \textbf{端点承载条件：}若协议同时要求对端点承载强度作独立审计，则 Toeplitz 截断阶 \(N\) 必须足以把 \(a_N\) 的误差界压至目标阈值内；在端点外谱隙存在时该条件可指数满足，否则必须外置更大模式轴或引入更强假设（\S\ref{subsubsec:cdim-blindspot-budget-endpoint-atom}，\S\ref{subsec:cdim-quantifier-elimination-spectral-surrogate}）。
 \end{enumerate}
 该联合条件的制度含义为：在 unitary slice 的最小闭包中，“排除离线偏移”不属于单一证书族的职责，而是三端资源的并行闭包；任何拒绝外置其中之一的协议都会在类型层产生可核验的失败见证，并按 \S\ref{subsec:cdim-failure-witness-output-format} 的格式输出。
+\begin{definition}[有限窗口谱增长账本]\label{def:distill-connes-finite-window-spectral-growth-ledger}
+一个深度 \(M\) 的有限窗口谱增长账本由以下数据组成：有限维 Hilbert 空间 \(H_{\le M}\)，正自伴算子 \(D_{\le M}\in\mathrm{End}(H_{\le M})\)，以及统一离线验证器 \(\mathrm{Ver}^{\mathrm{uni}}\) 在深度 \(M\) 内实际读取的有限证书数据 \(\mathcal C_{\le M}\)。
+
+称正自伴紧预解算子 \((H,D)\) 是该账本的一个谱增长扩张，若存在等距嵌入 \(H_{\le M}\subset H\)，使 \(H_{\le M}\) 对 \(D\) 不变且 \(D|_{H_{\le M}}=D_{\le M}\)，并且 \(\mathcal C_{\le M}\) 的所有算子读出均只作用在 \(H_{\le M}\) 上。其谱维读出定义为
+\[
+\delta(D):=\inf\{s>0:\operatorname{Tr}((1+D)^{-s})<\infty\}.
+\]
+两个扩张若在 \((H_{\le M},D_{\le M},\mathcal C_{\le M})\) 上相同，则称为有限窗口等价。
+\end{definition}
+
+\begin{proposition}[有限窗口不能决定谱维读出]\label{prop:distill-connes-finite-window-spectral-mirage}
+固定定义 \ref{def:distill-connes-finite-window-spectral-growth-ledger} 的深度 \(M\) 账本。对任意 \(\alpha\ge0\)，存在该账本的谱增长扩张 \((H^{(\alpha)},D^{(\alpha)})\)，使得
+\[
+\delta(D^{(\alpha)})=\alpha.
+\]
+因此，若一个断言只依赖 \(\mathcal C_{\le M}\)、相位分母、有限阶 Toeplitz--PSD 数据或有限 Jacobi 寄存器读出，则它不能在所有谱增长扩张上唯一决定 \(\delta(D)\)，除非额外假设了跨尺度特征值计数、热迹或可和性比较账本。
+\end{proposition}
+\begin{proof}
+令 \(K^{(\alpha)}\) 为具有正交分解
+\[
+K^{(\alpha)}=\bigoplus_{r=1}^{\infty}K_r^{(\alpha)},\qquad
+\dim K_r^{(\alpha)}=m_r^{(\alpha)}:=\max\{1,\lceil 2^{\alpha r}\rceil\},
+\]
+的 Hilbert 空间，并在 \(K_r^{(\alpha)}\) 上令 \(T^{(\alpha)}=2^r\mathrm{Id}\)。定义
+\[
+H^{(\alpha)}:=H_{\le M}\oplus K^{(\alpha)},\qquad
+D^{(\alpha)}:=D_{\le M}\oplus T^{(\alpha)}.
+\]
+由于 \(D_{\le M}\) 为有限维正算子，而 \(T^{(\alpha)}\) 的特征值趋于无穷，\(D^{(\alpha)}\) 为正自伴紧预解算子，并且它显然扩张给定有限窗口。所有 \(\mathcal C_{\le M}\) 的读出仍只见 \(H_{\le M}\)，故不同 \(\alpha\) 的扩张有限窗口等价。
+
+计算谱和：
+\[
+\operatorname{Tr}((1+D^{(\alpha)})^{-s})<\infty
+\quad\Longleftrightarrow\quad
+\sum_{r=1}^{\infty}m_r^{(\alpha)}(1+2^r)^{-s}<\infty.
+\]
+当 \(s>\alpha\) 时，取 \(\rho>0\) 使 \(\alpha+\rho<s\)，则充分大 \(r\) 有 \(m_r^{(\alpha)}\le 2^{(\alpha+\rho)r}\)，故该级数由 \(\sum_r2^{(\alpha+\rho-s)r}\) 控制而收敛。当 \(0<s<\alpha\) 时，取 \(\rho>0\) 使 \(s<\alpha-\rho\)，充分大 \(r\) 有 \(m_r^{(\alpha)}\ge2^{(\alpha-\rho)r}\)，故一般项不趋于零，级数发散。若 \(\alpha=0\)，则对每个 \(s>0\) 有 \(m_r^{(0)}=1\) 且 \(\sum_r(1+2^r)^{-s}<\infty\)，故谱维读出为 \(0\)。综上 \(\delta(D^{(\alpha)})=\alpha\)。取两个不同的 \(\alpha\) 即得有限窗口不可决定性。证毕。
+\end{proof}
+\begin{definition}[折叠稳定 dyadic 谱账本]\label{distill:connes_spectral_triples_and_chamseddine_connes_spectral_action-spectral_dimension_and_volume_family-fold-stable-dyadic-spectral-ledger}
+设
+\[
+\mathcal L=(H_m,D_m,\rho_{m+1,m})_{m\ge 0}
+\]
+由有限维 Hilbert 空间、正自伴算子 \(D_m\) 与线性限制映射 \(\rho_{m+1,m}:H_{m+1}\to H_m\) 组成。对 \(0\le k<m\) 记
+\[
+P_{m,k}:=\ind_{(2^k,2^{k+1}]}(D_m).
+\]
+称 \(\mathcal L\) 为折叠稳定 dyadic 谱账本，若对一切 \(m>k\) 成立
+\[
+\rho_{m+1,m}P_{m+1,k}=P_{m,k}\rho_{m+1,m},
+\]
+且 \(\rho_{m+1,m}\) 在 \(P_{m+1,k}H_{m+1}\) 上限制为到 \(P_{m,k}H_m\) 的酉同构。此时
+\[
+a_k(\mathcal L):=\rank P_{m,k}\qquad(m>k)
+\]
+与 \(m\) 无关，并称
+\[
+A_{\mathcal L}(K):=\sum_{k=0}^{K}a_k(\mathcal L)
+\]
+为深度 \(K\) 的稳定谱计数。这里 \(D_m\) 是 \(\mathsf{Spectral\ Encoding}\) 的 Dirac 型端，而 \(A_{\mathcal L}(K)\) 是 \(\mathsf{Dimension\mbox{-}by\mbox{-}Spectral\mbox{-}Growth}\) 在有限限制系统中的 dyadic 读出。
+\end{definition}
+
+\begin{theorem}[折叠稳定谱账本的体积残数门]\label{distill:connes_spectral_triples_and_chamseddine_connes_spectral_action-spectral_dimension_and_volume_family-fold-stable-dyadic-volume-residue-gate}
+令 \(\mathcal L\) 为折叠稳定 dyadic 谱账本。设存在 \(d>0\)、\(c_-,c_+>0\) 与 \(K_0\)，使所有 \(K\ge K_0\) 满足
+\[
+ c_-2^{dK}\le A_{\mathcal L}(K)\le c_+2^{dK}.\tag{\(*\)}
+\]
+则下列断言成立。
+\begin{enumerate}
+  \item 在
+  \[
+  H_\infty:=\bigoplus_{k=0}^{\infty}\CC^{a_k(\mathcal L)},\qquad
+  D_\infty\big|_{\CC^{a_k(\mathcal L)}}=2^k\mathrm{Id}
+  \]
+  上得到正自伴紧预解算子 \(D_\infty\)。
+  \item 存在常数 \(B_-,B_+>0\)，使所有充分小的 \(t>0\) 满足
+  \[
+  B_-t^{-d}\le \operatorname{Tr}(e^{-tD_\infty})\le B_+t^{-d}.
+  \]
+  \item dyadic 残数区间为非零有限量：
+  \[
+  0<\liminf_{K\to\infty}\frac{1}{K+1}\sum_{k=0}^{K}a_k(\mathcal L)2^{-dk}
+  \le
+  \limsup_{K\to\infty}\frac{1}{K+1}\sum_{k=0}^{K}a_k(\mathcal L)2^{-dk}<\infty.
+  \]
+  更精确地，其下、上极限分别被 \((1-2^{-d})c_-\) 与 \((1-2^{-d})c_+\) 夹住。
+  \item 若另一个折叠稳定账本 \(\mathcal L'\) 与 \(\mathcal L\) 在 \(0\le k\le K\) 的 shell multiplicity 上一致，则任一有限秩替身的总秩 \(R\) 必满足
+  \[
+  R\ge c_-2^{dK}\qquad(K\ge K_0),
+  \]
+  任一有限纤维 phase-only 替身 \(\sup_k a_k(\mathcal L')\le B\) 必满足
+  \[
+  B\ge \frac{c_-2^{dK}}{K+1}\qquad(K\ge K_0).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由折叠稳定性，\(a_k(\mathcal L)\) 与所取的 \(m>k\) 无关，故 \(H_\infty\) 与 \(D_\infty\) 定义良好。每个有限区间 \([0,2^{K+1}]\) 内的谱重数为 \(A_{\mathcal L}(K)<\infty\)，且由 \((*)\) 知非零 shell 无穷多，因此 \(D_\infty\) 为正自伴紧预解算子。
+
+证明热迹估计。取 \(K=K(t)\) 使
+\[
+2^{-K-1}<t\le 2^{-K}.
+\]
+当 \(K\ge K_0\) 时，低频部分给出
+\[
+\operatorname{Tr}(e^{-tD_\infty})
+\ge \sum_{k=0}^{K}a_k(\mathcal L)e^{-t2^k}
+\ge e^{-1}A_{\mathcal L}(K)
+\ge e^{-1}c_-2^{dK}
+\ge e^{-1}c_-2^{-d}t^{-d}.
+\]
+另一方面，
+\[
+\sum_{k=0}^{K}a_k(\mathcal L)e^{-t2^k}\le A_{\mathcal L}(K)\le c_+2^{dK}\le c_+t^{-d}.
+\]
+对尾部，利用 \(a_k(\mathcal L)\le A_{\mathcal L}(k)\le c_+2^{dk}\) 与 \(t2^{K+\ell}>2^{\ell-1}\) 得
+\[
+\sum_{k>K}a_k(\mathcal L)e^{-t2^k}
+\le c_+2^{dK}\sum_{\ell\ge 1}2^{d\ell}e^{-2^{\ell-1}}
+\le c_+t^{-d}\sum_{\ell\ge 1}2^{d\ell}e^{-2^{\ell-1}}.
+\]
+级数收敛，故得到所需的上界。
+
+令 \(A(K)=A_{\mathcal L}(K)\)，并置 \(A(-1)=0\)。由分部求和，
+\[
+\sum_{k=0}^{K}a_k(\mathcal L)2^{-dk}
+=\sum_{k=0}^{K}(A(k)-A(k-1))2^{-dk}
+=A(K)2^{-dK}+(1-2^{-d})\sum_{k=0}^{K-1}A(k)2^{-dk}.
+\]
+将 \((*)\) 代入并除以 \(K+1\)，有限个 \(k<K_0\) 的项在极限中消失，得到
+\[
+(1-2^{-d})c_-
+\le \liminf_{K\to\infty}\frac{1}{K+1}\sum_{k=0}^{K}a_k(\mathcal L)2^{-dk}
+\]
+以及
+\[
+\limsup_{K\to\infty}\frac{1}{K+1}\sum_{k=0}^{K}a_k(\mathcal L)2^{-dk}
+\le (1-2^{-d})c_+.
+\]
+残数区间非零且有限。
+
+最后设 \(\mathcal L'\) 与 \(\mathcal L\) 在 \(0\le k\le K\) 上一致。若 \(\mathcal L'\) 的总秩为 \(R\)，则
+\[
+R\ge \sum_{k=0}^{K}a_k(\mathcal L')=\sum_{k=0}^{K}a_k(\mathcal L)=A_{\mathcal L}(K)\ge c_-2^{dK}.
+\]
+若 \(\sup_k a_k(\mathcal L')\le B\)，则
+\[
+B(K+1)\ge \sum_{k=0}^{K}a_k(\mathcal L')=A_{\mathcal L}(K)\ge c_-2^{dK},
+\]
+即得所示下界。证毕。
+\end{proof}
+
+\begin{proposition}[有限谱窗口的尾部抹除正规形]\label{distill:connes_spectral_triples_and_chamseddine_connes_spectral_action-spectral_dimension_and_volume_family-finite-window-tail-erasure-normal-form}
+令 \(D\) 为可分 Hilbert 空间上的正自伴紧预解算子。取有限谱窗口
+\[
+\mathcal W=(\Lambda_1,\dots,\Lambda_r;t_1,\dots,t_p;s_1,\dots,s_q)
+\]
+其中 \(\Lambda_i>0\)、\(t_j>0\)、\(s_\ell>0\)，并假设
+\[
+\operatorname{Tr}(e^{-t_jD})<\infty,\qquad
+\operatorname{Tr}((1+D)^{-s_\ell})<\infty
+\]
+对所有 \(j,\ell\) 成立。则对任意 \(\eta>0\)，存在有限维正自伴算子 \(D_{\mathcal W,\eta}\)，使
+\[
+N_{D_{\mathcal W,\eta}}(\Lambda_i)=N_D(\Lambda_i)\qquad(1\le i\le r),
+\]
+并且
+\[
+\left|\operatorname{Tr}(e^{-t_jD})-\operatorname{Tr}(e^{-t_jD_{\mathcal W,\eta}})\right|<\eta,\qquad
+\left|\operatorname{Tr}((1+D)^{-s_\ell})-\operatorname{Tr}((1+D_{\mathcal W,\eta})^{-s_\ell})\right|<\eta.
+\]
+此外，对任意 \(d>0\)，\(D_{\mathcal W,\eta}\) 的 dyadic 残数平均为零：
+\[
+\lim_{K\to\infty}\frac{1}{K+1}\sum_{k=0}^{K}\rank\ind_{(2^k,2^{k+1}]}(D_{\mathcal W,\eta})\,2^{-dk}=0.
+\]
+\end{proposition}
+\begin{proof}
+按重数列出 \(D\) 的特征值为 \((\lambda_n)_{n\ge1}\)。令 \(\Lambda_*:=\max_i\Lambda_i\)，若 \(r=0\) 则取任意 \(\Lambda_*>0\)。由于题设中有限个热迹与 zeta 型迹均收敛，可取 \(R>\Lambda_*\)，使
+\[
+\sum_{\lambda_n>R}e^{-t_j\lambda_n}<\eta,\qquad
+\sum_{\lambda_n>R}(1+\lambda_n)^{-s_\ell}<\eta
+\]
+对所有 \(j,\ell\) 同时成立。令 \(H_R\) 为 \(D\) 的所有 \(\lambda_n\le R\) 特征向量张成的有限维子空间，并令 \(D_{\mathcal W,\eta}:=D|_{H_R}\)。因 \(R>\Lambda_i\)，每个 \([0,\Lambda_i]\) 中的特征值在截断后完全保留，故计数函数在所有 \(\Lambda_i\) 处相等。热迹与 zeta 型迹的差正是相应尾和，故由 \(R\) 的选择小于 \(\eta\)。最后 \(D_{\mathcal W,\eta}\) 有有限谱，故只有有限多个 dyadic shell rank 非零；于是任意 \(d>0\) 下，上述 Cesaro 型加权平均极限为零。证毕。
+\end{proof}
 
 \endinput

@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         ChatGPT Oracle Bridge (macOS)
+// @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.4
-// @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
+// @version      5.18
+// @description  Multi-agent oracle bridge — open project/chatgpt URLs with ?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -11,13 +11,16 @@
 // @connect      localhost
 // @connect      127.0.0.1
 // @run-at       document-start
+// @noframes
 // ==/UserScript==
 
 (function () {
   "use strict";
 
+  if (window.self !== window.top) return;
+
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.4";
+  const SCRIPT_VERSION = "5.18";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -165,8 +168,7 @@
   }
 
   function isForegroundReady() {
-    if (!REQUIRE_FOREGROUND_TO_CLAIM) return true;
-    return document.visibilityState === "visible" && document.hasFocus();
+    return !REQUIRE_FOREGROUND_TO_CLAIM || document.visibilityState === "visible";
   }
 
   async function postPhase(task_id, phase, detail = "") {
@@ -187,14 +189,49 @@
     updatePanel();
   }
 
+  function isServerCancelledTaskState(state) {
+    const status = String(state?.status || "").toLowerCase();
+    const phase = String(state?.phase || "").toLowerCase();
+    return status === "cancelled" || phase === "cancelled" || phase === "not_found";
+  }
+
+  function serverCancelledError(state) {
+    const status = String(state?.status || state?.phase || "unknown");
+    return new Error(`Task cancelled by server (${status})`);
+  }
+
+  function isServerCancelledError(err) {
+    return String(err?.message || "").startsWith("Task cancelled by server");
+  }
+
+  async function throwIfTaskCancelledOnServer(task_id) {
+    try {
+      const state = await serverGet(`/task_status/${encodeURIComponent(task_id)}`);
+      if (isServerCancelledTaskState(state)) throw serverCancelledError(state);
+    } catch (err) {
+      if (isServerCancelledError(err)) throw err;
+    }
+  }
+
   function sleep(ms) {
     return new Promise((r) => setTimeout(r, ms));
   }
 
+  function withTimeout(promise, timeoutMs, label) {
+    let timer = null;
+    const timeout = new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${label} timed out after ${timeoutMs}ms`)), timeoutMs);
+    });
+    return Promise.race([promise, timeout]).finally(() => {
+      if (timer) clearTimeout(timer);
+    });
+  }
+
   // ── Persistent task state (survives page navigation, namespaced per agent) ──
-  function saveTaskState(task) {
+  function saveTaskState(task, phase = "pending") {
     GM_setValue(GM_KEY("current_task"), JSON.stringify(task));
-    GM_setValue(GM_KEY("task_phase"), "pending");
+    GM_setValue(GM_KEY("task_phase"), phase);
+    if (task && task.prompt) GM_setValue(GM_KEY("sent_prompt"), task.prompt);
   }
   function loadTaskState() {
     try {
@@ -211,6 +248,10 @@
   function clearTaskState() {
     GM_setValue(GM_KEY("current_task"), "");
     GM_setValue(GM_KEY("task_phase"), "");
+    GM_setValue(GM_KEY("sent_prompt"), "");
+    GM_setValue(GM_KEY("post_send_lines"), "");
+    GM_setValue(GM_KEY("post_send_text"), "");
+    GM_setValue(GM_KEY("sent_url"), "");
   }
 
   // ── DOM helpers for ChatGPT UI ───────────────────────────────────────
@@ -223,6 +264,83 @@
     if (rect.width < 40 || rect.height < 12) return false;
     const disabled = el.getAttribute("aria-disabled") === "true" || el.disabled;
     return !disabled;
+  }
+
+  function deepRoots() {
+    const roots = [];
+    const seen = new Set();
+    function visit(root) {
+      if (!root || seen.has(root)) return;
+      seen.add(root);
+      roots.push(root);
+      let nodes = [];
+      try {
+        nodes = Array.from(root.querySelectorAll("*"));
+      } catch {}
+      for (const node of nodes) {
+        if (node.shadowRoot) visit(node.shadowRoot);
+      }
+    }
+    visit(document);
+    return roots;
+  }
+
+  function querySelectorAllDeep(selector) {
+    const out = [];
+    for (const root of deepRoots()) {
+      try {
+        out.push(...root.querySelectorAll(selector));
+      } catch {}
+    }
+    return out;
+  }
+
+  function querySelectorDeep(selector) {
+    for (const root of deepRoots()) {
+      try {
+        const el = root.querySelector(selector);
+        if (el) return el;
+      } catch {}
+    }
+    return null;
+  }
+
+  function deepActiveElement() {
+    let active = document.activeElement;
+    while (active && active.shadowRoot && active.shadowRoot.activeElement) {
+      active = active.shadowRoot.activeElement;
+    }
+    return active;
+  }
+
+  function inputTextLength(el) {
+    if (!el) return 0;
+    if (typeof el.value === "string") return el.value.length;
+    return (el.textContent || "").length;
+  }
+
+  function promptDomDebug() {
+    const selectors = [
+      "#prompt-textarea",
+      "[data-testid='prompt-textarea']",
+      "[data-testid='composer-text-input']",
+      "[contenteditable]",
+      "[role='textbox']",
+      "textarea",
+      "form",
+      "main",
+    ];
+    const parts = selectors.map((sel) => `${sel}:${querySelectorAllDeep(sel).length}`);
+    let shadowCount = 0;
+    let shadowMax = 0;
+    for (const root of deepRoots()) {
+      if (root !== document) {
+        shadowCount++;
+        shadowMax = Math.max(shadowMax, (root.textContent || "").length);
+      }
+    }
+    const bodyLen = (document.body?.innerText || document.body?.textContent || "").length;
+    return `${parts.join(", ")}, shadows=${shadowCount}(max=${shadowMax}), body=${bodyLen}, url=${window.location.href.slice(-80)}`;
   }
 
   function findPromptInput() {
@@ -248,11 +366,11 @@
       "div[contenteditable='true']",
       "div[contenteditable='plaintext-only']",
     ]) {
-      for (const el of document.querySelectorAll(sel)) {
+      for (const el of querySelectorAllDeep(sel)) {
         if (isUsablePromptInput(el)) return el;
       }
     }
-    const active = document.activeElement;
+    const active = deepActiveElement();
     if (active && active.matches && active.matches("[contenteditable], textarea")) {
       if (isUsablePromptInput(active)) return active;
     }
@@ -270,12 +388,12 @@
       "button[aria-label='Send message']",
       "button[aria-label='Submit']",
     ]) {
-      const el = document.querySelector(sel);
+      const el = querySelectorDeep(sel);
       if (el && (allowDisabled || !el.disabled)) return el;
     }
 
     // Layer 2: Find by partial data-testid containing "send"
-    for (const btn of document.querySelectorAll("button[data-testid]")) {
+    for (const btn of querySelectorAllDeep("button[data-testid]")) {
       const tid = btn.getAttribute("data-testid") || "";
       if (tid.toLowerCase().includes("send") && (allowDisabled || !btn.disabled)) return btn;
     }
@@ -292,10 +410,10 @@
 
     // Layer 3: Find SVG arrow icon inside form buttons (the send icon is typically an up-arrow)
     const formAreas = [
-      document.querySelector("form"),
-      document.querySelector("[class*='composer']"),
-      document.querySelector("[class*='input-area']"),
-      document.querySelector("[class*='prompt']")?.closest("div[class]"),
+      querySelectorDeep("form"),
+      querySelectorDeep("[class*='composer']"),
+      querySelectorDeep("[class*='input-area']"),
+      querySelectorDeep("[class*='prompt']")?.closest("div[class]"),
     ].filter(Boolean);
 
     for (const area of formAreas) {
@@ -333,7 +451,7 @@
 
   function findFileInput() {
     // ChatGPT has a hidden file input
-    return document.querySelector("input[type='file']");
+    return querySelectorDeep("input[type='file']");
   }
 
   function isOnNewChatPage() {
@@ -357,6 +475,59 @@
   }
 
   // ── Wait for PDF upload to finish ─────────────────────────────────
+  function normalizedProjectUrl(task) {
+    const raw = (task && task.project_url ? String(task.project_url) : "").trim();
+    if (!raw) return "";
+    try {
+      const url = new URL(raw);
+      if (!/^https:\/\/(chatgpt\.com|chat\.openai\.com)$/.test(url.origin)) return "";
+      const projectMatch = url.pathname.match(/^(\/g\/g-p-[a-z0-9-]+(?:-[^/?#]+)?)(?:\/(?:project|c\/[a-z0-9-]+))?\/?$/i);
+      if (projectMatch) {
+        url.pathname = `${projectMatch[1]}/project`;
+      } else {
+        url.pathname = url.pathname.replace(/\/c\/[a-z0-9-]+\/?$/i, "");
+      }
+      url.search = "";
+      url.hash = "";
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function isOnProjectContext(task) {
+    const projectUrl = normalizedProjectUrl(task);
+    if (!projectUrl) return true;
+    try {
+      const current = new URL(window.location.href);
+      const target = new URL(projectUrl);
+      const targetPath = target.pathname.replace(/\/+$/, "");
+      const currentPath = current.pathname.replace(/\/+$/, "");
+      if (current.origin !== target.origin) return false;
+      if (!targetPath) return true;
+      return currentPath.startsWith(targetPath);
+    } catch {
+      return false;
+    }
+  }
+
+  function isProjectStartPage(task) {
+    if (!isOnProjectContext(task)) return false;
+    if (/\/c\/[a-f0-9-]+/.test(window.location.pathname)) return false;
+    return true;
+  }
+
+  function taskStartUrl(task) {
+    const agentNum = AGENT_ID.replace("oracle_", "");
+    const projectUrl = normalizedProjectUrl(task);
+    if (projectUrl) {
+      const url = new URL(projectUrl);
+      url.searchParams.set("oracle", agentNum);
+      return url.href;
+    }
+    return `https://chatgpt.com/?oracle=${agentNum}`;
+  }
+
   async function waitForUploadComplete(timeoutMs = 60000) {
     log("Waiting for PDF upload to complete...");
     const start = Date.now();
@@ -492,8 +663,13 @@
   }
 
   // ── Enter prompt text into ProseMirror ───────────────────────────────
-  async function enterPrompt(text) {
+  async function enterPrompt(text, task_id = "") {
     log(`Entering prompt (${text.length} chars)...`);
+    const phase = async (name, detail = "") => {
+      if (!task_id) return;
+      await postPhase(task_id, name, detail || foregroundState());
+    };
+    await phase("enter_prompt_start", `chars=${text.length}; ${foregroundState()}`);
 
     const input = findPromptInput();
     if (!input) {
@@ -511,10 +687,28 @@
 
     let success = false;
 
+    if (typeof input.value === "string") {
+      try {
+        await phase("enter_prompt_textarea", `chars=${text.length}; ${foregroundState()}`);
+        input.value = text;
+        input.dispatchEvent(new InputEvent("input", {
+          bubbles: true, cancelable: true,
+          inputType: "insertText", data: text,
+        }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        await sleep(500);
+        success = input.value.length > 10;
+        if (success) log("Prompt: set textarea value with input event");
+      } catch (e) {
+        log(`Textarea value insert failed: ${e.message}`);
+      }
+    }
+
     // Strategy 1: execCommand insertText — BEST for ProseMirror
     // This goes through the browser's native editing API which ProseMirror hooks into,
     // so React/ProseMirror internal state stays in sync → send button enables correctly.
-    try {
+    if (!success) try {
+      await phase("enter_prompt_execcommand", `chars=${text.length}; ${foregroundState()}`);
       input.focus();
       // For long text, insert in chunks to avoid browser limits
       const CHUNK = 4000;
@@ -523,11 +717,14 @@
       } else {
         for (let i = 0; i < text.length; i += CHUNK) {
           document.execCommand("insertText", false, text.slice(i, i + CHUNK));
+          if (i > 0 && i % (CHUNK * 2) === 0) {
+            await phase("enter_prompt_execcommand", `inserted=${Math.min(i + CHUNK, text.length)}/${text.length}; ${foregroundState()}`);
+          }
           await sleep(50);
         }
       }
       await sleep(500);
-      if ((input.textContent || "").length > 10) {
+      if (inputTextLength(input) > 10) {
         success = true;
         log("Prompt: inserted via execCommand (ProseMirror-native)");
       }
@@ -538,11 +735,12 @@
     // Strategy 2: Clipboard API paste
     if (!success) {
       try {
-        await navigator.clipboard.writeText(text);
+        await phase("enter_prompt_clipboard", `chars=${text.length}; ${foregroundState()}`);
+        await withTimeout(navigator.clipboard.writeText(text), 5000, "clipboard.writeText");
         input.focus();
         document.execCommand("paste");
         await sleep(500);
-        if ((input.textContent || "").length > 10) {
+        if (inputTextLength(input) > 10) {
           success = true;
           log("Prompt: pasted via clipboard API");
         }
@@ -554,13 +752,14 @@
     // Strategy 3: Synthetic ClipboardEvent paste
     if (!success) {
       try {
+        await phase("enter_prompt_synthetic_paste", `chars=${text.length}; ${foregroundState()}`);
         const clipData = new DataTransfer();
         clipData.setData("text/plain", text);
         input.dispatchEvent(new ClipboardEvent("paste", {
           bubbles: true, cancelable: true, clipboardData: clipData,
         }));
         await sleep(500);
-        if ((input.textContent || "").length > 10) {
+        if (inputTextLength(input) > 10) {
           success = true;
           log("Prompt: pasted via synthetic ClipboardEvent");
         }
@@ -571,6 +770,7 @@
 
     // Strategy 4: Direct innerHTML + InputEvent (last resort — may not enable send button)
     if (!success) {
+      await phase("enter_prompt_innerhtml", `chars=${text.length}; ${foregroundState()}`);
       const escaped = text
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -605,8 +805,9 @@
       log("Prompt: forced React sync (space+delete)");
     }
 
-    const visible = (input.textContent || "").length;
+    const visible = inputTextLength(input);
     log(`Prompt visible: ${visible} chars, success=${success}`);
+    await phase("enter_prompt_done", `visible=${visible}; success=${success}; ${foregroundState()}`);
     return success;
   }
 
@@ -726,9 +927,11 @@
   // Set of text lines present AFTER clicking send (before response appears)
   // Any new lines that appear later = the response
   let postSendLines = new Set();
+  let postSendText = "";
 
   function setSentPrompt(text) {
     sentPromptText = text;
+    GM_setValue(GM_KEY("sent_prompt"), text || "");
   }
 
   function looksLikePromptEcho(text) {
@@ -771,8 +974,23 @@
   function capturePostSendState() {
     const main = document.querySelector("main");
     const text = main ? (main.innerText || "").trim() : "";
+    postSendText = text;
     postSendLines = new Set(text.split("\n").map(l => l.trim()).filter(l => l.length > 0));
-    log(`Post-send captured: ${postSendLines.size} lines`);
+    GM_setValue(GM_KEY("post_send_text"), postSendText);
+    GM_setValue(GM_KEY("post_send_lines"), JSON.stringify(Array.from(postSendLines)));
+    log(`Post-send captured: ${postSendLines.size} lines, ${postSendText.length} chars`);
+  }
+
+  function restorePostSendState() {
+    try {
+      postSendText = GM_getValue(GM_KEY("post_send_text"), "") || "";
+      const raw = GM_getValue(GM_KEY("post_send_lines"), "");
+      const lines = raw ? JSON.parse(raw) : [];
+      postSendLines = new Set(Array.isArray(lines) ? lines : []);
+    } catch {
+      postSendText = "";
+      postSendLines = new Set();
+    }
   }
 
   // Chrome/UI lines to always strip
@@ -916,6 +1134,92 @@
     return lines.join("").trim().length < 20;
   }
 
+  function stripThinkingPreamble(t) {
+    return (t || "")
+      .replace(/^ChatGPT\s*(?:said|说)[：:]?\s*/i, "")
+      .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
+      .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
+      .trim();
+  }
+
+  function stripChromeSuffix(t) {
+    return (t || "")
+      .replace(/\s*:?\s*Pro\s*(?:ChatGPT\s*(?:can make mistakes|也可能会犯错)[\s\S]*)$/i, "")
+      .replace(/\s*(?:ChatGPT\s*(?:can make mistakes|也可能会犯错)|Check important info|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)[\s\S]*$/i, "")
+      .trim();
+  }
+
+  function extractJsonEnvelopeIfObvious(t) {
+    const text = (t || "").trim();
+    const first = text.indexOf("{");
+    const last = text.lastIndexOf("}");
+    if (first < 0 || last <= first) return text;
+    const before = text.slice(0, first).trim();
+    const after = text.slice(last + 1).trim();
+    const beforeOk = !before || /^(ChatGPT\s*(?:said|说)[：:]?|Thought for \d+[sm]?\s*\d*[sm]?|Pro|[:：\s])+$/i.test(before);
+    const afterOk = !after || /^[:：]?\s*Pro\s*(?:ChatGPT\s*(?:can make mistakes|也可能会犯错)|Check important info|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)[\s\S]*$/i.test(after);
+    return beforeOk && afterOk ? text.slice(first, last + 1).trim() : text;
+  }
+
+  function normalizeAssistantText(t) {
+    let out = cleanText(stripSSRGarbage(t || ""));
+    out = stripThinkingPreamble(out);
+    out = stripChromeSuffix(out);
+    out = extractJsonEnvelopeIfObvious(out);
+    out = stripChromeSuffix(out);
+    return out.trim();
+  }
+
+  function commonPrefixLength(a, b) {
+    const max = Math.min(a.length, b.length);
+    let i = 0;
+    while (i < max && a.charCodeAt(i) === b.charCodeAt(i)) i++;
+    return i;
+  }
+
+  function extractAfterPostSendSnapshot(currentText) {
+    if (!currentText || !postSendText || postSendText.length < 50) return "";
+    const current = normalizeAssistantText(currentText);
+    const snapshot = normalizeAssistantText(postSendText);
+    if (current.length <= snapshot.length + 50) return "";
+
+    if (current.startsWith(snapshot)) {
+      const after = normalizeAssistantText(current.slice(snapshot.length));
+      if (after.length > 50 && !looksLikePromptEcho(after)) return after;
+    }
+
+    const prefix = commonPrefixLength(current, snapshot);
+    if (prefix >= Math.min(500, Math.floor(snapshot.length * 0.6))) {
+      const after = normalizeAssistantText(current.slice(prefix));
+      if (after.length > 50 && !looksLikePromptEcho(after)) return after;
+    }
+
+    return "";
+  }
+
+  function extractAfterLastAssistantMarker(text) {
+    if (!text) return "";
+    const markers = [
+      /ChatGPT\s*(?:said|说)[：:]?/gi,
+      /Assistant[：:]?/gi,
+    ];
+    let last = -1;
+    let markerLen = 0;
+    for (const re of markers) {
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index >= last) {
+          last = m.index;
+          markerLen = m[0].length;
+        }
+      }
+    }
+    if (last < 0) return "";
+    const after = normalizeAssistantText(text.slice(last + markerLen));
+    if (after.length >= 20 && !looksLikePromptEcho(after)) return after;
+    return "";
+  }
+
   function extractResponseText() {
     // ═══ Strategy S0: Shadow DOM extraction (ChatGPT 5.4 Pro) ═══
     // ChatGPT 5.4 Pro renders conversation inside a shadow root.
@@ -965,38 +1269,31 @@
       if (assistantEls.length > 0) {
         // Take the last (most recent) assistant message
         const lastAssistant = assistantEls[assistantEls.length - 1];
-        const text = cleanText(shadowInnerText(lastAssistant));
-        if (text.length > 100 && !looksLikePromptEcho(text)) {
+        const text = normalizeAssistantText(shadowInnerText(lastAssistant));
+        if (text.length > 20 && !looksLikePromptEcho(text)) {
           return text;
         }
       }
 
-      // Helper: strip ChatGPT thinking preamble from extracted text
-      function stripThinkingPreamble(t) {
-        return t
-          .replace(/^ChatGPT said:\s*/i, "")
-          .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
-          .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
-          .trim();
-      }
-
       // Fallback: get all text from shadow, stripped of CSS/JS
       const shadowText = shadowInnerText(el.shadowRoot);
-      if (shadowText.length < 500) continue;
+      const markerText = extractAfterLastAssistantMarker(shadowText);
+      if (markerText.length >= 20) return markerText;
+      if (shadowText.length < 200) continue;
 
       // Try tail-anchor split
       if (sentPromptText.length > 50) {
         const tail = sentPromptText.slice(-80).trim();
         const idx = shadowText.lastIndexOf(tail);
         if (idx >= 0) {
-          const after = stripThinkingPreamble(cleanText(shadowText.slice(idx + tail.length)));
+          const after = normalizeAssistantText(shadowText.slice(idx + tail.length));
           if (after.length > 100) return after;
         }
       }
 
       // Last resort: take second 60% (prompt first, response second)
       const halfPoint = Math.floor(shadowText.length * 0.4);
-      const secondHalf = stripThinkingPreamble(cleanText(shadowText.slice(halfPoint)));
+      const secondHalf = normalizeAssistantText(shadowText.slice(halfPoint));
       if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
         return secondHalf;
       }
@@ -1021,8 +1318,8 @@
         idx = fullText.lastIndexOf(tailAnchor.slice(-50));
       }
       if (idx >= 0) {
-        const after = cleanText(fullText.slice(idx + tailAnchor.length));
-        if (after.length > 100) {
+        const after = normalizeAssistantText(fullText.slice(idx + tailAnchor.length));
+        if (after.length > 20) {
           return after;
         }
       }
@@ -1033,14 +1330,14 @@
     const allBlocks = main.querySelectorAll("div, article, section");
     for (const el of allBlocks) {
       const text = extractTextWithMath(el);
-      if (text.length < 200) continue;
+      if (text.length < 20) continue;
       candidates.push({ el, text, len: text.length });
     }
     candidates.sort((a, b) => b.len - a.len);
 
     for (const cand of candidates) {
-      const cleaned = cleanText(cand.text);
-      if (cleaned.length < 200) continue;
+      const cleaned = normalizeAssistantText(cand.text);
+      if (cleaned.length < 20) continue;
 
       // Skip full-page candidate if smaller candidates exist
       const pageLen = fullText.length;
@@ -1078,8 +1375,8 @@
         if (els.length === 0) continue;
         for (let i = els.length - 1; i >= 0; i--) {
           const text = extractTextWithMath(els[i]);
-          const cleaned = cleanText(text);
-          if (cleaned.length < 200) continue;
+          const cleaned = normalizeAssistantText(text);
+          if (cleaned.length < 20) continue;
           if (looksLikePromptEcho(cleaned)) continue;
           if (sentPromptText.length > 30) {
             const ps = sentPromptText.slice(0, 40).trim();
@@ -1092,7 +1389,7 @@
 
     // ═══ Strategy C: Full-page text minus prompt (absolute fallback) ═══
     // fullText already declared at top of function; just re-check length
-    if (fullText.length < 100) return "";
+    if (fullText.length < 20) return "";
 
     // Try to locate prompt in page text and take everything after it
     if (sentPromptText.length > 30) {
@@ -1106,8 +1403,8 @@
             const tailIdx = fullText.indexOf(tail, idx);
             if (tailIdx >= 0) endIdx = Math.max(endIdx, tailIdx + tail.length);
           }
-          const after = cleanText(fullText.slice(endIdx));
-          if (after.length > 100) return after;
+          const after = normalizeAssistantText(fullText.slice(endIdx));
+          if (after.length > 20) return after;
         }
       }
     }
@@ -1118,12 +1415,23 @@
         const t = l.trim();
         return t.length > 0 && !postSendLines.has(t) && !isChromeLine(t);
       });
-      if (newLines.length > 3) {
-        const diffText = newLines.join("\n").trim();
-        if (diffText.length > 100 && !looksLikePromptEcho(diffText)) {
+      if (newLines.length > 0) {
+        const diffText = normalizeAssistantText(newLines.join("\n"));
+        if (diffText.length > 50 && !looksLikePromptEcho(diffText)) {
           return diffText;
         }
       }
+    }
+
+    const markerText = extractAfterLastAssistantMarker(fullText);
+    if (markerText.length >= 20) return markerText;
+
+    const snapshotText = extractAfterPostSendSnapshot(fullText);
+    if (snapshotText.length >= 50) return snapshotText;
+
+    const fallbackFullText = normalizeAssistantText(fullText);
+    if (fallbackFullText.length >= 500 && !looksLikePromptEcho(fallbackFullText)) {
+      return fallbackFullText;
     }
 
     return "";
@@ -1212,6 +1520,7 @@
         const phase = generating ? "waiting_response" : "response_observed";
         const detail = `elapsed=${elapsed}s; extracted=${responseText.length}; page=${mainLen}; stable=${stableCount}; gen=${generating}`;
         try { await postPhase(task_id, phase, detail); } catch {}
+        await throwIfTaskCancelledOnServer(task_id);
       }
 
       // Periodic status log (every 2 min)
@@ -1344,14 +1653,51 @@
     return lastText;
   }
 
+  async function finishTaskFromCurrentPage(task) {
+    const { task_id, prompt, min_response_length } = task;
+    const parsedMinResponseLength = Number(min_response_length);
+    const minResponseLength = min_response_length !== undefined
+      && min_response_length !== null
+      && Number.isFinite(parsedMinResponseLength)
+      ? parsedMinResponseLength
+      : DEFAULT_MIN_RESPONSE_LENGTH;
+    setSentPrompt(GM_getValue(GM_KEY("sent_prompt"), "") || prompt || "");
+    restorePostSendState();
+    setTaskPhase("waiting_response");
+    await postPhase(task_id, "waiting_response", `resume=true; url=${window.location.href.slice(-80)}`);
+
+    let response = "";
+    try {
+      response = await waitForResponse(task_id, minResponseLength);
+    } catch (err) {
+      if (isServerCancelledError(err)) {
+        log(`${err.message}; clearing local task state`);
+        clearTaskState();
+        return;
+      }
+      throw err;
+    }
+    if (!response || response.length < 5) {
+      throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
+    }
+
+    await serverPost("/result", {
+      task_id,
+      response,
+      model: task.model || "unknown",
+      agent_id: AGENT_ID,
+    });
+
+    log(`DONE: ${task_id} (${response.length} chars)`);
+    clearTaskState();
+  }
+
   // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
-    const { task_id, prompt, pdf_base64, pdf_name, min_response_length } = task;
-    const minResponseLength = Number.isFinite(Number(min_response_length))
-      ? Number(min_response_length)
-      : DEFAULT_MIN_RESPONSE_LENGTH;
+    const { task_id, prompt, pdf_base64, pdf_name } = task;
     log(`=== Task: ${task_id} ===`);
     busy = true;
+    saveTaskState(task, "processing");
     updatePanel();
 
     try {
@@ -1361,19 +1707,20 @@
       }
       await postPhase(task_id, "foreground_claimed", foregroundState());
 
-      // Navigate to a fresh chat page if we're not already on one.
+      // Navigate to the requested Project/new-chat page if needed.
       // IMPORTANT: Only redirect if we're actively processing a task.
       // Never hijack the user's normal ChatGPT browsing.
-      if (!isOnNewChatPage()) {
+      const inProjectContext = isOnProjectContext(task);
+      if (!inProjectContext || (!isOnNewChatPage() && !isProjectStartPage(task))) {
         // Mark that WE are about to navigate (not the user)
         GM_setValue(GM_KEY("oracle_navigating"), true);
         GM_setValue(GM_KEY("nav_task_id"), task_id);
-        setTaskPhase("navigating");
-        const agentNum = AGENT_ID.replace("oracle_", "");
-        log(`Not on fresh chat — navigating to chatgpt.com ...`);
+        saveTaskState(task, "navigating");
+        const destination = taskStartUrl(task);
+        log(`${inProjectContext ? "Not on fresh chat" : "Not in task Project"} - navigating ...`);
         busy = false;
         updatePanel();
-        window.location.href = `https://chatgpt.com/?oracle=${agentNum}`;
+        window.location.href = destination;
         return; // Script re-inits on new page, resumes from init()
       }
 
@@ -1384,15 +1731,15 @@
 
       // Wait for prompt input to appear
       let retries = 0;
-      while (!findPromptInput() && retries < 60) {
+      while (!findPromptInput() && retries < 120) {
         if (retries > 0 && retries % 10 === 0) {
-          await postPhase(task_id, "waiting_prompt_input", foregroundState());
+          await postPhase(task_id, "waiting_prompt_input", `${foregroundState()}; ${promptDomDebug()}`);
         }
         await sleep(1000);
         retries++;
       }
       if (!findPromptInput()) {
-        throw new Error("Prompt input not found after 60s wait");
+        throw new Error(`Prompt input not found after 120s wait; ${promptDomDebug()}`);
       }
       log("Page ready");
       if (!isForegroundReady()) {
@@ -1410,7 +1757,7 @@
       }
 
       // Enter prompt
-      const entered = await enterPrompt(prompt);
+      const entered = await enterPrompt(prompt, task_id);
       if (!entered) {
         throw new Error("Failed to enter prompt text");
       }
@@ -1441,6 +1788,8 @@
       if (!sent) {
         throw new Error("Failed to click send");
       }
+      setTaskPhase("waiting_response");
+      GM_setValue(GM_KEY("sent_url"), window.location.href);
       await postPhase(task_id, "sent", foregroundState());
 
       // Wait for URL change — ChatGPT redirects from chatgpt.com to
@@ -1470,25 +1819,30 @@
 
       // Capture page state NOW (on the conversation page, not homepage)
       capturePostSendState();
-      await postPhase(task_id, "waiting_response", `url=${window.location.href.slice(-80)}`);
-      const response = await waitForResponse(task_id, minResponseLength);
-
-      if (!response || response.length < 5) {
-        throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
-      }
-
-      // Post result
-      await serverPost("/result", {
-        task_id,
-        response,
-        model: task.model || "unknown",
-        agent_id: AGENT_ID,
-      });
-
-      log(`DONE: ${task_id} (${response.length} chars)`);
-      clearTaskState();
+      await finishTaskFromCurrentPage(task);
     } catch (err) {
+      if (isServerCancelledError(err)) {
+        log(`${err.message}; clearing local task state`);
+        clearTaskState();
+        return;
+      }
       log(`ERROR: ${err.message}`);
+      if (getTaskPhase() === "waiting_response") {
+        const recovered = extractResponseText();
+        if (recovered && recovered.length >= 5 && !looksLikePromptEcho(recovered)) {
+          log(`Recovered response after error: ${recovered.length} chars`);
+          try {
+            await serverPost("/result", {
+              task_id,
+              response: recovered,
+              model: task.model || "unknown",
+              agent_id: AGENT_ID,
+            });
+            clearTaskState();
+            return;
+          } catch {}
+        }
+      }
       try {
         await serverPost("/result", {
           task_id,
@@ -1548,13 +1902,27 @@
     const navTaskId = GM_getValue(GM_KEY("nav_task_id"), "");
     const oracleNav = GM_getValue(GM_KEY("oracle_navigating"), false);
     const urlHasOracleFlag = /[?&]oracle=\d/.test(window.location.search);
+    const savedTask = loadTaskState();
+
+    if (phase === "waiting_response" && savedTask && savedTask.task_id) {
+      log(`Resuming response capture for task: ${savedTask.task_id}`);
+      busy = true;
+      updatePanel();
+      try {
+        await finishTaskFromCurrentPage(savedTask);
+      } catch (e) {
+        log(`Response resume failed: ${e.message}`);
+      } finally {
+        busy = false;
+        updatePanel();
+      }
+    }
 
     // Only resume task processing if this navigation was initiated by this agent
     if (phase === "navigating" && navTaskId && (oracleNav || urlHasOracleFlag)) {
       log(`Resuming after navigation for task: ${navTaskId}`);
       GM_setValue(GM_KEY("nav_task_id"), "");
       GM_setValue(GM_KEY("oracle_navigating"), false);
-      clearTaskState();
 
       // Clean oracle flag from URL without triggering navigation
       if (urlHasOracleFlag) {
@@ -1566,7 +1934,7 @@
 
       // Re-fetch this agent's pending task from the server
       try {
-        const task = await serverGet(`/task?agent=${AGENT_ID}`);
+        const task = await serverGet(`/task?agent=${AGENT_ID}&resume=${encodeURIComponent(navTaskId)}`);
         if (task && task.task_id && task.status !== "idle") {
           log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
           await processTask(task);

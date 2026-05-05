@@ -214,6 +214,236 @@ n_k:=2^k,\qquad m_k:=n_k-2,\qquad M_k:=F_{n_k}=F_{m_k+2}\qquad(k\ge 2).
 \end{enumerate}
 \leanverified{paper\_fib\_adic\_basic}
 \end{proposition}
+\begin{theorem}[高稳定加法能量的有界地址图谱]\label{thm:distill-stable-add-energy-covering-atlas}
+固定 \(m\geq 1\)，记 \(M:=F_{m+2}\)，并令
+\(
+\alpha_m:\ZZ/(M\ZZ)\to X_m
+\)
+为定理 \ref{thm:finite-resolution-mod} 中 \(V_m\) 的逆映射。对非空集合 \(S\subset X_m\)，定义其有限分辨率加法能量
+\[
+E_+(S):=\#\Bigl\{(w_1,w_2,w_3,w_4)\in S^4:
+V_m(w_1)+V_m(w_2)\equiv V_m(w_3)+V_m(w_4)\pmod M\Bigr\}.
+\]
+若存在 \(K\geq 1\) 使
+\[
+E_+(S)\geq |S|^3/K,
+\]
+则存在只依赖于 \(K\) 的常数
+\(
+ c_{\mathrm{BSG}}(K)>0
+\)
+与
+\(
+ C_{\mathrm{BSG}}(K)\geq 1
+\)，以及子集 \(S'\subset S\)，满足
+\[
+|S'|\geq c_{\mathrm{BSG}}(K)|S|.
+\]
+若 \(B':=V_m(S')\subset\ZZ/(M\ZZ)\)，则
+\[
+|B'+B'|\leq C_{\mathrm{BSG}}(K)|B'|.
+\]
+进一步，存在 \(T\subset B'\) 使 \(|T|\leq C_{\mathrm{BSG}}(K)\) 且
+\[
+S'\subseteq
+\bigl\{\alpha_m(t+b-b'):\ t\in T,\ b,b'\in B'\bigr\}.
+\]
+因此，高碰撞能量只能在抽取出上述大子集和 Ruzsa 地址图谱之后，才给出稳定加法载体；若不能取 \(S'=S\)，则该结论不声称整个 \(S\) 已经具有有界覆盖。
+\end{theorem}
+\begin{definition}[fold-aware 算术限制、碰撞能量与有界覆盖证书]\label{distill:breuillard_green_tao_approximate_groups_and_helfgott_growth-arithmetic_coincidence_to_model_theorem-fold-aware-covering-certificate}
+设 \(m\ge 1\)，记
+\[
+M_m:=F_{m+2},\qquad G_m:=\ZZ/(M_m\ZZ).
+\]
+对任意剩余类 \(\bar a\in G_m\)，令 \(\langle \bar a\rangle_m\in\{0,1,\dots,M_m-1\}\) 为其标准代表，并定义分辨率 \(m\) 的规范代表回拉
+\[
+\mathbf w_m(\bar a):=\pi_m\bigl(Z(\langle \bar a\rangle_m)\bigr)\in X_m.
+\]
+于是 \(\mathbf w_m:G_m\to X_m\) 是 \(V_m:X_m\to G_m\) 的逆映射。
+
+若 \(1\le n\le m\) 且 \(M_n\mid M_m\)，记自然约化同态为
+\[
+\theta_{m,n}:G_m\longrightarrow G_n,\qquad \bar a\longmapsto \bar a\bmod M_n,
+\]
+并定义 fold-aware 算术限制
+\[
+\rho^{\mathrm{arith}}_{m\to n}:X_m\longrightarrow X_n,\qquad
+\rho^{\mathrm{arith}}_{m\to n}(x):=\mathbf w_n\bigl(\theta_{m,n}(V_m(x))\bigr).
+\]
+
+对非空集合 \(A\subset X_m\)，定义其加性碰撞能量为
+\[
+E_m^+(A):=\bigl|\{(a,b,c,d)\in A^4:
+V_m(a)+V_m(b)=V_m(c)+V_m(d)\ \text{in }G_m\}\bigr|.
+\]
+令
+\[
+X_m^\times:=\{x\in X_m:V_m(x)\in G_m^\times\}.
+\]
+对非空集合 \(A\subset X_m^\times\)，定义其乘性碰撞能量为
+\[
+E_m^\times(A):=\bigl|\{(a,b,c,d)\in A^4:
+V_m(a)V_m(b)=V_m(c)V_m(d)\ \text{in }G_m^\times\}\bigr|.
+\]
+
+一个 \(G_m\) 中的加性 coset progression 是形如
+\[
+P=H+Q,\qquad
+Q=\Bigl\{\sum_{i=1}^{r} n_i q_i:0\le n_i<N_i\Bigr\}
+\]
+的集合，其中 \(H\le G_m\)，\(q_i\in G_m\)，且 \(N_i\ge 1\)。其秩定义为可取 \(N_i>1\) 的生成元个数。若存在有限集 \(T\subset G_m\) 使得
+\[
+V_m(A)\subset \bigcup_{t\in T}(P+t),
+\]
+则称 \((P,T)\) 为 \(A\) 的加性有界覆盖证书。
+
+一个 \(G_m^\times\) 中的乘性 coset progression 是形如
+\[
+\Pi=L\cdot Q^\times,\qquad
+Q^\times=\Bigl\{\prod_{i=1}^{r} q_i^{n_i}:0\le n_i<N_i\Bigr\}
+\]
+的集合，其中 \(L\le G_m^\times\)，\(q_i\in G_m^\times\)，且 \(N_i\ge 1\)。若存在有限集 \(S\subset G_m^\times\) 使得
+\[
+V_m(A)\subset \bigcup_{s\in S}\Pi s,
+\]
+则称 \((\Pi,S)\) 为 \(A\) 的乘性有界覆盖证书。
+
+若上述证书的秩、平移数以及 carrier 大小与 \(|A|\) 的比值均由只依赖于参数 \(K\) 的常数控制，则称它为 Covering from additive energy 与 Model-by-controlled-progressions 型的 \(K\)-有界证书。
+\end{definition}
+\begin{lemma}[有限阿贝尔群中的能量覆盖工具]\label{distill:breuillard_green_tao_approximate_groups_and_helfgott_growth-arithmetic_coincidence_to_model_theorem-finite-abelian-energy-covering-tool}
+对每个 \(K\ge 1\)，存在只依赖于 \(K\) 的常数 \(r_K,C_K,L_K\)，满足如下性质。若 \(G\) 为有限阿贝尔群，\(B\subset G\) 非空，且
+\[
+E_G(B):=\bigl|\{(a,b,c,d)\in B^4:a+b=c+d\}\bigr|\ge |B|^3/K,
+\]
+则存在子群 \(H\le G\)、元素 \(q_1,\dots,q_r\in G\)、整数 \(N_i\ge 1\) 与集合 \(T\subset G\)，使得 \(r\le r_K\)、\(|T|\le L_K\)，并且对
+\[
+P=H+\Bigl\{\sum_{i=1}^{r}n_iq_i:0\le n_i<N_i\Bigr\}
+\]
+有
+\[
+B\subset \bigcup_{t\in T}(P+t),\qquad |P|\le C_K|B|.
+\]
+同一结论对任意有限阿贝尔群以乘法记号书写时成立。
+\end{lemma}
+\begin{proof}
+这是 Balog--Szemerédi--Gowers 覆盖定理与 Green--Ruzsa 有限阿贝尔群 Freiman 定理的合成形式；可由 \cite[Theorem~2.29]{TaoVu2006} 的覆盖型 Balog--Szemerédi--Gowers 结论和 \cite[Theorem~1.2]{GreenRuzsa2007} 得到。具体地，高能量假设给出一个 \(K_1(K)\)-近似子群 \(S\subset G\) 与集合 \(T\subset G\)，满足 \(|T|\le L_1(K)\)、\(|S|\le C_1(K)|B|\) 且 \(B\subset T+S\)。Green--Ruzsa 定理将有限阿贝尔近似子群 \(S\) 控制在秩至多 \(r_K\)、大小至多 \(C_2(K)|S|\) 的 coset progression \(P\) 中。吸收常数后得到 \(|P|\le C_K|B|\) 与 \(B\subset P+T\)。乘法形式只需把有限阿贝尔群的群律改写为乘法。
+\end{proof}
+
+\begin{theorem}[稳定碰撞统计的有界进展模型]\label{distill:breuillard_green_tao_approximate_groups_and_helfgott_growth-arithmetic_coincidence_to_model_theorem-stable-collision-controlled-progression-model}
+设 \(m\ge 1\)，\(K\ge 1\)。
+
+若非空集合 \(A\subset X_m\) 满足
+\[
+E_m^+(A)\ge |A|^3/K,
+\]
+则 \(A\) 承认加性 \(K\)-有界覆盖证书：存在 \(G_m\) 中秩至多 \(r_K\) 的 coset progression \(P=H+Q\) 与集合 \(T\subset G_m\)，使得
+\[
+|T|\le L_K,\qquad |P|\le C_K|A|,\qquad
+V_m(A)\subset \bigcup_{t\in T}(P+t).
+\]
+
+若非空集合 \(A\subset X_m^\times\) 满足
+\[
+E_m^\times(A)\ge |A|^3/K,
+\]
+则 \(A\) 承认乘性 \(K\)-有界覆盖证书：存在 \(G_m^\times\) 中秩至多 \(r_K\) 的乘性 coset progression \(\Pi=L\cdot Q^\times\) 与集合 \(S\subset G_m^\times\)，使得
+\[
+|S|\le L_K,\qquad |\Pi|\le C_K|A|,\qquad
+V_m(A)\subset \bigcup_{s\in S}\Pi s.
+\]
+
+进一步，若 \(1\le n\le m\) 且 \(M_n\mid M_m\)，则任一上述覆盖证书沿 \(\rho^{\mathrm{arith}}_{m\to n}\) 下降为同秩、不增平移数的覆盖证书。加性情形中，若 \(P=H+\{\sum n_iq_i:0\le n_i<N_i\}\)，则
+\[
+P_n:=\theta_{m,n}(H)+\Bigl\{\sum_i n_i\theta_{m,n}(q_i):0\le n_i<N_i\Bigr\},\qquad
+T_n:=\theta_{m,n}(T)
+\]
+满足
+\[
+V_n\bigl(\rho^{\mathrm{arith}}_{m\to n}(A)\bigr)\subset
+\bigcup_{t\in T_n}(P_n+t),\qquad
+|T_n|\le |T|,\qquad |P_n|\le |P|.
+\]
+乘性情形中，\(\Pi_n:=\theta_{m,n}(L)\cdot\{\prod_i\theta_{m,n}(q_i)^{e_i}:0\le e_i<N_i\}\) 与 \(S_n:=\theta_{m,n}(S)\) 满足相同形式的结论。
+\end{theorem}
+\begin{proof}
+先证加性情形。由定理 \ref{thm:finite-resolution-mod}，\(V_m:X_m\to G_m\) 是双射，并且 \(\boxplus_m\) 对应 \(G_m\) 上的加法。因此 \(E_m^+(A)\) 正是集合 \(B:=V_m(A)\subset G_m\) 的加性能量 \(E_{G_m}(B)\)。由引理 \ref{distill:breuillard_green_tao_approximate_groups_and_helfgott_growth-arithmetic_coincidence_to_model_theorem-finite-abelian-energy-covering-tool}，存在所述 \(P\) 与 \(T\)，且常数只依赖于 \(K\)。这给出加性覆盖证书。此处的 coset progression 是 Model-by-controlled-progressions 在有限阿贝尔群中的一步 nilpotent 形式，常数不含 \(m\) 或 \(M_m\)，即为 Rank-bounded uniformity。
+
+乘性情形完全相同。若 \(A\subset X_m^\times\)，则 \(B:=V_m(A)\subset G_m^\times\)。由推论 \ref{cor:crt-factorization}，\(G_m^\times\) 是有限阿贝尔群。能量 \(E_m^\times(A)\) 正是该群上的乘性能量。将引理以乘法记号应用于 \(B\)，得到 \(\Pi\) 与 \(S\)。
+
+最后证明下降断言。由于 \(M_n\mid M_m\)，\(\theta_{m,n}:G_m\to G_n\) 是环同态，且定义 \ref{distill:breuillard_green_tao_approximate_groups_and_helfgott_growth-arithmetic_coincidence_to_model_theorem-fold-aware-covering-certificate} 给出
+\[
+V_n\bigl(\rho^{\mathrm{arith}}_{m\to n}(x)\bigr)=\theta_{m,n}(V_m(x))
+\]
+对所有 \(x\in X_m\) 成立。若 \(V_m(x)=p+t\)，其中 \(p\in P\)、\(t\in T\)，则
+\[
+V_n\bigl(\rho^{\mathrm{arith}}_{m\to n}(x)\bigr)=\theta_{m,n}(p)+\theta_{m,n}(t)\in P_n+T_n.
+\]
+这证明加性覆盖下降。\(P_n\) 仍由同一组区间参数的像生成，故秩不增；同态像不增大基数，故 \(|P_n|\le |P|\)，并且 \(|T_n|\le |T|\)。乘性情形中，单位在约化同态下仍为单位，且同样有
+\[
+V_n\bigl(\rho^{\mathrm{arith}}_{m\to n}(x)\bigr)=\theta_{m,n}(V_m(x)),
+\]
+于是逐因子取像得到 \(\Pi_n\) 与 \(S_n\)，并保留同样的秩、平移数和大小估计。
+\end{proof}
+
+\begin{proposition}[碰撞标量伪不变量剔除]\label{distill:breuillard_green_tao_approximate_groups_and_helfgott_growth-arithmetic_coincidence_to_model_theorem-collision-scalar-pseudoinvariant-elimination}
+不存在如下加性 carrier 规则：对每个非空 \(A\subset X_m\) 指派真子集 \(\mathcal C(A)\subsetneq G_m\)，并同时满足
+\[
+V_m(A)\subset \mathcal C(A),
+\]
+\(\mathcal C(A)\) 只由二元数据 \((|A|,E_m^+(A))\) 决定，且对所有 \(s\in X_m\) 有平移协变性
+\[
+\mathcal C(A\boxplus_m s)=\mathcal C(A)+V_m(s).
+\]
+同样，不存在如下乘性 carrier 规则：对每个非空 \(A\subset X_m^\times\) 指派真子集 \(\mathcal C^\times(A)\subsetneq G_m^\times\)，只由 \((|A|,E_m^\times(A))\) 决定，包含 \(V_m(A)\)，并满足对所有 \(s\in X_m^\times\)
+\[
+\mathcal C^\times(A\boxtimes_m s)=\mathcal C^\times(A)V_m(s).
+\]
+\end{proposition}
+\begin{proof}
+设加性规则存在。对任意 \(s\in X_m\)，映射 \(a\mapsto a\boxplus_m s\) 在 \(X_m\) 上为双射，并在 \(V_m\) 下对应 \(G_m\) 的平移。因此
+\[
+|A\boxplus_m s|=|A|,\qquad E_m^+(A\boxplus_m s)=E_m^+(A).
+\]
+由于 \(\mathcal C(A)\) 只由 \((|A|,E_m^+(A))\) 决定，得到
+\[
+\mathcal C(A\boxplus_m s)=\mathcal C(A).
+\]
+与平移协变性合并，得
+\[
+\mathcal C(A)=\mathcal C(A)+V_m(s)\qquad(s\in X_m).
+\]
+而 \(V_m:X_m\to G_m\) 为满射，所以 \(\mathcal C(A)\) 对 \(G_m\) 的所有平移不变。又 \(V_m(A)\subset\mathcal C(A)\) 且 \(A\ne\varnothing\)，故 \(\mathcal C(A)\ne\varnothing\)。有限群中非空且对所有平移不变的子集只能是全群 \(G_m\)，与 \(\mathcal C(A)\subsetneq G_m\) 矛盾。
+
+乘性情形相同。对任意 \(s\in X_m^\times\)，右乘 \(s\) 保持 \(|A|\) 与 \(E_m^\times(A)\)，故由标量决定性得到 \(\mathcal C^\times(A\boxtimes_m s)=\mathcal C^\times(A)\)。乘性协变性给出
+\[
+\mathcal C^\times(A)=\mathcal C^\times(A)V_m(s)\qquad(s\in X_m^\times).
+\]
+由于 \(V_m:X_m^\times\to G_m^\times\) 为满射，\(\mathcal C^\times(A)\) 对 \(G_m^\times\) 的所有右乘不变；它非空，因而等于 \(G_m^\times\)，与真子集要求矛盾。
+\end{proof}
+
+\begin{proof}
+由定理 \ref{thm:finite-resolution-mod}，\(V_m\) 将 \((X_m,\boxplus_m)\) 与循环加法群 \(\ZZ/(M\ZZ)\) 同构。因此 \(E_+(S)\) 正是集合 \(B:=V_m(S)\) 在有限阿贝尔群 \(\ZZ/(M\ZZ)\) 中的加法能量。
+
+对 \(B\) 应用 Balog--Szemer\'edi--Gowers 定理，得到只依赖于 \(K\) 的常数 \(c_{\mathrm{BSG}}(K)\)、\(C_{\mathrm{BSG}}(K)\) 以及子集 \(B'\subset B\)，使得
+\[
+|B'|\geq c_{\mathrm{BSG}}(K)|B|,
+\qquad
+|B'+B'|\leq C_{\mathrm{BSG}}(K)|B'|.
+\]
+令 \(S':=\alpha_m(B')\subset S\)，即得点数下界与小倍增性质。
+
+再对 \(B'\) 应用 Ruzsa 覆盖引理，存在 \(T\subset B'\)、\(|T|\leq C_{\mathrm{BSG}}(K)\)，使得
+\[
+B'\subset T+(B'-B').
+\]
+将该覆盖通过 \(\alpha_m\) 拉回 \(X_m\)，便得到
+\[
+S'\subseteq
+\{\alpha_m(t+b-b'):\ t\in T,\ b,b'\in B'\}.
+\]
+所有常数来自有限阿贝尔群中的 Balog--Szemer\'edi--Gowers 与 Ruzsa 覆盖步骤，故只依赖于能量参数 \(K\)，不依赖于 \(m\)、\(M\) 或环境基数。证毕。
+\end{proof}
+
 \begin{proof}
 (1) 与 (2) 为逆极限的标准泛性质：有限离散环的乘积紧致，逆极限为其中闭子集，故紧致；环结构按分量继承且连续。
 (3) 单位群是逆系统中“逐层可逆”的极限：元素在逆极限中可逆当且仅当其在每一层投影均可逆；因此单位群与单位群的逆极限自然同构，并继承紧致性。

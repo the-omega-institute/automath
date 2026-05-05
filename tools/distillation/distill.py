@@ -14,9 +14,14 @@ import time
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Optional
+
+try:
+    from tools.distillation import lifecycle
+except ModuleNotFoundError:  # pragma: no cover - supports direct script imports
+    import lifecycle
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -74,12 +79,23 @@ SECTIONING_COMMAND_RE = re.compile(
 CJK_RE = re.compile(r"[\u3400-\u9fff]")
 KILLO_GOLDEN_TRACE_RE = re.compile(
     r"(?:"
-    r"\u65b0\u589e|\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
+    r"\u65b0\u589e\s*(?:\u5982\u4e0b|\u7ed3\u679c|[:\uff1a])|"
+    r"\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
     r"\u4fee\u6539\u8bb0\u5f55|\u52a0\u5165\u5982\u4e0b|"
     r"(?:\u7ed3\u8bba|\u95ed\u73af|\u8865\u5145)\s*"
     r"(?:[A-Z]|[0-9]+|[一二三四五六七八九十]+)\s*(?=[\]\}:：]|$)|"
     r"\b20[0-9]{2}[-/][0-9]{1,2}[-/][0-9]{1,2}\b"
     r")"
+)
+PIPELINE_METADATA_RE = re.compile(
+    r"(?i:"
+    r"\\textbf\{[^}]*?(?:dependency\s+status|date[- ]?time|"
+    r"distillation\s+timestamp|family\s*:)[^}]*\}"
+    r"|(?:dependency\s+status|date[- ]?time|distillation\s+timestamp)\s*:"
+    r"|(?:end\s+)?distillation\s+writeback"
+    r")"
+    r"|\\textbf\{[^}]*?(?:\u4f9d\u8d56\u72b6\u6001|"
+    r"\u65e5\u671f\u65f6\u95f4|\u7ed3\u679c\s*[0-9]+)[^}]*\}"
 )
 
 STAGE_ORDER = ["R", "S", "G", "W", "E", "DONE"]
@@ -97,29 +113,81 @@ PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
 SEMANTIC_SCAN_ACCEPT_THRESHOLD = 0.55
+SEMANTIC_SCAN_PROMPT_MAX_CHARS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_CHARS", "90000")
+)
+SEMANTIC_SCAN_PROMPT_MAX_TERMS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_TERMS", "40")
+)
+SEMANTIC_SCAN_PROMPT_MAX_SECTIONS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_SECTIONS", "24")
+)
+SEMANTIC_SCAN_PROMPT_MAX_CLAIMS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_CLAIMS", "24")
+)
+SEMANTIC_SCAN_PROMPT_MAX_DISTILL_CLAIMS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_DISTILL_CLAIMS", "16")
+)
+SEMANTIC_SCAN_PROMPT_MAX_INTERFACES = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_MAX_INTERFACES", "16")
+)
+SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS = int(
+    os.environ.get("DISTILL_SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS", "320")
+)
 GLOBAL_EVIDENCE_MAX_CLAIMS = 80
 GLOBAL_EVIDENCE_MAX_INTERFACES = 50
-ORACLE_EVIDENCE_MAX_SECTION_INDEX = 12
-ORACLE_EVIDENCE_MAX_CLAIMS = 8
-ORACLE_EVIDENCE_MAX_EXISTING = 6
-ORACLE_EVIDENCE_MAX_INTERFACES = 6
-ORACLE_EVIDENCE_MAX_MEMORY = 4
-ORACLE_SECTION_CONTEXT_CHARS = 6000
+ORACLE_EVIDENCE_MAX_SECTION_INDEX = 3
+ORACLE_EVIDENCE_MAX_CLAIMS = 2
+ORACLE_EVIDENCE_MAX_EXISTING = 2
+ORACLE_EVIDENCE_MAX_INTERFACES = 2
+ORACLE_EVIDENCE_MAX_MEMORY = 2
+ORACLE_SECTION_CONTEXT_CHARS = 40000
+ORACLE_DEEPENING_SECTION_CONTEXT_CHARS = int(
+    os.environ.get("ORACLE_DEEPENING_SECTION_CONTEXT_CHARS", "1000")
+)
+W_SECTION_CONTEXT_CHARS = int(os.environ.get("DISTILL_W_SECTION_CONTEXT_CHARS", "5000"))
+W_DEEPENING_SECTION_CONTEXT_CHARS = int(
+    os.environ.get("DISTILL_W_DEEPENING_SECTION_CONTEXT_CHARS", "3000")
+)
+W_PROMPT_MAX_CHARS = int(os.environ.get("DISTILL_W_PROMPT_MAX_CHARS", "65000"))
+ORACLE_PROMPT_MAX_CHARS = int(os.environ.get("ORACLE_PROMPT_MAX_CHARS", "45000"))
+PROMPT_TRUNCATION_TAIL_CHARS = int(
+    os.environ.get("DISTILL_PROMPT_TRUNCATION_TAIL_CHARS", "12000")
+)
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
+ORACLE_EVIDENCE_SNIPPET_CHARS = int(os.environ.get("ORACLE_EVIDENCE_SNIPPET_CHARS", "160"))
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
+ORACLE_PROJECT_URL = os.environ.get("CHATGPT_ORACLE_PROJECT_URL", "").strip()
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
 ORACLE_DONE_DIR = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle" / "done"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
 ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
+ORACLE_AGENT_STALE_TIMEOUT = int(os.environ.get("ORACLE_AGENT_STALE_TIMEOUT", "300"))
+ORACLE_NO_EXTRACT_TIMEOUT = int(os.environ.get("ORACLE_NO_EXTRACT_TIMEOUT", "600"))
 CODEX_INFRA_RETRIES = int(os.environ.get("DISTILL_CODEX_INFRA_RETRIES", "3"))
 CODEX_INFRA_RETRY_SLEEP = int(os.environ.get("DISTILL_CODEX_INFRA_RETRY_SLEEP", "20"))
+CLAUDE_QUOTA_WAIT_MAX_SECONDS = int(os.environ.get("CLAUDE_QUOTA_WAIT_MAX_SECONDS", "7200"))
 REVIEW_BACKENDS = ("codex", "codex-claude", "claude")
 DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "claude")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
     DEFAULT_REVIEW_BACKEND = "claude"
 
+
+def _reconfigure_stdio_for_utf8() -> None:
+    """Keep redirected Windows logs from failing on reviewer Unicode text."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if not callable(reconfigure):
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="backslashreplace")
+        except (OSError, ValueError):
+            continue
+
+
+_reconfigure_stdio_for_utf8()
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
 logger.setLevel(logging.INFO)
@@ -534,6 +602,31 @@ def _find_claude() -> str:
 CLAUDE_PATH = _find_claude()
 
 
+def _claude_quota_reset_delay(text: str, now: Optional[datetime] = None) -> Optional[int]:
+    """Return seconds until Claude quota reset, plus a small safety buffer."""
+    lowered = str(text or "").lower()
+    if "out of extra usage" not in lowered and "usage limit" not in lowered:
+        return None
+    match = re.search(
+        r"resets?\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?",
+        lowered,
+    )
+    if not match:
+        return 15 * 60
+    current = now or datetime.now().astimezone()
+    hour = int(match.group(1))
+    minute = int(match.group(2) or "0")
+    suffix = match.group(3)
+    if suffix == "pm" and hour < 12:
+        hour += 12
+    elif suffix == "am" and hour == 12:
+        hour = 0
+    target = current.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    if target <= current:
+        target = target + timedelta(days=1)
+    return max(0, int((target - current).total_seconds()) + 60)
+
+
 def claude_exec(
     prompt: str,
     *,
@@ -558,38 +651,59 @@ def claude_exec(
 
     cmd = [str(claude_bin), "-p", "--dangerously-skip-permissions"]
     use_shell = IS_WINDOWS and str(claude_bin).lower().endswith(".cmd")
-    start = time.monotonic()
-    result: Optional[subprocess.CompletedProcess[str]] = None
     # Strip CLAUDECODE env var to allow nested Claude CLI invocation
     clean_env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
-    try:
-        result = subprocess.run(
-            cmd,
-            input=prompt,
-            capture_output=True,
-            text=True,
-            timeout=timeout_seconds,
-            cwd=str(target_dir),
-            env=clean_env,
-            shell=use_shell,
-            encoding="utf-8",
-            errors="replace",
-        )
-    except subprocess.TimeoutExpired:
-        logger.warning("Claude CLI timed out after %ss", timeout_seconds)
-        return "(timeout)"
-    finally:
-        elapsed = time.monotonic() - start
-        rc = result.returncode if result else "?"
-        logger.info("Claude CLI completed in %.1fs rc=%s", elapsed, rc)
+    quota_waited = False
+    while True:
+        start = time.monotonic()
+        result: Optional[subprocess.CompletedProcess[str]] = None
+        try:
+            result = subprocess.run(
+                cmd,
+                input=prompt,
+                capture_output=True,
+                text=True,
+                timeout=timeout_seconds,
+                cwd=str(target_dir),
+                env=clean_env,
+                shell=use_shell,
+                encoding="utf-8",
+                errors="replace",
+            )
+        except subprocess.TimeoutExpired:
+            logger.warning("Claude CLI timed out after %ss", timeout_seconds)
+            return "(timeout)"
+        finally:
+            elapsed = time.monotonic() - start
+            rc = result.returncode if result else "?"
+            logger.info("Claude CLI completed in %.1fs rc=%s", elapsed, rc)
 
-    output = result.stdout or ""
-    if result.returncode != 0:
-        logger.warning("Claude CLI error: %s", (result.stderr or "")[:500])
-        if not output:
-            logger.warning("Claude produced no stdout; falling back to codex_exec")
-            return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
-    return output
+        output = result.stdout or ""
+        error = result.stderr or ""
+        combined = "\n".join(part for part in (output.strip(), error.strip()) if part)
+        if result.returncode == 0:
+            return output
+
+        logger.warning("Claude CLI error: %s", (combined or "<empty>")[:500])
+        quota_delay = _claude_quota_reset_delay(combined)
+        if (
+            quota_delay is not None
+            and not quota_waited
+            and quota_delay <= CLAUDE_QUOTA_WAIT_MAX_SECONDS
+        ):
+            logger.warning(
+                "Claude quota unavailable; sleeping %ss until reset before retrying",
+                quota_delay,
+            )
+            time.sleep(quota_delay)
+            quota_waited = True
+            continue
+        if output:
+            return output
+        if combined:
+            return combined
+        logger.warning("Claude produced no output; falling back to codex_exec")
+        return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
 
 
 def _load_prompt(name: str) -> str:
@@ -830,6 +944,11 @@ class DistillState:
     open_debts: list[dict[str, Any]] = field(default_factory=list)
     split_candidates: list[dict[str, Any]] = field(default_factory=list)
     blocked: dict[str, Any] = field(default_factory=dict)
+    failure_kind: str = "unknown"
+    attempts: int = 1
+    retry_budget: int = 0
+    next_action: str = "run_pipeline"
+    lifecycle_flags: dict[str, Any] = field(default_factory=dict)
 
 
 def _state_dir(name: str) -> Path:
@@ -869,6 +988,11 @@ def load_state(name: str) -> DistillState:
         open_debts=list(data.get("open_debts") or []),
         split_candidates=list(data.get("split_candidates") or []),
         blocked=dict(data.get("blocked") or {}),
+        failure_kind=str(data.get("failure_kind", "unknown")),
+        attempts=int(data.get("attempts", 1) or 1),
+        retry_budget=int(data.get("retry_budget", 0) or 0),
+        next_action=str(data.get("next_action", "run_pipeline")),
+        lifecycle_flags=dict(data.get("lifecycle_flags") or {}),
     )
 
 
@@ -984,12 +1108,139 @@ def _oracle_cancel_task(task_id: str, reason: str) -> None:
         return
 
 
+def _oracle_claimed_agent_infos(
+    status: dict[str, Any],
+    task_id: str,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return browser-agent status rows currently assigned to an Oracle task."""
+    agents = status.get("agents", {}) if isinstance(status, dict) else {}
+    if not isinstance(agents, dict):
+        return []
+    claimed: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in agents.items():
+        if isinstance(info, dict) and info.get("task_id") == task_id:
+            claimed.append((str(agent_id), info))
+    return claimed
+
+
+def _oracle_stale_agent_claims(
+    status: dict[str, Any],
+    task_id: str,
+    stale_timeout: int = ORACLE_AGENT_STALE_TIMEOUT,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return claimed Oracle agents whose heartbeat age exceeds stale_timeout."""
+    stale: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in _oracle_claimed_agent_infos(status, task_id):
+        try:
+            age = int(info.get("elapsed", 0))
+        except (TypeError, ValueError):
+            age = 0
+        if age >= stale_timeout:
+            stale.append((agent_id, info))
+    return stale
+
+
+def _oracle_sentinel_iframe_claims(
+    status: dict[str, Any],
+    task_id: str,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return claimed agents that are running inside ChatGPT sentinel iframes."""
+    sentinel: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in _oracle_claimed_agent_infos(status, task_id):
+        detail = str(info.get("detail", "")).lower()
+        if "backend-api/sentinel/frame" in detail or "sentinel/frame.html" in detail:
+            sentinel.append((agent_id, info))
+    return sentinel
+
+
+def _oracle_detail_int(detail: Any, key: str) -> Optional[int]:
+    """Parse integer key=value fields from browser Oracle phase details."""
+    match = re.search(rf"(?:^|[;,\s]){re.escape(key)}=([0-9]+)", str(detail or ""))
+    if not match:
+        return None
+    try:
+        return int(match.group(1))
+    except ValueError:
+        return None
+
+
+def _oracle_detail_bool(detail: Any, key: str) -> Optional[bool]:
+    """Parse boolean key=value fields from browser Oracle phase details."""
+    match = re.search(
+        rf"(?:^|[;,\s]){re.escape(key)}=(true|false)",
+        str(detail or ""),
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    return match.group(1).lower() == "true"
+
+
+def _oracle_zero_extract_agent_stalls(
+    status: dict[str, Any],
+    task_id: str,
+    no_extract_timeout: int = ORACLE_NO_EXTRACT_TIMEOUT,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return claimed agents stuck waiting with no extracted response text."""
+    stalled: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in _oracle_claimed_agent_infos(status, task_id):
+        phase = str(info.get("phase", ""))
+        if phase not in {"waiting_response", "response_observed"}:
+            continue
+        detail = str(info.get("detail", ""))
+        elapsed = _oracle_detail_int(detail, "elapsed")
+        extracted = _oracle_detail_int(detail, "extracted")
+        generating = _oracle_detail_bool(detail, "gen")
+        if (
+            elapsed is not None
+            and elapsed >= no_extract_timeout
+            and extracted == 0
+            and generating is False
+        ):
+            stalled.append((agent_id, info))
+    return stalled
+
+
 _ORACLE_METADATA_RE = re.compile(r"^\s*<!--\s*oracle metadata:\s*.*?-->\s*", re.DOTALL)
+_ORACLE_METADATA_JSON_RE = re.compile(
+    r"^\s*<!--\s*oracle metadata:\s*(.*?)-->\s*",
+    re.DOTALL,
+)
 
 
 def _strip_oracle_response_metadata(text: str) -> str:
     """Remove local oracle metadata comments from persisted browser responses."""
     return _ORACLE_METADATA_RE.sub("", text or "", count=1).lstrip()
+
+
+def _oracle_response_metadata(text: str) -> dict[str, Any]:
+    """Parse the leading oracle metadata comment, if present."""
+    match = _ORACLE_METADATA_JSON_RE.match(text or "")
+    if not match:
+        return {}
+    try:
+        data = json.loads(match.group(1).strip())
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _normalize_oracle_project_url(value: Any) -> str:
+    return str(value or "").strip().rstrip("/")
+
+
+def _oracle_project_matches(value: Any) -> bool:
+    expected = _normalize_oracle_project_url(ORACLE_PROJECT_URL)
+    if not expected:
+        return True
+    return _normalize_oracle_project_url(value) == expected
+
+
+def _mark_oracle_project(data: dict[str, Any], project_url: Any = None) -> dict[str, Any]:
+    value = _normalize_oracle_project_url(project_url if project_url is not None else ORACLE_PROJECT_URL)
+    if value:
+        data["_oracle_project_url"] = value
+    return data
 
 
 def _read_oracle_done_response(task_id: str) -> str:
@@ -1016,6 +1267,7 @@ def chatgpt_oracle_exec(
     dry_run: bool = False,
 ) -> str:
     """Submit a prompt to the local ChatGPT Oracle bridge and wait for a result."""
+    prompt = _limit_prompt_chars(prompt, ORACLE_PROMPT_MAX_CHARS, f"oracle:{log_tag}")
     if dry_run:
         logger.info(
             "[DRY RUN] ChatGPT Oracle task=%s model=%s prompt=%s",
@@ -1045,6 +1297,7 @@ def chatgpt_oracle_exec(
         status_before.get("max_agents", "?"),
         status_before.get("completed", "?"),
     )
+    logger.info("ChatGPT Oracle prompt length: %d chars", len(prompt))
 
     task_id = f"{_slugify(state.name)}_{log_tag}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     payload: dict[str, Any] = {
@@ -1052,6 +1305,8 @@ def chatgpt_oracle_exec(
         "prompt": prompt,
         "model": model,
     }
+    if ORACLE_PROJECT_URL:
+        payload["project_url"] = ORACLE_PROJECT_URL
     if pdf_path:
         path = Path(pdf_path)
         if path.exists():
@@ -1086,6 +1341,7 @@ def chatgpt_oracle_exec(
             "prompt_length": len(prompt),
             "response_length": len(response),
             "pdf_path": str(pdf_path) if pdf_path else "",
+            "project_url": ORACLE_PROJECT_URL,
             "oracle_status_before": status_before,
             "oracle_status_after": _oracle_server_status(),
             "source": source,
@@ -1119,18 +1375,66 @@ def chatgpt_oracle_exec(
 
         elapsed = int(time.time() - start)
         status = _oracle_server_status()
-        agents = status.get("agents", {}) if isinstance(status, dict) else {}
-        claimed_by = [
-            agent_id
-            for agent_id, info in agents.items()
-            if isinstance(info, dict) and info.get("task_id") == task_id
-        ]
+        claimed_infos = _oracle_claimed_agent_infos(status, task_id)
+        claimed_by = [agent_id for agent_id, _ in claimed_infos]
         if not claimed_by and elapsed >= ORACLE_CLAIM_TIMEOUT:
             _oracle_cancel_task(task_id, "claim_timeout_no_foreground_agent")
             logger.warning(
                 "ChatGPT Oracle task not claimed after %ss; continuing without Oracle: %s",
                 ORACLE_CLAIM_TIMEOUT,
                 task_id,
+            )
+            return ""
+        sentinel_claims = _oracle_sentinel_iframe_claims(status, task_id)
+        if (
+            claimed_by
+            and sentinel_claims
+            and len(sentinel_claims) == len(claimed_infos)
+        ):
+            sentinel_detail = ", ".join(
+                f"{agent_id}:phase={info.get('phase', '?')}:detail={info.get('detail', '')}"
+                for agent_id, info in sentinel_claims
+            )
+            _oracle_cancel_task(task_id, "sentinel_iframe_browser_agent")
+            logger.warning(
+                "ChatGPT Oracle task claimed by ChatGPT sentinel iframe; "
+                "continuing without Oracle: %s (%s)",
+                task_id,
+                sentinel_detail,
+            )
+            return ""
+        stale_claims = _oracle_stale_agent_claims(status, task_id)
+        if claimed_by and stale_claims and len(stale_claims) == len(claimed_infos):
+            stale_detail = ", ".join(
+                f"{agent_id}:phase={info.get('phase', '?')}:elapsed={info.get('elapsed', '?')}s"
+                for agent_id, info in stale_claims
+            )
+            _oracle_cancel_task(task_id, "stale_browser_agent")
+            logger.warning(
+                "ChatGPT Oracle task claimed by stale browser agent(s) after %ss; "
+                "continuing without Oracle: %s (%s)",
+                ORACLE_AGENT_STALE_TIMEOUT,
+                task_id,
+                stale_detail,
+            )
+            return ""
+        zero_extract_stalls = _oracle_zero_extract_agent_stalls(status, task_id)
+        if (
+            claimed_by
+            and zero_extract_stalls
+            and len(zero_extract_stalls) == len(claimed_infos)
+        ):
+            stall_detail = ", ".join(
+                f"{agent_id}:phase={info.get('phase', '?')}:detail={info.get('detail', '')}"
+                for agent_id, info in zero_extract_stalls
+            )
+            _oracle_cancel_task(task_id, "zero_extraction_browser_agent")
+            logger.warning(
+                "ChatGPT Oracle task produced no extracted response text after %ss; "
+                "continuing without Oracle: %s (%s)",
+                ORACLE_NO_EXTRACT_TIMEOUT,
+                task_id,
+                stall_detail,
             )
             return ""
         if elapsed > 0 and elapsed % 60 == 0:
@@ -1156,6 +1460,39 @@ def _unique_strings(items: Any) -> list[str]:
 def _json_block(data: Any) -> str:
     """Format a JSON value for inclusion in a prompt."""
     return json.dumps(data, ensure_ascii=False, indent=2, default=str)
+
+
+def _limit_prompt_chars(prompt: str, max_chars: int, label: str) -> str:
+    """Bound oversized prompts while preserving the final instruction block."""
+    if max_chars <= 0 or len(prompt) <= max_chars:
+        return prompt
+
+    marker = f"\n[distill.py prompt truncated: {label}]\n"
+    tail_budget = min(
+        PROMPT_TRUNCATION_TAIL_CHARS,
+        max(12, max_chars // 3),
+        max(0, len(prompt) // 2),
+    )
+    head_budget = max_chars - len(marker) - tail_budget
+    if head_budget < 1:
+        marker = "\n[prompt truncated]\n"
+        tail_budget = min(max(12, max_chars // 3), max(0, len(prompt) // 2))
+        head_budget = max_chars - len(marker) - tail_budget
+    if head_budget < 1:
+        return prompt[:max_chars]
+
+    limited = prompt[:head_budget] + marker + prompt[-tail_budget:]
+    if len(limited) > max_chars:
+        overflow = len(limited) - max_chars
+        head_budget = max(1, head_budget - overflow)
+        limited = prompt[:head_budget] + marker + prompt[-tail_budget:]
+    logger.warning(
+        "Prompt truncated for %s: %d -> %d chars",
+        label,
+        len(prompt),
+        len(limited),
+    )
+    return limited
 
 
 def _research_schema() -> str:
@@ -1475,11 +1812,26 @@ def _build_prior_feedback_block(state: DistillState) -> str:
 
     Ported from oracle_pipeline.py A-DEEP prior_feedback accumulation pattern.
     """
-    if not state.prior_feedback:
-        return ""
     lines = ["PRIOR FEEDBACK (address ALL of these):"]
+    has_feedback = False
     for entry in state.prior_feedback[-8:]:
         lines.append(f"  - {entry}")
+        has_feedback = True
+    blocked = _read_artifact_json_or_none(state, "blocked.json")
+    if isinstance(blocked, dict) and blocked.get("status") == "review_failed":
+        blocked_cycle = blocked.get("depth_cycle")
+        current_cycle = state.depth_cycle
+        try:
+            same_cycle = blocked_cycle is None or int(blocked_cycle) == current_cycle
+        except (TypeError, ValueError):
+            same_cycle = False
+        if same_cycle:
+            blocked_summary = _compact_review_feedback(blocked.get("last_review", {}))
+            if blocked_summary:
+                recent_feedback = "\n".join(state.prior_feedback[-8:])
+                if blocked_summary not in recent_feedback:
+                    lines.append(f"  - Last blocked review: {blocked_summary}")
+                    has_feedback = True
     if state.scores:
         score_lines = []
         for stage_key, review_data in state.scores.items():
@@ -1493,6 +1845,9 @@ def _build_prior_feedback_block(state: DistillState) -> str:
                 )
         if score_lines:
             lines.append("Score history: " + ", ".join(score_lines[-4:]))
+            has_feedback = True
+    if not has_feedback:
+        return ""
     return "\n".join(lines)
 
 
@@ -1510,7 +1865,7 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  were stated as Omega reconstruction obstructions. Output at most",
                 "  1-2 conservative writebacks, and omit any target whose local",
                 "  Omega carrier is not fully defined in the supplied context.",
-                "- Absolutely do not include the visible style tokens 新增, 本次,",
+                "- Absolutely do not include visible patch/log phrases such as 新增如下, 新增结果, 本次,",
                 "  本轮, 上一轮, 修改记录, 加入如下, 补充 A, 结论 1, or 闭环 1",
                 "  anywhere in a title, statement, proof, or explanatory sentence.",
                 "- For statistical_stability, quantify explicitly over all probability",
@@ -1574,6 +1929,206 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  locally introduced in the statement.",
             ]
         )
+    if family_slug == "sum_product_obstruction_classification":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has repeatedly failed when ordinary finite-ring,",
+                "  denominator, CRT, orbit-stabilizer, injectivity, or Kneser-style",
+                "  observations were relabeled as Bourgain sum-product content.",
+                "  Do not output such writebacks.",
+                "- Output at most 1-2 writebacks. Prefer one locally anchored result",
+                "  with a genuine growth lower bound or a genuine arithmetic",
+                "  obstruction over broad target coverage.",
+                "- A valid writeback must contain a nontrivial sum-product statement:",
+                "  either an explicit finite-field/finite-ring growth alternative",
+                "  of the form |A+A|+|A\\cdot A| >= |A|^{1+epsilon} under stated",
+                "  non-subfield/non-subring hypotheses, or a structural obstruction",
+                "  that uses the target's specific arithmetic carrier and proves why",
+                "  simultaneous additive and multiplicative stability forces that",
+                "  carrier into a named proper subring, quotient, representation",
+                "  block, or denominator class.",
+                "- The proof must use both addition and multiplication in an essential",
+                "  way. Reject yourself if the argument would remain true after",
+                "  deleting multiplication, after replacing multiplication by an",
+                "  arbitrary second operation, or if it only says that a finite set",
+                "  closed under ring operations generates a finite subring.",
+                "- Do not target the Fibonacci congruence file unless the snippet",
+                "  constructs an intrinsic local ring/finite-field projection from",
+                "  the supplied context. The monoid quotient D/\\equiv \\cong \\NN is",
+                "  not by itself a sum-product carrier.",
+                "- In the Z_34 representation target, do not identify real rotation",
+                "  planes with complex characters without handling conjugate pairs.",
+                "  Tensor products of real planes must account for both i+j and i-j",
+                "  escape indices, or the result must avoid character-product claims.",
+                "- In the zeta/Serrin flux target, denominator clearing or factorization",
+                "  through a finite residue map is not enough. The statement must use",
+                "  an analytic or arithmetic property visible in the local context,",
+                "  not merely the fact that rational coordinates have finite",
+                "  denominators.",
+                "- If no supplied target supports a genuine statement of this kind,",
+                "  return a single narrow conditional lemma whose hypotheses explicitly",
+                "  introduce the finite arithmetic carrier and the non-subring",
+                "  condition; do not overstate it as an intrinsic Omega theorem.",
+            ]
+        )
+    if family_slug == "entropy_increment_closure":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has failed when entropy language was used only as a",
+                "  definitional restatement. A theorem-level writeback must prove a",
+                "  nontrivial quantitative consequence: an entropy drop identity with",
+                "  a strictness criterion, a register-cardinality lower bound, or a",
+                "  finite stopping-time bound derived from a positive increment.",
+                "- Do not state a boxed normal-form identity that is merely the",
+                "  definition of an accepted set, construction set, or rigidity set.",
+                "  If the result is only a normal-form definition, output it as a",
+                "  definition and omit theorem-level closure language.",
+                "- If you use infinite-budget leak language, define the finite budget",
+                "  model first, then prove divergence as a quantified statement such",
+                "  as: for every B there is a finite ambiguity fibre that no register",
+                "  with at most B values can terminally separate. Do not use the phrase",
+                "  as an informal semantic conclusion.",
+                "- Keep theorem statements mathematical. Do not append interpretive",
+                "  paragraphs beginning with therefore/this means/in the forcing",
+                "  semantics inside theorem or proof bodies. Move such material into",
+                "  precise hypotheses or omit it.",
+                "- Avoid visible patch/log wording, especially 新增如下, 新增结果, 本次, 本轮,",
+                "  修改记录, 加入如下, 补充 A, 结论 1, and 闭环 1.",
+                "- Prefer 1-2 locally anchored writebacks over broad coverage. The",
+                "  recursive_addressing writeback should expose an entropy decrement",
+                "  or register lower bound; the fold_residual_time writeback should",
+                "  prove finite stopping from a density increment; the typed-address",
+                "  writeback should prove a real propagation or lower-bound consequence",
+                "  of construction/rigidity separation.",
+            ]
+        )
+    if family_slug == "probe_representability_and_reconstruction":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has failed when a strong POM reconstruction result was",
+                "  diluted by generic SPG inverse-limit material or CDIM protocol",
+                "  restatement. Output at most 1-2 writebacks, and it is acceptable",
+                "  to output only the strong POM writeback if it closes the family.",
+                "- Treat the POM curvature/minimal-phantom-depth writeback as the",
+                "  preferred primary shape: it should define two finite cones or",
+                "  probes, identify the first depth where their readings differ,",
+                "  and prove a real minimal phantom or reconstruction obstruction.",
+                "- Do not target para__spg-coordinate-bundle-screen-audit-closure.tex.",
+                "  SPG is allowed only if the supplied local context already discusses",
+                "  abstract screen probe descent, pro-representability, or a named",
+                "  probe tower with restriction maps. A generic finite-branching tree",
+                "  or Konig lemma argument is not enough by itself.",
+                "- CDIM is allowed only for a compact finite-probe residual-budget",
+                "  theorem with an explicit finite candidate set, probe map, maximum",
+                "  fibre size, and register lower bound. Do not append verifier",
+                "  semantics or protocol-only conclusions as an extra enumerated",
+                "  item.",
+                "- A valid proof must use the target's local objects to prove one",
+                "  non-tautological representability/reconstruction consequence:",
+                "  minimal phantom depth, uniqueness from separating probes, a finite",
+                "  residual-budget lower bound, or failure of reconstruction from a",
+                "  named obstruction. Reject yourself if the theorem would remain true",
+                "  as a generic statement about arbitrary finite sets.",
+            ]
+        )
+    if family_slug == "descent_to_closure_theorem_chains":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has failed when the same Cech/descent dichotomy was",
+                "  repeated in multiple target files. Output at most 1-2 writebacks,",
+                "  and each writeback must add a distinct mathematical mechanism.",
+                "- Do not target conclusion unless the result strictly strengthens an",
+                "  existing conclusion theorem. Rephrasing an existing phase-channel",
+                "  crowding lower bound in descent language is not enough.",
+                "- A valid descent-to-closure theorem must include one concrete",
+                "  descent datum, one closure or cocycle compatibility condition,",
+                "  and one non-tautological consequence: a glueability criterion,",
+                "  obstruction witness, base-change stability implication, or",
+                "  certificate-survival statement.",
+                "- Avoid broad slogans such as closure chain, universal invariant, or",
+                "  descent obstruction unless the finite carrier, cover, transition",
+                "  maps, and obstruction class are all locally defined.",
+                "- Do not introduce blank lines inside display math. In particular,",
+                "  keep definitions such as \\widetilde N_\\alpha := b_\\alpha^{-1}N_\\alpha",
+                "  on contiguous display lines.",
+                "- Prefer a short proposition with a real proof over a multi-file batch",
+                "  of parallel Cech dichotomies.",
+            ]
+        )
+    if family_slug == "growth_classification_from_legal_survivors":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This Stallings family has repeatedly failed by placing a generic",
+                "  nonnegative-matrix growth classification into the wrong host file.",
+                "  Do not target subsec__protocol-screening-fold-survivor.tex or",
+                "  subsec__group-unification-audit-pointers.tex. Those sections are",
+                "  protocol-screening and audit-interface sections, not venues for a",
+                "  new transition matrix framework.",
+                "- A valid writeback must be locally anchored in a target context that",
+                "  already discusses growth dynamics, transition matrix analysis,",
+                "  spectral radius, Perron-Frobenius data, legal survivor paths, or",
+                "  train-track transition matrices. If no supplied target context",
+                "  contains such objects, output no writeback for that target.",
+                "- The theorem must use a named transition matrix or explicitly defined",
+                "  legal-survivor directed graph from the local context. Do not invent",
+                "  survivor ledgers S_m, audit matrices T_m, address readouts a_m,",
+                "  witness carriers, or microstate update maps unless the statement",
+                "  defines them and the proof actually uses them.",
+                "- The Stallings/Bestvina-Handel connection must be mathematical, not",
+                "  cosmetic: either prove a classification for a local transition",
+                "  matrix/graph already present in the target, or explicitly state the",
+                "  result as a conservative transition matrix lemma without claiming",
+                "  train-track content.",
+            ]
+        )
+    if family_slug == "subgroup_reconstruction_from_canonical_finite_automata":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This Stallings family is about reconstructing a finitely generated",
+                "  subgroup of a free group from the finite deterministic automaton",
+                "  carried by a folded labelled core graph. Do not translate it into",
+                "  Zeckendorf words, Fibonacci moduli, cyclic groups, gcd subgroup",
+                "  formulas, or the operations op_m / zeta_m / V_m. Those are the",
+                "  wrong object layer for this source.",
+                "- A valid writeback must explicitly define or use a finite labelled",
+                "  directed graph with a base vertex, reduced edge labels in a finite",
+                "  alphabet A^{+-1}, accepted reduced loops, trimming of vertices not",
+                "  lying on accepted loops, and the deterministic/folded condition",
+                "  that no two outgoing edges at a vertex have the same label.",
+                "- Preferred theorem shape: if a finite based labelled graph is folded",
+                "  and core-trimmed, then its accepted reduced loop labels form a",
+                "  finitely generated subgroup; conversely a finite labelled bouquet",
+                "  for finitely many generators can be folded and trimmed to a finite",
+                "  deterministic core accepting exactly the subgroup they generate.",
+                "- Target group_unification if it can host labels, paths, basepoints,",
+                "  represented readouts, and quotient/core reconstruction. Target",
+                "  folding only for a short auxiliary graph-folding lemma. Do not",
+                "  target subsec__folding-map.tex with cyclic subgroup arithmetic.",
+                "- Do not target subsec__group-unification-audit-pointers.tex or",
+                "  cor__foldbin6-geo-mask-34.tex for this family. Prior attempts",
+                "  failed there as wrong-host or duplicate n|34/cyclic-legality",
+                "  restatements.",
+                "- Do not use the rank-one alphabet A={a}, sigma_geo, rho_n,",
+                "  omega_1+omega_5, n|34, or the two-vertex parity core as the",
+                "  main result. That is only the cyclic special case and does not",
+                "  close subgroup reconstruction from canonical finite automata.",
+                "- If the result is an abstract Stallings-core interface theorem,",
+                "  place it only in",
+                "  group_unification/subsec__group-unification-spectral-alignment.tex",
+                "  and state it as a formal admissibility gate for registered",
+                "  observable-channel labels such as the local \\mathcal R_{\\mathrm{obs}}",
+                "  interface, not as a theorem about an audit script.",
+                "- Keep labels short and unique. Put any Omega interpretation in a",
+                "  separate remark after the proof; theorem and proof environments",
+                "  must contain only the formal graph/automaton reconstruction claim.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(
@@ -1603,6 +2158,70 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
             "  conservative theorem that passes review over broad coverage.",
         ]
     )
+
+
+def _source_specific_writeback_contract(
+    state: DistillState,
+    focused_family: Optional[dict[str, Any]],
+) -> str:
+    """Return last-mile writeback guidance for source-level failure modes."""
+    source_slug = _slugify(state.name)
+    if source_slug == "persistent_homology_persistence_modules_and_constructible_sheaf_persistence":
+        family_name = str((focused_family or {}).get("name", "")).strip()
+        family_line = f"- Focused family: {family_name}." if family_name else ""
+        lines = [
+            "PERSISTENT-HOMOLOGY LAST-MILE CONTRACT:",
+            family_line,
+            "- For POM functorial persistence, use the dedicated host",
+            "  pom/parts/subsubsec__pom-persistence-module-ledger.tex.",
+            "- Do not target the strong-stationary-time, separation-distance,",
+            "  Markov-kernel, diagonal-rate, or refresh files with homology,",
+            "  sheaf, barcode, or interleaving machinery.",
+            "- Define the legal parameter, transition maps, and finite carrier",
+            "  before naming a stable residue. Do not import H_q, Cech, sheaf,",
+            "  or Vec notation unless it is explicitly bound in the statement.",
+            "- Prefer one narrow theorem/proposition with a proof over a broad",
+            "  batch. If the local target does not support the source mechanism,",
+            "  output no writeback for that target.",
+        ]
+        return "\n".join(line for line in lines if line)
+    if source_slug != "connes_consani_arithmetic_site":
+        return ""
+    family_name = str((focused_family or {}).get("name", "")).strip()
+    family_line = f"- Focused family: {family_name}." if family_name else ""
+    lines = [
+        "CONNES--CONSANI LAST-MILE CONTRACT:",
+        family_line,
+        "- Output at most one writeback. Omit every other target instead of",
+        "  filling a broad batch with standard algebra, kernel quotients,",
+        "  connecting homomorphisms, soft-max limits, pigeonhole counts, or",
+        "  mechanical parameter substitution.",
+        "- Do not introduce a new action category, topos, observer-fiber site,",
+        "  or heavy categorical framework unless the supplied target context",
+        "  already contains matching local objects. In the current",
+        "  typed-address context, use the existing Sem/C/T^(2) framework rather",
+        "  than replacing it with an external category.",
+        "- The accepted theorem must be non-tautological: it must prove a",
+        "  checkable condition, obstruction, bound, or descent consequence that",
+        "  is not one of the axioms in the definition and does not follow",
+        "  immediately from the definition.",
+        "- If the proof needs a first-break fiber, minimal observer, scale",
+        "  defect, or correspondence obstruction, define it inside the snippet",
+        "  using visible local notation before using it.",
+        "- Preferred shapes are narrow conditional lemmas: either a Frobenius-",
+        "  style correspondence ledger for nonretroactive updates with explicit",
+        "  source, target, multiplicity, composition, and obstruction data, or",
+        "  an action-site/stable-value lemma that proves a concrete descent",
+        "  criterion in existing emergent_arithmetic notation.",
+        "- For the Frobenius-correspondence spacetime skeleton family, integrate",
+        "  into the nonretroactive causal-order body context. Do not target the",
+        "  grand-chain synthesis/conclusion file with a standalone technical",
+        "  theorem.",
+        "- Do not use zeta or arithmetic-site motivation as a theorem claim.",
+        "  Zeta material is allowed only as a finite trace or orbit-budget",
+        "  diagnostic with all multiplicities and error terms defined locally.",
+    ]
+    return "\n".join(line for line in lines if line)
 
 
 def _theorem_family_names(state: DistillState) -> list[str]:
@@ -1648,6 +2267,45 @@ def _prune_completed_families(state: DistillState) -> bool:
         ", ".join(removed),
     )
     return True
+
+
+def _existing_content_completed_families(
+    state: DistillState,
+    *,
+    body_root: Path = CORE_BODY,
+) -> list[str]:
+    """Return family completions already supported by durable paper content."""
+    if state.name != "Stallings foldings and Bestvina-Handel train tracks":
+        return []
+    target = body_root / "fold_residual_time" / "subsec__protocol-screening-fold-survivor.tex"
+    try:
+        text = read_text(target)
+    except OSError:
+        return []
+    required = [
+        "def:distill-stallings-fold-survivor-transition-growth-ledger",
+        "prop:distill-stallings-fold-survivor-transition-growth-ledger",
+        "distill:stallings_foldings_and_bestvina_handel_train_tracks-"
+        "finite_descent_to_folded_core-transition-growth-critical-core-trimming",
+    ]
+    if all(label in text for label in required):
+        return ["growth-classification from legal survivors"]
+    return []
+
+
+def _mark_existing_content_completed_families(state: DistillState) -> bool:
+    """Add completion markers for families already present in paper text."""
+    allowed = set(_theorem_family_names(state))
+    changed = False
+    for family in _existing_content_completed_families(state):
+        if family in allowed and family not in state.completed_families:
+            state.completed_families.append(family)
+            changed = True
+            logger.info(
+                "Marked family '%s' complete from existing paper content",
+                family,
+            )
+    return changed
 
 
 def _invalidate_after_stage_r(state: DistillState) -> None:
@@ -1789,6 +2447,9 @@ def reconcile_state_contract(state: DistillState) -> DistillState:
     """Repair impossible stage states using local artifacts as source of truth."""
     artifacts_changed = _invalidate_stale_artifact_chain(state)
     family_markers_changed = _prune_completed_families(state)
+    family_markers_changed = (
+        _mark_existing_content_completed_families(state) or family_markers_changed
+    )
     if state.current_stage not in STAGE_ORDER:
         old_stage = state.current_stage
         state.current_stage = _resume_stage_from_artifacts(state)
@@ -2498,13 +3159,42 @@ def _policy_model(state: DistillState) -> tuple[dict[str, Any], dict[str, Any], 
     return scope, inventory, action
 
 
-def refresh_policy_state(state: DistillState, *, persist: bool = True) -> dict[str, Any]:
+def _lifecycle_snapshot(
+    state: DistillState,
+    inventory: dict[str, Any],
+    action: dict[str, Any],
+) -> dict[str, Any]:
+    """Build the compact lifecycle snapshot consumed by lifecycle.py."""
+    return {
+        "name": state.name,
+        "current_stage": state.current_stage,
+        "attempts": state.attempts,
+        "next_policy_action": action,
+        "blocked": state.blocked or inventory.get("blocked_artifact", {}),
+        "done_contract": inventory.get("done_contract", {}),
+        "oracle_status": inventory.get("oracle_status", {}),
+        "inventory": {
+            "artifacts": inventory.get("artifacts", {}),
+            "payload_error_count": len(inventory.get("payload_errors", [])),
+            "writeback_status": inventory.get("writeback_status", ""),
+            "open_debt_count": len(_open_debts_from_inventory(inventory)),
+            "split_candidate_count": len(inventory.get("split_candidates", [])),
+        },
+    }
+
+
+def refresh_policy_state(
+    state: DistillState,
+    *,
+    persist: bool = True,
+    update_memory: bool = True,
+) -> dict[str, Any]:
     """Persist the local policy snapshot and return the next action."""
     scope, inventory, action = _policy_model(state)
     state.scope_contract = scope
     state.open_debts = _open_debts_from_inventory(inventory)
     state.split_candidates = inventory.get("split_candidates", [])
-    if persist:
+    if persist and update_memory:
         _upsert_distillation_memory(_memory_entries_from_split_candidates(state))
     state.blocked = (
         {
@@ -2534,6 +3224,14 @@ def refresh_policy_state(state: DistillState, *, persist: bool = True) -> dict[s
             "split_candidate_count": len(state.split_candidates),
             "done_contract": inventory.get("done_contract", {}),
         },
+    }
+    lifecycle_state = lifecycle.annotate(_lifecycle_snapshot(state, inventory, action))
+    state.failure_kind = str(lifecycle_state.get("failure_kind", "unknown"))
+    state.retry_budget = int(lifecycle_state.get("retry_budget", 0) or 0)
+    state.next_action = str(lifecycle_state.get("next_action", "retry_resume"))
+    state.lifecycle_flags = {
+        "needs_user_intervention": bool(lifecycle_state.get("needs_user_intervention")),
+        "covered_by_existing_content": bool(lifecycle_state.get("covered_by_existing_content")),
     }
     if persist:
         save_state(state)
@@ -2698,6 +3396,30 @@ def _dry_raw_research(name: str) -> dict[str, Any]:
     }
 
 
+def _source_queue_context_block(state: DistillState) -> str:
+    """Return optional Oracle source-queue context for Stage R prompts."""
+    data = _read_artifact_json_or_none(state, "source_candidate.json")
+    if not isinstance(data, dict) or not data:
+        return "None."
+    compact = {
+        "queue_id": data.get("queue_id", ""),
+        "proposed_source": data.get("proposed_source", state.name),
+        "source_type": data.get("source_type", ""),
+        "target_sections": _unique_strings(data.get("target_sections", [])),
+        "omega_mechanisms": _unique_strings(data.get("omega_mechanisms", [])),
+        "source_material": _unique_strings(data.get("source_material", [])),
+        "first_distillation_prompt": str(data.get("first_distillation_prompt", "")).strip(),
+        "rationale": str(data.get("rationale", "")).strip(),
+        "risks": _unique_strings(data.get("risks", [])),
+        "outreach_angle": str(data.get("outreach_angle", "")).strip(),
+    }
+    return (
+        "This source was promoted from the Oracle-enriched source queue. "
+        "Use this context as the concrete source contract for Stage R:\n"
+        + _json_block(compact)
+    )
+
+
 def run_stage_r(
     state: DistillState,
     dry_run: bool = False,
@@ -2722,12 +3444,14 @@ def run_stage_r(
         "router_triggers",
     ]
     feedback = ""
+    source_queue_context = _source_queue_context_block(state)
     for attempt in range(1, 4):
         if dry_run:
             data = _dry_raw_research(state.name)
         elif oracle_research and attempt == 1:
             prompt = _load_prompt("oracle_research").format(
                 mathematician=state.name,
+                source_queue_context=source_queue_context,
                 current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
                 section_list=_section_list(),
                 euclid_example=_euclid_example(),
@@ -2767,6 +3491,7 @@ def run_stage_r(
         else:
             prompt = _load_prompt("research").format(
                 mathematician=state.name,
+                source_queue_context=source_queue_context,
                 section_list=_section_list(),
                 euclid_example=_euclid_example(),
                 schema=_research_schema(),
@@ -3270,6 +3995,150 @@ def _global_evidence_for_state(state: DistillState) -> dict[str, Any]:
     return pack
 
 
+def _prompt_snippet(text: Any, max_chars: int) -> str:
+    """Return a compact single-string prompt snippet."""
+    value = str(text or "").strip()
+    if len(value) <= max_chars:
+        return value
+    return value[:max_chars].rstrip() + "..."
+
+
+def _semantic_compact_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep only fields Stage S needs for prompt-facing relevance judgment."""
+    compact: dict[str, Any] = {}
+    for key in (
+        "section",
+        "tex_file",
+        "best_file",
+        "type",
+        "label",
+        "term",
+        "score",
+        "python_score",
+        "coverage",
+        "file_count",
+    ):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    for key in ("counts",):
+        value = row.get(key)
+        if isinstance(value, dict) and value:
+            compact[key] = value
+    for key in ("matched_terms", "unique_triggers"):
+        values = _unique_strings(row.get(key, []))[:8]
+        if values:
+            compact[key] = values
+    snippet = _prompt_snippet(
+        row.get("snippet", ""),
+        SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS,
+    )
+    if snippet:
+        compact["snippet"] = snippet
+    return compact
+
+
+def _semantic_compact_family_row(row: Any) -> Any:
+    """Trim source theorem-family notes before they enter Stage S prompts."""
+    if not isinstance(row, dict):
+        return _prompt_snippet(row, SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS)
+    compact: dict[str, Any] = {}
+    for key in ("name", "target_sections"):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    for key in ("key_results", "method_operators", "failure_modes"):
+        values = row.get(key)
+        if isinstance(values, list):
+            trimmed = [
+                _prompt_snippet(item, SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS)
+                for item in values[:5]
+            ]
+            if trimmed:
+                compact[key] = trimmed
+        elif values not in (None, "", []):
+            compact[key] = _prompt_snippet(values, SEMANTIC_SCAN_PROMPT_SNIPPET_CHARS)
+    return compact
+
+
+def _semantic_scan_prompt_evidence_pack(
+    global_evidence_pack: dict[str, Any],
+) -> dict[str, Any]:
+    """Compress whole-article evidence before Stage S model reranking.
+
+    The full artifact remains on disk for downstream stages; this prompt view
+    keeps Stage S from injecting hundreds of kilobytes of repeated snippets.
+    """
+    if not isinstance(global_evidence_pack, dict):
+        return {}
+    return {
+        "terms": _unique_strings(global_evidence_pack.get("terms", []))[
+            :SEMANTIC_SCAN_PROMPT_MAX_TERMS
+        ],
+        "source_theorem_families": [
+            _semantic_compact_family_row(row)
+            for row in global_evidence_pack.get("source_theorem_families", [])[:8]
+        ],
+        "section_index": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("section_index", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_SECTIONS
+            ]
+            if isinstance(row, dict)
+        ],
+        "high_signal_claims": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("high_signal_claims", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_CLAIMS
+            ]
+            if isinstance(row, dict)
+        ],
+        "existing_distillation_claims": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("existing_distillation_claims", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_DISTILL_CLAIMS
+            ]
+            if isinstance(row, dict)
+        ],
+        "frontier_interfaces": [
+            _semantic_compact_evidence_row(row)
+            for row in global_evidence_pack.get("frontier_interfaces", [])[
+                :SEMANTIC_SCAN_PROMPT_MAX_INTERFACES
+            ]
+            if isinstance(row, dict)
+        ],
+    }
+
+
+def _oracle_compact_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep only target-routing fields needed by the browser Oracle prompt."""
+    compact: dict[str, Any] = {}
+    for key in ("section", "tex_file", "type", "label", "term", "score", "python_score"):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    matched_terms = _unique_strings(row.get("matched_terms", []))[:6]
+    if matched_terms:
+        compact["matched_terms"] = matched_terms
+    snippet = _prompt_snippet(row.get("snippet", ""), ORACLE_EVIDENCE_SNIPPET_CHARS)
+    if snippet:
+        compact["snippet"] = snippet
+    return compact
+
+
+def _oracle_compact_section_index_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep section-index rows short enough for ChatGPT browser injection."""
+    compact: dict[str, Any] = {}
+    for key in ("section", "best_file", "python_score", "coverage"):
+        value = row.get(key)
+        if value not in (None, "", []):
+            compact[key] = value
+    triggers = _unique_strings(row.get("unique_triggers", []))[:6]
+    if triggers:
+        compact["unique_triggers"] = triggers
+    return compact
+
+
 def _oracle_relevant_evidence_pack(
     global_evidence_pack: dict[str, Any],
     focused_family: Optional[dict[str, Any]],
@@ -3296,7 +4165,7 @@ def _oracle_relevant_evidence_pack(
     def _trim_rows(key: str, limit: int) -> list[dict[str, Any]]:
         rows = [row for row in global_evidence_pack.get(key, []) if isinstance(row, dict)]
         rows.sort(key=_row_rank, reverse=True)
-        return rows[:limit]
+        return [_oracle_compact_evidence_row(row) for row in rows[:limit]]
 
     section_index = [row for row in global_evidence_pack.get("section_index", []) if isinstance(row, dict)]
     section_index.sort(
@@ -3316,7 +4185,10 @@ def _oracle_relevant_evidence_pack(
             {
                 "name": str(item.get("name", "")).strip(),
                 "target_sections": _unique_strings(item.get("target_sections", [])),
-                "key_results": _unique_strings(item.get("key_results", []))[:3],
+                "key_results": [
+                    _prompt_snippet(result, 220)
+                    for result in _unique_strings(item.get("key_results", []))[:3]
+                ],
             }
         )
 
@@ -3334,7 +4206,10 @@ def _oracle_relevant_evidence_pack(
         "terms": _unique_strings(global_evidence_pack.get("terms", []))[:20],
         "focused_target_sections": sorted(target_sections),
         "source_theorem_families": theorem_families[:8],
-        "section_index": section_index[:ORACLE_EVIDENCE_MAX_SECTION_INDEX],
+        "section_index": [
+            _oracle_compact_section_index_row(row)
+            for row in section_index[:ORACLE_EVIDENCE_MAX_SECTION_INDEX]
+        ],
         "high_signal_claims": _trim_rows("high_signal_claims", ORACLE_EVIDENCE_MAX_CLAIMS),
         "existing_distillation_claims": _trim_rows(
             "existing_distillation_claims",
@@ -3344,8 +4219,32 @@ def _oracle_relevant_evidence_pack(
             "frontier_interfaces",
             ORACLE_EVIDENCE_MAX_INTERFACES,
         ),
-        "distillation_memory": memory_rows[:ORACLE_EVIDENCE_MAX_MEMORY],
+        "distillation_memory": [
+            {
+                "id": str(row.get("id", "")).strip(),
+                "kind": str(row.get("kind", "")).strip(),
+                "status": str(row.get("status", "")).strip(),
+                "title": _prompt_snippet(row.get("title", ""), 160),
+                "target_sections": _unique_strings(row.get("target_sections", [])),
+                "reason": _prompt_snippet(row.get("reason", ""), 240),
+                "reuse_guidance": _prompt_snippet(row.get("reuse_guidance", ""), 240),
+            }
+            for row in memory_rows[:ORACLE_EVIDENCE_MAX_MEMORY]
+        ],
     }
+
+
+def _writeback_relevant_evidence_pack(
+    global_evidence_pack: dict[str, Any],
+    focused_family: Optional[dict[str, Any]],
+    targets: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Use the target-focused evidence summary for W prompts.
+
+    The full evidence pack can be hundreds of kilobytes and is meant as a
+    durable artifact, not as browser or model prompt input.
+    """
+    return _oracle_relevant_evidence_pack(global_evidence_pack, focused_family, targets)
 
 
 def _oracle_payload_summary(
@@ -3448,11 +4347,19 @@ def _semantic_scan(
         mathematician=state.name,
         raw_research=_json_block(raw_research),
         deterministic_scores=_json_block(candidates),
-        global_evidence_pack=_json_block(global_evidence_pack),
+        global_evidence_pack=_json_block(
+            _semantic_scan_prompt_evidence_pack(global_evidence_pack)
+        ),
         candidate_contexts=_scan_candidate_contexts(section_scores),
         deep_research_directive=_deep_research_directive(),
         schema=_semantic_scan_schema(),
     )
+    prompt = _limit_prompt_chars(
+        prompt,
+        SEMANTIC_SCAN_PROMPT_MAX_CHARS,
+        f"semantic-scan:{_slugify(state.name)}",
+    )
+    logger.info("Stage S+ semantic prompt length: %d chars", len(prompt))
     response = _codex_exec_with_infra_retries(
         prompt,
         work_dir=REPO_ROOT,
@@ -3877,7 +4784,7 @@ def _choose_writeback_targets(
             text = read_text(path)
         except OSError:
             continue
-        if path.name.startswith("para__") and not CLAIM_ENV_RE.search(text):
+        if not CLAIM_ENV_RE.search(text):
             continue
         base_lines = len(text.splitlines())
         if base_lines >= WRITEBACK_LINE_LIMIT - WRITEBACK_TARGET_LINE_HEADROOM:
@@ -3983,6 +4890,52 @@ def _select_target_files(
     return selected[:MAX_WRITEBACK_TARGET_FILES]
 
 
+def _family_specific_writeback_targets(
+    focused_family: Optional[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return explicit target overrides for families with known bad hosts."""
+    family_slug = _slugify(str((focused_family or {}).get("name", "")))
+    if family_slug == "subgroup_reconstruction_from_canonical_finite_automata":
+        path = (
+            CORE_BODY
+            / "group_unification"
+            / "subsec__group-unification-spectral-alignment.tex"
+        )
+        if path.exists() and not _is_wrapper_tex_file(path):
+            return [_target_file_descriptor("group_unification", path)]
+    return []
+
+
+def _source_specific_writeback_targets(
+    state: DistillState,
+    focused_family: Optional[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return explicit target overrides for source/family routing failures."""
+    source_slug = _slugify(state.name)
+    family_slug = _slugify(str((focused_family or {}).get("name", "")))
+    if (
+        source_slug == "connes_consani_arithmetic_site"
+        and family_slug == "frobenius_correspondence_spacetime_skeleton"
+    ):
+        section = "physical_spacetime_skeleton"
+        path = (
+            CORE_BODY
+            / section
+            / "subsec__physical-spacetime-skeleton-nonretroactive-resolution.tex"
+        )
+        if path.exists() and not _is_wrapper_tex_file(path):
+            return [_target_file_descriptor(section, path)]
+    if (
+        source_slug == "persistent_homology_persistence_modules_and_constructible_sheaf_persistence"
+        and family_slug == "functorial_persistence_construction"
+    ):
+        section = "pom"
+        path = CORE_BODY / section / "parts" / "subsubsec__pom-persistence-module-ledger.tex"
+        if path.exists() and not _is_wrapper_tex_file(path):
+            return [_target_file_descriptor(section, path)]
+    return []
+
+
 def _collect_section_contexts(
     targets: list[dict[str, Any]],
     *,
@@ -4000,6 +4953,14 @@ def _collect_section_contexts(
             text = text[:max_chars_per_file] + "\n% [context truncated by distill.py]\n"
         chunks.append(f"--- {rel} ---\n{text}")
     return "\n\n".join(chunks)
+
+
+def _collect_oracle_deepening_contexts(targets: list[dict[str, Any]]) -> str:
+    """Collect a compact target context for browser-based Oracle prompts."""
+    return _collect_section_contexts(
+        targets,
+        max_chars_per_file=ORACLE_DEEPENING_SECTION_CONTEXT_CHARS,
+    )
 
 
 def _dry_writebacks(targets: list[dict[str, Any]], name: str) -> list[dict[str, str]]:
@@ -4120,6 +5081,11 @@ def _validate_writebacks(
             errors.append(
                 f"Item {index} contains visible patch/log wording forbidden by killo-golden: {trace.group(0)}"
             )
+        metadata = PIPELINE_METADATA_RE.search(content)
+        if metadata:
+            errors.append(
+                f"Item {index} contains pipeline metadata forbidden in paper LaTeX: {metadata.group(0)}"
+            )
         ordinal = MANUAL_RESULT_ORDINAL_RE.search(content)
         if ordinal:
             errors.append(
@@ -4151,6 +5117,7 @@ def _parse_score_response(response: str) -> dict[str, Any]:
     unavailable_markers = (
         "you've hit your limit",
         "you have hit your limit",
+        "out of extra usage",
         "usage limit",
         "rate limit",
         "try again later",
@@ -4362,6 +5329,8 @@ def _has_usable_oracle_deepening(data: Any) -> bool:
     """Return true for cached Oracle data that should not be overwritten."""
     if not isinstance(data, dict):
         return False
+    if not _oracle_project_matches(data.get("_oracle_project_url") or data.get("project_url")):
+        return False
     status = str(data.get("status", "")).strip().lower()
     if status in {"parse_failed", "invalid", "unavailable", "error"}:
         return False
@@ -4397,9 +5366,17 @@ def _recover_oracle_deepening_from_done(
     )
     for path in candidates:
         try:
-            response = _strip_oracle_response_metadata(read_text(path)).strip()
+            raw_text = read_text(path)
         except OSError:
             continue
+        metadata = _oracle_response_metadata(raw_text)
+        if not _oracle_project_matches(metadata.get("project_url")):
+            logger.info(
+                "Skipping Oracle done file from different project context: %s",
+                path,
+            )
+            continue
+        response = _strip_oracle_response_metadata(raw_text).strip()
         if not response:
             continue
         try:
@@ -4407,6 +5384,7 @@ def _recover_oracle_deepening_from_done(
         except (ValueError, json.JSONDecodeError):
             raw_data = _raw_oracle_deepening_context(response, "No parseable JSON found")
             if not _oracle_deepening_quality_issues(raw_data, response):
+                _mark_oracle_project(raw_data, metadata.get("project_url"))
                 return raw_data, path, response
             continue
         if not isinstance(parsed, dict):
@@ -4415,11 +5393,13 @@ def _recover_oracle_deepening_from_done(
                 "Parsed JSON was not an object",
             )
             if not _oracle_deepening_quality_issues(raw_data, response):
+                _mark_oracle_project(raw_data, metadata.get("project_url"))
                 return raw_data, path, response
             continue
         parsed.setdefault("status", "ok")
         parsed.setdefault("main_theorem_chain", [])
         if not _oracle_deepening_quality_issues(parsed, response):
+            _mark_oracle_project(parsed, metadata.get("project_url"))
             return parsed, path, response
     return None
 
@@ -4565,6 +5545,7 @@ def _oracle_deepening_research(
                 )
             data.setdefault("status", "ok")
             data.setdefault("main_theorem_chain", [])
+            _mark_oracle_project(data)
             issues = _oracle_deepening_quality_issues(data, response)
         attempts.append(
             {
@@ -4633,6 +5614,7 @@ def _oracle_deepening_research(
         "last_response": last_data,
         "attempts": attempts,
     }
+    _mark_oracle_project(fallback)
     _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}.json", fallback)
     _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}_attempts.json", attempts)
     return fallback
@@ -4663,6 +5645,49 @@ def _combine_review_scores(scores: list[int]) -> int:
     if high >= SCORE_PASS_THRESHOLD and low < 4:
         return 6
     return high
+
+
+def _compact_review_feedback(review: dict[str, Any], max_chars: int = 1600) -> str:
+    """Build a durable one-line summary of actionable review feedback."""
+    if not isinstance(review, dict):
+        return ""
+    backend = str(review.get("review_backend", "review")).strip() or "review"
+    final_score = review.get("minimum_score", "?")
+    parts = [
+        f"review gate below {SCORE_PASS_THRESHOLD} "
+        f"(backend={backend}, final={final_score})"
+    ]
+    for name in ("codex", "claude", "oracle"):
+        reviewer = review.get(name)
+        if not isinstance(reviewer, dict) or reviewer.get("unavailable"):
+            continue
+        score = reviewer.get("score", "?")
+        verdict = str(reviewer.get("verdict", "")).strip() or "missing"
+        details = []
+        for key, label in (
+            ("issues", "issue"),
+            ("required_changes", "required_change"),
+        ):
+            raw_items = reviewer.get(key, [])
+            if isinstance(raw_items, str):
+                raw_items = [raw_items]
+            if not isinstance(raw_items, list):
+                continue
+            for item in raw_items[:3]:
+                text = re.sub(r"\s+", " ", str(item)).strip()
+                if text:
+                    details.append(f"{label}: {text}")
+        if details:
+            parts.append(
+                f"{name} score={score} verdict={verdict}: "
+                + " | ".join(details[:4])
+            )
+        else:
+            parts.append(f"{name} score={score} verdict={verdict}")
+    summary = "; ".join(parts)
+    if len(summary) > max_chars:
+        return summary[: max_chars - 3].rstrip() + "..."
+    return summary
 
 
 def _review_writebacks(
@@ -4832,6 +5857,10 @@ def _review_writebacks(
         "review_backend": review_backend,
         "both_reject": both_reject,
     }
+    if not gate_passed:
+        feedback_summary = _compact_review_feedback(result)
+        if feedback_summary:
+            logger.info("Review feedback summary: %s", feedback_summary)
     return result
 
 
@@ -4872,6 +5901,21 @@ def _remove_conflicting_distill_blocks(text: str, labels: list[str]) -> str:
     return _DISTILL_BLOCK_RE.sub(replace, text)
 
 
+def _remove_conflicting_claim_blocks(text: str, labels: list[str]) -> str:
+    """Remove prior theorem-style blocks carrying incoming labels."""
+    markers = [f"\\label{{{label}}}" for label in labels if label]
+    if not markers:
+        return text
+
+    def replace(match: re.Match[str]) -> str:
+        block = match.group(0)
+        if any(marker in block for marker in markers):
+            return "\n"
+        return block
+
+    return CLAIM_BLOCK_RE.sub(replace, text)
+
+
 def _plan_writeback_application(
     writebacks: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], list[str]]:
@@ -4894,20 +5938,21 @@ def _plan_writeback_application(
             continue
         old_text = read_text(path)
 
-        # Build one distillation block per item so later replacements do not
-        # delete unrelated writebacks in the same file.
+        # Insert only publication text. Source-level pipeline markers are
+        # forbidden by the post-cleanup paper hygiene contract.
         blocks = []
         for item in items:
-            block_lines = ["", "% --- Distillation writeback ---"]
-            block_lines.append(item["content"].strip())
-            block_lines.append("")
-            block_lines.append("% --- End distillation writeback ---")
-            blocks.append("\n".join(block_lines).rstrip())
+            blocks.append(item["content"].strip())
         insert_block = "\n".join(blocks).rstrip() + "\n"
 
-        # Idempotent: only replace blocks containing incoming labels.
+        # Idempotent: remove legacy marked blocks or markerless claim blocks
+        # containing incoming labels before inserting fresh publication text.
         base_text = _remove_conflicting_distill_blocks(
             old_text,
+            [item["label"] for item in items],
+        )
+        base_text = _remove_conflicting_claim_blocks(
+            base_text,
             [item["label"] for item in items],
         )
 
@@ -5104,6 +6149,20 @@ def run_stage_w(
                 present_sections.add(sec)
         if focused_targets:
             targets = focused_targets
+        family_targets = _family_specific_writeback_targets(focused_family)
+        if family_targets:
+            logger.info(
+                "Stage W using family-specific target override: %s",
+                [item["tex_file"] for item in family_targets],
+            )
+            targets = family_targets
+        source_targets = _source_specific_writeback_targets(state, focused_family)
+        if source_targets:
+            logger.info(
+                "Stage W using source-specific target override: %s",
+                [item["tex_file"] for item in source_targets],
+            )
+            targets = source_targets
 
     if not targets:
         logger.error("Stage W could not select target files")
@@ -5111,21 +6170,29 @@ def run_stage_w(
     section_contexts = _collect_section_contexts(
         targets,
         max_chars_per_file=(
-            ORACLE_SECTION_CONTEXT_CHARS if oracle_deepening else 16000
+            W_DEEPENING_SECTION_CONTEXT_CHARS if focused_family
+            else W_SECTION_CONTEXT_CHARS
         ),
     )
     global_evidence_pack = _global_evidence_for_state(state)
+    writeback_evidence_pack = _writeback_relevant_evidence_pack(
+        global_evidence_pack,
+        focused_family,
+        targets,
+    )
     prior_feedback_block = _build_prior_feedback_block(state)
     family_specific_contract = _family_specific_deepening_contract(focused_family)
+    source_specific_contract = _source_specific_writeback_contract(state, focused_family)
     oracle_deepening_context: dict[str, Any] = {"status": "disabled"}
     if oracle_deepening:
+        oracle_section_contexts = _collect_oracle_deepening_contexts(targets)
         oracle_deepening_context = _oracle_deepening_research(
             state,
             payload,
             raw_research,
             focused_family,
             targets,
-            section_contexts,
+            oracle_section_contexts,
             global_evidence_pack,
             prior_feedback_block,
             dry_run,
@@ -5156,7 +6223,7 @@ def run_stage_w(
                     method_operators=_json_block(raw_research.get("method_operators", [])),
                     targets=_json_block(targets),
                     section_contexts=section_contexts,
-                    global_evidence_pack=_json_block(global_evidence_pack),
+                    global_evidence_pack=_json_block(writeback_evidence_pack),
                     oracle_deepening_context=_json_block(oracle_deepening_context),
                     completed_families=", ".join(state.completed_families or ["none"]),
                     deep_research_directive=_deep_research_directive(),
@@ -5170,7 +6237,7 @@ def run_stage_w(
                     payload=_json_block(payload),
                     targets=_json_block(targets),
                     section_contexts=section_contexts,
-                    global_evidence_pack=_json_block(global_evidence_pack),
+                    global_evidence_pack=_json_block(writeback_evidence_pack),
                     oracle_deepening_context=_json_block(oracle_deepening_context),
                     schema=_writeback_schema(),
                 )
@@ -5178,6 +6245,8 @@ def run_stage_w(
                 prompt += "\n\n" + prior_feedback_block
             if family_specific_contract:
                 prompt += "\n\n" + family_specific_contract
+            if source_specific_contract:
+                prompt += "\n\n" + source_specific_contract
             if feedback:
                 prompt += (
                     "\n\nPrevious writeback failed validation or review. "
@@ -5211,6 +6280,12 @@ def run_stage_w(
                     "rather than rephrasing it.\n"
                 )
             w_timeout = 2400 if low_rounds >= 2 else 1800
+            prompt = _limit_prompt_chars(
+                prompt,
+                W_PROMPT_MAX_CHARS,
+                f"W:{_slugify(state.name)}:attempt{attempt}",
+            )
+            logger.info("Stage W prompt length: %d chars", len(prompt))
             response = _codex_exec_with_infra_retries(
                 prompt,
                 work_dir=CORE_BODY,
@@ -5315,7 +6390,8 @@ def run_stage_w(
             state.prior_feedback.append(
                 f"W attempt {attempt}: A-DEEP escalation {deep_rounds} "
                 f"(codex={review.get('codex', {}).get('score', 0)}, "
-                f"{secondary_key}={secondary_review.get('score', 0)})"
+                f"{secondary_key}={secondary_review.get('score', 0)}); "
+                f"{_compact_review_feedback(review)}"
             )
             save_state(state)
             continue
@@ -5326,7 +6402,8 @@ def run_stage_w(
         state.prior_feedback.append(
             f"W attempt {attempt}: review gate below {SCORE_PASS_THRESHOLD} "
             f"(codex={review.get('codex', {}).get('score', 0)}, "
-            f"{secondary_key}={secondary_score})"
+            f"{secondary_key}={secondary_score}); "
+            f"{_compact_review_feedback(review)}"
         )
         save_state(state)  # persist feedback in case of crash/restart
 
@@ -5929,6 +7006,13 @@ def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = N
     _git_commit_batch(name, f"stage {stage} ({STAGE_NAMES.get(stage, stage)}) complete")
 
 
+def _batch_commit_label_after_stage(stage: str, state: DistillState) -> str | None:
+    """Return an intermediate batch commit label after a stage completes."""
+    if stage != "E" or state.current_stage != "W" or not state.completed_families:
+        return None
+    return f"family {state.completed_families[-1]} complete"
+
+
 def run_pipeline(
     name: str,
     skip_to: Optional[str] = None,
@@ -6036,6 +7120,10 @@ def run_pipeline(
         if not dry_run:
             _git_stage_files(name, stage)
         state = reconcile_state_contract(load_state(name))
+        if not dry_run:
+            label = _batch_commit_label_after_stage(stage, state)
+            if label:
+                _git_commit_batch(name, label)
         refresh_policy_state(state)
     # Batch commit all accumulated stages at DONE
     if not dry_run:
@@ -6069,6 +7157,7 @@ def _status_lines(name: Optional[str] = None) -> list[str]:
     for item_name in names:
         state = reconcile_state_contract(load_state(item_name))
         _scope, inventory, action = _policy_model(state)
+        lifecycle_state = lifecycle.annotate(_lifecycle_snapshot(state, inventory, action))
         done, reason = _pipeline_done_contract(state)
         family_count = len(_theorem_family_names(state))
         debt_count = len(_open_debts_from_inventory(inventory))
@@ -6079,6 +7168,7 @@ def _status_lines(name: Optional[str] = None) -> list[str]:
             f"families={len(state.completed_families)}/{family_count} "
             f"debts={debt_count} splits={len(inventory.get('split_candidates', []))} "
             f"next={next_action} gate={action.get('gate')} "
+            f"failure={lifecycle_state.get('failure_kind')}/{lifecycle_state.get('next_action')} "
             f"done_contract={done} ({reason}) "
             f"updated={state.updated_at}"
         )
@@ -6173,6 +7263,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Model label passed to the ChatGPT Oracle bridge",
     )
     parser.add_argument(
+        "--oracle-project-url",
+        default=ORACLE_PROJECT_URL,
+        help="ChatGPT Project URL for Oracle tasks; overrides CHATGPT_ORACLE_PROJECT_URL",
+    )
+    parser.add_argument(
         "--oracle-pdf",
         type=Path,
         help="Optional project PDF to attach to ChatGPT Oracle research",
@@ -6182,8 +7277,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[list[str]] = None) -> int:
     """Run the distillation command-line interface."""
+    global ORACLE_PROJECT_URL
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.oracle_project_url:
+        ORACLE_PROJECT_URL = str(args.oracle_project_url).strip()
     supervised = bool(args.supervised and not args.auto_apply)
 
     if args.status:

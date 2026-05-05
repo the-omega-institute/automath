@@ -212,6 +212,58 @@ L_m:=D_{\mathrm{sync}}(m)+1<\infty,
 \]
 \leanverified{paper\_Ym\_zeta\_residue\_ratio}
 \end{proposition}
+\begin{definition}[歧义壳的 valuation 同步骨架]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-support_to_skeleton_reduction-ambiguity-valuation-skeleton-def}
+设 \(m\ge3\)，并沿用 \(H_m^{\mathrm{det}}\)、\(\mathcal S_m^{\mathrm{det}}\)、\(\mathcal S_m^{\mathrm{amb}}\) 与 \(H_m^{\mathrm{amb}}\) 的记号。对 \(S\in\mathcal S_m^{\mathrm{amb}}\)，定义其歧义寿命
+\[
+ h_m(S):=\max\{\ell\ge0:\ \exists\ S=S_0\to S_1\to\cdots\to S_\ell\ \text{为 }H_m^{\mathrm{amb}}\text{ 中的有向路径}\}.
+\]
+由定理 \ref{thm:Ym-ambiguity-shell-dag}，该最大值有限。若 \(h_m(S)>0\)，定义从 \(S\) 出发的 valuation-selected 面为
+\[
+ \operatorname{Face}_m(S):=\{\,e:S\to T\text{ 为 }H_m^{\mathrm{amb}}\text{ 的边}:\ h_m(T)=h_m(S)-1\,\};
+\]
+若 \(h_m(S)=0\)，令 \(\operatorname{Face}_m(S)=\varnothing\)。由所有顶点 \(\mathcal S_m^{\mathrm{amb}}\)、权重 \(h_m\)、以及边集 \(\bigcup_S\operatorname{Face}_m(S)\) 组成的有限加权有向复形记为 \(\mathfrak T_m^{\mathrm{amb}}\)。
+\end{definition}
+
+\begin{theorem}[最坏歧义块的 valuation-selected 骨架分类]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-support_to_skeleton_reduction-valuation-selected-ambiguity-synchronization-skeleton}
+设 \(m\ge3\)。则 \(\mathfrak T_m^{\mathrm{amb}}\) 是有限 DAG，且沿每条边 \(S\to T\) 有
+\[
+ h_m(T)=h_m(S)-1.
+\]
+特别地，每条 \(\mathfrak T_m^{\mathrm{amb}}\)-路径长度至多 \(m-1\)。此外，对任意 \(S\in\mathcal S_m^{\mathrm{amb}}\) 与任意允许输出块 \(a_0\cdots a_{L-1}\)，令
+\[
+ S_{i+1}:=\delta_m(S_i,a_i),\qquad S_0:=S.
+\]
+若 \(L=h_m(S)\)，则以下两条件等价：
+\begin{enumerate}
+  \item \(S_0,S_1,\ldots,S_L\) 全部属于 \(\mathcal S_m^{\mathrm{amb}}\)；
+  \item 对每个 \(0\le i<L\)，边 \(S_i\to S_{i+1}\) 属于 \(\operatorname{Face}_m(S_i)\)。
+\end{enumerate}
+因此，任何达到最大同步延迟的歧义坏块都被唯一地压缩到有限骨架 \(\mathfrak T_m^{\mathrm{amb}}\) 上的一条 valuation-selected 路径；非选中边必然严格缩短剩余歧义寿命，不能出现在最坏块中。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:Ym-ambiguity-shell-dag} 已说明 \(H_m^{\mathrm{amb}}\) 为有限 DAG，故从任一 \(S\in\mathcal S_m^{\mathrm{amb}}\) 出发的有向路径长度有最大值，\(h_m(S)\) 良定义。若 \(S\to T\) 是 \(H_m^{\mathrm{amb}}\) 中任意边，则从 \(T\) 出发的任一路径可在前端接上该边而成为从 \(S\) 出发的路径，所以
+\[
+ h_m(S)\ge h_m(T)+1.
+\]
+由 \(\operatorname{Face}_m(S)\) 的定义，\(\mathfrak T_m^{\mathrm{amb}}\) 中的每条边均满足 \(h_m(T)=h_m(S)-1\)。于是 \(h_m\) 沿 \(\mathfrak T_m^{\mathrm{amb}}\) 严格下降，故 \(\mathfrak T_m^{\mathrm{amb}}\) 不含有向环。
+
+再证长度上界。任取 \(S\in\mathcal S_m^{\mathrm{amb}}\)。由于 \(\mathcal S_m^{\mathrm{det}}\) 按定义由初始候选集 \(V_m\) 可达，存在从 \(V_m\) 到 \(S\) 的某条有限路径。若从 \(S\) 出发还存在长度 \(\ell\ge m\) 的路径完全停留在 \(\mathcal S_m^{\mathrm{amb}}\)，则把该路径接在一条到达 \(S\) 的路径之后，并从其中取连续长度为 \(m\) 的后缀，可得到一段从某个可达候选态继续读入 \(m\) 个符号后仍处于非单点态的确定化滤波。将此前缀并入从 \(V_m\) 出发的读入过程，便得到一条从初始状态出发、在某个时刻 \(t\ge m\) 仍停留于 \(\mathcal S_m^{\mathrm{amb}}\) 的滤波轨道。这与定理 \ref{thm:Ym-ambiguity-shell-dag} 中“对所有 \(t\ge m\) 有 \(|S_t|=1\)”矛盾。因此 \(h_m(S)\le m-1\)，从而每条 \(\mathfrak T_m^{\mathrm{amb}}\)-路径长度至多 \(m-1\)。
+
+最后证明等价性。设 \(L=h_m(S)\)，并假定 \(S_0,S_1,\ldots,S_L\) 全部属于 \(\mathcal S_m^{\mathrm{amb}}\)。对任意 \(0\le i<L\)，尾段
+\[
+ S_{i+1}\to S_{i+2}\to\cdots\to S_L
+\]
+说明 \(h_m(S_{i+1})\ge L-i-1\)。另一方面，前段
+\[
+ S_i\to S_{i+1}\to\cdots\to S_L
+\]
+ 已经是从 \(S_i\) 出发、长度 \(L-i\) 的歧义路径；若 \(h_m(S_{i+1})>L-i-1\)，则可把从 \(S_{i+1}\) 出发的更长歧义路径接在边 \(S_i\to S_{i+1}\) 后，得到从 \(S_i\) 出发长于 \(L-i\) 的歧义路径，进而接在 \(S_0\to\cdots\to S_i\) 后得到从 \(S\) 出发长于 \(L\) 的歧义路径，矛盾。因此 \(h_m(S_{i+1})=L-i-1=h_m(S_i)-1\)，故 \(S_i\to S_{i+1}\in\operatorname{Face}_m(S_i)\)。这证明了 (1) 推出 (2)。
+
+反过来，若每条边 \(S_i\to S_{i+1}\) 都属于 \(\operatorname{Face}_m(S_i)\)，则按定义这些边均为 \(H_m^{\mathrm{amb}}\) 中的边，故所有 \(S_i\) 均属于 \(\mathcal S_m^{\mathrm{amb}}\)。于是 (2) 推出 (1)。
+
+该证明同时给出坏例子的结构分类：最大延迟块不能任意游走于整个确定化图，而只能沿权重 \(h_m\) 每步下降一的 valuation-selected 面前进；任何偏离该面选择的边都会使剩余可保持歧义的长度小于最坏值。故歧义壳在同步问题中的有效剩余对象正是有限的带权入射骨架 \(\mathfrak T_m^{\mathrm{amb}}\)。
+\end{proof}
+
 \begin{proof}
 \(\eta_m\) 的不变量性来自定义：\(R_m^{\mathrm{cov}},R_m^{\mathrm{int}}\) 是两类 \(\zeta\) 在主极点处的主部系数。
 
