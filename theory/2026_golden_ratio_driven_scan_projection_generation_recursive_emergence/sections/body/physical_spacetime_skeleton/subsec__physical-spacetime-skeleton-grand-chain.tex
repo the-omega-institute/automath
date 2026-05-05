@@ -193,6 +193,74 @@ Z_{\mathcal F}^N:=\{j\in\{0,\ldots,N\}:\Phi_{2j}(f)=0\text{ for all }f\in\mathca
 \end{enumerate}
 因此，一个有限事件区覆盖若要承载平衡支撑骨架，必须通过上述有限生成锥与格核审计；失败时得到的不是物理边界本身，而是支撑法向层上的非平衡 obstruction certificate。
 \end{proposition}
+\begin{definition}[估值选择的局部时空骨架账本]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-valuation_and_tropical_degeneration-local-spacetime-ledger}
+令 \(K\) 为秩一赋值域，赋值为 \(\nu:K^*\to\RR\)，并令 \(\Gamma\) 为有限连通无向审计图。对每条无向边固定一个正向，反向边记为 \(\bar e\)。一个估值选择的局部时空骨架账本由下列数据组成：
+\begin{enumerate}
+  \item 一个有限秩自由格 \(L\)，其对偶格 \(N:=\operatorname{Hom}_{\ZZ}(L,\ZZ)\)，以及一个有理多面体窗口 \(P\subset N_{\RR}:=N\otimes_{\ZZ}\RR\)。该窗口表示当前审计种子图允许读取的同步深度与空间代价范围。
+  \item 对每个顶点 \(v\in V(\Gamma)\)，一个有限支撑 \(S_v\subset L\) 与一个局部估值读出
+  \[
+  \Phi_v=\sum_{m\in S_v}a_{v,m}x^m,\qquad a_{v,m}\in K^*.
+  \]
+  记 \(h_v(m):=\nu(a_{v,m})\)。对 \(\xi\in P\)，定义估值选择面
+  \[
+  F_v(\xi):=\{m\in S_v:h_v(m)+\langle m,\xi\rangle=\min_{m'\in S_v}(h_v(m')+\langle m',\xi\rangle)\}.
+  \]
+  \item 对每条有向边 \(e:v\to w\)，一个格商映射 \(q_e:L\to Q_e\) 与一个取值于阿贝尔 residual 群 \(R\) 的边余差 \(\rho_e\in R\)，并要求 \(q_{\bar e}=q_e\)、\(\rho_{\bar e}=-\rho_e\)。
+  \item 对每个有限多面体剖分 \(\mathcal F\) 的顶维胞腔集 \(\mathcal F_d\)，其中 \(d:=\dim P\)，账本给出一个可能为空的整数权集合 \(\mathcal W(\mathcal F)\)。元素 \(\mu\in\mathcal W(\mathcal F)\) 是映射 \(\mu:\mathcal F_d\to\ZZ_{\ge0}\)，表示局部交数、传播重数或审计预算重数。
+\end{enumerate}
+若在 \(\mathcal F\) 的每个胞腔相对内部上所有 \(F_v\) 均为常值，且对每条 \(e:v\to w\) 与每个胞腔 \(\sigma\in\mathcal F\) 成立
+\[
+q_e(F_v(\sigma))=q_e(F_w(\sigma))\subset Q_e,
+\]
+则称 \(\mathcal F\) 为面相容剖分。若 \(\tau\) 为 \(\mathcal F\) 的内部余维一胞腔，\(N_\tau\subset N\) 为平行于 \(\tau\) 的子格，且 \(n_{\sigma/\tau}\in N/N_\tau\) 为从 \(\tau\) 指向相邻顶维胞腔 \(\sigma\supset\tau\) 的本原法向量，则称 \(\mu\) 在 \(\tau\) 处平衡，是指
+\[
+\sum_{\sigma\supset\tau}\mu(\sigma)n_{\sigma/\tau}=0\quad\text{in }N/N_\tau.
+\]
+\end{definition}
+
+\begin{theorem}[估值退化坏例子的扇形--平衡--余差三分]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-valuation_and_tropical_degeneration-fan-balance-residual-trichotomy}
+给定定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-valuation_and_tropical_degeneration-local-spacetime-ledger} 的账本。称窗口 \(P\) 上存在估值--热带时空骨架证书，是指存在一个面相容剖分 \(\mathcal F\)、一个权 \(\mu\in\mathcal W(\mathcal F)\)，以及一个顶点 \(0\)-余链 \(\eta:V(\Gamma)\to R\)，使得：
+\begin{enumerate}
+  \item \(\mu\) 在每个内部余维一胞腔处平衡；
+  \item 对每条有向边 \(e:v\to w\)，有 \(\rho_e=\eta(w)-\eta(v)\)。
+\end{enumerate}
+则以下三类机制完全刻画证书失败：
+\begin{enumerate}
+  \item \textbf{扇形精化失败：}不存在面相容剖分；
+  \item \textbf{平衡失败：}存在面相容剖分，但对每个面相容剖分 \(\mathcal F\) 与每个 \(\mu\in\mathcal W(\mathcal F)\)，至少有一个内部余维一胞腔不平衡；
+  \item \textbf{余差上同调失败：}存在面相容剖分与平衡权，但边余差 \(\rho\) 在 \(H^1(\Gamma;R)\) 中的类非零。
+\end{enumerate}
+更精确地，证书不存在当且仅当上述三类机制至少一类发生。并且，若证书存在，则剖分的胞腔、所有估值选择面 \(F_v(\sigma)\)、支撑商影像 \(q_e(F_v(\sigma))\) 与平衡方程只依赖于有限支撑 \(S_v\) 和高度函数 \(h_v\)，而不依赖于系数的剩余解析单位。因此，固定全部高度函数而改变 \(a_{v,m}\) 的剩余单位，只能改变初始形式中的剩余系数与代表余链 \(\eta\)，不能改变由估值选出的整数骨架；若 \([\rho]\ne0\)，它只阻碍全局去扭或全局平凡化，不否定各边上的局部粘接相容性。
+\end{theorem}
+\begin{proof}
+先证明估值坍缩为有限多面体复形。对固定的 \(v\)，任意两个支撑点 \(m,m'\in S_v\) 给出仿射函数相等超平面
+\[
+\langle m-m',\xi\rangle=h_v(m')-h_v(m).
+\]
+这些超平面只有有限多个。它们把 \(P\) 切成有限多面体复形；在每个胞腔的相对内部，所有数
+\(h_v(m)+\langle m,\xi\rangle\) 的大小关系不变，因此 \(F_v(\xi)\) 不变。于是局部读出 \(\Phi_v\) 在估值层面只留下支撑 \(S_v\)、高度 \(h_v\) 与由最小仿射函数确定的面数据。这正是 Newtonization 与估值面选择在当前账本中的作用。
+
+取所有顶点 \(v\) 的上述复形的共同精化。由于 \(\Gamma\) 与每个 \(S_v\) 均有限，该共同精化仍有限。在其每个胞腔上，所有 \(F_v\) 均为常值。边约束
+\(q_e(F_v)=q_e(F_w)\)
+此时只是有限个支撑影像之间的等式；删除不满足这些等式的胞腔并继续取公共面，即得到所有可能的面相容剖分的共同有限来源。因此，局部重叠相容性在估值层面不再是解析方程族，而是一个有限扇形精化问题。若没有这样的剖分覆盖 \(P\)，即发生第一类失败；若存在，则所有后续问题都已被压缩到该有限整数骨架上。
+
+接着说明平衡方程为何是兼容闭包的必要有限形式。令 \(\mathcal F\) 为面相容剖分，\(\mu\in\mathcal W(\mathcal F)\)，并令 \(\tau\) 为内部余维一胞腔。对任意 \(m\in L\)，角色 \(x^m\) 沿相邻顶维胞腔 \(\sigma\supset\tau\) 的一阶法向阶数为 \(\langle m,n_{\sigma/\tau}\rangle\)。若带权初始片段在 toric 边界补全中没有沿 \(\tau\) 留下未抵消的一阶边界 residual，则所有角色的总阶数必须为零，即
+\[
+\sum_{\sigma\supset\tau}\mu(\sigma)\langle m,n_{\sigma/\tau}\rangle=0\qquad(m\in L).
+\]
+格配对分离 \(N/N_\tau\) 中的向量，故这等价于
+\[
+\sum_{\sigma\supset\tau}\mu(\sigma)n_{\sigma/\tau}=0.
+\]
+这就是 tropical skeleton extraction 在本文接口中的平衡律：交叠或闭包相容性被转写为每个余维一胞腔处的整数法向通量为零。若面相容剖分存在但所有允许权均在某处违反此式，则发生第二类失败；反之，一旦某个允许权满足全部这些等式，整数骨架已经通过平衡审计。
+
+最后处理 residual。由于 \(\Gamma\) 是有限连通无向图并已选定有向生成边，条件 \(\rho_{\bar e}=-\rho_e\) 使 \(\rho\) 成为 \(R\)-值 \(1\)-余链。若存在 \(\eta:V(\Gamma)\to R\) 使 \(\rho_e=\eta(w)-\eta(v)\)，则任意闭路上的边余差和按望远镜相消为零，所以 \([\rho]=0\)。反过来，若 \([\rho]=0\)，取根顶点 \(v_0\)。对任意顶点 \(v\)，沿一条从 \(v_0\) 到 \(v\) 的路径令 \(\eta(v)\) 为路径上 \(\rho\) 的和。闭路和为零保证该定义与路径无关，并立刻给出每条有向边 \(e:v\to w\) 上的等式 \(\rho_e=\eta(w)-\eta(v)\)。故 \([\rho]\ne0\) 精确阻碍全局去扭或全局平凡化；它并不推翻前两步已经验证的局部面相容或平衡粘接。
+
+由前三段可知，若证书不存在，则先看是否存在面相容剖分；不存在则为第一类。若存在，再看是否存在平衡允许权；不存在则为第二类。若二者存在，则证书的唯一剩余条件是 \(\rho\) 为上同调零类；失败即为第三类。反向蕴含显然：三类失败中的任意一类都分别排除证书定义中的相应组成部分。
+
+固定高度函数 \(h_v\) 时，所有超平面、所有面 \(F_v\)、所有支撑商影像和所有平衡方程均不变。改变系数的剩余单位不会改变任何数值 \(h_v(m)+\langle m,\xi\rangle\)，所以不会改变估值选出的多面体骨架；它只改变初始形式中留在 residue 层的系数，以及可选择的 \(R\)-值代表余链。结合定理 \ref{thm:physical-spacetime-procedural-grand-chain} 中局部读出、粘接 residual 与审计种子图对物理时空骨架的使用方式，所得证书正是把解析变化、整数热带骨架与全局 residual 去扭三者分离的有限审计形式。证毕。
+\end{proof}
+
 \begin{proof}
 第一项中，\((n^0,m)\) 平衡等价于
 \[
