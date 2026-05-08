@@ -2358,106 +2358,92 @@ fixed point in the symbol convention
 \[
 \sigma(1)=10,\qquad \sigma(0)=1
 \]
-\cite{QueffelecSubstitution,Fogg2002}.  Its six-factors are
+\cite{QueffelecSubstitution,Fogg2002}.  This word has no \(00\) and no \(111\).
+Consequently the possible terminal triples are exactly
+\[
+010,\qquad 011,\qquad 101,\qquad 110,
+\]
+and their one-step right extensions are
+\[
+010\mapsto 101,\qquad
+110\mapsto 101,\qquad
+011\mapsto 110,\qquad
+101\mapsto 010\text{ or }011 .
+\]
+These are the return-word transitions at the right endpoint.
+
+The length-six factors are
 \[
 010110,\quad 011010,\quad 011011,\quad 101011,\quad 101101,\quad 110101,
 \quad 110110 .
 \]
-A direct valuation gives
+A direct valuation gives the base case
 \[
 \begin{array}{c|c|c}
-b\in S_6(\varphi^{-1}) & b_4b_5b_6 & N_6(b)\bmod F_8\\
+b\in S_6(\varphi^{-1}) & b_4b_5b_6 & N_6(b)\\
 \hline
 010110&110&15\\
 011010&010&13\\
-011011&011&5\\
-101011&011&4\\
-101101&101&1\\
-110101&101&0\\
+011011&011&26\\
+101011&011&25\\
+101101&101&22\\
+110101&101&21\\
 110110&110&16 .
 \end{array}
 \]
-Since \(F_7=13\) and \(F_8=21\), this proves the assertion for \(m=6\).
-
-For \(m>6\), write \(w=a_1\cdots a_{m-3}\) and \(s=a_{m-2}a_{m-1}a_m\).  Put
+Since \(F_7=13\), \(F_8=21\), and \(F_9=34\), this is exactly the pair of
+interval statements
 \[
-P(w):=\sum_{j=1}^{m-3}a_jF_{j+1}.
-\]
-The factor language of the Fibonacci word contains the terminal triples
-\[
-010,\qquad 110,\qquad 011,\qquad 101
-\]
-and no others.  We treat these four cases.
-
-First suppose \(s=010\).  Then
-\[
-N_m(a)=P(w)+F_m.
-\]
-Because \(P(w)\) uses only the weights \(F_2,\dots,F_{m-2}\), the elementary
-Fibonacci sum identity gives
-\[
-0\le P(w)\le \sum_{j=1}^{m-3}F_{j+1}=F_m-2.
-\]
-Therefore
-\[
-F_m\le N_m(a)\le 2F_m-2<F_{m+2}.
-\]
-Moreover \(F_m\le N_m(a)<F_{m+1}\) can occur only when
-\[
-P(w)<F_{m-1}.
-\]
-In that case \(N_m(a)\in [F_m,F_{m+1})\), and adding \(F_m\) to the Zeckendorf
-normal form of \(P(w)\) creates the terminal block \(011\) in positions
-\(m-2,m-1,m\).  This would force the length-\(m\) factor \(a\) to have a
-left extension whose length-six suffix is one of the two \(m=6\) rows with
-suffix \(011\), namely \(101011\) or \(011011\), contradicting \(s=010\) after
-shifting the base table through the substitution recursion.  Hence
-\[
-F_{m+1}\le N_m(a)<F_{m+2}.
+\begin{array}{ll}
+N_6(b)\in[F_7,F_8), & b_4b_5b_6\in\{010,110\},\\
+N_6(b)\in[F_8,F_9), & b_4b_5b_6\in\{011,101\}.
+\end{array}
 \]
 
-For \(s=110\),
+We now propagate these two interval assertions.  Suppose they hold at length
+\(m\).  If a length-\((m+1)\) factor is obtained from \(a\in S_m(\varphi^{-1})\)
+by appending \(c\in\{0,1\}\), then
 \[
-N_m(a)=P(w)+F_{m-1}+F_m=P(w)+F_{m+1}.
+N_{m+1}(ac)=N_m(a)+cF_{m+2}.
 \]
-The same bound \(P(w)\le F_m-2\) gives
+Using the transition graph above:
 \[
-F_{m+1}\le N_m(a)\le F_{m+1}+F_m-2<F_{m+2}.
+\begin{array}{c|c|c}
+\text{old terminal triple} & c & \text{new terminal triple}\\
+\hline
+010&1&101\\
+110&1&101\\
+011&0&110\\
+101&0&010\\
+101&1&011 .
+\end{array}
 \]
+The corresponding interval inclusions are
+\[
+[F_{m+1},F_{m+2})+F_{m+2}\subset [F_{m+3},F_{m+4}),
+\]
+\[
+[F_{m+2},F_{m+3})\subset [F_{m+2},F_{m+3}),
+\]
+and
+\[
+[F_{m+2},F_{m+3})+F_{m+2}\subset [F_{m+3},F_{m+4}),
+\]
+where the last inclusion uses \(2F_{m+2}\ge F_{m+3}\).  Hence, at length
+\(m+1\),
+\[
+\begin{array}{ll}
+N_{m+1}(b)\in[F_{m+2},F_{m+3}), & b_{m-1}b_mb_{m+1}\in\{010,110\},\\
+N_{m+1}(b)\in[F_{m+3},F_{m+4}), & b_{m-1}b_mb_{m+1}\in\{011,101\}.
+\end{array}
+\]
+This closes the induction.
 
-For \(s=011\),
-\[
-N_m(a)=P(w)+F_m+F_{m+1}.
-\]
-Reducing modulo \(F_{m+2}=F_{m+1}+F_m\) leaves \(P(w)\), and
-\[
-0\le P(w)\le F_m-2<F_{m+1}.
-\]
-
-Finally suppose \(s=101\).  Then
-\[
-N_m(a)=P(w)+F_{m-1}+F_{m+1}=P(w)+F_{m+2}-F_{m-2}.
-\]
-If \(P(w)<F_{m-2}\), the residue is \(P(w)+F_{m+2}-F_{m-2}\), which would lie
-in \([F_{m+1},F_{m+2})\) only if \(P(w)\ge F_m\), impossible because
-\(P(w)<F_{m-2}\).  If \(P(w)\ge F_{m-2}\), the residue is
-\[
-P(w)-F_{m-2}\le F_m-2-F_{m-2}=F_{m-1}-2<F_{m+1}.
-\]
-Thus the residue lies below \(F_{m+1}\) in the \(101\) case as well.
-
-The only remaining point in the preceding paragraph is the exclusion used in
-the \(010\) case.  This is the standard return-word induction for the
-Fibonacci language, made explicit here.  The two return words to the right of a
-terminal \(010\) are obtained from the two base words \(011010\) and
-\(110110\) by applying \(\sigma\) and then taking the unique length-\(m\)
-suffix; each step replaces the interval of possible prefixes \(P(w)\) by the
-two children obtained by adding either \(0\) or the next Fibonacci weight.
-The children have lengths \(F_{r-1}\) and \(F_r\), and the threshold
-\(F_{r-1}\) is carried to \(F_r\).  Starting from the displayed \(m=6\)
-calculation, this induction gives \(P(w)\ge F_{m-1}\) for every length-\(m\)
-factor ending in \(010\).  The four case computations above then prove the
-claimed residue criterion.
+For terminal triples \(010\) and \(110\), the actual value already lies in
+\([F_{m+1},F_{m+2})\), so its residue modulo \(F_{m+2}\) lies in that same
+interval.  For terminal triples \(011\) and \(101\), the actual value lies in
+\([F_{m+2},F_{m+3})\); subtracting one \(F_{m+2}\) puts the residue in
+\([0,F_{m+1})\).  This proves the criterion.
 \end{proof}
 
 \begin{lemma}[Golden-slope endpoint balance of the canonical fold]
@@ -2483,42 +2469,23 @@ Consequently,
 \begin{proof}
 For the golden slope, the Sturmian language is the set of length-\(m\)
 factors of the Fibonacci word, in the symbol convention determined by the
-window \([0,\alpha)\) \cite{QueffelecSubstitution,Fogg2002}.  We shall use
-only two elementary endpoint consequences of this presentation.  First, every
-realized word begins with one of
+window \([0,\alpha)\) \cite{QueffelecSubstitution,Fogg2002}.  We shall use two
+elementary endpoint consequences of this presentation.  First, every realized
+word begins with one of
 \[
 01,\qquad 10,\qquad 110.
 \]
-Second, a direct return-word induction for the Fibonacci language gives the
-right-end alternatives
+Second, Lemma~\ref{lem:golden-terminal-residue-skeleton} gives the right-end
+residue criterion.  A legal word \(x\in X_m\) has last digit \(1\) exactly when
+its Fibonacci value lies in \([F_{m+1},F_{m+2})\).  By
+Proposition~\ref{prop:fold-residue-characterization}, the folded value has the
+same residue as \(N_m(a)\) modulo \(F_{m+2}\).  Therefore
 \[
 (\Fold_m(a))_m=1
 \quad\Longleftrightarrow\quad
 a_{m-2}a_{m-1}a_m\in\{010,110\}
 \qquad (m\ge6).
 \]
-To see the second assertion, write \(N_m(a)=P+R\), where \(P\) uses only the
-weights \(F_2,\dots,F_{m-2}\).  Inspecting the four right return words in the
-Fibonacci directive recursion gives the following residue intervals for
-\(P+R\) modulo \(F_{m+2}\):
-\[
-\begin{array}{c|c}
-\text{suffix of }a & N_m(a)\bmod F_{m+2}\\
-\hline
-010 & [F_{m+1},F_{m+2})\\
-110 & [F_{m+1},F_{m+2})\\
-011 & [0,F_{m+1})\\
-101 & [0,F_{m+1}).
-\end{array}
-\]
-This is a one-step induction on the Fibonacci substitution: appending the
-next return word replaces the previous interval pair by its two Fibonacci
-children, whose endpoints differ by \(F_{m-1}\) and \(F_m\).  The base case is
-the direct calculation at \(m=6\).  A legal word in \(X_m\) has last digit
-\(1\) exactly when its Fibonacci value lies in
-\([F_{m+1},F_{m+2})\), and
-Proposition~\ref{prop:fold-residue-characterization} identifies the residue
-of \(N_m(a)\) with the folded value.  This proves the right-end criterion.
 
 Let \(u=\Fold_m(a)\) with \(a\in S_m(\varphi^{-1})\).  The first endpoint is
 even more local.  If \(a_1a_2=10\), then \(N_m(a)\) contains \(F_2\) and not
@@ -2548,13 +2515,22 @@ and has measure \(1-\alpha=\varphi^{-2}\). Therefore
 \]
 
 By the right-end criterion, the last folded endpoint has mass
-\(\mu_m([010])+\mu_m([110])\).  These two cylinder lengths are read directly
-from the rotation coding.  With \(\alpha=\varphi^{-1}\),
+\(\mu_m([010])+\mu_m([110])\).  These two cylinder lengths are explicit
+intersections of half-open rotation windows.  With \(I=[0,\alpha)\) and
+\(\alpha=\varphi^{-1}\),
 \[
-[010]=[\alpha,1-(2\alpha-1)),\qquad
-[110]=[1-\alpha,\alpha),
+[010]=(\TT\setminus I)\cap R_{-\alpha}I\cap R_{-2\alpha}(\TT\setminus I)
+=[\alpha,2-2\alpha),
 \]
-up to endpoints of Lebesgue measure zero.  Hence
+because \(\TT\setminus I=[\alpha,1)\), the condition \(x+\alpha\in I\) is
+automatic on this interval, and \(x+2\alpha\notin I\) cuts off the right
+endpoint at \(2-2\alpha\).  Similarly,
+\[
+[110]=I\cap R_{-\alpha}I\cap R_{-2\alpha}(\TT\setminus I)
+=[1-\alpha,\alpha),
+\]
+because \(x\in I\) and \(x+\alpha\in I\) force \(x\in[1-\alpha,\alpha)\), and
+then \(x+2\alpha\notin I\) holds up to endpoints.  Hence
 \[
 \mu_m([010])=\varphi^{-4},
 \qquad
@@ -2694,11 +2670,24 @@ where
 \frac{1}{m+1}\sum_{a\in S_m(\alpha)}\tau(T_m(a))
 \right).
 \]
-For every \(q\in[0,\infty)\),
+For \(q=\infty\),
+\[
+D_\infty(\nu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+\Gamma_\infty(T_m),
+\]
+where
+\[
+\Gamma_\infty(T_m):=
+\log\max_{a\in S_m(\alpha)}
+\frac{\mu_m(a)}
+{e^{-H_\infty(\mu_m)}\tau(T_m(a))}.
+\]
+For every \(q\in[0,\infty]\),
 \[
 0\le \Gamma_q(T_m)\le 2\log\varphi.
 \]
-If \(q\in[0,\infty)\), then
+For finite \(q\in[0,\infty)\),
 \[
 \Gamma_q(T_m)=0
 \iff
@@ -2710,18 +2699,9 @@ and
 \iff
 T_m(S_m(\alpha))\subset X_m^{11}.
 \]
-For \(q=\infty\),
-\[
-(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)
-\le
-D_\infty(\nu_m\|\pi_m)
-\]
-\[
-\le
-(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+2\log\varphi,
-\]
-with equality in the lower bound whenever \(T_m(S_m(\alpha))\subset X_m^{00}\)
-and equality in the upper bound whenever \(T_m(S_m(\alpha))\subset X_m^{11}\).
+For \(q=\infty\), the containments \(T_m(S_m(\alpha))\subset X_m^{00}\) and
+\(T_m(S_m(\alpha))\subset X_m^{11}\) are sufficient for the lower and upper
+equalities, respectively.
 
 If, in addition, the partial quotients of \(\alpha\) are bounded by \(A\),
 then, for every \(q\in[0,\infty]\),
@@ -2883,10 +2863,13 @@ is exactly the same estimate rewritten with constants uniform in
 \subsection{Primitive-SFT placement barrier}
 
 The preceding optimization uses the endpoint collapse of the golden-mean
-Parry law.  The broader rigidity phenomenon behind it does not require the
-golden-mean endpoint formula: a primitive positive-entropy SFT has
-exponentially small Parry cylinders, whereas finite-block factors of a
-Sturmian system have only linear block complexity.
+Parry law.  The following result is only the primitive-SFT restoration
+interface needed here, not a replacement for the golden-mean endpoint theorem:
+it records the finite-block budget obstruction shared by all primitive
+positive-entropy SFTs.  A primitive Parry law has exponentially small
+cylinders, whereas finite-block factors of a Sturmian system have only linear
+block complexity, so injective placement cannot remove the order
+\(m\log\lambda-\log m\) divergence barrier.
 
 \begin{theorem}[Primitive-SFT injective-placement barrier]
 \label{thm:primitive-sft-placement-barrier}
