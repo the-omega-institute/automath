@@ -551,16 +551,16 @@ all filtration-level statements below are atomwise on $X$; when later phrased
 symbolically, they are the corresponding cylinder statements.
 \end{definition}
 
-\begin{definition}[Boundary atoms]
+\begin{definition}[Boundary atoms for arbitrary events]
 \label{def:boundary-atoms}
 Relative to the positive-atom convention of Definition~\ref{def:positive-atoms},
-and for an arbitrary event $\mathsf{P}\in\mathcal{B}$, define the
-depth-$m$ \emph{boundary family}
+we use a boundary family before imposing any tail measurability assumption.
+For an arbitrary event $\mathsf{P}\in\mathcal{B}$, define
 \[
 \partial_m\mathsf{P}
-:=\{C\in\mathcal{C}_m:\mu(\mathsf{P}\cap C)>0\text{ and }\mu(C\setminus\mathsf{P})>0\},
+:=\{C\in\mathcal{C}_m:0<\mu(\mathsf{P}\mid C)<1\},
 \]
-with cardinality $N_m(\partial\mathsf{P}):=\#(\partial_m\mathsf{P})$.
+and set $N_m(\partial\mathsf{P}):=\#(\partial_m\mathsf{P})$.
 Thus $\partial_m\mathsf{P}$ is the collection of positive depth-$m$ atoms on
 which the target event is still undecided.  In the symbolic specialization,
 these are exactly the positive boundary cylinders at depth $m$.
@@ -569,27 +569,29 @@ these are exactly the positive boundary cylinders at depth $m$.
 \begin{remark}
 The same boundary-cylinder family is used in
 \cite[Definition~5.1]{MaZhangPrefixBoundaryRates2026}.  The local increment is
-only notational: the family is separated from the growth exponent and is stated
-for positive atoms modulo null sets and arbitrary $\mathcal{B}$-events.
+the arbitrary-event, positive-atom formulation: no assumption
+$\mathsf{P}\in\mathcal{F}_\infty$ is made, and null atoms have already been
+removed from $\mathcal{C}_m$.
 \end{remark}
 
-\begin{proposition}[Exact atom decomposition]
+\begin{proposition}[Arbitrary-event atomwise Bayes decomposition]
 \label{prop:scan-error-cylinder}
-For an arbitrary target event $\mathsf{P}\in\mathcal{B}$, let
+The standard prefix-cylinder decomposition of
+\cite[Proposition~3.1]{MaZhangPrefixBoundaryRates2026} extends verbatim from
+tail events to arbitrary $\mathcal{B}$-events after null atoms are removed:
+for an arbitrary target event $\mathsf{P}\in\mathcal{B}$, let
 $\mathcal{C}_m$ be the positive atoms of $\mathcal{F}_m$ and
 $p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.  Then for every $m\ge 0$,
 \[
 \varepsilon_m(\mathsf{P};\mu)
-=\sum_{C\in\mathcal{C}_m}\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}
+=\sum_{C\in\mathcal{C}_m}\mu(C)\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}
 =\EE[\min\{p_m,1-p_m\}].
 \]
 \end{proposition}
 
 \begin{remark}
-The $\mathcal{F}_\infty$ version is
-\cite[Proposition~3.1]{MaZhangPrefixBoundaryRates2026}.  Here the statement is
-used in the larger finite-depth form for arbitrary $\mathcal{B}$-events and
-positive atoms, because later transfer bounds do not require
+Here the statement is used in the larger finite-depth form for arbitrary
+$\mathcal{B}$-events and positive atoms, because later transfer bounds do not require
 $\mathsf{P}\in\mathcal{F}_\infty$.
 \end{remark}
 
@@ -645,19 +647,19 @@ choice on atoms with $p_C=1/2$.  The displayed classifiers are exactly those
 choices, and the canonical rule is the tie-including representative.
 \end{proof}
 
-\begin{corollary}[Monotonicity and decidability]
+\begin{corollary}[Arbitrary-event monotonicity and decidability]
 \label{cor:basic-properties}
-For every arbitrary $\mathcal{B}$-event $\mathsf{P}$, the profile
-$m\mapsto\varepsilon_m(\mathsf{P};\mu)$ is nonincreasing, and
-$\varepsilon_m(\mathsf{P};\mu)=0$ iff $\mathsf{P}$ coincides $\mu$-a.s.\ with
-an event in $\mathcal{F}_m$.
+For every $\mathcal{B}$-event $\mathsf{P}$, increasing the prefix depth cannot
+increase the scan error.  Moreover, depth $m$ has zero scan error exactly when
+some $\mathcal{F}_m$-event agrees with $\mathsf{P}$ modulo a $\mu$-null set.
 \leanverified{paper_prefix_scan_error_basic_properties}
 \end{corollary}
 
 \begin{remark}
 For tail-measurable events this is
-\cite[Corollary~3.3]{MaZhangPrefixBoundaryRates2026}.  The local form keeps the
-same zero-error criterion without assuming $\mathsf{P}\in\mathcal{F}_\infty$.
+\cite[Corollary~3.3]{MaZhangPrefixBoundaryRates2026}.  The local increment is
+that the zero-error criterion is retained for arbitrary
+$\mathcal{B}$-events.
 \end{remark}
 
 \begin{proof}
@@ -681,9 +683,12 @@ symmetric-difference error.
 The quantity $L_m^{1/2}$ below is the discrete threshold compensator for the
 posterior martingale $p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)$ at level $1/2$.
 
-\begin{theorem}[Discrete Tanaka representation of the scan error]
+\begin{theorem}[Discrete Tanaka representation with residual terminal error]
 \label{thm:scan-tanaka}
-For an arbitrary target event $\mathsf{P}\in\mathcal{B}$, set
+The tail-event identity of
+\cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026} has the following
+arbitrary-event extension: for an arbitrary target event
+$\mathsf{P}\in\mathcal{B}$, set
 \[
 p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m),
 \qquad
@@ -707,7 +712,8 @@ nondecreasing.  Moreover,
 \qquad
 \varepsilon_0(\mathsf{P};\mu)=\min\{\mu(\mathsf{P}),1-\mu(\mathsf{P})\}.
 \]
-As $m\to\infty$,
+The new terminal term is the residual best error over
+$\mathcal{F}_\infty$; explicitly, as $m\to\infty$,
 \[
 \varepsilon_m(\mathsf{P};\mu)\to
 \varepsilon_\infty(\mathsf{P};\mu)
@@ -723,10 +729,9 @@ and therefore
 \end{theorem}
 
 \begin{remark}
-The finite-depth Tanaka scan-error identity for tail events appears as
-\cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026}.  The local increment is
-the terminal formula for arbitrary $\mathcal{B}$-events: the limit is the
-residual best error over $\mathcal{F}_\infty$, not necessarily zero.
+The local increment is the terminal formula for arbitrary
+$\mathcal{B}$-events: the limit is the residual best error over
+$\mathcal{F}_\infty$, not necessarily zero.
 \end{remark}
 
 \begin{proof}
@@ -1819,12 +1824,15 @@ these bounds with Corollary~\ref{cor:scan-tanaka-tail} to interpret decay of
 $\varepsilon_m(\mathsf{P};\mu)$ as a tail-error statement for the limiting
 event.
 
-\begin{proposition}[Transfer proposition from the exact boundary decomposition: boundary-dimension upper bound]
+\begin{proposition}[Positive-atom transfer upper bound]
 \label{thm:boundary-dimension}
-For arbitrary $\mathsf{P}\in\mathcal{B}$ and positive filtration atoms, assume that the cylinder growth base
-$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Suppose
-$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ for all $m\ge 1$ and every positive
-depth-$m$ atom $C\in\mathcal{C}_m$.  Then
+The count-based cylinder estimate of
+\cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026} is used here in its
+positive-atom form for arbitrary events.  Let
+$\mathsf{P}\in\mathcal{B}$, assume that the atom-growth base
+$\lambda_{\mathrm{cyl}}$ exists and is greater than $1$, and suppose that
+there is $K>0$ such that every positive atom $C\in\mathcal{C}_m$ satisfies
+$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ for all $m\ge 1$.  Then
 \[
 \varepsilon_m(\mathsf{P};\mu)\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
@@ -1834,9 +1842,7 @@ $\varepsilon_m(\mathsf{P};\mu)\le\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$.
 \end{proposition}
 
 \begin{remark}
-The tail-event cylinder version is
-\cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026}.  The local increment is
-the finite-depth positive-atom form, used below before any
+The local increment is the finite-depth positive-atom form, used below before any
 $\mathsf{P}\in\mathcal{F}_\infty$ specialization is imposed.
 \end{remark}
 
@@ -1858,15 +1864,18 @@ $\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-(1-\delta-\eta)m}$.  Since $\eta$ an
 the constant $K$ contribute $o(m)$ after taking logs, the bound follows.
 \end{proof}
 
-\begin{corollary}[Transfer corollary from boundary thickness]
+\begin{corollary}[Positive-atom two-sided transfer under thickness]
 \label{thm:volume-boundary-scaling}
-For arbitrary $\mathsf{P}\in\mathcal{B}$ and positive filtration atoms, assume that the cylinder growth base
-$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Suppose
-$c_-\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_+\lambda_{\mathrm{cyl}}^{-m}$ for
-all $m\ge 1$ and every positive depth-$m$ atom $C\in\mathcal{C}_m$, and suppose
-there exist
-$\theta\in(0,\frac12]$ and $m_0$ such that for all $m\ge m_0$ and all
-$C\in\partial_m\mathsf{P}$,
+The two-sided count law of
+\cite[Proposition~5.4]{MaZhangPrefixBoundaryRates2026} is invoked here after
+two local changes: the target may be any $\mathcal{B}$-event and the exact
+exponential count hypothesis is stated separately from the limsup boundary
+dimension.  Let $\mathsf{P}\in\mathcal{B}$, assume that the atom-growth base
+$\lambda_{\mathrm{cyl}}>1$ exists, and suppose that all positive
+$C\in\mathcal{C}_m$ obey
+$c_-\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_+\lambda_{\mathrm{cyl}}^{-m}$
+for all $m\ge 1$.  If there are $\theta\in(0,\frac12]$ and $m_0$ such that for
+all $m\ge m_0$ and all $C\in\partial_m\mathsf{P}$,
 \[
 \min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}\ge\theta.
 \]
@@ -1887,10 +1896,9 @@ is the exponential growth exponent of $N_m(\partial\mathsf{P})$.
 \end{corollary}
 
 \begin{remark}
-The corresponding tail-event count law is
-\cite[Proposition~5.4]{MaZhangPrefixBoundaryRates2026}.  Here it is kept as a
-finite-depth transfer statement for arbitrary events, with the exact
-exponential asymptotic stated separately from the weaker limsup dimension.
+Here the sibling's tail-event count law is kept as a finite-depth transfer
+statement for arbitrary events, with the exact exponential asymptotic stated
+separately from the weaker limsup dimension.
 \end{remark}
 
 \begin{proof}
@@ -4806,13 +4814,17 @@ polynomial cylinder-distortion hypothesis of
 positive atoms of the present filtration.
 \end{definition}
 
-\begin{theorem}[Log-regular transfer principle]
+\begin{theorem}[Log-regular transfer with polynomial boundary-count correction]
 \label{thm:nonuniform-cylinder}
-For arbitrary $\mathsf{P}\in\mathcal{B}$ and positive filtration atoms, assume that the cylinder growth base
-$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Let $\mu$ be
-log-regular with exponent $\alpha>0$.  Assume the thickness condition of
-Corollary~\ref{thm:volume-boundary-scaling} holds with some $\theta>0$ and
-$m_0$.  Then for all $m\ge m_0$,
+The polynomial-distortion transfer principle of
+\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026} is used here with two
+local additions: arbitrary $\mathcal{B}$-events are allowed, and a polynomial
+two-sided estimate is recorded when the boundary count is known up to
+polynomial factors.  Let $\mathsf{P}\in\mathcal{B}$, assume that the
+atom-growth base $\lambda_{\mathrm{cyl}}>1$ exists, and let $\mu$ be
+log-regular with exponent $\alpha>0$ on positive atoms.  If the thickness
+condition of Corollary~\ref{thm:volume-boundary-scaling} holds with some
+$\theta>0$ and $m_0$, then for all $m\ge m_0$,
 \[
 \theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
 \le\varepsilon_m(\mathsf{P};\mu)
@@ -4839,9 +4851,7 @@ for all large $m$, then for all large $m$,
 \end{theorem}
 
 \begin{remark}
-The polynomial-distortion variant in
-\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026} gives the same
-exponential-rate conclusion for tail events.  The local increment is the
+The local increment over the sibling's tail-event variant is the
 arbitrary-event positive-atom formulation together with the final two-sided
 polynomial correction when
 $N_m(\partial\mathsf{P})$ itself is known up to polynomial factors.
