@@ -89,6 +89,27 @@ TAB_STUCK_THRESHOLD_S = 300
 TAB_ALERT_DEBOUNCE_S = 600
 SERVER_BOOT_GRACE_S = 4
 
+# Inner.log surfacer: each tick scans inner.log tail for high-signal lines
+# (ERROR / CRITICAL / Claude unavailable / Codex stderr / blocked) and
+# echoes them to supervisor.log so the operator's monitor catches them
+# without tailing inner.log directly. Tracks the byte offset already
+# scanned so each line is reported at most once per supervisor run.
+INNER_LOG_PATH = SCRIPT_DIR / "supervisor_logs" / "inner.log"
+INNER_LOG_ALERT_PATTERNS = re.compile(
+    r"\[(ERROR|CRITICAL)\]"
+    r"|Claude (CLI )?unavailable"
+    r"|out of extra usage"
+    r"|Codex stderr:"
+    r"|Stage [A-D] (blocked|failed)"
+    r"|FAILED — Stage"
+    r"|max .* rounds exhausted"
+    r"|compile failed"
+    r"|push failed"
+    r"|aborted",
+    re.IGNORECASE,
+)
+INNER_LOG_MAX_LINES_PER_TICK = 20
+
 # Refill is a fallback producer: triggered only when the existing backlog
 # is fully DONE. Default cooldown is intentionally long (7 days) — the
 # operator's priority is finishing the existing splits, not generating new
@@ -284,6 +305,50 @@ def queue_stuck_too_long(threshold_seconds: int) -> bool:
         return False
     queued = s.get("queued_tasks") or []
     return any((t.get("age_seconds") or 0) > threshold_seconds for t in queued)
+
+
+_inner_log_offset = 0
+
+
+def surface_inner_log_alerts() -> int:
+    """Scan inner.log tail since last call, echo high-signal lines to supervisor.log.
+
+    Returns the number of lines surfaced this tick (cap-limited to keep
+    the supervisor log readable — duplicates within a burst are not
+    deduped beyond the per-tick cap).
+    """
+    global _inner_log_offset
+    if not INNER_LOG_PATH.exists():
+        return 0
+    try:
+        size = INNER_LOG_PATH.stat().st_size
+    except OSError:
+        return 0
+    # Recover from log rotation / truncation.
+    if size < _inner_log_offset:
+        _inner_log_offset = 0
+    if size == _inner_log_offset:
+        return 0
+    surfaced = 0
+    try:
+        with open(INNER_LOG_PATH, "r", encoding="utf-8", errors="replace") as fh:
+            fh.seek(_inner_log_offset)
+            for line in fh:
+                if surfaced >= INNER_LOG_MAX_LINES_PER_TICK:
+                    # Drain the rest to advance offset; just don't print.
+                    pass
+                else:
+                    if INNER_LOG_ALERT_PATTERNS.search(line):
+                        cleaned = line.rstrip("\r\n")
+                        # Trim very long lines so supervisor.log stays readable.
+                        if len(cleaned) > 320:
+                            cleaned = cleaned[:317] + "..."
+                        supervisor_log(f"inner: {cleaned}")
+                        surfaced += 1
+            _inner_log_offset = fh.tell()
+    except OSError as exc:
+        supervisor_log(f"inner.log surface scan failed: {exc}")
+    return surfaced
 
 
 # ---------------------------------------------------------------------------
@@ -817,6 +882,14 @@ def main() -> int:
                             paper_filter=paper_filter or None,
                             extra_args=args.inner_extra,
                         )
+
+            # Surface high-signal lines from inner.log so the operator's
+            # monitor sees Stage failures, Claude/codex outages, compile
+            # errors, and Oracle issues without tailing inner.log directly.
+            try:
+                surface_inner_log_alerts()
+            except Exception as exc:
+                supervisor_log(f"inner.log surface error: {exc}")
 
             if queue_stuck_too_long(TAB_STUCK_THRESHOLD_S):
                 if _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:

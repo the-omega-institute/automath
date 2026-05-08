@@ -1588,7 +1588,8 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
                 dry_run: bool = False,
                 context_mode: str = "",
                 agent_role: str = "",
-                skill: str = "") -> str:
+                skill: str = "",
+                codex_fallback: bool = True) -> str:
     """Call Claude Code CLI for independent review/verification.
 
     Uses `claude -p --dangerously-skip-permissions` for non-interactive
@@ -1601,6 +1602,12 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     (e.g. skill="killo-golden" → prompt prefixed with "/killo-golden\\n\\n").
     Used for Stage D backflow writeback so academic-style discipline
     (no patch-log phrasing, no temporal markers, etc.) is enforced.
+
+    When `codex_fallback=True` (default) and Claude raises
+    "Claude CLI unavailable" (out-of-quota / not-found), the call
+    transparently falls back to `codex_exec` with a substitution prompt
+    so the pipeline keeps moving. Pass `codex_fallback=False` to keep
+    the original strict behaviour (re-raise on Claude unavailability).
     """
     prompt = with_agent_context_contract(
         prompt, context_mode=context_mode, agent_role=agent_role)
@@ -1649,14 +1656,77 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     )
     if _is_claude_unavailable_text(combined):
         excerpt = combined.replace("\n", " ")[:300]
+        if codex_fallback:
+            logger.warning(
+                f"Claude unavailable ({excerpt}); falling back to Codex "
+                f"for {agent_role or 'unspecified role'}"
+            )
+            return _codex_fallback_for_claude(
+                prompt, work_dir=work_dir,
+                timeout_seconds=max(timeout_seconds, 600),
+                dry_run=dry_run,
+                context_mode=context_mode,
+                agent_role=agent_role,
+                skill=skill,
+            )
         raise RuntimeError(f"Claude CLI unavailable: {excerpt}")
     if result and result.returncode != 0:
         excerpt = combined.replace("\n", " ")[:300]
         logger.warning(f"Claude CLI error: {excerpt}")
+        if codex_fallback:
+            logger.warning(
+                f"Claude rc={result.returncode}; falling back to Codex "
+                f"for {agent_role or 'unspecified role'}"
+            )
+            return _codex_fallback_for_claude(
+                prompt, work_dir=work_dir,
+                timeout_seconds=max(timeout_seconds, 600),
+                dry_run=dry_run,
+                context_mode=context_mode,
+                agent_role=agent_role,
+                skill=skill,
+            )
         raise RuntimeError(
             f"Claude CLI failed rc={result.returncode}: {excerpt}")
 
     return output
+
+
+def _codex_fallback_for_claude(prompt: str, *, work_dir: Optional[Path],
+                               timeout_seconds: int, dry_run: bool,
+                               context_mode: str, agent_role: str,
+                               skill: str) -> str:
+    """Run a Claude prompt through Codex when Claude is unavailable.
+
+    Codex is the writer in this pipeline; using it as the reviewer for
+    a one-off fallback is suboptimal but better than blocking the whole
+    paper. The substitution prompt is conservative: it asks Codex to act
+    in the role Claude would have, follow the same skill discipline if
+    one was named, and produce the same JSON shape so downstream
+    consumers (parse_json_from_output, _record_claude_supervision) keep
+    working without changes.
+    """
+    skill_note = (
+        f"\n\n[Claude is unavailable. You are substituting for the "
+        f"`/{skill}` skill — follow its style discipline strictly.]"
+        if skill else ""
+    )
+    fallback_prompt = (
+        "[Claude is unavailable. You are substituting for the Claude "
+        f"reviewer in role `{agent_role or 'unspecified'}`. Follow the "
+        "instructions below and produce the same output format Claude "
+        "would have. Be conservative — when in doubt, defer to existing "
+        "manuscript content rather than invent new claims.]"
+        f"{skill_note}\n\n{prompt}"
+    )
+    return codex_exec(
+        fallback_prompt,
+        work_dir=work_dir,
+        timeout_seconds=timeout_seconds,
+        dry_run=dry_run,
+        context_mode=context_mode or "claude_fallback",
+        agent_role=f"claude_fallback_{agent_role}" if agent_role else "claude_fallback",
+    )
 
 
 # ---------------------------------------------------------------------------
