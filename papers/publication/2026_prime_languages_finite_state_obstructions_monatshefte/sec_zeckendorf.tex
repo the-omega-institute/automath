@@ -49,7 +49,7 @@ and set
   \[
     N_L(T):=\#\{w\in L:\val(w)\le T\}.
   \]
-  Then
+  If \(L=\varnothing\), then \(N_L(T)=0\) for all \(T\). Otherwise
   \[
     N_L(T)=T^{\alpha+o(1)},
     \qquad
@@ -63,30 +63,49 @@ and set
 \end{proposition}
 
 \begin{proof}
-  This is the Zeckendorf specialization of the general growth theorem
-  for \(S\)-recognizable sets in \cite[Theorem~7]{CharlierRampersad2011};
-  see also \cite{LecomteRigo2001}. In the present numeration system the
-  ambient counting function satisfies
+  This is the Zeckendorf specialization of the general growth theory for
+  \(S\)-recognizable sets \cite[Theorem~7]{CharlierRampersad2011}; see
+  also \cite{LecomteRigo2001}. For the endpoint cases used below one can
+  also read the estimate directly from the trimmed transition graph, as
+  follows. In the present numeration system the ambient counting function
+  satisfies
   \[
     \#(\mathcal Z\cap\{0,1\}^{\le m})
     =F_{m+2}-1
     =\varphi^{m+o(m)},
   \]
-  and the trimmed automaton for \(L\) contributes the exponential factor
-  \(\rho\) when an infinite recurrent component of radius \(>1\) is
-  present. If all contributing components have spectral radius at most
-  \(1\), the number of accepted words of length at most \(m\) is
-  subexponential, with only polynomial factors coming from chains of
-  radius-one components; if \(L\) is finite it is eventually constant.
-  Thus the endpoint \(\rho\le 1\) gives \(N_L(T)=T^{o(1)}\), including
-  the finite-language case. Substituting these growth parameters into
-  the theorem of Charlier and Rampersad yields exactly the displayed
-  asymptotic
+  and, conversely, \(F_{m+2}=\varphi^{m+O(1)}\). Hence
+  \(\val(w)\le T\) is equivalent, up to an \(O(1)\) error in length, to
+  \(\abs w\le (\log T)/(\log\varphi)\).
+
+  Let \(A\) be the adjacency matrix of the trimmed automaton for \(L\).
+  Standard block triangular form by strongly connected components gives
   \[
-    N_L(T)=T^{\alpha+o(1)}
+    \#\{w\in L:\abs w\le m\}
+    =\rho^{m+o(m)}
   \]
-  with \(\alpha=0\) when \(\rho\le 1\) and
-  \(\alpha=\log \rho/\log \varphi\) when \(\rho>1\).
+  when \(\rho>1\): the upper bound is the usual polynomial-times
+  \(\rho^m\) estimate from the Jordan form of the diagonal blocks, while
+  the lower bound comes from a reachable and co-reachable component of
+  spectral radius \(\rho\), summing over the finitely many residue
+  classes allowed by its period. If \(\rho\le1\), every recurrent block
+  has spectral radius at most \(1\). Since a non-negative integral
+  irreducible block of spectral radius \(1\) is a permutation block, the
+  only growth then comes from the finite number of chains through such
+  blocks and through acyclic parts. Thus the number of accepted words of
+  length at most \(m\) is polynomial in \(m\); in the finite-language
+  case it is eventually constant. Therefore
+  \[
+    \#\{w\in L:\abs w\le m\}
+    =
+    \begin{cases}
+      \rho^{m+o(m)}, & \rho>1,\\
+      \exp(o(m)), & \rho\le1.
+    \end{cases}
+  \]
+  Substituting \(m=(\log T)/(\log\varphi)+O(1)\) gives exactly
+  \(N_L(T)=T^{\alpha+o(1)}\), with \(\alpha=0\) for \(\rho\le1\) and
+  \(\alpha=\log\rho/\log\varphi\) for \(\rho>1\).
 \end{proof}
 
 \begin{remark}\label{rem:zeckendorf-examples}
