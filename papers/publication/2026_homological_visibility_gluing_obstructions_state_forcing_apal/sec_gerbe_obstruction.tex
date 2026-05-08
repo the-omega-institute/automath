@@ -94,6 +94,60 @@ the \emph{$v$-component substack} of $\mathfrak E_r$ is the full substack
 for objects $U$ of $\mathcal C_a$, where $\epsilon_{r,U}$ denotes the component of $\epsilon_r$ at $U$.
 \end{definition}
 
+\begin{lemma}[Equivalence data and component transport]\label{lem:extension-equivalence-component-transport}
+Let
+\[
+(\mathfrak E_r,\Band,\epsilon_r),
+\qquad
+(\mathfrak E'_r,\Band',\epsilon'_r)
+\]
+be banded realization-stack extensions on $\mathcal C_a$. Suppose an equivalence of stacks
+\[
+\Phi:\mathfrak E_r\to\mathfrak E'_r
+\]
+comes with a band isomorphism $\theta:\Band\xrightarrow{\sim}\Band'$ and satisfies
+\[
+\epsilon'_r\circ\pi_0(\Phi)=\epsilon_r.
+\]
+Then, for every visible value class $v$, $\Phi$ restricts to an equivalence of full component substacks
+\[
+\Phi_v:\mathfrak E_r[v]\xrightarrow{\sim}\mathfrak E'_r[v],
+\]
+and this restricted equivalence is banded by $\theta$.
+\end{lemma}
+
+\begin{proof}
+Let $U$ be an object of $\mathcal C_a$ and let $x\in\mathfrak E_r[v](U)$. By definition,
+\[
+\epsilon_{r,U}([x])=v|_U.
+\]
+The compatibility condition gives
+\[
+\epsilon'_{r,U}([\Phi(x)])
+=
+(\epsilon'_r\circ\pi_0(\Phi))_U([x])
+=
+\epsilon_{r,U}([x])
+=
+v|_U.
+\]
+Thus $\Phi(x)\in\mathfrak E'_r[v](U)$, so $\Phi$ restricts to a functor
+\[
+\Phi_v:\mathfrak E_r[v]\to\mathfrak E'_r[v].
+\]
+Since both component substacks are full, $\Phi_v$ is fully faithful because $\Phi$ is. For local essential surjectivity, take $z\in\mathfrak E'_r[v](U)$. A quasi-inverse $\Psi$ to $\Phi$ gives, after possibly refining $U$, an object $y\in\mathfrak E_r(U)$ with $\Phi(y)\cong z$. Applying $\epsilon'_r$ to this local isomorphism gives
+\[
+\epsilon_{r,U}([y])
+=
+\epsilon'_{r,U}([\Phi(y)])
+=
+\epsilon'_{r,U}([z])
+=
+v|_U,
+\]
+so $y$ lies locally in $\mathfrak E_r[v]$. Hence $\Phi_v$ is an equivalence of stacks. The automorphism-sheaf maps of $\Phi_v$ are the restrictions of the automorphism-sheaf maps of $\Phi$, so the band is transported by the same isomorphism $\theta$.
+\end{proof}
+
 \begin{lemma}[Transport of Giraud classes under banded equivalence]\label{lem:giraud-class-transport}
 Let $\mathfrak G$ be a $\Band$-banded gerbe and let $\mathfrak G'$ be a $\Band'$-banded gerbe on the same site $\mathcal C$. Suppose
 \[
@@ -256,25 +310,10 @@ This proves \textup{(ii)}.
 
 Assume now that $\Phi$ is an equivalence as in \textup{(iii)}. Let $U\in\mathcal C_a$ and let
 \[
-x\in \mathfrak E_r[v](U).
+\Phi_v:\mathfrak E_r[v]\to \mathfrak E'_r[v]
 \]
-Then
-\[
-\epsilon'_{r,U}([\Phi(x)])
-=
-\epsilon_{r,U}([x])
-=
-v|_U,
-\]
-so
-\[
-\Phi(x)\in \mathfrak E'_r[v](U).
-\]
-Hence $\Phi$ restricts to a functor
-\[
-\Phi_v:\mathfrak E_r[v]\to \mathfrak E'_r[v].
-\]
-A quasi-inverse of $\Phi$ satisfies the same compatibility with connected components, so $\Phi_v$ is an equivalence of stacks. Because the band is transported by $\theta$, standard functoriality of the Giraud class under equivalence of banded gerbes gives
+be the restricted equivalence supplied by
+\Cref{lem:extension-equivalence-component-transport}. Because this equivalence is banded by $\theta$, functoriality of the Giraud class under the explicit local-trivialization transport in \Cref{lem:giraud-class-transport} gives
 \[
 \theta_*\bigl([\mathfrak E_r[v]]\bigr)=[\mathfrak E'_r[v]]
 \]
@@ -431,6 +470,64 @@ Replace $\theta_{ij}$ by
 \theta_{ij}':=\theta_{ij}\circ h_{ij}^{-1}.
 \]
 The defining equation $c=\delta h$ is exactly the statement that the $\theta_{ij}'$ satisfy the strict cocycle condition on triple overlaps. Hence $(x_i,\theta_{ij}')$ is a descent datum for the stack $\mathfrak G_v$, and since $\mathfrak G_v$ is a stack in groupoids, that descent datum is effective. The resulting glued object of $\mathfrak G_v(a)$ is a global object, so the gerbe is neutral.
+\end{proof}
+
+\begin{lemma}[\v{C}ech calculus for branch gerbes]\label{lem:cech-branch-gerbe-calculus}
+In the setting of \Cref{thm:cech-bridge-compatible-realizations}, the following four operations have the indicated effects on the cocycle
+\[
+c_{ijk}:=\theta_{ik}^{-1}\theta_{jk}\theta_{ij}.
+\]
+\begin{enumerate}[label=(\roman*),nosep]
+\item If the local objects $x_i$ are fixed and $\theta'_{ij}=\theta_{ij}\circ h_{ij}^{-1}$ for a $1$-cochain $h=(h_{ij})$ with values in $\Band$, then the new cocycle is
+\[
+c'_{ijk}=h_{ik}\,c_{ijk}\,h_{jk}^{-1}h_{ij}^{-1};
+\]
+in additive notation, $c'-c=\delta h$.
+\item If local objects $x_i$ are replaced by $x_i'$ and $\psi_i:x_i\xrightarrow{\sim}x_i'$ are chosen, then
+\[
+\theta'_{ij}:=\psi_j\theta_{ij}\psi_i^{-1}
+\]
+produces the same cocycle under the band identifications. Changing the $\psi_i$ modifies the result only by a coboundary of the kind in \textup{(i)}.
+\item If $\lambda:\mathcal V\to\mathcal U$ is a refinement satisfying the same acyclicity hypotheses, the cocycle constructed from the pulled-back objects and isomorphisms on $\mathcal V$ is $\lambda^*c$.
+\item The class $[c]$ is zero if and only if the descent datum may be adjusted so that the comparison isomorphisms satisfy the strict cocycle condition; by effective descent for the stack $\mathfrak G_v$, this is equivalent to a global object of $\mathfrak G_v(a)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+For \textup{(i)}, the Isom sheaf on $U_{ij}$ is a $\Band$-torsor, so the ratio between $\theta_{ij}$ and $\theta'_{ij}$ is the unique element $h_{ij}^{-1}\in\Band(U_{ij})$ with
+\[
+\theta'_{ij}=\theta_{ij}\circ h_{ij}^{-1}.
+\]
+Substituting these three identities in
+\[
+c'_{ijk}=(\theta'_{ik})^{-1}\theta'_{jk}\theta'_{ij}
+\]
+and using that the band is abelian gives
+\[
+c'_{ijk}=h_{ik}\,c_{ijk}\,h_{jk}^{-1}h_{ij}^{-1}.
+\]
+This is precisely the multiplicative Cech coboundary formula.
+
+For \textup{(ii)}, substituting
+\[
+\theta'_{ij}=\psi_j\theta_{ij}\psi_i^{-1}
+\]
+into the triple product gives
+\[
+(\theta'_{ik})^{-1}\theta'_{jk}\theta'_{ij}
+=
+\psi_i\theta_{ik}^{-1}\theta_{jk}\theta_{ij}\psi_i^{-1}.
+\]
+Under the band identification
+\[
+\underline{\mathrm{Aut}}(x_i)\cong\Band|_{U_i}\cong
+\underline{\mathrm{Aut}}(x_i'),
+\]
+conjugation by $\psi_i$ is the identity on $\Band$. If the isomorphisms $\psi_i$ are changed, the new choices differ from the old ones by a $0$-cochain in the automorphism sheaves, and the resulting comparison isomorphisms differ from the displayed $\theta'_{ij}$ by the coboundary described in \textup{(i)}.
+
+For \textup{(iii)}, a refinement map $\lambda$ sends each member of $\mathcal V$ to one member of $\mathcal U$. Pulling back the objects $x_i$ and maps $\theta_{ij}$ along these assignments gives on each triple overlap of $\mathcal V$ exactly the restriction of $c_{\lambda(i)\lambda(j)\lambda(k)}$. This is the usual pullback cocycle $\lambda^*c$.
+
+For \textup{(iv)}, if $[c]=0$, choose $h$ with $c=\delta h$ and replace $\theta_{ij}$ by $\theta_{ij}\circ h_{ij}^{-1}$. By \textup{(i)} the new cocycle is zero, which says exactly that the modified $\theta_{ij}$ satisfy the strict descent condition on triple overlaps. Since $\mathfrak G_v$ is a stack, this descent datum is effective and glues to an object of $\mathfrak G_v(a)$. Conversely, a global object $x\in\mathfrak G_v(a)$ and local isomorphisms $x|_{U_i}\cong x_i$ produce comparison maps whose triple defect is zero; \textup{(ii)} and \textup{(i)} then show that the original cocycle class is zero.
 \end{proof}
 
 \begin{proposition}[Derived branch classes detect neutrality]\label{prop:derived-branch-classification}
