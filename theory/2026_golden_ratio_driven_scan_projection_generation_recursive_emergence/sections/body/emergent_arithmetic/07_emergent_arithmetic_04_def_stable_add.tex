@@ -35,6 +35,291 @@ m:=\max\{k:\ c_k=1\text{ 或 }d_k=1\}
 \)
 为有效分辨率。则存在一个仅对 Zeckendorf 数字进行局部有限操作的算法（等价地：一个确定的有限状态换能器/有限延迟顺序换能器），在时间 $O(m)$ 内直接从 $(c_1,\dots,c_m)$ 与 $(d_1,\dots,d_m)$ 计算出 $c\oplus d$ 的 Zeckendorf 数字输出，而不需要显式构造整数 $\mathrm{Val}(c),\mathrm{Val}(d)$。
 \end{theorem}
+\begin{definition}[active-address 矩探针]\label{def:distill-khovanskii-active-address-moments}
+对 \(c\in X_\infty\) 与 \(j\ge0\)，定义有限支撑矩
+\[
+\mu_j(c):=\sum_{k\ge1}c_kF_{k+1}^{\,j}.
+\]
+对 \(c,d\in X_\infty\)，定义二者的 signed active support 为
+\[
+S(c,d):=\{k\ge1:\ c_k\ne d_k\}.
+\]
+其大小 \(|S(c,d)|\) 是 fewnomial 口径下的活动地址数，而不是最大地址或 ambient degree。
+\end{definition}
+
+\begin{proposition}[活动支撑决定有限探针深度]\label{prop:distill-khovanskii-active-address-moment-separation}
+令 \(c,d\in X_\infty\)，并设 \(r:=|S(c,d)|\)。若
+\[
+\mu_j(c)=\mu_j(d)\qquad(0\le j\le r-1),
+\]
+则 \(c=d\)。特别地，对任意 \(R\ge0\)，集合
+\[
+\mathcal X_R:=\{c\in X_\infty:\ |\operatorname{supp}(c)|\le R\}
+\]
+上的映射
+\[
+\mathcal X_R\longrightarrow \mathbb Z^{2R},\qquad
+c\longmapsto (\mu_0(c),\mu_1(c),\ldots,\mu_{2R-1}(c))
+\]
+是单射。
+\end{proposition}
+\begin{definition}[稳定加法的加权 Newton 支撑骨架]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-support_to_skeleton_reduction-weighted-raw-newton-skeleton}
+对 \(c,d\in X_\infty\)，置
+\[
+ a_k(c,d):=c_k+d_k\in\{0,1,2\},\qquad
+ A(c,d):=\{F_{k+1}:\ a_k(c,d)>0\}.
+\]
+若 \(A(c,d)=\{x_1<\cdots <x_r\}\)，则定义 \((c,d)\) 的加权 Newton 支撑骨架 \(\mathcal N(c,d)\) 为如下有限格复形：顶点集为 \(A(c,d)\)，相邻顶点 \(x_i,x_{i+1}\) 之间带有一条一维胞腔，面关系由端点包含给出，且顶点 \(x_i=F_{k_i+1}\) 携带权重 \(a_{k_i}(c,d)\)。同时定义混合 active 矩
+\[
+ M_j(c,d):=\mu_j(c)+\mu_j(d)=\sum_{k\ge1}a_k(c,d)F_{k+1}^{\,j}\qquad(j\ge0).
+\]
+若 \(\eta:A(c,d)\to\Gamma\) 是取值于全序集的 valuation，则 \(\eta\)-初始支撑 \(\operatorname{in}_\eta\mathcal N(c,d)\) 指由所有使 \(\eta\) 取最小值的顶点及其继承权重组成的诱导子复形。
+\end{definition}
+
+\begin{theorem}[fewnomial 预算内的混合矩 Newton 骨架刚性]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-support_to_skeleton_reduction-mixed-moment-newton-skeleton-rigidity}
+令 \(R\ge1\)，并设 \(c,d\in X_\infty\) 满足
+\[
+ r:=|A(c,d)|\le R.
+\]
+则有限矩列
+\[
+ \bigl(M_0(c,d),M_1(c,d),\ldots,M_{2R-1}(c,d)\bigr)
+\]
+唯一决定加权 Newton 支撑骨架 \(\mathcal N(c,d)\)。更精确地，设
+\[
+ H_R(c,d):=\bigl(M_{i+j}(c,d)\bigr)_{0\le i,j\le R-1}.
+\]
+则 \(r=\operatorname{rank}H_R(c,d)\)。当 \(r>0\) 时，唯一的首一多项式
+\[
+ Q_{c,d}(T)=T^r+q_{r-1}T^{r-1}+\cdots+q_0
+\]
+满足
+\[
+ \sum_{i=0}^{r-1}q_iM_{i+j}(c,d)=-M_{r+j}(c,d)\qquad(0\le j\le r-1),
+\]
+并且其根恰为 \(A(c,d)\)。顶点权重 \(a_k(c,d)\) 随后由 Vandermonde 方程
+\[
+ \sum_{\ell=1}^r b_\ell x_\ell^{\,j}=M_j(c,d)\qquad(0\le j\le r-1)
+\]
+唯一恢复，其中 \(x_1<\cdots<x_r\) 为 \(Q_{c,d}\) 的根，且 \(b_\ell=a_{k_\ell}(c,d)\in\{1,2\}\)。
+
+因此，若另一对 \(c',d'\in X_\infty\) 也满足 \(|A(c',d')|\le R\)，且
+\[
+ M_j(c,d)=M_j(c',d')\qquad(0\le j\le 2R-1),
+\]
+则 \(a_k(c,d)=a_k(c',d')\) 对所有 \(k\) 成立，特别地
+\[
+ c\oplus d=c'\oplus d'.
+\]
+并且，对任意定义在恢复顶点集上的 valuation \(\eta\)，初始支撑 \(\operatorname{in}_\eta\mathcal N(c,d)\) 及其权重完全由上述有限矩列决定。
+\end{theorem}
+\begin{definition}[fewnomial 加法缺陷与内部 Fibonacci 证书]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-certificate}
+令 \(\mathbf e_k\) 表示第 \(k\) 个地址的标准基元。对有限支撑向量
+\[
+ u=\sum_{k\ge1}u_k\mathbf e_k\in \mathbb Z^{(\NN_{\ge1})}
+\]
+定义
+\[
+ \operatorname{supp}u:=\{k:\ u_k\ne0\},\qquad
+ \operatorname{Val}_{\mathbb Z}(u):=\sum_{k\ge1}u_kF_{k+1},\qquad
+ \|u\|_\infty:=\max_k |u_k|.
+\]
+若 \(I=[a,b]\cap\NN_{\ge1}\) 为有限地址区间，置
+\[
+ \rho_k:=\mathbf e_k+\mathbf e_{k+1}-\mathbf e_{k+2}\qquad(a\le k\le b-2),
+\]
+并定义内部 Fibonacci 关系模
+\[
+ \mathcal L(I):=\left\langle \rho_k:\ a\le k\le b-2\right\rangle_{\mathbb Z}\subset \mathbb Z^I,
+\]
+其中当 \(b-a\le1\) 时生成集为空。对 \(c,d,e\in X_\infty\)，定义稳定加法缺陷
+\[
+ \partial(c,d;e):=\sum_{k\ge1}(c_k+d_k-e_k)\mathbf e_k.
+\]
+\end{definition}
+
+\begin{theorem}[有限 active-address 加法缺陷的内部闭包判别]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-internal-closure}
+设 \(I=[a,b]\cap\NN_{\ge1}\)，\(\ell:=b-a\)，并记
+\[
+ H_\ell:=\max\{1,F_\ell\}.
+\]
+令 \(B,C\ge1\)。若有限支撑向量 \(u\in\mathbb Z^I\) 满足
+\[
+ |\operatorname{supp}u|\le B,\qquad \|u\|_\infty\le C,\qquad
+ \operatorname{Val}_{\mathbb Z}(u)=0,\qquad
+ C B H_\ell < F_{a+1},
+\]
+则
+\[
+ u\in\mathcal L(I).
+\]
+因此任何满足上述非退化位置不等式的 value-zero fewnomial 缺陷，都可以仅用区间 \(I\) 内的相邻 Fibonacci 关系闭合；证书不需要引入 \(I\) 外的新地址。特别地，若 \(c,d,e\in X_\infty\)，\(u=\partial(c,d;e)\) 支撑于 \(I\)，\(|\operatorname{supp}u|\le B\)，且
+\[
+ 2B H_\ell < F_{a+1},
+\]
+则
+\[
+ e=c\oplus d
+ \quad\Longleftrightarrow\quad
+ \partial(c,d;e)\in\mathcal L(I).
+\]
+\end{theorem}
+\begin{proof}
+先证明一个区间关系模的代数刻画。约定 \(F_{-1}=1\)、\(F_0=0\)。对 \(u\in\mathbb Z^I\) 定义两个边界坐标
+\[
+ P_I(u):=\sum_{t=0}^{\ell}u_{a+t}F_{t-1},\qquad
+ Q_I(u):=\sum_{t=0}^{\ell}u_{a+t}F_t.
+\]
+由 Fibonacci 递推可得，对所有 \(t\ge0\)，
+\[
+ F_{a+t+1}=F_{t-1}F_{a+1}+F_tF_{a+2}.
+\]
+于是
+\[
+ \operatorname{Val}_{\mathbb Z}(u)=P_I(u)F_{a+1}+Q_I(u)F_{a+2}.
+\]
+并且每个 \(\rho_k\) 在 \((P_I,Q_I)\) 下为零，因为 \(F_{j+1}+F_{j+2}-F_{j+3}=0\)。故
+\[
+ \mathcal L(I)\subseteq \ker(P_I,Q_I).
+\]
+反过来，若 \((P_I(u),Q_I(u))=(0,0)\)，则可从最高地址向下消元。若 \(b-a\le1\)，定义式直接给出剩余坐标为零。若 \(b-a\ge2\)，设最高坐标为 \(m=u_b\)。由于 \(\rho_{b-2}\) 在地址 \(b\) 的系数为 \(-1\)，向量 \(u+m\rho_{b-2}\) 的最高坐标为零，且其 \((P_I,Q_I)\) 仍为 \((0,0)\)。对较短区间归纳，得到 \(u+m\rho_{b-2}\in\langle \rho_a,\ldots,\rho_{b-3}\rangle_{\mathbb Z}\)，从而 \(u\in\mathcal L(I)\)。因此
+\[
+ \ker(P_I,Q_I)=\mathcal L(I).
+\]
+
+现在设 \(\operatorname{Val}_{\mathbb Z}(u)=0\)。上式给出
+\[
+ P_I(u)F_{a+1}+Q_I(u)F_{a+2}=0.
+\]
+由于相邻 Fibonacci 数互素，若 \((P_I(u),Q_I(u))\ne(0,0)\)，则存在非零整数 \(s\) 使
+\[
+ P_I(u)=sF_{a+2},\qquad Q_I(u)=-sF_{a+1}.
+\]
+于是
+\[
+ \max\{|P_I(u)|,|Q_I(u)|\}\ge F_{a+1}.
+\]
+另一方面，由 \(|\operatorname{supp}u|\le B\)、\(\|u\|_\infty\le C\) 以及 \(F_{t-1},F_t\le H_\ell\) 可得
+\[
+ |P_I(u)|\le C B H_\ell,\qquad |Q_I(u)|\le C B H_\ell.
+\]
+这与 \(CBH_\ell<F_{a+1}\) 矛盾。因此 \((P_I(u),Q_I(u))=(0,0)\)，由前述刻画可知 \(u\in\mathcal L(I)\)。
+
+最后取 \(u=\partial(c,d;e)\)。此时 \(\|u\|_\infty\le2\)。若 \(e=c\oplus d\)，则
+\[
+ \operatorname{Val}_{\mathbb Z}(u)=\mathrm{Val}(c)+\mathrm{Val}(d)-\mathrm{Val}(e)=0,
+\]
+故由已证部分得 \(u\in\mathcal L(I)\)。反之，若 \(u\in\mathcal L(I)\)，则每个生成元 \(\rho_k\) 的 \(\operatorname{Val}_{\mathbb Z}\) 为零，所以 \(\mathrm{Val}(e)=\mathrm{Val}(c)+\mathrm{Val}(d)\)。由于 \(e\in X_\infty\) 且 Zeckendorf 代表唯一，按定义 \(e=c\oplus d\)。证毕。
+\end{proof}
+
+\begin{definition}[有限 active-address 加法账本]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-ledger}
+固定 \(B\ge1\) 以及一族有限地址区间 \(\mathfrak I\)。称三元组 \((c,d;e)\in X_\infty^3\) 被账本 \(\mathsf{Cl}_{B,\mathfrak I}\) 闭合，若对 \(u:=\partial(c,d;e)\) 有 \(u=0\)，或同时满足
+\[
+ |\operatorname{supp}u|\le B
+ \quad\text{且存在 } I\in\mathfrak I \text{ 使得 } \operatorname{supp}u\subset I,\ u\in\mathcal L(I).
+\]
+\end{definition}
+
+\begin{proposition}[有限 active-address 账本的坏例子三分]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-bad-example-trichotomy}
+固定 \(B\ge1\) 与有限地址区间族 \(\mathfrak I\)。账本 \(\mathsf{Cl}_{B,\mathfrak I}\) 对稳定加法是可靠的：若 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 成立，则 \(e=c\oplus d\)。
+
+反过来，若 \(e=c\oplus d\) 但 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 不成立，记 \(u:=\partial(c,d;e)\)。则必有下列三种机制之一发生：
+\[
+ \text{\rm (i)}\quad |\operatorname{supp}u|>B;
+\]
+\[
+ \text{\rm (ii)}\quad \text{不存在 } I\in\mathfrak I \text{ 使 } \operatorname{supp}u\subset I;
+\]
+\[
+ \text{\rm (iii)}\quad \text{对每个 } I=[a,b]\cap\NN_{\ge1}\in\mathfrak I \text{ 且 } \operatorname{supp}u\subset I,
+ \quad 2B\max\{1,F_{b-a}\}\ge F_{a+1}.
+\]
+因此，在固定 fold-aware 地址图册 \(\mathfrak I\) 内，真正的加法闭包失败只能表现为 active support 增长、支撑切换到图册外，或区间位置退化到允许边界共振的范围。
+\end{proposition}
+\begin{proof}
+若 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 成立，则或者 \(u=0\)，或者存在 \(I\in\mathfrak I\) 使 \(u\in\mathcal L(I)\)。两种情形都给出
+\[
+ \operatorname{Val}_{\mathbb Z}(u)=0,
+\]
+因为 \(\operatorname{Val}_{\mathbb Z}(\rho_k)=F_{k+1}+F_{k+2}-F_{k+3}=0\)。于是
+\[
+ \mathrm{Val}(e)=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+由 \(e\in X_\infty\) 的 Zeckendorf 唯一性，得到 \(e=c\oplus d\)。可靠性得证。
+
+现设 \(e=c\oplus d\) 且账本不闭合。若 (i) 不成立，则 \(|\operatorname{supp}u|\le B\)。若 (ii) 也不成立，则存在 \(I=[a,b]\cap\NN_{\ge1}\in\mathfrak I\) 包含 \(\operatorname{supp}u\)。若对某个这样的 \(I\) 还有
+\[
+ 2B\max\{1,F_{b-a}\}<F_{a+1},
+\]
+则由定理 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-finite-active-address-internal-closure} 应用于 \(C=2\) 得 \(u\in\mathcal L(I)\)，从而 \(\mathsf{Cl}_{B,\mathfrak I}(c,d;e)\) 成立，矛盾。因此每个包含 \(\operatorname{supp}u\) 的图册区间均满足 (iii)。三分命题成立。证毕。
+\end{proof}
+
+\begin{remark}[Newtonization、valuation face selection 与 fewnomial budget 的局部化]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-fewnomial_budget_bounds-operator-bridge}
+上述判别把加法缺陷先 Newton 化为有限地址支撑 \(\operatorname{supp}u\) 及其区间 hull \(I=[a,b]\)，再用 \((B,C)\) 记录 active coefficient budget。证明中的边界坐标 \((P_I,Q_I)\) 是对区间 Fibonacci 递推商的 valuation-face 读出：所有内部相邻关系被折叠掉以后，唯一可能残留的非局部共振是 \((F_{a+2},-F_{a+1})\) 方向。非退化不等式 \(CBH_{b-a}<F_{a+1}\) 正是 fewnomial budget 排除该边界共振的有限 active-address 条件。
+\end{remark}
+
+\begin{proof}
+记 \(A(c,d)=\{x_1<\cdots <x_r\}\)，并令对应权重为 \(b_1,\ldots,b_r\)，其中每个 \(b_\ell\in\{1,2\}\)。于是
+\[
+ M_j(c,d)=\sum_{\ell=1}^r b_\ell x_\ell^{\,j}\qquad(j\ge0).
+\]
+若 \(r=0\)，全部混合矩为零，骨架为空，结论显然成立。以下设 \(r>0\)。
+
+令 \(V_R=(x_\ell^{\,i})_{0\le i\le R-1,\,1\le\ell\le r}\)，并置 \(B=\operatorname{diag}(b_1,\ldots,b_r)\)。则
+\[
+ H_R(c,d)=V_RBV_R^{\mathsf T}.
+\]
+由于 \(x_1,\ldots,x_r\) 两两不同且 \(R\ge r\)，矩阵 \(V_R\) 的列秩为 \(r\)；又 \(B\) 可逆，故 \(\operatorname{rank}H_R(c,d)=r\)。这说明 active 支撑数本身已经由有限矩 Hankel 阵读出，而不是由最大地址或 ambient degree 读出。
+
+考虑首一多项式
+\[
+ Q(T)=\prod_{\ell=1}^r(T-x_\ell)=T^r+q_{r-1}T^{r-1}+\cdots+q_0.
+\]
+对任意 \(j\ge0\)，有
+\[
+ \sum_{i=0}^r q_iM_{i+j}(c,d)
+ =\sum_{\ell=1}^r b_\ell x_\ell^{\,j}Q(x_\ell)=0,
+\]
+其中 \(q_r=1\)。因此 \(Q\) 满足定理中的线性方程。反过来，若另一首一多项式 \(P(T)=T^r+p_{r-1}T^{r-1}+\cdots+p_0\) 满足同一组方程，则 \(P-Q\) 的系数向量 \((p_0-q_0,\ldots,p_{r-1}-q_{r-1})\) 被方阵
+\[
+ H_r(c,d)=\bigl(M_{i+j}(c,d)\bigr)_{0\le i,j\le r-1}
+\]
+消去。由上一段同样的分解，\(H_r=V_rBV_r^{\mathsf T}\)，其中 \(V_r\) 是可逆 Vandermonde 矩阵，故 \(H_r\) 可逆，因而 \(P=Q\)。于是 \(Q_{c,d}\) 唯一，且其根正是 \(A(c,d)\)。由于 Fibonacci 权重 \(F_{k+1}\) 随 \(k\ge1\) 严格递增，每个根 \(x_\ell\) 唯一恢复对应地址 \(k_\ell\)。
+
+顶点恢复后，权重由
+\[
+ \sum_{\ell=1}^r b_\ell x_\ell^{\,j}=M_j(c,d)\qquad(0\le j\le r-1)
+\]
+唯一确定，因为系数矩阵仍是可逆 Vandermonde 矩阵。由原始构造知所得权重必为 \(1\) 或 \(2\)。故顶点、相邻关系、面关系与权重全部恢复，即 \(\mathcal N(c,d)\) 唯一确定。
+
+若 \((c',d')\) 有相同的前 \(2R\) 个混合矩，则上述过程给出同一个多项式、同一组根与同一组权重，所以 \(a_k(c,d)=a_k(c',d')\) 对所有 \(k\) 成立。因此
+\[
+ \mathrm{Val}(c)+\mathrm{Val}(d)=\sum_k a_k(c,d)F_{k+1}
+ =\sum_k a_k(c',d')F_{k+1}
+ =\mathrm{Val}(c')+\mathrm{Val}(d'),
+\]
+再由稳定加法的定义得到 \(c\oplus d=c'\oplus d'\)。最后，任意 valuation \(\eta\) 的初始支撑只依赖于已恢复的有限顶点集及顶点权重，故 \(\operatorname{in}_\eta\mathcal N(c,d)\) 亦由同一有限矩列决定。由此，稳定加法在 fixed fewnomial 预算下先经过支撑骨架与 valuation 面选择，再进入归一化；在该预算内不存在隐藏于同一混合矩 Newton 骨架中的稳定和坏例子。
+\end{proof}
+
+\begin{proof}
+若 \(r=0\)，则 \(S(c,d)=\varnothing\)，结论显然成立。设 \(r>0\)，并将
+\[
+S(c,d)=\{k_1,\ldots,k_r\},\qquad x_i:=F_{k_i+1},\qquad
+\varepsilon_i:=c_{k_i}-d_{k_i}\in\{-1,1\}
+\]
+写出。矩相等给出线性方程组
+\[
+\sum_{i=1}^r\varepsilon_i x_i^j=0\qquad(0\le j\le r-1).
+\]
+由于 Fibonacci 权重 \(x_i\) 两两不同，Vandermonde 行列式
+\[
+\det(x_i^{j})_{0\le j\le r-1,\,1\le i\le r}
+=\prod_{1\le i<\ell\le r}(x_\ell-x_i)
+\]
+非零。因此唯一解为 \(\varepsilon_i=0\) 对所有 \(i\)，与 \(k_i\in S(c,d)\) 矛盾。故 \(r\) 必为零，进而 \(c=d\)。
+
+若 \(c,d\in\mathcal X_R\)，则 \(|S(c,d)|\le2R\)。若二者的前 \(2R\) 个矩相同，则上一段应用于 \(r\le2R\) 给出 \(c=d\)。这说明在固定活动地址预算内，读出深度由 active support 控制，而不由最大 Fibonacci 位号控制。
+\end{proof}
 
 \begin{proof}
 这是 Zeckendorf/黄金比例 Ostrowski 数制的标准“归一化可由有限自动机实现”结论在加法特例下的表述：加法可视为先逐位相加得到字母表 $\{0,1,2\}$ 上的非规范数字，再执行一个保持值不变的规范化（消去 $2$ 与相邻 $11$）得到唯一 Zeckendorf 形式。Pisot 基（特别是黄金比例）情形下，这类规范化映射可由有限自动机/顺序换能器实现，从而给出线性时间算法（见 \cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}；对 Zeckendorf 情形的显式高效算法与实现细节可参见 \cite{AhlbachUsatineFrougnyPippenger2013}；Ostrowski 三遍扫描算法的黄金比例特例亦见 \cite{HieronymiTerry2018OstrowskiAddition}）。

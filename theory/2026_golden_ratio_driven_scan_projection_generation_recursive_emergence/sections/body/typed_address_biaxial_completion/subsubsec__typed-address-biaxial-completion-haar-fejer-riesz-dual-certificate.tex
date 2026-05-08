@@ -1,0 +1,364 @@
+\subsubsection{Haar--Fej\'er--Riesz 对偶证书}\label{subsubsec:typed-address-biaxial-completion-haar-fejer-riesz-dual-certificate}
+有限 Fourier--Toeplitz 外证书把验证问题降为有限数据，但仍保留了一个表面上的合成任务：寻找足够紧的外多项式上包络。本段说明，在 Fourier 截断并加入严格正尾部缓冲以后，不限制次数的最优外上包络不需要搜索；它就是相应正三角多项式的 Fej\'er--Riesz 外谱因子。合成问题由此转化为 Haar 对数平均及其正则化偏差的估计问题。
+
+仍令
+\[
+f_r(z):=\Phi_a(rz),
+\qquad
+W_r(e^{i\theta}):=|f_r(e^{i\theta})|^2,
+\qquad
+dm(\theta):=\frac{d\theta}{2\pi}.
+\]
+给定 Fourier 截断 \(W_{r,M}\) 与严格尾部上界
+\[
+\left|W_r(e^{i\theta})-W_{r,M}(e^{i\theta})\right|
+\le
+\Delta_{r,M}^+,
+\]
+定义有限三角多项式
+\[
+S_{r,M}(e^{i\theta})
+:=
+W_{r,M}(e^{i\theta})+\Delta_{r,M}^+.
+\]
+若 \(\Delta_{r,M}^+>\Delta_{r,M}\)，则
+\[
+S_{r,M}(e^{i\theta})
+\ge
+W_r(e^{i\theta})+\Delta_{r,M}^+-\Delta_{r,M}
+>
+0
+\]
+对所有 \(\theta\) 成立。因此 \(S_{r,M}\) 是严格正的有限三角多项式，并且 \(S_{r,M}\ge W_r\)。
+
+\begin{definition}[外上包络原问题]\label{def:typed-address-biaxial-completion-outer-majorant-primal}
+对任意正连续函数 \(S>0\)，定义
+\[
+\mathcal P(S)
+:=
+\inf
+\left\{
+\log|\mathfrak q(0)|:
+\mathfrak q \text{ 是 outer }H^2\text{ 函数，并且 }
+|\mathfrak q(e^{i\theta})|^2\ge S(e^{i\theta})
+\text{ a.e.}
+\right\}.
+\]
+\end{definition}
+
+\begin{theorem}[Haar--Fej\'er--Riesz 对偶]\label{thm:typed-address-biaxial-completion-haar-fejer-riesz-duality}
+若 \(S(e^{i\theta})>0\) 连续，则
+\[
+\mathcal P(S)
+=
+\frac12\int_{\mathbb T}\log S\,dm.
+\]
+若进一步 \(S\) 是严格正三角多项式，则存在外多项式 \(\mathfrak q_S\)，使
+\[
+|\mathfrak q_S(e^{i\theta})|^2=S(e^{i\theta})
+\]
+并且
+\[
+\log|\mathfrak q_S(0)|
+=
+\frac12\int_{\mathbb T}\log S\,dm.
+\]
+\end{theorem}
+\begin{proof}
+任取可行 outer 函数 \(\mathfrak q\)。由 \(|\mathfrak q|^2\ge S\) 得到
+\[
+2\log|\mathfrak q(e^{i\theta})|
+\ge
+\log S(e^{i\theta})
+\]
+几乎处处成立。积分并使用 outer 函数的 Jensen 等式，
+\[
+\int_{\mathbb T}\log|\mathfrak q|\,dm
+=
+\log|\mathfrak q(0)|,
+\]
+得到
+\[
+\log|\mathfrak q(0)|
+\ge
+\frac12\int_{\mathbb T}\log S\,dm.
+\]
+这给出原问题下界。
+
+反向由外函数构造给出：由于 \(\log S\in L^1(\mathbb T)\)，存在 outer 函数 \(\mathfrak q_S\) 满足边界模
+\[
+|\mathfrak q_S|^2=S
+\]
+且
+\[
+\log|\mathfrak q_S(0)|
+=
+\frac12\int_{\mathbb T}\log S\,dm.
+\]
+若 \(S\) 是严格正三角多项式，则 Fej\'er--Riesz 定理把该外函数实现为外多项式谱因子。证毕。
+\end{proof}
+
+由定理 \ref{thm:typed-address-biaxial-completion-haar-fejer-riesz-duality}，对有限正三角多项式 \(S_{r,M}\) 而言，最优外上包络由谱因子分解决定：
+\[
+S_{r,M}
+\xrightarrow{\ \text{Fej\'er--Riesz}\ }
+\mathfrak q_{r,M},
+\qquad
+|\mathfrak q_{r,M}|^2=S_{r,M}.
+\]
+因此有限外证书中的 Toeplitz--PSD 上包络不等式可在严格正模型中替换为谱因子等式。若实际离线计算只能给出区间近似，则保留一个小的因子化残差，并把该残差吸收到 \(\Delta_{r,M}^+\) 的额外缓冲中。
+
+\begin{definition}[谱因子外证书]\label{def:typed-address-biaxial-completion-spectral-factor-outer-certificate}
+固定
+\[
+R_q:=1-2^{-q},
+\qquad
+r_q:=1-\eta2^{-q},
+\qquad
+0<\eta<1.
+\]
+令
+\[
+S_q(e^{i\theta})
+:=
+W_{r_q,M}(e^{i\theta})+\Delta_{q,M}^+.
+\]
+一份 dyadic 层 \(q\) 的谱因子外证书为
+\[
+\mathsf{SpecCert}_q
+:=
+\bigl(
+M,\,
+\Delta_{q,M}^+,\,S_q,\,
+\mathfrak q_q,\,
+\lambda_*,\,
+A_0^-
+\bigr),
+\]
+并要求：
+\[
+W_{r_q}\le S_q,\qquad
+S_q>0,\qquad
+|\mathfrak q_q(e^{i\theta})|^2=S_q(e^{i\theta}),
+\]
+\[
+\lambda_{\min}\mathcal S(\mathfrak q_q)\ge\lambda_*>0,
+\qquad
+0<A_0^-\le|\Phi_a(0)|.
+\]
+若进一步
+\[
+\log|\mathfrak q_q(0)|-\log A_0^-
+<
+\log\frac{r_q}{R_q},
+\]
+则该证书输出 \(\mathsf{PASS}\)。
+\end{definition}
+
+\begin{corollary}[谱因子证书的正确性]\label{cor:typed-address-biaxial-completion-spectral-factor-certificate-soundness}
+若 \(\mathsf{SpecCert}_q=\mathsf{PASS}\)，则
+\[
+\Phi_a(w)\ne0
+\qquad
+(|w|\le R_q).
+\]
+\end{corollary}
+\begin{proof}
+由 \(W_{r_q}\le S_q=|\mathfrak q_q|^2\)，得到
+\[
+|\mathfrak q_q(e^{i\theta})|
+\ge
+|\Phi_a(r_qe^{i\theta})|.
+\]
+Schur--Cohn 裕度说明 \(\mathfrak q_q\) 在单位圆盘内无零点。因此，外多项式上包络证书定理 \ref{thm:typed-address-biaxial-completion-outer-majorant-repulsion} 直接给出 \(|w|\le R_q\) 内无零点。证毕。
+\end{proof}
+
+强对偶还给出有限模型的阻断语义。定义
+\[
+L(S_q)
+:=
+\frac12\int_{\mathbb T}\log S_q\,dm.
+\]
+由定理 \ref{thm:typed-address-biaxial-completion-haar-fejer-riesz-duality}，任何满足 \(|\mathfrak q|^2\ge S_q\) 的 outer 上包络都满足
+\[
+\log|\mathfrak q(0)|\ge L(S_q).
+\]
+因此，若能够严格证明
+\[
+L(S_q)-\log A_0^-
+\ge
+\log\frac{r_q}{R_q},
+\]
+则当前有限正多项式模型 \(S_q=W_{r_q,M}+\Delta_{q,M}^+\) 下不存在通过阈值的 outer 上包络。该结论只阻断当前 \((M,\Delta_{q,M}^+)\) 模型，并不构成 RH 反例证书；它可能反映 Fourier 阶数不足、尾部缓冲过大，或对数正则化在边界小值区域造成的偏差过大。
+
+在 exact 层中不作 Fourier 截断，直接取
+\[
+S=W_r=|\Phi_a(re^{i\theta})|^2.
+\]
+若 \(f_r\not\equiv0\)，则
+\[
+\mathcal P(W_r)
+=
+\frac12\int_{\mathbb T}\log W_r\,dm
+=
+\int_{\mathbb T}\log|\Phi_a(re^{i\theta})|\,dm.
+\]
+于是
+\[
+\mathcal P(W_r)-\log|\Phi_a(0)|
+=
+J_a(r).
+\]
+这说明外上包络原问题在 exact 层并未引入独立缺陷；它只是 Jensen 缺陷的外函数表达。
+
+有限层与 exact 层之间的差异由一个对数正则化偏差记录。定义
+\[
+\mathcal B_{r,M}
+:=
+\frac12\int_{\mathbb T}\log S_{r,M}\,dm
+-
+\frac12\int_{\mathbb T}\log W_r\,dm.
+\]
+由于 \(W_r\le S_{r,M}\)，有
+\[
+\mathcal B_{r,M}\ge0.
+\]
+同时，
+\[
+S_{r,M}
+=
+W_{r,M}+\Delta_{r,M}^+
+\le
+W_r+2\Delta_{r,M}^+,
+\]
+因此
+\[
+0\le
+\mathcal B_{r,M}
+\le
+\frac12
+\int_{\mathbb T}
+\log\left(
+1+\frac{2\Delta_{r,M}^+}{W_r(e^{i\theta})}
+\right)dm.
+\]
+若存在边界下界 \(W_r\ge m_r>0\)，则
+\[
+\mathcal B_{r,M}
+\le
+\frac12
+\log\left(
+1+\frac{2\Delta_{r,M}^+}{m_r}
+\right).
+\]
+该估计在远离小值区域时有效；当 \(W_r\) 在某些角度很小，它退化为边界层盲区的对数形式。
+
+小值区域的局部模型给出更符合解析结构的尺度。若在某个角度 \(\theta_0\) 附近
+\[
+W_r(e^{i\theta})
+\asymp
+C|\theta-\theta_0|^{2\nu},
+\qquad
+\nu\in\mathbb N,
+\]
+则对应局部正则化偏差由
+\[
+\int
+\log\left(
+1+\frac{\Delta}{|\theta-\theta_0|^{2\nu}}
+\right)d\theta
+\]
+控制。变量替换
+\[
+u=\frac{\theta-\theta_0}{\Delta^{1/(2\nu)}}
+\]
+给出量级
+\[
+\mathcal B_{\mathrm{loc}}
+=
+O\!\left(\Delta^{1/(2\nu)}\right).
+\]
+特别地，简单零型小值给出 \(O(\sqrt{\Delta})\) 的局部偏差。这表明 Fourier 尾部虽然以 \(\exp(-cM(1-r))\) 衰减，但在 \(\log(W+\Delta)\) 中会被近零区重标度。
+
+\begin{proposition}[谱因子正则化收敛]\label{prop:typed-address-biaxial-completion-spectral-factor-regularization-convergence}
+若
+\[
+\Delta_{r,M}^+\to0,
+\qquad
+\|W_{r,M}-W_r\|_{L^\infty(\mathbb T)}\le\Delta_{r,M}^+,
+\]
+并且 \(f_r\not\equiv0\)，则
+\[
+\frac12\int_{\mathbb T}\log\bigl(W_{r,M}+\Delta_{r,M}^+\bigr)\,dm
+\longrightarrow
+\frac12\int_{\mathbb T}\log W_r\,dm.
+\]
+等价地，若 \(\mathfrak q_{r,M}\) 是 \(S_{r,M}\) 的 Fej\'er--Riesz 外谱因子，则
+\[
+\log|\mathfrak q_{r,M}(0)|
+\longrightarrow
+\int_{\mathbb T}\log|\Phi_a(re^{i\theta})|\,dm.
+\]
+\end{proposition}
+\begin{proof}
+由
+\[
+W_r\le S_{r,M}\le W_r+2\Delta_{r,M}^+
+\]
+可得
+\[
+0\le
+\log S_{r,M}-\log W_r
+\le
+\log(W_r+2\Delta_{r,M}^+)-\log W_r
+\]
+在 \(W_r>0\) 处成立。远离 \(W_r\) 的零点时右端一致趋于 \(0\)。在零点附近，解析函数的有限阶零点结构给出
+\[
+W_r(e^{i\theta})\asymp C_j|\theta-\theta_j|^{2\nu_j}
+\]
+在足够小的局部弧上成立，且 \(\log W_r\) 局部可积。由前述局部估计可控制近零弧的贡献，并令其随 \(\Delta_{r,M}^+\to0\) 消失。有限多个近零弧与其补集合并，即得结论。证毕。
+\end{proof}
+
+由此得到一个三值有限语义。若可核验上界 \(L_q^+\) 满足
+\[
+\frac12\int_{\mathbb T}\log S_q\,dm\le L_q^+,
+\qquad
+L_q^+-\log A_0^-<\log\frac{r_q}{R_q},
+\]
+则输出 \(\mathsf{PASS}\)，并排除 \(|w|\le R_q\) 内零点。若可核验下界 \(L_q^-\) 满足
+\[
+L_q^-\le\frac12\int_{\mathbb T}\log S_q\,dm,
+\qquad
+L_q^- -\log A_0^-\ge\log\frac{r_q}{R_q},
+\]
+则输出 \(\mathsf{NO\text{-}PASS}(M,\Delta)\)，表示当前有限正则化模型无法产生通过证书。若上下界无法与阈值分离，则输出 \(\mathsf{NULL}\)。
+
+最后，\(\int\log S_q\,dm\) 本身也可有限核验。上界可由 Fenchel 切线给出：对任意正函数 \(Y\)，
+\[
+\log S_q
+\le
+\log Y+\frac{S_q}{Y}-1.
+\]
+若 \(Y\) 取正三角多项式或正有理函数，右侧积分可通过 Fourier 系数、留数公式或区间积分得到严格上界。下界可在有限弧分割上使用割线：若某弧上
+\[
+S_q(e^{i\theta})\in[a_j,b_j],
+\qquad
+0<a_j<b_j,
+\]
+则 \(\log x\) 在 \([a_j,b_j]\) 上的割线 \(\ell_j(x)\) 满足
+\[
+\ell_j(S_q(e^{i\theta}))\le\log S_q(e^{i\theta}),
+\]
+从而给出该弧上的严格积分下界。
+
+因此，外多项式合成问题被压缩为
+\[
+\text{Fej\'er--Riesz 谱因子}
+\;+\;
+\text{Haar 对数平均}
+\;+\;
+\text{正则化偏差账本}
+\;+\;
+\text{Jensen 排斥阈值}.
+\]
+剩余核心量是 \(\mathcal B_{r,M}\) 的有效上界，尤其是边界小值区域对 \(\log(W+\Delta)-\log W\) 的贡献。

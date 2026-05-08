@@ -10,22 +10,38 @@ client script --POST--> oracle_server.py <--poll-- Tampermonkey userscript
 ## Quick Start
 
 1. Install Tampermonkey.
-2. Install `chatgpt_oracle.user.js`.
+2. Install the platform script:
+   - Windows: `chatgpt_oracle_windows.user.js`
+   - macOS: `chatgpt_oracle_macos.user.js`
+
+   `chatgpt_oracle.user.js` is only a compatibility stub; do not install it as
+   the active Oracle script.
 3. Start the local server:
 
 ```bash
 python oracle_server.py
 ```
 
-4. Open one or more dedicated Oracle tabs:
+4. Open one or more dedicated Oracle tabs. For Automath Project mode, use:
 
 ```text
-https://chatgpt.com/?oracle=1
-https://chatgpt.com/?oracle=2
-https://chatgpt.com/?oracle=3
+https://chatgpt.com/g/g-p-69f858a02c188191ae7f489459bbf866-automathzheng-liu/project?oracle=1
+https://chatgpt.com/g/g-p-69f858a02c188191ae7f489459bbf866-automathzheng-liu/project?oracle=2
+https://chatgpt.com/g/g-p-69f858a02c188191ae7f489459bbf866-automathzheng-liu/project?oracle=3
 ```
 
+Generic non-Project tabs also work with `https://chatgpt.com/?oracle=N`,
+but Project mode is preferred when the task should use uploaded PDFs or Project
+context.
+
 Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
+
+After updating the userscript file, open Tampermonkey, replace the installed
+script content, save it, and reload every dedicated Oracle tab.
+
+Windows script `v5.18` also checks `/task_status/<id>` while waiting for a
+response, so a task cancelled by the supervisor clears local tab state and the
+tab resumes polling without a manual refresh.
 
 ## Protocol
 

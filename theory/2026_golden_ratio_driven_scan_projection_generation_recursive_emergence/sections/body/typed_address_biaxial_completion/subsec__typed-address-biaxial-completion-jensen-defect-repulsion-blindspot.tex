@@ -1,6 +1,120 @@
 \subsection{Jensen 缺陷、排斥半径与有限采样盲区}\label{subsec:typed-address-biaxial-completion-jensen-defect-repulsion-blindspot}
 原稿中关于 Jensen 缺陷的相关条目，一处展开为 12.67--12.76 的缺陷链，另一处则被重写为面向证书编译的局部接口；两种写法共享同一骨架：先把盘内零点事件压缩为半径参数上的 Jensen 缺陷，再把缺陷值压缩为排斥半径，随后用对数半径导数律把这条静态证书链重新展开为零点计数的动态账本，并最终暴露固定半径采样在边界层上的结构性盲区。本节把这几条结果压成一条统一的正文接口，以便后续直接接入 Toeplitz--PSD 正性层级与统一离线验证器。
 
+\subsubsection{标准 Cayley 图表下的 RH--Jensen 等价}\label{subsubsec:typed-address-biaxial-completion-cayley-jensen-standard-chart}
+为使后续证书链具有完全明确的解析坐标，固定 \(a>0\)，并令
+\[
+s_a(w):=\frac12+a\frac{1+w}{1-w},
+\qquad
+F_a(w):=\xi(s_a(w)),
+\]
+其中
+\[
+\xi(s)=\frac12s(s-1)\pi^{-s/2}\Gamma(s/2)\zeta(s)
+\]
+为完成化 Riemann \(\xi\)-函数。由于 Cayley 变换满足
+\[
+|w|<1
+\iff
+\Re\frac{1+w}{1-w}>0
+\iff
+\Re s_a(w)>\frac12,
+\]
+单位圆盘正是临界线右侧半平面的盘坐标化。若 \(F_a(0)\ne0\)，定义
+\[
+\mathcal J_a(r)
+:=
+\frac1{2\pi}\int_0^{2\pi}\log |F_a(re^{i\theta})|\,\dd\theta
+-\log |F_a(0)|,
+\qquad 0<r<1.
+\]
+
+\begin{theorem}[Cayley--Jensen 缺陷等价]\label{thm:typed-address-biaxial-completion-cayley-jensen-gap-equivalence}
+固定 \(a>0\)，并假设 \(F_a(0)\ne0\)。则
+\[
+\mathrm{RH}
+\iff
+F_a(w)\ne0\quad(|w|<1)
+\iff
+\mathcal J_a(r)=0\quad(0<r<1).
+\]
+若 \((w_j)\) 为 \(F_a\) 在单位圆盘内的零点，按重数计，则 Jensen 公式给出
+\[
+\mathcal J_a(r)
+=
+\sum_{|w_j|<r}\log\frac{r}{|w_j|}.
+\]
+因此 \(\mathcal J_a(r)\ge0\)，并且在没有零点落在 \(|w|=r\) 上的半径处成立
+\[
+\frac{\dd}{\dd(\log r)}\mathcal J_a(r)
+=
+N_a(r),
+\qquad
+N_a(r):=\#\{j:\ |w_j|<r\}.
+\]
+\end{theorem}
+\begin{proof}
+完成化函数 \(\xi\) 的零点正是 \(\zeta\) 的非平凡零点，并满足函数方程 \(\xi(1-s)=\xi(s)\)。因而 RH 等价于 \(\xi\) 在半平面 \(\Re s>1/2\) 内无零点：若左半平面存在非平凡零点，则由函数方程在右半平面得到对称零点。Cayley 变换 \(s=s_a(w)\) 把单位圆盘双全纯地送到 \(\Re s>1/2\)，于是 RH 等价于 \(F_a\) 在 \(\DD\) 内无零点。
+
+在 \(F_a(0)\ne0\) 的假设下，Jensen 公式直接给出所示求和表达。该求和恒非负，并且对所有 \(0<r<1\) 恒为零当且仅当没有任何盘内零点。对 \(\log r\) 求导时，每个已进入半径层的零点贡献 \(1\)，尚未进入者贡献 \(0\)，从而得到计数律；在阈值半径处则按阶跃测度理解。证毕。
+\end{proof}
+
+定理 \ref{thm:typed-address-biaxial-completion-cayley-jensen-gap-equivalence} 把 RH 的标准解析表述压成一个缺陷函数恒零问题。这里的缺陷不是外加误差项，而是盘内零点计数测度在对数半径方向上的积分账本；其正值、折角与斜率跳跃均具有零点论意义。
+
+\begin{proposition}[标准右半平面图表中的端点压缩]\label{prop:typed-address-biaxial-completion-cayley-endpoint-compression-standard-chart}
+设 \(\rho=\beta+i\gamma\) 为满足 \(\beta>1/2\) 的候选离线零点，记
+\[
+\delta:=\beta-\frac12>0.
+\]
+其在 \(s_a\) 图表中的圆盘坐标为
+\[
+w_\rho
+=
+\frac{\delta-a+i\gamma}{\delta+a+i\gamma}.
+\]
+于是
+\[
+|w_\rho|^2
+=
+\frac{(\delta-a)^2+\gamma^2}{(\delta+a)^2+\gamma^2},
+\qquad
+1-|w_\rho|^2
+=
+\frac{4a\delta}{(\delta+a)^2+\gamma^2}.
+\]
+特别地，当 \(|\gamma|\to\infty\) 时，
+\[
+1-|w_\rho|
+\sim
+\frac{2a\delta}{\gamma^2}.
+\]
+若 \(r_q=1-2^{-q}\)，则该零点能被第 \(q\) 个 dyadic 半径层捕捉的必要尺度为
+\[
+q\gtrsim
+2\log_2|\gamma|-\log_2(2a\delta).
+\]
+\end{proposition}
+\begin{proof}
+由 \(s_a(w)=\rho\) 得
+\[
+\frac{\rho-\frac12}{a}=\frac{1+w}{1-w},
+\]
+反解即
+\[
+w_\rho=
+\frac{\rho-\frac12-a}{\rho-\frac12+a}
+=
+\frac{\delta-a+i\gamma}{\delta+a+i\gamma}.
+\]
+取模平方得到第一式，并相减得到 \(1-|w_\rho|^2\) 的闭式。再由
+\[
+1-|w_\rho|=\frac{1-|w_\rho|^2}{1+|w_\rho|}
+\]
+以及 \(|w_\rho|\to1\) 得到渐近式。最后，\(r_q>|w_\rho|\) 等价于 \(2^{-q}<1-|w_\rho|\)，代入上述主项即得 dyadic 深度尺度。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-cayley-endpoint-compression-standard-chart} 给出固定 Cayley 图表的基本资源律：高度 \(|\gamma|\) 的离线事件并非以 \(1/|\gamma|\) 的尺度逼近边界，而是以 \(1/\gamma^2\) 的尺度被压入端点层。因此固定半径审计在高高度区域必然产生边界层盲区，除非引入共动前缀、层析反演或其他正交地址资源。
+
 \subsubsection{把盘内零点事件压成一族半径参数}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-radius-family}
 圆盘完成化接口的首要作用，在于把“开圆盘内是否存在零点”这一全局解析命题，转写为一族半径 \(\varrho\in(0,1)\) 上的有限证书对象。
 

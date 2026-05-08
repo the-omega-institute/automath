@@ -1,0 +1,75 @@
+\section{Fibonacci syntax and finite Zeckendorf sections}
+\label{sec:golden-syntax}
+
+Throughout the paper we use the Fibonacci convention
+\[
+F_1=F_2=1,\qquad F_{k+1}=F_k+F_{k-1}\quad(k\ge2).
+\]
+Thus \(1,1,2,3,5,8,\ldots\) is the Fibonacci sequence.
+
+A binary word \(z=z_1\cdots z_m\in\{0,1\}^m\) is called \emph{Zeckendorf-legal} if it contains no adjacent ones:
+\[
+z_kz_{k+1}\ne 11\qquad(1\le k<m).
+\]
+The stable type space at resolution \(m\) is
+\[
+X_m:=\{z\in\{0,1\}^m:z_kz_{k+1}\ne 11\text{ for all }1\le k<m\}.
+\]
+
+For \(z\in\{0,1\}^m\), define its shifted Fibonacci value by
+\[
+V_m(z):=\sum_{k=1}^{m}z_kF_{k+1}.
+\]
+The shift by one index is chosen so that legal words of length \(m\) represent exactly the interval
+\[
+\{0,1,\ldots,F_{m+2}-1\}.
+\]
+
+\begin{lemma}[Finite Zeckendorf section]
+\label{lem:finite-zeckendorf-section}
+For every \(m\ge1\), the map
+\[
+V_m:X_m\to\{0,1,\ldots,F_{m+2}-1\},
+\qquad
+V_m(z)=\sum_{k=1}^{m}z_kF_{k+1},
+\]
+is a bijection.  In particular,
+\[
+|X_m|=F_{m+2}.
+\]
+\end{lemma}
+
+\begin{proof}
+We argue by induction on \(m\).  For \(m=1\), \(X_1=\{0,1\}\), and
+\[
+V_1(0)=0,\qquad V_1(1)=F_2=1.
+\]
+Thus \(V_1(X_1)=\{0,1\}=\{0,\ldots,F_3-1\}\).
+
+Assume the claim for all smaller lengths.  Partition \(X_m\) according to the last digit.  If \(z_m=0\), then the prefix \(z_1\cdots z_{m-1}\) is an arbitrary element of \(X_{m-1}\).  By induction, the possible values are
+\[
+0,1,\ldots,F_{m+1}-1.
+\]
+If \(z_m=1\), legality forces \(z_{m-1}=0\).  The first \(m-2\) digits form an arbitrary word in \(X_{m-2}\).  Hence the value is
+\[
+F_{m+1}+r,\qquad 0\le r<F_m.
+\]
+This case gives precisely
+\[
+F_{m+1},F_{m+1}+1,\ldots,F_{m+1}+F_m-1.
+\]
+Since \(F_{m+1}+F_m=F_{m+2}\), the two cases cover \(\{0,1,\ldots,F_{m+2}-1\}\) without overlap.  Therefore \(V_m\) is bijective.
+\end{proof}
+
+\begin{definition}[Finite Zeckendorf section]
+\label{def:finite-zeckendorf-section}
+The inverse of \(V_m\) is denoted
+\[
+s_m:\{0,1,\ldots,F_{m+2}-1\}\to X_m.
+\]
+We call \(s_m\) the finite Zeckendorf section.
+\end{definition}
+
+\begin{remark}[Role of \(\varphi\)]
+The asymptotic growth rate of \(|X_m|\) is \(\varphi=(1+\sqrt5)/2\).  The role of \(\varphi\) in this paper is grammatical: it determines the legal syntax of stable representatives and the normalization section.  No physical interpretation is assumed.
+\end{remark}

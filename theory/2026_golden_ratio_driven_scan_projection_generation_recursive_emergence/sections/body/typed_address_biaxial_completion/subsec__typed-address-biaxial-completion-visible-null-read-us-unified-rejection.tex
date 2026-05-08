@@ -318,6 +318,117 @@ W^{\flat}:=
 \]
 通过时，系统输出 \(\mathrm{NonZero}\)、\(\mathrm{RootInterval}\)、禁入半径、Toeplitz--PSD 或端点原子质量上界；拒绝时，则输出定义 \ref{def:typed-address-biaxial-completion-standardized-rejection} 的 \(W^{\flat}\)。因而协议内的“对象”不再只是数值结果，而是“可被三端证书与统一拒绝规则共同解释的声明”。
 \end{proposition}
+\begin{definition}[typed alien--fold 桥门]\label{distill:ecalle_resurgence_mould_calculus_and_alien_derivatives-alien_fold_bridge_family-typed-bridge-gate}
+固定有限批次 \(B\subset \mathrm{Addr}_{\mathrm{US}}\) 与精度索引 \(b\)。称
+\[
+(\mathcal M_b(B),\mathcal F_\bullet,\Sigma,\nabla_{\mathrm{fold}},\{\Delta_\alpha\}_{\alpha\in\Sigma},\{a_\alpha\}_{\alpha\in\Sigma})
+\]
+为 \(B\) 上的 typed alien--fold 桥数据，若满足如下条件：
+\begin{enumerate}
+  \item \(\mathcal M_b(B)\) 是由该批次中可见地址、通过核验的 \(\mathrm{Cert}_b(F)\) 对象以及有限 \(\mathrm{NULL}\) 失败标签生成的有限维 \(\mathbb Q\)-向量空间，并带有残差深度滤过
+  \[
+  0=\mathcal F_{-1}\subset \mathcal F_0\subset\cdots\subset \mathcal F_D=\mathcal M_b(B).
+  \]
+  其中 \(\mathcal F_0\) 是已落在 \(X_{\mathrm{vis}}=\mathsf{Phase}\) 且通过 \(\mathbf{PW}\) 类型检查的可见层。
+  \item \(\Sigma\) 是同一有限批次经 Borel-lift singular support 得到的有限 residual 地址集；对每个 \(\alpha\in\Sigma\)，\(\Delta_\alpha\) 是 alien residual extraction 算子，满足
+  \[
+  \Delta_\alpha(\mathcal F_d)\subset \mathcal F_{d-1}\qquad(d\geq 0),
+  \]
+  而 \(\nabla_{\mathrm{fold}}\) 是本地 fold evolution 生成元，亦满足
+  \[
+  \nabla_{\mathrm{fold}}(\mathcal F_d)\subset \mathcal F_{d-1}.
+  \]
+  \item 对每个 \(\alpha\in\Sigma\) 给定桥系数 \(a_\alpha\in\mathbb Q\)。若 \(T\) 是任一降低一层滤过的算子，记
+  \[
+  \operatorname{gr}_{d-1,d}(T):\mathcal F_d/\mathcal F_{d-1}\longrightarrow \mathcal F_{d-1}/\mathcal F_{d-2},
+  \qquad [x]\longmapsto [Tx].
+  \]
+  第 \(d\) 层 alien--fold 桥缺陷定义为
+  \[
+  \mathfrak B_{\alpha,d}:=\operatorname{gr}_{d-1,d}(\Delta_\alpha-a_\alpha\nabla_{\mathrm{fold}}).
+  \]
+\end{enumerate}
+称线性自同构 \(G\) 为可见三角规范化，若 \(G(\mathcal F_d)=\mathcal F_d\)、\(Gx-x\in\mathcal F_{d-1}\) 对所有 \(x\in\mathcal F_d\) 成立，并且 \(G\) 在 \(\mathcal F_0\) 上保持可见读出、\(\mathbf{PW}\) 类型检查与 \(\mathrm{Ver}\) 的有限证书编码。规范化后的算子定义为
+\[
+\Delta_\alpha^G:=G\Delta_\alpha G^{-1},\qquad \nabla_{\mathrm{fold}}^G:=G\nabla_{\mathrm{fold}}G^{-1}.
+\]
+\end{definition}
+
+\begin{theorem}[bridge 失败的规范不变量与 typed \(\mathrm{NULL}\) 见证]\label{distill:ecalle_resurgence_mould_calculus_and_alien_derivatives-alien_fold_bridge_family-visible-null-bridge-defect-obstruction}
+设给定定义 \ref{distill:ecalle_resurgence_mould_calculus_and_alien_derivatives-alien_fold_bridge_family-typed-bridge-gate} 中的 typed alien--fold 桥数据。则：
+\begin{enumerate}
+  \item 对任意可见三角规范化 \(G\)，有
+  \[
+  \operatorname{gr}_{d-1,d}(\Delta_\alpha^G-a_\alpha\nabla_{\mathrm{fold}}^G)=\mathfrak B_{\alpha,d}
+  \]
+  在自然识别的关联分次层上成立。因此 \(\mathfrak B_{\alpha,d}\) 是可见三角规范化不变量。
+  \item 若某个 \(\mathfrak B_{\alpha,d}\neq 0\)，则不存在保持 \(X_{\mathrm{vis}}\)、\(\mathbf{PW}\) 与 \(\mathrm{Ver}\) 编码的可见三角规范化，使第 \(d\) 层 bridge law
+  \[
+  \operatorname{gr}_{d-1,d}(\Delta_\alpha)=a_\alpha\operatorname{gr}_{d-1,d}(\nabla_{\mathrm{fold}})
+  \]
+  成立。并且存在有限失败见证
+  \[
+  W=(\alpha,d,[x],\mathfrak B_{\alpha,d}[x]),\qquad [x]\in\mathcal F_d/\mathcal F_{d-1},
+  \]
+  可由离线验证器复核其非零性。于是任一把 bridge law 纳入 \(\mathrm{Chk}\) 的 \(\mathrm{Read}_{\mathrm{US}}\) 查询，在该批次上必须输出带见证的 \(\mathrm{NULL}\)，而不是输出规范化依赖的可见值。
+  \item 若 \(\mathfrak B_{\alpha,d}=0\) 对所有 \(\alpha\in\Sigma\) 与所有 \(1\leq d\leq D\) 成立，则 mould word bookkeeping 是强制的：对任意字
+  \[
+  w=\alpha_k\cdots\alpha_1,\qquad \alpha_j\in\Sigma,
+  \]
+  令 \(\Delta_w:=\Delta_{\alpha_k}\cdots\Delta_{\alpha_1}\) 与 \(a_w:=a_{\alpha_k}\cdots a_{\alpha_1}\)。若 \(k\leq d\)，则
+  \[
+  \operatorname{gr}_{d-k,d}(\Delta_w)=a_w\operatorname{gr}_{d-k,d}(\nabla_{\mathrm{fold}}^k):
+  \mathcal F_d/\mathcal F_{d-1}\longrightarrow \mathcal F_{d-k}/\mathcal F_{d-k-1}.
+  \]
+  因而多层 hidden residual depth 不能任意堆叠；其可见可核验部分完全由 native fold evolution 的同阶迭代控制。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+记 \(T_\alpha:=\Delta_\alpha-a_\alpha\nabla_{\mathrm{fold}}\)。由于 \(\Delta_\alpha\) 与 \(\nabla_{\mathrm{fold}}\) 都降低一层滤过，\(T_\alpha(\mathcal F_d)\subset \mathcal F_{d-1}\)。令 \(G\) 为可见三角规范化，并取 \(x\in\mathcal F_d\)。由三角性，存在 \(r\in\mathcal F_{d-1}\) 使
+\[
+G^{-1}x=x+r.
+\]
+于是
+\[
+G T_\alpha G^{-1}x=G T_\alpha(x+r)=G(T_\alpha x+T_\alpha r).
+\]
+其中 \(T_\alpha r\in\mathcal F_{d-2}\)。又因 \(T_\alpha x\in\mathcal F_{d-1}\)，三角性给出
+\[
+G(T_\alpha x)-T_\alpha x\in\mathcal F_{d-2}.
+\]
+故
+\[
+G T_\alpha G^{-1}x-T_\alpha x\in\mathcal F_{d-2}.
+\]
+这正说明
+\[
+\operatorname{gr}_{d-1,d}(G T_\alpha G^{-1})=\operatorname{gr}_{d-1,d}(T_\alpha),
+\]
+即第一项成立。
+
+若 \(\mathfrak B_{\alpha,d}\neq0\)，而某个可见三角规范化能使第 \(d\) 层 bridge law 成立，则规范化后的缺陷为零；这与第一项的不变性矛盾。由于 \(\mathcal M_b(B)\) 有限维，非零线性映射 \(\mathfrak B_{\alpha,d}\) 必在某个分次类 \([x]\) 上取非零值。以固定基写出 \([x]\) 与 \(\mathfrak B_{\alpha,d}[x]\) 的有理坐标，即得到有限见证 \(W\)。验证器只需检查 \(x\in\mathcal F_d\)、其像在 \(\mathcal F_{d-1}/\mathcal F_{d-2}\) 中非零以及该像等于 \(\mathfrak B_{\alpha,d}[x]\)，故该见证可离线复核。若 bridge law 被纳入 \(\mathrm{Chk}\)，则命题 \ref{prop:typed-address-biaxial-completion-visible-read-partial} 的偏读出规则迫使相应查询返回 \(\mathrm{NULL}\)，且失败来源正是上述有限见证。
+
+最后证明 mould word 断言。由 \(\mathfrak B_{\alpha,d}=0\) 对所有层成立可知，对任意 \(y\in\mathcal F_e\)，
+\[
+\Delta_\alpha y-a_\alpha\nabla_{\mathrm{fold}}y\in\mathcal F_{e-2}.
+\]
+对字长 \(k\) 归纳。\(k=1\) 正是上一式的关联分次表述。设结论对 \(k-1\) 成立。对 \(x\in\mathcal F_d\)，有
+\[
+\Delta_{\alpha_{k-1}\cdots\alpha_1}x-a_{\alpha_{k-1}\cdots\alpha_1}\nabla_{\mathrm{fold}}^{k-1}x\in\mathcal F_{d-k}.
+\]
+再施加 \(\Delta_{\alpha_k}\) 时，误差项被送入 \(\mathcal F_{d-k-1}\)。而对主项使用一层 bridge law，得
+\[
+\Delta_{\alpha_k}\bigl(a_{\alpha_{k-1}\cdots\alpha_1}\nabla_{\mathrm{fold}}^{k-1}x\bigr)
+-a_{\alpha_k}a_{\alpha_{k-1}\cdots\alpha_1}\nabla_{\mathrm{fold}}^k x
+\in \mathcal F_{d-k-1}.
+\]
+合并即
+\[
+\Delta_w x-a_w\nabla_{\mathrm{fold}}^k x\in\mathcal F_{d-k-1},
+\]
+这等价于所需的 \(\operatorname{gr}_{d-k,d}\) 恒等式。证毕。
+\end{proof}
+
 \begin{proof}
 命题 \ref{prop:typed-address-biaxial-completion-visible-read-partial}、命题 \ref{prop:typed-address-biaxial-completion-read-us-typed-precision}、命题 \ref{prop:typed-address-biaxial-completion-endpoint-heat-kernel-complement}、定义 \ref{def:typed-address-biaxial-completion-three-end-certificate}、命题 \ref{prop:typed-address-biaxial-completion-unified-rejection-rule} 与定义 \ref{def:typed-address-biaxial-completion-standardized-rejection} 共同给出这一闭包。证毕。
 \end{proof}

@@ -1,0 +1,383 @@
+\subsubsection{Product kernel 的有限弧积分证书}\label{subsubsec:typed-address-biaxial-completion-finite-arc-quadrature-product-kernel-certificate}
+Packet 感知证书给出了安全的解析上界；当该上界偏粗时，可在每个有限弧 cell 上直接核验乘积核积分。关键是先剥离全部 logarithmic singular part，再对剩余光滑函数做区间 Taylor 求积。
+
+设 \(K=[u,v]\) 位于单一角坐标图中，并且在该 cell 上已有下界
+\[
+W_r(e^{i\theta})
+\ge
+C_K\prod_{\ell\in A}q_\ell(\theta)^{\mu_\ell},
+\qquad
+q_\ell(\theta):=(\theta-\theta_\ell)^2+\gamma_\ell^2.
+\]
+其中 \(A\) 是 active zero 集合，inactive 因子已经吸收到 \(C_K\) 中。证书只需使用安全数据
+\[
+0<c_K\le C_K,
+\qquad
+d\ge\delta,
+\]
+并令
+\[
+Q(\theta):=\prod_{\ell\in A}q_\ell(\theta)^{\mu_\ell},
+\]
+若 \(A=\varnothing\)，约定 \(Q\equiv1\)。则局部正则化贡献
+\[
+B_K
+:=
+\frac12\int_K
+\log\left(1+\frac{\delta}{W_r(e^{i\theta})}\right)\,dm(\theta)
+=
+\frac1{4\pi}
+\int_K
+\log\left(1+\frac{\delta}{W_r(e^{i\theta})}\right)d\theta
+\]
+满足
+\[
+B_K
+\le
+\frac1{4\pi}
+\int_K
+\log\left(
+1+\frac{d}{c_KQ(\theta)}
+\right)d\theta.
+\]
+
+若某个 active zero 满足 \(\gamma_\ell=0\) 且 \(\theta_\ell\in K\)，原 integrand 具有可积对数奇性，直接使用 Simpson、Gauss 或 Taylor 求积会使高阶导数界退化。为此使用恒等式
+\[
+\log\left(
+1+\frac{d}{c_KQ(\theta)}
+\right)
+=
+R_K(\theta)-\log c_K-\sum_{\ell\in A}\mu_\ell\log q_\ell(\theta),
+\]
+其中
+\[
+R_K(\theta):=\log\bigl(d+c_KQ(\theta)\bigr).
+\]
+由于 \(d>0\)，\(R_K\) 在整个 \(K\) 上光滑；所有对数奇性都由显式项 \(-\log q_\ell\) 承担。
+
+\begin{lemma}[单因子对数积分闭式]\label{lem:typed-address-biaxial-completion-single-log-factor-integral}
+对 \(q(\theta)=(\theta-a)^2+\gamma^2\)，定义
+\[
+\mathcal L(K;a,\gamma)
+:=
+\int_u^v
+-\log\left((\theta-a)^2+\gamma^2\right)d\theta.
+\]
+若 \(\gamma>0\)，置
+\[
+\Lambda_\gamma(x)
+:=
+2x-x\log(x^2+\gamma^2)-2\gamma\arctan(x/\gamma).
+\]
+若 \(\gamma=0\)，置
+\[
+\Lambda_0(x):=2x-2x\log|x|,
+\qquad
+x\log|x|:=0\quad(x=0).
+\]
+则
+\[
+\mathcal L(K;a,\gamma)
+=
+\Lambda_\gamma(v-a)-\Lambda_\gamma(u-a)
+\]
+在两种情形下均成立。
+\end{lemma}
+\begin{proof}
+当 \(\gamma>0\) 时直接求导得到
+\[
+\frac{d}{dx}\Lambda_\gamma(x)
+=
+-\log(x^2+\gamma^2).
+\]
+当 \(\gamma=0\) 时，\(\Lambda_0'(x)=-2\log|x|=-\log(x^2)\) 在 \(x\ne0\) 处成立，且 \(x\log|x|\) 在 \(0\) 处按连续延拓取 \(0\)，故跨越零点的积分仍为有限闭式值。证毕。
+\end{proof}
+
+\begin{lemma}[参数盒下的对数奇性预算]\label{lem:typed-address-biaxial-completion-log-singular-box-budget}
+设
+\[
+\theta_\ell\in\Theta_\ell,
+\qquad
+\gamma_\ell\in\Gamma_\ell,
+\qquad
+\gamma_\ell^-:=\inf\Gamma_\ell.
+\]
+令
+\[
+a_\ell^*
+:=
+\operatorname{proj}_{\Theta_\ell}\left(\frac{u+v}{2}\right)
+\]
+为中点到角向盒 \(\Theta_\ell\) 的投影，并定义
+\[
+\mathcal L_\ell^+(K)
+:=
+\mathcal L(K;a_\ell^*,\gamma_\ell^-).
+\]
+则对所有 \(\theta_\ell\in\Theta_\ell\)、\(\gamma_\ell\in\Gamma_\ell\)，均有
+\[
+\int_K-\log\bigl((\theta-\theta_\ell)^2+\gamma_\ell^2\bigr)d\theta
+\le
+\mathcal L_\ell^+(K).
+\]
+\end{lemma}
+\begin{proof}
+函数
+\[
+-\log\bigl((\theta-a)^2+\gamma^2\bigr)
+\]
+随 \(\gamma\) 单调下降，故最坏情形取 \(\gamma=\gamma_\ell^-\)。固定 \(\gamma\) 后，令
+\[
+J(a):=\int_u^v-\log\bigl((\theta-a)^2+\gamma^2\bigr)d\theta.
+\]
+由闭式表达可得
+\[
+J'(a)
+=
+\log
+\frac{(v-a)^2+\gamma^2}{(u-a)^2+\gamma^2}.
+\]
+因此 \(J\) 在无约束情形下于 \(a=(u+v)/2\) 取最大值；带盒约束时，最大点为中点投影。证毕。
+\end{proof}
+
+光滑余项 \(R_K\) 通过区间 Taylor 求积核验。将
+\[
+K=\bigsqcup_{j=1}^M J_j,
+\qquad
+J_j=[x_j-h_j,x_j+h_j].
+\]
+在每个 \(J_j\) 上取 Taylor 阶数 \(p\)。设参数盒为
+\[
+\Pi_K:=\prod_{\ell\in A}(\Theta_\ell\times\Gamma_\ell).
+\]
+证书给出区间包络
+\[
+D_{j,n}
+\supseteq
+\left\{
+R_K^{(n)}(x_j;\pi):\pi\in\Pi_K
+\right\},
+\qquad
+0\le n\le p,
+\]
+以及
+\[
+M_{j,p+1}
+\ge
+\sup_{\theta\in J_j,\ \pi\in\Pi_K}
+\left|R_K^{(p+1)}(\theta;\pi)\right|.
+\]
+记 \(\overline D_{j,n}:=\sup D_{j,n}\)。由 Taylor 公式与对称区间上奇次项积分为零，
+\[
+\int_{J_j}R_K(\theta)d\theta
+\le
+\sum_{\substack{0\le n\le p\\ n\ {\rm even}}}
+\overline D_{j,n}
+\frac{2h_j^{n+1}}{n!(n+1)}
++
+\frac{2M_{j,p+1}h_j^{p+2}}{(p+1)!(p+2)}.
+\]
+定义
+\[
+\mathcal R_j^+
+:=
+\sum_{\substack{0\le n\le p\\ n\ {\rm even}}}
+\overline D_{j,n}
+\frac{2h_j^{n+1}}{n!(n+1)}
++
+\frac{2M_{j,p+1}h_j^{p+2}}{(p+1)!(p+2)},
+\qquad
+\mathcal R_K^+:=\sum_{j=1}^M\mathcal R_j^+.
+\]
+
+\begin{theorem}[有限弧 product-kernel 求积证书]\label{thm:typed-address-biaxial-completion-finite-arc-product-kernel-quadrature}
+设在 \(K=[u,v]\) 上有
+\[
+W_r(e^{i\theta})
+\ge
+c_K
+\prod_{\ell\in A}q_\ell(\theta)^{\mu_\ell},
+\qquad
+c_K>0,
+\]
+且 \(\delta\le d\)。若
+\[
+\int_KR_K(\theta)d\theta\le\mathcal R_K^+
+\]
+由上述区间 Taylor 求积证书给出，并且每个 active 因子满足
+\[
+\int_K-\log q_\ell(\theta)d\theta
+\le
+\mathcal L_\ell^+(K),
+\]
+则
+\[
+B_K\le B_{\mathrm{IQ}}^+(K),
+\]
+其中
+\[
+B_{\mathrm{IQ}}^+(K)
+:=
+\frac1{4\pi}
+\left[
+\mathcal R_K^+
+-
+|K|\log c_K
++
+\sum_{\ell\in A}\mu_\ell\mathcal L_\ell^+(K)
+\right].
+\]
+\end{theorem}
+\begin{proof}
+由 \(W_r\ge c_KQ\) 与 \(\delta\le d\)，得到
+\[
+\log\left(1+\frac{\delta}{W_r}\right)
+\le
+\log\left(1+\frac{d}{c_KQ}\right).
+\]
+再用 logarithmic peeling 恒等式
+\[
+\log\left(1+\frac{d}{c_KQ}\right)
+=
+\log(d+c_KQ)-\log c_K-\log Q,
+\]
+并展开
+\[
+\log Q=\sum_{\ell\in A}\mu_\ell\log q_\ell.
+\]
+分别代入 \(\mathcal R_K^+\) 与 \(\mathcal L_\ell^+(K)\) 的上界，再乘以 \(1/(4\pi)\)，即得结论。证毕。
+\end{proof}
+
+\begin{definition}[有限弧求积证书]\label{def:typed-address-biaxial-completion-finite-arc-quadrature-certificate}
+一份有限弧求积证书记为
+\[
+\mathsf{IQCert}_K
+:=
+\left(
+K,A,\{(\Theta_\ell,\Gamma_\ell,\mu_\ell)\}_{\ell\in A},
+c_K,d,\mathcal T,p,
+\{D_{j,n}\},\{M_{j,p+1}\},
+\{\mathcal L_\ell^+(K)\},
+B_{\mathrm{IQ}}^+(K)
+\right),
+\]
+其中 \(\mathcal T=\{J_j\}_{j=1}^M\) 是 \(K\) 的有限划分。验证器检查：
+\begin{enumerate}
+  \item chart check：\(K\) 位于单一角坐标图内；若跨越 \(2\pi\) cut，则先拆分；
+  \item model lower check：
+  \[
+  W_r(e^{i\theta})\ge
+  c_K\prod_{\ell\in A}q_\ell(\theta)^{\mu_\ell};
+  \]
+  \item partition check：\(K=\bigsqcup_jJ_j\)；
+  \item log-peeling check：使用
+  \[
+  \log\left(1+\frac{d}{c_KQ}\right)
+  =
+  \log(d+c_KQ)-\log c_K-\log Q;
+  \]
+  \item singular log budget check：每个 \(\mathcal L_\ell^+(K)\) 由引理 \ref{lem:typed-address-biaxial-completion-log-singular-box-budget} 给出；
+  \item Taylor derivative enclosure check：区间自动微分验证 \(D_{j,n}\) 与 \(M_{j,p+1}\)；
+  \item quadrature arithmetic check：核验 \(\mathcal R_K^+\) 与 \(B_{\mathrm{IQ}}^+(K)\) 的有限算术。
+\end{enumerate}
+通过后输出
+\[
+B_K\le B_{\mathrm{IQ}}^+(K).
+\]
+\end{definition}
+
+该证书比 Hölder 型解析上界保留了更多 packet 几何。Hölder 降维把乘积核压成若干单中心积分，会丢失不同零点因子之间的相互 shield；有限弧求积直接处理
+\[
+\log\left(
+1+\frac{d}{c_K\prod_{\ell\in A}q_\ell(\theta)^{\mu_\ell}}
+\right),
+\]
+因此在零点分离适中时通常给出更小预算。极端近碰撞时，求积证书可能需要更多 cell 与更高 Taylor 阶数，因此全局证书应保留解析上界与求积上界的最小值。
+
+对 packet 弧 \(I\) 的 split cell \(K_s\)，上一段已经给出
+\[
+W_r(e^{i\theta})
+\ge
+C_s\prod_{\ell\in A_s}q_\ell(\theta)^{\mu_\ell}.
+\]
+若每个 \(K_s\) 均生成 \(\mathsf{IQCert}_{K_s}\)，定义
+\[
+B_{\mathrm{split,IQ}}^+(I)
+:=
+\sum_sB_{\mathrm{IQ}}^+(K_s).
+\]
+最终可取
+\[
+B_{\mathrm{packet,final}}^+(I)
+:=
+\min\left\{
+B_{\mathrm{Holder}}^+(I),\,
+B_{\mathrm{split}}^+(I),\,
+B_{\mathrm{split,IQ}}^+(I)
+\right\}.
+\]
+
+区间求积还需要结构化失败见证。定义
+\[
+\mathsf{IQFail}_K
+\in
+\{
+\mathrm{ChartFail},
+\mathrm{ModelLowerFail},
+\mathrm{PartitionFail},
+\mathrm{LogBudgetFail},
+\mathrm{DerivativeEnclosureFail},
+\mathrm{RoundoffFail},
+\mathrm{QuadBudgetFail},
+\mathrm{CertificateSizeFail}
+\}.
+\]
+其中 \(\mathrm{ChartFail}\) 表示 \(K\) 未落入单一角坐标图；\(\mathrm{ModelLowerFail}\) 表示乘积下界缺失；\(\mathrm{PartitionFail}\) 表示划分有缺口或重叠；\(\mathrm{LogBudgetFail}\) 表示某个 \(\Theta_\ell,\Gamma_\ell\) 的对数预算不能可靠上界化；\(\mathrm{DerivativeEnclosureFail}\) 表示区间自动微分无法验证导数包络；\(\mathrm{RoundoffFail}\) 表示 \(\log,\arctan\) 等初等函数的向外舍入失败；\(\mathrm{QuadBudgetFail}\) 表示证书形式正确但 \(B_{\mathrm{IQ}}^+\) 仍过大；\(\mathrm{CertificateSizeFail}\) 表示 cell 数或 Taylor 阶数达到预设上限仍未闭合预算。
+
+自适应细化可只针对光滑余项。对 \(J_j=[x_j-h_j,x_j+h_j]\)，定义局部不确定预算
+\[
+E_j
+:=
+\frac{2M_{j,p+1}h_j^{p+2}}{(p+1)!(p+2)}
++
+\sum_{\substack{0\le n\le p\\ n\ {\rm even}}}
+\operatorname{wid}(D_{j,n})
+\frac{2h_j^{n+1}}{n!(n+1)}.
+\]
+若 \(E_j\) 过大，则二分 \(J_j\)。由于 singular part 已被闭式剥离，即使 \(J_j\) 含有 \(\theta_\ell\)，也不会出现无限导数；需要细化的只是光滑函数 \(R_K(\theta)=\log(d+c_KQ(\theta))\)。
+
+全局正则化预算可相应替换为
+\[
+B_{\mathrm{ZA,IQ}}^+
+:=
+\frac12m(E_0)\log\left(1+\frac{\delta}{m_0}\right)
++
+\sum_jB_{I_j}^+,
+\]
+其中每个小值弧允许取单中心、packet 解析或 packet 求积三类上界中的最小有效值。若
+\[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA,IQ}}^+
+<
+\log\frac rR,
+\]
+则 Jensen 排斥链仍给出
+\[
+\Phi_a(w)\ne0
+\qquad(|w|\le R).
+\]
+证书链由此细化为
+\[
+\mathsf{RTCert}
+\Longrightarrow
+\mathsf{PACert}
+\Longrightarrow
+\mathsf{IQCert}
+\Longrightarrow
+\mathsf{ZACert}_{\mathrm{IQ}}
+\Longrightarrow
+\text{Jensen 排斥证书}.
+\]

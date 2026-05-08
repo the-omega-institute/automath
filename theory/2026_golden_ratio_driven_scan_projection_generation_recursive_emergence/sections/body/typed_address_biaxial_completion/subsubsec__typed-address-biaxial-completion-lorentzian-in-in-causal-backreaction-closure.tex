@@ -1,0 +1,560 @@
+\subsubsection{Lorentzian in-in 有效作用、因果核、态依赖重整化与半经典 backreaction 闭包}\label{subsubsec:typed-address-biaxial-completion-lorentzian-in-in-causal-backreaction-closure}
+热核与谱 \(\zeta\) 账本给出 Euclidean elliptic determinant 的局域反项、anomaly data 与 Wilson coefficient running；EFT 截断账本给出低能导数层、residual 与可观测误差界。半经典 backreaction 还需要另一层数据：Lorentzian 初值问题中的量子态、Hadamard 奇异结构、closed-time-path 轮廓、retarded response 与噪声核。其核心区别是
+\[
+\boxed{
+\text{Euclidean determinant}
+\Rightarrow
+\text{local counterterms}
+}
+\qquad\text{but}\qquad
+\boxed{
+\text{Lorentzian backreaction}
+\Rightarrow
+\text{in-in causal expectation}.
+}
+\]
+因此不能把 Euclidean 有效作用简单替换为 Lorentzian metric 后直接变分。半经典几何源项必须来自同一态 \(\rho\) 上的 in-in 期望值。
+
+\paragraph{Closed-time-path 泛函。}
+给定 Lorentzian admissible 域、初始 Cauchy hypersurface \(\Sigma_i\) 与量子态 \(\rho\)，定义
+\[
+\boxed{
+Z_{\rm CTP}[g^+,g^-;\rho]
+=
+{\rm Tr}\!\left(
+U_{g^+}(t_f,t_i)\rho U_{g^-}(t_f,t_i)^\dagger
+\right).
+}
+\]
+其中 \(g^+\) 与 \(g^-\) 分别位于正向与反向时间支。令
+\[
+W_{\rm CTP}[g^+,g^-;\rho]
+:=
+-i\log Z_{\rm CTP}[g^+,g^-;\rho].
+\]
+物理极限是 diagonal limit：
+\[
+g^+=g^-=g.
+\]
+归一化 convention 要求
+\[
+Z_{\rm CTP}[g,g;\rho]=1,
+\qquad
+W_{\rm CTP}[g,g;\rho]=0.
+\]
+路径积分表达可写为
+\[
+Z_{\rm CTP}
+=
+\int
+\mathcal D\phi^+\mathcal D\phi^-\,
+\rho(\phi_i^+,\phi_i^-)
+\exp\!\left(
+iS_m[\phi^+,g^+]-iS_m[\phi^-,g^-]
+\right),
+\]
+并带有终端 sewing condition \(\phi^+(t_f)=\phi^-(t_f)\)。
+
+\begin{definition}[Lorentzian 态证书]\label{def:typed-address-biaxial-completion-lorentzian-state-cert}
+称 \(\mathsf{LorentzianStateCert}\) 为 Lorentzian 态证书，若它包含 \(M,g,\Sigma_i,\mathcal A(M),\rho\)、initial-data ledger、state-class ledger、purity-thermality ledger、gauge-constraint ledger、domain-of-dependence ledger 与 round hash。验证器检查 \(\Sigma_i\) 是否为 admissible Cauchy surface，\(\rho\) 是否为正归一态，是否满足场方程与 gauge constraints，并是否在目标观测窗口中定义良好。缺少态数据时输出 \(\mathsf{StateDataNull}\)。把不同态的 \(\langle T_{\mu\nu}\rangle\) 视为同一对象时输出 \(\mathsf{StateDependenceOmissionFail}\)。
+\end{definition}
+
+\begin{definition}[CTP 生成泛函证书]\label{def:typed-address-biaxial-completion-ctp-generating-functional-cert}
+称 \(\mathsf{CTPGeneratingFunctionalCert}\) 为 CTP 生成泛函证书，若它包含 \(Z_{\rm CTP},W_{\rm CTP},g^+,g^-,\rho,\Sigma_i,\Sigma_f\)、contour ledger、initial-density-matrix ledger、final-sewing ledger、normalization ledger、gauge-fixing-ghost ledger 与 round hash。验证器检查
+\[
+Z_{\rm CTP}[g,g;\rho]=1.
+\]
+若使用 in-out action 产生 expectation-value backreaction，输出 \(\mathsf{InOutBackreactionMismatchFail}\)。若缺少 closed-time-path 轮廓数据，输出 \(\mathsf{CTPContourNull}\)。
+\end{definition}
+
+\paragraph{Hadamard 条件与局域重整化。}
+Lorentzian curved-spacetime QFT 中，局域 stress tensor 期望值需要态满足 Hadamard 奇异结构。二点函数
+\[
+G^+_\rho(x,x')
+=
+\omega_\rho(\widehat\phi(x)\widehat\phi(x'))
+\]
+在短距离处应具有
+\[
+G^+_\rho(x,x')
+\sim
+\frac{1}{8\pi^2}
+\left[
+\frac{U(x,x')}{\sigma_+(x,x')}
++V(x,x')\log\!\left(\frac{\sigma_+(x,x')}{\ell^2}\right)
++W_\rho(x,x')
+\right].
+\]
+其中 \(U,V\) 由局部几何与 operator 决定，而 \(W_\rho\) 是态依赖的光滑余项。于是
+\[
+\boxed{
+\langle T_{\mu\nu}(x)\rangle_{\rho,{\rm ren}}
+=
+\lim_{x'\to x}
+D_{\mu\nu}(x,x')
+\left[
+G^+_\rho(x,x')-H(x,x')
+\right]
++\mathcal C_{\mu\nu}[g].
+}
+\]
+这里 \(H\) 是 Hadamard parametrix，\(\mathcal C_{\mu\nu}[g]\) 是局域、协变、守恒的几何 ambiguity。
+
+\begin{definition}[Hadamard 条件证书]\label{def:typed-address-biaxial-completion-hadamard-condition-cert}
+称 \(\mathsf{HadamardConditionCert}\) 为 Hadamard 条件证书，若它包含 \(G^+_\rho,H,U,V,W_\rho\)、wavefront-set ledger、local-parametrix ledger、short-distance-singularity ledger、state-smooth-remainder ledger 与 round hash。验证器检查 \(G^+_\rho-H\) 在 coincidence limit 中是否足够光滑。非 Hadamard 态下声称存在局域重整化 stress tensor 时输出 \(\mathsf{NonHadamardStressTensorFail}\)。未提交 Hadamard 数据时输出 \(\mathsf{HadamardConditionNull}\)。
+\end{definition}
+
+\begin{definition}[Hadamard 重整化 stress tensor 证书]\label{def:typed-address-biaxial-completion-hadamard-renormalized-stress-tensor-cert}
+称 \(\mathsf{HadamardRenormalizedStressTensorCert}\) 为 Hadamard 重整化 stress tensor 证书，若它包含 \(\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}\)、bidifferential operator \(D_{\mu\nu}(x,x')\)、parametrix \(H(x,x')\)、point-splitting ledger、local-covariance ledger、renormalization-scale ledger、ambiguity ledger、counterterm-matching ledger 与 round hash。验证器检查
+\[
+\nabla^\mu\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}=0
+\]
+是否在允许 anomaly 与 boundary flux 的口径内成立。若 stress ambiguity 与热核反项账本不一致，输出 \(\mathsf{StressCountertermMismatchFail}\)。若同一 local counterterm 同时进入几何侧与 stress ambiguity，输出 \(\mathsf{CountertermDoubleCountingFail}\)。
+\end{definition}
+
+\paragraph{in-in 变分。}
+采用 convention
+\[
+\boxed{
+\langle T_{\mu\nu}(x)\rangle_\rho
+=
+-\frac{2}{\sqrt{-g(x)}}
+\left.
+\frac{\delta W_{\rm CTP}[g^+,g^-;\rho]}
+{\delta g_+^{\mu\nu}(x)}
+\right|_{g^+=g^-=g}.
+}
+\]
+符号依赖 action convention，需由 stress-tensor-sign ledger 固定。带引力作用量时，方程来自
+\[
+\left.
+\frac{\delta}{\delta g_+^{\mu\nu}}
+\left[
+S_{\rm grav}[g^+]-S_{\rm grav}[g^-]
++W_{\rm CTP}[g^+,g^-;\rho]
+\right]
+\right|_{g^+=g^-=g}
+=0.
+\]
+若
+\[
+E_{\mu\nu}^{\rm grav}[g]
+=
+\frac{1}{\kappa}(G_{\mu\nu}+\Lambda g_{\mu\nu})
++\sum_a\alpha_aH_{\mu\nu}^{(a)}+\cdots,
+\]
+则物理方程写作
+\[
+\boxed{
+E_{\mu\nu}^{\rm grav}[g]
+=
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}.
+}
+\]
+
+\begin{definition}[in-in 变分证书]\label{def:typed-address-biaxial-completion-in-in-variation-cert}
+称 \(\mathsf{InInVariationCert}\) 为 in-in 变分证书，若它包含 \(W_{\rm CTP}\)、\(S_{\rm grav}[g^+]-S_{\rm grav}[g^-]\)、\(\delta/\delta g_+\)、diagonal-limit ledger、\(\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}\)、stress-tensor-sign ledger、boundary-term ledger 与 round hash。验证器检查 diagonal limit 中的变分是否给出 real expectation value。若得到的是
+\[
+\frac{\langle{\rm out}|T_{\mu\nu}|{\rm in}\rangle}{\langle{\rm out}|{\rm in}\rangle}
+\]
+却标记为态期望值，输出 \(\mathsf{InOutExpectationMislabelFail}\)。
+\end{definition}
+
+\paragraph{因果 response kernel。}
+对 metric perturbation \(h_{\alpha\beta}\)，in-in stress tensor 的线性响应为
+\[
+\delta\langle T_{\mu\nu}(x)\rangle
+=
+\int d^4y\sqrt{-g(y)}\,
+\Pi^{\rm ret}_{\mu\nu\alpha\beta}(x,y)
+h^{\alpha\beta}(y).
+\]
+因果性要求
+\[
+\boxed{
+\Pi^{\rm ret}_{\mu\nu\alpha\beta}(x,y)=0
+\quad\text{unless }y\in J^-(x).
+}
+\]
+operator 形式中，
+\[
+\Pi^{\rm ret}_{\mu\nu\alpha\beta}(x,y)
+\sim
+i\theta(x^0-y^0)
+\omega_\rho\!\left(
+[\widehat T_{\mu\nu}(x),\widehat T_{\alpha\beta}(y)]
+\right)
++\text{contact terms}.
+\]
+Euclidean form factor
+\[
+R\log(-\Delta_E/\mu^2)R
+\]
+若进入 Lorentzian backreaction，必须配备 retarded prescription：
+\[
+\left[
+\log\!\left(\frac{-\Box_{\rm ret}}{\mu^2}\right)f
+\right](x)
+=
+\int d^4y\sqrt{-g(y)}\,K_{\rm ret}(x,y)f(y),
+\qquad
+K_{\rm ret}(x,y)=0\quad (y\notin J^-(x)).
+\]
+
+\begin{definition}[因果核证书]\label{def:typed-address-biaxial-completion-causal-kernel-cert}
+称 \(\mathsf{CausalKernelCert}\) 为因果核证书，若它包含 \(\Pi^{\rm ret}_{\mu\nu\alpha\beta}\)、support ledger、retarded-Green-function ledger、contact-term ledger、Ward-identity ledger 与 round hash。验证器检查
+\[
+{\rm supp}\,\Pi^{\rm ret}(x,\cdot)\subseteq J^-(x).
+\]
+将 Feynman、advanced 或 Euclidean kernel 标记为 retarded kernel 时输出 \(\mathsf{CausalKernelMismatchFail}\)。缺少 support condition 时输出 \(\mathsf{CausalKernelNull}\)。
+\end{definition}
+
+\begin{definition}[Euclidean--Lorentzian continuation 证书]\label{def:typed-address-biaxial-completion-euclidean-lorentzian-continuation-cert}
+称 \(\mathsf{EuclideanLorentzianContinuationCert}\) 为 Euclidean--Lorentzian continuation 证书，若它包含 \(\Gamma_E,W_{\rm CTP}\)、analytic-continuation ledger、thermal-KMS ledger、contour-prescription ledger、retarded-prescription ledger、IR-branch-cut ledger 与 round hash。验证器检查 Euclidean result 是否只用于 local counterterms；若用于 finite nonlocal term，则必须声明 analytic continuation 与 retarded in-in prescription。把 Euclidean determinant 直接当作 Lorentzian causal response 时输出 \(\mathsf{EuclideanCausalMisuseFail}\)。
+\end{definition}
+
+\paragraph{Ward identity、trace anomaly 与 scheme。}
+半经典方程要求左右两侧协变散度匹配：
+\[
+\nabla^\mu
+\left(
+E_{\mu\nu}^{\rm grav}
+-
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}
+\right)=0
+\]
+到截断 residual、boundary flux 或 anomaly ledger 允许的阶数。trace anomaly 不是 non-conservation。对 conformal matter，可有
+\[
+\langle T^\mu_{\ \mu}\rangle_{\rm ren}
+=
+\frac{1}{(4\pi)^2}
+\left(
+c\,C_{\mu\nu\rho\sigma}C^{\mu\nu\rho\sigma}
+-a\,E_4
++b\,\Box R
+\right),
+\]
+其中 \(b\) 依赖 scheme，而 \(a,c\) 是 anomaly data。该账本必须与热核 \(A_4\) 系数一致。
+
+\begin{definition}[Ward identity 守恒证书]\label{def:typed-address-biaxial-completion-ward-identity-conservation-cert}
+称 \(\mathsf{WardIdentityConservationCert}\) 为 Ward identity 守恒证书，若它包含 \(\nabla^\mu\langle T_{\mu\nu}\rangle_{\rm ren}\)、\(\nabla^\mu E_{\mu\nu}^{\rm grav}\)、diffeomorphism-Ward ledger、anomaly ledger、boundary-flux ledger、truncation-Ward-residual ledger 与 round hash。验证器检查
+\[
+\nabla^\mu
+\left(
+E_{\mu\nu}^{\rm grav}
+-
+\langle T_{\mu\nu}\rangle_{\rm ren}
+\right)
+=
+O(\varepsilon^{N+1}).
+\]
+守恒失败时输出 \(\mathsf{WardIdentityConservationFail}\)。把 trace anomaly 误写为 non-conservation 时输出 \(\mathsf{TraceAnomalyMisinterpretationFail}\)。
+\end{definition}
+
+\begin{definition}[trace anomaly 账本]\label{def:typed-address-biaxial-completion-trace-anomaly-ledger}
+称 \(\mathsf{TraceAnomalyLedger}\) 为 trace anomaly 账本，若它包含 \(\langle T^\mu_{\ \mu}\rangle_{\rm ren}\)、coefficients \(a,c,b\)、conformal-class ledger、scheme-dependent \(\Box R\) ledger、heat-kernel \(A_4\) ledger 与 round hash。验证器检查 anomaly coefficient 是否与热核系数相容。不相容时输出 \(\mathsf{TraceAnomalyHeatKernelMismatchFail}\)。
+\end{definition}
+
+\paragraph{初值、约束与传播。}
+半经典 backreaction 是初值问题。给定
+\[
+(h_{ij},K_{ij};\rho_{\Sigma_i}),
+\]
+需满足半经典 Hamiltonian 与 momentum constraints：
+\[
+{}^{(3)}R+K^2-K_{ij}K^{ij}-2\Lambda
+=
+2\kappa\,\langle T_{\mu\nu}\rangle n^\mu n^\nu+\cdots,
+\]
+\[
+D_j(K^{ij}-h^{ij}K)
+=
+\kappa\,\langle T_{\mu\nu}\rangle n^\mu h^{\nu i}+\cdots.
+\]
+dots 表示 higher-curvature 与 EFT residual 项。若 Ward identity 与几何 Bianchi identity 成立，且初始 constraints 成立，则 constraints 应沿演化传播。
+
+\begin{definition}[初值 backreaction 证书]\label{def:typed-address-biaxial-completion-initial-value-backreaction-cert}
+称 \(\mathsf{InitialValueBackreactionCert}\) 为初值 backreaction 证书，若它包含 \(\Sigma_i,h_{ij},K_{ij},\rho_{\Sigma_i}\)、Hamiltonian-constraint ledger、momentum-constraint ledger、quantum-state-compatibility ledger、gauge-choice ledger 与 round hash。只给形式方程而无初始数据时输出 \(\mathsf{InitialDataNull}\)。
+\end{definition}
+
+\begin{definition}[约束传播证书]\label{def:typed-address-biaxial-completion-constraint-propagation-cert}
+称 \(\mathsf{ConstraintPropagationCert}\) 为约束传播证书，若它包含 \(\mathcal H,\mathcal M_i\)、\(\nabla^\mu E_{\mu\nu}\)、\(\nabla^\mu\langle T_{\mu\nu}\rangle\)、gauge-hyperbolic-reduction ledger、constraint-evolution ledger、boundary-flux ledger 与 round hash。验证器检查
+\[
+\mathcal H|_{\Sigma_i}=0,\quad
+\mathcal M_i|_{\Sigma_i}=0
+\quad\Longrightarrow\quad
+\mathcal H=\mathcal M_i=0
+\]
+在声明域内成立。约束不传播时输出 \(\mathsf{ConstraintPropagationFail}\)。
+\end{definition}
+
+\paragraph{噪声核与随机闭包。}
+mean stress tensor 不是完整的量子源项。令
+\[
+\widehat t_{\mu\nu}
+:=
+\widehat T_{\mu\nu}
+-
+\langle\widehat T_{\mu\nu}\rangle.
+\]
+定义 noise kernel：
+\[
+\boxed{
+N_{\mu\nu\alpha\beta}(x,y)
+=
+\frac12
+\omega_\rho\!\left(
+\{\widehat t_{\mu\nu}(x),\widehat t_{\alpha\beta}(y)\}
+\right).
+}
+\]
+若 fluctuations 可忽略，得到 deterministic backreaction；若不可忽略，则需要 stochastic source \(\xi_{\mu\nu}\)：
+\[
+E_{\mu\nu}^{(\le2N)}[g]
+=
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}
++\xi_{\mu\nu}
++O(\varepsilon^{N+1}),
+\]
+\[
+\mathbb E_\xi[\xi_{\mu\nu}]=0,
+\qquad
+\mathbb E_\xi[\xi_{\mu\nu}(x)\xi_{\alpha\beta}(y)]
+=
+N_{\mu\nu\alpha\beta}(x,y).
+\]
+以 smearing tensor \(f^{\mu\nu}\) 定义 fluctuation ratio：
+\[
+\eta_{\rm fluc}
+:=
+\frac{
+\left(N_{\mu\nu\alpha\beta}f^{\mu\nu}f^{\alpha\beta}\right)^{1/2}
+}{
+\left|\langle T_{\mu\nu}\rangle f^{\mu\nu}\right|+\delta_{\rm floor}
+}.
+\]
+\(\eta_{\rm fluc}\ll1\) 时可输出 deterministic pass；\(\eta_{\rm fluc}=O(1)\) 时需 stochastic pass；\(\eta_{\rm fluc}\gg1\) 时 mean-field backreaction 失效。
+
+\begin{definition}[noise kernel 证书]\label{def:typed-address-biaxial-completion-noise-kernel-cert}
+称 \(\mathsf{NoiseKernelCert}\) 为 noise kernel 证书，若它包含 \(N_{\mu\nu\alpha\beta}\)、\(\widehat t_{\mu\nu}\)、symmetrized-correlator ledger、positivity ledger、conservation ledger、fluctuation-magnitude ledger 与 round hash。验证器检查
+\[
+\int f^{\mu\nu}N_{\mu\nu\alpha\beta}f^{\alpha\beta}\ge0
+\]
+以及允许 contact terms 下的 conservation。fluctuations 与 mean 同阶却使用 deterministic equation 时输出 \(\mathsf{StressFluctuationDominanceFail}\)。未估计 fluctuations 时输出 \(\mathsf{NoiseKernelNull}\)。
+\end{definition}
+
+\begin{definition}[随机半经典证书]\label{def:typed-address-biaxial-completion-stochastic-semiclassical-cert}
+称 \(\mathsf{StochasticSemiclassicalCert}\) 为随机半经典证书，若它包含 \(\xi_{\mu\nu},N_{\mu\nu\alpha\beta},\eta_{\rm fluc}\)、smearing ledger、Gaussian-approximation ledger、Einstein--Langevin ledger、observable-variance ledger 与 round hash。验证器检查 stochastic correction 是否落在 observable error budget 内。超出误差阈值而被忽略时输出 \(\mathsf{StochasticResidualOmissionFail}\)。
+\end{definition}
+
+\paragraph{influence functional 与态依赖。}
+把 matter 积掉得到 influence action
+\[
+S_{\rm IF}[g^+,g^-;\rho]=W_{\rm CTP}[g^+,g^-;\rho].
+\]
+通常
+\[
+S_{\rm IF}={\rm Re}\,S_{\rm IF}+i\,{\rm Im}\,S_{\rm IF}.
+\]
+实部编码 dissipation 与 retarded response，虚部编码 noise kernel；热平衡中二者满足 fluctuation--dissipation relation。
+
+局域反项与 Hadamard singular part 是 state-independent 的；finite smooth part 通常依赖态：
+\[
+\boxed{
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}
+=
+T_{\mu\nu}^{\rm geom,ren}[g]
++T_{\mu\nu}^{\rm state}[g,\rho].
+}
+\]
+其中 \(T_{\mu\nu}^{\rm state}\) 可包含 occupation number、thermal flux、particle creation 与 retarded memory integral。
+
+\begin{definition}[influence functional 证书]\label{def:typed-address-biaxial-completion-influence-functional-cert}
+称 \(\mathsf{InfluenceFunctionalCert}\) 为 influence functional 证书，若它包含 \(S_{\rm IF}[g^+,g^-;\rho]\)、\({\rm Re}\,S_{\rm IF}\)、\({\rm Im}\,S_{\rm IF}\)、\(\Pi^{\rm ret}\)、\(N_{\mu\nu\alpha\beta}\)、dissipation ledger、noise ledger、fluctuation-dissipation ledger 与 round hash。虚部非零且相关却被忽略时输出 \(\mathsf{InfluenceNoiseOmissionFail}\)。
+\end{definition}
+
+\begin{definition}[态依赖账本]\label{def:typed-address-biaxial-completion-state-dependence-ledger}
+称 \(\mathsf{StateDependenceLedger}\) 为态依赖账本，若它包含 \(\rho,G^+_\rho,W_\rho(x,x')\)、\(T_{\mu\nu}^{\rm state}\)、occupation-number ledger、thermal-flux ledger、particle-creation ledger、memory-kernel ledger 与 round hash。若对所有态使用同一个 vacuum stress tensor，输出 \(\mathsf{StateUniversalizationFail}\)。
+\end{definition}
+
+\paragraph{长时项、order reduction 与稳定性。}
+Lorentzian nonlocal response 可产生 secular terms，例如 \(\varepsilon T/L\)、\(\varepsilon\log a(T)\) 或 \(\varepsilon(T/L)^p\)。定义
+\[
+\varepsilon_{\rm sec}(T_{\rm obs})
+=
+\varepsilon\left(\frac{T_{\rm obs}}{L}\right)^p
+\quad\text{or}\quad
+\varepsilon\log\!\left(\frac{a(T_{\rm obs})}{a_i}\right).
+\]
+若 \(\varepsilon_{\rm sec}\) 不小，则固定阶 perturbative backreaction 失效或需要 resummation。
+
+local higher derivatives 可按 lower-order EOM order-reduce；massless nonlocal memory 不能无 mass gap 地局域展开。若
+\[
+E^{(2)}[g]+\varepsilon E_{\rm local}^{(4)}[g]
++\varepsilon\int_{\Sigma_i}^{x}K_{\rm ret}(x,y)g(y)\,dy
+=T[g,\rho],
+\]
+则 \(E_{\rm local}^{(4)}\) 可替换为 order-reduced correction，而 \(K_{\rm ret}\) 必须保持因果支撑。
+
+\begin{definition}[Lorentzian order reduction 证书]\label{def:typed-address-biaxial-completion-lorentzian-order-reduction-cert}
+称 \(\mathsf{LorentzianOrderReductionCert}\) 为 Lorentzian order reduction 证书，若它包含 \(E^{(2)},E^{(4)},K_{\rm ret}\)、local-higher-derivative ledger、memory-kernel ledger、mass-gap ledger、runaway-exclusion ledger、state-dependent-reduction ledger 与 round hash。验证器检查 local higher derivatives 是否被 order-reduced、nonlocal kernel 是否保持 causal、massless tail 是否未被错误局域化、runaway modes 是否排除。无 mass gap 时把 long-tail memory 展开为 local polynomial，输出 \(\mathsf{MasslessMemoryLocalExpansionFail}\)。
+\end{definition}
+
+\begin{definition}[secular growth 证书]\label{def:typed-address-biaxial-completion-secular-growth-cert}
+称 \(\mathsf{SecularGrowthCert}\) 为 secular growth 证书，若它包含 \(T_{\rm obs},L,\varepsilon,\varepsilon_{\rm sec}(T_{\rm obs})\)、memory-integral ledger、resummation ledger、time-window ledger 与 round hash。验证器检查 \(\varepsilon_{\rm sec}(T_{\rm obs})<\varepsilon_{\max}\)。长时项超出 perturbative regime 时输出 \(\mathsf{SecularGrowthFail}\)。需要 resummation 但未提供时输出 \(\mathsf{ResummationRequiredNull}\)。
+\end{definition}
+
+对背景解 \(g_0\) 的扰动 \(h\)，线性化半经典方程为
+\[
+\mathcal L_{\rm sc}^{\rm ret}h=s,
+\qquad
+\mathcal L_{\rm sc}^{\rm ret}
+:=
+\mathcal L_{\rm grav}-\mathcal L_{\rm matter}^{\rm ret}.
+\]
+需要 retarded resolvent estimate：
+\[
+\|h\|_{\mathcal X}
+\le
+S_{\rm sc}\|s\|_{\mathcal Y}.
+\]
+
+\begin{definition}[linear response 稳定证书]\label{def:typed-address-biaxial-completion-linear-response-stability-cert}
+称 \(\mathsf{LinearResponseStabilityCert}\) 为 linear response 稳定证书，若它包含 \(\mathcal L_{\rm sc}^{\rm ret}\)、\(K_{\rm ret}\)、\(S_{\rm sc}\)、gauge-fixing ledger、mode-spectrum ledger、retarded-resolvent ledger、growing-mode ledger、time-window ledger 与 round hash。若存在未受控 growing modes，输出 \(\mathsf{SemiclassicalInstabilityFail}\)。
+\end{definition}
+
+\paragraph{可观测误差界与总证书。}
+对 gauge-invariant observable \(\mathcal O[g,\rho]\)，预测误差应包含
+\[
+\boxed{
+|\Delta\mathcal O|
+\le
+\Delta_{\rm EFT}
++\Delta_{\rm state}
++\Delta_{\rm stochastic}
++\Delta_{\rm secular}
++\Delta_{\rm numerical}.
+}
+\]
+其中 stochastic variance 由
+\[
+{\rm Var}(\mathcal O)
+=
+\int
+D\mathcal O^{\mu\nu}(x)
+N_{\mu\nu\alpha\beta}(x,y)
+D\mathcal O^{\alpha\beta}(y)\,dx\,dy
++\cdots
+\]
+控制。
+
+\begin{definition}[半经典可观测误差证书]\label{def:typed-address-biaxial-completion-semiclassical-observable-error-cert}
+称 \(\mathsf{SemiclassicalObservableErrorCert}\) 为半经典可观测误差证书，若它包含 \(\mathcal O,D\mathcal O,\Delta_{\rm EFT},\Delta_{\rm state},\Delta_{\rm stochastic},\Delta_{\rm secular},\Delta_{\rm total}\)、gauge-invariant-observable ledger、smearing ledger、noise-propagation ledger、time-window ledger 与 round hash。验证器检查 \(\Delta_{\rm total}\le\Delta_{\rm target}\)。observable 非 gauge invariant 时输出 \(\mathsf{GaugeDependentObservableFail}\)。随机 variance 未计入时输出 \(\mathsf{ObservableNoiseOmissionFail}\)。
+\end{definition}
+
+\begin{definition}[Lorentzian in-in backreaction 闭包证书]\label{def:typed-address-biaxial-completion-lorentzian-in-in-backreaction-closure-cert}
+称 \(\mathsf{LorentzianInInBackreactionClosureCert}\) 为 Lorentzian in-in backreaction 闭包证书，若它包含热核重整化闭包证书、EFT 截断闭包证书、\(\mathsf{LorentzianStateCert}\)、\(\mathsf{HadamardConditionCert}\)、\(\mathsf{CTPGeneratingFunctionalCert}\)、\(\mathsf{InInVariationCert}\)、\(\mathsf{CausalKernelCert}\)、\(\mathsf{EuclideanLorentzianContinuationCert}\)、\(\mathsf{HadamardRenormalizedStressTensorCert}\)、\(\mathsf{WardIdentityConservationCert}\)、\(\mathsf{TraceAnomalyLedger}\)、\(\mathsf{InitialValueBackreactionCert}\)、\(\mathsf{ConstraintPropagationCert}\)、\(\mathsf{NoiseKernelCert}\)、\(\mathsf{StochasticSemiclassicalCert}\)、\(\mathsf{InfluenceFunctionalCert}\)、\(\mathsf{StateDependenceLedger}\)、\(\mathsf{SecularGrowthCert}\)、\(\mathsf{LorentzianOrderReductionCert}\)、\(\mathsf{LinearResponseStabilityCert}\)、\(\mathsf{SemiclassicalObservableErrorCert}\)、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+主要通过标签为
+\[
+\mathsf{CausalInInEffectiveActionPass},\quad
+\mathsf{HadamardRenormalizedStressTensorPass},\quad
+\mathsf{DeterministicSemiclassicalBackreactionPass},\quad
+\mathsf{StochasticSemiclassicalBackreactionPass},\quad
+\mathsf{CausalNonlocalKernelPass},\quad
+\mathsf{StateDependentBackreactionPass}.
+\]
+主要 NULL 类型为
+\[
+\mathsf{StateDataNull},\quad
+\mathsf{HadamardConditionNull},\quad
+\mathsf{CTPContourNull},\quad
+\mathsf{CausalKernelNull},\quad
+\mathsf{InitialDataNull},\quad
+\mathsf{NoiseKernelNull},\quad
+\mathsf{ResummationRequiredNull}.
+\]
+主要 FAIL 类型为
+\[
+\mathsf{EuclideanCausalMisuseFail},\quad
+\mathsf{InOutBackreactionMismatchFail},\quad
+\mathsf{NonHadamardStressTensorFail},\quad
+\mathsf{WardIdentityConservationFail},\quad
+\mathsf{CountertermDoubleCountingFail},\quad
+\mathsf{CausalKernelMismatchFail},
+\]
+\[
+\mathsf{StressFluctuationDominanceFail},\quad
+\mathsf{MasslessMemoryLocalExpansionFail},\quad
+\mathsf{SecularGrowthFail},\quad
+\mathsf{SemiclassicalInstabilityFail}.
+\]
+
+\begin{theorem}[Lorentzian in-in 半经典 backreaction 的可靠性]\label{thm:typed-address-biaxial-completion-lorentzian-in-in-semiclassical-backreaction-soundness}
+若
+\[
+\mathsf{VerifyLorentzianInInBackreactionClosure}
+(\mathsf{LorentzianInInBackreactionClosureCert})
+=
+\mathsf{DeterministicSemiclassicalBackreactionPass},
+\]
+则存在 \((M,g,\Sigma_i,\rho)\) 与 \(2N\)-导数 Lorentzian EFT 截断 \(E_{\mu\nu}^{(\le2N)}[g]\)，使得
+\[
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}
+=
+-\frac{2}{\sqrt{-g}}
+\left.
+\frac{\delta W_{\rm CTP}}
+{\delta g_+^{\mu\nu}}
+\right|_{g^+=g^-=g}
+\]
+是同一态 \(\rho\) 上的 real in-in expectation value，并且
+\[
+\boxed{
+E_{\mu\nu}^{(\le2N)}[g]
+=
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}[g]
++O(\varepsilon^{N+1})
+}
+\]
+在声明的 Lorentzian admissible 域内成立。该方程具有 retarded causal kernel、Hadamard point-splitting 重整化、counterterm matching、Ward conservation、初值约束传播、fluctuation control、secular-growth control 与 linear-response stability estimate。
+\end{theorem}
+\begin{proof}
+Lorentzian 态证书给出 \(\rho\) 与 \(\Sigma_i\)。Hadamard 条件证书保证 \(G^+_\rho-H\) 足够光滑，从而 point-splitting stress tensor 可定义。CTP 生成泛函证书与 in-in 变分证书保证 stress tensor 是 in-in expectation value，而非 in-out matrix element。因果核证书给出 retarded support。Hadamard 重整化 stress tensor 证书把 ambiguity 与热核 counterterms 对齐，Ward identity 证书给出协变守恒到截断 residual。初值与约束传播证书保证方程作为初值问题闭合。noise kernel 与 fluctuation ratio 证书确认 deterministic mean-field approximation 可用。secular growth 与 linear response 稳定证书把 residual 控制推到解与 observable 的误差界。故所示半经典 backreaction 方程可靠。证毕。
+\end{proof}
+
+\begin{theorem}[随机半经典闭包的可靠性]\label{thm:typed-address-biaxial-completion-stochastic-semiclassical-closure-soundness}
+若验证器输出 \(\mathsf{StochasticSemiclassicalBackreactionPass}\)，则存在噪声场 \(\xi_{\mu\nu}\)，满足
+\[
+\mathbb E_\xi[\xi_{\mu\nu}]=0,
+\qquad
+\mathbb E_\xi[\xi_{\mu\nu}(x)\xi_{\alpha\beta}(y)]
+=
+N_{\mu\nu\alpha\beta}(x,y),
+\]
+并且 backreaction equation 应写成
+\[
+\boxed{
+E_{\mu\nu}^{(\le2N)}[g]
+=
+\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}
++\xi_{\mu\nu}
++O(\varepsilon^{N+1}).
+}
+\]
+对任意 smeared gauge-invariant observable，预测包含 mean 与 variance；若 variance 在目标误差阈值内，则随机半经典预测通过。
+\end{theorem}
+\begin{proof}
+Noise kernel 证书给出正半定 covariance kernel 与 conservation ledger。随机半经典证书把该 covariance 通过 \(\xi_{\mu\nu}\) 写入 Einstein--Langevin 型方程，并由可观测误差证书传播到 smeared observables 的 variance bound。因此通过标签给出的不是 deterministic mean equation，而是带噪声源的可审计随机闭包。证毕。
+\end{proof}
+
+综上，Euclidean heat kernel 只确定局域反项与 anomaly data，Wilsonian EFT 只确定有限阶截断与 residual；真正的 Lorentzian semiclassical equation 还必须通过 Hadamard 态、CTP in-in 变分、retarded kernel、初值约束、噪声估计与可观测误差界。最精确的压缩表述是：
+\[
+\boxed{
+\text{semiclassical Einstein equation}
+=
+\text{Hadamard state 上的 CTP causal expectation equation}
+}
+\]
+而不是 Euclidean determinant 的直接 Lorentzian 变分。

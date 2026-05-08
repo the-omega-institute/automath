@@ -3,11 +3,19 @@
 <!-- distillation-board:start -->
 | 来源 | 状态 | 目标章节 | 写回数 | 待扩张数 |
 |---|---|---|---:|---:|
-| `bourgain` | 进行中 | recursive_addressing, fold_residual_time, typed_address_biaxial_completion, circle_dimension_phase_gate, spg, zeta_finite_part, emergent_arithmetic, statistical_stability, group_unification | 2 | 6 |
-| `cech_cohomology` | 进行中 | typed_address_biaxial_completion, physical_spacetime_skeleton, circle_dimension_phase_gate, recursive_addressing, pom, folding, conclusion, fold_residual_time, spg, zeta_finite_part | 16 | 8 |
+| `bourgain` | 进行中 | recursive_addressing, fold_residual_time, typed_address_biaxial_completion, circle_dimension_phase_gate, spg, zeta_finite_part, emergent_arithmetic, statistical_stability, group_unification | 17 | 6 |
+| `breuillard_green_tao_approximate_groups_helfgott_growth` | 进行中 | group_unification, fold_residual_time, recursive_addressing, folding, finite_field_equational_saturation, emergent_arithmetic | 13 | 9 |
+| `cech_cohomology` | 进行中 | typed_address_biaxial_completion, physical_spacetime_skeleton, circle_dimension_phase_gate, recursive_addressing, pom, folding, conclusion, fold_residual_time, spg, zeta_finite_part | 17 | 8 |
+| `connes_consani_arithmetic_site` | 进行中 | circle_dimension_phase_gate, zeta_finite_part, typed_address_biaxial_completion, spg, physical_spacetime_skeleton, emergent_arithmetic, statistical_stability, folding, recursive_addressing | 6 | 8 |
+| `connes_spectral_triples_chamseddine_connes_spectral_action` | 进行中 | typed_address_biaxial_completion, spg, circle_dimension_phase_gate, statistical_stability, fold_residual_time, group_unification | 13 | 6 |
+| `ecalle_resurgence_mould_calculus_alien_derivatives` | 进行中 | fold_residual_time, typed_address_biaxial_completion, recursive_addressing | 11 | 6 |
 | `euclid_elements` | 进行中 | pom, folding, emergent_arithmetic, circle_dimension_phase_gate, physical_spacetime_skeleton, typed_address_biaxial_completion, recursive_addressing, fold_residual_time, spg, zeta_finite_part, conclusion, group_unification | 40 | 10 |
 | `gromov_coarse_filling_holonomic_obstruction` | 进行中 | recursive_addressing, fold_residual_time, physical_spacetime_skeleton, typed_address_biaxial_completion, circle_dimension_phase_gate, spg, folding, logic_expansion_chain, conclusion | 19 | 6 |
-| `grothendieck_relative_descent_probe_obstruction` | 进行中 | typed_address_biaxial_completion, recursive_addressing, physical_spacetime_skeleton, folding, circle_dimension_phase_gate, spg, fold_residual_time, zeta_finite_part, conclusion | 2 | 7 |
+| `grothendieck_relative_descent_probe_obstruction` | 进行中 | typed_address_biaxial_completion, recursive_addressing, physical_spacetime_skeleton, folding, circle_dimension_phase_gate, spg, fold_residual_time, zeta_finite_part, conclusion | 16 | 7 |
+| `hrushovski_zilber_zariski_geometries_elekes_szabo_group_extraction` | 进行中 | group_unification, statistical_stability, circle_dimension_phase_gate, folding, emergent_arithmetic, recursive_addressing, spg, typed_address_biaxial_completion, fold_residual_time, zeta_finite_part | 11 | 7 |
+| `khovanskii_newton_fewnomials_tropical_skeletons` | 进行中 | fold_residual_time, physical_spacetime_skeleton, emergent_arithmetic, folding, typed_address_biaxial_completion, circle_dimension_phase_gate, group_unification, spg, conclusion | 15 | 6 |
+| `persistent_homology_persistence_modules_constructible_sheaf_persistence` | 进行中 | fold_residual_time, typed_address_biaxial_completion, spg, physical_spacetime_skeleton, statistical_stability, circle_dimension_phase_gate, zeta_finite_part | 14 | 8 |
+| `stallings_foldings_bestvina_handel_train_tracks` | 进行中 | folding, fold_residual_time, recursive_addressing, group_unification, spg, typed_address_biaxial_completion | 12 | 8 |
 | `wang_zahl` | 进行中 | circle_dimension_phase_gate, pom, folding, recursive_addressing, spg, typed_address_biaxial_completion, conclusion, zeta_finite_part, emergent_arithmetic, physical_spacetime_skeleton, group_unification | 23 | 8 |
 | `wang_zahl_multiscale_counterexample_trichotomy` | 进行中 | zeta_finite_part, pom, circle_dimension_phase_gate, folding, physical_spacetime_skeleton, emergent_arithmetic | 0 | 6 |
 <!-- distillation-board:end -->

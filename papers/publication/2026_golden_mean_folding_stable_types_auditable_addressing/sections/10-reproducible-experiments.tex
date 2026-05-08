@@ -1,0 +1,66 @@
+\section{Reproducible experiments}
+\label{sec:experiments}
+
+The experiments are not used as proofs of the main theorems.  They serve as audit interfaces for the finite objects constructed above.  Each experiment reports a fixed input protocol, a deterministic output object, and a comparison statistic.
+
+\subsection{Folded histogram audit}
+For a binary input stream \(x=(x_t)\), the fold-histogram experiment forms
+\[
+Z_t^{(m)}=\Fold_m(x_tx_{t+1}\cdots x_{t+m-1})
+\]
+and records the empirical law \(\widehat\pi_{m,N}\) on \(X_m\).  Appendix~\ref{app:statistical-audit} gives the full statistical protocol.  The empirical law is compared with two exact baselines: the IID-uniform fiber law
+\[
+p_m^{\mathrm{fib}}(z)=\frac{|\Fold_m^{-1}(z)|}{2^m}
+\]
+and the golden-mean Parry cylinder law \(q_m\) from \Cref{app:golden-parry-baseline}.  The Parry law is a maximum-entropy reference, not an asserted limit law for arbitrary sources.  Reported values of
+\[
+\TV(\widehat\pi_{m,N},q_m)
+\quad\text{and}\quad
+\KL(\widehat\pi_{m,N}\mid q_m)
+\]
+are interpreted using the sampling/model decomposition of \Cref{thm:statistical-audit-decomposition}.
+
+\subsection{Cross-resolution residual audit}
+The second experiment compares adjacent empirical folded laws under stable prefix restriction.  It reports
+\[
+E_{m,N}:=
+\TV\!\left(
+\widehat\pi_{m,N},
+(\pi_{m+1\to m})_\#\widehat\pi_{m+1,N}
+\right).
+\]
+If TV confidence radii \(\tau_m\) and \(\tau_{m+1}\) are declared, then \(E_{m,N}>\tau_m+\tau_{m+1}\) gives a finite-sample certificate of population-level cross-resolution inconsistency for the selected restriction protocol.
+
+\subsection{Clarity profile audit}
+The third experiment fixes an event \(P\in\mathcal F_\infty\) and computes
+\[
+\varepsilon_m(P;\mu)=
+\sum_{C\in\mathcal C_m}
+\min\{\mu(P\cap C),\mu(C\setminus P)\}.
+\]
+The output is the curve
+\[
+m\longmapsto \varepsilon_m(P;\mu),
+\]
+together with the finite-depth slope
+\[
+-\frac1m\log \varepsilon_m(P;\mu)
+\]
+when the error is nonzero.  The audit compares this decay with boundary-cylinder counts \(N_m(\partial P)\).
+
+\subsection{Exact deterministic tables}
+Every fold-histogram run separates deterministic tables from random empirical histograms.  The deterministic tables include
+\[
+\Fold_m,\qquad
+d_m(z)=|\Fold_m^{-1}(z)|,\qquad
+p_m^{\mathrm{fib}},\qquad
+q_m.
+\]
+Appendix~\ref{app:fiber-ledger} defines the deterministic fiber ledger, including \(D_m\), \(\kappa_m\), collision moments, and the exact IID-uniform fiber law.  Hashes of these exact tables are reported with the empirical output.  This prevents changes in the fold table or baseline construction from being mistaken for statistical variation.
+
+\subsection{Reproducibility package}
+The publication package specified in Appendix~\ref{app:reproducibility} should include
+\[
+(\text{code},\text{data},\text{configuration},\text{random seed},\text{environment},\text{output hashes}).
+\]
+Its deterministic core consists of \texttt{fold\_table.json}, \texttt{fiber\_ledger.csv}, \texttt{parry\_baseline.csv}, \texttt{moment\_spectrum.csv}, \texttt{cross\_resolution\_fib.csv}, and canonical SHA256 hashes.  Its empirical layer stores sampled windows, folded histograms, TV/KL comparisons, and cross-resolution residuals.  Statistical claims should record \(m\), \(N\), \(N_{\mathrm{eff}}\), the distance used, the uncertainty radius, the model tolerance, and the decision rule.  A figure without the saved data and script needed to reproduce it is not an audit certificate.

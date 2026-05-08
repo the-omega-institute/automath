@@ -159,6 +159,183 @@ K_I^{\mathcal T}(y)\ne\varnothing
 \]
 特别地，若同一个有限状态界 \(|R|\) 下所有有限窗口都可 resolved lift，而全局 \(\mathcal T\)-resolved lift 不存在，则矛盾。因此，任何有限窗口同界通过而全局闭包失败的 \(\Phi_m\) 坏例子，都不能归因于窗口 incidence 或有限状态分辨率本身；它必须携带额外的非有限状态闭包谓词。
 \end{proposition}
+\begin{definition}[\texorpdfstring{$\Phi_m$}{Phi m} 的分层 overlap 核心]\label{def:distill-stallings-phi-layered-overlap-core}
+固定 \(m\ge1\)、有限区间 \(I=[r,s]\cap\ZZ\) 与 \(y\in X_m^{\ZZ}\)。对 \(t\in I\) 置
+\[
+\mathcal B_t(y):=\{w=w_1\cdots w_m\in\{0,1\}^m:\Fold_m(w)=y_t\}.
+\]
+定义有限分层有向图 \(\mathcal G_I(y)\)：其顶点为所有 \((t,w)\) 且 \(t\in I,\ w\in\mathcal B_t(y)\)；当 \(t<s\) 且
+\[
+w_2\cdots w_m=w'_1\cdots w'_{m-1}
+\]
+时放入一条边
+\[
+(t,w)\longrightarrow (t+1,w').
+\]
+称顶点 \((t,w)\) 为 \(I\)-surviving，若它落在一条贯穿所有层的有向路径
+\[
+(r,w^{(r)})\to(r+1,w^{(r+1)})\to\cdots\to(s,w^{(s)})
+\]
+上。由全部 surviving 顶点及其间边诱导的子图称为 \(y\) 在 \(I\) 上的 overlap 核心，记为 \(\operatorname{Core}_I(y)\)。
+\end{definition}
+
+\begin{proposition}[有限 lift 核心与顺序无关修剪]\label{prop:distill-stallings-phi-layered-overlap-core-trimming}
+沿用定义 \ref{def:distill-stallings-phi-layered-overlap-core}。则：
+\begin{enumerate}
+  \item \(K_I(y)\ne\varnothing\) 当且仅当 \(\mathcal G_I(y)\) 含有一条贯穿所有层的有向路径，当且仅当 \(\operatorname{Core}_I(y)\ne\varnothing\)。
+  \item 若 \(u\in K_I(y)\)，则
+  \[
+  w^{(t)}:=u_tu_{t+1}\cdots u_{t+m-1}\qquad(t\in I)
+  \]
+  给出一条贯穿路径。反之，任意贯穿路径唯一粘合为一个词
+  \[
+  u\in\{0,1\}^{I^+},\qquad I^+=[r,s+m-1]\cap\ZZ,
+  \]
+  且任意双边延拓均属于 \(K_I(y)\)。
+  \item \(\operatorname{Core}_I(y)\) 可由如下有限修剪过程得到，且与删除顺序无关：反复删除不能从第一层到达的顶点，或不能到达最后一层的顶点，直至不再可删。
+\end{enumerate}
+\end{proposition}
+\begin{proposition}[\texorpdfstring{$\Phi_m$}{Phi m} 表示图商的 fold-core 审计判别]
+\label{distill:stallings_foldings_and_bestvina_handel_train_tracks-local_fold_preserves_represented_object-phi-presentation-quotient-core-audit}
+固定 \(m\ge1\)。令 \(\mathcal H_m\) 为如下有限标记图：顶点为
+\(\{0,1\}^{m-1}\)（当 \(m=1\) 时理解为单点），边为所有
+\(w=w_1\cdots w_m\in\{0,1\}^m\)，其起点与终点分别为
+\[
+p(w):=w_1\cdots w_{m-1},
+\qquad
+s(w):=w_2\cdots w_m,
+\]
+其标记为
+\[
+\lambda(w):=\Fold_m(w)\in X_m.
+\]
+记 \(\mathcal L_{\ZZ}(G)\subseteq X_m^{\ZZ}\) 为有限标记图 \(G\) 的双边路径标记语言。则：
+\begin{enumerate}
+  \item \(\mathcal L_{\ZZ}(\mathcal H_m)=Y_m\)。
+  \item 设
+  \[
+  q:\mathcal H_m\twoheadrightarrow \mathcal K
+  \]
+  为保持边标记、起点与终点的有限图商。若 \(q\) 满足有限路径 lift 审计：对 \(\mathcal K\) 中任意有限路径
+  \[
+  \bar e_r\bar e_{r+1}\cdots\bar e_s
+  \]
+  以及任意位于 \(q^{-1}(o(\bar e_r))\) 中的顶点 \(v\)，存在 \(\mathcal H_m\) 中从 \(v\) 出发的路径
+  \[
+  e_r e_{r+1}\cdots e_s
+  \]
+  使 \(q(e_t)=\bar e_t\) 对所有 \(t\in[r,s]\cap\ZZ\) 成立，则
+  \[
+  \mathcal L_{\ZZ}(\mathcal K)=Y_m.
+  \]
+  因而，任何同标记局部分支识别只有在通过该 lift 审计时，才是表示对象保持的 fold，而不是任意压缩。
+  \item 若某个保持标记的商 \(q:\mathcal H_m\twoheadrightarrow\mathcal K\) 产生了额外标记序列，即存在
+  \[
+  y\in \mathcal L_{\ZZ}(\mathcal K)\setminus Y_m,
+  \]
+  则存在有限区间 \(I=[r,s]\cap\ZZ\)，使 \(\mathcal K\) 中有一条标记为 \(y_r\cdots y_s\) 的有限路径，但
+  \[
+  K_I(y)=\varnothing
+  \qquad\text{且}
+  \qquad
+  \operatorname{Core}_I(y)=\varnothing .
+  \]
+  反过来，若 \(\mathcal K\) 中每条有限路径的标记块都具有非空 overlap 核心，则
+  \[
+  \mathcal L_{\ZZ}(\mathcal K)\subseteq Y_m,
+  \]
+  从而在 \(q\) 满射的情形下等号成立。
+\end{enumerate}
+\leanverified{paper_stallings_foldings_local_fold_preserves_represented_object_phi_presentation_quotient_core_audit}
+\end{proposition}
+\begin{proof}
+先证明第一项。给定 \(u\in\{0,1\}^{\ZZ}\)，令
+\[
+w^{(t)}:=u_tu_{t+1}\cdots u_{t+m-1}\in\{0,1\}^m.
+\]
+则
+\[
+s(w^{(t)})=u_{t+1}\cdots u_{t+m-1}=p(w^{(t+1)}),
+\]
+故 \((w^{(t)})_{t\in\ZZ}\) 是 \(\mathcal H_m\) 中的一条双边路径，其标记序列为
+\[
+\lambda(w^{(t)})=\Fold_m(u_t\cdots u_{t+m-1})=(\Phi_m(u))_t.
+\]
+因此 \(Y_m\subseteq\mathcal L_{\ZZ}(\mathcal H_m)\)。
+
+反过来，设 \((w^{(t)})_{t\in\ZZ}\) 是 \(\mathcal H_m\) 中的双边路径。路径条件给出
+\[
+w^{(t)}_2\cdots w^{(t)}_m=w^{(t+1)}_1\cdots w^{(t+1)}_{m-1}.
+\]
+于是这些长度 \(m\) 的窗口唯一粘合为一个双边二元序列 \(u\)，满足
+\[
+w^{(t)}=u_tu_{t+1}\cdots u_{t+m-1}
+\qquad(t\in\ZZ).
+\]
+因此路径标记序列等于 \(\Phi_m(u)\)，属于 \(Y_m\)。第一项得证。
+
+第二项中，因 \(q\) 保持标记，任意 \(\mathcal H_m\) 中路径的像都是 \(\mathcal K\) 中同标记路径，故
+\[
+Y_m=\mathcal L_{\ZZ}(\mathcal H_m)\subseteq\mathcal L_{\ZZ}(\mathcal K).
+\]
+取任意 \(y\in\mathcal L_{\ZZ}(\mathcal K)\)。对每个有限区间 \(I=[r,s]\cap\ZZ\)，由 \(y\) 的定义，\(\mathcal K\) 中存在一条标记为 \(y_r\cdots y_s\) 的有限路径。有限路径 lift 审计把该路径提升为 \(\mathcal H_m\) 中同标记有限路径。由第一项的有限窗口粘合证明，该有限路径给出一个词
+\[
+u\in\{0,1\}^{I^+},\qquad I^+=[r,s+m-1]\cap\ZZ,
+\]
+满足
+\[
+\Fold_m(\nu_t\nu_{t+1}\cdots\nu_{t+m-1})=y_t
+\qquad(t\in I).
+\]
+任意双边延拓 \(\nu\) 得到 \(K_I(y)\ne\varnothing\)。由于这对每个有限区间 \(I\) 成立，命题 \ref{prop:distill-euclid-elements-phi-finite-interval-ledger-compactness} 给出 \(y\in Y_m\)。故 \(\mathcal L_{\ZZ}(\mathcal K)\subseteq Y_m\)，第二项成立。
+
+第三项中，若 \(y\in\mathcal L_{\ZZ}(\mathcal K)\setminus Y_m\)，则命题 \ref{prop:distill-euclid-elements-phi-finite-interval-ledger-compactness} 的逆否命题给出某个有限区间 \(I\)，使
+\(K_I(y)=\varnothing\)。另一方面，\(y\in\mathcal L_{\ZZ}(\mathcal K)\) 保证 \(\mathcal K\) 中存在标记为 \(y|_I\) 的有限路径。由命题 \ref{prop:distill-stallings-phi-layered-overlap-core-trimming}，
+\[
+K_I(y)=\varnothing
+\quad\Longleftrightarrow\quad
+\operatorname{Core}_I(y)=\varnothing,
+\]
+故得到所述有限 overlap-core 坏例。
+
+反过来，若 \(\mathcal K\) 中每条有限路径的标记块都有非空 overlap 核心，则对任意
+\(y\in\mathcal L_{\ZZ}(\mathcal K)\) 与任意有限区间 \(I\)，相应有限路径的标记块满足
+\(\operatorname{Core}_I(y)\ne\varnothing\)。再由命题 \ref{prop:distill-stallings-phi-layered-overlap-core-trimming} 得
+\(K_I(y)\ne\varnothing\)。应用命题 \ref{prop:distill-euclid-elements-phi-finite-interval-ledger-compactness}，可得
+\(y\in Y_m\)。于是 \(\mathcal L_{\ZZ}(\mathcal K)\subseteq Y_m\)。若 \(q\) 满射且保持标记，则前述包含
+\(Y_m\subseteq\mathcal L_{\ZZ}(\mathcal K)\) 同时成立，故等号成立。证毕。
+\end{proof}
+
+\begin{proof}
+若 \(u\in K_I(y)\)，则每个窗口 \(w^{(t)}=u_t\cdots u_{t+m-1}\) 满足 \(w^{(t)}\in\mathcal B_t(y)\)。相邻窗口来自同一词 \(u\)，故
+\[
+w^{(t)}_2\cdots w^{(t)}_m=w^{(t+1)}_1\cdots w^{(t+1)}_{m-1},
+\]
+从而得到贯穿路径。
+
+反过来，给定贯穿路径 \((t,w^{(t)})_{t=r}^s\)，先令
+\[
+u_r\nu_{r+1}\cdots\nu_{r+m-1}:=w^{(r)}.
+\]
+由重叠条件，\(w^{(r+1)}\) 的前 \(m-1\) 位已经等于 \(w^{(r)}\) 的后 \(m-1\) 位，因此只需把 \(w^{(r+1)}_m\) 作为新末位接上。逐层进行，得到唯一的 \(\nu\in\{0,1\}^{I^+}\)。对每个 \(t\in I\)，该词在窗口 \([t,t+m-1]\) 上正是 \(w^{(t)}\)，故
+\[
+\Fold_m(\nu_t\cdots\nu_{t+m-1})=y_t.
+\]
+把 \(\nu\) 任意延拓到 \(\ZZ\)，即得 \(K_I(y)\) 中元素。于是第一、第二项成立。
+
+为证明修剪的顺序无关性，定义前向可达层
+\[
+\mathcal F_r:=\mathcal B_r(y),\qquad
+\mathcal F_t:=\{w\in\mathcal B_t(y):\exists v\in\mathcal F_{t-1},\ v_2\cdots v_m=w_1\cdots w_{m-1}\}
+\]
+以及后向可达层
+\[
+\mathcal R_s:=\mathcal B_s(y),\qquad
+\mathcal R_t:=\{w\in\mathcal B_t(y):\exists v\in\mathcal R_{t+1},\ w_2\cdots w_m=v_1\cdots v_{m-1}\}.
+\]
+顶点 \((t,w)\) 位于某条贯穿路径上，当且仅当 \(w\in\mathcal F_t\cap\mathcal R_t\)。任意一次合法删除只会删去不在该交集中的顶点；反过来，不在该交集中的顶点必在有限次前向或后向修剪中被删除。因此终止后的子图正是由 \(\mathcal F_t\cap\mathcal R_t\) 诱导的子图，故与删除顺序无关。证毕。
+\end{proof}
+
 \begin{proof}
 若存在全局对 \((\bar u,\bar\alpha)\)，则对每个有限区间 \(I\)，取限制
 \[
