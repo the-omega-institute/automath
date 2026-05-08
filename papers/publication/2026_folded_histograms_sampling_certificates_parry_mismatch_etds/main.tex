@@ -146,21 +146,36 @@ The contribution is the finite-resolution comparison obtained when these
 standard structures are coupled by the canonical fold: the no-collision
 theorem on the realized Sturmian language, the exact Parry block
 optimization, and the bounded-type asymptotic window for the canonical folded
-law.  The main claims are organized as follows.  The arithmetic canonicity of
-the fold is fixed by the local Zeckendorf normalization theorem
-(Theorem~\ref{thm:local-zeckendorf-normalization}) and the contiguous
-numeration rigidity theorem
-(Theorem~\ref{thm:contiguous-fibonacci-uniqueness}).  Sampling error is
-handled by Theorem~\ref{thm:tv-certificate-hist} and the relative-entropy
-certificates of Section~3.  The lossless Sturmian slice is
-Theorem~\ref{thm:sturmian-no-collision-rigidity} and
-Theorem~\ref{thm:sequence-level-transparency}.  The golden-mean Parry
-comparison is Theorem~\ref{thm:parry-kl-identity},
+law.  The five advertised contributions are represented in the body as
+follows.
+\begin{enumerate}
+\item The no-collision and higher-block conjugacy statement for the canonical
+Sturmian slice is Theorem~\ref{thm:sturmian-no-collision-rigidity} together
+with Corollary~\ref{cor:sturmian-exact-relabeling} and
+Theorem~\ref{thm:sequence-level-transparency}.
+\item The closed-form R\'enyi and optimal-injective comparison is
+Theorem~\ref{thm:parry-kl-identity},
+Proposition~\ref{prop:parry-renyi-window},
 Theorem~\ref{thm:parry-support-barrier},
-Theorem~\ref{thm:optimal-injective-relabeling}, and the finite small-\(m\)
-budget Proposition~\ref{prop:small-m-endpoint-budget}.  The corresponding
-low-complexity obstruction inside a general primitive positive-entropy SFT is
-isolated in Theorem~\ref{thm:primitive-sft-placement-barrier}.
+Theorem~\ref{thm:optimal-injective-relabeling},
+Proposition~\ref{prop:small-m-endpoint-budget},
+Corollary~\ref{cor:injective-relabeling-bounded-type}, and
+Proposition~\ref{prop:canonical-golden-slope-gap}.
+\item The primitive positive-entropy SFT obstruction for low-complexity
+finite-block factors is Theorem~\ref{thm:primitive-sft-placement-barrier}.
+\item The canonicity of the Fibonacci weighting is
+Theorem~\ref{thm:local-zeckendorf-normalization} and
+Theorem~\ref{thm:contiguous-fibonacci-uniqueness}, with
+Proposition~\ref{prop:canonical-fold-basic} and
+Proposition~\ref{prop:fold-residue-characterization} giving the resulting
+finite-resolution residue interface.
+\item The sampling-versus-limit separation is Theorem~\ref{thm:tv-certificate-hist},
+Theorem~\ref{thm:general-window-relative-entropy-certificate},
+Proposition~\ref{prop:sturmian-microstate-kl-certificate},
+Corollary~\ref{cor:rotation-folded-kl-certificate},
+Theorem~\ref{prop:multiscale-residual-by-boundary}, and
+Corollary~\ref{cor:multiscale-residual-comparison-bound}.
+\end{enumerate}
 
 Section~2 sets up the rotation model, the fold and the Parry block law.
 Section~3 proves the sampling and relative-entropy estimates.  Section~4
@@ -2321,6 +2336,173 @@ D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)\le 2\log\varphi.
 \]
 \end{proof}
 
+\begin{lemma}[Golden-slope endpoint balance of the canonical fold]
+\label{lem:golden-fold-endpoint-masses}
+Assume \(\beta=\alpha=\varphi^{-1}\) and \(m\ge6\). Then
+\[
+\pi_m^{\mathrm{fold}}\{u:u_1=1\}
+=
+\pi_m^{\mathrm{fold}}\{u:u_m=1\}
+=
+\varphi^{-2}.
+\]
+Consequently,
+\[
+\eta_{11}(\pi_m^{\mathrm{fold}})
+-
+\eta_{00}(\pi_m^{\mathrm{fold}})
+=
+-\varphi^{-3}.
+\]
+\end{lemma}
+
+\begin{proof}
+For the golden slope, the Sturmian language is the set of length-\(m\)
+factors of the Fibonacci word, in the symbol convention determined by the
+window \([0,\alpha)\) \cite{QueffelecSubstitution,Fogg2002}.  We shall use
+only two elementary endpoint consequences of this presentation.  First, every
+realized word begins with one of
+\[
+01,\qquad 10,\qquad 110.
+\]
+Second, a direct return-word induction for the Fibonacci language gives the
+right-end alternatives
+\[
+(\Fold_m(a))_m=1
+\quad\Longleftrightarrow\quad
+a_{m-2}a_{m-1}a_m\in\{010,110\}
+\qquad (m\ge6).
+\]
+To see the second assertion, write \(N_m(a)=P+R\), where \(P\) uses only the
+weights \(F_2,\dots,F_{m-2}\).  Inspecting the four right return words in the
+Fibonacci directive recursion gives the following residue intervals for
+\(P+R\) modulo \(F_{m+2}\):
+\[
+\begin{array}{c|c}
+\text{suffix of }a & N_m(a)\bmod F_{m+2}\\
+\hline
+010 & [F_{m+1},F_{m+2})\\
+110 & [F_{m+1},F_{m+2})\\
+011 & [0,F_{m+1})\\
+101 & [0,F_{m+1}).
+\end{array}
+\]
+This is a one-step induction on the Fibonacci substitution: appending the
+next return word replaces the previous interval pair by its two Fibonacci
+children, whose endpoints differ by \(F_{m-1}\) and \(F_m\).  The base case is
+the direct calculation at \(m=6\).  A legal word in \(X_m\) has last digit
+\(1\) exactly when its Fibonacci value lies in
+\([F_{m+1},F_{m+2})\), and
+Proposition~\ref{prop:fold-residue-characterization} identifies the residue
+of \(N_m(a)\) with the folded value.  This proves the right-end criterion.
+
+Let \(u=\Fold_m(a)\) with \(a\in S_m(\varphi^{-1})\).  The first endpoint is
+even more local.  If \(a_1a_2=10\), then \(N_m(a)\) contains \(F_2\) and not
+\(F_3\), and all other summands are at least \(F_4\).  No Zeckendorf carry can
+remove the isolated \(F_2\) digit, hence \(u_1=1\).  If \(a\) begins with
+\(01\), the least nonzero summand in \(N_m(a)\) is \(F_3\), so the
+\(F_2\)-digit in the Zeckendorf expansion is \(0\).  If \(a\) begins with
+\(110\), then the initial sum \(F_2+F_3\) is replaced by \(F_4\) by the local
+Zeckendorf normalization of
+Theorem~\ref{thm:local-zeckendorf-normalization}; again the resulting
+\(F_2\)-digit is \(0\), and later summands cannot create a smaller digit.
+Thus
+\[
+(\Fold_m(a))_1=1
+\quad\Longleftrightarrow\quad
+a_1a_2=10.
+\]
+The cylinder \([10]\) for the rotation coding is
+\[
+\{x\in\TT:\ x\in[0,\alpha),\ x+\alpha\notin[0,\alpha)\}
+=
+[0,1-\alpha),
+\]
+and has measure \(1-\alpha=\varphi^{-2}\). Therefore
+\[
+\pi_m^{\mathrm{fold}}\{u:u_1=1\}=\varphi^{-2}.
+\]
+
+By the right-end criterion, the last folded endpoint has mass
+\(\mu_m([010])+\mu_m([110])\).  These two cylinder lengths are read directly
+from the rotation coding.  With \(\alpha=\varphi^{-1}\),
+\[
+[010]=[\alpha,1-(2\alpha-1)),\qquad
+[110]=[1-\alpha,\alpha),
+\]
+up to endpoints of Lebesgue measure zero.  Hence
+\[
+\mu_m([010])=\varphi^{-4},
+\qquad
+\mu_m([110])=\varphi^{-3},
+\]
+and
+\[
+\pi_m^{\mathrm{fold}}\{u:u_m=1\}
+=
+\varphi^{-4}+\varphi^{-3}
+=
+\varphi^{-2}.
+\]
+
+Finally,
+\[
+\eta_{11}(\pi_m^{\mathrm{fold}})
+-
+\eta_{00}(\pi_m^{\mathrm{fold}})
+=
+\pi_m^{\mathrm{fold}}\{u:u_1=1\}
++
+\pi_m^{\mathrm{fold}}\{u:u_m=1\}
+-
+1
+=
+2\varphi^{-2}-1
+=
+-\varphi^{-3},
+\]
+using \(\varphi^2=\varphi+1\).  This proves the asserted endpoint difference.
+\end{proof}
+
+\begin{proposition}[Canonical golden-slope gap above the injective floor]
+\label{prop:canonical-golden-slope-gap}
+Assume \(\beta=\alpha=\varphi^{-1}\).  For every \(m\ge6\),
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)-L_1(m)
+=
+\bigl(1-\varphi^{-3}\bigr)\log\varphi,
+\]
+where \(L_1(m)\) is the optimal injective value from
+Corollary~\ref{cor:injective-relabeling-bounded-type}.
+\end{proposition}
+
+\begin{proof}
+By Corollary~\ref{cor:injective-relabeling-bounded-type} and
+Theorem~\ref{thm:optimal-injective-relabeling},
+\[
+L_1(m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m).
+\]
+On the Sturmian slice the fold is an exact relabeling of \(\mu_m\), so
+Corollary~\ref{cor:no-fold-entropy-loss} gives
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)
+=
+m\log\varphi-\log\pi(0)-H_1(\mu_m)
++
+\bigl(\eta_{11}(\pi_m^{\mathrm{fold}})
+-\eta_{00}(\pi_m^{\mathrm{fold}})\bigr)\log\varphi .
+\]
+Subtracting the two formulas and using
+Lemma~\ref{lem:golden-fold-endpoint-masses} yields
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)-L_1(m)
+=
+\bigl(1-\varphi^{-3}\bigr)\log\varphi.
+\]
+\end{proof}
+
 Theorem~\ref{thm:optimal-injective-relabeling} gives the dominant comparison
 result of this section: once \(m\ge6\), the best injective placement is the
 one supported on \(X_m^{00}\).  The next theorem is a secondary refinement. It
@@ -2775,11 +2957,13 @@ which \(X_m^{00}\) contains enough words to realize the injective optimum.
 \input{generated/tab_canonical_injective_floor_exact_en}
 
 Table~\ref{tab:canonical-injective-floor-exact} shows the finite-\(m\)
-content of Theorem~\ref{thm:optimal-injective-relabeling}. The
-optimal injective floor \(L_1(m)\) and the exact folded-to-Parry divergence
+content of Theorem~\ref{thm:optimal-injective-relabeling} and
+Proposition~\ref{prop:canonical-golden-slope-gap}. The optimal injective
+floor \(L_1(m)\) and the exact folded-to-Parry divergence
 \(\KL(\pi_m^{\mathrm{fold}}\|\pi_m)\) both grow on the scale
-\(m\log\varphi-\log m\).  The last columns are exact evaluations from the
-finite Sturmian partition and the endpoint formula in
+\(m\log\varphi-\log m\), while their difference is the fixed constant
+\((1-\varphi^{-3})\log\varphi\).  The last columns are exact evaluations from
+the finite Sturmian partition and the endpoint formula in
 Theorem~\ref{thm:parry-kl-identity}.  At these resolutions the canonical
 folded law is far inside the universal \(2\log\varphi\) additive window above
 the injective optimum.  This table is the reference point for the empirical
