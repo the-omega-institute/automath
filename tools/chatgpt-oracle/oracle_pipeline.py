@@ -5548,120 +5548,13 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         detail=f"compiled={compiled_b4}")
         save_state(state)
 
-        if not CLAUDE_ENABLED:
-            logger.info(f"{tag} Round {rnd}: B5 skipped (--no-claude); "
-                        "returning directly to Oracle re-review")
-            state.log_event("B", "claude_supervision_skipped",
-                            round_num=rnd,
-                            detail="--no-claude codex+chatgpt test mode")
-            save_state(state)
-            continue
-
-        # ── B5: Claude supervisory review (review-only) ───────────
-        logger.info(f"{tag} Round {rnd}: B5 — Claude supervision")
-        claude_fix_prompt = textwrap.dedent(f"""\
-            Systematic quality check after Codex fixed oracle-reported issues.
-            Paper: {state.paper_dir}
-            Target: {state.target_journal}
-
-            The following issues were fixed by Codex:
-            {issues_text}
-
-            You are the independent supervising reviewer, not the executing
-            editor. Do not edit files. Use Claude's strengths:
-            1. Verify that each Oracle issue was addressed at the level of
-               manuscript structure and exposition.
-            2. Detect language, transition, reference, label, and local-notation
-               problems.
-            3. Detect revision artifacts.
-            4. Decompose any remaining mathematical, structural, or language
-               work into precise Codex work packages.
-
-            Output exactly one JSON object in your final answer:
-            ```json
-            {{
-              "system_verdict": "good|needs_codex|block",
-              "language_structure_findings": [],
-              "remaining_issues": [],
-              "codex_work_packages": [
-                {{
-                  "owner": "codex_math|codex_editorial",
-                  "priority": "blocker|high|medium|low",
-                  "location": "...",
-                  "task": "...",
-                  "acceptance_criterion": "..."
-                }}
-              ]
-            }}
-            ```
-        """)
-        out_b5 = claude_exec(claude_fix_prompt, work_dir=paper_path,
-                             dry_run=dry_run,
-                             context_mode="contextual_supervision",
-                             agent_role="stage_b_post_codex_review")
-        b5_data = parse_json_from_output(out_b5) if not dry_run else {
-            "system_verdict": "good",
-            "language_structure_findings": [],
-            "remaining_issues": [],
-            "codex_work_packages": [],
-        }
-        _record_claude_supervision(
-            state, f"stage_b_post_codex_review_R{rnd}", b5_data,
-            raw=out_b5,
-            context_mode="contextual_supervision",
-            agent_role="stage_b_post_codex_review")
-        b5_packages = list(_coerce_items(b5_data.get("codex_work_packages", [])))
-        for issue in _coerce_items(b5_data.get("remaining_issues", [])):
-            b5_packages.append({
-                "owner": "codex_editorial",
-                "priority": "medium",
-                "location": "",
-                "task": issue.get("reason", str(issue)) if isinstance(issue, dict)
-                        else str(issue),
-                "acceptance_criterion": "issue resolved in manuscript",
-            })
-        if b5_data.get("system_verdict") == "block" and not b5_packages:
-            state.error = (f"Stage B round {rnd}: Claude supervision blocked "
-                           f"without executable Codex packages")
-            save_state(state)
-            return False
-        if b5_packages:
-            package_issues = []
-            for pkg in b5_packages:
-                if isinstance(pkg, dict):
-                    package_issues.append(
-                        f"[{pkg.get('owner', 'codex_editorial')}/"
-                        f"{pkg.get('priority', 'medium')}] "
-                        f"{pkg.get('location', '')}: {pkg.get('task', '')} "
-                        f"(acceptance: {pkg.get('acceptance_criterion', '')})"
-                    )
-                else:
-                    package_issues.append(str(pkg))
-            logger.info(f"{tag} Round {rnd}: B5 handed "
-                        f"{len(package_issues)} package(s) back to Codex")
-            codex_exec(
-                build_codex_fix_from_claude_prompt(
-                    state.paper_dir, package_issues, rnd),
-                work_dir=paper_path, timeout_seconds=1800,
-                model=model, dry_run=dry_run,
-                context_mode="contextual_execution",
-                agent_role="stage_b_claude_package_fix")
-        compiled_b5 = compile_gate(paper_path, model=model,
-                                   dry_run=dry_run, tag=f"{tag} B5")
-        if not compiled_b5:
-            state.error = (f"Stage B round {rnd}: compile failed after "
-                           f"Claude-supervised Codex follow-up")
-            save_state(state)
-            return False
-        h_b5 = git_commit(paper_path,
-                          f"stage-B R{rnd}: claude-supervised follow-up fixes",
-                          tag=tag)
-        state.log_event("B", "claude_review_fixes", round_num=rnd,
-                        committed=bool(h_b5), commit_hash=h_b5,
-                        detail=json.dumps({
-                            "compiled": compiled_b5,
-                            "claude_system_review": b5_data,
-                        }, ensure_ascii=False)[:10000])
+        # Stage B is now Oracle ↔ Codex only: Codex fixed Oracle's issues
+        # in B4, the paper compiled and was committed. Loop back to Oracle
+        # for re-review without a Claude pass — the operator wanted the
+        # cycle reduced to two parties so Oracle's accept/minor verdict
+        # is the sole gate.
+        state.log_event("B", "oracle_codex_cycle", round_num=rnd,
+                        detail="claude review skipped by design")
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_B_ROUNDS} complete, "
