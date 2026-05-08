@@ -72,9 +72,15 @@ and set
     =F_{m+2}-1
     =\varphi^{m+o(m)},
   \]
-  The trimmed automaton for \(L\) contributes the exponential factor
-  \(\max(1,\rho)\). Substituting these two growth parameters into the
-  theorem of Charlier and Rampersad yields exactly the displayed
+  and the trimmed automaton for \(L\) contributes the exponential factor
+  \(\rho\) when an infinite recurrent component of radius \(>1\) is
+  present. If all contributing components have spectral radius at most
+  \(1\), the number of accepted words of length at most \(m\) is
+  subexponential, with only polynomial factors coming from chains of
+  radius-one components; if \(L\) is finite it is eventually constant.
+  Thus the endpoint \(\rho\le 1\) gives \(N_L(T)=T^{o(1)}\), including
+  the finite-language case. Substituting these growth parameters into
+  the theorem of Charlier and Rampersad yields exactly the displayed
   asymptotic
   \[
     N_L(T)=T^{\alpha+o(1)}
@@ -145,6 +151,51 @@ and set
   constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) with the stated property.
 \end{proof}
 
+\begin{lemma}[Canonical Zeckendorf presentation]
+  \label{lem:zeckendorf-canonical-presentation}
+  The language \(\mathcal Z\) is accepted by the two-state trim
+  strongly connected deterministic presentation \(\mathcal N_{\mathrm Z}\)
+  with state set \(\{0,1\}\), initial state \(0\), accepting state
+  \(\{1\}\), and transitions
+  \[
+    0\xrightarrow{0}0,\qquad
+    0\xrightarrow{1}1,\qquad
+    1\xrightarrow{0}0.
+  \]
+  Its adjacency matrix is
+  \[
+    M_{\mathrm Z}=
+    \begin{pmatrix}
+      1&1\\
+      1&0
+    \end{pmatrix},
+  \]
+  its Perron root is \(\varphi\), and its graph period is \(1\). Hence
+  \(\mathcal N_{\mathrm Z}\) satisfies the hypotheses of
+  \Cref{thm:parry-density} with \(\lambda=\varphi\), and
+  \(z_m=\abs{\mathcal Z_m}=F_m\).
+\end{lemma}
+
+\begin{proof}
+  A path in the displayed graph records exactly a binary word with no
+  adjacent \(1\)'s: after reading a \(1\) the only available next digit
+  is \(0\), while from state \(0\) both digits are available. The
+  accepting state is \(1\), so the accepted words are precisely those
+  no-\(11\) words whose terminal digit is \(1\), namely
+  \(\mathcal Z\). The state \(0\) is initial and lies on the loop
+  labelled \(0\), while \(0\xrightarrow{1}1\xrightarrow{0}0\); therefore
+  both states are reachable from the initial state and can reach the
+  accepting state, and the underlying directed graph is strongly
+  connected. The loop at \(0\) gives period \(1\).
+
+  The characteristic polynomial of \(M_{\mathrm Z}\) is
+  \(t^2-t-1\). Its spectral radius is the positive root
+  \(\varphi=(1+\sqrt5)/2>1\). Finally the accepted length-\(m\) words
+  are the canonical Zeckendorf words of length \(m\), whose number is
+  \(F_m\) by the standard Fibonacci recurrence with initial values
+  \(F_1=F_2=1\).
+\end{proof}
+
 For a deterministic automaton \(\mathcal A\) over the Zeckendorf digit
 alphabet, write
 \[
@@ -170,7 +221,10 @@ alphabet, write
 \end{corollary}
 
 \begin{proof}
-  Apply \Cref{thm:parry-density} with \(\mathcal N=\mathcal Z\). Thus
+  By \Cref{lem:zeckendorf-canonical-presentation}, the canonical
+  Zeckendorf presentation satisfies the hypotheses of
+  \Cref{thm:parry-density} with \(\lambda=\varphi\) and
+  \(z_m=F_m\). Applying that theorem gives
   \[
     \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
     =c_{m\bmod p}+O(\theta^m)
@@ -213,7 +267,7 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   \label{cor:zeck-recall-precision}
   Let \(\mathcal A\) be a deterministic automaton over the Zeckendorf
   alphabet. Let \(p\), \(c_0,\dots,c_{p-1}\), and \(\theta\) be supplied
-  by \Cref{thm:parry-density} for \(\mathcal N=\mathcal Z\), so that
+  by \Cref{lem:zeckendorf-canonical-presentation,thm:parry-density}, so that
   \[
     \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
     =c_{m\bmod p}+O(\theta^m)

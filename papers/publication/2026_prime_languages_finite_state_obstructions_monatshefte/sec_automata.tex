@@ -157,6 +157,50 @@ One may equivalently compare a DFA language against
 \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\) is unchanged because every
 prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 
+\begin{lemma}[Prime counts in base-\(b\) slices]
+  \label{lem:base-prime-count}
+  There exist constants \(A_b,B_b>0\) such that, for all sufficiently
+  large \(m\),
+  \[
+    A_b\,\frac{b^m}{m}
+    \le \abs{\mathcal P_m^{(b)}}
+    \le B_b\,\frac{b^m}{m}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  The leading-digit convention gives an exact count
+  \[
+    \abs{\mathcal P_m^{(b)}}=\pi(b^m)-\pi(b^{m-1}).
+  \]
+  The prime number theorem with first-order error term gives
+  \[
+    \pi(x)=\frac{x}{\log x}
+      +O\!\left(\frac{x}{\log^2 x}\right).
+  \]
+  Applying this at \(x=b^m\) and \(x=b^{m-1}\) yields
+  \[
+    \pi(b^m)-\pi(b^{m-1})
+    =
+    \frac{b^m}{m\log b}
+    -\frac{b^{m-1}}{(m-1)\log b}
+    +O\!\left(\frac{b^m}{m^2}\right).
+  \]
+  Since
+  \[
+    \frac{b^m}{m\log b}
+    -\frac{b^{m-1}}{(m-1)\log b}
+    =
+    \frac{b^m}{m\log b}
+    \left(1-\frac{m}{b(m-1)}\right),
+  \]
+  and the factor in parentheses tends to \(1-1/b>0\), the main term is
+  bounded above and below by positive multiples of \(b^m/m\) for all
+  large \(m\). The error term is \(o(b^m/m)\), so reducing the lower
+  constant and increasing the upper constant gives the asserted
+  constants \(A_b,B_b\).
+\end{proof}
+
 We first establish the quantitative obstruction that drives both
 corollaries below.
 
@@ -203,9 +247,8 @@ corollaries below.
     \le \delta^{-1}\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}
     \le \delta^{-1}\abs{\mathcal P_m^{(b)}}.
   \]
-  Since \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), the displayed chain
-  gives \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set \(M\) of
-  lengths.
+  By \Cref{lem:base-prime-count}, the displayed chain gives
+  \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set \(M\) of lengths.
 
   Let \(p\), \(c_0,\dots,c_{p-1}\), and \(\theta\) be supplied by
   \Cref{thm:dfa-density-dichotomy}. By the pigeonhole principle, some
@@ -251,9 +294,10 @@ corollaries below.
     \frac{a_{pk+r}(\mathcal A)}{b^{pk+r}}=c_r+O(\theta^k)
     \qquad (k\to\infty).
   \]
-  Fix constants \(A,B>0\) such that
+  Fix constants \(A_b,B_b>0\), supplied by
+  \Cref{lem:base-prime-count}, such that
   \[
-    A\,\frac{b^m}{m}\le \abs{\mathcal P_m^{(b)}}\le B\,\frac{b^m}{m}
+    A_b\,\frac{b^m}{m}\le \abs{\mathcal P_m^{(b)}}\le B_b\,\frac{b^m}{m}
   \]
   for all sufficiently large \(m\).
 
@@ -266,13 +310,13 @@ corollaries below.
   Hence there exists \(k_r\) such that for all \(k\ge k_r\),
   \[
     a_{pk+r}(\mathcal A)
-    \le \frac{A}{2}\,\frac{b^{pk+r}}{pk+r}.
+    \le \frac{A_b}{2}\,\frac{b^{pk+r}}{pk+r}.
   \]
   For those \(k\),
   \[
     \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
     \ge \abs{\mathcal P_{pk+r}^{(b)}}-a_{pk+r}(\mathcal A)
-    \ge \frac{A}{2}\,\frac{b^{pk+r}}{pk+r}.
+    \ge \frac{A_b}{2}\,\frac{b^{pk+r}}{pk+r}.
   \]
 
   If \(c_r>0\), then there exists \(k_r\) such that for all \(k\ge k_r\),
@@ -280,7 +324,7 @@ corollaries below.
     a_{pk+r}(\mathcal A)\ge \frac{c_r}{2}\,b^{pk+r}.
   \]
   Enlarging \(k_r\) if necessary, we may also ensure that
-  \(B/(pk+r)\le c_r/4\). Then for all such \(k\),
+  \(B_b/(pk+r)\le c_r/4\). Then for all such \(k\),
   \[
     \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
     \ge a_{pk+r}(\mathcal A)-\abs{\mathcal P_{pk+r}^{(b)}}
@@ -288,7 +332,7 @@ corollaries below.
   \]
 
   Since there are only finitely many residue classes, taking the minimum
-  of \(A/2\) and the finitely many numbers \(c_r/4\) arising in the
+  of \(A_b/2\) and the finitely many numbers \(c_r/4\) arising in the
   case \(c_r>0\) yields a constant \(c_{\mathcal A,b}>0\) such that
   \[
     \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle \mathcal P_m^{(b)}}
@@ -348,7 +392,8 @@ corollaries below.
   \[
     \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m).
   \]
-  Fix a constant \(B_b>0\) such that
+  Fix the upper-bound constant \(B_b>0\) from
+  \Cref{lem:base-prime-count}, so that
   \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all sufficiently large
   \(m\).
   We treat each residue class \(r\bmod p\) separately by considering the
@@ -357,7 +402,8 @@ corollaries below.
   \textit{Case \(c_r=0\).}
   Along the subsequence \(m\equiv r\pmod{p}\), we have
   \(a_m(\mathcal A)=O(\theta^m b^m)\). Since
-  \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\),
+  \Cref{lem:base-prime-count} gives
+  \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), so
   \[
     \mathrm{Rec}_m
     \le \frac{a_m(\mathcal A)}{\abs{\mathcal P_m^{(b)}}}
