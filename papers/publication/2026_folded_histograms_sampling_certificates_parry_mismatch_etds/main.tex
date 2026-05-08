@@ -146,7 +146,21 @@ The contribution is the finite-resolution comparison obtained when these
 standard structures are coupled by the canonical fold: the no-collision
 theorem on the realized Sturmian language, the exact Parry block
 optimization, and the bounded-type asymptotic window for the canonical folded
-law.
+law.  The main claims are organized as follows.  The arithmetic canonicity of
+the fold is fixed by the local Zeckendorf normalization theorem
+(Theorem~\ref{thm:local-zeckendorf-normalization}) and the contiguous
+numeration rigidity theorem
+(Theorem~\ref{thm:contiguous-fibonacci-uniqueness}).  Sampling error is
+handled by Theorem~\ref{thm:tv-certificate-hist} and the relative-entropy
+certificates of Section~3.  The lossless Sturmian slice is
+Theorem~\ref{thm:sturmian-no-collision-rigidity} and
+Theorem~\ref{thm:sequence-level-transparency}.  The golden-mean Parry
+comparison is Theorem~\ref{thm:parry-kl-identity},
+Theorem~\ref{thm:parry-support-barrier},
+Theorem~\ref{thm:optimal-injective-relabeling}, and the finite small-\(m\)
+budget Proposition~\ref{prop:small-m-endpoint-budget}.  The corresponding
+low-complexity obstruction inside a general primitive positive-entropy SFT is
+isolated in Theorem~\ref{thm:primitive-sft-placement-barrier}.
 
 Section~2 sets up the rotation model, the fold and the Parry block law.
 Section~3 proves the sampling and relative-entropy estimates.  Section~4
@@ -193,6 +207,131 @@ The canonical fold is
 \qquad Z(N_m(\omega))=(z_1,z_2,\dots).
 \]
 \end{definition}
+
+\begin{theorem}[Local Zeckendorf normalization]\label{thm:local-zeckendorf-normalization}
+Let \(d=(d_1,d_2,\dots)\) be a finitely supported sequence of nonnegative
+integers, and put
+\[
+V(d):=\sum_{j\ge1} d_jF_{j+1}.
+\]
+Consider the following local rewrites, whenever the displayed coordinates are
+available and the left-hand side has the required positive multiplicity:
+\[
+d_j,d_{j+1}\ge1:
+\qquad
+d_jF_{j+1}+d_{j+1}F_{j+2}
+\longmapsto
+(d_j-1)F_{j+1}+(d_{j+1}-1)F_{j+2}+F_{j+3},
+\]
+that is, subtract \(1\) from \(d_j,d_{j+1}\) and add \(1\) to \(d_{j+2}\);
+and, for double digits,
+\[
+d_1\ge2:\quad 2F_2\longmapsto F_3,
+\]
+\[
+d_2\ge2:\quad 2F_3\longmapsto F_2+F_4,
+\]
+\[
+d_j\ge2,\ j\ge3:\quad 2F_{j+1}\longmapsto F_{j-1}+F_{j+2}.
+\]
+Equivalently, the last three rules subtract \(2\) from the indicated
+coordinate and add the shown unit digits.  Every sequence of such local
+rewrites terminates.  Its terminal vector is a \(\{0,1\}\)-vector with no
+adjacent \(1\)'s, has the same value \(V(d)\), and is independent of the
+order in which the rewrites were applied.  In particular, starting from the
+binary digit vector of a word \(\omega\in\Omega_m\), every local normalization
+order gives the Zeckendorf expansion of \(N_m(\omega)\).
+\end{theorem}
+
+\begin{proof}
+Each rewrite preserves \(V(d)\).  For the adjacent-carry rule this is exactly
+\[
+F_{j+1}+F_{j+2}=F_{j+3}.
+\]
+For the double-digit rules, the identities are
+\[
+2F_2=F_3,\qquad 2F_3=F_2+F_4,
+\]
+and, for \(j\ge3\),
+\[
+2F_{j+1}=F_{j-1}+F_{j+2}.
+\]
+The last identity follows from
+\[
+F_{j+2}+F_{j-1}
+=F_{j+1}+F_j+F_{j-1}
+=F_{j+1}+F_{j+1}.
+\]
+
+Termination is elementary but important.  Since the value \(V(d)\) is fixed,
+only finitely many finitely supported nonnegative vectors can occur during
+the rewriting: if \(d_j>0\), then \(F_{j+1}\le V(d)\), and each coordinate is
+bounded by \(V(d)\).  Order these finitely many vectors lexicographically from
+the largest index downward, padding by zeros.  Every rewrite strictly
+increases this order.  Indeed, an adjacent carry first changes the highest
+affected coordinate \(j+2\) by increasing it by \(1\).  The double-digit rule
+at \(j=1\) first increases coordinate \(2\), the rule at \(j=2\) first
+increases coordinate \(3\), and the rule at \(j\ge3\) first increases
+coordinate \(j+1\).  Hence an infinite rewriting chain is impossible.
+
+If a terminal vector had a coordinate \(d_j\ge2\), one of the double-digit
+rules would apply.  If it had adjacent positive coordinates
+\(d_j,d_{j+1}\ge1\), the adjacent-carry rule would apply.  Thus a terminal
+vector is a \(\{0,1\}\)-vector with no adjacent \(1\)'s.  It is therefore a
+Zeckendorf representation of the integer \(V(d)\).  Zeckendorf uniqueness
+\cite{Zeckendorf1972} implies that all terminal vectors are equal, so the
+normal form is independent of the rewrite order.
+\end{proof}
+
+\begin{theorem}[Contiguous numeration rigidity]\label{thm:contiguous-fibonacci-uniqueness}
+Let \(a_1,a_2,\dots\) be positive integers.  For \(m\ge1\), define
+\[
+W_m(u):=\sum_{j=1}^m u_ja_j,\qquad u\in X_m.
+\]
+Assume that, for every \(m\ge1\), the set of legal values is exactly the
+contiguous interval
+\[
+W_m(X_m)=\{0,1,\dots,F_{m+2}-1\}.
+\]
+Then
+\[
+a_j=F_{j+1}\qquad (j\ge1).
+\]
+Consequently the Fibonacci weights used in Definition~\ref{def:canonical-fold}
+are the unique positive weights for which the golden-mean words \(X_m\)
+enumerate contiguous initial intervals at every resolution.
+\end{theorem}
+
+\begin{proof}
+For \(m=1\), the legal words are \(0\) and \(1\), so
+\(\{0,a_1\}=\{0,1\}\), and \(a_1=1=F_2\).  For \(m=2\), the legal words are
+\(00,10,01\), so
+\[
+\{0,a_1,a_2\}=\{0,1,2\}.
+\]
+Since \(a_1=1\), this gives \(a_2=2=F_3\).
+
+Assume inductively that \(a_j=F_{j+1}\) for \(j<m\), where \(m\ge3\).  The
+words in \(X_m\) ending in \(0\) are exactly \(u0\) with \(u\in X_{m-1}\).
+By the induction hypothesis and the contiguous axiom at level \(m-1\), their
+values form
+\[
+\{0,1,\dots,F_{m+1}-1\}.
+\]
+The words in \(X_m\) ending in \(1\) are exactly \(v01\) with
+\(v\in X_{m-2}\).  Their values form
+\[
+a_m+\{0,1,\dots,F_m-1\},
+\]
+again by the induction hypothesis, now at level \(m-2\).
+
+The two families are disjoint because the full map \(W_m\) has
+\(|X_m|=F_{m+2}\) values and its image is the \(F_{m+2}\)-point interval
+\(\{0,\dots,F_{m+2}-1\}\).  The first family already occupies the initial
+block \(\{0,\dots,F_{m+1}-1\}\), and the second family has exactly \(F_m\)
+values.  Since \(F_{m+2}=F_{m+1}+F_m\), contiguity forces the second block to
+start at \(F_{m+1}\).  Hence \(a_m=F_{m+1}\), completing the induction.
+\end{proof}
 
 \begin{proposition}[Basic properties of the canonical fold]\label{prop:canonical-fold-basic}
 For every \(m\ge 1\), the map \(\Fold_m:\Omega_m\to X_m\) is surjective and
@@ -1929,6 +2068,135 @@ an injective placement inside \(X_m^{00}\) exists exactly in that range, and
 the displayed infimum formula follows.
 \end{proof}
 
+\begin{proposition}[Finite small-\(m\) endpoint budgets]
+\label{prop:small-m-endpoint-budget}
+Assume \(\beta=\alpha\), fix \(1\le m\le5\), and write the masses of the
+Sturmian \(m\)-block law in nonincreasing order as
+\[
+p_1\ge p_2\ge\cdots\ge p_{m+1}>0.
+\]
+Let
+\[
+b_0(m):=|X_m^{00}|,\qquad
+b_1(m):=|X_m^{01}|+|X_m^{10}|,\qquad
+b_2(m):=|X_m^{11}|,
+\]
+with the convention \(X_1^{00}=\{0\}\), \(X_1^{11}=\{1\}\), and
+\(X_1^{01}=X_1^{10}=\varnothing\).  The endpoint capacities and the
+support-optimal endpoint budgets for an injective placement of the \(m+1\)
+Sturmian atoms are
+\[
+\begin{array}{c|c|c|c}
+m & (b_0,b_1,b_2) & \text{best support budget }(n_0,n_1,n_2)
+& \text{endpoint classes used}\\
+\hline
+1 & (1,0,1) & (1,0,1) & X_1^{00},X_1^{11}\\
+2 & (1,2,0) & (1,2,0) & X_2^{00},X_2^{01},X_2^{10}\\
+3 & (2,2,1) & (2,2,0) & X_3^{00},X_3^{01},X_3^{10}\\
+4 & (3,4,1) & (3,2,0) & X_4^{00}\text{ and two middle-class words}\\
+5 & (5,6,2) & (5,1,0) & X_5^{00}\text{ and one middle-class word}.
+\end{array}
+\]
+Here \(n_0+n_1+n_2=m+1\), and the classes are filled in the order
+\[
+X_m^{00},\qquad X_m^{01}\cup X_m^{10},\qquad X_m^{11}.
+\]
+
+For \(q\in(0,\infty)\setminus\{1\}\), the minimum over injective placements
+\(T_m:S_m(\alpha)\to X_m\) is
+\[
+\inf_{T_m}D_q((T_m)_*\mu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m)+\gamma_{m,q},
+\]
+where
+\[
+\gamma_{m,q}
+=
+\frac{1}{q-1}\log
+\frac{
+\sum_{r=1}^{n_0}p_r^q
+\;+\;\varphi^{q-1}\sum_{r=n_0+1}^{n_0+n_1}p_r^q
+\;+\;\varphi^{2(q-1)}\sum_{r=n_0+n_1+1}^{m+1}p_r^q}
+{\sum_{r=1}^{m+1}p_r^q}.
+\]
+For \(q=1\),
+\[
+\inf_{T_m}\KL((T_m)_*\mu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m)+\gamma_{m,1},
+\]
+where
+\[
+\gamma_{m,1}
+=
+\left(\sum_{r=n_0+1}^{n_0+n_1}p_r
++2\sum_{r=n_0+n_1+1}^{m+1}p_r\right)\log\varphi.
+\]
+For \(q=0\), the minimum is
+\[
+\inf_{T_m}D_0((T_m)_*\mu_m\|\pi_m)
+=
+-\log\!\left(
+\pi(0)\varphi^{-(m-1)}
+\bigl(n_0+n_1\varphi^{-1}+n_2\varphi^{-2}\bigr)
+\right).
+\]
+The minimizers are exactly the placements with the endpoint budgets displayed
+above, with the largest source atoms assigned to the heaviest available
+endpoint classes for \(q\in(0,\infty]\); for \(q=0\), only the support budget
+matters.
+\end{proposition}
+
+\begin{proof}
+The capacity table follows from direct enumeration for \(m=1\) and from
+Lemma~\ref{lem:endpoint-class-counts} for \(2\le m\le5\).  Since Parry masses
+on \(X_m^{00}\), \(X_m^{01}\cup X_m^{10}\), and \(X_m^{11}\) are respectively
+\[
+\pi(0)\varphi^{-(m-1)},\qquad
+\pi(0)\varphi^{-m},\qquad
+\pi(0)\varphi^{-(m+1)},
+\]
+the support of largest Parry mass is obtained by filling the endpoint classes
+in the displayed order.  Applying this rule with \(k=m+1\) gives the five
+rows of the table.
+
+Let \(q\in(0,\infty)\setminus\{1\}\).  The endpoint-penalty identity proved in
+Theorem~\ref{thm:lossless-coarse-graining-envelope} shows that minimizing the
+divergence is the same as optimizing
+\[
+\sum_{a\in S_m(\alpha)}\mu_m(a)^q\tau(T_m(a))^{1-q},
+\]
+with the sign of \(1/(q-1)\) taken into account.  If \(q>1\), the prefactor is
+positive and the coefficients
+\[
+1,\quad \varphi^{q-1},\quad \varphi^{2(q-1)}
+\]
+increase from the \(00\)-class to the \(11\)-class.  The rearrangement
+inequality therefore assigns the largest weights \(p_r^q\) to the smallest
+available coefficients.  If \(0<q<1\), the prefactor is negative and the
+coefficients
+\[
+1,\quad \varphi^{q-1},\quad \varphi^{2(q-1)}
+\]
+decrease from the \(00\)-class to the \(11\)-class; maximizing the weighted
+sum, which minimizes the logarithm after multiplication by the negative
+prefactor, gives the same assignment.  This proves the displayed formula for
+\(\gamma_{m,q}\).
+
+For \(q=1\), Theorem~\ref{thm:lossless-coarse-graining-envelope} reduces the
+endpoint penalty to the expectation of the class costs \(0,\log\varphi\), and
+\(2\log\varphi\).  The same rearrangement argument assigns the largest masses
+to the lowest costs, giving \(\gamma_{m,1}\).  For \(q=0\), the source weights
+drop out and
+\[
+D_0((T_m)_*\mu_m\|\pi_m)=-\log\pi_m(T_m(S_m(\alpha))),
+\]
+so the best support budget is exactly the support budget already listed in
+the table.  The equality cases stated in the proposition are precisely the
+equality cases in these rearrangement steps.
+\end{proof}
+
 \begin{remark}[Injective relabeling and support budgets]
 \label{rem:injective-relabeling-stronger}
 Theorem~\ref{thm:optimal-injective-relabeling} does more than constrain the
@@ -1936,9 +2204,9 @@ image support size. It fixes the realized Sturmian weight vector \(\mu_m\) and
 allows only injective placements of those \(m+1\) probabilities inside the
 ambient language \(X_m\). The resulting optimum is therefore a coding
 invariance statement for the realized source, not just a best \((m+1)\)-state
-approximation problem over arbitrary laws on \(X_m\).  The finite exceptional
-cases \(m<6\) play no role in the asymptotic statements and are absorbed into
-the \(O_\alpha(1)\) constants.
+approximation problem over arbitrary laws on \(X_m\).  The finite range
+\(m<6\) is the endpoint-budget obstruction classified in
+Proposition~\ref{prop:small-m-endpoint-budget}.
 \end{remark}
 
 \subsection{Support budgets and bounded-type asymptotics}
