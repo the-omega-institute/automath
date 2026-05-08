@@ -120,7 +120,7 @@ def oracle_submit(task_id: str, prompt: str, *,
                   is_followup: bool = False,
                   tag: str = "",
                   pdf_path: Optional[Path] = None,
-                  model: str = "chatgpt-5.5-pro") -> dict:
+                  model: str = "gpt-5.5-codex-high") -> dict:
     """POST to /submit (new conv) or /continue (existing conv).
 
     Returns the server's JSON response (contains conversation_id + queue_position)
