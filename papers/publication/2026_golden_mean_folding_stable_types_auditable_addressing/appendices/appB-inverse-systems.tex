@@ -1,0 +1,393 @@
+\section{Finite automata, Markov covers, entropy, and Parry baselines}
+\label{app:finite-state-audit}
+
+This appendix records the finite-state interface induced by the block fold
+\[
+\Fold_m:\Om_m\to X_m.
+\]
+The main text constructs \(\Fold_m\) at a single finite window.  Here we pass to the sequence-level sliding block factor
+\[
+\Phi_m:\{0,1\}^{\ZZ}\to X_m^{\ZZ},
+\qquad
+(\Phi_m x)_t=\Fold_m(x_tx_{t+1}\cdots x_{t+m-1}),
+\]
+and write
+\[
+Y_m:=\Phi_m(\{0,1\}^{\ZZ}).
+\]
+The purpose of this appendix is to make \(Y_m\) computationally auditable.  We construct a labeled de Bruijn presentation, a deterministic right-resolving cover, an adjacency matrix, entropy and Parry data, and a cover-level zeta function.
+
+The convention throughout is that the cover is a computational presentation, whereas \(Y_m\) is the intrinsic sofic shift.  Thus adjacency matrices, Perron--Frobenius data, and determinant zeta functions are cover-level certificates unless an additional resolving property identifies them with intrinsic labeled data.
+
+\subsection{The block factor}
+
+Recall that
+\[
+\Om_m=\{0,1\}^m,
+\qquad
+X_m=\{z_1\cdots z_m\in\{0,1\}^m:z_iz_{i+1}\neq 11\text{ for all }i\}.
+\]
+The fold is defined in \Cref{sec:folding} by the finite Zeckendorf residue section
+\[
+\Fold_m(\omega)=s_m\bigl(N_m(\omega)\bmod F_{m+2}\bigr),
+\qquad
+N_m(\omega)=\sum_{k=1}^m\omega_kF_{k+1}.
+\]
+\Cref{app:rewriting} gives a local carry implementation of the same map.
+
+The sequence-level factor is
+\[
+(\Phi_m x)_t=\Fold_m(x_tx_{t+1}\cdots x_{t+m-1}).
+\]
+Since \(\Phi_m\) is a finite sliding block code from the full two-shift, \(Y_m\) is sofic \cite{LindMarcus1995}.
+
+\subsection{Labeled de Bruijn presentation}
+
+Let the order-\((m-1)\) de Bruijn vertex set be
+\[
+V_m^{(0)}:=\{0,1\}^{m-1}.
+\]
+For every block
+\[
+w=w_1\cdots w_m\in\{0,1\}^m,
+\]
+put an edge
+\[
+e_w:w_1\cdots w_{m-1}\longrightarrow w_2\cdots w_m.
+\]
+Label this edge by
+\[
+\ell(e_w):=\Fold_m(w)\in X_m.
+\]
+This gives a finite labeled graph
+\[
+\mathcal G_m^{(0)}=(V_m^{(0)},E_m^{(0)},\ell)
+\]
+with
+\[
+|V_m^{(0)}|=2^{m-1},
+\qquad
+|E_m^{(0)}|=2^m.
+\]
+
+\begin{proposition}[Correctness of the de Bruijn presentation]
+\label{prop:debruijn-presentation}
+The label shift presented by \(\mathcal G_m^{(0)}\) is exactly \(Y_m\).
+\end{proposition}
+
+\begin{proof}
+Let \(x=(x_t)_{t\in\ZZ}\in\{0,1\}^{\ZZ}\).  For each \(t\), define
+\[
+v_t=x_tx_{t+1}\cdots x_{t+m-2}\in V_m^{(0)}
+\]
+and
+\[
+w_t=x_tx_{t+1}\cdots x_{t+m-1}\in\{0,1\}^m.
+\]
+Then \(e_{w_t}:v_t\to v_{t+1}\) is an edge of \(\mathcal G_m^{(0)}\), and its label is
+\[
+\ell(e_{w_t})=\Fold_m(w_t)=(\Phi_m x)_t.
+\]
+Thus every point of \(Y_m\) is produced by a bi-infinite path in \(\mathcal G_m^{(0)}\).
+
+Conversely, every bi-infinite path in the de Bruijn graph consists of overlapping length-\(m\) blocks.  The overlap condition reconstructs a unique bi-infinite binary sequence \(x\).  The emitted labels are precisely
+\[
+\Fold_m(x_tx_{t+1}\cdots x_{t+m-1}),
+\]
+so the label sequence belongs to \(Y_m\).  Therefore the label shift of \(\mathcal G_m^{(0)}\) is exactly \(Y_m\).
+\end{proof}
+
+\subsection{Right-resolving cover}
+
+The graph \(\mathcal G_m^{(0)}\) is finite and labeled, but it need not be right-resolving.  For entropy and Parry computations it is convenient to replace it by a deterministic presentation.
+
+A labeled graph \(\mathcal G=(V,E,\ell)\) over alphabet \(X_m\) is \emph{right-resolving} if, for every vertex \(v\in V\) and every label \(a\in X_m\), there is at most one edge leaving \(v\) with label \(a\).
+
+Starting from \(\mathcal G_m^{(0)}\), form the subset determinization.  For a subset \(S\subseteq V_m^{(0)}\) and a label \(a\in X_m\), define
+\[
+\delta(S,a):=
+\{v'\in V_m^{(0)}:\exists v\in S,\ \exists e:v\to v'\text{ with }\ell(e)=a\}.
+\]
+Begin with \(S_0=V_m^{(0)}\).  Include every nonempty subset reachable from \(S_0\) by repeated applications of \(\delta(\cdot,a)\).  These reachable subsets form the deterministic state set \(V_m^{\det}\).  For every reachable \(S\in V_m^{\det}\) and every \(a\in X_m\) with \(\delta(S,a)\neq\varnothing\), put one edge
+\[
+S\longrightarrow \delta(S,a)
+\]
+labeled by \(a\).  This gives a deterministic labeled graph
+\[
+\mathcal G_m^{\det}=(V_m^{\det},E_m^{\det},\ell).
+\]
+Finally remove vertices and edges that lie on no bi-infinite path.  The remaining essential graph is denoted
+\[
+\mathcal K_m.
+\]
+We call \(\mathcal K_m\) the reference Markov cover of \(Y_m\).  If a minimal irreducible right-resolving presentation is required, \(\mathcal K_m\) may be further minimized to the Fischer cover.  For this paper, \(\mathcal K_m\) is sufficient: it is finite, deterministic, reproducible, and presents the same sofic shift.
+
+\begin{proposition}[Correctness of the right-resolving cover]
+\label{prop:right-resolving-cover}
+The cover \(\mathcal K_m\) is right-resolving and presents \(Y_m\).
+\end{proposition}
+
+\begin{proof}
+By construction, from a subset state \(S\) and a label \(a\), there is at most one outgoing transition \(S\to\delta(S,a)\).  Hence the deterministic graph is right-resolving.
+
+Subset determinization preserves the accepted label language of the original labeled graph.  Since \(\mathcal G_m^{(0)}\) presents \(Y_m\) by \Cref{prop:debruijn-presentation}, the deterministic graph before trimming presents the same finite label language.  Removing vertices and edges that occur in no bi-infinite path does not change the associated two-sided sofic shift.  Therefore the essential deterministic graph \(\mathcal K_m\) presents \(Y_m\).
+\end{proof}
+
+\subsection{Adjacency matrix and entropy}
+
+Let
+\[
+\mathcal K_m=(V_m,E_m,\ell)
+\]
+be the essential right-resolving cover.  Define its adjacency matrix
+\[
+A_m=(A_m(u,v))_{u,v\in V_m}
+\]
+by
+\[
+A_m(u,v):=\#\{e\in E_m:e:u\to v\}.
+\]
+Because \(\mathcal K_m\) is right-resolving, different edges leaving the same vertex carry different labels, although several differently labeled edges may connect the same ordered pair of vertices.
+
+\begin{theorem}[Entropy from the cover adjacency matrix]
+\label{thm:cover-entropy}
+The topological entropy of \(Y_m\) is
+\[
+h_{\mathrm{top}}(Y_m)=\log\rho(A_m),
+\]
+where \(\rho(A_m)\) is the spectral radius of the essential cover adjacency matrix.  If \(A_m\) has several essential strongly connected components, then
+\[
+h_{\mathrm{top}}(Y_m)=\max_C\log\rho(A_m|_C),
+\]
+where \(C\) ranges over essential strongly connected components.
+\end{theorem}
+
+\begin{proof}
+Let \(L_n(Y_m)\) be the set of length-\(n\) words appearing in \(Y_m\), and let \(P_n(\mathcal K_m)\) be the set of length-\(n\) paths in the cover.  Every path gives one label word, so
+\[
+|L_n(Y_m)|\le |P_n(\mathcal K_m)|.
+\]
+Conversely, because \(\mathcal K_m\) is right-resolving, once the starting vertex and the label word are known, the path is uniquely determined.  Hence each label word has at most \(|V_m|\) path lifts, and
+\[
+|P_n(\mathcal K_m)|\le |V_m|\,|L_n(Y_m)|.
+\]
+Taking logarithms, dividing by \(n\), and letting \(n\to\infty\), the factor \(|V_m|\) disappears.  Thus the label shift and the edge shift of the cover have the same entropy.
+
+For a finite directed graph with adjacency matrix \(A_m\),
+\[
+\lim_{n\to\infty}\frac1n\log |P_n(\mathcal K_m)|=\log\rho(A_m).
+\]
+If \(A_m\) is reducible, the path growth rate is governed by the essential strongly connected component with maximal spectral radius.  This proves the theorem.
+\end{proof}
+
+\subsection{Parry measure on maximal components}
+
+Assume first that \(A_m\) is irreducible, and set
+\[
+\lambda_m:=\rho(A_m).
+\]
+By Perron--Frobenius theory, there are positive right and left eigenvectors
+\[
+A_m r=\lambda_m r,
+\qquad
+\ell^\top A_m=\lambda_m\ell^\top,
+\]
+normalized by
+\[
+\ell^\top r=1.
+\]
+Define
+\[
+\pi_u:=\ell_u r_u.
+\]
+For vertices \(u,v\in V_m\), define
+\[
+P_{uv}:=\frac{A_m(u,v)r_v}{\lambda_m r_u}.
+\]
+Then \(\sum_vP_{uv}=1\) and \(\pi^\top P=\pi^\top\).  If there are multiple edges \(e:u\to v\), each such edge is assigned conditional probability
+\[
+P(e\mid u):=\frac{r_v}{\lambda_m r_u}.
+\]
+The resulting Markov measure on the edge shift of \(\mathcal K_m\) is the Parry measure of the cover \cite{Parry1964}.
+
+For an edge path
+\[
+u_0\xrightarrow{e_0}u_1\xrightarrow{e_1}\cdots
+\xrightarrow{e_{n-1}}u_n,
+\]
+the edge-cylinder probability is
+\[
+\mu_{\mathrm{Parry}}([e_0\cdots e_{n-1}])
+=
+\pi_{u_0}\prod_{k=0}^{n-1}\frac{r_{u_{k+1}}}{\lambda_m r_{u_k}}
+=
+\frac{\ell_{u_0}r_{u_n}}{\lambda_m^n}.
+\]
+For a label word \(a_0\cdots a_{n-1}\in X_m^n\), its pushed-forward Parry probability is obtained by summing over all paths whose labels are \(a_0,\ldots,a_{n-1}\):
+\[
+\nu_m([a_0\cdots a_{n-1}])
+=
+\sum_{\ell(e_k)=a_k}
+\mu_{\mathrm{Parry}}([e_0\cdots e_{n-1}]).
+\]
+Because the cover is right-resolving, for each initial state there is at most one path labeled by a given word, so this sum is finite and directly computable.
+
+For finite label cylinders, right-resolving means that, once an initial state is fixed, there is at most one path carrying a given finite label word.  This makes the pushed-forward cylinder probabilities directly computable by a finite sum over initial states.  If \(\mathcal K_m\) is further minimized to the Fischer cover of an irreducible sofic shift, the pushforward of the component Parry measure is the canonical measure of maximal entropy on \(Y_m\).  For a nonminimal reference cover, the pushed-forward measure is a reproducible cover-induced Markov baseline; its intrinsic maximal-entropy status should be recorded only when the required resolving or finite-to-one condition has been certified.  If several essential components have the same maximal spectral radius, the audit output should list every maximal component and the corresponding pushed-forward baseline measure.
+
+\subsection{Golden-mean Parry baseline}
+\label{app:golden-parry-baseline}
+
+The stable grammar itself is the golden-mean shift
+\[
+X_{\mathrm{GM}}=\{z\in\{0,1\}^{\ZZ}:z_iz_{i+1}\neq 11\text{ for all }i\}.
+\]
+Its adjacency matrix is
+\[
+A_{\mathrm{GM}}=
+\begin{pmatrix}
+1&1\\
+1&0
+\end{pmatrix},
+\]
+with spectral radius
+\[
+\rho(A_{\mathrm{GM}})=\varphi=\frac{1+\sqrt5}{2}.
+\]
+Hence
+\[
+h_{\mathrm{top}}(X_{\mathrm{GM}})=\log\varphi.
+\]
+Choose right and left Perron vectors
+\[
+r=(\varphi,1),
+\qquad
+\ell=\left(1,\frac1\varphi\right),
+\]
+so that \(\ell^\top r=\sqrt5\).  The stationary distribution is
+\[
+\pi_0=\frac{\varphi}{\sqrt5},
+\qquad
+\pi_1=\frac{1}{\varphi\sqrt5}.
+\]
+The Parry transition matrix is
+\[
+P_{\mathrm{GM}}=
+\begin{pmatrix}
+\varphi^{-1}&\varphi^{-2}\\
+1&0
+\end{pmatrix}.
+\]
+For a legal word \(z=z_1\cdots z_m\in X_m\), define the finite golden-mean Parry baseline
+\[
+q_m(z):=\pi_{z_1}\prod_{i=1}^{m-1}P_{\mathrm{GM}}(z_i,z_{i+1}).
+\]
+This \(q_m\) is a reference maximum-entropy cylinder distribution on legal stable words.  It is a baseline, not a theorem about the empirical fold-output law.  The correct experimental question is the discrepancy between an observed fold-output histogram and \(q_m\), with sampling uncertainty and model discrepancy reported separately.
+
+\subsection{Cover zeta function and pressure}
+
+For the cover adjacency matrix \(A_m\), define the cover zeta function
+\[
+\zeta_{\mathcal K_m}(z)
+:=
+\exp\left(\sum_{n\ge1}\frac{\operatorname{tr}(A_m^n)}{n}z^n\right).
+\]
+Since \(A_m\) is finite,
+\[
+\zeta_{\mathcal K_m}(z)=\frac{1}{\det(I-zA_m)}.
+\]
+This is the zeta function of the edge shift of the cover.  It must not be confused with an intrinsic zeta function of the labeled sofic shift \(Y_m\).  If the label map is not one-to-one on periodic points, then \(\zeta_{\mathcal K_m}\) counts lifted periodic orbits and may overcount intrinsic labeled periodic points.
+
+More generally, for a potential \(\psi:E_m\to\RR\), define the weighted adjacency matrix
+\[
+A_{m,\psi}(u,v):=\sum_{e:u\to v}\exp(\psi(e)).
+\]
+The cover pressure is
+\[
+P_{\mathcal K_m}(\psi):=\log\rho(A_{m,\psi}).
+\]
+Special cases include unweighted entropy \(\psi\equiv0\), output-label potentials, fiber multiplicity potentials depending on \(|\Fold_m^{-1}(a)|\), and moment or collision potentials used for Renyi-type projection statistics.  These are cover pressure certificates unless the potential descends cleanly to the intrinsic labeled system.
+
+\subsection{Algorithmic audit protocol}
+
+\begin{definition}[Reference finite-state audit]
+\label{def:reference-finite-state-audit}
+For a fixed resolution \(m\), the reference finite-state audit consists of the following deterministic steps.
+\begin{enumerate}[label=(B\arabic*)]
+\item Enumerate all words \(w\in\{0,1\}^m\).
+\item Compute \(a(w):=\Fold_m(w)\), using the residue-section definition or the executable normalizer of \Cref{app:rewriting}.
+\item Build the labeled de Bruijn graph \(\mathcal G_m^{(0)}\) with edge
+\[
+\operatorname{prefix}_{m-1}(w)\to \operatorname{suffix}_{m-1}(w),
+\qquad
+\ell(e_w)=a(w).
+\]
+\item Determinize by subset construction to obtain \(\mathcal G_m^{\det}\).
+\item Trim vertices and edges lying on no bi-infinite path to obtain the essential cover \(\mathcal K_m\).
+\item Form the adjacency matrix \(A_m\).
+\item Compute \(\lambda_m=\rho(A_m)\) and \(h_m=\log\lambda_m\).
+\item For every maximal component, compute Perron left and right eigenvectors and the corresponding Parry measure.
+\item Report the cover zeta function
+\[
+\zeta_{\mathcal K_m}(z)=\frac1{\det(I-zA_m)}.
+\]
+\item Separately report the golden-mean Parry baseline \(q_m\) on \(X_m\).
+\end{enumerate}
+The output is
+\[
+\left(\mathcal K_m,A_m,\lambda_m,h_m,\nu_m,\zeta_{\mathcal K_m},q_m\right),
+\]
+with maximal components listed separately when the cover is reducible.
+\end{definition}
+
+The initial de Bruijn presentation has \(2^{m-1}\) vertices and \(2^m\) edges.  Computing all labels \(\Fold_m(w)\) by the exact normalizer costs \(O(m^2 2^m)\) bit operations using the simple carry audit of \Cref{app:rewriting}.  Subset determinization has worst-case state count \(2^{2^{m-1}}\), although the reachable essential subgraph may be much smaller in concrete computations.  Thus the construction is finite and deterministic for every fixed \(m\), but worst-case exponential in the de Bruijn state count.  Once the cover has \(N_m\) vertices and \(M_m\) edges, adjacency-matrix and Perron--Frobenius computations are polynomial in \(N_m\) and \(M_m\).  Certified numerical work should report interval enclosures for spectral radii, entropies, and pressures.
+
+\subsection{Intrinsic versus cover-level objects}
+
+The following separation is part of the audit discipline.
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+object & cover-level definition & intrinsic status\\
+\midrule
+entropy & \(\log\rho(A_m)\) & equals \(h_{\mathrm{top}}(Y_m)\)\\
+Parry measure & PF Markov measure on \(\mathcal K_m\) & requires resolving certificate for MME\\
+zeta & \(1/\det(I-zA_m)\) & may overcount labeled periodic orbits\\
+pressure & \(\log\rho(A_{m,\psi})\) & cover pressure unless potential descends\\
+periodic counts & \(\operatorname{tr}(A_m^n)\) & lifted count, not automatically intrinsic\\
+\bottomrule
+\end{tabular}
+\end{center}
+In particular,
+\[
+\operatorname{tr}(A_m^n)
+\neq
+\#\operatorname{Fix}(Y_m,\sigma^n)
+\]
+unless the cover is periodic-point resolving in the required sense.
+
+\begin{theorem}[Finite-state audit of the folded sofic factor]
+\label{thm:finite-state-audit}
+For every \(m\ge1\), the sliding block image
+\[
+Y_m=\Phi_m(\{0,1\}^{\ZZ})
+\]
+is a sofic shift admitting an explicit finite right-resolving cover \(\mathcal K_m\).  The cover is computable from \(\Fold_m\) by the de Bruijn-plus-determinization construction.  Its adjacency matrix \(A_m\) satisfies
+\[
+h_{\mathrm{top}}(Y_m)=\log\rho(A_m).
+\]
+On each irreducible maximal component, Perron--Frobenius data define a Parry Markov measure on the cover, whose label pushforward is a reproducible cover-induced Markov baseline.  When the cover component is Fischer, or otherwise certified to be resolving or finite-to-one in the required sense, this pushforward is a maximal entropy measure on \(Y_m\).  The cover zeta function is
+\[
+\zeta_{\mathcal K_m}(z)=\frac1{\det(I-zA_m)}.
+\]
+This zeta function is a cover certificate and must be distinguished from any intrinsic labeled zeta function of \(Y_m\).
+\end{theorem}
+
+\begin{proof}
+\Cref{prop:debruijn-presentation} gives the labeled de Bruijn presentation of \(Y_m\).  \Cref{prop:right-resolving-cover} gives the deterministic right-resolving cover \(\mathcal K_m\).  \Cref{thm:cover-entropy} computes entropy from its adjacency matrix.  Perron--Frobenius theory gives the Parry measure on every irreducible maximal component.  Its label pushforward is a cover-induced baseline, and it is promoted to an intrinsic maximal entropy measure only when the relevant resolving or finite-to-one condition is certified.  The determinant formula for the cover zeta function follows from the finite-matrix identity
+\[
+\exp\left(\sum_{n\ge1}\frac{\operatorname{tr}(A_m^n)}n z^n\right)
+=
+\frac1{\det(I-zA_m)}.
+\]
+The distinction between cover-level and intrinsic labeled periodic data follows because the label map may identify distinct cover periodic orbits.
+\end{proof}

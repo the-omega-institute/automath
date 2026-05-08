@@ -1,0 +1,245 @@
+\subsubsection{有限 Fourier--Toeplitz 外证书}\label{subsubsec:typed-address-biaxial-completion-finite-fourier-toeplitz-outer-certificate}
+外多项式上包络证书仍包含一个圆周上的连续不等式。本段把该不等式完全有限化为 Fourier 尾部账本、Toeplitz--PSD Gram 矩阵、Schur--Cohn 外性裕度与中心值阈值。
+
+固定 \(0<R<r<1\)，并令
+\[
+f_r(z):=\Phi_a(rz),
+\qquad
+W_r(e^{i\theta}):=|f_r(e^{i\theta})|^2.
+\]
+若 \(f_r(z)=\sum_{n\ge0}c_nz^n\)，则
+\[
+W_r^\sharp(z):=
+\left(\sum_{n\ge0}c_nz^n\right)
+\left(\sum_{n\ge0}\overline{c_n}z^{-n}\right)
+\]
+在环域
+\[
+r<|z|<\frac1r
+\]
+内解析，并在 \(|z|=1\) 上等于 \(W_r\)。写其 Laurent 展开为
+\[
+W_r(e^{i\theta})
+=
+\sum_{k\in\ZZ}\widehat W_k^{(r)}e^{ik\theta}.
+\]
+给定 \(M\ge0\)，定义截断
+\[
+W_{r,M}(e^{i\theta})
+:=
+\sum_{|k|\le M}\widehat W_k^{(r)}e^{ik\theta},
+\]
+以及 Fourier 尾部缺陷
+\[
+\Delta_{r,M}
+:=
+\sup_{\theta}
+\left|W_r(e^{i\theta})-W_{r,M}(e^{i\theta})\right|.
+\]
+
+\begin{lemma}[Fourier 尾部缺陷界]\label{lem:typed-address-biaxial-completion-fourier-tail-gap-bound}
+若 \(1<\rho<1/r\)，并且 \(\rho^{-1}>r\)，令
+\[
+\mathcal M_{r,\rho}:=
+\sup_{\rho^{-1}\le |z|\le\rho}|W_r^\sharp(z)|.
+\]
+则
+\[
+|\widehat W_k^{(r)}|\le \mathcal M_{r,\rho}\rho^{-|k|}
+\qquad(k\in\ZZ),
+\]
+并且
+\[
+\Delta_{r,M}
+\le
+2\mathcal M_{r,\rho}
+\frac{\rho^{-M-1}}{1-\rho^{-1}}.
+\]
+\end{lemma}
+\begin{proof}
+Laurent 系数的 Cauchy 估计分别在圆 \(|z|=\rho\) 与 \(|z|=\rho^{-1}\) 上给出正、负 Fourier 系数界。对 \(|k|>M\) 的几何尾部求和，即得第二式。证毕。
+\end{proof}
+
+\begin{proposition}[dyadic Fourier 尾部复杂度]\label{prop:typed-address-biaxial-completion-dyadic-fourier-tail-complexity}
+固定 \(0<\eta<1\)，令
+\[
+r_q:=1-\eta2^{-q},
+\qquad
+\varepsilon_q:=2^{-q},
+\qquad
+\rho_q:=\frac{1-\frac{\eta}{2}\varepsilon_q}{1-\eta\varepsilon_q}.
+\]
+则存在常数 \(C,c,B>0\)，只依赖于 \(a,\eta\)，使
+\[
+\Delta_{r_q,M}
+\le
+C\varepsilon_q^{-(B+1)}\exp(-cM\varepsilon_q).
+\]
+因此若要 \(\Delta_{r_q,M}\le\mu\)，充分条件为
+\[
+M\ge
+C_{a,\eta}2^q
+\left(
+\log\frac1\mu+O_{a,\eta}(q)+1
+\right).
+\]
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+\rho_q=1+\frac{\eta}{2}\varepsilon_q+O(\varepsilon_q^2),
+\qquad
+\log\rho_q\asymp_{\eta}\varepsilon_q,
+\qquad
+1-\rho_q^{-1}\asymp_{\eta}\varepsilon_q.
+\]
+并且 \(r_q\rho_q=1-\frac{\eta}{2}\varepsilon_q\)，同时 \(r_q/\rho_q<1-\frac{\eta}{2}\varepsilon_q\) 对充分大 \(q\) 成立。于是环域 \(\rho_q^{-1}\le |z|\le\rho_q\) 上 \(W_{r_q}^\sharp(z)\) 的两个因子都只在 \(|w|\le1-c_\eta\varepsilon_q\) 的端点层内读取 \(\Phi_a\)。由命题 \ref{prop:typed-address-biaxial-completion-renormalized-polynomial-endpoint-growth}，
+\[
+\mathcal M_{r_q,\rho_q}\le C_{a,\eta}\varepsilon_q^{-B}
+\]
+（调整 \(B\) 后吸收平方）。代入引理 \ref{lem:typed-address-biaxial-completion-fourier-tail-gap-bound}，并用
+\[
+\rho_q^{-M-1}\le \exp(-cM\varepsilon_q),
+\qquad
+(1-\rho_q^{-1})^{-1}\le C_\eta\varepsilon_q^{-1},
+\]
+即得尾部缺陷界。取对数并移项得到 \(M\) 的充分条件。证毕。
+\end{proof}
+
+设候选外多项式为
+\[
+\mathfrak q(z)=q_0+q_1z+\cdots+q_Nz^N,
+\qquad
+Q(e^{i\theta})=|\mathfrak q(e^{i\theta})|^2.
+\]
+令 \(L=\max\{N,M\}\)，并写
+\[
+D(e^{i\theta})
+:=
+Q(e^{i\theta})-W_{r,M}(e^{i\theta})-\Delta^+
+=
+\sum_{k=-L}^{L}d_ke^{ik\theta}.
+\]
+其中 \(\Delta^+\) 是待验证的尾部上界。若存在 Hermitian 矩阵 \(H\succeq0\) 使
+\[
+D(e^{i\theta})
+=
+v_L(e^{i\theta})^*Hv_L(e^{i\theta}),
+\qquad
+v_L(z):=(1,z,\ldots,z^L)^T,
+\]
+则 \(D(e^{i\theta})\ge0\) 对所有 \(\theta\) 成立。系数匹配为有限线性方程
+\[
+d_k=\sum_{j-i=k}H_{ij},
+\qquad
+-L\le k\le L.
+\]
+
+\begin{definition}[有限 Fourier--Toeplitz 外证书]\label{def:typed-address-biaxial-completion-finite-fourier-toeplitz-outer-certificate}
+固定 dyadic 半径
+\[
+R_q:=1-2^{-q},
+\qquad
+r_q:=1-\eta2^{-q}.
+\]
+一份第 \(q\) 层有限外证书为
+\[
+\mathsf{Cert}^{\mathrm{out}}_q
+:=
+\bigl(
+\mathfrak q_N,\,
+M,\,
+\Delta^+_{q,M},\,
+H,\,
+\lambda_*,\,
+A_0^-
+\bigr),
+\]
+并要求以下有限条件均被严格核验：
+\begin{enumerate}
+  \item Fourier 尾部闭合：
+  \[
+  \Delta_{r_q,M}\le \Delta^+_{q,M}.
+  \]
+  \item Toeplitz--PSD 上包络：对
+  \[
+  D_q(e^{i\theta})
+  :=
+  |\mathfrak q_N(e^{i\theta})|^2
+  -W_{r_q,M}(e^{i\theta})
+  -\Delta^+_{q,M},
+  \]
+  存在 \(H\succeq0\) 使其 Fourier 系数满足上述 Gram 匹配方程。
+  \item Schur--Cohn 外性裕度：
+  \[
+  \lambda_{\min}\mathcal S(\mathfrak q_N)\ge\lambda_*>0,
+  \]
+  其中 \(\mathcal S(\mathfrak q_N)\) 是 Schur--Cohn/Jury 矩阵。
+  \item 基点下界与阈值：
+  \[
+  0<A_0^-\le|\Phi_a(0)|,
+  \qquad
+  \log|\mathfrak q_N(0)|-\log A_0^-
+  <
+  \log\frac{r_q}{R_q}.
+  \]
+\end{enumerate}
+若四组条件均成立，则定义该证书输出 \(\mathsf{PASS}\)。
+\end{definition}
+
+\begin{theorem}[有限 Fourier--Toeplitz 外证书的正确性]\label{thm:typed-address-biaxial-completion-finite-fourier-toeplitz-outer-certificate-soundness}
+若 \(\mathsf{Cert}^{\mathrm{out}}_q=\mathsf{PASS}\)，则
+\[
+\Phi_a(w)\ne0\qquad(|w|\le R_q).
+\]
+\end{theorem}
+\begin{proof}
+Fourier 尾部闭合给出
+\[
+W_{r_q}\le W_{r_q,M}+\Delta^+_{q,M}
+\]
+在圆周上成立。Toeplitz--PSD 上包络给出
+\[
+|\mathfrak q_N(e^{i\theta})|^2
+\ge
+W_{r_q,M}(e^{i\theta})+\Delta^+_{q,M}.
+\]
+因此
+\[
+|\mathfrak q_N(e^{i\theta})|
+\ge
+|\Phi_a(r_qe^{i\theta})|.
+\]
+Schur--Cohn 裕度说明 \(\mathfrak q_N\) 在单位圆盘内无零点，故 Jensen 公式给出
+\[
+J_a(r_q)
+\le
+\log|\mathfrak q_N(0)|-\log|\Phi_a(0)|
+\le
+\log|\mathfrak q_N(0)|-\log A_0^-.
+\]
+阈值条件推出
+\[
+J_a(r_q)<\log\frac{r_q}{R_q}.
+\]
+最后由命题 \ref{prop:typed-address-biaxial-completion-renormalized-jensen-repulsion-certificate} 得到 \(|w|\le R_q\) 内无零点。证毕。
+\end{proof}
+
+\begin{corollary}[RH 的有限外证书链表述]\label{cor:typed-address-biaxial-completion-rh-finite-outer-certificate-chain}
+固定 \(0<\eta<1\)。则 RH 等价于：存在 \(q_0\)，使得对所有 \(q\ge q_0\)，均存在第 \(q\) 层有限外证书 \(\mathsf{Cert}^{\mathrm{out}}_q=\mathsf{PASS}\)。
+\end{corollary}
+\begin{proof}
+若证书链最终逐层通过，则定理 \ref{thm:typed-address-biaxial-completion-finite-fourier-toeplitz-outer-certificate-soundness} 排除每个共终闭盘 \(|w|\le1-2^{-q}\) 中的零点，从而排除整个单位圆盘内零点，等价于 RH。反之，若 RH 成立，则上一段的 dyadic 外多项式证书存在性给出连续上包络证书；其上包络具有严格裕度时，取 \(M\) 足够大使 Fourier 尾部闭合，再由 Fej\'er--Riesz/Toeplitz--PSD 表示给出 \(H\succeq0\)，Schur--Cohn 裕度则由外多项式零点远离闭圆盘得到。故每个充分大 dyadic 层存在有限外证书。证毕。
+\end{proof}
+
+因此，验证问题已经完全降为有限对象：
+\[
+\text{Fourier 尾部上界}
+\;+\;
+\text{Toeplitz--PSD Gram 匹配}
+\;+\;
+\text{Schur--Cohn 外性裕度}
+\;+\;
+\text{中心值阈值}.
+\]
+Fourier 尾部 \(\Delta_{r,M}\) 记录无限模态截断的缺陷，Gram 矩阵 \(H\succeq0\) 记录圆周非负性的有限见证，Schur--Cohn 裕度记录外性，而阈值 \(\log(r/R)\) 把平均缺陷再翻译为子盘禁入。剩余问题不再是验证，而是合成：在 dyadic 层 \(q\) 构造足够紧的外多项式 \(\mathfrak q_N\)，使中心值落在排斥阈值以下。

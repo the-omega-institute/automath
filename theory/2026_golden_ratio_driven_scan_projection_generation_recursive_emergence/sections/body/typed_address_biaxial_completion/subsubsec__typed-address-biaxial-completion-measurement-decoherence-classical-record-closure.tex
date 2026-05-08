@@ -1,0 +1,539 @@
+\subsubsection{测量、退相干、coarse-graining、Born 概率与经典可见 spacetime record 闭包}\label{subsubsec:typed-address-biaxial-completion-measurement-decoherence-classical-record-closure}
+Hilbert 载体、Born 配对、量子信道与 Lorentzian in-in backreaction 仍未自动给出经典可见事实。可见事实还需要测量相互作用、apparatus/environment 粗粒化、退相干 pointer、稳定记录代数与有限误差读出。该接口可压缩为
+\[
+\boxed{
+\rho
+\longrightarrow
+\text{measurement instrument}
+\longrightarrow
+\text{decohered records}
+\longrightarrow
+\text{classical visible data}
+\longrightarrow
+\text{observable spacetime statements}.
+}
+\]
+因此 \({\rm Tr}(\rho E)\) 只是概率配对；它不等同于一个稳定、可审计、可复制的 classical record。
+
+\paragraph{instrument 形式的测量。}
+实际测量由完全正 instrument
+\[
+\mathcal I=\{\mathcal I_r\}_{r\in\mathsf R}
+\]
+描述，其中每个 \(\mathcal I_r\) 是 trace-nonincreasing completely positive map，且
+\[
+\sum_{r\in\mathsf R}\mathcal I_r
+\]
+trace-preserving。若
+\[
+\mathcal I_r(\rho)
+=
+\sum_\alpha M_{r,\alpha}\rho M_{r,\alpha}^\dagger,
+\]
+则对应 POVM 元素为
+\[
+\boxed{
+E_r
+=
+\sum_\alpha M_{r,\alpha}^\dagger M_{r,\alpha},
+\qquad
+\sum_rE_r=\mathbf 1.
+}
+\]
+概率与条件化后态分别为
+\[
+\boxed{
+p(r)
+=
+{\rm Tr}(\rho E_r)
+=
+{\rm Tr}[\mathcal I_r(\rho)],
+}
+\]
+\[
+\boxed{
+\rho_r
+=
+\frac{\mathcal I_r(\rho)}{p(r)}
+\qquad (p(r)>0).
+}
+\]
+若结果未被读出，则使用非选择性状态
+\[
+\boxed{
+\rho'_{\rm uncond}
+=
+\sum_r\mathcal I_r(\rho).
+}
+\]
+由此，“collapse”在证书语法中只是 outcome conditioning，而非额外动力学公理。
+
+\begin{definition}[测量协议证书]\label{def:typed-address-biaxial-completion-measurement-protocol-cert}
+称 \(\mathsf{MeasurementProtocolCert}\) 为测量协议证书，若它包含 \(\mathcal H_S,\mathcal H_A,\mathcal H_E\)、\(\rho_S,\rho_A,\rho_E\)、相互作用 \(U_{SAE}\)、记录集合 \(\mathsf R\)、apparatus pointer projectors \(\{P_r^A\}\)、preparation ledger、apparatus-calibration ledger、environment-coupling ledger、record-readout ledger 与 round hash。输出态为
+\[
+\rho_{SAE}^{\rm out}
+=
+U_{SAE}(\rho_S\otimes\rho_A\otimes\rho_E)U_{SAE}^\dagger,
+\]
+记录概率由
+\[
+p(r)
+=
+{\rm Tr}\!\left[
+(\mathbf 1_S\otimes P_r^A\otimes\mathbf 1_E)
+\rho_{SAE}^{\rm out}
+\right]
+\]
+读出。只写“测量 observable”而无 instrument 或 pointer record 时输出 \(\mathsf{MeasurementProtocolNull}\)。
+\end{definition}
+
+\begin{definition}[POVM instrument 证书]\label{def:typed-address-biaxial-completion-povm-instrument-cert}
+称 \(\mathsf{POVMInstrumentCert}\) 为 POVM instrument 证书，若它包含 \(\{\mathcal I_r\}_{r\in\mathsf R}\)、Kraus operators \(\{M_{r,\alpha}\}\)、POVM \(\{E_r\}\)、complete-positivity ledger、trace-preservation ledger、outcome-space ledger、Kraus-representation ledger、POVM-completeness ledger 与 round hash。验证器检查 \(\mathcal I_r\) 完全正、\({\rm Tr}[\mathcal I_r(\rho)]\ge0\)，以及
+\[
+\sum_r{\rm Tr}[\mathcal I_r(\rho)]={\rm Tr}(\rho).
+\]
+若 \(\sum_rE_r\neq\mathbf1\)，输出 \(\mathsf{POVMCompletenessFail}\)。若 instrument 非完全正，输出 \(\mathsf{NonCPInstrumentFail}\)。
+\end{definition}
+
+\begin{definition}[Born 概率账本]\label{def:typed-address-biaxial-completion-born-probability-ledger}
+称 \(\mathsf{BornProbabilityLedger}\) 为 Born 概率账本，若它包含 \(\rho,\{E_r\},\{p(r)\}\)、identity \(p(r)={\rm Tr}(\rho E_r)\)、normalization ledger、zero-probability ledger、conditional-state ledger 与 round hash。验证器检查
+\[
+p(r)\ge0,\qquad \sum_rp(r)=1.
+\]
+若 \(p(r)=0\)，则 \(\rho_r=\mathcal I_r(\rho)/p(r)\) 未定义，输出 \(\mathsf{ZeroProbabilityConditioningNull}\)。把单次结果频率误读为概率恒等式时输出 \(\mathsf{SingleShotFrequencyMisreadFail}\)。
+\end{definition}
+
+\paragraph{退相干与 histories。}
+System--apparatus--environment 相互作用可理想化为
+\[
+|s_a\rangle|A_0\rangle|E_0\rangle
+\longmapsto
+|s_a\rangle|A_a\rangle|E_a\rangle.
+\]
+若输入为 \(\sum_ac_a|s_a\rangle\)，输出为
+\[
+|\Psi_{\rm out}\rangle
+=
+\sum_ac_a|s_a\rangle|A_a\rangle|E_a\rangle.
+\]
+apparatus reduced state 含有 off-diagonal factors \(\langle E_b|E_a\rangle\)。当
+\[
+\langle E_b|E_a\rangle\approx0
+\qquad (a\neq b)
+\]
+时，apparatus 在 pointer basis 中近似为 classical mixture。
+
+对多时刻 histories \(\alpha=(r_1,\ldots,r_n)\)，令
+\[
+C_\alpha=P_{r_n}(t_n)\cdots P_{r_1}(t_1),
+\]
+并定义 decoherence functional
+\[
+\boxed{
+D(\alpha,\beta)
+=
+{\rm Tr}(C_\alpha\rho C_\beta^\dagger).
+}
+\]
+若
+\[
+\boxed{
+|D(\alpha,\beta)|
+\le
+\epsilon_{\rm dec}
+\sqrt{D(\alpha,\alpha)D(\beta,\beta)}
+\qquad(\alpha\neq\beta),
+}
+\]
+则 histories 近似退相干，概率为
+\[
+p(\alpha)=D(\alpha,\alpha).
+\]
+
+\begin{definition}[decoherence functional 证书]\label{def:typed-address-biaxial-completion-decoherence-functional-cert}
+称 \(\mathsf{DecoherenceFunctionalCert}\) 为 decoherence functional 证书，若它包含 \(\{C_\alpha\}\)、\(D(\alpha,\beta)\)、\(\epsilon_{\rm dec}\)、history-projector ledger、off-diagonal-suppression ledger、probability-additivity ledger 与 round hash。若 off-diagonal terms 与 diagonal terms 同阶却使用 classical probability，输出 \(\mathsf{DecoherenceOmissionFail}\)。
+\end{definition}
+
+\begin{definition}[histories 一致性证书]\label{def:typed-address-biaxial-completion-histories-consistency-cert}
+称 \(\mathsf{HistoriesConsistencyCert}\) 为 histories 一致性证书，若它包含 coarse-grained histories \(A\)、概率 \(p(A)\)、additivity ledger、interference-bound ledger 与 round hash。验证器检查
+\[
+\left|
+D(A,A)-\sum_{\alpha\in A}D(\alpha,\alpha)
+\right|
+\le
+\epsilon_{\rm hist}.
+\]
+多时刻记录仍强干涉却被当作 classical stochastic process 时输出 \(\mathsf{ClassicalHistoryMisuseFail}\)。
+\end{definition}
+
+\paragraph{pointer basis 与 classical record algebra。}
+退相干需要稳定 pointer。对 pointer states \(\rho_r^A\)，要求可区分性、持久性、近似 QND 条件与环境冗余：
+\[
+\frac12\|\rho_r^A-\rho_s^A\|_1\ge1-\epsilon_{\rm sep},
+\]
+\[
+\|\mathcal E_{\Delta t}(\rho_r^A)-\rho_r^A\|_1\le\epsilon_{\rm pers},
+\]
+\[
+\|[P_r^A,H_{AE}]\|\le\epsilon_{\rm QND}.
+\]
+可见记录代数还应近似 Abelian：
+\[
+\boxed{
+\|[R_i,R_j]\|\le\epsilon_{\rm comm}.
+}
+\]
+有限结果空间中，经典记录代数应近似
+\[
+\mathcal R_{\rm cl}\simeq\mathbb C^{|\mathsf R|}.
+\]
+
+\begin{definition}[pointer basis 稳定证书]\label{def:typed-address-biaxial-completion-pointer-basis-stability-cert}
+称 \(\mathsf{PointerBasisStabilityCert}\) 为 pointer basis 稳定证书，若它包含 \(\{P_r^A\}\)、\(\{\rho_r^A\}\)、\(\epsilon_{\rm sep},\epsilon_{\rm pers},\epsilon_{\rm QND},\epsilon_{\rm red}\)、distinguishability ledger、persistence ledger、redundancy ledger、environmental-selection ledger 与 round hash。pointer basis 不稳定或不唯一时输出 \(\mathsf{PointerBasisAmbiguityFail}\)。记录迅速被擦除时输出 \(\mathsf{RecordPersistenceFail}\)。
+\end{definition}
+
+\begin{definition}[经典记录代数证书]\label{def:typed-address-biaxial-completion-classical-record-algebra-cert}
+称 \(\mathsf{ClassicalRecordAlgebraCert}\) 为经典记录代数证书，若它包含 \(\mathcal R_{\rm cl},\mathsf R,\{R_i\}\)、\(\epsilon_{\rm comm}\)、abelianization ledger、coarse-grained-projection ledger、classical-probability ledger 与 round hash。验证器检查 record observables 是否近似交换，以及 coarse-grained record algebra 是否可作为 classical data table。非交换 records 被当作 simultaneous classical variables 时输出 \(\mathsf{RecordNonCommutativityFail}\)。
+\end{definition}
+
+\paragraph{ReadRecord 偏函数与条件化。}
+与 ReadUS 语义兼容，定义
+\[
+\boxed{
+\mathsf{ReadRecord}:
+(\rho,\mathcal I,\mathcal R_{\rm cl},b)
+\longrightarrow
+r\in\mathsf R
+\quad\text{or}\quad
+\mathsf{NULL}.
+}
+\]
+其中 \(b\) 是分辨率、阈值或证书深度。NULL 可细分为
+\[
+\mathsf{InstrumentNull},\quad
+\mathsf{DecoherenceNull},\quad
+\mathsf{PointerNull},\quad
+\mathsf{RecordPersistenceNull},\quad
+\mathsf{CalibrationNull},\quad
+\mathsf{ResolutionNull}.
+\]
+这些 NULL 表示 readout map 未闭合，而不是某个 ordinary outcome。
+
+\begin{definition}[outcome conditioning 证书]\label{def:typed-address-biaxial-completion-outcome-conditioning-cert}
+称 \(\mathsf{OutcomeConditioningCert}\) 为 outcome conditioning 证书，若它包含 \(r,p(r),\rho_r,\rho'_{\rm uncond}\)、selective-update ledger、nonselective-update ledger、zero-probability ledger 与 round hash。验证器检查选择性后态
+\[
+\rho_r=\frac{\mathcal I_r(\rho)}{p(r)}
+\]
+与非选择性状态 \(\rho'_{\rm uncond}=\sum_r\mathcal I_r(\rho)\) 是否被正确区分。混用二者时输出 \(\mathsf{SelectiveNonselectiveMixingFail}\)。
+\end{definition}
+
+\begin{definition}[测量 back-action 账本]\label{def:typed-address-biaxial-completion-measurement-back-action-ledger}
+称 \(\mathsf{MeasurementBackActionLedger}\) 为测量 back-action 账本，若它包含后态 \(\rho'\)、trace-distance bound
+\[
+\eta_{\rm BA}:=\|\rho'-\rho\|_1
+\]
+或 observable-family bound
+\[
+\eta_{\rm BA}^{\mathcal O}
+:=
+\sup_{\mathcal O\in\mathfrak O}
+\left|
+{\rm Tr}(\rho'\mathcal O)-{\rm Tr}(\rho\mathcal O)
+\right|,
+\]
+以及 disturbance ledger 与 round hash。后续动力学使用测量前态而实际读出已条件化时输出 \(\mathsf{MeasurementBackActionOmissionFail}\)。
+\end{definition}
+
+\paragraph{coarse-graining、频率与校准。}
+实际可见记录通常由 micro-record 粗粒化得到：
+\[
+\pi:\mathsf R_{\rm micro}\to\mathsf R_{\rm vis}.
+\]
+于是
+\[
+\boxed{
+p(\bar r)
+=
+\sum_{r:\pi(r)=\bar r}p(r),
+\qquad
+\mathcal I_{\bar r}
+=
+\sum_{r:\pi(r)=\bar r}\mathcal I_r,
+}
+\]
+\[
+\boxed{
+\rho_{\bar r}
+=
+\frac{\sum_{r:\pi(r)=\bar r}\mathcal I_r(\rho)}{p(\bar r)}.
+}
+\]
+coarse-graining 信息损失由 \(H(R_{\rm micro}|R_{\rm vis})\) 记录。
+
+\begin{definition}[coarse-graining record 证书]\label{def:typed-address-biaxial-completion-coarse-graining-record-cert}
+称 \(\mathsf{CoarseGrainingRecordCert}\) 为 coarse-graining record 证书，若它包含 \(\pi:\mathsf R_{\rm micro}\to\mathsf R_{\rm vis}\)、\(p(r),p(\bar r)\)、\(\mathcal I_r,\mathcal I_{\bar r}\)、\(H(R_{\rm micro}|R_{\rm vis})\)、information-loss ledger、resolution ledger 与 round hash。从 coarse-grained record 反推出唯一 micro-record 时输出 \(\mathsf{CoarseGrainingInversionFail}\)。
+\end{definition}
+
+Born probability 是单次概率规则；实验频率需要有限样本界。对 \(N\) 次 independent repeated trials，
+\[
+\hat p_r=\frac{N_r}{N},
+\]
+Hoeffding 型界为
+\[
+\mathbb P(|\hat p_r-p(r)|>\delta)
+\le
+2e^{-2N\delta^2}.
+\]
+多结果时
+\[
+\mathbb P\!\left(\max_r|\hat p_r-p(r)|>\delta\right)
+\le
+2|\mathsf R|e^{-2N\delta^2}.
+\]
+若 trials correlated，需给出 mixing ledger 与 effective sample size \(N_{\rm eff}\)。
+
+\begin{definition}[有限样本频率证书]\label{def:typed-address-biaxial-completion-finite-sample-frequency-cert}
+称 \(\mathsf{FiniteSampleFrequencyCert}\) 为有限样本频率证书，若它包含 \(N,N_r,\hat p_r,p(r),\delta\)、confidence ledger、correlation ledger、\(N_{\rm eff}\) ledger 与 round hash。少量样本未给置信界却声称违反 Born probabilities 时输出 \(\mathsf{FiniteSampleOverclaimFail}\)。
+\end{definition}
+
+\begin{definition}[校准证书]\label{def:typed-address-biaxial-completion-calibration-cert}
+称 \(\mathsf{CalibrationCert}\) 为校准证书，若它包含 ideal POVM \(\{E_r\}\)、calibrated POVM \(\{\widetilde E_r\}\)、误差
+\[
+\epsilon_{\rm cal}:=\max_r\|\widetilde E_r-E_r\|,
+\]
+instrument-response ledger、detector-artifact ledger 与 round hash。未区分 ideal measurement 与 calibrated instrument 时输出 \(\mathsf{CalibrationNull}\)。将 detector artifact 当作 system property 时输出 \(\mathsf{DetectorArtifactMislabelFail}\)。
+\end{definition}
+
+\paragraph{detector backreaction 与 spacetime record。}
+Apparatus 与 environment 也携带 stress tensor。若探测器不可视为 probe，则半经典源项应使用
+\[
+\boxed{
+\langle T_{\mu\nu}^{S+A+E}\rangle_{\rho_{\rm total},r,{\rm ren}}.
+}
+\]
+定义 detector probe ratio
+\[
+\eta_{\rm det}
+:=
+\frac{\|T_{\mu\nu}^A+T_{\mu\nu}^E\|_{\rm obs}}
+{\|T_{\mu\nu}^S\|_{\rm obs}+\delta_{\rm floor}}.
+\]
+\(\eta_{\rm det}\ll1\) 时可采用 probe approximation；\(\eta_{\rm det}=O(1)\) 时需纳入 detector backreaction。
+
+\begin{definition}[detector backreaction 证书]\label{def:typed-address-biaxial-completion-detector-backreaction-cert}
+称 \(\mathsf{DetectorBackreactionCert}\) 为 detector backreaction 证书，若它包含 \(T_{\mu\nu}^A,T_{\mu\nu}^E,\eta_{\rm det}\)、probe-approximation ledger、source-inclusion ledger 与 round hash。detector/environment stress tensor 不可忽略却被省略时输出 \(\mathsf{DetectorBackreactionOmissionFail}\)。
+\end{definition}
+
+在引力系统中，坐标分量 \(g_{\mu\nu}(x)\) 通常不是直接 gauge-invariant record。应使用 relational observable，例如
+\[
+\boxed{
+\mathcal O[g,\Phi]
+=
+g_{\mu\nu}(X_\Phi)V^\mu_\Phi V^\nu_\Phi,
+}
+\]
+其中 \(\Phi\) 是 clock/rod/reference matter，\(X_\Phi\) 由物理参照系统定义。
+
+\begin{definition}[relational observable record 证书]\label{def:typed-address-biaxial-completion-relational-observable-record-cert}
+称 \(\mathsf{RelationalObservableRecordCert}\) 为 relational observable record 证书，若它包含 \(\mathcal O[g,\Phi]\)、clock-rod ledger、gauge-invariant-definition ledger、coordinate-choice ledger、record-readout ledger 与 round hash。把 coordinate gauge artifact 当作物理记录时输出 \(\mathsf{CoordinateObservableFail}\)。
+\end{definition}
+
+多个观察者记录 \(r_i,r_j\) 若声称指向同一 event，需给出 matching relation \(\mathcal M_{ij}(r_i,r_j)=1\)、同步误差、参考系转换误差与通信延迟。Agreement probability 为
+\[
+P_{\rm agree}
+=
+\sum_{r_i,r_j:\mathcal M_{ij}=1}p(r_i,r_j),
+\]
+并要求 \(1-P_{\rm agree}\le\epsilon_{\rm agree}\)。
+
+\begin{definition}[观察者一致证书]\label{def:typed-address-biaxial-completion-observer-agreement-cert}
+称 \(\mathsf{ObserverAgreementCert}\) 为观察者一致证书，若它包含 \(\mathcal M_{ij}\)、\(\epsilon_{\rm sync},\epsilon_{\rm frame},\epsilon_{\rm comm}\)、agreement-probability ledger 与 round hash。未校准的不同观察者记录被合并为同一 classical fact 时输出 \(\mathsf{ObserverRecordMismatchFail}\)。
+\end{definition}
+
+可见几何不是 naked metric，而是 record equivalence class：
+\[
+\boxed{
+[g]_{\rm rec}
+=
+\{r:\ r\text{ compatible with }g\text{ within error budget}\}.
+}
+\]
+记录似然为
+\[
+\boxed{
+p(r|g,\rho,\mathcal I)
+=
+{\rm Tr}\!\left(\rho E_r[g,\mathcal I]\right).
+}
+\]
+几何反演是统计估计，例如 posterior
+\[
+p(g|r)\propto p(r|g)\Pi(g),
+\]
+并带有不确定度 \(\Delta g_{\rm rec}\)。
+
+\begin{definition}[经典 spacetime record 证书]\label{def:typed-address-biaxial-completion-classical-spacetime-record-cert}
+称 \(\mathsf{ClassicalSpacetimeRecordCert}\) 为经典 spacetime record 证书，若它包含 clock、rod、light 与 detector records、\([g]_{\rm rec}\)、estimator \(\widehat g(r)\)、uncertainty \(\Delta g_{\rm rec}\)、relational-coordinate ledger、gauge-equivalence ledger、instrument-response ledger、reconstruction-uncertainty ledger 与 round hash。从有限噪声记录推出 exact metric 时输出 \(\mathsf{ExactMetricFromFiniteRecordFail}\)。
+\end{definition}
+
+\paragraph{record-conditioned backreaction。}
+Lorentzian 半经典方程在读出 \(r\) 后应使用条件化态：
+\[
+\boxed{
+E_{\mu\nu}^{(\le2N)}[g_r]
+=
+\langle T_{\mu\nu}\rangle_{\rho_r,{\rm ren}}
++\xi_{\mu\nu}^{(r)}
++O(\varepsilon^{N+1})
++O(\epsilon_{\rm meas}).
+}
+\]
+其中
+\[
+\epsilon_{\rm meas}
+=
+\epsilon_{\rm dec}
++\epsilon_{\rm cal}
++\epsilon_{\rm BA}
++\epsilon_{\rm det}
++\epsilon_{\rm rec}.
+\]
+若未读出具体结果，则 ensemble source 使用 \(\rho'_{\rm uncond}\)。由于 backreaction 方程非线性，一般不能把 conditioned geometry 与 ensemble geometry 互换：
+\[
+g_{\sum_rp_r\rho_r}\neq \sum_rp_rg_{\rho_r}.
+\]
+
+\begin{definition}[record-conditioned backreaction 证书]\label{def:typed-address-biaxial-completion-record-conditioned-backreaction-cert}
+称 \(\mathsf{RecordConditionedBackreactionCert}\) 为 record-conditioned backreaction 证书，若它包含 \(r,p(r),\rho_r,g_r\)、\(\langle T_{\mu\nu}\rangle_{\rho_r,{\rm ren}}\)、\(\xi_{\mu\nu}^{(r)}\)、\(\epsilon_{\rm meas}\)、conditioned-state ledger、detector-backreaction ledger、geometry-conditioning ledger、ensemble-conditioning-separation ledger 与 round hash。使用 conditioned record 却代入 unconditioned stress tensor 时输出 \(\mathsf{RecordConditioningMismatchFail}\)。
+\end{definition}
+
+\paragraph{classicality threshold 与总证书。}
+定义总 classical record error：
+\[
+\boxed{
+\epsilon_{\rm class}
+=
+\epsilon_{\rm dec}
++\epsilon_{\rm comm}
++\epsilon_{\rm pers}
++\epsilon_{\rm sep}
++\epsilon_{\rm coarse}
++\epsilon_{\rm cal}.
+}
+\]
+若 \(\epsilon_{\rm class}\ll\Delta_{\rm target}\)，输出 \(\mathsf{ClassicalRecordPass}\)；若同阶，输出 \(\mathsf{ApproximateRecordPass}\)；若超过目标阈值，输出 \(\mathsf{ClassicalRecordFail}\)。
+
+\begin{definition}[测量--退相干--记录闭包证书]\label{def:typed-address-biaxial-completion-measurement-decoherence-record-closure-cert}
+称 \(\mathsf{MeasurementDecoherenceRecordClosureCert}\) 为测量--退相干--记录闭包证书，若它包含 Hilbert 量子闭包证书、Lorentzian in-in backreaction 闭包证书、ReadUS 证书族、visible sigma algebra 证书、\(\mathsf{MeasurementProtocolCert}\)、\(\mathsf{POVMInstrumentCert}\)、\(\mathsf{BornProbabilityLedger}\)、\(\mathsf{DecoherenceFunctionalCert}\)、\(\mathsf{HistoriesConsistencyCert}\)、\(\mathsf{PointerBasisStabilityCert}\)、\(\mathsf{ClassicalRecordAlgebraCert}\)、\(\mathsf{OutcomeConditioningCert}\)、\(\mathsf{MeasurementBackActionLedger}\)、\(\mathsf{CoarseGrainingRecordCert}\)、\(\mathsf{FiniteSampleFrequencyCert}\)、\(\mathsf{CalibrationCert}\)、\(\mathsf{DetectorBackreactionCert}\)、\(\mathsf{RelationalObservableRecordCert}\)、\(\mathsf{ObserverAgreementCert}\)、\(\mathsf{ClassicalSpacetimeRecordCert}\)、\(\mathsf{RecordConditionedBackreactionCert}\)、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+主要通过标签为
+\[
+\mathsf{BornInstrumentProbabilityPass},\quad
+\mathsf{DecoheredRecordPass},\quad
+\mathsf{ClassicalRecordAlgebraPass},\quad
+\mathsf{ConditionedStateUpdatePass},\quad
+\mathsf{RelationalSpacetimeRecordPass},\quad
+\mathsf{RecordConditionedBackreactionPass}.
+\]
+主要 NULL 类型为
+\[
+\mathsf{MeasurementProtocolNull},\quad
+\mathsf{InstrumentNull},\quad
+\mathsf{DecoherenceNull},\quad
+\mathsf{PointerBasisNull},\quad
+\mathsf{CalibrationNull},\quad
+\mathsf{RelationalObservableNull},\quad
+\mathsf{ZeroProbabilityConditioningNull}.
+\]
+主要 FAIL 类型为
+\[
+\mathsf{POVMCompletenessFail},\quad
+\mathsf{NonCPInstrumentFail},\quad
+\mathsf{ProjectionPostulateOverreachFail},\quad
+\mathsf{DecoherenceOmissionFail},\quad
+\mathsf{PointerBasisAmbiguityFail},\quad
+\mathsf{RecordNonCommutativityFail},
+\]
+\[
+\mathsf{SelectiveNonselectiveMixingFail},\quad
+\mathsf{MeasurementBackActionOmissionFail},\quad
+\mathsf{DetectorBackreactionOmissionFail},\quad
+\mathsf{CoordinateObservableFail},\quad
+\mathsf{ExactMetricFromFiniteRecordFail}.
+\]
+
+\begin{theorem}[测量--退相干--记录闭包的可靠性]\label{thm:typed-address-biaxial-completion-measurement-decoherence-record-closure-soundness}
+若
+\[
+\mathsf{VerifyMeasurementDecoherenceRecordClosure}
+(\mathsf{MeasurementDecoherenceRecordClosureCert})
+=
+\mathsf{ClassicalRecordPass},
+\]
+则存在 instrument \(\{\mathcal I_r\}_{r\in\mathsf R}\)、POVM \(\{E_r\}_{r\in\mathsf R}\)、近似 Abelian 的 classical record algebra \(\mathcal R_{\rm cl}\simeq\mathbb C^{|\mathsf R|}\)，以及 decohered pointer record family \(\{P_r^A\}\)，使得任意输入态 \(\rho\) 的可见记录概率满足
+\[
+\boxed{
+p(r)
+=
+{\rm Tr}(\rho E_r)
+=
+{\rm Tr}[\mathcal I_r(\rho)].
+}
+\]
+并且 \(p(r)\ge0\)、\(\sum_rp(r)=1\)。若 \(p(r)>0\)，读出 \(r\) 后的条件化状态为
+\[
+\rho_r=\frac{\mathcal I_r(\rho)}{p(r)}.
+\]
+同时，history interference、record noncommutativity 与总 classical record error 分别受 \(\epsilon_{\rm dec}\)、\(\epsilon_{\rm comm}\)、\(\epsilon_{\rm class}\) 控制，且 \(\epsilon_{\rm class}\le\Delta_{\rm target}\)。因此 \(r\) 是目标误差阈值内的 classical visible record。
+\end{theorem}
+\begin{proof}
+POVM instrument 证书给出完全正 instrument 与 POVM 完备性，因此 Born probabilities 非负且归一。Born 概率账本给出 \(p(r)={\rm Tr}(\rho E_r)\)。Outcome conditioning 证书区分选择性条件化后态与非选择性状态。Decoherence functional 与 histories 一致性证书控制干涉项，使 diagonal probabilities 近似满足 classical additivity。Pointer basis 稳定证书保证记录可区分、持久且被环境冗余承载。Classical record algebra 证书保证记录变量近似交换。校准、有限样本、back-action 与 detector backreaction 账本把实际读出误差纳入 \(\epsilon_{\rm class}\)。故 \(r\) 可作为 certified classical record。证毕。
+\end{proof}
+
+\begin{theorem}[record-conditioned 半经典预测的可靠性]\label{thm:typed-address-biaxial-completion-record-conditioned-semiclassical-prediction-soundness}
+若 \(\mathsf{RecordConditionedBackreactionCert}\) 输出 \(\mathsf{RecordConditionedBackreactionPass}\)，且 Lorentzian in-in backreaction 闭包证书通过，则读出结果 \(r\) 对应的半经典方程为
+\[
+\boxed{
+E_{\mu\nu}^{(\le2N)}[g_r]
+=
+\langle T_{\mu\nu}\rangle_{\rho_r,{\rm ren}}
++\xi_{\mu\nu}^{(r)}
++O(\varepsilon^{N+1})
++O(\epsilon_{\rm meas}).
+}
+\]
+若只做 ensemble prediction，则使用 \(\rho'_{\rm uncond}=\sum_r\mathcal I_r(\rho)\)，而不是任意一个 \(\rho_r\)。因此 conditioned prediction 与 ensemble prediction 是不同对象，在非线性 backreaction 方程中不能互换。
+\end{theorem}
+\begin{proof}
+Outcome conditioning 证书给出读出后的 \(\rho_r\)。Lorentzian in-in 闭包证书把任意 admissible state 映到 \(\langle T_{\mu\nu}\rangle_{\rho,{\rm ren}}\) 与对应噪声项。Record-conditioned backreaction 证书把测量误差、detector backreaction 与 geometry conditioning 归入同一 residual 预算。非线性几何方程不保持 ensemble averaging 与 conditioned solution 的交换，因此两类预测必须分开审计。证毕。
+\end{proof}
+
+测量接口由此把 Hilbert 态与可见事实连接起来：
+\[
+\boxed{
+\text{Hilbert state}
+\Rightarrow
+\text{CP instrument}
+\Rightarrow
+\text{Born probabilities}
+\Rightarrow
+\text{decohered pointer records}
+\Rightarrow
+\text{classical visible data}.
+}
+\]
+最终多时刻记录概率可写为
+\[
+\boxed{
+p(r_1,\ldots,r_n)
+=
+{\rm Tr}\!\left[
+\mathcal I_{r_n}^{(n)}
+\circ\cdots\circ
+\mathcal I_{r_1}^{(1)}(\rho)
+\right]
++O(\epsilon_{\rm class}).
+}
+\]
+因此，经典可见事实不是裸量子态的直接属性，而是 CP instrument、退相干 pointer、稳定记录代数与有限误差读出共同给出的 certified record。

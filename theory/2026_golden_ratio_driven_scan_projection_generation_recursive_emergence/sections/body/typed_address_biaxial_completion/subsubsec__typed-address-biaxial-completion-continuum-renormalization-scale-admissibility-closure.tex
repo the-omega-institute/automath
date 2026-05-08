@@ -1,0 +1,475 @@
+\subsubsection{连续极限、重整化、尺度一致性、有效理论、RG flow 与 continuum admissibility 闭包}\label{subsubsec:typed-address-biaxial-completion-continuum-renormalization-scale-admissibility-closure}
+有限窗口证书只说明某个分辨率下的对象通过审计。连续物理结构还需要尺度族、restriction coherence、重整化、tightness、极限拓扑、收敛模数与结构门槛。基本链条为
+\[
+\boxed{
+\text{finite window}
+\to
+\text{compatible scale family}
+\to
+\text{renormalized observable}
+\to
+\text{continuum candidate}
+\to
+\text{admissible continuum theory}.
+}
+\]
+因此 \(m\to\infty\) 不是一句话，而是一组可审计证书。
+
+\paragraph{有限层、逆极限层、连续层。}
+必须区分固定有限层对象
+\[
+\boxed{X_m,}
+\]
+逆极限对象
+\[
+\boxed{
+X_\infty^{\rm inv}=\varprojlim_m X_m,
+}
+\]
+以及连续极限对象
+\[
+\boxed{X_{\rm cont}.}
+\]
+集合逆极限本身不等于拓扑空间、测度空间、Hilbert 空间、光滑流形或场论。若把 \(\varprojlim X_m\) 直接称为 continuous manifold，输出 \(\mathsf{InverseLimitAsManifoldFail}\)。若只有 set limit 却声明 structured limit，输出 \(\mathsf{BareSetLimitAsStructuredLimitFail}\)。
+
+\begin{definition}[尺度族证书]\label{def:typed-address-biaxial-completion-scale-family-cert}
+称 \(\mathsf{ScaleFamilyCert}\) 为尺度族证书，若它包含
+\[
+(X_m,\rho_{m+1,m},\epsilon_m,\mathsf{TypeLedger},\mathsf{RoundHash}),
+\qquad
+\epsilon_m\downarrow0,
+\]
+并满足
+\[
+\rho_{m,m}=\operatorname{id},
+\qquad
+\rho_{m+2,m}=\rho_{m+1,m}\circ\rho_{m+2,m+1}.
+\]
+若尺度 restriction 不满足组合相容，输出 \(\mathsf{ScaleRestrictionNonAssociativeFail}\)。
+\end{definition}
+
+\paragraph{fold-aware restriction。}
+若原稿有
+\[
+\operatorname{Fold}_m:\Omega_m\to X_m,
+\]
+则 raw microstate truncation \(\pi_{m+1,m}:\Omega_{m+1}\to\Omega_m\) 不自动给出 \(X_m\) 上的 restriction。需要存在
+\[
+\bar\rho_{m+1,m}:X_{m+1}\to X_m
+\]
+使图交换：
+\[
+\boxed{
+\operatorname{Fold}_m\circ\pi_{m+1,m}
+=
+\bar\rho_{m+1,m}\circ\operatorname{Fold}_{m+1}.
+}
+\]
+若只用 \(\pi_{m+1,m}\) 替代 fold 后的 restriction，却声称跨尺度相容，输出 \(\mathsf{RawTruncationAsFoldRestrictionFail}\)。若只检查相邻层而无任意多层 coherence，输出 \(\mathsf{AdjacentCompatibilityOnlyNull}\)。若 direct restriction 与组合 restriction 不一致，输出 \(\mathsf{RestrictionCoherenceFail}\)。
+
+\paragraph{极限结构与 completion boundary。}
+集合极限若要成为连续对象，需要声明
+\[
+d_\infty,\quad
+\tau_\infty,\quad
+\mu_\infty,\quad
+\mathcal A_\infty,\quad
+\mathcal D_\infty,
+\]
+分别对应 metric、topology、measure、algebra 与 domain。若尺度距离 \(d_m\) 给出极限距离，需要
+\[
+d_m(\rho_{n,m}x_n,\rho_{n,m}y_n)
+\to
+d_\infty(x_\infty,y_\infty).
+\]
+若 \(d_m\) 随尺度振荡且无控制，输出 \(\mathsf{MetricOscillationNull}\)。
+
+有限递归轨道可收敛到 \(L\)，但通常
+\[
+\boxed{
+L\notin\{x_n:n<\omega\}.
+}
+\]
+因此必须区分 \(\mathsf{FiniteReachable}\)、\(\mathsf{LimitPoint}\) 与 \(\mathsf{CompletedObject}\)。把极限点称为有限步可达对象时输出 \(\mathsf{LimitAsFiniteReachableFail}\)。
+
+\paragraph{可观测量重整化。}
+连续极限往往先在可观测量层成立。设
+\[
+O_m:X_m\to V_m.
+\]
+需要重标定 \(Z_m\) 使
+\[
+\boxed{
+\widetilde O_m=Z_mO_m
+}
+\]
+具有极限 \(O_{\rm cont}\)。证书
+\[
+\mathsf{ObservableScalingCert}
+=(O_m,Z_m,O_{\rm cont},\mathsf{NormLedger},\mathsf{RoundHash})
+\]
+检查不同尺度是否在同一归一化口径下比较。未声明 \(Z_m\) 却比较裸数值时输出 \(\mathsf{UnrenormalizedObservableComparisonFail}\)。裸量与重整化量混用时输出 \(\mathsf{BareRenormalizedMixingFail}\)。
+
+\begin{definition}[continuum admissibility 证书]\label{def:typed-address-biaxial-completion-continuum-admissibility-cert}
+称 \(\mathsf{ContinuumAdmissibilityCert}\) 为 continuum admissibility 证书，若它包含尺度族 \((X_m,\rho_{n,m},\epsilon_m)\)、renormalization factors \(Z_m\)、observables \(O_m\)、candidate \(O_{\rm cont}\)、误差 \(\delta_m\to0\)、limit topology ledger 与 round hash，并满足
+\[
+\boxed{
+\|Z_mO_m-O_{\rm cont}\|\le\delta_m.
+}
+\]
+若没有 \(\delta_m\) 或收敛模数，输出 \(\mathsf{ContinuumLimitNull}\)。
+\end{definition}
+
+\paragraph{收敛模数、tightness 与 Kolmogorov consistency。}
+对任意 \(\eta>0\)，需要 modulus \(m(\eta)\)：
+\[
+\boxed{
+m\ge m(\eta)
+\Rightarrow
+d(O_m,O_{\rm cont})\le\eta.
+}
+\]
+只画有限趋势图而无 \(m(\eta)\) 时输出 \(\mathsf{TrendPlotAsConvergenceFail}\)。
+
+若 \(X_m\) 上有概率测度 \(\mu_m\)，弱极限需要 tightness：
+\[
+\forall\eta>0,\ \exists K_\eta\ {\rm compact}:
+\mu_m(K_\eta)\ge1-\eta\quad\forall m.
+\]
+只证明 finite marginals convergence 而无 tightness 时输出 \(\mathsf{FiniteMarginalAsProcessLimitFail}\)。有限维分布还必须满足边缘相容；不相容却声称存在 process measure 时输出 \(\mathsf{InconsistentFiniteMarginalsFail}\)。
+
+\paragraph{RG map 与 universality。}
+renormalization map 写作
+\[
+\boxed{
+R_{m\to m-1}:\mathcal C_m\to\mathcal C_{m-1}.
+}
+\]
+若要谈固定点，必须把 \(R\) 定义在同一对象空间内：
+\[
+R:\mathcal C\to\mathcal C,
+\qquad
+R(c_*)=c_*.
+\]
+若 \(R\) ill-typed 却谈 fixed point，输出 \(\mathsf{IllTypedRGFixedPointFail}\)。
+
+RG 半群律为
+\[
+\boxed{
+R_{\ell\to m}\circ R_{n\to\ell}=R_{n\to m},
+\qquad n\ge\ell\ge m.
+}
+\]
+组合不一致时输出 \(\mathsf{RGCompositionFail}\)。若有尺度 anomaly
+\[
+R_{\ell\to m}R_{n\to\ell}=A_{n,\ell,m}R_{n\to m},
+\]
+必须记录 \(\mathsf{RGAnomalyLedger}\)。
+
+固定点附近的线性化 \(DR_{c_*}\) 给出 relevant、irrelevant 与 marginal directions。若未计算谱却声称 universality class，输出 \(\mathsf{UniversalityWithoutRGSpectrumNull}\)。若只因两个有限窗口数值相近就称同一 universality class，输出 \(\mathsf{FiniteSimilarityAsUniversalityFail}\)。marginal direction 不能直接当作 irrelevant；若漏记 marginally relevant flow，输出 \(\mathsf{MarginalInstabilityNull}\)。
+
+\paragraph{有效理论与 residual。}
+连续候选常只在 cutoff \(\Lambda\) 以下有效：
+\[
+\boxed{
+\mathcal T_{\rm eff}(\Lambda)
+}
+\]
+只对 \(E\ll\Lambda\) 或 \(\ell\gg\epsilon_m\) 声明。低能结论被写成全尺度理论时输出 \(\mathsf{EffectiveAsExactTheoryFail}\)。irrelevant couplings 即便在极限中消失，也需记录 finite-size correction \(\Delta O_m^{(i)}\)。忽略这些残差时输出 \(\mathsf{FiniteSizeCorrectionHiddenFail}\)。
+
+\paragraph{尺度 anomaly 与奇异极限。}
+若经典尺度对称在重整化或离散极限中破缺，则由 \(\mathsf{ScaleAnomalyCert}\) 记录。把 anomalous scaling 写成 exact scale invariance 时输出 \(\mathsf{AnomalousAsExactScaleInvarianceFail}\)。
+
+若裸极限不存在，但重标定后存在
+\[
+Z_mO_m\to O,
+\]
+称 singular renormalized limit。裸极限发散却未重标定时输出 \(\mathsf{DivergentLimitNull}\)。奇异极限被写成 regular continuum object 时输出 \(\mathsf{SingularLimitAsRegularFail}\)。
+
+\paragraph{几何结构门槛。}
+离散 holonomy \(H_m(\gamma)\) 到连续曲率需要面积归一化：
+\[
+\boxed{
+F_m(\gamma)=\frac{\log H_m(\gamma)}{A_m(\gamma)}.
+}
+\]
+若 \(A_m\to0\) 但 \(\log H_m\) 无阶控制，输出 \(\mathsf{CurvatureScalingNull}\)。若 holonomy 有 oscillatory limit，输出 \(\mathsf{CurvatureLimitOscillationFail}\)。
+
+同步成本得到的 \(d_m\) 若只是 resource preorder，不得直接称为 metric；否则输出 \(\mathsf{ResourcePreorderAsMetricFail}\)。有限 causal relation \(x\preceq_m y\) 的极限需满足反身、传递、闭图与无 closed causal loop；极限出现闭合因果曲线时输出 \(\mathsf{CausalLoopLimitFail}\)。
+
+Lorentz structure 需要
+\[
+(M,g),\qquad \operatorname{sig}(g)=(-,+,+,+).
+\]
+只有 causal order 却没有 nondegenerate metric tensor 时输出 \(\mathsf{CausalOrderAsLorentzMetricFail}\)。光滑流形还需要 atlas 与 smooth transition maps；metric convergence 不足以推出 smooth manifold，违者输出 \(\mathsf{MetricLimitAsSmoothManifoldFail}\)。
+
+Levi--Civita connection 需要
+\[
+\nabla g=0,\qquad T^\nabla=0.
+\]
+未证明 metric-compatible 与 torsion-free 时输出 \(\mathsf{ConnectionAsLeviCivitaFail}\)。Lorentz structure 不等于 Einstein equation；若只得到 Lorentz data 却声称
+\[
+G_{\mu\nu}=8\pi GT_{\mu\nu},
+\]
+输出 \(\mathsf{LorentzAsEinsteinFail}\)。未给 stress-energy source 时输出 \(\mathsf{StressEnergySourceNull}\)。
+
+\paragraph{\(M_{\rm adm}\) 的连续闭合。}
+若 \(M_{\rm adm}\) 被称为最大 admissible domain，应给出局部覆盖
+\[
+\boxed{
+M_{\rm adm}=\bigcup_\alpha U_\alpha
+}
+\]
+以及 overlap gluing。局域 admissible 未证明全局粘接时输出 \(\mathsf{LocalAdmissibleAsGlobalFail}\)。
+
+\paragraph{Hilbert、operator 与 Schrödinger 扇区。}
+有限维 Hilbert spaces \(\mathcal H_m\) 到 \(L^2(X,\nu)\) 需要 embeddings
+\[
+J_m:\mathcal H_m\to L^2(X,\nu)
+\]
+并证明
+\[
+\|J_m\psi_m-\psi\|_{L^2}\to0.
+\]
+维数增长但无嵌入时输出 \(\mathsf{DimensionGrowthAsHilbertLimitFail}\)。
+
+离散算子 \(A_m\) 的极限需声明 strong、weak、norm 或 strong-resolvent convergence。只证明矩阵元收敛却声称 norm convergence 时输出 \(\mathsf{WeakAsNormConvergenceFail}\)。
+
+Schrödinger sector 需要 \(\mathcal H\simeq L^2(X,\nu)\)、Laplacian、potential、domain、self-adjointness 与 unitary group。只有形式 Hamiltonian 时输出 \(\mathsf{FormalHamiltonianOnlyNull}\)。离散 unitary step 不能直接声明 continuous-time generator；缺少 strong continuity 与 Stone interface 时输出 \(\mathsf{DiscreteUnitaryAsContinuousGeneratorFail}\)。
+
+连续谱表示需要 spectral theorem data
+\[
+A=\int\lambda\,dE(\lambda).
+\]
+有限谱逼近被写成 continuous spectrum 时输出 \(\mathsf{FiniteSpectrumAsContinuousSpectrumFail}\)。
+
+\paragraph{场、Euclidean reconstruction 与热核。}
+场极限通常由 correlation functions 定义：
+\[
+\langle\phi_m(x_1)\cdots\phi_m(x_k)\rangle
+\to
+G_k(x_1,\ldots,x_k).
+\]
+只证明 two-point function 却声称 full field distribution 时输出 \(\mathsf{TwoPointAsFullFieldLimitFail}\)。Euclidean correlations 要重构 quantum theory，还需 reflection positivity、Euclidean invariance、symmetry、clustering 与 regularity；缺 positivity 时输出 \(\mathsf{EuclideanCorrelatorsWithoutReflectionPositivityNull}\)。
+
+离散 derivative、Laplacian、heat kernel 与 spectrum 均需各自的 convergence ledger：
+\[
+\nabla_m f(i)=\frac{f(i+1)-f(i)}{\epsilon_m},
+\]
+\[
+(\Delta_m+\lambda)^{-1}\to(\Delta+\lambda)^{-1},
+\]
+\[
+K_m(t,x,y)\to K(t,x,y),
+\qquad
+\lambda_{m,k}\to\lambda_k.
+\]
+省略 \(\epsilon_m^{-1}\) 时输出 \(\mathsf{UnscaledDifferenceAsDerivativeFail}\)。只比较少数 eigenvalues 却声明 operator convergence 时输出 \(\mathsf{LowEigenvaluesAsOperatorConvergenceFail}\)。单个 \(t\) 的 heat-kernel check 被写成 uniform convergence 时输出 \(\mathsf{SingleTimeHeatKernelAsUniformFail}\)。忽略 eigenvalue crossing 或 multiplicity 时输出 \(\mathsf{EigenvalueCrossingHiddenFail}\)。
+
+\paragraph{normalization、finite-size scaling 与 subsequence。}
+黄金尺度、dyadic depth 与 physical scale 必须在同一账本内换算：
+\[
+\epsilon_m^{(\varphi)}=F_m^{-1}\sim\sqrt5\,\varphi^{-m},
+\qquad
+\ell_m=2^{-m}L.
+\]
+混用 \(2^{-m}\) 与 \(\varphi^{-m}\) 而无换算时输出 \(\mathsf{ScaleBaseMixingFail}\)。无单位换算却把 dyadic depth 称为 physical length 时输出 \(\mathsf{DimensionlessDepthAsPhysicalScaleFail}\)。
+
+离散场与 measure 需要 normalization：
+\[
+\phi_m(i)=\epsilon_m^\Delta\phi(x_i),
+\qquad
+\epsilon_m^d\sum_i f(i)\to\int f(x)\,dx.
+\]
+未声明 scaling dimension 时输出 \(\mathsf{UnnormalizedFieldLimitFail}\)。裸求和直接当积分时输出 \(\mathsf{SumAsIntegralWithoutJacobianFail}\)。
+
+finite-size scaling 可写
+\[
+O_m=O_\infty+a\epsilon_m^\Delta+o(\epsilon_m^\Delta).
+\]
+只用两个尺度点拟合 exponent 时输出 \(\mathsf{TwoPointExponentFitNull}\)。视觉曲线重合被当作 proof 时输出 \(\mathsf{VisualCollapseAsProofFail}\)。
+
+子列 \(m_j\to\infty\) 的收敛不推出全列收敛。需要
+\[
+\boxed{
+\sup_{m_j\le m<m_{j+1}}d(O_m,O_{m_j})\to0
+}
+\]
+或唯一 cluster point。只验证 dyadic subsequence 却声称 full limit 时输出 \(\mathsf{DyadicSubsequenceAsFullLimitFail}\)。log-periodic oscillation 被强行取常数极限时输出 \(\mathsf{OscillatoryScalingAsConvergentFail}\)。
+
+\paragraph{边界层、bulk--boundary 字典与 QEC scaling。}
+finite boundary conditions \(B_m\to B\) 需说明 Dirichlet、Neumann、Robin、mixed 或 nonlocal 类型。若 boundary term 在极限中残留却被忽略，输出 \(\mathsf{BoundaryLayerHiddenFail}\)。若 boundary layer scale \(\ell_{\rm bdry}(m)\ne\epsilon_m\)，必须单独记录；把 bulk scaling 用到 boundary layer 时输出 \(\mathsf{BulkScalingAsBoundaryScalingFail}\)。
+
+bulk--boundary dictionary 需与极限交换：
+\[
+\boxed{
+\lim_{m\to\infty}D_m(O_m)
+=
+D_{\rm cont}\!\left(\lim_{m\to\infty}O_m\right).
+}
+\]
+若 finite holography 不 commute with limit，输出 \(\mathsf{HolographyLimitNonCommutationFail}\)。
+
+decoder scaling 要求
+\[
+P_{\rm fail}(m)\to0
+\]
+且 \(T_D(m),S_D(m)\) 与 continuum budget 相容。每个 \(m\) 可 decoder 但资源增长超预算时输出 \(\mathsf{PointwiseDecoderAsContinuumDecoderFail}\) 或 \(\mathsf{ContinuumDecoderComplexityFail}\)。
+
+continuum QEC 需要
+\[
+\|\mathcal R_{A,m}\mathcal N_m\mathcal V_m-\operatorname{id}_m\|_\diamond\to0.
+\]
+pointwise recovery 存在但 diamond error 不趋零时输出 \(\mathsf{PointwiseQECAsContinuumQECFail}\)。
+
+\paragraph{horizon、\(\zeta\)、PSD 与 topology。}
+horizon area law 需证明
+\[
+\frac{S_m}{A_m}\to\frac1{4G}
+\]
+并声明单位与重标定。有限窗口拟合被写成 area law 时输出 \(\mathsf{FiniteAreaFitAsAreaLawFail}\)。area 与 entropy 单位未对齐时输出 \(\mathsf{AreaEntropyUnitMismatchFail}\)。
+
+finite transfer matrix \(\zeta_m(z)=\det(I-zA_m)^{-1}\) 的连续极限若要成为 Fredholm determinant，需要 \(A_m\to\mathcal L\) 在 trace-class 或相应 operator ideal 中收敛。只比较有限阶 trace 却声称 Fredholm determinant limit 时输出 \(\mathsf{FiniteTraceAsFredholmLimitFail}\)。
+
+PSD hierarchy \(T_m\succeq0\) 要推出 \(T\succeq0\)，需 \(T_m\to T\) 且 cone 在该 topology 下闭合。只验证有限主子矩阵时输出 \(\mathsf{FinitePSDAsInfinitePSDFail}\)，除非给出 \(\mathsf{CofinalPSDHierarchyCert}\)。
+
+topological invariants \(\chi_m,b_k(m),c_1(m),\operatorname{ind}(D_m)\) 需要 eventual stability 或 gap control。Betti numbers 振荡时输出 \(\mathsf{TopologyNotStabilizedNull}\)。无 spectral gap 却声称 index stability 时输出 \(\mathsf{IndexWithoutGapNull}\)。
+
+\paragraph{总证书与验证。}
+称 \(\mathsf{ContinuumRenormalizationClosureCert}\) 为连续重整化总证书，若它合并
+\[
+\mathsf{ScaleFamilyCert},\quad
+\mathsf{RestrictionCompatibilityCert},\quad
+\mathsf{RenormalizationMapCert},\quad
+\mathsf{ObservableScalingCert},\quad
+\mathsf{TightnessCert},
+\]
+\[
+\mathsf{LimitTopologyCert},\quad
+\mathsf{ConvergenceModulusCert},\quad
+\mathsf{ContinuumAdmissibilityCert},\quad
+\mathsf{EffectiveTheoryCert},\quad
+\mathsf{RGFlowCert},
+\]
+\[
+\mathsf{UniversalityClassCert},\quad
+\mathsf{AnomalyPersistenceCert},\quad
+\mathsf{ContinuumFailureWitnessCert}.
+\]
+允许 PASS：
+\[
+\mathsf{ScaleFamilyPass},\quad
+\mathsf{FoldAwareRestrictionPass},\quad
+\mathsf{RGSemigroupPass},\quad
+\mathsf{RenormalizedObservablePass},\quad
+\mathsf{TightnessPass},\quad
+\mathsf{ContinuumAdmissiblePass},\quad
+\mathsf{EffectiveContinuumPass}.
+\]
+允许 NULL：
+\[
+\mathsf{ContinuumLimitNull},\quad
+\mathsf{NoTightnessNull},\quad
+\mathsf{SubsequenceOnlyNull},\quad
+\mathsf{MarginalInstabilityNull},\quad
+\mathsf{BoundaryLayerNull},\quad
+\mathsf{OperatorLimitNull}.
+\]
+允许 FAIL：
+\[
+\mathsf{FiniteSampleAsContinuumFail},\quad
+\mathsf{InverseLimitAsManifoldFail},\quad
+\mathsf{UnrenormalizedObservableComparisonFail},\quad
+\mathsf{RawTruncationAsFoldRestrictionFail},\quad
+\mathsf{EffectiveAsExactTheoryFail},\quad
+\mathsf{HolographyLimitNonCommutationFail},\quad
+\mathsf{SingularLimitAsRegularFail}.
+\]
+
+\begin{theorem}[continuum admissibility 的可靠性]\label{thm:typed-address-biaxial-completion-continuum-admissibility-soundness}
+若
+\[
+\mathsf{VerifyContinuumRenormalizationClosure}
+(\mathsf{ContinuumRenormalizationClosureCert})
+=
+\mathsf{ContinuumAdmissiblePass},
+\]
+则存在 \((X_m,\rho_{n,m},\epsilon_m)\)、\(Z_m\)、\(O_m\)、\(O_{\rm cont}\) 与 modulus \(m(\eta)\)，使对任意 \(\eta>0\),
+\[
+\boxed{
+m\ge m(\eta)
+\Rightarrow
+\|Z_mO_m-O_{\rm cont}\|\le\eta.
+}
+\]
+此外，metric、measure、Hilbert、operator、curvature、causal、Lorentz、Einstein 与 Schrödinger sector 等结构性声明，只在相应结构证书通过的层级上成立。
+\end{theorem}
+
+\begin{proof}
+\(\mathsf{ScaleFamilyCert}\) 与 restriction compatibility 给出 coherent scale family。
+\(\mathsf{ObservableScalingCert}\) 给出 \(Z_mO_m\) 的同尺度比较。
+\(\mathsf{LimitTopologyCert}\) 指定收敛口径，\(\mathsf{ConvergenceModulusCert}\) 给出有限误差控制。
+\(\mathsf{TightnessCert}\)、RG ledger 与结构证书分别排除缺少紧性、错误重标定和结构越级。
+故连续候选是证书化对象，而非 finite data 的口头外推。
+\end{proof}
+
+\begin{theorem}[有限验证不推出连续收敛]\label{thm:typed-address-biaxial-completion-finite-verification-not-continuum}
+若只知道每个固定 \(m\) 有
+\[
+V_m(C_m)=\mathsf{PASS},
+\]
+则只能推出 \(\forall m,\ P_m\)。除非另有 scale compatibility、limit topology 与 convergence modulus，否则不能推出 \(P_{\rm cont}\)。缺失这些证书却声称连续定理时输出
+\[
+\boxed{\mathsf{FiniteSampleAsContinuumFail}.}
+\]
+\end{theorem}
+
+\begin{proof}
+逐点通过不包含跨尺度 restriction、topology 或 convergence rate。可构造在每个 \(m\) 通过但沿尺度振荡的族，因此 finite pass 不蕴含 continuum pass。
+\end{proof}
+
+\begin{theorem}[裸量不必收敛]\label{thm:typed-address-biaxial-completion-renormalization-necessity}
+存在 finite-scale observables \(O_m\) 使 \(O_m\to\infty\)，但存在 \(Z_m\) 使
+\[
+Z_mO_m\to O.
+\]
+因此连续极限声明必须说明讨论的是 bare observable 还是 renormalized observable；混用时输出 \(\mathsf{BareRenormalizedMixingFail}\)。
+\end{theorem}
+
+\begin{proof}
+取 \(O_m=\epsilon_m^{-\Delta}O\) 与 \(Z_m=\epsilon_m^\Delta\)。若 \(\Delta>0\)，裸量发散而重标定量收敛。故重整化 ledger 是连续极限主张的必要成分。
+\end{proof}
+
+\begin{theorem}[子列收敛不足]\label{thm:typed-address-biaxial-completion-subsequence-not-full-limit}
+若只有 \(m_j\to\infty\) 使
+\[
+O_{m_j}\to O,
+\]
+则不能推出 \(O_m\to O\)。需要额外证明
+\[
+\boxed{
+\sup_{m_j\le m<m_{j+1}}d(O_m,O_{m_j})\to0
+}
+\]
+或唯一 cluster point。否则输出 \(\mathsf{SubsequenceLimitAsUniqueLimitFail}\)。
+\end{theorem}
+
+\begin{proof}
+序列可在子列上收敛，同时在间隔内振荡。缺少 inter-scale control 或唯一 cluster point 时，全列极限不被决定。
+\end{proof}
+
+\paragraph{原稿表述的替换。}
+若原稿写“有限窗口验证说明连续极限成立”，应改为：有限窗口验证给出尺度族中的局部证书；连续极限还需尺度相容、重整化、tightness、极限拓扑与收敛模数。
+
+若原稿写“折叠结构在极限中给出流形”，应改为：折叠结构给出逆系统与稳定类型族；若要得到流形，还需拓扑、图表、转移映射光滑性与 metric nondegeneracy。
+
+若原稿写“离散 holonomy 给出曲率”，应改为：离散 holonomy 给出 finite-scale curvature candidate；连续曲率需证明 holonomy 对面积的归一化极限存在并与图表选择相容。
+
+若原稿写“局域 Euclidean 扇区推出 Schrödinger 方程”，应改为：局域 Euclidean 扇区在 Hilbert limit、operator convergence、self-adjointness 与 Stone interface 通过后，可解释为 Schrödinger 型有效扇区。
+
+最终主句是：
+\[
+\boxed{
+\text{a finite verified family becomes a continuum theory only after scale coherence, renormalization, tightness, limit topology, convergence modulus, boundary-layer control, and structure certificates pass.}
+}
+\]

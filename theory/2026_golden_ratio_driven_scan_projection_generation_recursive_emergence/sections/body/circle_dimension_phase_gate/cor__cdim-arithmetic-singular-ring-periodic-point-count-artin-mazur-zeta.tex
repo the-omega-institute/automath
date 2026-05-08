@@ -30,6 +30,480 @@
 \)。
 核的基数由定理 \ref{thm:cdim-solenoid-arithmetic-singular-ring-torsion-kernel-formula} 取 \(m=n^k-1\) 直接给出。证毕。
 \end{proof}
+\begin{definition}[乘法自同态的 \(S\)-尺度分母账本]\label{def:distill-cdim-scaling-denominator-ledger}
+沿推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 的记号，令
+\[
+A_{S,n}(k):=|\operatorname{Fix}([n]^k)|,
+\qquad
+D^{[n]}_{S}(k):=\prod_{p\in S}p^{v_p(n^k-1)},
+\]
+其中 \(v_p\) 为 \(p\)-进赋值。称 \(D^{[n]}_{S}\) 为 \([n]\) 的有限 \(S\)-尺度分母账本。若存在整数 \(B\ge 0\) 与函数
+\[
+E(k)=\prod_{p\in S}p^{e_p(k)},
+\qquad e_p(k)\in\mathbb Z_{\ge0},
+\]
+满足对所有 \(p\in S\) 与 \(k\ge1\) 有 \(e_p(k)\le B\)，则称 \(E\) 为 \(B\)-有界的 \(S\)-分母账本。
+\end{definition}
+
+\begin{lemma}[有限尺度账本的次指数性与无界轴]\label{lem:distill-cdim-scaling-denominator-subexponential}
+令 \(S\subset\mathbb P\) 为有限集且 \(n\ge2\)。则
+\[
+\lim_{k\to\infty}\bigl(D^{[n]}_{S}(k)\bigr)^{1/k}=1.
+\]
+进一步，若存在 \(p\in S\) 使 \(p\nmid n\)，则数列 \(v_p(n^k-1)\) 关于 \(k\) 无界；因而 \(D^{[n]}_{S}\) 不是任何 \(B\)-有界 \(S\)-分母账本。
+\end{lemma}
+\begin{proof}
+若 \(p\mid n\)，则 \(n^k-1\equiv -1\pmod p\)，故 \(v_p(n^k-1)=0\)。设 \(p\nmid n\)。当 \(p\) 为奇素数时，记 \(\rho_p\) 为 \(n\) 在 \((\mathbb Z/p\mathbb Z)^\times\) 中的阶。若 \(\rho_p\nmid k\)，则 \(v_p(n^k-1)=0\)；若 \(\rho_p\mid k\)，由提升指数引理得
+\[
+v_p(n^k-1)=v_p\bigl(n^{\rho_p}-1\bigr)+v_p(k/\rho_p)
+=v_p\bigl(n^{\rho_p}-1\bigr)+v_p(k),
+\]
+其中最后一步用到 \(p\nmid\rho_p\)。
+
+当 \(p=2\) 且 \(2\nmid n\) 时，\(n\) 为奇数。若 \(k\) 为奇数，则
+\[
+v_2(n^k-1)=v_2(n-1),
+\]
+而若 \(k\) 为偶数，则提升指数引理给出
+\[
+v_2(n^k-1)=v_2(n^2-1)+v_2(k)-1.
+\]
+因此对每个 \(p\in S\) 均存在常数 \(C_p\) 使
+\[
+v_p(n^k-1)\le C_p+v_p(k)
+\qquad(k\ge1).
+\]
+于是
+\[
+D^{[n]}_{S}(k)\le
+\left(\prod_{p\in S}p^{C_p}\right)
+\prod_{p\in S}p^{v_p(k)}
+\le C k
+\]
+对某常数 \(C>0\) 成立，故 \(\bigl(D^{[n]}_{S}(k)\bigr)^{1/k}\to1\)。
+
+若 \(p\in S\) 且 \(p\nmid n\)，则对奇素数 \(p\) 取 \(k=\rho_p p^a\)，上式给出
+\[
+v_p(n^k-1)=v_p(n^{\rho_p}-1)+a\to\infty.
+\]
+对 \(p=2\) 取 \(k=2^a\)，上述偶数情形同样给出 \(v_2(n^k-1)\to\infty\)。故相应 \(p\)-进尺度轴无界，结论成立。
+\end{proof}
+
+\begin{theorem}[周期点计数的尺度账本半径与有界迹阻碍]\label{thm:distill-cdim-scaling-denominator-shadow-radius}
+沿推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 的记号，设 \(s=|S|\ge1\)。则对所有 \(k\ge1\) 有精确分解
+\[
+A_{S,n}(k)=\frac{(n^k-1)^s}{D^{[n]}_{S}(k)}.
+\]
+因此
+\[
+\lim_{k\to\infty}A_{S,n}(k)^{1/k}=n^s.
+\]
+特别地，对数 Artin--Mazur 级数
+\[
+L_{S,n}(z):=\sum_{k\ge1}\frac{A_{S,n}(k)}{k}z^k
+\]
+的收敛半径恰为 \(n^{-s}\)。
+
+若存在 \(p\in S\) 使 \(p\nmid n\)，则不存在整数 \(B\ge0\) 与 \(B\)-有界 \(S\)-分母账本 \(E\) 使得对所有 \(k\ge1\) 同时成立
+\[
+A_{S,n}(k)=\frac{(n^k-1)^s}{E(k)}.
+\]
+换言之，在含有真正外部尺度素数 \(p\nmid n\) 的情形下，周期点计数不能由有界 multiplicity ledger 承载；任何有限迹解释若要逐周期精确，必须保留无界的 \(p\)-进尺度账本。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta}，
+\[
+A_{S,n}(k)=(n^k-1)^{s-1}(n^k-1)_{S^c}.
+\]
+另一方面
+\[
+n^k-1=D^{[n]}_{S}(k)\,(n^k-1)_{S^c}.
+\]
+代入即得
+\[
+A_{S,n}(k)
+=\bigl(D^{[n]}_{S}(k)(n^k-1)_{S^c}\bigr)^{s-1}(n^k-1)_{S^c}
+=\frac{(n^k-1)^s}{D^{[n]}_{S}(k)}.
+\]
+由引理 \ref{lem:distill-cdim-scaling-denominator-subexponential}，\(D^{[n]}_{S}(k)^{1/k}\to1\)，而 \((n^k-1)^{1/k}\to n\)，故
+\[
+A_{S,n}(k)^{1/k}
+=\frac{(n^k-1)^{s/k}}{\bigl(D^{[n]}_{S}(k)\bigr)^{1/k}}
+\longrightarrow n^s.
+\]
+Cauchy--Hadamard 公式给出
+\[
+R^{-1}
+=\limsup_{k\to\infty}\left(\frac{A_{S,n}(k)}{k}\right)^{1/k}
+=n^s,
+\]
+因此 \(L_{S,n}(z)\) 的收敛半径为 \(R=n^{-s}\)。
+
+最后，若存在 \(B\)-有界 \(E\) 满足
+\[
+A_{S,n}(k)=\frac{(n^k-1)^s}{E(k)}
+\]
+对所有 \(k\) 成立，则与已经证明的精确分解比较，因 \(n^k-1\ne0\) 且 \(A_{S,n}(k)>0\)，必有
+\[
+E(k)=D^{[n]}_{S}(k)
+\qquad(k\ge1).
+\]
+但当某个 \(p\in S\) 满足 \(p\nmid n\) 时，引理 \ref{lem:distill-cdim-scaling-denominator-subexponential} 表明 \(v_p(D^{[n]}_{S}(k))=v_p(n^k-1)\) 沿一列 \(k\) 无界，这与 \(E\) 的 \(B\)-有界性矛盾。证毕。
+\end{proof}
+\begin{definition}[有限迹对象与 primitive 预算账本]\label{distill:connes_consani_arithmetic_site-zeta_shadow_periodic_count_templates-finite-trace-ledger}
+沿推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 的记号。固定整数 \(N\ge1\)。称三元组
+\[
+\mathcal T_{\le N}=(\mathcal O_{\le N},\pi,m)
+\]
+为一个 \(N\)-级有限迹对象，若 \(\mathcal O_{\le N}\) 为有限集，
+\[
+\pi:\mathcal O_{\le N}\to\{1,\ldots,N\},\qquad
+m:\mathcal O_{\le N}\to\mathbb Z_{>0},
+\]
+并且其第 \(k\) 级迹数定义为
+\[
+\operatorname{Tr}_{\mathcal T}(k)
+:=\sum_{\substack{\omega\in\mathcal O_{\le N}\\ \pi(\omega)\mid k}}
+\pi(\omega)m(\omega)
+\qquad(1\le k\le N).
+\]
+这里 \(\pi(\omega)\) 是 primitive 周期，\(m(\omega)\) 是该 primitive 轨道或固定对应分量的 multiplicity。本文在此处使用方法算子 \emph{count through geometric zeta shadows} 时，仅指这样的有限迹对象及其形式迹级数；不附加任何 Riemann--\(\zeta\) 型解析断言。
+\end{definition}
+
+\begin{theorem}[有限 zeta-shadow 的 primitive 预算门与有界分母首障碍]\label{distill:connes_consani_arithmetic_site-zeta_shadow_periodic_count_templates-finite-trace-primitive-budget-gate}
+设 \(S\subset\mathbb P\) 为有限素数集，\(s=|S|\ge1\)，\(n\ge2\)，并令
+\[
+A_{S,n}(k):=|\operatorname{Fix}([n]^k)|
+\]
+为推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 的周期定点计数。记 \(\mu_{\rm Mob}\) 为 Möbius 函数，并定义
+\[
+P_{S,n}(d):=\frac1d\sum_{e\mid d}\mu_{\rm Mob}(e)A_{S,n}(d/e)
+\qquad(d\ge1).
+\]
+则对每个 \(d\ge1\)，\(P_{S,n}(d)\in\mathbb Z_{\ge0}\)，且它等于 \([n]\) 在 \(\mathfrak R_S\) 上 exact primitive 周期为 \(d\) 的轨道数。
+
+更精确地，对任意 \(N\ge1\)，令 \(\mathcal O_{S,n,\le N}\) 为 exact primitive 周期不超过 \(N\) 的 \([n]\)-轨道集合，令 \(\pi\) 为其周期，令 \(m\equiv1\)。则
+\[
+\mathcal T_{S,n,\le N}:=(\mathcal O_{S,n,\le N},\pi,1)
+\]
+是一个有限迹对象，并满足
+\[
+A_{S,n}(k)=\operatorname{Tr}_{\mathcal T_{S,n,\le N}}(k)
+=\sum_{d\mid k}dP_{S,n}(d)
+\qquad(1\le k\le N).
+\]
+因此有形式同余
+\[
+\exp\!\left(\sum_{k=1}^{N}\frac{A_{S,n}(k)}kz^k\right)
+\equiv
+\prod_{d=1}^{N}(1-z^d)^{-P_{S,n}(d)}
+\pmod{z^{N+1}}.
+\]
+反过来，若任一有限迹对象 \(\mathcal T_{\le N}\) 满足
+\[
+\operatorname{Tr}_{\mathcal T}(k)=A_{S,n}(k)\qquad(1\le k\le N),
+\]
+则对每个 \(d\le N\)，其周期为 \(d\) 的总 multiplicity 必为 \(P_{S,n}(d)\)。因此，候选 zeta-shadow 在第 \(N\) 级以前通过有限轨道预算审计，当且仅当其 trace 数列的 Möbius primitive 预算为非负整数并逐周期等于上述 \(P_{S,n}(d)\)。
+
+此外，若存在 \(p\in S\) 使 \(p\nmid n\)，并给定整数 \(B\ge0\)，定义
+\[
+\kappa_{p,B}:=
+\begin{cases}
+\rho_p p^{B+1},& p\text{ 为奇素数，且 }\rho_p\text{ 为 }n\text{ 在 }(\mathbb Z/p\mathbb Z)^\times\text{ 中的阶},\\
+2^{B+1},& p=2.
+\end{cases}
+\]
+若 \(N\ge\kappa_{p,B}\)，则不存在 \(B\)-有界的 \(S\)-分母账本
+\[
+E(k)=\prod_{q\in S}q^{e_q(k)},\qquad 0\le e_q(k)\le B,
+\]
+使得
+\[
+\operatorname{Tr}_{\mathcal T}(k)=\frac{(n^k-1)^s}{E(k)}=A_{S,n}(k)
+\qquad(1\le k\le N)
+\]
+对某个有限迹对象 \(\mathcal T_{\le N}\) 成立。换言之，有界分母的错误 orbit budget 在有限阶 \(\kappa_{p,B}\) 以前已经被迫显形，不能留待全局闭包阶段修补。
+\end{theorem}
+\begin{proof}
+对任意自映射，点 \(x\) 的 exact 周期为 \(d\) 当且仅当 \([n]^d(x)=x\) 且不存在真因子 \(r\mid d\) 满足 \([n]^r(x)=x\)。由于推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 已给出每个 \(\operatorname{Fix}([n]^k)\) 的有限基数，exact 周期为 \(d\) 的点集有限，并分解为若干长度正好为 \(d\) 的 \([n]\)-轨道。设这些轨道数为 \(Q(d)\)。则对每个 \(k\ge1\)，一个 primitive 周期为 \(d\) 的轨道对 \(\operatorname{Fix}([n]^k)\) 的贡献为 \(d\) 当且仅当 \(d\mid k\)，否则贡献为 \(0\)。因此
+\[
+A_{S,n}(k)=\sum_{d\mid k}dQ(d).
+\]
+对该卷积恒等式作 Möbius 反演，得到
+\[
+dQ(d)=\sum_{e\mid d}\mu_{\rm Mob}(e)A_{S,n}(d/e),
+\]
+故 \(Q(d)=P_{S,n}(d)\)。这同时证明 \(P_{S,n}(d)\in\mathbb Z_{\ge0}\)，并证明其为 exact primitive 周期轨道数。
+
+取 \(\mathcal O_{S,n,\le N}\) 为 exact primitive 周期不超过 \(N\) 的轨道集合时，上述贡献公式立刻给出
+\[
+\operatorname{Tr}_{\mathcal T_{S,n,\le N}}(k)=\sum_{d\mid k}dP_{S,n}(d)=A_{S,n}(k)
+\qquad(1\le k\le N).
+\]
+再由形式展开
+\[
+-\log(1-z^d)=\sum_{r\ge1}\frac{z^{dr}}r
+\]
+可得
+\[
+\log\prod_{d=1}^{N}(1-z^d)^{-P_{S,n}(d)}
+=\sum_{d=1}^{N}P_{S,n}(d)\sum_{r\ge1}\frac{z^{dr}}r.
+\]
+取 \(z^k\) 的系数且只看 \(k\le N\)，其值为
+\[
+\frac1k\sum_{d\mid k}dP_{S,n}(d)=\frac{A_{S,n}(k)}k.
+\]
+故两边指数级数在 \(z^N\) 以前系数相同，即得所述模 \(z^{N+1}\) 同余。
+
+若 \(\mathcal T_{\le N}\) 是任意满足 \(\operatorname{Tr}_{\mathcal T}(k)=A_{S,n}(k)\) 的有限迹对象，记
+\[
+M_{\mathcal T}(d):=\sum_{\substack{\omega\in\mathcal O_{\le N}\\ \pi(\omega)=d}}m(\omega).
+\]
+则按定义有
+\[
+A_{S,n}(k)=\operatorname{Tr}_{\mathcal T}(k)=\sum_{d\mid k}dM_{\mathcal T}(d)
+\qquad(1\le k\le N).
+\]
+对 \(1\le d\le N\) 再作 Möbius 反演，得到 \(M_{\mathcal T}(d)=P_{S,n}(d)\)。这证明了 primitive multiplicity 预算的唯一性，也说明任何有限 zeta-shadow 审计必须先通过该 Möbius primitive 门。
+
+最后证明有界分母首障碍。由定理 \ref{thm:distill-cdim-scaling-denominator-shadow-radius}，对所有 \(k\ge1\) 有精确分解
+\[
+A_{S,n}(k)=\frac{(n^k-1)^s}{D^{[n]}_{S}(k)},
+\qquad
+D^{[n]}_{S}(k)=\prod_{q\in S}q^{v_q(n^k-1)}.
+\]
+若某个 \(B\)-有界账本 \(E\) 在 \(1\le k\le N\) 上满足
+\[
+\frac{(n^k-1)^s}{E(k)}=A_{S,n}(k),
+\]
+则因 \(n^k-1\ne0\)，必有 \(E(k)=D^{[n]}_{S}(k)\)。
+
+当 \(p\) 为奇素数时，取 \(k=\kappa_{p,B}=\rho_p p^{B+1}\)。提升指数引理给出
+\[
+v_p(n^k-1)=v_p(n^{\rho_p}-1)+v_p(p^{B+1})
+=v_p(n^{\rho_p}-1)+B+1>B.
+\]
+当 \(p=2\) 时，\(n\) 为奇数，取 \(k=2^{B+1}\)，同一提升指数公式的二进制形式给出
+\[
+v_2(n^k-1)=v_2(n^2-1)+v_2(k)-1
+=v_2(n^2-1)+B>B,
+\]
+因为奇数 \(n\) 满足 \(v_2(n^2-1)\ge3\)。于是只要 \(N\ge\kappa_{p,B}\)，在该 \(k\le N\) 处有
+\[
+v_p(D^{[n]}_{S}(k))>B,
+\]
+这与 \(E\) 的 \(B\)-有界性矛盾。故错误的有界分母 trace 模板必在有限阶 \(\kappa_{p,B}\) 以前失败。证毕。
+\end{proof}
+\begin{theorem}[有限协议 nerve 的构造性 holonomy-width 跳墙]\label{thm:distill-cdim-constructible-holonomy-width-jump-ledger}
+沿用定义 \ref{def:distill-cdim-scaling-denominator-ledger} 中的 \(S\)-尺度分母账本。取正整数链
+\[
+k_0<k_1<\cdots<k_J
+\]
+并记
+\[
+D_j:=D^{[n]}_S(k_j).
+\]
+假设 \(D_j\mid D_{j+1}\) 对所有 \(j<J\) 成立，并令
+\[
+A_j:=\ZZ/D_j\ZZ,
+\qquad
+\iota_{j+1,j}([x]_{D_j})=[(D_{j+1}/D_j)x]_{D_{j+1}}.
+\]
+对每个 \(j\) 给定有限协议 nerve \(N_j\)、一组有向边代表 \(E_j^+\)，以及余循环
+\[
+\alpha_j\in Z^1(N_j;A_j).
+\]
+若细化墙 \(j\to j+1\) 配有单纯映射 \(r_{j+1,j}:N_{j+1}\to N_j\)，则得到上同调转移
+\[
+\Phi_{j+1,j}:\check H^1(N_j;A_j)\longrightarrow \check H^1(N_{j+1};A_{j+1}),
+\qquad
+\Phi_{j+1,j}=\iota_{j+1,j\,*}r_{j+1,j}^{\ast}.
+\]
+对 \(h\in\check H^1(N_j;A_j)\)，定义 holonomy-width
+\[
+w_j(h):=\min_{\gamma\in h}\#\{e\in E_j^+:\gamma(e)\ne0\},
+\]
+其中 \(\gamma\) 遍历代表 \(h\) 的所有 \(1\)-余循环。设 \(\mathcal W\subseteq\{0,\ldots,J-1\}\) 为所有不满足下列条件的墙集合：\(D_{j+1}=D_j\)，\(r_{j+1,j}\) 为 nerve 同构，且 \(E_{j+1}^+\) 与 \(E_j^+\) 在该同构下逐边对应。则：
+\begin{enumerate}
+  \item 若 \(j\notin\mathcal W\) 且 \([\alpha_{j+1}]=\Phi_{j+1,j}[\alpha_j]\)，则
+  \[
+  w_{j+1}([\alpha_{j+1}])=w_j([\alpha_j]).
+  \]
+  \item holonomy-width 只能在有限墙集 \(\mathcal W\) 上改变；在其补集的每个连续区间上，\([\alpha_j]\) 构成局部常值的 constructible 持久类。
+  \item 在任一墙 \(j\in\mathcal W\) 上，已有 holonomy 类死亡当且仅当其属于 \(\ker\Phi_{j+1,j}\)；墙后出现的 holonomy 类不来自墙前数据当且仅当其在 \(\operatorname{coker}\Phi_{j+1,j}\) 中的像非零。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+首先，\(D_j\mid D_{j+1}\) 保证 \(\iota_{j+1,j}\) 是良定义群同态；与单纯拉回复合后，它与 \v Cech 余边界算子交换，因此 \(\Phi_{j+1,j}\) 是上同调群之间的合法结构映射。
+
+若 \(j\notin\mathcal W\)，则系数群相同、nerve 同构，且有向边代表逐边对应。该同构把代表 \([\alpha_j]\) 的余循环与代表 \([\alpha_{j+1}]\) 的余循环双射对应，并且把余边界仍送到余边界。因此在所有同调代表中最小化非零边支撑数的过程保持不变，得到第一项的等式。
+
+第二项随即成立：有限索引集上，除 \(\mathcal W\) 外的相邻墙均保持同一 nerve、同一系数群和同一支撑最小化问题，所以 holonomy-width 在每个连续稳定段上常值；可能变化的位置只能是列出的有限墙。
+
+最后，对墙映射 \(\Phi_{j+1,j}\) 写出正合片段
+\[
+0\longrightarrow\ker\Phi_{j+1,j}\longrightarrow \check H^1(N_j;A_j)
+\xrightarrow{\ \Phi_{j+1,j}\ }
+\check H^1(N_{j+1};A_{j+1})
+\longrightarrow\operatorname{coker}\Phi_{j+1,j}\longrightarrow0 .
+\]
+墙前类被送为零正是属于核；墙后类不在像中正是余核类非零。故构造性跳墙账本由有限稳定段、核死亡见证与余核出生见证组成。
+\end{proof}
+\begin{definition}[周期点分母过滤的有限 persistence 模]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-module-definition}
+沿推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 与定义 \ref{def:distill-cdim-scaling-denominator-ledger} 的记号，固定域 \(\mathbb F\) 与整数 \(K\ge1\)。对 \(1\le k\le K\) 记
+\[
+\nu_S(k):=(v_p(n^k-1))_{p\in S}\in\mathbb Z_{\ge0}^{S},
+\qquad
+U_{K,p}:=\max_{1\le k\le K}v_p(n^k-1).
+\]
+令
+\[
+B_K:=\prod_{p\in S}\{0,1,\ldots,U_{K,p}\}
+\]
+带有逐坐标偏序，并令有限 carrier 为
+\[
+\mathcal C_K:=\{(k,x):1\le k\le K,\ x\in\operatorname{Fix}([n]^k)\}.
+\]
+对 \(u=(u_p)_{p\in S}\in B_K\)，定义
+\[
+\mathsf M_{S,n,K}(u)
+:=\bigoplus_{\substack{(k,x)\in\mathcal C_K\\ \nu_S(k)\le u}}
+\mathbb F e_{k,x}.
+\]
+若 \(u\le u'\)，则 \(\iota_{u,u'}:\mathsf M_{S,n,K}(u)\to\mathsf M_{S,n,K}(u')\) 定义为由同名基向量诱导的包含映射。称 \(\mathsf M_{S,n,K}\) 为 \(S\)-尺度分母账本 \(D_S^{[n]}\) 在有限 carrier \(\mathcal C_K\) 上的 filtration-to-module conversion。记
+\[
+\mathcal W_K:=\{\nu_S(k):1\le k\le K\}\subset B_K
+\]
+为其临界 birth 值集。对 \(a\in B_K\)，令
+\[
+\mathsf B_K(a):=\mathsf M_{S,n,K}(a)
+\Big/
+\sum_{\substack{p\in S\\ a_p>0}}
+\iota_{a-\mathbf e_p,a}\bigl(\mathsf M_{S,n,K}(a-\mathbf e_p)\bigr),
+\]
+其中 \(\mathbf e_p\) 为第 \(p\) 个坐标向量。
+\end{definition}
+
+\begin{theorem}[周期点分母 persistence 账本的构造性跃迁分层]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-constructible-stratification}
+对任意域 \(\mathbb F\) 与 \(K\ge1\)，上面的 \(\mathsf M_{S,n,K}\) 是 \(B_K\) 上的点态有限维 persistence 模。并且有自然同构
+\[
+\mathsf M_{S,n,K}\cong
+\bigoplus_{(k,x)\in\mathcal C_K}\mathbb F_{\uparrow \nu_S(k)},
+\]
+其中
+\[
+\mathbb F_{\uparrow a}(u)=
+\begin{cases}
+\mathbb F,& a\le u,\\
+0,& a\nleq u,
+\end{cases}
+\]
+且支撑内的结构映射为恒等映射。特别地，令
+\[
+r_K(u):=\dim_{\mathbb F}\mathsf M_{S,n,K}(u)
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)\le u}}A_{S,n}(k),
+\]
+则每个临界值 \(a\in B_K\) 的 birth 重数为
+\[
+\dim_{\mathbb F}\mathsf B_K(a)
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)=a}}A_{S,n}(k).
+\]
+若约定当某坐标为负时 \(r_K(w)=0\)，并令 \(\mathbf 1_T\in\{0,1\}^S\) 为子集 \(T\subseteq S\) 的特征向量，则该重数亦由秩函数的有限差分唯一恢复：
+\[
+\dim_{\mathbb F}\mathsf B_K(a)
+=\sum_{T\subseteq S}(-1)^{|T|}r_K(a-\mathbf 1_T).
+\]
+此外，把 \(\mathsf M_{S,n,K}\) 延拓到
+\(X_K:=\prod_{p\in S}(0,U_{K,p}+1)\subset\mathbb R^S\) 上，令
+\[
+\overline{\mathsf M}_{S,n,K}(t):=\mathsf M_{S,n,K}\bigl((\lfloor t_p\rfloor)_{p\in S}\bigr),
+\]
+则 \(\overline{\mathsf M}_{S,n,K}\) 在有限墙集
+\[
+\Sigma_K:=\bigcup_{p\in S}\bigcup_{j=1}^{U_{K,p}}\{t\in X_K:t_p=j\}
+\]
+的补集的每个连通分支上局部常值；所有非平凡跃迁均由 \(\mathcal W_K\) 上的上述 birth 商记录。这给出该有限周期点分母账本的 constructible stratification。
+\end{theorem}
+
+\begin{proof}
+首先，推论 \ref{cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta} 给出每个 \(\operatorname{Fix}([n]^k)\) 的有限性，因此 \(\mathcal C_K\) 有限，且 \(\mathsf M_{S,n,K}(u)\) 点态有限维。若 \(u\le u'\le u''\)，则同名基向量的包含满足
+\[
+\iota_{u',u''}\circ\iota_{u,u'}=\iota_{u,u''},
+\]
+故 \(\mathsf M_{S,n,K}\) 是从偏序 \(B_K\) 到 \(\mathbb F\)-向量空间范畴的函子。
+
+对每个 carrier 元素 \((k,x)\)，定义主上集模 \(\mathbb F_{\uparrow\nu_S(k)}\)。在参数 \(u\) 处，把该直和中由 \((k,x)\) 标记的基向量送到 \(\mathsf M_{S,n,K}(u)\) 中的 \(e_{k,x}\)，若 \(\nu_S(k)\le u\)；否则两边该 summand 均为零。此映射逐参数为线性同构，并与所有包含映射交换，因此得到所述自然同构。
+
+由该分解，\(r_K(u)\) 正是满足 \(\nu_S(k)\le u\) 的周期点 carrier 的个数，按周期 \(k\) 分组即为
+\[
+r_K(u)=\sum_{\substack{1\le k\le K\\ \nu_S(k)\le u}}|\operatorname{Fix}([n]^k)|
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)\le u}}A_{S,n}(k).
+\]
+再看 birth 商。一个基向量 \(e_{k,x}\in\mathsf M_{S,n,K}(a)\) 落入
+\(\sum_{a_p>0}\iota_{a-\mathbf e_p,a}\mathsf M_{S,n,K}(a-\mathbf e_p)\) 当且仅当存在 \(p\in S\) 使 \(a_p>0\) 且 \(\nu_S(k)\le a-\mathbf e_p\)。这等价于 \(\nu_S(k)\le a\) 但 \(\nu_S(k)\ne a\)。故商中留下的恰为满足 \(\nu_S(k)=a\) 的所有 \((k,x)\)，其维数为
+\[
+\sum_{\substack{1\le k\le K\\ \nu_S(k)=a}}|\operatorname{Fix}([n]^k)|
+=\sum_{\substack{1\le k\le K\\ \nu_S(k)=a}}A_{S,n}(k).
+\]
+
+有限差分公式由逐 carrier 的包含排除给出。固定 \((k,x)\)，其对
+\(\sum_{T\subseteq S}(-1)^{|T|}r_K(a-\mathbf 1_T)\) 的贡献为
+\[
+\sum_{\substack{T\subseteq S\\ \nu_S(k)\le a-\mathbf 1_T}}(-1)^{|T|}.
+\]
+若 \(\nu_S(k)=a\)，只有 \(T=\varnothing\) 可贡献，和为 \(1\)。若 \(\nu_S(k)\le a\) 但不等于 \(a\)，令
+\(P:=\{p\in S:\nu_S(k)_p<a_p\}\)，则可贡献的 \(T\) 正是 \(P\) 的子集，交错和为 \((1-1)^{|P|}=0\)。若 \(\nu_S(k)\nleq a\)，无贡献。按所有 carrier 求和即得公式。
+
+最后，若 \(t\in X_K\setminus\Sigma_K\)，则每个坐标 \(\lfloor t_p\rfloor\) 在 \(t\) 的某个邻域内不变，因此 \(\overline{\mathsf M}_{S,n,K}\) 在该邻域内等于同一个 \(\mathsf M_{S,n,K}(u)\)，从而局部常值。前述 birth 商已经证明所有新 carrier 只能在某个 \(a=\nu_S(k)\in\mathcal W_K\) 处出现，并且其重数完全由 \(\mathsf B_K(a)\) 记录。定理得证。
+\end{proof}
+\begin{proposition}[fold-aware 读出中的 plateau--wall 分离]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-fold-aware-plateau-wall-readout}
+保持定理 \ref{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-constructible-stratification} 的记号。设
+\(\lambda:\{0,1,\ldots,N\}\to B_K\) 是非降映射，并称其为一个合法的 fold-aware \(S\)-预算读出。令
+\[
+\mathsf N_i:=\mathsf M_{S,n,K}(\lambda(i)),
+\qquad
+\alpha_i:=\iota_{\lambda(i-1),\lambda(i)}:\mathsf N_{i-1}\to\mathsf N_i
+\quad(1\le i\le N),
+\]
+并设
+\[
+J_\lambda:=\{1\le i\le N:\text{存在 }(k,x)\in\mathcal C_K
+\text{ 使 }\nu_S(k)\le\lambda(i)\text{ 但 }\nu_S(k)\nleq\lambda(i-1)\}.
+\]
+则一参数模 \(\mathsf N_\bullet\) 有分解
+\[
+\mathsf N_\bullet\cong
+\bigoplus_{\substack{(k,x)\in\mathcal C_K\\ b(k,x)<\infty}}
+\mathbb F_{[b(k,x),N]},
+\qquad
+b(k,x):=\min\{i:\nu_S(k)\le\lambda(i)\},
+\]
+其中 \(\mathbb F_{[b,N]}\) 为链 \(\{0,\ldots,N\}\) 上支撑于 \([b,N]\) 的区间模。因此 \(\alpha_i\) 为同构当且仅当 \(i\notin J_\lambda\)。
+
+进一步，若给定有限维商读出
+\(\pi_i:\mathsf N_i\twoheadrightarrow Q_i\) 与线性映射
+\(g_i:Q_{i-1}\to Q_i\)，满足
+\[
+g_i\circ\pi_{i-1}=\pi_i\circ\alpha_i
+\qquad(1\le i\le N),
+\]
+并且在 \(i\notin J_\lambda\) 时 \(g_i\) 为同构，则 \((Q_i^\vee,g_i^\vee)\) 在每个 plateau 上构成稳定逆系统；任何读出维数、秩或同构类不变量只能在 \(J_\lambda\) 中改变。在墙 \(i\in J_\lambda\) 处，正合列
+\[
+0\longrightarrow\ker g_i\longrightarrow Q_{i-1}\xrightarrow{\ g_i\ }Q_i
+\longrightarrow\operatorname{coker}g_i\longrightarrow0
+\]
+分别记录该墙上的 death 或 merge 空间 \(\ker g_i\) 与 birth 空间 \(\operatorname{coker}g_i\)。特别地，若两个读出类 \(q,q'\in Q_{i-1}\) 在第 \(i\) 步后被识别，则 \(q-q'\in\ker g_i\)；反之亦然。
+\end{proposition}
+
+\begin{proof}
+把定理 \ref{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-constructible_jump_stratification-finite-periodic-denominator-constructible-stratification} 的主上集分解沿 \(\lambda\) 拉回。对固定 \((k,x)\in\mathcal C_K\)，该 summand 在时刻 \(i\) 非零当且仅当 \(\nu_S(k)\le\lambda(i)\)。由于 \(\lambda\) 非降，一旦该条件成立，此后恒成立；若从不成立，则该 summand 在拉回模中为零。故非零 summand 恰为区间模 \(\mathbb F_{[b(k,x),N]}\)，得到所述分解。
+
+由该区间分解，\(\alpha_i\) 不是同构当且仅当存在某个 summand 在 \(i-1\) 处为零而在 \(i\) 处为 \(\mathbb F\)，这正是 \(i\in J_\lambda\) 的定义。故 \(J_\lambda\) 的补集为稳定 plateau，且在其中所有结构映射均为同构。
+
+设再给定商读出 \((Q_i,g_i)\)。当 \(i\notin J_\lambda\) 时，假设给出 \(g_i\) 为同构，于是其对偶 \(g_i^\vee:Q_i^\vee\to Q_{i-1}^\vee\) 亦为同构；沿任一不遇到 \(J_\lambda\) 的时间区间复合这些对偶同构，即得到 plateau 上的稳定逆系统。因此任何只依赖于 \(Q_i\) 同构类的量在该区间内不变。
+
+最后，任意线性映射 \(g_i:Q_{i-1}\to Q_i\) 都给出显示的正合列。\(\operatorname{coker}g_i\) 是 \(Q_i\) 中不能从 \(Q_{i-1}\) 推来的商空间，故精确记录该墙后新出现的读出类；\(\ker g_i\) 是在通过该墙时被送为零的读出空间，并且 \(g_i(q)=g_i(q')\) 当且仅当 \(q-q'\in\ker g_i\)，故它同时记录 death 与 merge。命题得证。
+\end{proof}
 
 \endinput
 

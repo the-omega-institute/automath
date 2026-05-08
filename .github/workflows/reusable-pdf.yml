@@ -55,13 +55,11 @@ jobs:
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.aux
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.bbl
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.blg
-            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.fdb_latexmk
-            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.fls
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.out
             theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.toc
-          key: ${{ runner.os }}-latex-aux-${{ hashFiles('theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/latexmkrc', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/*.bib', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/**/*.tex') }}
+          key: ${{ runner.os }}-latex-aux-v2-${{ hashFiles('theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/latexmkrc', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/*.bib', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/**/*.tex') }}
           restore-keys: |
-            ${{ runner.os }}-latex-aux-
+            ${{ runner.os }}-latex-aux-v2-
 
       - name: Build main.pdf
         run: |
@@ -70,12 +68,14 @@ jobs:
             export LC_ALL=en_US.UTF-8
           fi
 
+          rm -f main.fdb_latexmk main.fls main.xdv main.pdf
+
           # Bootstrap bibtex on cold cache (no .bbl), then latexmk for convergence
           if [ ! -f main.bbl ]; then
             xelatex -cnf-line=max_in_open=50 -no-pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex || true
             bibtex main || true
           fi
-          latexmk -pdfxe -interaction=nonstopmode -file-line-error main.tex || latexmk_rc=$?
+          latexmk -g -pdfxe -interaction=nonstopmode -file-line-error main.tex || latexmk_rc=$?
 
           # Fail only if PDF was not produced (latexmk may exit non-zero for unresolved refs)
           if [ ! -f main.pdf ]; then

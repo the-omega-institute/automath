@@ -42,6 +42,365 @@
 \begin{corollary}[零新增公理原则]\label{cor:physical-spacetime-no-new-axioms}
 若某个具体模型只是在不改变上述接口的前提下，选择了某种特定的谱表示、核表示或几何极限表示，那么该模型中的量子结构与时空结构都只是总链的后端实现，而不是额外加入的独立公理。
 \end{corollary}
+\begin{definition}[有限阶谱作用审计账本]\label{distill:connes_spectral_triples_and_chamseddine_connes_spectral_action-spectral_action_closure_family-ledger-def}
+设 \(M_{\mathrm{adm}}\) 为定理 \ref{thm:physical-spacetime-admissible-einstein-closure-main} 所得 admissible 四维域。一个 \(N\) 阶谱作用审计账本由下列数据组成：对每个有限读出层 \(m\)，给出实偶谱接口
+\[
+(\mathcal A_m,\mathcal H_m,D_m,J_m,\gamma_m),
+\]
+允许的一形式涨落集合
+\[
+\Omega_m^1:=\left\{\omega=\omega^\ast:\ \omega=\sum_{\ell=1}^r a_\ell[D_m,b_\ell],\ a_\ell,b_\ell\in\mathcal A_m\right\},
+\]
+以及涨落 Dirac 型算子
+\[
+D_{m,\omega}:=D_m+\omega+J_m\omega J_m^{-1}.
+\]
+要求每个 \(D_{m,\omega}^2\) 在 \(M_{\mathrm{adm}}\) 的对应读出片上为 Laplace 型，并且存在热核展开
+\[
+\Tr_{\mathcal H_m}\bigl(e^{-tD_{m,\omega}^2}\bigr)
+=\sum_{j=0}^{N}t^{j-2}a_{2j,m}(\omega)+O(t^{N-1})
+\qquad(t\downarrow0).
+\]
+记
+\[
+C_m^N(\omega):=(a_{0,m}(\omega),a_{2,m}(\omega),\ldots,a_{2N,m}(\omega))\in V_m^N
+\]
+为第 \(m\) 层的谱系数账本。若 \(n\ge m\)，称线性映射
+\[
+\rho_{mn}^N:V_n^N\longrightarrow V_m^N
+\]
+为 fold-aware 限制，若对任意可允许涨落 \(\omega_n\in\Omega_n^1\) 及其第 \(m\) 层读出 \(\omega_m\in\Omega_m^1\)，都有
+\[
+\Tr_{\mathcal H_m}\bigl(e^{-tD_{m,\omega_m}^2}\bigr)
+-\sum_{j=0}^{N}t^{j-2}\bigl(\rho_{mn}^N C_n^N(\omega_n)\bigr)_j
+=O(t^{N-1}).
+\]
+此时称 \(\{C_m^N,\rho_{mn}^N\}\) 为 fold-aware 谱系数逆系统。
+\end{definition}
+
+\begin{theorem}[谱作用闭包的矩分离审计]\label{distill:connes_spectral_triples_and_chamseddine_connes_spectral_action-spectral_action_closure_family-ledger}
+在定义 \ref{distill:connes_spectral_triples_and_chamseddine_connes_spectral_action-spectral_action_closure_family-ledger-def} 的假设下，设 \(\mathcal F\) 是一族偶截断函数，并记 \(\Phi_{2j}(f)\) 为四维谱作用展开中对应 \(a_{2j}\) 的标准矩系数。假设对每个 \(f\in\mathcal F\) 有渐近式
+\[
+\Tr_{\mathcal H_m}\bigl(f(D_{m,\omega}/\Lambda)\bigr)
+=\sum_{j=0}^{N}\Phi_{2j}(f)\Lambda^{4-2j}a_{2j,m}(\omega)
++O(\Lambda^{2-2N})
+\qquad(\Lambda\to\infty).
+\]
+令
+\[
+Z_{\mathcal F}^N:=\{j\in\{0,\ldots,N\}:\Phi_{2j}(f)=0\text{ for all }f\in\mathcal F\}.
+\]
+则成立如下断言。
+\begin{enumerate}
+  \item 若 \(Z_{\mathcal F}^N=\varnothing\)，则 \(\mathcal F\) 的谱作用渐近式唯一决定完整账本 \(C_m^N(\omega)\)。
+  \item 若 \(\rho_{mn}^N\) 为 fold-aware 限制，且 \(\omega_m\) 是 \(\omega_n\) 的第 \(m\) 层读出，则
+  \[
+  C_m^N(\omega_m)=\rho_{mn}^N C_n^N(\omega_n).
+  \]
+  \item 一个候选闭包族 \(\Theta=(\Theta_m)_m\), \(\Theta_m\in V_m^N\), 能够由 \(N\) 阶谱作用审计实现，当且仅当
+  \[
+  \Theta\in\varprojlim_m C_m^N(\Omega_m^1),
+  \]
+  即每个 \(\Theta_m\) 来自某个允许内涨落的热核系数，并且 \(\rho_{mn}^N\Theta_n=\Theta_m\) 对所有 \(n\ge m\) 成立。
+\end{enumerate}
+若 \(Z_{\mathcal F}^N\ne\varnothing\)，则所有仅由 \(\mathcal F\) 测试而不可由系数账本确认的伪闭包方向，恰为
+\[
+\bigoplus_{j\in Z_{\mathcal F}^N} V_{m,2j}\subseteq V_m^N.
+\]
+特别地，当 \(N\ge2\) 且 \(a_{0,m},a_{2,m},a_{4,m}\) 采用四维局部 Seeley--de Witt 密度分解时，宇宙常数型、Einstein--Hilbert 型、Yang--Mills 型与标量场型项只能作为这些系数槽位的投影进入闭包；它们不能作为独立于 \(C_m^N\) 的自由清单加入。
+\end{theorem}
+\begin{definition}[观察者扇区的有限 Stokes 残差跃迁账本]\label{def:distill-ecalle-observer-sector-stokes-ledger}
+设 \(V\) 为由某一有限审计层上的局部读出状态生成的阿贝尔群，设
+\[
+\Pi:V\longrightarrow P
+\]
+为同时记录观察者、时间、空间与因果骨架读出的群同态。一个有限 Stokes 残差跃迁账本由下列数据组成：
+\begin{enumerate}
+  \item 有限观察者扇区集合 \(\mathcal Q\)；
+  \item 有限残差奇异地址集合 \(\mathfrak S\)；
+  \item 对每个 \(\sigma\in\mathfrak S\)，给定残差跃迁算子
+  \(N_\sigma:V\to V\)；
+  \item 对每个有向扇区边 \(\eta\to\eta'\)，给定一个地址字
+  \(\Gamma(\eta,\eta')=(\sigma_1,\ldots,\sigma_k)\)，并定义有序跃迁
+  \[
+  \mathcal T_{\eta\eta'}:=(1+N_{\sigma_k})\cdots(1+N_{\sigma_1});
+  \]
+  \item 给定本征折叠生成元 \(G:V\to V\)，并对每个地址给定桥接缺陷
+  \(C_\sigma:V\to V\)，满足
+  \[
+  G N_\sigma-N_\sigma G=C_\sigma.
+  \]
+\end{enumerate}
+若 \(\Pi N_\sigma=0\) 且 \(\Pi C_\sigma=0\) 对所有 \(\sigma\in\mathfrak S\) 成立，则称该账本在骨架读出 \(\Pi\) 下不可见但可审计。
+\end{definition}
+
+\begin{theorem}[扇区 Stokes 账本的骨架不变性与 residual holonomy 证书]\label{thm:distill-ecalle-observer-sector-stokes-skeleton-holonomy}
+设 \(\mathfrak S\)、\(\mathcal Q\)、\(V\)、\(\Pi\)、\(G\) 与 \(\mathcal T_{\eta\eta'}\) 构成定义
+\ref{def:distill-ecalle-observer-sector-stokes-ledger} 的不可见但可审计账本。则对任意扇区边
+\(\eta\to\eta'\)，有
+\[
+\Pi\mathcal T_{\eta\eta'}=\Pi
+\]
+并且折叠演化在骨架读出后与扇区跃迁交换：
+\[
+\Pi G\mathcal T_{\eta\eta'}=\Pi\mathcal T_{\eta\eta'}G.
+\]
+若
+\(\ell=(\eta_0\to\eta_1\to\cdots\to\eta_m=\eta_0)\) 是扇区图中的闭路，则
+\[
+\mathcal H_\ell:=
+\mathcal T_{\eta_{m-1}\eta_m}\cdots\mathcal T_{\eta_0\eta_1}
+\]
+满足 \(\Pi\mathcal H_\ell=\Pi\)。因此
+\(\mathcal H_\ell-1\) 若非零，只能作为闭路 residual 曲率或 holonomy 证书出现，而不能改变总链中已经由 \(\Pi\) 读出的观察者、时间、空间与因果骨架。
+\end{theorem}
+\begin{definition}[事件覆盖的支撑平衡账本]\label{def:distill-khovanskii-event-support-balance-ledger}
+设 \(\Gamma\) 为有限无向连通图，\(V\) 为顶点集，并选定一组有向边生成元 \(E^+\)。对 \(e\in E^+\)，记其起点与终点为 \(s(e),t(e)\)。令 \(L\) 为有限秩自由阿贝尔群，并给每条边赋予一个 valuation 选出的支撑法向量 \(\nu_e\in L\)。定义
+\[
+\partial_\nu:\mathbb Z^{E^+}\longrightarrow L^V,
+\qquad
+(\partial_\nu n)_v
+:=\sum_{s(e)=v}n_e\nu_e-\sum_{t(e)=v}n_e\nu_e .
+\]
+称 \(n\in\mathbb Z_{\ge0}^{E^+}\) 为平衡支撑流，若 \(\partial_\nu n=0\)。这个条件是事件区覆盖上的 tropical balancing 读法：边权记录有限支撑的可见重数，\(\nu_e\) 记录相邻区域之间的 face survivor 法向。
+\end{definition}
+
+\begin{proposition}[有限支撑平衡的扩张与秩障碍]\label{prop:distill-khovanskii-event-support-balance-extension}
+沿用定义 \ref{def:distill-khovanskii-event-support-balance-ledger}。令 \(E_0\subseteq E^+\)，\(E_1:=E^+\setminus E_0\)，并给定部分非负权重 \(n^0\in\mathbb Z_{\ge0}^{E_0}\)。记 \(\partial_{\nu,E_i}\) 为 \(\partial_\nu\) 在 \(\mathbb Z^{E_i}\) 上的限制。则：
+\begin{enumerate}
+  \item 存在非负补全 \(m\in\mathbb Z_{\ge0}^{E_1}\) 使 \((n^0,m)\) 平衡，当且仅当
+  \[
+  -\partial_{\nu,E_0}n^0\in
+  \partial_{\nu,E_1}\bigl(\mathbb Z_{\ge0}^{E_1}\bigr)\subseteq L^V.
+  \]
+  \item 若存在群同态 \(\lambda:L^V\to\mathbb Z\)，满足
+  \[
+  \lambda\bigl(\partial_{\nu,E_1}m\bigr)\ge0
+  \quad(m\in\mathbb Z_{\ge0}^{E_1}),
+  \qquad
+  \lambda\bigl(-\partial_{\nu,E_0}n^0\bigr)<0,
+  \]
+  则该部分权重没有非负平衡补全。
+  \item 若允许整数符号权重，并且存在一个整数补全 \(m_\ast\in\mathbb Z^{E_1}\)，则所有整数补全构成仿射格
+  \[
+  m_\ast+\ker(\partial_{\nu,E_1}),
+  \]
+  且其方向秩为
+  \[
+  \rank_{\mathbb Z}\ker(\partial_{\nu,E_1})
+  =|E_1|-\rank_{\mathbb Z}\operatorname{im}(\partial_{\nu,E_1}).
+  \]
+\end{enumerate}
+因此，一个有限事件区覆盖若要承载平衡支撑骨架，必须通过上述有限生成锥与格核审计；失败时得到的不是物理边界本身，而是支撑法向层上的非平衡 obstruction certificate。
+\end{proposition}
+\begin{definition}[估值选择的局部时空骨架账本]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-valuation_and_tropical_degeneration-local-spacetime-ledger}
+令 \(K\) 为秩一赋值域，赋值为 \(\nu:K^*\to\RR\)，并令 \(\Gamma\) 为有限连通无向审计图。对每条无向边固定一个正向，反向边记为 \(\bar e\)。一个估值选择的局部时空骨架账本由下列数据组成：
+\begin{enumerate}
+  \item 一个有限秩自由格 \(L\)，其对偶格 \(N:=\operatorname{Hom}_{\ZZ}(L,\ZZ)\)，以及一个有理多面体窗口 \(P\subset N_{\RR}:=N\otimes_{\ZZ}\RR\)。该窗口表示当前审计种子图允许读取的同步深度与空间代价范围。
+  \item 对每个顶点 \(v\in V(\Gamma)\)，一个有限支撑 \(S_v\subset L\) 与一个局部估值读出
+  \[
+  \Phi_v=\sum_{m\in S_v}a_{v,m}x^m,\qquad a_{v,m}\in K^*.
+  \]
+  记 \(h_v(m):=\nu(a_{v,m})\)。对 \(\xi\in P\)，定义估值选择面
+  \[
+  F_v(\xi):=\{m\in S_v:h_v(m)+\langle m,\xi\rangle=\min_{m'\in S_v}(h_v(m')+\langle m',\xi\rangle)\}.
+  \]
+  \item 对每条有向边 \(e:v\to w\)，一个格商映射 \(q_e:L\to Q_e\) 与一个取值于阿贝尔 residual 群 \(R\) 的边余差 \(\rho_e\in R\)，并要求 \(q_{\bar e}=q_e\)、\(\rho_{\bar e}=-\rho_e\)。
+  \item 对每个有限多面体剖分 \(\mathcal F\) 的顶维胞腔集 \(\mathcal F_d\)，其中 \(d:=\dim P\)，账本给出一个可能为空的整数权集合 \(\mathcal W(\mathcal F)\)。元素 \(\mu\in\mathcal W(\mathcal F)\) 是映射 \(\mu:\mathcal F_d\to\ZZ_{\ge0}\)，表示局部交数、传播重数或审计预算重数。
+\end{enumerate}
+若在 \(\mathcal F\) 的每个胞腔相对内部上所有 \(F_v\) 均为常值，且对每条 \(e:v\to w\) 与每个胞腔 \(\sigma\in\mathcal F\) 成立
+\[
+q_e(F_v(\sigma))=q_e(F_w(\sigma))\subset Q_e,
+\]
+则称 \(\mathcal F\) 为面相容剖分。若 \(\tau\) 为 \(\mathcal F\) 的内部余维一胞腔，\(N_\tau\subset N\) 为平行于 \(\tau\) 的子格，且 \(n_{\sigma/\tau}\in N/N_\tau\) 为从 \(\tau\) 指向相邻顶维胞腔 \(\sigma\supset\tau\) 的本原法向量，则称 \(\mu\) 在 \(\tau\) 处平衡，是指
+\[
+\sum_{\sigma\supset\tau}\mu(\sigma)n_{\sigma/\tau}=0\quad\text{in }N/N_\tau.
+\]
+\end{definition}
+
+\begin{theorem}[估值退化坏例子的扇形--平衡--余差三分]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-valuation_and_tropical_degeneration-fan-balance-residual-trichotomy}
+给定定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-valuation_and_tropical_degeneration-local-spacetime-ledger} 的账本。称窗口 \(P\) 上存在估值--热带时空骨架证书，是指存在一个面相容剖分 \(\mathcal F\)、一个权 \(\mu\in\mathcal W(\mathcal F)\)，以及一个顶点 \(0\)-余链 \(\eta:V(\Gamma)\to R\)，使得：
+\begin{enumerate}
+  \item \(\mu\) 在每个内部余维一胞腔处平衡；
+  \item 对每条有向边 \(e:v\to w\)，有 \(\rho_e=\eta(w)-\eta(v)\)。
+\end{enumerate}
+则以下三类机制完全刻画证书失败：
+\begin{enumerate}
+  \item \textbf{扇形精化失败：}不存在面相容剖分；
+  \item \textbf{平衡失败：}存在面相容剖分，但对每个面相容剖分 \(\mathcal F\) 与每个 \(\mu\in\mathcal W(\mathcal F)\)，至少有一个内部余维一胞腔不平衡；
+  \item \textbf{余差上同调失败：}存在面相容剖分与平衡权，但边余差 \(\rho\) 在 \(H^1(\Gamma;R)\) 中的类非零。
+\end{enumerate}
+更精确地，证书不存在当且仅当上述三类机制至少一类发生。并且，若证书存在，则剖分的胞腔、所有估值选择面 \(F_v(\sigma)\)、支撑商影像 \(q_e(F_v(\sigma))\) 与平衡方程只依赖于有限支撑 \(S_v\) 和高度函数 \(h_v\)，而不依赖于系数的剩余解析单位。因此，固定全部高度函数而改变 \(a_{v,m}\) 的剩余单位，只能改变初始形式中的剩余系数与代表余链 \(\eta\)，不能改变由估值选出的整数骨架；若 \([\rho]\ne0\)，它只阻碍全局去扭或全局平凡化，不否定各边上的局部粘接相容性。
+\end{theorem}
+\begin{definition}[局域 residual 的 Newton 化审计数据]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-omega-newtonization-datum}
+固定一个 admissible 局域图册片 \(U_i\)，并设其闭路 residual、粘接 residual 或局域 exactness residual 已在某个可逆 monomial 坐标系中写成有限 Laurent 系统
+\[
+\mathcal R_i=(R_{i,1},\ldots,R_{i,r_i}),\qquad
+R_{i,a}(x)=\sum_{m\in S_{i,a}} c_{i,a,m}x^m,
+\]
+其中 \(S_{i,a}\subset\mathbb Z^{d_i}\) 有限，且所有 \(c_{i,a,m}\neq 0\)。称
+\[
+\operatorname{Newt}(\mathcal R_i)
+ :=\bigl((S_{i,a})_{a=1}^{r_i},(P_{i,a})_{a=1}^{r_i},N(P_i)\bigr),\qquad
+P_{i,a}:=\operatorname{conv}(S_{i,a}),\quad P_i:=P_{i,1}+\cdots+P_{i,r_i},
+\]
+为 \(U_i\) 上 residual 的 Newton 化审计数据，其中 \(N(P_i)\) 为 \(P_i\) 的法扇。
+
+对任意锥 \(\sigma\in N(P_i)\)，取 \(w\in\operatorname{relint}(\sigma)\)，并定义面选择初形
+\[
+\operatorname{in}_{\sigma}R_{i,a}:=\sum_{m\in S_{i,a},\,\langle w,m\rangle=\min_{u\in S_{i,a}}\langle w,u\rangle}c_{i,a,m}x^m,
+\qquad
+S_{i,a}^{\sigma}:=\operatorname{supp}(\operatorname{in}_{\sigma}R_{i,a}).
+\]
+由于 \(w\) 在同一相对内点锥内移动时选出的面不变，上式与 \(w\) 的选择无关。该操作称为从 \(\mathcal R_i\) 到面 residual
+\[
+\mathcal R_i^{\sigma}:=(\operatorname{in}_{\sigma}R_{i,1},\ldots,\operatorname{in}_{\sigma}R_{i,r_i})
+\]
+的 valuation face selection。其有效 monomial 数为
+\[
+\kappa_{i,\sigma}:=\sum_{a=1}^{r_i}|S_{i,a}^{\sigma}|.
+\]
+这里 Newton 化只保留 exponent support、Newton 面与法扇数据；连续系数只在随后判别式审计中重新进入。
+\end{definition}
+\begin{definition}[面判别式与扇细化闭包审计]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-face-discriminant-audit}
+在定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-omega-newtonization-datum} 的记号下，设
+\[
+\mathbb C[S_i^{\sigma}]:=\prod_{a=1}^{r_i}\mathbb C^{S_{i,a}^{\sigma}}
+\]
+为面 residual 的系数空间。令 \(\Delta_{i,\sigma}\subset\mathbb C[S_i^{\sigma}]\) 为下列代数闭集：若 \(r_i=d_i\)，则 \(\Delta_{i,\sigma}\) 是支撑族 \((S_{i,1}^{\sigma},\ldots,S_{i,r_i}^{\sigma})\) 的稀疏结式零点集；一般地，\(\Delta_{i,\sigma}\) 定义为所有系数组成的 Zariski 闭包，使得面系统 \(\mathcal R_i^{\sigma}=0\) 在相应 torus 轨道中出现奇点，或其公共零点维数大于
+\[
+e_{i,\sigma}:=\dim O(\sigma)-r_i
+\]
+的预期值。若 \(e_{i,\sigma}<0\)，则“维数大于 \(e_{i,\sigma}\)”理解为该面系统在该轨道上非空。等价地，\(\Delta_{i,\sigma}\) 是对应支撑配置的 \(A\)-判别式与必要稀疏结式因子的并。
+
+称局域 Newton 化数据通过 \(\sigma\)-面审计，若其系数向量不落在 \(\Delta_{i,\sigma}\)。给定若干局域片 \(U_i\)，称一组公共扇 \(\Sigma\) 是 residual 适配的，若 \(\Sigma\) 同时细化所有 \(N(P_i)\)，并且每个 \(\tau\in\Sigma\) 在每个 \(N(P_i)\) 中落入唯一最小锥 \(\sigma_i(\tau)\)。称 toric boundary closure audit 成立，若
+\[
+[c_{i,a,m}]_{m\in S_{i,a}^{\sigma_i(\tau)}}\notin\Delta_{i,\sigma_i(\tau)}
+\]
+对所有 \(i,a,\tau\) 所诱导的面系统同时成立，并且这些面系统在公共扇 \(\Sigma\) 的重叠 torus 轨道上满足原有粘接 cocycle 的限制相容性。
+\end{definition}
+\begin{theorem}[toric boundary closure 的坏例子三分定理]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-boundary-failure-trichotomy}
+设 admissible 四维域构造中每个局域片 \(U_i\) 的 residual 已给出定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-omega-newtonization-datum} 的 Newton 化审计数据。若局域 residual 在每个 \(U_i\) 内可解，且局域粘接 cocycle 在原开覆盖上相容，但在进入 rigidity 或 Einstein 闭包之前的 toric boundary closure audit 失败，则至少发生以下三种情形之一：
+\begin{enumerate}
+  \item 不存在共同扇 \(\Sigma\) 同时细化所有 \(N(P_i)\)，并保持重叠片上的面选择一致；
+  \item 存在某个 \(i\) 与某个边界锥 \(\sigma\in N(P_i)\)，使得面 residual \(\mathcal R_i^{\sigma}=0\) 在相应 torus 轨道中不具预期维数或非横截；
+  \item 存在某个 \(i,\sigma\)，使得面系数向量落在 \(\Delta_{i,\sigma}\)，即出现由支撑配置决定的 \(A\)-判别式或稀疏结式障碍。
+\end{enumerate}
+反之，若存在 residual 适配公共扇 \(\Sigma\)，所有面系数均避开相应 \(\Delta_{i,\sigma_i(\tau)}\)，并且公共扇上所有边界轨道的限制 cocycle 相容，则 toric boundary closure audit 成立；因此任何随后关于全局刚性或 admissible Einstein 闭包的声明均可在该审计之后进行，而不能由局域可解性单独推出。
+\end{theorem}
+\begin{proof}
+先将每个局域 residual Newton 化。Newton 化把 \(\mathcal R_i\) 的连续表达式压缩为有限支撑族、Newton 多面体与法扇；因此所有趋向边界的退化方向都由某个 valuation \(w\) 所选的面系统 \(\mathcal R_i^{\sigma}\) 表示。由定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-omega-newtonization-datum}，同一锥相对内点中的 valuation 给出相同面 residual，故边界问题被有限地转化为法扇锥上的面问题。
+
+若没有共同扇同时细化这些法扇并保持重叠片上的面选择一致，则不同局域片把同一退化方向送入不兼容的面 residual。此时边界 strata 本身不能被统一索引，故闭包审计失败，得到第一种情形。
+
+现假设存在这样的公共扇。取任意公共锥 \(\tau\)。它在第 \(i\) 个片中确定唯一面锥 \(\sigma_i(\tau)\)，于是边界轨道上的局域方程正是面 residual \(\mathcal R_i^{\sigma_i(\tau)}=0\)。若该面系统在相应 torus 轨道中维数大于 \(e_{i,\sigma_i(\tau)}\)，或在公共零点处 Jacobian 秩不足，则边界交叉不横截，局域闭包虽可在内部成立，却不能作为 rigidity 层可用的边界闭包证书。这给出第二种情形。
+
+若所有面系统均具有预期维数并横截，则剩余的代数失败只能来自面系数进入支撑配置的判别式或结式闭集。按定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-face-discriminant-audit}，该闭集正是 \(\Delta_{i,\sigma}\)：在方程数等于 torus 维数时由稀疏结式检测非预期公共零点；在一般情形中由 \(A\)-判别式及必要结式因子检测奇点、碰撞或预期余维失败。因此若闭包审计仍失败，必落入第三种情形。
+
+反过来，若存在 residual 适配公共扇，且所有面系数避开相应 \(\Delta_{i,\sigma}\)，则每个 valuation 方向都被公共扇中的唯一锥记录，每个边界轨道上的面 residual 都有预期维数并横截，且所有重叠轨道上的限制 cocycle 已按假设相容。于是局域内部解、边界面解与重叠限制解共同形成一个 toric boundary closure audit。该结论并不声称 cocycle 为 coboundary；它只给出闭包层所需的相容性证书。若进一步要作全局平凡化、untwisting 或 Einstein rigidity 断言，还必须在本审计之后另行验证相应的 coboundary 或变分闭包条件。
+\end{proof}
+\begin{corollary}[总链中的闭包审计次序约束]\label{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-grand-chain-audit-order}
+在定理 \ref{thm:physical-spacetime-procedural-grand-chain} 的程序性总链中，若 admissible 四维域由局域 residual 与粘接证书构造，并且这些 residual 允许定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-omega-newtonization-datum} 的 Newton 化，则从局域构造层进入全局刚性层之前，必须先完成定义 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-face-discriminant-audit} 的 toric boundary closure audit。特别地，局域可解性与原覆盖上的 cocycle 相容性不能推出边界闭包，也不能替代对公共扇、面横截性与支撑判别式的检查。
+\end{corollary}
+\begin{proof}
+程序性总链把对象构造、障碍识别与闭包刚性分成不同层次。局域可解性只说明 residual 在每个 \(U_i\) 的内部可处理；原覆盖上的 cocycle 相容性只说明这些内部片可以按既有接口粘接。定理 \ref{distill:khovanskii_newton_polyhedra_fewnomials_and_tropical_skeletons-toric_boundary_closure-boundary-failure-trichotomy} 表明，进入边界后仍可能出现三类坏例子：法扇缺少共同细化、面 strata 非横截、或面系数命中 \(A\)-判别式/稀疏结式障碍。这三类失败都不可由内部局域可解性排除。因此，在总链中从 admissible 局域构造走向全局 rigidity 或 Einstein 闭包时，toric boundary closure audit 是独立且先行的闭包检查。
+\end{proof}
+
+\begin{proof}
+先证明估值坍缩为有限多面体复形。对固定的 \(v\)，任意两个支撑点 \(m,m'\in S_v\) 给出仿射函数相等超平面
+\[
+\langle m-m',\xi\rangle=h_v(m')-h_v(m).
+\]
+这些超平面只有有限多个。它们把 \(P\) 切成有限多面体复形；在每个胞腔的相对内部，所有数
+\(h_v(m)+\langle m,\xi\rangle\) 的大小关系不变，因此 \(F_v(\xi)\) 不变。于是局部读出 \(\Phi_v\) 在估值层面只留下支撑 \(S_v\)、高度 \(h_v\) 与由最小仿射函数确定的面数据。这正是 Newtonization 与估值面选择在当前账本中的作用。
+
+取所有顶点 \(v\) 的上述复形的共同精化。由于 \(\Gamma\) 与每个 \(S_v\) 均有限，该共同精化仍有限。在其每个胞腔上，所有 \(F_v\) 均为常值。边约束
+\(q_e(F_v)=q_e(F_w)\)
+此时只是有限个支撑影像之间的等式；删除不满足这些等式的胞腔并继续取公共面，即得到所有可能的面相容剖分的共同有限来源。因此，局部重叠相容性在估值层面不再是解析方程族，而是一个有限扇形精化问题。若没有这样的剖分覆盖 \(P\)，即发生第一类失败；若存在，则所有后续问题都已被压缩到该有限整数骨架上。
+
+接着说明平衡方程为何是兼容闭包的必要有限形式。令 \(\mathcal F\) 为面相容剖分，\(\mu\in\mathcal W(\mathcal F)\)，并令 \(\tau\) 为内部余维一胞腔。对任意 \(m\in L\)，角色 \(x^m\) 沿相邻顶维胞腔 \(\sigma\supset\tau\) 的一阶法向阶数为 \(\langle m,n_{\sigma/\tau}\rangle\)。若带权初始片段在 toric 边界补全中没有沿 \(\tau\) 留下未抵消的一阶边界 residual，则所有角色的总阶数必须为零，即
+\[
+\sum_{\sigma\supset\tau}\mu(\sigma)\langle m,n_{\sigma/\tau}\rangle=0\qquad(m\in L).
+\]
+格配对分离 \(N/N_\tau\) 中的向量，故这等价于
+\[
+\sum_{\sigma\supset\tau}\mu(\sigma)n_{\sigma/\tau}=0.
+\]
+这就是 tropical skeleton extraction 在本文接口中的平衡律：交叠或闭包相容性被转写为每个余维一胞腔处的整数法向通量为零。若面相容剖分存在但所有允许权均在某处违反此式，则发生第二类失败；反之，一旦某个允许权满足全部这些等式，整数骨架已经通过平衡审计。
+
+最后处理 residual。由于 \(\Gamma\) 是有限连通无向图并已选定有向生成边，条件 \(\rho_{\bar e}=-\rho_e\) 使 \(\rho\) 成为 \(R\)-值 \(1\)-余链。若存在 \(\eta:V(\Gamma)\to R\) 使 \(\rho_e=\eta(w)-\eta(v)\)，则任意闭路上的边余差和按望远镜相消为零，所以 \([\rho]=0\)。反过来，若 \([\rho]=0\)，取根顶点 \(v_0\)。对任意顶点 \(v\)，沿一条从 \(v_0\) 到 \(v\) 的路径令 \(\eta(v)\) 为路径上 \(\rho\) 的和。闭路和为零保证该定义与路径无关，并立刻给出每条有向边 \(e:v\to w\) 上的等式 \(\rho_e=\eta(w)-\eta(v)\)。故 \([\rho]\ne0\) 精确阻碍全局去扭或全局平凡化；它并不推翻前两步已经验证的局部面相容或平衡粘接。
+
+由前三段可知，若证书不存在，则先看是否存在面相容剖分；不存在则为第一类。若存在，再看是否存在平衡允许权；不存在则为第二类。若二者存在，则证书的唯一剩余条件是 \(\rho\) 为上同调零类；失败即为第三类。反向蕴含显然：三类失败中的任意一类都分别排除证书定义中的相应组成部分。
+
+固定高度函数 \(h_v\) 时，所有超平面、所有面 \(F_v\)、所有支撑商影像和所有平衡方程均不变。改变系数的剩余单位不会改变任何数值 \(h_v(m)+\langle m,\xi\rangle\)，所以不会改变估值选出的多面体骨架；它只改变初始形式中留在 residue 层的系数，以及可选择的 \(R\)-值代表余链。结合定理 \ref{thm:physical-spacetime-procedural-grand-chain} 中局部读出、粘接 residual 与审计种子图对物理时空骨架的使用方式，所得证书正是把解析变化、整数热带骨架与全局 residual 去扭三者分离的有限审计形式。证毕。
+\end{proof}
+
+\begin{proof}
+第一项中，\((n^0,m)\) 平衡等价于
+\[
+\partial_{\nu,E_0}n^0+\partial_{\nu,E_1}m=0,
+\]
+并且 \(m\) 被要求落在非负幺半群 \(\mathbb Z_{\ge0}^{E_1}\) 内，故正是所述的幺半群像条件。
+
+第二项是 valuation 分离证书。若存在非负补全 \(m\)，则由第一项有
+\(-\partial_{\nu,E_0}n^0=\partial_{\nu,E_1}m\)。对 \(\lambda\) 取值得到左边严格小于零，而右边按假设非负，矛盾。
+
+第三项中，整数补全方程是自由阿贝尔群之间的线性方程
+\[
+\partial_{\nu,E_1}m=-\partial_{\nu,E_0}n^0.
+\]
+若 \(m_\ast\) 是一个解，则另一个整数解 \(m\) 与 \(m_\ast\) 的差恰在 \(\ker(\partial_{\nu,E_1})\) 中，反之亦然。最后的秩公式由有限生成自由阿贝尔群同态的秩--零化度公式给出。
+\end{proof}
+
+\begin{proof}
+先证单个地址跃迁。由 \(\Pi N_\sigma=0\) 得
+\[
+\Pi(1+N_\sigma)=\Pi.
+\]
+沿地址字 \(\Gamma(\eta,\eta')=(\sigma_1,\ldots,\sigma_k)\) 逐项代入，得到
+\(\Pi\mathcal T_{\eta\eta'}=\Pi\)。这里必须使用地址字的有序分解；若只有一个未局部化的全局误差项，则无法逐地址消去骨架读出。
+
+再看折叠生成元。桥接缺陷等式给出
+\[
+G(1+N_\sigma)-(1+N_\sigma)G=C_\sigma.
+\]
+左乘 \(\Pi\) 并用 \(\Pi C_\sigma=0\)，得
+\[
+\Pi G(1+N_\sigma)=\Pi(1+N_\sigma)G.
+\]
+对地址字作归纳，便有
+\(\Pi G\mathcal T_{\eta\eta'}=\Pi\mathcal T_{\eta\eta'}G\)。因此 Stokes 型扇区变化不仅不改变骨架读出，还在读出层与本征折叠演化相容。
+
+闭路情形只是把边跃迁按闭路顺序复合。前一结论给出
+\(\Pi\mathcal H_\ell=\Pi\)。若 \(\mathcal H_\ell-1\neq0\)，该非平凡性完全落在
+\(\ker\Pi\) 中，因而不会生成新的观察者、时间、空间或因果骨架；它记录的是闭路复合残差，正对应全章总链中的离散 holonomy 与离散曲率证书层。
+\end{proof}
+
+\begin{proof}
+对固定的 \(m,\omega,f\)，谱作用展开中 \(\Lambda^{4-2j}\) 的系数为 \(\Phi_{2j}(f)a_{2j,m}(\omega)\)。若 \(Z_{\mathcal F}^N=\varnothing\)，则对每个 \(j\) 可取 \(f_j\in\mathcal F\) 使 \(\Phi_{2j}(f_j)\ne0\)，于是
+\[
+a_{2j,m}(\omega)=\Phi_{2j}(f_j)^{-1}\,[\Lambda^{4-2j}]\Tr_{\mathcal H_m}\bigl(f_j(D_{m,\omega}/\Lambda)\bigr),
+\]
+从而所有系数槽位均被唯一恢复。这证明第一项。
+
+第二项由 fold-aware 限制的定义和热核渐近展开的唯一性给出。确实，定义给出
+\[
+\Tr_{\mathcal H_m}\bigl(e^{-tD_{m,\omega_m}^2}\bigr)
+=\sum_{j=0}^{N}t^{j-2}\bigl(\rho_{mn}^N C_n^N(\omega_n)\bigr)_j+O(t^{N-1}),
+\]
+而同一算子 \(D_{m,\omega_m}^2\) 的账本定义给出
+\[
+\Tr_{\mathcal H_m}\bigl(e^{-tD_{m,\omega_m}^2}\bigr)
+=\sum_{j=0}^{N}t^{j-2}a_{2j,m}(\omega_m)+O(t^{N-1}).
+\]
+比较 \(t^{-2},t^{-1},\ldots,t^{N-2}\) 的系数即得
+\(C_m^N(\omega_m)=\rho_{mn}^N C_n^N(\omega_n)\)。
+
+第三项中，若 \(\Theta\) 由谱作用审计实现，则存在允许涨落族使 \(\Theta_m=C_m^N(\omega_m)\)。第二项立即给出所有限制相容性，因此 \(\Theta\) 属于所示逆极限。反过来，若 \(\Theta\) 属于该逆极限，则按定义每个 \(\Theta_m\) 已由某个允许内涨落的热核系数给出，且这些系数在 fold-aware 限制下相容；故它正是一个 \(N\) 阶谱作用账本闭包。
+
+最后，若某个扰动 \(\Delta=(\Delta_0,\ldots,\Delta_N)\in V_m^N\) 对 \(\mathcal F\) 的所有谱作用测试不可见，则对所有 \(f\in\mathcal F\) 与所有 \(j\) 都有 \(\Phi_{2j}(f)\Delta_j=0\)。在复向量空间上这等价于 \(\Delta_j=0\) 对所有 \(j\notin Z_{\mathcal F}^N\) 成立，而 \(j\in Z_{\mathcal F}^N\) 的分量任意。因此不可见方向正是 \(\bigoplus_{j\in Z_{\mathcal F}^N}V_{m,2j}\)。四维 Laplace 型热核公式把体积、标量曲率、规范曲率平方以及标量场局部密度分别置于 \(a_0,a_2,a_4\) 的相应投影中；前述唯一恢复与逆系统相容性说明这些项只能通过系数账本进入闭包。证毕。
+\end{proof}
+
 \begin{proof}
 定理 \ref{thm:physical-spacetime-procedural-grand-chain} 已经说明，骨架对象由接口结构统一诱导。
 因此，任何不改变接口、只改变表示落点的选择，都只会改变实现方式，而不会改变骨架的生成逻辑。

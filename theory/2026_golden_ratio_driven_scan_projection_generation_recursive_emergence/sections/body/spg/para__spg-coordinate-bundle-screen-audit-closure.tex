@@ -228,5 +228,172 @@ k\log(E+1)\ge 2^{m(n-s)}\log p.
 
 \noindent
 因此，坐标遗漏的代价在 dyadic 屏幕模型中并非仅呈数量级增长，而是严格满足每遗漏一个坐标方向便乘上一个 \(2^m\) 因子的闭式律；而当全部内部坐标方向均已可见时，唯一剩余缺口只是与外部参考相连的整体常值模，并且任一外边界面都足以将其消去。换言之，在定理 \ref{thm:spg-screen-rank-matroid-supermodularity} 所给出的行拟阵语言中，\(S_{[n]}^{\mathrm{int}}\) 恰处于亏秩 \(1\) 的位置，而任一外边界面都构成其达到精确屏幕的单步补足。
+\begin{proposition}[坐标束闭合缺口的区间分解]\label{prop:distill-spg-coordinate-bundle-defect-intervals}
+沿用定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 的记号，并假设 \(J\subseteq\{1,\ldots,n\}\) 非空，\(s=|J|\)。令 \(\mathcal C(J)\) 为屏幕图 \(\Gamma_{S_J^{\mathrm{int}}}\) 的内部连通分量集合；于是
+\[
+\card\mathcal C(J)=2^{m(n-s)}.
+\]
+取一条外边界审计链
+\[
+B_0\subseteq B_1\subseteq\cdots\subseteq B_T
+\]
+其中每个 \(B_t\) 为外边界面族。对 \(C\in\mathcal C(J)\)，定义
+\[
+d(C):=\min\{t: B_t\text{ 中某张外边界面与 }C\text{ 相接}\},
+\]
+若集合为空则令 \(d(C):=T+1\)。令
+\[
+D_t:=\bigoplus_{C\in\mathcal C(J),\ d(C)>t}\mathbb K e_C
+\]
+并定义转移 \(\tau_{t+1,t}:D_t\to D_{t+1}\) 为
+\[
+\tau_{t+1,t}(e_C)=
+\begin{cases}
+e_C,&d(C)>t+1,\\
+0,&d(C)=t+1.
+\end{cases}
+\]
+则 \((D_t,\tau_{t+1,t})_{0\le t\le T}\) 是一参数有限维持久模，且分解为
+\[
+D_\bullet\cong\bigoplus_{C\in\mathcal C(J)}\mathbb K_{[0,d(C))}.
+\]
+并且对每个 \(t\)，扩张屏幕 \(S_J^{\mathrm{int}}\cup B_t\) 的剩余最小外边界闭合条数恰为
+\[
+\dim_{\mathbb K}D_t=\#\{C\in\mathcal C(J):d(C)>t\}.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form}，内部坐标束屏幕的内部连通分量正由补坐标标记，数目为 \(2^{m(n-s)}\)。因为 \(J\ne\varnothing\)，推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure} 表明每个内部连通分量均可由某张外边界面接到外部顶点 \(\infty\)，且一张外边界面只接入一个内部连通分量。
+
+映射 \(\tau_{t+1,t}\) 显然满足 \(\tau_{u,t}=\tau_{u,u-1}\cdots\tau_{t+1,t}\)，因为每个基向量 \(e_C\) 只在首次接触尺度 \(d(C)\) 被杀死一次，之后不再出现。因此 \((D_t,\tau_{t+1,t})\) 是合法的一参数持久模。对固定 \(C\)，向量 \(e_C\) 在 \(t<d(C)\) 时存在，在 \(t\ge d(C)\) 时为零，故它贡献区间模 \(\mathbb K_{[0,d(C))}\)。对所有 \(C\) 取直和得到所示条码分解。
+
+在尺度 \(t\)，已经接触 \(B_t\) 的内部连通分量与 \(\infty\) 同属一个连通块；未接触者仍各自与 \(\infty\) 分离。由推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure}，要使屏幕精确，必须且只须给每个未接触分量再选一张外边界面。因此剩余闭合条数等于未死亡区间的数目，即 \(\dim_{\mathbb K}D_t\)。
+\end{proof}
+下述有限化使用 Interleaving stability 算子：扰动预算不比较外边界面本身，而比较其在坐标束屏幕图连通分量载体上的首次闭合时间。
+\begin{theorem}[坐标束闭合审计的载体死亡时间稳定定理]\label{distill:persistent_homology_persistence_modules_and_constructible_sheaf_persistence-stability_and_interleaving-spg-coordinate-bundle-carrier-death-stability}
+沿用定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 与推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure} 的记号，并假设 \(J\neq\varnothing\)。置
+\[
+\Lambda_J:=\{0,\dots,2^m-1\}^{J^c}.
+\]
+若 \(b\) 是一个外边界取向面，记 \(Q_a\) 为与 \(b\) 相接的唯一顶维 dyadic 立方体，并定义其坐标束载体为
+\[
+\kappa(b):=(a_i)_{i\in J^c}\in \Lambda_J.
+\]
+设 \(L\ge 1\)，称递增外边界面族
+\[
+B_0\subseteq B_1\subseteq\cdots\subseteq B_L
+\]
+为闭合有限外边界审计协议，如果对每个 \(u\in\Lambda_J\) 都存在 \(b\in B_L\) 满足 \(\kappa(b)=u\)。定义载体 \(u\) 的首次闭合时间
+\[
+\tau_B(u):=\min\{t\in\{0,\dots,L\}:\exists b\in B_t\text{ with }\kappa(b)=u\}.
+\]
+令 \(\mathbb F\) 为任意域，并定义有限审计 ledger
+\[
+M_B(t):=\operatorname{span}_{\mathbb F}\{e_u:u\in\Lambda_J,\ t<\tau_B(u)\},\qquad 0\le t\le L,
+\]
+其中 \(M_B(t)\to M_B(t')\) 对 \(t\le t'\) 为删去已死亡基向量的坐标投影。
+
+若两个闭合审计协议 \(B\) 与 \(C\) 满足如下 \(\rho\)-载体交错条件：对所有 \(0\le t\le L\)，
+\[
+\{u:\tau_B(u)\le t\}\subseteq \{u:\tau_C(u)\le \min(L,t+\rho)\},
+\]
+且同一包含式在交换 \(B,C\) 后仍成立，则
+\[
+|\tau_B(u)-\tau_C(u)|\le \rho
+\qquad\text{for every }u\in\Lambda_J.
+\]
+特别地，若
+\[
+d_{\mathrm{death}}(B,C):=\min_{\sigma\in\operatorname{Sym}(\Lambda_J)}\max_{u\in\Lambda_J}|\tau_B(u)-\tau_C(\sigma(u))|,
+\]
+则
+\[
+d_{\mathrm{death}}(B,C)\le \rho.
+\]
+此外，对任意截止深度 \(r\in\{0,\dots,L\}\)，两个审计 ledger 在 \(r\) 处的生存判决只能在 \(B\)-死亡时间的 \(\rho\)-邻域内不同：
+\[
+\{u:(e_u\in M_B(r))\not\Longleftrightarrow(e_u\in M_C(r))\}
+\subseteq
+\{u:r-\rho<\tau_B(u)\le r+\rho\}.
+\]
+因此，若某载体 \(u\) 在 \(B\) 中满足 \(\tau_B(u)>r+\rho\)，则它在所有与 \(B\) \(\rho\)-载体交错的闭合协议 \(C\) 中仍满足 \(e_u\in M_C(r)\)；若 \(\tau_B(u)\le r-\rho\)，则在所有此类 \(C\) 中均有 \(e_u\notin M_C(r)\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 的证明，\(S_J^{\mathrm{int}}\) 的内部连通分量正由补坐标 \(u\in\Lambda_J\) 标记。由于 \(J\neq\varnothing\)，固定补坐标后，允许变化的 \(J\)-坐标形成一个非空坐标方向上的有限网格；该网格与外边界相接。因此一个外边界面 \(b\) 的载体 \(\kappa(b)\) 正好指定它闭合的内部连通分量。
+
+闭合协议的假设给出 \(\tau_B(u),\tau_C(u)\in\{0,\dots,L\}\)。取任意 \(u\in\Lambda_J\)，并在 \(\rho\)-载体交错条件中令 \(t=\tau_B(u)\)。因 \(u\in\{v:\tau_B(v)\le t\}\)，得到
+\[
+\tau_C(u)\le \min(L,\tau_B(u)+\rho)\le \tau_B(u)+\rho.
+\]
+交换 \(B,C\) 后同理得到
+\[
+\tau_B(u)\le \tau_C(u)+\rho.
+\]
+两式合并即为 \(|\tau_B(u)-\tau_C(u)|\le\rho\)。取置换 \(\sigma=\operatorname{id}_{\Lambda_J}\) 便得 \(d_{\mathrm{death}}(B,C)\le\rho\)。
+
+再固定截止深度 \(r\)。按定义，\(e_u\in M_B(r)\) 当且仅当 \(r<\tau_B(u)\)，而 \(e_u\notin M_B(r)\) 当且仅当 \(\tau_B(u)\le r\)。若 \(\tau_B(u)\le r-\rho\)，则由上段不等式
+\[
+\tau_C(u)\le \tau_B(u)+\rho\le r,
+\]
+故 \(e_u\notin M_C(r)\)，不会发生生存判决差异。若 \(\tau_B(u)>r+\rho\)，则
+\[
+\tau_C(u)\ge \tau_B(u)-\rho>r,
+\]
+故 \(e_u\in M_C(r)\)，同样不会发生差异。于是任何差异载体必须满足
+\[
+r-\rho<\tau_B(u)\le r+\rho.
+\]
+最后两项断言正是这两个排除情形的重述。推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure} 保证这里的每个载体死亡都对应一个内部连通分量被外边界闭合，故该死亡时间判据正是坐标束屏幕审计闭合的有限稳定判据。证毕。
+\end{proof}
+\begin{definition}[屏幕图的有限 Dirac 距离预算]\label{def:distill-connes-screen-dirac-distance-budget}
+设 \(\Gamma=(V,E)\) 为有限无向图，且每条边 \(e=\{v,w\}\) 配有权重 \(\kappa_e>0\)。令
+\[
+H_{\Gamma}:=\ell^2(V),\qquad \mathcal A_{\Gamma}:=\RR^V,
+\]
+并令 \(M_f\) 表示 \(f\in\mathcal A_{\Gamma}\) 的乘法算子。定义自伴更新算子
+\[
+D_{\kappa}\delta_v:=\sum_{w:\{v,w\}\in E}\kappa_{\{v,w\}}\delta_w.
+\]
+置
+\[
+L_{\kappa}(f):=\|[D_{\kappa},M_f]\|,\qquad
+\mathrm d_{\kappa}(u,v):=\sup\{|f(u)-f(v)|:\ f\in\mathcal A_{\Gamma},\ L_{\kappa}(f)\le1\}.
+\]
+若上确界无界，则约定 \(\mathrm d_{\kappa}(u,v)=\infty\)。
+\end{definition}
+
+\begin{theorem}[屏幕闭合的交换子距离判据]\label{thm:distill-connes-screen-commutator-distance-closure}
+令 \(S\) 为任一屏幕面族，\(\Gamma_S\) 为前文定义的屏幕图，并在 \(\Gamma_S\) 的每条边上取正权重 \(\kappa\)。则以下命题成立：
+\begin{enumerate}
+  \item 若顶点 \(u,v\) 属于 \(\Gamma_S\) 的不同连通分量，则 \(\mathrm d_{\kappa}(u,v)=\infty\)。
+  \item 若 \(u=v_0,v_1,\ldots,v_r=v\) 是 \(\Gamma_S\) 中的一条路径，则
+  \[
+  \mathrm d_{\kappa}(u,v)\le \sum_{i=0}^{r-1}\kappa_{\{v_i,v_{i+1}\}}^{-1}.
+  \]
+  特别地，同一连通分量内的任意两点具有有限 \(\mathrm d_{\kappa}\)-距离。
+\end{enumerate}
+沿用定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 的记号。若 \(J\ne\varnothing\)，则对扩张屏幕 \(S_J^{\mathrm{int}}\cup B\)，所有内部顶维胞腔到外部顶点 \(\infty\) 的 \(\mathrm d_{\kappa}\)-距离均有限，当且仅当 \(B\) 与 \(\Gamma_{S_J^{\mathrm{int}}}\) 的每个内部连通分量都相接。因此达到该性质所需的外边界面最小条数为 \(2^{m(n-s)}\)。
+\end{theorem}
+\begin{proof}
+若 \(u,v\) 分属不同连通分量，令 \(C\) 为含 \(u\) 的连通分量，并令 \(f=t\ind_C\)，其中 \(t>0\)。由于 \(\Gamma_S\) 没有连接 \(C\) 与其补集的边，对每条边 \(\{x,y\}\) 都有 \(f(x)=f(y)\)。故 \([D_{\kappa},M_f]=0\)，即 \(L_{\kappa}(f)=0\le1\)，而 \(|f(u)-f(v)|=t\)。令 \(t\to\infty\) 得 \(\mathrm d_{\kappa}(u,v)=\infty\)。
+
+若 \(\{x,y\}\) 为一条边且 \(L_{\kappa}(f)\le1\)，则
+\[
+[D_{\kappa},M_f]\delta_y
+=\sum_{z:\{y,z\}\in E}\kappa_{\{y,z\}}(f(y)-f(z))\delta_z,
+\]
+因此
+\[
+1\ge \|[D_{\kappa},M_f]\delta_y\|\ge
+\kappa_{\{x,y\}}|f(y)-f(x)|.
+\]
+于是 \(|f(x)-f(y)|\le\kappa_{\{x,y\}}^{-1}\)。沿路径求和得到
+\[
+|f(u)-f(v)|\le \sum_{i=0}^{r-1}\kappa_{\{v_i,v_{i+1}\}}^{-1}.
+\]
+对所有满足 \(L_{\kappa}(f)\le1\) 的 \(f\) 取上确界，即得第二项。
+
+对 \(S_J^{\mathrm{int}}\cup B\)，顶维胞腔到 \(\infty\) 的谱距离有限正等价于它们在扩张屏幕图中与 \(\infty\) 同属一个连通分量。由推论 \ref{cor:spg-coordinate-bundle-minimal-boundary-closure}，这又等价于 \(B\) 与 \(\Gamma_{S_J^{\mathrm{int}}}\) 的每个内部连通分量都相接，并且最小条数为 \(2^{m(n-s)}\)。证毕。
+\end{proof}
 
 \endinput

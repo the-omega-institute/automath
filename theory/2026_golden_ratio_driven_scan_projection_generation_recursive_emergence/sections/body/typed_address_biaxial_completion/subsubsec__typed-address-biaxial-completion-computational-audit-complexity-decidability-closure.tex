@@ -1,0 +1,503 @@
+\subsubsection{复杂度、计算可实现性、decoder complexity、不可判定边界、证书压缩与计算审计闭包}\label{subsubsec:typed-address-biaxial-completion-computational-audit-complexity-decidability-closure}
+量子纠错与 boundary reconstruction 只说明某些 recovery 或 logical operator 在数学上存在。计算口径还必须区分存在、构造、效率、证书、验证与统一判定：
+\[
+\boxed{
+\text{exists}
+\ne
+\text{constructible}
+\ne
+\text{efficiently constructible}
+\ne
+\text{succinctly certifiable}
+\ne
+\text{uniformly decidable}.
+}
+\]
+因此第 31 节的
+\[
+\mathcal H_{\rm code}
+\xrightarrow{V}
+\mathcal H_\partial
+\xrightarrow{\mathcal N}
+\mathcal H_A
+\xrightarrow{\mathcal R_A}
+\mathcal H_{\rm code}
+\]
+只能继承 mathematical recoverability。若要声称 observer、screen 或 offline verifier 可以在固定预算内恢复 bulk 数据，还必须给出 decoder、资源界、数值审计、证书格式与不可判定边界。
+
+\paragraph{五层分离原则。}
+任何主张 \(P(x)\) 均按五层拆开。存在性为
+\[
+\boxed{\exists y:\ P(x,y).}
+\]
+构造性要求存在 total procedure \(A\) 满足
+\[
+\boxed{P(x,A(x))=1.}
+\]
+高效性要求输入长度 \(n=|x|\) 下有资源界
+\[
+\boxed{
+T_A(n)\le {\rm poly}(n),
+\qquad
+S_A(n)\le {\rm poly}(n).
+}
+\]
+可验证性要求证书 \(C\) 与 verifier \(V\)：
+\[
+\boxed{
+V(x,C)\in\{\mathsf{PASS},\mathsf{FAIL},\mathsf{NULL}\}.
+}
+\]
+统一判定性要求 total decision procedure \(D\) 对所有输入终止：
+\[
+\boxed{
+D(x)\in\{\mathsf{YES},\mathsf{NO}\}.
+}
+\]
+不得从前一层自动推出后一层。
+
+\begin{definition}[存在性与构造性证书]\label{def:typed-address-biaxial-completion-existence-construction-cert}
+称 \(\mathsf{ExistenceCert}\) 为存在性证书，若它包含 \(x,y,P\)、witness ledger、domain ledger 与 round hash，并验证 \(P(x,y)=1\)。它不声明 \(y\) 如何被找到。
+
+称 \(\mathsf{ConstructionCert}\) 为构造性证书，若它包含 \(A,x,A(x),P\)、description ledger、termination ledger 与 round hash，并验证 \(P(x,A(x))=1\)。若只有 \(\exists y:P(x,y)\) 却声称给出构造，输出 \(\mathsf{ExistenceAsConstructionFail}\)。若没有 termination proof 却声称 total construction，输出 \(\mathsf{TerminationNull}\)。若只在有限样例成功却声称全域构造，输出 \(\mathsf{SampleAsUniformConstructionFail}\)。
+\end{definition}
+
+\begin{definition}[复杂度界证书]\label{def:typed-address-biaxial-completion-complexity-bound-cert}
+称 \(\mathsf{ComplexityBoundCert}\) 为复杂度界证书，若它包含 procedure \(A\)、输入长度 \(n\)、time bound \(T_A(n)\)、space bound \(S_A(n)\)、asymptotic class、bit-model ledger、arithmetic-model ledger、uniformity ledger 与 round hash。若只证明可计算，却声称 polynomial time，输出 \(\mathsf{EfficiencyOverclaimFail}\)。
+\end{definition}
+
+\paragraph{bit model、arithmetic model 与 uniformity。}
+同一计算流程在不同模型下复杂度不同。bit model 按 bit length 计费；arithmetic model 可把某些域运算视为单位成本。若在 arithmetic model 下多项式，却声称 bit model 多项式，输出 \(\mathsf{ArithmeticAsBitPolynomialFail}\)。
+
+对 circuit family \(\{C_n\}_{n\ge1}\)，还必须区分 non-uniform existence 与 uniform generation：
+\[
+\boxed{
+G(1^n)=C_n.
+}
+\]
+
+\begin{definition}[uniformity 证书]\label{def:typed-address-biaxial-completion-uniformity-cert}
+称 \(\mathsf{UniformityCert}\) 为 uniformity 证书，若它包含 \(\{C_n\}\)、generator \(G\)、\(T_G(n)\)、\(S_G(n)\)、non-uniform advice ledger 与 round hash。若使用 advice \(a_n\)，必须声明 \(|a_n|\) 与来源。把 non-uniform family 当成 uniform procedure 时输出 \(\mathsf{NonUniformAsUniformFail}\)。
+\end{definition}
+
+\paragraph{验证器与三值语义。}
+offline verifier 不等于 certificate synthesizer。统一写作
+\[
+\boxed{
+\mathsf{OffV}:\mathsf{CertObject}
+\to
+\{\mathsf{PASS},\mathsf{FAIL},\mathsf{NULL}\}.
+}
+\]
+PASS、FAIL 与 NULL 的含义为
+\[
+\boxed{
+V(x,C)=\mathsf{PASS}\Rightarrow P(x)=1,
+}
+\]
+\[
+\boxed{
+V(x,C)=\mathsf{FAIL}\Rightarrow P(x)=0
+}
+\]
+或给出资源、类型、协议失败见证，而
+\[
+\boxed{
+V(x,C)=\mathsf{NULL}
+}
+\]
+只表示当前证书不足，不表示 \(P(x)\) 真或假。
+
+\begin{definition}[verifier 证书]\label{def:typed-address-biaxial-completion-verifier-cert}
+称 \(\mathsf{VerifierCert}\) 为 verifier 证书，若它包含 \(V,x,C,V(x,C)\)、soundness ledger、completeness ledger、runtime ledger、failure-witness ledger、null-witness ledger 与 round hash。若 verifier 可能因数值误差错误 PASS，输出 \(\mathsf{UnsoundVerifierFail}\)。把 NULL 当 FAIL 时输出 \(\mathsf{NullAsFailFail}\)，把 NULL 当 PASS 时输出 \(\mathsf{NullAsPassFail}\)。
+\end{definition}
+
+\begin{definition}[证书大小与合成证书]\label{def:typed-address-biaxial-completion-certificate-size-synthesis-cert}
+称 \(\mathsf{CertificateSizeCert}\) 为证书大小证书，若它包含 \(|C|\)、输入长度 \(n\)、size bound、format ledger 与 round hash。若 \(|C|\) 为指数级，不得称为 succinct certificate；若需要存储 truth table \(2^n\) 却声称多项式证书，输出 \(\mathsf{TruthTableAsSuccinctCertFail}\)。
+
+称 \(\mathsf{CertificateSynthesisCert}\) 为证书合成证书，若它包含 synthesizer \(S\)、\(S(x)=C\)、\(V(x,C)=\mathsf{PASS}\)、\(T_S(n)\)、\(S_S(n)\) 与 round hash。若只有 verifier，却声称可自动产生证书，输出 \(\mathsf{VerifierAsSynthesizerFail}\)。
+\end{definition}
+
+\paragraph{确定离线审计与区间算术。}
+确定离线验证器应包含 cert format、parser、type checker、arithmetic kernel、interval kernel、decision rules、PASS/FAIL/NULL rules、reproducibility ledger 与 round hash。若 verifier 依赖未固定的 floating-point environment，输出 \(\mathsf{NonReproducibleVerifierFail}\)。
+
+数值命题 \(f(x)\le0\) 不能靠近似浮点值直接 PASS。应给出 enclosure
+\[
+\boxed{f(x)\in[L,U].}
+\]
+判定规则为
+\[
+U<0\Rightarrow\mathsf{PASS},\qquad
+L>0\Rightarrow\mathsf{FAIL},\qquad
+0\in[L,U]\Rightarrow\mathsf{NULL}.
+\]
+若 \(0\in[L,U]\) 却强行 PASS，输出 \(\mathsf{IntervalStraddleAsPassFail}\)。若 interval 不包含真实值，输出 \(\mathsf{InvalidIntervalFail}\)。浮点等号被当作 exact equality 时输出 \(\mathsf{FloatEqualityFail}\)。
+
+\paragraph{随机审计、统计证书与渐近主张。}
+若 verifier 使用随机性 \(r\)，必须声明
+\[
+\Pr_r[V(x,C;r)=\mathsf{PASS}]
+\]
+以及 \(\epsilon_{\rm sound},\epsilon_{\rm comp}\)。未声明失败概率时输出 \(\mathsf{RandomAuditProbabilityNull}\)。统计置信区间不是确定性证明；把 \(95\%\) confidence certificate 当成 theorem 时输出 \(\mathsf{StatisticalAsDeterministicProofFail}\)。
+
+渐近主张需带量词与速率。若
+\[
+a_n\sim c f(n),
+\]
+应给出 \(n_0\) 与 \(\epsilon(n)\) 使
+\[
+\boxed{
+\forall n\ge n_0:\ |a_n-cf(n)|\le\epsilon(n).
+}
+\]
+极限 \(x_n\to x\) 需给 convergence modulus
+\[
+\boxed{
+m(\varepsilon):\ n\ge m(\varepsilon)\Rightarrow d(x_n,x)\le\varepsilon.
+}
+\]
+只检查 \(n\le N\) 却声称 \(n\to\infty\) 时输出 \(\mathsf{FiniteSampleAsAsymptoticFail}\)。缺少 modulus 而需要有限误差界时输出 \(\mathsf{ConvergenceRateNull}\)。
+
+\paragraph{共终稀疏化、逆系统与有限无限桥。}
+若性质 \(P_m\) 只在稀疏子列 \(m_j\to\infty\) 上检查，必须证明
+\[
+\boxed{
+P_{m_j}\ \forall j
+\Rightarrow
+P_m\ \forall m
+}
+\]
+的 cofinal domination。缺少该桥时输出 \(\mathsf{SparseCheckAsFullCheckFail}\)。
+
+逆系统
+\[
+C_1\leftarrow C_2\leftarrow C_3\leftarrow\cdots
+\]
+的 finite-depth certificate 只证明有限深度属性。若把 finite prefix 当作 inverse-limit point，输出 \(\mathsf{FinitePrefixAsLimitPointFail}\)。有限审计器只读取 \(C_{\le N}\)；要推出 \(\forall n\,P_n\)，必须给 induction、monotonicity、convergence modulus、cofinality 或 reduction。否则输出 \(\mathsf{FiniteAuditAsInfiniteTruthFail}\)。
+
+\paragraph{ReadUS 的计算语义。}
+ReadUS 作为偏函数写作
+\[
+\boxed{
+\mathsf{ReadUS}(a,\theta,b)
+\in
+\mathsf{Value}\cup\{\mathsf{NULL}\},
+}
+\]
+其中 \(a\) 为 typed address，\(\theta\) 为 precision/depth，\(b\) 为 budget/certificate。其计算证书包含 parser、type checker、domain checker、evaluator、null classifier、runtime ledger 与 round hash。
+
+计算 NULL 包括
+\[
+\mathsf{TimeoutNull},\quad
+\mathsf{PrecisionNull},\quad
+\mathsf{OracleNull},\quad
+\mathsf{UndecidableNull},\quad
+\mathsf{ComplexityNull}.
+\]
+超时被记为 false 时输出 \(\mathsf{TimeoutAsFalseFail}\)。未终止被当作反例时输出 \(\mathsf{DivergenceAsCounterexampleFail}\)。
+
+\paragraph{decoder complexity。}
+第 31 节的 recovery channel \(\mathcal R_A\) 必须降为具体 decoder
+\[
+\boxed{
+D_A:\text{boundary data}\to\text{logical data}
+}
+\]
+才能声称可执行恢复。证书需声明
+\[
+T_D(n),\qquad S_D(n),\qquad P_{\rm fail}(n).
+\]
+只有 \(\mathcal R_A\) 存在时，只能输出 \(\mathsf{RecoveryExistencePass}\)。若强行声称 efficient decoder，输出 \(\mathsf{RecoveryAsEfficientDecoderFail}\)。
+
+decoder mode 分三类：
+\[
+\text{exact decoder},\qquad
+\text{approximate decoder},\qquad
+\text{heuristic decoder}.
+\]
+heuristic success 被写作 proof 时输出 \(\mathsf{HeuristicAsProofFail}\)。maximum-likelihood syndrome decoder 未声明计算复杂度时输出 \(\mathsf{MLDecoderComplexityNull}\)。
+
+\paragraph{hidden fiber exactification 的计算版本。}
+若
+\[
+\mathsf{Bd}:\Omega_{\rm bulk}\to\Omega_\partial
+\]
+具有 fiber \(\mathcal F_b=\mathsf{Bd}^{-1}(b)\)，第 31 节要求 residual \(r\) 使 \((\mathsf{Bd},r)\) 单射。计算审计还要求
+\[
+\boxed{
+r(x)\ \text{computable in}\ T_r(|x|)
+}
+\]
+并且
+\[
+\boxed{
+\mathsf{Rec}(b,r(x))=x
+}
+\]
+可计算。residual 存在但不可计算时输出 \(\mathsf{NonComputableResidualNull}\)；residual 可计算但长度指数级时输出 \(\mathsf{ExponentialResidualWarning}\)。
+
+任意 injective encoding \(E:X\to\{0,1\}^{\ell}\) 必须满足
+\[
+\boxed{
+\ell\ge\lceil\log_2|X|\rceil.
+}
+\]
+低于 counting lower bound 却声称 lossless 时输出 \(\mathsf{CountingBoundViolationFail}\)。多数 \(n\)-bit strings 还满足 Kolmogorov 下界 \(K(x)\ge n-c\)；声称 universal lossless compression below entropy 时输出 \(\mathsf{UniversalCompressionFail}\)。
+
+\paragraph{prime-register 与 Gödel budget。}
+prime-register 编码
+\[
+N=\prod_i p_i^{e_i}
+\]
+的真实 bit budget 是
+\[
+\boxed{
+\log N=\sum_i e_i\log p_i.
+}
+\]
+只数 prime axes 而不数 exponent bit length 时输出 \(\mathsf{PrimeAxisOnlyBudgetFail}\)。指数 \(e_i\) 可指数大却称常数内存时输出 \(\mathsf{ExponentBudgetHiddenFail}\)。
+
+Gödelization 可把对象写成单整数 \(N_x\)，但
+\[
+\boxed{
+|N_x|_{\rm bit}=\lceil\log_2N_x\rceil.
+}
+\]
+把 ``one integer'' 当作 constant-size certificate 时输出 \(\mathsf{SingleIntegerAsConstantSizeFail}\)。
+
+\paragraph{rewriting、FRACTRAN 与 halting boundary。}
+若 rewriting system 或 FRACTRAN-like compile 可模拟通用计算，则 global termination 可能不可判定。termination property
+\[
+\forall w,\ \exists t:\ R^t(w)\ {\rm normal}
+\]
+若由 well-founded measure \(\mu(w')<\mu(w)\) 证明，则可 PASS。若系统可编码 halting problem 且无 finite-window restriction，输出 \(\mathsf{HaltingBoundaryNull}\)。把 bounded-run termination 当作 global termination 时输出 \(\mathsf{BoundedRunAsTerminationFail}\)。
+
+固定窗口 \(\Omega_m=\{0,1\}^m\) 总可 finite enumeration，但 uniform family \(\{P_m\}_{m\ge1}\) 可能不可高效或不可判定。把固定 \(m\) 的可枚举结论外推到所有 \(m\) 时输出 \(\mathsf{FixedWindowAsUniformFail}\)。把 finite brute force 称为 efficient 时输出 \(\mathsf{FiniteAsEfficientFail}\)。
+
+\paragraph{moment、Prony 与 condition number。}
+有限阶 moments
+\[
+M_q=\sum_x d_x^q,\qquad q\le Q
+\]
+不必决定 full fiber distribution 或最大 fiber。只用低阶碰撞矩识别最大 fiber 时输出 \(\mathsf{LowMomentAsMaxFiberFail}\)。
+
+Hankel/Prony recovery 需声明 rank \(r\)、moment range、separation 与 conditioning。若 Hankel matrix 近奇异却声称 stable recovery，输出 \(\mathsf{IllConditionedPronyFail}\)。
+
+反演 \(Ax=b\) 的误差受 condition number 控制：
+\[
+\frac{\|\delta x\|}{\|x\|}
+\lesssim
+\kappa(A)\frac{\|\delta b\|}{\|b\|}.
+\]
+可逆但 \(\kappa(A)\) 指数大时，exact recovery 不等于 stable recovery。忽略病态条件数时输出 \(\mathsf{InvertibleAsStableFail}\)。
+
+\paragraph{不可判定、oracle 与复杂度屏障。}
+若有 many-one reduction
+\[
+\boxed{
+\mathsf{HALT}\le_m P,
+}
+\]
+则不存在对所有输入终止的 \(P\)-decision procedure。声称 total decision 时输出 \(\mathsf{UndecidableAsDecidableFail}\)。若只有 semi-decision，却称为 decision，输出 \(\mathsf{SemiDecisionAsDecisionFail}\)。
+
+使用 oracle \(O(q)\) 时必须给 oracle ledger。把 oracle answer 当作 internal computation 时输出 \(\mathsf{OracleAsComputationFail}\)。不可判定 oracle 隐藏在 subroutine 中时输出 \(\mathsf{HiddenOracleFail}\)。
+
+若性质 \(P\) 有 polynomial PASS certificate，则 \(P\in\mathsf{NP}\)；若补性质有 polynomial FAIL certificate，则 \(P\in\mathsf{coNP}\)。polynomial verifier 不等于 \(P\in\mathsf P\)。把 NP verification 当作 polynomial decision 时输出 \(\mathsf{NPAsPFail}\)。若某声明隐含 \(\mathsf P=\mathsf{NP}\) 而未标注，输出 \(\mathsf{HiddenPNPAssumptionFail}\)。
+
+\paragraph{proof object、formal proof 与 trusted base。}
+proof checker 不等于 proof search。存在 proof object
+\[
+\pi\vdash\varphi
+\]
+不等于存在高效 search routine。若有 proof checker 却声称 theorem prover，输出 \(\mathsf{CheckerAsProverFail}\)。
+
+形式证明证书包含 theorem name、statement、proof term、kernel version、dependencies、trusted-base ledger 与 round hash。若依赖未形式化 lemma，却标为 fully formal，输出 \(\mathsf{InformalLemmaInFormalProofFail}\)。trusted base 包括 kernel、parser、compiler 与 hardware；隐藏 trusted base 时输出 \(\mathsf{TCBHiddenFail}\)。
+
+\paragraph{资源向量与审计成本。}
+复杂度不是单标量，而是资源向量
+\[
+\boxed{
+\mathbf R=(T,S,B,D,E,Q,\epsilon),
+}
+\]
+其中 \(T\) 为 time、\(S\) 为 space、\(B\) 为 bit length、\(D\) 为 depth、\(E\) 为 energy、\(Q\) 为 query count、\(\epsilon\) 为 error。用时间复杂度掩盖空间指数时输出 \(\mathsf{TimeOnlyComplexityFail}\)。用 query complexity 掩盖 oracle cost 时输出 \(\mathsf{OracleQueryOnlyFail}\)。
+
+审计成本写为
+\[
+\boxed{
+\mathsf{Cost}_{\rm audit}
+=
+T_{\rm parse}
++T_{\rm type}
++T_{\rm arithmetic}
++T_{\rm interval}
++T_{\rm proof}
++T_{\rm replay}.
+}
+\]
+证书验证本身指数级却称为 lightweight audit 时输出 \(\mathsf{HeavyVerifierAsLightAuditFail}\)。
+
+\paragraph{holographic reconstruction 的计算接口。}
+第 31 节的 operator equation
+\[
+O_AV=VO_{\rm bulk}
+\]
+若要可执行，必须给构造 routine
+\[
+\boxed{
+\mathsf{BuildBoundaryOperator}(O_{\rm bulk},A)=O_A.
+}
+\]
+证书需包含 \(T_{\rm build}\)、\(S_{\rm build}\)、support check、norm check 与 round hash。只知道 \(O_A\) 存在却不能构造时输出 \(\mathsf{HolographicExistenceOnlyNull}\)。
+
+entanglement wedge 的使用还要求计算 QES：
+\[
+\gamma_A=\operatorname*{arg\,ext}S_{\rm gen}.
+\]
+这可能是非凸或无限维变分问题。只找到 local extremum 却声称 global QES 时输出 \(\mathsf{LocalQESAsGlobalFail}\)。
+
+验证 quantum channel 是否 CPTP 需 Choi matrix
+\[
+J_{\mathcal E}\ge0,
+\qquad
+\operatorname{Tr}_{\rm out}J_{\mathcal E}=I_{\rm in}.
+\]
+若 Choi matrix dimension 对 logical size 指数大，却声称直接 matrix verification 为 polynomial，输出 \(\mathsf{ChoiMatrixSizeHiddenFail}\)。
+
+近似 QEC 的 diamond norm
+\[
+\|\mathcal R\mathcal N\mathcal V-\operatorname{id}\|_\diamond
+\]
+需 SDP、duality gap 或可验证上界。仅用 sample fidelity 推断 diamond norm 时输出 \(\mathsf{SampleFidelityAsDiamondNormFail}\)。
+
+\paragraph{总证书与输出。}
+称 \(\mathsf{ComputationalAuditClosureCert}\) 为计算审计总证书，若它合并 \(\mathsf{ComputabilityCert}\)、\(\mathsf{ConstructionCert}\)、\(\mathsf{ComplexityBoundCert}\)、\(\mathsf{UniformityCert}\)、\(\mathsf{VerifierCert}\)、\(\mathsf{CertificateSizeCert}\)、\(\mathsf{CertificateSynthesisCert}\)、\(\mathsf{IntervalArithmeticCert}\)、\(\mathsf{OracleUseCert}\)、\(\mathsf{UndecidabilityBoundaryCert}\)、\(\mathsf{CompressionLowerBoundCert}\) 与 \(\mathsf{DecoderComplexityCert}\)。
+
+允许 PASS：
+\[
+\mathsf{ExistencePass},\quad
+\mathsf{ConstructionPass},\quad
+\mathsf{PolynomialTimePass},\quad
+\mathsf{VerifierSoundnessPass},\quad
+\mathsf{IntervalAuditPass},\quad
+\mathsf{AsymptoticPass}.
+\]
+允许 NULL：
+\[
+\mathsf{TerminationNull},\quad
+\mathsf{ComplexityNull},\quad
+\mathsf{VerifierNull},\quad
+\mathsf{PrecisionNull},\quad
+\mathsf{ConvergenceRateNull},\quad
+\mathsf{OracleNull},\quad
+\mathsf{UndecidabilityBoundaryNull}.
+\]
+允许 FAIL：
+\[
+\mathsf{ExistenceAsConstructionFail},\quad
+\mathsf{RecoveryAsEfficientDecoderFail},\quad
+\mathsf{FiniteAsEfficientFail},\quad
+\mathsf{FiniteSampleAsAsymptoticFail},\quad
+\mathsf{VerifierAsSynthesizerFail},\quad
+\mathsf{OracleAsComputationFail},\quad
+\mathsf{HiddenPNPAssumptionFail}.
+\]
+
+\begin{theorem}[计算审计可靠性]\label{thm:typed-address-biaxial-completion-computational-audit-soundness}
+若
+\[
+\mathsf{VerifyComputationalAuditClosure}
+(\mathsf{ComputationalAuditClosureCert})
+=
+\mathsf{ComputationalAuditPass},
+\]
+则存在对象层命题 \(P(x)\)、证书 \(C\)、verifier \(V\) 与资源账本 \(\mathbf R\)，满足
+\[
+\boxed{
+V(x,C)=\mathsf{PASS}
+\Rightarrow
+P(x)=1.
+}
+\]
+若输出为 \(\mathsf{FAIL}\)，则
+\[
+\boxed{
+V(x,C)=\mathsf{FAIL}
+\Rightarrow
+P(x)=0
+}
+\]
+或给出明确的资源、类型、协议失败见证。NULL 只表示当前审计层级不足以决定。
+\end{theorem}
+
+\begin{proof}
+\(\mathsf{VerifierCert}\) 给出 PASS/FAIL/NULL 三值语义与 soundness ledger。
+\(\mathsf{CertificateSizeCert}\)、\(\mathsf{ComplexityBoundCert}\) 与 \(\mathsf{ResourceVectorCert}\) 给出证书长度和资源预算。
+\(\mathsf{IntervalArithmeticCert}\) 与 arithmetic discipline 保证数值 PASS 不越过判定边界。
+\(\mathsf{OracleUseCert}\) 与 \(\mathsf{UndecidabilityBoundaryCert}\) 把外部能力和不可判定区域分离。
+因此 PASS 与 FAIL 均是带证书的对象层事件，而 NULL 不被误读为真假判定。
+\end{proof}
+
+\begin{theorem}[存在性不推出高效 decoder]\label{thm:typed-address-biaxial-completion-existence-not-efficient-decoder}
+若某 reconstruction statement 只给出
+\[
+\exists R:\quad R\circ N\circ V=\operatorname{id},
+\]
+但没有给出 decoder \(D_R\)、\(T_D(n)\)、\(S_D(n)\) 与 failure ledger，则只能输出 \(\mathsf{RecoveryExistencePass}\)，不能输出 \(\mathsf{EfficientDecoderPass}\)。若强行输出 efficient pass，则触发
+\[
+\boxed{
+\mathsf{RecoveryAsEfficientDecoderFail}.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+等式 \(RNV=\operatorname{id}\) 是存在性或代数重构声明。efficient decoder 还需要可描述、可运行、终止且资源受控的 \(D_R\)。缺少 \(D_R,T_D,S_D\) 时，构造层和效率层均未闭合，故不能升级标签。
+\end{proof}
+
+\begin{theorem}[有限 verifier 与合成屏障]\label{thm:typed-address-biaxial-completion-verifier-synthesis-barrier}
+设 \(P\) 是 SAT-hard 性质。若存在 polynomial-time synthesizer \(S\) 与 polynomial-time verifier \(V\)，且对所有输入 \(x\)
+\[
+x\in P
+\Longleftrightarrow
+V(x,S(x))=\mathsf{PASS},
+\]
+则推出 \(\mathsf P=\mathsf{NP}\)。任何隐含该结论的声明必须标入 complexity barrier ledger。
+\end{theorem}
+
+\begin{proof}
+由 \(S\) 生成 candidate certificate，再由 \(V\) 在 polynomial time 验证，即得 \(P\) 的 polynomial-time decision procedure。若 \(P\) 为 SAT-hard，则 SAT 也可 polynomial-time 判定，故推出 \(\mathsf P=\mathsf{NP}\)。
+\end{proof}
+
+\begin{theorem}[不可判定边界]\label{thm:typed-address-biaxial-completion-undecidability-boundary}
+若
+\[
+\mathsf{HALT}\le_m P,
+\]
+则不存在对所有输入终止并判定 \(P\) 的 total decision procedure。任何声称统一判定 \(P\) 的流程必须限制在 decidable subdomain、显式使用 oracle、输出 NULL，或给出阻断 reduction 的结构限制；否则输出
+\[
+\boxed{
+\mathsf{UndecidableAsDecidableFail}.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+若 \(P\) 有 total decision procedure，则通过 many-one reduction 可判定 \(\mathsf{HALT}\)，矛盾。因此 total decision 只能在额外限制、oracle 或 NULL 语义下合法。
+\end{proof}
+
+\paragraph{原稿表述的替换。}
+若原稿写“给出可审计证书，因此问题可解”，应改为：给出的是在指定证书格式与 verifier 下的 PASS/FAIL/NULL 机制；这不自动等价于高效证书合成或统一判定。
+
+若原稿写“边界数据决定 bulk，因此可恢复”，应改为：边界数据在指定模型中数学上决定 bulk；若要称为计算恢复，还需给出稳定性、condition number、decoder complexity 与误差传播账本。
+
+若原稿写“单个 Gödel 整数编码全部信息”，应改为：Gödel integer 提供单对象编码，但 bit length、factorization cost 与 exponent-vector budget 必须进入外置账本。
+
+若原稿写“有限验证表明极限性质成立”，应改为：有限验证只给 finite-depth certificate；要推出 limit property，必须给 induction、monotonicity、convergence modulus 或 cofinal sparsification proof。
+
+最终主句是：
+\[
+\boxed{
+\text{auditable reconstruction must separately declare existence, construction, resource bounds, certificate format, verifier semantics, NULL rules, and undecidability boundaries.}
+}
+\]

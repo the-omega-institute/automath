@@ -1,0 +1,354 @@
+\subsubsection{Rouch\'e--Taylor 局部零点证书}\label{subsubsec:typed-address-biaxial-completion-rouche-taylor-local-zero-certificate}
+零点敏感正则化证书需要在小值弧上输入形如
+\[
+W_r(e^{i\theta})
+\ge
+C_j\left((\theta-\theta_j)^2+\gamma_j^2\right)^{\nu_j}
+\]
+的局部下界。该局部下界可进一步还原为可审计的 Taylor 数据、Rouch\'e 零点隔离与余因子下界。
+
+固定
+\[
+f(z):=f_r(z)=\Phi_a(rz),
+\qquad
+W_r(e^{i\theta})=|f(e^{i\theta})|^2.
+\]
+局部证书的目标是确认：在小弧 \(I_j\) 附近，\(f\) 的小值由一个已隔离的零点或零点 packet 造成，而剩余因子在该邻域内保持远离零。
+
+\begin{lemma}[圆周点到局部零点的几何下界]\label{lem:typed-address-biaxial-completion-circle-zero-distance-lower-bound}
+设
+\[
+\alpha=\rho e^{i\theta_0},
+\qquad
+z=e^{i\theta},
+\qquad
+t=\mathrm{wrap}(\theta-\theta_0)\in[-\pi,\pi].
+\]
+若 \(\rho\ge\rho_->0\)，并定义
+\[
+\kappa(\rho_-):=
+\min\left\{1,\frac{4\rho_-}{\pi^2}\right\},
+\]
+则
+\[
+|e^{i\theta}-\alpha|^2
+\ge
+\kappa(\rho_-)
+\left(t^2+(1-\rho)^2\right).
+\]
+\end{lemma}
+\begin{proof}
+直接计算得到
+\[
+|e^{i\theta}-\rho e^{i\theta_0}|^2
+=
+(1-\rho)^2+4\rho\sin^2\frac t2.
+\]
+对 \(|t|\le\pi\)，有
+\[
+\left|\sin\frac t2\right|\ge\frac{|t|}{\pi}.
+\]
+因此
+\[
+|e^{i\theta}-\alpha|^2
+\ge
+(1-\rho)^2+\frac{4\rho_-}{\pi^2}t^2
+\ge
+\kappa(\rho_-)\bigl((1-\rho)^2+t^2\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[局部因子分解给出小值下界]\label{prop:typed-address-biaxial-completion-local-factor-lower-bound}
+设在包含边界弧 \(I_j\) 的邻域中，
+\[
+f(z)=(z-\alpha_j)^{\nu_j}h_j(z),
+\qquad
+|h_j(z)|\ge H_j>0,
+\]
+其中
+\[
+\alpha_j=\rho_j e^{i\theta_j},
+\qquad
+\rho_j\ge\rho_{j,-}>0,
+\qquad
+\nu_j\in\mathbb{N}.
+\]
+令
+\[
+\gamma_j:=|1-\rho_j|,
+\qquad
+\kappa_j:=\min\left\{1,\frac{4\rho_{j,-}}{\pi^2}\right\},
+\qquad
+C_j:=H_j^2\kappa_j^{\nu_j}.
+\]
+则对 \(\theta\in I_j\)，以 \(t=\mathrm{wrap}(\theta-\theta_j)\) 记角向差，有
+\[
+W_r(e^{i\theta})
+\ge
+C_j(t^2+\gamma_j^2)^{\nu_j}.
+\]
+\end{proposition}
+\begin{proof}
+由因子分解，
+\[
+|f(e^{i\theta})|^2
+=
+|e^{i\theta}-\alpha_j|^{2\nu_j}|h_j(e^{i\theta})|^2.
+\]
+引理 \ref{lem:typed-address-biaxial-completion-circle-zero-distance-lower-bound} 给出
+\[
+|e^{i\theta}-\alpha_j|^2
+\ge
+\kappa_j(t^2+\gamma_j^2).
+\]
+再乘以 \(|h_j|^2\ge H_j^2\)，即得结论。证毕。
+\end{proof}
+
+\begin{definition}[语义型局部零点证书]\label{def:typed-address-biaxial-completion-semantic-local-zero-certificate}
+一份语义型局部零点证书记为
+\[
+\mathsf{ZeroLocalCert}_j
+:=
+\bigl(
+I_j,\alpha_j,\nu_j,H_j,\rho_{j,-},C_j,\gamma_j
+\bigr).
+\]
+它验证以下数据：
+\[
+\alpha_j=\rho_j e^{i\theta_j},
+\qquad
+\rho_j\ge\rho_{j,-}>0,
+\]
+\[
+f(z)=(z-\alpha_j)^{\nu_j}h_j(z),
+\qquad
+|h_j(z)|\ge H_j
+\]
+在包含 \(\{e^{i\theta}:\theta\in I_j\}\) 的邻域中成立，并且
+\[
+\gamma_j=|1-\rho_j|,
+\qquad
+C_j=
+H_j^2
+\left(
+\min\left\{1,\frac{4\rho_{j,-}}{\pi^2}\right\}
+\right)^{\nu_j}.
+\]
+验证通过后，该证书向零点敏感正则化证书输出
+\[
+W_r(e^{i\theta})
+\ge
+C_j\left(\mathrm{wrap}(\theta-\theta_j)^2+\gamma_j^2\right)^{\nu_j}
+\qquad(\theta\in I_j).
+\]
+\end{definition}
+
+为了离线核验，语义型证书需要由有限 Taylor 与 Rouch\'e 数据生成。取局部圆盘
+\[
+D_j:=D(c_j,s_j)
+\]
+并在其中写
+\[
+f(z)
+=
+\sum_{k=0}^{N_j}a_{j,k}(z-c_j)^k
++
+R_{j,N_j}(z).
+\]
+有限验证器持有系数区间
+\[
+a_{j,k}\in a_{j,k}^{\Box}
+\]
+以及尾项上界
+\[
+|R_{j,N_j}(z)|\le T_j
+\qquad(z\in D_j).
+\]
+令中点多项式为
+\[
+P_j(z):=
+\sum_{k=0}^{N_j}a_{j,k}^{\mathrm{mid}}(z-c_j)^k.
+\]
+若在边界 \(\partial D_j\) 上有严格裕度
+\[
+\inf_{z\in\partial D_j}|P_j(z)|
+>
+T_j+E_j^{\mathrm{coef}},
+\]
+其中 \(E_j^{\mathrm{coef}}\) 是系数区间误差在 \(\partial D_j\) 上诱导的统一上界，则 Rouch\'e 定理保证 \(f\) 与 \(P_j\) 在 \(D_j\) 内有相同零点数，按重数计。
+
+\begin{definition}[Rouch\'e--Taylor 局部证书]\label{def:typed-address-biaxial-completion-rouche-taylor-local-certificate}
+一份局部有限证书记为
+\[
+\mathsf{RTCert}_j
+:=
+\left(
+c_j,s_j,\nu_j,N_j,
+\{a_{j,k}^{\Box}\}_{k=0}^{N_j},
+T_j,A_j,H_j,I_j
+\right).
+\]
+它要求以下有限条件均被严格核验：
+\begin{enumerate}
+  \item Taylor 包络：
+  \[
+  a_{j,k}\in a_{j,k}^{\Box},
+  \qquad
+  |R_{j,N_j}(z)|\le T_j
+  \quad(z\in D_j).
+  \]
+  \item Rouch\'e 隔离：
+  \[
+  \inf_{\partial D_j}|P_j|
+  >
+  T_j+E_j^{\mathrm{coef}}.
+  \]
+  \item 零点个数与位置：\(P_j\) 在 \(D_j\) 内的相关零点数为 \(\nu_j\)，并且对应根被隔离在盒 \(A_j\subset D_j\) 中；由 Rouch\'e 裕度推出 \(f\) 在该局部 packet 中也具有同一总重数。
+  \item 弧覆盖：\(\{e^{i\theta}:\theta\in I_j\}\) 落在已验证局部邻域内。
+  \item 余因子下界：在该邻域内有可核验下界 \(|h_j|\ge H_j>0\)，或在 packet 型证书中有剩余因子统一下界。
+\end{enumerate}
+\end{definition}
+
+若 \(\mathsf{RTCert}_j\) 进一步证明 packet 中只有一个零点 \(\alpha_j\)，且其重数为 \(\nu_j\)，则得到
+\[
+f(z)=(z-\alpha_j)^{\nu_j}h_j(z)
+\]
+并可输出定义 \ref{def:typed-address-biaxial-completion-semantic-local-zero-certificate} 的单中心数据。若 packet 中包含多个彼此接近的零点
+\[
+\alpha_{j,1},\ldots,\alpha_{j,L_j},
+\qquad
+\sum_{\ell=1}^{L_j}\mu_{j,\ell}=\nu_j,
+\]
+则不应强制压成单中心幂型模型；更稳妥的输出是乘积型下界
+\[
+|f(e^{i\theta})|^2
+\ge
+H_j^2
+\prod_{\ell=1}^{L_j}
+|e^{i\theta}-\alpha_{j,\ell}|^{2\mu_{j,\ell}}.
+\]
+只有当额外证书确认这些零点确为同一重零点，或确认 packet 压缩不会削弱所需下界时，才允许把乘积型数据转成单中心形式。
+
+余因子下界也可以由 Taylor 数据有限化。若已经确认
+\[
+f(z)=(z-\alpha_j)^{\nu_j}h_j(z),
+\]
+并在 \(|z-\alpha_j|\le\sigma_j\) 上写
+\[
+h_j(z)=
+b_{j,0}
++
+b_{j,1}(z-\alpha_j)
++
+b_{j,2}(z-\alpha_j)^2+\cdots,
+\qquad
+b_{j,0}=\frac{f^{(\nu_j)}(\alpha_j)}{\nu_j!},
+\]
+若验证器给出
+\[
+\sum_{\ell\ge1}|b_{j,\ell}|\sigma_j^\ell
+\le
+R_j^{\mathrm{tail}},
+\qquad
+|b_{j,0}|-R_j^{\mathrm{tail}}>0,
+\]
+则可取
+\[
+H_j:=|b_{j,0}|-R_j^{\mathrm{tail}}.
+\]
+这把“余因子不消失”转为有限导数/尾项账本。
+
+\begin{theorem}[Rouch\'e--Taylor 证书到零点敏感输入]\label{thm:typed-address-biaxial-completion-rouche-taylor-to-zero-aware-input}
+若 \(\mathsf{RTCert}_j\) 通过，并且其 packet 被验证为单个 \(\nu_j\) 阶零点
+\[
+\alpha_j=\rho_j e^{i\theta_j},
+\qquad
+\rho_j\ge\rho_{j,-}>0,
+\]
+余因子满足 \(|h_j|\ge H_j>0\)，则对 \(\theta\in I_j\)，
+\[
+W_r(e^{i\theta})
+\ge
+H_j^2
+\left(
+\min\left\{1,\frac{4\rho_{j,-}}{\pi^2}\right\}
+\right)^{\nu_j}
+\left(
+\mathrm{wrap}(\theta-\theta_j)^2
++
+\gamma_j^2
+\right)^{\nu_j},
+\]
+其中
+\[
+\gamma_j=|1-\rho_j|.
+\]
+因此该局部证书可作为 \(\mathsf{ZACert}_{r,M}\) 的小值弧输入。
+\end{theorem}
+\begin{proof}
+Rouch\'e 隔离与重数验证给出局部因子分解 \(f=(z-\alpha_j)^{\nu_j}h_j\)。余因子证书给出 \(|h_j|\ge H_j\)。随后命题 \ref{prop:typed-address-biaxial-completion-local-factor-lower-bound} 直接给出所需下界。证毕。
+\end{proof}
+
+由该定理，每个通过的单中心局部证书输出
+\[
+\left(
+I_j,\theta_j,\rho_j,\nu_j,C_j,\gamma_j
+\right),
+\qquad
+C_j=
+H_j^2
+\left(
+\min\left\{1,\frac{4\rho_{j,-}}{\pi^2}\right\}
+\right)^{\nu_j}.
+\]
+这些数据正是定义 \ref{def:typed-address-biaxial-completion-zero-aware-regularization-certificate} 中 \(\mathsf{ZACert}_{r,M}\) 的局部输入。于是证书链可写为
+\[
+\mathsf{RTCert}_j
+\Longrightarrow
+\mathsf{ZeroLocalCert}_j
+\Longrightarrow
+\mathsf{ZACert}_{r,M}
+\Longrightarrow
+\text{Jensen 排斥证书}.
+\]
+若
+\[
+J_r^+
++
+\log\frac{A_0^+}{A_0^-}
++
+B_{\mathrm{ZA}}^+
+<
+\log\frac rR,
+\]
+则最终推出
+\[
+\Phi_a(w)\ne0
+\qquad(|w|\le R).
+\]
+
+有限验证器还应记录局部失败类型，而不是仅给出未通过标志。可用失败标签为
+\[
+\mathsf{RTFail}_j
+\in
+\{
+\mathrm{TailFail},
+\mathrm{RoucheFail},
+\mathrm{MultiplicityFail},
+\mathrm{ClusterFail},
+\mathrm{CofactorFail},
+\mathrm{ArcCoverFail}
+\}.
+\]
+其中 \(\mathrm{TailFail}\) 表示 Taylor 尾项或系数误差无法压住；\(\mathrm{RoucheFail}\) 表示边界 Rouch\'e 裕度缺失；\(\mathrm{MultiplicityFail}\) 表示无法确认局部零点总重数；\(\mathrm{ClusterFail}\) 表示多个零点 packet 不能安全压成单中心幂型模型；\(\mathrm{CofactorFail}\) 表示无法证明 \(|h_j|\ge H_j>0\)；\(\mathrm{ArcCoverFail}\) 表示小值弧未完全落入已验证邻域。此类失败标签对应结构性 \(\mathrm{NULL}\)，不应解释为 RH 失败。
+
+该局部证书的复杂度含义由 shield 尺度决定。若
+\[
+a_j:=\left(\frac{\delta}{C_j}\right)^{1/(2\nu_j)}
+\]
+满足 \(a_j\gtrsim\gamma_j\)，则该局部零点对正则化缺陷表现为边界零型贡献；若 \(a_j\ll\gamma_j\)，则径向隔离项 \(\gamma_j\) shield 住小值区域，贡献近似降为线性尺度
+\[
+\frac{\delta}{C_j\gamma_j^{2\nu_j}}.
+\]
+因此，Rouch\'e--Taylor 证书不仅记录零点位置与重数，还判定该局部结构在当前 Fourier 尾部 \(\delta\) 下属于危险近边界区还是可屏蔽区。

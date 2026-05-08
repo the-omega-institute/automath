@@ -96,6 +96,406 @@ X_\infty \hookrightarrow \mathcal{D}
 是一个可计算的截面（选择规范代表）。这正是”折叠（folding）= 取不变量/取商 + 选规范形”的抽象机制在 Fibonacci 情形下的具体实现。
 \leanverified{paper\_ea\_fold\_as\_section}
 \end{corollary}
+\begin{theorem}[有限观察逆系统的折叠下降与坏例预算]\label{distill:connes_consani_arithmetic_site-emergent_arithmetic_from_action_site_sections-finite-observer-descent-budget}
+对每个整数 \(q\ge 2\)，定义有限分类观察截面
+\[
+\rho_q:\mathcal{D}\longrightarrow \mathbb{Z}/q\mathbb{Z},
+\qquad
+\rho_q(a):=\left[\mathrm{Val}(a)\right]_q
+=\left[\sum_{k\ge 1}a_kF_{k+1}\right]_q .
+\]
+当 \(q\mid q'\) 时，记 \(r_{q',q}:\mathbb{Z}/q'\mathbb{Z}\to \mathbb{Z}/q\mathbb{Z}\) 为自然约化映射。令
+\[
+L_M:=\operatorname{lcm}(2,3,\dots,M)\qquad (M\ge 2),
+\]
+并称 \(a,b\in\mathcal{D}\) 为 \(M\)-不可分辨，如果 \(\rho_q(a)=\rho_q(b)\) 对所有 \(2\le q\le M\) 成立。则以下结论成立。
+\begin{enumerate}
+  \item 每个 \(\rho_q\) 都是 \(\mathcal{D}\) 的平移作用上的加法截面读数：对任意 \(a,c\in\mathcal{D}\)，
+  \[
+  \rho_q(a+c)=\rho_q(a)+\rho_q(c).
+  \]
+  且 \(\rho_q\) 与 Fibonacci 折叠关系相容：
+  \[
+  \rho_q(e_2)=\rho_q(2e_1),
+  \qquad
+  \rho_q(e_{k+2})=\rho_q(e_{k+1}+e_k)\quad(k\ge 1).
+  \]
+  因此 \(\rho_q\) 下降为商上的截面
+  \[
+  \overline{\rho}_q:\mathcal{D}/\!\equiv\longrightarrow \mathbb{Z}/q\mathbb{Z},
+  \]
+  并且这些截面对观察覆盖的细化构成稳定逆系统：若 \(q\mid q'\)，则
+  \[
+  r_{q',q}\circ \overline{\rho}_{q'}=\overline{\rho}_q.
+  \]
+  \item 对任意 \(a,b\in\mathcal{D}\)，\(a,b\) 为 \(M\)-不可分辨，当且仅当
+  \[
+  \mathrm{Val}(a)-\mathrm{Val}(b)\in L_M\mathbb{Z}.
+  \]
+  特别地，若 \(a,b\) 为 \(M\)-不可分辨且 \(a\not\equiv b\)，则
+  \[
+  \bigl|\mathrm{Val}(a)-\mathrm{Val}(b)\bigr|\ge L_M.
+  \]
+  \item 设 \(B<L_M\)，并令
+  \[
+  \mathcal{D}_{\le B}:=\{a\in\mathcal{D}:\mathrm{Val}(a)\le B\}.
+  \]
+  则有限观察覆盖 \(\{\rho_q:2\le q\le M\}\) 在 \(\mathcal{D}_{\le B}\) 上已经充分：若 \(a,b\in\mathcal{D}_{\le B}\) 且 \(a,b\) 为 \(M\)-不可分辨，则 \(a\equiv b\)。
+  \item 在同一预算假设 \(B<L_M\) 下，令
+  \[
+  \mathsf{Add}_q(a,b):=\rho_q(a)+\rho_q(b),
+  \qquad
+  \mathsf{Mul}_q(a,b):=\rho_q(a)\rho_q(b)
+  \]
+  为 \(\mathbb{Z}/q\mathbb{Z}\) 中的局部加法与乘法读数。若 \(\mathrm{Val}(a)+\mathrm{Val}(b)\le B\)，且 \(u\in\mathcal{D}_{\le B}\) 满足
+  \[
+  \rho_q(u)=\mathsf{Add}_q(a,b)\qquad(2\le q\le M),
+  \]
+  则 \(u\equiv a+b\)。若 \(\mathrm{Val}(a)\mathrm{Val}(b)\le B\)，且 \(u\in\mathcal{D}_{\le B}\) 满足
+  \[
+  \rho_q(u)=\mathsf{Mul}_q(a,b)\qquad(2\le q\le M),
+  \]
+  则
+  \[
+  u\equiv \bigl(\mathrm{Val}(a)\mathrm{Val}(b)\bigr)e_1.
+  \]
+  因而，在固定稳定值预算内，加法、乘法与同余判定均由平移作用、Fibonacci 折叠相容性、有限分类观察截面及其逆系统细化唯一重构。
+\end{enumerate}
+\end{theorem}
+\begin{theorem}[max-plus 包络下的有限相位下降与反例骨架]\label{distill:connes_consani_arithmetic_site-characteristic_one_stable_value_reconstruction-max-plus-envelope-phase-descent}
+令
+\(
+\mathbb T_{\max}:=\RR\cup\{-\infty\}
+\)
+带有运算
+\(
+x\oplus y:=\max\{x,y\}
+\)
+与
+\(
+x\odot y:=x+y
+\)，并约定 \(2^{-\infty}=0\)。
+对 \(a\in\mathcal D\)，记
+\[
+\operatorname{supp}(a):=\{k\ge1:a_k\ne0\},
+\qquad
+s(a):=\#\operatorname{supp}(a),
+\]
+并定义其 Fibonacci 尺度的 max-plus 包络为
+\[
+\mu(a):=\bigoplus_{k\in\operatorname{supp}(a)}
+\bigl(\log_2 a_k\odot\log_2 F_{k+1}\bigr)
+=\max_{k\in\operatorname{supp}(a)}\log_2(a_kF_{k+1}),
+\]
+其中空最大值取为 \(-\infty\)。
+给定 \(M\ge2\)，令
+\[
+L_M:=\operatorname{lcm}(2,3,\ldots,M),
+\qquad
+\rho_q(a):=[\operatorname{Val}(a)]_q\quad(2\le q\le M).
+\]
+若 \(a,b\in\mathcal D\) 满足
+\[
+\rho_q(a)=\rho_q(b)\qquad(2\le q\le M)
+\]
+以及尺度--相位转移不等式
+\[
+\max\{s(a),s(b)\}\,2^{\max\{\mu(a),\mu(b)\}}<L_M,
+\]
+则
+\[
+a\equiv b.
+\]
+因此，任意满足所有有限相位读数相同但 \(a\not\equiv b\) 的反例必满足
+\[
+\max\{s(a),s(b)\}\,2^{\max\{\mu(a),\mu(b)\}}\ge L_M.
+\]
+该下界是尖锐的：对每个 \(M\ge2\)，取
+\(
+a=L_Me_1
+\)
+与
+\(
+b=0
+\)，则 \(\rho_q(a)=\rho_q(b)\) 对所有 \(2\le q\le M\) 成立，且 \(a\not\equiv b\)，并且
+\[
+\max\{s(a),s(b)\}\,2^{\max\{\mu(a),\mu(b)\}}=L_M.
+\]
+进一步，令 \(I\subset\NN_{\ge1}\) 为有限集，\(B\in\NN\)，并令
+\[
+\mathcal D_{I,B}:=\{a\in\mathcal D:\operatorname{supp}(a)\subset I,\ 0\le a_k\le 2^B\ \text{对所有 }k\in I\}.
+\]
+对 \(a\in\mathcal D_{I,B}\) 定义有限 max-plus 影子
+\[
+\Theta_{I,B}(a)_k:=
+\begin{cases}
+-\infty,&a_k=0,\\
+\lceil\log_2 a_k\rceil,&a_k>0,
+\end{cases}
+\qquad(k\in I).
+\]
+若序列 \((a^{(t)})_{t\ge0}\subset\mathcal D_{I,B}\) 的 \(\Theta_{I,B}(a^{(t)})\) 在 \(\mathbb T_{\max}^{I}\) 的逐坐标序中单调不降，则该影子至多经过 \(|I|(B+1)\) 次严格变化后稳定。若此外每个 \(\rho_q(a^{(t)})\) 都最终稳定，且
+\[
+|I|\,2^B\max_{k\in I}F_{k+1}<L_M,
+\]
+则商类 \([a^{(t)}]\in\mathcal D/\!\equiv\) 最终稳定。
+\end{theorem}
+\begin{remark}[方法算子的有限翻译]\label{distill:connes_consani_arithmetic_site-point_spectrum_obstruction_classification-operator-bridge}
+在以下审计中，\texttt{siteify monoid dynamics} 被具体化为：只允许把 \(\mathcal D\) 的平移幺半群动力学读成模 \(q\) 的同态截面 \(\eta_q:\mathcal D\to\mathbb Z/q\mathbb Z\)。\texttt{recover numbers from point classification} 被具体化为：通过 rank-one 观察纤维 \(\mathbb Z/p^m\mathbb Z\) 的点标签恢复 \(\overline{\mathrm{Val}}\) 的剩余类。跨尺度对象只经由 \(r_{q',q}\) 的稳定逆系统比较。
+\end{remark}
+
+\begin{theorem}[有限 fold-aware 点谱审计的首次失败分类与 rank-one 尺度预算]\label{distill:connes_consani_arithmetic_site-point_spectrum_obstruction_classification-finite-fold-aware-rank-one-spectrum-audit}
+令 \(\mathcal Q\) 为有限非空的模数集合，且若 \(q\in\mathcal Q\)、\(d\mid q\)、\(d\ge2\)，则 \(d\in\mathcal Q\)。对每个 \(q\in\mathcal Q\)，给定交换幺半群同态
+\[
+\eta_q:\mathcal D\longrightarrow \mathbb Z/q\mathbb Z,
+\qquad
+u_q:=\eta_q(e_1).
+\]
+对 \(q\mid q'\) 仍记 \(r_{q',q}:\mathbb Z/q'\mathbb Z\to\mathbb Z/q\mathbb Z\) 为自然约化。定义 Fibonacci 下降缺陷
+\[
+\delta^{\rm fib}_{q,0}:=\eta_q(e_2)-2\eta_q(e_1),
+\qquad
+\delta^{\rm fib}_{q,k}:=\eta_q(e_{k+2})-\eta_q(e_{k+1})-\eta_q(e_k)\quad(k\ge1),
+\]
+以及尺度转移缺陷
+\[
+\delta^{\rm sc}_{q',q}:=r_{q',q}(\nu_{q'})-\nu_q\qquad(q\mid q',\ q,q'\in\mathcal Q).
+\]
+按先检查 Fibonacci 下降缺陷、再检查尺度转移缺陷、最后检查 rank-one 纤维尺度的优先级，任一族 \((\eta_q)_{q\in\mathcal Q}\) 恰落入以下三类之一。
+\begin{enumerate}
+  \item 存在最小的 \((q,i)\) 使 \(\delta^{\rm fib}_{q,i}\ne0\)。此时 \((q,i,\delta^{\rm fib}_{q,i})\) 是首次下降失败点；该族不能下降到 \(\mathcal D/\!\equiv\) 上的观察截面。
+  \item 所有 \(\delta^{\rm fib}_{q,i}\) 均为零，但存在最小的可除箭头 \(q\mid q'\) 使 \(\delta^{\rm sc}_{q',q}\ne0\)。此时 \((q',q,\delta^{\rm sc}_{q',q})\) 是首次尺度失败纤维；该族不能给出稳定逆系统截面。
+  \item 所有上述缺陷均为零。则每个 \(\eta_q\) 唯一下降为
+  \[
+  \overline\eta_q([a])=\nu_q\,\overline\rho_q([a])=\nu_q\,[\mathrm{Val}(a)]_q,
+  \]
+  且所有复合约化自动相容。若每个 \(\nu_q\) 都是 \(\mathbb Z/q\mathbb Z\) 的单位，则存在唯一的相容单位尺度证书 \(v_q\in(\mathbb Z/q\mathbb Z)^\times\) 满足 \(v_q\nu_q=1\)，并且
+  \[
+  a\longmapsto v_q\eta_q(a)
+  \]
+  正是标准观察截面 \(\rho_q\)。若某个 \(\nu_q\) 非单位，则存在素数 \(p\) 与 \(m\ge1\) 使 \(p^m\in\mathcal Q\) 且 \(\nu_{p^m}\) 非单位；对最小这样的 rank-one 纤维，令
+  \[
+  t:=\min\{v_p(\widetilde\nu),m\},
+  \]
+  其中 \(\widetilde\nu\) 是 \(\nu_{p^m}\) 的任一整数代表。则 \(1\le t\le m\)，且 \(\overline\eta_{p^m}\) 在标准值纤维 \(\mathbb Z/p^m\mathbb Z\) 上恰好压缩模 \(p^{m-t}\) 的陪集；特别地
+  \[
+  a_0:=0,
+  \qquad
+  a_1:=p^{m-t}e_1
+  \]
+  满足 \(\rho_{p^m}(a_0)\ne\rho_{p^m}(a_1)\)，但 \(\eta_{p^m}(a_0)=\eta_{p^m}(a_1)\)。进一步，若允许细化到 \(p^{m+s}\) 并给定相容的下降截面 \(\widetilde\eta_{p^{m+s}}\) 满足 \(\widetilde\eta_{p^{m+s}}(e_1)=U_s\) 与 \(r_{p^{m+s},p^m}(U_s)=\nu_{p^m}\)，则该细化纤维能区分全部 \(p^m\)-值类，当且仅当
+  \[
+  \min\{v_p(\widetilde U_s),m+s\}\le s,
+  \]
+  其中 \(\widetilde U_s\) 为 \(U_s\) 的任一整数代表。在此条件成立时，记录 \(p\)-进深度 \(w_s:=\min\{v_p(\widetilde U_s),m+s\}\) 与单位部分逆元就是恢复 \(\rho_{p^m}\) 所需且充分的尺度证书；若该条件不成立，则不存在仅依赖细化点标签 \(\widetilde\eta_{p^{m+s}}(a)\) 的函数能够在所有 \(p^m\)-值类上恢复 \(\rho_{p^m}(a)\)。
+\end{enumerate}
+因此，在该有限 fold-aware 审计语义中，坏重构的最小见证只能是下降点、尺度箭头或 rank-one 尺度纤维；rank-one 缺陷的闭合必须通过满足上述不等式的观察细化与尺度证书完成，否则该纤维缺陷不能在当前接纳的观察模数内被消去。
+\end{theorem}
+\begin{proof}
+若某个 \(\delta^{\rm fib}_{q,i}\) 非零，则由于 \(\mathcal Q\) 有限且指标集 \(\{0,1,2,\ldots\}\) 良序，存在最小的失败对 \((q,i)\)。Fibonacci 同余 \(\equiv\) 正由 \(e_2\equiv2e_1\) 与 \(e_{k+2}\equiv e_{k+1}+e_k\) 生成；故该非零缺陷说明 \(\eta_q\) 对生成关系不恒定，因而不可能下降到 \(\mathcal D/\!\equiv\)。这给出第一类，并且排除了后续分类的适用性。
+
+以下假设所有 Fibonacci 下降缺陷均为零。由 \(\eta_q\) 的加法性与缺陷为零可归纳得到
+\[
+\eta_q(e_k)=F_{k+1}\nu_q\qquad(k\ge1).
+\]
+确实，\(k=1\) 为定义，\(k=2\) 由 \(\eta_q(e_2)=2\eta_q(e_1)=F_3\nu_q\) 给出；若结论对 \(k\) 与 \(k+1\) 成立，则
+\[
+\eta_q(e_{k+2})=\eta_q(e_{k+1})+\eta_q(e_k)=(F_{k+2}+F_{k+1})\nu_q=F_{k+3}\nu_q.
+\]
+于是对任意 \(a=\sum_k a_ke_k\in\mathcal D\)，有限支撑性给出
+\[
+\eta_q(a)=\sum_k a_k\eta_q(e_k)=\left(\sum_k a_kF_{k+1}\right)\nu_q
+=\nu_q[\mathrm{Val}(a)]_q.
+\]
+因此 \(\eta_q\) 对 \(\equiv\) 恒定，并唯一诱导 \(\overline\eta_q([a])=\nu_q\overline\rho_q([a])\)。
+
+在上述表达式下，对任意 \(q\mid q'\) 与任意 \(a\in\mathcal D\)，有
+\[
+r_{q',q}(\eta_{q'}(a))-\eta_q(a)
+=[\mathrm{Val}(a)]_q\bigl(r_{q',q}(\nu_{q'})-\nu_q\bigr).
+\]
+取 \(a=e_1\) 可知转移相容等价于 \(\delta^{\rm sc}_{q',q}=0\)。若存在非零尺度缺陷，则有限可除箭头集中存在最小失败箭头，得到第二类。若所有尺度缺陷均为零，则 \(r_{q',q}(\nu_{q'})=\nu_q\)，从而对任何复合 \(q\mid q'\mid q''\) 亦有
+\[
+r_{q'',q}(\nu_{q''})=r_{q',q}(r_{q'',q'}(\nu_{q''}))=r_{q',q}(\nu_{q'})=\nu_q,
+\]
+所以不存在额外的复合约化失败。
+
+若所有 \(\nu_q\) 都是单位，令 \(v_q:=\nu_q^{-1}\)。单位逆元唯一，且
+\[
+r_{q',q}(v_{q'})\nu_q
+=r_{q',q}(v_{q'}\nu_{q'})=1,
+\]
+故 \(r_{q',q}(v_{q'})=v_q\)。于是 \((v_q)_q\) 是唯一相容尺度证书，并且
+\[
+v_q\eta_q(a)=v_q\nu_q[\mathrm{Val}(a)]_q=[\mathrm{Val}(a)]_q=\rho_q(a).
+\]
+
+剩余情形中某个 \(\nu_q\) 非单位。取素数 \(p\mid\gcd(\widetilde\nu_q,q)\)。由于 \(\mathcal Q\) 对除数封闭，\(p^m\in\mathcal Q\)，其中 \(m=v_p(q)\ge1\)；并且 \(\nu_{p^m}=r_{q,p^m}(\nu_q)\) 仍非单位。对最小的此类 \((p,m)\)，令 \(t=\min\{v_p(\widetilde\nu),m\}\)。映射
+\[
+T:\mathbb Z/p^m\mathbb Z\longrightarrow\mathbb Z/p^m\mathbb Z,
+\qquad
+[n]\longmapsto\nu_{p^m}[n]
+\]
+的核由条件 \(p^m\mid \widetilde\nu n\) 描述，等价于 \(p^{m-t}\mid n\)。故 \(T\) 恰好压缩模 \(p^{m-t}\) 的陪集。因为 \(t\ge1\)，元素 \([p^{m-t}]\) 在 \(\mathbb Z/p^m\mathbb Z\) 中非零，而
+\[
+T([p^{m-t}])=0=T([0]).
+\]
+取 \(a_0=0\)、\(a_1=p^{m-t}e_1\)，并用 \(\mathrm{Val}(e_1)=F_2=1\)，得到
+\[
+\rho_{p^m}(a_1)-\rho_{p^m}(a_0)=[p^{m-t}]_{p^m}\ne0,
+\qquad
+\eta_{p^m}(a_1)=\eta_{p^m}(a_0).
+\]
+这就是 rank-one 点谱中的可见压缩见证。
+
+最后考虑细化 \(p^{m+s}\)。令
+\[
+w_s:=\min\{v_p(\widetilde U_s),m+s\}.
+\]
+细化标签在 \(p^m\)-值类上的作用为
+\[
+T_s:\mathbb Z/p^m\mathbb Z\longrightarrow\mathbb Z/p^{m+s}\mathbb Z,
+\qquad
+[n]\longmapsto U_s[n].
+\]
+若 \(w_s\le s\)，则 \(T_s([n])=0\) 蕴含 \(p^{m+s}\mid\widetilde U_sn\)，从而 \(p^{m+s-w_s}\mid n\)。由于 \(m+s-w_s\ge m\)，得 \([n]=0\) 于 \(\mathbb Z/p^m\mathbb Z\)，故 \(T_s\) 单射。写 \(U_s=p^{w_s}W_s\)，其中 \(W_s\) 在模 \(p^{m+s-w_s}\) 下为单位。对标签 \(y=T_s([n])\)，数值 \(y/p^{w_s}\) 在模 \(p^{m+s-w_s}\) 下良定义，且
+\[
+[W_s^{-1}(y/p^{w_s})]_{p^m}=[n]_{p^m}.
+\]
+因此 \((w_s,W_s^{-1})\) 给出恢复 \(\rho_{p^m}\) 的尺度证书。
+
+反之，若 \(w_s>s\)，则 \(m+s-w_s<m\)。取 \(d=p^{m+s-w_s}\)；若 \(w_s=m+s\)，该式给出 \(d=1\)。于是 \([d]\ne0\) 于 \(\mathbb Z/p^m\mathbb Z\)，但
+\[
+U_s[d]=0=U_s[0]\quad\text{于 }\mathbb Z/p^{m+s}\mathbb Z.
+\]
+两个不同的 \(p^m\)-值类具有同一细化点标签，因此任何仅依赖该标签的函数都必须给出同一输出，不能同时恢复二者不同的标准剩余类。细化判据与尺度预算下界随之成立。
+\end{proof}
+
+\begin{proof}
+设
+\[
+C:=\max\{s(a),s(b)\}\,2^{\max\{\mu(a),\mu(b)\}}.
+\]
+由 \(\mu\) 的定义，对每个 \(k\in\operatorname{supp}(a)\) 有
+\(
+a_kF_{k+1}\le 2^{\mu(a)}\le 2^{\max\{\mu(a),\mu(b)\}}
+\)。
+因此
+\[
+0\le \operatorname{Val}(a)
+=\sum_{k\ge1}a_kF_{k+1}
+\le s(a)2^{\mu(a)}\le C.
+\]
+同理 \(0\le\operatorname{Val}(b)\le C\)。若 \(C<L_M\)，则
+\[
+|\operatorname{Val}(a)-\operatorname{Val}(b)|<L_M.
+\]
+另一方面，\(\rho_q(a)=\rho_q(b)\) 对所有 \(2\le q\le M\) 成立，故整数
+\(
+\operatorname{Val}(a)-\operatorname{Val}(b)
+\)
+被每个 \(q=2,\ldots,M\) 整除，因而被 \(L_M\) 整除。结合上式只能得到
+\[
+\operatorname{Val}(a)=\operatorname{Val}(b).
+\]
+由定理 \ref{thm:monoid-quotient-is-N}，\(\overline{\operatorname{Val}}:\mathcal D/\!\equiv\to\NN\) 为同构，故 \([a]=[b]\)，即 \(a\equiv b\)。反例下界即为该结论的逆否命题。
+
+对尖锐性，若 \(a=L_Me_1\) 且 \(b=0\)，则 \(\operatorname{Val}(a)=L_MF_2=L_M\)，而 \(\operatorname{Val}(b)=0\)。由于每个 \(q\in\{2,\ldots,M\}\) 都整除 \(L_M\)，有 \(\rho_q(a)=\rho_q(b)\)。但 \(\operatorname{Val}(a)\ne\operatorname{Val}(b)\)，再由定理 \ref{thm:monoid-quotient-is-N} 得 \(a\not\equiv b\)。同时 \(s(a)=1\)、\(s(b)=0\)、\(F_2=1\)，所以
+\[
+\mu(a)=\log_2(L_M),
+\qquad
+\max\{s(a),s(b)\}\,2^{\max\{\mu(a),\mu(b)\}}=L_M.
+\]
+
+最后考虑 \((a^{(t)})_{t\ge0}\subset\mathcal D_{I,B}\)。每个坐标 \(\Theta_{I,B}(a^{(t)})_k\) 只取有限链
+\(
+\{-\infty,0,1,\ldots,B\}
+\)
+中的值。若 \(\Theta_{I,B}(a^{(t)})\) 逐坐标单调不降，则每个坐标最多严格增加 \(B+1\) 次，故整个影子最多严格变化 \(|I|(B+1)\) 次，因而最终稳定。
+
+设所有 \(\rho_q(a^{(t)})\) 在 \(t\ge T_0\) 后稳定。对任意 \(t,t'\ge T_0\)，有
+\(
+\rho_q(a^{(t)})=\rho_q(a^{(t')})
+\)
+对所有 \(2\le q\le M\) 成立。又因 \(a^{(t)},a^{(t')}\in\mathcal D_{I,B}\)，有
+\[
+s(a^{(t)})\le |I|,
+\qquad
+2^{\mu(a^{(t)})}\le 2^B\max_{k\in I}F_{k+1},
+\]
+并且 \(a^{(t')}\) 同样满足该界。由假设
+\(
+|I|2^B\max_{k\in I}F_{k+1}<L_M
+\)
+及已经证明的下降判据可得
+\(
+a^{(t)}\equiv a^{(t')}
+\)。因此 \([a^{(t)}]\) 在 \(t\ge T_0\) 后恒定。证毕。
+\end{proof}
+
+\begin{proof}
+首先，\(\mathrm{Val}\) 是交换幺半群同态，故对任意 \(a,c\in\mathcal{D}\) 有
+\[
+\rho_q(a+c)=[\mathrm{Val}(a+c)]_q
+=[\mathrm{Val}(a)+\mathrm{Val}(c)]_q
+=\rho_q(a)+\rho_q(c).
+\]
+这正是 \(\mathcal{D}\) 对自身平移作用下的截面相容性。对折叠生成元，利用本节 Fibonacci 标定，得到
+\[
+\rho_q(e_2)=[F_3]_q=[2F_2]_q=\rho_q(2e_1),
+\]
+且对所有 \(k\ge 1\)，
+\[
+\rho_q(e_{k+2})=[F_{k+3}]_q=[F_{k+2}+F_{k+1}]_q
+=\rho_q(e_{k+1}+e_k).
+\]
+因此 \(\rho_q\) 对生成同余关系取相同值，并由同余对加法封闭可知 \(\rho_q\) 在 \(\mathcal{D}/\!\equiv\) 上诱导良定义映射 \(\overline{\rho}_q\)。若 \(q\mid q'\)，则对任意 \(a\in\mathcal{D}\)，
+\[
+(r_{q',q}\circ\rho_{q'})(a)=r_{q',q}([\mathrm{Val}(a)]_{q'})=[\mathrm{Val}(a)]_q=\rho_q(a),
+\]
+所以下降后仍有 \(r_{q',q}\circ\overline{\rho}_{q'}=\overline{\rho}_q\)。这证明第一项。
+
+接着，\(a,b\) 为 \(M\)-不可分辨，当且仅当对每个 \(2\le q\le M\)，
+\[
+[\mathrm{Val}(a)-\mathrm{Val}(b)]_q=0,
+\]
+也即每个 \(q\in\{2,\dots,M\}\) 都整除整数 \(\mathrm{Val}(a)-\mathrm{Val}(b)\)。这等价于其最小公倍数 \(L_M\) 整除该差值，即
+\[
+\mathrm{Val}(a)-\mathrm{Val}(b)\in L_M\mathbb{Z}.
+\]
+若同时 \(a\not\equiv b\)，由定理 \ref{thm:monoid-quotient-is-N}，商类由 \(\mathrm{Val}\) 完全刻画，故 \(\mathrm{Val}(a)\ne \mathrm{Val}(b)\)。于是该非零差值是 \(L_M\) 的整数倍，从而其绝对值至少为 \(L_M\)。第二项得证。
+
+若 \(a,b\in\mathcal{D}_{\le B}\) 且 \(B<L_M\)，则
+\[
+\bigl|\mathrm{Val}(a)-\mathrm{Val}(b)\bigr|\le B<L_M.
+\]
+若 \(a,b\) 为 \(M\)-不可分辨，第二项给出 \(L_M\mid \mathrm{Val}(a)-\mathrm{Val}(b)\)，因此只能有 \(\mathrm{Val}(a)=\mathrm{Val}(b)\)。再由定理 \ref{thm:monoid-quotient-is-N}，得到 \(a\equiv b\)。第三项得证。
+
+最后证明局部运算读数的唯一性。若 \(\mathrm{Val}(a)+\mathrm{Val}(b)\le B\) 且 \(u\in\mathcal{D}_{\le B}\) 满足 \(\rho_q(u)=\mathsf{Add}_q(a,b)\) 对所有 \(2\le q\le M\) 成立，则由 \(\rho_q\) 的加法性，
+\[
+\rho_q(u)=\rho_q(a)+\rho_q(b)=\rho_q(a+b).
+\]
+同时 \(a+b\in\mathcal{D}_{\le B}\)。由第三项应用于 \(u\) 与 \(a+b\)，得 \(u\equiv a+b\)。
+
+若 \(\mathrm{Val}(a)\mathrm{Val}(b)\le B\)，令
+\[
+v:=\bigl(\mathrm{Val}(a)\mathrm{Val}(b)\bigr)e_1\in\mathcal{D}.
+\]
+由于本节标定下 \(F_2=1\)，有
+\[
+\mathrm{Val}(v)=\mathrm{Val}(a)\mathrm{Val}(b)\le B.
+\]
+并且对每个 \(q\)，
+\[
+\rho_q(v)=[\mathrm{Val}(a)\mathrm{Val}(b)]_q
+=[\mathrm{Val}(a)]_q[\mathrm{Val}(b)]_q
+=\rho_q(a)\rho_q(b)=\mathsf{Mul}_q(a,b).
+\]
+若 \(u\in\mathcal{D}_{\le B}\) 具有相同的乘法局部读数，则 \(u\) 与 \(v\) 在所有 \(2\le q\le M\) 的观察截面上不可分辨。第三项给出 \(u\equiv v\)，即
+\[
+u\equiv \bigl(\mathrm{Val}(a)\mathrm{Val}(b)\bigr)e_1.
+\]
+同余判定本身即第三项。第四项随之成立。\end{proof}
 
 \textbf{证明：}
 由定理 \ref{thm:monoid-quotient-is-N} 的同构性与唯一规范代表结论直接推出。

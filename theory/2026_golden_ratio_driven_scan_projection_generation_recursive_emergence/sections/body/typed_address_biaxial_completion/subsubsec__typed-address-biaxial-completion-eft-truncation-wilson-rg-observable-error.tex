@@ -1,0 +1,463 @@
+\subsubsection{有效场论阶数、Wilson RG、低能截断、order reduction 与可观测误差界}\label{subsubsec:typed-address-biaxial-completion-eft-truncation-wilson-rg-observable-error}
+热核重整化说明四维量子物质的一圈贡献通常要求 \(R^2\)、\(R_{\mu\nu}R^{\mu\nu}\)、\(R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma}\) 型 counterterms。由此得到的精确重整化引力类通常不是 minimal Einstein 类。然而，这并不取消 Einstein 方程在低能、弱曲率、有限精度窗口内的地位。正确表述是：
+\[
+\boxed{
+\text{exact renormalized gravity class}
+\ne
+\text{leading-order low-energy field equation}.
+}
+\]
+也就是说，二导数 Einstein equation 是 EFT 的 leading projection；higher-curvature terms 可以保留为 correction，也可以在给定误差预算内放入受控 residual。
+
+\paragraph{EFT tower 与小参数。}
+四维低能引力 EFT 写作
+\[
+\Gamma_{\rm EFT}[g,\Psi]
+=
+\int d^4x\sqrt{-g}
+\left[
+-\rho_\Lambda
++
+\frac{M_{\rm Pl}^2}{2}R
++
+\mathcal L_{\rm matter}
++
+\sum_{n\ge2}\sum_a\lambda_{2n,a}\mathcal O_{2n,a}
+\right]
++
+\Gamma_{\rm nonlocal}.
+\]
+其中 \(\mathcal O_{2n,a}\) 是 \(2n\)-导数局域协变量，例如
+\[
+\mathcal O_4\in
+\{R^2,\ R_{\mu\nu}R^{\mu\nu},\ R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma},\ F_{\mu\nu}F^{\mu\nu},\ldots\}.
+\]
+因此
+\[
+\Gamma_{\rm EFT}
+=
+\Gamma_{(0)}+\Gamma_{(2)}+\Gamma_{(4)}+\Gamma_{(6)}+\cdots,
+\]
+而 Einstein gravity 是
+\[
+\Gamma_{\le2}:=\Gamma_{(0)}+\Gamma_{(2)}+\Gamma_{\rm matter}.
+\]
+
+截断需要小参数。对区域 \(U\)，令
+\[
+L_R^{-2}:=\sup_U|{\rm Riem}|,
+\qquad
+\varepsilon_R(U):=\frac{\sup_U|{\rm Riem}|}{M_*^2}.
+\]
+若外部能量或频率为 \(E\)，定义
+\[
+\varepsilon_E:=\frac{E^2}{M_*^2}.
+\]
+若重粒子阈值为 \(m\)，低能展开参数为 \(\varepsilon_m=E^2/m^2\)。统一写作
+\[
+\boxed{
+\varepsilon
+=
+\max\{\varepsilon_R,\varepsilon_E,\varepsilon_m,\varepsilon_{\rm state},\varepsilon_{\rm boundary}\}.
+}
+\]
+
+\begin{definition}[EFT 尺度分离证书]\label{def:typed-address-biaxial-completion-eft-scale-separation-cert}
+称 \(\mathsf{EFTScaleSeparationCert}\) 为 EFT 尺度分离证书，若它包含区域 \(U\)、曲率尺度 \(L_R\)、能量窗口 \(E\)、cutoff \(M_*\)、质量阈值、\(\varepsilon_R,\varepsilon_E,\varepsilon_m,\varepsilon\)、curvature-norm ledger、energy-window ledger、threshold ledger、boundary-scale ledger 与 round hash。验证器检查
+\[
+\varepsilon<\varepsilon_{\max}.
+\]
+若未能证明 \(\varepsilon\ll1\)，输出 \(\mathsf{ScaleSeparationNull}\)。若能量、曲率或边界尺度接近 cutoff 却仍使用低能展开，输出 \(\mathsf{CutoffViolationFail}\)。
+\end{definition}
+
+\paragraph{导数阶数与 operator basis。}
+导数计数规则为
+\[
+\mathcal O_{2n}\sim\partial^{2n}.
+\]
+若
+\[
+\Gamma_{(2n)}
+=
+M_{\rm Pl}^2M_*^{2-2n}
+\int\sqrt{-g}\,c_{2n,a}\mathcal O_{2n,a},
+\]
+则相对于 Einstein 项
+\[
+\frac{\Gamma_{(2n)}}{\Gamma_{(2)}}
+\sim
+c_{2n,a}\left(\frac{1}{M_*^2L^2}\right)^{n-1}
+=
+c_{2n,a}\varepsilon_R^{n-1}.
+\]
+四导数项相对二导数项为 \(O(\varepsilon_R)\)，六导数项为 \(O(\varepsilon_R^2)\)，除非 coefficient ledger 说明存在非自然大系数。
+
+\begin{definition}[导数 power-counting 证书]\label{def:typed-address-biaxial-completion-derivative-power-counting-cert}
+称 \(\mathsf{DerivativePowerCountingCert}\) 为导数 power-counting 证书，若它包含 \(\{\mathcal O_{2n,a}\}\)、\(\{c_{2n,a}\}\)、\(M_*,M_{\rm Pl},\varepsilon\)、dimension ledger、derivative-order ledger、naturalness ledger、loop-counting ledger 与 round hash。验证器检查每个 operator 与 coefficient 的质量维数、loop order、导数阶数，以及是否错误丢弃低阶 operator。导数阶数标错时输出 \(\mathsf{PowerCountingMismatchFail}\)。coefficient 非自然大但无 ledger 时输出 \(\mathsf{NaturalnessLedgerNull}\)。
+\end{definition}
+
+operator basis 必须按 integration by parts、Bianchi identities、curvature symmetries、Gauss--Bonnet identity、lower-order equations of motion、field redefinitions 与 boundary total derivatives 约化。四维无边界情形中，可在
+\[
+\{R^2,\ R_{\mu\nu}R^{\mu\nu},\ C_{\mu\nu\rho\sigma}C^{\mu\nu\rho\sigma},\ E_4,\ \Box R\}
+\]
+等价基之间切换，并声明哪些项为 dynamical、topological、boundary 或 redundant。
+
+\begin{definition}[operator basis 约化证书]\label{def:typed-address-biaxial-completion-operator-basis-reduction-cert}
+称 \(\mathsf{OperatorBasisReductionCert}\) 为 operator basis 约化证书，若它包含 \(\mathcal B_{2N}\)、IBP ledger、Bianchi ledger、Gauss--Bonnet ledger、EOM redundancy ledger、field-redefinition ledger、boundary-operator ledger 与 round hash。验证器检查 basis 无重复、无遗漏且等价识别正确。把 EOM-redundant operator 当作独立可观测 coefficient 时输出 \(\mathsf{RedundantOperatorMislabelFail}\)。存在边界却丢弃 boundary total derivative 时输出 \(\mathsf{BoundaryOperatorOmissionFail}\)。
+\end{definition}
+
+\paragraph{Wilsonian matching 与 running。}
+Wilsonian EFT 通过 matching 条件确定低能 Wilson coefficients：
+\[
+\Gamma_{\rm full}^{(n)}(p_i)
+=
+\Gamma_{\rm EFT}^{(n)}(p_i;\lambda_j(\mu))
++
+O\!\left(\frac{p^{2N+2}}{M_*^{2N+2}}\right)
+\]
+对 \(|p_i|\le\mu\ll M_*\) 成立。匹配可通过 scattering amplitudes、curved-background stress correlators、heat-kernel coefficients、form factors 或 background-field effective action 完成。
+
+\begin{definition}[Wilsonian matching 证书]\label{def:typed-address-biaxial-completion-wilsonian-matching-cert}
+称 \(\mathsf{WilsonianMatchingCert}\) 为 Wilsonian matching 证书，若它包含 \(\Gamma_{\rm full},\Gamma_{\rm EFT},\mu,M_*,\{\lambda_i(\mu)\}\)、matching-observable ledger、momentum-window ledger、threshold ledger、scheme ledger 与 round hash。验证器检查 full 与 EFT 在声明 observable family 上相差 \(O(\varepsilon^{N+1})\)。只写 integrating out heavy modes 而无 matching condition 时输出 \(\mathsf{MatchingConditionNull}\)。在 \(\mu\sim M_*\) 处仍使用低能 EFT 时输出 \(\mathsf{MatchingWindowFail}\)。
+\end{definition}
+
+Wilson coefficients 满足
+\[
+\mu\frac{d\lambda_i}{d\mu}=\beta_i(\lambda).
+\]
+任意物理量应满足
+\[
+\mu\frac{d}{d\mu}\mathcal A_{\rm EFT}^{(\le2N)}
+=
+O(\varepsilon^{N+1}).
+\]
+热核中的 \(A_4\) 控制四维 log divergence，也控制 curvature-squared Wilson coefficients 的 running。
+
+\begin{definition}[running coupling 闭包证书]\label{def:typed-address-biaxial-completion-running-coupling-closure-cert}
+称 \(\mathsf{RunningCouplingClosureCert}\) 为 running coupling 闭包证书，若它包含 \(\{\lambda_i(\mu)\}\)、\(\{\beta_i\}\)、heat-kernel log-divergence ledger、scheme-change ledger、RG-invariant observable ledger 与 round hash。验证器检查
+\[
+\mu\frac{d}{d\mu}
+\left[
+\Gamma_{\rm EFT}^{\rm ren}
++
+\Gamma_{\rm loop}^{\rm ren}
+\right]
+=
+O(\varepsilon^{N+1}).
+\]
+running 与热核 log divergence 不一致时输出 \(\mathsf{RunningHeatKernelMismatchFail}\)。
+\end{definition}
+
+\paragraph{截断 action 与 residual。}
+定义 \(2N\)-导数截断
+\[
+\boxed{
+\Gamma_{\le2N}
+:=
+\sum_{n=0}^{N}\Gamma_{(2n)}
++
+\Gamma_{\rm nonlocal}^{(\le2N)}.
+}
+\]
+剩余项为
+\[
+\Gamma_{>2N}:=\Gamma_{\rm EFT}-\Gamma_{\le2N}.
+\]
+metric variation residual 为
+\[
+\boxed{
+\mathcal R_{\mu\nu}^{(>2N)}
+:=
+\frac{2}{\sqrt{-g}}
+\frac{\delta\Gamma_{>2N}}{\delta g^{\mu\nu}}.
+}
+\]
+若
+\[
+\|\mathcal R^{(>2N)}\|\le C_N\varepsilon^{N+1},
+\]
+则该截断具有 order-\(N\) residual control。
+
+\begin{definition}[截断阶证书]\label{def:typed-address-biaxial-completion-truncation-order-cert}
+称 \(\mathsf{TruncationOrderCert}\) 为截断阶证书，若它包含 \(N,\Gamma_{\le2N},\Gamma_{>2N},\mathcal R_{\mu\nu}^{(>2N)},C_N,\varepsilon\)、norm ledger、residual-bound ledger、operator-remainder ledger 与 round hash。验证器检查 residual bound。截断但不给 residual 时输出 \(\mathsf{TruncationResidualNull}\)。residual 与声明阶数不符时输出 \(\mathsf{TruncationOrderMismatchFail}\)。
+\end{definition}
+
+\paragraph{Einstein projection 与四导数修正。}
+取 \(N=1\) 得
+\[
+\Gamma_{\le2}
+=
+\int\sqrt{-g}
+\left[
+-\rho_\Lambda+\frac{M_{\rm Pl}^2}{2}R+\mathcal L_{\rm matter}
+\right],
+\]
+其方程为
+\[
+\boxed{
+G_{\mu\nu}+\Lambda g_{\mu\nu}
+=
+M_{\rm Pl}^{-2}T_{\mu\nu}.
+}
+\]
+四导数及更高项进入 \(\mathcal R_{\mu\nu}^{(>2)}\)。因此该输出应标记为
+\[
+\mathsf{LeadingEinsteinEFTProjectionPass},
+\]
+而不是 exact minimal renormalized pass。
+
+若保留四导数层，
+\[
+\Gamma_{\le4}
+=
+\Gamma_{\le2}
++
+\int\sqrt{-g}
+\left[
+\alpha_1R^2+\alpha_2R_{\mu\nu}R^{\mu\nu}
++\alpha_3C_{\mu\nu\rho\sigma}C^{\mu\nu\rho\sigma}
+\right]
++
+\Gamma_{(4)}^{\rm nonlocal},
+\]
+则输出
+\[
+\mathsf{FourDerivativeGravityEFTPass}.
+\]
+此时剩余误差由六导数及更高项控制。
+
+\paragraph{order reduction 与 runaway 排除。}
+若非扰动地求解四导数方程，通常会引入 cutoff 附近或 cutoff 以上的 extra modes。EFT 中这些分支不应作为低能物理解。设
+\[
+E_{\mu\nu}^{(2)}[g]+\varepsilon E_{\mu\nu}^{(4)}[g]=0,
+\]
+取
+\[
+g_{\mu\nu}=g_{\mu\nu}^{(0)}+\varepsilon g_{\mu\nu}^{(1)}+O(\varepsilon^2).
+\]
+零阶满足 \(E^{(2)}[g^{(0)}]=0\)，一阶满足
+\[
+\left.
+\frac{\delta E_{\mu\nu}^{(2)}}{\delta g_{\alpha\beta}}
+\right|_{g^{(0)}}
+g_{\alpha\beta}^{(1)}
++
+E_{\mu\nu}^{(4)}[g^{(0)}]=0.
+\]
+高阶导数只允许用 lower-order equations 及其协变导数替换。
+
+\begin{definition}[order reduction 证书]\label{def:typed-address-biaxial-completion-order-reduction-cert}
+称 \(\mathsf{OrderReductionCert}\) 为 order reduction 证书，若它包含 \(E^{(2)},E^{(4)},\ldots,E^{(2N)}\)、扰动解 \(g^{(0)},\ldots,g^{(N-1)}\)、lower-order EOM ledger、higher-derivative replacement ledger、perturbative-solution ledger 与 round hash。验证器检查是否只用低阶方程消去高阶导数，是否未引入额外 initial data，是否未把 cutoff-scale modes 当作 EFT states，并检查 Ward identity 保持。保留 runaway 模式时输出 \(\mathsf{RunawayModeIncludedFail}\)。无 order-reduction ledger 时输出 \(\mathsf{OrderReductionLedgerNull}\)。
+\end{definition}
+
+\begin{definition}[runaway mode 排除证书]\label{def:typed-address-biaxial-completion-runaway-mode-exclusion-cert}
+称 \(\mathsf{RunawayModeExclusionCert}\) 为 runaway mode 排除证书，若它包含 mode-spectrum ledger、cutoff-comparison ledger、initial-data-restriction ledger、perturbative-branch ledger 与 round hash。验证器检查 extra mode 是否位于 cutoff 附近或以上，或是否被排除在 EFT Hilbert/solution space 之外。cutoff 以上模式被解释为低能物理粒子时输出 \(\mathsf{EFTModeMisinterpretationFail}\)。
+\end{definition}
+
+\paragraph{field redefinition 与 nonlocal form factor。}
+局域 field redefinition
+\[
+g_{\mu\nu}\mapsto g_{\mu\nu}+\Delta g_{\mu\nu}
+\]
+会移动 \(R^2\)、\(R_{\mu\nu}R^{\mu\nu}\) 等 coefficients，并生成与 lower-order EOM 成比例的 redundant operators。basis coefficient 与 field-redefinition invariant observable coefficient 必须分开。
+
+\begin{definition}[field-redefinition 等价证书]\label{def:typed-address-biaxial-completion-field-redefinition-equivalence-cert}
+称 \(\mathsf{FieldRedefinitionEquivalenceCert}\) 为 field-redefinition 等价证书，若它包含 \(g_{\mu\nu}\mapsto g_{\mu\nu}+\Delta g_{\mu\nu}\)、basis map、EOM-redundant operator ledger、observable-invariant ledger、stress-tensor scheme ledger 与 round hash。验证器检查 redefinition 是否局域、可逆、在 EFT 阶数内，是否改变 boundary conditions，以及是否把 basis artifact 当作 observable。后者发生时输出 \(\mathsf{FieldRedefinitionArtifactFail}\)。
+\end{definition}
+
+finite nonlocal terms 也有 EFT 阶数。例如
+\[
+\int\sqrt{-g}\,R\log(-\Box/\mu^2)R
+\]
+属于四导数层。massless logarithm 不能被简单 local Taylor expansion 消去；Lorentzian backreaction 还需 causal in-in kernel。
+
+\begin{definition}[nonlocal form-factor 阶数证书]\label{def:typed-address-biaxial-completion-nonlocal-form-factor-order-cert}
+称 \(\mathsf{NonlocalFormFactorOrderCert}\) 为 nonlocal form-factor 阶数证书，若它包含 \(\Gamma_{\rm nonlocal}\)、form-factor ledger、massive-expansion ledger、massless-IR ledger、causal-kernel ledger、derivative-order ledger 与 round hash。验证器检查 nonlocal term 是否归入正确导数阶，massless log 是否被错误 local 展开，Lorentzian response 是否采用 causal kernel，并检查 IR scale。Euclidean nonlocal action 被直接当作 Lorentzian causal response 时输出 \(\mathsf{NonlocalCausalMismatchFail}\)。
+\end{definition}
+
+\paragraph{从 residual 到解误差与可观测误差。}
+设 \(g_N\) 是截断解：
+\[
+E_{\le2N}[g_N]=0.
+\]
+完整解写作 \(g_{\rm full}=g_N+h\)。线性化得
+\[
+\mathcal L_Nh=-\mathcal R_{>2N}[g_N]+O(h^2).
+\]
+若 gauge-fixed linearized operator 有 resolvent bound
+\[
+\|h\|_{\mathcal X}
+\le
+S_N\|\mathcal L_Nh\|_{\mathcal Y},
+\]
+则
+\[
+\|g_{\rm full}-g_N\|_{\mathcal X}
+\le
+S_NC_N\varepsilon^{N+1}+O(\varepsilon^{2N+2}).
+\]
+
+\begin{definition}[稳定 resolvent 证书]\label{def:typed-address-biaxial-completion-stability-resolvent-cert}
+称 \(\mathsf{StabilityResolventCert}\) 为稳定 resolvent 证书，若它包含 \(\mathcal L_N,\mathcal X,\mathcal Y,S_N\)、gauge-fixing ledger、zero-mode projection ledger、boundary-condition ledger、time-interval ledger 与 round hash。验证器检查
+\[
+\|h\|_{\mathcal X}\le S_N\|\mathcal L_Nh\|_{\mathcal Y}
+\]
+在声明 gauge slice 与 boundary condition 下成立。zero modes 未投影时输出 \(\mathsf{LinearizedZeroModeFail}\)。背景不稳定却给 uniform bound 时输出 \(\mathsf{StabilityAssumptionFail}\)。
+\end{definition}
+
+对 gauge-invariant observable \(\mathcal O[g,\Psi]\)，若 Fr\'echet derivative 有界 \(\|D\mathcal O\|\le L_{\mathcal O}\)，则
+\[
+\boxed{
+|\Delta\mathcal O|
+\le
+L_{\mathcal O}S_NC_N\varepsilon^{N+1}
++O(\varepsilon^{2N+2}).
+}
+\]
+
+\begin{definition}[可观测误差界证书]\label{def:typed-address-biaxial-completion-observable-error-bound-cert}
+称 \(\mathsf{ObservableErrorBoundCert}\) 为可观测误差界证书，若它包含 \(\mathcal O,D\mathcal O,L_{\mathcal O},S_N,C_N,\varepsilon,\Delta_{\mathcal O}\)、observable-definition ledger、gauge-invariant ledger、measurement-window ledger 与 round hash。验证器检查 \(|\Delta\mathcal O|\le\Delta_{\mathcal O}^{\max}\)。非 gauge invariant quantity 被当作物理预测时输出 \(\mathsf{GaugeDependentObservableFail}\)。缺 observable error bound 时输出 \(\mathsf{ObservableErrorBoundNull}\)。
+\end{definition}
+
+\paragraph{EFT gravity class 与 predictivity。}
+引力闭包标签分为三类：exact minimal Einstein、leading Einstein EFT projection、Einstein plus certified corrections。若热核分类要求 dynamical curvature-squared counterterms，却声明 exact minimal Einstein，则为 overclaim。若只声明 leading projection，则必须有 scale separation 与 truncation residual。
+
+\begin{definition}[EFT 引力类证书]\label{def:typed-address-biaxial-completion-eft-gravity-class-cert}
+称 \(\mathsf{EFTGravityClassCert}\) 为 EFT 引力类证书，若它包含 declared class、\(\Gamma_{\le2N},\Gamma_{>2N}\)、heat-kernel counterterm ledger、truncation-order cert、order-reduction cert、observable-error-bound cert 与 round hash。允许标签为 \(\mathsf{ExactMinimalEinstein}\)、\(\mathsf{LeadingEinsteinEFTProjection}\)、\(\mathsf{FourDerivativeGravityEFT}\)、\(\mathsf{HigherDerivativeGravityEFT}\)、\(\mathsf{FixedBackgroundQFT}\)、\(\mathsf{NoLowEnergyTruncation}\)。验证器检查 declared class 与 counterterm classification 一致。需要 \(R^2\) counterterm 却声明 exact minimal Einstein 时输出 \(\mathsf{ExactEinsteinOverclaimFail}\)。
+\end{definition}
+
+固定背景 QFT 是特殊标签：若不变分 \(g_{\mu\nu}\)，引力 counterterms 只作为 background source functional 的重整化项；一旦用 \(\delta\Gamma/\delta g^{\mu\nu}\) 产生 backreaction，就必须进入 gravity EFT classification。
+
+\begin{definition}[有限阶可预测性证书]\label{def:typed-address-biaxial-completion-finite-order-predictivity-cert}
+称 \(\mathsf{FiniteOrderPredictivityCert}\) 为有限阶可预测性证书，若它包含 \(N\)、系数集 \(\mathcal C_{\le2N}\)、其基数、observable-family ledger、coefficient-determination ledger、residual-error ledger 与 round hash。验证器检查
+\[
+\mathcal O_{\rm phys}
+=
+\mathcal O_{\le2N}(\mathcal C_{\le2N})
++O(\varepsilon^{N+1}).
+\]
+若同一预测精度阶进入无限多未知 coefficients，输出 \(\mathsf{PredictivityLossFail}\)。
+\end{definition}
+
+\paragraph{EFT 截断闭包证书。}
+\begin{definition}[EFT 截断闭包证书]\label{def:typed-address-biaxial-completion-eft-truncation-closure-cert}
+称 \(\mathsf{EFTTruncationClosureCert}\) 为 EFT 截断闭包证书，若它包含热核重整化闭包证书、EFT 尺度分离证书、导数 power-counting 证书、operator basis 约化证书、Wilsonian matching 证书、running coupling 闭包证书、截断阶证书、order reduction 证书、runaway mode 排除证书、field-redefinition 等价证书、nonlocal form-factor 阶数证书、稳定 resolvent 证书、可观测误差界证书、EFT 引力类证书、有限阶可预测性证书、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifyEFTTruncationClosure}\) 读取热核 counterterm class，建立 \(\mathcal B_{\le2N}\)，声明 cutoff \(M_*\) 与小参数 \(\varepsilon\)，检查 scale separation、Wilsonian matching、running、截断 action、residual bound、order reduction、runaway 排除、stability resolvent 与 observable error bound。输出可为
+\[
+\mathsf{LeadingEinsteinEFTProjectionPass},\quad
+\mathsf{FourDerivativeGravityEFTPass},\quad
+\mathsf{HigherDerivativeGravityEFTPass},\quad
+\mathsf{FiniteOrderPredictivityPass},
+\]
+\[
+\mathsf{WilsonianMatchingPass},\quad
+\mathsf{ObservableErrorBoundPass},\quad
+\mathsf{NULL},\quad
+\mathsf{FAIL}.
+\]
+
+NULL 类型包括
+\[
+\mathsf{ScaleSeparationNull},\quad
+\mathsf{TruncationResidualNull},\quad
+\mathsf{MatchingConditionNull},\quad
+\mathsf{OrderReductionLedgerNull},\quad
+\mathsf{ObservableErrorBoundNull},\quad
+\mathsf{NoLowEnergyTruncation}.
+\]
+FAIL 类型包括
+\[
+\mathsf{ExactEinsteinOverclaimFail},\quad
+\mathsf{CutoffViolationFail},\quad
+\mathsf{PowerCountingMismatchFail},\quad
+\mathsf{TruncationOrderMismatchFail},\quad
+\mathsf{RunawayModeIncludedFail},
+\]
+\[
+\mathsf{FieldRedefinitionArtifactFail},\quad
+\mathsf{PredictivityLossFail},\quad
+\mathsf{GaugeDependentObservableFail}.
+\]
+
+\begin{theorem}[EFT 截断闭包的可靠性]\label{thm:typed-address-biaxial-completion-eft-truncation-closure-soundness}
+若
+\[
+\mathsf{VerifyEFTTruncationClosure}
+(\mathsf{EFTTruncationClosureCert})
+=
+\mathsf{LeadingEinsteinEFTProjectionPass},
+\]
+则存在低能/弱曲率小参数 \(\varepsilon\ll1\) 与二导数截断 action
+\[
+\Gamma_{\le2}
+=
+\int\sqrt{-g}
+\left[
+-\rho_\Lambda
++
+\frac{M_{\rm Pl}^2}{2}R
++
+\mathcal L_{\rm matter}
+\right],
+\]
+其 Euler--Lagrange equation 为
+\[
+G_{\mu\nu}+\Lambda g_{\mu\nu}=M_{\rm Pl}^{-2}T_{\mu\nu}.
+\]
+完整重整化有效方程可写为
+\[
+G_{\mu\nu}+\Lambda g_{\mu\nu}-M_{\rm Pl}^{-2}T_{\mu\nu}
++
+\mathcal R_{\mu\nu}^{(>2)}
+=0,
+\]
+且 residual 满足
+\[
+\|\mathcal R^{(>2)}\|\le C_1\varepsilon^2
+\]
+或声明的相对阶数版本。若稳定 resolvent bound 成立，则完整解与 Einstein 投影解满足
+\[
+\|g_{\rm full}-g_{\rm Ein}\|_{\mathcal X}
+\le
+S_1C_1\varepsilon^2+O(\varepsilon^4).
+\]
+任意具备 derivative bound 的 gauge-invariant observable 满足
+\[
+|\mathcal O[g_{\rm full}]-\mathcal O[g_{\rm Ein}]|
+\le
+L_{\mathcal O}S_1C_1\varepsilon^2+O(\varepsilon^4).
+\]
+因此 Einstein 方程在该 regime 中是具有误差界的 leading-order EFT field equation，但不推出 exact minimal Einstein renormalization。
+\end{theorem}
+\begin{proof}
+尺度分离证书给出 \(\varepsilon\ll1\)。导数 power-counting 证书把 operator tower 分成 \(2,4,6,\ldots\) 导数层。截断阶证书给出 \(\Gamma_{\le2}\) 与 residual \(\mathcal R_{>2}\)，并证明 residual bound。稳定 resolvent 证书把方程 residual 转为解误差界。可观测误差界证书再把解误差转为 observable error bound。因此二导数 Einstein equation 是受控 leading projection。若热核 counterterm 分类要求 curvature-squared terms，则 exact renormalized action 仍属 higher-curvature EFT，不能改标为 exact minimal Einstein。证毕。
+\end{proof}
+
+\begin{theorem}[四导数 EFT 修正的可靠性]\label{thm:typed-address-biaxial-completion-four-derivative-eft-correction-soundness}
+若验证器输出 \(\mathsf{FourDerivativeGravityEFTPass}\)，则存在截断 action
+\[
+\Gamma_{\le4}
+=
+\Gamma_{\le2}
++
+\int\sqrt{-g}
+\left[
+\alpha_1R^2+\alpha_2R_{\mu\nu}R^{\mu\nu}
++\alpha_3C_{\mu\nu\rho\sigma}C^{\mu\nu\rho\sigma}
+\right]
++
+\Gamma_{(4)}^{\rm nonlocal},
+\]
+其 order-reduced field equation 近似完整 equation 到下一阶：
+\[
+\|\mathcal R^{(>4)}\|\le C_2\varepsilon^3
+\]
+或相应规范化阶数。若缺少 order reduction，则只能得到 formal higher-derivative equation，而非 physical EFT pass。
+\end{theorem}
+\begin{proof}
+四导数截断证书保留 \(\Gamma_{(4)}\) 的 local 与 nonlocal 部分。order reduction 证书用 lower-order equations 消去 EFT 外的高阶独立分支，runaway 排除证书保证 cutoff-scale modes 不进入低能解空间。截断 residual 与稳定性证书给出下一阶误差界。故四导数修正作为 EFT correction 可靠。证毕。
+\end{proof}
+
+由此，热核重整化产生的 higher-curvature terms 不会推翻 Einstein 方程；它们把 Einstein 方程精确定位为二导数 leading projection。若需要更高精度，则保留 \(R^2\)、\(R_{\mu\nu}^2\)、\(C^2\) 与 causal nonlocal form factors，并附带 order reduction 与 observable error bound。若没有 scale separation 或 residual ledger，则输出不可判定，而不是把低能截断误判为通过。

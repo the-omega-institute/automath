@@ -1,0 +1,487 @@
+\subsubsection{路径积分、有效作用与 stationary phase 下的经典/半经典双极限}\label{subsubsec:typed-address-biaxial-completion-effective-action-stationary-phase-double-limit}
+半经典源项闭包可等价改写为有效作用的 stationary condition。该改写不把路径积分符号当作无条件测度，而是要求历史空间、作用量、规则化积分、生成泛函、Legendre 变换、重整化、边界项、规范固定与应力张量匹配均有独立证书。核心链条为
+\[
+\mathsf{Hist}_g
+\longrightarrow
+Z[J;g]
+\longrightarrow
+W[J;g]
+\longrightarrow
+\Gamma[\Phi;g]
+\longrightarrow
+\delta\Gamma_{\rm eff}=0.
+\]
+在 minimal semiclassical 口径中，
+\[
+\boxed{
+\Gamma_{\rm eff}[g,\Psi]
+=
+S_{\rm EH}^{\rm ren}[g]
++
+S_{\rm cl}^{\rm ren}[g,\Psi]
++
+W_{\rm q}^{\rm ren}[g]
+}
+\]
+并采用约定
+\[
+\boxed{
+T^{\rm q}_{\mu\nu}[g]
+:=
+-\frac{2}{\sqrt{|g|}}
+\frac{\delta W_{\rm q}^{\rm ren}[g]}{\delta g^{\mu\nu}}.
+}
+\]
+该对象必须与 operator-renormalized stress expectation 一致：
+\[
+T^{\rm q}_{\mu\nu}
+=
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}.
+\]
+
+\paragraph{历史空间与作用量。}
+量子态、代数与局域事件可由 Hilbert 或 algebraic 口径描述；路径积分口径改用历史对象。给定 \(g\) 与区域 \(U\subseteq M_{\mathrm{qadm}}\)，记历史空间为
+\[
+\mathsf{Hist}_g(U).
+\]
+其元素可以是场配置 \(\Phi:U\to E\)、离散可见轨道、局部 lift 序列或 cylinder approximant。Lorentzian 路径积分通常是 oscillatory functional，而非概率测度，因此 \(\mathcal D\Phi\) 只能作为规则化极限或形式渐近符号使用。
+
+\begin{definition}[历史空间证书]\label{def:typed-address-biaxial-completion-history-space-cert}
+称 \(\mathsf{HistorySpaceCert}\) 为历史空间证书，若它包含 \(M_{\mathrm{qadm}},g,\mathsf{Hist}_g\)、field-bundle ledger、boundary-condition ledger、causal-support ledger、topology-or-cylinder ledger 与 round hash。验证器检查每个 history 的支撑与 \(g\)-causal cone 相容，field bundle 与局部代数网相容，边界条件或 in/in-in contour 明确；若只给出 finite cylinder approximants，则检查 refinement ledger。无法定义 history object 时输出 \(\mathsf{HistorySpaceNull}\)。history support 违反因果支撑时输出 \(\mathsf{HistoryCausalSupportFail}\)。
+\end{definition}
+
+局部作用量写为
+\[
+S[\Phi;g]
+=
+\int_{M_{\mathrm{qadm}}}
+\mathcal L(\Phi,\nabla\Phi,g,R,\ldots)\,d{\rm vol}_g.
+\]
+引力部分可取
+\[
+S_{\rm grav}^{\rm bare}[g]
+=
+\frac{1}{2\kappa_0}
+\int\sqrt{|g|}(R-2\Lambda_0)\,d^4x
++
+S_{\rm bdy}[g],
+\]
+并在需要时加入 \(R^2\)、\(R_{\mu\nu}R^{\mu\nu}\) 等 higher-curvature counterterms。边界项是变分问题的一部分；固定边界 metric 时若无 Gibbons--York--Hawking 型或等价 ledger，stationary condition 不闭合。
+
+\begin{definition}[作用量泛函证书]\label{def:typed-address-biaxial-completion-action-functional-cert}
+称 \(\mathsf{ActionFunctionalCert}\) 为作用量泛函证书，若它包含 \(S[\Phi;g]\)、\(S_{\rm grav}[g]\)、\(S_{\rm matter}[\Phi;g]\)、locality ledger、covariance ledger、boundary-term ledger、variation-domain ledger、regularity ledger 与 round hash。验证器检查 \(\delta S\) 在提交的 test variation 类中存在。若声称 local action，则检查 action 只依赖有限 jet 或已提交非局部 kernel ledger。boundary variation 未抵消时输出 \(\mathsf{BoundaryVariationFail}\)。作用量无法定义时输出 \(\mathsf{ActionFunctionalNull}\)。
+\end{definition}
+
+\paragraph{规则化路径积分与生成泛函。}
+Lorentzian 生成泛函以规则化极限定义：
+\[
+Z[J;g]
+=
+\lim_{N\to\infty}Z_N[J;g],
+\]
+其中
+\[
+Z_N[J;g]
+=
+\int_{\mathsf{Hist}_{g,N}}
+\exp\left[
+\frac{i}{\hbar}
+\bigl(S_N[\Phi;g]+\langle J,\Phi\rangle\bigr)
+\right]\,d\mu_{g,N}(\Phi).
+\]
+Euclidean 口径则用
+\[
+Z_E[J;g_E]
+=
+\int
+\exp\left[
+-\frac{1}{\hbar}
+\bigl(S_E[\Phi;g_E]-\langle J,\Phi\rangle\bigr)
+\right]\,d\mu_{g_E}(\Phi).
+\]
+cutoff 可以是 lattice、spectral、heat-kernel、dyadic、mode 或 finite cylinder cutoff。
+
+\begin{definition}[规则化路径积分证书]\label{def:typed-address-biaxial-completion-regularized-path-integral-cert}
+称 \(\mathsf{RegularizedPathIntegralCert}\) 为规则化路径积分证书，若它包含 \(\{Z_N[J;g]\}_N\)、cutoff-scheme ledger、measure-or-oscillatory-functional ledger、refinement-compatibility ledger、limit-topology ledger、counterterm ledger 与 round hash。验证器检查极限口径属于 distributional、Schwinger functional、formal asymptotic、Borel-summed、Euclidean measure 或 finite-cutoff mode。只写 \(\int\mathcal D\Phi\) 而无规则化时输出 \(\mathsf{PathIntegralMeasureNull}\)。cutoff 极限依赖 scheme 且无 renormalization flow 时输出 \(\mathsf{CutoffLimitFail}\)。
+\end{definition}
+
+connected generating functional 定义为
+\[
+\boxed{
+W[J;g]:=-i\hbar\log Z[J;g].
+}
+\]
+Euclidean convention 可写成 \(W_E=-\hbar\log Z_E\)。一阶导数给出 one-point function，
+\[
+\Phi_J(x)=\frac{\delta W[J;g]}{\delta J(x)},
+\]
+二阶导数给出 connected two-point function。所有导数均以 test-function pairing 或 distribution sense 解释。
+
+\begin{definition}[生成泛函证书]\label{def:typed-address-biaxial-completion-generating-functional-cert}
+称 \(\mathsf{GeneratingFunctionalCert}\) 为生成泛函证书，若它包含 \(Z[J;g]\)、\(W[J;g]\)、source-space ledger、connected-log ledger、functional-derivative ledger、correlation-function ledger 与 round hash。验证器检查 \(\delta W/\delta J\) 与 \(\delta^2W/\delta J\delta J\) 存在，并与态正则性和二点函数 ledger 相容。若 \(Z=0\) 导致 \(\log Z\) branch ambiguity，输出 \(\mathsf{GeneratingLogBranchNull}\)。connected functional 不存在时输出 \(\mathsf{GeneratingFunctionalNull}\)。
+\end{definition}
+
+\paragraph{Legendre 变换与有效作用。}
+定义 classical field
+\[
+\Phi_c=\frac{\delta W[J]}{\delta J}.
+\]
+若 \(J\mapsto\Phi_c\) 可局部反解，则
+\[
+\boxed{
+\Gamma[\Phi_c;g]
+=
+W[J;g]-\langle J,\Phi_c\rangle
+}
+\]
+其中 \(J=J[\Phi_c]\)，并且
+\[
+\frac{\delta\Gamma}{\delta\Phi_c}=-J.
+\]
+无源条件 \(J=0\) 等价于 \(\delta\Gamma/\delta\Phi_c=0\)。若 Legendre map 非凸、多值或跨越 branch，则必须提交 branch 或 convex-envelope ledger。
+
+\begin{definition}[Legendre 变换证书]\label{def:typed-address-biaxial-completion-legendre-transform-cert}
+称 \(\mathsf{LegendreTransformCert}\) 为 Legendre 变换证书，若它包含 \(W[J;g]\)、\(\Phi_c[J]\)、\(\Gamma[\Phi_c;g]\)、invertibility ledger、convexity-or-branch ledger、functional-derivative ledger、source-elimination ledger 与 round hash。验证器检查 \(\delta\Gamma/\delta\Phi_c=-J\)。若 \(J\mapsto\Phi_c\) 不可逆但声称单值 \(\Gamma\)，输出 \(\mathsf{LegendreInvertibilityFail}\)。多鞍点 branch 未分类时输出 \(\mathsf{LegendreBranchNull}\)。
+\end{definition}
+
+\begin{definition}[有效作用证书]\label{def:typed-address-biaxial-completion-effective-action-cert}
+称 \(\mathsf{EffectiveActionCert}\) 为有效作用证书，若它包含 \(\Gamma_{\rm eff}[g,\Phi]\)、\(S_{\rm grav}^{\rm ren}[g]\)、\(W_{\rm q}^{\rm ren}[g]\) 或 \(\Gamma_{\rm q}^{\rm ren}[g,\Phi]\)、metric variation ledger、field variation ledger、boundary ledger、counterterm ledger 与 round hash。验证器检查
+\[
+\frac{\delta\Gamma_{\rm eff}}{\delta g^{\mu\nu}},
+\qquad
+\frac{\delta\Gamma_{\rm eff}}{\delta\Phi}
+\]
+存在，并检查无源 stationary condition 与提交方程 residual 匹配。仅给出形式符号而无 variation ledger 时输出 \(\mathsf{EffectiveActionNull}\)。metric variation 与应力张量定义不一致时输出 \(\mathsf{MetricVariationStressFail}\)。
+\end{definition}
+
+\paragraph{stationary phase 与经典极限。}
+有限维 oscillatory integral
+\[
+I(\hbar)=\int_{\mathbb R^n}e^{\frac{i}{\hbar}S(x)}a(x)\,dx
+\]
+在非退化临界点 \(x_\ast\) 附近满足
+\[
+I(\hbar)
+\sim
+e^{\frac{i}{\hbar}S(x_\ast)}
+e^{i\pi\sigma/4}
+(2\pi\hbar)^{n/2}
+\frac{a(x_\ast)}{|\det S''(x_\ast)|^{1/2}}
+\bigl(1+O(\hbar)\bigr).
+\]
+所以 classical equation 来自 \(\delta S=0\)。场论中 Hessian 变为 fluctuation operator
+\[
+\mathcal O
+=
+\frac{\delta^2S}{\delta\Phi\,\delta\Phi}\bigg|_{\Phi_\ast}.
+\]
+
+\begin{definition}[stationary phase 证书]\label{def:typed-address-biaxial-completion-stationary-phase-cert}
+称 \(\mathsf{StationaryPhaseCert}\) 为 stationary phase 证书，若它包含 \(S,\Phi_\ast,g_\ast\)、critical-point ledger、Hessian ledger、nondegeneracy-or-zero-mode ledger、asymptotic-expansion ledger、remainder-bound ledger 与 round hash。验证器检查 \(\delta S[\Phi_\ast,g_\ast]=0\)。若 Hessian 有 zero modes，必须由 gauge symmetry 或 moduli ledger 解释。critical point 不满足 field equation 时输出 \(\mathsf{StationaryResidualFail}\)。Hessian degeneracy 未处理时输出 \(\mathsf{HessianDegeneracyNull}\)。无 remainder control 时只输出 \(\mathsf{FormalStationaryPhasePass}\)。
+\end{definition}
+
+\begin{definition}[经典极限证书]\label{def:typed-address-biaxial-completion-classical-limit-cert}
+称 \(\mathsf{ClassicalLimitCert}\) 为经典极限证书，若它包含 \(\hbar\to0\)、\(\Phi_\ast,g_\ast\)、stationary phase 证书、observable-convergence ledger、loop-suppression ledger、caustic-or-Stokes ledger 与 round hash。验证器检查 stationary histories dominate、非临界路径被相位振荡抑制、loop corrections 相对主项受控、observable expectation 收敛到 classical observable。多个鞍点同阶且干涉未处理时输出 \(\mathsf{MultiSaddleInterferenceNull}\)。
+\end{definition}
+
+\paragraph{one-loop determinant 与规范固定。}
+在 saddle 附近取 \(\Phi=\Phi_\ast+\sqrt{\hbar}\eta\)，得到
+\[
+\Gamma_{\rm eff}
+=
+S[\Phi_\ast]
++
+\frac{i\hbar}{2}\log\det{}'\mathcal O
++
+O(\hbar^2)
+\]
+在 Lorentzian convention 下成立；Euclidean convention 通常为
+\[
+\Gamma_E
+=
+S_E[\Phi_\ast]
++
+\frac{\hbar}{2}\log\det{}'\mathcal O_E
++
+O(\hbar^2).
+\]
+prime 表示 zero modes、gauge modes 或 constrained modes 已处理。
+
+\begin{definition}[one-loop determinant 证书]\label{def:typed-address-biaxial-completion-one-loop-determinant-cert}
+称 \(\mathsf{OneLoopDeterminantCert}\) 为 one-loop determinant 证书，若它包含 \(\mathcal O,\det{}'\mathcal O\)、spectrum ledger、zero-mode ledger、regularization ledger、phase-or-eta-invariant ledger、counterterm ledger 与 round hash。验证器检查 \(\log\det{}'\mathcal O\) 由 zeta、heat-kernel、Pauli--Villars、dimensional regularization 或 finite cutoff ledger 定义。determinant divergent 且无 counterterm 时输出 \(\mathsf{OneLoopDeterminantNull}\)。negative modes 导致 saddle instability 且无 contour deformation 时输出 \(\mathsf{SaddleInstabilityFail}\)。
+\end{definition}
+
+若存在 gauge redundancy \(\Phi\sim\Phi^g\)，必须除去 gauge volume。Faddeev--Popov 与 BRST ledger 记录
+\[
+\Delta_{\rm FP}[\Phi]
+=
+\det\left(\frac{\delta F(\Phi^\alpha)}{\delta\alpha}\right),
+\]
+ghost action 与 nilpotent BRST differential \(s\)。
+
+\begin{definition}[gauge fixing 与 BRST 证书]\label{def:typed-address-biaxial-completion-gauge-fixing-brst-cert}
+称 \(\mathsf{GaugeFixingBRSTCert}\) 为 gauge fixing 与 BRST 证书，若它包含 gauge group、orbit space、gauge condition \(F\)、Faddeev--Popov determinant、ghost-action ledger、BRST-differential ledger、zero-mode ledger、可选 Gribov-region ledger 与 round hash。验证器检查 \(s^2=0\)、gauge-fixed action BRST-invariant，以及 ghost determinant 匹配 Faddeev--Popov determinant。gauge volume 未除去时输出 \(\mathsf{GaugeOvercountingFail}\)。diffeomorphism anomaly 破坏 Ward identity 时输出 \(\mathsf{DiffeomorphismAnomalyFail}\)。
+\end{definition}
+
+\paragraph{Euclidean continuation 与 in-in 口径。}
+Euclidean route 使用 \(t\mapsto-i\tau\)，形式上 \(e^{iS/\hbar}\mapsto e^{-S_E/\hbar}\)。但 Wick rotation 需要 time function、analytic continuation、pole prescription、contour deformation、reflection positivity 与 Lorentzian recovery ledger。
+
+\begin{definition}[Euclidean continuation 证书]\label{def:typed-address-biaxial-completion-euclidean-continuation-cert}
+称 \(\mathsf{EuclideanContinuationCert}\) 为 Euclidean continuation 证书，若它包含 \(g_L,g_E,S_L,S_E\)、analytic-continuation ledger、contour ledger、reflection-positivity ledger、可选 Osterwalder reconstruction ledger 与 round hash。Wick rotation 不存在时输出 \(\mathsf{WickRotationNull}\)。Euclidean measure positive 但 reflection positivity 失败时输出 \(\mathsf{ReflectionPositivityFail}\)。
+\end{definition}
+
+半经典 backreaction 需要 expectation value in a state，通常应使用 Schwinger--Keldysh / closed-time-path 泛函：
+\[
+Z_{\rm SK}[J_+,J_-;g_+,g_-]
+=
+\operatorname{Tr}
+\bigl(
+U_{J_+,g_+}\rho_0U_{J_-,g_-}^{\dagger}
+\bigr).
+\]
+physical limit 为 \(J_+=J_-\)、\(g_+=g_-=g\)。
+
+\begin{definition}[in-in 因果有效作用证书]\label{def:typed-address-biaxial-completion-in-in-causal-effective-action-cert}
+称 \(\mathsf{InInCausalEffectiveActionCert}\) 为 in-in 因果有效作用证书，若它包含 \(Z_{\rm SK}\)、\(\Gamma_{\rm CTP}\)、\(\rho_0\)、forward-backward contour ledger、causality ledger、reality ledger、physical-limit ledger 与 round hash。验证器检查 \(Z_{\rm SK}[J,J]=1\)、physical limit 中 expectation values 为实、方程为因果，并且 stress tensor 匹配半经典源项。使用 in-out action 直接处理 expectation-value backreaction 且未说明状态解释时输出 \(\mathsf{InOutBackreactionNull}\)。
+\end{definition}
+
+\paragraph{metric variation 与半经典方程。}
+effective stress 定义为
+\[
+\boxed{
+T^{\rm q}_{\mu\nu}[g]
+=
+-\frac{2}{\sqrt{|g|}}
+\frac{\delta W_{\rm q}^{\rm ren}[g]}{\delta g^{\mu\nu}}.
+}
+\]
+若 \(W_{\rm q}^{\rm ren}\) 在 admissible diffeomorphism 下不变，则 infinitesimal variation
+\[
+\delta_\xi g^{\mu\nu}
+=
+-\nabla^\mu\xi^\nu-\nabla^\nu\xi^\mu
+\]
+给出 Ward identity
+\[
+\nabla^\mu T^{\rm q}_{\mu\nu}=0
+\]
+除非 anomaly ledger 记录非零项。
+
+\begin{definition}[metric variation--stress 证书]\label{def:typed-address-biaxial-completion-metric-variation-stress-cert}
+称 \(\mathsf{MetricVariationStressCert}\) 为 metric variation--stress 证书，若它包含 \(W_{\rm q}^{\rm ren}[g]\)、\(T^{\rm q}_{\mu\nu}\)、variation-convention ledger、Ward-identity ledger、renormalized-stress-match ledger、conservation ledger 与 round hash。验证器检查
+\[
+T^{\rm q}_{\mu\nu}
+=
+-\frac{2}{\sqrt{|g|}}
+\frac{\delta W_{\rm q}^{\rm ren}}{\delta g^{\mu\nu}},
+\]
+并与 operator-renormalized stress 一致。二者不一致时输出 \(\mathsf{StressEffectiveMismatchFail}\)。
+\end{definition}
+
+对
+\[
+\Gamma_{\rm eff}[g,\Psi]
+=
+S_{\rm EH}^{\rm ren}[g]
++
+S_{\rm cl}^{\rm ren}[g,\Psi]
++
+W_{\rm q}^{\rm ren}[g],
+\]
+stationary condition \(\delta_g\Gamma_{\rm eff}=0\) 展开为
+\[
+\frac{1}{2\kappa}
+(G_{\mu\nu}+\Lambda g_{\mu\nu})
+-
+\frac12T^{\rm cl}_{\mu\nu}
+-
+\frac12T^{\rm q}_{\mu\nu}
+=0,
+\]
+即
+\[
+\boxed{
+G_{\mu\nu}+\Lambda g_{\mu\nu}
+=
+\kappa\bigl(T^{\rm cl}_{\mu\nu}+T^{\rm q}_{\mu\nu}\bigr).
+}
+\]
+代入 \(T^{\rm q}_{\mu\nu}=\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\) 即得半经典方程。
+
+\begin{definition}[重整化有效作用证书]\label{def:typed-address-biaxial-completion-renormalized-effective-action-cert}
+称 \(\mathsf{RenormalizedEffectiveActionCert}\) 为重整化有效作用证书，若它包含 bare 与 renormalized effective action、divergence ledger、counterterm ledger、running-coupling ledger、gravity-class ledger、finite-scheme ledger 与 round hash。验证器检查 divergences 被 local counterterms 吸收，finite scheme changes 只改变允许项，并正确标记 gravity class：
+\[
+\mathsf{EinsteinMinimal},\quad
+\mathsf{HigherCurvature},\quad
+\mathsf{NonlocalEffective},\quad
+\mathsf{QuantumGravityExtension}.
+\]
+需要 higher-curvature 却标记为 minimal Einstein 时输出 \(\mathsf{GravityClassMislabelFail}\)。
+\end{definition}
+
+\paragraph{随机有效作用与多鞍点。}
+CTP effective action 的 imaginary part 可编码噪声核：
+\[
+{\rm Im}\,\Gamma_{\rm CTP}
+\sim
+\frac12
+\int h_{\mu\nu}(x)N^{\mu\nu\rho\sigma}(x,y)h_{\rho\sigma}(y)\,dx\,dy.
+\]
+Hubbard--Stratonovich 变换引入随机源 \(\xi_{\mu\nu}\)，满足
+\[
+\mathbb E[\xi_{\mu\nu}]=0,\qquad
+\mathbb E[\xi_{\mu\nu}(x)\xi_{\rho\sigma}(y)]
+=
+N_{\mu\nu\rho\sigma}(x,y).
+\]
+
+\begin{definition}[随机有效作用证书]\label{def:typed-address-biaxial-completion-stochastic-effective-action-cert}
+称 \(\mathsf{StochasticEffectiveActionCert}\) 为随机有效作用证书，若它包含 \(\Gamma_{\rm CTP}\)、noise kernel、随机源、imaginary-part ledger、noise-kernel ledger、Hubbard--Stratonovich ledger、Einstein--Langevin ledger 与 round hash。验证器检查 \(N_{\mu\nu\rho\sigma}\) 作为 covariance kernel 正半定。imaginary part 不正时输出 \(\mathsf{NoiseKernelPositivityFail}\)。随机源不守恒时输出 \(\mathsf{StochasticConservationFail}\)。
+\end{definition}
+
+若存在多个 saddle，
+\[
+Z\sim\sum_a C_a e^{\frac{i}{\hbar}S[\Phi_\ast^{(a)}]},
+\]
+则不同 saddle 的相位差会产生干涉。跨越 Stokes wall 时 \(C_a\) 可能跳变；除非有 dominance ledger，不能任意只保留一个 saddle。
+
+\begin{definition}[saddle--Stokes 证书]\label{def:typed-address-biaxial-completion-saddle-stokes-cert}
+称 \(\mathsf{SaddleStokesCert}\) 为 saddle--Stokes 证书，若它包含 saddle 族、action 值、系数、saddle-enumeration ledger、steepest-descent-contour ledger、Stokes-wall ledger、dominance ledger、interference ledger 与 round hash。多个 saddle 同阶却只保留一个时输出 \(\mathsf{SaddleSelectionFail}\)。Stokes jump 未追踪时输出 \(\mathsf{UncontrolledStokesJumpFail}\)。
+\end{definition}
+
+\paragraph{operator 与路径积分应力匹配。}
+半经典源项已有 operator-renormalized stress；有效作用给出 variation stress。二者必须由同一 state、同一 scheme、同一边界条件、同一 variation convention 与同一 anomaly ledger 对齐。
+
+\begin{definition}[operator--path-integral 应力匹配证书]\label{def:typed-address-biaxial-completion-operator-path-integral-stress-match-cert}
+称 \(\mathsf{OperatorPathIntegralStressMatchCert}\) 为 operator--path-integral 应力匹配证书，若它包含 \(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}^{\rm op}\)、\(T_{\mu\nu}^{\rm q,eff}\)、state-match ledger、scheme-match ledger、boundary-match ledger、variation-convention ledger 与 round hash。验证器检查二者相等，或只差允许的 local counterterm variation。scheme 不同但未转换时输出 \(\mathsf{StressSchemeMismatchNull}\)。真正不相容时输出 \(\mathsf{OperatorEffectiveStressMismatchFail}\)。
+\end{definition}
+
+\paragraph{有效作用闭包证书。}
+\begin{definition}[有效作用闭包证书]\label{def:typed-address-biaxial-completion-effective-action-closure-cert}
+称 \(\mathsf{EffectiveActionClosureCert}\) 为有效作用闭包证书，若它包含量子--时空接口证书、历史空间证书、作用量泛函证书、规则化路径积分证书、生成泛函证书、Legendre 变换证书、有效作用证书、stationary phase 证书、可选 one-loop determinant 证书、可选 gauge fixing 与 BRST 证书、可选 Euclidean continuation 证书、backreaction 场景下的 in-in 因果有效作用证书、metric variation--stress 证书、重整化有效作用证书、可选随机有效作用证书、可选 saddle--Stokes 证书、operator--path-integral 应力匹配证书、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifyEffectiveActionClosure}\) 依次检查量子--时空接口、历史空间、作用量、边界变分、cutoff path integral、生成泛函、Legendre 变换、总有效作用、metric variation、operator/effective stress matching、stationary residual、counterterm 分类、可选 gauge/Euclidean/in-in/stochastic/multi-saddle ledger。输出可为
+\[
+\mathsf{ClassicalStationaryActionPass},\quad
+\mathsf{MinimalEffectiveSemiclassicalPass},\quad
+\mathsf{HigherCurvatureEffectivePass},\quad
+\mathsf{StochasticEffectivePass},
+\]
+\[
+\mathsf{FormalEffectiveActionPass},\quad
+\mathsf{FixedBackgroundGeneratingFunctionalPass},\quad
+\mathsf{NULL},\quad
+\mathsf{FAIL}.
+\]
+
+NULL 类型包括
+\[
+\mathsf{HistorySpaceNull},\quad
+\mathsf{ActionFunctionalNull},\quad
+\mathsf{PathIntegralMeasureNull},\quad
+\mathsf{GeneratingFunctionalNull},\quad
+\mathsf{GeneratingLogBranchNull},
+\]
+\[
+\mathsf{LegendreBranchNull},\quad
+\mathsf{EffectiveActionNull},\quad
+\mathsf{OneLoopDeterminantNull},\quad
+\mathsf{WickRotationNull},\quad
+\mathsf{InOutBackreactionNull},\quad
+\mathsf{StressSchemeMismatchNull}.
+\]
+FAIL 类型包括
+\[
+\mathsf{HistoryCausalSupportFail},\quad
+\mathsf{BoundaryVariationFail},\quad
+\mathsf{CutoffLimitFail},\quad
+\mathsf{LegendreInvertibilityFail},\quad
+\mathsf{MetricVariationStressFail},
+\]
+\[
+\mathsf{GaugeOvercountingFail},\quad
+\mathsf{DiffeomorphismAnomalyFail},\quad
+\mathsf{ReflectionPositivityFail},\quad
+\mathsf{StationaryResidualFail},\quad
+\mathsf{SaddleInstabilityFail},
+\]
+\[
+\mathsf{SaddleSelectionFail},\quad
+\mathsf{UncontrolledStokesJumpFail},\quad
+\mathsf{GravityClassMislabelFail},\quad
+\mathsf{OperatorEffectiveStressMismatchFail}.
+\]
+
+\begin{theorem}[有效作用半经典闭包的可靠性]\label{thm:typed-address-biaxial-completion-effective-action-semiclassical-closure-soundness}
+若
+\[
+\mathsf{VerifyEffectiveActionClosure}
+(\mathsf{EffectiveActionClosureCert})
+=
+\mathsf{MinimalEffectiveSemiclassicalPass},
+\]
+则在 \(M_{\mathrm{qadm}}\subseteq M_{\mathrm{adm}}\) 上存在重整化有效作用
+\[
+\Gamma_{\rm eff}[g,\Psi]
+=
+S_{\rm EH}^{\rm ren}[g]
++
+S_{\rm cl}^{\rm ren}[g,\Psi]
++
+W_{\rm q}^{\rm ren}[g],
+\]
+使得 \(W_{\rm q}^{\rm ren}\) 由规则化路径积分或等价 generating functional 构造，metric variation 与 boundary ledger 合法，
+\[
+T_{\mu\nu}^{\rm q}
+=
+-\frac{2}{\sqrt{|g|}}
+\frac{\delta W_{\rm q}^{\rm ren}}{\delta g^{\mu\nu}}
+=
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren},
+\]
+并且 stationary condition
+\[
+\frac{\delta\Gamma_{\rm eff}}{\delta g^{\mu\nu}}=0
+\]
+等价于
+\[
+\boxed{
+G_{\mu\nu}
++
+\Lambda g_{\mu\nu}
+=
+\kappa
+\Bigl(
+T_{\mu\nu}^{\rm cl}
++
+\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+\Bigr).
+}
+\]
+若输出为 \(\mathsf{HigherCurvatureEffectivePass}\)，则对应高阶曲率 effective equation 成立。若输出为 \(\mathsf{StochasticEffectivePass}\)，则 Einstein--Langevin 型 stochastic effective equation 成立。
+\end{theorem}
+\begin{proof}
+历史空间证书与作用量证书给出可变分的 history/action pair。规则化路径积分证书与生成泛函证书给出 \(Z\) 与 \(W\)。重整化有效作用证书保证 divergences 已由 counterterms 吸收，并正确标记 gravity class。metric variation--stress 证书给出 \(T_{\mu\nu}^{\rm q}=-(2/\sqrt{|g|})\delta W_{\rm q}^{\rm ren}/\delta g^{\mu\nu}\)。operator--path-integral 应力匹配证书把该对象识别为 \(\langle\widehat T_{\mu\nu}\rangle_{\rm ren}\)。Einstein--Hilbert 部分的 boundary ledger 给出
+\[
+\delta S_{\rm EH}^{\rm ren}
+=
+\frac{1}{2\kappa}
+\int\sqrt{|g|}
+(G_{\mu\nu}+\Lambda g_{\mu\nu})
+\delta g^{\mu\nu},
+\]
+经典物质部分给出 \(T_{\mu\nu}^{\rm cl}=-(2/\sqrt{|g|})\delta S_{\rm cl}/\delta g^{\mu\nu}\)，量子部分给出 \(T_{\mu\nu}^{\rm q}\)。因此 \(\delta_g\Gamma_{\rm eff}=0\) 等价于
+\[
+\frac{1}{2\kappa}
+(G_{\mu\nu}+\Lambda g_{\mu\nu})
+-
+\frac12T_{\mu\nu}^{\rm cl}
+-
+\frac12T_{\mu\nu}^{\rm q}
+=0.
+\]
+整理并代入 stress matching，即得 minimal semiclassical Einstein equation。高阶曲率与随机版本由相应 residual ledger 给出。证毕。
+\end{proof}
+
+该接口的边界是：\(\int\mathcal D\Phi\) 必须由规则化或形式渐近证书支撑；in-out action 不自动给出 expectation-value backreaction；one-loop determinant 必须处理 zero modes、gauge modes、regularization 与 phase；Euclidean measure 不自动重构 unitary Lorentzian QFT；不可避免的 higher-curvature counterterms 会改变 gravitational class；stationary phase 只给出 classical 或 semiclassical approximation；\(\int\mathcal Dg\) 属于 quantum gravity extension，而非 minimal semiclassical closure。

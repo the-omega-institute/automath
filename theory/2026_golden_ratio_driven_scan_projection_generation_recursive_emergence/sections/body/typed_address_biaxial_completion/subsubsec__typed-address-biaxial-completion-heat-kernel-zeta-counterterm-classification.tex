@@ -1,0 +1,459 @@
+\subsubsection{热核、谱 \(\zeta\)、Seeley--DeWitt 系数与 counterterm 自动分类}\label{subsubsec:typed-address-biaxial-completion-heat-kernel-zeta-counterterm-classification}
+有效作用闭包中的 \(\log\det{}'\mathcal O\) 只有在 determinant、zero mode、regularization、counterterm 与 gravity class 都已证书化后，才是可审计对象。Euclidean 口径把 fluctuation operator 改写为 elliptic Laplace-type operator \(\mathcal P\)，并用热核和谱 \(\zeta\) 函数定义 one-loop determinant：
+\[
+\boxed{
+\log\det{}'_\zeta(\mathcal P/\mu^2)
+=
+-\zeta'_{\mathcal P}(0;\mu).
+}
+\]
+短时热核展开
+\[
+\boxed{
+{\rm Tr}\,e^{-s\mathcal P}
+\sim
+(4\pi s)^{-d/2}
+\sum_{k\ge0}s^kA_{2k}(\mathcal P)
+\qquad(s\downarrow0)
+}
+\]
+把 UV divergence 化为有限个 local invariants。该接口的判定目标是区分
+\[
+\mathsf{MinimalEinsteinRenormalizationPass},
+\qquad
+\mathsf{HigherCurvatureRenormalizationPass},
+\qquad
+\mathsf{FormalDeterminantOnlyPass}.
+\]
+
+\paragraph{Laplace-type operator 与符号约定。}
+固定 Euclidean convention：
+\[
+\boxed{
+\mathcal P=-(g^{\mu\nu}\nabla_\mu\nabla_\nu+\mathcal E)
+}
+\]
+作用在 vector bundle \(E\to M_E\) 的截面上。connection curvature 为
+\[
+\Omega_{\mu\nu}:=[\nabla_\mu,\nabla_\nu].
+\]
+若物理 operator 写成 \(\mathcal P_{\rm phys}=-\nabla^2+\mathcal Q\)，则在该 convention 中 \(\mathcal E=-\mathcal Q\)。例如
+\[
+\mathcal P=-\nabla^2+m^2+\xi R
+\]
+对应
+\[
+\mathcal E=-(m^2+\xi R).
+\]
+该符号 ledger 必须固定，否则 \(a_2\) 与 \(a_4\) 的符号不可审计。
+
+\begin{definition}[Laplace-type operator 证书]\label{def:typed-address-biaxial-completion-laplace-type-operator-cert}
+称 \(\mathsf{LaplaceTypeOperatorCert}\) 为 Laplace-type operator 证书，若它包含 \(M_E,g_E,E,\nabla,\mathcal E,\mathcal P\)、principal-symbol ledger、bundle-metric ledger、connection-curvature ledger、sign-convention ledger 与 round hash。验证器检查
+\[
+\sigma_2(\mathcal P)(x,\xi)
+=
+g_E^{\mu\nu}(x)\xi_\mu\xi_\nu\,{\rm Id}_E.
+\]
+若 \(g_E^{\mu\nu}\xi_\mu\xi_\nu>0\) 对 \(\xi\ne0\) 成立，则 principal symbol elliptic。主符号非 elliptic 时输出 \(\mathsf{EllipticityFail}\)。operator 不是 Laplace type 却使用标准 Seeley--DeWitt 系数时输出 \(\mathsf{OperatorNotLaplaceTypeNull}\)。
+\end{definition}
+
+\paragraph{热核与短时展开。}
+定义
+\[
+K(s;x,y)=e^{-s\mathcal P}(x,y),\qquad s>0.
+\]
+若 \(M_E\) compact without boundary，且 \(\mathcal P\) self-adjoint、elliptic、bounded below，则
+\[
+{\rm Tr}\,e^{-s\mathcal P}
+=
+\int_M{\rm tr}_E K(s;x,x)\,d{\rm vol}_g
+\]
+良定，并有短时渐近展开。局部系数记为 \(a_{2k}(x,\mathcal P)\)，全局系数为
+\[
+A_{2k}(\mathcal P)
+=
+\int_M{\rm tr}_E a_{2k}(x,\mathcal P)\,d{\rm vol}_g.
+\]
+若存在边界，展开包含半整数项
+\[
+{\rm Tr}\,e^{-s\mathcal P}
+\sim
+(4\pi s)^{-d/2}
+\sum_{j\ge0}s^{j/2}A_j(\mathcal P,\mathcal B).
+\]
+
+\begin{definition}[热核存在证书]\label{def:typed-address-biaxial-completion-heat-kernel-existence-cert}
+称 \(\mathsf{HeatKernelExistenceCert}\) 为热核存在证书，若它包含 \(\mathcal P,K(s;x,y),{\rm Tr}\,e^{-s\mathcal P}\)、ellipticity/self-adjointness cert、lower-bound ledger、trace-class ledger、boundary-condition ledger、zero-mode ledger 与 round hash。验证器检查 \(e^{-s\mathcal P}\) 是否 trace class，或是否在 local trace density sense 下可定义。连续谱情形必须提交 spectral density 或 relative determinant ledger。heat trace 不存在时输出 \(\mathsf{HeatKernelTraceNull}\)。self-adjoint realization 未说明时输出 \(\mathsf{SelfAdjointnessNull}\)。
+\end{definition}
+
+在 convention \(\mathcal P=-(\nabla^2+\mathcal E)\) 下，无边界前三个局部系数为
+\[
+a_0={\rm Id}_E,
+\]
+\[
+a_2=\mathcal E+\frac16R\,{\rm Id}_E,
+\]
+以及
+\[
+\begin{aligned}
+a_4={}&
+\frac1{360}
+\left(
+5R^2
+-2R_{\mu\nu}R^{\mu\nu}
++2R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma}
++12\Box R
+\right){\rm Id}_E\\
+&+
+\frac16R\mathcal E
++\frac12\mathcal E^2
++\frac1{12}\Omega_{\mu\nu}\Omega^{\mu\nu}
++\frac16\Box\mathcal E.
+\end{aligned}
+\]
+total derivative terms 在 compact boundaryless 情形可转入 scheme ledger；有边界时必须进入 boundary ledger。
+
+\begin{definition}[Seeley--DeWitt 系数证书]\label{def:typed-address-biaxial-completion-seeley-dewitt-coefficient-cert}
+称 \(\mathsf{SeeleyDeWittCoefficientCert}\) 为 Seeley--DeWitt 系数证书，若它包含 \(\{a_{2k}\}_{k\le K}\)、\(\{A_{2k}\}_{k\le K}\)、convention ledger、invariant-basis ledger、total-derivative ledger、boundary-coefficient ledger、symbol-computation ledger 与 round hash。验证器检查 \(a_{2k}\) 的 mass dimension 为 \(2k\)，所有项为 local covariant invariants，bundle trace 已完成，total derivative 的处理与边界账本一致，并且 convention 与 \(\mathcal P=-(\nabla^2+\mathcal E)\) 一致。coefficient convention 不兼容时输出 \(\mathsf{CoefficientConventionMismatchFail}\)。无系数账本时输出 \(\mathsf{SeeleyDeWittCoefficientNull}\)。
+\end{definition}
+
+\paragraph{谱 \(\zeta\) determinant。}
+若 \(\mathcal P\) positive self-adjoint，并已去除 zero modes，则
+\[
+\zeta_{\mathcal P}(s)={\rm Tr}'\,\mathcal P^{-s}.
+\]
+引入 scale \(\mu\)：
+\[
+\zeta_{\mathcal P}(s;\mu)
+=
+{\rm Tr}'\,(\mathcal P/\mu^2)^{-s}
+=
+\mu^{2s}\zeta_{\mathcal P}(s).
+\]
+Mellin 表示为
+\[
+\zeta_{\mathcal P}(s)
+=
+\frac1{\Gamma(s)}
+\int_0^\infty t^{s-1}{\rm Tr}'\,e^{-t\mathcal P}\,dt.
+\]
+determinant 定义为
+\[
+\boxed{
+\log\det{}'_\zeta(\mathcal P/\mu^2)
+=
+-\zeta'_{\mathcal P}(0;\mu).
+}
+\]
+由于
+\[
+\zeta'_{\mathcal P}(0;\mu)
+=
+2\log\mu\,\zeta_{\mathcal P}(0)+\zeta'_{\mathcal P}(0),
+\]
+scale dependence 为
+\[
+\mu\frac{d}{d\mu}
+\log\det{}'_\zeta(\mathcal P/\mu^2)
+=
+-2\zeta_{\mathcal P}(0).
+\]
+
+\begin{definition}[\(\zeta\)-determinant 证书]\label{def:typed-address-biaxial-completion-zeta-determinant-cert}
+称 \(\mathsf{ZetaDeterminantCert}\) 为 \(\zeta\)-determinant 证书，若它包含 \(\zeta_{\mathcal P}(s)\)、\(\zeta_{\mathcal P}(s;\mu)\)、\(\log\det{}'_\zeta(\mathcal P/\mu^2)\)、Mellin-transform ledger、analytic-continuation ledger、zero-mode-removal ledger、scale-dependence ledger 与 round hash。验证器检查 \(\zeta_{\mathcal P}\) 可 meromorphic continuation 到 \(s=0\)，且 determinant 定义良好。若 \(s=0\) 有不可去极点，输出 \(\mathsf{ZetaAnalyticContinuationFail}\)。zero modes 未去除时输出 \(\mathsf{ZeroModeDeterminantNull}\)。
+\end{definition}
+
+\paragraph{proper-time divergence。}
+Euclidean one-loop action 可写为
+\[
+W_{E,\epsilon}^{(1)}
+=
+-\frac{\hbar}{2}
+\int_\epsilon^\infty
+\frac{ds}{s}
+{\rm Tr}'\,e^{-s\mathcal P},
+\]
+整体符号由 determinant convention ledger 固定。代入热核展开，UV divergence 由 \(s\downarrow0\) 给出。四维无边界情形为
+\[
+\boxed{
+W_{\rm div}^{(1)}
+=
+-\frac{\hbar}{2}(4\pi)^{-2}
+\left[
+\frac{A_0}{2\epsilon^2}
++
+\frac{A_2}{\epsilon}
++
+A_4\log\frac1{\epsilon\mu^2}
+\right].
+}
+\]
+
+\begin{definition}[proper-time divergence 证书]\label{def:typed-address-biaxial-completion-proper-time-divergence-cert}
+称 \(\mathsf{ProperTimeDivergenceCert}\) 为 proper-time divergence 证书，若它包含 \(W_\epsilon^{(1)}\)、\(W_{\rm div}^{(1)}\)、\(\{A_{2k}\}_{2k\le d}\)、cutoff-convention ledger、log-scale ledger、power-divergence ledger 与 round hash。验证器检查 divergence extraction 与 heat-kernel expansion 匹配。若 \(A_{2k}\) 与 divergence powers 不匹配，输出 \(\mathsf{HeatKernelDivergenceMismatchFail}\)。只有发散符号而无 local invariant decomposition 时输出 \(\mathsf{DivergenceClassificationNull}\)。
+\end{definition}
+
+\paragraph{四维 counterterm 分类。}
+在 \(d=4\) 中，\(A_0,A_2,A_4\) 分别控制不同 counterterm。\(A_0\) 对应
+\[
+\int\sqrt g
+\]
+即 cosmological constant / vacuum energy。\(A_2\) 包含
+\[
+\int\sqrt g\,R
+\]
+以及 mass-dependent vacuum terms，对应 \(\Lambda\) 与 \(\kappa^{-1}\) 的 renormalization。\(A_4\) 包含
+\[
+R^2,\quad
+R_{\mu\nu}R^{\mu\nu},\quad
+R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma},\quad
+\Omega_{\mu\nu}\Omega^{\mu\nu},
+\quad
+\mathcal E^2,
+\quad
+R\mathcal E.
+\]
+因此 generic matter one-loop correction 在四维曲背景上通常要求 curvature-squared counterterms。
+
+\begin{definition}[counterterm 分类证书]\label{def:typed-address-biaxial-completion-counterterm-classification-cert}
+称 \(\mathsf{CountertermClassificationCert}\) 为 counterterm 分类证书，若它包含 \(W_{\rm div}^{(1)}\)、counterterm invariant basis \(\mathcal I_{\rm ct}\)、invariant-basis ledger、Gauss--Bonnet ledger、boundary-total-derivative ledger、matter-coupling ledger、gravity-class ledger 与 round hash。验证器检查
+\[
+W_{\rm div}^{(1)}+S_{\rm ct}
+\]
+是否 finite。若 \(A_4\) 需要 curvature-squared counterterms 但仍声称 exact minimal Einstein closure，输出 \(\mathsf{GravityClassMislabelFail}\)。divergence 不能由 local invariants 吸收时输出 \(\mathsf{DivergenceUnabsorbedFail}\)。
+\end{definition}
+
+\paragraph{标量场示例与分界规则。}
+对 Euclidean scalar operator
+\[
+\mathcal P=-\nabla^2+m^2+\xi R
+\]
+有
+\[
+\mathcal E=-(m^2+\xi R),
+\qquad
+\Omega_{\mu\nu}=0.
+\]
+于是
+\[
+a_2=
+\left(\frac16-\xi\right)R-m^2.
+\]
+忽略 total derivative 时，
+\[
+\begin{aligned}
+a_4={}&
+\frac12m^4
++m^2\left(\xi-\frac16\right)R
++\frac12\left(\xi-\frac16\right)^2R^2\\
+&+
+\frac1{180}
+\left(
+R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma}
+-
+R_{\mu\nu}R^{\mu\nu}
+\right)
++\left(\frac1{30}-\frac{\xi}{6}\right)\Box R.
+\end{aligned}
+\]
+因此除非有 cancellation、topological reduction、EFT truncation 或 fixed-background-only 声明，否则 \(A_4\) 会迫使 gravitational class 升级。
+
+\begin{definition}[有效引力类证书]\label{def:typed-address-biaxial-completion-effective-gravity-class-cert}
+称 \(\mathsf{EffectiveGravityClassCert}\) 为有效引力类证书，若它包含 \(S_{\rm grav}^{\rm ren}\)、counterterm 分类证书、truncation-order ledger、topological-term ledger、boundary-term ledger、declared gravity class 与 round hash。允许标签为
+\[
+\mathsf{EinsteinMinimal},\quad
+\mathsf{EinsteinPlusTopological},\quad
+\mathsf{HigherCurvatureEFT},\quad
+\mathsf{NonlocalEffectiveGravity},\quad
+\mathsf{FixedBackgroundQFTOnly},\quad
+\mathsf{QuantumGravityExtension}.
+\]
+验证器检查 declared class 与 counterterms 匹配。仅当 high-curvature coefficients 消失、为 topological/boundary terms、处于声明截断阶以外，或仅声明 fixed-background QFT 时，才能保留 minimal label。
+\end{definition}
+
+\paragraph{zero modes、negative modes 与 ghosts。}
+若 \(\mathcal P\psi_i=0\)，determinant 必须改为 \(\det{}'\mathcal P\)，并把 zero modes 解释为 gauge redundancy、moduli、collective coordinates、exact symmetries 或 topological sectors。若 \(\lambda_i<0\)，Euclidean Gaussian 不再正定；需要 contour deformation、phase 或 eta-invariant ledger。
+
+\begin{definition}[zero/negative mode 证书]\label{def:typed-address-biaxial-completion-zero-negative-mode-cert}
+称 \(\mathsf{ZeroModeNegativeModeCert}\) 为 zero/negative mode 证书，若它包含 \(\ker\mathcal P\)、negative eigenvalue ledger、zero-mode basis ledger、collective-coordinate ledger、gauge-mode ledger、negative-mode ledger、contour-deformation ledger 与 round hash。zero modes 未处理时输出 \(\mathsf{ZeroModeDeterminantNull}\)。negative modes 未解释却声称 stable Euclidean saddle 时输出 \(\mathsf{NegativeModeStabilityFail}\)。
+\end{definition}
+
+gauge field one-loop determinant 必须包含 ghost contribution。典型组合为
+\[
+\Gamma^{(1)}
+=
+\frac12{\rm STr}\log\mathcal P.
+\]
+
+\begin{definition}[gauge/ghost 热核证书]\label{def:typed-address-biaxial-completion-gauge-ghost-heat-kernel-cert}
+称 \(\mathsf{GaugeGhostHeatKernelCert}\) 为 gauge/ghost 热核证书，若它包含 physical 与 ghost fluctuation operators、gauge-fixing ledger、BRST ledger、ghost-bundle ledger、heat-kernel supertrace ledger、zero-mode ledger 与 round hash。验证器检查 determinant combination 包含正确 ghost signs 与 degeneracy factors。ghost determinant 遗漏或权重错误时输出 \(\mathsf{GaugeGhostMismatchFail}\)。
+\end{definition}
+
+\paragraph{trace anomaly、finite nonlocal part 与 running。}
+even dimension 中 log divergence coefficient \(A_d\) 控制 scale anomaly。四维 conformal fields 通常满足
+\[
+\langle T^\mu_{\ \mu}\rangle
+=
+\frac1{(4\pi)^2}
+\left(
+c\,C_{\mu\nu\rho\sigma}C^{\mu\nu\rho\sigma}
+-a\,E_4
++b\,\Box R
+\right),
+\]
+其中 \(b\) 受 local \(R^2\) counterterm scheme 影响。trace anomaly 不破坏 diffeomorphism conservation；diffeomorphism anomaly 才会破坏 \(\nabla^\mu T_{\mu\nu}=0\)。
+
+\begin{definition}[trace anomaly 证书]\label{def:typed-address-biaxial-completion-heat-kernel-trace-anomaly-cert}
+称 \(\mathsf{TraceAnomalyCert}\) 为 trace anomaly 证书，若它包含 \(A_d\)、\(\langle T^\mu_{\ \mu}\rangle\)、scale-variation ledger、scheme-dependence ledger、Ward-identity ledger、diffeomorphism-anomaly ledger 与 round hash。anomaly 与 claimed symmetry 冲突时输出 \(\mathsf{AnomalyWardFail}\)。\(A_d\ne0\) 但未记录 trace anomaly 时输出 \(\mathsf{TraceAnomalyLedgerNull}\)。
+\end{definition}
+
+局部热核系数只分类 UV local divergence；finite part 通常含 nonlocal form factors，例如
+\[
+\int\sqrt g\,R\log(\mathcal P/\mu^2)R,
+\qquad
+\int\sqrt g\,C_{\mu\nu\rho\sigma}\log(\mathcal P/\mu^2)C^{\mu\nu\rho\sigma}.
+\]
+
+\begin{definition}[finite nonlocal part 证书]\label{def:typed-address-biaxial-completion-nonlocal-finite-part-cert}
+称 \(\mathsf{NonlocalFinitePartCert}\) 为 finite nonlocal part 证书，若它包含 \(W_{\rm fin}^{(1)}\)、form-factor ledger、IR-regularization ledger、mass-threshold ledger、causal in-in kernel ledger 与 round hash。只给 local counterterms 却声称 full finite effective action 已知时输出 \(\mathsf{NonlocalFinitePartNull}\)。nonlocal variation 用于 backreaction 但未转入 in-in causal kernel 时输出 \(\mathsf{NonlocalCausalityFail}\)。
+\end{definition}
+
+running 由 bare independence 固定。若
+\[
+S_{\rm bare}=\sum_i\lambda_i^{\rm bare}\mathcal I_i,
+\qquad
+\lambda_i^{\rm bare}
+=
+\mu^{\Delta_i}\bigl(\lambda_i(\mu)+\delta\lambda_i\bigr),
+\]
+则
+\[
+\mu\frac{d}{d\mu}S_{\rm bare}=0
+\]
+给出 \(\beta_i=\mu d\lambda_i/d\mu\)。在 \(\zeta\)-regularization 中 scale derivative 与 \(\zeta_{\mathcal P}(0)\) 相连，整体符号由 scale convention ledger 固定。
+
+\begin{definition}[renormalization scale running 证书]\label{def:typed-address-biaxial-completion-renormalization-scale-running-cert}
+称 \(\mathsf{RenormalizationScaleRunningCert}\) 为 scale running 证书，若它包含 \(\{\lambda_i(\mu)\}\)、\(\{\beta_i\}\)、\(A_d\)、\(\zeta_{\mathcal P}(0)\)、scheme ledger、scale-convention ledger、bare-independence ledger 与 round hash。验证器检查
+\[
+\mu\frac{d}{d\mu}
+\bigl(S_{\rm ren}+S_{\rm ct}+W^{(1)}\bigr)=0.
+\]
+running 与 log divergence 或 \(\zeta(0)\) 不一致时输出 \(\mathsf{RunningCouplingMismatchFail}\)。
+\end{definition}
+
+\paragraph{边界与 Lorentzian recovery。}
+有边界时，heat-kernel expansion 包含 extrinsic curvature 与 boundary projector 等 invariants。bulk counterterms 不能吸收 boundary divergence；引力 action 也必须加入 GHY 与高阶曲率边界项。
+
+\begin{definition}[边界热核 counterterm 证书]\label{def:typed-address-biaxial-completion-boundary-heat-kernel-counterterm-cert}
+称 \(\mathsf{BoundaryHeatKernelCountertermCert}\) 为边界热核 counterterm 证书，若它包含 \(\partial M\)、边界条件 \(\mathcal B\)、boundary coefficients、boundary-condition ellipticity cert、extrinsic-curvature ledger、GHY ledger、higher-curvature boundary ledger 与 round hash。边界条件不构成 elliptic boundary value problem 时输出 \(\mathsf{BoundaryEllipticityFail}\)。bulk divergences 已分类但 boundary divergences 未吸收时输出 \(\mathsf{BoundaryDivergenceUnabsorbedFail}\)。
+\end{definition}
+
+热核与 \(\zeta\) determinant 是 Euclidean elliptic calculus。若用于 Lorentzian expectation-value backreaction，必须提交 Wick rotation、\(i\epsilon\) prescription、state selection、in-in causal kernel 与 stress continuation。
+
+\begin{definition}[Lorentzian 热核恢复证书]\label{def:typed-address-biaxial-completion-lorentzian-heat-kernel-recovery-cert}
+称 \(\mathsf{LorentzianHeatKernelRecoveryCert}\) 为 Lorentzian 热核恢复证书，若它包含 \(\mathcal P_E,\mathcal O_L\)、Wick-rotation ledger、pole-prescription ledger、state ledger、in-in causal-kernel ledger、stress-tensor-continuation ledger 与 round hash。Euclidean determinant 被直接用于 Lorentzian backreaction 且无 in-in 结构时输出 \(\mathsf{EuclideanBackreactionNull}\)。
+\end{definition}
+
+\paragraph{热核重整化闭包证书。}
+\begin{definition}[热核重整化闭包证书]\label{def:typed-address-biaxial-completion-heat-kernel-renormalization-closure-cert}
+称 \(\mathsf{HeatKernelRenormalizationClosureCert}\) 为热核重整化闭包证书，若它包含有效作用闭包证书、spectral geometry input cert、Laplace-type operator 证书、ellipticity/self-adjointness cert、boundary ellipticity cert、heat-kernel existence cert、heat-kernel asymptotic cert、Seeley--DeWitt coefficient cert、\(\zeta\)-determinant cert、proper-time divergence cert、counterterm classification cert、effective gravity class cert、scale running cert、zero/negative mode cert、可选 gauge/ghost heat-kernel cert、trace anomaly cert、finite nonlocal part cert、boundary counterterm cert、Lorentzian recovery cert、null-or-fail ledger 与 transcript hash。
+\end{definition}
+
+验证器 \(\mathsf{VerifyHeatKernelRenormalizationClosure}\) 载入 effective-action closure，提取 \(\mathcal P\)，检查 Laplace type、ellipticity、self-adjointness、lower bound、zero/negative modes、ghost factors、heat trace、短时展开、\(A_{2k}\)、proper-time divergence、local counterterm basis、gravity class、\(\zeta\) analytic continuation、scale running、boundary terms 与 Lorentzian recovery。输出可为
+\[
+\mathsf{HeatKernelZetaDeterminantPass},\quad
+\mathsf{SeeleyDeWittCountertermPass},\quad
+\mathsf{MinimalEinsteinRenormalizationPass},\quad
+\mathsf{HigherCurvatureRenormalizationPass},
+\]
+\[
+\mathsf{FixedBackgroundOneLoopPass},\quad
+\mathsf{EuclideanOneLoopPass},\quad
+\mathsf{FormalDeterminantOnlyPass},\quad
+\mathsf{NULL},\quad
+\mathsf{FAIL}.
+\]
+
+NULL 类型包括
+\[
+\mathsf{OperatorNotLaplaceTypeNull},\quad
+\mathsf{HeatKernelTraceNull},\quad
+\mathsf{SeeleyDeWittCoefficientNull},\quad
+\mathsf{ZetaAnalyticContinuationNull},\quad
+\mathsf{ZeroModeDeterminantNull},
+\]
+\[
+\mathsf{BoundaryConditionNull},\quad
+\mathsf{NonlocalFinitePartNull},\quad
+\mathsf{EuclideanBackreactionNull}.
+\]
+FAIL 类型包括
+\[
+\mathsf{EllipticityFail},\quad
+\mathsf{SelfAdjointnessFail},\quad
+\mathsf{BoundaryEllipticityFail},\quad
+\mathsf{HeatKernelDivergenceMismatchFail},\quad
+\mathsf{CoefficientConventionMismatchFail},
+\]
+\[
+\mathsf{DivergenceUnabsorbedFail},\quad
+\mathsf{GravityClassMislabelFail},\quad
+\mathsf{GaugeGhostMismatchFail},\quad
+\mathsf{NegativeModeStabilityFail},\quad
+\mathsf{RunningCouplingMismatchFail},\quad
+\mathsf{AnomalyWardFail}.
+\]
+
+\begin{theorem}[热核重整化闭包的可靠性]\label{thm:typed-address-biaxial-completion-heat-kernel-renormalization-closure-soundness}
+若
+\[
+\mathsf{VerifyHeatKernelRenormalizationClosure}
+(\mathsf{HeatKernelRenormalizationClosureCert})
+=
+\mathsf{HigherCurvatureRenormalizationPass},
+\]
+则存在 Laplace-type Euclidean fluctuation operator
+\[
+\mathcal P=-(\nabla^2+\mathcal E)
+\]
+及其热核短时展开
+\[
+{\rm Tr}\,e^{-s\mathcal P}
+\sim
+(4\pi s)^{-d/2}\sum_{k\ge0}s^kA_{2k}(\mathcal P),
+\]
+并且 one-loop divergence 完全由 \(2k\le d\) 的 \(A_{2k}\) 中 local invariants 给出。存在 local counterterm action
+\[
+S_{\rm ct}[g]=\sum_i\delta\lambda_i\mathcal I_i[g]
+\]
+使 \(W^{(1)}+S_{\rm ct}\) 在 UV 意义下 finite。若 \(d=4\)，required invariant basis 包含 \(\int\sqrt g\)、\(\int\sqrt g R\) 以及 curvature-squared basis 或其 Gauss--Bonnet/Weyl 等价基。因此 effective action 升级为
+\[
+\Gamma_{\rm eff}^{\rm ren}
+=
+S_{\rm EH}^{\rm ren}
++S_{\rm hc}^{\rm ren}
++S_{\rm cl}^{\rm ren}
++W_{\rm q,fin}^{(1)}
++O(\hbar^2),
+\]
+其 metric variation 给出 higher-curvature semiclassical equation
+\[
+\boxed{
+G_{\mu\nu}
++\Lambda g_{\mu\nu}
++\sum_a\alpha_aH_{\mu\nu}^{(a)}
+=
+\kappa
+\bigl(
+T_{\mu\nu}^{\rm cl}
++\langle\widehat T_{\mu\nu}\rangle_{\rm ren}
+\bigr).
+}
+\]
+若输出为 \(\mathsf{MinimalEinsteinRenormalizationPass}\)，同样结论成立，但 \(S_{\rm hc}^{\rm ren}\) 可省略或仅保留 topological、boundary、或声明截断阶以外的项。
+\end{theorem}
+\begin{proof}
+Laplace-type 与 ellipticity/self-adjointness 证书保证 \(\mathcal P\) 具有适用的 heat-kernel calculus。热核存在证书给出 \({\rm Tr}\,e^{-s\mathcal P}\)，热核渐近与 Seeley--DeWitt 系数证书给出 \(A_{2k}\)。proper-time representation 表明 \(s\downarrow0\) divergence 只由 \(2k\le d\) 的热核系数控制。counterterm 分类证书把这些系数分解到 local invariant basis \(\mathcal I_i[g]\)，因此可选择 local \(S_{\rm ct}\) 抵消 \(W_{\rm div}^{(1)}\)。若 \(A_4\) 包含 dynamical curvature-squared invariants，则有效引力类证书必须标记为 higher-curvature EFT；对 renormalized action 做 metric variation 即得相应高阶半经典方程。若 curvature-squared 系数消失、为 topological 或 boundary 项，或被置于声明截断阶以外，则 minimal pass 的判定成立。证毕。
+\end{proof}
+
+该接口的边界是：热核 \(\zeta\) 方法是 Euclidean elliptic calculus，不自动适用于 Lorentzian hyperbolic operator；local coefficients 只分类 UV divergence，不给出 full finite nonlocal action；\(\zeta\) 与 proper-time cutoff 的 finite scheme 可不同；zero/negative modes 会改变 determinant 与 saddle stability；gauge theory 必须包含 ghost determinant；有边界时 bulk coefficients 不足以闭合 renormalization；generic 四维 matter loop 通常要求 curvature-squared counterterms，不能无证书声称 exact minimal Einstein closure。

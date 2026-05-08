@@ -55,7 +55,7 @@ import time
 import uuid
 from collections import deque
 from datetime import datetime, timezone
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import unquote, urlparse, parse_qs
 
@@ -968,7 +968,7 @@ def main():
     _hydrate_queue_state()
     _hydrate_results_ring()
     SOURCE_SHA = _compute_source_sha()
-    server = HTTPServer(("127.0.0.1", PORT), OracleHandler)
+    server = ThreadingHTTPServer(("127.0.0.1", PORT), OracleHandler)
     print(f"[server] Oracle server running on http://localhost:{PORT}")
     print(f"[server] Source sha: {SOURCE_SHA}")
     print(f"[server] Sessions dir: {SESSIONS_DIR}")
