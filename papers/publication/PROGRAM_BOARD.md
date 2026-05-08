@@ -29,7 +29,7 @@
 | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | C-DONE (Claude: submit, 2 rounds) | — |
 | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | C-DONE (Claude: submit, 3 rounds) | — |
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | B-STUCK (Oracle: reject, 99 rounds — needs human review) | — |
-| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | C-DONE (Claude: submit, 3 rounds) | — |
+| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (scope_contract.md missing) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | B-STUCK (Oracle: major revision, 99 rounds — needs human review) | — |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | P5 done | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | P3 返工 | — |
