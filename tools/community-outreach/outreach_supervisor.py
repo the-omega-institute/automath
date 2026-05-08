@@ -56,7 +56,8 @@ GIT_OPS_LOCK = STATE_DIR / ".git_ops.lock"
 
 ORACLE_SERVER_URL = "http://localhost:8766"
 ORACLE_SERVER_SCRIPT = SCRIPT_DIR / "outreach_oracle_server.py"
-INNER_SCRIPT = SCRIPT_DIR / "outreach_research_loop.py"
+RESEARCH_LOOP_SCRIPT = SCRIPT_DIR / "outreach_research_loop.py"
+TASK_RUNNER_SCRIPT = SCRIPT_DIR / "outreach_task_runner.py"
 ARXIV_WATCH = SCRIPT_DIR / "arxiv_watch.py"
 LIT_STALENESS = SCRIPT_DIR / "lit_staleness.py"
 INBOX_WATCHER = SCRIPT_DIR / "outreach_inbox_watcher.py"
@@ -227,14 +228,13 @@ def stale_research_cleanup() -> int:
 # ---------------------------------------------------------------------------
 
 
-def spawn_inner(parallel: int) -> subprocess.Popen:
+def _spawn_inner(script: Path, *, log_name: str, label: str, extra_args: list[str] | None = None) -> subprocess.Popen:
     SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
-    if not INNER_SCRIPT.exists():
+    if not script.exists():
         supervisor_log(
-            f"inner script {INNER_SCRIPT.name} missing — supervisor will idle "
-            f"on inner; periodic short tasks still run"
+            f"{label}: {script.name} missing — supervisor will idle on this slot; "
+            f"periodic short tasks still run"
         )
-        # Return a benign already-exited Popen so the main loop's poll() returns rc.
         proc = subprocess.Popen(
             ["python3", "-c", "import sys; sys.exit(0)"],
             cwd=str(REPO_ROOT),
@@ -242,17 +242,12 @@ def spawn_inner(parallel: int) -> subprocess.Popen:
             stderr=subprocess.DEVNULL,
         )
         return proc
-    log_handle = open(SUPERVISOR_LOG_DIR / "inner.log", "ab")
+    log_handle = open(SUPERVISOR_LOG_DIR / log_name, "ab")
     log_handle.write(
-        f"\n=== inner spawn at {_now_iso()} parallel={parallel} ===\n".encode()
+        f"\n=== {label} spawn at {_now_iso()} ===\n".encode()
     )
     log_handle.flush()
-    cmd = [
-        "python3",
-        str(INNER_SCRIPT),
-        "--loop",
-        "--parallel", str(parallel),
-    ]
+    cmd = ["python3", str(script), "--loop", *(extra_args or [])]
     proc = subprocess.Popen(
         cmd,
         cwd=str(REPO_ROOT),
@@ -260,8 +255,26 @@ def spawn_inner(parallel: int) -> subprocess.Popen:
         stderr=subprocess.STDOUT,
         start_new_session=True,
     )
-    supervisor_log(f"inner loop spawned pid={proc.pid} parallel={parallel}")
+    supervisor_log(f"{label}: spawned pid={proc.pid}")
     return proc
+
+
+def spawn_research_loop(parallel: int) -> subprocess.Popen:
+    return _spawn_inner(
+        RESEARCH_LOOP_SCRIPT,
+        log_name="inner_research.log",
+        label="research_loop",
+        extra_args=["--parallel", str(parallel)],
+    )
+
+
+def spawn_task_runner() -> subprocess.Popen:
+    return _spawn_inner(
+        TASK_RUNNER_SCRIPT,
+        log_name="inner_task_runner.log",
+        label="task_runner",
+        extra_args=[],
+    )
 
 
 def stop_inner(inner: subprocess.Popen, grace_seconds: int = 30) -> None:
@@ -390,11 +403,14 @@ def run_pi_review(supervisor_state: dict) -> dict | None:
         return ", ".join(applied) or "no recognized cooldown keys"
 
     def _restart_inner_cb() -> str | None:
-        proc: subprocess.Popen | None = supervisor_state.get("inner")
-        if proc is not None and proc.poll() is None:
-            stop_inner(proc, grace_seconds=20)
-        supervisor_state["inner"] = None
-        return "inner stopped; supervisor will respawn"
+        stopped = []
+        for slot in ("inner_research", "inner_task"):
+            proc: subprocess.Popen | None = supervisor_state.get(slot)
+            if proc is not None and proc.poll() is None:
+                stop_inner(proc, grace_seconds=20)
+                stopped.append(slot)
+            supervisor_state[slot] = None
+        return f"stopped {stopped}; supervisor will respawn" if stopped else "no live inner to stop"
 
     callbacks = {
         "adjust_cooldown": _adjust_cooldown_cb,
@@ -460,7 +476,11 @@ def main() -> int:
     parser.add_argument("--no-auto-commit", action="store_true")
     parser.add_argument("--no-pi-review", action="store_true")
     parser.add_argument("--no-inner", action="store_true",
-                        help="do not spawn outreach_research_loop; only run short-task triggers")
+                        help="do not spawn either inner daemon (research_loop + task_runner); only run short-task triggers")
+    parser.add_argument("--no-research-loop", action="store_true",
+                        help="skip the research_loop inner (drains RESEARCH_BOARD T-NN entries)")
+    parser.add_argument("--no-task-runner", action="store_true",
+                        help="skip the task_runner inner (drains outreach_state/task_queue/*.json)")
     parser.add_argument("--no-server-spawn", action="store_true",
                         help="do not auto-spawn outreach_oracle_server even if dead")
     parser.add_argument("--once", action="store_true",
@@ -483,7 +503,8 @@ def main() -> int:
     )
 
     supervisor_state: dict = {
-        "inner": None,
+        "inner_research": None,
+        "inner_task": None,
         "pi_review_hours": args.pi_review_hours,
         "arxiv_watch_hours": args.arxiv_watch_hours,
         "lit_staleness_hours": args.lit_staleness_hours,
@@ -497,7 +518,8 @@ def main() -> int:
     last_lit_ts = 0.0
     last_refill_ts = 0.0
     last_tab_alert_ts = 0.0
-    inner: subprocess.Popen | None = None
+    last_research_exit_ts = 0.0
+    last_task_exit_ts = 0.0
 
     try:
         while not STOP_FILE.exists():
@@ -512,17 +534,36 @@ def main() -> int:
                 supervisor_log(f"cleaned {cleaned} stale research claims")
 
             if not args.no_inner:
-                inner = supervisor_state.get("inner")
-                if inner is None or inner.poll() is not None:
-                    if inner is not None and inner.poll() is not None:
-                        rc = inner.poll()
-                        supervisor_log(
-                            f"inner exited rc={rc}; backoff "
-                            f"{args.inner_restart_backoff}s before respawn"
-                        )
-                        time.sleep(args.inner_restart_backoff)
-                    inner = spawn_inner(args.parallel)
-                    supervisor_state["inner"] = inner
+                # research_loop slot
+                if not args.no_research_loop:
+                    proc = supervisor_state.get("inner_research")
+                    if proc is None or proc.poll() is not None:
+                        if proc is not None:
+                            rc = proc.poll()
+                            since = _now() - last_research_exit_ts
+                            if since < args.inner_restart_backoff:
+                                pass  # in backoff window — try again next tick
+                            else:
+                                supervisor_log(f"research_loop exited rc={rc}; respawning")
+                                supervisor_state["inner_research"] = spawn_research_loop(args.parallel)
+                                last_research_exit_ts = _now()
+                        else:
+                            supervisor_state["inner_research"] = spawn_research_loop(args.parallel)
+                # task_runner slot
+                if not args.no_task_runner:
+                    proc = supervisor_state.get("inner_task")
+                    if proc is None or proc.poll() is not None:
+                        if proc is not None:
+                            rc = proc.poll()
+                            since = _now() - last_task_exit_ts
+                            if since < args.inner_restart_backoff:
+                                pass
+                            else:
+                                supervisor_log(f"task_runner exited rc={rc}; respawning")
+                                supervisor_state["inner_task"] = spawn_task_runner()
+                                last_task_exit_ts = _now()
+                        else:
+                            supervisor_state["inner_task"] = spawn_task_runner()
 
             since_inbox_h = (_now() - last_inbox_ts) / 3600.0
             if args.once or since_inbox_h >= supervisor_state["inbox_watcher_hours"]:
@@ -585,9 +626,10 @@ def main() -> int:
     except KeyboardInterrupt:
         supervisor_log("supervisor interrupted")
     finally:
-        final_inner = supervisor_state.get("inner") or inner
-        if final_inner is not None:
-            stop_inner(final_inner)
+        for slot in ("inner_research", "inner_task"):
+            proc = supervisor_state.get(slot)
+            if proc is not None:
+                stop_inner(proc, grace_seconds=20)
         if STOP_FILE.exists():
             try:
                 STOP_FILE.unlink()
