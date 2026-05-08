@@ -228,7 +228,7 @@ The canonical fold is
 \]
 \end{definition}
 
-\begin{theorem}[Local Zeckendorf normalization]\label{thm:local-zeckendorf-normalization}
+\begin{theorem}[Local Zeckendorf normalization by uniqueness certificate]\label{thm:local-zeckendorf-normalization}
 Let \(d=(d_1,d_2,\dots)\) be a finitely supported sequence of nonnegative
 integers, and put
 \[
@@ -610,6 +610,52 @@ D_N^*(\alpha;x_0)
 This quantity is effective because length-$m$ rotation words are determined by a
 finite partition of the circle into interval atoms.
 
+\begin{lemma}[Ostrowski block discrepancy decomposition]\label{lem:ostrowski-block-discrepancy}
+Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
+\[
+N=\sum_{j=0}^s b_jq_j,\qquad 0\le b_j\le a_{j+1},
+\]
+be the standard Ostrowski expansion of \(N\) \cite{Cassels1957}.  For every function
+\(f:\TT\to\mathbb R\) of bounded variation and every \(x_0\in\TT\),
+\[
+\left|
+\sum_{t=0}^{N-1} f(x_0+t\alpha)-N\int_{\TT}f\,d\leb
+\right|
+\le
+\operatorname{Var}(f)\sum_{j=0}^s b_j .
+\]
+Here \(\operatorname{Var}\) is total variation on the circle with the
+half-open representative used for interval indicators; in particular
+\(\operatorname{Var}(\mathbf 1_{[0,a)}-a)=2\) for \(0<a<1\), and the bound is
+trivial at \(a=0,1\).
+\end{lemma}
+
+\begin{proof}
+Write \(N_j=\sum_{r=0}^{j-1} b_rq_r\), with \(N_0=0\).  The first \(N\)
+iterates split into consecutive blocks
+\[
+\{N_j+\ell q_j,\ldots,N_j+\ell q_j+q_j-1\},
+\qquad 0\le j\le s,\quad 0\le \ell<b_j,
+\]
+after omitting the empty families with \(b_j=0\).  This is just the displayed
+Ostrowski identity for \(N\), read as a concatenation of \(b_0\) blocks of
+length \(q_0\), then \(b_1\) blocks of length \(q_1\), and so on; this
+ascending order is a bookkeeping choice only, because each block estimate
+below is uniform in its initial point.
+
+For a block of length \(q_j\) starting at \(y\), the Denjoy--Koksma inequality
+for the rotation by \(\alpha\) at a continued-fraction denominator
+\cite[Chapter~2]{KuipersNiederreiter1974} gives
+\[
+\left|
+\sum_{t=0}^{q_j-1} f(y+t\alpha)-q_j\int_{\TT}f\,d\leb
+\right|
+\le \operatorname{Var}(f).
+\]
+Summing this estimate over the \(b_j\) blocks of each denominator \(q_j\)
+proves the displayed inequality.
+\end{proof}
+
 \begin{proposition}[Continued-fraction discrepancy rate]\label{prop:rotation-discrepancy-cf-rate}
 Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
 \(q_n\) be the continued-fraction denominators.  Choose \(s=s(N)\) so that
@@ -641,17 +687,9 @@ D_N^*(\varphi^{-1};x_0)
 \end{proposition}
 
 \begin{proof}
-For \(0\le a\le1\), put \(f_a(x)=\mathbf{1}_{[0,a)}(x)-a\).  The
-Denjoy--Koksma inequality for rotations at continued-fraction denominators
-\cite[Chapter~2]{KuipersNiederreiter1974} gives, for every starting point
-\(y\),
-\[
-\left|\sum_{t=0}^{q_j-1} f_a(y+t\alpha)\right|
-\le \operatorname{Var}(f_a)\le 2 .
-\]
-Decompose the first \(N\) iterates into the consecutive Ostrowski blocks of
-lengths \(q_j\).  Since the preceding estimate is uniform in the starting
-point of each block,
+For \(0\le a\le1\), put \(f_a(x)=\mathbf{1}_{[0,a)}(x)-a\).  By
+Lemma~\ref{lem:ostrowski-block-discrepancy}, using
+\(\operatorname{Var}(f_a)\le2\) in the stated half-open convention,
 \[
 \left|\sum_{t=0}^{N-1}f_a(x_0+t\alpha)\right|
 \le 2\sum_{j=0}^s b_j .
