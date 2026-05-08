@@ -292,6 +292,43 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
   =1-\alpha^n z^n.
 \end{equation}
 
+\begin{definition}[Cyclic data, trace budget, and support size]
+  \label{def:cyclic-data-trace-budget}
+  A countable cyclic datum is a family
+  \[
+    \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J},
+    \qquad
+    n_j,m_j\in\NN,\quad \beta_j\in\CC\setminus\{0\},
+  \]
+  indexed by a finite or countably infinite set \(J\). Its trace budget,
+  formal positive determinant, and numerical support size are
+  \[
+    \tau_{\mathcal D}
+    :=\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}\in[0,\infty],
+  \]
+  \[
+    D_{\mathcal D}(z)
+    :=\prod_{j\in J}(1-\beta_jz^{n_j})^{m_j},
+    \qquad
+    N_{\mathcal D}:=\sum_{j\in J}m_jn_j\in\NN\cup\{\infty\}.
+  \]
+  The symbol \(N_{\mathcal D}\) is a count of cyclic spectral slots. When
+  \(J\) is infinite it is used only as the statement that there are
+  infinitely many such slots; the Hilbert-space dimension of the closed
+  support of the associated separable cyclic model is then \(\aleph_0\),
+  not the extended integer \(\infty\).
+
+  If \(\tau_{\mathcal D}<\infty\), choose roots
+  \(\alpha_j^{n_j}=\beta_j\) and set
+  \[
+    H_{\mathcal D}
+    :=\bigoplus_{j\in J}\bigl(\CC^{n_j}\otimes\CC^{m_j}\bigr),
+    \qquad
+    L_{\mathcal D}
+    :=\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
+  \]
+\end{definition}
+
 \begin{lemma}[Single cyclic-block spectrum]
   \label{lem:single-cyclic-block-spectrum}
   Let \(n,m\in\NN\), \(\beta\in\CC\setminus\{0\}\), and
@@ -557,6 +594,79 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
   \(D_{\mathcal D}^{-1}\) on \(\Omega\).
 \end{proof}
 
+\begin{proposition}[Cyclic datum construction interface]
+  \label{prop:cyclic-data-construction-interface}
+  Let \(\mathcal D\) be a countable cyclic datum in the sense of
+  \Cref{def:cyclic-data-trace-budget} with
+  \(\tau_{\mathcal D}<\infty\). Then every choice of roots
+  \(\alpha_j^{n_j}=\beta_j\) gives a normal trace-class operator
+  \(L_{\mathcal D}\in\sone(H_{\mathcal D})\) satisfying
+  \[
+    \norm{L_{\mathcal D}}_1=\tau_{\mathcal D},
+    \qquad
+    \dim H_{\mathcal D}=
+    \begin{cases}
+      N_{\mathcal D},& J\text{ finite},\\
+      \aleph_0,& J\text{ infinite},
+    \end{cases}
+  \]
+  where the second equality is a Hilbert-space dimension identity. The
+  unitary equivalence class of \(L_{\mathcal D}\) is independent of the
+  chosen roots. Moreover \(D_{\mathcal D}\) is an entire function and
+  \[
+    \det(I-zL_{\mathcal D})=D_{\mathcal D}(z)
+  \]
+  locally uniformly for \(z\in\CC\).
+\end{proposition}
+
+\begin{proof}
+  For a finite set \(F\subset J\), the singular values of
+  \(\bigoplus_{j\in F}(C(n_j,\alpha_j)\otimes I_{m_j})\) are the numbers
+  \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\), each repeated \(m_jn_j\)
+  times. Hence its trace norm is
+  \[
+    \sum_{j\in F}m_jn_j\abs{\beta_j}^{1/n_j}.
+  \]
+  The net of finite partial sums is Cauchy in trace norm because
+  \(\tau_{\mathcal D}<\infty\), and its trace-norm limit is exactly
+  \(L_{\mathcal D}\). Trace-norm continuity of the norm gives
+  \[
+    \norm{L_{\mathcal D}}_1
+    =\sup_{\substack{F\subset J\\ F\ \mathrm{finite}}}
+      \sum_{j\in F}m_jn_j\abs{\beta_j}^{1/n_j}
+    =\tau_{\mathcal D}.
+  \]
+  Normality follows because each summand
+  \(C(n_j,\alpha_j)\otimes I_{m_j}\) is a scalar multiple of a unitary and
+  the orthogonal direct sum of normal blocks is normal. The same lemma,
+  together with
+  \Cref{lem:direct-cyclic-weierstrass-product}, gives the entire locally
+  uniform convergence of \(D_{\mathcal D}\) and the displayed Fredholm
+  determinant identity.
+
+  The Hilbert-space dimension statement is the dimension of the orthogonal
+  direct sum
+  \(\bigoplus_{j\in J}(\CC^{n_j}\otimes\CC^{m_j})\): finite \(J\) gives the
+  finite integer \(N_{\mathcal D}\), while countably infinite \(J\) gives
+  the separable infinite dimension \(\aleph_0\).
+
+  If \(\alpha_j'\) is another root of \(\beta_j\), then
+  \(\alpha_j'=\alpha_j\zeta_j\) for some \(n_j\)-th root of unity
+  \(\zeta_j\). Multiplication by \(\zeta_j\) permutes the regular
+  \(n_j\)-gon
+  \(\{\alpha_j\omega:\omega^{n_j}=1\}\). The Fourier diagonalization of
+  \(\Pi_{n_j}\) therefore identifies
+  \(C(n_j,\alpha_j)\otimes I_{m_j}\) and
+  \(C(n_j,\alpha_j')\otimes I_{m_j}\) as unitarily equivalent diagonal
+  blocks. Taking the orthogonal direct sum of these blockwise unitaries
+  proves root-choice independence.
+\end{proof}
+
+\noindent
+\Cref{prop:cyclic-data-construction-interface} is the bookkeeping
+interface used by the exact threshold theorem and by the later normal
+classification.
+
 \noindent\emph{Determinant convention.}
 In the infinite cyclic-block products below, the positive-exponent product
 is first defined directly by
@@ -666,10 +776,17 @@ For a normal trace-class operator \(L\), write
   \]
   Moreover
   \[
-    \dim \mathsf S(L)=\sum_{j\in J}m_jn_j,
+    \dim \mathsf S(L)=
+    \begin{cases}
+      N_{\mathcal D},& J\text{ finite},\\
+      \aleph_0,& J\text{ infinite},
+    \end{cases}
   \]
-  as a Hilbert-space dimension. If \(J\) is infinite, then the algebraic
-  range is a proper dense subspace of its closed support:
+  as a Hilbert-space dimension; equivalently, the finite numerical support
+  count is \(N_{\mathcal D}=\sum_{j\in J}m_jn_j\) when \(J\) is finite,
+  while a countably infinite datum gives separable infinite support
+  dimension. If \(J\) is infinite, then the algebraic range is a proper
+  dense subspace of its closed support:
   \[
     \mathrm{ran}(L)\subsetneq \mathsf S(L)
     =\overline{\mathrm{ran}(L)} .
@@ -706,13 +823,16 @@ For a normal trace-class operator \(L\), write
   \(\Lambda_{\mathcal D}\), namely
   \[
     \sum_{\lambda\in\Lambda_{\mathcal D}}1
-    =\sum_{j\in J}m_jn_j,
+    =N_{\mathcal D},
   \]
-  with the same convention that multiplicities are counted. This remains
-  true when different cyclic factors contribute the same eigenvalue,
-  because for normal operators the algebraic and geometric
-  multiplicities coincide, so the eigenspace dimension is the sum of the
-  corresponding algebraic multiplicities.
+  with the same convention that multiplicities are counted. For finite
+  \(J\) this is the Hilbert-space dimension itself. For infinite \(J\) the
+  displayed equality records the countably infinite spectral-slot count,
+  and the Hilbert-space dimension is \(\aleph_0\). This remains true when
+  different cyclic factors contribute the same eigenvalue, because for
+  normal operators the algebraic and geometric multiplicities coincide, so
+  the eigenspace dimension is the sum of the corresponding algebraic
+  multiplicities.
 
   By \Cref{lem:normal-support-range-closure},
   \(\overline{\mathrm{ran}(L)}=\mathsf S(L)\). If \(J\) is infinite, then
@@ -830,6 +950,12 @@ For a normal trace-class operator \(L\), write
 The preceding proposition isolates the collapsed non-zero spectral multiset
 encoded by the cyclic data. The next theorem packages the exact trace-class
 threshold for normal Fredholm realization into a single \(\iff\) statement.
+Its dependency graph is acyclic: the existence implication
+\textup{(i)}\(\Rightarrow\)\textup{(ii)} is the later cyclic construction
+from \Cref{thm:cyclic-fredholm-realisation}, while the necessity implication
+\textup{(iii)}\(\Rightarrow\)\textup{(i)} below is independent of that
+construction and uses only Fredholm zero multiplicities and the classical
+Weyl--Ky Fan eigenvalue bound for trace-class operators.
 
 \begin{theorem}[Exact trace-class threshold for realizability of cyclic data]
   \label{thm:normal-realizability-threshold}
@@ -1240,7 +1366,7 @@ threshold for normal Fredholm realization into a single \(\iff\) statement.
   \[
     \dim\mathsf S(L)=\dim H_{\mathcal D},
   \]
-  where this Hilbert-space dimension equals \(\sum_{j\in J}m_j n_j\) if
+  where this Hilbert-space dimension equals \(N_{\mathcal D}\) if
   \(J\) is finite and equals \(\aleph_0\) if \(J\) is infinite, and
   \[
     \|L\|_1
