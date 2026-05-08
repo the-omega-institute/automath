@@ -359,22 +359,44 @@ def discover_runnable_papers(only: list[str] | None = None) -> list[Path]:
 # ---------------------------------------------------------------------------
 
 
-def spawn_inner_for_paper(paper_dir: Path, *, target_journal: str = "",
-                          extra_args: list[str] | None = None) -> subprocess.Popen | None:
+def spawn_inner_pool(parallel: int, *, target_journal: str = "",
+                     paper_filter: list[str] | None = None,
+                     extra_args: list[str] | None = None) -> subprocess.Popen | None:
+    """Spawn a single long-running oracle_pipeline.py with internal pool.
+
+    oracle_pipeline.py's `run_rolling` already implements the
+    "codex parallel + oracle queues" pattern: papers run concurrently in
+    a ThreadPoolExecutor; while one worker is waiting on an Oracle browser
+    response (I/O-bound), other workers continue Codex/Claude compute work
+    (CPU-bound). Pool oversubscribes by MAX_ORACLE_WAIT_OVERSUBSCRIPTION
+    so blocked workers do not idle the pool. The supervisor therefore
+    spawns ONE inner with --all --parallel N --continuous and lets the
+    inner own paper scheduling.
+
+    paper_filter, when set, restricts the pool to those paper directories
+    (passed as repeated --paper flags). Empty filter → --all.
+    """
     if not ORACLE_PIPELINE_SCRIPT.exists():
         supervisor_log(f"oracle_pipeline.py missing at {ORACLE_PIPELINE_SCRIPT}")
         return None
     SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_handle = open(SUPERVISOR_LOG_DIR / "inner.log", "ab")
+    mode = (f"--paper x{len(paper_filter)}" if paper_filter else "--all")
     log_handle.write(
-        f"\n=== inner spawn at {_now_iso()} paper={paper_dir.name} ===\n".encode()
+        f"\n=== inner pool spawn at {_now_iso()} {mode} parallel={parallel} ===\n".encode()
     )
     log_handle.flush()
     cmd = [
         _python(),
         str(ORACLE_PIPELINE_SCRIPT),
-        "--paper", str(paper_dir),
+        "--parallel", str(parallel),
+        "--continuous",
     ]
+    if paper_filter:
+        for p in paper_filter:
+            cmd.extend(["--paper", p])
+    else:
+        cmd.append("--all")
     if target_journal:
         cmd.extend(["--target-journal", target_journal])
     if extra_args:
@@ -388,9 +410,11 @@ def spawn_inner_for_paper(paper_dir: Path, *, target_journal: str = "",
             **_detached_popen_kwargs(),
         )
     except Exception as exc:
-        supervisor_log(f"inner spawn failed for {paper_dir.name}: {exc}")
+        supervisor_log(f"inner pool spawn failed: {exc}")
         return None
-    supervisor_log(f"inner spawned pid={proc.pid} paper={paper_dir.name}")
+    supervisor_log(
+        f"inner pool spawned pid={proc.pid} parallel={parallel} mode={mode}"
+    )
     return proc
 
 
@@ -601,8 +625,12 @@ def _install_signal_handlers() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Paper pipeline supervisor (Windows-compatible)")
     parser.add_argument("--paper", action="append", default=[],
-                        help="Restrict to specific paper directory name (may repeat). "
-                             "Without this, supervisor picks runnable papers automatically.")
+                        help="Restrict the inner pool to specific paper directories "
+                             "(may repeat). Without this, the inner pool runs --all.")
+    parser.add_argument("--parallel", type=int, default=0,
+                        help="Inner pool parallelism. 0 means oracle_pipeline auto-detects "
+                             "from CPU cores (typically 2-6). Codex/Claude run "
+                             "concurrently; oracle waits do not idle the pool.")
     parser.add_argument("--target-journal", default="",
                         help="Pass-through to oracle_pipeline --target-journal")
     parser.add_argument("--inner-extra", action="append", default=[],
@@ -671,19 +699,18 @@ def main() -> int:
     last_pi_review_ts = pi_review_last_run_ts()
     server_proc: subprocess.Popen | None = None
     inner: subprocess.Popen | None = None
-    current_paper: Path | None = None
 
     auto_commit_paths = [
         "papers/publication",
         "tools/chatgpt-oracle/pipeline_state",
     ]
 
-    only_papers: list[str] | None = None
+    paper_filter: list[str] = []
     if args.paper:
-        only_papers = []
         for entry in args.paper:
-            p = Path(entry)
-            only_papers.append(p.name if p.is_absolute() or "/" in entry or "\\" in entry else entry)
+            # Accept either the short name or an absolute path; oracle_pipeline.py
+            # accepts both forms via its --paper flag.
+            paper_filter.append(entry)
 
     try:
         while not STOP_FILE.exists():
@@ -748,18 +775,23 @@ def main() -> int:
                     if inner is not None and inner.poll() is not None:
                         rc = inner.poll()
                         supervisor_log(
-                            f"inner exited rc={rc} (paper={current_paper.name if current_paper else '-'}); "
-                            f"backoff {args.inner_restart_backoff}s before next paper"
+                            f"inner pool exited rc={rc}; "
+                            f"backoff {args.inner_restart_backoff}s before respawn"
                         )
                         time.sleep(args.inner_restart_backoff)
                         inner = None
-                        current_paper = None
 
-                    runnable = discover_runnable_papers(only_papers)
+                    # Decide whether there is anything to run before spawning
+                    # the long-running pool. oracle_pipeline.py --all will
+                    # exit immediately if no runnable papers remain, which
+                    # gives us a natural signal to consider refill.
+                    runnable = discover_runnable_papers(
+                        paper_filter if paper_filter else None
+                    )
                     if not runnable:
-                        if only_papers is not None:
+                        if paper_filter:
                             supervisor_log(
-                                f"no runnable paper(s) match filter {only_papers!r}; will retry next tick"
+                                f"no runnable paper(s) match filter {paper_filter!r}; will retry next tick"
                             )
                         else:
                             supervisor_log("no runnable papers (all DONE or none with main.tex)")
@@ -779,11 +811,10 @@ def main() -> int:
                                         f"refill cooldown not met ({remaining_h:.1f}h remaining)"
                                     )
                     else:
-                        target = runnable[0]
-                        current_paper = target
-                        inner = spawn_inner_for_paper(
-                            target,
+                        inner = spawn_inner_pool(
+                            args.parallel,
                             target_journal=args.target_journal,
+                            paper_filter=paper_filter or None,
                             extra_args=args.inner_extra,
                         )
 
