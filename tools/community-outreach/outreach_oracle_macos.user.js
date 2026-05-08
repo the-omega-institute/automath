@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.7
-// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765). v1.6: fresh-chat fallback URL now targets the Omega Outreach openproblem ChatGPT Project so attached files (main.pdf + READMEs + PROGRAM_BOARD) are inherited by board_refill conversations. v1.7: per-tab role flag (openproblem | general) + tag-based dispatch — server only sends openproblem-* tagged tasks to tabs in openproblem role, so ad-hoc ChatGPT use on a sibling tab does not steal pipeline tasks.
+// @version      1.8
+// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. v1.6: openproblem Project URL fallback. v1.7: per-tab role isolation (openproblem | general) + tag-based dispatch. v1.8: bedc-style tab labelling — open the Project URL with `?outreach=1` / `?outreach=2` (or a/b) and the panel banner shows "Tab #1" / "Tab #2"; tab auto-activates on URL flag. Unlabeled tabs offer one-click shortcuts to label themselves.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -14,12 +14,17 @@
 // ==/UserScript==
 
 // SETUP (operator):
-//   1. Open https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project
+//   1. Open https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project?outreach=1
 //      Confirm 5 files attached: main.pdf, MAIN_PAPER_INDEX.md, MAIN_PAPER_README.md,
 //      LEAN4_README.md, PROGRAM_BOARD.md
-//   2. Click ACTIVATE in the outreach-oracle-panel (right-side panel injected by this script)
-//   3. Keep the tab open. The supervisor's board_refill task will dispatch
-//      prompts here; the resulting chats inherit the Project's attached files.
+//   2. (Optional) Open a second tab with ?outreach=2 to parallelize. Server caps
+//      at 2 concurrent agents; a third tab will idle.
+//   3. With the URL flag, tab auto-ACTIVATES; the panel shows "Tab #1" / "Tab #2"
+//      so you can tell them apart at a glance.
+//   4. Without a flag, the panel shows UNLABELED + one-click "label as 1/2/a/b"
+//      shortcuts; pick one to navigate to the labelled URL.
+//   5. Keep the tab open. board_refill prompts dispatch only to openproblem-role
+//      tabs; the resulting chats inherit the Project's attached files.
 
 // FORKED FROM: tools/chatgpt-oracle/chatgpt_oracle_macos.user.js v4.10
 // Differences (search "OUTREACH ADD" / "OUTREACH CHANGE" comments):
@@ -41,7 +46,7 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.7";
+  const SCRIPT_VERSION = "outreach-1.8";
 
   // OUTREACH ADD v1.6: openproblem ChatGPT Project URL. New-chat URL fallback
   // navigates here so the chat inherits the project-level attached files
@@ -53,17 +58,46 @@
     "https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project";
   const OPENPROBLEM_PROJECT_PATH_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
 
+  // OUTREACH ADD v1.8: bedc-style tab labelling. Each tab opens with a flag
+  // in the URL (?outreach=1 or ?outreach=a etc.) which gives a stable
+  // per-tab agent_id, makes panel banners distinguishable, and allows the
+  // tab to auto-activate on load.
+  function isInsideOpenproblemProject() {
+    try {
+      return window.location.pathname.startsWith(OPENPROBLEM_PROJECT_PATH_PREFIX);
+    } catch {
+      return false;
+    }
+  }
+  function urlFlag() {
+    try {
+      const m = window.location.search.match(/[?&]outreach=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : "";
+    } catch {
+      return "";
+    }
+  }
+  function tabLabel() {
+    // Stable label per tab: URL flag if present, else short slice of agent_id.
+    const f = urlFlag();
+    if (f) return f;
+    const a = (() => {
+      try { return sessionStorage.getItem("outreach_agent_id") || ""; }
+      catch { return ""; }
+    })();
+    return a ? a.slice(-4) : "?";
+  }
+  function projectEntryUrl(flag) {
+    return `${OPENPROBLEM_PROJECT_URL}${flag ? `?outreach=${encodeURIComponent(flag)}` : ""}`;
+  }
+
   // OUTREACH ADD v1.7: per-tab role isolation. A tab self-identifies as either
   // `openproblem` (only takes openproblem-* tagged tasks; suitable for the
   // openproblem Project page) or `general` (takes general / untagged tasks).
   // Auto-detected from URL on first visit, then persisted in sessionStorage
   // so the operator can override by toggling the panel button.
   function detectRole() {
-    try {
-      const url = window.location.href;
-      if (url.includes(OPENPROBLEM_PROJECT_PATH_PREFIX)) return "openproblem";
-    } catch {}
-    return "general";
+    return isInsideOpenproblemProject() ? "openproblem" : "general";
   }
   function readRole() {
     try {
@@ -86,13 +120,19 @@
   }
 
   let busy = false;
-  // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
-  // which is cross-tab and caused new ChatGPT windows the user opens for
-  // personal use to inherit ACTIVE state and start stealing tasks).
-  // Each tab now opts in independently by clicking the dashboard toggle.
+  // OUTREACH CHANGE v1.8: per-tab active flag. If URL has `?outreach=N` flag
+  // OR we're inside the openproblem project, tab auto-activates on load.
+  // Otherwise, falls back to whatever sessionStorage says (operator must
+  // press ACTIVATE manually).
   let active = (() => {
-    try { return sessionStorage.getItem("outreach_active") === "1"; }
-    catch { return false; }
+    try {
+      const urlOptIn = urlFlag() !== "";
+      if (urlOptIn) sessionStorage.setItem("outreach_active", "1");
+      const stored = sessionStorage.getItem("outreach_active") === "1";
+      return stored && (urlOptIn || isInsideOpenproblemProject());
+    } catch {
+      return urlFlag() !== "";
+    }
   })();
 
   // ── Logging ──────────────────────────────────────────────────────────
@@ -171,9 +211,11 @@
     const statusColor = active ? (busy ? "#ff0" : "#9af") : "#f55";
     const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
     const collapsed = !active && !busy && !panelExpanded;
+    const flag = urlFlag();
+    const label = tabLabel();
     if (collapsed) {
-      panel.innerHTML = `<span style="color:#cdf">[Outreach]</span> <span style="color:${statusColor};font-weight:bold">⏸</span>`;
-      panel.title = "Outreach Oracle (paused). Click to expand.";
+      panel.innerHTML = `<span style="color:#cdf">[Outreach #${label}]</span> <span style="color:${statusColor};font-weight:bold">⏸</span>`;
+      panel.title = `Outreach Oracle Tab #${label} (paused). Click to expand.`;
       // Click badge → expand
       panel.onclick = (e) => { e.stopPropagation(); panelExpanded = true; updatePanel(); };
       return;
@@ -185,9 +227,24 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     const role = readRole();
     const roleColor = role === "openproblem" ? "#9f9" : "#fc9";
+    // OUTREACH ADD v1.8: tab label prominent. If unlabeled (no ?outreach=
+    // flag), show two big shortcut buttons that navigate to /project?outreach=1
+    // and /project?outreach=2 — operator can label both tabs in one click.
+    const labelBlock = flag
+      ? `<span style="background:#cdf;color:#000;font-weight:bold;border-radius:4px;padding:1px 6px;font-size:11px">Tab #${label}</span>`
+      : `<span style="background:#fa5;color:#000;font-weight:bold;border-radius:4px;padding:1px 6px;font-size:11px">UNLABELED</span>`;
+    const labelShortcuts = flag ? "" : `
+      <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#9af;margin-top:2px">
+        <span>label this tab as →</span>
+        <button id="outreach-label-1" title="Open Tab #1" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">1</button>
+        <button id="outreach-label-2" title="Open Tab #2" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">2</button>
+        <button id="outreach-label-a" title="Open Tab #a" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">a</button>
+        <button id="outreach-label-b" title="Open Tab #b" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">b</button>
+      </div>`;
     panel.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <b style="color:#cdf">[Outreach Oracle ${SCRIPT_VERSION}]</b>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+        <b style="color:#cdf">[Outreach ${SCRIPT_VERSION}]</b>
+        ${labelBlock}
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="outreach-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
         ${collapseBtn}
@@ -197,10 +254,26 @@
         <button id="outreach-role-toggle" title="Toggle role (openproblem ↔ general)" style="background:${roleColor};color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">${role}</button>
         <span style="color:#888">(only ${role === "openproblem" ? "openproblem-*" : "general/untagged"} tasks)</span>
       </div>
+      ${labelShortcuts}
       <hr style="border-color:#446;margin:4px 0">
       ${lines}`;
     const btn = document.getElementById("outreach-toggle");
     if (btn) btn.addEventListener("click", toggleActive);
+    // OUTREACH ADD v1.8: tab-label shortcut buttons.
+    for (const tag of ["1", "2", "a", "b"]) {
+      const el = document.getElementById(`outreach-label-${tag}`);
+      if (el) el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        // If we're already on the openproblem project, just append the flag.
+        if (isInsideOpenproblemProject()) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("outreach", tag);
+          window.location.href = url.toString();
+        } else {
+          window.location.href = projectEntryUrl(tag);
+        }
+      });
+    }
     const rbtn = document.getElementById("outreach-role-toggle");
     if (rbtn) rbtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -1244,7 +1317,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()} — role=${readRole()}`);
+    log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — Tab #${tabLabel()} — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()} — role=${readRole()}`);
 
     const phase = getTaskPhase();
     const navTaskId = GM_getValue("outreach_nav_task_id", "");
