@@ -1027,9 +1027,17 @@ Weyl--Ky Fan eigenvalue bound for trace-class operators.
   \(M_{\mathcal D}(\lambda)\) is finite.
 
   Let \(q_\lambda\) be the order of the zero of \(\det(I-zT)\) at
-  \(z=\lambda^{-1}\). The same derivative argument, now applied after
-  fixing all finitely many factors with \(\lambda^{n_j}=\beta_j\), gives
-  \(q_\lambda\ge M_{\mathcal D}(\lambda)\). By the standard
+  \(z=\lambda^{-1}\). Since \(M_{\mathcal D}(\lambda)<\infty\), the set
+  \(E_\lambda:=\{j\in J:\lambda^{n_j}=\beta_j\}\) is finite; fix it in the
+  directed net. For every finite \(F\supset E_\lambda\), the factors with
+  \(j\in E_\lambda\) contribute exactly
+  \(M_{\mathcal D}(\lambda)\) powers of \(1-\lambda z\), while every factor
+  with \(j\in F\setminus E_\lambda\) is non-vanishing at
+  \(z=\lambda^{-1}\). Hence the derivatives of \(P_F\) of orders
+  \(0,\dots,M_{\mathcal D}(\lambda)-1\) vanish at \(z=\lambda^{-1}\) for
+  all \(F\supset E_\lambda\). Locally uniform convergence of this cofinal
+  subnet implies convergence of derivatives at \(z=\lambda^{-1}\), and
+  therefore \(q_\lambda\ge M_{\mathcal D}(\lambda)\). By the standard
   zero-multiplicity theorem for Fredholm determinants, in the form stating
   that the zero of \(\det(I-zT)\) at \(z=\lambda^{-1}\) has order equal to
   the algebraic multiplicity of \(\lambda\) as an eigenvalue of \(T\),
@@ -1635,6 +1643,38 @@ partial-sum inequality therefore yields the final claim.
   root is strictly increasing on \([0,\infty)\).
 \end{proof}
 
+\begin{lemma}[Trace-norm convergence of Schur compressions]
+  \label{lem:trace-norm-schur-compressions}
+  Let \(T\in\sone(H)\), and let \((P_N)_{N\ge1}\) be finite-rank
+  orthogonal projections with \(P_N\to I\) strongly. Then
+  \[
+    P_NTP_N\longrightarrow T
+    \qquad\text{in }\sone\text{-norm}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Fix \(\varepsilon>0\), and choose a finite-rank operator \(F\) with
+  \(\|T-F\|_1<\varepsilon\). Since multiplication by contractions is
+  contractive on \(\sone\),
+  \[
+    \|T-P_NTP_N\|_1
+    \le 2\|T-F\|_1+\|F-P_NFP_N\|_1.
+  \]
+  It remains to treat \(F\). Write \(F=\sum_{\ell=1}^r x_\ell\otimes
+  y_\ell\), where \((x\otimes y)h=\langle h,y\rangle x\). For rank-one
+  operators, \(\|x\otimes y\|_1=\|x\|\,\|y\|\), and therefore
+  \[
+    \|x_\ell\otimes y_\ell-P_Nx_\ell\otimes P_Ny_\ell\|_1
+    \le \|x_\ell-P_Nx_\ell\|\,\|y_\ell\|
+      +\|P_Nx_\ell\|\,\|y_\ell-P_Ny_\ell\|.
+  \]
+  Strong convergence \(P_N\to I\) makes the right-hand side tend to zero
+  for each \(\ell\). Hence \(P_NFP_N\to F\) in trace norm, and the displayed
+  estimate gives \(\limsup_N\|T-P_NTP_N\|_1\le 2\varepsilon\). Since
+  \(\varepsilon\) is arbitrary, the claim follows.
+\end{proof}
+
 \begin{theorem}[Global trace-norm minimum and minimizer classification in a Fredholm-determinant fiber]
   \label{thm:determinant-fiber-trace-minimality}
   Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy the
@@ -1767,7 +1807,8 @@ partial-sum inequality therefore yields the final claim.
 
   Let \(P_N\) be the orthogonal projection onto
   \(\mathrm{span}\{e_1,\dots,e_N\}\), and put \(A_N:=P_NTP_N\). Since
-  \(T\in\sone\), one has \(A_N\to T\) in trace norm, so
+  \(P_N\to I\) strongly, \Cref{lem:trace-norm-schur-compressions} gives
+  \(A_N\to T\) in trace norm, so
   \[
     \|A_N\|_1\longrightarrow \|T\|_1.
   \]
