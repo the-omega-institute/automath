@@ -162,7 +162,8 @@ Proposition~\ref{prop:small-m-endpoint-budget},
 Corollary~\ref{cor:injective-relabeling-bounded-type}, and
 Proposition~\ref{prop:canonical-golden-slope-gap}.
 \item The limited primitive positive-entropy SFT restoration interface is the
-injective-placement obstruction of
+support-envelope and injective-placement obstruction of
+Proposition~\ref{prop:primitive-sft-support-envelope} and
 Theorem~\ref{thm:primitive-sft-placement-barrier}; it is used only to explain
 why a low-complexity finite-block Sturmian factor cannot remove an
 exponential Parry cylinder budget.
@@ -1719,9 +1720,19 @@ subtracting \(-\log c_m-H_q(\nu)\) leaves
 \frac{\sum_{u\in X_m}\nu(u)^q r(u)^{1-q}}
 {\sum_{u\in X_m}\nu(u)^q}.
 \]
-Because \(r(u)\in\{\varphi,1,\varphi^{-1}\}\), the quotient inside the
-logarithm lies between \(\varphi^{-(q-1)}\) and \(\varphi^{q-1}\). Hence the
-last term lies in \([-\log\varphi,\log\varphi]\), giving the stated bounds.
+Put \(w_u=\nu(u)^q/\sum_v\nu(v)^q\) on the support of \(\nu\).  The quotient
+is the weighted mean
+\[
+\sum_{u} w_u r(u)^{1-q}.
+\]
+If \(q>1\), then \(1-q<0\), so
+\(r(u)^{1-q}\in[\varphi^{1-q},\varphi^{q-1}]\); after taking logarithms and
+multiplying by the positive number \(1/(q-1)\), the contribution lies in
+\([-\log\varphi,\log\varphi]\).  If \(0<q<1\), then \(1-q>0\), so the same
+weighted mean lies in \([\varphi^{-(1-q)},\varphi^{1-q}]\); multiplication by
+the negative number \(1/(q-1)\) reverses the endpoints and again gives
+\([-\log\varphi,\log\varphi]\).  This proves the stated bounds for all finite
+\(q\ne1\).
 
 For \(q=1\), Theorem~\ref{thm:parry-kl-identity} shows that
 \[
@@ -2122,6 +2133,17 @@ Here \(n_0+n_1+n_2=m+1\), and the classes are filled in the order
 \[
 X_m^{00},\qquad X_m^{01}\cup X_m^{10},\qquad X_m^{11}.
 \]
+For the \(q=\infty\) formula below set
+\[
+R_{m,\infty}:=
+\max\!\left(
+\{1\}
+\cup
+\left\{\varphi\,\frac{p_{n_0+1}}{p_1}: n_1>0\right\}
+\cup
+\left\{\varphi^2\,\frac{p_{n_0+n_1+1}}{p_1}: n_2>0\right\}
+\right).
+\]
 
 For \(q\in(0,\infty)\setminus\{1\}\), the minimum over injective placements
 \(T_m:S_m(\alpha)\to X_m\) is
@@ -2154,6 +2176,18 @@ where
 \left(\sum_{r=n_0+1}^{n_0+n_1}p_r
 +2\sum_{r=n_0+n_1+1}^{m+1}p_r\right)\log\varphi.
 \]
+For \(q=\infty\),
+\[
+\inf_{T_m}D_\infty((T_m)_*\mu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+\gamma_{m,\infty},
+\]
+where
+\[
+\gamma_{m,\infty}
+=
+\log R_{m,\infty}.
+\]
 For \(q=0\), the minimum is
 \[
 \inf_{T_m}D_0((T_m)_*\mu_m\|\pi_m)
@@ -2163,10 +2197,16 @@ For \(q=0\), the minimum is
 \bigl(n_0+n_1\varphi^{-1}+n_2\varphi^{-2}\bigr)
 \right).
 \]
-The minimizers are exactly the placements with the endpoint budgets displayed
-above, with the largest source atoms assigned to the heaviest available
-endpoint classes for \(q\in(0,\infty]\); for \(q=0\), only the support budget
-matters.
+For \(q\in(0,\infty)\), the minimizers are exactly the placements with the
+endpoint budgets displayed above, with the largest source atoms assigned to the
+heaviest available endpoint classes.  For \(q=\infty\), those placements attain
+the displayed value, and an injective placement is minimizing if and only if
+\[
+\max_{a\in S_m(\alpha)}
+\frac{\mu_m(a)}{p_1\,\tau(T_m(a))}
+\le R_{m,\infty}.
+\]
+For \(q=0\), only the support budget matters.
 \end{proposition}
 
 \begin{proof}
@@ -2208,7 +2248,24 @@ prefactor, gives the same assignment.  This proves the displayed formula for
 For \(q=1\), Theorem~\ref{thm:lossless-coarse-graining-envelope} reduces the
 endpoint penalty to the expectation of the class costs \(0,\log\varphi\), and
 \(2\log\varphi\).  The same rearrangement argument assigns the largest masses
-to the lowest costs, giving \(\gamma_{m,1}\).  For \(q=0\), the source weights
+to the lowest costs, giving \(\gamma_{m,1}\).  For \(q=\infty\), the problem is
+to minimize
+\[
+\max_{a\in S_m(\alpha)}\frac{\mu_m(a)}{\tau(T_m(a))}.
+\]
+The displayed class filling gives bottleneck \(p_1R_{m,\infty}\): its largest
+ratios in the three endpoint levels are \(p_1\), \(\varphi p_{n_0+1}\), and
+\(\varphi^2p_{n_0+n_1+1}\), with empty levels omitted.  Conversely, if a
+placement has bottleneck at most \(p_1R_{m,\infty}\), then it is optimal.  No
+smaller bottleneck is possible.  Indeed, a bound \(B<p_1R_{m,\infty}\) must
+fail in one of three ways: \(B<p_1\), so the largest atom already exceeds the
+bound even in \(X_m^{00}\); or \(n_1>0\) and \(B<\varphi p_{n_0+1}\), so the
+first \(n_0+1\) atoms would all have to lie in \(X_m^{00}\), whose capacity is
+only \(n_0\); or \(n_2>0\) and
+\(B<\varphi^2p_{n_0+n_1+1}\), so the first \(n_0+n_1+1\) atoms would all have
+to lie outside \(X_m^{11}\), while \(X_m^{00}\cup X_m^{01}\cup X_m^{10}\) has
+capacity only \(n_0+n_1\) in the support-optimal budget.  This proves the
+\(q=\infty\) value and the stated minimizer criterion.  For \(q=0\), the source weights
 drop out and
 \[
 D_0((T_m)_*\mu_m\|\pi_m)=-\log\pi_m(T_m(S_m(\alpha))),
@@ -2756,13 +2813,20 @@ D_q(\nu_m\|\pi_m)
 -\log c_{00}-H_q(\mu_m)+\Gamma_q(T_m),
 \end{aligned}
 \]
-which is the claimed identity. Because every \(\mu_m(a)\) is positive and
-\(\tau(T_m(a))\in\{1,\varphi^{-1},\varphi^{-2}\}\), the weighted average
-inside the logarithm defining \(\Gamma_q(T_m)\) lies between the minimum and
-maximum of \(\tau^{1-q}\). Therefore
+which is the claimed identity.  Put
 \[
-0\le \Gamma_q(T_m)\le 2\log\varphi.
+w_a=\frac{\mu_m(a)^q}{\sum_{b\in S_m(\alpha)}\mu_m(b)^q}.
 \]
+The logarithm in \(\Gamma_q(T_m)\) is applied to the weighted mean
+\[
+\sum_{a\in S_m(\alpha)}w_a\,\tau(T_m(a))^{1-q}.
+\]
+If \(q>1\), then \(1-q<0\), and this mean lies in
+\([1,\varphi^{2(q-1)}]\); multiplying its logarithm by the positive number
+\(1/(q-1)\) gives a value in \([0,2\log\varphi]\).  If \(0<q<1\), then
+\(1-q>0\), and the same mean lies in \([\varphi^{-2(1-q)},1]\);
+multiplying by the negative number \(1/(q-1)\) reverses the interval and
+again gives \(0\le \Gamma_q(T_m)\le2\log\varphi\).
 The lower endpoint occurs if and only if every \(\tau(T_m(a))=1\), namely
 \(T_m(S_m(\alpha))\subset X_m^{00}\). The upper endpoint occurs if and only if
 every \(\tau(T_m(a))=\varphi^{-2}\), namely
@@ -2865,11 +2929,72 @@ is exactly the same estimate rewritten with constants uniform in
 The preceding optimization uses the endpoint collapse of the golden-mean
 Parry law.  The following result is only the primitive-SFT restoration
 interface needed here, not a replacement for the golden-mean endpoint theorem:
-it records the finite-block budget obstruction shared by all primitive
+it records the finite-block support envelope shared by all primitive
 positive-entropy SFTs.  A primitive Parry law has exponentially small
 cylinders, whereas finite-block factors of a Sturmian system have only linear
 block complexity, so injective placement cannot remove the order
 \(m\log\lambda-\log m\) divergence barrier.
+
+\begin{proposition}[Primitive-SFT Parry support envelope]
+\label{prop:primitive-sft-support-envelope}
+Let \(A\) be a primitive \(d\times d\) zero-one matrix with Perron root
+\(\lambda>1\), and let \(\Pi_m^A\) be the \(m\)-block marginal of its Parry
+measure on the one-sided vertex shift \(X_A\).  Define, for
+\(1\le k\le |X_A^{(m)}|\),
+\[
+M_m^A(k):=\max\{\Pi_m^A(S): S\subset X_A^{(m)},\ |S|\le k\}.
+\]
+There is a constant \(C_A\ge1\) such that, for all \(m\ge1\) and all \(k\),
+\[
+M_m^A(k)\le C_A k\lambda^{-m}.
+\]
+Consequently, if \(\nu\in\Delta(X_A^{(m)})\) has \(|\supp(\nu)|\le k\), then
+for every \(q\in[0,\infty]\),
+\[
+D_q(\nu\|\Pi_m^A)\ge m\log\lambda-\log k-\log C_A.
+\]
+In particular, any sequence of \(m\)-block laws with
+\(D_q(\nu_m\|\Pi_m^A)=O(1)\) for some fixed \(q\in[0,\infty]\) must have
+\(|\supp(\nu_m)|\ge c_A\lambda^m\) along that sequence, for a constant
+\(c_A>0\) depending only on \(A\) and on the \(O(1)\) bound.
+\end{proposition}
+
+\begin{proof}
+Let \(l,r_A\) be positive left and right Perron eigenvectors for \(A\),
+normalized by \(\sum_i l_ir_{A,i}=1\).  The Parry transition matrix is
+\[
+P_{ij}=A_{ij}\frac{r_{A,j}}{\lambda r_{A,i}},
+\]
+with stationary vector \(\pi_i=l_ir_{A,i}\).  Thus every admissible
+word \(u=u_1\cdots u_m\in X_A^{(m)}\) has Parry mass
+\[
+\Pi_m^A(u)
+=
+\pi_{u_1}P_{u_1u_2}\cdots P_{u_{m-1}u_m}
+=
+l_{u_1}r_{A,u_m}\lambda^{-(m-1)}.
+\]
+Since the state set is finite, after increasing the constant if necessary,
+\[
+\Pi_m^A(u)\le C_A\lambda^{-m}
+\qquad (u\in X_A^{(m)},\ m\ge1).
+\]
+Every \(k\)-point set therefore has Parry mass at most
+\(C_Ak\lambda^{-m}\), which proves the support-envelope estimate.
+
+Now put \(S=\supp(\nu)\).  Proposition~\ref{prop:renyi-support-conditioning}
+gives, for every \(q\in[0,\infty]\),
+\[
+D_q(\nu\|\Pi_m^A)
+=
+D_q(\nu\|\Pi_m^A(\cdot\mid S))-\log\Pi_m^A(S)
+\ge
+-\log\Pi_m^A(S),
+\]
+because R\'enyi divergences are nonnegative.  Since \(|S|\le k\), the envelope
+bound gives the displayed lower bound.  Rearranging this bound gives the final
+support lower bound.
+\end{proof}
 
 \begin{theorem}[Primitive-SFT injective-placement barrier]
 \label{thm:primitive-sft-placement-barrier}
@@ -2879,8 +3004,7 @@ measure on the one-sided vertex shift \(X_A\).  Let \(\ell\ge0\), let
 \(\Theta\) be a sliding block code of window length \(\ell+1\) from a
 Sturmian subshift of slope \(\alpha\) into a finite alphabet, and let
 \(\sigma_m\) be the law of the length-\(m\) words in the factor
-\(\Theta(X_\alpha)\).  If the partial quotients of \(\alpha\) are bounded by
-\(B\), then there is a constant \(C=C(A,\ell,B)\) such that, for every
+\(\Theta(X_\alpha)\).  Then there is a constant \(C=C(A,\ell)\) such that, for every
 \(m\ge1\) and every injective placement
 \[
 \iota:\supp(\sigma_m)\hookrightarrow X_A^{(m)}
