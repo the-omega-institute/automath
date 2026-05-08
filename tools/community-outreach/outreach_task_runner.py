@@ -190,27 +190,16 @@ def cleanup_stale_claims(stale_hours: float = DEFAULT_CLAIM_STALE_HOURS) -> int:
 
 
 # ---------------------------------------------------------------------------
-# claude exec helper
-# ---------------------------------------------------------------------------
-
-
-def _claude(prompt: str, *, timeout: int, log_tag: str) -> tuple[bool, str, int]:
-    try:
-        from outreach_claude_exec import claude_exec  # noqa: PLC0415
-    except Exception as exc:
-        runner_log(f"outreach_claude_exec import failed: {exc}")
-        return False, str(exc), -1
-    return claude_exec(
-        prompt,
-        timeout=timeout,
-        log_tag=log_tag,
-        log_dir=TASK_RUNNER_LOG_DIR,
-        repo_root=REPO_ROOT,
-    )
-
-
-# ---------------------------------------------------------------------------
 # workers per task type
+#
+# Author allocation (per operator decision 2026-05-08):
+#   - codex_track: primary deep-reasoning + drafting (codex authors,
+#     codex self-audits, claude does redline hygiene only)
+#   - oracle (ChatGPT Project): codex_track escalations + tasks pre-flagged
+#     with context.use_oracle=True (need Project-attached files like
+#     main.pdf / READMEs / PROGRAM_BOARD.md as deep context)
+#   - claude: gate auditor (claude_review) + writeback skill (/killo-golden,
+#     handled by outreach_writeback_loop). NOT used as primary author here.
 # ---------------------------------------------------------------------------
 
 
@@ -223,64 +212,14 @@ def _ensure_parent(p: Path) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
 
 
-_DRAFTING_PROMPT = """You are drafting a single deliverable for a specific operator commitment. Output ONLY the deliverable contents — no surrounding commentary, no markdown fence around the whole document, no "Here is the draft" preamble.
-
-# Task
-
-{title}
-
-# Context (do not invent facts beyond what is stated here)
-
-```
-{context_json}
-```
-
-# Hard constraints
-
-{constraints}
-
-# Required deliverable
-
-Write to `{deliverable_path}`.
-
-The constraints are not suggestions. The output must be ready for the operator to review, copy-paste, and send. Audience is the named external party in `context.thread` or `context.external_party` (if any) — write to them directly.
-
-Begin the deliverable now. Do not preface.
-"""
-
-
-_DRAFTING_RETRY_PROMPT = """You previously produced a draft for this task that did NOT pass the gate review. Below is the gate's verdict (specific reasons it failed) and your previous draft. Produce a NEW draft that fixes the failures while keeping the parts that were OK. Do NOT repeat the same mistake.
-
-# Task
-
-{title}
-
-# Context (do not invent facts beyond what is stated here)
-
-```
-{context_json}
-```
-
-# Hard constraints
-
-{constraints}
-
-# Previous gate verdict (this is what failed last time — fix THESE)
-
-```
-{prev_gate_reason}
-```
-
-# Previous draft (full text — for reference; do not paste back unchanged)
-
-```
-{prev_draft}
-```
-
-# Required deliverable
-
-Write to `{deliverable_path}`. Output ONLY the new draft, no preamble.
-"""
+def _infer_source_type(task: TaskSpec) -> str:
+    """Map TaskSpec.type → outreach_codex_track source_type."""
+    mapping = {
+        "issue_reply_draft": "gh_issue",
+        "email_reply_draft": "email",
+        "experimental": "email",
+    }
+    return mapping.get(task.type, "email")
 
 
 def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
@@ -386,12 +325,21 @@ def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
 
 
 def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
-    """Single-deliverable drafting tasks.
+    """Codex-first single-deliverable drafting.
 
     Routing rule:
-      - context.use_oracle=True → ChatGPT Project oracle (deep reasoning)
-        delegated to _run_oracle_drafting_task above.
-      - else → local claude (with retry-aware feedback prompt when retrying).
+      - context.use_oracle=True → straight to ChatGPT Project oracle (the
+        operator pre-decided this task needs Project-attached files like
+        main.pdf / READMEs as deep-reasoning context).
+      - else → outreach_codex_track.run_codex_track (codex authors + codex
+        self-audits + claude redline hygiene check). On verdict=escalate,
+        fall through to oracle deep_reasoning. On verdict=close, copy the
+        codex-authored draft to the task's deliverable_paths[0] and let
+        the claude_review gate audit it as final.
+
+    Claude is no longer the primary author for any drafting task — its
+    only roles in this loop are the redline hygiene check inside
+    codex_track and the claude_review gate after the worker returns.
     """
     if (task.context or {}).get("use_oracle"):
         return _run_oracle_drafting_task(task)
@@ -401,47 +349,87 @@ def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
     target = _abs(task.deliverable_paths[0])
     _ensure_parent(target)
 
-    constraints = task.context.get("operator_constraints") or []
-    if not isinstance(constraints, list):
-        constraints = [str(constraints)]
-    constraints_block = "\n".join(f"- {c}" for c in constraints) or "(none beyond context fidelity)"
+    try:
+        from outreach_codex_track import run_codex_track  # noqa: PLC0415
+    except Exception as exc:
+        return False, f"outreach_codex_track import failed: {exc}"
 
-    import json as _json
+    ctx = task.context or {}
+    target_payload = {
+        "target_id": task.id,
+        "title": task.title,
+        "source_type": _infer_source_type(task),
+        "source_url": ctx.get("thread") or ctx.get("source_url") or "",
+        "summary": ctx.get("summary") or task.title,
+        "fields": ctx,
+    }
 
-    is_retry = task.retries > 0 and target.exists() and bool(task.last_reason)
-    if is_retry:
-        try:
-            prev_draft = target.read_text(encoding="utf-8")
-        except OSError:
-            prev_draft = ""
-        prompt = _DRAFTING_RETRY_PROMPT.format(
-            title=task.title,
-            context_json=_json.dumps(task.context, ensure_ascii=False, indent=2),
-            constraints=constraints_block,
-            prev_gate_reason=task.last_reason or "(no recorded reason)",
-            prev_draft=prev_draft[:25000],
-            deliverable_path=task.deliverable_paths[0],
+    max_rounds = int(ctx.get("max_rounds", 6))
+    wall_clock_s = int(ctx.get("wall_clock_s", 1800))
+    runner_log(
+        f"{task.id}: codex_track max_rounds={max_rounds} wall_clock={wall_clock_s}s "
+        f"(retry={task.retries})"
+    )
+    result = run_codex_track(
+        target_payload,
+        max_rounds=max_rounds,
+        wall_clock_s=wall_clock_s,
+        drafts_dir=DRAFTS_DIR,
+    )
+    runner_log(
+        f"{task.id}: codex_track verdict={result.verdict} rounds={result.rounds} "
+        f"audit_score={result.audit_score} redline_pass={result.redline_pass} "
+        f"transcript={result.transcript_path}"
+    )
+
+    if result.verdict == "close" and result.draft_path and result.draft_path.exists():
+        body = result.draft_path.read_text(encoding="utf-8")
+        target.write_text(body, encoding="utf-8")
+        return True, (
+            f"wrote {target.relative_to(REPO_ROOT)} ({len(body)} chars) "
+            f"via codex_track [score={result.audit_score} rounds={result.rounds}]"
         )
-        log_tag = f"draft_retry{task.retries}_{task.id}"
-        runner_log(f"{task.id}: retry #{task.retries} — feeding prior draft + gate reason back to claude")
-    else:
-        prompt = _DRAFTING_PROMPT.format(
-            title=task.title,
-            context_json=_json.dumps(task.context, ensure_ascii=False, indent=2),
-            constraints=constraints_block,
-            deliverable_path=task.deliverable_paths[0],
+
+    if result.verdict == "escalate":
+        runner_log(
+            f"{task.id}: codex_track escalated → oracle deep_reasoning "
+            f"(reason={result.obstruction_reason[:200]})"
         )
-        log_tag = f"draft_{task.id}"
+        return _run_oracle_drafting_task(task)
 
-    ok, stdout, rc = _claude(prompt, timeout=2400, log_tag=log_tag)
-    if not ok:
-        return False, f"claude exec rc={rc} output_head={(stdout or '')[:200]}"
+    return False, (
+        f"codex_track verdict={result.verdict}: "
+        f"{result.obstruction_reason or 'no draft produced'}"
+    )
 
-    body = (stdout or "").strip()
+
+def _codex_oneshot(prompt: str, *, timeout: int, log_tag: str) -> tuple[bool, str]:
+    """Single-shot codex exec returning plain stdout text.
+
+    Used by _run_paper_trade for each step (summary / questions / pointers).
+    Returns (ok, body_text). body_text falls back to raw codex stdout when
+    the response is not JSON-wrapped, since paper-trade steps don't carry
+    a verdict envelope.
+    """
+    try:
+        from outreach_codex_track import codex_exec  # noqa: PLC0415
+    except Exception as exc:
+        return False, f"codex_exec import failed: {exc}"
+    res = codex_exec(prompt, timeout=timeout, log_tag=log_tag)
+    if not res.ok:
+        return False, f"codex rc={res.rc} err={res.error or '(none)'}"
+    body = ""
+    if isinstance(res.parsed, dict):
+        for key in ("text", "body", "draft", "draft_text", "content", "message", "summary"):
+            v = res.parsed.get(key)
+            if isinstance(v, str) and v.strip():
+                body = v.strip()
+                break
     if not body:
-        return False, "claude returned empty body"
-    target.write_text(body + "\n", encoding="utf-8")
-    return True, f"wrote {target.relative_to(REPO_ROOT)} ({len(body)} chars){' [retry]' if is_retry else ''}"
+        body = (res.raw_output or "").strip()
+    if not body:
+        return False, "codex returned empty body"
+    return True, body
 
 
 def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
@@ -517,16 +505,16 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"Read the SAIR paper text below and write a concise (1500-3000 char) reading summary "
         f"of the protocol — what Israel measures, the ceiling effect's empirical signature, "
         f"the Wilson CI choice, the saturation-region detection method, and any same-conversation "
-        f"axis he treats. Output the summary directly, no preamble.\n\n"
+        f"axis he treats. Output the summary text directly, plain prose, no preamble, no JSON wrapper.\n\n"
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Paper text (truncated)\n\n```\n{pdf_text[:60000]}\n```\n"
     )
-    ok, stdout, _ = _claude(summary_prompt, timeout=1500, log_tag=f"israel_summary_{task.id}")
-    if not ok or not stdout.strip():
-        return False, f"summary step failed: ok={ok}"
+    ok, body = _codex_oneshot(summary_prompt, timeout=1500, log_tag=f"israel_summary_{task.id}")
+    if not ok:
+        return False, f"summary step failed: {body}"
     summary_path = _abs(summary_rel)
     _ensure_parent(summary_path)
-    summary_path.write_text(stdout.strip() + "\n", encoding="utf-8")
+    summary_path.write_text(body + "\n", encoding="utf-8")
     runner_log(f"{task.id}: wrote {summary_rel}")
 
     # Step 3: annotated questions
@@ -537,16 +525,16 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"Required topical coverage: Wilson CI choice (pick one or two specific places to ask), "
         f"saturation-region detection (ask about thresholds / how to draw the saturation boundary), "
         f"same-conversation different-prompting-strategy axis (the meta-prompt 40→9100 char observation we shared — "
-        f"ask how his framework treats this). Write 600-1500 char total. Output text only.\n\n"
+        f"ask how his framework treats this). Write 600-1500 char total. Output plain text only, no JSON wrapper.\n\n"
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Summary\n\n{summary_path.read_text(encoding='utf-8')}\n"
     )
-    ok, stdout, _ = _claude(q_prompt, timeout=1500, log_tag=f"israel_questions_{task.id}")
-    if not ok or not stdout.strip():
-        return False, f"questions step failed: ok={ok}"
+    ok, body = _codex_oneshot(q_prompt, timeout=1500, log_tag=f"israel_questions_{task.id}")
+    if not ok:
+        return False, f"questions step failed: {body}"
     q_path = _abs(questions_rel)
     _ensure_parent(q_path)
-    q_path.write_text(stdout.strip() + "\n", encoding="utf-8")
+    q_path.write_text(body + "\n", encoding="utf-8")
     runner_log(f"{task.id}: wrote {questions_rel}")
 
     # Step 4: Lean library pointers (line-anchored, no Lean execution)
@@ -556,20 +544,21 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"Compose a concise document of line-anchored Lean library pointers for Israel. "
         f"Each pointer must be in `path:line:declaration_name` format with one-line context. "
         f"Cover three sections matching `lean_pointer_targets`: Z/21Z CRT split, integer-affine closure / "
-        f"non-affine witness, and Sym²/Λ² near-misses. Group by section. Write 1500-3500 char.\n\n"
+        f"non-affine witness, and Sym²/Λ² near-misses. Group by section. Write 1500-3500 char. "
+        f"Output plain text only, no JSON wrapper.\n\n"
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Per-section grep extracts (use these as the source of file:line evidence)\n\n"
         f"```\n{grep_dump[:50000]}\n```\n"
     )
-    ok, stdout, _ = _claude(p_prompt, timeout=1500, log_tag=f"israel_pointers_{task.id}")
-    if not ok or not stdout.strip():
-        return False, f"pointers step failed: ok={ok}"
+    ok, body = _codex_oneshot(p_prompt, timeout=1500, log_tag=f"israel_pointers_{task.id}")
+    if not ok:
+        return False, f"pointers step failed: {body}"
     p_path = _abs(pointers_rel)
     _ensure_parent(p_path)
-    p_path.write_text(stdout.strip() + "\n", encoding="utf-8")
+    p_path.write_text(body + "\n", encoding="utf-8")
     runner_log(f"{task.id}: wrote {pointers_rel}")
 
-    return True, "all 4 paper-trade deliverables written"
+    return True, "all 4 paper-trade deliverables written (codex)"
 
 
 def _extract_pdf_text(pdf_path: Path) -> str:
