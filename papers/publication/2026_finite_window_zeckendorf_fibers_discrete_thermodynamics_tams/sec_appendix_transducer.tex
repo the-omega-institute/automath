@@ -108,6 +108,88 @@ three hashes pin respectively the archived JSON file, the verifier script, and
 the canonical mathematical payload checked by that script.
 \end{proof}
 
+\begin{proposition}[Auditable reconstruction of the finite collision kernel]
+\label{prop:auditable-kernel-reconstruction}
+The finite table archived in the paper-local certificate file of
+\Cref{prop:pinned-normalizer-certificate-table} determines, without any further
+choices, the normalizer \(\mathcal T\), the one-copy augmented fold automaton
+\(\widehat Q\), and, for every \(q\ge2\), the integer histogram kernel
+\[
+  (\widetilde A_q,\widetilde u_q,\widetilde v_q)
+\]
+used in \Cref{thm:symmetric-compression,def:exact-histogram-kernel}.  More
+explicitly, an audit consists of the following finite reconstruction.
+\begin{center}
+\small
+\begin{tabular}{@{}cp{0.78\textwidth}@{}}
+\toprule
+stage & finite data reconstructed from the archive\\
+\midrule
+1 & the deterministic carry table \(\mathcal C\), its initial state, and every
+edge \(s\xrightarrow[d/e]{}s'\);\\
+2 & the binary padded subsequential transducer \(\mathcal T\), obtained by
+restricting to \(d\in\{0,1\}\), applying the recorded leading-delay convention,
+and using the terminal zero flush;\\
+3 & the bounded-delay data \(L\), the augmented states
+\(\widehat Q=Q\times\{0,1\}^{\le L+1}\times\{0,1\}\), and, for each
+\((s,r,e)\in\widehat Q\) and \(a\in\{0,1\}\), the update
+\(T_a(s,r,e)\), committed block \(C_a(s,r,e)\), and terminal suffix
+\(\Phi(s,r,e)\);\\
+4 & the histogram set
+\(\mathcal H_q=\{\eta:\widehat Q\to\ZZ_{\ge0}:\sum_s\eta(s)=q\}\), the
+transition multiplicities in \(\widetilde A_q\), and the vectors
+\(\widetilde u_q,\widetilde v_q\).\\
+\bottomrule
+\end{tabular}
+\end{center}
+The resulting matrix coefficient satisfies
+\[
+  S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q
+  \qquad(m\ge0),
+\]
+and the construction is the same finite object whether it is used for
+\Cref{thm:collision-kernel,thm:symmetric-compression} or for the
+arithmetic-window residual certificates in Appendix~\ref{app:certification}.
+\end{proposition}
+
+\begin{proof}
+The first stage is a literal read of the finite field
+\(\texttt{fixed\_normalizer\_transition\_table}\) in the archived JSON file.
+It lists the state names, the initial state, the alphabets, and every edge of
+the carry table.  Since the table is deterministic and total on its digit
+alphabet, the binary restriction and the recorded terminal-flush convention
+determine a unique deterministic subsequential transducer \(\mathcal T\).
+\Cref{thm:pinned-padded-normalizer-soundness} proves that this reconstructed
+transducer is the padded Zeckendorf normalizer used in the paper.
+
+Given \(\mathcal T\), the number \(L=\max_s|\tau(s)|\) is read from its finite
+terminal-output table.  The definition of \(\widehat Q\) is then a finite
+Cartesian product.  For each augmented state and each binary input symbol, the
+update rule in \Cref{prop:appendix-collision-automaton} performs only three
+deterministic operations: append the transducer output \(\lambda(s,a)\), delete
+the initial overflow symbol if the deletion flag has not yet fired, and split
+the resulting visible word into its committed prefix and suffix of length at
+most \(L+1\).  Thus the maps \(T_a\), the committed blocks \(C_a\), and the
+terminal suffixes \(\Phi\) are finite functions determined by the archive.
+
+Finally, for fixed \(q\), the histogram set \(\mathcal H_q\) is the finite set
+of weak compositions of \(q\) into \(|\widehat Q|\) parts.  The entries of
+\(\widetilde A_q\) are the finite multinomial sums displayed in
+\Cref{def:exact-histogram-kernel}; these sums use only the already
+reconstructed maps \(T_a\) and \(C_a\).  The initial vector selects the
+histogram supported on the initial augmented state, and the terminal vector is
+the indicator of the finite condition that all states in the support have the
+same \(\Phi\)-value.  Therefore the archive determines the same integer matrix
+and vectors for every auditor.
+
+The equality with \(S_q(m)\) is then exactly the accepted-path count proved in
+\Cref{prop:appendix-collision-automaton}, followed by the orbit-sum histogram
+realization of \Cref{lem:exact-histogram-realization}.  The body kernels and
+the certificate kernels are built from this same reconstructed finite object,
+so there is no additional fitted table hidden behind the recurrence
+certificates.
+\end{proof}
+
 \begin{theorem}[Soundness of the hash-pinned padded normalizer]
 \label{thm:pinned-padded-normalizer-soundness}
 Let \(\mathcal C\) be the finite carry table stored in the pinned certificate
