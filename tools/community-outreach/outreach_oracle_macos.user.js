@@ -103,7 +103,7 @@
     panel = document.createElement("div");
     panel.id = "outreach-oracle-panel";
     panel.style.cssText = `
-      position: fixed; bottom: 12px; right: 12px; z-index: 99999;
+      position: fixed; top: 12px; right: 12px; z-index: 99999;
       background: #1d1d3a; color: #9af; font-family: monospace; font-size: 11px;
       padding: 8px 12px; border-radius: 6px; max-width: 460px; max-height: 320px;
       overflow-y: auto; box-shadow: 0 2px 12px rgba(80,40,180,0.5); opacity: 0.93;
