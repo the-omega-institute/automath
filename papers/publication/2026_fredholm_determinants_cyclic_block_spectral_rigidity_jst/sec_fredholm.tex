@@ -839,6 +839,19 @@ threshold for normal Fredholm realization into a single \(\iff\) statement.
     n_j,m_j\in\NN,\qquad
     \beta_j\in\CC\setminus\{0\}.
   \]
+  For a trace-class operator \(A\), the assertion
+  \[
+    \det(I-zA)=\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j}
+  \]
+  means the following product-side condition. The finite products
+  \[
+    P_F(z):=\prod_{j\in F}(1-\beta_j z^{n_j})^{m_j},
+    \qquad F\Subset J,
+  \]
+  directed by inclusion, converge locally uniformly on compact subsets of
+  \(\CC\) to the Fredholm determinant \(\det(I-zA)\). No summability of the
+  root budget is assumed in this convention; the theorem asserts that such
+  a Fredholm-determinant limit exists exactly in the summable case.
   Then the following are equivalent:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item The summability condition
@@ -877,20 +890,31 @@ threshold for normal Fredholm realization into a single \(\iff\) statement.
     :=\sum_{\{j\in J:\lambda^{n_j}=\beta_j\}}m_j.
   \]
   A factor \((1-\beta_j z^{n_j})^{m_j}\) vanishes at \(z=\lambda^{-1}\)
-  exactly when \(\lambda^{n_j}=\beta_j\). Since the product converges
-  locally uniformly to the entire Fredholm determinant \(\det(I-zT)\),
-  the zero at \(z=\lambda^{-1}\) has finite order, so
-  \(M_{\mathcal D}(\lambda)<\infty\). Its order is exactly
-  \(M_{\mathcal D}(\lambda)\), because near \(z=\lambda^{-1}\) the
-  convergent product splits into the finitely many vanishing factors and a
-  locally non-vanishing factor. By the standard zero-multiplicity theorem
-  for Fredholm determinants, \cite[Theorem~3.7]{Simon2005TraceIdeals};
-  see also
+  exactly when \(\lambda^{n_j}=\beta_j\). We first prove that
+  \(M_{\mathcal D}(\lambda)<\infty\). If not, then for every \(r\ge1\) and
+  every sufficiently large finite set \(F\) in the directed net, the
+  product \(P_F\) is divisible by \((1-\lambda z)^r\) at
+  \(z=\lambda^{-1}\). Locally uniform convergence of \(P_F\) to the entire
+  function \(\det(I-zT)\) implies convergence of derivatives, hence
+  \(\det(I-zT)\) has a zero of order at least \(r\) at \(z=\lambda^{-1}\).
+  Since \(r\) is arbitrary and \(\det(I)=1\), this is impossible. Thus
+  \(M_{\mathcal D}(\lambda)\) is finite.
+
+  Let \(q_\lambda\) be the order of the zero of \(\det(I-zT)\) at
+  \(z=\lambda^{-1}\). The same derivative argument, now applied after
+  fixing all finitely many factors with \(\lambda^{n_j}=\beta_j\), gives
+  \(q_\lambda\ge M_{\mathcal D}(\lambda)\). By the standard
+  zero-multiplicity theorem for Fredholm determinants, in the form stating
+  that the zero of \(\det(I-zT)\) at \(z=\lambda^{-1}\) has order equal to
+  the algebraic multiplicity of \(\lambda\) as an eigenvalue of \(T\),
+  \cite[Theorem~3.7]{Simon2005TraceIdeals}; see also
   \cite{Simon1977InfiniteDeterminants,GohbergGoldbergKrupnik1996TracesDeterminants},
-  the same order is the algebraic multiplicity of \(\lambda\) as an
-  eigenvalue of \(T\). Thus the non-zero spectrum of \(T\), counted with
-  algebraic multiplicity, is precisely the multiset prescribed by
-  \(\mathcal D\).
+  the algebraic multiplicity of \(\lambda\) for \(T\) is \(q_\lambda\).
+  Hence the prescribed multiset from \(\mathcal D\) embeds, with
+  multiplicity, into the non-zero eigenvalue multiset of \(T\). This is
+  the only product-side information needed for the budget implication; no
+  convergence of the abstract product beyond the Fredholm-determinant
+  limit has been assumed.
 
   Let \((\lambda_k(T))_{k\ge1}\) be the eigenvalues of \(T\), repeated
   according to algebraic multiplicity and ordered by decreasing modulus,
@@ -902,18 +926,19 @@ threshold for normal Fredholm realization into a single \(\iff\) statement.
   see K\"onig's treatment of eigenvalue/singular-value majorization for
   compact operators \cite{Konig1986EigenvalueDistribution}; compare also
   \cite[Chapter~1]{Simon2005TraceIdeals}. Choose roots
-  \(\alpha_j^{n_j}=\beta_j\). Since the prescribed
-  non-zero eigenvalue multiset is exactly
+  \(\alpha_j^{n_j}=\beta_j\). The prescribed cyclic multiset is
   \[
     \bigl\{\!\bigl\{\alpha_j\omega:
       j\in J,\ \omega^{n_j}=1,\text{ repeated }m_j\text{ times}
     \bigr\}\!\bigr\},
   \]
+  and the preceding paragraph shows that this multiset is contained in
+  the non-zero eigenvalue multiset of \(T\), with multiplicities. Hence
   one obtains
   \[
     \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
     =\sum_{\lambda\neq 0}\abs{\lambda}M_{\mathcal D}(\lambda)
-    =\sum_{k\ge1}\abs{\lambda_k(T)}
+    \le \sum_{k\ge1}\abs{\lambda_k(T)}
     \le \|T\|_1<\infty,
   \]
   which is \textup{(i)}. Once \textup{(i)} is known,
@@ -1264,13 +1289,52 @@ threshold for normal Fredholm realization into a single \(\iff\) statement.
   summability hypothesis is not merely sufficient but necessary.
 \end{remark}
 
-\begin{remark}[Choice of roots]\label{rem:choice-of-roots}
-  Replacing \(\alpha_j\) by another \(n_j\)th root of \(\beta_j\)
-  merely rotates the same regular \(n_j\)-gon of eigenvalues. Hence the
-  corresponding blocks \(C(n_j,\alpha_j)\otimes I_{m_j}\) are unitarily
-  equivalent. The determinant data determine the block only up to this
-  harmless relabelling and the addition of zero summands.
-\end{remark}
+\begin{lemma}[Choice of roots and unitary relabelling]\label{rem:choice-of-roots}
+  Let \(n,m\in\NN\), let \(\beta\in\CC\setminus\{0\}\), and let
+  \(\alpha^n=(\alpha')^n=\beta\). Then
+  \(C(n,\alpha)\otimes I_m\) and \(C(n,\alpha')\otimes I_m\) are
+  unitarily equivalent. More explicitly, if
+  \(\eta:=\alpha'/\alpha\), so that \(\eta^n=1\), and
+  \((e_0,\dots,e_{n-1})\) is the cyclic basis in which
+  \(\Pi_n e_k=e_{k+1\!\!\pmod n}\), then
+  \[
+    U_\eta e_k:=\eta^k e_k
+    \qquad (0\le k<n)
+  \]
+  defines a unitary on \(\CC^n\) satisfying
+  \[
+    U_\eta C(n,\alpha)U_\eta^{-1}=C(n,\alpha').
+  \]
+  Consequently any two root choices in the construction of
+  \(L_{\mathcal D}\) give unitarily equivalent cyclic models, via the
+  block direct sum of the maps \(U_{\eta_j}\otimes I_{m_j}\). The
+  determinant data therefore determine the cyclic model only up to this
+  explicit relabelling and the addition of zero summands.
+\end{lemma}
+
+\begin{proof}
+  The operator \(U_\eta\) is unitary because it is diagonal in the cyclic
+  basis with unimodular diagonal entries. For \(0\le k<n\),
+  \[
+    U_\eta\Pi_nU_\eta^{-1}e_k
+    =U_\eta\Pi_n(\eta^{-k} e_k)
+    =\eta^{-k}U_\eta e_{k+1}
+    =\eta^{-k}\eta^{k+1}e_{k+1}
+    =\eta\Pi_ne_k
+  \]
+  if \(k<n-1\), and the same computation at \(k=n-1\) gives
+  \(U_\eta\Pi_nU_\eta^{-1}e_{n-1}=\eta^{-(n-1)}e_0=\eta e_0\), since
+  \(\eta^n=1\). Thus \(U_\eta\Pi_nU_\eta^{-1}=\eta\Pi_n\). Hence
+  \[
+    U_\eta C(n,\alpha)U_\eta^{-1}
+    =\alpha\eta\Pi_n
+    =\alpha'\Pi_n
+    =C(n,\alpha').
+  \]
+  Tensoring with \(I_m\) proves the finite-multiplicity statement, and the
+  Hilbert direct sum of the resulting block unitaries proves the assertion
+  for \(L_{\mathcal D}\).
+\end{proof}
 
 \begin{corollary}[Finite Euler products give finite-rank determinant models]
   \label{cor:finite-rank-realisation}
@@ -1346,8 +1410,9 @@ trace-class determinant fiber already comes from the normal cyclic model.
 \begin{proof}
   For \(T\in\sone(H)\), the Fredholm determinant \(z\mapsto\det(I-zT)\)
   is entire, and its zeros are exactly the reciprocals of the non-zero
-  eigenvalues of \(T\), counted with algebraic multiplicity; this is the
-  standard zero-multiplicity correspondence of
+  eigenvalues of \(T\), with the order of the zero at \(z=\lambda^{-1}\)
+  equal to the algebraic multiplicity of the eigenvalue \(\lambda\). This
+  is the standard zero-multiplicity correspondence of
   \cite{Simon1977InfiniteDeterminants,GohbergGoldbergKrupnik1996TracesDeterminants}
   and \cite[Theorem~3.7]{Simon2005TraceIdeals}. Equality as holomorphic
   germs at \(0\) therefore extends to all of \(\CC\), and the non-zero
@@ -1360,7 +1425,7 @@ trace-class determinant fiber already comes from the normal cyclic model.
   gives \(p_n(T_1)=p_n(T_2)\) for all \(n\ge1\).
 \end{proof}
 
-\begin{lemma}[Ordered Weyl--Ky Fan inequality for trace class]
+\begin{lemma}[Ordered Weyl--Ky Fan--Lidskii inequality for trace class]
   \label{lem:weyl-ky-fan-trace-class}
 Let \(T\in\sone(H)\). Let \((\lambda_k(T))_{k\ge1}\) be the eigenvalues
 of \(T\), repeated according to algebraic multiplicity and ordered so
@@ -1386,14 +1451,62 @@ Consequently,
 
 \begin{proof}
 This is the classical Weyl--Ky Fan majorization inequality for compact
-operators, applied to the eigenvalue sequence ordered by decreasing
-modulus and the singular-value sequence ordered decreasingly; see
-K\"onig's monograph on eigenvalue distribution of compact operators
-\cite{Konig1986EigenvalueDistribution}; compare also
-\cite[Chapter~1]{Simon2005TraceIdeals}. Since \(T\in\sone(H)\), the
+operators, in the trace-class form descended from Lidskii's trace theorem:
+the partial sums of the moduli of the eigenvalues, ordered decreasingly
+and counted with algebraic multiplicity, are dominated by the corresponding
+partial sums of the singular values. See Lidskii's original trace theorem
+\cite{Lidskii1959}, K\"onig's monograph on eigenvalue distribution of
+compact operators \cite{Konig1986EigenvalueDistribution}, and the
+treatment of \(s\)-numbers and trace-class eigenvalue estimates in
+\cite[Chapter~1]{Simon2005TraceIdeals} and
+\cite{GohbergGoldbergKaashoek1990ClassesI}. Since \(T\in\sone(H)\), the
 singular values are summable and
 \(\sum_{k\ge1}s_k(T)=\|T\|_1\). Passing to the monotone limit in the
 partial-sum inequality therefore yields the final claim.
+\end{proof}
+
+\begin{lemma}[Two-by-two trace-norm pinching identity]
+  \label{lem:two-by-two-trace-norm-pinching}
+  For \(a,b,c\in\CC\), let
+  \[
+    B=\begin{pmatrix}a&c\\0&b\end{pmatrix}.
+  \]
+  Then
+  \[
+    \|B\|_1^2=(\abs{a}+\abs{b})^2+\abs{c}^2.
+  \]
+  In particular,
+  \[
+    \|B\|_1\ge \abs{a}+\abs{b},
+  \]
+  and equality holds if and only if \(c=0\).
+\end{lemma}
+
+\begin{proof}
+  Let \(\sigma_1,\sigma_2\ge0\) be the singular values of \(B\). Then
+  \[
+    \|B\|_1^2=(\sigma_1+\sigma_2)^2
+    =\sigma_1^2+\sigma_2^2+2\sigma_1\sigma_2.
+  \]
+  The squared singular values are the eigenvalues of \(B^*B\), so
+  \[
+    \sigma_1^2+\sigma_2^2=\Tr(B^*B)
+    =\abs{a}^2+\abs{b}^2+\abs{c}^2,
+  \]
+  and
+  \[
+    \sigma_1\sigma_2=\sqrt{\det(B^*B)}
+    =\abs{\det B}
+    =\abs{ab}.
+  \]
+  Therefore
+  \[
+    \|B\|_1^2
+    =\abs{a}^2+\abs{b}^2+\abs{c}^2+2\abs{a}\,\abs{b}
+    =(\abs{a}+\abs{b})^2+\abs{c}^2.
+  \]
+  The equality characterization follows immediately, since the square
+  root is strictly increasing on \([0,\infty)\).
 \end{proof}
 
 \begin{theorem}[Global trace-norm minimum and minimizer classification in a Fredholm-determinant fiber]
@@ -1510,13 +1623,14 @@ partial-sum inequality therefore yields the final claim.
   Replacing \(H\) by \(H_T\) and \(T\) by \(T|_{H_T}\) therefore loses no
   information, so we may assume from now on that \(H\) is separable.
 
-  By the Schur triangularization theorem for compact operators on a
-  separable Hilbert space \cite{Ringrose1971CompactNonSelfAdjoint}, there
-  is an orthonormal basis \((e_k)_{k\ge1}\) of \(H\) such that the matrix
-  \(A=[a_{ij}]\) of \(T\) in this basis is upper triangular and the
-  diagonal entries \((a_{kk})_{k\ge1}\) are the eigenvalues of \(T\),
-  counted with algebraic multiplicity, followed by zeros. Since those
-  non-zero eigenvalues are exactly the multiset encoded by
+  We use Ringrose's compact Schur triangularization theorem
+  \cite{Ringrose1971CompactNonSelfAdjoint}: for a compact operator on a
+  separable Hilbert space there is an orthonormal basis in which the
+  matrix is upper triangular and its diagonal lists the eigenvalues with
+  algebraic multiplicity, followed by zeros. Applying this to \(T\), let
+  \((e_k)_{k\ge1}\) be such a basis and let \(A=[a_{ij}]\) be the matrix
+  of \(T\) in this basis. Since those non-zero eigenvalues are exactly the
+  multiset encoded by
   \(D_{\mathcal D}\),
   \[
     \sum_{k\ge1}\abs{a_{kk}}
@@ -1581,23 +1695,9 @@ partial-sum inequality therefore yields the final claim.
     -\abs{a_{ii}}-\abs{a_{jj}}.
   \]
 
-  For the displayed \(2\times2\) upper triangular matrix \(B_{ij}\),
-  \[
-    \det(B_{ij}^*B_{ij})=\abs{a_{ii}a_{jj}}^2
-  \]
-  and
-  \[
-    \Tr(B_{ij}^*B_{ij})
-    =\abs{a_{ii}}^2+\abs{a_{jj}}^2+\abs{a_{ij}}^2.
-  \]
-  Hence, since the trace norm of a \(2\times2\) matrix is the sum of the
-  square roots of the eigenvalues of \(B_{ij}^*B_{ij}\),
-  \[
-    \|B_{ij}\|_1^2
-    =\Tr(B_{ij}^*B_{ij})+2\sqrt{\det(B_{ij}^*B_{ij})}
-    =(\abs{a_{ii}}+\abs{a_{jj}})^2+\abs{a_{ij}}^2.
-  \]
-  Therefore
+  Applying the two-by-two pinching identity
+  \Cref{lem:two-by-two-trace-norm-pinching} to the displayed matrix
+  \(B_{ij}:=R_{ij}A_NR_{ij}\) gives
   \[
     \|B_{ij}\|_1>\abs{a_{ii}}+\abs{a_{jj}}
     \qquad\text{whenever }a_{ij}\neq0.
