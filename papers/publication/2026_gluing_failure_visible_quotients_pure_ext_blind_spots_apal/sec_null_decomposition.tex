@@ -670,8 +670,128 @@ refined state $q$.
 \end{proof}
 
 \begin{proposition}[A finite model for the three absence modes]\label{prop:finite-three-mode-model}
-See \cite[Proposition~4.17]{HomologicalVisibilityGluingObstructions2026}.
+There is a finite information-state model with one state $p$, one
+referenceable sort $s$, and three admitted references
+\[
+r_{\mathrm{loc}},\quad r_{\mathrm{cmp}},\quad r_{\mathrm{glue}}:\mathsf{Ref}_s
+\]
+such that, at $p$,
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}}),
+\qquad
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}}),
+\qquad
+M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}}).
+\]
+The local reference frame may be chosen to be a finite preorder site in which
+the compatibility failure is detected by two distinct common refinements, so
+the example does not use or require binary meets.
 \end{proposition}
+
+\begin{proof}
+Take a context $\Gamma_p$ with one valuation and let
+$p=(\Gamma_p,R_p)$ with $R_p$ that singleton. Interpret the three references as
+three distinct admitted classes
+\[
+a_{\mathrm{loc}}=[r_{\mathrm{loc}}]_p,\qquad
+a_{\mathrm{cmp}}=[r_{\mathrm{cmp}}]_p,\qquad
+a_{\mathrm{glue}}=[r_{\mathrm{glue}}]_p.
+\]
+Let $\mathcal B_{p,s}$ be the disjoint union of the following three finite
+preorder components, and take the displayed nonempty families, together with
+identity families and their transitive refinements, as the covers.
+
+For $a_{\mathrm{loc}}$, use only the root object $a_{\mathrm{loc}}$ and its
+identity cover. Put
+\[
+F(a_{\mathrm{loc}})=\varnothing .
+\]
+Then no covering family of $a_{\mathrm{loc}}$ has local sections on all of its
+members, so $\LocSec_s(r_{\mathrm{loc}})$ fails. Since the reference is
+admitted, \Cref{def:null-failure-modes} gives
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}}).
+\]
+
+For $a_{\mathrm{cmp}}$, use objects
+\[
+u,\ v,\ c_0,\ c_1,\ a_{\mathrm{cmp}}
+\]
+with preorder arrows
+\[
+c_\epsilon\sqsubseteq u\sqsubseteq a_{\mathrm{cmp}},
+\qquad
+c_\epsilon\sqsubseteq v\sqsubseteq a_{\mathrm{cmp}}
+\quad(\epsilon=0,1),
+\]
+and no imposed comparison between $c_0$ and $c_1$. Let
+$\{u\to a_{\mathrm{cmp}},v\to a_{\mathrm{cmp}}\}$ be the only non-identity
+root cover in this component; below $u$, $v$, $c_0$, and $c_1$, take only the
+identity covers
+\[
+\{u\to u\},\qquad \{v\to v\},\qquad \{c_0\to c_0\},\qquad \{c_1\to c_1\}.
+\]
+This satisfies the pullback-stability clause because
+the indexing sets over cover members not hit by the chosen lower object are
+empty; the covering family itself remains nonempty. Thus the two objects
+$c_0,c_1$ are common refinements used for the compatibility test, not a chosen
+binary meet and not extra cover generators below $u$ or $v$.
+Define the presheaf values by
+\[
+F(u)=\{\sigma_u\},\qquad
+F(v)=\{\sigma_v\},\qquad
+F(c_0)=F(c_1)=\{0,1\},\qquad
+F(a_{\mathrm{cmp}})=\varnothing ,
+\]
+with restrictions
+\[
+\res_{c_0}^{u}(\sigma_u)=0,\quad
+\res_{c_1}^{u}(\sigma_u)=0,\qquad
+\res_{c_0}^{v}(\sigma_v)=0,\quad
+\res_{c_1}^{v}(\sigma_v)=1 .
+\]
+The cover $\{u,v\}$ has local sections, so $\LocSec_s(r_{\mathrm{cmp}})$ holds.
+However, the only possible local family on that cover is
+$(\sigma_u,\sigma_v)$, and its restrictions disagree at the common refinement
+$c_1$:
+\[
+\res_{c_1}^{u}(\sigma_u)=0\ne 1=\res_{c_1}^{v}(\sigma_v).
+\]
+The only root cover with local sections is therefore $\{u,v\}$, and its only
+possible local family fails the common-refinement matching condition at $c_1$.
+The identity cover cannot witness compatibility since
+$F(a_{\mathrm{cmp}})=\varnothing$. Therefore $\CompSec_s(r_{\mathrm{cmp}})$
+fails while $\LocSec_s(r_{\mathrm{cmp}})$ holds, and
+\[
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}}).
+\]
+This is the finite-preorder increment over the sibling meet-semilattice
+example: compatibility is tested against all common refinements
+$c\sqsubseteq u,v$, not against a chosen meet $u\wedge v$.
+
+For $a_{\mathrm{glue}}$, use objects
+\[
+x,\ y,\ d,\ a_{\mathrm{glue}}
+\]
+with $d\sqsubseteq x,y\sqsubseteq a_{\mathrm{glue}}$ and cover
+$\{x\to a_{\mathrm{glue}},y\to a_{\mathrm{glue}}\}$. Define
+\[
+F(x)=F(y)=F(d)=\{*\},\qquad F(a_{\mathrm{glue}})=\varnothing ,
+\]
+with the unique possible restriction maps. The pair $(*,*)$ is compatible on
+every common refinement of $x$ and $y$, so $\CompSec_s(r_{\mathrm{glue}})$
+holds. Since $F(a_{\mathrm{glue}})=\varnothing$, $\Sec_s(r_{\mathrm{glue}})$
+fails. Therefore
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}}).
+\]
+
+The three components are finite and disjoint, so the prescriptions assemble
+into a single finite preorder site and a single contravariant functor
+$F_{p,s}:\mathcal B_{p,s}^{\mathrm{op}}\to\mathbf{Set}$. The cover axioms are
+exactly identity and closure under the displayed pullback-stable and transitive
+refinements, so \Cref{prop:local-reference-pretopology} applies.
+\end{proof}
 
 \subsection{Forcing necessity of the enrichment}
 
