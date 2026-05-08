@@ -58,6 +58,7 @@ ORACLE_SERVER_URL = "http://localhost:8766"
 ORACLE_SERVER_SCRIPT = SCRIPT_DIR / "outreach_oracle_server.py"
 RESEARCH_LOOP_SCRIPT = SCRIPT_DIR / "outreach_research_loop.py"
 TASK_RUNNER_SCRIPT = SCRIPT_DIR / "outreach_task_runner.py"
+WRITEBACK_LOOP_SCRIPT = SCRIPT_DIR / "outreach_writeback_loop.py"
 ARXIV_WATCH = SCRIPT_DIR / "arxiv_watch.py"
 LIT_STALENESS = SCRIPT_DIR / "lit_staleness.py"
 INBOX_WATCHER = SCRIPT_DIR / "outreach_inbox_watcher.py"
@@ -277,6 +278,15 @@ def spawn_task_runner() -> subprocess.Popen:
     )
 
 
+def spawn_writeback_loop() -> subprocess.Popen:
+    return _spawn_inner(
+        WRITEBACK_LOOP_SCRIPT,
+        log_name="inner_writeback.log",
+        label="writeback_loop",
+        extra_args=[],
+    )
+
+
 def stop_inner(inner: subprocess.Popen, grace_seconds: int = 30) -> None:
     if inner.poll() is not None:
         return
@@ -404,7 +414,7 @@ def run_pi_review(supervisor_state: dict) -> dict | None:
 
     def _restart_inner_cb() -> str | None:
         stopped = []
-        for slot in ("inner_research", "inner_task"):
+        for slot in ("inner_research", "inner_task", "inner_writeback"):
             proc: subprocess.Popen | None = supervisor_state.get(slot)
             if proc is not None and proc.poll() is None:
                 stop_inner(proc, grace_seconds=20)
@@ -481,6 +491,8 @@ def main() -> int:
                         help="skip the research_loop inner (drains RESEARCH_BOARD T-NN entries)")
     parser.add_argument("--no-task-runner", action="store_true",
                         help="skip the task_runner inner (drains outreach_state/task_queue/*.json)")
+    parser.add_argument("--no-writeback-loop", action="store_true",
+                        help="skip the writeback_loop inner (drains writeback_pending tasks; killo-golden skill)")
     parser.add_argument("--no-server-spawn", action="store_true",
                         help="do not auto-spawn outreach_oracle_server even if dead")
     parser.add_argument("--once", action="store_true",
@@ -505,6 +517,7 @@ def main() -> int:
     supervisor_state: dict = {
         "inner_research": None,
         "inner_task": None,
+        "inner_writeback": None,
         "pi_review_hours": args.pi_review_hours,
         "arxiv_watch_hours": args.arxiv_watch_hours,
         "lit_staleness_hours": args.lit_staleness_hours,
@@ -520,6 +533,7 @@ def main() -> int:
     last_tab_alert_ts = 0.0
     last_research_exit_ts = 0.0
     last_task_exit_ts = 0.0
+    last_writeback_exit_ts = 0.0
 
     try:
         while not STOP_FILE.exists():
@@ -564,6 +578,21 @@ def main() -> int:
                                 last_task_exit_ts = _now()
                         else:
                             supervisor_state["inner_task"] = spawn_task_runner()
+                # writeback_loop slot
+                if not args.no_writeback_loop:
+                    proc = supervisor_state.get("inner_writeback")
+                    if proc is None or proc.poll() is not None:
+                        if proc is not None:
+                            rc = proc.poll()
+                            since = _now() - last_writeback_exit_ts
+                            if since < args.inner_restart_backoff:
+                                pass
+                            else:
+                                supervisor_log(f"writeback_loop exited rc={rc}; respawning")
+                                supervisor_state["inner_writeback"] = spawn_writeback_loop()
+                                last_writeback_exit_ts = _now()
+                        else:
+                            supervisor_state["inner_writeback"] = spawn_writeback_loop()
 
             since_inbox_h = (_now() - last_inbox_ts) / 3600.0
             if args.once or since_inbox_h >= supervisor_state["inbox_watcher_hours"]:
@@ -626,7 +655,7 @@ def main() -> int:
     except KeyboardInterrupt:
         supervisor_log("supervisor interrupted")
     finally:
-        for slot in ("inner_research", "inner_task"):
+        for slot in ("inner_research", "inner_task", "inner_writeback"):
             proc = supervisor_state.get(slot)
             if proc is not None:
                 stop_inner(proc, grace_seconds=20)

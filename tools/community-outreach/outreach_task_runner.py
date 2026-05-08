@@ -283,12 +283,119 @@ Write to `{deliverable_path}`. Output ONLY the new draft, no preamble.
 """
 
 
-def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
-    """Single-deliverable drafting tasks. On retries (task.retries > 0 with a
-    previous draft on disk and a recorded gate reason), use the iterative
-    refinement prompt that injects the prior attempt + gate feedback —
-    so the agent learns from the failure rather than redrafting blind.
+def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
+    """Drafting via ChatGPT Project oracle (deep reasoning).
+
+    For tasks where context.use_oracle=True the deliverable benefits from the
+    Project's attached files (main.pdf + READMEs + PROGRAM_BOARD). Routes
+    through OracleConsultant.deep_reasoning — multi-turn driver that opens
+    a fresh conversation with the framing prompt + drives DEFAULT_DEEPENING
+    follow-ups until BREAKTHROUGH / STUCK / EXHAUSTED. Reuses the same
+    pattern dispatch_worktree --supervise --oracle-deep already uses for
+    T-NN entries.
+
+    Saves the final response (and oracle-authored LaTeX if produced) to
+    deliverable_paths[0]. Operator + claude_review gate audits afterwards.
     """
+    if not task.deliverable_paths:
+        return False, "no deliverable_paths configured"
+    target = _abs(task.deliverable_paths[0])
+    _ensure_parent(target)
+
+    try:
+        from oracle_consultant import (  # noqa: PLC0415
+            OracleConsultant,
+            DEFAULT_WRITE_PAPER_LATEX_PROMPT,
+            codex_driven_prompt_generator,
+        )
+    except Exception as exc:
+        return False, f"oracle_consultant import failed: {exc}"
+
+    consultant = OracleConsultant()
+    if not consultant.is_alive():
+        return False, f"oracle server unreachable at {consultant.server_url}; aborting (will retry next cycle)"
+
+    ctx = task.context or {}
+    constraints = ctx.get("operator_constraints") or []
+    if not isinstance(constraints, list):
+        constraints = [str(constraints)]
+    constraints_block = "\n".join(f"- {c}" for c in constraints) or "(none beyond context fidelity)"
+
+    import json as _json
+    initial_prompt = (
+        f"You are the deep-reasoning oracle for the Omega Outreach project. "
+        f"Operator-curated commitment task: {task.title}\n\n"
+        f"# Context (do not invent facts beyond what is stated here)\n\n"
+        f"```\n{_json.dumps(ctx, ensure_ascii=False, indent=2)}\n```\n\n"
+        f"# Hard constraints\n\n{constraints_block}\n\n"
+        f"# Required deliverable\n\n"
+        f"Produce the final draft suitable for {ctx.get('thread', 'the named external party')}.\n"
+        f"Output the deliverable as the response body (no preamble). The Project's "
+        f"attached files (main.pdf, MAIN_PAPER_INDEX.md, READMEs, PROGRAM_BOARD.md) "
+        f"are available — cite them where relevant for fidelity.\n\n"
+        f"When you have a substantive result, mark it with the literal token "
+        f"BREAKTHROUGH on its own line; the framework uses that to stop multi-turn "
+        f"driving."
+    )
+
+    # Build a TodoSpec-shaped stub so OracleConsultant's logging/state code works.
+    class _TaskTodoStub:
+        todo_id = task.id
+        title = task.title
+        def slug(self_inner): return task.id
+
+    todo_stub = _TaskTodoStub()
+    max_turns = int(ctx.get("max_turns", 6))
+    per_turn_timeout = int(ctx.get("per_turn_timeout_s", 3600))
+    use_codex_driver = bool(ctx.get("use_codex_driver", False))
+    runner_log(
+        f"{task.id}: oracle deep_reasoning max_turns={max_turns} "
+        f"per_turn={per_turn_timeout}s codex_driver={use_codex_driver}"
+    )
+    run = consultant.deep_reasoning(
+        todo_stub, initial_prompt,
+        max_turns=max_turns,
+        prompt_generator=codex_driven_prompt_generator if use_codex_driver else None,
+        per_turn_timeout=per_turn_timeout,
+        slug=task.id,
+    )
+    verdict = run.get("final_verdict", "FAILED")
+    runner_log(
+        f"{task.id}: oracle verdict={verdict} turns={len(run.get('turns') or [])} "
+        f"elapsed={run.get('total_elapsed_seconds', 0)}s"
+    )
+    if verdict == "FAILED":
+        return False, f"oracle deep_reasoning FAILED: {run.get('error','(no error message)')}"
+
+    # Pick the response body to land as the deliverable. Prefer the BREAKTHROUGH
+    # turn's response; fall back to last non-empty turn.
+    turns = run.get("turns") or []
+    body = ""
+    for t in reversed(turns):
+        resp = (t.get("response") or "").strip()
+        if resp:
+            body = resp
+            break
+    if not body:
+        return False, f"oracle returned no usable response (verdict={verdict})"
+    target.write_text(body + "\n", encoding="utf-8")
+    return True, (
+        f"wrote {target.relative_to(REPO_ROOT)} ({len(body)} chars) "
+        f"via oracle [verdict={verdict}, {len(turns)} turns]"
+    )
+
+
+def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
+    """Single-deliverable drafting tasks.
+
+    Routing rule:
+      - context.use_oracle=True → ChatGPT Project oracle (deep reasoning)
+        delegated to _run_oracle_drafting_task above.
+      - else → local claude (with retry-aware feedback prompt when retrying).
+    """
+    if (task.context or {}).get("use_oracle"):
+        return _run_oracle_drafting_task(task)
+
     if not task.deliverable_paths:
         return False, "no deliverable_paths configured"
     target = _abs(task.deliverable_paths[0])
