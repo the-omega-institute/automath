@@ -594,13 +594,70 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
   \(D_{\mathcal D}^{-1}\) on \(\Omega\).
 \end{proof}
 
-\begin{proposition}[Cyclic datum construction interface]
+\begin{lemma}[Choice of roots and unitary relabelling]\label{lem:choice-of-roots}
+  Let \(n,m\in\NN\), let \(\beta\in\CC\setminus\{0\}\), and let
+  \(\alpha^n=(\alpha')^n=\beta\). Then
+  \(C(n,\alpha)\otimes I_m\) and \(C(n,\alpha')\otimes I_m\) are
+  unitarily equivalent. More explicitly, if
+  \(\eta:=\alpha'/\alpha\), so that \(\eta^n=1\), and
+  \((e_0,\dots,e_{n-1})\) is the cyclic basis in which
+  \(\Pi_n e_k=e_{k+1\!\!\pmod n}\), then
+  \[
+    U_\eta e_k:=\eta^k e_k
+    \qquad (0\le k<n)
+  \]
+  defines a unitary on \(\CC^n\) satisfying
+  \[
+    U_\eta C(n,\alpha)U_\eta^{-1}=C(n,\alpha').
+  \]
+  Consequently any two root choices in the construction of
+  \(L_{\mathcal D}\) give unitarily equivalent cyclic models, via the
+  block direct sum of the maps \(U_{\eta_j}\otimes I_{m_j}\). The
+  determinant data therefore determine the cyclic model only up to this
+  explicit relabelling and the addition of zero summands.
+\end{lemma}
+
+\begin{proof}
+  The operator \(U_\eta\) is unitary because it is diagonal in the cyclic
+  basis with unimodular diagonal entries. For \(0\le k<n\),
+  \[
+    U_\eta\Pi_nU_\eta^{-1}e_k
+    =U_\eta\Pi_n(\eta^{-k} e_k)
+    =\eta^{-k}U_\eta e_{k+1}
+    =\eta^{-k}\eta^{k+1}e_{k+1}
+    =\eta\Pi_ne_k
+  \]
+  if \(k<n-1\), and the same computation at \(k=n-1\) gives
+  \(U_\eta\Pi_nU_\eta^{-1}e_{n-1}=\eta^{-(n-1)}e_0=\eta e_0\), since
+  \(\eta^n=1\). Thus \(U_\eta\Pi_nU_\eta^{-1}=\eta\Pi_n\). Hence
+  \[
+    U_\eta C(n,\alpha)U_\eta^{-1}
+    =\alpha\eta\Pi_n
+    =\alpha'\Pi_n
+    =C(n,\alpha').
+  \]
+  Tensoring with \(I_m\) proves the finite-multiplicity statement, and the
+  Hilbert direct sum of the resulting block unitaries proves the assertion
+  for \(L_{\mathcal D}\).
+\end{proof}
+
+\begin{proposition}[Acyclic construction interface for cyclic data]
   \label{prop:cyclic-data-construction-interface}
   Let \(\mathcal D\) be a countable cyclic datum in the sense of
   \Cref{def:cyclic-data-trace-budget} with
-  \(\tau_{\mathcal D}<\infty\). Then every choice of roots
-  \(\alpha_j^{n_j}=\beta_j\) gives a normal trace-class operator
-  \(L_{\mathcal D}\in\sone(H_{\mathcal D})\) satisfying
+  \(\tau_{\mathcal D}<\infty\), and choose roots
+  \(\alpha_j^{n_j}=\beta_j\). For each finite
+  \(F\Subset J\), set
+  \[
+    H_F:=\bigoplus_{j\in F}(\CC^{n_j}\otimes\CC^{m_j}),
+    \qquad
+    L_F:=\bigoplus_{j\in F}(C(n_j,\alpha_j)\otimes I_{m_j}),
+  \]
+  and regard \(L_F\) as acting by zero on the orthogonal complement of
+  \(H_F\) in \(H_{\mathcal D}\). Then the net
+  \((L_F)_{F\Subset J}\), directed by inclusion, converges
+  unconditionally in trace norm to a normal operator
+  \(L_{\mathcal D}\in\sone(H_{\mathcal D})\). This limit satisfies
   \[
     \norm{L_{\mathcal D}}_1=\tau_{\mathcal D},
     \qquad
@@ -610,25 +667,31 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
       \aleph_0,& J\text{ infinite},
     \end{cases}
   \]
-  where the second equality is a Hilbert-space dimension identity. The
-  unitary equivalence class of \(L_{\mathcal D}\) is independent of the
-  chosen roots. Moreover \(D_{\mathcal D}\) is an entire function and
+  where the second equality is a Hilbert-space dimension identity.
+  Moreover \(D_{\mathcal D}\) is an entire function and
   \[
     \det(I-zL_{\mathcal D})=D_{\mathcal D}(z)
   \]
-  locally uniformly for \(z\in\CC\).
+  locally uniformly for \(z\in\CC\). The unitary equivalence class of
+  \(L_{\mathcal D}\) is independent of the chosen roots; more precisely,
+  replacing \(\alpha_j\) by another root \(\alpha_j'\) conjugates the
+  \(j\)-th block by the diagonal relabelling from
+  \(\Cref{lem:choice-of-roots}\), and the orthogonal direct sum of these
+  relabellings conjugates the two cyclic models.
 \end{proposition}
 
 \begin{proof}
-  For a finite set \(F\subset J\), the singular values of
-  \(\bigoplus_{j\in F}(C(n_j,\alpha_j)\otimes I_{m_j})\) are the numbers
+  If \(E\subset F\) are finite subsets of \(J\), then the singular values
+  of \(L_F-L_E\) are the numbers
   \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\), each repeated \(m_jn_j\)
-  times. Hence its trace norm is
+  times, with \(j\in F\setminus E\). Hence
   \[
-    \sum_{j\in F}m_jn_j\abs{\beta_j}^{1/n_j}.
+    \norm{L_F-L_E}_1
+    =\sum_{j\in F\setminus E}m_jn_j\abs{\beta_j}^{1/n_j}.
   \]
-  The net of finite partial sums is Cauchy in trace norm because
-  \(\tau_{\mathcal D}<\infty\), and its trace-norm limit is exactly
+  Since the full sum defining \(\tau_{\mathcal D}\) is finite, the finite
+  partial sums are an unconditionally Cauchy net in trace norm. Their
+  trace-norm limit is the block direct sum
   \(L_{\mathcal D}\). Trace-norm continuity of the norm gives
   \[
     \norm{L_{\mathcal D}}_1
@@ -636,13 +699,18 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
       \sum_{j\in F}m_jn_j\abs{\beta_j}^{1/n_j}
     =\tau_{\mathcal D}.
   \]
-  Normality follows because each summand
+  Normality follows by passing to the strong, hence weak, limit in the
+  block diagonal representation: each summand
   \(C(n_j,\alpha_j)\otimes I_{m_j}\) is a scalar multiple of a unitary and
-  the orthogonal direct sum of normal blocks is normal. The same lemma,
-  together with
-  \Cref{lem:direct-cyclic-weierstrass-product}, gives the entire locally
-  uniform convergence of \(D_{\mathcal D}\) and the displayed Fredholm
-  determinant identity.
+  different summands act on orthogonal reducing subspaces, so
+  \(L_{\mathcal D}L_{\mathcal D}^*=L_{\mathcal D}^*L_{\mathcal D}\) on the
+  finite-support algebraic direct sum and hence on its closure.
+  \Cref{lem:direct-cyclic-weierstrass-product,lem:cyclic-product-trace-norm-limit}
+  gives the entire locally uniform convergence of \(D_{\mathcal D}\) and
+  the displayed Fredholm determinant identity. These inputs all precede
+  the exact threshold and normal-classification theorems, so this
+  proposition supplies their construction step without using either
+  theorem.
 
   The Hilbert-space dimension statement is the dimension of the orthogonal
   direct sum
@@ -650,22 +718,22 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
   finite integer \(N_{\mathcal D}\), while countably infinite \(J\) gives
   the separable infinite dimension \(\aleph_0\).
 
-  If \(\alpha_j'\) is another root of \(\beta_j\), then
-  \(\alpha_j'=\alpha_j\zeta_j\) for some \(n_j\)-th root of unity
-  \(\zeta_j\). Multiplication by \(\zeta_j\) permutes the regular
-  \(n_j\)-gon
-  \(\{\alpha_j\omega:\omega^{n_j}=1\}\). The Fourier diagonalization of
-  \(\Pi_{n_j}\) therefore identifies
-  \(C(n_j,\alpha_j)\otimes I_{m_j}\) and
-  \(C(n_j,\alpha_j')\otimes I_{m_j}\) as unitarily equivalent diagonal
-  blocks. Taking the orthogonal direct sum of these blockwise unitaries
-  proves root-choice independence.
+  Finally, let \((\alpha_j')_{j\in J}\) be another choice of roots with
+  \((\alpha_j')^{n_j}=\beta_j\). \Cref{lem:choice-of-roots} gives a
+  blockwise unitary
+  \(U_j:\CC^{n_j}\otimes\CC^{m_j}\to\CC^{n_j}\otimes\CC^{m_j}\) conjugating
+  \(C(n_j,\alpha_j)\otimes I_{m_j}\) to
+  \(C(n_j,\alpha_j')\otimes I_{m_j}\). The orthogonal direct sum
+  \(\bigoplus_{j\in J}U_j\) is unitary and conjugates the two direct-sum
+  limits, proving root-choice independence.
 \end{proof}
 
 \noindent
-\Cref{prop:cyclic-data-construction-interface} is the bookkeeping
-interface used by the exact threshold theorem and by the later normal
-classification.
+\Cref{prop:cyclic-data-construction-interface} is the acyclic
+construction interface used by the exact threshold theorem and by the
+later normal classification: it depends only on the cyclic block
+calculus and determinant continuity, while the classification theorems
+use it as an input.
 
 \noindent\emph{Determinant convention.}
 In the infinite cyclic-block products below, the positive-exponent product
@@ -949,10 +1017,11 @@ For a normal trace-class operator \(L\), write
 
 The preceding proposition isolates the collapsed non-zero spectral multiset
 encoded by the cyclic data. The next theorem packages the exact trace-class
-threshold for normal Fredholm realization into a single \(\iff\) statement.
-Its dependency graph is acyclic: the existence implication
-\textup{(i)}\(\Rightarrow\)\textup{(ii)} is the later cyclic construction
-from \Cref{thm:cyclic-fredholm-realisation}, while the necessity implication
+  threshold for normal Fredholm realization into a single \(\iff\) statement.
+  Its dependency graph is acyclic: the existence implication
+  \textup{(i)}\(\Rightarrow\)\textup{(ii)} is the cyclic construction
+  interface from \Cref{prop:cyclic-data-construction-interface}, while the
+  necessity implication
 \textup{(iii)}\(\Rightarrow\)\textup{(i)} below is independent of that
 construction and uses only Fredholm zero multiplicities and the classical
 Weyl--Ky Fan eigenvalue bound for trace-class operators.
@@ -1000,14 +1069,14 @@ Weyl--Ky Fan eigenvalue bound for trace-class operators.
   \end{enumerate}
   Whenever these conditions hold, any choice of roots
   \(\alpha_j^{n_j}=\beta_j\) produces the cyclic model \(L_{\mathcal D}\)
-  from \Cref{thm:cyclic-fredholm-realisation}, and every normal trace-class
+  from \Cref{prop:cyclic-data-construction-interface}, and every normal trace-class
   realization in \textup{(ii)} is unitarily equivalent to
   \(0_{H_0}\oplus L_{\mathcal D}\) for some Hilbert space \(H_0\).
 \end{theorem}
 
 \begin{proof}
   The implication \textup{(i)}\(\Rightarrow\)\textup{(ii)} is the existence
-  statement proved below in \Cref{thm:cyclic-fredholm-realisation}.
+  statement of \Cref{prop:cyclic-data-construction-interface}.
   The implication \textup{(ii)}\(\Rightarrow\)\textup{(iii)} is immediate.
 
   Assume \textup{(iii)}. For \(\lambda\in\CC\setminus\{0\}\), put
@@ -1076,8 +1145,9 @@ Weyl--Ky Fan eigenvalue bound for trace-class operators.
     \le \|T\|_1<\infty,
   \]
   which is \textup{(i)}. Once \textup{(i)} is known,
-  \Cref{thm:cyclic-fredholm-realisation} supplies the cyclic model
-  \(L_{\mathcal D}\) and the unitary classification of every normal
+  \Cref{prop:cyclic-data-construction-interface} supplies the cyclic model
+  \(L_{\mathcal D}\), and \Cref{thm:cyclic-fredholm-realisation} supplies
+  the unitary classification of every normal
   trace-class realization with that determinant.
 \end{proof}
 
@@ -1136,22 +1206,16 @@ Weyl--Ky Fan eigenvalue bound for trace-class operators.
 \end{theorem}
 
 \begin{proof}
-  By construction,
-  \[
-    \norm{L_{\mathcal D}}_1
-    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}<\infty,
-  \]
-  so \(L_{\mathcal D}\in\sone(H_{\mathcal D})\); normality is immediate
-  from the block-diagonal form. By
-  \Cref{lem:direct-cyclic-weierstrass-product,lem:cyclic-product-trace-norm-limit},
+  By \Cref{prop:cyclic-data-construction-interface},
+  \(L_{\mathcal D}\in\sone(H_{\mathcal D})\) is normal and
   \[
     D_{\mathcal D}(z)
     =\det(I-zL_{\mathcal D})
     =\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j}
   \]
-  locally uniformly on compact subsets of \(\CC\); the same lemma gives the
-  reciprocal identity on any connected zero-free neighbourhood
-  \(\Omega\ni0\).
+  locally uniformly on compact subsets of \(\CC\). The reciprocal identity
+  on any connected zero-free neighbourhood \(\Omega\ni0\) follows from
+  \Cref{lem:cyclic-product-trace-norm-limit}.
 
   The implication \textup{(ii)}\(\Rightarrow\)\textup{(i)} follows because
   zero summands do not affect the Fredholm determinant. Conversely, assume
@@ -1422,53 +1486,6 @@ Weyl--Ky Fan eigenvalue bound for trace-class operators.
   model is then forced by \Cref{cor:block-cyclic-rigidity}. Thus the
   summability hypothesis is not merely sufficient but necessary.
 \end{remark}
-
-\begin{lemma}[Choice of roots and unitary relabelling]\label{rem:choice-of-roots}
-  Let \(n,m\in\NN\), let \(\beta\in\CC\setminus\{0\}\), and let
-  \(\alpha^n=(\alpha')^n=\beta\). Then
-  \(C(n,\alpha)\otimes I_m\) and \(C(n,\alpha')\otimes I_m\) are
-  unitarily equivalent. More explicitly, if
-  \(\eta:=\alpha'/\alpha\), so that \(\eta^n=1\), and
-  \((e_0,\dots,e_{n-1})\) is the cyclic basis in which
-  \(\Pi_n e_k=e_{k+1\!\!\pmod n}\), then
-  \[
-    U_\eta e_k:=\eta^k e_k
-    \qquad (0\le k<n)
-  \]
-  defines a unitary on \(\CC^n\) satisfying
-  \[
-    U_\eta C(n,\alpha)U_\eta^{-1}=C(n,\alpha').
-  \]
-  Consequently any two root choices in the construction of
-  \(L_{\mathcal D}\) give unitarily equivalent cyclic models, via the
-  block direct sum of the maps \(U_{\eta_j}\otimes I_{m_j}\). The
-  determinant data therefore determine the cyclic model only up to this
-  explicit relabelling and the addition of zero summands.
-\end{lemma}
-
-\begin{proof}
-  The operator \(U_\eta\) is unitary because it is diagonal in the cyclic
-  basis with unimodular diagonal entries. For \(0\le k<n\),
-  \[
-    U_\eta\Pi_nU_\eta^{-1}e_k
-    =U_\eta\Pi_n(\eta^{-k} e_k)
-    =\eta^{-k}U_\eta e_{k+1}
-    =\eta^{-k}\eta^{k+1}e_{k+1}
-    =\eta\Pi_ne_k
-  \]
-  if \(k<n-1\), and the same computation at \(k=n-1\) gives
-  \(U_\eta\Pi_nU_\eta^{-1}e_{n-1}=\eta^{-(n-1)}e_0=\eta e_0\), since
-  \(\eta^n=1\). Thus \(U_\eta\Pi_nU_\eta^{-1}=\eta\Pi_n\). Hence
-  \[
-    U_\eta C(n,\alpha)U_\eta^{-1}
-    =\alpha\eta\Pi_n
-    =\alpha'\Pi_n
-    =C(n,\alpha').
-  \]
-  Tensoring with \(I_m\) proves the finite-multiplicity statement, and the
-  Hilbert direct sum of the resulting block unitaries proves the assertion
-  for \(L_{\mathcal D}\).
-\end{proof}
 
 \begin{corollary}[Finite Euler products give finite-rank determinant models]
   \label{cor:finite-rank-realisation}
