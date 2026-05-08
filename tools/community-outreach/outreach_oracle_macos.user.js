@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.6
-// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765). v1.6: fresh-chat fallback URL now targets the Omega Outreach openproblem ChatGPT Project so attached files (main.pdf + READMEs + PROGRAM_BOARD) are inherited by board_refill conversations.
+// @version      1.7
+// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765). v1.6: fresh-chat fallback URL now targets the Omega Outreach openproblem ChatGPT Project so attached files (main.pdf + READMEs + PROGRAM_BOARD) are inherited by board_refill conversations. v1.7: per-tab role flag (openproblem | general) + tag-based dispatch — server only sends openproblem-* tagged tasks to tabs in openproblem role, so ad-hoc ChatGPT use on a sibling tab does not steal pipeline tasks.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -41,7 +41,7 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.6";
+  const SCRIPT_VERSION = "outreach-1.7";
 
   // OUTREACH ADD v1.6: openproblem ChatGPT Project URL. New-chat URL fallback
   // navigates here so the chat inherits the project-level attached files
@@ -51,6 +51,39 @@
   // openproblem Project before injecting the prompt.
   const OPENPROBLEM_PROJECT_URL =
     "https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project";
+  const OPENPROBLEM_PROJECT_PATH_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
+
+  // OUTREACH ADD v1.7: per-tab role isolation. A tab self-identifies as either
+  // `openproblem` (only takes openproblem-* tagged tasks; suitable for the
+  // openproblem Project page) or `general` (takes general / untagged tasks).
+  // Auto-detected from URL on first visit, then persisted in sessionStorage
+  // so the operator can override by toggling the panel button.
+  function detectRole() {
+    try {
+      const url = window.location.href;
+      if (url.includes(OPENPROBLEM_PROJECT_PATH_PREFIX)) return "openproblem";
+    } catch {}
+    return "general";
+  }
+  function readRole() {
+    try {
+      const stored = sessionStorage.getItem("outreach_role");
+      if (stored === "openproblem" || stored === "general") return stored;
+    } catch {}
+    const auto = detectRole();
+    try { sessionStorage.setItem("outreach_role", auto); } catch {}
+    return auto;
+  }
+  function writeRole(r) {
+    if (r !== "openproblem" && r !== "general") return;
+    try { sessionStorage.setItem("outreach_role", r); } catch {}
+  }
+  function toggleRole() {
+    const cur = readRole();
+    const next = cur === "openproblem" ? "general" : "openproblem";
+    writeRole(next);
+    return next;
+  }
 
   let busy = false;
   // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
@@ -150,6 +183,8 @@
     const btnColor = active ? "#f55" : "#9af";
     const collapseBtn = !active && !busy ? `<button id="outreach-collapse" title="Collapse to badge" style="background:#446;color:#9af;border:none;border-radius:3px;padding:2px 6px;cursor:pointer;font-size:10px">−</button>` : "";
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
+    const role = readRole();
+    const roleColor = role === "openproblem" ? "#9f9" : "#fc9";
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <b style="color:#cdf">[Outreach Oracle ${SCRIPT_VERSION}]</b>
@@ -157,10 +192,22 @@
         <button id="outreach-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
         ${collapseBtn}
       </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#9af;margin-top:2px">
+        <span>role:</span>
+        <button id="outreach-role-toggle" title="Toggle role (openproblem ↔ general)" style="background:${roleColor};color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">${role}</button>
+        <span style="color:#888">(only ${role === "openproblem" ? "openproblem-*" : "general/untagged"} tasks)</span>
+      </div>
       <hr style="border-color:#446;margin:4px 0">
       ${lines}`;
     const btn = document.getElementById("outreach-toggle");
     if (btn) btn.addEventListener("click", toggleActive);
+    const rbtn = document.getElementById("outreach-role-toggle");
+    if (rbtn) rbtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const next = toggleRole();
+      log(`role → ${next}`);
+      updatePanel();
+    });
     const cb = document.getElementById("outreach-collapse");
     if (cb) cb.addEventListener("click", (e) => { e.stopPropagation(); panelExpanded = false; updatePanel(); });
   }
@@ -1172,7 +1219,8 @@
       active = _readActive();
       if (active && !busy) {
         try {
-          const task = await serverGet(`/task?agent=${encodeURIComponent(agentId())}`);
+          const role = readRole();
+          const task = await serverGet(`/task?agent=${encodeURIComponent(agentId())}&role=${encodeURIComponent(role)}`);
           if (task && task.task_id && task.status !== "idle") {
             if (!_readActive()) {
               log("Task available but PAUSED — skipping");
@@ -1196,7 +1244,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()}`);
+    log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()} — role=${readRole()}`);
 
     const phase = getTaskPhase();
     const navTaskId = GM_getValue("outreach_nav_task_id", "");

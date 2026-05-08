@@ -51,7 +51,7 @@ ORACLE_DIR = Path(__file__).parent / "outreach_oracle"
 SESSIONS_DIR = ORACLE_DIR / "sessions"
 RESULTS_DIR = ORACLE_DIR / "results"
 
-MAX_AGENTS = 3
+MAX_AGENTS = 2
 TASK_TIMEOUT = 14400  # 4 hours; ChatGPT Pro thinking can be 60+ min/turn
 SESSION_IDLE_RETENTION = 14 * 24 * 3600  # keep sessions on disk for 14 days
 
@@ -61,7 +61,21 @@ results: dict[str, dict] = {}             # task_id -> result record
 pending_tasks: dict[str, dict] = {}       # agent_id -> task currently in flight
 dispatch_times: dict[str, float] = {}     # agent_id -> dispatch timestamp
 sessions: dict[str, dict] = {}            # conv_id -> session record
+agent_roles: dict[str, str] = {}          # agent_id -> last-reported role (openproblem|general)
 _lock = threading.Lock()
+
+
+def _agent_can_take(task: dict, agent_role: str) -> bool:
+    """Tag-based dispatch filter. Untagged or `general-*` tasks go to any role.
+    `openproblem-*` tasks go ONLY to openproblem-role agents.
+    """
+    tag = (task.get("tag") or "").lower().strip()
+    if not tag or tag.startswith("general"):
+        return True
+    if tag.startswith("openproblem"):
+        return agent_role == "openproblem"
+    # Unknown tag — default permissive so existing call sites don't break.
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -179,22 +193,43 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             agent_id = (qs.get("agent", [None])[0]
                         or qs.get("agent_id", [None])[0]
                         or "default")
+            # Per-tab role isolation (added 2026-05-08): tabs identify their
+            # role on every poll. Untagged tasks go to any role; tasks tagged
+            # `openproblem-*` go ONLY to agents with role=openproblem; tasks
+            # tagged `general-*` go ONLY to agents with role=general.
+            agent_role = (qs.get("role", [None])[0] or "general").lower().strip()
+            if agent_role not in {"openproblem", "general"}:
+                agent_role = "general"
+            agent_roles[agent_id] = agent_role
             with _lock:
                 if agent_id in pending_tasks:
                     self._send_json(pending_tasks[agent_id])
                     return
-                if task_queue and len(pending_tasks) < MAX_AGENTS:
-                    task = task_queue.popleft()
+                # Find the first task this agent is allowed to take.
+                eligible_idx = -1
+                for i, candidate in enumerate(task_queue):
+                    if _agent_can_take(candidate, agent_role):
+                        eligible_idx = i
+                        break
+                if eligible_idx >= 0 and len(pending_tasks) < MAX_AGENTS:
+                    # popleft if at front, else iterate-and-remove
+                    if eligible_idx == 0:
+                        task = task_queue.popleft()
+                    else:
+                        task = task_queue[eligible_idx]
+                        del task_queue[eligible_idx]
                     task["assigned_agent"] = agent_id
+                    task["assigned_role"] = agent_role
                     pending_tasks[agent_id] = task
                     dispatch_times[agent_id] = time.time()
                     print(f"[server] Dispatched {task['task_id']} → {agent_id} "
-                          f"(conv={task.get('conversation_id','-')[:12]} "
+                          f"(role={agent_role} tag={task.get('tag','-')} "
+                          f"conv={task.get('conversation_id','-')[:12]} "
                           f"agents={len(pending_tasks)}/{MAX_AGENTS} "
                           f"queue={len(task_queue)})")
                     self._send_json(task)
                     return
-                self._send_json({"status": "idle"})
+                self._send_json({"status": "idle", "role_filtered": eligible_idx < 0 and len(task_queue) > 0})
             return
 
         if parsed.path == "/status":

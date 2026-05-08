@@ -157,7 +157,7 @@ def _submit_oracle_task(prompt: str) -> str | None:
         return None
     payload = {
         "prompt": prompt,
-        "tag": "outreach-board-refill",
+        "tag": "openproblem-board-refill",
         "project_url": REFILL_PROJECT_URL,
     }
     try:
@@ -166,10 +166,35 @@ def _submit_oracle_task(prompt: str) -> str | None:
         _log(f"oracle submit failed: {exc}")
         return None
     task_id = resp.get("task_id")
+    conv_id = resp.get("conversation_id") or ""
     if not task_id:
         _log(f"oracle submit returned no task_id: {resp}")
         return None
-    _log(f"oracle task submitted: {task_id} (conv={resp.get('conversation_id','-')[:12]})")
+    _log(f"oracle task submitted: {task_id} (conv={conv_id[:12]})")
+    return task_id, conv_id
+
+
+def _submit_followup(prompt: str, conversation_id: str) -> str | None:
+    """POST /continue (same conversation, new prompt). Returns task_id."""
+    if not _server_alive():
+        _log("oracle server not alive — cannot send follow-up")
+        return None
+    payload = {
+        "prompt": prompt,
+        "conversation_id": conversation_id,
+        "tag": "openproblem-board-refill",
+        "project_url": REFILL_PROJECT_URL,
+    }
+    try:
+        resp = _http_post(f"{ORACLE_SERVER_URL}/continue", payload, timeout=15)
+    except Exception as exc:
+        _log(f"oracle continue failed: {exc}")
+        return None
+    task_id = resp.get("task_id")
+    if not task_id:
+        _log(f"oracle continue returned no task_id: {resp}")
+        return None
+    _log(f"oracle follow-up submitted: {task_id} (conv={conversation_id[:12]})")
     return task_id
 
 
@@ -409,45 +434,109 @@ def main(argv: list[str] | None = None) -> int:
     if not _server_alive():
         return _status_noop("outreach_oracle_server (:8766) not alive — skipping cycle")
 
-    task_id = _submit_oracle_task(prompt)
-    if not task_id:
-        _status_write({"ran_at": _now_iso(), "verdict": "submit_failed"})
-        return 1
-
-    raw = _poll_oracle(task_id, timeout_s=args.timeout_s)
-    if not raw:
-        _status_write({"ran_at": _now_iso(), "verdict": "oracle_timeout", "task_id": task_id})
-        return 1
-
-    # Persist raw response for postmortem.
-    raw_path = LOG_DIR / f"refill_response_{_now_tag()}.txt"
-    raw_path.write_text(raw, encoding="utf-8")
-    _log(f"oracle response saved to {raw_path.name} ({len(raw)} chars)")
-
-    candidates = _parse_candidates(raw)
-    _log(f"parsed {len(candidates)} candidates from oracle response")
-    if not candidates:
-        _status_write({
-            "ran_at": _now_iso(), "verdict": "no_candidates_parsed",
-            "task_id": task_id, "raw_response_path": str(raw_path),
-        })
-        return 0
+    # ── Multi-round oracle loop with follow-ups ────────────────────────
+    # Round 1 sends the full prompt. If parsed candidates are insufficient
+    # (< MIN_GOOD_CANDIDATES kept after dedup), we send a follow-up in the
+    # same conversation (so the Project context is preserved) asking the
+    # oracle to deepen / be more specific. Cap at MAX_ROUNDS rounds.
+    MIN_GOOD_CANDIDATES = 3
+    MAX_ROUNDS = 3
+    per_round_budget = max(900, args.timeout_s // MAX_ROUNDS)
 
     existing = _existing_board_titles_and_sources()
-    survivors: list[Candidate] = []
-    drops: list[tuple[str, str]] = []
-    for c in candidates:
-        keep, reason = _dedup_candidate(c, existing)
-        if keep:
-            survivors.append(c)
-        else:
-            drops.append((c.title, reason))
-            _log(f"dedup drop: {c.title!r} — {reason}")
+    accumulated_survivors: list[Candidate] = []
+    accumulated_drops: list[tuple[str, str]] = []
+    round_history: list[dict] = []
+    seen_titles_lower: set[str] = set()
 
+    submit = _submit_oracle_task(prompt)
+    if not submit:
+        _status_write({"ran_at": _now_iso(), "verdict": "submit_failed"})
+        return 1
+    task_id, conv_id = submit
+
+    for round_idx in range(1, MAX_ROUNDS + 1):
+        raw = _poll_oracle(task_id, timeout_s=per_round_budget)
+        if not raw:
+            round_history.append({
+                "round": round_idx, "task_id": task_id, "verdict": "timeout",
+            })
+            _log(f"round {round_idx}: timeout, breaking")
+            break
+
+        raw_path = LOG_DIR / f"refill_round{round_idx}_{_now_tag()}.txt"
+        raw_path.write_text(raw, encoding="utf-8")
+
+        candidates = _parse_candidates(raw)
+        _log(f"round {round_idx}: parsed {len(candidates)} candidates from oracle response")
+
+        round_survivors: list[Candidate] = []
+        round_drops: list[tuple[str, str]] = []
+        for c in candidates:
+            tl = c.title.strip().lower()
+            if not tl or tl in seen_titles_lower:
+                round_drops.append((c.title, "duplicate within this refill cycle"))
+                continue
+            keep, reason = _dedup_candidate(c, existing)
+            if keep:
+                round_survivors.append(c)
+                seen_titles_lower.add(tl)
+            else:
+                round_drops.append((c.title, reason))
+                _log(f"dedup drop (round {round_idx}): {c.title!r} — {reason}")
+
+        accumulated_survivors.extend(round_survivors)
+        accumulated_drops.extend(round_drops)
+        round_history.append({
+            "round": round_idx,
+            "task_id": task_id,
+            "raw_response_path": str(raw_path),
+            "received": len(candidates),
+            "kept": len(round_survivors),
+            "dropped": len(round_drops),
+        })
+
+        if len(accumulated_survivors) >= MIN_GOOD_CANDIDATES:
+            _log(f"round {round_idx}: have {len(accumulated_survivors)} survivors, stopping")
+            break
+        if round_idx >= MAX_ROUNDS:
+            _log(f"reached MAX_ROUNDS={MAX_ROUNDS} with {len(accumulated_survivors)} survivors")
+            break
+        if not conv_id:
+            _log("no conversation_id retained; cannot follow up")
+            break
+
+        # Build a follow-up prompt that's specific about what we still need.
+        dropped_titles = [t for t, _ in accumulated_drops][:8]
+        followup = (
+            f"That round produced {len(candidates)} candidates of which we are keeping "
+            f"{len(round_survivors)} ({len(accumulated_survivors)} cumulatively). "
+            f"We need at least {MIN_GOOD_CANDIDATES}. Please propose more candidates "
+            f"that satisfy the original criteria, with these constraints:\n\n"
+            f"1. Do NOT re-propose any of these (already considered or dropped):\n"
+            + "\n".join(f"   - {t}" for t in dropped_titles)
+            + (
+                "\n\n2. Be more specific about the omega_fit_detail — name the exact "
+                "lemma file paths in lean4/Omega/* that plug in.\n"
+                "3. Prefer candidates whose source URL is a real recent (≤ 12 months) "
+                "preprint or registry entry; cite it.\n"
+                "4. Same JSON output schema.\n"
+                "5. If you genuinely cannot produce more, output `{\"candidates\": []}` and "
+                "explain in the rationale of an empty placeholder why."
+            )
+        )
+        sub2 = _submit_followup(followup, conv_id)
+        if not sub2:
+            _log("follow-up submit failed; ending refill loop")
+            break
+        task_id = sub2
+        # conv_id stays the same
+
+    # ── Append survivors to board ──────────────────────────────────────
     next_id_int = int(re.match(r"T-(\d+)", _next_todo_id(existing)).group(1))
     blocks: list[str] = []
     appended_ids: list[str] = []
-    for i, c in enumerate(survivors):
+    for i, c in enumerate(accumulated_survivors):
         tid = f"T-{next_id_int + i:02d}"
         blocks.append(_format_candidate_block(tid, c))
         appended_ids.append(tid)
@@ -455,12 +544,11 @@ def main(argv: list[str] | None = None) -> int:
     appended = _append_to_board(blocks) if blocks else 0
     payload = {
         "ran_at": _now_iso(),
-        "verdict": "appended" if appended else "all_drops",
-        "task_id": task_id,
-        "raw_response_path": str(raw_path),
-        "candidates_received": len(candidates),
+        "verdict": "appended" if appended else ("no_candidates_parsed" if not accumulated_survivors else "all_drops"),
+        "rounds": round_history,
+        "candidates_total": sum(r.get("received", 0) for r in round_history),
         "appended_ids": appended_ids,
-        "drops": drops,
+        "drops": accumulated_drops[:32],
     }
     _status_write(payload)
     print(json.dumps(payload, ensure_ascii=False, indent=2))

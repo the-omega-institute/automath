@@ -249,8 +249,46 @@ Begin the deliverable now. Do not preface.
 """
 
 
+_DRAFTING_RETRY_PROMPT = """You previously produced a draft for this task that did NOT pass the gate review. Below is the gate's verdict (specific reasons it failed) and your previous draft. Produce a NEW draft that fixes the failures while keeping the parts that were OK. Do NOT repeat the same mistake.
+
+# Task
+
+{title}
+
+# Context (do not invent facts beyond what is stated here)
+
+```
+{context_json}
+```
+
+# Hard constraints
+
+{constraints}
+
+# Previous gate verdict (this is what failed last time — fix THESE)
+
+```
+{prev_gate_reason}
+```
+
+# Previous draft (full text — for reference; do not paste back unchanged)
+
+```
+{prev_draft}
+```
+
+# Required deliverable
+
+Write to `{deliverable_path}`. Output ONLY the new draft, no preamble.
+"""
+
+
 def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
-    """Single-deliverable drafting tasks (issue_reply_draft / email_reply_draft / experimental)."""
+    """Single-deliverable drafting tasks. On retries (task.retries > 0 with a
+    previous draft on disk and a recorded gate reason), use the iterative
+    refinement prompt that injects the prior attempt + gate feedback —
+    so the agent learns from the failure rather than redrafting blind.
+    """
     if not task.deliverable_paths:
         return False, "no deliverable_paths configured"
     target = _abs(task.deliverable_paths[0])
@@ -262,13 +300,33 @@ def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
     constraints_block = "\n".join(f"- {c}" for c in constraints) or "(none beyond context fidelity)"
 
     import json as _json
-    prompt = _DRAFTING_PROMPT.format(
-        title=task.title,
-        context_json=_json.dumps(task.context, ensure_ascii=False, indent=2),
-        constraints=constraints_block,
-        deliverable_path=task.deliverable_paths[0],
-    )
-    ok, stdout, rc = _claude(prompt, timeout=2400, log_tag=f"draft_{task.id}")
+
+    is_retry = task.retries > 0 and target.exists() and bool(task.last_reason)
+    if is_retry:
+        try:
+            prev_draft = target.read_text(encoding="utf-8")
+        except OSError:
+            prev_draft = ""
+        prompt = _DRAFTING_RETRY_PROMPT.format(
+            title=task.title,
+            context_json=_json.dumps(task.context, ensure_ascii=False, indent=2),
+            constraints=constraints_block,
+            prev_gate_reason=task.last_reason or "(no recorded reason)",
+            prev_draft=prev_draft[:25000],
+            deliverable_path=task.deliverable_paths[0],
+        )
+        log_tag = f"draft_retry{task.retries}_{task.id}"
+        runner_log(f"{task.id}: retry #{task.retries} — feeding prior draft + gate reason back to claude")
+    else:
+        prompt = _DRAFTING_PROMPT.format(
+            title=task.title,
+            context_json=_json.dumps(task.context, ensure_ascii=False, indent=2),
+            constraints=constraints_block,
+            deliverable_path=task.deliverable_paths[0],
+        )
+        log_tag = f"draft_{task.id}"
+
+    ok, stdout, rc = _claude(prompt, timeout=2400, log_tag=log_tag)
     if not ok:
         return False, f"claude exec rc={rc} output_head={(stdout or '')[:200]}"
 
@@ -276,7 +334,7 @@ def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
     if not body:
         return False, "claude returned empty body"
     target.write_text(body + "\n", encoding="utf-8")
-    return True, f"wrote {target.relative_to(REPO_ROOT)} ({len(body)} chars)"
+    return True, f"wrote {target.relative_to(REPO_ROOT)} ({len(body)} chars){' [retry]' if is_retry else ''}"
 
 
 def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
