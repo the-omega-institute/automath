@@ -367,8 +367,39 @@ def _write_summary(todo_id: str, slug: str, rc: int, log_path: str) -> Path:
     return p
 
 
+def _has_real_artifacts(slug: str) -> bool:
+    """A T-NN target only earns 'Pending User Approval' once concrete
+    artifacts exist on disk under targets/<slug>/. Avoids false-marking
+    entries whose dispatch_worktree.supervisor_profile is empty (rc=0
+    no-op) — those should stay Backlog.
+    """
+    target_dir = TARGETS_DIR / slug
+    if not target_dir.exists():
+        return False
+    for name in (
+        "research.md",
+        "submission_draft.md",
+        "submission_draft_final.md",
+    ):
+        p = target_dir / name
+        try:
+            if p.exists() and p.stat().st_size > 0:
+                return True
+        except OSError:
+            continue
+    # Any *_results.json or _results.md counts too (per gitignore patterns)
+    for f in target_dir.glob("*_results.*"):
+        try:
+            if f.is_file() and f.stat().st_size > 0:
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
-    """Claim → dispatch → write summary → mark board → release."""
+    """Claim → dispatch → write summary → mark board (only if real work
+    happened) → release."""
     started = _now()
     if not claim(slug):
         return {"todo_id": todo_id, "slug": slug, "skipped": "already_claimed"}
@@ -377,10 +408,17 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
         rc, log_path = _spawn_supervise(todo_id, timeout_s)
         loop_log(f"{todo_id}: dispatch_worktree --supervise rc={rc} ({log_path})")
         summary_path = _write_summary(todo_id, slug, rc, log_path)
-        marked = mark_pending_user_approval(
-            todo_id,
-            note=f"rc={rc}",
-        )
+        # Only mark Pending User Approval when concrete artifacts landed.
+        # Empty supervisor_profiles (T-NN entries without registered
+        # commands) return rc=0 instantly and should NOT mark the board.
+        marked = False
+        if rc == 0 and _has_real_artifacts(slug):
+            marked = mark_pending_user_approval(todo_id, note=f"rc={rc}")
+        else:
+            loop_log(
+                f"{todo_id}: not marking — "
+                f"{'no artifacts under targets/' + slug + '/' if rc == 0 else f'rc={rc}'}"
+            )
         elapsed = _now() - started
         return {
             "todo_id": todo_id,
