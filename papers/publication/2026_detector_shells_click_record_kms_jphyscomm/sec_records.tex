@@ -203,7 +203,7 @@ zero, and does not describe true continuous recovery after every within-bin
 click.
 \end{remark}
 
-\begin{proposition}[Short-bin specificity of the sampled boundary reset]\label{prop:short-bin-boundary-reset-main}
+\begin{proposition}[Short-bin specificity of the sampled boundary reset with leakage constants]\label{prop:short-bin-boundary-reset-main}
 Let $\widetilde T_0,\widetilde T_1$ be the continuous intra-bin recovery kernels
 of \Cref{rem:continuous-comparator-main}, and let $T_0,T_1$ be the sampled
 boundary-reset kernels of \Cref{prop:instrument-kernels-main}. For fixed
@@ -213,15 +213,21 @@ $\Gamma,\kappa_{\mathrm r}>0$, as $\Delta\tau\downarrow0$,
 =\frac12\Gamma\kappa_{\mathrm r}(\Delta\tau)^2
 +O((\Delta\tau)^3),
 \qquad
-(\widetilde T_1)_{DR}=O((\Delta\tau)^3),
+(\widetilde T_1)_{DR}
+=\frac16\Gamma\kappa_{\mathrm r}^2(\Delta\tau)^3
++O((\Delta\tau)^4),
 \]
 while
 \[
 T_1(R,R)=T_1(D,R)=0.
 \]
-Hence the sampled theorem is a second-order short-bin approximation to
-continuous recovery in the $R\to R$ click-ending channel, not an exact
-continuous-recovery theorem.
+Hence the sampled theorem is separated from true continuous intra-bin recovery
+by an initially ready post-click return-to-ready leakage of order
+$\frac12\Gamma\kappa_{\mathrm r}(\Delta\tau)^2$ and an initially refractory
+post-click return-to-ready leakage of order
+$\frac16\Gamma\kappa_{\mathrm r}^2(\Delta\tau)^3$. The sampled boundary-reset
+law is therefore a kernel-level short-bin approximation with explicit killed
+leakage channels, not an exact continuous-recovery theorem.
 \end{proposition}
 
 \begin{proof}
@@ -1070,10 +1076,12 @@ The memory-transition threshold is therefore not a softened version of the ideal
 \label{fig:hazard-cov}
 \end{figure}
 
-\begin{corollary}\label{cor:no-exact-main}
-No positive parameter choice in the sampled boundary-reset recovery model
-realizes the Parry benchmark of Proposition~\ref{prop:ideal-main}. The same
-record is also never Bernoulli.
+\begin{corollary}[No exact Parry or Bernoulli law at positive sampling interval]\label{cor:no-exact-main}
+For every positive choice of
+$\Gamma,\kappa_{\mathrm r},\Delta\tau$, the sampled boundary-reset recovery
+model does not realize the Parry benchmark of
+Proposition~\ref{prop:ideal-main}. The same stationary record is also never
+Bernoulli.
 \end{corollary}
 
 \begin{proof}
@@ -1141,8 +1149,9 @@ boundary-reset recovery record still approaches the ideal grammar in a
 controlled small-$\Delta\tau$ regime. This is the sense in which this sampled
 boundary-reset law yields a \emph{soft} dead time.
 
-\begin{proposition}\label{prop:soft-main}
-In the sampled boundary-reset recovery model, for fixed positive $\Gamma$ and $\kappa_{\mathrm r}$,
+\begin{proposition}[Fixed-rate soft grammar and exact-clock singularity]\label{prop:soft-main}
+In the sampled boundary-reset recovery model, for fixed positive $\Gamma$ and
+$\kappa_{\mathrm r}$,
 \begin{equation}\label{eq:soft-main}
 \PP(A_{n+1}=1\mid A_n=1)=a
 =\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2+O((\Delta\tau)^3)
@@ -1162,6 +1171,26 @@ Then
 Thus, for every fixed $m$, the sampled boundary-reset recovery record
 concentrates on the golden-mean admissible set as $\Delta\tau\downarrow0$ at
 fixed physical rates.
+
+By contrast, along the exact-clock Parry scaling
+$\Gamma\Delta\tau=\log\varphi$ with fixed $\kappa_{\mathrm r}$,
+\begin{equation}\label{eq:soft-exact-clock-main}
+\PP(A_{n+1}=1\mid A_n=1)
+=
+\kappa_{\mathrm r}C_\varphi\,\Delta\tau+O((\Delta\tau)^2),
+\qquad
+C_\varphi:=1-\frac{1-\varphi^{-1}}{\log\varphi}>0.
+\end{equation}
+Consequently
+\[
+\PP\!\bigl((A_0,\dots,A_{m-1})\in V_m\bigr)
+\le
+\kappa_{\mathrm r}C_\varphi(m-1)\Delta\tau
++O\!\bigl(m(\Delta\tau)^2\bigr)
+\]
+for fixed $m$. Thus the quadratic fixed-rate suppression of adjacent clicks is
+not uniform across the exact-clock scaling that produces the ideal Parry
+benchmark in the one-step blanking model.
 \end{proposition}
 
 \begin{proof}
@@ -1195,6 +1224,39 @@ which proves~\eqref{eq:soft-main}. For the window estimate, use the union bound 
 \le (m-1)a .
 \]
 Inserting the expansion for $a$ gives~\eqref{eq:window-main}.
+
+For the exact-clock comparison, set $L=\log\varphi$ and impose
+$\Gamma=L/\Delta\tau$. The same integral formula for $a$ gives, after the
+change of variables $s=u\Delta\tau$,
+\[
+a
+=
+\kappa_{\mathrm r}\Delta\tau
+\int_0^1 e^{-\kappa_{\mathrm r}\Delta\tau u}
+\bigl(1-e^{-L(1-u)}\bigr)\,du .
+\]
+Since $\kappa_{\mathrm r}$ is fixed,
+$e^{-\kappa_{\mathrm r}\Delta\tau u}=1+O(\Delta\tau)$ uniformly on
+$0\le u\le1$, and therefore
+\[
+a=
+\kappa_{\mathrm r}\Delta\tau
+\int_0^1 \bigl(1-e^{-L(1-u)}\bigr)\,du
++O((\Delta\tau)^2).
+\]
+The integral equals
+\[
+1-\int_0^1 e^{-L(1-u)}\,du
+=
+1-\frac{1-e^{-L}}{L}
+=
+1-\frac{1-\varphi^{-1}}{\log\varphi}
+=C_\varphi.
+\]
+It is positive because the integrand is nonnegative and not identically zero.
+This proves~\eqref{eq:soft-exact-clock-main}. The exact-clock window estimate
+again follows from the same stationary union bound
+$\PP(V_m)\le(m-1)a$.
 \end{proof}
 
 Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular
