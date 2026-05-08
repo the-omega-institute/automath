@@ -292,7 +292,11 @@ increases this order.  Indeed, an adjacent carry first changes the highest
 affected coordinate \(j+2\) by increasing it by \(1\).  The double-digit rule
 at \(j=1\) first increases coordinate \(2\), the rule at \(j=2\) first
 increases coordinate \(3\), and the rule at \(j\ge3\) first increases
-coordinate \(j+1\).  Hence an infinite rewriting chain is impossible.
+coordinate \(j+1\).  In the last case the simultaneous new digit at
+coordinate \(j-2\) is lower in this reverse lexicographic comparison than
+both the increased coordinate \(j+1\) and the decreased coordinate \(j\), so
+it cannot undo the strict increase.  Hence an infinite rewriting chain is
+impossible.
 
 If a terminal vector had a coordinate \(d_j\ge2\), one of the double-digit
 rules would apply.  If it had adjacent positive coordinates
@@ -2060,8 +2064,21 @@ If \(m\ge6\), then for every \(q\in[0,\infty]\),
 (m-1)\log\varphi-\log\pi(0)-H_q(\mu_m).
 \]
 Every injection with image contained in \(X_m^{00}\) attains this value. For
-every \(q<\infty\), these are exactly the optimal injections. Since
-\(|X_m^{00}|=F_m\), such placements exist if and only if \(m\ge6\).
+every \(q<\infty\), these are exactly the optimal injections. For
+\(q=\infty\), write
+\[
+p_*:=\max_{w\in S_m(\alpha)}\mu_m(w),\qquad
+\tau(u):=\frac{\pi_m(u)}{\pi(0)\varphi^{-(m-1)}}\in\{1,\varphi^{-1},\varphi^{-2}\}.
+\]
+An injection \(\iota\) is optimal if and only if
+\[
+\mu_m(w)\le p_*\tau(\iota(w))
+\qquad\text{for every }w\in S_m(\alpha).
+\]
+Thus \(q=\infty\) may have additional optimizers, but precisely the additional
+placements of non-maximal source atoms whose loss of Parry mass is no larger
+than their drop below the maximal source mass. Since \(|X_m^{00}|=F_m\), an
+all-\(X_m^{00}\) optimal placement exists if and only if \(m\ge6\).
 \end{theorem}
 
 \begin{proof}
@@ -2158,7 +2175,25 @@ D_\infty(\nu\|\pi_m)
 (m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m).
 \end{aligned}
 \]
-Any injection with image in \(X_m^{00}\) attains equality here as well.
+The displayed lower bound is sharp exactly when
+\[
+\max_{u\in\supp(\nu)}\frac{\nu(u)}{c_{00}\tau(u)}
+=
+\frac{\max_{u\in\supp(\nu)}\nu(u)}{c_{00}}.
+\]
+Since \(\nu=\iota_*\mu_m\) and \(\iota\) is injective, this condition is
+equivalent to
+\[
+\frac{\mu_m(w)}{\tau(\iota(w))}\le p_*
+\qquad (w\in S_m(\alpha)),
+\]
+or, equivalently, to
+\(\mu_m(w)\le p_*\tau(\iota(w))\) for every realized word \(w\).  This proves
+the asserted \(q=\infty\) optimizer characterization.  In particular, any
+injection with image in \(X_m^{00}\), for which \(\tau\equiv1\) on the image,
+attains equality here as well; other optimizers occur exactly when every atom
+placed outside \(X_m^{00}\) is small enough to satisfy the displayed
+inequality.
 
 It remains to characterize the admissible range. The Sturmian complexity is
 \(|S_m(\alpha)|=m+1\), while Lemma~\ref{lem:endpoint-class-counts} gives
@@ -3126,7 +3161,11 @@ block complexity, so injective placement cannot remove the order
 \(m\log\lambda-\log m\) divergence barrier.  This coarse support-envelope
 obstruction is exactly the primitive-SFT contribution of this manuscript; the
 paper does not claim a richer finite-block rigidity or optimizer
-classification for general primitive SFTs.
+classification for general primitive SFTs.  Thus every use of the word
+``rigidity'' in this subsection refers only to the support-budget obstruction
+proved below, with the stated sliding-block factor hypothesis, and not to a
+finite-block factor classification or to a primitive-SFT analogue of the
+golden-mean optimizer theorem.
 
 \begin{proposition}[Primitive-SFT Parry support envelope]
 \label{prop:primitive-sft-support-envelope}
@@ -3357,11 +3396,11 @@ also averages over the displayed \(\beta\)-grid.  The residual and Parry tables
 use \(N=3\times 10^5\), for which the discrepancy term is already on the order
 of \(10^{-5}\).
 
-The table fragments included from \texttt{generated/} are emitted by the
-Python scripts in \texttt{scripts/} and \texttt{supplementary/scripts/}.  The
+The table fragments included from \texttt{generated/} are emitted by scripts
+in the \texttt{scripts/} and \texttt{supplementary/scripts/} directories.  The
 rotation, microstate, residual, independent-baseline and circle-map scripts
-write CSV files under the export directory; the generated-TeX script in
-\texttt{supplementary/scripts/} then converts those CSV files to the TeX
+write CSV files under the export directory; the generated-TeX script in the
+supplementary script directory then converts those CSV files to the TeX
 fragments input below.  The files under \texttt{generated/} are therefore
 generated outputs rather than hand-edited source tables.
 
@@ -3508,7 +3547,13 @@ with \(K=0.3\) and \(\Omega\) tuned by bisection on the lift so that the
 rotation number equals \(\varphi^{-1}\), giving
 \(\Omega\approx 0.6166931270470741\). With anchor \(a=0.2\), coding window
 \(I=[a,f(a))\), and initial point \(x_0=a\), the resulting symbolic sequence
-is the canonical golden Sturmian coding in conjugacy coordinates.
+is treated here as a script-audited illustration of the conjugacy theorem.
+The proof input in Theorem~\ref{thm:circle-map-conjugacy-transfer} would be
+the exact pulled-back interval \(h^{-1}([0,\varphi^{-1}))\); the displayed
+interval and tuned parameter are not used as theorem evidence beyond the
+provenance recorded in the two copies of
+\texttt{exp\_circle\_map\_audit.py} under \texttt{scripts/} and
+\texttt{supplementary/scripts/}.
 At \(m=12\) and \(N=10^5\), the empirical folded histogram satisfies
 \[
 \TV(\hat\pi_{12,N},\pi_{12}^{\mathrm{fold}})
