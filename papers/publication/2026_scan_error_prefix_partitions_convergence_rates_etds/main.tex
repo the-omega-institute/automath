@@ -140,11 +140,12 @@ The ETDS-facing contributions of the paper are:
   (Theorem~\ref{thm:weighted-boundary-pressure}): the refined ambiguous
   product graph defines a boundary path shift, and the weighted boundary
   partition sum is controlled by the reachable recurrent boundary components,
-  so the exponent for $Z_m(\partial\mathsf{P},\varphi)$ is the pressure gap
+  so the exponent for $Z_m(\partial\mathsf{P},\varphi)$ is the pressure
+  difference
   $P_X(\varphi)-P_\partial(\varphi)$ with
   $P_\partial(\varphi)=\max_{C\in\mathfrak{C}_\partial}P_C(\varphi)$; under the
-  separate $\mu_\phi$-resolving thickness hypothesis, the same gap transfers to
-  scan error.
+  separate $\mu_\phi$-resolving thickness hypothesis, this difference is
+  proved positive and transfers to scan error.
 \item Two \emph{fully explicit golden-mean computations}:
   Theorem~\ref{ex:golden-mean-specialization} gives an exact parity-resolved
   scan-error formula with $\delta_\partial(\mathsf{E})=1/2$, and
@@ -228,7 +229,7 @@ partition geometry and low-noise behavior near a decision boundary, see
 upward theorem \cite{Doob1953,Williams1991,Durrett2019}.  The discrete Tanaka
 formula is a lattice analogue of Tanaka's formula
 \cite{Tanaka1963,RevuzYor1999}; throughout,
-$L_m^{1/2}$ is used only as a discrete threshold local-time functional, not
+$L_m^{1/2}$ is used only as a discrete threshold convexity compensator, not
 as an occupation-density local time.
 
 Cylinder partition structure in symbolic dynamics is treated in
@@ -394,7 +395,8 @@ defines ordinary topological pressure on an event-dependent refined boundary
 graph, identifies exactly which reachable recurrent components control the
 rate for $Z_m(\partial\mathsf{P},\phi)$, keeps acyclic tails and residue
 classes explicit, and then, after the separate resolving-thickness step,
-transfers that pressure gap to the scan-error profile of the fixed event. \\
+proves positivity and transfers the resulting pressure gap to the scan-error
+profile of the fixed event. \\
 \addlinespace
 Theorem~\ref{ex:golden-mean-specialization} &
 For the explicit event $\mathsf{E}$ on the golden-mean shift, the theorem
@@ -454,8 +456,10 @@ a bibliographic maximality claim.  In that local comparison,
 Theorem~\ref{thm:finite-state-posterior} adds an event-relative observer that
 computes boundary exponents and scan error, beyond factor-code restriction
 criteria.  Theorem~\ref{thm:weighted-boundary-pressure} adds an event-defined
-boundary graph whose reachable recurrent components govern the pressure gap,
-beyond relative-pressure or weighted-pressure statements for factor maps.
+boundary graph whose reachable recurrent components govern the pressure
+difference for boundary sums and, after the resolving-thickness step, the
+positive gap for scan error, beyond relative-pressure or weighted-pressure
+statements for factor maps.
 Theorems~\ref{ex:golden-mean-specialization}
 and~\ref{ex:golden-mean-gibbs-weighted} then push those two general results to
 closed formulas on one explicit SFT/event pair.
@@ -694,7 +698,7 @@ p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m),
 \qquad
 p_\infty:=\mu(\mathsf{P}\mid\mathcal{F}_\infty).
 \]
-For $m\ge 1$ define the discrete threshold local-time functional at level
+For $m\ge 1$ define the discrete threshold convexity compensator at level
 $1/2$ by
 \[
 L_m^{1/2}
@@ -2146,6 +2150,8 @@ period $p_C$ of $C$.  We call it \emph{no-maximal-chain} if $q_\partial=1$.
 \label{lem:restricted-initial-partition-sum}
 Let $Y$ be a primitive one-step SFT over a finite alphabet $\mathcal{A}$, let
 $\psi:Y\to\mathbb{R}$ be H\"older, and let $I\subseteq\mathcal{A}$ be nonempty.
+Assume that for every $i\in I$ and every $m\ge 1$ there is an admissible word
+of length $m$ in $Y$ starting at $i$.
 For $m\ge 1$, define
 \[
 \mathcal{Z}_m(\psi)
@@ -2221,8 +2227,8 @@ Thus, for every $n\ge N+1$,
 =\bigl(e^{-N\|\psi\|_\infty-NP_Y(\psi)}A_-\bigr)e^{nP_Y(\psi)}.
 \]
 For the finitely many values $1\le n\le N$, the sums $\mathcal{Z}_n^I(\psi)$
-are strictly positive because $I\neq\varnothing$ and each one-cylinder $[i]$
-with $i\in I$ is nonempty in a primitive SFT.  Therefore
+are strictly positive by the standing admissibility assumption on the initial
+set $I$.  Therefore
 \[
 A_I^-:=\min\Bigl\{
 e^{-N\|\psi\|_\infty-NP_Y(\psi)}A_-,
@@ -2298,10 +2304,11 @@ such that $P_{C_j}(\phi)=P_*$ for every $j$.
 
 For every finite path $\gamma\in\mathcal{P}_m^I(G)$, there is a unique ordered
 list $D_1,\dots,D_t$ of cyclic strongly connected components visited by
-$\gamma$, and there is a constant $B_G<\infty$, depending only on $G$, such
-that the total number of vertices of $\gamma$ outside
+$\gamma$.  This list contains only components in which $\gamma$ spends at
+least one vertex.  There is a constant $B_G<\infty$, depending only on $G$,
+such that the total number of vertices of $\gamma$ outside
 $D_1\cup\cdots\cup D_t$ is at most $B_G$.  Equivalently, if $n_j$ denotes the
-number of vertices of $\gamma$ spent in $D_j$ and
+positive number of vertices of $\gamma$ spent in $D_j$ and
 $L(\gamma_{\mathrm{acyc}})$ denotes the number of vertices of $\gamma$ outside
 the visited cyclic components, then
 \[
@@ -2309,6 +2316,9 @@ n_1+\cdots+n_t=m-L(\gamma_{\mathrm{acyc}})
 \qquad\text{and}\qquad
 L(\gamma_{\mathrm{acyc}})\le B_G.
 \]
+Recurrent components not visited by $\gamma$, including components that are
+reachable only after the path terminates or were reachable before a short
+terminal tail, do not enter this ordered list.
 Then there exists $K>0$ such that
 \[
 \sum_{\gamma\in\mathcal{P}_m^I(G)}
@@ -2363,10 +2373,16 @@ are only finitely many decorated itineraries
 \[
 \Gamma=(\gamma_{\mathrm{acyc}};D_1,e_1,f_1;\dots;D_t,e_t,f_t)
 \]
-consisting of the transient part $\gamma_{\mathrm{acyc}}$, the cyclic
-components visited, and the entry and exit vertices $(e_j,f_j)$ inside each
-$D_j$.  Fix such an itinerary $\Gamma$.  The corresponding paths contribute at
-most
+consisting of the transient vertices, the cyclic components actually visited,
+and the entry and exit vertices $(e_j,f_j)$ inside each $D_j$.  A decorated
+itinerary also records the finitely many edges of the initial transient
+prefix, of each bridge between consecutive visited cyclic components, and of
+the terminal acyclic tail; all of these vertices and edges are included in
+the bounded acyclic part.  Fix such an itinerary $\Gamma$.  If $t=0$, then all
+paths with this itinerary lie in the bounded acyclic part, so they occur only
+for $m\le B_G$ and their total contribution is bounded by a constant multiple
+of $e^{mP_*}$.  We may therefore assume $t\ge 1$.  The corresponding paths
+contribute at most
 \[
 A_\Gamma
 \sum_{\substack{n_1,\dots,n_t\ge 1\\
@@ -2488,6 +2504,11 @@ $\mathfrak{C}_I\neq\varnothing$, and set
 \[
 P_*:=\max_{C\in\mathfrak{C}_I}P_C(\phi).
 \]
+For a bridge $\beta$ into a component $C$, its length $|\beta|$ is always the
+vertex length.  Thus if a recurrent segment $\eta$ in $C$ starts at the
+terminal vertex of $\beta$ and has vertex length $np_C+1$, the concatenated
+path $\beta\star\eta$ has vertex length $|\beta|+np_C$.  This is the
+convention behind the residue classes below.
 Let $q$ be the maximal integer $q\ge 1$ for which there exist distinct
 components $C_1,\dots,C_q\in\mathfrak{C}_I$ with
 $P_{C_j}(\phi)=P_*$ for all $j$ and with a directed path from $C_j$ to
@@ -2509,11 +2530,11 @@ Then the following hold.
 \item Let $C\in\mathfrak{C}_I$ satisfy $P_C(\phi)=P_*$, and let
   $\beta=b_0\cdots b_{\ell-1}$ be a directed path in $G$ satisfying
   $b_0\in I$ and $b_{\ell-1}\in C$.  Then there exists
-  $A_-(\beta)>0$ such that
+  $A_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
   \[
   \mathfrak{Z}_{\ell+np_C}^I(G,\phi,\kappa)
   \ge A_-(\beta)e^{(\ell+np_C)P_*}
-  \qquad(n\ge 0).
+  \qquad(n\ge n_0(\beta)).
   \]
 \item Suppose there is a component $C\in\mathfrak{C}_I$ with
   $P_C(\phi)=P_*$ and directed paths
@@ -2611,7 +2632,7 @@ uniform multiplicative constant, so there exists $A_-(\beta)>0$ with
 =A_-(\beta)e^{(|\beta|+np)P_*}
 \qquad(n\ge 0).
 \]
-This proves~\emph{(ii)}.  Combining~\emph{(ii)} with the upper bound already
+This proves~\emph{(ii)} with $n_0(\beta)=0$.  Combining~\emph{(ii)} with the upper bound already
 proved shows that
 \[
 \limsup_{m\to\infty}\frac1m
@@ -2625,11 +2646,11 @@ obtain a constant $A_r^->0$ such that
 \[
 \mathfrak{Z}_{|\beta_r|+np_C}^I(G,\phi,\kappa)
 \ge A_r^-e^{(|\beta_r|+np_C)P_*}
-\qquad(n\ge 0).
+\qquad(n\ge n_0(\beta_r)).
 \]
 Set
 \[
-m_0:=\max_{0\le r<p_C}|\beta_r|.
+m_0:=\max_{0\le r<p_C}\bigl(|\beta_r|+n_0(\beta_r)p_C\bigr).
 \]
 Fix $m\ge m_0$, and let $r\in\{0,\dots,p_C-1\}$ be the residue class of $m$
 modulo $p_C$.  Since the residue-complete hypothesis gives
@@ -2637,7 +2658,8 @@ $|\beta_r|\equiv r\pmod{p_C}$, the quantity
 \[
 n_r(m):=\frac{m-|\beta_r|}{p_C}
 \]
-is an integer.  It is also nonnegative because $m\ge m_0\ge |\beta_r|$.
+is an integer.  It is also at least $n_0(\beta_r)$ because
+$m\ge m_0\ge |\beta_r|+n_0(\beta_r)p_C$.
 Hence every $m\ge m_0$ admits the exact representation
 \[
 m=|\beta_r|+n_r(m)p_C
@@ -2829,12 +2851,12 @@ $P_\partial(\phi)=\max_{C\in\mathfrak{C}_\partial}P_C(\phi)$.  More precisely:
 \item Let $C\in\mathfrak{C}_\partial$ satisfy $P_C(\phi)=P_\partial(\phi)$, and
   let $\beta$ be a bridge path in the refined ambiguous graph from a state of
   $\mathcal{I}$ into $C$.  If $p_C$ is the period of $C$ and $|\beta|=\ell$,
-  then there exists $A_-(\beta)>0$ such that
+  then there exist $A_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
   \[
   Z_{\ell+np_C}(\partial\mathsf{P},\phi)
   =\widehat Z_{\ell+np_C}(\partial\mathsf{P},\phi)
   \ge A_-(\beta)e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
-  \qquad(n\ge 0).
+  \qquad(n\ge n_0(\beta)).
   \]
 \item Suppose some component $C\in\mathfrak{C}_\partial$ with
   $P_C(\phi)=P_\partial(\phi)$ makes the chosen presentation
@@ -3003,12 +3025,12 @@ $P_\partial(\phi)\in\mathbb{R}$.  Then:
 \item Let $C\in\mathfrak{C}_\partial$ satisfy $P_C(\phi)=P_\partial(\phi)$, and
   let $\beta$ be a bridge path in the refined ambiguous graph from a state of
   $\mathcal{I}$ into $C$.  If $p_C$ is the period of $C$ and $|\beta|=\ell$,
-  then there exists $C_-(\beta)>0$ such that
+  then there exist $C_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
   \[
   Z_{\ell+np_C}(\partial\mathsf{P},\phi)
   \ge C_-(\beta)\,
   e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
-  \qquad(n\ge 0).
+  \qquad(n\ge n_0(\beta)).
   \]
 \item Suppose some component $C\in\mathfrak{C}_\partial$ with
   $P_C(\phi)=P_\partial(\phi)$ makes the chosen presentation
@@ -3072,12 +3094,12 @@ Definition~\ref{def:observer-regular}, then:
   If $C\in\mathfrak{C}_\partial$ satisfies
   $P_C(\phi)=P_\partial(\phi)$, $\beta$ is a bridge path from
   $\mathcal{I}$ into $C$, $p_C$ is the period of $C$, and $|\beta|=\ell$, then
-  there exists $L_-(\beta)>0$ such that
+  there exist $L_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
   \[
   \varepsilon_{\ell+np_C}(\mathsf{P};\mu_\phi)
   \ge L_-(\beta)\,
   e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
-  \qquad(n\ge 0).
+  \qquad(n\ge n_0(\beta)).
   \]
   Moreover
   \[
@@ -3339,12 +3361,13 @@ following hold.
   \]
 \item Let $C\in\mathfrak{C}_\partial$ satisfy $P_C(\phi)=P_\partial(\phi)$, and
   let $\beta$ be a bridge path from $\mathcal{I}$ into $C$.  If $p_C$ is the
-  period of $C$ and $|\beta|=\ell$, then there exists $L_-(\beta)>0$ such that
+  period of $C$ and $|\beta|=\ell$, then there exist
+  $L_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
   \[
   \varepsilon_{\ell+np_C}(\mathsf{P};\mu_\phi)
   \ge L_-(\beta)\,
   e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
-  \qquad(n\ge 0).
+  \qquad(n\ge n_0(\beta)).
   \]
 \item One has
   \[
@@ -3418,14 +3441,14 @@ Z_m(\partial\mathsf{P},\phi)
 \]
 Applying Lemma~\ref{lem:reachable-component-partition-sums}\emph{(ii)} to the
 refined graph $G_\partial$, with initial set $\mathcal{I}$ and symbol map
-$\kappa$, gives a constant $A_-(\beta)>0$ such that
+$\kappa$, gives a constant $A_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
 \[
 \widehat Z_{\ell+np_C}(\partial\mathsf{P},\phi)
 \ge A_-(\beta)e^{-(\ell+np_C)P_X(\phi)}e^{(\ell+np_C)P_\partial(\phi)}
-\qquad(n\ge 0).
+\qquad(n\ge n_0(\beta)).
 \]
 Multiplying by the comparison constant $K_-$ from the first display proves
-~\emph{(2)} with $L_-(\beta):=K_-A_-(\beta)$.
+~\emph{(2)} with $L_-(\beta):=K_-A_-(\beta)$ and the same $n_0(\beta)$.
 
 Because $\mathsf{P}\in\mathcal{F}_\infty$, Corollary~\ref{cor:scan-tanaka-tail}
 gives
@@ -3435,15 +3458,16 @@ gives
 \]
 Choose a component $C\in\mathfrak{C}_\partial$ with
 $P_C(\phi)=P_\partial(\phi)$ and a bridge path $\beta$ from $\mathcal{I}$ into
-$C$, with $|\beta|=\ell$.  By~\emph{(2)}, there exists $L_-(\beta)>0$ such that
+$C$, with $|\beta|=\ell$.  By~\emph{(2)}, there exist
+$L_-(\beta)>0$ and $n_0(\beta)\ge 0$ such that
 \[
 \varepsilon_{\ell+np_C}(\mathsf{P};\mu_\phi)
 \ge L_-(\beta)\,
 e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
-\qquad(n\ge 0).
+\qquad(n\ge n_0(\beta)).
 \]
 If $P_X(\phi)-P_\partial(\phi)\le 0$, then the right-hand side is bounded below
-by the positive constant $L_-(\beta)$ for all $n\ge 0$, contradicting
+by the positive constant $L_-(\beta)$ for all $n\ge n_0(\beta)$, contradicting
 $\varepsilon_m(\mathsf{P};\mu_\phi)\to 0$.  Hence
 \[
 P_X(\phi)>P_\partial(\phi).
@@ -4681,8 +4705,9 @@ Proposition~\ref{prop:scan-error-cylinder}, therefore yields
 Theorem~\ref{ex:golden-mean-gibbs-weighted} can also be verified directly from
 the explicit matrix: the exact identity for
 $Z_m(\partial\mathsf{E},\varphi_t)$ and the explicit resolving words give the
-same pressure-gap exponent first for the weighted boundary sum and, after the
-resolving-thickness step in the proof, for scan error on the
+same pressure-difference exponent first for the weighted boundary sum and,
+after the resolving-thickness step in the proof, the same positive
+pressure-gap exponent for scan error on the
 transient-plus-periodic observer graph.  At $t=0$ this reduces to the Parry value
 $\lambda_0=\lambda_{\mathrm G}$, while for $t\neq 0$ the exponent varies with
 the potential even though
@@ -4722,9 +4747,9 @@ Tsukamoto~\cite{Tsukamoto2023WeightedPressure},
 Yayama~\cite{Yayama2023RelativePressure,Yayama2026RelativePressureGibbs}, and
 Alibabaei~\cite{Alibabaei2025WeightedPressure}, the increment proved here is
 an event-defined refined boundary graph whose reachable recurrent components,
-acyclic tails, and residue classes determine the ordinary pressure gap for the
-boundary partition sums and, with the separate resolving-thickness input, the
-scan-error decay law of one fixed event.  Finally,
+acyclic tails, and residue classes determine the ordinary pressure difference
+for the boundary partition sums and, with the separate resolving-thickness
+input, the positive scan-error decay gap of one fixed event.  Finally,
 Theorem~\ref{ex:golden-mean-specialization} and
 Theorem~\ref{ex:golden-mean-gibbs-weighted} supply explicit matrix formulas of
 that event-relative type on the golden-mean shift, rather than only an
@@ -4753,8 +4778,9 @@ Bowen's estimate \cite{Bowen1975} is instead
 which depends on the word $a$ through the Birkhoff sum $S_m\phi$.
 Accordingly, the correct invariant Gibbs analogue is the weighted boundary
 pressure law of Theorem~\ref{thm:weighted-boundary-pressure}, where the
-boundary exponent is the pressure gap $P_X(\phi)-P_\partial(\phi)$ rather than
-a bare count exponent.
+boundary exponent is the pressure difference $P_X(\phi)-P_\partial(\phi)$;
+after the resolving-thickness transfer in the theorem this difference is the
+positive scan-error pressure gap, rather than a bare count exponent.
 
 \paragraph{Relation to margin conditions.}
 The exact boundary identity
