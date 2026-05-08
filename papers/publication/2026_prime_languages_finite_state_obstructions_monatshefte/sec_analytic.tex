@@ -26,17 +26,18 @@ consequences of well-known mechanisms.
 \end{theorem}
 
 \begin{proof}
+  We interpret convergence of the Euler product in the standard
+  compact-open sense: its finite partial products converge locally
+  uniformly on \(\abs{z}<1\) to the stated holomorphic function.
+  The finite partial products are zero-free on \(\abs{z}<1\), and
+  \(Z_b(0)=1\). Hurwitz's theorem therefore implies at once that
+  \(Z_b\) is zero-free on \(\abs{z}<1\).
   Since every factor \((1-r^n)^{-b_n}\) is \(>1\) for \(0<r<1\), and
   since \(b_p>0\) for at least one prime \(p\), one has
   \(Z_b(r)\ge(1-r^p)^{-b_p}\to\infty\) as \(r\uparrow 1\). Thus the
   power series of \(Z_b\) has radius of convergence exactly \(1\), and
   all of its Taylor coefficients are non-negative integers.
 
-  Since \(Z_b(z)=\prod_{n\ge 1}(1-z^n)^{-b_n}\), taking logarithms
-  gives
-  \[
-    \log Z_b(z)=-\sum_{n\ge 1}b_n\log(1-z^n).
-  \]
   For each \(m\), the coefficient of \(z^m\) in \(Z_b(z)\) depends only
   on the finite product \(\prod_{n\le m}(1-z^n)^{-b_n}\). Each such
   finite product has Taylor coefficients in \(\ZZ_{\ge 0}\) (the
@@ -56,9 +57,17 @@ consequences of well-known mechanisms.
     \le\Bigl(\sup_{n\ge 1}nr^{n/2}\Bigr)\sum_{n\ge 1}b_n r^{n/2}
     <\infty.
   \]
-  Therefore \(\sum_{n\ge 1}nb_nz^n/(1-z^n)\) converges absolutely and
-  uniformly on \(\abs{z}\le r\), which justifies termwise logarithmic
-  differentiation:
+  Therefore
+  \[
+    L(z):=\sum_{n\ge 1}\frac{n b_n z^n}{1-z^n}
+  \]
+  converges absolutely and uniformly on \(\abs{z}\le r\). Let
+  \(Z_{b,N}(z):=\prod_{n\le N}(1-z^n)^{-b_n}\). The finite products
+  satisfy \(zZ_{b,N}'(z)/Z_{b,N}(z)=\sum_{n\le N}n b_nz^n/(1-z^n)\).
+  Since \(Z_{b,N}\to Z_b\) and these logarithmic derivatives converge
+  locally uniformly to \(L\), the identities
+  \(zZ_{b,N}'=Z_{b,N}\sum_{n\le N}n b_nz^n/(1-z^n)\) pass to the limit
+  uniformly on compact subdisks. Hence
   \[
     \frac{zZ_b'(z)}{Z_b(z)}
     =\sum_{n\ge 1}\frac{n b_n z^n}{1-z^n}
@@ -77,10 +86,8 @@ consequences of well-known mechanisms.
   non-empty open arc of \(\abs{z}=1\). By the P\'olya--Carlson theorem
   \cite{Polya1923,Carlson1921}, a power series with integer
   coefficients and radius \(1\) that extends beyond the unit circle
-  must be rational. Hence \(Z_b\) is rational. Since \(Z_b(0)=1\) and
-  each partial Euler product is zero-free on \(\abs{z}<1\), Hurwitz's
-  theorem implies that \(Z_b\) is zero-free on \(\abs{z}<1\). Therefore
-  the logarithmic derivative
+  must be rational. Hence \(Z_b\) is rational. Since \(Z_b\) is
+  zero-free on \(\abs{z}<1\), the logarithmic derivative
   \[
     R(z):=\frac{zZ_b'(z)}{Z_b(z)}=\sum_{m\ge 1} c_m z^m
   \]
@@ -91,15 +98,18 @@ consequences of well-known mechanisms.
     R(z)=H(z)+\sum_{j=1}^J\frac{\alpha_j}{1-z/\rho_j},
   \]
   where \(H\) is a polynomial and \(\abs{\rho_j}\ge 1\), since \(R\)
-  has no poles in \(\abs{z}<1\). Because \(R\) is the logarithmic
-  derivative of a rational function, every pole is simple. Extracting
-  coefficients gives
+  has no poles in \(\abs{z}<1\). The poles are simple: if
+  \(Z_b(z)=P(z)/Q(z)\) in lowest terms, then
+  \(R(z)=zP'(z)/P(z)-zQ'(z)/Q(z)\), and the logarithmic derivative of a
+  polynomial has only simple poles, with residue equal to the
+  corresponding multiplicity. Extracting coefficients gives
   \[
     c_m
     =\sum_{\abs{\rho_j}=1}\alpha_j\rho_j^{-m}+O(\theta^m)
   \]
   for some \(\theta\in(0,1)\). In particular, \((c_m)_{m\ge 1}\) is
-  bounded.
+  bounded, because finitely many unit-modulus exponential terms are
+  bounded and the remaining poles have modulus \(>1\).
 
   Since \(R\) is rational, the sequence \((c_m)\) satisfies a linear
   recurrence after clearing the denominator of \(R\). Because the Taylor
@@ -110,9 +120,10 @@ consequences of well-known mechanisms.
   of any order-\(d\) recurrence take values in a finite set and evolve
   deterministically. Hence \((c_m)\) is eventually periodic.
 
-  Eventual periodicity is incompatible with \(c_p=c_1+p b_p\) for
-  infinitely many primes \(p\) with \(b_p>0\), because the latter would
-  make \((c_p)\) unbounded along those primes. This contradiction shows
+  For the infinitely many primes \(p\) with \(b_p>0\),
+  \(c_p=c_1+p b_p\ge p\), so the prime-indexed subsequence
+  \((c_p)\) is unbounded. This contradicts boundedness, and a fortiori
+  eventual periodicity. This contradiction shows
   that \(Z_b\) cannot extend holomorphically across any non-empty arc of
   \(\abs{z}=1\). The unit circle is therefore a natural boundary for
   \(Z_b\).
@@ -167,8 +178,14 @@ consequences of well-known mechanisms.
   \[
     a_{n_1}n_1^{-\sigma}(e^{-2\pi i\log n_1}-1)+O\!\bigl((n_1+1)^{-\sigma}\bigr).
   \]
-  Since \(\log n_1\notin\ZZ\) (as \(n_1\ge 2\) is a positive integer),
-  the coefficient \(e^{-2\pi i\log n_1}-1\) is non-zero. Thus the
+  The coefficient \(e^{-2\pi i\log n_1}-1\) is non-zero. Indeed,
+  \(e^{-2\pi i\log n_1}=1\) would imply \(\log n_1\in\ZZ\), say
+  \(n_1=e^k\) with \(k\in\ZZ\); for \(n_1\ge2\) this has \(k\ge1\), but
+  Hermite's theorem that \(e\) is transcendental implies \(e^k\) is
+  transcendental, contradicting \(n_1\in\ZZ\). See, for instance,
+  \cite[Chapter~11]{HardyWright2008}. In the Riemann zeta case this is
+  the concrete assertion \(\log 2\notin\ZZ\), so
+  \(e^{-2\pi i\log2}\ne1\). Thus the
   difference \(F(\sigma+2\pi i)-F(\sigma)\) is non-zero for all
   sufficiently large \(\sigma\), so \(F\) is not \(2\pi i\)-periodic on
   any right half-plane. By the identity theorem, \(F\) therefore cannot

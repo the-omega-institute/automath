@@ -443,11 +443,49 @@ corollaries below.
 
 \subsection{Relative density for trim strongly connected presentations}
 
+We use the following deterministic presentation convention in the
+relative-density statements.
+
+\begin{definition}[Trim deterministic presentation]
+  \label{def:trim-deterministic-presentation}
+  A deterministic presentation over a finite alphabet \(\Sigma\) is a
+  tuple
+  \[
+    \mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N),
+  \]
+  where \(Q_N\) is finite, \(q_N\in Q_N\), \(F_N\subseteq Q_N\), and
+  \(\delta_N:Q_N\times\Sigma\rightharpoonup Q_N\) is a partial
+  transition map. A word is accepted if it labels a path from \(q_N\)
+  to a state in \(F_N\). Its adjacency matrix is
+  \[
+    (B_N)_{qq'}
+    :=\#\{a\in\Sigma:\delta_N(q,a)=q'\};
+  \]
+  thus several letters leading from \(q\) to the same state \(q'\) are
+  counted with their multiplicity, while unavailable letters contribute
+  no edge. The presentation is trim if every state is reachable from
+  \(q_N\) and can reach some state of \(F_N\). It is strongly connected
+  if the directed graph with edges \(q\to q'\) whenever
+  \(\delta_N(q,a)=q'\) for some \(a\in\Sigma\) is strongly connected.
+
+  If \(\mathcal A=(Q_A,\Sigma,\delta_A,q_A,F_A)\) is another
+  deterministic automaton over the same alphabet, its synchronous
+  product with \(\mathcal N\) has state set \(Q_N\times Q_A\), initial
+  state \((q_N,q_A)\), accepting set \(F_N\times F_A\), and the partial
+  transition
+  \[
+    (q,s)\xrightarrow{a}(\delta_N(q,a),\delta_A(s,a))
+  \]
+  exactly for letters \(a\) for which both displayed transitions are
+  defined. Completing \(\mathcal A\) by a sink state, when desired, does
+  not change the intersection language.
+\end{definition}
+
 No additional numeration-system formalism is needed for the next
-theorem beyond a trim deterministic automaton
-\(\mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N)\) whose underlying directed
-graph is strongly connected. In the applications below \(\mathcal N\)
-is the canonical presentation of a regular numeration system. Write
+theorem beyond such a trim deterministic presentation whose underlying
+directed graph is strongly connected. In the applications below
+\(\mathcal N\) is the canonical presentation of a regular numeration
+system. Write
 \[
   \mathcal N_m:=L(\mathcal N)\cap\Sigma^m,
   \qquad
@@ -517,7 +555,8 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   presentation with adjacency matrix \(B_N\), Perron root
   \(\lambda>1\), and Perron--Frobenius right eigenvector
   \(h\in\RR_{>0}^{Q_N}\). For every deterministic automaton
-  \(\mathcal A\) over the same alphabet there exist an integer
+  \(\mathcal A\) over the same alphabet, complete or partial as in
+  \Cref{def:trim-deterministic-presentation}, there exist an integer
   \(p'\ge 1\), non-negative constants \(e_0,\dots,e_{p'-1}\), and
   \(\eta\in(0,1)\) such that
   \[
@@ -527,7 +566,9 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 \end{lemma}
 
 \begin{proof}
-  Form the synchronous product automaton
+  If necessary, complete \(\mathcal A\) by adjoining a sink state; this
+  leaves \(L(\mathcal A)\cap L(\mathcal N)\) unchanged. Form the
+  synchronous product automaton of
   \(\mathcal B=\mathcal N\times\mathcal A\) and trim it by deleting
   states that are unreachable from the initial pair or cannot reach an
   accepting pair. If no state remains, then
@@ -552,10 +593,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
     \sum_{y\in Q'}P'_{xy}
     =\frac{1}{\lambda h_q}\sum_{y\in Q'}B'_{xy}h_{\pi(y)}.
   \]
-  Because \(\mathcal A\) is deterministic, each letter available from
-  \(q\) in \(\mathcal N\) contributes to at most one outgoing edge from
-  \(x\) in the product automaton, and trimming can only delete such
-  edges. Hence
+  Because the product is deterministic letter by letter, each letter
+  available from \(q\) in \(\mathcal N\) contributes to at most one
+  outgoing edge from \(x\) in the product automaton, and trimming can
+  only delete such edges. Hence
   \[
     \sum_{y\in Q'}B'_{xy}h_{\pi(y)}
     \le \sum_{\substack{q\xrightarrow{a}q'\\ \text{in }\mathcal N}} h_{q'}
@@ -609,7 +650,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 
 \begin{theorem}[Relative density for a trim strongly connected presentation]
   \label{thm:parry-density}
-  Let \(\mathcal N\) and \(\lambda\) be as above, and let
+  Let \(\mathcal N\) be a trim strongly connected deterministic
+  presentation in the sense of
+  \Cref{def:trim-deterministic-presentation}, with Perron root
+  \(\lambda>1\), and let
   \(\mathcal A\) be a deterministic automaton over \(\Sigma\). Then
   there exist an integer \(p\ge 1\), non-negative constants
   \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that for all
