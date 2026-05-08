@@ -222,6 +222,40 @@ def _infer_source_type(task: TaskSpec) -> str:
     return mapping.get(task.type, "email")
 
 
+def _build_retry_context(task: TaskSpec, prev_deliverable: Path) -> str:
+    """Assemble the retry-feedback block for codex_track / paper_trade.
+
+    On the first attempt this returns "" so the prompt template just says
+    "(no prior task-level failures)". On retry attempts this synthesizes:
+      - the gate's last_reason verbatim (which file failed, why)
+      - retries count vs max_retries
+      - the actual previous deliverable text (truncated) so codex sees
+        what it produced and can target the gap directly
+    """
+    if task.retries <= 0 or not (task.last_reason or task.last_verdict):
+        return ""
+    parts = [
+        f"This is task-level retry #{task.retries} of {task.max_retries}.",
+        "",
+        f"Previous gate verdict: {task.last_verdict or 'fail'}",
+        f"Previous gate reason: {task.last_reason or '(none recorded)'}",
+        "",
+        "Address the specific failure above. If the gate said the previous draft was undersize, EXPAND on the under-treated points named in the reason; do not shorten existing material. If the gate flagged missing terms, weave them in naturally.",
+    ]
+    try:
+        if prev_deliverable.exists():
+            prev_body = prev_deliverable.read_text(encoding="utf-8", errors="replace")
+            if prev_body.strip():
+                parts.append("")
+                parts.append("Previous draft body (full text — improve, do not paste back unchanged):")
+                parts.append("```")
+                parts.append(prev_body[:25000])
+                parts.append("```")
+    except OSError:
+        pass
+    return "\n".join(parts)
+
+
 def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
     """Drafting via ChatGPT Project oracle (deep reasoning).
 
@@ -370,11 +404,13 @@ def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
         f"{task.id}: codex_track max_rounds={max_rounds} wall_clock={wall_clock_s}s "
         f"(retry={task.retries})"
     )
+    retry_ctx = _build_retry_context(task, target)
     result = run_codex_track(
         target_payload,
         max_rounds=max_rounds,
         wall_clock_s=wall_clock_s,
         drafts_dir=DRAFTS_DIR,
+        retry_context=retry_ctx,
     )
     runner_log(
         f"{task.id}: codex_track verdict={result.verdict} rounds={result.rounds} "
@@ -501,6 +537,18 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
     constraints = ctx.get("operator_constraints") or []
     constraints_block = "\n".join(f"- {c}" for c in constraints)
 
+    # On retry, give each step the gate's prior failure reason + the file's
+    # previous body so codex can target the exact undersize / missing-term gap.
+    summary_path = _abs(summary_rel)
+    questions_path = _abs(questions_rel)
+    pointers_path = _abs(pointers_rel)
+    retry_summary = _build_retry_context(task, summary_path)
+    retry_questions = _build_retry_context(task, questions_path)
+    retry_pointers = _build_retry_context(task, pointers_path)
+
+    def retry_block(hint: str) -> str:
+        return f"\n\n# Prior task-level retry feedback\n\n{hint}\n" if hint else ""
+
     summary_prompt = (
         f"Read the SAIR paper text below and write a concise (1500-3000 char) reading summary "
         f"of the protocol — what Israel measures, the ceiling effect's empirical signature, "
@@ -508,11 +556,11 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"axis he treats. Output the summary text directly, plain prose, no preamble, no JSON wrapper.\n\n"
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Paper text (truncated)\n\n```\n{pdf_text[:60000]}\n```\n"
+        f"{retry_block(retry_summary)}"
     )
     ok, body = _codex_oneshot(summary_prompt, timeout=1500, log_tag=f"israel_summary_{task.id}")
     if not ok:
         return False, f"summary step failed: {body}"
-    summary_path = _abs(summary_rel)
     _ensure_parent(summary_path)
     summary_path.write_text(body + "\n", encoding="utf-8")
     runner_log(f"{task.id}: wrote {summary_rel}")
@@ -528,13 +576,13 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"ask how his framework treats this). Write 600-1500 char total. Output plain text only, no JSON wrapper.\n\n"
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Summary\n\n{summary_path.read_text(encoding='utf-8')}\n"
+        f"{retry_block(retry_questions)}"
     )
     ok, body = _codex_oneshot(q_prompt, timeout=1500, log_tag=f"israel_questions_{task.id}")
     if not ok:
         return False, f"questions step failed: {body}"
-    q_path = _abs(questions_rel)
-    _ensure_parent(q_path)
-    q_path.write_text(body + "\n", encoding="utf-8")
+    _ensure_parent(questions_path)
+    questions_path.write_text(body + "\n", encoding="utf-8")
     runner_log(f"{task.id}: wrote {questions_rel}")
 
     # Step 4: Lean library pointers (line-anchored, no Lean execution)
@@ -549,13 +597,13 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Per-section grep extracts (use these as the source of file:line evidence)\n\n"
         f"```\n{grep_dump[:50000]}\n```\n"
+        f"{retry_block(retry_pointers)}"
     )
     ok, body = _codex_oneshot(p_prompt, timeout=1500, log_tag=f"israel_pointers_{task.id}")
     if not ok:
         return False, f"pointers step failed: {body}"
-    p_path = _abs(pointers_rel)
-    _ensure_parent(p_path)
-    p_path.write_text(body + "\n", encoding="utf-8")
+    _ensure_parent(pointers_path)
+    pointers_path.write_text(body + "\n", encoding="utf-8")
     runner_log(f"{task.id}: wrote {pointers_rel}")
 
     return True, "all 4 paper-trade deliverables written (codex)"

@@ -338,6 +338,7 @@ def run_codex_track(
     max_rounds: int = 8,
     wall_clock_s: int = 1800,
     drafts_dir: Optional[Path] = None,
+    retry_context: Optional[str] = None,
 ) -> OutreachCodexTrackResult:
     target = dict(target or {})
     target_id = str(target.get("target_id") or target.get("id") or target.get("source_url") or "target")
@@ -348,6 +349,7 @@ def run_codex_track(
     transcript_path = LOG_DIR / f"{target_slug}_{_now_tag()}.transcript.json"
     start = time.monotonic()
     target_context = _target_block(target, channel)
+    retry_context_block = (retry_context or "").strip() or "(no prior task-level failures)"
     rounds: list[dict] = []
     final_score = 0
     final_redline_pass = False
@@ -385,6 +387,7 @@ def run_codex_track(
             "target_block": target_context,
             "prior_rounds_summary": _history_summary(rounds),
             "channel_constraints": _channel_constraints(channel),
+            "retry_context_block": retry_context_block,
         })
         codex_timeout = min(DEFAULT_CODEX_TIMEOUT, max(60, int(remaining) - 20))
         author_t0 = time.monotonic()

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.8
-// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. v1.6: openproblem Project URL fallback. v1.7: per-tab role isolation (openproblem | general) + tag-based dispatch. v1.8: bedc-style tab labelling — open the Project URL with `?outreach=1` / `?outreach=2` (or a/b) and the panel banner shows "Tab #1" / "Tab #2"; tab auto-activates on URL flag. Unlabeled tabs offer one-click shortcuts to label themselves.
+// @version      outreach-1.9
+// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -11,24 +11,12 @@
 // @connect      localhost
 // @connect      127.0.0.1
 // @run-at       document-idle
+// @noframes
 // ==/UserScript==
-
-// SETUP (operator):
-//   1. Open https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project?outreach=1
-//      Confirm 5 files attached: main.pdf, MAIN_PAPER_INDEX.md, MAIN_PAPER_README.md,
-//      LEAN4_README.md, PROGRAM_BOARD.md
-//   2. (Optional) Open a second tab with ?outreach=2 to parallelize. Server caps
-//      at 2 concurrent agents; a third tab will idle.
-//   3. With the URL flag, tab auto-ACTIVATES; the panel shows "Tab #1" / "Tab #2"
-//      so you can tell them apart at a glance.
-//   4. Without a flag, the panel shows UNLABELED + one-click "label as 1/2/a/b"
-//      shortcuts; pick one to navigate to the labelled URL.
-//   5. Keep the tab open. board_refill prompts dispatch only to openproblem-role
-//      tabs; the resulting chats inherit the Project's attached files.
 
 // FORKED FROM: tools/chatgpt-oracle/chatgpt_oracle_macos.user.js v4.10
 // Differences (search "OUTREACH ADD" / "OUTREACH CHANGE" comments):
-//   - SERVER port 8766 (paper oracle is 8765, run side by side)
+//   - SERVER port 8767 (paper oracle is 8765, run side by side)
 //   - All GM_setValue keys namespaced under "outreach_*" (no clash)
 //   - URL flag is ?outreach=N (paper uses ?oracle=N)
 //   - Panel branding distinct (purple/cyan, "[outreach]" prefix)
@@ -40,98 +28,53 @@
 (function () {
   "use strict";
 
+  try {
+    if (window.top !== window.self) return;
+  } catch {
+    return;
+  }
+  if (window.location.pathname.startsWith("/backend-api/")) return;
+  if (window.location.href.includes("/sentinel/")) return;
+
   // OUTREACH CHANGE
   const SERVER = "http://localhost:8766";
   const POLL_INTERVAL = 30000;
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.8";
+  const NO_OUTPUT_IDLE_TIMEOUT = 420000;
+  const REFILL_NO_OUTPUT_IDLE_TIMEOUT = 1800000;
+  const SCRIPT_VERSION = "outreach-1.9";
+  const OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
+  const OPENPROBLEM_PROJECT_URL = `https://chatgpt.com${OPENPROBLEM_PROJECT_PREFIX}/project`;
 
-  // OUTREACH ADD v1.6: openproblem ChatGPT Project URL. New-chat URL fallback
-  // navigates here so the chat inherits the project-level attached files
-  // (main.pdf + MAIN_PAPER_INDEX.md + MAIN_PAPER_README.md + LEAN4_README.md +
-  // PROGRAM_BOARD.md). board_refill submits its prompt with a `project_url`
-  // hint; the userscript sees this and confirms the active tab is the
-  // openproblem Project before injecting the prompt.
-  const OPENPROBLEM_PROJECT_URL =
-    "https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project";
-  const OPENPROBLEM_PROJECT_PATH_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
+  function isInsideBedcProject() {
+    return window.location.pathname.startsWith(OPENPROBLEM_PROJECT_PREFIX);
+  }
 
-  // OUTREACH ADD v1.8: bedc-style tab labelling. Each tab opens with a flag
-  // in the URL (?outreach=1 or ?outreach=a etc.) which gives a stable
-  // per-tab agent_id, makes panel banners distinguishable, and allows the
-  // tab to auto-activate on load.
-  function isInsideOpenproblemProject() {
-    try {
-      return window.location.pathname.startsWith(OPENPROBLEM_PROJECT_PATH_PREFIX);
-    } catch {
-      return false;
-    }
+  function outreachFlagFromUrl() {
+    const m = window.location.search.match(/[?&]outreach=([^&]+)/);
+    return m ? m[1] : "";
   }
-  function urlFlag() {
-    try {
-      const m = window.location.search.match(/[?&]outreach=([^&]+)/);
-      return m ? decodeURIComponent(m[1]) : "";
-    } catch {
-      return "";
-    }
-  }
-  function tabLabel() {
-    // Stable label per tab: URL flag if present, else short slice of agent_id.
-    const f = urlFlag();
-    if (f) return f;
-    const a = (() => {
-      try { return sessionStorage.getItem("outreach_agent_id") || ""; }
-      catch { return ""; }
-    })();
-    return a ? a.slice(-4) : "?";
-  }
-  function projectEntryUrl(flag) {
+
+  function projectEntryUrl() {
+    const flag = outreachFlagFromUrl();
     return `${OPENPROBLEM_PROJECT_URL}${flag ? `?outreach=${encodeURIComponent(flag)}` : ""}`;
   }
 
-  // OUTREACH ADD v1.7: per-tab role isolation. A tab self-identifies as either
-  // `openproblem` (only takes openproblem-* tagged tasks; suitable for the
-  // openproblem Project page) or `general` (takes general / untagged tasks).
-  // Auto-detected from URL on first visit, then persisted in sessionStorage
-  // so the operator can override by toggling the panel button.
-  function detectRole() {
-    return isInsideOpenproblemProject() ? "openproblem" : "general";
-  }
-  function readRole() {
-    try {
-      const stored = sessionStorage.getItem("outreach_role");
-      if (stored === "openproblem" || stored === "general") return stored;
-    } catch {}
-    const auto = detectRole();
-    try { sessionStorage.setItem("outreach_role", auto); } catch {}
-    return auto;
-  }
-  function writeRole(r) {
-    if (r !== "openproblem" && r !== "general") return;
-    try { sessionStorage.setItem("outreach_role", r); } catch {}
-  }
-  function toggleRole() {
-    const cur = readRole();
-    const next = cur === "openproblem" ? "general" : "openproblem";
-    writeRole(next);
-    return next;
-  }
-
   let busy = false;
-  // OUTREACH CHANGE v1.8: per-tab active flag. If URL has `?outreach=N` flag
-  // OR we're inside the openproblem project, tab auto-activates on load.
-  // Otherwise, falls back to whatever sessionStorage says (operator must
-  // press ACTIVATE manually).
+  // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
+  // which is cross-tab and caused new ChatGPT windows the user opens for
+  // personal use to inherit ACTIVE state and start stealing tasks).
+  // Each tab now opts in independently by a ?outreach= URL or dashboard toggle.
   let active = (() => {
+    const urlOptIn = window.location.search.includes("outreach=");
     try {
-      const urlOptIn = urlFlag() !== "";
       if (urlOptIn) sessionStorage.setItem("outreach_active", "1");
-      const stored = sessionStorage.getItem("outreach_active") === "1";
-      return stored && (urlOptIn || isInsideOpenproblemProject());
+      const storedActive = sessionStorage.getItem("outreach_active") === "1";
+      return storedActive && (urlOptIn || isInsideBedcProject());
     } catch {
-      return urlFlag() !== "";
+      return urlOptIn;
     }
   })();
 
@@ -154,143 +97,50 @@
   }
 
   // ── Status panel (OUTREACH CHANGE: distinct color/branding) ──────────
-  // v1.3 — Multi-script-friendly: collapses to a 80×24 badge when PAUSED so
-  // it doesn't crowd a sibling oracle's panel (BEDC / publication / future).
-  // Detects sibling fixed-position panels and auto-flips position to the
-  // opposite corner if a clash is detected.
   let panel = null;
-  let panelExpanded = false;  // user can click badge to force expand even when paused
-
-  // v1.4 — sibling-corner detection removed (could hang on huge DOMs and
-  // potentially blocked init in some Tampermonkey contexts). Outreach panel
-  // always docks top-right; BEDC / publication scripts default to bottom-right.
-  // Two scripts in the same tab no longer overlap because the corners differ.
-  function preferredCorner() {
-    // Fixed top-right anchor — distinct from BEDC's bottom-right default.
-    return { top: "12px", right: "12px", bottom: "auto", left: "auto" };
-  }
-
   function ensurePanel() {
     if (panel && document.body.contains(panel)) return;
     panel = document.createElement("div");
     panel.id = "outreach-oracle-panel";
+    panel.style.cssText = `
+      position: fixed; bottom: 12px; right: 12px; z-index: 99999;
+      background: #1d1d3a; color: #9af; font-family: monospace; font-size: 11px;
+      padding: 8px 12px; border-radius: 6px; max-width: 460px; max-height: 320px;
+      overflow-y: auto; box-shadow: 0 2px 12px rgba(80,40,180,0.5); opacity: 0.93;
+      line-height: 1.4; border: 1px solid #5577cc;
+    `;
     document.body.appendChild(panel);
-  }
-
-  function applyPanelStyle() {
-    const corner = preferredCorner();
-    const collapsed = !active && !busy && !panelExpanded;
-    if (collapsed) {
-      // Tiny badge — minimum visual footprint when paused. Click to expand.
-      panel.style.cssText = `
-        position: fixed; ${Object.entries(corner).map(([k,v])=>`${k}:${v}`).join(';')};
-        z-index: 99999; background: #1d1d3a; color: #9af;
-        font-family: monospace; font-size: 11px;
-        padding: 4px 8px; border-radius: 12px;
-        cursor: pointer; opacity: 0.7;
-        border: 1px solid #5577cc;
-        box-shadow: 0 1px 4px rgba(80,40,180,0.3);
-      `;
-    } else {
-      // Full panel — visible logs, controls, status.
-      panel.style.cssText = `
-        position: fixed; ${Object.entries(corner).map(([k,v])=>`${k}:${v}`).join(';')};
-        z-index: 99999; background: #1d1d3a; color: #9af;
-        font-family: monospace; font-size: 11px;
-        padding: 8px 12px; border-radius: 6px;
-        max-width: 460px; max-height: 320px;
-        overflow-y: auto; box-shadow: 0 2px 12px rgba(80,40,180,0.5); opacity: 0.93;
-        line-height: 1.4; border: 1px solid #5577cc;
-      `;
-    }
   }
 
   function updatePanel() {
     ensurePanel();
-    applyPanelStyle();
     const statusColor = active ? (busy ? "#ff0" : "#9af") : "#f55";
     const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
-    const collapsed = !active && !busy && !panelExpanded;
-    const flag = urlFlag();
-    const label = tabLabel();
-    if (collapsed) {
-      panel.innerHTML = `<span style="color:#cdf">[Outreach #${label}]</span> <span style="color:${statusColor};font-weight:bold">⏸</span>`;
-      panel.title = `Outreach Oracle Tab #${label} (paused). Click to expand.`;
-      // Click badge → expand
-      panel.onclick = (e) => { e.stopPropagation(); panelExpanded = true; updatePanel(); };
-      return;
-    }
-    panel.onclick = null;
     const btnText = active ? "⏸ Pause" : "▶ Start";
     const btnColor = active ? "#f55" : "#9af";
-    const collapseBtn = !active && !busy ? `<button id="outreach-collapse" title="Collapse to badge" style="background:#446;color:#9af;border:none;border-radius:3px;padding:2px 6px;cursor:pointer;font-size:10px">−</button>` : "";
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    const role = readRole();
-    const roleColor = role === "openproblem" ? "#9f9" : "#fc9";
-    // OUTREACH ADD v1.8: tab label prominent. If unlabeled (no ?outreach=
-    // flag), show two big shortcut buttons that navigate to /project?outreach=1
-    // and /project?outreach=2 — operator can label both tabs in one click.
-    const labelBlock = flag
-      ? `<span style="background:#cdf;color:#000;font-weight:bold;border-radius:4px;padding:1px 6px;font-size:11px">Tab #${label}</span>`
-      : `<span style="background:#fa5;color:#000;font-weight:bold;border-radius:4px;padding:1px 6px;font-size:11px">UNLABELED</span>`;
-    const labelShortcuts = flag ? "" : `
-      <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#9af;margin-top:2px">
-        <span>label this tab as →</span>
-        <button id="outreach-label-1" title="Open Tab #1" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">1</button>
-        <button id="outreach-label-2" title="Open Tab #2" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">2</button>
-        <button id="outreach-label-a" title="Open Tab #a" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">a</button>
-        <button id="outreach-label-b" title="Open Tab #b" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">b</button>
-      </div>`;
     panel.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
-        <b style="color:#cdf">[Outreach ${SCRIPT_VERSION}]</b>
-        ${labelBlock}
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <b style="color:#cdf">[Outreach Oracle ${SCRIPT_VERSION}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="outreach-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
-        ${collapseBtn}
       </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#9af;margin-top:2px">
-        <span>role:</span>
-        <button id="outreach-role-toggle" title="Toggle role (openproblem ↔ general)" style="background:${roleColor};color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">${role}</button>
-        <span style="color:#888">(only ${role === "openproblem" ? "openproblem-*" : "general/untagged"} tasks)</span>
-      </div>
-      ${labelShortcuts}
       <hr style="border-color:#446;margin:4px 0">
       ${lines}`;
     const btn = document.getElementById("outreach-toggle");
     if (btn) btn.addEventListener("click", toggleActive);
-    // OUTREACH ADD v1.8: tab-label shortcut buttons.
-    for (const tag of ["1", "2", "a", "b"]) {
-      const el = document.getElementById(`outreach-label-${tag}`);
-      if (el) el.addEventListener("click", (e) => {
-        e.stopPropagation();
-        // If we're already on the openproblem project, just append the flag.
-        if (isInsideOpenproblemProject()) {
-          const url = new URL(window.location.href);
-          url.searchParams.set("outreach", tag);
-          window.location.href = url.toString();
-        } else {
-          window.location.href = projectEntryUrl(tag);
-        }
-      });
-    }
-    const rbtn = document.getElementById("outreach-role-toggle");
-    if (rbtn) rbtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const next = toggleRole();
-      log(`role → ${next}`);
-      updatePanel();
-    });
-    const cb = document.getElementById("outreach-collapse");
-    if (cb) cb.addEventListener("click", (e) => { e.stopPropagation(); panelExpanded = false; updatePanel(); });
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
   function serverGet(path) {
     return new Promise((resolve, reject) => {
+      const sep = path.includes("?") ? "&" : "?";
+      const meta = `${sep}script_version=${encodeURIComponent(SCRIPT_VERSION)}`
+        + `&page_url=${encodeURIComponent(window.location.href)}`
+        + `&chatgpt_url=${encodeURIComponent(currentChatUrl())}`;
       GM_xmlhttpRequest({
         method: "GET",
-        url: `${SERVER}${path}`,
+        url: `${SERVER}${path}${meta}`,
         timeout: 10000,
         onload: (r) => {
           try { resolve(JSON.parse(r.responseText)); }
@@ -304,11 +154,16 @@
 
   function serverPost(path, data) {
     return new Promise((resolve, reject) => {
+      const payload = Object.assign({}, data || {}, {
+        script_version: SCRIPT_VERSION,
+        page_url: window.location.href,
+        chatgpt_url: (data && data.chatgpt_url) || currentChatUrl(),
+      });
       GM_xmlhttpRequest({
         method: "POST",
         url: `${SERVER}${path}`,
         headers: { "Content-Type": "application/json" },
-        data: JSON.stringify(data),
+        data: JSON.stringify(payload),
         timeout: 30000,
         onload: (r) => {
           try { resolve(JSON.parse(r.responseText)); }
@@ -331,45 +186,50 @@
   // /c/<uuid> redirect, dropping in-memory busy state). With in_flight set,
   // a re-entry of processTask while on the original /c/<uuid> page resumes
   // waitForResponse() instead of re-navigating + re-entering the prompt.
+  // OUTREACH FIX (cross-tab contamination): all task-state keys are now scoped
+  // by agentId() via tabSet/tabGet (defined below alongside agentId). This
+  // prevents tab A's saveTaskState from overwriting tab B's, which had
+  // caused B-10/B-11 mid-flight prompt swaps and two tabs racing onto the
+  // same /c/<uuid>.
   function saveTaskState(task) {
-    GM_setValue("outreach_current_task", JSON.stringify(task));
-    GM_setValue("outreach_task_phase", "pending");
+    tabSet("current_task", JSON.stringify(task));
+    tabSet("task_phase", "pending");
   }
   function loadTaskState() {
     try {
-      const s = GM_getValue("outreach_current_task", "");
+      const s = tabGet("current_task", "");
       return s ? JSON.parse(s) : null;
     } catch { return null; }
   }
   function getTaskPhase() {
-    return GM_getValue("outreach_task_phase", "");
+    return tabGet("task_phase", "");
   }
   function setTaskPhase(phase) {
-    GM_setValue("outreach_task_phase", phase);
+    tabSet("task_phase", phase);
   }
   function clearTaskState() {
-    GM_setValue("outreach_current_task", "");
-    GM_setValue("outreach_task_phase", "");
+    tabSet("current_task", "");
+    tabSet("task_phase", "");
   }
   function getInFlightTaskId() {
-    return GM_getValue("outreach_in_flight_task_id", "");
+    return tabGet("in_flight_task_id", "");
   }
   function setInFlightTaskId(id) {
-    GM_setValue("outreach_in_flight_task_id", id || "");
+    tabSet("in_flight_task_id", id || "");
     // Also stamp the URL we were on when we became busy with this task.
     if (id) {
-      GM_setValue("outreach_in_flight_url", window.location.href);
-      GM_setValue("outreach_in_flight_started_at", Date.now());
+      tabSet("in_flight_url", window.location.href);
+      tabSet("in_flight_started_at", Date.now());
     } else {
-      GM_setValue("outreach_in_flight_url", "");
-      GM_setValue("outreach_in_flight_started_at", 0);
+      tabSet("in_flight_url", "");
+      tabSet("in_flight_started_at", 0);
     }
   }
   function getInFlightUrl() {
-    return GM_getValue("outreach_in_flight_url", "");
+    return tabGet("in_flight_url", "");
   }
   function getInFlightAgeMs() {
-    const ts = GM_getValue("outreach_in_flight_started_at", 0);
+    const ts = tabGet("in_flight_started_at", 0);
     return ts ? (Date.now() - ts) : 0;
   }
 
@@ -387,6 +247,126 @@
       if (el) return el;
     }
     return null;
+  }
+
+  function findFileInput() {
+    // ChatGPT has a hidden file input on the composer
+    return document.querySelector("input[type='file']");
+  }
+
+  // ── PDF upload (ported from automath chatgpt_oracle_macos.user.js) ────
+  async function waitForUploadComplete(timeoutMs = 60000) {
+    log("Waiting for PDF upload to complete...");
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      await sleep(2000);
+      const uploading =
+        document.querySelector("[class*='uploading']") ||
+        document.querySelector("[class*='progress']") ||
+        document.querySelector("[role='progressbar']") ||
+        document.querySelector("[class*='loading']");
+      const attached =
+        document.querySelector("[class*='attachment']") ||
+        document.querySelector("[class*='file-chip']") ||
+        document.querySelector("[data-testid*='attachment']") ||
+        document.querySelector("[class*='uploaded']") ||
+        document.querySelector("img[alt*='pdf']") ||
+        document.querySelector("[class*='file']");
+      const elapsed = Math.floor((Date.now() - start) / 1000);
+      if (!uploading && attached) {
+        log(`PDF upload complete (${elapsed}s), attachment visible`);
+        return true;
+      }
+      const sendBtn = findSendButton();
+      if (sendBtn && !sendBtn.disabled && elapsed > 5) {
+        log(`PDF upload likely complete (${elapsed}s), send button enabled`);
+        return true;
+      }
+      if (elapsed % 10 === 0 && elapsed > 0) {
+        log(`Upload waiting... ${elapsed}s (uploading=${!!uploading}, attached=${!!attached})`);
+      }
+    }
+    log("Upload wait timeout — proceeding anyway");
+    return false;
+  }
+
+  async function uploadPDF(base64Data, fileName) {
+    log(`PDF upload: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
+    const byteChars = atob(base64Data);
+    const byteArray = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) byteArray[i] = byteChars.charCodeAt(i);
+    const file = new File([byteArray], fileName, { type: "application/pdf" });
+
+    let injected = false;
+
+    // Method 1: hidden file input
+    const fileInput = findFileInput();
+    if (fileInput) {
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+        log("PDF: injected via file input");
+        injected = true;
+      } catch (e) {
+        log(`PDF file input failed: ${e.message}`);
+      }
+    }
+
+    // Method 2: click attach button, then file input
+    if (!injected) {
+      const attachBtn = document.querySelector(
+        "button[aria-label='Attach files'], button[aria-label='Upload file'], " +
+        "button[data-testid='composer-attach-button'], button[aria-haspopup='menu']"
+      );
+      if (attachBtn) {
+        log("PDF: clicking attach button...");
+        attachBtn.click();
+        await sleep(1000);
+        const fi2 = document.querySelector("input[type='file']");
+        if (fi2) {
+          try {
+            const dt2 = new DataTransfer();
+            dt2.items.add(file);
+            fi2.files = dt2.files;
+            fi2.dispatchEvent(new Event("change", { bubbles: true }));
+            log("PDF: injected after clicking attach");
+            injected = true;
+          } catch (e) {
+            log(`PDF inject after attach failed: ${e.message}`);
+          }
+        }
+      }
+    }
+
+    // Method 3: drag-drop on composer
+    if (!injected) {
+      log("PDF: trying drag-drop...");
+      const dropTarget =
+        document.querySelector("form") ||
+        findPromptInput()?.closest("div") ||
+        document.querySelector("[class*='composer']");
+      if (dropTarget) {
+        const dt3 = new DataTransfer();
+        dt3.items.add(file);
+        for (const evtType of ["dragenter", "dragover", "drop"]) {
+          dropTarget.dispatchEvent(new DragEvent(evtType, {
+            bubbles: true, cancelable: true, dataTransfer: dt3,
+          }));
+          await sleep(300);
+        }
+        log("PDF: drag-drop dispatched");
+        injected = true;
+      }
+    }
+
+    if (!injected) {
+      log("PDF: ALL METHODS FAILED — continuing without PDF");
+      return false;
+    }
+    await waitForUploadComplete(60000);
+    return true;
   }
 
   function findSendButton(allowDisabled = false) {
@@ -452,11 +432,58 @@
     return msgs.length === 0;
   }
 
-  // OUTREACH ADD: detect if current page is a /c/<id> conversation
+  // Outreach: hard-pin the project prefix. If a tab somehow ends up on a
+  // bare /c/<id> URL (ChatGPT occasionally drops the /g/g-p-… prefix
+  // mid-session — observed empirically), every URL the userscript
+  // captures or hands back to the server must reassert this prefix so
+  // the project's PDF context isn't silently lost.
+  // Force a /c/<id> URL into the Outreach project namespace. Idempotent: a
+  // URL already in /g/g-p-…/c/<id> form is returned unchanged.
+  function pinToProject(url) {
+    if (!url) return url;
+    try {
+      const u = new URL(url, window.location.origin);
+      // already inside any /g/<slug>/ namespace — trust it
+      if (/^\/g\/[^/]+\//.test(u.pathname)) return u.toString();
+      // bare /c/<id> — splice in the Outreach project prefix
+      const m = u.pathname.match(/^\/c\/[a-f0-9-]{6,}/);
+      if (m) {
+        u.pathname = `${OPENPROBLEM_PROJECT_PREFIX}${m[0]}`;
+        return u.toString();
+      }
+      // bare root or other path — return as-is, caller decides
+      return u.toString();
+    } catch {
+      return url;
+    }
+  }
+
+  // OUTREACH ADD: detect if current page is a /c/<id> conversation. Always
+  // returns a project-pinned URL so the server doesn't store a bare
+  // /c/<id> that would later leak the tab out of the project.
   function currentChatUrl() {
     const href = window.location.href;
-    if (/\/c\/[a-f0-9-]{6,}/.test(href)) return href.split("?")[0];
+    if (/\/c\/[a-f0-9-]{6,}/.test(href)) {
+      return pinToProject(href.split("?")[0]);
+    }
     return "";
+  }
+
+  // If we've drifted out of the project (URL is /c/<id> with no /g/g-p-…
+  // prefix), redirect ourselves back into the project namespace before
+  // doing anything that depends on PDF context. Returns true if we
+  // navigated (caller should bail out and let the page reload).
+  function ensureInProject() {
+    const href = window.location.href;
+    if (!/\/c\/[a-f0-9-]{6,}/.test(href)) return false;
+    if (window.location.pathname.startsWith(OPENPROBLEM_PROJECT_PREFIX)) return false;
+    const pinned = pinToProject(href);
+    if (pinned !== href) {
+      log(`drift detected — navigating ${href.slice(-40)} → project-pinned`);
+      window.location.href = pinned;
+      return true;
+    }
+    return false;
   }
 
   // OUTREACH ADD: ChatGPT 5.5 redirects /?outreach=1 → /c/<latest>, so URL
@@ -585,7 +612,12 @@
       if (btn && !btn.disabled) {
         const tid = btn.getAttribute("data-testid");
         const lbl = btn.getAttribute("aria-label");
-        log(`Send button found (testid=${tid}, label=${lbl}), clicking ONCE...`);
+        // OUTREACH FIX: snapshot assistant message count IMMEDIATELY before send,
+        // so waitForResponse can require count strict-increase. This is the
+        // structural fix for oracle_duplicate_response (turn N captures
+        // turn N-1's content because DOM still has prior turns visible).
+        const pre = snapshotAssistantCount();
+        log(`Send button found (testid=${tid}, label=${lbl}), pre-send assistant count=${pre}, clicking ONCE...`);
         btn.click();
         await sleep(500);
         return true;
@@ -639,6 +671,31 @@
   // ── Response extraction (verbatim from paper oracle v4.10) ───────────
   let sentPromptText = "";
   let postSendLines = new Set();
+  // OUTREACH FIX: snapshot of `[data-message-author-role='assistant']` COUNT
+  // taken immediately before we hit Send. waitForResponse waits until the
+  // count strictly increases, then captures only the NEW last assistant
+  // message. Without this, follow-up turns can return turn N-1's text
+  // because the multi-strategy fallbacks in extractResponseText see prior
+  // assistant messages still in DOM and pick one of them as "stable".
+  // Root cause of the historical oracle_duplicate_response failure cluster.
+  let preSubmitAssistantCount = 0;
+  function snapshotAssistantCount() {
+    try {
+      preSubmitAssistantCount = document.querySelectorAll(
+        "[data-message-author-role='assistant']"
+      ).length;
+    } catch {
+      preSubmitAssistantCount = 0;
+    }
+    return preSubmitAssistantCount;
+  }
+  function newAssistantCount() {
+    try {
+      return document.querySelectorAll("[data-message-author-role='assistant']").length;
+    } catch {
+      return 0;
+    }
+  }
 
   function setSentPrompt(text) { sentPromptText = text; }
 
@@ -676,6 +733,22 @@
     log(`Post-send captured: ${postSendLines.size} lines`);
   }
 
+  function postSendNovelText(text) {
+    if (postSendLines.size === 0) return "";
+    const newLines = cleanText(text).split("\n").filter(l => {
+      const t = l.trim();
+      return t.length > 0 && !postSendLines.has(t) && !isChromeLine(t);
+    });
+    if (newLines.length < 2) return "";
+    const joined = newLines.join("\n").trim();
+    return joined.length >= 100 ? joined : "";
+  }
+
+  function hasPostSendNovelContent(text) {
+    if (postSendLines.size === 0) return true;
+    return postSendNovelText(text).length >= 100;
+  }
+
   const CHROME_RE = [
     /^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/,
     /^(ChatGPT can make mistakes|Check important info)/,
@@ -705,6 +778,17 @@
   function isChromeLine(t) {
     if (!t || t.length > 200) return false;
     return CHROME_RE.some(re => re.test(t));
+  }
+
+  function stableResponseKey(text) {
+    const normalized = cleanText(text)
+      .replace(/Thought for\s+\d+(?:\s*m\s*\d+\s*s|\s*s|\s+min)/gi, "Thought for <elapsed>")
+      .replace(/\b\d{1,2}:\d{2}(?::\d{2})?\b/g, "<clock>")
+      .replace(/\b(Pro thinking|Extended Pro|Reasoning…)\b/gi, "")
+      .replace(/[ \t]+/g, " ")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+    return normalized.length >= 5 ? normalized : text.trim();
   }
 
   function isSsrLine(t) {
@@ -822,6 +906,9 @@
       }
     }
 
+    const novelText = postSendNovelText(fullText);
+    if (novelText.length > 100 && !looksLikePromptEcho(novelText)) return novelText;
+
     const candidates = [];
     const allBlocks = main.querySelectorAll("div, article, section");
     for (const el of allBlocks) {
@@ -836,6 +923,7 @@
       const pageLen = fullText.length;
       if (cleaned.length > pageLen * 0.95 && candidates.length > 3) continue;
       if (looksLikePromptEcho(cleaned)) continue;
+      if (!hasPostSendNovelContent(cleaned)) continue;
       if (sentPromptText.length > 500) {
         const promptStart = sentPromptText.slice(0, 200).trim();
         if (cleaned.startsWith(promptStart)
@@ -862,6 +950,7 @@
           const cleaned = cleanText(text);
           if (cleaned.length < 200) continue;
           if (looksLikePromptEcho(cleaned)) continue;
+          if (!hasPostSendNovelContent(cleaned)) continue;
           if (sentPromptText.length > 30) {
             const ps = sentPromptText.slice(0, 40).trim();
             if (cleaned.startsWith(ps) && cleaned.length < sentPromptText.length * 1.2) continue;
@@ -889,16 +978,6 @@
       }
     }
 
-    if (postSendLines.size > 0) {
-      const newLines = fullText.split("\n").filter(l => {
-        const t = l.trim();
-        return t.length > 0 && !postSendLines.has(t) && !isChromeLine(t);
-      });
-      if (newLines.length > 3) {
-        const diffText = newLines.join("\n").trim();
-        if (diffText.length > 100 && !looksLikePromptEcho(diffText)) return diffText;
-      }
-    }
     return "";
   }
 
@@ -939,33 +1018,82 @@
     return false;
   }
 
-  async function waitForResponse() {
-    log("Waiting for ChatGPT response...");
+  async function waitForResponse(task_id, noOutputIdleTimeout = NO_OUTPUT_IDLE_TIMEOUT) {
+    log(`Waiting for ChatGPT response (pre-send assistant count was ${preSubmitAssistantCount})...`);
     const startTime = Date.now();
-    let lastText = "";
+    let lastResponseText = "";
+    let lastStableKey = "";
     let stableCount = 0;
     let lastLogTime = 0;
+    let lastHeartbeat = 0;
+    let countIncreasedLogged = false;
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
-      const responseText = extractResponseText();
+      // OUTREACH FIX: require strict count increase before trusting any
+      // extractResponseText output. Without this, the multi-strategy
+      // fallback can return prior-turn text that happens to be "stable"
+      // because no new generation has rendered yet.
+      const curCount = newAssistantCount();
+      const responseText = (curCount > preSubmitAssistantCount)
+        ? extractAssistantOnly()    // count increased: take the LAST assistant message only
+        : "";                       // count not yet increased: don't even consider stability
+      if (curCount > preSubmitAssistantCount && !countIncreasedLogged) {
+        log(`new assistant message detected (count ${preSubmitAssistantCount} → ${curCount})`);
+        countIncreasedLogged = true;
+      }
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
+      const nowMs = Date.now();
+      if (task_id && nowMs - lastHeartbeat >= 60000) {
+        lastHeartbeat = nowMs;
+        let ack = null;
+        try {
+          ack = await serverPost("/ack", {
+            task_id,
+            agent_id: agentId(),
+            heartbeat: true,
+            metrics: {
+              elapsed_seconds: elapsed,
+              extracted_chars: responseText.length,
+              page_chars: mainLen,
+              stable_count: stableCount,
+              generating,
+              url_tail: window.location.href.slice(-60),
+            },
+          });
+        } catch {}
+        if (ack && ack.status === "cancelled") {
+          throw new Error(`Task cancelled by server: ${task_id}`);
+        }
+      }
       if (elapsed - lastLogTime >= 300) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
       }
+      if (
+        !generating &&
+        responseText.length < 5 &&
+        Date.now() - startTime >= noOutputIdleTimeout
+      ) {
+        throw new Error(
+          `No assistant output after ${Math.floor(noOutputIdleTimeout / 1000)}s ` +
+          `(page=${mainLen}, url=${window.location.href.slice(-60)})`
+        );
+      }
       if (responseText.length >= 5) {
         if (looksLikePromptEcho(responseText)) {
           if (stableCount === 0) log(`Prompt echo detected (${responseText.length} chars) — waiting`);
-          stableCount = 0; lastText = ""; continue;
+          stableCount = 0; lastResponseText = ""; lastStableKey = ""; continue;
         }
         if (isSSRGarbage(responseText)) {
           if (stableCount === 0) log(`SSR garbage detected — page hydrating, waiting`);
-          stableCount = 0; lastText = ""; continue;
+          stableCount = 0; lastResponseText = ""; lastStableKey = ""; continue;
         }
-        if (responseText === lastText) {
+        const stableKey = stableResponseKey(responseText);
+        if (stableKey === lastStableKey) {
           stableCount++;
+          lastResponseText = responseText;
           let minChecks;
           if (responseText.length >= 2000) minChecks = STABLE_CHECKS;
           else if (responseText.length >= 200) minChecks = STABLE_CHECKS + 2;
@@ -978,21 +1106,30 @@
           }
         } else {
           stableCount = 0;
-          lastText = responseText;
+          lastResponseText = responseText;
+          lastStableKey = stableKey;
         }
       } else if (generating) {
         stableCount = 0;
       }
     }
-    log(`TIMEOUT (${MAX_WAIT/1000}s), returning partial: ${lastText.length} chars`);
-    return lastText;
+    log(`TIMEOUT (${MAX_WAIT/1000}s), returning partial: ${lastResponseText.length} chars`);
+    return lastResponseText;
   }
 
   // ── Process a task (OUTREACH ADD: multi-turn navigation + reload-safe) ─
   async function processTask(task) {
-    const { task_id, prompt, conversation_url, is_followup, conversation_id, re_extract } = task;
+    const { task_id, prompt, conversation_url, is_followup, conversation_id, re_extract, pdf_base64, pdf_name, tag } = task;
+    const noOutputIdleTimeout = (tag === "outreach-board-refill")
+      ? REFILL_NO_OUTPUT_IDLE_TIMEOUT
+      : NO_OUTPUT_IDLE_TIMEOUT;
     busy = true;
     updatePanel();
+
+    if (!isInsideBedcProject()) {
+      navigateTaskBackToProject(task, "outside project before task");
+      return;
+    }
 
     // OUTREACH ADD: re_extract mode. Server says "this conversation already
     // has the response we want — just navigate there and extract the latest
@@ -1001,15 +1138,18 @@
     if (re_extract) {
       log(`=== Task: ${task_id} [RE-EXTRACT] conv=${(conversation_id || "").slice(0, 12)} ===`);
       try {
-        if (conversation_url && !window.location.href.startsWith(conversation_url)) {
-          GM_setValue("outreach_navigating", true);
-          GM_setValue("outreach_nav_task_id", task_id);
+        // OUTREACH FIX: re-pin server-provided URL into the project namespace
+        // in case it was stored as a bare /c/<id> from a drifted session.
+        const pinnedConv = pinToProject(conversation_url);
+        if (pinnedConv && !window.location.href.startsWith(pinnedConv)) {
+          tabSet("navigating", true);
+          tabSet("nav_task_id", task_id);
           saveTaskState(task);
           setTaskPhase("navigating");
-          log(`Navigating to ${conversation_url.slice(-60)} for re-extract ...`);
+          log(`Navigating to ${pinnedConv.slice(-60)} for re-extract ...`);
           busy = false;
           updatePanel();
-          window.location.href = conversation_url;
+          window.location.href = pinnedConv;
           return;
         }
         try { await serverPost("/ack", { task_id, agent_id: agentId() }); } catch {}
@@ -1059,13 +1199,12 @@
     // prompt and started generating), DO NOT re-enter the prompt. Just resume
     // waitForResponse. ChatGPT 5.5 triggers a full page reload when the URL
     // first changes from chatgpt.com/ to chatgpt.com/c/<uuid>, which loses
-    // our in-memory state but the in-flight task survives.
-    //
-    // Fix v1.5: this guard now applies to follow-up tasks too. Earlier the
-    // condition was `!is_followup`, which let a page reload during a follow-up
-    // (e.g. WRITE_PAPER_LATEX terminal turn) trigger duplicate prompt entry —
-    // observed visually as the same prompt block appearing twice in the
-    // ChatGPT chat for T-20.
+    // our in-memory state but the in-flight task survives. The guard applies
+    // to follow-up tasks too: long Pro reasoning turns (>30 min) inside an
+    // existing /c/<uuid> page can trigger DOM remount / focus reset, which
+    // re-enters processTask. Without including follow-ups, the same prompt
+    // gets submitted twice and the polite restatement overwrites the real
+    // long response captured by the extractor.
     const onConvPage = /\/c\/[a-f0-9-]{6,}/.test(window.location.href);
     if (getInFlightTaskId() === task_id && onConvPage) {
       log(`=== Task: ${task_id} [RESUMING on existing chat ${currentChatUrl().slice(-40)}] ===`);
@@ -1074,7 +1213,7 @@
       setSentPrompt(prompt);
       capturePostSendState();
       try {
-        const response = await waitForResponse();
+        const response = await waitForResponse(task_id, noOutputIdleTimeout);
         if (!response || response.length < 5) {
           throw new Error(`Resumed wait got no response (${response?.length || 0} chars)`);
         }
@@ -1112,7 +1251,14 @@
       // (a) follow-up + conversation_url provided + we are NOT on it → navigate there
       // (b) new task + we're not on a fresh chat page → navigate to fresh chat
       // (c) otherwise stay where we are
-      const targetUrl = (is_followup && conversation_url) ? conversation_url : null;
+      //
+      // OUTREACH FIX: pin any server-provided conversation_url into the Outreach
+      // project namespace before deciding to navigate. Sessions stored
+      // before v1.17 may carry bare /c/<id> URLs (drifted out of project)
+      // — navigating there would lose PDF context for the rest of the
+      // session. pinToProject is idempotent so already-pinned URLs are
+      // unchanged.
+      const targetUrl = (is_followup && conversation_url) ? pinToProject(conversation_url) : null;
       const needNavToConv = targetUrl && !window.location.href.startsWith(targetUrl);
       const needNavToFresh = !targetUrl && !isOnNewChatPage();
 
@@ -1126,27 +1272,51 @@
           // No reload — keep going in same script instance
         } else {
           log(`No New Chat button found; falling back to URL navigation`);
-          GM_setValue("outreach_navigating", true);
-          GM_setValue("outreach_nav_task_id", task_id);
+          tabSet("navigating", true);
+          tabSet("nav_task_id", task_id);
           saveTaskState(task);
           setTaskPhase("navigating");
           busy = false;
           updatePanel();
-          // OUTREACH CHANGE v1.6: route to openproblem Project root so new
-          // chat inherits attached files. ?outreach=1 is preserved as the
-          // fresh-chat marker the navigation-resume logic uses.
-          window.location.href = OPENPROBLEM_PROJECT_URL + "?outreach=1";
+          // OUTREACH FIX: if we're inside a ChatGPT Project (URL like
+          // /g/g-p-XXXXXX-name/c/<uuid>), fall back to the project's
+          // root URL so we DON'T leave the Project (which would lose
+          // the project-attached PDF and any project-wide instructions).
+          // Outside a Project, fall back to chatgpt.com root with the
+          // tab's outreach=N flag pinned.
+          //
+          // OUTREACH FIX (cross-tab id corruption): the outreach flag MUST come
+          // from agentId() (which is pinned in sessionStorage on the
+          // tab's first load). Reading it from window.location.search
+          // here is wrong — after ChatGPT redirects /project?outreach=N to
+          // /project/c/<uuid>, the URL has no query string, and the
+          // previous default-of-"1" caused outreach_3 to navigate to
+          // ?outreach=1 and steal outreach_1's identity in subsequent tasks.
+          const m = window.location.pathname.match(/^(\/g\/g-p-[a-zA-Z0-9_-]+)/);
+          const aid = agentId();
+          const flagMatch = aid.match(/^outreach_(\d+)$/);
+          const outreachFlag = flagMatch ? flagMatch[1] : "1";
+          const fallbackUrl = m
+            ? `https://chatgpt.com${m[1]}/project?outreach=${outreachFlag}`
+            : `${OPENPROBLEM_PROJECT_URL}?outreach=${outreachFlag}`;
+          log(`fallback URL: ${fallbackUrl} (agentId=${aid})`);
+          window.location.href = fallbackUrl;
           return;
         }
       } else if (needNavToConv) {
-        GM_setValue("outreach_navigating", true);
-        GM_setValue("outreach_nav_task_id", task_id);
+        tabSet("navigating", true);
+        tabSet("nav_task_id", task_id);
         saveTaskState(task);
         setTaskPhase("navigating");
         log(`Navigating to existing conv ${(targetUrl || "").slice(-60)} ...`);
         busy = false;
         updatePanel();
         window.location.href = targetUrl;
+        return;
+      }
+
+      if (!isInsideBedcProject()) {
+        navigateTaskBackToProject(task, "navigation left project");
         return;
       }
 
@@ -1174,6 +1344,21 @@
         throw new Error(`Prompt input not found after 90s (url=${window.location.href})`);
       }
       log(`Page ready (${is_followup ? "existing conv" : "fresh chat"}) after ${retries}s`);
+
+      // OUTREACH ADD: PDF attach BEFORE prompt entry, only on first turn of a
+      // fresh conversation (non-followup) AND only if server provided pdf_base64.
+      // Follow-up turns inherit the PDF from earlier turns via conversation
+      // memory, so re-uploading is wasted work. If user is using a ChatGPT
+      // Project with main.pdf attached at project level, server typically
+      // wouldn't send pdf_base64 at all (Project provides PDF context auto).
+      if (!is_followup && pdf_base64) {
+        try {
+          const ok = await uploadPDF(pdf_base64, pdf_name || "main.pdf");
+          if (!ok) log("PDF upload failed — proceeding without PDF context");
+        } catch (e) {
+          log(`PDF upload exception: ${e.message} — proceeding without PDF`);
+        }
+      }
 
       // Enter prompt
       const entered = await enterPrompt(prompt);
@@ -1221,7 +1406,7 @@
 
       await sleep(5000); // settle DOM
       capturePostSendState();
-      const response = await waitForResponse();
+      const response = await waitForResponse(task_id, noOutputIdleTimeout);
 
       if (!response || response.length < 5) {
         throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
@@ -1263,37 +1448,108 @@
   // so persisting agent_id there causes multiple tabs to share an identity and
   // the server dispatches the same task to all of them concurrently. Use
   // sessionStorage (per-tab) instead, fall back to window.name + URL flag.
+  //
+  // OUTREACH FIX (cross-tab contamination): agentId is now PINNED on first call
+  // and reused for the lifetime of this tab. Previously, a `?outreach=N` flag
+  // returned `outreach_N` only while the URL had the flag; once ChatGPT
+  // redirected /?outreach=N → /c/<uuid> the URL lost the flag and agentId
+  // started returning a NEW random sessionStorage id. So a tab's identity
+  // changed mid-task, and worse, the per-tab GM_setValue namespace also
+  // changed (see tabSet/tabGet below). Pinning to sessionStorage on the
+  // very first call gives every tab a stable identity for its full session.
   function agentId() {
-    const m = window.location.search.match(/[?&]outreach=([^&]+)/);
-    if (m) return `outreach_${m[1]}`;
     try {
-      let stored = sessionStorage.getItem("outreach_agent_id");
-      if (!stored) {
-        stored = `outreach_${Math.floor(Math.random() * 9000) + 1000}_${Date.now().toString(36).slice(-4)}`;
-        sessionStorage.setItem("outreach_agent_id", stored);
+      // URL flag is authoritative when present: overwrite any stale stored
+      // value (e.g. left over from a prior userscript version that randomized
+      // here). After ChatGPT redirects /?outreach=N → /c/<uuid> the URL flag is
+      // gone, but the sessionStorage value we just wrote keeps the tab pinned.
+      const m = window.location.search.match(/[?&]outreach=([^&]+)/);
+      if (m) {
+        const id = `outreach_${m[1]}`;
+        sessionStorage.setItem("outreach_agent_id", id);
+        return id;
       }
+      let stored = sessionStorage.getItem("outreach_agent_id");
+      if (stored) return stored;
+      stored = `outreach_${Math.floor(Math.random() * 9000) + 1000}_${Date.now().toString(36).slice(-4)}`;
+      sessionStorage.setItem("outreach_agent_id", stored);
       return stored;
     } catch {
       // Private mode / sessionStorage disabled — fall back to window.name
       if (!window.name || !window.name.startsWith("outreach_")) {
-        window.name = `outreach_${Math.floor(Math.random() * 9000) + 1000}_${Date.now().toString(36).slice(-4)}`;
+        const m = window.location.search.match(/[?&]outreach=([^&]+)/);
+        window.name = m
+          ? `outreach_${m[1]}`
+          : `outreach_${Math.floor(Math.random() * 9000) + 1000}_${Date.now().toString(36).slice(-4)}`;
       }
       return window.name;
     }
   }
 
+  // OUTREACH FIX: per-tab namespace for GM_setValue / GM_getValue. GM storage
+  // is shared across ALL tabs running the userscript, so two tabs writing
+  // `outreach_current_task` simultaneously will trample each other (observed
+  // as B-10/B-11 cross-contamination, and as two tabs landing on the same
+  // /c/<uuid> after racing GM writes). Scoping every key by agentId()
+  // gives each tab its own private namespace.
+  function tabSet(k, v) { return GM_setValue(`${agentId()}_${k}`, v); }
+  function tabGet(k, d) { return GM_getValue(`${agentId()}_${k}`, d); }
+
+  function outreachFlagForAgent() {
+    const flagMatch = agentId().match(/^outreach_(\d+)$/);
+    return flagMatch ? flagMatch[1] : (outreachFlagFromUrl() || "1");
+  }
+
+  function projectEntryUrlForAgent() {
+    return `${OPENPROBLEM_PROJECT_URL}?outreach=${encodeURIComponent(outreachFlagForAgent())}`;
+  }
+
+  function navigateTaskBackToProject(task, reason) {
+    const taskId = (task && task.task_id) || "";
+    const target = /\/c\/[a-f0-9-]{6,}/.test(window.location.href)
+      ? pinToProject(window.location.href)
+      : projectEntryUrlForAgent();
+    tabSet("navigating", true);
+    tabSet("nav_task_id", taskId);
+    if (task) saveTaskState(task);
+    setTaskPhase("navigating");
+    log(`${reason}; navigating to Outreach Project ${target.slice(-80)}`);
+    busy = false;
+    updatePanel();
+    window.location.href = target;
+  }
+
   // ── Main loop ────────────────────────────────────────────────────────
   function _readActive() {
-    try { return sessionStorage.getItem("outreach_active") === "1"; }
+    try { return sessionStorage.getItem("outreach_active") === "1" && isInsideBedcProject(); }
     catch { return false; }
   }
+
+  function enforceProjectBeforePolling() {
+    if (isInsideBedcProject()) return false;
+    if (window.location.search.includes("outreach=")) {
+      const target = projectEntryUrl();
+      log(`Outreach Project required; navigating to ${target}`);
+      window.location.href = target;
+      return true;
+    }
+    try { sessionStorage.setItem("outreach_active", "0"); } catch {}
+    active = false;
+    log("Outside Outreach Project; polling paused");
+    updatePanel();
+    return true;
+  }
+
   async function pollLoop() {
     while (true) {
       active = _readActive();
       if (active && !busy) {
+        if (enforceProjectBeforePolling()) {
+          await sleep(POLL_INTERVAL);
+          continue;
+        }
         try {
-          const role = readRole();
-          const task = await serverGet(`/task?agent=${encodeURIComponent(agentId())}&role=${encodeURIComponent(role)}`);
+          const task = await serverGet(`/task?agent=${encodeURIComponent(agentId())}`);
           if (task && task.task_id && task.status !== "idle") {
             if (!_readActive()) {
               log("Task available but PAUSED — skipping");
@@ -1317,14 +1573,27 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — Tab #${tabLabel()} — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()} — role=${readRole()}`);
+    log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()}`);
 
     const phase = getTaskPhase();
-    const navTaskId = GM_getValue("outreach_nav_task_id", "");
-    const outreachNav = GM_getValue("outreach_navigating", false);
+    const navTaskId = tabGet("nav_task_id", "");
+    const outreachNav = tabGet("navigating", false);
     const urlHasFlag = window.location.search.includes("outreach=");
     const inFlightId = getInFlightTaskId();
     const inFlightAgeMin = Math.floor(getInFlightAgeMs() / 60000);
+    const storedActive = (() => {
+      try { return sessionStorage.getItem("outreach_active") === "1"; }
+      catch { return false; }
+    })();
+
+    if (urlHasFlag && !isInsideBedcProject()) {
+      const target = projectEntryUrl();
+      log(`Outreach Project required; navigating to ${target}`);
+      window.location.href = target;
+      return;
+    }
+
+    if ((inFlightId || storedActive) && ensureInProject()) return;
 
     // OUTREACH ADD: if we have an in-flight task that's clearly stuck (>3h),
     // give up — server's task_timeout (4h) hasn't kicked in yet but we don't
@@ -1345,7 +1614,7 @@
       try {
         await serverPost("/pin-conv-url", {
           task_id: inFlightId,
-          chatgpt_url: window.location.href.split("?")[0],
+          chatgpt_url: currentChatUrl(),
           agent_id: agentId(),
         });
       } catch {}
@@ -1353,8 +1622,8 @@
 
     if (phase === "navigating" && navTaskId && (outreachNav || urlHasFlag)) {
       log(`Resuming after navigation for task: ${navTaskId}`);
-      GM_setValue("outreach_nav_task_id", "");
-      GM_setValue("outreach_navigating", false);
+      tabSet("nav_task_id", "");
+      tabSet("navigating", false);
       const savedTask = loadTaskState();
       clearTaskState();
 
@@ -1381,8 +1650,8 @@
       }
     } else if (phase === "navigating") {
       log("Clearing stale navigation state (user browsing, not outreach)");
-      GM_setValue("outreach_nav_task_id", "");
-      GM_setValue("outreach_navigating", false);
+      tabSet("nav_task_id", "");
+      tabSet("navigating", false);
       clearTaskState();
     }
 
