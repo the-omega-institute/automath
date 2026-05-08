@@ -2574,6 +2574,125 @@ is exactly the same estimate rewritten with constants uniform in
 \(q\in[0,\infty]\).
 \end{proof}
 
+\subsection{Primitive-SFT placement barrier}
+
+The preceding optimization uses the endpoint collapse of the golden-mean
+Parry law.  The broader rigidity phenomenon behind it does not require the
+golden-mean endpoint formula: a primitive positive-entropy SFT has
+exponentially small Parry cylinders, whereas finite-block factors of a
+Sturmian system have only linear block complexity.
+
+\begin{theorem}[Primitive-SFT injective-placement barrier]
+\label{thm:primitive-sft-placement-barrier}
+Let \(A\) be a primitive \(d\times d\) zero-one matrix with Perron root
+\(\lambda>1\), and let \(\Pi_m^A\) be the \(m\)-block marginal of its Parry
+measure on the one-sided vertex shift \(X_A\).  Let \(\ell\ge0\), let
+\(\Theta\) be a sliding block code of window length \(\ell+1\) from a
+Sturmian subshift of slope \(\alpha\) into a finite alphabet, and let
+\(\sigma_m\) be the law of the length-\(m\) words in the factor
+\(\Theta(X_\alpha)\).  If the partial quotients of \(\alpha\) are bounded by
+\(B\), then there is a constant \(C=C(A,\ell,B)\) such that, for every
+\(m\ge1\) and every injective placement
+\[
+\iota:\supp(\sigma_m)\hookrightarrow X_A^{(m)}
+\]
+into the admissible \(m\)-blocks of \(X_A\),
+\[
+\KL(\iota_*\sigma_m\|\Pi_m^A)
+\ge
+m\log\lambda-\log m-C.
+\]
+The same lower bound, with a possibly different constant \(C\), holds for
+\(D_q(\iota_*\sigma_m\|\Pi_m^A)\) for every \(q\in[0,\infty]\), uniformly in
+\(q\), whenever \(D_q\) is evaluated on an injective relabeling of
+\(\sigma_m\).  In particular no finite-block factor of a bounded-type
+Sturmian system can be placed injectively inside a primitive positive-entropy
+SFT with \(O(1)\) Parry divergence along all block lengths.
+\end{theorem}
+
+\begin{proof}
+Let \(l,r_A\) be positive left and right Perron eigenvectors for \(A\),
+normalized by \(\sum_i l_ir_{A,i}=1\).  The Parry transition matrix is
+\[
+P_{ij}=A_{ij}\frac{r_{A,j}}{\lambda r_{A,i}},
+\]
+with stationary vector \(\pi_i=l_ir_{A,i}\).  Therefore every admissible
+word \(u=u_1\cdots u_m\in X_A^{(m)}\) has Parry mass
+\[
+\Pi_m^A(u)
+=
+\pi_{u_1}P_{u_1u_2}\cdots P_{u_{m-1}u_m}
+=
+l_{u_1}r_{A,u_m}\lambda^{-(m-1)}.
+\]
+Since there are only finitely many states, there is a constant \(C_A>0\) such
+that
+\[
+\Pi_m^A(u)\le C_A\lambda^{-m}
+\qquad (u\in X_A^{(m)},\ m\ge1).
+\]
+
+A length-\(m\) word in the block-code factor \(\Theta(X_\alpha)\) is
+determined by a length \(m+\ell\) word of the Sturmian source.  Hence
+\[
+|\supp(\sigma_m)|\le m+\ell+1.
+\]
+Consequently, for every \(q\in[0,\infty]\),
+\[
+H_q(\sigma_m)\le H_0(\sigma_m)\le \log(m+\ell+1).
+\]
+
+Let \(\nu=\iota_*\sigma_m\).  Since \(\iota\) is injective,
+\(H_q(\nu)=H_q(\sigma_m)\) for every \(q\).  For \(q=1\),
+\[
+\begin{aligned}
+\KL(\nu\|\Pi_m^A)
+&=
+-H_1(\nu)-\sum_{u\in X_A^{(m)}}\nu(u)\log \Pi_m^A(u)\\
+&\ge
+-H_1(\sigma_m)+m\log\lambda-\log C_A\\
+&\ge
+m\log\lambda-\log(m+\ell+1)-\log C_A.
+\end{aligned}
+\]
+Absorbing \(\ell\) and \(C_A\) into a constant gives the displayed KL lower
+bound.
+
+For \(q\in(0,\infty)\setminus\{1\}\), the cylinder estimate
+\(\Pi_m^A(u)\le C_A\lambda^{-m}\) gives
+\[
+\sum_u \nu(u)^q\Pi_m^A(u)^{1-q}
+\begin{cases}
+\ge (C_A\lambda^{-m})^{1-q}\sum_u\nu(u)^q, & q>1,\\
+\le (C_A\lambda^{-m})^{1-q}\sum_u\nu(u)^q, & 0<q<1.
+\end{cases}
+\]
+After multiplication by \(1/(q-1)\) and taking logarithms, both cases yield
+\[
+D_q(\nu\|\Pi_m^A)
+\ge
+m\log\lambda-\log C_A-H_q(\sigma_m).
+\]
+Using \(H_q(\sigma_m)\le \log(m+\ell+1)\) proves the same lower bound.  For
+\(q=0\),
+\[
+D_0(\nu\|\Pi_m^A)
+=-\log\Pi_m^A(\supp\nu)
+\ge
+-\log\bigl((m+\ell+1)C_A\lambda^{-m}\bigr),
+\]
+which is the required estimate.  For \(q=\infty\),
+\[
+D_\infty(\nu\|\Pi_m^A)
+=
+\log\max_{u\in\supp\nu}\frac{\nu(u)}{\Pi_m^A(u)}
+\ge
+m\log\lambda-\log C_A-H_\infty(\sigma_m),
+\]
+and \(H_\infty(\sigma_m)\le H_0(\sigma_m)\le\log(m+\ell+1)\).  This completes
+the proof.
+\end{proof}
+
 \begin{remark}[Numerical interpretation]
 \label{rem:numerical-interpretation}
 The numerical examples follow the two comparisons used in the proofs.  First
@@ -2632,6 +2751,14 @@ also averages over the displayed \(\beta\)-grid.  The residual and Parry tables
 use \(N=3\times 10^5\), for which the discrepancy term is already on the order
 of \(10^{-5}\).
 
+The table fragments included from \texttt{generated/} are emitted by the
+Python scripts in \texttt{scripts/} and \texttt{supplementary/scripts/}.  The
+rotation, microstate, residual, independent-baseline and circle-map scripts
+write CSV files under the export directory; the generated-TeX script in
+\texttt{supplementary/scripts/} then converts those CSV files to the TeX
+fragments input below.  The files under \texttt{generated/} are therefore
+generated outputs rather than hand-edited source tables.
+
 All slope families in Table~\ref{tab:parameter-grid} are of bounded type.  The
 family \([0;B,1,1,\dots]\) is included to show the effect of a large first
 partial quotient, not as an unbounded-type example.
@@ -2651,22 +2778,12 @@ Table~\ref{tab:canonical-injective-floor-exact} shows the finite-\(m\)
 content of Theorem~\ref{thm:optimal-injective-relabeling}. The
 optimal injective floor \(L_1(m)\) and the exact folded-to-Parry divergence
 \(\KL(\pi_m^{\mathrm{fold}}\|\pi_m)\) both grow on the scale
-\(m\log\varphi-\log m\). In the displayed range, direct enumeration of the
-finite Sturmian partition gives the constant difference
-\[
-\KL(\pi_m^{\mathrm{fold}}\|\pi_m)-L_1(m)
-=
-(1-\varphi^{-3})\log\varphi
-=
-0.3676131227688\ldots
-\]
-This is the identity of Theorem~\ref{thm:optimal-injective-relabeling}
-together with the enumerated endpoint imbalance
-\(\eta_{11}(\pi_m^{\mathrm{fold}})-\eta_{00}(\pi_m^{\mathrm{fold}})
-=-\varphi^{-3}\) for these canonical golden-slope rows.
-At these resolutions the canonical folded law is far inside the universal
-\(2\log\varphi\) additive window above the injective optimum.  This table is
-the reference point for the empirical comparisons below.
+\(m\log\varphi-\log m\).  The last columns are exact evaluations from the
+finite Sturmian partition and the endpoint formula in
+Theorem~\ref{thm:parry-kl-identity}.  At these resolutions the canonical
+folded law is far inside the universal \(2\log\varphi\) additive window above
+the injective optimum.  This table is the reference point for the empirical
+comparisons below.
 
 \subsection{Finite-sample validation}
 
