@@ -62,18 +62,24 @@ from urllib.parse import unquote, urlparse, parse_qs
 PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
 SESSIONS_DIR = ORACLE_DIR / "sessions"
+QUEUE_STATE_PATH = ORACLE_DIR / "queue_state.json"
+RESULTS_RING_PATH = ORACLE_DIR / "results_ring.json"
 
 MAX_AGENTS = 3          # max concurrent browser tabs
 TASK_TIMEOUT = 14400    # 4 hours — ChatGPT Pro can think 60+ min per task
 SESSION_RETENTION_S = 14 * 24 * 3600  # keep sessions on disk for 14 days
+RESULTS_RING_MAX = 200  # keep last N results across restarts
 
-# In-memory state (durable copy on disk for sessions)
+# In-memory state (durable copy on disk for sessions, queue, results)
 task_queue: deque[dict] = deque()
 results: dict[str, dict] = {}             # task_id -> result
 pending_tasks: dict[str, dict] = {}       # agent_id -> task currently in flight
 dispatch_times: dict[str, float] = {}     # agent_id -> dispatch timestamp
 sessions: dict[str, dict] = {}            # conversation_id -> session record
 _lock = threading.RLock()  # reentrant: handlers may chain helper calls under lock
+
+# Source-version stamp (set by main() so /status can advertise it).
+SOURCE_SHA = ""
 
 
 def _is_extraction_failure_response(response: str) -> bool:
@@ -129,6 +135,112 @@ def _hydrate_sessions() -> None:
             continue
 
 
+# --------------------------------------------------------------------------- #
+# Queue / results / pending persistence (P0: restart-safe state)              #
+# --------------------------------------------------------------------------- #
+
+
+def _persist_queue_state() -> None:
+    """Write task_queue + pending_tasks + dispatch_times to disk.
+
+    Called under _lock by the handlers that mutate these. Cheap (one
+    small JSON file). Survives kill -9; lets oracle_server restart
+    without dropping in-flight or queued tasks.
+    """
+    try:
+        ORACLE_DIR.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "task_queue": list(task_queue),
+            "pending_tasks": pending_tasks,
+            "dispatch_times": dispatch_times,
+            "saved_at": _now_iso(),
+        }
+        QUEUE_STATE_PATH.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        print(f"[server] WARN: failed to persist queue state: {exc}")
+
+
+def _persist_results_ring() -> None:
+    """Write last RESULTS_RING_MAX results to disk.
+
+    Used so callers polling /result/<task_id> can still get answers
+    after a server restart, as long as the result completed within the
+    ring window.
+    """
+    try:
+        ORACLE_DIR.mkdir(parents=True, exist_ok=True)
+        # Sort by timestamp so the ring keeps newest first.
+        items = list(results.values())
+        items.sort(key=lambda r: r.get("timestamp", ""), reverse=True)
+        RESULTS_RING_PATH.write_text(
+            json.dumps(
+                {"results": items[:RESULTS_RING_MAX], "saved_at": _now_iso()},
+                ensure_ascii=False, indent=2,
+            ) + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        print(f"[server] WARN: failed to persist results ring: {exc}")
+
+
+def _hydrate_queue_state() -> None:
+    """Reload task_queue + pending_tasks + dispatch_times from disk.
+
+    Pending tasks whose dispatch time is older than TASK_TIMEOUT are
+    treated as orphaned and re-queued, since the agent that claimed
+    them is presumed gone.
+    """
+    if not QUEUE_STATE_PATH.exists():
+        return
+    try:
+        data = json.loads(QUEUE_STATE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return
+    raw_queue = data.get("task_queue") or []
+    raw_pending = data.get("pending_tasks") or {}
+    raw_dispatch = data.get("dispatch_times") or {}
+    now = time.time()
+    requeued = 0
+    for item in raw_queue:
+        if isinstance(item, dict):
+            task_queue.append(item)
+    for aid, task in raw_pending.items():
+        if not isinstance(task, dict):
+            continue
+        ts = float(raw_dispatch.get(aid) or 0.0)
+        if not ts or now - ts > TASK_TIMEOUT:
+            task_queue.appendleft(task)
+            requeued += 1
+        else:
+            pending_tasks[aid] = task
+            dispatch_times[aid] = ts
+    if requeued:
+        print(f"[server] hydrate: re-queued {requeued} orphan pending task(s) past {TASK_TIMEOUT}s timeout")
+
+
+def _hydrate_results_ring() -> None:
+    if not RESULTS_RING_PATH.exists():
+        return
+    try:
+        data = json.loads(RESULTS_RING_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return
+    for rec in data.get("results", []) or []:
+        if isinstance(rec, dict) and rec.get("task_id"):
+            results[rec["task_id"]] = rec
+
+
+def _compute_source_sha() -> str:
+    import hashlib
+    try:
+        return hashlib.sha1(Path(__file__).read_bytes()).hexdigest()[:12]
+    except OSError:
+        return ""
+
+
 def _new_conversation_id() -> str:
     return f"conv_{uuid.uuid4().hex[:16]}"
 
@@ -180,6 +292,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                 dispatch_times.pop(aid, None)
                 task_queue.appendleft(task)  # re-queue at front
                 print(f"[server] Agent {aid} timed out — task {task['task_id']} returned to queue")
+            if stale:
+                _persist_queue_state()
 
     def _queue_age_seconds(self) -> int:
         """Oldest queued task's age. Used by supervisors to detect stuck tabs."""
@@ -226,6 +340,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                     task["assigned_agent"] = agent_id
                     pending_tasks[agent_id] = task
                     dispatch_times[agent_id] = time.time()
+                    _persist_queue_state()
                     print(f"[server] Dispatched {task['task_id']} → {agent_id} "
                           f"(conv={(task.get('conversation_id') or '-')[:12]} "
                           f"agents={len(pending_tasks)}/{MAX_AGENTS}, "
@@ -266,6 +381,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                     "completed": len(results),
                     "active_sessions": len(sessions),
                     "diagnosis": self._diagnosis(),
+                    "source_sha": SOURCE_SHA,
                 }
             self._send_json(payload)
             return
@@ -446,6 +562,7 @@ class OracleHandler(BaseHTTPRequestHandler):
 
         with _lock:
             task_queue.append(task)
+            _persist_queue_state()
 
         kind = "CONT " if is_continue else ("NEW  " if conv_id else "ONE  ")
         print(f"[server] {kind}queued {task_id} "
@@ -492,6 +609,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "status": "cancelled",
                 "reason": reason,
             }
+            _persist_queue_state()
+            _persist_results_ring()
 
         print(f"[server] Cancelled {task_id}: queue={removed_queue}, "
               f"agents={removed_agents or '-'} ({reason})")
@@ -540,6 +659,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "response_chars": len(response),
             }
             results[task_id] = record
+            _persist_queue_state()
+            _persist_results_ring()
 
         if conv_id:
             _record_turn(conv_id, {
@@ -704,6 +825,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             mode = "repeat-prompt"
         with _lock:
             task_queue.append(task)
+            _persist_queue_state()
         print(f"[server] retry {mode} → queued {new_task_id} conv={conv_id[:12]}")
         self._send_json({
             "status": "queued",
@@ -840,12 +962,20 @@ def close_conversation(conversation_id: str) -> dict:
 
 
 def main():
+    global SOURCE_SHA
     _ensure_dirs()
     _hydrate_sessions()
+    _hydrate_queue_state()
+    _hydrate_results_ring()
+    SOURCE_SHA = _compute_source_sha()
     server = HTTPServer(("127.0.0.1", PORT), OracleHandler)
     print(f"[server] Oracle server running on http://localhost:{PORT}")
+    print(f"[server] Source sha: {SOURCE_SHA}")
     print(f"[server] Sessions dir: {SESSIONS_DIR}")
-    print(f"[server] Hydrated {len(sessions)} session(s) from disk")
+    print(f"[server] Hydrated {len(sessions)} session(s), "
+          f"{len(task_queue)} queued task(s), "
+          f"{len(pending_tasks)} pending task(s), "
+          f"{len(results)} result(s)")
     print(f"[server] Max {MAX_AGENTS} concurrent agents (single-shot + multi-turn)")
     print(f"[server] Open browser tabs:")
     for i in range(1, MAX_AGENTS + 1):

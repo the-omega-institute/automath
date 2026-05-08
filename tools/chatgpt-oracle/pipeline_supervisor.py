@@ -78,6 +78,8 @@ PIPELINE_STATE_DIR = SCRIPT_DIR / "pipeline_state"
 PUBLICATION_DIR = REPO_ROOT / "papers" / "publication"
 SUPERVISOR_LOG_DIR = SCRIPT_DIR / "supervisor_logs"
 STOP_FILE = SCRIPT_DIR / ".pipeline_supervisor.stop"
+SERVER_RESTART_FILE = SCRIPT_DIR / ".server.restart"
+INNER_RESTART_FILE = SCRIPT_DIR / ".inner.restart"
 SUPERVISOR_BRANCH_DEFAULT = "dev-automation-integration"
 
 DEFAULT_POLL_INTERVAL_S = 120
@@ -215,7 +217,16 @@ def server_alive(timeout: int = 3) -> bool:
     return server_status(timeout).get("port") == 8765
 
 
-def ensure_server() -> int | None:
+def ensure_server() -> subprocess.Popen | None:
+    """Spawn oracle_server.py if dead. Returns the Popen handle, or None on failure / already-up.
+
+    Note: when the server was started outside of this supervisor (e.g. the
+    operator launched it manually), we cannot kill it via Popen. P1's
+    .server.restart relies on supervisor having spawned the server itself —
+    if the operator started the server externally and wants to restart it,
+    they should kill that process first, then drop the .server.restart
+    flag (or just let supervisor.ensure_server respawn).
+    """
     if server_alive():
         return None
     if not ORACLE_SERVER_SCRIPT.exists():
@@ -244,7 +255,20 @@ def ensure_server() -> int | None:
         supervisor_log("server still not responding after spawn; check manually")
         return None
     supervisor_log(f"server spawned pid={proc.pid}")
-    return proc.pid
+    return proc
+
+
+def server_source_sha() -> str:
+    """Read /status.source_sha (running server's source hash)."""
+    return server_status().get("source_sha", "") or ""
+
+
+def disk_source_sha(path: Path) -> str:
+    import hashlib
+    try:
+        return hashlib.sha1(path.read_bytes()).hexdigest()[:12]
+    except OSError:
+        return ""
 
 
 def queue_stuck_too_long(threshold_seconds: int) -> bool:
@@ -577,6 +601,8 @@ def main() -> int:
 
     last_commit_ts = 0.0
     last_tab_alert_ts = 0.0
+    last_drift_alert_ts = 0.0
+    server_proc: subprocess.Popen | None = None
     inner: subprocess.Popen | None = None
     current_paper: Path | None = None
 
@@ -596,8 +622,59 @@ def main() -> int:
         while not STOP_FILE.exists():
             tick_started = _now()
 
+            # P1: handle .server.restart signal — kill server so ensure_server
+            # respawns it on this same tick.
+            if SERVER_RESTART_FILE.exists():
+                supervisor_log(f"server restart signal seen ({SERVER_RESTART_FILE.name})")
+                if server_proc is not None and server_proc.poll() is None:
+                    _terminate(server_proc, grace_seconds=15)
+                    server_proc = None
+                else:
+                    supervisor_log(
+                        "server was not started by this supervisor (or already exited); "
+                        "ensure_server will (re)spawn on this tick"
+                    )
+                try:
+                    SERVER_RESTART_FILE.unlink()
+                except OSError:
+                    pass
+
             if not args.no_server_spawn:
-                ensure_server()
+                # If our tracked proc died on its own, drop the handle so
+                # ensure_server can respawn cleanly.
+                if server_proc is not None and server_proc.poll() is not None:
+                    rc = server_proc.poll()
+                    supervisor_log(f"oracle_server exited rc={rc} on its own; will respawn")
+                    server_proc = None
+                spawned = ensure_server()
+                if spawned is not None:
+                    server_proc = spawned
+
+            # P2: source-version drift between disk and running server.
+            if server_alive():
+                running_sha = server_source_sha()
+                disk_sha = disk_source_sha(ORACLE_SERVER_SCRIPT)
+                if running_sha and disk_sha and running_sha != disk_sha:
+                    if _now() - last_drift_alert_ts > 1800:  # warn at most every 30 min
+                        supervisor_log(
+                            f"DRIFT: oracle_server.py on disk (sha={disk_sha}) differs from "
+                            f"running server (sha={running_sha}). "
+                            f"`touch {SERVER_RESTART_FILE.name}` to apply."
+                        )
+                        last_drift_alert_ts = _now()
+
+            # P1: handle .inner.restart signal — terminate the current inner
+            # so the next tick picks the next runnable paper with new code.
+            if INNER_RESTART_FILE.exists():
+                supervisor_log(f"inner restart signal seen ({INNER_RESTART_FILE.name})")
+                if inner is not None and inner.poll() is None:
+                    _terminate(inner, grace_seconds=20)
+                inner = None
+                current_paper = None
+                try:
+                    INNER_RESTART_FILE.unlink()
+                except OSError:
+                    pass
 
             if not args.no_inner:
                 if inner is None or inner.poll() is not None:
@@ -670,6 +747,9 @@ def main() -> int:
     finally:
         if inner is not None and inner.poll() is None:
             _terminate(inner)
+        # Leave server_proc alone on supervisor exit — operators may want the
+        # bridge to keep running while they tinker with the supervisor itself.
+        # If they want a full shutdown they can `taskkill` / `kill` the server.
         if STOP_FILE.exists():
             try:
                 STOP_FILE.unlink()

@@ -146,6 +146,108 @@ class OracleServerMultiTurnTests(unittest.TestCase):
         sess = self._get(f"/session/{conv_id}")
         self.assertTrue(sess.get("closed_at"))
 
+    def test_status_advertises_source_sha_when_set(self):
+        # SOURCE_SHA is populated by main(); in tests we set it manually so we
+        # can exercise drift detection on the supervisor side.
+        oracle_server.SOURCE_SHA = "abc123def456"
+        try:
+            status = self._get("/status")
+            self.assertEqual(status["source_sha"], "abc123def456")
+        finally:
+            oracle_server.SOURCE_SHA = ""
+
+
+class PersistenceTests(unittest.TestCase):
+    """Round-trip queue/results persistence so kill-9 doesn't drop work."""
+
+    def setUp(self):
+        # Use real on-disk files but isolate to a tmp path so we don't
+        # clobber a real running server's state.
+        import tempfile
+        self.tmp = tempfile.mkdtemp(prefix="oracle_persist_")
+        self._real_oracle_dir = oracle_server.ORACLE_DIR
+        self._real_queue_path = oracle_server.QUEUE_STATE_PATH
+        self._real_results_path = oracle_server.RESULTS_RING_PATH
+        self._real_sessions_dir = oracle_server.SESSIONS_DIR
+        oracle_server.ORACLE_DIR = Path(self.tmp)
+        oracle_server.QUEUE_STATE_PATH = oracle_server.ORACLE_DIR / "queue_state.json"
+        oracle_server.RESULTS_RING_PATH = oracle_server.ORACLE_DIR / "results_ring.json"
+        oracle_server.SESSIONS_DIR = oracle_server.ORACLE_DIR / "sessions"
+        oracle_server.task_queue.clear()
+        oracle_server.results.clear()
+        oracle_server.pending_tasks.clear()
+        oracle_server.dispatch_times.clear()
+
+    def tearDown(self):
+        import shutil
+        oracle_server.ORACLE_DIR = self._real_oracle_dir
+        oracle_server.QUEUE_STATE_PATH = self._real_queue_path
+        oracle_server.RESULTS_RING_PATH = self._real_results_path
+        oracle_server.SESSIONS_DIR = self._real_sessions_dir
+        oracle_server.task_queue.clear()
+        oracle_server.results.clear()
+        oracle_server.pending_tasks.clear()
+        oracle_server.dispatch_times.clear()
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_queue_round_trip(self):
+        oracle_server.task_queue.append({"task_id": "q1", "prompt": "x"})
+        oracle_server.task_queue.append({"task_id": "q2", "prompt": "y"})
+        oracle_server.pending_tasks["oracle_1"] = {"task_id": "p1", "prompt": "z"}
+        oracle_server.dispatch_times["oracle_1"] = time.time()
+        oracle_server._persist_queue_state()
+
+        # Wipe in-memory state then hydrate.
+        oracle_server.task_queue.clear()
+        oracle_server.pending_tasks.clear()
+        oracle_server.dispatch_times.clear()
+        oracle_server._hydrate_queue_state()
+
+        self.assertEqual(len(oracle_server.task_queue), 2)
+        self.assertIn("oracle_1", oracle_server.pending_tasks)
+
+    def test_orphan_pending_requeues_on_hydrate(self):
+        # Simulate a pending task whose dispatch is past the timeout: hydrate
+        # should re-queue it instead of silently dropping it.
+        old_ts = time.time() - oracle_server.TASK_TIMEOUT - 60
+        oracle_server.pending_tasks["oracle_1"] = {"task_id": "stale", "prompt": "x"}
+        oracle_server.dispatch_times["oracle_1"] = old_ts
+        oracle_server._persist_queue_state()
+
+        oracle_server.task_queue.clear()
+        oracle_server.pending_tasks.clear()
+        oracle_server.dispatch_times.clear()
+        oracle_server._hydrate_queue_state()
+
+        self.assertEqual(len(oracle_server.task_queue), 1)
+        self.assertEqual(oracle_server.task_queue[0]["task_id"], "stale")
+        self.assertNotIn("oracle_1", oracle_server.pending_tasks)
+
+    def test_results_ring_round_trip(self):
+        oracle_server.results["t1"] = {"task_id": "t1", "response": "r1", "timestamp": "2026-01-01T00:00:00+00:00"}
+        oracle_server.results["t2"] = {"task_id": "t2", "response": "r2", "timestamp": "2026-01-02T00:00:00+00:00"}
+        oracle_server._persist_results_ring()
+
+        oracle_server.results.clear()
+        oracle_server._hydrate_results_ring()
+
+        self.assertEqual(len(oracle_server.results), 2)
+        self.assertEqual(oracle_server.results["t2"]["response"], "r2")
+
+
+class DriftDetectionTests(unittest.TestCase):
+    def test_disk_source_sha_matches_compute(self):
+        """supervisor.disk_source_sha and server._compute_source_sha should agree."""
+        # We can't test the live server's SOURCE_SHA without booting one,
+        # but the helpers must produce the same digest for the same file.
+        from_supervisor = pipeline_supervisor.disk_source_sha(
+            pipeline_supervisor.ORACLE_SERVER_SCRIPT
+        )
+        # _compute_source_sha hashes oracle_server.py (its own __file__).
+        from_server = oracle_server._compute_source_sha()
+        self.assertTrue(from_supervisor)
+        self.assertEqual(from_supervisor, from_server)
+
 
 if __name__ == "__main__":
     unittest.main()
