@@ -71,9 +71,9 @@ Output requirements:
 Length target: 8-15 pages. No outline-only content.
 """
 
-# Reuse the dispatch board parser
+# Reuse the zero-dep board parser
 sys.path.insert(0, str(Path(__file__).parent))
-from dispatch_worktree import parse_board, BOARD_PATH_DEFAULT, TodoSpec  # noqa: E402
+from outreach_board_parser import parse_board, BOARD_PATH_DEFAULT, TodoSpec  # noqa: E402
 
 _DISTILL_LOG_DIR = None
 _distill_codex_exec = None

@@ -299,46 +299,22 @@ def collect_snapshot() -> dict:
 # ---------------------------------------------------------------------------
 # claude exec
 # ---------------------------------------------------------------------------
+# Single source of truth lives in outreach_claude_exec (zero-dep). Re-exported
+# below so existing `from outreach_pi_agent import claude_exec` callers keep
+# working without taking on this module's import-time risk surface.
+
+sys.path.insert(0, str(SCRIPT_DIR))
+from outreach_claude_exec import claude_exec as _claude_exec  # noqa: E402
 
 
 def claude_exec(prompt: str, *, timeout: int = PI_TIMEOUT_S, log_tag: str = "pi_review") -> tuple[bool, str, int]:
-    if not CLAUDE_PATH or not Path(CLAUDE_PATH).exists():
-        return (False, f"claude CLI not found at {CLAUDE_PATH}", -1)
-    SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
-    ts = _now_tag()
-    (SUPERVISOR_LOG_DIR / f"{log_tag}_{ts}.prompt.txt").write_text(prompt, encoding="utf-8")
-    cmd = [CLAUDE_PATH, "-p", "--dangerously-skip-permissions"]
-    env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
-    proc = subprocess.Popen(
-        cmd,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        cwd=str(REPO_ROOT),
-        env=env,
-        encoding="utf-8",
-        errors="replace",
-        start_new_session=True,
+    return _claude_exec(
+        prompt,
+        timeout=timeout,
+        log_tag=log_tag,
+        log_dir=SUPERVISOR_LOG_DIR,
+        repo_root=REPO_ROOT,
     )
-    stdout, stderr, rc = "", "", -1
-    try:
-        stdout, stderr = proc.communicate(input=prompt, timeout=timeout + 30)
-        rc = proc.returncode
-    except subprocess.TimeoutExpired:
-        try:
-            os.killpg(proc.pid, 9)
-        except ProcessLookupError:
-            pass
-        try:
-            stdout, stderr = proc.communicate(timeout=10)
-        except subprocess.TimeoutExpired:
-            stdout = stdout or ""
-            stderr = stderr or ""
-        rc = -9
-    (SUPERVISOR_LOG_DIR / f"{log_tag}_{ts}.stdout.txt").write_text(stdout or "", encoding="utf-8")
-    (SUPERVISOR_LOG_DIR / f"{log_tag}_{ts}.stderr.txt").write_text(stderr or "", encoding="utf-8")
-    return (rc == 0, stdout, rc)
 
 
 def _extract_json_object(text: str) -> dict | None:

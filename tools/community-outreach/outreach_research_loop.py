@@ -106,12 +106,12 @@ def loop_log(msg: str) -> None:
 def _parse_board_safe():
     """Best-effort parse_board call. Returns dict[todo_id, TodoSpec] or {}."""
     try:
-        import dispatch_worktree as dw  # noqa: PLC0415
+        from outreach_board_parser import parse_board  # noqa: PLC0415
     except Exception as exc:
-        loop_log(f"dispatch_worktree import failed: {exc}")
+        loop_log(f"outreach_board_parser import failed: {exc}")
         return {}
     try:
-        return dw.parse_board(RESEARCH_BOARD_PATH)
+        return parse_board(RESEARCH_BOARD_PATH)
     except Exception as exc:
         loop_log(f"parse_board failed: {exc}")
         return {}

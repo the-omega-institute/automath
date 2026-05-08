@@ -54,7 +54,7 @@ DEFAULT_CATEGORIES = ["math.NT", "math.CO", "math.AG", "math.DS", "math.LO", "ma
 # Reuse machinery from lit_staleness
 sys.path.insert(0, str(Path(__file__).parent))
 from lit_staleness import extract_keywords as _base_extract_keywords  # noqa: E402
-from dispatch_worktree import parse_board, TodoSpec  # noqa: E402
+from outreach_board_parser import parse_board, TodoSpec  # noqa: E402
 
 
 # Extra stopwords for arxiv_watch: generic math jargon that produces noise.

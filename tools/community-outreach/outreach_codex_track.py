@@ -32,7 +32,7 @@ DEFAULT_DRAFTS_DIR = SCRIPT_DIR / "drafts"
 LOG_DIR = SCRIPT_DIR / "outreach_state" / "codex_track_logs"
 
 sys.path.insert(0, str(SCRIPT_DIR))
-from outreach_pi_agent import claude_exec  # noqa: E402
+from outreach_claude_exec import claude_exec  # noqa: E402
 
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
 DEFAULT_CODEX_TIMEOUT = 600

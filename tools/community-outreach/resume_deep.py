@@ -25,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).parent))
 
 import oracle_consultant as oc  # noqa: E402
-from dispatch_worktree import parse_board  # noqa: E402
+from outreach_board_parser import parse_board  # noqa: E402
 
 SESS_DIR = REPO_ROOT / "tools/community-outreach/outreach_oracle/sessions"
 

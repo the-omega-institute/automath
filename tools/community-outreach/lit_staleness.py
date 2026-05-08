@@ -54,9 +54,9 @@ ERDOS_YAML_URL = "https://raw.githubusercontent.com/teorth/erdosproblems/main/da
 ERDOS_AI_WIKI_URL = "https://raw.githubusercontent.com/wiki/teorth/erdosproblems/AI-contributions-to-Erd%C5%91s-problems.md"
 ARXIV_API = "http://export.arxiv.org/api/query"
 
-# --- import the parser from dispatch_worktree.py to avoid duplication ---
+# --- import the parser from outreach_board_parser (zero-dep module) ---
 sys.path.insert(0, str(Path(__file__).parent))
-from dispatch_worktree import parse_board, TodoSpec  # noqa: E402
+from outreach_board_parser import parse_board, TodoSpec  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
