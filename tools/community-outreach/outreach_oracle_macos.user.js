@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.5
-// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
+// @version      1.6
+// @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765). v1.6: fresh-chat fallback URL now targets the Omega Outreach openproblem ChatGPT Project so attached files (main.pdf + READMEs + PROGRAM_BOARD) are inherited by board_refill conversations.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -12,6 +12,14 @@
 // @connect      127.0.0.1
 // @run-at       document-idle
 // ==/UserScript==
+
+// SETUP (operator):
+//   1. Open https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project
+//      Confirm 5 files attached: main.pdf, MAIN_PAPER_INDEX.md, MAIN_PAPER_README.md,
+//      LEAN4_README.md, PROGRAM_BOARD.md
+//   2. Click ACTIVATE in the outreach-oracle-panel (right-side panel injected by this script)
+//   3. Keep the tab open. The supervisor's board_refill task will dispatch
+//      prompts here; the resulting chats inherit the Project's attached files.
 
 // FORKED FROM: tools/chatgpt-oracle/chatgpt_oracle_macos.user.js v4.10
 // Differences (search "OUTREACH ADD" / "OUTREACH CHANGE" comments):
@@ -33,7 +41,16 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.5";
+  const SCRIPT_VERSION = "outreach-1.6";
+
+  // OUTREACH ADD v1.6: openproblem ChatGPT Project URL. New-chat URL fallback
+  // navigates here so the chat inherits the project-level attached files
+  // (main.pdf + MAIN_PAPER_INDEX.md + MAIN_PAPER_README.md + LEAN4_README.md +
+  // PROGRAM_BOARD.md). board_refill submits its prompt with a `project_url`
+  // hint; the userscript sees this and confirms the active tab is the
+  // openproblem Project before injecting the prompt.
+  const OPENPROBLEM_PROJECT_URL =
+    "https://chatgpt.com/g/g-p-69fdba181e648191a0eb330852658373-openproblem/project";
 
   let busy = false;
   // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
@@ -995,7 +1012,10 @@
           setTaskPhase("navigating");
           busy = false;
           updatePanel();
-          window.location.href = "https://chatgpt.com/?outreach=1";
+          // OUTREACH CHANGE v1.6: route to openproblem Project root so new
+          // chat inherits attached files. ?outreach=1 is preserved as the
+          // fresh-chat marker the navigation-resume logic uses.
+          window.location.href = OPENPROBLEM_PROJECT_URL + "?outreach=1";
           return;
         }
       } else if (needNavToConv) {
