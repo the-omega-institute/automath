@@ -611,6 +611,15 @@ D_N^*(\alpha;x_0)
 This quantity is effective because length-$m$ rotation words are determined by a
 finite partition of the circle into interval atoms.
 
+\begin{remark}[Variation convention for interval tests]\label{rem:half-open-variation-convention}
+When a half-open interval indicator is used below, it is viewed as a
+right-continuous representative on \([0,1)\) with the endpoint \(0=1\)
+identified.  Thus \(x\mapsto \mathbf 1_{[0,a)}(x)-a\) has exactly two jumps on
+the circle for \(0<a<1\), one up and one down, and has circular total variation
+\(2\).  For \(a=0,1\) the centered indicator is constant and the corresponding
+discrepancy test contributes zero.
+\end{remark}
+
 \begin{lemma}[Ostrowski block discrepancy decomposition]\label{lem:ostrowski-block-discrepancy}
 Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
 \[
@@ -628,22 +637,28 @@ be the standard Ostrowski expansion of \(N\)
 \]
 Here \(\operatorname{Var}\) is total variation on the circle with the
 half-open representative used for interval indicators; in particular
-\(\operatorname{Var}(\mathbf 1_{[0,a)}-a)=2\) for \(0<a<1\), and the bound is
-trivial at \(a=0,1\).
+\(\operatorname{Var}(\mathbf 1_{[0,a)}-a)=2\) for \(0<a<1\), as in
+Remark~\ref{rem:half-open-variation-convention}, and the bound is trivial at
+\(a=0,1\).
 \end{lemma}
 
 \begin{proof}
-Write \(N_j=\sum_{r=0}^{j-1} b_rq_r\), with \(N_0=0\).  The first \(N\)
-iterates split into consecutive blocks
+Set \(M_0=0\) and, for \(0\le j\le s\) and \(0\le \ell<b_j\), set
 \[
-\{N_j+\ell q_j,\ldots,N_j+\ell q_j+q_j-1\},
+M_{j,\ell}:=\sum_{r=0}^{j-1}b_rq_r+\ell q_j .
+\]
+The standard Ostrowski identity writes the interval of times
+\(\{0,\ldots,N-1\}\) as the disjoint concatenation
+\[
+\{M_{j,\ell},M_{j,\ell}+1,\ldots,M_{j,\ell}+q_j-1\},
 \qquad 0\le j\le s,\quad 0\le \ell<b_j,
 \]
-after omitting the empty families with \(b_j=0\).  This is just the displayed
-Ostrowski identity for \(N\), read as a concatenation of \(b_0\) blocks of
-length \(q_0\), then \(b_1\) blocks of length \(q_1\), and so on; this
-ascending order is a bookkeeping choice only, because each block estimate
-below is uniform in its initial point.
+after omitting empty digit families.  Indeed, after all blocks with index
+less than \(j\) and the first \(\ell\) blocks of length \(q_j\) have been
+listed, the next unused time is exactly \(M_{j,\ell}\); after the final block
+the endpoint is \(\sum_{j=0}^s b_jq_j=N\).  The ascending order is only a
+bookkeeping choice, because the estimate below is uniform in the starting
+point of each block.
 
 For a block of length \(q_j\) starting at \(y\), the Denjoy--Koksma inequality
 for the rotation by \(\alpha\) at a continued-fraction denominator
@@ -691,7 +706,8 @@ D_N^*(\varphi^{-1};x_0)
 \begin{proof}
 For \(0\le a\le1\), put \(f_a(x)=\mathbf{1}_{[0,a)}(x)-a\).  By
 Lemma~\ref{lem:ostrowski-block-discrepancy}, using
-\(\operatorname{Var}(f_a)\le2\) in the stated half-open convention,
+\(\operatorname{Var}(f_a)\le2\) in the half-open convention of
+Remark~\ref{rem:half-open-variation-convention},
 \[
 \left|\sum_{t=0}^{N-1}f_a(x_0+t\alpha)\right|
 \le 2\sum_{j=0}^s b_j .
@@ -1164,14 +1180,24 @@ at least
 \]
 which proves the first claim.
 
-For \(\alpha=\varphi^{-1}\), the continued-fraction denominators are
-\(q_{n-1}=F_n\) in the Fibonacci convention \(F_0=0,F_1=1\), and Cassels'
-standard indexing gives
+For \(\alpha=\varphi^{-1}=[0;1,1,\ldots]\), the continued-fraction
+denominators in the convention \(q_{-1}=0,q_0=1\) are
 \[
-\|F_n\varphi^{-1}\|=\varphi^{-n}\qquad(n\ge1)
+q_j=F_{j+1}\qquad(j\ge0),
 \]
-\cite[Ch.~I]{Cassels1957}.  Choose \(n\ge2\) with \(F_n\le k<F_{n+1}\). The
-best-approximation property of continued-fraction denominators gives
+where \(F_0=0,F_1=1\).  Since
+\(\varphi^{-1}=1/\varphi\) and \(F_n=(\varphi^n-(-\varphi)^{-n})/\sqrt5\),
+one has
+\[
+F_n\varphi^{-1}-F_{n-1}=(-1)^{n+1}\varphi^{-n},
+\qquad\text{hence}\qquad
+\|F_n\varphi^{-1}\|=\varphi^{-n}\quad(n\ge1).
+\]
+Equivalently, this is Cassels' denominator estimate
+\(\|q_j\alpha\|=\varphi^{-j-1}\) with \(q_j=F_{j+1}\)
+\cite[Ch.~I]{Cassels1957}.  Choose \(n\ge2\) with
+\(F_n\le k<F_{n+1}\).  The best-approximation property of continued-fraction
+denominators applied to \(q_{n-1}=F_n\) gives
 \(\|k\alpha\|\ge \|F_n\alpha\|=\varphi^{-n}\). Hence
 \[
 k\|k\alpha\|\ge F_n\varphi^{-n}\ge \varphi^{-2},
@@ -1711,6 +1737,41 @@ D_\infty(p\|r):=
 \]
 \end{definition}
 
+\begin{lemma}[Finite-alphabet R\'enyi nonnegativity]\label{lem:renyi-nonnegativity}
+Let \(E\) be finite, let \(p,r\in\Delta(E)\), and assume \(p\ll r\).  Then
+\[
+D_q(p\|r)\ge0\qquad\text{for every }q\in[0,\infty].
+\]
+\end{lemma}
+
+\begin{proof}
+For \(0<q<1\), H\"older's inequality with exponents \(1/q\) and
+\(1/(1-q)\) gives
+\[
+\sum_x p(x)^q r(x)^{1-q}\le
+\left(\sum_xp(x)\right)^q\left(\sum_xr(x)\right)^{1-q}=1.
+\]
+Since \(q-1<0\), the defining factor \(1/(q-1)\) reverses the logarithmic
+inequality and gives \(D_q(p\|r)\ge0\).  For \(q>1\), write
+\(a_x=p(x)/r(x)\) on \(\supp(r)\), with \(a_x=0\) when \(r(x)>0=p(x)\).
+Then
+\[
+\sum_xp(x)^qr(x)^{1-q}=\sum_x r(x)a_x^q
+\ge \left(\sum_xr(x)a_x\right)^q=1
+\]
+by Jensen's inequality for the convex function \(t\mapsto t^q\).  Hence
+\(D_q(p\|r)\ge0\) also for \(q>1\).  The case \(q=1\) is Gibbs'
+inequality.  For \(q=0\), \(D_0(p\|r)=-\log r(\supp p)\ge0\).  For
+\(q=\infty\),
+\[
+\max_{x\in\supp p}\frac{p(x)}{r(x)}
+\ge
+\frac{\sum_{x\in\supp p}p(x)}{\sum_{x\in\supp p}r(x)}
+=\frac1{r(\supp p)}\ge1,
+\]
+so \(D_\infty(p\|r)\ge0\).
+\end{proof}
+
 \begin{theorem}[Exact divergence identity relative to the Parry measure]\label{thm:parry-kl-identity}
 For every probability law \(\nu\in\Delta(X_m)\),
 \[
@@ -1953,13 +2014,6 @@ D_\infty(p\|\rho)
 =
 D_\infty(p\|\rho^S)-\log\rho(S).
 \]
-On a finite alphabet, \(D_q(p\|r)\ge0\) for all \(q\in[0,\infty]\) under the
-same support convention: for \(0<q<1\), H\"older's inequality gives
-\(\sum_x p(x)^qr(x)^{1-q}\le1\); for \(q>1\), the same inequality applied to
-\(r=p^{q/(q-1)}(r^{1-q})^{1/(q-1)}\) gives
-\(\sum_x p(x)^qr(x)^{1-q}\ge1\); \(q=1\) is Gibbs' inequality, \(q=0\) gives
-\(-\log r(\supp p)\ge0\), and \(q=\infty\) gives a logarithm of a maximum at
-least \(1\).
 \end{proof}
 
 \begin{lemma}[Endpoint class counts]\label{lem:endpoint-class-counts}
@@ -2059,8 +2113,8 @@ gives
 \[
 D_q(\nu\|\pi_m)=D_q(\nu\|\pi_m(\cdot\mid S))-\log\pi_m(S)\ge -\log\pi_m(S),
 \]
-because every R\'enyi divergence is nonnegative. Since \(|S|\le k\),
-\(\pi_m(S)\le M_m(k)\), hence
+by Lemma~\ref{lem:renyi-nonnegativity}. Since \(|S|\le k\), \(\pi_m(S)\le
+M_m(k)\), hence
 \[
 D_q(\nu\|\pi_m)\ge -\log M_m(k).
 \]
@@ -3291,9 +3345,9 @@ D_q(\nu\|\Pi_m^A(\cdot\mid S))-\log\Pi_m^A(S)
 \ge
 -\log\Pi_m^A(S),
 \]
-because R\'enyi divergences are nonnegative.  Since \(|S|\le k\), the envelope
-bound gives the displayed lower bound.  Rearranging this bound gives the final
-support lower bound.
+by Lemma~\ref{lem:renyi-nonnegativity}.  Since \(|S|\le k\), the envelope bound
+gives the displayed lower bound.  Rearranging this bound gives the final support
+lower bound.
 \end{proof}
 
 \begin{theorem}[Primitive-SFT injective-placement barrier]
