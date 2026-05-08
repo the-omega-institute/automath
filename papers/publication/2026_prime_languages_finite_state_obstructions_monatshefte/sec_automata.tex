@@ -204,8 +204,25 @@ corollaries below.
     \le \delta^{-1}\abs{\mathcal P_m^{(b)}}.
   \]
   Since \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), the displayed chain
-  gives \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set of lengths.
-  This is impossible by \Cref{thm:dfa-density-dichotomy}.
+  gives \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set \(M\) of
+  lengths.
+
+  Let \(p\), \(c_0,\dots,c_{p-1}\), and \(\theta\) be supplied by
+  \Cref{thm:dfa-density-dichotomy}. By the pigeonhole principle, some
+  residue class \(r\bmod p\) contains infinitely many lengths from
+  \(M\). Along this infinite subsequence the preceding bounds give
+  positive constants \(K_1,K_2\) such that
+  \[
+    \frac{K_1}{m}\le \frac{a_m(\mathcal A)}{b^m}
+    \le \frac{K_2}{m}.
+  \]
+  If \(c_r=0\), then the density dichotomy gives
+  \(a_m(\mathcal A)/b^m=O(\theta^m)\) on \(m\equiv r\pmod p\), which is
+  incompatible with \(K_1/m\) on an infinite subsequence. If \(c_r>0\),
+  then \(a_m(\mathcal A)/b^m\ge c_r/2\) for all sufficiently large
+  \(m\equiv r\pmod p\), which is incompatible with the upper bound
+  \(K_2/m\). Both residue-class alternatives contradict the assumed
+  infinite set \(M\).
 \end{proof}
 
 \begin{corollary}[Symmetric-difference lower bound for base-\(b\) primes]
@@ -448,6 +465,102 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   :=\abs{L(\mathcal A)\cap\mathcal N_m}.
 \]
 
+\begin{lemma}[Substochastic product expansion]
+  \label{lem:substochastic-product-expansion}
+  Let \(\mathcal N\) be a trim strongly connected deterministic
+  presentation with adjacency matrix \(B_N\), Perron root
+  \(\lambda>1\), and Perron--Frobenius right eigenvector
+  \(h\in\RR_{>0}^{Q_N}\). For every deterministic automaton
+  \(\mathcal A\) over the same alphabet there exist an integer
+  \(p'\ge 1\), non-negative constants \(e_0,\dots,e_{p'-1}\), and
+  \(\eta\in(0,1)\) such that
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Form the synchronous product automaton
+  \(\mathcal B=\mathcal N\times\mathcal A\) and trim it by deleting
+  states that are unreachable from the initial pair or cannot reach an
+  accepting pair. If no state remains, then
+  \(a_m(\mathcal A,\mathcal N)=0\) for all \(m\), and the assertion
+  holds with \(p'=1\) and \(e_0=0\). Otherwise let \(Q'\) be the state
+  set of the resulting product \(\mathcal B'\), let \(B'\) be its
+  adjacency matrix, and let \(u'\) and \(v'\) be the indicator vectors
+  of its initial and accepting states. Trimming does not change the
+  intersection counts, so
+  \[
+    a_m(\mathcal A,\mathcal N)=u'^{\mathsf T}B'^m v'.
+  \]
+
+  Let \(\pi\colon Q'\to Q_N\) forget the \(\mathcal A\)-coordinate.
+  Define \(\widetilde h_x:=h_{\pi(x)}\), put
+  \(\widetilde D:=\operatorname{diag}(\widetilde h)\), and set
+  \[
+    P':=\lambda^{-1}\widetilde D^{-1}B'\widetilde D.
+  \]
+  For a state \(x=(q,s)\in Q'\),
+  \[
+    \sum_{y\in Q'}P'_{xy}
+    =\frac{1}{\lambda h_q}\sum_{y\in Q'}B'_{xy}h_{\pi(y)}.
+  \]
+  Because \(\mathcal A\) is deterministic, each letter available from
+  \(q\) in \(\mathcal N\) contributes to at most one outgoing edge from
+  \(x\) in the product automaton, and trimming can only delete such
+  edges. Hence
+  \[
+    \sum_{y\in Q'}B'_{xy}h_{\pi(y)}
+    \le \sum_{\substack{q\xrightarrow{a}q'\\ \text{in }\mathcal N}} h_{q'}
+    =(B_Nh)_q
+    =\lambda h_q.
+  \]
+  Thus \(P'\) is substochastic.
+
+  Adjoin a cemetery state \(\partial\) and define
+  \[
+    \widehat P:=
+    \begin{pmatrix}
+      P' & \mathbf{1}-P'\mathbf{1}\\
+      0 & 1
+    \end{pmatrix}.
+  \]
+  The matrix \(\widehat P\) is stochastic, and
+  \((\widehat P^m)_{xy}=(P'^m)_{xy}\) for all \(x,y\in Q'\). Apply the
+  finite-state transient/recurrent decomposition used in
+  \Cref{thm:dfa-density-dichotomy} to \(\widehat P\). After restricting
+  the resulting expansion to the \(Q'\times Q'\) block, there are an
+  integer \(p'\ge 1\), non-negative matrices
+  \(S_0,\dots,S_{p'-1}\), a constant \(C>0\), and \(\eta\in(0,1)\) such
+  that
+  \[
+    P'^m=S_{m\bmod p'}+E_m,
+    \qquad
+    \|E_m\|\le C\eta^m.
+  \]
+  The non-negativity follows from
+  \(S_r=\lim_{k\to\infty}P'^{kp'+r}\).
+
+  Since \(B'^m=\lambda^m\widetilde DP'^m\widetilde D^{-1}\), we obtain
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\widetilde u^{\mathsf T}P'^m\widetilde v,
+    \qquad
+    \widetilde u:=\widetilde D u',
+    \quad
+    \widetilde v:=\widetilde D^{-1}v'.
+  \]
+  Therefore
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr),
+    \qquad
+    e_r:=\widetilde u^{\mathsf T}S_r\widetilde v\ge 0,
+  \]
+  as required.
+\end{proof}
+
 \begin{theorem}[Relative density for a trim strongly connected presentation]
   \label{thm:parry-density}
   Let \(\mathcal N\) and \(\lambda\) be as above, and let
@@ -468,92 +581,12 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 
 \begin{proof}
   Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
-  \(B_N\), so \(B_Nh=\lambda h\), and set
-  \(D:=\operatorname{diag}(h)\). Then
-  \[
-    P_N:=\lambda^{-1}D^{-1}B_ND
-  \]
-  is stochastic, because the \(q\)-th row sum is
-  \[
-    \frac{1}{\lambda h_q}\sum_{q'\in Q_N}(B_N)_{qq'}h_{q'}
-    =\frac{(B_Nh)_q}{\lambda h_q}
-    =1.
-  \]
-
-  Form the synchronous product automaton \(\mathcal B=\mathcal N\times\mathcal A\)
-  and trim it by deleting states that are unreachable from the initial
-  pair or cannot reach an accepting pair. Let \(Q'\) be the state set
-  of the resulting product \(\mathcal B'\), let \(B'\) be its adjacency
-  matrix, and let \(u'\) and \(v'\) be the indicator vectors of its
-  initial and accepting states. Trimming does not change the
-  intersection counts, so
-  \[
-    a_m(\mathcal A,\mathcal N)=u'^{\mathsf T}B'^m v'.
-  \]
-
-  Let \(\pi\colon Q'\to Q_N\) forget the \(\mathcal A\)-coordinate.
-  Define \(\widetilde h_x:=h_{\pi(x)}\) for \(x\in Q'\), put
-  \(\widetilde D:=\operatorname{diag}(\widetilde h)\), and set
-  \[
-    P':=\lambda^{-1}\widetilde D^{-1}B'\widetilde D.
-  \]
-  For a state \(x=(q,s)\in Q'\),
-  \[
-    \sum_{y\in Q'}P'_{xy}
-    =\frac{1}{\lambda h_q}\sum_{y\in Q'}B'_{xy}h_{\pi(y)}.
-  \]
-  Because \(\mathcal A\) is deterministic, each letter available from
-  \(q\) in \(\mathcal N\) contributes to at most one outgoing edge from
-  \(x\) in the product automaton, and trimming can only delete such
-  edges. Hence
-  \[
-    \sum_{y\in Q'}B'_{xy}h_{\pi(y)}
-    \le \sum_{\substack{q\xrightarrow{a}q'\\ \text{in }\mathcal N}} h_{q'}
-    =(B_Nh)_q
-    =\lambda h_q,
-  \]
-  so every row sum of \(P'\) is at most \(1\). Thus \(P'\) is
-  substochastic.
-
-  Adjoin a cemetery state \(\partial\) and define
-  \[
-    \widehat P:=
-    \begin{pmatrix}
-      P' & \mathbf{1}-P'\mathbf{1}\\
-      0 & 1
-    \end{pmatrix},
-  \]
-  which is stochastic. Since \(\partial\) is absorbing, one has
-  \((\widehat P^m)_{xy}=(P'^m)_{xy}\) for all \(x,y\in Q'\). Applying
-  the same transient/recurrent decomposition as in the proof of
-  \Cref{thm:dfa-density-dichotomy} to \(\widehat P\), and then
-  restricting back to \(Q'\), yields an integer \(p'\ge 1\),
-  non-negative matrices \(S_0,\dots,S_{p'-1}\), and \(\eta\in(0,1)\)
-  such that
-  \[
-    P'^m=S_{m\bmod p'}+E_m,
-    \qquad
-    \|E_m\|\le C\eta^m.
-  \]
-  The matrices \(S_r\) collect the contributions of recurrent classes
-  of \(\widehat P\) contained entirely in \(Q'\); if no such recurrent
-  class exists, then every \(S_r\) is zero.
-
-  Since \(B'^m=\lambda^m\widetilde DP'^m\widetilde D^{-1}\), we obtain
+  \(B_N\). By \Cref{lem:substochastic-product-expansion}, there are
+  \(p'\ge 1\), non-negative constants \(e_0,\dots,e_{p'-1}\), and
+  \(\eta\in(0,1)\) such that
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\widetilde u^{\mathsf T}P'^m\widetilde v,
-    \qquad
-    \widetilde u:=\widetilde D u',
-    \quad
-    \widetilde v:=\widetilde D^{-1}v'.
-  \]
-  Therefore
-  \[
-    a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr),
-    \qquad
-    e_r:=\widetilde u^{\mathsf T}S_r\widetilde v\ge 0.
+    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr).
   \]
 
   Now combine this with \Cref{lem:trim-density}. After replacing \(p'\)

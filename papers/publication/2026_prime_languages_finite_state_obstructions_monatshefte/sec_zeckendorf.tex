@@ -211,8 +211,32 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
 
 \begin{corollary}[No simultaneous recall and precision in Zeckendorf]
   \label{cor:zeck-recall-precision}
-  Every deterministic automaton \(\mathcal A\) over the Zeckendorf
-  alphabet satisfies one of the following:
+  Let \(\mathcal A\) be a deterministic automaton over the Zeckendorf
+  alphabet. Let \(p\), \(c_0,\dots,c_{p-1}\), and \(\theta\) be supplied
+  by \Cref{thm:parry-density} for \(\mathcal N=\mathcal Z\), so that
+  \[
+    \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
+    =c_{m\bmod p}+O(\theta^m)
+  \]
+  for all sufficiently large \(m\). Let \(B_{\mathrm Z}\) be the
+  upper-bound constant from \Cref{lem:zeck-prime-count}. For each
+  residue class \(r\bmod p\) exactly one of the following alternatives
+  holds:
+  \begin{enumerate}[label=\textup{(\alph*)}]
+    \item If \(c_r=0\), then
+    \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
+    \(m\equiv r\pmod p\).
+    \item If \(c_r>0\), then there is a constant
+    \(C_{r,\varphi}>0\), for instance
+    \(C_{r,\varphi}=2C_\varphi B_{\mathrm Z}/c_r\) with
+    \(F_m\ge C_\varphi^{-1}\varphi^m\) for all large \(m\), such that
+    \[
+      \mathrm{Prec}_m^{(\mathrm Z)}\le \frac{C_{r,\varphi}}{m}
+    \]
+    for all sufficiently large \(m\equiv r\pmod p\).
+  \end{enumerate}
+  Consequently every deterministic automaton satisfies one of the
+  following global alternatives:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
     every residue class of lengths.
@@ -225,17 +249,60 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
 \end{corollary}
 
 \begin{proof}
-  Apply the density dichotomy \Cref{thm:parry-density} with
-  \(\mathcal N=\mathcal Z\) and argue as in the proof of
-  \Cref{cor:dfa-prime-recall-precision}, using
-  \Cref{lem:zeck-prime-count}. When \(c_r=0\) the numerator of
-  \(\mathrm{Rec}_m^{(\mathrm Z)}\) is exponentially small relative to
-  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp \varphi^m/m\), so recall
-  decays exponentially. When \(c_r>0\),
-  \(a_m^{(\mathrm Z)}(\mathcal A)\gg \varphi^m\) along that progression,
-  whereas the numerator is \(O(\varphi^m/m)\), yielding
-  \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\). The
-  final statement follows as in the base-\(b\) case.
+  Fix \(A_{\mathrm Z},B_{\mathrm Z}>0\) as in
+  \Cref{lem:zeck-prime-count}; thus
+  \[
+    A_{\mathrm Z}\frac{\varphi^m}{m}
+    \le \abs{\mathcal P_m^{(\mathrm Z)}}
+    \le B_{\mathrm Z}\frac{\varphi^m}{m}
+  \]
+  for all sufficiently large \(m\). Also fix constants
+  \(K_1,K_2>0\) such that
+  \(K_1\varphi^m\le F_m\le K_2\varphi^m\) for all large \(m\).
+
+  Treat each residue class \(r\bmod p\) separately. If \(c_r=0\), then
+  along \(m\equiv r\pmod p\),
+  \(a_m^{(\mathrm Z)}(\mathcal A)=O(\theta^mF_m)\). Hence
+  \[
+    \mathrm{Rec}_m^{(\mathrm Z)}
+    \le
+    \frac{a_m^{(\mathrm Z)}(\mathcal A)}
+         {\abs{\mathcal P_m^{(\mathrm Z)}}}
+    \ll m\theta^m.
+  \]
+  Since \(m\theta^m=O(\theta_r^m)\) for some \(\theta_r\in(0,1)\),
+  recall decays exponentially on this residue class.
+
+  If \(c_r>0\), then for all sufficiently large \(m\equiv r\pmod p\),
+  \[
+    a_m^{(\mathrm Z)}(\mathcal A)\ge \frac{c_r}{2}F_m
+    \ge \frac{c_rK_1}{2}\varphi^m.
+  \]
+  Therefore
+  \[
+    \mathrm{Prec}_m^{(\mathrm Z)}
+    \le
+    \frac{\abs{\mathcal P_m^{(\mathrm Z)}}}
+         {a_m^{(\mathrm Z)}(\mathcal A)}
+    \le
+    \frac{2B_{\mathrm Z}}{c_rK_1}\cdot\frac{1}{m}.
+  \]
+  This proves the stated per-residue alternative, with
+  \(C_{r,\varphi}=2B_{\mathrm Z}/(c_rK_1)\).
+
+  If all \(c_r\) vanish, the first alternative holds on every residue
+  class, hence globally. Otherwise choose a residue class with
+  \(c_r>0\); the second alternative holds on that arithmetic
+  progression, and one may take
+  \(C_{\mathcal A,\varphi}=C_{r,\varphi}\).
+
+  Finally suppose that both recall and precision were bounded below by
+  some \(\delta>0\) on infinitely many Zeckendorf lengths. By the
+  pigeonhole principle, infinitely many of those lengths lie in one
+  residue class \(r\bmod p\). The case \(c_r=0\) contradicts the
+  exponential recall decay above. The case \(c_r>0\) contradicts the
+  bound \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{r,\varphi}/m\) along that
+  same residue class.
 \end{proof}
 
 \begin{corollary}[Prime Zeckendorf language is not regular]
