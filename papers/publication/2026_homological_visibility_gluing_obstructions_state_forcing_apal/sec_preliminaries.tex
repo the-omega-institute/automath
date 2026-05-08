@@ -121,6 +121,34 @@ The semantic layers considered later fit into the chain
 \]
 where the hooked arrow $\xhookrightarrow{\iota}$ denotes a singleton semantic embedding (\Cref{def:singleton-semantic-embedding}) and each $\preceq$ denotes a conservative extension in the sense of \Cref{def:conservative-extension}. Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer with reference sorts, $\mathbb{L}_2$ adds local-object predicates and site structure, $\mathbb{L}_3$ adds structural absence and obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage from $\mathbb{L}_1$ upward is cumulative. The first step is weaker: pointwise states embed faithfully as singleton information states, but arbitrary multi-realization states need not project back to single assignments.
 
+\begin{lemma}[Reduct induction for a displayed layer extension]\label{lem:layer-reduct-induction}
+Let $1\le m<n\le 4$. Suppose that $\Sigma_n$ is obtained from $\Sigma_m$ by adjoining a disjoint block of new symbols, that $\Mod_n$ consists of expansions of $\Sigma_m$-reducts through the forgetful functor
+\[
+U_{n,m}:\Mod_n\to\Mod_m,
+\]
+and that the state projection
+\[
+\pi^M_{n,m}:\St_n(M)\to\St_m(U_{n,m}(M))
+\]
+forgets only the new layer coordinates. Assume also that every atomic forcing clause whose atom belongs to $\Sigma_m$ is interpreted through the reduct:
+\[
+M,p\Vdash_n \alpha
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \alpha
+\]
+for every $\Sigma_m$-atomic formula $\alpha$. Then the same equivalence holds for every formula $\varphi\in\mathrm{Form}_m$:
+\[
+M,p\Vdash_n \varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \varphi.
+\]
+Consequently $\mathbb L_m\preceq\mathbb L_n$.
+\end{lemma}
+
+\begin{proof}
+Proceed by induction on the construction of $\varphi$. The atomic case is the displayed hypothesis. Boolean connectives are immediate from the induction hypothesis. For quantifiers, the variable ranges are those of the retained $\Sigma_m$-sorts; the forgetful functor does not change those carrier sets, and the state projection changes no assignment on retained variables. Thus the induction hypothesis applies uniformly to every valuation used in the quantifier clause. The state-forcing clauses for implication, persistence, and decidedness in the lower language quantify over the same lower information states after applying $\pi^M_{n,m}$, because the projection forgets only layer-$n$ bookkeeping. Hence each recursive forcing clause commutes with reduct. The resulting equivalence is exactly \Cref{eq:conservative-extension}, so $\mathbb L_m\preceq\mathbb L_n$.
+\end{proof}
+
 \begin{proposition}[Concrete instantiation of the finite chain]\label{prop:chain-instantiation}
 The chain
 \[
@@ -232,7 +260,7 @@ U_{1,0}(M),\rho\Vdash_0\varphi.
 \]
 These are exactly the three pieces of structure and the preservation condition required in \Cref{def:singleton-semantic-embedding}. Notice that the verification uses only singleton information states; it does not assert a projection from arbitrary $\mathbb L_1$-states to pointwise states.
 
-For $\mathbb L_1\preceq\mathbb L_2$, the language embedding is the inclusion of $\Sigma_1$ into the signature obtained by adjoining the local-object and site symbols. The functor $U_{2,1}$ forgets precisely those added symbols and structures, and the state map $\pi^M_{2,1}$ is the identity on the underlying information state. If $\varphi\in\mathrm{Form}_1$, then every atomic clause of $\varphi$ uses only symbols retained by $U_{2,1}$; Boolean connectives, quantifiers, and the state-forcing clauses quantify over the same underlying information state after applying $\pi^M_{2,1}$. A structural induction on $\varphi$ therefore gives
+For $\mathbb L_1\preceq\mathbb L_2$, the displayed clauses fix the object language of the extension: $\Sigma_2$ is the disjoint expansion of $\Sigma_1$ by the local-object and site symbols listed in \textup{(ii)}, $\Mod_2$ is the class of $\Sigma_2$-expansions whose $\Sigma_1$-reduct is obtained by $U_{2,1}$, and $\pi^M_{2,1}$ is the identity on the underlying information state. Atomic $\Sigma_1$-formulas use only symbols retained by $U_{2,1}$. Thus \Cref{lem:layer-reduct-induction} gives, for every $\varphi\in\mathrm{Form}_1$,
 \[
 M,p\Vdash_2\varphi
 \Longleftrightarrow
@@ -240,7 +268,7 @@ U_{2,1}(M),\pi^M_{2,1}(p)\Vdash_1\varphi,
 \]
 which is \Cref{def:conservative-extension}.
 
-The same argument applies to $\mathbb L_2\preceq\mathbb L_3$. The functor $U_{3,2}$ forgets realization prestacks, bands, component gerbes, and obstruction classes, while $\pi^M_{3,2}$ leaves the underlying state unchanged. Formulas in $\mathrm{Form}_2$ contain no symbols for the forgotten gerbe or obstruction data, so induction on formulas gives
+The same lemma applies to $\mathbb L_2\preceq\mathbb L_3$. Here $\Sigma_3$ is the disjoint expansion of $\Sigma_2$ by the realization-prestack, band, component-gerbe, structural-absence, and obstruction-class symbols listed in \textup{(iii)}. The functor $U_{3,2}$ forgets precisely those symbols, while $\pi^M_{3,2}$ leaves the underlying state unchanged. Atomic $\Sigma_2$-formulas contain no symbols for the forgotten gerbe or obstruction data, so \Cref{lem:layer-reduct-induction} gives
 \[
 M,p\Vdash_3\varphi
 \Longleftrightarrow
@@ -249,7 +277,7 @@ U_{3,2}(M),\pi^M_{3,2}(p)\Vdash_2\varphi
 \]
 Thus $\mathbb L_2\preceq\mathbb L_3$.
 
-Finally, $U_{4,3}$ forgets the refinement-dynamic axes, update structure, and rewrite operations, and $\pi^M_{4,3}$ forgets only that added bookkeeping. No $\mathrm{Form}_3$-formula mentions these $\mathbb L_4$-only coordinates, so the same structural induction gives
+Finally, $\Sigma_4$ is obtained from $\Sigma_3$ by adjoining only the refinement-dynamic axes, update structure, support notions, and rewrite operations listed in \textup{(iv)}. The functor $U_{4,3}$ forgets exactly that dynamic structure, and $\pi^M_{4,3}$ forgets only the corresponding state bookkeeping. Atomic $\Sigma_3$-formulas are interpreted through the reduct, so \Cref{lem:layer-reduct-induction} yields
 \[
 M,p\Vdash_4\varphi
 \Longleftrightarrow
