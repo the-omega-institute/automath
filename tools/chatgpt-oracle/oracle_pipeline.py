@@ -1346,10 +1346,15 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
         (CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt").write_text(
             prompt, encoding="utf-8")
 
-    # Prompt as positional arg + stdin=DEVNULL — borrowed from
-    # lean4-codex-auto-dev (PR #37). Empirically prevents codex hang on
-    # "Reading additional input from stdin..." (20+ min idle observed when
-    # prompt is fed via stdin pipe even after communicate() closes the write end).
+    # Prompt strategy:
+    #   * Small prompts (<2 KB) → positional arg + stdin=DEVNULL (the
+    #     historic path that avoided a codex hang on "Reading additional
+    #     input from stdin..." when prompt was piped without `-`).
+    #   * Large prompts (>=2 KB) OR Windows → write to a temp file and pass
+    #     `-` as the positional arg, then feed the file contents on stdin.
+    #     Windows CMD blows up around 8 KB of command line; codex's `-`
+    #     mode is documented and explicit, so it does not trigger the
+    #     historic concurrent-input hang.
     # --json gives all agent_message events as fallback if -o is empty.
     cmd = [
         codex_bin, "exec",
@@ -1359,7 +1364,16 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     ]
     if model:
         cmd.extend(["-m", model])
-    cmd.append(prompt)
+
+    # Threshold chosen well below CMD's 8 KB limit so small prompts on
+    # Windows still take the simpler positional path.
+    use_stdin_prompt = IS_WINDOWS or len(prompt) >= 2000
+    prompt_input = None
+    if use_stdin_prompt:
+        cmd.append("-")
+        prompt_input = prompt
+    else:
+        cmd.append(prompt)
 
     # Windows: .cmd wrappers need shell=True
     use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
@@ -1370,7 +1384,7 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     start = time.monotonic()
     result = None
     popen_kwargs: dict = dict(
-        stdin=subprocess.DEVNULL,
+        stdin=subprocess.PIPE if use_stdin_prompt else subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -1390,7 +1404,10 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     try:
         proc = subprocess.Popen(cmd, **popen_kwargs)
         try:
-            stdout, stderr = proc.communicate(timeout=timeout_seconds + 30)
+            stdout, stderr = proc.communicate(
+                input=prompt_input,
+                timeout=timeout_seconds + 30,
+            )
             result = _Result(stdout, stderr, proc.returncode)
         except subprocess.TimeoutExpired:
             logger.warning(f"Codex timed out after {timeout_seconds}s, "
