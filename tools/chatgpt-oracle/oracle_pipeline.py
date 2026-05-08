@@ -1570,7 +1570,8 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
                 timeout_seconds: int = 600,
                 dry_run: bool = False,
                 context_mode: str = "",
-                agent_role: str = "") -> str:
+                agent_role: str = "",
+                skill: str = "") -> str:
     """Call Claude Code CLI for independent review/verification.
 
     Uses `claude -p --dangerously-skip-permissions` for non-interactive
@@ -1578,12 +1579,20 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     independent judgment separate from Codex.
 
     Used for: Stage F2, A4, C1, D2 (all verification/review steps).
+
+    When `skill` is set, invoke a Claude Code slash-command-style skill
+    (e.g. skill="killo-golden" → prompt prefixed with "/killo-golden\\n\\n").
+    Used for Stage D backflow writeback so academic-style discipline
+    (no patch-log phrasing, no temporal markers, etc.) is enforced.
     """
     prompt = with_agent_context_contract(
         prompt, context_mode=context_mode, agent_role=agent_role)
+    if skill:
+        prompt = f"/{skill.lstrip('/')}\n\n{prompt}"
     if context_mode:
         logger.info(f"Claude context: {context_mode}"
-                    f"{'/' + agent_role if agent_role else ''}")
+                    f"{'/' + agent_role if agent_role else ''}"
+                    f"{' skill=' + skill if skill else ''}")
     if dry_run:
         logger.info(f"[DRY RUN] claude_exec:\n{prompt[:200]}...")
         return "(dry run)"
@@ -6092,15 +6101,20 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         return True
 
     # ── D3: Apply backflow with explicit placement guidance ──────
+    # Writeback to the main paper goes through Claude with the
+    # /killo-golden skill so academic-style discipline (no patch-log
+    # phrasing, no temporal markers, no "新增" prefix wording) is
+    # enforced. Codex would otherwise leak patch-style language.
     logger.info(f"{tag} D3 — Apply {len(approved_items)} backflow items "
-                f"with {len(placements)} placement guides")
+                f"with {len(placements)} placement guides (claude /killo-golden)")
     apply_prompt = build_backflow_apply_prompt(
         state.paper_dir, state.main_paper_dir, approved_items,
         placements=placements)
-    codex_exec(apply_prompt, work_dir=REPO_ROOT,
-               timeout_seconds=1800, model=model, dry_run=dry_run,
-               context_mode="contextual_execution",
-               agent_role="stage_d_apply_backflow")
+    claude_exec(apply_prompt, work_dir=REPO_ROOT,
+                timeout_seconds=1800, dry_run=dry_run,
+                context_mode="contextual_execution",
+                agent_role="stage_d_apply_backflow",
+                skill="killo-golden")
     compiled_d3 = compile_gate(main_path, model=model,
                                dry_run=dry_run, tag=f"{tag} D3")
     if not compiled_d3:
@@ -6196,10 +6210,12 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     save_state(state)
 
     if d5_verdict == "needs_fixes" and d5_issues:
-        logger.info(f"{tag} D5 found {len(d5_issues)} issues — Codex fixing")
+        # Quality-fix is also writeback to the main paper, so route through
+        # Claude /killo-golden for the same academic-discipline reason as D3.
+        logger.info(f"{tag} D5 found {len(d5_issues)} issues — Claude /killo-golden fixing")
         issues_text = "\n".join(f"  {i+1}. {iss}" for i, iss in enumerate(d5_issues))
         fix_prompt = textwrap.dedent(f"""\
-            Fix issues found by Claude's quality review of backflow changes.
+            Fix issues found by the quality review of backflow changes.
             Main paper: {state.main_paper_dir}
 
             ## Issues
@@ -6208,10 +6224,11 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
             Fix each issue directly in the .tex files.
             Compile: cd {state.main_paper_dir} && xelatex -interaction=nonstopmode main.tex
         """)
-        codex_exec(fix_prompt, work_dir=main_path,
-                   timeout_seconds=900, model=model, dry_run=dry_run,
-                   context_mode="contextual_execution",
-                   agent_role="stage_d_backflow_quality_fix")
+        claude_exec(fix_prompt, work_dir=main_path,
+                    timeout_seconds=900, dry_run=dry_run,
+                    context_mode="contextual_execution",
+                    agent_role="stage_d_backflow_quality_fix",
+                    skill="killo-golden")
         compiled_d5 = compile_gate(main_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} D5")
         if not compiled_d5:

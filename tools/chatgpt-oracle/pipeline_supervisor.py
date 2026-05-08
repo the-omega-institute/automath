@@ -97,6 +97,13 @@ DEFAULT_REFILL_COOLDOWN_HOURS = 24 * 7
 REFILL_SCRIPT = SCRIPT_DIR / "paper_refill.py"
 REFILL_QUEUE_PATH = REPO_ROOT / "papers" / "publication" / "_refill_queue.json"
 
+# PI review (joint codex + claude judgment layer) — periodic sanity check, not
+# a critical-path gate. Default cooldown is long enough that codex/claude
+# tokens remain a small fraction of total pipeline cost.
+DEFAULT_PI_REVIEW_HOURS = 6
+PI_REVIEW_SCRIPT = SCRIPT_DIR / "pi_review.py"
+PI_REVIEW_LOG = SCRIPT_DIR / "supervisor_logs" / "pi_review.log"
+
 IS_WINDOWS = sys.platform == "win32"
 
 
@@ -412,6 +419,59 @@ def refill_last_run_ts() -> float:
         return 0.0
 
 
+def pi_review_last_run_ts() -> float:
+    """Read the last PI review timestamp from the log file. 0.0 if never run."""
+    if not PI_REVIEW_LOG.exists():
+        return 0.0
+    try:
+        text = PI_REVIEW_LOG.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return 0.0
+    last = ""
+    for line in reversed(text.splitlines()):
+        line = line.strip()
+        if line.startswith("[") and "]" in line:
+            last = line[1:line.index("]")]
+            break
+    if not last:
+        return 0.0
+    try:
+        if last.endswith("Z"):
+            last = last[:-1] + "+00:00"
+        return datetime.fromisoformat(last).timestamp()
+    except ValueError:
+        return 0.0
+
+
+def trigger_pi_review(*, codex_timeout: int = 900, claude_timeout: int = 600) -> bool:
+    """Spawn pi_review.py in the background. Returns True if launched."""
+    if not PI_REVIEW_SCRIPT.exists():
+        supervisor_log(f"pi_review skipped: {PI_REVIEW_SCRIPT.name} missing")
+        return False
+    SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = SUPERVISOR_LOG_DIR / f"pi_review_{_now_tag_safe()}.log"
+    cmd = [
+        _python(),
+        str(PI_REVIEW_SCRIPT),
+        "--codex-timeout", str(codex_timeout),
+        "--claude-timeout", str(claude_timeout),
+    ]
+    try:
+        with open(log_path, "ab") as logf:
+            subprocess.Popen(
+                cmd,
+                cwd=str(REPO_ROOT),
+                stdout=logf,
+                stderr=subprocess.STDOUT,
+                **_detached_popen_kwargs(),
+            )
+    except Exception as exc:
+        supervisor_log(f"pi_review spawn failed: {exc}")
+        return False
+    supervisor_log("pi_review spawned (codex + claude joint health check)")
+    return True
+
+
 def trigger_refill(project_url: str, *, limit: int = 5,
                    timeout: int = 1800, model: str = "chatgpt-5.4-pro") -> bool:
     """Spawn paper_refill.py in the background. Returns True if launched."""
@@ -575,6 +635,12 @@ def main() -> int:
                         help="Max candidates per refill run")
     parser.add_argument("--refill-timeout", type=int, default=1800,
                         help="Oracle wait budget for refill (seconds)")
+    parser.add_argument("--pi-review-hours", type=float, default=DEFAULT_PI_REVIEW_HOURS,
+                        help=f"Hours between PI joint reviews (default {DEFAULT_PI_REVIEW_HOURS}h). "
+                             "0 disables. PI review = codex + claude jointly assess "
+                             "pipeline health and write to .pi_inbox.md.")
+    parser.add_argument("--no-pi-review", action="store_true",
+                        help="Disable PI joint review entirely.")
     parser.add_argument("--once", action="store_true",
                         help="Run a single tick (advance one paper, or just check) then exit")
     args = parser.parse_args()
@@ -602,6 +668,7 @@ def main() -> int:
     last_commit_ts = 0.0
     last_tab_alert_ts = 0.0
     last_drift_alert_ts = 0.0
+    last_pi_review_ts = pi_review_last_run_ts()
     server_proc: subprocess.Popen | None = None
     inner: subprocess.Popen | None = None
     current_paper: Path | None = None
@@ -735,6 +802,13 @@ def main() -> int:
                     except Exception as exc:
                         supervisor_log(f"auto-commit error: {exc}")
                     last_commit_ts = _now()
+
+            if not args.no_pi_review and args.pi_review_hours > 0:
+                cooldown_s = args.pi_review_hours * 3600.0
+                since_pi_s = _now() - last_pi_review_ts
+                if since_pi_s >= cooldown_s:
+                    if trigger_pi_review():
+                        last_pi_review_ts = _now()
 
             if args.once:
                 break

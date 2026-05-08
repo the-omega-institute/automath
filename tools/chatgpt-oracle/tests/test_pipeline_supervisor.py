@@ -249,5 +249,35 @@ class DriftDetectionTests(unittest.TestCase):
         self.assertEqual(from_supervisor, from_server)
 
 
+class PIReviewTests(unittest.TestCase):
+    def test_pi_review_dry_run_produces_record(self):
+        import pi_review
+        record = pi_review.run_pi_review(dry_run=True)
+        self.assertIn(record["status"], {"ok", "codex_failed", "claude_failed"})
+        self.assertIn("captured_at", record)
+        # Dry run does not call the CLIs but still synthesizes verdicts.
+        if record["status"] == "ok":
+            self.assertEqual(record["codex_verdict"]["loop_health"], "healthy")
+
+    def test_evidence_payload_collects_states_and_log(self):
+        import pi_review
+        evidence = pi_review._evidence_payload()
+        self.assertIn("captured_at", evidence)
+        self.assertIn("pipeline_states", evidence)
+        self.assertIn("recent_supervisor_log", evidence)
+        self.assertIsInstance(evidence["pipeline_states"], list)
+
+    def test_safe_json_handles_fenced_response(self):
+        import pi_review
+        fenced = '```json\n{"loop_health":"healthy","summary":"ok"}\n```'
+        parsed = pi_review._safe_json(fenced)
+        self.assertEqual(parsed["loop_health"], "healthy")
+
+    def test_safe_json_returns_empty_on_garbage(self):
+        import pi_review
+        self.assertEqual(pi_review._safe_json("no json here"), {})
+        self.assertEqual(pi_review._safe_json(""), {})
+
+
 if __name__ == "__main__":
     unittest.main()
