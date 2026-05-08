@@ -311,7 +311,7 @@ unstated local-confluence calculation: Zeckendorf uniqueness
 normal form is independent of the rewrite order.
 \end{proof}
 
-\begin{corollary}[Church--Rosser certificate for the canonical fold]
+\begin{corollary}[Uniqueness certificate for local normalization]
 \label{cor:local-normalization-church-rosser}
 Let \(d\) be any finitely supported nonnegative digit vector, and write
 \(\mathcal R(d)\) for the directed graph whose vertices are all digit vectors
@@ -344,10 +344,11 @@ vectors reachable from \(d\) to be equal; call this common vector \(z(d)\).
 Now let \(d\to d'\) and \(d\to d''\) be two finite rewrite chains.  By
 termination, each of \(d'\) and \(d''\) reaches a terminal vector.  The
 preceding paragraph identifies both terminal vectors with \(z(d)\).  This is
-the Church--Rosser conclusion for the finite reachable graph
-\(\mathcal R(d)\).  The last assertion is only the definition of the canonical
-fold after identifying \(z(d)\) with the Zeckendorf expansion of
-\(N_m(\omega)=V(d)\).
+the only confluence assertion used here: it is a certificate obtained from
+termination together with global Zeckendorf uniqueness, not an independent
+local critical-pair or Church--Rosser proof for the rewrite system.  The last
+assertion is only the definition of the canonical fold after identifying
+\(z(d)\) with the Zeckendorf expansion of \(N_m(\omega)=V(d)\).
 \end{proof}
 
 \begin{theorem}[Contiguous numeration rigidity]\label{thm:contiguous-fibonacci-uniqueness}
@@ -1193,12 +1194,19 @@ F_n\varphi^{-1}-F_{n-1}=(-1)^{n+1}\varphi^{-n},
 \qquad\text{hence}\qquad
 \|F_n\varphi^{-1}\|=\varphi^{-n}\quad(n\ge1).
 \]
-Equivalently, this is Cassels' denominator estimate
-\(\|q_j\alpha\|=\varphi^{-j-1}\) with \(q_j=F_{j+1}\)
-\cite[Ch.~I]{Cassels1957}.  Choose \(n\ge2\) with
-\(F_n\le k<F_{n+1}\).  The best-approximation property of continued-fraction
-denominators applied to \(q_{n-1}=F_n\) gives
-\(\|k\alpha\|\ge \|F_n\alpha\|=\varphi^{-n}\). Hence
+Equivalently, after substituting \(n=j+1\), this is Cassels' denominator
+estimate
+\[
+\|q_j\alpha\|=\|F_{j+1}\alpha\|=\varphi^{-j-1}
+\]
+in this Fibonacci indexing \cite[Ch.~I]{Cassels1957}.  Choose \(n\ge2\) with
+\(F_n\le k<F_{n+1}\).  Since \(q_{n-1}=F_n\) and \(q_n=F_{n+1}\), the
+best-approximation property of continued-fraction denominators says that for
+every integer \(1\le k<q_n=F_{n+1}\) with \(k\ne q_{n-1}\),
+\[
+\|k\alpha\|\ge \|q_{n-1}\alpha\|=\|F_n\alpha\|=\varphi^{-n}.
+\]
+The same lower bound is an equality when \(k=F_n\). Hence
 \[
 k\|k\alpha\|\ge F_n\varphi^{-n}\ge \varphi^{-2},
 \]
@@ -1972,6 +1980,10 @@ Then
 \[
 D_q(p\|\rho)=D_q(p\|\rho^S)-\log \rho(S).
 \]
+In particular, by Lemma~\ref{lem:renyi-nonnegativity},
+\[
+D_q(p\|\rho)\ge -\log\rho(S).
+\]
 \end{proposition}
 
 \begin{proof}
@@ -2014,6 +2026,9 @@ D_\infty(p\|\rho)
 =
 D_\infty(p\|\rho^S)-\log\rho(S).
 \]
+The displayed lower bound follows by applying
+Lemma~\ref{lem:renyi-nonnegativity} on the finite alphabet \(S\) to
+\(D_q(p\|\rho^S)\).
 \end{proof}
 
 \begin{lemma}[Endpoint class counts]\label{lem:endpoint-class-counts}
@@ -2111,9 +2126,10 @@ three classes, so the displayed piecewise formula for \(M_m(k)\) follows.
 Now let \(S:=\supp(\nu)\). Proposition~\ref{prop:renyi-support-conditioning}
 gives
 \[
-D_q(\nu\|\pi_m)=D_q(\nu\|\pi_m(\cdot\mid S))-\log\pi_m(S)\ge -\log\pi_m(S),
+D_q(\nu\|\pi_m)\ge -\log\pi_m(S),
 \]
-by Lemma~\ref{lem:renyi-nonnegativity}. Since \(|S|\le k\), \(\pi_m(S)\le
+using the finite-alphabet nonnegativity input recorded in
+Lemma~\ref{lem:renyi-nonnegativity}. Since \(|S|\le k\), \(\pi_m(S)\le
 M_m(k)\), hence
 \[
 D_q(\nu\|\pi_m)\ge -\log M_m(k).
@@ -3339,15 +3355,13 @@ Every \(k\)-point set therefore has Parry mass at most
 Now put \(S=\supp(\nu)\).  Proposition~\ref{prop:renyi-support-conditioning}
 gives, for every \(q\in[0,\infty]\),
 \[
-D_q(\nu\|\Pi_m^A)
-=
-D_q(\nu\|\Pi_m^A(\cdot\mid S))-\log\Pi_m^A(S)
-\ge
--\log\Pi_m^A(S),
+D_q(\nu\|\Pi_m^A)\ge -\log\Pi_m^A(S),
 \]
-by Lemma~\ref{lem:renyi-nonnegativity}.  Since \(|S|\le k\), the envelope bound
-gives the displayed lower bound.  Rearranging this bound gives the final support
-lower bound.
+where the inequality is exactly the
+Lemma~\ref{lem:renyi-nonnegativity} consequence built into
+Proposition~\ref{prop:renyi-support-conditioning}.  Since \(|S|\le k\), the
+envelope bound gives the displayed lower bound.  Rearranging this bound gives
+the final support lower bound.
 \end{proof}
 
 \begin{theorem}[Primitive-SFT injective-placement barrier]
