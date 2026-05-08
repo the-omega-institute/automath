@@ -294,7 +294,15 @@ def factor_record(q: int, tag: str, p: int) -> dict[str, Any]:
     P = poly_pq(q)
     x = P.gens[0]
     Fp = sp.Poly(P.as_expr(), x, modulus=p)
-    _, facs = sp.factor_list(Fp, modulus=p)
+    _, facs = Fp.factor_list()
+    facs = sorted(
+        facs,
+        key=lambda item: (
+            int(item[0].degree()),
+            [int(c) % p for c in item[0].all_coeffs()],
+            int(item[1]),
+        ),
+    )
     factors = []
     degs: list[int] = []
     product = sp.Poly(1, x, modulus=p)
