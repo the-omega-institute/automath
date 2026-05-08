@@ -298,9 +298,9 @@ By \Cref{def:cech-gluing-obstruction}, the image of that same filtered system is
 \]
 \end{proof}
 
-\begin{proposition}[Supporting component gerbes of visible branches]\label{thm:component-gerbe-decomposition}
+\begin{theorem}[Supporting component gerbes of visible branches]\label{thm:component-gerbe-decomposition}
 In the pullback-based setting of \Cref{def:compatible-realization-stack}, and using only the realization-prestack and component data fixed there, every visible branch $v\in \Vis_{p,s}(r)$ determines a full substack $\mathfrak G_v\subseteq \mathfrak L_r$ that is a banded $\Band$-gerbe over $\mathcal C_{p,s}/a$. In particular, neither global conservativity at $a$ nor the derived comparison hypothesis \textup{(H4)} is used here.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 Apply \Cref{thm:intrinsic-branch-obstruction-extension}(i) to the banded realization-stack extension
@@ -310,7 +310,7 @@ Apply \Cref{thm:intrinsic-branch-obstruction-extension}(i) to the banded realiza
 supplied by \Cref{prop:stackification-components}. The resulting $v$-component substack is exactly $\mathfrak G_v$.
 \end{proof}
 
-\begin{proposition}[\v{C}ech obstruction of a branch gerbe on an acyclic cover]\label{thm:cech-bridge-compatible-realizations}
+\begin{theorem}[\v{C}ech obstruction of a branch gerbe on an acyclic cover]\label{thm:cech-bridge-compatible-realizations}
 Assume that $\mathfrak G_v$ is a banded component gerbe with band $\Band$ in the sense of \Cref{def:compatible-realization-stack}. Using only this gerbe and a single acyclic cover of $a$, let
 \[
 \mathcal U=\{U_i\to a\}_{i\in I}\in \Cov_{p,s}(a)
@@ -319,14 +319,15 @@ be any cover whose \v{C}ech nerve exists in $\mathcal C_{p,s}/a$, and write
 \[
 U_{i_0\cdots i_n}
 \]
-for the corresponding simplices. Assume
+for the corresponding simplices. Assume that the cover is locally nonempty for the branch, so that objects
+\[
+x_i\in \mathfrak G_v(U_i)
+\]
+exist for all $i$, and assume
 \[
 H^1(U_{i_0\cdots i_n},\Band)=0
 \]
-for every nonempty intersection used below. Choose objects
-\[
-x_i\in \mathfrak G_v(U_i).
-\]
+for every nonempty intersection used below, including all members, pairwise overlaps, triple overlaps, and quadruple overlaps appearing in the descent calculation.
 Then:
 \begin{enumerate}[label=(\roman*),nosep]
 \item for every pair $(i,j)$ there exists an isomorphism
@@ -342,10 +343,10 @@ defines a \v{C}ech $2$-cocycle $c=(c_{ijk})\in \check Z^2(\mathcal U,\Band)$;
 \item the class $[c]\in \check H^2(\mathcal U,\Band)$ depends only on the branch gerbe $\mathfrak G_v$ and the chosen cover: changing the local objects or the comparison isomorphisms changes $c$ by a \v{C}ech coboundary, and refinements of acyclic covers pull this class back functorially;
 \item the class $[c]$ vanishes if and only if the branch gerbe $\mathfrak G_v$ is neutral over $a$.
 \end{enumerate}
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
-Because $\mathfrak G_v$ is a gerbe, the chosen cover is locally nonempty, so the objects $x_i\in \mathfrak G_v(U_i)$ exist by assumption. For every pair $(i,j)$, the sheaf
+By local nonemptiness, fix objects $x_i\in \mathfrak G_v(U_i)$. For every pair $(i,j)$, the sheaf
 \[
 \mathrm{Isom}(x_i|_{U_{ij}},x_j|_{U_{ij}})
 \]
@@ -502,8 +503,57 @@ Conversely, if $\mathfrak G_v(a)\neq\varnothing$ for some visible branch $v$, th
 \end{proof}
 
 \begin{theorem}[Conditional branched gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
-See \cite[Theorem~5.20]{MaZhang2026ConditionalGluingFailure}; in the present notation it applies with visible branches $v\in\Vis_{p,s}(r)$, component gerbes $\mathfrak G_v$, and derived branch classes $\omega_v\in H^2(\mathcal C_a,\Band)$.
+Assume \textup{(H1)}--\textup{(H3)} for an admitted reference $r:\mathsf{Ref}_s$ at $p$. Then the gluing-null condition is exactly the existence of at least one visible branch and the non-neutrality of every component gerbe:
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\Vis_{p,s}(r)\neq\varnothing
+\ \text{and}\
+\mathfrak G_v\ \text{is non-neutral for every }v\in\Vis_{p,s}(r).
+\]
+If, in addition, \textup{(H4)} holds, then this is equivalently
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\Vis_{p,s}(r)\neq\varnothing
+\ \text{and}\
+\omega_v\neq 0\ \text{in }H^2(\mathcal C_a,\Band)
+\text{ for every }v\in\Vis_{p,s}(r).
+\]
+The companion theorem \cite[Theorem~5.20]{MaZhang2026ConditionalGluingFailure} is the meet-semilattice analogue of this pullback-site formulation.
 \end{theorem}
+
+\begin{proof}
+Because $r$ is admitted, the definition of gluing-level nullity gives
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash \CompSec_s(r)\ \text{and}\ M,p\nVdash \Sec_s(r).
+\]
+By \Cref{prop:compsecs-vs-visible-branches}, the compatible-local clause is equivalent to
+\[
+\Vis_{p,s}(r)\neq\varnothing.
+\]
+By \Cref{prop:global-sections-vs-neutral-components}, using global conservativity at $a$ from \textup{(H3)}, the global-section clause is equivalent to the existence of a visible branch $v$ with
+\[
+\mathfrak G_v(a)\neq\varnothing.
+\]
+By \Cref{lem:terminal-fibre-neutrality}, this is equivalent to the existence of a neutral component gerbe. Therefore
+\[
+M,p\nVdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\mathfrak G_v\ \text{is non-neutral for every }v\in\Vis_{p,s}(r),
+\]
+provided the compatible-local clause has supplied at least one visible branch. Combining these two equivalences proves the first displayed characterization.
+
+Assume now also \textup{(H4)}. For each visible branch $v$, \Cref{prop:derived-branch-classification} gives
+\[
+\omega_v=0
+\quad\Longleftrightarrow\quad
+\mathfrak G_v\ \text{is neutral}.
+\]
+Thus non-neutrality of every component gerbe is equivalent to nonvanishing of every derived branch class $\omega_v$, and the second displayed characterization follows.
+\end{proof}
 
 \subsection{Visible quotients and strictification}
 
@@ -541,7 +591,7 @@ A_{\mathrm{vis}}:=A/H_\alpha.
 \]
 \end{definition}
 
-\begin{proposition}[Initial visible quotient of a gluing obstruction]\label{thm:initial-visible-quotient}
+\begin{theorem}[Initial visible quotient of a gluing obstruction]\label{thm:initial-visible-quotient}
 In the setting of \Cref{def:finite-obstruction-presentation}, let
 \[
 \pi:A\twoheadrightarrow A_{\mathrm{vis}}
@@ -556,7 +606,7 @@ be the canonical quotient map. Then:
 with $\varphi=\bar\varphi\circ\pi$.
 \end{enumerate}
 Hence $A_{\mathrm{vis}}$ is the initial coefficient quotient through which the chosen obstruction presentation becomes strictly trivial.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 By construction, every cocycle value $\alpha_{ijk}$ lies in the subgroup $H_\alpha$. Therefore $\pi(\alpha_{ijk})=0$ for every nonempty triple overlap, which proves (i).
@@ -582,7 +632,7 @@ A character $\chi\in\widehat A$ is called \emph{presentation-invariant} for the 
 In that case the pushed-forward class $\chi_*[\alpha]$ depends only on the visible quotient and not on the chosen local trivializations.
 \end{definition}
 
-\begin{proposition}[Character channels and the presentation-level visible quotient]\label{thm:character-definability-barrier}
+\begin{theorem}[Character channels and the presentation-level visible quotient]\label{thm:character-definability-barrier}
 In the setting of \Cref{def:finite-obstruction-presentation}, let
 \[
 \widehat A:=\mathrm{Hom}(A,\mathbb T),
@@ -604,7 +654,7 @@ for every nonempty triple overlap of $\mathcal U$. Then:
 \]
 \item consequently, every globally admissible character channel factors uniquely through $A_{\mathrm{vis}}$, and a character is presentation-invariant for the chosen obstruction presentation if and only if it lies in $H_\alpha^\perp$.
 \end{enumerate}
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 Since $H_\alpha$ is generated by the cocycle values $\alpha_{ijk}$, a character $\chi$ is trivial on $H_\alpha$ if and only if it is trivial on each generator $\alpha_{ijk}$. This proves (i).
@@ -673,7 +723,7 @@ such that the first projection recovers the canonical quotient:
 Equivalently, the visible quotient is kept fixed, while the auxiliary register $R$ resolves the hidden information inside the fibers of $\pi$.
 \end{definition}
 
-\begin{proposition}[Minimal information cost of strictification]\label{thm:minimal-information-cost-of-strictification}
+\begin{theorem}[Minimal information cost of strictification]\label{thm:minimal-information-cost-of-strictification}
 In the setting of \Cref{def:auxiliary-strictification-code}, every auxiliary strictification code satisfies
 \[
 |R|\ge |H_\alpha|.
@@ -684,7 +734,7 @@ Equivalently,
 \]
 Moreover, this lower bound is sharp.
 \leanverified{paper_gluing_failure_minimal_information_cost_of_strictification}
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 Let $\bar a\in A_{\mathrm{vis}}$. The fiber $\pi^{-1}(\bar a)$ is a coset of $\ker\pi=H_\alpha$, hence has cardinality $|H_\alpha|$. Since $\iota$ is injective and $\mathrm{pr}_1\circ\iota=\pi$, the restriction of $\iota$ to $\pi^{-1}(\bar a)$ lands inside the slice $\{\bar a\}\times R$ and remains injective. Therefore
