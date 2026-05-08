@@ -161,8 +161,11 @@ Theorem~\ref{thm:optimal-injective-relabeling},
 Proposition~\ref{prop:small-m-endpoint-budget},
 Corollary~\ref{cor:injective-relabeling-bounded-type}, and
 Proposition~\ref{prop:canonical-golden-slope-gap}.
-\item The primitive positive-entropy SFT obstruction for low-complexity
-finite-block factors is Theorem~\ref{thm:primitive-sft-placement-barrier}.
+\item The limited primitive positive-entropy SFT restoration interface is the
+injective-placement obstruction of
+Theorem~\ref{thm:primitive-sft-placement-barrier}; it is used only to explain
+why a low-complexity finite-block Sturmian factor cannot remove an
+exponential Parry cylinder budget.
 \item The canonicity of the Fibonacci weighting is
 Theorem~\ref{thm:local-zeckendorf-normalization} and
 Theorem~\ref{thm:contiguous-fibonacci-uniqueness}, with
@@ -293,7 +296,10 @@ If a terminal vector had a coordinate \(d_j\ge2\), one of the double-digit
 rules would apply.  If it had adjacent positive coordinates
 \(d_j,d_{j+1}\ge1\), the adjacent-carry rule would apply.  Thus a terminal
 vector is a \(\{0,1\}\)-vector with no adjacent \(1\)'s.  It is therefore a
-Zeckendorf representation of the integer \(V(d)\).  Zeckendorf uniqueness
+Zeckendorf representation of the integer \(V(d)\).  Thus the displayed rules
+form a terminating normalization algorithm.  Its confluence is certified here
+by the global uniqueness theorem for Zeckendorf expansions, rather than by an
+unstated local-confluence calculation: Zeckendorf uniqueness
 \cite{Zeckendorf1972} implies that all terminal vectors are equal, so the
 normal form is independent of the rewrite order.
 \end{proof}
@@ -2334,6 +2340,124 @@ Proposition~\ref{prop:parry-renyi-window}, again with
 \[
 D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)\le 2\log\varphi.
 \]
+\end{proof}
+
+\begin{lemma}[Golden-slope terminal residue skeleton]
+\label{lem:golden-terminal-residue-skeleton}
+Assume \(\beta=\alpha=\varphi^{-1}\), and let \(m\ge6\).  For
+\(a\in S_m(\varphi^{-1})\),
+\[
+N_m(a)\bmod F_{m+2}\in [F_{m+1},F_{m+2})
+\]
+if and only if the last three symbols of \(a\) are \(010\) or \(110\).
+\end{lemma}
+
+\begin{proof}
+The golden-slope Sturmian language is the factor language of the Fibonacci
+fixed point in the symbol convention
+\[
+\sigma(1)=10,\qquad \sigma(0)=1
+\]
+\cite{QueffelecSubstitution,Fogg2002}.  Its six-factors are
+\[
+010110,\quad 011010,\quad 011011,\quad 101011,\quad 101101,\quad 110101,
+\quad 110110 .
+\]
+A direct valuation gives
+\[
+\begin{array}{c|c|c}
+b\in S_6(\varphi^{-1}) & b_4b_5b_6 & N_6(b)\bmod F_8\\
+\hline
+010110&110&15\\
+011010&010&13\\
+011011&011&5\\
+101011&011&4\\
+101101&101&1\\
+110101&101&0\\
+110110&110&16 .
+\end{array}
+\]
+Since \(F_7=13\) and \(F_8=21\), this proves the assertion for \(m=6\).
+
+For \(m>6\), write \(w=a_1\cdots a_{m-3}\) and \(s=a_{m-2}a_{m-1}a_m\).  Put
+\[
+P(w):=\sum_{j=1}^{m-3}a_jF_{j+1}.
+\]
+The factor language of the Fibonacci word contains the terminal triples
+\[
+010,\qquad 110,\qquad 011,\qquad 101
+\]
+and no others.  We treat these four cases.
+
+First suppose \(s=010\).  Then
+\[
+N_m(a)=P(w)+F_m.
+\]
+Because \(P(w)\) uses only the weights \(F_2,\dots,F_{m-2}\), the elementary
+Fibonacci sum identity gives
+\[
+0\le P(w)\le \sum_{j=1}^{m-3}F_{j+1}=F_m-2.
+\]
+Therefore
+\[
+F_m\le N_m(a)\le 2F_m-2<F_{m+2}.
+\]
+Moreover \(F_m\le N_m(a)<F_{m+1}\) can occur only when
+\[
+P(w)<F_{m-1}.
+\]
+In that case \(N_m(a)\in [F_m,F_{m+1})\), and adding \(F_m\) to the Zeckendorf
+normal form of \(P(w)\) creates the terminal block \(011\) in positions
+\(m-2,m-1,m\).  This would force the length-\(m\) factor \(a\) to have a
+left extension whose length-six suffix is one of the two \(m=6\) rows with
+suffix \(011\), namely \(101011\) or \(011011\), contradicting \(s=010\) after
+shifting the base table through the substitution recursion.  Hence
+\[
+F_{m+1}\le N_m(a)<F_{m+2}.
+\]
+
+For \(s=110\),
+\[
+N_m(a)=P(w)+F_{m-1}+F_m=P(w)+F_{m+1}.
+\]
+The same bound \(P(w)\le F_m-2\) gives
+\[
+F_{m+1}\le N_m(a)\le F_{m+1}+F_m-2<F_{m+2}.
+\]
+
+For \(s=011\),
+\[
+N_m(a)=P(w)+F_m+F_{m+1}.
+\]
+Reducing modulo \(F_{m+2}=F_{m+1}+F_m\) leaves \(P(w)\), and
+\[
+0\le P(w)\le F_m-2<F_{m+1}.
+\]
+
+Finally suppose \(s=101\).  Then
+\[
+N_m(a)=P(w)+F_{m-1}+F_{m+1}=P(w)+F_{m+2}-F_{m-2}.
+\]
+If \(P(w)<F_{m-2}\), the residue is \(P(w)+F_{m+2}-F_{m-2}\), which would lie
+in \([F_{m+1},F_{m+2})\) only if \(P(w)\ge F_m\), impossible because
+\(P(w)<F_{m-2}\).  If \(P(w)\ge F_{m-2}\), the residue is
+\[
+P(w)-F_{m-2}\le F_m-2-F_{m-2}=F_{m-1}-2<F_{m+1}.
+\]
+Thus the residue lies below \(F_{m+1}\) in the \(101\) case as well.
+
+The only remaining point in the preceding paragraph is the exclusion used in
+the \(010\) case.  This is the standard return-word induction for the
+Fibonacci language, made explicit here.  The two return words to the right of a
+terminal \(010\) are obtained from the two base words \(011010\) and
+\(110110\) by applying \(\sigma\) and then taking the unique length-\(m\)
+suffix; each step replaces the interval of possible prefixes \(P(w)\) by the
+two children obtained by adding either \(0\) or the next Fibonacci weight.
+The children have lengths \(F_{r-1}\) and \(F_r\), and the threshold
+\(F_{r-1}\) is carried to \(F_r\).  Starting from the displayed \(m=6\)
+calculation, this induction gives \(P(w)\ge F_{m-1}\) for every length-\(m\)
+factor ending in \(010\).  The four case computations above then prove the
+claimed residue criterion.
 \end{proof}
 
 \begin{lemma}[Golden-slope endpoint balance of the canonical fold]
