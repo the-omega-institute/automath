@@ -1402,11 +1402,23 @@ $[a]\in\partial_{|a|}\mathsf{P}$, $a_{|a|-1}=i$, and $q(a)=u$.  Because
   \le \frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}r_1\widetilde{B}^{\,m-1}\mathbf{1}.
   \]
   If the chosen presentation is primitive in the sense of
-  Definition~\ref{def:regular-event}, then
+  Definition~\ref{def:regular-event}, let $v,w>0$ be the right and left
+  Perron eigenvectors of $\widetilde B$, normalized by $w^T v=1$.  Then
   \[
-  r_1\widetilde{B}^{\,m-1}\mathbf{1}\asymp \rho(\widetilde{B})^m,
+  K_\partial:=
+  \frac{(r_1v)(w^T\mathbf{1})}{\rho(\widetilde B)}>0
   \]
-  and therefore
+  and there is a number $\eta<\rho(\widetilde B)$ such that
+  \[
+  r_1\widetilde{B}^{\,m-1}\mathbf{1}
+  =K_\partial\rho(\widetilde{B})^m+O(\eta^m).
+  \]
+  In particular
+  \[
+  r_1\widetilde{B}^{\,m-1}\mathbf{1}
+  \sim K_\partial\rho(\widetilde{B})^m,
+  \]
+  and the scan error has the sharp two-sided exponential scale
   \[
   \varepsilon_m(\mathsf{P};\mu)\asymp
   \left(\frac{\rho(\widetilde{B})}{\lambda_{\mathrm{cyl}}}\right)^m
@@ -1708,12 +1720,30 @@ depth-$m$ cylinder has mass at most $c_+\lambda_{\mathrm{cyl}}^{-m}$, hence
 = \frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}r_1\widetilde{B}^{\,m-1}\mathbf{1}.
 \]
 This proves~\emph{(4)}.  If $\widetilde{B}$ is primitive, then
-Perron--Frobenius theory gives
-$r_1\widetilde{B}^{\,m-1}\mathbf{1}\asymp \rho(\widetilde{B})^{m-1}$, hence
-also $r_1\widetilde{B}^{\,m-1}\mathbf{1}\asymp \rho(\widetilde{B})^m$ after
-absorbing the constant factor $\rho(\widetilde{B})^{-1}$.  Substituting this
-into the two-sided estimate and using~\emph{(2)} yields the displayed
-asymptotic law with base $\rho(\widetilde{B})/\lambda_{\mathrm{cyl}}$.
+$\rho:=\rho(\widetilde B)>0$, since a primitive nonzero matrix cannot have
+spectral radius zero.  Let $v,w>0$ be right and left Perron eigenvectors
+normalized by $w^T v=1$.  Perron--Frobenius theory for primitive matrices gives
+the spectral decomposition
+\[
+\widetilde B^n=\rho^n v w^T+O(\eta^n)
+\]
+for some $\eta<\rho$, in any fixed matrix norm.  Therefore
+\[
+r_1\widetilde B^{m-1}\mathbf 1
+=\rho^{m-1}(r_1v)(w^T\mathbf 1)+O(\eta^{m-1}).
+\]
+The vector $r_1$ is nonzero and nonnegative in the nondegenerate case, while
+$v,w,\mathbf 1$ are positive, so $(r_1v)(w^T\mathbf 1)>0$.  Writing
+\[
+K_\partial=\rho^{-1}(r_1v)(w^T\mathbf 1)>0
+\]
+and replacing $\eta$ by any number in $(\eta,\rho)$ if necessary yields
+\[
+r_1\widetilde B^{m-1}\mathbf 1=K_\partial\rho^m+O(\eta^m).
+\]
+Substituting the resulting equivalence into the two-sided scan-error estimate
+and using~\emph{(2)} yields the displayed sharp exponential scale with base
+$\rho(\widetilde{B})/\lambda_{\mathrm{cyl}}$.
 \end{proof}
 
 \begin{proposition}[Higher-block invariance of the ambiguity exponent]
@@ -4588,14 +4618,20 @@ Z_m(\partial\mathsf{E},\varphi_t)\asymp
 \varepsilon_m(\mathsf{E};\mu_t)\asymp
 \exp\!\Bigl(-m\bigl(P_X(\varphi_t)-P_\partial(\varphi_t)\bigr)\Bigr).
 \]
+Here the matrix identity for $Z_m(\partial\mathsf{E},\varphi_t)$ and the
+pressure gap are exact; the scan-error statement is the transferred
+two-sided comparison obtained from the Gibbs cylinder bounds and the
+resolving-thickness constants.
 \end{theorem}
 
 \begin{proof}
 Because $\varphi_t$ is H\"older on the mixing one-step SFT $X$, Bowen's Gibbs
-estimate on cylinders \cite{Bowen1975,WaltersErgodicTheory} gives a constant
-$c_t^->0$ such that every admissible cylinder $[a]$ satisfies
+estimate on cylinders \cite{Bowen1975,WaltersErgodicTheory} gives constants
+$0<c_t^-\le c_t^+<\infty$ such that every admissible cylinder $[a]$ satisfies
 \[
-\mu_t([a])\ge c_t^-\exp\!\bigl(\sup_{x\in[a]}S_{|a|}\varphi_t(x)-|a|P_X(\varphi_t)\bigr)>0.
+c_t^-\exp\!\bigl(\sup_{x\in[a]}S_{|a|}\varphi_t(x)-|a|P_X(\varphi_t)\bigr)
+\le \mu_t([a])
+\le c_t^+\exp\!\bigl(\sup_{x\in[a]}S_{|a|}\varphi_t(x)-|a|P_X(\varphi_t)\bigr).
 \]
 Hence $\mu_t$ has full support.  Moreover, $\mathsf{E}$
 satisfies the continuation-robust criterion from
@@ -4695,7 +4731,15 @@ constant $\theta_t>0$ such that
 \qquad([a]\in\partial_m\mathsf{E}).
 \]
 Bowen's Gibbs estimate on cylinders, together with
-Proposition~\ref{prop:scan-error-cylinder}, therefore yields
+Proposition~\ref{prop:scan-error-cylinder}, therefore yields constants
+$d_t^-,d_t^+>0$ such that, for all $m\ge 1$,
+\[
+d_t^- Z_m(\partial\mathsf{E},\varphi_t)
+\le \varepsilon_m(\mathsf{E};\mu_t)
+\le d_t^+ Z_m(\partial\mathsf{E},\varphi_t).
+\]
+Combining this two-sided transfer with the exact weighted partition-sum
+formula proves
 \[
 \varepsilon_m(\mathsf{E};\mu_t)\asymp
 \exp\!\Bigl(-m\bigl(P_X(\varphi_t)-P_\partial(\varphi_t)\bigr)\Bigr).
