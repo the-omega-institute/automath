@@ -111,42 +111,63 @@ many-one equivalent for this fragment, and both are undecidable.
 \label{lem:eml-real-witness-library}
 There is a finite, effectively fixed library of principal-branch EML
 terms over the constant \(1\) for exactly the Richardson primitives
-used below.  The selected entries may be taken from Odrzywo{\l}ek's
-verified bootstrapping chain as follows:
+used below.  Let
+\[
+  E(u)=\eml(u,1),
+  \qquad
+  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr).
+\]
+On \(u>0\), \(L(u)=\log u\), and for
+\(u\in\RR\setminus\{0\}\), \(\exp L(u)=u\).  The
+following table is the complete finite witness interface used in the
+Richardson reduction:
 \[
 \begin{array}{c|c|c}
-\text{real primitive} & \text{source support} & \text{real-domain use}\\
+\text{real primitive} & \text{chosen witness or locator} & \text{real-domain use}\\
 \hline
-\exp u & \text{SI Part~II, Lemma~1} & u\in\RR\\
-\operatorname{Log} u & \text{SI Part~II, Lemma~2} & u>0\\
-u-v & \text{SI Part~II, Lemma~3} & u,v\in\RR\\
--u & \text{SI Part~II, core arithmetic} & u\in\RR\\
-u+v & \text{SI Part~II, core arithmetic} & u,v\in\RR\\
-1/u & \text{SI Part~II, core arithmetic} & u\ne0\\
-uv & \text{SI Part~II, core arithmetic} & u,v\in\RR\\
-u^2 & \text{SI Part~II, core arithmetic} & u\in\RR\\
-u/v & \text{SI Part~II, core arithmetic} & v\ne0\\
-\sqrt u & \text{SI Part~II, remaining primitives} & u\ge0\\
-\pi & \text{SI Part~II, core constants} & \text{constant}\\
-\sin u & \text{SI Part~II, remaining primitives} & u\in\RR .
+\exp u & E(u)=\eml(u,1) & u\in\RR\\
+\operatorname{Log} u & L(u) & u>0\\
+u-v & \text{Table~S2 step~4 and SI~2.1--2.3} & u,v\in\RR\\
+-u & 1-\bigl(e-((e-1)-u)\bigr) & u\in\RR\\
+u+v & \text{Table~S2 step~8 and SI~2.1--2.3} & u,v\in\RR\\
+1/u & \text{Table~S2 step~9 and SI~2.1--2.3} & u\ne0\\
+uv & \text{Table~S2 step~10 and SI~2.1--2.3} & u,v\in\RR\\
+u/v & \text{Table~S2 step~12 and SI~2.1--2.3} & v\ne0\\
+u^2 & \text{Table~S2 step~11 and SI~2.5 core basis} & u\in\RR\\
+\sqrt u & \text{Corollary~4 and SI~2.5 core basis} & u\ge0\\
+\pi & \text{Corollary~4 and SI~2.5 core constants} & \text{constant}\\
+\sin u & \text{SI~2.5 remaining-primitives table} & u\in\RR .
 \end{array}
 \]
-Here ``SI Part~II'' refers to Supplementary Information, Part~II,
-Sections~2.1, 2.3, and 2.5, of
-\cite{Odrzywolek2026SingleBinaryOperator}.  Part~I, Table~S2 supplies
-the machine-generated discovery chain and convenient witnesses for the
-early rows, while Part~II is the verification source used here: it
-states the principal-branch convention, verifies the EML compiler
-macros, and gives a constructive completeness proof sketch for the
-Table~1 class.  The local list above is the complete witness interface
-used in this paper.  Every later occurrence is obtained by substituting
-into these entries, and no unlisted EML identity from the source is
-used in the Richardson reduction.  In particular, the logarithm row is
-used on \(u>0\), the square-root row on \(u\ge0\), the reciprocal and
-division rows only away from zero denominators, and the arithmetic rows
-\(u\pm v\), \(-u\), and \(uv\) only on the real domains displayed in
-the right-hand column.  With these fixed choices the following
-real-domain properties hold.
+Here ``SI'' means the ancillary Supplementary Information of
+arXiv:2603.21852v2.  Part~I, Table~S2 supplies the discovery-chain
+locators, including steps 1--12 for \(e\), \(\exp\), \(\ln\),
+subtraction, negation, addition, reciprocal, multiplication, square,
+and division.  Part~II is the verification source used here:
+Section~2.1 defines the EML compiler macros, Section~2.3 verifies the
+compiled witnesses symbolically under natural real-domain assumptions,
+Section~2.4 prints representative compiled expressions, and
+Section~2.5 gives Lemmas~1--3, Corollary~4, the remaining-primitives
+table, and Theorem~5 for the Table~1 class
+\cite[Supplementary Information, Part~II, Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
+The displayed negation row is the clean positive-real witness
+described at the end of SI~2.5; after substituting the already fixed
+witnesses for subtraction and for \(e=E(1)\), it is a pure EML term.
+Thus the present Richardson translation does not rely on the shorter
+extended-real convention \(L(0)=-\infty\).
+
+The compact formulas displayed in the middle column are source
+locators whenever their intermediate logarithms have extra positivity
+requirements.  The fixed witness used in the translation is the
+verified Part~II compiled EML term for that Table~1 primitive,
+restricted to the real-domain use in the right-hand column.  Thus the
+arithmetic witnesses for \(u\pm v\), \(-u\), \(uv\), and \(u/v\) are
+used for all real arguments on which the operation is defined; the
+logarithm row is used only on \(u>0\), and the square-root row only on
+\(u\ge0\).  Every later occurrence is obtained by substituting into
+these finitely many entries, and no unlisted EML identity from the
+source is used in the Richardson reduction.  With these fixed choices
+the following real-domain properties hold.
 \begin{enumerate}
 \item For all \(u,v\in\RR\), the chosen witnesses for
   \(u+v\), \(u-v\), and \(uv\) are defined and have those real
@@ -168,35 +189,49 @@ corresponding real-domain entry in the right-hand column.
 
 \begin{proof}
 Odrzywo{\l}ek's main Table~1 fixes the scientific-calculator basis,
-and Supplementary Information, Part~II, gives finite EML terms for
-the displayed primitives using only the terminal \(1\), variables, and
-the binary operation \(\eml\)
+and Supplementary Information, Part~II, gives a finite compiler from
+that basis to pure EML terms using only the terminal \(1\), variables,
+and the binary operation \(\eml\)
 \cite[Table~1 and Supplementary Information, Part~II,
-Secs.~2.1, 2.3, and 2.5]{Odrzywolek2026SingleBinaryOperator}.
-Part~I, Table~S2 is used only as an additional locator for the short
-early witnesses such as subtraction.  We choose these finitely many
-verified terms once and for all, and we restrict them to the real
-domains shown in the table.  These restrictions are exactly the
-domains on which the principal-branch identities are used in the
-Richardson translation.
-For \(\exp\), the entry is the displayed identity
+Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
+Because the Richardson reduction uses only the finite list displayed
+above, choose from this verified compiler output one pure EML term for
+each row.  Part~I, Table~S2 is used only as an additional locator for
+short early witnesses; the proof input is the Part~II verification
+under the corresponding real-domain assumptions.  These choices are
+finite and effective, and substituting one chosen term into another is
+a purely syntactic operation in the grammar
+\(S\to1\mid x_i\mid\eml(S,S)\).
+
+For \(\exp\), the chosen entry is the displayed identity
 \[
   e^u=\eml(u,1),
 \]
 whose second EML input is the nonzero constant \(1\).
+For the logarithm entry,
+\[
+  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr)
+       =e-\operatorname{Log}(e^e/u)
+       =\log u
+\]
+when \(u>0\), since \(e^e/u\) is then positive real.  The square-root
+entry is used only on \(\RR_{\ge0}\), where the principal square root
+is the ordinary nonnegative real square root.  The sine entry is used
+on the real axis, as in the remaining-primitives table of SI~2.5.
+The arithmetic rows are the verified compiled Table~1 witnesses,
+restricted to their displayed real domains; therefore their values are
+the ordinary real \(+,-,\times\), and division values wherever those
+operations are defined.
 
-The square-root entry is used only on \(\RR_{\ge0}\), where the
-principal square root is the ordinary nonnegative real square root.
-The logarithm entry is used on \(u>0\), so the principal logarithm is
-the ordinary real logarithm there.  The constant \(0\) is obtained as
-\(1-1\), integers are obtained by iterated addition and subtraction,
-and a rational \(a/b\) with \(b>0\) is obtained by applying the
-chosen division witness to the integer witnesses for \(a\) and \(b\);
-the denominator witness is nonzero.  Finally, \(\log 2\) is obtained
-from the same positive-real logarithm witness applied to
-\(2=1+1\).  These are finite syntactic constructions, uniform in the
-rational input, and each is evaluated only on the real domain on
-which the corresponding principal-branch witness is defined.
+The constant \(0\) is obtained as \(1-1\), integers are obtained by
+iterated addition and subtraction, and a rational \(a/b\) with
+\(b>0\) is obtained by applying the chosen division witness to the
+integer witnesses for \(a\) and \(b\); the denominator witness is
+nonzero.  Finally, \(\log 2\) is obtained from the positive-real
+logarithm witness applied to \(2=1+1\).  These are finite syntactic
+constructions, uniform in the rational input, and each is evaluated
+only on the real domain on which the corresponding principal-branch
+witness is defined.
 \end{proof}
 
 \begin{lemma}[Effective Richardson translation]
