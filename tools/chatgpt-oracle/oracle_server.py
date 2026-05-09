@@ -377,7 +377,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                     pending_tasks[agent_id] = task
                     dispatch_times[agent_id] = time.time()
                     _persist_queue_state()
-                    print(f"[server] Dispatched {task['task_id']} → {agent_id} "
+                    print(f"[server] Dispatched {task['task_id']} -> {agent_id} "
                           f"(conv={(task.get('conversation_id') or '-')[:12]} "
                           f"agents={len(pending_tasks)}/{MAX_AGENTS}, "
                           f"queue={len(task_queue)})")
@@ -862,7 +862,7 @@ class OracleHandler(BaseHTTPRequestHandler):
         with _lock:
             task_queue.append(task)
             _persist_queue_state()
-        print(f"[server] retry {mode} → queued {new_task_id} conv={conv_id[:12]}")
+        print(f"[server] retry {mode} -> queued {new_task_id} conv={conv_id[:12]}")
         self._send_json({
             "status": "queued",
             "task_id": new_task_id,
@@ -999,6 +999,17 @@ def close_conversation(conversation_id: str) -> dict:
 
 def main():
     global SOURCE_SHA
+    # Force UTF-8 stdout/stderr so any unicode in print() (Chinese comments,
+    # arrows, mathematical symbols in task IDs) does not crash the request
+    # handler thread on Windows cp1252 default. Observed bug: U+2192 in a
+    # dispatch log line crashed the GET /task handler before _send_json
+    # ran, causing oracle_2/oracle_3 tabs to silently never receive tasks
+    # while the server thought they were busy.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        pass
     _ensure_dirs()
     _hydrate_sessions()
     _hydrate_queue_state()
