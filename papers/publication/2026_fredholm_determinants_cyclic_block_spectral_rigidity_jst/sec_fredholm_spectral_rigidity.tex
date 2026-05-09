@@ -49,9 +49,9 @@ singular values are summable and
 partial-sum inequality therefore yields the final claim.
 \end{proof}
 
-\begin{lemma}[Ringrose triangularisation with prescribed diagonal]
+\begin{lemma}[Ringrose triangularisation with summable prescribed diagonal]
   \label{lem:ringrose-prescribed-diagonal}
-  Let \(T\) be compact on a Hilbert space \(H\). After replacing \(H\)
+  Let \(T\in\sone(H)\). After replacing \(H\)
   by the reducing subspace
   \[
     H_T:=\overline{\mathrm{span}}\{u_r,v_r:r\ge1\}
@@ -61,8 +61,18 @@ partial-sum inequality therefore yields the final claim.
   acts on a separable Hilbert space and vanishes on \(H_T^\perp\).
   On this separable reducing part there is an orthonormal basis
   \((e_k)_{k\ge1}\) in which the matrix of \(T\) is upper triangular and
-  the diagonal entries are precisely the non-zero eigenvalues of \(T\),
-  repeated according to algebraic multiplicity, followed by zeros.
+  the diagonal entries form a prescribed enumeration
+  \((d_k)_{k\ge1}\) of the full algebraic eigenvalue multiset of \(T\),
+  including zeros as needed. The enumeration may be any one for which the
+  non-zero terms are exactly the non-zero eigenvalues repeated by
+  algebraic multiplicity. In particular
+  \[
+    \sum_{k\ge1}\abs{d_k}
+    =
+    \sum_{\lambda\in\spec(T)\setminus\{0\}}
+      \abs{\lambda}\,m_{\mathrm{alg}}(\lambda)
+    <\infty .
+  \]
 \end{lemma}
 
 \begin{proof}
@@ -72,11 +82,15 @@ partial-sum inequality therefore yields the final claim.
   theorem for compact operators on a separable Hilbert space gives a
   maximal triangularizing chain whose successive one-dimensional quotients
   carry exactly the characteristic values of the compact operator,
-  counted according to algebraic multiplicity, with zero repeated after
-  the non-zero characteristic values have been exhausted; see
+  counted according to algebraic multiplicity, with zero quotients
+  inserted for the remaining part of the chain; see
   \cite[Chapter~1, Theorem~3, pp.~6--8]{Ringrose1971CompactNonSelfAdjoint}.
-  Applying this theorem to \(T|_{H_T}\) gives the stated orthonormal
-  Schur basis and prescribed diagonal.
+  Refining the chain inside finite-dimensional root spaces and arranging
+  the one-dimensional zero quotients gives any prescribed enumeration of
+  the same algebraic multiset. Applying this theorem to \(T|_{H_T}\)
+  gives the stated orthonormal Schur basis. The final summability follows
+  from the ordered Weyl--Ky Fan--Lidskii inequality in
+  \Cref{lem:weyl-ky-fan-trace-class}.
 \end{proof}
 
 \begin{lemma}[Two-by-two trace-norm pinching identity]
@@ -492,10 +506,11 @@ partial-sum inequality therefore yields the final claim.
     :=\sum_{\lambda\in\Sigma_{\mathcal D}}
       \abs{\lambda}M_{\mathcal D}(\lambda).
   \]
-  Choose the Ringrose basis from
-  \Cref{lem:ringrose-prescribed-diagonal}, ordered so that the diagonal
-  entries are the prescribed eigenvalues followed by zeros, and write
-  \(A=[a_{ij}]\) for the resulting upper triangular matrix. For
+  Choose a Ringrose basis from
+  \Cref{lem:ringrose-prescribed-diagonal} whose diagonal is an enumeration
+  of the determinant-forced algebraic eigenvalue multiset, with zeros
+  inserted as needed, and write \(A=[a_{ij}]\) for the resulting upper
+  triangular matrix. For
   \(P_N\) the projection onto
   \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
   \[
@@ -545,6 +560,106 @@ partial-sum inequality therefore yields the final claim.
   \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then
   \(\|P_NTP_N\|_1\le\|T\|_1\) and, after taking \(N\to\infty\) with
   \(N\ge j\), the bound for the fixed entry follows.
+\end{proof}
+
+\begin{theorem}[Tail-controlled trace-norm distance to the minimizer class]
+  \label{thm:tail-controlled-trace-distance}
+  Under the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, let \(T\in\sone(H)\)
+  satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  near \(0\), and let
+  \[
+    \tau_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda),\qquad
+    \varepsilon:=\|T\|_1-\tau_{\mathcal D}.
+  \]
+  Choose a Ringrose basis as in
+  \Cref{lem:ringrose-prescribed-diagonal}, write
+  \(A=[a_{ij}]\), and let \(P_N\) be the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\). Suppose that, for some
+  \(N\ge1\), the diagonal tail and the compression tail satisfy
+  \[
+    \sum_{k>N}\abs{a_{kk}}\le \eta,
+    \qquad
+    \norm{T-P_NTP_N}_1\le \eta .
+  \]
+  Let
+  \[
+    D_N:=\operatorname{diag}(a_{11},\ldots,a_{NN})
+  \]
+  on \(P_NH\), and let \(S_N\) be the normal diagonal operator
+  \(D_N\oplus0\) on \(P_NH\oplus P_NH^\perp\), transported back to \(H\)
+  by the chosen basis. Then \(S_N\) is a finite truncation of the normal
+  minimizer \(0\oplus L_{\mathcal D}\), and
+  \[
+    \norm{T-S_N}_1
+    \le
+    \eta+
+    N\sqrt{(N-1)(\|T\|_1+\eta)(\varepsilon+2\eta)} .
+  \]
+  Consequently, if \(T_\nu\) is a family in the same determinant fiber
+  with \(\|T_\nu\|_1\downarrow\tau_{\mathcal D}\) and if there are
+  integers \(N_\nu\to\infty\) and numbers \(\eta_\nu\downarrow0\) such
+  that the two displayed tail bounds hold for \(T_\nu\), then
+  \[
+    \dist_1(T_\nu,\mathcal M_{\mathcal D})
+    \longrightarrow0,
+  \]
+  where \(\mathcal M_{\mathcal D}\) is the unitary equivalence class of
+  the normal minimizers \(0_{H_0}\oplus L_{\mathcal D}\).
+\end{theorem}
+
+\begin{proof}
+  Set \(A_N=P_NTP_N\) and
+  \[
+    \delta_N:=\norm{A_N}_1-\sum_{k=1}^N\abs{a_{kk}}.
+  \]
+  The Weyl--Ky Fan lower bound gives \(\delta_N\ge0\). The assumed tails
+  imply
+  \[
+    \norm{A_N}_1\le\norm{T}_1+\eta
+  \]
+  and
+  \[
+    \delta_N
+    \le \norm{T}_1+\eta-(\tau_{\mathcal D}-\eta)
+    =\varepsilon+2\eta .
+  \]
+  The same two-by-two pinching argument used in
+  \Cref{thm:determinant-fiber-trace-minimality} gives, for
+  \(1\le i<j\le N\),
+  \[
+    \abs{a_{ij}}^2
+    \le2\norm{A_N}_1\delta_N
+    \le2(\norm{T}_1+\eta)(\varepsilon+2\eta).
+  \]
+  Since \(A_N-D_N\) is strictly upper triangular,
+  \[
+    \norm{A_N-D_N}_1
+    \le \sqrt N\,\norm{A_N-D_N}_2
+    \le
+    N\sqrt{(N-1)(\norm{T}_1+\eta)(\varepsilon+2\eta)}.
+  \]
+  Finally,
+  \[
+    \norm{T-S_N}_1
+    \le \norm{T-A_N}_1+\norm{A_N-D_N}_1
+  \]
+  and the first term is at most \(\eta\) by hypothesis. The operator
+  \(S_N\) is diagonal with entries drawn from the determinant-forced
+  eigenvalue multiset and zeros elsewhere, hence it is a finite truncation
+  of a normal minimizer. For the final assertion, choose the corresponding
+  full normal diagonal minimizer \(S_\nu^\ast\) by restoring the omitted
+  diagonal tail. Then
+  \[
+    \norm{S_\nu^\ast-S_{N_\nu}}_1
+    =\sum_{k>N_\nu}\abs{a_{kk}^{(\nu)}}\le\eta_\nu,
+  \]
+  and the displayed estimate tends to zero under the stated hypotheses.
 \end{proof}
 
 \begin{theorem}[Finite-dimensional stability near the minimizer class]
@@ -618,8 +733,10 @@ partial-sum inequality therefore yields the final claim.
   \[
     U^*TU=A=[a_{ij}]_{i,j=1}^N
   \]
-  whose diagonal lists the prescribed non-zero eigenvalues, repeated
-  according to \(M_{\mathcal D}\), followed by zeros. Let
+  whose diagonal lists the prescribed algebraic eigenvalue multiset:
+  the non-zero eigenvalues are repeated according to
+  \(M_{\mathcal D}\), and the remaining \(N-d_{\mathcal D}\) diagonal
+  entries are zero. Let
   \(D=\operatorname{diag}(a_{11},\ldots,a_{NN})\) and set
   \(S=UDU^*\). Then \(S\in\mathcal M_{\mathcal D,N}\), and
   \[
@@ -789,11 +906,11 @@ partial-sum inequality therefore yields the final claim.
 
   More quantitatively, let \(M_{\mathcal D}\) and
   \(\Sigma_{\mathcal D}\) be the collapsed multiplicity function and its
-  support from \Cref{lem:schatten-collapsed-multiplicities}. Choose the
+  support from \Cref{lem:schatten-collapsed-multiplicities}. Choose a
   Ringrose basis from
-  \Cref{lem:ringrose-prescribed-diagonal}, ordered so that the diagonal
-  entries are the prescribed non-zero eigenvalues, repeated according to
-  \(M_{\mathcal D}\), followed by zeros, and write \(A=[a_{ij}]\). For
+  \Cref{lem:ringrose-prescribed-diagonal} whose diagonal is an enumeration
+  of the prescribed algebraic eigenvalue multiset, with zeros inserted as
+  needed, and write \(A=[a_{ij}]\). For
   \(P_N\) the projection onto
   \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
   \[
@@ -853,8 +970,8 @@ partial-sum inequality therefore yields the final claim.
   \Cref{lem:ringrose-prescribed-diagonal} to the compact operator \(T\)
   after the separable reduction coming from a singular-value expansion.
   In the resulting upper triangular matrix \(A=[a_{ij}]\), the diagonal
-  is the prescribed non-zero eigenvalue multiset followed by zeros, and
-  therefore
+  is an enumeration of the prescribed algebraic eigenvalue multiset, with
+  zeros inserted as needed, and therefore
   \[
     \sum_{k\ge1}\abs{a_{kk}}^p=\tau_{\mathcal D,p}=\|T\|_p^p.
   \]
@@ -1044,10 +1161,12 @@ partial-sum inequality therefore yields the final claim.
   statement for regularized determinant fibers in every
   \(\mathcal S_p\), \(1<p<\infty\): equality in the sharp
   \(\mathcal S_p\)-budget is again rigid, the same Schur-compression
-  mechanism gives a quantitative near-minimizer constraint, and
+  mechanism gives a fixed-entry near-minimizer constraint, and
   \Cref{thm:finite-dimensional-schatten-stability} upgrades this
-  entrywise constraint to an orbit-level finite-dimensional stability
-  statement on bounded \(\mathcal S_p\)-sets.
+  entrywise constraint to a finite-dimensional bounded-set compactness
+  statement on bounded \(\mathcal S_p\)-sets. No infinite-dimensional
+  \(\mathcal S_p\)-distance-to-orbit estimate is asserted without an
+  additional tail hypothesis.
 \end{remark}
 
 Trace-norm minimality fixes the normal minimizers, but the determinant
@@ -1255,6 +1374,38 @@ case.
   the quasinilpotent sector remains completely free.
 \end{remark}
 
+\begin{definition}[Stable unitary and algebraic root-space quotients]
+  \label{def:root-space-equivalence-relations}
+  Let \(\mathcal D\) satisfy the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}. For a determinant-fiber
+  element \(T\), put
+  \[
+    \mathcal R_\lambda(T)
+    :=\bigcup_{k\ge1}\ker((T-\lambda I)^k),
+    \qquad
+    N_\lambda(T):=(T-\lambda I)|_{\mathcal R_\lambda(T)}
+  \]
+  for \(\lambda\in\Sigma_{\mathcal D}\).
+
+  Two fiber elements \(T,T'\) are \emph{stably unitarily equivalent away
+  from zero}, written \(T\sim_{\mathrm u}T'\), if there exist trace-class
+  quasinilpotents \(Q,Q'\) such that \(T\oplus Q\) and \(T'\oplus Q'\)
+  are unitarily equivalent. This is the unitary relation used for the
+  inherited Hilbert-space root-space operators \(N_\lambda(T)\).
+
+  When \(\Sigma_{\mathcal D}\) is finite, two fiber elements are
+  \emph{algebraically equivalent modulo the zero quasinilpotent sector},
+  written \(T\sim_{\mathrm{alg}}T'\), if, for every
+  \(\lambda\in\Sigma_{\mathcal D}\),
+  \[
+    N_\lambda(T)\quad\text{and}\quad N_\lambda(T')
+  \]
+  are similar as nilpotent matrices. Equivalently, after the Riesz
+  decomposition away from zero, trace-class quasinilpotent summands at
+  \(0\) are ignored and only the algebraic \(GL\)-orbits of the non-zero
+  root-space nilpotents are retained.
+\end{definition}
+
 \begin{theorem}[Quasinilpotent stabilization preserves non-zero root-space invariants]
   \label{thm:quasinilpotent-stabilization-nonzero-invariants}
   Let \(T\in\sone(H)\), \(T'\in\sone(H')\), and let
@@ -1332,7 +1483,7 @@ case.
   Jordan blocks at its non-zero eigenvalues.
 \end{proof}
 
-\begin{theorem}[Stable non-zero skeleton under quasinilpotent stabilization]
+\begin{theorem}[Stable unitary non-zero skeleton under quasinilpotent stabilization]
   \label{thm:stable-nonzero-skeleton-classification}
   Let \(T\in\sone(H)\), \(T'\in\sone(H')\), and suppose that
   \[
@@ -1346,10 +1497,10 @@ case.
     N_\lambda(T):=(T-\lambda I)|_{\mathcal R_\lambda(T)} .
   \]
   Then \(\mathcal R_\lambda(T)\) and \(\mathcal R_\lambda(T')\) are
-  finite-dimensional spaces of the same dimension. If there are
-  trace-class quasinilpotents \(Q,Q'\) such that
-  \(T\oplus Q\) and \(T'\oplus Q'\) are unitarily equivalent, then for
-  every \(\lambda\neq0\) the nilpotent root-space restrictions
+  finite-dimensional spaces of the same dimension. If
+  \(T\sim_{\mathrm u}T'\) in the sense of
+  \Cref{def:root-space-equivalence-relations}, then for every
+  \(\lambda\neq0\) the nilpotent root-space restrictions
   \(N_\lambda(T)\) and \(N_\lambda(T')\), with their inherited Hilbert
   norms, are unitarily equivalent.
 
@@ -1369,7 +1520,7 @@ case.
   algebraic multiplicity by \Cref{lem:fredholm-spectral-rigidity}. Hence
   the root spaces at a fixed \(\lambda\neq0\) are finite-dimensional and
   have the same dimension for \(T\) and \(T'\). If
-  \(T\oplus Q\) and \(T'\oplus Q'\) are unitarily equivalent, then
+  \(T\sim_{\mathrm u}T'\), then
   \Cref{thm:quasinilpotent-stabilization-nonzero-invariants} applies and
   gives unitary equivalence of the restricted nilpotent root-space
   operators at every non-zero \(\lambda\).
@@ -1388,7 +1539,7 @@ case.
   adding quasinilpotent summands at zero.
 \end{proof}
 
-\begin{theorem}[Finite-support quotient by trace-class quasinilpotents]
+\begin{theorem}[Finite-support algebraic quotient by trace-class quasinilpotents]
   \label{thm:finite-support-quasinilpotent-quotient}
   Let \(\mathcal D\) satisfy the hypotheses of
   \Cref{thm:determinant-fiber-trace-minimality}, and assume that
@@ -1420,17 +1571,28 @@ case.
     \left(\bigoplus_{\lambda\in\Sigma_{\mathcal D}}T_\lambda\right)
       \oplus Q_T .
   \]
-  In particular, after quotienting the finite-support determinant fiber
-  by similarity and by arbitrary trace-class quasinilpotent summands at
-  \(0\), the remaining data are exactly the finite-dimensional root-space
-  similarity classes
+  Consequently the map
   \[
-    \bigl\{\,T_\lambda-\lambda I:
-      \lambda\in\Sigma_{\mathcal D}\,\bigr\};
+    [T]_{\sim_{\mathrm{alg}}}
+    \longmapsto
+    \bigl([N_\lambda(T)]_{GL(M_{\mathcal D}(\lambda),\CC)}
+      \bigr)_{\lambda\in\Sigma_{\mathcal D}}
   \]
-  equivalently, at the Jordan-profile level, they are precisely the
-  partitions of \(M_{\mathcal D}(\lambda)\) for
-  \(\lambda\in\Sigma_{\mathcal D}\). These quotient classes have the same
+  is a bijection
+  \[
+    \mathcal F_{\mathcal D}^{\mathrm{fin}}/\!\sim_{\mathrm{alg}}
+    \cong
+    \prod_{\lambda\in\Sigma_{\mathcal D}}
+      \mathrm{Nil}_{M_{\mathcal D}(\lambda)}(\CC)/
+      GL(M_{\mathcal D}(\lambda),\CC),
+  \]
+  where \(\mathcal F_{\mathcal D}^{\mathrm{fin}}\) is the trace-class
+  determinant fiber over \(D_{\mathcal D}\) under the present
+  finite-support hypothesis and
+  \(\mathrm{Nil}_m(\CC)\) denotes nilpotent \(m\times m\) matrices. At the
+  Jordan-profile level, the quotient is equivalently the product of the
+  partition sets of \(M_{\mathcal D}(\lambda)\). These quotient classes
+  have the same
   sharp trace-norm infimum
   \[
     \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
@@ -1483,16 +1645,15 @@ case.
   outside the enclosed non-zero Riesz spectral sets, hence is contained
   in \(\{0\}\). Thus \(Q_T\) is quasinilpotent.
 
-  The preceding decomposition shows that, modulo trace-class
-  quasinilpotent summands at \(0\), a determinant-fiber element with
-  finite non-zero support is represented by the finite-dimensional
-  operators \(T_\lambda\). On
-  \(\mathcal R_\lambda(T)\), the operator \(T_\lambda-\lambda I\) is
-  nilpotent of dimension \(M_{\mathcal D}(\lambda)\), so its similarity
-  class is equivalently its Jordan partition. Conversely,
-  \Cref{thm:nonnormal-jordan-classification} realizes every such
-  partition while preserving the determinant. The statement about the
-  sharp infimum and its attainment is exactly the fixed-profile
+  The preceding decomposition shows that the algebraic relation
+  \(\sim_{\mathrm{alg}}\) is exactly equality of the finite-dimensional
+  nilpotent similarity classes \(N_\lambda(T)\). Hence the displayed map
+  is well defined and injective by definition. It is surjective because
+  \Cref{thm:nonnormal-jordan-classification} realizes, independently for
+  every \(\lambda\in\Sigma_{\mathcal D}\), every nilpotent Jordan
+  partition of size \(M_{\mathcal D}(\lambda)\), while a nilpotent
+  similarity class is determined by its Jordan partition. The statement
+  about the sharp infimum and its attainment is exactly the fixed-profile
   infimum and equality statement in
   \Cref{thm:nonnormal-jordan-classification}.
 \end{proof}
