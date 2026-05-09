@@ -118,25 +118,33 @@ used below.  Let
   L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr).
 \]
 On \(u>0\), \(L(u)=\log u\), and for
-\(u\in\RR\setminus\{0\}\), \(\exp L(u)=u\).  The
-following table is the complete finite witness interface used in the
-Richardson reduction:
+\(u\in\RR\setminus\{0\}\), \(\exp L(u)=u\).  Choose once and for all
+fixed pure EML terms
+\[
+  W_{\exp},W_{\log},W_+,W_-,W_{\mathrm{neg}},
+  W_{\times},W_{\div},W_{\mathrm{sq}},
+  W_{\sqrt{\phantom{x}}},W_{\pi},W_{\sin}
+\]
+from the verified Odrzywo{\l}ek compiler output, with
+\(W_{\exp}=E\), \(W_{\log}=L\), and
+\(W_{\mathrm{sq}}(u)=W_{\times}(u,u)\).  The following table is the
+complete finite witness interface used in the Richardson reduction:
 \[
 \begin{array}{c|c|c}
 \text{real primitive} & \text{fixed verified witness} & \text{real-domain use}\\
 \hline
-\exp u & E(u)=\eml(u,1) & u\in\RR\\
-\operatorname{Log} u & L(u) & u>0\\
-u-v & \text{Part~II, Secs.~2.3 and 2.5, arithmetic table} & u,v\in\RR\\
--u & 1-\bigl(e-((e-1)-u)\bigr) & u\in\RR\\
-u+v & \text{Part~II, Sec.~2.5, arithmetic table after Cor.~4} & u,v\in\RR\\
-1/u & \text{Part~II, Sec.~2.5, arithmetic table after Cor.~4} & u\ne0\\
-uv & \text{Part~II, Sec.~2.5, arithmetic table after Cor.~4} & u,v\in\RR\\
-u/v & \text{Part~II, Sec.~2.5, arithmetic table after Cor.~4} & v\ne0\\
-u^2 & W_{\times}(u,u) & u\in\RR\\
-\sqrt u & \text{Part~II, Sec.~2.5, Cor.~4 and following table} & u\ge0\\
-\pi & \text{Part~II, Sec.~2.5, Cor.~4} & \text{constant}\\
-\sin u & \text{Part~II, Sec.~2.5, table after Cor.~4} & u\in\RR .
+\exp u & W_{\exp}(u)=\eml(u,1) & u\in\RR\\
+\operatorname{Log} u & W_{\log}(u)=L(u) & u>0\\
+u-v & W_-(u,v) & u,v\in\RR\\
+-u & W_{\mathrm{neg}}(u)=1-\bigl(e-((e-1)-u)\bigr) & u\in\RR\\
+u+v & W_+(u,v) & u,v\in\RR\\
+1/u & W_{\div}(1,u) & u\ne0\\
+uv & W_{\times}(u,v) & u,v\in\RR\\
+u/v & W_{\div}(u,v) & v\ne0\\
+u^2 & W_{\mathrm{sq}}(u)=W_{\times}(u,u) & u\in\RR\\
+\sqrt u & W_{\sqrt{\phantom{x}}}(u) & u\ge0\\
+\pi & W_{\pi} & \text{constant}\\
+\sin u & W_{\sin}(u) & u\in\RR .
 \end{array}
 \]
 Here ``Part~II'' means the verification part of the ancillary
@@ -147,26 +155,28 @@ Section~2.4 prints representative compiled expressions, and
 Section~2.5 gives Lemmas~1--3, Corollary~4, the table of remaining
 primitives, and Theorem~5 for the Table~1 class
 \cite[Supplementary Information, Part~II, Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
-The displayed negation row is the clean positive-real witness
-described at the end of Part~II, Section~2.5; after substituting the already fixed
+The symbols \(W_-\), \(W_+\), \(W_{\times}\), \(W_{\div}\),
+\(W_{\sqrt{\phantom{x}}}\), \(W_{\pi}\), and \(W_{\sin}\) name the
+fixed compiled witnesses from that verification record; the displayed
+negation row is the clean positive-real witness described at the end
+of Part~II, Section~2.5.  After substituting the already fixed
 witnesses for subtraction and for \(e=E(1)\), it is a pure EML term.
 Thus the present Richardson translation does not rely on the shorter
 extended-real convention \(L(0)=-\infty\).
 
-The entries that are not printed as compact formulas are not open
-search instructions.  They name fixed pure EML terms from the cited
-Part~II compiler and verification record.  The fixed witness used in
-the translation is the verified Part~II compiled EML term for that
-Table~1 primitive, restricted to the real-domain use in the right-hand
-column.  Thus the
-arithmetic witnesses for \(u\pm v\), \(-u\), \(uv\), and \(u/v\) are
-used for all real arguments on which the operation is defined; the
-logarithm row is used only on \(u>0\), and the square-root row only on
-\(u\ge0\).  Every later occurrence is obtained by substituting into
-these finitely many fixed entries, and no branch choice, witness
-search, or unlisted EML identity from the source is used in the
-Richardson reduction.  With these fixed choices the following
-real-domain properties hold.
+The witness symbols in the table are not open search instructions.
+They are the fixed pure EML terms chosen once from the cited Part~II
+compiler and verification record.  The fixed witness used in the
+translation is the verified Part~II compiled EML term for that
+Table~1 primitive, restricted to the real-domain use in the
+right-hand column.  Thus the arithmetic witnesses for \(u\pm v\),
+\(-u\), \(uv\), and \(u/v\) are used for all real arguments on which
+the operation is defined; the logarithm row is used only on \(u>0\),
+and the square-root row only on \(u\ge0\).  Every later occurrence is
+obtained by substituting into these finitely many fixed entries, and
+no branch choice, witness search, or unlisted EML identity from the
+source is used in the Richardson reduction.  With these fixed choices
+the following real-domain properties hold.
 \begin{enumerate}
 \item For all \(u,v\in\RR\), the chosen witnesses for
   \(u+v\), \(u-v\), and \(uv\) are defined and have those real
@@ -180,11 +190,11 @@ real-domain properties hold.
   there is an effective construction of a witness for every rational
   constant.
 \end{enumerate}
-The middle column records the external source location or displayed
-formula for each fixed verified witness, not an additional hypothesis.
-Principal-domain validity is taken from the Part~II verification, and
-each later use in this paper is restricted to the corresponding
-real-domain entry in the right-hand column.
+The middle column records the chosen witness symbol or compact formula
+for each fixed verified witness, not an additional hypothesis or a
+lookup instruction.  Principal-domain validity is taken from the
+Part~II verification, and each later use in this paper is restricted
+to the corresponding real-domain entry in the right-hand column.
 \end{lemma}
 
 \begin{proof}
