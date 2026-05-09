@@ -29,7 +29,7 @@
 | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +71 chars (threshol) | — |
-| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=5)) | — |
+| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +0 chars (threshold) | — |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | A-DONE (audit 8/10, 9 rounds, 2 final A3) | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +160 chars (thresho) | — |
