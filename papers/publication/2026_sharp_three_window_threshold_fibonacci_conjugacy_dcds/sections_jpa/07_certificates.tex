@@ -29,13 +29,60 @@ Let
 denote the finite support of these stabilized $n$-block laws.
 
 \begin{theorem}[Stabilized block law from discrepancy]\label{thm:tv-certificate}
-For the discrepancy bound on stabilized block laws in the rotation readout
-model, see \cite[Theorem~8.1]{MaZhang2026Nonlinearity}.
+Let $D_N^*(\alpha;x_0)$ denote the interval discrepancy of the orbit segment
+$\{x_0+t\alpha\}_{t=0}^{N-1}$, namely the supremum over circle intervals $I$
+of
+\[
+\left|
+\frac1N\#\{0\le t<N:\{x_0+t\alpha\}\in I\}-|I|
+\right|.
+\]
+Then, for every $m\ge2$ and $n\ge1$,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
+\le (m+n)D_N^*(\alpha;x_0).
+\]
+This is a supporting rotation-source certificate; the structural conjugacy
+results above do not depend on it.
 \end{theorem}
 
+\begin{proof}
+Put $L=m+n-1$.  In the standard two-interval Sturmian coding, the depth-$L$
+raw-word atoms form a partition of the circle into at most $L+1=m+n$
+intervals.  For each such interval $I$ the definition of interval discrepancy
+gives
+\[
+\left|
+\frac1N\#\{0\le t<N:\{x_0+t\alpha\}\in I\}-|I|
+\right|
+\le D_N^*(\alpha;x_0),
+\]
+where $|I|$ denotes Lebesgue length.  Summing over the at most $m+n$ atoms gives
+\[
+D_{\TV}\bigl(\hat{\mu}_{L,N},\mu_L\bigr)
+\le (m+n)D_N^*(\alpha;x_0).
+\]
+Total variation cannot increase under deterministic pushforward.  Applying
+the map $\Phi_{m,n}$ to the two raw-word laws gives the displayed bound.
+\end{proof}
+
 \begin{corollary}[Bound for bounded stabilized-block observables]\label{cor:observable-certificate}
-See \cite[Corollary~8.2]{MaZhang2026Nonlinearity}.
+If $g:\mathcal Y_{m,n}\to\RR$ is bounded, then
+\[
+\left|
+\int g\,d\hat{\eta}_{m,n,N}-\int g\,d\eta_{m,n}
+\right|
+\le
+2\|g\|_\infty (m+n)D_N^*(\alpha;x_0).
+\]
 \end{corollary}
+
+\begin{proof}
+For probability measures $\lambda,\lambda'$ on a finite set,
+$|\int g\,d\lambda-\int g\,d\lambda'|
+\le 2\|g\|_\infty D_{\TV}(\lambda,\lambda')$.  Apply
+Theorem~\ref{thm:tv-certificate}.
+\end{proof}
 
 \subsection{Boundary-layer stability for stabilized blocks}\label{sec:fp:tv:boundary}
 
@@ -54,8 +101,28 @@ for the boundary-layer mass. Let $\mu_{m+n-1}^{(0)}$ and $\mu_{m+n-1}^{(\rho)}$ 
 be the stabilized $n$-block laws.
 
 \begin{proposition}[Boundary-layer control for raw and stabilized block laws]\label{prop:boundary-layer}
-See \cite[Proposition~8.3]{MaZhang2026Nonlinearity}.
+With $L=m+n-1$,
+\[
+D_{\TV}\bigl(\mu_L^{(\rho)},\mu_L^{(0)}\bigr)
+\le L\varepsilon_\rho
+\]
+and therefore
+\[
+D_{\TV}\bigl(\eta_{m,n}^{(\rho)},\eta_{m,n}^{(0)}\bigr)
+\le (m+n-1)\varepsilon_\rho .
+\]
 \end{proposition}
+
+\begin{proof}
+Couple the sharp and blurred readouts by evaluating both on the same source
+point and along the same orbit segment.  The two length-$L$ raw words can
+differ only if at least one of the $L$ sampled readout symbols lies in the
+boundary-error set $\{h:R_\rho(h)\ne R_0(h)\}$.  By the union bound, this event
+has probability at most $L\varepsilon_\rho$.  The coupling characterization of
+total variation gives the raw-word bound.  The stabilized law is the
+deterministic pushforward of the raw-word law under $\Phi_{m,n}$, so data
+processing gives the second bound.
+\end{proof}
 
 \begin{corollary}[Interval-partition resolution certificate]\label{cor:resolution-certificate}
 Assume that the blurred readout need not be a two-interval coding, but that its
@@ -82,19 +149,84 @@ coding.
 The stated interval-complexity hypothesis gives the same empirical-to-limiting
 bound for the blurred raw-word law as in Theorem~\ref{thm:tv-certificate}, and
 data processing gives the corresponding stabilized-law bound. Combine this with
-the boundary-layer estimate of \cite[Proposition~8.3]{MaZhang2026Nonlinearity}
-and apply the triangle inequality.
+Proposition~\ref{prop:boundary-layer} and apply the triangle inequality.
 \end{proof}
 
 \subsection{Recovery of finite-range observables}
 
 \begin{theorem}[Recovery of finite-range observables from stabilized blocks]\label{thm:operational-observable-recovery}
-See \cite[Theorem~8.5]{MaZhang2026Nonlinearity}.
+Assume $m\ge3$ and $n\ge m$.  Let
+$f:\{0,1\}^{m+n-1}\to\RR$ be any finite-range raw observable.  There is a
+unique observable $\widetilde f:\mathcal Y_{m,n}\to\RR$ such that
+\[
+f=\widetilde f\circ\Phi_{m,n}
+\quad\text{on }\{0,1\}^{m+n-1}.
+\]
+It is given by $\widetilde f(y)=f(\Psi_{m,n}(y))$, where
+$\Psi_{m,n}$ is the inverse block decoder from
+Theorem~\ref{thm:block-invertibility}.  Consequently
+\[
+\int f\,d\hat{\mu}_{m+n-1,N}
+=
+\int \widetilde f\,d\hat{\eta}_{m,n,N},
+\qquad
+\int f\,d\mu_{m+n-1}
+=
+\int \widetilde f\,d\eta_{m,n},
+\]
+and
+\[
+\left|
+\int f\,d\hat{\mu}_{m+n-1,N}
+-
+\int f\,d\mu_{m+n-1}
+\right|
+\le
+2\|f\|_\infty (m+n)D_N^*(\alpha;x_0).
+\]
 \end{theorem}
 
+\begin{proof}
+For $m\ge3$ and $n\ge m$, Theorem~\ref{thm:block-invertibility} makes
+$\Phi_{m,n}$ a bijection from $\{0,1\}^{m+n-1}$ onto
+$\mathcal Y_{m,n}$, with inverse $\Psi_{m,n}$.  Therefore the formula
+$\widetilde f(y)=f(\Psi_{m,n}(y))$ is the unique function satisfying
+$f=\widetilde f\circ\Phi_{m,n}$.  The two identities of integrals are simply
+change of variables under deterministic pushforward.  Since
+$\|\widetilde f\|_\infty=\|f\|_\infty$, the last estimate is
+Corollary~\ref{cor:observable-certificate} applied to $\widetilde f$.
+\end{proof}
+
 \begin{corollary}[Bounded-type slopes]\label{cor:tv-bounded-type}
-See \cite[Corollary~8.7]{MaZhang2026Nonlinearity}.
+If $\alpha$ has bounded continued-fraction partial quotients, then there is a
+constant $C_\alpha$ such that, for all $N\ge2$,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
+\le
+C_\alpha(m+n)\frac{\log N}{N}.
+\]
+For $m\ge3$ and $n\ge m$, every recovered finite-range observable in
+Theorem~\ref{thm:operational-observable-recovery} satisfies the corresponding
+bound
+\[
+\left|
+\int f\,d\hat{\mu}_{m+n-1,N}
+-
+\int f\,d\mu_{m+n-1}
+\right|
+\le
+2C_\alpha\|f\|_\infty(m+n)\frac{\log N}{N}.
+\]
 \end{corollary}
+
+\begin{proof}
+The classical discrepancy estimate for irrational rotations with bounded
+partial quotients gives
+$D_N^*(\alpha;x_0)\le C_\alpha\log N/N$, uniformly in the starting point
+\cite{KuipersNiederreiter1974,DrmotaTichy1997}.  Substitute this estimate into
+Theorem~\ref{thm:tv-certificate} and
+Theorem~\ref{thm:operational-observable-recovery}.
+\end{proof}
 
 \begin{remark}
 Theorem~\ref{thm:operational-observable-recovery} and Corollary~\ref{cor:resolution-certificate} quantify the rotation source law after the conjugacy has been established. The finite-sample error terms are the orbit discrepancy and the boundary-layer mass.
