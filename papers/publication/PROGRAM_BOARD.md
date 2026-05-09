@@ -27,7 +27,7 @@
 | `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | JNT | 已投 04-07 | — |
 | `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +405 chars (thresho) | — |
 | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
-| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | A-BLOCKED (scope_contract.md missing) | — |
+| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +71 chars (threshol) | — |
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=5)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +0 chars (threshold) | — |
