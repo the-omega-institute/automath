@@ -46,19 +46,22 @@ rows \(5,6,8,10\) are \(u\)-multiples of rows \(1,2,7,9\),
 respectively. Hence \(\operatorname{rank} B(u)\le 6\), so \(0\) is a
 persistent eigenvalue of multiplicity at least four.
 
-\begin{proposition}[Characteristic polynomial and residue constant]
+\begin{proposition}[Untwisted Perron root and residue constant]
   \label{prop:sync-kernel-spectrum}
-  The matrix \(B=B(1)\) is primitive and satisfies
-  \[
-    \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
-  \]
-  Moreover
+  The matrix \(B=B(1)\) is primitive and every row of \(B\) has sum
+  \(3\). Consequently
   \[
     B\mathbf 1=3\mathbf 1,\qquad
     \rho(B)\le \max_i\sum_j B_{ij}=3,
   \]
-  so \(\rho(B)=3\). The Perron residue constant \(C_B\) of
-  \Cref{def:perron-residue-constant} satisfies
+  so \(\rho(B)=3\), and the Perron eigenvalue \(3\) is simple and is
+  the unique eigenvalue of modulus \(3\).
+  In addition,
+  \[
+    \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+  \]
+  The Perron residue constant \(C_B\) of
+  \Cref{def:perron-residue-constant} is
   \[
     C_B=\frac{243}{272}.
   \]
@@ -87,10 +90,10 @@ explicit paths from \(\st{000}\) to the other states:
 \]
 Thus the digraph of \(B\) is strongly connected. Since there is also the
 self-loop \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
-Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The displayed
-factorisation is then immediate. The spectral-radius statement is a
-separate Perron--Frobenius consequence of the non-negative matrix
-itself. Every row of \(B=B(1)\) has sum \(3\), and hence
+The Perron-root calculation uses only the non-negative matrix \(B\),
+not the factorisation of its characteristic polynomial. Inspecting the
+transition table at \(u=1\), every row of \(B=B(1)\) has sum \(3\), and
+hence
 \[
   B\mathbf 1=3\mathbf 1,\qquad
   \rho(B)\le \max_i\sum_j B_{ij}=\|B\|_\infty=3.
@@ -100,9 +103,13 @@ shows that no eigenvalue has larger modulus. Therefore
 \(\rho(B)=3\). Since \(B\) is primitive, Perron--Frobenius also gives
 that this Perron eigenvalue is simple and is the unique eigenvalue of
 modulus \(3\).
-The displayed factorisation is not used to identify the Perron root;
-it is used only after the row-sum proof of \(\rho(B)=3\), namely for
-the residue computation
+Only after this row-sum argument do we use the determinant
+factorisation. Setting \(u=1\) in \Cref{prop:kernel-delta-explicit}
+gives
+\[
+  \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+\]
+This factorisation is used here only for the residue computation
 \[
   \begin{aligned}
   C_B
@@ -576,34 +583,33 @@ Taking determinants yields the stated factorisation.
     \qquad
     s_a:=r_a+r_a^{-1}=2\cos(\pi a/m).
   \]
-  Then
-  \[
-    \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a).
-  \]
-  Consequently, if
+  Put
   \[
     A_m:=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
       a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+    \qquad
+    \Phi_m^+(s):=\prod_{\alpha\in A_m}(s-\alpha),
   \]
-  then the primitive Fourier blocks of the \(m\)-cyclic lift, after
-  pairing conjugate characters and applying the character-dependent
-  change of variables \(w=zr_a\), give the completed, normalized
-  primitive real factor
+  and \(d_m:=|A_m|\).
+  Then the normalized primitive real factor is the root product
   \[
     P_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
   \]
-  If \(\Phi_m^+(s):=\prod_{\alpha\in A_m}(s-\alpha)\) and
-  \(d_m:=|A_m|\), then the standard Sylvester resultant satisfies
+  Equivalently, it is the ordered resultant
   \[
-    \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr)
-    =P_m(w).
+    P_m(w)=
+    \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr),
   \]
-  This equation is a definition of the ordered elimination convention
-  used below: the monic real cyclotomic polynomial is placed in the
-  first argument. In the reversed order one has
+  where \(\Phi_m^+\) is in the first argument. The reversed order is
+  not used to define \(P_m\); with the standard Sylvester convention it
+  is
   \[
     \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
     =(-1)^{3d_m}P_m(w).
+  \]
+  Moreover, for every \(a\) as above,
+  \[
+    \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a).
   \]
 \end{proposition}
 
@@ -633,15 +639,13 @@ so \Cref{lem:ordered-cyclotomic-resultant} gives
     \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
   \qquad d_m=|A_m|.
 \]
-Thus the real primitive factor obtained from the paired primitive
-Fourier blocks is exactly the ordered resultant with \(\Phi_m^+\) in
-the first slot. The reversed-order resultant is a different polynomial
-when \(3d_m\) is odd. Since \(\deg_s\widehat\Delta=3\), the
+The root product is therefore represented by a resultant only with
+\(\Phi_m^+\) in the first slot. Since \(\deg_s\widehat\Delta=3\), the
 reversed-order identity in \Cref{lem:ordered-cyclotomic-resultant} gives
 \[
-  \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
-  =(-1)^{3d_m}
-    \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr),
+    \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+    =(-1)^{3d_m}
+      \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr),
 \]
 which is the displayed reversed-order sign formula.
 \end{proof}
@@ -766,6 +770,24 @@ minimal-modulus roots of \(R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha)\)
 come exactly from the endpoint factor(s). The final assertion follows
 by formal substitution of the Taylor series.
 \end{proof}
+
+The theorem is meant as an application template, not as a statement
+about the particular ten-state matrix. For a new self-dual kernel the
+required inputs are exactly:
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item a row-sum Perron root \(q\) and primitivity of \(B(1)\);
+  \item an involution exchanging the two labelled edge matrices;
+  \item the strict unitary spectral gap
+  \(\rho(B(e^{it}))<q\) away from \(t=0\);
+  \item an endpoint root \(w(2)=1/q\) that is simple and isolated in
+  modulus;
+  \item an effective interval \(2-\eta\le s\le2\) on which this branch
+  is separated from the other roots and is monotone.
+\end{enumerate}
+Once these verifications are available, no further information about
+the original graph is used: the cyclotomic endpoint selection and the
+large-\(m\) asymptotic expansion follow from the completed determinant
+\(H(w,s)\) alone.
 
 \subsection{Cyclotomic resultants and twisted Perron roots}
 
