@@ -21,6 +21,7 @@ from sage.all import (
     ComplexField,
     GF,
     QQ,
+    QuadraticField,
     PolynomialRing,
     LaurentPolynomialRing,
     SR,
@@ -46,6 +47,88 @@ def sha256(path):
     h = hashlib.sha256()
     h.update(path.read_bytes())
     return h.hexdigest()
+
+
+def _variations(signs):
+    nz = [s for s in signs if s != 0]
+    return sum(1 for a, b in zip(nz, nz[1:]) if a * b < 0)
+
+
+def _sign(value):
+    if value > 0:
+        return 1
+    if value < 0:
+        return -1
+    return 0
+
+
+def sturm_count(poly, left, right):
+    """Count real roots in (left,right) for a QQ univariate polynomial."""
+    if poly.is_zero():
+        raise ValueError("zero polynomial has no finite Sturm count")
+    f = poly.squarefree_part()
+    seq = f.sturm_sequence()
+    left_signs = [_sign(p(left)) for p in seq]
+    right_signs = [_sign(p(right)) for p in seq]
+    return _variations(left_signs) - _variations(right_signs)
+
+
+def circle_crossing_polynomial(radius):
+    """Return a QQ[s] polynomial whose zeros contain circle crossings.
+
+    For real s, a root of H(w,s) on |w|=radius gives a real parameter t
+    under w = radius*((1-t^2)+2*i*t)/(1+t^2). Eliminating t from the
+    real and imaginary parts gives the crossing polynomial.
+    """
+    K = QuadraticField(-1, names=("ii",))
+    ii = K.gen()
+    P = PolynomialRing(K, names=("s", "t"))
+    ss, tt = P.gens()
+    rr = K(radius)
+    ww = rr * ((1 - tt**2) + 2 * ii * tt) / (1 + tt**2)
+    expr = (
+        1 - ss * ww - 5 * ww**2 + 3 * ss * ww**3
+        + (5 - ss**2) * ww**4 + (ss**3 - 6 * ss) * ww**5
+        + (ss**2 - 1) * ww**6
+    ) * (1 + tt**2) ** 6
+    expr = P(expr)
+    real = P.zero()
+    imag = P.zero()
+    for mon, coeff in expr.dict().items():
+        real += QQ(coeff[0]) * ss**mon[0] * tt**mon[1]
+        imag += QQ(coeff[1]) * ss**mon[0] * tt**mon[1]
+    res = real.resultant(imag, tt)
+    Q = PolynomialRing(QQ, names=("s",))
+    return Q(res)
+
+
+def no_circle_crossings(radius, left, right):
+    Q = PolynomialRing(QQ, names=("s",))
+    ss = Q.gen()
+    cross = circle_crossing_polynomial(radius)
+    endpoint_plus = (
+        1 - ss * radius - 5 * radius**2 + 3 * ss * radius**3
+        + (5 - ss**2) * radius**4 + (ss**3 - 6 * ss) * radius**5
+        + (ss**2 - 1) * radius**6
+    )
+    endpoint_minus = (
+        1 + ss * radius - 5 * radius**2 - 3 * ss * radius**3
+        + (5 - ss**2) * radius**4 - (ss**3 - 6 * ss) * radius**5
+        + (ss**2 - 1) * radius**6
+    )
+    return (
+        sturm_count(cross, left, right) == 0
+        and sturm_count(endpoint_plus, left, right) == 0
+        and sturm_count(endpoint_minus, left, right) == 0
+    )
+
+
+def polynomial_negative_on(poly, left, right):
+    crit = poly.derivative()
+    points = [left, right]
+    roots = crit.roots(QQ, multiplicities=False)
+    points.extend(root for root in roots if left < root < right)
+    return all(poly(point) < 0 for point in points)
 
 
 def main():
@@ -189,13 +272,31 @@ def main():
             finite_selection_ok = False
     record("finite_m_branch_selection_4_to_31", finite_selection_ok)
 
-    # Exact rational endpoint samples used by the interval proof in the
-    # manuscript. The Sturm-box interval verification is described in
-    # the appendix; these values are printed here to pin the constants
-    # and make accidental drift visible.
+    Q = PolynomialRing(QQ, names=("s",))
+    sq = Q.gen()
+    endpoint_radius = QQ(1) / 2
+    separation_radius = QQ(101) / 300
+    endpoint_left = QQ(199) / 100
+    endpoint_right = QQ(2)
+    central_left = -endpoint_left
+    central_right = endpoint_left
+    H_at_separation_radius = Q(
+        H(w=separation_radius, s=sq)
+    )
+
+    endpoint_ok = (
+        no_circle_crossings(endpoint_radius, endpoint_left, endpoint_right)
+        and no_circle_crossings(separation_radius, endpoint_left, endpoint_right)
+        and polynomial_negative_on(
+            H_at_separation_radius, endpoint_left, endpoint_right
+        )
+    )
+    central_ok = no_circle_crossings(
+        separation_radius, central_left, central_right
+    )
     record("m0_endpoint_threshold", 2 * cos(pi / 32).n(80) > QQ(199) / 100)
-    record("endpoint_interval_certificate", True)
-    record("central_interval_certificate", True)
+    record("endpoint_interval_certificate", endpoint_ok)
+    record("central_interval_certificate", central_ok)
 
 
 if __name__ == "__main__":
