@@ -67,42 +67,9 @@ The map $\Fold_m$ is the finite-window canonicalization compatible with Fibonacc
 
 \begin{proposition}[Basic properties of $\Fold_m$]\label{thm:fold-suite}
 \leanverified{paper_fibonacci_stabilization_fold_suite}
-For every $m\ge1$, the stabilization map
-$\Fold_m:\{0,1\}^m\to X_m$ satisfies:
-\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
-  \item $\Fold_m$ is well-defined.
-  \item If $x\in X_m$, then $\Fold_m(x)=x$.
-  \item $\Fold_m$ is onto $X_m$.
-  \item The fibers
-  \[
-  \mathcal F_m(x):=\Fold_m^{-1}(\{x\}),\qquad x\in X_m,
-  \]
-  form a partition of $\{0,1\}^m$.  In particular, with
-  $d_m(x):=|\mathcal F_m(x)|$,
-  \[
-  \sum_{x\in X_m}d_m(x)=2^m.
-  \]
-\end{enumerate}
+For the well-definedness, idempotence, surjectivity, and fiber-partition
+properties of $\Fold_m$, see \cite[Theorem~3.2]{MaZhang2026Nonlinearity}.
 \end{proposition}
-
-\begin{proof}
-Proposition~\ref{prop:finite-window-range} says that
-$\Val_m|_{X_m}$ is a bijection from $X_m$ onto the complete residue set
-$\{0,\ldots,F_{m+2}-1\}$.  Hence the inverse appearing in
-Definition~\ref{def:fold} is defined for the residue of every raw word
-$\omega\in\{0,1\}^m$, proving (i).
-
-If $x\in X_m$, then $\Val_m(x)$ already lies in
-$\{0,\ldots,F_{m+2}-1\}$ and the inverse of
-$\Val_m|_{X_m}$ sends this value back to $x$.  Thus $\Fold_m(x)=x$, proving
-(ii).  The same identity shows that every $x\in X_m$ is in the image of
-$\Fold_m$, proving (iii).
-
-Finally, $\Fold_m$ is a function on the finite set $\{0,1\}^m$.  The inverse
-images of its singleton values are pairwise disjoint and their union is the
-whole domain.  Summing their cardinalities gives
-$\sum_{x\in X_m}d_m(x)=|\{0,1\}^m|=2^m$.
-\end{proof}
 
 \subsection{Residue fibers and Fourier formula}\label{sec:stab:fiber}
 
@@ -272,76 +239,9 @@ Reducing modulo $F_{m+2}$ proves the claim.
 \end{proof}
 
 \begin{theorem}[Affine transfer principle]\label{thm:affine-transfer}
-For every $m\ge1$, define
-\[
-C_m:=\sum_{\substack{1\le k\le m\\ k\not\equiv m\!\!\!\pmod 2}}F_{k+1}
-\]
-and
-\[
-\pi_m(r):=F_{m+1}r+C_m\pmod {F_{m+2}}.
-\]
-Then $\pi_m$ is a permutation of $\ZZ/F_{m+2}\ZZ$, and
-\[
-\widetilde d_m(r)=d_m^\sharp(\pi_m(r))
-\qquad\text{for all }r\in\ZZ/F_{m+2}\ZZ.
-\]
-In particular, the canonical and shifted-weight models have the same fiber
-multiset.
+For the affine transfer between the canonical and shifted-weight fiber
+models, see \cite[Theorem~3.6]{MaZhang2026Nonlinearity}.
 \end{theorem}
-
-\begin{proof}
-Define a bijection $\tau_m:\{0,1\}^m\to\{0,1\}^m$ by
-\[
-\tau_m(\omega)_k:=
-\begin{cases}
-\omega_{m+1-k}, & k\equiv m\pmod 2,\\
-1-\omega_{m+1-k}, & k\not\equiv m\pmod 2.
-\end{cases}
-\]
-This is bit reversal followed by parity-selected bit flips.  We compute
-$\Val_m(\tau_m(\omega))$ modulo $F_{m+2}$.  Separating the constant part gives
-\[
-\Val_m(\tau_m(\omega))
-=
-\sum_{k=1}^m(-1)^{m-k}\omega_{m+1-k}F_{k+1}+C_m.
-\]
-With the index $j=m+1-k$, this becomes
-\[
-\Val_m(\tau_m(\omega))
-=
-\sum_{j=1}^m(-1)^{j-1}\omega_jF_{m+2-j}+C_m.
-\]
-Lemma~\ref{lem:cross-multiplication} gives, term by term,
-\[
-F_{m+1}\widetilde{\Val}_m(\omega)
-\equiv
-\sum_{j=1}^m(-1)^{j-1}\omega_jF_{m+2-j}
-\pmod {F_{m+2}}.
-\]
-Thus
-\[
-\Val_m(\tau_m(\omega))
-\equiv F_{m+1}\widetilde{\Val}_m(\omega)+C_m
-=\pi_m(\widetilde{\Val}_m(\omega))
-\pmod {F_{m+2}}.
-\]
-
-Since $\gcd(F_{m+1},F_{m+2})=1$, multiplication by $F_{m+1}$ is invertible
-modulo $F_{m+2}$, so $\pi_m$ is a permutation.  Therefore, for every residue
-$r$,
-\begin{align*}
-\widetilde d_m(r)
-&=
-\#\{\omega:\widetilde{\Val}_m(\omega)\equiv r\pmod {F_{m+2}}\}\\
-&=
-\#\{\omega:\Val_m(\tau_m(\omega))\equiv\pi_m(r)\pmod {F_{m+2}}\}\\
-&=
-\#\{u:\Val_m(u)\equiv\pi_m(r)\pmod {F_{m+2}}\}\\
-&=d_m^\sharp(\pi_m(r)),
-\end{align*}
-where the third equality uses the bijectivity of $\tau_m$ and the last is
-Theorem~\ref{thm:fiber-residue} in residue coordinates.
-\end{proof}
 
 \begin{corollary}[Transfer of multiset-based statistics]\label{cor:affine-transfer-stats}
 For every $m\ge1$, the shifted-weight model and the canonical model have the
