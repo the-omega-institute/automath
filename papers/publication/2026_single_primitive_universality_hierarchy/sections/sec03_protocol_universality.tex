@@ -88,6 +88,14 @@ finite maps \(\Fold_m\) provide the certificate fibers, whereas
 arithmetic is read on the countable set of eventually-zero normal
 forms.
 
+The normalization used here is the stable, eventually-zero
+normalization attached to the value \(\Val\), not a limit operation on
+the compact completion.  The full online normalization and stable
+arithmetic algorithms for Zeckendorf addresses are developed in the
+companion account \cite{ZeckendorfStableArithmetic2026}; in this
+paper we use only the value-transported consequences proved in
+\Cref{prop:fold-confluence,thm:semiring}.
+
 The finite legal-word spaces also form an inverse system under
 coordinate truncation.  The arithmetic used below lives on its
 eventually-zero part, not on the whole compact limit.
@@ -222,6 +230,46 @@ No new identity about Church iteration is involved.  The point is
 that the usual iteration laws remain decidable after the indices are
 placed in Zeckendorf normal form.
 
+\begin{lemma}[Exponent skeleton for a level-zero multiplicative readout]
+\label{lem:level-zero-exponent-skeleton}
+Let \(M\) be a monoid, let \(g\in M\) have infinite order, and put
+\(C=\{g^n:n\in\NN\}\).  If a map
+\(\eta\colon\NN_{\ge1}\to C\) satisfies
+\(\eta(ab)=\eta(a)\eta(b)\), then there is a unique function
+\(e\colon\NN_{\ge1}\to\NN\) such that
+\[
+  \eta(n)=g^{e(n)}
+  \qquad\text{and}\qquad
+  e(ab)=e(a)+e(b).
+\]
+Moreover \(e(1)=0\), and \(e\) is determined by its values on
+primes:
+\[
+  e(n)=\sum_p v_p(n)e(p)
+  \qquad(n\ge1).
+\]
+Consequently \(\eta\) is injective if and only if the additive weight
+map \(n\mapsto\sum_p v_p(n)e(p)\) separates all positive integers.
+\end{lemma}
+
+\begin{proof}
+The infinite order of \(g\) makes \(n\mapsto g^n\) injective, so each
+element of \(C\) has a unique exponent.  This gives the unique
+function \(e\) with \(\eta(n)=g^{e(n)}\).  The multiplicativity of
+\(\eta\) is equivalent, by uniqueness of exponents, to
+\[
+  g^{e(ab)}=g^{e(a)+e(b)},
+\]
+hence to \(e(ab)=e(a)+e(b)\).  Taking \(a=b=1\) gives
+\(e(1)=2e(1)\), so \(e(1)=0\).  If
+\(n=\prod_p p^{v_p(n)}\), repeated use of additivity gives
+\[
+  e(n)=\sum_p v_p(n)e(p).
+\]
+The final assertion follows because \(\eta(a)=\eta(b)\) is equivalent
+to \(e(a)=e(b)\).
+\end{proof}
+
 \begin{theorem}[Level-zero obstruction for multiplicative readout]
 \label{thm:level-zero-obstruction}
 Let \(M\) be a monoid and let \(g\in M\) have infinite order.  Put
@@ -245,16 +293,8 @@ restriction.
 \end{theorem}
 
 \begin{proof}
-Since \(g\) has infinite order, each element of \(C\) has a unique
-form \(g^e\), \(e\in\NN\).  Write
-\[
-  \eta(n)=g^{e(n)} .
-\]
-The displayed multiplicativity condition is equivalent to
-\[
-  e(ab)=e(a)+e(b)\qquad(a,b\ge1).
-\]
-Taking \(a=b=1\) gives \(e(1)=0\).  If \(p\) is prime and
+Let \(e\) be the exponent weight supplied by
+\Cref{lem:level-zero-exponent-skeleton}.  If \(p\) is prime and
 \(e(p)=0\), then \(\eta(p)=\eta(1)\), contrary to injectivity.
 Thus \(e(p)>0\) for every prime \(p\).
 
