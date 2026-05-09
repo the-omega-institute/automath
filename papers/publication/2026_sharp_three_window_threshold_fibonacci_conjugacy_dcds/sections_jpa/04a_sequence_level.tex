@@ -328,9 +328,44 @@ $\psi_m(y_t,\ldots,y_{t+m-1})$ is its first bit, namely $a_t$.
 \end{proof}
 
 \begin{proposition}[Sharp low-window counterexamples]\label{prop:low-window-counterexamples}
-For the sharp low-window counterexamples, see
-\cite[Proposition~4.5]{MaZhang2026Nonlinearity}.
+The threshold in Theorem~\ref{thm:block-invertibility} is sharp.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item At $m=2$, sequence-level injectivity fails:
+  \[
+  \Phi_2(0^{\ZZ})=\Phi_2(1^{\ZZ})=(\ldots,00,00,00,\ldots).
+  \]
+  \item At $m=3$, the finite-block hypothesis $n\ge m$ is sharp:
+  \[
+  \Phi_{3,2}(0001)=\Phi_{3,2}(0110)=(000,001).
+  \]
+\end{enumerate}
 \end{proposition}
+
+\begin{proof}
+For (i), $\Fold_2(00)=00$ by idempotence on $X_2$.  Also
+\[
+\Val_2(11)=F_2+F_3=1+2=3\equiv0\pmod {F_4},
+\]
+and the unique admissible word in $X_2$ with valuation $0$ is $00$; hence
+$\Fold_2(11)=00$.  Every length-$2$ window in $0^{\ZZ}$ is $00$, and every
+length-$2$ window in $1^{\ZZ}$ is $11$, so both stabilized trajectories are
+the constant $00$ trajectory.
+
+For (ii), idempotence gives
+\[
+\Fold_3(000)=000,\qquad \Fold_3(001)=001.
+\]
+For the other block,
+\[
+\Val_3(011)=F_3+F_4=2+3=5\equiv0\pmod {F_5},
+\]
+so $\Fold_3(011)=000$, and
+\[
+\Val_3(110)=F_2+F_3=1+2=3=\Val_3(001),
+\]
+so $\Fold_3(110)=001$.  Thus the two raw length-$4$ blocks $0001$ and
+$0110$ have the same pair of stabilized length-$3$ windows.
+\end{proof}
 
 \begin{theorem}[Complete classification of the two-window branch locus]\label{thm:m2-branch-locus}
 Let
@@ -497,10 +532,26 @@ remaining branch point at $y^\ast$ when it has positive mass.
 \end{proof}
 
 \begin{corollary}[Full block complexity of the one-sided stabilized image]\label{cor:one-sided-complexity}
-For the full block-complexity formula
-$p_{Y_m^+}(n)=2^{n+m-1}$ for $m\ge3$ and $n\ge m$, see
-\cite[Corollary~4.10]{MaZhang2026Nonlinearity}.
+Let
+\[
+p_{Y_m^+}(n):=\#\mathcal L_n(Y_m^+)
+\]
+be the length-$n$ word complexity of the one-sided stabilized image
+$Y_m^+$.  If $m\ge3$ and $n\ge m$, then
+\[
+p_{Y_m^+}(n)=2^{n+m-1}.
+\]
 \end{corollary}
+
+\begin{proof}
+The length-$n$ words in $Y_m^+$ are exactly the image of the finite-block map
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\to X_m^n.
+\]
+The domain has cardinality $2^{n+m-1}$.  Since $m\ge3$ and $n\ge m$,
+Theorem~\ref{thm:block-invertibility} says that $\Phi_{m,n}$ is injective.
+Therefore its image, namely $\mathcal L_n(Y_m^+)$, has the same cardinality.
+\end{proof}
 
 \begin{corollary}[One-sided stabilized-window conjugacy]\label{cor:one-sided-conjugacy}
 For every $m\ge3$, the map
@@ -632,10 +683,53 @@ at most $m$ Fibonacci-weighted additions modulo $F_{m+2}$.
 \end{remark}
 
 \begin{proposition}[Standard dynamical corollaries above threshold]\label{prop:conjugacy-consequences}
-For the standard periodic-point, zeta-function, invariant-measure, and
-ergodic-theoretic consequences above threshold, see
-\cite[Proposition~4.13]{MaZhang2026Nonlinearity}.
+Assume $m\ge3$.  Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item For every $n\ge1$,
+  \[
+  \#\operatorname{Fix}(\sigma^n|_{Y_m})=2^n.
+  \]
+  Hence the Artin--Mazur zeta function is
+  \[
+  \zeta_{Y_m}(z)
+  :=\exp\left(\sum_{n\ge1}
+  \frac{\#\operatorname{Fix}(\sigma^n|_{Y_m})}{n}z^n\right)
+  =
+  \frac{1}{1-2z}.
+  \]
+  \item Pushforward by $\Phi_m$ is a bijection from shift-invariant Borel
+  probability measures on $\{0,1\}^{\ZZ}$ to shift-invariant Borel
+  probability measures on $Y_m$, with inverse pushforward by the local
+  decoder in Theorem~\ref{thm:two-sided-conjugacy}.
+  \item Ergodicity, weak mixing, strong mixing, Bernoulli-ness, the
+  $K$-property, and measure-theoretic entropy are transported exactly through
+  this measure correspondence.
+\end{enumerate}
 \end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:two-sided-conjugacy}, $\Phi_m$ is a topological conjugacy
+between the full two-shift and $(Y_m,\sigma)$, with inverse given by a
+sliding-block code.  A point $y\in Y_m$ is fixed by $\sigma^n$ if and only if
+its inverse image $\Phi_m^{-1}(y)$ is fixed by $\sigma^n$ in the full
+two-shift.  The latter system has exactly $2^n$ points of period dividing
+$n$, one for each binary word of length $n$ repeated periodically.  This
+proves the fixed-point formula.  Substituting it into the definition of the
+Artin--Mazur zeta function gives
+\[
+\zeta_{Y_m}(z)=
+\exp\left(\sum_{n\ge1}\frac{(2z)^n}{n}\right)
+=\exp\bigl(-\log(1-2z)\bigr)
+=\frac{1}{1-2z}.
+\]
+
+The measure correspondence is the pushforward correspondence induced by a
+Borel isomorphism intertwining the two shifts; the inverse map is pushforward
+by the inverse sliding-block decoder.  The properties listed in (iii) are
+standard invariants of measure-theoretic isomorphism, and entropy invariance
+also follows directly from the Kolmogorov--Sinai definition; see
+\cite{Walters1982}.
+\end{proof}
 
 \begin{remark}\label{rem:exact-recoding}
 For $m\ge3$ the stabilized image is a subshift of finite type topologically
