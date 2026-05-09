@@ -101,6 +101,14 @@ the corresponding command block.
     \(\Delta(uz,u^{-1})=\Delta(z,u)\) coefficientwise, which is the
     explicit consistency check used in
     \Cref{prop:kernel-delta-explicit}.
+    The exact Sage output for the two requested checks is therefore
+    \[
+    \begin{aligned}
+      \Delta&=1-(1+u)z-5uz^2+3u(1+u)z^3-u(u^2-3u+1)z^4\\
+      &\qquad +u(u^3-3u^2-3u+1)z^5+u^2(u^2+u+1)z^6,\\
+      \Delta(uz,u^{-1})-\Delta(z,u)&=0.
+    \end{aligned}
+    \]
 
     \medskip
     \noindent\textit{Sage commands.}
@@ -119,7 +127,20 @@ B = Matrix(R, [
     [0,u,u,0,0,0,0,u,0,0]
 ])
 Delta = (identity_matrix(R, 10) - z*B).det().expand()
+Delta
 factor(Delta.subs(u=1))
+
+L.<u,z> = LaurentPolynomialRing(QQ)
+DeltaL = 1-(1+u)*z-5*u*z^2+3*u*(1+u)*z^3 \
+    - u*(u^2-3*u+1)*z^4 \
+    + u*(u^3-3*u^2-3*u+1)*z^5 \
+    + u^2*(u^2+u+1)*z^6
+DeltaDual = 1-(1+1/u)*(u*z)-5*(1/u)*(u*z)^2 \
+    + 3*(1/u)*(1+1/u)*(u*z)^3 \
+    - (1/u)*((1/u)^2-3*(1/u)+1)*(u*z)^4 \
+    + (1/u)*((1/u)^3-3*(1/u)^2-3*(1/u)+1)*(u*z)^5 \
+    + (1/u)^2*((1/u)^2+(1/u)+1)*(u*z)^6
+(DeltaDual - DeltaL).expand()
 \end{verbatim}
 
   \item \textit{Completion and quotient polynomial.}\quad
@@ -181,9 +202,15 @@ ideal(F, diff(F, x), diff(F, y)).groebner_basis()
 
   \item \textit{Discriminant and mod-\(p\) factorisations.}\quad
     The discriminant \(D(s)=\disc_w\widehat\Delta(w,s)\) has degree
-    \(20\) in \(s\) with leading coefficient \(-256\). The command below
-    computes the full polynomial \(D(s)\), confirming both the degree
-    and the leading coefficient. The specialisations
+    \(20\) in \(s\) with leading coefficient \(-256\). The exact Sage
+    output for the metadata used in the proof is
+    \[
+      (D.\operatorname{degree}(),D.\operatorname{leading\_coefficient}())
+      =(20,-256).
+    \]
+    The command below also computes the full polynomial \(D(s)\), so the
+    degree and leading coefficient are reproducible from the printed
+    expression rather than from a fitted numerical value. The specialisations
     used in \Cref{prop:sync-hatdelta-galois-s6-generic} are
     \[
       \widehat\Delta(w,3)=8w^6+9w^5-4w^4+9w^3-5w^2-3w+1
