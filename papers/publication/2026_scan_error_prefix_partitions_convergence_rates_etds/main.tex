@@ -580,23 +580,28 @@ removed from $\mathcal{C}_m$.
 
 \begin{proposition}[Arbitrary-event atomwise Bayes decomposition]
 \label{prop:scan-error-cylinder}
-The standard prefix-cylinder decomposition of
-\cite[Proposition~3.1]{MaZhangPrefixBoundaryRates2026} extends verbatim from
-tail events to arbitrary $\mathcal{B}$-events after null atoms are removed:
-for an arbitrary target event $\mathsf{P}\in\mathcal{B}$, let
-$\mathcal{C}_m$ be the positive atoms of $\mathcal{F}_m$ and
+For an arbitrary target event $\mathsf{P}\in\mathcal{B}$, let
+$\mathcal{C}_m$ be the positive atoms of $\mathcal{F}_m$, put
+$p_C:=\mu(\mathsf{P}\mid C)$ for $C\in\mathcal{C}_m$, and set
 $p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.  Then for every $m\ge 0$,
 \[
 \varepsilon_m(\mathsf{P};\mu)
 =\sum_{C\in\mathcal{C}_m}\mu(C)\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}
 =\EE[\min\{p_m,1-p_m\}].
 \]
+Equivalently, only boundary atoms contribute:
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\sum_{C\in\partial_m\mathsf{P}}\mu(C)\min\{p_C,1-p_C\}.
+\]
 \end{proposition}
 
-\begin{remark}
-Here the statement is used in the larger finite-depth form for arbitrary
-$\mathcal{B}$-events and positive atoms, because later transfer bounds do not require
-$\mathsf{P}\in\mathcal{F}_\infty$.
+\begin{remark}[Provenance]
+For tail events and symbolic cylinders this is the same atomwise Bayes
+decomposition as \cite[Proposition~3.1]{MaZhangPrefixBoundaryRates2026}.
+Here it is recorded directly in the larger finite-depth form for arbitrary
+$\mathcal{B}$-events and positive atoms, because later transfer bounds do not
+require $\mathsf{P}\in\mathcal{F}_\infty$.
 \end{remark}
 
 \begin{proof}
@@ -605,7 +610,10 @@ union of positive atoms.  On each positive atom $C$, inclusion contributes
 local error $\mu(C\setminus\mathsf{P})$ and exclusion contributes
 $\mu(\mathsf{P}\cap C)$; the optimum is their minimum.  Since
 $\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}=\mu(C)\min\{p_C,1-p_C\}$
-where $p_C:=\mu(\mathsf{P}\mid C)$, summing over atoms gives the expectation form.
+where $p_C:=\mu(\mathsf{P}\mid C)$, summing over atoms gives the expectation
+form.  If $C\notin\partial_m\mathsf{P}$, then $p_C\in\{0,1\}$ and the local
+minimum is zero; restricting the sum to $\partial_m\mathsf{P}$ gives the final
+display.
 \end{proof}
 
 \begin{proposition}[Bayes threshold classifier on prefix atoms]
@@ -684,18 +692,92 @@ symmetric-difference error.
 \section{Preliminaries: Discrete Tanaka Representation}
 \label{sec:tanaka}
 
-The quantity $L_m^{1/2}$ is the discrete threshold compensator from
-\cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026}, applied here to the
-posterior martingale $p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)$ at level $1/2$.
+The quantity $L_m^{1/2}$ below is a finite-depth convexity compensator for the
+posterior martingale $p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)$ at threshold
+$1/2$.  It is a predictable loss for the concave function
+$h(u):=\min\{u,1-u\}$ under one-step refinement, not an occupation-density
+local time.
+
+\begin{lemma}[Finite-depth threshold compensator]
+\label{lem:finite-depth-threshold-compensator}
+Let $(\mathcal{F}_m)_{m\ge0}$ be an increasing finite filtration and let
+$(p_m)_{m\ge0}$ be an $[0,1]$-valued martingale adapted to it.  Put
+$h(u):=\min\{u,1-u\}$ and, for $m\ge0$,
+\[
+A_{m+1}^{1/2}
+:=h(p_m)-\EE[h(p_{m+1})\mid\mathcal{F}_m],
+\qquad
+L_m^{1/2}:=\sum_{j=0}^{m-1}A_{j+1}^{1/2},
+\]
+with $L_0^{1/2}=0$.  Then $A_{m+1}^{1/2}\ge0$ a.s. and
+\[
+h(p_m)=h(p_0)+M_m-L_m^{1/2},
+\qquad
+M_m:=\sum_{j=0}^{m-1}
+\left(h(p_{j+1})-\EE[h(p_{j+1})\mid\mathcal{F}_j]\right)
+\]
+is a mean-zero martingale.  Consequently, for every $m\ge0$,
+\[
+\EE[h(p_m)]=\EE[h(p_0)]-\EE[L_m^{1/2}].
+\]
+If the filtration is the positive-atom filtration of
+Definition~\ref{def:positive-atoms}, then on a positive atom
+$C\in\mathcal{C}_j$ the one-step compensator is the explicit atomwise quantity
+\[
+A_{j+1}^{1/2}\big|_C
+=h(p_C)-
+\sum_{\substack{D\in\mathcal{C}_{j+1}\\D\subseteq C}}
+\frac{\mu(D)}{\mu(C)}h(p_D),
+\qquad p_E:=\mu(\mathsf{P}\mid E).
+\]
+\end{lemma}
+
+\begin{proof}
+The function $h$ is concave on $[0,1]$.  Since
+$p_j=\EE[p_{j+1}\mid\mathcal{F}_j]$, conditional Jensen gives
+\[
+h(p_j)=h(\EE[p_{j+1}\mid\mathcal{F}_j])
+\ge \EE[h(p_{j+1})\mid\mathcal{F}_j],
+\]
+so $A_{j+1}^{1/2}\ge0$ a.s.  The increment
+$h(p_{j+1})-\EE[h(p_{j+1})\mid\mathcal{F}_j]$ is
+$\mathcal{F}_{j+1}$-measurable, integrable, and has conditional expectation
+zero over $\mathcal{F}_j$; hence $M_m$ is a mean-zero martingale.
+By the definition of $A_{j+1}^{1/2}$,
+\[
+h(p_{j+1})-h(p_j)
+=\left(h(p_{j+1})-\EE[h(p_{j+1})\mid\mathcal{F}_j]\right)
+-A_{j+1}^{1/2}.
+\]
+Summing this identity from $j=0$ to $m-1$ gives the displayed finite-depth
+decomposition, and taking expectations gives the expectation identity.
+
+For the atomwise formula, fix $C\in\mathcal{C}_j$.  The variable $p_j$ is
+constant on $C$ with value $p_C$.  The positive atoms
+$D\in\mathcal{C}_{j+1}$ contained in $C$ form, modulo null sets, the
+$\mathcal{F}_{j+1}$-refinement of $C$, and $p_{j+1}$ is constant on such a
+$D$ with value $p_D$.  Therefore
+\[
+\EE[h(p_{j+1})\mid\mathcal{F}_j]\big|_C
+=\sum_{\substack{D\in\mathcal{C}_{j+1}\\D\subseteq C}}
+\frac{\mu(D)}{\mu(C)}h(p_D),
+\]
+which is the claimed expression.
+\end{proof}
 
 \begin{theorem}[Arbitrary-event Tanaka representation with residual terminal error]
 \label{thm:scan-tanaka}
 Let $\mathsf{P}\in\mathcal{B}$ and set
-$p_\infty:=\mu(\mathsf{P}\mid\mathcal{F}_\infty)$.  The finite-depth Tanaka
-identity and compensator of \cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026}
-apply to the posterior martingale
-$p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)$.  The local extension is the terminal
-residual formula
+$p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$ and
+$p_\infty:=\mu(\mathsf{P}\mid\mathcal{F}_\infty)$.  Let $L_m^{1/2}$ be the
+finite-depth compensator of
+Lemma~\ref{lem:finite-depth-threshold-compensator} for this posterior
+martingale.  Then for every $m\ge0$,
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\varepsilon_0(\mathsf{P};\mu)-\EE[L_m^{1/2}].
+\]
+Moreover
 \[
 \varepsilon_m(\mathsf{P};\mu)\to
 \varepsilon_\infty(\mathsf{P};\mu)
@@ -710,15 +792,22 @@ and therefore
 \leanverified{paper_prefix_scan_error_tanaka_representation}
 \end{theorem}
 
-\begin{remark}
-The cited proposition treats the tail-measurable case, where the terminal error
-is zero.  The increment here is the arbitrary-event terminal term: the limit is
-the residual best error over $\mathcal{F}_\infty$, not necessarily zero.
+\begin{remark}[Provenance]
+For tail-measurable events the same discrete threshold formula appears in
+\cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026}, where the terminal
+error is zero.  The present proof includes the finite-depth compensator and
+keeps the arbitrary-event terminal term: the limit is the residual best error
+over $\mathcal{F}_\infty$, not necessarily zero.
 \end{remark}
 
 \begin{proof}
-The finite-depth identity is the cited discrete Tanaka identity applied to the
-martingale $p_m$.  L\'{e}vy's upward theorem
+Apply Lemma~\ref{lem:finite-depth-threshold-compensator} to the posterior
+martingale $p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)$ and take expectations.
+Proposition~\ref{prop:scan-error-cylinder} gives
+$\varepsilon_j(\mathsf{P};\mu)=\EE[h(p_j)]$ at every finite depth $j$,
+including $j=0$, so the finite-depth identity follows.
+
+L\'{e}vy's upward theorem
 \cite{Doob1953,Williams1991,Durrett2019} gives $p_m\to p_\infty$ in $L^1$.
 Since $u\mapsto\min\{u,1-u\}$ is $1$-Lipschitz and
 Proposition~\ref{prop:scan-error-cylinder} gives the Bayes-risk formula,
@@ -736,8 +825,14 @@ For any $\mathsf{Q}\in\mathcal{F}_\infty$,
 with equality for the threshold classifier
 $\mathsf{Q}_\infty^\star:=\{p_\infty\ge 1/2\}\in\mathcal{F}_\infty$.  Thus
 $\varepsilon_\infty(\mathsf{P};\mu)=\EE[\min\{p_\infty,1-p_\infty\}]$, and the
-identity for $\EE[L_\infty^{1/2}]$ follows from monotone convergence applied
-to the cited nondecreasing compensators.
+identity for $\EE[L_\infty^{1/2}]$ follows by monotone convergence, because
+$L_m^{1/2}$ is an increasing sum of nonnegative increments and
+\[
+\EE[L_m^{1/2}]
+=\varepsilon_0(\mathsf{P};\mu)-\varepsilon_m(\mathsf{P};\mu)
+\uparrow
+\varepsilon_0(\mathsf{P};\mu)-\varepsilon_\infty(\mathsf{P};\mu).
+\]
 \end{proof}
 
 \begin{corollary}[Tail-measurable specialization]
@@ -1784,42 +1879,84 @@ event.
 
 \begin{proposition}[Positive-atom transfer upper bound]
 \label{thm:boundary-dimension}
-The count-based cylinder estimate of
-\cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026} is used here with the
-following local increment: $\mathsf{P}$ may be an arbitrary event in
-$\mathcal{B}$, and the cylinder hypothesis is imposed only on positive atoms of
-the present filtration.  Under these replacements, if
-$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on every positive
-$C\in\mathcal{C}_m$, the same upper estimate and the same subcritical
-boundary-count consequence hold.
+Let $\mathsf{P}\in\mathcal{B}$ and assume that
+$\lambda_{\mathrm{cyl}}>1$.  Suppose that for some $K>0$ and all sufficiently
+large $m$,
+\[
+\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}
+\qquad\text{for every }C\in\mathcal{C}_m.
+\]
+Then, for all sufficiently large $m$,
+\[
+\varepsilon_m(\mathsf{P};\mu)
+\le \frac{K}{2}N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+Consequently, if
+$d:=\overline{\dim}_B(\partial\mathsf{P})<1$, then for every
+$0<\eta<1-d$ there is $m_\eta$ such that, for all $m\ge m_\eta$,
+\[
+\varepsilon_m(\mathsf{P};\mu)
+\le \frac{K}{2}
+\lambda_{\mathrm{cyl}}^{-(1-d-\eta)m}.
+\]
+In particular the scan error decays exponentially whenever the boundary-count
+exponent is subcritical.
 \leanverified{paper_prefix_scan_error_boundary_dimension_upper}
 \end{proposition}
 
-\begin{remark}
-The cited proposition is stated for the sibling paper's tail-event setting.
-Here the transfer is deliberately finite-depth: no
-$\mathsf{P}\in\mathcal{F}_\infty$ specialization is imposed before applying the
-bound.
+\begin{remark}[Provenance]
+For tail events and symbolic cylinders this is the positive-atom analogue of
+\cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026}.  Here the estimate is
+proved directly at finite depth: no $\mathsf{P}\in\mathcal{F}_\infty$
+specialization is imposed before applying the bound.
 \end{remark}
 
 \begin{proof}
-Combine Proposition~\ref{prop:scan-error-cylinder} with the counting argument
-of \cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026}; null atoms are
-omitted by definition, and non-boundary positive atoms have zero local Bayes
-contribution.
+By Proposition~\ref{prop:scan-error-cylinder},
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\sum_{C\in\partial_m\mathsf{P}}\mu(C)\min\{p_C,1-p_C\}.
+\]
+For every boundary atom, $\min\{p_C,1-p_C\}\le1/2$.  The uniform atom-mass
+upper bound therefore gives
+\[
+\varepsilon_m(\mathsf{P};\mu)
+\le \sum_{C\in\partial_m\mathsf{P}}\frac{K}{2}\lambda_{\mathrm{cyl}}^{-m}
+=\frac{K}{2}N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+If $d=\overline{\dim}_B(\partial\mathsf{P})$, then the definition of the
+limsup gives, for every $\eta>0$, an index $m_\eta$ such that
+$N_m(\partial\mathsf{P})\le
+\lambda_{\mathrm{cyl}}^{(d+\eta)m}$ for all $m\ge m_\eta$.  Substitution gives
+the displayed exponential estimate.  Null atoms do not appear because
+$\mathcal{C}_m$ was defined after removing them.
 \end{proof}
 
 \begin{corollary}[Positive-atom two-sided transfer under thickness]
 \label{thm:volume-boundary-scaling}
-The two-sided count law of
-\cite[Proposition~5.4]{MaZhangPrefixBoundaryRates2026} is used here for
-arbitrary $\mathcal{B}$-events after replacing cylinders by positive atoms and
-keeping the same uniform mass and thickness assumptions.  The local refinement
-is that the exponential conclusion is asserted only from the explicit count
-asymptotic
-$N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, which is
-stronger than the corresponding limsup dimension condition; under that
-additional hypothesis,
+Let $\mathsf{P}\in\mathcal{B}$ and assume that
+$\lambda_{\mathrm{cyl}}>1$.  Suppose that there are constants
+$c_-,c_+>0$ such that, for all sufficiently large $m$ and all
+$C\in\mathcal{C}_m$,
+\[
+c_-\lambda_{\mathrm{cyl}}^{-m}
+\le\mu(C)\le
+c_+\lambda_{\mathrm{cyl}}^{-m}.
+\]
+Assume also a uniform boundary-thickness constant $\theta>0$: for all
+sufficiently large $m$ and every $C\in\partial_m\mathsf{P}$,
+\[
+\min\{p_C,1-p_C\}\ge\theta,
+\qquad p_C:=\mu(\mathsf{P}\mid C).
+\]
+Then, for all sufficiently large $m$,
+\[
+\theta c_-N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}
+\le \varepsilon_m(\mathsf{P};\mu)
+\le \frac{c_+}{2}N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+In particular, if
+$N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then
 \[
 \lim_{m\to\infty}\left(-\frac{1}{m}\log_{\lambda_{\mathrm{cyl}}}\varepsilon_m\right)=1-\delta,
 \]
@@ -1827,19 +1964,42 @@ so $\varepsilon_m$ has exponential decay exponent $1-\delta$, where $\delta$
 is the exponential growth exponent of $N_m(\partial\mathsf{P})$.
 \end{corollary}
 
-\begin{remark}
-The cited proposition supplies the two-sided transfer estimate in the sibling's
-tail-event setting.  The increment here is the arbitrary-event positive-atom
-scope together with the separation of the exact count asymptotic from the
-weaker limsup boundary dimension.
+\begin{remark}[Provenance]
+For tail events and symbolic cylinders this is the positive-atom analogue of
+\cite[Proposition~5.4]{MaZhangPrefixBoundaryRates2026}.  The present statement
+keeps the arbitrary-event positive-atom scope and separates the exact count
+asymptotic from the weaker limsup boundary dimension.
 \end{remark}
 
 \begin{proof}
-The positive-atom version follows from Proposition~\ref{prop:scan-error-cylinder}
-by the same decomposition used in
-\cite[Proposition~5.4]{MaZhangPrefixBoundaryRates2026}.  Substituting the
-displayed exact count asymptotic into that two-sided estimate gives the stated
-exponential rate.
+Again Proposition~\ref{prop:scan-error-cylinder} gives
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\sum_{C\in\partial_m\mathsf{P}}\mu(C)\min\{p_C,1-p_C\}.
+\]
+For the lower bound, each boundary summand is at least
+$c_-\lambda_{\mathrm{cyl}}^{-m}\theta$, so
+\[
+\varepsilon_m(\mathsf{P};\mu)
+\ge
+\theta c_-N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+For the upper bound, each boundary summand is at most
+$c_+\lambda_{\mathrm{cyl}}^{-m}/2$, so
+\[
+\varepsilon_m(\mathsf{P};\mu)
+\le
+\frac{c_+}{2}N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+
+If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, the
+two-sided estimate says
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}
+\]
+up to fixed positive multiplicative constants.  Taking
+$-\frac1m\log_{\lambda_{\mathrm{cyl}}}$ gives the stated limit.
 \end{proof}
 
 \begin{remark}[Tail specialization of the transfer principles]
@@ -4801,12 +4961,24 @@ positive atoms of the present filtration.
 
 \begin{theorem}[Log-regular transfer with polynomial boundary-count correction]
 \label{thm:nonuniform-cylinder}
-The polynomial-distortion transfer principle of
-\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026} is used here after the
-same positive-atom, arbitrary-event replacement as in
-Corollary~\ref{thm:volume-boundary-scaling}.  The additional local statement is
-the polynomial boundary-count correction: if, besides the cited hypotheses, for
-some $\beta\ge 0$ and $A_-,A_+>0$,
+Let $\mathsf{P}\in\mathcal{B}$ and assume that $\mu$ is log-regular with
+exponent $\alpha\ge0$ and constants $c_1,c_2>0$ in the sense of
+Definition~\ref{def:log-regular}.  Suppose also that there is a uniform
+boundary-thickness constant $\theta>0$ such that, for all sufficiently large
+$m$ and every $C\in\partial_m\mathsf{P}$,
+\[
+\min\{p_C,1-p_C\}\ge\theta,
+\qquad p_C:=\mu(\mathsf{P}\mid C).
+\]
+Then, for all sufficiently large $m$,
+\[
+\theta c_1m^{-\alpha}
+N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}
+\le \varepsilon_m(\mathsf{P};\mu)
+\le \frac{c_2}{2}m^\alpha
+N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+If in addition, for some $\beta\ge 0$ and $A_-,A_+>0$,
 \[
 A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{\delta m}
 \le N_m(\partial\mathsf{P})
@@ -4821,19 +4993,43 @@ for all large $m$, then for all large $m$,
 \leanverified{paper_prefix_scan_error_nonuniform_cylinder}
 \end{theorem}
 
-\begin{remark}
-The cited proposition gives the polynomial-distortion transfer in the sibling's
-tail-event setting.  The increment here is the arbitrary-event positive-atom
-scope together with the final two-sided polynomial correction when
-$N_m(\partial\mathsf{P})$ itself is known up to polynomial factors.
+\begin{remark}[Provenance]
+For tail events and symbolic cylinders this is the positive-atom analogue of
+\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026}.  The present theorem
+is stated and proved directly for arbitrary events, with the final two-sided
+polynomial correction when $N_m(\partial\mathsf{P})$ itself is known up to
+polynomial factors.
 \end{remark}
 
 \begin{proof}
-Apply the estimate from
-\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026} in the positive-atom
-form justified by Proposition~\ref{prop:scan-error-cylinder}.  Substituting the
-two-sided polynomial bounds for $N_m(\partial\mathsf{P})$ gives the displayed
-estimate.
+Proposition~\ref{prop:scan-error-cylinder} gives
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\sum_{C\in\partial_m\mathsf{P}}\mu(C)\min\{p_C,1-p_C\}.
+\]
+For every large $m$ and every positive atom $C\in\mathcal{C}_m$,
+log-regularity gives
+\[
+c_1m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}
+\le \mu(C)\le
+c_2m^\alpha\lambda_{\mathrm{cyl}}^{-m}.
+\]
+On boundary atoms the thickness hypothesis gives
+$\min\{p_C,1-p_C\}\ge\theta$, while the trivial upper bound gives
+$\min\{p_C,1-p_C\}\le1/2$.  Summing these two atomwise estimates over the
+$N_m(\partial\mathsf{P})$ boundary atoms yields
+\[
+\theta c_1m^{-\alpha}
+N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}
+\le \varepsilon_m(\mathsf{P};\mu)
+\le \frac{c_2}{2}m^\alpha
+N_m(\partial\mathsf{P})\lambda_{\mathrm{cyl}}^{-m}.
+\]
+Substituting
+$A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{\delta m}\le
+N_m(\partial\mathsf{P})\le
+A_+m^\beta\lambda_{\mathrm{cyl}}^{\delta m}$
+into this estimate gives the displayed polynomial correction.
 \end{proof}
 
 \begin{example}[Filtration-level sharpness example]
