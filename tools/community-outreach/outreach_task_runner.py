@@ -600,7 +600,7 @@ def _run_paper_trade(task: TaskSpec) -> tuple[bool, str]:
         f"Required topical coverage: Wilson CI choice (pick one or two specific places to ask), "
         f"saturation-region detection (ask about thresholds / how to draw the saturation boundary), "
         f"same-conversation different-prompting-strategy axis (the meta-prompt 40→9100 char observation we shared — "
-        f"ask how his framework treats this). Write 600-1500 char total. Output plain text only, no JSON wrapper.\n\n"
+        f"ask how his framework treats this). Write 2800-4500 char total — each anchored question gets a real paragraph, not a one-liner. Output plain text only, no JSON wrapper.\n\n"
         f"# Constraints\n\n{constraints_block}\n\n"
         f"# Summary\n\n{summary_path.read_text(encoding='utf-8')}\n"
         f"{retry_block(retry_questions)}"
