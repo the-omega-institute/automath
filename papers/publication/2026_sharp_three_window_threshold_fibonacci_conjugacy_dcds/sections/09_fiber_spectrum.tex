@@ -129,7 +129,20 @@ $\Sigma_1=2$, $\Sigma_2=6$, and $\Sigma_3=14$.
 
 \subsection{Finite enumerations}\label{sec:fiber-enumerations}
 
-Table~\ref{tab:sanity-fibers} lists representative exact values from the enumeration up to $m=22$. Throughout, $F_1=F_2=1$ and $|X_m|=F_{m+2}$. Since the minimum fiber size is always $1$, only the maximal fiber size and the second moment $\Sigma_m$ are recorded.
+Table~\ref{tab:sanity-fibers} lists representative exact values from the enumeration up to $m=22$. Throughout, $F_1=F_2=1$ and $|X_m|=F_{m+2}$. Since the minimum fiber size is always $1$, only the maximal fiber size and the second moment $\Sigma_m$ are recorded. The enumeration is the direct residue-count algorithm
+\[
+d_m(r)=
+\bigl|\{\omega\in\{0,1\}^m:\Val_m(\omega)\equiv r\pmod {F_{m+2}}\}\bigr|,
+\qquad
+\Sigma_m=\sum_{r=0}^{F_{m+2}-1}d_m(r)^2,
+\]
+with the maximum taken over the same residue counts. Equivalently, initialize
+an array $d[0],\ldots,d[F_{m+2}-1]$ to zero, loop through all binary words
+$\omega$ of length $m$, increment
+$d[\Val_m(\omega)\bmod F_{m+2}]$, and then compute $\max_r d[r]$ and
+$\sum_r d[r]^2$. This is independent of any choice of legal representative
+because Proposition~\ref{prop:finite-window-range} identifies $X_m$ with the
+complete residue system modulo $F_{m+2}$.
 
 \begin{table}[t]
 \centering
@@ -148,4 +161,10 @@ $m$ & $|X_m|$ & $\max d_m$ & $\Sigma_m$ \\
 \end{tabular}
 \end{table}
 
-The full enumeration up to $m=22$ agrees with the recurrence in Proposition~\ref{prop:second-moment-recurrence}. An independent shifted-weight computation gives the same values, as predicted by Theorem~\ref{thm:affine-transfer}.
+The full enumeration up to $m=22$ agrees with the recurrence in Proposition~\ref{prop:second-moment-recurrence}; for example the recurrence gives
+\[
+\Sigma_{22}=2\Sigma_{21}+2\Sigma_{20}-2\Sigma_{19}=452899840,
+\]
+matching the direct residue count in the table. An independent shifted-weight
+computation gives the same values, as predicted by
+Theorem~\ref{thm:affine-transfer}.

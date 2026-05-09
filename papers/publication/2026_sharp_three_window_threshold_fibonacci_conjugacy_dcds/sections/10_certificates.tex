@@ -86,13 +86,26 @@ Theorem~\ref{thm:tv-certificate}.
 
 \subsection{Boundary-layer stability for stabilized blocks}\label{sec:fp:tv:boundary}
 
-Let $R_0:H\to\{0,1\}$ denote the sharp indicator readout and let $R_\rho:H\to\{0,1\}$ be a binary finite-resolution readout obtained from a smoothed kernel with resolution parameter $\rho$. Write
+Let $(H,\mathcal B,\mu,T)$ be measure preserving. Let
+$R_0:H\to\{0,1\}$ denote the sharp indicator readout and let
+$R_\rho:H\to\{0,1\}$ be a binary finite-resolution readout obtained from a
+smoothed kernel with resolution parameter $\rho$. Write
 \[
+E_\rho:=\{h\in H:\ R_\rho(h)\neq R_0(h)\},
+\qquad
 \varepsilon_\rho
 :=
-\mu\bigl(\{h\in H:\ R_\rho(h)\neq R_0(h)\}\bigr)
+\mu(E_\rho)
 \]
-for the boundary-layer mass. Let $\mu_{m+n-1}^{(0)}$ and $\mu_{m+n-1}^{(\rho)}$ be the corresponding raw-word marginals on $\{0,1\}^{m+n-1}$, and let
+for the boundary-layer mass. For each block length $L$, the sharp and blurred
+words are coupled along the same orbit:
+\[
+\bigl(R_0(T^j h)\bigr)_{j=0}^{L-1},
+\qquad
+\bigl(R_\rho(T^j h)\bigr)_{j=0}^{L-1}.
+\]
+Let $\mu_{m+n-1}^{(0)}$ and $\mu_{m+n-1}^{(\rho)}$ be the corresponding
+raw-word marginals on $\{0,1\}^{m+n-1}$, and let
 \[
 \eta_{m,n}^{(0)}:=(\Phi_{m,n})_*\mu_{m+n-1}^{(0)},
 \qquad
@@ -114,14 +127,23 @@ D_{\TV}\bigl(\eta_{m,n}^{(\rho)},\eta_{m,n}^{(0)}\bigr)
 \end{proposition}
 
 \begin{proof}
-Couple the sharp and blurred readouts by evaluating both on the same source
-point and along the same orbit segment.  The two length-$L$ raw words can
-differ only if at least one of the $L$ sampled readout symbols lies in the
-boundary-error set $\{h:R_\rho(h)\ne R_0(h)\}$.  By the union bound, this event
-has probability at most $L\varepsilon_\rho$.  The coupling characterization of
-total variation gives the raw-word bound.  The stabilized law is the
-deterministic pushforward of the raw-word law under $\Phi_{m,n}$, so data
-processing gives the second bound.
+Under the common-orbit coupling displayed above, the two length-$L$ raw words
+can differ only if $T^j h\in E_\rho$ for at least one $0\le j\le L-1$.
+Therefore
+\[
+\PP\{\text{the two length-}L\text{ words differ}\}
+\le
+\sum_{j=0}^{L-1}\mu(T^{-j}E_\rho)
+=
+L\mu(E_\rho)
+=
+L\varepsilon_\rho,
+\]
+where measure preservation is used in the equality
+$\mu(T^{-j}E_\rho)=\mu(E_\rho)$. The coupling characterization of total
+variation gives the raw-word bound. The stabilized law is the deterministic
+pushforward of the raw-word law under $\Phi_{m,n}$, so data processing gives
+the second bound.
 \end{proof}
 
 \begin{corollary}[Interval-partition resolution certificate]\label{cor:resolution-certificate}

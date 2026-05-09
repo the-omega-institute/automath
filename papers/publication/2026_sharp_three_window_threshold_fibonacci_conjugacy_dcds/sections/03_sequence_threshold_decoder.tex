@@ -299,6 +299,67 @@ are equal.  These intervals cover all indices $0,\ldots,n+m-2$, so the two
 raw blocks are equal.
 \end{proof}
 
+\begin{corollary}[Residue decoder in algorithmic form]\label{cor:residue-decoder-algorithm}
+Assume $m\ge3$ and let
+$W=(y_0,\ldots,y_{m-1})\in\mathcal L_m(Y_m)$. The first raw bit of the unique
+preimage block of $W$ is obtained by the following finite procedure.
+
+For $m=3$, compute
+\[
+r_t:=\Val_3(y_t)\in\{0,\ldots,4\},\qquad
+q:=r_0-r_1-r_2\pmod 5.
+\]
+Set
+\[
+a_4=
+\begin{cases}
+0, & q\in\{0,1\},\\
+1, & q\in\{3,4\},\\
+0, & q=2,\ r_0=1,\\
+1, & q=2,\ r_0=0,\\
+0, & q=2,\ r_0=3,\ r_2\in\{0,2\},\\
+1, & q=2,\ r_0=3,\ r_2\in\{1,4\}.
+\end{cases}
+\]
+Then decode $(a_2,a_3)$ from the value
+$r_2-3a_4\pmod 5$ under the table
+$0\mapsto(0,0)$, $1\mapsto(1,0)$, $2\mapsto(0,1)$,
+$3\mapsto(1,1)$, and decode $(a_0,a_1)$ from
+$r_0-3a_2\pmod 5$ by the same table. Return $a_0$.
+
+For $m\ge4$, compute $r_t:=\Val_m(y_t)$ for $0\le t\le m-1$. For
+$0\le t\le m-3$, form
+\[
+q_t:=r_t-r_{t+1}-r_{t+2}\pmod {F_{m+2}}
+\]
+with representative in $\{0,\ldots,F_{m+2}-1\}$, and set
+\[
+a_{t+m+1}=
+\begin{cases}
+0, & q_t\in\{0,1,2\},\\
+1, & q_t\in\{F_m,F_m+1,F_m+2\}.
+\end{cases}
+\]
+Next recover $(a_{m-1},a_m)$ from
+\[
+r_{m-1}-\sum_{j=2}^{m-1}a_{m-1+j}F_{j+2}\pmod {F_{m+2}}
+\]
+using the injective table $0\mapsto(0,0)$, $1\mapsto(1,0)$,
+$2\mapsto(0,1)$, $3\mapsto(1,1)$ for $u+2v$. Finally, for
+$j=m-2,m-3,\ldots,0$, subtract the already known tail
+$\sum_{i=1}^{m-1}a_{j+i}F_{i+2}$ from $r_j$ modulo $F_{m+2}$; the result is
+$a_j\in\{0,1\}$. Return $a_0$.
+\end{corollary}
+
+\begin{proof}
+The case $m=3$ is exactly the branch test and back-substitution in
+Lemma~\ref{lem:m3-decoder}.  For $m\ge4$, the test for $a_{t+m+1}$ is
+equation~\eqref{eq:block-decoder-qt} and the disjointness of the two residue
+ranges in the proof of Theorem~\ref{thm:block-invertibility}.  The subsequent
+two-bit and one-bit back-substitutions are the last two reconstruction steps
+in that proof.
+\end{proof}
+
 \begin{corollary}[Explicit sliding-block decoder above threshold]\label{cor:explicit-decoder}
 \leanpending{paper_fibonacci_stabilization_explicit_decoder}
 Assume $m\ge3$.  For each allowed word
@@ -310,7 +371,9 @@ let
 \Psi_{m,m}(W)=a_0a_1\ldots a_{2m-2}
 \]
 be the unique raw block whose $\Phi_{m,m}$-image is $W$, as supplied by
-Theorem~\ref{thm:block-invertibility}.  Define
+Theorem~\ref{thm:block-invertibility}; equivalently, it is computed by the
+finite residue procedure in Corollary~\ref{cor:residue-decoder-algorithm}.
+Define
 \[
 \psi_m(W):=a_0.
 \]
