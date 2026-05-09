@@ -34,7 +34,7 @@
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | B-PAUSED (Oracle infra retry needed at B10) | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +133 chars (thresho) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | — |
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
