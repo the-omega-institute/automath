@@ -31,6 +31,13 @@ Thus \(S_0(m)=\card{X_m}=F_{m+2}\), \(S_1(m)=2^m\), and for \(q\ge 2\),
 In particular, \(S_q(0)=1\) for every \(q\ge0\).
 \end{definition}
 
+\begin{remark}
+For \(m\ge1\) this is the collision-moment definition of
+\cite[Definition~\textup{``Collision moments''}]{MaZhangProjectionCore2026};
+the local convention also includes the empty window \(m=0\), needed below for
+the exact finite-state initial condition.
+\end{remark}
+
 \begin{theorem}[Finite-state collision kernels]
 \label{thm:collision-kernel}
 \leanverified{paper_projection_collision_kernel}
@@ -43,6 +50,13 @@ For every integer \(q\ge 2\), there exist a finite nonnegative integer matrix
 Moreover, \(A_q\) may be chosen trim: every state of the underlying automaton
 lies on a directed path from the initial state to an accepting terminal state.
 \end{theorem}
+
+\begin{remark}
+\cite[Proposition~\textup{``Finite collision automaton''}]{MaZhangProjectionCore2026}
+gives the companion collision automaton.  The local increment is the trimmed
+\(m=0\)-inclusive realization reconstructed from the hash-pinned
+overflow-aware normalizer used in Appendix~\ref{app:transducer}.
+\end{remark}
 
 \begin{proof}
 Appendix~\ref{app:transducer} makes the construction explicit.  Choose the
@@ -75,9 +89,13 @@ matrix of this trim automaton, let \(u_q\) select the initial state, and let
 \begin{theorem}[Symmetric compression]
 \label{thm:symmetric-compression}
 \leanverified{paper_projection_symmetric_compression}
-Let \(k\) be the number of states of the one-copy augmented fold automaton from
-Appendix~\ref{app:transducer}.  The kernel \(A_q\) of
-\Cref{thm:collision-kernel} admits a symmetric quotient
+Let
+\[
+  k:=|\widehat Q|=2\,|Q|\,(2^{L+2}-1)
+\]
+be the number of states of the overflow-aware one-copy augmented fold automaton
+of \Cref{prop:appendix-collision-automaton}.  The kernel \(A_q\) of
+\Cref{thm:collision-kernel} admits an overflow-aware symmetric quotient
 \(\widetilde A_q\) acting on histogram states of cardinality
 \[
   \binom{k+q-1}{k-1},
@@ -91,6 +109,14 @@ such that
 In particular, for fixed \(k\) the state-space dimension grows polynomially in
 \(q\).
 \end{theorem}
+
+\begin{remark}
+The symmetric quotient in
+\cite[Theorem~\textup{``Symmetric compression''}]{MaZhangProjectionCore2026}
+uses the companion one-copy state set.  The local increment is the explicit
+overflow-aware state count \(k=2|Q|(2^{L+2}-1)\), corresponding to the residual
+bound \(L+1\) and the deletion flag in Appendix~\ref{app:transducer}.
+\end{remark}
 
 \begin{proof}
 Let \(\widehat Q\) be the one-copy augmented state set from
@@ -122,99 +148,31 @@ the same eigenvalue, and therefore \(\rho(\widetilde A_q)=\rho(A_q)\).
 \begin{corollary}[Algebraic realization of the partition constants]
 \label{cor:lambda-algebraic}
 \leanverified{paper_projection_lambda_algebraic}
-For every integer \(q\ge 2\), the partition constant \(\lambda_q\) of
-\Cref{thm:all-q-transfer} is the spectral radius of a nonnegative integer
-matrix.  More precisely,
-\[
-  \lambda_q=\rho(A_q)=\rho(\widetilde A_q),
-\]
-where \(\widetilde A_q\) may be chosen to have dimension polynomial in \(q\).
-In particular, \(\lambda_q\) is an algebraic integer.
+See
+\cite[Corollary~\textup{``Algebraic realization of the partition constants''}]{MaZhangProjectionCore2026}.
 \end{corollary}
-
-\begin{proof}
-By \Cref{thm:all-q-transfer}, \(\lambda_q=r_q\) for \(q\ge 2\).  The claimed
-matrix realizations are exactly those of \Cref{thm:collision-kernel} and
-\Cref{thm:symmetric-compression}.  Since \(\widetilde A_q\) is an integer
-matrix, its spectral radius is a root of its characteristic polynomial.
-\end{proof}
 
 \begin{proposition}[Hankel positivity and cross-moment convexity]
 \label{prop:hankel-psd}
-For fixed \(m\), the Hankel matrix
-\[
-  H_r^{(m)}:=[S_{i+j}(m)]_{0\le i,j\le r}
-\]
-is positive semidefinite for every \(r\ge 0\).  Consequently, for all integers
-\(q\ge r\ge 1\),
-\[
-  S_q(m)^2\le S_{q-r}(m)S_{q+r}(m).
-\]
+See
+\cite[Proposition~\textup{``Hankel positivity and cross-moment convexity''}]{MaZhangProjectionCore2026}.
 \end{proposition}
-
-\begin{proof}
-For \(c=(c_0,\dots,c_r)\in\RR^{r+1}\),
-\[
-  c^{\mathsf T}H_r^{(m)}c
-  =
-  \sum_{x\in X_m}\left(\sum_{i=0}^r c_i d_m(x)^i\right)^2\ge 0.
-\]
-This proves positive semidefiniteness.  The cross-moment inequality follows by
-applying Cauchy--Schwarz to the sequences
-\(d_m(x)^{(q-r)/2}\) and \(d_m(x)^{(q+r)/2}\).
-\end{proof}
 
 \begin{corollary}[Adjacent pressure convexity]
 \label{cor:cross-q-logconvex}
 \leanverified{paper_projection_adjacent_pressure_convexity}
-For every \(q\ge 2\), the partition constants satisfy
-\[
-  \lambda_q^2\le \lambda_{q-1}\lambda_{q+1}.
-\]
+See
+\cite[Corollary~\textup{``Adjacent pressure convexity''}]{MaZhangProjectionCore2026}.
 \end{corollary}
-
-\begin{proof}
-By \Cref{prop:hankel-psd},
-\(S_q(m)^2\le S_{q-1}(m)S_{q+1}(m)\) for every \(m\).  Take logarithms, divide
-by \(m\), and let \(m\to\infty\), using \Cref{thm:all-q-transfer}.
-\end{proof}
 
 \subsection{Pressure geometry and the zero-temperature regime}
 
 \begin{theorem}[Global pressure convexity]
 \label{thm:global-pressure-convexity}
 \leanverified{paper_projection_global_pressure_convexity}
-Let \(1\le p<q<r\) be integers, and set \(\theta=(q-p)/(r-p)\).  Then
-\[
-  S_q(m)\le S_p(m)^{1-\theta}S_r(m)^\theta
-  \qquad (m\ge 1).
-\]
-Consequently,
-\[
-  \lambda_q\le \lambda_p^{1-\theta}\lambda_r^\theta.
-\]
-If \(p,q,r\ge 2\), then equivalently
-\[
-  r_q\le r_p^{1-\theta}r_r^\theta.
-\]
+See
+\cite[Theorem~\textup{``Global pressure convexity''}]{MaZhangProjectionCore2026}.
 \end{theorem}
-
-\begin{proof}
-For fixed \(m\), write \(b_x:=d_m(x)\ge 0\).  Then
-\[
-  S_q(m)
-  =
-  \sum_{x\in X_m}
-  \bigl(b_x^p\bigr)^{1-\theta}\bigl(b_x^r\bigr)^\theta.
-\]
-H\"older's inequality yields
-\[
-  S_q(m)\le S_p(m)^{1-\theta}S_r(m)^\theta.
-\]
-Take logarithms, divide by \(m\), and send \(m\to\infty\).  The
-\(\lambda\)-version follows from \Cref{thm:all-q-transfer}, and the
-\(r\)-version follows for \(p,q,r\ge 2\) because \(r_j=\lambda_j\).
-\end{proof}
 
 \begin{corollary}[Endpoint law for the partition constants]
 \label{cor:renyi-endpoint}
