@@ -164,7 +164,10 @@ SageMath~10.2 computation recorded in
 \Cref{sec:appendix-computation}\,(d) prints the output
 \((20,-256)\) for \((\deg D,\operatorname{lc}D)\), so \(D(s)\) has
 degree~\(20\) with leading coefficient~\(-256\).
-Since the leading coefficient is negative, \(D(s)\to-\infty\) as
+This metadata is already a nonsquare certificate: every square in
+\(\QQ(s)\) has even order at infinity and positive leading sign when it
+is a nonzero polynomial, whereas this polynomial has even degree and
+negative leading coefficient. Equivalently, \(D(s)\to-\infty\) as
 \(s\to+\infty\), so \(D(s)\) takes negative real values and is
 therefore not a square in~\(\QQ(s)\). Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in \(w\) changes sign under odd permutations, \(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
 
@@ -235,6 +238,8 @@ transposition.
 \noindent\textit{5-cycle (\(s=3\), mod \(19\)).}\quad
 One checks that
 \(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod{19}\).
+Thus \(19\nmid D(3)\), so the specialisation is separable at \(19\) and
+Dedekind's theorem applies to this factorisation.
 Here \(\operatorname{lc}_w\widehat\Delta(w,3)=8\not\equiv0\pmod{19}\).
 Modulo \(19\),
 \[
@@ -284,13 +289,14 @@ projective curve.
   \[
     x:=w^2,\qquad y:=sw
   \]
-  identify \(\overline{Y}\) birationally with the smooth projective closure of
+  identify the sign quotient birationally with the projective closure of
   the affine curve
   \[
     F(x,y):=
     1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3=0.
   \]
-  Consequently,
+  This projective closure is smooth; consequently it is the smooth
+  projective model \(\overline{Y}\), and
   \[
     g(\overline{Y})=3.
   \]
@@ -308,10 +314,14 @@ parity of \(j\). Hence
 identify the invariant function field birationally, and the same lemma
 gives a unique polynomial \(F(x,y)\in\QQ[x,y]\) with
 \(\widehat\Delta(w,s)=F(w^2,sw)\).
-A direct substitution gives the displayed formula for \(F\). Conversely,
-adjoining \(w=\sqrt{x}\) recovers the function field of \(\overline{X}\)
-from that of the curve \(F=0\), showing that \(\overline{Y}\) is
-birationally the smooth projective closure of \(\{F=0\}\).
+A direct substitution gives the displayed formula for \(F\). Since
+\(\widehat\Delta(0,s)=1\), the constant coefficient hypothesis
+\(c_0\ne0\) in \Cref{lem:sign-quotient-normal-form} is satisfied; hence
+the quotient function field is the function field of \(F=0\). Thus
+\(\overline{Y}\) is birational to the projective closure of the affine
+quartic \(\{F=0\}\).
+After the smoothness check below, this closure is the smooth projective
+model \(\overline{Y}\).
 
 We verify that this projective closure is smooth.  Homogenise by setting
 \(X=x\), \(Y=y\), \(Z=1\) and clearing denominators to obtain
@@ -768,9 +778,18 @@ which determines \(w''(2)\), and therefore
   \rho''(2)=\frac{2w'(2)^2}{w(2)^3}-\frac{w''(2)}{w(2)^2}
   =\frac{1351}{9826}.
 \]
-Continuing the same recursion through order six yields the displayed
-jet of \(\rho(2-\delta)\). The exact recursive identities and the
-resulting coefficients are recorded in
+Equivalently, write
+\[
+  w(s)=\sum_{j=0}^6 a_j(s-2)^j+O((s-2)^7),
+  \qquad a_0=\frac13 .
+\]
+Substituting this series into \(\widehat\Delta(w(s),s)\) and setting the
+coefficient of \((s-2)^n\) equal to \(0\), for \(1\le n\le6\), gives a
+triangular recursion because the coefficient of the new unknown \(a_n\)
+is always \(\partial_w\widehat\Delta(1/3,2)\ne0\). Solving these six
+linear equations and then inverting \(w(s)\) yields the displayed jet of
+\(\rho(2-\delta)\). The exact recursive identities and the resulting
+coefficients are recorded in
 \Cref{sec:appendix-computation}\,\textup{(f)}.
 \end{proof}
 
@@ -835,6 +854,9 @@ that \(w^{*\prime}(s)<0\) on \([2-\eta,2]\). Thus \(w^*(s)>1/3\) for
   \rho(s)=\frac{1}{w^*(s)}
 \]
 is strictly increasing on \([2-\eta,2]\).
+Equivalently \(\lambda(s)=w^*(s)\) is strictly decreasing on this
+interval. Together with the symmetry \(\lambda(-s)=\lambda(s)\), this
+will compare endpoint-near conjugates through their absolute values.
 
 \medskip
 \noindent\textit{Step 2 (Strict spectral gap away from the untwisted
@@ -842,7 +864,10 @@ endpoints).}\quad
 Let \(s\in(-2,2)\), choose \(\vartheta\in(0,\pi)\) with
 \(s=2\cos\vartheta\), and set \(r=e^{i\vartheta}\), \(u=r^2=e^{2i\vartheta}\).
 Then \(\widehat\Delta(w,s)=\Delta(w/r,r^2)\), so
-\(\lambda(s)^{-1}\) is the spectral radius of \(B(u)\). Since every row
+the substitution \(z=w/r\) has \(|z|=|w|\). Hence the minimal
+\(|w|\)-root of \(\widehat\Delta(w,s)\) is the minimal \(|z|\)-root of
+\(\Delta(z,u)=\det(I-zB(u))\), and \(\lambda(s)^{-1}\) is the spectral
+radius of \(B(u)\). Since every row
 of \(B(1)\) has sum \(3\), one has \(\rho(B(u))\le 3\).
 
 Suppose for contradiction that \(\rho(B(u))=3\). Choose an eigenvalue
@@ -923,8 +948,9 @@ satisfies
 \[
   |\alpha|<s_m.
 \]
-Using \(\lambda(-s)=\lambda(s)\) and the strict monotonicity of
-\(\rho(s)=1/\lambda(s)\) on \([2-\eta,2]\), we obtain
+Using \(\lambda(-s)=\lambda(s)\) and the strict decrease of
+\(\lambda(s)\) on \([2-\eta,2]\), equivalently the strict increase of
+\(\rho(s)=1/\lambda(s)\), we obtain
 \[
   \lambda(\alpha)=\lambda(|\alpha|)>\lambda(s_m)
   \qquad
