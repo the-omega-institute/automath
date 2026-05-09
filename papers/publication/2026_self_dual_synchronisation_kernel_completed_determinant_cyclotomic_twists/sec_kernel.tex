@@ -115,9 +115,12 @@ proved, and only for the displayed factorisation and residue. Setting
 \[
   \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
 \]
-This factorisation is not a proof of the spectral radius: the cubic
-factor also has a reciprocal zero inside the unit circle. It is used
-here for the residue computation
+This factorisation is deliberately not used to prove the spectral
+radius. In the variable \(z\), the cubic factor \(z^3-z^2+z+1\) has a
+zero with \(\abs{z}<1\), so a comparison of zero moduli in the
+factorisation is not a valid Perron argument. The Perron conclusion
+above comes only from the row-sum bound and primitivity. The
+factorisation is used here solely for the residue computation
 \[
   \begin{aligned}
   C_B
@@ -601,20 +604,20 @@ Taking determinants yields the stated factorisation.
   Then the normalized primitive real factor is the following root
   product, which is the definition of the polynomial used below:
   \[
-    P_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
+    R_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
   \]
   With the standard Sylvester resultant convention this same polynomial
   is represented by a resultant only in the following order:
   \[
-    P_m(w)=
+    R_m(w)=
     \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr),
   \]
   where \(\Phi_m^+\) is in the first argument. The reversed order is
-  not used to define \(P_m\); with the standard Sylvester convention it
+  not used to define \(R_m\); with the standard Sylvester convention it
   is
   \[
     \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
-    =(-1)^{3d_m}P_m(w).
+    =(-1)^{3d_m}R_m(w).
   \]
   Moreover, for every \(a\) as above,
   \[
@@ -649,7 +652,7 @@ so \Cref{lem:ordered-cyclotomic-resultant} gives
   \qquad d_m=|A_m|.
 \]
 The root product is therefore represented by a resultant only with
-\(\Phi_m^+\) in the first slot. In particular, the notation \(P_m\)
+\(\Phi_m^+\) in the first slot. In particular, the notation \(R_m\)
 denotes the product itself, not an unordered resultant expression. Since
 \(\deg_s\widehat\Delta=3\), the reversed-order identity in
 \Cref{lem:ordered-cyclotomic-resultant} gives
@@ -731,7 +734,7 @@ which is the displayed reversed-order sign formula.
        \quad (0\le s\le 2-\eta),
   \]
   and \(w(s)\) is strictly decreasing on \([2-\eta,2]\), then for every
-  \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\) the resultant \(R_m(w)\) has
+  \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\) the root product \(R_m(w)\) has
   its minimal-modulus roots exactly in the factors \(H(w,s_m)\) and,
   when \(m\) is even, \(H(w,-s_m)\). Consequently
   \[
@@ -852,7 +855,7 @@ the original graph is used: the cyclotomic endpoint selection and the
 large-\(m\) asymptotic expansion follow from the completed determinant
 \(H(w,s)\) alone.
 
-\subsection{Cyclotomic resultants and twisted Perron roots}
+\subsection{Cyclotomic root products and twisted Perron roots}
 
 For \(m\ge 2\), let
 \[
@@ -1382,6 +1385,49 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \]
 \end{proof}
 
+\begin{corollary}[Endpoint theorem applied to the ten-state kernel]
+  \label{cor:sync-endpoint-selection-application}
+  The ten-state kernel satisfies the hypotheses of
+  \Cref{thm:self-dual-endpoint-selection} with
+  \[
+    q=3,\qquad
+    H(w,s)=\widehat\Delta(w,s),\qquad
+    \eta=\frac1{100},\qquad
+    \varepsilon=\frac1{200}.
+  \]
+  Consequently, for every \(m\ge32\),
+  \[
+    \rho_m=\rho\!\left(2\cos\frac{\pi}{m}\right).
+  \]
+  More generally, any endpoint jet
+  \[
+    \rho(2-\delta)=\sum_{j=0}^N a_j\delta^j+O(\delta^{N+1})
+  \]
+  for this branch gives
+  \[
+    \rho_m
+    =\sum_{j=0}^N a_j
+      \left(2-2\cos\frac{\pi}{m}\right)^j
+      +O(m^{-2N-2}).
+  \]
+\end{corollary}
+
+\begin{proof}
+The row-sum Perron root \(q=3\) and primitivity of \(B(1)\) are
+\Cref{prop:sync-kernel-spectrum}. The involution exchanging \(B_0\) and
+\(B_1\) is \Cref{prop:sync-self-duality}, and
+\Cref{prop:sync-hatdelta-completion} identifies the completed
+determinant \(H\) with \(\widehat\Delta\). The endpoint root
+\(w(2)=1/3\) is simple and isolated by
+\Cref{prop:sync-endpoint-jet} and the endpoint factorisation in the
+proof of \Cref{lem:root-separation}. The strict unitary spectral gap and
+the effective separation and monotonicity hypotheses with
+\(\eta=1/100\) and \(\varepsilon=1/200\) are exactly the assertions
+proved in \Cref{lem:root-separation}. Applying
+\Cref{thm:self-dual-endpoint-selection} gives both displayed
+conclusions.
+\end{proof}
+
 \begin{theorem}[Asymptotic expansion of the twisted Perron roots]
   \label{thm:rho-gap-m12}
   As \(m\to\infty\),
@@ -1406,8 +1452,12 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \end{theorem}
 
 \begin{proof}
-By \Cref{lem:root-separation}, \(\rho_m=\rho(s_m)\) for every
-\(m\ge32\), and this is the range needed for the asymptotic statement.
+By \Cref{cor:sync-endpoint-selection-application},
+\(\rho_m=\rho(s_m)\) for every \(m\ge32\), and this is the range needed
+for the asymptotic statement. Thus the branch selection used here is an
+application of the general endpoint-selection theorem; the remaining
+calculation is the universal coefficient transfer in the explicit
+sixth-order jet.
 The Taylor series of \(2-s_m=2-2\cos(\pi/m)\) at infinity is
 \[
 \begin{aligned}
