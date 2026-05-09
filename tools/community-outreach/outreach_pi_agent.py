@@ -61,6 +61,10 @@ ALLOWED_AUTONOMOUS = {
     "mark_target_stale",
     "adjust_cooldown",
     "restart_inner",
+    # 2026-05-09: bounded task-state mutations so PI can self-iterate on dead
+    # tasks without the operator having to step in for every retry exhaustion.
+    "revive_task",        # rejected → pending + retries=0 (with optional context tweaks)
+    "reroute_task",       # flip context.use_oracle to escape a stuck deep-reason path
 }
 ALLOWED_INBOX = {
     "send_drafted_email",
@@ -507,9 +511,95 @@ def apply_actions(plan: dict, supervisor_callbacks: dict | None = None) -> list[
                     applied.append("restart_inner")
                 else:
                     applied.append("SKIP restart_inner: no supervisor callback")
+            elif action == "revive_task":
+                tid = (args.get("task_id") or "").strip()
+                reason = (args.get("reason") or "PI revive").strip()
+                ok, msg = _revive_task(tid, reason)
+                applied.append(f"revive_task task={tid} ok={ok} ({msg})")
+            elif action == "reroute_task":
+                tid = (args.get("task_id") or "").strip()
+                use_oracle = bool(args.get("use_oracle"))
+                reason = (args.get("reason") or "PI reroute").strip()
+                ok, msg = _reroute_task(tid, use_oracle=use_oracle, reason=reason)
+                applied.append(f"reroute_task task={tid} use_oracle={use_oracle} ok={ok} ({msg})")
         except Exception as exc:
             applied.append(f"ERROR applying {action}: {exc}")
     return applied
+
+
+# ---------------------------------------------------------------------------
+# task-state mutation helpers (autonomous PI actions)
+# ---------------------------------------------------------------------------
+
+
+_TASK_QUEUE_DIR = STATE_DIR / "task_queue"
+
+
+def _load_task(task_id: str) -> tuple[Path | None, dict]:
+    p = _TASK_QUEUE_DIR / f"{task_id}.json"
+    if not p.exists():
+        return None, {}
+    try:
+        return p, json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return p, {}
+
+
+def _save_task(p: Path, d: dict) -> None:
+    p.write_text(json.dumps(d, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _revive_task(task_id: str, reason: str) -> tuple[bool, str]:
+    """Reset rejected/blocked task to pending so task_runner re-attempts.
+
+    Hard-blocks blocked tasks that need an external repo (`requires_external_repo`)
+    and tasks already pending/in_progress (no-op).
+    """
+    if not task_id:
+        return False, "task_id empty"
+    p, d = _load_task(task_id)
+    if p is None:
+        return False, "task not found"
+    cur = d.get("status", "")
+    if cur in {"pending", "in_progress", "writeback_pending", "writeback_in_progress"}:
+        return False, f"task already in workable state ({cur})"
+    if d.get("requires_external_repo"):
+        return False, "requires_external_repo; revive blocked"
+    d["status"] = "pending"
+    d["retries"] = 0
+    d["last_verdict"] = ""
+    d["last_reason"] = f"PI revive 2026-05-09: {reason[:200]}"
+    d["last_run_iso"] = ""
+    _save_task(p, d)
+    return True, f"revived from {cur}"
+
+
+def _reroute_task(task_id: str, *, use_oracle: bool, reason: str) -> tuple[bool, str]:
+    """Flip context.use_oracle on a task. Use to escape a stuck deep-reason
+    path (e.g. ChatGPT bridge stalls → switch to codex_track local) or to
+    escalate a codex-track-exhausted task to ChatGPT Project context.
+
+    Resets retries to 0 and status to pending in the same write so the
+    task_runner picks up the new routing on the next poll.
+    """
+    if not task_id:
+        return False, "task_id empty"
+    p, d = _load_task(task_id)
+    if p is None:
+        return False, "task not found"
+    ctx = d.get("context") or {}
+    prev = bool(ctx.get("use_oracle"))
+    if prev == use_oracle and d.get("status") in {"pending", "in_progress"}:
+        return False, f"already use_oracle={use_oracle} and {d.get('status')}"
+    ctx["use_oracle"] = use_oracle
+    d["context"] = ctx
+    d["status"] = "pending"
+    d["retries"] = 0
+    d["last_verdict"] = ""
+    d["last_reason"] = f"PI reroute 2026-05-09 use_oracle={prev}->{use_oracle}: {reason[:200]}"
+    d["last_run_iso"] = ""
+    _save_task(p, d)
+    return True, f"use_oracle {prev}->{use_oracle} status->pending retries->0"
 
 
 def stage_inbox_items(plan: dict, escalated_concerns: list[dict]) -> list[str]:

@@ -546,7 +546,7 @@ class OracleConsultant:
             return False
 
     def deep_reasoning(self, todo: TodoSpec, initial_prompt: str, *,
-                       max_turns: int = 10,
+                       max_turns: int = 999,
                        follow_up_prompts: Optional[list[str]] = None,
                        prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None = None,
                        per_turn_timeout: int = DEFAULT_TIMEOUT,

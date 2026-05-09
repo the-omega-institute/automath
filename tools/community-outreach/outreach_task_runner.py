@@ -301,14 +301,27 @@ def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
         f"# Context (do not invent facts beyond what is stated here)\n\n"
         f"```\n{_json.dumps(ctx, ensure_ascii=False, indent=2)}\n```\n\n"
         f"# Hard constraints\n\n{constraints_block}\n\n"
-        f"# Required deliverable\n\n"
-        f"Produce the final draft suitable for {ctx.get('thread', 'the named external party')}.\n"
-        f"Output the deliverable as the response body (no preamble). The Project's "
-        f"attached files (main.pdf, MAIN_PAPER_INDEX.md, READMEs, PROGRAM_BOARD.md) "
-        f"are available — cite them where relevant for fidelity.\n\n"
-        f"When you have a substantive result, mark it with the literal token "
-        f"BREAKTHROUGH on its own line; the framework uses that to stop multi-turn "
-        f"driving."
+        f"# Required deliverable — output discipline (CRITICAL)\n\n"
+        f"Produce the final draft suitable for {ctx.get('thread', 'the named external party')}.\n\n"
+        f"OUTPUT THE COMPLETE DELIVERABLE AS INLINE MESSAGE TEXT. Treat your\n"
+        f"response body itself as the deliverable file we will copy verbatim.\n\n"
+        f"Forbidden response shapes:\n"
+        f"  - Saying 'I have written this to <path>' or referencing a file you 'saved'\n"
+        f"  - Returning only file paths, links, or pointers in lieu of content\n"
+        f"  - Splitting the deliverable into a separate document and only summarising it\n"
+        f"  - Wrapping the deliverable in scaffolding ('Here is the draft:'); just emit it\n\n"
+        f"The Project's attached files (main.pdf, MAIN_PAPER_INDEX.md, READMEs,\n"
+        f"PROGRAM_BOARD.md) are available — cite them inline where relevant for\n"
+        f"fidelity, but the cited content must be paraphrased into the body text.\n\n"
+        f"# Termination signal\n\n"
+        f"When your inline draft satisfies every operator constraint AND every\n"
+        f"`scope_ledger_items_to_pin` item is reproduced AND the Bridge Schema /\n"
+        f"central claim is stated, append the literal token BREAKTHROUGH on its\n"
+        f"own line at the end of the same response. The framework reads the\n"
+        f"BREAKTHROUGH marker and stops driving more turns.\n\n"
+        f"If you cannot complete the deliverable in this turn, do NOT emit\n"
+        f"BREAKTHROUGH. Output the strongest partial draft you can, and the\n"
+        f"framework will follow up with a deepening question."
     )
 
     # Build a TodoSpec-shaped stub so OracleConsultant's logging/state code works.
@@ -340,21 +353,35 @@ def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
     if verdict == "FAILED":
         return False, f"oracle deep_reasoning FAILED: {run.get('error','(no error message)')}"
 
-    # Pick the response body to land as the deliverable. Prefer the BREAKTHROUGH
-    # turn's response; fall back to last non-empty turn.
+    # Pick the response body to land as the deliverable.
+    # NB: oracle_consultant.deep_reasoning stores `response_log_path` (a FILE
+    # PATH on disk) in turns[].response, NOT the response text itself. We must
+    # read the file to get the actual content. Earlier code wrote the path
+    # string into the deliverable, which is exactly what triggered the
+    # "Deliverable is only a pair of file paths" gate failure on retry.
     turns = run.get("turns") or []
     body = ""
+    chosen_path = ""
     for t in reversed(turns):
-        resp = (t.get("response") or "").strip()
-        if resp:
-            body = resp
-            break
+        resp_path = (t.get("response") or "").strip()
+        if not resp_path:
+            continue
+        try:
+            p = Path(resp_path)
+            if p.exists() and p.is_file():
+                text = p.read_text(encoding="utf-8", errors="replace").strip()
+                if text:
+                    body = text
+                    chosen_path = resp_path
+                    break
+        except OSError:
+            continue
     if not body:
         return False, f"oracle returned no usable response (verdict={verdict})"
     target.write_text(body + "\n", encoding="utf-8")
     return True, (
         f"wrote {target.relative_to(REPO_ROOT)} ({len(body)} chars) "
-        f"via oracle [verdict={verdict}, {len(turns)} turns]"
+        f"via oracle [verdict={verdict}, {len(turns)} turns, src={Path(chosen_path).name}]"
     )
 
 
