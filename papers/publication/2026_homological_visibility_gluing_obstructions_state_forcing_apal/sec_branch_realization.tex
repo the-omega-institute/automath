@@ -8,7 +8,7 @@ It is the formal \v{C}ech site of a finite good-cover presentation, so that
 the cohomological comparison used later is an actual Leray comparison rather
 than a declared comparison datum.
 
-\begin{theorem}[Formal \v{C}ech site and one-state admissible expansion]\label{lem:generated-subsite-model-interface}
+\begin{lemma}[Formal \v{C}ech site and one-state admissible expansion]\label{lem:generated-subsite-model-interface}
 Let
 \[
 \mathcal U=\{U_i\to a\}_{i\in I}
@@ -21,9 +21,11 @@ one object $U_J$ for each nonempty simplex $J\in N$. A realization functor
 from this formal category to open subsets of \(X\) sends \(a\) to \(X\),
 \(\emptyset\) to the empty open set, and \(U_J\) to the corresponding
 nonempty good-cover intersection. This is a pullback-complete formal site,
-not the full subcategory on only nonempty intersections. A finite subset
-$J\subseteq I$ which is not a simplex is therefore not discarded; its
-intersection is represented by the same strict initial object. In formulas
+not the full subcategory on only nonempty intersections. The only finite
+subsets represented by named non-initial objects are the simplices of
+\(N\), but a finite subset \(J\subseteq I\) which is not a simplex is not
+discarded; whenever such a subset arises as a pullback intersection, it is
+represented by the same strict initial object. In formulas
 we write
 \[
 \widetilde U_J:=
@@ -48,15 +50,23 @@ U_J\times_{U_L}U_K=\widetilde U_{J\cup K}.
 If $J\cup K\notin N$, this means that the fibre product is the strict
 initial object $\emptyset$. Any fibre product in which one factor is
 $\emptyset$ is also $\emptyset$. The pretopology is the smallest
-pretopology for which the vertex cover \(\{U_i\to a\}_{i\in I}\), its
-realized pullback covers, all identity covers, and the empty cover of
-\(\emptyset\) are covers. Equivalently, it is obtained by repeatedly
-applying pullback stability and transitivity to the vertex cover inside
-the formal category just described. In particular, disjoint cover members
-\(U_i,U_j\to a\) have the pullback \(U_i\times_aU_j=\emptyset\) in the
-site. The empty object is omitted only from the nonempty \v{C}ech nerve
-and from the displayed nonzero cochain groups, never from the
-local-reference-site structure.
+pretopology for which the vertex cover \(\{U_i\to a\}_{i\in I}\), all of
+its pullbacks along arrows of the formal category, all identity covers,
+and the empty cover of \(\emptyset\) are covers. Equivalently, it is
+obtained by repeatedly applying pullback stability and transitivity to
+the vertex cover inside the formal category just described. For example,
+the pullback of the vertex cover along \(U_J\to a\) is the family of
+arrows
+\[
+\{\widetilde U_{J\cup\{i\}}\to U_J\}_{i\in I},
+\]
+with the terms for non-simplices equal to \(\emptyset\). Repetitions of
+\(\emptyset\) are harmless and may be suppressed in displayed cochains,
+but the corresponding pullback object is still present in the site. In
+particular, disjoint cover members \(U_i,U_j\to a\) have the pullback
+\(U_i\times_aU_j=\emptyset\) in the site. The empty object is omitted only
+from the nonempty \v{C}ech nerve and from the displayed nonzero cochain
+groups, never from the local-reference-site structure.
 Every pullback demanded by \Cref{def:local-reference-frame} is therefore
 an object of \(\mathcal C_{\mathcal U}\), including the empty pullback
 objects produced by disjoint members of a covering family.
@@ -117,7 +127,7 @@ and the automorphism-sheaf condition of
 $\mathbb L_3$-expansion $M_3$ in which $r$ has realization prestack
 $\mathfrak P$, band $\Band$, and stackification $a(\mathfrak P)$.
 \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 The formal index category is thin and has terminal object $a$. We first
@@ -147,12 +157,19 @@ $U_i$ is a nonempty object $U_J$ rather than $\emptyset$. Hence the
 The sheaf \(A_{\mathcal U}\) is defined by restricting the genuine
 constant sheaf of locally constant \(A\)-valued functions on \(X\) along
 the realization functor \(W\mapsto |W|\). Equivalently,
-\(A_{\mathcal U}(W)=\operatorname{LC}(|W|,A)\). Since every nonempty
+\(A_{\mathcal U}(W)=\operatorname{LC}(|W|,A)\), with the usual sheaf
+restriction maps for locally constant functions. Since every nonempty
 formal intersection \(U_J\) is contractible, hence connected, its sections
 are \(A\); over the strict initial object the section group is \(0\). This
 is a sheaf before it is used as a band: no sheaf condition is being
 inferred from the identity-restriction constant presheaf on the formal
-index category.
+index category. More explicitly, if a generated cover of an object \(W\)
+contains several nonempty pieces, a matching family is a family of locally
+constant functions on the corresponding open subsets which agree on the
+nonempty realized overlaps and impose no condition on empty pullbacks,
+where the coefficient group is \(0\). These functions glue uniquely to a
+locally constant function on \(|W|\) because they are sections of the
+ambient constant sheaf restricted to the cover.
 Hence the \v{C}ech $n$-cochains on
 $\mathcal U$ are exactly functions from the set of nonempty
 $(n+1)$-fold intersections to $A$; empty pullback terms contribute only
@@ -251,6 +268,16 @@ $\mathcal C_{\mathcal U}/W$ is again a sheaf. Its value on an object
 connected nonempty basic intersection, \(0\) for \(\emptyset\), and the
 locally constant functions on \(|V|\) for any possibly disconnected
 realized open set;
+\item for every generated covering family
+\[
+\{V_\ell\to V\}_{\ell\in L}
+\]
+in a slice, a family \(a_\ell\in A_{\mathcal U}(V_\ell)\) is a matching
+family exactly when the corresponding locally constant functions agree on
+each nonempty pullback \(V_\ell\times_VV_m\), while pullbacks equal to
+\(\emptyset\) impose only the unique equality in
+\(A_{\mathcal U}(\emptyset)=0\). Such matching families glue uniquely in
+\(A_{\mathcal U}(V)\);
 \item if \(x,y\) are two objects of a fibred groupoid over \(W\) whose
 isomorphism presheaf is defined on each \(V\to W\) by an explicit
 identification
@@ -296,9 +323,10 @@ Cover members whose pullback is \(\emptyset\) impose no equality because
 \(A_{\mathcal U}(\emptyset)=0\); when \(V=\emptyset\), the only covering
 is refined by the empty cover and the unique section is \(0\). This proves
 \textup{(ii)} without invoking the identity-restriction constant
-presheaf.
+presheaf, and the same paragraph proves the explicit matching-family
+description in \textup{(iii)}.
 
-For \textup{(iii)}, the displayed identification is an isomorphism
+For \textup{(iv)}, the displayed identification is an isomorphism
 \[
 \underline{\mathrm{Isom}}(x,y)\cong
 A_{\mathcal U}|_{\mathcal C_{\mathcal U}/W}
