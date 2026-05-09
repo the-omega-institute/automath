@@ -1,24 +1,118 @@
 \section{Overlap presentations and the sharp threshold}\label{sec:stab:conjugacy}
 
-The local fibers become a dynamical problem only after overlap is imposed. The basic overlap presentation, sharp injectivity threshold, two-window branch classification, and entropy defect formula are proved in \cite{MaZhang2026Nonlinearity}; this section recalls those ingredients by citation and isolates the DCDS-level phase-transition synthesis in Theorem~\ref{thm:phase-transition}. The terminology for sofic shifts and labeled graph presentations is standard; see \cite{LindMarcus1995,Kitchens1998,Nasu1995}.
+The local fibers become a dynamical problem only after overlap is imposed.  In
+this section we pass from the finite-window map $\Fold_m$ to a sliding-block
+factor, prove the finite-state presentation of its image, and then prove the
+sharp three-window reconstruction threshold.  The terminology for sofic shifts
+and labeled graph presentations is standard; see
+\cite{LindMarcus1995,Kitchens1998,Nasu1995}.
 
 \begin{definition}[Sliding stabilized-window process]\label{def:Phi}
-See \cite{MaZhang2026Nonlinearity}, Definition~4.1.
+Fix $m\ge 2$.  The two-sided sliding stabilized-window map is
+\[
+\Phi_m:\{0,1\}^{\ZZ}\longrightarrow (X_m)^{\ZZ},
+\qquad
+(\Phi_m(a))_t:=\Fold_m(a_t,a_{t+1},\ldots,a_{t+m-1}).
+\]
+Its image is denoted
+\[
+Y_m:=\Phi_m(\{0,1\}^{\ZZ})\subset (X_m)^{\ZZ}.
+\]
+For $n\ge 1$ the associated finite-block map is
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\longrightarrow X_m^n,
+\qquad
+\Phi_{m,n}(a_0\ldots a_{n+m-2})
+:=
+\bigl(\Fold_m(a_t\ldots a_{t+m-1})\bigr)_{t=0}^{n-1}.
+\]
+We write residues of stabilized windows as
+\[
+r_t:=\Val_m\bigl((\Phi_m(a))_t\bigr).
+\]
+Equivalently,
+$r_t\equiv\Val_m(a_t\ldots a_{t+m-1})\pmod {F_{m+2}}$.
 \end{definition}
 
 \begin{definition}[The overlap graph]\label{def:overlap-graph}
-See \cite{MaZhang2026Nonlinearity}, the definition of the overlap graph immediately before Theorem~4.1.
+For $m\ge2$, let $\mathcal G_m$ be the labeled directed graph with vertex set
+\[
+V_m:=\{0,1\}^{m-1}.
+\]
+For every vertex $u=(u_1,\ldots,u_{m-1})\in V_m$ and every
+$c\in\{0,1\}$ there is an edge
+\[
+u\longrightarrow (u_2,\ldots,u_{m-1},c)
+\]
+with label
+\[
+\ell(u,c):=\Fold_m(u_1,\ldots,u_{m-1},c)\in X_m.
+\]
+Thus a path in $\mathcal G_m$ records the successive length-$(m-1)$ overlaps
+of a raw binary sequence, while the edge label records the stabilized
+length-$m$ window.
 \end{definition}
 
 \begin{theorem}[Finite-state lift and bounded multiplicity]\label{thm:finite-state-lift}
-See \cite{MaZhang2026Nonlinearity}, Theorem~4.1.
+For every $m\ge2$ the image shift $Y_m$ is presented by the labeled graph
+$\mathcal G_m$.  Moreover $\mathcal G_m$ is both right-resolving and
+left-resolving, and every point of $Y_m$ has at most $2^{m-1}$ preimages under
+$\Phi_m$.
 \end{theorem}
 
-\begin{remark}
-The cited theorem supplies the finite-state lift used below only as an input; the contribution of the present paper is the phase-transition synthesis in Theorem~\ref{thm:phase-transition} and its downstream DCDS interpretation.
-\end{remark}
+\begin{proof}
+A bi-infinite raw sequence $a\in\{0,1\}^{\ZZ}$ determines the path whose
+vertex at time $t$ is
+\[
+u_t=(a_t,\ldots,a_{t+m-2})\in V_m.
+\]
+The edge from $u_t$ to $u_{t+1}$ is obtained by appending $a_{t+m-1}$, and its
+label is
+\[
+\ell(u_t,a_{t+m-1})=\Fold_m(a_t,\ldots,a_{t+m-1})=(\Phi_m(a))_t.
+\]
+Thus every point of $Y_m$ is read along a path in $\mathcal G_m$.  Conversely,
+any bi-infinite path in $\mathcal G_m$ has overlapping vertices
+\[
+u_t=(a_t,\ldots,a_{t+m-2})
+\]
+for a unique raw sequence $a\in\{0,1\}^{\ZZ}$, and its label sequence is
+$\Phi_m(a)$.  Hence $\mathcal G_m$ presents exactly $Y_m$.
 
-The arithmetic content of the threshold is already visible at $m=3$. The three output residues $r_0,r_1,r_2$ determine the tail bit $a_4$ except for one elementary branch, and that branch is separated by the pair $(r_0,r_2)$. The remaining bits are then recovered from the injective map $(u,v)\mapsto u+2v$ on $\{0,1\}^2$.
+To prove right-resolvingness, fix $u\in V_m$ and suppose the two outgoing
+edges corresponding to $c,c'\in\{0,1\}$ have the same label.  Since
+$\Val_m|_{X_m}$ is injective, their labels have the same residue modulo
+$F_{m+2}$.  The two raw windows differ only in the last coordinate, so
+\[
+(c-c')F_{m+1}\equiv0\pmod {F_{m+2}}.
+\]
+Because $\gcd(F_{m+1},F_{m+2})=1$, this forces $c=c'$.  Thus outgoing edges
+from the same vertex have distinct labels.
+
+The left-resolving proof is the same in reverse.  Fix a terminal vertex
+$v=(v_1,\ldots,v_{m-1})$ and suppose the two incoming edges obtained from
+first bits $b,b'\in\{0,1\}$ have the same label.  The raw windows differ only
+in their first coordinate, whose weight is $F_2=1$, hence
+\[
+b-b'\equiv0\pmod {F_{m+2}}.
+\]
+Since $F_{m+2}\ge3$, this gives $b=b'$.  Thus incoming edges to the same
+vertex have distinct labels.
+
+Finally fix $y\in Y_m$.  If the initial vertex
+$(a_0,\ldots,a_{m-2})\in V_m$ of a lift is known, then right-resolvingness
+determines at most one outgoing edge with label $y_0$, hence at most one next
+state and one bit $a_{m-1}$.  Iterating forward determines all nonnegative
+coordinates.  Left-resolvingness determines the negative coordinates
+backwards.  Therefore there is at most one lift for each possible initial
+vertex, and there are $|V_m|=2^{m-1}$ initial vertices.
+\end{proof}
+
+The arithmetic content of the threshold is already visible at $m=3$. The three
+output residues $r_0,r_1,r_2$ determine the tail bit $a_4$ except for one
+elementary branch, and that branch is separated by the pair $(r_0,r_2)$. The
+remaining bits are then recovered from the injective map $(u,v)\mapsto u+2v$
+on $\{0,1\}^2$.
 
 \begin{lemma}[Explicit three-window decoder]\label{lem:m3-decoder}
 The map
@@ -36,7 +130,8 @@ M:=F_5=5,
 r_t:=\Val_3\bigl(\Fold_3(a_ta_{t+1}a_{t+2})\bigr)\in\{0,1,2,3,4\},
 \qquad 0\le t\le 2.
 \]
-Because $\Val_3|_{X_3}$ is a bijection, the stabilized output triple is equivalent to the residue triple $(r_0,r_1,r_2)$.
+Because $\Val_3|_{X_3}$ is a bijection, the stabilized output triple is
+equivalent to the residue triple $(r_0,r_1,r_2)$.
 
 Using
 \[
@@ -56,11 +151,13 @@ q\in\{0,1\}\Longrightarrow a_4=0,
 \qquad
 q\in\{3,4\}\Longrightarrow a_4=1.
 \]
-Only the case $q=2$ requires an additional branch distinction. Then the two possible triples $(a_0,a_1,a_4)$ are
+Only the case $q=2$ requires an additional branch distinction. Then the two
+possible triples $(a_0,a_1,a_4)$ are
 \[
 (1,1,0)\qquad\text{or}\qquad (0,0,1).
 \]
-The corresponding diagnostic residues are summarized in Table~\ref{tab:m3-decoder}.
+The corresponding diagnostic residues are summarized in
+Table~\ref{tab:m3-decoder}.
 
 \begin{table}[t]
 \centering
@@ -88,7 +185,11 @@ r_0\equiv 3a_2\pmod 5,
 \qquad
 r_2\equiv a_2+2a_3+3\pmod 5.
 \]
-Thus $(q,r_0,r_2)$ determines $a_4$ uniquely. Outside $q=2$ this follows from the disjoint residue ranges above. Inside $q=2$, the values $r_0=1$ and $r_0=0$ identify the first and second branch respectively, while the only common value $r_0=3$ is separated by the disjoint alternatives $r_2\in\{0,2\}$ and $r_2\in\{1,4\}$.
+Thus $(q,r_0,r_2)$ determines $a_4$ uniquely. Outside $q=2$ this follows from
+the disjoint residue ranges above. Inside $q=2$, the values $r_0=1$ and
+$r_0=0$ identify the first and second branch respectively, while the only
+common value $r_0=3$ is separated by the disjoint alternatives
+$r_2\in\{0,2\}$ and $r_2\in\{1,4\}$.
 
 Once $a_4$ is known, define
 \[
@@ -110,44 +211,328 @@ Then
 \[
 u\equiv a_0+2a_1\pmod 5,
 \]
-and the same injectivity recovers $(a_0,a_1)$. Hence $a_0a_1a_2a_3a_4$ is uniquely determined by $(r_0,r_1,r_2)$, proving injectivity.
+and the same injectivity recovers $(a_0,a_1)$. Hence
+$a_0a_1a_2a_3a_4$ is uniquely determined by $(r_0,r_1,r_2)$, proving
+injectivity.
 \end{proof}
 
 \begin{theorem}[Sharp three-window threshold]\label{thm:block-invertibility}
-See \cite{MaZhang2026Nonlinearity}, Theorem~4.3.
+Let $m\ge3$ and $n\ge m$.  Then the finite-block stabilized map
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\longrightarrow X_m^n
+\]
+is injective.
 \end{theorem}
 
-\begin{remark}
-The cited theorem is the sharp finite-block injectivity result. In the present paper it is used as the threshold input for the phase-transition statement below.
-\end{remark}
+\begin{proof}
+It is enough first to prove injectivity for $n=m$.  The case $m=3$ is
+Lemma~\ref{lem:m3-decoder}.
+
+Assume now that $m\ge4$ and that the stabilized length-$m$ output residues
+\[
+r_t\in\{0,\ldots,F_{m+2}-1\},\qquad 0\le t\le m-1,
+\]
+come from a raw block
+\[
+a_0a_1\ldots a_{2m-2}\in\{0,1\}^{2m-1}.
+\]
+For $0\le t\le m-3$, set
+\[
+q_t:=r_t-r_{t+1}-r_{t+2}\pmod {F_{m+2}},
+\]
+represented in $\{0,\ldots,F_{m+2}-1\}$.  Since
+\[
+r_t\equiv\sum_{j=0}^{m-1}a_{t+j}F_{j+2}\pmod {F_{m+2}},
+\]
+the Fibonacci recurrence cancels all interior terms and gives
+\begin{equation}\label{eq:block-decoder-qt}
+q_t\equiv a_t+a_{t+1}+F_m a_{t+m+1}\pmod {F_{m+2}}.
+\end{equation}
+If $a_{t+m+1}=0$, the right-hand side is one of $\{0,1,2\}$.  If
+$a_{t+m+1}=1$, it is one of
+\[
+\{F_m,F_m+1,F_m+2\}.
+\]
+For $m\ge4$ these alternatives are disjoint, and the second set still lies
+strictly below the modulus because
+\[
+F_m+2 < F_m+F_{m+1}=F_{m+2}.
+\]
+Thus each $q_t$ determines the boundary bit $a_{t+m+1}$.  As $t$ runs from
+$0$ to $m-3$, this recovers
+\[
+a_{m+1},a_{m+2},\ldots,a_{2m-2}.
+\]
+
+The last residue $r_{m-1}$ now contains only two unknown bits:
+\[
+r_{m-1}\equiv
+a_{m-1}+2a_m+\sum_{j=2}^{m-1}a_{m-1+j}F_{j+2}
+\pmod {F_{m+2}}.
+\]
+The displayed tail sum is known.  Since
+\[
+(u,v)\mapsto u+2v
+\]
+is injective on $\{0,1\}^2$ and its values lie in $\{0,1,2,3\}$, the residue
+$r_{m-1}$ recovers $(a_{m-1},a_m)$.  Then, for
+$j=m-2,m-3,\ldots,0$, the residue $r_j$ has the form
+\[
+r_j\equiv a_j+\sum_{i=1}^{m-1}a_{j+i}F_{i+2}\pmod {F_{m+2}},
+\]
+where the sum is already known.  Because $a_j\in\{0,1\}$, this determines
+$a_j$ uniquely.  Hence $\Phi_{m,m}$ is injective for every $m\ge4$.
+
+Now let $n\ge m$ and suppose two raw blocks
+$a_0\ldots a_{n+m-2}$ and $b_0\ldots b_{n+m-2}$ have the same
+$\Phi_{m,n}$-image.  For every $0\le s\le n-m$, the length-$m$ output
+subblocks beginning at $s$ agree.  By the already proved injectivity of
+$\Phi_{m,m}$, the corresponding raw subblocks
+\[
+a_s\ldots a_{s+2m-2}
+\quad\text{and}\quad
+b_s\ldots b_{s+2m-2}
+\]
+are equal.  These intervals cover all indices $0,\ldots,n+m-2$, so the two
+raw blocks are equal.
+\end{proof}
 
 \begin{corollary}[Explicit sliding-block decoder above threshold]\label{cor:explicit-decoder}
-See \cite{MaZhang2026Nonlinearity}, Corollary~4.4.
+Assume $m\ge3$.  For each allowed word
+\[
+W=(y_0,\ldots,y_{m-1})\in\mathcal L_m(Y_m)
+\]
+let
+\[
+\Psi_{m,m}(W)=a_0a_1\ldots a_{2m-2}
+\]
+be the unique raw block whose $\Phi_{m,m}$-image is $W$, as supplied by
+Theorem~\ref{thm:block-invertibility}.  Define
+\[
+\psi_m(W):=a_0.
+\]
+Then for every $a\in\{0,1\}^{\ZZ}$ and $y=\Phi_m(a)$,
+\[
+a_t=\psi_m(y_t,y_{t+1},\ldots,y_{t+m-1})
+\qquad\text{for all }t\in\ZZ.
+\]
+Thus the inverse above threshold is a sliding-block code with memory $0$ and
+anticipation $m-1$.
 \end{corollary}
+
+\begin{proof}
+The block $(y_t,\ldots,y_{t+m-1})$ is the $\Phi_{m,m}$-image of
+$a_ta_{t+1}\ldots a_{t+2m-2}$.  By Theorem~\ref{thm:block-invertibility} this
+raw block is the unique preimage of the displayed output block.  Therefore
+$\psi_m(y_t,\ldots,y_{t+m-1})$ is its first bit, namely $a_t$.
+\end{proof}
 
 \begin{proposition}[Sharp low-window counterexamples]\label{prop:low-window-counterexamples}
-See \cite{MaZhang2026Nonlinearity}, Proposition~4.5.
+The threshold in Theorem~\ref{thm:block-invertibility} is sharp in both
+directions.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item At $m=2$, the two distinct raw sequences $0^{\ZZ}$ and $1^{\ZZ}$ have
+  the same image:
+  \[
+  \Phi_2(0^{\ZZ})=\Phi_2(1^{\ZZ})=(00)^{\ZZ}.
+  \]
+  \item At $m=3$ and $n=2$, the distinct raw blocks $0001$ and $0110$ have the
+  same stabilized two-block image:
+  \[
+  \Phi_{3,2}(0001)=\Phi_{3,2}(0110)=(000,001).
+  \]
+\end{enumerate}
 \end{proposition}
 
+\begin{proof}
+For $m=2$ one has $F_4=3$ and
+\[
+X_2=\{00,10,01\},
+\qquad
+\Val_2(00)=0,\quad \Val_2(10)=1,\quad \Val_2(01)=2.
+\]
+Thus $\Fold_2(00)=00$, while
+\[
+\Val_2(11)=1+2=3\equiv0\pmod3,
+\]
+so $\Fold_2(11)=00$ as well.  This proves (i).
+
+For (ii), use the $m=3$ weights $1,2,3$ and modulus $F_5=5$.  The block
+$0001$ has windows $000$ and $001$, already admissible, so its output is
+$(000,001)$.  The block $0110$ has windows $011$ and $110$.  Their valuations
+are
+\[
+\Val_3(011)=2+3=5\equiv0\pmod5,
+\qquad
+\Val_3(110)=1+2=3\pmod5.
+\]
+The admissible representatives of residues $0$ and $3$ are $000$ and $001$,
+respectively.  Hence $\Phi_{3,2}(0110)=(000,001)$.
+\end{proof}
+
 \begin{theorem}[Complete classification of the two-window branch locus]\label{thm:m2-branch-locus}
-See \cite{MaZhang2026Nonlinearity}, Theorem~4.6.
+Let
+\[
+y^\ast:=(\ldots,00,00,00,\ldots)\in Y_2.
+\]
+Then
+\[
+\Phi_2^{-1}(y^\ast)=\{0^{\ZZ},1^{\ZZ}\}.
+\]
+Every other point of $Y_2$ has a singleton preimage under $\Phi_2$.
 \end{theorem}
 
+\begin{proof}
+The computation in Proposition~\ref{prop:low-window-counterexamples} gives
+the complete two-window rule:
+\[
+\Fold_2(00)=00,\qquad \Fold_2(11)=00,\qquad
+\Fold_2(10)=10,\qquad \Fold_2(01)=01.
+\]
+Thus a symbol $10$ in the output determines the adjacent raw pair as $10$, a
+symbol $01$ determines the adjacent raw pair as $01$, and a symbol $00$ says
+precisely that the two adjacent raw bits are equal.
+
+If $y=y^\ast$, then every adjacent raw pair in any lift must be either $00$ or
+$11$, so all adjacent raw bits are equal.  The only two lifts are therefore
+$0^{\ZZ}$ and $1^{\ZZ}$.
+
+Now suppose $y\ne y^\ast$.  Choose an index $s$ with
+$y_s\in\{10,01\}$.  This output symbol determines the raw pair
+$(a_s,a_{s+1})$.  Moving to the right, each subsequent output symbol determines
+$a_{t+1}$ from $a_t$: if $y_t=00$ then $a_{t+1}=a_t$, while if
+$y_t=10$ or $01$ the pair is explicitly that symbol.  Moving to the left,
+the same rule determines $a_t$ from $a_{t+1}$.  Hence there is at most one
+bi-infinite lift.  Since $y\in Y_2$, at least one lift exists, so the lift is
+unique.
+\end{proof}
+
 \begin{corollary}[Exact entropy and KL defect formulas at the two-window threshold]\label{cor:m2-defect-formulas}
-See \cite{MaZhang2026Nonlinearity}, Corollary~4.7. The present version also records the boundary convention that, if the source law assigns positive mass to the branch fiber while the comparison law assigns none, both raw and pushed-forward divergences are infinite and no finite defect identity is asserted.
+Let $\mu$ be a Borel probability measure on $\{0,1\}^{\ZZ}$ and let
+$\eta:=(\Phi_2)_*\mu$.  Set
+\[
+B_0:=\{0^{\ZZ}\},\qquad B_1:=\{1^{\ZZ}\},\qquad
+p_i:=\mu(B_i),\qquad p:=p_0+p_1.
+\]
+Then the conditional entropy of the raw trajectory given its stabilized
+trajectory is
+\[
+H_\mu(a\mid \Phi_2(a))=
+\begin{cases}
+0, & p=0,\\[1mm]
+p\,h_2(p_0/p), & p>0,
+\end{cases}
+\]
+where $h_2(s):=-s\log s-(1-s)\log(1-s)$.
+
+If $\nu$ is another Borel probability measure, $\xi:=(\Phi_2)_*\nu$,
+$q_i:=\nu(B_i)$ and $q:=q_0+q_1$, then, whenever the right-hand side is finite,
+\[
+D_{\KL}(\mu\|\nu)-D_{\KL}(\eta\|\xi)
+=
+p\,D_{\KL}\!\left(
+\left(\frac{p_0}{p},\frac{p_1}{p}\right)
+\middle\|
+\left(\frac{q_0}{q},\frac{q_1}{q}\right)
+\right),
+\]
+with the convention that the defect is $0$ when $p=0$.  If $p>0$ and $q=0$,
+then both $D_{\KL}(\mu\|\nu)$ and $D_{\KL}(\eta\|\xi)$ are infinite and no
+finite defect identity is asserted.  If $p>0$, $q>0$, and some $p_i>0=q_i$,
+then the raw divergence and the displayed defect are infinite.
 \end{corollary}
 
-\begin{remark}
-The added boundary convention is a qualitative endpoint clarification of the same branch-fiber formula in \cite{MaZhang2026Nonlinearity}; it does not change the finite-defect identity on its stated finite range.
-\end{remark}
+\begin{proof}
+By Theorem~\ref{thm:m2-branch-locus}, the conditional distribution of $a$
+given $\Phi_2(a)=y$ is a point mass for every $y\ne y^\ast$.  Over
+$y^\ast$ it is the two-point distribution
+\[
+\left(\frac{p_0}{p},\frac{p_1}{p}\right)
+\]
+when $p>0$.  Integrating the entropy of these conditional distributions gives
+the displayed conditional-entropy formula.
+
+The KL identity is the chain rule for relative entropy under the measurable
+map $\Phi_2$:
+\[
+D_{\KL}(\mu\|\nu)
+=D_{\KL}(\eta\|\xi)
++\int D_{\KL}\bigl(\mu(\,\cdot\,\mid \Phi_2=y)\|
+\nu(\,\cdot\,\mid \Phi_2=y)\bigr)\,d\eta(y),
+\]
+with the usual extended-value conventions.  All conditional divergences vanish
+off $y^\ast$ because both conditional measures are the same point mass there.
+The only possible contribution is over $y^\ast$, where the conditional laws
+are the two displayed branch distributions.  This proves the formula and the
+boundary cases.
+\end{proof}
 
 \begin{corollary}[Asymptotic sufficiency off the branch fiber]\label{cor:m2-asymptotic-sufficiency}
-See \cite{MaZhang2026Nonlinearity}, Corollary~4.8.
+Let
+\[
+B:=B_0\cup B_1=\{0^{\ZZ},1^{\ZZ}\}.
+\]
+On $\{0,1\}^{\ZZ}\setminus B$ the map $\Phi_2$ is a Borel isomorphism onto
+$Y_2\setminus\{y^\ast\}$.  Consequently, for any family of probability laws
+$\{\mu_u:u\in\mathcal U\}$ satisfying $\mu_u(B)=0$ for all $u$, the raw
+path-space experiment and the stabilized path-space experiment
+$\{(\Phi_2)_*\mu_u:u\in\mathcal U\}$ are deterministically equivalent.  In
+particular all decision problems based on the full trajectory and the
+path-space KL divergence are preserved.  For each fixed $u$ and each fixed
+raw cylinder, the cylinder is recovered from a sufficiently large stabilized
+block with $\mu_u$-probability tending to one.
 \end{corollary}
 
+\begin{proof}
+Theorem~\ref{thm:m2-branch-locus} gives a singleton fiber over every point of
+$Y_2\setminus\{y^\ast\}$ and shows that the whole non-singleton fiber is $B$.
+The graph rule in its proof reconstructs the unique raw sequence from any
+nonconstant output by locating one symbol $10$ or $01$ and propagating left and
+right; this gives a Borel inverse on $Y_2\setminus\{y^\ast\}$.  Thus $\Phi_2$
+is a measurable bijection between the two full-measure spaces for every
+$\mu_u$ in the family.  Transporting full-trajectory decision rules through
+this inverse gives identical risk distributions, and invariance of KL
+divergence under a bimeasurable change of variables gives the path-space KL
+claim.
+
+It remains only to justify the stated asymptotic finite-window recovery.  To
+recover a fixed raw coordinate from a finite stabilized block, search inside
+that block for a symbol $10$ or $01$ and propagate the equality rule through
+the intervening $00$ symbols.  The only obstruction inside a symmetric
+stabilized block of radius $N$ is that all visible symbols in that block are
+$00$.  The corresponding raw event is the union of the two constant cylinders
+on an interval whose length tends to infinity with $N$; these events decrease
+to $B_0\cup B_1$.  Since $\mu_u(B)=0$, their probabilities tend to zero.  A
+finite raw cylinder is recovered by applying the same argument to finitely
+many coordinates and taking a union bound.
+\end{proof}
+
 \begin{corollary}[Mod-zero invertibility at the two-window threshold]\label{cor:m2-mod-zero}
-See \cite{MaZhang2026Nonlinearity}, Corollary~4.9.
+Let $\mu$ be a Borel probability measure on $\{0,1\}^{\ZZ}$.  The map
+\[
+\Phi_2:(\{0,1\}^{\ZZ},\mu)\longrightarrow(Y_2,(\Phi_2)_*\mu)
+\]
+admits a measurable inverse modulo null sets if and only if
+\[
+\mu(\{0^{\ZZ}\})=0\quad\text{or}\quad \mu(\{1^{\ZZ}\})=0.
+\]
+In particular, if $\mu(\{0^{\ZZ},1^{\ZZ}\})=0$, then $\Phi_2$ is a mod-zero
+isomorphism.
 \end{corollary}
+
+\begin{proof}
+If both branch atoms have positive $\mu$-mass, then every full-measure subset
+of the domain contains both $0^{\ZZ}$ and $1^{\ZZ}$, and these two points have
+the same image.  No inverse can be defined modulo null sets.
+
+Conversely, suppose one of the two branch atoms is null.  Remove that null
+atom from the domain.  On the remaining full-measure set every fiber is a
+singleton by Theorem~\ref{thm:m2-branch-locus}: off $y^\ast$ this is the
+branch-locus classification, and over $y^\ast$ only the non-null branch atom
+remains.  The inverse is the Borel inverse from
+Corollary~\ref{cor:m2-asymptotic-sufficiency} off $y^\ast$, together with the
+remaining branch point at $y^\ast$ when it has positive mass.
+\end{proof}
 
 \begin{corollary}[Full block complexity of the one-sided stabilized image]\label{cor:one-sided-complexity}
 Let
@@ -156,7 +541,7 @@ p_{Y_m^+}(n):=\#\mathcal L_n(Y_m^+)
 \]
 denote the length-$n$ word complexity of the one-sided stabilized image
 \[
-Y_m^+:=\Phi_m^+(\{0,1\}^{\mathbb N}),
+Y_m^+:=\Phi_m^+(\{0,1\}^{\NN}),
 \qquad
 (\Phi_m^+(a))_t:=\Fold_m(a_t\ldots a_{t+m-1}).
 \]
@@ -167,16 +552,102 @@ p_{Y_m^+}(n)=2^{n+m-1}.
 \end{corollary}
 
 \begin{proof}
-The domain of $\Phi_{m,n}$ has cardinality $2^{n+m-1}$. By Theorem~\ref{thm:block-invertibility}, $\Phi_{m,n}$ is injective, so its image has the same cardinality. That image is precisely the set of length-$n$ blocks appearing in $Y_m^+$.
+The domain of $\Phi_{m,n}$ has cardinality $2^{n+m-1}$. By
+Theorem~\ref{thm:block-invertibility}, $\Phi_{m,n}$ is injective, so its image
+has the same cardinality. That image is precisely the set of length-$n$ blocks
+appearing in $Y_m^+$.
 \end{proof}
 
 \begin{corollary}[One-sided stabilized-window conjugacy]\label{cor:one-sided-conjugacy}
-See \cite{MaZhang2026Nonlinearity}, Corollary~4.11.
+For every $m\ge3$, the map
+\[
+\Phi_m^+:\{0,1\}^{\NN}\longrightarrow Y_m^+
+\]
+is a topological conjugacy of one-sided shifts onto its image.  Its inverse is
+the sliding-block code
+\[
+(\Phi_m^+)^{-1}(y)_t=\psi_m(y_t,\ldots,y_{t+m-1}),
+\qquad t\ge0,
+\]
+with memory $0$ and anticipation $m-1$.
 \end{corollary}
 
+\begin{proof}
+Surjectivity onto $Y_m^+$ is the definition of the image.  The local formula
+in Corollary~\ref{cor:explicit-decoder} applies to every one-sided trajectory
+because the block $(y_t,\ldots,y_{t+m-1})$ is available for each $t\ge0$.
+Thus it recovers every raw coordinate $a_t$.  The decoder is continuous and
+commutes with the one-sided shift, so it is a topological inverse to
+$\Phi_m^+$ on $Y_m^+$.
+\end{proof}
+
 \begin{theorem}[Two-sided finite-memory conjugacy and finite-type closure]\label{thm:two-sided-conjugacy}
-See \cite{MaZhang2026Nonlinearity}, Theorem~4.12.
+Assume $m\ge3$.  Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item The factor map
+  \[
+  \Phi_m:(\{0,1\}^{\ZZ},\sigma)\longrightarrow(Y_m,\sigma)
+  \]
+  is a topological conjugacy.  Its inverse is
+  \[
+  \Phi_m^{-1}(y)_t=\psi_m(y_t,\ldots,y_{t+m-1}).
+  \]
+  \item Let $\mathcal B_m:=\mathcal L_m(Y_m)$ and, for
+  $W\in\mathcal B_m$, let $\Psi_{m,m}(W)\in\{0,1\}^{2m-1}$ be the unique
+  raw block with $\Phi_{m,m}(\Psi_{m,m}(W))=W$.  A sequence
+  $y\in(X_m)^{\ZZ}$ belongs to $Y_m$ if and only if every length-$m$ block
+  $W_t:=(y_t,\ldots,y_{t+m-1})$ lies in $\mathcal B_m$ and the decoded raw
+  blocks satisfy the overlap condition
+  \[
+  \Psi_{m,m}(W_t)_{1,\ldots,2m-2}
+  =
+  \Psi_{m,m}(W_{t+1})_{0,\ldots,2m-3}
+  \qquad\text{for all }t\in\ZZ.
+  \]
+  \item In particular $Y_m$ is a subshift of finite type.  It is defined by
+  finitely many forbidden words of length at most $m+1$ over the alphabet
+  $X_m$.
+  \item Pushforward by $\Phi_m$ gives a bijection between shift-invariant
+  Borel probability measures on $\{0,1\}^{\ZZ}$ and shift-invariant Borel
+  probability measures on $Y_m$, with inverse pushforward by the displayed
+  local decoder.
+\end{enumerate}
 \end{theorem}
+
+\begin{proof}
+The formula in Corollary~\ref{cor:explicit-decoder} gives a continuous
+shift-commuting left inverse to $\Phi_m$ on $Y_m$.  Since $Y_m$ is the image of
+$\Phi_m$, this left inverse is also a right inverse on $Y_m$.  Hence $\Phi_m$
+is a topological conjugacy, proving (i).
+
+If $y=\Phi_m(a)$, then each $W_t$ lies in $\mathcal B_m$ and
+$\Psi_{m,m}(W_t)=a_ta_{t+1}\ldots a_{t+2m-2}$.  Consecutive decoded raw
+blocks therefore overlap in their common $2m-2$ coordinates, so the condition
+in (ii) is necessary.
+
+Conversely, suppose a sequence $y\in(X_m)^{\ZZ}$ satisfies the two conditions
+in (ii).  The overlap condition glues the finite words
+$\Psi_{m,m}(W_t)$ into a unique bi-infinite binary sequence $a$ such that
+\[
+\Psi_{m,m}(W_t)=a_ta_{t+1}\ldots a_{t+2m-2}
+\qquad\text{for all }t.
+\]
+Applying $\Phi_{m,m}$ to this raw block gives $W_t$, so in particular
+\[
+\Fold_m(a_t,\ldots,a_{t+m-1})=y_t
+\]
+for every $t$.  Thus $y=\Phi_m(a)\in Y_m$.  This proves (ii).
+
+The criterion in (ii) depends only on adjacent length-$m$ output blocks, hence
+only on words of length $m+1$ over the finite alphabet $X_m$.  There are
+finitely many violations, so $Y_m$ is an SFT with memory at most $m$.  This
+proves (iii).
+
+Finally, a topological conjugacy sends invariant Borel probability measures
+bijectively to invariant Borel probability measures by pushforward, and the
+inverse bijection is pushforward by the inverse conjugacy.  The inverse
+conjugacy is the local decoder in (i), proving (iv).
+\end{proof}
 
 \begin{theorem}[Three-window phase transition]\label{thm:phase-transition}
 For the sliding stabilized-window factors $\Phi_m$, $m\ge2$, there are exactly
@@ -186,12 +657,12 @@ two regimes.
   \[
   \Phi_2^{-1}\bigl((\ldots,00,00,\ldots)\bigr)
   =
-  \{0^{\mathbb Z},1^{\mathbb Z}\}.
+  \{0^{\ZZ},1^{\ZZ}\}.
   \]
   Every other point of $Y_2$ has a singleton preimage.
   \item For every $m\ge3$ the map
   \[
-  \Phi_m:\bigl(\{0,1\}^{\mathbb Z},\sigma\bigr)\to(Y_m,\sigma)
+  \Phi_m:\bigl(\{0,1\}^{\ZZ},\sigma\bigr)\to(Y_m,\sigma)
   \]
   is a topological conjugacy onto a subshift of finite type. Its inverse is a
   sliding-block code with memory $0$ and anticipation $m-1$.
@@ -202,27 +673,18 @@ only at $m=2$, and there it consists of the single branch orbit pair displayed
 above.
 \end{theorem}
 
-\begin{remark}
-The ingredients are Theorems~4.6 and~4.12 of \cite{MaZhang2026Nonlinearity}. The increment here is the exhaustive DCDS phase-transition formulation: across all $m\ge2$ the stabilized-window factor has only the single two-window branch regime and the conjugacy/SFT regime, with no intermediate finite-to-one non-conjugate case.
-\end{remark}
-
 \begin{proof}
-By Theorem~4.6 of \cite{MaZhang2026Nonlinearity}, the two-window path-space
-fiber over the constant $00$ output is exactly
-$\{0^{\mathbb Z},1^{\mathbb Z}\}$, and every other point of $Y_2$ has a
-singleton preimage. Since both preimages are fixed points, this is a single
-shift-orbit pair.
-
-By Theorem~4.12 of \cite{MaZhang2026Nonlinearity}, every $m\ge3$ gives a
-topological conjugacy onto $Y_m$, the image is a subshift of finite type, and
-the inverse is a sliding-block code with memory $0$ and anticipation $m-1$.
-These two alternatives exhaust all integers $m\ge2$. Thus there is no remaining
-value of $m$ at which a nontrivial finite-to-one, non-conjugate, or non-SFT
-intermediate degeneration can occur.
+The two-window statement is exactly Theorem~\ref{thm:m2-branch-locus}.  The
+above-threshold statement is Theorem~\ref{thm:two-sided-conjugacy}.  These two
+alternatives exhaust all integers $m\ge2$.
 \end{proof}
 
 \begin{remark}[Decoder complexity]\label{rem:decoder-complexity}
-The inverse code supplied by Corollary~\ref{cor:explicit-decoder} reads a sliding window of length $m$ and outputs one raw bit. Equivalently, the decoder may be implemented by maintaining an overlap state of size $m-1$. The arithmetic cost is $O(m)$ per output symbol, since each decoding step involves at most $m$ Fibonacci-weighted additions modulo $F_{m+2}$.
+The inverse code supplied by Corollary~\ref{cor:explicit-decoder} reads a
+sliding window of length $m$ and outputs one raw bit. Equivalently, the decoder
+may be implemented by maintaining an overlap state of size $m-1$. The
+arithmetic cost is $O(m)$ per output symbol, since each decoding step involves
+at most $m$ Fibonacci-weighted additions modulo $F_{m+2}$.
 \end{remark}
 
 \begin{proposition}[Standard dynamical corollaries above threshold]\label{prop:conjugacy-consequences}
@@ -234,29 +696,47 @@ Assume $m\ge 3$.
   \qquad
   \zeta_{Y_m}(z)=\frac{1}{1-2z}.
   \]
-  \item Pushforward by $\Phi_m$ induces a bijection between the shift-invariant Borel probability measures on $\{0,1\}^{\mathbb Z}$ and those on $Y_m$.
-  \item Ergodicity, weak mixing, mixing, measure-theoretic entropy, and the Bernoulli and $K$ properties are transported exactly through the conjugacy.
+  \item Pushforward by $\Phi_m$ induces a bijection between the shift-invariant
+  Borel probability measures on $\{0,1\}^{\ZZ}$ and those on $Y_m$.
+  \item Ergodicity, weak mixing, mixing, measure-theoretic entropy, and the
+  Bernoulli and $K$ properties are transported exactly through the conjugacy.
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-All three items are standard consequences of the conjugacy and inverse sliding-block code in Theorem~\ref{thm:two-sided-conjugacy}. Fixed-point counts and the Artin--Mazur zeta function are conjugacy invariants. The inverse sliding-block code gives the bijection of invariant measures. The dynamical statements in (iii) are invariants of topological or measure-theoretic conjugacy; see \cite{Walters1982}.
+All three items are standard consequences of the conjugacy and inverse
+sliding-block code in Theorem~\ref{thm:two-sided-conjugacy}. Fixed-point counts
+and the Artin--Mazur zeta function are conjugacy invariants. The inverse
+sliding-block code gives the bijection of invariant measures. The dynamical
+statements in (iii) are invariants of topological or measure-theoretic
+conjugacy; see \cite{Walters1982}.
 \end{proof}
 
 \begin{remark}\label{rem:exact-recoding}
-For $m\ge3$ the stabilized image is a subshift of finite type topologically conjugate to the full two-shift by a finite-memory code. The only obstruction below threshold is the branch locus in Theorem~\ref{thm:m2-branch-locus}.
+For $m\ge3$ the stabilized image is a subshift of finite type topologically
+conjugate to the full two-shift by a finite-memory code. The only obstruction
+below threshold is the branch locus in Theorem~\ref{thm:m2-branch-locus}.
 \end{remark}
 
 \begin{remark}\label{rem:sofic-comparison}
-In the terminology of \cite{LindMarcus1995}, $\mathcal G_m$ is a right-resolving presentation of the sofic shift $Y_m$, and $\Phi_m$ has degree at most $2^{m-1}$ by Theorem~\ref{thm:finite-state-lift}. A right-resolving factor of degree~1 between irreducible shifts of finite type is a conjugacy \cite[Theorem~8.1.16]{LindMarcus1995}; see also \cite{Ashley1991} for the equal-entropy resolving theory and \cite{Boyle1983} for the lower-entropy obstruction. The threshold theorem says that degree~1 is achieved exactly at $m=3$. This is an arithmetic fact, not a formal consequence of the sofic framework, and it uses the explicit decoder of Lemma~\ref{lem:m3-decoder}.
+In the terminology of \cite{LindMarcus1995}, $\mathcal G_m$ is a
+right-resolving presentation of the sofic shift $Y_m$, and $\Phi_m$ has degree
+at most $2^{m-1}$ by Theorem~\ref{thm:finite-state-lift}. A right-resolving
+factor of degree~1 between irreducible shifts of finite type is a conjugacy
+\cite[Theorem~8.1.16]{LindMarcus1995}; see also \cite{Ashley1991} for the
+equal-entropy resolving theory and \cite{Boyle1983} for the lower-entropy
+obstruction. The threshold theorem says that degree~1 is achieved exactly at
+$m=3$. This is an arithmetic fact, not a formal consequence of the sofic
+framework, and it uses the explicit decoder of Lemma~\ref{lem:m3-decoder}.
 \end{remark}
 
 \begin{proposition}[Measure-theoretic entropy preservation under the stabilized-window factor]\label{prop:measure-entropy-preservation}
-Let $m\ge 2$, let $\nu$ be a shift-invariant Borel probability measure on $\{0,1\}^{\mathbb Z}$, and let
+Let $m\ge 2$, let $\nu$ be a shift-invariant Borel probability measure on
+$\{0,1\}^{\ZZ}$, and let
 \[
 \eta:=(\Phi_m)_*\nu
 \]
-be its image on $Y_m\subset (X_m)^{\mathbb Z}$. Then
+be its image on $Y_m\subset (X_m)^{\ZZ}$. Then
 \[
 h_\eta(\sigma)=h_\nu(\sigma).
 \]
@@ -269,7 +749,8 @@ A_{0:n+m-2}:=(A_0,\dots,A_{n+m-2})
 \]
 denote the raw binary block of length $n+m-1$, and let
 \[
-Y_{0:n-1}:=(Y_0,\dots,Y_{n-1}),\qquad Y_t=\Fold_m(A_t\cdots A_{t+m-1}),
+Y_{0:n-1}:=(Y_0,\dots,Y_{n-1}),\qquad
+Y_t=\Fold_m(A_t\cdots A_{t+m-1}),
 \]
 denote the stabilized block of length $n$.
 
@@ -277,11 +758,13 @@ Since $Y_{0:n-1}$ is a deterministic function of $A_{0:n+m-2}$, one has
 \[
 H_\eta(Y_{0:n-1})\le H_\nu(A_{0:n+m-2}).
 \]
-Conversely, by the finite-state lift in Theorem~\ref{thm:finite-state-lift}, once the initial overlap state
+Conversely, by the finite-state lift in Theorem~\ref{thm:finite-state-lift},
+once the initial overlap state
 \[
 (A_0,\dots,A_{m-2})\in\{0,1\}^{m-1}
 \]
-is specified, the entire raw block $A_{0:n+m-2}$ is uniquely determined by the stabilized block $Y_{0:n-1}$. Therefore
+is specified, the entire raw block $A_{0:n+m-2}$ is uniquely determined by the
+stabilized block $Y_{0:n-1}$. Therefore
 \[
 H_\nu(A_{0:n+m-2}\mid Y_{0:n-1})\le (m-1)\log 2.
 \]
@@ -297,7 +780,11 @@ hence
 \[
 0\le H_\nu(A_{0:n+m-2})-H_\eta(Y_{0:n-1})\le (m-1)\log 2.
 \]
-Divide by $n$ and let $n\to\infty$. The additive discrepancy is $O(1)$, so it disappears after normalization. The left-hand side converges to $h_\nu(\sigma)$ because shifting the block length by the fixed amount $m-1$ does not affect the entropy rate, while the right-hand side converges to $h_\eta(\sigma)$. Thus
+Divide by $n$ and let $n\to\infty$. The additive discrepancy is $O(1)$, so it
+disappears after normalization. The left-hand side converges to
+$h_\nu(\sigma)$ because shifting the block length by the fixed amount $m-1$
+does not affect the entropy rate, while the right-hand side converges to
+$h_\eta(\sigma)$. Thus
 \[
 h_\eta(\sigma)=h_\nu(\sigma).
 \]
@@ -313,11 +800,11 @@ h_{\mathrm{top}}(Y_m)=\log 2.
 \begin{proof}
 The map $\Phi_m$ is a continuous factor from the full two-shift onto $Y_m$, so
 \[
-h_{\mathrm{top}}(Y_m)\le h_{\mathrm{top}}(\{0,1\}^{\mathbb Z})=\log 2.
+h_{\mathrm{top}}(Y_m)\le h_{\mathrm{top}}(\{0,1\}^{\ZZ})=\log 2.
 \]
 Let
 \[
-\nu_{1/2}:=\Bigl(\tfrac12,\tfrac12\Bigr)^{\otimes \mathbb Z}
+\nu_{1/2}:=\Bigl(\tfrac12,\tfrac12\Bigr)^{\otimes \ZZ}
 \]
 be the Bernoulli measure on the full two-shift, and set
 \[
@@ -327,7 +814,8 @@ By Proposition~\ref{prop:measure-entropy-preservation},
 \[
 h_{\eta_{1/2}}(\sigma)=h_{\nu_{1/2}}(\sigma)=\log 2.
 \]
-Since $\eta_{1/2}$ is a shift-invariant Borel probability measure on $Y_m$, the variational principle \cite{Walters1982} gives
+Since $\eta_{1/2}$ is a shift-invariant Borel probability measure on $Y_m$,
+the variational principle \cite{Walters1982} gives
 \[
 h_{\mathrm{top}}(Y_m)\ge \log 2.
 \]
@@ -335,5 +823,10 @@ Thus equality holds.
 \end{proof}
 
 \begin{remark}
-For every $m\ge2$ the stabilized-window factor preserves entropy. Once $m\ge3$, the structure is stronger: $Y_m$ is conjugate to the full two-shift. Preservation of periodic data and invariant measures is then a consequence of the conjugacy, not an additional source of arithmetic content. Proposition~\ref{prop:low-window-counterexamples} shows that the threshold cannot be lowered.
+For every $m\ge2$ the stabilized-window factor preserves entropy. Once
+$m\ge3$, the structure is stronger: $Y_m$ is conjugate to the full two-shift.
+Preservation of periodic data and invariant measures is then a consequence of
+the conjugacy, not an additional source of arithmetic content.
+Proposition~\ref{prop:low-window-counterexamples} shows that the threshold
+cannot be lowered.
 \end{remark}
