@@ -7,39 +7,211 @@ hand, we obtain its integer-order R\'enyi entropy rates
 
 \begin{definition}[Visible law under uniform input]
 \label{def:visible-law}
-See
-\cite[Definition~\textup{``Visible law under uniform input''}]{MaZhangProjectionCore2026}.
+For \(m\ge0\), the visible law is the probability measure on \(X_m\) obtained
+by pushing the uniform law on \(\Omega_m\) forward by \(\Fold_m\):
+\[
+  p_m(x):=2^{-m}\card{\{\omega\in\Omega_m:\Fold_m(\omega)=x\}}
+  =
+  \frac{d_m(x)}{2^m}
+  \qquad (x\in X_m).
+\]
 \end{definition}
 
 \begin{corollary}[Typical visible thickness band]
 \label{cor:visible-band}
-See
-\cite[Corollary~\textup{``Typical visible thickness band''}]{MaZhangProjectionCore2026}.
+For every \(\varepsilon>0\),
+\[
+  p_m\!\left\{
+    x\in X_m:
+    \Delta_1-\varepsilon\le \frac1m\log d_m(x)
+    \le \Delta_2+\varepsilon
+  \right\}
+  =
+  1-\exp\bigl(-(\varepsilon+o(1))m\bigr).
+\]
+Here \(\Delta_1=\log2-\log\varphi\), because
+\(S_1(m)=2^m\) and \(S_0(m)=F_{m+2}\).
 \end{corollary}
+
+\begin{proof}
+By \Cref{def:visible-law},
+\[
+  p_m(x)=\frac{d_m(x)}{S_1(m)}=\mu_{m,1}(x).
+\]
+Apply \Cref{thm:gibbs-selection} with \(q=1\).  The two exceptional tails
+outside the displayed band each have mass at most
+\(\exp(-(\varepsilon+o(1))m)\), and the sum of two such errors is still
+\(\exp(-(\varepsilon+o(1))m)\).  Finally,
+\[
+  \Delta_1=P_1-P_0=\log2-\log\varphi,
+\]
+using \(P_1=\log\lambda_1=\log2\) from \(S_1(m)=2^m\) and
+\(P_0=\log\varphi\).
+\end{proof}
 
 \begin{theorem}[Integer-order R\'enyi entropy rates]
 \label{thm:renyi-entropy-rate}
 \leanverified{paper_projection_renyi_entropy_rate}
-See
-\cite[Theorem~\textup{``Integer-order R\'enyi entropy rates''}]{MaZhangProjectionCore2026}.
+For every integer \(q\ge2\), let
+\[
+  H_q(p_m):=\frac{1}{1-q}\log\sum_{x\in X_m}p_m(x)^q
+\]
+be the R\'enyi entropy of order \(q\).  Then the entropy rate
+\[
+  h_q:=\lim_{m\to\infty}\frac1mH_q(p_m)
+\]
+exists and is
+\[
+  h_q=\frac{q\log2-P_q}{q-1}.
+\]
+Moreover,
+\[
+  \lim_{q\to\infty}h_q=\log2-\frac12\log\varphi .
+\]
 \end{theorem}
+
+\begin{proof}
+By \Cref{def:visible-law},
+\[
+  \sum_{x\in X_m}p_m(x)^q
+  =
+  2^{-mq}\sum_{x\in X_m}d_m(x)^q
+  =
+  2^{-mq}S_q(m).
+\]
+Therefore
+\[
+  H_q(p_m)
+  =
+  \frac{1}{1-q}\bigl(\log S_q(m)-mq\log2\bigr)
+  =
+  \frac{mq\log2-\log S_q(m)}{q-1}.
+\]
+For fixed \(q\ge2\), \Cref{thm:all-q-transfer} gives
+\[
+  \frac1m\log S_q(m)\to P_q,
+\]
+so the displayed rate follows.  Finally,
+\[
+  h_q
+  =
+  \frac{q}{q-1}\log2-\frac{q}{q-1}\cdot\frac{P_q}{q}.
+\]
+By \Cref{cor:renyi-endpoint}, \(P_q/q=\log(\lambda_q^{1/q})\to
+\frac12\log\varphi\), and hence \(h_q\to
+\log2-\frac12\log\varphi\).
+\end{proof}
 
 \begin{corollary}[Visible-tail envelope for thick fibers]
 \label{cor:visible-thick-tail}
 \leanverified{paper_projection_visible_thick_tail}
-See
-\cite[Corollary~\textup{``Visible-tail envelope for thick fibers''}]{MaZhangProjectionCore2026}.
+For \(\alpha\ge0\), set
+\[
+  E_m(\alpha):=
+  \left\{x\in X_m:\frac1m\log d_m(x)\ge\alpha\right\}.
+\]
+Then, for every integer \(q\ge1\),
+\[
+  \limsup_{m\to\infty}\frac1m\log p_m(E_m(\alpha))
+  \le
+  P_q-\log2-(q-1)\alpha .
+\]
+Consequently,
+\[
+  \limsup_{m\to\infty}\frac1m\log p_m(E_m(\alpha))
+  \le
+  \inf_{q\ge1}\bigl(P_q-\log2-(q-1)\alpha\bigr).
+\]
+If \(\alpha>\frac12\log\varphi\), then \(p_m(E_m(\alpha))=0\) for all
+sufficiently large \(m\).
 \end{corollary}
+
+\begin{proof}
+On \(E_m(\alpha)\), the inequality \(d_m(x)\ge e^{\alpha m}\) gives
+\[
+  d_m(x)\le e^{-(q-1)\alpha m}d_m(x)^q
+  \qquad(q\ge1).
+\]
+Thus
+\[
+  p_m(E_m(\alpha))
+  =
+  2^{-m}\sum_{x\in E_m(\alpha)}d_m(x)
+  \le
+  2^{-m}e^{-(q-1)\alpha m}S_q(m).
+\]
+Taking logarithms, dividing by \(m\), and applying
+\Cref{thm:all-q-transfer} gives the first bound.  Taking the infimum over
+\(q\ge1\) gives the second.  The final assertion follows from
+\Cref{thm:max-fiber}: if \(\alpha>\frac12\log\varphi\), then eventually
+\(D_m<e^{\alpha m}\), so \(E_m(\alpha)=\varnothing\).
+\end{proof}
 
 \begin{corollary}[Collision entropy rate]
 \label{thm:collision-entropy-rate}
 \leanverified{paper_projection_collision_entropy_rate}
-See
-\cite[Corollary~\textup{``Collision entropy rate''}]{MaZhangProjectionCore2026}.
+The collision entropy
+\[
+  H_2(p_m):=-\log\sum_{x\in X_m}p_m(x)^2
+\]
+satisfies
+\[
+  \lim_{m\to\infty}\frac1mH_2(p_m)=2\log2-P_2.
+\]
+Equivalently, \(H_2(p_m)=h_2m+o(m)\) with
+\[
+  h_2=2\log2-\log\lambda_2.
+\]
 \end{corollary}
+
+\begin{proof}
+This is \Cref{thm:renyi-entropy-rate} with \(q=2\).  Explicitly,
+\[
+  \sum_{x\in X_m}p_m(x)^2=2^{-2m}S_2(m),
+\]
+so
+\[
+  H_2(p_m)=2m\log2-\log S_2(m).
+\]
+Since \(m^{-1}\log S_2(m)\to P_2=\log\lambda_2\), the asserted rate follows.
+\end{proof}
 
 \begin{corollary}[R\'enyi-2 asymptotics]
 \label{cor:renyi2}
-See
-\cite[Corollary~\textup{``R\'enyi-2 asymptotics''}]{MaZhangProjectionCore2026}.
+Let \(p(\lambda)=\lambda^3-2\lambda^2-2\lambda+2\), and let
+\(\lambda_-\in(-2,-1)\), \(\lambda_+\in(0,1)\), and \(\rho\in(2,3)\) be its
+three real roots.  With the constants
+\[
+  T_2(m)=c_\rho\rho^m+c_-\lambda_-^m+c_+\lambda_+^m
+\]
+from \Cref{thm:q2-alternating-second-order}, one has
+\[
+  \sum_{x\in X_m}p_m(x)^2
+  =
+  4^{-m}\bigl(c_\rho\rho^m+c_-\lambda_-^m+c_+\lambda_+^m\bigr),
+\]
+where \(c_\rho>0\) and \(c_-\ne0\).  In particular,
+\[
+  H_2(p_m)
+  =
+  m(2\log2-\log\rho)-\log c_\rho
+  -\log\!\left(
+    1+\frac{c_-}{c_\rho}\left(\frac{\lambda_-}{\rho}\right)^m
+      +\frac{c_+}{c_\rho}\left(\frac{\lambda_+}{\rho}\right)^m
+  \right),
+\]
+and the leading rate is \(2\log2-\log\rho=2\log2-P_2\).
 \end{corollary}
+
+\begin{proof}
+By \Cref{def:T2}, \(T_2(m)=S_2(m)\).  The exact expansion of \(T_2(m)\) is
+\Cref{thm:q2-alternating-second-order}; substituting it into
+\[
+  \sum_{x\in X_m}p_m(x)^2=4^{-m}S_2(m)
+\]
+gives the first display.  Since \(\rho\) is the unique dominant root and
+\(c_\rho>0\), factor \(c_\rho\rho^m\) out of \(S_2(m)\) and take minus the
+logarithm.  This gives the displayed formula for \(H_2(p_m)\).
+\Cref{rem:chow-jones} identifies the dominant root \(\rho\) with
+\(\lambda_2\), so \(\log\rho=P_2\).
+\end{proof}
