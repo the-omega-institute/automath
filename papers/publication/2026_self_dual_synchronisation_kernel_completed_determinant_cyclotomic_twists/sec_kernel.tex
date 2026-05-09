@@ -83,8 +83,18 @@ Thus the digraph of \(B\) is strongly connected. Since there is also the
 self-loop \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
 Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The factorisation is
 then immediate. Since \((3z-1)\) is the unique factor whose reciprocal
-lies outside the unit circle, \(\rho(B)=3\). Evaluating the cofactor at
-\(z=1/3\) gives the residue constant. This proves part~\textup{(i)} of
+lies outside the unit circle, \(\rho(B)=3\). The residue is the exact
+one-line computation
+\[
+  \begin{aligned}
+  C_B
+  &=\lim_{z\to1/3}
+    \frac{1-3z}{(z-1)(z+1)(3z-1)(z^3-z^2+z+1)}  \\
+  &=-\frac{1}{(-2/3)(4/3)(34/27)}
+    =\frac{243}{272}.
+  \end{aligned}
+\]
+This proves part~\textup{(i)} of
 \Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
@@ -293,8 +303,8 @@ parity of \(j\). Hence
 \[
   x=w^2,\qquad y=sw
 \]
-generate the invariant subring, and there is a unique polynomial
-\(F(x,y)\in\QQ[x,y]\) with
+identify the invariant function field birationally, and the same lemma
+gives a unique polynomial \(F(x,y)\in\QQ[x,y]\) with
 \(\widehat\Delta(w,s)=F(w^2,sw)\).
 A direct substitution gives the displayed formula for \(F\). Conversely,
 adjoining \(w=\sqrt{x}\) recovers the function field of \(\overline{X}\)
@@ -529,8 +539,9 @@ Taking determinants yields the stated factorisation.
       a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
   \]
   then the primitive Fourier blocks of the \(m\)-cyclic lift, after
-  pairing conjugate characters and changing variables \(w=zr_a\), give
-  the real polynomial
+  pairing conjugate characters and applying the character-dependent
+  change of variables \(w=zr_a\), give the completed, normalized
+  primitive real factor
   \[
     \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
     =\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr).
@@ -547,7 +558,10 @@ unity, so the corresponding factor is one of the primitive Fourier
 blocks in \Cref{prop:sync-cyclic-lift-factorisation}. Replacing \(a\) by
 \(-a\) conjugates \(r_a\) and leaves \(s_a=r_a+r_a^{-1}\) unchanged, so
 conjugate primitive characters collapse to the same real slice
-\(\widehat\Delta(w,s_a)\).
+\(\widehat\Delta(w,s_a)\). Thus the displayed product is a polynomial in
+the normalized coordinate \(w\): for each primitive character separately,
+the corresponding factor in the original cyclic-lift determinant is
+obtained by the harmless scaling \(z=w/r_a\).
 
 By definition,
 \[
@@ -583,8 +597,12 @@ Concretely, the conjugates of \(s_m\) under \(\Gal(\QQ(s_m)/\QQ)\) are
 and \(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\). The degree is
 \(\deg\Phi_m^+=|A_m|=\varphi(2m)/2\). By
 \Cref{prop:sync-primitive-real-factor}, the polynomial \(R_m(w)\) is
-precisely the primitive real factor extracted from the \(m\)-cyclic
-lift.
+precisely the completed, normalized primitive real factor extracted from
+the \(m\)-cyclic lift. It is normalized because each primitive character
+\(r_a^2\) uses its own coordinate \(w=zr_a\); before this change of
+variables the primitive factors are the ordinary \(z\)-factors
+\(\Delta(z,r_a^2)\), and no single unscaled \(z\)-polynomial is being
+identified with \(R_m(w)\).
 
 For orientation, the first few real cyclotomic polynomials are
 \[
@@ -981,7 +999,20 @@ using the finite SageMath checks recorded in
 \Cref{sec:appendix-computation}\,\textup{(e)}. Thus the table below does
 not use \Cref{lem:root-separation}, which is only invoked for
 sufficiently large \(m\). Solving the specialised equations for these
-small values and comparing with the truncation of
+small values at \(100\)-bit precision, then rounding each displayed
+decimal to \(12\) digits after the decimal point and each displayed
+absolute error to three significant figures, gives the table below.
+The specialised equations used for the positive endpoint slices are
+\[
+\begin{array}{ll}
+m=4:  & \widehat\Delta(w,\sqrt2)=0,\\
+m=6:  & \widehat\Delta(w,\sqrt3)=0,\\
+m=8:  & \widehat\Delta\bigl(w,\sqrt{2+\sqrt2}\bigr)=0,\\
+m=10: & \widehat\Delta\bigl(w,\sqrt{(5+\sqrt5)/2}\bigr)=0.
+\end{array}
+\]
+Comparing the smallest-modulus roots of these equations with the
+truncation of
 \Cref{thm:rho-gap-m12} gives
 \[
   \begin{array}{c|c|c|c}

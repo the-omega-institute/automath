@@ -102,6 +102,15 @@ are used anywhere in the paper.
       \Delta(z,1)=1-2z-5z^2+6z^3+z^4-4z^5+3z^6
       =(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
     \]
+    Hence the residue constant used in
+    \Cref{prop:sync-kernel-spectrum} is checked exactly by
+    \[
+      \begin{aligned}
+      \lim_{z\to1/3}\frac{1-3z}{\Delta(z,1)}
+      &=-\frac{1}{(-2/3)(4/3)(34/27)}\\
+      &=\frac{243}{272}.
+      \end{aligned}
+    \]
     The same expansion satisfies
     \(\Delta(uz,u^{-1})=\Delta(z,u)\) coefficientwise, which is the
     explicit consistency check used in
@@ -294,12 +303,28 @@ gcd(f319, f319.derivative()), factor(f319)
     \]
     Together with the symmetry \(\lambda(-\alpha)=\lambda(\alpha)\),
     this verifies that the displayed values \(\rho_m\) are obtained from
-    the slices \(\alpha=\pm s_m\).
+    the slices \(\alpha=\pm s_m\). Numerically, SageMath~10.2 evaluates
+    the roots in the complex field with \(100\) bits of precision; the
+    values of \(\rho_m=1/\lambda(s_m)\) in the table are rounded to
+    \(12\) digits after the decimal point, and the absolute errors are
+    rounded to three significant figures.
+
+    The exact endpoint equations solved for the displayed \(\rho_m\)
+    values are
+    \[
+    \begin{array}{ll}
+      m=4:  & \widehat\Delta(w,\sqrt2)=0,\\
+      m=6:  & \widehat\Delta(w,\sqrt3)=0,\\
+      m=8:  & \widehat\Delta\bigl(w,\sqrt{2+\sqrt2}\bigr)=0,\\
+      m=10: & \widehat\Delta\bigl(w,\sqrt{(5+\sqrt5)/2}\bigr)=0.
+    \end{array}
+    \]
 
     \medskip
     \noindent\textit{Sage commands.}
 \begin{verbatim}
 R.<w> = PolynomialRing(QQ)
+CC = ComplexField(100)
 def H(alpha):
     return 1 - alpha*w - 5*w^2 + 3*alpha*w^3 + (5 - alpha^2)*w^4 \
         + (alpha^3 - 6*alpha)*w^5 + (alpha^2 - 1)*w^6
