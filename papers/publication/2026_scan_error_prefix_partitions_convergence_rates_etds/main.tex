@@ -597,11 +597,12 @@ Equivalently, only boundary atoms contribute:
 \end{proposition}
 
 \begin{remark}[Provenance]
-For tail events and symbolic cylinders this is the same atomwise Bayes
-decomposition as \cite[Proposition~3.1]{MaZhangPrefixBoundaryRates2026}.
-Here it is recorded directly in the larger finite-depth form for arbitrary
-$\mathcal{B}$-events and positive atoms, because later transfer bounds do not
-require $\mathsf{P}\in\mathcal{F}_\infty$.
+The tail-event cylinder specialization overlaps with
+\cite[Proposition~3.1]{MaZhangPrefixBoundaryRates2026}.  The statement and
+proof used here are independent: they are recorded directly in the larger
+finite-depth form for arbitrary $\mathcal{B}$-events and positive atoms,
+because later transfer bounds do not require
+$\mathsf{P}\in\mathcal{F}_\infty$.
 \end{remark}
 
 \begin{proof}
@@ -793,11 +794,11 @@ and therefore
 \end{theorem}
 
 \begin{remark}[Provenance]
-For tail-measurable events the same discrete threshold formula appears in
-\cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026}, where the terminal
-error is zero.  The present proof includes the finite-depth compensator and
-keeps the arbitrary-event terminal term: the limit is the residual best error
-over $\mathcal{F}_\infty$, not necessarily zero.
+The zero-terminal-error tail specialization is parallel to
+\cite[Proposition~4.1]{MaZhangPrefixBoundaryRates2026}.  The present theorem
+is proved here from the finite-depth compensator and keeps the arbitrary-event
+terminal term: the limit is the residual best error over
+$\mathcal{F}_\infty$, not necessarily zero.
 \end{remark}
 
 \begin{proof}
@@ -1771,6 +1772,87 @@ and using~\emph{(2)} yields the displayed sharp exponential scale with base
 $\rho(\widetilde{B})/\lambda_{\mathrm{cyl}}$.
 \end{proof}
 
+\begin{corollary}[DFA observers give a complete Parry scan-error law]
+\label{cor:dfa-observer-parry-law}
+Let $X$ be a mixing one-step SFT on the finite alphabet $\mathcal{A}$ with
+transition matrix $A$, let $\mu$ be its Parry measure, and assume
+$h_{\mathrm{top}}(X)=\log\lambda_{\mathrm{cyl}}>0$.  Let
+$\mathsf{P}\in\mathcal{F}_\infty$.  Suppose that the decisive languages
+$L_{1,\mu}(\mathsf{P})$, $L_{0,\mu}(\mathsf{P})$, and
+$L_{\partial,\mu}(\mathsf{P})$ are recognized on admissible words by finite
+deterministic automata.  Form the terminal-symbol product observer of
+Theorem~\ref{prop:automaton-regular-sufficient}, and let
+$\widehat G$ be its transition graph.  Assume that every accessible ambiguous
+state of this product observer reaches both a $1$-decided state and a
+$0$-decided state in $\widehat G$.  If there is at least one accessible
+ambiguous state, let $R_{\min}$ be the maximum of the two shortest-path
+distances, as in Theorem~\ref{prop:automaton-regular-sufficient}; if there is
+none, set $R_{\min}=1$.  Define
+\[
+  p_*:=\min\{\mu(x_{n+1}=j\mid x_n=i): A_{ij}=1\}>0,
+  \qquad
+  \theta:=p_*^{R_{\min}} .
+\]
+Then the refined ambiguous matrix $\widetilde B$ and initial vector $r_1$
+attached to this product observer satisfy, for every $m\ge1$,
+\[
+N_m(\partial\mathsf{P})=r_1\widetilde B^{\,m-1}\mathbf 1.
+\]
+If $\widetilde B$ is not nilpotent, then
+$\Lambda_\partial(\mathsf{P})=\rho(\widetilde B)$; if $\widetilde B$ is
+nilpotent, then $\partial_m\mathsf{P}=\varnothing$ for all large $m$ and
+$\Lambda_\partial(\mathsf{P})=1$ by convention.  Moreover, there are constants
+$c_-,c_+>0$ such that for every $m\ge1$,
+\[
+\theta c_-\lambda_{\mathrm{cyl}}^{-m}
+r_1\widetilde B^{\,m-1}\mathbf 1
+\le \varepsilon_m(\mathsf{P};\mu)
+\le
+\frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}
+r_1\widetilde B^{\,m-1}\mathbf 1 .
+\]
+Consequently, if $\widetilde B$ is primitive and nonzero, then
+\[
+\varepsilon_m(\mathsf{P};\mu)\asymp
+\left(\frac{\rho(\widetilde B)}{\lambda_{\mathrm{cyl}}}\right)^m
+=\lambda_{\mathrm{cyl}}^{-(1-\delta_\partial(\mathsf{P}))m}.
+\]
+Thus, under a finite and checkable automaton hypothesis, the boundary count,
+the higher-block invariant ambiguity exponent, and the Parry scan-error
+exponent are all computed by the single refined ambiguous graph.
+\end{corollary}
+
+\begin{proof}
+Because $X$ is mixing and $\mu$ is its Parry measure, every admissible cylinder
+has positive $\mu$-measure and every allowed one-step transition has positive
+conditional probability.  The hypotheses on the decisive languages therefore
+allow Theorem~\ref{prop:automaton-regular-sufficient} to build a finite-state
+posterior presentation from the terminal-symbol product automaton.  The same
+theorem says that this presentation is follower-resolving and that the
+distance condition in $\widehat G$ is equivalent to the
+$\mu$-resolving condition, with least resolving window $R_{\min}$.  Hence the
+posterior presentation satisfies all hypotheses of
+Theorem~\ref{thm:finite-state-posterior}.
+
+Applying Theorem~\ref{thm:finite-state-posterior}\emph{(1)} gives the exact
+matrix recursion for $N_m(\partial\mathsf{P})$, and
+Theorem~\ref{thm:finite-state-posterior}\emph{(2)} gives the limsup growth
+identity and the stated nilpotent convention.  The thickness constant in
+Theorem~\ref{thm:finite-state-posterior}\emph{(3)} is exactly
+$p_*^{R_{\min}}=\theta$, because the resolving continuations supplied by the
+product graph have length at most $R_{\min}$.  Combining this thickness with
+the Parry same-length cylinder bounds and the Bayes decomposition gives the
+two-sided scan-error estimate in
+Theorem~\ref{thm:finite-state-posterior}\emph{(4)}.  If $\widetilde B$ is
+primitive and nonzero, the Perron--Frobenius asymptotic in the final part of
+Theorem~\ref{thm:finite-state-posterior}\emph{(4)} gives the displayed sharp
+exponential scale.  Finally,
+Theorem~\ref{thm:finite-state-posterior}\emph{(2)} identifies
+$\delta_\partial(\mathsf{P})=\log\rho(\widetilde B)/
+\log\lambda_{\mathrm{cyl}}$ in the nonnilpotent case, which is the last
+equality.
+\end{proof}
+
 \begin{proposition}[Higher-block invariance of the ambiguity exponent]
 \label{prop:higher-block-invariance}
 Assume the hypotheses of Theorem~\ref{thm:finite-state-posterior}.  Then
@@ -1911,10 +1993,11 @@ exponent is subcritical.
 \end{proposition}
 
 \begin{remark}[Provenance]
-For tail events and symbolic cylinders this is the positive-atom analogue of
-\cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026}.  Here the estimate is
-proved directly at finite depth: no $\mathsf{P}\in\mathcal{F}_\infty$
-specialization is imposed before applying the bound.
+The tail-event cylinder version is background provenance from
+\cite[Proposition~5.3]{MaZhangPrefixBoundaryRates2026}.  The estimate needed
+in this article is proved directly below at finite depth for positive atoms:
+no $\mathsf{P}\in\mathcal{F}_\infty$ specialization is imposed before applying
+the bound.
 \end{remark}
 
 \begin{proof}
@@ -1971,10 +2054,11 @@ is the exponential growth exponent of $N_m(\partial\mathsf{P})$.
 \end{corollary}
 
 \begin{remark}[Provenance]
-For tail events and symbolic cylinders this is the positive-atom analogue of
+The corresponding tail-event cylinder estimate is historical background in
 \cite[Proposition~5.4]{MaZhangPrefixBoundaryRates2026}.  The present statement
-keeps the arbitrary-event positive-atom scope and separates the exact count
-asymptotic from the weaker limsup boundary dimension.
+and proof are local to this paper: they keep the arbitrary-event positive-atom
+scope and separate the exact count asymptotic from the weaker limsup boundary
+dimension.
 \end{remark}
 
 \begin{proof}
@@ -5087,8 +5171,8 @@ for all large $m$, then for all large $m$,
 \end{theorem}
 
 \begin{remark}[Provenance]
-For tail events and symbolic cylinders this is the positive-atom analogue of
-\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026}.  The present theorem
+The tail-event cylinder counterpart appears as background provenance in
+\cite[Proposition~7.2]{MaZhangPrefixBoundaryRates2026}.  The theorem used here
 is stated and proved directly for arbitrary events, with the final two-sided
 polynomial correction when $N_m(\partial\mathsf{P})$ itself is known up to
 polynomial factors.
