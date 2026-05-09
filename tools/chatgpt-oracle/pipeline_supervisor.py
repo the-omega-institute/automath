@@ -346,6 +346,40 @@ def aged_queued_tasks(threshold_seconds: int) -> list[dict]:
     return out
 
 
+def cancel_task(task_id: str, reason: str = "supervisor_auto") -> bool:
+    """POST /cancel for a task_id. Used by supervisor self-heal + PI callbacks."""
+    try:
+        req = urllib.request.Request(
+            f"{ORACLE_SERVER_URL}/cancel",
+            data=json.dumps({"task_id": task_id, "reason": reason}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=10)
+        return True
+    except Exception as exc:
+        supervisor_log(f"cancel_task({task_id}) failed: {exc}")
+        return False
+
+
+def auto_heal_disposable_stuck(threshold_seconds: int = 300) -> int:
+    """Cancel disposable tasks (smoke/test/retry) stuck on an agent > N seconds.
+
+    Called every tick. Self-healing — does not require operator or PI
+    judgment because disposable tasks have no operational value.
+    """
+    healed = 0
+    for stuck in stuck_agents(threshold_seconds):
+        tid = stuck.get("task_id", "")
+        if tid.startswith(("smoke", "test_", "retry_")):
+            if cancel_task(tid, reason="auto_heal_disposable_stuck"):
+                supervisor_log(
+                    f"auto-action: cancelled disposable {tid} stuck on "
+                    f"{stuck['agent_id']} for {stuck['elapsed']}s"
+                )
+                healed += 1
+    return healed
+
+
 _inner_log_offset = 0
 
 
@@ -930,40 +964,52 @@ def main() -> int:
             except Exception as exc:
                 supervisor_log(f"inner.log surface error: {exc}")
 
-            # Three independent stuck-detectors so monitor picks up the right
-            # signature regardless of which failure mode we're in.
+            # Self-heal: cancel disposable tasks stuck on agents (no
+            # operator value, no PI judgment needed).
+            try:
+                auto_heal_disposable_stuck(threshold_seconds=300)
+            except Exception as exc:
+                supervisor_log(f"auto-heal error: {exc}")
+
+            # Real-task agent-stuck: log INFO only, leave for PI to decide
+            # (cancel and lose work? wait? reset paper?). Not a monitor ping.
+            real_stuck = [
+                a for a in stuck_agents(AGENT_STUCK_THRESHOLD_S)
+                if not str(a.get("task_id", "")).startswith(("smoke", "test_", "retry_"))
+            ]
+            if real_stuck:
+                supervisor_log(
+                    f"info: {len(real_stuck)} real task(s) stuck on agent "
+                    f">{AGENT_STUCK_THRESHOLD_S//60}min — PI will inspect"
+                )
+
+            # User-side stuck conditions: PIPELINE CANNOT FIX without
+            # operator action. These DO ping monitor.
+            user_attention_needed = False
+            user_attention_msg = ""
             if queue_stuck_too_long(TAB_STUCK_THRESHOLD_S):
-                if _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
-                    desktop_notify(
-                        "pipeline supervisor: tab stuck",
-                        "ALERT: ChatGPT oracle tab stuck >5min, queue waiting for agent. "
-                        "Open https://chatgpt.com/?oracle=1 and click ACTIVATE.",
+                user_attention_needed = True
+                user_attention_msg = (
+                    "ALERT: queue waiting >5min for any browser agent. "
+                    "Open https://chatgpt.com/?oracle=1 and click ACTIVATE."
+                )
+            else:
+                aged = aged_queued_tasks(QUEUE_AGED_THRESHOLD_S)
+                if aged:
+                    joined = "; ".join(
+                        f"{q['task_id'][:40]}@{q['age_seconds']}s"
+                        for q in aged[:3]
                     )
-                    last_tab_alert_ts = _now()
+                    user_attention_needed = True
+                    user_attention_msg = (
+                        f"ALERT: {len(aged)} real task(s) queued "
+                        f">{QUEUE_AGED_THRESHOLD_S//60}min: {joined}. "
+                        "Browser tabs likely insufficient or stuck."
+                    )
 
-            stuck = stuck_agents(AGENT_STUCK_THRESHOLD_S)
-            if stuck and _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
-                joined = "; ".join(
-                    f"{a['agent_id']}={a['task_id'][:40]}@{a['elapsed']}s"
-                    for a in stuck[:3]
-                )
-                desktop_notify(
-                    "pipeline supervisor: agent stuck",
-                    f"ALERT: agent(s) stuck on one task >{AGENT_STUCK_THRESHOLD_S//60}min: {joined}. "
-                    "Browser tab likely died; refresh or POST /cancel.",
-                )
-                last_tab_alert_ts = _now()
-
-            aged = aged_queued_tasks(QUEUE_AGED_THRESHOLD_S)
-            if aged and _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
-                joined = "; ".join(
-                    f"{q['task_id'][:40]}@{q['age_seconds']}s" for q in aged[:3]
-                )
-                desktop_notify(
-                    "pipeline supervisor: queue starved",
-                    f"ALERT: {len(aged)} task(s) queued >{QUEUE_AGED_THRESHOLD_S//60}min: {joined}. "
-                    "Real review work backlogged; check oracle tabs.",
-                )
+            if user_attention_needed and _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
+                desktop_notify("pipeline supervisor: operator action needed",
+                               user_attention_msg)
                 last_tab_alert_ts = _now()
 
             if not args.no_auto_commit:

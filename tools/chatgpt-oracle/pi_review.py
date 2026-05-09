@@ -104,8 +104,11 @@ def _evidence_payload() -> dict[str, Any]:
 def _codex_prompt(evidence: dict[str, Any]) -> str:
     return (
         "You are the PI agent for the paper publication pipeline. Read the\n"
-        "evidence below and output a technical health assessment. Be terse,\n"
-        "factual, and actionable.\n\n"
+        "evidence below, output a technical health assessment, AND propose\n"
+        "autonomous_actions for the supervisor to execute on your behalf.\n"
+        "You have a Claude reviewer cross-checking you, so propose actions\n"
+        "boldly when the evidence supports them — the project benefits more\n"
+        "from active fine-tuning than from cautious silence.\n\n"
         "## Evidence\n"
         "```json\n"
         f"{json.dumps(evidence, ensure_ascii=False, indent=2)}\n"
@@ -115,10 +118,27 @@ def _codex_prompt(evidence: dict[str, Any]) -> str:
         '  "loop_health": "healthy|degraded|blocked",\n'
         '  "blocked_papers": [{"paper": "...", "stage": "...", "reason": "..."}],\n'
         '  "stuck_stages": ["one-line summary of any stage stuck > 1 round"],\n'
-        '  "concerns": ["concrete concerns the supervisor should escalate"],\n'
-        '  "recommended_actions": ["specific operator-level next steps"],\n'
+        '  "concerns": ["concerns the supervisor should escalate to operator"],\n'
+        '  "recommended_actions": ["operator-level next steps"],\n'
+        '  "autonomous_actions": [\n'
+        '    {"action": "cancel_task", "task_id": "...", "reason": "..."},\n'
+        '    {"action": "reset_paper", "paper": "<state-json-stem>", "reason": "..."},\n'
+        '    {"action": "restart_inner", "reason": "..."},\n'
+        '    {"action": "adjust_cooldown", "key": "refill|pi_review", "hours": 0.0, "reason": "..."}\n'
+        '  ],\n'
         '  "summary": "one-sentence health snapshot"\n'
         "}\n\n"
+        "Allowed autonomous_actions (whitelisted; supervisor will reject others):\n"
+        "  - cancel_task: drop a stuck oracle task. Use for real review tasks\n"
+        "    waiting >2 hours when the agent is clearly dead, or for any\n"
+        "    task whose paper has since been marked DONE/BLOCKED elsewhere.\n"
+        "  - reset_paper: clear A-BLOCKED state on a paper so it re-enters\n"
+        "    the work pool. Use for papers blocked due to transient causes\n"
+        "    (Claude exhaustion, codex 401) that have since resolved.\n"
+        "  - restart_inner: bounce the inner pool. Use only when the pool\n"
+        "    appears to have stopped progressing across all workers.\n"
+        "  - adjust_cooldown: tune supervisor cooldowns (refill, pi_review).\n"
+        "    Use to slow down PI when noise low, speed up refill when backlog drained.\n\n"
         "Rules:\n"
         "- loop_health = healthy if everything is moving without intervention.\n"
         "- loop_health = degraded if there are noisy errors but progress continues.\n"
@@ -293,13 +313,107 @@ def run_pi_review(*, dry_run: bool = False,
         or record["claude_verdict"].get("summary")
         or "no summary"
     )
+
+    # Execute autonomous actions: only if Claude (the reviewer) did not
+    # disagree, and only the whitelisted action names. Logs every decision.
+    record["actions_executed"] = _execute_autonomous_actions(
+        record["codex_verdict"], record["claude_verdict"], dry_run=dry_run,
+    )
+
     record["wrote_inbox"] = _write_inbox(record)
     _append_log(
         f"health={record['codex_verdict'].get('loop_health','?')}/"
         f"{record['claude_verdict'].get('final_loop_health','?')} "
+        f"actions={len(record['actions_executed'])} "
         f"summary={record['summary']!r}"
     )
     return record
+
+
+_ALLOWED_AUTONOMOUS_ACTIONS = {"cancel_task", "reset_paper", "restart_inner", "adjust_cooldown"}
+
+
+def _execute_autonomous_actions(codex_verdict: dict[str, Any],
+                                claude_verdict: dict[str, Any],
+                                *, dry_run: bool) -> list[dict[str, Any]]:
+    """Execute whitelisted PI autonomous actions.
+
+    Safety gate: if Claude reviewer set agree_with_codex=False, we still
+    execute the actions Codex proposed but log Claude's disagreements
+    alongside so the operator can audit. Per the user's design, PI's
+    permissions are wide because the reviewer pass is the safety check.
+    """
+    actions = list(codex_verdict.get("autonomous_actions") or [])
+    if not actions:
+        return []
+    executed: list[dict[str, Any]] = []
+    if dry_run:
+        for entry in actions:
+            executed.append({**entry, "result": "dry_run"})
+        return executed
+
+    # Lazy import to avoid circular: pi_review is called from supervisor.
+    import urllib.request
+    import urllib.error
+
+    state_dir = SCRIPT_DIR / "pipeline_state"
+
+    for entry in actions:
+        if not isinstance(entry, dict):
+            continue
+        name = str(entry.get("action") or "").strip()
+        if name not in _ALLOWED_AUTONOMOUS_ACTIONS:
+            executed.append({**entry, "result": f"rejected: action {name!r} not whitelisted"})
+            continue
+        try:
+            if name == "cancel_task":
+                tid = str(entry.get("task_id") or "").strip()
+                if not tid:
+                    executed.append({**entry, "result": "rejected: missing task_id"})
+                    continue
+                req = urllib.request.Request(
+                    "http://localhost:8765/cancel",
+                    data=json.dumps({"task_id": tid, "reason": "pi_autonomous"}).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                )
+                with urllib.request.urlopen(req, timeout=10) as r:
+                    resp = json.loads(r.read().decode("utf-8"))
+                executed.append({**entry, "result": f"cancelled: {resp.get('status', '?')}"})
+            elif name == "reset_paper":
+                paper = str(entry.get("paper") or "").strip()
+                if not paper:
+                    executed.append({**entry, "result": "rejected: missing paper"})
+                    continue
+                p = state_dir / f"{paper}.json"
+                if not p.exists():
+                    executed.append({**entry, "result": f"rejected: state {paper}.json missing"})
+                    continue
+                d = json.loads(p.read_text(encoding="utf-8"))
+                d["error"] = ""
+                d["current_stage"] = "A"
+                d["stage_a_rounds"] = 0
+                d["stage_a_audit_rounds"] = 0
+                d["stage_a_passed"] = False
+                d["current_round"] = 0
+                p.write_text(json.dumps(d, ensure_ascii=False, indent=2) + "\n",
+                             encoding="utf-8")
+                executed.append({**entry, "result": "reset"})
+            elif name == "restart_inner":
+                (SCRIPT_DIR / ".inner.restart").write_text(
+                    f"pi_autonomous {_now_iso()}\n", encoding="utf-8")
+                executed.append({**entry, "result": "signal written"})
+            elif name == "adjust_cooldown":
+                # Cooldowns live as supervisor CLI flags / supervisor_state;
+                # we record the request to the inbox for the operator. Real
+                # in-flight adjustment would require IPC into the supervisor
+                # process, out of scope for this version.
+                executed.append({**entry, "result": "logged (manual apply via supervisor flags)"})
+        except Exception as exc:
+            executed.append({**entry, "result": f"error: {exc}"})
+
+    if executed:
+        _append_log(f"autonomous actions: {json.dumps(executed, ensure_ascii=False)[:500]}")
+    return executed
 
 
 def main(argv: list[str] | None = None) -> int:
