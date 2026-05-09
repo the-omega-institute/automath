@@ -208,7 +208,39 @@ signed triples
 \end{gathered}
 \]
 with initial state \(000\), input alphabet \(\{0,1,2\}\), and output alphabet
-\(\{0,1\}\).  The deterministic binary transducer \(\mathcal T\) used in this
+\(\{0,1\}\).  Written as output/next-state entries, the local transition table
+is
+\[
+\begin{array}{c|ccc}
+&0&1&2\\
+\hline
+000&0/000&0/001&0/002\\
+100&1/000&1/001&1/002\\
+001&0/010&0/100&0/101\\
+002&0/11{-}1&1/000&1/001\\
+010&0/100&0/101&1/0{-}12\\
+101&1/010&1/100&1/101\\
+0{-}12&0/01{-}1&0/010&0/100\\
+1{-}12&1/01{-}1&1/010&1/100\\
+01{-}1&0/001&0/002&0/1{-}12\\
+11{-}1&1/001&1/002&1/1{-}12
+\end{array}
+\]
+and this printed table is exactly the transition list in
+\Cref{prop:pinned-normalizer-certificate-table}.  The certificate field
+\(\texttt{normalizer\_local\_verification}\) checks all thirty entries after
+parsing every state label as a signed triple.  For an edge
+\((\alpha,\beta,\gamma)\xrightarrow[d/e]{}
+(\alpha',\beta',\gamma')\), the checked identity is
+\[
+  \alpha F_{n+3}+\beta F_{n+2}+\gamma F_{n+1}+dF_n
+  =
+  eF_{n+3}+\alpha'F_{n+2}+\beta'F_{n+1}+\gamma'F_n
+  \qquad(n\ge2),
+\]
+reduced exactly in the basis \((F_{n+1},F_n)\), and the same field checks that
+there is exactly one outgoing edge for each state and each input
+\(d\in\{0,1,2\}\).  The deterministic binary transducer \(\mathcal T\) used in this
 appendix is the binary-input padded normalizer obtained from this table by
 Frougny's finite carry construction with the terminal zero flush and leading
 delay convention recorded in the certificate schema.  For every binary word
