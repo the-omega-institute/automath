@@ -123,20 +123,20 @@ following table is the complete finite witness interface used in the
 Richardson reduction:
 \[
 \begin{array}{c|c|c}
-\text{real primitive} & \text{chosen witness or locator} & \text{real-domain use}\\
+\text{real primitive} & \text{fixed verified witness} & \text{real-domain use}\\
 \hline
 \exp u & E(u)=\eml(u,1) & u\in\RR\\
 \operatorname{Log} u & L(u) & u>0\\
-u-v & \text{Table~S2 step~4 and SI~2.1--2.3} & u,v\in\RR\\
+u-v & \text{Part~II witness; S2 step~4 locator} & u,v\in\RR\\
 -u & 1-\bigl(e-((e-1)-u)\bigr) & u\in\RR\\
-u+v & \text{Table~S2 step~8 and SI~2.1--2.3} & u,v\in\RR\\
-1/u & \text{Table~S2 step~9 and SI~2.1--2.3} & u\ne0\\
-uv & \text{Table~S2 step~10 and SI~2.1--2.3} & u,v\in\RR\\
-u/v & \text{Table~S2 step~12 and SI~2.1--2.3} & v\ne0\\
-u^2 & \text{Table~S2 step~11 and SI~2.5 core basis} & u\in\RR\\
-\sqrt u & \text{Corollary~4 and SI~2.5 core basis} & u\ge0\\
-\pi & \text{Corollary~4 and SI~2.5 core constants} & \text{constant}\\
-\sin u & \text{SI~2.5 remaining-primitives table} & u\in\RR .
+u+v & \text{Part~II witness; S2 step~8 locator} & u,v\in\RR\\
+1/u & \text{Part~II witness; S2 step~9 locator} & u\ne0\\
+uv & \text{Part~II witness; S2 step~10 locator} & u,v\in\RR\\
+u/v & \text{Part~II witness; S2 step~12 locator} & v\ne0\\
+u^2 & \text{Part~II witness; S2 step~11 locator} & u\in\RR\\
+\sqrt u & \text{Part~II witness; Corollary~4 locator} & u\ge0\\
+\pi & \text{Part~II constant; Corollary~4 locator} & \text{constant}\\
+\sin u & \text{Part~II witness; SI~2.5 table locator} & u\in\RR .
 \end{array}
 \]
 Here ``SI'' means the ancillary Supplementary Information of
@@ -156,18 +156,21 @@ witnesses for subtraction and for \(e=E(1)\), it is a pure EML term.
 Thus the present Richardson translation does not rely on the shorter
 extended-real convention \(L(0)=-\infty\).
 
-The compact formulas displayed in the middle column are source
-locators whenever their intermediate logarithms have extra positivity
-requirements.  The fixed witness used in the translation is the
+The entries that are not printed as compact formulas are not open
+search instructions.  They name fixed pure EML terms from the cited
+Part~II compiler and verification record; the Table~S2 and
+Corollary~4 references are only source locators for those already
+verified terms.  The fixed witness used in the translation is the
 verified Part~II compiled EML term for that Table~1 primitive,
 restricted to the real-domain use in the right-hand column.  Thus the
 arithmetic witnesses for \(u\pm v\), \(-u\), \(uv\), and \(u/v\) are
 used for all real arguments on which the operation is defined; the
 logarithm row is used only on \(u>0\), and the square-root row only on
 \(u\ge0\).  Every later occurrence is obtained by substituting into
-these finitely many entries, and no unlisted EML identity from the
-source is used in the Richardson reduction.  With these fixed choices
-the following real-domain properties hold.
+these finitely many fixed entries, and no branch choice, witness
+search, or unlisted EML identity from the source is used in the
+Richardson reduction.  With these fixed choices the following
+real-domain properties hold.
 \begin{enumerate}
 \item For all \(u,v\in\RR\), the chosen witnesses for
   \(u+v\), \(u-v\), and \(uv\) are defined and have those real
@@ -181,10 +184,11 @@ the following real-domain properties hold.
   there is an effective construction of a witness for every rational
   constant.
 \end{enumerate}
-The labels in the middle column are source locators, not additional
-hypotheses.  Principal-domain validity is taken from the Part~II
-verification, and each later use in this paper is restricted to the
-corresponding real-domain entry in the right-hand column.
+The labels in the middle column are source locators for fixed
+verified witnesses, not additional hypotheses.  Principal-domain
+validity is taken from the Part~II verification, and each later use
+in this paper is restricted to the corresponding real-domain entry in
+the right-hand column.
 \end{lemma}
 
 \begin{proof}
@@ -299,9 +303,14 @@ by
 \]
 using the principal square root on the nonnegative real axis.
 Moreover, let \(|E|\) denote the number of nodes in the expanded
-Richardson expression tree, with a rational constant \(a/b\) counted
-by the fixed constructor tree built from \(1\), integer addition and
-subtraction, and one division.  Then there is a constant \(K\),
+Richardson expression tree.  A rational constant \(a/b\) with
+\(b>0\) is not counted as one atomic token: it contributes the size
+of the chosen constructor tree for the numerator \(a\), the
+denominator \(b\), and the final division, built from \(1\), integer
+addition and subtraction, negation when needed, and one division.
+Equivalently, if a source syntax writes rationals compactly, then
+\(|E|\) means the syntax size after replacing every rational token by
+this fixed constructor expansion.  Then there is a constant \(K\),
 depending only on the fixed witness library and not on \(E\), such
 that the EML tree size and substitution depth satisfy
 \[
@@ -348,12 +357,17 @@ statement concerns this transported real semantics; it makes no
 branch-independent assertion about equality of arbitrary raw EML
 terms on a complex domain.
 
-It remains to record the quantitative bound.  For each selected
-unary or binary witness \(W\), let \(s(W)\) be its EML tree size,
-let \(d(W)\) be its depth, and let \(r(W)\) be the largest number of
-occurrences of any one formal input variable in \(W\).  The witness
-library is finite, and the rational constants have already been
-expanded by a fixed constructor scheme, so choose an integer \(K\ge2\)
+It remains to record the quantitative bound.  The size convention in
+the statement charges the full constructor cost of every rational
+constant, including the numerator and denominator witnesses; the
+estimate is therefore not uniform in arbitrarily large rational
+tokens at constant source size.  For each selected unary or binary
+witness \(W\), let \(s(W)\) be its EML tree size, let \(d(W)\) be
+its depth, and let \(r(W)\) be the largest number of occurrences of
+any one formal input variable in \(W\).  The witness library is
+finite, and the rational constants have already been expanded by the
+fixed constructor scheme before \(|E|\) is measured, so choose an
+integer \(K\ge2\)
 larger than every one of these finitely many library constants and
 larger than the corresponding constants for the constructors
 \(0\), \(1\), integer successor by addition, integer predecessor by
