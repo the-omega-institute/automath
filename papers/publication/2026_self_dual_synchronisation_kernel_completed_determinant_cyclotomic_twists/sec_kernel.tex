@@ -31,7 +31,8 @@ One has
 \begin{proof}
 A symbolic determinant computation from the explicit \(10\times 10\)
 matrix \(B(u)\) of \Cref{def:sync-kernel} gives the displayed formula;
-the exact computation is recorded in
+the displayed polynomial is the exact certificate used in the sequel,
+and the command block producing it is recorded in
 \Cref{sec:appendix-computation}\,\textup{(a)}.
 As a consistency check, the closed form satisfies the self-duality
 identity of \Cref{prop:sync-self-duality}; in particular, comparing
@@ -131,7 +132,9 @@ by \(\widehat\Delta(w,s)\).
 Substitute \(u=r^2\) and \(z=w/r\) into the explicit formula of
 \Cref{prop:kernel-delta-explicit}. Terms in \(r\) and \(r^{-1}\)
 combine to give a polynomial in \(s=r+r^{-1}\), and a direct expansion
-produces the displayed formula; the exact command certificate is
+produces the displayed formula. This displayed formula, together with
+the parity identity below it, is the certificate used in the geometric
+and cyclotomic arguments; the command block producing it is
 recorded in \Cref{sec:appendix-computation}\,\textup{(b)}. The parity
 relation is immediate. This proves part~\textup{(ii)} of
 \Cref{thm:intro-kernel-geometry}.
@@ -164,12 +167,16 @@ SageMath~10.2 computation recorded in
 \Cref{sec:appendix-computation}\,(d) prints the output
 \((20,-256)\) for \((\deg D,\operatorname{lc}D)\), so \(D(s)\) has
 degree~\(20\) with leading coefficient~\(-256\).
-This metadata is already a nonsquare certificate: every square in
-\(\QQ(s)\) has even order at infinity and positive leading sign when it
-is a nonzero polynomial, whereas this polynomial has even degree and
-negative leading coefficient. Equivalently, \(D(s)\to-\infty\) as
-\(s\to+\infty\), so \(D(s)\) takes negative real values and is
-therefore not a square in~\(\QQ(s)\). Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in \(w\) changes sign under odd permutations, \(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
+This metadata is already a nonsquare certificate. Indeed, if a
+polynomial \(D\in\QQ[s]\) is a square in \(\QQ(s)\), write
+\(D=(A/B)^2\) with coprime \(A,B\in\QQ[s]\). Then
+\(A^2=DB^2\), so every irreducible divisor of \(B\) divides \(A\);
+hence \(B\) is constant and \(D\) is a square in \(\QQ[s]\). Its
+leading coefficient is therefore a square in \(\QQ^\times\), in
+particular positive. The leading coefficient \(-256\) rules this out.
+Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in
+\(w\) changes sign under odd permutations,
+\(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
 
 \medskip
 \noindent\textit{Step 2 (specialisation input).}\quad
@@ -238,8 +245,9 @@ transposition.
 \noindent\textit{5-cycle (\(s=3\), mod \(19\)).}\quad
 One checks that
 \(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod{19}\).
-Thus \(19\nmid D(3)\), so the specialisation is separable at \(19\) and
-Dedekind's theorem applies to this factorisation.
+This squarefree reduction is exactly the separability witness:
+equivalently \(19\nmid D(3)\), so Dedekind's theorem applies to this
+factorisation.
 Here \(\operatorname{lc}_w\widehat\Delta(w,3)=8\not\equiv0\pmod{19}\).
 Modulo \(19\),
 \[
@@ -255,14 +263,16 @@ factorisation type is \((1)(5)\), so the Frobenius at \(19\) in
 \noindent\textit{Step 4 (subgroup classification).}\quad
 We now have: \(G\le S_6\) is transitive, contains a transposition, and
 contains a \(5\)-cycle. A transitive subgroup of \(S_6\) that contains
-a \(5\)-cycle is primitive: if \(\sigma\in G\) is a \(5\)-cycle and
-\(\mathcal{B}\) is a non-trivial block, then \(|\mathcal{B}|\) divides
-\(6\). If \(\mathcal{B}\) meets the support of \(\sigma\), then
-\(\sigma(\mathcal{B})\cap\mathcal{B}\neq\varnothing\), which forces
-\(\sigma(\mathcal{B})=\mathcal{B}\), so \(\mathcal{B}\) must contain all
-five moved points of \(\sigma\), giving \(|\mathcal{B}|\in\{5,6\}\). No
-proper block of size \(5\) or \(6\) can exist in a transitive group on
-six points, so \(G\) is primitive \cite[Ch.~3, \S{}3.3]{Dixon1996}.
+a \(5\)-cycle is primitive. Indeed, a non-trivial block system on six
+points has either \(2\) or \(3\) blocks. Let \(\sigma\in G\) be a
+\(5\)-cycle. The induced action of \(\sigma\) on such a block system
+has order dividing both \(5\) and the order of a permutation group on
+\(2\) or \(3\) points; hence the induced action is trivial. Therefore
+each block is fixed setwise by \(\sigma\). Any block meeting the support
+of the \(5\)-cycle must then contain the whole five-point support,
+which is impossible for block size \(3\) or \(2\). Thus no non-trivial
+block system exists, so \(G\) is primitive
+\cite[Ch.~3, \S{}3.3]{Dixon1996}.
 A primitive subgroup of \(S_6\) containing a transposition is the full
 symmetric group \cite[Ch.~3, Theorem~3.3A]{Dixon1996}. Hence \(G=S_6\),
 completing part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
@@ -371,6 +381,9 @@ Hence the projective curve is smooth everywhere, so by the
 genus formula for smooth plane curves
 \cite[Ch.~IV, Example~1.3.4]{Hartshorne1977},
 \(g(\overline{Y})=(4-1)(4-2)/2=3\).
+The birational quotient identified at the start of the proof is
+therefore represented by this nonsingular projective quartic, which is
+the smooth projective model of the quotient.
 \end{proof}
 
 \begin{lemma}[Integrality and function-field setup]
@@ -783,14 +796,26 @@ Equivalently, write
   w(s)=\sum_{j=0}^6 a_j(s-2)^j+O((s-2)^7),
   \qquad a_0=\frac13 .
 \]
-Substituting this series into \(\widehat\Delta(w(s),s)\) and setting the
-coefficient of \((s-2)^n\) equal to \(0\), for \(1\le n\le6\), gives a
-triangular recursion because the coefficient of the new unknown \(a_n\)
-is always \(\partial_w\widehat\Delta(1/3,2)\ne0\). Solving these six
-linear equations and then inverting \(w(s)\) yields the displayed jet of
-\(\rho(2-\delta)\). The exact recursive identities and the resulting
-coefficients are recorded in
-\Cref{sec:appendix-computation}\,\textup{(f)}.
+Put \(t=s-2\), \(w_0=1/3\), and let
+\[
+  H_n(a_1,\ldots,a_n)
+  :=[t^n]\,
+    \widehat\Delta\!\left(w_0+\sum_{j=1}^n a_jt^j,\,2+t\right).
+\]
+Since \(\widehat\Delta(w_0,2)=0\), each equation \(H_n=0\) has the
+triangular form
+\[
+  \partial_w\widehat\Delta(w_0,2)\,a_n
+  +H_n(a_1,\ldots,a_{n-1},0)=0,
+  \qquad 1\le n\le6.
+\]
+The coefficient \(\partial_w\widehat\Delta(w_0,2)=-272/81\) is nonzero,
+so the coefficients \(a_n\) are determined successively. Solving these
+six linear equations and then inverting \(w(s)\) yields the displayed
+jet of \(\rho(2-\delta)\). The exact recursive identities and the
+resulting coefficients displayed in
+\Cref{sec:appendix-computation}\,\textup{(f)} are the certificate used
+for this endpoint jet.
 \end{proof}
 
 \begin{lemma}[Root separation]
@@ -867,7 +892,10 @@ Then \(\widehat\Delta(w,s)=\Delta(w/r,r^2)\), so
 the substitution \(z=w/r\) has \(|z|=|w|\). Hence the minimal
 \(|w|\)-root of \(\widehat\Delta(w,s)\) is the minimal \(|z|\)-root of
 \(\Delta(z,u)=\det(I-zB(u))\), and \(\lambda(s)^{-1}\) is the spectral
-radius of \(B(u)\). Since every row
+radius of \(B(u)\). This is the comparison between completed
+coordinates and the original twisted spectral radius: it uses only that
+\(|r|=1\) on the unit circle, so the change of variables preserves
+moduli. Since every row
 of \(B(1)\) has sum \(3\), one has \(\rho(B(u))\le 3\).
 
 Suppose for contradiction that \(\rho(B(u))=3\). Choose an eigenvalue
