@@ -32,7 +32,7 @@
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | A-DONE (audit 8/10, 11 rounds, 2 final A3) | — |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | A-DONE (audit 8/10, 9 rounds, 2 final A3) | — |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +0 chars (threshold) | — |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +368 chars (thresho) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | A-BLOCKED (A2 produced no substantive theorem change: FAKE EXTENSION: no new theorems added, content delta only +0 chars (threshold) | — |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=8)) | — |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
