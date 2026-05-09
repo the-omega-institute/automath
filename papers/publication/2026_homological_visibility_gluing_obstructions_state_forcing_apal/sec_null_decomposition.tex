@@ -191,7 +191,7 @@ a=[r]_p,
 The restricted local-object presheaf $F_{p,s}|_{\mathcal C_a}$ is \emph{slice-separated} if it is separated at every object of $\mathcal C_a$.
 \end{definition}
 
-\begin{lemma}[Strict representatives after refinement]\label{lem:strict-sheafification-representatives}
+\begin{lemma}[Flattening sheafification representatives]\label{lem:strict-sheafification-representatives}
 Let $\mathcal C$ be a site with pullbacks of covering families, let
 $F$ be a presheaf of sets on $\mathcal C$, and let
 $u:F\to aF$ be the sheafification unit. For every object $X$ and every
@@ -201,14 +201,13 @@ section $\xi\in(aF)(X)$ there is a covering family
 \]
 and sections $\sigma_i\in F(X_i)$ such that:
 \begin{enumerate}[label=(\roman*),nosep]
-\item the restrictions of $\sigma_i$ and $\sigma_j$ to each overlap
-$X_i\times_X X_j$ become equal after a covering refinement of that
-overlap;
+\item the restrictions of $\sigma_i$ and $\sigma_j$ to
+$X_i\times_X X_j$ agree after a covering refinement of that overlap;
 \item the family $(u(\sigma_i))_i$ glues in the sheaf $aF$ to $\xi$;
-\item after replacing the cover by the single transitive refinement
-obtained from the overlap refinements, the resulting pulled-back
-sections form a strict matching family in $F$ on the refined cover and
-still represent $\xi$.
+\item after replacing the cover by the single covering refinement obtained
+from the overlap refinements, the resulting pulled-back sections form a
+strict matching family in $F$ on the refined cover and still represent
+$\xi$.
 \end{enumerate}
 If $F$ is already separated on the relevant slice, then equality after
 the overlap refinements in \textup{(i)} is equivalent to equality on the
@@ -216,37 +215,74 @@ original overlap.
 \end{lemma}
 
 \begin{proof}
-Use the usual plus construction. A section of $F^+(X)$ is represented by
-a covering family $\{X_i\to X\}$ and local sections
-$\sigma_i\in F(X_i)$ whose restrictions to $X_i\times_X X_j$ agree
-locally; two such representatives are identified after a common
-refinement. Since sheafification is $aF=(F^+)^+$, a section
-$\xi\in(aF)(X)$ is represented by a cover $\{Y_\ell\to X\}$ and sections
+Use the usual plus construction in the form recalled in
+\cite[III.5]{MacLaneMoerdijk1994}, \cite[Tags 00W1, 00W3]{StacksProject}.
+A section of $F^+(X)$ is represented by a covering family
+$\{X_i\to X\}$ and local sections $\sigma_i\in F(X_i)$ whose restrictions
+to $X_i\times_X X_j$ agree after a cover of that overlap; two such
+representatives are identified after passage to a common refinement.
+Sheafification is $aF=(F^+)^+$, so a section $\xi\in(aF)(X)$ is
+represented by a cover $\{Y_\ell\to X\}$ and sections
 \[
 \eta_\ell\in F^+(Y_\ell)
 \]
-which match locally in $F^+$. Choose for each $\eta_\ell$ a plus
+which agree in $F^+$ after covers of the overlaps
+$Y_\ell\times_XY_{\ell'}$. Choose for each $\eta_\ell$ a plus
 representative
 \[
 \{Y_{\ell m}\to Y_\ell\}_{m\in M_\ell},
 \qquad
 \sigma_{\ell m}\in F(Y_{\ell m}).
 \]
-By pullback stability, the composite family
-$\{Y_{\ell m}\to X\}_{\ell,m}$ is a cover of $X$ by transitivity of the
-pretopology. On every pairwise overlap of two members of this composite
-cover, equality of the corresponding $F^+$-sections means precisely that
-the two pulled-back $F$-sections agree after a further covering
-refinement. Choosing such refinements for all overlaps and then applying
-transitivity once more gives a single covering refinement of
-$\{Y_{\ell m}\to X\}_{\ell,m}$ on which the pulled-back $F$-sections agree
-strictly on actual overlaps. The sheaf $aF$ is insensitive to replacing a
-representative by a covering refinement, so the strict matching family on
-this final cover still represents $\xi$.
+By pullback stability and transitivity, the composites
+$Y_{\ell m}\to X$ form a cover of $X$. For two such composites, the
+overlap is covered by pullbacks to the refinements on which
+$\eta_\ell$ and $\eta_{\ell'}$ are equal in $F^+$, and then by the plus
+representative refinements witnessing equality in $F^+$. After pulling
+back along these overlap covers and using
+transitivity of the pretopology, the sections $\sigma_{\ell m}$ become a
+strict matching family in $F$ on one refinement of the composite cover.
+The canonical map from this strict representative to $(F^+)^+(X)$ is
+unchanged by replacing representatives with covering refinements, so the
+final strict matching family still maps to $\xi$.
 
 If $F$ is separated on the slice, two sections over an overlap that agree
 after a covering of that overlap are already equal by separatedness at
 that overlap object. This gives the final assertion.
+\end{proof}
+
+\begin{lemma}[Equality in the unit is local equality]\label{lem:sheafification-unit-equality-local}
+Let $\mathcal C$ be a site with pullbacks of covering families, let
+$F$ be a presheaf of sets on $\mathcal C$, and let
+$u:F\to aF$ be the sheafification unit. If
+\[
+u_X(\sigma)=u_X(\tau)
+\qquad
+(\sigma,\tau\in F(X)),
+\]
+then there is a covering family $\{X_i\to X\}_{i\in I}$ such that
+\[
+\res_{X_i}^{X}(\sigma)=\res_{X_i}^{X}(\tau)
+\qquad(\forall i\in I).
+\]
+Conversely, equality after such a cover implies
+$u_X(\sigma)=u_X(\tau)$.
+\end{lemma}
+
+\begin{proof}
+For the plus construction, the two unit representatives of
+$\sigma,\tau\in F(X)$ are represented by the identity cover of $X$. Their
+images in $F^+(X)$ are equal exactly when, after a covering refinement of
+that identity cover, the restrictions of $\sigma$ and $\tau$ agree in
+$F$. Applying the same statement to the unit
+$F^+\to(F^+)^+=aF$, equality of $u_X(\sigma)$ and $u_X(\tau)$ gives a cover
+$\{Y_j\to X\}$ on which the two corresponding sections of $F^+$ agree.
+For each $j$, equality in $F^+(Y_j)$ gives a further cover
+$\{X_{ji}\to Y_j\}_i$ on which the restrictions of $\sigma$ and $\tau$
+agree in $F$. By transitivity, the composites $X_{ji}\to X$ form the
+required cover. The converse follows because $aF$ is a sheaf: if the two
+unit sections agree after a cover, separatedness of the sheaf $aF$ forces
+them to agree over $X$.
 \end{proof}
 
 \begin{corollary}[Sheafification removes gluing failure]\label{cor:sheafification-removes-glue}
@@ -622,7 +658,9 @@ If, moreover, $F_{p,s}|_{\mathcal C_a}$ is slice-separated in the sense of \Cref
 \begin{enumerate}[label=(\alph*),nosep]
 \item $\mathfrak P_r$ is globally conservative at $a$;
 \item $u_a$ is bijective;
-\item $F_{p,s}|_{\mathcal C_a}$ satisfies the sheaf gluing condition for every cover of $a$.
+\item $F_{p,s}|_{\mathcal C_a}$ satisfies the sheaf gluing condition at
+the object $a$, that is, every matching family on every cover of $a$ has a
+unique amalgamation in $F_{p,s}(a)$.
 \end{enumerate}
 \end{theorem}
 
@@ -709,7 +747,8 @@ u_a(\sigma)=u_a(\tau)
 \qquad
 (\sigma,\tau\in F_{p,s}(a)),
 \]
-then the two global sections define the same element of the sheafification at $a$, so by the matching-family description of sheafification there exists a cover
+then the two global sections define the same element of the sheafification at $a$.
+Applying \Cref{lem:sheafification-unit-equality-local} gives a cover
 \[
 \{U_i\to a\}_{i\in I}
 \]
@@ -768,13 +807,19 @@ equalities to the equality in the original presheaf value
 This is the only valid upgrade from equality in sheafification at $U_i$ to
 equality in $F_{p,s}(U_i)$; separatedness only at the terminal object $a$
 would not imply it.
-Thus every matching family over $a$ has a unique amalgamation, and $F_{p,s}|_{\mathcal C_a}$ is a sheaf at $a$.
+Thus every matching family over $a$ has a unique amalgamation, and
+$F_{p,s}|_{\mathcal C_a}$ satisfies the sheaf gluing condition at $a$.
 
 Assume conversely that \textup{(c)} holds. Every element of
 \[
 \bigl(a_{p,s}F_{p,s}\bigr)(a)
 \]
-is represented by a matching family over a cover of $a$, and the sheaf condition at $a$ produces a unique global amalgamation in $F_{p,s}(a)$. Therefore $u_a$ is bijective. This proves \textup{(b)}$\Leftrightarrow$\textup{(c)}.
+has, by \Cref{lem:strict-sheafification-representatives}, a strict
+matching representative after replacing its plus-plus representative by a
+covering refinement. The sheaf condition at $a$ produces a unique global
+amalgamation in $F_{p,s}(a)$, and uniqueness is exactly injectivity of
+$u_a$ already proved from slice-separatedness. Therefore $u_a$ is
+bijective. This proves \textup{(b)}$\Leftrightarrow$\textup{(c)}.
 \end{proof}
 
 \begin{corollary}[Nontrivial gluing semantics forces noncanonical lift data]\label{cor:no-rigid-gluing-null}
