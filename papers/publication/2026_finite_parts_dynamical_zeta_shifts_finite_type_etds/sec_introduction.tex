@@ -45,19 +45,21 @@ quotients of the fixed cocycle. The logical direction of the proofs is
 \]
 Here the Adams--M\"obius arrow is the primitive extraction step; the last
 arrow is ordinary character orthogonality after the Perron-point values
-have been constructed. The formal scope of these packages and of the
-auxiliary scalar section is collected in the next subsection.
+have been constructed. The formal input--output statements and the role
+of the auxiliary scalar section are collected in the next subsection.
 
-Main Theorem~I is the package
+Main Theorem~I is the single determinant-recovery statement
+\Cref{thm:intro-finite-group}. Its proof is split across
 \Cref{lem:twisted-trace-identity,thm:class-function-linearisation,%
 cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant,%
-cor:primitive-peter-weyl-trace}.
-Main Theorem~II is the package
+cor:primitive-peter-weyl-trace}. Main Theorem~II is the Perron-point
+class-constant statement
+\Cref{thm:intro-class-mertens}, proved in
 \Cref{thm:class-mertens-explicit,prop:class-mertens-deviations,%
 thm:class-mertens-fourier}. The quotient and cyclic-detection results
 of \Cref{sec:shadows}, including the scalar projection boundary
 \Cref{thm:scalar-normalisation-projection-boundary}, are structural
-consequences of these packages.
+consequences of these two theorem statements.
 The scalar finite-part and root-of-unity statements are auxiliary inputs
 proved later. The scalar dynamical \(\zeta\)-function
 \[
@@ -105,9 +107,9 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
 \paragraph{Roadmap of results.}
 The argument has three logically separate parts.
 \begin{enumerate}
-\item Main Theorem~I is the finite-group determinant and
-  Adams--M\"obius package on the open Perron disc
-  \(|z|<\lambda^{-1}\).
+\item Main Theorem~I recovers the primitive Peter--Weyl series from the
+  finite group character table and the twisted determinant logarithms
+  on the open Perron disc \(|z|<\lambda^{-1}\).
 \item Main Theorem~II begins only after imposing \(\lambda>1\) and the
   twisted spectral gap
   \[
@@ -177,24 +179,43 @@ auxiliary scalar finite-part calculation.
   \]
   and
   \(\psi^m\chi_\varrho
-    =\sum_{\sigma\in\Irr(G)}a_{\varrho,\sigma}^{(m)}\chi_\sigma\),
-  then
+    =\sum_{\pi\in\Irr(G)}a_{\varrho,\pi}^{(m)}\chi_\pi\),
+  and write the supplied twisted determinant logarithms as
+  \[
+    D_\pi(z):=\log\det(I-zA_\pi)^{-1}
+    \qquad (|z|<\lambda^{-1}).
+  \]
+  Define
+  \[
+    E_\varrho(z):=
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}D_\pi(z^m).
+  \]
+  Then
+  \[
+    E_\varrho(z)=\Pi_\varrho(z)
+    \qquad (|z|<\lambda^{-1}),
+  \]
+  i.e. the character table together with the functions
+  \(\{D_\pi\}_{\pi\in\Irr(G)}\) determines the primitive
+  Peter--Weyl channel \(\Pi_\varrho\). Equivalently,
   \[
     \Pi_\varrho(z)
     =
     \sum_{m\ge 1}\frac{\mu(m)}{m}
-      \sum_{\sigma\in\Irr(G)}
-        a_{\varrho,\sigma}^{(m)}
-        \log\det(I-z^mA_\sigma)^{-1}.
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}
+        \log\det(I-z^mA_\pi)^{-1}.
   \]
   Coefficient extraction gives the primitive Peter--Weyl trace formula
   \[
     \pi_{n,\varrho}(A,\tau)
     =
     \frac{1}{n}\sum_{m\mid n}\mu(m)
-      \sum_{\sigma\in\Irr(G)}
-        a_{\varrho,\sigma}^{(m)}
-        \Tr(A_\sigma^{n/m}).
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}
+        \Tr(A_\pi^{n/m}).
   \]
 \end{theorem}
 
@@ -258,7 +279,8 @@ auxiliary scalar finite-part calculation.
       \abs{\Pi_\varrho(\lambda^{-1})}^2.
   \]
   Here the forward expansion uses the coefficient
-  \(\chi_\varrho^\ast(C)\), while the inverse readout pairs it with
+  \(\chi_\varrho^\ast(C):=\overline{\chi_\varrho(C)}
+  =\chi_\varrho(C^{-1})\), while the inverse readout pairs it with
   \(\chi_\sigma(C)\) in the Hermitian class-function inner product.
 \end{theorem}
 
@@ -432,56 +454,66 @@ records is fixed in \Cref{def:spectral-fingerprints}.
 
 \subsection{Relation to existing work}
 
-The nearest recent \textit{Ergodic Theory and Dynamical Systems}
-comparison points are as follows.
+Within \textit{Ergodic Theory and Dynamical Systems} over the last five
+years there appears to be no paper directly proving finite-group
+Adams--M\"obius primitive inversion for SFT cocycles; the closest papers
+are adjacent through skew products, periodic-orbit asymptotics, finite
+periodic data, and spectral reconstruction.
 
 \begin{table}[t]
   \centering
   \footnotesize
   \setlength{\tabcolsep}{3pt}
-  \begin{tabular}{@{}L{0.22\textwidth}L{0.27\textwidth}L{0.43\textwidth}@{}}
+  \begin{tabular}{@{}L{0.24\textwidth}L{0.29\textwidth}L{0.39\textwidth}@{}}
     \toprule
-    Result in this paper & Recent ETDS comparator & Difference \\
+    Theorem here & Closest recent ETDS comparator & Theorem-by-theorem distinction \\
     \midrule
-    Adams--M\"obius primitive determinant inversion
+    Main Theorem~I:
+    Adams--M\"obius primitive determinant inversion for one
+    finite-group SFT cocycle
     &
-    Crismale--Del Vecchio--Griseta--Rossi
-    \cite{CrismaleDelVecchioGrisetaRossi2025NoncommutativeSkewProduct},
-    non-commutative skew-product extension dynamical systems
+    No close ETDS theorem in the last five years. The adjacent
+    skew-product paper is Crismale--Del Vecchio--Griseta--Rossi
+    \cite{CrismaleDelVecchioGrisetaRossi2025NoncommutativeSkewProduct}.
     &
-    Operator-algebraic skew products, unique ergodicity, and
-    cohomology; here: finite-group symbolic primitive-orbit determinant
-    inversion.
+    Their results concern operator-algebraic skew-product dynamics,
+    unique ergodicity, and cohomology. They do not reconstruct primitive
+    Peter--Weyl channels from finite twisted determinant logarithms.
     \\
-    Class Mertens constants
+    Main Theorem~II:
+    class Mertens constants from Perron-point primitive channels under
+    \(\eta<\lambda\)
     &
-    Coles \cite{Coles2025VassilievWritheAxiomA},
-    periodic-orbit averages for Axiom~A flows
+    No close ETDS theorem in the last five years. The adjacent
+    periodic-orbit asymptotic is Coles
+    \cite{Coles2025VassilievWritheAxiomA}.
     &
-    Geometric knot-observable asymptotics; here:
-    finite-state finite-group conjugacy-class constants under
-    \(\eta<\lambda\).
+    Coles studies geometric knot observables over Axiom~A periodic
+    orbits. Here the output is a finite-state conjugacy-class harmonic
+    constant formula for a fixed finite-group cocycle.
     \\
-    Finite data and readout
+    Character-orthogonality readout of the full class profile
     &
-    O'Hare \cite{OHare2025FiniteDataRigidity},
-    finite data rigidity for expanding maps
+    O'Hare \cite{OHare2025FiniteDataRigidity}, finite data rigidity for
+    one-dimensional expanding maps.
     &
-    Periodic derivative data and effective equidistribution; here: all
-    class constants and character orthogonality.
+    O'Hare reconstructs rigidity information from finite periodic
+    derivative data. The readout here is finite-group Fourier inversion
+    of class constants after the primitive channels have been recovered.
     \\
-    Spectral reconstruction comparison
+    Auxiliary cyclic-lift spectral comparison
     &
     Humbert \cite{Humbert2025FirstRuelleResonance},
-    Ruelle resonances for Anosov flows
+    first Ruelle resonance for Anosov flows.
     &
-    Spectral reconstruction of equilibrium measures; here: an auxiliary
-    finite-dimensional cyclic-lift reconstruction.
+    Humbert concerns Ruelle resonances and equilibrium measures for
+    flows. The cyclic-lift statement here is a finite-dimensional
+    branch-lifted logarithmic reconstruction for one matrix, not a
+    finite-group class-profile theorem.
     \\
     \bottomrule
   \end{tabular}
-  \caption{Recent ETDS comparison points for the theorem packages
-  proved in this paper.}
+  \caption{Theorem-by-theorem comparison with recent ETDS papers.}
   \label{tab:intro-recent-etds-comparison}
 \end{table}
 
@@ -490,8 +522,7 @@ determinant-level primitive inversion theorem for one fixed
 finite-group SFT cocycle; Main Theorem~II turns the same finite-state
 data into the classwise constants \(\mathcal M_C(A,\tau;G)\) under the
 finite-matrix condition \(\eta<\lambda\); and the scalar cyclic-lift
-section remains only an auxiliary finite-dimensional comparison
-package.
+section remains only an auxiliary finite-dimensional comparison.
 
 The dynamical \(\zeta\)-function for SFTs goes back to
 Artin--Mazur \cite{ArtinMazur1965PeriodicPoints} and Bowen--Lanford
@@ -593,7 +624,10 @@ Boyle--Schmieding
 \cite{BoyleSchmieding2017FiniteGroupExtensions} and
 Boyle--Carlsen--Eilers \cite{BoyleCarlsenEilers2020FlowEquivalenceGSFT}
 analyse finite group extensions through obstruction theory,
-\(K\)-theory, and equivariant flow equivalence. Those works address
+\(K\)-theory, and equivariant flow equivalence. Matsumoto's
+finite-group extension theory for subshifts via skew products of
+\(\lambda\)-graph systems gives another symbolic-dynamics comparison
+point \cite{Matsumoto2016ExtensionsSubshiftsFiniteGroups}. Those works address
 existence, classification, and periodic-data invariants. Here the cocycle
 \(\tau:E_A\to G\) and its twisted matrices are fixed, and the question is
 inverse-determinantal: which primitive Peter--Weyl channels and which
@@ -650,6 +684,18 @@ Ruelle zeta functions on locally symmetric spaces
 finite-state symbolic setting but fit naturally into this determinant
 programme.
 
+Group-extension spectral-radius criteria form a related but different
+line of work. Stadlbauer's Kesten-type criterion for topological Markov
+chains \cite{Stadlbauer2013KestenTopologicalMarkov}, Jaerisch's
+Perron--Frobenius spectral-radius characterisation for group-extended
+Markov systems \cite{Jaerisch2015GroupExtendedMarkov}, and the
+Dougall--Sharp work on growth rates for covers and group extensions of
+subshifts \cite{DougallSharp2021AnosovCoversGroupExtensions} concern
+amenability, pressure, or orbit-growth rates for typically countable
+group extensions. The finite-group gap condition used here is instead a
+finite-dimensional Peter--Weyl spectral hypothesis for one fixed
+cocycle.
+
 The present finite-state calculation should also be distinguished from
 the orbit-counting and reciprocity literature for skew products and
 homology classes. Lalley's distribution results for symbolic and
@@ -675,8 +721,8 @@ reduced determinants, cyclic lifts, and finite-group extensions.
 finite-group extensions, derives the primitive Peter--Weyl determinant
 series, and establishes the class Mertens theorem under a twisted
 spectral gap. The conditional refinement in
-\Cref{sec:secondary-term} is above the square-root barrier and is not a
-third main theorem package. \Cref{sec:eta-gap} explains the rigidity of
+\Cref{sec:secondary-term} is above the square-root barrier and is an
+optional refinement, not a third main theorem. \Cref{sec:eta-gap} explains the rigidity of
 the boundary case \(\eta=\lambda\). \Cref{sec:shadows} proves quotient
 functoriality, identifies the scalar projection boundary, the abelian
 shadow, and the exact boundary of cyclic detection inside the
