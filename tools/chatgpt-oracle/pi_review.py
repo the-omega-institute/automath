@@ -124,7 +124,10 @@ def _codex_prompt(evidence: dict[str, Any]) -> str:
         '    {"action": "cancel_task", "task_id": "...", "reason": "..."},\n'
         '    {"action": "reset_paper", "paper": "<state-json-stem>", "reason": "..."},\n'
         '    {"action": "restart_inner", "reason": "..."},\n'
-        '    {"action": "adjust_cooldown", "key": "refill|pi_review", "hours": 0.0, "reason": "..."}\n'
+        '    {"action": "adjust_cooldown", "key": "refill|pi_review", "hours": 0.0, "reason": "..."},\n'
+        '    {"action": "apply_code_patch", "file": "tools/chatgpt-oracle/<name>.py",\n'
+        '     "find": "exact unique substring to replace", "replace": "new text",\n'
+        '     "reason": "...", "restart": "server|inner|both"}\n'
         '  ],\n'
         '  "summary": "one-sentence health snapshot"\n'
         "}\n\n"
@@ -138,7 +141,22 @@ def _codex_prompt(evidence: dict[str, Any]) -> str:
         "  - restart_inner: bounce the inner pool. Use only when the pool\n"
         "    appears to have stopped progressing across all workers.\n"
         "  - adjust_cooldown: tune supervisor cooldowns (refill, pi_review).\n"
-        "    Use to slow down PI when noise low, speed up refill when backlog drained.\n\n"
+        "    Use to slow down PI when noise low, speed up refill when backlog drained.\n"
+        "  - apply_code_patch: ★ self-iterating fix. When the supervisor /\n"
+        "    inner / server log shows a deterministic bug (Unicode crash,\n"
+        "    None where dict expected, off-by-one in a regex, missing import,\n"
+        "    wrong default), propose a minimal find/replace patch to one of\n"
+        "    the whitelisted files (oracle_pipeline.py, oracle_server.py,\n"
+        "    oracle_dispatch.py, pipeline_supervisor.py, pi_review.py,\n"
+        "    paper_refill.py, chatgpt_oracle_windows.user.js).\n"
+        "    Hard rules: `find` MUST be a unique substring in the file; tests\n"
+        "    in tests/test_pipeline_supervisor.py MUST keep passing after the\n"
+        "    edit (supervisor runs them and rolls back if not). Choose minimal\n"
+        "    patches over full rewrites. The reviewer (Claude) will cross-check\n"
+        "    your patch before it lands. Use `restart` = the smallest scope that\n"
+        "    picks up the change: server-only edits use \"server\", inner-only\n"
+        "    edits (oracle_pipeline) use \"inner\", supervisor edits leave\n"
+        "    `restart` empty (operator must restart supervisor manually).\n\n"
         "Rules:\n"
         "- loop_health = healthy if everything is moving without intervention.\n"
         "- loop_health = degraded if there are noisy errors but progress continues.\n"
@@ -330,7 +348,22 @@ def run_pi_review(*, dry_run: bool = False,
     return record
 
 
-_ALLOWED_AUTONOMOUS_ACTIONS = {"cancel_task", "reset_paper", "restart_inner", "adjust_cooldown"}
+_ALLOWED_AUTONOMOUS_ACTIONS = {
+    "cancel_task", "reset_paper", "restart_inner", "adjust_cooldown",
+    "apply_code_patch",
+}
+
+# Whitelist of files the PI agent may patch autonomously. Restricted to
+# the orchestration layer; never the paper content, theory/, lean4/.
+_PATCHABLE_FILES = {
+    "tools/chatgpt-oracle/oracle_server.py",
+    "tools/chatgpt-oracle/oracle_dispatch.py",
+    "tools/chatgpt-oracle/oracle_pipeline.py",
+    "tools/chatgpt-oracle/pipeline_supervisor.py",
+    "tools/chatgpt-oracle/pi_review.py",
+    "tools/chatgpt-oracle/paper_refill.py",
+    "tools/chatgpt-oracle/chatgpt_oracle_windows.user.js",
+}
 
 
 def _execute_autonomous_actions(codex_verdict: dict[str, Any],
@@ -408,12 +441,126 @@ def _execute_autonomous_actions(codex_verdict: dict[str, Any],
                 # in-flight adjustment would require IPC into the supervisor
                 # process, out of scope for this version.
                 executed.append({**entry, "result": "logged (manual apply via supervisor flags)"})
+            elif name == "apply_code_patch":
+                executed.append({**entry, "result": _execute_apply_code_patch(entry)})
         except Exception as exc:
             executed.append({**entry, "result": f"error: {exc}"})
 
     if executed:
         _append_log(f"autonomous actions: {json.dumps(executed, ensure_ascii=False)[:500]}")
     return executed
+
+
+def _execute_apply_code_patch(entry: dict[str, Any]) -> str:
+    """Apply a code patch proposed by Codex+Claude consensus.
+
+    Schema:
+      file:    repo-relative path (must be in _PATCHABLE_FILES)
+      find:    exact substring to replace (must be unique in file)
+      replace: replacement text
+      reason:  why
+      restart: optional, "server" / "inner" / "" — what to restart after
+
+    Workflow:
+      1. Whitelist check
+      2. Find/replace (require uniqueness)
+      3. Run test_pipeline_supervisor.py — must pass
+      4. git add + commit + push
+      5. Touch the requested restart signal so supervisor picks it up
+
+    Returns a string summary of what happened.
+    """
+    import subprocess
+    import shutil
+
+    rel = str(entry.get("file") or "").strip().replace("\\", "/")
+    find_str = entry.get("find")
+    replace_str = entry.get("replace")
+    if rel not in _PATCHABLE_FILES:
+        return f"rejected: {rel!r} not in patch whitelist"
+    if not isinstance(find_str, str) or not isinstance(replace_str, str):
+        return "rejected: find/replace must be strings"
+    if not find_str:
+        return "rejected: empty find"
+    if find_str == replace_str:
+        return "rejected: no-op patch"
+
+    target = REPO_ROOT / rel
+    if not target.exists():
+        return f"rejected: {rel} does not exist"
+
+    try:
+        original = target.read_text(encoding="utf-8")
+    except OSError as exc:
+        return f"error reading file: {exc}"
+    occ = original.count(find_str)
+    if occ == 0:
+        return "rejected: find string not present"
+    if occ > 1:
+        return f"rejected: find string non-unique ({occ} occurrences)"
+
+    backup = original
+    patched = original.replace(find_str, replace_str, 1)
+    try:
+        target.write_text(patched, encoding="utf-8")
+    except OSError as exc:
+        return f"error writing patch: {exc}"
+
+    # Run tests; on failure, revert.
+    test_path = REPO_ROOT / "tools/chatgpt-oracle/tests/test_pipeline_supervisor.py"
+    test_ok = True
+    if test_path.exists():
+        try:
+            test_proc = subprocess.run(
+                [sys.executable, str(test_path)],
+                cwd=str(REPO_ROOT / "tools/chatgpt-oracle"),
+                capture_output=True, text=True, timeout=120,
+            )
+            test_ok = (test_proc.returncode == 0)
+            if not test_ok:
+                _append_log(f"apply_code_patch: tests FAILED, rolling back. "
+                            f"stderr_excerpt={(test_proc.stderr or '')[:200]}")
+        except (subprocess.TimeoutExpired, OSError) as exc:
+            test_ok = False
+            _append_log(f"apply_code_patch: test runner error: {exc}")
+
+    if not test_ok:
+        try:
+            target.write_text(backup, encoding="utf-8")
+        except OSError as exc:
+            return f"error: tests failed AND rollback failed ({exc})"
+        return "rejected: tests failed; rolled back"
+
+    # Commit + push.
+    reason = str(entry.get("reason") or "pi autonomous patch")[:200]
+    msg = f"pi autonomous patch ({rel}): {reason}"
+    try:
+        subprocess.run(["git", "add", str(target)], cwd=str(REPO_ROOT),
+                       capture_output=True, text=True, check=True, timeout=30)
+        commit = subprocess.run(["git", "commit", "-m", msg], cwd=str(REPO_ROOT),
+                                capture_output=True, text=True, timeout=60)
+        if commit.returncode != 0:
+            target.write_text(backup, encoding="utf-8")
+            return f"rejected: git commit failed ({commit.stderr.strip()[:120]}); rolled back"
+        push = subprocess.run(["git", "push", "origin", "HEAD"],
+                              cwd=str(REPO_ROOT),
+                              capture_output=True, text=True, timeout=120)
+        if push.returncode != 0:
+            return f"applied + committed but push failed: {push.stderr.strip()[:120]}"
+    except (subprocess.SubprocessError, OSError) as exc:
+        target.write_text(backup, encoding="utf-8")
+        return f"error during commit/push: {exc}; rolled back"
+
+    # Trigger appropriate restart so the patch takes effect.
+    restart = str(entry.get("restart") or "").strip().lower()
+    if restart in {"server", "both"}:
+        (SCRIPT_DIR / ".server.restart").write_text(
+            f"pi_autonomous_patch {_now_iso()}\n", encoding="utf-8")
+    if restart in {"inner", "both", ""} and rel != "tools/chatgpt-oracle/pipeline_supervisor.py":
+        (SCRIPT_DIR / ".inner.restart").write_text(
+            f"pi_autonomous_patch {_now_iso()}\n", encoding="utf-8")
+
+    return f"applied + committed + pushed; restart={restart or 'inner'}"
 
 
 def main(argv: list[str] | None = None) -> int:

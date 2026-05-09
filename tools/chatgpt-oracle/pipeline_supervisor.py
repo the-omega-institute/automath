@@ -97,12 +97,17 @@ AGENT_STUCK_THRESHOLD_S = 30 * 60        # 30 minutes
 QUEUE_AGED_THRESHOLD_S = 60 * 60         # 1 hour
 SERVER_BOOT_GRACE_S = 4
 
-# Inner.log surfacer: each tick scans inner.log tail for high-signal lines
-# (ERROR / CRITICAL / Claude unavailable / Codex stderr / blocked) and
-# echoes them to supervisor.log so the operator's monitor catches them
-# without tailing inner.log directly. Tracks the byte offset already
-# scanned so each line is reported at most once per supervisor run.
+# Log surfacer: each tick scans tracked log files (inner.log,
+# oracle_server.log, pi_review log) for high-signal lines and echoes
+# them to supervisor.log so the operator's monitor catches them without
+# tailing each child log directly. Tracks per-file byte offsets so each
+# line is reported at most once per supervisor run.
 INNER_LOG_PATH = SCRIPT_DIR / "supervisor_logs" / "inner.log"
+ORACLE_SERVER_LOG_PATH = SCRIPT_DIR / "supervisor_logs" / "oracle_server.log"
+SURFACED_LOGS = [
+    ("inner", INNER_LOG_PATH),
+    ("server", ORACLE_SERVER_LOG_PATH),
+]
 INNER_LOG_ALERT_PATTERNS = re.compile(
     r"\[(ERROR|CRITICAL)\]"
     r"|Claude (CLI )?unavailable"
@@ -113,10 +118,23 @@ INNER_LOG_ALERT_PATTERNS = re.compile(
     r"|max .* rounds exhausted"
     r"|compile failed"
     r"|push failed"
-    r"|aborted",
+    r"|aborted"
+    r"|UnicodeEncodeError"
+    r"|UnicodeDecodeError"
+    r"|Traceback \(most recent"
+    r"|charmap\.cp1252"
+    r"|404 Not Found"
+    r"|500 Internal"
+    r"|Connection refused"
+    r"|Address already in use",
     re.IGNORECASE,
 )
 INNER_LOG_MAX_LINES_PER_TICK = 20
+
+# Aggressive remediation thresholds: after this many seconds, supervisor
+# itself cancels a stuck real task without waiting for PI's 6h cycle.
+# Below this we still log info: but don't act.
+REAL_TASK_AUTO_CANCEL_S = 2 * 3600       # 2 hours
 
 # Refill is a fallback producer: triggered only when the existing backlog
 # is fully DONE. Default cooldown is intentionally long (7 days) — the
@@ -380,48 +398,79 @@ def auto_heal_disposable_stuck(threshold_seconds: int = 300) -> int:
     return healed
 
 
-_inner_log_offset = 0
+_log_offsets: dict[str, int] = {}
 
 
-def surface_inner_log_alerts() -> int:
-    """Scan inner.log tail since last call, echo high-signal lines to supervisor.log.
+def surface_log_alerts() -> int:
+    """Scan each tracked log file's tail since last call.
 
-    Returns the number of lines surfaced this tick (cap-limited to keep
-    the supervisor log readable — duplicates within a burst are not
-    deduped beyond the per-tick cap).
+    Echoes high-signal lines to supervisor.log so the operator's
+    monitor catches them. Tracks per-file byte offsets so each line is
+    reported at most once. Watches both inner.log (paper pipeline) and
+    oracle_server.log (bridge service); the latter caught the recent
+    Unicode crash that the inner-only surfacer had missed.
     """
-    global _inner_log_offset
-    if not INNER_LOG_PATH.exists():
-        return 0
-    try:
-        size = INNER_LOG_PATH.stat().st_size
-    except OSError:
-        return 0
-    # Recover from log rotation / truncation.
-    if size < _inner_log_offset:
-        _inner_log_offset = 0
-    if size == _inner_log_offset:
-        return 0
-    surfaced = 0
-    try:
-        with open(INNER_LOG_PATH, "r", encoding="utf-8", errors="replace") as fh:
-            fh.seek(_inner_log_offset)
-            for line in fh:
-                if surfaced >= INNER_LOG_MAX_LINES_PER_TICK:
-                    # Drain the rest to advance offset; just don't print.
-                    pass
-                else:
-                    if INNER_LOG_ALERT_PATTERNS.search(line):
-                        cleaned = line.rstrip("\r\n")
-                        # Trim very long lines so supervisor.log stays readable.
-                        if len(cleaned) > 320:
-                            cleaned = cleaned[:317] + "..."
-                        supervisor_log(f"inner: {cleaned}")
-                        surfaced += 1
-            _inner_log_offset = fh.tell()
-    except OSError as exc:
-        supervisor_log(f"inner.log surface scan failed: {exc}")
-    return surfaced
+    total_surfaced = 0
+    for tag, path in SURFACED_LOGS:
+        if not path.exists():
+            continue
+        try:
+            size = path.stat().st_size
+        except OSError:
+            continue
+        offset = _log_offsets.get(tag, 0)
+        if size < offset:  # rotated / truncated
+            offset = 0
+        if size == offset:
+            continue
+        per_file = 0
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as fh:
+                fh.seek(offset)
+                for line in fh:
+                    if per_file < INNER_LOG_MAX_LINES_PER_TICK:
+                        if INNER_LOG_ALERT_PATTERNS.search(line):
+                            cleaned = line.rstrip("\r\n")
+                            if len(cleaned) > 320:
+                                cleaned = cleaned[:317] + "..."
+                            supervisor_log(f"{tag}: {cleaned}")
+                            per_file += 1
+                _log_offsets[tag] = fh.tell()
+        except OSError as exc:
+            supervisor_log(f"{path.name} surface scan failed: {exc}")
+        total_surfaced += per_file
+    return total_surfaced
+
+
+# Backward-compat shim: pi_review and tests may still reach for the
+# old name.
+surface_inner_log_alerts = surface_log_alerts
+
+
+def auto_cancel_long_stuck_real_tasks(threshold_seconds: int = REAL_TASK_AUTO_CANCEL_S) -> int:
+    """Cancel real review tasks stuck on a single agent >threshold.
+
+    Disposable tasks are handled separately by auto_heal_disposable_stuck.
+    This is an aggressive last-resort remediation: a 2h+ stuck task on
+    an agent almost always means the browser tab died silently. Cancelling
+    frees the agent slot so other queued work can dispatch immediately,
+    instead of waiting for the 4h server-side TASK_TIMEOUT.
+
+    Cancelled real tasks reappear in the inner pool's normal flow because
+    Stage B / C re-emit when their oracle wait times out internally.
+    """
+    cancelled = 0
+    for stuck in stuck_agents(threshold_seconds):
+        tid = stuck.get("task_id", "")
+        if tid.startswith(("smoke", "test_", "retry_")):
+            continue  # disposable handled elsewhere
+        if cancel_task(tid, reason=f"auto_cancel_long_stuck_{stuck['elapsed']}s"):
+            supervisor_log(
+                f"auto-action: cancelled real task {tid[:50]} stuck on "
+                f"{stuck['agent_id']} for {stuck['elapsed']}s — agent slot freed"
+            )
+            cancelled += 1
+    return cancelled
 
 
 # ---------------------------------------------------------------------------
@@ -956,13 +1005,14 @@ def main() -> int:
                             extra_args=args.inner_extra,
                         )
 
-            # Surface high-signal lines from inner.log so the operator's
-            # monitor sees Stage failures, Claude/codex outages, compile
-            # errors, and Oracle issues without tailing inner.log directly.
+            # Surface high-signal lines from inner.log + oracle_server.log so
+            # supervisor's monitor sees Stage failures, Claude/codex outages,
+            # compile errors, server unicode crashes etc without tailing
+            # each child log directly.
             try:
-                surface_inner_log_alerts()
+                surface_log_alerts()
             except Exception as exc:
-                supervisor_log(f"inner.log surface error: {exc}")
+                supervisor_log(f"log surface error: {exc}")
 
             # Self-heal: cancel disposable tasks stuck on agents (no
             # operator value, no PI judgment needed).
@@ -971,11 +1021,18 @@ def main() -> int:
             except Exception as exc:
                 supervisor_log(f"auto-heal error: {exc}")
 
-            # Real-task agent-stuck: log INFO only, leave for PI to decide
-            # (cancel and lose work? wait? reset paper?). Not a monitor ping.
+            # Real-task remediation tiers:
+            #   30 min: log INFO only (PI will inspect)
+            #   2 hour: supervisor auto-cancels (frees agent slot;
+            #           Stage B/C will re-emit if needed)
+            try:
+                auto_cancel_long_stuck_real_tasks()
+            except Exception as exc:
+                supervisor_log(f"auto-cancel error: {exc}")
             real_stuck = [
                 a for a in stuck_agents(AGENT_STUCK_THRESHOLD_S)
                 if not str(a.get("task_id", "")).startswith(("smoke", "test_", "retry_"))
+                and (a.get("elapsed") or 0) < REAL_TASK_AUTO_CANCEL_S
             ]
             if real_stuck:
                 supervisor_log(
