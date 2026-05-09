@@ -130,11 +130,44 @@ cardinality \(\binom{k+q-1}{k-1}\).
 Because the synchronized update rule of
 \Cref{prop:appendix-collision-automaton} is coordinatewise and depends only on
 whether the newly committed visible blocks agree across the \(q\) coordinates,
-orbit sums produce a nonnegative integer quotient matrix \(\widetilde A_q\)
-with the stated realization formula.  The symmetric subspace of
-\(\RR^{\widehat Q^q}\) is \(A_q\)-invariant and is naturally identified with
-the histogram state space, so \(\widetilde A_q\) is precisely the restriction
-of \(A_q\) to that invariant subspace.  Averaging a Perron eigenvector of
+the quotient entries can be written without any orbit-sum ambiguity.  For
+histograms \(\eta,\eta'\in\mathcal H_q\), put
+\[
+(\widetilde A_q)_{\eta,\eta'}
+=
+\sum_{\substack{b\in\{0,1\}^*\\
+                \xi:\widehat Q\times\{0,1\}\to\ZZ_{\ge0}}}
+\prod_{t\in\widehat Q}
+\frac{\eta(t)!}{\xi(t,0)!\xi(t,1)!},
+\]
+where a summand is included exactly when
+\[
+\begin{gathered}
+  \xi(t,0)+\xi(t,1)=\eta(t)\quad(t\in\widehat Q),\\
+  \sum_{\substack{t\in\widehat Q,\ a\in\{0,1\}\\T_a(t)=t'}}
+       \xi(t,a)=\eta'(t')\quad(t'\in\widehat Q),\\
+  \xi(t,a)>0\Longrightarrow C_a(t)=b.
+\end{gathered}
+\]
+Here \(T_a\) is the one-copy augmented update and \(C_a(t)\) is the committed
+visible block of \Cref{prop:appendix-collision-automaton}.  The multinomial
+factor counts labelled choices among the coordinates currently in state \(t\);
+the last displayed condition is precisely the requirement that the labelled
+path has a common committed block during this step.  Hence each labelled
+synchronized path projects to a unique histogram path and contributes exactly
+one to the product of the corresponding quotient multiplicities, while the
+quotient multiplicity counts exactly the labelled lifts of that histogram
+step.  With \(\widetilde u_q\) supported on the histogram of the initial
+synchronized state and \(\widetilde v_q\) the indicator of terminal histograms
+whose unresolved suffixes agree, this gives
+\[
+  S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q.
+\]
+
+The symmetric subspace of \(\RR^{\widehat Q^q}\), consisting of functions
+constant on \(\mathfrak S_q\)-orbits, is \(A_q\)-invariant and is naturally
+identified with the histogram state space.  Under this identification the
+restriction is the matrix just displayed.  Averaging a Perron eigenvector of
 \(A_q\) over \(\mathfrak S_q\) produces a nonzero symmetric eigenvector with
 the same eigenvalue, and therefore \(\rho(\widetilde A_q)=\rho(A_q)\).
 \end{proof}
