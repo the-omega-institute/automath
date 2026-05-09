@@ -10,7 +10,7 @@ import Omega.HyperKernel.Rewrite
 import Omega.HyperKernel.NormalForm
 import Omega.HyperKernel.Run
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace AnalyzeRun
 
 open Analysis
@@ -76,7 +76,7 @@ def run : IO Unit := do
       
       -- Delta 统计：最短时间实现相对于最小singular下界的代价
       let deltaSamples := analyses.filterMap (fun a => a.deltaFromShortest)
-      if h : deltaSamples.length = 0 then
+      if deltaSamples.length = 0 then
         IO.println "\n无可比对的 delta 样本（可能未建立有限的奇异预算界）。"
       else
         let d0 := deltaSamples.filter (fun x => x = 0) |>.length
@@ -151,4 +151,4 @@ def run : IO Unit := do
       IO.println "全部分析完成！"
 
 end AnalyzeRun
-end HyperKernel
+end Omega.HyperKernel

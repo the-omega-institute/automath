@@ -4,7 +4,7 @@ import Omega.HyperKernel.Analysis
 import Omega.HyperKernel.Closure
 import Omega.HyperKernel.SetStructure
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Geometry
 
 open Analysis
@@ -18,11 +18,11 @@ def dictLookupWord (n : Nat) (dict : Dict n) (target : Op n) : Option (List Nat)
 def getOpAt? (n : Nat) (gens : List (Op n)) (idx : Nat) : Option (Op n) :=
   match gens, idx with
   | [], _ => none
-  | g :: gs, 0 => some g
-  | _ :: gs, i + 1 => getOpAt? n gs i
+  | g :: _, 0 => some g
+  | _ :: rest, i + 1 => getOpAt? n rest i
 
 def distanceFromWords (a b : List Nat) : Nat :=
-  if h : a.length ≤ b.length then b.length - a.length else a.length - b.length
+  if a.length ≤ b.length then b.length - a.length else a.length - b.length
 
 def opDistanceByWordLength (n : Nat) (dict : Dict n) (a b : Op n) : Option Nat :=
   match dictLookupWord n dict a, dictLookupWord n dict b with
@@ -48,7 +48,6 @@ def squareCurvatureAt
     (dict : Dict n)
     (op : Op n)
     (i j : Nat) : Option Int :=
-  let wi := dictLookupWord n dict op
   match getOpAt? n gens i, getOpAt? n gens j with
   | none, _ | _, none => none
   | some gi, some gj =>
@@ -105,4 +104,4 @@ def budgetDiscreteCurvature
   (List.range (maxLen + 1)).map (fun l => (l, discreteCurvatureAtLevel n gens dict l))
 
 end Geometry
-end HyperKernel
+end Omega.HyperKernel

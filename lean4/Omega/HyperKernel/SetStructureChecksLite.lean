@@ -2,7 +2,7 @@ import Omega.HyperKernel.SetStructure
 import Omega.HyperKernel.Enum
 import Omega.HyperKernel.AutoSeed
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace SetStructureChecksLite
 
 open SetStructure
@@ -32,7 +32,7 @@ def seedClosure_n4 : Option (Closure.Dict 4) := do
       none
 
 def signatureCurve_seed_n4 : Option (List (Prod Nat Nat)) :=
-  seedClosure_n4 >>= fun dict => some (HyperKernel.SetStructure.signatureCountCurve 4 dict 7)
+  seedClosure_n4 >>= fun dict => some (Omega.HyperKernel.SetStructure.signatureCountCurve 4 dict 7)
 
 /-- every length has a prefix count entry -/
 theorem signatureCurve_seed_n4_has8 :
@@ -40,4 +40,4 @@ theorem signatureCurve_seed_n4_has8 :
   native_decide
 
 end SetStructureChecksLite
-end HyperKernel
+end Omega.HyperKernel

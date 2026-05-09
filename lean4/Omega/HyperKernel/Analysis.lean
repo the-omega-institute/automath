@@ -3,7 +3,7 @@ import Omega.HyperKernel.Op
 import Omega.HyperKernel.Closure
 import Omega.HyperKernel.Pretty
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Analysis
 
 def rank (f : Op n) : Nat :=
@@ -334,4 +334,4 @@ def printDefectVerification {n : Nat} (result : HypothesisResult n) : IO Unit :=
       IO.println s!"  {Pretty.opString ex.op}: rank={ex.rankValue}, defect={ex.defect}, singular={ex.singularCount}, word={Pretty.wordString ex.word}"
 
 end Analysis
-end HyperKernel
+end Omega.HyperKernel

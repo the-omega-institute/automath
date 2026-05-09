@@ -17,7 +17,7 @@ import Omega.HyperKernel.Closure
 import Omega.HyperKernel.Analysis
 import Omega.HyperKernel.Pretty
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace NormalForm
 
 open Analysis
@@ -172,4 +172,4 @@ def printNFExamples (n : Nat) (results : List (NormalFormResult n)) : IO Unit :=
       IO.println s!"  rank={rankVal}: {reach}/{byRank.length} 可达 ({rate}%)"
 
 end NormalForm
-end HyperKernel
+end Omega.HyperKernel

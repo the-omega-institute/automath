@@ -6,11 +6,8 @@ import Omega.HyperKernel.Pretty
 import Omega.HyperKernel.Analysis
 import Omega.HyperKernel.AutoSeed
 import Omega.HyperKernel.RankMono
-import Omega.HyperKernel.Rewrite
-import Omega.HyperKernel.NormalForm
-import Omega.HyperKernel.Run
-import Omega.HyperKernel.AnalyzeRun
 import Omega.HyperKernel.SetStructure
 import Omega.HyperKernel.SetStructureChecksTiny
 import Omega.HyperKernel.Fiber
 import Omega.HyperKernel.Geometry
+import Omega.HyperKernel.Paper

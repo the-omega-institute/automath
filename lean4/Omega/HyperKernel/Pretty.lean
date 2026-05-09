@@ -1,7 +1,7 @@
 import Std
 import Omega.HyperKernel.Op
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Pretty
 
 /-- 字典序比较（Nat 列表）。-/
@@ -51,4 +51,4 @@ def sortOps (xs : List (Op n)) : List (Op n) :=
   insertSort (fun a b => ltOp a b) xs
 
 end Pretty
-end HyperKernel
+end Omega.HyperKernel

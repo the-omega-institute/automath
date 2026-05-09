@@ -1,7 +1,7 @@
 import Std
 import Omega.HyperKernel.Op
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Closure
 
 abbrev Word := List Nat
@@ -66,4 +66,4 @@ def closureSize (n : Nat) (gens : List (Op n)) (fuel : Nat) : Nat :=
   (closureDict n gens fuel).length
 
 end Closure
-end HyperKernel
+end Omega.HyperKernel

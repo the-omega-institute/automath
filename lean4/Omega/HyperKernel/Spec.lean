@@ -1,4 +1,4 @@
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Spec
 
 /-- 状态空间大小 n（默认 3，可自行修改后重新编译）。
@@ -9,4 +9,4 @@ def n : Nat := 4
 def maxSeedSize : Nat := 5
 
 end Spec
-end HyperKernel
+end Omega.HyperKernel

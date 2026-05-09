@@ -5,7 +5,7 @@ import Omega.HyperKernel.Closure
 import Omega.HyperKernel.Pretty
 import Omega.HyperKernel.SetStructure
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Fiber
 
 open Analysis
@@ -56,4 +56,4 @@ def budgetRankFiberDiffs (n : Nat) (dict : Dict n) (maxLen : Nat) : List (Nat ×
   (List.range (maxLen + 1)).map (fun l => (l, rankFiberDiffsAtLevel n dict l))
 
 end Fiber
-end HyperKernel
+end Omega.HyperKernel

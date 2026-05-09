@@ -5,7 +5,7 @@ import Omega.HyperKernel.Enum
 import Omega.HyperKernel.Closure
 import Omega.HyperKernel.Pretty
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace SetStructure
 
 open Analysis
@@ -128,7 +128,7 @@ theorem memPoint_iff_belongs (n : Nat) (p : Point n) (s : SetObj n) :
     memPoint n p.1 s.1 ↔ belongs n p s := by
   rfl
 
--- legacy name kept for compatibility with the analyzer output
+/-- Alias for the point-signature inclusion relation used by analyzer reports. -/
 def subset (n : Nat) (points : List (Op n)) (e f : Op n) : Prop :=
   isMonotonePoints n points e f
 
@@ -453,4 +453,4 @@ def printLatticeReport (n : Nat) (dict : Dict n) : IO Unit := do
             IO.println s!"missing join: a={opString a} b={opString b} joinSig={joinSig}"
 
 end SetStructure
-end HyperKernel
+end Omega.HyperKernel

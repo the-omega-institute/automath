@@ -4,7 +4,7 @@ import Omega.HyperKernel.AutoSeed
 import Omega.HyperKernel.Closure
 import Omega.HyperKernel.RankMono
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace SeedCore
 
 open Analysis
@@ -46,4 +46,4 @@ theorem autoSeedFound_n4 : (AutoSeed.findMinGenerators 4 3).isSome := by
   native_decide
 
 end SeedCore
-end HyperKernel
+end Omega.HyperKernel

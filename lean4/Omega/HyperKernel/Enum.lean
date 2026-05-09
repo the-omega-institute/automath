@@ -1,7 +1,7 @@
 import Std
 import Omega.HyperKernel.Op
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Enum
 
 /-- 生成所有长度为 `len` 的 base-`n` 数字串（每位在 `[0,n-1]`），按字典序**降序**枚举。-/
@@ -22,4 +22,4 @@ def universeSize (n : Nat) : Nat :=
   (allOps n).length
 
 end Enum
-end HyperKernel
+end Omega.HyperKernel

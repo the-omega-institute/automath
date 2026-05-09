@@ -3,7 +3,7 @@ import Omega.HyperKernel.Op
 import Omega.HyperKernel.Enum
 import Omega.HyperKernel.Closure
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace AutoSeed
 
 /-- 组合枚举：从 `xs` 中取 `k` 个元素的所有组合（保持原列表顺序）。-/
@@ -43,4 +43,4 @@ def findMinGenerators (n maxK : Nat) : Option (Nat × List (Op n)) :=
   scan 1 maxK
 
 end AutoSeed
-end HyperKernel
+end Omega.HyperKernel

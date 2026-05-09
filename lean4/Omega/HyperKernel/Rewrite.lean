@@ -17,7 +17,7 @@
 import Omega.HyperKernel.Op
 import Omega.HyperKernel.Analysis
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Rewrite
 
 open Analysis
@@ -241,4 +241,4 @@ def printExamples (n : Nat) (results : List (NormalizationResult n)) : IO Unit :
     IO.println s!"  步数={r.steps}, 逆序={r.totalInversions}, 失败={r.commutativityFailures}"
 
 end Rewrite
-end HyperKernel
+end Omega.HyperKernel

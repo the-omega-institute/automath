@@ -3,7 +3,7 @@ import Omega.HyperKernel.Op
 import Omega.HyperKernel.Analysis
 import Omega.HyperKernel.Enum
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace RankMono
 
 open Analysis
@@ -31,4 +31,4 @@ theorem rank_drop_at_most_one_n4 (f g : Op 4) (hf : f ∈ Enum.allOps 4)
   exact of_decide_eq_true hpred hgrank
 
 end RankMono
-end HyperKernel
+end Omega.HyperKernel

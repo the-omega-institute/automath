@@ -6,7 +6,7 @@ import Omega.HyperKernel.AutoSeed
 import Omega.HyperKernel.Closure
 import Omega.HyperKernel.Pretty
 
-namespace HyperKernel
+namespace Omega.HyperKernel
 namespace Run
 
 def enumFrom (start : Nat) (xs : List α) : List (Nat × α) :=
@@ -62,4 +62,4 @@ def run : IO Unit := do
       IO.println "✓ 完成！"
 
 end Run
-end HyperKernel
+end Omega.HyperKernel
