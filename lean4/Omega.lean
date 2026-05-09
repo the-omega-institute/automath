@@ -15,6 +15,7 @@ import Omega.Frontier
 import Omega.GU
 import Omega.Graph
 import Omega.GroupUnification
+import Omega.HyperKernel
 import Omega.HighDimensionalCutProject
 import Omega.Kronecker
 import Omega.LogicExpansionChain
