@@ -89,8 +89,32 @@ many-one equivalent for this fragment, and both are undecidable.
 \begin{lemma}[Richardson-compatible EML witnesses]
 \label{lem:eml-real-witness-library}
 There is a finite, effectively fixed library of principal-branch EML
-terms over the constant \(1\) with the following real-domain
-properties.
+terms over the constant \(1\) for exactly the Richardson primitives
+used below.  The selected entries may be taken from Odrzywo{\l}ek's
+verified bootstrapping chain as follows:
+\[
+\begin{array}{c|c|c}
+\text{real primitive} & \text{source entry} & \text{real-domain use}\\
+\hline
+\exp u & \text{Table S2, step 2} & u\in\RR\\
+\operatorname{Log} u & \text{Table S2, step 3} & u>0\\
+u-v & \text{Table S2, step 4} & u,v\in\RR\\
+-u & \text{Table S2, step 7} & u\in\RR\\
+u+v & \text{Table S2, step 8} & u,v\in\RR\\
+1/u & \text{Table S2, step 9} & u\ne0\\
+uv & \text{Table S2, step 10} & u,v\in\RR\\
+u^2 & \text{Table S2, step 11} & u\in\RR\\
+u/v & \text{Table S2, step 12} & v\ne0\\
+\sqrt u & \text{Table S2, step 15} & u\ge0\\
+\pi & \text{Table S2, step 18} & \text{constant}\\
+\sin u & \text{Table S2, step 25} & u\in\RR .
+\end{array}
+\]
+Here ``Table S2'' means the complete EML bootstrapping chain in the
+Supplementary Information, Part I, of \cite{Odrzywolek2026}; the same
+identities are then verified in its Supplementary Information, Part
+II.  With these fixed choices the following real-domain properties
+hold.
 \begin{enumerate}
 \item For all \(u,v\in\RR\), the chosen witnesses for
   \(u+v\), \(u-v\), and \(uv\) are defined and have those real
@@ -107,26 +131,30 @@ properties.
 \end{lemma}
 
 \begin{proof}
-Odrzywo{\l}ek's principal-branch EML table gives finite terms for
-the standard arithmetic operations, elementary unary functions, and
-scientific-calculator constants used here
-\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
-We choose once and for all the entries for \(+\), \(-\),
-\(\times\), \(\div\), \(\exp\), \(\sin\), square root, and \(\pi\),
-restricted to the displayed real domains.  The real domains in the
-first two items are the usual real domains of those operations.  For
-\(\exp\) this is also immediate from the displayed formula
-\(e^u=\eml(u,1)\), since the second EML input is the nonzero
-constant \(1\).
+Odrzywo{\l}ek's main Table~1 fixes the scientific-calculator basis,
+and the cited entries of Table S2 give finite EML terms for the
+displayed primitives using only the terminal \(1\), variables, and
+the binary operation \(\eml\)
+\cite[Table~1 and Supplementary Information, Table~S2 and
+Part~II]{Odrzywolek2026}.  We choose those finitely many entries once
+and for all, and we restrict them to the real domains shown in the
+table.  These restrictions are exactly the domains on which the
+principal-branch identities are used in the Richardson translation.
+For \(\exp\), the entry is the displayed identity
+\[
+  e^u=\eml(u,1),
+\]
+whose second EML input is the nonzero constant \(1\).
 
 The square-root entry is used only on \(\RR_{\ge0}\), where the
 principal square root is the ordinary nonnegative real square root.
-The constant \(0\) is obtained as \(1-1\), integers are obtained by
-iterated addition and subtraction, and a rational \(a/b\) with
-\(b>0\) is obtained by applying the chosen division witness to the
-integer witnesses for \(a\) and \(b\); the denominator witness is
-nonzero.  Finally, \(\log 2\) is obtained from the logarithm witness
-in \Cref{thm:eml-universality} applied to the positive real constant
+The logarithm entry is used on \(u>0\), so the principal logarithm is
+the ordinary real logarithm there.  The constant \(0\) is obtained as
+\(1-1\), integers are obtained by iterated addition and subtraction,
+and a rational \(a/b\) with \(b>0\) is obtained by applying the
+chosen division witness to the integer witnesses for \(a\) and \(b\);
+the denominator witness is nonzero.  Finally, \(\log 2\) is obtained
+from the same positive-real logarithm witness applied to
 \(2=1+1\).  These are finite syntactic constructions, uniform in the
 rational input, and each is evaluated only on the real domain on
 which the corresponding principal-branch witness is defined.
@@ -149,6 +177,17 @@ by
   |F|=\sqrt{F^2}
 \]
 using the principal square root on the nonnegative real axis.
+Moreover, let \(|E|\) denote the number of nodes in the expanded
+Richardson expression tree, with a rational constant \(a/b\) counted
+by the fixed constructor tree built from \(1\), integer addition and
+subtraction, and one division.  Then there is a constant \(K\),
+depending only on the fixed witness library and not on \(E\), such
+that the EML tree size and substitution depth satisfy
+\[
+  |\tau(E)|_{\eml}\le K^{2|E|}
+  \qquad\text{and}\qquad
+  \operatorname{depth}\tau(E)\le K|E| .
+\]
 \end{lemma}
 
 \begin{proof}
@@ -187,6 +226,44 @@ the original Richardson expression as a real function.  The
 statement concerns this transported real semantics; it makes no
 branch-independent assertion about equality of arbitrary raw EML
 terms on a complex domain.
+
+It remains to record the quantitative bound.  For each selected
+unary or binary witness \(W\), let \(s(W)\) be its EML tree size,
+let \(d(W)\) be its depth, and let \(r(W)\) be the largest number of
+occurrences of any one formal input variable in \(W\).  The witness
+library is finite, and the rational constants have already been
+expanded by a fixed constructor scheme, so choose an integer \(K\ge2\)
+larger than every one of these finitely many library constants and
+larger than the corresponding constants for the constructors
+\(0\), \(1\), integer successor by addition, integer predecessor by
+subtraction, and division by a nonzero integer.
+
+We prove the two estimates simultaneously by induction on the
+Richardson expression tree.  Variables and constants satisfy the
+bounds after the preceding choice of \(K\).  For a primitive unary or
+binary operation represented by a witness \(W\), substituting the
+translated children into the formal input leaves of \(W\) gives
+\[
+  |\tau(E)|_{\eml}
+  \le K\Bigl(1+\sum_i |\tau(E_i)|_{\eml}\Bigr)
+  \le K^{2+2\sum_i |E_i|}
+  = K^{2|E|},
+\]
+after increasing \(K\) once if necessary; the depth increases by at
+most \(d(W)\le K\), hence is at most \(K|E|\).  For a composition
+\(G\circ F\), syntactic substitution of \(\tau(F)\) into every
+variable leaf of \(\tau(G)\) gives
+\[
+  |\tau(G\circ F)|_{\eml}
+  \le |\tau(G)|_{\eml}\,|\tau(F)|_{\eml}
+  \le K^{2|G|+2|F|}
+  \le K^{2|G\circ F|},
+\]
+and the substitution depth is at most the sum of the two depths,
+hence at most \(K(|G|+|F|)\le K|G\circ F|\).  The absolute-value case
+is a primitive square, followed by the fixed square-root witness, so
+it is covered by the same unary-operation estimate.  This proves the
+claimed expression-tree and substitution-depth bounds.
 \end{proof}
 
 \begin{theorem}[Expression universality does not give normal forms]
