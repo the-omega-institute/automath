@@ -140,19 +140,45 @@ def _hydrate_sessions() -> None:
 # --------------------------------------------------------------------------- #
 
 
+def _is_disposable_task(task: dict) -> bool:
+    """Return True for tasks that should not survive a server restart.
+
+    Smoke / test / retry tasks have no operational value past their
+    immediate use; persisting them across restarts means the server
+    rehydrates ghosts that block real review work behind them in the
+    queue (observed: 4h+ smoke residue starving real Stage B tasks).
+    """
+    if not isinstance(task, dict):
+        return True
+    tid = str(task.get("task_id") or "")
+    return tid.startswith(("smoke", "test_", "retry_"))
+
+
 def _persist_queue_state() -> None:
     """Write task_queue + pending_tasks + dispatch_times to disk.
 
     Called under _lock by the handlers that mutate these. Cheap (one
     small JSON file). Survives kill -9; lets oracle_server restart
     without dropping in-flight or queued tasks.
+
+    Filters out disposable tasks (smoke / test / retry) so a restart
+    does not rehydrate ghosts that have no operational meaning.
     """
     try:
         ORACLE_DIR.mkdir(parents=True, exist_ok=True)
+        clean_queue = [t for t in task_queue if not _is_disposable_task(t)]
+        clean_pending = {
+            aid: t for aid, t in pending_tasks.items()
+            if not _is_disposable_task(t)
+        }
+        clean_dispatch = {
+            aid: ts for aid, ts in dispatch_times.items()
+            if aid in clean_pending
+        }
         payload = {
-            "task_queue": list(task_queue),
-            "pending_tasks": pending_tasks,
-            "dispatch_times": dispatch_times,
+            "task_queue": clean_queue,
+            "pending_tasks": clean_pending,
+            "dispatch_times": clean_dispatch,
             "saved_at": _now_iso(),
         }
         QUEUE_STATE_PATH.write_text(
@@ -204,11 +230,19 @@ def _hydrate_queue_state() -> None:
     raw_dispatch = data.get("dispatch_times") or {}
     now = time.time()
     requeued = 0
+    skipped_disposable = 0
     for item in raw_queue:
-        if isinstance(item, dict):
-            task_queue.append(item)
+        if not isinstance(item, dict):
+            continue
+        if _is_disposable_task(item):
+            skipped_disposable += 1
+            continue
+        task_queue.append(item)
     for aid, task in raw_pending.items():
         if not isinstance(task, dict):
+            continue
+        if _is_disposable_task(task):
+            skipped_disposable += 1
             continue
         ts = float(raw_dispatch.get(aid) or 0.0)
         if not ts or now - ts > TASK_TIMEOUT:
@@ -219,6 +253,8 @@ def _hydrate_queue_state() -> None:
             dispatch_times[aid] = ts
     if requeued:
         print(f"[server] hydrate: re-queued {requeued} orphan pending task(s) past {TASK_TIMEOUT}s timeout")
+    if skipped_disposable:
+        print(f"[server] hydrate: skipped {skipped_disposable} disposable task(s) (smoke/test/retry)")
 
 
 def _hydrate_results_ring() -> None:

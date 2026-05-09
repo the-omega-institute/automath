@@ -87,6 +87,14 @@ DEFAULT_INNER_RESTART_BACKOFF_S = 30
 DEFAULT_AUTO_COMMIT_COOLDOWN_S = 600
 TAB_STUCK_THRESHOLD_S = 300
 TAB_ALERT_DEBOUNCE_S = 600
+# Agent has held one task this long without progress → almost certainly
+# the browser tab died or got navigated away. Server's hard cleanup is
+# at TASK_TIMEOUT (4h); we want to surface much earlier.
+AGENT_STUCK_THRESHOLD_S = 30 * 60        # 30 minutes
+# Any queued task waiting this long even with at least one busy agent →
+# real backlog (e.g. agent is processing a different task forever).
+# Independent of TAB_STUCK_THRESHOLD_S which only fires on zero-agent state.
+QUEUE_AGED_THRESHOLD_S = 60 * 60         # 1 hour
 SERVER_BOOT_GRACE_S = 4
 
 # Inner.log surfacer: each tick scans inner.log tail for high-signal lines
@@ -161,9 +169,10 @@ def desktop_notify(title: str, body: str) -> None:
 
     macOS: osascript. Windows: log only (toast notifications need extra
     deps). Linux: log only. Always also writes to supervisor.log so an
-    operator can scrape state.
+    operator can scrape state. Prefix is `WARN:` so existing monitor
+    grep patterns (case-insensitive `warn:`) catch it.
     """
-    supervisor_log(f"NOTIFY: {title} — {body}")
+    supervisor_log(f"WARN: {title} — {body}")
     if sys.platform == "darwin":
         safe_title = title.replace('"', '\\"')
         safe_body = body.replace('"', '\\"')
@@ -305,6 +314,36 @@ def queue_stuck_too_long(threshold_seconds: int) -> bool:
         return False
     queued = s.get("queued_tasks") or []
     return any((t.get("age_seconds") or 0) > threshold_seconds for t in queued)
+
+
+def stuck_agents(threshold_seconds: int) -> list[dict]:
+    """Return agents that have held a single task longer than threshold."""
+    s = server_status()
+    out: list[dict] = []
+    for aid, info in (s.get("agents") or {}).items():
+        elapsed = info.get("elapsed") or 0
+        if elapsed > threshold_seconds:
+            out.append({
+                "agent_id": aid,
+                "task_id": info.get("task_id", "?"),
+                "elapsed": elapsed,
+            })
+    return out
+
+
+def aged_queued_tasks(threshold_seconds: int) -> list[dict]:
+    """Return queued tasks waiting longer than threshold (regardless of diagnosis)."""
+    s = server_status()
+    out: list[dict] = []
+    for t in s.get("queued_tasks") or []:
+        age = t.get("age_seconds") or 0
+        if age > threshold_seconds:
+            out.append({
+                "task_id": t.get("task_id", "?"),
+                "age_seconds": age,
+                "conversation_id": t.get("conversation_id", ""),
+            })
+    return out
 
 
 _inner_log_offset = 0
@@ -891,13 +930,41 @@ def main() -> int:
             except Exception as exc:
                 supervisor_log(f"inner.log surface error: {exc}")
 
+            # Three independent stuck-detectors so monitor picks up the right
+            # signature regardless of which failure mode we're in.
             if queue_stuck_too_long(TAB_STUCK_THRESHOLD_S):
                 if _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
                     desktop_notify(
                         "pipeline supervisor: tab stuck",
-                        "ChatGPT oracle tab stuck >5min. Open https://chatgpt.com/?oracle=1 and click ACTIVATE.",
+                        "ALERT: ChatGPT oracle tab stuck >5min, queue waiting for agent. "
+                        "Open https://chatgpt.com/?oracle=1 and click ACTIVATE.",
                     )
                     last_tab_alert_ts = _now()
+
+            stuck = stuck_agents(AGENT_STUCK_THRESHOLD_S)
+            if stuck and _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
+                joined = "; ".join(
+                    f"{a['agent_id']}={a['task_id'][:40]}@{a['elapsed']}s"
+                    for a in stuck[:3]
+                )
+                desktop_notify(
+                    "pipeline supervisor: agent stuck",
+                    f"ALERT: agent(s) stuck on one task >{AGENT_STUCK_THRESHOLD_S//60}min: {joined}. "
+                    "Browser tab likely died; refresh or POST /cancel.",
+                )
+                last_tab_alert_ts = _now()
+
+            aged = aged_queued_tasks(QUEUE_AGED_THRESHOLD_S)
+            if aged and _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
+                joined = "; ".join(
+                    f"{q['task_id'][:40]}@{q['age_seconds']}s" for q in aged[:3]
+                )
+                desktop_notify(
+                    "pipeline supervisor: queue starved",
+                    f"ALERT: {len(aged)} task(s) queued >{QUEUE_AGED_THRESHOLD_S//60}min: {joined}. "
+                    "Real review work backlogged; check oracle tabs.",
+                )
+                last_tab_alert_ts = _now()
 
             if not args.no_auto_commit:
                 if _now() - last_commit_ts >= args.auto_commit_cooldown:
