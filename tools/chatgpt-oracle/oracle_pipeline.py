@@ -4689,10 +4689,15 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                     context_mode="scope_bound_review",
                     agent_role="stage_a_structural_audit_fallback")
             else:
-                out = claude_exec(prompt, work_dir=paper_path,
-                                  timeout_seconds=900, dry_run=dry_run,
-                                  context_mode="scope_bound_review",
-                                  agent_role="stage_a_claude_structural_audit")
+                # Stage A structural audit: deep reasoning, route to Codex.
+                # The audit runs as part of an A3 final gate; the gate is
+                # codex_audit + structural_audit combined, both in parallel,
+                # so doing both with Codex saves one Claude call per round
+                # without changing what's gated.
+                out = codex_exec(prompt, work_dir=paper_path,
+                                 timeout_seconds=900, model=model, dry_run=dry_run,
+                                 context_mode="scope_bound_review",
+                                 agent_role="stage_a_structural_audit")
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CLAUDE_STRUCTURAL_METRICS},
                 "verdict": "pass",
@@ -4838,18 +4843,23 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             }
             claude_scope_out = ""
         else:
+            # Stage A scope brief: deep-reasoning step, route to Codex.
+            # Claude was the original reviewer here but Codex is the writer
+            # in this pipeline and the brief is consumed by Codex's own
+            # scope-contract pass — going Claude->Codex burned 5min/paper
+            # without an independent gate.
             claude_scope_prompt = build_claude_scope_brief_prompt(
                 state.paper_dir, state.target_journal,
                 state.main_paper_dir)
-            claude_scope_out = claude_exec(
+            claude_scope_out = codex_exec(
                 claude_scope_prompt, work_dir=paper_path,
-                timeout_seconds=900, dry_run=dry_run,
+                timeout_seconds=900, model=model, dry_run=dry_run,
                 context_mode="contextual_supervision",
                 agent_role="stage_a_scope_brief")
             claude_scope_data = parse_json_from_output(claude_scope_out)
             if not claude_scope_data:
                 return _stage_a_pause(
-                    state, "Claude scope brief missing or unparseable",
+                    state, "scope brief missing or unparseable",
                     tag=tag)
         _record_claude_supervision(
             state, "stage_a_scope_brief", claude_scope_data,
