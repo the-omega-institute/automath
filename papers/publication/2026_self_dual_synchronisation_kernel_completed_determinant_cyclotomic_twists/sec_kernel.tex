@@ -82,20 +82,24 @@ explicit paths from \(\st{000}\) to the other states:
 \]
 Thus the digraph of \(B\) is strongly connected. Since there is also the
 self-loop \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
-Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The factorisation is
-then immediate. We do not infer the spectral radius from the reciprocal
-moduli of the displayed factors; the cubic factor also has a reciprocal
-outside the unit circle. Instead the spectral radius is determined
-directly from Perron--Frobenius and the row sums. Every row of
-\(B=B(1)\) has sum \(3\), so
+Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The displayed
+factorisation is then immediate. The spectral radius is not determined
+from reciprocal moduli of the factors; indeed
 \[
-  B\mathbf 1=3\mathbf 1,\qquad \|B\|_\infty=3.
+  z^3-z^2+z+1
 \]
-Thus \(3\) is an eigenvalue and every eigenvalue \(\lambda\) satisfies
-\(\abs{\lambda}\le \|B\|_\infty=3\). Since \(B\) is primitive,
-Perron--Frobenius makes the eigenvalue of modulus \(3\) simple and
-positive, hence \(\rho(B)=3\). The residue is the exact one-line
-computation
+has a zero inside the unit circle, so that shortcut would give the
+wrong criterion. We instead use the non-negative matrix itself. Every
+row of \(B=B(1)\) has sum \(3\), so
+\[
+  B\mathbf 1=3\mathbf 1,\qquad
+  \rho(B)\le \max_i\sum_j B_{ij}=\|B\|_\infty=3.
+\]
+The first identity shows that \(3\) is an eigenvalue; the row-sum bound
+shows that no eigenvalue has larger modulus. Therefore
+\(\rho(B)=3\). Since \(B\) is primitive, Perron--Frobenius also gives
+that this Perron eigenvalue is simple and is the unique eigenvalue of
+modulus \(3\). The residue is the exact one-line computation
 \[
   \begin{aligned}
   C_B
@@ -585,8 +589,13 @@ Taking determinants yields the stated factorisation.
   \[
     P_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
   \]
-  With the standard Sylvester resultant convention used throughout this
-  paper,
+  We use the standard Sylvester resultant convention
+  \[
+    \Res_s(f,g)=a_f^{\deg g}\prod_{f(\alpha)=0}g(\alpha),
+    \qquad f(s)=a_f\prod_{f(\alpha)=0}(s-\alpha).
+  \]
+  With this convention, and with the real cyclotomic factor placed in
+  the first slot,
   \[
     \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr)
     =P_m(w),
@@ -614,7 +623,9 @@ the normalized coordinate \(w\): for each primitive character separately,
 the corresponding factor in the original cyclic-lift determinant is
 obtained by the harmless scaling \(z=w/r_a\).
 
-By definition,
+With the convention in the statement, a monic polynomial
+\(f(s)=\prod_i(s-\alpha_i)\) satisfies
+\(\Res_s(f,g)=\prod_i g(\alpha_i)\). By definition,
 \[
   \Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha),
 \]
@@ -628,7 +639,7 @@ so the product formula for the Sylvester resultant gives
 Thus the real primitive factor obtained from the paired primitive
 Fourier blocks is exactly the resultant with \(\Phi_m^+\) in the first
 slot. Reversing the two arguments would multiply this product by the
-Sylvester sign \((-1)^{3d_m}\).
+Sylvester sign \((-1)^{3d_m}\), since \(\deg_s\widehat\Delta=3\).
 \end{proof}
 
 \begin{theorem}[Endpoint asymptotics for completed self-dual determinants]
@@ -646,7 +657,26 @@ Sylvester sign \((-1)^{3d_m}\).
     \Delta(z,u)=\det(I-zB(u)),\qquad
     H(w,s)=\Delta(w/r,r^2),\qquad s=r+r^{-1}.
   \]
-  Then \(H(w,s)\in\ZZ[s][w]\). Assume further that
+  Then \(H(w,s)\in\ZZ[s][w]\) and \(H(w,-s)=H(-w,s)\). For \(m\ge2\)
+  set
+  \[
+    A_m=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
+      a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+      \qquad d_m=|A_m|,
+  \]
+  let
+  \[
+    \Phi_m^+(s):=\prod_{\alpha\in A_m}(s-\alpha),
+  \]
+  and define the normalized real cyclotomic resultant by the ordered
+  Sylvester resultant
+  \[
+    R_m(w):=\Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr)
+       =\prod_{\alpha\in A_m}H(w,\alpha).
+  \]
+  If the two resultant arguments are reversed, the product on the
+  right is multiplied by \((-1)^{(\deg_s H)d_m}\).
+  Assume further that
   \[
     \rho(B(e^{it}))<q
     \qquad (t\not\equiv0\pmod{2\pi}),
@@ -668,14 +698,12 @@ Sylvester sign \((-1)^{3d_m}\).
        \quad (0\le s\le 2-\eta),
   \]
   and \(w(s)\) is strictly decreasing on \([2-\eta,2]\), then for every
-  \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\) the normalized real
-  cyclotomic resultant
-  \[
-    R_m(w)=\Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr)
-  \]
-  has its minimal-modulus roots exactly in the factors \(H(w,s_m)\) and,
+  \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\) the resultant \(R_m(w)\) has
+  its minimal-modulus roots exactly in the factors \(H(w,s_m)\) and,
   when \(m\) is even, \(H(w,-s_m)\). Consequently
   \[
+    \rho_m:=\frac{1}{\min\{\abs{w}:R_m(w)=0\}}
+    \quad\text{satisfies}\quad
     \rho_m=\rho(s_m).
   \]
   If the endpoint branch has a Taylor expansion to order \(N\), then
@@ -685,8 +713,16 @@ Sylvester sign \((-1)^{3d_m}\).
 \end{theorem}
 
 \begin{proof}
-The inclusion \(H\in\ZZ[s][w]\) is exactly
-\Cref{lem:self-dual-compression}. For \(\alpha=2\cos\theta\in[-2,2]\)
+The inclusion \(H\in\ZZ[s][w]\), together with the parity
+\(H(w,-s)=H(-w,s)\), is exactly \Cref{lem:self-dual-compression}. The
+displayed product formula for \(R_m\) follows from the standard
+Sylvester convention because
+\(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\) is monic. The sign for
+the reversed resultant is the identity
+\[
+  \Res_s(g,f)=(-1)^{\deg f\deg g}\Res_s(f,g).
+\]
+For \(\alpha=2\cos\theta\in[-2,2]\)
 choose \(r=e^{i\theta}\). Then
 \[
   H(w,\alpha)=\Delta(w/r,r^2),
@@ -713,11 +749,7 @@ conjugates with \(\abs{\alpha}>2-\eta\), strict monotonicity of the
 endpoint branch gives \(\lambda(\alpha)=\lambda(\abs{\alpha})
 >\lambda(s_m)\). If \(\abs{\alpha}\le2-\eta\), the assumed separation
 gives \(\lambda(\alpha)\ge q^{-1}+\varepsilon>\lambda(s_m)\). Hence the
-minimal-modulus roots of the product
-\[
-  R_m(w)=\prod_{\alpha}H(w,\alpha),
-  \qquad d_m:=\deg\Phi_m^+,
-\]
+minimal-modulus roots of \(R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha)\)
 come exactly from the endpoint factor(s). The final assertion follows
 by formal substitution of the Taylor series.
 \end{proof}
