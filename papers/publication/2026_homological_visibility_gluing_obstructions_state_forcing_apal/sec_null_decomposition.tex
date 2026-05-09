@@ -154,6 +154,11 @@ $\sigma_j$ to the pullback $X_i\times_X X_j$ agree after a covering
 refinement of that pullback object;
 \item the family $(u(\sigma_i))_i$ glues in the sheaf $aF$ to $\xi$;
 \end{enumerate}
+No strict matching family of $F$ is asserted in this first conclusion.
+For an arbitrary presheaf, the compatibility obtained from a section of
+\((aF)(X)\) is only compatibility after refinements of the pairwise
+overlaps. This is exactly the loss of information caused by the two
+successive plus-construction quotient relations.
 If $F$ is separated at every overlap object occurring in the slice
 $\mathcal C/X$, then the equalities after covering refinements in
 \textup{(i)} upgrade to equalities in
@@ -171,7 +176,7 @@ it is a matching family of \(F^+\)-sections, and each of those
 local equivalence relation.
 
 For an object \(T\), a section of \(F^+(T)\) is an equivalence class of
-data
+strict \(F\)-matching data
 \[
 \{T_\alpha\to T\}_{\alpha\in A},
 \qquad
@@ -180,7 +185,11 @@ s_\alpha\in F(T_\alpha),
 whose restrictions agree strictly on each pullback
 \(T_\alpha\times_T T_\beta\). Two such matching families define the same
 element of \(F^+(T)\) precisely when their pullbacks to a common covering
-refinement agree in \(F\). In particular, if two elements of \(F^+(T)\) are
+refinement agree in \(F\). More explicitly, the common refinement is taken
+after pulling the two covers back to each \(T_\alpha\times_TT'_\beta\);
+there is no assertion that the original sections agree on
+\(T_\alpha\times_TT'_\beta\) itself. In particular, if two elements of
+\(F^+(T)\) are
 represented by matching families
 \[
 \{T_\alpha\to T,s_\alpha\}_{\alpha\in A},
@@ -198,7 +207,11 @@ $\{Y_\ell\to X\}_{\ell\in L}$ and sections
 \[
 \eta_\ell\in F^+(Y_\ell)
 \]
-which form a strict $F^+$-matching family. Choose, for each $\ell$, a
+which form a strict \(F^+\)-matching family. The word ``strict'' here
+refers only to equality of the \(\eta_\ell\) in \(F^+\) on the overlaps
+\(Y_\ell\times_XY_{\ell'}\); after expanding the \(\eta_\ell\) to
+\(F\)-data, that equality again means equality only after a further cover.
+Choose, for each $\ell$, a
 plus representative
 \[
 \{Y_{\ell m}\to Y_\ell\}_{m\in M_\ell},
@@ -219,8 +232,10 @@ equality back to \(T\). Applying the just stated equality criterion in
 \(F^+\) to the two chosen plus representatives gives a cover
 $\{T_q\to T\}_q$ on which the restrictions of the two $F$-sections
 $\sigma_{\ell m}$ and $\sigma_{\ell' m'}$ are equal in $F(T_q)$. These
-covers of the pairwise overlaps give exactly the local-on-overlaps
-compatibility in \textup{(i)}. The image of the family
+are covers of the already formed pullback overlap \(T\), not replacements
+for \(T\) in the \v{C}ech nerve. They give exactly the local-on-overlaps
+compatibility in \textup{(i)} and nothing stronger without a separatedness
+hypothesis. The image of the family
 $(u(\sigma_{\ell m}))_{\ell,m}$ in $(F^+)^+(X)$ is the original
 representative $(\eta_\ell)_\ell$, hence glues to $\xi$; this proves
 \textup{(ii)}.
@@ -230,6 +245,29 @@ sections over such an overlap that agree after a covering of that overlap
 are already equal by separatedness at the overlap object. This converts
 the local-on-overlaps compatibility into strict equality on every
 $X_i\times_X X_j$.
+\end{proof}
+
+\begin{lemma}[Strictification of sheafified component representatives]\label{lem:strictify-component-representatives}
+Let $\mathcal C$ be a site with pullbacks of covering families, let
+$F$ be a presheaf of sets on $\mathcal C$, and let \(X\) be an object.
+Assume that \(F\) is separated at every object of the slice
+\(\mathcal C/X\). If \(\xi\in(aF)(X)\), then there is a cover
+\[
+\{X_i\to X\}_{i\in I}
+\]
+and sections \(\sigma_i\in F(X_i)\) which form a strict matching family on
+the original pullback overlaps \(X_i\times_X X_j\), and whose images under
+the sheafification unit glue to \(\xi\).
+\end{lemma}
+
+\begin{proof}
+Apply \Cref{lem:strict-sheafification-representatives}. This gives a
+cover and \(F\)-sections whose restrictions to each original pullback
+overlap agree after a further cover of that overlap. Since each overlap is
+an object of \(\mathcal C/X\), the slice-separated hypothesis lets
+\Cref{lem:slice-separated-refined-equality} upgrade all refined overlap
+equalities to equalities over the original overlaps. The same
+plus--plus representative still glues under the unit to \(\xi\).
 \end{proof}
 
 \begin{lemma}[Slice-separated descent of refined equality]\label{lem:slice-separated-refined-equality}
@@ -340,16 +378,15 @@ Conversely, suppose
 \]
 Since sheafification is the plus--plus construction for an arbitrary
 presheaf, one cannot read $\xi$ directly as a strict $F$-matching family
-on the first cover that appears in a plus representative. Apply
-\Cref{lem:strict-sheafification-representatives} to $\xi$ in the slice
-$\mathcal C_a$. This gives a covering family
+on the first cover that appears in a plus representative. The needed
+strict representative is exactly the conclusion of
+\Cref{lem:strictify-component-representatives}, applied to the restricted
+presheaf \(F_{p,s}|_{\mathcal C_a}\) on the slice. This gives a covering family
 \[
 \{b_\ell\to a\}_{\ell\in L}
 \]
-and sections $\tau_\ell\in F_{p,s}(b_\ell)$ whose restrictions agree
-after a cover of each overlap $b_\ell\times_a b_m$. Because the restricted
-presheaf is slice-separated, \Cref{lem:slice-separated-refined-equality}
-upgrades those refined equalities to the strict equalities
+and sections $\tau_\ell\in F_{p,s}(b_\ell)$ satisfying the strict
+equalities
 \[
 \res_{b_\ell\times_a b_m}^{b_\ell}(\tau_\ell)
 =
@@ -808,10 +845,10 @@ The identification
 \pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}
 \]
 from \Cref{prop:stackification-components} writes $\xi$ as a sheafified
-matching datum. We now use the plus--plus normal form explicitly, because
-a section of \(aF\) is not, for a general presheaf, a strict \(F\)-matching
-family on the first displayed cover. By
-\Cref{lem:strict-sheafification-representatives}, applied in the slice
+matching datum. We now use the strictified plus--plus normal form
+explicitly, because a section of \(aF\) is not, for a general presheaf, a
+strict \(F\)-matching family on the first displayed cover. By
+\Cref{lem:strictify-component-representatives}, applied in the slice
 \(\mathcal C_a\), there is a
 covering family
 \[
@@ -826,26 +863,19 @@ such that for every pair \(i,j\), with
 \[
 U_{ij}:=U_i\times_a U_j,
 \]
-the two restrictions
-\[
-\res_{U_{ij}}^{U_i}(\sigma_i),
-\qquad
-\res_{U_{ij}}^{U_j}(\sigma_j)
-\]
-become equal after a covering family of \(U_{ij}\). The object \(U_{ij}\)
-is an object of the slice \(\mathcal C_a\), including the case where it is
-the formal initial object representing an empty overlap. Since \(F\) is
-slice-separated, it is separated at this particular overlap object.
-\Cref{lem:slice-separated-refined-equality} therefore upgrades the refined
-overlap equalities to the strict equalities
+the two restrictions agree on the original overlap:
 \[
 \res_{U_{ij}}^{U_i}(\sigma_i)
 =
 \res_{U_{ij}}^{U_j}(\sigma_j)
 \qquad(\forall i,j),
 \]
-on the original pullback objects. This is the point at which
-slice-separatedness, rather than separatedness only at \(a\), is needed.
+including the case where \(U_{ij}\) is the formal initial object
+representing an empty overlap. The cited strictification lemma is the
+point at which slice-separatedness, rather than separatedness only at
+\(a\), is needed: the plus--plus representative first gives equality only
+after covers of the \(U_{ij}\), and separatedness at those overlap objects
+upgrades it to equality on the original \(U_{ij}\).
 Representative-rigidity supplies strict representatives
 \[
 y_i:=s_{U_i}(\sigma_i)\in\mathfrak P_r(U_i).
