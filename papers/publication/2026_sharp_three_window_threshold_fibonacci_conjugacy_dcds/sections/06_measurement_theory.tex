@@ -1,0 +1,258 @@
+\section{Consequences of the finite-memory conjugacy}\label{sec:measurement}
+
+We now record the consequences of Theorem~\ref{thm:two-sided-conjugacy} for
+finite blocks, path-space laws and continuous potentials. These are consequences
+of the conjugacy; the arithmetic input has already been isolated in
+Section~\ref{sec:stab:conjugacy}.
+
+\subsection{Block presentations above threshold}\label{sec:measurement:sufficiency}
+
+Fix $m\ge 3$ and $n\ge m$.  Write
+\[
+\mathcal Y_{m,n}:=\Phi_{m,n}\bigl(\{0,1\}^{n+m-1}\bigr)\subset X_m^n
+\]
+for the legal length-$n$ stabilized output blocks, and let
+\[
+\Psi_{m,n}:\mathcal Y_{m,n}\to\{0,1\}^{n+m-1}
+\]
+denote the inverse of $\Phi_{m,n}$ from Theorem~\ref{thm:block-invertibility}.
+
+\begin{theorem}[Equivalence of block presentations above threshold]\label{thm:exact-sufficiency}
+Assume $m\ge3$ and $n\ge m$.  Let
+\[
+E_{m,n}:=\{0,1\}^{n+m-1}
+\]
+be the raw block experiment and let $\mathcal Y_{m,n}$ be the stabilized
+block experiment.  Then the deterministic channel
+\[
+\Phi_{m,n}:E_{m,n}\to\mathcal Y_{m,n}
+\]
+is a Blackwell equivalence.  More explicitly, the forward kernel is
+$K(y\mid a)=\ind_{\{\Phi_{m,n}(a)=y\}}$ and the reverse kernel is
+$L(a\mid y)=\ind_{\{\Psi_{m,n}(y)=a\}}$, and
+\[
+LK=\operatorname{id}_{E_{m,n}},\qquad KL=\operatorname{id}_{\mathcal Y_{m,n}}.
+\]
+Consequently every finite decision problem has the same value from the raw and
+stabilized block observations.  In particular, for probability laws $\mu,\nu$
+on $E_{m,n}$ and their pushforwards
+$\eta=(\Phi_{m,n})_*\mu$, $\xi=(\Phi_{m,n})_*\nu$,
+\[
+D_{\TV}(\eta,\xi)=D_{\TV}(\mu,\nu)
+\]
+and
+\[
+D_{\KL}(\eta\|\xi)=D_{\KL}(\mu\|\nu),
+\]
+with the convention that both sides are $+\infty$ when absolute continuity
+fails.
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:block-invertibility} says that $\Phi_{m,n}$ is injective for
+$m\ge3$ and $n\ge m$, while $\mathcal Y_{m,n}$ is its image by definition.
+Therefore $\Psi_{m,n}$ is a genuine inverse on $\mathcal Y_{m,n}$.  The two
+displayed identities for the kernels are just
+\[
+\Psi_{m,n}(\Phi_{m,n}(a))=a,\qquad
+\Phi_{m,n}(\Psi_{m,n}(y))=y.
+\]
+Thus the two experiments simulate one another by deterministic postprocessing,
+which is precisely Blackwell equivalence.
+
+For total variation,
+\[
+\begin{aligned}
+2D_{\TV}(\eta,\xi)
+&=\sum_{y\in\mathcal Y_{m,n}}|\eta(y)-\xi(y)|  \\
+&=\sum_{y\in\mathcal Y_{m,n}}
+|\mu(\Psi_{m,n}(y))-\nu(\Psi_{m,n}(y))|       \\
+&=\sum_{a\in E_{m,n}}|\mu(a)-\nu(a)|
+=2D_{\TV}(\mu,\nu).
+\end{aligned}
+\]
+The KL identity is the same change of variables:
+\[
+D_{\KL}(\eta\|\xi)
+=\sum_{y\in\mathcal Y_{m,n}}
+\eta(y)\log\frac{\eta(y)}{\xi(y)}
+=\sum_{a\in E_{m,n}}
+\mu(a)\log\frac{\mu(a)}{\nu(a)}
+=D_{\KL}(\mu\|\nu),
+\]
+when $\mu\ll\nu$.  If $\mu\not\ll\nu$, then some raw atom has positive
+$\mu$-mass and zero $\nu$-mass; its stabilized image has positive $\eta$-mass
+and zero $\xi$-mass because $\Phi_{m,n}$ is injective.  Hence both KL
+divergences are infinite.
+\end{proof}
+
+\subsection{Path-space equivalence}
+
+The same inverse is local on two-sided trajectories. Thus the many-to-one
+character of $\Fold_m$ on isolated windows does not lead to a loss of
+path-space information for $m\ge3$.
+
+\begin{corollary}[Path-space equivalence and relative entropy rates]\label{cor:path-space-divergence}
+Assume $m\ge3$.  Let $\mu$ and $\nu$ be shift-invariant Borel probability
+measures on $\{0,1\}^{\ZZ}$, and set
+\[
+\eta:=(\Phi_m)_*\mu,\qquad \xi:=(\Phi_m)_*\nu .
+\]
+Then $\Phi_m$ is a bimeasurable isomorphism from
+$(\{0,1\}^{\ZZ},\mu,\sigma)$ to $(Y_m,\eta,\sigma)$, with inverse given by the
+local decoder in Theorem~\ref{thm:two-sided-conjugacy}.  Moreover, for every
+$N\ge m$,
+\[
+D_{\KL}\bigl(\eta_{[0,N-1]}\|\xi_{[0,N-1]}\bigr)
+=
+D_{\KL}\bigl(\mu_{[0,N+m-2]}\|\nu_{[0,N+m-2]}\bigr),
+\]
+and therefore the relative entropy rates agree:
+\[
+\lim_{N\to\infty}\frac1N
+D_{\KL}\bigl(\eta_{[0,N-1]}\|\xi_{[0,N-1]}\bigr)
+=
+\lim_{N\to\infty}\frac1N
+D_{\KL}\bigl(\mu_{[0,N-1]}\|\nu_{[0,N-1]}\bigr),
+\]
+whenever either side is computed as the finite-alphabet block relative-entropy
+rate.
+\end{corollary}
+
+\begin{proof}
+The bimeasurable isomorphism statement is Theorem~\ref{thm:two-sided-conjugacy}
+with its displayed inverse
+\[
+\Phi_m^{-1}(y)_t=\psi_m(y_t,\ldots,y_{t+m-1}).
+\]
+Fix $N\ge m$.  The stabilized coordinate block
+$(Y_0,\ldots,Y_{N-1})$ depends on the raw block
+$(A_0,\ldots,A_{N+m-2})$ through the finite map $\Phi_{m,N}$.  By
+Theorem~\ref{thm:block-invertibility}, this finite map is injective.  Applying
+Theorem~\ref{thm:exact-sufficiency} with block length $N$ gives the displayed
+finite-block KL identity.
+
+Let
+\[
+d_k:=D_{\KL}\bigl(\mu_{[0,k-1]}\|\nu_{[0,k-1]}\bigr).
+\]
+The previous identity reads
+$D_{\KL}(\eta_{[0,N-1]}\|\xi_{[0,N-1]})=d_{N+m-1}$.  Since
+$(N+m-1)/N\to1$, any finite-alphabet block relative-entropy rate
+$\lim_{k\to\infty}d_k/k$ is unchanged by replacing $k$ with $N+m-1$ and
+dividing by $N$.  This proves the rate identity; if the rate is infinite, the
+same calculation gives divergence to $+\infty$.
+\end{proof}
+
+\begin{remark}[Local fibers versus trajectory information]
+The entropy identity in Proposition~\ref{thm:kl-ledger} concerns a single
+window and records unresolved multiplicity inside the finite fibers of
+$\Fold_m$. Corollary~\ref{cor:path-space-divergence} is a different statement:
+overlapping windows carry enough consistency information to reconstruct the
+whole trajectory above the threshold.
+\end{remark}
+
+\subsection{Continuous potentials and finite-range interactions}\label{sec:measurement:renorm}
+
+We finally state the thermodynamic consequence of the conjugacy. This is the
+standard transport of potentials through a topological conjugacy, written here
+to identify the induced finite-range interaction explicitly.
+
+\begin{theorem}[Transport of continuous potentials under the conjugacy]\label{thm:continuous-potentials}
+Assume $m\ge3$ and let $f:\{0,1\}^{\ZZ}\to\RR$ be continuous.  Define the
+transported potential on $Y_m$ by
+\[
+\widetilde f(y):=f(\Phi_m^{-1}y).
+\]
+Then
+\[
+P_{Y_m}(\widetilde f)=P_{\{0,1\}^{\ZZ}}(f),
+\]
+where pressure is taken with respect to the shift.  Under the pushforward
+correspondence $\mu\mapsto(\Phi_m)_*\mu$, the equilibrium states for $f$ on
+the full two-shift are exactly the equilibrium states for $\widetilde f$ on
+$Y_m$.
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:two-sided-conjugacy} gives a topological conjugacy between
+the full two-shift and $Y_m$.  Hence pushforward by $\Phi_m$ is a bijection
+between the invariant Borel probability measures on the two systems, and
+Proposition~\ref{prop:conjugacy-consequences} records that measure-theoretic
+entropy is preserved under this correspondence.  For
+$\eta=(\Phi_m)_*\mu$,
+\[
+\int_{Y_m}\widetilde f\,d\eta
+=
+\int_{\{0,1\}^{\ZZ}} f\,d\mu .
+\]
+The variational principle for pressure \cite{Walters1982} therefore gives
+\[
+\begin{aligned}
+P_{Y_m}(\widetilde f)
+&=\sup_{\eta\in\mathcal M_\sigma(Y_m)}
+\left(h_\eta(\sigma)+\int\widetilde f\,d\eta\right)\\
+&=\sup_{\mu\in\mathcal M_\sigma(\{0,1\}^{\ZZ})}
+\left(h_\mu(\sigma)+\int f\,d\mu\right)
+=P_{\{0,1\}^{\ZZ}}(f).
+\end{aligned}
+\]
+A measure attains the supremum on one side if and only if its corresponding
+measure attains the supremum on the other side, proving the equilibrium-state
+correspondence.
+\end{proof}
+
+\begin{proposition}[Finite-range energetics under local inversion]\label{prop:finite-range-renorm}
+Assume $m\ge3$ and let $\phi:\{0,1\}^r\to\RR$ be a finite-range interaction
+of range $r\ge1$.  Define
+\[
+\widetilde\phi:\mathcal L_{r+m-1}(Y_m)\to\RR
+\]
+by
+\[
+\widetilde\phi(y_0,\ldots,y_{r+m-2})
+:=
+\phi\bigl(
+\psi_m(y_0,\ldots,y_{m-1}),
+\psi_m(y_1,\ldots,y_m),
+\ldots,
+\psi_m(y_{r-1},\ldots,y_{r+m-2})
+\bigr).
+\]
+Then $\widetilde\phi$ has stabilized range at most $r+m-1$, and for every
+$a\in\{0,1\}^{\ZZ}$, $y=\Phi_m(a)$, and $t\in\ZZ$,
+\[
+\phi(a_t,\ldots,a_{t+r-1})
+=
+\widetilde\phi(y_t,\ldots,y_{t+r+m-2}).
+\]
+Consequently every raw finite-range energy sum is represented exactly as a
+finite-range energy sum on the stabilized trajectory:
+\[
+\sum_{t=p}^{q}\phi(a_t,\ldots,a_{t+r-1})
+=
+\sum_{t=p}^{q}\widetilde\phi(y_t,\ldots,y_{t+r+m-2})
+\]
+for all integers $p\le q$.
+\end{proposition}
+
+\begin{proof}
+The definition of $\widetilde\phi$ uses only the stabilized coordinates
+$y_0,\ldots,y_{r+m-2}$, so its range is at most $r+m-1$.  By
+Corollary~\ref{cor:explicit-decoder}, for $y=\Phi_m(a)$ one has
+\[
+a_{t+j}=\psi_m(y_{t+j},\ldots,y_{t+j+m-1})
+\qquad\text{for }0\le j\le r-1.
+\]
+Substituting these $r$ identities into the definition of $\widetilde\phi$
+gives the pointwise equality.  Summing the pointwise equality over
+$p\le t\le q$ gives the finite-volume energy identity.
+\end{proof}
+
+\begin{remark}[Prototype observables]
+Taking $\phi(a_0):=a_0$ gives exact recovery of occupancy sums, and taking
+$\phi(a_0,a_1):=a_0a_1$ gives exact recovery of nearest-neighbour pair sums.
+Thus the occupancy and nearest-neighbour energy examples used below are
+instances of Proposition~\ref{prop:finite-range-renorm}; they do not require
+additional thermodynamic assumptions.
+\end{remark}

@@ -1,0 +1,134 @@
+\section{Symbolic source models}\label{sec:readout}
+
+We next pass from the source layer to the symbolic input. The Sturmian rotation model supplies the golden-mean grammar, while a nondegenerate local readout explains why the normalization has to be defined on the full cube $\{0,1\}^m$ rather than only on the admissible Sturmian language.
+
+\subsection{Coding map and induced law}\label{sec:readout:maps}
+
+Only the induced symbolic law will be used. We therefore introduce the source dynamics through a finite-alphabet coding formalism.
+
+\begin{definition}[Finite-alphabet readout]\label{def:readout}
+Let $(H,\mathcal B,\mu,T)$ be a probability-preserving dynamical system and let
+$\mathcal A$ be a finite alphabet.  A finite-alphabet readout is a measurable
+map $R:H\to\mathcal A$.  It produces the one-sided symbolic process
+\[
+  \mathcal C_R(h):=(R(T^t h))_{t\ge0}\in\mathcal A^{\NN}
+\]
+and, when $T$ is invertible, the two-sided process
+\[
+  \mathcal C_R(h):=(R(T^t h))_{t\in\ZZ}\in\mathcal A^{\ZZ}.
+\]
+\end{definition}
+
+\begin{definition}[Coding map and induced input law]\label{def:coding-law}
+For a readout $R$ as in Definition~\ref{def:readout}, the coding map is
+$\mathcal C_R$.  The induced symbolic input law is the pushforward
+\[
+  \nu_R:=(\mathcal C_R)_*\mu
+\]
+on the corresponding full shift over $\mathcal A$.  Its length-$m$ marginal is
+denoted by $\nu_{R,m}$.
+\end{definition}
+
+\begin{proposition}[Stationarity and ergodicity of the induced law]\label{prop:induced-law}
+If $T$ preserves $\mu$, then $\nu_R$ is shift-invariant.  If, in addition,
+$(H,\mathcal B,\mu,T)$ is ergodic, then $\nu_R$ is ergodic.
+\end{proposition}
+
+\begin{proof}
+Let $\sigma$ be the shift on the symbolic space.  By construction
+$\sigma\circ\mathcal C_R=\mathcal C_R\circ T$.  Hence, for every Borel set
+$B$ in the symbolic space,
+\[
+\nu_R(\sigma^{-1}B)
+=\mu(\mathcal C_R^{-1}\sigma^{-1}B)
+=\mu(T^{-1}\mathcal C_R^{-1}B)
+=\mu(\mathcal C_R^{-1}B)
+=\nu_R(B),
+\]
+which proves stationarity.
+
+If $B$ is shift-invariant, then $\mathcal C_R^{-1}B$ is $T$-invariant by the
+same intertwining identity.  Ergodicity of $T$ gives
+$\mu(\mathcal C_R^{-1}B)\in\{0,1\}$, so $\nu_R(B)\in\{0,1\}$.  Thus $\nu_R$
+is ergodic.
+\end{proof}
+
+\subsection{The Fibonacci--Sturmian model}\label{sec:readout:sturmian}
+
+When the scan dynamics is an irrational circle rotation and the readout is a two-interval coding, the resulting process is Sturmian \cite{MorseHedlund1940,Lothaire2002,Queffelec2010}. We use only two standard features of this model: minimal aperiodic binary complexity and, in the golden regime, compatibility with the grammar used for stabilization.
+
+\begin{proposition}[Rotation-to-grammar bridge in the golden regime]\label{prop:sturmian-no11}
+Let $\alpha=(\sqrt5-1)/2$ and let $T_\alpha x=x+\alpha\pmod 1$ on $\TT$.
+With the binary readout
+\[
+R(x)=\ind_{[0,\,1-\alpha)}(x),
+\]
+the induced language is Sturmian and every word in it belongs to the
+golden-mean language: no factor contains the block $11$.
+\end{proposition}
+
+\begin{proof}
+The coding of an irrational rotation by a two-interval partition whose
+endpoints lie on one rotation orbit is Sturmian; see
+\cite{MorseHedlund1940,Lothaire2002,Queffelec2010}.  It remains only to check
+the forbidden block.  Put $I=[0,1-\alpha)$.  Since $1-\alpha=\alpha^2$ and
+$\alpha+\alpha^2=1$, the intervals $I$ and $I-\alpha$ are disjoint modulo
+one.  Therefore no point $x$ can satisfy both $x\in I$ and
+$x+\alpha\in I$.  Thus two consecutive readout symbols cannot both be $1$.
+\end{proof}
+
+\begin{remark}[Sturmian input]
+Proposition~\ref{prop:sturmian-no11} shows that a noiseless Fibonacci source lies in the admissible language~$X_m$. Together with Proposition~\ref{thm:fold-suite}(ii), this means that local stabilization acts as the identity on the noiseless source. The model remains useful because it supplies the grammar of the normalization, and its linear word complexity gives the total-variation bound in Section~\ref{sec:fp:tv}.
+\end{remark}
+
+\subsection{Passage to the full cube}\label{sec:readout:noise}
+
+The noiseless Fibonacci source does not populate the full cube. Strictly positive local readout uncertainty supplies the full ambient support needed by the finite-window stabilization problem.
+
+\begin{proposition}[Positive local noise gives full support]\label{thm:noise-full-support}
+Let $\lambda$ be any law on $\mathcal A^{\ZZ}$ and let a binary noisy readout
+be obtained by passing each input symbol independently through a channel
+$K:\mathcal A\times\{0,1\}\to(0,1)$.  If
+$K(a,b)>0$ for every $a\in\mathcal A$ and $b\in\{0,1\}$, then every binary
+word of every finite length has positive probability under the output law.
+\end{proposition}
+
+\begin{proof}
+Fix a word $w\in\{0,1\}^m$.  Conditional on any input block
+$a_1,\ldots,a_m$, the probability of seeing $w$ is
+\[
+  \prod_{j=1}^m K(a_j,w_j)>0.
+\]
+Averaging this strictly positive finite product over the input-block law gives
+a strictly positive number.  Hence the output length-$m$ marginal has full
+support on $\{0,1\}^m$.
+\end{proof}
+
+\begin{proposition}[Finite-radius detector realization of full support]\label{prop:detector-realization}
+The same full-support conclusion holds for any finite-radius binary detector
+whose conditional output probabilities are uniformly positive.  More
+precisely, suppose the output symbol at time $t$ is generated from an input
+context $C_t$ of radius $\rho$ and
+\[
+  \inf_{c}\min\{P(0\mid c),P(1\mid c)\}>0 .
+\]
+Then every binary word of every finite length has positive output probability.
+\end{proposition}
+
+\begin{proof}
+Let the displayed infimum be $\varepsilon>0$.  For any prescribed output word
+$w\in\{0,1\}^m$ and any realization of the input contexts,
+\[
+P(w\mid C_1,\ldots,C_m)\ge \varepsilon^m>0
+\]
+when the detector uses conditionally independent local draws given the input
+contexts.  Integrating over the input process preserves the lower bound.  In
+particular the output length-$m$ marginal assigns positive mass to $w$.
+\end{proof}
+\begin{remark}
+Proposition~\ref{thm:noise-full-support} gives the memoryless statement, while Proposition~\ref{prop:detector-realization} gives the finite-radius analogue. Thus, after strictly positive local uncertainty is introduced at the readout layer, length-$m$ words need not remain in the Sturmian language.
+\end{remark}
+
+\subsection{Empirical block laws for the model}\label{sec:readout:empirical}
+
+For each depth $m$, the induced law $\nu_R$ determines a raw-word marginal on $\{0,1\}^m$. In the irrational-rotation model these marginals are obtained from the partition of $\TT^1$ into nonempty depth-$m$ Sturmian atoms, whose number is at most $m+1$. This linear complexity is the only source-specific input used in Section~\ref{sec:fp:tv}.
