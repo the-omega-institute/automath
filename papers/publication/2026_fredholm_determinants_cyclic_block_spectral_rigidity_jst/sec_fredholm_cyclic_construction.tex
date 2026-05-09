@@ -64,6 +64,21 @@ Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity and
     \qquad
     N_{\mathcal D}:=\sum_{j\in J}m_jn_j\in\NN\cup\{\infty\}.
   \]
+  The associated cyclic zero divisor is the divisor on
+  \(\CC^\times\)
+  \[
+    Z_{\mathcal D}
+    :=\sum_{j\in J}m_j\sum_{\lambda^{n_j}=\beta_j}[\lambda].
+  \]
+  Thus a point \(\lambda\in\CC^\times\) has divisor multiplicity
+  \[
+    M_{\mathcal D}(\lambda)
+    :=\sum_{\{j\in J:\lambda^{n_j}=\beta_j\}}m_j,
+  \]
+  possibly \(+\infty\) before summability or realisability hypotheses are
+  imposed. Equivalently, the factor
+  \((1-\beta_jz^{n_j})^{m_j}\) contributes multiplicity \(m_j\) at every
+  root \(\lambda\) of \(\lambda^{n_j}=\beta_j\).
   The symbol \(N_{\mathcal D}\) is a count of cyclic spectral slots. When
   \(J\) is infinite it is used only as the statement that there are
   infinitely many such slots; the Hilbert-space dimension of the closed
@@ -766,6 +781,171 @@ For a normal trace-class operator \(L\), write
   \Cref{lem:cyclic-product-trace-norm-limit}, these finite determinants
   converge locally uniformly to \(\det(I-zL_{\mathcal D})\). This gives the
   displayed determinant formula and the equivalent multiset statement.
+\end{proof}
+
+\subsection{Schatten determinants}
+\label{subsec:schatten-regularized-cyclic}
+
+The trace-class threshold above has an exact analogue for cyclic-block
+models in every Schatten class. The determinant must then be replaced by
+the regularized Fredholm determinant of integer order. For
+\(1<p<\infty\), put \(r=\lceil p\rceil\); thus
+\(\mathcal S_p\subseteq\mathcal S_r\), and \(\det_r(I-\cdot)\) is defined
+on \(\mathcal S_p\).
+
+\begin{theorem}[Sharp Schatten threshold and regularized cyclic determinant]
+  \label{thm:schatten-cyclic-regularized-determinant}
+  Let \(1<p<\infty\), let \(r=\lceil p\rceil\), and let
+  \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be countable cyclic data.
+  Choose roots \(\alpha_j^{n_j}=\beta_j\), and form the cyclic direct sum
+  \(L_{\mathcal D}=\bigoplus_j(C(n_j,\alpha_j)\otimes I_{m_j})\) whenever
+  it is defined as a compact operator. Then
+  \[
+    L_{\mathcal D}\in\mathcal S_p
+    \quad\Longleftrightarrow\quad
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty,
+  \]
+  and in this case
+  \[
+    \norm{L_{\mathcal D}}_p^p
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  Moreover the finite regularized cyclic determinants converge locally
+  uniformly on \(\CC\), independently of the enumeration of \(J\), to
+  \[
+    \det_r(I-zL_{\mathcal D})
+    =
+    \prod_{j\in J}
+      (1-\beta_jz^{n_j})^{m_j}
+      \exp\!\left(
+        m_j\sum_{1\le q\le (r-1)/n_j}
+          \frac{\beta_j^qz^{qn_j}}{q}
+      \right).
+  \]
+  Equivalently, if \(p\) is an integer, this is the sharp
+  \(\det_p\)-formula
+  \[
+    \det_p(I-zL_{\mathcal D})
+    =
+    \prod_{j\in J}
+      (1-\beta_jz^{n_j})^{m_j}
+      \exp\!\left(
+        m_j\sum_{1\le q\le (p-1)/n_j}
+          \frac{\beta_j^qz^{qn_j}}{q}
+      \right).
+  \]
+
+  Conversely, if \(T\in\mathcal S_p(H)\) and the finite products on the
+  right-hand side above, directed by finite subsets of \(J\), converge
+  locally uniformly to \(\det_r(I-zT)\), then
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}
+    \le \norm{T}_p^p.
+  \]
+  Thus the displayed Schatten budget is the exact threshold for
+  realisability by the normal cyclic model and the sharp lower bound for
+  any \(\mathcal S_p\)-operator with the prescribed regularized cyclic
+  determinant germ.
+\end{theorem}
+
+\begin{proof}
+  On the \(j\)-th cyclic block the singular values are all
+  \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\), with multiplicity
+  \(m_jn_j\). Hence the finite block sums are Cauchy in
+  \(\mathcal S_p\) exactly when
+  \[
+    \sum_jm_jn_j\abs{\beta_j}^{p/n_j}<\infty,
+  \]
+  and the same computation gives the formula for
+  \(\norm{L_{\mathcal D}}_p^p\). Since \(p\le r\), convergence in
+  \(\mathcal S_p\) implies convergence in \(\mathcal S_r\), so the
+  regularized determinant is continuous along these finite truncations;
+  see the standard construction and continuity estimates for regularized
+  determinants in \cite[Chapter~9]{Simon2005TraceIdeals},
+  Gohberg--Krein \cite{GohbergKrein1969NonSelfAdjoint}, and
+  \cite{GesztesyLatushkinMitreaZinchenko2005}.
+
+  For a finite-dimensional operator \(A\), the regularized determinant is
+  \[
+    \det_r(I-zA)
+    =\det(I-zA)
+      \exp\!\left(\sum_{\ell=1}^{r-1}
+        \frac{z^\ell\Tr(A^\ell)}{\ell}\right).
+  \]
+  Applying this to one block
+  \(B=C(n,\alpha)\otimes I_m\), with \(\beta=\alpha^n\), gives
+  \[
+    \det(I-zB)=(1-\beta z^n)^m.
+  \]
+  Also
+  \[
+    \Tr(B^\ell)
+    =m\alpha^\ell\sum_{\omega^n=1}\omega^\ell
+    =
+    \begin{cases}
+      mn\,\beta^q,& \ell=qn,\\
+      0,& n\nmid \ell.
+    \end{cases}
+  \]
+  Therefore
+  \[
+    \det_r(I-zB)
+    =(1-\beta z^n)^m
+      \exp\!\left(
+        m\sum_{1\le q\le (r-1)/n}
+          \frac{\beta^qz^{qn}}{q}
+      \right).
+  \]
+  Multiplying over finite subsets gives the stated finite products.
+
+  It remains only to record why the infinite product is locally uniformly
+  convergent under the \(\mathcal S_p\)-budget. Write
+  \(a_j=\abs{\beta_j}^{1/n_j}\). The budget implies \(a_j\to0\). On a
+  fixed disk \(\abs z\le R\), all but finitely many indices satisfy
+  \(Ra_j\le1/2\). For such an index, the logarithm of the \(j\)-th
+  regularized factor is
+  \[
+    -m_j\sum_{\substack{q\ge1\\ qn_j\ge r}}
+      \frac{\beta_j^qz^{qn_j}}{q},
+  \]
+  and its absolute value is bounded by a constant depending only on
+  \(R,p\) times \(m_j(Ra_j)^p\), because every remaining exponent
+  \(qn_j\) is at least \(r\ge p\). Since
+  \(m_j(Ra_j)^p\le R^p m_jn_ja_j^p\), the Weierstrass test gives normal
+  convergence of the logarithmic tails, and the finite initial segment is
+  harmless. Thus the finite regularized products converge locally
+  uniformly, and determinant continuity identifies the limit with
+  \(\det_r(I-zL_{\mathcal D})\).
+
+  Finally assume \(T\in\mathcal S_p\) has the stated product-side
+  regularized determinant limit. The exponential corrections in the finite
+  cyclic factors are non-vanishing entire functions. Hence, at
+  \(z=\lambda^{-1}\), the order of vanishing of each finite regularized
+  product is exactly the contribution of the factors with
+  \(\lambda^{n_j}=\beta_j\). Locally uniform convergence gives convergence
+  of derivatives at \(z=\lambda^{-1}\). Therefore an infinite contribution
+  would force \(\det_r(I-zT)\) to have a zero of arbitrarily high finite
+  order, impossible since \(\det_r(I)=1\), and a finite contribution
+  \(M_{\mathcal D}(\lambda)\) forces a zero of order at least
+  \(M_{\mathcal D}(\lambda)\). The zero set of \(\det_r(I-zT)\) is the
+  reciprocal non-zero spectrum of \(T\), with algebraic multiplicities
+  unchanged by the non-vanishing regularization factor; hence every root
+  \(\lambda\) of the cyclic divisor contributes at least
+  \(M_{\mathcal D}(\lambda)\) to the algebraic multiplicity of \(T\).
+  Weyl's eigenvalue--singular-value majorisation, in its Schatten form
+  \[
+    \sum_k\abs{\lambda_k(T)}^p\le\sum_ks_k(T)^p=\norm{T}_p^p,
+  \]
+  due to Weyl and Fan
+  \cite{Weyl1949EigenvalueInequalities,Fan1951MaximumProperties}, then
+  yields
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}
+    =\sum_{\lambda\ne0}\abs{\lambda}^pM_{\mathcal D}(\lambda)
+    \le\norm{T}_p^p.
+  \]
+  This proves the converse lower bound and the sharpness follows from the
+  cyclic model.
 \end{proof}
 
 The preceding proposition isolates the collapsed non-zero spectral multiset

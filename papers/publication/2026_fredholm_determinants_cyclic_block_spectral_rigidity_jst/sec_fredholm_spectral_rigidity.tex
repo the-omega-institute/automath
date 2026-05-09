@@ -1,45 +1,11 @@
 \subsection{Spectral rigidity}
 
-The next lemma is classical. It records the standard consequence of
-Fredholm-determinant equality needed below. In the next theorem, the
-lower bound itself is the immediate combination of this lemma with the
-classical Weyl/Ky Fan inequality; the additional content is the
-equality-case analysis, which shows that every minimizer in the full
-trace-class determinant fiber already comes from the normal cyclic model.
-
-\begin{lemma}[Classical Fredholm determinant rigidity]
-  \label{lem:fredholm-spectral-rigidity}
-  Let \(T_1,T_2\in \sone\). If
-  \[
-    \det(I-zT_1)=\det(I-zT_2)
-  \]
-  in a neighbourhood of \(z=0\), then the non-zero spectra of \(T_1\)
-  and \(T_2\) coincide with algebraic multiplicity. Consequently,
-  \[
-    \Tr(T_1^n)=\Tr(T_2^n),
-    \qquad
-    p_n(T_1)=p_n(T_2)
-    \qquad (n\ge 1).
-  \]
-\end{lemma}
-
-\begin{proof}
-  For \(T\in\sone(H)\), the Fredholm determinant \(z\mapsto\det(I-zT)\)
-  is entire, and its zeros are exactly the reciprocals of the non-zero
-  eigenvalues of \(T\), with the order of the zero at \(z=\lambda^{-1}\)
-  equal to the algebraic multiplicity of the eigenvalue \(\lambda\). This
-  is the standard zero-multiplicity correspondence of
-  \cite{Simon1977InfiniteDeterminants,GohbergGoldbergKrupnik1996TracesDeterminants}
-  and \cite[Theorem~3.7 and Chapter~3]{Simon2005TraceIdeals}. Equality as holomorphic
-  germs at \(0\) therefore extends to all of \(\CC\), and the non-zero
-  spectra of \(T_1\) and \(T_2\) must coincide with algebraic
-  multiplicity.
-
-  The same germ equality also identifies the coefficients in the
-  Fredholm--Witt expansion from \Cref{prop:fredholm-witt-bridge}, so
-  \(\Tr(T_1^n)=\Tr(T_2^n)\) for every \(n\ge1\). M\"obius inversion then
-  gives \(p_n(T_1)=p_n(T_2)\) for all \(n\ge1\).
-\end{proof}
+The determinant rigidity lemma used here was stated before
+\Cref{thm:normal-realizability-threshold}. In the next theorem, the lower
+bound itself is the immediate combination of that lemma with the classical
+Weyl/Ky Fan inequality; the additional content is the equality and
+near-equality analysis, which shows how the trace-norm defect controls
+the Schur off-diagonal entries of a triangular representative.
 
 \begin{lemma}[Ordered Weyl--Ky Fan--Lidskii inequality for trace class]
   \label{lem:weyl-ky-fan-trace-class}
@@ -72,6 +38,8 @@ the partial sums of the moduli of the eigenvalues, ordered decreasingly
 and counted with algebraic multiplicity, are dominated by the corresponding
 partial sums of the singular values. See Lidskii's original trace theorem
 \cite[p.~485]{Lidskii1959}, K\"onig's Weyl-inequality chapter
+\cite{Weyl1949EigenvalueInequalities,Fan1951MaximumProperties},
+K\"onig's Weyl-inequality chapter
 \cite[Chapter~2, Section~2.a]{Konig1986EigenvalueDistribution}, and the
 treatment of \(s\)-numbers and Weyl--Ky Fan inequalities in
 \cite[Chapter~1]{Simon2005TraceIdeals} and
@@ -80,6 +48,35 @@ Since \(T\in\sone(H)\), the
 singular values are summable and
 \(\sum_{k\ge1}s_k(T)=\|T\|_1\). Passing to the monotone limit in the
 partial-sum inequality therefore yields the final claim.
+\end{proof}
+
+\begin{lemma}[Ringrose triangularisation with prescribed diagonal]
+  \label{lem:ringrose-prescribed-diagonal}
+  Let \(T\in\sone(H)\). After replacing \(H\) by the reducing subspace
+  \[
+    H_T:=\overline{\mathrm{span}}\{u_r,v_r:r\ge1\}
+  \]
+  coming from any singular-value expansion
+  \(T=\sum_{r\ge1}s_r(T)\langle\,\cdot\,,u_r\rangle v_r\), the operator
+  acts on a separable Hilbert space and vanishes on \(H_T^\perp\).
+  On this separable reducing part there is an orthonormal basis
+  \((e_k)_{k\ge1}\) in which the matrix of \(T\) is upper triangular and
+  the diagonal entries are precisely the non-zero eigenvalues of \(T\),
+  repeated according to algebraic multiplicity, followed by zeros.
+\end{lemma}
+
+\begin{proof}
+  The separable reduction follows directly from the singular-value
+  expansion: both \(H_T\) and \(H_T^\perp\) reduce \(T\), and
+  \(T|_{H_T^\perp}=0\). Ringrose's compact triangular representation
+  theorem for compact operators on a separable Hilbert space gives a
+  maximal triangularizing chain whose successive one-dimensional quotients
+  carry exactly the characteristic values of the compact operator,
+  counted according to algebraic multiplicity, with zero repeated after
+  the non-zero characteristic values have been exhausted; see
+  \cite[Chapter~1, Theorem~3, pp.~6--8]{Ringrose1971CompactNonSelfAdjoint}.
+  Applying this theorem to \(T|_{H_T}\) gives the stated orthonormal
+  Schur basis and prescribed diagonal.
 \end{proof}
 
 \begin{lemma}[Two-by-two trace-norm pinching identity]
@@ -272,12 +269,7 @@ partial-sum inequality therefore yields the final claim.
   Replacing \(H\) by \(H_T\) and \(T\) by \(T|_{H_T}\) therefore loses no
   information, so we may assume from now on that \(H\) is separable.
 
-  We use Ringrose's compact Schur triangularisation theorem
-  \cite[Chapter~1, pp.~1--16]{Ringrose1971CompactNonSelfAdjoint}:
-  for a compact operator on a separable Hilbert space there is an
-  orthonormal basis in which the matrix is upper triangular and its
-  diagonal lists the eigenvalues with
-  algebraic multiplicity, followed by zeros. Applying this to \(T\), let
+  Applying \Cref{lem:ringrose-prescribed-diagonal} to \(T\), let
   \((e_k)_{k\ge1}\) be such a basis and let \(A=[a_{ij}]\) be the matrix
   of \(T\) in this basis. Since those non-zero eigenvalues are exactly the
   multiset encoded by
@@ -350,10 +342,15 @@ partial-sum inequality therefore yields the final claim.
   \Cref{lem:two-by-two-trace-norm-pinching} to the displayed matrix
   \(B_{ij}:=R_{ij}A_NR_{ij}\) gives
   \[
-    \|B_{ij}\|_1>\abs{a_{ii}}+\abs{a_{jj}}
-    \qquad\text{whenever }a_{ij}\neq0.
+    \abs{a_{ij}}^2
+    =
+    \bigl(\|B_{ij}\|_1+\abs{a_{ii}}+\abs{a_{jj}}\bigr)
+    \bigl(\|B_{ij}\|_1-\abs{a_{ii}}-\abs{a_{jj}}\bigr)
+    \le
+    2\|A_N\|_1\,\delta_N .
   \]
-  Since \(\delta_N\to0\), the previous lower bound forces \(a_{ij}=0\).
+  Since \(A_N\to T\) in trace norm and \(\delta_N\to0\), this quantitative
+  estimate forces \(a_{ij}=0\).
   As \(i<j\) were arbitrary, every strict upper-triangular entry of \(A\)
   vanishes. Thus \(A\) is diagonal in an orthonormal basis, so \(T\) is
   normal.
@@ -369,16 +366,87 @@ partial-sum inequality therefore yields the final claim.
   \(\|L_{\mathcal D}\|_1=\sum_jm_jn_j\abs{\beta_j}^{1/n_j}\).
 \end{proof}
 
+\begin{corollary}[Schur-entry stability for trace-norm near-minimizers]
+  \label{cor:schur-entry-stability}
+  Under the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, let \(T\in\sone(H)\)
+  satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  near \(0\), and put
+  \[
+    \tau_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  Choose the Ringrose basis from
+  \Cref{lem:ringrose-prescribed-diagonal}, ordered so that the diagonal
+  entries are the prescribed eigenvalues followed by zeros, and write
+  \(A=[a_{ij}]\) for the resulting upper triangular matrix. For
+  \(P_N\) the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
+  \[
+    \delta_N(T):=\|P_NTP_N\|_1-\sum_{k=1}^N\abs{a_{kk}}.
+  \]
+  Then \(\delta_N(T)\ge0\),
+  \[
+    \limsup_{N\to\infty}\delta_N(T)
+    \le \|T\|_1-\tau_{\mathcal D},
+  \]
+  and for every \(1\le i<j\le N\),
+  \[
+    \abs{a_{ij}}^2
+    \le 2\|P_NTP_N\|_1\,\delta_N(T).
+  \]
+  In particular, if \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then for
+  each fixed \(i<j\),
+  \[
+    \abs{a_{ij}}
+    \le \sqrt{2(\tau_{\mathcal D}+\varepsilon)\varepsilon}
+    \qquad(\varepsilon\downarrow0 \text{ along any near-minimizing family}).
+  \]
+\end{corollary}
+
+\begin{proof}
+  The proof is the quantitative part of the preceding argument, without
+  setting the final defect equal to zero. The compressions
+  \(P_NTP_N\to T\) in trace norm by
+  \Cref{lem:trace-norm-schur-compressions}, and the prescribed diagonal
+  is absolutely summable with total \(\tau_{\mathcal D}\). Hence
+  \[
+    \limsup_{N\to\infty}\delta_N(T)
+    \le \|T\|_1-\tau_{\mathcal D}.
+  \]
+  The pinching estimate applied to the \(i,j\) coordinates of
+  \(P_NTP_N\) gives
+  \[
+    \delta_N(T)
+    \ge
+    \left\|
+      \begin{pmatrix}a_{ii}&a_{ij}\\0&a_{jj}\end{pmatrix}
+    \right\|_1-\abs{a_{ii}}-\abs{a_{jj}}.
+  \]
+  Using \Cref{lem:two-by-two-trace-norm-pinching} and
+  \(\|B\|_1+\abs{a_{ii}}+\abs{a_{jj}}\le2\|P_NTP_N\|_1\) yields the
+  displayed entry estimate. If
+  \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then
+  \(\|P_NTP_N\|_1\le\|T\|_1\) and, after taking \(N\to\infty\) with
+  \(N\ge j\), the bound for the fixed entry follows.
+\end{proof}
+
 \begin{remark}[What is classical and what is not in the determinant-fiber theorem]
   \label{rem:minimizer-classification-novelty}
   The lower bound in
   \Cref{thm:determinant-fiber-trace-minimality} is exactly the standard
   combination of \Cref{lem:fredholm-spectral-rigidity} with the classical
-  inequality \(\sum_k\abs{\lambda_k(T)}\le \|T\|_1\). The extra content of
-  the theorem is the equality analysis: the pinching argument above forces
-  every trace-norm minimizer to be normal, after which the normal
-  classification theorem identifies it with the cyclic model up to zero
-  summands.
+  inequality \(\sum_k\abs{\lambda_k(T)}\le \|T\|_1\). The additional
+  trace-norm information is the quantitative pinching estimate in
+  \Cref{cor:schur-entry-stability}: near-minimal defect forces every fixed
+  Schur off-diagonal entry in the prescribed Ringrose triangularisation to
+  be small, and zero defect forces all such entries to vanish. The normal
+  classification theorem then identifies the equality case with the cyclic
+  model up to zero summands.
 \end{remark}
 
 Trace-norm minimality fixes the normal minimizers, but the determinant
