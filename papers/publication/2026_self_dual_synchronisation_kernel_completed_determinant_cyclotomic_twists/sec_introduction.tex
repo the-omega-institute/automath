@@ -22,7 +22,9 @@ consequences for any such kernel: the determinant satisfies the
 functional equation \(\Delta(z,u)=\Delta(uz,u^{-1})\) and compresses to a
 polynomial \(\widehat\Delta(w,s)\in\ZZ[s][w]\) of degree six after the
 change of variables \(u=r^2,\ s=r+r^{-1},\ w=zr\). Every other statement in
-the paper is specific to the ten-state kernel of \Cref{def:sync-kernel}.
+the paper is either the conditional endpoint-selection theorem for this
+class of self-dual kernels or a verification specific to the ten-state
+kernel of \Cref{def:sync-kernel}.
 For each fixed \(u\), the matrix \(B(u)\) defines a finite-state
 dynamical \(\zeta\)-function through the determinant
 \[
@@ -74,16 +76,17 @@ cyclotomic twists of the kernel.
 \paragraph{Computer-assisted verification.}
 The exact determinant, discriminant, finite-field factorisations, and
 endpoint jet coefficients were computed in SageMath~10.2 and
-Mathematica~14.0. These certificates support the determinant,
-quotient, Galois, endpoint-jet, and asymptotic results in
-\Cref{sec:completion-twists}.
-The appendix is organised as a theorem-to-command map rather than as a
-single executable script. Items \textup{(a)}--\textup{(e)} give the
-SageMath checks for the determinant, completion, smoothness,
-Galois-theoretic specialisations, and finite small-\(m\) slices; item
-\textup{(f)} gives the Mathematica endpoint-jet recursion. Each item
-states the exact output used in the corresponding proof, and no fitted
-parameters are used.
+cross-checked in Mathematica~14.0. These certificates support the
+determinant, quotient, Galois, endpoint-jet, and asymptotic results in
+\Cref{sec:completion-twists}. The appendix gives both a
+theorem-to-command map and a single Sage
+certificate runner, \texttt{certificates/verify\_certificates.py}. The
+runner prints exact outputs, Sage and Python versions, and SHA-256
+checksums for the paper sources and the certificate script. Items
+\textup{(a)}--\textup{(f)} give the corresponding determinant,
+completion, smoothness, Galois-theoretic, root-separation, and
+endpoint-jet certificates inline. Each item states the exact output
+used in the corresponding proof, and no fitted parameters are used.
 
 What makes this particular example worth isolating is a structural
 coincidence that does not hold for generic self-dual kernels. The
@@ -96,9 +99,18 @@ rather than general: once everything is packaged into this one small
 polynomial, the quotient geometry, the generic Galois group, and the
 large-\(m\) asymptotics can all be computed completely and audited
 term by term. Beyond the formal consequences of
-\Cref{lem:self-dual-compression} and the cyclic-lift factorisation of
-\Cref{prop:sync-cyclic-lift-factorisation}, every claim in the paper is
-deliberately confined to the ten-state kernel.
+\Cref{lem:self-dual-compression}, the cyclic-lift factorisation of
+\Cref{prop:sync-cyclic-lift-factorisation}, and the conditional
+endpoint-selection theorem, every substantive closed-form claim in the
+paper is deliberately confined to the ten-state kernel.
+
+The one reusable statement extracted from the example is the conditional
+endpoint-selection theorem, \Cref{thm:self-dual-endpoint-selection}.
+It applies to any primitive self-dual finite kernel whose unitary twists
+have a strict spectral gap and whose endpoint branch is separated by
+explicit constants. The ten-state kernel is then an instance of this
+theorem because \Cref{lem:root-separation} supplies the constants
+\(\eta=1/100\), \(\varepsilon=1/200\), and \(m_0=32\).
 
 
 \subsection{Main results}
@@ -182,9 +194,9 @@ then:
     =3-\frac{11\pi^2}{17m^2}+O(m^{-4}).
   \]
   More precisely, the branch selection
-  \(\rho_m=\rho(2\cos(\pi/m))\) is proved for all sufficiently large
-  \(m\), and on that range \Cref{thm:rho-gap-m12} gives the expansion
-  through order \(m^{-12}\). The small values displayed later are
+  \(\rho_m=\rho(2\cos(\pi/m))\) is proved for every \(m\ge32\), and on
+  that range \Cref{thm:rho-gap-m12} gives the expansion through order
+  \(m^{-12}\). The small values displayed later are
   verified directly from the defining resultant rather than from this
   asymptotic branch-selection statement. In particular,
   \[
@@ -204,10 +216,13 @@ continuing through Parry--Pollicott and Bass
 We use this tradition only to place the determinant
 \(\det(I-zB(u))\) in context; the determinant itself is computed
 directly from the displayed matrix. General symbolic-dynamics
-background is available in \cite{LindMarcus2021,Kitchens1998}. The
-standard algebraic-geometry and function-field inputs are cited at the
-points where they enter the proof: the smooth plane quartic genus
-formula, quadratic ramification, and Riemann--Hurwitz.
+background is available in \cite{ArtinMazur1965,Ruelle1976,
+LindMarcus2021,Kitchens1998}. The determinant manipulations also sit
+near the multivariable graph-zeta determinant identities of
+Foata--Zeilberger \cite{FoataZeilberger1999}. The standard
+algebraic-geometry and function-field inputs are cited at the points
+where they enter the proof: the smooth plane quartic genus formula,
+quadratic ramification, and Riemann--Hurwitz.
 
 The closest literature falls into three layers.
 
@@ -232,6 +247,17 @@ Morita and collaborators
 \cite{Morita2020,IdeIshikawaMoritaSatoSegawa2021}. These works are the
 closest antecedents to the cyclic-lift/resultant discussion in the
 present note.
+
+Thus the novelty claimed here is deliberately narrow. Classical
+graph-zeta determinant formulas explain why finite labelled kernels
+produce rational determinants; graph-covering and Artin
+\(L\)-factorisation formulas explain why cyclic lifts split into
+character factors; and real cyclotomic parametrisations are standard.
+What is new in this note is not any of those frameworks, but the
+closed-form analysis of one explicit self-dual weighted kernel whose
+completed determinant is small enough to carry out the genus, generic
+Galois, normalized cyclotomic resultant, root-selection, and endpoint
+asymptotic calculations completely.
 
 Finite-group extensions of shifts of finite type provide the standard
 language for tracking output labels in skew products. We use the
@@ -258,8 +284,9 @@ weighted synchronisation kernel together with its self-duality.
 cyclic-lift Fourier decomposition, the irreducibility and integrality
 of the completed curve, its geometry, the resultant degree law, and the
 asymptotics of the twisted Perron roots.
-\Cref{sec:appendix-computation} records the explicit transition matrix
-and the exact theorem-to-command map for the computer-assisted checks.
+\Cref{sec:appendix-computation} records the explicit transition matrix,
+the executable Sage certificate runner, and the exact
+theorem-to-command map for the computer-assisted checks.
 
 
 

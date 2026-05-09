@@ -83,9 +83,16 @@ explicit paths from \(\st{000}\) to the other states:
 Thus the digraph of \(B\) is strongly connected. Since there is also the
 self-loop \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
 Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The factorisation is
-then immediate. Since \((3z-1)\) is the unique factor whose reciprocal
-lies outside the unit circle, \(\rho(B)=3\). The residue is the exact
-one-line computation
+then immediate. The spectral radius is determined independently from
+Perron--Frobenius. Every row of \(B=B(1)\) has sum \(3\), so
+\[
+  B\mathbf 1=3\mathbf 1,\qquad \|B\|_\infty=3.
+\]
+Thus \(3\) is an eigenvalue and every eigenvalue \(\lambda\) satisfies
+\(\abs{\lambda}\le \|B\|_\infty=3\). Since \(B\) is primitive,
+Perron--Frobenius makes the eigenvalue of modulus \(3\) simple and
+positive, hence \(\rho(B)=3\). The residue is the exact one-line
+computation
 \[
   \begin{aligned}
   C_B
@@ -336,8 +343,8 @@ quartic \(\{F=0\}\).
 After the smoothness check below, this closure is the smooth projective
 model \(\overline{Y}\).
 
-We verify that this projective closure is smooth.  Homogenise by setting
-\(X=x\), \(Y=y\), \(Z=1\) and clearing denominators to obtain
+We verify that this projective closure is smooth. Homogenizing
+\(F(x,y)\) to degree \(4\) in projective coordinates \([X:Y:Z]\) gives
 \[
 \begin{aligned}
   F_h(X,Y,Z)
@@ -606,6 +613,96 @@ which is exactly the real primitive factor obtained from the paired
 primitive Fourier blocks.
 \end{proof}
 
+\begin{theorem}[Self-dual endpoint selection]
+  \label{thm:self-dual-endpoint-selection}
+  Let \(B(u)=B_0+uB_1\) be a finite non-negative
+  output-labelled kernel with \(B(1)\mathbf 1=q\mathbf 1\), and assume
+  \(B(1)\) is primitive. Suppose there is a permutation matrix \(\Pi\)
+  with
+  \[
+    \Pi^{-1}B_0\Pi=B_1,\qquad
+    \Pi^{-1}B_1\Pi=B_0.
+  \]
+  Let
+  \[
+    \Delta(z,u)=\det(I-zB(u)),\qquad
+    H(w,s)=\Delta(w/r,r^2),\qquad s=r+r^{-1}.
+  \]
+  Then \(H(w,s)\in\ZZ[s][w]\). Assume further that
+  \[
+    \rho(B(e^{it}))<q
+    \qquad (t\not\equiv0\pmod{2\pi}),
+  \]
+  and that \(H(w,2)\) has a simple root \(w_0=1/q\) whose modulus is
+  strictly smaller than the moduli of all other roots. Let
+  \(w(s)\) be the corresponding analytic branch near \(s=2\), and put
+  \(\rho(s)=1/w(s)\). If there are rational constants
+  \(\eta,\varepsilon>0\) such that
+  \[
+    \lambda(s):=\min\{\abs{w}:H(w,s)=0\}
+  \]
+  satisfies
+  \[
+    \lambda(s)=w(s)<q^{-1}+\varepsilon
+       \quad (2-\eta\le s\le2),
+    \qquad
+    \lambda(s)\ge q^{-1}+\varepsilon
+       \quad (0\le s\le 2-\eta),
+  \]
+  and \(w(s)\) is strictly decreasing on \([2-\eta,2]\), then for every
+  \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\) the normalized real
+  cyclotomic resultant
+  \[
+    R_m(w)=\Res_s\bigl(H(w,s),\Phi_m^+(s)\bigr)
+  \]
+  has its minimal-modulus roots exactly in the factors \(H(w,s_m)\) and,
+  when \(m\) is even, \(H(w,-s_m)\). Consequently
+  \[
+    \rho_m=\rho(s_m).
+  \]
+  If the endpoint branch has a Taylor expansion to order \(N\), then
+  substituting the Taylor expansion of \(2-2\cos(\pi/m)\) gives the
+  corresponding asymptotic expansion of \(\rho_m\) through order
+  \(m^{-2N}\).
+\end{theorem}
+
+\begin{proof}
+The inclusion \(H\in\ZZ[s][w]\) is exactly
+\Cref{lem:self-dual-compression}. For \(\alpha=2\cos\theta\in[-2,2]\)
+choose \(r=e^{i\theta}\). Then
+\[
+  H(w,\alpha)=\Delta(w/r,r^2),
+\]
+and \(\abs{r}=1\), so the change of variables \(z=w/r\) preserves
+moduli. Hence
+\[
+  \lambda(\alpha)^{-1}=\rho(B(e^{2i\theta})).
+  \]
+The strict spectral-radius hypothesis gives \(\lambda(s)>1/q\) for
+\(-2<s<2\), while \(B(1)\mathbf1=q\mathbf1\) and primitivity give the
+unique untwisted Perron root \(w_0=1/q\) at \(s=2\).
+
+The symmetry \(H(w,-s)=H(-w,s)\) gives \(\lambda(-s)=\lambda(s)\).
+Thus it is enough to compare \(\abs{\alpha}\). Among the primitive
+conjugates
+\[
+  \alpha=2\cos(\pi a/m),
+  \qquad a\in(\ZZ/2m\ZZ)^\times/\{\pm1\},
+\]
+the maximum of \(\abs{\alpha}\) is \(s_m\), attained only by
+\(\alpha=s_m\) and, for even \(m\), by \(\alpha=-s_m\). For all other
+conjugates with \(\abs{\alpha}>2-\eta\), strict monotonicity of the
+endpoint branch gives \(\lambda(\alpha)=\lambda(\abs{\alpha})
+>\lambda(s_m)\). If \(\abs{\alpha}\le2-\eta\), the assumed separation
+gives \(\lambda(\alpha)\ge q^{-1}+\varepsilon>\lambda(s_m)\). Hence the
+minimal-modulus roots of the product
+\[
+  R_m(w)=\prod_{\alpha}H(w,\alpha)
+\]
+come exactly from the endpoint factor(s). The final assertion follows
+by formal substitution of the Taylor series.
+\end{proof}
+
 \subsection{Cyclotomic resultants and twisted Perron roots}
 
 For \(m\ge 2\), let
@@ -632,7 +729,16 @@ the \(m\)-cyclic lift. It is normalized because each primitive character
 \(r_a^2\) uses its own coordinate \(w=zr_a\); before this change of
 variables the primitive factors are the ordinary \(z\)-factors
 \(\Delta(z,r_a^2)\), and no single unscaled \(z\)-polynomial is being
-identified with \(R_m(w)\).
+identified with \(R_m(w)\). Equivalently, the exact identity in the
+original and normalized coordinates is
+\[
+  \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a),
+  \qquad s_a=r_a+r_a^{-1}.
+\]
+Thus \(R_m\) is a normalized \(w\)-polynomial. It is not literally the
+primitive part of \(\det(I-z\widetilde B_m)\) in one common
+\(z\)-coordinate, because the rescaling \(w=zr_a\) depends on the
+primitive character.
 
 For orientation, the first few real cyclotomic polynomials are
 \[
@@ -816,22 +922,52 @@ triangular form
 \]
 The coefficient \(\partial_w\widehat\Delta(w_0,2)=-272/81\) is nonzero,
 so the coefficients \(a_n\) are determined successively. Solving these
-six linear equations and then inverting \(w(s)\) yields the displayed
-jet of \(\rho(2-\delta)\). The exact recursive identities and the
-resulting coefficients displayed in
+six linear equations gives
+\[
+\begin{aligned}
+  a_1&=-\frac{11}{153},&
+  a_2&=\frac{4175}{530604},&
+  a_3&=-\frac{336709}{3680269344},\\
+  a_4&=\frac{5582818619}{25526348169984},&
+  a_5&=-\frac{26151302654713}{177050750907009024},&
+  a_6&=\frac{15005008669158719}{1228024008291014590464}.
+\end{aligned}
+\]
+Inverting \(w(s)\) as a formal power series then gives
+\[
+\begin{aligned}
+  \frac{1}{w(2+t)}
+  &=3+\frac{11}{17}t+\frac{1351}{19652}t^2
+    +\frac{17133}{45435424}t^3
+    -\frac{350037409}{105046700288}t^4\\
+  &\quad
+    +\frac{47614595705}{242867971065856}t^5
+    +\frac{141889658001627}{561510749104259072}t^6
+    +O(t^7).
+\end{aligned}
+\]
+Setting \(t=-\delta\) yields the displayed jet of
+\(\rho(2-\delta)\). The exact recursive identities and the resulting
+coefficients displayed in
 \Cref{sec:appendix-computation}\,\textup{(f)} are the certificate used
 for this endpoint jet.
 \end{proof}
 
 \begin{lemma}[Root separation]
   \label{lem:root-separation}
-  For all sufficiently large \(m\), the minimal-modulus roots of
+  Put
+  \[
+    \eta=\frac1{100},\qquad \varepsilon=\frac1{200},\qquad m_0=32.
+  \]
+  For every \(m\ge m_0\), the minimal-modulus roots of
   \(R_m(w)\) are precisely the roots contributed by
   \(\widehat\Delta(w,s_m)\), together with the symmetric factor
   \(\widehat\Delta(w,-s_m)\) when \(-s_m\in A_m\) (equivalently, when
   \(m\) is even). Specifically, letting \(w^*(s_m)\) denote the unique
   root of \(\widehat\Delta(w,s_m)=0\) near \(w=1/3\), one has
-  \(\rho_m=\rho(s_m)=1/|w^*(s_m)|\).
+  \(\rho_m=\rho(s_m)=1/|w^*(s_m)|\). The remaining cases
+  \(4\le m<32\) are verified by exact algebraic interval comparison in
+  \Cref{sec:appendix-computation}\,\textup{(e)}.
 \end{lemma}
 
 \begin{proof}
@@ -846,8 +982,7 @@ By the symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\), one has
 \]
 and \(\rho_m=1/\min\{|w|:R_m(w)=0\}=1/\min_{\alpha\in A_m}\lambda(\alpha)\).
 We must show that \(\lambda(s_m)\) is strictly smaller than
-\(\lambda(\alpha)\) for all other \(\alpha\in A_m\), provided \(m\)
-is large enough.
+\(\lambda(\alpha)\) for all other \(\alpha\in A_m\) when \(m\ge32\).
 
 \medskip
 \noindent\textit{Step 1 (Endpoint branch near \(s=2\)).}\quad
@@ -855,11 +990,15 @@ At \(s=2\), the polynomial \(\widehat\Delta(w,2)\) factorises as
 \[
   \widehat\Delta(w,2)=(w-1)(w+1)(3w-1)(w^3-w^2+w+1).
 \]
-The minimal-modulus root is \(w=1/3\), and it is simple. The cubic factor has a unique real root between \(-11/20\) and \(-27/50\) because it changes sign there. Moreover,
+The minimal-modulus root is \(w=1/3\), and it is simple. The cubic
+factor has a unique real root between \(-11/20\) and \(-27/50\) because
+it changes sign there. Moreover,
 \[
   |w^3-w^2+w|\le |w|^3+|w|^2+|w|<0.54^3+0.54^2+0.54<1
 \]
-whenever \(|w|\le 27/50\), so \(w^3-w^2+w+1\neq 0\) on the closed disc of radius \(27/50\). Hence every root other than \(w=1/3\) has modulus at least \(27/50>1/2\).
+whenever \(|w|\le 27/50\), so \(w^3-w^2+w+1\neq 0\) on the closed disc
+of radius \(27/50\). Hence every root other than \(w=1/3\) has modulus
+at least \(27/50>1/2\).
 By the implicit function theorem, there exist \(\eta>0\) and a unique real-analytic branch
 \(w^*:[2-\eta,2]\to\RR\) with \(w^*(2)=1/3\) and
 \(\widehat\Delta(w^*(s),s)=0\). Shrinking \(\eta\) if necessary, we may
@@ -887,6 +1026,19 @@ is strictly increasing on \([2-\eta,2]\).
 Equivalently \(\lambda(s)=w^*(s)\) is strictly decreasing on this
 interval. Together with the symmetry \(\lambda(-s)=\lambda(s)\), this
 will compare endpoint-near conjugates through their absolute values.
+The exact interval computation in
+\Cref{sec:appendix-computation}\,\textup{(e)} verifies that the same
+conclusions hold with the explicit interval
+\[
+  \frac{199}{100}\le s\le2.
+\]
+More precisely, on this interval the branch \(w^*(s)\) is the unique
+root of modulus \(<1/2\), it satisfies
+\[
+  w^*(s)<\frac{101}{300},
+\]
+and \(w^{*\prime}(s)<0\). Thus the constants in the statement may be
+taken to be \(\eta=1/100\) and \(\varepsilon=1/200\).
 
 \medskip
 \noindent\textit{Step 2 (Strict spectral gap away from the untwisted
@@ -927,7 +1079,7 @@ Now inspect the specific rows of \(B(u)\). From the row of
   3=|\mu x_1|=|x_1+x_2+x_3|,
 \]
 so \(x_1=x_2=x_3\) and \(\mu=3\). Then the row of
-\(\st{001}\) give
+\(\st{001}\) gives
 \[
   3x_2=x_4+x_5+x_6,
 \]
@@ -961,18 +1113,27 @@ therefore the maximum modulus of its roots, equivalently \(1/\lambda(s)\),
 is continuous. On the compact
 set
 \[
-  K:=[-2+\eta,\,2-\eta],
+  K:=\left[-\frac{199}{100},\,\frac{199}{100}\right],
 \]
 Step~2 gives \(\lambda(s)>1/3\) for every \(s\in K\). Hence
 \[
   c_0:=\min_{s\in K}\lambda(s)
 \]
 is well defined and satisfies \(c_0>1/3\).
+The interval certificate in
+\Cref{sec:appendix-computation}\,\textup{(e)} strengthens this to
+\[
+  c_0\ge\frac{101}{300}.
+\]
 
 \medskip
 \noindent\textit{Step 4 (Comparison of endpoint-near conjugates).}\quad
-Let \(\alpha\in A_m\). If \(|\alpha|>2-\eta\), then for large enough
-\(m\) one has \(|\alpha|\in[2-\eta,2]\). Among the conjugates
+For \(m\ge32\), one has
+\[
+  s_m=2\cos(\pi/m)>\frac{199}{100}=2-\eta.
+\]
+Let \(\alpha\in A_m\). If \(|\alpha|>2-\eta\), then
+\(|\alpha|\in[2-\eta,2]\). Among the conjugates
 \(\alpha=2\cos(\pi a/m)\) with \(1\le a<m\), the quantity \(|\alpha|\)
 is maximal at \(a=1\), giving \(s_m=2\cos(\pi/m)\); if \(m\) is even,
 the same maximal absolute value also occurs at \(a=m-1\), giving
@@ -989,13 +1150,12 @@ Using \(\lambda(-s)=\lambda(s)\) and the strict decrease of
   \qquad
   (\alpha\in A_m,\ \alpha\neq \pm s_m,\ |\alpha|>2-\eta).
 \]
-If \(|\alpha|\le 2-\eta\), then \(\alpha\in K\) and Step~3 gives
+If \(|\alpha|\le 2-\eta=199/100\), then \(\alpha\in K\) and Step~3 gives
 \[
-  \lambda(\alpha)\ge c_0.
+  \lambda(\alpha)\ge\frac{101}{300}.
 \]
-Since \(\lambda(s_m)=w^*(s_m)\to 1/3\) as \(m\to\infty\), we have
-\(\lambda(s_m)<c_0\) for all sufficiently large \(m\). Therefore, for
-all sufficiently large \(m\),
+The endpoint interval certificate gives
+\(\lambda(s_m)<101/300\). Therefore, for every \(m\ge32\),
 \[
   \lambda(s_m)\le \lambda(\alpha)
   \qquad
@@ -1035,8 +1195,9 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \end{theorem}
 
 \begin{proof}
-By \Cref{lem:root-separation}, \(\rho_m=\rho(s_m)\) for all sufficiently
-large \(m\). The Taylor series of \(2-s_m=2-2\cos(\pi/m)\) at infinity is
+By \Cref{lem:root-separation}, \(\rho_m=\rho(s_m)\) for every
+\(m\ge32\), and this is the range needed for the asymptotic statement.
+The Taylor series of \(2-s_m=2-2\cos(\pi/m)\) at infinity is
 \[
 \begin{aligned}
   2-s_m
@@ -1064,11 +1225,11 @@ values of \(m\). For the displayed values \(m=4,6,8,10\), the quantity
 \]
 using the finite SageMath checks recorded in
 \Cref{sec:appendix-computation}\,\textup{(e)}. Thus the table below does
-not use \Cref{lem:root-separation}, which is only invoked for
-sufficiently large \(m\). Solving the specialised equations for these
-small values at \(100\)-bit precision, then rounding each displayed
-decimal to \(12\) digits after the decimal point and each displayed
-absolute error to three significant figures, gives the table below.
+not use the large-\(m\) part of \Cref{lem:root-separation}. Solving the
+specialised equations for these small values at \(100\)-bit precision,
+then rounding each displayed decimal to \(12\) digits after the decimal
+point and each displayed absolute error to three significant figures,
+gives the table below.
 The specialised equations used for the positive endpoint slices are
 \[
 \begin{array}{ll}
