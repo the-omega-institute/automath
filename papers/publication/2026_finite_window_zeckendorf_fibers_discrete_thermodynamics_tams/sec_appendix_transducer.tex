@@ -77,10 +77,21 @@ whose SHA-256 hash is
 \end{gathered}
 \]
 The file declares schema
-\(\texttt{finite-window-zeckendorf-arithmetic-window-certificates-v2}\).  In
-this schema the field
-\(\texttt{fixed\_normalizer\_transition\_table}\) is the finite Frougny carry
-table from which the verifier reconstructs the binary padded normalizer of
+\[
+\begin{gathered}
+\texttt{finite-window-zeckendorf-arithmetic-}\\
+\texttt{window-certificates-v2}.
+\end{gathered}
+\]
+In this schema the field
+\[
+\begin{gathered}
+\texttt{fixed\_normalizer\_}\\
+\texttt{transition\_table}
+\end{gathered}
+\]
+is the finite Frougny carry table from which the verifier reconstructs the
+binary padded normalizer of
 \Cref{thm:pinned-padded-normalizer-soundness}; the one-copy state updates
 \(T_a\), committed outputs \(C_a\), and terminal-flush convention used in the
 histogram kernels of \Cref{def:exact-histogram-kernel} are the binary
@@ -89,9 +100,12 @@ recomputes and checks the canonical payload hash displayed above; the raw
 file-byte hash pins this archived serialization, while the payload hash pins
 the ordered mathematical content.  The same file stores the exact supplementary
 records
-\(\texttt{normalizer\_local\_verification}\) and
-\(\texttt{exact\_moment\_window\_records}\) used later for the Hankel and Smith
-arguments.
+\[
+\texttt{normalizer\_local\_verification}
+\qquad\text{and}\qquad
+\texttt{exact\_moment\_window\_records}
+\]
+used later for the Hankel and Smith arguments.
 \end{proposition}
 
 \begin{proof}
@@ -196,6 +210,50 @@ so there is no additional fitted table hidden behind the recurrence
 certificates.
 \end{proof}
 
+\begin{lemma}[Convention dictionary for the printed carry table]
+\label{lem:normalizer-convention-dictionary}
+The table in \Cref{thm:pinned-padded-normalizer-soundness} is read in the
+following convention.  A state label \(\alpha\beta\gamma\) denotes the signed
+integer carry
+\[
+  \alpha F_{n+3}+\beta F_{n+2}+\gamma F_{n+1}
+\]
+immediately before the next input digit of weight \(F_n\) is absorbed.  An
+edge
+\[
+  (\alpha,\beta,\gamma)\xrightarrow[d/e]{}
+  (\alpha',\beta',\gamma')
+\]
+emits the delayed output digit of weight \(F_{n+3}\), shifts the carry window
+one Fibonacci place to the right, and leaves the new carry
+\[
+  \alpha'F_{n+2}+\beta'F_{n+1}+\gamma'F_n .
+\]
+The terminal flush is obtained by feeding three terminal zeroes and retaining
+only the first \(m+1\) delayed output digits; the leading delayed digit is the
+padding digit in the displayed \((m+1)\)-digit Zeckendorf word.  With this
+dictionary, the equality checked on every printed edge is exactly the
+one-step preservation of the represented integer in the basis
+\((F_{n+1},F_n)\).
+\end{lemma}
+
+\begin{proof}
+Substituting the stated meanings of the incoming carry, input digit, emitted
+digit, and outgoing carry gives precisely the identity
+\[
+  \alpha F_{n+3}+\beta F_{n+2}+\gamma F_{n+1}+dF_n
+  =
+  eF_{n+3}+\alpha'F_{n+2}+\beta'F_{n+1}+\gamma'F_n .
+\]
+The verifier field \(\texttt{normalizer\_local\_verification}\) reduces this
+identity to the basis \((F_{n+1},F_n)\) for each of the thirty entries.  Since
+the table is deterministic and total, iterating the identity telescopes over a
+whole input word.  The three terminal zeroes move every pending carry register
+past the retained output window; the recorded flush convention then discards
+only the forced trailing carry-clearance bookkeeping and keeps exactly the
+leading padding digit followed by the \(m\) visible digits.
+\end{proof}
+
 \begin{theorem}[Soundness of the hash-pinned padded normalizer]
 \label{thm:pinned-padded-normalizer-soundness}
 Let \(\mathcal C\) be the finite carry table stored in the pinned certificate
@@ -256,9 +314,11 @@ normal form of \(w\).
 \end{theorem}
 
 \begin{proof}
-The theorem is a convention translation from Frougny's standard Fibonacci
-normalizer to the pinned table used in this paper.  More precisely, we use the
-normalization theorem for linear numeration systems in
+The convention used to read the table is fixed in
+\Cref{lem:normalizer-convention-dictionary}.  With that convention, the theorem
+is a translation from Frougny's standard Fibonacci normalizer to the pinned
+table used in this paper.  More precisely, we use the normalization theorem for
+linear numeration systems in
 \cite{Frougny1992NumbersAutomata} in the Fibonacci case, together with the
 explicit bounded-delay Fibonacci realization stated as
 \cite[Corollary~4]{Frougny1999OnlineAddition}.  These cited results supply a
@@ -301,14 +361,16 @@ digit alphabet used by Frougny's construction.
 
 It remains only to translate conventions.  Restricting the table to binary
 input is the addition-free specialization of the same Fibonacci normalizer;
-appending the terminal zero flush clears the three pending registers, and the
-one-symbol leading delay is retained as a left padding digit.  By the cited
-normalization theorem and its Fibonacci bounded-delay realization, this
-deterministic carry process emits the greedy Fibonacci normal representation:
-the output digits are binary, contain no adjacent ones, and represent the same
-integer as the input.  The displayed edge identities give the equality of
-represented values in the indexing convention of this appendix.  The leading
-delay contributes the single padding digit, so the output length is \(m+1\).
+appending the terminal zero flush clears the three pending registers in the
+dictionary of \Cref{lem:normalizer-convention-dictionary}, and the one-symbol
+leading delay is retained as a left padding digit.  By the cited normalization
+theorem and its Fibonacci bounded-delay realization, this deterministic carry
+process emits the greedy Fibonacci normal representation: the output digits are
+binary, contain no adjacent ones, and represent the same integer as the input.
+The displayed edge identities give the equality of represented values in the
+indexing convention of this appendix.  The leading delay contributes the single
+padding digit, and the flush convention retains exactly the next \(m\) digits,
+so the output length is \(m+1\).
 By the uniqueness part of Zeckendorf's theorem, the emitted word is the unique
 \((m+1)\)-digit padded Zeckendorf normal form.
 \end{proof}
