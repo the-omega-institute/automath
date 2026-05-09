@@ -39,7 +39,6 @@ and counted with algebraic multiplicity, are dominated by the corresponding
 partial sums of the singular values. See Lidskii's original trace theorem
 \cite[p.~485]{Lidskii1959}, K\"onig's Weyl-inequality chapter
 \cite{Weyl1949EigenvalueInequalities,Fan1951MaximumProperties},
-K\"onig's Weyl-inequality chapter
 \cite[Chapter~2, Section~2.a]{Konig1986EigenvalueDistribution}, and the
 treatment of \(s\)-numbers and Weyl--Ky Fan inequalities in
 \cite[Chapter~1]{Simon2005TraceIdeals} and
@@ -513,6 +512,165 @@ partial-sum inequality therefore yields the final claim.
   \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then
   \(\|P_NTP_N\|_1\le\|T\|_1\) and, after taking \(N\to\infty\) with
   \(N\ge j\), the bound for the fixed entry follows.
+\end{proof}
+
+\begin{theorem}[Finite-dimensional stability near the minimizer class]
+  \label{thm:finite-dimensional-trace-stability}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy the
+  summability hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and
+  let \(M_{\mathcal D}\) and \(\Sigma_{\mathcal D}\) be the collapsed
+  multiplicity function and support from
+  \Cref{prop:collapsed-spectral-multiplicities}. Assume that
+  \(\Sigma_{\mathcal D}\) is finite. Put
+  \[
+    D_{\mathcal D}(z)
+    :=\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j},
+  \]
+  and
+  \[
+    d_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}M_{\mathcal D}(\lambda),
+    \qquad
+    \tau_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  Let \(N\ge d_{\mathcal D}\), and let \(T\in M_N(\CC)\) satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z).
+  \]
+  Set
+  \[
+    \varepsilon(T):=\|T\|_1-\tau_{\mathcal D}.
+  \]
+  Then \(\varepsilon(T)\ge0\). Moreover there is a normal matrix
+  \(S\in M_N(\CC)\), unitarily equivalent to
+  \[
+    \operatorname{diag}\bigl(
+      \lambda I_{M_{\mathcal D}(\lambda)}:
+      \lambda\in\Sigma_{\mathcal D}\bigr)\oplus0_{N-d_{\mathcal D}},
+  \]
+  such that
+  \[
+    \|T-S\|_1
+    \le
+    N\sqrt{(N-1)\|T\|_1\,\varepsilon(T)}.
+  \]
+  In particular, if \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then
+  \[
+    \operatorname{dist}_1(T,\mathcal M_{\mathcal D,N})
+    \le
+    N\sqrt{(N-1)(\tau_{\mathcal D}+\varepsilon)\varepsilon},
+  \]
+  where \(\mathcal M_{\mathcal D,N}\) denotes the above unitary orbit of
+  finite-dimensional minimizers with \(N-d_{\mathcal D}\) zero summands.
+
+  The square-root exponent cannot be improved uniformly, even when
+  \(N=2\) and the determinant has a non-zero double root.
+\end{theorem}
+
+\begin{proof}
+  The determinant identity fixes the non-zero eigenvalues of \(T\), with
+  algebraic multiplicity, as the multiset in which
+  \(\lambda\in\Sigma_{\mathcal D}\) appears
+  \(M_{\mathcal D}(\lambda)\) times. Since \(T\) is \(N\)-dimensional,
+  the remaining \(N-d_{\mathcal D}\) eigenvalues are zero. Hence the
+  Weyl--Ky Fan lower bound gives
+  \[
+    \|T\|_1\ge\tau_{\mathcal D},
+  \]
+  so \(\varepsilon(T)\ge0\).
+
+  Choose a Schur triangularisation
+  \[
+    U^*TU=A=[a_{ij}]_{i,j=1}^N
+  \]
+  whose diagonal lists the prescribed non-zero eigenvalues, repeated
+  according to \(M_{\mathcal D}\), followed by zeros. Let
+  \(D=\operatorname{diag}(a_{11},\ldots,a_{NN})\) and set
+  \(S=UDU^*\). Then \(S\in\mathcal M_{\mathcal D,N}\), and
+  \[
+    \sum_{i=1}^N\abs{a_{ii}}=\tau_{\mathcal D}.
+  \]
+  Thus
+  \[
+    \delta:=\|A\|_1-\sum_{i=1}^N\abs{a_{ii}}
+    =\varepsilon(T).
+  \]
+
+  Fix \(1\le i<j\le N\). Let \(R_{ij}\) be the projection onto
+  \(\operatorname{span}\{e_i,e_j\}\) and \(S_{ij}=I-R_{ij}\). The same
+  pinching argument used in the proof of
+  \Cref{thm:determinant-fiber-trace-minimality} gives
+  \[
+    \delta
+    \ge
+    \left\|
+      \begin{pmatrix}
+        a_{ii} & a_{ij}\\
+        0 & a_{jj}
+      \end{pmatrix}
+    \right\|_1-\abs{a_{ii}}-\abs{a_{jj}} .
+  \]
+  By \Cref{lem:two-by-two-trace-norm-pinching},
+  \[
+    \abs{a_{ij}}^2
+    \le
+    2\|A\|_1\,\delta
+    =
+    2\|T\|_1\,\varepsilon(T).
+  \]
+  Since \(A-D\) is strictly upper triangular,
+  \[
+    \|A-D\|_2^2
+    =
+    \sum_{1\le i<j\le N}\abs{a_{ij}}^2
+    \le N(N-1)\|T\|_1\,\varepsilon(T).
+  \]
+  The rank of \(A-D\) is at most \(N\), so
+  \[
+    \|T-S\|_1
+    =\|A-D\|_1
+    \le \sqrt N\,\|A-D\|_2
+    \le N\sqrt{(N-1)\|T\|_1\,\varepsilon(T)}.
+  \]
+  This proves the asserted distance estimate.
+
+  It remains to justify the optimality of the exponent. Fix
+  \(\lambda\in\CC\setminus\{0\}\), and for \(c\in\CC\) put
+  \[
+    A_c=\begin{pmatrix}\lambda&c\\0&\lambda\end{pmatrix},
+    \qquad
+    D=\lambda I_2 .
+  \]
+  Each \(A_c\) has determinant
+  \((1-\lambda z)^2\). By
+  \Cref{lem:two-by-two-trace-norm-pinching},
+  \[
+    \varepsilon(A_c)
+    =
+    \sqrt{4\abs{\lambda}^2+\abs c^2}
+      -2\abs{\lambda}
+    =
+    \frac{\abs c^2}
+    {\sqrt{4\abs{\lambda}^2+\abs c^2}+2\abs{\lambda}}.
+  \]
+  Thus \(\varepsilon(A_c)\asymp \abs c^2\) as \(c\to0\). The minimizer
+  orbit for the determinant \((1-\lambda z)^2\) in dimension two is the
+  singleton \(\{\lambda I_2\}\), because a normal matrix with the only
+  eigenvalue \(\lambda\) is \(\lambda I_2\). Therefore
+  \[
+    \operatorname{dist}_1(A_c,\mathcal M_{\mathcal D,2})
+    =
+    \|A_c-\lambda I_2\|_1
+    =
+    \left\|\begin{pmatrix}0&c\\0&0\end{pmatrix}\right\|_1
+    =
+    \abs c .
+  \]
+  No estimate of order
+  \(O(\varepsilon^\alpha)\) with \(\alpha>1/2\) can therefore hold
+  uniformly near the minimizer class.
 \end{proof}
 
 \begin{lemma}[Collapsed multiplicities under a Schatten budget]
