@@ -413,6 +413,87 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   same residue class.
 \end{proof}
 
+\begin{proposition}[Regular Zeckendorf slices exclude the prime scale]
+  \label{prop:zeckendorf-regular-slice-rigidity}
+  Let \(L\subseteq\mathcal Z\) be a regular language, and put
+  \[
+    \ell_m:=\abs{L\cap\mathcal Z_m}.
+  \]
+  Then there are an integer \(p\ge1\), non-negative constants
+  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that
+  \[
+    \frac{\ell_m}{F_m}=c_{m\bmod p}+O(\theta^m).
+  \]
+  Consequently, on each residue class modulo \(p\), the ratio
+  \[
+    \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
+  \]
+  either tends to \(0\) exponentially up to the harmless polynomial
+  factor \(m\), or tends to \(+\infty\) at least linearly in \(m\).
+  In particular no regular sublanguage of \(\mathcal Z\) has
+  \(\ell_m=\abs{\mathcal P_m^{(\mathrm Z)}}\) for all sufficiently
+  large \(m\).
+\end{proposition}
+
+\begin{proof}
+  Let \(\mathcal A\) be a deterministic automaton recognizing \(L\).
+  Since \(L\subseteq\mathcal Z\), one has
+  \[
+    \ell_m=\abs{L(\mathcal A)\cap\mathcal Z_m}
+          =a_m^{(\mathrm Z)}(\mathcal A).
+  \]
+  By \Cref{lem:zeckendorf-canonical-presentation}, the canonical
+  Zeckendorf presentation is trim, deterministic, strongly connected,
+  has Perron root \(\varphi\), and satisfies
+  \(z_m=\abs{\mathcal Z_m}=F_m\). Applying
+  \Cref{thm:parry-density} to this presentation and to
+  \(\mathcal A\) gives the displayed expansion.
+
+  Fix a residue class \(r\bmod p\). By \Cref{lem:zeck-prime-count}
+  there are constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) such that
+  \[
+    A_{\mathrm Z}\frac{\varphi^m}{m}
+    \le\abs{\mathcal P_m^{(\mathrm Z)}}
+    \le B_{\mathrm Z}\frac{\varphi^m}{m}
+  \]
+  for all sufficiently large \(m\). Also fix \(K_1,K_2>0\) such that
+  \(K_1\varphi^m\le F_m\le K_2\varphi^m\) for all large \(m\).
+
+  If \(c_r=0\), then along \(m\equiv r\pmod p\) we have
+  \[
+    \ell_m=O(\theta^mF_m)=O(\theta^m\varphi^m).
+  \]
+  Hence
+  \[
+    \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
+    =O(m\theta^m),
+  \]
+  which tends to \(0\) exponentially after increasing \(\theta\) within
+  \((0,1)\).
+
+  If \(c_r>0\), then for all sufficiently large
+  \(m\equiv r\pmod p\),
+  \[
+    \ell_m\ge\frac{c_r}{2}F_m
+        \ge\frac{c_rK_1}{2}\varphi^m.
+  \]
+  Therefore
+  \[
+    \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
+    \ge
+    \frac{c_rK_1}{2B_{\mathrm Z}}\,m,
+  \]
+  and the ratio tends to \(+\infty\) at least linearly on this residue
+  class.
+
+  Every residue class falls into exactly one of these two cases. Thus
+  equality
+  \(\ell_m=\abs{\mathcal P_m^{(\mathrm Z)}}\) cannot hold for all
+  sufficiently large \(m\), since any fixed residue class contains
+  arbitrarily large lengths and on that class the ratio cannot remain
+  equal to \(1\).
+\end{proof}
+
 \begin{corollary}[Prime Zeckendorf language is not regular]
   \label{cor:zeckendorf-prime-language-not-regular}
   Let
@@ -426,20 +507,18 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
 \end{corollary}
 
 \begin{proof}
-  If \(\mathcal P_{\mathcal Z}\) were regular, then
-  \Cref{prop:zeckendorf-regular-powerlaw} would give
+  Suppose that \(\mathcal P_{\mathcal Z}\) were regular. Applying
+  \Cref{prop:zeckendorf-regular-slice-rigidity} to
+  \(L=\mathcal P_{\mathcal Z}\) gives a period \(p\) such that on every
+  residue class modulo \(p\) the ratio
   \[
-    \pi(T)=N_{\mathcal P_{\mathcal Z}}(T)=T^{\alpha+o(1)}
+    \frac{\abs{\mathcal P_{\mathcal Z}\cap\mathcal Z_m}}
+         {\abs{\mathcal P_m^{(\mathrm Z)}}}
   \]
-  for some \(\alpha\in[0,1]\). In the \(\rho\le1\) case this says only
-  \(\pi(T)=T^{o(1)}\), which is already impossible because
-  \(\pi(T)\sim T/\log T\). In the remaining case
-  \(\alpha=\log\rho/\log\varphi\). Since a regular sublanguage of
-  \(\mathcal Z\) has at most \(F_{m+2}-1=\varphi^{m+o(m)}\) words of
-  length at most \(m\), one has \(\rho\le\varphi\), hence
-  \(\alpha\le1\). The prime number theorem now gives the contradiction:
-  for every \(\alpha<1\), \(\pi(T)/T^\alpha\to\infty\), while
-  \(\pi(T)/T\to0\) excludes \(\alpha=1\).
+  either tends to \(0\) or tends to \(+\infty\). But by definition
+  \(\mathcal P_{\mathcal Z}\cap\mathcal Z_m=\mathcal P_m^{(\mathrm Z)}\)
+  for every \(m\). The displayed ratio is therefore identically \(1\),
+  a contradiction.
 \end{proof}
 
 \begin{remark}[Easy sofic corollary]
