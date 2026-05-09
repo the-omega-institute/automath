@@ -535,11 +535,19 @@ class PaperState:
     stage_b_verdicts: list[str] = field(default_factory=list)
     stage_b_passed: bool = False
     stage_b_all_issues: list[str] = field(default_factory=list)  # Accumulated Oracle issues across all rounds
+    # Multi-turn deepen + fresh-eval (per user spec: deepen until same Conv
+    # accepts, then a NEW Conv first-look; final pass = fresh first-reply
+    # accepts).
+    stage_b_deepen_conv_id: str = ""
+    stage_b_fresh_attempts: int = 0
+    stage_b_last_fix_summary: str = ""
 
     # Stage C tracking
     stage_c_rounds: int = 0
     stage_c_verdicts: list[str] = field(default_factory=list)
     stage_c_passed: bool = False
+    stage_c_deepen_conv_id: str = ""
+    stage_c_fresh_attempts: int = 0
 
     # Stage D tracking
     stage_d_backflow_items: list[str] = field(default_factory=list)
@@ -594,9 +602,14 @@ class PaperState:
             "stage_b_verdicts": self.stage_b_verdicts,
             "stage_b_passed": self.stage_b_passed,
             "stage_b_all_issues": self.stage_b_all_issues[-200:],  # keep last 200 issue strings
+            "stage_b_deepen_conv_id": self.stage_b_deepen_conv_id,
+            "stage_b_fresh_attempts": self.stage_b_fresh_attempts,
+            "stage_b_last_fix_summary": self.stage_b_last_fix_summary[-2000:],
             "stage_c_rounds": self.stage_c_rounds,
             "stage_c_verdicts": self.stage_c_verdicts,
             "stage_c_passed": self.stage_c_passed,
+            "stage_c_deepen_conv_id": self.stage_c_deepen_conv_id,
+            "stage_c_fresh_attempts": self.stage_c_fresh_attempts,
             "stage_d_backflow_items": self.stage_d_backflow_items,
             "stage_d_passed": self.stage_d_passed,
             "history": self.history[-50:],  # keep last 50 entries
@@ -642,6 +655,9 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                      "stage_a_scope_done", "stage_a_audit_rounds",
                      "stage_b_rounds", "stage_b_passed", "stage_c_rounds",
                      "stage_c_passed", "stage_d_passed", "pdf_path",
+                     "stage_b_deepen_conv_id", "stage_b_fresh_attempts",
+                     "stage_b_last_fix_summary",
+                     "stage_c_deepen_conv_id", "stage_c_fresh_attempts",
                      "started_at", "completed_at", "error"):
             if key in data:
                 setattr(s, key, data[key])
@@ -1083,23 +1099,63 @@ def oracle_submit(task_id: str, prompt: str,
                   pdf_path: Optional[Path] = None,
                   model: str = "chatgpt-5.4-pro-extended",
                   context_mode: str = "",
-                  agent_role: str = "") -> bool:
+                  agent_role: str = "",
+                  conversation_id: Optional[str] = None,
+                  is_followup: bool = False) -> bool:
+    """Submit an oracle task to the bridge service.
+
+    `conversation_id` controls multi-turn behaviour:
+      None            single-shot (legacy). Server treats as a fresh chat.
+      ""              caller wants a multi-turn-capable conversation; server
+                      issues a new conversation_id and returns it via the
+                      /result record (caller fetches with oracle_poll_record).
+      "<known id>"    follow up in an existing conversation: routes to
+                      /continue so the userscript navigates back to the
+                      pinned chatgpt_url and posts the prompt as a turn
+                      in the same chat. Use a SHORT prompt here (e.g.
+                      "按审稿人意见改了xxx, 这版你愿意接收吗?").
+    """
     prompt = with_agent_context_contract(
         prompt, context_mode=context_mode, agent_role=agent_role)
     if context_mode:
         logger.info(f"Oracle context: {context_mode}"
-                    f"{'/' + agent_role if agent_role else ''}")
+                    f"{'/' + agent_role if agent_role else ''}"
+                    f"{' conv=' + conversation_id[:12] if conversation_id else ''}")
     payload: dict = {"task_id": task_id, "prompt": prompt, "model": model}
+    if conversation_id is not None:
+        payload["conversation_id"] = conversation_id
+    if is_followup:
+        payload["is_followup"] = True
     if pdf_path and pdf_path.exists():
         with open(pdf_path, "rb") as f:
             payload["pdf_base64"] = base64.b64encode(f.read()).decode("ascii")
         payload["pdf_name"] = pdf_path.name
+    endpoint = "/continue" if (conversation_id and is_followup) else "/submit"
     try:
-        http_post(f"{ORACLE_SERVER}/submit", payload, timeout=30)
+        http_post(f"{ORACLE_SERVER}{endpoint}", payload, timeout=30)
         return True
     except Exception as e:
-        logger.error(f"Oracle submit failed: {e}")
+        logger.error(f"Oracle submit ({endpoint}) failed: {e}")
         return False
+
+
+def oracle_poll_record(task_id: str, timeout: int = 300) -> dict:
+    """Poll /result/<task_id> until completed/failed/cancelled.
+
+    Returns the full record dict (status, response, conversation_id,
+    chatgpt_url, ...). Used by Stage B/C deepen flow to learn the
+    conversation_id the server issued for a fresh multi-turn task.
+    """
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=5)
+            if data and data.get("status") in {"completed", "failed", "cancelled"}:
+                return data
+        except Exception:
+            pass
+        time.sleep(3)
+    return {"status": "timeout", "task_id": task_id, "response": ""}
 
 
 def oracle_cancel(task_id: str, reason: str) -> bool:
@@ -2919,6 +2975,32 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
           sharper bounds, applications, converses) that would elevate the paper.
           The pipeline will use these to drive deep-research extension.
         Do NOT edit any files — only output the JSON evaluation.
+    """)
+
+
+def build_oracle_followup_prompt(fix_summary: str, target_journal: str) -> str:
+    """Short follow-up prompt for an existing deepen conversation.
+
+    Per project design: the deepen Conv accumulates context across
+    rounds; we just describe what was changed since the last round and
+    ask whether the new version is acceptable. ChatGPT remembers its
+    own prior verdict and the paper structure, so a long re-review
+    prompt is wasteful here.
+
+    Keep terse — Conv-deepen already has the paper PDF and the
+    referee context from round 1.
+    """
+    summary = (fix_summary or "").strip()
+    if not summary:
+        summary = "addressed every issue you raised in your previous review"
+    return textwrap.dedent(f"""\
+        Per your previous review, I {summary}.
+
+        Start your reply with a single line exactly of the form
+          Overall verdict: <Accept|Minor revision|Major revision|Reject>
+        so the verdict can be parsed unambiguously. Then briefly explain
+        what now meets the bar for "{target_journal}" and what (if anything)
+        still does not.
     """)
 
 
@@ -5322,6 +5404,59 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
 # STAGE B: Oracle Review (minor-revision-gated loop)
 # ═══════════════════════════════════════════════════════════════════════════
 
+
+def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
+                        oracle_timeout: int, dry_run: bool,
+                        tag: str, safe_name: str) -> tuple[bool, str, str]:
+    """Open a NEW conversation and ask for a first-look verdict.
+
+    Per project design: deepen Conv accumulates context and may have
+    been primed into accepting; fresh Conv has zero history and gives
+    the truth check. Stage B passes only if the fresh Conv accepts
+    on its first reply.
+
+    Returns (passed, verdict, response_text).
+    """
+    state.stage_b_fresh_attempts += 1
+    fresh_task_id = (
+        f"review_{safe_name}_B{rnd}_fresh{state.stage_b_fresh_attempts}_"
+        f"{time.time_ns()}"
+    )
+    save_state(state)
+
+    if dry_run:
+        return True, "minor revision", "Overall verdict: Minor revision\n(dry run)"
+
+    pdf_path = Path(state.pdf_path) if state.pdf_path else None
+    fresh_prompt = build_oracle_review_prompt(state.target_journal)
+    logger.info(f"{tag} fresh-eval submit task={fresh_task_id}")
+    if not oracle_submit(
+        fresh_task_id, fresh_prompt, pdf_path,
+        context_mode="fresh_review",
+        agent_role="stage_b_fresh_eval",
+        conversation_id="",  # NEW conv each attempt; no prior context
+        is_followup=False,
+    ):
+        logger.warning(f"{tag} fresh-eval submit failed; treating deepen verdict as final")
+        return True, "deepen-only", ""
+
+    deadline = time.time() + oracle_timeout
+    while time.time() < deadline:
+        remaining = max(1, int(deadline - time.time()))
+        raw = oracle_poll(fresh_task_id, timeout=remaining)
+        if raw == ORACLE_CANCELLED_RESPONSE:
+            logger.info(f"{tag} fresh-eval task cancelled")
+            return False, "cancelled", ""
+        if is_oracle_response_valid(raw):
+            verdict = extract_verdict(raw)
+            passed = verdict in ("accept", "minor revision")
+            return passed, verdict or "unknown", raw
+        if not raw:
+            oracle_cancel(fresh_task_id, f"{state.paper_name} fresh-eval poll timeout")
+            return False, "timeout", ""
+    return False, "timeout", ""
+
+
 def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None,
                 oracle_timeout: int = 7200) -> bool:
@@ -5387,7 +5522,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         committed=False, commit_hash="")
         save_state(state)
 
-        # ── B2: Oracle editorial review (EVENT WAIT) ─────────────
+        # ── B2: Oracle editorial review (multi-turn deepen + fresh-eval) ──
         # Sanitize paper_name to ASCII for URL safety (中文 in task_id breaks polling)
         safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
         # Use a per-round task id.  Reusing a stable paper-level id lets the
@@ -5395,10 +5530,26 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         # Stage B in a fake re-review loop.
         task_id_base = f"review_{safe_name}_B{rnd}_{time.time_ns()}"
         task_id = f"{task_id_base}_a1"
-        # Always use first-review prompt: Oracle has no history across rounds
-        prompt = build_oracle_review_prompt(state.target_journal)
 
-        logger.info(f"{tag} Round {rnd}: B2 — Oracle review")
+        # Multi-turn deepen: if we have a conv_id from a prior round, post a
+        # short follow-up in the same chat. Otherwise open a fresh deepen
+        # Conv with the full first-look review prompt and capture the
+        # server-issued conv_id so subsequent rounds thread into it.
+        deepen_conv_id = state.stage_b_deepen_conv_id
+        if deepen_conv_id:
+            submit_conv_id = deepen_conv_id
+            is_followup_turn = True
+            prompt = build_oracle_followup_prompt(
+                state.stage_b_last_fix_summary, state.target_journal,
+            )
+            referee_role = "stage_b_oracle_referee_followup"
+            logger.info(f"{tag} Round {rnd}: B2 — Oracle deepen (conv={deepen_conv_id[:12]})")
+        else:
+            submit_conv_id = ""  # ask server to issue conv_id
+            is_followup_turn = False
+            prompt = build_oracle_review_prompt(state.target_journal)
+            referee_role = "stage_b_oracle_referee"
+            logger.info(f"{tag} Round {rnd}: B2 — Oracle review (start deepen conv)")
 
         if dry_run:
             response = ("Overall verdict: Major revision\n"
@@ -5410,12 +5561,17 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             # the retry must get a new task id; otherwise /result/<id> keeps
             # serving the cached bad response.
             pdf_path = Path(state.pdf_path) if state.pdf_path else None
+            # Follow-up turns: PDF already attached in conv-deepen round 1; do
+            # not re-upload to keep the follow-up turn light.
+            submit_pdf = None if is_followup_turn else pdf_path
             attempt = 1
             logger.info(f"{tag} B2 oracle submit (task={task_id})")
             if not oracle_submit(
-                task_id, prompt, pdf_path,
-                context_mode="fresh_review",
-                agent_role="stage_b_oracle_referee",
+                task_id, prompt, submit_pdf,
+                context_mode="multi_turn_deepen" if is_followup_turn else "fresh_review",
+                agent_role=referee_role,
+                conversation_id=submit_conv_id,
+                is_followup=is_followup_turn,
             ):
                 state.error = "Oracle submit failed"
                 return False
@@ -5444,6 +5600,21 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     return False
                 if is_oracle_response_valid(raw):
                     response = raw
+                    # If we just opened a deepen Conv this round, capture
+                    # the server-issued conv_id so future rounds can thread
+                    # into it via /continue.
+                    if not deepen_conv_id:
+                        try:
+                            rec = oracle_poll_record(task_id, timeout=2)
+                        except Exception:
+                            rec = {}
+                        new_conv = ""
+                        if isinstance(rec, dict):
+                            new_conv = str(rec.get("conversation_id") or "")
+                        if new_conv:
+                            state.stage_b_deepen_conv_id = new_conv
+                            save_state(state)
+                            logger.info(f"{tag} captured deepen conv={new_conv[:12]}")
                     break
                 if raw:
                     bad_dir = SCRIPT_DIR / "oracle" / "bad"
@@ -5466,9 +5637,11 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                             f"{MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS} "
                             f"(task={task_id})")
                         if not oracle_submit(
-                            task_id, prompt, pdf_path,
-                            context_mode="fresh_review",
-                            agent_role="stage_b_oracle_referee_timeout_retry",
+                            task_id, prompt, submit_pdf,
+                            context_mode="multi_turn_deepen" if is_followup_turn else "fresh_review",
+                            agent_role=f"{referee_role}_timeout_retry",
+                            conversation_id=submit_conv_id,
+                            is_followup=is_followup_turn,
                         ):
                             state.error = (
                                 f"Oracle timeout re-submit failed B{rnd} "
@@ -5541,22 +5714,76 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     f"{len(issues)} issues "
                     f"(total accumulated: {len(state.stage_b_all_issues)} rounds)")
 
-        # ── Gate: accept or minor revision → Stage C ────────────
+        # ── Gate: deepen Conv accept → fresh-eval Conv → Stage C ────
+        # Stage B passes only when a NEW conversation (no prior context)
+        # accepts on first reply. The deepen Conv has been refining with
+        # ChatGPT's prior verdicts in scope; fresh-eval is the truth
+        # check that the current paper actually meets the bar without
+        # ChatGPT being primed by its own earlier "accept this" reasoning.
         if verdict in ("accept", "minor revision"):
-            logger.info(f"{tag} STAGE B PASSED at round {rnd}: {verdict.upper()}")
-            git_commit(paper_path,
-                       f"Stage B ({verdict}, {rnd}R): "
-                       f"Oracle review passed", tag=tag)
-            update_program_board(state.paper_name, "B-DONE",
-                                 f"Oracle: {verdict}, {rnd} rounds")
-            state.stage_b_rounds = rnd
-            state.stage_b_passed = True
-            consecutive_nonpass = 0
-            save_state(state)
-            return True
+            logger.info(f"{tag} Round {rnd}: deepen conv {verdict.upper()}, running fresh-eval")
+            fresh_pass, fresh_verdict, fresh_resp = _stage_b_fresh_eval(
+                state, rnd=rnd, oracle_timeout=oracle_timeout,
+                dry_run=dry_run, tag=tag, safe_name=safe_name,
+            )
+            if fresh_pass:
+                logger.info(f"{tag} STAGE B PASSED at round {rnd}: deepen={verdict.upper()}, "
+                            f"fresh first-look={fresh_verdict.upper()}")
+                git_commit(paper_path,
+                           f"Stage B ({fresh_verdict} via fresh-eval, {rnd}R): "
+                           f"Oracle review passed", tag=tag)
+                update_program_board(state.paper_name, "B-DONE",
+                                     f"Oracle: deepen={verdict}, fresh={fresh_verdict}, {rnd} rounds")
+                state.stage_b_rounds = rnd
+                state.stage_b_passed = True
+                consecutive_nonpass = 0
+                save_state(state)
+                return True
+            # Fresh rejected. Treat its response as the new round's authoritative
+            # input so Codex fixes the issues fresh just raised, then continue
+            # the deepen Conv next round.
+            logger.info(f"{tag} fresh-eval verdict={fresh_verdict}, falling back to deepen "
+                        f"with fresh issues")
+            response = fresh_resp or response
+            verdict = fresh_verdict or verdict
+            try:
+                fresh_issues = parse_oracle_issues(response)
+                if fresh_issues:
+                    issues = fresh_issues
+                    issues_text_this_round = format_issues_for_codex(fresh_issues)
+                    state.stage_b_all_issues.append(
+                        f"=== Round {rnd} (fresh-eval) ===\n{issues_text_this_round}"
+                    )
+            except Exception:
+                pass
 
         # Update consecutive non-pass counter
         consecutive_nonpass += 1
+
+        # Build a short fix summary for the NEXT round's deepen follow-up
+        # prompt: ChatGPT only needs to know what we addressed, not the
+        # full issue payload.
+        if issues:
+            severities = [
+                str(it.get("severity", "")).upper() for it in issues
+                if isinstance(it, dict)
+            ]
+            blockers = sum(1 for s in severities if s == "BLOCKER")
+            mediums = sum(1 for s in severities if s == "MEDIUM")
+            highs = sum(1 for s in severities if s == "HIGH")
+            lows = sum(1 for s in severities if s in {"LOW", "CRITICAL"})
+            head = (issues_text_this_round or "").strip().splitlines()[:3]
+            preview = " ".join(head)[:300].strip()
+            state.stage_b_last_fix_summary = (
+                f"addressed {len(issues)} issues from your previous review "
+                f"(blocker={blockers}, high={highs}, medium={mediums}, low={lows})"
+                + (f"; main thread: {preview}" if preview else "")
+            )
+        else:
+            state.stage_b_last_fix_summary = (
+                "made revisions per the verdict in your previous review"
+            )
+        save_state(state)
 
         # ── B4: Codex fix issues ─────────────────────────────────
         # Build prior issues summary from all accumulated rounds
