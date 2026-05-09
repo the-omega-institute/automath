@@ -2381,6 +2381,10 @@ Lemma~\ref{lem:one-sided-gibbs-partition-normalization}, and define
 :=\sum_{\substack{w\in\mathcal{L}_m(Y)\\ w_0\in I}}
 \exp\!\bigl(\sup_{y\in[w]}S_m\psi(y)\bigr).
 \]
+The length $m$ here is the one-sided cylinder length, and the weight is the
+same supremum weight as in the unrestricted normalization of
+Lemma~\ref{lem:one-sided-gibbs-partition-normalization}.  In particular, no
+choice of endpoint or reference point is hidden in the notation.
 Then there exist constants $A_I^-,A_I^+>0$ such that
 \[
 A_I^- e^{mP_Y(\psi)}
@@ -2400,7 +2404,7 @@ A_-e^{mP_Y(\psi)}
 \le \mathcal{Z}_m(\psi)
 \le A_+e^{mP_Y(\psi)}
 \qquad(m\ge 1)
-\]
+\].
 Therefore
 \[
 \mathcal{Z}_m^I(\psi)\le \mathcal{Z}_m(\psi)\le A_+e^{mP_Y(\psi)}.
@@ -2798,18 +2802,36 @@ is topologically mixing.  The potential
 \phi_C^{(p)}
 :=\sum_{k=0}^{p-1}(\phi\circ\pi_C)\circ\sigma^k
 \]
-is H\"older on $((\Sigma_C)_0,\sigma^p)$, and its pressure is
-$pP_C(\phi)$.  Applying
-Lemma~\ref{lem:restricted-initial-partition-sum} to a primitive one-step
-presentation of $((\Sigma_C)_0,\sigma^p)$ with initial symbol corresponding to
-$a$ gives a constant $B_a^->0$ such that the partition sum over words in
-$\Sigma_C$ of length $np+1$ starting at $a$ is bounded below by
-$B_a^-e^{npP_C(\phi)}$ for every $n\ge 0$.  Every such word determines a
-directed path $\eta$ of vertex length $np+1$ in $C$ starting at $a$: the
-$\sigma^p$ word has $n+1$ vertices sampled in the cyclic class, and the
-unsampled intervening vertices give exactly $np+1$ vertices in the original
-component.  Concatenating
-it to the fixed bridge $\beta$ produces a directed path $\beta\star\eta$ of
+is H\"older on $((\Sigma_C)_0,\sigma^p)$, and the variational principle for the
+iterate gives
+\[
+P_{((\Sigma_C)_0,\sigma^p)}(\phi_C^{(p)})=pP_C(\phi).
+\]
+Use the standard primitive one-step presentation for this $\sigma^p$ system
+whose symbols are $p$-step return blocks from $C_0$ to $C_0$.  Take as initial
+set the return-block symbols whose first vertex is $a$.  With this initial set,
+a length-$n$ word in the p-block presentation, for $n\ge1$, is exactly an
+original $C$-path
+\[
+\eta=e_0e_1\cdots e_{np}
+\]
+of vertex length $np+1$ starting at $a$.  The p-block Birkhoff sum accounts for
+the first $np$ original coordinates.  The remaining endpoint contributes only
+the bounded factor $e^{\pm\|\phi\|_\infty}$; hence
+Lemma~\ref{lem:restricted-initial-partition-sum}, applied with the same
+one-sided cylinder and supremum-weight convention to the primitive
+$\sigma^p$ presentation, gives a constant $B_a^->0$ such that
+\[
+\sum_{\substack{\eta\text{ a }C\text{-path}\\ |\eta|=np+1,\ \eta_0=a}}
+\exp\!\bigl(\sup_{y\in[\eta]_{\Sigma_C}}S_{np+1}(\phi\circ\pi_C)(y)\bigr)
+\ge B_a^-e^{npP_C(\phi)}
+\qquad(n\ge 1),
+\]
+after decreasing $B_a^-$ once to absorb the endpoint contribution.  The
+remaining case $n=0$ is the one-vertex path at $a$, and it is absorbed by
+decreasing $B_a^-$ a second time; hence the same displayed lower bound holds
+for all $n\ge0$.  Concatenating such an $\eta$ to the fixed bridge $\beta$
+produces a directed path $\beta\star\eta$ of
 length
 \[
 |\beta\star\eta|
@@ -3444,12 +3466,27 @@ the same inequality divided by $\mu_\phi([u])>0$.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:weighted-boundary-pressure}]
-Conclusion~\emph{(4)} is exactly
+The finite-path part is independent of resolving.  If
+$\mathfrak{C}_\partial=\varnothing$, the eventual identity
+$Z_m(\partial\mathsf{P},\phi)=\widehat Z_m(\partial\mathsf{P},\phi)=0$ is
+Proposition~\ref{prop:finite-boundary-vs-recurrent-pressure}.  When
+$\mathfrak{C}_\partial\neq\varnothing$, the same proposition applies to the
+exact finite-path language
+$\mathcal{P}_m^{\mathcal{I}}(\widetilde B)$ and proves
+conclusions~\emph{(1)},~\emph{(2)}, and~\emph{(3)}.  Thus the recurrent
+component pressure $P_\partial(\phi)$ and the polynomial factor
+$m^{q_\partial-1}$ are obtained before any resolving-window hypothesis is
+used; reachable acyclic tails and finite dead-end paths are already included
+through the identity
+$Z_m(\partial\mathsf{P},\phi)=\widehat Z_m(\partial\mathsf{P},\phi)$.
+
+It remains to prove the conditional resolving conclusions.  Assume the chosen
+presentation is $\mu_\phi$-resolving.  Conclusion~\emph{(4)} is exactly
 Lemma~\ref{lem:weighted-thickness-without-components} below.  In particular,
 the thickness bound is proved directly from the finite resolving family over
 $\mathcal{R}_\partial$ and does not use the recurrent boundary-component set
-$\mathfrak{C}_\partial$.
-Let $\theta_\phi>0$ be the constant supplied by conclusion~\emph{(4)}.
+$\mathfrak{C}_\partial$.  Let $\theta_\phi>0$ be the constant supplied by
+conclusion~\emph{(4)}.
 
 Bowen's Gibbs estimate on $X$ \cite{Bowen1975,WaltersErgodicTheory} gives
 constants $c_-,c_+>0$ such that for every positive cylinder $C=[a]$ of length
@@ -3469,20 +3506,17 @@ yields
 \le \frac{c_+}{2}Z_m(\partial\mathsf{P},\phi),
 \]
 so conclusion~\emph{(5)} holds with $K_-:=\theta_\phi c_-$ and
-$K_+:=c_+/2$.
+$K_+:=c_+/2$.  If $\mathfrak{C}_\partial=\varnothing$, the already-proved
+eventual vanishing of $Z_m$ gives
+$\varepsilon_m(\mathsf{P};\mu_\phi)=0$ for all large $m$, as asserted in
+conclusion~\emph{(5)}.
 
-If $\mathfrak{C}_\partial=\varnothing$, then the eventual vanishing of
-$Z_m(\partial\mathsf{P},\phi)$ was already proved in
-Proposition~\ref{prop:finite-boundary-vs-recurrent-pressure}, so there is
-nothing more to prove.  Assume henceforth that
-$\mathfrak{C}_\partial\neq\varnothing$.  Then
-Proposition~\ref{prop:finite-boundary-vs-recurrent-pressure} proves
-conclusions~\emph{(1)},~\emph{(2)}, and~\emph{(3)}.
-Combining the upper bound in conclusion~\emph{(1)} with
-conclusion~\emph{(5)} gives the first display in conclusion~\emph{(6)} with
-$L_+:=K_+C_+$.  Combining the residue-class lower bound in
-conclusion~\emph{(2)} with conclusion~\emph{(5)} gives the second display in
-conclusion~\emph{(6)} with $L_-(\beta):=K_-C_-(\beta)$.
+Assume now that $\mathfrak{C}_\partial\neq\varnothing$.  Combining the upper
+bound in conclusion~\emph{(1)} with conclusion~\emph{(5)} gives the first
+display in conclusion~\emph{(6)} with $L_+:=K_+C_+$.  Combining the
+residue-class lower bound in conclusion~\emph{(2)} with conclusion~\emph{(5)}
+gives the second display in conclusion~\emph{(6)} with
+$L_-(\beta):=K_-C_-(\beta)$.
 Because $\mathsf{P}\in\mathcal{F}_\infty$,
 Corollary~\ref{cor:scan-tanaka-tail} gives
 $\varepsilon_m(\mathsf{P};\mu_\phi)\to0$.  If
@@ -5035,7 +5069,7 @@ formula proves
 \end{proof}
 
 Theorem~\ref{ex:golden-mean-gibbs-weighted} can also be verified directly from
-the explicit matrix: the exact identity for
+the explicit matrix with the same target-symbol weighting convention: the exact identity for
 $Z_m(\partial\mathsf{E},\varphi_t)$ and the explicit resolving words give the
 same pressure-difference exponent first for the weighted boundary sum and,
 after the resolving-thickness step in the proof, the same positive
