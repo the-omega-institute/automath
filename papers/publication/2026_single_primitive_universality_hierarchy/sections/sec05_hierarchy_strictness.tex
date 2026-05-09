@@ -41,14 +41,24 @@ therefore induces an injection on \(T/{\sim}\).  To decide whether
 decidable equality of protocol normal forms.
 \end{proof}
 
-\begin{remark}\label{rem:compile-scope}
-This is a compatibility statement, not an embedding theorem for an
-arbitrary expression-universal grammar.  The hypothesis is exactly
-the missing canonical-form information.  If equivalence in the
-expression language is undecidable, no computable evaluator
-satisfying \eqref{eq:semantic-compatibility} can exist into a
-protocol with decidable equality.
-\end{remark}
+\begin{corollary}[Canonical-form obstruction to compilation]
+\label{cor:compile-scope}
+Let \(T\) be an admissible expression-term algebra whose semantic
+equivalence relation \(\sim\) is undecidable.  Then there is no
+computable evaluator from \(T\) into the code set of a
+protocol-universal system with decidable normal-form equality satisfying
+the semantic compatibility condition
+\eqref{eq:semantic-compatibility}.
+\end{corollary}
+
+\begin{proof}
+If such an evaluator existed, \Cref{prop:L1-compiles-L0} would make
+semantic equivalence of terms decidable by computing the two protocol
+normal forms and comparing them.  This contradicts the assumed
+undecidability of \(\sim\).  Thus the obstruction is precisely the
+absence of compatible computable canonical forms, not a failure of
+expression universality itself.
+\end{proof}
 
 \subsection{The Richardson obstruction}
 \label{ssec:L0-not-L1}
@@ -507,11 +517,60 @@ strictly weaker, as logical requirements, than the finite-state
 transfer property.
 \end{proof}
 
-\begin{remark}\label{rem:hankel-psd-generic}
-The certificate level has two parts.  Finite Hankel positivity and
-Prony reconstruction are formal consequences of a finite fiber
-partition.  Polynomial-size finite-state computation of the same
-moments is stronger and must come from the particular transfer
-representation at hand; it is not certified by moment positivity and
-reconstruction alone.
-\end{remark}
+\begin{corollary}[Finite-state growth budget]
+\label{cor:finite-state-growth-budget}
+Fix \(q=2\).  Every finite-state certificate realization in the sense
+of \Cref{def:cert-univ} has at most exponential growth in the
+resolution parameter:
+\[
+  |S_2^{(m)}|\le C R^m\qquad(m\ge1)
+\]
+for some constants \(C,R>0\) depending on the fixed transfer data.
+By contrast, computable finite-fiber covers of the Zeckendorf
+resolution data can realize second collision moments of the form
+\[
+  S_2^\sharp(m)=(a_m+1)^2+F_{m+2}-1
+\]
+for an arbitrary computable integer sequence \(a_m\ge1\).
+\end{corollary}
+
+\begin{proof}
+The finite-state clause of \Cref{def:cert-univ} gives, for \(q=2\), a
+fixed finite matrix representation
+\[
+  S_2^{(m)}=u_2^{\mathsf T}A_2^m v_2 .
+\]
+Choosing any submultiplicative matrix norm and putting
+\(R=\max\{1,\|A_2\|\}\), one has
+\[
+  |S_2^{(m)}|\le \|u_2\|\,\|v_2\|\,R^m .
+\]
+After increasing the constant if necessary this has the asserted
+form.  The realization of arbitrary computable one-spike growth is
+the construction and calculation in
+\Cref{thm:finite-state-strictness}.
+\end{proof}
+
+\begin{corollary}[Finite-fiber certificates are independent of finite-state transfer]
+\label{cor:hankel-psd-independent}
+Hankel positivity and finite Prony reconstruction are universal
+finite-fiber consequences of effective finite resolution data, but
+they do not imply the finite-state transfer clause of
+\Cref{def:cert-univ}.  Equivalently, finite-fiber certificate
+universality is strictly weaker than finite-state certificate
+universality.
+\end{corollary}
+
+\begin{proof}
+The universal finite-fiber part is exactly
+\Cref{prop:L2-generic-vs-structural}: at a fixed resolution the fiber
+sizes give a finite atomic moment measure, hence Hankel positivity and
+finite Prony reconstruction with a computable bound from the finite
+normal-form list.  To see that these facts do not imply finite-state
+transfer, apply \Cref{thm:finite-state-strictness} with \(a_m=m!\).
+The resulting computable finite-fiber cover is certificate-universal
+in the finite-fiber sense, but its second collision moment admits no
+fixed finite-matrix representation in the resolution parameter.  This
+contradicts the defining finite-state clause for \(q=2\), and proves
+the claimed non-implication.
+\end{proof}
