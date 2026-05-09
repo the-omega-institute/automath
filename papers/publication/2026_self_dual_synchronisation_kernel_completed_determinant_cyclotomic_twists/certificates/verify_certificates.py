@@ -185,6 +185,7 @@ def main():
         + (s**2 - 1) * w**6
     )
     record("completed_determinant", H)
+    record("resultant_sign_m2_difference", H.resultant(s, s) + H(s=0))
 
     T = PolynomialRing(QQ, names=("x", "y"))
     x, y = T.gens()
