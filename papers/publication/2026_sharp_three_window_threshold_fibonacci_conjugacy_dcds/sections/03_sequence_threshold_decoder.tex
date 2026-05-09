@@ -1,0 +1,388 @@
+﻿\section{Overlap presentations and the sharp threshold}\label{sec:stab:conjugacy}
+
+The local fibers become a dynamical problem only after overlap is imposed.  In
+this section we pass from the finite-window map $\Fold_m$ to a sliding-block
+factor, prove the finite-state presentation of its image, and then prove the
+sharp three-window reconstruction threshold.  The terminology for sofic shifts
+and labeled graph presentations is standard; see
+\cite{LindMarcus1995,Kitchens1998,Nasu1995}.
+
+\begin{definition}[Sliding stabilized-window process]\label{def:Phi}
+Fix $m\ge 2$.  The two-sided sliding stabilized-window map is
+\[
+\Phi_m:\{0,1\}^{\ZZ}\longrightarrow (X_m)^{\ZZ},
+\qquad
+(\Phi_m(a))_t:=\Fold_m(a_t,a_{t+1},\ldots,a_{t+m-1}).
+\]
+Its image is denoted
+\[
+Y_m:=\Phi_m(\{0,1\}^{\ZZ})\subset (X_m)^{\ZZ}.
+\]
+For $n\ge 1$ the associated finite-block map is
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\longrightarrow X_m^n,
+\qquad
+\Phi_{m,n}(a_0\ldots a_{n+m-2})
+:=
+\bigl(\Fold_m(a_t\ldots a_{t+m-1})\bigr)_{t=0}^{n-1}.
+\]
+We write residues of stabilized windows as
+\[
+r_t:=\Val_m\bigl((\Phi_m(a))_t\bigr).
+\]
+Equivalently,
+$r_t\equiv\Val_m(a_t\ldots a_{t+m-1})\pmod {F_{m+2}}$.
+\end{definition}
+
+\begin{definition}[The overlap graph]\label{def:overlap-graph}
+For $m\ge2$, let $\mathcal G_m$ be the labeled directed graph with vertex set
+\[
+V_m:=\{0,1\}^{m-1}.
+\]
+For every vertex $u=(u_1,\ldots,u_{m-1})\in V_m$ and every
+$c\in\{0,1\}$ there is an edge
+\[
+u\longrightarrow (u_2,\ldots,u_{m-1},c)
+\]
+with label
+\[
+\ell(u,c):=\Fold_m(u_1,\ldots,u_{m-1},c)\in X_m.
+\]
+Thus a path in $\mathcal G_m$ records the successive length-$(m-1)$ overlaps
+of a raw binary sequence, while the edge label records the stabilized
+length-$m$ window.
+\end{definition}
+
+\begin{theorem}[Finite-state lift and bounded multiplicity]\label{thm:finite-state-lift}
+\leanpending{paper_fibonacci_stabilization_finite_state_lift}
+For every $m\ge2$ the image shift $Y_m$ is presented by the labeled graph
+$\mathcal G_m$.  Moreover $\mathcal G_m$ is both right-resolving and
+left-resolving, and every point of $Y_m$ has at most $2^{m-1}$ preimages under
+$\Phi_m$.
+\end{theorem}
+
+\begin{proof}
+A bi-infinite raw sequence $a\in\{0,1\}^{\ZZ}$ determines the path whose
+vertex at time $t$ is
+\[
+u_t=(a_t,\ldots,a_{t+m-2})\in V_m.
+\]
+The edge from $u_t$ to $u_{t+1}$ is obtained by appending $a_{t+m-1}$, and its
+label is
+\[
+\ell(u_t,a_{t+m-1})=\Fold_m(a_t,\ldots,a_{t+m-1})=(\Phi_m(a))_t.
+\]
+Thus every point of $Y_m$ is read along a path in $\mathcal G_m$.  Conversely,
+any bi-infinite path in $\mathcal G_m$ has overlapping vertices
+\[
+u_t=(a_t,\ldots,a_{t+m-2})
+\]
+for a unique raw sequence $a\in\{0,1\}^{\ZZ}$, and its label sequence is
+$\Phi_m(a)$.  Hence $\mathcal G_m$ presents exactly $Y_m$.
+
+To prove right-resolvingness, fix $u\in V_m$ and suppose the two outgoing
+edges corresponding to $c,c'\in\{0,1\}$ have the same label.  Since
+$\Val_m|_{X_m}$ is injective, their labels have the same residue modulo
+$F_{m+2}$.  The two raw windows differ only in the last coordinate, so
+\[
+(c-c')F_{m+1}\equiv0\pmod {F_{m+2}}.
+\]
+Because $\gcd(F_{m+1},F_{m+2})=1$, this forces $c=c'$.  Thus outgoing edges
+from the same vertex have distinct labels.
+
+The left-resolving proof is the same in reverse.  Fix a terminal vertex
+$v=(v_1,\ldots,v_{m-1})$ and suppose the two incoming edges obtained from
+first bits $b,b'\in\{0,1\}$ have the same label.  The raw windows differ only
+in their first coordinate, whose weight is $F_2=1$, hence
+\[
+b-b'\equiv0\pmod {F_{m+2}}.
+\]
+Since $F_{m+2}\ge3$, this gives $b=b'$.  Thus incoming edges to the same
+vertex have distinct labels.
+
+Finally fix $y\in Y_m$.  If the initial vertex
+$(a_0,\ldots,a_{m-2})\in V_m$ of a lift is known, then right-resolvingness
+determines at most one outgoing edge with label $y_0$, hence at most one next
+state and one bit $a_{m-1}$.  Iterating forward determines all nonnegative
+coordinates.  Left-resolvingness determines the negative coordinates
+backwards.  Therefore there is at most one lift for each possible initial
+vertex, and there are $|V_m|=2^{m-1}$ initial vertices.
+\end{proof}
+
+The arithmetic content of the threshold is already visible at $m=3$. The three
+output residues $r_0,r_1,r_2$ determine the tail bit $a_4$ except for one
+elementary branch, and that branch is separated by the pair $(r_0,r_2)$. The
+remaining bits are then recovered from the injective map $(u,v)\mapsto u+2v$
+on $\{0,1\}^2$.
+
+\begin{lemma}[Explicit three-window decoder]\label{lem:m3-decoder}
+The map
+\[
+\Phi_{3,3}:\{0,1\}^{5}\longrightarrow X_3^3
+\]
+is injective.
+\end{lemma}
+
+\begin{proof}
+Write the raw block as $a_0a_1a_2a_3a_4$ and let
+\[
+M:=F_5=5,
+\qquad
+r_t:=\Val_3\bigl(\Fold_3(a_ta_{t+1}a_{t+2})\bigr)\in\{0,1,2,3,4\},
+\qquad 0\le t\le 2.
+\]
+Because $\Val_3|_{X_3}$ is a bijection, the stabilized output triple is
+equivalent to the residue triple $(r_0,r_1,r_2)$.
+
+Using
+\[
+r_t\equiv a_t+2a_{t+1}+3a_{t+2}\pmod 5,
+\]
+set
+\[
+q:=r_0-r_1-r_2\pmod 5.
+\]
+The Fibonacci recurrence gives
+\[
+q\equiv a_0+a_1+2a_4\pmod 5.
+\]
+Since $a_0+a_1\in\{0,1,2\}$ and $2a_4\in\{0,2\}$, one has:
+\[
+q\in\{0,1\}\Longrightarrow a_4=0,
+\qquad
+q\in\{3,4\}\Longrightarrow a_4=1.
+\]
+Only the case $q=2$ requires an additional branch distinction. Then the two
+possible triples $(a_0,a_1,a_4)$ are
+\[
+(1,1,0)\qquad\text{or}\qquad (0,0,1).
+\]
+The corresponding diagnostic residues are summarized in
+Table~\ref{tab:m3-decoder}.
+
+\begin{table}[t]
+\centering
+\caption{Diagnostic residues for the exceptional branch $q=2$ in Lemma~\ref{lem:m3-decoder}.}
+\label{tab:m3-decoder}
+\begin{tabular}{ccc}
+\toprule
+$(a_0,a_1,a_4)$ & possible $r_0$ & if $r_0=3$, possible $r_2$ \\
+\midrule
+$(1,1,0)$ & $\{1,3\}$ & $\{0,2\}$ \\
+$(0,0,1)$ & $\{0,3\}$ & $\{1,4\}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Indeed, in the first branch one has
+\[
+r_0\equiv 3+3a_2\pmod 5,
+\qquad
+r_2\equiv a_2+2a_3\pmod 5,
+\]
+whereas in the second branch
+\[
+r_0\equiv 3a_2\pmod 5,
+\qquad
+r_2\equiv a_2+2a_3+3\pmod 5.
+\]
+Thus $(q,r_0,r_2)$ determines $a_4$ uniquely. Outside $q=2$ this follows from
+the disjoint residue ranges above. Inside $q=2$, the values $r_0=1$ and
+$r_0=0$ identify the first and second branch respectively, while the only
+common value $r_0=3$ is separated by the disjoint alternatives
+$r_2\in\{0,2\}$ and $r_2\in\{1,4\}$.
+
+Once $a_4$ is known, define
+\[
+t:=r_2-3a_4\pmod 5.
+\]
+Then
+\[
+t\equiv a_2+2a_3\pmod 5.
+\]
+Because the map
+\[
+\{0,1\}^2\to\{0,1,2,3\},\qquad (u,v)\mapsto u+2v
+\]
+is injective, $(a_2,a_3)$ is uniquely determined by $t$. Finally define
+\[
+u:=r_0-3a_2\pmod 5.
+\]
+Then
+\[
+u\equiv a_0+2a_1\pmod 5,
+\]
+and the same injectivity recovers $(a_0,a_1)$. Hence
+$a_0a_1a_2a_3a_4$ is uniquely determined by $(r_0,r_1,r_2)$, proving
+injectivity.
+\end{proof}
+
+\begin{theorem}[Sharp three-window threshold]\label{thm:block-invertibility}
+\leanpending{paper_fibonacci_stabilization_block_invertibility}
+Let $m\ge3$ and $n\ge m$.  Then the finite-block stabilized map
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\longrightarrow X_m^n
+\]
+is injective.
+\end{theorem}
+
+\begin{proof}
+It is enough first to prove injectivity for $n=m$.  The case $m=3$ is
+Lemma~\ref{lem:m3-decoder}.
+
+Assume now that $m\ge4$ and that the stabilized length-$m$ output residues
+\[
+r_t\in\{0,\ldots,F_{m+2}-1\},\qquad 0\le t\le m-1,
+\]
+come from a raw block
+\[
+a_0a_1\ldots a_{2m-2}\in\{0,1\}^{2m-1}.
+\]
+For $0\le t\le m-3$, set
+\[
+q_t:=r_t-r_{t+1}-r_{t+2}\pmod {F_{m+2}},
+\]
+represented in $\{0,\ldots,F_{m+2}-1\}$.  Since
+\[
+r_t\equiv\sum_{j=0}^{m-1}a_{t+j}F_{j+2}\pmod {F_{m+2}},
+\]
+the Fibonacci recurrence cancels all interior terms and gives
+\begin{equation}\label{eq:block-decoder-qt}
+q_t\equiv a_t+a_{t+1}+F_m a_{t+m+1}\pmod {F_{m+2}}.
+\end{equation}
+If $a_{t+m+1}=0$, the right-hand side is one of $\{0,1,2\}$.  If
+$a_{t+m+1}=1$, it is one of
+\[
+\{F_m,F_m+1,F_m+2\}.
+\]
+For $m\ge4$ these alternatives are disjoint, and the second set still lies
+strictly below the modulus because
+\[
+F_m+2 < F_m+F_{m+1}=F_{m+2}.
+\]
+Thus each $q_t$ determines the boundary bit $a_{t+m+1}$.  As $t$ runs from
+$0$ to $m-3$, this recovers
+\[
+a_{m+1},a_{m+2},\ldots,a_{2m-2}.
+\]
+
+The last residue $r_{m-1}$ now contains only two unknown bits:
+\[
+r_{m-1}\equiv
+a_{m-1}+2a_m+\sum_{j=2}^{m-1}a_{m-1+j}F_{j+2}
+\pmod {F_{m+2}}.
+\]
+The displayed tail sum is known.  Since
+\[
+(u,v)\mapsto u+2v
+\]
+is injective on $\{0,1\}^2$ and its values lie in $\{0,1,2,3\}$, the residue
+$r_{m-1}$ recovers $(a_{m-1},a_m)$.  Then, for
+$j=m-2,m-3,\ldots,0$, the residue $r_j$ has the form
+\[
+r_j\equiv a_j+\sum_{i=1}^{m-1}a_{j+i}F_{i+2}\pmod {F_{m+2}},
+\]
+where the sum is already known.  Because $a_j\in\{0,1\}$, this determines
+$a_j$ uniquely.  Hence $\Phi_{m,m}$ is injective for every $m\ge4$.
+
+Now let $n\ge m$ and suppose two raw blocks
+$a_0\ldots a_{n+m-2}$ and $b_0\ldots b_{n+m-2}$ have the same
+$\Phi_{m,n}$-image.  For every $0\le s\le n-m$, the length-$m$ output
+subblocks beginning at $s$ agree.  By the already proved injectivity of
+$\Phi_{m,m}$, the corresponding raw subblocks
+\[
+a_s\ldots a_{s+2m-2}
+\quad\text{and}\quad
+b_s\ldots b_{s+2m-2}
+\]
+are equal.  These intervals cover all indices $0,\ldots,n+m-2$, so the two
+raw blocks are equal.
+\end{proof}
+
+\begin{corollary}[Explicit sliding-block decoder above threshold]\label{cor:explicit-decoder}
+\leanpending{paper_fibonacci_stabilization_explicit_decoder}
+Assume $m\ge3$.  For each allowed word
+\[
+W=(y_0,\ldots,y_{m-1})\in\mathcal L_m(Y_m)
+\]
+let
+\[
+\Psi_{m,m}(W)=a_0a_1\ldots a_{2m-2}
+\]
+be the unique raw block whose $\Phi_{m,m}$-image is $W$, as supplied by
+Theorem~\ref{thm:block-invertibility}.  Define
+\[
+\psi_m(W):=a_0.
+\]
+Then for every $a\in\{0,1\}^{\ZZ}$ and $y=\Phi_m(a)$,
+\[
+a_t=\psi_m(y_t,y_{t+1},\ldots,y_{t+m-1})
+\qquad\text{for all }t\in\ZZ.
+\]
+Thus the inverse above threshold is a sliding-block code with memory $0$ and
+anticipation $m-1$.
+\end{corollary}
+
+\begin{proof}
+The block $(y_t,\ldots,y_{t+m-1})$ is the $\Phi_{m,m}$-image of
+$a_ta_{t+1}\ldots a_{t+2m-2}$.  By Theorem~\ref{thm:block-invertibility} this
+raw block is the unique preimage of the displayed output block.  Therefore
+$\psi_m(y_t,\ldots,y_{t+m-1})$ is its first bit, namely $a_t$.
+\end{proof}
+
+\begin{proposition}[Sharp low-window counterexamples]\label{prop:low-window-counterexamples}
+The lower-window analogues of Theorem~\ref{thm:block-invertibility} fail in
+both possible senses:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item At $m=2$,
+  \[
+  \Phi_2(0^{\ZZ})=\Phi_2(1^{\ZZ})=(\ldots,00,00,00,\ldots).
+  \]
+  Hence the two-window sliding stabilized map is not injective.
+  \item At the sharp threshold $m=3$, using only two consecutive output
+  windows is not enough: the two raw blocks
+  \[
+  0001,\qquad 0110
+  \]
+  have the same $\Phi_{3,2}$-image.  Therefore the hypothesis
+  $n\ge m$ in Theorem~\ref{thm:block-invertibility} cannot be replaced by
+  $n\ge m-1$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+For $m=2$ the modulus is $F_4=3$ and the two weights are
+$F_2=1$ and $F_3=2$.  Thus
+\[
+\Val_2(00)=0,\qquad \Val_2(11)=1+2=3\equiv0\pmod 3.
+\]
+The unique element of $X_2$ with residue $0$ is $00$, so
+\[
+\Fold_2(00)=\Fold_2(11)=00.
+\]
+Applying this equality at every coordinate gives
+\[
+\Phi_2(0^{\ZZ})=\Phi_2(1^{\ZZ})=(\ldots,00,00,00,\ldots),
+\]
+which proves (i).
+
+For the finite-block obstruction at $m=3$, the modulus is $F_5=5$ and the
+weights are $F_2,F_3,F_4=1,2,3$.  The two consecutive windows in the raw block
+$0001$ are $000$ and $001$, whose residues are
+\[
+0,\qquad 3.
+\]
+Both words are already legal, so their stabilized outputs are $000$ and
+$001$.  The two consecutive windows in the raw block $0110$ are $011$ and
+$110$, whose residues are
+\[
+2+3=5\equiv0\pmod5,\qquad 1+2=3\pmod5.
+\]
+The unique elements of $X_3$ with residues $0$ and $3$ are again $000$ and
+$001$.  Hence
+\[
+\Phi_{3,2}(0001)=(000,001)=\Phi_{3,2}(0110),
+\]
+although $0001\ne0110$.  This proves (ii).
+\end{proof}
+
