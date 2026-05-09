@@ -234,6 +234,39 @@ partial-sum inequality therefore yields the final claim.
   \(\varepsilon\downarrow0\) proves the claim.
 \end{proof}
 
+\begin{lemma}[Spectral rigidity for regularized determinants]
+  \label{lem:regularized-determinant-spectral-rigidity}
+  Let \(1\le r<\infty\), and let \(T_1,T_2\in\mathcal S_r\). If
+  \[
+    \det_r(I-zT_1)=\det_r(I-zT_2)
+  \]
+  as entire functions, then the non-zero spectra of \(T_1\) and \(T_2\)
+  coincide with algebraic multiplicity.
+\end{lemma}
+
+\begin{proof}
+  For finite-rank \(A\), the regularized determinant has the form
+  \[
+    \det_r(I-zA)
+    =
+    \det(I-zA)
+    \exp\!\left(\sum_{\ell=1}^{r-1}
+      \frac{z^\ell\Tr(A^\ell)}{\ell}\right),
+  \]
+  with the exponential factor non-vanishing on \(\CC\). Hence its zeros,
+  with order, are exactly the reciprocals of the non-zero eigenvalues of
+  \(A\), counted with algebraic multiplicity. The general
+  \(\mathcal S_r\) statement is the corresponding zero-divisor theorem
+  for regularized Fredholm determinants: the regularizing factor changes
+  the determinant by a non-vanishing entire factor and does not change
+  zero multiplicities. We use the standard construction and
+  zero-multiplicity statement from \cite[Chapter~9]{Simon2005TraceIdeals},
+  \cite{GohbergKrein1969NonSelfAdjoint}, and
+  \cite{GesztesyLatushkinMitreaZinchenko2005}. Equality of the two entire
+  functions therefore gives equality, with order, of their zero divisors,
+  and hence equality of the two non-zero spectral multisets.
+\end{proof}
+
 \begin{theorem}[Global trace-norm minimum and minimizer classification in a Fredholm-determinant fiber]
   \label{thm:determinant-fiber-trace-minimality}
   Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy the
@@ -788,16 +821,12 @@ partial-sum inequality therefore yields the final claim.
 \end{theorem}
 
 \begin{proof}
-  In finite dimension, regularization multiplies the ordinary determinant
-  by a non-vanishing entire exponential factor. Hence the zeros of the
-  regularized determinant, with multiplicities, are precisely the
-  reciprocals of the non-zero eigenvalues, counted with algebraic
-  multiplicity. The identity
+  By \Cref{lem:regularized-determinant-spectral-rigidity}, the identity
   \[
     \det_r(I-zT)=\det_r(I-zL_{\mathcal D})
   \]
-  and \Cref{lem:schatten-collapsed-multiplicities} therefore show that the
-  non-zero eigenvalue multiset of \(T\) is exactly the multiset in which
+  and \Cref{lem:schatten-collapsed-multiplicities} show that the non-zero
+  eigenvalue multiset of \(T\) is exactly the multiset in which
   \(\lambda\in\Sigma_{\mathcal D}\) occurs
   \(M_{\mathcal D}(\lambda)\) times.
 
@@ -902,6 +931,103 @@ partial-sum inequality therefore yields the final claim.
   off-diagonal entries to tend to \(0\).
 \end{proof}
 
+\begin{theorem}[Finite-dimensional Schatten stability near the minimizer class]
+  \label{thm:finite-dimensional-schatten-stability}
+  Let \(1<p<\infty\), put \(r=\lceil p\rceil\), and let
+  \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
+  \[
+    \tau_{\mathcal D,p}
+    :=\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty .
+  \]
+  Let \(M_{\mathcal D}\) and \(\Sigma_{\mathcal D}\) be the collapsed
+  multiplicity function and support from
+  \Cref{lem:schatten-collapsed-multiplicities}, and assume that
+  \(\Sigma_{\mathcal D}\) is finite. Put
+  \[
+    d_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}M_{\mathcal D}(\lambda).
+  \]
+  Fix \(N\ge d_{\mathcal D}\), and let
+  \(\mathcal M_{\mathcal D,N}^{(p)}\) be the unitary orbit in
+  \(M_N(\CC)\) of
+  \[
+    \operatorname{diag}\bigl(
+      \lambda I_{M_{\mathcal D}(\lambda)}:
+      \lambda\in\Sigma_{\mathcal D}\bigr)\oplus0_{N-d_{\mathcal D}}.
+  \]
+  For every \(R>\tau_{\mathcal D,p}^{1/p}\) there is a nondecreasing
+  function
+  \[
+    \omega_{N,p,R,\mathcal D}:[0,\infty)\longrightarrow[0,\infty),
+    \qquad
+    \omega_{N,p,R,\mathcal D}(\varepsilon)\downarrow0
+    \quad(\varepsilon\downarrow0),
+  \]
+  such that every \(T\in M_N(\CC)\) satisfying
+  \[
+    \det_r(I-zT)=\det_r(I-zL_{\mathcal D}),
+    \qquad
+    \norm{T}_p\le R,
+  \]
+  obeys
+  \[
+    \dist_p(T,\mathcal M_{\mathcal D,N}^{(p)})
+    \le
+    \omega_{N,p,R,\mathcal D}
+      \bigl(\norm{T}_p^p-\tau_{\mathcal D,p}\bigr).
+  \]
+  Equivalently, in fixed dimension and on bounded \(\mathcal S_p\)-sets,
+  convergence of the regularized determinant-fiber budget to its sharp
+  value forces convergence in \(\mathcal S_p\)-distance to the whole
+  cyclic minimizer orbit.
+\end{theorem}
+
+\begin{proof}
+  By \Cref{thm:schatten-determinant-fiber-minimality}, every matrix in
+  the displayed regularized determinant fiber satisfies
+  \[
+    \norm{T}_p^p-\tau_{\mathcal D,p}\ge0,
+  \]
+  and equality holds exactly on
+  \(\mathcal M_{\mathcal D,N}^{(p)}\). For fixed \(N,p,R,\mathcal D\),
+  the set
+  \[
+    K_R:=
+    \{T\in M_N(\CC):
+      \det_r(I-zT)=\det_r(I-zL_{\mathcal D}),\ \norm{T}_p\le R\}
+  \]
+  is compact: it is a closed subset of the closed bounded ball in the
+  finite-dimensional space \(M_N(\CC)\), and the regularized determinant
+  coefficients are continuous functions of the matrix entries. Define
+  \[
+    \omega_{N,p,R,\mathcal D}(\varepsilon)
+    :=
+    \sup\{\dist_p(T,\mathcal M_{\mathcal D,N}^{(p)}):
+      T\in K_R,\ \norm{T}_p^p-\tau_{\mathcal D,p}\le\varepsilon\}.
+  \]
+  This function is nondecreasing. If it did not tend to \(0\) as
+  \(\varepsilon\downarrow0\), there would be a sequence
+  \(T_\nu\in K_R\) with
+  \[
+    \norm{T_\nu}_p^p-\tau_{\mathcal D,p}\to0
+  \]
+  but with distance from
+  \(\mathcal M_{\mathcal D,N}^{(p)}\) bounded below by a positive number.
+  Compactness gives a convergent subsequence \(T_{\nu_k}\to T_\infty\) in
+  \(M_N(\CC)\). The determinant identity and the \(\mathcal S_p\)-norm
+  pass to the limit, so
+  \[
+    \det_r(I-zT_\infty)=\det_r(I-zL_{\mathcal D}),
+    \qquad
+    \norm{T_\infty}_p^p=\tau_{\mathcal D,p}.
+  \]
+  The equality case of
+  \Cref{thm:schatten-determinant-fiber-minimality} puts
+  \(T_\infty\) in \(\mathcal M_{\mathcal D,N}^{(p)}\), contradicting the
+  positive lower bound on the distances. Hence
+  \(\omega_{N,p,R,\mathcal D}(\varepsilon)\to0\).
+\end{proof}
+
 \begin{remark}[What is classical and what is not in the determinant-fiber theorem]
   \label{rem:minimizer-classification-novelty}
   The lower bound in
@@ -917,8 +1043,11 @@ partial-sum inequality therefore yields the final claim.
   \Cref{thm:schatten-determinant-fiber-minimality} proves the analogous
   statement for regularized determinant fibers in every
   \(\mathcal S_p\), \(1<p<\infty\): equality in the sharp
-  \(\mathcal S_p\)-budget is again rigid, and the same Schur-compression
-  mechanism gives a quantitative near-minimizer constraint.
+  \(\mathcal S_p\)-budget is again rigid, the same Schur-compression
+  mechanism gives a quantitative near-minimizer constraint, and
+  \Cref{thm:finite-dimensional-schatten-stability} upgrades this
+  entrywise constraint to an orbit-level finite-dimensional stability
+  statement on bounded \(\mathcal S_p\)-sets.
 \end{remark}
 
 Trace-norm minimality fixes the normal minimizers, but the determinant
@@ -1201,6 +1330,62 @@ case.
   these profiles survive quasinilpotent stabilization at zero. The final
   assertion follows because the normal cyclic model has only one-by-one
   Jordan blocks at its non-zero eigenvalues.
+\end{proof}
+
+\begin{theorem}[Stable non-zero skeleton under quasinilpotent stabilization]
+  \label{thm:stable-nonzero-skeleton-classification}
+  Let \(T\in\sone(H)\), \(T'\in\sone(H')\), and suppose that
+  \[
+    \det(I-zT)=\det(I-zT')
+  \]
+  as germs at \(0\). For \(\lambda\neq0\), write
+  \[
+    \mathcal R_\lambda(T)
+    :=\bigcup_{k\ge1}\ker((T-\lambda I)^k),
+    \qquad
+    N_\lambda(T):=(T-\lambda I)|_{\mathcal R_\lambda(T)} .
+  \]
+  Then \(\mathcal R_\lambda(T)\) and \(\mathcal R_\lambda(T')\) are
+  finite-dimensional spaces of the same dimension. If there are
+  trace-class quasinilpotents \(Q,Q'\) such that
+  \(T\oplus Q\) and \(T'\oplus Q'\) are unitarily equivalent, then for
+  every \(\lambda\neq0\) the nilpotent root-space restrictions
+  \(N_\lambda(T)\) and \(N_\lambda(T')\), with their inherited Hilbert
+  norms, are unitarily equivalent.
+
+  For the cyclic determinant fiber over \(D_{\mathcal D}\), the
+  determinant-forced dimension of the non-zero root space at
+  \(\lambda\in\Sigma_{\mathcal D}\) is \(M_{\mathcal D}(\lambda)\), and
+  the unitary class of the nilpotent root-space restriction is a stable
+  invariant whenever such a fiber element is given. At the algebraic
+  similarity level, every partition of \(M_{\mathcal D}(\lambda)\) occurs
+  as the Jordan profile at \(\lambda\), and different profiles remain
+  distinct after arbitrary trace-class quasinilpotent stabilization at
+  zero.
+\end{theorem}
+
+\begin{proof}
+  Equality of Fredholm determinants fixes the non-zero spectrum with
+  algebraic multiplicity by \Cref{lem:fredholm-spectral-rigidity}. Hence
+  the root spaces at a fixed \(\lambda\neq0\) are finite-dimensional and
+  have the same dimension for \(T\) and \(T'\). If
+  \(T\oplus Q\) and \(T'\oplus Q'\) are unitarily equivalent, then
+  \Cref{thm:quasinilpotent-stabilization-nonzero-invariants} applies and
+  gives unitary equivalence of the restricted nilpotent root-space
+  operators at every non-zero \(\lambda\).
+
+  Now assume the determinant is \(D_{\mathcal D}\). The dimension formula
+  \[
+    \dim\mathcal R_\lambda(T)=M_{\mathcal D}(\lambda)
+  \]
+  follows from \Cref{prop:collapsed-spectral-multiplicities}. On this
+  finite-dimensional root space, \(T-\lambda I\) is nilpotent. Conversely,
+  \Cref{thm:nonnormal-jordan-classification} constructs determinant-fiber
+  elements with every prescribed partition of
+  \(M_{\mathcal D}(\lambda)\) at each non-zero \(\lambda\). The same
+  stabilization-invariance theorem then shows that two different
+  non-zero Jordan profiles cannot become unitarily equivalent after
+  adding quasinilpotent summands at zero.
 \end{proof}
 
 \begin{corollary}[Nonnormal determinant fibers are trace-norm unbounded]
