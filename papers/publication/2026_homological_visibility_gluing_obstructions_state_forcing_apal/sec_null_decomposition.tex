@@ -131,6 +131,12 @@ where $\{a_i\to a\}_{i\in I}$ is a covering family in $\Cov_{p,s}(a)$ and each $
 \res_{a_i\times_a a_j}^{a_i}(\sigma_i)=\res_{a_i\times_a a_j}^{a_j}(\sigma_j)
 \]
 for every pair $(i,j)$. Two such representatives define the same section of $G(a)$ if and only if they agree after pullback to some common refinement of their covers.
+For an arbitrary presheaf this statement is understood through
+\Cref{lem:strict-sheafification-representatives}: the first plus step
+gives local equality on refinements of overlaps, and pullback stability
+and transitivity replace the original cover by one on which the matching
+equalities hold strictly. Thus every element of $G(a)$ has a strict
+matching-family representative after refining the cover.
 
 Suppose first that $M,p\Vdash\CompSec_s(r)$. By \Cref{def:existence-levels}(ii), there exist a cover $\{a_i\to a\}_{i\in I}$ and local sections $\sigma_i\in F_{p,s}(a_i)$ satisfying exactly the displayed matching condition on the pairwise pullbacks. Hence these data determine a section of $G(a)$, so $G(a)\neq\varnothing$.
 
@@ -181,6 +187,64 @@ a=[r]_p,
 \]
 The restricted local-object presheaf $F_{p,s}|_{\mathcal C_a}$ is \emph{slice-separated} if it is separated at every object of $\mathcal C_a$.
 \end{definition}
+
+\begin{lemma}[Strict representatives after refinement]\label{lem:strict-sheafification-representatives}
+Let $\mathcal C$ be a site with pullbacks of covering families, let
+$F$ be a presheaf of sets on $\mathcal C$, and let
+$u:F\to aF$ be the sheafification unit. For every object $X$ and every
+section $\xi\in(aF)(X)$ there is a covering family
+\[
+\{X_i\to X\}_{i\in I}
+\]
+and sections $\sigma_i\in F(X_i)$ such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item the restrictions of $\sigma_i$ and $\sigma_j$ to each overlap
+$X_i\times_X X_j$ become equal after a covering refinement of that
+overlap;
+\item the family $(u(\sigma_i))_i$ glues in the sheaf $aF$ to $\xi$;
+\item after replacing the cover by the single transitive refinement
+obtained from the overlap refinements, the resulting pulled-back
+sections form a strict matching family in $F$ on the refined cover and
+still represent $\xi$.
+\end{enumerate}
+If $F$ is already separated on the relevant slice, then equality after
+the overlap refinements in \textup{(i)} is equivalent to equality on the
+original overlap.
+\end{lemma}
+
+\begin{proof}
+Use the usual plus construction. A section of $F^+(X)$ is represented by
+a covering family $\{X_i\to X\}$ and local sections
+$\sigma_i\in F(X_i)$ whose restrictions to $X_i\times_X X_j$ agree
+locally; two such representatives are identified after a common
+refinement. Since sheafification is $aF=(F^+)^+$, a section
+$\xi\in(aF)(X)$ is represented by a cover $\{Y_\ell\to X\}$ and sections
+\[
+\eta_\ell\in F^+(Y_\ell)
+\]
+which match locally in $F^+$. Choose for each $\eta_\ell$ a plus
+representative
+\[
+\{Y_{\ell m}\to Y_\ell\}_{m\in M_\ell},
+\qquad
+\sigma_{\ell m}\in F(Y_{\ell m}).
+\]
+By pullback stability, the composite family
+$\{Y_{\ell m}\to X\}_{\ell,m}$ is a cover of $X$ by transitivity of the
+pretopology. On every pairwise overlap of two members of this composite
+cover, equality of the corresponding $F^+$-sections means precisely that
+the two pulled-back $F$-sections agree after a further covering
+refinement. Choosing such refinements for all overlaps and then applying
+transitivity once more gives a single covering refinement of
+$\{Y_{\ell m}\to X\}_{\ell,m}$ on which the pulled-back $F$-sections agree
+strictly on actual overlaps. The sheaf $aF$ is insensitive to replacing a
+representative by a covering refinement, so the strict matching family on
+this final cover still represents $\xi$.
+
+If $F$ is separated on the slice, two sections over an overlap that agree
+after a covering of that overlap are already equal by separatedness at
+that overlap object. This gives the final assertion.
+\end{proof}
 
 \begin{corollary}[Sheafification removes gluing failure]\label{cor:sheafification-removes-glue}
 Let $\Sec_s^{\sharp}(r)$ denote global sectionability computed with the sheafified local object functor $a_{p,s}F_{p,s}$. In the pullback-based thin site of \Cref{def:local-reference-frame},
@@ -484,7 +548,9 @@ The identification
 \pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}
 \]
 from \Cref{prop:stackification-components} writes $\xi$ as a sheafified
-matching datum. Thus, after refining if necessary, there is a covering family
+matching datum. By \Cref{lem:strict-sheafification-representatives}, after
+replacing the original representative by one transitive refinement there is a
+covering family
 \[
 \{U_i\to a\}_{i\in I}
 \]
@@ -493,7 +559,7 @@ and a matching family
 \sigma_i\in F_{p,s}(U_i)
 \]
 whose sheafified component is $\xi$. Matching means that, after passing to a
-common refinement of the overlaps, the restrictions satisfy
+this refined cover, the restrictions satisfy the strict equalities
 \[
 \res_{U_{ij}}^{U_i}(\sigma_i)
 =
@@ -549,11 +615,11 @@ H^1(\mathcal C_a,\Band)=0,
 \]
 then surjectivity of $u_a$ implies that $\mathfrak P_r$ is globally conservative at $a$.
 \end{enumerate}
-If, moreover, $F_{p,s}|_{\mathcal C_a}$ is separated at $a$ in the sense of \Cref{def:separated-at-a}, then under the same vanishing hypothesis the following are equivalent:
+If, moreover, $F_{p,s}|_{\mathcal C_a}$ is slice-separated in the sense of \Cref{def:slice-separated-local-object}, then under the same vanishing hypothesis the following are equivalent:
 \begin{enumerate}[label=(\alph*),nosep]
 \item $\mathfrak P_r$ is globally conservative at $a$;
 \item $u_a$ is bijective;
-\item $F_{p,s}|_{\mathcal C_a}$ is a sheaf at $a$.
+\item $F_{p,s}|_{\mathcal C_a}$ satisfies the sheaf gluing condition for every cover of $a$.
 \end{enumerate}
 \end{theorem}
 
@@ -634,7 +700,7 @@ is a $\Band$-torsor, and the vanishing of $H^1(\mathcal C_a,\Band)$ gives a glob
 \]
 in $\mathfrak L_r(a)$. Thus every object of $\mathfrak L_r(a)$ is in the essential image of $(\iota_r)_a$, so $\mathfrak P_r$ is globally conservative at $a$.
 
-Assume now that $F_{p,s}|_{\mathcal C_a}$ is separated at $a$. If
+Assume now that $F_{p,s}|_{\mathcal C_a}$ is slice-separated. If
 \[
 u_a(\sigma)=u_a(\tau)
 \qquad
@@ -650,7 +716,7 @@ such that
 \qquad
 (\forall i\in I).
 \]
-Separatedness forces $\sigma=\tau$. Therefore $u_a$ is injective.
+Separatedness at the terminal object $a$ forces $\sigma=\tau$. Therefore $u_a$ is injective.
 
 Under $H^1(\mathcal C_a,\Band)=0$, part \textup{(i)} gives \textup{(a)}$\Rightarrow$\textup{(b)}, and part \textup{(ii)} together with injectivity gives \textup{(b)}$\Rightarrow$\textup{(a)}. It remains to compare \textup{(b)} and \textup{(c)}.
 
@@ -672,9 +738,26 @@ mapping to that element. By construction of the sheafification unit, the image $
 \]
 so
 \[
-\res_{U_i}^a(\sigma)=\sigma_i
+u_{U_i}\bigl(\res_{U_i}^a(\sigma)\bigr)=u_{U_i}(\sigma_i)
 \qquad
 (\forall i\in I).
+\]
+For each $i$, equality in the sheafification at $U_i$ gives a cover
+\[
+\{V_{ik}\to U_i\}_{k}
+\]
+such that
+\[
+\res_{V_{ik}}^{a}(\sigma)
+=
+\res_{V_{ik}}^{U_i}(\sigma_i)
+\qquad
+(\forall k).
+\]
+Since slice-separatedness gives separatedness at the cover object $U_i$,
+these refined equalities imply
+\[
+\res_{U_i}^a(\sigma)=\sigma_i.
 \]
 Thus every matching family over $a$ has a unique amalgamation, and $F_{p,s}|_{\mathcal C_a}$ is a sheaf at $a$.
 
