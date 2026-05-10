@@ -344,7 +344,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   classes and their cyclic decompositions have been computed, and let
   \(D_A\) be a common multiple of the recurrent periods. For each
   residue class \(r\bmod D_A\) there is an algorithm which outputs
-  rational numbers \(K_r>0\), \(\theta_r\in(0,1)\), and an integer
+  rational numbers \(0<\tau_r<\theta_r<1\), \(K_r>0\), and an integer
   \(N_r\) such that
   \[
     \|P^m-S_r\|_\infty\le K_r\theta_r^m
@@ -353,17 +353,18 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   where \(S_r=\lim_{k\to\infty}P^{kD_A+r}\). The output includes a
   finite certificate consisting of the strict inequalities
   \[
-    \rho(T)<\theta_r,\qquad
-    \rho(Q_{j,t}-\Pi_{j,t})<\theta_r^{d_j},
+    \rho(T)<\tau_r,\qquad
+    \rho(Q_{j,t}-\Pi_{j,t})<\tau_r^{d_j},
   \]
   where \(T=P_{TT}\), \(Q_{j,t}=P^{d_j}|_{R_{j,t}}\) is the primitive
   return chain on the cyclic class \(R_{j,t}\), and
   \(\Pi_{j,t}=\mathbf 1\pi_{j,t}\), plus rational resolvent bounds. The
-  proof object also records, for each residue, a rational monotonicity
-  threshold and the finite list of exact rational matrix inequalities
-  checked below that threshold. We assert computability of these data;
-  no polynomial bit-complexity or output-sensitive complexity bound is
-  claimed.
+  proof object also records, for each residue, an integer polynomial
+  degree \(J_r\), a monotonicity threshold for the inequality
+  \(C_rm^{J_r}\tau_r^m\le K_r\theta_r^m\), and the finite list of exact
+  rational matrix inequalities checked below that threshold. We assert
+  computability of these data; no polynomial bit-complexity or
+  output-sensitive complexity bound is claimed.
 \end{lemma}
 
 \begin{proof}
@@ -376,20 +377,21 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 
   Compute the characteristic polynomials of these rational blocks and
   isolate their complex roots as algebraic numbers. If the finite list
-  of roots is empty, take \(\theta_r=1/2\). Otherwise choose a rational
-  \(\theta_r\in(0,1)\) such that all eigenvalues of \(T\) have modulus
-  \(<\theta_r\) and all eigenvalues of every \(E_{j,t}\) have modulus
-  \(<\theta_r^{d_j}\). Each strict comparison is certified by rational
-  isolating rectangles whose squared moduli lie below the corresponding
-  rational threshold. This gives the spectral-radius part of the
-  certificate, including the case in which there are no non-peripheral
-  roots to control.
+  of roots is empty, take \(\tau_r=1/3\) and \(\theta_r=1/2\). Otherwise
+  choose a rational \(\tau_r\in(0,1)\) such that all eigenvalues of
+  \(T\) have modulus \(<\tau_r\) and all eigenvalues of every
+  \(E_{j,t}\) have modulus \(<\tau_r^{d_j}\); then choose any rational
+  \(\theta_r\) with \(\tau_r<\theta_r<1\). Each strict comparison is
+  certified by rational isolating rectangles whose squared moduli lie
+  below the corresponding rational threshold. This gives the
+  spectral-radius part of the certificate, including the case in which
+  there are no non-peripheral roots to control.
 
   It remains to turn spectral separation into a bound on powers without
   invoking a Jordan basis. Let \(A\) be any one of the rational blocks
-  and let \(\eta\in(0,1)\) be the corresponding target rate
-  (\(\eta=\theta_r\) for \(T\), and
-  \(\eta=\theta_r^{d_j}\) for \(E_{j,t}\)). Choose a rational
+  and let \(\eta\in(0,1)\) be the corresponding block rate
+  (\(\eta=\tau_r\) for \(T\), and
+  \(\eta=\tau_r^{d_j}\) for \(E_{j,t}\)). Choose a rational
   \(\gamma\) with \(\rho(A)<\gamma<\eta\). From the root isolating
   intervals we compute a rational \(\delta>0\) such that
   \[
@@ -413,17 +415,33 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   The standard finite-chain block formula writes \(P^m-S_r\), on
   \(m\equiv r\bmod D_A\), as a finite sum of products involving powers
   of \(T\), powers of the \(E_{j,t}\), and fixed rational connecting
-  matrices. The resolvent bounds above dominate every such product by a
-  rational multiple of either \(\theta_r^m\) or of a convolution
-  \(\sum_{\ell=0}^{m-1}\theta_r^\ell\theta_r^{m-1-\ell}\). Since
-  \(m\theta_r^{m-1}\le C_{\theta_r,N}\theta_r^m\) for all \(m\ge N\)
-  after an effectively found monotonicity threshold, these finitely many
-  estimates give rational \(K_r\) and \(N_r\). The certificate records
-  the explicit value of this monotone-tail threshold. The finitely many
-  powers in the residue class below that threshold are checked directly
-  by rational matrix powering and are included as exact inequalities;
-  if necessary, \(K_r\) is enlarged before the certificate is printed.
-  Thus the certificate verifies the displayed inequality for all
+  matrices. The resolvent bounds above dominate every direct block
+  product by a rational multiple of \(\tau_r^m\). A
+  transient-to-recurrent term with one entrance time is bounded by a
+  rational multiple of
+  \[
+    \sum_{\ell=0}^{m-1}\tau_r^\ell \tau_r^{m-1-\ell}
+    =m\tau_r^{m-1}.
+  \]
+  The finitely many higher-order block-chain convolutions that occur in
+  the canonical block formula are similarly bounded by
+  \(C_rm^{J_r}\tau_r^m\), for effectively computed rational \(C_r>0\)
+  and integer \(J_r\ge0\), after increasing \(C_r\) to absorb the
+  harmless factor \(\tau_r^{-1}\) from one-step entrance terms. Since
+  \(\tau_r/\theta_r<1\), the rational sequence
+  \(m^{J_r}(\tau_r/\theta_r)^m\) is eventually decreasing and tends to
+  \(0\). A finite rational search therefore produces \(K_r\) and
+  \(N_r\) such that
+  \[
+    C_rm^{J_r}\tau_r^m\le K_r\theta_r^m
+    \qquad(m\ge N_r).
+  \]
+  The certificate records \(C_r,J_r,K_r,N_r,\tau_r,\theta_r\) and the
+  explicit monotone-tail threshold. The finitely many powers in the
+  residue class below that threshold are checked directly by rational
+  matrix powering and are included as exact inequalities; if necessary,
+  \(K_r\) is enlarged before the certificate is printed. Thus the
+  certificate verifies the displayed inequality for all
   \(m\equiv r\bmod D_A\) with \(m\ge N_r\).
 \end{proof}
 
@@ -482,7 +500,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \]
     Again all cyclic indices are read modulo \(d_j\). This formula
     decides \(c_r=0\) or \(c_r>0\) by exact rational arithmetic.
-    \item Rational constants \(K_r>0\), \(\theta_r\in(0,1)\), and
+    \item Rational constants \(0<\tau_r<\theta_r<1\), \(K_r>0\), and
     integer thresholds \(N_r\) such that
     \[
       \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
@@ -491,11 +509,65 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     The certificate records the strict spectral-radius inequalities
     and rational resolvent bounds of
     \Cref{lem:effective-spectral-constants}, including the rational
-    numbers \(\theta_r\), rational upper bounds \(K_r\), the monotone
-    tail threshold, and the finite list of exact rational inequalities
-    checked before the tail. These data are enough to verify the
-    inequality mechanically, without reconstructing an algebraic Jordan
-    basis.
+    numbers \(\tau_r,\theta_r\), rational upper bounds \(K_r\), the
+    monotone tail threshold, and the finite list of exact rational
+    inequalities checked before the tail. These data are enough to
+    verify the inequality mechanically, without reconstructing an
+    algebraic Jordan basis.
+  \end{enumerate}
+  \smallskip
+  \noindent\textit{Certificate schema.}
+  For each residue class the certificate schema consists of the
+  following fields.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item Rational matrices \(P,T,Q_{j,t},E_{j,t}=Q_{j,t}-\Pi_{j,t}\),
+    the cyclic projections \(S_{j,t}\), and the rational vectors
+    \(\pi_{j,t},A_{j,t}\) solving the displayed linear systems.
+    \item Rational numbers \(c_r,\tau_r,\theta_r,K_r,C_r\), integers
+    \(J_r,N_r\), and a tail threshold \(N_r^{\mathrm{tail}}\), with
+    \(0<\tau_r<\theta_r<1\).
+    \item Root-isolation certificates for every characteristic
+    polynomial: rational rectangles, each containing exactly one complex
+    root and disjoint from the others, whose squared-modulus intervals
+    certify \(\rho(T)<\tau_r\) and
+    \(\rho(E_{j,t})<\tau_r^{d_j}\). The verifier checks these by
+    Sturm--subdivision or any equivalent exact rational root-counting
+    procedure on the rectangles and by rational interval arithmetic for
+    the squared moduli.
+    \item Resolvent certificates
+    \((\gamma_A,\delta_A,U_A,L_A)\) for
+    \(A\in\{T\}\cup\{E_{j,t}\}_{j,t}\), with
+    \(\rho(A)<\gamma_A<\tau_r\) for \(A=T\) and
+    \(\rho(A)<\gamma_A<\tau_r^{d_j}\) for \(A=E_{j,t}\). The verifier
+    checks, using the same isolating intervals and rational interval
+    arithmetic, that
+    \[
+      |\det(zI-A)|\ge\delta_A\quad(|z|=\gamma_A),
+      \qquad
+      \|\operatorname{adj}(zI-A)\|_\infty\le U_A,
+    \]
+    and hence that \(\|A^n\|_\infty\le L_A\gamma_A^n\) for all
+    \(n\ge0\).
+    \item A rational block-form expansion of \(P^m-S_r\) on the residue
+    class \(m\equiv r\pmod {D_A}\), together with the coefficient bound
+    proving
+    \[
+      \|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m
+      \qquad(m\equiv r\pmod {D_A}).
+    \]
+    The verifier obtains this bound by multiplying the listed rational
+    connector matrices and the recorded resolvent bounds in the
+    \(\ell^\infty\) operator norm, i.e. maximum absolute row sum.
+    \item The rational tail inequality
+    \[
+      C_rm^{J_r}\tau_r^m\le K_r\theta_r^m
+      \qquad(m\ge N_r^{\mathrm{tail}})
+    \]
+    and exact rational matrix-power checks for every
+    \(m<N_r^{\mathrm{tail}}\) in the residue class that is not covered
+    by the tail. The displayed exponential estimate is accepted with
+    \(N_r\) no smaller than both the finite-check cutoff and
+    \(N_r^{\mathrm{tail}}\).
   \end{enumerate}
   With this output, the following holds for every
   \(m\ge M_r\) satisfying \(m\equiv r\pmod {D_A}\).
@@ -529,12 +601,13 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   The compressed output is the tuple
   \[
     \mathcal C=(D_A,\{R_j,d_j,(R_{j,t})_t,\pi_{j,t},A_{j,t}\}_{j,t},
-      \{K_r,\theta_r,N_r,M_r,c_r\}_{r\bmod D_A})
+      \{c_r,\tau_r,\theta_r,K_r,C_r,J_r,N_r,M_r\}_{r\bmod D_A})
   \]
   when all residues are enumerated. If \(D_A\) is large, the same data
   may instead be represented by the class list together with an exact
-  residue-evaluation procedure for \(r\mapsto c_r,K_r,\theta_r,N_r,M_r\)
-  and the corresponding proof object from part~\textup{(e)};
+  residue-evaluation procedure for
+  \(r\mapsto c_r,\tau_r,\theta_r,K_r,C_r,J_r,N_r,M_r\) and the
+  corresponding proof object from part~\textup{(e)};
   any final all-large constant obtained by taking a minimum over
   residues is then represented by this finite minimization procedure.
   Printing the full residue table is charged to output size \(D_A\).
@@ -584,17 +657,19 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   on \(R_{j,t+r}\) proves \eqref{eq:compressed-cr}.
 
   Applying \Cref{lem:effective-spectral-constants} to \(P\) and
-  \(D_A\) gives \(K_r,\theta_r,N_r\) and
+  \(D_A\) gives \(\tau_r,\theta_r,K_r,N_r\) and
   \[
     \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
     \qquad(m\equiv r\bmod {D_A},\ m\ge N_r).
   \]
-  The associated certificate consists of rational \(\theta_r\), a
-  rational bound \(K_r\), the spectral-radius proof objects for the
-  transient and return-error blocks, the rational resolvent bounds, and
-  the finite rational power checks preceding the monotone tail. Thus the
-  quantified inequality used below is part of the output, not an
-  unverifiable analytic side condition.
+  The associated certificate consists of rational
+  \(\tau_r,\theta_r,K_r,C_r\), the integer \(J_r\), the
+  spectral-radius proof objects for the transient and return-error
+  blocks, the rational resolvent bounds, the rational inequality
+  \(C_rm^{J_r}\tau_r^m\le K_r\theta_r^m\) on the tail, and the finite
+  rational power checks preceding the tail. Thus the quantified
+  inequality used below is part of the output, not an unverifiable
+  analytic side condition.
 
   Choose \(A_b,B_b>0\) and \(M_b\) from
   \Cref{lem:base-prime-count}, so that
