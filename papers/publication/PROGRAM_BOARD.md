@@ -2,39 +2,46 @@
 
 全量论文状态表。管线 (`oracle_pipeline.py`) 读此文件决定调度：跳过已投/已发表/骨架，处理 P0–P7 阶段论文。
 
-更新日期：2026-04-20
+更新日期：2026-05-10
 
 ## 状态编码
 
 - `已投 MM-DD` — 已投稿，等待编辑决定
 - `已投 MM-DD 审稿中` / `R&R` / `接收` / `拒稿` — 投稿后续
+- `✅ 可投稿` — 管线终审通过 (Oracle accept + Claude submit)，等用户手动 submit
 - `P0`–`P7` — 管线阶段（未投稿）
 - `P4-MAJOR` — P4 门禁返回 MAJOR_REVISION
 - `待分诊` — 有 main.tex 但未入管线
 - `骨架` — 无 main.tex
+
+## 手动投稿队列 (2026-05-10 快照)
+
+| 论文 | 目标期刊 | 备注 |
+|------|---------|------|
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | C round 8，最近 5 轮 Oracle accept + Claude submit (4/5)。可手动投稿；需准备 cover letter + metadata |
 
 ## 全量状态表
 
 | 目录 | 目标期刊 | 状态 | 改投记录 |
 |------|---------|------|---------|
 | `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Q. | 拒稿 04-20, 转投 FQ | ETDS→JNT→FQ | JNT editor 推荐 FQ; fallback: JSC (IF 1.1) |
-| `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS | B-DONE (Oracle: minor revision, 1 rounds) | SIADS→ETDS | fallback: Israel J. Math (IF 1.0), DCDS-A (IF 1.1) |
+| `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS | C-7 (Oracle minor revision; Claude revise) — 接近终审通过 | SIADS→ETDS | fallback: Israel J. Math (IF 1.0), DCDS-A (IF 1.1) |
 | `submitted_2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | 待核实 | 已投 04-07（期刊未证实） | Folder/old board said ETDS, but no cover letter/receipt/metadata found; user notes 05-10 was first ETDS |
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
 | `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | Ramanujan J. | 拒稿 04-20, 转投 RJ | RNT→RJ | 两位 editor 均推荐 FQ; fallback: FQ, Bull. Malaysian (IF 1.2) |
-| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | B-PAUSED (Oracle infra retry needed at B5) | Nonlinearity→DCDS-A | fallback: J. Diff. Eqs. Apps. (IF 1.1), Dynamical Systems |
+| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | B-5 (Oracle minor revision; PAUSED, infra retry needed) | Nonlinearity→DCDS-A | fallback: J. Diff. Eqs. Apps. (IF 1.1), Dynamical Systems |
 | `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | J. Theoret. Probab. | 已投, peer review 中 (7 reviewers invited) | QTDS→JTP | 标题改为 "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type" |
 | `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | JNT | 已投 04-07 | — |
 | `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=4)) | — |
 | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=8)) | — |
-| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | B-STUCK (Oracle: minor revision, 20 rounds — needs human review) | — |
+| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | B-20 (Oracle: minor revision，连续 2 轮 minor — 已达 round cap，可考虑接受 minor 后投稿) | — |
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | — |
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | 已投 05-10 | ScholarOne ETDS; Oracle+Claude pass, 9 rounds |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | B-PAUSED (Oracle infra retry needed at B11) | — |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | A-DONE (audit 7/10, 11 rounds, 2 final A3) | — |
-| `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | — |
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | B-DONE / next submission candidate (needs cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | B-3 (Oracle: accept) — 待进入 C 终审 | — |
+| `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-20 (Oracle: reject — 已达 round cap，建议放弃或重新选题) | — |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | ✅ 可投稿 — C-8 (Oracle accept + Claude submit, 4/5 轮一致；需 cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
