@@ -77,10 +77,12 @@ normalization agree.  Applying this at every coordinate for $m=2$ gives
 $\Phi_{1,2}=\Phi_2$.
 \end{proof}
 
-\begin{theorem}[Metallic two-window rigidity]
+\begin{theorem}[Metallic two-window rigidity within the constant-type model]
 \label{thm:metallic-two-window-rigidity}
 \leanpending{paper_fibonacci_stabilization_metallic_two_window_rigidity}
-For every integer $A\ge 2$ the following statements hold.
+Within the constant-type metallic finite-window normalization family of
+Definition~\ref{def:metallic-window-data}, for every integer $A\ge 2$ the
+following statements hold.
 \begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
   \item For every $m\ge 1$, the restriction
   \[
@@ -121,7 +123,8 @@ For every integer $A\ge 2$ the following statements hold.
 \end{enumerate}
 Consequently, within the constant-type metallic finite-window normalization
 family of Definition~\ref{def:metallic-window-data}, the golden case $A=1$ is
-the only case in which a nontrivial two-window branch locus remains.
+the only member of this model in which a nontrivial two-window branch locus
+remains.
 \end{theorem}
 
 \begin{proof}
@@ -202,6 +205,13 @@ The overlap graph $\mathcal G_m$ gives a concrete presentation of $Y_m$. Above
 threshold this presentation is not merely convenient; it is the intrinsic
 minimal right-resolving presentation.
 
+We use the following standard characterization of the right Fischer cover of
+an irreducible synchronized sofic shift: it is the unique essential
+irreducible right-resolving follower-separated presentation whose vertices are
+the follower sets of intrinsically synchronizing words. This is the
+Fischer--Krieger cover construction in its right-resolving form; see
+\cite{Fischer1975,Krieger1984,Krieger1987,LindMarcus1995,BoyleKitchensMarcus1985,Johansen2011}.
+
 For a vertex $u\in V_m=\{0,1\}^{m-1}$, let
 \[
 \mathcal F^+(u):=
@@ -218,45 +228,50 @@ presenting $X$. Assume that:
   \item $G$ is right-resolving;
   \item $G$ is follower-separated, meaning distinct vertices have distinct
   right follower languages in $X$;
-  \item every vertex of $G$ is the terminal vertex of a path whose label is an
-  intrinsically synchronizing word of $X$.
+  \item every vertex $v$ of $G$ is the terminal vertex of a path whose label
+  $w_v$ is intrinsically synchronizing for $X$ and labels a unique path in
+  $G$.
 \end{enumerate}
 Then $G$ is the right Fischer cover of $X$. In particular, every
 right-resolving presentation of $X$ has at least as many vertices as $G$.
 \end{lemma}
 
 \begin{proof}
-For an irreducible sofic shift, the right Fischer cover is the canonical
-follower-separated right-resolving presentation whose vertices are the follower
-sets $F_X(w)$ reached by intrinsically synchronizing words $w$
-\cite[Section~3.3]{LindMarcus1995}.  Because $G$ is follower-separated, the
-map
+For each vertex $v$, fix a word $w_v$ as in hypothesis (iv).  We first show
+that the right follower set of the word $w_v$ in the shift is exactly the
+right follower language of the terminal vertex:
 \[
-v\longmapsto \mathcal F^+_G(v)
+F_X(w_v)=\mathcal F_G^+(v).
 \]
-embeds the vertices of $G$ into the follower-set vertices of the Fischer-cover
-construction.
+If $z\in F_X(w_v)$, then $w_vz$ occurs as the label of a path in the
+presentation $G$.  The prefix labeled $w_v$ must be the unique path labeled
+$w_v$, and hence it ends at $v$; the suffix path labeled $z$ starts at $v$.
+Thus $z\in\mathcal F_G^+(v)$.  The reverse inclusion is immediate because any
+path starting at $v$ may be appended to the fixed path labeled $w_v$ ending at
+$v$.  Therefore every vertex of $G$ is precisely the follower set of an
+intrinsically synchronizing word.
 
-Hypothesis (iv) shows that every vertex of $G$ is one of these synchronizing
-follower-set vertices. Conversely, let $s$ be any intrinsically synchronizing
-word of $X$. Since $G$ presents $X$, there is a path in $G$ labeled by $s$,
-ending at some vertex $v$. If two such paths ended at vertices with different
-follower languages, then two different futures after $s$ would be possible in
-the presentation, contradicting intrinsic synchronization and
-follower-separatedness. Thus $F_X(s)=\mathcal F^+_G(v)$, so every Fischer-cover
-vertex also occurs in the displayed image. Essentiality and irreducibility
-exclude transient vertices.
+By the standard Fischer-cover characterization recalled above, an essential
+irreducible right-resolving follower-separated presentation whose vertices are
+precisely follower sets of intrinsically synchronizing words is the right
+Fischer cover.  The displayed identity verifies that hypothesis for $G$:
+under the map $v\mapsto F_X(w_v)$, each vertex is one of the canonical
+synchronizing follower-set vertices, and follower-separatedness makes the
+identification injective.
 
-The edge sets also agree. If $v\xrightarrow{a}w$ is an edge in $G$ and $s$ is
-an intrinsically synchronizing label ending at $v$, then $sa$ is intrinsically
-synchronizing whenever it is admissible, and the right-resolving transition
-from $F_X(s)$ under the symbol $a$ is
-$F_X(sa)=\mathcal F^+_G(w)$. Thus the vertex identification preserves and
-reflects labeled edges.
-
-Therefore the labeled graph $G$ is isomorphic to the right Fischer cover of
-$X$.  The stated lower bound for right-resolving presentations is the standard
-minimality property of the right Fischer cover.
+It remains only to check that labeled edges agree under this vertex
+identification.  If $v\xrightarrow{a}u$ is an edge of $G$, then right
+resolvingness gives
+\[
+\{z:az\in\mathcal F_G^+(v)\}=\mathcal F_G^+(u),
+\]
+which is the canonical follower-set transition
+$F_X(w_v)\xrightarrow{a}F_X(w_va)$. Conversely, every canonical transition
+arises from an admissible symbol after the corresponding vertex, hence from an
+edge of $G$ because $G$ presents $X$ and is right-resolving. Thus the
+identification preserves and reflects all labeled edges, so $G$ is isomorphic
+to the right Fischer cover of $X$.  The lower bound for right-resolving
+presentations is the usual minimality of the right Fischer cover.
 \end{proof}
 
 \begin{theorem}[Fischer cover of the stabilized image]
@@ -318,8 +333,9 @@ above proves follower separation, which is hypothesis (iii).
 
 Finally, every vertex is the terminal vertex of some length-$m$ path: append
 the symbols of that vertex after any initial bit. By (i), the label of every
-length-$m$ path is intrinsically synchronizing. Thus every vertex is reached
-by an intrinsically synchronizing word, verifying hypothesis (iv).
+length-$m$ path labels a unique path and is intrinsically synchronizing. Thus
+every vertex is reached by a unique-path intrinsically synchronizing word,
+verifying hypothesis (iv).
 Lemma~\ref{lem:fischer-cover-criterion} therefore identifies $\mathcal G_m$
 with the right Fischer cover of $Y_m$ and gives the lower bound for all
 right-resolving presentations. The vertex set has cardinality
