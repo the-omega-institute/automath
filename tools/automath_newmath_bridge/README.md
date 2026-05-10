@@ -29,6 +29,10 @@ content.
 - `bridge_gates.py` runs deterministic local gates over the bridge inbox.
 - `bridge_supervisor.py` periodically fetches both repos, runs discovery, runs
   gates, and can write local ignored review packets.
+- `bridge_heavy_loop.py` runs slow synthesis and Automath writeback dry-runs on
+  an isolated cadence so the main scanner can keep polling.
+- `bridge_watchdog.py` supervises persistent supervisor/heavy-loop health
+  without joining either work queue.
 - `bridge_to_automath_killo_golden.py` converts accepted NewMath-to-Automath
   bridge records into Automath distillation candidates and invokes the existing
   Killo/golden Claude writeback lane when explicitly requested.
@@ -42,6 +46,60 @@ content.
   artifacts, not in intermediate packet files.
 
 The bridge ledger lives at `docs/bridge/automath-newmath-bridge.md`.
+
+## Loop separation
+
+The bridge uses three independent loops:
+
+- `bridge_supervisor.py` is the main scanner. It fetches configured refs,
+  updates ignored seen-state, refreshes the agent queue, and runs deterministic
+  gates.
+- `bridge_heavy_loop.py` handles slower synthesis and Automath writeback
+  dry-runs from already generated artifacts. Restarting or changing it must not
+  interrupt the main scanner.
+- `bridge_watchdog.py` checks that the other loops remain healthy. It writes
+  only ignored status/log files and can optionally push the current `codex/*`
+  audit branch when it is clean and ahead of its upstream.
+
+Each loop has its own stop file:
+
+```text
+tools/automath_newmath_bridge/.bridge_supervisor.stop
+tools/automath_newmath_bridge/.bridge_heavy_loop.stop
+tools/automath_newmath_bridge/.bridge_watchdog.stop
+```
+
+The watchdog's ignored outputs are:
+
+```text
+tools/automath_newmath_bridge/logs/bridge_watchdog.log
+tools/automath_newmath_bridge/state/bridge_watchdog_status.json
+```
+
+One health pass:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_watchdog.py --once
+```
+
+Persistent watchdog:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_watchdog.py \
+  --poll-interval 900
+```
+
+Safe branch push is opt-in and restricted to the current clean `codex/*` audit
+branch:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_watchdog.py \
+  --poll-interval 900 \
+  --push-safe-current-branch
+```
+
+The watchdog does not create PRs, merge BEDC branches, push production bridge
+branches, or commit runtime artifacts.
 
 ## Artifact kinds
 
