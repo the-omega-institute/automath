@@ -295,10 +295,20 @@ def run_gates(config_path: Path, *, allow_publication_risk: bool) -> list[dict[s
     return results
 
 
-def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: bool, dry_run: bool) -> dict[str, Any]:
+def run_automath_writeback(
+    config: dict[str, Any],
+    *,
+    apply: bool,
+    push_branch: bool,
+    dry_run: bool,
+    allow_current_branch: bool,
+) -> dict[str, Any]:
     cfg = config.get("automath_writeback")
     if not isinstance(cfg, dict) or not cfg.get("enabled", False):
         return {"status": "disabled"}
+    branch = str(cfg.get("branch") or "bridge/automath-newmath-consumption")
+    if allow_current_branch and not apply and not push_branch:
+        branch = current_branch(REPO_ROOT)
     cmd = [
         sys.executable,
         str(SCRIPT_DIR / "bridge_to_automath_killo_golden.py"),
@@ -307,7 +317,7 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
         "--runtime-dir",
         str(REPO_ROOT / str(cfg.get("runtime_candidate_dir") or "tools/automath_newmath_bridge/inbox/automath_writeback_candidates")),
         "--branch",
-        str(cfg.get("branch") or "bridge/automath-newmath-consumption"),
+        branch,
         "--limit",
         str(int(cfg.get("max_candidates_per_pass") or 1)),
     ]
@@ -323,6 +333,7 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
             "status": "failed",
             "apply": apply,
             "push_branch": push_branch,
+            "branch": branch,
             "reason": (result.stderr or result.stdout).strip()[:2000],
         }
     try:
@@ -333,6 +344,7 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
         "status": "applied" if apply else "dry_run",
         "apply": apply,
         "push_branch": push_branch,
+        "branch": branch,
         **payload,
     }
 
@@ -411,6 +423,7 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
             apply=automath_apply,
             push_branch=automath_push,
             dry_run=args.automath_writeback_dry_run,
+            allow_current_branch=args.allow_current_branch,
         )
         _log(f"automath_writeback: {wb_result}")
         if wb_result.get("status") == "failed":
