@@ -115,7 +115,11 @@ For \(m\ge 0\), write
   \]
   exist; the matrices \(S_r\) include both the recurrent-class limits
   and the absorption terms from transient states into those recurrent
-  classes. Consequently there are \(C>0\) and \(\theta\in(0,1)\) such
+  classes. This theorem uses these as qualitative Markov-chain limits;
+  the certified computable version, with rational tail constants and
+  verifiable proof objects, is isolated in
+  \Cref{lem:effective-spectral-constants,thm:effective-fixed-dfa-prime-obstruction}.
+  Consequently there are \(C>0\) and \(\theta\in(0,1)\) such
   that
   \[
     P^m=S_{m\bmod D_A}+E_m,
@@ -207,9 +211,10 @@ the prime corollaries below.
     \qquad (x\ge5393)
   \]
   \cite{Dusart2010}. We use this source only for the displayed explicit
-  numerical inequality; any later published explicit-PNT estimate with
-  comparable constants may be substituted without changing the
-  argument. Since \(\log 5393>2\), for \(x\ge5393\) we have
+  numerical inequality. This is enough for the present lemma because no
+  later argument depends on sharp constants; any published explicit-PNT
+  estimate with comparable constants may be substituted without changing
+  the argument. Since \(\log 5393>2\), for \(x\ge5393\) we have
   \[
     0\le \pi(x)-\frac{x}{\log x}
     \le \frac{x}{\log x-1}-\frac{x}{\log x}
@@ -353,8 +358,12 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \]
   where \(T=P_{TT}\), \(Q_{j,t}=P^{d_j}|_{R_{j,t}}\) is the primitive
   return chain on the cyclic class \(R_{j,t}\), and
-  \(\Pi_{j,t}=\mathbf 1\pi_{j,t}\), plus rational resolvent bounds and
-  a monotonicity threshold proving the displayed estimate.
+  \(\Pi_{j,t}=\mathbf 1\pi_{j,t}\), plus rational resolvent bounds. The
+  proof object also records, for each residue, a rational monotonicity
+  threshold and the finite list of exact rational matrix inequalities
+  checked below that threshold. We assert computability of these data;
+  no polynomial bit-complexity or output-sensitive complexity bound is
+  claimed.
 \end{lemma}
 
 \begin{proof}
@@ -366,12 +375,13 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \(Q_{j,t}\) is primitive stochastic.
 
   Compute the characteristic polynomials of these rational blocks and
-  isolate their complex roots. If the finite list of roots is empty,
-  take \(\theta_r=1/2\). Otherwise choose a rational
+  isolate their complex roots as algebraic numbers. If the finite list
+  of roots is empty, take \(\theta_r=1/2\). Otherwise choose a rational
   \(\theta_r\in(0,1)\) such that all eigenvalues of \(T\) have modulus
   \(<\theta_r\) and all eigenvalues of every \(E_{j,t}\) have modulus
-  \(<\theta_r^{d_j}\). The strict comparisons are certified by the
-  isolating intervals. This gives the spectral-radius part of the
+  \(<\theta_r^{d_j}\). Each strict comparison is certified by rational
+  isolating rectangles whose squared moduli lie below the corresponding
+  rational threshold. This gives the spectral-radius part of the
   certificate, including the case in which there are no non-peripheral
   roots to control.
 
@@ -408,10 +418,12 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \(\sum_{\ell=0}^{m-1}\theta_r^\ell\theta_r^{m-1-\ell}\). Since
   \(m\theta_r^{m-1}\le C_{\theta_r,N}\theta_r^m\) for all \(m\ge N\)
   after an effectively found monotonicity threshold, these finitely many
-  estimates give rational \(K_r\) and \(N_r\). The finitely many earlier
-  powers in the residue class are checked directly by rational matrix
-  powering and, if necessary, \(K_r\) is enlarged. Thus the certificate
-  verifies the displayed inequality for all
+  estimates give rational \(K_r\) and \(N_r\). The certificate records
+  the explicit value of this monotone-tail threshold. The finitely many
+  powers in the residue class below that threshold are checked directly
+  by rational matrix powering and are included as exact inequalities;
+  if necessary, \(K_r\) is enlarged before the certificate is printed.
+  Thus the certificate verifies the displayed inequality for all
   \(m\equiv r\bmod D_A\) with \(m\ge N_r\).
 \end{proof}
 
@@ -478,9 +490,12 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \]
     The certificate records the strict spectral-radius inequalities
     and rational resolvent bounds of
-    \Cref{lem:effective-spectral-constants}. These data are enough to
-    verify the inequality mechanically, without reconstructing an
-    algebraic Jordan basis.
+    \Cref{lem:effective-spectral-constants}, including the rational
+    numbers \(\theta_r\), rational upper bounds \(K_r\), the monotone
+    tail threshold, and the finite list of exact rational inequalities
+    checked before the tail. These data are enough to verify the
+    inequality mechanically, without reconstructing an algebraic Jordan
+    basis.
   \end{enumerate}
   With this output, the following holds for every
   \(m\ge M_r\) satisfying \(m\equiv r\pmod {D_A}\).
@@ -518,7 +533,8 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \]
   when all residues are enumerated. If \(D_A\) is large, the same data
   may instead be represented by the class list together with an exact
-  residue-evaluation procedure for \(r\mapsto c_r,K_r,\theta_r,N_r,M_r\);
+  residue-evaluation procedure for \(r\mapsto c_r,K_r,\theta_r,N_r,M_r\)
+  and the corresponding proof object from part~\textup{(e)};
   any final all-large constant obtained by taking a minimum over
   residues is then represented by this finite minimization procedure.
   Printing the full residue table is charged to output size \(D_A\).
@@ -573,6 +589,12 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
     \qquad(m\equiv r\bmod {D_A},\ m\ge N_r).
   \]
+  The associated certificate consists of rational \(\theta_r\), a
+  rational bound \(K_r\), the spectral-radius proof objects for the
+  transient and return-error blocks, the rational resolvent bounds, and
+  the finite rational power checks preceding the monotone tail. Thus the
+  quantified inequality used below is part of the output, not an
+  unverifiable analytic side condition.
 
   Choose \(A_b,B_b>0\) and \(M_b\) from
   \Cref{lem:base-prime-count}, so that
@@ -993,6 +1015,15 @@ be the period of \(B_N\).
   \]
   for some spectral projectors \(E_\ell\), constant \(C>0\), and
   \(\theta_N\in(0,1)\), where \(\omega_{d_N}:=e^{2\pi i/d_N}\).
+  Equivalently, on cyclic classes \(C_i,C_j\), if
+  \(h\equiv j-i\pmod {d_N}\) and \(x\in C_i,y\in C_j\), then the
+  irreducible periodic Perron--Frobenius entry asymptotic gives
+  \[
+    \lambda^{-(kd_N+h)}(B_N^{kd_N+h})_{xy}
+      \longrightarrow h_y\nu_x>0
+  \]
+  for positive Perron vectors \(h,\nu\) normalized on the corresponding
+  cyclic classes.
   For \(0\le r<d_N\) set
   \[
     S_r:=\sum_{\ell=0}^{d_N-1}\omega_{d_N}^{\ell r}E_\ell
@@ -1026,15 +1057,8 @@ be the period of \(B_N\).
   applies, so \(q_N\) and \(f\) lie in cyclic classes whose difference
   is \(r\), and
   \((B_N^{kd_N+r})_{q_N f}>0\) for all sufficiently large \(k\).
-  The periodic Perron--Frobenius entry asymptotic is sharper than mere
-  eventual positivity: if \(q_N\in C_i\), \(f\in C_{i+r}\), and \(h,\nu\)
-  are positive right and left Perron vectors on the corresponding
-  cyclic classes, then
-  \[
-    \lambda^{-(kd_N+r)}(B_N^{kd_N+r})_{q_N f}
-      \longrightarrow h_f\nu_{q_N}>0 .
-  \]
-  Hence \((S_r)_{q_N f}>0\), and therefore
+  Applying the entry asymptotic displayed above with \(x=q_N\) and
+  \(y=f\) gives \((S_r)_{q_N f}>0\), and therefore
   \(d_r=u_N^{\mathsf T}S_rv_N>0\).
   Substituting into the expansion gives
   \[
@@ -1207,7 +1231,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   This is the standard conditional-density conclusion for deterministic
   presentations, specialized to our notation; compare
   \cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
-  For completeness we spell out the reduction used below.
+  The proof below is included only to identify the constants used later:
+  \Cref{lem:substochastic-product-expansion} supplies the product
+  expansion, and \Cref{lem:trim-density} supplies the positive
+  denominator constants on relevant residue classes.
   Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
   \(B_N\). By \Cref{lem:substochastic-product-expansion}, there are
   \(D'\ge 1\), non-negative constants \(e_0,\dots,e_{D'-1}\), and
@@ -1249,6 +1276,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 
 Only the following finite-budget consequence is used in the prime-slice
 applications.
+It is the exact form of the background relative-density theorem needed
+below, after the substochastic product expansion and the positive
+periodic denominator constants have already been supplied in
+\Cref{lem:substochastic-product-expansion,lem:trim-density}.
 
 \begin{corollary}[Finite-budget lemma for a trim presentation]
   \label{cor:relative-finite-budget-obstruction}
