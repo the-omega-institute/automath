@@ -535,6 +535,8 @@ class PaperState:
     stage_b_verdicts: list[str] = field(default_factory=list)
     stage_b_passed: bool = False
     stage_b_all_issues: list[str] = field(default_factory=list)  # Accumulated Oracle issues across all rounds
+    stage_b_issue_streaks: dict[str, int] = field(default_factory=dict)
+    stage_b_reject_classes: list[dict] = field(default_factory=list)
     # Multi-turn deepen + fresh-eval (per user spec: deepen until same Conv
     # accepts, then a NEW Conv first-look; final pass = fresh first-reply
     # accepts).
@@ -555,6 +557,8 @@ class PaperState:
 
     # Full history
     history: list[dict] = field(default_factory=list)
+    events: list[dict] = field(default_factory=list)
+    retarget_history: list[dict] = field(default_factory=list)
 
     # Meta
     pdf_path: str = ""
@@ -602,6 +606,8 @@ class PaperState:
             "stage_b_verdicts": self.stage_b_verdicts,
             "stage_b_passed": self.stage_b_passed,
             "stage_b_all_issues": self.stage_b_all_issues[-200:],  # keep last 200 issue strings
+            "stage_b_issue_streaks": self.stage_b_issue_streaks,
+            "stage_b_reject_classes": self.stage_b_reject_classes[-20:],
             "stage_b_deepen_conv_id": self.stage_b_deepen_conv_id,
             "stage_b_fresh_attempts": self.stage_b_fresh_attempts,
             "stage_b_last_fix_summary": self.stage_b_last_fix_summary[-2000:],
@@ -613,6 +619,8 @@ class PaperState:
             "stage_d_backflow_items": self.stage_d_backflow_items,
             "stage_d_passed": self.stage_d_passed,
             "history": self.history[-50:],  # keep last 50 entries
+            "events": self.events[-200:],
+            "retarget_history": self.retarget_history,
             "pdf_path": self.pdf_path,
             "started_at": self.started_at,
             "completed_at": self.completed_at,
@@ -667,9 +675,13 @@ def load_state(paper_name: str) -> Optional[PaperState]:
         s.stage_a_split_candidates = data.get("stage_a_split_candidates", [])
         s.stage_b_verdicts = data.get("stage_b_verdicts", [])
         s.stage_b_all_issues = data.get("stage_b_all_issues", [])
+        s.stage_b_issue_streaks = data.get("stage_b_issue_streaks", {})
+        s.stage_b_reject_classes = data.get("stage_b_reject_classes", [])
         s.stage_c_verdicts = data.get("stage_c_verdicts", [])
         s.stage_d_backflow_items = data.get("stage_d_backflow_items", [])
         s.history = data.get("history", [])
+        s.events = data.get("events", [])
+        s.retarget_history = data.get("retarget_history", [])
         return s
     except Exception:
         return None
@@ -3519,6 +3531,59 @@ def parse_oracle_issues(review_text: str) -> list[dict]:
     return issues
 
 
+_ORACLE_FIT_REJECT_RE = re.compile(
+    r"(too narrow|too specialized|specialized computational|"
+    r"computational note|not (a )?new (general )?"
+    r"(theory|result|contribution)|below.{0,20}standard for|"
+    r"out of (the )?(scope|journal mandate|journal'?s scope|"
+    r"aims and scope)|insufficient (novelty|generality)|"
+    r"not of sufficient interest|not suitable for|wrong venue|"
+    r"better suited (for|to))",
+    re.IGNORECASE,
+)
+
+
+def _classify_oracle_reject(response_text: str) -> str:
+    """Classify an Oracle reject as journal-fit driven or technical."""
+    matches = {
+        re.sub(r"\s+", " ", m.group(0).lower()).strip()
+        for m in _ORACLE_FIT_REJECT_RE.finditer(response_text or "")
+    }
+    return "fit" if len(matches) >= 2 else "technical"
+
+
+_ISSUE_LOCATION_RE = re.compile(
+    r"(prop(?:osition)?\.?|thm|theorem|lemma|cor(?:ollary)?|"
+    r"sec(?:tion)?|eq(?:uation)?\.?)\s*[\(\d.]+\)?",
+    re.IGNORECASE,
+)
+
+
+def _canonical_issue_key(issue_str: str) -> str:
+    """Reduce an Oracle issue string to a stable location-focused key."""
+    normalized = re.sub(r"^\d+\s*[|.:]\s*", "", issue_str or "").lower()
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    markers = []
+    canonical_names = {
+        "prop": "prop", "prop.": "prop", "proposition": "prop",
+        "proposition.": "prop", "thm": "theorem", "theorem": "theorem",
+        "lemma": "lemma", "cor": "cor", "corollary": "cor",
+        "sec": "section", "section": "section",
+        "eq": "equation", "eq.": "equation", "equation": "equation",
+        "equation.": "equation",
+    }
+    for m in _ISSUE_LOCATION_RE.finditer(normalized):
+        marker = re.sub(r"\s+", " ", m.group(0).lower()).strip()
+        parts = marker.split(" ", 1)
+        if len(parts) == 2:
+            name = canonical_names.get(parts[0], parts[0])
+            marker = f"{name} {parts[1]}"
+        markers.append(marker)
+    if markers:
+        return " ".join(markers)
+    return normalized[:80]
+
+
 _VERDICT_PATTERNS = (
     r"minor\s+revision",
     r"major\s+revision",
@@ -5714,6 +5779,16 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     f"{len(issues)} issues "
                     f"(total accumulated: {len(state.stage_b_all_issues)} rounds)")
 
+        if verdict in {"reject", "major revision"}:
+            reject_class = _classify_oracle_reject(response)
+            state.stage_b_reject_classes.append({
+                "round": rnd,
+                "verdict": verdict,
+                "class": reject_class,
+            })
+            state.stage_b_reject_classes = state.stage_b_reject_classes[-20:]
+            save_state(state)
+
         # ── Gate: deepen Conv accept → fresh-eval Conv → Stage C ────
         # Stage B passes only when a NEW conversation (no prior context)
         # accepts on first reply. The deepen Conv has been refining with
@@ -5759,6 +5834,151 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 
         # Update consecutive non-pass counter
         consecutive_nonpass += 1
+
+        recent_verdicts = state.stage_b_verdicts[-4:]
+        if (
+            len(recent_verdicts) == 4
+            and all(v in {"reject", "major revision"} for v in recent_verdicts)
+        ):
+            recent_classes = [
+                item for item in state.stage_b_reject_classes[-4:]
+                if item.get("verdict") in {"reject", "major revision"}
+            ]
+            fit_count = sum(1 for item in recent_classes
+                            if item.get("class") == "fit")
+            if recent_classes and fit_count > len(recent_classes) / 2:
+                if len(state.retarget_history) >= 2:
+                    logger.error(f"{tag} gate A: max retargets reached, "
+                                 "escalating to human")
+                    state.error = (
+                        "Stage B gate A: max retargets reached, escalating "
+                        "to human"
+                    )
+                    state.events.append({
+                        "stage": "B",
+                        "phase": "gate_a_retarget_max_reached",
+                        "round_num": rnd,
+                        "timestamp": datetime.now().isoformat(),
+                        "verdicts": state.stage_b_verdicts[-5:],
+                    })
+                    update_program_board(
+                        state.paper_name, "B-STUCK",
+                        "max fit-retargets reached; needs human review")
+                    save_state(state)
+                    return False
+
+                logger.info(f"{tag} gate A: 4+ rejects classified fit -> "
+                            "auto-retarget")
+                prior_journal = state.target_journal
+                state.events.append({
+                    "stage": "B",
+                    "phase": "gate_a_retarget_trigger",
+                    "round_num": rnd,
+                    "timestamp": datetime.now().isoformat(),
+                    "verdicts": state.stage_b_verdicts[-5:],
+                    "fit_count": fit_count,
+                    "classified": recent_classes,
+                })
+                state.retarget_history.append({
+                    "from_journal": prior_journal,
+                    "trigger": "gate_a_fit_reject_streak",
+                    "verdicts": state.stage_b_verdicts[-5:],
+                    "round": rnd,
+                    "timestamp": datetime.now().isoformat(),
+                })
+                state.current_stage = "F"
+                state.stage_f_passed = False
+                state.stage_b_passed = False
+                state.stage_b_verdicts = []
+                state.stage_b_all_issues = []
+                state.stage_b_issue_streaks = {}
+                state.stage_b_reject_classes = []
+                state.stage_b_deepen_conv_id = ""
+                state.stage_b_fresh_attempts = 0
+                state.stage_b_last_fix_summary = ""
+                state.stage_b_rounds = 0
+                update_program_board(
+                    state.paper_name, "RETARGET-FIT",
+                    f"4+ fit-rejects at B{rnd}; reset to Stage F for new journal")
+                save_state(state)
+                return False
+
+        issue_texts_by_key: dict[str, list[str]] = {}
+        for issue in issues:
+            issue_text = format_issues_for_codex([issue])
+            if not issue_text.strip():
+                issue_text = str(issue)
+            key = _canonical_issue_key(issue_text)
+            if key:
+                issue_texts_by_key.setdefault(key, []).append(issue_text)
+
+        current_issue_keys = set(issue_texts_by_key)
+        prior_streaks = dict(state.stage_b_issue_streaks)
+        for key in set(prior_streaks) | current_issue_keys:
+            if key in current_issue_keys:
+                state.stage_b_issue_streaks[key] = prior_streaks.get(key, 0) + 1
+            else:
+                state.stage_b_issue_streaks[key] = 0
+        save_state(state)
+
+        focused_patch_prefix = ""
+        stuck_keys = [
+            key for key in current_issue_keys
+            if state.stage_b_issue_streaks.get(key, 0) >= 3
+        ]
+        if stuck_keys and verdict not in ("accept", "minor revision"):
+            stuck_keys = sorted(
+                stuck_keys,
+                key=lambda key: state.stage_b_issue_streaks.get(key, 0),
+                reverse=True,
+            )[:2]
+            max_streak = max(state.stage_b_issue_streaks.get(key, 0)
+                             for key in stuck_keys)
+            logger.info(f"{tag} gate B: stuck issue keys={stuck_keys} "
+                        f"streak={max_streak}")
+            full_issue_text = "\n\n".join(
+                "\n".join(issue_texts_by_key.get(key, []))
+                for key in stuck_keys
+            ).strip()
+            target_locations = ", ".join(stuck_keys)
+            focused_patch_prefix = textwrap.dedent(f"""\
+                === FOCUSED PATCH - STUCK ISSUE (round {rnd}, streak {max_streak}) ===
+                The following Oracle issue(s) have appeared {max_streak} consecutive rounds without resolution. Apply a TARGETED fix to ONLY the named locations. Do NOT touch other sections, do NOT make cosmetic edits elsewhere.
+
+                {full_issue_text}
+
+                Target locations: {target_locations}
+
+                After your edit, the diff must touch ONLY files containing these locations and ONLY the lines around them. Reject the edit if it sprawls to unrelated sections.
+
+            """)
+            state.events.append({
+                "stage": "B",
+                "phase": "gate_b_stuck_issue",
+                "round_num": rnd,
+                "timestamp": datetime.now().isoformat(),
+                "stuck_keys": stuck_keys,
+                "streak": max_streak,
+            })
+            keys_at_five = [
+                key for key in current_issue_keys
+                if state.stage_b_issue_streaks.get(key, 0) == 5
+            ]
+            if len(keys_at_five) == 1:
+                try:
+                    inbox = SCRIPT_DIR / ".pi_inbox.md"
+                    with open(inbox, "a", encoding="utf-8") as f:
+                        f.write(
+                            f"[gate-b ESCALATE] {state.paper_name} - "
+                            f"{keys_at_five[0]} stuck for 5 rounds; suspect "
+                            "Codex prompt drift; please review "
+                            "build_oracle_fix_prompt and Codex agent_role "
+                            "wiring.\n"
+                        )
+                except Exception as exc:
+                    logger.warning(f"{tag} gate B: failed to append PI inbox "
+                                   f"note: {exc}")
+            save_state(state)
 
         # Build a short fix summary for the NEXT round's deepen follow-up
         # prompt: ChatGPT only needs to know what we addressed, not the
@@ -5813,6 +6033,8 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             state.paper_dir, issues_text, rnd,
             prior_issues=prior_issues_text,
             deep_mode=deep_mode)
+        if focused_patch_prefix:
+            fix_prompt = focused_patch_prefix + fix_prompt
         if not CLAUDE_ENABLED and issues:
             item_timeout = 1200 if deep_mode else 900
             for issue_idx, issue in enumerate(issues, 1):
@@ -5829,6 +6051,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     prior_issues=prior_issues_text,
                     deep_mode=deep_mode,
                 )
+                single_issue_key = _canonical_issue_key(single_issue_text)
+                if focused_patch_prefix and single_issue_key in stuck_keys:
+                    single_prompt = focused_patch_prefix + single_prompt
                 codex_exec(single_prompt, work_dir=paper_path,
                            timeout_seconds=item_timeout, model=model,
                            dry_run=dry_run,
