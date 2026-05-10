@@ -27,10 +27,10 @@ For \(m\ge 0\), write
 
 \begin{theorem}[Density dichotomy for DFA languages]
   \label{thm:dfa-density-dichotomy}
-  There exist an integer \(p\ge 1\), non-negative constants
-  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that
+  There exist an integer \(D_A\ge 1\), non-negative constants
+  \(c_0,\dots,c_{D_A-1}\), and \(\theta\in(0,1)\) such that
   \[
-    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m)
+    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod D_A}+O(\theta^m)
     \qquad (m\to\infty).
   \]
   Consequently exactly one of the following alternatives holds:
@@ -41,10 +41,10 @@ For \(m\ge 0\), write
       \frac{a_m(\mathcal A)}{b^m}=O(\eta^m);
     \]
     equivalently, \(a_m(\mathcal A)=O((b\eta)^m)\).
-    \item There exists a residue class \(r\bmod p\) and a constant
+    \item There exists a residue class \(r\bmod D_A\) and a constant
     \(c>0\) such that
     \[
-      \frac{a_{r+kp}(\mathcal A)}{b^{r+kp}}\ge c
+      \frac{a_{r+kD_A}(\mathcal A)}{b^{r+kD_A}}\ge c
       \qquad\text{for all sufficiently large }k.
     \]
   \end{enumerate}
@@ -103,39 +103,39 @@ For \(m\ge 0\), write
   periodic limits.
 
   Let \(d_i\) be the period of \(C_i\), and put
-  \(p:=\operatorname{lcm}(d_1,\dots,d_s)\). By the periodic
+  \(D_A:=\operatorname{lcm}(d_1,\dots,d_s)\). By the periodic
   Perron--Frobenius theorem for the recurrent blocks, each sequence
-  \(C_i^{kp+r}\) converges exponentially fast as \(k\to\infty\), for
+  \(C_i^{kD_A+r}\) converges exponentially fast as \(k\to\infty\), for
   each fixed \(r\). Since \(T^\ell\) decays exponentially, the displayed
   convolution also has an exponentially fast limit on every residue
   class. Hence the entrywise limits
   \[
-    S_r:=\lim_{k\to\infty}P^{kp+r}
-    \qquad(0\le r<p)
+    S_r:=\lim_{k\to\infty}P^{kD_A+r}
+    \qquad(0\le r<D_A)
   \]
   exist; the matrices \(S_r\) include both the recurrent-class limits
   and the absorption terms from transient states into those recurrent
   classes. Consequently there are \(C>0\) and \(\theta\in(0,1)\) such
   that
   \[
-    P^m=S_{m\bmod p}+E_m,
+    P^m=S_{m\bmod D_A}+E_m,
     \qquad
     \|E_m\|\le C\theta^m.
   \]
   Therefore
   \[
-    u^{\mathsf T}P^m v=u^{\mathsf T}S_{m\bmod p}v+O(\theta^m).
+    u^{\mathsf T}P^m v=u^{\mathsf T}S_{m\bmod D_A}v+O(\theta^m).
   \]
-  For \(0\le r<p\), define
+  For \(0\le r<D_A\), define
   \[
-    c_r:=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v=u^{\mathsf T}S_r v.
+    c_r:=\lim_{k\to\infty}u^{\mathsf T}P^{kD_A+r}v=u^{\mathsf T}S_r v.
   \]
   The limit exists by the preceding expansion, and \(c_r\ge 0\) because
-  every term \(u^{\mathsf T}P^{kp+r}v\) is non-negative. Thus
+  every term \(u^{\mathsf T}P^{kD_A+r}v\) is non-negative. Thus
   \[
     \frac{a_m(\mathcal A)}{b^m}
     =u^{\mathsf T}P^m v
-    =c_{m\bmod p}+O(\theta^m),
+    =c_{m\bmod D_A}+O(\theta^m),
   \]
   as claimed.
 
@@ -156,7 +156,7 @@ For \(m\ge 0\), write
   Finally, suppose that for some \(K_1,K_2>0\) the two-sided
   finite-budget bound \(K_1/m\le a_m(\mathcal A)/b^m\le K_2/m\) holds
   on an infinite set \(M\). Passing to an infinite subset in one residue
-  class \(r\bmod p\), the case \(c_r=0\) contradicts the lower bound
+  class \(r\bmod D_A\), the case \(c_r=0\) contradicts the lower bound
   \(K_1/m\), while the case \(c_r>0\) contradicts the upper bound
   \(K_2/m\). This proves the final assertion.
 \end{proof}
@@ -165,17 +165,17 @@ For later use we spell out the elementary effective content of the
 preceding proof. Assume that the entries of the DFA transition matrices
 are given explicitly. Put \(P=B/b\). The strongly connected components
 of the directed graph of \(P\), the recurrent classes, their periods
-\(d_i\), and hence \(p=\operatorname{lcm}(d_i)\), are obtained by the
+\(d_i\), and hence \(D_A=\operatorname{lcm}(d_i)\), are obtained by the
 standard linear-time graph algorithms. For each residue class \(r\bmod
-p\), the limit
+D_A\), the limit
 \[
-  c_r=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v
+  c_r=\lim_{k\to\infty}u^{\mathsf T}P^{kD_A+r}v
 \]
 is the value of the finite Markov chain on that residue class; it can be
 computed by solving the finite linear systems for the stationary
 distributions on the recurrent classes and the absorption probabilities
 from transient states. Equivalently, it is obtained as the exact
-limit of the rational matrices \(P^{kp+r}\). Thus the residue
+limit of the rational matrices \(P^{kD_A+r}\). Thus the residue
 alternatives \(c_r=0\) and \(c_r>0\) are decidable by exact rational
 linear algebra when the transition table is integral.
 
@@ -323,6 +323,75 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   so \(B_b:=K_2/\log b\) is admissible for all \(m\ge M_b\).
 \end{proof}
 
+\begin{lemma}[Effective spectral constants for a fixed residue class]
+  \label{lem:effective-spectral-constants}
+  Let \(P\) be a rational stochastic matrix of dimension \(n\) and bit
+  height \(H\). Suppose that the recurrent classes and their cyclic
+  decompositions have been computed, and let \(D_A\) be a common
+  multiple of the recurrent periods. For each residue class
+  \(r\bmod D_A\) one can compute algebraic real numbers
+  \(K_r>0\), \(\theta_r\in(0,1)\), and an integer \(N_r\) such that
+  \[
+    \|P^m-S_r\|\le K_r\theta_r^m
+    \qquad(m\equiv r\bmod D_A,\ m\ge0),
+  \]
+  where \(S_r=\lim_{k\to\infty}P^{kD_A+r}\). The constants are given by
+  minimal polynomials and isolating intervals, and the computation is
+  effective in the rational bit model.
+\end{lemma}
+
+\begin{proof}
+  Put \(P\) in canonical Markov-chain block form. The blocks that can
+  contribute non-peripheral decay are the transient block \(P_{TT}\) and
+  the primitive return blocks \(P^{d_j}|_{R_{j,t}}\) after the
+  Perron--Frobenius rank-one limits have been subtracted. Compute their
+  characteristic polynomials over \(\QQ\), factor them over \(\QQ\), and
+  isolate all complex roots by standard algebraic root-isolation
+  algorithms. This gives exact algebraic representations of every
+  eigenvalue and separation bounds between their moduli.
+
+  Let \(\Theta\) be the finite set of moduli of the eigenvalues of
+  \(P_{TT}\) and of the non-unit eigenvalues of the return blocks. If
+  \(\Theta=\varnothing\), set \(\theta_r=1/2\); the only remaining
+  errors are nilpotent or finite-prefix errors, handled below. If
+  \(\Theta\ne\varnothing\), use the isolating intervals and separation
+  bounds to choose a rational number
+  \[
+    \theta_r\in(\max\Theta,1).
+  \]
+
+  For each eigenvalue \(\mu\) with \(|\mu|<\theta_r\), and for each
+  Jordan block size \(s\), the binomial expansion of
+  \((\mu I+N)^m\) bounds the corresponding block by
+  \(C_{\mu,s}m^{s-1}|\mu|^m\), with \(C_{\mu,s}\) computed from a
+  transition matrix between the rational basis and the algebraic Jordan
+  basis. Put \(a=|\mu|/\theta_r<1\). Since
+  \(x\mapsto x^{s-1}a^x\) is decreasing for
+  \(x\ge (s-1)/\log(1/a)\), the finite maximum
+  \[
+    C(\mu,\theta_r,s):=
+    \max_{0\le m\le N_{\mu,s}} m^{s-1}
+       \left(\frac{|\mu|}{\theta_r}\right)^m,
+    \qquad
+    N_{\mu,s}:=
+    \left\lceil\frac{s-1}{\log(\theta_r/|\mu|)}\right\rceil+1
+  \]
+  satisfies
+  \[
+    m^{s-1}|\mu|^m\le C(\mu,\theta_r,s)\theta_r^m
+    \qquad(m\ge0).
+  \]
+  The finite maximum is evaluated with algebraic interval arithmetic.
+  Nilpotent parts vanish after at most \(n\) steps; enlarge the same
+  finite maximum to cover those initial values. Summing the finitely
+  many block estimates gives a computable \(K_r\). If the sum is \(0\),
+  replace it by \(1\). Finally, verify all finitely many values before
+  the block estimates begin by direct rational matrix powering and
+  enlarge \(K_r\) if necessary. The resulting constants prove the
+  displayed inequality for all \(m\ge0\); the finite verification also
+  records an explicit threshold \(N_r\).
+\end{proof}
+
 \begin{theorem}[Algorithmic fixed-DFA prime-slice obstruction]
   \label{thm:effective-fixed-dfa-prime-obstruction}
   Fix \(b\ge2\) and a complete DFA
@@ -344,17 +413,21 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \]
     and the refined cyclic absorption probabilities
     \[
-      H_{j,t}^{(r)}(q)
+      A_{j,t}(q)
       :=\sum_{\ell\ge0}
         e_q^{\mathsf T}P_{TT}^{\ell}P_{T,R_j}
-        S_{j,t-r-1-\ell}\mathbf 1 ,
+        S_{j,t+\ell+1}\mathbf 1 ,
     \]
     where indices are taken modulo \(d_j\) and
     \(S_{j,u}\) is the cyclic projection onto \(R_{j,u}\).
-    The displayed series is evaluated exactly as a finite family of
-    linear solves after grouping \(\ell\) modulo \(d_j\).
+    Thus, conditional on absorption after \(\ell\) transient steps, the
+    recurrent entry class is chosen so that at every later time
+    \(m\equiv r\pmod {d_j}\) the recurrent chain lies in
+    \(R_{j,t+r}\). The displayed series is evaluated exactly as a
+    finite family of linear solves after grouping \(\ell\) modulo
+    \(d_j\).
     \item For each residue \(r\) modulo
-    \(p=\operatorname{lcm}_j d_j\), the compressed formula
+    \(D_A=\operatorname{lcm}_j d_j\), the compressed formula
     \[
       c_r=
       \sum_{j=1}^s\sum_{t=0}^{d_j-1}
@@ -368,7 +441,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
       \alpha_{j,t}^{(r)}=
       \begin{cases}
         1, & q_0\in R_{j,t},\\
-        H_{j,t}^{(r)}(q_0), & q_0\in T,\\
+        A_{j,t}(q_0), & q_0\in T,\\
         0, & \text{otherwise.}
       \end{cases}
     \]
@@ -378,11 +451,11 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     integer thresholds \(M_r\) such that
     \[
       \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
-      \qquad(m\equiv r\pmod p,\ m\ge0).
+      \qquad(m\equiv r\pmod {D_A},\ m\ge0).
     \]
   \end{enumerate}
   With this output, the following holds for every
-  \(m\ge M_r\) satisfying \(m\equiv r\pmod p\).
+  \(m\ge M_r\) satisfying \(m\equiv r\pmod {D_A}\).
   If \(c_r=0\), then
   \[
     a_m(\mathcal A)\le K_r\theta_r^m b^m
@@ -413,7 +486,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   In the rational bit model, the graph decomposition and all rational
   linear solves are polynomial in the input size plus the size of the
   produced certificate. The optional full list
-  \(c_0,\dots,c_{p-1}\) has output size at least \(p\); no polynomial
+  \(c_0,\dots,c_{D_A-1}\) has output size at least \(D_A\); no polynomial
   bound in the input size alone is asserted for printing that list.
   The constants \(K_r,\theta_r,M_r\) are represented by algebraic
   numbers together with isolating intervals, and their real
@@ -424,7 +497,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 \begin{proof}
   Compute the matrix \(B=\sum_{d\in\Sigma_b}T_d\), the stochastic matrix
   \(P=B/b\), the transient set, the recurrent classes, their periods,
-  their cyclic decompositions, and the common period \(p\) by standard
+  their cyclic decompositions, and the common period \(D_A\) by standard
   graph algorithms. The vectors \(\pi_{j,t}\) are the unique solutions
   of
   \[
@@ -437,41 +510,35 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   probabilities \(H_j\) solve the displayed systems in the statement;
   the matrix \(I-P_{TT}\) is invertible because \(T\) is transient.
   For the cyclic refinements, group the defining series for
-  \(H_{j,t}^{(r)}\) by \(\ell\equiv u\pmod{d_j}\). Each group is a
+  \(A_{j,t}\) by \(\ell\equiv u\pmod{d_j}\). Each group is a
   rational expression in
   \[
-    (I-P_{TT}^{d_j})^{-1}P_{TT}^uP_{T,R_j}S_{j,t-r-1-u}\mathbf 1,
+    (I-P_{TT}^{d_j})^{-1}P_{TT}^uP_{T,R_j}S_{j,t+u+1}\mathbf 1,
   \]
   hence is again computed by exact rational linear algebra. Formula
   \eqref{eq:compressed-cr} is precisely the canonical block-power limit
-  of \(u^{\mathsf T}P^m v\) along \(m\equiv r\pmod p\): after absorption
-  into \(R_{j,t}\), \(r\) further steps place the recurrent chain in
-  \(R_{j,t+r}\), and the limiting conditional distribution there is
-  \(\pi_{j,t+r}\).
-
-  It remains to record a verifiable construction of
-  \(K_r,\theta_r\). Put \(P\) in block form with \(P_{TT}\) and the
-  primitive return blocks \(P^{d_j}|_{R_{j,t}}\). Let \(\Theta\) be the
-  finite set consisting of the moduli of all eigenvalues of
-  \(P_{TT}\) and of all non-unit eigenvalues of the return blocks. Every
-  element of \(\Theta\) is an algebraic number effectively represented
-  by its minimal polynomial and an isolating interval. Since the
-  transient spectral radii and the non-peripheral recurrent moduli are
-  \(<1\), choose an algebraic or rational
+  of \(u^{\mathsf T}P^m v\) along \(m\equiv r\pmod {D_A}\). Indeed,
+  suppose the chain starts in a transient state \(q\), remains
+  transient for exactly \(\ell\) steps, and then enters \(R_j\) at time
+  \(\ell+1\) in cyclic class \(R_{j,u}\). Because \(P\) maps
+  \(R_{j,a}\) into \(R_{j,a+1}\), at a later time
+  \(m\equiv r\pmod {d_j}\) its recurrent cyclic class is
   \[
-    \theta_r\in\bigl(\max\Theta,1\bigr).
+    u+m-(\ell+1)\equiv u+r-\ell-1 \pmod {d_j}.
   \]
-  In Jordan form, each non-peripheral block contributes terms bounded by
-  \(C_\mu m^{s_\mu-1}|\mu|^m\), where \(s_\mu\) is the largest Jordan
-  block size for \(\mu\). Real-root isolation and exact algebraic
-  arithmetic give explicit constants \(C_\mu\). For this chosen
-  \(\theta_r\), compute an integer \(N_\mu\) with
-  \(m^{s_\mu-1}|\mu|^m\le\theta_r^m\) for all \(m\ge N_\mu\), and enlarge
-  the coefficient to cover the finitely many \(m<N_\mu\). Summing these
-  finitely many block bounds gives \(K_r\) and
+  To contribute to the limiting distribution
+  \(\pi_{j,t+r}\) on \(R_{j,t+r}\), the entry class must therefore
+  satisfy \(u+r-\ell-1\equiv t+r\), equivalently
+  \(u\equiv t+\ell+1\pmod {d_j}\). This is exactly the projection
+  \(S_{j,t+\ell+1}\) in the definition of \(A_{j,t}\). Conditioning on
+  the absorption time and then applying the primitive return-chain limit
+  on \(R_{j,t+r}\) proves \eqref{eq:compressed-cr}.
+
+  Applying \Cref{lem:effective-spectral-constants} to \(P\) and
+  \(D_A\) gives \(K_r,\theta_r\) and
   \[
     \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
-    \qquad(m\equiv r\bmod p).
+    \qquad(m\equiv r\bmod {D_A}).
   \]
 
   Choose \(A_b,B_b>0\) and \(M_b\) from
@@ -486,13 +553,13 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   class tail satisfying
   \[
     K_r\theta_r^m\le \frac{A_b}{2m}
-    \qquad(m\ge M_r,\ m\equiv r\bmod p).
+    \qquad(m\ge M_r,\ m\equiv r\bmod {D_A}).
   \]
   This threshold is computable by real algebraic interval arithmetic:
   check the finitely many values before monotonicity of
   \(mK_r\theta_r^m\) begins, and then solve the remaining one-sided
   inequality by bisection on isolating intervals.
-  For \(m\ge M_r\),
+  For \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\),
   \[
     a_m(\mathcal A)\le \frac{A_b}{2}\frac{b^m}{m},
   \]
@@ -505,8 +572,8 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \qquad
     B_b/m\le c_r/4
   \]
-  for all larger \(m\equiv r\bmod p\). This is computed in the same
-  real bit model.
+  for all \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\). This is computed
+  in the same real bit model.
   Then \(a_m(\mathcal A)\ge(c_r/2)b^m\), whence
   \[
     \mathrm{Prec}_m
@@ -532,7 +599,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   isolation with requested precision. The certificate is compressed by
   recurrent class and cyclic class. If the user asks for an explicit
   printed table of all \(c_r\), that table is charged to the output
-  size, which is necessary because \(p\) may be super-polynomial in the
+  size, which is necessary because \(D_A\) may be super-polynomial in the
   number of states.
 \end{proof}
 
@@ -585,9 +652,9 @@ corollaries below.
   By \Cref{lem:base-prime-count}, the displayed chain gives
   \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set \(M\) of lengths.
 
-  Let \(p\), \(c_0,\dots,c_{p-1}\), and \(\theta\) be supplied by
+  Let \(D_A\), \(c_0,\dots,c_{D_A-1}\), and \(\theta\) be supplied by
   \Cref{thm:dfa-density-dichotomy}. By the pigeonhole principle, some
-  residue class \(r\bmod p\) contains infinitely many lengths from
+  residue class \(r\bmod D_A\) contains infinitely many lengths from
   \(M\). Along this infinite subsequence the preceding bounds give
   positive constants \(K_1,K_2\) such that
   \[
@@ -595,10 +662,10 @@ corollaries below.
     \le \frac{K_2}{m}.
   \]
   If \(c_r=0\), then the density dichotomy gives
-  \(a_m(\mathcal A)/b^m=O(\theta^m)\) on \(m\equiv r\pmod p\), which is
+  \(a_m(\mathcal A)/b^m=O(\theta^m)\) on \(m\equiv r\pmod {D_A}\), which is
   incompatible with \(K_1/m\) on an infinite subsequence. If \(c_r>0\),
   then \(a_m(\mathcal A)/b^m\ge c_r/2\) for all sufficiently large
-  \(m\equiv r\pmod p\), which is incompatible with the upper bound
+  \(m\equiv r\pmod {D_A}\), which is incompatible with the upper bound
   \(K_2/m\). Both residue-class alternatives contradict the assumed
   infinite set \(M\).
 \end{proof}
@@ -621,12 +688,12 @@ corollaries below.
 \end{corollary}
 
 \begin{proof}
-  Let \(p\ge 1\), \(c_0,\dots,c_{p-1}\ge 0\), and \(\theta\in(0,1)\) be
+  Let \(D_A\ge 1\), \(c_0,\dots,c_{D_A-1}\ge 0\), and \(\theta\in(0,1)\) be
   as in \Cref{thm:dfa-density-dichotomy}. Replacing \(\theta\) by
-  \(\theta^p\) if necessary, we may write for each residue class
-  \(r\bmod p\)
+  \(\theta^{D_A}\) if necessary, we may write for each residue class
+  \(r\bmod D_A\)
   \[
-    \frac{a_{pk+r}(\mathcal A)}{b^{pk+r}}=c_r+O(\theta^k)
+    \frac{a_{D_Ak+r}(\mathcal A)}{b^{D_Ak+r}}=c_r+O(\theta^k)
     \qquad (k\to\infty).
   \]
   Fix constants \(A_b,B_b>0\), supplied by
@@ -640,30 +707,31 @@ corollaries below.
 
   If \(c_r=0\), then
   \[
-    a_{pk+r}(\mathcal A)=O(\theta^k b^{pk+r})=o\!\left(\frac{b^{pk+r}}{pk+r}\right).
+    a_{D_Ak+r}(\mathcal A)=O(\theta^k b^{D_Ak+r})
+    =o\!\left(\frac{b^{D_Ak+r}}{D_Ak+r}\right).
   \]
   Hence there exists \(k_r\) such that for all \(k\ge k_r\),
   \[
-    a_{pk+r}(\mathcal A)
-    \le \frac{A_b}{2}\,\frac{b^{pk+r}}{pk+r}.
+    a_{D_Ak+r}(\mathcal A)
+    \le \frac{A_b}{2}\,\frac{b^{D_Ak+r}}{D_Ak+r}.
   \]
   For those \(k\),
   \[
-    \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
-    \ge \abs{\mathcal P_{pk+r}^{(b)}}-a_{pk+r}(\mathcal A)
-    \ge \frac{A_b}{2}\,\frac{b^{pk+r}}{pk+r}.
+    \abs{(L(\mathcal A)\cap\Sigma_b^{D_Ak+r})\triangle \mathcal P_{D_Ak+r}^{(b)}}
+    \ge \abs{\mathcal P_{D_Ak+r}^{(b)}}-a_{D_Ak+r}(\mathcal A)
+    \ge \frac{A_b}{2}\,\frac{b^{D_Ak+r}}{D_Ak+r}.
   \]
 
   If \(c_r>0\), then there exists \(k_r\) such that for all \(k\ge k_r\),
   \[
-    a_{pk+r}(\mathcal A)\ge \frac{c_r}{2}\,b^{pk+r}.
+    a_{D_Ak+r}(\mathcal A)\ge \frac{c_r}{2}\,b^{D_Ak+r}.
   \]
   Enlarging \(k_r\) if necessary, we may also ensure that
-  \(B_b/(pk+r)\le c_r/4\). Then for all such \(k\),
+  \(B_b/(D_Ak+r)\le c_r/4\). Then for all such \(k\),
   \[
-    \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
-    \ge a_{pk+r}(\mathcal A)-\abs{\mathcal P_{pk+r}^{(b)}}
-    \ge \frac{c_r}{4}\,b^{pk+r}.
+    \abs{(L(\mathcal A)\cap\Sigma_b^{D_Ak+r})\triangle \mathcal P_{D_Ak+r}^{(b)}}
+    \ge a_{D_Ak+r}(\mathcal A)-\abs{\mathcal P_{D_Ak+r}^{(b)}}
+    \ge \frac{c_r}{4}\,b^{D_Ak+r}.
   \]
 
   Since there are only finitely many residue classes, taking the minimum
@@ -698,26 +766,26 @@ corollaries below.
 \begin{corollary}[No simultaneous recall and precision for fixed DFA]
   \label{cor:dfa-prime-recall-precision}
   With \(\mathrm{Rec}_m\) and \(\mathrm{Prec}_m\) as in
-  \Cref{prop:dfa-quantitative-obstruction}, let \(p\) and
-  \(c_0,\dots,c_{p-1}\) be the period and residue constants supplied by
+  \Cref{prop:dfa-quantitative-obstruction}, let \(D_A\) and
+  \(c_0,\dots,c_{D_A-1}\) be the automaton period and residue constants supplied by
   \Cref{thm:dfa-density-dichotomy}. For each residue class
-  \(r\bmod p\) exactly one of the following alternatives holds:
+  \(r\bmod D_A\) exactly one of the following alternatives holds:
   \begin{enumerate}[label=\textup{(\alph*)}]
     \item If \(c_r=0\), then \(\mathrm{Rec}_m\) decays exponentially
-    along \(m\equiv r\pmod p\).
+    along \(m\equiv r\pmod {D_A}\).
     \item If \(c_r>0\), then there is a constant
     \(C_r=2B_b/c_r\), where
     \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all large \(m\),
     such that \(\mathrm{Prec}_m\le C_r/m\) for all sufficiently large
-    \(m\equiv r\pmod p\) for which \(a_m(\mathcal A)>0\).
+    \(m\equiv r\pmod {D_A}\) for which \(a_m(\mathcal A)>0\).
   \end{enumerate}
   Consequently every DFA satisfies one of the following statements:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
     \item There exists at least one residue class
-    \(r\bmod p\) with \(c_r>0\) such that
+    \(r\bmod D_A\) with \(c_r>0\) such that
     \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) for all sufficiently large
-    \(m\equiv r\pmod p\) for which precision is defined.
+    \(m\equiv r\pmod {D_A}\) for which precision is defined.
   \end{enumerate}
   Precision is left undefined on lengths with \(a_m(\mathcal A)=0\);
   no assertion is made about other positive-density or sparse residue
@@ -728,20 +796,20 @@ corollaries below.
 
 \begin{proof}
   Apply \Cref{thm:dfa-density-dichotomy}. Thus there exist an integer
-  \(p\ge 1\), constants \(c_0,\dots,c_{p-1}\ge 0\), and
+  \(D_A\ge 1\), constants \(c_0,\dots,c_{D_A-1}\ge 0\), and
   \(\theta\in(0,1)\) such that
   \[
-    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m).
+    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod D_A}+O(\theta^m).
   \]
   Fix the upper-bound constant \(B_b>0\) from
   \Cref{lem:base-prime-count}, so that
   \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all sufficiently large
   \(m\).
-  We treat each residue class \(r\bmod p\) separately by considering the
+  We treat each residue class \(r\bmod D_A\) separately by considering the
   two cases \(c_r=0\) and \(c_r>0\).
 
   \textit{Case \(c_r=0\).}
-  Along the subsequence \(m\equiv r\pmod{p}\), we have
+  Along the subsequence \(m\equiv r\pmod {D_A}\), we have
   \(a_m(\mathcal A)=O(\theta^m b^m)\). Since
   \Cref{lem:base-prime-count} gives
   \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), so
@@ -754,7 +822,7 @@ corollaries below.
   recall decays exponentially along this residue class.
 
   \textit{Case \(c_r>0\).}
-  Along \(m\equiv r\pmod{p}\) with \(m\) large enough, we have
+  Along \(m\equiv r\pmod {D_A}\) with \(m\) large enough, we have
   \(a_m(\mathcal A)\ge \tfrac{1}{2}c_r b^m\). Using the bound for
   \(\abs{\mathcal P_m^{(b)}}\),
   \[
@@ -766,7 +834,7 @@ corollaries below.
   arithmetic progression, so we may take
   \(C_{\mathcal A,b}=2B_b/c_r\) for that subsequence.
 
-  Every residue class \(r\bmod p\) falls into one of these two cases.
+  Every residue class \(r\bmod D_A\) falls into one of these two cases.
   If all residue classes have \(c_r=0\), then
   \(\mathrm{Rec}_m\to 0\) exponentially for every \(m\), giving
   alternative~\textup{(i)}. Otherwise, at least one residue class has
