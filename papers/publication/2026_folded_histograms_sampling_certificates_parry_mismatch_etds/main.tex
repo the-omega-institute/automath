@@ -1657,7 +1657,9 @@ If \(\nu\in\Delta(X_m)\), define the endpoint-class masses
 \begin{proposition}[Fiber-uniform lift decomposition]
 \label{prop:fiber-uniform-lift-decomposition}
 Let \(\mu\in\Delta(\Omega_m)\), let \(\pi:=(\Fold_m)_*\mu\), and let
-\(\eta\in\Delta(X_m)\). Then
+\(\eta\in\Delta(X_m)\). The identity below is understood in the
+extended-value sense: if \(\pi\not\ll\eta\), then both sides are \(+\infty\).
+If \(\pi\ll\eta\), then
 \[
 \KL(\mu\|Q_m\eta)=\KL(\pi\|\eta)+\KL(\mu\|Q_m\pi),
 \]
@@ -1665,6 +1667,11 @@ so the observable divergence and the within-fiber term split exactly.
 \end{proposition}
 
 \begin{proof}
+If \(\pi\not\ll\eta\), choose \(x\in X_m\) with \(\pi(x)>0\) and
+\(\eta(x)=0\).  Then \((Q_m\eta)(a)=0\) for every
+\(a\in\Fold_m^{-1}\{x\}\), while at least one such \(a\) has \(\mu(a)>0\).
+Thus \(\KL(\mu\|Q_m\eta)=+\infty\), and \(\KL(\pi\|\eta)=+\infty\).
+It remains to prove the finite case \(\pi\ll\eta\).
 For \(a\in\Omega_m\), write \(x_a:=\Fold_m(a)\). Then
 \[
 \frac{\mu(a)}{(Q_m\eta)(a)}
@@ -2944,11 +2951,15 @@ gives first folded digit \(1\) exactly for the two words beginning with
   positions \(m,m+1\).  Applying the same adjacent carry first replaces
   \(d_m=d_{m+1}=1\) by \(d_m=d_{m+1}=0\), \(d_{m+2}=1\).  This removes the only
   new contact between the appended digit and the old word.  Because the old
-  suffix is \(101\), the digit in position \(m-1\) is \(0\).  Thus, both before
-  the extension and after this top carry, the same lower prefix in positions
-  \(\le m-1\) is separated from the changed high digit by a zero position.  No
-  normalization path can propagate across that zero gap, so the \(F_2\)-digit is
-  the same as at length \(m\).
+  suffix is \(101\), the digit in position \(m-1\) is \(0\).  After the carry,
+  all altered digits are in positions \(m,m+1,m+2\), and positions \(m-1\) and
+  \(m\) are both \(0\).  Every remaining forbidden adjacent pair, if any, lies
+  wholly inside the unchanged prefix \(\{1,\ldots,m-2\}\): there is no adjacent
+  pair crossing from this prefix into the zero pair at \(m-1,m\), and the single
+  high digit at \(m+2\) is separated from it by the zero at \(m+1\).  Hence the
+  rest of the Zeckendorf normalization factors as the normalization of the
+  unchanged lower prefix together with the isolated high digit \(F_{m+3}\).
+  In particular the \(F_2\)-digit is the same as at length \(m\).
   The normal form is order-independent by
   Theorem~\ref{thm:local-zeckendorf-normalization}, so these local
   normalizations compute the canonical fold.  Induction from the length-six
@@ -3565,16 +3576,10 @@ discrepancies are \(1.01\times10^{-5}\) for the residual table and at most
 \(9.33\times10^{-5}\) for the off-canonical Parry-gap table, so the sampling
 terms are already below the displayed deterministic gaps.
 
-The supplementary archive accompanying this submission contains the scripts and
-pre-built generated fragments used for the numerical tables.  The table
-fragments included from \texttt{generated/} are emitted by scripts in
-\texttt{scripts/} and in the supplementary script directory.  The rotation,
-microstate, residual, independent-baseline and circle-map scripts write CSV
-files under the export directory; the generated-TeX script in the supplementary
-script directory then converts those CSV files to the TeX fragments input below.
-The files under \texttt{generated/} are therefore generated outputs rather than
-hand-edited source tables.  These claims assume that the supplementary archive
-is supplied with the submission.
+The tables below are numerical illustrations of the finite formulas proved
+above.  The manuscript does not use them as additional evidence for any theorem,
+and all acceptance-critical estimates are the analytic statements in the
+preceding sections.
 
 All slope families in Table~\ref{tab:parameter-grid} are of bounded type.  The
 family \([0;B,1,1,\dots]\) is included to show the effect of a large first
@@ -3677,9 +3682,11 @@ baseline dominates the sampling term once \(m\) is moderately large.
 
 The independent comparison separates two bookkeeping regimes.  When the
 data-generating law is matched to the reference baseline, the classical
-finite-alphabet sampling envelopes below control the observed error.  For the
-rotation data, Theorem~\ref{thm:tv-certificate-hist} controls the folded
-histogram relative to \(\pi_m^{\mathrm{fold}}\), while
+finite-alphabet sampling envelopes give the right scale but grow with the
+alphabet size.  The table reports the observed seed averages only; it is not
+used as a concentration certificate for the deterministic rotation examples.
+For the rotation data, Theorem~\ref{thm:tv-certificate-hist} controls the
+folded histogram relative to \(\pi_m^{\mathrm{fold}}\), while
 Corollary~\ref{cor:tv-decomposition-parry} is the exact KL identity for the
 microstate law relative to the Parry lift \(Q_m\pi_m\).  The remaining
 comparison with the Parry block law \(\pi_m\) is therefore deterministic and
@@ -3696,14 +3703,15 @@ For reference, the standard high-probability envelopes on a finite alphabet
 \lesssim
 \frac{F_{m+2}\log(N+1)+\log(1/\delta)}{N}
 \]
-at confidence level \(1-\delta\); see
+at confidence level \(1-\delta\), with constants and lower-order terms
+depending on the chosen form of the inequality; see
 \cite{WeissmanEtAl2003L1Empirical,DemboZeitouni2010LargeDeviations}. These
 are independent sampling envelopes on the finite alphabet \(E\). The rotation
 experiments are controlled instead by the deterministic discrepancy
 certificates of Section~3. When
-\(p=\pi_m\) and the data are Parry-distributed, the observed errors in the
-table fall well within this envelope. When \(p=\pi_m\) but the data come from
-folded rotation orbits, the deterministic Parry gap dominates.
+\(p=\pi_m\) and the data are Parry-distributed, the observed errors in the table
+are at the expected independent-sampling scale. When \(p=\pi_m\) but the data
+come from folded rotation orbits, the deterministic Parry gap dominates.
 
 \subsection{A nonlinear circle-map illustration}
 
@@ -3719,13 +3727,10 @@ with \(K=0.3\) and \(\Omega\) tuned by bisection on the lift so that the
 rotation number equals \(\varphi^{-1}\), giving
 \(\Omega\approx 0.6166931270470741\). With anchor \(a=0.2\), coding window
 \(I=[a,f(a))\), and initial point \(x_0=a\), the resulting symbolic sequence
-is treated here as a script-audited illustration of the conjugacy theorem.
-The proof input in Theorem~\ref{thm:circle-map-conjugacy-transfer} would be
-the exact pulled-back interval \(h^{-1}([0,\varphi^{-1}))\); the displayed
-interval and tuned parameter are not used as theorem evidence beyond the
-provenance recorded in the two copies of
-\texttt{exp\_circle\_map\_audit.py} under \texttt{scripts/} and
-\texttt{supplementary/scripts/}.
+is treated here only as an illustration.  The proof input in
+Theorem~\ref{thm:circle-map-conjugacy-transfer} would be the exact pulled-back
+interval \(h^{-1}([0,\varphi^{-1}))\); the displayed interval and tuned
+parameter are not used as theorem evidence.
 At \(m=12\) and \(N=10^5\), the empirical folded histogram satisfies
 \[
 \TV(\hat\pi_{12,N},\pi_{12}^{\mathrm{fold}})
