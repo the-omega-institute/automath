@@ -30,6 +30,9 @@ except ModuleNotFoundError:  # pragma: no cover
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 DEFAULT_CONFIG = SCRIPT_DIR / "bridge_pipeline_config.json"
+DEFAULT_EVENT_LOG = SCRIPT_DIR / "state" / "bridge_events.jsonl"
+DEFAULT_QUEUE = SCRIPT_DIR / "out" / "bridge_agent_queue.jsonl"
+SUPPRESS_STATUSES = {"consumed", "rejected", "blocked"}
 
 
 def _now_iso() -> str:
@@ -97,6 +100,13 @@ def _repo_commit(repo_path: Path, ref: str) -> str:
     return _run_git(repo_path, ["rev-parse", ref]).strip()
 
 
+def _repo_blob(repo_path: Path, ref: str, rel_path: str) -> str:
+    try:
+        return _run_git(repo_path, ["rev-parse", f"{ref}:{rel_path}"]).strip()
+    except RuntimeError:
+        return ""
+
+
 def _ls_tree(repo_path: Path, ref: str) -> list[str]:
     out = _run_git(repo_path, ["ls-tree", "-r", "--name-only", ref])
     return [line.strip() for line in out.splitlines() if line.strip()]
@@ -136,6 +146,19 @@ def _artifact_key(source_repo: str, source_ref: str, source_path: str) -> str:
     return f"{source_repo}@{source_ref}:{source_path}"
 
 
+def _candidate_hash(record: dict[str, Any]) -> str:
+    payload = {
+        "source_repo": record.get("source_repo"),
+        "source_path": record.get("source_path"),
+        "source_blob": record.get("source_blob"),
+        "destination_repo": record.get("destination_repo"),
+        "destination_artifact_kind": record.get("destination_artifact_kind"),
+        "bridge_direction": record.get("bridge_direction"),
+        "discovery_rule": record.get("discovery_rule"),
+    }
+    return hashlib.sha1(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()[:20]
+
+
 def _destination_path(template: str, source_path: str) -> str:
     return template.format(slug=_slug_for_path(source_path), source_path=source_path)
 
@@ -149,14 +172,69 @@ def _status_for(key: str, state: dict[str, Any], default_status: str) -> str:
     return default_status
 
 
-def _classify_change(key: str, source_commit: str, state: dict[str, Any]) -> str:
+def _classify_change(key: str, source_commit: str, source_blob: str, state: dict[str, Any]) -> str:
     artifacts = state.get("artifacts", {})
     prior = artifacts.get(key) if isinstance(artifacts, dict) else None
     if not isinstance(prior, dict):
         return "new"
+    prior_blob = str(prior.get("source_blob") or prior.get("last_seen_blob") or "")
+    if source_blob and prior_blob:
+        return "changed" if prior_blob != source_blob else "unchanged"
     if str(prior.get("source_commit", "")) != source_commit:
         return "changed"
     return "unchanged"
+
+
+def _parse_iso(text: str) -> datetime | None:
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def _prior_for(key: str, state: dict[str, Any]) -> dict[str, Any]:
+    artifacts = state.get("artifacts", {})
+    prior = artifacts.get(key) if isinstance(artifacts, dict) else None
+    return prior if isinstance(prior, dict) else {}
+
+
+def _state_suppression(prior: dict[str, Any], source_blob: str, *, now: datetime) -> str:
+    cooldown_until = _parse_iso(str(prior.get("cooldown_until") or ""))
+    if cooldown_until and cooldown_until > now:
+        return f"cooldown_until:{cooldown_until.isoformat()}"
+    status = str(prior.get("status") or "")
+    prior_blob = str(prior.get("source_blob") or prior.get("last_seen_blob") or "")
+    if status in SUPPRESS_STATUSES and prior_blob and prior_blob == source_blob:
+        return f"suppressed_status:{status}"
+    return ""
+
+
+def _priority_score(record: dict[str, Any], prior: dict[str, Any]) -> tuple[int, list[str]]:
+    score = int(record.get("priority", 0) or 0)
+    reasons = [f"base:{score}"]
+    change_bonus = {"new": 20, "changed": 12, "unchanged": 0}.get(str(record.get("change_kind")), 0)
+    if change_bonus:
+        score += change_bonus
+        reasons.append(f"change:+{change_bonus}")
+    kind = str(record.get("source_artifact_kind") or "")
+    kind_bonus = {"taste_gate_witness": 12, "lean_theorem": 10, "accepted_proposal": 8, "paper_claim": 4}.get(kind, 0)
+    if kind_bonus:
+        score += kind_bonus
+        reasons.append(f"{kind}:+{kind_bonus}")
+    if record.get("taste_gate_required"):
+        score -= 5
+        reasons.append("taste_gate_pending:-5")
+    if str(record.get("external_publication_risk") or "none") not in {"none", "low"}:
+        score -= 10
+        reasons.append("publication_risk:-10")
+    attempts = int(prior.get("attempt_count", 0) or 0)
+    if attempts:
+        penalty = min(40, attempts * 8)
+        score -= penalty
+        reasons.append(f"attempts:-{penalty}")
+    return score, reasons
 
 
 def _repo_meta(config: dict[str, Any], config_path: Path) -> dict[str, dict[str, Any]]:
@@ -183,6 +261,7 @@ def discover_records(
     *,
     include_unchanged: bool,
     limit_per_rule: int,
+    scan_limit_per_rule: int,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     repos = _repo_meta(config, config_path)
     rules = config.get("discovery_rules")
@@ -190,6 +269,7 @@ def discover_records(
         raise ValueError("config.discovery_rules must be a list")
 
     now = _now_iso()
+    now_dt = datetime.now(timezone.utc)
     records: list[dict[str, Any]] = []
     summary: dict[str, Any] = {"rules": {}, "refs": {}}
 
@@ -230,6 +310,8 @@ def discover_records(
         matched: list[str] = []
         skipped_content = 0
         for path in paths:
+            if scan_limit_per_rule > 0 and len(matched) >= scan_limit_per_rule:
+                break
             if include_globs and not _matches_any(path, include_globs):
                 continue
             if exclude_globs and _matches_any(path, exclude_globs):
@@ -242,11 +324,18 @@ def discover_records(
             matched.append(path)
 
         emitted = 0
+        suppressed = 0
         change_counts = {"new": 0, "changed": 0, "unchanged": 0}
         for source_path in sorted(matched):
             artifact_key = _artifact_key(str(source_repo.get("repo")), source_ref, source_path)
-            change_kind = _classify_change(artifact_key, source_commit, state)
+            source_blob = _repo_blob(source_repo["local_path_resolved"], source_ref, source_path)
+            prior = _prior_for(artifact_key, state)
+            suppression = _state_suppression(prior, source_blob, now=now_dt)
+            change_kind = _classify_change(artifact_key, source_commit, source_blob, state)
             change_counts[change_kind] += 1
+            if suppression and not include_unchanged:
+                suppressed += 1
+                continue
             if change_kind == "unchanged" and not include_unchanged:
                 continue
             if emitted >= limit_per_rule:
@@ -266,6 +355,7 @@ def discover_records(
                 "source_branch_or_ref": source_ref,
                 "source_path": source_path,
                 "source_commit": source_commit,
+                "source_blob": source_blob,
                 "source_artifact_kind": str(rule.get("source_artifact_kind")),
                 "destination_repo": str(dest_repo.get("repo")),
                 "destination_branch_or_ref": dest_ref,
@@ -293,12 +383,17 @@ def discover_records(
                 "artifact_key": artifact_key,
                 "discovery_rule": rule_id,
             }
+            record["candidate_hash"] = _candidate_hash(record)
+            priority_score, priority_reasons = _priority_score(record, prior)
+            record["priority_score"] = priority_score
+            record["priority_reasons"] = priority_reasons
             records.append(record)
             emitted += 1
 
         summary["rules"][rule_id] = {
             "matched": len(matched),
             "emitted": emitted,
+            "suppressed": suppressed,
             "skipped_content": skipped_content,
             "changes": change_counts,
             "source_ref": source_ref,
@@ -308,7 +403,7 @@ def discover_records(
     records.sort(
         key=lambda item: (
             {"new": 0, "changed": 1, "unchanged": 2}.get(str(item.get("change_kind")), 3),
-            -int(item.get("priority", 0)),
+            -int(item.get("priority_score", item.get("priority", 0)) or 0),
             str(item.get("source_path", "")),
         )
     )
@@ -341,8 +436,8 @@ def render_transfer_plan(records: list[dict[str, Any]], summary: dict[str, Any])
         "",
         "## Rule Summary",
         "",
-        "| Rule | Matched | Emitted | New | Changed | Unchanged |",
-        "| --- | ---: | ---: | ---: | ---: | ---: |",
+        "| Rule | Matched | Emitted | Suppressed | New | Changed | Unchanged |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
     ])
     rules = summary.get("rules", {})
     if isinstance(rules, dict):
@@ -351,7 +446,7 @@ def render_transfer_plan(records: list[dict[str, Any]], summary: dict[str, Any])
                 continue
             changes = item.get("changes", {}) if isinstance(item.get("changes"), dict) else {}
             lines.append(
-                f"| `{rule_id}` | {item.get('matched', 0)} | {item.get('emitted', 0)} | "
+                f"| `{rule_id}` | {item.get('matched', 0)} | {item.get('emitted', 0)} | {item.get('suppressed', 0)} | "
                 f"{changes.get('new', 0)} | {changes.get('changed', 0)} | {changes.get('unchanged', 0)} |"
             )
 
@@ -359,8 +454,8 @@ def render_transfer_plan(records: list[dict[str, Any]], summary: dict[str, Any])
         "",
         "## Transfer Candidates",
         "",
-        "| Priority | Change | Status | Readiness | Direction | Source | Destination | Next action |",
-        "| ---: | --- | --- | --- | --- | --- | --- | --- |",
+        "| Priority | Score | Change | Status | Readiness | Direction | Source | Destination | Next action |",
+        "| ---: | ---: | --- | --- | --- | --- | --- | --- | --- |",
     ])
     for record in records[:200]:
         synthesis = record.get("synthesis") if isinstance(record.get("synthesis"), dict) else {}
@@ -374,6 +469,7 @@ def render_transfer_plan(records: list[dict[str, Any]], summary: dict[str, Any])
         )
         row = [
             str(record.get("priority", "")),
+            str(record.get("priority_score", "")),
             f"`{record.get('change_kind', '')}`",
             f"`{record.get('status', '')}`",
             f"`{synthesis.get('readiness', 'unsynthesized')}`",
@@ -408,12 +504,14 @@ def update_state(state: dict[str, Any], records: list[dict[str, Any]], summary: 
         if not key:
             continue
         prior = artifacts.get(key) if isinstance(artifacts.get(key), dict) else {}
+        attempt_count = int(prior.get("attempt_count", 0) or 0)
         artifacts[key] = {
             "status": prior.get("status") or record.get("status"),
             "source_repo": record.get("source_repo"),
             "source_branch_or_ref": record.get("source_branch_or_ref"),
             "source_path": record.get("source_path"),
             "source_commit": record.get("source_commit"),
+            "source_blob": record.get("source_blob"),
             "source_artifact_kind": record.get("source_artifact_kind"),
             "destination_repo": record.get("destination_repo"),
             "destination_branch_or_ref": record.get("destination_branch_or_ref"),
@@ -421,6 +519,11 @@ def update_state(state: dict[str, Any], records: list[dict[str, Any]], summary: 
             "destination_artifact_kind": record.get("destination_artifact_kind"),
             "bridge_direction": record.get("bridge_direction"),
             "last_seen_at": _now_iso(),
+            "last_emitted_at": _now_iso(),
+            "candidate_hash": record.get("candidate_hash"),
+            "priority_score": record.get("priority_score"),
+            "priority_reasons": record.get("priority_reasons", []),
+            "attempt_count": attempt_count + 1,
             "discovery_rule": record.get("discovery_rule"),
             "operator_review_required": record.get("operator_review_required"),
             "taste_gate_required": record.get("taste_gate_required"),
@@ -429,15 +532,63 @@ def update_state(state: dict[str, Any], records: list[dict[str, Any]], summary: 
     return updated
 
 
+def append_events(path: Path, records: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        for record in records:
+            event = {
+                "event": "candidate_emitted",
+                "created_at": _now_iso(),
+                "artifact_key": record.get("artifact_key"),
+                "candidate_hash": record.get("candidate_hash"),
+                "source_blob": record.get("source_blob"),
+                "change_kind": record.get("change_kind"),
+                "priority_score": record.get("priority_score"),
+                "status": record.get("status"),
+                "discovery_rule": record.get("discovery_rule"),
+            }
+            handle.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def write_agent_queue(path: Path, records: list[dict[str, Any]], *, limit: int) -> None:
+    queue = []
+    for record in records[: max(0, limit)]:
+        queue.append(
+            {
+                "candidate_hash": record.get("candidate_hash"),
+                "artifact_key": record.get("artifact_key"),
+                "priority_score": record.get("priority_score"),
+                "priority_reasons": record.get("priority_reasons", []),
+                "change_kind": record.get("change_kind"),
+                "status": record.get("status"),
+                "source": f"{record.get('source_repo')}@{record.get('source_branch_or_ref')}:{record.get('source_path')}",
+                "source_blob": record.get("source_blob"),
+                "destination": f"{record.get('destination_repo')}@{record.get('destination_branch_or_ref')}:{record.get('destination_path')}",
+                "allowed_actions": ["classify", "summarize", "propose_review_packet"],
+                "forbidden_actions": ["write_durable_destination", "mark_accepted", "push"],
+            }
+        )
+    _write_jsonl(path, queue)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the growth-aware Automath-NewMath bridge pipeline")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG), help="pipeline config JSON")
     parser.add_argument("--include-unchanged", action="store_true", help="emit records already seen in bridge state")
     parser.add_argument("--limit-per-rule", type=int, default=50, help="maximum emitted records per discovery rule")
+    parser.add_argument(
+        "--scan-limit-per-rule",
+        type=int,
+        default=0,
+        help="maximum matched paths to scan per discovery rule; 0 keeps the full scan",
+    )
     parser.add_argument("--update-state", action="store_true", help="persist observed artifacts to local bridge state")
     parser.add_argument("--no-synthesis", action="store_true", help="skip cross-repo readiness synthesis")
     parser.add_argument("--inbox", help="override inbox JSONL output path")
     parser.add_argument("--plan", help="override transfer-plan Markdown output path")
+    parser.add_argument("--event-log", default=str(DEFAULT_EVENT_LOG), help="ignored JSONL event log written with --update-state")
+    parser.add_argument("--queue", default=str(DEFAULT_QUEUE), help="ignored top-K agent queue JSONL")
+    parser.add_argument("--queue-limit", type=int, default=25, help="maximum records written to the agent queue")
     args = parser.parse_args(argv)
 
     config_path = Path(args.config).resolve()
@@ -456,6 +607,7 @@ def main(argv: list[str] | None = None) -> int:
         state,
         include_unchanged=args.include_unchanged,
         limit_per_rule=max(1, args.limit_per_rule),
+        scan_limit_per_rule=max(0, args.scan_limit_per_rule),
     )
     if not args.no_synthesis:
         snapshot = build_repo_snapshot(config, config_path)
@@ -471,15 +623,18 @@ def main(argv: list[str] | None = None) -> int:
     else:
         summary["synthesis"] = {"enabled": False}
     _write_jsonl(inbox_path, records)
+    write_agent_queue(Path(args.queue), records, limit=max(0, args.queue_limit))
     plan = render_transfer_plan(records, summary)
     plan_path.parent.mkdir(parents=True, exist_ok=True)
     plan_path.write_text(plan, encoding="utf-8")
     if args.update_state:
         _write_json(state_path, update_state(state, records, summary))
-        state_msg = f"updated state {state_path}"
+        append_events(Path(args.event_log), records)
+        state_msg = f"updated state {state_path}; appended events to {args.event_log}"
     else:
         state_msg = "state unchanged (pass --update-state to persist observations)"
     print(f"[bridge-pipeline] wrote {len(records)} inbox record(s) to {inbox_path}")
+    print(f"[bridge-pipeline] wrote agent queue to {args.queue}")
     print(f"[bridge-pipeline] wrote transfer plan to {plan_path}")
     print(f"[bridge-pipeline] {state_msg}")
     return 0

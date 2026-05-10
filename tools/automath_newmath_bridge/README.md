@@ -20,8 +20,9 @@ content.
 - `bridge_pipeline_config.json` defines dynamic discovery rules for growing
   Automath and NewMath refs.
 - `run_bridge_pipeline.py` discovers new or changed bridgeable artifacts from
-  both repos, synthesizes cross-repo readiness, and renders a local transfer
-  plan.
+  both repos, compares blob-level seen state, computes priority scores,
+  synthesizes cross-repo readiness, renders a local transfer plan, and writes
+  an ignored top-K agent queue.
 - `bridge_synthesis.py` scans both repos for matching evidence: NewMath
   constant/RealConstant material, BEDC TasteGate/supervisor patterns, Automath
   Killo/golden Lean surfaces, and Automath gate surfaces.
@@ -184,11 +185,13 @@ Local runtime outputs:
 
 - `tools/automath_newmath_bridge/inbox/bridge_inbox.jsonl`
 - `tools/automath_newmath_bridge/inbox/writeback_packets/*.json`
+- `tools/automath_newmath_bridge/out/bridge_agent_queue.jsonl`
 - `tools/automath_newmath_bridge/out/bridge_transfer_plan.md`
 - `tools/automath_newmath_bridge/out/bridge_synthesis_report.md`
 - `tools/automath_newmath_bridge/out/bridge_synthesis.jsonl`
 - `tools/automath_newmath_bridge/out/bridge_gate_results.jsonl`
 - `tools/automath_newmath_bridge/state/bridge_state.json`
+- `tools/automath_newmath_bridge/state/bridge_events.jsonl`
 - `tools/automath_newmath_bridge/logs/bridge_supervisor.log`
 
 Those files are intentionally ignored. Durable project decisions belong in
@@ -198,6 +201,22 @@ Generated review packet JSON files are intermediate artifacts too. If a review
 packet becomes a durable source for an Automath decision, summarize it in the
 commit message and record the accepted decision in the manifest or native
 Automath writeback artifact rather than committing the packet itself.
+
+The runner records scan discipline in ignored state:
+
+- `artifact_key` identifies a source repo/ref/path.
+- `source_blob` records the Git blob hash for content-level seen checks.
+- `candidate_hash` identifies the emitted bridge candidate.
+- `priority_score` combines rule priority, change kind, artifact kind, risk,
+  TasteGate requirements, and prior attempts.
+- `cooldown_until`, `rejected`, `blocked`, and `consumed` state entries suppress
+  unchanged content until the blob changes or cooldown expires.
+- `bridge_events.jsonl` appends ignored event records when `--update-state` is
+  used.
+
+LLM agents should consume `out/bridge_agent_queue.jsonl`, not rescan the whole
+repository. Queue entries list allowed actions and explicitly forbid durable
+writes, acceptance, or push.
 
 To persist "already seen" local state:
 

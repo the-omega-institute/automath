@@ -77,9 +77,12 @@ def current_branch(repo: Path) -> str:
     return _git_stdout(repo, ["branch", "--show-current"], timeout=30)
 
 
-def ensure_branch(expected: str) -> None:
+def ensure_branch(expected: str, *, allow_current_branch: bool = False) -> None:
     branch = current_branch(REPO_ROOT)
     if branch != expected:
+        if allow_current_branch:
+            _log(f"branch guard bypassed for local audit branch {branch!r}; configured production branch is {expected!r}")
+            return
         raise RuntimeError(
             f"Refusing to run on branch {branch!r}; expected {expected!r}. "
             "The bridge supervisor never checks out dev or outreach branches."
@@ -160,7 +163,15 @@ def run_command(args: list[str], *, timeout: int = 600) -> subprocess.CompletedP
     )
 
 
-def run_pipeline(config_path: Path, *, include_unchanged: bool, update_state: bool, limit_per_rule: int) -> None:
+def run_pipeline(
+    config_path: Path,
+    *,
+    include_unchanged: bool,
+    update_state: bool,
+    limit_per_rule: int,
+    scan_limit_per_rule: int,
+    no_synthesis: bool,
+) -> None:
     cmd = [
         sys.executable,
         str(SCRIPT_DIR / "run_bridge_pipeline.py"),
@@ -173,6 +184,10 @@ def run_pipeline(config_path: Path, *, include_unchanged: bool, update_state: bo
         cmd.append("--include-unchanged")
     if update_state:
         cmd.append("--update-state")
+    if no_synthesis:
+        cmd.append("--no-synthesis")
+    if scan_limit_per_rule > 0:
+        cmd.extend(["--scan-limit-per-rule", str(scan_limit_per_rule)])
     result = run_command(cmd)
     if result.stdout.strip():
         _log(result.stdout.strip())
@@ -300,7 +315,7 @@ def write_local_packets(gate_results: list[dict[str, Any]], *, limit: int) -> li
 def supervisor_pass(args: argparse.Namespace) -> bool:
     config_path = Path(args.config).resolve()
     config = _load_config(config_path)
-    ensure_branch(expected_branch_from_config(config_path, args.branch))
+    ensure_branch(expected_branch_from_config(config_path, args.branch), allow_current_branch=args.allow_current_branch)
     if tracked_dirty_lines(REPO_ROOT) and not args.allow_dirty:
         raise RuntimeError("Tracked worktree changes present; pass --allow-dirty only for local runtime/debug work")
 
@@ -316,8 +331,13 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
         include_unchanged=args.include_unchanged,
         update_state=args.update_state,
         limit_per_rule=args.limit_per_rule,
+        scan_limit_per_rule=args.scan_limit_per_rule,
+        no_synthesis=args.no_synthesis,
     )
-    run_synthesis_report(config_path)
+    if args.no_synthesis:
+        _log("bridge_synthesis: skipped by --no-synthesis")
+    else:
+        run_synthesis_report(config_path)
     gate_results = run_gates(config_path, allow_publication_risk=args.allow_publication_risk)
 
     automath_apply = bool(args.apply_automath_writeback or config.get("automath_writeback", {}).get("apply_by_default", False))
@@ -353,8 +373,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--include-unchanged", action="store_true", help="Emit already-seen artifacts")
     parser.add_argument("--update-state", action="store_true", help="Persist seen artifacts to ignored local state")
     parser.add_argument("--allow-dirty", action="store_true", help="Allow tracked dirty worktree before running")
+    parser.add_argument(
+        "--allow-current-branch",
+        action="store_true",
+        help="Allow running on the current local audit branch instead of the configured production bridge branch",
+    )
     parser.add_argument("--allow-publication-risk", action="store_true", help="Suppress publication-risk gate warnings")
     parser.add_argument("--limit-per-rule", type=int, default=50)
+    parser.add_argument("--scan-limit-per-rule", type=int, default=0, help="Limit matched path scans per discovery rule for fast local harness checks")
+    parser.add_argument("--no-synthesis", action="store_true", help="Skip cross-repo readiness synthesis for a fast local harness check")
     parser.add_argument(
         "--apply-automath-writeback",
         action="store_true",

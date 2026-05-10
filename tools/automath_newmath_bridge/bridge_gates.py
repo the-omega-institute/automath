@@ -135,6 +135,9 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         "source_artifact_kind": record.get("source_artifact_kind"),
         "destination_artifact_kind": record.get("destination_artifact_kind"),
         "priority": int(record.get("priority", 0) or 0),
+        "priority_score": int(record.get("priority_score", record.get("priority", 0)) or 0),
+        "candidate_hash": record.get("candidate_hash", ""),
+        "source_blob": record.get("source_blob", ""),
         "change_kind": record.get("change_kind", ""),
         "gate_status": gate_status,
         "readiness": readiness or "unsynthesized",
@@ -163,7 +166,7 @@ def gate_records(records: list[dict[str, Any]], *, allow_publication_risk: bool 
     results.sort(
         key=lambda item: (
             0 if item["gate_status"] == "gate_passed" else 1,
-            -int(item.get("priority", 0) or 0),
+            -int(item.get("priority_score", item.get("priority", 0)) or 0),
             str(item.get("source_path", "")),
         )
     )
