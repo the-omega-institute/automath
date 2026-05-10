@@ -131,7 +131,7 @@ this convention: the convention says only that, once such data are explicitly
 constructed or assumed and satisfy the stated typing axioms, the resulting
 structure is a member of the relevant higher model class.
 
-\begin{lemma}[Reduct induction for a displayed layer extension]\label{lem:layer-reduct-induction}
+\begin{lemma}[Flat reduct induction for a displayed layer extension]\label{lem:layer-reduct-induction}
 Let $1\le m<n\le 4$. Suppose that $\Sigma_n$ is obtained from $\Sigma_m$ by adjoining a disjoint block of new symbols, that $\Mod_n$ consists of expansions of $\Sigma_m$-reducts through the forgetful functor
 \[
 U_{n,m}:\Mod_n\to\Mod_m,
@@ -156,10 +156,36 @@ Consequently $\mathbb L_m\preceq\mathbb L_n$.
 \end{lemma}
 
 \begin{proof}
-Proceed by induction on the construction of $\varphi$. The atomic case is the displayed hypothesis. Boolean connectives are immediate from the induction hypothesis. For quantifiers, the variable ranges are those of the retained $\Sigma_m$-sorts; the forgetful functor does not change those carrier sets, and the state projection changes no assignment on retained variables. Thus the induction hypothesis applies uniformly to every valuation used in the quantifier clause. The state-forcing clauses for implication, persistence, and decidedness in the lower language quantify over the same lower information states after applying $\pi^M_{n,m}$, because the projection forgets only layer-$n$ bookkeeping. Hence each recursive forcing clause commutes with reduct. The resulting equivalence is exactly \Cref{eq:conservative-extension}, so $\mathbb L_m\preceq\mathbb L_n$.
+For every retained formula \(\varphi\in\mathrm{Form}_m\), forcing is the
+flat information-state satisfaction of \Cref{def:state-forcing}: it means
+ordinary pointwise satisfaction of \(\varphi\) by every realization in the
+state. The reduct functor \(U_{n,m}\) leaves all retained symbols, retained
+sorts, and retained assignments unchanged, while the state projection
+\(\pi^M_{n,m}\) forgets only the newly adjoined layer coordinates. Hence, for
+every retained assignment \(\rho\) occurring in \(p\),
+\[
+M,\rho\models \varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\rho|_{\Sigma_m}\models \varphi .
+\]
+This is the ordinary first-order reduct induction on the formula
+\(\varphi\): atomic formulas are the displayed hypothesis, Boolean
+connectives are immediate, and quantifiers range over the same retained
+sort-carriers on both sides. Taking the universal quantifier over the same
+projected set of realizations in the state gives
+\[
+M,p\Vdash_n\varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m\varphi .
+\]
+Persistence and decidedness are not additional recursive forcing clauses in
+this paper; persistence is a theorem about the flat forcing relation, and
+decidedness is the abbreviation from \Cref{def:decidedness}. The displayed
+equivalence is exactly \Cref{eq:conservative-extension}, so
+\(\mathbb L_m\preceq\mathbb L_n\).
 \end{proof}
 
-\begin{proposition}[Admissible expansion interface for the layer chain]\label{prop:admissible-layer-expansion-interface}
+\begin{proposition}[Admissible-expansion model-class interface for the layer chain]\label{prop:admissible-layer-expansion-interface}
 Let $i\in\{1,2,3\}$ and let $M_i\in\Mod_i$. Suppose a block of new layer data
 $D_{i+1}$ is supplied as follows:
 \begin{enumerate}[label=(\roman*),nosep]
@@ -196,11 +222,14 @@ M_i,\pi^{M_{i+1}}_{i+1,i}(p)\Vdash_i\varphi
 \]
 Thus arbitrary finite pullback subsites, arbitrary local object functors on
 those subsites, and arbitrary supplied banded prestack or stack-extension data
-are part of the admissible expansion class once they satisfy the displayed
-typing and theorem-level hypotheses. This is a definition of the model class of
-the expanded layers, not an additional closure theorem about a smaller class of
-models. Such expansions may be used to form higher-layer models without changing
-lower-layer forcing.
+are admissible only in the generated model class defined by this proposition,
+once they satisfy the displayed typing and theorem-level hypotheses. This is a
+model-class convention for the expanded layers, not a semantic existence or
+closure theorem for an independently restricted class of models. The realization
+theorems below therefore have two parts: an algebraic construction of typed
+site, presheaf, prestack, stackification, and cohomology data, followed by the
+admissible-expansion step which declares those well-typed data to be an
+\(\mathbb L_{i+1}\)-model without changing lower-layer forcing.
 \end{proposition}
 
 \begin{proof}
