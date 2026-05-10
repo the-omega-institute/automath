@@ -2908,24 +2908,51 @@ Lemma~\ref{lem:golden-slope-coding-audit}, a direct Zeckendorf normalization
 gives first folded digit \(1\) exactly for the two words beginning with
 \(10\), and first folded digit \(0\) for the words beginning with \(01\) or
 \(110\).  When a legal golden factor \(a\) is extended on the right by an
-allowed symbol \(c\), the valuation changes by
-\[
-N_{m+1}(ac)=N_m(a)+cF_{m+2}.
-\]
-The first folded digit is unchanged by this extension.  To see this, let
-\(z\) be the Zeckendorf normal form of \(N_m(a)\).  If \(c=0\) there is
-nothing to prove.  If \(c=1\), the audited transition graph has terminal triple
-\(010\) or \(110\); hence, by the interval assertion proved in
-Lemma~\ref{lem:golden-terminal-residue-skeleton}, the only new interaction
-with \(z\) occurs in the top two positions \(m,m+1\).  The local reductions are
-therefore among \(F_{m+1},F_{m+2},F_{m+3}\), so they cannot alter the
-\(F_2\)-digit.  The normal form is order-independent by
-Theorem~\ref{thm:local-zeckendorf-normalization}.  Induction from the length-six
-audit gives
-\[
-(\Fold_m(a))_1=1
-\quad\Longleftrightarrow\quad
-a_1a_2=10.
+  allowed symbol \(c\), the valuation changes by
+  \[
+  N_{m+1}(ac)=N_m(a)+cF_{m+2}.
+  \]
+  The first folded digit is unchanged by this extension.  We verify this at the
+  level of the raw Fibonacci digit vector before invoking uniqueness of the
+  terminal normal form.  The audited transition graph has exactly the five
+  right-extension cases
+  \[
+  010+1\to101,\qquad
+  110+1\to101,\qquad
+  011+0\to110,\qquad
+  101+0\to010,\qquad
+  101+1\to011 .
+  \]
+  In the two \(c=0\) cases the integer is unchanged, so the lower Zeckendorf
+  digits, and in particular the \(F_2\)-digit, are unchanged.  In the cases
+  \(010+1\) and \(110+1\), Lemma~\ref{lem:golden-terminal-residue-skeleton}
+  puts \(N_m(a)\) in \([F_{m+1},F_{m+2})\).  Its normal form therefore has the
+  top digit \(z_m=1\) and no digit in position \(m+1\).  Adding \(F_{m+2}\)
+  creates the adjacent pair at positions \(m,m+1\), and the local carry
+  \[
+  F_{m+1}+F_{m+2}\longmapsto F_{m+3}
+  \]
+  is supported in positions \(m,m+1,m+2\).  It cannot alter any position
+  \(\le m-1\).
+
+  The remaining \(c=1\) transition is the exceptional branch
+  \(101+1\to011\).  Here the appended raw vector has adjacent \(1\)'s at
+  positions \(m,m+1\).  Applying the same adjacent carry first replaces
+  \(d_m=d_{m+1}=1\) by \(d_m=d_{m+1}=0\), \(d_{m+2}=1\).  This removes the only
+  new contact between the appended digit and the old word.  Because the old
+  suffix is \(101\), the digit in position \(m-1\) is \(0\).  Thus, both before
+  the extension and after this top carry, the same lower prefix in positions
+  \(\le m-1\) is separated from the changed high digit by a zero position.  No
+  normalization path can propagate across that zero gap, so the \(F_2\)-digit is
+  the same as at length \(m\).
+  The normal form is order-independent by
+  Theorem~\ref{thm:local-zeckendorf-normalization}, so these local
+  normalizations compute the canonical fold.  Induction from the length-six
+  audit gives
+  \[
+  (\Fold_m(a))_1=1
+  \quad\Longleftrightarrow\quad
+  a_1a_2=10.
 \]
 The cylinder \([10]\) for the rotation coding is
 \[
@@ -3532,13 +3559,15 @@ also averages over the displayed \(\beta\)-grid.  The residual and Parry tables
 use \(N=3\times 10^5\), for which the discrepancy term is already on the order
 of \(10^{-5}\).
 
-The table fragments included from \texttt{generated/} are emitted by scripts
-in the \texttt{scripts/} and \texttt{supplementary/scripts/} directories.  The
-rotation, microstate, residual, independent-baseline and circle-map scripts
-write CSV files under the export directory; the generated-TeX script in the
-supplementary script directory then converts those CSV files to the TeX
-fragments input below.  The files under \texttt{generated/} are therefore
-generated outputs rather than hand-edited source tables.
+The supplementary archive accompanying this submission contains the scripts and
+pre-built generated fragments used for the numerical tables.  The table
+fragments included from \texttt{generated/} are emitted by scripts in
+\texttt{scripts/} and in the supplementary script directory.  The rotation,
+microstate, residual, independent-baseline and circle-map scripts write CSV
+files under the export directory; the generated-TeX script in the supplementary
+script directory then converts those CSV files to the TeX fragments input below.
+The files under \texttt{generated/} are therefore generated outputs rather than
+hand-edited source tables.
 
 All slope families in Table~\ref{tab:parameter-grid} are of bounded type.  The
 family \([0;B,1,1,\dots]\) is included to show the effect of a large first
