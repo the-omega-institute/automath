@@ -173,7 +173,36 @@ and set
 \end{lemma}
 
 \begin{proof}
-  Choose \(M_0\) such that \(F_{m+1}\ge X_0\) and
+  Binet's formula gives
+  \[
+    F_n=\frac{\varphi^n-(-\varphi)^{-n}}{\sqrt5}.
+  \]
+  For every \(n\ge2\),
+  \[
+    \frac{\varphi^n-1}{\sqrt5}\le F_n\le
+    \frac{\varphi^n+1}{\sqrt5}\le \varphi^n.
+  \]
+  Hence, for \(j=1,2\) and \(m\ge1\),
+  \[
+    C_1\varphi^m\le F_{m+j}\le C_2\varphi^m,\qquad
+    C_1:=\frac{\varphi^2-1}{\sqrt5\varphi},\quad
+    C_2:=\varphi^2.
+  \]
+  Define
+  \[
+    C_3:=\frac12\log\varphi,\qquad C_4:=3\log\varphi,
+  \]
+  and let \(M_{\log}\) be the least integer \(M\ge2\) such that, for
+  all \(m\ge M\) and \(j=1,2\),
+  \[
+    C_3m\le \log F_{m+j}\le C_4m.
+  \]
+  This is a finite search using the preceding Binet bounds: the two
+  required inequalities follow once
+  \(\log C_1+m\log\varphi\ge C_3m\) and
+  \(\log C_2+m\log\varphi\le C_4m\).
+
+  Choose \(M_0\ge M_{\log}\) such that \(F_{m+1}\ge X_0\) and
   \[
     \frac12\le
     \frac{\log F_{m+2}}{m\log\varphi},
@@ -184,8 +213,8 @@ and set
       \frac{\log F_{m+2}}{\log F_{m+1}}
     \le\frac{1+\varphi^{-1}}2
   \]
-  for every \(m\ge M_0\). Such an \(M_0\) is found effectively from
-  Binet's formula. Put
+  for every \(m\ge M_0\). Such an \(M_0\) is found effectively from the
+  same explicit Binet bounds. Put
   \[
     \Delta_m:=
     1-\frac{F_{m+1}}{F_{m+2}}
@@ -208,9 +237,15 @@ and set
   \[
     \abs{\mathcal P_m^{(\mathrm Z)}}
     =\pi(F_{m+2}-1)-\pi(F_{m+1}-1)
-    =\pi(F_{m+2})-\pi(F_{m+1})+O(1),
   \]
-  with \(\pi(x)=\#\{p\le x:p\text{ prime}\}\). For
+  and the endpoint correction is the explicit inequality
+  \[
+    \left|
+      \abs{\mathcal P_m^{(\mathrm Z)}}-
+      \bigl(\pi(F_{m+2})-\pi(F_{m+1})\bigr)
+    \right|\le 2.
+  \]
+  Here \(\pi(x)=\#\{p\le x:p\text{ prime}\}\). For
   \(m\ge M_{\mathrm Z}\), \Cref{lem:explicit-pnt-input} gives
   \[
     \pi(F_{m+2})-\pi(F_{m+1})
@@ -219,23 +254,15 @@ and set
     -K_1\frac{F_{m+2}}{(\log F_{m+2})^2}
     -K_1\frac{F_{m+1}}{(\log F_{m+1})^2}.
   \]
-  By the definition of \(M_{\mathrm Z}\), after absorbing the endpoint
-  \(O(1)\),
+  By the definition of \(M_{\mathrm Z}\), using the displayed endpoint
+  inequality,
   \[
     \abs{\mathcal P_m^{(\mathrm Z)}}
     \ge \frac12\,\frac{F_{m+2}}{\log F_{m+2}}\Delta_m .
   \]
-  Binet's formula gives
-  \(F_{m+j}=\varphi^{m+j}/\sqrt5+O(\varphi^{-m})\) for \(j=1,2\), and
-  hence
-  \[
-    C_1\varphi^m\le F_{m+j}\le C_2\varphi^m,\qquad
-    C_3m\le \log F_{m+j}\le C_4m
-  \]
-  for all sufficiently large \(m\), with suitable positive constants
-  \(C_1,\dots,C_4\). Also
-  \(\Delta_m\ge(1-\varphi^{-1})/2\) by construction. Therefore one may
-  take, after enlarging \(M_{\mathrm Z}\) if needed,
+  The explicit Binet constants above and
+  \(\Delta_m\ge(1-\varphi^{-1})/2\) by construction show that one may
+  take
   \[
     A_{\mathrm Z}:=\frac{C_1(1-\varphi^{-1})}{8C_4}.
   \]
@@ -357,20 +384,20 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
 \begin{corollary}[No simultaneous recall and precision in Zeckendorf]
   \label{cor:zeck-recall-precision}
   Let \(\mathcal A\) be a deterministic automaton over the Zeckendorf
-  alphabet. Let \(p\), the constants \(c_0,\dots,c_{p-1}\), and
+  alphabet. Let \(D_Z\), the constants \(c_0,\dots,c_{D_Z-1}\), and
   \(\theta\) be supplied by
   \Cref{lem:zeckendorf-canonical-presentation,thm:parry-density}, so that
   \[
     \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
-    =c_{m\bmod p}+O(\theta^m)
+    =c_{m\bmod D_Z}+O(\theta^m)
   \]
   for all sufficiently large \(m\). Let \(B_{\mathrm Z}\) be the upper
   estimate constant from \Cref{lem:zeck-prime-count}. For each residue
-  class \(r\bmod p\), exactly one of the following alternatives holds:
+  class \(r\bmod D_Z\), exactly one of the following alternatives holds:
   \begin{enumerate}[label=\textup{(\alph*)}]
     \item If \(c_r=0\), then
     \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
-    \(m\equiv r\pmod p\).
+    \(m\equiv r\pmod {D_Z}\).
     \item If \(c_r>0\), then there is a constant
     \(C_{r,\varphi}>0\), for instance
     \(C_{r,\varphi}=2C_\varphi B_{\mathrm Z}/c_r\) with
@@ -378,17 +405,17 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
     \[
       \mathrm{Prec}_m^{(\mathrm Z)}\le \frac{C_{r,\varphi}}{m}
     \]
-    for all sufficiently large \(m\equiv r\pmod p\).
+    for all sufficiently large \(m\equiv r\pmod {D_Z}\).
   \end{enumerate}
   Consequently every deterministic automaton satisfies one of the
   following statements:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
     every residue class of lengths.
-    \item There exists at least one residue class \(r\bmod p\) with
+    \item There exists at least one residue class \(r\bmod D_Z\) with
     \(c_r>0\) such that
     \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\) for
-    all sufficiently large \(m\equiv r\pmod p\) for which precision is
+    all sufficiently large \(m\equiv r\pmod {D_Z}\) for which precision is
     defined.
   \end{enumerate}
   Precision is left undefined on lengths with
@@ -411,8 +438,8 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   \(K_1,K_2>0\) such that
   \(K_1\varphi^m\le F_m\le K_2\varphi^m\) for all large \(m\).
 
-  Treat each residue class \(r\bmod p\) separately. If \(c_r=0\), then
-  along \(m\equiv r\pmod p\),
+  Treat each residue class \(r\bmod D_Z\) separately. If \(c_r=0\), then
+  along \(m\equiv r\pmod {D_Z}\),
   \(a_m^{(\mathrm Z)}(\mathcal A)=O(\theta^mF_m)\). Hence
   \[
     \mathrm{Rec}_m^{(\mathrm Z)}
@@ -424,7 +451,7 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   Since \(m\theta^m=O(\theta_r^m)\) for some \(\theta_r\in(0,1)\),
   recall decays exponentially on this residue class.
 
-  If \(c_r>0\), then for all sufficiently large \(m\equiv r\pmod p\),
+  If \(c_r>0\), then for all sufficiently large \(m\equiv r\pmod {D_Z}\),
   \[
     a_m^{(\mathrm Z)}(\mathcal A)\ge \frac{c_r}{2}F_m
     \ge \frac{c_rK_1}{2}\varphi^m.
@@ -450,7 +477,7 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   Finally suppose that both recall and precision were bounded below by
   some \(\delta>0\) on infinitely many Zeckendorf lengths. By the
   pigeonhole principle, infinitely many of those lengths lie in one
-  residue class \(r\bmod p\). The case \(c_r=0\) contradicts the
+  residue class \(r\bmod D_Z\). The case \(c_r=0\) contradicts the
   exponential recall decay above. The case \(c_r>0\) contradicts the
   bound \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{r,\varphi}/m\) along that
   same residue class.
@@ -462,12 +489,12 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   \[
     \ell_m:=\abs{L\cap\mathcal Z_m}.
   \]
-  Then there are an integer \(p\ge1\), non-negative constants
-  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that
+  Then there are an integer \(D_Z\ge1\), non-negative constants
+  \(c_0,\dots,c_{D_Z-1}\), and \(\theta\in(0,1)\) such that
   \[
-    \frac{\ell_m}{F_m}=c_{m\bmod p}+O(\theta^m).
+    \frac{\ell_m}{F_m}=c_{m\bmod D_Z}+O(\theta^m).
   \]
-  Consequently, on each residue class modulo \(p\), the ratio
+  Consequently, on each residue class modulo \(D_Z\), the ratio
   \[
     \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
   \]
@@ -492,7 +519,7 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   \Cref{thm:parry-density} to this presentation and to
   \(\mathcal A\) gives the displayed expansion.
 
-  Fix a residue class \(r\bmod p\). By \Cref{lem:zeck-prime-count}
+  Fix a residue class \(r\bmod D_Z\). By \Cref{lem:zeck-prime-count}
   there are constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) such that
   \[
     A_{\mathrm Z}\frac{\varphi^m}{m}
@@ -502,7 +529,7 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   for all sufficiently large \(m\). Also fix \(K_1,K_2>0\) such that
   \(K_1\varphi^m\le F_m\le K_2\varphi^m\) for all large \(m\).
 
-  If \(c_r=0\), then along \(m\equiv r\pmod p\) we have
+  If \(c_r=0\), then along \(m\equiv r\pmod {D_Z}\) we have
   \[
     \ell_m=O(\theta^mF_m)=O(\theta^m\varphi^m).
   \]
@@ -515,7 +542,7 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   \((0,1)\).
 
   If \(c_r>0\), then for all sufficiently large
-  \(m\equiv r\pmod p\),
+  \(m\equiv r\pmod {D_Z}\),
   \[
     \ell_m\ge\frac{c_r}{2}F_m
         \ge\frac{c_rK_1}{2}\varphi^m.
@@ -552,8 +579,8 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
 \begin{proof}
   Suppose that \(\mathcal P_{\mathcal Z}\) were regular. Applying
   \Cref{prop:zeckendorf-regular-slice-rigidity} to
-  \(L=\mathcal P_{\mathcal Z}\) gives a period \(p\) such that on every
-  residue class modulo \(p\) the ratio
+  \(L=\mathcal P_{\mathcal Z}\) gives a period \(D_Z\) such that on every
+  residue class modulo \(D_Z\) the ratio
   \[
     \frac{\abs{\mathcal P_{\mathcal Z}\cap\mathcal Z_m}}
          {\abs{\mathcal P_m^{(\mathrm Z)}}}

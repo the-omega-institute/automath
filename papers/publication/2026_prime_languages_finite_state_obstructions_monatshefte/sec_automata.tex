@@ -280,12 +280,19 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \[
     \abs{\mathcal P_m^{(b)}}=\pi(b^m-1)-\pi(b^{m-1}-1).
   \]
-  Equivalently, this is
+  The endpoint correction is the visible inequality
+  \[
+    \left|
+      \abs{\mathcal P_m^{(b)}}-
+      \bigl(\pi(b^m)-\pi(b^{m-1})\bigr)
+    \right|\le 2,
+  \]
+  valid for every \(m\ge1\). Equivalently, this is
   \[
     \pi(b^m)-\pi(b^{m-1})+O(1),
   \]
-  since only the two endpoints can differ. For \(m\ge M_b\), the
-  explicit estimate in \Cref{lem:explicit-pnt-input} gives
+  with the displayed absolute constant. For \(m\ge M_b\), the explicit
+  estimate in \Cref{lem:explicit-pnt-input} gives
   \[
     \pi(b^m)-\pi(b^{m-1})
     \ge
@@ -360,17 +367,20 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \theta_r\in(\max\Theta,1).
   \]
 
-  For each eigenvalue \(\mu\) with \(|\mu|<\theta_r\), and for each
-  Jordan block size \(s\), the binomial expansion of
+  Eigenvalue \(0\) contributes only nilpotent Jordan terms, which vanish
+  after at most \(s\) steps and are absorbed into the finite-prefix
+  maximum below. For each non-zero eigenvalue \(\mu\) with
+  \(|\mu|<\theta_r\), and for each Jordan block size \(s\), the binomial
+  expansion of
   \((\mu I+N)^m\) bounds the corresponding block by
-  \(C_{\mu,s}m^{s-1}|\mu|^m\), with \(C_{\mu,s}\) computed from a
+  \(C_{\mu,s}(m+1)^{s-1}|\mu|^m\), with \(C_{\mu,s}\) computed from a
   transition matrix between the rational basis and the algebraic Jordan
   basis. Put \(a=|\mu|/\theta_r<1\). Since
-  \(x\mapsto x^{s-1}a^x\) is decreasing for
-  \(x\ge (s-1)/\log(1/a)\), the finite maximum
+  \(x\mapsto (x+1)^{s-1}a^x\) is decreasing for
+  \(x+1\ge (s-1)/\log(1/a)\), the finite maximum
   \[
     C(\mu,\theta_r,s):=
-    \max_{0\le m\le N_{\mu,s}} m^{s-1}
+    \max_{0\le m\le N_{\mu,s}} (m+1)^{s-1}
        \left(\frac{|\mu|}{\theta_r}\right)^m,
     \qquad
     N_{\mu,s}:=
@@ -378,7 +388,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \]
   satisfies
   \[
-    m^{s-1}|\mu|^m\le C(\mu,\theta_r,s)\theta_r^m
+    (m+1)^{s-1}|\mu|^m\le C(\mu,\theta_r,s)\theta_r^m
     \qquad(m\ge0).
   \]
   The finite maximum is evaluated with algebraic interval arithmetic.
@@ -905,6 +915,40 @@ Let \(B_N\) be the adjacency matrix of \(\mathcal N\), let
 \(\lambda:=\rho(B_N)>1\) be its spectral radius, and let \(d_N\ge 1\)
 be the period of \(B_N\).
 
+\begin{lemma}[Cyclic-class path threshold]
+  \label{lem:cyclic-class-path-threshold}
+  Let \(B\) be an irreducible non-negative integer matrix with period
+  \(d\) and cyclic decomposition \(C_0,\dots,C_{d-1}\), indexed so that
+  \(B\) maps \(C_i\) to \(C_{i+1}\). For each pair of cyclic classes
+  \(C_i,C_j\) there is an integer \(N_{ij}\) such that, whenever
+  \(n\ge N_{ij}\) and \(n\equiv j-i\pmod d\), every pair
+  \(x\in C_i\), \(y\in C_j\) is joined by at least one path of length
+  \(n\). The threshold is uniform over the finite pair
+  \(C_i\times C_j\).
+\end{lemma}
+
+\begin{proof}
+  The diagonal block of \(B^d\) on each cyclic class \(C_i\) is
+  primitive. Hence for each \(i\) there is an exponent \(E_i\) such that
+  \((B^{kd})_{xy}>0\) for every \(x,y\in C_i\) and every \(k\ge E_i\).
+  If \(j-i\equiv h\pmod d\), irreducibility and the cyclic
+  decomposition imply that for each \(x\in C_i\) and \(y\in C_j\) there
+  is a path from \(x\) to \(y\) whose length is congruent to \(h\)
+  modulo \(d\). Choose one such path for each finite pair and write its
+  length as \(h+dq_{xy}\). Let \(Q_{ij}:=\max_{x,y}q_{xy}\), and let
+  \(N_{ij}:=h+d(Q_{ij}+\max_iE_i)\), with
+  \(h\in\{0,\dots,d-1\}\).
+
+  For \(n=h+dk\ge N_{ij}\), use the chosen path
+  \(x=x_0\to x_1\to\cdots\to x_{h+dq_{xy}}=y\). Its first \(h\) edges
+  end at a state \(w\in C_j\). Since \(B^d|_{C_j}\) is primitive, there
+  is a path of length \(d(k-q_{xy})\) from \(w\) to \(w\) whenever
+  \(k-q_{xy}\ge E_j\). Follow the first \(h\) edges from \(x\) to \(w\),
+  insert this return path at \(w\), and then follow the remaining
+  \(dq_{xy}\) edges of the chosen path from \(w\) to \(y\). The total
+  length is \(h+d(k-q_{xy})+dq_{xy}=n\).
+\end{proof}
+
 \begin{lemma}[Periodic growth of trim presentations]
   \label{lem:trim-density}
   With the notation above there exist \(d_N\) non-negative constants
@@ -955,13 +999,9 @@ be the period of \(B_N\).
   \(k\) there is an accepting state \(f_k\in F_N\) with
   \((B_N^{kd_N+r})_{q_N f_k}>0\). Since \(F_N\) is finite, one
   accepting state \(f\) occurs for infinitely many \(k\). In an
-  irreducible non-negative matrix of period \(d_N\), the cyclic
-  decomposition \(C_0,\dots,C_{d_N-1}\) has the property that
-  \(B_N\) maps \(C_j\) only to \(C_{j+1}\), and for each \(j\) the
-  diagonal block of \(B_N^{d_N}\) on \(C_j\) is primitive
-  \cite[Sec.~4.5]{LindMarcus1995}; equivalently, all sufficiently long
-  paths in an admissible residue class occur between the corresponding
-  cyclic classes. Therefore
+  irreducible non-negative matrix of period \(d_N\), the
+  cyclic-class threshold in \Cref{lem:cyclic-class-path-threshold}
+  applies. Therefore
   \((B_N^{kd_N+r})_{q_N f}>0\) for all sufficiently large \(k\), and
   the limit
   \[
@@ -991,11 +1031,11 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   \(h\in\RR_{>0}^{Q_N}\). For every deterministic automaton
   \(\mathcal A\) over the same alphabet, complete or partial as in
   \Cref{def:trim-deterministic-presentation}, there exist an integer
-  \(p'\ge 1\), non-negative constants \(e_0,\dots,e_{p'-1}\), and
+  \(D'\ge 1\), non-negative constants \(e_0,\dots,e_{D'-1}\), and
   \(\eta\in(0,1)\) such that
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr).
+    =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr).
   \]
 \end{lemma}
 
@@ -1007,7 +1047,7 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   states that are unreachable from the initial pair or cannot reach an
   accepting pair. If no state remains, then
   \(a_m(\mathcal A,\mathcal N)=0\) for all \(m\), and the assertion
-  holds with \(p'=1\) and \(e_0=0\). Otherwise let \(Q'\) be the state
+  holds with \(D'=1\) and \(e_0=0\). Otherwise let \(Q'\) be the state
   set of the resulting product \(\mathcal B'\), let \(B'\) be its
   adjacency matrix, and let \(u'\) and \(v'\) be the indicator vectors
   of its initial and accepting states. Trimming does not change the
@@ -1077,10 +1117,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   \]
   The powers \(T^\ell\) decay exponentially, while each \(C_j^m\) has
   the usual periodic Perron--Frobenius limits. Hence, with
-  \(p'=\operatorname{lcm}(d_1,\dots,d_s)\), the entrywise limits
+  \(D'=\operatorname{lcm}(d_1,\dots,d_s)\), the entrywise limits
   \[
-    S_r:=\lim_{k\to\infty}P'^{kp'+r}
-    \qquad(0\le r<p')
+    S_r:=\lim_{k\to\infty}P'^{kD'+r}
+    \qquad(0\le r<D')
   \]
   exist on the \(Q'\times Q'\) block. These limits include the
   non-decaying absorption terms from transient states into recurrent
@@ -1088,7 +1128,7 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   non-peripheral parts of the recurrent blocks decay exponentially,
   there are a constant \(C>0\) and \(\eta\in(0,1)\) such that
   \[
-    P'^m=S_{m\bmod p'}+E_m,
+    P'^m=S_{m\bmod D'}+E_m,
     \qquad
     \|E_m\|\le C\eta^m.
   \]
@@ -1109,7 +1149,7 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   Therefore
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr),
+    =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr),
     \qquad
     e_r:=\widetilde u^{\mathsf T}S_r\widetilde v\ge 0,
   \]
@@ -1123,12 +1163,12 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   \Cref{def:trim-deterministic-presentation}, with Perron root
   \(\lambda>1\), and let
   \(\mathcal A\) be a deterministic automaton over \(\Sigma\). Then
-  there exist an integer \(p\ge 1\), non-negative constants
-  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that for all
+  there exist an integer \(D_N\ge 1\), non-negative constants
+  \(c_0,\dots,c_{D_N-1}\), and \(\theta\in(0,1)\) such that for all
   sufficiently large \(m\) with \(z_m>0\),
   \[
     \frac{a_m(\mathcal A,\mathcal N)}{z_m}
-    =c_{m\bmod p}+O(\theta^m).
+    =c_{m\bmod D_N}+O(\theta^m).
   \]
   In particular, either the ratio
   \(a_m(\mathcal A,\mathcal N)/z_m\) decays exponentially fast, or else
@@ -1140,25 +1180,25 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 \begin{proof}
   Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
   \(B_N\). By \Cref{lem:substochastic-product-expansion}, there are
-  \(p'\ge 1\), non-negative constants \(e_0,\dots,e_{p'-1}\), and
+  \(D'\ge 1\), non-negative constants \(e_0,\dots,e_{D'-1}\), and
   \(\eta\in(0,1)\) such that
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr).
+    =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr).
   \]
 
-  Now combine this with \Cref{lem:trim-density}. After replacing \(p'\)
-  by a common multiple \(p\) of \(p'\) and \(d_N\), and regrouping the
+  Now combine this with \Cref{lem:trim-density}. After replacing \(D'\)
+  by a common multiple \(D_N\) of \(D'\) and \(d_N\), and regrouping the
   residue classes, there exist non-negative constants
-  \(e_0,\dots,e_{p-1}\), \(d_0,\dots,d_{p-1}\), and \(\theta\in(0,1)\)
+  \(e_0,\dots,e_{D_N-1}\), \(d_0,\dots,d_{D_N-1}\), and \(\theta\in(0,1)\)
   such that
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p}+O(\theta^m)\bigr),
+    =\lambda^m\bigl(e_{m\bmod D_N}+O(\theta^m)\bigr),
     \qquad
-    z_m=\lambda^m\bigl(d_{m\bmod p}+O(\theta^m)\bigr).
+    z_m=\lambda^m\bigl(d_{m\bmod D_N}+O(\theta^m)\bigr).
   \]
-  If \(z_m>0\) for infinitely many \(m\equiv r\pmod p\), then
+  If \(z_m>0\) for infinitely many \(m\equiv r\pmod {D_N}\), then
   \Cref{lem:trim-density} gives \(d_r>0\). Along every such residue
   class,
   \[
@@ -1223,14 +1263,14 @@ applications.
 \end{corollary}
 
 \begin{proof}
-  Let \(p\), \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) be supplied
-  by \Cref{thm:parry-density}. Enlarge \(p\), if necessary, so that it
+  Let \(D_N\), \(c_0,\dots,c_{D_N-1}\), and \(\theta\in(0,1)\) be supplied
+  by \Cref{thm:parry-density}. Enlarge \(D_N\), if necessary, so that it
   is also a multiple of the period in \Cref{lem:trim-density}. Then for
-  every residue class \(r\bmod p\) containing infinitely many lengths
+  every residue class \(r\bmod D_N\) containing infinitely many lengths
   with \(z_m>0\), there is a constant \(d_r>0\) such that
   \[
     z_m=\lambda^m(d_r+O(\theta^m))
-    \qquad (m\equiv r\bmod p),
+    \qquad (m\equiv r\bmod {D_N}),
   \]
   after increasing \(\theta\) within \((0,1)\) if needed. Hence
   \(z_m\asymp\lambda^m\)
@@ -1258,7 +1298,7 @@ applications.
   \]
 
   If \(c_r>0\), then \(\abs{A_m}/z_m\ge c_r/2\) for all sufficiently
-  large \(m\equiv r\bmod p\) with \(z_m>0\). Since
+  large \(m\equiv r\bmod {D_N}\) with \(z_m>0\). Since
   \(z_m\asymp\lambda^m\) on the residue class, there is a constant
   \(\gamma_r>0\) such that \(\abs{A_m}\ge\gamma_r\lambda^m\). The upper
   bound on \(\abs{T_m}\) then gives, for all sufficiently large \(m\) in
