@@ -69,6 +69,8 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
     source_kind = str(record.get("source_artifact_kind") or "")
     destination_path = str(record.get("destination_path") or "")
     publication_risk = str(record.get("external_publication_risk") or "none")
+    synthesis = record.get("synthesis") if isinstance(record.get("synthesis"), dict) else {}
+    readiness = str(synthesis.get("readiness") or "")
 
     durable_write_allowed = False
     packet_write_allowed = False
@@ -84,6 +86,12 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
 
     if publication_risk in {"medium", "high"} and not allow_publication_risk:
         warnings.append("publication-risk record requires explicit operator approval before any public-facing use")
+
+    if readiness == "observe_only":
+        warnings.append("synthesis is observe_only; local packet is suppressed until readiness changes")
+
+    if readiness.startswith("blocked"):
+        warnings.append(f"synthesis readiness is {readiness}; local packet is review-only and durable write remains blocked")
 
     if record.get("taste_gate_required") and "taste" not in (
         str(record.get("notes", "")) + " " + str(record.get("audit_boundary", ""))
@@ -104,11 +112,12 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         passed = False
 
     if passed:
-        packet_write_allowed = True
+        packet_write_allowed = readiness != "observe_only"
         durable_write_allowed = (
             not bool(record.get("operator_review_required"))
             and not bool(record.get("taste_gate_required"))
             and publication_risk in {"none", "low"}
+            and readiness == "ready_for_durable_write"
         )
 
     gate_status = "gate_passed" if passed else "gate_blocked"
@@ -128,6 +137,8 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         "priority": int(record.get("priority", 0) or 0),
         "change_kind": record.get("change_kind", ""),
         "gate_status": gate_status,
+        "readiness": readiness or "unsynthesized",
+        "readiness_confidence": synthesis.get("readiness_confidence", ""),
         "packet_write_allowed": packet_write_allowed,
         "durable_write_allowed": durable_write_allowed,
         "operator_review_required": record.get("operator_review_required"),
@@ -136,6 +147,9 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         "external_publication_risk": publication_risk,
         "issues": issues,
         "warnings": warnings,
+        "required_gates": synthesis.get("required_gates", []),
+        "why_not_writeback_yet": synthesis.get("why_not_writeback_yet", ""),
+        "evidence_summary": synthesis.get("evidence_summary", []),
         "next_action": (
             "write local review packet for operator decision"
             if packet_write_allowed

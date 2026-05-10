@@ -82,6 +82,14 @@ def ensure_branch(expected: str) -> None:
         )
 
 
+def expected_branch_from_config(config_path: Path, fallback: str) -> str:
+    try:
+        config = _load_config(config_path)
+    except Exception:
+        return fallback
+    return str(config.get("required_branch") or fallback)
+
+
 def tracked_dirty_lines(repo: Path) -> list[str]:
     output = _git_stdout(repo, ["status", "--porcelain", "--untracked-files=no"], timeout=30)
     return [line for line in output.splitlines() if line.strip()]
@@ -168,6 +176,30 @@ def run_pipeline(config_path: Path, *, include_unchanged: bool, update_state: bo
         raise RuntimeError((result.stderr or result.stdout or "bridge pipeline failed").strip())
 
 
+def run_synthesis_report(config_path: Path) -> None:
+    config = _load_config(config_path)
+    inbox = REPO_ROOT / str(config.get("inbox_path"))
+    output = SCRIPT_DIR / "out" / "bridge_synthesis.jsonl"
+    report = REPO_ROOT / str(config.get("synthesis_report_path") or "tools/automath_newmath_bridge/out/bridge_synthesis_report.md")
+    cmd = [
+        sys.executable,
+        str(SCRIPT_DIR / "bridge_synthesis.py"),
+        "--config",
+        str(config_path),
+        "--input",
+        str(inbox),
+        "--output",
+        str(output),
+        "--report",
+        str(report),
+    ]
+    result = run_command(cmd)
+    if result.stdout.strip():
+        _log(result.stdout.strip())
+    if result.returncode != 0:
+        raise RuntimeError((result.stderr or result.stdout or "bridge synthesis failed").strip())
+
+
 def run_gates(config_path: Path, *, allow_publication_risk: bool) -> list[dict[str, Any]]:
     config = _load_config(config_path)
     inbox = REPO_ROOT / str(config.get("inbox_path"))
@@ -220,24 +252,26 @@ def write_local_packets(gate_results: list[dict[str, Any]], *, limit: int) -> li
 
 
 def supervisor_pass(args: argparse.Namespace) -> bool:
-    ensure_branch(args.branch)
+    config_path = Path(args.config).resolve()
+    ensure_branch(expected_branch_from_config(config_path, args.branch))
     if tracked_dirty_lines(REPO_ROOT) and not args.allow_dirty:
         raise RuntimeError("Tracked worktree changes present; pass --allow-dirty only for local runtime/debug work")
 
     if not args.no_fetch:
-        fetch_results = fetch_repositories(Path(args.config).resolve())
+        fetch_results = fetch_repositories(config_path)
         for item in fetch_results:
             _log(f"fetch: {item}")
         if any(item.get("status") == "fetch_failed" for item in fetch_results):
             return False
 
     run_pipeline(
-        Path(args.config).resolve(),
+        config_path,
         include_unchanged=args.include_unchanged,
         update_state=args.update_state,
         limit_per_rule=args.limit_per_rule,
     )
-    gate_results = run_gates(Path(args.config).resolve(), allow_publication_risk=args.allow_publication_risk)
+    run_synthesis_report(config_path)
+    gate_results = run_gates(config_path, allow_publication_risk=args.allow_publication_risk)
 
     if args.apply_writeback_packets:
         written = write_local_packets(gate_results, limit=args.packet_limit)
@@ -249,7 +283,7 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Automath-NewMath bridge supervisor")
-    parser.add_argument("--branch", default="bridge/automath-newmath-consumption", help="Required current branch")
+    parser.add_argument("--branch", default="bridge/automath-newmath-consumption", help="Required current branch fallback; config.required_branch wins")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG), help="bridge pipeline config JSON")
     parser.add_argument("--once", action="store_true", help="Run one pass")
     parser.add_argument("--poll-interval", type=int, default=300, help="Seconds between passes")

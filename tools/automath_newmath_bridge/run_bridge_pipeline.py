@@ -2,10 +2,10 @@
 """Run the growth-aware Automath-NewMath bridge pipeline.
 
 This runner discovers bridgeable artifacts from both repositories by reading
-configured Git refs, compares them with local bridge state, emits an inbox of
-candidate transfer records, and renders a transfer plan. It is intentionally
-non-destructive: it does not modify source repos, accept proposals, apply
-writebacks, publish, send, push, or merge.
+configured Git refs, compares them with local bridge state, synthesizes
+cross-repo readiness, emits an inbox of candidate transfer records, and renders
+a transfer plan. It is intentionally non-destructive: it does not modify source
+repos, accept proposals, apply writebacks, publish, send, push, or merge.
 """
 
 from __future__ import annotations
@@ -20,6 +20,11 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+try:
+    from bridge_synthesis import build_repo_snapshot, synthesize_records
+except ModuleNotFoundError:  # pragma: no cover
+    from tools.automath_newmath_bridge.bridge_synthesis import build_repo_snapshot, synthesize_records
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -354,10 +359,11 @@ def render_transfer_plan(records: list[dict[str, Any]], summary: dict[str, Any])
         "",
         "## Transfer Candidates",
         "",
-        "| Priority | Change | Status | Direction | Source | Destination | Next action |",
-        "| ---: | --- | --- | --- | --- | --- | --- |",
+        "| Priority | Change | Status | Readiness | Direction | Source | Destination | Next action |",
+        "| ---: | --- | --- | --- | --- | --- | --- | --- |",
     ])
     for record in records[:200]:
+        synthesis = record.get("synthesis") if isinstance(record.get("synthesis"), dict) else {}
         source = (
             f"{record.get('source_repo')}@{record.get('source_branch_or_ref')}:"
             f"{record.get('source_path')}"
@@ -370,10 +376,11 @@ def render_transfer_plan(records: list[dict[str, Any]], summary: dict[str, Any])
             str(record.get("priority", "")),
             f"`{record.get('change_kind', '')}`",
             f"`{record.get('status', '')}`",
+            f"`{synthesis.get('readiness', 'unsynthesized')}`",
             f"`{record.get('bridge_direction', '')}`",
             source,
             destination,
-            str(record.get("next_action", "")),
+            str(synthesis.get("synthesis_next_action") or record.get("next_action", "")),
         ]
         lines.append("| " + " | ".join(str(cell).replace("|", "\\|") for cell in row) + " |")
 
@@ -428,6 +435,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--include-unchanged", action="store_true", help="emit records already seen in bridge state")
     parser.add_argument("--limit-per-rule", type=int, default=50, help="maximum emitted records per discovery rule")
     parser.add_argument("--update-state", action="store_true", help="persist observed artifacts to local bridge state")
+    parser.add_argument("--no-synthesis", action="store_true", help="skip cross-repo readiness synthesis")
     parser.add_argument("--inbox", help="override inbox JSONL output path")
     parser.add_argument("--plan", help="override transfer-plan Markdown output path")
     args = parser.parse_args(argv)
@@ -449,6 +457,19 @@ def main(argv: list[str] | None = None) -> int:
         include_unchanged=args.include_unchanged,
         limit_per_rule=max(1, args.limit_per_rule),
     )
+    if not args.no_synthesis:
+        snapshot = build_repo_snapshot(config, config_path)
+        records = synthesize_records(records, snapshot)
+        summary["synthesis"] = {
+            "enabled": True,
+            "automath_commit": snapshot["repos"]["automath"]["commit"],
+            "newmath_commit": snapshot["repos"]["newmath"]["commit"],
+            "newmath_constant_lean_files": snapshot["newmath_constants"]["lean_hit_count"],
+            "newmath_constant_paper_files": snapshot["newmath_constants"]["paper_hit_count"],
+            "automath_killo_golden_files": snapshot["automath_surfaces"]["killo_golden_path_count"],
+        }
+    else:
+        summary["synthesis"] = {"enabled": False}
     _write_jsonl(inbox_path, records)
     plan = render_transfer_plan(records, summary)
     plan_path.parent.mkdir(parents=True, exist_ok=True)

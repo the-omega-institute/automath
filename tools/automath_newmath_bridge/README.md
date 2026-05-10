@@ -20,7 +20,11 @@ content.
 - `bridge_pipeline_config.json` defines dynamic discovery rules for growing
   Automath and NewMath refs.
 - `run_bridge_pipeline.py` discovers new or changed bridgeable artifacts from
-  both repos and renders a local transfer plan.
+  both repos, synthesizes cross-repo readiness, and renders a local transfer
+  plan.
+- `bridge_synthesis.py` scans both repos for matching evidence: NewMath
+  constant/RealConstant material, BEDC TasteGate/supervisor patterns, Automath
+  Killo/golden Lean surfaces, and Automath gate surfaces.
 - `bridge_gates.py` runs deterministic local gates over the bridge inbox.
 - `bridge_supervisor.py` periodically fetches both repos, runs discovery, runs
   gates, and can write local ignored review packets.
@@ -137,9 +141,10 @@ One pass does this:
 1. Verifies the current branch is `bridge/automath-newmath-consumption`.
 2. Fetches latest refs for Automath and NewMath unless `--no-fetch` is passed.
 3. Discovers new or changed artifacts from both repos.
-4. Writes a local inbox and transfer plan.
-5. Runs deterministic gates.
-6. Optionally writes local review packets if `--apply-writeback-packets` is
+4. Synthesizes readiness from both repo contents.
+5. Writes a local inbox, synthesis report, and transfer plan.
+6. Runs deterministic gates.
+7. Optionally writes local review packets if `--apply-writeback-packets` is
    passed.
 
 Continuous mode:
@@ -171,6 +176,8 @@ Local runtime outputs:
 - `tools/automath_newmath_bridge/inbox/bridge_inbox.jsonl`
 - `tools/automath_newmath_bridge/inbox/writeback_packets/*.json`
 - `tools/automath_newmath_bridge/out/bridge_transfer_plan.md`
+- `tools/automath_newmath_bridge/out/bridge_synthesis_report.md`
+- `tools/automath_newmath_bridge/out/bridge_synthesis.jsonl`
 - `tools/automath_newmath_bridge/out/bridge_gate_results.jsonl`
 - `tools/automath_newmath_bridge/state/bridge_state.json`
 - `tools/automath_newmath_bridge/logs/bridge_supervisor.log`
@@ -235,6 +242,20 @@ python3 tools/automath_newmath_bridge/bridge_gates.py \
   tools/automath_newmath_bridge/inbox/bridge_inbox.jsonl \
   --output tools/automath_newmath_bridge/out/bridge_gate_results.jsonl
 ```
+
+Run synthesis directly after an inbox exists:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_synthesis.py \
+  --config tools/automath_newmath_bridge/bridge_pipeline_config.json \
+  --input tools/automath_newmath_bridge/inbox/bridge_inbox.jsonl \
+  --output tools/automath_newmath_bridge/out/bridge_synthesis.jsonl
+```
+
+NewMath constants are intentionally treated as source evidence until an
+operator chooses a receiving Automath queue and audit boundary. The synthesis
+layer can mark these records `blocked_automath_not_ready`; that is a useful
+decision, not a failure.
 
 ## Commit message convention
 
