@@ -35,8 +35,8 @@
 | `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit unclear failure) | — |
 | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | B-STUCK (Oracle: minor revision, 20 rounds — needs human review) | — |
-| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
-| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
+| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit unclear failure) | — |
+| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit real block (score=6)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | 已投 05-10 | ScholarOne ETDS; Oracle+Claude pass, 9 rounds |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | B-PAUSED (Oracle infra retry needed at B11) | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | B-3 (Oracle: accept) — 待进入 C 终审 | — |
