@@ -103,7 +103,7 @@ def tracked_dirty_lines(repo: Path) -> list[str]:
 
 
 def _load_config(path: Path) -> dict[str, Any]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8-sig"))
     if not isinstance(data, dict):
         raise ValueError(f"Expected object JSON in {path}")
     return data
@@ -172,6 +172,9 @@ def run_pipeline(
     scan_limit_per_rule: int,
     no_synthesis: bool,
 ) -> None:
+    config = _load_config(config_path)
+    queue_path = REPO_ROOT / str(config.get("agent_queue_path") or "tools/automath_newmath_bridge/out/bridge_agent_queue.jsonl")
+    event_log_path = REPO_ROOT / str(config.get("event_log_path") or "tools/automath_newmath_bridge/state/bridge_events.jsonl")
     cmd = [
         sys.executable,
         str(SCRIPT_DIR / "run_bridge_pipeline.py"),
@@ -179,6 +182,10 @@ def run_pipeline(
         str(config_path),
         "--limit-per-rule",
         str(limit_per_rule),
+        "--queue",
+        str(queue_path),
+        "--event-log",
+        str(event_log_path),
     ]
     if include_unchanged:
         cmd.append("--include-unchanged")
@@ -222,7 +229,11 @@ def run_synthesis_report(config_path: Path) -> None:
 def run_gates(config_path: Path, *, allow_publication_risk: bool) -> list[dict[str, Any]]:
     config = _load_config(config_path)
     inbox = REPO_ROOT / str(config.get("inbox_path"))
-    output = SCRIPT_DIR / "out" / "bridge_gate_results.jsonl"
+    automath_cfg = config.get("automath_writeback")
+    gate_results_path = ""
+    if isinstance(automath_cfg, dict):
+        gate_results_path = str(automath_cfg.get("gate_results_path") or "")
+    output = REPO_ROOT / (gate_results_path or "tools/automath_newmath_bridge/out/bridge_gate_results.jsonl")
     records = read_jsonl(inbox)
     results = gate_records(records, allow_publication_risk=allow_publication_risk)
     write_jsonl(output, results)
