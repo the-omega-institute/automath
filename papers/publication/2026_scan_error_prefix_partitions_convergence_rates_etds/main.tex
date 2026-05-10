@@ -601,7 +601,7 @@ $\mathcal{F}_m$-event equal to $\mathsf{P}$ modulo null sets has zero
 symmetric-difference error.
 \end{proof}
 
-\section{Preliminaries: Discrete Tanaka Representation}
+\section{Preliminaries: Threshold Convexity Compensator}
 \label{sec:tanaka}
 
 The quantity $L_m^{1/2}$ below is a finite-depth convexity compensator for the
@@ -677,7 +677,7 @@ $D$ with value $p_D$.  Therefore
 which is the claimed expression.
 \end{proof}
 
-\begin{theorem}[Arbitrary-event Tanaka representation with residual terminal error]
+\begin{theorem}[Threshold convexity compensator identity with residual terminal error]
 \label{thm:scan-tanaka}
 Let $\mathsf{P}\in\mathcal{B}$ and set
 $p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$ and
@@ -772,7 +772,12 @@ This section contains both the short transfer preliminaries used throughout
 the paper and the main symbolic theorems.  Subsection~\ref{sub:boundary-growth}
 records the finite-depth transfer consequences that follow directly from
 Proposition~\ref{prop:scan-error-cylinder} once cylinder-mass information is
-available.  The genuinely new symbolic content starts in
+available; Proposition~\ref{thm:boundary-dimension} and
+Corollary~\ref{thm:volume-boundary-scaling} are elementary transfer
+consequences rather than main contributions.  The genuinely new ETDS-facing
+results are Theorems~\ref{thm:finite-state-posterior},
+\ref{thm:weighted-boundary-pressure}, \ref{ex:golden-mean-specialization},
+and~\ref{ex:golden-mean-gibbs-weighted}.  The symbolic content starts in
 Subsection~\ref{sub:finite-posterior} with
 Theorem~\ref{thm:finite-state-posterior} and culminates in
 Theorem~\ref{thm:weighted-boundary-pressure}.
@@ -986,6 +991,38 @@ measure $\nu$, which proves the displayed identities and the final claim about
 transferring a finite-state observer between full-support measures.
 \end{proof}
 
+\begin{corollary}[Continuation-robust DFA observers for full-support Gibbs states]
+\label{cor:continuation-robust-dfa-gibbs-observer}
+Let $X$ be a mixing one-step SFT, let
+$\mathsf{P}\in\mathcal{F}_\infty$ satisfy the continuation-robust trichotomy
+of Proposition~\ref{prop:full-support-invariant-decisive-languages}, and
+assume that the resulting three decisive prefix languages are recognized by
+DFAs.  Then the terminal-symbol product observer of
+Proposition~\ref{prop:automaton-regular-sufficient} gives the same
+finite-state posterior presentation for every full-support Borel probability
+measure on $X$.  In particular, for every H\"older potential $\phi$ with
+equilibrium state $\mu_\phi$, the finite-presentation hypothesis of
+Theorem~\ref{thm:weighted-boundary-pressure} is satisfied.  If, in addition,
+the graph-distance condition of
+Proposition~\ref{prop:automaton-regular-sufficient}\emph{(3)} holds for the
+ambiguous product-observer states, the same presentation is
+$\mu_\phi$-resolving for every such $\mu_\phi$, with the common bound
+$R_{\min}$.
+\end{corollary}
+
+\begin{proof}
+Equilibrium states of H\"older potentials on a mixing SFT have full support by
+the Gibbs cylinder estimates.  Proposition~\ref{prop:full-support-invariant-decisive-languages}
+therefore makes the decisive prefix languages independent of the chosen
+full-support measure.  Applying
+Proposition~\ref{prop:automaton-regular-sufficient} to those DFA languages
+gives a finite follower-resolving posterior presentation for each
+$\mu_\phi$.  The optional resolving conclusion is exactly the finite-distance
+criterion in Proposition~\ref{prop:automaton-regular-sufficient}\emph{(3)};
+the directed graph and the distances are topological data of the product
+observer and hence do not depend on $\phi$.
+\end{proof}
+
 \begin{proposition}[Constructive observer synthesis from decisive-language automata]
 \label{prop:automaton-regular-sufficient}
 Let $\mathcal{A}$ be a finite alphabet, let $X\subseteq\mathcal{A}^{\NN}$ be a
@@ -1065,14 +1102,18 @@ Then:
   the product observer.  For each ambiguous state
   $r\in\widehat{\mathcal{S}}_\partial$, let $d_\sigma(r)$ be the shortest path
   length in $\widehat G$ from $r$ to $\widehat{\mathcal{S}}_\sigma$, with
-  $d_\sigma(r)=+\infty$ if no such path exists.  Then the uniform
-  resolving-window hypothesis of
+  $d_\sigma(r)=+\infty$ if no such path exists.  Let
+  $\widehat{\mathcal{S}}_\partial^{\mathrm{acc}}$ be the ambiguous states
+  reached by positive boundary cylinders.  Then the uniform
+  resolving-window hypothesis used in
   Theorem~\ref{thm:finite-state-posterior} holds if and only if
-  $d_0(r),d_1(r)<\infty$ for every $r\in\widehat{\mathcal{S}}_\partial$.  In
-  that case the least possible resolving bound is
+  $d_0(r),d_1(r)<\infty$ for every
+  $r\in\widehat{\mathcal{S}}_\partial^{\mathrm{acc}}$.  In that case the
+  least possible resolving bound is
   \[
   R_{\min}
-  =\max_{r\in\widehat{\mathcal{S}}_\partial}\max\{d_0(r),d_1(r)\},
+  =\max_{r\in\widehat{\mathcal{S}}_\partial^{\mathrm{acc}}}
+  \max\{d_0(r),d_1(r)\},
   \]
   and $R_{\min}$ is computable by reverse breadth-first search from
   $\widehat{\mathcal{S}}_0$ and $\widehat{\mathcal{S}}_1$ in the finite graph
@@ -1138,14 +1179,15 @@ $\widehat{\mathcal{S}}_0$.  Therefore the decided states are absorbing.  This
 proves (1) and (2).
 
 For (3), first assume the uniform resolving-window hypothesis holds with some
-bound $R$.  Fix $r\in\widehat{\mathcal{S}}_\partial$.  By hypothesis there are
+bound $R$.  Fix $r\in\widehat{\mathcal{S}}_\partial^{\mathrm{acc}}$.  By hypothesis there are
 words $w_r^+,w_r^-$ of lengths at most $R$ whose runs from $r$ stay defined at
 every intermediate prefix and end in $\widehat{\mathcal{S}}_1$ and
 $\widehat{\mathcal{S}}_0$, respectively.  These runs are directed paths in
 $\widehat G$, so
 $d_1(r)\le |w_r^+|\le R$ and $d_0(r)\le |w_r^-|\le R$.
 
-Conversely, suppose that $d_0(r),d_1(r)<\infty$ for every ambiguous state $r$.
+Conversely, suppose that $d_0(r),d_1(r)<\infty$ for every accessible
+ambiguous state $r\in\widehat{\mathcal{S}}_\partial^{\mathrm{acc}}$.
 Choose shortest directed paths from $r$ to
 $\widehat{\mathcal{S}}_1$ and $\widehat{\mathcal{S}}_0$; reading off their edge
 labels gives words $w_r^+,w_r^-$ of lengths
@@ -1221,9 +1263,18 @@ $\mathsf{P}\in\mathcal{F}_\infty$ admit a finite-state posterior presentation
 with respect to $\mu$ as in Definition~\ref{def:finite-posterior}.  In
 particular, whenever the decisive languages
 $L_{0,\mu}(\mathsf{P})$, $L_{1,\mu}(\mathsf{P})$, and
-$L_{\partial,\mu}(\mathsf{P})$ are given by DFAs, one may take the explicit
-terminal-symbol product observer and the breadth-first-search resolving bound
-from Proposition~\ref{prop:automaton-regular-sufficient}.  If
+$L_{\partial,\mu}(\mathsf{P})$ are given by DFAs, the explicit
+terminal-symbol product observer of
+Proposition~\ref{prop:automaton-regular-sufficient} gives a finite-state
+posterior presentation.  Its breadth-first-search resolving bound is available
+only if every accessible ambiguous product-observer state has finite graph
+distance to both decided classes; in that case
+\[
+  R_{\min}
+  =\max_{r\in \widehat{\mathcal{S}}_\partial^{\mathrm{acc}}}
+  \max\{d_0(r),d_1(r)\},
+\]
+with the notation of Proposition~\ref{prop:automaton-regular-sufficient}.  If
 $q_\emptyset\in\mathcal{S}_0\cup\mathcal{S}_1$, then $\mathsf{P}$ is already
 decided at depth $0$, so $\partial_m\mathsf{P}=\varnothing$ and
 $\varepsilon_m(\mathsf{P};\mu)=0$ for all $m\ge 0$.  We therefore restrict to
@@ -1834,19 +1885,27 @@ observer state only after the event $\mathsf{P}$ has been shown to be
 Definition~\ref{def:observer-regular}: the prefix languages
 $L_{1,\mu}(\mathsf{P}),L_{0,\mu}(\mathsf{P}),L_{\partial,\mu}(\mathsf{P})$ must
 be recognized by finitely many follower-resolving states, and the ambiguous
-states must admit a bounded decision window.  In a right-resolving sofic presentation
-this is often achieved by adjoining the current presentation vertex, or
-equivalently the current follower class, to a finite automaton recognizing the
-three decisive prefix languages; for a finite hidden Markov model one can do the
-same with a finite observer on hidden-state posterior classes when those
-classes already separate decided and boundary prefixes.  After recoding to an
-edge shift, such observer-regular events fall under
-Theorem~\ref{thm:finite-state-posterior}.  What is \emph{not} claimed is that
-every Borel event $\mathsf{P}\in\mathcal{F}_\infty$ on a sofic shift or finite
-hidden Markov source admits such a finite observer.  For arbitrary tail events
-the decisive prefix languages need not be regular, and existence of a finite
-posterior presentation or bounded resolving window remains an additional
-assumption here; compare
+states must admit a bounded decision window.  In a right-resolving sofic
+presentation this is often achieved by adjoining the current presentation
+vertex, or equivalently the current follower class, to a finite automaton
+recognizing the three decisive prefix languages; for a finite hidden Markov
+model one can do the same with a finite observer on hidden-state posterior
+classes when those classes already separate decided and boundary prefixes.
+The applicable theorem then depends on the source.  After recoding to an edge
+shift, Parry sources are covered by
+Theorem~\ref{thm:finite-state-posterior}; H\"older Gibbs states and locally
+constant Markov sources are covered by
+Theorem~\ref{thm:weighted-boundary-pressure}, provided the finite posterior
+presentation is built for that measure.  An arbitrary hidden Markov factor is
+not automatically Parry and is not covered by these conclusions without an
+additional Gibbs-type or cylinder-weight hypothesis strong enough to replace
+the Parry same-length bounds or Bowen Gibbs bounds used in the proofs.  What
+is \emph{not} claimed is that every Borel event
+$\mathsf{P}\in\mathcal{F}_\infty$ on a sofic shift or finite hidden Markov
+source admits such a finite observer.  For arbitrary tail events the decisive
+prefix languages need not be regular, and existence of a finite posterior
+presentation or bounded resolving window remains an additional assumption
+here; compare
 \cite{Blackwell1957,Heller1965,Fischer1975,Krieger1984,Kitchens1998,LindMarcus1995}.
 \end{remark}
 
@@ -1873,7 +1932,7 @@ these bounds with Corollary~\ref{cor:scan-tanaka-tail} to interpret decay of
 $\varepsilon_m(\mathsf{P};\mu)$ as a tail-error statement for the limiting
 event.
 
-\begin{theorem}[Positive-atom transfer upper bound]
+\begin{proposition}[Positive-atom transfer upper bound]
 \label{thm:boundary-dimension}
 Let $\mathsf{P}\in\mathcal{B}$ and assume that
 $\lambda_{\mathrm{cyl}}>1$.  Suppose that for some $K>0$ and all sufficiently
@@ -1898,7 +1957,7 @@ $0<\eta<1-d$ there is $m_\eta$ such that, for all $m\ge m_\eta$,
 In particular the scan error decays exponentially whenever the boundary-count
 exponent is subcritical.
 \leanverified{paper_prefix_scan_error_boundary_dimension_upper}
-\end{theorem}
+\end{proposition}
 
 \begin{remark}
 The estimate needed in this article is proved directly below at finite depth
@@ -1927,7 +1986,7 @@ the displayed exponential estimate.  Null atoms do not appear because
 $\mathcal{C}_m$ was defined after removing them.
 \end{proof}
 
-\begin{theorem}[Positive-atom two-sided transfer under thickness]
+\begin{corollary}[Positive-atom two-sided transfer under thickness]
 \label{thm:volume-boundary-scaling}
 Let $\mathsf{P}\in\mathcal{B}$ and assume that
 $\lambda_{\mathrm{cyl}}>1$.  Suppose that there are constants
@@ -1957,7 +2016,7 @@ $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then
 \]
 so $\varepsilon_m$ has exponential decay exponent $1-\delta$, where $\delta$
 is the exponential growth exponent of $N_m(\partial\mathsf{P})$.
-\end{theorem}
+\end{corollary}
 
 \begin{remark}
 The statement and proof are local to this paper: they keep the arbitrary-event
@@ -2000,7 +2059,7 @@ $-\frac1m\log_{\lambda_{\mathrm{cyl}}}$ gives the stated limit.
 \label{rem:tail-specialization-transfer}
 Proposition~\ref{thm:boundary-dimension}
 and Corollary~\ref{thm:volume-boundary-scaling}, together with the later
-Theorem~\ref{thm:nonuniform-cylinder}, are finite-depth statements for
+Proposition~\ref{thm:nonuniform-cylinder}, are finite-depth statements for
 arbitrary Borel events $\mathsf{P}\in\mathcal{B}$.  If, in addition,
 $\mathsf{P}\in\mathcal{F}_\infty$, then Corollary~\ref{cor:scan-tanaka-tail}
 identifies $\varepsilon_m(\mathsf{P};\mu)$ as a tail error converging to zero.
@@ -2046,7 +2105,9 @@ Appendix~\ref{sub:nonuniform}.
 \label{rem:boundary-assumption-ledger}
 Before passing from the count-based Parry setting to the Gibbs-weighted one,
 it is useful to separate the standing hypotheses from the refinements that
-improve specific conclusions.
+improve specific conclusions.  The extended dependency ledger is placed here,
+rather than in the introduction, so the main text can first introduce the
+objects it summarizes.
 \begin{enumerate}[label=(\alph*)]
 \item Proposition~\ref{thm:boundary-dimension} and
   Corollary~\ref{thm:volume-boundary-scaling} are transfer statements with no
@@ -2423,18 +2484,30 @@ $C_1\to\cdots\to C_q$ in the condensation graph of the reachable part of $G$
 such that $P_{C_j}(\phi)=P_*$ for every $j$.
 
 For every finite path $\gamma\in\mathcal{P}_m^I(G)$, there is a unique ordered
-list $D_1,\dots,D_t$ of cyclic strongly connected components visited by
-$\gamma$.  This list contains only components in which $\gamma$ spends at
-least one vertex.  There is a constant $B_G<\infty$, depending only on $G$,
-such that the total number of vertices of $\gamma$ outside
-$D_1\cup\cdots\cup D_t$ is at most $B_G$.  Equivalently, if $n_j$ denotes the
-positive number of vertices of $\gamma$ spent in $D_j$ and
-$L(\gamma_{\mathrm{acyc}})$ denotes the number of vertices of $\gamma$ outside
-the visited cyclic components, then
+list $D_1,\dots,D_t$ of cyclic strongly connected components in which
+$\gamma$ spends at least one vertex.  With the vertex-length convention
+$|\gamma|=m$, the path decomposes uniquely in the concatenation form
 \[
-n_1+\cdots+n_t=m-L(\gamma_{\mathrm{acyc}})
+\gamma
+=\tau_0\star\eta_1\star\tau_1\star\eta_2
+\star\cdots\star\eta_t\star\tau_t.
+\]
+Here $\eta_j$ is the maximal subpath of $\gamma$ lying in $D_j$, and each
+  $\tau_j$ is the transient bridge from the exit of $D_j$ to the entry of
+$D_{j+1}$, with the evident meaning for $\tau_0,\tau_t$.  Empty bridges are
+allowed when two recurrent blocks meet at the concatenation vertex, and
+$|\alpha\star\beta|=|\alpha|+|\beta|-1$ whenever the two paths share the
+concatenation vertex.  The bridge lengths below count only vertices not
+already counted in a recurrent block.  There is a constant $B_G<\infty$,
+depending only on $G$, such that the total bridge length of
+$\tau_0,\dots,\tau_t$ is at most $B_G$.  Equivalently, if
+$n_j:=|\eta_j|$ and $L(\gamma_{\mathrm{br}})$ denotes the number of vertices
+of $\gamma$ outside the visited cyclic components after this overlap
+convention, then
+\[
+n_1+\cdots+n_t=m-L(\gamma_{\mathrm{br}})
 \qquad\text{and}\qquad
-L(\gamma_{\mathrm{acyc}})\le B_G.
+L(\gamma_{\mathrm{br}})\le B_G.
 \]
 Recurrent components not visited by $\gamma$, including components that are
 reachable only after the path terminates or were reachable before a short
@@ -2460,10 +2533,12 @@ B_G:=|\mathcal{T}|.
 If $\gamma\in\mathcal{P}_m^I(G)$ meets cyclic components
 $D_1,\dots,D_t$, then the condensation graph of the reachable part of $G$ is
 acyclic, so $\gamma$ can enter each cyclic component at most once.  Hence the
-ordered list $D_1,\dots,D_t$ is unique, and all vertices of $\gamma$ not
-belonging to these components lie in the acyclic graph $G|\mathcal{T}$.  Thus
-their total number is at most $B_G$, which is exactly the asserted bound on
-$L(\gamma_{\mathrm{acyc}})$.
+ordered list $D_1,\dots,D_t$ is unique.  Taking each $\eta_j$ to be the
+maximal consecutive subpath inside $D_j$ leaves the remaining vertices in the
+acyclic graph $G|\mathcal{T}$, except for the overlap endpoints already
+accounted for by the operation $\star$.  Thus the bridge contribution is at
+most $B_G$, which is exactly the asserted bound on
+$L(\gamma_{\mathrm{br}})$.
 
 Let $V_\phi<\infty$ be a Bowen-variation constant for $\phi$ on $X$.  For each
 $C\in\mathfrak{C}_I$, standard thermodynamic formalism on the irreducible SFT
@@ -2488,25 +2563,25 @@ $\eta_0=e$, then Lemma~\ref{lem:subset-cylinder-distortion} gives
 \qquad(n\ge 1).
 \]
 
-Because $G$ is finite and the total acyclic length is bounded by $B_G$, there
+Because $G$ is finite and the total bridge length is bounded by $B_G$, there
 are only finitely many decorated itineraries
 \[
-\Gamma=(\gamma_{\mathrm{acyc}};D_1,e_1,f_1;\dots;D_t,e_t,f_t)
+\Gamma=(\gamma_{\mathrm{br}};D_1,e_1,f_1;\dots;D_t,e_t,f_t)
 \]
 consisting of the transient vertices, the cyclic components actually visited,
 and the entry and exit vertices $(e_j,f_j)$ inside each $D_j$.  A decorated
 itinerary also records the finitely many edges of the initial transient
 prefix, of each bridge between consecutive visited cyclic components, and of
 the terminal acyclic tail; all of these vertices and edges are included in
-the bounded acyclic part.  Fix such an itinerary $\Gamma$.  If $t=0$, then all
-paths with this itinerary lie in the bounded acyclic part, so they occur only
+the bounded bridge part.  Fix such an itinerary $\Gamma$.  If $t=0$, then all
+paths with this itinerary lie in the bounded bridge part, so they occur only
 for $m\le B_G$ and their total contribution is bounded by a constant multiple
 of $e^{mP_*}$.  We may therefore assume $t\ge 1$.  The corresponding paths
 contribute at most
 \[
 A_\Gamma
 \sum_{\substack{n_1,\dots,n_t\ge 1\\
-n_1+\cdots+n_t=m-L(\gamma_{\mathrm{acyc}})}}
+n_1+\cdots+n_t=m-L(\gamma_{\mathrm{br}})}}
 \prod_{j=1}^t e^{n_jP_{D_j}(\phi)}
 \]
 for some constant $A_\Gamma>0$ absorbing the finitely many acyclic pieces and
@@ -2540,10 +2615,10 @@ geometric series of the form
 \]
 independent of $m$.  For the remaining $t_*(\Gamma)$ maximal components, the
 positive lengths form a composition of
-$m-L(\gamma_{\mathrm{acyc}})-\sum_{j\notin J_*(\Gamma)}n_j$ into
+$m-L(\gamma_{\mathrm{br}})-\sum_{j\notin J_*(\Gamma)}n_j$ into
 $t_*(\Gamma)$ parts.  The number of such compositions is
 \[
-\binom{m-L(\gamma_{\mathrm{acyc}})-\sum_{j\notin J_*(\Gamma)}n_j-1}
+\binom{m-L(\gamma_{\mathrm{br}})-\sum_{j\notin J_*(\Gamma)}n_j-1}
 {t_*(\Gamma)-1}
 \le (m+1)^{t_*(\Gamma)-1}
 \le (m+1)^{q-1}.
@@ -4713,6 +4788,11 @@ Finally, for every $k\ge 1$,
 =\frac{\lambda_{\mathrm G}}{5}\,\lambda_{\mathrm G}^{-k}
 -\frac{1}{10}\,(-\lambda_{\mathrm G}^{-3})^k,
 \]
+and the endpoint depths are
+\[
+\varepsilon_0(\mathsf{E};\mu)=\varepsilon_1(\mathsf{E};\mu)
+=\frac1{2\sqrt5}.
+\]
 so
 \[
 \varepsilon_m(\mathsf{E};\mu)\asymp \lambda_{\mathrm G}^{-m/2},
@@ -4996,29 +5076,12 @@ estimates into scan-error statements once the relevant cylinder-mass bounds are
 available.
 
 \paragraph{Theorem-by-theorem ETDS comparison.}
-Table~\ref{tab:etds-novelty-boundary} should be read as a local comparison
-table against the cited adjacent ETDS results whose theorem statements
-actually overlap with the present symbolic theorems.  It is not intended as a
-bibliographic census.  The ETDS theorem-level claims begin only with
-Theorem~\ref{thm:finite-state-posterior}, whose increment over
-Theorem~1.1 of MacDonald~\cite{MacDonald2024} and Theorems~6.1 and~8.1 of
-Han--Marcus--Wu~\cite{HanMarcusWu2024} is the event-relative observer that
-computes boundary growth, thickness, and scan error, rather than a criterion
-for injective or finite-to-one factor-code restrictions.  Theorem~\ref{thm:weighted-boundary-pressure} and
-Theorem~\ref{ex:golden-mean-gibbs-weighted} then shift the thermodynamic
-comparison away from factor-map relative pressure: against Theorem~2.1 of
-Tsukamoto~\cite{Tsukamoto2023WeightedPressure}, Theorem~6.2 of
-Yayama~\cite{Yayama2023RelativePressure}, Theorems~3.1 and~4.2 of
-Yayama~\cite{Yayama2026RelativePressureGibbs}, and Theorem~2.1 of
-Alibabaei~\cite{Alibabaei2025WeightedPressure}, the increment proved here is
-an event-defined refined boundary graph whose reachable recurrent components,
-acyclic tails, and residue classes determine the ordinary pressure difference
-for the boundary partition sums and, with the separate resolving-thickness
-input, the positive scan-error decay gap of one fixed event.  Finally,
-Theorem~\ref{ex:golden-mean-specialization} and
-Theorem~\ref{ex:golden-mean-gibbs-weighted} supply explicit matrix formulas of
-that event-relative type on the golden-mean shift, rather than only an
-existence or variational-principle statement.
+Table~\ref{tab:etds-novelty-boundary} gives the comparison used in the
+introduction.  The only new ETDS-facing results asserted here are
+Theorems~\ref{thm:finite-state-posterior},
+\ref{thm:weighted-boundary-pressure}, \ref{ex:golden-mean-specialization},
+and~\ref{ex:golden-mean-gibbs-weighted}; the Bayes decomposition, threshold
+compensator, and transfer estimates are preparatory tools.
 
 \paragraph{Shannon--McMillan--Breiman and uniform bounds.}
 The SMB theorem \cite{Shannon1948,McMillan1953,Breiman1957} states that for
@@ -5070,10 +5133,10 @@ geometry remains open.
 
 \paragraph{Future directions.}
 We do not claim any extension beyond the discrete finite-depth setting treated
-above.  Two natural open problems are whether the filtration-level Tanaka
-bookkeeping admits a genuine $q$-ary analogue, with $q-1$ threshold parameters,
-and whether any continuous-time scaling limit leads to a Tanaka--Meyer type
-formula \cite{RevuzYor1999}.  Other directions include weakening the thickness
+above.  Two natural open problems are whether the filtration-level threshold
+compensator admits a genuine $q$-ary analogue, with $q-1$ threshold
+parameters, and whether any continuous-time scaling limit leads to an analogue
+of Tanaka--Meyer convexity bookkeeping \cite{RevuzYor1999}.  Other directions include weakening the thickness
 hypothesis to an $L^p$ condition on boundary-atom probabilities and finding an
 intrinsic pressure or information-theoretic description of ambiguity beyond the
 finite-state observer setting.
@@ -5124,7 +5187,7 @@ scale $\lambda_{\mathrm{cyl}}^{-m}$ up to a polynomial factor.  The definition
 is used only for the positive atoms of the present filtration.
 \end{definition}
 
-\begin{theorem}[Log-regular transfer with polynomial boundary-count correction]
+\begin{proposition}[Log-regular transfer with polynomial boundary-count correction]
 \label{thm:nonuniform-cylinder}
 Let $\mathsf{P}\in\mathcal{B}$ and assume that $\mu$ is log-regular with
 exponent $\alpha\ge0$ and constants $c_1,c_2>0$ in the sense of
@@ -5156,7 +5219,7 @@ for all large $m$, then for all large $m$,
 \le \frac{c_2A_+}{2}m^{\alpha+\beta}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}.
 \]
 \leanverified{paper_prefix_scan_error_nonuniform_cylinder}
-\end{theorem}
+\end{proposition}
 
 \begin{remark}
 The theorem is stated and proved directly for arbitrary events, with the final
@@ -5198,7 +5261,7 @@ into this estimate gives the displayed polynomial correction.
 \begin{example}[Filtration-level sharpness example]
 \label{ex:log-regular-polynomial-correction}
 This non-stationary product example shows that the polynomial factors in
-Theorem~\ref{thm:nonuniform-cylinder} cannot in general be removed.
+Proposition~\ref{thm:nonuniform-cylinder} cannot in general be removed.
 
 Let $X=\{0,1\}^{\NN}$ with its prefix filtration and let
 $0<\alpha<1$.  Define the independent, non-identically distributed product
