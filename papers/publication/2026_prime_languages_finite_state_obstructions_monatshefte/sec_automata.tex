@@ -186,25 +186,38 @@ the prime corollaries below.
 
 \begin{lemma}[Explicit prime-counting input]
   \label{lem:explicit-pnt-input}
-  There are absolute effectively computable constants \(X_0,K_1,K_2>0\)
-  such that for every \(x\ge X_0\),
+  The following numerical constants are admissible:
+  \[
+    X_0=5393,\qquad K_1=2,\qquad K_2=2.
+  \]
+  For every \(x\ge X_0\),
   \[
     \left|\pi(x)-\frac{x}{\log x}\right|
       \le K_1\frac{x}{(\log x)^2},
     \qquad
     \pi(x)\le K_2\frac{x}{\log x}.
   \]
-  For instance, Rosser--Schoenfeld
-  \cite{RosserSchoenfeld1962} gives one such choice.
 \end{lemma}
 
 \begin{proof}
-  Rosser--Schoenfeld give explicit upper and lower estimates for
-  \(\pi(x)\) of the form \(x/\log x\) multiplied by rational functions
-  of \(1/\log x\) for all sufficiently large \(x\). Increasing \(X_0\),
-  if necessary, absorbs the finitely many exceptional small values and
-  gives the two displayed inequalities with absolute constants
-  \(K_1,K_2\).
+  Rosser--Schoenfeld prove \(\pi(x)>x/\log x\) for \(x\ge17\)
+  \cite{RosserSchoenfeld1962}. Dusart's explicit upper estimate gives
+  \[
+    \pi(x)\le \frac{x}{\log x-1}
+    \qquad (x\ge5393)
+  \]
+  \cite{Dusart2010}. Since \(\log 5393>2\), for \(x\ge5393\) we have
+  \[
+    0\le \pi(x)-\frac{x}{\log x}
+    \le \frac{x}{\log x-1}-\frac{x}{\log x}
+    =\frac{x}{\log x(\log x-1)}
+    \le 2\,\frac{x}{(\log x)^2},
+  \]
+  and also
+  \[
+    \pi(x)\le\frac{x}{\log x-1}
+      \le 2\,\frac{x}{\log x}.
+  \]
 \end{proof}
 
 \begin{remark}\label{rem:dfa-density-sharpness}
@@ -310,27 +323,72 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   so \(B_b:=K_2/\log b\) is admissible for all \(m\ge M_b\).
 \end{proof}
 
-\begin{theorem}[Effective fixed-DFA prime-slice obstruction]
+\begin{theorem}[Algorithmic fixed-DFA prime-slice obstruction]
   \label{thm:effective-fixed-dfa-prime-obstruction}
   Fix \(b\ge2\) and a complete DFA
-  \(\mathcal A=(Q,\Sigma_b,\delta,q_0,F)\). From the transition table of
-  \(\mathcal A\) one can compute the following finite output:
-  the recurrent classes of the Markov chain \(P=B/b\), their periods
-  \(d_i\), cyclic classes, stationary distributions, absorption
-  probabilities from transient states, the common period
-  \(p=\operatorname{lcm}_i d_i\), the residue constants
-  \(c_r=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v\), the alternatives
-  \(c_r=0\) or \(c_r>0\), and constants
-  \(C_r,D_r>0\), \(\eta_r\in(0,1)\), and \(M_r\). If the residues
-  \(c_0,\dots,c_{p-1}\) are listed explicitly, this listing is part of
-  the output. With this output, the following holds for every
+  \(\mathcal A=(Q,\Sigma_b,\delta,q_0,F)\), encoded by its integer
+  transition table. Let \(B\) be its unlabeled transition matrix and
+  \(P=B/b\). There is an algorithm which outputs the following
+  compressed exact certificate.
+  \begin{enumerate}[label=\textup{(\alph*)}]
+    \item The transient set \(T\), the recurrent classes
+    \(R_1,\dots,R_s\) of \(P\), their periods \(d_j\), and cyclic
+    decompositions \(R_{j,0},\dots,R_{j,d_j-1}\).
+    \item For every \(j,t\), the stationary probability vector
+    \(\pi_{j,t}\) of the primitive return chain
+    \(P^{d_j}|_{R_{j,t}}\), with rational entries.
+    \item The absorption probabilities \(H_j(q)\), \(q\in T\), obtained
+    from
+    \[
+      (I-P_{TT})H_j=P_{T,R_j}\mathbf 1,
+    \]
+    and the refined cyclic absorption probabilities
+    \[
+      H_{j,t}^{(r)}(q)
+      :=\sum_{\ell\ge0}
+        e_q^{\mathsf T}P_{TT}^{\ell}P_{T,R_j}
+        S_{j,t-r-1-\ell}\mathbf 1 ,
+    \]
+    where indices are taken modulo \(d_j\) and
+    \(S_{j,u}\) is the cyclic projection onto \(R_{j,u}\).
+    The displayed series is evaluated exactly as a finite family of
+    linear solves after grouping \(\ell\) modulo \(d_j\).
+    \item For each residue \(r\) modulo
+    \(p=\operatorname{lcm}_j d_j\), the compressed formula
+    \[
+      c_r=
+      \sum_{j=1}^s\sum_{t=0}^{d_j-1}
+      \alpha_{j,t}^{(r)}\,
+      \pi_{j,t+r}(F\cap R_{j,t+r}),
+      \tag{\(*\)}
+      \label{eq:compressed-cr}
+    \]
+    where
+    \[
+      \alpha_{j,t}^{(r)}=
+      \begin{cases}
+        1, & q_0\in R_{j,t},\\
+        H_{j,t}^{(r)}(q_0), & q_0\in T,\\
+        0, & \text{otherwise.}
+      \end{cases}
+    \]
+    Again all cyclic indices are read modulo \(d_j\). This formula
+    decides \(c_r=0\) or \(c_r>0\) by exact rational arithmetic.
+    \item Algebraic constants \(K_r>0\), \(\theta_r\in(0,1)\), and
+    integer thresholds \(M_r\) such that
+    \[
+      \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
+      \qquad(m\equiv r\pmod p,\ m\ge0).
+    \]
+  \end{enumerate}
+  With this output, the following holds for every
   \(m\ge M_r\) satisfying \(m\equiv r\pmod p\).
   If \(c_r=0\), then
   \[
-    a_m(\mathcal A)\le C_r\eta_r^m b^m
+    a_m(\mathcal A)\le K_r\theta_r^m b^m
     \quad\text{and}\quad
     \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
-    \ge D_r\,\frac{b^m}{m}.
+    \ge \frac{A_b}{2}\,\frac{b^m}{m}.
   \]
   If \(c_r>0\), then
   \[
@@ -341,7 +399,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   whenever \(\mathrm{Prec}_m\) is defined, and
   \[
     \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
-    \ge D_r b^m .
+    \ge \frac{c_r}{4} b^m .
   \]
   Here \(A_b,B_b,M_b\) may be the explicit constants supplied by
   \Cref{lem:base-prime-count}. Consequently
@@ -352,31 +410,69 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \ge c_{\mathcal A,b}\,\frac{b^m}{m}
     \qquad(m\ge M_{\mathcal A,b}).
   \]
-  The arithmetic complexity is polynomial in the input size plus the
-  size of the produced output. Equivalently, the compressed Markov-chain
-  output above avoids charging the algorithm for explicitly printing
-  \(p\) residue records when \(p=\operatorname{lcm}_i d_i\) is large.
+  In the rational bit model, the graph decomposition and all rational
+  linear solves are polynomial in the input size plus the size of the
+  produced certificate. The optional full list
+  \(c_0,\dots,c_{p-1}\) has output size at least \(p\); no polynomial
+  bound in the input size alone is asserted for printing that list.
+  The constants \(K_r,\theta_r,M_r\) are represented by algebraic
+  numbers together with isolating intervals, and their real
+  bit-complexity is polynomial in the input size, the certificate size,
+  and the requested output precision.
 \end{theorem}
 
 \begin{proof}
   Compute the matrix \(B=\sum_{d\in\Sigma_b}T_d\), the stochastic matrix
-  \(P=B/b\), the recurrent classes of \(P\), their periods, and the
-  common period \(p\) as described after
-  \Cref{thm:dfa-density-dichotomy}. Exact rational linear algebra gives
-  the residue limits \(c_r\) and decides which of them vanish. The same
-  finite-dimensional computation also gives a number
-  \(\theta\in(0,1)\) and constants \(K_r\) such that
+  \(P=B/b\), the transient set, the recurrent classes, their periods,
+  their cyclic decompositions, and the common period \(p\) by standard
+  graph algorithms. The vectors \(\pi_{j,t}\) are the unique solutions
+  of
   \[
-    \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta^m
+    \pi_{j,t}P^{d_j}|_{R_{j,t}}=\pi_{j,t},
+    \qquad
+    \pi_{j,t}\mathbf 1=1.
+  \]
+  Because \(P\) has rational entries, these vectors are rational and
+  are obtained by rational Gaussian elimination. The absorption
+  probabilities \(H_j\) solve the displayed systems in the statement;
+  the matrix \(I-P_{TT}\) is invertible because \(T\) is transient.
+  For the cyclic refinements, group the defining series for
+  \(H_{j,t}^{(r)}\) by \(\ell\equiv u\pmod{d_j}\). Each group is a
+  rational expression in
+  \[
+    (I-P_{TT}^{d_j})^{-1}P_{TT}^uP_{T,R_j}S_{j,t-r-1-u}\mathbf 1,
+  \]
+  hence is again computed by exact rational linear algebra. Formula
+  \eqref{eq:compressed-cr} is precisely the canonical block-power limit
+  of \(u^{\mathsf T}P^m v\) along \(m\equiv r\pmod p\): after absorption
+  into \(R_{j,t}\), \(r\) further steps place the recurrent chain in
+  \(R_{j,t+r}\), and the limiting conditional distribution there is
+  \(\pi_{j,t+r}\).
+
+  It remains to record a verifiable construction of
+  \(K_r,\theta_r\). Put \(P\) in block form with \(P_{TT}\) and the
+  primitive return blocks \(P^{d_j}|_{R_{j,t}}\). Let \(\Theta\) be the
+  finite set consisting of the moduli of all eigenvalues of
+  \(P_{TT}\) and of all non-unit eigenvalues of the return blocks. Every
+  element of \(\Theta\) is an algebraic number effectively represented
+  by its minimal polynomial and an isolating interval. Since the
+  transient spectral radii and the non-peripheral recurrent moduli are
+  \(<1\), choose an algebraic or rational
+  \[
+    \theta_r\in\bigl(\max\Theta,1\bigr).
+  \]
+  In Jordan form, each non-peripheral block contributes terms bounded by
+  \(C_\mu m^{s_\mu-1}|\mu|^m\), where \(s_\mu\) is the largest Jordan
+  block size for \(\mu\). Real-root isolation and exact algebraic
+  arithmetic give explicit constants \(C_\mu\). For this chosen
+  \(\theta_r\), compute an integer \(N_\mu\) with
+  \(m^{s_\mu-1}|\mu|^m\le\theta_r^m\) for all \(m\ge N_\mu\), and enlarge
+  the coefficient to cover the finitely many \(m<N_\mu\). Summing these
+  finitely many block bounds gives \(K_r\) and
+  \[
+    \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
     \qquad(m\equiv r\bmod p).
   \]
-  For example, one may put \(P\) in rational canonical or Jordan form
-  over an algebraic extension, separate the peripheral eigenvalues from
-  the remaining eigenvalues, and take any rational \(\theta\) strictly
-  between the largest non-peripheral modulus and \(1\); standard
-  eigenvalue isolation makes this effective. Equivalently, the same
-  bound follows from the canonical transient/recurrent Markov-chain
-  decomposition and explicit bounds for powers of the transient blocks.
 
   Choose \(A_b,B_b>0\) and \(M_b\) from
   \Cref{lem:base-prime-count}, so that
@@ -386,8 +482,16 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \le B_b\,\frac{b^m}{m}
     \qquad(m\ge M_b).
   \]
-  If \(c_r=0\), take \(C_r=K_r\) and \(\eta_r=\theta\), then enlarge
-  \(M_r\ge M_b\) until \(K_r\theta^m\le A_b/(2m)\) on the residue class.
+  If \(c_r=0\), take \(M_r\ge M_b\) to be any integer in the residue
+  class tail satisfying
+  \[
+    K_r\theta_r^m\le \frac{A_b}{2m}
+    \qquad(m\ge M_r,\ m\equiv r\bmod p).
+  \]
+  This threshold is computable by real algebraic interval arithmetic:
+  check the finitely many values before monotonicity of
+  \(mK_r\theta_r^m\) begins, and then solve the remaining one-sided
+  inequality by bisection on isolating intervals.
   For \(m\ge M_r\),
   \[
     a_m(\mathcal A)\le \frac{A_b}{2}\frac{b^m}{m},
@@ -395,8 +499,14 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   so the symmetric difference is at least
   \(A_b b^m/(2m)\). Thus \(D_r=A_b/2\) is admissible in the sparse case.
 
-  If \(c_r>0\), enlarge \(M_r\ge M_b\) until
-  \(K_r\theta^m\le c_r/2\) and \(B_b/m\le c_r/4\) on the residue class.
+  If \(c_r>0\), take \(M_r\ge M_b\) so that
+  \[
+    K_r\theta_r^m\le c_r/2,
+    \qquad
+    B_b/m\le c_r/4
+  \]
+  for all larger \(m\equiv r\bmod p\). This is computed in the same
+  real bit model.
   Then \(a_m(\mathcal A)\ge(c_r/2)b^m\), whence
   \[
     \mathrm{Prec}_m
@@ -416,15 +526,14 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   positive constants \(A_b/2\) and \(c_r/4\) appearing above gives the
   final all-large-\(m\) constant after replacing \(D_r b^m\) by the
   weaker \(D_r b^m/m\) in the positive-density residue classes.
-  The complexity statement follows from the standard algorithms for
-  strongly connected components, periods of strongly connected directed
-  graphs, rational linear systems, and algebraic eigenvalue isolation in
-  finite dimension. Explicitly printing \(c_0,\dots,c_{p-1}\) has cost at
-  least proportional to \(p\); therefore the bit bound is polynomial in
-  the input plus output size. If instead the output is kept in the
-  compressed recurrent-class form from the statement, it consists of the
-  class data, cyclic classes, stationary distributions, absorption
-  probabilities, and the formula defining \(c_r\) from these data.
+  The complexity statement follows from polynomial-time strongly
+  connected component and period algorithms, polynomial bit-complexity
+  rational linear algebra, and standard real-algebraic eigenvalue
+  isolation with requested precision. The certificate is compressed by
+  recurrent class and cyclic class. If the user asks for an explicit
+  printed table of all \(c_r\), that table is charged to the output
+  size, which is necessary because \(p\) may be super-polynomial in the
+  number of states.
 \end{proof}
 
 We first establish the quantitative obstruction that drives both
@@ -600,16 +709,20 @@ corollaries below.
     \(C_r=2B_b/c_r\), where
     \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all large \(m\),
     such that \(\mathrm{Prec}_m\le C_r/m\) for all sufficiently large
-    \(m\equiv r\pmod p\).
+    \(m\equiv r\pmod p\) for which \(a_m(\mathcal A)>0\).
   \end{enumerate}
-  Consequently every DFA satisfies one of the following global
-  alternatives:
+  Consequently every DFA satisfies one of the following explicitly
+  global alternatives:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
-    \item \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) along an infinite
-    arithmetic progression of lengths that depends only on
-    \(\mathcal A\) and \(b\).
+    \item There exists at least one residue class
+    \(r\bmod p\) with \(c_r>0\) such that
+    \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) for all sufficiently large
+    \(m\equiv r\pmod p\) for which precision is defined.
   \end{enumerate}
+  Precision is left undefined on lengths with \(a_m(\mathcal A)=0\);
+  no assertion is made about other positive-density or sparse residue
+  classes beyond the per-residue alternatives above.
   In particular, no fixed DFA has both recall and precision bounded
   away from zero for infinitely many lengths.
 \end{corollary}
@@ -658,8 +771,9 @@ corollaries below.
   If all residue classes have \(c_r=0\), then
   \(\mathrm{Rec}_m\to 0\) exponentially for every \(m\), giving
   alternative~\textup{(i)}. Otherwise, at least one residue class has
-  \(c_r>0\), and \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) along that
-  infinite arithmetic progression, giving alternative~\textup{(ii)}.
+  \(c_r>0\), and \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) on defined
+  lengths along that infinite arithmetic progression, giving
+  alternative~\textup{(ii)}.
 
   If both recall and precision were bounded below by some
   \(\delta>0\) for infinitely many lengths, then
@@ -935,7 +1049,7 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   as required.
 \end{proof}
 
-\begin{theorem}[Relative density for a trim strongly connected presentation]
+\begin{theorem}[Background relative density for a trim strongly connected presentation]
   \label{thm:parry-density}
   Let \(\mathcal N\) be a trim strongly connected deterministic
   presentation in the sense of
@@ -995,6 +1109,13 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   arithmetic progression the ratio stays bounded below by a positive
   constant.
 \end{proof}
+
+The preceding theorem is the standard conditional-density conclusion
+for a deterministic trim strongly connected presentation, specialized
+to the notation used here; compare
+\cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
+Only the following finite-budget consequence is used in the prime-slice
+applications.
 
 \begin{corollary}[Finite-budget lemma for a trim presentation]
   \label{cor:relative-finite-budget-obstruction}
@@ -1095,8 +1216,8 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 \end{proof}
 
 \noindent
-This finite-budget lemma is the central skeleton behind the prime-slice
-results: the base-\(b\) and Zeckendorf prime slices are exactly the
+This finite-budget lemma is the only relative-density consequence used
+below: the base-\(b\) and Zeckendorf prime slices are exactly the
 instances in which \(T_m\) has size comparable to \(\lambda^m/m\) by
 \Cref{lem:base-prime-count,lem:zeck-prime-count}.
 
