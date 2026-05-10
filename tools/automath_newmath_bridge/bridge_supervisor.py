@@ -9,9 +9,13 @@ The supervisor mirrors the local distillation/oracle pipeline style:
 - run the bridge discovery pipeline;
 - run deterministic gates;
 - optionally write local review packets;
+- optionally invoke Automath-native Killo/golden distillation writeback;
+- optionally push only the Automath bridge branch after successful writeback;
 - keep runtime artifacts local-only and ignored by Git.
 
-It never pushes, sends, publishes, submits, or directly edits paper/Lean files.
+It never sends, publishes, submits, checks out dev, or writes outreach state.
+Paper writes are only allowed through Automath-native distillation/Claude
+writeback gates when explicitly requested.
 """
 
 from __future__ import annotations
@@ -213,6 +217,48 @@ def run_gates(config_path: Path, *, allow_publication_risk: bool) -> list[dict[s
     return results
 
 
+def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: bool, dry_run: bool) -> dict[str, Any]:
+    cfg = config.get("automath_writeback")
+    if not isinstance(cfg, dict) or not cfg.get("enabled", False):
+        return {"status": "disabled"}
+    cmd = [
+        sys.executable,
+        str(SCRIPT_DIR / "bridge_to_automath_killo_golden.py"),
+        "--gate-results",
+        str(REPO_ROOT / str(cfg.get("gate_results_path") or "tools/automath_newmath_bridge/out/bridge_gate_results.jsonl")),
+        "--runtime-dir",
+        str(REPO_ROOT / str(cfg.get("runtime_candidate_dir") or "tools/automath_newmath_bridge/inbox/automath_writeback_candidates")),
+        "--branch",
+        str(cfg.get("branch") or "bridge/automath-newmath-consumption"),
+        "--limit",
+        str(int(cfg.get("max_candidates_per_pass") or 1)),
+    ]
+    if apply:
+        cmd.append("--apply")
+    if dry_run:
+        cmd.append("--dry-run")
+    if push_branch:
+        cmd.append("--push-branch")
+    result = run_command(cmd, timeout=7500 if apply else 180)
+    if result.returncode != 0:
+        return {
+            "status": "failed",
+            "apply": apply,
+            "push_branch": push_branch,
+            "reason": (result.stderr or result.stdout).strip()[:2000],
+        }
+    try:
+        payload = json.loads(result.stdout.strip()) if result.stdout.strip() else {}
+    except json.JSONDecodeError:
+        payload = {"raw": result.stdout.strip()[:2000]}
+    return {
+        "status": "applied" if apply else "dry_run",
+        "apply": apply,
+        "push_branch": push_branch,
+        **payload,
+    }
+
+
 def _packet_name(result: dict[str, Any]) -> str:
     raw = str(result.get("id") or result.get("artifact_key") or result.get("source_path") or "packet")
     safe = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in raw)
@@ -253,6 +299,7 @@ def write_local_packets(gate_results: list[dict[str, Any]], *, limit: int) -> li
 
 def supervisor_pass(args: argparse.Namespace) -> bool:
     config_path = Path(args.config).resolve()
+    config = _load_config(config_path)
     ensure_branch(expected_branch_from_config(config_path, args.branch))
     if tracked_dirty_lines(REPO_ROOT) and not args.allow_dirty:
         raise RuntimeError("Tracked worktree changes present; pass --allow-dirty only for local runtime/debug work")
@@ -272,6 +319,21 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
     )
     run_synthesis_report(config_path)
     gate_results = run_gates(config_path, allow_publication_risk=args.allow_publication_risk)
+
+    automath_apply = bool(args.apply_automath_writeback or config.get("automath_writeback", {}).get("apply_by_default", False))
+    automath_push = bool(args.push_branch or config.get("automath_writeback", {}).get("push_branch_by_default", False))
+    if not args.no_automath_writeback:
+        wb_result = run_automath_writeback(
+            config,
+            apply=automath_apply,
+            push_branch=automath_push,
+            dry_run=args.automath_writeback_dry_run,
+        )
+        _log(f"automath_writeback: {wb_result}")
+        if wb_result.get("status") == "failed":
+            return False
+    else:
+        _log("automath_writeback: disabled by --no-automath-writeback")
 
     if args.apply_writeback_packets:
         written = write_local_packets(gate_results, limit=args.packet_limit)
@@ -293,6 +355,26 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--allow-dirty", action="store_true", help="Allow tracked dirty worktree before running")
     parser.add_argument("--allow-publication-risk", action="store_true", help="Suppress publication-risk gate warnings")
     parser.add_argument("--limit-per-rule", type=int, default=50)
+    parser.add_argument(
+        "--apply-automath-writeback",
+        action="store_true",
+        help="Invoke Automath-native distillation/Claude Killo-golden writeback for accepted bridge records",
+    )
+    parser.add_argument(
+        "--automath-writeback-dry-run",
+        action="store_true",
+        help="Pass --dry-run to the Automath distillation supervisor",
+    )
+    parser.add_argument(
+        "--push-branch",
+        action="store_true",
+        help="Push only the Automath bridge branch after successful Automath-native writeback",
+    )
+    parser.add_argument(
+        "--no-automath-writeback",
+        action="store_true",
+        help="Skip the Automath-native writeback adapter",
+    )
     parser.add_argument(
         "--apply-writeback-packets",
         action="store_true",

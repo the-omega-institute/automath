@@ -28,6 +28,9 @@ content.
 - `bridge_gates.py` runs deterministic local gates over the bridge inbox.
 - `bridge_supervisor.py` periodically fetches both repos, runs discovery, runs
   gates, and can write local ignored review packets.
+- `bridge_to_automath_killo_golden.py` converts accepted NewMath-to-Automath
+  bridge records into Automath distillation candidates and invokes the existing
+  Killo/golden Claude writeback lane when explicitly requested.
 - `validate_bridge_manifest.py` validates manifest or packet JSONL records.
 - `render_bridge_report.py` renders manifest or packet JSONL as Markdown for
   human and AI review.
@@ -144,7 +147,9 @@ One pass does this:
 4. Synthesizes readiness from both repo contents.
 5. Writes a local inbox, synthesis report, and transfer plan.
 6. Runs deterministic gates.
-7. Optionally writes local review packets if `--apply-writeback-packets` is
+7. Dry-runs the Automath-native Killo/golden writeback adapter, or applies it
+   with `--apply-automath-writeback`.
+8. Optionally writes local review packets if `--apply-writeback-packets` is
    passed.
 
 Continuous mode:
@@ -167,9 +172,10 @@ The supervisor follows the local distillation/oracle pattern:
 - fetch before each pass;
 - dry local runtime artifacts;
 - deterministic gates before local packet writes;
-- no push;
+- Automath paper writes only through `tools/distillation/supervisor.py`;
+- optional push is limited to `bridge/automath-newmath-consumption`;
 - no external send;
-- no direct durable paper / Lean / docs writes.
+- no direct Lean / docs / outreach-state writes.
 
 Local runtime outputs:
 
@@ -202,6 +208,23 @@ python3 tools/automath_newmath_bridge/bridge_supervisor.py \
 
 These packets are review material only. They do not authorize destination
 writes.
+
+To allow accepted NewMath-to-Automath bridge records to enter the Automath
+paper lane:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py \
+  --once \
+  --apply-automath-writeback \
+  --push-branch
+```
+
+The adapter only considers NewMath-to-Automath records whose bridge status is
+already `accepted` or `consumed`; current `blocked_automath_not_ready` NewMath
+constant records are ignored. The paper writeback itself is owned by
+`tools/distillation/supervisor.py`, which uses the existing Killo/golden style
+checks and Claude review gate. `--push-branch` pushes only
+`bridge/automath-newmath-consumption` after that native lane succeeds.
 
 ## Commands
 

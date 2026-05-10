@@ -166,6 +166,8 @@ distillation, NewMath BEDC supervisor, and loning/oracle pipelines:
 | deterministic policy gate | `bridge_gates.py` |
 | cross-repo readiness synthesis | `bridge_synthesis.py` |
 | review packet before writeback | ignored `inbox/writeback_packets/*.json` |
+| Automath writeback | `bridge_to_automath_killo_golden.py` invokes `tools/distillation/supervisor.py` |
+| branch push | only `bridge/automath-newmath-consumption`, only after native writeback succeeds |
 | publication / review gates | no public-facing use without explicit approval |
 
 The bridge synthesis layer scans both repos, not just refs:
@@ -198,6 +200,26 @@ when required, and blocks durable paper / Lean / docs / outreach-state writes.
 
 Approved local packet writes are still only "needs operator review" packets.
 They are not accepted or consumed manifest entries.
+
+NewMath-to-Automath durable transfer has one allowed write path on this branch:
+
+```text
+NewMath source evidence
+  -> bridge discovery
+  -> bridge_synthesis readiness
+  -> bridge_gates
+  -> manifest status accepted/consumed
+  -> bridge_to_automath_killo_golden.py
+  -> tools/distillation/supervisor.py
+  -> Killo/golden Claude writeback review
+  -> Automath paper writeback if native gate accepts
+  -> push bridge/automath-newmath-consumption
+```
+
+The adapter does not generate LaTeX directly. It refuses records that are still
+`blocked_automath_not_ready`, `observed`, or merely `candidate`, so emergent
+NewMath constant material cannot be pulled into Automath paper before the
+receiving queue and gate are chosen.
 
 Run one supervised pass:
 
