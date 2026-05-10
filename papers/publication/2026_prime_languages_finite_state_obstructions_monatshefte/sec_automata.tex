@@ -73,38 +73,50 @@ For \(m\ge 0\), write
     a_m(\mathcal A)=u^{\mathsf T}B^m v.
   \]
   Set \(P:=B/b\). Then \(P\) is a stochastic matrix on the finite set
-  \(Q\). After permuting states, write \(P\) in block upper-triangular
-  form with one transient block and recurrent-class blocks
-  \(P_1,\dots,P_s\), where each \(P_i\) is an irreducible stochastic
-  matrix. The transient block has spectral radius \(<1\), so its
-  contribution is \(O(\theta_T^m)\) for some \(\theta_T\in(0,1)\).
-
-  Fix \(i\), and let \(d_i\) be the period of \(P_i\). By the periodic
-  Perron--Frobenius theorem for irreducible non-negative matrices, there
-  exist spectral projectors \(E_{i,0},\dots,E_{i,d_i-1}\), a constant
-  \(C_i>0\), and \(\theta_i\in(0,1)\) such that
+  \(Q\). After permuting states, put \(P\) in canonical Markov-chain
+  form
   \[
-    P_i^m
-    =\sum_{\ell=0}^{d_i-1}\omega_{d_i}^{\ell m}E_{i,\ell}+R_{i,m},
-    \qquad
-    \|R_{i,m}\|\le C_i\theta_i^m,
+    P=
+    \begin{pmatrix}
+      T & R_1 & \cdots & R_s\\
+      0 & C_1 & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s
+    \end{pmatrix},
   \]
-  where \(\omega_{d_i}:=e^{2\pi i/d_i}\). Since the transient block has
-  no eigenvalues on the unit circle, these recurrent-class expansions
-  account for every peripheral eigenvalue of \(P\). Hence there exist
-  matrices \(F_{i,\ell}\) on the full state space, a constant \(C>0\),
-  and \(\theta\in(0,1)\) such that
+  where \(T\) is the transient block, \(\rho(T)<1\), and each \(C_i\)
+  is an irreducible stochastic recurrent class. For \(m\ge1\),
   \[
-    P^m
-    =\sum_{i=1}^s\sum_{\ell=0}^{d_i-1}
-      \omega_{d_i}^{\ell m}F_{i,\ell}+E_m,
-    \qquad
-    \|E_m\|\le C\theta^m.
+    P^m=
+    \begin{pmatrix}
+      T^m &
+      \sum_{\ell=0}^{m-1}T^\ell R_1C_1^{m-1-\ell} &
+      \cdots &
+      \sum_{\ell=0}^{m-1}T^\ell R_sC_s^{m-1-\ell}\\
+      0 & C_1^m & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s^m
+    \end{pmatrix}.
   \]
+  Thus the transient-to-recurrent blocks need not be exponentially
+  small: their absorption convolutions generally converge to non-zero
+  periodic limits.
 
-  Let \(p:=\operatorname{lcm}(d_1,\dots,d_s)\). Grouping the peripheral
-  terms by the residue class of \(m\bmod p\), we obtain matrices
-  \(S_0,\dots,S_{p-1}\) such that
+  Let \(d_i\) be the period of \(C_i\), and put
+  \(p:=\operatorname{lcm}(d_1,\dots,d_s)\). By the periodic
+  Perron--Frobenius theorem for the recurrent blocks, each sequence
+  \(C_i^{kp+r}\) converges exponentially fast as \(k\to\infty\), for
+  each fixed \(r\). Since \(T^\ell\) decays exponentially, the displayed
+  convolution also has an exponentially fast limit on every residue
+  class. Hence the entrywise limits
+  \[
+    S_r:=\lim_{k\to\infty}P^{kp+r}
+    \qquad(0\le r<p)
+  \]
+  exist; the matrices \(S_r\) include both the recurrent-class limits
+  and the absorption terms from transient states into those recurrent
+  classes. Consequently there are \(C>0\) and \(\theta\in(0,1)\) such
+  that
   \[
     P^m=S_{m\bmod p}+E_m,
     \qquad
@@ -172,6 +184,29 @@ This density dichotomy is classical; compare
 We keep the short proof because the residue-class constants are used in
 the prime corollaries below.
 
+\begin{lemma}[Explicit prime-counting input]
+  \label{lem:explicit-pnt-input}
+  There are absolute effectively computable constants \(X_0,K_1,K_2>0\)
+  such that for every \(x\ge X_0\),
+  \[
+    \left|\pi(x)-\frac{x}{\log x}\right|
+      \le K_1\frac{x}{(\log x)^2},
+    \qquad
+    \pi(x)\le K_2\frac{x}{\log x}.
+  \]
+  For instance, Rosser--Schoenfeld
+  \cite{RosserSchoenfeld1962} gives one such choice.
+\end{lemma}
+
+\begin{proof}
+  Rosser--Schoenfeld give explicit upper and lower estimates for
+  \(\pi(x)\) of the form \(x/\log x\) multiplied by rational functions
+  of \(1/\log x\) for all sufficiently large \(x\). Increasing \(X_0\),
+  if necessary, absorbs the finitely many exceptional small values and
+  gives the two displayed inequalities with absolute constants
+  \(K_1,K_2\).
+\end{proof}
+
 \begin{remark}\label{rem:dfa-density-sharpness}
   Both alternatives occur already for elementary regular languages. The
   language \(\Sigma_b^\ast 0\) of words ending in \(0\) has density
@@ -203,8 +238,10 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 
 \begin{lemma}[Prime counts in base-\(b\) slices]
   \label{lem:base-prime-count}
-  There exist constants \(A_b,B_b>0\) such that, for all sufficiently
-  large \(m\),
+  Let \(X_0,K_1,K_2\) be constants satisfying
+  \Cref{lem:explicit-pnt-input}. There are explicit constants
+  \(A_b,B_b>0\) and an explicit integer \(M_b\) such that, for all
+  \(m\ge M_b\),
   \[
     A_b\,\frac{b^m}{m}
     \le \abs{\mathcal P_m^{(b)}}
@@ -213,6 +250,18 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 \end{lemma}
 
 \begin{proof}
+  Put \(L_b:=\log b\). Choose \(M_b\ge2\) so that
+  \(b^{M_b-1}\ge X_0\) and, for every \(m\ge M_b\),
+  \[
+    K_1\left(\frac{1}{mL_b}+\frac{b}{(m-1)^2L_b}\right)
+      +\frac{2m}{b^m}
+    \le
+    \frac{1}{2L_b}
+      \left(1-\frac{m}{b(m-1)}\right).
+  \]
+  This is an effective finite search, because the left-hand side is
+  \(O(1/m)\) and the factor on the right tends to
+  \((1-1/b)/(2L_b)>0\).
   The leading-digit convention gives the exact half-open interval count
   \[
     \abs{\mathcal P_m^{(b)}}=\pi(b^m-1)-\pi(b^{m-1}-1).
@@ -221,20 +270,15 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \[
     \pi(b^m)-\pi(b^{m-1})+O(1),
   \]
-  since only the two endpoints can differ. The prime number theorem with
-  first-order error term gives
-  \[
-    \pi(x)=\frac{x}{\log x}
-      +O\!\left(\frac{x}{\log^2 x}\right).
-  \]
-  Applying this at \(x=b^m\) and \(x=b^{m-1}\), and absorbing the endpoint
-  \(O(1)\), yields
+  since only the two endpoints can differ. For \(m\ge M_b\), the
+  explicit estimate in \Cref{lem:explicit-pnt-input} gives
   \[
     \pi(b^m)-\pi(b^{m-1})
-    =
+    \ge
     \frac{b^m}{m\log b}
     -\frac{b^{m-1}}{(m-1)\log b}
-    +O\!\left(\frac{b^m}{m^2}\right).
+    -K_1\frac{b^m}{m^2(\log b)^2}
+    -K_1\frac{b^{m-1}}{(m-1)^2(\log b)^2}.
   \]
   Since
   \[
@@ -244,22 +288,42 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \frac{b^m}{m\log b}
     \left(1-\frac{m}{b(m-1)}\right),
   \]
-  and the factor in parentheses tends to \(1-1/b>0\), the main term is
-  bounded above and below by positive multiples of \(b^m/m\) for all
-  large \(m\). The error term is \(o(b^m/m)\), so reducing the lower
-  constant and increasing the upper constant gives the asserted
-  constants \(A_b,B_b\).
+  the choice of \(M_b\), together with the endpoint \(O(1)\), gives the
+  explicit lower bound
+  \[
+    \abs{\mathcal P_m^{(b)}}
+    \ge
+    \frac{1}{2\log b}
+    \left(1-\frac{m}{b(m-1)}\right)\frac{b^m}{m}.
+  \]
+  After increasing \(M_b\) once more so that
+  \(1-m/(b(m-1))\ge (1-1/b)/2\), one may take
+  \[
+    A_b:=\frac{1-1/b}{4\log b}.
+  \]
+  The upper bound follows from
+  \[
+    \abs{\mathcal P_m^{(b)}}\le\pi(b^m)
+      \le K_2\frac{b^m}{m\log b},
+  \]
+  so \(B_b:=K_2/\log b\) is admissible for all \(m\ge M_b\).
 \end{proof}
 
 \begin{theorem}[Effective fixed-DFA prime-slice obstruction]
   \label{thm:effective-fixed-dfa-prime-obstruction}
   Fix \(b\ge2\) and a complete DFA
   \(\mathcal A=(Q,\Sigma_b,\delta,q_0,F)\). From the transition table of
-  \(\mathcal A\) one can compute an integer \(p\ge1\), residue
-  constants \(c_0,\dots,c_{p-1}\in\RR_{\ge0}\), residue alternatives
+  \(\mathcal A\) one can compute the following finite output:
+  the recurrent classes of the Markov chain \(P=B/b\), their periods
+  \(d_i\), cyclic classes, stationary distributions, absorption
+  probabilities from transient states, the common period
+  \(p=\operatorname{lcm}_i d_i\), the residue constants
+  \(c_r=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v\), the alternatives
   \(c_r=0\) or \(c_r>0\), and constants
-  \(C_r,D_r>0\), \(\eta_r\in(0,1)\), and \(M_r\) with the following
-  property for every \(m\ge M_r\) satisfying \(m\equiv r\pmod p\).
+  \(C_r,D_r>0\), \(\eta_r\in(0,1)\), and \(M_r\). If the residues
+  \(c_0,\dots,c_{p-1}\) are listed explicitly, this listing is part of
+  the output. With this output, the following holds for every
+  \(m\ge M_r\) satisfying \(m\equiv r\pmod p\).
   If \(c_r=0\), then
   \[
     a_m(\mathcal A)\le C_r\eta_r^m b^m
@@ -278,9 +342,8 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
     \ge D_r b^m .
   \]
-  Here \(B_b\) is any explicit upper constant in
-  \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) valid for \(m\ge M_b\),
-  obtained from an explicit prime number theorem bound. Consequently
+  Here \(A_b,B_b,M_b\) may be the explicit constants supplied by
+  \Cref{lem:base-prime-count}. Consequently
   one computes constants \(c_{\mathcal A,b}>0\) and \(M_{\mathcal A,b}\)
   such that
   \[
@@ -288,11 +351,10 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \ge c_{\mathcal A,b}\,\frac{b^m}{m}
     \qquad(m\ge M_{\mathcal A,b}).
   \]
-  The algorithm uses polynomially many arithmetic operations in the
-  number of states for the graph decomposition and the rational linear
-  systems; the bit complexity is polynomial in the bit size of the
-  rational data produced from \(P=B/b\), apart from the chosen explicit
-  prime-counting threshold.
+  The arithmetic complexity is polynomial in the input size plus the
+  size of the produced output. Equivalently, the compressed Markov-chain
+  output above avoids charging the algorithm for explicitly printing
+  \(p\) residue records when \(p=\operatorname{lcm}_i d_i\) is large.
 \end{theorem}
 
 \begin{proof}
@@ -315,8 +377,8 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   bound follows from the canonical transient/recurrent Markov-chain
   decomposition and explicit bounds for powers of the transient blocks.
 
-  Choose explicit constants \(A_b,B_b>0\) and \(M_b\) from any explicit
-  PNT estimate so that
+  Choose \(A_b,B_b>0\) and \(M_b\) from
+  \Cref{lem:base-prime-count}, so that
   \[
     A_b\,\frac{b^m}{m}
     \le\abs{\mathcal P_m^{(b)}}
@@ -356,7 +418,12 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   The complexity statement follows from the standard algorithms for
   strongly connected components, periods of strongly connected directed
   graphs, rational linear systems, and algebraic eigenvalue isolation in
-  finite dimension.
+  finite dimension. Explicitly printing \(c_0,\dots,c_{p-1}\) has cost at
+  least proportional to \(p\); therefore the bit bound is polynomial in
+  the input plus output size. If instead the output is kept in the
+  compressed recurrent-class form from the statement, it consists of the
+  class data, cyclic classes, stationary distributions, absorption
+  probabilities, and the formula defining \(c_r\) from these data.
 \end{proof}
 
 We first establish the quantitative obstruction that drives both

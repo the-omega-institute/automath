@@ -87,7 +87,7 @@ and set
   estimate.
 \end{proof}
 
-\begin{proposition}[Known growth law for regular Zeckendorf languages]
+\begin{proposition}[Growth law for regular Zeckendorf languages]
   \label{prop:zeckendorf-regular-powerlaw}
   Let \(L\subseteq\mathcal Z\) be regular. Choose a DFA recognizing
   \(L\), delete states that are not reachable from the initial state or
@@ -115,8 +115,8 @@ and set
 \begin{proof}
   This is the Zeckendorf specialization of the general growth theory for
   \(S\)-recognizable sets \cite[Theorem~7]{CharlierRampersad2011}; see
-  also \cite{LecomteRigo2001}. For the endpoint cases used below one can
-  also read the estimate directly from
+  also \cite{LecomteRigo2001}. In the present setting the estimate can
+  be read directly from
   \Cref{lem:zeckendorf-length-growth}, as follows. In the present
   numeration system the ambient counting function satisfies
   \[
@@ -161,8 +161,10 @@ and set
 
 \begin{lemma}[Prime counts in Zeckendorf slices]
   \label{lem:zeck-prime-count}
-  There exist constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) such that for
-  all sufficiently large \(m\),
+  Let \(X_0,K_1,K_2\) be constants satisfying
+  \Cref{lem:explicit-pnt-input}. There are explicit constants
+  \(A_{\mathrm Z},B_{\mathrm Z}>0\) and an explicit integer \(M_{\mathrm Z}\)
+  such that for all \(m\ge M_{\mathrm Z}\),
   \[
     A_{\mathrm Z}\,\frac{\varphi^m}{m}
     \le \abs{\mathcal P_m^{(\mathrm Z)}}
@@ -171,6 +173,36 @@ and set
 \end{lemma}
 
 \begin{proof}
+  Choose \(M_0\) such that \(F_{m+1}\ge X_0\) and
+  \[
+    \frac12\le
+    \frac{\log F_{m+2}}{m\log\varphi},
+    \frac{\log F_{m+1}}{m\log\varphi}
+    \le2,
+    \qquad
+    \frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}
+    \le\frac{1+\varphi^{-1}}2
+  \]
+  for every \(m\ge M_0\). Such an \(M_0\) is found effectively from
+  Binet's formula. Put
+  \[
+    \Delta_m:=
+    1-\frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}.
+  \]
+  Then \(\Delta_m\ge(1-\varphi^{-1})/2\) for \(m\ge M_0\). Enlarge
+  \(M_0\) to \(M_{\mathrm Z}\) so that, for all \(m\ge M_{\mathrm Z}\),
+  \[
+    K_1\left(
+      \frac{F_{m+2}}{(\log F_{m+2})^2}
+      +\frac{F_{m+1}}{(\log F_{m+1})^2}\right)+2
+    \le
+    \frac12\,\frac{F_{m+2}}{\log F_{m+2}}\Delta_m .
+  \]
+  This is again an effective finite search, since the left-hand side is
+  \(O(\varphi^m/m^2)\) while the right-hand side is
+  \(\gg\varphi^m/m\).
   Every word in \(\mathcal Z_m\) represents an integer in
   \([F_{m+1},F_{m+2})\), so
   \[
@@ -178,16 +210,22 @@ and set
     =\pi(F_{m+2}-1)-\pi(F_{m+1}-1)
     =\pi(F_{m+2})-\pi(F_{m+1})+O(1),
   \]
-  with \(\pi(x)=\#\{p\le x:p\text{ prime}\}\). The prime number theorem with
-  a first-order error term
-  \cite[Chapter~22]{HardyWright2008} gives
-  \(\pi(x)=x/\log x+O(x/\log^2 x)\). Hence
+  with \(\pi(x)=\#\{p\le x:p\text{ prime}\}\). For
+  \(m\ge M_{\mathrm Z}\), \Cref{lem:explicit-pnt-input} gives
   \[
     \pi(F_{m+2})-\pi(F_{m+1})
-    =\frac{F_{m+2}}{\log F_{m+2}}-\frac{F_{m+1}}{\log F_{m+1}}
-     +O\!\left(\frac{F_{m+2}}{\log^2 F_{m+2}}\right).
+    \ge
+    \frac{F_{m+2}}{\log F_{m+2}}-\frac{F_{m+1}}{\log F_{m+1}}
+    -K_1\frac{F_{m+2}}{(\log F_{m+2})^2}
+    -K_1\frac{F_{m+1}}{(\log F_{m+1})^2}.
   \]
-  More explicitly, Binet's formula gives
+  By the definition of \(M_{\mathrm Z}\), after absorbing the endpoint
+  \(O(1)\),
+  \[
+    \abs{\mathcal P_m^{(\mathrm Z)}}
+    \ge \frac12\,\frac{F_{m+2}}{\log F_{m+2}}\Delta_m .
+  \]
+  Binet's formula gives
   \(F_{m+j}=\varphi^{m+j}/\sqrt5+O(\varphi^{-m})\) for \(j=1,2\), and
   hence
   \[
@@ -196,23 +234,19 @@ and set
   \]
   for all sufficiently large \(m\), with suitable positive constants
   \(C_1,\dots,C_4\). Also
+  \(\Delta_m\ge(1-\varphi^{-1})/2\) by construction. Therefore one may
+  take, after enlarging \(M_{\mathrm Z}\) if needed,
   \[
-    \frac{F_{m+1}}{F_{m+2}}\longrightarrow\varphi^{-1}<1
+    A_{\mathrm Z}:=\frac{C_1(1-\varphi^{-1})}{8C_4}.
   \]
-  and
-  \(\log F_{m+1}=m\log\varphi+O(1)=\log F_{m+2}+O(1)\). Thus the
-  quantity in parentheses
+  For the upper bound,
   \[
-    1-\frac{F_{m+1}}{F_{m+2}}
-      \frac{\log F_{m+2}}{\log F_{m+1}}
+    \abs{\mathcal P_m^{(\mathrm Z)}}\le \pi(F_{m+2})
+      \le K_2\frac{F_{m+2}}{\log F_{m+2}}
+      \le \frac{K_2C_2}{C_3}\frac{\varphi^m}{m}.
   \]
-  stays bounded between two positive constants for all large \(m\).
-  The displayed main term is therefore between positive multiples of
-  \(F_{m+2}/\log F_{m+2}\), hence between positive multiples of
-  \(\varphi^m/m\). The error term
-  \(O(F_{m+2}/\log^2 F_{m+2})\) is \(o(\varphi^m/m)\). The displayed
-  expression is therefore comparable to \(\varphi^m/m\), yielding
-  constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) with the stated property.
+  Thus \(B_{\mathrm Z}:=K_2C_2/C_3\) is admissible for every
+  \(m\ge M_{\mathrm Z}\).
 \end{proof}
 
 \begin{lemma}[Canonical Zeckendorf presentation]
