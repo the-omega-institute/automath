@@ -49,6 +49,61 @@ singular values are summable and
 partial-sum inequality therefore yields the final claim.
 \end{proof}
 
+\begin{lemma}[Ordered non-zero root-space flag]
+  \label{lem:ordered-nonzero-root-flag}
+  Let \(K\) be a compact operator on a separable Hilbert space, and let
+  \((\mu_q)_{q\in Q}\), where \(Q=\{1,\ldots,m\}\) or \(Q=\NN\), be any
+  ordering of the non-zero eigenvalues of \(K\), each repeated according
+  to algebraic multiplicity. Then there is an increasing family
+  \[
+    0=E_0\subset E_1\subset E_2\subset\cdots
+  \]
+  of finite-dimensional \(K\)-invariant subspaces, indexed by \(q\in Q\),
+  such that \(\dim E_q=q\) and the induced operator on
+  \(E_q/E_{q-1}\) is multiplication by \(\mu_q\). If
+  \(E:=\overline{\bigcup_q E_q}\), then \(E\) contains every non-zero
+  Riesz root space of \(K\), and the compact operator induced by \(K\) on
+  the quotient space \(H/E\) has no non-zero eigenvalues.
+\end{lemma}
+
+\begin{proof}
+  For each non-zero eigenvalue \(\lambda\), let \(G_\lambda\) be the
+  Riesz root space of \(K\). This space is finite-dimensional, invariant,
+  and has dimension equal to the algebraic multiplicity of \(\lambda\).
+  Choose once and for all a complete invariant flag
+  \[
+    0=G_{\lambda,0}\subset G_{\lambda,1}\subset\cdots
+    \subset G_{\lambda,m_{\mathrm{alg}}(\lambda)}=G_\lambda
+  \]
+  for \(K|_{G_\lambda}\). Each one-dimensional quotient
+  \(G_{\lambda,r}/G_{\lambda,r-1}\) carries multiplication by
+  \(\lambda\).
+
+  For \(q\in Q\), let \(r_\lambda(q)\) be the number of occurrences of
+  \(\lambda\) among \(\mu_1,\ldots,\mu_q\), and define
+  \[
+    E_q:=
+    \bigoplus_{\lambda\in\{\mu_1,\ldots,\mu_q\}}
+      G_{\lambda,r_\lambda(q)} .
+  \]
+  Only finitely many eigenvalues occur in this sum. The Riesz root spaces
+  for distinct non-zero eigenvalues are linearly independent, so \(E_q\)
+  has dimension \(q\). Each summand is invariant, hence \(E_q\) is
+  invariant. Passing from \(E_{q-1}\) to \(E_q\) adds precisely the next
+  one-dimensional quotient in the flag for \(G_{\mu_q}\), and therefore
+  the quotient diagonal entry is \(\mu_q\).
+
+  The closure \(E=\overline{\bigcup_q E_q}\) contains every
+  \(G_\lambda\), because the sequence \((\mu_q)\) lists all non-zero
+  eigenvalues with their full algebraic multiplicities. Let \(\widehat K\)
+  denote the operator induced by \(K\) on \(H/E\). If
+  \(\lambda\ne0\), the Riesz projection of \(\widehat K\) at \(\lambda\)
+  is the quotient induced by the Riesz projection of \(K\) at \(\lambda\);
+  the range of the latter is \(G_\lambda\subset E\). Hence the quotient
+  projection is zero, so \(\lambda\) is not a characteristic value of
+  \(\widehat K\). Thus \(\widehat K\) has no non-zero eigenvalues.
+\end{proof}
+
 \begin{lemma}[Ringrose triangularisation in Schatten ideals]
   \label{lem:ringrose-prescribed-diagonal}
   Let \(1\le p<\infty\) and let \(T\in\mathcal S_p(H)\). After replacing \(H\)
@@ -64,11 +119,14 @@ partial-sum inequality therefore yields the final claim.
   non-zero diagonal entries may be chosen so that their non-zero
   subsequence occurs in any prescribed ordering of the non-zero
   eigenvalues of \(T\), each repeated according to algebraic multiplicity.
-  Every other diagonal entry is zero. Thus the diagonal sequence
+  Every other diagonal entry is zero. Equivalently, the diagonal sequence
   \((d_k)_{k\ge1}\) has non-zero subsequence equal to the prescribed
-  ordering of the non-zero algebraic eigenvalue multiset of \(T\), and its
-  other entries are zero; no assertion is made that the zero entries may
-  be placed at arbitrary prescribed indices. In particular
+  ordering of the non-zero algebraic eigenvalue multiset of \(T\), and all
+  entries outside that subsequence are zero.
+
+  This assertion prescribes only the relative order of the non-zero
+  diagonal entries. It does not prescribe the positions occupied by zero
+  entries. In particular,
   \[
     \sum_{k\ge1}\abs{d_k}^p
     =
@@ -81,36 +139,30 @@ partial-sum inequality therefore yields the final claim.
 \begin{proof}
   The separable reduction follows directly from the singular-value
   expansion: both \(H_T\) and \(H_T^\perp\) reduce \(T\), and
-  \(T|_{H_T^\perp}=0\). Ringrose's compact triangular representation
-  theorem for compact operators on a separable Hilbert space gives a
-  complete maximal chain of invariant subspaces whose one-dimensional
-  quotient diagonal consists of the characteristic values of the compact
-  operator, counted according to algebraic multiplicity, and zeros on the
-  remaining quotients; see
+  \(T|_{H_T^\perp}=0\). We therefore work on \(H_T\).
+
+  Apply \Cref{lem:ordered-nonzero-root-flag} to the chosen ordering
+  \((\mu_q)\) of the non-zero algebraic eigenvalue multiset of
+  \(T|_{H_T}\). This gives a nested invariant finite-dimensional flag
+  whose successive quotient diagonal entries are exactly
+  \(\mu_1,\mu_2,\ldots\). Let \(E\) be the closure of the union of this
+  flag. The induced compact operator on \(H_T/E\) has no non-zero
+  eigenvalues by the same lemma.
+
+  Ringrose's compact triangular representation theorem, applied on the
+  quotient \(H_T/E\), gives a maximal invariant chain for the quotient
+  whose one-dimensional quotient diagonal consists only of zeros; see
   \cite[Chapter~1, Theorem~3, pp.~6--8]{Ringrose1971CompactNonSelfAdjoint}.
-  We spell out the ordering point, since only the non-zero diagonal
-  subsequence is prescribed here. For each non-zero eigenvalue
-  \(\lambda\), its Riesz root space is finite-dimensional and invariant,
-  and the restriction of \(T\) to that root space has a finite invariant
-  flag with quotient diagonal entries all equal to \(\lambda\). Given the
-  prescribed ordering \((\mu_q)\) of the non-zero algebraic multiset, let
-  \(r_\lambda(q)\) be the number of occurrences of \(\lambda\) among
-  \(\mu_1,\ldots,\mu_q\), and take, inside the \(\lambda\)-root space, the
-  first \(r_\lambda(q)\) spaces of such a flag. The finite sum of these
-  chosen pieces, over the finitely many eigenvalues appearing among
-  \(\mu_1,\ldots,\mu_q\), is invariant and has successive one-dimensional
-  quotients with diagonal entries \(\mu_1,\ldots,\mu_q\). The closure of
-  the union over \(q\) is invariant and contains every non-zero Riesz root
-  space. On the corresponding quotient the induced compact operator has
-  only the characteristic value \(0\); otherwise the quotient Riesz
-  projection for some \(\lambda\ne0\) would be the image of the original
-  \(\lambda\)-Riesz projection, whose range has already been included.
-  Ringrose's theorem then completes the invariant chain with zero
-  quotient diagonal entries. Applying Gram--Schmidt along the resulting
-  chain gives an orthonormal Schur basis for \(T|_{H_T}\) whose non-zero
-  diagonal subsequence is the prescribed sequence \((\mu_q)\), with zeros
-  in the remaining positions. The final Schatten summability follows from
-  the Weyl--Ky Fan
+  Lifting this quotient chain to \(H_T\) and placing it after the finite
+  or countable flag inside \(E\) gives a complete invariant chain for
+  \(T|_{H_T}\). Applying Gram--Schmidt along that chain produces an
+  orthonormal Schur basis. Along the initial part of the chain the
+  non-zero quotient entries are the prescribed sequence \((\mu_q)\); along
+  the lifted quotient part all diagonal entries are zero. Thus the
+  non-zero diagonal subsequence is prescribed, and the remaining diagonal
+  entries are zero.
+
+  The final Schatten summability follows from the Weyl--Ky Fan
   eigenvalue--singular-value majorisation in Schatten form,
   \[
     \sum_{k\ge1}\abs{\lambda_k(T)}^p
