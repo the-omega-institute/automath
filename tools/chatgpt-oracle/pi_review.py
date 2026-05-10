@@ -127,7 +127,13 @@ def _codex_prompt(evidence: dict[str, Any]) -> str:
         '    {"action": "adjust_cooldown", "key": "refill|pi_review", "hours": 0.0, "reason": "..."},\n'
         '    {"action": "apply_code_patch", "file": "tools/chatgpt-oracle/<name>.py",\n'
         '     "find": "exact unique substring to replace", "replace": "new text",\n'
-        '     "reason": "...", "restart": "server|inner|both"}\n'
+        '     "reason": "...", "restart": "server|inner|both"},\n'
+        '    {"action": "force_b_stuck_block", "paper": "<state-stem>",\n'
+        '     "reason": "B_STUCK_REPEATED_BLOCKER|B_STUCK_JOURNAL_FIT"},\n'
+        '    {"action": "trigger_retarget", "paper": "<state-stem>",\n'
+        '     "new_target_journal": "(optional) journal name", "reason": "..."},\n'
+        '    {"action": "requeue_focused_patch", "paper": "<state-stem>",\n'
+        '     "canonical_key": "prop. 4.35", "reason": "..."}\n'
         '  ],\n'
         '  "summary": "one-sentence health snapshot"\n'
         "}\n\n"
@@ -156,7 +162,21 @@ def _codex_prompt(evidence: dict[str, Any]) -> str:
         "    your patch before it lands. Use `restart` = the smallest scope that\n"
         "    picks up the change: server-only edits use \"server\", inner-only\n"
         "    edits (oracle_pipeline) use \"inner\", supervisor edits leave\n"
-        "    `restart` empty (operator must restart supervisor manually).\n\n"
+        "    `restart` empty (operator must restart supervisor manually).\n"
+        "  - force_b_stuck_block: pin a deterministic stuck-block reason\n"
+        "    onto a paper when the gate fired but state was lost (crash mid-\n"
+        "    round, write race). Reason must be one of B_STUCK_REPEATED_BLOCKER\n"
+        "    or B_STUCK_JOURNAL_FIT — exactly the strings the gate emits.\n"
+        "  - trigger_retarget: reset a paper to Stage F so journal-fit can be\n"
+        "    re-evaluated. GUARDED: only succeeds when Gate A would already\n"
+        "    fire on next round (fit-streak >= 2 OR last 4 verdicts all\n"
+        "    reject/major and no prior retarget). Hard cap at 2 retargets per\n"
+        "    paper. Optional `new_target_journal` overrides Stage F's pick.\n"
+        "  - requeue_focused_patch: replay the focused-patch path on a known\n"
+        "    stuck canonical_key. GUARDED: key streak must be >= 2; rate-\n"
+        "    limited to 1 use per paper per 24h. Use this when the gate-B\n"
+        "    focused prompt clearly improved Codex's diff but the next\n"
+        "    Oracle round hasn't happened yet — accelerates re-evaluation.\n\n"
         "Rules:\n"
         "- loop_health = healthy if everything is moving without intervention.\n"
         "- loop_health = degraded if there are noisy errors but progress continues.\n"
@@ -351,7 +371,42 @@ def run_pi_review(*, dry_run: bool = False,
 _ALLOWED_AUTONOMOUS_ACTIONS = {
     "cancel_task", "reset_paper", "restart_inner", "adjust_cooldown",
     "apply_code_patch",
+    "force_b_stuck_block", "trigger_retarget", "requeue_focused_patch",
 }
+
+# Per-paper rate-limit log for guarded actions. Keyed by paper_name → action
+# → ISO timestamp of last successful invocation. Read/written by PI agent
+# only; never persisted into PaperState (avoids dataclass schema churn).
+_PI_ACTION_LOG = SCRIPT_DIR / ".pi_action_log.json"
+
+
+def _read_action_log() -> dict[str, dict[str, str]]:
+    if not _PI_ACTION_LOG.exists():
+        return {}
+    try:
+        return json.loads(_PI_ACTION_LOG.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _write_action_log(log: dict[str, dict[str, str]]) -> None:
+    try:
+        _PI_ACTION_LOG.write_text(
+            json.dumps(log, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8")
+    except OSError:
+        pass
+
+
+def _hours_since(iso_ts: str) -> float:
+    if not iso_ts:
+        return float("inf")
+    try:
+        dt = datetime.fromisoformat(iso_ts.replace("Z", "+00:00"))
+    except ValueError:
+        return float("inf")
+    delta = datetime.now(dt.tzinfo) - dt
+    return delta.total_seconds() / 3600.0
 
 # Whitelist of files the PI agent may patch autonomously. Restricted to
 # the orchestration layer; never the paper content, theory/, lean4/.
@@ -443,12 +498,149 @@ def _execute_autonomous_actions(codex_verdict: dict[str, Any],
                 executed.append({**entry, "result": "logged (manual apply via supervisor flags)"})
             elif name == "apply_code_patch":
                 executed.append({**entry, "result": _execute_apply_code_patch(entry)})
+            elif name == "force_b_stuck_block":
+                executed.append({**entry, "result": _execute_force_b_stuck_block(entry, state_dir)})
+            elif name == "trigger_retarget":
+                executed.append({**entry, "result": _execute_trigger_retarget(entry, state_dir)})
+            elif name == "requeue_focused_patch":
+                executed.append({**entry, "result": _execute_requeue_focused_patch(entry, state_dir)})
         except Exception as exc:
             executed.append({**entry, "result": f"error: {exc}"})
 
     if executed:
         _append_log(f"autonomous actions: {json.dumps(executed, ensure_ascii=False)[:500]}")
     return executed
+
+
+_VALID_FORCE_BLOCK_REASONS = {
+    "B_STUCK_REPEATED_BLOCKER", "B_STUCK_JOURNAL_FIT",
+}
+
+
+def _load_paper_state(paper: str, state_dir: Path) -> tuple[Path, dict[str, Any] | None]:
+    if not paper:
+        return Path(), None
+    p = state_dir / f"{paper}.json"
+    if not p.exists():
+        return p, None
+    try:
+        return p, json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return p, None
+
+
+def _save_paper_state(p: Path, d: dict[str, Any]) -> None:
+    p.write_text(json.dumps(d, ensure_ascii=False, indent=2) + "\n",
+                 encoding="utf-8")
+
+
+def _execute_force_b_stuck_block(entry: dict[str, Any], state_dir: Path) -> str:
+    """Force-record a Stage-B stuck-block reason on a paper.
+
+    Used when the deterministic gate fired but state was lost (crash,
+    write race). Only valid reasons are the gate's own constants.
+    """
+    paper = str(entry.get("paper") or "").strip()
+    reason = str(entry.get("reason") or "").strip()
+    if reason not in _VALID_FORCE_BLOCK_REASONS:
+        return f"rejected: reason {reason!r} not in {sorted(_VALID_FORCE_BLOCK_REASONS)}"
+    p, d = _load_paper_state(paper, state_dir)
+    if d is None:
+        return f"rejected: state {paper}.json missing"
+    d["block_reason"] = reason
+    d["stage_b_passed"] = False
+    _save_paper_state(p, d)
+    return f"forced block_reason={reason}"
+
+
+def _execute_trigger_retarget(entry: dict[str, Any], state_dir: Path) -> str:
+    """Reset paper to Stage F so journal-fit can be re-evaluated.
+
+    Guard: only allowed when journal-fit streak >= 2 (gate would fire) OR
+    retarget_history is empty AND last 4 verdicts are all reject/major.
+    Also caps total retargets at 2 per paper to prevent infinite loops.
+    """
+    paper = str(entry.get("paper") or "").strip()
+    new_journal = str(entry.get("new_target_journal") or "").strip()
+    p, d = _load_paper_state(paper, state_dir)
+    if d is None:
+        return f"rejected: state {paper}.json missing"
+
+    history = d.get("retarget_history") or []
+    if len(history) >= 2:
+        return f"rejected: max retargets reached ({len(history)}); halt to human"
+
+    streaks = d.get("stage_b_issue_streaks") or {}
+    fit_streak = int(streaks.get("__journal_fit__", 0))
+    last_verdicts = (d.get("stage_b_verdicts") or [])[-4:]
+    bad = {"reject", "major revision"}
+    fit_gate_armed = fit_streak >= 2
+    fresh_armed = (not history) and len(last_verdicts) >= 4 and all(v in bad for v in last_verdicts)
+    if not (fit_gate_armed or fresh_armed):
+        return (f"rejected: guard not satisfied "
+                f"(fit_streak={fit_streak}, last4={last_verdicts}, history={len(history)})")
+
+    prior_journal = d.get("target_journal", "")
+    history.append({
+        "from_journal": prior_journal,
+        "trigger": "pi_autonomous_trigger_retarget",
+        "round": d.get("stage_b_rounds", 0),
+        "timestamp": _now_iso(),
+    })
+    d["retarget_history"] = history
+    d["current_stage"] = "F"
+    d["stage_f_passed"] = False
+    d["stage_b_passed"] = False
+    d["stage_b_verdicts"] = []
+    d["stage_b_all_issues"] = []
+    d["stage_b_deepen_conv_id"] = ""
+    d["stage_b_fresh_attempts"] = 0
+    d["stage_b_rounds"] = 0
+    d["stage_b_issue_streaks"] = {}
+    if new_journal:
+        d["target_journal"] = new_journal
+    d["error"] = ""
+    _save_paper_state(p, d)
+    return f"retargeted (prev={prior_journal}, new={new_journal or 'TBD-by-Stage-F'})"
+
+
+def _execute_requeue_focused_patch(entry: dict[str, Any], state_dir: Path) -> str:
+    """Replay the focused-patch path on a known stuck issue once.
+
+    Guard: canonical_key must already be tracked with streak >= 2.
+    Rate-limit: at most 1 use per paper per 24 hours.
+    Implementation: clears the codex-fix completion marker on the current
+    round (forces the inner loop to re-run B4 with the focused-patch
+    prefix already injected by gate B). We don't re-prompt directly here
+    — we just reset state so the next inner loop iteration picks it up.
+    """
+    paper = str(entry.get("paper") or "").strip()
+    key = str(entry.get("canonical_key") or "").strip()
+    p, d = _load_paper_state(paper, state_dir)
+    if d is None:
+        return f"rejected: state {paper}.json missing"
+
+    streaks = d.get("stage_b_issue_streaks") or {}
+    streak = int(streaks.get(key, 0))
+    if streak < 2:
+        return f"rejected: key {key!r} streak {streak} < 2"
+
+    log = _read_action_log()
+    paper_log = log.get(paper, {})
+    last = paper_log.get("requeue_focused_patch", "")
+    hrs = _hours_since(last)
+    if hrs < 24.0:
+        return f"rejected: rate-limited (last use {hrs:.1f}h ago, need 24h)"
+
+    # Trigger: clear current round error so inner loop re-enters with the
+    # focused-patch prefix that gate B injects on streak>=2.
+    d["error"] = ""
+    _save_paper_state(p, d)
+
+    paper_log["requeue_focused_patch"] = _now_iso()
+    log[paper] = paper_log
+    _write_action_log(log)
+    return f"requeued (key={key!r}, streak={streak})"
 
 
 def _execute_apply_code_patch(entry: dict[str, Any]) -> str:
