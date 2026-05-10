@@ -85,7 +85,7 @@ by Git and must not be uploaded.
    operator approval before bridge status appears on public pages.
 9. The supervisor may fetch latest refs from both repos, but it must not push.
 10. Intermediate artifacts stay local-only under `inbox/`, `out/`, `state/`,
-   and `logs/`.
+   `logs/`, and generated review-packet JSON files.
 11. Automatic writeback is limited to ignored local review packets. Durable
    paper / Lean / docs writes require accepted or consumed manifest records and
    the destination project's own gates.
@@ -118,7 +118,8 @@ Bridge tooling may not:
 - merge `dev`, `auto-dev`, or integration branches;
 - overwrite proposal or accepted proposal files;
 - move source material into a durable destination without a manifest record;
-- upload intermediate inbox/out/state/log artifacts to GitHub.
+- upload intermediate inbox/out/state/log/review-packet JSON artifacts to
+  GitHub.
 
 ## TasteGate and audit boundary
 
@@ -249,7 +250,8 @@ Future agents should inspect commits touching this bridge by reading:
 1. The commit message Source block.
 2. The commit message Destination block.
 3. `tools/automath_newmath_bridge/bridge_manifest.jsonl`.
-4. Any generated packet under `tools/automath_newmath_bridge/out/`.
+4. The commit message Runtime-artifacts block, which must summarize generated
+   packets or state that no runtime artifacts were retained.
 5. This ledger.
 
 If a commit only changes schema, manifest, scripts, or reports, it should be
@@ -284,6 +286,19 @@ Audit boundary:
 - TasteGate required: yes
 - Lean build required: no
 - external publication/send: no
+
+Runtime artifacts excluded from git:
+- tools/automath_newmath_bridge/inbox/**
+- tools/automath_newmath_bridge/out/**
+- tools/automath_newmath_bridge/state/**
+- tools/automath_newmath_bridge/logs/**
+- tools/automath_newmath_bridge/review_packets/*.json
+
+Gates:
+- <command>: <passed/failed/skipped and reason>
+
+Follow-up:
+- <remaining risk, if any>
 
 AI-analysis note:
 - This commit records source observation and bridge rules only. It does not

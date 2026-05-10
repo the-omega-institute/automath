@@ -36,6 +36,9 @@ content.
   human and AI review.
 - `inbox/`, `out/`, `state/`, and `logs/` are runtime directories. Generated
   contents are ignored by Git and should not be uploaded.
+- Generated review-packet JSON files are also ignored. Durable bridge decisions
+  belong in commit messages, `bridge_manifest.jsonl`, and native receiving
+  artifacts, not in intermediate packet files.
 
 The bridge ledger lives at `docs/bridge/automath-newmath-bridge.md`.
 
@@ -191,6 +194,11 @@ Local runtime outputs:
 Those files are intentionally ignored. Durable project decisions belong in
 `bridge_manifest.jsonl`, not in runtime artifacts.
 
+Generated review packet JSON files are intermediate artifacts too. If a review
+packet becomes a durable source for an Automath decision, summarize it in the
+commit message and record the accepted decision in the manifest or native
+Automath writeback artifact rather than committing the packet itself.
+
 To persist "already seen" local state:
 
 ```bash
@@ -311,9 +319,27 @@ Audit boundary:
 - Lean build required: no
 - external publication/send: no
 
+Runtime artifacts excluded from git:
+- tools/automath_newmath_bridge/inbox/**
+- tools/automath_newmath_bridge/out/**
+- tools/automath_newmath_bridge/state/**
+- tools/automath_newmath_bridge/logs/**
+- tools/automath_newmath_bridge/review_packets/*.json
+
+Gates:
+- <command>: <passed/failed/skipped and reason>
+
+Follow-up:
+- <remaining risk, if any>
+
 AI-analysis note:
 - Future agents should infer that this commit records protocol and candidate
   observation only; it does not accept, consume, publish, or synchronize content.
 ```
 
 For `automath_to_newmath` commits, reverse the Source and Destination blocks.
+
+Every bridge commit should include enough provenance to reconstruct the work
+without committing runtime artifacts. Do not commit generated inbox, out, state,
+log, or review-packet JSON files. They may be regenerated from the committed
+config, manifest, source refs, and commit message trail.
