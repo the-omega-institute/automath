@@ -3,10 +3,11 @@
 This directory defines the first-stage bridge layer between
 `the-omega-institute/automath` and `the-omega-institute/newmath`.
 
-The bridge is intentionally conservative. It records source artifacts,
-candidate destinations, review boundaries, and audit obligations. It does not
-sync files, accept proposals, apply writebacks, publish artifacts, push
-branches, or send external messages.
+The bridge is intentionally gated. It records source artifacts, candidate
+destinations, review boundaries, and audit obligations. The supervisor may
+fetch the latest refs and generate local review packets, but it does not push,
+publish, send external messages, or directly write paper / Lean / dossier
+content.
 
 ## Files
 
@@ -16,9 +17,18 @@ branches, or send external messages.
 - `bridge_sources.json` is the read-only scan configuration used to generate
   candidate packet records.
 - `scan_bridge_sources.py` observes configured paths and writes candidate JSONL.
+- `bridge_pipeline_config.json` defines dynamic discovery rules for growing
+  Automath and NewMath refs.
+- `run_bridge_pipeline.py` discovers new or changed bridgeable artifacts from
+  both repos and renders a local transfer plan.
+- `bridge_gates.py` runs deterministic local gates over the bridge inbox.
+- `bridge_supervisor.py` periodically fetches both repos, runs discovery, runs
+  gates, and can write local ignored review packets.
 - `validate_bridge_manifest.py` validates manifest or packet JSONL records.
 - `render_bridge_report.py` renders manifest or packet JSONL as Markdown for
   human and AI review.
+- `inbox/`, `out/`, `state/`, and `logs/` are runtime directories. Generated
+  contents are ignored by Git and should not be uploaded.
 
 The bridge ledger lives at `docs/bridge/automath-newmath-bridge.md`.
 
@@ -114,6 +124,78 @@ new glue:
 Future bridge records that mention Automath theorem evidence should cite exact
 Lean module paths and, where available, exact `paper_*` labels.
 
+## Supervisor pipeline
+
+The growth-aware supervisor is the intended recurring entry point:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py --once
+```
+
+One pass does this:
+
+1. Verifies the current branch is `bridge/automath-newmath-consumption`.
+2. Fetches latest refs for Automath and NewMath unless `--no-fetch` is passed.
+3. Discovers new or changed artifacts from both repos.
+4. Writes a local inbox and transfer plan.
+5. Runs deterministic gates.
+6. Optionally writes local review packets if `--apply-writeback-packets` is
+   passed.
+
+Continuous mode:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py \
+  --poll-interval 300
+```
+
+Stop continuous mode by creating:
+
+```text
+tools/automath_newmath_bridge/.bridge_supervisor.stop
+```
+
+The supervisor follows the local distillation/oracle pattern:
+
+- fixed branch guard;
+- stop file;
+- fetch before each pass;
+- dry local runtime artifacts;
+- deterministic gates before local packet writes;
+- no push;
+- no external send;
+- no direct durable paper / Lean / docs writes.
+
+Local runtime outputs:
+
+- `tools/automath_newmath_bridge/inbox/bridge_inbox.jsonl`
+- `tools/automath_newmath_bridge/inbox/writeback_packets/*.json`
+- `tools/automath_newmath_bridge/out/bridge_transfer_plan.md`
+- `tools/automath_newmath_bridge/out/bridge_gate_results.jsonl`
+- `tools/automath_newmath_bridge/state/bridge_state.json`
+- `tools/automath_newmath_bridge/logs/bridge_supervisor.log`
+
+Those files are intentionally ignored. Durable project decisions belong in
+`bridge_manifest.jsonl`, not in runtime artifacts.
+
+To persist "already seen" local state:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py --once --update-state
+```
+
+To write local review packets for gate-passed candidates:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py \
+  --once \
+  --update-state \
+  --apply-writeback-packets
+```
+
+These packets are review material only. They do not authorize destination
+writes.
+
 ## Commands
 
 Generate a read-only candidate packet:
@@ -144,6 +226,14 @@ Render a review report:
 python3 tools/automath_newmath_bridge/render_bridge_report.py \
   tools/automath_newmath_bridge/out/bridge_candidates.jsonl \
   --output tools/automath_newmath_bridge/out/bridge_report.md
+```
+
+Run deterministic gates directly:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_gates.py \
+  tools/automath_newmath_bridge/inbox/bridge_inbox.jsonl \
+  --output tools/automath_newmath_bridge/out/bridge_gate_results.jsonl
 ```
 
 ## Commit message convention

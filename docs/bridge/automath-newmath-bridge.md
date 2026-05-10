@@ -13,10 +13,18 @@ humans and future AI agents answer:
 - Does it require operator review, TasteGate evidence, or another audit?
 - Could it trigger paper, Lean, docs, publication, or external-send effects?
 
-The first stage stores the manifest in Automath at
+The first stage stores the durable manifest in Automath at
 `tools/automath_newmath_bridge/bridge_manifest.jsonl`. NewMath is observed as a
 source repo through explicit refs such as `origin/auto-dev` and
 `origin/codex-auto-dev`; no NewMath file is written by this first-stage bridge.
+
+The recurring bridge supervisor is:
+
+`tools/automath_newmath_bridge/bridge_supervisor.py`
+
+It periodically fetches Automath and NewMath refs, discovers new or changed
+artifacts, runs bridge gates, and writes local-only review packets when
+explicitly enabled. Runtime outputs are ignored by Git and must not be uploaded.
 
 ## Current bridge directions
 
@@ -65,14 +73,24 @@ source repo through explicit refs such as `origin/auto-dev` and
    `tools/community-outreach/outreach_state` or the active outreach board.
 8. Public dossier or publication use has publication risk. It requires explicit
    operator approval before bridge status appears on public pages.
+9. The supervisor may fetch latest refs from both repos, but it must not push.
+10. Intermediate artifacts stay local-only under `inbox/`, `out/`, `state/`,
+   and `logs/`.
+11. Automatic writeback is limited to ignored local review packets. Durable
+   paper / Lean / docs writes require accepted or consumed manifest records and
+   the destination project's own gates.
 
 ## Operator approval boundary
 
 Bridge tooling may:
 
 - scan configured source paths;
+- fetch latest refs for configured repos;
+- discover new or changed artifacts as both repos grow;
 - read current Git refs and commits;
 - generate local candidate packets;
+- run deterministic bridge gates;
+- write ignored local review packets after gates pass;
 - validate JSONL records;
 - render Markdown reports.
 
@@ -85,7 +103,8 @@ Bridge tooling may not:
 - publish intermediate artifacts;
 - merge `dev`, `auto-dev`, or integration branches;
 - overwrite proposal or accepted proposal files;
-- move source material into a destination without a manifest record.
+- move source material into a durable destination without a manifest record;
+- upload intermediate inbox/out/state/log artifacts to GitHub.
 
 ## TasteGate and audit boundary
 
@@ -117,6 +136,50 @@ The bridge must reuse local Automath mechanisms where they already exist:
 This table is deliberately evidence-first. Future agents should add bridge
 records by naming exact files and theorem labels found locally, not by
 describing generic "Automath has gates" behavior.
+
+## Supervisor and gate model
+
+The bridge supervisor follows the same operational ideas as the local
+distillation and loning/oracle pipelines:
+
+| Existing pattern | Bridge equivalent |
+| --- | --- |
+| fixed branch guard | `--branch bridge/automath-newmath-consumption` |
+| stop file | `tools/automath_newmath_bridge/.bridge_supervisor.stop` |
+| fetch before pass | fetch Automath and NewMath configured refs |
+| dashboard/log file | `tools/automath_newmath_bridge/logs/bridge_supervisor.log` |
+| source queue / runtime state | ignored `inbox/`, `out/`, and `state/` |
+| deterministic policy gate | `bridge_gates.py` |
+| review packet before writeback | ignored `inbox/writeback_packets/*.json` |
+| publication / review gates | no public-facing use without explicit approval |
+
+The bridge gate checks that a record is schema-valid, points only to safe local
+review-packet destinations for automatic writes, preserves TasteGate language
+when required, and blocks durable paper / Lean / docs / outreach-state writes.
+
+Approved local packet writes are still only "needs operator review" packets.
+They are not accepted or consumed manifest entries.
+
+Run one supervised pass:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py --once
+```
+
+Run periodically:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py --poll-interval 300
+```
+
+Persist seen-state and emit local review packets:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_supervisor.py \
+  --once \
+  --update-state \
+  --apply-writeback-packets
+```
 
 ## Future AI commit analysis
 
