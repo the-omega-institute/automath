@@ -1715,6 +1715,19 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
             encoding="utf-8", errors="replace",
         )
     except subprocess.TimeoutExpired:
+        if codex_fallback:
+            logger.warning(
+                f"Claude CLI hung past {timeout_seconds}s; falling back "
+                f"to Codex for {agent_role or 'unspecified role'}"
+            )
+            return _codex_fallback_for_claude(
+                prompt, work_dir=work_dir,
+                timeout_seconds=max(timeout_seconds, 600),
+                dry_run=dry_run,
+                context_mode=context_mode,
+                agent_role=agent_role,
+                skill=skill,
+            )
         raise RuntimeError(f"Claude CLI timed out after {timeout_seconds}s")
     finally:
         elapsed = time.monotonic() - start
@@ -4046,7 +4059,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
             }}
             ```
         """)
-        out2 = claude_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
+        out2 = codex_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
         claude_data = parse_json_from_output(out2) if not dry_run else {
             "adjusted_fit_score": 4,
             "recommended_journal": "Journal of Functional Analysis",
@@ -4057,8 +4070,8 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
             "recommended_journal", codex_top_recommendation)
         final_fit = min(fit_score, adjusted)
         _record_claude_supervision(
-            state, "stage_f_journal_fit_review", claude_data, raw=out2)
-        state.log_event("F", "claude_review_fit", score=adjusted,
+            state, "stage_f_journal_fit_review_codex", claude_data, raw=out2)
+        state.log_event("F", "codex_review_fit", score=adjusted,
                         detail=json.dumps(claude_data,
                                           ensure_ascii=False)[:10000])
         save_state(state)
@@ -5061,30 +5074,10 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         prompt = build_claude_stage_a_structural_audit_prompt(
             state.paper_dir, state.target_journal, audit_round)
         for attempt in range(1, 3):
-            if not CLAUDE_ENABLED and not dry_run:
-                out = codex_exec(
-                    prompt + textwrap.dedent("""\
-
-                    Claude is unavailable and the pipeline is running in
-                    --no-claude test mode. Act only as a temporary structural
-                    auditor for this smoke test. Preserve the same JSON schema;
-                    do not edit files and do not claim independent Claude
-                    approval.
-                    """),
-                    work_dir=paper_path, timeout_seconds=900,
-                    model=model, dry_run=dry_run,
-                    context_mode="scope_bound_review",
-                    agent_role="stage_a_structural_audit_fallback")
-            else:
-                # Stage A structural audit: deep reasoning, route to Codex.
-                # The audit runs as part of an A3 final gate; the gate is
-                # codex_audit + structural_audit combined, both in parallel,
-                # so doing both with Codex saves one Claude call per round
-                # without changing what's gated.
-                out = codex_exec(prompt, work_dir=paper_path,
-                                 timeout_seconds=900, model=model, dry_run=dry_run,
-                                 context_mode="scope_bound_review",
-                                 agent_role="stage_a_structural_audit")
+            out = codex_exec(prompt, work_dir=paper_path,
+                             timeout_seconds=900, model=model, dry_run=dry_run,
+                             context_mode="scope_bound_review",
+                             agent_role="stage_a_structural_audit")
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CLAUDE_STRUCTURAL_METRICS},
                 "verdict": "pass",
@@ -5099,12 +5092,7 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                 data, STAGE_A_CLAUDE_STRUCTURAL_METRICS
             )) == set(STAGE_A_CLAUDE_STRUCTURAL_METRICS):
                 return data
-            auditor_label = (
-                "Claude structural audit"
-                if CLAUDE_ENABLED or dry_run
-                else "Structural audit fallback"
-            )
-            logger.warning(f"{tag} {auditor_label} attempt {attempt} "
+            logger.warning(f"{tag} Codex structural audit attempt {attempt} "
                            f"empty/unparseable, retrying")
         return {}
 
@@ -5114,19 +5102,10 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         codex_data = f_codex.result()
         claude_data = f_claude.result()
 
-    supervision_phase = (
-        f"stage_a_structural_audit_R{audit_round}"
-        if CLAUDE_ENABLED
-        else f"stage_a_structural_audit_codex_fallback_R{audit_round}"
-    )
     _record_claude_supervision(
-        state, supervision_phase, claude_data,
+        state, f"stage_a_structural_audit_codex_R{audit_round}", claude_data,
         context_mode="scope_bound_review",
-        agent_role=(
-            "stage_a_claude_structural_audit"
-            if CLAUDE_ENABLED
-            else "stage_a_structural_audit_fallback"
-        ))
+        agent_role="stage_a_structural_audit")
     audit = _combine_stage_a_audits(codex_data, claude_data)
     if not dry_run:
         _write_json_artifact(paper_path, "stage_a_audit.json", audit)
@@ -5866,9 +5845,13 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             # the retry must get a new task id; otherwise /result/<id> keeps
             # serving the cached bad response.
             pdf_path = Path(state.pdf_path) if state.pdf_path else None
-            # Follow-up turns: PDF already attached in conv-deepen round 1; do
-            # not re-upload to keep the follow-up turn light.
-            submit_pdf = None if is_followup_turn else pdf_path
+            # Always re-attach the freshly compiled PDF, including on
+            # follow-up turns: each round produces a NEW build with the
+            # latest fixes, so the referee must see this round's PDF, not
+            # the one attached in round 1. ChatGPT keeps prior attachments
+            # in history but the freshest revision is what we are asking
+            # them to re-evaluate.
+            submit_pdf = pdf_path
             attempt = 1
             logger.info(f"{tag} B2 oracle submit (task={task_id})")
             if not oracle_submit(
@@ -6282,6 +6265,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     "repeated blocker after focused-patch attempts")
                 save_state(state)
                 return False
+            save_state(state)
 
         # Build a short fix summary for the NEXT round's deepen follow-up
         # prompt: ChatGPT only needs to know what we addressed, not the
@@ -6503,64 +6487,43 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             current_oracle_issues=oracle_issues)
 
         issues: list = []
-        if not CLAUDE_ENABLED and not dry_run:
-            claude_verdict = "pending"
-            claude_pass = False
-            state.stage_c_verdicts.append(
-                f"oracle:{oracle_verdict};claude:pending")
-            if oracle_pass and not oracle_issues:
-                state.error = (
-                    f"{PAUSED_ERROR_PREFIX} Stage C pending final Claude "
-                    "review after Oracle accepted the manuscript"
-                )
-                logger.info(f"{tag} {state.error}")
-                state.log_event("C", "pending_final_claude_review",
-                                round_num=rnd, verdict=oracle_verdict,
-                                detail=state.error)
-                save_state(state)
-                return False
-            logger.info(f"{tag} Round {rnd}: C2 skipped (--no-claude); "
-                        "Oracle has not accepted yet, so Codex will fix "
-                        "Oracle final-review issues")
-        else:
-            # ── C2: Claude independent review ────────────────────
-            logger.info(f"{tag} Round {rnd}: C2 — Claude independent review")
-            review_prompt = build_claude_independent_review_prompt(
-                state.paper_dir, state.target_journal,
-                stage_c_memory=stage_c_memory)
-            out_c1 = claude_exec(review_prompt, work_dir=paper_path,
-                                 dry_run=dry_run,
-                                 context_mode="contextual_supervision",
-                                 agent_role="stage_c_claude_final")
-            review_data = parse_json_from_output(out_c1) if not dry_run else {
-                "verdict": "revise" if rnd < 2 else "submit",
-                "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
-            }
-            _record_claude_supervision(
-                state, f"stage_c_presubmission_review_R{rnd}",
-                review_data, raw=out_c1,
-                context_mode="contextual_supervision",
-                agent_role="stage_c_claude_final")
-            claude_verdict = str(review_data.get("verdict", "revise")).lower()
-            issues = list(_coerce_items(review_data.get("issues", [])))
-            work_packages = review_data.get("work_packages", [])
-            if work_packages:
-                issues = list(issues) + [
-                    f"[{wp.get('owner', 'codex_editorial')}/"
-                    f"{wp.get('priority', 'medium')}] "
-                    f"{wp.get('location', '')}: {wp.get('task', '')} "
-                    f"(acceptance: {wp.get('acceptance_criterion', '')})"
-                    if isinstance(wp, dict) else str(wp)
-                    for wp in work_packages
-                ]
-            claude_pass = claude_verdict == "submit"
-            state.stage_c_verdicts.append(
-                f"oracle:{oracle_verdict};claude:{claude_verdict}")
-            state.log_event("C", "claude_independent_review", round_num=rnd,
-                            verdict=claude_verdict,
-                            detail=json.dumps(
-                                review_data, ensure_ascii=False)[:10000])
-            save_state(state)
+        logger.info(f"{tag} Round {rnd}: C2 - Codex independent review")
+        review_prompt = build_claude_independent_review_prompt(
+            state.paper_dir, state.target_journal,
+            stage_c_memory=stage_c_memory)
+        out_c1 = codex_exec(review_prompt, work_dir=paper_path,
+                            dry_run=dry_run,
+                            context_mode="contextual_supervision",
+                            agent_role="stage_c_codex_final")
+        review_data = parse_json_from_output(out_c1) if not dry_run else {
+            "verdict": "revise" if rnd < 2 else "submit",
+            "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
+        }
+        _record_claude_supervision(
+            state, f"stage_c_presubmission_review_codex_R{rnd}",
+            review_data, raw=out_c1,
+            context_mode="contextual_supervision",
+            agent_role="stage_c_codex_final")
+        claude_verdict = str(review_data.get("verdict", "revise")).lower()
+        issues = list(_coerce_items(review_data.get("issues", [])))
+        work_packages = review_data.get("work_packages", [])
+        if work_packages:
+            issues = list(issues) + [
+                f"[{wp.get('owner', 'codex_editorial')}/"
+                f"{wp.get('priority', 'medium')}] "
+                f"{wp.get('location', '')}: {wp.get('task', '')} "
+                f"(acceptance: {wp.get('acceptance_criterion', '')})"
+                if isinstance(wp, dict) else str(wp)
+                for wp in work_packages
+            ]
+        claude_pass = claude_verdict == "submit"
+        state.stage_c_verdicts.append(
+            f"oracle:{oracle_verdict};claude:{claude_verdict}")
+        state.log_event("C", "codex_independent_review", round_num=rnd,
+                        verdict=claude_verdict,
+                        detail=json.dumps(
+                            review_data, ensure_ascii=False)[:10000])
+        save_state(state)
 
         logger.info(f"{tag} Round {rnd}: Oracle verdict = {oracle_verdict}, "
                     f"Claude verdict = {claude_verdict}; "
@@ -7291,15 +7254,8 @@ def run_new_paper_pipeline(
         ```
     """)
     scope_work_dir = Path(state.main_paper_dir) if state.main_paper_dir else paper_path
-    if not CLAUDE_ENABLED and not dry_run:
-        scope_out = codex_exec(
-            scope_prompt + "\n\nClaude is disabled by --no-claude; provide "
-            "a temporary Codex scope definition for smoke testing.",
-            work_dir=scope_work_dir, timeout_seconds=900,
-            model=model, dry_run=dry_run)
-    else:
-        scope_out = claude_exec(scope_prompt, work_dir=scope_work_dir,
-                                dry_run=dry_run)
+    scope_out = codex_exec(scope_prompt, work_dir=scope_work_dir,
+                           dry_run=dry_run)
     scope_data = parse_json_from_output(scope_out) if not dry_run else {
         "core_theorem": "dry run theorem",
         "imported_results": [],
@@ -7310,17 +7266,10 @@ def run_new_paper_pipeline(
         "differentiation": "dry run",
         "suggested_title": f"On {topic}",
     }
-    scope_event = (
-        "claude_scope_definition"
-        if CLAUDE_ENABLED else "codex_fallback_scope_definition"
-    )
-    state.log_event("N", scope_event,
+    state.log_event("N", "codex_scope_definition",
                     detail=json.dumps(scope_data, ensure_ascii=False)[:10000])
     _record_claude_supervision(
-        state,
-        "new_paper_scope_definition"
-        if CLAUDE_ENABLED else "new_paper_scope_definition_codex_fallback",
-        scope_data, raw=scope_out)
+        state, "new_paper_scope_definition_codex", scope_data, raw=scope_out)
     save_state(state)
 
     # Pass scope constraints to N1
