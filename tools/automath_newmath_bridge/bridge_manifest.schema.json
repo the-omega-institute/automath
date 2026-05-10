@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/the-omega-institute/automath/tools/automath_newmath_bridge/bridge_manifest.schema.json",
+  "title": "Automath-NewMath bridge manifest record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "record_version",
+    "created_at",
+    "source_repo",
+    "source_branch_or_ref",
+    "source_path",
+    "source_commit",
+    "source_artifact_kind",
+    "destination_repo",
+    "destination_branch_or_ref",
+    "destination_path",
+    "destination_artifact_kind",
+    "bridge_direction",
+    "status",
+    "operator_review_required",
+    "taste_gate_required",
+    "audit_required",
+    "external_publication_risk",
+    "notes",
+    "next_action"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "record_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "updated_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "source_repo": {
+      "type": "string",
+      "enum": [
+        "the-omega-institute/automath",
+        "the-omega-institute/newmath"
+      ]
+    },
+    "source_branch_or_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "source_artifact_kind": {
+      "$ref": "#/$defs/artifact_kind"
+    },
+    "destination_repo": {
+      "type": "string",
+      "enum": [
+        "the-omega-institute/automath",
+        "the-omega-institute/newmath"
+      ]
+    },
+    "destination_branch_or_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "destination_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "destination_artifact_kind": {
+      "$ref": "#/$defs/artifact_kind"
+    },
+    "bridge_direction": {
+      "type": "string",
+      "enum": [
+        "newmath_to_automath",
+        "automath_to_newmath",
+        "bidirectional"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "observed",
+        "candidate",
+        "accepted",
+        "consumed",
+        "blocked",
+        "needs_operator_review"
+      ]
+    },
+    "operator_review_required": {
+      "type": "boolean"
+    },
+    "taste_gate_required": {
+      "type": "boolean"
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "external_publication_risk": {
+      "type": "string",
+      "enum": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "review_boundary": {
+      "type": "string"
+    },
+    "audit_boundary": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_local_path": {
+          "type": "string"
+        },
+        "source_path_status": {
+          "type": "string",
+          "enum": [
+            "exists",
+            "missing"
+          ]
+        },
+        "source_current_branch": {
+          "type": "string"
+        },
+        "destination_local_path": {
+          "type": "string"
+        },
+        "destination_current_branch": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "artifact_kind": {
+      "type": "string",
+      "enum": [
+        "proposal",
+        "accepted_proposal",
+        "paper_seed_stub",
+        "taste_gate_witness",
+        "lean_theorem",
+        "paper_claim",
+        "open_problem_target",
+        "scope_ledger",
+        "review_packet",
+        "writeback_packet",
+        "publication_slug",
+        "pipeline_status",
+        "audit_failure",
+        "candidate_mechanism"
+      ]
+    }
+  }
+}
