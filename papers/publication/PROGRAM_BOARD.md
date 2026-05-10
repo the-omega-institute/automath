@@ -22,7 +22,7 @@
 | `submitted_2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | 已投 04-07 | — |
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
 | `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | Ramanujan J. | 拒稿 04-20, 转投 RJ | RNT→RJ | 两位 editor 均推荐 FQ; fallback: FQ, Bull. Malaysian (IF 1.2) |
-| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | B-PAUSED (Oracle infra retry needed at B3) | Nonlinearity→DCDS-A | fallback: J. Diff. Eqs. Apps. (IF 1.1), Dynamical Systems |
+| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | B-PAUSED (Oracle infra retry needed at B5) | Nonlinearity→DCDS-A | fallback: J. Diff. Eqs. Apps. (IF 1.1), Dynamical Systems |
 | `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | J. Theoret. Probab. | 已投, peer review 中 (7 reviewers invited) | QTDS→JTP | 标题改为 "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type" |
 | `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | JNT | 已投 04-07 | — |
 | `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=5)) | — |
