@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -41,6 +42,7 @@ DEFAULT_CONFIG = SCRIPT_DIR / "bridge_pipeline_config.json"
 STOP_FILE = SCRIPT_DIR / ".bridge_supervisor.stop"
 LOG_DIR = SCRIPT_DIR / "logs"
 PACKET_DIR = SCRIPT_DIR / "inbox" / "writeback_packets"
+FETCH_LOCK_STALE_SECONDS = 1800
 
 
 def _now_iso() -> str:
@@ -118,22 +120,72 @@ def _resolve_repo_path(raw: str, config_path: Path) -> Path:
     return path
 
 
+def _fetch_lock_path(repo_path: Path) -> Path:
+    git_dir = Path(_git_stdout(repo_path, ["rev-parse", "--git-dir"], timeout=30))
+    if not git_dir.is_absolute():
+        git_dir = (repo_path / git_dir).resolve()
+    return git_dir / "omega_bridge_fetch.lock"
+
+
+def _acquire_fetch_lock(repo_path: Path, *, timeout: int = 300) -> tuple[Path, int]:
+    path = _fetch_lock_path(repo_path)
+    deadline = time.time() + timeout
+    while True:
+        try:
+            fd = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.write(fd, f"pid={os.getpid()}\ncreated_at={_now_iso()}\n".encode("utf-8"))
+            return path, fd
+        except FileExistsError:
+            try:
+                age = time.time() - path.stat().st_mtime
+                if age > FETCH_LOCK_STALE_SECONDS:
+                    path.unlink()
+                    continue
+            except FileNotFoundError:
+                continue
+            if time.time() >= deadline:
+                raise RuntimeError(f"Timed out waiting for fetch lock {path}")
+            time.sleep(1)
+
+
 def fetch_repo(repo_key: str, repo_cfg: dict[str, Any], config_path: Path) -> dict[str, Any]:
     repo_path = _resolve_repo_path(str(repo_cfg.get("local_path", "")), config_path)
-    before = _git_stdout(repo_path, ["rev-parse", str(repo_cfg.get("default_ref") or "HEAD")], timeout=30)
-    result = _git(repo_path, ["fetch", "origin"], timeout=300)
-    if result.returncode != 0:
-        return {
-            "repo_key": repo_key,
-            "status": "fetch_failed",
-            "reason": (result.stderr or result.stdout).strip(),
-        }
-    after = _git_stdout(repo_path, ["rev-parse", str(repo_cfg.get("default_ref") or "HEAD")], timeout=30)
+    refs = {
+        str(value)
+        for key, value in repo_cfg.items()
+        if key.endswith("_ref") and isinstance(value, str) and value.startswith("origin/")
+    }
+    default_ref = str(repo_cfg.get("default_ref") or "HEAD")
+    if default_ref.startswith("origin/"):
+        refs.add(default_ref)
+    lock_path: Path | None = None
+    lock_fd: int | None = None
+    try:
+        lock_path, lock_fd = _acquire_fetch_lock(repo_path)
+        before = _git_stdout(repo_path, ["rev-parse", default_ref], timeout=30)
+        refspecs = [f"+refs/heads/{ref.removeprefix('origin/')}:refs/remotes/origin/{ref.removeprefix('origin/')}" for ref in sorted(refs)]
+        result = _git(repo_path, ["fetch", "origin", *refspecs], timeout=300)
+        if result.returncode != 0:
+            return {
+                "repo_key": repo_key,
+                "status": "fetch_failed",
+                "reason": (result.stderr or result.stdout).strip(),
+            }
+        after = _git_stdout(repo_path, ["rev-parse", default_ref], timeout=30)
+    finally:
+        if lock_fd is not None:
+            os.close(lock_fd)
+        if lock_path is not None:
+            try:
+                lock_path.unlink()
+            except FileNotFoundError:
+                pass
     return {
         "repo_key": repo_key,
         "status": "fetched",
         "repo": repo_cfg.get("repo"),
-        "default_ref": repo_cfg.get("default_ref"),
+        "default_ref": default_ref,
+        "fetched_refs": sorted(refs),
         "before": before,
         "after": after,
         "changed": before != after,
