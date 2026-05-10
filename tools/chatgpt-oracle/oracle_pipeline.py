@@ -3041,8 +3041,9 @@ def build_oracle_followup_prompt(fix_summary: str, target_journal: str) -> str:
     """)
 
 
-def build_oracle_review_prompt(target_journal: str) -> str:
-    return textwrap.dedent(f"""\
+def build_oracle_review_prompt(target_journal: str,
+                               framing_mode: str = "default") -> str:
+    prompt = textwrap.dedent(f"""\
         You are a referee for "{target_journal}". Review the attached paper.
 
         Start your reply with a single line exactly of the form
@@ -3079,6 +3080,20 @@ def build_oracle_review_prompt(target_journal: str) -> str:
         the paper already says. A single wrong identity in a main theorem is a
         BLOCKER, not a LOW.
     """)
+    if framing_mode == "fresh_eval":
+        journal = target_journal or "the journal"
+        preamble = textwrap.dedent(f"""\
+            === FRESH REVIEW BRIEFING ===
+            You are receiving this paper for first-pass editorial review. By design,
+            you have NO prior reviewer comments - this is a clean-room evaluation.
+            Do not request prior reviews; assess the submitted PDF on its own merits
+            as if you are a new {journal} referee receiving the paper today.
+            The pipeline routes papers through multiple internal review rounds before
+            they reach you; your job is the independent first-look acceptance gate.
+            === END FRESH REVIEW BRIEFING ===
+        """)
+        return f"{preamble}\n{prompt}"
+    return prompt
 
 
 def build_oracle_re_review_prompt(target_journal: str) -> str:
@@ -6063,7 +6078,8 @@ def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
         return True, "minor revision", "Overall verdict: Minor revision\n(dry run)"
 
     pdf_path = Path(state.pdf_path) if state.pdf_path else None
-    fresh_prompt = build_oracle_review_prompt(state.target_journal)
+    fresh_prompt = build_oracle_review_prompt(
+        state.target_journal, framing_mode="fresh_eval")
     logger.info(f"{tag} fresh-eval submit task={fresh_task_id}")
     if not oracle_submit(
         fresh_task_id, fresh_prompt, pdf_path,

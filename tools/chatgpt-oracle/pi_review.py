@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -93,11 +94,86 @@ def _read_recent_supervisor_log(lines: int = RECENT_LOG_LINES) -> str:
     return "\n".join(text.splitlines()[-lines:])
 
 
+def _oracle_response_paper_name(path: Path) -> str:
+    name = path.name
+    stem = path.stem
+    match = re.match(r"^review_(.+?)_B\d+_", name)
+    if match:
+        return match.group(1)
+    match = re.match(r"^final_(.+?)_C\d+_", name)
+    if match:
+        return match.group(1)
+    match = re.match(r"^(.+?)_oracle_(?:deepen|fresh)_cycle\d+_", name)
+    if match:
+        return match.group(1)
+    match = re.match(r"^(.+)_\d{10,}(?:_\w+)?$", stem)
+    if match:
+        return match.group(1)
+    if "_" in stem:
+        return stem.rsplit("_", 1)[0]
+    return stem
+
+
+def _sample_recent_oracle_responses(
+        max_papers=3,
+        max_per_paper=2,
+        max_chars_per_response=2500) -> list[dict]:
+    """Sample recent raw Oracle response files so the PI can detect prompt-framing issues. Returns list of dicts with keys: paper, file_basename, verdict, response_excerpt."""
+    script_dir = globals().get("SCRIPT_DIR", Path(__file__).resolve().parent)
+    done_dir = Path(script_dir) / "oracle" / "done"
+    if not done_dir.exists():
+        return []
+
+    groups: dict[str, list[Path]] = {}
+    for path in done_dir.glob("*.md"):
+        if not path.is_file():
+            continue
+        groups.setdefault(_oracle_response_paper_name(path), []).append(path)
+
+    def _mtime(path: Path) -> float:
+        try:
+            return path.stat().st_mtime
+        except OSError:
+            return 0.0
+
+    ordered_groups = sorted(
+        groups.items(),
+        key=lambda item: max((_mtime(path) for path in item[1]), default=0.0),
+        reverse=True,
+    )
+
+    sample: list[dict] = []
+    for paper, paths in ordered_groups[:max_papers]:
+        for path in sorted(paths, key=_mtime, reverse=True)[:max_per_paper]:
+            try:
+                text = path.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            was_cut = len(text) > max_chars_per_response
+            excerpt = text[:max_chars_per_response]
+            if was_cut:
+                excerpt += "...[truncated]"
+            verdict_match = re.search(
+                r"^Overall verdict:\s*(.+?)$", text,
+                flags=re.MULTILINE | re.IGNORECASE)
+            sample.append({
+                "paper": paper,
+                "file_basename": path.name,
+                "verdict": (
+                    verdict_match.group(1).strip()
+                    if verdict_match else "(not detected)"
+                ),
+                "response_excerpt": excerpt,
+            })
+    return sample
+
+
 def _evidence_payload() -> dict[str, Any]:
     return {
         "captured_at": _now_iso(),
         "pipeline_states": _load_pipeline_states(),
         "recent_supervisor_log": _read_recent_supervisor_log(),
+        "recent_oracle_responses": _sample_recent_oracle_responses(),
     }
 
 
@@ -113,6 +189,12 @@ def _codex_prompt(evidence: dict[str, Any]) -> str:
         "```json\n"
         f"{json.dumps(evidence, ensure_ascii=False, indent=2)}\n"
         "```\n\n"
+        "Evidence schema notes:\n"
+        "- recent_oracle_responses: sample of recent raw reviewer outputs. "
+        "Use these to detect prompt-framing problems (reviewer confusion, "
+        "meta-complaints, re-raising issues that earlier rounds resolved). "
+        "If you see systemic prompt-framing issues, propose apply_code_patch "
+        "actions to fix the prompt builders in oracle_pipeline.py.\n\n"
         "## Output (JSON only, no prose, no markdown fences)\n"
         "{\n"
         '  "loop_health": "healthy|degraded|blocked",\n'
