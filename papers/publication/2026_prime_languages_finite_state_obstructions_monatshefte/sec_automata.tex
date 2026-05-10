@@ -188,14 +188,14 @@ the prime corollaries below.
   \label{lem:explicit-pnt-input}
   The following numerical constants are admissible:
   \[
-    X_0=5393,\qquad K_1=2,\qquad K_2=2.
+    X_0=5393,\qquad C_{\pi,1}=2,\qquad C_{\pi,2}=2.
   \]
   For every \(x\ge X_0\),
   \[
     \left|\pi(x)-\frac{x}{\log x}\right|
-      \le K_1\frac{x}{(\log x)^2},
+      \le C_{\pi,1}\frac{x}{(\log x)^2},
     \qquad
-    \pi(x)\le K_2\frac{x}{\log x}.
+    \pi(x)\le C_{\pi,2}\frac{x}{\log x}.
   \]
 \end{lemma}
 
@@ -206,7 +206,10 @@ the prime corollaries below.
     \pi(x)\le \frac{x}{\log x-1}
     \qquad (x\ge5393)
   \]
-  \cite{Dusart2010}. Since \(\log 5393>2\), for \(x\ge5393\) we have
+  \cite{Dusart2010}. We use this source only for the displayed explicit
+  numerical inequality; any later published explicit-PNT estimate with
+  comparable constants may be substituted without changing the
+  argument. Since \(\log 5393>2\), for \(x\ge5393\) we have
   \[
     0\le \pi(x)-\frac{x}{\log x}
     \le \frac{x}{\log x-1}-\frac{x}{\log x}
@@ -251,7 +254,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 
 \begin{lemma}[Prime counts in base-\(b\) slices]
   \label{lem:base-prime-count}
-  Let \(X_0,K_1,K_2\) be constants satisfying
+  Let \(X_0,C_{\pi,1},C_{\pi,2}\) be constants satisfying
   \Cref{lem:explicit-pnt-input}. There are explicit constants
   \(A_b,B_b>0\) and an explicit integer \(M_b\) such that, for all
   \(m\ge M_b\),
@@ -266,7 +269,7 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   Put \(L_b:=\log b\). Choose \(M_b\ge2\) so that
   \(b^{M_b-1}\ge X_0\) and, for every \(m\ge M_b\),
   \[
-    K_1\left(\frac{1}{mL_b^2}
+    C_{\pi,1}\left(\frac{1}{mL_b^2}
       +\frac{m}{b(m-1)^2L_b^2}\right)
       +\frac{2m}{b^m}
     \le
@@ -298,8 +301,8 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \ge
     \frac{b^m}{m\log b}
     -\frac{b^{m-1}}{(m-1)\log b}
-    -K_1\frac{b^m}{m^2(\log b)^2}
-    -K_1\frac{b^{m-1}}{(m-1)^2(\log b)^2}.
+    -C_{\pi,1}\frac{b^m}{m^2(\log b)^2}
+    -C_{\pi,1}\frac{b^{m-1}}{(m-1)^2(\log b)^2}.
   \]
   Since
   \[
@@ -325,81 +328,91 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   The upper bound follows from
   \[
     \abs{\mathcal P_m^{(b)}}\le\pi(b^m)
-      \le K_2\frac{b^m}{m\log b},
+      \le C_{\pi,2}\frac{b^m}{m\log b},
   \]
-  so \(B_b:=K_2/\log b\) is admissible for all \(m\ge M_b\).
+  so \(B_b:=C_{\pi,2}/\log b\) is admissible for all \(m\ge M_b\).
 \end{proof}
 
-\begin{lemma}[Effective spectral constants for a fixed residue class]
+\begin{lemma}[Certified spectral decay for a fixed residue class]
   \label{lem:effective-spectral-constants}
-  Let \(P\) be a rational stochastic matrix of dimension \(n\) and bit
-  height \(H\). Suppose that the recurrent classes and their cyclic
-  decompositions have been computed, and let \(D_A\) be a common
-  multiple of the recurrent periods. For each residue class
-  \(r\bmod D_A\) one can compute algebraic real numbers
-  \(K_r>0\), \(\theta_r\in(0,1)\), and an integer \(N_r\) such that
+  Let \(P\) be a rational stochastic matrix. Suppose that the recurrent
+  classes and their cyclic decompositions have been computed, and let
+  \(D_A\) be a common multiple of the recurrent periods. For each
+  residue class \(r\bmod D_A\) there is an algorithm which outputs
+  rational numbers \(K_r>0\), \(\theta_r\in(0,1)\), and an integer
+  \(N_r\) such that
   \[
-    \|P^m-S_r\|\le K_r\theta_r^m
-    \qquad(m\equiv r\bmod D_A,\ m\ge0),
+    \|P^m-S_r\|_\infty\le K_r\theta_r^m
+    \qquad(m\equiv r\bmod D_A,\ m\ge N_r),
   \]
-  where \(S_r=\lim_{k\to\infty}P^{kD_A+r}\). The constants are given by
-  minimal polynomials and isolating intervals, and the computation is
-  effective in the rational bit model.
+  where \(S_r=\lim_{k\to\infty}P^{kD_A+r}\). The output includes a
+  finite certificate consisting of the strict inequalities
+  \[
+    \rho(T)<\theta_r,\qquad
+    \rho(Q_{j,t}-\Pi_{j,t})<\theta_r^{d_j},
+  \]
+  where \(T=P_{TT}\), \(Q_{j,t}=P^{d_j}|_{R_{j,t}}\) is the primitive
+  return chain on the cyclic class \(R_{j,t}\), and
+  \(\Pi_{j,t}=\mathbf 1\pi_{j,t}\), plus rational resolvent bounds and
+  a monotonicity threshold proving the displayed estimate.
 \end{lemma}
 
 \begin{proof}
-  Put \(P\) in canonical Markov-chain block form. The blocks that can
-  contribute non-peripheral decay are the transient block \(P_{TT}\) and
-  the primitive return blocks \(P^{d_j}|_{R_{j,t}}\) after the
-  Perron--Frobenius rank-one limits have been subtracted. Compute their
-  characteristic polynomials over \(\QQ\), factor them over \(\QQ\), and
-  isolate all complex roots by standard algebraic root-isolation
-  algorithms. This gives exact algebraic representations of every
-  eigenvalue and separation bounds between their moduli.
+  Put \(P\) in canonical Markov-chain block form. The decaying blocks
+  are the transient block \(T=P_{TT}\) and, for each recurrent cyclic
+  class \(R_{j,t}\), the return-error block
+  \(E_{j,t}:=Q_{j,t}-\Pi_{j,t}\). The block \(T\) has spectral radius
+  \(<1\), and each \(E_{j,t}\) has spectral radius \(<1\) because
+  \(Q_{j,t}\) is primitive stochastic.
 
-  Let \(\Theta\) be the finite set of moduli of the eigenvalues of
-  \(P_{TT}\) and of the non-unit eigenvalues of the return blocks. If
-  \(\Theta=\varnothing\), set \(\theta_r=1/2\); the only remaining
-  errors are nilpotent or finite-prefix errors, handled below. If
-  \(\Theta\ne\varnothing\), use the isolating intervals and separation
-  bounds to choose a rational number
+  Compute the characteristic polynomials of these rational blocks and
+  isolate their complex roots. If the finite list of roots is empty,
+  take \(\theta_r=1/2\). Otherwise choose a rational
+  \(\theta_r\in(0,1)\) such that all eigenvalues of \(T\) have modulus
+  \(<\theta_r\) and all eigenvalues of every \(E_{j,t}\) have modulus
+  \(<\theta_r^{d_j}\). The strict comparisons are certified by the
+  isolating intervals. This gives the spectral-radius part of the
+  certificate, including the case in which there are no non-peripheral
+  roots to control.
+
+  It remains to turn spectral separation into a bound on powers without
+  invoking a Jordan basis. Let \(A\) be any one of the rational blocks
+  and let \(\eta\in(0,1)\) be the corresponding target rate
+  (\(\eta=\theta_r\) for \(T\), and
+  \(\eta=\theta_r^{d_j}\) for \(E_{j,t}\)). Choose a rational
+  \(\gamma\) with \(\rho(A)<\gamma<\eta\). From the root isolating
+  intervals we compute a rational \(\delta>0\) such that
   \[
-    \theta_r\in(\max\Theta,1).
+    |\det(zI-A)|\ge\delta\qquad(|z|=\gamma).
   \]
-
-  Eigenvalue \(0\) contributes only nilpotent Jordan terms, which vanish
-  after at most \(s\) steps and are absorbed into the finite-prefix
-  maximum below. For each non-zero eigenvalue \(\mu\) with
-  \(|\mu|<\theta_r\), and for each Jordan block size \(s\), the binomial
-  expansion of
-  \((\mu I+N)^m\) bounds the corresponding block by
-  \(C_{\mu,s}(m+1)^{s-1}|\mu|^m\), with \(C_{\mu,s}\) computed from a
-  transition matrix between the rational basis and the algebraic Jordan
-  basis. Put \(a=|\mu|/\theta_r<1\). Since
-  \(x\mapsto (x+1)^{s-1}a^x\) is decreasing for
-  \(x+1\ge (s-1)/\log(1/a)\), the finite maximum
+  Indeed, the product formula for the determinant and the strict root
+  separation from the circle \(|z|=\gamma\) give such a lower bound.
+  The adjugate entries of \(zI-A\) are polynomials in \(z\), so their
+  absolute values on the same circle have an elementary rational upper
+  bound \(U\) obtained from the coefficients of \(A\). Cauchy's formula
+  for the matrix resolvent gives
   \[
-    C(\mu,\theta_r,s):=
-    \max_{0\le m\le N_{\mu,s}} (m+1)^{s-1}
-       \left(\frac{|\mu|}{\theta_r}\right)^m,
+    A^m=\frac{1}{2\pi i}\int_{|z|=\gamma}z^m(zI-A)^{-1}\,dz,
     \qquad
-    N_{\mu,s}:=
-    \left\lceil\frac{s-1}{\log(\theta_r/|\mu|)}\right\rceil+1
+    \|A^m\|_\infty\le L_A\gamma^m\le L_A\eta^m,
   \]
-  satisfies
-  \[
-    (m+1)^{s-1}|\mu|^m\le C(\mu,\theta_r,s)\theta_r^m
-    \qquad(m\ge0).
-  \]
-  The finite maximum is evaluated with algebraic interval arithmetic.
-  Nilpotent parts vanish after at most \(n\) steps; enlarge the same
-  finite maximum to cover those initial values. Summing the finitely
-  many block estimates gives a computable \(K_r\). If the sum is \(0\),
-  replace it by \(1\). Finally, verify all finitely many values before
-  the block estimates begin by direct rational matrix powering and
-  enlarge \(K_r\) if necessary. The resulting constants prove the
-  displayed inequality for all \(m\ge0\); the finite verification also
-  records an explicit threshold \(N_r\).
+  where \(L_A\) is a rational number computed from \(U,\delta,\gamma\),
+  and the dimension of \(A\). The data
+  \((\gamma,\delta,U,L_A)\) are the resolvent certificate for \(A\).
+
+  The standard finite-chain block formula writes \(P^m-S_r\), on
+  \(m\equiv r\bmod D_A\), as a finite sum of products involving powers
+  of \(T\), powers of the \(E_{j,t}\), and fixed rational connecting
+  matrices. The resolvent bounds above dominate every such product by a
+  rational multiple of either \(\theta_r^m\) or of a convolution
+  \(\sum_{\ell=0}^{m-1}\theta_r^\ell\theta_r^{m-1-\ell}\). Since
+  \(m\theta_r^{m-1}\le C_{\theta_r,N}\theta_r^m\) for all \(m\ge N\)
+  after an effectively found monotonicity threshold, these finitely many
+  estimates give rational \(K_r\) and \(N_r\). The finitely many earlier
+  powers in the residue class are checked directly by rational matrix
+  powering and, if necessary, \(K_r\) is enlarged. Thus the certificate
+  verifies the displayed inequality for all
+  \(m\equiv r\bmod D_A\) with \(m\ge N_r\).
 \end{proof}
 
 \begin{theorem}[Algorithmic fixed-DFA prime-slice obstruction]
@@ -457,12 +470,17 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \]
     Again all cyclic indices are read modulo \(d_j\). This formula
     decides \(c_r=0\) or \(c_r>0\) by exact rational arithmetic.
-    \item Algebraic constants \(K_r>0\), \(\theta_r\in(0,1)\), and
-    integer thresholds \(M_r\) such that
+    \item Rational constants \(K_r>0\), \(\theta_r\in(0,1)\), and
+    integer thresholds \(N_r\) such that
     \[
       \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
-      \qquad(m\equiv r\pmod {D_A},\ m\ge0).
+      \qquad(m\equiv r\pmod {D_A},\ m\ge N_r).
     \]
+    The certificate records the strict spectral-radius inequalities
+    and rational resolvent bounds of
+    \Cref{lem:effective-spectral-constants}. These data are enough to
+    verify the inequality mechanically, without reconstructing an
+    algebraic Jordan basis.
   \end{enumerate}
   With this output, the following holds for every
   \(m\ge M_r\) satisfying \(m\equiv r\pmod {D_A}\).
@@ -493,15 +511,20 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \ge c_{\mathcal A,b}\,\frac{b^m}{m}
     \qquad(m\ge M_{\mathcal A,b}).
   \]
-  In the rational bit model, the graph decomposition and all rational
-  linear solves are polynomial in the input size plus the size of the
-  produced certificate. The optional full list
-  \(c_0,\dots,c_{D_A-1}\) has output size at least \(D_A\); no polynomial
-  bound in the input size alone is asserted for printing that list.
-  The constants \(K_r,\theta_r,M_r\) are represented by algebraic
-  numbers together with isolating intervals, and their real
-  bit-complexity is polynomial in the input size, the certificate size,
-  and the requested output precision.
+  The compressed output is the tuple
+  \[
+    \mathcal C=(D_A,\{R_j,d_j,(R_{j,t})_t,\pi_{j,t},A_{j,t}\}_{j,t},
+      \{K_r,\theta_r,N_r,M_r,c_r\}_{r\bmod D_A})
+  \]
+  when all residues are enumerated. If \(D_A\) is large, the same data
+  may instead be represented by the class list together with an exact
+  residue-evaluation procedure for \(r\mapsto c_r,K_r,\theta_r,N_r,M_r\);
+  any final all-large constant obtained by taking a minimum over
+  residues is then represented by this finite minimization procedure.
+  Printing the full residue table is charged to output size \(D_A\).
+  No polynomial bound in the input size alone is asserted for the
+  spectral certificate, for enumerating all residues, or for the final
+  minimization.
 \end{theorem}
 
 \begin{proof}
@@ -545,10 +568,10 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   on \(R_{j,t+r}\) proves \eqref{eq:compressed-cr}.
 
   Applying \Cref{lem:effective-spectral-constants} to \(P\) and
-  \(D_A\) gives \(K_r,\theta_r\) and
+  \(D_A\) gives \(K_r,\theta_r,N_r\) and
   \[
     \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
-    \qquad(m\equiv r\bmod {D_A}).
+    \qquad(m\equiv r\bmod {D_A},\ m\ge N_r).
   \]
 
   Choose \(A_b,B_b>0\) and \(M_b\) from
@@ -559,16 +582,16 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \le B_b\,\frac{b^m}{m}
     \qquad(m\ge M_b).
   \]
-  If \(c_r=0\), take \(M_r\ge M_b\) to be any integer in the residue
-  class tail satisfying
+  If \(c_r=0\), take \(M_r\ge \max(M_b,N_r)\) to be any integer in the
+  residue class tail satisfying
   \[
     K_r\theta_r^m\le \frac{A_b}{2m}
     \qquad(m\ge M_r,\ m\equiv r\bmod {D_A}).
   \]
-  This threshold is computable by real algebraic interval arithmetic:
-  check the finitely many values before monotonicity of
-  \(mK_r\theta_r^m\) begins, and then solve the remaining one-sided
-  inequality by bisection on isolating intervals.
+  Since \(K_r\) and \(\theta_r\) are rational, this threshold is
+  obtained by checking finitely many values before monotonicity of
+  \(mK_r\theta_r^m\) begins and then recording the first value after
+  which the monotone tail is below \(A_b/2\).
   For \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\),
   \[
     a_m(\mathcal A)\le \frac{A_b}{2}\frac{b^m}{m},
@@ -576,14 +599,14 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   so the symmetric difference is at least
   \(A_b b^m/(2m)\).
 
-  If \(c_r>0\), take \(M_r\ge M_b\) so that
+  If \(c_r>0\), take \(M_r\ge \max(M_b,N_r)\) so that
   \[
     K_r\theta_r^m\le c_r/2,
     \qquad
     B_b/m\le c_r/4
   \]
-  for all \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\). This is computed
-  in the same real bit model.
+  for all \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\). This is again a
+  rational monotone-tail check.
   Then \(a_m(\mathcal A)\ge(c_r/2)b^m\), whence
   \[
     \mathrm{Prec}_m
@@ -603,14 +626,13 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   positive constants \(A_b/2\) and \(c_r/4\) appearing above gives the
   final all-large-\(m\) constant after replacing \(c_r b^m/4\) by the
   weaker \(c_r b^m/(4m)\) in the positive-density residue classes.
-  The complexity statement follows from polynomial-time strongly
-  connected component and period algorithms, polynomial bit-complexity
-  rational linear algebra, and standard real-algebraic eigenvalue
-  isolation with requested precision. The certificate is compressed by
-  recurrent class and cyclic class. If the user asks for an explicit
-  printed table of all \(c_r\), that table is charged to the output
-  size, which is necessary because \(D_A\) may be super-polynomial in the
-  number of states.
+  The output statement follows from strongly connected component and
+  period algorithms, exact rational linear algebra, root isolation for
+  the finitely many characteristic polynomials, and the certified
+  resolvent construction in \Cref{lem:effective-spectral-constants}.
+  The certificate is compressed by recurrent class and cyclic class.
+  Printing all residues, and taking the final minimum by enumeration,
+  are charged to the chosen output representation.
 \end{proof}
 
 We first establish the quantitative obstruction that drives both
@@ -1001,15 +1023,19 @@ be the period of \(B_N\).
   accepting state \(f\) occurs for infinitely many \(k\). In an
   irreducible non-negative matrix of period \(d_N\), the
   cyclic-class threshold in \Cref{lem:cyclic-class-path-threshold}
-  applies. Therefore
-  \((B_N^{kd_N+r})_{q_N f}>0\) for all sufficiently large \(k\), and
-  the limit
+  applies, so \(q_N\) and \(f\) lie in cyclic classes whose difference
+  is \(r\), and
+  \((B_N^{kd_N+r})_{q_N f}>0\) for all sufficiently large \(k\).
+  The periodic Perron--Frobenius entry asymptotic is sharper than mere
+  eventual positivity: if \(q_N\in C_i\), \(f\in C_{i+r}\), and \(h,\nu\)
+  are positive right and left Perron vectors on the corresponding
+  cyclic classes, then
   \[
-    (S_r)_{q_N f}
-    =\lim_{k\to\infty}\lambda^{-(kd_N+r)}
-      (B_N^{kd_N+r})_{q_N f}
+    \lambda^{-(kd_N+r)}(B_N^{kd_N+r})_{q_N f}
+      \longrightarrow h_f\nu_{q_N}>0 .
   \]
-  is strictly positive. Hence \(d_r=u_N^{\mathsf T}S_rv_N>0\).
+  Hence \((S_r)_{q_N f}>0\), and therefore
+  \(d_r=u_N^{\mathsf T}S_rv_N>0\).
   Substituting into the expansion gives
   \[
     z_m=u_N^{\mathsf T}B_N^m v_N
@@ -1178,6 +1204,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
 \end{theorem}
 
 \begin{proof}
+  This is the standard conditional-density conclusion for deterministic
+  presentations, specialized to our notation; compare
+  \cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
+  For completeness we spell out the reduction used below.
   Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
   \(B_N\). By \Cref{lem:substochastic-product-expansion}, there are
   \(D'\ge 1\), non-negative constants \(e_0,\dots,e_{D'-1}\), and
@@ -1217,10 +1247,6 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   constant.
 \end{proof}
 
-The preceding theorem is the standard conditional-density conclusion
-for a deterministic trim strongly connected presentation, specialized
-to the notation used here; compare
-\cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
 Only the following finite-budget consequence is used in the prime-slice
 applications.
 
