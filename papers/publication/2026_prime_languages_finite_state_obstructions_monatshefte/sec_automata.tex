@@ -149,6 +149,24 @@ For \(m\ge 0\), write
   \(K_2/m\). This proves the final assertion.
 \end{proof}
 
+For later use we spell out the elementary effective content of the
+preceding proof. Assume that the entries of the DFA transition matrices
+are given explicitly. Put \(P=B/b\). The strongly connected components
+of the directed graph of \(P\), the recurrent classes, their periods
+\(d_i\), and hence \(p=\operatorname{lcm}(d_i)\), are obtained by the
+standard linear-time graph algorithms. For each residue class \(r\bmod
+p\), the limit
+\[
+  c_r=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v
+\]
+is the value of the finite Markov chain on that residue class; it can be
+computed by solving the finite linear systems for the stationary
+distributions on the recurrent classes and the absorption probabilities
+from transient states. Equivalently, it is obtained as the exact
+limit of the rational matrices \(P^{kp+r}\). Thus the residue
+alternatives \(c_r=0\) and \(c_r>0\) are decidable by exact rational
+linear algebra when the transition table is integral.
+
 This density dichotomy is classical; compare
 \cite{Berstel1973,BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity,Koga2019Density}.
 We keep the short proof because the residue-class constants are used in
@@ -231,6 +249,114 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   large \(m\). The error term is \(o(b^m/m)\), so reducing the lower
   constant and increasing the upper constant gives the asserted
   constants \(A_b,B_b\).
+\end{proof}
+
+\begin{theorem}[Effective fixed-DFA prime-slice obstruction]
+  \label{thm:effective-fixed-dfa-prime-obstruction}
+  Fix \(b\ge2\) and a complete DFA
+  \(\mathcal A=(Q,\Sigma_b,\delta,q_0,F)\). From the transition table of
+  \(\mathcal A\) one can compute an integer \(p\ge1\), residue
+  constants \(c_0,\dots,c_{p-1}\in\RR_{\ge0}\), residue alternatives
+  \(c_r=0\) or \(c_r>0\), and constants
+  \(C_r,D_r>0\), \(\eta_r\in(0,1)\), and \(M_r\) with the following
+  property for every \(m\ge M_r\) satisfying \(m\equiv r\pmod p\).
+  If \(c_r=0\), then
+  \[
+    a_m(\mathcal A)\le C_r\eta_r^m b^m
+    \quad\text{and}\quad
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge D_r\,\frac{b^m}{m}.
+  \]
+  If \(c_r>0\), then
+  \[
+    a_m(\mathcal A)\ge \frac{c_r}{2}b^m,
+    \qquad
+    \mathrm{Prec}_m\le \frac{2B_b}{c_r}\,\frac1m,
+  \]
+  whenever \(\mathrm{Prec}_m\) is defined, and
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge D_r b^m .
+  \]
+  Here \(B_b\) is any explicit upper constant in
+  \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) valid for \(m\ge M_b\),
+  obtained from an explicit prime number theorem bound. Consequently
+  one computes constants \(c_{\mathcal A,b}>0\) and \(M_{\mathcal A,b}\)
+  such that
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge c_{\mathcal A,b}\,\frac{b^m}{m}
+    \qquad(m\ge M_{\mathcal A,b}).
+  \]
+  The algorithm uses polynomially many arithmetic operations in the
+  number of states for the graph decomposition and the rational linear
+  systems; the bit complexity is polynomial in the bit size of the
+  rational data produced from \(P=B/b\), apart from the chosen explicit
+  prime-counting threshold.
+\end{theorem}
+
+\begin{proof}
+  Compute the matrix \(B=\sum_{d\in\Sigma_b}T_d\), the stochastic matrix
+  \(P=B/b\), the recurrent classes of \(P\), their periods, and the
+  common period \(p\) as described after
+  \Cref{thm:dfa-density-dichotomy}. Exact rational linear algebra gives
+  the residue limits \(c_r\) and decides which of them vanish. The same
+  finite-dimensional computation also gives a number
+  \(\theta\in(0,1)\) and constants \(K_r\) such that
+  \[
+    \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta^m
+    \qquad(m\equiv r\bmod p).
+  \]
+  For example, one may put \(P\) in rational canonical or Jordan form
+  over an algebraic extension, separate the peripheral eigenvalues from
+  the remaining eigenvalues, and take any rational \(\theta\) strictly
+  between the largest non-peripheral modulus and \(1\); standard
+  eigenvalue isolation makes this effective. Equivalently, the same
+  bound follows from the canonical transient/recurrent Markov-chain
+  decomposition and explicit bounds for powers of the transient blocks.
+
+  Choose explicit constants \(A_b,B_b>0\) and \(M_b\) from any explicit
+  PNT estimate so that
+  \[
+    A_b\,\frac{b^m}{m}
+    \le\abs{\mathcal P_m^{(b)}}
+    \le B_b\,\frac{b^m}{m}
+    \qquad(m\ge M_b).
+  \]
+  If \(c_r=0\), take \(C_r=K_r\) and \(\eta_r=\theta\), then enlarge
+  \(M_r\ge M_b\) until \(K_r\theta^m\le A_b/(2m)\) on the residue class.
+  For \(m\ge M_r\),
+  \[
+    a_m(\mathcal A)\le \frac{A_b}{2}\frac{b^m}{m},
+  \]
+  so the symmetric difference is at least
+  \(A_b b^m/(2m)\). Thus \(D_r=A_b/2\) is admissible in the sparse case.
+
+  If \(c_r>0\), enlarge \(M_r\ge M_b\) until
+  \(K_r\theta^m\le c_r/2\) and \(B_b/m\le c_r/4\) on the residue class.
+  Then \(a_m(\mathcal A)\ge(c_r/2)b^m\), whence
+  \[
+    \mathrm{Prec}_m
+    \le\frac{\abs{\mathcal P_m^{(b)}}}{a_m(\mathcal A)}
+    \le\frac{2B_b}{c_r}\frac1m,
+  \]
+  and
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge a_m(\mathcal A)-\abs{\mathcal P_m^{(b)}}
+    \ge \frac{c_r}{4}b^m.
+  \]
+  Thus \(D_r=c_r/4\) is admissible in the positive-density case.
+
+  Taking
+  \(M_{\mathcal A,b}:=\max_r M_r\) and the minimum over the finitely many
+  positive constants \(A_b/2\) and \(c_r/4\) appearing above gives the
+  final all-large-\(m\) constant after replacing \(D_r b^m\) by the
+  weaker \(D_r b^m/m\) in the positive-density residue classes.
+  The complexity statement follows from the standard algorithms for
+  strongly connected components, periods of strongly connected directed
+  graphs, rational linear systems, and algebraic eigenvalue isolation in
+  finite dimension.
 \end{proof}
 
 We first establish the quantitative obstruction that drives both
@@ -674,29 +800,53 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   \]
   The matrix \(\widehat P\) is stochastic, and
   \((\widehat P^m)_{xy}=(P'^m)_{xy}\) for all \(x,y\in Q'\). Apply the
-  finite-state transient/recurrent decomposition used in
-  \Cref{thm:dfa-density-dichotomy} to \(\widehat P\). The cemetery state
-  forms one closed recurrent class. Its peripheral projector is supported
-  on the cemetery coordinate, so it contributes zero to the
-  \(Q'\times Q'\) block. Any other closed recurrent class of
-  \(\widehat P\), if present, lies inside \(Q'\) and has the usual
-  periodic Perron--Frobenius projectors. Transient blocks, including
-  paths that eventually enter the cemetery state, contribute only an
-  exponentially decaying remainder on the \(Q'\times Q'\) block. Thus,
-  after restricting the expansion to this block, there are an integer
-  \(p'\ge 1\), non-negative matrices \(S_0,\dots,S_{p'-1}\), a constant
-  \(C>0\), and \(\eta\in(0,1)\) such that
+  finite Markov-chain canonical decomposition to \(\widehat P\). After
+  permuting states, write
+  \[
+    \widehat P=
+    \begin{pmatrix}
+      T & R_1 & \cdots & R_s\\
+      0 & C_1 & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s
+    \end{pmatrix},
+  \]
+  where \(T\) is the transient block, \(\rho(T)<1\), and each \(C_j\) is
+  an irreducible stochastic recurrent class with period \(d_j\). For
+  \(m\ge1\),
+  \[
+    \widehat P^m=
+    \begin{pmatrix}
+      T^m &
+      \sum_{\ell=0}^{m-1}T^\ell R_1C_1^{m-1-\ell} &
+      \cdots &
+      \sum_{\ell=0}^{m-1}T^\ell R_sC_s^{m-1-\ell}\\
+      0 & C_1^m & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s^m
+    \end{pmatrix}.
+  \]
+  The powers \(T^\ell\) decay exponentially, while each \(C_j^m\) has
+  the usual periodic Perron--Frobenius limits. Hence, with
+  \(p'=\operatorname{lcm}(d_1,\dots,d_s)\), the entrywise limits
+  \[
+    S_r:=\lim_{k\to\infty}P'^{kp'+r}
+    \qquad(0\le r<p')
+  \]
+  exist on the \(Q'\times Q'\) block. These limits include the
+  non-decaying absorption terms from transient states into recurrent
+  classes. Since convergence of \(T^\ell\) is exponential and the
+  non-peripheral parts of the recurrent blocks decay exponentially,
+  there are a constant \(C>0\) and \(\eta\in(0,1)\) such that
   \[
     P'^m=S_{m\bmod p'}+E_m,
     \qquad
     \|E_m\|\le C\eta^m.
   \]
-  The residue matrices are non-negative because, for each residue class,
-  \[
-    S_r=\lim_{k\to\infty}P'^{kp'+r}
-  \]
-  entrywise; this also covers the case in which the restricted block is
-  purely transient, where every \(S_r\) is the zero matrix.
+  The residue matrices are non-negative because they are entrywise
+  limits of non-negative matrices. This also covers the case in which
+  the restricted block is purely transient, where every \(S_r\) is the
+  zero matrix.
 
   Since \(B'^m=\lambda^m\widetilde DP'^m\widetilde D^{-1}\), we obtain
   \[

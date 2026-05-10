@@ -39,6 +39,54 @@ and set
   :=\bigcup_{m\ge 1}\mathcal P_m^{(\mathrm Z)}.
 \]
 
+\begin{lemma}[Length growth for regular Zeckendorf sublanguages]
+  \label{lem:zeckendorf-length-growth}
+  Let \(L\subseteq\mathcal Z\) be regular. Choose a DFA recognizing
+  \(L\), delete states that are not reachable from the initial state or
+  cannot reach an accepting state, and let \(\rho\) be the maximal
+  spectral radius of a strongly connected component of the resulting
+  automaton. Then \(\rho\le\varphi\). Moreover,
+  \[
+    \#\{w\in L:\abs w\le m\}=
+    \begin{cases}
+      \rho^{m+o(m)}, & \rho>1,\\
+      \exp(o(m)), & \rho\le1.
+    \end{cases}
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(L\subseteq\mathcal Z\), the number of words of length at most
+  \(m\) in \(L\) is bounded above by
+  \[
+    \#(\mathcal Z\cap\{0,1\}^{\le m})=F_{m+2}-1=\varphi^{m+o(m)}.
+  \]
+  For any trimmed strongly connected component \(C\) of spectral radius
+  \(\rho_C\), choose entry and exit paths through the trimmed automaton.
+  Periodic Perron--Frobenius theory gives a residue class of lengths on
+  which the number of paths that traverse \(C\) is
+  \(\rho_C^{n+o(n)}\). These paths yield distinct accepted words after
+  adding the fixed entry and exit words. The preceding ambient upper
+  bound therefore forces \(\rho_C\le\varphi\) for every component, and
+  hence \(\rho\le\varphi\).
+
+  Put the trimmed adjacency matrix in block upper-triangular form by
+  strongly connected components. The upper bound
+  \(O(m^N\rho^m)\), with \(N\) depending only on the number of blocks,
+  follows from the usual path decomposition through this acyclic block
+  graph and the Jordan-form estimates for the diagonal blocks. If
+  \(\rho>1\), choose a reachable and co-reachable component of spectral
+  radius \(\rho\); the same periodic Perron--Frobenius lower bound along
+  one admissible residue class gives \(\rho^{m+o(m)}\) words of length at
+  most \(m\). If \(\rho\le1\), every non-negative integral irreducible
+  recurrent block has spectral radius at most \(1\), hence is either
+  nilpotent in the acyclic part or a permutation block on a directed
+  cycle. A path can pass through only finitely many such blocks, so the
+  total number of accepted words of length at most \(m\) is polynomial in
+  \(m\), and therefore \(\exp(o(m))\). This proves the displayed
+  estimate.
+\end{proof}
+
 \begin{proposition}[Known growth law for regular Zeckendorf languages]
   \label{prop:zeckendorf-regular-powerlaw}
   Let \(L\subseteq\mathcal Z\) be regular. Choose a DFA recognizing
@@ -68,9 +116,9 @@ and set
   This is the Zeckendorf specialization of the general growth theory for
   \(S\)-recognizable sets \cite[Theorem~7]{CharlierRampersad2011}; see
   also \cite{LecomteRigo2001}. For the endpoint cases used below one can
-  also read the estimate directly from the trimmed transition graph, as
-  follows. In the present numeration system the ambient counting function
-  satisfies
+  also read the estimate directly from
+  \Cref{lem:zeckendorf-length-growth}, as follows. In the present
+  numeration system the ambient counting function satisfies
   \[
     \#(\mathcal Z\cap\{0,1\}^{\le m})
     =F_{m+2}-1
@@ -80,31 +128,9 @@ and set
   \(\val(w)\le T\) is equivalent, up to an \(O(1)\) error in length, to
   \(\abs w\le (\log T)/(\log\varphi)\).
 
-  Let \(A\) be the adjacency matrix of the trimmed automaton for \(L\).
-  Standard block triangular form by strongly connected components gives
-  \[
-    \#\{w\in L:\abs w\le m\}
-    =\rho^{m+o(m)}
-  \]
-  when \(\rho>1\): the upper bound is the usual polynomial-times
-  \(\rho^m\) estimate from the Jordan form of the diagonal blocks, while
-  the lower bound comes from a reachable and co-reachable component of
-  spectral radius \(\rho\), summing over the finitely many residue
-  classes allowed by its period. If \(\rho\le1\), every recurrent block
-  has spectral radius at most \(1\). Since a non-negative integral
-  irreducible block of spectral radius \(1\) is a permutation block, the
-  only growth then comes from the finite number of chains through such
-  blocks and through acyclic parts. Thus the number of accepted words of
-  length at most \(m\) is polynomial in \(m\); in the finite-language
-  case it is eventually constant. Therefore
-  \[
-    \#\{w\in L:\abs w\le m\}
-    =
-    \begin{cases}
-      \rho^{m+o(m)}, & \rho>1,\\
-      \exp(o(m)), & \rho\le1.
-    \end{cases}
-  \]
+  By \Cref{lem:zeckendorf-length-growth},
+  the number of accepted words of length at most \(m\) is
+  \(\rho^{m+o(m)}\) if \(\rho>1\), and \(\exp(o(m))\) if \(\rho\le1\).
   Substituting \(m=(\log T)/(\log\varphi)+O(1)\) gives exactly
   \(N_L(T)=T^{\alpha+o(1)}\), with \(\alpha=0\) for \(\rho\le1\) and
   \(\alpha=\log\rho/\log\varphi\) for \(\rho>1\).
