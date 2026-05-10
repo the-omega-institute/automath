@@ -28,16 +28,16 @@
 | `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=5)) | — |
 | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | B-STUCK (Oracle: minor revision, 20 rounds — needs human review) | — |
-| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | — |
+| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
-| `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | B-DONE (Oracle: deepen=accept, fresh=minor revision, 13 rounds) | — |
+| `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | C-DONE (Oracle+Claude: pass, 9 rounds) | — |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | B-PAUSED (Oracle infra retry needed at B11) | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | — |
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=0)) | — |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | A-DONE (audit 8/10, 11 rounds, 2 final A3) | — |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
-| `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
+| `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | — |
 | `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | — | 待分诊 | — |
 | `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | 待分诊 | — |
 | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | — | 待分诊 | — |
