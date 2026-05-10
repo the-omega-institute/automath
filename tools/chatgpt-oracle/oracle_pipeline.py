@@ -543,6 +543,7 @@ class PaperState:
     stage_b_deepen_conv_id: str = ""
     stage_b_fresh_attempts: int = 0
     stage_b_last_fix_summary: str = ""
+    block_reason: str = ""
 
     # Stage C tracking
     stage_c_rounds: int = 0
@@ -611,6 +612,7 @@ class PaperState:
             "stage_b_deepen_conv_id": self.stage_b_deepen_conv_id,
             "stage_b_fresh_attempts": self.stage_b_fresh_attempts,
             "stage_b_last_fix_summary": self.stage_b_last_fix_summary[-2000:],
+            "block_reason": self.block_reason,
             "stage_c_rounds": self.stage_c_rounds,
             "stage_c_verdicts": self.stage_c_verdicts,
             "stage_c_passed": self.stage_c_passed,
@@ -666,7 +668,8 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                      "stage_b_deepen_conv_id", "stage_b_fresh_attempts",
                      "stage_b_last_fix_summary",
                      "stage_c_deepen_conv_id", "stage_c_fresh_attempts",
-                     "started_at", "completed_at", "error"):
+                     "started_at", "completed_at", "error",
+                     "block_reason"):
             if key in data:
                 setattr(s, key, data[key])
         s.stage_a_scores = data.get("stage_a_scores", [])
@@ -3531,6 +3534,197 @@ def parse_oracle_issues(review_text: str) -> list[dict]:
     return issues
 
 
+def _extract_remaining_blockers_value(text: str) -> Optional[str]:
+    """Remaining-blockers deterministic gate; fallback semantics: absent or unparsable lines return None so the existing LLM issue parse is preserved."""
+    match = re.search(
+        r"^\s*(?:[-*]\s*)?(?:remaining\s+blockers(?:\s+preventing\s+acceptance)?|"
+        r"blockers\s+preventing\s+acceptance)\s*[:\-]\s*(.*?)\s*$",
+        text or "",
+        re.IGNORECASE | re.MULTILINE,
+    )
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
+def _looks_like_status_row(text: str) -> bool:
+    """Status-row deterministic gate; fallback semantics: uncertain issue text returns False so normal LLM-derived issues remain intact."""
+    normalized = re.sub(r"\s+", " ", (text or "").strip().strip("|")).strip()
+    lowered = normalized.lower()
+    if not lowered:
+        return False
+    if re.fullmatch(
+        r"(accept(?:ed)?|minor revision|major revision|reject(?:ion)?|"
+        r"overall verdict|verdict)",
+        lowered,
+    ):
+        return True
+    status_prefixes = (
+        "overall verdict",
+        "verdict:",
+        "severity action owner",
+        "severity action",
+        "action owner",
+    )
+    if lowered.startswith(status_prefixes):
+        return True
+    cells = [
+        re.sub(r"\s+", " ", cell).strip().lower()
+        for cell in normalized.split("|")
+        if cell.strip()
+    ]
+    if cells and cells[0] in {
+        "overall verdict",
+        "verdict",
+        "severity action owner",
+    }:
+        return True
+    if set(cells).issubset({
+        "overall verdict",
+        "verdict",
+        "accept",
+        "accepted",
+        "minor revision",
+        "major revision",
+        "reject",
+        "rejection",
+        "severity action owner",
+        "status",
+        "header",
+    }):
+        return True
+    return False
+
+
+_FALLBACK_BLOCKER_HEADER_RE = re.compile(
+    r"^\s*(?:#{1,6}\s*)?(?:[-*]\s*)?"
+    r"(remaining\s+blockers|mathematical\s+blockers|same\s+blockers\s+remain|"
+    r"blockers\s+preventing\s+acceptance)\b.*?(?::\s*(.*))?$",
+    re.IGNORECASE,
+)
+
+
+def _extract_fallback_blockers(text: str) -> list[str]:
+    """Blocker-list deterministic gate; fallback semantics: returns [] when no clear blocker header/list is found so Stage B keeps the raw LLM path."""
+    lines = (text or "").splitlines()
+    blockers: list[str] = []
+    for idx, line in enumerate(lines):
+        header = _FALLBACK_BLOCKER_HEADER_RE.match(line)
+        if not header:
+            continue
+        inline = (header.group(2) or "").strip()
+        if inline and inline.lower() not in {"none", "n/a", "na", "-"}:
+            blockers.append(inline)
+        current: list[str] = []
+        for follow in lines[idx + 1:]:
+            stripped = follow.strip()
+            if not stripped:
+                if current:
+                    break
+                continue
+            if re.match(r"^\s*(?:#{1,6}\s*)?[A-Z][A-Za-z0-9 /-]{2,80}:\s*$", follow):
+                break
+            item = re.match(r"^\s*(?:[-*+]\s+|\d+[.)]\s+)(.+)$", follow)
+            if item:
+                if current:
+                    blockers.append(" ".join(current).strip())
+                current = [item.group(1).strip()]
+                continue
+            if current:
+                current.append(stripped)
+                continue
+            if re.search(
+                r"\b(blocker|not proven|gap|insufficient|not acceptable)\b",
+                stripped,
+                re.IGNORECASE,
+            ):
+                blockers.append(stripped)
+                continue
+            break
+        if current:
+            blockers.append(" ".join(current).strip())
+    seen: set[str] = set()
+    unique: list[str] = []
+    for blocker in blockers:
+        blocker = re.sub(r"\s+", " ", blocker).strip()
+        if not blocker:
+            continue
+        key = blocker.lower()
+        if key not in seen:
+            seen.add(key)
+            unique.append(blocker)
+    return unique
+
+
+def _oracle_issue_section_from_text(text: str) -> str:
+    """Issue-section deterministic gate; fallback semantics: return unknown when no clear Section/Theorem/Lemma/Proposition token is present."""
+    match = re.search(
+        r"\b((?:Section|Theorem|Lemma|Proposition)\s+[\w.()/-]+)",
+        text or "",
+        re.IGNORECASE,
+    )
+    return match.group(1) if match else "unknown"
+
+
+def _auto_blocker_issue(idx: int, description: str) -> dict:
+    """Auto-blocker deterministic gate; fallback semantics: synthesize only from already-selected Oracle reject text and leave suggested_fix empty."""
+    description = re.sub(r"\s+", " ", description or "").strip()
+    return {
+        "id": f"AUTO{idx}",
+        "severity": "BLOCKER",
+        "section": _oracle_issue_section_from_text(description),
+        "description": description[:800],
+        "suggested_fix": "",
+    }
+
+
+def parse_oracle_issues_strict(response: str) -> list[dict]:
+    """Oracle issue parser deterministic gate; fallback semantics: ambiguous accept/minor output keeps parsed LLM issues, while reject/major output with no parse gets synthesized blockers from explicit text."""
+    issues = parse_oracle_issues(response)
+    verdict = extract_verdict(response)
+    if verdict in {"accept", "minor revision"}:
+        blockers_value = _extract_remaining_blockers_value(response)
+        if blockers_value is not None and re.fullmatch(
+            r"(?:none|n/a|na|-)?", blockers_value.strip(), re.IGNORECASE,
+        ):
+            issues = [
+                issue for issue in issues
+                if not _looks_like_status_row(
+                    " ".join(
+                        str(issue.get(field, ""))
+                        for field in ("section", "description", "suggested_fix")
+                    )
+                )
+            ]
+        return issues
+    if verdict in {"reject", "major revision"} and not issues:
+        fallback_blockers = _extract_fallback_blockers(response)
+        if fallback_blockers:
+            return [
+                _auto_blocker_issue(idx, blocker)
+                for idx, blocker in enumerate(fallback_blockers, 1)
+            ]
+        paragraphs = [
+            re.sub(r"\s+", " ", p).strip()
+            for p in re.split(r"\n\s*\n", response or "")
+            if p.strip()
+        ]
+        description = ""
+        for paragraph in paragraphs:
+            if re.search(
+                r"(reject|blocker|insufficient|not acceptable|not a new|"
+                r"below scope)",
+                paragraph,
+                re.IGNORECASE,
+            ):
+                description = paragraph
+                break
+        if not description:
+            description = paragraphs[0] if paragraphs else (response or "")
+        return [_auto_blocker_issue(1, description)]
+    return issues
+
+
 _ORACLE_FIT_REJECT_RE = re.compile(
     r"(too narrow|too specialized|specialized computational|"
     r"computational note|not (a )?new (general )?"
@@ -3582,6 +3776,52 @@ def _canonical_issue_key(issue_str: str) -> str:
     if markers:
         return " ".join(markers)
     return normalized[:80]
+
+
+def _update_b_issue_streaks(state, verdict: str, response_text: str,
+                            issues: list[dict]) -> Optional[str]:
+    """Stage-B issue-streak deterministic gate; fallback semantics: pass/minor and unknown verdicts return None so the existing Stage B LLM fix loop continues."""
+    streaks = getattr(state, "stage_b_issue_streaks", None)
+    if not isinstance(streaks, dict):
+        streaks = {}
+        state.stage_b_issue_streaks = streaks
+    verdict = (verdict or "").lower().strip()
+    if verdict in {"accept", "minor revision"}:
+        for key in list(streaks):
+            if key != "__journal_fit__":
+                streaks[key] = 0
+        return None
+    if verdict not in {"reject", "major revision"}:
+        return None
+    observed_keys: set[str] = set()
+    for issue in issues or []:
+        if not isinstance(issue, dict):
+            continue
+        key = _canonical_issue_key(
+            f"{issue.get('section', '')} "
+            f"{issue.get('description', '')} "
+            f"{issue.get('suggested_fix', '')}"
+        )
+        if key:
+            observed_keys.add(key)
+    for key in observed_keys:
+        streaks[key] = int(streaks.get(key, 0) or 0) + 1
+    for key in list(streaks):
+        if key != "__journal_fit__" and key not in observed_keys:
+            streaks[key] = 0
+    fit_reject = _classify_oracle_reject(response_text) == "fit"
+    if fit_reject:
+        streaks["__journal_fit__"] = int(streaks.get("__journal_fit__", 0) or 0) + 1
+    else:
+        streaks["__journal_fit__"] = 0
+    if any(
+        key != "__journal_fit__" and int(streaks.get(key, 0) or 0) >= 2
+        for key in observed_keys
+    ):
+        return "B_STUCK_REPEATED_BLOCKER"
+    if int(streaks.get("__journal_fit__", 0) or 0) >= 2:
+        return "B_STUCK_JOURNAL_FIT"
+    return None
 
 
 _VERDICT_PATTERNS = (
@@ -5760,7 +6000,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 
         # ── B3: Parse verdict ────────────────────────────────────
         verdict = extract_verdict(response)
-        issues = parse_oracle_issues(response)
+        issues = parse_oracle_issues_strict(response)
         state.stage_b_verdicts.append(verdict)
 
         # Accumulate ALL Oracle issues across rounds (optimization #1)
@@ -5822,7 +6062,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             response = fresh_resp or response
             verdict = fresh_verdict or verdict
             try:
-                fresh_issues = parse_oracle_issues(response)
+                fresh_issues = parse_oracle_issues_strict(response)
                 if fresh_issues:
                     issues = fresh_issues
                     issues_text_this_round = format_issues_for_codex(fresh_issues)
@@ -5834,6 +6074,59 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 
         # Update consecutive non-pass counter
         consecutive_nonpass += 1
+
+        stuck_gate = _update_b_issue_streaks(state, verdict, response, issues)
+        if stuck_gate == "B_STUCK_JOURNAL_FIT":
+            logger.info(f"{tag} [STAGE-B][STUCK-FIT] repeated journal-fit reject")
+            state.events.append({
+                "stage": "B",
+                "phase": "stage_b_stuck_fit",
+                "round_num": rnd,
+                "timestamp": datetime.now().isoformat(),
+                "streak": state.stage_b_issue_streaks.get("__journal_fit__", 0),
+            })
+            if state.retarget_history:
+                state.block_reason = "B_STUCK_JOURNAL_FIT"
+                state.stage_b_passed = False
+                state.error = "Stage B stuck: repeated journal-fit reject after retarget attempt"
+                update_program_board(
+                    state.paper_name, "B-STUCK",
+                    "repeated journal-fit reject after retarget attempt")
+                save_state(state)
+                return False
+            prior_journal = state.target_journal
+            state.retarget_history.append({
+                "from_journal": prior_journal,
+                "trigger": "stage_b_stuck_journal_fit",
+                "verdicts": state.stage_b_verdicts[-5:],
+                "round": rnd,
+                "timestamp": datetime.now().isoformat(),
+            })
+            state.current_stage = "F"
+            state.stage_f_passed = False
+            state.stage_b_passed = False
+            state.stage_b_verdicts = []
+            state.stage_b_all_issues = []
+            state.stage_b_issue_streaks = {}
+            state.stage_b_reject_classes = []
+            state.stage_b_deepen_conv_id = ""
+            state.stage_b_fresh_attempts = 0
+            state.stage_b_last_fix_summary = ""
+            state.stage_b_rounds = 0
+            update_program_board(
+                state.paper_name, "RETARGET-FIT",
+                f"2 fit-rejects at B{rnd}; reset to Stage F for new journal")
+            save_state(state)
+            return False
+        if stuck_gate == "B_STUCK_REPEATED_BLOCKER":
+            logger.info(f"{tag} [STAGE-B][STUCK-REPEAT] repeated blocker")
+            state.events.append({
+                "stage": "B",
+                "phase": "stage_b_stuck_repeat",
+                "round_num": rnd,
+                "timestamp": datetime.now().isoformat(),
+            })
+        save_state(state)
 
         recent_verdicts = state.stage_b_verdicts[-4:]
         if (
@@ -5913,18 +6206,13 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 issue_texts_by_key.setdefault(key, []).append(issue_text)
 
         current_issue_keys = set(issue_texts_by_key)
-        prior_streaks = dict(state.stage_b_issue_streaks)
-        for key in set(prior_streaks) | current_issue_keys:
-            if key in current_issue_keys:
-                state.stage_b_issue_streaks[key] = prior_streaks.get(key, 0) + 1
-            else:
-                state.stage_b_issue_streaks[key] = 0
         save_state(state)
 
         focused_patch_prefix = ""
+        stuck_threshold = 2 if stuck_gate == "B_STUCK_REPEATED_BLOCKER" else 3
         stuck_keys = [
             key for key in current_issue_keys
-            if state.stage_b_issue_streaks.get(key, 0) >= 3
+            if state.stage_b_issue_streaks.get(key, 0) >= stuck_threshold
         ]
         if stuck_keys and verdict not in ("accept", "minor revision"):
             stuck_keys = sorted(
@@ -5978,7 +6266,22 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 except Exception as exc:
                     logger.warning(f"{tag} gate B: failed to append PI inbox "
                                    f"note: {exc}")
-            save_state(state)
+            keys_at_four = [
+                key for key in stuck_keys
+                if state.stage_b_issue_streaks.get(key, 0) >= 4
+            ]
+            if stuck_gate == "B_STUCK_REPEATED_BLOCKER" and keys_at_four:
+                state.block_reason = "B_STUCK_REPEATED_BLOCKER"
+                state.stage_b_passed = False
+                state.error = (
+                    "Stage B stuck: repeated blocker remained after two "
+                    "focused-patch attempts"
+                )
+                update_program_board(
+                    state.paper_name, "B-STUCK",
+                    "repeated blocker after focused-patch attempts")
+                save_state(state)
+                return False
 
         # Build a short fix summary for the NEXT round's deepen follow-up
         # prompt: ChatGPT only needs to know what we addressed, not the
@@ -6189,7 +6492,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 oracle_response, encoding="utf-8")
 
         oracle_verdict = extract_verdict(oracle_response)
-        oracle_issues = parse_oracle_issues(oracle_response)
+        oracle_issues = parse_oracle_issues_strict(oracle_response)
         oracle_pass = oracle_verdict == "accept"
         state.log_event("C", "oracle_final_review", round_num=rnd,
                         verdict=oracle_verdict,
