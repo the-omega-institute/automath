@@ -141,6 +141,7 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         "candidate_hash": record.get("candidate_hash", ""),
         "source_blob": record.get("source_blob", ""),
         "change_kind": record.get("change_kind", ""),
+        "status": record.get("status"),
         "gate_status": gate_status,
         "readiness": readiness or "unsynthesized",
         "readiness_confidence": synthesis.get("readiness_confidence", ""),
