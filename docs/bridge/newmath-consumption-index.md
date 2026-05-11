@@ -5,7 +5,7 @@ It records NewMath-to-Automath candidates, readiness, and blocking
 reasons without writing Automath paper or Lean content. Automath durable
 paper writes remain behind the Killo/golden distillation lane.
 
-Input source: `synthesis`.
+Input source: `gate`.
 
 ## Readiness Summary
 
