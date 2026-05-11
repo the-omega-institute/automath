@@ -2042,6 +2042,61 @@ def update_program_board(paper_name: str, stage: str, detail: str) -> None:
         logger.warning(f"Failed to update PROGRAM_BOARD: {e}")
 
 
+def _add_to_submission_queue(paper_name: str, target_journal: str,
+                             note: str) -> None:
+    """Append paper to PROGRAM_BOARD.md '手动投稿队列' section.
+
+    Called when a paper reaches the C-DONE terminal-pass gate so the
+    user has a single place to look for submission-ready papers without
+    scanning the full status table. Idempotent: if the paper is already
+    in the queue, no-op.
+    """
+    if not PROGRAM_BOARD.exists():
+        return
+    try:
+        with git_repo_lock():
+            text = PROGRAM_BOARD.read_text(encoding="utf-8")
+            lines = text.split("\n")
+
+            queue_start = None
+            for idx, line in enumerate(lines):
+                if line.startswith("## 手动投稿队列"):
+                    queue_start = idx
+                    break
+            if queue_start is None:
+                logger.warning(
+                    "PROGRAM_BOARD: '手动投稿队列' section not found; "
+                    f"could not enqueue {paper_name}")
+                return
+
+            queue_end = len(lines)
+            for j in range(queue_start + 1, len(lines)):
+                if lines[j].startswith("## "):
+                    queue_end = j
+                    break
+
+            queue_block = "\n".join(lines[queue_start:queue_end])
+            if f"`{paper_name}`" in queue_block:
+                logger.info(
+                    f"PROGRAM_BOARD queue: {paper_name} already present")
+                return
+
+            insert_pos = queue_end
+            while insert_pos > queue_start and not lines[insert_pos - 1].strip():
+                insert_pos -= 1
+
+            safe_note = (note or "").replace("|", "\\|").replace("\n", " ")
+            new_row = f"| `{paper_name}` | {target_journal or '—'} | {safe_note} |"
+            lines.insert(insert_pos, new_row)
+            PROGRAM_BOARD.write_text("\n".join(lines), encoding="utf-8")
+            _invalidate_board_cache()
+            logger.info(
+                f"PROGRAM_BOARD queue: enqueued {paper_name} "
+                f"({target_journal})")
+    except Exception as e:
+        logger.warning(f"Failed to enqueue {paper_name}: {e}")
+
+
 def verify_substantive_change(paper_path: Path,
                                pre_theorems: list[tuple[str, str]],
                                min_new_theorems: int = 1,
@@ -7025,12 +7080,16 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         # ── Gate: submit → Stage D ───────────────────────────────
         if oracle_pass and claude_pass and not oracle_issues and not issues:
             logger.info(f"{tag} STAGE C PASSED at round {rnd}: "
-                        "Oracle + Claude approved")
+                        "Oracle + Codex approved")
             git_commit(paper_path,
                        f"Stage C (joint pass, {rnd}R): "
-                       f"Oracle and Claude approved for submission", tag=tag)
+                       f"Oracle and Codex approved for submission", tag=tag)
             update_program_board(state.paper_name, "C-DONE",
-                                 f"Oracle+Claude: pass, {rnd} rounds")
+                                 f"Oracle+Codex: pass, {rnd} rounds")
+            _add_to_submission_queue(
+                state.paper_name, state.target_journal,
+                f"C-DONE round {rnd}: Oracle accept + Codex submit; "
+                "需准备 cover letter + metadata")
             state.stage_c_passed = True
             save_state(state)
             return True
