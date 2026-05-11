@@ -45,7 +45,7 @@
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | ✅ 可投稿 — C-8 (Oracle accept + Claude submit, 4/5 轮一致；需 cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
-| `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | — |
+| `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit unclear failure) | — |
 | `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | — | 待分诊 | — |
 | `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | 待分诊 | — |
 | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | — | 待分诊 | — |
