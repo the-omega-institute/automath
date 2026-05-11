@@ -154,8 +154,10 @@ def _sample_recent_oracle_responses(
             if was_cut:
                 excerpt += "...[truncated]"
             verdict_match = re.search(
-                r"^Overall verdict:\s*(.+?)$", text,
-                flags=re.MULTILINE | re.IGNORECASE)
+                r"(?:overall\\s+verdict|recommendation|decision|final\\s+verdict)\\s*[:\\-]\\s*"
+                r"(accept(?:ed)?|minor\\s+revision|major\\s+revision|reject(?:ion)?)",
+                text,
+                flags=re.IGNORECASE)
             sample.append({
                 "paper": paper,
                 "file_basename": path.name,
