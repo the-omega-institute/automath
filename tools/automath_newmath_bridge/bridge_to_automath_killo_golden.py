@@ -167,6 +167,7 @@ def run_distillation_supervisor(
     *,
     branch: str,
     name: str,
+    review_backend: str,
     dry_run: bool,
     push_branch: bool,
     oracle_research: bool,
@@ -183,7 +184,7 @@ def run_distillation_supervisor(
         "--name",
         name,
         "--review-backend",
-        "codex-claude",
+        review_backend,
     ]
     if dry_run:
         cmd.append("--dry-run")
@@ -217,6 +218,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--apply", action="store_true", help="Invoke Automath distillation supervisor")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--push-branch", action="store_true", help="Push the Automath bridge branch after successful writeback")
+    parser.add_argument(
+        "--review-backend",
+        choices=["codex", "codex-claude", "claude"],
+        default="codex-claude",
+        help="Automath distillation reviewer backend; codex-claude falls back to Codex when Claude is unavailable",
+    )
     parser.add_argument("--oracle-research", action="store_true")
     parser.add_argument("--oracle-deepening", action="store_true")
     args = parser.parse_args(argv)
@@ -231,8 +238,18 @@ def main(argv: list[str] | None = None) -> int:
         "candidate_packets": [str(path.relative_to(REPO_ROOT)) for path in paths],
         "apply": bool(args.apply),
         "push_branch": bool(args.push_branch),
+        "review_backend": args.review_backend,
+        "fallback_policy": (
+            "Automath distillation owns review fallback. With review_backend=codex-claude, "
+            "Codex review remains sufficient when Claude is unavailable or quota-limited."
+        ),
     }
     if not paths:
+        summary["status"] = "no_eligible_records"
+        summary["reason"] = (
+            "No NewMath-to-Automath records passed bridge gates with accepted/consumed "
+            "operator status, so Killo/golden writeback was not attempted."
+        )
         print(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True))
         return 0
     if args.apply:
@@ -241,6 +258,7 @@ def main(argv: list[str] | None = None) -> int:
         summary["distillation"] = run_distillation_supervisor(
             branch=args.branch,
             name=name,
+            review_backend=args.review_backend,
             dry_run=args.dry_run,
             push_branch=args.push_branch,
             oracle_research=args.oracle_research,

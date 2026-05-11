@@ -242,7 +242,10 @@ def run_pipeline(
         raise RuntimeError((result.stderr or result.stdout or "bridge pipeline failed").strip())
 
 
-def run_synthesis_report(config_path: Path) -> None:
+def run_synthesis_report(config_path: Path, *, enabled: bool, timeout: int) -> None:
+    if not enabled:
+        _log("standalone synthesis report: skipped; run_bridge_pipeline already synthesizes records")
+        return
     config = _load_config(config_path)
     inbox = REPO_ROOT / str(config.get("inbox_path"))
     output = SCRIPT_DIR / "out" / "bridge_synthesis.jsonl"
@@ -259,7 +262,7 @@ def run_synthesis_report(config_path: Path) -> None:
         "--report",
         str(report),
     ]
-    result = run_command(cmd)
+    result = run_command(cmd, timeout=timeout)
     if result.stdout.strip():
         _log(result.stdout.strip())
     if result.returncode != 0:
@@ -294,6 +297,8 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
         str(cfg.get("branch") or "bridge/automath-newmath-consumption"),
         "--limit",
         str(int(cfg.get("max_candidates_per_pass") or 1)),
+        "--review-backend",
+        str(cfg.get("review_backend") or "codex-claude"),
     ]
     if apply:
         cmd.append("--apply")
@@ -380,7 +385,11 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
         limit_per_rule=args.limit_per_rule,
         scan_limit_per_rule=args.scan_limit_per_rule,
     )
-    run_synthesis_report(config_path)
+    run_synthesis_report(
+        config_path,
+        enabled=bool(args.run_standalone_synthesis),
+        timeout=args.standalone_synthesis_timeout,
+    )
     gate_results = run_gates(config_path, allow_publication_risk=args.allow_publication_risk)
 
     automath_apply = bool(args.apply_automath_writeback or config.get("automath_writeback", {}).get("apply_by_default", False))
@@ -419,6 +428,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--allow-publication-risk", action="store_true", help="Suppress publication-risk gate warnings")
     parser.add_argument("--limit-per-rule", type=int, default=50)
     parser.add_argument("--scan-limit-per-rule", type=int, default=0, help="Limit candidate path scans per discovery rule")
+    parser.add_argument(
+        "--run-standalone-synthesis",
+        action="store_true",
+        help="Run the legacy standalone bridge_synthesis report after run_bridge_pipeline",
+    )
+    parser.add_argument("--standalone-synthesis-timeout", type=int, default=120)
     parser.add_argument(
         "--apply-automath-writeback",
         action="store_true",
