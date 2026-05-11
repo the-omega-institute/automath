@@ -185,14 +185,16 @@ linear algebra when the transition table is integral.
 
 This density dichotomy is classical; compare
 \cite{Berstel1973,BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity,Koga2019Density}.
-We keep the short proof because the residue-class constants are used in
-the prime corollaries below.
+It is not the new ingredient of the paper; we keep the short proof
+because the residue-class constants are the input certified in
+\Cref{thm:effective-fixed-dfa-prime-obstruction} and then used in the
+prime corollaries below.
 
 \begin{lemma}[Explicit prime-counting input]
   \label{lem:explicit-pnt-input}
   The following numerical constants are admissible:
   \[
-    X_0=5393,\qquad C_{\pi,1}=2,\qquad C_{\pi,2}=2.
+    X_0=355991,\qquad C_{\pi,1}=2,\qquad C_{\pi,2}=2.
   \]
   For every \(x\ge X_0\),
   \[
@@ -205,19 +207,16 @@ the prime corollaries below.
 
 \begin{proof}
   Rosser--Schoenfeld prove \(\pi(x)>x/\log x\) for \(x\ge17\)
-  \cite{RosserSchoenfeld1962}. Dusart's explicit upper estimate gives
+  \cite{RosserSchoenfeld1962}. Dusart's explicit upper estimate
+  \cite[Theorem~1.10]{Dusart2010} gives
   \[
     \pi(x)\le
       \frac{x}{\log x}\left(1+\frac{1}{\log x}
         +\frac{2.51}{(\log x)^2}\right)
-    \qquad (x>1)
+    \qquad (x\ge355991).
   \]
-  by Dusart \cite[Theorem~1.10]{Dusart2010}. We use this source only
-  for the displayed explicit numerical inequality. This is enough for
-  the present lemma because no later argument depends on sharp
-  constants; any published explicit-PNT estimate with comparable
-  constants may be substituted without changing the argument. Since
-  \(\log 5393>8\), for \(x\ge5393\) we have
+  These are the exact published inputs used here. Since
+  \(\log 355991>12\), for \(x\ge355991\) we have
   \[
     0\le \pi(x)-\frac{x}{\log x}
     \le \frac{x}{(\log x)^2}
@@ -298,7 +297,12 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \]
   This is an effective finite search, because the left-hand side is
   \(O(1/m)\) and the factor on the right tends to
-  \((1-1/b)/(2L_b)>0\).
+  \((1-1/b)/(2L_b)>0\). Concretely, one enumerates
+  \(M=2,3,\ldots\), tests the displayed rational-logarithmic inequality
+  for all \(m\ge M\) after the elementary monotonicity threshold of its
+  two sides, and then directly checks the finitely many preceding
+  \(m\)'s. This produces a reproducible value of \(M_b\), not an
+  unspecified asymptotic threshold.
   The leading-digit convention gives the exact half-open interval count
   \[
     \abs{\mathcal P_m^{(b)}}=\pi(b^m-1)-\pi(b^{m-1}-1).
@@ -518,6 +522,16 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   \(K_r\) is enlarged before the certificate is printed. Thus the
   certificate verifies the displayed inequality for all
   \(m\equiv r\bmod D_A\) with \(m\ge N_r\).
+
+  Thus the verifier never appeals to an unnamed finite-chain formula.
+  Its normal form for each entry of \(P^m-S_r\) is the explicit finite
+  list consisting of the direct transient powers \(T^m\), the recurrent
+  return-error terms \(W_{j,t,a}E_{j,t+a}^h\), the residue-grouped
+  convolutions just displayed, and the geometric resolvent tails
+  \((I-T^{D_A})^{-1}T^u\). Each listed matrix is rational once the
+  stationary vectors and cyclic projections have been solved over
+  \(\QQ\), and each inequality is reduced to rational norm bounds plus
+  the certified root-isolation comparisons above.
 \end{proof}
 
 \begin{theorem}[Algorithmic fixed-DFA prime-slice obstruction]
@@ -553,7 +567,14 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \(m\equiv r\pmod {d_j}\) the recurrent chain lies in
     \(R_{j,t+r}\). The displayed series is evaluated exactly as a
     finite family of linear solves after grouping \(\ell\) modulo
-    \(d_j\).
+    \(d_j\), namely
+    \[
+      A_{j,t}
+      =
+      \sum_{u=0}^{d_j-1}
+      (I-P_{TT}^{d_j})^{-1}P_{TT}^uP_{T,R_j}
+      S_{j,t+u+1}\mathbf 1 .
+    \]
     \item For each residue \(r\) modulo
     \(D_A=\operatorname{lcm}_j d_j\), the compressed formula
     \[
@@ -659,7 +680,17 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     verified after grouping \(\ell\bmod D_A\) as a finite list of
     geometric resolvents \((I-T^{D_A})^{-1}T^u\). The verifier checks
     each displayed identity by rational matrix multiplication and exact
-    inversion over \(\QQ\).
+    inversion over \(\QQ\). For the first finite convolution, the
+    verifier further splits \(\ell=u+D_Aq\), records the exact affine
+    exponent \(h(q)=q+h_0\) attached to the relevant return-error block,
+    and checks only the resulting finite residue list
+    \[
+      \sum_{q=0}^{Q(m,u)}
+        X_{u}T^{D_Aq}Y_{u}E_{j,t_u}^{q+h_0}Z_{u},
+    \]
+    with all matrices \(X_u,Y_u,Z_u\) rational and with the finitely
+    many exceptional \(h_0<0\) terms moved to the direct finite-check
+    list. This is the normal form for every convolution term.
     \item The exact convolution bounds attached to the preceding
     expansion. For every direct term \(X A^nY\) the certificate lists
     the rational product
@@ -1248,6 +1279,8 @@ be the period of \(B_N\).
   \(x\in C_i\), \(y\in C_j\) is joined by at least one path of length
   \(n\). The threshold is uniform over the finite pair
   \(C_i\times C_j\).
+  This is the elementary cyclic-class input used in the denominator
+  positivity argument; it is not a separate contribution.
 \end{lemma}
 
 \begin{proof}
@@ -1281,6 +1314,8 @@ be the period of \(B_N\).
     z_m=\lambda^m\bigl(d_{m\bmod d_N}+O(\theta_N^m)\bigr)
     \qquad (m\to\infty).
   \]
+  This is used only for trim strongly connected presentations; no
+  multiple-maximal-component extension is asserted here.
 \end{lemma}
 
 \begin{proof}
@@ -1366,6 +1401,9 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
     a_m(\mathcal A,\mathcal N)
     =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr).
   \]
+  This is a background product-expansion lemma for the fixed trim
+  strongly connected presentation setting; it supplies constants for
+  \Cref{thm:parry-density} and not a broader multicomponent theorem.
 \end{lemma}
 
 \begin{proof}
@@ -1504,6 +1542,10 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   it stays bounded below by a positive constant along an arithmetic
   progression of lengths that contains infinitely many indices with
   \(z_m>0\).
+  This theorem is a background conditional-density tool for the stated
+  trim strongly connected deterministic setting; the new finite-budget
+  use of it is isolated in
+  \Cref{cor:relative-finite-budget-obstruction}.
 \end{theorem}
 
 \begin{proof}
