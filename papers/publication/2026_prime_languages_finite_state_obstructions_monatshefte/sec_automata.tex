@@ -420,15 +420,21 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   (\(\eta=\tau_r\) for \(T\), and
   \(\eta=\tau_r^{d_j}\) for \(E_{j,t}\)). Choose a rational
   \(\gamma\) with \(\rho(A)<\gamma<\eta\). From the root isolating
-  intervals we compute a rational \(\delta>0\) such that
+  rectangles we compute a rational \(\delta>0\) such that
   \[
     |\det(zI-A)|\ge\delta\qquad(|z|=\gamma).
   \]
-  Indeed, the product formula for the determinant and the strict root
-  separation from the circle \(|z|=\gamma\) give such a lower bound.
-  The adjugate entries of \(zI-A\) are polynomials in \(z\), so their
-  absolute values on the same circle have an elementary rational upper
-  bound \(U\) obtained from the coefficients of \(A\). Cauchy's formula
+  Indeed, if \(R_\xi\) is the isolating rectangle for a root \(\xi\),
+  exact rational interval arithmetic gives a positive rational lower
+  bound \(\Delta_\xi\) for
+  \(\inf\{|z-w|:|z|=\gamma,\ w\in R_\xi\}\); positivity follows from
+  \(\rho(A)<\gamma\) and from the disjoint certified rectangles. The
+  product \(\prod_\xi\Delta_\xi\) is a valid determinant lower bound,
+  counted with algebraic multiplicity. The adjugate entries of
+  \(zI-A\) are polynomials in \(z\), so their absolute values on the
+  same circle have an elementary rational upper bound \(U\) obtained
+  from the coefficients of \(A\) and the identity \(|z|=\gamma\).
+  Cauchy's formula
   for the matrix resolvent gives
   \[
     A^m=\frac{1}{2\pi i}\int_{|z|=\gamma}z^m(zI-A)^{-1}\,dz,
@@ -647,11 +653,17 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \(A\in\{T\}\cup\{E_{j,t}\}_{j,t}\), with
     \(\rho(A)<\gamma_A<\tau_r\) for \(A=T\) and
     \(\rho(A)<\gamma_A<\tau_r^{d_j}\) for \(A=E_{j,t}\). The verifier
-    checks, using the same isolating intervals and rational interval
-    arithmetic, that
+    checks, using the same isolating rectangles and rational interval
+    arithmetic, that every rectangle lies strictly inside the circle
+    \(|z|=\gamma_A\) and supplies a positive rational distance
+    \(\Delta_\xi\) from the rectangle to that circle. Therefore
     \[
-      |\det(zI-A)|\ge\delta_A\quad(|z|=\gamma_A),
-      \qquad
+      |\det(zI-A)|\ge \prod_{\xi}\Delta_\xi=:\delta_A
+      \qquad(|z|=\gamma_A),
+    \]
+    with roots counted with algebraic multiplicity. The verifier also
+    checks the elementary coefficient bound
+    \[
       \|\operatorname{adj}(zI-A)\|_\infty\le U_A,
     \]
     and hence that \(\|A^n\|_\infty\le L_A\gamma_A^n\) for all
@@ -687,23 +699,39 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     geometric resolvents \((I-T^{D_A})^{-1}T^u\). The verifier checks
     each displayed identity by rational matrix multiplication and exact
     inversion over \(\QQ\). For the first finite convolution, the
-    verifier further splits \(\ell=u+D_Aq\), records the exact affine
-    exponent \(h(q)=q+h_0\) attached to the relevant return-error block,
-    and checks only the resulting finite residue list
+    verifier further splits \(\ell=u+D_Aq\). If the recurrent factor in
+    that residue has length \(m-1-\ell=d_jh+a\), with
+    \(0\le a<d_j\), then
+    \[
+      h=H_{m,u}-L_jq,\qquad
+      L_j:=D_A/d_j,\qquad
+      H_{m,u}:=(m-1-u-a)/d_j .
+    \]
+    The integer \(a\) is fixed by the listed residue class, so
+    \(H_{m,u}\) is integral and the return-error exponent decreases as
+    \(q\) increases. The certificate records only the terms with
+    \(H_{m,u}-L_jq\ge1\); the finitely many smaller recurrent exponents
+    are moved to the direct finite-check list. The resulting finite
+    residue list is
     \[
       \sum_{q=0}^{Q(m,u)}
-        X_{u}T^{D_Aq}Y_{u}E_{j,t_u}^{q+h_0}Z_{u},
+        X_{u}T^{D_Aq}Y_{u}E_{j,t_u}^{H_{m,u}-L_jq}Z_{u},
     \]
-    with all matrices \(X_u,Y_u,Z_u\) rational and with the finitely
-    many exceptional \(h_0<0\) terms moved to the direct finite-check
-    list. This is the normal form for every convolution term.
+    with all matrices \(X_u,Y_u,Z_u\) rational. This is the normal form
+    for every convolution term.
     \item The exact convolution bounds attached to the preceding
     expansion. For every direct term \(X A^nY\) the certificate lists
     the rational product
     \(\|X\|_\infty L_A\|Y\|_\infty\eta^n\). For every convolution term
     it lists the rational coefficient \(C\) in
-    \(C\,m\tau_r^{m-1}\), and for every tail it lists the rational
-    coefficient in
+    \(C\,m\tau_r^{m-1-\kappa}\), where the bounded offset
+    \(\kappa<\max_j d_j\) comes from the residue \(a\) above and is
+    absorbed into the printed coefficient. Indeed
+    \(T^{D_Aq}\) contributes at most \(\tau_r^{D_Aq}\), while
+    \(E_{j,t_u}^{H_{m,u}-L_jq}\) contributes at most
+    \(\tau_r^{d_jH_{m,u}-D_Aq}\); the \(q\)-dependence cancels, and the
+    number of terms is at most \(m\). For every tail it lists the
+    rational coefficient in
     \(C\,\tau_r^m/(1-\tau_r^{D_A})\). Summing these finitely many
     coefficients gives the stated coefficient bound
     proving
@@ -1221,7 +1249,7 @@ corollaries below.
   neither is compatible with \(a_m(\mathcal A)\asymp b^m/m\).
 \end{proof}
 
-\subsection{Relative density for trim strongly connected presentations}
+\subsection{Relative density for deterministic presentations}
 
 We use the following deterministic presentation convention in the
 relative-density statements.
@@ -1260,6 +1288,162 @@ relative-density statements.
   defined. Completing \(\mathcal A\) by a sink state, when desired, does
   not change the intersection language.
 \end{definition}
+
+We first record the finite-budget statement in the general
+multicomponent form. This is the version needed when the deterministic
+presentation is trim but its adjacency matrix has several maximal
+strongly connected components, possibly connected by transient paths.
+The polynomial factors in the statement are exactly the factors absent
+from the strongly connected specialization below.
+
+\begin{theorem}[Multicomponent finite-budget obstruction]
+  \label{thm:multicomponent-finite-budget}
+  Let
+  \(\mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N)\) be a trim deterministic
+  presentation, not necessarily strongly connected. Let \(B_N\) be its
+  adjacency matrix, let \(\lambda:=\rho(B_N)>1\), and put
+  \(z_m=\abs{L(\mathcal N)\cap\Sigma^m}\). Then there are an integer
+  period \(D\ge1\), a number \(0<\theta<\lambda\), an integer
+  \(S\ge0\), and, for every residue \(r\bmod D\), an exponent
+  \(s_r\in\{-\infty,0,\dots,S\}\) and a constant \(d_r\ge0\) such that
+  \(s_r=-\infty\) exactly on residue classes with only finitely many
+  accepted lengths, while on every relevant residue class
+  \(s_r\ge0\), \(d_r>0\), and
+  \[
+    z_m
+    =
+    \lambda^m
+    \left(
+      d_r m^{s_r}
+      +O(m^{s_r-1})
+    \right)
+    +O(\theta^m m^S),
+    \qquad m\equiv r\pmod D .
+  \]
+  The convention is that the \(O(m^{-1})\) term is absent when
+  \(s_r=0\).
+
+  For every deterministic automaton \(\mathcal A\) over \(\Sigma\) and
+  \[
+    a_m(\mathcal A,\mathcal N)
+    :=\abs{L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m},
+  \]
+  after replacing \(D,S,\theta\) by common choices there are exponents
+  \(t_r\in\{-\infty,0,\dots,S\}\) and constants \(e_r\ge0\) such that
+  on every residue class
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =
+    \lambda^m
+    \left(
+      e_r m^{t_r}
+      +O(m^{t_r-1})
+    \right)
+    +O(\theta^m m^S),
+  \]
+  with the same convention when \(t_r=0\); if the intersection has
+  exponential growth \(<\lambda\) on that residue, then \(t_r=-\infty\)
+  and the first displayed polynomial part is absent. Moreover, whenever
+  \(z_m>0\) eventually on \(r\bmod D\), either \(t_r=-\infty\) or
+  \(t_r\le s_r\), and if \(t_r=s_r\) then \(0\le e_r\le d_r\).
+
+  Consequently, let \(T_m\subseteq L(\mathcal N)\cap\Sigma^m\) satisfy
+  \[
+    \alpha\frac{\lambda^m}{m}
+    \le \abs{T_m}
+    \le \beta\frac{\lambda^m}{m}
+  \]
+  for all sufficiently large relevant lengths \(m\), with fixed
+  \(\alpha,\beta>0\). For every fixed deterministic automaton
+  \(\mathcal A\) there is a constant
+  \(C_{\mathcal A,\mathcal N,T}>0\) such that
+  \[
+    \abs{(L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m)\triangle T_m}
+    \ge
+    C_{\mathcal A,\mathcal N,T}\frac{\lambda^m}{m}
+  \]
+  for all sufficiently large relevant \(m\). On each relevant residue
+  class either the recall against \(T_m\) tends to \(0\) exponentially
+  or polynomially, or else the precision is \(O(1/m)\) whenever it is
+  defined.
+\end{theorem}
+
+\begin{proof}
+  Put \(B_N\) in Frobenius normal form. For a finite non-negative
+  integer matrix, the rational generating function
+  \(u_N^{\mathsf T}(I-xB_N)^{-1}v_N\) has poles at reciprocals of
+  eigenvalues of \(B_N\), and the coefficients are finite sums of
+  terms \(p_{\mu}(m)\mu^m\), where \(p_\mu\) is a polynomial whose
+  degree is one less than the size of the largest Jordan block attached
+  to \(\mu\), plus exponentially smaller terms. Equivalently, this is
+  the Frobenius normal form or transfer-matrix expansion for regular
+  languages; see \cite{SalomaaSoittola1978,BerstelReutenauer2011}.
+  For a non-negative matrix, the eigenvalues of modulus \(\lambda\)
+  that contribute to accepted paths are roots of unity times
+  \(\lambda\), arising from maximal components and chains between them.
+  Taking \(D\) to be a common period of those components makes the
+  peripheral factors constant on each residue class. On a fixed residue
+  \(r\bmod D\), collect the largest remaining polynomial degree as
+  \(s_r\). Trimness and non-negativity imply that if the residue has
+  accepted words for all sufficiently large indices in the class, then
+  the leading coefficient \(d_r\) is positive: the coefficient is the
+  sum of the non-negative leading contributions of maximal
+  component-chains realizing that residue. This gives the displayed
+  expansion for \(z_m\). Residues with only finitely many accepted
+  lengths are assigned \(s_r=-\infty\).
+
+  Form the synchronous product of \(\mathcal N\) with \(\mathcal A\),
+  trim unreachable or non-coaccessible states, and let \(B'\) be its
+  adjacency matrix. Its accepted-word count is
+  \(a_m(\mathcal A,\mathcal N)=u'^{\mathsf T}(B')^m v'\), so the same
+  transfer-matrix expansion applies. Its exponential growth rate is at
+  most \(\lambda\), because every accepted product word projects
+  injectively to a word of \(L(\mathcal N)\). If the product growth rate
+  is \(<\lambda\) on a residue class, it is absorbed into
+  \(O(\theta^m m^S)\) after increasing \(\theta\) below \(\lambda\) and
+  increasing \(S\). If the product has growth \(\lambda\), its leading
+  polynomial degree on a relevant residue cannot exceed \(s_r\);
+  otherwise \(a_m(\mathcal A,\mathcal N)\le z_m\) would fail along that
+  residue for large \(m\). The same inequality gives \(e_r\le d_r\)
+  when \(t_r=s_r\).
+
+  Fix a relevant residue class and put
+  \(A_m=L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m\). If
+  \(t_r=-\infty\), then \(\abs{A_m}=O(\theta^m m^S)\), and hence
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{T_m}}
+    \le
+    O(m^{S+1}(\theta/\lambda)^m),
+  \]
+  so recall decays exponentially and
+  \(\abs{A_m\triangle T_m}\ge(\alpha/2)\lambda^m/m\) for all large
+  \(m\) in the residue.
+
+  Suppose next that the first non-zero leading term in the expansion of
+  \(a_m(\mathcal A,\mathcal N)\) on this residue is
+  \(\gamma_r\lambda^m m^{u_r}\), with \(\gamma_r>0\) and \(u_r\ge0\).
+  Then, for all large \(m\) in the residue,
+  \(\abs{A_m}\ge(\gamma_r/2)\lambda^m m^{u_r}\). Since
+  \(\abs{T_m}\le\beta\lambda^m/m\),
+  \[
+    \abs{A_m\triangle T_m}
+    \ge \abs{A_m}-\abs{T_m}
+    \ge \frac{\gamma_r}{4}\lambda^m m^{u_r}
+    \ge \frac{\gamma_r}{4}\frac{\lambda^m}{m},
+  \]
+  after enlarging the threshold. Whenever \(\abs{A_m}>0\),
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{A_m}}
+    \le
+    \frac{2\beta}{\gamma_r}\frac{1}{m^{u_r+1}}
+    \le
+    \frac{2\beta}{\gamma_r}\frac1m .
+  \]
+  If no such non-zero polynomial term exists, the residue is in the
+  exponentially smaller case already handled. There are only finitely
+  many relevant residue classes, so taking the minimum of the positive
+  constants obtained above proves the uniform finite-budget bound.
+\end{proof}
 
 No additional numeration-system formalism is needed for the next
 theorem beyond such a trim deterministic presentation whose underlying

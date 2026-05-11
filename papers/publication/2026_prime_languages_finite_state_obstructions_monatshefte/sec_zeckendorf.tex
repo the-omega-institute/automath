@@ -211,30 +211,64 @@ and set
   \(\log C_F+m\log\varphi\le C_{\log}m\) hold, so it is enough to test
   the resulting explicit lower bounds for \(m\).
 
-  Choose \(M_0\ge M_{\log}\) by increasing \(M\) until \(F_{m+1}\ge X_0\)
+  Choose \(M_R\ge M_{\log}\) by the following explicit Binet
+  majorization. Write
+  \[
+    F_n=\frac{\varphi^n}{\sqrt5}(1-\varepsilon_n),
+    \qquad
+    \varepsilon_n:=(-1)^n\varphi^{-2n}.
+  \]
+  For \(m\ge1\),
+  \[
+    \frac{F_{m+1}}{F_{m+2}}
+    =
+    \varphi^{-1}
+    \frac{1-\varepsilon_{m+1}}{1-\varepsilon_{m+2}}
+    \le
+    \varphi^{-1}
+    \frac{1+\varphi^{-2m-2}}{1-\varphi^{-2m-4}},
+  \]
+  and, once \(\varphi^{-2m-2}\le1/2\),
+  \[
+    \log F_{m+1}
+    \ge
+    (m+1)\log\varphi-\tfrac12\log5-2\varphi^{-2m-2}.
+  \]
+  Also \(F_{m+2}/F_{m+1}\le3\) for \(m\ge1\), so
+  \[
+    \frac{\log F_{m+2}}{\log F_{m+1}}
+    =
+    1+\frac{\log(F_{m+2}/F_{m+1})}{\log F_{m+1}}
+    \le
+    1+
+    \frac{\log3}
+    {(m+1)\log\varphi-\tfrac12\log5-2\varphi^{-2m-2}},
+  \]
+  whenever the denominator is positive. The right-hand side in the
+  product of the last two displayed upper bounds tends to
+  \(\varphi^{-1}\). Therefore a finite rational search, using rational
+  upper and lower intervals for \(\varphi\) and \(\log\varphi,\log3\),
+  produces \(M_R\) such that for every \(m\ge M_R\)
+  \[
+    \frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}
+    \le\frac{1+\varphi^{-1}}2 .
+  \]
+  This certificate contains no monotonicity assertion about the exact
+  sequence \(R_m\); it verifies a single explicit upper bound that is
+  valid for all \(m\ge M_R\).
+
+  Choose \(M_0\ge M_R\) by increasing \(M\) until \(F_{m+1}\ge X_0\)
   and
   \[
     \frac12\le
     \frac{\log F_{m+2}}{m\log\varphi},
     \frac{\log F_{m+1}}{m\log\varphi}
     \le2,
-    \qquad
-    \frac{F_{m+1}}{F_{m+2}}
-      \frac{\log F_{m+2}}{\log F_{m+1}}
-    \le\frac{1+\varphi^{-1}}2
   \]
   for every \(m\ge M_0\). The logarithmic ratio conditions are checked
-  from the same linear Binet bounds. For the last inequality, the
-  exact sequence
-  \[
-    R_m:=
-    \frac{F_{m+1}}{F_{m+2}}
-      \frac{\log F_{m+2}}{\log F_{m+1}}
-  \]
-  tends to \(\varphi^{-1}\); the algorithm uses interval arithmetic
-  from Binet's formula to certify
-  \(R_m\le(1+\varphi^{-1})/2\) on a monotone tail, and directly checks
-  the finite prefix before that tail. Put
+  from the same linear Binet bounds, while the last displayed
+  product inequality is already certified by the choice of \(M_R\). Put
   \[
     \Delta_m:=
     1-\frac{F_{m+1}}{F_{m+2}}
