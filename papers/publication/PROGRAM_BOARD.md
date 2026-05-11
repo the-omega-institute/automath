@@ -24,7 +24,7 @@
 
 | 目录 | 目标期刊 | 状态 | 改投记录 |
 |------|---------|------|---------|
-| `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Q. | 拒稿 04-20, 转投 FQ | ETDS→JNT→FQ | JNT editor 推荐 FQ; fallback: JSC (IF 1.1) |
+| `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Q. | 拒稿 05-01；FQ/JNT 路线关闭；不回 Stage A | ETDS→JNT→FQ; FQ editor: 更适合 dynamical systems; core 已并入/重叠 DCDS-A 在审稿件 `260511-Zhang-2` |
 | `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS | C-STUCK (Oracle+Claude exhausted 15 rounds) | SIADS→ETDS | fallback: Israel J. Math (IF 1.0), DCDS-A (IF 1.1) |
 | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) | — |
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
