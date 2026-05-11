@@ -19,6 +19,7 @@
 | 论文 | 目标期刊 | 备注 |
 |------|---------|------|
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | C-DONE (Oracle+Claude: pass, 15 rounds) |
+| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | C-DONE: Oracle accept + Codex submit (3 轮一致); D 已完成回流; 需 cover letter + metadata |
 
 ## 全量状态表
 
