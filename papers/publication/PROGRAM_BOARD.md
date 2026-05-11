@@ -27,7 +27,7 @@
 |------|---------|------|---------|
 | `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Q. | 拒稿 04-20, 转投 FQ | ETDS→JNT→FQ | JNT editor 推荐 FQ; fallback: JSC (IF 1.1) |
 | `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS | C-STUCK (Oracle+Claude exhausted 15 rounds) | SIADS→ETDS | fallback: Israel J. Math (IF 1.0), DCDS-A (IF 1.1) |
-| `submitted_2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | 待核实 | 已投 04-07（期刊未证实） | Folder/old board said ETDS, but no cover letter/receipt/metadata found; user notes 05-10 was first ETDS |
+| `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) | — |
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
 | `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | Ramanujan J. | 拒稿 04-20, 转投 RJ | RNT→RJ | 两位 editor 均推荐 FQ; fallback: FQ, Bull. Malaysian (IF 1.2) |
 | `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | C-DONE (Oracle+Claude: pass, 6 rounds) | Nonlinearity→DCDS-A | fallback: J. Diff. Eqs. Apps. (IF 1.1), Dynamical Systems |
