@@ -370,6 +370,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--allow-dirty", action="store_true", help="Allow tracked dirty worktree before running")
     parser.add_argument("--allow-publication-risk", action="store_true", help="Suppress publication-risk gate warnings")
     parser.add_argument("--limit-per-rule", type=int, default=50)
+    parser.add_argument("--scan-limit-per-rule", type=int, default=0, help="Limit candidate path scans per discovery rule")
     parser.add_argument(
         "--apply-automath-writeback",
         action="store_true",
