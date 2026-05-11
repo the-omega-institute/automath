@@ -18,7 +18,7 @@
 
 | 论文 | 目标期刊 | 备注 |
 |------|---------|------|
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | C round 8，最近 5 轮 Oracle accept + Claude submit (4/5)。可手动投稿；需准备 cover letter + metadata |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | C-DONE (Oracle+Claude: pass, 15 rounds) |
 
 ## 全量状态表
 
