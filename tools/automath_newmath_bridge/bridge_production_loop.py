@@ -272,11 +272,11 @@ def _commit_if_changed(paths: list[Path], message: str, *, push: bool) -> dict[s
     result: dict[str, Any] = {"status": "committed", "stdout": commit.stdout.strip()}
     if push:
         branch = _git(["branch", "--show-current"], timeout=30).stdout.strip()
-        if branch.startswith("codex/"):
+        if branch.startswith(("codex/", "bridge/")):
             pushed = _git(["push", "origin", branch], timeout=300)
             result["push"] = "ok" if pushed.returncode == 0 else pushed.stderr.strip()
         else:
-            result["push"] = f"skipped non-codex branch {branch}"
+            result["push"] = f"skipped non-bridge branch {branch}"
     return result
 
 
