@@ -88,10 +88,12 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         warnings.append("publication-risk record requires explicit operator approval before any public-facing use")
 
     if readiness == "observe_only":
-        warnings.append("synthesis is observe_only; local packet is suppressed until readiness changes")
+        issues.append("synthesis is observe_only; local packet is suppressed until readiness changes")
+        passed = False
 
     if readiness.startswith("blocked"):
-        warnings.append(f"synthesis readiness is {readiness}; local packet is review-only and durable write remains blocked")
+        issues.append(f"synthesis readiness is {readiness}; candidate is not receivable until the blocking gate is cleared")
+        passed = False
 
     if record.get("taste_gate_required") and "taste" not in (
         str(record.get("notes", "")) + " " + str(record.get("audit_boundary", ""))

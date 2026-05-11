@@ -81,16 +81,44 @@ def _load_records(args: argparse.Namespace) -> tuple[list[dict[str, Any]], str]:
     return synthesis_records, "synthesis"
 
 
-def _selected(records: list[dict[str, Any]], *, limit: int) -> list[dict[str, Any]]:
-    selected = [
+def _direction_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
         record
         for record in records
         if record.get("bridge_direction") == "newmath_to_automath"
         and record.get("destination_repo") == "the-omega-institute/automath"
-        and record.get("gate_status") in {"gate_passed", "synthesis_ready"}
     ]
+
+
+def _pre_gate_passed(record: dict[str, Any]) -> bool:
+    readiness = str(record.get("readiness") or "")
+    if record.get("gate_status") not in {"gate_passed", "synthesis_ready"}:
+        return False
+    if readiness != "ready_for_local_packet":
+        return False
+    if record.get("taste_gate_required") and not str(record.get("readiness_confidence") or ""):
+        return False
+    return True
+
+
+def _post_gate_state(record: dict[str, Any]) -> str:
+    if not _pre_gate_passed(record):
+        return "not_selected"
+    if record.get("operator_review_required") and record.get("status") not in {"accepted", "consumed"}:
+        return "awaiting_operator_acceptance"
+    return "eligible_for_killo_golden_distillation"
+
+
+def _selected(records: list[dict[str, Any]], *, limit: int) -> list[dict[str, Any]]:
+    selected = [record for record in _direction_records(records) if _pre_gate_passed(record)]
     selected.sort(key=lambda item: (-int(item.get("priority_score") or 0), str(item.get("source_path") or "")))
     return selected[:limit]
+
+
+def _blocked(records: list[dict[str, Any]], *, limit: int) -> list[dict[str, Any]]:
+    blocked = [record for record in _direction_records(records) if not _pre_gate_passed(record)]
+    blocked.sort(key=lambda item: (-int(item.get("priority_score") or 0), str(item.get("source_path") or "")))
+    return blocked[:limit]
 
 
 def _readiness_bucket(readiness: str) -> str:
@@ -105,8 +133,10 @@ def _readiness_bucket(readiness: str) -> str:
 
 def _render(records: list[dict[str, Any]], *, limit: int, input_kind: str) -> str:
     selected = _selected(records, limit=limit)
+    blocked = _blocked(records, limit=limit)
+    direction_records = _direction_records(records)
     counts: dict[str, int] = {}
-    for record in selected:
+    for record in direction_records:
         readiness = str(record.get("readiness") or "unknown")
         counts[readiness] = counts.get(readiness, 0) + 1
     lines = [
@@ -118,6 +148,8 @@ def _render(records: list[dict[str, Any]], *, limit: int, input_kind: str) -> st
         "paper writes remain behind the Killo/golden distillation lane.",
         "",
         f"Input source: `{input_kind}`.",
+        "",
+        f"Selection gate: `{len(selected)}` receivable item(s), `{len(blocked)}` blocked or review-only item(s).",
         "",
         "## Readiness Summary",
         "",
@@ -131,42 +163,68 @@ def _render(records: list[dict[str, Any]], *, limit: int, input_kind: str) -> st
     lines.extend(
         [
             "",
-            "## Current NewMath Inputs",
+            "## Receivable NewMath Inputs",
             "",
-            "| Source | Kind | Readiness | Score | Automath action |",
-            "| --- | --- | --- | ---: | --- |",
+            "| Source | Kind | Readiness | Score | Post-gate state | Automath action |",
+            "| --- | --- | --- | ---: | --- | --- |",
         ]
     )
     for record in selected:
         source = f"{record.get('source_repo')}@{record.get('source_branch_or_ref')}:{record.get('source_path')}"
         readiness = str(record.get("readiness") or "")
-        if readiness == "ready_for_local_packet":
-            action = "summarize as review packet; no paper write"
+        action = "summarize as review packet; Killo/golden required before paper write"
+        lines.append(
+            "| `{}` | `{}` | `{}` | {} | `{}` | {} |".format(
+                source,
+                record.get("source_artifact_kind", ""),
+                readiness,
+                int(record.get("priority_score") or 0),
+                _post_gate_state(record),
+                action,
+            )
+        )
+    if not selected:
+        lines.append("| _none_ |  |  |  |  |  |")
+    lines.extend(
+        [
+            "",
+            "## Blocked Or Review-Only Inputs",
+            "",
+            "| Source | Kind | Readiness | Score | Blocking reason |",
+            "| --- | --- | --- | ---: | --- |",
+        ]
+    )
+    for record in blocked:
+        source = f"{record.get('source_repo')}@{record.get('source_branch_or_ref')}:{record.get('source_path')}"
+        readiness = str(record.get("readiness") or "")
+        if readiness == "blocked_automath_not_ready":
+            reason = "Automath receiving theorem or article section has not been selected"
         elif readiness == "needs_operator_review":
-            action = "operator decision required before any writeback"
-        elif readiness == "blocked_automath_not_ready":
-            action = "select Automath receiving theorem or article section first"
+            reason = "operator review is required before this can become receivable"
+        elif readiness == "observe_only":
+            reason = "observation only"
         else:
-            action = "observe only"
+            reason = "pre-gate did not mark the item receivable"
         lines.append(
             "| `{}` | `{}` | `{}` | {} | {} |".format(
                 source,
                 record.get("source_artifact_kind", ""),
                 readiness,
                 int(record.get("priority_score") or 0),
-                action,
+                reason,
             )
         )
-    if not selected:
+    if not blocked:
         lines.append("| _none_ |  |  |  |  |")
     lines.extend(
         [
             "",
             "## Policy",
             "",
-            "- `ready_for_local_packet` permits an ignored review packet or durable index entry only.",
-            "- `needs_operator_review` records a boundary, not acceptance.",
-            "- `blocked_automath_not_ready` means NewMath evidence exists but Automath has not chosen a receiving paper/Lean target.",
+            "- The selection gate admits only `ready_for_local_packet` records into the receivable table.",
+            "- `needs_operator_review` records a boundary, not acceptance, and is not selected for writeback.",
+            "- `blocked_automath_not_ready` means NewMath evidence exists but Automath has not chosen a receiving paper/Lean target; it is never selected as returnable content.",
+            "- The post-gate requires operator acceptance before any Killo/golden distillation candidate can be used.",
             "- Automath paper writeback must pass the native Killo/golden distillation and review lane.",
             "- BEDC text, seed stubs, and TasteGate witnesses must not be copied verbatim into Automath paper content.",
         ]

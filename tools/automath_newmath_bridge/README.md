@@ -380,6 +380,24 @@ operator chooses a receiving Automath queue and audit boundary. The synthesis
 layer can mark these records `blocked_automath_not_ready`; that is a useful
 decision, not a failure.
 
+## Selection Gates
+
+NewMath-to-Automath intake uses two gates:
+
+- The selection gate admits only `ready_for_local_packet` records into the
+  receivable index. `blocked_automath_not_ready`, `observe_only`, and
+  `needs_operator_review` records are kept in the blocked/review-only table and
+  are not treated as returnable content.
+- The post-polish gate requires operator acceptance before a record may become
+  a Killo/golden distillation candidate. The distillation lane must still pass
+  Automath style validation, Claude review, writeback validation, and any local
+  paper checks before content can become durable paper text.
+
+`blocked_automath_not_ready` means that NewMath evidence has been detected, but
+Automath has not selected a receiving theorem, article section, paper label, or
+Lean target. The bridge may record the block and priority, but it must not
+select that item as writable content.
+
 ## Commit message convention
 
 Use commits that make the source-to-destination movement explicit:
