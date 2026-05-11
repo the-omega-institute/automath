@@ -21,7 +21,9 @@ writeback gates when explicitly requested.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import json
+import os
 import subprocess
 import sys
 import time
@@ -73,6 +75,51 @@ def _git_stdout(repo: Path, args: list[str], *, timeout: int = 120) -> str:
     return result.stdout.strip()
 
 
+@contextmanager
+def repo_fetch_lock(repo: Path, *, timeout: int = 600):
+    """Serialize fetches against a local repo across bridge supervisors."""
+    lock_path = repo / ".git" / "automath_newmath_bridge.fetch.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + timeout
+    with lock_path.open("a+b") as handle:
+        handle.seek(0, os.SEEK_END)
+        if handle.tell() == 0:
+            handle.write(b"\0")
+            handle.flush()
+        handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+
+            while True:
+                try:
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                    break
+                except OSError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"Timed out waiting for fetch lock {lock_path}")
+                    time.sleep(1)
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            while True:
+                try:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"Timed out waiting for fetch lock {lock_path}")
+                    time.sleep(1)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
 def current_branch(repo: Path) -> str:
     return _git_stdout(repo, ["branch", "--show-current"], timeout=30)
 
@@ -122,15 +169,16 @@ def _resolve_repo_path(raw: str, config_path: Path) -> Path:
 
 def fetch_repo(repo_key: str, repo_cfg: dict[str, Any], config_path: Path) -> dict[str, Any]:
     repo_path = _resolve_repo_path(str(repo_cfg.get("local_path", "")), config_path)
-    before = _git_stdout(repo_path, ["rev-parse", str(repo_cfg.get("default_ref") or "HEAD")], timeout=30)
-    result = _git(repo_path, ["fetch", "origin"], timeout=300)
-    if result.returncode != 0:
-        return {
-            "repo_key": repo_key,
-            "status": "fetch_failed",
-            "reason": (result.stderr or result.stdout).strip(),
-        }
-    after = _git_stdout(repo_path, ["rev-parse", str(repo_cfg.get("default_ref") or "HEAD")], timeout=30)
+    with repo_fetch_lock(repo_path):
+        before = _git_stdout(repo_path, ["rev-parse", str(repo_cfg.get("default_ref") or "HEAD")], timeout=30)
+        result = _git(repo_path, ["fetch", "origin"], timeout=300)
+        if result.returncode != 0:
+            return {
+                "repo_key": repo_key,
+                "status": "fetch_failed",
+                "reason": (result.stderr or result.stdout).strip(),
+            }
+        after = _git_stdout(repo_path, ["rev-parse", str(repo_cfg.get("default_ref") or "HEAD")], timeout=30)
     return {
         "repo_key": repo_key,
         "status": "fetched",
