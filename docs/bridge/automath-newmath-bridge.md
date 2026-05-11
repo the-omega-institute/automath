@@ -97,6 +97,9 @@ by Git and must not be uploaded.
     watchdog or Codex agents must not convert `Input source: synthesis` into
     Automath paper, Lean, Killo/golden writeback, or accepted manifest writes
     without a later `gate_status=gate_passed` record.
+15. Watchdogs on `codex/*` bridge branches may self-sync only by clean
+    fast-forward from their configured upstream. They must never reset, switch
+    branches, or merge diverged histories.
 
 ## Operator approval boundary
 

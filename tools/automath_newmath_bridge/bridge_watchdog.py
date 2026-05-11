@@ -233,6 +233,43 @@ def _git_status(*, push_safe_current_branch: bool) -> dict[str, Any]:
     }
 
 
+def _upstream_ahead_counts() -> dict[str, Any]:
+    upstream_result = _git(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], timeout=30)
+    if upstream_result.returncode != 0:
+        return {"upstream": "", "ahead": 0, "behind": 0, "has_upstream": False}
+    upstream = upstream_result.stdout.strip()
+    counts = _git_stdout(["rev-list", "--left-right", "--count", f"{upstream}...HEAD"], timeout=60).split()
+    behind = int(counts[0]) if len(counts) == 2 else 0
+    ahead = int(counts[1]) if len(counts) == 2 else 0
+    return {"upstream": upstream, "ahead": ahead, "behind": behind, "has_upstream": True}
+
+
+def _self_sync_current_branch(*, enabled: bool) -> dict[str, Any]:
+    if not enabled:
+        return {"status": "disabled"}
+    branch = _git_stdout(["branch", "--show-current"], timeout=30)
+    if not branch.startswith("codex/"):
+        return {"status": "skipped_non_codex_branch", "branch": branch}
+    tracked = _git_stdout(["status", "--porcelain", "--untracked-files=no"], timeout=30)
+    if tracked.strip():
+        return {"status": "skipped_tracked_changes", "branch": branch, "tracked_count": len(tracked.splitlines())}
+    fetch = _git(["fetch", "origin"], timeout=300)
+    if fetch.returncode != 0:
+        return {"status": "fetch_failed", "branch": branch, "reason": (fetch.stderr or fetch.stdout).strip()[-1200:]}
+    counts = _upstream_ahead_counts()
+    if not counts["has_upstream"]:
+        return {"status": "skipped_no_upstream", "branch": branch}
+    if counts["ahead"]:
+        return {"status": "skipped_local_ahead", "branch": branch, **counts}
+    if not counts["behind"]:
+        return {"status": "up_to_date", "branch": branch, **counts}
+    merge = _git(["merge", "--ff-only", "@{u}"], timeout=300)
+    if merge.returncode != 0:
+        return {"status": "ff_failed", "branch": branch, **counts, "reason": (merge.stderr or merge.stdout).strip()[-1200:]}
+    after = _git_stdout(["rev-parse", "HEAD"], timeout=30)
+    return {"status": "fast_forwarded", "branch": branch, **counts, "after": after, "stdout": merge.stdout.strip()[-1200:]}
+
+
 def _stale_lock_checks(stale_lock_seconds: int) -> list[dict[str, Any]]:
     locks = [
         SCRIPT_DIR / "state" / "bridge_heavy_loop.lock",
@@ -254,6 +291,7 @@ def _stale_lock_checks(stale_lock_seconds: int) -> list[dict[str, Any]]:
 
 def run_once(args: argparse.Namespace) -> bool:
     config = _load_config(Path(args.config).resolve())
+    self_sync = _self_sync_current_branch(enabled=not args.no_self_sync_current_branch)
     processes = _python_bridge_processes()
     git_status = _git_status(push_safe_current_branch=args.push_safe_current_branch)
     supervisor_age = _file_age_seconds(SUPERVISOR_STDOUT)
@@ -268,6 +306,7 @@ def run_once(args: argparse.Namespace) -> bool:
         "checked_at": _now_iso(),
         "repo": str(REPO_ROOT),
         "configured_required_branch": config.get("required_branch"),
+        "self_sync": self_sync,
         "git": git_status,
         "process_count_scope": "repo-marker" if repo_marker else "global",
         "process_counts": {
@@ -319,6 +358,8 @@ def run_once(args: argparse.Namespace) -> bool:
             issues.append(f"production loop stderr is non-empty: {production_stderr_size} bytes")
     if git_status["behind"]:
         issues.append(f"current branch is behind upstream by {git_status['behind']} commit(s)")
+    if self_sync.get("status") in {"fetch_failed", "ff_failed"}:
+        issues.append(f"self-sync failed: {self_sync.get('status')}")
     if any(item["stale"] for item in locks):
         issues.append("one or more bridge lock files are stale")
     if status["process_counts"]["bridge_supervisor"] < args.min_supervisor_processes:
@@ -349,6 +390,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-heavy-processes", type=int, default=2)
     parser.add_argument("--min-production-processes", type=int, default=0)
     parser.add_argument("--push-safe-current-branch", action="store_true")
+    parser.add_argument(
+        "--no-self-sync-current-branch",
+        action="store_true",
+        help="Disable safe ff-only self-sync for clean codex/* branches before health checks",
+    )
     return parser
 
 
