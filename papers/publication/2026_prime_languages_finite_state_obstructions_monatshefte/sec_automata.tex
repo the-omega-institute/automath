@@ -429,30 +429,82 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   and the dimension of \(A\). The data
   \((\gamma,\delta,U,L_A)\) are the resolvent certificate for \(A\).
 
-  The standard finite-chain block formula writes \(P^m-S_r\), on
-  \(m\equiv r\bmod D_A\), as a finite sum of products involving powers
-  of \(T\), powers of the \(E_{j,t}\), and fixed rational connecting
-  matrices. The resolvent bounds above dominate every direct block
-  product by a rational multiple of \(\tau_r^m\). A
-  transient-to-recurrent term with one entrance time is bounded by a
-  rational multiple of
+  We now spell out the finite block normal form used by the verifier.
+  In the canonical order \(T,R_1,\ldots,R_s\), and for
+  \(m\equiv r\bmod D_A\), the only non-zero blocks of \(P^m-S_r\) are
+  of the following types.
   \[
-    \sum_{\ell=0}^{m-1}\tau_r^\ell \tau_r^{m-1-\ell}
-    =m\tau_r^{m-1}.
+    T^m,\qquad C_j^m-C_{j,r}^{\infty},
   \]
-  The finitely many higher-order block-chain convolutions that occur in
-  the canonical block formula are similarly bounded by
-  \(C_rm^{J_r}\tau_r^m\), for effectively computed rational \(C_r>0\)
-  and integer \(J_r\ge0\), after increasing \(C_r\) to absorb the
-  harmless factor \(\tau_r^{-1}\) from one-step entrance terms. This is
-  the only polynomial loss retained in the certificate: the block and
-  convolution estimates are first made at the strict rate \(\tau_r\),
-  and the final advertised rate \(\theta_r\) is introduced only after
-  choosing \(\theta_r\in(\tau_r,1)\). Since
-  \(\tau_r/\theta_r<1\), the rational sequence
-  \(m^{J_r}(\tau_r/\theta_r)^m\) is eventually decreasing and tends to
-  \(0\). A finite rational search therefore produces \(K_r\) and
-  \(N_r\) such that
+  on the diagonal, and
+  \[
+    \sum_{\ell=0}^{m-1}
+      T^\ell P_{T,R_j}\bigl(C_j^{m-1-\ell}-C_{j,r-\ell-1}^{\infty}\bigr)
+      -
+    \sum_{\ell=m}^{\infty}
+      T^\ell P_{T,R_j}C_{j,r-\ell-1}^{\infty}
+  \]
+  in the transient-to-\(R_j\) block. Here \(C_{j,a}^{\infty}\) is the
+  rational limit of \(C_j^n\) along \(n\equiv a\bmod d_j\); explicitly
+  its rows supported on \(R_{j,t}\) are equal to
+  \(\pi_{j,t+a}\) on \(R_{j,t+a}\) and zero elsewhere. For each
+  \(a\bmod d_j\) let
+  \(G_{j,u}:=P_{R_{j,u},R_{j,u+1}}\) and
+  \(W_{j,t,a}:=G_{j,t}G_{j,t+1}\cdots G_{j,t+a-1}\), with
+  \(W_{j,t,0}\) the identity on \(R_{j,t}\). The certificate expands
+  \(C_j^{d_jh+a}-C_{j,a}^{\infty}\), for \(h\ge1\), as the finite
+  rational sum
+  \[
+    \sum_{t=0}^{d_j-1}
+      M_{j,t,a}(h),
+  \]
+  where \(M_{j,t,a}(h)\) is the full \(R_j\times R_j\) matrix whose only
+  non-zero block is the block from rows \(R_{j,t}\) to columns
+  \(R_{j,t+a}\), equal to \(W_{j,t,a}E_{j,t+a}^{h}\). The case \(h=0\)
+  is one of the finitely many initial powers checked directly. The
+  verifier checks the identity for \(0\le a<d_j\) by multiplying the
+  listed rational cyclic blocks and using
+  \(Q_{j,t+a}^{h}-\Pi_{j,t+a}=E_{j,t+a}^{h}\) for \(h\ge1\). Thus every
+  summand is a listed rational connector product containing either
+  \(T^n\), one \(E_{j,t}^n\), or one convolution of such powers.
+
+  The resolvent bounds above dominate a listed direct product
+  \(X A^n Y\) by
+  \(\|X\|_\infty L_A\|Y\|_\infty\eta^n\). A listed convolution
+  \(\sum_{\ell=0}^{m-1}X T^\ell Y E_{j,t}^{h(\ell)}Z\) is bounded by the
+  exact rational inequality obtained from
+  \[
+    \sum_{\ell=0}^{m-1}
+      \|X\|_\infty L_T\tau_r^\ell
+      \|Y\|_\infty L_{E_{j,t}}\tau_r^{m-1-\ell}\|Z\|_\infty
+    \le
+    C\,m\tau_r^{m-1};
+  \]
+  the finitely many residues hidden in \(h(\ell)\) only change the
+  rational coefficient \(C\). The infinite tail above is bounded by the
+  listed geometric estimate
+  \[
+    \sum_{\ell=m}^{\infty}
+      \|T^\ell\|_\infty\|P_{T,R_j}\|_\infty
+      \|C_{j,r-\ell-1}^{\infty}\|_\infty
+    \le
+    \frac{L_T\|P_{T,R_j}\|_\infty}{1-\tau_r}\tau_r^m .
+  \]
+  Adding the finitely many rational coefficients gives explicit
+  \(C_r>0\) and \(J_r\le1\) with
+  \[
+    \|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m
+    \qquad(m\equiv r\bmod D_A),
+  \]
+  after increasing \(C_r\) to absorb the finitely many omitted small
+  exponents and the harmless factor \(\tau_r^{-1}\). This is the only
+  polynomial loss retained in the certificate: the block and convolution
+  estimates are first made at the strict rate \(\tau_r\), and the final
+  advertised rate \(\theta_r\) is introduced only after choosing
+  \(\theta_r\in(\tau_r,1)\). Since \(\tau_r/\theta_r<1\), the rational
+  sequence \(m^{J_r}(\tau_r/\theta_r)^m\) is eventually decreasing and
+  tends to \(0\). A finite rational search therefore produces \(K_r\)
+  and \(N_r\) such that
   \[
     C_rm^{J_r}\tau_r^m\le K_r\theta_r^m
     \qquad(m\ge N_r).
@@ -578,15 +630,50 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     and hence that \(\|A^n\|_\infty\le L_A\gamma_A^n\) for all
     \(n\ge0\).
     \item A rational block-form expansion of \(P^m-S_r\) on the residue
-    class \(m\equiv r\pmod {D_A}\), together with the coefficient bound
+    class \(m\equiv r\pmod {D_A}\). For every recurrent block \(R_j\)
+    and residue \(a\bmod d_j\) the data include the rational cyclic step
+    matrices \(G_{j,u}=P_{R_{j,u},R_{j,u+1}}\), their products
+    \(W_{j,t,a}=G_{j,t}\cdots G_{j,t+a-1}\), the rational limit matrix
+    \(C_{j,a}^{\infty}\), and the checked identities
+    \[
+      C_j^{d_jh+a}-C_{j,a}^{\infty}
+      =
+      \sum_t M_{j,t,a}(h)
+    \]
+    for \(h\ge1\), where \(M_{j,t,a}(h)\) has only the
+    \(R_{j,t}\)-to-\(R_{j,t+a}\) block \(W_{j,t,a}E_{j,t+a}^h\)
+    non-zero. The finitely many \(h=0\) cases are checked directly. The
+    data also include, for every transient-to-\(R_j\) block, the exact
+    identity
+    \[
+      (P^m-S_r)_{T,R_j}
+      =
+      \sum_{\ell=0}^{m-1}
+        T^\ell P_{T,R_j}
+        \bigl(C_j^{m-1-\ell}-C_{j,r-\ell-1}^{\infty}\bigr)
+      -
+      \sum_{\ell=m}^{\infty}
+        T^\ell P_{T,R_j}C_{j,r-\ell-1}^{\infty}.
+    \]
+    These are finite rational identities: the second infinite sum is
+    verified after grouping \(\ell\bmod D_A\) as a finite list of
+    geometric resolvents \((I-T^{D_A})^{-1}T^u\). The verifier checks
+    each displayed identity by rational matrix multiplication and exact
+    inversion over \(\QQ\).
+    \item The exact convolution bounds attached to the preceding
+    expansion. For every direct term \(X A^nY\) the certificate lists
+    the rational product
+    \(\|X\|_\infty L_A\|Y\|_\infty\eta^n\). For every convolution term
+    it lists the rational coefficient \(C\) in
+    \(C\,m\tau_r^{m-1}\), and for every tail it lists the rational
+    coefficient in
+    \(C\,\tau_r^m/(1-\tau_r^{D_A})\). Summing these finitely many
+    coefficients gives the stated coefficient bound
     proving
     \[
       \|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m
       \qquad(m\equiv r\pmod {D_A}).
     \]
-    The verifier obtains this bound by multiplying the listed rational
-    connector matrices and the recorded resolvent bounds in the
-    \(\ell^\infty\) operator norm, i.e. maximum absolute row sum.
     \item The rational tail inequality
     \[
       C_rm^{J_r}\tau_r^m\le K_r\theta_r^m
@@ -598,6 +685,25 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
     \(N_r\) no smaller than both the finite-check cutoff and
     \(N_r^{\mathrm{tail}}\).
   \end{enumerate}
+  \smallskip
+  \noindent\textit{Certificate-verifier theorem.}
+  Given the fields just listed, there is a finite verifier which accepts
+  if and only if the following rational assertions all check:
+  the stochastic block decomposition is a permutation of \(P\); each
+  \(C_{j,a}^{\infty}\), \(\pi_{j,t}\), and \(A_{j,t}\) satisfies its
+  displayed linear equations; the root-isolation rectangles prove the
+  strict spectral-radius inequalities; the resolvent certificates prove
+  the listed bounds for every decaying block; the finite block normal
+  form for \(P^m-S_r\) is exactly the one displayed in the preceding
+  two items; the summed direct, convolution, and tail coefficients give
+  \(\|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m\) on the residue class;
+  the finitely many pre-tail powers satisfy the same advertised
+  estimate after enlargement of \(K_r\); and the rational monotone-tail
+  inequality gives \(C_rm^{J_r}\tau_r^m\le K_r\theta_r^m\). All steps
+  use rational matrix arithmetic, exact inverses over \(\QQ\), finite
+  root counts in rational rectangles, and rational interval arithmetic.
+  No unlisted block formula or limiting argument is part of the
+  verification step.
   With this output, the following holds for every
   \(m\ge M_r\) satisfying \(m\equiv r\pmod {D_A}\).
   If \(c_r=0\), then
@@ -761,6 +867,74 @@ prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
   Printing all residues, and taking the final minimum by enumeration,
   are charged to the chosen output representation.
 \end{proof}
+
+\begin{example}[Two explicit certificates]
+  \label{ex:base-ending-zero-certificate}
+  Let \(\mathcal A_0\) be the complete DFA over \(\Sigma_b\) accepting
+  exactly the non-empty words ending in \(0\). It has states
+  \(q_0,q_1\), initial state \(q_0\), accepting set \(\{q_1\}\), and
+  transitions
+  \[
+    \delta(q_i,0)=q_1,\qquad
+    \delta(q_i,d)=q_0\quad(1\le d\le b-1).
+  \]
+  Its unlabeled transition matrix and stochastic matrix are
+  \[
+    B=\begin{pmatrix} b-1&1\\ b-1&1\end{pmatrix},
+    \qquad
+    P=\begin{pmatrix} (b-1)/b&1/b\\ (b-1)/b&1/b\end{pmatrix}.
+  \]
+  There is one recurrent aperiodic class \(R_1=\{q_0,q_1\}\), no
+  transient state, \(d_1=D_A=1\), and
+  \[
+    \pi_{1,0}=\bigl((b-1)/b,\;1/b\bigr),\qquad
+    c_0=\pi_{1,0}(\{q_1\})=1/b.
+  \]
+  Since \(P^2=P\), one may take \(S_0=P\), \(N_0=1\), any rational
+  \(0<\tau_0<\theta_0<1\), and any rational \(K_0>0\) for the advertised
+  convergence estimate on all \(m\ge1\). Equivalently,
+  \(a_m(\mathcal A_0)=b^{m-1}\) and
+  \(a_m(\mathcal A_0)/b^m=1/b\) for every \(m\ge1\).
+
+  Let \(A_b,B_b,M_b\) be the constants from
+  \Cref{lem:base-prime-count}. The positive-density branch of
+  \Cref{thm:effective-fixed-dfa-prime-obstruction} may therefore use the
+  explicit threshold
+  \[
+    M_0:=\left\lceil\max\{M_b,4bB_b\}\right\rceil .
+  \]
+  For every \(m\ge M_0\),
+  \[
+    \mathrm{Prec}_m
+    \le
+    \frac{\abs{\mathcal P_m^{(b)}}}{a_m(\mathcal A_0)}
+    \le
+    \frac{bB_b}{m},
+  \]
+  on lengths where the denominator is nonzero, and
+  \[
+    \abs{(L(\mathcal A_0)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge
+    b^{m-1}-B_b\frac{b^m}{m}
+    \ge
+    \frac{1}{2b}b^m .
+  \]
+  Thus the certificate has \(D_A=1\), \(c_0=1/b\), precision constant
+  \(bB_b\), symmetric-difference constant \(1/(2b)\) on the stronger
+  \(b^m\) scale, and the final theorem also permits the weaker constant
+  \(1/(2b)\) on the \(b^m/m\) scale.
+
+  The empty DFA gives the complementary sparse branch. Here
+  \(a_m=0\), \(c_0=0\), and any rational \(K_0>0\) is admissible. Hence, for all
+  \(m\ge M_b\),
+  \[
+    \abs{(\varnothing\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    =
+    \abs{\mathcal P_m^{(b)}}
+    \ge
+    A_b\frac{b^m}{m}.
+  \]
+\end{example}
 
 We first establish the quantitative obstruction that drives both
 corollaries below.
