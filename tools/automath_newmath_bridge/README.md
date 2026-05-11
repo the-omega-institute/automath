@@ -31,8 +31,11 @@ content.
   gates, and can write local ignored review packets.
 - `bridge_heavy_loop.py` runs slow synthesis and Automath writeback dry-runs on
   an isolated cadence so the main scanner can keep polling.
-- `bridge_watchdog.py` supervises persistent supervisor/heavy-loop health
-  without joining either work queue.
+- `bridge_production_loop.py` turns eligible NewMath-to-Automath synthesis
+  output into lightweight durable Automath receiving indexes without writing
+  Automath paper or Lean content.
+- `bridge_watchdog.py` supervises persistent supervisor/heavy/production-loop
+  health without joining any work queue.
 - `bridge_to_automath_killo_golden.py` converts accepted NewMath-to-Automath
   bridge records into Automath distillation candidates and invokes the existing
   Killo/golden Claude writeback lane when explicitly requested.
@@ -49,7 +52,7 @@ The bridge ledger lives at `docs/bridge/automath-newmath-bridge.md`.
 
 ## Loop separation
 
-The bridge uses three independent loops:
+The bridge uses four independent loops:
 
 - `bridge_supervisor.py` is the main scanner. It fetches configured refs,
   updates ignored seen-state, refreshes the agent queue, and runs deterministic
@@ -57,6 +60,9 @@ The bridge uses three independent loops:
 - `bridge_heavy_loop.py` handles slower synthesis and Automath writeback
   dry-runs from already generated artifacts. Restarting or changing it must not
   interrupt the main scanner.
+- `bridge_production_loop.py` converts NewMath-to-Automath synthesis output
+  into durable receiving indexes while preserving the Killo/golden writeback
+  boundary for paper content.
 - `bridge_watchdog.py` checks that the other loops remain healthy. It writes
   only ignored status/log files and can optionally push the current `codex/*`
   audit branch when it is clean and ahead of its upstream.
@@ -66,6 +72,7 @@ Each loop has its own stop file:
 ```text
 tools/automath_newmath_bridge/.bridge_supervisor.stop
 tools/automath_newmath_bridge/.bridge_heavy_loop.stop
+tools/automath_newmath_bridge/.bridge_production_loop.stop
 tools/automath_newmath_bridge/.bridge_watchdog.stop
 ```
 
@@ -87,6 +94,14 @@ Persistent watchdog:
 ```bash
 python3 tools/automath_newmath_bridge/bridge_watchdog.py \
   --poll-interval 900
+```
+
+Production loop:
+
+```bash
+python3 tools/automath_newmath_bridge/bridge_production_loop.py \
+  --poll-interval 1800 \
+  --push
 ```
 
 Safe branch push is opt-in and restricted to the current clean `codex/*` audit

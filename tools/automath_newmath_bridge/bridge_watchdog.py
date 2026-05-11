@@ -2,9 +2,11 @@
 """Independent watchdog for persistent Automath-NewMath bridge loops.
 
 The bridge supervisor scans and gates. The heavy loop runs slower synthesis
-and adapter dry-runs. This watchdog supervises those loops without becoming
-part of either work queue: it checks log freshness, stderr growth, stale locks,
-Git branch drift, and optional safe pushes for local codex audit branches.
+and adapter dry-runs. The production loop turns eligible synthesis output into
+durable receiving indexes. This watchdog supervises those loops without
+becoming part of any work queue: it checks log freshness, stderr growth, stale
+locks, Git branch drift, and optional safe pushes for local codex audit
+branches.
 """
 
 from __future__ import annotations
@@ -32,6 +34,8 @@ SUPERVISOR_STDOUT = SCRIPT_DIR / "logs" / "persistent_supervisor_stdout.log"
 SUPERVISOR_STDERR = SCRIPT_DIR / "logs" / "persistent_supervisor_stderr.log"
 HEAVY_LOG = SCRIPT_DIR / "logs" / "bridge_heavy_loop.log"
 HEAVY_STDERR = SCRIPT_DIR / "logs" / "persistent_heavy_loop_stderr.log"
+PRODUCTION_LOG = SCRIPT_DIR / "logs" / "bridge_production_loop.log"
+PRODUCTION_STDERR = SCRIPT_DIR / "logs" / "persistent_production_loop_stderr.log"
 
 
 def _now_iso() -> str:
@@ -120,12 +124,10 @@ def _python_bridge_processes() -> list[dict[str, Any]]:
     ps_script = (
         "Get-CimInstance Win32_Process | "
         "Where-Object { "
-        "($_.CommandLine -like '*tools/automath_newmath_bridge/bridge_supervisor.py*' -or "
-        "$_.CommandLine -like '*tools\\\\automath_newmath_bridge\\\\bridge_supervisor.py*' -or "
-        "$_.CommandLine -like '*tools/automath_newmath_bridge/bridge_heavy_loop.py*' -or "
-        "$_.CommandLine -like '*tools\\\\automath_newmath_bridge\\\\bridge_heavy_loop.py*' -or "
-        "$_.CommandLine -like '*tools/automath_newmath_bridge/bridge_watchdog.py*' -or "
-        "$_.CommandLine -like '*tools\\\\automath_newmath_bridge\\\\bridge_watchdog.py*') -and "
+        "($_.CommandLine -like '*bridge_supervisor.py*' -or "
+        "$_.CommandLine -like '*bridge_heavy_loop.py*' -or "
+        "$_.CommandLine -like '*bridge_production_loop.py*' -or "
+        "$_.CommandLine -like '*bridge_watchdog.py*') -and "
         "$_.ExecutablePath -like '*Python*' "
         "} | Select-Object ProcessId,ParentProcessId,CreationDate,CommandLine | ConvertTo-Json -Depth 3"
     )
@@ -214,8 +216,10 @@ def run_once(args: argparse.Namespace) -> bool:
     git_status = _git_status(push_safe_current_branch=args.push_safe_current_branch)
     supervisor_age = _file_age_seconds(SUPERVISOR_STDOUT)
     heavy_age = _file_age_seconds(HEAVY_LOG)
+    production_age = _file_age_seconds(PRODUCTION_LOG)
     supervisor_stderr_size = _file_size(SUPERVISOR_STDERR)
     heavy_stderr_size = _file_size(HEAVY_STDERR)
+    production_stderr_size = _file_size(PRODUCTION_STDERR)
     locks = _stale_lock_checks(args.stale_lock_seconds)
     repo_marker = args.repo_marker.replace("\\", "/")
     status = {
@@ -227,6 +231,7 @@ def run_once(args: argparse.Namespace) -> bool:
         "process_counts": {
             "bridge_supervisor": _count_processes(processes, "bridge_supervisor.py", repo_marker),
             "bridge_heavy_loop": _count_processes(processes, "bridge_heavy_loop.py", repo_marker),
+            "bridge_production_loop": _count_processes(processes, "bridge_production_loop.py", repo_marker),
             "bridge_watchdog": _count_processes(processes, "bridge_watchdog.py", repo_marker),
         },
         "logs": {
@@ -236,11 +241,15 @@ def run_once(args: argparse.Namespace) -> bool:
             "heavy_log_age_seconds": None if heavy_age is None else round(heavy_age, 3),
             "heavy_stderr_size": heavy_stderr_size,
             "heavy_stderr_tail": _tail(HEAVY_STDERR) if heavy_stderr_size else "",
+            "production_log_age_seconds": None if production_age is None else round(production_age, 3),
+            "production_stderr_size": production_stderr_size,
+            "production_stderr_tail": _tail(PRODUCTION_STDERR) if production_stderr_size else "",
         },
         "locks": locks,
         "stop_files": {
             "supervisor": (SCRIPT_DIR / ".bridge_supervisor.stop").exists(),
             "heavy_loop": (SCRIPT_DIR / ".bridge_heavy_loop.stop").exists(),
+            "production_loop": (SCRIPT_DIR / ".bridge_production_loop.stop").exists(),
             "watchdog": STOP_FILE.exists(),
         },
     }
@@ -257,6 +266,13 @@ def run_once(args: argparse.Namespace) -> bool:
         issues.append(f"supervisor stderr is non-empty: {supervisor_stderr_size} bytes")
     if heavy_stderr_size:
         issues.append(f"heavy loop stderr is non-empty: {heavy_stderr_size} bytes")
+    if args.min_production_processes > 0:
+        if production_age is None:
+            issues.append("missing production loop log")
+        elif production_age > args.max_production_log_age:
+            issues.append(f"production loop log stale: {round(production_age, 1)}s")
+        if production_stderr_size:
+            issues.append(f"production loop stderr is non-empty: {production_stderr_size} bytes")
     if git_status["behind"]:
         issues.append(f"current branch is behind upstream by {git_status['behind']} commit(s)")
     if any(item["stale"] for item in locks):
@@ -265,6 +281,8 @@ def run_once(args: argparse.Namespace) -> bool:
         issues.append("fewer bridge supervisor processes than expected")
     if status["process_counts"]["bridge_heavy_loop"] < args.min_heavy_processes:
         issues.append("fewer bridge heavy loop processes than expected")
+    if status["process_counts"]["bridge_production_loop"] < args.min_production_processes:
+        issues.append("fewer bridge production loop processes than expected")
     status["issues"] = issues
     status["ok"] = not issues
     _json_dump(STATUS_FILE, status)
@@ -280,10 +298,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--poll-interval", type=int, default=900)
     parser.add_argument("--max-supervisor-log-age", type=int, default=900)
     parser.add_argument("--max-heavy-log-age", type=int, default=2700)
+    parser.add_argument("--max-production-log-age", type=int, default=2700)
     parser.add_argument("--stale-lock-seconds", type=int, default=1800)
     parser.add_argument("--repo-marker", default="")
     parser.add_argument("--min-supervisor-processes", type=int, default=2)
     parser.add_argument("--min-heavy-processes", type=int, default=2)
+    parser.add_argument("--min-production-processes", type=int, default=0)
     parser.add_argument("--push-safe-current-branch", action="store_true")
     return parser
 
