@@ -39,7 +39,7 @@
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit real block (score=6)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | 已投 05-10 | ScholarOne ETDS; Oracle+Claude pass, 9 rounds |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | B-PAUSED (Oracle infra retry needed at B11) | — |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | B-3 (Oracle: accept) — 待进入 C 终审 | — |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | B-PAUSED (Oracle infra retry needed at B7) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | IMRN→Exp. Math 候选 |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | ✅ 可投稿 — C-8 (Oracle accept + Claude submit, 4/5 轮一致；需 cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
