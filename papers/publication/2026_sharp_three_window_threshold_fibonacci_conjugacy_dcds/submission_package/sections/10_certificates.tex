@@ -1,0 +1,276 @@
+\section{Auxiliary applications: Sturmian discrepancy estimates}\label{sec:fp:tv}
+
+The rotation model gives deterministic estimates for the finite-window laws
+considered above. These estimates are auxiliary source-law applications; they
+are not used in the proof of the sharp threshold or the Fischer-cover
+identification. The argument combines standard discrepancy bounds with
+deterministic pushforward under $\Phi_{m,n}$.
+
+\subsection{Stabilized block laws from discrepancy}
+
+Fix a stabilization aperture $m$ and a stabilized block length $n\ge 1$. Here $\Phi_{m,n}$ denotes the finite-block sliding map
+\[
+\Phi_{m,n}(a_0\ldots a_{m+n-2})
+:=
+\bigl(\Fold_m(a_t\ldots a_{t+m-1})\bigr)_{t=0}^{n-1}.
+\]
+For the first $N$ starting positions $\{x_0+t\alpha\}_{t=0}^{N-1}$ under the standard two-interval rotation coding, let $\hat{\mu}_{m+n-1,N}$ denote the empirical distribution of raw words of length $m+n-1$ beginning at those positions, and let $\mu_{m+n-1}$ be the corresponding limiting raw-word distribution obtained from Lebesgue measure on the depth-$(m+n-1)$ Sturmian atoms. Define the empirical stabilized $n$-block law and its limit by
+\[
+\hat{\eta}_{m,n,N}:=(\Phi_{m,n})_*\hat{\mu}_{m+n-1,N},
+\qquad
+\eta_{m,n}:=(\Phi_{m,n})_*\mu_{m+n-1}.
+\]
+For $n=1$ these are exactly the empirical folded histogram and its limit:
+\[
+\hat{\eta}_{m,1,N}=\hat{\pi}_{m,N},
+\qquad
+\eta_{m,1}=\pi_m^{\mathrm{fold}}.
+\]
+Let
+\[
+\mathcal Y_{m,n}:=\Phi_{m,n}(\{0,1\}^{m+n-1})
+\]
+denote the finite support of these stabilized $n$-block laws.
+
+\begin{theorem}[Stabilized block law from discrepancy]\label{thm:tv-certificate}
+Let $D_N^*(\alpha;x_0)$ denote the interval discrepancy of the orbit segment
+$\{x_0+t\alpha\}_{t=0}^{N-1}$, namely the supremum over circle intervals $I$
+of
+\[
+\left|
+\frac1N\#\{0\le t<N:\{x_0+t\alpha\}\in I\}-|I|
+\right|.
+\]
+Then, for every $m\ge2$ and $n\ge1$,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
+\le (m+n)D_N^*(\alpha;x_0).
+\]
+This is a supporting rotation-source certificate; the structural conjugacy
+results above do not depend on it.
+\end{theorem}
+
+\begin{proof}
+Put $L=m+n-1$.  In the standard two-interval Sturmian coding, the depth-$L$
+raw-word atoms form a partition of the circle into at most $L+1=m+n$
+intervals.  For each such interval $I$ the definition of interval discrepancy
+gives
+\[
+\left|
+\frac1N\#\{0\le t<N:\{x_0+t\alpha\}\in I\}-|I|
+\right|
+\le D_N^*(\alpha;x_0),
+\]
+where $|I|$ denotes Lebesgue length.  Summing over the at most $m+n$ atoms gives
+\[
+D_{\TV}\bigl(\hat{\mu}_{L,N},\mu_L\bigr)
+\le (m+n)D_N^*(\alpha;x_0).
+\]
+Total variation cannot increase under deterministic pushforward.  Applying
+the map $\Phi_{m,n}$ to the two raw-word laws gives the displayed bound.
+\end{proof}
+
+\begin{corollary}[Bound for bounded stabilized-block observables]\label{cor:observable-certificate}
+If $g:\mathcal Y_{m,n}\to\RR$ is bounded, then
+\[
+\left|
+\int g\,d\hat{\eta}_{m,n,N}-\int g\,d\eta_{m,n}
+\right|
+\le
+2\|g\|_\infty (m+n)D_N^*(\alpha;x_0).
+\]
+This is only the bounded-observable form of the preceding supporting
+rotation-source certificate.
+\end{corollary}
+
+\begin{proof}
+For probability measures $\lambda,\lambda'$ on a finite set,
+$|\int g\,d\lambda-\int g\,d\lambda'|
+\le 2\|g\|_\infty D_{\TV}(\lambda,\lambda')$.  Apply
+Theorem~\ref{thm:tv-certificate}.
+\end{proof}
+
+\subsection{Boundary-layer stability for stabilized blocks}\label{sec:fp:tv:boundary}
+
+Let $(H,\mathcal B,\mu,T)$ be measure preserving. Let
+$R_0:H\to\{0,1\}$ denote the sharp indicator readout and let
+$R_\rho:H\to\{0,1\}$ be a deterministic binary finite-resolution readout with
+resolution parameter $\rho$. Write
+\[
+E_\rho:=\{h\in H:\ R_\rho(h)\neq R_0(h)\},
+\qquad
+\varepsilon_\rho
+:=
+\mu(E_\rho)
+\]
+for the boundary-layer mass. For each block length $L$, the sharp and blurred
+words are coupled along the same orbit:
+\[
+\bigl(R_0(T^j h)\bigr)_{j=0}^{L-1},
+\qquad
+\bigl(R_\rho(T^j h)\bigr)_{j=0}^{L-1}.
+\]
+Let $\mu_{m+n-1}^{(0)}$ and $\mu_{m+n-1}^{(\rho)}$ be the corresponding
+raw-word marginals on $\{0,1\}^{m+n-1}$, and let
+\[
+\eta_{m,n}^{(0)}:=(\Phi_{m,n})_*\mu_{m+n-1}^{(0)},
+\qquad
+\eta_{m,n}^{(\rho)}:=(\Phi_{m,n})_*\mu_{m+n-1}^{(\rho)}
+\]
+be the stabilized $n$-block laws.
+
+\begin{proposition}[Boundary-layer control for raw and stabilized block laws]\label{prop:boundary-layer}
+Assume that $T$ is measure preserving and that
+$\mu_L^{(0)}$ and $\mu_L^{(\rho)}$ are the laws of the sharp and blurred
+length-$L$ words obtained from the same random initial point $h\sim\mu$ along
+the common orbit
+\[
+h,Th,\ldots,T^{L-1}h .
+\]
+With $L=m+n-1$,
+\[
+D_{\TV}\bigl(\mu_L^{(\rho)},\mu_L^{(0)}\bigr)
+\le L\varepsilon_\rho
+\]
+and therefore
+\[
+D_{\TV}\bigl(\eta_{m,n}^{(\rho)},\eta_{m,n}^{(0)}\bigr)
+\le (m+n-1)\varepsilon_\rho .
+\]
+The statement is a conditional boundary-layer estimate for readout models and
+does not assert that all blurred readouts have interval atom partitions.
+\end{proposition}
+
+\begin{proof}
+Under the common-orbit coupling displayed above, the two length-$L$ raw words
+can differ only if $T^j h\in E_\rho$ for at least one $0\le j\le L-1$.
+Therefore
+\[
+\PP\{\text{the two length-}L\text{ words differ}\}
+\le
+\sum_{j=0}^{L-1}\mu(T^{-j}E_\rho)
+=
+L\mu(E_\rho)
+=
+L\varepsilon_\rho,
+\]
+where measure preservation is used in the equality
+$\mu(T^{-j}E_\rho)=\mu(E_\rho)$. The coupling characterization of total
+variation gives the raw-word bound. The stabilized law is the deterministic
+pushforward of the raw-word law under $\Phi_{m,n}$, so data processing gives
+the second bound.
+\end{proof}
+
+\begin{corollary}[Conditional interval-partition resolution certificate]\label{cor:resolution-certificate}
+The following is a conditional certificate. The blurred readout need not be a
+two-interval coding, but assume that its depth-$(m+n-1)$ atom partition consists
+of at most $m+n$ intervals, so that its empirical raw-word law differs from its
+limiting raw-word law in total variation by at most
+$(m+n)D_N^*(\alpha;x_0)$. Then, for the empirical blurred stabilized law
+$\hat{\eta}_{m,n,N}^{(\rho)}$,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N}^{(\rho)},\eta_{m,n}^{(0)}\bigr)
+\le
+(m+n)D_N^*(\alpha;x_0)+(m+n-1)\varepsilon_\rho.
+\]
+\end{corollary}
+
+\begin{remark}
+For the sharp two-interval Sturmian coding, the depth-$(m+n-1)$ atoms form at
+most $m+n$ intervals, so the same argument gives the displayed certificate
+with $\varepsilon_\rho=0$.  The present statement records the
+interval-partition extension: the certificate holds for any blurred readout
+whose depth atoms form at most $m+n$ intervals, even when the blurred readout
+is not itself a two-interval coding.
+\end{remark}
+
+\begin{proof}
+The stated interval-complexity hypothesis gives the same empirical-to-limiting
+bound for the blurred raw-word law as in Theorem~\ref{thm:tv-certificate}, and
+data processing gives the corresponding stabilized-law bound. Combine this with
+Proposition~\ref{prop:boundary-layer} and apply the triangle inequality.
+\end{proof}
+
+\subsection{Recovery of finite-range observables}
+
+\begin{theorem}[Recovery of finite-range observables from stabilized blocks]\label{thm:operational-observable-recovery}
+Assume $m\ge3$ and $n\ge m$.  Let
+$f:\{0,1\}^{m+n-1}\to\RR$ be any finite-range raw observable.  There is a
+unique observable $\widetilde f:\mathcal Y_{m,n}\to\RR$ such that
+\[
+f=\widetilde f\circ\Phi_{m,n}
+\quad\text{on }\{0,1\}^{m+n-1}.
+\]
+It is given by $\widetilde f(y)=f(\Psi_{m,n}(y))$, where
+$\Psi_{m,n}$ is the inverse block decoder from
+Theorem~\ref{thm:block-invertibility}.  Consequently
+\[
+\int f\,d\hat{\mu}_{m+n-1,N}
+=
+\int \widetilde f\,d\hat{\eta}_{m,n,N},
+\qquad
+\int f\,d\mu_{m+n-1}
+=
+\int \widetilde f\,d\eta_{m,n},
+\]
+and
+\[
+\left|
+\int f\,d\hat{\mu}_{m+n-1,N}
+-
+\int f\,d\mu_{m+n-1}
+\right|
+\le
+2\|f\|_\infty (m+n)D_N^*(\alpha;x_0).
+\]
+This is an operational restatement of the finite-block inverse together with
+the supporting discrepancy bound.
+\end{theorem}
+
+\begin{proof}
+For $m\ge3$ and $n\ge m$, Theorem~\ref{thm:block-invertibility} makes
+$\Phi_{m,n}$ a bijection from $\{0,1\}^{m+n-1}$ onto
+$\mathcal Y_{m,n}$, with inverse $\Psi_{m,n}$.  Therefore the formula
+$\widetilde f(y)=f(\Psi_{m,n}(y))$ is the unique function satisfying
+$f=\widetilde f\circ\Phi_{m,n}$.  The two identities of integrals are simply
+change of variables under deterministic pushforward.  Since
+$\|\widetilde f\|_\infty=\|f\|_\infty$, the last estimate is
+Corollary~\ref{cor:observable-certificate} applied to $\widetilde f$.
+\end{proof}
+
+\begin{corollary}[Bounded-type slopes]\label{cor:tv-bounded-type}
+If $\alpha$ has bounded continued-fraction partial quotients, then there is a
+constant $C_\alpha$ such that, for all $N\ge2$,
+\[
+D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
+\le
+C_\alpha(m+n)\frac{\log N}{N}.
+\]
+For $m\ge3$ and $n\ge m$, every recovered finite-range observable in
+Theorem~\ref{thm:operational-observable-recovery} satisfies the corresponding
+bound
+\[
+\left|
+\int f\,d\hat{\mu}_{m+n-1,N}
+-
+\int f\,d\mu_{m+n-1}
+\right|
+\le
+2C_\alpha\|f\|_\infty(m+n)\frac{\log N}{N}.
+\]
+This corollary only substitutes the classical bounded-type rotation
+discrepancy estimate into the preceding support results.
+\end{corollary}
+
+\begin{proof}
+The classical discrepancy estimate for irrational rotations with bounded
+partial quotients gives
+$D_N^*(\alpha;x_0)\le C_\alpha\log N/N$, uniformly in the starting point
+\cite{KuipersNiederreiter1974,DrmotaTichy1997}.  Substitute this estimate into
+Theorem~\ref{thm:tv-certificate} and
+Theorem~\ref{thm:operational-observable-recovery}.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:operational-observable-recovery} and Corollary~\ref{cor:resolution-certificate} quantify the rotation source law after the conjugacy has been established. The finite-sample error terms are the orbit discrepancy and the boundary-layer mass.
+\end{remark}

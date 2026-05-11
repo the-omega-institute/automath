@@ -1,0 +1,124 @@
+\section{Finite-window entropy}\label{sec:entropy-ledger}
+
+The preceding sections concern overlapping windows. The complementary single-window identity separates the entropy of the stabilized word, the logarithmic size of its fiber, and the non-uniformity inside that fiber.
+
+\subsection{Fiber-uniform lift}\label{sec:entropy-ledger:lifts}
+
+\begin{definition}[Fiber-uniform lift]\label{def:fiber-lift}
+Let $\mu$ be a probability measure on $\{0,1\}^m$ and put
+$\pi=(\Fold_m)_*\mu$.  The fiber-uniform lift of $\pi$ is the probability
+measure $\mu^e$ on $\{0,1\}^m$ defined by
+\[
+  \mu^e(\omega)
+  :=
+  \frac{\pi(\Fold_m(\omega))}{d_m(\Fold_m(\omega))},
+  \qquad \omega\in\{0,1\}^m .
+\]
+Equivalently, $\mu^e$ has visible law $\pi$ and is uniform on each fiber
+$\mathcal F_m(x)$.
+\end{definition}
+
+\begin{remark}
+The normalization is immediate:
+\[
+\sum_{\omega\in\{0,1\}^m}\mu^e(\omega)
+=
+\sum_{x\in X_m}\sum_{\omega\in\mathcal{F}_m(x)}\frac{\pi(x)}{|\mathcal{F}_m(x)|}
+=
+\sum_{x\in X_m}\pi(x)=1.
+\]
+\end{remark}
+
+\subsection{Exact entropy decomposition}\label{sec:entropy-ledger:identity}
+
+\begin{theorem}[Entropy decomposition over fibers]\label{thm:kl-ledger}
+Let $\mu$ be a probability measure on $\{0,1\}^m$, let
+$\pi=(\Fold_m)_*\mu$, and let $\mu^e$ be the fiber-uniform lift of $\pi$.
+Then
+\[
+H(\mu)
+=
+H(\pi)+\EE_\pi\!\left[
+H\bigl(\mu(\,\cdot\,\mid\mathcal F_m(X))\bigr)
+\right],
+\]
+\[
+H(\mu^e)=H(\pi)+\EE_\pi[\log d_m(X)],
+\]
+and
+\[
+D_{\KL}(\mu\|\mu^e)
+=
+\EE_\pi[\log d_m(X)]
+-
+\EE_\pi\!\left[
+H\bigl(\mu(\,\cdot\,\mid\mathcal F_m(X))\bigr)
+\right].
+\]
+This is a fixed-window finite-partition identity and is not used to prove
+path-space injectivity or the Fischer-cover lower bound.
+\end{theorem}
+
+\begin{proof}
+Disintegrate $\mu$ over the finite partition into fibers:
+\[
+\mu(\omega)=\pi(x)\mu(\omega\mid\mathcal F_m(x)),
+\qquad \omega\in\mathcal F_m(x).
+\]
+The Shannon chain rule on this finite partition gives the first displayed
+identity.  For $\mu^e$, the conditional law on $\mathcal F_m(x)$ is uniform,
+so its conditional entropy is $\log d_m(x)$; the chain rule gives the second
+identity.
+
+Finally, if $\omega\in\mathcal F_m(x)$ and $\mu(\omega)>0$, then
+$\pi(x)>0$ and $\mu^e(\omega)=\pi(x)/d_m(x)>0$.  Hence
+\[
+\begin{aligned}
+D_{\KL}(\mu\|\mu^e)
+&=\sum_{x\in X_m}\sum_{\omega\in\mathcal F_m(x)}
+\mu(\omega)\log
+\frac{\pi(x)\mu(\omega\mid\mathcal F_m(x))}{\pi(x)/d_m(x)}\\
+&=\sum_{x\in X_m}\pi(x)
+\left(
+\log d_m(x)+
+\sum_{\omega\in\mathcal F_m(x)}
+\mu(\omega\mid\mathcal F_m(x))
+\log\mu(\omega\mid\mathcal F_m(x))
+\right),
+\end{aligned}
+\]
+which is the third formula.
+\end{proof}
+
+\begin{corollary}[Entropy increase under fiber equilibration]\label{cor:entropy-increase}
+Let $\mu^e$ be the fiber-uniform lift of $(\Fold_m)_*\mu$. Then
+\begin{equation}\label{eq:entropy-increase}
+H(\mu^e)-H(\mu)=D_{\KL}(\mu\|\mu^e).
+\end{equation}
+This corollary records the same fixed-window bookkeeping and makes no
+trajectory-level information-loss claim.
+\end{corollary}
+
+\begin{proof}
+Directly from the fiber-uniform lift,
+\[
+H(\mu^e)=H(\pi)+\EE_\pi[\log d_m(X)].
+\]
+The KL formula in Theorem~\ref{thm:kl-ledger} is exactly the difference
+between this entropy and $H(\mu)$, giving \eqref{eq:entropy-increase}.
+\end{proof}
+
+\subsection{Consequences for finite-window laws}\label{sec:entropy-ledger:consequences}
+
+\begin{remark}
+Theorem~\ref{thm:kl-ledger} separates three contributions: the visible
+entropy $H(\pi)$ of the stabilized type, the logarithmic fiber size
+$\EE_\pi[\log d_m(X)]$, and the within-fiber divergence
+$D_{\KL}(\mu\|\mu^e)$. For uniform input on $\{0,1\}^m$, one has
+$\pi_m^{\mathrm{unif}}(x)=d_m(x)/2^m$; hence the fiber counts determine both
+the visible law and the collision probability in Section~\ref{sec:fiber-spectrum}.
+\end{remark}
+
+\begin{remark}
+Theorem~\ref{thm:kl-ledger} is a fixed-window identity. For $m\ge3$, Theorem~\ref{thm:two-sided-conjugacy} shows that this local multiplicity does not imply loss of information on path space, because the overlapping process has a finite-memory inverse.
+\end{remark}
