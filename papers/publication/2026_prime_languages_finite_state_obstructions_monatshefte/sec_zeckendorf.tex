@@ -200,17 +200,19 @@ and set
   \[
     c_{\log}:=\frac12\log\varphi,\qquad C_{\log}:=3\log\varphi,
   \]
-  and let \(M_{\log}\) be the least integer \(M\ge2\) such that, for
-  all \(m\ge M\) and \(j=1,2\),
+  and let \(M_{\log}\) be produced by the following finite calculation.
+  Increase \(M\ge2\) until, for all \(m\ge M\) and \(j=1,2\),
   \[
     c_{\log}m\le \log F_{m+j}\le C_{\log}m.
   \]
-  This is a finite search using the preceding Binet bounds: the two
-  required inequalities follow once
+  This is reproducible from the preceding Binet bounds: the two
+  displayed inequalities are guaranteed once the linear inequalities
   \(\log c_F+m\log\varphi\ge c_{\log}m\) and
-  \(\log C_F+m\log\varphi\le C_{\log}m\).
+  \(\log C_F+m\log\varphi\le C_{\log}m\) hold, so it is enough to test
+  the resulting explicit lower bounds for \(m\).
 
-  Choose \(M_0\ge M_{\log}\) such that \(F_{m+1}\ge X_0\) and
+  Choose \(M_0\ge M_{\log}\) by increasing \(M\) until \(F_{m+1}\ge X_0\)
+  and
   \[
     \frac12\le
     \frac{\log F_{m+2}}{m\log\varphi},
@@ -221,8 +223,18 @@ and set
       \frac{\log F_{m+2}}{\log F_{m+1}}
     \le\frac{1+\varphi^{-1}}2
   \]
-  for every \(m\ge M_0\). Such an \(M_0\) is found effectively from the
-  same explicit Binet bounds. Put
+  for every \(m\ge M_0\). The logarithmic ratio conditions are checked
+  from the same linear Binet bounds. For the last inequality, the
+  exact sequence
+  \[
+    R_m:=
+    \frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}
+  \]
+  tends to \(\varphi^{-1}\); the algorithm uses interval arithmetic
+  from Binet's formula to certify
+  \(R_m\le(1+\varphi^{-1})/2\) on a monotone tail, and directly checks
+  the finite prefix before that tail. Put
   \[
     \Delta_m:=
     1-\frac{F_{m+1}}{F_{m+2}}
@@ -237,9 +249,15 @@ and set
     \le
     \frac12\,\frac{F_{m+2}}{\log F_{m+2}}\Delta_m .
   \]
-  This is again an effective finite search, since the left-hand side is
-  \(O(\varphi^m/m^2)\) while the right-hand side is
-  \(\gg\varphi^m/m\).
+  This last enlargement is also finite and reproducible. Using the
+  certified bounds \(c_F\varphi^m\le F_{m+j}\le C_F\varphi^m\) and
+  \(c_{\log}m\le\log F_{m+j}\le C_{\log}m\), the left-hand side is
+  bounded above by an explicit multiple of \(\varphi^m/m^2\) plus \(2\),
+  while the right-hand side is bounded below by an explicit multiple of
+  \(\varphi^m/m\). Once that symbolic majorization verifies the tail,
+  the finite prefix is checked by exact Fibonacci integers and real
+  interval arithmetic for the logarithms. This is the certificate for
+  \(M_{\mathrm Z}\).
   Every word in \(\mathcal Z_m\) represents an integer in
   \([F_{m+1},F_{m+2})\), so
   \[
