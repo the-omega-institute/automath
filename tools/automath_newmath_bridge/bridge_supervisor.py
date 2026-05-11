@@ -326,6 +326,23 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
     }
 
 
+def render_newmath_ack_status(config_path: Path) -> dict[str, Any]:
+    cmd = [
+        sys.executable,
+        str(SCRIPT_DIR / "render_newmath_ack_report.py"),
+        "--config",
+        str(config_path),
+    ]
+    result = run_command(cmd, timeout=120)
+    if result.returncode != 0:
+        return {"status": "failed", "reason": (result.stderr or result.stdout).strip()[:1000]}
+    try:
+        payload = json.loads(result.stdout.strip()) if result.stdout.strip() else {}
+    except json.JSONDecodeError:
+        payload = {"raw": result.stdout.strip()[:1000]}
+    return {"status": "ok", **payload}
+
+
 def _packet_name(result: dict[str, Any]) -> str:
     raw = str(result.get("id") or result.get("artifact_key") or result.get("source_path") or "packet")
     safe = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in raw)
@@ -391,6 +408,8 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
         timeout=args.standalone_synthesis_timeout,
     )
     gate_results = run_gates(config_path, allow_publication_risk=args.allow_publication_risk)
+    ack_result = render_newmath_ack_status(config_path)
+    _log(f"newmath_ack_status: {ack_result}")
 
     automath_apply = bool(args.apply_automath_writeback or config.get("automath_writeback", {}).get("apply_by_default", False))
     automath_push = bool(args.push_branch or config.get("automath_writeback", {}).get("push_branch_by_default", False))

@@ -33,6 +33,14 @@ DURABLE_WRITE_PREFIXES = (
     "tools/community-outreach/outreach_state/",
 )
 
+RUNTIME_PATH_MARKERS = (
+    "tools/automath_newmath_bridge/inbox/",
+    "tools/automath_newmath_bridge/out/",
+    "tools/automath_newmath_bridge/state/",
+    "tools/automath_newmath_bridge/logs/",
+    "tools/bedc-deep/state/",
+)
+
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
@@ -61,6 +69,10 @@ def _is_durable_write_path(path: str) -> bool:
     return any(path.startswith(prefix) for prefix in DURABLE_WRITE_PREFIXES)
 
 
+def _is_runtime_path(path: str) -> bool:
+    return any(path.startswith(prefix) for prefix in RUNTIME_PATH_MARKERS)
+
+
 def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False) -> dict[str, Any]:
     issues = validate_record(record)
     warnings: list[str] = []
@@ -68,6 +80,7 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
 
     source_kind = str(record.get("source_artifact_kind") or "")
     destination_path = str(record.get("destination_path") or "")
+    source_path = str(record.get("source_path") or "")
     publication_risk = str(record.get("external_publication_risk") or "none")
     synthesis = record.get("synthesis") if isinstance(record.get("synthesis"), dict) else {}
     readiness = str(synthesis.get("readiness") or "")
@@ -84,6 +97,10 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         issues.append(
             "destination_path points at durable paper/Lean/docs/outreach state; bridge may only write a local review packet automatically"
         )
+        passed = False
+
+    if _is_runtime_path(source_path) or _is_runtime_path(destination_path):
+        issues.append("bridge record points at runtime inbox/out/state/log path; runtime artifacts must not be committed or consumed as durable source")
         passed = False
 
     if publication_risk in {"medium", "high"} and not allow_publication_risk:
