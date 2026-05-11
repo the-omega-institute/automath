@@ -82,11 +82,16 @@ def _run_git(repo: Path, args: list[str]) -> str:
 
 def _resolve_repo_path(raw: str, config_path: Path) -> Path:
     path = Path(raw)
-    if not path.is_absolute():
-        path = (config_path.parent / path).resolve()
-        if not (path / ".git").exists():
-            path = (REPO_ROOT / raw).resolve()
-    return path
+    candidates = [path] if path.is_absolute() else [
+        config_path.parent / path,
+        REPO_ROOT / path,
+        REPO_ROOT.parent / path,
+    ]
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists():
+            return resolved
+    return candidates[-1].resolve()
 
 
 def _repo_branch(repo_path: Path) -> str:
@@ -183,6 +188,7 @@ def discover_records(
     *,
     include_unchanged: bool,
     limit_per_rule: int,
+    scan_limit_per_rule: int = 0,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     repos = _repo_meta(config, config_path)
     rules = config.get("discovery_rules")
@@ -229,11 +235,17 @@ def discover_records(
 
         matched: list[str] = []
         skipped_content = 0
+        scanned_candidates = 0
+        skipped_scan_limit = 0
         for path in paths:
             if include_globs and not _matches_any(path, include_globs):
                 continue
             if exclude_globs and _matches_any(path, exclude_globs):
                 continue
+            if scan_limit_per_rule > 0 and scanned_candidates >= scan_limit_per_rule:
+                skipped_scan_limit += 1
+                continue
+            scanned_candidates += 1
             if content_pattern:
                 text = _show_text(source_repo["local_path_resolved"], source_ref, path)
                 if not content_pattern.search(text):
@@ -300,6 +312,8 @@ def discover_records(
             "matched": len(matched),
             "emitted": emitted,
             "skipped_content": skipped_content,
+            "scanned_candidates": scanned_candidates,
+            "skipped_scan_limit": skipped_scan_limit,
             "changes": change_counts,
             "source_ref": source_ref,
             "source_commit": source_commit,
@@ -434,6 +448,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", default=str(DEFAULT_CONFIG), help="pipeline config JSON")
     parser.add_argument("--include-unchanged", action="store_true", help="emit records already seen in bridge state")
     parser.add_argument("--limit-per-rule", type=int, default=50, help="maximum emitted records per discovery rule")
+    parser.add_argument("--scan-limit-per-rule", type=int, default=0, help="maximum candidate paths scanned per discovery rule before content filtering")
     parser.add_argument("--update-state", action="store_true", help="persist observed artifacts to local bridge state")
     parser.add_argument("--no-synthesis", action="store_true", help="skip cross-repo readiness synthesis")
     parser.add_argument("--inbox", help="override inbox JSONL output path")
@@ -456,6 +471,7 @@ def main(argv: list[str] | None = None) -> int:
         state,
         include_unchanged=args.include_unchanged,
         limit_per_rule=max(1, args.limit_per_rule),
+        scan_limit_per_rule=max(0, args.scan_limit_per_rule),
     )
     if not args.no_synthesis:
         snapshot = build_repo_snapshot(config, config_path)

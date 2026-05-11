@@ -108,11 +108,16 @@ def _load_config(path: Path) -> dict[str, Any]:
 
 def _resolve_repo_path(raw: str, config_path: Path) -> Path:
     path = Path(raw)
-    if not path.is_absolute():
-        path = (config_path.parent / path).resolve()
-        if not (path / ".git").exists():
-            path = (REPO_ROOT / raw).resolve()
-    return path
+    candidates = [path] if path.is_absolute() else [
+        config_path.parent / path,
+        REPO_ROOT / path,
+        REPO_ROOT.parent / path,
+    ]
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists():
+            return resolved
+    return candidates[-1].resolve()
 
 
 def fetch_repo(repo_key: str, repo_cfg: dict[str, Any], config_path: Path) -> dict[str, Any]:
@@ -160,7 +165,14 @@ def run_command(args: list[str], *, timeout: int = 600) -> subprocess.CompletedP
     )
 
 
-def run_pipeline(config_path: Path, *, include_unchanged: bool, update_state: bool, limit_per_rule: int) -> None:
+def run_pipeline(
+    config_path: Path,
+    *,
+    include_unchanged: bool,
+    update_state: bool,
+    limit_per_rule: int,
+    scan_limit_per_rule: int,
+) -> None:
     cmd = [
         sys.executable,
         str(SCRIPT_DIR / "run_bridge_pipeline.py"),
@@ -168,6 +180,8 @@ def run_pipeline(config_path: Path, *, include_unchanged: bool, update_state: bo
         str(config_path),
         "--limit-per-rule",
         str(limit_per_rule),
+        "--scan-limit-per-rule",
+        str(scan_limit_per_rule),
     ]
     if include_unchanged:
         cmd.append("--include-unchanged")
@@ -316,6 +330,7 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
         include_unchanged=args.include_unchanged,
         update_state=args.update_state,
         limit_per_rule=args.limit_per_rule,
+        scan_limit_per_rule=args.scan_limit_per_rule,
     )
     run_synthesis_report(config_path)
     gate_results = run_gates(config_path, allow_publication_risk=args.allow_publication_risk)

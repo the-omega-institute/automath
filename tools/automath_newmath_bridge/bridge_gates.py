@@ -71,6 +71,8 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
     publication_risk = str(record.get("external_publication_risk") or "none")
     synthesis = record.get("synthesis") if isinstance(record.get("synthesis"), dict) else {}
     readiness = str(synthesis.get("readiness") or "")
+    if not readiness:
+        readiness = "needs_operator_review" if record.get("status") == "candidate" else "observe_only"
 
     durable_write_allowed = False
     packet_write_allowed = False
@@ -137,7 +139,7 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         "priority": int(record.get("priority", 0) or 0),
         "change_kind": record.get("change_kind", ""),
         "gate_status": gate_status,
-        "readiness": readiness or "unsynthesized",
+        "readiness": readiness,
         "readiness_confidence": synthesis.get("readiness_confidence", ""),
         "packet_write_allowed": packet_write_allowed,
         "durable_write_allowed": durable_write_allowed,

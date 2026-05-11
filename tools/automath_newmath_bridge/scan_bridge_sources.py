@@ -53,11 +53,16 @@ def _run_git(repo: Path, args: list[str]) -> str:
 
 def _resolve_repo_path(raw: str, config_path: Path) -> Path:
     path = Path(raw)
-    if not path.is_absolute():
-        path = (config_path.parent / path).resolve()
-        if not (path / ".git").exists():
-            path = (REPO_ROOT / raw).resolve()
-    return path
+    candidates = [path] if path.is_absolute() else [
+        config_path.parent / path,
+        REPO_ROOT / path,
+        REPO_ROOT.parent / path,
+    ]
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists():
+            return resolved
+    return candidates[-1].resolve()
 
 
 def _repo_commit(repo_path: Path, ref: str) -> str:
