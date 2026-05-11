@@ -74,7 +74,8 @@ Selection gate: `1` receivable item(s), `44` blocked or review-only item(s).
 
 ## Policy
 
-- The selection gate admits only `ready_for_local_packet` records into the receivable table.
+- The writeback selection gate admits only `gate_status=gate_passed` and `ready_for_local_packet` records.
+- `Input source: synthesis` means review-only evidence, not a deterministic gate pass.
 - `needs_operator_review` records a boundary, not acceptance, and is not selected for writeback.
 - `blocked_automath_not_ready` means NewMath evidence exists but Automath has not chosen a receiving paper/Lean target; it is never selected as returnable content.
 - The post-gate requires operator acceptance before any Killo/golden distillation candidate can be used.

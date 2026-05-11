@@ -61,6 +61,13 @@ def _git_stdout(args: list[str], *, timeout: int = 120) -> str:
     return result.stdout.strip()
 
 
+def _git_dir() -> Path:
+    path = Path(_git_stdout(["rev-parse", "--git-dir"], timeout=30))
+    if not path.is_absolute():
+        path = (REPO_ROOT / path).resolve()
+    return path
+
+
 def _load_config(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8-sig"))
     if not isinstance(data, dict):
@@ -121,6 +128,12 @@ def _release_lock(fd: int | None) -> None:
 
 
 def _python_bridge_processes() -> list[dict[str, Any]]:
+    if sys.platform.startswith("win"):
+        return _windows_bridge_processes()
+    return _posix_bridge_processes()
+
+
+def _windows_bridge_processes() -> list[dict[str, Any]]:
     ps_script = (
         "Get-CimInstance Win32_Process | "
         "Where-Object { "
@@ -131,15 +144,44 @@ def _python_bridge_processes() -> list[dict[str, Any]]:
         "$_.ExecutablePath -like '*Python*' "
         "} | Select-Object ProcessId,ParentProcessId,CreationDate,CommandLine | ConvertTo-Json -Depth 3"
     )
-    result = subprocess.run(["powershell", "-NoProfile", "-Command", ps_script], capture_output=True, text=True, timeout=30, check=False)
-    if result.returncode != 0 or not result.stdout.strip():
+    for shell in ("powershell", "pwsh"):
+        try:
+            result = subprocess.run([shell, "-NoProfile", "-Command", ps_script], capture_output=True, text=True, timeout=30, check=False)
+        except FileNotFoundError:
+            continue
+        if result.returncode != 0 or not result.stdout.strip():
+            continue
+        data = json.loads(result.stdout)
+        if isinstance(data, dict):
+            data = [data]
+        if not isinstance(data, list):
+            return []
+        return [item for item in data if isinstance(item, dict)]
+    return []
+
+
+def _posix_bridge_processes() -> list[dict[str, Any]]:
+    result = subprocess.run(["ps", "-axo", "pid=,ppid=,command="], capture_output=True, text=True, timeout=30, check=False)
+    if result.returncode != 0:
         return []
-    data = json.loads(result.stdout)
-    if isinstance(data, dict):
-        data = [data]
-    if not isinstance(data, list):
-        return []
-    return [item for item in data if isinstance(item, dict)]
+    needles = ("bridge_supervisor.py", "bridge_heavy_loop.py", "bridge_production_loop.py", "bridge_watchdog.py")
+    processes: list[dict[str, Any]] = []
+    for line in result.stdout.splitlines():
+        parts = line.strip().split(None, 2)
+        if len(parts) != 3:
+            continue
+        pid, ppid, command = parts
+        if not any(needle in command for needle in needles):
+            continue
+        processes.append(
+            {
+                "ProcessId": pid,
+                "ParentProcessId": ppid,
+                "CreationDate": "",
+                "CommandLine": command,
+            }
+        )
+    return processes
 
 
 def _count_processes(processes: list[dict[str, Any]], needle: str, repo_marker: str) -> int:
@@ -194,7 +236,7 @@ def _git_status(*, push_safe_current_branch: bool) -> dict[str, Any]:
 def _stale_lock_checks(stale_lock_seconds: int) -> list[dict[str, Any]]:
     locks = [
         SCRIPT_DIR / "state" / "bridge_heavy_loop.lock",
-        REPO_ROOT / ".git" / "omega_bridge_fetch.lock",
+        _git_dir() / "omega_bridge_fetch.lock",
     ]
     checks = []
     for path in locks:
@@ -254,18 +296,20 @@ def run_once(args: argparse.Namespace) -> bool:
         },
     }
     issues: list[str] = []
-    if supervisor_age is None:
-        issues.append("missing persistent supervisor stdout log")
-    elif supervisor_age > args.max_supervisor_log_age:
-        issues.append(f"supervisor log stale: {round(supervisor_age, 1)}s")
-    if heavy_age is None:
-        issues.append("missing heavy loop log")
-    elif heavy_age > args.max_heavy_log_age:
-        issues.append(f"heavy loop log stale: {round(heavy_age, 1)}s")
-    if supervisor_stderr_size:
-        issues.append(f"supervisor stderr is non-empty: {supervisor_stderr_size} bytes")
-    if heavy_stderr_size:
-        issues.append(f"heavy loop stderr is non-empty: {heavy_stderr_size} bytes")
+    if args.min_supervisor_processes > 0:
+        if supervisor_age is None:
+            issues.append("missing persistent supervisor stdout log")
+        elif supervisor_age > args.max_supervisor_log_age:
+            issues.append(f"supervisor log stale: {round(supervisor_age, 1)}s")
+        if supervisor_stderr_size:
+            issues.append(f"supervisor stderr is non-empty: {supervisor_stderr_size} bytes")
+    if args.min_heavy_processes > 0:
+        if heavy_age is None:
+            issues.append("missing heavy loop log")
+        elif heavy_age > args.max_heavy_log_age:
+            issues.append(f"heavy loop log stale: {round(heavy_age, 1)}s")
+        if heavy_stderr_size:
+            issues.append(f"heavy loop stderr is non-empty: {heavy_stderr_size} bytes")
     if args.min_production_processes > 0:
         if production_age is None:
             issues.append("missing production loop log")

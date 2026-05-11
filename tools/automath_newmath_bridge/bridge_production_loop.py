@@ -67,8 +67,6 @@ def _normalized(record: dict[str, Any], *, input_kind: str) -> dict[str, Any]:
         normalized.setdefault("evidence_summary", synthesis.get("evidence_summary"))
         normalized.setdefault("required_gates", synthesis.get("required_gates"))
         normalized.setdefault("why_not_writeback_yet", synthesis.get("why_not_writeback_yet"))
-    if input_kind == "synthesis":
-        normalized.setdefault("gate_status", "synthesis_ready")
     normalized["_bridge_input_kind"] = input_kind
     return normalized
 
@@ -92,7 +90,7 @@ def _direction_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def _pre_gate_passed(record: dict[str, Any]) -> bool:
     readiness = str(record.get("readiness") or "")
-    if record.get("gate_status") not in {"gate_passed", "synthesis_ready"}:
+    if record.get("gate_status") != "gate_passed":
         return False
     if readiness != "ready_for_local_packet":
         return False
@@ -101,7 +99,18 @@ def _pre_gate_passed(record: dict[str, Any]) -> bool:
     return True
 
 
+def _review_only(record: dict[str, Any]) -> bool:
+    return (
+        record.get("_bridge_input_kind") == "synthesis"
+        and record.get("bridge_direction") == "newmath_to_automath"
+        and record.get("destination_repo") == "the-omega-institute/automath"
+        and str(record.get("readiness") or "") == "ready_for_local_packet"
+    )
+
+
 def _post_gate_state(record: dict[str, Any]) -> str:
+    if _review_only(record):
+        return "review_only_synthesis_not_writeback_eligible"
     if not _pre_gate_passed(record):
         return "not_selected"
     if record.get("operator_review_required") and record.get("status") not in {"accepted", "consumed"}:
@@ -110,13 +119,13 @@ def _post_gate_state(record: dict[str, Any]) -> str:
 
 
 def _selected(records: list[dict[str, Any]], *, limit: int) -> list[dict[str, Any]]:
-    selected = [record for record in _direction_records(records) if _pre_gate_passed(record)]
+    selected = [record for record in _direction_records(records) if _pre_gate_passed(record) or _review_only(record)]
     selected.sort(key=lambda item: (-int(item.get("priority_score") or 0), str(item.get("source_path") or "")))
     return selected[:limit]
 
 
 def _blocked(records: list[dict[str, Any]], *, limit: int) -> list[dict[str, Any]]:
-    blocked = [record for record in _direction_records(records) if not _pre_gate_passed(record)]
+    blocked = [record for record in _direction_records(records) if not _pre_gate_passed(record) and not _review_only(record)]
     blocked.sort(key=lambda item: (-int(item.get("priority_score") or 0), str(item.get("source_path") or "")))
     return blocked[:limit]
 
@@ -221,7 +230,8 @@ def _render(records: list[dict[str, Any]], *, limit: int, input_kind: str) -> st
             "",
             "## Policy",
             "",
-            "- The selection gate admits only `ready_for_local_packet` records into the receivable table.",
+            "- The writeback selection gate admits only `gate_status=gate_passed` and `ready_for_local_packet` records.",
+            "- `Input source: synthesis` means review-only evidence, not a deterministic gate pass.",
             "- `needs_operator_review` records a boundary, not acceptance, and is not selected for writeback.",
             "- `blocked_automath_not_ready` means NewMath evidence exists but Automath has not chosen a receiving paper/Lean target; it is never selected as returnable content.",
             "- The post-gate requires operator acceptance before any Killo/golden distillation candidate can be used.",

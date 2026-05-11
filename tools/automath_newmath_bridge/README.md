@@ -60,9 +60,10 @@ The bridge uses four independent loops:
 - `bridge_heavy_loop.py` handles slower synthesis and Automath writeback
   dry-runs from already generated artifacts. Restarting or changing it must not
   interrupt the main scanner.
-- `bridge_production_loop.py` converts NewMath-to-Automath synthesis output
-  into durable receiving indexes while preserving the Killo/golden writeback
-  boundary for paper content.
+- `bridge_production_loop.py` converts NewMath-to-Automath output into durable
+  receiving indexes while preserving the Killo/golden writeback boundary for
+  paper content. Synthesis-only rows are review leads, not deterministic gate
+  passes.
 - `bridge_watchdog.py` checks that the other loops remain healthy. It writes
   only ignored status/log files and can optionally push the current `codex/*`
   audit branch when it is clean and ahead of its upstream.
@@ -115,6 +116,10 @@ python3 tools/automath_newmath_bridge/bridge_watchdog.py \
 
 The watchdog does not create PRs, merge BEDC branches, push production bridge
 branches, or commit runtime artifacts.
+
+Only records with `gate_status=gate_passed` may enter Automath-native
+Killo/golden writeback. `Input source: synthesis` in a receiving index is an AI
+review signal, not permission to write paper or Lean content.
 
 ## Artifact kinds
 
