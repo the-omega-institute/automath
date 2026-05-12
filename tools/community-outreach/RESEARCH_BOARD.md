@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — Misframed target. The board entry itself records that Erdős #1191 is an infinite Sidon-set liminf/logarithmic-density problem, while the proposed statement is a finite Sidon second-order constant/ansatz-extremality proje |
+| Status | **🔴 DROP · profile judge DROP** — Misframed and too derivative for automated deep reasoning: the board entry itself records that the named Erdős #1191 infinite Sidon-set problem is being conflated with a finite Sidon diameter second-order constant / piec |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
@@ -422,7 +422,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — Not viable as stated: the supremum over /t/<=1 includes t=0, so the objective contains ∫ f(x)^2 dx / //f//_1^2. For nonnegative L^1 functions supported in [-1/4,1/4], this ratio is unbounded by concentrating unit L^1 mas |
+| Status | **🔴 DROP · profile judge DROP** — Not viable as stated. The supremum over /t/<=1 includes t=0, so the objective contains ∫ f(x)^2 dx / //f//_1^2. For nonnegative L^1 functions supported in [-1/4,1/4], this ratio is unbounded by concentrating fixed L^1 ma |
 | Source | AlphaEvolve PDF + Boyer-Steinerberger arxiv:2506.16750 + arxiv:2508.02803 |
 | Type | OPEN / extremal functional |
 | Untouched | ✅ 全是 step-function 数值竞赛, 0 人攻 closed form |
