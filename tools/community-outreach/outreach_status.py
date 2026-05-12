@@ -427,6 +427,7 @@ def _pi_status() -> dict:
         "age_minutes": age_minutes,
         "ok": bool(row.get("ok")),
         "rc": row.get("rc"),
+        "backend": row.get("backend"),
         "plan_health": (row.get("plan") or {}).get("loop_health") if isinstance(row.get("plan"), dict) else None,
         "reason": reason,
     }
@@ -607,9 +608,15 @@ def _print_text(report: dict) -> None:
     if pi:
         pi_line = "available" if pi.get("available") else "unavailable"
         reason = pi.get("reason") or pi.get("plan_health") or ""
+        backend = pi.get("backend") or {}
+        backend_text = ""
+        if isinstance(backend, dict) and backend.get("backend"):
+            backend_text = f" backend={backend.get('backend')}"
+            if backend.get("fallback_used"):
+                backend_text += f" fallback={backend.get('fallback_reason', '')}"
         age = pi.get("age_minutes")
         age_text = f", age={age}m" if age is not None else ""
-        print(f"PI: {pi_line}{age_text} {reason}".rstrip())
+        print(f"PI: {pi_line}{age_text}{backend_text} {reason}".rstrip())
     decision = report.get("decision_view") or {}
 
     print("1. 还在跑")

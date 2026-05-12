@@ -376,11 +376,11 @@ def collect_snapshot() -> dict:
 # working without taking on this module's import-time risk surface.
 
 sys.path.insert(0, str(SCRIPT_DIR))
-from outreach_claude_exec import claude_exec as _claude_exec  # noqa: E402
+import outreach_claude_exec as _claude_backend  # noqa: E402
 
 
 def claude_exec(prompt: str, *, timeout: int = PI_TIMEOUT_S, log_tag: str = "pi_review") -> tuple[bool, str, int]:
-    return _claude_exec(
+    return _claude_backend.claude_exec(
         prompt,
         timeout=timeout,
         log_tag=log_tag,
@@ -750,6 +750,30 @@ def run_review(supervisor_callbacks: dict | None = None) -> dict | None:
     plan: dict | None = None
     if ok:
         plan = _extract_json_object(stdout)
+    if ok and plan is None:
+        repair_prompt = (
+            "The previous PI backend response did not parse as the required "
+            "single JSON object. Convert the text below into the exact PI JSON "
+            "schema requested by the original prompt. Output only JSON with "
+            "keys loop_health, rationale, autonomous_actions, human_inbox, "
+            "concerns. If the response contains no usable plan, return a "
+            "degraded plan that says the PI backend response was unparseable "
+            "and recommends no external actions.\n\n"
+            "=== UNPARSEABLE RESPONSE ===\n"
+            f"{stdout[:30000]}"
+        )
+        ok2, stdout2, rc2 = _claude_backend.codex_fallback_exec(
+            repair_prompt,
+            timeout=min(600, PI_TIMEOUT_S),
+            log_tag="pi_json_repair",
+            log_dir=SUPERVISOR_LOG_DIR,
+            repo_root=REPO_ROOT,
+            reason="PI response was not parseable JSON",
+        )
+        if ok2:
+            repaired = _extract_json_object(stdout2)
+            if repaired:
+                ok, stdout, rc, plan = ok2, stdout2, rc2, repaired
 
     applied: list[str] = []
     inbox: list[str] = []
@@ -765,6 +789,7 @@ def run_review(supervisor_callbacks: dict | None = None) -> dict | None:
         "ts": _now_iso(),
         "ok": ok,
         "rc": rc,
+        "backend": dict(_claude_backend.LAST_EXEC_INFO),
         "snapshot": snapshot,
         "plan": plan,
         "applied": applied,

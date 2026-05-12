@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""outreach_writeback_loop — claude + /killo-golden skill backflow daemon.
+"""outreach_writeback_loop — Claude/Codex writeback backflow daemon.
 
 Phase 2 of the operator-designed agent allocation:
   - codex / oracle / claude do the heavy thinking and drafting
   - the operator reviews each draft (gated_ready → user approval)
   - **this loop** writes the approved deliverable into the main paper
-    using claude with the /killo-golden skill (academic-prose integration,
-    no visible patch traces, no time-stamps, no "新增 / 补充" prefixes)
+    using Claude with the /killo-golden skill when available, or Codex as an
+    audited fallback when Claude is quota-limited/unavailable.
 
 Invocation gate: a task must EXPLICITLY transition to status='writeback_pending'
 before this loop will touch the main paper. The operator does that
@@ -206,9 +206,82 @@ def _build_skill_args(task: TaskSpec) -> str:
     return " ".join(parts)
 
 
+def _looks_like_claude_limit(text: str) -> bool:
+    lower = (text or "").lower()
+    return any(
+        needle in lower
+        for needle in (
+            "hit your limit",
+            "usage limit",
+            "rate limit",
+            "quota",
+            "too many requests",
+            "try again later",
+            "resets ",
+        )
+    )
+
+
+def _run_codex_writeback_fallback(task: TaskSpec, *, reason: str) -> tuple[bool, str]:
+    if not task.deliverable_paths:
+        return False, "task.deliverable_paths empty"
+    deliverable_abs = (
+        task.deliverable_paths[0]
+        if Path(task.deliverable_paths[0]).is_absolute()
+        else REPO_ROOT / task.deliverable_paths[0]
+    )
+    if not deliverable_abs.exists():
+        return False, f"deliverable missing on disk: {task.deliverable_paths[0]}"
+    try:
+        from outreach_codex_track import codex_exec  # noqa: PLC0415
+    except Exception as exc:
+        return False, f"codex fallback import failed: {exc}"
+
+    bf = (task.context or {}).get("backflow") or {}
+    target_root = bf.get("target_paper_root") or (
+        "theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence"
+    )
+    section_hint = bf.get("target_section_hint") or ""
+    extra = bf.get("skill_args_extra") or ""
+    prompt = f"""You are Codex acting as the fallback writeback backend for the Omega outreach pipeline.
+
+Claude /killo-golden is unavailable for this writeback, so perform the same writeback discipline directly.
+
+Fallback reason: {reason}
+
+Task id: {task.id}
+Deliverable: {task.deliverable_paths[0]}
+Target paper root: {target_root}
+Target section hint: {section_hint or "(none)"}
+Operator note: {extra or "(none)"}
+
+Instructions:
+- Read the deliverable in full before editing.
+- Locate the closest existing section where the material belongs.
+- Integrate as continuous academic prose; do not add visible patch traces, timestamps, changelog notes, or "newly added" / "supplement" prefixes.
+- Do not overclaim. Preserve all caveats, proof/evidence limits, and operator constraints from the deliverable.
+- Do not send email, post externally, push, or commit.
+- Keep edits scoped to the target paper root unless the existing include structure requires a sibling file.
+- Do not exceed 600 lines per edited file; create a new sibling file if needed and wire it into the local include structure only when necessary.
+- At the end, report files changed and any verification you ran.
+"""
+    writeback_log(f"{task.id}: Claude unavailable; invoking Codex writeback fallback ({reason})")
+    result = codex_exec(
+        prompt,
+        timeout=DEFAULT_TIMEOUT_S,
+        log_tag=f"writeback_fallback_{task.id}",
+    )
+    if not result.ok:
+        return False, f"codex fallback failed: {result.error or result.raw[:500]}"
+    return True, f"writeback complete via codex fallback ({len(result.raw or '')} chars; reason={reason})"
+
+
 def _run_writeback(task: TaskSpec) -> tuple[bool, str]:
     if not CLAUDE_PATH or not Path(CLAUDE_PATH).exists():
-        return False, f"claude CLI not found at {CLAUDE_PATH}"
+        return _run_codex_writeback_fallback(
+            task,
+            reason=f"claude CLI not found at {CLAUDE_PATH}",
+        )
     if not task.deliverable_paths:
         return False, "task.deliverable_paths empty"
     deliverable_abs = (task.deliverable_paths[0]
@@ -253,15 +326,22 @@ def _run_writeback(task: TaskSpec) -> tuple[bool, str]:
             except (ProcessLookupError, OSError):
                 pass
             stdout_log.write_text("(killed on timeout)\n", encoding="utf-8")
-            return False, f"writeback timed out after {DEFAULT_TIMEOUT_S}s"
+            return _run_codex_writeback_fallback(
+                task,
+                reason=f"claude writeback timed out after {DEFAULT_TIMEOUT_S}s",
+            )
     except Exception as exc:
-        return False, f"claude spawn failed: {exc}"
+        return _run_codex_writeback_fallback(task, reason=f"claude spawn failed: {exc}")
 
     stdout_log.write_text(out or "", encoding="utf-8")
     stderr_log.write_text(err or "", encoding="utf-8")
     if rc != 0:
-        return False, f"claude rc={rc} stderr_head={(err or '')[:200]}"
+        failure = "\n".join([out or "", err or ""])
+        reason = "claude quota/limit" if _looks_like_claude_limit(failure) else f"claude rc={rc}"
+        return _run_codex_writeback_fallback(task, reason=reason)
     body = (out or "").strip()
+    if _looks_like_claude_limit(body):
+        return _run_codex_writeback_fallback(task, reason="claude quota/limit")
     return True, f"writeback complete ({len(body)} chars stdout; logs={stdout_log.name})"
 
 

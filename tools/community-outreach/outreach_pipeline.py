@@ -2237,10 +2237,9 @@ def claude_exec(
 ) -> str:
     if os.environ.get("OUTREACH_ALLOW_CLAUDE") != "1":
         logger.warning(
-            "Claude disabled in legacy outreach_pipeline.py; use PI/writeback paths "
-            "or set OUTREACH_ALLOW_CLAUDE=1 for an explicit diagnostic."
+            "Claude disabled in legacy outreach_pipeline.py; falling back to Codex."
         )
-        return "(claude disabled outside PI/writeback)"
+        return codex_exec(prompt, work_dir=work_dir, timeout=timeout, dry_run=dry_run)
 
     if dry_run:
         logger.info("[DRY RUN] claude exec in %s", work_dir)
@@ -2268,16 +2267,28 @@ def claude_exec(
             errors="replace",
         )
     except subprocess.TimeoutExpired:
-        logger.warning("Claude CLI timed out after %ss", timeout)
-        return "(timeout)"
+        logger.warning("Claude CLI timed out after %ss; falling back to Codex", timeout)
+        return codex_exec(prompt, work_dir=work_dir, timeout=timeout, dry_run=dry_run)
     finally:
         elapsed = time.monotonic() - start
         rc = result.returncode if result else "?"
         logger.info("Claude exec: %.1fs (rc=%s)", elapsed, rc)
 
     output = result.stdout if result else ""
-    if result and result.returncode != 0 and not output:
-        logger.warning("Claude stderr: %s", (result.stderr or "")[:400])
+    combined = "\n".join([output or "", (result.stderr if result else "") or ""])
+    limit_markers = (
+        "hit your limit",
+        "usage limit",
+        "rate limit",
+        "quota",
+        "too many requests",
+        "try again later",
+    )
+    if any(marker in combined.lower() for marker in limit_markers):
+        logger.warning("Claude quota/limit text detected; falling back to Codex")
+        return codex_exec(prompt, work_dir=work_dir, timeout=timeout, dry_run=dry_run)
+    if result and result.returncode != 0:
+        logger.warning("Claude stderr: %s", (result.stderr or output or "")[:400])
         return codex_exec(prompt, work_dir=work_dir, timeout=timeout, dry_run=dry_run)
     return output or (result.stderr if result else "")
 
