@@ -88,6 +88,8 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import quote
 
+import split_overlap_harness
+
 # ---------------------------------------------------------------------------
 # Paths & constants
 # ---------------------------------------------------------------------------
@@ -355,6 +357,33 @@ def _invalidate_board_cache() -> None:
 def _board_skip(status: str) -> bool:
     """Return True if this paper should be skipped by the pipeline."""
     s = status.strip()
+    skip_prefixes = (
+        "\u5df2\u6295",       # submitted
+        "\u5df2\u63a5\u6536", # accepted
+        "\u63a5\u6536",       # accept
+        "\u5df2\u53d1\u8868", # published
+        "\u62d2\u7a3f",       # rejected
+        "\u9aa8\u67b6",       # skeleton
+        "\u5f52\u6863",       # archived
+        "\u5f85\u5206\u8bca", # triage pending
+        "submitted",
+        "under review",
+        "accepted",
+        "published",
+        "rejected",
+        "archived",
+    )
+    s_lower = s.lower()
+    for prefix in skip_prefixes:
+        if s.startswith(prefix) or s_lower.startswith(prefix):
+            return True
+    for marker in (
+        "\u5ba1\u7a3f\u4e2d", # under review
+        "peer review",
+        "under review",
+    ):
+        if marker in s or marker in s_lower:
+            return True
     for prefix in ("已投", "已接收", "接收", "已发表", "拒稿", "骨架", "归档",
                     "待分诊"):
         if s.startswith(prefix):
@@ -655,6 +684,16 @@ def save_state(state: PaperState) -> None:
             json.dump(state.to_dict(), f, indent=2, ensure_ascii=False)
 
 
+
+def _state_dict_value(data: dict, key: str) -> dict:
+    value = data.get(key, {})
+    return value if isinstance(value, dict) else {}
+
+
+def _state_list_value(data: dict, key: str) -> list:
+    value = data.get(key, [])
+    return value if isinstance(value, list) else []
+
 def load_state(paper_name: str) -> Optional[PaperState]:
     path = _state_file(paper_name)
     if not path.exists():
@@ -679,21 +718,21 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                      "block_reason"):
             if key in data:
                 setattr(s, key, data[key])
-        s.stage_a_scores = data.get("stage_a_scores", [])
-        s.stage_a_audit_metrics = data.get("stage_a_audit_metrics", {})
-        s.stage_a_inventory = data.get("stage_a_inventory", {})
-        s.stage_a_split_candidates = data.get("stage_a_split_candidates", [])
-        s.stage_a_failure_classes = data.get("stage_a_failure_classes", [])
-        s.stage_b_verdicts = data.get("stage_b_verdicts", [])
-        s.stage_b_all_issues = data.get("stage_b_all_issues", [])
-        s.stage_b_issue_streaks = data.get("stage_b_issue_streaks", {})
-        s.stage_b_reject_classes = data.get("stage_b_reject_classes", [])
-        s.stage_b_diff_scope_misses = data.get("stage_b_diff_scope_misses", [])
-        s.stage_c_verdicts = data.get("stage_c_verdicts", [])
-        s.stage_d_backflow_items = data.get("stage_d_backflow_items", [])
-        s.history = data.get("history", [])
-        s.events = data.get("events", [])
-        s.retarget_history = data.get("retarget_history", [])
+        s.stage_a_scores = _state_list_value(data, "stage_a_scores")
+        s.stage_a_audit_metrics = _state_dict_value(data, "stage_a_audit_metrics")
+        s.stage_a_inventory = _state_dict_value(data, "stage_a_inventory")
+        s.stage_a_split_candidates = _state_list_value(data, "stage_a_split_candidates")
+        s.stage_a_failure_classes = _state_list_value(data, "stage_a_failure_classes")
+        s.stage_b_verdicts = _state_list_value(data, "stage_b_verdicts")
+        s.stage_b_all_issues = _state_list_value(data, "stage_b_all_issues")
+        s.stage_b_issue_streaks = _state_dict_value(data, "stage_b_issue_streaks")
+        s.stage_b_reject_classes = _state_list_value(data, "stage_b_reject_classes")
+        s.stage_b_diff_scope_misses = _state_list_value(data, "stage_b_diff_scope_misses")
+        s.stage_c_verdicts = _state_list_value(data, "stage_c_verdicts")
+        s.stage_d_backflow_items = _state_list_value(data, "stage_d_backflow_items")
+        s.history = _state_list_value(data, "history")
+        s.events = _state_list_value(data, "events")
+        s.retarget_history = _state_list_value(data, "retarget_history")
         return s
     except Exception:
         return None
@@ -838,6 +877,7 @@ _ARTIFACT_PATTERNS = (
     "research_directive.md", "scope_contract.md", "scope_contract.json",
     "theorem_inventory.md", "theorem_inventory.json",
     "split_candidates.json", "stage_a_audit.json",
+    "semantic_overlap_blockers.json", "semantic_overlap_blockers.md",
     ".pipeline.stop",
 )
 _ARTIFACT_DIR_NAMES = {
@@ -1663,6 +1703,44 @@ def claude_health_status(timeout_seconds: int = 45) -> tuple[bool, str]:
     return True, "Claude supervision available"
 
 
+
+def _configure_claude_startup_mode(
+    *,
+    dry_run: bool,
+    no_claude: bool,
+    health_check=claude_health_status,
+) -> bool:
+    """Configure startup mode without letting Claude quota stop the run."""
+    global CLAUDE_ENABLED
+
+    if no_claude:
+        CLAUDE_ENABLED = False
+        if not dry_run:
+            logger.warning(
+                "Claude gates disabled by --no-claude; running Codex+ChatGPT "
+                "fallback mode"
+            )
+        return True
+
+    CLAUDE_ENABLED = True
+    if dry_run:
+        return True
+
+    claude_ok, claude_msg = health_check()
+    if claude_ok:
+        return True
+
+    CLAUDE_ENABLED = False
+    logger.warning(
+        "Claude supervision unavailable; continuing in Codex+ChatGPT "
+        "fallback mode: %s", claude_msg
+    )
+    logger.warning(
+        "Claude-only final review/writeback gates will pause individual papers "
+        "instead of blocking the whole pipeline."
+    )
+    return True
+
 def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
                 timeout_seconds: int = 600,
                 dry_run: bool = False,
@@ -2235,6 +2313,144 @@ def _is_boilerplate(phrase: str) -> bool:
     routine 'Let X be a ...' openers."""
     low = phrase.lower()
     return any(marker in low for marker in _BOILERPLATE_MARKERS)
+
+
+def _publication_sibling_papers(current_paper: Path) -> list[Path]:
+    """Return publication sibling directories, including submitted archives."""
+    siblings: list[Path] = []
+    if not PAPERS_PUB_DIR_CONST.exists():
+        return siblings
+    for p in PAPERS_PUB_DIR_CONST.iterdir():
+        if not p.is_dir():
+            continue
+        if p.name.startswith("."):
+            continue
+        if p.name in ("oracle", "backflow", "strategy"):
+            continue
+        if p.resolve() == current_paper.resolve():
+            continue
+        siblings.append(p)
+    return siblings
+
+
+def detect_semantic_submission_overlaps(
+    current_paper: Path,
+    other_papers: list[Path],
+    min_shared_markers: int = 4,
+) -> list[dict]:
+    """Compatibility wrapper around the deterministic split-overlap harness."""
+    board_entries = split_overlap_harness.parse_board_entries(PROGRAM_BOARD)
+    current_record = split_overlap_harness.build_paper_record(
+        current_paper, board_entries
+    )
+    records: list[dict] = []
+
+    for sibling in other_papers:
+        if sibling.resolve() == current_paper.resolve():
+            continue
+        sibling_record = split_overlap_harness.build_paper_record(
+            sibling, board_entries
+        )
+        finding = split_overlap_harness.compare_paper_records(
+            current_record,
+            sibling_record,
+            min_shared_markers=min_shared_markers,
+        )
+        if not finding:
+            continue
+        if not split_overlap_harness.finding_blocks_current_paper(
+            finding, current_paper.name
+        ):
+            continue
+        finding["sibling"] = sibling.name
+        finding["board_status"] = finding.get("board_b", "")
+        records.append(finding)
+    return records
+
+
+def _write_semantic_overlap_blockers(paper_path: Path,
+                                     report: dict) -> None:
+    try:
+        (paper_path / "semantic_overlap_blockers.json").write_text(
+            json.dumps(report, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        (paper_path / "semantic_overlap_blockers.md").write_text(
+            split_overlap_harness.render_markdown_report(report),
+            encoding="utf-8",
+        )
+    except Exception as exc:
+        logger.warning(f"Failed to write semantic overlap blockers: {exc}")
+
+
+def _semantic_overlap_block_reason(report: dict) -> str:
+    findings = report.get("findings", [])
+    failing = [
+        finding for finding in findings
+        if finding.get("classification")
+        in split_overlap_harness.FAILING_CLASSIFICATIONS
+    ]
+    if failing and all(
+        finding.get("classification")
+        == split_overlap_harness.DEFERRED_PRIOR_SUBMISSION_CLASSIFICATION
+        for finding in failing
+    ):
+        deferred = sorted(
+            {
+                str(finding.get("deferred_paper") or finding.get("paper_a") or "")
+                for finding in failing
+                if finding.get("deferred_paper") or finding.get("paper_a")
+            }
+        )
+        primary = sorted(
+            {
+                str(finding.get("primary_paper") or "")
+                for finding in failing
+                if finding.get("primary_paper")
+            }
+        )
+        primary_text = ", ".join(primary[:3]) or "prior submitted sibling"
+        deferred_text = ", ".join(deferred[:3]) or "this later draft"
+        return (
+            f"overlap with earlier submitted/current paper(s) {primary_text}; "
+            f"defer this later draft ({deferred_text}) until prior submission "
+            "receives editorial feedback or the board explicitly closes, "
+            "supersedes, merges, or withdraws that route"
+        )
+    return (
+        "semantic overlap requires explicit board resolution before this "
+        "paper can advance"
+    )
+
+
+def run_semantic_submission_overlap_gate(
+    state: PaperState,
+    *,
+    dry_run: bool = False,
+    tag: str = "",
+) -> bool:
+    paper_path = Path(state.paper_dir)
+    report = split_overlap_harness.build_overlap_report(
+        publication_dir=PAPERS_PUB_DIR_CONST,
+        board_path=PROGRAM_BOARD,
+        current_paper=paper_path,
+    )
+    if not report.get("gate_failed"):
+        return True
+    _write_semantic_overlap_blockers(paper_path, report)
+    findings = report.get("findings", [])
+    detail = json.dumps({
+        "summary": report.get("summary", {}),
+        "findings": findings[:5],
+    }, ensure_ascii=False)[:4000]
+    state.log_event("A", "semantic_submission_overlap_blocked",
+                    detail=detail)
+    return _stage_a_block(
+        state,
+        _semantic_overlap_block_reason(report),
+        dry_run=dry_run,
+        tag=tag,
+    )
 
 
 def build_cross_paper_dedup_prompt(paper_dir: str,
@@ -2937,9 +3153,13 @@ def build_deep_extension_prompt(paper_dir: str, target_journal: str,
            highest existing [New-*] tag in the paper before starting). This tag
            lives INSIDE the theorem environment, right after \\begin{{theorem}}[...].
         4. **No self-plagiarism across papers.** Before adding a theorem, grep
-           every sibling paper in papers/publication/2026_*/*.tex. If ≥70%
-           literal overlap or the statement already exists under another label,
-           abort that theorem and choose a different extension direction.
+           every sibling paper in `papers/publication/2026_*/*.tex` and
+           `papers/publication/submitted_2026_*/*.tex`. If ≥70% literal overlap,
+           semantic overlap with a submitted/rejected sibling, or the statement
+           already exists under another label, abort that theorem and choose a
+           different extension direction. A submitted/rejected sibling may be
+           reused only if the board explicitly says it is closed, superseded,
+           merged into the current paper, or parked.
         5. **Rigorous academic register only.** No colloquialisms, no
            first-person narrative ("we now show", "note that"), no filler
            ("interestingly", "remarkably"), no hedging ("it seems", "likely").
@@ -4387,20 +4607,8 @@ def run_stage_a_dedup(state: PaperState, *, round_num: int,
         logger.info(f"{tag} A-DEDUP [dry run] skip")
         return True
 
-    # Collect sibling papers (everything in papers/publication/ except self
-    # and non-paper directories)
-    siblings: list[Path] = []
-    if PAPERS_PUB_DIR_CONST.exists():
-        for p in PAPERS_PUB_DIR_CONST.iterdir():
-            if not p.is_dir():
-                continue
-            if p.name.startswith("."):
-                continue
-            if p.name in ("oracle", "backflow", "strategy"):
-                continue
-            if p.resolve() == paper_path.resolve():
-                continue
-            siblings.append(p)
+    # Collect sibling papers, including historical submitted_* archives.
+    siblings = _publication_sibling_papers(paper_path)
 
     overlaps = detect_cross_paper_overlaps(paper_path, siblings)
     if not overlaps:
@@ -4494,7 +4702,7 @@ def _coerce_items(value) -> list:
 
 def _scope_memory(paper_path: Path) -> dict:
     data = _read_json_artifact(paper_path, "scope_contract.json")
-    if not data:
+    if not isinstance(data, dict):
         return {}
     keys = ("research_question", "in_scope", "must_prove_in_this_paper",
             "out_of_scope", "split_policy")
@@ -5248,10 +5456,12 @@ def _classify_stage_a_failure(state, audit_result) -> str:
 
 
 def stage_a_ready_for_b(state: PaperState) -> bool:
-    if state.stage_a_audit_metrics.get("mode") == "no_claude_deterministic_audit":
+    audit = state.stage_a_audit_metrics
+    if not isinstance(audit, dict):
         return False
-    return bool(state.stage_a_passed
-                and stage_a_audit_passes(state.stage_a_audit_metrics))
+    if audit.get("mode") == "no_claude_deterministic_audit":
+        return False
+    return bool(state.stage_a_passed and stage_a_audit_passes(audit))
 
 
 def _stage_a_audit_has_actionable_issues(audit: dict) -> bool:
@@ -5499,6 +5709,11 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
     _ensure_research_directive(paper_path, state.target_journal,
                                dry_run=dry_run)
     stage_a_infra_retry_rounds: set[int] = set()
+
+    if not run_semantic_submission_overlap_gate(
+        state, dry_run=dry_run, tag=tag
+    ):
+        return False
 
     def _record_stage_a_failure_class(audit: dict, audit_round: int) -> str:
         classification = _classify_stage_a_failure(state, audit)
@@ -8572,7 +8787,6 @@ def main() -> int:
     parser.add_argument("--no-assign", action="store_true",
                         help="Ignore machine assignment, process all papers")
     args = parser.parse_args()
-    CLAUDE_ENABLED = not args.no_claude
 
     if args.status:
         print_status()
@@ -8597,18 +8811,11 @@ def main() -> int:
     # process singleton lock before any side-effecting work.
     acquire_pipeline_lock()
 
-    if not args.dry_run and CLAUDE_ENABLED:
-        claude_ok, claude_msg = claude_health_status()
-        if not claude_ok:
-            logger.error("Claude supervision unavailable; refusing to start "
-                         f"pipeline: {claude_msg}")
-            logger.error("No paper status was changed. Restart after Claude "
-                         "availability recovers, or run --dry-run for a "
-                         "non-mutating smoke test.")
-            return 2
-    elif not args.dry_run:
-        logger.warning("Claude gates disabled by --no-claude; running "
-                       "Codex+ChatGPT smoke-test mode")
+    if not _configure_claude_startup_mode(
+        dry_run=args.dry_run,
+        no_claude=args.no_claude,
+    ):
+        return 2
 
     # ── New-paper mode ─────────────────────────────────────────
     if args.new:
