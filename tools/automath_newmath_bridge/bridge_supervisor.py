@@ -376,6 +376,8 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
         cmd.append("--dry-run")
     if push_branch:
         cmd.append("--push-branch")
+    if cfg.get("distillation_timeout_seconds"):
+        cmd.extend(["--distillation-timeout-seconds", str(int(cfg.get("distillation_timeout_seconds") or 0))])
     result = run_command(cmd, timeout=7500 if apply else 180)
     if result.returncode != 0:
         return {

@@ -22,6 +22,7 @@ DEFAULT_GATE_RESULTS = SCRIPT_DIR / "out" / "bridge_gate_results.jsonl"
 DEFAULT_ACK_STATUS = REPO_ROOT / "docs" / "bridge" / "newmath-bridge-ack-status.md"
 DEFAULT_REPORT = REPO_ROOT / "docs" / "bridge" / "automath-newmath-pi-reflection.md"
 DEFAULT_ACTIONS = REPO_ROOT / "docs" / "bridge" / "automath-newmath-pi-actions.jsonl"
+DEFAULT_DISTILLATION_DIR = REPO_ROOT / "papers" / "publication" / "backflow" / ".distillation"
 
 
 STATUS_ROW_RE = re.compile(r"^\|\s*`([^`]+)`\s*\|\s*([0-9]+)\s*\|")
@@ -70,6 +71,12 @@ def _eligible_writeback(record: dict[str, Any]) -> bool:
         return False
     if record.get("destination_repo") != "the-omega-institute/automath":
         return False
+    if (
+        str(record.get("source_artifact_kind") or "") == "paper_claim"
+        and record.get("readiness") in {"ready_for_local_packet", "blocked_automath_not_ready"}
+        and "concrete_instances/banach/" in str(record.get("source_path") or "").lower()
+    ):
+        return True
     if record.get("readiness") in {"blocked_automath_not_ready", "observe_only"}:
         return False
     if record.get("operator_review_required") and record.get("status") not in {"accepted", "consumed"}:
@@ -96,15 +103,71 @@ def _blocked_reason(record: dict[str, Any]) -> str:
     return "not_selected"
 
 
+def _distill_slug(value: str) -> str:
+    lowered = value.strip().lower()
+    slug = re.sub(r"[^a-z0-9]+", "_", lowered).strip("_")
+    return slug or "distillation_source"
+
+
+def _candidate_name(record: dict[str, Any]) -> str:
+    source_path = str(record.get("source_path") or record.get("artifact_key") or "NewMath bridge")
+    stem = Path(source_path).stem.replace("_", " ").replace("-", " ").strip()
+    return f"NewMath bridge source: {stem}"
+
+
+def _review_blocked_sources(eligible: list[dict[str, Any]], distillation_dir: Path) -> list[dict[str, str]]:
+    blocked: list[dict[str, str]] = []
+    for record in eligible:
+        name = _candidate_name(record)
+        state_dir = distillation_dir / _distill_slug(name)
+        blocked_path = state_dir / "blocked.json"
+        state_path = state_dir / "state.json"
+        if not blocked_path.exists():
+            if not state_path.exists():
+                continue
+            try:
+                state_payload = json.loads(state_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            failure_kind = str(state_payload.get("failure_kind") or "")
+            if failure_kind not in {"distillation_timeout", "bridge_distillation_timeout"}:
+                continue
+            blocked.append(
+                {
+                    "source": name,
+                    "stage": str(state_payload.get("current_stage") or ""),
+                    "status": failure_kind,
+                    "source_path": str(record.get("source_path") or ""),
+                }
+            )
+            continue
+        try:
+            payload = json.loads(blocked_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(payload, dict) and payload.get("status") in {"review_failed", "distillation_timeout"}:
+            blocked.append(
+                {
+                    "source": name,
+                    "stage": str(payload.get("stage") or ""),
+                    "status": str(payload.get("status") or ""),
+                    "source_path": str(record.get("source_path") or ""),
+                }
+            )
+    return blocked
+
+
 def build_actions(
     gate_rows: list[dict[str, Any]],
     ack_status_counts: dict[str, int],
     *,
     review_backend: str,
+    distillation_dir: Path,
 ) -> list[dict[str, Any]]:
     direction_rows = _direction_rows(gate_rows)
     eligible = [row for row in direction_rows if _eligible_writeback(row)]
     blocked_counts = Counter(_blocked_reason(row) for row in direction_rows if not _eligible_writeback(row))
+    review_blocked = _review_blocked_sources(eligible, distillation_dir)
     actions: list[dict[str, Any]] = []
 
     actions.append(
@@ -138,6 +201,25 @@ def build_actions(
                 "policy": "Only accepted/consumed NewMath-to-Automath rows can become Killo/golden distillation source candidates.",
             }
         )
+        if review_blocked:
+            actions.append(
+                {
+                    "schema_version": "automath-bridge-pi-action-v1",
+                    "action_id": "pi:automath:killo_golden_review_blocked",
+                    "action_type": "quality_gate_feedback",
+                    "severity": "high",
+                    "safe_to_apply_automatically": True,
+                    "automatic_effect": "refine_bridge_source_context_and_retry",
+                    "blocked_sources": review_blocked[:12],
+                    "policy": (
+                        "A Killo/golden review or distillation-timeout block is a "
+                        "successful gate signal, not an infrastructure failure. Refine "
+                        "source labels, receiving sections, scope size, and "
+                        "first-distillation prompt before retrying; do not bypass the "
+                        "Automath paper review gate."
+                    ),
+                }
+            )
     else:
         actions.append(
             {
@@ -177,10 +259,13 @@ def render_report(
     gate_rows: list[dict[str, Any]],
     ack_status_counts: dict[str, int],
     actions: list[dict[str, Any]],
+    *,
+    distillation_dir: Path,
 ) -> str:
     direction_rows = _direction_rows(gate_rows)
     eligible = [row for row in direction_rows if _eligible_writeback(row)]
     blocked_counts = Counter(_blocked_reason(row) for row in direction_rows if not _eligible_writeback(row))
+    review_blocked = _review_blocked_sources(eligible, distillation_dir)
     lines = [
         "# Automath-NewMath PI Reflection",
         "",
@@ -192,6 +277,7 @@ def render_report(
         "",
         f"- NewMath-to-Automath gate rows: `{len(direction_rows)}`",
         f"- Killo/golden writeback-eligible rows: `{len(eligible)}`",
+        f"- Killo/golden review-blocked bridge sources: `{len(review_blocked)}`",
         f"- PI actions: `{len(actions)}`",
         "",
         "## Blocked Counts",
@@ -210,6 +296,12 @@ def render_report(
             lines.append(f"| `{status}` | {count} |")
     else:
         lines.append("| _none_ | 0 |")
+    lines.extend(["", "## Killo/Golden Review Blocks", "", "| Source | Source Path |", "| --- | --- |"])
+    if review_blocked:
+        for item in review_blocked:
+            lines.append(f"| `{item['source']}` | `{item['source_path']}` |")
+    else:
+        lines.append("| _none_ | _none_ |")
     lines.extend(["", "## PI Actions", "", "| Action | Effect | Severity |", "| --- | --- | --- |"])
     for action in actions:
         lines.append(
@@ -240,17 +332,27 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ack-status", default=str(DEFAULT_ACK_STATUS))
     parser.add_argument("--report", default=str(DEFAULT_REPORT))
     parser.add_argument("--actions", default=str(DEFAULT_ACTIONS))
+    parser.add_argument("--distillation-dir", default=str(DEFAULT_DISTILLATION_DIR))
     parser.add_argument("--review-backend", default="codex-claude")
     args = parser.parse_args(argv)
 
     gate_rows = _read_jsonl(Path(args.gate_results))
     ack_counts = _ack_status_counts(Path(args.ack_status))
-    actions = build_actions(gate_rows, ack_counts, review_backend=args.review_backend)
+    distillation_dir = Path(args.distillation_dir)
+    actions = build_actions(
+        gate_rows,
+        ack_counts,
+        review_backend=args.review_backend,
+        distillation_dir=distillation_dir,
+    )
 
     _write_jsonl(Path(args.actions), actions)
     report_path = Path(args.report)
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(render_report(gate_rows, ack_counts, actions), encoding="utf-8")
+    report_path.write_text(
+        render_report(gate_rows, ack_counts, actions, distillation_dir=distillation_dir),
+        encoding="utf-8",
+    )
     print(
         json.dumps(
             {
