@@ -1,7 +1,7 @@
 # NewMath Bridge ACK Status
 
 - Source ref: `origin/bridge/newmath-automath-consumption`
-- ACK rows: `19`
+- ACK rows: `20`
 - Failure rows: `0`
 
 ## Status Counts
@@ -9,7 +9,7 @@
 | Status | Count |
 | --- | ---: |
 | `blocked` | 8 |
-| `consumed` | 5 |
+| `consumed` | 6 |
 | `evidence_only` | 6 |
 
 ## Latest ACK/NACK Rows
@@ -35,6 +35,7 @@
 | `blocked` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_cayley_gate.tex | no_specific_board_claim |
 | `blocked` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_doob_phi_entropy.tex | no_specific_board_claim |
 | `consumed` | `B-677` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_cayley_gate.tex | accepted_into_bedc_board |
+| `consumed` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_cayley_gate.tex | duplicate_board_title |
 
 ## Boundary
 

@@ -258,22 +258,52 @@ def _candidate_name(record: dict[str, Any]) -> str:
 
 def _candidate_block_status(record: dict[str, Any]) -> str:
     state_dir = DISTILLATION_DIR / _distill_slug(_candidate_name(record))
+    current_revision = _bridge_prompt_revision(record)
     blocked_path = state_dir / "blocked.json"
-    if not blocked_path.exists():
+    if blocked_path.exists():
+        try:
+            payload = json.loads(blocked_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            payload = {}
+        if isinstance(payload, dict):
+            blocked_revision = str(payload.get("bridge_prompt_revision") or "")
+            if blocked_revision and blocked_revision != current_revision:
+                return ""
+            source_path = str(record.get("source_path") or "").lower()
+            if not blocked_revision and "concrete_instances/banach/singleton_certificate.tex" in source_path:
+                return ""
+            return str(payload.get("status") or "")
+    state_path = state_dir / "state.json"
+    if not state_path.exists():
         return ""
     try:
-        payload = json.loads(blocked_path.read_text(encoding="utf-8"))
+        state_payload = json.loads(state_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return ""
-    if not isinstance(payload, dict):
+    if not isinstance(state_payload, dict):
         return ""
-    blocked_revision = str(payload.get("bridge_prompt_revision") or "")
-    if blocked_revision and blocked_revision != _bridge_prompt_revision(record):
+    candidate_path = state_dir / "source_candidate.json"
+    candidate_revision = ""
+    if candidate_path.exists():
+        try:
+            candidate_payload = json.loads(candidate_path.read_text(encoding="utf-8"))
+            if isinstance(candidate_payload, dict):
+                candidate_revision = str(candidate_payload.get("bridge_prompt_revision") or "")
+        except (OSError, json.JSONDecodeError):
+            candidate_revision = ""
+    if candidate_revision and candidate_revision != current_revision:
         return ""
-    source_path = str(record.get("source_path") or "").lower()
-    if not blocked_revision and "concrete_instances/banach/singleton_certificate.tex" in source_path:
-        return ""
-    return str(payload.get("status") or "")
+    if state_payload.get("current_stage") in {"R", "W", "E"} and state_payload.get("failure_kind") in {
+        "bridge_distillation_timeout",
+        "review_failed",
+        "writeback_review_failed",
+    }:
+        return str(state_payload.get("failure_kind") or "blocked")
+    if state_payload.get("current_stage") == "W" and candidate_revision == current_revision:
+        return "writeback_in_progress"
+    if state_payload.get("current_stage") == "W" and not candidate_revision:
+        return "writeback_in_progress"
+    return ""
 
 
 def _candidate_payload(record: dict[str, Any]) -> dict[str, Any]:
@@ -358,7 +388,10 @@ def build_candidates(
             continue
         if not retry_blocked and _candidate_block_status(record) in {
             "distillation_timeout",
+            "bridge_distillation_timeout",
             "review_failed",
+            "writeback_review_failed",
+            "writeback_in_progress",
         }:
             continue
         source_path = str(record.get("source_path") or "newmath-bridge")

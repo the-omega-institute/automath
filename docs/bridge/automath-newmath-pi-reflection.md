@@ -8,7 +8,7 @@ It does not write Automath paper or Lean content directly.
 
 - NewMath-to-Automath gate rows: `8`
 - Killo/golden writeback-eligible rows: `2`
-- Killo/golden review-blocked bridge sources: `2`
+- Killo/golden review-blocked bridge sources: `1`
 - PI actions: `4`
 
 ## Blocked Counts
@@ -23,7 +23,7 @@ It does not write Automath paper or Lean content directly.
 | Status | Count |
 | --- | ---: |
 | `blocked` | 8 |
-| `consumed` | 5 |
+| `consumed` | 6 |
 | `evidence_only` | 6 |
 
 ## Killo/Golden Review Blocks
@@ -31,7 +31,6 @@ It does not write Automath paper or Lean content directly.
 | Source | Source Path |
 | --- | --- |
 | `NewMath bridge source: intro and carrier` | `papers/bedc/parts/concrete_instances/banach/intro_and_carrier.tex` |
-| `NewMath bridge source: singleton certificate` | `papers/bedc/parts/concrete_instances/banach/singleton_certificate.tex` |
 
 ## PI Actions
 

@@ -43,6 +43,7 @@ DEFAULT_CONFIG = SCRIPT_DIR / "bridge_pipeline_config.json"
 STOP_FILE = SCRIPT_DIR / ".bridge_supervisor.stop"
 LOG_DIR = SCRIPT_DIR / "logs"
 PACKET_DIR = SCRIPT_DIR / "inbox" / "writeback_packets"
+WRITEBACK_LOG = LOG_DIR / "automath_writeback_background.log"
 
 
 def _now_iso() -> str:
@@ -444,6 +445,99 @@ def run_automath_writeback(config: dict[str, Any], *, apply: bool, push_branch: 
     }
 
 
+def _writeback_processes() -> list[dict[str, Any]]:
+    script = str(SCRIPT_DIR / "bridge_to_automath_killo_golden.py")
+    if os.name != "nt":
+        return []
+    ps = (
+        "Get-CimInstance Win32_Process -Filter \"name = 'python.exe'\" | "
+        "Where-Object { $_.CommandLine -like '*bridge_to_automath_killo_golden.py*' } | "
+        "Select-Object ProcessId,ParentProcessId,CreationDate,CommandLine | ConvertTo-Json -Compress"
+    )
+    result = subprocess.run(
+        ["powershell", "-NoProfile", "-Command", ps],
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        return []
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return []
+    rows = data if isinstance(data, list) else [data]
+    return [row for row in rows if isinstance(row, dict) and script.lower() in str(row.get("CommandLine") or "").lower()]
+
+
+def launch_automath_writeback_background(
+    config: dict[str, Any],
+    *,
+    apply: bool,
+    push_branch: bool,
+    dry_run: bool,
+) -> dict[str, Any]:
+    cfg = config.get("automath_writeback")
+    if not isinstance(cfg, dict) or not cfg.get("enabled", False):
+        return {"status": "disabled"}
+    running = _writeback_processes()
+    if running:
+        return {
+            "status": "already_running",
+            "running": [
+                {
+                    "pid": item.get("ProcessId"),
+                    "created_at": item.get("CreationDate"),
+                }
+                for item in running[:5]
+            ],
+        }
+    cmd = [
+        sys.executable,
+        str(SCRIPT_DIR / "bridge_to_automath_killo_golden.py"),
+        "--gate-results",
+        str(REPO_ROOT / str(cfg.get("gate_results_path") or "tools/automath_newmath_bridge/out/bridge_gate_results.jsonl")),
+        "--runtime-dir",
+        str(REPO_ROOT / str(cfg.get("runtime_candidate_dir") or "tools/automath_newmath_bridge/inbox/automath_writeback_candidates")),
+        "--branch",
+        str(cfg.get("branch") or "bridge/automath-newmath-consumption"),
+        "--limit",
+        str(int(cfg.get("max_candidates_per_pass") or 1)),
+        "--review-backend",
+        str(cfg.get("review_backend") or "codex-claude"),
+    ]
+    if apply:
+        cmd.append("--apply")
+    if dry_run:
+        cmd.append("--dry-run")
+    if push_branch:
+        cmd.append("--push-branch")
+    if cfg.get("distillation_timeout_seconds"):
+        cmd.extend(["--distillation-timeout-seconds", str(int(cfg.get("distillation_timeout_seconds") or 0))])
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    handle = WRITEBACK_LOG.open("a", encoding="utf-8")
+    handle.write(f"[{_now_iso()}] launch {' '.join(cmd)}\n")
+    handle.flush()
+    proc = subprocess.Popen(
+        cmd,
+        cwd=str(REPO_ROOT),
+        stdout=handle,
+        stderr=subprocess.STDOUT,
+        text=True,
+        creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+    )
+    handle.close()
+    return {
+        "status": "launched",
+        "pid": proc.pid,
+        "apply": apply,
+        "push_branch": push_branch,
+        "log": str(WRITEBACK_LOG),
+    }
+
+
 def render_newmath_ack_status(config_path: Path) -> dict[str, Any]:
     cmd = [
         sys.executable,
@@ -563,12 +657,20 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
     automath_apply = bool(args.apply_automath_writeback or config.get("automath_writeback", {}).get("apply_by_default", False))
     automath_push = bool(args.push_branch or config.get("automath_writeback", {}).get("push_branch_by_default", False))
     if not args.no_automath_writeback:
-        wb_result = run_automath_writeback(
-            config,
-            apply=automath_apply,
-            push_branch=automath_push,
-            dry_run=args.automath_writeback_dry_run,
-        )
+        if args.automath_writeback_background:
+            wb_result = launch_automath_writeback_background(
+                config,
+                apply=automath_apply,
+                push_branch=automath_push,
+                dry_run=args.automath_writeback_dry_run,
+            )
+        else:
+            wb_result = run_automath_writeback(
+                config,
+                apply=automath_apply,
+                push_branch=automath_push,
+                dry_run=args.automath_writeback_dry_run,
+            )
         _log(f"automath_writeback: {wb_result}")
         if wb_result.get("status") == "failed":
             return False
@@ -622,6 +724,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--automath-writeback-dry-run",
         action="store_true",
         help="Pass --dry-run to the Automath distillation supervisor",
+    )
+    parser.add_argument(
+        "--automath-writeback-background",
+        action="store_true",
+        help="Launch Automath Killo/golden writeback in a background lane so the main scan/PI loop keeps running",
     )
     parser.add_argument(
         "--push-branch",
