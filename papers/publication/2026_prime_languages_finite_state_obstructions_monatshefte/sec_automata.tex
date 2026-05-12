@@ -1311,6 +1311,23 @@ strongly connected components, possibly connected by transient paths.
 The polynomial factors in the statement are exactly the factors absent
 from the strongly connected specialization below.
 
+\noindent\textit{\(\lambda\)-active residues.}
+Let \(\mathcal N\) be a trim deterministic presentation with adjacency
+matrix \(B_N\), let \(\lambda=\rho(B_N)>1\), and let
+\(z_m=\abs{L(\mathcal N)\cap\Sigma^m}\). After a period \(D\) has been
+fixed, call a residue class \(r\bmod D\) \(\lambda\)-active if
+\[
+  z_m\not=O(\theta^m)
+  \qquad (m\equiv r\pmod D)
+\]
+for every \(\theta<\lambda\). Equivalently, accepted words in that
+residue class have exponential growth rate \(\lambda\). A residue class
+can contain infinitely many accepted lengths without being
+\(\lambda\)-active: in a reducible presentation those words may be
+supplied only by components of smaller spectral radius. The
+multicomponent theorem below separates this lower-growth phenomenon
+from the Perron-scale comparison.
+
 \begin{theorem}[Multicomponent finite-budget obstruction]
   \label{thm:multicomponent-finite-budget}
   Let
@@ -1321,9 +1338,9 @@ from the strongly connected specialization below.
   period \(D\ge1\), a number \(0<\theta<\lambda\), an integer
   \(S\ge0\), and, for every residue \(r\bmod D\), an exponent
   \(s_r\in\{-\infty,0,\dots,S\}\) and a constant \(d_r\ge0\) such that
-  \(s_r=-\infty\) exactly on residue classes with only finitely many
-  accepted lengths, while on every relevant residue class
-  \(s_r\ge0\), \(d_r>0\), and
+  \(s_r\ge0\) and \(d_r>0\) exactly on the \(\lambda\)-active residue
+  classes, while \(s_r=-\infty\) and \(d_r=0\) on all other residue
+  classes. On every residue class
   \[
     z_m
     =
@@ -1336,7 +1353,10 @@ from the strongly connected specialization below.
     \qquad m\equiv r\pmod D .
   \]
   The convention is that the \(O(m^{-1})\) term is absent when
-  \(s_r=0\).
+  \(s_r=0\), and the displayed polynomial part is absent when
+  \(s_r=-\infty\). Thus non-\(\lambda\)-active residue classes, even
+  those with infinitely many accepted lengths, are absorbed into the
+  sub-Perron error term.
 
   For every deterministic automaton \(\mathcal A\) over \(\Sigma\) and
   \[
@@ -1359,7 +1379,7 @@ from the strongly connected specialization below.
   with the same convention when \(t_r=0\); if the intersection has
   exponential growth \(<\lambda\) on that residue, then \(t_r=-\infty\)
   and the first displayed polynomial part is absent. Moreover, whenever
-  \(z_m>0\) eventually on \(r\bmod D\), either \(t_r=-\infty\) or
+  \(r\bmod D\) is \(\lambda\)-active, either \(t_r=-\infty\) or
   \(t_r\le s_r\), and if \(t_r=s_r\) then \(0\le e_r\le d_r\).
 
   Consequently, let \(T_m\subseteq L(\mathcal N)\cap\Sigma^m\) satisfy
@@ -1368,8 +1388,8 @@ from the strongly connected specialization below.
     \le \abs{T_m}
     \le \beta\frac{\lambda^m}{m}
   \]
-  for all sufficiently large relevant lengths \(m\), with fixed
-  \(\alpha,\beta>0\). For every fixed deterministic automaton
+  for all sufficiently large \(m\) in every \(\lambda\)-active residue
+  class, with fixed \(\alpha,\beta>0\). For every fixed deterministic automaton
   \(\mathcal A\) there is a constant
   \(C_{\mathcal A,\mathcal N,T}>0\) such that
   \[
@@ -1377,10 +1397,10 @@ from the strongly connected specialization below.
     \ge
     C_{\mathcal A,\mathcal N,T}\frac{\lambda^m}{m}
   \]
-  for all sufficiently large relevant \(m\). On each relevant residue
-  class either the recall against \(T_m\) tends to \(0\) exponentially
-  or polynomially, or else the precision is \(O(1/m)\) whenever it is
-  defined.
+  for all sufficiently large \(m\) in \(\lambda\)-active residue
+  classes. On each \(\lambda\)-active residue class either the recall
+  against \(T_m\) tends to \(0\) exponentially or polynomially, or else
+  the precision is \(O(1/m)\) whenever it is defined.
 \end{theorem}
 
 \begin{proof}
@@ -1398,14 +1418,22 @@ from the strongly connected specialization below.
   \(\lambda\), arising from maximal components and chains between them.
   Taking \(D\) to be a common period of those components makes the
   peripheral factors constant on each residue class. On a fixed residue
-  \(r\bmod D\), collect the largest remaining polynomial degree as
-  \(s_r\). Trimness and non-negativity imply that if the residue has
-  accepted words for all sufficiently large indices in the class, then
-  the leading coefficient \(d_r\) is positive: the coefficient is the
+  \(r\bmod D\), look only at the terms whose exponential factor has
+  modulus \(\lambda\). If no such term contributes to accepted paths in
+  that residue, then the whole residue-class count has exponential
+  growth \(<\lambda\); after enlarging \(\theta\) below \(\lambda\), it
+  is included in \(O(\theta^m m^S)\), and we set \(s_r=-\infty\) and
+  \(d_r=0\). This case includes residues with infinitely many accepted
+  lengths supplied only by smaller components.
+
+  If a Perron-scale term does contribute, collect the largest remaining
+  polynomial degree as \(s_r\). The leading coefficient \(d_r\) is the
   sum of the non-negative leading contributions of maximal
-  component-chains realizing that residue. This gives the displayed
-  expansion for \(z_m\). Residues with only finitely many accepted
-  lengths are assigned \(s_r=-\infty\).
+  component-chains realizing that residue at that degree. This sum is
+  positive, because at least one such Perron-scale chain contributes
+  and no cancellation is possible for counts of paths in a
+  non-negative matrix. These are precisely the \(\lambda\)-active
+  residues, and the displayed expansion for \(z_m\) follows.
 
   Form the synchronous product of \(\mathcal N\) with \(\mathcal A\),
   trim unreachable or non-coaccessible states, and let \(B'\) be its
@@ -1417,12 +1445,12 @@ from the strongly connected specialization below.
   is \(<\lambda\) on a residue class, it is absorbed into
   \(O(\theta^m m^S)\) after increasing \(\theta\) below \(\lambda\) and
   increasing \(S\). If the product has growth \(\lambda\), its leading
-  polynomial degree on a relevant residue cannot exceed \(s_r\);
+  polynomial degree on a \(\lambda\)-active residue cannot exceed \(s_r\);
   otherwise \(a_m(\mathcal A,\mathcal N)\le z_m\) would fail along that
   residue for large \(m\). The same inequality gives \(e_r\le d_r\)
   when \(t_r=s_r\).
 
-  Fix a relevant residue class and put
+  Fix a \(\lambda\)-active residue class and put
   \(A_m=L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m\). If
   \(t_r=-\infty\), then \(\abs{A_m}=O(\theta^m m^S)\), and hence
   \[
@@ -1456,8 +1484,12 @@ from the strongly connected specialization below.
   \]
   If no such non-zero polynomial term exists, the residue is in the
   exponentially smaller case already handled. There are only finitely
-  many relevant residue classes, so taking the minimum of the positive
-  constants obtained above proves the uniform finite-budget bound.
+  many \(\lambda\)-active residue classes, so taking the minimum of the
+  positive constants obtained above proves the uniform finite-budget
+  bound. The theorem makes no prime-scale conclusion on
+  non-\(\lambda\)-active residues, where \(L(\mathcal N)\) itself has
+  sub-Perron growth and a target of size \(\asymp\lambda^m/m\) cannot
+  be a subset of \(L(\mathcal N)\cap\Sigma^m\) for all large \(m\).
 \end{proof}
 
 No additional numeration-system formalism is needed for the next
