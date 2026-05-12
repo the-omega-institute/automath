@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — The candidate is misframed for automated deep reasoning: it conflates the named Erdős #1191 infinite Sidon-set problem with a finite Sidon-diameter second-order constant / piecewise-affine ansatz optimization. The action |
+| Status | **🔴 DROP · profile judge DROP** — Misframed target: the board entry presents the named Erdős #1191 infinite Sidon-set second-order problem as if automated deep reasoning should instead prove extremality of a specific piecewise-affine/AE ansatz. That ansa |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
