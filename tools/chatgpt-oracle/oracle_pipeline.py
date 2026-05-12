@@ -3373,12 +3373,22 @@ def build_oracle_review_prompt(target_journal: str,
 
 def build_oracle_re_review_prompt(target_journal: str) -> str:
     return textwrap.dedent(f"""\
-        This is a REVISED paper resubmitted to "{target_journal}".
+        This is a final acceptance-gate review for a revised paper submitted to
+        "{target_journal}".
 
-        1. For each previous issue: RESOLVED / PARTIALLY / UNRESOLVED
-        2. Any new problems introduced?
-        3. Overall verdict: Accept / Minor revision / Major revision / Reject
-        4. Remaining blockers preventing acceptance
+        Start your reply with a single line exactly of the form
+          Overall verdict: <Accept|Minor revision|Major revision|Reject>
+
+        The prompt may not include a prior issue list. If no prior issue list is
+        supplied, do not request one and do not spend review space on its absence;
+        instead infer the likely revision targets from the current manuscript and
+        audit acceptance readiness directly.
+
+        Report:
+        1. Remaining acceptance blockers, if any.
+        2. Any new problems introduced by the revision.
+        3. Copyediting-only issues separately from mathematical blockers.
+        4. A concise rationale for the verdict.
 
         If this paper now meets the standards of "{target_journal}", state Accept.
     """)
