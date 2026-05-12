@@ -1,0 +1,155 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{HyperKernel 有限核证书：从可逆--投影闭包到集合语义与离散几何}\label{app:hyperkernel-finite-certificate}
+
+本附录提供一个与正文投影词演算相接的有限核证书。
+其目的不在于为黄金比例主线补充新的数值证据，而在于隔离出一个更底层的问题：
+若仅以“可逆演化 + 最小投影折叠”作为核，点、集合、隶属与几何残差是否已经可以在核内被推出。
+HyperKernel 模型给出一个可回放的有限化答案。
+
+\subsection{最小模型与正文接口}\label{subsec:hyperkernel-model-interface}
+
+固定 \(n\)，令
+\[
+T_n:=\End(\mathrm{Fin}\ n)
+\]
+为有限全变换幺半群，复合为乘法。
+选择三生成元
+\[
+g_0,\qquad g_1,\qquad g_2,
+\]
+其中 \(g_0,g_1\) 为置换，\(g_2\) 为 rank \(n-1\) 的 defect-\(1\) 奇异变换。
+这两类原语为正文投影词演算中两类机制的最小载体：置换对应可逆演化、lift 与地址搬运；defect-\(1\) 奇异元对应 \(\Fold_m\)、\(E_m\) 与 \(\mathrm{PROJ}\) 的最小不可逆折叠事件。
+
+由生成元闭包得到有限字典
+\[
+\mathcal C=\langle g_0,g_1,g_2\rangle\subseteq T_n,
+\]
+并用 BFS 记录每个 \(f\in\mathcal C\) 的最短词 \(w_f\)。
+词长 \(|w_f|\) 作为离散 action/budget 坐标。
+因此，HyperKernel 对应正文投影词闭包的一条有限化链条：
+\[
+\text{可逆 + 投影生成元}
+\Longrightarrow
+\text{闭包与最短证书}
+\Longrightarrow
+\text{语义对象}
+\Longrightarrow
+\text{rank 纤维与交换方块残差}.
+\]
+Lean 形式化入口为核心聚合模块
+\[
+\path{lean4/Omega/HyperKernel.lean}.
+\]
+面向论文引用的封装位于 \path{Omega.HyperKernel.Paper}；报告与命令行工具位于 \path{Omega.HyperKernel.Tools}。
+
+\subsection{rank 作为最小单调量}\label{subsec:hyperkernel-rank-core}
+
+HyperKernel 只把 rank 当作核内可计算单调量使用。
+两条核心事实是：
+\[
+\rank(g\circ f)\leq \rank(f),
+\]
+以及当 \(\rank(g)=n-1\) 时，一次左复合最多使 rank 下降一维。
+在 \(n=3,4\) 的有限宇宙中，这些事实由 Lean 枚举判定封装为计算证书。
+接口入口 \path{lean4/Omega/HyperKernel.lean} 默认导入核心语义、几何接口与论文封装；
+快速枚举证书由 \path{Omega.HyperKernel.Certificates} 聚合；穷举型重证书由
+\path{Omega.HyperKernel.CertificatesHeavy} 聚合，并以
+\path{Omega.HyperKernel.SeedCore} 与 \path{Omega.HyperKernel.SetStructureChecksLite} 作为可单独回放的目标。
+
+这些证书在不引入外部集合论的前提下为后续语义读出提供一个尺度：信息维度在投影复合中不能自发增加，defect-\(1\) 事件给出 rank 下降的最小预算单位。
+
+\subsection{集合语义的核内读出}\label{subsec:hyperkernel-set-semantics}
+
+HyperKernel 不把集合与元素作为先验对象输入。
+它在 \(T_n\) 内部定义：
+\[
+e\ \text{是集合对象}
+\quad\Longleftrightarrow\quad
+e\circ e=e,
+\]
+即集合对象是幂等投影；
+\[
+p\ \text{是点对象}
+\quad\Longleftrightarrow\quad
+p\circ p=p\ \text{且}\ \rank(p)=1,
+\]
+即点对象是 rank-\(1\) 幂等；
+并定义隶属关系为稳定性
+\[
+p\in e
+\quad\Longleftrightarrow\quad
+e\circ p=p.
+\]
+在固定点对象列表后，集合对象 \(e\) 的外延签名为
+\[
+\sigma(e):=\{i:\ p_i\in e\}.
+\]
+这些定义在 Lean 中位于
+\path{Omega.HyperKernel.SetStructure}。
+
+该读出说明：集合层不是额外公理，而是“投影稳定态 + rank 原子”的代数后果。
+在全变换幺半群基线中，非空签名对应非空子集；空集没有 total-map witness，因为 total map 的像不可能为空。
+这正解释了有限核中 meet 缺口的来源：join 在非空签名层闭合，而 meet 只在交为空时失败；加入显式 bottom 后，签名层恢复格闭合。
+
+\subsection{预算曲线与递归涌现}\label{subsec:hyperkernel-budget-emergence}
+
+最短词字典给出预算过滤
+\[
+\mathcal C_{\leq L}:=\{f\in\mathcal C:\ |w_f|\leq L\}.
+\]
+令 \(\Sigma_{\leq L}\) 为预算 \(L\) 内可见的集合签名族，则
+\[
+L\longmapsto |\Sigma_{\leq L}|
+\]
+是最直接的涌现曲线。
+在 \(n=4\) 的固定三生成元证书中，签名数量随预算从极少状态跃迁到全部 \(2^4-1=15\) 个非空签名。
+这条曲线把“结构出现”改写成可审计的 action 坐标：集合语义不是一次性给定，而是随着可达闭包和最短证书预算逐层展开。
+
+\subsection{rank 纤维与交换方块曲率}\label{subsec:hyperkernel-geometry}
+
+闭包字典还给出一个离散几何读出。
+首先按 rank 分层：
+\[
+\mathcal C=\bigsqcup_r \mathcal F_r,\qquad
+\mathcal F_r:=\{f\in\mathcal C:\rank(f)=r\}.
+\]
+同一 rank 纤维内的不同元素具有不同最短词长度，因而可读出“同一信息维度下的实现成本差异”。
+相关接口在 \path{Omega.HyperKernel.Fiber}。
+
+其次，对生成元 \(g_i,g_j\) 与节点 \(x\in\mathcal C\)，比较两条长度二路径
+\[
+g_j\circ g_i\circ x,
+\qquad
+g_i\circ g_j\circ x.
+\]
+若用最短词长度差给出距离代理，则交换方块残差定义为
+\[
+K_{ij}(x)
+:=
+d(g_jg_i x,\ g_i g_j x)-2.
+\]
+该量不是连续曲率的替代定义，而是有限核中“可逆生成元与投影生成元混合后路径不再平坦”的可审计信号。
+相关接口在 \path{Omega.HyperKernel.Geometry}。
+
+\subsection{结论与边界}\label{subsec:hyperkernel-conclusion}
+
+HyperKernel 对正文的贡献位于机制层：
+\[
+\text{可逆 + 投影}
+\Longrightarrow
+\text{闭包}
+\Longrightarrow
+\text{语义对象}
+\Longrightarrow
+\text{几何残差}.
+\]
+它在一个更小的有限载体上展示了第 \ref{subsec:pom-three-generator-residual-closure} 小节三生成元残差闭包所依赖的同一机制：不可逆投影不是附加修饰，而是能够生成可审计语义层与几何响应的核心事件。
+
+HyperKernel 的边界同样需要明确：它不论及黄金比例最优性，不替代 Fold/Zeckendorf 主线，不给出 Parry/PF 压力谱的算术结论。其角色为一个无须新增公理、独立于 mathlib 主依赖以可选模块形式构建的有限证书，用以表明本文投影本体数学的最小核原则具备可执行内容。
+
+\input{two_line_merge_summary}
+
+\end{document}
