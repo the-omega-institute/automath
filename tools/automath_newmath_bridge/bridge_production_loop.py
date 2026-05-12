@@ -10,7 +10,9 @@ writeback remains owned by the Killo/golden distillation lane.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import json
+import os
 import subprocess
 import time
 from datetime import datetime, timezone
@@ -41,6 +43,51 @@ def _log(message: str) -> None:
 
 def _git(args: list[str], *, timeout: int = 120) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["git", *args], cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=timeout, check=False)
+
+
+@contextmanager
+def repo_git_write_lock(timeout: int = 900):
+    """Serialize local git index writes across bridge loops in this repo."""
+    lock_path = REPO_ROOT / ".git" / "automath_newmath_bridge.git_write.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + timeout
+    with lock_path.open("a+b") as handle:
+        handle.seek(0, os.SEEK_END)
+        if handle.tell() == 0:
+            handle.write(b"\0")
+            handle.flush()
+        handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+
+            while True:
+                try:
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                    break
+                except OSError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"Timed out waiting for git write lock {lock_path}")
+                    time.sleep(1)
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            while True:
+                try:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"Timed out waiting for git write lock {lock_path}")
+                    time.sleep(1)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -260,24 +307,25 @@ def _index_has_entries(text: str) -> bool:
 
 
 def _commit_if_changed(paths: list[Path], message: str, *, push: bool) -> dict[str, Any]:
-    add = _git(["add", *[str(path.relative_to(REPO_ROOT)) for path in paths if path.exists()]], timeout=30)
-    if add.returncode != 0:
-        return {"status": "add_failed", "stderr": add.stderr.strip()}
-    diff = _git(["diff", "--cached", "--quiet"], timeout=30)
-    if diff.returncode == 0:
-        return {"status": "nothing_to_commit"}
-    commit = _git(["commit", "-m", message], timeout=120)
-    if commit.returncode != 0:
-        return {"status": "commit_failed", "stderr": commit.stderr.strip()}
-    result: dict[str, Any] = {"status": "committed", "stdout": commit.stdout.strip()}
-    if push:
-        branch = _git(["branch", "--show-current"], timeout=30).stdout.strip()
-        if branch.startswith(("codex/", "bridge/")):
-            pushed = _git(["push", "origin", branch], timeout=300)
-            result["push"] = "ok" if pushed.returncode == 0 else pushed.stderr.strip()
-        else:
-            result["push"] = f"skipped non-bridge branch {branch}"
-    return result
+    with repo_git_write_lock():
+        add = _git(["add", *[str(path.relative_to(REPO_ROOT)) for path in paths if path.exists()]], timeout=30)
+        if add.returncode != 0:
+            return {"status": "add_failed", "stderr": add.stderr.strip()}
+        diff = _git(["diff", "--cached", "--quiet"], timeout=30)
+        if diff.returncode == 0:
+            return {"status": "nothing_to_commit"}
+        commit = _git(["commit", "-m", message], timeout=120)
+        if commit.returncode != 0:
+            return {"status": "commit_failed", "stderr": commit.stderr.strip()}
+        result: dict[str, Any] = {"status": "committed", "stdout": commit.stdout.strip()}
+        if push:
+            branch = _git(["branch", "--show-current"], timeout=30).stdout.strip()
+            if branch.startswith(("codex/", "bridge/")):
+                pushed = _git(["push", "origin", branch], timeout=300)
+                result["push"] = "ok" if pushed.returncode == 0 else pushed.stderr.strip()
+            else:
+                result["push"] = f"skipped non-bridge branch {branch}"
+        return result
 
 
 def run_once(args: argparse.Namespace) -> bool:

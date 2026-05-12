@@ -120,6 +120,51 @@ def repo_fetch_lock(repo: Path, *, timeout: int = 600):
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
+@contextmanager
+def repo_git_write_lock(repo: Path, *, timeout: int = 900):
+    """Serialize local git index writes across bridge loops in one repo."""
+    lock_path = repo / ".git" / "automath_newmath_bridge.git_write.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + timeout
+    with lock_path.open("a+b") as handle:
+        handle.seek(0, os.SEEK_END)
+        if handle.tell() == 0:
+            handle.write(b"\0")
+            handle.flush()
+        handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+
+            while True:
+                try:
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                    break
+                except OSError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"Timed out waiting for git write lock {lock_path}")
+                    time.sleep(1)
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            while True:
+                try:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"Timed out waiting for git write lock {lock_path}")
+                    time.sleep(1)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
 def current_branch(repo: Path) -> str:
     return _git_stdout(repo, ["branch", "--show-current"], timeout=30)
 
@@ -185,35 +230,36 @@ def _allowed_durable_path(path: str) -> bool:
 
 
 def commit_and_push_durable(repo: Path, *, message: str, push: bool) -> dict[str, Any]:
-    branch = current_branch(repo)
-    all_paths = _status_paths(repo)
-    paths = [path for path in all_paths if _allowed_durable_path(path)]
-    skipped = [path for path in all_paths if path not in paths]
-    if not paths:
-        return {"status": "nothing_to_commit", "branch": branch, "skipped": skipped[:20]}
-    add = _git(repo, ["add", *paths], timeout=60)
-    if add.returncode != 0:
-        return {"status": "add_failed", "branch": branch, "stderr": add.stderr.strip()[:1000]}
-    diff = _git(repo, ["diff", "--cached", "--quiet"], timeout=60)
-    if diff.returncode == 0:
-        return {"status": "nothing_to_commit", "branch": branch, "paths": paths, "skipped": skipped[:20]}
-    commit = _git(repo, ["commit", "-m", message], timeout=180)
-    if commit.returncode != 0:
-        return {"status": "commit_failed", "branch": branch, "stderr": commit.stderr.strip()[:1000]}
-    result: dict[str, Any] = {
-        "status": "committed",
-        "branch": branch,
-        "paths": paths,
-        "skipped": skipped[:20],
-        "stdout": commit.stdout.strip()[:1000],
-    }
-    if push:
-        if not branch.startswith(("bridge/", "codex/")):
-            result["push"] = f"skipped branch {branch}"
-        else:
-            pushed = _git(repo, ["push", "origin", branch], timeout=300)
-            result["push"] = "ok" if pushed.returncode == 0 else pushed.stderr.strip()[:1000]
-    return result
+    with repo_git_write_lock(repo):
+        branch = current_branch(repo)
+        all_paths = _status_paths(repo)
+        paths = [path for path in all_paths if _allowed_durable_path(path)]
+        skipped = [path for path in all_paths if path not in paths]
+        if not paths:
+            return {"status": "nothing_to_commit", "branch": branch, "skipped": skipped[:20]}
+        add = _git(repo, ["add", *paths], timeout=60)
+        if add.returncode != 0:
+            return {"status": "add_failed", "branch": branch, "stderr": add.stderr.strip()[:1000]}
+        diff = _git(repo, ["diff", "--cached", "--quiet"], timeout=60)
+        if diff.returncode == 0:
+            return {"status": "nothing_to_commit", "branch": branch, "paths": paths, "skipped": skipped[:20]}
+        commit = _git(repo, ["commit", "-m", message], timeout=180)
+        if commit.returncode != 0:
+            return {"status": "commit_failed", "branch": branch, "stderr": commit.stderr.strip()[:1000]}
+        result: dict[str, Any] = {
+            "status": "committed",
+            "branch": branch,
+            "paths": paths,
+            "skipped": skipped[:20],
+            "stdout": commit.stdout.strip()[:1000],
+        }
+        if push:
+            if not branch.startswith(("bridge/", "codex/")):
+                result["push"] = f"skipped branch {branch}"
+            else:
+                pushed = _git(repo, ["push", "origin", branch], timeout=300)
+                result["push"] = "ok" if pushed.returncode == 0 else pushed.stderr.strip()[:1000]
+        return result
 
 
 def _load_config(path: Path) -> dict[str, Any]:
