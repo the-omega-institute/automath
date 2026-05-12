@@ -1275,6 +1275,20 @@ def _expected_artifact_paths_for_todo(todo: TodoSpec) -> list[str]:
     return deduped
 
 
+def _extract_paths_from_gate_missing(missing: list[str]) -> list[str]:
+    """Pull concrete target-local paths out of deterministic gate messages."""
+    paths: list[str] = []
+    pattern = re.compile(
+        r"tools/community-outreach/targets/[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+"
+    )
+    for item in missing or []:
+        for match in pattern.finditer(str(item)):
+            path = match.group(0).rstrip("`'\".,;:)")
+            if path and path not in paths:
+                paths.append(path)
+    return paths
+
+
 def _fence_language_for_path(path: str) -> str:
     suffix = Path(path).suffix.lower()
     if suffix == ".json":
@@ -1293,6 +1307,9 @@ def _fence_language_for_path(path: str) -> str:
 def _artifact_repair_prompt(todo: TodoSpec, missing: list[str], *, last_response: str) -> str:
     missing_block = "\n".join(f"- {m}" for m in missing) or "- unspecified missing evidence"
     artifact_paths = _expected_artifact_paths_for_todo(todo)
+    for path in _extract_paths_from_gate_missing(missing):
+        if path not in artifact_paths:
+            artifact_paths.append(path)
     artifact_block = "\n\n".join(
         f"FILE: {path}\n```{_fence_language_for_path(path)}\n... exact file content ...\n```"
         for path in artifact_paths

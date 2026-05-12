@@ -17,6 +17,7 @@ import sys
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[1]
@@ -190,6 +191,11 @@ def _rel_repo_path(path: Path) -> str:
         return str(path)
 
 
+def _append_unique(items: list[str], value: str) -> None:
+    if value not in items:
+        items.append(value)
+
+
 def _is_draft_artifact(path_text: str) -> bool:
     name = Path(path_text).name.lower()
     return "draft" in name or name in {"submission.md", "email.md"}
@@ -335,6 +341,7 @@ def _validate_results_json(todo: TodoSpec, rel_path: str, path: Path) -> list[st
     errors: list[str] = []
     if not isinstance(data, dict):
         return [f"invalid results.json: {rel_path}: top-level value is not an object"]
+    errors.extend(_validate_referenced_local_artifacts(rel_path, data))
     if todo.slug() == "arxiv_2603_21645_2":
         params = data.get("parameters")
         if not isinstance(params, dict):
@@ -371,6 +378,76 @@ def _validate_results_json(todo: TodoSpec, rel_path: str, path: Path) -> list[st
                 )
             if any(states <= 0 for states in seen.values()):
                 errors.append(f"invalid results.json: {rel_path}: state counts must be positive")
+    return errors
+
+
+def _iter_json_values(value: Any) -> Any:
+    if isinstance(value, dict):
+        for item in value.values():
+            yield from _iter_json_values(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _iter_json_values(item)
+    elif isinstance(value, str):
+        yield value
+
+
+def _validate_referenced_local_artifacts(rel_path: str, data: dict) -> list[str]:
+    """Require local replay artifacts named by results.json to exist on disk.
+
+    A results ledger may summarize Oracle output, but if it records a command,
+    script_path, output_path, verify_output_path, or any target-local replay
+    artifact, the deterministic gate should verify that the referenced file is
+    actually present. Otherwise a prose packet can falsely look reproducible.
+    """
+    errors: list[str] = []
+    seen: set[str] = set()
+    local_re = re.compile(
+        r"tools/community-outreach/targets/[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+"
+    )
+
+    def check_path(path_text: str, context: str) -> None:
+        raw = (path_text or "").strip().strip("`'\".,;:)")
+        if not raw:
+            return
+        # Only enforce target-local replay artifacts. Remote links, generic
+        # labels, and the ledger itself are not local reproducibility evidence.
+        matches = [m.group(0).rstrip("`'\".,;:)") for m in local_re.finditer(raw)]
+        if raw.startswith("tools/community-outreach/targets/"):
+            matches.append(raw)
+        for match in matches:
+            if match in seen:
+                continue
+            seen.add(match)
+            name = Path(match).name.lower()
+            if name in {LEDGER_NAME, "outreach_impact_gate.json", "profile.json", "freshness_judge.json"}:
+                continue
+            if _is_draft_artifact(match):
+                continue
+            if not (REPO_ROOT / match).exists():
+                _append_unique(errors,
+                    f"invalid results.json: {rel_path}: referenced local artifact missing: {match} ({context})"
+                )
+
+    def walk(value: Any, key_path: str = "") -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                child = f"{key_path}.{key}" if key_path else str(key)
+                key_lower = str(key).lower()
+                if isinstance(item, str) and (
+                    key_lower.endswith("_path")
+                    or key_lower in {"script_path", "output_path", "verify_output_path"}
+                    or "command" in key_lower
+                ):
+                    check_path(item, child)
+                walk(item, child)
+        elif isinstance(value, list):
+            for idx, item in enumerate(value):
+                walk(item, f"{key_path}[{idx}]")
+        elif isinstance(value, str) and "tools/community-outreach/targets/" in value:
+            check_path(value, key_path or "string")
+
+    walk(data)
     return errors
 
 
@@ -812,7 +889,7 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
         evidence_paths.append(terminal_rel)
         artifact_text = _read_text(artifact)
     else:
-        missing.append(f"terminal artifact missing: {contract.terminal_artifact}")
+        _append_unique(missing, f"terminal artifact missing: {contract.terminal_artifact}")
 
     missing_required_artifacts: list[str] = []
     invalid_required_artifacts: list[str] = []
@@ -827,7 +904,7 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
             evidence_paths.append(rel_path)
             invalid_required_artifacts.extend(_validate_evidence_file(todo, rel_path, p))
         elif not _is_draft_artifact(rel_path):
-            missing_required_artifacts.append(f"expected artifact missing: {rel_path}")
+            _append_unique(missing_required_artifacts, f"expected artifact missing: {rel_path}")
 
     # Evidence requirements often name concrete files like results.json even
     # when a profile forgot to list them in expected_artifacts. Treat those as
@@ -846,12 +923,14 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
             evidence_paths.append(rel_path)
             invalid_required_artifacts.extend(_validate_evidence_file(todo, rel_path, p))
         elif rel_path not in expected_seen and rel_path != terminal_rel:
-            missing_required_artifacts.append(f"required evidence file missing: {rel_path}")
+            _append_unique(missing_required_artifacts, f"required evidence file missing: {rel_path}")
 
     if missing_required_artifacts:
-        missing.extend(missing_required_artifacts)
+        for item in missing_required_artifacts:
+            _append_unique(missing, item)
     if invalid_required_artifacts:
-        missing.extend(invalid_required_artifacts)
+        for item in invalid_required_artifacts:
+            _append_unique(missing, item)
 
     state = _target_state(todo.slug())
     deep_run = _latest_deep_run(state)
@@ -860,13 +939,14 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
     combined = "\n\n".join([artifact_text, deep_text])
 
     if artifact_text:
-        missing.extend(_contains_contract_text(artifact_text, profile))
+        for item in _contains_contract_text(artifact_text, profile):
+            _append_unique(missing, item)
     if not combined.strip():
-        missing.append("no artifact or oracle deep reasoning text available")
+        _append_unique(missing, "no artifact or oracle deep reasoning text available")
 
     if _needs_local_reproducer(contract.contribution_type, target_lane, combined):
         if not _target_has_runnable_reproducer(target_dir):
-            missing.append(
+            _append_unique(missing,
                 "frontier/certificate exact numerical claim lacks a local runnable reproducer "
                 f"in {_rel_repo_path(target_dir)}"
             )
