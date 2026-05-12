@@ -1,4 +1,8 @@
 \documentclass[11pt,letterpaper]{article}
+% Submission-stage formatting note: this theorem-review source uses a generic
+% article shell.  Before submission to The Fibonacci Quarterly, the front
+% matter and bibliography style will be transferred to the journal's current
+% author template without changing the theorem content.
 
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
@@ -53,7 +57,7 @@ main result classifies the minimal generators of~$B_n$: every minimal
 generator factors uniquely as a pairwise coprime product of atomic
 prime-power birth moduli forming a witness cover whose support spans the prime
 coordinates of~$n$. This yields the sharp bound $\omega(m)\le\omega(n)$ for
-every minimal generator $m$, with equality on every odd layer, and a
+every minimal generator $m$, with equality for every odd $n\ge3$, and a
 primitive-versus-ladder dichotomy for atomic factors. We give complete
 classifications for $\omega(n)\le 3$ and show that
 both $B_n$ and its minimal-generator set admit unique factorizations into
@@ -156,7 +160,7 @@ covers $\Theta$ to minimal generators:
 \right\}.
 \]
 Consequently every $m\in\mathcal M_n$ satisfies
-$\omega(m)\le\omega(n)$, and this bound is attained for every odd $n$. The
+$\omega(m)\le\omega(n)$, and this bound is attained for every odd $n\ge3$. The
 precise cover conditions are given in Definition~\ref{def:witness-cover},
 and the result is Theorem~\ref{thm:witness-classification} together with
 Corollaries~\ref{cor:support-bound} and~\ref{cor:support-bound-sharp}.
@@ -654,18 +658,16 @@ divisor of $F_n$. Then the principal interval
 [\pi_n,F_n]_{D_n}:=\{q\in D_n:\ \pi_n\mid q\}
 \]
 is contained in $B_n$. In particular $B_n$ contains a divisor-lattice
-interval isomorphic to $\operatorname{Div}(F_n/\pi_n)$ if
-$\nu_{\pi_n}(F_n)=1$, and more generally to the interval of divisors of
-$F_n$ with positive $\pi_n$-adic exponent.
+interval naturally isomorphic to $\operatorname{Div}(F_n/\pi_n)$.
 \end{corollary}
 
 \begin{proof}
 By Theorem~\ref{thm:primitive-divisors}, there is a prime
 $\pi_n$ with $\alpha(\pi_n)=n$. Thus $\pi_n\in B_n$. Since
 Theorem~\ref{thm:upper-fiber} says that $B_n$ is an upper set in $D_n$,
-every divisor $q$ of $F_n$ with $\pi_n\mid q$ also lies in $B_n$. The
-interval description is the usual divisor-lattice identification obtained
-by dividing out one factor of $\pi_n$.
+every divisor $q$ of $F_n$ with $\pi_n\mid q$ also lies in $B_n$. Division by
+$\pi_n$ gives an order-preserving bijection from this interval to
+$\operatorname{Div}(F_n/\pi_n)$, with inverse $d\mapsto \pi_n d$.
 \end{proof}
 
 \begin{corollary}\label{cor:boolean-skeleton}
@@ -893,19 +895,28 @@ $\theta_1\theta_2\in\mathcal M_n$. The two displayed families are disjoint
 because their elements have respectively one and two prime-power factors.
 \end{proof}
 
-We now classify the three-support case. The interfaces are as follows. An
-abstract type records only the pairs $(I,J)$ of essential and full coordinate
-sets. A slot with $I=J$ is primitive, so it must be filled by a prime whose
-rank lies in the rank window $\mathcal R_J^\circ(n)$; the excluded indices
-$1,2,6,12$ are exactly the ranks with no primitive Fibonacci prime. A proper
-slot $I=\{i\}\subsetneq J$ is a ladder slot, so the prime-power formulas
-leave at most one candidate $\mathcal L_i^*(n)$, and that candidate is kept
-only if its rank has full-coordinate set $J$. Singleton slots may be filled
-by either mechanism. After these local choices are made, the only remaining
-condition is the matching condition that the selected prime powers have
-distinct underlying primes. The abstract enumeration below is finite; the
-arithmetic content lies in this primitive-slot, ladder-slot, and matching
-test.
+We now classify the three-support case. The section separates four tasks that
+are easy to conflate. Theorem~\ref{thm:abstract-three-types} is purely
+combinatorial: it lists the possible pairs $(I,J)$ of essential and full
+coordinate sets on three labelled coordinates, before any Fibonacci arithmetic
+is used. The Fibonacci input starts when a slot must be filled. A slot with
+$I=J$ is a primitive slot, so it can be filled only by a prime whose rank lies
+in the primitive window $\mathcal R_J^\circ(n)$; the removed ranks
+$1,2,6,12$ are precisely the ranks at which the Fibonacci primitive-divisor
+theorem gives no primitive prime. A proper slot
+$I=\{i\}\subsetneq J$ is a ladder slot, so the prime-power rank formulas leave
+at most one candidate $\mathcal L_i^*(n)$, and that candidate survives only
+when its rank has full-coordinate set $J$. This is also why the abstract shape
+$\Gamma_2=\{(12,123)\}$ is an obstruction: it asks for a nonsingleton
+essential set inside a single proper slot, which cannot be supplied by either
+a primitive atom or a one-coordinate ladder atom. Singleton slots may be
+primitive or ladder. After these local choices are made,
+Theorem~\ref{thm:three-coordinate-nonemptiness} turns realization of any
+remaining type into a finite arithmetic selection problem: choose allowed
+primitive-window primes and forced ladder candidates, then check only that the
+chosen prime powers have distinct underlying primes. Thus the table below is
+the abstract menu, while Theorem~\ref{thm:three-coordinate-nonemptiness} is
+the Fibonacci-specific matching test for nonemptiness.
 
 \begin{center}
 \small
@@ -1485,11 +1496,13 @@ M^{\mathrm{conn}}(n)=
 \begin{proof}
 Equation~\eqref{eq:partition-formula} is the ordinary exponential formula on
 the finite set $\mathcal P(n)$ with block weight
-$C\mapsto A^{\mathrm{conn}}(n_C)$. M\"obius inversion in the partition
-lattice gives the displayed coefficient
-$\mu_{\mathsf{Part}}(\Pi,\hat1)=(-1)^{|\Pi|-1}(|\Pi|-1)!$, where $\hat1$ is
-the partition containing all coordinates in one block. Applying the same
-partition-lattice inversion to
+$C\mapsto A^{\mathrm{conn}}(n_C)$. M\"obius inversion in the partition lattice
+gives
+\[
+\mu_{\mathsf{Part}}(\Pi,\hat1)=(-1)^{|\Pi|-1}(|\Pi|-1)!,
+\]
+where $\hat1$ is the partition containing all coordinates in one block.
+Applying the same partition-lattice inversion to
 \eqref{eq:minimal-partition-formula} gives the minimal-generator formula.
 \end{proof}
 
@@ -1570,19 +1583,20 @@ family shapes governed by the nonemptiness criterion in
 Theorem~\ref{thm:three-coordinate-nonemptiness}, not consequences of the
 $n=30$ data.
 
-The table was produced from the supplementary verification script
-\texttt{scripts/compute\_birth\_layer\_table.py}, supplied with this article.
-The script computes $F_n$ exactly for $2\le n\le30$, enumerates all divisors
+The table is exhaustively verified for $2\le n\le30$ by the supplementary
+source files
+\[
+\text{\texttt{scripts/compute\_birth\_layer\_table.py}},\qquad
+\text{\texttt{generated/tab\_birth\_layer\_data.tex}} .
+\]
+For each such $n$, the script computes $F_n$ exactly, enumerates all divisors
 of $F_n$, determines $\alpha(q)$ by testing the divisors of $n$, forms
 $B_n=\{q\mid F_n:\alpha(q)=n\}$, and extracts $\mathcal M_n$ as the minimal
-divisibility elements of this list. Thus the computation is an exhaustive
-divisor/rank verification within the stated range only. The supplementary
-generated source \texttt{generated/tab\_birth\_layer\_data.tex}, also supplied
-with this article, records the same columns as the manuscript table,
-including the displayed minimal-generator sets. The prose comments following
-the table, such as the assignment of the $n=30$ covers to the types
-$\Gamma_i$, are manuscript annotations derived from the theorems above rather
-than additional script output.
+divisibility elements. The synchronized table source contains the same
+numerical columns as Table~\ref{tab:birth-layer-data}, including the displayed
+minimal-generator sets. The comments following the table, such as the
+assignment of the $n=30$ covers to the types $\Gamma_i$, are derived from the
+theorems above rather than from additional computation.
 
 \begin{table}[ht]
 \centering
@@ -1663,16 +1677,19 @@ of the manuscript. Both authors read and approved the final version.
 conflict of interest.
 
 \smallskip
-\noindent\textbf{Data availability.} The computational data in
-Table~\ref{tab:birth-layer-data} were produced by the supplementary script
-\texttt{scripts/compute\_birth\_layer\_table.py}, using the exhaustive
-divisor/rank method described in Section~\ref{sec:numerical}. The verified
-range is $2\le n\le30$. The synchronized supplementary source file
-\texttt{generated/tab\_birth\_layer\_data.tex} contains the columns $n$,
-$\omega(n)$, $F_n$, $A(n)$, $\#\mathcal M_n$, and the displayed set
-$\mathcal M_n$; these two computational files accompany the article as the
-verification artifact for the numerical table.
+\noindent\textbf{Data availability.} The data in
+Table~\ref{tab:birth-layer-data} are exhaustively verified for
+$2\le n\le30$ by the supplementary source files
+\[
+\text{\texttt{scripts/compute\_birth\_layer\_table.py}},\qquad
+\text{\texttt{generated/tab\_birth\_layer\_data.tex}} .
+\]
+The script uses the divisor/rank method described in Section~\ref{sec:numerical}.
+The synchronized table source contains the columns $n$, $\omega(n)$, $F_n$,
+$A(n)$, $\#\mathcal M_n$, and the displayed minimal-generator set
+$\mathcal M_n$.
 
+% See the submission-stage formatting note at the top of the source.
 \bibliographystyle{plain}
 \bibliography{references_local}
 
