@@ -146,6 +146,76 @@ def tracked_dirty_lines(repo: Path) -> list[str]:
     return [line for line in output.splitlines() if line.strip()]
 
 
+def _status_paths(repo: Path) -> list[str]:
+    output = _git_stdout(repo, ["status", "--porcelain"], timeout=30)
+    paths: list[str] = []
+    for line in output.splitlines():
+        if not line.strip():
+            continue
+        raw = line[3:] if len(line) > 3 and line[2] == " " else line[2:]
+        if " -> " in raw:
+            raw = raw.split(" -> ", 1)[1]
+        path = raw.strip().strip('"')
+        if path:
+            paths.append(path.replace("\\", "/"))
+    return paths
+
+
+def _is_bridge_runtime_path(path: str) -> bool:
+    blocked_prefixes = (
+        "tools/automath_newmath_bridge/inbox/",
+        "tools/automath_newmath_bridge/out/",
+        "tools/automath_newmath_bridge/state/",
+        "tools/automath_newmath_bridge/logs/",
+        "papers/publication/backflow/.distillation/",
+    )
+    return path.startswith(blocked_prefixes)
+
+
+def _allowed_durable_path(path: str) -> bool:
+    if "__pycache__/" in path or path.endswith((".pyc", ".pyo")):
+        return False
+    if path.startswith("tools/automath_newmath_bridge/") and _is_bridge_runtime_path(path):
+        return False
+    if path.startswith(("docs/bridge/", "tools/automath_newmath_bridge/")):
+        return True
+    if path == "papers/publication/backflow/source_queue.json":
+        return True
+    return False
+
+
+def commit_and_push_durable(repo: Path, *, message: str, push: bool) -> dict[str, Any]:
+    branch = current_branch(repo)
+    all_paths = _status_paths(repo)
+    paths = [path for path in all_paths if _allowed_durable_path(path)]
+    skipped = [path for path in all_paths if path not in paths]
+    if not paths:
+        return {"status": "nothing_to_commit", "branch": branch, "skipped": skipped[:20]}
+    add = _git(repo, ["add", *paths], timeout=60)
+    if add.returncode != 0:
+        return {"status": "add_failed", "branch": branch, "stderr": add.stderr.strip()[:1000]}
+    diff = _git(repo, ["diff", "--cached", "--quiet"], timeout=60)
+    if diff.returncode == 0:
+        return {"status": "nothing_to_commit", "branch": branch, "paths": paths, "skipped": skipped[:20]}
+    commit = _git(repo, ["commit", "-m", message], timeout=180)
+    if commit.returncode != 0:
+        return {"status": "commit_failed", "branch": branch, "stderr": commit.stderr.strip()[:1000]}
+    result: dict[str, Any] = {
+        "status": "committed",
+        "branch": branch,
+        "paths": paths,
+        "skipped": skipped[:20],
+        "stdout": commit.stdout.strip()[:1000],
+    }
+    if push:
+        if not branch.startswith(("bridge/", "codex/")):
+            result["push"] = f"skipped branch {branch}"
+        else:
+            pushed = _git(repo, ["push", "origin", branch], timeout=300)
+            result["push"] = "ok" if pushed.returncode == 0 else pushed.stderr.strip()[:1000]
+    return result
+
+
 def _load_config(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
@@ -343,6 +413,35 @@ def render_newmath_ack_status(config_path: Path) -> dict[str, Any]:
     return {"status": "ok", **payload}
 
 
+def run_pi_reflection(config: dict[str, Any]) -> dict[str, Any]:
+    cfg = config.get("pi_reflection")
+    if not isinstance(cfg, dict) or not cfg.get("enabled", True):
+        return {"status": "disabled"}
+    wb_cfg = config.get("automath_writeback") if isinstance(config.get("automath_writeback"), dict) else {}
+    cmd = [
+        sys.executable,
+        str(SCRIPT_DIR / "bridge_pi_reflection.py"),
+        "--gate-results",
+        str(REPO_ROOT / str(cfg.get("gate_results_path") or wb_cfg.get("gate_results_path") or "tools/automath_newmath_bridge/out/bridge_gate_results.jsonl")),
+        "--ack-status",
+        str(REPO_ROOT / str(cfg.get("ack_status_path") or "docs/bridge/newmath-bridge-ack-status.md")),
+        "--report",
+        str(REPO_ROOT / str(cfg.get("report_path") or "docs/bridge/automath-newmath-pi-reflection.md")),
+        "--actions",
+        str(REPO_ROOT / str(cfg.get("actions_path") or "docs/bridge/automath-newmath-pi-actions.jsonl")),
+        "--review-backend",
+        str(wb_cfg.get("review_backend") or "codex-claude"),
+    ]
+    result = run_command(cmd, timeout=120)
+    if result.returncode != 0:
+        return {"status": "failed", "reason": (result.stderr or result.stdout).strip()[:1000]}
+    try:
+        payload = json.loads(result.stdout.strip()) if result.stdout.strip() else {}
+    except json.JSONDecodeError:
+        payload = {"raw": result.stdout.strip()[:1000]}
+    return {"status": "ok", **payload}
+
+
 def _packet_name(result: dict[str, Any]) -> str:
     raw = str(result.get("id") or result.get("artifact_key") or result.get("source_path") or "packet")
     safe = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in raw)
@@ -426,6 +525,17 @@ def supervisor_pass(args: argparse.Namespace) -> bool:
     else:
         _log("automath_writeback: disabled by --no-automath-writeback")
 
+    pi_result = run_pi_reflection(config)
+    _log(f"pi_reflection: {pi_result}")
+
+    if args.commit_durable:
+        commit_result = commit_and_push_durable(
+            REPO_ROOT,
+            message=f"bridge(automath): record PI bridge feedback {_now_iso()}",
+            push=args.push_branch,
+        )
+        _log(f"commit_durable: {commit_result}")
+
     if args.apply_writeback_packets:
         written = write_local_packets(gate_results, limit=args.packet_limit)
         _log(f"local writeback packets: wrote={len(written)} dir={PACKET_DIR}")
@@ -479,6 +589,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write local ignored review packets for gate-passed candidates",
     )
     parser.add_argument("--packet-limit", type=int, default=25)
+    parser.add_argument("--commit-durable", action="store_true", help="Commit durable bridge/PI outputs but not runtime artifacts")
     return parser
 
 
