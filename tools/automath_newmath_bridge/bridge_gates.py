@@ -73,6 +73,10 @@ def _is_runtime_path(path: str) -> bool:
     return any(path.startswith(prefix) for prefix in RUNTIME_PATH_MARKERS)
 
 
+def _is_allowed_runtime_destination(path: str) -> bool:
+    return path.startswith("tools/automath_newmath_bridge/inbox/")
+
+
 def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False) -> dict[str, Any]:
     issues = validate_record(record)
     warnings: list[str] = []
@@ -99,7 +103,7 @@ def gate_record(record: dict[str, Any], *, allow_publication_risk: bool = False)
         )
         passed = False
 
-    if _is_runtime_path(source_path) or _is_runtime_path(destination_path):
+    if _is_runtime_path(source_path) or (_is_runtime_path(destination_path) and not _is_allowed_runtime_destination(destination_path)):
         issues.append("bridge record points at runtime inbox/out/state/log path; runtime artifacts must not be committed or consumed as durable source")
         passed = False
 
