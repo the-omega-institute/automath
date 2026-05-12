@@ -18,7 +18,7 @@
 
 | 论文 | 目标期刊 | 备注 |
 |------|---------|------|
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | C-DONE (Oracle+Claude: pass, 15 rounds) |
+| — | — | 当前无待手动投稿项；已投稿稿件移至全量状态表，C-RUNNING 稿件等终审通过后再自动入队 |
 
 ## 全量状态表
 
@@ -29,7 +29,7 @@
 | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) | — |
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
 | `submitted_2026_fibonacci_moduli_cross_resolution_arithmetic_rint` | RINT归档 | 归档；与RJ upper-fibers稿完全重复；不处理 | exact duplicate of `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` |
-| `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | RJ归档 | RJ拒稿 05-11；路线关闭；不回 Stage A | active FQ deep-revision fork: `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` |
+| `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | RJ归档 | 归档；RJ拒稿 05-11；路线关闭；不回 Stage A | active FQ deep-revision fork: `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` |
 | `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` | Fibonacci Quarterly | A-READY-FQ-DEEPEN | RJ→FQ深改候选；先修正n=30/八类型问题并新增实质结果；不在手动投稿队列 |
 | `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | 已投 05-11 审稿中 | Nonlinearity→DCDS-A; MSP/EditFlow Paper ID: 260511-Zhang-2 |
 | `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | J. Theoret. Probab. | 已投, peer review 中 (7 reviewers invited) | QTDS→JTP | 标题改为 "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type" |
@@ -41,7 +41,7 @@
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit real block (score=6)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | 已投 05-10 | ScholarOne ETDS; Oracle+Claude pass, 9 rounds |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | B-PAUSED (Oracle infra retry needed at B15) | — |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | B-PAUSED (Oracle infra retry needed at B10) | — |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | C-RUNNING (Stage C final gate active 2026-05-13; B passed; awaiting final Oracle/Codex confirmation) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | IMRN→Exp. Math 候选 |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | ✅ 可投稿 — C-8 (Oracle accept + Claude submit, 4/5 轮一致；需 cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
 | `2026_prefix_scan_error_boundary_rates_dynamical_systems` | legacy archive | 归档；parked；canonical ETDS route is `2026_scan_error_prefix_partitions_convergence_rates_etds` | overlap resolved by `2026_scan_error_prefix_partitions_convergence_rates_etds/cross_paper_dedup.md`; do not process independently |
@@ -49,15 +49,16 @@
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit unclear failure) | — |
 | `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | — | 待分诊 | — |
-| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | 待分诊 | — |
+| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | P0 | triaged 2026-05-13: substantial main.tex; canonical route for centered homotopy / cubical Stokes coefficient-bound manuscript |
 | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | — | 待分诊 | — |
-| `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | Dynamical Systems | 待分诊 | — |
+| `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | Dynamical Systems | P0 | triaged 2026-05-13: substantial finite-window Zeckendorf truncation-defect manuscript; must pass overlap harness before Stage A deepening |
 | `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | — | 待分诊 | — |
-| `2026_recursive_addressing_prefix_sites_tac` | TAC | 待分诊 | — |
+| `2026_recursive_addressing_prefix_sites_tac` | TAC | P0 | triaged 2026-05-13: substantial prefix-sites / inverse-limits manuscript; needs journal-fit and novelty gate |
 | `2026_elliptic_normalization_branch_geometry_quartic_spectral` | — | 待分诊 | — |
 | `2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online` | — | 待分诊 | — |
 | `2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge` | — | 待分诊 | — |
 | `2026_golden_ratio_driven_scan_projection_generation_recursive_emergence` | — | 待分诊 | — |
+| `2026_cubical_stokes_inverse_boundary_readout_jdsgt` | legacy archive | 归档；parked；duplicate of canonical JDDE route `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | identical main.tex hash as canonical route; do not process independently |
 | `2026_group_unification_fibonacci_prime_window_entropy_time` | — | 骨架 | — |
 | `2026_zeta_completion_xi_zero_audit` | — | 骨架 | — |
 
