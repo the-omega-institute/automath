@@ -68,8 +68,10 @@ is the adjacent defect law with top digit fixed to $1$.  In particular,
 \frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
 \]
 The tail bit is the parity of the initial run of $1$'s in the upper block and
-is the minimal exact tail statistic for the full defect family.  The same
-description yields an explicit stationary one-step Markov analogue, again as a
+is the minimal exact tail statistic for the full defect family.  For stationary
+one-step Markov inputs, this tail bit is a finite-state hidden Markov
+observable whose live two-state transfer matrix has eigenvalue $-p_{11}$.
+This gives an explicit Markov analogue of the defect law, again as a
 two-component mixture, now with coefficients
 $p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and hence with
 exponential convergence to the limiting law.
@@ -155,13 +157,16 @@ shows that $\beta(q)$ is the parity of the initial run of $1$'s in the tail
 and proves that no strictly coarser tail statistic determines the entire
 family of defects $D_{n\to m}$ exactly.  This minimality statement is
 finite-state in spirit and may be compared with Myhill--Nerode minimization
-\cite{Myhill1957,Nerode1958}.  The same identification yields an exact
-stationary one-step Markov extension: after conditioning on the boundary digit
-$\omega_m$, the defect law is again a two-component mixture, now with
-coefficient $p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and
-hence converges exponentially.  We do not pursue higher-order dependence or
-other linear-recurrence numeration systems here.  Standard Markov-chain
-background may be found in
+\cite{Myhill1957,Nerode1958}.  The same identification makes the Markov
+extension a finite-state factor statement rather than a separate tail count:
+after adding absorbing output states and two live parity states for the initial
+run of $1$'s, the transfer operator for the live component has eigenvalue
+$-p_{11}$.  Consequently, for every stationary one-step Markov input the defect
+law is again a two-component mixture, now with coefficient
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and hence
+converges exponentially.  We do not pursue higher-order dependence or other
+linear-recurrence numeration systems here.  Standard Markov-chain background
+may be found in
 \cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
 
 Classical background on Zeckendorf expansions goes back to
@@ -1181,10 +1186,116 @@ The identity $\beta=\psi\circ\gamma$ is immediate from the definition of
 $\psi$, and uniqueness holds on the image of $\gamma$.
 \end{proof}
 
-The preceding theorem converts the deterministic collapse into an exact
-non-uniform law for one-step Markov inputs.  The only tail information that
-survives is the parity of the initial run of $1$'s, and that parity has a
-closed form under Markov sampling.
+The preceding theorem makes the Markov extension a finite-state factor of the
+shift.  The defect depends on the future block only through the hidden
+observable $\beta$, and $\beta$ is computed by a transducer which records the
+parity of the live initial run of $1$'s and then freezes the resulting output
+after the first $0$.  The next proposition isolates the corresponding transfer
+operator.  The one-step Markov law is then a corollary obtained by averaging
+the deterministic adjacent defect against this factor.
+
+\begin{proposition}[Hidden tail factor and transfer spectrum]
+\label{prop:hidden-tail-transfer}
+Let $P=(p_{ab})_{a,b\in\{0,1\}}$ be an irreducible one-step transition matrix
+on $\{0,1\}$.  For $a\in\{0,1\}$ and $\ell\ge 0$, let $Q_\ell^{(a)}$ be the
+law of the tail statistic
+\[
+\beta(\omega_1\cdots\omega_\ell)
+\]
+when the Markov chain is started from the boundary state $\omega_0=a$.  Then
+$Q_\ell^{(a)}$ is obtained from the four-state hidden chain
+\[
+Z_t\in\{E,O,Z_0,Z_1\},
+\]
+where $E$ and $O$ mean that the initial run of $1$'s is still alive with even
+or odd length, while $Z_i$ is the absorbing output state reached after the
+first $0$ when the final value of $\beta$ is $i$.  After the first symbol has
+been read, the initial row vector is
+\[
+u_a=(0,p_{a1},p_{a0},0)
+\]
+in the ordered coordinates $(E,O,Z_0,Z_1)$, and all subsequent symbols are read
+with transition matrix
+\[
+M=
+\begin{pmatrix}
+0 & p_{11} & p_{10} & 0\\
+p_{11} & 0 & 0 & p_{10}\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1
+\end{pmatrix},
+\]
+with output vector
+\[
+h=(0,1,0,1)^T.
+\]
+Thus $Q_\ell^{(a)}(\{1\})=u_aM^{\ell-1}h$ for $\ell\ge 1$.  On the live
+parity subspace the transfer operator is
+\[
+T=
+\begin{pmatrix}
+0 & p_{11}\\
+p_{11} & 0
+\end{pmatrix},
+\]
+whose eigenvalues are $p_{11}$ and $-p_{11}$.  Consequently
+\[
+Q_0^{(a)}=\delta_0
+\]
+and, for $\ell\ge 1$,
+\[
+Q_\ell^{(a)}
+=
+\left(1-\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}\right)\delta_0
++
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}\delta_1.
+\]
+The observable $\beta$ therefore descends from the one-sided shift to this
+four-state hidden Markov factor, with the only nontrivial oscillatory mode
+equal to $-p_{11}$.
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:tail-rigidity}, $\beta(q)$ is the parity of the initial
+run of $1$'s in $q$.  If the first symbol is $0$, the output is already frozen
+at $0$; if it is $1$, the live run has odd length.  Thereafter, while the next
+symbol remains $1$, the parity toggles with probability $p_{11}$.  When the
+first $0$ appears, the current parity is frozen as the final output.  This is
+exactly the hidden-chain representation with initial vector $u_a$, transition
+matrix $M$, and output vector $h$.  The live block of $M$ is the displayed
+matrix $T$, so its eigenvalues are $p_{11}$ and $-p_{11}$.
+
+It remains only to compute the mass assigned to the output state $1$.  For
+$\ell=0$ the tail word is empty, so $Q_0^{(a)}=\delta_0$.  For $\ell\ge 1$,
+summing the disjoint events that the initial run has odd length gives
+\[
+\PP[\beta(\omega_1\cdots\omega_\ell)=1\mid \omega_0=a]
+=
+\sum_{\substack{1\le r<\ell\\ r\ {\rm odd}}}
+p_{a1}p_{11}^{r-1}p_{10}
++
+\mathbf{1}_{\{\ell\ {\rm odd}\}}p_{a1}p_{11}^{\ell-1}.
+\]
+If $\ell=2s$, this equals
+\[
+\sum_{j=0}^{s-1}p_{a1}p_{11}^{2j}(1-p_{11})
+=
+\frac{p_{a1}(1-p_{11}^{2s})}{1+p_{11}}.
+\]
+If $\ell=2s+1$, it equals
+\[
+\sum_{j=0}^{s-1}p_{a1}p_{11}^{2j}(1-p_{11})
++p_{a1}p_{11}^{2s}
+=
+\frac{p_{a1}(1+p_{11}^{2s+1})}{1+p_{11}}.
+\]
+These two cases combine to
+\[
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}},
+\]
+which is the coefficient of $\delta_1$ in $Q_\ell^{(a)}$.  The coefficient of
+$\delta_0$ is its complement.
+\end{proof}
 
 \begin{theorem}[Stationary one-step Markov extension]
 \label{thm:markov-defect-law}
@@ -1306,37 +1417,16 @@ Since $\PP_P[\omega_m=a]=\pi_a$ by stationarity, averaging over $a$ proves the
 first displayed formula for $P_{m,\ell}$.  The formula for the nonzero defect
 probability is immediate.
 
-Theorem~\ref{thm:tail-rigidity} identifies $\beta(q)$ with the parity of the
-initial run of $1$'s.  Under the Markov law started from state $a$, the event
-$\{\beta(q)=1\}$ is therefore the disjoint union of the cylinder events
-corresponding to odd initial run lengths.  For $\ell=0$, this probability is
-zero.  For $\ell\ge 1$, write $\ell=2r$ or $\ell=2r+1$.
-
-If $\ell=2r$, then an odd initial run has length $2j+1$ for some
-$0\le j\le r-1$, so
+Proposition~\ref{prop:hidden-tail-transfer}, applied to the future chain
+started from the boundary state $a=\omega_m$, gives
 \[
-\rho_{2r}^{(a)}
+\rho_0^{(a)}=0,
+\qquad
+\rho_\ell^{(a)}
 =
-\sum_{j=0}^{r-1} p_{a1}p_{11}^{2j}(1-p_{11})
-=
-\frac{p_{a1}(1-p_{11}^{2r})}{1+p_{11}}
-=
-\frac{p_{a1}(1-(-p_{11})^{2r})}{1+p_{11}}.
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}
+\qquad(\ell\ge 1).
 \]
-If $\ell=2r+1$, then either the odd initial run has length $2j+1$ with
-$0\le j\le r-1$ and is followed by $0$, or the entire block is $1^{2r+1}$.
-Hence
-\[
-\rho_{2r+1}^{(a)}
-=
-\sum_{j=0}^{r-1} p_{a1}p_{11}^{2j}(1-p_{11})
-+ p_{a1}p_{11}^{2r}
-=
-\frac{p_{a1}(1+p_{11}^{2r+1})}{1+p_{11}}
-=
-\frac{p_{a1}(1-(-p_{11})^{2r+1})}{1+p_{11}}.
-\]
-This proves the closed form for $\rho_\ell^{(a)}$.
 
 Let
 \[
