@@ -22,9 +22,9 @@ It does not write Automath paper or Lean content directly.
 
 | Status | Count |
 | --- | ---: |
-| `blocked` | 4 |
-| `consumed` | 2 |
-| `evidence_only` | 3 |
+| `blocked` | 8 |
+| `consumed` | 4 |
+| `evidence_only` | 6 |
 
 ## PI Actions
 
