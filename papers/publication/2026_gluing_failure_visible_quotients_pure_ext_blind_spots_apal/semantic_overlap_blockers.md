@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-12T21:08:06+00:00`
+- Generated: `2026-05-12T22:38:37+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal`
 - Gate failed: `true`

@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-12T21:07:53+00:00`
+- Generated: `2026-05-12T22:37:54+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_finite_observation_escape_rates_cyclotomic_resonances_etds`
 - Gate failed: `true`
