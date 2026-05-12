@@ -32,7 +32,7 @@ Selection gate: `1` receivable item(s), `7` blocked or review-only item(s).
 | `the-omega-institute/newmath@origin/bridge/newmath-automath-consumption:docs/bridge/automath-newmath-failures.jsonl` | `audit_failure` | `observe_only` | low | observation only |
 | `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/BeliefUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
 | `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/DyadicPrecisionUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
-| `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/LyapunovUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
+| `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/FoldMomentKernelUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
 | `the-omega-institute/newmath@origin/auto-dev:papers/bedc/parts/concrete_instances/banach/intro_and_carrier.tex` | `paper_claim` | `blocked_automath_not_ready` | low | Automath receiving theorem or article section has not been selected |
 | `the-omega-institute/newmath@origin/auto-dev:papers/bedc/parts/concrete_instances/banach/singleton_certificate.tex` | `paper_claim` | `blocked_automath_not_ready` | low | Automath receiving theorem or article section has not been selected |
 
