@@ -47,7 +47,7 @@ DEFAULT_SUPERVISOR_ARGS = [
     "--parallel",
     "2",
     "--no-freshness-judge",
-    "--no-pi-review",
+    "--auto-commit",
 ]
 
 
