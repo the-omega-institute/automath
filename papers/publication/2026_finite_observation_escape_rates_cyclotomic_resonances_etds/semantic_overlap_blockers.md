@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-12T08:58:51+00:00`
+- Generated: `2026-05-12T10:34:20+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_finite_observation_escape_rates_cyclotomic_resonances_etds`
 - Gate failed: `true`
@@ -12,14 +12,15 @@
 | `blocker` | 0 |
 | `deferred_wait_for_prior_submission` | 0 |
 | `needs_human_resolution` | 1 |
-| `resolved` | 1 |
-| `informational` | 28 |
+| `resolved` | 2 |
+| `informational` | 27 |
 
 ## Findings
 
 | class | paper A | paper B | action | primary | deferred | shared markers | token Jaccard | board A | board B |
 |---|---|---|---|---|---|---|---:|---|---|
 | needs_human_resolution | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_scan_projection_address_semantics_sigma_nonexpansion_etds` | record_board_resolution_before_advancing | `` | `` | bernoulli_markov_transport, cyclotomic_resonance, finite_observation_escape_rates, residue_window_decoder, visible_quotient_gluing | 0.4564 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |  |
+| resolved | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_prefix_scan_error_boundary_rates_dynamical_systems` | continue_after_board_resolution | `` | `` | bernoulli_markov_transport | 0.2269 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | legacy archive \| 归档；parked；canonical ETDS route is `2026_scan_error_prefix_partitions_convergence_rates_etds` \| overlap resolved by `2026_scan_error_prefix_partitions_convergence_rates_etds/cross_paper_dedup.md`; do... |
 | resolved | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | continue_after_board_resolution | `` | `` | bernoulli_markov_transport, dynamical_zeta_finite_part, fibonacci_finite_window_fold, residue_window_decoder, sliding_overlap_reconstruction | 0.2139 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | Fibonacci Q. \| 拒稿 05-01；FQ/JNT 路线关闭；不回 Stage A \| ETDS→JNT→FQ; FQ editor: 更适合 dynamical systems; core 已并入/重叠 DCDS-A 在审稿件 `260511-Zhang-2` |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_detector_shells_click_record_kms_jphyscomm` | no_action_required | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1835 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | no_action_required | `` | `` | bernoulli_markov_transport, fibonacci_finite_window_fold, residue_window_decoder | 0.1304 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | Dynamical Systems \| 待分诊 \| — |
@@ -32,7 +33,6 @@
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | no_action_required | `` | `` | residue_window_decoder, sliding_overlap_reconstruction, visible_quotient_gluing | 0.1580 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_golden_mean_folding_stable_types_auditable_addressing` | no_action_required | `` | `` | bernoulli_markov_transport, fibonacci_finite_window_fold, parry_mismatch_or_divergence, residue_window_decoder, sliding_overlap_reconstruction | 0.1857 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |  |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | no_action_required | `` | `` | sliding_overlap_reconstruction, visible_quotient_gluing | 0.1560 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | APAL \| B-STUCK (Oracle: minor revision, 20 rounds — needs human review) \| — |
-| informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_prefix_scan_error_boundary_rates_dynamical_systems` | no_action_required | `` | `` | bernoulli_markov_transport | 0.2269 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |  |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_prime_languages_finite_state_obstructions_monatshefte` | no_action_required | `` | `` | fibonacci_finite_window_fold, parry_mismatch_or_divergence, residue_window_decoder | 0.2262 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | Monatshefte \| B-PAUSED (Oracle infra retry needed at B10) \| — |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_projection_ontological_mathematics_core_tams` | no_action_required | `` | `` | bernoulli_markov_transport, fibonacci_finite_window_fold, residue_window_decoder, sliding_overlap_reconstruction | 0.2012 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |  |
 | informational | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | `2026_recursive_addressing_prefix_sites_tac` | no_action_required | `` | `` | sliding_overlap_reconstruction, visible_quotient_gluing | 0.1648 | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | TAC \| 待分诊 \| — |
