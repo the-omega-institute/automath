@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — Misframed target: the board entry presents the named Erdős #1191 infinite Sidon-set second-order problem as if automated deep reasoning should instead prove extremality of a specific piecewise-affine/AE ansatz. That ansa |
+| Status | **🔴 DROP · profile judge DROP** — Misframed target. Erdős #1191 itself is a real high-impact additive-combinatorics problem, but this board entry does not propose attacking the actual invariant b or producing a new bound/construction/certificate. It redi |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
@@ -422,7 +422,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — Not viable as stated. The stated supremum includes t=0, so for any nonnegative L^1 function supported in [-1/4,1/4] the objective includes ∫ f(x)^2 dx / //f//_1^2. This ratio is unbounded by concentrating fixed L^1 mass  |
+| Status | **🔴 DROP · profile judge DROP** — Not viable as stated: the objective takes a supremum over /t/<=1, which includes t=0, so the ratio contains ∫ f(x)^2 dx / //f//_1^2. For nonnegative L^1 functions supported in [-1/4,1/4], this ratio is unbounded by conce |
 | Source | AlphaEvolve PDF + Boyer-Steinerberger arxiv:2506.16750 + arxiv:2508.02803 |
 | Type | OPEN / extremal functional |
 | Untouched | ✅ 全是 step-function 数值竞赛, 0 人攻 closed form |
