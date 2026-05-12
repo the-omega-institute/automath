@@ -683,7 +683,8 @@ exactly one full-support coordinate, as claimed.
 \begin{corollary}\label{cor:two-support-complete-classification}
 Assume $\mathcal P(n)=\{\ell_1,\ell_2\}$ and put
 \[
-\Atom_i(n):=\{\theta:\theta\in\Atom(d),\ d\mid n,\ T_n(\theta)=\{\ell_i\}\}
+\Atom_i(n):=\{\theta:\theta\in\Atom(d),\ d\mid n,\
+E_n(\theta)=T_n(\theta)=\{\ell_i\}\}
 \quad(i=1,2),
 \]
 and
@@ -716,14 +717,17 @@ $\alpha(\theta/p)<n$ for its underlying prime $p$.
 If the cover has two factors, Theorem~\ref{thm:extremal-coordinate-separation}
 shows after relabeling that one factor has private coordinate $\ell_1$ and the
 other has private coordinate $\ell_2$, and neither factor can have both
-coordinates in its $T$-support. Hence the factors lie in
+coordinates in its $T$-support. Thus
+\(T_n(\theta_i)=\{\ell_i\}\). Since the private coordinate belongs to
+\(E_n(\theta_i)\subseteq T_n(\theta_i)\), also
+\(E_n(\theta_i)=\{\ell_i\}\). Hence the factors lie in
 \(\Atom_1(n)\) and \(\Atom_2(n)\). Pairwise coprimeness is part of the
 witness-cover definition.
 Conversely, if $\theta_i\in\Atom_i(n)$ are coprime, then their
 $T_n$-supports cover $\{\ell_1,\ell_2\}$, and each factor has its unique
 coordinate as an essential private coordinate because
-$E_n(\theta_i)\subseteq T_n(\theta_i)=\{\ell_i\}$ is nonempty by atomicity
-at that full coordinate. Thus the two factors form an $n$-witness cover, and
+$E_n(\theta_i)=T_n(\theta_i)=\{\ell_i\}$. Thus the two factors form an
+$n$-witness cover, and
 Theorem~\ref{thm:witness-classification} gives
 \(\theta_1\theta_2\in\mathcal M_n\).
 \end{proof}
@@ -835,6 +839,56 @@ remaining conditions are the existence of atoms with those exact
 is the criterion proved in Theorem~\ref{thm:three-coordinate-nonemptiness}.
 \end{proof}
 
+\begin{proposition}[Arithmetic atom families in three coordinates]
+\label{prop:three-coordinate-atom-families}
+Assume $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$. For nonempty
+$I\subseteq J\subseteq[3]$, put
+\[
+\mathcal A_{I,J}(n):=
+\{\theta\in\bigcup_{d\mid n}\Atom(d):\ E_n(\theta)=I,\ T_n(\theta)=J\}.
+\]
+For nonempty $J\subseteq[3]$, define the primitive family
+\[
+P_J(n):=\{p:\ p\text{ is prime},\ \alpha(p)\mid n,\ T_n(p)=J\}.
+\]
+For $i\in J$, define the ladder family
+\[
+L_{i,J}(n):=\{p^e:\ e>1,\ p^e\in\Atom(d),\ d\mid n,\ 
+T_n(p^e)=J,\ E_n(p^e)=\{\ell_i\}\}.
+\]
+Then, for every nonempty $I\subseteq J\subseteq[3]$,
+\[
+\mathcal A_{I,J}(n)=
+\begin{cases}
+P_J(n)\cup L_{i,J}(n),& I=J=\{i\},\\
+P_J(n),& I=J,\ \#J\ge2,\\
+L_{i,J}(n),& I=\{i\}\subsetneq J,\\
+\varnothing,& \text{otherwise.}
+\end{cases}
+\]
+Consequently the nonemptiness of every admissible three-coordinate type is a
+finite pairwise-coprime selection problem from the explicit primitive rank
+families \(P_J(n)\) and ladder-step families \(L_{i,J}(n)\).
+\end{proposition}
+
+\begin{proof}
+Let \(\theta\in\mathcal A_{I,J}(n)\). If \(\theta\) is primitive, then
+Theorem~\ref{thm:primitive-ladder-dichotomy} gives
+\(E_n(\theta)=T_n(\theta)\), so \(I=J\), and \(\theta\in P_J(n)\). Conversely
+any \(p\in P_J(n)\) is primitive and has \(E_n(p)=T_n(p)=J\), hence belongs
+to \(\mathcal A_{J,J}(n)\).
+
+If \(\theta\) is a ladder atom, then the same dichotomy shows that its
+essential set, when it occurs in a witness cover, is the singleton consisting
+of the coordinate changed by the ladder step. Thus
+\(\theta\in\mathcal A_{I,J}(n)\) with \(I=\{\ell_i\}\) if and only if
+\(\theta\in L_{i,J}(n)\). The only overlap between the two descriptions is
+the singleton case \(I=J=\{i\}\), where either a primitive atom or a ladder
+atom whose full support is exactly that coordinate can occur. All cases in
+which \(I\) is a proper nonsingleton subset of \(J\), or in which \(I\ne J\)
+and \(\#I>1\), are excluded by the primitive--ladder dichotomy.
+\end{proof}
+
 \begin{theorem}[Three-coordinate nonemptiness criterion]
 \label{thm:three-coordinate-nonemptiness}
 Assume $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$ and identify subsets of
@@ -856,7 +910,9 @@ of factors with identical labelled data.
 
 Equivalently, an unlabelled type $\Gamma_i$ is realized if and only if the
 preceding pairwise-coprime selection condition holds after some permutation
-of the three coordinates. The excluded type $\Gamma_2$ is never realized.
+of the three coordinates, with the sets \(\mathcal A_{I,J}(n)\) given
+arithmetically by Proposition~\ref{prop:three-coordinate-atom-families}. The
+excluded type $\Gamma_2$ is never realized.
 \end{theorem}
 
 \begin{proof}
@@ -948,29 +1004,202 @@ $n_C:=\prod_{\ell\in C}\ell^{\nu_\ell(n)}$ for nonempty
 $C\subseteq\mathcal P(n)$.
 
 \begin{definition}\label{def:support-hypergraph}
-See \cite{MaZhang2026FibonacciModuliCrossResolution}, Definition~5.1.
+Let $q\in D_n$ and write
+\[
+q=\prod_{i=1}^r p_i^{e_i}
+\]
+with distinct primes $p_i$. The \emph{support hypergraph} $H_n(q)$ has vertex
+set $\mathcal P(n)$ and nonempty hyperedges
+\[
+\operatorname{supp}_n(p_i^{e_i})
+:=\{\ell\in\mathcal P(n):\nu_\ell(\alpha(p_i^{e_i}))>0\}.
+\]
+Prime-power factors with empty support are ignored. We call $q$ \emph{connected}
+if $H_n(q)$ is connected on its non-isolated vertices; for $q\in B_n$ this is
+equivalently connected on all of $\mathcal P(n)$.
+Define
+\[
+A^{\mathrm{conn}}(n):=\#\{q\in B_n:q\text{ is connected}\},
+\qquad
+M^{\mathrm{conn}}(n):=\#\{m\in\mathcal M_n:m\text{ is connected}\}.
+\]
 \end{definition}
 
 \begin{theorem}\label{thm:coprime-embedding}
-See \cite{MaZhang2026FibonacciModuliCrossResolution}, Theorem~5.2.
+Let $C_1,\ldots,C_s$ be pairwise disjoint nonempty subsets of
+$\mathcal P(n)$. If $q_j\in B_{n_{C_j}}$ for each $j$, then the integers
+$q_1,\ldots,q_s$ are pairwise coprime, their product divides
+$F_{n_{C_1\cup\cdots\cup C_s}}$, and
+\[
+\alpha(q_1\cdots q_s)=n_{C_1\cup\cdots\cup C_s}.
+\]
+In particular, if $\{C_1,\ldots,C_s\}$ is a partition of $\mathcal P(n)$,
+then $q_1\cdots q_s\in B_n$.
 \end{theorem}
+
+\begin{proof}
+For $i\ne j$, the indices $n_{C_i}$ and $n_{C_j}$ are coprime. Hence
+\[
+\gcd(q_i,q_j)\mid \gcd(F_{n_{C_i}},F_{n_{C_j}})
+=F_{\gcd(n_{C_i},n_{C_j})}=F_1=1
+\]
+by strong divisibility, so the factors are pairwise coprime. Since
+$n_{C_j}\mid n_{C_1\cup\cdots\cup C_s}$, each $q_j$ divides
+$F_{n_{C_1\cup\cdots\cup C_s}}$, and so does the product. Finally,
+Proposition~\ref{prop:rank-basics} gives
+\[
+\alpha(q_1\cdots q_s)=\lcmop(n_{C_1},\ldots,n_{C_s})
+=n_{C_1\cup\cdots\cup C_s}.
+\]
+\end{proof}
 
 \begin{theorem}\label{thm:birth-connected-factorization}
-See \cite{MaZhang2026FibonacciModuliCrossResolution}, Theorem~5.3.
+Let $q\in B_n$, and let $C_1,\ldots,C_s$ be the connected components of
+$H_n(q)$. For each component $C$, let $q_C$ be the product of those
+prime-power factors $p^e\Vert q$ for which
+\(\operatorname{supp}_n(p^e)\subseteq C\). Then
+\[
+q=q_{C_1}\cdots q_{C_s},\qquad q_C\in B_{n_C},
+\qquad \alpha(q_C)=n_C,
+\]
+and every $q_C$ is connected. This factorization is unique.
 \end{theorem}
+
+\begin{proof}
+Every prime-power factor of $q$ has support contained in exactly one connected
+component, so the displayed product and uniqueness are immediate from unique
+factorization once the components are known.
+
+Fix a component $C$. If \(p^e\Vert q_C\), then
+\(\alpha(p^e)\mid n\) and all prime coordinates of \(\alpha(p^e)\) lie in
+$C$, hence \(\alpha(p^e)\mid n_C\). Therefore \(p^e\mid F_{n_C}\), and
+\(q_C\mid F_{n_C}\). Thus \(\alpha(q_C)\mid n_C\).
+Conversely, for each \(\ell\in C\), the equality \(\alpha(q)=n\) implies
+that some prime-power factor \(p^e\Vert q\) has
+\(\nu_\ell(\alpha(p^e))=\nu_\ell(n)\). Its support lies in the same component
+$C$, so it divides \(q_C\). Hence the \(\ell\)-coordinate of
+\(\alpha(q_C)\) has full exponent \(\nu_\ell(n)\). This holds for every
+\(\ell\in C\), proving \(\alpha(q_C)=n_C\). The hypergraph of \(q_C\) is the
+component \(C\), so \(q_C\) is connected.
+\end{proof}
 
 \begin{theorem}\label{thm:mingenerator-connected-factorization}
-See \cite{MaZhang2026FibonacciModuliCrossResolution}, Theorem~5.4.
+Let \(m\in\mathcal M_n\), and write
+\[
+m=\prod_{C\in\pi}m_C
+\]
+for the connected-block factorization of
+Theorem~\ref{thm:birth-connected-factorization}. Then
+\(m_C\in\mathcal M_{n_C}\) for every block \(C\in\pi\). Conversely, if
+\(\pi\in\Part(\mathcal P(n))\) and \(m_C\in\mathcal M_{n_C}\) is connected
+for every \(C\in\pi\), then \(\prod_{C\in\pi}m_C\in\mathcal M_n\).
 \end{theorem}
 
-\begin{corollary}\label{cor:four-support-reduction}
-See \cite{MaZhang2026FibonacciModuliCrossResolution}, Corollary~5.5.
+\begin{proof}
+Let \(m\in\mathcal M_n\). The preceding theorem gives \(m_C\in B_{n_C}\).
+If some proper divisor \(r_C<m_C\) belonged to \(B_{n_C}\), then
+\[
+r_C\prod_{D\in\pi,\ D\ne C}m_D
+\]
+would divide \(m\) properly and would have rank
+\(\lcmop(n_C,n_D:D\ne C)=n\) by Theorem~\ref{thm:coprime-embedding},
+contradicting the minimality of \(m\). Thus \(m_C\in\mathcal M_{n_C}\).
+
+Conversely, let \(m=\prod_{C\in\pi}m_C\) with connected
+\(m_C\in\mathcal M_{n_C}\). Theorem~\ref{thm:coprime-embedding} gives
+\(m\in B_n\). Suppose \(s\mid m\) and \(s\in B_n\). Put
+\[
+s_C:=\gcd(s,m_C)\qquad(C\in\pi).
+\]
+The factors \(m_C\) are pairwise coprime, so \(s=\prod_C s_C\). Since
+\(s_C\mid F_{n_C}\), the rank \(\alpha(s_C)\) divides \(n_C\). The equality
+\(\alpha(s)=n\) forces, in every block \(C\), full exponent in every
+coordinate of \(C\); because no other block contains those coordinates, this
+means \(\alpha(s_C)=n_C\), or \(s_C\in B_{n_C}\). Minimality of \(m_C\) then
+forces \(s_C=m_C\) for all \(C\), so \(s=m\). Hence \(m\in\mathcal M_n\).
+\end{proof}
+
+\begin{corollary}[Partition formulas]\label{cor:partition-formulas}
+For every \(n\ge2\),
+\begin{equation}\label{eq:partition-formula}
+A(n)=\sum_{\pi\in\Part(\mathcal P(n))}
+\prod_{C\in\pi}A^{\mathrm{conn}}(n_C),
+\qquad
+\#\mathcal M_n=\sum_{\pi\in\Part(\mathcal P(n))}
+\prod_{C\in\pi}M^{\mathrm{conn}}(n_C).
+\end{equation}
+Equivalently, by Mobius inversion on the partition lattice,
+\begin{equation}\label{eq:connected-inversion}
+A^{\mathrm{conn}}(n)=
+\sum_{\pi\in\Part(\mathcal P(n))}
+(-1)^{|\pi|-1}(|\pi|-1)!\prod_{C\in\pi}A(n_C),
+\end{equation}
+and the same formula with \(A\) replaced by \(\#\mathcal M\) and
+\(A^{\mathrm{conn}}\) replaced by \(M^{\mathrm{conn}}\) holds for minimal
+generators.
 \end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:birth-connected-factorization} gives a unique decomposition
+of each \(q\in B_n\) into connected elements indexed by a partition of
+\(\mathcal P(n)\), and Theorem~\ref{thm:coprime-embedding} gives the converse
+product construction. Counting these decompositions gives the formula for
+\(A(n)\). The same argument using
+Theorem~\ref{thm:mingenerator-connected-factorization} gives the formula for
+\(\#\mathcal M_n\).
+
+The displayed inversion is the standard Mobius inversion formula for the
+partition lattice. The Mobius value from a partition \(\pi\) to the top
+one-block partition is
+\((-1)^{|\pi|-1}(|\pi|-1)!\), which gives
+\eqref{eq:connected-inversion}; the minimal-generator formula is identical.
+\end{proof}
+
+\begin{corollary}\label{cor:four-support-reduction}
+Assume \(\omega(n)=4\). Every disconnected element of \(\mathcal M_n\) is a
+product of connected minimal generators supported on proper coordinate blocks.
+Consequently a complete classification for \(\mathcal M_n\) at four
+coordinates reduces to the connected four-coordinate case together with the
+one-, two-, and three-coordinate classifications of the preceding sections.
+\end{corollary}
+
+\begin{proof}
+This is the minimal-generator factorization theorem applied to the partitions
+of a four-element set. If the partition has more than one block, every block
+has size at most three, so each factor belongs to a previously classified
+lower-support birth layer. The only part not supplied by lower-support data is
+the one-block, connected case.
+\end{proof}
 
 \begin{corollary}\label{cor:odd-primitive-cover-realization}
-See \cite{MaZhang2026FibonacciModuliCrossResolution}, Corollary~5.6.
+Let \(n\) be odd. For every partition
+\(\pi\in\Part(\mathcal P(n))\) there is a minimal generator
+\[
+m_\pi=\prod_{C\in\pi}\rho_C\in\mathcal M_n
+\]
+whose connected blocks are the blocks of \(\pi\), with
+\(\alpha(\rho_C)=n_C\). Hence
+\[
+\#\mathcal M_n\ge \#\Part(\mathcal P(n)),
+\]
+the Bell number of \(\omega(n)\).
 \end{corollary}
 
+\begin{proof}
+If \(n\) is odd and \(C\ne\varnothing\), then \(n_C\ge3\) and
+\(n_C\notin\{6,12\}\). The primitive-divisor theorem therefore provides a
+prime \(\rho_C\) with \(\alpha(\rho_C)=n_C\). For a fixed partition \(\pi\),
+the primes \(\rho_C\) are distinct because their ranks are distinct, and the
+sets \(T_n(\rho_C)=E_n(\rho_C)=C\) partition \(\mathcal P(n)\). Thus
+\(\{\rho_C:C\in\pi\}\) is an \(n\)-witness cover, and
+Theorem~\ref{thm:witness-classification} gives
+\(m_\pi\in\mathcal M_n\).
+
+The support hypergraph of \(m_\pi\) has connected components exactly the
+blocks of \(\pi\). The connected-block factorization is unique, so distinct
+partitions give distinct minimal generators. This proves the Bell-type lower
+bound.
+\end{proof}
 %% ====================================================================
 \section{Numerical evidence}\label{sec:numerical}
 %% ====================================================================
