@@ -47,15 +47,14 @@ Singapore\\
 
 \begin{abstract}
 For each positive integer $n$, let $B_n$ denote the set of divisors of the
-Fibonacci number $F_n$ whose rank of apparition equals~$n$. We use the
-upper-fiber and witness-cover framework of
-\cite{MaZhang2026UpperFibersWitnessCoversFQ}, in which $B_n$ is an upper set
-in the divisor lattice of $F_n$ obtained by removing the covering ideals
-associated with the maximal proper divisors of~$n$, and every minimal
-generator factors uniquely as a pairwise coprime product of atomic
-prime-power birth moduli forming a witness cover whose support spans the prime
-coordinates of~$n$. This yields the bound $\omega(m)\le\omega(n)$ for every
-minimal generator $m$ and a primitive-versus-ladder dichotomy for atomic
+Fibonacci number $F_n$ whose rank of apparition equals~$n$. We prove that
+$B_n$ is an upper set in the divisor lattice of $F_n$ obtained by removing
+the covering ideals associated with the maximal proper divisors of~$n$, and
+that every minimal generator factors uniquely as a pairwise coprime product
+of atomic prime-power birth moduli forming a witness cover whose support spans
+the prime coordinates of~$n$. This yields the bound
+$\omega(m)\le\omega(n)$ for every minimal generator $m$ and a
+primitive-versus-ladder dichotomy for atomic
 factors. The new contribution here is a finite rank-checkable classification for
 $\omega(n)\le 3$ and show that
 both $B_n$ and its minimal-generator set admit unique factorizations into
@@ -128,9 +127,16 @@ three-support classifications proved here.
 Our first main result identifies $B_n$ as an upper fiber obtained by sieve.
 
 \begin{theorem}\label{thm:intro-upper-fiber}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Theorem~1.1, for the
-upper-fiber sieve identity and the minimal-generator upper-set
-decomposition used in this paper.
+For every \(n\ge2\),
+\[
+B_n=D_n\setminus\bigcup_{p\mid n}D_{n/p}.
+\]
+Consequently \(B_n\) is an upper set in the divisor lattice \(D_n\), and
+\[
+B_n=\bigcup_{m\in\mathcal M_n}\{q\in D_n:\ m\mid q\},
+\]
+where \(\mathcal M_n\) is the set of minimal elements of \(B_n\) under
+divisibility.
 \end{theorem}
 
 Call a prime power $\theta=p^e$ \emph{atomic for the index $d$} if
@@ -140,8 +146,13 @@ collectively span the prime factorization of $n$ in a minimal, irredundant
 fashion (see Definition~\ref{def:witness-cover} for the precise formulation).
 
 \begin{theorem}\label{thm:intro-witness}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Theorem~1.2, for the
-minimal-generator classification by witness covers and the support bound
+For every \(n\ge2\), multiplication gives a bijection from \(n\)-witness
+covers to minimal generators:
+\[
+\mathcal M_n=
+\bigl\{\prod_{\theta\in\Theta}\theta:\Theta\text{ is an \(n\)-witness cover}\bigr\}.
+\]
+In particular every \(m\in\mathcal M_n\) satisfies
 \(\omega(m)\le\omega(n)\).
 \end{theorem}
 
@@ -191,8 +202,8 @@ $n$---Bell-type lower bounds on $\#\mathcal M_n$
 
 The paper is organized as follows. Section~\ref{sec:prelim} collects the
 background on Fibonacci divisibility and the prime-power apparition formulas.
-Section~\ref{sec:upper-fibers} recalls the upper-fiber and witness-cover
-theory from \cite{MaZhang2026UpperFibersWitnessCoversFQ}. Section~\ref{sec:low-support} treats the
+Section~\ref{sec:upper-fibers} proves the upper-fiber and witness-cover
+theory. Section~\ref{sec:low-support} treats the
 primitive--ladder dichotomy and the low-support classifications.
 Section~\ref{sec:connected} records the connected-block factorization
 (Theorem~\ref{thm:intro-connected}) and the partition-lattice formulas.
@@ -206,10 +217,34 @@ Section~\ref{sec:questions} records further questions.
 \subsection{Rank of apparition and Fibonacci divisibility}\label{subsec:fib-div}
 
 \begin{proposition}\label{prop:rank-basics}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Proposition~2.1, for the
-rank-divisibility, strong-divisibility, and lcm rules for \(\alpha\) used
-throughout.
+Let \(q,u,v\ge2\) and \(a,b,m\ge1\). Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \(q\mid F_m\) if and only if \(\alpha(q)\mid m\).
+\item \(\gcd(F_a,F_b)=F_{\gcd(a,b)}\).
+\item \(\alpha(\lcmop(u,v))=\lcmop(\alpha(u),\alpha(v))\).
+\end{enumerate}
 \end{proposition}
+
+\begin{proof}
+The first assertion is the standard rank-divisibility property of the
+Fibonacci rank of apparition, as proved for example by Wall
+\cite{Wall1960FibonacciModm} and Vinson \cite{Vinson1963RankApparition}: once
+a modulus first appears at index \(\alpha(q)\), it appears exactly at the
+multiples of that index. The second assertion is the strong-divisibility
+identity for the Fibonacci sequence.
+
+For (iii), put \(L=\lcmop(u,v)\). For every \(m\ge1\),
+\[
+L\mid F_m
+\quad\Longleftrightarrow\quad
+u\mid F_m\ \text{and}\ v\mid F_m
+\quad\Longleftrightarrow\quad
+\alpha(u)\mid m\ \text{and}\ \alpha(v)\mid m
+\]
+by (i). This is equivalent to
+\(\lcmop(\alpha(u),\alpha(v))\mid m\). Therefore the least positive \(m\)
+for which \(L\mid F_m\) is \(\lcmop(\alpha(u),\alpha(v))\), which is (iii).
+\end{proof}
 
 \subsection{Primitive divisors}\label{subsec:primitive}
 
@@ -252,31 +287,138 @@ Sections~\ref{sec:upper-fibers}--\ref{sec:connected} are independent of them.
 \subsection{Prime-power apparition formulas}\label{subsec:prime-power}
 
 \begin{proposition}\label{prop:prime-power-ladders}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Proposition~2.3, for the
-prime-power rank formulas for \(2\), \(5\), and primes \(p\ne2,5\).
+Let \(p\) be prime, put \(z_p:=\alpha(p)\), and, for \(p\ne2,5\), put
+\[
+h_p:=\nu_p(F_{z_p}).
+\]
+Then the ranks of apparition of prime powers are as follows:
+\[
+\alpha(2)=3,\qquad \alpha(4)=6,\qquad
+\alpha(2^e)=3\cdot2^{e-2}\quad(e\ge3),
+\]
+\[
+\alpha(5^e)=5^e\quad(e\ge1),
+\]
+and, for \(p\ne2,5\),
+\[
+\alpha(p^e)=p^{\max\{e-h_p,0\}}\,z_p\quad(e\ge1).
+\]
 \end{proposition}
 
+\begin{proof}
+These are the classical prime-power lifting formulas for Fibonacci ranks of
+apparition. The exceptional formulas for \(2\) and \(5\), and the general
+formula in terms of \(h_p=\nu_p(F_{\alpha(p)})\), are recorded in
+Fulton--Morris \cite{FultonMorris1969ArithmeticalFunctions}, Lengyel
+\cite{Lengyel1995OrderFibonacciLucas}, and Jarden
+\cite{Jarden1966RecurringSequences}. In the notation used here, the cited
+valuation formula says that for \(p\ne2,5\), after the first appearance
+\(z_p\), the rank remains \(z_p\) through the powers \(p^e\) with
+\(e\le h_p\), and each further power raises the rank by one additional factor
+of \(p\). This is exactly
+\(\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p\). The displayed \(2\)- and
+\(5\)-adic formulas are the corresponding exceptional cases.
+\end{proof}
+
 \begin{definition}\label{def:atomic-families}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Definition~2.4, for the
-atomic prime-power families \(\Atom(d)\), the rank functions \(d(\theta)\)
-and \(d^-(\theta)\), and the full and essential supports \(T_n(\theta)\) and
-\(E_n(\theta)\).
+For a prime power \(\theta=p^e\) with \(e\ge1\), set
+\[
+d(\theta):=\alpha(\theta),\qquad
+d^-(\theta):=\alpha(p^{e-1}),
+\]
+with the convention \(\alpha(1)=1\). For \(d\ge1\) define the atomic
+birth family
+\[
+\Atom(d):=\{p^e:\ \alpha(p^e)=d,\ \alpha(p^{e-1})<d\}.
+\]
+Thus \(\Atom(d)\) consists of the prime-power factors born exactly at rank
+\(d\).
+
+Let \(d(\theta)\mid n\). The full-coordinate support of \(\theta\) relative
+to \(n\) is
+\[
+T_n(\theta):=
+\{\ell\in\mathcal P(n):\nu_\ell(d(\theta))=\nu_\ell(n)\},
+\]
+and its essential-coordinate support is
+\[
+E_n(\theta):=
+\{\ell\in T_n(\theta):\nu_\ell(d^-(\theta))<\nu_\ell(n)\}.
+\]
+Equivalently, \(T_n(\theta)\) records the prime coordinates of \(n\) supplied
+at full exponent by \(d(\theta)\), while \(E_n(\theta)\) records the full
+coordinates lost when \(\theta=p^e\) is lowered to \(p^{e-1}\).
 \end{definition}
 
 \begin{corollary}\label{cor:atomic-classification}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Corollary~2.5, for the
-complete classification of atomic prime powers and the primitive-versus-ladder
-dichotomy for atoms.
+The atomic prime powers are exactly the following:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \(2\in\Atom(3)\), \(4\in\Atom(6)\), and
+\(2^e\in\Atom(3\cdot2^{e-2})\) for every \(e\ge4\). The power \(8\) is not
+atomic.
+\item \(5^e\in\Atom(5^e)\) for every \(e\ge1\).
+\item If \(p\ne2,5\), \(z_p=\alpha(p)\), and
+\(h_p=\nu_p(F_{z_p})\), then \(p\in\Atom(z_p)\) and
+\[
+p^e\in\Atom(p^{e-h_p}z_p)\qquad(e>h_p).
+\]
+No power \(p^e\) with \(1<e\le h_p\) is atomic.
+\end{enumerate}
+Consequently every atom is either a primitive atom \(p\in\Atom(\alpha(p))\)
+or a ladder atom \(p^e\) with \(e>1\), and every ladder atom changes only one
+prime coordinate of its apparition index when it is lowered by one power of
+its underlying prime.
 \end{corollary}
+
+\begin{proof}
+For \(p=2\), Proposition~\ref{prop:prime-power-ladders} gives
+\[
+\alpha(2)=3,\quad \alpha(4)=6,\quad \alpha(8)=6,\quad
+\alpha(2^e)=3\cdot2^{e-2}\ (e\ge3).
+\]
+Thus \(2\) and \(4\) are atomic, \(8\) is not atomic because
+\(\alpha(8)=\alpha(4)\), and every \(2^e\) with \(e\ge4\) is atomic because
+\(3\cdot2^{e-2}>3\cdot2^{e-3}\).
+
+For \(p=5\), the formula \(\alpha(5^e)=5^e\) gives a strict increase at every
+step, so every \(5^e\) is atomic. For \(p\ne2,5\), the formula
+\(\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p\) is constant for
+\(1\le e\le h_p\) and is then multiplied by \(p\) at each further step.
+Hence \(p\) is atomic, no power \(p^e\) with \(1<e\le h_p\) is atomic, and
+every \(p^e\) with \(e>h_p\) is atomic with apparition index
+\(p^{e-h_p}z_p\).
+
+The final dichotomy follows from the same list. An atom of exponent \(1\) is
+primitive. An atom of exponent \(e>1\) is a ladder step; comparing
+\(d(p^e)\) with \(d^-(p^e)\) in the displayed formulas shows that the lowered
+rank differs by a single factor \(2\), \(5\), or \(p\), respectively, with the
+exceptional \(4\)-step changing \(3\) to \(6\), again only in the \(2\)-adic
+coordinate.
+\end{proof}
 
 %% ====================================================================
 \section{Birth layers and witness covers}\label{sec:upper-fibers}
 %% ====================================================================
 
 \begin{definition}\label{def:birth-layer}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Definition~3.1, for the
-birth layer \(B_n\), its minimal-generator set \(\mathcal M_n\), its width,
-the coordinate set \(\mathcal P(n)\), and the boundary convention at \(n=2\).
+For \(n\ge2\), let
+\[
+D_n:=\operatorname{Div}(F_n),\qquad
+B_n:=\{q\in D_n:\alpha(q)=n\},\qquad
+A(n):=\#B_n.
+\]
+The set \(B_n\) is partially ordered by divisibility. Its set of minimal
+elements is
+\[
+\mathcal M_n:=\{m\in B_n:\text{ no }q\in B_n\text{ satisfies }q\mid m
+\text{ and }q<m\},
+\]
+and \(\widthop(B_n)\) denotes the maximum size of an antichain in this poset.
+We write \(\mathcal P(n)\) for the set of prime divisors of \(n\). Since
+\(F_2=1\), we use the boundary convention
+\[
+B_2=\mathcal M_2=\varnothing,\qquad A(2)=\widthop(B_2)=0.
+\]
 \end{definition}
 
 \begin{theorem}\label{thm:upper-fiber}
@@ -305,16 +447,74 @@ $B_n$, which gives the displayed decomposition.
 \end{proof}
 
 \begin{theorem}\label{thm:minimal-generators}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Theorem~3.3, for the lcm
-criterion characterizing the minimal generators \(\mathcal M_n\).
+Let \(n\ge2\), and let
+\[
+m=\prod_{i=1}^r p_i^{e_i}
+\]
+be a divisor of \(F_n\), with distinct primes \(p_i\) and \(e_i\ge1\). Put
+\[
+\lambda_i:=\alpha(p_i^{e_i}),\qquad
+\lambda_i^-:=\alpha(p_i^{e_i-1}),
+\]
+where \(\alpha(1)=1\). Then \(m\in\mathcal M_n\) if and only if
+\begin{equation}\label{eq:lcm-criterion}
+\lcmop(\lambda_1,\ldots,\lambda_r)=n
+\quad\text{and}\quad
+\lcmop(\lambda_1,\ldots,\lambda_{i-1},\lambda_i^-,
+\lambda_{i+1},\ldots,\lambda_r)<n
+\end{equation}
+for every \(1\le i\le r\).
 \end{theorem}
+
+\begin{proof}
+By repeated application of Proposition~\ref{prop:rank-basics},
+\[
+\alpha(m)=\lcmop(\lambda_1,\ldots,\lambda_r),
+\]
+and, for each \(i\),
+\[
+\alpha(m/p_i)=
+\lcmop(\lambda_1,\ldots,\lambda_{i-1},\lambda_i^-,
+\lambda_{i+1},\ldots,\lambda_r).
+\]
+
+Suppose first that \(m\in\mathcal M_n\). Then \(m\in B_n\), so
+\(\alpha(m)=n\), giving the first equality in
+\eqref{eq:lcm-criterion}. If \(\alpha(m/p_i)=n\) for some \(i\), then
+\(m/p_i\in B_n\) is a proper divisor of \(m\), contradicting minimality.
+Since \(m/p_i\mid F_n\), its rank divides \(n\); therefore
+\(\alpha(m/p_i)<n\), giving the second condition.
+
+Conversely, assume \eqref{eq:lcm-criterion}. The first equality gives
+\(\alpha(m)=n\), hence \(m\in B_n\). Let \(q<m\) be any proper divisor of
+\(m\). Then \(q\mid m/p_i\) for at least one \(i\). By
+Proposition~\ref{prop:rank-basics},
+\(\alpha(q)\mid\alpha(m/p_i)<n\), so \(q\notin B_n\). Thus no proper divisor
+of \(m\) lies in \(B_n\), and \(m\in\mathcal M_n\).
+\end{proof}
 
 \subsection*{Witness covers}
 
 \begin{definition}\label{def:witness-cover}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Definition~3.4, for the
-definition of an \(n\)-witness cover, including the coprimeness, coverage,
-and irredundance conditions.
+An \(n\)-witness cover is a finite set
+\(\Theta=\{\theta_1,\ldots,\theta_r\}\) of atomic prime powers satisfying:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \(d(\theta_i)\mid n\) for every \(i\);
+\item the elements of \(\Theta\) are pairwise coprime;
+\item the full-coordinate supports cover all prime coordinates of \(n\):
+\[
+\bigcup_{\theta\in\Theta}T_n(\theta)=\mathcal P(n);
+\]
+\item each atom has an essential coordinate not supplied by the other atoms:
+\[
+E_n(\theta)\nsubseteq
+\bigcup_{\eta\in\Theta,\ \eta\ne\theta}T_n(\eta)
+\qquad(\theta\in\Theta).
+\]
+\end{enumerate}
+The last condition is the irredundance condition; it is stated with \(E_n\)
+rather than \(T_n\) because witness covers may have overlapping full
+supports.
 \end{definition}
 
 \begin{theorem}\label{thm:witness-classification}
@@ -690,15 +890,56 @@ Theorem~\ref{thm:three-coordinate-nonemptiness} below.
 
 \begin{proposition}[Arithmetic atom families in three coordinates]
 \label{prop:three-coordinate-atom-families}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Proposition~4.6, for the
-three-coordinate decomposition of the abstract atom families
-\(\mathcal A_{I,J}(n)\) into primitive families \(P_J(n)\) and ladder-step
-families \(L_{i,J}(n)\).
+Assume \(\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}\). For
+\(\varnothing\ne I\subseteq J\subseteq[3]\), define
+\[
+\mathcal A_{I,J}(n):=
+\{\theta:\theta\in\Atom(d),\ d\mid n,\ E_n^\#(\theta)=I,\
+T_n^\#(\theta)=J\}.
+\]
+For nonempty \(J\subseteq[3]\), define the primitive family
+\[
+P_J(n):=\{p\in\mathcal A_{J,J}(n):p\text{ is prime}\},
+\]
+and, for \(i\in J\), define the ladder-step family
+\[
+L_{i,J}(n):=
+\{p^e\in\mathcal A_{\{i\},J}(n):e>1\}.
+\]
+Then the three-coordinate atom families decompose as follows:
+\[
+\mathcal A_{I,J}(n)=
+\begin{cases}
+P_J(n),& I=J\text{ and }\#J\ge2,\\
+P_{\{i\}}(n)\cup L_{i,\{i\}}(n),& I=J=\{i\},\\
+L_{i,J}(n),& I=\{i\}\subsetneq J,\\
+\varnothing,&\text{otherwise}.
+\end{cases}
+\]
 \end{proposition}
+
+\begin{proof}
+Let \(\theta\in\mathcal A_{I,J}(n)\). If \(\theta\) is primitive, then
+Theorem~\ref{thm:primitive-ladder-dichotomy} gives
+\(E_n(\theta)=T_n(\theta)\), hence \(I=J\), and \(\theta\) is a prime in
+\(P_J(n)\). Conversely every prime in \(P_J(n)\) belongs to
+\(\mathcal A_{J,J}(n)\) by definition.
+
+If \(\theta\) is not primitive, then it is a ladder atom. Again by
+Theorem~\ref{thm:primitive-ladder-dichotomy}, \(E_n(\theta)\) is either empty
+or a singleton. The family \(\mathcal A_{I,J}(n)\) only allows nonempty
+\(I\), so \(I=\{i\}\) for some \(i\in J\). If \(I=J\), then \(J\) is also the
+singleton \(\{i\}\), and the atom lies in \(L_{i,\{i\}}(n)\). If
+\(I\subsetneq J\), it is exactly an element of
+\(L_{i,J}(n)\) by definition. No ladder atom can contribute a family with
+\(\#I\ge2\), and no primitive atom can contribute a family with \(I\ne J\).
+The displayed alternatives follow.
+\end{proof}
 
 \begin{remark}
 The finite-rank tests in Proposition~\ref{prop:three-coordinate-finite-recipe}
-are the local increment over this shared atom-family decomposition.
+make this decomposition effective using only the prime-power ranks of the
+finitely many prime-power divisors of \(F_n\).
 \end{remark}
 
 \begin{proposition}[Finite rank tests for three-coordinate atom families]
