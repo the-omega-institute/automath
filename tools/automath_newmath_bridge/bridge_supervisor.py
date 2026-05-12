@@ -477,6 +477,8 @@ def run_pi_reflection(config: dict[str, Any]) -> dict[str, Any]:
         str(REPO_ROOT / str(cfg.get("report_path") or "docs/bridge/automath-newmath-pi-reflection.md")),
         "--actions",
         str(REPO_ROOT / str(cfg.get("actions_path") or "docs/bridge/automath-newmath-pi-actions.jsonl")),
+        "--retry-policy",
+        str(REPO_ROOT / str(cfg.get("retry_policy_path") or "docs/bridge/automath-newmath-retry-policy.jsonl")),
         "--review-backend",
         str(wb_cfg.get("review_backend") or "codex-claude"),
     ]

@@ -22,6 +22,7 @@ DEFAULT_GATE_RESULTS = SCRIPT_DIR / "out" / "bridge_gate_results.jsonl"
 DEFAULT_ACK_STATUS = REPO_ROOT / "docs" / "bridge" / "newmath-bridge-ack-status.md"
 DEFAULT_REPORT = REPO_ROOT / "docs" / "bridge" / "automath-newmath-pi-reflection.md"
 DEFAULT_ACTIONS = REPO_ROOT / "docs" / "bridge" / "automath-newmath-pi-actions.jsonl"
+DEFAULT_RETRY_POLICY = REPO_ROOT / "docs" / "bridge" / "automath-newmath-retry-policy.jsonl"
 DEFAULT_DISTILLATION_DIR = REPO_ROOT / "papers" / "publication" / "backflow" / ".distillation"
 
 
@@ -255,6 +256,50 @@ def build_actions(
     return actions
 
 
+def build_retry_policy(
+    gate_rows: list[dict[str, Any]],
+    *,
+    distillation_dir: Path,
+) -> list[dict[str, Any]]:
+    direction_rows = _direction_rows(gate_rows)
+    eligible = [row for row in direction_rows if _eligible_writeback(row)]
+    review_blocked = _review_blocked_sources(eligible, distillation_dir)
+    blocked_by_path = {item["source_path"]: item for item in review_blocked}
+    policies: list[dict[str, Any]] = []
+    for row in eligible:
+        source_path = str(row.get("source_path") or "")
+        blocked = blocked_by_path.get(source_path)
+        if blocked:
+            last_status = blocked.get("status", "")
+            if "singleton_certificate.tex" in source_path:
+                next_action = "retry_with_single_pom_singleton_certificate_scope"
+            else:
+                next_action = "split_source_or_shrink_prompt_before_retry"
+            retry_after_change_required = True
+        else:
+            last_status = "eligible"
+            next_action = "run_killo_golden_writeback"
+            retry_after_change_required = False
+        policies.append(
+            {
+                "schema_version": "automath-newmath-retry-policy-v1",
+                "bridge_direction": "newmath_to_automath",
+                "source_repo": row.get("source_repo"),
+                "source_branch_or_ref": row.get("source_branch_or_ref"),
+                "source_commit": row.get("source_commit"),
+                "source_path": source_path,
+                "last_status": last_status,
+                "retry_after_change_required": retry_after_change_required,
+                "next_action": next_action,
+                "policy": (
+                    "Automath writeback retries must change scope, receiving section, "
+                    "or first_distillation_prompt before reusing a blocked Killo/golden source."
+                ),
+            }
+        )
+    return policies
+
+
 def render_report(
     gate_rows: list[dict[str, Any]],
     ack_status_counts: dict[str, int],
@@ -332,6 +377,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ack-status", default=str(DEFAULT_ACK_STATUS))
     parser.add_argument("--report", default=str(DEFAULT_REPORT))
     parser.add_argument("--actions", default=str(DEFAULT_ACTIONS))
+    parser.add_argument("--retry-policy", default=str(DEFAULT_RETRY_POLICY))
     parser.add_argument("--distillation-dir", default=str(DEFAULT_DISTILLATION_DIR))
     parser.add_argument("--review-backend", default="codex-claude")
     args = parser.parse_args(argv)
@@ -345,8 +391,10 @@ def main(argv: list[str] | None = None) -> int:
         review_backend=args.review_backend,
         distillation_dir=distillation_dir,
     )
+    retry_policy = build_retry_policy(gate_rows, distillation_dir=distillation_dir)
 
     _write_jsonl(Path(args.actions), actions)
+    _write_jsonl(Path(args.retry_policy), retry_policy)
     report_path = Path(args.report)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(
@@ -358,9 +406,11 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "gate_rows": len(gate_rows),
                 "actions": len(actions),
+                "retry_policy_rows": len(retry_policy),
                 "ack_status_counts": ack_counts,
                 "report": str(report_path),
                 "actions_path": str(Path(args.actions)),
+                "retry_policy": str(Path(args.retry_policy)),
             },
             sort_keys=True,
         )

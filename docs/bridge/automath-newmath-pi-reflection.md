@@ -23,7 +23,7 @@ It does not write Automath paper or Lean content directly.
 | Status | Count |
 | --- | ---: |
 | `blocked` | 8 |
-| `consumed` | 4 |
+| `consumed` | 5 |
 | `evidence_only` | 6 |
 
 ## Killo/Golden Review Blocks

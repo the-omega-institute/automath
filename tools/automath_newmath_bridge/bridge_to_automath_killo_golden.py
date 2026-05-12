@@ -123,8 +123,64 @@ def _source_labels(record: dict[str, Any]) -> list[str]:
     return LATEX_LABEL_RE.findall(_source_text(record))[:12]
 
 
+def _bridge_prompt_revision(record: dict[str, Any]) -> str:
+    receiving = _automath_receiving_context(record) or {}
+    payload = {
+        "source_path": record.get("source_path"),
+        "source_commit": record.get("source_commit"),
+        "target_sections": receiving.get("target_sections", []),
+        "omega_mechanisms": receiving.get("omega_mechanisms", []),
+        "first_distillation_prompt": receiving.get("first_distillation_prompt", ""),
+        "scope_contract_seed": receiving.get("scope_contract_seed", {}),
+    }
+    return hashlib.sha1(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()[:12]
+
+
 def _automath_receiving_context(record: dict[str, Any]) -> dict[str, Any] | None:
     source_path = str(record.get("source_path") or "").lower()
+    if "concrete_instances/banach/singleton_certificate.tex" in source_path:
+        return {
+            "status": "found",
+            "target_sections": ["pom"],
+            "evidence_paths": [
+                "theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/sec__pom.tex",
+                "theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/operator_algebra/app__op-algebra.tex",
+            ],
+            "omega_mechanisms": [
+                "pom",
+                "finite audit obligation",
+                "empty-history singleton certificate",
+            ],
+            "scope_contract_seed": {
+                "max_families": 1,
+                "allowed_target_sections": ["pom"],
+                "forbidden_sections": [
+                    "circle_dimension_phase_gate",
+                    "recursive_addressing",
+                    "typed_address_biaxial_completion",
+                    "fold_residual_time",
+                    "principles",
+                    "spg",
+                    "zeta_finite_part",
+                ],
+                "required_disposition": "one tiny lemma or explicit no-fit rejection",
+            },
+            "rationale": (
+                "The NewMath singleton-certificate source is narrow enough for a "
+                "single Automath POM receiving test. It should not reopen the broader "
+                "Banach bounded-operator bridge."
+            ),
+            "first_distillation_prompt": (
+                "Narrow retry for the NewMath singleton_certificate bridge source. "
+                "Extract at most one Automath-native POM finite-audit obligation: an "
+                "empty-history singleton certificate or explicit no-fit rejection. "
+                "Use only the source labels and evidence_paths as prior evidence. Do "
+                "not discuss Banach theory, bounded-operator carriers, circle dimension "
+                "phase gates, recursive addressing, SPG, zeta finite part, or any "
+                "future split candidates. If the existing POM notation cannot state the "
+                "certificate in one small theorem-family/writeback, return blocked."
+            ),
+        }
     if "concrete_instances/banach/" in source_path:
         return {
             "status": "found",
@@ -211,6 +267,12 @@ def _candidate_block_status(record: dict[str, Any]) -> str:
         return ""
     if not isinstance(payload, dict):
         return ""
+    blocked_revision = str(payload.get("bridge_prompt_revision") or "")
+    if blocked_revision and blocked_revision != _bridge_prompt_revision(record):
+        return ""
+    source_path = str(record.get("source_path") or "").lower()
+    if not blocked_revision and "concrete_instances/banach/singleton_certificate.tex" in source_path:
+        return ""
     return str(payload.get("status") or "")
 
 
@@ -224,10 +286,12 @@ def _candidate_payload(record: dict[str, Any]) -> dict[str, Any]:
     auto_promoted = _auto_promote_for_killo(record)
     target_sections = receiving.get("target_sections") or ["killo-golden", "omega paper writeback"]
     omega_mechanisms = receiving.get("omega_mechanisms") or ["killo-golden", "NewMath bridge evidence"]
+    revision = _bridge_prompt_revision(record)
     return {
         "schema_version": "automath-newmath-automath-writeback-candidate-v1",
         "created_at": _now_iso(),
         "status": "ready_for_automath_distillation_supervisor",
+        "bridge_prompt_revision": revision,
         "distillation_source_name": _candidate_name(record),
         "bridge_source": source,
         "bridge_record": record,
@@ -240,8 +304,10 @@ def _candidate_payload(record: dict[str, Any]) -> dict[str, Any]:
             "proposed_source": _candidate_name(record),
             "source_type": "bridge_packet",
             "origin": "automath_newmath_bridge",
+            "bridge_prompt_revision": revision,
             "target_sections": target_sections,
             "omega_mechanisms": omega_mechanisms,
+            "scope_contract_seed": receiving.get("scope_contract_seed", {}),
             "fit_score": 8,
             "novelty_score": 6,
             "rationale": (
@@ -281,6 +347,8 @@ def build_candidates(
     limit: int,
     retry_blocked: bool = False,
 ) -> list[Path]:
+    if not runtime_dir.is_absolute():
+        runtime_dir = REPO_ROOT / runtime_dir
     runtime_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
     for record in records:
@@ -392,6 +460,7 @@ def record_timeout_block(name: str, distillation: dict[str, Any]) -> None:
         "status": "distillation_timeout",
         "timeout_seconds": distillation.get("timeout_seconds"),
         "resume_stage": "W",
+        "bridge_prompt_revision": distillation.get("bridge_prompt_revision"),
         "updated_at": _now_iso(),
     }
     (state_dir / "blocked.json").write_text(
@@ -440,6 +509,7 @@ def seed_distillation_source(payload: dict[str, Any]) -> Path:
         "source_paper_labels": payload.get("source_paper_labels", []),
         "receiving_context": payload.get("receiving_context", {}),
         "auto_promoted_for_killo_golden": payload.get("auto_promoted_for_killo_golden", False),
+        "bridge_prompt_revision": payload.get("bridge_prompt_revision", ""),
     }
     (state_dir / "source_candidate.json").write_text(
         json.dumps(source_candidate, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
@@ -491,12 +561,17 @@ def seed_distillation_source(payload: dict[str, Any]) -> Path:
                     blocked_data = raw_blocked
             except (OSError, json.JSONDecodeError):
                 blocked_data = {}
+        prompt_revision = str(payload.get("bridge_prompt_revision") or "")
+        blocked_revision = str(blocked_data.get("bridge_prompt_revision") or "")
+        revision_changed = prompt_revision and prompt_revision != blocked_revision
         if (
             isinstance(state_data, dict)
             and state_data.get("current_stage") in {"W", "E"}
             and (
                 blocked_data.get("status") == "review_failed"
+                or blocked_data.get("status") == "distillation_timeout"
                 or state_data.get("failure_kind") in {"review_failed", "writeback_review_failed"}
+                or (revision_changed and state_data.get("failure_kind") == "bridge_distillation_timeout")
             )
         ):
             for artifact_name in (
@@ -526,7 +601,7 @@ def seed_distillation_source(payload: dict[str, Any]) -> Path:
             if not isinstance(feedback, list):
                 feedback = []
             feedback.append(
-                "Bridge reseeded source_candidate with refined receiving context after Killo/golden review block."
+                "Bridge reseeded source_candidate with refined receiving context after Killo/golden review/timeout block."
             )
             state_data["prior_feedback"] = feedback[-20:]
             state_path.write_text(
@@ -610,6 +685,8 @@ def main(argv: list[str] | None = None) -> int:
             timeout_seconds=args.distillation_timeout_seconds,
         )
         distillation = summary["distillation"]
+        if isinstance(distillation, dict):
+            distillation["bridge_prompt_revision"] = payload.get("bridge_prompt_revision")
         if distillation.get("status") == "writeback_blocked_by_killo_golden_review":
             summary["status"] = "writeback_blocked_by_killo_golden_review"
             summary["next_pi_action"] = (
