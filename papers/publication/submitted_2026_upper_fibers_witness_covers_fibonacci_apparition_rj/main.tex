@@ -806,27 +806,82 @@ the singleton containing its private coordinate. This is \(\Gamma_9\).
 \end{proof}
 
 \begin{theorem}\label{thm:fibonacci-three-coordinate-types}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Theorem~4.5.
+Let \(\omega(n)=3\), and label \(\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}\).
+For \(m\in\mathcal M_n\), form the collection of indexed pairs
+\[
+\Delta_n(m)=\{(E_n^\#(\theta),T_n^\#(\theta)):\theta\in\Theta\},
+\]
+where \(\Theta\) is the witness cover of \(m\),
+\[
+T_n^\#(\theta):=\{i:\ell_i\in T_n(\theta)\},\qquad
+E_n^\#(\theta):=\{i:\ell_i\in E_n(\theta)\}.
+\]
+Then, up to a permutation of the three coordinates, \(\Delta_n(m)\) is one of
+\(\Gamma_1,\Gamma_3,\Gamma_4,\Gamma_5,\Gamma_6,\Gamma_7,\Gamma_8,\Gamma_9\).
+The abstract type \(\Gamma_2\) is not a Fibonacci witness type.
+
+Conversely, this exclusion is the only formal obstruction coming from the
+primitive--ladder dichotomy: any realized three-coordinate witness type must be
+one of the eight displayed types, but the arithmetic nonemptiness of a displayed
+type is a separate selection problem in the atom families of
+Proposition~\ref{prop:three-coordinate-atom-families}.
 \end{theorem}
+
+\begin{proof}
+Let \(m\in\mathcal M_n\), and let \(\Theta\) be its witness cover, which is
+unique because it is the set of prime-power factors of \(m\). The witness-cover
+conditions give
+\[
+\bigcup_{\theta\in\Theta}T_n^\#(\theta)=\{1,2,3\},\qquad
+E_n^\#(\theta)\nsubseteq
+ \bigcup_{\eta\in\Theta,\eta\ne\theta}T_n^\#(\eta)
+ \quad(\theta\in\Theta).
+\]
+Moreover \(E_n^\#(\theta)\) is nonempty for every \(\theta\in\Theta\), since
+the displayed irredundance condition could not hold for the empty set. Thus
+\(\Delta_n(m)\) satisfies the hypotheses of
+Theorem~\ref{thm:abstract-three-types}. The abstract enumeration gives one of
+\(\Gamma_1,\ldots,\Gamma_9\), up to relabeling.
+
+It remains to remove \(\Gamma_2\). Its unique pair is
+\((\{1,2\},\{1,2,3\})\), after relabeling. This has
+\[
+1<\#E_n^\#(\theta)<\#T_n^\#(\theta),
+\]
+which is impossible by Theorem~\ref{thm:primitive-ladder-dichotomy}: primitive
+atoms have \(E_n(\theta)=T_n(\theta)\), while ladder atoms have essential
+support empty or a singleton. The other eight abstract types contain only
+diagonal pairs \(I=J\) or singleton proper-essential pairs
+\(\{i\}\subsetneq J\), so they are not excluded by this formal dichotomy.
+Their actual occurrence depends on the arithmetic availability and coprimeness
+of atoms in the relevant families, which is exactly the content of
+Theorem~\ref{thm:three-coordinate-nonemptiness} below.
+\end{proof}
 
 \begin{proposition}[Arithmetic atom families in three coordinates]
 \label{prop:three-coordinate-atom-families}
 Assume $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$. This three-coordinate
 refinement of the two-support classification separates each atom family by
 the primitive alternative \(I=J\) and the ladder alternative \(\#I=1\). For
+an atom \(\theta\) with \(d(\theta)\mid n\), put
+\[
+T_n^\#(\theta):=\{i:\ell_i\in T_n(\theta)\},\qquad
+E_n^\#(\theta):=\{i:\ell_i\in E_n(\theta)\}.
+\]
+For
 nonempty $I\subseteq J\subseteq[3]$, put
 \[
 \mathcal A_{I,J}(n):=
-\{\theta\in\bigcup_{d\mid n}\Atom(d):\ E_n(\theta)=I,\ T_n(\theta)=J\}.
+\{\theta\in\bigcup_{d\mid n}\Atom(d):\ E_n^\#(\theta)=I,\ T_n^\#(\theta)=J\}.
 \]
 For nonempty $J\subseteq[3]$, define the primitive family
 \[
-P_J(n):=\{p:\ p\text{ is prime},\ \alpha(p)\mid n,\ T_n(p)=J\}.
+P_J(n):=\{p:\ p\text{ is prime},\ \alpha(p)\mid n,\ T_n^\#(p)=J\}.
 \]
 For $i\in J$, define the ladder family
 \[
-L_{i,J}(n):=\{p^e:\ e>1,\ p^e\in\Atom(d),\ d\mid n,\ 
-T_n(p^e)=J,\ E_n(p^e)=\{\ell_i\}\}.
+L_{i,J}(n):=\{p^e:\ e>1,\ p^e\in\bigcup_{d\mid n}\Atom(d),\ 
+T_n^\#(p^e)=J,\ E_n^\#(p^e)=\{i\}\}.
 \]
 Then, for every nonempty $I\subseteq J\subseteq[3]$,
 \[
@@ -844,9 +899,8 @@ families \(P_J(n)\) and ladder-step families \(L_{i,J}(n)\).
 \end{proposition}
 
 \begin{remark}
-The two-coordinate classification of
-\cite{MaZhang2026UpperFibersWitnessCoversFQ}, Corollary~4.3, gives the
-corresponding minimal-generator decomposition when
+Corollary~\ref{cor:two-support-complete-classification} gives the corresponding
+minimal-generator decomposition when
 \(\mathcal P(n)=\{\ell_1,\ell_2\}\). Proposition~\ref{prop:three-coordinate-atom-families}
 is used here only for the added three-coordinate bookkeeping: it identifies
 which \((E,T)\)-families can occur and records whether each nonempty family is
@@ -857,13 +911,13 @@ primitive, ladder, or their singleton overlap.
 Let \(\theta\in\mathcal A_{I,J}(n)\). If \(\theta\) is primitive, then
 Theorem~\ref{thm:primitive-ladder-dichotomy} gives
 \(E_n(\theta)=T_n(\theta)\), so \(I=J\), and \(\theta\in P_J(n)\). Conversely
-any \(p\in P_J(n)\) is primitive and has \(E_n(p)=T_n(p)=J\), hence belongs
+any \(p\in P_J(n)\) is primitive and has \(E_n^\#(p)=T_n^\#(p)=J\), hence belongs
 to \(\mathcal A_{J,J}(n)\).
 
 If \(\theta\) is a ladder atom, then the same dichotomy shows that its
 essential set, when it occurs in a witness cover, is the singleton consisting
 of the coordinate changed by the ladder step. Thus
-\(\theta\in\mathcal A_{I,J}(n)\) with \(I=\{\ell_i\}\) if and only if
+\(\theta\in\mathcal A_{I,J}(n)\) with \(I=\{i\}\) if and only if
 \(\theta\in L_{i,J}(n)\). The only overlap between the two descriptions is
 the singleton case \(I=J=\{i\}\), where either a primitive atom or a ladder
 atom whose full support is exactly that coordinate can occur. All cases in
@@ -873,19 +927,143 @@ and \(\#I>1\), are excluded by the primitive--ladder dichotomy.
 
 \begin{theorem}[Three-coordinate nonemptiness criterion]
 \label{thm:three-coordinate-nonemptiness}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Theorem~4.6. In the present
-paper the families \(\mathcal A_{I,J}(n)\) are decomposed arithmetically in
-Proposition~\ref{prop:three-coordinate-atom-families}.
+Assume \(\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}\). A three-coordinate type is
+realized by some \(m\in\mathcal M_n\) if and only if, after a simultaneous
+permutation of the coordinate labels, one of the following pairwise-coprime
+selections exists:
+\[
+\begin{array}{ll}
+\Gamma_1: & \theta\in P_{\{1,2,3\}}(n),\\[1mm]
+\Gamma_3: & \theta\in L_{1,\{1,2,3\}}(n),\\[1mm]
+\Gamma_4: & \theta_{12}\in P_{\{1,2\}}(n),\quad
+             \theta_{13}\in P_{\{1,3\}}(n),\quad
+             \gcd(\theta_{12},\theta_{13})=1,\\[1mm]
+\Gamma_5: & \theta_{1,12}\in L_{1,\{1,2\}}(n),\quad
+             \theta_{23}\in P_{\{2,3\}}(n),\quad
+             \gcd(\theta_{1,12},\theta_{23})=1,\\[1mm]
+\Gamma_6: & \theta_{1,12}\in L_{1,\{1,2\}}(n),\quad
+             \theta_{3,23}\in L_{3,\{2,3\}}(n),\quad
+             \gcd(\theta_{1,12},\theta_{3,23})=1,\\[1mm]
+\Gamma_7: & \theta_1\in P_{\{1\}}(n)\cup L_{1,\{1\}}(n),\quad
+             \theta_{23}\in P_{\{2,3\}}(n),\quad
+             \gcd(\theta_1,\theta_{23})=1,\\[1mm]
+\Gamma_8: & \theta_1\in P_{\{1\}}(n)\cup L_{1,\{1\}}(n),\quad
+             \theta_{2,23}\in L_{2,\{2,3\}}(n),\quad
+             \gcd(\theta_1,\theta_{2,23})=1,\\[1mm]
+\Gamma_9: & \theta_i\in P_{\{i\}}(n)\cup L_{i,\{i\}}(n)\quad(1\le i\le3),
+             \quad \gcd(\theta_i,\theta_j)=1\ (i\ne j).
+\end{array}
+\]
+The abstract type \(\Gamma_2\) is never realized.
 \end{theorem}
 
+\begin{proof}
+The nonrealizability of \(\Gamma_2\) is
+Theorem~\ref{thm:fibonacci-three-coordinate-types}. For the remaining types,
+combine the abstract list in Theorem~\ref{thm:abstract-three-types} with the
+atom-family decomposition in Proposition~\ref{prop:three-coordinate-atom-families}.
+That proposition says precisely that a pair \((I,J)\) can be filled by an atom
+from \(P_J(n)\) when \(I=J\), by an atom from \(L_{i,J}(n)\) when
+\(I=\{i\}\subsetneq J\), and by either \(P_{\{i\}}(n)\) or
+\(L_{i,\{i\}}(n)\) in the singleton diagonal case \(I=J=\{i\}\).
+Substituting these alternatives into the eight surviving \(\Gamma\)-patterns
+gives exactly the displayed list.
+
+If a displayed selection exists, pairwise coprimeness is one of the conditions
+in Definition~\ref{def:witness-cover}; the listed \(T_n^\#\)-sets cover
+\(\{1,2,3\}\), and the listed \(E_n^\#\)-sets provide the private coordinates
+specified by the corresponding \(\Gamma\)-pattern. Hence the selected atoms form
+an \(n\)-witness cover. Theorem~\ref{thm:witness-classification} then puts the
+product of the selected atoms in \(\mathcal M_n\), with the asserted type.
+
+Conversely, let \(m\in\mathcal M_n\) realize one of the eight surviving types,
+and let \(\Theta\) be its witness cover. Each atom in \(\Theta\) belongs to the
+family prescribed for its pair \((E_n^\#(\theta),T_n^\#(\theta))\) by
+Proposition~\ref{prop:three-coordinate-atom-families}. Since \(\Theta\) is a
+witness cover, its atoms are pairwise coprime. Thus \(m\) supplies one of the
+displayed selections, after the coordinate permutation identifying its type
+with the representative \(\Gamma_j\).
+\end{proof}
+
 \begin{corollary}\label{cor:three-coordinate-realization}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Corollary~4.7.
+Assume \(\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}\). The set
+\(\mathcal M_n\) is the disjoint union, by witness cover, of the products
+obtained from the pairwise-coprime selections in
+Theorem~\ref{thm:three-coordinate-nonemptiness} and all simultaneous
+permutations of the coordinate labels. Thus an admissible type
+\(\Gamma_j\) with \(j\ne2\) is realized at \(n\) exactly when its corresponding
+selection set in Theorem~\ref{thm:three-coordinate-nonemptiness} is nonempty;
+\(\Gamma_2\) is never realized.
+
+For \(n=30\), with coordinates \((2,3,5)\), the atoms
+\[
+\begin{gathered}
+31\in P_{\{1,2,3\}}(30),\quad
+4\in L_{1,\{1,2\}}(30),\quad
+2\in P_{\{2\}}(30),\\
+11\in P_{\{1,3\}}(30),\quad
+5\in P_{\{3\}}(30),\quad
+61\in P_{\{2,3\}}(30)
+\end{gathered}
+\]
+give exactly the five witness covers
+\(\{31\},\{4,5\},\{2,11\},\{4,61\},\{11,61\}\). These realize, up to
+coordinate relabeling, \(\Gamma_1,\Gamma_8,\Gamma_7,\Gamma_5\), and
+\(\Gamma_4\), respectively; they do not realize
+\(\Gamma_3,\Gamma_6\), or \(\Gamma_9\).
 \end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:witness-classification} identifies \(\mathcal M_n\) with the
+products of \(n\)-witness covers, and
+Theorem~\ref{thm:three-coordinate-nonemptiness} identifies exactly which
+three-coordinate witness covers exist. A product determines its witness cover
+uniquely as its set of pairwise coprime prime-power factors, so the union is
+disjoint when indexed by the actual selected cover. The assertion for \(n=30\)
+is a direct verification from the ranks
+\[
+\alpha(31)=30,\quad \alpha(4)=6,\quad \alpha(2)=3,\quad
+\alpha(11)=10,\quad \alpha(5)=5,\quad \alpha(61)=15,
+\]
+and the definitions of \(P_J(30)\) and \(L_{i,J}(30)\).
+\end{proof}
 
 \begin{corollary}[Primitive three-coordinate skeleton]
 \label{cor:primitive-three-skeleton}
-See \cite{MaZhang2026UpperFibersWitnessCoversFQ}, Corollary~4.8.
+Assume \(\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}\). The primitive
+three-coordinate witness covers are exactly the following pairwise-coprime
+selections, after simultaneous permutation of the coordinate labels:
+\[
+\begin{array}{ll}
+\Gamma_1: & p\in P_{\{1,2,3\}}(n),\\[1mm]
+\Gamma_4: & p_{12}\in P_{\{1,2\}}(n),\quad
+             p_{13}\in P_{\{1,3\}}(n),\quad
+             p_{12}\ne p_{13},\\[1mm]
+\Gamma_7: & p_1\in P_{\{1\}}(n),\quad
+             p_{23}\in P_{\{2,3\}}(n),\quad
+             p_1\ne p_{23},\\[1mm]
+\Gamma_9: & p_i\in P_{\{i\}}(n)\quad(1\le i\le3),\quad
+             p_1,p_2,p_3\text{ distinct}.
+\end{array}
+\]
+The corresponding primitive minimal generators are the products of the selected
+primes.
 \end{corollary}
+
+\begin{proof}
+If a witness cover is primitive, then
+Theorem~\ref{thm:primitive-ladder-dichotomy} gives
+\(E_n^\#(\theta)=T_n^\#(\theta)\) for every atom in it. Therefore its type can
+contain only diagonal pairs \((I,I)\). Among the eight Fibonacci-admissible
+three-coordinate types, the diagonal-only types are
+\(\Gamma_1,\Gamma_4,\Gamma_7\), and \(\Gamma_9\). Filling their diagonal pairs
+with primitive atoms is exactly the displayed list. Since the selected atoms are
+primes, pairwise coprimeness is equivalent to distinctness. Conversely, every
+displayed selection has full coordinate coverage and the required private
+coordinates, hence is a primitive \(n\)-witness cover; multiplying its primes
+gives an element of \(\mathcal M_n\) by
+Theorem~\ref{thm:witness-classification}.
+\end{proof}
 
 \begin{remark}\label{rem:wss}
 The Wall--Sun--Sun condition enters through
