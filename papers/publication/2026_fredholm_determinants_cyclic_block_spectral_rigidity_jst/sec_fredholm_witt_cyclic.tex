@@ -1,0 +1,251 @@
+\section{Fredholm Determinants and Cyclic-Block Realisations}
+\label{sec:fredholm}
+
+\subsection{The Fredholm--Witt bridge}
+
+Let \(H\) be a complex Hilbert space and let \(T\in \sone(H)\) be a
+trace-class operator. Define
+\[
+  a_n(T):=\Tr(T^n),
+  \qquad
+  p_n(T):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(T)
+  \qquad (n\ge 1).
+\]
+
+\begin{proposition}[Connecting Fredholm--Witt identity]
+  \label{prop:fredholm-witt-bridge}
+  The following is a direct consequence of the classical Fredholm
+  determinant identity; we record it here to fix notation and to make
+  the Euler-product structure explicit. For every trace-class operator
+  \(T\) and every \(\abs{z}<\min(1,\norm{T}^{-1})\), with the convention
+  \(\norm{0}^{-1}:=\infty\),
+  \[
+    \det(I-zT)^{-1}
+    =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)},
+  \]
+  where \(\log(1-z^m)\) denotes the principal branch on \(\abs{z}<1\).
+  This identity holds as an equality of holomorphic germs at \(z=0\);
+  equivalently, it is an identity of formal power series. The
+  exponents \(p_n(T)\) are in general not integers, so the Euler
+  product on the right is not a finite collection of zero-free factors,
+  and the expression should not be extended beyond the common disc of
+  convergence without an explicit branch choice.
+\end{proposition}
+
+\begin{proof}
+  The Fredholm determinant identity
+  \[
+    \det(I-zT)^{-1}
+    =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(T^n)}{n}z^n\right)
+  \]
+  is classical for trace-class operators; see Grothendieck
+  \cite{Grothendieck1956} and \cite[Chapter~3]{Simon2005TraceIdeals}.
+  Fix \(0<\rho<\min(1,\norm{T}^{-1})\). Since
+  \[
+    \abs{a_n(T)}
+    =\abs{\Tr(T^n)}
+    \le \norm{T^n}_1
+    \le \norm{T}_1\norm{T}^{n-1},
+  \]
+  the series
+  \[
+    \sum_{n\ge 1}\frac{\abs{a_n(T)}}{n}\rho^n
+  \]
+  converges. By definition of \(p_n(T)\), M\"obius inversion gives
+  \[
+    a_n(T)=\sum_{d\mid n}d\,p_d(T).
+  \]
+  Moreover,
+  \begin{align*}
+    \sum_{m\ge 1}\abs{p_m(T)}\rho^m
+    &\le \sum_{m\ge 1}\frac{\rho^m}{m}\sum_{d\mid m}\abs{a_{m/d}(T)} \\
+    &=\sum_{k\ge 1}\frac{\abs{a_k(T)}}{k}\sum_{\ell\ge 1}\frac{\rho^{k\ell}}{\ell}
+      =\sum_{k\ge 1}\frac{\abs{a_k(T)}}{k}\bigl(-\log(1-\rho^k)\bigr) \\
+    &\le \frac{1}{1-\rho}
+      \sum_{k\ge 1}\frac{\abs{a_k(T)}}{k}\rho^k
+      <\infty,
+  \end{align*}
+  because \(-\log(1-x)\le x/(1-\rho)\) for \(0\le x\le \rho<1\).
+  Therefore, for \(\abs{z}\le \rho\),
+  \begin{align*}
+    \sum_{m\ge 1}\abs{p_m(T)\log(1-z^m)}
+    &\le \sum_{m\ge 1}\abs{p_m(T)}
+      \sum_{r\ge 1}\frac{\abs{z}^{mr}}{r} \\
+    &\le \sum_{m\ge 1}\abs{p_m(T)}\bigl(-\log(1-\rho^m)\bigr) \\
+    &\le \frac{1}{1-\rho}\sum_{m\ge 1}\abs{p_m(T)}\rho^m
+      <\infty.
+  \end{align*}
+  Thus both
+  \[
+    \sum_{n\ge 1}\frac{a_n(T)}{n}z^n
+    \quad\text{and}\quad
+    -\sum_{m\ge 1}p_m(T)\log(1-z^m)
+  \]
+  converge absolutely and locally uniformly on \(\abs{z}<\rho\), with
+  \(\log(1-z^m)\) taken in the principal branch. We may therefore expand
+  \(-\log(1-z^m)=\sum_{r\ge 1}z^{mr}/r\) and rearrange absolutely:
+  \begin{align*}
+    -\sum_{m\ge 1}p_m(T)\log(1-z^m)
+    &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr} \\
+    &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(T)}{n}z^n
+      =\sum_{n\ge 1}\frac{a_n(T)}{n}z^n.
+  \end{align*}
+  Since \(\rho<\min(1,\norm{T}^{-1})\) was arbitrary, this proves the
+  equality on \(\abs{z}<\min(1,\norm{T}^{-1})\). Exponentiating gives the
+  Euler product. The same computation is an identity of formal power
+  series, hence of holomorphic germs at \(0\).
+\end{proof}
+
+\begin{remark}[Arithmetic flexibility]
+  \label{rem:witt-arithmetic-flexibility}
+  In the finite-state setting of \Cref{thm:primitive-symbolic-exclusion},
+  the corresponding coordinates count primitive periodic orbits and are
+  non-negative integers. For a general trace-class operator, the
+  coordinates \(p_n(T)\) need neither be integers nor be non-negative.
+  Thus trace-class realisability is strictly broader than finite-state
+  realisability.
+\end{remark}
+
+\begin{remark}[Witt coordinates are not cyclic divisor multiplicities]
+  \label{rem:witt-versus-cyclic-data}
+  For a trace-class operator \(T\), \Cref{prop:fredholm-witt-bridge}
+  associates the Witt coordinates
+  \[
+    p_n(T)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\Tr(T^{n/d})
+    \qquad (n\ge1).
+  \]
+  These are complex numbers extracted from the trace sequence of \(T\).
+  By contrast, the realisation problem in \Cref{sec:fredholm} later
+  fixes discrete cyclic zero-divisor data
+  \[
+    \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J},
+    \qquad m_j\in\NN,\ \beta_j\in\CC\setminus\{0\},
+  \]
+  describing prescribed factors \((1-\beta_j z^{n_j})^{m_j}\) in a
+  Fredholm determinant. In general there is no identification
+  \(p_n(T)=m_n\), nor do the \(p_n(T)\) recover the triples
+  \((n_j,\beta_j,m_j)\). The only overlap is the special integral
+  unit-root case recorded in
+  \Cref{prop:cyclic-witt-compatibility}. Thus the cyclic-block theorem in
+  the next subsection is a theorem about prescribed cyclic zero
+  divisors, not a converse parametrization of arbitrary Witt
+  coordinates.
+\end{remark}
+
+\begin{proposition}[Compatibility of cyclic zero divisors with Witt coordinates]
+  \label{prop:cyclic-witt-compatibility}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
+  \[
+    n_j,m_j\in\NN,\qquad
+    \beta_j\in\CC\setminus\{0\},\qquad
+    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty,
+  \]
+  and let \(L_{\mathcal D}\) be the cyclic model from
+  \Cref{lem:cyclic-product-trace-norm-limit}. Then for every \(n\ge1\),
+  \[
+    a_n(L_{\mathcal D})
+    =\sum_{\{j\in J:n_j\mid n\}} n_jm_j\,\beta_j^{n/n_j},
+  \]
+  and therefore
+  \[
+    p_n(L_{\mathcal D})
+    =\frac{1}{n}\sum_{d\mid n}\mu(d)
+      \sum_{\{j\in J:n_j\mid n/d\}} n_jm_j\,\beta_j^{(n/d)/n_j}.
+  \]
+  In particular, the Witt coordinates are determined by the cyclic
+  zero-divisor data, but they are generally complex and need not equal
+  the multiplicities \(m_j\). In the special unit-root case
+  \[
+    \mathcal D=\{(n,1,m_n)\}_{n\ge1},
+    \qquad
+    \sum_{n\ge1} n\,m_n<\infty,
+  \]
+  one has
+  \[
+    a_n(L_{\mathcal D})=\sum_{d\mid n} d\,m_d,
+    \qquad
+    p_n(L_{\mathcal D})=m_n.
+  \]
+  Thus the cyclic-block theorem below is a realisation theorem for
+  prescribed cyclic zero divisors; it coincides with the Witt packaging
+  only in this integral unit-root situation.
+\end{proposition}
+
+\begin{proof}
+  Write
+  \[
+    L_{\mathcal D}
+    =\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr),
+    \qquad \alpha_j^{n_j}=\beta_j.
+  \]
+  Fix \(n\ge1\) and put \(a_j:=\abs{\beta_j}^{1/n_j}=\abs{\alpha_j}\).
+  Since \(\sum_j m_jn_ja_j<\infty\), only finitely many indices satisfy
+  \(a_j>1\). Therefore, for a finite exceptional set \(F_n\subset J\)
+  containing all such indices,
+  \[
+    \sum_{j\in J}m_jn_ja_j^n
+    \le
+    \sum_{j\in F_n}m_jn_ja_j^n
+    +\sum_{j\notin F_n}m_jn_ja_j
+    <\infty.
+  \]
+  Equivalently,
+  \[
+    \sum_{j\in J}
+    \norm{(C(n_j,\alpha_j)\otimes I_{m_j})^n}_1
+    =\sum_{j\in J}m_jn_j\abs{\alpha_j}^n
+    <\infty.
+  \]
+  This is the blockwise trace-class summability needed below: the
+  hypothesis gives \(\sum_jm_jn_j\abs{\alpha_j}<\infty\), hence only
+  finitely many \(\abs{\alpha_j}>1\), and on the remaining tail one has
+  \(\abs{\alpha_j}^n\le \abs{\alpha_j}\).
+  For the \(j\)-th block,
+  \[
+    B_j^n:=(C(n_j,\alpha_j)\otimes I_{m_j})^n
+    =\alpha_j^n\,\Pi_{n_j}^n\otimes I_{m_j}.
+  \]
+  Since \(\Pi_{n_j}^n\otimes I_{m_j}\) is unitary, the singular values of
+  \(B_j^n\) are all \(a_j^n\), with multiplicity \(n_jm_j\). Hence
+  \[
+    \norm{B_j^n}_1=n_jm_j a_j^n,
+    \qquad
+    \sum_{j\in J}\norm{B_j^n}_1<\infty.
+  \]
+  Thus \(L_{\mathcal D}^n=\bigoplus_{j\in J}B_j^n\) is a trace-class
+  direct sum and
+  \[
+    \Tr(L_{\mathcal D}^n)=\sum_{j\in J}\Tr(B_j^n),
+    \qquad
+    \sum_{j\in J}\abs{\Tr(B_j^n)}
+    \le \sum_{j\in J}\norm{B_j^n}_1<\infty.
+  \]
+  In particular, the series defining \(\Tr(L_{\mathcal D}^n)\) is
+  absolutely convergent, so the trace may be computed blockwise. The
+  cyclic permutation \(\Pi_{n_j}^n\) has trace \(n_j\) when
+  \(n_j\mid n\) and trace \(0\) otherwise. Hence
+  \[
+    \Tr(B_j^n)
+    =
+    \begin{cases}
+      n_jm_j\,\alpha_j^n
+        =n_jm_j\,\beta_j^{n/n_j}, & n_j\mid n,\\
+      0, & n_j\nmid n.
+    \end{cases}
+  \]
+  Summing over \(j\) gives the formula for \(a_n(L_{\mathcal D})\).
+  Applying the definition
+  \[
+    p_n(L_{\mathcal D})
+    =\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(L_{\mathcal D})
+  \]
+  yields the displayed formula for \(p_n(L_{\mathcal D})\).
+
+  In the special case \(\mathcal D=\{(n,1,m_n)\}_{n\ge1}\), the first
+  formula becomes
+  \[
+    a_n(L_{\mathcal D})=\sum_{d\mid n} d\,m_d,
+  \]
+  and M\"obius inversion gives \(p_n(L_{\mathcal D})=m_n\).
+\end{proof}

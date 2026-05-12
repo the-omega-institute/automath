@@ -1,0 +1,194 @@
+\section{Auxiliary finite-window statistic: second moments of the fibers}\label{sec:fiber-spectrum}
+
+The threshold and conjugacy theorems do not require the full fiber spectrum.
+This section records an independent finite-window statistic rather than an
+ingredient in the proof of the threshold. The second moment
+\[
+\Sigma_m:=\sum_{x\in X_m}d_m(x)^2,
+\]
+equivalently, up to the factor $2^{-2m}$, the collision probability of the stabilized law under uniform raw input.
+
+\subsection{Second moment and collision probability}\label{sec:fiber-collision}
+
+\begin{proposition}[Second-moment linear recurrence]\label{prop:second-moment-recurrence}
+For all $m\ge4$,
+\begin{equation}\label{eq:sigma-recurrence}
+\Sigma_m=2\Sigma_{m-1}+2\Sigma_{m-2}-2\Sigma_{m-3},
+\end{equation}
+with initial values $\Sigma_1=2$, $\Sigma_2=6$, and $\Sigma_3=14$.
+This is the independent finite-window statistic retained from the auxiliary
+material; it is not used in the proof of the sharp overlap threshold.
+\end{proposition}
+
+\begin{proof}
+The second moment counts ordered pairs of raw words with the same residue:
+\[
+\Sigma_m
+=
+\#\{(\omega,\omega')\in\{0,1\}^m\times\{0,1\}^m:
+\Val_m(\omega)\equiv\Val_m(\omega')\pmod {F_{m+2}}\}.
+\]
+Write $\epsilon_k:=\omega_k-\omega'_k\in\{-1,0,1\}$, with multiplicity
+weights $w(0)=2$ and $w(\pm1)=1$, and let $f(n,t)$ be the weighted number of
+$\epsilon\in\{-1,0,1\}^n$ satisfying
+\[
+\sum_{k=1}^n\epsilon_kF_{k+1}=t.
+\]
+Since
+\[
+\left|\sum_{k=1}^m\epsilon_kF_{k+1}\right|
+\le\sum_{k=1}^mF_{k+1}=F_{m+3}-2<2F_{m+2},
+\]
+only the differences $0$ and $\pm F_{m+2}$ can contribute to the congruence.
+By symmetry,
+\begin{equation}\label{eq:sigma-split-local}
+\Sigma_m=f(m,0)+2f(m,F_{m+2}).
+\end{equation}
+
+Condition on the last digit $\epsilon_m$.  The value $F_{m+2}$ can be reached
+only from $\epsilon_m=1$ and a prefix sum $F_m$; the alternatives
+$F_{m+2}$ and $F_{m+3}$ for the prefix are outside the range available to
+$m-1$ digits.  Hence
+\[
+f(m,F_{m+2})=f(m-1,F_m).
+\]
+Conditioning once more gives, for $m\ge4$,
+\[
+f(m-1,F_m)=2f(m-2,F_m)+f(m-2,0),
+\]
+while the possible prefix value $2F_m$ is outside the range of the first
+$m-2$ digits.  Using \eqref{eq:sigma-split-local} with aperture $m-2$, the
+right-hand side is $\Sigma_{m-2}$, so
+\begin{equation}\label{eq:fiber-tail-term}
+f(m,F_{m+2})=\Sigma_{m-2}.
+\end{equation}
+
+Similarly,
+\[
+f(m,0)=2f(m-1,0)+2f(m-1,F_{m+1}).
+\]
+The same argument applied at aperture $m-1$ gives
+$f(m-1,F_{m+1})=\Sigma_{m-3}$, and
+\eqref{eq:sigma-split-local} at aperture $m-1$ gives
+$f(m-1,0)=\Sigma_{m-1}-2\Sigma_{m-3}$.  Therefore
+\[
+f(m,0)=2\Sigma_{m-1}-2\Sigma_{m-3}.
+\]
+Combining this identity with \eqref{eq:fiber-tail-term} in
+\eqref{eq:sigma-split-local} yields
+\[
+\Sigma_m
+=2\Sigma_{m-1}-2\Sigma_{m-3}+2\Sigma_{m-2},
+\]
+which is \eqref{eq:sigma-recurrence}.
+
+The initial values are obtained by direct enumeration:
+$d_1=(1,1)$, $d_2=(2,1,1)$, and $d_3=(2,2,1,2,1)$ after ordering fibers by
+residue, so $\Sigma_1=2$, $\Sigma_2=6$, and $\Sigma_3=14$.
+\end{proof}
+
+\begin{proposition}[Uniform collision recurrence]\label{prop:uniform-collision}
+Under the uniform raw law on $\{0,1\}^m$, the collision probability
+\[
+\Col_{\mathrm{unif}}(m):=
+\sum_{x\in X_m}\pi_m^{\mathrm{unif}}(x)^2
+\]
+of $\pi_m^{\mathrm{unif}}:=(\Fold_m)_*\mu_m^{\mathrm{unif}}$ satisfies
+$\Col_{\mathrm{unif}}(m)=\Sigma_m/2^{2m}$ and therefore, for $m\ge4$,
+\[
+\Col_{\mathrm{unif}}(m)
+=\frac12\Col_{\mathrm{unif}}(m-1)
++\frac18\Col_{\mathrm{unif}}(m-2)
+-\frac1{32}\Col_{\mathrm{unif}}(m-3),
+\]
+with initial values
+\[
+\Col_{\mathrm{unif}}(1)=\frac12,\qquad
+\Col_{\mathrm{unif}}(2)=\frac38,\qquad
+\Col_{\mathrm{unif}}(3)=\frac7{32}.
+\]
+This is only the collision-probability restatement of the preceding
+second-moment recurrence.
+\end{proposition}
+
+\begin{remark}
+The fiber-count identity is immediate from Definition~\ref{def:fold} and
+Theorem~\ref{thm:fiber-residue}: under the uniform raw law,
+$\pi_m^{\mathrm{unif}}(x)=|\mathcal F_m(x)|/2^m=d_m(x)/2^m$, and hence
+$\Col_{\mathrm{unif}}(m)=2^{-2m}\sum_{x\in X_m}d_m(x)^2$. The increment here
+is the closed scalar recurrence for the uniform collision probability,
+obtained by combining that identity with
+Proposition~\ref{prop:second-moment-recurrence}.
+\end{remark}
+
+\begin{proof}
+The identity $\Col_{\mathrm{unif}}(m)=\Sigma_m/2^{2m}$ follows because the
+uniform raw law assigns mass $d_m(x)/2^m$ to the fiber over $x$. Dividing the
+recurrence
+\[
+\Sigma_m=2\Sigma_{m-1}+2\Sigma_{m-2}-2\Sigma_{m-3}
+\]
+from Proposition~\ref{prop:second-moment-recurrence} by $2^{2m}$ gives the stated
+recurrence for $\Col_{\mathrm{unif}}(m)$. The initial values follow from
+$\Sigma_1=2$, $\Sigma_2=6$, and $\Sigma_3=14$.
+\end{proof}
+
+\subsection{Finite enumerations}\label{sec:fiber-enumerations}
+
+Table~\ref{tab:sanity-fibers} lists representative exact values from the enumeration up to $m=22$. Throughout, $F_1=F_2=1$ and $|X_m|=F_{m+2}$. Since the minimum fiber size is always $1$, only the maximal fiber size and the second moment $\Sigma_m$ are recorded. The enumeration is the direct residue-count algorithm
+\[
+d_m^\sharp(r)=
+\bigl|\{\omega\in\{0,1\}^m:\Val_m(\omega)\equiv r\pmod {F_{m+2}}\}\bigr|,
+\qquad
+\Sigma_m=\sum_{r=0}^{F_{m+2}-1}d_m^\sharp(r)^2,
+\]
+with the maximum taken over the same residue counts. Equivalently, initialize
+an array $d[0],\ldots,d[F_{m+2}-1]$ to zero, loop through all binary words
+$\omega$ of length $m$, increment
+$d[\Val_m(\omega)\bmod F_{m+2}]$, and then compute $\max_r d[r]$ and
+$\sum_r d[r]^2$. This is independent of any choice of legal representative
+because Proposition~\ref{prop:finite-window-range} identifies $X_m$ with the
+complete residue system modulo $F_{m+2}$.
+
+\[
+\begin{array}{l}
+\text{\bf Dynamic program for Table~\ref{tab:sanity-fibers}}\\
+\text{for }m=1,\ldots,22:\\
+\quad M\leftarrow F_{m+2},\quad d[0],\ldots,d[M-1]\leftarrow0\\
+\quad d[0]\leftarrow1\\
+\quad \text{for }k=1,\ldots,m:\\
+\quad\quad d_{\rm new}[0],\ldots,d_{\rm new}[M-1]\leftarrow0\\
+\quad\quad \text{for }r=0,\ldots,M-1:\\
+\quad\quad\quad d_{\rm new}[r]\leftarrow d_{\rm new}[r]+d[r]\\
+\quad\quad\quad d_{\rm new}[(r+F_{k+1})\bmod M]
+\leftarrow d_{\rm new}[(r+F_{k+1})\bmod M]+d[r]\\
+\quad\quad d\leftarrow d_{\rm new}\\
+\quad \max d_m\leftarrow \max_r d[r],\qquad
+\Sigma_m\leftarrow\sum_{r=0}^{M-1}d[r]^2 .
+\end{array}
+\]
+
+\begin{table}[t]
+\centering
+\caption{Representative exact fiber data. The second moment $\Sigma_m$ is the quantity appearing in Theorem~\ref{thm:fiber-dft} and Proposition~\ref{prop:second-moment-recurrence}.}
+\label{tab:sanity-fibers}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{rrrr}
+\toprule
+$m$ & $|X_m|$ & $\max d_m$ & $\Sigma_m$ \\
+\midrule
+3 & 5 & 2 & 14 \\
+5 & 13 & 4 & 88 \\
+12 & 377 & 21 & 51216 \\
+22 & 46368 & 233 & 452899840 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The full enumeration up to $m=22$ agrees with the recurrence in Proposition~\ref{prop:second-moment-recurrence}; for example the recurrence gives
+\[
+\Sigma_{22}=2\Sigma_{21}+2\Sigma_{20}-2\Sigma_{19}=452899840,
+\]
+matching the direct residue count in the table. An independent shifted-weight
+computation gives the same values, as predicted by
+Theorem~\ref{thm:affine-transfer}.

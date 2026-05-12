@@ -1,32 +1,74 @@
 \section{Further remarks}\label{sec:conclusion}
 
-This note isolates one explicit weighted self-dual kernel in which
-self-duality collapses all unit-circle twists to a single completed
-determinant. The point is not a general theory but a complete
-calculation: in this example the same degree-\(6\) polynomial controls
-the quotient geometry, the generic Galois group, the cyclic-lift
+The paper proves two theorem-level tools for self-dual finite kernels.
+The first is the sign-quotient plane-model theorem: the completed
+determinant parity conditions force the quotient by
+\((w,s)\mapsto(-w,-s)\) to be expressed through \(x=w^2\) and \(y=sw\),
+and a smooth plane model obtained in these coordinates gives the
+quotient genus immediately. The second is the endpoint-selection theorem
+for primitive self-dual kernels with strict unitary spectral gap and
+explicit root separation. Once a completed determinant \(H(w,s)\) is
+obtained from a self-dual kernel, this theorem reduces the large-\(m\)
+cyclotomic problem to checking separation of one endpoint branch and
+then substitutes the endpoint Taylor jet through an explicit
+coefficient-transfer formula to produce the asymptotic expansion of the
+twisted Perron roots. Its statement applies to any primitive self-dual
+finite kernel satisfying the same spectral-gap and separation
+hypotheses. The ten-state kernel is the effective application verifying
+these hypotheses and recording the associated exact invariants. The
+primary cyclotomic object is the conjugate product
+\[
+  R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha).
+\]
+With the standard Sylvester convention this product is
+\[
+  \Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr),
+\]
+because \(\Phi_m^+\) is placed in the first slot. The reversed order
+contributes the sign \((-1)^{(\deg_s H)\deg\Phi_m^+}\) and is not the
+definition of \(R_m\).
+
+The explicit weighted ten-state kernel is the fully effective
+application developed here. The structural statements above remain
+available for other primitive self-dual finite kernels satisfying the
+same hypotheses.
+Its self-duality collapses all unit-circle twists to a single completed
+determinant, and in this application the same degree-\(6\) polynomial
+controls the quotient geometry, the generic Galois group, the cyclic-lift
 factors, and the cyclotomic asymptotics. The cyclotomic resultants
 therefore reduce the unit-circle twists to a one-parameter elimination
 problem and yield twisted Perron roots with an effective large-\(m\)
 expansion.
 
-Two directions seem natural. The first is to identify structural
-conditions on a general self-dual weighted kernel that force a
-low-degree completed determinant or, more concretely, a quotient curve
-of genus at most \(3\). The second is to understand to what extent the
-large-\(m\) asymptotics of \(\rho_m\) depend only on the local jet of
-\(\widehat\Delta\) at the endpoint \(s=2\).
+Two separate directions extend the theorem-level part of the paper. One
+is a classification problem: identify structural conditions on
+self-dual weighted kernels that force a low-degree completed determinant
+or a low-genus quotient curve. The other is to make the effective
+root-separation constants uniform in families. These would strengthen
+the endpoint-selection theorem, but they are not needed for its present
+form: \Cref{thm:self-dual-endpoint-selection} already gives a
+kernel-independent endpoint-asymptotic result for cyclotomic factors of
+completed self-dual determinants, and
+\Cref{thm:sign-quotient-plane-genus} gives the corresponding reusable
+quotient normal form. The displayed ten-state kernel supplies a complete
+effective application, including spectral-gap, separation, and
+endpoint-jet certificates.
 
 \appendix
 
 \section{Explicit matrix and computational verification}
 \label{sec:appendix-computation}
 
-\subsection*{The transition matrix \(B(u)\)}
+\subsection*{The transition matrix \texorpdfstring{\(B(u)\)}{B(u)}}
 
-In the state order
-\((\mathtt{000},\mathtt{001},\mathtt{002},\mathtt{010},\mathtt{100},
-\mathtt{101},\mathtt{0{-}12},\mathtt{1{-}12},\mathtt{01{-}1},\mathtt{11{-}1})\),
+For the following state order,
+\[
+\begin{array}{ccccc}
+\mathtt{000},&\mathtt{001},&\mathtt{002},&\mathtt{010},&\mathtt{100},\\
+\mathtt{101},&\mathtt{0{-}12},&\mathtt{1{-}12},&
+\mathtt{01{-}1},&\mathtt{11{-}1},
+\end{array}
+\]
 the weighted adjacency matrix \(B(u)=B_0+uB_1\) of
 \Cref{def:sync-kernel} is
 \[
@@ -52,32 +94,44 @@ of \Cref{prop:kernel-delta-explicit}.
 
 \subsection*{Reproducibility guide}
 
-The cyclic-lift factorisation and the primitive real-factor
-interpretation are proved in the main text in
-\Cref{prop:sync-cyclic-lift-factorisation,prop:sync-primitive-real-factor}.
-The computer-assisted parts of the paper are organised here as a
-theorem-to-command map rather than as a single executable script,
-because the verification splits naturally into SageMath and Mathematica
-blocks.
+The cyclic-lift factorisation is proved in
+\Cref{prop:sync-cyclic-lift-factorisation}. The primitive real-factor
+interpretation is proved in \Cref{prop:sync-primitive-real-factor}.
+The computer-assisted parts of the paper are reproducible from the
+single Sage runner
+\[
+  \texttt{certificates/verify\_certificates.py}.
+\]
+Run from the paper directory with
+\[
+  \texttt{sage -python certificates/verify\_certificates.py}.
+\]
+The script prints the SageMath version, Python version, SHA-256
+checksums of the paper sources and certificate script, and the exact
+outputs listed below. The reference run used SageMath~10.2; the
+endpoint recurrence was independently cross-checked in Mathematica~14.0
+but no Mathematica output is needed to verify the paper.
 
-Items \textup{(a)}--\textup{(e)} were run in SageMath~10.2, and item
-\textup{(f)} was run in Mathematica~14.0. Their roles in the body are:
+Items \textup{(a)}--\textup{(f)} are Sage-reproducible. Their roles in
+the body are:
 \begin{itemize}[leftmargin=2.5em]
   \item \textup{(a)} certifies \Cref{prop:kernel-delta-explicit};
   \item \textup{(b)} certifies
         \Cref{prop:sync-hatdelta-completion,prop:sync-hatdelta-quotient};
   \item \textup{(c)} certifies the affine smoothness step in
         \Cref{prop:sync-hatdelta-quotient};
-  \item \textup{(d)} certifies the discriminant and finite-field
-        factorisations used in
+  \item \textup{(d)} certifies the discriminant and finite-field data for
         \Cref{prop:sync-hatdelta-galois-s6-generic};
   \item \textup{(e)} certifies the finite small-\(m\) checks used in
-        the numerical remark after \Cref{thm:rho-gap-m12};
+        the numerical remark after \Cref{thm:rho-gap-m12} and the
+        interval constants in \Cref{lem:root-separation};
   \item \textup{(f)} certifies
         \Cref{prop:sync-endpoint-jet,thm:rho-gap-m12}.
 \end{itemize}
 Each item records the exact output used in the argument together with
-the corresponding command block.
+the corresponding command block. All displayed constants and
+coefficients are exact symbolic outputs from these computations; no
+fitted parameters are used anywhere in the paper.
 
 \subsection*{Exact verification data}
 
@@ -94,13 +148,36 @@ the corresponding command block.
     \]
     Substituting \(u=1\) yields
     \[
-      \Delta(z,1)=1-2z-5z^2+6z^3+z^4-4z^5+3z^6
-      =(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+    \begin{aligned}
+      \Delta(z,1)
+      &=1-2z-5z^2+6z^3+z^4-4z^5+3z^6\\
+      &=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+    \end{aligned}
+    \]
+    Hence the residue constant used in
+    \Cref{prop:sync-kernel-spectrum} is checked exactly by
+    \[
+      \begin{aligned}
+      \lim_{z\to1/3}\frac{1-3z}{\Delta(z,1)}
+      &=-\frac{1}{(-2/3)(4/3)(34/27)}\\
+      &=\frac{243}{272}.
+      \end{aligned}
     \]
     The same expansion satisfies
     \(\Delta(uz,u^{-1})=\Delta(z,u)\) coefficientwise, which is the
     explicit consistency check used in
     \Cref{prop:kernel-delta-explicit}.
+    The exact Sage output for the two requested checks is therefore
+    \[
+    \begin{aligned}
+      \Delta
+      &=1-(1+u)z-5uz^2+3u(1+u)z^3\\
+      &\quad -u(u^2-3u+1)z^4
+        +u(u^3-3u^2-3u+1)z^5\\
+      &\quad +u^2(u^2+u+1)z^6,\\
+      \Delta(uz,u^{-1})-\Delta(z,u)&=0.
+    \end{aligned}
+    \]
 
     \medskip
     \noindent\textit{Sage commands.}
@@ -119,7 +196,20 @@ B = Matrix(R, [
     [0,u,u,0,0,0,0,u,0,0]
 ])
 Delta = (identity_matrix(R, 10) - z*B).det().expand()
+Delta
 factor(Delta.subs(u=1))
+
+L.<u,z> = LaurentPolynomialRing(QQ)
+DeltaL = 1-(1+u)*z-5*u*z^2+3*u*(1+u)*z^3 \
+    - u*(u^2-3*u+1)*z^4 \
+    + u*(u^3-3*u^2-3*u+1)*z^5 \
+    + u^2*(u^2+u+1)*z^6
+DeltaDual = 1-(1+1/u)*(u*z)-5*(1/u)*(u*z)^2 \
+    + 3*(1/u)*(1+1/u)*(u*z)^3 \
+    - (1/u)*((1/u)^2-3*(1/u)+1)*(u*z)^4 \
+    + (1/u)*((1/u)^3-3*(1/u)^2-3*(1/u)+1)*(u*z)^5 \
+    + (1/u)^2*((1/u)^2+(1/u)+1)*(u*z)^6
+(DeltaDual - DeltaL).expand()
 \end{verbatim}
 
   \item \textit{Completion and quotient polynomial.}\quad
@@ -133,15 +223,32 @@ factor(Delta.subs(u=1))
     \[
       F(x,y)=1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3.
     \]
+    These two displayed polynomials are the exact certificates used in
+    \Cref{prop:sync-hatdelta-completion,prop:sync-hatdelta-quotient};
+    the command block below records how they are produced. The same
+    item also fixes the resultant convention used later: with the
+    standard Sylvester convention,
+    \[
+      \Res_s(s,\widehat\Delta(w,s))=\widehat\Delta(w,0),
+    \]
+    while reversing the two arguments gives
+    \(\Res_s(\widehat\Delta(w,s),s)=-\widehat\Delta(w,0)\) because
+    \(\deg_s\widehat\Delta=3\). The runner asserts the reversed-order
+    sign check by
+    printing
+    \[
+      \texttt{resultant\_sign\_m2\_difference: 0}.
+    \]
 
     \medskip
     \noindent\textit{Sage commands.}
 \begin{verbatim}
 R.<r,w> = LaurentPolynomialRing(QQ)
-Delta_rw = 1-(1+r^2)*(w/r)-5*r^2*(w/r)^2+3*r^2*(1+r^2)*(w/r)^3 \
-    - r^2*(r^4-3*r^2+1)*(w/r)^4 \
-    + r^2*(r^6-3*r^4-3*r^2+1)*(w/r)^5 \
-    + r^4*(r^4+r^2+1)*(w/r)^6
+Delta_rw = 1 - (1+r^2)*(w/r) - 5*r^2*(w/r)^2 \
+    + 3*r^2*(1+r^2)*(w/r)^3 \
+    - r^2*(r^4 - 3*r^2 + 1)*(w/r)^4 \
+    + r^2*(r^6 - 3*r^4 - 3*r^2 + 1)*(w/r)^5 \
+    + r^4*(r^4 + r^2 + 1)*(w/r)^6
 Delta_rw.expand()
 
 S.<s,w> = PolynomialRing(QQ)
@@ -152,6 +259,8 @@ T.<x,y> = PolynomialRing(QQ)
 F = 1 - y - 5*x + 3*x*y + 5*x^2 - x*y^2 + x*y^3 \
     - 6*x^2*y + x^2*y^2 - x^3
 H, F
+s.resultant(H, s) - H(s=0)
+H.resultant(s, s) + H(s=0)
 \end{verbatim}
 
   \item \textit{Affine smoothness certificate.}\quad
@@ -181,9 +290,15 @@ ideal(F, diff(F, x), diff(F, y)).groebner_basis()
 
   \item \textit{Discriminant and mod-\(p\) factorisations.}\quad
     The discriminant \(D(s)=\disc_w\widehat\Delta(w,s)\) has degree
-    \(20\) in \(s\) with leading coefficient \(-256\). The command below
-    computes the full polynomial \(D(s)\), confirming both the degree
-    and the leading coefficient. The specialisations
+    \(20\) in \(s\) with leading coefficient \(-256\). The exact Sage
+    output for the metadata used in the proof is
+    \[
+      (D.\operatorname{degree}(),D.\operatorname{leading\_coefficient}())
+      =(20,-256).
+    \]
+    The command below also computes the full polynomial \(D(s)\), so the
+    degree and leading coefficient are reproducible from the printed
+    expression rather than from a fitted numerical value. The specialisations
     used in \Cref{prop:sync-hatdelta-galois-s6-generic} are
     \[
       \widehat\Delta(w,3)=8w^6+9w^5-4w^4+9w^3-5w^2-3w+1
@@ -220,6 +335,9 @@ ideal(F, diff(F, x), diff(F, y)).groebner_basis()
       (w+16)\bigl(8w^5+14w^4+9w^2+3w+6\bigr)\pmod{19},
     \]
     with the quintic factor irreducible over \(\mathbb{F}_{19}\).
+    These displayed finite-field gcd and factorisation lines are the
+    exact certificates used in the Dedekind-specialisation step of
+    \Cref{prop:sync-hatdelta-galois-s6-generic}.
 
     \medskip
     \noindent\textit{Sage commands.}
@@ -228,6 +346,7 @@ R.<w,s> = QQ[]
 H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
     + (s^3 - 6*s)*w^5 + (s^2 - 1)*w^6
 D = H.discriminant(w)
+D
 D.degree(), D.leading_coefficient()
 
 R7.<w> = PolynomialRing(GF(7))
@@ -243,7 +362,10 @@ gcd(f319, f319.derivative()), factor(f319)
 \end{verbatim}
 
   \item \textit{Finite verification for the displayed small values.}\quad
-    For the table following \Cref{thm:rho-gap-m12}, one computes
+    This certificate has two roles: it verifies the displayed finite
+    values and it supplies the rational constants used in
+    \Cref{lem:root-separation}. For the table following
+    \Cref{thm:rho-gap-m12}, one computes
     \[
       \lambda(\alpha):=\min\{\abs{w}:\widehat\Delta(w,\alpha)=0\}
     \]
@@ -262,18 +384,74 @@ gcd(f319, f319.derivative()), factor(f319)
     \]
     Together with the symmetry \(\lambda(-\alpha)=\lambda(\alpha)\),
     this verifies that the displayed values \(\rho_m\) are obtained from
-    the slices \(\alpha=\pm s_m\).
+    the slices \(\alpha=\pm s_m\). Numerically, SageMath~10.2 evaluates
+    the roots in the complex field with \(100\) bits of precision; the
+    values of \(\rho_m=1/\lambda(s_m)\) in the table are rounded to
+    \(12\) digits after the decimal point, and the absolute errors are
+    rounded to three significant figures.
+
+    The exact endpoint equations solved for the displayed \(\rho_m\)
+    values are
+    \[
+    \begin{array}{ll}
+      m=4:  & \widehat\Delta(w,\sqrt2)=0,\\
+      m=6:  & \widehat\Delta(w,\sqrt3)=0,\\
+      m=8:  & \widehat\Delta\bigl(w,\sqrt{2+\sqrt2}\bigr)=0,\\
+      m=10: & \widehat\Delta\bigl(w,\sqrt{(5+\sqrt5)/2}\bigr)=0.
+    \end{array}
+    \]
+    The same Sage runner performs exact interval checks for all
+    \(4\le m<32\) and for the endpoint separation constants. The
+    rational certificate used in the proof is:
+    \[
+      2\cos(\pi/32)>\frac{199}{100},
+    \]
+    \[
+      \lambda(s)<\frac{101}{300}
+      \quad\text{for}\quad \frac{199}{100}\le s\le2,
+    \]
+    with a unique root of modulus \(<1/2\) on this endpoint interval,
+    and
+    \[
+      \lambda(s)\ge\frac{101}{300}
+      \quad\text{for}\quad
+      -\frac{199}{100}\le s\le\frac{199}{100}.
+    \]
+    The interval computation uses Sturm isolation over the rational
+    boxes in the displayed ranges after clearing denominators in the
+    real and imaginary parts of
+    \(\widehat\Delta(x+iy,s)\). The certificate runner also prints
+    the following summary keys:
+    \[
+      \texttt{endpoint\_interval\_certificate: true},
+      \qquad
+      \texttt{central\_interval\_certificate: true},
+    \]
+    and
+    \[
+      \texttt{finite\_m\_branch\_selection\_4\_to\_31: true}.
+    \]
+    These are independent algebraic certificates: the interval
+    inequalities are not inferred from floating point approximations,
+    while the decimal table below is printed only for orientation.
 
     \medskip
     \noindent\textit{Sage commands.}
 \begin{verbatim}
 R.<w> = PolynomialRing(QQ)
+CC = ComplexField(100)
 def H(alpha):
-    return 1 - alpha*w - 5*w^2 + 3*alpha*w^3 + (5 - alpha^2)*w^4 \
-        + (alpha^3 - 6*alpha)*w^5 + (alpha^2 - 1)*w^6
+    return (
+        1 - alpha*w - 5*w^2 + 3*alpha*w^3
+        + (5 - alpha^2)*w^4
+        + (alpha^3 - 6*alpha)*w^5
+        + (alpha^2 - 1)*w^6
+    )
 
 def lambda_alpha(alpha):
-    roots = H(alpha).change_ring(CC).roots(multiplicities=False)
+    roots = H(alpha).change_ring(CC).roots(
+        multiplicities=False
+    )
     return min(abs(root) for root in roots)
 
 for m in [4, 6, 8, 10]:
@@ -281,7 +459,17 @@ for m in [4, 6, 8, 10]:
     for a in range(1, 2*m):
         if gcd(a, 2*m) == 1 and a <= m:
             reps.append(2*cos(pi*a/m))
-    print(m, [(alpha.n(), lambda_alpha(alpha).n()) for alpha in reps])
+    vals = [
+        (alpha.n(), lambda_alpha(alpha).n())
+        for alpha in reps
+    ]
+    print(m, vals)
+
+# The executable certificate runner contains the interval version used
+# in the proof:
+#   endpoint_interval_certificate: true
+#   central_interval_certificate: true
+#   finite_m_branch_selection_4_to_31: true
 \end{verbatim}
 
   \item \textit{Endpoint jet recursion.}\quad
@@ -293,8 +481,59 @@ for m in [4, 6, 8, 10]:
     \]
     Writing \(w(s)=\sum_{j\ge 0}a_j(s-2)^j\) with \(a_0=1/3\) and
     substituting into \(\widehat\Delta(w(s),s)=0\) gives a triangular
-    recursion for the coefficients \(a_j\). After inversion
-    \(\rho(s)=1/w(s)\), the exact coefficients of
+    recursion for the coefficients \(a_j\). Put \(t=s-2\) and
+    \[
+      H_n=[t^n]\,
+      \widehat\Delta\!\left(
+        \frac13+a_1t+\cdots+a_nt^n,\,2+t
+      \right).
+    \]
+    The six triangular equations \(H_n=0\) are
+    \[
+      -\frac{16(153a_1+11)}{729}=0,
+    \]
+    \[
+      -\frac{4(530604a_2-4175)}{632043}=0,
+    \]
+    \[
+      -\frac{3680269344a_3+336709}{1095962562}=0,
+    \]
+    \[
+      -\frac{25526348169984a_4-5582818619}{7601596330032}=0,
+    \]
+    \[
+      -\frac{177050750907009024a_5+26151302654713}
+             {52724672145101952}=0,
+    \]
+    \[
+      -\frac{1228024008291014590464a_6-15005008669158719}
+             {365698325998427139072}=0.
+    \]
+    Hence
+    \[
+    \begin{aligned}
+      a_1&=-\frac{11}{153},&
+      a_2&=\frac{4175}{530604},&
+      a_3&=-\frac{336709}{3680269344},\\
+      a_4&=\frac{5582818619}{25526348169984},&
+      a_5&=-\frac{26151302654713}{177050750907009024},&
+      a_6&=\frac{15005008669158719}{1228024008291014590464}.
+    \end{aligned}
+    \]
+    Formal inversion gives
+    \[
+    \begin{aligned}
+      \frac1{w(2+t)}
+      &=3+\frac{11}{17}t+\frac{1351}{19652}t^2
+        +\frac{17133}{45435424}t^3
+        -\frac{350037409}{105046700288}t^4\\
+      &\quad
+        +\frac{47614595705}{242867971065856}t^5
+        +\frac{141889658001627}{561510749104259072}t^6
+        +O(t^7).
+    \end{aligned}
+    \]
+    Setting \(t=-\delta\), the exact coefficients of
     \(\rho(2-\delta)=3+\sum_{j=1}^6 c_j\delta^j+O(\delta^7)\) are
     \[
       c_1=-\frac{11}{17},\qquad
@@ -309,23 +548,19 @@ for m in [4, 6, 8, 10]:
       c_6=\frac{141889658001627}{561510749104259072}.
     \]
     These are exactly the jet coefficients used in
-    \Cref{prop:sync-endpoint-jet}.
+    \Cref{prop:sync-endpoint-jet}; the displayed triangular recurrence
+    is the human-auditable high-order jet certificate used in
+    \Cref{thm:rho-gap-m12}.
 
     \medskip
-    \noindent\textit{Mathematica commands.}
+    \noindent\textit{Sage commands.}
 \begin{verbatim}
-Clear[w, s, \[Delta], a1, a2, a3, a4, a5, a6];
-H[w_, s_] := 1 - s w - 5 w^2 + 3 s w^3 + (5 - s^2) w^4 +
-    (s^3 - 6 s) w^5 + (s^2 - 1) w^6;
-ws = 1/3 + a1 \[Delta] + a2 \[Delta]^2 + a3 \[Delta]^3 +
-    a4 \[Delta]^4 + a5 \[Delta]^5 + a6 \[Delta]^6;
-seriesH = Normal[
-    Series[H[ws, 2 - \[Delta]], {\[Delta], 0, 6}]
-];
-eqns = Thread[
-    CoefficientList[seriesH, \[Delta]] == 0
-];
-sol = First[Solve[eqns, {a1, a2, a3, a4, a5, a6}]];
-Normal[Series[1/(ws /. sol), {\[Delta], 0, 6}]]
+R.<t,a1,a2,a3,a4,a5,a6> = QQ[]
+w = 1/3 + a1*t + a2*t^2 + a3*t^3 + a4*t^4 + a5*t^5 + a6*t^6
+s = 2 + t
+H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
+    + (s^3 - 6*s)*w^5 + (s^2 - 1)*w^6
+[H.monomial_coefficient(t^n) for n in range(1, 7)]
+# solve successively for a1,...,a6, then invert 1/w to order 6
 \end{verbatim}
 \end{enumerate}

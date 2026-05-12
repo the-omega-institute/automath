@@ -27,20 +27,24 @@ For \(m\ge 0\), write
 
 \begin{theorem}[Density dichotomy for DFA languages]
   \label{thm:dfa-density-dichotomy}
-  There exist an integer \(p\ge 1\), non-negative constants
-  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that
+  There exist an integer \(D_A\ge 1\), non-negative constants
+  \(c_0,\dots,c_{D_A-1}\), and \(\theta\in(0,1)\) such that
   \[
-    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m)
+    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod D_A}+O(\theta^m)
     \qquad (m\to\infty).
   \]
   Consequently exactly one of the following alternatives holds:
   \begin{enumerate}[label=\textup{(\roman*)}]
-    \item There exists \(\eta\in(0,1)\) such that
-    \(a_m(\mathcal A)=O((b\eta)^m)\).
-    \item There exists a residue class \(r\bmod p\) and a constant
+    \item There exists \(\eta\in(0,1)\) such that the normalized
+    density satisfies
+    \[
+      \frac{a_m(\mathcal A)}{b^m}=O(\eta^m);
+    \]
+    equivalently, \(a_m(\mathcal A)=O((b\eta)^m)\).
+    \item There exists a residue class \(r\bmod D_A\) and a constant
     \(c>0\) such that
     \[
-      \frac{a_{r+kp}(\mathcal A)}{b^{r+kp}}\ge c
+      \frac{a_{r+kD_A}(\mathcal A)}{b^{r+kD_A}}\ge c
       \qquad\text{for all sufficiently large }k.
     \]
   \end{enumerate}
@@ -48,7 +52,12 @@ For \(m\ge 0\), write
   \[
     a_m(\mathcal A)/b^m\asymp m^{-\alpha}
   \]
-  for any \(\alpha>0\).
+  for any \(\alpha>0\). More generally, there do not exist
+  \(K_1,K_2>0\) and an infinite set \(M\subseteq\NN\) such that
+  \[
+    \frac{K_1}{m}\le \frac{a_m(\mathcal A)}{b^m}\le \frac{K_2}{m}
+    \qquad(m\in M).
+  \]
 \end{theorem}
 
 \begin{proof}
@@ -64,57 +73,73 @@ For \(m\ge 0\), write
     a_m(\mathcal A)=u^{\mathsf T}B^m v.
   \]
   Set \(P:=B/b\). Then \(P\) is a stochastic matrix on the finite set
-  \(Q\). After permuting states, write \(P\) in block upper-triangular
-  form with one transient block and recurrent-class blocks
-  \(P_1,\dots,P_s\), where each \(P_i\) is an irreducible stochastic
-  matrix. The transient block has spectral radius \(<1\), so its
-  contribution is \(O(\theta_T^m)\) for some \(\theta_T\in(0,1)\).
-
-  Fix \(i\), and let \(d_i\) be the period of \(P_i\). By the periodic
-  Perron--Frobenius theorem for irreducible non-negative matrices, there
-  exist spectral projectors \(E_{i,0},\dots,E_{i,d_i-1}\), a constant
-  \(C_i>0\), and \(\theta_i\in(0,1)\) such that
+  \(Q\). After permuting states, put \(P\) in canonical Markov-chain
+  form
   \[
-    P_i^m
-    =\sum_{\ell=0}^{d_i-1}\omega_{d_i}^{\ell m}E_{i,\ell}+R_{i,m},
-    \qquad
-    \|R_{i,m}\|\le C_i\theta_i^m,
+    P=
+    \begin{pmatrix}
+      T & R_1 & \cdots & R_s\\
+      0 & C_1 & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s
+    \end{pmatrix},
   \]
-  where \(\omega_{d_i}:=e^{2\pi i/d_i}\). Since the transient block has
-  no eigenvalues on the unit circle, these recurrent-class expansions
-  account for every peripheral eigenvalue of \(P\). Hence there exist
-  matrices \(F_{i,\ell}\) on the full state space, a constant \(C>0\),
-  and \(\theta\in(0,1)\) such that
+  where \(T\) is the transient block, \(\rho(T)<1\), and each \(C_i\)
+  is an irreducible stochastic recurrent class. For \(m\ge1\),
   \[
-    P^m
-    =\sum_{i=1}^s\sum_{\ell=0}^{d_i-1}
-      \omega_{d_i}^{\ell m}F_{i,\ell}+E_m,
-    \qquad
-    \|E_m\|\le C\theta^m.
+    P^m=
+    \begin{pmatrix}
+      T^m &
+      \sum_{\ell=0}^{m-1}T^\ell R_1C_1^{m-1-\ell} &
+      \cdots &
+      \sum_{\ell=0}^{m-1}T^\ell R_sC_s^{m-1-\ell}\\
+      0 & C_1^m & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s^m
+    \end{pmatrix}.
   \]
+  Thus the transient-to-recurrent blocks need not be exponentially
+  small: their absorption convolutions generally converge to non-zero
+  periodic limits.
 
-  Let \(p:=\operatorname{lcm}(d_1,\dots,d_s)\). Grouping the peripheral
-  terms by the residue class of \(m\bmod p\), we obtain matrices
-  \(S_0,\dots,S_{p-1}\) such that
+  Let \(d_i\) be the period of \(C_i\), and put
+  \(D_A:=\operatorname{lcm}(d_1,\dots,d_s)\). By the periodic
+  Perron--Frobenius theorem for the recurrent blocks, each sequence
+  \(C_i^{kD_A+r}\) converges exponentially fast as \(k\to\infty\), for
+  each fixed \(r\). Since \(T^\ell\) decays exponentially, the displayed
+  convolution also has an exponentially fast limit on every residue
+  class. Hence the entrywise limits
   \[
-    P^m=S_{m\bmod p}+E_m,
+    S_r:=\lim_{k\to\infty}P^{kD_A+r}
+    \qquad(0\le r<D_A)
+  \]
+  exist; the matrices \(S_r\) include both the recurrent-class limits
+  and the absorption terms from transient states into those recurrent
+  classes. This theorem uses these as qualitative Markov-chain limits;
+  the certified computable version, with rational tail constants and
+  verifiable proof objects, is isolated in
+  \Cref{lem:effective-spectral-constants,thm:effective-fixed-dfa-prime-obstruction}.
+  Consequently there are \(C>0\) and \(\theta\in(0,1)\) such
+  that
+  \[
+    P^m=S_{m\bmod D_A}+E_m,
     \qquad
     \|E_m\|\le C\theta^m.
   \]
   Therefore
   \[
-    u^{\mathsf T}P^m v=u^{\mathsf T}S_{m\bmod p}v+O(\theta^m).
+    u^{\mathsf T}P^m v=u^{\mathsf T}S_{m\bmod D_A}v+O(\theta^m).
   \]
-  For \(0\le r<p\), define
+  For \(0\le r<D_A\), define
   \[
-    c_r:=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v=u^{\mathsf T}S_r v.
+    c_r:=\lim_{k\to\infty}u^{\mathsf T}P^{kD_A+r}v=u^{\mathsf T}S_r v.
   \]
   The limit exists by the preceding expansion, and \(c_r\ge 0\) because
-  every term \(u^{\mathsf T}P^{kp+r}v\) is non-negative. Thus
+  every term \(u^{\mathsf T}P^{kD_A+r}v\) is non-negative. Thus
   \[
     \frac{a_m(\mathcal A)}{b^m}
     =u^{\mathsf T}P^m v
-    =c_{m\bmod p}+O(\theta^m),
+    =c_{m\bmod D_A}+O(\theta^m),
   \]
   as claimed.
 
@@ -123,12 +148,99 @@ For \(m\ge 0\), write
   \textup{(i)}. Otherwise some \(c_r\) is strictly positive, and along
   the corresponding residue class the density has a positive lower
   bound, which is alternative \textup{(ii)}.
+
+  The exclusion of intermediate polynomial density follows by the same
+  residue-class argument. Suppose first that
+  \(a_m(\mathcal A)/b^m\asymp m^{-\alpha}\) for some \(\alpha>0\).
+  If all \(c_r\) vanish, then \(a_m(\mathcal A)/b^m=O(\theta^m)\), which
+  is eventually smaller than every positive multiple of \(m^{-\alpha}\).
+  If some \(c_r>0\), then along that residue class
+  \(a_m(\mathcal A)/b^m\ge c_r/2\) for all sufficiently large \(m\),
+  which is incompatible with an upper bound \(O(m^{-\alpha})\).
+  Finally, suppose that for some \(K_1,K_2>0\) the two-sided
+  finite-budget bound \(K_1/m\le a_m(\mathcal A)/b^m\le K_2/m\) holds
+  on an infinite set \(M\). Passing to an infinite subset in one residue
+  class \(r\bmod D_A\), the case \(c_r=0\) contradicts the lower bound
+  \(K_1/m\), while the case \(c_r>0\) contradicts the upper bound
+  \(K_2/m\). This proves the final assertion.
 \end{proof}
+
+For later use we spell out the elementary effective content of the
+preceding proof. Assume that the entries of the DFA transition matrices
+are given explicitly. Put \(P=B/b\). The strongly connected components
+of the directed graph of \(P\), the recurrent classes, their periods
+\(d_i\), and hence \(D_A=\operatorname{lcm}(d_i)\), are obtained by the
+standard linear-time graph algorithms. For each residue class \(r\bmod
+D_A\), the limit
+\[
+  c_r=\lim_{k\to\infty}u^{\mathsf T}P^{kD_A+r}v
+\]
+is the value of the finite Markov chain on that residue class; it can be
+computed by solving the finite linear systems for the stationary
+distributions on the recurrent classes and the absorption probabilities
+from transient states. Equivalently, it is obtained as the exact
+limit of the rational matrices \(P^{kD_A+r}\). Thus the residue
+alternatives \(c_r=0\) and \(c_r>0\) are decidable by exact rational
+linear algebra when the transition table is integral.
 
 This density dichotomy is classical; compare
 \cite{Berstel1973,BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity,Koga2019Density}.
-We keep the short proof because the residue-class constants are used in
-the prime corollaries below.
+It is not the new ingredient of the paper; we keep the short proof
+because the residue-class constants are the input certified in
+\Cref{thm:effective-fixed-dfa-prime-obstruction} and then used in the
+prime corollaries below.
+
+\begin{lemma}[Explicit prime-counting input]
+  \label{lem:explicit-pnt-input}
+  The following numerical constants are admissible:
+  \[
+    X_0=355991,\qquad C_{\pi,1}=2,\qquad C_{\pi,2}=2.
+  \]
+  For every \(x\ge X_0\),
+  \[
+    \left|\pi(x)-\frac{x}{\log x}\right|
+      \le C_{\pi,1}\frac{x}{(\log x)^2},
+    \qquad
+    \pi(x)\le C_{\pi,2}\frac{x}{\log x}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Rosser--Schoenfeld prove \(\pi(x)>x/\log x\) for \(x\ge17\)
+  \cite{RosserSchoenfeld1962}. Dusart's published explicit upper
+  estimate \cite[Theorem~1.10]{Dusart2018} gives
+  \[
+    \pi(x)\le
+      \frac{x}{\log x}\left(1+\frac{1}{\log x}
+        +\frac{2.51}{(\log x)^2}\right)
+    \qquad (x\ge355991).
+  \]
+  These are the exact published inputs used here. Since
+  \(\log 355991>12\), for \(x\ge355991\) we have
+  \[
+    0\le \pi(x)-\frac{x}{\log x}
+    \le \frac{x}{(\log x)^2}
+       +2.51\,\frac{x}{(\log x)^3}
+    \le 2\,\frac{x}{(\log x)^2},
+  \]
+  and also
+  \[
+    \pi(x)\le
+      \frac{x}{\log x}\left(1+\frac{1}{\log x}
+        +\frac{2.51}{(\log x)^2}\right)
+      \le 2\,\frac{x}{\log x}.
+  \]
+\end{proof}
+
+We shall use the following interval-count convention in both prime-slice
+estimates. For \(X<Y\) with \(X\ge X_0\),
+\[
+  \#\{p\text{ prime}:X\le p<Y\}
+  =\pi(Y)-\pi(X)+\varepsilon_{X,Y},
+  \qquad |\varepsilon_{X,Y}|\le2.
+\]
+Thus all half-open endpoint changes in the slice estimates are accounted
+for by one absolute \(O(1)\) term.
 
 \begin{remark}\label{rem:dfa-density-sharpness}
   Both alternatives occur already for elementary regular languages. The
@@ -136,7 +248,9 @@ the prime corollaries below.
   \(1/b\) in every positive length, so it lies in
   alternative~\textup{(ii)}. By contrast, the language \(0^\ast 1\)
   satisfies \(\#(0^\ast 1\cap\Sigma_b^m)=1\) for every \(m\ge 1\), so
-  it lies in alternative~\textup{(i)}.
+  its normalized density is \(b^{-m}\). It therefore lies in the
+  normalized exponential-sparse alternative~\textup{(i)} even though
+  the raw count is constant rather than decreasing.
 \end{remark}
 
 For base-\(b\) expansions we use the standard most-significant-digit
@@ -148,7 +262,7 @@ whose first digit is nonzero and whose value is prime. Let
 \cite{HardyWright2008},
 \[
   p_m^{(b)}
-  =\pi(b^m)-\pi(b^{m-1})
+  =\pi(b^m-1)-\pi(b^{m-1}-1)
   \asymp \frac{b^m}{m}.
 \]
 The condition that the first digit be nonzero excludes leading zeros.
@@ -156,6 +270,751 @@ One may equivalently compare a DFA language against
 \(\{1,\dots,b-1\}\Sigma_b^{m-1}\); in particular, the scale
 \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\) is unchanged because every
 prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
+
+\begin{lemma}[Prime counts in base-\(b\) slices]
+  \label{lem:base-prime-count}
+  Let \(X_0,C_{\pi,1},C_{\pi,2}\) be constants satisfying
+  \Cref{lem:explicit-pnt-input}. There are explicit constants
+  \(A_b,B_b>0\) and an explicit integer \(M_b\) such that, for all
+  \(m\ge M_b\),
+  \[
+    A_b\,\frac{b^m}{m}
+    \le \abs{\mathcal P_m^{(b)}}
+    \le B_b\,\frac{b^m}{m}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Put \(L_b:=\log b\). The threshold used below is obtained by the
+  following finite algorithm. Start with
+  \(M\ge2\) satisfying \(b^{M-1}\ge X_0\). Increase \(M\) until
+  \(1-m/(b(m-1))\ge(1-1/b)/2\) for all \(m\ge M\), which is certified
+  from the identity
+  \(1-m/(b(m-1))=(b-1)/b-1/(b(m-1))\). Then increase \(M\) until
+  \[
+    C_{\pi,1}\left(\frac{1}{mL_b^2}
+      +\frac{m}{b(m-1)^2L_b^2}\right)
+      +\frac{2m}{b^m}
+    \le
+    \frac{1}{2L_b}
+      \left(1-\frac{m}{b(m-1)}\right).
+  \]
+  To make the last step reproducible, note that the two rational
+  functions \(1/m\) and \(m/(m-1)^2\) are decreasing for \(m\ge2\), and
+  \(m/b^m\) is decreasing for \(m\ge1/\log b\). The right-hand side is
+  increasing in \(m\). Thus after
+  \(M_{\mathrm{mon}}:=\max\{2,\lceil1/\log b\rceil+1\}\), it is enough
+  to test the displayed inequality at the candidate value \(M\); the
+  finitely many smaller \(m\) between the initial lower bound and
+  \(M_{\mathrm{mon}}\) are checked directly. Let \(M_b\) be the first
+  candidate accepted by this procedure. This produces a reproducible
+  value of \(M_b\), not an unspecified asymptotic threshold.
+  The leading-digit convention gives the exact half-open interval count
+  \[
+    \abs{\mathcal P_m^{(b)}}=\pi(b^m-1)-\pi(b^{m-1}-1).
+  \]
+  Applying the interval-count convention after
+  \Cref{lem:explicit-pnt-input}, the endpoint correction is the visible
+  inequality
+  \[
+    \left|
+      \abs{\mathcal P_m^{(b)}}-
+      \bigl(\pi(b^m)-\pi(b^{m-1})\bigr)
+    \right|\le 2,
+  \]
+  valid for every \(m\ge1\). Equivalently, this is
+  \[
+    \pi(b^m)-\pi(b^{m-1})+O(1),
+  \]
+  with the displayed absolute constant. For \(m\ge M_b\), the explicit
+  estimate in \Cref{lem:explicit-pnt-input} gives
+  \[
+    \pi(b^m)-\pi(b^{m-1})
+    \ge
+    \frac{b^m}{m\log b}
+    -\frac{b^{m-1}}{(m-1)\log b}
+    -C_{\pi,1}\frac{b^m}{m^2(\log b)^2}
+    -C_{\pi,1}\frac{b^{m-1}}{(m-1)^2(\log b)^2}.
+  \]
+  Since
+  \[
+    \frac{b^m}{m\log b}
+    -\frac{b^{m-1}}{(m-1)\log b}
+    =
+    \frac{b^m}{m\log b}
+    \left(1-\frac{m}{b(m-1)}\right),
+  \]
+  the choice of \(M_b\), together with the endpoint \(O(1)\), gives the
+  explicit lower bound
+  \[
+    \abs{\mathcal P_m^{(b)}}
+    \ge
+    \frac{1}{2\log b}
+    \left(1-\frac{m}{b(m-1)}\right)\frac{b^m}{m}.
+  \]
+  By construction,
+  \(1-m/(b(m-1))\ge (1-1/b)/2\), so one may take
+  \[
+    A_b:=\frac{1-1/b}{4\log b}.
+  \]
+  The upper bound follows from
+  \[
+    \abs{\mathcal P_m^{(b)}}\le\pi(b^m)
+      \le C_{\pi,2}\frac{b^m}{m\log b},
+  \]
+  so \(B_b:=C_{\pi,2}/\log b\) is admissible for all \(m\ge M_b\).
+\end{proof}
+
+\begin{lemma}[Certified spectral decay for a fixed residue class]
+  \label{lem:effective-spectral-constants}
+  Let \(P\) be a rational stochastic matrix. Suppose that the recurrent
+  classes and their cyclic decompositions have been computed, and let
+  \(D_A\) be a common multiple of the recurrent periods. For each
+  residue class \(r\bmod D_A\) there is an algorithm which outputs
+  rational numbers \(0<\tau_r<\theta_r<1\), \(K_r>0\), and an integer
+  \(N_r\) such that
+  \[
+    \|P^m-S_r\|_\infty\le K_r\theta_r^m
+    \qquad(m\equiv r\bmod D_A,\ m\ge N_r),
+  \]
+  where \(S_r=\lim_{k\to\infty}P^{kD_A+r}\). The output includes a
+  finite certificate consisting of the strict inequalities
+  \[
+    \rho(T)<\tau_r,\qquad
+    \rho(Q_{j,t}-\Pi_{j,t})<\tau_r^{d_j},
+  \]
+  where \(T=P_{TT}\), \(Q_{j,t}=P^{d_j}|_{R_{j,t}}\) is the primitive
+  return chain on the cyclic class \(R_{j,t}\), and
+  \(\Pi_{j,t}=\mathbf 1\pi_{j,t}\), plus rational resolvent bounds. The
+  proof object also records, for each residue, an integer polynomial
+  degree \(J_r\), a monotonicity threshold for the inequality
+  \(C_rm^{J_r}\tau_r^m\le K_r\theta_r^m\), and the finite list of exact
+  rational matrix inequalities checked below that threshold. We assert
+  computability of these data; no polynomial bit-complexity or
+  output-sensitive complexity bound is claimed.
+\end{lemma}
+
+\begin{proof}
+  Put \(P\) in canonical Markov-chain block form. The decaying blocks
+  are the transient block \(T=P_{TT}\) and, for each recurrent cyclic
+  class \(R_{j,t}\), the return-error block
+  \(E_{j,t}:=Q_{j,t}-\Pi_{j,t}\). The block \(T\) has spectral radius
+  \(<1\), and each \(E_{j,t}\) has spectral radius \(<1\) because
+  \(Q_{j,t}\) is primitive stochastic.
+
+  Compute the characteristic polynomials of these rational blocks and
+  isolate their complex roots as algebraic numbers. If the finite list
+  of roots is empty, take \(\tau_r=1/3\) and \(\theta_r=1/2\). Otherwise
+  choose a rational \(\tau_r\in(0,1)\) such that all eigenvalues of
+  \(T\) have modulus \(<\tau_r\) and all eigenvalues of every
+  \(E_{j,t}\) have modulus \(<\tau_r^{d_j}\); then choose any rational
+  \(\theta_r\) with \(\tau_r<\theta_r<1\). Each strict comparison is
+  certified by rational isolating rectangles whose squared moduli lie
+  below the corresponding rational threshold. This gives the
+  spectral-radius part of the certificate, including the case in which
+  there are no non-peripheral roots to control.
+
+  It remains to turn spectral separation into a bound on powers without
+  invoking a Jordan basis. Let \(A\) be any one of the rational blocks
+  and let \(\eta\in(0,1)\) be the corresponding block rate
+  (\(\eta=\tau_r\) for \(T\), and
+  \(\eta=\tau_r^{d_j}\) for \(E_{j,t}\)). Choose a rational
+  \(\gamma\) with \(\rho(A)<\gamma<\eta\). From the root isolating
+  rectangles we compute a rational \(\delta>0\) such that
+  \[
+    |\det(zI-A)|\ge\delta\qquad(|z|=\gamma).
+  \]
+  Indeed, if \(R_\xi\) is the isolating rectangle for a root \(\xi\),
+  exact rational interval arithmetic gives a positive rational lower
+  bound \(\Delta_\xi\) for
+  \(\inf\{|z-w|:|z|=\gamma,\ w\in R_\xi\}\); positivity follows from
+  \(\rho(A)<\gamma\) and from the disjoint certified rectangles. The
+  characteristic polynomial is monic, so the
+  product \(\prod_\xi\Delta_\xi\) is a valid determinant lower bound,
+  with one factor for each root counted with algebraic multiplicity. The
+  adjugate entries of
+  \(zI-A\) are polynomials in \(z\), so their absolute values on the
+  same circle have an elementary rational upper bound \(U\) obtained
+  from the coefficients of \(A\) and the identity \(|z|=\gamma\).
+  Cauchy's formula
+  for the matrix resolvent gives
+  \[
+    A^m=\frac{1}{2\pi i}\int_{|z|=\gamma}z^m(zI-A)^{-1}\,dz,
+    \qquad
+    \|A^m\|_\infty\le L_A\gamma^m\le L_A\eta^m,
+  \]
+  where \(L_A\) is a rational number computed from \(U,\delta,\gamma\),
+  and the dimension of \(A\). The data
+  \((\gamma,\delta,U,L_A)\) are the resolvent certificate for \(A\).
+
+  We now spell out the finite block normal form used by the verifier.
+  In the canonical order \(T,R_1,\ldots,R_s\), and for
+  \(m\equiv r\bmod D_A\), the only non-zero blocks of \(P^m-S_r\) are
+  of the following types.
+  \[
+    T^m,\qquad C_j^m-C_{j,r}^{\infty},
+  \]
+  on the diagonal, and
+  \[
+    \sum_{\ell=0}^{m-1}
+      T^\ell P_{T,R_j}\bigl(C_j^{m-1-\ell}-C_{j,r-\ell-1}^{\infty}\bigr)
+      -
+    \sum_{\ell=m}^{\infty}
+      T^\ell P_{T,R_j}C_{j,r-\ell-1}^{\infty}
+  \]
+  in the transient-to-\(R_j\) block. Here \(C_{j,a}^{\infty}\) is the
+  rational limit of \(C_j^n\) along \(n\equiv a\bmod d_j\); explicitly
+  its rows supported on \(R_{j,t}\) are equal to
+  \(\pi_{j,t+a}\) on \(R_{j,t+a}\) and zero elsewhere. For each
+  \(a\bmod d_j\) let
+  \(G_{j,u}:=P_{R_{j,u},R_{j,u+1}}\) and
+  \(W_{j,t,a}:=G_{j,t}G_{j,t+1}\cdots G_{j,t+a-1}\), with
+  \(W_{j,t,0}\) the identity on \(R_{j,t}\). The certificate expands
+  \(C_j^{d_jh+a}-C_{j,a}^{\infty}\), for \(h\ge1\), as the finite
+  rational sum
+  \[
+    \sum_{t=0}^{d_j-1}
+      M_{j,t,a}(h),
+  \]
+  where \(M_{j,t,a}(h)\) is the full \(R_j\times R_j\) matrix whose only
+  non-zero block is the block from rows \(R_{j,t}\) to columns
+  \(R_{j,t+a}\), equal to \(W_{j,t,a}E_{j,t+a}^{h}\). The case \(h=0\)
+  is one of the finitely many initial powers checked directly. The
+  verifier checks the identity for \(0\le a<d_j\) by multiplying the
+  listed rational cyclic blocks and using
+  \(Q_{j,t+a}^{h}-\Pi_{j,t+a}=E_{j,t+a}^{h}\) for \(h\ge1\). Thus every
+  summand is a listed rational connector product containing either
+  \(T^n\), one \(E_{j,t}^n\), or one convolution of such powers.
+
+  The resolvent bounds above dominate a listed direct product
+  \(X A^n Y\) by
+  \(\|X\|_\infty L_A\|Y\|_\infty\eta^n\). A listed finite convolution is
+  first split by writing \(\ell=u+D_Aq\). If
+  \(m-1-u=d_jH_{m,u}+a\), with \(0\le a<d_j\), then its recurrent
+  return-error exponent is \(H_{m,u}-L_jq\), where
+  \(L_j=D_A/d_j\). Thus a residue summand has the form
+  \[
+    \sum_q X_uT^{D_Aq}Y_uE_{j,t_u}^{H_{m,u}-L_jq}Z_u,
+  \]
+  with the terms having non-positive recurrent exponent placed in the
+  finite direct-check list. For the remaining terms the product of the
+  two exponential bounds is
+  \[
+    \tau_r^{u+D_Aq}\tau_r^{d_jH_{m,u}-D_Aq}
+      =\tau_r^{m-1-a},
+  \]
+  so the \(q\)-dependence cancels. Since there are at most \(m\) terms
+  and only finitely many residues \(u,a\), exact rational norm bounds
+  give a listed inequality \(C\,m\tau_r^m\) after absorbing
+  \(\tau_r^{-1-a}\) into \(C\). The infinite tail above is bounded by the
+  listed geometric estimate
+  \[
+    \sum_{\ell=m}^{\infty}
+      \|T^\ell\|_\infty\|P_{T,R_j}\|_\infty
+      \|C_{j,r-\ell-1}^{\infty}\|_\infty
+    \le
+    \frac{L_T\|P_{T,R_j}\|_\infty}{1-\tau_r}\tau_r^m .
+  \]
+  Adding the finitely many rational coefficients gives explicit
+  \(C_r>0\) and \(J_r\le1\) with
+  \[
+    \|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m
+    \qquad(m\equiv r\bmod D_A),
+  \]
+  after increasing \(C_r\) to absorb the finitely many omitted small
+  exponents and the harmless factor \(\tau_r^{-1}\). This is the only
+  polynomial loss retained in the certificate: the block and convolution
+  estimates are first made at the strict rate \(\tau_r\), and the final
+  advertised rate \(\theta_r\) is introduced only after choosing
+  \(\theta_r\in(\tau_r,1)\). Since \(\tau_r/\theta_r<1\), the rational
+  sequence \(m^{J_r}(\tau_r/\theta_r)^m\) is eventually decreasing and
+  tends to \(0\). A finite rational search therefore produces \(K_r\)
+  and \(N_r\) such that
+  \[
+    C_rm^{J_r}\tau_r^m\le K_r\theta_r^m
+    \qquad(m\ge N_r).
+  \]
+  The certificate records both rates, namely the block rate \(\tau_r\)
+  and the final output rate \(\theta_r\), together with
+  \(C_r,J_r,K_r,N_r\) and the explicit monotone-tail threshold. The
+  finitely many powers in the
+  residue class below that threshold are checked directly by rational
+  matrix powering and are included as exact inequalities; if necessary,
+  \(K_r\) is enlarged before the certificate is printed. Thus the
+  certificate verifies the displayed inequality for all
+  \(m\equiv r\bmod D_A\) with \(m\ge N_r\).
+
+  Thus the verifier never appeals to an unnamed finite-chain formula.
+  Its normal form for each entry of \(P^m-S_r\) is the explicit finite
+  list consisting of the direct transient powers \(T^m\), the recurrent
+  return-error terms \(W_{j,t,a}E_{j,t+a}^h\), the residue-grouped
+  convolutions just displayed, and the geometric resolvent tails
+  \((I-T^{D_A})^{-1}T^u\). Each listed matrix is rational once the
+  stationary vectors and cyclic projections have been solved over
+  \(\QQ\), and each inequality is reduced to rational norm bounds plus
+  the certified root-isolation comparisons above.
+\end{proof}
+
+\begin{theorem}[Algorithmic fixed-DFA prime-slice obstruction]
+  \label{thm:effective-fixed-dfa-prime-obstruction}
+  Fix \(b\ge2\) and a complete DFA
+  \(\mathcal A=(Q,\Sigma_b,\delta,q_0,F)\), encoded by its integer
+  transition table. Let \(B\) be its unlabeled transition matrix and
+  \(P=B/b\). There is an algorithm which outputs the following
+  compressed exact certificate.
+  \begin{enumerate}[label=\textup{(\alph*)}]
+    \item The transient set \(T\), the recurrent classes
+    \(R_1,\dots,R_s\) of \(P\), their periods \(d_j\), and cyclic
+    decompositions \(R_{j,0},\dots,R_{j,d_j-1}\).
+    \item For every \(j,t\), the stationary probability vector
+    \(\pi_{j,t}\) of the primitive return chain
+    \(P^{d_j}|_{R_{j,t}}\), with rational entries.
+    \item The absorption probabilities \(H_j(q)\), \(q\in T\), obtained
+    from
+    \[
+      (I-P_{TT})H_j=P_{T,R_j}\mathbf 1,
+    \]
+    and the refined cyclic absorption probabilities
+    \[
+      A_{j,t}(q)
+      :=\sum_{\ell\ge0}
+        e_q^{\mathsf T}P_{TT}^{\ell}P_{T,R_j}
+        S_{j,t+\ell+1}\mathbf 1 ,
+    \]
+    where indices are taken modulo \(d_j\) and
+    \(S_{j,u}\) is the cyclic projection onto \(R_{j,u}\).
+    Thus, conditional on absorption after \(\ell\) transient steps, the
+    recurrent entry class is chosen so that at every later time
+    \(m\equiv r\pmod {d_j}\) the recurrent chain lies in
+    \(R_{j,t+r}\). The displayed series is evaluated exactly as a
+    finite family of linear solves after grouping \(\ell\) modulo
+    \(d_j\), namely
+    \[
+      A_{j,t}
+      =
+      \sum_{u=0}^{d_j-1}
+      (I-P_{TT}^{d_j})^{-1}P_{TT}^uP_{T,R_j}
+      S_{j,t+u+1}\mathbf 1 .
+    \]
+    \item For each residue \(r\) modulo
+    \(D_A=\operatorname{lcm}_j d_j\), the compressed formula
+    \[
+      c_r=
+      \sum_{j=1}^s\sum_{t=0}^{d_j-1}
+      \alpha_{j,t}^{(r)}\,
+      \pi_{j,t+r}(F\cap R_{j,t+r}),
+      \tag{\(*\)}
+      \label{eq:compressed-cr}
+    \]
+    where
+    \[
+      \alpha_{j,t}^{(r)}=
+      \begin{cases}
+        1, & q_0\in R_{j,t},\\
+        A_{j,t}(q_0), & q_0\in T,\\
+        0, & \text{otherwise.}
+      \end{cases}
+    \]
+    Again all cyclic indices are read modulo \(d_j\). This formula
+    decides \(c_r=0\) or \(c_r>0\) by exact rational arithmetic.
+    \item Rational constants \(0<\tau_r<\theta_r<1\), \(K_r>0\), and
+    integer thresholds \(N_r\) such that
+    \[
+      \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
+      \qquad(m\equiv r\pmod {D_A},\ m\ge N_r).
+    \]
+    Here \(\tau_r\) is the certified decay rate for the transient and
+    return-error blocks, while \(\theta_r\) is the larger final
+    exponential rate after the polynomial convolution factor has been
+    absorbed. The certificate records the strict spectral-radius
+    inequalities and rational resolvent bounds of
+    \Cref{lem:effective-spectral-constants}, including the rational
+    numbers \(\tau_r,\theta_r\), rational upper bounds \(K_r\), the
+    monotone tail threshold, and the finite list of exact rational
+    inequalities checked before the tail. These data are enough to
+    verify the inequality mechanically, without reconstructing an
+    algebraic Jordan basis.
+  \end{enumerate}
+  \smallskip
+  \noindent\textit{Certificate schema.}
+  For each residue class the certificate schema consists of the
+  following fields, all represented by rational data except for the
+  root-isolation rectangles.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item Rational matrices \(P,T,Q_{j,t},E_{j,t}=Q_{j,t}-\Pi_{j,t}\),
+    the cyclic projections \(S_{j,t}\), and the rational vectors
+    \(\pi_{j,t},A_{j,t}\) solving the displayed linear systems.
+    The norm convention throughout the schema is the
+    \(\ell^\infty\) operator norm, i.e. maximum absolute row sum.
+    \item Rational numbers \(c_r,\tau_r,\theta_r,K_r,C_r\), integers
+    \(J_r,N_r\), and a tail threshold \(N_r^{\mathrm{tail}}\), with
+    \(0<\tau_r<\theta_r<1\).
+    \item Root-isolation certificates for every characteristic
+    polynomial: rational rectangles, each containing exactly one complex
+    root and disjoint from the others, whose squared-modulus intervals
+    certify \(\rho(T)<\tau_r\) and
+    \(\rho(E_{j,t})<\tau_r^{d_j}\). The verifier checks these by
+    Sturm--subdivision or any equivalent exact rational root-counting
+    procedure on the rectangles and by rational interval arithmetic for
+    the squared moduli.
+    \item Resolvent certificates
+    \((\gamma_A,\delta_A,U_A,L_A)\) for
+    \(A\in\{T\}\cup\{E_{j,t}\}_{j,t}\), with
+    \(\rho(A)<\gamma_A<\tau_r\) for \(A=T\) and
+    \(\rho(A)<\gamma_A<\tau_r^{d_j}\) for \(A=E_{j,t}\). The verifier
+    checks, using the same isolating rectangles and rational interval
+    arithmetic, that every rectangle lies strictly inside the circle
+    \(|z|=\gamma_A\) and supplies a positive rational distance
+    \(\Delta_\xi\) from the rectangle to that circle. Therefore
+    \[
+      |\det(zI-A)|\ge \prod_{\xi}\Delta_\xi=:\delta_A
+      \qquad(|z|=\gamma_A),
+    \]
+    with roots counted with algebraic multiplicity. The verifier also
+    checks the elementary coefficient bound
+    \[
+      \|\operatorname{adj}(zI-A)\|_\infty\le U_A,
+    \]
+    and hence that \(\|A^n\|_\infty\le L_A\gamma_A^n\) for all
+    \(n\ge0\).
+    \item A rational block-form expansion of \(P^m-S_r\) on the residue
+    class \(m\equiv r\pmod {D_A}\). For every recurrent block \(R_j\)
+    and residue \(a\bmod d_j\) the data include the rational cyclic step
+    matrices \(G_{j,u}=P_{R_{j,u},R_{j,u+1}}\), their products
+    \(W_{j,t,a}=G_{j,t}\cdots G_{j,t+a-1}\), the rational limit matrix
+    \(C_{j,a}^{\infty}\), and the checked identities
+    \[
+      C_j^{d_jh+a}-C_{j,a}^{\infty}
+      =
+      \sum_t M_{j,t,a}(h)
+    \]
+    for \(h\ge1\), where \(M_{j,t,a}(h)\) has only the
+    \(R_{j,t}\)-to-\(R_{j,t+a}\) block \(W_{j,t,a}E_{j,t+a}^h\)
+    non-zero. The finitely many \(h=0\) cases are checked directly. The
+    data also include, for every transient-to-\(R_j\) block, the exact
+    identity
+    \[
+      (P^m-S_r)_{T,R_j}
+      =
+      \sum_{\ell=0}^{m-1}
+        T^\ell P_{T,R_j}
+        \bigl(C_j^{m-1-\ell}-C_{j,r-\ell-1}^{\infty}\bigr)
+      -
+      \sum_{\ell=m}^{\infty}
+        T^\ell P_{T,R_j}C_{j,r-\ell-1}^{\infty}.
+    \]
+    These are finite rational identities: the second infinite sum is
+    verified after grouping \(\ell\bmod D_A\) as a finite list of
+    geometric resolvents \((I-T^{D_A})^{-1}T^u\). The verifier checks
+    each displayed identity by rational matrix multiplication and exact
+    inversion over \(\QQ\). For the first finite convolution, the
+    verifier further splits \(\ell=u+D_Aq\). If the recurrent factor in
+    that residue has length \(m-1-\ell=d_jh+a\), with
+    \(0\le a<d_j\), then
+    \[
+      h=H_{m,u}-L_jq,\qquad
+      L_j:=D_A/d_j,\qquad
+      H_{m,u}:=(m-1-u-a)/d_j .
+    \]
+    The integer \(a\) is fixed by the listed residue class, so
+    \(H_{m,u}\) is integral and the return-error exponent decreases as
+    \(q\) increases. The certificate records only the terms with
+    \(H_{m,u}-L_jq\ge1\); the finitely many smaller recurrent exponents
+    are moved to the direct finite-check list. The resulting finite
+    residue list is
+    \[
+      \sum_{q=0}^{Q(m,u)}
+        X_{u}T^{D_Aq}Y_{u}E_{j,t_u}^{H_{m,u}-L_jq}Z_{u},
+    \]
+    with all matrices \(X_u,Y_u,Z_u\) rational. This is the normal form
+    for every convolution term.
+    \item The exact convolution bounds attached to the preceding
+    expansion. For every direct term \(X A^nY\) the certificate lists
+    the rational product
+    \(\|X\|_\infty L_A\|Y\|_\infty\eta^n\). For every convolution term
+    it lists the rational coefficient
+    \[
+      C_u=\|X_u\|_\infty L_T\|Y_u\|_\infty
+        L_{E_{j,t_u}}\|Z_u\|_\infty\tau_r^{-1-a}
+    \]
+    for the corresponding residue \(u,a\); if \(a=0\), this means the
+    same displayed formula with the factor \(\tau_r^{-1}\). Indeed
+    \(T^{D_Aq}\) contributes at most \(\tau_r^{D_Aq}\), while
+    \(E_{j,t_u}^{H_{m,u}-L_jq}\) contributes at most
+    \(\tau_r^{d_jH_{m,u}-D_Aq}\); the \(q\)-dependence cancels, and the
+    identity \(m-1-u=d_jH_{m,u}+a\) gives a contribution bounded by
+    \(C_u\tau_r^m\) for each \(q\). The number of terms is at most \(m\),
+    so the residue summand is bounded by \(C_um\tau_r^m\). For every
+    tail it lists the
+    rational coefficient in
+    \(C\,\tau_r^m/(1-\tau_r^{D_A})\). Summing these finitely many
+    coefficients gives the stated coefficient bound
+    proving
+    \[
+      \|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m
+      \qquad(m\equiv r\pmod {D_A}).
+    \]
+    \item The rational tail inequality
+    \[
+      C_rm^{J_r}\tau_r^m\le K_r\theta_r^m
+      \qquad(m\ge N_r^{\mathrm{tail}})
+    \]
+    and exact rational matrix-power checks for every
+    \(m<N_r^{\mathrm{tail}}\) in the residue class that is not covered
+    by the tail. The displayed exponential estimate is accepted with
+    \(N_r\) no smaller than both the finite-check cutoff and
+    \(N_r^{\mathrm{tail}}\).
+  \end{enumerate}
+  \smallskip
+  \noindent\textit{Certificate-verifier theorem.}
+  Given the fields just listed, there is a finite verifier which accepts
+  if and only if the following rational assertions all check:
+  the stochastic block decomposition is a permutation of \(P\); each
+  \(C_{j,a}^{\infty}\), \(\pi_{j,t}\), and \(A_{j,t}\) satisfies its
+  displayed linear equations; the root-isolation rectangles prove the
+  strict spectral-radius inequalities; the resolvent certificates prove
+  the listed bounds for every decaying block; the finite block normal
+  form for \(P^m-S_r\) is exactly the one displayed in the preceding
+  two items; the summed direct, convolution, and tail coefficients give
+  \(\|P^m-S_r\|_\infty\le C_rm^{J_r}\tau_r^m\) on the residue class;
+  the finitely many pre-tail powers satisfy the same advertised
+  estimate after enlargement of \(K_r\); and the rational monotone-tail
+  inequality gives \(C_rm^{J_r}\tau_r^m\le K_r\theta_r^m\). All steps
+  use rational matrix arithmetic, exact inverses over \(\QQ\), finite
+  root counts in rational rectangles, and rational interval arithmetic.
+  No unlisted block formula or limiting argument is part of the
+  verification step.
+  With this output, the following holds for every
+  \(m\ge M_r\) satisfying \(m\equiv r\pmod {D_A}\).
+  If \(c_r=0\), then
+  \[
+    a_m(\mathcal A)\le K_r\theta_r^m b^m
+    \quad\text{and}\quad
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge \frac{A_b}{2}\,\frac{b^m}{m}.
+  \]
+  If \(c_r>0\), then
+  \[
+    a_m(\mathcal A)\ge \frac{c_r}{2}b^m,
+    \qquad
+    \mathrm{Prec}_m\le \frac{2B_b}{c_r}\,\frac1m,
+  \]
+  whenever \(\mathrm{Prec}_m\) is defined, i.e. on lengths where the
+  denominator is nonzero, and
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge \frac{c_r}{4} b^m .
+  \]
+  Here \(A_b,B_b,M_b\) may be the explicit constants supplied by
+  \Cref{lem:base-prime-count}. Consequently
+  one computes constants \(c_{\mathcal A,b}>0\) and \(M_{\mathcal A,b}\)
+  such that
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge c_{\mathcal A,b}\,\frac{b^m}{m}
+    \qquad(m\ge M_{\mathcal A,b}).
+  \]
+  The compressed output is the tuple
+  \[
+    \mathcal C=(D_A,\{R_j,d_j,(R_{j,t})_t,\pi_{j,t},A_{j,t}\}_{j,t},
+      \{c_r,\tau_r,\theta_r,K_r,C_r,J_r,N_r,M_r\}_{r\bmod D_A})
+  \]
+  when all residues are enumerated. If \(D_A\) is large, the same data
+  may instead be represented by the class list together with an exact
+  residue-evaluation procedure for
+  \(r\mapsto c_r,\tau_r,\theta_r,K_r,C_r,J_r,N_r,M_r\) and the
+  corresponding proof object from part~\textup{(e)};
+  any final all-large constant obtained by taking a minimum over
+  residues is then represented by this finite minimization procedure.
+  Printing the full residue table is charged to output size \(D_A\).
+  No polynomial bound in the input size alone is asserted for the
+  spectral certificate, for enumerating all residues, or for the final
+  minimization.
+\end{theorem}
+
+\begin{proof}
+  Compute the matrix \(B=\sum_{d\in\Sigma_b}T_d\), the stochastic matrix
+  \(P=B/b\), the transient set, the recurrent classes, their periods,
+  their cyclic decompositions, and the common period \(D_A\) by standard
+  graph algorithms. The vectors \(\pi_{j,t}\) are the unique solutions
+  of
+  \[
+    \pi_{j,t}P^{d_j}|_{R_{j,t}}=\pi_{j,t},
+    \qquad
+    \pi_{j,t}\mathbf 1=1.
+  \]
+  Because \(P\) has rational entries, these vectors are rational and
+  are obtained by rational Gaussian elimination. The absorption
+  probabilities \(H_j\) solve the displayed systems in the statement;
+  the matrix \(I-P_{TT}\) is invertible because \(T\) is transient.
+  For the cyclic refinements, group the defining series for
+  \(A_{j,t}\) by \(\ell\equiv u\pmod{d_j}\). Each group is a
+  rational expression in
+  \[
+    (I-P_{TT}^{d_j})^{-1}P_{TT}^uP_{T,R_j}S_{j,t+u+1}\mathbf 1,
+  \]
+  hence is again computed by exact rational linear algebra. Formula
+  \eqref{eq:compressed-cr} is precisely the canonical block-power limit
+  of \(u^{\mathsf T}P^m v\) along \(m\equiv r\pmod {D_A}\). Indeed,
+  suppose the chain starts in a transient state \(q\), remains
+  transient for exactly \(\ell\) steps, and then enters \(R_j\) at time
+  \(\ell+1\) in cyclic class \(R_{j,u}\). Because \(P\) maps
+  \(R_{j,a}\) into \(R_{j,a+1}\), at a later time
+  \(m\equiv r\pmod {d_j}\) its recurrent cyclic class is
+  \[
+    u+m-(\ell+1)\equiv u+r-\ell-1 \pmod {d_j}.
+  \]
+  To contribute to the limiting distribution
+  \(\pi_{j,t+r}\) on \(R_{j,t+r}\), the entry class must therefore
+  satisfy \(u+r-\ell-1\equiv t+r\), equivalently
+  \(u\equiv t+\ell+1\pmod {d_j}\). This is exactly the projection
+  \(S_{j,t+\ell+1}\) in the definition of \(A_{j,t}\). Conditioning on
+  the absorption time and then applying the primitive return-chain limit
+  on \(R_{j,t+r}\) proves \eqref{eq:compressed-cr}.
+
+  Applying \Cref{lem:effective-spectral-constants} to \(P\) and
+  \(D_A\) gives \(\tau_r,\theta_r,K_r,N_r\) and
+  \[
+    \abs{a_m(\mathcal A)/b^m-c_r}\le K_r\theta_r^m
+    \qquad(m\equiv r\bmod {D_A},\ m\ge N_r).
+  \]
+  The associated certificate consists of rational
+  \(\tau_r,\theta_r,K_r,C_r\), the integer \(J_r\), the
+  spectral-radius proof objects for the transient and return-error
+  blocks, the rational resolvent bounds, the rational inequality
+  \(C_rm^{J_r}\tau_r^m\le K_r\theta_r^m\) on the tail, and the finite
+  rational power checks preceding the tail. Thus the quantified
+  inequality used below is part of the output, not an unverifiable
+  analytic side condition.
+
+  Choose \(A_b,B_b>0\) and \(M_b\) from
+  \Cref{lem:base-prime-count}, so that
+  \[
+    A_b\,\frac{b^m}{m}
+    \le\abs{\mathcal P_m^{(b)}}
+    \le B_b\,\frac{b^m}{m}
+    \qquad(m\ge M_b).
+  \]
+  If \(c_r=0\), take \(M_r\ge \max(M_b,N_r)\) to be any integer in the
+  residue class tail satisfying
+  \[
+    K_r\theta_r^m\le \frac{A_b}{2m}
+    \qquad(m\ge M_r,\ m\equiv r\bmod {D_A}).
+  \]
+  Since \(K_r\) and \(\theta_r\) are rational, this threshold is
+  obtained by checking finitely many values before monotonicity of
+  \(mK_r\theta_r^m\) begins and then recording the first value after
+  which the monotone tail is below \(A_b/2\).
+  For \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\),
+  \[
+    a_m(\mathcal A)\le \frac{A_b}{2}\frac{b^m}{m},
+  \]
+  so the symmetric difference is at least
+  \(A_b b^m/(2m)\).
+
+  If \(c_r>0\), take \(M_r\ge \max(M_b,N_r)\) so that
+  \[
+    K_r\theta_r^m\le c_r/2,
+    \qquad
+    B_b/m\le c_r/4
+  \]
+  for all \(m\ge M_r\) with \(m\equiv r\bmod {D_A}\). This is again a
+  rational monotone-tail check.
+  Then \(a_m(\mathcal A)\ge(c_r/2)b^m\), whence
+  \[
+    \mathrm{Prec}_m
+    \le\frac{\abs{\mathcal P_m^{(b)}}}{a_m(\mathcal A)}
+    \le\frac{2B_b}{c_r}\frac1m,
+  \]
+  and
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge a_m(\mathcal A)-\abs{\mathcal P_m^{(b)}}
+    \ge \frac{c_r}{4}b^m.
+  \]
+  This proves the positive-density lower bound.
+
+  Taking
+  \(M_{\mathcal A,b}:=\max_r M_r\) and the minimum over the finitely many
+  positive constants \(A_b/2\) and \(c_r/4\) appearing above gives the
+  final all-large-\(m\) constant after replacing \(c_r b^m/4\) by the
+  weaker \(c_r b^m/(4m)\) in the positive-density residue classes.
+  The output statement follows from strongly connected component and
+  period algorithms, exact rational linear algebra, root isolation for
+  the finitely many characteristic polynomials, and the certified
+  resolvent construction in \Cref{lem:effective-spectral-constants}.
+  The certificate is compressed by recurrent class and cyclic class.
+  Printing all residues, and taking the final minimum by enumeration,
+  are charged to the chosen output representation.
+\end{proof}
+
+\begin{example}[Two explicit certificates]
+  \label{ex:base-ending-zero-certificate}
+  Let \(\mathcal A_0\) be the complete DFA over \(\Sigma_b\) accepting
+  exactly the non-empty words ending in \(0\). It has states
+  \(q_0,q_1\), initial state \(q_0\), accepting set \(\{q_1\}\), and
+  transitions
+  \[
+    \delta(q_i,0)=q_1,\qquad
+    \delta(q_i,d)=q_0\quad(1\le d\le b-1).
+  \]
+  Its unlabeled transition matrix and stochastic matrix are
+  \[
+    B=\begin{pmatrix} b-1&1\\ b-1&1\end{pmatrix},
+    \qquad
+    P=\begin{pmatrix} (b-1)/b&1/b\\ (b-1)/b&1/b\end{pmatrix}.
+  \]
+  There is one recurrent aperiodic class \(R_1=\{q_0,q_1\}\), no
+  transient state, \(d_1=D_A=1\), and
+  \[
+    \pi_{1,0}=\bigl((b-1)/b,\;1/b\bigr),\qquad
+    c_0=\pi_{1,0}(\{q_1\})=1/b.
+  \]
+  Since \(P^2=P\), one may take \(S_0=P\), \(N_0=1\), any rational
+  \(0<\tau_0<\theta_0<1\), and any rational \(K_0>0\) for the advertised
+  convergence estimate on all \(m\ge1\). Equivalently,
+  \(a_m(\mathcal A_0)=b^{m-1}\) and
+  \(a_m(\mathcal A_0)/b^m=1/b\) for every \(m\ge1\).
+
+  Let \(A_b,B_b,M_b\) be the constants from
+  \Cref{lem:base-prime-count}. The positive-density branch of
+  \Cref{thm:effective-fixed-dfa-prime-obstruction} may therefore use the
+  explicit threshold
+  \[
+    M_0:=\left\lceil\max\{M_b,4bB_b\}\right\rceil .
+  \]
+  For every \(m\ge M_0\),
+  \[
+    \mathrm{Prec}_m
+    \le
+    \frac{\abs{\mathcal P_m^{(b)}}}{a_m(\mathcal A_0)}
+    \le
+    \frac{bB_b}{m},
+  \]
+  on lengths where the denominator is nonzero, and
+  \[
+    \abs{(L(\mathcal A_0)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    \ge
+    b^{m-1}-B_b\frac{b^m}{m}
+    \ge
+    \frac{1}{2b}b^m .
+  \]
+  Thus the certificate has \(D_A=1\), \(c_0=1/b\), precision constant
+  \(bB_b\), symmetric-difference constant \(1/(2b)\) on the stronger
+  \(b^m\) scale, and the final theorem also permits the weaker constant
+  \(1/(2b)\) on the \(b^m/m\) scale.
+
+  The empty DFA gives the complementary sparse branch. Here
+  \(a_m=0\), \(c_0=0\), and any rational \(K_0>0\) is admissible. Hence, for all
+  \(m\ge M_b\),
+  \[
+    \abs{(\varnothing\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    =
+    \abs{\mathcal P_m^{(b)}}
+    \ge
+    A_b\frac{b^m}{m}.
+  \]
+\end{example}
 
 We first establish the quantitative obstruction that drives both
 corollaries below.
@@ -203,9 +1062,25 @@ corollaries below.
     \le \delta^{-1}\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}
     \le \delta^{-1}\abs{\mathcal P_m^{(b)}}.
   \]
-  Since \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), the displayed chain
-  gives \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set of lengths.
-  This is impossible by \Cref{thm:dfa-density-dichotomy}.
+  By \Cref{lem:base-prime-count}, the displayed chain gives
+  \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set \(M\) of lengths.
+
+  Let \(D_A\), \(c_0,\dots,c_{D_A-1}\), and \(\theta\) be supplied by
+  \Cref{thm:dfa-density-dichotomy}. By the pigeonhole principle, some
+  residue class \(r\bmod D_A\) contains infinitely many lengths from
+  \(M\). Along this infinite subsequence the preceding bounds give
+  positive constants \(K_1,K_2\) such that
+  \[
+    \frac{K_1}{m}\le \frac{a_m(\mathcal A)}{b^m}
+    \le \frac{K_2}{m}.
+  \]
+  If \(c_r=0\), then the density dichotomy gives
+  \(a_m(\mathcal A)/b^m=O(\theta^m)\) on \(m\equiv r\pmod {D_A}\), which is
+  incompatible with \(K_1/m\) on an infinite subsequence. If \(c_r>0\),
+  then \(a_m(\mathcal A)/b^m\ge c_r/2\) for all sufficiently large
+  \(m\equiv r\pmod {D_A}\), which is incompatible with the upper bound
+  \(K_2/m\). Both residue-class alternatives contradict the assumed
+  infinite set \(M\).
 \end{proof}
 
 \begin{corollary}[Symmetric-difference lower bound for base-\(b\) primes]
@@ -226,17 +1101,18 @@ corollaries below.
 \end{corollary}
 
 \begin{proof}
-  Let \(p\ge 1\), \(c_0,\dots,c_{p-1}\ge 0\), and \(\theta\in(0,1)\) be
+  Let \(D_A\ge 1\), \(c_0,\dots,c_{D_A-1}\ge 0\), and \(\theta\in(0,1)\) be
   as in \Cref{thm:dfa-density-dichotomy}. Replacing \(\theta\) by
-  \(\theta^p\) if necessary, we may write for each residue class
-  \(r\bmod p\)
+  \(\theta^{D_A}\) if necessary, we may write for each residue class
+  \(r\bmod D_A\)
   \[
-    \frac{a_{pk+r}(\mathcal A)}{b^{pk+r}}=c_r+O(\theta^k)
+    \frac{a_{D_Ak+r}(\mathcal A)}{b^{D_Ak+r}}=c_r+O(\theta^k)
     \qquad (k\to\infty).
   \]
-  Fix constants \(A,B>0\) such that
+  Fix constants \(A_b,B_b>0\), supplied by
+  \Cref{lem:base-prime-count}, such that
   \[
-    A\,\frac{b^m}{m}\le \abs{\mathcal P_m^{(b)}}\le B\,\frac{b^m}{m}
+    A_b\,\frac{b^m}{m}\le \abs{\mathcal P_m^{(b)}}\le B_b\,\frac{b^m}{m}
   \]
   for all sufficiently large \(m\).
 
@@ -244,34 +1120,35 @@ corollaries below.
 
   If \(c_r=0\), then
   \[
-    a_{pk+r}(\mathcal A)=O(\theta^k b^{pk+r})=o\!\left(\frac{b^{pk+r}}{pk+r}\right).
+    a_{D_Ak+r}(\mathcal A)=O(\theta^k b^{D_Ak+r})
+    =o\!\left(\frac{b^{D_Ak+r}}{D_Ak+r}\right).
   \]
   Hence there exists \(k_r\) such that for all \(k\ge k_r\),
   \[
-    a_{pk+r}(\mathcal A)
-    \le \frac{A}{2}\,\frac{b^{pk+r}}{pk+r}.
+    a_{D_Ak+r}(\mathcal A)
+    \le \frac{A_b}{2}\,\frac{b^{D_Ak+r}}{D_Ak+r}.
   \]
   For those \(k\),
   \[
-    \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
-    \ge \abs{\mathcal P_{pk+r}^{(b)}}-a_{pk+r}(\mathcal A)
-    \ge \frac{A}{2}\,\frac{b^{pk+r}}{pk+r}.
+    \abs{(L(\mathcal A)\cap\Sigma_b^{D_Ak+r})\triangle \mathcal P_{D_Ak+r}^{(b)}}
+    \ge \abs{\mathcal P_{D_Ak+r}^{(b)}}-a_{D_Ak+r}(\mathcal A)
+    \ge \frac{A_b}{2}\,\frac{b^{D_Ak+r}}{D_Ak+r}.
   \]
 
   If \(c_r>0\), then there exists \(k_r\) such that for all \(k\ge k_r\),
   \[
-    a_{pk+r}(\mathcal A)\ge \frac{c_r}{2}\,b^{pk+r}.
+    a_{D_Ak+r}(\mathcal A)\ge \frac{c_r}{2}\,b^{D_Ak+r}.
   \]
   Enlarging \(k_r\) if necessary, we may also ensure that
-  \(B/(pk+r)\le c_r/4\). Then for all such \(k\),
+  \(B_b/(D_Ak+r)\le c_r/4\). Then for all such \(k\),
   \[
-    \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
-    \ge a_{pk+r}(\mathcal A)-\abs{\mathcal P_{pk+r}^{(b)}}
-    \ge \frac{c_r}{4}\,b^{pk+r}.
+    \abs{(L(\mathcal A)\cap\Sigma_b^{D_Ak+r})\triangle \mathcal P_{D_Ak+r}^{(b)}}
+    \ge a_{D_Ak+r}(\mathcal A)-\abs{\mathcal P_{D_Ak+r}^{(b)}}
+    \ge \frac{c_r}{4}\,b^{D_Ak+r}.
   \]
 
   Since there are only finitely many residue classes, taking the minimum
-  of \(A/2\) and the finitely many numbers \(c_r/4\) arising in the
+  of \(A_b/2\) and the finitely many numbers \(c_r/4\) arising in the
   case \(c_r>0\) yields a constant \(c_{\mathcal A,b}>0\) such that
   \[
     \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle \mathcal P_m^{(b)}}
@@ -288,8 +1165,11 @@ corollaries below.
 \begin{remark}[Sharpness of the lower bounds]\label{rem:prime-diff-sharp}
   The two scales in \Cref{cor:dfa-prime-symmetric-diff} are optimal up
   to the implicit constants. If \(L=\emptyset\), then
-  \(\abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}=\abs{\mathcal P_m^{(b)}}\asymp
-  b^m/m\). On the other hand, for the positive-density language
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}
+    =\abs{\mathcal P_m^{(b)}}\asymp b^m/m .
+  \]
+  On the other hand, for the positive-density language
   \(\Sigma_b^\ast0\) the symmetric difference with
   \(\mathcal P_m^{(b)}\) is \(\asymp b^m\) along every residue class,
   so the strengthened \(\Omega(b^m)\) conclusion on arithmetic
@@ -299,35 +1179,53 @@ corollaries below.
 \begin{corollary}[No simultaneous recall and precision for fixed DFA]
   \label{cor:dfa-prime-recall-precision}
   With \(\mathrm{Rec}_m\) and \(\mathrm{Prec}_m\) as in
-  \Cref{prop:dfa-quantitative-obstruction}, every DFA satisfies one of
-  the following:
+  \Cref{prop:dfa-quantitative-obstruction}, let \(D_A\) and
+  \(c_0,\dots,c_{D_A-1}\) be the automaton period and residue constants supplied by
+  \Cref{thm:dfa-density-dichotomy}. For each residue class
+  \(r\bmod D_A\) exactly one of the following alternatives holds:
+  \begin{enumerate}[label=\textup{(\alph*)}]
+    \item If \(c_r=0\), then \(\mathrm{Rec}_m\) decays exponentially
+    along \(m\equiv r\pmod {D_A}\).
+    \item If \(c_r>0\), then there is a constant
+    \(C_r=2B_b/c_r\), where
+    \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all large \(m\),
+    such that \(\mathrm{Prec}_m\le C_r/m\) for all sufficiently large
+    \(m\equiv r\pmod {D_A}\) for which \(a_m(\mathcal A)>0\).
+  \end{enumerate}
+  Consequently every DFA satisfies one of the following statements:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
-    \item \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) along an infinite
-    arithmetic progression of lengths that depends only on
-    \(\mathcal A\) and \(b\).
+    \item There exists at least one residue class
+    \(r\bmod D_A\) with \(c_r>0\) such that
+    \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) for all sufficiently large
+    \(m\equiv r\pmod {D_A}\) for which precision is defined.
   \end{enumerate}
+  Precision is left undefined on lengths with \(a_m(\mathcal A)=0\);
+  no assertion is made about other positive-density or sparse residue
+  classes beyond the per-residue alternatives above.
   In particular, no fixed DFA has both recall and precision bounded
   away from zero for infinitely many lengths.
 \end{corollary}
 
 \begin{proof}
   Apply \Cref{thm:dfa-density-dichotomy}. Thus there exist an integer
-  \(p\ge 1\), constants \(c_0,\dots,c_{p-1}\ge 0\), and
+  \(D_A\ge 1\), constants \(c_0,\dots,c_{D_A-1}\ge 0\), and
   \(\theta\in(0,1)\) such that
   \[
-    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m).
+    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod D_A}+O(\theta^m).
   \]
-  Fix a constant \(B_b>0\) such that
+  Fix the upper-bound constant \(B_b>0\) from
+  \Cref{lem:base-prime-count}, so that
   \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all sufficiently large
   \(m\).
-  We treat each residue class \(r\bmod p\) separately by considering the
+  We treat each residue class \(r\bmod D_A\) separately by considering the
   two cases \(c_r=0\) and \(c_r>0\).
 
   \textit{Case \(c_r=0\).}
-  Along the subsequence \(m\equiv r\pmod{p}\), we have
+  Along the subsequence \(m\equiv r\pmod {D_A}\), we have
   \(a_m(\mathcal A)=O(\theta^m b^m)\). Since
-  \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\),
+  \Cref{lem:base-prime-count} gives
+  \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), so
   \[
     \mathrm{Rec}_m
     \le \frac{a_m(\mathcal A)}{\abs{\mathcal P_m^{(b)}}}
@@ -337,7 +1235,7 @@ corollaries below.
   recall decays exponentially along this residue class.
 
   \textit{Case \(c_r>0\).}
-  Along \(m\equiv r\pmod{p}\) with \(m\) large enough, we have
+  Along \(m\equiv r\pmod {D_A}\) with \(m\) large enough, we have
   \(a_m(\mathcal A)\ge \tfrac{1}{2}c_r b^m\). Using the bound for
   \(\abs{\mathcal P_m^{(b)}}\),
   \[
@@ -349,12 +1247,13 @@ corollaries below.
   arithmetic progression, so we may take
   \(C_{\mathcal A,b}=2B_b/c_r\) for that subsequence.
 
-  Every residue class \(r\bmod p\) falls into one of these two cases.
+  Every residue class \(r\bmod D_A\) falls into one of these two cases.
   If all residue classes have \(c_r=0\), then
   \(\mathrm{Rec}_m\to 0\) exponentially for every \(m\), giving
   alternative~\textup{(i)}. Otherwise, at least one residue class has
-  \(c_r>0\), and \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) along that
-  infinite arithmetic progression, giving alternative~\textup{(ii)}.
+  \(c_r>0\), and \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) on defined
+  lengths along that infinite arithmetic progression, giving
+  alternative~\textup{(ii)}.
 
   If both recall and precision were bounded below by some
   \(\delta>0\) for infinitely many lengths, then
@@ -365,13 +1264,207 @@ corollaries below.
   neither is compatible with \(a_m(\mathcal A)\asymp b^m/m\).
 \end{proof}
 
-\subsection{Relative density for trim strongly connected presentations}
+\subsection{Relative density for deterministic presentations}
+
+We use the following deterministic presentation convention in the
+relative-density statements.
+
+\begin{definition}[Trim deterministic presentation]
+  \label{def:trim-deterministic-presentation}
+  A deterministic presentation over a finite alphabet \(\Sigma\) is a
+  tuple
+  \[
+    \mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N),
+  \]
+  where \(Q_N\) is finite, \(q_N\in Q_N\), \(F_N\subseteq Q_N\), and
+  \(\delta_N:Q_N\times\Sigma\rightharpoonup Q_N\) is a partial
+  transition map. A word is accepted if it labels a path from \(q_N\)
+  to a state in \(F_N\). Its adjacency matrix is
+  \[
+    (B_N)_{qq'}
+    :=\#\{a\in\Sigma:\delta_N(q,a)=q'\};
+  \]
+  thus several letters leading from \(q\) to the same state \(q'\) are
+  counted with their multiplicity, while unavailable letters contribute
+  no edge. The presentation is trim if every state is reachable from
+  \(q_N\) and can reach some state of \(F_N\). It is strongly connected
+  if the directed graph with edges \(q\to q'\) whenever
+  \(\delta_N(q,a)=q'\) for some \(a\in\Sigma\) is strongly connected.
+
+  If \(\mathcal A=(Q_A,\Sigma,\delta_A,q_A,F_A)\) is another
+  deterministic automaton over the same alphabet, its synchronous
+  product with \(\mathcal N\) has state set \(Q_N\times Q_A\), initial
+  state \((q_N,q_A)\), accepting set \(F_N\times F_A\), and the partial
+  transition
+  \[
+    (q,s)\xrightarrow{a}(\delta_N(q,a),\delta_A(s,a))
+  \]
+  exactly for letters \(a\) for which both displayed transitions are
+  defined. Completing \(\mathcal A\) by a sink state, when desired, does
+  not change the intersection language.
+\end{definition}
+
+We first record the finite-budget statement in the general
+multicomponent form. This is the version needed when the deterministic
+presentation is trim but its adjacency matrix has several maximal
+strongly connected components, possibly connected by transient paths.
+The polynomial factors in the statement are exactly the factors absent
+from the strongly connected specialization below.
+
+\begin{theorem}[Multicomponent finite-budget obstruction]
+  \label{thm:multicomponent-finite-budget}
+  Let
+  \(\mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N)\) be a trim deterministic
+  presentation, not necessarily strongly connected. Let \(B_N\) be its
+  adjacency matrix, let \(\lambda:=\rho(B_N)>1\), and put
+  \(z_m=\abs{L(\mathcal N)\cap\Sigma^m}\). Then there are an integer
+  period \(D\ge1\), a number \(0<\theta<\lambda\), an integer
+  \(S\ge0\), and, for every residue \(r\bmod D\), an exponent
+  \(s_r\in\{-\infty,0,\dots,S\}\) and a constant \(d_r\ge0\) such that
+  \(s_r=-\infty\) exactly on residue classes with only finitely many
+  accepted lengths, while on every relevant residue class
+  \(s_r\ge0\), \(d_r>0\), and
+  \[
+    z_m
+    =
+    \lambda^m
+    \left(
+      d_r m^{s_r}
+      +O(m^{s_r-1})
+    \right)
+    +O(\theta^m m^S),
+    \qquad m\equiv r\pmod D .
+  \]
+  The convention is that the \(O(m^{-1})\) term is absent when
+  \(s_r=0\).
+
+  For every deterministic automaton \(\mathcal A\) over \(\Sigma\) and
+  \[
+    a_m(\mathcal A,\mathcal N)
+    :=\abs{L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m},
+  \]
+  after replacing \(D,S,\theta\) by common choices there are exponents
+  \(t_r\in\{-\infty,0,\dots,S\}\) and constants \(e_r\ge0\) such that
+  on every residue class
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =
+    \lambda^m
+    \left(
+      e_r m^{t_r}
+      +O(m^{t_r-1})
+    \right)
+    +O(\theta^m m^S),
+  \]
+  with the same convention when \(t_r=0\); if the intersection has
+  exponential growth \(<\lambda\) on that residue, then \(t_r=-\infty\)
+  and the first displayed polynomial part is absent. Moreover, whenever
+  \(z_m>0\) eventually on \(r\bmod D\), either \(t_r=-\infty\) or
+  \(t_r\le s_r\), and if \(t_r=s_r\) then \(0\le e_r\le d_r\).
+
+  Consequently, let \(T_m\subseteq L(\mathcal N)\cap\Sigma^m\) satisfy
+  \[
+    \alpha\frac{\lambda^m}{m}
+    \le \abs{T_m}
+    \le \beta\frac{\lambda^m}{m}
+  \]
+  for all sufficiently large relevant lengths \(m\), with fixed
+  \(\alpha,\beta>0\). For every fixed deterministic automaton
+  \(\mathcal A\) there is a constant
+  \(C_{\mathcal A,\mathcal N,T}>0\) such that
+  \[
+    \abs{(L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m)\triangle T_m}
+    \ge
+    C_{\mathcal A,\mathcal N,T}\frac{\lambda^m}{m}
+  \]
+  for all sufficiently large relevant \(m\). On each relevant residue
+  class either the recall against \(T_m\) tends to \(0\) exponentially
+  or polynomially, or else the precision is \(O(1/m)\) whenever it is
+  defined.
+\end{theorem}
+
+\begin{proof}
+  Put \(B_N\) in Frobenius normal form. For a finite non-negative
+  integer matrix, the rational generating function
+  \(u_N^{\mathsf T}(I-xB_N)^{-1}v_N\) has poles at reciprocals of
+  eigenvalues of \(B_N\), and the coefficients are finite sums of
+  terms \(p_{\mu}(m)\mu^m\), where \(p_\mu\) is a polynomial whose
+  degree is one less than the size of the largest Jordan block attached
+  to \(\mu\), plus exponentially smaller terms. Equivalently, this is
+  the Frobenius normal form or transfer-matrix expansion for regular
+  languages; see \cite{SalomaaSoittola1978,BerstelReutenauer2011}.
+  For a non-negative matrix, the eigenvalues of modulus \(\lambda\)
+  that contribute to accepted paths are roots of unity times
+  \(\lambda\), arising from maximal components and chains between them.
+  Taking \(D\) to be a common period of those components makes the
+  peripheral factors constant on each residue class. On a fixed residue
+  \(r\bmod D\), collect the largest remaining polynomial degree as
+  \(s_r\). Trimness and non-negativity imply that if the residue has
+  accepted words for all sufficiently large indices in the class, then
+  the leading coefficient \(d_r\) is positive: the coefficient is the
+  sum of the non-negative leading contributions of maximal
+  component-chains realizing that residue. This gives the displayed
+  expansion for \(z_m\). Residues with only finitely many accepted
+  lengths are assigned \(s_r=-\infty\).
+
+  Form the synchronous product of \(\mathcal N\) with \(\mathcal A\),
+  trim unreachable or non-coaccessible states, and let \(B'\) be its
+  adjacency matrix. Its accepted-word count is
+  \(a_m(\mathcal A,\mathcal N)=u'^{\mathsf T}(B')^m v'\), so the same
+  transfer-matrix expansion applies. Its exponential growth rate is at
+  most \(\lambda\), because every accepted product word projects
+  injectively to a word of \(L(\mathcal N)\). If the product growth rate
+  is \(<\lambda\) on a residue class, it is absorbed into
+  \(O(\theta^m m^S)\) after increasing \(\theta\) below \(\lambda\) and
+  increasing \(S\). If the product has growth \(\lambda\), its leading
+  polynomial degree on a relevant residue cannot exceed \(s_r\);
+  otherwise \(a_m(\mathcal A,\mathcal N)\le z_m\) would fail along that
+  residue for large \(m\). The same inequality gives \(e_r\le d_r\)
+  when \(t_r=s_r\).
+
+  Fix a relevant residue class and put
+  \(A_m=L(\mathcal A)\cap L(\mathcal N)\cap\Sigma^m\). If
+  \(t_r=-\infty\), then \(\abs{A_m}=O(\theta^m m^S)\), and hence
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{T_m}}
+    \le
+    O(m^{S+1}(\theta/\lambda)^m),
+  \]
+  so recall decays exponentially and
+  \(\abs{A_m\triangle T_m}\ge(\alpha/2)\lambda^m/m\) for all large
+  \(m\) in the residue.
+
+  Suppose next that the first non-zero leading term in the expansion of
+  \(a_m(\mathcal A,\mathcal N)\) on this residue is
+  \(\gamma_r\lambda^m m^{u_r}\), with \(\gamma_r>0\) and \(u_r\ge0\).
+  Then, for all large \(m\) in the residue,
+  \(\abs{A_m}\ge(\gamma_r/2)\lambda^m m^{u_r}\). Since
+  \(\abs{T_m}\le\beta\lambda^m/m\),
+  \[
+    \abs{A_m\triangle T_m}
+    \ge \abs{A_m}-\abs{T_m}
+    \ge \frac{\gamma_r}{4}\lambda^m m^{u_r}
+    \ge \frac{\gamma_r}{4}\frac{\lambda^m}{m},
+  \]
+  after enlarging the threshold. Whenever \(\abs{A_m}>0\),
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{A_m}}
+    \le
+    \frac{2\beta}{\gamma_r}\frac{1}{m^{u_r+1}}
+    \le
+    \frac{2\beta}{\gamma_r}\frac1m .
+  \]
+  If no such non-zero polynomial term exists, the residue is in the
+  exponentially smaller case already handled. There are only finitely
+  many relevant residue classes, so taking the minimum of the positive
+  constants obtained above proves the uniform finite-budget bound.
+\end{proof}
 
 No additional numeration-system formalism is needed for the next
-theorem beyond a trim deterministic automaton
-\(\mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N)\) whose underlying directed
-graph is strongly connected. In the applications below \(\mathcal N\)
-is the canonical presentation of a regular numeration system. Write
+theorem beyond such a trim deterministic presentation whose underlying
+directed graph is strongly connected. In the applications below
+\(\mathcal N\) is the canonical presentation of a regular numeration
+system. Write
 \[
   \mathcal N_m:=L(\mathcal N)\cap\Sigma^m,
   \qquad
@@ -380,6 +1473,42 @@ is the canonical presentation of a regular numeration system. Write
 Let \(B_N\) be the adjacency matrix of \(\mathcal N\), let
 \(\lambda:=\rho(B_N)>1\) be its spectral radius, and let \(d_N\ge 1\)
 be the period of \(B_N\).
+
+\begin{lemma}[Cyclic-class path threshold]
+  \label{lem:cyclic-class-path-threshold}
+  Let \(B\) be an irreducible non-negative integer matrix with period
+  \(d\) and cyclic decomposition \(C_0,\dots,C_{d-1}\), indexed so that
+  \(B\) maps \(C_i\) to \(C_{i+1}\). For each pair of cyclic classes
+  \(C_i,C_j\) there is an integer \(N_{ij}\) such that, whenever
+  \(n\ge N_{ij}\) and \(n\equiv j-i\pmod d\), every pair
+  \(x\in C_i\), \(y\in C_j\) is joined by at least one path of length
+  \(n\). The threshold is uniform over the finite pair
+  \(C_i\times C_j\).
+  This is the elementary cyclic-class input used in the denominator
+  positivity argument; it is not a separate contribution.
+\end{lemma}
+
+\begin{proof}
+  The diagonal block of \(B^d\) on each cyclic class \(C_i\) is
+  primitive. Hence for each \(i\) there is an exponent \(E_i\) such that
+  \((B^{kd})_{xy}>0\) for every \(x,y\in C_i\) and every \(k\ge E_i\).
+  If \(j-i\equiv h\pmod d\), irreducibility and the cyclic
+  decomposition imply that for each \(x\in C_i\) and \(y\in C_j\) there
+  is a path from \(x\) to \(y\) whose length is congruent to \(h\)
+  modulo \(d\). Choose one such path for each finite pair and write its
+  length as \(h+dq_{xy}\). Let \(Q_{ij}:=\max_{x,y}q_{xy}\), and let
+  \(N_{ij}:=h+d(Q_{ij}+\max_iE_i)\), with
+  \(h\in\{0,\dots,d-1\}\).
+
+  For \(n=h+dk\ge N_{ij}\), use the chosen path
+  \(x=x_0\to x_1\to\cdots\to x_{h+dq_{xy}}=y\). Its first \(h\) edges
+  end at a state \(w\in C_j\). Since \(B^d|_{C_j}\) is primitive, there
+  is a path of length \(d(k-q_{xy})\) from \(w\) to \(w\) whenever
+  \(k-q_{xy}\ge E_j\). Follow the first \(h\) edges from \(x\) to \(w\),
+  insert this return path at \(w\), and then follow the remaining
+  \(dq_{xy}\) edges of the chosen path from \(w\) to \(y\). The total
+  length is \(h+d(k-q_{xy})+dq_{xy}=n\).
+\end{proof}
 
 \begin{lemma}[Periodic growth of trim presentations]
   \label{lem:trim-density}
@@ -390,6 +1519,8 @@ be the period of \(B_N\).
     z_m=\lambda^m\bigl(d_{m\bmod d_N}+O(\theta_N^m)\bigr)
     \qquad (m\to\infty).
   \]
+  This is used only for trim strongly connected presentations; no
+  multiple-maximal-component extension is asserted here.
 \end{lemma}
 
 \begin{proof}
@@ -403,6 +1534,15 @@ be the period of \(B_N\).
   \]
   for some spectral projectors \(E_\ell\), constant \(C>0\), and
   \(\theta_N\in(0,1)\), where \(\omega_{d_N}:=e^{2\pi i/d_N}\).
+  Equivalently, on cyclic classes \(C_i,C_j\), if
+  \(h\equiv j-i\pmod {d_N}\) and \(x\in C_i,y\in C_j\), then the
+  irreducible periodic Perron--Frobenius entry asymptotic gives
+  \[
+    \lambda^{-(kd_N+h)}(B_N^{kd_N+h})_{xy}
+      \longrightarrow h_y\nu_x>0
+  \]
+  for positive Perron vectors \(h,\nu\) normalized on the corresponding
+  cyclic classes.
   For \(0\le r<d_N\) set
   \[
     S_r:=\sum_{\ell=0}^{d_N-1}\omega_{d_N}^{\ell r}E_\ell
@@ -420,9 +1560,26 @@ be the period of \(B_N\).
   \[
     d_r:=u_N^{\mathsf T}S_r v_N\ge 0.
   \]
-  Whenever the residue class \(r\bmod d_N\) contains words of
-  arbitrarily large length, some entry of \(S_r\) is positive, hence
-  \(d_r>0\). Substituting into the expansion gives
+  The constant \(d_r\) is positive exactly for the residue classes that
+  contain arbitrarily long accepted words. Indeed, if
+  \(d_r>0\), then some initial-to-accepting entry of \(S_r\) is
+  positive; the convergence defining \(S_r\) gives
+  \((B_N^{kd_N+r})_{q_N f}>0\) for all sufficiently large \(k\) and
+  some \(f\in F_N\), hence accepted words of lengths \(kd_N+r\).
+  Conversely, suppose that the residue class \(r\bmod d_N\) contains
+  accepted words of arbitrarily large length. Then for infinitely many
+  \(k\) there is an accepting state \(f_k\in F_N\) with
+  \((B_N^{kd_N+r})_{q_N f_k}>0\). Since \(F_N\) is finite, one
+  accepting state \(f\) occurs for infinitely many \(k\). In an
+  irreducible non-negative matrix of period \(d_N\), the
+  cyclic-class threshold in \Cref{lem:cyclic-class-path-threshold}
+  applies, so \(q_N\) and \(f\) lie in cyclic classes whose difference
+  is \(r\), and
+  \((B_N^{kd_N+r})_{q_N f}>0\) for all sufficiently large \(k\).
+  Applying the entry asymptotic displayed above with \(x=q_N\) and
+  \(y=f\) gives \((S_r)_{q_N f}>0\), and therefore
+  \(d_r=u_N^{\mathsf T}S_rv_N>0\).
+  Substituting into the expansion gives
   \[
     z_m=u_N^{\mathsf T}B_N^m v_N
     =\lambda^m\bigl(d_{m\bmod d_N}+O(\theta_N^m)\bigr).
@@ -435,51 +1592,45 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   :=\abs{L(\mathcal A)\cap\mathcal N_m}.
 \]
 
-\begin{theorem}[Relative density for a trim strongly connected presentation]
-  \label{thm:parry-density}
-  Let \(\mathcal N\) and \(\lambda\) be as above, and let
-  \(\mathcal A\) be a deterministic automaton over \(\Sigma\). Then
-  there exist an integer \(p\ge 1\), non-negative constants
-  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that for all
-  sufficiently large \(m\) with \(z_m>0\),
+\begin{lemma}[Substochastic product expansion]
+  \label{lem:substochastic-product-expansion}
+  Let \(\mathcal N\) be a trim strongly connected deterministic
+  presentation with adjacency matrix \(B_N\), Perron root
+  \(\lambda>1\), and Perron--Frobenius right eigenvector
+  \(h\in\RR_{>0}^{Q_N}\). For every deterministic automaton
+  \(\mathcal A\) over the same alphabet, complete or partial as in
+  \Cref{def:trim-deterministic-presentation}, there exist an integer
+  \(D'\ge 1\), non-negative constants \(e_0,\dots,e_{D'-1}\), and
+  \(\eta\in(0,1)\) such that
   \[
-    \frac{a_m(\mathcal A,\mathcal N)}{z_m}
-    =c_{m\bmod p}+O(\theta^m).
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr).
   \]
-  In particular, either the ratio
-  \(a_m(\mathcal A,\mathcal N)/z_m\) decays exponentially fast, or else
-  it stays bounded below by a positive constant along an arithmetic
-  progression of lengths that contains infinitely many indices with
-  \(z_m>0\).
-\end{theorem}
+  This product-expansion lemma supplies the constants for the fixed trim
+  strongly connected presentation setting in \Cref{thm:parry-density}.
+  The broader multicomponent finite-budget comparison is
+  \Cref{thm:multicomponent-finite-budget}.
+\end{lemma}
 
 \begin{proof}
-  Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
-  \(B_N\), so \(B_Nh=\lambda h\), and set
-  \(D:=\operatorname{diag}(h)\). Then
-  \[
-    P_N:=\lambda^{-1}D^{-1}B_ND
-  \]
-  is stochastic, because the \(q\)-th row sum is
-  \[
-    \frac{1}{\lambda h_q}\sum_{q'\in Q_N}(B_N)_{qq'}h_{q'}
-    =\frac{(B_Nh)_q}{\lambda h_q}
-    =1.
-  \]
-
-  Form the synchronous product automaton \(\mathcal B=\mathcal N\times\mathcal A\)
-  and trim it by deleting states that are unreachable from the initial
-  pair or cannot reach an accepting pair. Let \(Q'\) be the state set
-  of the resulting product \(\mathcal B'\), let \(B'\) be its adjacency
-  matrix, and let \(u'\) and \(v'\) be the indicator vectors of its
-  initial and accepting states. Trimming does not change the
+  If necessary, complete \(\mathcal A\) by adjoining a sink state; this
+  leaves \(L(\mathcal A)\cap L(\mathcal N)\) unchanged. Form the
+  synchronous product automaton of
+  \(\mathcal B=\mathcal N\times\mathcal A\) and trim it by deleting
+  states that are unreachable from the initial pair or cannot reach an
+  accepting pair. If no state remains, then
+  \(a_m(\mathcal A,\mathcal N)=0\) for all \(m\), and the assertion
+  holds with \(D'=1\) and \(e_0=0\). Otherwise let \(Q'\) be the state
+  set of the resulting product \(\mathcal B'\), let \(B'\) be its
+  adjacency matrix, and let \(u'\) and \(v'\) be the indicator vectors
+  of its initial and accepting states. Trimming does not change the
   intersection counts, so
   \[
     a_m(\mathcal A,\mathcal N)=u'^{\mathsf T}B'^m v'.
   \]
 
   Let \(\pi\colon Q'\to Q_N\) forget the \(\mathcal A\)-coordinate.
-  Define \(\widetilde h_x:=h_{\pi(x)}\) for \(x\in Q'\), put
+  Define \(\widetilde h_x:=h_{\pi(x)}\), put
   \(\widetilde D:=\operatorname{diag}(\widetilde h)\), and set
   \[
     P':=\lambda^{-1}\widetilde D^{-1}B'\widetilde D.
@@ -489,18 +1640,17 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
     \sum_{y\in Q'}P'_{xy}
     =\frac{1}{\lambda h_q}\sum_{y\in Q'}B'_{xy}h_{\pi(y)}.
   \]
-  Because \(\mathcal A\) is deterministic, each letter available from
-  \(q\) in \(\mathcal N\) contributes to at most one outgoing edge from
-  \(x\) in the product automaton, and trimming can only delete such
-  edges. Hence
+  Because the product is deterministic letter by letter, each letter
+  available from \(q\) in \(\mathcal N\) contributes to at most one
+  outgoing edge from \(x\) in the product automaton, and trimming can
+  only delete such edges. Hence
   \[
     \sum_{y\in Q'}B'_{xy}h_{\pi(y)}
     \le \sum_{\substack{q\xrightarrow{a}q'\\ \text{in }\mathcal N}} h_{q'}
     =(B_Nh)_q
-    =\lambda h_q,
+    =\lambda h_q.
   \]
-  so every row sum of \(P'\) is at most \(1\). Thus \(P'\) is
-  substochastic.
+  Thus \(P'\) is substochastic.
 
   Adjoin a cemetery state \(\partial\) and define
   \[
@@ -508,23 +1658,57 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
     \begin{pmatrix}
       P' & \mathbf{1}-P'\mathbf{1}\\
       0 & 1
+    \end{pmatrix}.
+  \]
+  The matrix \(\widehat P\) is stochastic, and
+  \((\widehat P^m)_{xy}=(P'^m)_{xy}\) for all \(x,y\in Q'\). Apply the
+  finite Markov-chain canonical decomposition to \(\widehat P\). After
+  permuting states, write
+  \[
+    \widehat P=
+    \begin{pmatrix}
+      T & R_1 & \cdots & R_s\\
+      0 & C_1 & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s
     \end{pmatrix},
   \]
-  which is stochastic. Since \(\partial\) is absorbing, one has
-  \((\widehat P^m)_{xy}=(P'^m)_{xy}\) for all \(x,y\in Q'\). Applying
-  the same transient/recurrent decomposition as in the proof of
-  \Cref{thm:dfa-density-dichotomy} to \(\widehat P\), and then
-  restricting back to \(Q'\), yields an integer \(p'\ge 1\),
-  non-negative matrices \(S_0,\dots,S_{p'-1}\), and \(\eta\in(0,1)\)
-  such that
+  where \(T\) is the transient block, \(\rho(T)<1\), and each \(C_j\) is
+  an irreducible stochastic recurrent class with period \(d_j\). For
+  \(m\ge1\),
   \[
-    P'^m=S_{m\bmod p'}+E_m,
+    \widehat P^m=
+    \begin{pmatrix}
+      T^m &
+      \sum_{\ell=0}^{m-1}T^\ell R_1C_1^{m-1-\ell} &
+      \cdots &
+      \sum_{\ell=0}^{m-1}T^\ell R_sC_s^{m-1-\ell}\\
+      0 & C_1^m & 0 & 0\\
+      \vdots & 0 & \ddots & 0\\
+      0 & 0 & 0 & C_s^m
+    \end{pmatrix}.
+  \]
+  The powers \(T^\ell\) decay exponentially, while each \(C_j^m\) has
+  the usual periodic Perron--Frobenius limits. Hence, with
+  \(D'=\operatorname{lcm}(d_1,\dots,d_s)\), the entrywise limits
+  \[
+    S_r:=\lim_{k\to\infty}P'^{kD'+r}
+    \qquad(0\le r<D')
+  \]
+  exist on the \(Q'\times Q'\) block. These limits include the
+  non-decaying absorption terms from transient states into recurrent
+  classes. Since convergence of \(T^\ell\) is exponential and the
+  non-peripheral parts of the recurrent blocks decay exponentially,
+  there are a constant \(C>0\) and \(\eta\in(0,1)\) such that
+  \[
+    P'^m=S_{m\bmod D'}+E_m,
     \qquad
     \|E_m\|\le C\eta^m.
   \]
-  The matrices \(S_r\) collect the contributions of recurrent classes
-  of \(\widehat P\) contained entirely in \(Q'\); if no such recurrent
-  class exists, then every \(S_r\) is zero.
+  The residue matrices are non-negative because they are entrywise
+  limits of non-negative matrices. This also covers the case in which
+  the restricted block is purely transient, where every \(S_r\) is the
+  zero matrix.
 
   Since \(B'^m=\lambda^m\widetilde DP'^m\widetilde D^{-1}\), we obtain
   \[
@@ -538,23 +1722,67 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   Therefore
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr),
+    =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr),
     \qquad
-    e_r:=\widetilde u^{\mathsf T}S_r\widetilde v\ge 0.
+    e_r:=\widetilde u^{\mathsf T}S_r\widetilde v\ge 0,
+  \]
+  as required.
+\end{proof}
+
+\begin{theorem}[Background relative density for a trim strongly connected presentation]
+  \label{thm:parry-density}
+  Let \(\mathcal N\) be a trim strongly connected deterministic
+  presentation in the sense of
+  \Cref{def:trim-deterministic-presentation}, with Perron root
+  \(\lambda>1\), and let
+  \(\mathcal A\) be a deterministic automaton over \(\Sigma\). Then
+  there exist an integer \(D_N\ge 1\), non-negative constants
+  \(c_0,\dots,c_{D_N-1}\), and \(\theta\in(0,1)\) such that for all
+  sufficiently large \(m\) with \(z_m>0\),
+  \[
+    \frac{a_m(\mathcal A,\mathcal N)}{z_m}
+    =c_{m\bmod D_N}+O(\theta^m).
+  \]
+  In particular, either the ratio
+  \(a_m(\mathcal A,\mathcal N)/z_m\) decays exponentially fast, or else
+  it stays bounded below by a positive constant along an arithmetic
+  progression of lengths that contains infinitely many indices with
+  \(z_m>0\).
+  This theorem is a background conditional-density tool for the stated
+  trim strongly connected deterministic setting; the new finite-budget
+  use of it is isolated in
+  \Cref{cor:relative-finite-budget-obstruction}.
+\end{theorem}
+
+\begin{proof}
+  This is the standard conditional-density conclusion for deterministic
+  presentations, specialized to our notation; compare
+  \cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
+  The proof below is included only to identify the constants used later:
+  \Cref{lem:substochastic-product-expansion} supplies the product
+  expansion, and \Cref{lem:trim-density} supplies the positive
+  denominator constants on relevant residue classes.
+  Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
+  \(B_N\). By \Cref{lem:substochastic-product-expansion}, there are
+  \(D'\ge 1\), non-negative constants \(e_0,\dots,e_{D'-1}\), and
+  \(\eta\in(0,1)\) such that
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\bigl(e_{m\bmod D'}+O(\eta^m)\bigr).
   \]
 
-  Now combine this with \Cref{lem:trim-density}. After replacing \(p'\)
-  by a common multiple \(p\) of \(p'\) and \(d_N\), and regrouping the
+  Now combine this with \Cref{lem:trim-density}. After replacing \(D'\)
+  by a common multiple \(D_N\) of \(D'\) and \(d_N\), and regrouping the
   residue classes, there exist non-negative constants
-  \(e_0,\dots,e_{p-1}\), \(d_0,\dots,d_{p-1}\), and \(\theta\in(0,1)\)
+  \(e_0,\dots,e_{D_N-1}\), \(d_0,\dots,d_{D_N-1}\), and \(\theta\in(0,1)\)
   such that
   \[
     a_m(\mathcal A,\mathcal N)
-    =\lambda^m\bigl(e_{m\bmod p}+O(\theta^m)\bigr),
+    =\lambda^m\bigl(e_{m\bmod D_N}+O(\theta^m)\bigr),
     \qquad
-    z_m=\lambda^m\bigl(d_{m\bmod p}+O(\theta^m)\bigr).
+    z_m=\lambda^m\bigl(d_{m\bmod D_N}+O(\theta^m)\bigr).
   \]
-  If \(z_m>0\) for infinitely many \(m\equiv r\pmod p\), then
+  If \(z_m>0\) for infinitely many \(m\equiv r\pmod {D_N}\), then
   \Cref{lem:trim-density} gives \(d_r>0\). Along every such residue
   class,
   \[
@@ -573,17 +1801,127 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   constant.
 \end{proof}
 
+Only the following finite-budget consequence is used in the prime-slice
+applications.
+It is the exact form of the background relative-density theorem needed
+below, after the substochastic product expansion and the positive
+periodic denominator constants have already been supplied in
+\Cref{lem:substochastic-product-expansion,lem:trim-density}.
+
+\begin{corollary}[Finite-budget lemma for a trim presentation]
+  \label{cor:relative-finite-budget-obstruction}
+  Let \(\mathcal N\) and \(\mathcal A\) satisfy the hypotheses of
+  \Cref{thm:parry-density}. For each \(m\) with \(z_m>0\), let
+  \(T_m\subseteq\mathcal N_m\). Suppose that there are constants
+  \(\alpha,\beta>0\) such that, for all sufficiently large \(m\) with
+  \(z_m>0\),
+  \[
+    \alpha\,\frac{\lambda^m}{m}
+    \le \abs{T_m}
+    \le \beta\,\frac{\lambda^m}{m}.
+  \]
+  Put \(A_m:=L(\mathcal A)\cap\mathcal N_m\). Then there is a constant
+  \(C_{\mathcal A,\mathcal N,T}>0\) such that
+  \[
+    \abs{A_m\triangle T_m}
+    \ge C_{\mathcal A,\mathcal N,T}\,\frac{\lambda^m}{m}
+  \]
+  for all sufficiently large \(m\) with \(z_m>0\).
+
+  More precisely, after passing to the residue classes supplied by
+  \Cref{thm:parry-density}, every relevant residue class has one of the
+  following two behaviours. If its limiting relative-density constant
+  is zero, then
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{T_m}}
+    \le \frac{\abs{A_m}}{\abs{T_m}}
+  \]
+  decays exponentially along that residue class. If its limiting
+  relative-density constant is positive, then along that residue class
+  \[
+    \abs{A_m\triangle T_m}\gg \lambda^m,
+    \qquad
+    \frac{\abs{A_m\cap T_m}}{\abs{A_m}}=O(1/m)
+  \]
+  whenever the second ratio is defined.
+\end{corollary}
+
+\begin{proof}
+  Let \(D_N\), \(c_0,\dots,c_{D_N-1}\), and \(\theta\in(0,1)\) be supplied
+  by \Cref{thm:parry-density}. Enlarge \(D_N\), if necessary, so that it
+  is also a multiple of the period in \Cref{lem:trim-density}. Then for
+  every residue class \(r\bmod D_N\) containing infinitely many lengths
+  with \(z_m>0\), there is a constant \(d_r>0\) such that
+  \[
+    z_m=\lambda^m(d_r+O(\theta^m))
+    \qquad (m\equiv r\bmod {D_N}),
+  \]
+  after increasing \(\theta\) within \((0,1)\) if needed. Hence
+  \(z_m\asymp\lambda^m\)
+  on each relevant residue class.
+
+  Fix such a residue class. If \(c_r=0\), then
+  \(\abs{A_m}/z_m=O(\theta^m)\), and therefore
+  \[
+    \abs{A_m}=O(\lambda^m\theta^m).
+  \]
+  Choosing \(\eta\) with \(\theta<\eta<1\), the elementary bound
+  \(m\theta^m=O(\eta^m)\) gives
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{T_m}}
+    \le \frac{\abs{A_m}}{\abs{T_m}}
+    =O(m\theta^m)
+    =O(\eta^m),
+  \]
+  so recall against \(T_m\) decays exponentially on this residue class.
+  Also, for all sufficiently large \(m\) in this class,
+  \[
+    \abs{A_m\triangle T_m}
+    \ge \abs{T_m}-\abs{A_m}
+    \ge \frac{\alpha}{2}\,\frac{\lambda^m}{m}.
+  \]
+
+  If \(c_r>0\), then \(\abs{A_m}/z_m\ge c_r/2\) for all sufficiently
+  large \(m\equiv r\bmod {D_N}\) with \(z_m>0\). Since
+  \(z_m\asymp\lambda^m\) on the residue class, there is a constant
+  \(\gamma_r>0\) such that \(\abs{A_m}\ge\gamma_r\lambda^m\). The upper
+  bound on \(\abs{T_m}\) then gives, for all sufficiently large \(m\) in
+  the class,
+  \[
+    \abs{A_m\triangle T_m}
+    \ge \abs{A_m}-\abs{T_m}
+    \ge \frac{\gamma_r}{2}\lambda^m,
+  \]
+  and, whenever \(\abs{A_m}>0\),
+  \[
+    \frac{\abs{A_m\cap T_m}}{\abs{A_m}}
+    \le \frac{\abs{T_m}}{\abs{A_m}}
+    \le \frac{\beta}{\gamma_r}\,\frac{1}{m}.
+  \]
+
+  There are only finitely many relevant residue classes. Taking the
+  minimum of the positive constants obtained above proves the uniform
+  lower bound \(C_{\mathcal A,\mathcal N,T}\lambda^m/m\) for all
+  sufficiently large \(m\) with \(z_m>0\), and the two residue-class
+  alternatives prove the remaining assertions.
+\end{proof}
+
+\noindent
+This finite-budget lemma is the only relative-density consequence used
+below: the base-\(b\) and Zeckendorf prime slices are exactly the
+instances in which \(T_m\) has size comparable to \(\lambda^m/m\) by
+\Cref{lem:base-prime-count,lem:zeck-prime-count}.
+
 \begin{remark}
   When \(\mathcal N\) is the trim strongly connected presentation of a
-  Parry numeration system or of the Zeckendorf language, the parameter
-  \(\lambda\) is the dominant root of the corresponding linear
-  recurrence. Thus \Cref{thm:parry-density} applies verbatim to
-  canonical numeration systems generated by linear recurrences, and the
-  base-\(b\) case is recovered by setting \(\mathcal N=\Sigma_b^\ast\)
-  with \(\lambda=b\). We do not claim an extension to presentations
-  with multiple strongly connected components; see
-  \cite{CharlierRampersadRigoWaxweiler2010} for examples where this
-  phenomenon genuinely occurs.
+  Parry numeration system or of the Zeckendorf language, the same
+  presentation-level statement applies with \(\lambda\) equal to the
+  dominant root of the corresponding recurrence. Presentations with
+  multiple maximal components are covered by
+  \Cref{thm:multicomponent-finite-budget}, where polynomial factors are
+  retained. Nondeterministic or weighted presentations are not treated
+  here; see \cite{CharlierRampersadRigoWaxweiler2010} for examples where
+  multicomponent behaviour genuinely occurs.
 \end{remark}
 
 \begin{remark}[Relation to conditional-density literature]
@@ -592,12 +1930,13 @@ For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
   and relative-density analyses of Kozik~\cite{Kozik2005Conditional},
   Koga \cite{Koga2019Density}, Montoya \cite{Montoya2025Relative}, and
   Berth\'e--Goulet-Ouellet--Perrin \cite{BertheGouletPerrin2025}.
-  \Cref{thm:dfa-density-dichotomy,thm:parry-density} should therefore be
-  read as background statements for the trim, strongly connected
-  deterministic setting used later, not as new density theorems. The
-  new contributions of this section are the quantitative prime
-  obstructions recorded in
-  \Cref{cor:dfa-prime-symmetric-diff,cor:dfa-prime-recall-precision}.
+  Thus \Cref{thm:dfa-density-dichotomy,thm:parry-density} are used here
+  as standard inputs for the fixed-DFA and strongly connected
+  deterministic settings. The multicomponent theorem keeps the
+  polynomial factors that those inputs suppress. The contribution is
+  the conversion of these residue-class expansions into the
+  finite-budget prime obstructions recorded in
+  \Cref{thm:multicomponent-finite-budget,cor:relative-finite-budget-obstruction,cor:dfa-prime-symmetric-diff,cor:dfa-prime-recall-precision}.
 \end{remark}
 
 

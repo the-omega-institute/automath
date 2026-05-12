@@ -9,27 +9,35 @@ periodic density laws or exponential-polynomial growth, and that is
 often enough to rule out arithmetic languages whose size is governed by
 the prime number theorem.
 
-This note is centered on a quantitative consequence rather than on a
-new density theorem. Once the classical density dichotomy for regular
-languages is written with explicit residue classes and constants, it
-gives fixed-DFA approximation obstructions for prime slices. The
-genuinely new outputs are the symmetric-difference and recall/precision
-lower bounds in the fixed-base and Zeckendorf settings. The density
-dichotomies themselves, the Zeckendorf growth law, and the analytic
-remarks are included only as background in the specialized form needed
-for those corollaries. The eventual-sofic exclusion for prime
-Zeckendorf slices is recorded as a short corollary of regularity plus
-non-regularity, not as a separate asymptotic theorem.
+This paper isolates a quantitative finite-budget obstruction. The first
+part makes the fixed-base obstruction effective: from the DFA transition
+matrix and explicit prime-counting bounds one computes the residue
+alternatives, thresholds, and constants in the base-\(b\) prime-slice
+comparison. The second part removes the strongly connected restriction
+from the relative-density comparison. For an arbitrary trim
+deterministic presentation with Perron root \(\lambda>1\), possibly
+with several maximal strongly connected components and transient paths
+between them, the denominator and product counts have residue-wise
+expansions with polynomial factors. Comparing those polynomial exponents
+gives a finite-budget obstruction for every target family of size
+\(\asymp\lambda^m/m\). The Zeckendorf prime-slice results are then the
+strongly connected specialization of this mechanism.
 
-Throughout, we work with trim deterministic presentations whose
-underlying directed graph is strongly connected and has Perron root
-\(>1\); numeration automata with multiple strongly connected components
-do occur \cite{CharlierRampersadRigoWaxweiler2010}, so this hypothesis
-is part of the setup rather than a claim of full generality.
+For explicit Zeckendorf constants we use the canonical trim strongly
+connected presentation, but the abstract finite-budget comparison in
+\Cref{thm:multicomponent-finite-budget} applies to arbitrary trim
+deterministic presentations. Numeration automata with multiple strongly
+connected components do occur
+\cite{CharlierRampersadRigoWaxweiler2010}; their polynomial factors are
+accounted for in that theorem rather than excluded from the framework.
 
 Throughout, \(f(m)\asymp g(m)\) means that \(c_1g(m)\le f(m)\le c_2g(m)\)
 for some positive constants \(c_1,c_2\) and all sufficiently large
-\(m\). We write \(F_0=0\), \(F_1=1\) for the Fibonacci numbers,
+\(m\). We use the standard prime-counting convention
+\(\pi(x)=\#\{p\le x:p\text{ prime}\}\). Thus an integer half-open
+interval \([X,Y)\) contains exactly \(\pi(Y-1)-\pi(X-1)\) primes; in
+asymptotic estimates below this may equivalently be written
+\(\pi(Y)-\pi(X)+O(1)\). We write \(F_0=0\), \(F_1=1\) for the Fibonacci numbers,
 \(\varphi=(1+\sqrt5)/2\), and for a Zeckendorf word
 \(w=x_1\cdots x_m\) we set
 \[
@@ -42,71 +50,79 @@ We summarize the background inputs and the quantitative corollaries
 needed later; the precise residue-class refinements and proofs appear
 in Sections~\ref{sec:automata}--\ref{sec:zeckendorf}.
 
-We begin with the classical density dichotomy for deterministic
-automata, recorded here because its constants feed directly into the
-prime approximation bounds.
+The logical chain is the following. First,
+\Cref{thm:dfa-density-dichotomy} supplies the residue constants \(c_r\)
+for a fixed complete DFA, and
+\Cref{thm:multicomponent-finite-budget} supplies the multicomponent
+finite-budget comparison for general trim deterministic presentations.
+Second,
+\Cref{lem:explicit-pnt-input,lem:base-prime-count} turn a published
+explicit prime-counting estimate into concrete base-\(b\) slice
+constants \(A_b,B_b,M_b\). Third,
+\Cref{thm:effective-fixed-dfa-prime-obstruction} combines these two
+finite inputs and outputs the certified residue alternatives,
+thresholds, and symmetric-difference and precision bounds. The later
+base-\(b\) and Zeckendorf corollaries are consequences of this
+finite-budget conversion.
 
-\begin{theorem}\label{thm:intro-density}
-Let \(\mathcal A\) be a complete deterministic finite automaton over
-\(\Sigma=\{0,1\}\), and let
+\begin{center}
+\begin{tabular}{p{0.18\linewidth}p{0.72\linewidth}}
+\textbf{Symbol} & \textbf{Meaning}\\
+\(D_A,c_r\) & Period and residue density constants for a complete DFA
+\(\mathcal A\) over \(\Sigma_b\).\\
+\(P_m^{(b)}\), \(\mathcal P_m^{(b)}\) & The base-\(b\) prime slice;
+we use the calligraphic notation in statements and reserve
+\(p_m^{(b)}=\abs{\mathcal P_m^{(b)}}\) for its size.\\
+\(D_N,d_r,e_r\) & Period and numerator/denominator residue constants
+for a trim strongly connected presentation \(\mathcal N\).\\
+\(s_r,t_r,S,\lambda\) & Polynomial exponents, maximum exponent, and
+Perron root in the multicomponent presentation theorem.\\
+\(D_{\mathrm Z},c_r^{(\mathrm Z)}\) & Period and relative-density
+constants for the Zeckendorf product presentation.\\
+\(\mathcal P_m^{(\mathrm Z)}\), \(\mathcal P_{\mathcal Z}\) &
+The length-\(m\) Zeckendorf prime slice and the full prime Zeckendorf
+language.\\
+\(A_b,B_b,M_b\), \(A_{\mathrm Z},B_{\mathrm Z},M_{\mathrm Z}\) &
+Explicit prime-slice lower/upper constants and thresholds in the
+base-\(b\) and Zeckendorf settings.\\
+\end{tabular}
+\end{center}
+
+We begin with the classical density dichotomy for deterministic
+automata, recorded in \Cref{thm:dfa-density-dichotomy} because its
+constants feed directly into the prime approximation bounds. In the
+binary case, if
 \[
   a_m(\mathcal A)
-  :=\#\{w\in\Sigma^m:\mathcal A\text{ accepts }w\}.
+  :=\#\{w\in\{0,1\}^m:\mathcal A\text{ accepts }w\},
 \]
-Then there exist an integer \(p\ge 1\), non-negative constants
-\(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that
+then
 \[
-  \frac{a_m(\mathcal A)}{2^m}=c_{m\bmod p}+O(\theta^m)
-  \qquad (m\to\infty).
+  \frac{a_m(\mathcal A)}{2^m}=c_{m\bmod D_A}+O(\theta^m)
 \]
-Consequently exactly one of the following holds:
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item \(a_m(\mathcal A)/2^m\) decays exponentially.
-  \item Along some residue class modulo \(p\), the ratio
-  \(a_m(\mathcal A)/2^m\) is bounded below by a positive constant.
-\end{enumerate}
-Section~\ref{sec:automata} proves this dichotomy. In particular, it
-rules out the intermediate scale \(a_m(\mathcal A)/2^m\asymp m^{-\alpha}\).
-\end{theorem}
+for some automaton period \(D_A\), non-negative residue constants
+\(c_0,\dots,c_{D_A-1}\), and \(\theta\in(0,1)\). Thus the normalized
+count either decays exponentially on every residue class, or is
+bounded below by a positive constant on at least one residue class. In
+particular, the intermediate scale
+\(a_m(\mathcal A)/2^m\asymp m^{-\alpha}\) is excluded.
 
 When this is applied to the binary prime language
 \(\mathcal P_m^{(2)}\), whose size is \(\asymp 2^m/m\) by the prime
-number theorem \cite{HardyWright2008}, one obtains a sharp
-incompatibility with finite-state recognition.
-
-\begin{corollary}[Symmetric-difference lower bound for binary primes]
-  \label{cor:intro-binary-primes}
-Let \(L(\mathcal A)\subseteq\{0,1\}^\ast\) be recognised by a fixed
-deterministic finite automaton. Then there exists \(c>0\) such that
+number theorem \cite{HardyWright2008}, the full base-\(b\) results
+\Cref{cor:dfa-prime-symmetric-diff,cor:dfa-prime-recall-precision}
+give the following binary consequences. For every fixed deterministic
+finite automaton there is \(c>0\) such that
 \[
   \abs{(L(\mathcal A)\cap\{0,1\}^m)\triangle\mathcal P_m^{(2)}}
   \ge c\,\frac{2^m}{m}
 \]
-for all sufficiently large \(m\). The proof in
-\Cref{sec:automata} further shows that positive-density languages have
-\(\gg 2^m\) symmetric difference along an arithmetic progression.
-\end{corollary}
-
-\begin{corollary}[No simultaneous recall and precision for fixed DFA]
-  \label{cor:intro-binary-precision}
-  Let
-  \[
-    \mathrm{Rec}_m
-    :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(2)}}}
-            {\abs{\mathcal P_m^{(2)}}},
-    \qquad
-    \mathrm{Prec}_m
-    :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(2)}}}
-            {\abs{L(\mathcal A)\cap\{0,1\}^m}}
-  \]
-  whenever \(\abs{L(\mathcal A)\cap\{0,1\}^m}>0\). Then every fixed DFA
-  satisfies one of the following:
-  \begin{enumerate}[label=\textup{(\roman*)}]
-    \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
-    \item \(\mathrm{Prec}_m\to 0\) along an infinite arithmetic
-    progression of lengths.
-  \end{enumerate}
-\end{corollary}
+for all sufficiently large \(m\), and positive-density languages have
+\(\gg 2^m\) symmetric difference along an arithmetic progression. For
+the corresponding recall and precision ratios, every fixed DFA has
+either exponentially decaying recall or \(O(1/m)\) precision along an
+infinite arithmetic progression. These introductory statements are
+summaries of the later corollaries, not separate theorem content.
 
 \begin{example}[MSD-first base-\(5\) convention]\label{ex:msd-base}
   With digits read from the most significant position first, the word
@@ -119,24 +135,23 @@ for all sufficiently large \(m\). The proof in
   \Cref{sec:automata}.
 \end{example}
 
-For the Zeckendorf setting we use the following background growth law
-for regular sublanguages of
+For the Zeckendorf setting we use the background growth law proved in
+the specialized form needed in
+\Cref{prop:zeckendorf-regular-powerlaw}. It applies to regular
+sublanguages of
 \[
   \mathcal Z
   :=\{x_1\cdots x_m\in\{0,1\}^\ast:
       x_ix_{i+1}\neq 11,\ x_m=1\}.
 \]
-
-\begin{theorem}[Background: Zeckendorf growth law]
-  \label{thm:intro-zeckendorf}
-Let \(L\subseteq\mathcal Z\) be regular. After deleting states that are
-not reachable from the initial state or cannot reach an accepting
-state, let \(\rho\) be the maximal spectral radius of a strongly
-connected component in a DFA recognizing \(L\). Define
+For such an \(L\), after deleting states that are not reachable from
+the initial state or cannot reach an accepting state, let \(\rho\) be
+the maximal spectral radius of a strongly connected component in a DFA
+recognizing \(L\), and define
 \[
   N_L(T):=\#\{w\in L:\val(w)\le T\},
 \]
-where \(\val(w)\) is the Zeckendorf value of \(w\). Then
+where \(\val(w)\) is the Zeckendorf value of \(w\). The growth law says
 \[
   N_L(T)=T^{\alpha+o(1)},
   \qquad
@@ -150,8 +165,8 @@ where \(\val(w)\) is the Zeckendorf value of \(w\). Then
 \Cref{sec:zeckendorf} combines this background statement with
 prime-counting estimates to deduce the quantitative Zeckendorf
 corollaries. The non-regularity and eventual-sofic exclusions then
-follow immediately.
-\end{theorem}
+follow immediately. In the endpoint case \(\rho\le1\), the displayed
+formula is used only in the form \(N_L(T)=T^{o(1)}\).
 
 \begin{example}[LSD-first Zeckendorf convention]\label{ex:lsd-zeck}
   Consider the integer \(23=F_8+F_3\). Its Zeckendorf expansion uses
@@ -164,31 +179,11 @@ follow immediately.
   trim deterministic presentation used in \Cref{sec:zeckendorf}.
 \end{example}
 
-For completeness, we record two classical analytic obstructions.
-
-\begin{theorem}[Background]\label{thm:intro-analytic}
-The following statements hold.
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item If \((b_n)_{n\ge 1}\subseteq\ZZ_{\ge 0}\), if \(b_p>0\) for
-  infinitely many primes \(p\), and if the Euler product
-  \[
-    Z_b(z):=\prod_{n\ge 1}(1-z^n)^{-b_n}
-  \]
-  converges to a holomorphic function on \(\abs{z}<1\), then it has the
-  unit circle as a natural boundary.
-
-  \item For every finite matrix \(M\), the function
-  \[
-    F_M(s):=\det(I-e^{-s}M)^{-1}
-  \]
-  is \(2\pi i\)-periodic. Consequently, if \(F(s)=\sum_{n\ge 1}a_n n^{-s}\)
-  is a Dirichlet series with at least one coefficient \(a_n\neq 0\) for
-  some \(n\ge 2\), then \(F\) cannot agree with \(F_M\) on any non-empty
-  open subset of a right half-plane. In particular, \(F_M\) cannot agree
-  with the Riemann \(\zeta\)-function on any non-empty open subset of
-  \(\Re(s)>1\).
-\end{enumerate}
-\end{theorem}
+The final remarks are only contextual. They recall the classical
+P\'olya--Carlson--Estermann natural-boundary obstruction for
+prime-supported Euler products and the elementary \(2\pi i\)-periodicity
+of scalar determinant models after \(z=e^{-s}\); these statements are
+not used in the finite-budget proofs.
 
 \subsection{Relation to prior work}\label{subsec:prior-work}
 
@@ -196,7 +191,7 @@ We give a theorem-by-theorem account of what is known, what is a
 specialized reproof, and what is new.
 
 \begin{itemize}
-  \item \textbf{\Cref{thm:intro-density} (Theorem~2.2; density dichotomy):
+  \item \textbf{\Cref{thm:dfa-density-dichotomy} (density dichotomy):
   classical.} The eventual periodicity of normalized word counts for a
   deterministic automaton is a direct Perron--Frobenius consequence and
   is standard in the density literature for regular languages; see
@@ -210,39 +205,61 @@ specialized reproof, and what is new.
   presentations and of the known Zeckendorf growth law; see, e.g.,
   \cite{SalomaaSoittola1978,LecomteRigo2001,CharlierRampersad2011}.
 
-  \item \textbf{\Cref{thm:parry-density} (Theorem~2.9; trim strongly connected
-  presentations): background packaging.} This is a specialized
-  relative-density formulation of the conditional-density literature
-  \cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
-  Its role is to isolate the trim, strongly connected case needed for
-  the later prime obstructions.
+  \item \textbf{\Cref{thm:multicomponent-finite-budget}
+  (multicomponent deterministic presentations).} The theorem keeps the
+  full residue-wise exponential-polynomial expansion for arbitrary trim
+  deterministic presentations and compares the polynomial exponents in
+  the product automaton. This is the presentation-level finite-budget
+  result used to handle maximal components connected by transient
+  paths.
 
-  \item \textbf{\Cref{cor:intro-binary-primes} and
-  \Cref{cor:intro-binary-precision} (Corollaries~2.5 and~2.7): new.}
-  These corollaries give a uniform quantitative obstruction for
-  approximating the base-\(b\) prime slices by a single fixed DFA, in
-  terms of both symmetric difference and simultaneous recall/precision.
-  The Zeckendorf analogues
-  \Cref{cor:zeck-symmetric-diff,cor:zeck-recall-precision} follow from
-  the same mechanism.
+  \item \textbf{\Cref{thm:parry-density} (trim strongly connected
+  presentations).} This is the \(s_r=0\) specialization of the
+  multicomponent picture and agrees with the conditional-density
+  literature
+  \cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
+  Its role is to isolate the constants used in the Zeckendorf
+  application.
+
+  \item \textbf{Effective quantitative prime-slice obstructions.} The
+  introductory binary corollaries above summarize the later statements
+  \Cref{prop:dfa-quantitative-obstruction,cor:dfa-prime-symmetric-diff,cor:dfa-prime-recall-precision}.
+  The effective theorem \Cref{thm:effective-fixed-dfa-prime-obstruction}
+  makes the fixed-base constants and thresholds computable from a
+  compressed Markov-chain certificate for the transition matrix of the
+  given DFA. This is an effective packaging of the classical density
+  dichotomy with explicit prime-counting input, not a new density
+  theorem. Together with
+  \Cref{cor:relative-finite-budget-obstruction}, this gives a uniform
+  obstruction to approximating the base-\(b\) prime slices by a single
+  fixed DFA, both for symmetric difference and for simultaneous
+  recall/precision. The Zeckendorf analogues
+  \Cref{cor:zeck-symmetric-diff,cor:zeck-recall-precision} follow by the
+  same mechanism.
 
   \item \textbf{Sofic-slice exclusion
-  (\Cref{rem:zeckendorf-primes-not-sofic}): easy corollary.} Once
+  (\Cref{rem:zeckendorf-primes-not-sofic}).} Once
   \Cref{cor:zeckendorf-prime-language-not-regular} is known, the
   regularity of sofic block languages immediately rules out eventual
   sofic realization of the prime Zeckendorf slices. We record this only
   because it fits the overall narrative.
 
-  \item \textbf{\Cref{thm:intro-analytic} (analytic obstructions):
-  classical background.} The natural-boundary and periodicity
-  statements are standard consequences of the work of
-  P\'olya--Carlson--Estermann and of the Artin--Mazur determinant
-  formula \cite{Polya1923,Carlson1921,Estermann1928,ArtinMazur1965,BowenLanford1970}.
+  \item \textbf{Analytic obstructions: classical background.}
+  \Cref{thm:euler-product-natural-boundary} is the usual
+  P\'olya--Carlson natural-boundary mechanism for Euler products.
+  \Cref{prop:finite-zeta-imaginary-periodicity} is the corresponding
+  periodicity obstruction for determinant models after \(z=e^{-s}\). Both are
+  classical
+  \cite{Polya1923,Carlson1921,Estermann1928,ArtinMazur1965,BowenLanford1970}.
 \end{itemize}
 \smallskip
-\noindent\textbf{Relation to density literature.} For ordinary
+\noindent\textbf{Relation to density and approximation literature.} For ordinary
 automatic sets, asymptotic density questions go back at least to
-Berstel \cite{Berstel1973}; matrix and algorithmic treatments appear in
+Berstel \cite{Berstel1973}; the standard global sources include
+B\"uchi's automata-theoretic decidability work \cite{Buchi1960} and
+Allouche--Shallit's monograph on automatic sequences
+\cite{AlloucheShallit2003}. Matrix and algorithmic treatments appear
+in
 \cite{BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity},
 and Koga's paper \cite{Koga2019Density} revisits Sin'ya's density-zero
 criterion \cite{Sinya2021}. The rational-measure viewpoint of Hansel
@@ -254,42 +271,152 @@ Montoya \cite{Montoya2025Relative} recasts these questions in terms of
 relative densities, and Berth\'e--Goulet-Ouellet--Perrin
 \cite{BertheGouletPerrin2025} establish a broad density theorem under
 shift-invariant measures. Accordingly,
-\Cref{thm:intro-density,thm:intro-zeckendorf,thm:parry-density}
+\Cref{thm:dfa-density-dichotomy,prop:zeckendorf-regular-powerlaw,thm:parry-density}
 should be read here as background statements in a form suited to the
-prime-slice applications.
+prime-slice applications, while
+\Cref{thm:multicomponent-finite-budget} is the exponent-sensitive
+extension needed for general trim deterministic presentations. Cobham's
+theorem
+\cite{Cobham1969} is the foundational reference for base-dependent
+automatic recognizability of sets of integers. Regular approximation of
+non-regular languages is a separate line of work; see, for example,
+Eisman and Ravikumar \cite{EismanRavikumar2005} and the asymptotic
+approximation framework of Sin'ya \cite{Sinya2021}. Polynomial and
+sparse growth phenomena for regular languages are part of the classical
+transfer-matrix picture \cite{Berstel1973,SalomaaSoittola1978}, and
+numeration systems on regular languages are treated in
+\cite{LecomteRigo2001,Frougny1992,BruyereHansel1997,CharlierRampersad2011,Rigo2014Vol1,Rigo2014Vol2}.
+The present contribution is narrower: it packages the fixed-DFA
+prime-slice obstruction with computable residue-class constants and
+explicit thresholds, then applies the same finite-budget argument in the
+Zeckendorf setting.
 
 
 \medskip
-\noindent\textbf{Summary.} \Cref{thm:intro-density} together with
+\noindent\textbf{Summary.} \Cref{thm:dfa-density-dichotomy} together with
 \Cref{lem:trim-density} and \Cref{prop:zeckendorf-regular-powerlaw}
-record the classical density statements needed for deterministic
-presentations. \Cref{thm:parry-density} packages the conditional-density
-framework for precisely those trim, strongly connected presentations
-with Perron root \(\lambda>1\) that drive our applications; we do not
-claim any results for presentations with multiple strongly connected
-components, consistent with the counterexamples in
-\cite{CharlierRampersadRigoWaxweiler2010}. The genuinely new
-contributions are the quantitative recall/precision and symmetric-difference
-obstructions (\Cref{cor:intro-binary-primes,cor:intro-binary-precision}),
+record the density statements needed for deterministic presentations.
+\Cref{thm:multicomponent-finite-budget} gives the general trim
+deterministic finite-budget theorem, including multiple maximal
+components and their polynomial factors, and \Cref{thm:parry-density}
+records the strongly connected specialization used for Zeckendorf. The
+paper's effective contribution is the finite-budget obstruction
+mechanism with
+quantitative fixed-DFA recall/precision and symmetric-difference
+instances
+(\Cref{cor:relative-finite-budget-obstruction,prop:dfa-quantitative-obstruction,cor:dfa-prime-symmetric-diff,cor:dfa-prime-recall-precision}),
 their Zeckendorf companions
-(\Cref{cor:zeck-symmetric-diff,cor:zeck-recall-precision}). The
-eventual-sofic exclusion is recorded only as the easy corollary
-\Cref{rem:zeckendorf-primes-not-sofic}.
+(\Cref{cor:zeck-symmetric-diff,cor:zeck-recall-precision}) and the
+slice-rigidity route to prime Zeckendorf non-regularity
+(\Cref{prop:zeckendorf-regular-slice-rigidity,cor:zeckendorf-prime-language-not-regular}).
+The eventual-sofic exclusion is recorded only as the brief consequence
+\Cref{rem:zeckendorf-primes-not-sofic}, while
+\Cref{thm:euler-product-natural-boundary,prop:finite-zeta-imaginary-periodicity}
+remain classical background.
 
 \medskip
-The impossibility of recognizing prime numbers by finite automata in
-classical settings goes back to Hartmanis and Shank
-\cite{HartmanisShank1968}. The interaction between primes and digital
-constraints has a much deeper literature; in particular, the work of
-Mauduit and Rivat \cite{MauduitRivat2010} and of Drmota, Mauduit and
-Rivat \cite{DrmotaMauduitRivat2009} shows that prime inputs display
-highly nontrivial equidistribution phenomena inside automatic and
-digit-restricted settings. For Zeckendorf and more general Parry
-numeration systems, the regularity of admissible expansions is standard;
-see \cite{Frougny1992,BruyereHansel1997}. Our treatment uses only this
-regular syntax together with the transfer-matrix viewpoint on word
-counts, familiar from symbolic dynamics and analytic combinatorics
+Finite-automata non-recognizability of the base-\(b\) prime language
+goes back to Minsky and Papert \cite{MinskyPapert1966}.
+Allen \cite{Allen1968}, Hartmanis--Shank
+\cite{HartmanisShank1968}, and Sch\"utzenberger
+\cite{Schutzenberger1968} proved stronger related results for broader
+language classes and acceptable sets. Shallit's survey and monograph
+treat automaticity and number theory from the finite-automata viewpoint
+\cite{Shallit1996,AlloucheShallit2003}. Recent work of Yuen and Dubbe
+studies regularity and quantitative automaticity around the prime set
+\cite{Yuen2022,Dubbe2024}, and Shen proves that prime automata in Yao's
+finite-automata primeness model do not exist \cite{Shen2022}. Those
+results concern
+recognizability or growing-state quantitative automaticity. The present
+theorems are different: the automaton is fixed, the comparison is made
+on each fixed length slice, and the conclusion is a recall/precision
+or symmetric-difference obstruction rather than a state lower bound for
+a sequence of automata.
+
+The interaction between primes and digital
+constraints has a much deeper literature. Mauduit and Rivat
+\cite{MauduitRivat2010}, Drmota--Mauduit--Rivat
+\cite{DrmotaMauduitRivat2009}, and M\"ullner \cite{Muellner2017} prove
+analytic equidistribution results for digit functions and automatic
+sequences evaluated at primes. Maynard's theorem on primes with missing
+digits \cite{Maynard2019}, Bourgain's work on primes with prescribed
+binary digits
+\cite{Bourgain2013PrescribedDigits,Bourgain2015PrescribedDigitsII},
+Swaenepoel's extension to a positive proportion of preassigned digits
+in arbitrary bases \cite{Swaenepoel2020PreassignedDigits}, and work on
+reversed-prime or digit-reversal questions such as Bhowmik--Suzuki
+\cite{BhowmikSuzuki2023} address the complementary problem of locating
+primes inside large digit-restricted sets. These analytic results allow
+the digit constraints to vary with the length and prove prime
+asymptotics or positive proportions inside those varying families. The
+present paper does neither: the automaton is fixed once and for all,
+and the obstruction is the elementary mismatch between eventual
+periodic finite-state densities and the finite prime budget
+\(\asymp\lambda^m/m\). For Zeckendorf and more general Parry numeration
+systems, the uniqueness theorem goes back to Lekkerkerker and
+Zeckendorf \cite{Lekkerkerker1952,Zeckendorf1972}, and the regularity
+of admissible expansions is standard; see
+\cite{Frougny1992,BruyereHansel1997,Rigo2014Vol1,Rigo2014Vol2}. Analytic
+work of Drmota--M\"ullner--Spiegelhofer on primes in Fibonacci or
+Zeckendorf representations \cite{DrmotaMuellnerSpiegelhofer2021}
+studies prime distribution under numeration constraints. Here we use
+only the size of the Zeckendorf interval and regular syntax, not an
+equidistribution theorem for Zeckendorf digit patterns. The
+transfer-matrix viewpoint on word counts is familiar from symbolic
+dynamics and analytic combinatorics
 \cite{LindMarcus1995,Kitchens1998,FlajoletSedgewick2009}.
+
+Recent Monatshefte work illustrates the surrounding symbolic-dynamical
+landscape: Bustos-Gajardo--Kellendonk--Yassawi use finite semigroup
+methods for factors of substitution shifts
+\cite{BustosKellendonkYassawi2025}, and Charlier--Cisternino study
+soficity phenomena in Cantor real-base expansions
+\cite{CharlierCisternino2021}. These are complementary to the present
+finite-budget obstruction; they do not supply, and are not used as, a
+prime-slice density theorem.
+
+\begin{center}
+\begin{tabular}{p{0.19\linewidth}p{0.31\linewidth}p{0.13\linewidth}p{0.25\linewidth}}
+\textbf{Topic} & \textbf{Known result} & \textbf{Used here?} & \textbf{New increment}\\
+Regular-language density &
+\cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}
+give periodic or conditional density statements for regular languages. &
+Yes. &
+Residue constants are fed into explicit prime-slice thresholds for one
+fixed automaton.\\
+Numeration-system syntax &
+\cite{Frougny1992,BruyereHansel1997,CharlierRampersad2011,Rigo2014Vol1,Rigo2014Vol2}
+provide regular admissible languages and growth laws for abstract
+numeration, including Zeckendorf-type systems. &
+Yes, in the trim strongly connected cases stated explicitly. &
+The fixed-prime-slice obstruction is transferred to Zeckendorf length
+slices with computable constants.\\
+Primes in Fibonacci or Zeckendorf representations &
+Prime number theorem estimates give the number of primes in
+\([F_{m+1},F_{m+2})\) as \(\asymp\varphi^m/m\). &
+Yes. &
+Only this finite prime budget is used; no distribution theorem for
+Zeckendorf digit patterns is claimed.\\
+Sofic and orbit-growth context &
+\cite{BustosKellendonkYassawi2025,CharlierCisternino2021} and the
+classical zeta references in \Cref{sec:analytic} &
+No, except for contextual comparison. &
+The paper separates sofic/orbit-growth phenomena from the fixed
+prime-slice density obstruction.\\
+Regular approximation of nonregular languages &
+\cite{EismanRavikumar2005,Sinya2021} study approximation frameworks
+for nonregular languages. &
+Only for positioning. &
+The obstruction here is slice-wise and quantitative for one fixed DFA,
+not an optimal approximation scheme.\\
+Present fixed prime-slice obstruction &
+\Cref{thm:effective-fixed-dfa-prime-obstruction,thm:multicomponent-finite-budget,cor:relative-finite-budget-obstruction} &
+Yes; this is the main theorem chain. &
+Computes residue alternatives, thresholds, and constants for a fixed
+finite automaton, and compares multicomponent polynomial exponents
+against a prime budget of order \(\lambda^m/m\).\\
+\end{tabular}
+\end{center}
 
 \subsection{Organisation}
 
@@ -297,9 +424,10 @@ counts, familiar from symbolic dynamics and analytic combinatorics
 automata and derives the fixed-base prime corollaries.
 \Cref{sec:zeckendorf} records the background growth law for regular
 Zeckendorf sublanguages, deduces the corresponding quantitative prime
-corollaries, and then notes the easy sofic exclusion.
-\Cref{sec:analytic} collects background analytic observations
-concerning Euler products and determinant models. Later sections cite
-the statements recorded above directly, so their proofs and corollaries
-need not restate the results in full.
+corollaries, proves the slice-level rigidity that yields prime
+Zeckendorf non-regularity, and then notes the easy sofic exclusion.
+\Cref{sec:analytic} collects final background analytic comparators
+concerning Euler products and scalar determinant models. Later sections
+cite the statements recorded above directly, so their proofs and
+corollaries need not restate the results in full.
 

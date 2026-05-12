@@ -1,0 +1,271 @@
+﻿\subsection{Certified recurrence theorem}
+
+\begin{theorem}[All-tail recurrence theorem for the arithmetic window]
+\label{prop:section7-recurrence-input}
+The exact certificate records of
+Theorem~\ref{thm:arithmetic-window-certificates} imply the following.  For each
+\(q=9,\dots,17\), let
+\(P_q\) be the polynomial printed in
+Table~\ref{tab:appendix-recurrences-q9-17}.  This polynomial is used together
+with the exact residual certificate in
+Table~\ref{tab:appendix-recurrence-cert-normalization}; the coefficient table by
+itself is not the recurrence proof.  Let \(E\) denote the forward shift.  Then
+\[
+  P_q(E)S_q(j)=0\qquad(j\ge2),
+\]
+or equivalently
+\[
+  S_q(m)=\sum_{i=1}^{d_q}c_{q,i}S_q(m-i)
+  \qquad(m\ge d_q+2).
+\]
+The proof uses the exact histogram kernel
+\((\widetilde A_q,\widetilde u_q,\widetilde v_q)\).  The recurrence part uses
+the residual certificate \(\mathsf W_q(P_q)=\mathrm{accept}\): after substituting
+the displayed polynomial into the exact kernel matrix, the verifier proves the
+\(N_q\) integer residual equalities
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^t
+  P_q(\widetilde A_q)\widetilde v_q=0
+  \qquad(t=2,\dots,N_q+1).
+\]
+\Cref{thm:apriori-exact-kernel-certification} then propagates this
+Cayley--Hamilton block to every \(t\ge2\).  It is not an extrapolation from
+finitely many values of \(S_q(m)\).
+Moreover, on the exact observable quotient
+\(\mathcal O_2(\widetilde A_q,\widetilde u_q,\widetilde v_q)\), the
+endomorphism induced by \(\widetilde A_q\) has characteristic polynomial
+\(P_q\); this quotient statement uses the rank part
+\(\mathsf V_q(P_q)=\mathrm{accept}\).
+\end{theorem}
+
+\begin{proof}
+Fix \(q\), write \(d=d_q\), and abbreviate
+\[
+  (A,u,v,N)=(\widetilde A_q,\widetilde u_q,\widetilde v_q,N_q).
+\]
+By Lemma~\ref{lem:exact-histogram-realization},
+\[
+  S_q(m)=u^{\mathsf T}A^m v
+  \qquad(m\ge0).
+\]
+Theorem~\ref{thm:arithmetic-window-certificates} supplies the residual certificate
+record \(\mathsf W_q(P_q)=\mathrm{accept}\).  Equivalently,
+\[
+  u^{\mathsf T}A^tP_q(A)v=0
+  \qquad(t=2,\dots,N+1).
+\]
+Define
+\[
+  e_m:=S_q(m)-\sum_{i=1}^{d}c_{q,i}S_q(m-i)
+  =u^{\mathsf T}A^{m-d}P_q(A)v
+  \qquad(m\ge d).
+\]
+The residual certificate is exactly
+\[
+  e_{d+2}=e_{d+3}=\cdots=e_{d+N+1}=0.
+\]
+Applying \Cref{thm:apriori-exact-kernel-certification} to the same exact kernel
+identity gives the recurrence for \(m\ge d+2\), equivalently
+\[
+  e_m=0
+  \qquad(m\ge d+2).
+\]
+This is the asserted recurrence.  Replacing \(m\) by \(j+d\) gives
+\(P_q(E)S_q(j)=0\) for \(j\ge2\).  The rank part
+\(\mathsf V_q(P_q)=\mathrm{accept}\) of
+Theorem~\ref{thm:arithmetic-window-certificates}, together with
+\Cref{lem:cyclic-observable-quotient-certificate}, gives the stated
+characteristic-polynomial interpretation on the observable quotient.  By
+Lemma~\ref{lem:scalar-free-verifier}, the accepted residual block is obtained
+after substituting \(P_q\) into the exact histogram matrix; it is not inferred
+from sampled values of \(S_q(m)\).
+\end{proof}
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Exact certificates used by the arithmetic-window results.  Each entry is
+part of Theorem~\ref{thm:arithmetic-window-certificates}; the dependency
+skeleton is \Cref{prop:arithmetic-window-dependency-skeleton}, and the
+surrounding lemmas prove the soundness of these finite records.}
+\label{tab:section7-dependency-map}
+\begin{tabular}{@{}p{0.22\textwidth}p{0.68\textwidth}@{}}
+\toprule
+Result & Exact certificates \\
+\midrule
+Hankel principalization &
+\(\mathsf W_q(P_q)=\mathrm{accept}\) as a recurrence certificate record,
+Theorem~\ref{prop:section7-recurrence-input},
+and the Smith-normal-form certificates in
+Table~\ref{tab:appendix-principalization-q9-17}.\\
+Irreducibility and minimal recurrence &
+\(\mathsf W_q(P_q)=\mathrm{accept}\) as a recurrence certificate record,
+Theorem~\ref{prop:section7-recurrence-input},
+and the finite-field certificate of
+Lemma~\ref{lem:finite-field-certificate-soundness}.\\
+Full symmetric Galois groups &
+Irreducibility, the \((d_q-1,1)\) reductions, and the Jordan-cycle reductions
+certified by Lemma~\ref{lem:finite-field-certificate-soundness}.\\
+Linear disjointness and product densities &
+Full symmetric groups and the discriminant squareclass certificate
+Lemma~\ref{lem:discriminant-squareclass-certificate}.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Integral Hankel relations}
+
+\begin{definition}[Certified recurrence polynomials and null modes]
+\label{def:resonance-polynomials}
+For \(q=9,\dots,17\), let \(d_q\), \(m_0(q)\), and
+\((c_{q,1},\dots,c_{q,d_q})\) be the row of
+Table~\ref{tab:appendix-recurrences-q9-17}; the word ``certified'' here means
+that the same row has passed the local exact residual verifier of
+Table~\ref{tab:appendix-recurrence-cert-normalization}.  Define
+\[
+  P_q(\lambda):=
+  \lambda^{d_q}
+  -c_{q,1}\lambda^{d_q-1}
+  -c_{q,2}\lambda^{d_q-2}
+  -\cdots
+  -c_{q,d_q}\in\ZZ[\lambda].
+\]
+By \Cref{prop:section7-recurrence-input}, the recurrence holds for
+\(m\ge d_q+2\) in every row; equivalently
+\[
+  P_q(E)S_q(j)=0\qquad(j\ge2),
+\]
+where
+\[
+  P_q(E)S_q(j):=
+  S_q(j+d_q)-c_{q,1}S_q(j+d_q-1)-\cdots-c_{q,d_q}S_q(j).
+\]
+This is the normalization recorded in
+Table~\ref{tab:appendix-recurrence-cert-normalization}.  Set
+\[
+  n_q:=2\left\lfloor\frac{q}{2}\right\rfloor+1,
+  \qquad
+  \kappa_q:=n_q-d_q.
+\]
+Define the square Hankel block
+\[
+  H_q:=\bigl[S_q(i+j+2)\bigr]_{0\le i,j\le n_q-1}
+\]
+and its integral null module
+\[
+  \mathrm{NullModes}(q):=\ker_{\ZZ}(H_q^{\mathsf T})\subset \ZZ^{n_q}.
+\]
+Finally, let
+\[
+  \mathcal M(P_q):=
+  \bigl\{\operatorname{coeff}_{<n_q}(Q(\lambda)P_q(\lambda)):
+  Q\in\ZZ[\lambda],\ \deg Q<\kappa_q\bigr\}\subset\ZZ^{n_q},
+\]
+where \(\operatorname{coeff}_{<n_q}\) truncates a polynomial to its first
+\(n_q\) coefficients.
+\end{definition}
+
+\begin{remark}
+The polynomials \(P_q\), the starting indices \(m_0(q)\), and the rows
+\(c_{q,i}\) are the certified residual records of
+Tables~\ref{tab:appendix-recurrences-q9-17} and
+\ref{tab:appendix-recurrence-cert-normalization}, so the Hankel block is tied
+to this paper's arithmetic-window certificates.
+\end{remark}
+
+\begin{theorem}[Hankel principalization]
+\label{thm:principalization}
+The exact certificate records of
+Theorem~\ref{thm:arithmetic-window-certificates} imply that, for every
+\(q\in\{9,\dots,17\}\),
+\[
+  \mathrm{NullModes}(q)=\mathcal M(P_q).
+\]
+In other words, every integral elimination relation visible in the chosen
+Hankel window is a short multiple of the certified recurrence polynomial.
+\end{theorem}
+
+\begin{proof}
+Since \(P_q(E)S_q(\cdot+2)=0\), every short multiple \(Q(\lambda)P_q(\lambda)\)
+gives an annihilating relation on the full sequence and hence a vector in
+\(\mathrm{NullModes}(q)\).  Thus \(\mathcal M(P_q)\subseteq \mathrm{NullModes}(q)\).
+
+The exact arithmetic certificate recorded in Appendix~\ref{app:certification}
+computes a \(\ZZ\)-basis of \(\mathrm{NullModes}(q)\) for each
+\(q=9,\dots,17\); the basis vectors are recorded in the machine-checkable
+artifact of \Cref{prop:pinned-normalizer-certificate-table}.  By
+\Cref{prop:exact-moment-window-supplement}, the same archived supplement also
+contains the exact Hankel matrices \(H_q\), verifies the annihilation
+\(H_q^{\mathsf T}\alpha=0\) for each recorded basis vector \(\alpha\), and
+checks \(\rk H_q=d_q\).  The resulting basis has \(\kappa_q\) vectors.  Hence
+\[
+  \rk_{\ZZ}\mathrm{NullModes}(q)=n_q-d_q=\kappa_q.
+\]
+Equivalently, \(\rk H_q=n_q-\kappa_q=d_q\).
+On the other hand, \(\mathcal M(P_q)\) is a free \(\ZZ\)-module of rank
+\(\kappa_q\), generated by the truncated coefficient vectors of
+\(P_q,\lambda P_q,\dots,\lambda^{\kappa_q-1}P_q\).  Since
+\(\mathcal M(P_q)\subseteq \mathrm{NullModes}(q)\) and both are free
+\(\ZZ\)-modules of rank \(\kappa_q\), the inclusion has finite index.  To
+verify that this index equals~\(1\), we use the Smith-normal-form certificates
+summarized in Table~\ref{tab:appendix-principalization-q9-17} and recorded with
+unimodular matrices \(U_q,V_q\) in the artifact.  For each
+\(q=9,\dots,17\), the matrix expressing the generators
+\(P_q,\lambda P_q,\dots,\lambda^{\kappa_q-1}P_q\) in a \(\ZZ\)-basis of
+\(\mathrm{NullModes}(q)\) has all invariant factors equal to~\(1\)
+(with the case \(\kappa_{12}=0\) vacuous).  Hence the inclusion has index~\(1\),
+and therefore
+\(\mathcal M(P_q)=\mathrm{NullModes}(q)\).
+\end{proof}
+
+\begin{corollary}[No spurious eliminations]
+\label{cor:no-spurious-elimination}
+Let \(q\in\{9,\dots,17\}\) with \(\kappa_q>0\), and let
+\(B(\lambda)\in\ZZ[\lambda]\) satisfy \(\deg B<n_q\).  If its coefficient vector
+belongs to \(\mathrm{NullModes}(q)\), then there exists a unique polynomial
+\(Q(\lambda)\in\ZZ[\lambda]\) with \(\deg Q<\kappa_q\) such that
+\[
+  B(\lambda)=Q(\lambda)P_q(\lambda).
+\]
+In particular, every elimination relation detected in the chosen Hankel block
+extends automatically to the full recurrence.
+\end{corollary}
+
+\begin{proof}
+By \Cref{thm:principalization}, the coefficient vector of \(B\) is the
+truncation of \(QP_q\) for some \(Q\) of degree \(<\kappa_q\).  Since
+\(\deg(QP_q)<n_q\), truncation does nothing, and uniqueness follows from the
+fact that \(P_q\) is monic.
+\end{proof}
+
+\begin{corollary}[GCD recovery]
+\label{cor:gcd-recovers-minpoly}
+Let \(q\in\{9,\dots,17\}\) with \(\kappa_q>0\), and choose any \(\ZZ\)-basis
+\(\alpha^{(1)},\dots,\alpha^{(\kappa_q)}\) of \(\mathrm{NullModes}(q)\).  Write
+\[
+  A^{(j)}(\lambda):=\sum_{k=0}^{n_q-1}\alpha^{(j)}_k\lambda^k.
+\]
+Then
+\[
+  \gcd\bigl(A^{(1)}(\lambda),\dots,A^{(\kappa_q)}(\lambda)\bigr)=\pm P_q(\lambda).
+\]
+Thus the certified recurrence polynomial is uniquely recoverable from any
+integral basis of finite Hankel certificates.
+\end{corollary}
+
+\begin{proof}
+By \Cref{thm:principalization}, each \(A^{(j)}\) is of the form
+\(Q^{(j)}P_q\) with \(\deg Q^{(j)}<\kappa_q\), so \(P_q\) is a common divisor.
+Conversely, the module \(\mathcal M(P_q)\) contains \(P_q\) itself, because one
+may take \(Q\equiv 1\).  Since the \(\alpha^{(j)}\) form a basis of
+\(\mathcal M(P_q)\), there are integers \(c_j\) such that
+\[
+  P_q=\sum_{j=1}^{\kappa_q} c_j A^{(j)}
+  =\left(\sum_{j=1}^{\kappa_q} c_jQ^{(j)}\right)P_q.
+\]
+As \(\ZZ[\lambda]\) is an integral domain, the polynomials \(Q^{(j)}\) generate
+the unit ideal.  Hence their greatest common divisor is \(\pm1\), and the gcd of
+the \(A^{(j)}\) is exactly \(\pm P_q\).
+\end{proof}
+

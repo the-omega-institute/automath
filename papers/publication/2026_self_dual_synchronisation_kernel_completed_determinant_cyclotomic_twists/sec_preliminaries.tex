@@ -27,7 +27,8 @@ then
 \end{lemma}
 
 \begin{proof}
-By Perron--Frobenius theory,
+By the standard Perron--Frobenius trace estimate for shifts of finite
+type~\cite{LindMarcus2021,Kitchens1998},
 \(
   \Tr(M^n)=\lambda^n+O(\Lambda(M)^n)
 \).
@@ -40,15 +41,27 @@ gives the main term and every divisor \(d\ge 2\) contributes at most
 
 \subsection{Self-dual kernels and completion}
 
-Let \(B(u)=B_0+uB_1\) with integer matrices \(B_0,B_1\), and suppose there is a permutation matrix \(\Pi\) such that \(\Pi^{-1}B_0\Pi=B_1\) (and hence \(\Pi^{-1}B_1\Pi=B_0\)). Write
+Let \(B(u)=B_0+uB_1\) with integer matrices \(B_0,B_1\), and suppose there is a permutation matrix \(\Pi\) such that
+\[
+  \Pi^{-1}B_0\Pi=B_1,
+  \qquad
+  \Pi^{-1}B_1\Pi=B_0.
+\]
+Write
 \[\Delta(z,u):=\det(I-zB(u)).\]
 The following observation packages the formal consequences of this self-duality.
 
 \begin{lemma}[Self-dual compression]\label{lem:self-dual-compression}
-With \(B(u)\) as above, one has \(\Pi^{-1}B(u)\Pi=u\,B(1/u)\), hence
-\(\Delta(z,u)=\Delta(uz,u^{-1})\). After the change of variables
-\(u=r^2\), \(w=zr\), and \(s=r+r^{-1}\), the expression
-\(\widehat\Delta(w,s):=\Delta(w/r,r^2)\) belongs to \(\ZZ[s][w]\). Writing
+With \(B(u)\) as above,
+\[
+  \Pi^{-1}B(u)\Pi=u\,B(1/u),
+  \qquad
+  \Delta(z,u)=\Delta(uz,u^{-1}).
+\]
+After the change of variables \(u=r^2\), \(w=zr\), and
+\(s=r+r^{-1}\), the expression
+\(\widehat\Delta(w,s):=\Delta(w/r,r^2)\) belongs to \(\ZZ[s][w]\).
+Writing
 \[
   \widehat\Delta(w,s)=\sum_{j=0}^d c_j(s)w^j,
 \]
@@ -97,7 +110,96 @@ Replacing \(r\) by \(-r\) sends \((w,s)\) to \((-w,-s)\), so
 Comparing coefficients of \(w^j\) gives
 \(c_j(-s)=(-1)^j c_j(s)\).
 \end{proof}
-For reference we keep the terminology of Section~\ref{sec:introduction}: the polynomial $\widehat\Delta(w,s)$ is the completed determinant, and $\Phi_m^+$ denotes the real cyclotomic polynomial of $2\cos(\pi/m)$.
+For reference we keep the terminology of Section~\ref{sec:introduction}:
+the polynomial \(\widehat\Delta(w,s)\) is the completed determinant. For
+\(m\ge2\), \(\Phi_m^+\) denotes the real cyclotomic polynomial of
+\(2\cos(\pi/m)\), i.e.
+\[
+  \Phi_m^+(s)
+  =
+  \prod_{\alpha\in A_m}(s-\alpha),
+  \qquad
+  A_m=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
+      a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\}.
+\]
+Whenever a cyclotomic factor is written as a resultant in this paper,
+the convention is the ordered one
+\[
+  \Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr)
+\]
+with \(\Phi_m^+\) in the first slot. The reversed order is always
+understood to carry the Sylvester sign described in
+\Cref{lem:ordered-cyclotomic-resultant}.
+
+\begin{lemma}[Row-sum Perron bound]
+  \label{lem:row-sum-perron-bound}
+  Let \(M\) be a finite non-negative matrix. If every row of \(M\) has
+  sum at most \(q\), and \(M\mathbf1=q\mathbf1\), then \(\rho(M)=q\).
+  If, in addition, \(M\) is primitive, then \(q\) is a simple eigenvalue
+  and no other eigenvalue has modulus \(q\).
+\end{lemma}
+
+\begin{proof}
+The equality \(M\mathbf1=q\mathbf1\) shows that \(q\) is an eigenvalue.
+For any eigenvalue \(\lambda\) of \(M\),
+\[
+  \abs{\lambda}\le \|M\|_\infty
+  =\max_i\sum_j \abs{M_{ij}}
+  =\max_i\sum_j M_{ij}\le q,
+\]
+so \(\rho(M)=q\). The final assertion is the primitive
+Perron--Frobenius theorem.
+\end{proof}
+
+\begin{lemma}[Ordered root-product resultant convention]
+  \label{lem:ordered-cyclotomic-resultant}
+  Let \(K\) be a field of characteristic \(0\), let \(A\) be a finite
+  Galois-stable set of algebraic numbers, and put
+  \[
+    \Phi_A(s):=\prod_{\alpha\in A}(s-\alpha)\in K[s].
+  \]
+  For every polynomial \(H(w,s)\in K[w,s]\), define the root product
+  \[
+    \mathcal R_A[H](w):=\prod_{\alpha\in A}H(w,\alpha).
+  \]
+  With the standard Sylvester convention \cite{CoxLittleOShea2005}
+  \[
+    \Res_s(f,g)=a_f^{\deg g}\prod_{f(\alpha)=0}g(\alpha),
+    \qquad f(s)=a_f\prod_{f(\alpha)=0}(s-\alpha),
+  \]
+  one has the exact product identity
+  \[
+    \mathcal R_A[H](w)
+    =\Res_s\bigl(\Phi_A(s),H(w,s)\bigr).
+  \]
+  Thus the root product is defined independently of resultants and is
+  represented by a resultant only in this ordered form, with the monic
+  polynomial \(\Phi_A\) as the first argument. This is the convention
+  used throughout the paper whenever a cyclotomic root product is
+  denoted by a resultant.
+  If \(e=\deg_s H\), where the degree is taken in \(K(w)[s]\), then
+  reversing the two resultant arguments gives
+  \[
+    \Res_s\bigl(H(w,s),\Phi_A(s)\bigr)
+      =(-1)^{e|A|}\mathcal R_A[H](w).
+  \]
+\end{lemma}
+
+\begin{proof}
+Since \(\Phi_A\) is monic, the displayed Sylvester convention gives
+\[
+  \Res_s\bigl(\Phi_A(s),H(w,s)\bigr)
+    =\prod_{\alpha\in A}H(w,\alpha).
+\]
+The reversed-order formula is the standard symmetry
+\[
+  \Res_s(g,f)=(-1)^{\deg f\deg g}\Res_s(f,g),
+\]
+applied in \(K(w)[s]\) to \(f=\Phi_A\) and \(g=H\). In particular,
+no statement in the sequel identifies
+\(\Res_s(H(w,s),\Phi_A(s))\) with the root product unless the displayed
+sign is also present.
+\end{proof}
 
 \begin{lemma}[Parity normal form for the sign quotient]
   \label{lem:sign-quotient-normal-form}
@@ -111,9 +213,10 @@ For reference we keep the terminology of Section~\ref{sec:introduction}: the pol
   \[
     H(w,s)=G(w^2,sw).
   \]
-  If \(H\) is irreducible, then the quotient of the affine curve
-  \(H(w,s)=0\) by the involution \((w,s)\mapsto(-w,-s)\) is birational
-  to the affine plane curve \(G(x,y)=0\).
+  If \(H\) is irreducible and \(c_0\ne0\), then the quotient of the
+  affine curve \(H(w,s)=0\) by the involution
+  \((w,s)\mapsto(-w,-s)\) is birational to the affine plane curve
+  \(G(x,y)=0\).
 \end{lemma}
 
 \begin{proof}
@@ -129,21 +232,78 @@ where \(x=w^2\) and \(y=sw\). This gives a polynomial
 because the monomials \(x^ay^b\) are linearly independent in
 \(k[w,s]\).
 
-If \(H\) is irreducible, then \(k[w,s]/(H)\) is a domain. Let
+If \(H\) is irreducible and \(c_0\ne0\), then \(G\) is irreducible as
+well: otherwise a proper factorisation of \(G\) would pull back to a
+proper factorisation of \(H\). Thus the image of \(k[x,y]\) in
+\(k[w,s]/(H)\) has kernel \((G)\). Let
 \[
   K:=\operatorname{Frac}\bigl(k[w,s]/(H)\bigr)
 \]
 be its function field. The involution \((w,s)\mapsto(-w,-s)\) acts on
-\(K\), and its invariant subfield is generated by \(x=w^2\) and
-\(y=sw\). Hence the quotient is birational to the plane curve
-\(G(x,y)=0\).
+\(K\). In the ambient rational field,
+\[
+  k(w,s)^{(w,s)\mapsto(-w,-s)}=k(w^2,sw):
+\]
+the even rational invariants are generated by \(w^2\), \(ws\), and
+\(s^2=(ws)^2/w^2\), so no further generator is needed. Passing to the
+quotient is legitimate as follows. Let \(L\) be the subfield of \(K\)
+generated by the images of \(x=w^2\) and \(y=sw\). The field \(K\) is
+generated over \(L\) by the image of \(w\), with \(w^2=x\) and
+\(s=y/w\). The induced involution is nontrivial, since otherwise the image
+of \(w\) would be equal to its negative; as \(c_0\ne0\), the polynomial
+\(H\) is not divisible by \(w\), so the image of \(w\) is nonzero in the
+domain \(k[w,s]/(H)\).
+Because \(\operatorname{char} k\ne2\), this order-two action gives
+\([K:K^\iota]=2\). Since \(K=L(w)\) and \(w^2=x\), also \([K:L]\le2\);
+the nontriviality just noted forces \(L=K^\iota\). Therefore
+\[
+  K^\iota=\operatorname{Frac}\bigl(k[x,y]/(G)\bigr),
+\]
+and the quotient is birational to the plane curve \(G(x,y)=0\).
+\end{proof}
+
+\begin{theorem}[Sign-quotient plane model and genus]
+  \label{thm:sign-quotient-plane-genus}
+  Let \(k\) be a field of characteristic different from \(2\), and let
+  \[
+    H(w,s)=\sum_{j=0}^d c_j(s)w^j\in k[w,s]
+  \]
+  be irreducible with \(c_0\ne0\). Assume
+  \[
+    \deg_s c_j\le j,\qquad c_j(-s)=(-1)^jc_j(s)
+    \quad (0\le j\le d).
+  \]
+  Let \(G(x,y)\in k[x,y]\) be the unique polynomial satisfying
+  \[
+    H(w,s)=G(w^2,sw),
+  \]
+  and let \(Y_{\mathrm{aff}}\) be the affine plane curve \(G(x,y)=0\).
+  Then the quotient of the affine curve \(H(w,s)=0\) by the involution
+  \((w,s)\mapsto(-w,-s)\) has function field \(k(Y_{\mathrm{aff}})\).
+  If the projective closure \(Y\subset\mathbb P^2_k\) of
+  \(Y_{\mathrm{aff}}\) is nonsingular of degree \(n\), then \(Y\) is the
+  smooth projective quotient model and, after extending scalars to an
+  algebraic closure of \(k\),
+  \[
+    g(Y)=\frac{(n-1)(n-2)}2.
+  \]
+\end{theorem}
+
+\begin{proof}
+\Cref{lem:sign-quotient-normal-form} gives the polynomial \(G\) and
+identifies the invariant function field with \(k(Y_{\mathrm{aff}})\).
+If the projective closure \(Y\) is nonsingular, it is already complete
+and regular, hence it is the smooth projective model of that function
+field. The genus formula is the standard formula for a nonsingular
+plane curve of degree \(n\)
+\cite[Ch.~IV, Example~1.3.4]{Hartshorne1977}.
 \end{proof}
 
 
 \subsection{The ten-state weighted kernel}
 
 \begin{definition}\label{def:sync-kernel}
-We work throughout with the explicit ten-state weighted digraph shown in Figure~\ref{fig:sync-kernel}. Its state labels \(\st{000},\st{001},\dots,\st{11-1}\) are inherited from the two-track comparison automaton that originally motivated the example, but in this note they serve purely as names for the vertices of the digraph. Every edge and weight is displayed in the transition table below, so no external construction is required; we keep the synchronisation language only as a mnemonic for the involution that exchanges output-zero and output-one edges.
+We work throughout with the explicit ten-state weighted digraph shown in Figure~\ref{fig:sync-kernel}. Its state labels \(\st{000},\st{001},\dots,\st{11-1}\) are inherited from the two-track comparison automaton that originally motivated the example, but in this article they serve purely as names for the vertices of the digraph. Every edge and weight is displayed in the transition table below, so no external construction is required; we keep the synchronisation language only as a mnemonic for the involution that exchanges output-zero and output-one edges.
 Let
 \[
   \mathcal S=
@@ -183,29 +343,29 @@ entry, and each output-\(1\) edge contributes \(u\).
 The ten states partition into five dual pairs under the involution
 \(\iota\) of \Cref{prop:sync-self-duality}:
 \[
-  \underbrace{\st{000}\leftrightarrow\st{101}}_{\text{pair 1}},\quad
-  \underbrace{\st{001}\leftrightarrow\st{100}}_{\text{pair 2}},\quad
-  \underbrace{\st{002}\leftrightarrow\st{010}}_{\text{pair 3}},\quad
-  \underbrace{\st{0-12}\leftrightarrow\st{11-1}}_{\text{pair 4}},\quad
-  \underbrace{\st{1-12}\leftrightarrow\st{01-1}}_{\text{pair 5}}.
+  \begin{array}{ccc}
+  \st{000}\leftrightarrow\st{101},&
+  \st{001}\leftrightarrow\st{100},&
+  \st{002}\leftrightarrow\st{010},\\
+  \st{0-12}\leftrightarrow\st{11-1},&
+  \st{1-12}\leftrightarrow\st{01-1}.&
+  \end{array}
 \]
 Each state has exactly three outgoing edges. The self-loop at
 \(\st{000}\) (and dually at \(\st{101}\)) makes the digraph aperiodic.
 The strong connectivity can be checked from the transitions: every state
 reaches \(\st{000}\) in at most three steps via
 \[
-  \st{001}\to\st{010}\to\st{100}\to\st{000},\qquad
-  \st{002}\to\st{000},\qquad
-  \st{010}\to\st{100}\to\st{000},\qquad
-  \st{101}\to\st{100}\to\st{000},
-\]
-\[
-  \st{0-12}\to\st{100}\to\st{000},\qquad
-  \st{1-12}\to\st{100}\to\st{000},\qquad
-  \st{01-1}\to\st{002}\to\st{000},
-\]
-\[
-  \st{11-1}\to\st{002}\to\st{000},
+  \begin{array}{ll}
+  \st{001}\to\st{010}\to\st{100}\to\st{000},&
+  \st{002}\to\st{000},\\
+  \st{010}\to\st{100}\to\st{000},&
+  \st{101}\to\st{100}\to\st{000},\\
+  \st{0-12}\to\st{100}\to\st{000},&
+  \st{1-12}\to\st{100}\to\st{000},\\
+  \st{01-1}\to\st{002}\to\st{000},&
+  \st{11-1}\to\st{002}\to\st{000}.
+  \end{array}
 \]
 and \(\st{000}\) reaches every state by following
 \(\st{000}\to\st{001}\to\st{010}\to\st{0-12}\to\st{01-1}\to\st{1-12}\)

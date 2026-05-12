@@ -39,7 +39,56 @@ and set
   :=\bigcup_{m\ge 1}\mathcal P_m^{(\mathrm Z)}.
 \]
 
-\begin{proposition}[Known growth law for regular Zeckendorf languages]
+\begin{lemma}[Length growth for regular Zeckendorf sublanguages]
+  \label{lem:zeckendorf-length-growth}
+  Let \(L\subseteq\mathcal Z\) be regular. Choose a DFA recognizing
+  \(L\), delete states that are not reachable from the initial state or
+  cannot reach an accepting state, and let \(\rho\) be the maximal
+  spectral radius of a strongly connected component of the resulting
+  automaton. Then \(\rho\le\varphi\). Moreover,
+  \[
+    \#\{w\in L:\abs w\le m\}=
+    \begin{cases}
+      \rho^{m+o(m)}, & \rho>1,\\
+      \exp(o(m)), & \rho\le1.
+    \end{cases}
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(L\subseteq\mathcal Z\), the number of words of length at most
+  \(m\) in \(L\) is bounded above by
+  \[
+    \#(\mathcal Z\cap\{0,1\}^{\le m})=F_{m+2}-1=\varphi^{m+o(m)}.
+  \]
+  For any trimmed strongly connected component \(C\) of spectral radius
+  \(\rho_C\), choose entry and exit paths through the trimmed automaton.
+  Periodic Perron--Frobenius theory gives a residue class of lengths on
+  which the number of paths that traverse \(C\) is
+  \(\rho_C^{n+o(n)}\). These paths yield distinct accepted words after
+  adding the fixed entry and exit words. The preceding ambient upper
+  bound therefore forces \(\rho_C\le\varphi\) for every component, and
+  hence \(\rho\le\varphi\).
+
+  Put the trimmed adjacency matrix in block upper-triangular form by
+  strongly connected components. The upper bound
+  \(O(m^N\rho^m)\), with \(N\) depending only on the number of blocks,
+  follows from the usual path decomposition through this acyclic block
+  graph and standard finite-dimensional matrix-power estimates for the
+  diagonal blocks. If
+  \(\rho>1\), choose a reachable and co-reachable component of spectral
+  radius \(\rho\); the same periodic Perron--Frobenius lower bound along
+  one admissible residue class gives \(\rho^{m+o(m)}\) words of length at
+  most \(m\). If \(\rho\le1\), every non-negative integral irreducible
+  recurrent block has spectral radius at most \(1\), hence is either
+  nilpotent in the acyclic part or a permutation block on a directed
+  cycle. A path can pass through only finitely many such blocks, so the
+  total number of accepted words of length at most \(m\) is polynomial in
+  \(m\), and therefore \(\exp(o(m))\). This proves the displayed
+  estimate.
+\end{proof}
+
+\begin{proposition}[Growth law for regular Zeckendorf languages]
   \label{prop:zeckendorf-regular-powerlaw}
   Let \(L\subseteq\mathcal Z\) be regular. Choose a DFA recognizing
   \(L\), delete states that are not reachable from the initial state or
@@ -49,7 +98,7 @@ and set
   \[
     N_L(T):=\#\{w\in L:\val(w)\le T\}.
   \]
-  Then
+  If \(L=\varnothing\), then \(N_L(T)=0\) for all \(T\). Otherwise
   \[
     N_L(T)=T^{\alpha+o(1)},
     \qquad
@@ -60,27 +109,35 @@ and set
     \end{cases}
     \qquad (T\to\infty).
   \]
+  In the endpoint case \(\rho\le1\) this assertion means only
+  \(N_L(T)=T^{o(1)}\); no sharper polynomial asymptotic is asserted.
+  This is a transfer-matrix restatement for the LSD-first Zeckendorf
+  convention fixed at the start of the section, not a new
+  recognizability theorem for abstract numeration systems.
 \end{proposition}
 
 \begin{proof}
-  This is the Zeckendorf specialization of the general growth theorem
-  for \(S\)-recognizable sets in \cite[Theorem~7]{CharlierRampersad2011};
-  see also \cite{LecomteRigo2001}. In the present numeration system the
-  ambient counting function satisfies
+  We use the direct transfer-matrix specialization supplied by
+  \Cref{lem:zeckendorf-length-growth}; the general
+  \(S\)-recognizable-set theorem of
+  \cite[Theorem~7]{CharlierRampersad2011} gives the same conclusion.
+  In the present
+  numeration system the ambient counting function satisfies
   \[
     \#(\mathcal Z\cap\{0,1\}^{\le m})
     =F_{m+2}-1
     =\varphi^{m+o(m)},
   \]
-  The trimmed automaton for \(L\) contributes the exponential factor
-  \(\max(1,\rho)\). Substituting these two growth parameters into the
-  theorem of Charlier and Rampersad yields exactly the displayed
-  asymptotic
-  \[
-    N_L(T)=T^{\alpha+o(1)}
-  \]
-  with \(\alpha=0\) when \(\rho\le 1\) and
-  \(\alpha=\log \rho/\log \varphi\) when \(\rho>1\).
+  and, conversely, \(F_{m+2}=\varphi^{m+O(1)}\). Hence
+  \(\val(w)\le T\) is equivalent, up to an \(O(1)\) error in length, to
+  \(\abs w\le (\log T)/(\log\varphi)\).
+
+  By \Cref{lem:zeckendorf-length-growth},
+  the number of accepted words of length at most \(m\) is
+  \(\rho^{m+o(m)}\) if \(\rho>1\), and \(\exp(o(m))\) if \(\rho\le1\).
+  Substituting \(m=(\log T)/(\log\varphi)+O(1)\) gives exactly
+  \(N_L(T)=T^{\alpha+o(1)}\), with \(\alpha=0\) for \(\rho\le1\) and
+  \(\alpha=\log\rho/\log\varphi\) for \(\rho>1\).
 \end{proof}
 
 \begin{remark}\label{rem:zeckendorf-examples}
@@ -103,46 +160,235 @@ and set
   setting the regular syntax of admissible expansions replaces
   \(\mathcal Z\), and the dominant exponential growth constant of the
   numeration system replaces \(\varphi\); see
-  \cite{Frougny1992,BruyereHansel1997,LecomteRigo2001}.
+  \cite{Frougny1992,BruyereHansel1997,LecomteRigo2001,Rigo2014Vol1,Rigo2014Vol2}.
 \end{remark}
 
 \begin{lemma}[Prime counts in Zeckendorf slices]
   \label{lem:zeck-prime-count}
-  There exist constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) such that for
-  all sufficiently large \(m\),
+  Let \(X_0,C_{\pi,1},C_{\pi,2}\) be constants satisfying
+  \Cref{lem:explicit-pnt-input}. There are explicit constants
+  \(A_{\mathrm Z},B_{\mathrm Z}>0\) and an explicit integer \(M_{\mathrm Z}\)
+  such that for all \(m\ge M_{\mathrm Z}\),
   \[
     A_{\mathrm Z}\,\frac{\varphi^m}{m}
     \le \abs{\mathcal P_m^{(\mathrm Z)}}
     \le B_{\mathrm Z}\,\frac{\varphi^m}{m}.
   \]
+  Equivalently, for all sufficiently large \(m\), the prime count in
+  the exact Zeckendorf slice \([F_{m+1},F_{m+2})\) is between
+  \(c_1F_m/m\) and \(c_2F_m/m\) for suitable constants
+  \(c_1,c_2>0\).
 \end{lemma}
 
 \begin{proof}
+  Binet's formula gives
+  \[
+    F_n=\frac{\varphi^n-(-\varphi)^{-n}}{\sqrt5}.
+  \]
+  For every \(n\ge2\),
+  \[
+    \frac{\varphi^n-1}{\sqrt5}\le F_n\le
+    \frac{\varphi^n+1}{\sqrt5}\le \varphi^n.
+  \]
+  Hence, for \(j=1,2\) and \(m\ge1\),
+  \[
+    c_F\varphi^m\le F_{m+j}\le C_F\varphi^m,\qquad
+    c_F:=\frac{\varphi^2-1}{\sqrt5\varphi},\quad
+    C_F:=\varphi^2.
+  \]
+  Define
+  \[
+    c_{\log}:=\frac12\log\varphi,\qquad C_{\log}:=3\log\varphi,
+  \]
+  and let \(M_{\log}\) be produced by the following finite calculation.
+  Increase \(M\ge2\) until, for all \(m\ge M\) and \(j=1,2\),
+  \[
+    c_{\log}m\le \log F_{m+j}\le C_{\log}m.
+  \]
+  This is reproducible from the preceding Binet bounds: the two
+  displayed inequalities are guaranteed once the linear inequalities
+  \(\log c_F+m\log\varphi\ge c_{\log}m\) and
+  \(\log C_F+m\log\varphi\le C_{\log}m\) hold, so it is enough to test
+  the resulting explicit lower bounds for \(m\).
+
+  Choose \(M_R\ge M_{\log}\) by the following explicit Binet
+  majorization, with no monotonicity input about the exact sequence
+  \(R_m=(F_{m+1}/F_{m+2})(\log F_{m+2}/\log F_{m+1})\). Write
+  \[
+    F_n=\frac{\varphi^n}{\sqrt5}(1-\varepsilon_n),
+    \qquad
+    \varepsilon_n:=(-1)^n\varphi^{-2n}.
+  \]
+  For \(m\ge1\),
+  \[
+    \frac{F_{m+1}}{F_{m+2}}
+    =
+    \varphi^{-1}
+    \frac{1-\varepsilon_{m+1}}{1-\varepsilon_{m+2}}
+    \le
+    \varphi^{-1}
+    \frac{1+\varphi^{-2m-2}}{1-\varphi^{-2m-4}},
+  \]
+  and, once \(\varphi^{-2m-2}\le1/2\),
+  \[
+    \log F_{m+1}
+    \ge
+    (m+1)\log\varphi-\tfrac12\log5-2\varphi^{-2m-2}.
+  \]
+  Also \(F_{m+2}/F_{m+1}\le3\) for \(m\ge1\), so
+  \[
+    \frac{\log F_{m+2}}{\log F_{m+1}}
+    =
+    1+\frac{\log(F_{m+2}/F_{m+1})}{\log F_{m+1}}
+    \le
+    1+
+    \frac{\log3}
+    {(m+1)\log\varphi-\tfrac12\log5-2\varphi^{-2m-2}},
+  \]
+  whenever the denominator is positive. The two error functions
+  \(\varphi^{-2m-2}\) and
+  \(((m+1)\log\varphi-\tfrac12\log5-2\varphi^{-2m-2})^{-1}\) are bounded
+  above, for all \(m\ge M_{\log}\), by explicit decreasing rational
+  majorants obtained from rational lower and upper intervals for
+  \(\varphi\) and \(\log\varphi\). Consequently the product of the last
+  two displayed upper bounds is itself bounded by a decreasing explicit
+  function tending to \(\varphi^{-1}\). A finite rational search on this
+  majorant, using rational intervals for \(\varphi,\log\varphi,\log3\),
+  produces \(M_R\) such that for every \(m\ge M_R\)
+  \[
+    \frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}
+    \le\frac{1+\varphi^{-1}}2 .
+  \]
+  The certificate therefore verifies a single explicit Binet upper bound
+  that is valid for all \(m\ge M_R\), rather than a monotone-tail
+  assertion for \(R_m\) itself.
+
+  Choose \(M_0\ge M_R\) by increasing \(M\) until \(F_{m+1}\ge X_0\)
+  and
+  \[
+    \frac12\le
+    \frac{\log F_{m+2}}{m\log\varphi},
+    \frac{\log F_{m+1}}{m\log\varphi}
+    \le2,
+  \]
+  for every \(m\ge M_0\). The logarithmic ratio conditions are checked
+  from the same linear Binet bounds, while the last displayed
+  product inequality is already certified by the choice of \(M_R\). Put
+  \[
+    \Delta_m:=
+    1-\frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}.
+  \]
+  Then \(\Delta_m\ge(1-\varphi^{-1})/2\) for \(m\ge M_0\). Enlarge
+  \(M_0\) to \(M_{\mathrm Z}\) so that, for all \(m\ge M_{\mathrm Z}\),
+  \[
+    C_{\pi,1}\left(
+      \frac{F_{m+2}}{(\log F_{m+2})^2}
+      +\frac{F_{m+1}}{(\log F_{m+1})^2}\right)+2
+    \le
+    \frac12\,\frac{F_{m+2}}{\log F_{m+2}}\Delta_m .
+  \]
+  This last enlargement is also finite and reproducible. Using the
+  certified bounds \(c_F\varphi^m\le F_{m+j}\le C_F\varphi^m\) and
+  \(c_{\log}m\le\log F_{m+j}\le C_{\log}m\), the left-hand side is
+  bounded above by an explicit multiple of \(\varphi^m/m^2\) plus \(2\),
+  while the right-hand side is bounded below by an explicit multiple of
+  \(\varphi^m/m\). Once that symbolic majorization verifies the tail,
+  the finite prefix is checked by exact Fibonacci integers and real
+  interval arithmetic for the logarithms. This is the certificate for
+  \(M_{\mathrm Z}\).
   Every word in \(\mathcal Z_m\) represents an integer in
   \([F_{m+1},F_{m+2})\), so
-  \(\abs{\mathcal P_m^{(\mathrm Z)}}=\pi(F_{m+2})-\pi(F_{m+1})\), where
-  \(\pi\) is the prime-counting function. The prime number theorem with
-  a first-order error term
-  \cite[Chapter~22]{HardyWright2008} gives
-  \(\pi(x)=x/\log x+O(x/\log^2 x)\). Hence
+  \[
+    \abs{\mathcal P_m^{(\mathrm Z)}}
+    =\pi(F_{m+2}-1)-\pi(F_{m+1}-1)
+  \]
+  and the interval-count convention following
+  \Cref{lem:explicit-pnt-input} gives the endpoint correction
+  \[
+    \left|
+      \abs{\mathcal P_m^{(\mathrm Z)}}-
+      \bigl(\pi(F_{m+2})-\pi(F_{m+1})\bigr)
+    \right|\le 2.
+  \]
+  Here \(\pi(x)=\#\{p\le x:p\text{ prime}\}\). For
+  \(m\ge M_{\mathrm Z}\), \Cref{lem:explicit-pnt-input} gives
   \[
     \pi(F_{m+2})-\pi(F_{m+1})
-    =\frac{F_{m+2}}{\log F_{m+2}}-\frac{F_{m+1}}{\log F_{m+1}}
-     +O\!\left(\frac{F_{m+2}}{\log^2 F_{m+2}}\right).
+    \ge
+    \frac{F_{m+2}}{\log F_{m+2}}-\frac{F_{m+1}}{\log F_{m+1}}
+    -C_{\pi,1}\frac{F_{m+2}}{(\log F_{m+2})^2}
+    -C_{\pi,1}\frac{F_{m+1}}{(\log F_{m+1})^2}.
   \]
-  Since \(F_{m+1}/F_{m+2}\to\varphi^{-1}<1\) and
-  \(\log F_{m+1}=m\log\varphi+O(1)=\log F_{m+2}+O(1)\), the quantity in
-  parentheses
+  By the definition of \(M_{\mathrm Z}\), using the displayed endpoint
+  inequality,
   \[
-    1-\frac{F_{m+1}}{F_{m+2}}
-      \frac{\log F_{m+2}}{\log F_{m+1}}
+    \abs{\mathcal P_m^{(\mathrm Z)}}
+    \ge \frac12\,\frac{F_{m+2}}{\log F_{m+2}}\Delta_m .
   \]
-  stays bounded between two positive constants for all large \(m\).
-  Moreover \(F_{m+2}=\Theta(\varphi^m)\) and
-  \(\log F_{m+2}=m\log\varphi+O(1)\), while the error term
-  \(O(F_{m+2}/\log^2 F_{m+2})\) is \(o(\varphi^m/m)\). The displayed
-  expression is therefore comparable to \(\varphi^m/m\), yielding
-  constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) with the stated property.
+  The explicit Binet constants above and
+  \(\Delta_m\ge(1-\varphi^{-1})/2\) by construction show that one may
+  take
+  \[
+    A_{\mathrm Z}:=\frac{c_F(1-\varphi^{-1})}{8C_{\log}}.
+  \]
+  For the upper bound,
+  \[
+    \abs{\mathcal P_m^{(\mathrm Z)}}\le \pi(F_{m+2})
+      \le C_{\pi,2}\frac{F_{m+2}}{\log F_{m+2}}
+      \le \frac{C_{\pi,2}C_F}{c_{\log}}\frac{\varphi^m}{m}.
+  \]
+  Thus \(B_{\mathrm Z}:=C_{\pi,2}C_F/c_{\log}\) is admissible for every
+  \(m\ge M_{\mathrm Z}\).
+\end{proof}
+
+All automata in this section read Zeckendorf words in the displayed
+LSD-first order.
+
+\begin{lemma}[Canonical Zeckendorf presentation]
+  \label{lem:zeckendorf-canonical-presentation}
+  The language \(\mathcal Z\) is accepted by the two-state trim
+  strongly connected deterministic presentation \(\mathcal N_{\mathrm Z}\)
+  with state set \(\{0,1\}\), initial state \(0\), accepting state
+  \(\{1\}\), and transitions
+  \[
+    0\xrightarrow{0}0,\qquad
+    0\xrightarrow{1}1,\qquad
+    1\xrightarrow{0}0.
+  \]
+  Its adjacency matrix is
+  \[
+    M_{\mathrm Z}=
+    \begin{pmatrix}
+      1&1\\
+      1&0
+    \end{pmatrix},
+  \]
+  its Perron root is \(\varphi\), and its graph period is \(1\). Hence
+  \(\mathcal N_{\mathrm Z}\) satisfies the hypotheses of
+  \Cref{thm:parry-density} with \(\lambda=\varphi\), and
+  \(z_m=\abs{\mathcal Z_m}=F_m\).
+\end{lemma}
+
+\begin{proof}
+  A path in the displayed graph records exactly a binary word with no
+  adjacent \(1\)'s: after reading a \(1\) the only available next digit
+  is \(0\), while from state \(0\) both digits are available. The
+  accepting state is \(1\), so the accepted words are precisely those
+  no-\(11\) words whose terminal digit is \(1\), namely
+  \(\mathcal Z\). The state \(0\) is initial and lies on the loop
+  labelled \(0\), while \(0\xrightarrow{1}1\xrightarrow{0}0\); therefore
+  both states are reachable from the initial state and can reach the
+  accepting state, and the underlying directed graph is strongly
+  connected. The loop at \(0\) gives period \(1\).
+
+  The characteristic polynomial of \(M_{\mathrm Z}\) is
+  \(t^2-t-1\). Its spectral radius is the positive root
+  \(\varphi=(1+\sqrt5)/2>1\). Finally the accepted length-\(m\) words
+  are the canonical Zeckendorf words of length \(m\), whose number is
+  \(F_m\) by the standard Fibonacci recurrence with initial values
+  \(F_1=F_2=1\).
 \end{proof}
 
 For a deterministic automaton \(\mathcal A\) over the Zeckendorf digit
@@ -154,6 +400,8 @@ alphabet, write
 
 \begin{corollary}[Zeckendorf symmetric-difference obstruction]
   \label{cor:zeck-symmetric-diff}
+  All automata in this statement read the Zeckendorf words LSD-first, as
+  in the definition of \(\mathcal Z\) above.
   Let \(\mathcal A\) be a deterministic automaton over the Zeckendorf
   alphabet. Then there exists \(c_{\mathcal A,\varphi}>0\) such that
   \[
@@ -170,30 +418,26 @@ alphabet, write
 \end{corollary}
 
 \begin{proof}
-  Apply \Cref{thm:parry-density} with \(\mathcal N=\mathcal Z\). Thus
+  Apply \Cref{cor:relative-finite-budget-obstruction} with
   \[
-    \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
-    =c_{m\bmod p}+O(\theta^m)
+    \mathcal N=\mathcal N_{\mathrm Z},\qquad
+    \lambda=\varphi,\qquad
+    z_m=F_m,\qquad
+    T_m=\mathcal P_m^{(\mathrm Z)}.
   \]
-  for some integers \(p\ge 1\), \(\theta\in(0,1)\), and constants
-  \(c_0,\dots,c_{p-1}\ge 0\). Treat each residue class separately.
-
-  If \(c_r=0\), then along \(m=pk+r\) we have
-  \(a_m^{(\mathrm Z)}(\mathcal A)=O(\theta^k\varphi^{pk+r})\). By
-  \Cref{lem:zeck-prime-count},
-  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp \varphi^{pk+r}/(pk+r)\). For
-  \(k\) large enough the difference is therefore bounded below by
-  \(\tfrac{1}{2}A_{\mathrm Z}\varphi^{pk+r}/(pk+r)\).
-
-  If \(c_r>0\), then along \(m=pk+r\) we have
-  \(a_m^{(\mathrm Z)}(\mathcal A)\ge \tfrac{1}{2}c_r F_{pk+r}\). Since
-  \(F_m\asymp \varphi^m\) and \(\abs{\mathcal P_m^{(\mathrm Z)}}\ll
-  \varphi^m/m\), the symmetric difference is \(\gg \varphi^{pk+r}\) on
-  that progression.
-
-  Taking the minimum of the finitely many lower bounds obtained over all
-  residue classes produces \(c_{\mathcal A,\varphi}>0\) with the stated
-  properties.
+  The presentation hypotheses and \(z_m=F_m\) are supplied by
+  \Cref{lem:zeckendorf-canonical-presentation}; the finite-budget
+  hypothesis
+  \[
+    A_{\mathrm Z}\frac{\varphi^m}{m}
+    \le \abs{T_m}
+    \le B_{\mathrm Z}\frac{\varphi^m}{m}
+  \]
+  is exactly \Cref{lem:zeck-prime-count}. The corollary therefore gives
+  the all-large-\(m\) symmetric-difference bound. Its positive-density
+  residue-class clause gives the stronger \(\Omega(\varphi^m)\) bound
+  on every residue class where the limiting relative density of
+  \(L(\mathcal A)\cap\mathcal Z_m\) inside \(\mathcal Z_m\) is positive.
 \end{proof}
 
 Define recall and precision for Zeckendorf slices by
@@ -207,35 +451,194 @@ Define recall and precision for Zeckendorf slices by
           {a_m^{(\mathrm Z)}(\mathcal A)}
 \]
 whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
-\(a_m^{(\mathrm Z)}(\mathcal A)>0\).
+\(a_m^{(\mathrm Z)}(\mathcal A)>0\), i.e. on lengths where the
+denominator is nonzero.
 
 \begin{corollary}[No simultaneous recall and precision in Zeckendorf]
   \label{cor:zeck-recall-precision}
-  Every deterministic automaton \(\mathcal A\) over the Zeckendorf
-  alphabet satisfies one of the following:
+  Let \(\mathcal A\) be a deterministic automaton over the Zeckendorf
+  alphabet. Let \(D_Z\), the constants \(c_0,\dots,c_{D_Z-1}\), and
+  \(\theta\) be supplied by
+  \Cref{lem:zeckendorf-canonical-presentation,thm:parry-density}, so that
+  \[
+    \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
+    =c_{m\bmod D_Z}+O(\theta^m)
+  \]
+  for all sufficiently large \(m\). Let \(B_{\mathrm Z}\) be the upper
+  estimate constant from \Cref{lem:zeck-prime-count}. For each residue
+  class \(r\bmod D_Z\), exactly one of the following alternatives holds:
+  \begin{enumerate}[label=\textup{(\alph*)}]
+    \item If \(c_r=0\), then
+    \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
+    \(m\equiv r\pmod {D_Z}\).
+    \item If \(c_r>0\), then there is a constant
+    \(C_{r,\varphi}>0\), for instance
+    \(C_{r,\varphi}=2C_\varphi B_{\mathrm Z}/c_r\) with
+    \(F_m\ge C_\varphi^{-1}\varphi^m\) for all large \(m\), such that
+    \[
+      \mathrm{Prec}_m^{(\mathrm Z)}\le \frac{C_{r,\varphi}}{m}
+    \]
+    for all sufficiently large \(m\equiv r\pmod {D_Z}\).
+  \end{enumerate}
+  Consequently every deterministic automaton satisfies one of the
+  following statements:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
     every residue class of lengths.
-    \item Along some arithmetic progression one has
-    \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\) for a
-    constant depending only on \(\mathcal A\).
+    \item There exists at least one residue class \(r\bmod D_Z\) with
+    \(c_r>0\) such that
+    \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\) for
+    all sufficiently large \(m\equiv r\pmod {D_Z}\) for which precision is
+    defined.
   \end{enumerate}
+  Precision is left undefined on lengths with
+  \(a_m^{(\mathrm Z)}(\mathcal A)=0\); the statement makes no uniform
+  precision assertion on residue classes other than those covered by
+  the per-residue alternative.
   Consequently no fixed DFA has both recall and precision bounded below
   on infinitely many Zeckendorf lengths.
 \end{corollary}
 
 \begin{proof}
-  Apply the density dichotomy \Cref{thm:parry-density} with
-  \(\mathcal N=\mathcal Z\) and argue as in the proof of
-  \Cref{cor:dfa-prime-recall-precision}, using
-  \Cref{lem:zeck-prime-count}. When \(c_r=0\) the numerator of
-  \(\mathrm{Rec}_m^{(\mathrm Z)}\) is exponentially small relative to
-  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp \varphi^m/m\), so recall
-  decays exponentially. When \(c_r>0\),
-  \(a_m^{(\mathrm Z)}(\mathcal A)\gg \varphi^m\) along that progression,
-  whereas the numerator is \(O(\varphi^m/m)\), yielding
-  \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\). The
-  final statement follows as in the base-\(b\) case.
+  Fix \(A_{\mathrm Z},B_{\mathrm Z}>0\) as in
+  \Cref{lem:zeck-prime-count}; thus
+  \[
+    A_{\mathrm Z}\frac{\varphi^m}{m}
+    \le \abs{\mathcal P_m^{(\mathrm Z)}}
+    \le B_{\mathrm Z}\frac{\varphi^m}{m}
+  \]
+  for all sufficiently large \(m\). Also fix constants
+  \(c_F',C_F'>0\) such that
+  \(c_F'\varphi^m\le F_m\le C_F'\varphi^m\) for all large \(m\).
+
+  Treat each residue class \(r\bmod D_Z\) separately. If \(c_r=0\), then
+  along \(m\equiv r\pmod {D_Z}\),
+  \(a_m^{(\mathrm Z)}(\mathcal A)=O(\theta^mF_m)\). Hence
+  \[
+    \mathrm{Rec}_m^{(\mathrm Z)}
+    \le
+    \frac{a_m^{(\mathrm Z)}(\mathcal A)}
+         {\abs{\mathcal P_m^{(\mathrm Z)}}}
+    \ll m\theta^m.
+  \]
+  Since \(m\theta^m=O(\theta_r^m)\) for some \(\theta_r\in(0,1)\),
+  recall decays exponentially on this residue class.
+
+  If \(c_r>0\), then for all sufficiently large \(m\equiv r\pmod {D_Z}\),
+  \[
+    a_m^{(\mathrm Z)}(\mathcal A)\ge \frac{c_r}{2}F_m
+    \ge \frac{c_rc_F'}{2}\varphi^m.
+  \]
+  Therefore
+  \[
+    \mathrm{Prec}_m^{(\mathrm Z)}
+    \le
+    \frac{\abs{\mathcal P_m^{(\mathrm Z)}}}
+         {a_m^{(\mathrm Z)}(\mathcal A)}
+    \le
+    \frac{2B_{\mathrm Z}}{c_rc_F'}\cdot\frac{1}{m}.
+  \]
+  This proves the stated per-residue alternative, with
+  \(C_{r,\varphi}=2B_{\mathrm Z}/(c_rc_F')\).
+
+  If all \(c_r\) vanish, the first alternative holds on every residue
+  class, hence globally. Otherwise choose a residue class with
+  \(c_r>0\); the second alternative holds on defined lengths in that
+  arithmetic progression, and one may take
+  \(C_{\mathcal A,\varphi}=C_{r,\varphi}\).
+
+  Finally suppose that both recall and precision were bounded below by
+  some \(\delta>0\) on infinitely many Zeckendorf lengths. By the
+  pigeonhole principle, infinitely many of those lengths lie in one
+  residue class \(r\bmod D_Z\). The case \(c_r=0\) contradicts the
+  exponential recall decay above. The case \(c_r>0\) contradicts the
+  bound \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{r,\varphi}/m\) along that
+  same residue class.
+\end{proof}
+
+\begin{proposition}[Regular Zeckendorf slices exclude the prime scale]
+  \label{prop:zeckendorf-regular-slice-rigidity}
+  Let \(L\subseteq\mathcal Z\) be a regular language, and put
+  \[
+    \ell_m:=\abs{L\cap\mathcal Z_m}.
+  \]
+  Then there are an integer \(D_Z\ge1\), non-negative constants
+  \(c_0,\dots,c_{D_Z-1}\), and \(\theta\in(0,1)\) such that
+  \[
+    \frac{\ell_m}{F_m}=c_{m\bmod D_Z}+O(\theta^m).
+  \]
+  Consequently, on each residue class modulo \(D_Z\), the ratio
+  \[
+    \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
+  \]
+  either tends to \(0\) exponentially up to the harmless polynomial
+  factor \(m\), or tends to \(+\infty\) at least linearly in \(m\).
+  In particular no regular sublanguage of \(\mathcal Z\) has
+  \(\ell_m=\abs{\mathcal P_m^{(\mathrm Z)}}\) for all sufficiently
+  large \(m\).
+\end{proposition}
+
+\begin{proof}
+  Let \(\mathcal A\) be a deterministic automaton recognizing \(L\).
+  Since \(L\subseteq\mathcal Z\), one has
+  \[
+    \ell_m=\abs{L(\mathcal A)\cap\mathcal Z_m}
+          =a_m^{(\mathrm Z)}(\mathcal A).
+  \]
+  By \Cref{lem:zeckendorf-canonical-presentation}, the canonical
+  Zeckendorf presentation is trim, deterministic, strongly connected,
+  has Perron root \(\varphi\), and satisfies
+  \(z_m=\abs{\mathcal Z_m}=F_m\). Applying
+  the background relative-density theorem
+  \Cref{thm:parry-density} to this presentation and to
+  \(\mathcal A\) gives the displayed expansion; its proof is the
+  substochastic product expansion of
+  \Cref{lem:substochastic-product-expansion} combined with the positive
+  periodic denominator constants from \Cref{lem:trim-density}.
+
+  Fix a residue class \(r\bmod D_Z\). By \Cref{lem:zeck-prime-count}
+  there are constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) such that
+  \[
+    A_{\mathrm Z}\frac{\varphi^m}{m}
+    \le\abs{\mathcal P_m^{(\mathrm Z)}}
+    \le B_{\mathrm Z}\frac{\varphi^m}{m}
+  \]
+  for all sufficiently large \(m\). Also fix \(c_F'',C_F''>0\) such that
+  \(c_F''\varphi^m\le F_m\le C_F''\varphi^m\) for all large \(m\).
+
+  If \(c_r=0\), then along \(m\equiv r\pmod {D_Z}\) we have
+  \[
+    \ell_m=O(\theta^mF_m)=O(\theta^m\varphi^m).
+  \]
+  Hence
+  \[
+    \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
+    =O(m\theta^m),
+  \]
+  which tends to \(0\) exponentially after increasing \(\theta\) within
+  \((0,1)\).
+
+  If \(c_r>0\), then for all sufficiently large
+  \(m\equiv r\pmod {D_Z}\),
+  \[
+    \ell_m\ge\frac{c_r}{2}F_m
+        \ge\frac{c_rc_F''}{2}\varphi^m.
+  \]
+  Therefore
+  \[
+    \frac{\ell_m}{\abs{\mathcal P_m^{(\mathrm Z)}}}
+    \ge
+    \frac{c_rc_F''}{2B_{\mathrm Z}}\,m,
+  \]
+  and the ratio tends to \(+\infty\) at least linearly on this residue
+  class.
+
+  Every residue class falls into exactly one of these two cases. Thus
+  equality
+  \(\ell_m=\abs{\mathcal P_m^{(\mathrm Z)}}\) cannot hold for all
+  sufficiently large \(m\), since any fixed residue class contains
+  arbitrarily large lengths and on that class the ratio cannot remain
+  equal to \(1\).
 \end{proof}
 
 \begin{corollary}[Prime Zeckendorf language is not regular]
@@ -250,22 +653,39 @@ whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
   regular language.
 \end{corollary}
 
+This corollary should be read as a fixed-slice consequence of the
+finite-budget obstruction above. It gives a self-contained proof in the
+LSD-first Zeckendorf presentation used here, rather than a new abstract
+numeration-system recognizability theorem. General results relating
+\(S\)-recognizability, \(S\)-automaticity, and morphic predicates in
+abstract numeration systems include Maes--Rigo
+\cite{MaesRigo2002} and the standard references cited in
+\Cref{subsec:prior-work}.
+
 \begin{proof}
-  If \(\mathcal P_{\mathcal Z}\) were regular, then
-  \Cref{prop:zeckendorf-regular-powerlaw} would give
+  Suppose that \(\mathcal P_{\mathcal Z}\) were regular. Applying
+  \Cref{prop:zeckendorf-regular-slice-rigidity} to
+  \(L=\mathcal P_{\mathcal Z}\) gives a period \(D_Z\) such that on every
+  residue class modulo \(D_Z\) the ratio
   \[
-    \pi(T)=N_{\mathcal P_{\mathcal Z}}(T)=T^{\alpha+o(1)}
+    \frac{\abs{\mathcal P_{\mathcal Z}\cap\mathcal Z_m}}
+         {\abs{\mathcal P_m^{(\mathrm Z)}}}
   \]
-  for some \(\alpha\in[0,1]\). This is impossible because
-  \(\pi(T)\sim T/\log T\): for every \(\alpha<1\) one has
-  \(\pi(T)/T^\alpha\to\infty\), while \(\pi(T)/T\to 0\).
+  either tends to \(0\) or tends to \(+\infty\). But by definition
+  \(\mathcal P_{\mathcal Z}\cap\mathcal Z_m=\mathcal P_m^{(\mathrm Z)}\)
+  for every \(m\). The displayed ratio is therefore identically \(1\),
+  whereas \Cref{prop:zeckendorf-regular-slice-rigidity}, itself an
+  application of the background density theorem
+  \Cref{thm:parry-density} and the prime-count estimate
+  \Cref{lem:zeck-prime-count}, forces the ratio on each residue class
+  either to vanish or to diverge. This is a contradiction.
 \end{proof}
 
-\begin{remark}[Easy sofic corollary]
+\begin{remark}[Sofic corollary]
   \label{rem:zeckendorf-primes-not-sofic}
-  The preceding non-regularity statement immediately excludes eventual
-  sofic realization of the prime Zeckendorf length slices. We record
-  only the short argument.
+  The preceding non-regularity statement excludes eventual sofic
+  realization of the prime Zeckendorf length slices by the following
+  short argument.
   Let \(\mathcal B_m(X)\) denote the admissible words of length
   \(m\) in a sofic shift \(X\). If
   \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for all \(m\ge N\),

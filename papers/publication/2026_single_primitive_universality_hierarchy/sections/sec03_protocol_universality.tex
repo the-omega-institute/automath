@@ -1,6 +1,8 @@
-\section{A Zeckendorf protocol}\label{sec:L1}
+\section{\texorpdfstring{\(L1\)}{L1}: protocol universality via a Zeckendorf protocol}\label{sec:L1}
 
-We now add the normal-form data absent from expression universality.
+We now pass from \(L0\) expression universality to \(L1\),
+\emph{protocol universality}, by adding the normal-form data absent
+from expression universality.
 Let \(\Omega_m=\{0,1\}^m\).  The elements of \(\Omega_m\) may be
 regarded as finite itineraries of a one-generator symbolic source,
 although no dynamical property will be used.  The fold map sends a
@@ -87,6 +89,14 @@ where \(\omega\) is extended by zeros after its last digit.  Thus the
 finite maps \(\Fold_m\) provide the certificate fibers, whereas
 arithmetic is read on the countable set of eventually-zero normal
 forms.
+
+The normalization used here is the stable, eventually-zero
+normalization attached to the value \(\Val\), not a limit operation on
+the compact completion.  The full online normalization and stable
+arithmetic algorithms for Zeckendorf addresses are developed in the
+companion account \cite{ZeckendorfStableArithmetic2026}; in this
+paper we use only the value-transported consequences proved in
+\Cref{prop:fold-confluence,thm:semiring}.
 
 The finite legal-word spaces also form an inverse system under
 coordinate truncation.  The arithmetic used below lives on its
@@ -222,6 +232,46 @@ No new identity about Church iteration is involved.  The point is
 that the usual iteration laws remain decidable after the indices are
 placed in Zeckendorf normal form.
 
+\begin{lemma}[Exponent skeleton for a level-zero multiplicative readout]
+\label{lem:level-zero-exponent-skeleton}
+Let \(M\) be a monoid, let \(g\in M\) have infinite order, and put
+\(C=\{g^n:n\in\NN\}\).  If a map
+\(\eta\colon\NN_{\ge1}\to C\) satisfies
+\(\eta(ab)=\eta(a)\eta(b)\), then there is a unique function
+\(e\colon\NN_{\ge1}\to\NN\) such that
+\[
+  \eta(n)=g^{e(n)}
+  \qquad\text{and}\qquad
+  e(ab)=e(a)+e(b).
+\]
+Moreover \(e(1)=0\), and \(e\) is determined by its values on
+primes:
+\[
+  e(n)=\sum_p v_p(n)e(p)
+  \qquad(n\ge1).
+\]
+Consequently \(\eta\) is injective if and only if the additive weight
+map \(n\mapsto\sum_p v_p(n)e(p)\) separates all positive integers.
+\end{lemma}
+
+\begin{proof}
+The infinite order of \(g\) makes \(n\mapsto g^n\) injective, so each
+element of \(C\) has a unique exponent.  This gives the unique
+function \(e\) with \(\eta(n)=g^{e(n)}\).  The multiplicativity of
+\(\eta\) is equivalent, by uniqueness of exponents, to
+\[
+  g^{e(ab)}=g^{e(a)+e(b)},
+\]
+hence to \(e(ab)=e(a)+e(b)\).  Taking \(a=b=1\) gives
+\(e(1)=2e(1)\), so \(e(1)=0\).  If
+\(n=\prod_p p^{v_p(n)}\), repeated use of additivity gives
+\[
+  e(n)=\sum_p v_p(n)e(p).
+\]
+The final assertion follows because \(\eta(a)=\eta(b)\) is equivalent
+to \(e(a)=e(b)\).
+\end{proof}
+
 \begin{theorem}[Level-zero obstruction for multiplicative readout]
 \label{thm:level-zero-obstruction}
 Let \(M\) be a monoid and let \(g\in M\) have infinite order.  Put
@@ -245,16 +295,8 @@ restriction.
 \end{theorem}
 
 \begin{proof}
-Since \(g\) has infinite order, each element of \(C\) has a unique
-form \(g^e\), \(e\in\NN\).  Write
-\[
-  \eta(n)=g^{e(n)} .
-\]
-The displayed multiplicativity condition is equivalent to
-\[
-  e(ab)=e(a)+e(b)\qquad(a,b\ge1).
-\]
-Taking \(a=b=1\) gives \(e(1)=0\).  If \(p\) is prime and
+Let \(e\) be the exponent weight supplied by
+\Cref{lem:level-zero-exponent-skeleton}.  If \(p\) is prime and
 \(e(p)=0\), then \(\eta(p)=\eta(1)\), contrary to injectivity.
 Thus \(e(p)>0\) for every prime \(p\).
 
@@ -305,6 +347,49 @@ algorithmic presentation data; the only algebraic operation used in
 the readout terms is \(\sigma\), as in a canonical rewriting
 system with a decidable word problem \cite{BaaderNipkow1998}.
 \end{definition}
+
+\begin{corollary}[Protocol dichotomy on one level-zero orbit]
+\label{cor:level-zero-protocol-dichotomy}
+Let a protocol in the sense of \Cref{def:prot-univ} contain a
+positive-integer locus represented by a section
+\(\rho\colon\NN_{\ge1}\to N\) with
+\(\nu(\rho(a))=a\).  Suppose that, at one semantic level, the
+single operation symbol is interpreted as the ambient product on a
+free monogenic orbit
+\[
+  C=\{g^n:n\in\NN\}
+\]
+for an infinite-order element \(g\), and write
+\(\eta(a)=\Phi_\ell(\rho(a))\in C\).  If multiplication is read at
+that same level by the ambient product in the strict form
+\[
+  \Phi_\ell(\rho(ab))
+  =
+  \Phi_\ell(\rho(a))\,\Phi_\ell(\rho(b))
+  \qquad(a,b\ge1),
+\]
+then \(\eta\) is not injective.  Equivalently, under this
+level-zero monogenic-orbit restriction, a protocol has the following
+dichotomy: either the orbit readout fails to separate positive
+integers, or multiplication is not realized by the ambient product on
+that single orbit.  Thus any protocol readout which separates
+positive integers must move multiplication away from this one
+level-zero orbit, as in the level-one power-operator readout of
+\Cref{thm:two-level}.
+\end{corollary}
+
+\begin{proof}
+The displayed compatibility condition says exactly that
+\(\eta(ab)=\eta(a)\eta(b)\) for all \(a,b\ge1\).  Since \(C\) is one
+free monogenic orbit generated by an infinite-order element, this is
+the situation of \Cref{thm:level-zero-obstruction}.  That theorem
+rules out injectivity of such an \(\eta\).  Therefore the two desired
+requirements, injective separation of positive integers and
+level-zero ambient-product realization of multiplication on the
+same orbit, cannot hold simultaneously.  The last sentence is the
+contrapositive applied to a readout that does separate the positive
+integer locus.
+\end{proof}
 
 \begin{theorem}[Zeckendorf protocol universality]
 \label{thm:zeckendorf-protocol-univ}

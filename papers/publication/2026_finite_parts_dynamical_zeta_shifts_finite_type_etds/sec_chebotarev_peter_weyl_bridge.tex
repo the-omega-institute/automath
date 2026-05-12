@@ -1,0 +1,590 @@
+\subsection{Primitive Peter--Weyl series}
+
+Applying \Cref{cor:class-function-adams-mobius} to irreducible
+characters produces the primitive Peter--Weyl coefficients directly
+from the twisted determinants.
+
+For \(\varrho\in\Irr(G)\), define
+\begin{equation}\label{eq:primitive-peter-weyl-series}
+  \Pi_\varrho(z):=\Pi_{\chi_\varrho}(z)
+  =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)z^n,
+  \qquad
+  \pi_{n,\varrho}(A,\tau)
+  :=\sum_{\substack{\gamma\in\cP\\ |\gamma|=n}}
+    \chi_\varrho(\tau(\gamma)).
+\end{equation}
+For \(m\ge 1\), write
+\begin{equation}\label{eq:adams-character-decomposition}
+  \psi^m\chi_\varrho
+  =\sum_{\pi\in\Irr(G)}a_{\varrho,\pi}^{(m)}\chi_\pi
+\end{equation}
+for the Adams decomposition in the character ring. Equivalently, with
+\(p_m(g)=g^m\),
+\begin{equation}\label{eq:adams-coefficient-inner-product}
+  a_{\varrho,\pi}^{(m)}
+  =
+  \left\langle \chi_\varrho\circ p_m,\chi_\pi\right\rangle
+  =
+  \frac{1}{|G|}\sum_{g\in G}
+    \chi_\varrho(g^m)\overline{\chi_\pi(g)}.
+\end{equation}
+Thus the finite character-ring input is not merely the ordinary
+character table: it is the character table together with the power maps
+on conjugacy classes, or equivalently the Adams operations on \(R(G)\).
+
+\begin{lemma}\label{lem:adams-coefficients-bounded}
+  For every \(\varrho,\pi\in\Irr(G)\) and every \(m\ge 1\),
+  \[
+    \abs{a_{\varrho,\pi}^{(m)}}\le \dim\varrho.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since the irreducible characters are orthonormal,
+  \[
+    a_{\varrho,\pi}^{(m)}
+    =\langle \psi^m\chi_\varrho,\chi_\pi\rangle.
+  \]
+  Hence
+  \[
+    \abs{a_{\varrho,\pi}^{(m)}}
+    \le \norm{\psi^m\chi_\varrho}_2\norm{\chi_\pi}_2
+    =\norm{\psi^m\chi_\varrho}_2.
+  \]
+  Moreover,
+  \[
+    \norm{\psi^m\chi_\varrho}_2^2
+    =\frac{1}{|G|}\sum_{g\in G}\abs{\chi_\varrho(g^m)}^2
+    \le (\dim\varrho)^2,
+  \]
+  because \(\abs{\chi_\varrho(h)}\le \dim\varrho\) for all \(h\in G\).
+  Taking the square root gives the claim.
+\end{proof}
+
+\begin{remark}[Periodicity of Adams coefficients]
+  \label{rem:adams-coefficients-periodic}
+  Let \(\exp(G)\) denote the exponent of \(G\). Since
+  \(g^{m+\exp(G)}=g^m\) for every \(g\in G\), one has
+  \[
+    \psi^{m+\exp(G)}\chi_\varrho=\psi^m\chi_\varrho.
+  \]
+  Consequently
+  \(a_{\varrho,\pi}^{(m+\exp(G))}=a_{\varrho,\pi}^{(m)}\) for all
+  \(m\), so only finitely many Adams coefficient vectors occur. In the
+  estimates below we use this finiteness only through the uniform bound
+  of \Cref{lem:adams-coefficients-bounded}.
+\end{remark}
+
+\begin{corollary}[Main Theorem I(c): irreducible-channel determinant
+  formula]
+  \label{cor:primitive-peter-weyl-determinant}
+  For each \(\pi\in\Irr(G)\), write
+  \[
+    P_\pi(z):=\det(I-zA_\pi),\qquad P_\pi(0)=1,
+  \]
+  and let \(D_\pi\) be the unique analytic germ on
+  \(|z|<\lambda^{-1}\) with \(D_\pi(0)=0\) and
+  \(\exp D_\pi=P_\pi^{-1}\). The finite determinant data are the
+  polynomials \(P_\pi\), or equivalently the matrices \(A_\pi\); the
+  logarithmic branches are these normalized germs derived from them.
+  For every \(\varrho\in\Irr(G)\) and every \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:primitive-peter-weyl-determinant}
+    \Pi_\varrho(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}
+        D_\pi(z^m).
+  \end{equation}
+  Equivalently \(D_\pi(z^m)=\log\det(I-z^mA_\pi)^{-1}\) in the branch
+  fixed by the logarithm convention for this section.
+\end{corollary}
+
+\begin{proof}
+  Apply \Cref{cor:class-function-adams-mobius} with
+  \(\phi=\chi_\varrho\). Then
+  \[
+    \Pi_\varrho(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}
+      \mathcal L_{\psi^m\chi_\varrho}(z^m).
+  \]
+  By \eqref{eq:adams-character-decomposition} and the determinant
+  linearisation \eqref{eq:class-logarithm-determinant-linearisation},
+  \[
+    \mathcal L_{\psi^m\chi_\varrho}(z^m)
+    =
+    \sum_{\pi\in\Irr(G)}
+      a_{\varrho,\pi}^{(m)}
+      D_\pi(z^m),
+  \]
+  because \(D_\pi\) is the normalized determinant logarithm on the
+  Perron disc.
+  Substituting this identity proves
+  \eqref{eq:primitive-peter-weyl-determinant}.
+\end{proof}
+
+\noindent
+The determinant identity above is the generating-function part of Main
+Theorem~I. The coefficient form is obtained next by taking traces from
+the same determinant expansion; neither the twisted spectral gap nor
+cyclic root-of-unity reconstruction enters this first main theorem.
+
+\begin{remark}[Abelian toy model: the cyclic lift]
+  \label{rem:abelian-toy-model-cyclic}
+  Let \(G=\ZZ/q\ZZ\), and let \(\chi_j(h)=\omega_q^{jh}\) be its
+  irreducible characters. The canonical cyclic-lift cocycle is the
+  special cocycle \(\tau_q:E_A\to\ZZ/q\ZZ\) with
+  \(\tau_q(e)=1\) on every edge; its skew-product adjacency matrix is
+  \(A\otimes P_q\). For this cocycle, and not for a general
+  \(\ZZ/q\ZZ\)-valued edge labelling, one has
+  \(A_{\chi_j}=\omega_q^jA\), and therefore
+  \[
+    \mathcal L_{\chi_j}(z)=\log\det(I-\omega_q^j zA)^{-1}.
+  \]
+  The Adams--M\"obius inversion
+  \eqref{eq:class-adams-mobius-inversion} then reduces to the ordinary
+  Fourier decomposition on the \(q\)-th roots of unity. This is the
+  concrete bridge between the abelian formulas of
+  \Cref{sec:finite-part} and the present finite-group formalism, but
+  only after the original cocycle has been replaced by this canonical
+  cyclic-lift cocycle.
+  This model is also not an example of the twisted spectral gap used
+  later when \(q>1\): for every non-trivial character \(\chi_j\),
+  \(\rho(A_{\chi_j})=\rho(A)=\lambda\), so the non-trivial twisted
+  radius is \(\eta=\lambda\), not \(<\lambda\). The cyclic-lift layer is
+  therefore a finite-matrix comparison case, not a source of
+  Perron-point non-trivial-channel constants.
+\end{remark}
+
+\begin{corollary}[Main Theorem I(d): primitive Peter--Weyl trace formula]
+  \label{cor:primitive-peter-weyl-trace}
+  For every \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
+  \begin{equation}\label{eq:primitive-peter-weyl-trace}
+    \pi_{n,\varrho}(A,\tau)
+    =
+    \frac{1}{n}\sum_{m\mid n}\mu(m)
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}
+        \Tr(A_\pi^{n/m}).
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  Extract the coefficient of \(z^n\) in
+  \eqref{eq:primitive-peter-weyl-determinant}. Since
+  \[
+    [z^n]\log\det(I-z^mA_\pi)^{-1}
+    =
+    \begin{cases}
+      \Tr(A_\pi^{n/m})/(n/m), & m\mid n, \\
+      0, & m\nmid n,
+    \end{cases}
+  \]
+  the stated formula follows immediately.
+\end{proof}
+
+\noindent
+This completes Main Theorem~I in the sense used in the introduction.
+The trace lemma supplies the periodic input, the linearisation theorem
+rewrites it as twisted determinant data, the Adams--M\"obius corollary
+removes repetitions, and the determinant and trace corollaries give the
+primitive Peter--Weyl series and coefficients.
+
+\subsection{Bridge to classes and Main Theorem II}
+
+The primitive Peter--Weyl coefficients determine the conjugacy-class
+counts by Fourier inversion on \(G\). The next proposition is a bridge: it
+translates the primitive channels of Main Theorem~I into class counts,
+but it does not add a new independent main theorem.
+
+\begin{proposition}[Conjugacy-class primitive decomposition]
+  \label{thm:class-primitive-decomposition}
+  Let \(C\subset G\) be a conjugacy class. If \(p_{n,C}\) denotes the
+  number of primitive orbits of length \(n\) whose \(G\)-label lies in
+  \(C\), then for \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-primitive-generating-function}
+    \sum_{n\ge 1}p_{n,C}z^n
+    =
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(z),
+  \end{equation}
+  and therefore
+  \begin{equation}\label{eq:class-primitive-coefficients}
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  By definition,
+  \[
+    \sum_{n\ge 1}p_{n,C}z^n
+    =
+    \sum_{\gamma\in\cP}\mathbf 1_C(\tau(\gamma))z^{|\gamma|}.
+  \]
+  Applying \Cref{prop:class-indicator-expansion} to the class function
+  \(\mathbf 1_C\) and using the linearity of \(\Pi_\phi\) yields
+  \eqref{eq:class-primitive-generating-function}. Comparing coefficients
+  gives \eqref{eq:class-primitive-coefficients}.
+\end{proof}
+
+\begin{corollary}[Conjugacy-class Artin--M\"obius trace formula]
+  \label{cor:class-artin-mobius-trace}
+  For every conjugacy class \(C\subset G\) and every \(n\ge 1\),
+  \begin{equation}\label{eq:class-artin-mobius-trace}
+    p_{n,C}
+    =
+    \frac{|C|}{|G|\,n}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)
+        \sum_{m\mid n}\mu(m)
+          \sum_{\pi\in\Irr(G)}
+            a_{\varrho,\pi}^{(m)}
+            \Tr(A_\pi^{n/m}).
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  Substitute \eqref{eq:primitive-peter-weyl-trace} into
+  \eqref{eq:class-primitive-coefficients}.
+\end{proof}
+
+From this point onward in the Perron-point part of Main Theorem~II we
+assume \(\lambda>1\) and impose the gap hypothesis
+\[
+  \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda.
+\]
+If \(G\) is trivial, this maximum is empty and \(\eta=0\).
+Thus the formal determinant identities
+\Cref{thm:class-function-linearisation,cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant,cor:primitive-peter-weyl-trace}
+are unconditional in the open Perron disc, while the estimates and
+constants from \Cref{lem:nontrivial-peter-weyl-channel-bound} through
+\Cref{thm:class-mertens-fourier} are conditional on \(\lambda>1\) and
+the displayed gap.
+The only scalar input used below is the trivial-channel
+orbit-Mertens constant \(\mathcal M(A)\); its finite-matrix formula is
+proved independently in \Cref{sec:finite-part}.
+
+The class Mertens theorem below is the analytic part of Main
+Theorem~II from the introduction. The leading density term is included
+to identify the constant term and normalisation; the new ingredient in
+this section is the passage from the twisted determinant channels to the
+primitive Perron-point class profile. The later Fourier formula is a
+readout of the constants by character orthogonality. The proof is
+assembled from the next five lemmas:
+class decomposition, the non-trivial channel estimate, absolute
+convergence at the Perron point, a geometric-harmonic tail bound, and
+the trivial Perron-channel contribution.
+
+\begin{lemma}[Trivial and non-trivial class decomposition]
+  \label{lem:class-primitive-trivial-split}
+  For every conjugacy class \(C\subset G\) and every \(n\ge 1\),
+  \[
+    p_{n,C}
+    =
+    \frac{|C|}{|G|}p_n(A)
+    +\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Separate the trivial representation from
+  \eqref{eq:class-primitive-coefficients}. Since
+  \(\chi_{\mathbf 1}^\ast(C)=1\) and
+  \(\pi_{n,\mathbf 1}(A,\tau)=p_n(A)\), the displayed identity follows.
+\end{proof}
+
+\begin{lemma}[Non-trivial Peter--Weyl channel bound]
+  \label{lem:nontrivial-peter-weyl-channel-bound}
+  For every non-trivial \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}
+    \le
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho}{n}
+      \left(\sum_{\kappa\in\Irr(G)}\dim\kappa\right)
+      \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m},
+  \]
+  and therefore
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}
+    \le
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho}{n}
+      \left(\sum_{\kappa\in\Irr(G)}\dim\kappa\right)
+      \frac{\lambda^{n/2+1}}{\lambda-1}.
+  \]
+  In particular,
+  \[
+    \pi_{n,\varrho}(A,\tau)
+    =O\!\left(\frac{\max\{\eta^n,\lambda^{n/2}\}}{n}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Fix \(\varrho\neq\mathbf 1\). For each
+  \(\kappa\in\Irr(G)\), let
+  \(\mu_{\kappa,1},\dots,\mu_{\kappa,|V|\dim\kappa}\) be the eigenvalues
+  of \(A_\kappa\), repeated with algebraic multiplicity. By
+  \Cref{prop:twisted-spectral-radius-bound},
+  \[
+    \abs{\mu_{\kappa,j}}\le \rho(A_\kappa)\le \lambda
+    \qquad
+    (\kappa\in\Irr(G)),
+  \]
+  and for the present non-trivial \(\varrho\) the twisted gap gives
+  \[
+    \abs{\mu_{\varrho,j}}\le \rho(A_\varrho)\le \eta.
+  \]
+  Therefore
+  \[
+    \abs{\Tr(A_\varrho^n)}
+    =
+    \left|\sum_{j=1}^{|V|\dim\varrho}\mu_{\varrho,j}^n\right|
+    \le |V|\,\dim\varrho\,\eta^n,
+  \]
+  and, for every \(\kappa\in\Irr(G)\) and every \(\ell\ge 1\),
+  \[
+    \abs{\Tr(A_\kappa^\ell)}
+    =
+    \left|\sum_{j=1}^{|V|\dim\kappa}\mu_{\kappa,j}^\ell\right|
+    \le |V|\,\dim\kappa\,\lambda^\ell.
+  \]
+
+  By \Cref{cor:primitive-peter-weyl-trace},
+  \[
+    \pi_{n,\varrho}(A,\tau)
+    =
+    \frac{1}{n}\Tr(A_\varrho^n)
+    +\frac{1}{n}
+      \sum_{\substack{m\mid n\\ m>1}}\mu(m)
+        \sum_{\kappa\in\Irr(G)}
+          a_{\varrho,\kappa}^{(m)}\Tr(A_\kappa^{n/m}).
+  \]
+  Taking absolute values, the first term is bounded by
+  \(|V|\,\dim\varrho\,\eta^n/n\). For the divisor sum, use
+  \Cref{lem:adams-coefficients-bounded} together with the trace bound
+  above:
+  \begin{align*}
+    \abs{
+      \sum_{\kappa\in\Irr(G)}
+        a_{\varrho,\kappa}^{(m)}\Tr(A_\kappa^{n/m})
+    }
+    &\le
+    \sum_{\kappa\in\Irr(G)}
+      \dim\varrho\,|V|\,\dim\kappa\,\lambda^{n/m} \\
+    &=
+    |V|\,\dim\varrho
+      \left(\sum_{\kappa\in\Irr(G)}\dim\kappa\right)\lambda^{n/m}.
+  \end{align*}
+  This proves the first displayed estimate. Since \(n/m\le n/2\) for
+  \(m>1\),
+  \[
+    \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m}
+    \le \sum_{k=1}^{\lfloor n/2\rfloor}\lambda^k
+    \le \frac{\lambda^{\lfloor n/2\rfloor+1}}{\lambda-1}
+    \le \frac{\lambda^{n/2+1}}{\lambda-1}.
+  \]
+  Substituting this into the first estimate gives the second displayed
+  bound, and the \(O\)-estimate follows.
+\end{proof}
+
+\begin{lemma}[Absolute convergence at the Perron point]
+  \label{lem:nontrivial-perron-point-convergence}
+  Assume \(\lambda>1\) and \(\eta<\lambda\). Then, for every non-trivial
+  \(\varrho\in\Irr(G)\), the series
+  \[
+    \Pi_\varrho(\lambda^{-1})
+    =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)\lambda^{-n}
+  \]
+  converges absolutely.
+\end{lemma}
+
+\begin{proof}
+  Let
+  \[
+    \vartheta:=\max\{\eta/\lambda,\lambda^{-1/2}\}\in(0,1).
+  \]
+  By \Cref{lem:nontrivial-peter-weyl-channel-bound},
+  \[
+    \abs{\pi_{n,\varrho}(A,\tau)}\lambda^{-n}
+    =O\!\left(\frac{\vartheta^n}{n}\right),
+  \]
+  and the series \(\sum_{n\ge 1}\vartheta^n/n\) converges.
+\end{proof}
+
+\begin{lemma}[Abel limit equals the ordinary correction sum]
+  \label{lem:abel-correction-sum}
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\). If
+  \[
+    \sum_{n\ge 1}\left|\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right|
+    <\infty,
+  \]
+  then
+  \[
+    \FP(A)
+    =
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
+  \]
+  Equivalently, for every \(0\le r<1\),
+  \[
+    P_A(r)+\log(1-r)
+    =
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)r^n,
+  \]
+  and the limit \(r\uparrow 1\) may be passed termwise.
+\end{lemma}
+
+\begin{proof}
+  For \(0\le r<1\), the harmonic-series identity
+  \[
+    -\log(1-r)=\sum_{n\ge 1}\frac{r^n}{n}
+  \]
+  gives
+  \[
+    P_A(r)+\log(1-r)
+    =
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)r^n.
+  \]
+  The right-hand side is dominated by the absolutely summable majorant
+  \[
+    \sum_{n\ge 1}\left|\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right|,
+  \]
+  so dominated convergence allows \(r\uparrow 1\) termwise. By the
+  definition of \(\FP(A)\), the limit equals \(\FP(A)\), proving the
+  stated ordinary-sum formula.
+\end{proof}
+
+\begin{lemma}[Geometric-harmonic tails]
+  \label{lem:geometric-harmonic-tail}
+  If \(0<\vartheta<1\), then for every \(N\ge 1\),
+  \[
+    \sum_{n>N}\frac{\vartheta^n}{n}
+    \le
+    \frac{\vartheta^{N+1}}{(N+1)(1-\vartheta)}.
+  \]
+  In particular, if \(b_n=O(\vartheta^n/n)\), then
+  \[
+    \sum_{n>N}b_n=O\!\left(\frac{\vartheta^N}{N}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(n\ge N+1\) throughout the tail,
+  \[
+    \sum_{n>N}\frac{\vartheta^n}{n}
+    \le
+    \frac{1}{N+1}\sum_{n>N}\vartheta^n
+    =
+    \frac{\vartheta^{N+1}}{(N+1)(1-\vartheta)}.
+  \]
+  The second statement is immediate.
+\end{proof}
+
+\begin{lemma}[Harmonic-log remainder bound]
+  \label{lem:harmonic-log-remainder}
+  For every \(N\ge 1\),
+  \[
+    0
+    <
+    H_N-\log N-\gamma
+    \le
+    \frac{1}{N+1}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since
+  \[
+    \log(N+1)-\log N
+    =
+    \log\!\left(1+\frac{1}{N}\right)
+  \]
+  and \(\frac{x}{1+x}\le \log(1+x)\le x\) for \(x>-1\), one has
+  \[
+    \frac{1}{N+1}
+    \le
+    \log\!\left(1+\frac{1}{N}\right)
+    \le
+    \frac{1}{N}.
+  \]
+  Therefore
+  \[
+    0
+    \le
+    \frac{1}{N}-\log\!\left(1+\frac{1}{N}\right)
+    \le
+    \frac{1}{N(N+1)}.
+  \]
+  Using the defining limit
+  \(\gamma=\lim_{M\to\infty}(H_M-\log M)\), we obtain
+  \begin{align*}
+    H_N-\log N-\gamma
+    &=
+    \sum_{m>N}
+      \left(
+        \frac{1}{m}-\log\!\left(1+\frac{1}{m}\right)
+      \right) \\
+    &\le
+    \sum_{m>N}\frac{1}{m(m+1)}
+    =
+    \frac{1}{N+1}.
+  \end{align*}
+  Each summand is strictly positive, so the left-hand inequality follows.
+\end{proof}
+
+\begin{lemma}[Perron-channel contribution]
+  \label{lem:perron-channel-contribution}
+  Assume \(\lambda>1\), \(\eta<\lambda\), and set
+  \[
+    \Lambda_*:=\max\{\Lambda(A),\eta,\lambda^{1/2}\}.
+  \]
+  Then \(\vartheta_*:=\Lambda_*/\lambda\in(0,1)\), and
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\mathcal M(A)-\gamma
+    +O\!\left(\frac{\vartheta_*^N}{N}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(\Lambda(A)<\lambda\), \(\eta<\lambda\), and
+  \(\lambda^{1/2}<\lambda\), one has \(\vartheta_*\in(0,1)\). By
+  \Cref{lem:primitive-orbit-asymptotic},
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}
+    +O\!\left(\frac{\vartheta_*^n}{n}\right).
+  \]
+  Hence the correction series
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely, and \Cref{lem:abel-correction-sum} gives
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+    =
+    \FP(A)
+    =
+    \mathcal M(A)-\gamma.
+  \]
+  Therefore
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\mathcal M(A)-\gamma
+    -\sum_{n>N}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
+  \]
+  The tail is \(O(\vartheta_*^N/N)\) by
+  \Cref{lem:geometric-harmonic-tail}.
+\end{proof}

@@ -31,7 +31,8 @@ One has
 \begin{proof}
 A symbolic determinant computation from the explicit \(10\times 10\)
 matrix \(B(u)\) of \Cref{def:sync-kernel} gives the displayed formula;
-the exact computation is recorded in
+the displayed polynomial is the exact certificate used in the sequel,
+and the command block producing it is recorded in
 \Cref{sec:appendix-computation}\,\textup{(a)}.
 As a consistency check, the closed form satisfies the self-duality
 identity of \Cref{prop:sync-self-duality}; in particular, comparing
@@ -45,14 +46,23 @@ rows \(5,6,8,10\) are \(u\)-multiples of rows \(1,2,7,9\),
 respectively. Hence \(\operatorname{rank} B(u)\le 6\), so \(0\) is a
 persistent eigenvalue of multiplicity at least four.
 
-\begin{proposition}[Characteristic polynomial and residue constant]
+\begin{proposition}[Untwisted Perron root and residue constant]
   \label{prop:sync-kernel-spectrum}
-  The matrix \(B=B(1)\) is primitive and satisfies
+  The matrix \(B=B(1)\) is primitive and every row of \(B\) has sum
+  \(3\). Consequently the spectral radius is determined before any
+  characteristic-polynomial factorisation is used:
+  \[
+    B\mathbf 1=3\mathbf 1,\qquad
+    \rho(B)\le \max_i\sum_j B_{ij}=3,
+  \]
+  so \(\rho(B)=3\), and the Perron eigenvalue \(3\) is simple and is
+  the unique eigenvalue of modulus \(3\).
+  In addition,
   \[
     \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
   \]
-  In particular \(\rho(B)=3\), and the Perron residue constant
-  \(C_B\) of \Cref{def:perron-residue-constant} satisfies
+  The Perron residue constant \(C_B\) of
+  \Cref{def:perron-residue-constant} is
   \[
     C_B=\frac{243}{272}.
   \]
@@ -60,15 +70,69 @@ persistent eigenvalue of multiplicity at least four.
 
 \begin{proof}
 Every state reaches \(\st{000}\) in at most three steps by the paths
-listed in \Cref{def:sync-kernel}, and \(\st{000}\) reaches every state
-by iterating the transitions through \(\st{001}\), \(\st{002}\),
-\(\st{010}\), and \(\st{0-12}\); hence the digraph of \(B\) is strongly
-connected. Since there is also the self-loop
-\(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
-Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The factorisation is
-then immediate. Since \((3z-1)\) is the unique factor whose reciprocal
-lies outside the unit circle, \(\rho(B)=3\). Evaluating the cofactor at
-\(z=1/3\) gives the residue constant. This proves part~\textup{(i)} of
+listed in \Cref{def:sync-kernel}. Conversely, the transition table gives
+explicit paths from \(\st{000}\) to the other states:
+\[
+  \st{000}\to\st{001},\qquad
+  \st{000}\to\st{002},\qquad
+  \st{000}\to\st{001}\to\st{010},
+\]
+\[
+  \st{000}\to\st{001}\to\st{100},\qquad
+  \st{000}\to\st{001}\to\st{101},\qquad
+  \st{000}\to\st{002}\to\st{11-1},
+\]
+\[
+  \st{000}\to\st{001}\to\st{010}\to\st{0-12},\qquad
+  \st{000}\to\st{001}\to\st{010}\to\st{0-12}\to\st{01-1},
+\]
+\[
+  \st{000}\to\st{002}\to\st{11-1}\to\st{1-12}.
+\]
+Thus the digraph of \(B\) is strongly connected. Since there is also the
+self-loop \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
+
+We next determine the spectral radius directly from the non-negative
+matrix \(B\), before using any determinant factorisation. Inspecting the
+transition table at \(u=1\), every row of \(B=B(1)\) has sum \(3\).
+Therefore
+\[
+  B\mathbf 1=3\mathbf 1,\qquad
+  \rho(B)\le \max_i\sum_j B_{ij}=\|B\|_\infty=3.
+\]
+The first equality exhibits \(3\) as an eigenvalue. The inequality
+follows from the \(\ell^\infty\)-operator norm, or equivalently from
+\Cref{lem:row-sum-perron-bound}, and shows that no eigenvalue of \(B\)
+can have modulus greater than \(3\). Hence \(3\le\rho(B)\le3\), so
+\(\rho(B)=3\). Since \(B\) is primitive, the Perron--Frobenius theorem
+gives that this eigenvalue is simple and that no other eigenvalue lies
+on \(\abs{\lambda}=3\).
+
+The determinant is used only after this Perron conclusion has been
+proved, and only for the displayed factorisation and residue. Setting
+\(u=1\) in
+\Cref{prop:kernel-delta-explicit} gives
+\[
+  \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+\]
+This factorisation is deliberately not used to prove the spectral
+radius. In the variable \(z\), the cubic factor \(z^3-z^2+z+1\) has a
+zero with \(\abs{z}<1\), so a comparison of zero moduli in the
+factorisation is not a valid Perron argument; the factor \(3z-1\) is
+not distinguished by such a reciprocal-modulus test. The Perron
+conclusion above comes only from \(B\mathbf1=3\mathbf1\), the row-sum
+bound, and primitivity. The factorisation is used here solely for the
+residue computation
+\[
+  \begin{aligned}
+  C_B
+  &=\lim_{z\to1/3}
+    \frac{1-3z}{(z-1)(z+1)(3z-1)(z^3-z^2+z+1)}  \\
+  &=-\frac{1}{(-2/3)(4/3)(34/27)}
+    =\frac{243}{272}.
+  \end{aligned}
+\]
+This proves part~\textup{(i)} of
 \Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
@@ -105,8 +169,12 @@ by \(\widehat\Delta(w,s)\).
 Substitute \(u=r^2\) and \(z=w/r\) into the explicit formula of
 \Cref{prop:kernel-delta-explicit}. Terms in \(r\) and \(r^{-1}\)
 combine to give a polynomial in \(s=r+r^{-1}\), and a direct expansion
-produces the displayed formula. The parity relation is immediate. This
-proves part~\textup{(ii)} of \Cref{thm:intro-kernel-geometry}.
+produces the displayed formula. This displayed formula, together with
+the parity identity below it, is the certificate used in the geometric
+and cyclotomic arguments; the command block producing it is
+recorded in \Cref{sec:appendix-computation}\,\textup{(b)}. The parity
+relation is immediate. This proves part~\textup{(ii)} of
+\Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
 \begin{remark}
@@ -132,31 +200,48 @@ steps.
 \medskip
 \noindent\textit{Step 1 (discriminant, \(G\not\subset A_6\)).}\quad
 Write \(D(s):=\disc_w\widehat\Delta(w,s)\in\QQ[s]\). The explicit
-computation recorded in \Cref{sec:appendix-computation}\,(d) shows
-that \(D(s)\) has degree~\(20\) with leading coefficient~\(-256\).
-Since the leading coefficient is negative, \(D(s)\to-\infty\) as
-\(s\to+\infty\), so \(D(s)\) takes negative real values and is
-therefore not a square in~\(\QQ(s)\). Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in \(w\) changes sign under odd permutations, \(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
+SageMath~10.2 computation recorded in
+\Cref{sec:appendix-computation}\,(d) prints the output
+\((20,-256)\) for \((\deg D,\operatorname{lc}D)\), so \(D(s)\) has
+degree~\(20\) with leading coefficient~\(-256\).
+This metadata is already a nonsquare certificate. Indeed, if a
+polynomial \(D\in\QQ[s]\) is a square in \(\QQ(s)\), write
+\(D=(A/B)^2\) with coprime \(A,B\in\QQ[s]\). Then
+\(A^2=DB^2\), so every irreducible divisor of \(B\) divides \(A\);
+hence \(B\) is constant and \(D\) is a square in \(\QQ[s]\). Its
+leading coefficient is therefore a square in \(\QQ^\times\), in
+particular positive. The leading coefficient \(-256\) rules this out.
+Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in
+\(w\) changes sign under odd permutations,
+\(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
 
 \medskip
 \noindent\textit{Step 2 (specialisation input).}\quad
 We use the following standard fact: if \(s_0\in\QQ\) is such that
 \(\widehat\Delta(w,s_0)\) is separable over \(\QQ\) (equivalently,
 \(D(s_0)\neq 0\)), then the Galois group \(G_{s_0}\) of
-\(\widehat\Delta(w,s_0)\) over \(\QQ\) embeds into \(G\); see
-\cite[\S 4.4]{Serre2008Topics}. The condition \(D(s_0)\neq 0\) is
+\(\widehat\Delta(w,s_0)\) over \(\QQ\) embeds into \(G\); see the
+specialisation theorem in \cite[\S 4.4, Proposition~1]{Serre2008Topics}.
+The condition \(D(s_0)\neq 0\) is
 verified at each chosen \(s_0\) by computing
 \(\gcd(\widehat\Delta(w,s_0),\partial_w\widehat\Delta(w,s_0))\bmod p\)
 for a convenient prime \(p\).
 
 To read off cycle types inside \(G_{s_0}\), we apply Dedekind's
-theorem: if \(f(w)\in\ZZ[w]\) is monic, \(p\nmid\text{disc}(f)\),
-and \(f\equiv f_1^{e_1}\cdots f_r^{e_r}\pmod p\) with the \(f_i\)
-distinct and irreducible over \(\mathbb{F}_p\), then the Frobenius
-at \(p\) in \(\Gal(f/\QQ)\) has cycle type
-\((\deg f_1,\dots,\deg f_r)\); see \cite[Ch.~4,
-\S{}4.3]{Serre2008Topics}. The exact mod-\(p\) factorisation data are
-recorded in \Cref{sec:appendix-computation}\,(d).
+theorem in its localized form. Namely, let
+\(f(w)\in\ZZ[w]\) have degree \(n\), and let \(p\) be a prime
+which divides neither the leading coefficient of \(f\) nor
+\(\disc(f)\). Then \(f\) has degree \(n\) after reduction modulo
+\(p\), and multiplying its reduction by the inverse of the reduced
+leading coefficient gives a monic polynomial with the same irreducible
+factor degrees. If this reduction factors as
+\(f_1\cdots f_r\) with the \(f_i\) distinct and irreducible over
+\(\mathbb{F}_p\), then the Frobenius at \(p\) in \(\Gal(f/\QQ)\)
+has cycle type \((\deg f_1,\dots,\deg f_r)\). This is the usual
+Dedekind theorem \cite[I, \S{}6, Proposition~25]{Serre1979}, applied
+over \(\ZZ_{(p)}\), in the Frobenius form used in
+\cite[\S{}4.3]{Serre2008Topics}. The exact mod-\(p\) factorisation
+data are recorded in \Cref{sec:appendix-computation}\,(d).
 
 \medskip
 \noindent\textit{Step 3 (three Frobenius specialisations).}
@@ -166,6 +251,8 @@ recorded in \Cref{sec:appendix-computation}\,(d).
 One checks that
 \(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod 7\),
 so \(D(3)\neq 0\) and the specialisation is separable.
+Here \(\operatorname{lc}_w\widehat\Delta(w,3)=8\not\equiv0\pmod7\),
+so the nonmonic normalization above is legitimate.
 Modulo \(7\),
 \[
   \widehat\Delta(w,3)
@@ -179,20 +266,29 @@ on the six roots.
 \noindent\textit{Transposition (\(s=2\), mod \(7\)).}\quad
 One checks that
 \(\gcd(\widehat\Delta(w,2),\partial_w\widehat\Delta(w,2))\equiv 1\pmod 7\),
-so \(D(2)\neq 0\). Modulo \(7\),
+so \(D(2)\neq 0\). Here
+\(\operatorname{lc}_w\widehat\Delta(w,2)=3\not\equiv0\pmod7\).
+Modulo \(7\),
 \[
+\begin{aligned}
   \widehat\Delta(w,2)
-  \equiv (w+6)(w+5)(w+2)(w+1)(3w^2+3w+2)\pmod 7,
+  &\equiv (w+6)(w+5)(w+2)(w+1) \\
+  &\qquad\cdot(3w^2+3w+2)\pmod 7,
+\end{aligned}
 \]
-where \(3w^2+3w+2\) is irreducible over \(\mathbb{F}_7\). The
-factorisation type is \((1)(1)(1)(1)(2)\), so the Frobenius at \(7\)
-in \(G_2\subset G\) is a transposition. Hence \(G\) contains a
-transposition.
+The quadratic factor \(3w^2+3w+2\) is irreducible over
+\(\mathbb{F}_7\). Thus the factorisation type is
+\((1)(1)(1)(1)(2)\), so the Frobenius at \(7\) in \(G_2\subset G\) is a
+transposition. Hence \(G\) contains a transposition.
 
 \smallskip
 \noindent\textit{5-cycle (\(s=3\), mod \(19\)).}\quad
 One checks that
 \(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod{19}\).
+This squarefree reduction is exactly the separability witness:
+equivalently \(19\nmid D(3)\), so Dedekind's theorem applies to this
+factorisation.
+Here \(\operatorname{lc}_w\widehat\Delta(w,3)=8\not\equiv0\pmod{19}\).
 Modulo \(19\),
 \[
   \widehat\Delta(w,3)
@@ -207,14 +303,16 @@ factorisation type is \((1)(5)\), so the Frobenius at \(19\) in
 \noindent\textit{Step 4 (subgroup classification).}\quad
 We now have: \(G\le S_6\) is transitive, contains a transposition, and
 contains a \(5\)-cycle. A transitive subgroup of \(S_6\) that contains
-a \(5\)-cycle is primitive: if \(\sigma\in G\) is a \(5\)-cycle and
-\(\mathcal{B}\) is a non-trivial block, then \(|\mathcal{B}|\) divides
-\(6\). If \(\mathcal{B}\) meets the support of \(\sigma\), then
-\(\sigma(\mathcal{B})\cap\mathcal{B}\neq\varnothing\), which forces
-\(\sigma(\mathcal{B})=\mathcal{B}\), so \(\mathcal{B}\) must contain all
-five moved points of \(\sigma\), giving \(|\mathcal{B}|\in\{5,6\}\). No
-proper block of size \(5\) or \(6\) can exist in a transitive group on
-six points, so \(G\) is primitive \cite[Ch.~3, \S{}3.3]{Dixon1996}.
+a \(5\)-cycle is primitive. Indeed, a non-trivial block system on six
+points has either \(2\) or \(3\) blocks. Let \(\sigma\in G\) be a
+\(5\)-cycle. The induced action of \(\sigma\) on such a block system
+has order dividing both \(5\) and the order of a permutation group on
+\(2\) or \(3\) points; hence the induced action is trivial. Therefore
+each block is fixed setwise by \(\sigma\). Any block meeting the support
+of the \(5\)-cycle must then contain the whole five-point support,
+which is impossible for block size \(3\) or \(2\). Thus no non-trivial
+block system exists, so \(G\) is primitive
+\cite[Ch.~3, \S{}3.3]{Dixon1996}.
 A primitive subgroup of \(S_6\) containing a transposition is the full
 symmetric group \cite[Ch.~3, Theorem~3.3A]{Dixon1996}. Hence \(G=S_6\),
 completing part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
@@ -241,13 +339,14 @@ projective curve.
   \[
     x:=w^2,\qquad y:=sw
   \]
-  identify \(\overline{Y}\) birationally with the smooth projective closure of
+  identify the sign quotient birationally with the projective closure of
   the affine curve
   \[
     F(x,y):=
     1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3=0.
   \]
-  Consequently,
+  This projective closure is smooth; consequently it is the smooth
+  projective model \(\overline{Y}\), and
   \[
     g(\overline{Y})=3.
   \]
@@ -257,25 +356,29 @@ projective curve.
 By \Cref{lem:self-dual-compression}, the coefficient of \(w^j\) in
 \(\widehat\Delta(w,s)\) has degree at most \(j\) in \(s\) and the
 parity of \(j\). Hence
-\Cref{lem:sign-quotient-normal-form} applies to the involution
+\Cref{thm:sign-quotient-plane-genus} applies to the involution
 \(\iota:(w,s)\mapsto(-w,-s)\): the invariants
 \[
   x=w^2,\qquad y=sw
 \]
-generate the invariant subring, and there is a unique polynomial
-\(F(x,y)\in\QQ[x,y]\) with
+identify the invariant function field birationally, and the theorem
+gives a unique polynomial \(F(x,y)\in\QQ[x,y]\) with
 \(\widehat\Delta(w,s)=F(w^2,sw)\).
-A direct substitution gives the displayed formula for \(F\). Conversely,
-adjoining \(w=\sqrt{x}\) recovers the function field of \(\overline{X}\)
-from that of the curve \(F=0\), showing that \(\overline{Y}\) is
-birationally the smooth projective closure of \(\{F=0\}\).
+A direct substitution gives the displayed formula for \(F\). Since
+\(\widehat\Delta(0,s)=1\), the constant coefficient hypothesis
+\(c_0\ne0\) in \Cref{thm:sign-quotient-plane-genus} is satisfied; hence
+the quotient function field is the function field of \(F=0\). Thus
+\(\overline{Y}\) is birational to the projective closure of the affine
+quartic \(\{F=0\}\).
+After the smoothness check below, this closure is the smooth projective
+model \(\overline{Y}\).
 
-We verify that this projective closure is smooth.  Homogenise by setting
-\(X=x\), \(Y=y\), \(Z=1\) and clearing denominators to obtain
+We verify that this projective closure is smooth. Homogenizing
+\(F(x,y)\) to degree \(4\) in projective coordinates \([X:Y:Z]\) gives
 \[
 \begin{aligned}
   F_h(X,Y,Z)
-  &= Z^4 - YZ^3 - 5XZ^2 + 3XYZ + 5X^2Z^2 - XY^2Z \\
+  &= Z^4 - YZ^3 - 5XZ^3 + 3XYZ^2 + 5X^2Z^2 - XY^2Z \\
   &\quad + XY^3 - 6X^2YZ + X^2Y^2 - X^3Z .
 \end{aligned}
 \]
@@ -302,7 +405,7 @@ At \([0:1:0]\) (chart \(Y=1\)): one computes
 \begin{aligned}
   \partial_X F_h\big|_{(0,1,0)}
   &=
-  \bigl[-5Z^2+3YZ-Y^2Z+Y^3 \\
+  \bigl[-5Z^3+3YZ^2+10XZ^2-Y^2Z+Y^3 \\
   &\qquad -12XYZ+2XY^2-3X^2Z\bigr]_{(0,1,0)}
   = 1\neq 0 .
 \end{aligned}
@@ -311,12 +414,15 @@ At the other two points at infinity,
 \[
   \partial_Z F_h\big|_{(1,0,0)}=-1\neq 0,
   \qquad
-  \partial_Z F_h\big|_{(1,-1,0)}=1\neq 0 .
+  \partial_Z F_h\big|_{(1,-1,0)}=4\neq 0 .
 \]
 
 Hence the projective curve is smooth everywhere, so by the
-genus formula for smooth plane curves \cite{Hartshorne1977},
-\(g(\overline{Y})=(4-1)(4-2)/2=3\).
+\Cref{thm:sign-quotient-plane-genus} with \(n=4\), this nonsingular
+quartic is the smooth projective quotient model and
+\[
+  g(\overline{Y})=(4-1)(4-2)/2=3.
+\]
 \end{proof}
 
 \begin{lemma}[Integrality and function-field setup]
@@ -364,8 +470,10 @@ extension is the function field of \(C_{\mathrm{aff}}\).
 
 \begin{proof}
 By \Cref{lem:integral-function-field}, the extension of function fields
-\(k(\overline{X})/k(\overline{Y})\) is \(k(\overline{Y})(\sqrt{x})\),
-which has degree exactly two.
+\[
+  k(\overline{X})/k(\overline{Y})
+\]
+is obtained by adjoining \(\sqrt{x}\), and it has degree exactly two.
 
 We use the standard criterion for ramification in quadratic extensions
 of function fields: let \(K\) be a function field of characteristic
@@ -384,12 +492,12 @@ On the affine chart, \(F(0,y)=1-y\), so the only affine point with
 For the points at infinity, work on the chart \(X=1\) with
 \(y=Y/X\) and \(z=Z/X\). The equation becomes
 \[
-  G(y,z)=z^4-yz^3-y^2z+y^3-3yz+y^2-z.
+  G(y,z)=z^4-yz^3-5z^3+3yz^2+5z^2-y^2z+y^3-6yz+y^2-z.
 \]
 At \(Q_0=[1:0:0]\), one has \(\partial_z G(0,0)=-1\), so \(z\) is an
 analytic function of \(y\), and solving \(G(y,z)=0\) gives
 \[
-  z=y^2-2y^3+O(y^4).
+  z=y^2-5y^3+O(y^4).
 \]
 Hence \(x=X/Z=1/z\) has pole order \(2\) at \(Q_0\), so
 \[
@@ -398,11 +506,12 @@ Hence \(x=X/Z=1/z\) has pole order \(2\) at \(Q_0\), so
 At
 \(Q_\infty=[1:-1:0]\), writing \(y=-1+t\) gives
 \[
-  G(-1+t,z)=t-2t^2+t^3+z-tz-t^2z+z^3-tz^3+z^4,
+  G(-1+t,z)=t-2t^2+t^3+4z-4tz-t^2z
+  +2z^2+3tz^2-4z^3-tz^3+z^4,
 \]
-so \(\partial_z G(-1,0)=1\neq 0\), and
+so \(\partial_z G(-1,0)=4\neq 0\), and
 \[
-  z=-t+t^2+O(t^3).
+  z=-\frac14t+\frac{7}{32}t^2+O(t^3).
 \]
 Thus \(x=1/z\) has a simple pole at \(Q_\infty\), so
 \[
@@ -427,7 +536,8 @@ Thus
 The odd valuations occur exactly at \(P\) and \(Q_\infty\). By the
 quadratic ramification criterion, these are exactly the two ramified
 places of \(k(\overline{X})/k(\overline{Y})\), and each contributes one
-simple branch point. Hurwitz's formula \cite{Hartshorne1977} then gives
+simple branch point. The Riemann--Hurwitz genus formula
+\cite[III.4.12]{Stichtenoth2009} then gives
 \[
   2g(\overline{X})-2=2(2g(\overline{Y})-2)+2=2(2\cdot 3-2)+2,
 \]
@@ -485,21 +595,35 @@ Taking determinants yields the stated factorisation.
     \qquad
     s_a:=r_a+r_a^{-1}=2\cos(\pi a/m).
   \]
-  Then
-  \[
-    \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a).
-  \]
-  Consequently, if
+  Put
   \[
     A_m:=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
       a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+    \qquad
+    \Phi_m^+(s):=\prod_{\alpha\in A_m}(s-\alpha),
   \]
-  then the primitive Fourier blocks of the \(m\)-cyclic lift, after
-  pairing conjugate characters and changing variables \(w=zr_a\), give
-  the real polynomial
+  and \(d_m:=|A_m|\).
+  Then the normalized primitive real factor is the following root
+  product, which is the definition of the polynomial used below:
   \[
-    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
-    =\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr).
+    R_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
+  \]
+  With the standard Sylvester resultant convention this same polynomial
+  is represented by a resultant only in the following order:
+  \[
+    R_m(w)=
+    \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr),
+  \]
+  where \(\Phi_m^+\) is in the first argument. The reversed order is
+  not used to define \(R_m\); with the standard Sylvester convention it
+  is
+  \[
+    \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+    =(-1)^{3d_m}R_m(w).
+  \]
+  Moreover, for every \(a\) as above,
+  \[
+    \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a).
   \]
 \end{proposition}
 
@@ -513,32 +637,253 @@ unity, so the corresponding factor is one of the primitive Fourier
 blocks in \Cref{prop:sync-cyclic-lift-factorisation}. Replacing \(a\) by
 \(-a\) conjugates \(r_a\) and leaves \(s_a=r_a+r_a^{-1}\) unchanged, so
 conjugate primitive characters collapse to the same real slice
-\(\widehat\Delta(w,s_a)\).
+\(\widehat\Delta(w,s_a)\). Thus the displayed product is a polynomial in
+the normalized coordinate \(w\): for each primitive character separately,
+the corresponding factor in the original cyclic-lift determinant is
+obtained by the harmless scaling \(z=w/r_a\).
 
 By definition,
 \[
   \Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha),
 \]
-so the product formula for resultants gives
+so \Cref{lem:ordered-cyclotomic-resultant} gives
 \[
-  \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
-  =\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
+  \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr)
+  =
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
+  \qquad d_m=|A_m|.
 \]
-which is exactly the real primitive factor obtained from the paired
-primitive Fourier blocks.
+The root product is therefore represented by a resultant only with
+\(\Phi_m^+\) in the first slot. In particular, the notation \(R_m\)
+denotes the product itself, not an unordered resultant expression. Since
+\(\deg_s\widehat\Delta=3\), the reversed-order identity in
+\Cref{lem:ordered-cyclotomic-resultant} gives
+\[
+    \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+    =(-1)^{3d_m}
+      \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr),
+\]
+which is the displayed reversed-order sign formula.
 \end{proof}
 
-\subsection{Cyclotomic resultants and twisted Perron roots}
+\subsection{A general endpoint-selection theorem}
+
+\begin{theorem}[Endpoint selection and asymptotic transfer]
+  \label{thm:self-dual-endpoint-selection}
+  Let \(B(u)=B_0+uB_1\) be a finite non-negative output-labelled kernel
+  with integer entries. Assume that \(B(1)\) is primitive and that
+  \(B(1)\mathbf 1=q\mathbf 1\). Suppose there is a permutation matrix
+  \(\Pi\) with
+  \[
+    \Pi^{-1}B_0\Pi=B_1,\qquad
+    \Pi^{-1}B_1\Pi=B_0.
+  \]
+  Let
+  \[
+    \Delta(z,u)=\det(I-zB(u)),\qquad
+    H(w,s)=\Delta(w/r,r^2),\qquad s=r+r^{-1}.
+  \]
+  Then \(H(w,s)\in\ZZ[s][w]\) and \(H(w,-s)=H(-w,s)\). More precisely,
+  if \(H(w,s)=\sum_j c_j(s)w^j\), then \(\deg_s c_j\le j\) and
+  \(c_j(-s)=(-1)^jc_j(s)\).
+  For \(m\ge2\)
+  set
+  \[
+    A_m=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
+      a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+      \qquad d_m=|A_m|,
+  \]
+  let
+  \[
+    \Phi_m^+(s):=\prod_{\alpha\in A_m}(s-\alpha),
+  \]
+  and define the normalized real cyclotomic factor directly by the root
+  product
+  \[
+    R_m(w):=\prod_{\alpha\in A_m}H(w,\alpha).
+  \]
+  This product, not an unordered resultant expression, is the definition
+  of \(R_m\). Under the standard Sylvester convention the same
+  polynomial is represented by the ordered resultant fixed in
+  \Cref{lem:ordered-cyclotomic-resultant},
+  \[
+    R_m(w)=\Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr).
+  \]
+  This order is part of the theorem: the cyclotomic polynomial is the
+  first argument, so the resultant is the root product itself. The
+  notation \(R_m\) never denotes the reversed-order resultant; if the
+  two resultant arguments are reversed, the product above is multiplied
+  by \((-1)^{(\deg_s H)d_m}\).
+  Assume further that
+  \[
+    \rho(B(e^{it}))<q
+    \qquad (t\not\equiv0\pmod{2\pi}),
+  \]
+  and that \(H(w,2)\) has a simple root \(w_0=1/q\) whose modulus is
+  strictly smaller than the moduli of all other roots. Let
+  \(w(s)\) be the corresponding analytic branch near \(s=2\), and put
+  \(\rho(s)=1/w(s)\). If there are rational constants
+  \(\eta,\varepsilon>0\) such that
+  \[
+    \lambda(s):=\min\{\abs{w}:H(w,s)=0\}
+  \]
+  satisfies
+  \[
+    \lambda(s)=w(s)<q^{-1}+\varepsilon
+       \quad (2-\eta\le s\le2),
+    \qquad
+    \lambda(s)\ge q^{-1}+\varepsilon
+       \quad (0\le s\le 2-\eta),
+  \]
+  and \(w(s)\) is strictly decreasing on \([2-\eta,2]\), then for every
+  \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\) the root product \(R_m(w)\) has
+  its minimal-modulus roots exactly in the factors \(H(w,s_m)\) and,
+  when \(m\) is even, \(H(w,-s_m)\). Consequently
+  \[
+    \rho_m:=\frac{1}{\min\{\abs{w}:R_m(w)=0\}}
+    \quad\text{satisfies}\quad
+    \rho_m=\rho(s_m).
+  \]
+  This conclusion is kernel-independent: after the displayed
+  hypotheses have been verified for a completed determinant \(H\), the
+  original labelled graph enters no further.
+  Finally suppose that, for some \(N\ge0\),
+  \[
+    \rho(2-\delta)=\sum_{j=0}^N a_j\delta^j+O(\delta^{N+1})
+    \qquad(\delta\to0^+).
+  \]
+  Then
+  \[
+    \rho_m
+    =\sum_{j=0}^N a_j
+      \left(2-2\cos\frac{\pi}{m}\right)^j
+      +O(m^{-2N-2}).
+  \]
+  Equivalently, if
+  \[
+    2-2\cos\frac{\pi}{m}
+      =\sum_{\ell=1}^{N+1}
+        \frac{2(-1)^{\ell+1}\pi^{2\ell}}{(2\ell)!}\,m^{-2\ell}
+        +O(m^{-2N-4}),
+  \]
+  then the coefficient of \(m^{-2k}\), \(0\le k\le N\), in \(\rho_m\)
+  is
+  \[
+    \sum_{j=0}^k a_j\,
+    [T^k]\left(
+      \sum_{\ell=1}^k
+        \frac{2(-1)^{\ell+1}\pi^{2\ell}}{(2\ell)!}\,T^\ell
+    \right)^j .
+  \]
+\end{theorem}
+
+\begin{proof}
+The inclusion \(H\in\ZZ[s][w]\), together with the parity
+\(H(w,-s)=H(-w,s)\), is exactly \Cref{lem:self-dual-compression}. The
+displayed product formula for \(R_m\) is exactly
+\Cref{lem:ordered-cyclotomic-resultant} with \(A=A_m\): the monic
+polynomial \(\Phi_m^+\) is deliberately placed in the first resultant
+slot, so no sign occurs in the root product. The same lemma also gives
+the reversed-order sign \((-1)^{(\deg_s H)d_m}\).
+For \(\alpha=2\cos\theta\in[-2,2]\)
+choose \(r=e^{i\theta}\). Then
+\[
+  H(w,\alpha)=\Delta(w/r,r^2),
+\]
+and \(\abs{r}=1\), so the change of variables \(z=w/r\) preserves
+moduli. Hence
+\[
+  \lambda(\alpha)^{-1}=\rho(B(e^{2i\theta})).
+  \]
+The strict spectral-radius hypothesis gives \(\lambda(s)>1/q\) for
+\(-2<s<2\), while \(B(1)\mathbf1=q\mathbf1\) and primitivity give the
+unique untwisted Perron root \(w_0=1/q\) at \(s=2\).
+
+The symmetry \(H(w,-s)=H(-w,s)\) gives \(\lambda(-s)=\lambda(s)\).
+Thus it is enough to compare \(\abs{\alpha}\). Among the primitive
+conjugates
+\[
+  \alpha=2\cos(\pi a/m),
+  \qquad a\in(\ZZ/2m\ZZ)^\times/\{\pm1\},
+\]
+the maximum of \(\abs{\alpha}\) is \(s_m\), attained only by
+\(\alpha=s_m\) and, for even \(m\), by \(\alpha=-s_m\). For all other
+conjugates with \(\abs{\alpha}>2-\eta\), strict monotonicity of the
+endpoint branch gives \(\lambda(\alpha)=\lambda(\abs{\alpha})
+>\lambda(s_m)\). If \(\abs{\alpha}\le2-\eta\), the assumed separation
+gives \(\lambda(\alpha)\ge q^{-1}+\varepsilon>\lambda(s_m)\). Hence the
+minimal-modulus roots of \(R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha)\)
+come exactly from the endpoint factor(s), and
+\(\rho_m=\rho(s_m)\).
+
+It remains only to record the coefficient transfer, since this is the
+part used later without reference to the original graph. Put
+\(\delta_m=2-s_m=2-2\cos(\pi/m)\). The identity just proved gives
+\[
+  \rho_m=\rho(2-\delta_m).
+\]
+As \(m\to\infty\), one has \(\delta_m=O(m^{-2})\), and the Taylor
+expansion of the cosine gives
+\[
+  \delta_m
+  =\sum_{\ell=1}^{N+1}
+    \frac{2(-1)^{\ell+1}\pi^{2\ell}}{(2\ell)!}\,m^{-2\ell}
+    +O(m^{-2N-4}).
+\]
+Substituting this into
+\(\rho(2-\delta)=\sum_{j=0}^N a_j\delta^j+O(\delta^{N+1})\) gives
+\[
+  \rho_m
+  =\sum_{j=0}^N a_j\delta_m^j+O(\delta_m^{N+1})
+  =\sum_{j=0}^N a_j\delta_m^j+O(m^{-2N-2}).
+\]
+Expanding the finite polynomial in powers of \(T=m^{-2}\) gives the
+displayed coefficient formula. No matrix-theoretic information beyond
+the hypotheses of the theorem enters this transfer step.
+\end{proof}
+
+The theorem is the general endpoint-asymptotic result used in the rest
+of the paper. For a new self-dual kernel the required inputs are
+exactly:
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item a row-sum Perron root \(q\) and primitivity of \(B(1)\);
+  \item an involution exchanging the two labelled edge matrices;
+  \item the strict unitary spectral gap
+  \(\rho(B(e^{it}))<q\) away from \(t=0\);
+  \item an endpoint root \(w(2)=1/q\) that is simple and isolated in
+  modulus;
+  \item an effective interval \(2-\eta\le s\le2\) on which this branch
+  is separated from the other roots and is monotone.
+\end{enumerate}
+Once these verifications are available, no further information about
+the original graph is used: the cyclotomic endpoint selection and the
+large-\(m\) asymptotic expansion follow from the completed determinant
+\(H(w,s)\) alone.
+
+\subsection{Cyclotomic root products and twisted Perron roots}
 
 For \(m\ge 2\), let
 \[
   s_m:=2\cos(\pi/m),
 \]
 let \(\Phi_m^+(s)\) be the minimal polynomial of \(s_m\) over \(\QQ\), and
-define
+define the normalized primitive real factor by the conjugate product
 \[
-  R_m(w):=\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)\in\ZZ[w].
+  R_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)\in\ZZ[w],
 \]
+where \(A_m\) is the conjugate set displayed below. This product is the
+definition of \(R_m\). With the standard Sylvester convention the same
+polynomial is represented by the ordered resultant
+\[
+  R_m(w)=\Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr)
+\]
+with \(\Phi_m^+\) in the first resultant slot. The order is part of the
+notation: since \(\deg_s\widehat\Delta=3\), the same convention gives
+\[
+  \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+    =(-1)^{3\deg\Phi_m^+}R_m(w),
+\]
+so the reversed-order resultant is not used to define \(R_m\).
 The notation \(\Phi_m^+\) is non-standard; it denotes the real
 cyclotomic polynomial of \(2\cos(\pi/m)\), namely the minimal
 polynomial of the real part of a primitive \(2m\)-th root of unity.
@@ -549,8 +894,44 @@ Concretely, the conjugates of \(s_m\) under \(\Gal(\QQ(s_m)/\QQ)\) are
 and \(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\). The degree is
 \(\deg\Phi_m^+=|A_m|=\varphi(2m)/2\). By
 \Cref{prop:sync-primitive-real-factor}, the polynomial \(R_m(w)\) is
-precisely the primitive real factor extracted from the \(m\)-cyclic
-lift.
+precisely the completed, normalized primitive real factor extracted from
+the \(m\)-cyclic lift. It is normalized because each primitive character
+\(r_a^2\) uses its own coordinate \(w=zr_a\); before this change of
+variables the primitive factors are the ordinary \(z\)-factors
+\(\Delta(z,r_a^2)\), and no single unscaled \(z\)-polynomial is being
+identified with \(R_m(w)\). Equivalently, the exact identity in the
+original and normalized coordinates is
+\[
+  \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a),
+  \qquad s_a=r_a+r_a^{-1}.
+\]
+Thus \(R_m\) is a normalized \(w\)-polynomial. It is not literally the
+primitive part of \(\det(I-z\widetilde B_m)\) in one common
+\(z\)-coordinate, because the rescaling \(w=zr_a\) depends on the
+primitive character. With the Sylvester resultant convention, its
+ordered-resultant representation is
+\[
+  R_m(w)=
+    \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr)
+    =
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
+  \qquad d_m:=\deg\Phi_m^+=|A_m|.
+\]
+Reversing the two resultant arguments would introduce the sign
+\((-1)^{3d_m}\); the chosen order avoids that sign in the primitive
+factor itself. Thus, with the standard convention,
+\[
+  \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+  =(-1)^{3d_m}R_m(w),
+\]
+and this reversed-order resultant is not used as \(R_m(w)\). For example,
+when \(m=2\) one has \(\Phi_2^+(s)=s\) and the two possible orders give
+\[
+  \Res_s\bigl(s,\widehat\Delta(w,s)\bigr)=\widehat\Delta(w,0),
+  \qquad
+  \Res_s\bigl(\widehat\Delta(w,s),s\bigr)=-\widehat\Delta(w,0),
+\]
+which is the sign \((-1)^3\) in the smallest case.
 
 For orientation, the first few real cyclotomic polynomials are
 \[
@@ -586,13 +967,27 @@ conjugate set
 \[
   A_m:=\Bigl\{2\cos\!\tfrac{\pi a}{m}:a\in(\ZZ/2m\ZZ)^\times/\{\pm 1\}\Bigr\}.
 \]
-Then \(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\), and the
-product formula for resultants \cite{CoxLittleOShea2005} gives
+Then \(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\), and
+\Cref{lem:ordered-cyclotomic-resultant} gives the exact identities
 \[
   R_m(w)
-  =\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
-  =\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
+  =
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
+  \quad\text{and}\quad
+  \Res_s\bigl(\Phi_m^+(s),\widehat\Delta(w,s)\bigr)
+  =
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
 \]
+The second displayed expression equals the same product. The displayed
+resultant order is essential: the
+cyclotomic polynomial is in the first slot.
+The same lemma gives
+\[
+  \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+  =(-1)^{3d_m}R_m(w)
+\]
+in the reversed order, so the reversed-order resultant is not
+identified with \(R_m\).
 For \(m\ge 4\), the leading coefficient of \(\widehat\Delta(w,\alpha)\)
 as a polynomial in \(w\) is \(\alpha^2-1\). Since \(\alpha=2\cos(\pi a/m)\)
 for \(a\in(\ZZ/2m\ZZ)^\times\), we have \(\alpha=\pm 1\) only if
@@ -610,30 +1005,39 @@ For evenness when \(m\) is even: the set \(A_m\) is stable under
 \(-\cos(\pi a/m)=\cos(\pi(m-a)/m)\) belong to the same conjugate set.
 The symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\) then gives
 \[
+\begin{aligned}
   R_m(-w)
-  =\prod_{\alpha\in A_m}\widehat\Delta(-w,\alpha)
-  =\prod_{\alpha\in A_m}\widehat\Delta(w,-\alpha)
-  =\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
-  =R_m(w).\qedhere
+  &=
+    \prod_{\alpha\in A_m}\widehat\Delta(-w,\alpha) \\
+  &=
+    \prod_{\alpha\in A_m}\widehat\Delta(w,-\alpha) \\
+  &=
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
+    =R_m(w).
+\end{aligned}
 \]
 \end{proof}
 
 \begin{corollary}[The twist \(m=2\)]
   \label{cor:rho-m2-closed-form}
   One has
-  \[
+\[
     R_2(w)=\widehat\Delta(w,0)
     =1-5w^2+5w^4-w^6
     =(1-w^2)(w^4-4w^2+1),
-  \]
+\]
   and therefore
-  \[
+\[
     \rho_2=\sqrt{2+\sqrt3}.
-  \]
+\]
 \end{corollary}
 
 \begin{proof}
-Since \(s_2=0\), the resultant is obtained by direct substitution.
+Since \(\Phi_2^+(s)=s\), the Sylvester resultant in the chosen order
+gives
+\[
+  R_2(w)=\Res_s(s,\widehat\Delta(w,s))=\widehat\Delta(w,0).
+\]
 A minimal-modulus zero of \(R_2\) is \(\sqrt{2-\sqrt3}\), whose
 reciprocal is the stated value. Together with
 \Cref{thm:sync-cyclotomic-degree-law}, this proves
@@ -714,21 +1118,72 @@ which determines \(w''(2)\), and therefore
   \rho''(2)=\frac{2w'(2)^2}{w(2)^3}-\frac{w''(2)}{w(2)^2}
   =\frac{1351}{9826}.
 \]
-Continuing the same recursion through order six yields the displayed
-jet of \(\rho(2-\delta)\). The exact recursive identities and the
-resulting coefficients are recorded in
-\Cref{sec:appendix-computation}\,\textup{(e)}.
+Equivalently, write
+\[
+  w(s)=\sum_{j=0}^6 a_j(s-2)^j+O((s-2)^7),
+  \qquad a_0=\frac13 .
+\]
+Put \(t=s-2\), \(w_0=1/3\), and let
+\[
+  H_n(a_1,\ldots,a_n)
+  :=[t^n]\,
+    \widehat\Delta\!\left(w_0+\sum_{j=1}^n a_jt^j,\,2+t\right).
+\]
+Since \(\widehat\Delta(w_0,2)=0\), each equation \(H_n=0\) has the
+triangular form
+\[
+  \partial_w\widehat\Delta(w_0,2)\,a_n
+  +H_n(a_1,\ldots,a_{n-1},0)=0,
+  \qquad 1\le n\le6.
+\]
+The coefficient \(\partial_w\widehat\Delta(w_0,2)=-272/81\) is nonzero,
+so the coefficients \(a_n\) are determined successively. Solving these
+six linear equations gives
+\[
+\begin{aligned}
+  a_1&=-\frac{11}{153},&
+  a_2&=\frac{4175}{530604},&
+  a_3&=-\frac{336709}{3680269344},\\
+  a_4&=\frac{5582818619}{25526348169984},&
+  a_5&=-\frac{26151302654713}{177050750907009024},&
+  a_6&=\frac{15005008669158719}{1228024008291014590464}.
+\end{aligned}
+\]
+Inverting \(w(s)\) as a formal power series then gives
+\[
+\begin{aligned}
+  \frac{1}{w(2+t)}
+  &=3+\frac{11}{17}t+\frac{1351}{19652}t^2
+    +\frac{17133}{45435424}t^3
+    -\frac{350037409}{105046700288}t^4\\
+  &\quad
+    +\frac{47614595705}{242867971065856}t^5
+    +\frac{141889658001627}{561510749104259072}t^6
+    +O(t^7).
+\end{aligned}
+\]
+Setting \(t=-\delta\) yields the displayed jet of
+\(\rho(2-\delta)\). The exact recursive identities and the resulting
+coefficients displayed in
+\Cref{sec:appendix-computation}\,\textup{(f)} are the certificate used
+for this endpoint jet.
 \end{proof}
 
 \begin{lemma}[Root separation]
   \label{lem:root-separation}
-  For all sufficiently large \(m\), the minimal-modulus roots of
+  Put
+  \[
+    \eta=\frac1{100},\qquad \varepsilon=\frac1{200},\qquad m_0=32.
+  \]
+  For every \(m\ge m_0\), the minimal-modulus roots of
   \(R_m(w)\) are precisely the roots contributed by
   \(\widehat\Delta(w,s_m)\), together with the symmetric factor
   \(\widehat\Delta(w,-s_m)\) when \(-s_m\in A_m\) (equivalently, when
   \(m\) is even). Specifically, letting \(w^*(s_m)\) denote the unique
   root of \(\widehat\Delta(w,s_m)=0\) near \(w=1/3\), one has
-  \(\rho_m=\rho(s_m)=1/|w^*(s_m)|\).
+  \(\rho_m=\rho(s_m)=1/|w^*(s_m)|\). The remaining cases
+  \(4\le m<32\) are verified by exact algebraic interval comparison in
+  \Cref{sec:appendix-computation}\,\textup{(e)}.
 \end{lemma}
 
 \begin{proof}
@@ -737,14 +1192,16 @@ Define
   \lambda(s):=\min\bigl\{|w|:\widehat\Delta(w,s)=0\bigr\}.
 \]
 By the symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\), one has
-\(\lambda(-s)=\lambda(s)\) for all \(s\). By the product formula,
+\(\lambda(-s)=\lambda(s)\) for all \(s\). By
+\Cref{lem:ordered-cyclotomic-resultant},
 \[
-  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
+  R_m(w)=
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
+  \qquad d_m:=\deg\Phi_m^+,
 \]
 and \(\rho_m=1/\min\{|w|:R_m(w)=0\}=1/\min_{\alpha\in A_m}\lambda(\alpha)\).
 We must show that \(\lambda(s_m)\) is strictly smaller than
-\(\lambda(\alpha)\) for all other \(\alpha\in A_m\), provided \(m\)
-is large enough.
+\(\lambda(\alpha)\) for all other \(\alpha\in A_m\) when \(m\ge32\).
 
 \medskip
 \noindent\textit{Step 1 (Endpoint branch near \(s=2\)).}\quad
@@ -752,11 +1209,15 @@ At \(s=2\), the polynomial \(\widehat\Delta(w,2)\) factorises as
 \[
   \widehat\Delta(w,2)=(w-1)(w+1)(3w-1)(w^3-w^2+w+1).
 \]
-The minimal-modulus root is \(w=1/3\), and it is simple. The cubic factor has a unique real root between \(-11/20\) and \(-27/50\) because it changes sign there. Moreover,
+The minimal-modulus root is \(w=1/3\), and it is simple. The cubic
+factor has a unique real root between \(-11/20\) and \(-27/50\) because
+it changes sign there. Moreover,
 \[
   |w^3-w^2+w|\le |w|^3+|w|^2+|w|<0.54^3+0.54^2+0.54<1
 \]
-whenever \(|w|\le 27/50\), so \(w^3-w^2+w+1\neq 0\) on the closed disc of radius \(27/50\). Hence every root other than \(w=1/3\) has modulus at least \(27/50>1/2\).
+whenever \(|w|\le 27/50\), so \(w^3-w^2+w+1\neq 0\) on the closed disc
+of radius \(27/50\). Hence every root other than \(w=1/3\) has modulus
+at least \(27/50>1/2\).
 By the implicit function theorem, there exist \(\eta>0\) and a unique real-analytic branch
 \(w^*:[2-\eta,2]\to\RR\) with \(w^*(2)=1/3\) and
 \(\widehat\Delta(w^*(s),s)=0\). Shrinking \(\eta\) if necessary, we may
@@ -781,6 +1242,22 @@ that \(w^{*\prime}(s)<0\) on \([2-\eta,2]\). Thus \(w^*(s)>1/3\) for
   \rho(s)=\frac{1}{w^*(s)}
 \]
 is strictly increasing on \([2-\eta,2]\).
+Equivalently \(\lambda(s)=w^*(s)\) is strictly decreasing on this
+interval. Together with the symmetry \(\lambda(-s)=\lambda(s)\), this
+will compare endpoint-near conjugates through their absolute values.
+The exact interval computation in
+\Cref{sec:appendix-computation}\,\textup{(e)} verifies that the same
+conclusions hold with the explicit interval
+\[
+  \frac{199}{100}\le s\le2.
+\]
+More precisely, on this interval the branch \(w^*(s)\) is the unique
+root of modulus \(<1/2\), it satisfies
+\[
+  w^*(s)<\frac{101}{300},
+\]
+and \(w^{*\prime}(s)<0\). Thus the constants in the statement may be
+taken to be \(\eta=1/100\) and \(\varepsilon=1/200\).
 
 \medskip
 \noindent\textit{Step 2 (Strict spectral gap away from the untwisted
@@ -788,7 +1265,13 @@ endpoints).}\quad
 Let \(s\in(-2,2)\), choose \(\vartheta\in(0,\pi)\) with
 \(s=2\cos\vartheta\), and set \(r=e^{i\vartheta}\), \(u=r^2=e^{2i\vartheta}\).
 Then \(\widehat\Delta(w,s)=\Delta(w/r,r^2)\), so
-\(\lambda(s)^{-1}\) is the spectral radius of \(B(u)\). Since every row
+the substitution \(z=w/r\) has \(|z|=|w|\). Hence the minimal
+\(|w|\)-root of \(\widehat\Delta(w,s)\) is the minimal \(|z|\)-root of
+\(\Delta(z,u)=\det(I-zB(u))\), and \(\lambda(s)^{-1}\) is the spectral
+radius of \(B(u)\). This is the comparison between completed
+coordinates and the original twisted spectral radius: it uses only that
+\(|r|=1\) on the unit circle, so the change of variables preserves
+moduli. Since every row
 of \(B(1)\) has sum \(3\), one has \(\rho(B(u))\le 3\).
 
 Suppose for contradiction that \(\rho(B(u))=3\). Choose an eigenvalue
@@ -814,18 +1297,24 @@ Now inspect the specific rows of \(B(u)\). From the row of
 \[
   3=|\mu x_1|=|x_1+x_2+x_3|,
 \]
-so \(x_1=x_2=x_3\) and \(\mu=3\). Then the rows of
-\(\st{001}\), \(\st{0-12}\), and \(\st{01-1}\) successively give
+so \(x_1=x_2=x_3\) and \(\mu=3\). Then the row of
+\(\st{001}\) gives
 \[
-  x_4=x_5=x_6=x_7=x_8=x_9=x_1.
+  3x_2=x_4+x_5+x_6,
 \]
-Finally, the row of \(\st{002}\) reads
+so \(x_4=x_5=x_6=x_1\). The row of \(\st{010}\) reads
 \[
-  3x_3=ux_1+ux_2+x_{10}.
+  3x_4=x_5+x_6+ux_7.
 \]
-Again each summand has modulus \(1\), so equality forces
-\(ux_1=ux_2=x_{10}=x_3=x_1\), hence \(u=1\), contradicting
-\(\vartheta\in(0,\pi)\). Therefore
+Since \(x_4=x_5=x_6=x_1\), this forces \(ux_7=x_1\). The row of
+\(\st{0-12}\) gives
+\[
+  3x_7=x_9+x_4+x_5.
+\]
+All three summands on the right have modulus \(1\), and two of them
+are equal to \(x_1\). Equality in the triangle inequality therefore
+forces \(x_7=x_9=x_1\). Combining this with \(ux_7=x_1\) gives
+\(u=1\), contradicting \(\vartheta\in(0,\pi)\). Therefore
 \[
   \lambda(s)>\frac13
   \qquad (-2<s<2).
@@ -833,21 +1322,37 @@ Again each summand has modulus \(1\), so equality forces
 
 \medskip
 \noindent\textit{Step 3 (Compactness away from the endpoints).}\quad
-The function \(\lambda:[-2,2]\to\RR_{>0}\) is continuous. On the compact
+The function \(\lambda:[-2,2]\to\RR_{>0}\) is continuous. Indeed, since
+\(\widehat\Delta(0,s)=1\), its reciprocal polynomial
+\[
+  t^6\widehat\Delta(1/t,s)
+\]
+is monic of degree \(6\), so its roots depend continuously on \(s\);
+therefore the maximum modulus of its roots, equivalently \(1/\lambda(s)\),
+is continuous. On the compact
 set
 \[
-  K:=[-2+\eta,\,2-\eta],
+  K:=\left[-\frac{199}{100},\,\frac{199}{100}\right],
 \]
 Step~2 gives \(\lambda(s)>1/3\) for every \(s\in K\). Hence
 \[
   c_0:=\min_{s\in K}\lambda(s)
 \]
 is well defined and satisfies \(c_0>1/3\).
+The interval certificate in
+\Cref{sec:appendix-computation}\,\textup{(e)} strengthens this to
+\[
+  c_0\ge\frac{101}{300}.
+\]
 
 \medskip
 \noindent\textit{Step 4 (Comparison of endpoint-near conjugates).}\quad
-Let \(\alpha\in A_m\). If \(|\alpha|>2-\eta\), then for large enough
-\(m\) one has \(|\alpha|\in[2-\eta,2]\). Among the conjugates
+For \(m\ge32\), one has
+\[
+  s_m=2\cos(\pi/m)>\frac{199}{100}=2-\eta.
+\]
+Let \(\alpha\in A_m\). If \(|\alpha|>2-\eta\), then
+\(|\alpha|\in[2-\eta,2]\). Among the conjugates
 \(\alpha=2\cos(\pi a/m)\) with \(1\le a<m\), the quantity \(|\alpha|\)
 is maximal at \(a=1\), giving \(s_m=2\cos(\pi/m)\); if \(m\) is even,
 the same maximal absolute value also occurs at \(a=m-1\), giving
@@ -856,20 +1361,20 @@ satisfies
 \[
   |\alpha|<s_m.
 \]
-Using \(\lambda(-s)=\lambda(s)\) and the strict monotonicity of
-\(\rho(s)=1/\lambda(s)\) on \([2-\eta,2]\), we obtain
+Using \(\lambda(-s)=\lambda(s)\) and the strict decrease of
+\(\lambda(s)\) on \([2-\eta,2]\), equivalently the strict increase of
+\(\rho(s)=1/\lambda(s)\), we obtain
 \[
   \lambda(\alpha)=\lambda(|\alpha|)>\lambda(s_m)
   \qquad
   (\alpha\in A_m,\ \alpha\neq \pm s_m,\ |\alpha|>2-\eta).
 \]
-If \(|\alpha|\le 2-\eta\), then \(\alpha\in K\) and Step~3 gives
+If \(|\alpha|\le 2-\eta=199/100\), then \(\alpha\in K\) and Step~3 gives
 \[
-  \lambda(\alpha)\ge c_0.
+  \lambda(\alpha)\ge\frac{101}{300}.
 \]
-Since \(\lambda(s_m)=w^*(s_m)\to 1/3\) as \(m\to\infty\), we have
-\(\lambda(s_m)<c_0\) for all sufficiently large \(m\). Therefore, for
-all sufficiently large \(m\),
+The endpoint interval certificate gives
+\(\lambda(s_m)<101/300\). Therefore, for every \(m\ge32\),
 \[
   \lambda(s_m)\le \lambda(\alpha)
   \qquad
@@ -883,6 +1388,49 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \[
   \rho_m=\frac{1}{\lambda(s_m)}=\rho(s_m). \qedhere
 \]
+\end{proof}
+
+\begin{corollary}[Endpoint theorem applied to the ten-state kernel]
+  \label{cor:sync-endpoint-selection-application}
+  The ten-state kernel satisfies the hypotheses of
+  \Cref{thm:self-dual-endpoint-selection} with
+  \[
+    q=3,\qquad
+    H(w,s)=\widehat\Delta(w,s),\qquad
+    \eta=\frac1{100},\qquad
+    \varepsilon=\frac1{200}.
+  \]
+  Consequently, for every \(m\ge32\),
+  \[
+    \rho_m=\rho\!\left(2\cos\frac{\pi}{m}\right).
+  \]
+  More generally, any endpoint jet
+  \[
+    \rho(2-\delta)=\sum_{j=0}^N a_j\delta^j+O(\delta^{N+1})
+  \]
+  for this branch gives
+  \[
+    \rho_m
+    =\sum_{j=0}^N a_j
+      \left(2-2\cos\frac{\pi}{m}\right)^j
+      +O(m^{-2N-2}).
+  \]
+\end{corollary}
+
+\begin{proof}
+The row-sum Perron root \(q=3\) and primitivity of \(B(1)\) are
+\Cref{prop:sync-kernel-spectrum}. The involution exchanging \(B_0\) and
+\(B_1\) is \Cref{prop:sync-self-duality}, and
+\Cref{prop:sync-hatdelta-completion} identifies the completed
+determinant \(H\) with \(\widehat\Delta\). The endpoint root
+\(w(2)=1/3\) is simple and isolated by
+\Cref{prop:sync-endpoint-jet} and the endpoint factorisation in the
+proof of \Cref{lem:root-separation}. The strict unitary spectral gap and
+the effective separation and monotonicity hypotheses with
+\(\eta=1/100\) and \(\varepsilon=1/200\) are exactly the assertions
+proved in \Cref{lem:root-separation}. Applying
+\Cref{thm:self-dual-endpoint-selection} gives both displayed
+conclusions.
 \end{proof}
 
 \begin{theorem}[Asymptotic expansion of the twisted Perron roots]
@@ -909,8 +1457,13 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \end{theorem}
 
 \begin{proof}
-By \Cref{lem:root-separation}, \(\rho_m=\rho(s_m)\) for all sufficiently
-large \(m\). The Taylor series of \(2-s_m=2-2\cos(\pi/m)\) at infinity is
+By \Cref{cor:sync-endpoint-selection-application},
+\(\rho_m=\rho(s_m)\) for every \(m\ge32\), and this is the range needed
+for the asymptotic statement. Thus the branch selection used here is an
+application of the general endpoint-selection theorem; the remaining
+calculation is the universal coefficient transfer in the explicit
+sixth-order jet.
+The Taylor series of \(2-s_m=2-2\cos(\pi/m)\) at infinity is
 \[
 \begin{aligned}
   2-s_m
@@ -938,9 +1491,22 @@ values of \(m\). For the displayed values \(m=4,6,8,10\), the quantity
 \]
 using the finite SageMath checks recorded in
 \Cref{sec:appendix-computation}\,\textup{(e)}. Thus the table below does
-not use \Cref{lem:root-separation}, which is only invoked for
-sufficiently large \(m\). Solving the specialised equations for these
-small values and comparing with the truncation of
+not use the large-\(m\) part of \Cref{lem:root-separation}. Solving the
+specialised equations for these small values at \(100\)-bit precision,
+then rounding each displayed decimal to \(12\) digits after the decimal
+point and each displayed absolute error to three significant figures,
+gives the table below.
+The specialised equations used for the positive endpoint slices are
+\[
+\begin{array}{ll}
+m=4:  & \widehat\Delta(w,\sqrt2)=0,\\
+m=6:  & \widehat\Delta(w,\sqrt3)=0,\\
+m=8:  & \widehat\Delta\bigl(w,\sqrt{2+\sqrt2}\bigr)=0,\\
+m=10: & \widehat\Delta\bigl(w,\sqrt{(5+\sqrt5)/2}\bigr)=0.
+\end{array}
+\]
+Comparing the smallest-modulus roots of these equations with the
+truncation of
 \Cref{thm:rho-gap-m12} gives
 \[
   \begin{array}{c|c|c|c}

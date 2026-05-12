@@ -121,6 +121,139 @@ The semantic layers considered later fit into the chain
 \]
 where the hooked arrow $\xhookrightarrow{\iota}$ denotes a singleton semantic embedding (\Cref{def:singleton-semantic-embedding}) and each $\preceq$ denotes a conservative extension in the sense of \Cref{def:conservative-extension}. Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer with reference sorts, $\mathbb{L}_2$ adds local-object predicates and site structure, $\mathbb{L}_3$ adds structural absence and obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage from $\mathbb{L}_1$ upward is cumulative. The first step is weaker: pointwise states embed faithfully as singleton information states, but arbitrary multi-realization states need not project back to single assignments.
 
+The model classes of the higher layers are used below as generated
+expansion classes.
+Precisely, an expansion from $\mathbb L_m$ to $\mathbb L_n$ is admissible when
+the newly adjoined symbols of $\Sigma_n\setminus\Sigma_m$ are interpreted by
+the kind of data named for that layer, the reduct under $U_{n,m}$ is the given
+lower model, and the lower atomic forcing clauses are read through that
+reduct.  No existence theorem for gluing-sensitive data is being smuggled into
+this convention: the convention says only that, once such data are explicitly
+constructed or assumed and satisfy the stated typing axioms, the resulting
+structure is a member of the relevant higher model class.
+
+Accordingly, the realization theorems in later sections are internal
+construction results under this generated expansion convention. They first
+construct typed finite sites, presheaves, prestacks, stackifications, and
+cohomology classes satisfying the displayed hypotheses, and then invoke the
+expansion convention to regard those data as an \(\mathbb L_2\)- or
+\(\mathbb L_3\)-model. They should not be read as closure theorems for an
+independently specified semantic model class.
+
+\begin{lemma}[Flat reduct induction for a displayed layer extension]\label{lem:layer-reduct-induction}
+Let $1\le m<n\le 4$. Suppose that $\Sigma_n$ is obtained from $\Sigma_m$ by adjoining a disjoint block of new symbols, that $\Mod_n$ consists of expansions of $\Sigma_m$-reducts through the forgetful functor
+\[
+U_{n,m}:\Mod_n\to\Mod_m,
+\]
+and that the state projection
+\[
+\pi^M_{n,m}:\St_n(M)\to\St_m(U_{n,m}(M))
+\]
+forgets only the new layer coordinates. Assume also that every atomic forcing clause whose atom belongs to $\Sigma_m$ is interpreted through the reduct:
+\[
+M,p\Vdash_n \alpha
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \alpha
+\]
+for every $\Sigma_m$-atomic formula $\alpha$. Then the same equivalence holds for every formula $\varphi\in\mathrm{Form}_m$:
+\[
+M,p\Vdash_n \varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \varphi.
+\]
+Consequently $\mathbb L_m\preceq\mathbb L_n$.
+\end{lemma}
+
+\begin{proof}
+For every retained formula \(\varphi\in\mathrm{Form}_m\), forcing is the
+flat information-state satisfaction of \Cref{def:state-forcing}: it means
+ordinary pointwise satisfaction of \(\varphi\) by every realization in the
+state. The reduct functor \(U_{n,m}\) leaves all retained symbols, retained
+sorts, and retained assignments unchanged, while the state projection
+\(\pi^M_{n,m}\) forgets only the newly adjoined layer coordinates. Hence, for
+every retained assignment \(\rho\) occurring in \(p\),
+\[
+M,\rho\models \varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\rho|_{\Sigma_m}\models \varphi .
+\]
+This is the ordinary first-order reduct induction on the formula
+\(\varphi\): atomic formulas are the displayed hypothesis, Boolean
+connectives are immediate, and quantifiers range over the same retained
+sort-carriers on both sides. Taking the universal quantifier over the same
+projected set of realizations in the state gives
+\[
+M,p\Vdash_n\varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m\varphi .
+\]
+Persistence and decidedness are not additional recursive forcing clauses in
+this paper; persistence is a theorem about the flat forcing relation, and
+decidedness is the abbreviation from \Cref{def:decidedness}. The displayed
+equivalence is exactly \Cref{eq:conservative-extension}, so
+\(\mathbb L_m\preceq\mathbb L_n\).
+\end{proof}
+
+\begin{proposition}[Admissible-expansion model-class interface for the layer chain]\label{prop:admissible-layer-expansion-interface}
+Let $i\in\{1,2,3\}$ and let $M_i\in\Mod_i$. Suppose a block of new layer data
+$D_{i+1}$ is supplied as follows:
+\begin{enumerate}[label=(\roman*),nosep]
+\item for $i=1$, $D_2$ may be any finite pullback-based local reference site
+attached to the given admitted references, with covering families, refinement
+relations, pullbacks, and any contravariant local object functors satisfying the
+typing clauses of
+\Cref{def:reference-classes,def:local-reference-frame,def:local-object-functor};
+\item for $i=2$, $D_3$ consists of structural-absence predicates, visible
+branches, realization prestacks, banded stackifications or banded
+realization-stack extensions, component-gerbe data, and obstruction classes
+satisfying the hypotheses explicitly stated where those data are used;
+\item for $i=3$, $D_4$ consists of refinement-dynamic axes, update relations,
+support data, and rewrite operations satisfying the typing clauses of
+\Cref{def:multi-axis-dynamic-structure,def:value-preserving-rewrite}.
+\end{enumerate}
+Assume in each case that the interpretations of all symbols already belonging
+to $\Sigma_i$ are exactly those of $M_i$, and that every $\Sigma_i$-atomic
+forcing clause is evaluated through the reduct. Then the expansion
+\[
+M_{i+1}:=M_i[D_{i+1}]
+\]
+is an admissible model in $\Mod_{i+1}$, satisfies
+\[
+U_{i+1,i}(M_{i+1})=M_i,
+\]
+and, with the state projection forgetting only the newly added layer
+coordinates, preserves forcing of every $\mathbb L_i$-formula:
+\[
+M_{i+1},p\Vdash_{i+1}\varphi
+\quad\Longleftrightarrow\quad
+M_i,\pi^{M_{i+1}}_{i+1,i}(p)\Vdash_i\varphi
+\qquad(\varphi\in\mathrm{Form}_i).
+\]
+Thus arbitrary finite pullback subsites, arbitrary local object functors on
+those subsites, and arbitrary supplied banded prestack or stack-extension data
+are admissible only in the generated model class defined by this proposition,
+once they satisfy the displayed typing and theorem-level hypotheses. This is a
+model-class convention for the expanded layers, not a semantic existence or
+closure theorem for an independently restricted class of models. The realization
+theorems below therefore have two parts: an algebraic construction of typed
+site, presheaf, prestack, stackification, and cohomology data, followed by the
+admissible-expansion step which declares those well-typed data to be an
+\(\mathbb L_{i+1}\)-model without changing lower-layer forcing.
+\end{proposition}
+
+\begin{proof}
+By the expansion convention just fixed, $\Mod_{i+1}$ is exactly the class of
+$\Sigma_{i+1}$-expansions of admissible $\Sigma_i$-models by the corresponding
+well-typed layer data.  The hypotheses on $D_{i+1}$ therefore put
+$M_i[D_{i+1}]$ in $\Mod_{i+1}$ and make its reduct under $U_{i+1,i}$ equal to
+$M_i$.  The state projection is the projection specified for the adjacent
+layer boundary and forgets only the new layer coordinates.  Since lower atomic
+forcing clauses are assumed to be interpreted through the reduct, all
+hypotheses of \Cref{lem:layer-reduct-induction} hold for the adjacent pair
+$\mathbb L_i\preceq\mathbb L_{i+1}$.  Applying that lemma gives the displayed
+forcing equivalence for every $\varphi\in\mathrm{Form}_i$.
+\end{proof}
+
 \begin{proposition}[Concrete instantiation of the finite chain]\label{prop:chain-instantiation}
 The chain
 \[
@@ -214,5 +347,49 @@ for every $\varphi\in\mathrm{Form}_3$.
 \end{enumerate}
 The base boundary $\mathbb L_0\hookrightarrow\mathbb L_1$ is a singleton semantic embedding: pointwise states embed faithfully into information states, preserving the forcing of all $\mathbb L_0$-formulas on that canonical image. The three higher boundaries $\mathbb L_1\preceq\mathbb L_2\preceq\mathbb L_3\preceq\mathbb L_4$ are conservative extensions in the sense of \Cref{def:conservative-extension}, each with an explicit forgetful functor and state projection.
 \end{proposition}
+
+\begin{proof}
+For the first boundary, the data displayed in \textup{(i)} give the language embedding
+\[
+e_{0,1}:\Sigma_0\hookrightarrow\Sigma_1,
+\]
+the forgetful functor $U_{1,0}$, and for each pointwise state $\rho$ the canonical singleton information state
+\[
+\iota_{0,1}^M(\rho)=(\Gamma,\{\rho\}).
+\]
+\Cref{prop:singleton-conservativity} gives, for every $\mathbb L_0$-formula $\varphi$,
+\[
+M,\iota_{0,1}^M(\rho)\Vdash_1\varphi
+\Longleftrightarrow
+U_{1,0}(M),\rho\Vdash_0\varphi.
+\]
+These are exactly the three pieces of structure and the preservation condition required in \Cref{def:singleton-semantic-embedding}. Notice that the verification uses only singleton information states; it does not assert a projection from arbitrary $\mathbb L_1$-states to pointwise states.
+
+For $\mathbb L_1\preceq\mathbb L_2$, the displayed clauses fix the object language of the extension: $\Sigma_2$ is the disjoint expansion of $\Sigma_1$ by the local-object and site symbols listed in \textup{(ii)}, $\Mod_2$ is the class of $\Sigma_2$-expansions whose $\Sigma_1$-reduct is obtained by $U_{2,1}$, and $\pi^M_{2,1}$ is the identity on the underlying information state. Equivalently, this is the local-object instance of the admissible expansion interface of \Cref{prop:admissible-layer-expansion-interface}. Atomic $\Sigma_1$-formulas use only symbols retained by $U_{2,1}$. Thus \Cref{lem:layer-reduct-induction} gives, for every $\varphi\in\mathrm{Form}_1$,
+\[
+M,p\Vdash_2\varphi
+\Longleftrightarrow
+U_{2,1}(M),\pi^M_{2,1}(p)\Vdash_1\varphi,
+\]
+which is \Cref{def:conservative-extension}.
+
+The same lemma applies to $\mathbb L_2\preceq\mathbb L_3$. Here $\Sigma_3$ is the disjoint expansion of $\Sigma_2$ by the realization-prestack, band, component-gerbe, structural-absence, and obstruction-class symbols listed in \textup{(iii)}. The admissible models are precisely the corresponding well-typed expansions singled out in \Cref{prop:admissible-layer-expansion-interface}. The functor $U_{3,2}$ forgets precisely those symbols, while $\pi^M_{3,2}$ leaves the underlying state unchanged. Atomic $\Sigma_2$-formulas contain no symbols for the forgotten gerbe or obstruction data, so \Cref{lem:layer-reduct-induction} gives
+\[
+M,p\Vdash_3\varphi
+\Longleftrightarrow
+U_{3,2}(M),\pi^M_{3,2}(p)\Vdash_2\varphi
+\qquad(\varphi\in\mathrm{Form}_2).
+\]
+Thus $\mathbb L_2\preceq\mathbb L_3$.
+
+Finally, $\Sigma_4$ is obtained from $\Sigma_3$ by adjoining only the refinement-dynamic axes, update structure, support notions, and rewrite operations listed in \textup{(iv)}. This is the refinement-dynamic instance of \Cref{prop:admissible-layer-expansion-interface}. The functor $U_{4,3}$ forgets exactly that dynamic structure, and $\pi^M_{4,3}$ forgets only the corresponding state bookkeeping. Atomic $\Sigma_3$-formulas are interpreted through the reduct, so \Cref{lem:layer-reduct-induction} yields
+\[
+M,p\Vdash_4\varphi
+\Longleftrightarrow
+U_{4,3}(M),\pi^M_{4,3}(p)\Vdash_3\varphi
+\qquad(\varphi\in\mathrm{Form}_3).
+\]
+Consequently the three upper steps are conservative extensions, and the displayed finite chain has exactly the asserted form.
+\end{proof}
 
 Hence the genuinely conservative part of the chain begins at $\mathbb L_1$.

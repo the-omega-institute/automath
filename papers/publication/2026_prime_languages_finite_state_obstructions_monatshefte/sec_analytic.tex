@@ -1,187 +1,66 @@
-\section{Background: Analytic Observations}
+\section{Contextual Analytic Comparators}
 \label{sec:analytic}
 
-The two observations in this section are classical in nature. They
-belong to the tradition of P\'olya, Carlson, and Estermann
-\cite{Polya1923,Carlson1921,Estermann1928} and the determinant calculus
-of Artin and Mazur and of Bowen and Lanford
-\cite{ArtinMazur1965,BowenLanford1970}. We include them as
-complementary background, not as core contributions: the first records
-that prime-supported Euler products cannot be meromorphically continued
-past the unit circle, and the second records that the change of
-variables \(z=e^{-s}\) already separates Dirichlet series from
-finite-determinant models by a periodicity argument. Both are elementary
-consequences of well-known mechanisms.
+This appendix is purely contextual. The finite-state results in the
+paper use only transfer-matrix counting and explicit prime-counting
+bounds. Two classical analytic contrasts are worth recording: prime
+support in Euler products often forces natural boundaries, and scalar
+finite-matrix determinant models become \(2\pi i\)-periodic after the
+substitution \(z=e^{-s}\). Neither statement is used in
+\Cref{thm:effective-fixed-dfa-prime-obstruction,thm:multicomponent-finite-budget}.
 
-\begin{theorem}[Prime-supported Euler products have a natural boundary]
+\begin{theorem}[Classical: prime-supported Euler products have a natural boundary]
   \label{thm:euler-product-natural-boundary}
-  Let \((b_n)_{n\ge 1}\subseteq\ZZ_{\ge 0}\) and assume that
-  \(b_p>0\) for infinitely many primes \(p\). Suppose that
+  Let \((b_n)_{n\ge1}\subseteq\ZZ_{\ge0}\), assume that \(b_p>0\) for
+  infinitely many primes \(p\), and suppose that
   \[
-    Z_b(z):=\prod_{n\ge 1}(1-z^n)^{-b_n}
+    Z_b(z):=\prod_{n\ge1}(1-z^n)^{-b_n}
   \]
-  converges to a holomorphic function on \(\abs{z}<1\). Then the unit
-  circle is a natural boundary for \(Z_b\).
-\leanverified{paper_prime_languages_euler_product_natural_boundary}
+  converges to a holomorphic function on \(\abs z<1\). Then
+  \(\abs z=1\) is a natural boundary for \(Z_b\).
+  \leanverified{paper_prime_languages_euler_product_natural_boundary}
 \end{theorem}
 
 \begin{proof}
-  Since every factor \((1-r^n)^{-b_n}\) is \(>1\) for \(0<r<1\), and
-  since \(b_p>0\) for at least one prime \(p\), one has
-  \(Z_b(r)\ge(1-r^p)^{-b_p}\to\infty\) as \(r\uparrow 1\). Thus the
-  power series of \(Z_b\) has radius of convergence exactly \(1\), and
-  all of its Taylor coefficients are non-negative integers.
-
-  Since \(Z_b(z)=\prod_{n\ge 1}(1-z^n)^{-b_n}\), taking logarithms
-  gives
-  \[
-    \log Z_b(z)=-\sum_{n\ge 1}b_n\log(1-z^n).
-  \]
-  For each \(m\), the coefficient of \(z^m\) in \(Z_b(z)\) depends only
-  on the finite product \(\prod_{n\le m}(1-z^n)^{-b_n}\). Each such
-  finite product has Taylor coefficients in \(\ZZ_{\ge 0}\) (the
-  coefficient of \(z^m\) counts partitions of \(m\) into parts of size
-  \(\le m\) with multiplicity weights \(b_n\)). Hence all Taylor
-  coefficients of \(Z_b\) lie in \(\ZZ_{\ge 0}\).
-
-  Fix \(0<r<1\). Since the Euler product converges at \(r^{1/2}\),
-  \[
-    \sum_{n\ge 1}b_n\bigl(-\log(1-r^{n/2})\bigr)<\infty.
-  \]
-  Because \(-\log(1-x)\ge x\) for \(0<x<1\), this implies
-  \(\sum_{n\ge 1}b_n r^{n/2}<\infty\). Moreover,
-  \(\sup_{n\ge 1}nr^{n/2}<\infty\), so
-  \[
-    \sum_{n\ge 1}nb_n r^n
-    \le\Bigl(\sup_{n\ge 1}nr^{n/2}\Bigr)\sum_{n\ge 1}b_n r^{n/2}
-    <\infty.
-  \]
-  Therefore \(\sum_{n\ge 1}nb_nz^n/(1-z^n)\) converges absolutely and
-  uniformly on \(\abs{z}\le r\), which justifies termwise logarithmic
-  differentiation:
-  \[
-    \frac{zZ_b'(z)}{Z_b(z)}
-    =\sum_{n\ge 1}\frac{n b_n z^n}{1-z^n}
-    =\sum_{m\ge 1} c_m z^m,
-  \]
-  where
-  \[
-    c_m:=\sum_{n\mid m} n b_n\in\ZZ_{\ge 0}.
-  \]
-  In particular, for every prime \(p\),
-  \[
-    c_p=c_1+p b_p.
-  \]
-
-  Suppose that \(Z_b\) admitted a holomorphic continuation across some
-  non-empty open arc of \(\abs{z}=1\). By the P\'olya--Carlson theorem
-  \cite{Polya1923,Carlson1921}, a power series with integer
-  coefficients and radius \(1\) that extends beyond the unit circle
-  must be rational. Hence \(Z_b\) is rational. Since \(Z_b(0)=1\) and
-  each partial Euler product is zero-free on \(\abs{z}<1\), Hurwitz's
-  theorem implies that \(Z_b\) is zero-free on \(\abs{z}<1\). Therefore
-  the logarithmic derivative
-  \[
-    R(z):=\frac{zZ_b'(z)}{Z_b(z)}=\sum_{m\ge 1} c_m z^m
-  \]
-  is rational and holomorphic on \(\abs{z}<1\).
-
-  Write the partial-fraction decomposition of \(R\) as
-  \[
-    R(z)=H(z)+\sum_{j=1}^J\frac{\alpha_j}{1-z/\rho_j},
-  \]
-  where \(H\) is a polynomial and \(\abs{\rho_j}\ge 1\), since \(R\)
-  has no poles in \(\abs{z}<1\). Because \(R\) is the logarithmic
-  derivative of a rational function, every pole is simple. Extracting
-  coefficients gives
-  \[
-    c_m
-    =\sum_{\abs{\rho_j}=1}\alpha_j\rho_j^{-m}+O(\theta^m)
-  \]
-  for some \(\theta\in(0,1)\). In particular, \((c_m)_{m\ge 1}\) is
-  bounded.
-
-  Since \(R\) is rational, the sequence \((c_m)\) satisfies a linear
-  recurrence after clearing the denominator of \(R\). Because the Taylor
-  coefficients \(c_m\) are integers and bounded, the state vectors
-  \[
-    (c_m,c_{m+1},\dots,c_{m+d-1})
-  \]
-  of any order-\(d\) recurrence take values in a finite set and evolve
-  deterministically. Hence \((c_m)\) is eventually periodic.
-
-  Eventual periodicity is incompatible with \(c_p=c_1+p b_p\) for
-  infinitely many primes \(p\) with \(b_p>0\), because the latter would
-  make \((c_p)\) unbounded along those primes. This contradiction shows
-  that \(Z_b\) cannot extend holomorphically across any non-empty arc of
-  \(\abs{z}=1\). The unit circle is therefore a natural boundary for
-  \(Z_b\).
+  This is the prime-supported case of Estermann's natural-boundary
+  theorem for Euler products with non-negative integral exponents
+  \cite{Estermann1928}; see also the P\'olya--Carlson formulation
+  \cite{Polya1923,Carlson1921}. Under the displayed hypotheses,
+  infinitely many prime-indexed primitive factors occur with positive
+  exponent, so Estermann's theorem applies directly.
 \end{proof}
 
-\begin{remark}
-  Theorem \ref{thm:euler-product-natural-boundary} is a
-  prime-supported instance of the classical rational-versus-natural
-  boundary mechanism for Euler products in the work of P\'olya, Carlson,
-  and Estermann \cite{Polya1923,Carlson1921,Estermann1928}.
-\end{remark}
-
-\begin{proposition}[Periodic determinant models after the change of variables \(z=e^{-s}\)]
+\begin{proposition}[Classical: periodic scalar determinant models after \(z=e^{-s}\)]
   \label{prop:finite-zeta-imaginary-periodicity}
-  Let \(A\) be the adjacency matrix of a shift of finite type \(X_A\).
-  Its Artin--Mazur zeta function is
+  For every finite square complex matrix \(M\), the scalar determinant
+  model
   \[
-    \zeta_{X_A}(z)=\det(I-zA)^{-1}.
+    F_M(s):=\det(I-(e^{-s})M)^{-1}
   \]
-  Consequently \(\zeta_{X_A}(e^{-s})\) is \(2\pi i\)-periodic in \(s\).
-  More generally, let
-  \[
-    F(s)=\sum_{n\ge 1} a_n n^{-s}
-  \]
-  be a Dirichlet series with abscissa of convergence \(\sigma_c\). Assume
-  that there exists at least one index \(n\ge 2\) with \(a_n\neq 0\),
-  and let
-  \[
-    n_1:=\min\{n\ge 2:a_n\neq 0\}.
-  \]
-  Then \(F\) is not \(2\pi i\)-periodic on any right half-plane, and
-  therefore cannot agree with \(\zeta_{X_A}(e^{-s})\) on any non-empty
-  open subset of \(\Re(s)>\sigma_c\). In particular, the Riemann
-  \(\zeta\)-function cannot agree with \(\det(I-e^{-s}A)^{-1}\) on any
-  non-empty open subset of \(\Re(s)>1\).
+  is \(2\pi i\)-periodic wherever it is holomorphic. Therefore it
+  cannot agree on a non-empty right-half-plane open set with a
+  nonconstant ordinary Dirichlet series such as the Riemann
+  \(\zeta\)-function.
 \end{proposition}
 
 \begin{proof}
-  The determinant formula is classical for shifts of finite type; see
-  Artin and Mazur \cite{ArtinMazur1965}, Bowen and Lanford
-  \cite{BowenLanford1970}, and
-  \cite[Chapter~6]{LindMarcus1995}. The identity
-  \(e^{-(s+2\pi i)}=e^{-s}\) then gives
-  \(\zeta_{X_A}(e^{-(s+2\pi i)})=\zeta_{X_A}(e^{-s})\).
-
-  For large real \(\sigma\),
+  The periodicity is the identity
   \[
-    F(\sigma+2\pi i)-F(\sigma)
-    =\sum_{n\ge 2}a_n n^{-\sigma}(e^{-2\pi i\log n}-1).
+    F_M(s+2\pi i)
+    =\det(I-(e^{-(s+2\pi i)})M)^{-1}
+    =F_M(s).
   \]
-  The dominant term as \(\sigma\to+\infty\) is
+  If \(F(s)=\sum_{n\ge1}a_nn^{-s}\) is an ordinary Dirichlet series with
+  some non-zero coefficient at \(n\ge2\), then
   \[
-    a_{n_1}n_1^{-\sigma}(e^{-2\pi i\log n_1}-1)+O\!\bigl((n_1+1)^{-\sigma}\bigr).
+    G(s):=F(s+2\pi i)-F(s)
+      =\sum_{n\ge1}a_n(e^{-2\pi i\log n}-1)n^{-s}
   \]
-  Since \(\log n_1\notin\ZZ\) (as \(n_1\ge 2\) is a positive integer),
-  the coefficient \(e^{-2\pi i\log n_1}-1\) is non-zero. Thus the
-  difference \(F(\sigma+2\pi i)-F(\sigma)\) is non-zero for all
-  sufficiently large \(\sigma\), so \(F\) is not \(2\pi i\)-periodic on
-  any right half-plane. By the identity theorem, \(F\) therefore cannot
-  agree on a non-empty open subset of \(\Re(s)>\sigma_c\) with the
-  \(2\pi i\)-periodic function \(\zeta_{X_A}(e^{-s})\). The Riemann
-  \(\zeta\)-function satisfies the hypothesis because \(a_n=1\neq 0\)
-  for all \(n\ge 2\), so taking \(F(s)=\zeta(s)\) with \(n_1=2\) gives
-  the final assertion.
+  has a non-zero first coefficient, where \(\log\) is the real
+  logarithm. The usual uniqueness lemma for ordinary Dirichlet series,
+  obtained by multiplying by the first index to the power \(\sigma\)
+  and letting \(\sigma\to+\infty\), gives \(G(\sigma)\ne0\) for all
+  sufficiently large real \(\sigma\). Thus \(F\) is not
+  \(2\pi i\)-periodic, and the identity theorem prevents agreement with
+  a scalar determinant model on such an open set.
 \end{proof}
-
-\begin{remark}
-  \Cref{thm:euler-product-natural-boundary,prop:finite-zeta-imaginary-periodicity}
-  are complementary. The first obstructs finite-state models at the
-  level of the boundary geometry of the Euler product. The second
-  obstructs them already after the logarithmic change of variables.
-\end{remark}

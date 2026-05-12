@@ -41,14 +41,35 @@ therefore induces an injection on \(T/{\sim}\).  To decide whether
 decidable equality of protocol normal forms.
 \end{proof}
 
-\begin{remark}\label{rem:compile-scope}
-This is a compatibility statement, not an embedding theorem for an
-arbitrary expression-universal grammar.  The hypothesis is exactly
-the missing canonical-form information.  If equivalence in the
-expression language is undecidable, no computable evaluator
-satisfying \eqref{eq:semantic-compatibility} can exist into a
-protocol with decidable equality.
-\end{remark}
+The formal consequence needed in the hierarchy is the following
+canonical-form obstruction.  Its hypotheses are exactly the semantic
+compatibility hypotheses of \Cref{prop:L1-compiles-L0} together with
+undecidability of the source equivalence relation.
+
+\begin{corollary}[Canonical-form obstruction to compilation]
+\label{cor:compile-scope}
+Let \(T\) be an admissible expression-term algebra whose semantic
+equivalence relation \(\sim\) is undecidable.  Then there is no
+computable evaluator from \(T\) into the code set of a
+protocol-universal system with decidable normal-form equality satisfying
+the semantic compatibility condition
+\eqref{eq:semantic-compatibility}.
+\end{corollary}
+
+\begin{proof}
+If such an evaluator existed, \Cref{prop:L1-compiles-L0} would make
+semantic equivalence of terms decidable by computing the two protocol
+normal forms and comparing them.  This contradicts the assumed
+undecidability of \(\sim\).  Thus the obstruction is precisely the
+absence of compatible computable canonical forms, not a failure of
+expression universality itself.
+\end{proof}
+
+In this article the preceding corollary is used only in the
+displayed compatibility form of \eqref{eq:semantic-compatibility}.  It
+does not assert a general word-problem theorem for arbitrary
+single-primitive expression grammars, nor does it add an evaluator to
+Odrzywo{\l}ek's EML theorem.
 
 \subsection{The Richardson obstruction}
 \label{ssec:L0-not-L1}
@@ -89,8 +110,73 @@ many-one equivalent for this fragment, and both are undecidable.
 \begin{lemma}[Richardson-compatible EML witnesses]
 \label{lem:eml-real-witness-library}
 There is a finite, effectively fixed library of principal-branch EML
-terms over the constant \(1\) with the following real-domain
-properties.
+terms over the constant \(1\) for exactly the Richardson primitives
+used below.  Let
+\[
+  E(u)=\eml(u,1),
+  \qquad
+  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr).
+\]
+On \(u>0\), \(L(u)=\log u\), and for
+\(u\in\RR\setminus\{0\}\), \(\exp L(u)=u\).  Choose once and for all
+fixed pure EML terms
+\[
+  W_{\exp},W_{\log},W_+,W_-,W_{\mathrm{neg}},
+  W_{\times},W_{\div},W_{\mathrm{sq}},
+  W_{\sqrt{\phantom{x}}},W_{\pi},W_{\sin}
+\]
+from the verified Odrzywo{\l}ek compiler output, with
+\(W_{\exp}=E\), \(W_{\log}=L\), and
+\(W_{\mathrm{sq}}(u)=W_{\times}(u,u)\).  The following table is the
+complete finite witness interface used in the Richardson reduction:
+\[
+\begin{array}{c|c|c}
+\text{real primitive} & \text{fixed verified witness} & \text{real-domain use}\\
+\hline
+\exp u & W_{\exp}(u)=\eml(u,1) & u\in\RR\\
+\operatorname{Log} u & W_{\log}(u)=L(u) & u>0\\
+u-v & W_-(u,v) & u,v\in\RR\\
+-u & W_{\mathrm{neg}}(u)=1-\bigl(e-((e-1)-u)\bigr) & u\in\RR\\
+u+v & W_+(u,v) & u,v\in\RR\\
+1/u & W_{\div}(1,u) & u\ne0\\
+uv & W_{\times}(u,v) & u,v\in\RR\\
+u/v & W_{\div}(u,v) & v\ne0\\
+u^2 & W_{\mathrm{sq}}(u)=W_{\times}(u,u) & u\in\RR\\
+\sqrt u & W_{\sqrt{\phantom{x}}}(u) & u\ge0\\
+\pi & W_{\pi} & \text{constant}\\
+\sin u & W_{\sin}(u) & u\in\RR .
+\end{array}
+\]
+Here ``Part~II'' means the verification part of the ancillary
+Supplementary Information of arXiv:2603.21852v2.  Section~2.1 defines
+the EML compiler macros, Section~2.3 gives the symbolic verification
+of the compiled identities under the stated real-domain assumptions,
+Section~2.4 prints representative compiled expressions, and
+Section~2.5 gives Lemmas~1--3, Corollary~4, the table of remaining
+primitives, and Theorem~5 for the Table~1 class
+\cite[Supplementary Information, Part~II, Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
+The symbols \(W_-\), \(W_+\), \(W_{\times}\), \(W_{\div}\),
+\(W_{\sqrt{\phantom{x}}}\), \(W_{\pi}\), and \(W_{\sin}\) name the
+fixed compiled witnesses from that verification record; the displayed
+negation row is the clean positive-real witness described at the end
+of Part~II, Section~2.5.  After substituting the already fixed
+witnesses for subtraction and for \(e=E(1)\), it is a pure EML term.
+Thus the present Richardson translation does not rely on the shorter
+extended-real convention \(L(0)=-\infty\).
+
+The witness symbols in the table are not open search instructions.
+They are the fixed pure EML terms chosen once from the cited Part~II
+compiler and verification record.  The fixed witness used in the
+translation is the verified Part~II compiled EML term for that
+Table~1 primitive, restricted to the real-domain use in the
+right-hand column.  Thus the arithmetic witnesses for \(u\pm v\),
+\(-u\), \(uv\), and \(u/v\) are used for all real arguments on which
+the operation is defined; the logarithm row is used only on \(u>0\),
+and the square-root row only on \(u\ge0\).  Every later occurrence is
+obtained by substituting into these finitely many fixed entries, and
+no branch choice, witness search, or unlisted EML identity from the
+source is used in the Richardson reduction.  With these fixed choices
+the following real-domain properties hold.
 \begin{enumerate}
 \item For all \(u,v\in\RR\), the chosen witnesses for
   \(u+v\), \(u-v\), and \(uv\) are defined and have those real
@@ -104,32 +190,106 @@ properties.
   there is an effective construction of a witness for every rational
   constant.
 \end{enumerate}
+The middle column records the chosen witness symbol or compact formula
+for each fixed verified witness, not an additional hypothesis or a
+lookup instruction.  Principal-domain validity is taken from the
+Part~II verification, and each later use in this paper is restricted
+to the corresponding real-domain entry in the right-hand column.
 \end{lemma}
 
 \begin{proof}
-Odrzywo{\l}ek's principal-branch EML table gives finite terms for
-the standard arithmetic operations, elementary unary functions, and
-scientific-calculator constants used here
-\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
-We choose once and for all the entries for \(+\), \(-\),
-\(\times\), \(\div\), \(\exp\), \(\sin\), square root, and \(\pi\),
-restricted to the displayed real domains.  The real domains in the
-first two items are the usual real domains of those operations.  For
-\(\exp\) this is also immediate from the displayed formula
-\(e^u=\eml(u,1)\), since the second EML input is the nonzero
-constant \(1\).
+Odrzywo{\l}ek's main Table~1 fixes the scientific-calculator basis,
+and Supplementary Information, Part~II, gives a finite compiler from
+that basis to pure EML terms using only the terminal \(1\), variables,
+and the binary operation \(\eml\)
+\cite[Table~1 and Supplementary Information, Part~II,
+Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
+Because the Richardson reduction uses only the finite list displayed
+above, choose from this verified compiler output one pure EML term for
+each row.  These choices are made once from the Part~II verification
+record under the corresponding real-domain assumptions; Part~I's
+discovery chain is not used as an additional proof input.  The choices
+are finite and effective, and substituting one chosen term into another
+is a purely syntactic operation in the grammar
+\(S\to1\mid x_i\mid\eml(S,S)\).
 
-The square-root entry is used only on \(\RR_{\ge0}\), where the
-principal square root is the ordinary nonnegative real square root.
+For \(\exp\), the chosen entry is the displayed identity
+\[
+  e^u=\eml(u,1),
+\]
+whose second EML input is the nonzero constant \(1\).
+For the logarithm entry,
+\[
+  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr)
+       =e-\operatorname{Log}(e^e/u)
+       =\log u
+\]
+when \(u>0\), since \(e^e/u\) is then positive real.  The square-root
+entry is used only on \(\RR_{\ge0}\), where the principal square root
+is the ordinary nonnegative real square root.  The sine entry is used
+on the real axis, as in the remaining-primitives table of Part~II,
+Section~2.5.
+The arithmetic rows are the verified compiled Table~1 witnesses,
+restricted to their displayed real domains; therefore their values are
+the ordinary real \(+,-,\times\), and division values wherever those
+operations are defined.
+
 The constant \(0\) is obtained as \(1-1\), integers are obtained by
 iterated addition and subtraction, and a rational \(a/b\) with
 \(b>0\) is obtained by applying the chosen division witness to the
 integer witnesses for \(a\) and \(b\); the denominator witness is
-nonzero.  Finally, \(\log 2\) is obtained from the logarithm witness
-in \Cref{thm:eml-universality} applied to the positive real constant
-\(2=1+1\).  These are finite syntactic constructions, uniform in the
-rational input, and each is evaluated only on the real domain on
-which the corresponding principal-branch witness is defined.
+nonzero.  Finally, \(\log 2\) is obtained from the positive-real
+logarithm witness applied to \(2=1+1\).  These are finite syntactic
+constructions, uniform in the rational input, and each is evaluated
+only on the real domain on which the corresponding principal-branch
+witness is defined.
+\end{proof}
+
+\begin{corollary}[Finite EML witness locking]
+\label{cor:eml-witness-locking}
+There is a finite list
+\[
+  \mathcal W_{\mathcal R}
+  =
+  \{W_{\exp},W_{\log},W_+,W_-,W_{\mathrm{neg}},
+    W_{\times},W_{\div},W_{\mathrm{sq}},W_{\sqrt{\phantom{x}}},
+    W_{\pi},W_{\sin}\}
+\]
+of pure EML trees over \(1\) and formal input leaves such that every
+translation used in \Cref{lem:richardson-translation} is obtained by
+substituting translated subexpressions and rational-constant
+constructor trees into this one list.  The list is fixed once and for
+all by Odrzywo{\l}ek's Table~1 compiler and Supplementary
+Information, Part~II, Sections~2.1--2.5; no further source identities
+or witness choices are made during the Richardson reduction.  For
+each \(W\in\mathcal W_{\mathcal R}\), the principal-branch real-domain
+validity is exactly the validity recorded in the right-hand column of
+\Cref{lem:eml-real-witness-library}.
+\end{corollary}
+
+\begin{proof}
+\Cref{lem:eml-real-witness-library} chooses one verified pure EML
+term for each primitive needed from Richardson's language.  The
+Richardson grammar used here has only the variable, rational
+constants, \(\pi\), \(\log 2\), the operations \(+,-,\times\),
+composition, and the total real functions \(\exp\), \(\sin\), and
+\(|\cdot|\).  The listed witnesses cover the nonconstant primitive
+operations: \(|\cdot|\) is handled by \(W_{\mathrm{sq}}\) followed by
+\(W_{\sqrt{\phantom{x}}}\), and \(\log 2\) is obtained by applying
+\(W_{\log}\) to the rational-constant constructor for \(2\).  A
+rational constant \(a/b\) is built from the fixed terminal \(1\) by
+the fixed addition, subtraction, negation, and division witnesses, so
+rational constants require no additional analytic identities beyond
+the same finite list.
+
+Since each witness is a finite tree and the list has finitely many
+entries, syntactic substitution into input leaves produces a pure EML
+tree effectively.  The semantic assertions for these entries,
+including the principal-branch domain restrictions, are precisely the
+assertions proved in \Cref{lem:eml-real-witness-library}.  Hence the
+later translation is a recursion over a fixed finite witness library,
+not a new search through Odrzywo{\l}ek's source or an appeal to
+unlisted EML identities.
 \end{proof}
 
 \begin{lemma}[Effective Richardson translation]
@@ -149,6 +309,22 @@ by
   |F|=\sqrt{F^2}
 \]
 using the principal square root on the nonnegative real axis.
+Moreover, let \(|E|\) denote the number of nodes in the expanded
+Richardson expression tree.  A rational constant \(a/b\) with
+\(b>0\) is not counted as one atomic token: it contributes the size
+of the chosen constructor tree for the numerator \(a\), the
+denominator \(b\), and the final division, built from \(1\), integer
+addition and subtraction, negation when needed, and one division.
+Equivalently, if a source syntax writes rationals compactly, then
+\(|E|\) means the syntax size after replacing every rational token by
+this fixed constructor expansion.  Then there is a constant \(K\),
+depending only on the fixed witness library and not on \(E\), such
+that the EML tree size and substitution depth satisfy
+\[
+  |\tau(E)|_{\eml}\le K^{2|E|}
+  \qquad\text{and}\qquad
+  \operatorname{depth}\tau(E)\le K|E| .
+\]
 \end{lemma}
 
 \begin{proof}
@@ -187,6 +363,49 @@ the original Richardson expression as a real function.  The
 statement concerns this transported real semantics; it makes no
 branch-independent assertion about equality of arbitrary raw EML
 terms on a complex domain.
+
+It remains to record the quantitative bound.  The size convention in
+the statement charges the full constructor cost of every rational
+constant, including the numerator and denominator witnesses; the
+estimate is therefore not uniform in arbitrarily large rational
+tokens at constant source size.  For each selected unary or binary
+witness \(W\), let \(s(W)\) be its EML tree size, let \(d(W)\) be
+its depth, and let \(r(W)\) be the largest number of occurrences of
+any one formal input variable in \(W\).  The witness library is
+finite, and the rational constants have already been expanded by the
+fixed constructor scheme before \(|E|\) is measured, so choose an
+integer \(K\ge2\)
+larger than every one of these finitely many library constants and
+larger than the corresponding constants for the constructors
+\(0\), \(1\), integer successor by addition, integer predecessor by
+subtraction, and division by a nonzero integer.
+
+We prove the two estimates simultaneously by induction on the
+Richardson expression tree.  Variables and constants satisfy the
+bounds after the preceding choice of \(K\).  For a primitive unary or
+binary operation represented by a witness \(W\), substituting the
+translated children into the formal input leaves of \(W\) gives
+\[
+  |\tau(E)|_{\eml}
+  \le K\Bigl(1+\sum_i |\tau(E_i)|_{\eml}\Bigr)
+  \le K^{2+2\sum_i |E_i|}
+  = K^{2|E|},
+\]
+after increasing \(K\) once if necessary; the depth increases by at
+most \(d(W)\le K\), hence is at most \(K|E|\).  For a composition
+\(G\circ F\), syntactic substitution of \(\tau(F)\) into every
+variable leaf of \(\tau(G)\) gives
+\[
+  |\tau(G\circ F)|_{\eml}
+  \le |\tau(G)|_{\eml}\,|\tau(F)|_{\eml}
+  \le K^{2|G|+2|F|}
+  \le K^{2|G\circ F|},
+\]
+and the substitution depth is at most the sum of the two depths,
+hence at most \(K(|G|+|F|)\le K|G\circ F|\).  The absolute-value case
+is a primitive square, followed by the fixed square-root witness, so
+it is covered by the same unary-operation estimate.  This proves the
+claimed expression-tree and substitution-depth bounds.
 \end{proof}
 
 \begin{theorem}[Expression universality does not give normal forms]
@@ -269,7 +488,11 @@ which is Hankel positivity.  Since
 \(\sum_{x\in N_m}\delta_{d_m(x)}\) has finite support of size at
 most \(|N_m|\), its support points and multiplicities are recovered
 from finitely many moments, with the explicit bound
-\(2|N_m|-1\) from \Cref{thm:prony}.  The value \(|N_m|\) and the
+\(2|N_m|-1\) from \Cref{thm:prony}.  Here
+\Cref{thm:prony} is invoked only through the finite atomic measure
+proof just recalled, applied to
+\(\sum_{x\in N_m}\delta_{d_m(x)}\); no property special to
+Zeckendorf fibers is used.  The value \(|N_m|\) and the
 finite moment segment are computable by bounded enumeration in the
 effective resolution data.  Neither argument constructs a
 finite-state transfer operator.  That operator is additional
@@ -430,11 +653,60 @@ strictly weaker, as logical requirements, than the finite-state
 transfer property.
 \end{proof}
 
-\begin{remark}\label{rem:hankel-psd-generic}
-The certificate level has two parts.  Finite Hankel positivity and
-Prony reconstruction are formal consequences of a finite fiber
-partition.  Polynomial-size finite-state computation of the same
-moments is stronger and must come from the particular transfer
-representation at hand; it is not certified by moment positivity and
-reconstruction alone.
-\end{remark}
+\begin{corollary}[Finite-state growth budget]
+\label{cor:finite-state-growth-budget}
+Fix \(q=2\).  Every finite-state certificate realization in the sense
+of \Cref{def:cert-univ} has at most exponential growth in the
+resolution parameter:
+\[
+  |S_2^{(m)}|\le C R^m\qquad(m\ge1)
+\]
+for some constants \(C,R>0\) depending on the fixed transfer data.
+By contrast, computable finite-fiber covers of the Zeckendorf
+resolution data can realize second collision moments of the form
+\[
+  S_2^\sharp(m)=(a_m+1)^2+F_{m+2}-1
+\]
+for an arbitrary computable integer sequence \(a_m\ge1\).
+\end{corollary}
+
+\begin{proof}
+The finite-state clause of \Cref{def:cert-univ} gives, for \(q=2\), a
+fixed finite matrix representation
+\[
+  S_2^{(m)}=u_2^{\mathsf T}A_2^m v_2 .
+\]
+Choosing any submultiplicative matrix norm and putting
+\(R=\max\{1,\|A_2\|\}\), one has
+\[
+  |S_2^{(m)}|\le \|u_2\|\,\|v_2\|\,R^m .
+\]
+After increasing the constant if necessary this has the asserted
+form.  The realization of arbitrary computable one-spike growth is
+the construction and calculation in
+\Cref{thm:finite-state-strictness}.
+\end{proof}
+
+\begin{corollary}[Finite-fiber certificates are independent of finite-state transfer]
+\label{cor:hankel-psd-independent}
+Hankel positivity and finite Prony reconstruction are universal
+finite-fiber consequences of effective finite resolution data, but
+they do not imply the finite-state transfer clause of
+\Cref{def:cert-univ}.  Equivalently, finite-fiber certificate
+universality is strictly weaker than finite-state certificate
+universality.
+\end{corollary}
+
+\begin{proof}
+The universal finite-fiber part is exactly
+\Cref{prop:L2-generic-vs-structural}: at a fixed resolution the fiber
+sizes give a finite atomic moment measure, hence Hankel positivity and
+finite Prony reconstruction with a computable bound from the finite
+normal-form list.  To see that these facts do not imply finite-state
+transfer, apply \Cref{thm:finite-state-strictness} with \(a_m=m!\).
+The resulting computable finite-fiber cover is certificate-universal
+in the finite-fiber sense, but its second collision moment admits no
+fixed finite-matrix representation in the resolution parameter.  This
+contradicts the defining finite-state clause for \(q=2\), and proves
+the claimed non-implication.
+\end{proof}

@@ -529,17 +529,31 @@ class PaperState:
     stage_a_audit_metrics: dict = field(default_factory=dict)
     stage_a_inventory: dict = field(default_factory=dict)
     stage_a_split_candidates: list[dict] = field(default_factory=list)
+    stage_a_failure_classes: list = field(default_factory=list)
 
     # Stage B tracking
     stage_b_rounds: int = 0
     stage_b_verdicts: list[str] = field(default_factory=list)
     stage_b_passed: bool = False
     stage_b_all_issues: list[str] = field(default_factory=list)  # Accumulated Oracle issues across all rounds
+    stage_b_issue_streaks: dict[str, int] = field(default_factory=dict)
+    stage_b_reject_classes: list[dict] = field(default_factory=list)
+    # Multi-turn deepen + fresh-eval (per user spec: deepen until same Conv
+    # accepts, then a NEW Conv first-look; final pass = fresh first-reply
+    # accepts).
+    stage_b_deepen_conv_id: str = ""
+    stage_b_fresh_attempts: int = 0
+    stage_b_last_fix_summary: str = ""
+    stage_b_diff_scope_misses: list = field(default_factory=list)
+    stage_b_fresh_eval_pending: int = 0
+    block_reason: str = ""
 
     # Stage C tracking
     stage_c_rounds: int = 0
     stage_c_verdicts: list[str] = field(default_factory=list)
     stage_c_passed: bool = False
+    stage_c_deepen_conv_id: str = ""
+    stage_c_fresh_attempts: int = 0
 
     # Stage D tracking
     stage_d_backflow_items: list[str] = field(default_factory=list)
@@ -547,6 +561,8 @@ class PaperState:
 
     # Full history
     history: list[dict] = field(default_factory=list)
+    events: list[dict] = field(default_factory=list)
+    retarget_history: list[dict] = field(default_factory=list)
 
     # Meta
     pdf_path: str = ""
@@ -590,16 +606,29 @@ class PaperState:
             "stage_a_audit_metrics": self.stage_a_audit_metrics,
             "stage_a_inventory": self.stage_a_inventory,
             "stage_a_split_candidates": self.stage_a_split_candidates[-50:],
+            "stage_a_failure_classes": self.stage_a_failure_classes[-100:],
             "stage_b_rounds": self.stage_b_rounds,
             "stage_b_verdicts": self.stage_b_verdicts,
             "stage_b_passed": self.stage_b_passed,
             "stage_b_all_issues": self.stage_b_all_issues[-200:],  # keep last 200 issue strings
+            "stage_b_issue_streaks": self.stage_b_issue_streaks,
+            "stage_b_reject_classes": self.stage_b_reject_classes[-20:],
+            "stage_b_deepen_conv_id": self.stage_b_deepen_conv_id,
+            "stage_b_fresh_attempts": self.stage_b_fresh_attempts,
+            "stage_b_last_fix_summary": self.stage_b_last_fix_summary[-2000:],
+            "stage_b_diff_scope_misses": self.stage_b_diff_scope_misses[-100:],
+            "stage_b_fresh_eval_pending": self.stage_b_fresh_eval_pending,
+            "block_reason": self.block_reason,
             "stage_c_rounds": self.stage_c_rounds,
             "stage_c_verdicts": self.stage_c_verdicts,
             "stage_c_passed": self.stage_c_passed,
+            "stage_c_deepen_conv_id": self.stage_c_deepen_conv_id,
+            "stage_c_fresh_attempts": self.stage_c_fresh_attempts,
             "stage_d_backflow_items": self.stage_d_backflow_items,
             "stage_d_passed": self.stage_d_passed,
             "history": self.history[-50:],  # keep last 50 entries
+            "events": self.events[-200:],
+            "retarget_history": self.retarget_history,
             "pdf_path": self.pdf_path,
             "started_at": self.started_at,
             "completed_at": self.completed_at,
@@ -642,18 +671,29 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                      "stage_a_scope_done", "stage_a_audit_rounds",
                      "stage_b_rounds", "stage_b_passed", "stage_c_rounds",
                      "stage_c_passed", "stage_d_passed", "pdf_path",
-                     "started_at", "completed_at", "error"):
+                     "stage_b_deepen_conv_id", "stage_b_fresh_attempts",
+                     "stage_b_last_fix_summary",
+                     "stage_b_fresh_eval_pending",
+                     "stage_c_deepen_conv_id", "stage_c_fresh_attempts",
+                     "started_at", "completed_at", "error",
+                     "block_reason"):
             if key in data:
                 setattr(s, key, data[key])
         s.stage_a_scores = data.get("stage_a_scores", [])
         s.stage_a_audit_metrics = data.get("stage_a_audit_metrics", {})
         s.stage_a_inventory = data.get("stage_a_inventory", {})
         s.stage_a_split_candidates = data.get("stage_a_split_candidates", [])
+        s.stage_a_failure_classes = data.get("stage_a_failure_classes", [])
         s.stage_b_verdicts = data.get("stage_b_verdicts", [])
         s.stage_b_all_issues = data.get("stage_b_all_issues", [])
+        s.stage_b_issue_streaks = data.get("stage_b_issue_streaks", {})
+        s.stage_b_reject_classes = data.get("stage_b_reject_classes", [])
+        s.stage_b_diff_scope_misses = data.get("stage_b_diff_scope_misses", [])
         s.stage_c_verdicts = data.get("stage_c_verdicts", [])
         s.stage_d_backflow_items = data.get("stage_d_backflow_items", [])
         s.history = data.get("history", [])
+        s.events = data.get("events", [])
+        s.retarget_history = data.get("retarget_history", [])
         return s
     except Exception:
         return None
@@ -1083,23 +1123,63 @@ def oracle_submit(task_id: str, prompt: str,
                   pdf_path: Optional[Path] = None,
                   model: str = "chatgpt-5.4-pro-extended",
                   context_mode: str = "",
-                  agent_role: str = "") -> bool:
+                  agent_role: str = "",
+                  conversation_id: Optional[str] = None,
+                  is_followup: bool = False) -> bool:
+    """Submit an oracle task to the bridge service.
+
+    `conversation_id` controls multi-turn behaviour:
+      None            single-shot (legacy). Server treats as a fresh chat.
+      ""              caller wants a multi-turn-capable conversation; server
+                      issues a new conversation_id and returns it via the
+                      /result record (caller fetches with oracle_poll_record).
+      "<known id>"    follow up in an existing conversation: routes to
+                      /continue so the userscript navigates back to the
+                      pinned chatgpt_url and posts the prompt as a turn
+                      in the same chat. Use a SHORT prompt here (e.g.
+                      "按审稿人意见改了xxx, 这版你愿意接收吗?").
+    """
     prompt = with_agent_context_contract(
         prompt, context_mode=context_mode, agent_role=agent_role)
     if context_mode:
         logger.info(f"Oracle context: {context_mode}"
-                    f"{'/' + agent_role if agent_role else ''}")
+                    f"{'/' + agent_role if agent_role else ''}"
+                    f"{' conv=' + conversation_id[:12] if conversation_id else ''}")
     payload: dict = {"task_id": task_id, "prompt": prompt, "model": model}
+    if conversation_id is not None:
+        payload["conversation_id"] = conversation_id
+    if is_followup:
+        payload["is_followup"] = True
     if pdf_path and pdf_path.exists():
         with open(pdf_path, "rb") as f:
             payload["pdf_base64"] = base64.b64encode(f.read()).decode("ascii")
         payload["pdf_name"] = pdf_path.name
+    endpoint = "/continue" if (conversation_id and is_followup) else "/submit"
     try:
-        http_post(f"{ORACLE_SERVER}/submit", payload, timeout=30)
+        http_post(f"{ORACLE_SERVER}{endpoint}", payload, timeout=30)
         return True
     except Exception as e:
-        logger.error(f"Oracle submit failed: {e}")
+        logger.error(f"Oracle submit ({endpoint}) failed: {e}")
         return False
+
+
+def oracle_poll_record(task_id: str, timeout: int = 300) -> dict:
+    """Poll /result/<task_id> until completed/failed/cancelled.
+
+    Returns the full record dict (status, response, conversation_id,
+    chatgpt_url, ...). Used by Stage B/C deepen flow to learn the
+    conversation_id the server issued for a fresh multi-turn task.
+    """
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=5)
+            if data and data.get("status") in {"completed", "failed", "cancelled"}:
+                return data
+        except Exception:
+            pass
+        time.sleep(3)
+    return {"status": "timeout", "task_id": task_id, "response": ""}
 
 
 def oracle_cancel(task_id: str, reason: str) -> bool:
@@ -1346,10 +1426,15 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
         (CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt").write_text(
             prompt, encoding="utf-8")
 
-    # Prompt as positional arg + stdin=DEVNULL — borrowed from
-    # lean4-codex-auto-dev (PR #37). Empirically prevents codex hang on
-    # "Reading additional input from stdin..." (20+ min idle observed when
-    # prompt is fed via stdin pipe even after communicate() closes the write end).
+    # Prompt strategy:
+    #   * Small prompts (<2 KB) → positional arg + stdin=DEVNULL (the
+    #     historic path that avoided a codex hang on "Reading additional
+    #     input from stdin..." when prompt was piped without `-`).
+    #   * Large prompts (>=2 KB) OR Windows → write to a temp file and pass
+    #     `-` as the positional arg, then feed the file contents on stdin.
+    #     Windows CMD blows up around 8 KB of command line; codex's `-`
+    #     mode is documented and explicit, so it does not trigger the
+    #     historic concurrent-input hang.
     # --json gives all agent_message events as fallback if -o is empty.
     cmd = [
         codex_bin, "exec",
@@ -1359,7 +1444,16 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     ]
     if model:
         cmd.extend(["-m", model])
-    cmd.append(prompt)
+
+    # Threshold chosen well below CMD's 8 KB limit so small prompts on
+    # Windows still take the simpler positional path.
+    use_stdin_prompt = IS_WINDOWS or len(prompt) >= 2000
+    prompt_input = None
+    if use_stdin_prompt:
+        cmd.append("-")
+        prompt_input = prompt
+    else:
+        cmd.append(prompt)
 
     # Windows: .cmd wrappers need shell=True
     use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
@@ -1370,7 +1464,7 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     start = time.monotonic()
     result = None
     popen_kwargs: dict = dict(
-        stdin=subprocess.DEVNULL,
+        stdin=subprocess.PIPE if use_stdin_prompt else subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -1390,7 +1484,10 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     try:
         proc = subprocess.Popen(cmd, **popen_kwargs)
         try:
-            stdout, stderr = proc.communicate(timeout=timeout_seconds + 30)
+            stdout, stderr = proc.communicate(
+                input=prompt_input,
+                timeout=timeout_seconds + 30,
+            )
             result = _Result(stdout, stderr, proc.returncode)
         except subprocess.TimeoutExpired:
             logger.warning(f"Codex timed out after {timeout_seconds}s, "
@@ -1570,7 +1667,9 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
                 timeout_seconds: int = 600,
                 dry_run: bool = False,
                 context_mode: str = "",
-                agent_role: str = "") -> str:
+                agent_role: str = "",
+                skill: str = "",
+                codex_fallback: bool = True) -> str:
     """Call Claude Code CLI for independent review/verification.
 
     Uses `claude -p --dangerously-skip-permissions` for non-interactive
@@ -1578,12 +1677,26 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     independent judgment separate from Codex.
 
     Used for: Stage F2, A4, C1, D2 (all verification/review steps).
+
+    When `skill` is set, invoke a Claude Code slash-command-style skill
+    (e.g. skill="killo-golden" → prompt prefixed with "/killo-golden\\n\\n").
+    Used for Stage D backflow writeback so academic-style discipline
+    (no patch-log phrasing, no temporal markers, etc.) is enforced.
+
+    When `codex_fallback=True` (default) and Claude raises
+    "Claude CLI unavailable" (out-of-quota / not-found), the call
+    transparently falls back to `codex_exec` with a substitution prompt
+    so the pipeline keeps moving. Pass `codex_fallback=False` to keep
+    the original strict behaviour (re-raise on Claude unavailability).
     """
     prompt = with_agent_context_contract(
         prompt, context_mode=context_mode, agent_role=agent_role)
+    if skill:
+        prompt = f"/{skill.lstrip('/')}\n\n{prompt}"
     if context_mode:
         logger.info(f"Claude context: {context_mode}"
-                    f"{'/' + agent_role if agent_role else ''}")
+                    f"{'/' + agent_role if agent_role else ''}"
+                    f"{' skill=' + skill if skill else ''}")
     if dry_run:
         logger.info(f"[DRY RUN] claude_exec:\n{prompt[:200]}...")
         return "(dry run)"
@@ -1611,6 +1724,19 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
             encoding="utf-8", errors="replace",
         )
     except subprocess.TimeoutExpired:
+        if codex_fallback:
+            logger.warning(
+                f"Claude CLI hung past {timeout_seconds}s; falling back "
+                f"to Codex for {agent_role or 'unspecified role'}"
+            )
+            return _codex_fallback_for_claude(
+                prompt, work_dir=work_dir,
+                timeout_seconds=max(timeout_seconds, 600),
+                dry_run=dry_run,
+                context_mode=context_mode,
+                agent_role=agent_role,
+                skill=skill,
+            )
         raise RuntimeError(f"Claude CLI timed out after {timeout_seconds}s")
     finally:
         elapsed = time.monotonic() - start
@@ -1623,14 +1749,77 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     )
     if _is_claude_unavailable_text(combined):
         excerpt = combined.replace("\n", " ")[:300]
+        if codex_fallback:
+            logger.warning(
+                f"Claude unavailable ({excerpt}); falling back to Codex "
+                f"for {agent_role or 'unspecified role'}"
+            )
+            return _codex_fallback_for_claude(
+                prompt, work_dir=work_dir,
+                timeout_seconds=max(timeout_seconds, 600),
+                dry_run=dry_run,
+                context_mode=context_mode,
+                agent_role=agent_role,
+                skill=skill,
+            )
         raise RuntimeError(f"Claude CLI unavailable: {excerpt}")
     if result and result.returncode != 0:
         excerpt = combined.replace("\n", " ")[:300]
         logger.warning(f"Claude CLI error: {excerpt}")
+        if codex_fallback:
+            logger.warning(
+                f"Claude rc={result.returncode}; falling back to Codex "
+                f"for {agent_role or 'unspecified role'}"
+            )
+            return _codex_fallback_for_claude(
+                prompt, work_dir=work_dir,
+                timeout_seconds=max(timeout_seconds, 600),
+                dry_run=dry_run,
+                context_mode=context_mode,
+                agent_role=agent_role,
+                skill=skill,
+            )
         raise RuntimeError(
             f"Claude CLI failed rc={result.returncode}: {excerpt}")
 
     return output
+
+
+def _codex_fallback_for_claude(prompt: str, *, work_dir: Optional[Path],
+                               timeout_seconds: int, dry_run: bool,
+                               context_mode: str, agent_role: str,
+                               skill: str) -> str:
+    """Run a Claude prompt through Codex when Claude is unavailable.
+
+    Codex is the writer in this pipeline; using it as the reviewer for
+    a one-off fallback is suboptimal but better than blocking the whole
+    paper. The substitution prompt is conservative: it asks Codex to act
+    in the role Claude would have, follow the same skill discipline if
+    one was named, and produce the same JSON shape so downstream
+    consumers (parse_json_from_output, _record_claude_supervision) keep
+    working without changes.
+    """
+    skill_note = (
+        f"\n\n[Claude is unavailable. You are substituting for the "
+        f"`/{skill}` skill — follow its style discipline strictly.]"
+        if skill else ""
+    )
+    fallback_prompt = (
+        "[Claude is unavailable. You are substituting for the Claude "
+        f"reviewer in role `{agent_role or 'unspecified'}`. Follow the "
+        "instructions below and produce the same output format Claude "
+        "would have. Be conservative — when in doubt, defer to existing "
+        "manuscript content rather than invent new claims.]"
+        f"{skill_note}\n\n{prompt}"
+    )
+    return codex_exec(
+        fallback_prompt,
+        work_dir=work_dir,
+        timeout_seconds=timeout_seconds,
+        dry_run=dry_run,
+        context_mode=context_mode or "claude_fallback",
+        agent_role=f"claude_fallback_{agent_role}" if agent_role else "claude_fallback",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1851,6 +2040,61 @@ def update_program_board(paper_name: str, stage: str, detail: str) -> None:
                     f"add a row to track it")
     except Exception as e:
         logger.warning(f"Failed to update PROGRAM_BOARD: {e}")
+
+
+def _add_to_submission_queue(paper_name: str, target_journal: str,
+                             note: str) -> None:
+    """Append paper to PROGRAM_BOARD.md '手动投稿队列' section.
+
+    Called when a paper reaches the C-DONE terminal-pass gate so the
+    user has a single place to look for submission-ready papers without
+    scanning the full status table. Idempotent: if the paper is already
+    in the queue, no-op.
+    """
+    if not PROGRAM_BOARD.exists():
+        return
+    try:
+        with git_repo_lock():
+            text = PROGRAM_BOARD.read_text(encoding="utf-8")
+            lines = text.split("\n")
+
+            queue_start = None
+            for idx, line in enumerate(lines):
+                if line.startswith("## 手动投稿队列"):
+                    queue_start = idx
+                    break
+            if queue_start is None:
+                logger.warning(
+                    "PROGRAM_BOARD: '手动投稿队列' section not found; "
+                    f"could not enqueue {paper_name}")
+                return
+
+            queue_end = len(lines)
+            for j in range(queue_start + 1, len(lines)):
+                if lines[j].startswith("## "):
+                    queue_end = j
+                    break
+
+            queue_block = "\n".join(lines[queue_start:queue_end])
+            if f"`{paper_name}`" in queue_block:
+                logger.info(
+                    f"PROGRAM_BOARD queue: {paper_name} already present")
+                return
+
+            insert_pos = queue_end
+            while insert_pos > queue_start and not lines[insert_pos - 1].strip():
+                insert_pos -= 1
+
+            safe_note = (note or "").replace("|", "\\|").replace("\n", " ")
+            new_row = f"| `{paper_name}` | {target_journal or '—'} | {safe_note} |"
+            lines.insert(insert_pos, new_row)
+            PROGRAM_BOARD.write_text("\n".join(lines), encoding="utf-8")
+            _invalidate_board_cache()
+            logger.info(
+                f"PROGRAM_BOARD queue: enqueued {paper_name} "
+                f"({target_journal})")
+    except Exception as e:
+        logger.warning(f"Failed to enqueue {paper_name}: {e}")
 
 
 def verify_substantive_change(paper_path: Path,
@@ -2826,8 +3070,35 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
     """)
 
 
-def build_oracle_review_prompt(target_journal: str) -> str:
+def build_oracle_followup_prompt(fix_summary: str, target_journal: str) -> str:
+    """Short follow-up prompt for an existing deepen conversation.
+
+    Per project design: the deepen Conv accumulates context across
+    rounds; we just describe what was changed since the last round and
+    ask whether the new version is acceptable. ChatGPT remembers its
+    own prior verdict and the paper structure, so a long re-review
+    prompt is wasteful here.
+
+    Keep terse — Conv-deepen already has the paper PDF and the
+    referee context from round 1.
+    """
+    summary = (fix_summary or "").strip()
+    if not summary:
+        summary = "addressed every issue you raised in your previous review"
     return textwrap.dedent(f"""\
+        Per your previous review, I {summary}.
+
+        Start your reply with a single line exactly of the form
+          Overall verdict: <Accept|Minor revision|Major revision|Reject>
+        so the verdict can be parsed unambiguously. Then briefly explain
+        what now meets the bar for "{target_journal}" and what (if anything)
+        still does not.
+    """)
+
+
+def build_oracle_review_prompt(target_journal: str,
+                               framing_mode: str = "default") -> str:
+    prompt = textwrap.dedent(f"""\
         You are a referee for "{target_journal}". Review the attached paper.
 
         Start your reply with a single line exactly of the form
@@ -2864,6 +3135,20 @@ def build_oracle_review_prompt(target_journal: str) -> str:
         the paper already says. A single wrong identity in a main theorem is a
         BLOCKER, not a LOW.
     """)
+    if framing_mode == "fresh_eval":
+        journal = target_journal or "the journal"
+        preamble = textwrap.dedent(f"""\
+            === FRESH REVIEW BRIEFING ===
+            You are receiving this paper for first-pass editorial review. By design,
+            you have NO prior reviewer comments - this is a clean-room evaluation.
+            Do not request prior reviews; assess the submitted PDF on its own merits
+            as if you are a new {journal} referee receiving the paper today.
+            The pipeline routes papers through multiple internal review rounds before
+            they reach you; your job is the independent first-look acceptance gate.
+            === END FRESH REVIEW BRIEFING ===
+        """)
+        return f"{preamble}\n{prompt}"
+    return prompt
 
 
 def build_oracle_re_review_prompt(target_journal: str) -> str:
@@ -3341,6 +3626,477 @@ def parse_oracle_issues(review_text: str) -> list[dict]:
     return issues
 
 
+def _extract_remaining_blockers_value(text: str) -> Optional[str]:
+    """Remaining-blockers deterministic gate; fallback semantics: absent or unparsable lines return None so the existing LLM issue parse is preserved."""
+    match = re.search(
+        r"^\s*(?:[-*]\s*)?(?:remaining\s+blockers(?:\s+preventing\s+acceptance)?|"
+        r"blockers\s+preventing\s+acceptance)\s*[:\-]\s*(.*?)\s*$",
+        text or "",
+        re.IGNORECASE | re.MULTILINE,
+    )
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
+def _looks_like_status_row(text: str) -> bool:
+    """Status-row deterministic gate; fallback semantics: uncertain issue text returns False so normal LLM-derived issues remain intact."""
+    normalized = re.sub(r"\s+", " ", (text or "").strip().strip("|")).strip()
+    lowered = normalized.lower()
+    if not lowered:
+        return False
+    if re.fullmatch(
+        r"(accept(?:ed)?|minor revision|major revision|reject(?:ion)?|"
+        r"overall verdict|verdict)",
+        lowered,
+    ):
+        return True
+    status_prefixes = (
+        "overall verdict",
+        "verdict:",
+        "severity action owner",
+        "severity action",
+        "action owner",
+    )
+    if lowered.startswith(status_prefixes):
+        return True
+    cells = [
+        re.sub(r"\s+", " ", cell).strip().lower()
+        for cell in normalized.split("|")
+        if cell.strip()
+    ]
+    if cells and cells[0] in {
+        "overall verdict",
+        "verdict",
+        "severity action owner",
+    }:
+        return True
+    if set(cells).issubset({
+        "overall verdict",
+        "verdict",
+        "accept",
+        "accepted",
+        "minor revision",
+        "major revision",
+        "reject",
+        "rejection",
+        "severity action owner",
+        "status",
+        "header",
+    }):
+        return True
+    return False
+
+
+_FALLBACK_BLOCKER_HEADER_RE = re.compile(
+    r"^\s*(?:#{1,6}\s*)?(?:[-*]\s*)?"
+    r"(remaining\s+blockers|mathematical\s+blockers|same\s+blockers\s+remain|"
+    r"blockers\s+preventing\s+acceptance)\b.*?(?::\s*(.*))?$",
+    re.IGNORECASE,
+)
+
+
+def _extract_fallback_blockers(text: str) -> list[str]:
+    """Blocker-list deterministic gate; fallback semantics: returns [] when no clear blocker header/list is found so Stage B keeps the raw LLM path."""
+    lines = (text or "").splitlines()
+    blockers: list[str] = []
+    for idx, line in enumerate(lines):
+        header = _FALLBACK_BLOCKER_HEADER_RE.match(line)
+        if not header:
+            continue
+        inline = (header.group(2) or "").strip()
+        if inline and inline.lower() not in {"none", "n/a", "na", "-"}:
+            blockers.append(inline)
+        current: list[str] = []
+        for follow in lines[idx + 1:]:
+            stripped = follow.strip()
+            if not stripped:
+                if current:
+                    break
+                continue
+            if re.match(r"^\s*(?:#{1,6}\s*)?[A-Z][A-Za-z0-9 /-]{2,80}:\s*$", follow):
+                break
+            item = re.match(r"^\s*(?:[-*+]\s+|\d+[.)]\s+)(.+)$", follow)
+            if item:
+                if current:
+                    blockers.append(" ".join(current).strip())
+                current = [item.group(1).strip()]
+                continue
+            if current:
+                current.append(stripped)
+                continue
+            if re.search(
+                r"\b(blocker|not proven|gap|insufficient|not acceptable)\b",
+                stripped,
+                re.IGNORECASE,
+            ):
+                blockers.append(stripped)
+                continue
+            break
+        if current:
+            blockers.append(" ".join(current).strip())
+    seen: set[str] = set()
+    unique: list[str] = []
+    for blocker in blockers:
+        blocker = re.sub(r"\s+", " ", blocker).strip()
+        if not blocker:
+            continue
+        key = blocker.lower()
+        if key not in seen:
+            seen.add(key)
+            unique.append(blocker)
+    return unique
+
+
+def _oracle_issue_section_from_text(text: str) -> str:
+    """Issue-section deterministic gate; fallback semantics: return unknown when no clear Section/Theorem/Lemma/Proposition token is present."""
+    match = re.search(
+        r"\b((?:Section|Theorem|Lemma|Proposition)\s+[\w.()/-]+)",
+        text or "",
+        re.IGNORECASE,
+    )
+    return match.group(1) if match else "unknown"
+
+
+def _auto_blocker_issue(idx: int, description: str) -> dict:
+    """Auto-blocker deterministic gate; fallback semantics: synthesize only from already-selected Oracle reject text and leave suggested_fix empty."""
+    description = re.sub(r"\s+", " ", description or "").strip()
+    return {
+        "id": f"AUTO{idx}",
+        "severity": "BLOCKER",
+        "section": _oracle_issue_section_from_text(description),
+        "description": description[:800],
+        "suggested_fix": "",
+    }
+
+
+def parse_oracle_issues_strict(response: str) -> list[dict]:
+    """Oracle issue parser deterministic gate; fallback semantics: ambiguous accept/minor output keeps parsed LLM issues, while reject/major output with no parse gets synthesized blockers from explicit text."""
+    issues = parse_oracle_issues(response)
+    verdict = extract_verdict(response)
+    if verdict in {"accept", "minor revision"}:
+        blockers_value = _extract_remaining_blockers_value(response)
+        if blockers_value is not None and re.fullmatch(
+            r"(?:none|n/a|na|-)?", blockers_value.strip(), re.IGNORECASE,
+        ):
+            issues = [
+                issue for issue in issues
+                if not _looks_like_status_row(
+                    " ".join(
+                        str(issue.get(field, ""))
+                        for field in ("section", "description", "suggested_fix")
+                    )
+                )
+            ]
+        return issues
+    if verdict in {"reject", "major revision"} and not issues:
+        fallback_blockers = _extract_fallback_blockers(response)
+        if fallback_blockers:
+            return [
+                _auto_blocker_issue(idx, blocker)
+                for idx, blocker in enumerate(fallback_blockers, 1)
+            ]
+        paragraphs = [
+            re.sub(r"\s+", " ", p).strip()
+            for p in re.split(r"\n\s*\n", response or "")
+            if p.strip()
+        ]
+        description = ""
+        for paragraph in paragraphs:
+            if re.search(
+                r"(reject|blocker|insufficient|not acceptable|not a new|"
+                r"below scope)",
+                paragraph,
+                re.IGNORECASE,
+            ):
+                description = paragraph
+                break
+        if not description:
+            description = paragraphs[0] if paragraphs else (response or "")
+        return [_auto_blocker_issue(1, description)]
+    return issues
+
+
+_ORACLE_FIT_REJECT_RE = re.compile(
+    r"(too narrow|too specialized|specialized computational|"
+    r"computational note|not (a )?new (general )?"
+    r"(theory|result|contribution)|below.{0,20}standard for|"
+    r"out of (the )?(scope|journal mandate|journal'?s scope|"
+    r"aims and scope)|insufficient (novelty|generality)|"
+    r"not of sufficient interest|not suitable for|wrong venue|"
+    r"better suited (for|to))",
+    re.IGNORECASE,
+)
+
+
+def _classify_oracle_reject(response_text: str) -> str:
+    """Classify an Oracle reject as journal-fit driven or technical."""
+    matches = {
+        re.sub(r"\s+", " ", m.group(0).lower()).strip()
+        for m in _ORACLE_FIT_REJECT_RE.finditer(response_text or "")
+    }
+    return "fit" if len(matches) >= 2 else "technical"
+
+
+_ISSUE_LOCATION_RE = re.compile(
+    r"(prop(?:osition)?\.?|thm|theorem|lemma|cor(?:ollary)?|"
+    r"sec(?:tion)?|eq(?:uation)?\.?)\s*[\(\d.]+\)?",
+    re.IGNORECASE,
+)
+
+
+def _canonical_issue_key(issue_str: str) -> str:
+    """Reduce an Oracle issue string to a stable location-focused key."""
+    normalized = re.sub(r"^\d+\s*[|.:]\s*", "", issue_str or "").lower()
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    markers = []
+    canonical_names = {
+        "prop": "prop", "prop.": "prop", "proposition": "prop",
+        "proposition.": "prop", "thm": "theorem", "theorem": "theorem",
+        "lemma": "lemma", "cor": "cor", "corollary": "cor",
+        "sec": "section", "section": "section",
+        "eq": "equation", "eq.": "equation", "equation": "equation",
+        "equation.": "equation",
+    }
+    for m in _ISSUE_LOCATION_RE.finditer(normalized):
+        marker = re.sub(r"\s+", " ", m.group(0).lower()).strip()
+        parts = marker.split(" ", 1)
+        if len(parts) == 2:
+            name = canonical_names.get(parts[0], parts[0])
+            marker = f"{name} {parts[1]}"
+        markers.append(marker)
+    if markers:
+        return " ".join(markers)
+    return normalized[:80]
+
+
+def _issue_location_parts(key: str) -> tuple[str, str]:
+    key = re.sub(r"\s+", " ", key or "").lower().strip()
+    m = re.search(
+        r"\b(prop|proposition|theorem|thm|lemma|cor|corollary|"
+        r"section|sec|equation|eq)\.?\s*\(?([0-9][0-9A-Za-z.\-]*)\)?",
+        key,
+    )
+    if not m:
+        return "", ""
+    kind = m.group(1)
+    kind_map = {
+        "prop": "proposition",
+        "proposition": "proposition",
+        "thm": "theorem",
+        "theorem": "theorem",
+        "lemma": "lemma",
+        "cor": "corollary",
+        "corollary": "corollary",
+        "sec": "section",
+        "section": "section",
+        "eq": "equation",
+        "equation": "equation",
+    }
+    return kind_map.get(kind, kind), m.group(2).strip(".-")
+
+
+def _location_needles_for_key(key: str) -> list[str]:
+    kind, number = _issue_location_parts(key)
+    if not kind or not number:
+        return []
+    dot_num = number.replace("-", ".")
+    dash_num = number.replace(".", "-")
+    compact_num = re.sub(r"[\s.\-]+", "", number)
+    prefixes = {
+        "proposition": ["prop", "proposition"],
+        "theorem": ["thm", "theorem"],
+        "lemma": ["lem", "lemma"],
+        "corollary": ["cor", "corollary"],
+        "section": ["sec", "section"],
+        "equation": ["eq", "equation"],
+    }.get(kind, [kind])
+    nums = [dot_num, dash_num, compact_num]
+    needles = {f"{kind} {dot_num}", f"{kind} {dash_num}"}
+    for prefix in prefixes:
+        for num in nums:
+            if num:
+                needles.update({
+                    f"label{{{prefix}:{num}}}",
+                    f"label{{{prefix}-{num}}}",
+                    f"label{{{prefix}.{num}}}",
+                    f"{prefix}:{num}",
+                    f"{prefix}-{num}",
+                    f"{prefix}.{num}",
+                })
+    if kind == "section":
+        needles.update({
+            f"section{{{dot_num}",
+            f"section*{{{dot_num}",
+            f"section {dot_num}",
+        })
+    elif kind == "equation":
+        needles.update({
+            f"tag{{{dot_num}}}",
+            f"tag{{({dot_num})}}",
+            f"({dot_num})",
+        })
+    else:
+        needles.update({
+            f"{kind} {dot_num}",
+            f"{kind}~{dot_num}",
+        })
+    return sorted(needles, key=len, reverse=True)
+
+
+def _location_key_useful(key: str) -> bool:
+    kind, number = _issue_location_parts(key)
+    return bool(kind and number)
+
+
+def _git_show_text(commit_hash: str, *args: str, cwd: Optional[Path] = None) -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "show", *args, commit_hash],
+            cwd=str(cwd) if cwd else None,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=60,
+            check=False,
+        )
+        return (proc.stdout or "") + (proc.stderr or "")
+    except Exception:
+        return ""
+
+
+def _parse_git_stat_size(stat_text: str) -> tuple[int, int]:
+    files = insertions = deletions = 0
+    for line in reversed((stat_text or "").splitlines()):
+        if "changed" not in line:
+            continue
+        file_m = re.search(r"(\d+)\s+files?\s+changed", line)
+        ins_m = re.search(r"(\d+)\s+insertions?\(\+\)", line)
+        del_m = re.search(r"(\d+)\s+deletions?\(-\)", line)
+        if file_m:
+            files = int(file_m.group(1))
+            insertions = int(ins_m.group(1)) if ins_m else 0
+            deletions = int(del_m.group(1)) if del_m else 0
+            break
+    return files, insertions + deletions
+
+
+def _verify_fix_diff_scope(state, oracle_issues, fix_commit_hash,
+                           paper_dir) -> dict:
+    """Check whether a Codex fix commit touched every Oracle location."""
+    del state
+    paper_path = Path(paper_dir)
+    keys = []
+    for issue in oracle_issues or []:
+        if isinstance(issue, dict):
+            issue_text = format_issues_for_codex([issue]) or str(issue)
+        else:
+            issue_text = str(issue)
+        key = _canonical_issue_key(issue_text)
+        if key and key not in keys:
+            keys.append(key)
+
+    stat_text = _git_show_text(str(fix_commit_hash), "--stat", cwd=paper_path)
+    diff_size_files, diff_size_lines = _parse_git_stat_size(stat_text)
+    patch_text = _git_show_text(
+        str(fix_commit_hash), "--unified=0", cwd=paper_path).lower()
+
+    changed_files = {
+        m.group(1).strip()
+        for m in re.finditer(r"^\s*(.+?)\s+\|\s+\d+", stat_text, re.MULTILINE)
+        if not m.group(1).strip().startswith(("-", "+"))
+    }
+    covered = []
+    missed = []
+    tex_files = list(paper_path.rglob("*.tex")) if paper_path.exists() else []
+
+    for key in keys:
+        if not _location_key_useful(key):
+            covered.append(key)
+            continue
+        needles = [n.lower() for n in _location_needles_for_key(key)]
+        expected_files = set()
+        for tex_file in tex_files:
+            try:
+                content = tex_file.read_text(encoding="utf-8", errors="ignore").lower()
+            except Exception:
+                continue
+            if any(needle in content for needle in needles):
+                expected_files.add(tex_file)
+
+        hunk_contains_location = any(needle in patch_text for needle in needles)
+        if hunk_contains_location:
+            covered.append(key)
+        else:
+            missed.append(key)
+
+    return {
+        "all_locations_touched": not missed,
+        "missed_locations": missed,
+        "covered_locations": covered,
+        "diff_size_files": diff_size_files,
+        "diff_size_lines": diff_size_lines,
+        "drift_signal": bool(
+            diff_size_lines > 200 and len(oracle_issues or []) <= 3),
+    }
+
+
+def _append_pi_inbox(message: str) -> None:
+    try:
+        inbox = SCRIPT_DIR / ".pi_inbox.md"
+        with open(inbox, "a", encoding="utf-8") as f:
+            f.write(message.rstrip() + "\n")
+    except Exception as exc:
+        logger.warning(f"failed to append PI inbox note: {exc}")
+
+
+def _update_b_issue_streaks(state, verdict: str, response_text: str,
+                            issues: list[dict]) -> Optional[str]:
+    """Stage-B issue-streak deterministic gate; fallback semantics: pass/minor and unknown verdicts return None so the existing Stage B LLM fix loop continues."""
+    streaks = getattr(state, "stage_b_issue_streaks", None)
+    if not isinstance(streaks, dict):
+        streaks = {}
+        state.stage_b_issue_streaks = streaks
+    verdict = (verdict or "").lower().strip()
+    if verdict in {"accept", "minor revision"}:
+        for key in list(streaks):
+            if key != "__journal_fit__":
+                streaks[key] = 0
+        return None
+    if verdict not in {"reject", "major revision"}:
+        return None
+    observed_keys: set[str] = set()
+    for issue in issues or []:
+        if not isinstance(issue, dict):
+            continue
+        key = _canonical_issue_key(
+            f"{issue.get('section', '')} "
+            f"{issue.get('description', '')} "
+            f"{issue.get('suggested_fix', '')}"
+        )
+        if key:
+            observed_keys.add(key)
+    for key in observed_keys:
+        streaks[key] = int(streaks.get(key, 0) or 0) + 1
+    for key in list(streaks):
+        if key != "__journal_fit__" and key not in observed_keys:
+            streaks[key] = 0
+    fit_reject = _classify_oracle_reject(response_text) == "fit"
+    if fit_reject:
+        streaks["__journal_fit__"] = int(streaks.get("__journal_fit__", 0) or 0) + 1
+    else:
+        streaks["__journal_fit__"] = 0
+    if any(
+        key != "__journal_fit__" and int(streaks.get(key, 0) or 0) >= 2
+        for key in observed_keys
+    ):
+        return "B_STUCK_REPEATED_BLOCKER"
+    if int(streaks.get("__journal_fit__", 0) or 0) >= 2:
+        return "B_STUCK_JOURNAL_FIT"
+    return None
+
+
 _VERDICT_PATTERNS = (
     r"minor\s+revision",
     r"major\s+revision",
@@ -3563,7 +4319,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
             }}
             ```
         """)
-        out2 = claude_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
+        out2 = codex_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
         claude_data = parse_json_from_output(out2) if not dry_run else {
             "adjusted_fit_score": 4,
             "recommended_journal": "Journal of Functional Analysis",
@@ -3574,8 +4330,8 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
             "recommended_journal", codex_top_recommendation)
         final_fit = min(fit_score, adjusted)
         _record_claude_supervision(
-            state, "stage_f_journal_fit_review", claude_data, raw=out2)
-        state.log_event("F", "claude_review_fit", score=adjusted,
+            state, "stage_f_journal_fit_review_codex", claude_data, raw=out2)
+        state.log_event("F", "codex_review_fit", score=adjusted,
                         detail=json.dumps(claude_data,
                                           ensure_ascii=False)[:10000])
         save_state(state)
@@ -4412,6 +5168,85 @@ def stage_a_audit_passes(audit: dict) -> bool:
     )
 
 
+def _audit_final_score(audit_result: dict):
+    if not isinstance(audit_result, dict):
+        return None
+    for key in ("final_score", "score"):
+        if key in audit_result:
+            value = audit_result.get(key)
+            if value is None:
+                return None
+            if isinstance(value, str):
+                stripped = value.strip().lower()
+                if stripped in {"", "?", "n/a", "na", "none", "null"}:
+                    return None
+            try:
+                return float(value)
+            except Exception:
+                return None
+    metrics = audit_result.get("metrics", {})
+    if isinstance(metrics, dict) and metrics:
+        return float(_stage_a_score_from_audit(audit_result))
+    return None
+
+
+def _audit_issue_category_count(audit_result: dict) -> int:
+    issues = _coerce_items(audit_result.get("issues"))
+    categories = set()
+    for issue in issues:
+        if not isinstance(issue, dict):
+            continue
+        value = (
+            issue.get("category")
+            or issue.get("kind")
+            or issue.get("type")
+            or issue.get("auditor")
+        )
+        if value:
+            categories.add(str(value).strip().lower())
+    if categories:
+        return len(categories)
+    grouped = []
+    for key in (
+        "blockers",
+        "required_revisions",
+        "work_packages",
+        "split_reasons",
+    ):
+        items = _coerce_items(audit_result.get(key))
+        if items:
+            categories.add(key)
+        grouped.extend(items)
+    if categories:
+        return len(categories)
+    return len(issues)
+
+
+def _classify_stage_a_failure(state, audit_result) -> str:
+    del state
+    audit = audit_result if isinstance(audit_result, dict) else {}
+    metrics = audit.get("metrics", {})
+    required = set(STAGE_A_METRIC_THRESHOLDS)
+    metrics_complete = isinstance(metrics, dict) and required.issubset(metrics)
+    final_score = _audit_final_score(audit)
+    if (
+        not metrics_complete
+        or final_score is None
+        or audit.get("exception")
+        or audit.get("error")
+    ):
+        return "infra_fail"
+
+    threshold = min(STAGE_A_METRIC_THRESHOLDS.values())
+    if final_score < threshold and _audit_issue_category_count(audit) >= 3:
+        return "real_block"
+    if final_score >= threshold - 2 and len(_coerce_items(
+        audit.get("work_packages")
+    )) > 0:
+        return "work_pending"
+    return "unclear"
+
+
 def stage_a_ready_for_b(state: PaperState) -> bool:
     if state.stage_a_audit_metrics.get("mode") == "no_claude_deterministic_audit":
         return False
@@ -4578,25 +5413,10 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         prompt = build_claude_stage_a_structural_audit_prompt(
             state.paper_dir, state.target_journal, audit_round)
         for attempt in range(1, 3):
-            if not CLAUDE_ENABLED and not dry_run:
-                out = codex_exec(
-                    prompt + textwrap.dedent("""\
-
-                    Claude is unavailable and the pipeline is running in
-                    --no-claude test mode. Act only as a temporary structural
-                    auditor for this smoke test. Preserve the same JSON schema;
-                    do not edit files and do not claim independent Claude
-                    approval.
-                    """),
-                    work_dir=paper_path, timeout_seconds=900,
-                    model=model, dry_run=dry_run,
-                    context_mode="scope_bound_review",
-                    agent_role="stage_a_structural_audit_fallback")
-            else:
-                out = claude_exec(prompt, work_dir=paper_path,
-                                  timeout_seconds=900, dry_run=dry_run,
-                                  context_mode="scope_bound_review",
-                                  agent_role="stage_a_claude_structural_audit")
+            out = codex_exec(prompt, work_dir=paper_path,
+                             timeout_seconds=900, model=model, dry_run=dry_run,
+                             context_mode="scope_bound_review",
+                             agent_role="stage_a_structural_audit")
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CLAUDE_STRUCTURAL_METRICS},
                 "verdict": "pass",
@@ -4611,12 +5431,7 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                 data, STAGE_A_CLAUDE_STRUCTURAL_METRICS
             )) == set(STAGE_A_CLAUDE_STRUCTURAL_METRICS):
                 return data
-            auditor_label = (
-                "Claude structural audit"
-                if CLAUDE_ENABLED or dry_run
-                else "Structural audit fallback"
-            )
-            logger.warning(f"{tag} {auditor_label} attempt {attempt} "
+            logger.warning(f"{tag} Codex structural audit attempt {attempt} "
                            f"empty/unparseable, retrying")
         return {}
 
@@ -4626,19 +5441,10 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         codex_data = f_codex.result()
         claude_data = f_claude.result()
 
-    supervision_phase = (
-        f"stage_a_structural_audit_R{audit_round}"
-        if CLAUDE_ENABLED
-        else f"stage_a_structural_audit_codex_fallback_R{audit_round}"
-    )
     _record_claude_supervision(
-        state, supervision_phase, claude_data,
+        state, f"stage_a_structural_audit_codex_R{audit_round}", claude_data,
         context_mode="scope_bound_review",
-        agent_role=(
-            "stage_a_claude_structural_audit"
-            if CLAUDE_ENABLED
-            else "stage_a_structural_audit_fallback"
-        ))
+        agent_role="stage_a_structural_audit")
     audit = _combine_stage_a_audits(codex_data, claude_data)
     if not dry_run:
         _write_json_artifact(paper_path, "stage_a_audit.json", audit)
@@ -4692,6 +5498,25 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
 
     _ensure_research_directive(paper_path, state.target_journal,
                                dry_run=dry_run)
+    stage_a_infra_retry_rounds: set[int] = set()
+
+    def _record_stage_a_failure_class(audit: dict, audit_round: int) -> str:
+        classification = _classify_stage_a_failure(state, audit)
+        state.stage_a_failure_classes.append(classification)
+        state.stage_a_failure_classes = state.stage_a_failure_classes[-100:]
+        state.log_event(
+            "A", "audit_failure_classified",
+            round_num=audit_round,
+            verdict=classification,
+            detail=json.dumps({
+                "classification": classification,
+                "round": state.current_round,
+                "audit_round": audit_round,
+                "metrics": audit.get("metrics", {}) if isinstance(audit, dict) else {},
+            }, ensure_ascii=False)[:4000],
+        )
+        save_state(state)
+        return classification
 
     # ── A0: Scope contract (one-shot, no theorem demotion) ─────────
     scope_ok, scope_reason = _scope_contract_valid(paper_path)
@@ -4742,18 +5567,23 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             }
             claude_scope_out = ""
         else:
+            # Stage A scope brief: deep-reasoning step, route to Codex.
+            # Claude was the original reviewer here but Codex is the writer
+            # in this pipeline and the brief is consumed by Codex's own
+            # scope-contract pass — going Claude->Codex burned 5min/paper
+            # without an independent gate.
             claude_scope_prompt = build_claude_scope_brief_prompt(
                 state.paper_dir, state.target_journal,
                 state.main_paper_dir)
-            claude_scope_out = claude_exec(
+            claude_scope_out = codex_exec(
                 claude_scope_prompt, work_dir=paper_path,
-                timeout_seconds=900, dry_run=dry_run,
+                timeout_seconds=900, model=model, dry_run=dry_run,
                 context_mode="contextual_supervision",
                 agent_role="stage_a_scope_brief")
             claude_scope_data = parse_json_from_output(claude_scope_out)
             if not claude_scope_data:
                 return _stage_a_pause(
-                    state, "Claude scope brief missing or unparseable",
+                    state, "scope brief missing or unparseable",
                     tag=tag)
         _record_claude_supervision(
             state, "stage_a_scope_brief", claude_scope_data,
@@ -4986,6 +5816,35 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 return True
 
+            failure_class = _record_stage_a_failure_class(audit, audit_round)
+            if failure_class == "infra_fail":
+                if rnd not in stage_a_infra_retry_rounds:
+                    stage_a_infra_retry_rounds.add(rnd)
+                    logger.warning(f"{tag} A3 audit infra_fail; retrying once")
+                    state.stage_a_audit_rounds = max(
+                        0, state.stage_a_audit_rounds - 1)
+                    if state.stage_a_scores:
+                        state.stage_a_scores.pop()
+                    save_state(state)
+                    continue
+                logger.warning(f"{tag} A3 audit infra_fail after retry; pausing")
+                return _stage_a_pause(
+                    state, "stage_a_audit_infra_fail_after_retry", tag=tag)
+            if failure_class == "real_block":
+                return _stage_a_block(
+                    state, "stage_a_audit_real_block",
+                    dry_run=dry_run, tag=tag)
+            if failure_class == "work_pending" and not _stage_a_audit_has_actionable_issues(audit):
+                state.log_event("A", "audit_work_pending",
+                                round_num=audit_round,
+                                detail="recoverable audit; continuing Stage A")
+                save_state(state)
+                break
+            if failure_class == "unclear":
+                return _stage_a_block(
+                    state, "stage_a_audit_unclear_failure",
+                    dry_run=dry_run, tag=tag)
+
             actionable = _stage_a_audit_has_actionable_issues(audit)
             if audit.get("audit_unparseable") and not actionable:
                 return _stage_a_pause(state, "stage_a_audit_unparseable",
@@ -5099,6 +5958,40 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                     ensure_ascii=False))
                 save_state(state)
                 return True
+
+            failure_class = _record_stage_a_failure_class(audit, audit_round)
+            if failure_class == "infra_fail":
+                retry_key = -state.stage_a_rounds
+                if retry_key not in stage_a_infra_retry_rounds:
+                    stage_a_infra_retry_rounds.add(retry_key)
+                    logger.warning(f"{tag} A3 final audit infra_fail; retrying once")
+                    state.stage_a_audit_rounds = max(
+                        0, state.stage_a_audit_rounds - 1)
+                    if state.stage_a_scores:
+                        state.stage_a_scores.pop()
+                    save_state(state)
+                    continue
+                logger.warning(f"{tag} A3 final audit infra_fail after retry; pausing")
+                return _stage_a_pause(
+                    state, "stage_a_final_audit_infra_fail_after_retry",
+                    tag=tag)
+            if failure_class == "real_block":
+                return _stage_a_block(
+                    state,
+                    f"max Stage A rounds exhausted; final audit real block "
+                    f"(score={score})",
+                    dry_run=dry_run, tag=tag)
+            if failure_class == "work_pending" and not _stage_a_audit_has_actionable_issues(audit):
+                state.log_event("A", "final_audit_work_pending",
+                                round_num=audit_round,
+                                detail="recoverable final audit; continuing Stage A")
+                save_state(state)
+                continue
+            if failure_class == "unclear":
+                return _stage_a_block(
+                    state,
+                    "max Stage A rounds exhausted; final audit unclear failure",
+                    dry_run=dry_run, tag=tag)
 
             actionable = _stage_a_audit_has_actionable_issues(audit)
             if audit.get("audit_unparseable") and not actionable:
@@ -5216,6 +6109,60 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
 # STAGE B: Oracle Review (minor-revision-gated loop)
 # ═══════════════════════════════════════════════════════════════════════════
 
+
+def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
+                        oracle_timeout: int, dry_run: bool,
+                        tag: str, safe_name: str) -> tuple[bool, str, str]:
+    """Open a NEW conversation and ask for a first-look verdict.
+
+    Per project design: deepen Conv accumulates context and may have
+    been primed into accepting; fresh Conv has zero history and gives
+    the truth check. Stage B passes only if the fresh Conv accepts
+    on its first reply.
+
+    Returns (passed, verdict, response_text).
+    """
+    state.stage_b_fresh_attempts += 1
+    fresh_task_id = (
+        f"review_{safe_name}_B{rnd}_fresh{state.stage_b_fresh_attempts}_"
+        f"{time.time_ns()}"
+    )
+    save_state(state)
+
+    if dry_run:
+        return True, "minor revision", "Overall verdict: Minor revision\n(dry run)"
+
+    pdf_path = Path(state.pdf_path) if state.pdf_path else None
+    fresh_prompt = build_oracle_review_prompt(
+        state.target_journal, framing_mode="fresh_eval")
+    logger.info(f"{tag} fresh-eval submit task={fresh_task_id}")
+    if not oracle_submit(
+        fresh_task_id, fresh_prompt, pdf_path,
+        context_mode="fresh_review",
+        agent_role="stage_b_fresh_eval",
+        conversation_id="",  # NEW conv each attempt; no prior context
+        is_followup=False,
+    ):
+        logger.warning(f"{tag} fresh-eval submit failed; infra unavailable")
+        return False, "infra_fail", ""
+
+    deadline = time.time() + oracle_timeout
+    while time.time() < deadline:
+        remaining = max(1, int(deadline - time.time()))
+        raw = oracle_poll(fresh_task_id, timeout=remaining)
+        if raw == ORACLE_CANCELLED_RESPONSE:
+            logger.info(f"{tag} fresh-eval task cancelled")
+            return False, "cancelled", ""
+        if is_oracle_response_valid(raw):
+            verdict = extract_verdict(raw)
+            passed = verdict in ("accept", "minor revision")
+            return passed, verdict or "unknown", raw
+        if not raw:
+            oracle_cancel(fresh_task_id, f"{state.paper_name} fresh-eval poll timeout")
+            return False, "timeout", ""
+    return False, "timeout", ""
+
+
 def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None,
                 oracle_timeout: int = 7200) -> bool:
@@ -5281,7 +6228,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         committed=False, commit_hash="")
         save_state(state)
 
-        # ── B2: Oracle editorial review (EVENT WAIT) ─────────────
+        # ── B2: Oracle editorial review (multi-turn deepen + fresh-eval) ──
         # Sanitize paper_name to ASCII for URL safety (中文 in task_id breaks polling)
         safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
         # Use a per-round task id.  Reusing a stable paper-level id lets the
@@ -5289,10 +6236,26 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         # Stage B in a fake re-review loop.
         task_id_base = f"review_{safe_name}_B{rnd}_{time.time_ns()}"
         task_id = f"{task_id_base}_a1"
-        # Always use first-review prompt: Oracle has no history across rounds
-        prompt = build_oracle_review_prompt(state.target_journal)
 
-        logger.info(f"{tag} Round {rnd}: B2 — Oracle review")
+        # Multi-turn deepen: if we have a conv_id from a prior round, post a
+        # short follow-up in the same chat. Otherwise open a fresh deepen
+        # Conv with the full first-look review prompt and capture the
+        # server-issued conv_id so subsequent rounds thread into it.
+        deepen_conv_id = state.stage_b_deepen_conv_id
+        if deepen_conv_id:
+            submit_conv_id = deepen_conv_id
+            is_followup_turn = True
+            prompt = build_oracle_followup_prompt(
+                state.stage_b_last_fix_summary, state.target_journal,
+            )
+            referee_role = "stage_b_oracle_referee_followup"
+            logger.info(f"{tag} Round {rnd}: B2 — Oracle deepen (conv={deepen_conv_id[:12]})")
+        else:
+            submit_conv_id = ""  # ask server to issue conv_id
+            is_followup_turn = False
+            prompt = build_oracle_review_prompt(state.target_journal)
+            referee_role = "stage_b_oracle_referee"
+            logger.info(f"{tag} Round {rnd}: B2 — Oracle review (start deepen conv)")
 
         if dry_run:
             response = ("Overall verdict: Major revision\n"
@@ -5304,12 +6267,21 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             # the retry must get a new task id; otherwise /result/<id> keeps
             # serving the cached bad response.
             pdf_path = Path(state.pdf_path) if state.pdf_path else None
+            # Always re-attach the freshly compiled PDF, including on
+            # follow-up turns: each round produces a NEW build with the
+            # latest fixes, so the referee must see this round's PDF, not
+            # the one attached in round 1. ChatGPT keeps prior attachments
+            # in history but the freshest revision is what we are asking
+            # them to re-evaluate.
+            submit_pdf = pdf_path
             attempt = 1
             logger.info(f"{tag} B2 oracle submit (task={task_id})")
             if not oracle_submit(
-                task_id, prompt, pdf_path,
-                context_mode="fresh_review",
-                agent_role="stage_b_oracle_referee",
+                task_id, prompt, submit_pdf,
+                context_mode="multi_turn_deepen" if is_followup_turn else "fresh_review",
+                agent_role=referee_role,
+                conversation_id=submit_conv_id,
+                is_followup=is_followup_turn,
             ):
                 state.error = "Oracle submit failed"
                 return False
@@ -5338,6 +6310,21 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     return False
                 if is_oracle_response_valid(raw):
                     response = raw
+                    # If we just opened a deepen Conv this round, capture
+                    # the server-issued conv_id so future rounds can thread
+                    # into it via /continue.
+                    if not deepen_conv_id:
+                        try:
+                            rec = oracle_poll_record(task_id, timeout=2)
+                        except Exception:
+                            rec = {}
+                        new_conv = ""
+                        if isinstance(rec, dict):
+                            new_conv = str(rec.get("conversation_id") or "")
+                        if new_conv:
+                            state.stage_b_deepen_conv_id = new_conv
+                            save_state(state)
+                            logger.info(f"{tag} captured deepen conv={new_conv[:12]}")
                     break
                 if raw:
                     bad_dir = SCRIPT_DIR / "oracle" / "bad"
@@ -5360,9 +6347,11 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                             f"{MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS} "
                             f"(task={task_id})")
                         if not oracle_submit(
-                            task_id, prompt, pdf_path,
-                            context_mode="fresh_review",
-                            agent_role="stage_b_oracle_referee_timeout_retry",
+                            task_id, prompt, submit_pdf,
+                            context_mode="multi_turn_deepen" if is_followup_turn else "fresh_review",
+                            agent_role=f"{referee_role}_timeout_retry",
+                            conversation_id=submit_conv_id,
+                            is_followup=is_followup_turn,
                         ):
                             state.error = (
                                 f"Oracle timeout re-submit failed B{rnd} "
@@ -5416,7 +6405,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 
         # ── B3: Parse verdict ────────────────────────────────────
         verdict = extract_verdict(response)
-        issues = parse_oracle_issues(response)
+        issues = parse_oracle_issues_strict(response)
         state.stage_b_verdicts.append(verdict)
 
         # Accumulate ALL Oracle issues across rounds (optimization #1)
@@ -5435,22 +6424,315 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     f"{len(issues)} issues "
                     f"(total accumulated: {len(state.stage_b_all_issues)} rounds)")
 
-        # ── Gate: accept or minor revision → Stage C ────────────
-        if verdict in ("accept", "minor revision"):
-            logger.info(f"{tag} STAGE B PASSED at round {rnd}: {verdict.upper()}")
-            git_commit(paper_path,
-                       f"Stage B ({verdict}, {rnd}R): "
-                       f"Oracle review passed", tag=tag)
-            update_program_board(state.paper_name, "B-DONE",
-                                 f"Oracle: {verdict}, {rnd} rounds")
-            state.stage_b_rounds = rnd
-            state.stage_b_passed = True
-            consecutive_nonpass = 0
+        if verdict in {"reject", "major revision"}:
+            reject_class = _classify_oracle_reject(response)
+            state.stage_b_reject_classes.append({
+                "round": rnd,
+                "verdict": verdict,
+                "class": reject_class,
+            })
+            state.stage_b_reject_classes = state.stage_b_reject_classes[-20:]
             save_state(state)
-            return True
+
+        # ── Gate: deepen Conv accept → fresh-eval Conv → Stage C ────
+        # Stage B passes only when a NEW conversation (no prior context)
+        # accepts on first reply. The deepen Conv has been refining with
+        # ChatGPT's prior verdicts in scope; fresh-eval is the truth
+        # check that the current paper actually meets the bar without
+        # ChatGPT being primed by its own earlier "accept this" reasoning.
+        if verdict in ("accept", "minor revision"):
+            logger.info(f"{tag} Round {rnd}: deepen conv {verdict.upper()}, running fresh-eval")
+            fresh_pass, fresh_verdict, fresh_resp = _stage_b_fresh_eval(
+                state, rnd=rnd, oracle_timeout=oracle_timeout,
+                dry_run=dry_run, tag=tag, safe_name=safe_name,
+            )
+            if fresh_verdict in ("accept", "minor revision", "major revision",
+                                 "reject"):
+                state.stage_b_fresh_eval_pending = max(
+                    0, int(getattr(state, "stage_b_fresh_eval_pending", 0) or 0) - 1)
+                save_state(state)
+            if fresh_verdict == "infra_fail":
+                state.stage_b_fresh_eval_pending = int(
+                    getattr(state, "stage_b_fresh_eval_pending", 0) or 0) + 1
+                state.stage_b_rounds = rnd
+                state.log_event("B", "fresh_eval_pending", round_num=rnd,
+                                verdict=verdict,
+                                detail="fresh eval pending, holding at Stage B")
+                logger.info(f"{tag} fresh eval pending, holding at Stage B")
+                save_state(state)
+                continue
+            if fresh_pass:
+                if (
+                    int(getattr(state, "stage_b_fresh_eval_pending", 0) or 0) > 0
+                    and verdict in ("accept", "minor revision")
+                ):
+                    state.log_event(
+                        "B", "fresh_eval_pending_hold", round_num=rnd,
+                        verdict=verdict,
+                        detail="fresh eval pending, holding at Stage B")
+                    logger.info(f"{tag} fresh eval pending, holding at Stage B")
+                    state.stage_b_rounds = rnd
+                    save_state(state)
+                    continue
+                logger.info(f"{tag} STAGE B PASSED at round {rnd}: deepen={verdict.upper()}, "
+                            f"fresh first-look={fresh_verdict.upper()}")
+                git_commit(paper_path,
+                           f"Stage B ({fresh_verdict} via fresh-eval, {rnd}R): "
+                           f"Oracle review passed", tag=tag)
+                update_program_board(state.paper_name, "B-DONE",
+                                     f"Oracle: deepen={verdict}, fresh={fresh_verdict}, {rnd} rounds")
+                state.stage_b_rounds = rnd
+                state.stage_b_passed = True
+                consecutive_nonpass = 0
+                save_state(state)
+                return True
+            # Fresh rejected. Treat its response as the new round's authoritative
+            # input so Codex fixes the issues fresh just raised, then continue
+            # the deepen Conv next round.
+            logger.info(f"{tag} fresh-eval verdict={fresh_verdict}, falling back to deepen "
+                        f"with fresh issues")
+            response = fresh_resp or response
+            verdict = fresh_verdict or verdict
+            try:
+                fresh_issues = parse_oracle_issues_strict(response)
+                if fresh_issues:
+                    issues = fresh_issues
+                    issues_text_this_round = format_issues_for_codex(fresh_issues)
+                    state.stage_b_all_issues.append(
+                        f"=== Round {rnd} (fresh-eval) ===\n{issues_text_this_round}"
+                    )
+            except Exception:
+                pass
 
         # Update consecutive non-pass counter
         consecutive_nonpass += 1
+
+        stuck_gate = _update_b_issue_streaks(state, verdict, response, issues)
+        if stuck_gate == "B_STUCK_JOURNAL_FIT":
+            logger.info(f"{tag} [STAGE-B][STUCK-FIT] repeated journal-fit reject")
+            state.events.append({
+                "stage": "B",
+                "phase": "stage_b_stuck_fit",
+                "round_num": rnd,
+                "timestamp": datetime.now().isoformat(),
+                "streak": state.stage_b_issue_streaks.get("__journal_fit__", 0),
+            })
+            if state.retarget_history:
+                state.block_reason = "B_STUCK_JOURNAL_FIT"
+                state.stage_b_passed = False
+                state.error = "Stage B stuck: repeated journal-fit reject after retarget attempt"
+                update_program_board(
+                    state.paper_name, "B-STUCK",
+                    "repeated journal-fit reject after retarget attempt")
+                save_state(state)
+                return False
+            prior_journal = state.target_journal
+            state.retarget_history.append({
+                "from_journal": prior_journal,
+                "trigger": "stage_b_stuck_journal_fit",
+                "verdicts": state.stage_b_verdicts[-5:],
+                "round": rnd,
+                "timestamp": datetime.now().isoformat(),
+            })
+            state.current_stage = "F"
+            state.stage_f_passed = False
+            state.stage_b_passed = False
+            state.stage_b_verdicts = []
+            state.stage_b_all_issues = []
+            state.stage_b_issue_streaks = {}
+            state.stage_b_reject_classes = []
+            state.stage_b_deepen_conv_id = ""
+            state.stage_b_fresh_attempts = 0
+            state.stage_b_last_fix_summary = ""
+            state.stage_b_rounds = 0
+            update_program_board(
+                state.paper_name, "RETARGET-FIT",
+                f"2 fit-rejects at B{rnd}; reset to Stage F for new journal")
+            save_state(state)
+            return False
+        if stuck_gate == "B_STUCK_REPEATED_BLOCKER":
+            logger.info(f"{tag} [STAGE-B][STUCK-REPEAT] repeated blocker")
+            state.events.append({
+                "stage": "B",
+                "phase": "stage_b_stuck_repeat",
+                "round_num": rnd,
+                "timestamp": datetime.now().isoformat(),
+            })
+        save_state(state)
+
+        recent_verdicts = state.stage_b_verdicts[-4:]
+        if (
+            len(recent_verdicts) == 4
+            and all(v in {"reject", "major revision"} for v in recent_verdicts)
+        ):
+            recent_classes = [
+                item for item in state.stage_b_reject_classes[-4:]
+                if item.get("verdict") in {"reject", "major revision"}
+            ]
+            fit_count = sum(1 for item in recent_classes
+                            if item.get("class") == "fit")
+            if recent_classes and fit_count > len(recent_classes) / 2:
+                if len(state.retarget_history) >= 2:
+                    logger.error(f"{tag} gate A: max retargets reached, "
+                                 "escalating to human")
+                    state.error = (
+                        "Stage B gate A: max retargets reached, escalating "
+                        "to human"
+                    )
+                    state.events.append({
+                        "stage": "B",
+                        "phase": "gate_a_retarget_max_reached",
+                        "round_num": rnd,
+                        "timestamp": datetime.now().isoformat(),
+                        "verdicts": state.stage_b_verdicts[-5:],
+                    })
+                    update_program_board(
+                        state.paper_name, "B-STUCK",
+                        "max fit-retargets reached; needs human review")
+                    save_state(state)
+                    return False
+
+                logger.info(f"{tag} gate A: 4+ rejects classified fit -> "
+                            "auto-retarget")
+                prior_journal = state.target_journal
+                state.events.append({
+                    "stage": "B",
+                    "phase": "gate_a_retarget_trigger",
+                    "round_num": rnd,
+                    "timestamp": datetime.now().isoformat(),
+                    "verdicts": state.stage_b_verdicts[-5:],
+                    "fit_count": fit_count,
+                    "classified": recent_classes,
+                })
+                state.retarget_history.append({
+                    "from_journal": prior_journal,
+                    "trigger": "gate_a_fit_reject_streak",
+                    "verdicts": state.stage_b_verdicts[-5:],
+                    "round": rnd,
+                    "timestamp": datetime.now().isoformat(),
+                })
+                state.current_stage = "F"
+                state.stage_f_passed = False
+                state.stage_b_passed = False
+                state.stage_b_verdicts = []
+                state.stage_b_all_issues = []
+                state.stage_b_issue_streaks = {}
+                state.stage_b_reject_classes = []
+                state.stage_b_deepen_conv_id = ""
+                state.stage_b_fresh_attempts = 0
+                state.stage_b_last_fix_summary = ""
+                state.stage_b_rounds = 0
+                update_program_board(
+                    state.paper_name, "RETARGET-FIT",
+                    f"4+ fit-rejects at B{rnd}; reset to Stage F for new journal")
+                save_state(state)
+                return False
+
+        issue_texts_by_key: dict[str, list[str]] = {}
+        for issue in issues:
+            issue_text = format_issues_for_codex([issue])
+            if not issue_text.strip():
+                issue_text = str(issue)
+            key = _canonical_issue_key(issue_text)
+            if key:
+                issue_texts_by_key.setdefault(key, []).append(issue_text)
+
+        current_issue_keys = set(issue_texts_by_key)
+        save_state(state)
+
+        focused_patch_prefix = ""
+        stuck_threshold = 2 if stuck_gate == "B_STUCK_REPEATED_BLOCKER" else 3
+        stuck_keys = [
+            key for key in current_issue_keys
+            if state.stage_b_issue_streaks.get(key, 0) >= stuck_threshold
+        ]
+        if stuck_keys and verdict not in ("accept", "minor revision"):
+            stuck_keys = sorted(
+                stuck_keys,
+                key=lambda key: state.stage_b_issue_streaks.get(key, 0),
+                reverse=True,
+            )[:2]
+            max_streak = max(state.stage_b_issue_streaks.get(key, 0)
+                             for key in stuck_keys)
+            logger.info(f"{tag} gate B: stuck issue keys={stuck_keys} "
+                        f"streak={max_streak}")
+            full_issue_text = "\n\n".join(
+                "\n".join(issue_texts_by_key.get(key, []))
+                for key in stuck_keys
+            ).strip()
+            target_locations = ", ".join(stuck_keys)
+            focused_patch_prefix = textwrap.dedent(f"""\
+                === FOCUSED PATCH - STUCK ISSUE (round {rnd}, streak {max_streak}) ===
+                The following Oracle issue(s) have appeared {max_streak} consecutive rounds without resolution. Apply a TARGETED fix to ONLY the named locations. Do NOT touch other sections, do NOT make cosmetic edits elsewhere.
+
+                {full_issue_text}
+
+                Target locations: {target_locations}
+
+                After your edit, the diff must touch ONLY files containing these locations and ONLY the lines around them. Reject the edit if it sprawls to unrelated sections.
+
+            """)
+            state.events.append({
+                "stage": "B",
+                "phase": "gate_b_stuck_issue",
+                "round_num": rnd,
+                "timestamp": datetime.now().isoformat(),
+                "stuck_keys": stuck_keys,
+                "streak": max_streak,
+            })
+            keys_at_five = [
+                key for key in current_issue_keys
+                if state.stage_b_issue_streaks.get(key, 0) == 5
+            ]
+            if len(keys_at_five) == 1:
+                _append_pi_inbox(
+                    f"[gate-b ESCALATE] {state.paper_name} - "
+                    f"{keys_at_five[0]} stuck for 5 rounds; suspect "
+                    "Codex prompt drift; please review "
+                    "build_oracle_fix_prompt and Codex agent_role wiring."
+                )
+            keys_at_four = [
+                key for key in stuck_keys
+                if state.stage_b_issue_streaks.get(key, 0) >= 4
+            ]
+            if stuck_gate == "B_STUCK_REPEATED_BLOCKER" and keys_at_four:
+                state.block_reason = "B_STUCK_REPEATED_BLOCKER"
+                state.stage_b_passed = False
+                state.error = (
+                    "Stage B stuck: repeated blocker remained after two "
+                    "focused-patch attempts"
+                )
+                update_program_board(
+                    state.paper_name, "B-STUCK",
+                    "repeated blocker after focused-patch attempts")
+                save_state(state)
+                return False
+            save_state(state)
+
+        # Build a short fix summary for the NEXT round's deepen follow-up
+        # prompt: ChatGPT only needs to know what we addressed, not the
+        # full issue payload.
+        if issues:
+            severities = [
+                str(it.get("severity", "")).upper() for it in issues
+                if isinstance(it, dict)
+            ]
+            blockers = sum(1 for s in severities if s == "BLOCKER")
+            mediums = sum(1 for s in severities if s == "MEDIUM")
+            highs = sum(1 for s in severities if s == "HIGH")
+            lows = sum(1 for s in severities if s in {"LOW", "CRITICAL"})
+            head = (issues_text_this_round or "").strip().splitlines()[:3]
+            preview = " ".join(head)[:300].strip()
+            state.stage_b_last_fix_summary = (
+                f"addressed {len(issues)} issues from your previous review "
+                f"(blocker={blockers}, high={highs}, medium={mediums}, low={lows})"
+                + (f"; main thread: {preview}" if preview else "")
+            )
+        else:
+            state.stage_b_last_fix_summary = (
+                "made revisions per the verdict in your previous review"
+            )
+        save_state(state)
 
         # ── B4: Codex fix issues ─────────────────────────────────
         # Build prior issues summary from all accumulated rounds
@@ -5480,6 +6762,8 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             state.paper_dir, issues_text, rnd,
             prior_issues=prior_issues_text,
             deep_mode=deep_mode)
+        if focused_patch_prefix:
+            fix_prompt = focused_patch_prefix + fix_prompt
         if not CLAUDE_ENABLED and issues:
             item_timeout = 1200 if deep_mode else 900
             for issue_idx, issue in enumerate(issues, 1):
@@ -5496,6 +6780,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     prior_issues=prior_issues_text,
                     deep_mode=deep_mode,
                 )
+                single_issue_key = _canonical_issue_key(single_issue_text)
+                if focused_patch_prefix and single_issue_key in stuck_keys:
+                    single_prompt = focused_patch_prefix + single_prompt
                 codex_exec(single_prompt, work_dir=paper_path,
                            timeout_seconds=item_timeout, model=model,
                            dry_run=dry_run,
@@ -5522,120 +6809,118 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         detail=f"compiled={compiled_b4}")
         save_state(state)
 
-        if not CLAUDE_ENABLED:
-            logger.info(f"{tag} Round {rnd}: B5 skipped (--no-claude); "
-                        "returning directly to Oracle re-review")
-            state.log_event("B", "claude_supervision_skipped",
-                            round_num=rnd,
-                            detail="--no-claude codex+chatgpt test mode")
-            save_state(state)
-            continue
+        # Stage B is now Oracle ↔ Codex only: Codex fixed Oracle's issues
+        # in B4, the paper compiled and was committed. Loop back to Oracle
+        # for re-review without a Claude pass — the operator wanted the
+        # cycle reduced to two parties so Oracle's accept/minor verdict
+        # is the sole gate.
+        if h_b4:
+            scope_result = _verify_fix_diff_scope(state, issues, h_b4,
+                                                  paper_path)
+            if scope_result.get("drift_signal"):
+                drift_msg = (
+                    f"paper drift signal R{rnd} "
+                    f"{scope_result.get('diff_size_lines', 0)} lines "
+                    f"for {len(issues)} issues"
+                )
+                logger.warning(f"{tag} {drift_msg}")
+                _append_pi_inbox(f"[stage-B drift] {state.paper_name}: {drift_msg}")
+            if not scope_result.get("all_locations_touched", True):
+                missed = list(scope_result.get("missed_locations", []))
+                covered = list(scope_result.get("covered_locations", []))
+                logger.warning(
+                    f"{tag} diff-scope mismatch missed locations: {missed}")
+                first_miss_this_round = not any(
+                    isinstance(item, dict) and item.get("round") == rnd
+                    for item in state.stage_b_diff_scope_misses
+                )
+                miss_entry = {
+                    "round": rnd,
+                    "missed": missed,
+                    "covered": covered,
+                    "diff_size_lines": scope_result.get("diff_size_lines", 0),
+                }
+                state.stage_b_diff_scope_misses.append(miss_entry)
+                state.stage_b_diff_scope_misses = (
+                    state.stage_b_diff_scope_misses[-100:])
+                state.log_event(
+                    "B", "diff_scope_mismatch", round_num=rnd,
+                    detail=json.dumps(miss_entry, ensure_ascii=False))
+                save_state(state)
 
-        # ── B5: Claude supervisory review (review-only) ───────────
-        logger.info(f"{tag} Round {rnd}: B5 — Claude supervision")
-        claude_fix_prompt = textwrap.dedent(f"""\
-            Systematic quality check after Codex fixed oracle-reported issues.
-            Paper: {state.paper_dir}
-            Target: {state.target_journal}
+                if first_miss_this_round and missed:
+                    missed_text = "\n".join(f"- {loc}" for loc in missed)
+                    targeted_prompt = textwrap.dedent(f"""\
+                        TARGETED RE-FIX: Stage B round {rnd} missed Oracle locations.
 
-            The following issues were fixed by Codex:
-            {issues_text}
+                        The previous Codex fix commit did not touch these required
+                        manuscript locations:
+                        {missed_text}
 
-            You are the independent supervising reviewer, not the executing
-            editor. Do not edit files. Use Claude's strengths:
-            1. Verify that each Oracle issue was addressed at the level of
-               manuscript structure and exposition.
-            2. Detect language, transition, reference, label, and local-notation
-               problems.
-            3. Detect revision artifacts.
-            4. Decompose any remaining mathematical, structural, or language
-               work into precise Codex work packages.
+                        Edit ONLY those locations and only the local text needed to
+                        address the existing Oracle issue. Do not make cosmetic edits,
+                        do not touch unrelated sections, and do not broaden the diff.
+                        If a location cannot be found, add the smallest nearby note
+                        explaining the issue at that exact theorem/lemma/proposition/
+                        section/equation site.
 
-            Output exactly one JSON object in your final answer:
-            ```json
-            {{
-              "system_verdict": "good|needs_codex|block",
-              "language_structure_findings": [],
-              "remaining_issues": [],
-              "codex_work_packages": [
-                {{
-                  "owner": "codex_math|codex_editorial",
-                  "priority": "blocker|high|medium|low",
-                  "location": "...",
-                  "task": "...",
-                  "acceptance_criterion": "..."
-                }}
-              ]
-            }}
-            ```
-        """)
-        out_b5 = claude_exec(claude_fix_prompt, work_dir=paper_path,
-                             dry_run=dry_run,
-                             context_mode="contextual_supervision",
-                             agent_role="stage_b_post_codex_review")
-        b5_data = parse_json_from_output(out_b5) if not dry_run else {
-            "system_verdict": "good",
-            "language_structure_findings": [],
-            "remaining_issues": [],
-            "codex_work_packages": [],
-        }
-        _record_claude_supervision(
-            state, f"stage_b_post_codex_review_R{rnd}", b5_data,
-            raw=out_b5,
-            context_mode="contextual_supervision",
-            agent_role="stage_b_post_codex_review")
-        b5_packages = list(_coerce_items(b5_data.get("codex_work_packages", [])))
-        for issue in _coerce_items(b5_data.get("remaining_issues", [])):
-            b5_packages.append({
-                "owner": "codex_editorial",
-                "priority": "medium",
-                "location": "",
-                "task": issue.get("reason", str(issue)) if isinstance(issue, dict)
-                        else str(issue),
-                "acceptance_criterion": "issue resolved in manuscript",
-            })
-        if b5_data.get("system_verdict") == "block" and not b5_packages:
-            state.error = (f"Stage B round {rnd}: Claude supervision blocked "
-                           f"without executable Codex packages")
-            save_state(state)
-            return False
-        if b5_packages:
-            package_issues = []
-            for pkg in b5_packages:
-                if isinstance(pkg, dict):
-                    package_issues.append(
-                        f"[{pkg.get('owner', 'codex_editorial')}/"
-                        f"{pkg.get('priority', 'medium')}] "
-                        f"{pkg.get('location', '')}: {pkg.get('task', '')} "
-                        f"(acceptance: {pkg.get('acceptance_criterion', '')})"
-                    )
-                else:
-                    package_issues.append(str(pkg))
-            logger.info(f"{tag} Round {rnd}: B5 handed "
-                        f"{len(package_issues)} package(s) back to Codex")
-            codex_exec(
-                build_codex_fix_from_claude_prompt(
-                    state.paper_dir, package_issues, rnd),
-                work_dir=paper_path, timeout_seconds=1800,
-                model=model, dry_run=dry_run,
-                context_mode="contextual_execution",
-                agent_role="stage_b_claude_package_fix")
-        compiled_b5 = compile_gate(paper_path, model=model,
-                                   dry_run=dry_run, tag=f"{tag} B5")
-        if not compiled_b5:
-            state.error = (f"Stage B round {rnd}: compile failed after "
-                           f"Claude-supervised Codex follow-up")
-            save_state(state)
-            return False
-        h_b5 = git_commit(paper_path,
-                          f"stage-B R{rnd}: claude-supervised follow-up fixes",
-                          tag=tag)
-        state.log_event("B", "claude_review_fixes", round_num=rnd,
-                        committed=bool(h_b5), commit_hash=h_b5,
-                        detail=json.dumps({
-                            "compiled": compiled_b5,
-                            "claude_system_review": b5_data,
-                        }, ensure_ascii=False)[:10000])
+                        Original issue payload:
+                        {issues_text[:6000]}
+                    """)
+                    codex_exec(
+                        targeted_prompt, work_dir=paper_path,
+                        timeout_seconds=1200, model=model, dry_run=dry_run,
+                        context_mode="contextual_execution",
+                        agent_role="stage_b_targeted_diff_scope_refix")
+                    compiled_targeted = compile_gate(
+                        paper_path, model=model, dry_run=dry_run,
+                        tag=f"{tag} B4-TARGETED")
+                    if not compiled_targeted:
+                        state.error = (
+                            f"Stage B round {rnd}: compile failed after "
+                            "targeted diff-scope re-fix")
+                        save_state(state)
+                        return False
+                    h_targeted = git_commit(
+                        paper_path,
+                        f"stage-B R{rnd}: codex targeted re-fix for missed locations",
+                        tag=tag)
+                    if h_targeted:
+                        second_scope = _verify_fix_diff_scope(
+                            state, issues, h_targeted, paper_path)
+                        if not second_scope.get("all_locations_touched", True):
+                            logger.warning(
+                                f"{tag} diff-scope mismatch after targeted "
+                                f"re-fix missed locations: "
+                                f"{second_scope.get('missed_locations', [])}")
+                            second_entry = {
+                                "round": rnd,
+                                "missed": list(second_scope.get(
+                                    "missed_locations", [])),
+                                "covered": list(second_scope.get(
+                                    "covered_locations", [])),
+                                "diff_size_lines": second_scope.get(
+                                    "diff_size_lines", 0),
+                            }
+                            state.stage_b_diff_scope_misses.append(second_entry)
+                            state.stage_b_diff_scope_misses = (
+                                state.stage_b_diff_scope_misses[-100:])
+                            state.log_event(
+                                "B", "diff_scope_mismatch_second_pass",
+                                round_num=rnd,
+                                detail=json.dumps(
+                                    second_entry, ensure_ascii=False))
+                        else:
+                            state.log_event(
+                                "B", "diff_scope_targeted_refix",
+                                round_num=rnd, committed=True,
+                                commit_hash=h_targeted,
+                                detail=json.dumps(
+                                    second_scope, ensure_ascii=False)[:4000])
+                        save_state(state)
+
+        state.log_event("B", "oracle_codex_cycle", round_num=rnd,
+                        detail="claude review skipped by design")
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_B_ROUNDS} complete, "
@@ -5738,7 +7023,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 oracle_response, encoding="utf-8")
 
         oracle_verdict = extract_verdict(oracle_response)
-        oracle_issues = parse_oracle_issues(oracle_response)
+        oracle_issues = parse_oracle_issues_strict(oracle_response)
         oracle_pass = oracle_verdict == "accept"
         state.log_event("C", "oracle_final_review", round_num=rnd,
                         verdict=oracle_verdict,
@@ -5749,64 +7034,43 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             current_oracle_issues=oracle_issues)
 
         issues: list = []
-        if not CLAUDE_ENABLED and not dry_run:
-            claude_verdict = "pending"
-            claude_pass = False
-            state.stage_c_verdicts.append(
-                f"oracle:{oracle_verdict};claude:pending")
-            if oracle_pass and not oracle_issues:
-                state.error = (
-                    f"{PAUSED_ERROR_PREFIX} Stage C pending final Claude "
-                    "review after Oracle accepted the manuscript"
-                )
-                logger.info(f"{tag} {state.error}")
-                state.log_event("C", "pending_final_claude_review",
-                                round_num=rnd, verdict=oracle_verdict,
-                                detail=state.error)
-                save_state(state)
-                return False
-            logger.info(f"{tag} Round {rnd}: C2 skipped (--no-claude); "
-                        "Oracle has not accepted yet, so Codex will fix "
-                        "Oracle final-review issues")
-        else:
-            # ── C2: Claude independent review ────────────────────
-            logger.info(f"{tag} Round {rnd}: C2 — Claude independent review")
-            review_prompt = build_claude_independent_review_prompt(
-                state.paper_dir, state.target_journal,
-                stage_c_memory=stage_c_memory)
-            out_c1 = claude_exec(review_prompt, work_dir=paper_path,
-                                 dry_run=dry_run,
-                                 context_mode="contextual_supervision",
-                                 agent_role="stage_c_claude_final")
-            review_data = parse_json_from_output(out_c1) if not dry_run else {
-                "verdict": "revise" if rnd < 2 else "submit",
-                "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
-            }
-            _record_claude_supervision(
-                state, f"stage_c_presubmission_review_R{rnd}",
-                review_data, raw=out_c1,
-                context_mode="contextual_supervision",
-                agent_role="stage_c_claude_final")
-            claude_verdict = str(review_data.get("verdict", "revise")).lower()
-            issues = list(_coerce_items(review_data.get("issues", [])))
-            work_packages = review_data.get("work_packages", [])
-            if work_packages:
-                issues = list(issues) + [
-                    f"[{wp.get('owner', 'codex_editorial')}/"
-                    f"{wp.get('priority', 'medium')}] "
-                    f"{wp.get('location', '')}: {wp.get('task', '')} "
-                    f"(acceptance: {wp.get('acceptance_criterion', '')})"
-                    if isinstance(wp, dict) else str(wp)
-                    for wp in work_packages
-                ]
-            claude_pass = claude_verdict == "submit"
-            state.stage_c_verdicts.append(
-                f"oracle:{oracle_verdict};claude:{claude_verdict}")
-            state.log_event("C", "claude_independent_review", round_num=rnd,
-                            verdict=claude_verdict,
-                            detail=json.dumps(
-                                review_data, ensure_ascii=False)[:10000])
-            save_state(state)
+        logger.info(f"{tag} Round {rnd}: C2 - Codex independent review")
+        review_prompt = build_claude_independent_review_prompt(
+            state.paper_dir, state.target_journal,
+            stage_c_memory=stage_c_memory)
+        out_c1 = codex_exec(review_prompt, work_dir=paper_path,
+                            dry_run=dry_run,
+                            context_mode="contextual_supervision",
+                            agent_role="stage_c_codex_final")
+        review_data = parse_json_from_output(out_c1) if not dry_run else {
+            "verdict": "revise" if rnd < 2 else "submit",
+            "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
+        }
+        _record_claude_supervision(
+            state, f"stage_c_presubmission_review_codex_R{rnd}",
+            review_data, raw=out_c1,
+            context_mode="contextual_supervision",
+            agent_role="stage_c_codex_final")
+        claude_verdict = str(review_data.get("verdict", "revise")).lower()
+        issues = list(_coerce_items(review_data.get("issues", [])))
+        work_packages = review_data.get("work_packages", [])
+        if work_packages:
+            issues = list(issues) + [
+                f"[{wp.get('owner', 'codex_editorial')}/"
+                f"{wp.get('priority', 'medium')}] "
+                f"{wp.get('location', '')}: {wp.get('task', '')} "
+                f"(acceptance: {wp.get('acceptance_criterion', '')})"
+                if isinstance(wp, dict) else str(wp)
+                for wp in work_packages
+            ]
+        claude_pass = claude_verdict == "submit"
+        state.stage_c_verdicts.append(
+            f"oracle:{oracle_verdict};claude:{claude_verdict}")
+        state.log_event("C", "codex_independent_review", round_num=rnd,
+                        verdict=claude_verdict,
+                        detail=json.dumps(
+                            review_data, ensure_ascii=False)[:10000])
+        save_state(state)
 
         logger.info(f"{tag} Round {rnd}: Oracle verdict = {oracle_verdict}, "
                     f"Claude verdict = {claude_verdict}; "
@@ -5816,12 +7080,16 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         # ── Gate: submit → Stage D ───────────────────────────────
         if oracle_pass and claude_pass and not oracle_issues and not issues:
             logger.info(f"{tag} STAGE C PASSED at round {rnd}: "
-                        "Oracle + Claude approved")
+                        "Oracle + Codex approved")
             git_commit(paper_path,
                        f"Stage C (joint pass, {rnd}R): "
-                       f"Oracle and Claude approved for submission", tag=tag)
+                       f"Oracle and Codex approved for submission", tag=tag)
             update_program_board(state.paper_name, "C-DONE",
-                                 f"Oracle+Claude: pass, {rnd} rounds")
+                                 f"Oracle+Codex: pass, {rnd} rounds")
+            _add_to_submission_queue(
+                state.paper_name, state.target_journal,
+                f"C-DONE round {rnd}: Oracle accept + Codex submit; "
+                "需准备 cover letter + metadata")
             state.stage_c_passed = True
             save_state(state)
             return True
@@ -6092,15 +7360,20 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         return True
 
     # ── D3: Apply backflow with explicit placement guidance ──────
+    # Writeback to the main paper goes through Claude with the
+    # /killo-golden skill so academic-style discipline (no patch-log
+    # phrasing, no temporal markers, no "新增" prefix wording) is
+    # enforced. Codex would otherwise leak patch-style language.
     logger.info(f"{tag} D3 — Apply {len(approved_items)} backflow items "
-                f"with {len(placements)} placement guides")
+                f"with {len(placements)} placement guides (claude /killo-golden)")
     apply_prompt = build_backflow_apply_prompt(
         state.paper_dir, state.main_paper_dir, approved_items,
         placements=placements)
-    codex_exec(apply_prompt, work_dir=REPO_ROOT,
-               timeout_seconds=1800, model=model, dry_run=dry_run,
-               context_mode="contextual_execution",
-               agent_role="stage_d_apply_backflow")
+    claude_exec(apply_prompt, work_dir=REPO_ROOT,
+                timeout_seconds=1800, dry_run=dry_run,
+                context_mode="contextual_execution",
+                agent_role="stage_d_apply_backflow",
+                skill="killo-golden")
     compiled_d3 = compile_gate(main_path, model=model,
                                dry_run=dry_run, tag=f"{tag} D3")
     if not compiled_d3:
@@ -6196,10 +7469,12 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     save_state(state)
 
     if d5_verdict == "needs_fixes" and d5_issues:
-        logger.info(f"{tag} D5 found {len(d5_issues)} issues — Codex fixing")
+        # Quality-fix is also writeback to the main paper, so route through
+        # Claude /killo-golden for the same academic-discipline reason as D3.
+        logger.info(f"{tag} D5 found {len(d5_issues)} issues — Claude /killo-golden fixing")
         issues_text = "\n".join(f"  {i+1}. {iss}" for i, iss in enumerate(d5_issues))
         fix_prompt = textwrap.dedent(f"""\
-            Fix issues found by Claude's quality review of backflow changes.
+            Fix issues found by the quality review of backflow changes.
             Main paper: {state.main_paper_dir}
 
             ## Issues
@@ -6208,10 +7483,11 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
             Fix each issue directly in the .tex files.
             Compile: cd {state.main_paper_dir} && xelatex -interaction=nonstopmode main.tex
         """)
-        codex_exec(fix_prompt, work_dir=main_path,
-                   timeout_seconds=900, model=model, dry_run=dry_run,
-                   context_mode="contextual_execution",
-                   agent_role="stage_d_backflow_quality_fix")
+        claude_exec(fix_prompt, work_dir=main_path,
+                    timeout_seconds=900, dry_run=dry_run,
+                    context_mode="contextual_execution",
+                    agent_role="stage_d_backflow_quality_fix",
+                    skill="killo-golden")
         compiled_d5 = compile_gate(main_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} D5")
         if not compiled_d5:
@@ -6529,15 +7805,8 @@ def run_new_paper_pipeline(
         ```
     """)
     scope_work_dir = Path(state.main_paper_dir) if state.main_paper_dir else paper_path
-    if not CLAUDE_ENABLED and not dry_run:
-        scope_out = codex_exec(
-            scope_prompt + "\n\nClaude is disabled by --no-claude; provide "
-            "a temporary Codex scope definition for smoke testing.",
-            work_dir=scope_work_dir, timeout_seconds=900,
-            model=model, dry_run=dry_run)
-    else:
-        scope_out = claude_exec(scope_prompt, work_dir=scope_work_dir,
-                                dry_run=dry_run)
+    scope_out = codex_exec(scope_prompt, work_dir=scope_work_dir,
+                           dry_run=dry_run)
     scope_data = parse_json_from_output(scope_out) if not dry_run else {
         "core_theorem": "dry run theorem",
         "imported_results": [],
@@ -6548,17 +7817,10 @@ def run_new_paper_pipeline(
         "differentiation": "dry run",
         "suggested_title": f"On {topic}",
     }
-    scope_event = (
-        "claude_scope_definition"
-        if CLAUDE_ENABLED else "codex_fallback_scope_definition"
-    )
-    state.log_event("N", scope_event,
+    state.log_event("N", "codex_scope_definition",
                     detail=json.dumps(scope_data, ensure_ascii=False)[:10000])
     _record_claude_supervision(
-        state,
-        "new_paper_scope_definition"
-        if CLAUDE_ENABLED else "new_paper_scope_definition_codex_fallback",
-        scope_data, raw=scope_out)
+        state, "new_paper_scope_definition_codex", scope_data, raw=scope_out)
     save_state(state)
 
     # Pass scope constraints to N1

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.18
-// @description  Multi-agent oracle bridge — open project/chatgpt URLs with ?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
+// @version      5.20
+// @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -20,7 +20,7 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.18";
+  const SCRIPT_VERSION = "5.20";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -92,8 +92,39 @@
     updatePanel();
   }
 
-  // ── Status panel ─────────────────────────────────────────────────────
+  // ── Tab labelling (v5.20, bedc-style) ─────────────────────────────────
+  // Each oracle tab opens with `?oracle=N` in the URL. The flag gives a
+  // stable per-tab agent_id, distinguishable panel banner, and one-click
+  // shortcuts when the operator opens a tab without the flag.
+  function urlOracleFlag() {
+    try {
+      const m = window.location.search.match(/[?&]oracle=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : "";
+    } catch {
+      return "";
+    }
+  }
+  function tabLabel() {
+    const f = urlOracleFlag();
+    if (f) return f;
+    return AGENT_ID ? AGENT_ID.replace("oracle_", "") : "?";
+  }
+  function entryUrlFor(flag) {
+    // Prefer adopting the current origin + path so labelling preserves
+    // whatever Project page the operator is already on. Fall back to the
+    // bare chatgpt.com root if URL parsing fails.
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("oracle", flag);
+      return url.toString();
+    } catch {
+      return `https://chatgpt.com/?oracle=${encodeURIComponent(flag)}`;
+    }
+  }
+
+  // ── Status panel (v5.20: collapsible, bedc-style label badge) ────────
   let panel = null;
+  let panelExpanded = true;
   function ensurePanel() {
     if (panel && document.body.contains(panel)) return;
     panel = document.createElement("div");
@@ -112,20 +143,54 @@
     ensurePanel();
     const statusColor = active ? (busy ? "#ff0" : "#0f0") : "#f55";
     const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
+    const flag = urlOracleFlag();
+    const label = tabLabel();
+    const collapsed = !panelExpanded && !active && !busy;
+    if (collapsed) {
+      panel.innerHTML = `<span style="color:#cdf">[Oracle #${label}]</span> <span style="color:${statusColor};font-weight:bold">⏸</span>`;
+      panel.title = `Oracle Tab #${label} (paused). Click to expand.`;
+      panel.onclick = (e) => { e.stopPropagation(); panelExpanded = true; updatePanel(); };
+      return;
+    }
+    panel.onclick = null;
     const btnText = active ? "⏸ Pause" : "▶ Start";
-    const btnColor = active ? "#f55" : "#0f0";
-    const agentLabel = AGENT_ID.replace("oracle_", "#");
+    const btnColor = active ? "#f55" : "#9af";
+    const collapseBtn = !active && !busy
+      ? `<button id="oracle-collapse" title="Collapse to badge" style="background:#446;color:#9af;border:none;border-radius:3px;padding:2px 6px;cursor:pointer;font-size:10px">−</button>`
+      : "";
+    const labelBlock = flag
+      ? `<span style="background:#cdf;color:#000;font-weight:bold;border-radius:4px;padding:1px 6px;font-size:11px">Tab #${label}</span>`
+      : `<span style="background:#fa5;color:#000;font-weight:bold;border-radius:4px;padding:1px 6px;font-size:11px">UNLABELED</span>`;
+    const labelShortcuts = flag ? "" : `
+      <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#9af;margin-top:2px">
+        <span>label this tab as →</span>
+        <button id="oracle-label-1" title="Open Tab #1" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">1</button>
+        <button id="oracle-label-2" title="Open Tab #2" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">2</button>
+        <button id="oracle-label-3" title="Open Tab #3" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">3</button>
+      </div>`;
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v${SCRIPT_VERSION} ${agentLabel}]</b>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+        <b>[Oracle v${SCRIPT_VERSION}]</b>
+        ${labelBlock}
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
+        ${collapseBtn}
       </div>
+      ${labelShortcuts}
       <hr style="border-color:#333;margin:4px 0">
       ${lines}`;
     const btn = document.getElementById("oracle-toggle");
     if (btn) btn.addEventListener("click", toggleActive);
+    for (const tag of ["1", "2", "3"]) {
+      const el = document.getElementById(`oracle-label-${tag}`);
+      if (el) el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.location.href = entryUrlFor(tag);
+      });
+    }
+    const cb = document.getElementById("oracle-collapse");
+    if (cb) cb.addEventListener("click", (e) => { e.stopPropagation(); panelExpanded = false; updatePanel(); });
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -496,6 +561,20 @@
   }
 
   function isOnProjectContext(task) {
+    // Multi-turn follow-up: treat the conversation_url as the only valid context.
+    if (task && task.is_followup && task.conversation_url) {
+      try {
+        const convTarget = new URL(task.conversation_url);
+        const current = new URL(window.location.href);
+        if (current.origin !== convTarget.origin) return false;
+        const targetPath = convTarget.pathname.replace(/\/+$/, "");
+        const currentPath = current.pathname.replace(/\/+$/, "");
+        if (!targetPath) return true;
+        return currentPath.startsWith(targetPath);
+      } catch {
+        return false;
+      }
+    }
     const projectUrl = normalizedProjectUrl(task);
     if (!projectUrl) return true;
     try {
@@ -512,6 +591,10 @@
   }
 
   function isProjectStartPage(task) {
+    // Follow-up tasks are valid on the existing /c/<id> conversation page.
+    if (task && task.is_followup && task.conversation_url) {
+      return isOnProjectContext(task);
+    }
     if (!isOnProjectContext(task)) return false;
     if (/\/c\/[a-f0-9-]+/.test(window.location.pathname)) return false;
     return true;
@@ -519,6 +602,17 @@
 
   function taskStartUrl(task) {
     const agentNum = AGENT_ID.replace("oracle_", "");
+    // Multi-turn follow-up: jump straight back into the existing conversation
+    // so the /continue prompt threads into the same chat.
+    if (task && task.is_followup && task.conversation_url) {
+      try {
+        const convUrl = new URL(task.conversation_url);
+        if (/^https:\/\/(chatgpt\.com|chat\.openai\.com)$/.test(convUrl.origin)) {
+          convUrl.searchParams.set("oracle", agentNum);
+          return convUrl.href;
+        }
+      } catch {}
+    }
     const projectUrl = normalizedProjectUrl(task);
     if (projectUrl) {
       const url = new URL(projectUrl);
@@ -1686,6 +1780,7 @@
       response,
       model: task.model || "unknown",
       agent_id: AGENT_ID,
+      chatgpt_url: window.location.href,
     });
 
     log(`DONE: ${task_id} (${response.length} chars)`);
@@ -1837,6 +1932,7 @@
               response: recovered,
               model: task.model || "unknown",
               agent_id: AGENT_ID,
+              chatgpt_url: window.location.href,
             });
             clearTaskState();
             return;
@@ -1849,6 +1945,7 @@
           response: `ERROR: ${err.message}`,
           model: task.model || "unknown",
           agent_id: AGENT_ID,
+          chatgpt_url: window.location.href,
         });
       } catch {}
       clearTaskState();

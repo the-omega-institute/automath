@@ -1,0 +1,2230 @@
+\subsection{Spectral rigidity}
+
+The determinant rigidity lemma used here was stated before
+\Cref{thm:normal-realizability-threshold}. In the next theorem, the lower
+bound itself is the immediate combination of that lemma with the classical
+Weyl/Ky Fan inequality; the additional content is the equality and
+near-equality analysis, which shows how the trace-norm defect controls
+the Schur off-diagonal entries of a triangular representative.
+
+\begin{lemma}[Ordered Weyl--Ky Fan--Lidskii inequality for trace class]
+  \label{lem:weyl-ky-fan-trace-class}
+Let \(T\in\sone(H)\). Let \((\lambda_k(T))_{k\ge1}\) be the eigenvalues
+of \(T\), repeated according to algebraic multiplicity and ordered so
+that
+\[
+  \abs{\lambda_1(T)}\ge \abs{\lambda_2(T)}\ge \cdots,
+\]
+padding by zeros once the non-zero spectrum is exhausted. Let
+\((s_k(T))_{k\ge1}\) be the singular values of \(T\), ordered so that
+\[
+  s_1(T)\ge s_2(T)\ge \cdots \ge 0.
+\]
+Then for every \(N\ge1\),
+\[
+  \sum_{k=1}^N \abs{\lambda_k(T)}
+  \le \sum_{k=1}^N s_k(T).
+\]
+Consequently,
+\[
+  \sum_{k\ge1}\abs{\lambda_k(T)}\le \|T\|_1.
+\]
+\end{lemma}
+
+\begin{proof}
+This is the classical Weyl--Ky Fan majorisation inequality for compact
+operators, in the trace-class form descended from Lidskii's trace theorem:
+the partial sums of the moduli of the eigenvalues, ordered decreasingly
+and counted with algebraic multiplicity, are dominated by the corresponding
+partial sums of the singular values. See Lidskii's original trace theorem
+\cite[p.~485]{Lidskii1959}, K\"onig's Weyl-inequality chapter
+\cite{Weyl1949EigenvalueInequalities,Fan1951MaximumProperties},
+\cite[Chapter~2, Section~2.a]{Konig1986EigenvalueDistribution}, and the
+treatment of \(s\)-numbers and Weyl--Ky Fan inequalities in
+\cite[Chapter~1]{Simon2005TraceIdeals} and
+\cite[Chapter~VI, Section~1]{GohbergGoldbergKaashoek1990ClassesI}.
+Since \(T\in\sone(H)\), the
+singular values are summable and
+\(\sum_{k\ge1}s_k(T)=\|T\|_1\). Passing to the monotone limit in the
+partial-sum inequality therefore yields the final claim.
+\end{proof}
+
+\begin{lemma}[Ordered non-zero root-space flag]
+  \label{lem:ordered-nonzero-root-flag}
+  Let \(K\) be a compact operator on a separable Hilbert space, and let
+  \((\mu_q)_{q\in Q}\), where \(Q=\{1,\ldots,m\}\) or \(Q=\NN\), be any
+  ordering of the non-zero eigenvalues of \(K\), each repeated according
+  to algebraic multiplicity. Then there is an increasing family
+  \[
+    0=E_0\subset E_1\subset E_2\subset\cdots
+  \]
+  of finite-dimensional \(K\)-invariant subspaces, indexed by \(q\in Q\),
+  such that \(\dim E_q=q\) and the induced operator on
+  \(E_q/E_{q-1}\) is multiplication by \(\mu_q\). If
+  \(E:=\overline{\bigcup_q E_q}\), then \(E\) contains every non-zero
+  Riesz root space of \(K\), and the compact operator induced by \(K\) on
+  the quotient space \(H/E\) has no non-zero eigenvalues.
+\end{lemma}
+
+\begin{proof}
+  For each non-zero eigenvalue \(\lambda\), let \(G_\lambda\) be the
+  Riesz root space of \(K\). This space is finite-dimensional, invariant,
+  and has dimension equal to the algebraic multiplicity of \(\lambda\).
+  Choose once and for all a complete invariant flag
+  \[
+    0=G_{\lambda,0}\subset G_{\lambda,1}\subset\cdots
+    \subset G_{\lambda,m_{\mathrm{alg}}(\lambda)}=G_\lambda
+  \]
+  for \(K|_{G_\lambda}\). Each one-dimensional quotient
+  \(G_{\lambda,r}/G_{\lambda,r-1}\) carries multiplication by
+  \(\lambda\).
+
+  For \(q\in Q\), let \(r_\lambda(q)\) be the number of occurrences of
+  \(\lambda\) among \(\mu_1,\ldots,\mu_q\), and define
+  \[
+    E_q:=
+    \bigoplus_{\lambda\in\{\mu_1,\ldots,\mu_q\}}
+      G_{\lambda,r_\lambda(q)} .
+  \]
+  Only finitely many eigenvalues occur in this sum. The Riesz root spaces
+  for distinct non-zero eigenvalues are linearly independent, so \(E_q\)
+  has dimension \(q\). Each summand is invariant, hence \(E_q\) is
+  invariant. Passing from \(E_{q-1}\) to \(E_q\) adds precisely the next
+  one-dimensional quotient in the flag for \(G_{\mu_q}\), and therefore
+  the quotient diagonal entry is \(\mu_q\).
+
+  The closure \(E=\overline{\bigcup_q E_q}\) contains every
+  \(G_\lambda\), because the sequence \((\mu_q)\) lists all non-zero
+  eigenvalues with their full algebraic multiplicities. Let \(\widehat K\)
+  denote the operator induced by \(K\) on \(H/E\). If
+  \(\lambda\ne0\), the Riesz projection of \(\widehat K\) at \(\lambda\)
+  is the quotient induced by the Riesz projection of \(K\) at \(\lambda\);
+  the algebraic range of the latter projection is \(G_\lambda\subset E\).
+  Hence the quotient
+  projection is zero, so \(\lambda\) is not a characteristic value of
+  \(\widehat K\). Thus \(\widehat K\) has no non-zero eigenvalues.
+\end{proof}
+
+\begin{lemma}[Ringrose triangularisation in Schatten ideals]
+  \label{lem:ringrose-prescribed-diagonal}
+  Let \(1\le p<\infty\) and let \(T\in\mathcal S_p(H)\). After replacing \(H\)
+  by the reducing subspace
+  \[
+    H_T:=\overline{\mathrm{span}}\{u_r,v_r:r\ge1\}
+  \]
+  coming from any singular-value expansion
+  \(T=\sum_{r\ge1}s_r(T)\langle\,\cdot\,,u_r\rangle v_r\), the operator
+  acts on a separable Hilbert space and vanishes on \(H_T^\perp\).
+  On this separable reducing part there is an orthonormal basis
+  \((e_k)_{k\ge1}\) in which the matrix of \(T\) is upper triangular. The
+  non-zero diagonal entries may be chosen so that their non-zero
+  subsequence occurs in any prescribed ordering of the non-zero
+  eigenvalues of \(T\), each repeated according to algebraic multiplicity.
+  Every other diagonal entry is zero. Equivalently, the diagonal sequence
+  \((d_k)_{k\ge1}\) has non-zero subsequence equal to the prescribed
+  ordering of the non-zero algebraic eigenvalue multiset of \(T\), and all
+  entries outside that subsequence are zero.
+
+  This assertion prescribes only the relative order of the non-zero
+  diagonal entries. It does not prescribe the positions occupied by zero
+  entries. In particular,
+  \[
+    \sum_{k\ge1}\abs{d_k}^p
+    =
+    \sum_{\lambda\in\spec(T)\setminus\{0\}}
+      \abs{\lambda}^p\,m_{\mathrm{alg}}(\lambda)
+    <\infty .
+  \]
+\end{lemma}
+
+\begin{proof}
+  The separable reduction follows directly from the singular-value
+  expansion: both \(H_T\) and \(H_T^\perp\) reduce \(T\), and
+  \(T|_{H_T^\perp}=0\). We therefore work on \(H_T\).
+
+  Apply \Cref{lem:ordered-nonzero-root-flag} to the chosen ordering
+  \((\mu_q)\) of the non-zero algebraic eigenvalue multiset of
+  \(T|_{H_T}\). This gives a nested invariant finite-dimensional flag
+  whose successive quotient diagonal entries are exactly
+  \(\mu_1,\mu_2,\ldots\). Let \(E\) be the closure of the union of this
+  flag. The induced compact operator on \(H_T/E\) has no non-zero
+  eigenvalues by the same lemma.
+
+  Extend the invariant chain containing all \(E_q\) to a maximal invariant
+  chain for \(T|_{H_T}\), and apply Ringrose's compact triangular
+  representation theorem to that maximal chain; see
+  \cite[Chapter~1, Theorem~3, pp.~6--8]{Ringrose1971CompactNonSelfAdjoint}.
+  Applying Gram--Schmidt along the resulting chain produces an orthonormal
+  Schur basis. The one-dimensional quotients \(E_q/E_{q-1}\) contribute
+  the prescribed non-zero entries \(\mu_q\), in that relative order. Since
+  \(E\) contains every non-zero Riesz root space and the quotient on
+  \(H_T/E\) has no non-zero eigenvalues, every remaining one-dimensional
+  quotient has diagonal entry zero. Thus the non-zero diagonal subsequence
+  is prescribed, and the remaining diagonal entries are zero; no position
+  of a zero entry is prescribed.
+
+  The final Schatten summability follows from the Weyl--Ky Fan
+  eigenvalue--singular-value majorisation in Schatten form,
+  \[
+    \sum_{k\ge1}\abs{\lambda_k(T)}^p
+    \le
+    \sum_{k\ge1}s_k(T)^p
+    =
+    \norm{T}_p^p<\infty,
+  \]
+  with eigenvalues repeated according to algebraic multiplicity and padded
+  by zeros; see the sources cited in \Cref{lem:weyl-ky-fan-trace-class}.
+\end{proof}
+
+\begin{lemma}[Two-by-two trace-norm pinching identity]
+  \label{lem:two-by-two-trace-norm-pinching}
+  For \(a,b,c\in\CC\), let
+  \[
+    B=\begin{pmatrix}a&c\\0&b\end{pmatrix}.
+  \]
+  Then
+  \[
+    \|B\|_1^2=(\abs{a}+\abs{b})^2+\abs{c}^2.
+  \]
+  In particular,
+  \[
+    \|B\|_1\ge \abs{a}+\abs{b},
+  \]
+  and equality holds if and only if \(c=0\).
+\end{lemma}
+
+\begin{proof}
+  Let \(\sigma_1,\sigma_2\ge0\) be the singular values of \(B\). Then
+  \[
+    \|B\|_1^2=(\sigma_1+\sigma_2)^2
+    =\sigma_1^2+\sigma_2^2+2\sigma_1\sigma_2.
+  \]
+  The squared singular values are the eigenvalues of \(B^*B\), so
+  \[
+    \sigma_1^2+\sigma_2^2=\Tr(B^*B)
+    =\abs{a}^2+\abs{b}^2+\abs{c}^2,
+  \]
+  and
+  \[
+    \sigma_1\sigma_2=\sqrt{\det(B^*B)}
+    =\abs{\det B}
+    =\abs{ab}.
+  \]
+  Therefore
+  \[
+    \|B\|_1^2
+    =\abs{a}^2+\abs{b}^2+\abs{c}^2+2\abs{a}\,\abs{b}
+    =(\abs{a}+\abs{b})^2+\abs{c}^2.
+  \]
+  The equality characterization follows immediately, since the square
+  root is strictly increasing on \([0,\infty)\).
+\end{proof}
+
+\begin{lemma}[Two-by-two Schatten pinching rigidity]
+  \label{lem:two-by-two-schatten-pinching}
+  Let \(1<p<\infty\). For \(a,b,c\in\CC\), put
+  \[
+    B=\begin{pmatrix}a&c\\0&b\end{pmatrix}
+  \]
+  and define
+  \[
+    \Phi_p(a,b,c):=\|B\|_p^p-\abs a^p-\abs b^p .
+  \]
+  Then
+  \[
+    \Phi_p(a,b,c)\ge0,
+  \]
+  Equality holds if and only if \(c=0\). For fixed \(a,b\), if
+  \[
+    \Phi_p(a,b,c_\nu)\longrightarrow0,
+  \]
+  then \(c_\nu\to0\).
+\end{lemma}
+
+\begin{proof}
+  Let \(\sigma_1\ge\sigma_2\ge0\) be the singular values of \(B\), and let
+  \(\mu_1\ge\mu_2\ge0\) be the decreasing rearrangement of
+  \(\abs a,\abs b\). The two eigenvalues of \(B\) are \(a\) and \(b\), so
+  Weyl--Ky Fan majorisation gives
+  \[
+    (\mu_1,\mu_2)\prec_w(\sigma_1,\sigma_2).
+  \]
+  Since \(t\mapsto t^p\) is increasing and strictly convex on
+  \([0,\infty)\), weak majorisation implies
+  \[
+    \mu_1^p+\mu_2^p\le \sigma_1^p+\sigma_2^p=\|B\|_p^p.
+  \]
+  This is exactly \(\Phi_p(a,b,c)\ge0\).
+
+  If equality holds in the displayed inequality, the strict convexity
+  equality case for weak majorisation forces
+  \((\sigma_1,\sigma_2)=(\mu_1,\mu_2)\). Therefore
+  \[
+    \abs a^2+\abs b^2+\abs c^2
+    =\Tr(B^*B)
+    =\sigma_1^2+\sigma_2^2
+    =\mu_1^2+\mu_2^2
+    =\abs a^2+\abs b^2,
+  \]
+  so \(c=0\). The converse is immediate because \(B\) is then diagonal.
+  The final assertion follows from continuity of the singular values as
+  functions of the entries of a \(2\times2\) matrix.
+\end{proof}
+
+\begin{lemma}[Trace-norm convergence of Schur compressions]
+  \label{lem:trace-norm-schur-compressions}
+  Let \(T\in\sone(H)\), and let \((P_N)_{N\ge1}\) be finite-rank
+  orthogonal projections with \(P_N\to I\) strongly. Then
+  \[
+    P_NTP_N\longrightarrow T
+    \qquad\text{in }\sone\text{-norm}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Fix \(\varepsilon>0\), and choose a finite-rank operator \(F\) with
+  \(\|T-F\|_1<\varepsilon\). Since multiplication by contractions is
+  contractive on \(\sone\),
+  \[
+    \|T-P_NTP_N\|_1
+    \le 2\|T-F\|_1+\|F-P_NFP_N\|_1.
+  \]
+  It remains to treat \(F\). Write \(F=\sum_{\ell=1}^r x_\ell\otimes
+  y_\ell\), where \((x\otimes y)h=\langle h,y\rangle x\). For rank-one
+  operators, \(\|x\otimes y\|_1=\|x\|\,\|y\|\), and therefore
+  \[
+    \|x_\ell\otimes y_\ell-P_Nx_\ell\otimes P_Ny_\ell\|_1
+    \le \|x_\ell-P_Nx_\ell\|\,\|y_\ell\|
+      +\|P_Nx_\ell\|\,\|y_\ell-P_Ny_\ell\|.
+  \]
+  Strong convergence \(P_N\to I\) makes the right-hand side tend to zero
+  for each \(\ell\). Hence \(P_NFP_N\to F\) in trace norm, and the displayed
+  estimate gives \(\limsup_N\|T-P_NTP_N\|_1\le 2\varepsilon\). Since
+  \(\varepsilon\) is arbitrary, the claim follows.
+\end{proof}
+
+\begin{lemma}[Schatten-norm convergence of Schur compressions]
+  \label{lem:schatten-schur-compressions}
+  Let \(1\le p<\infty\), let \(T\in\mathcal S_p(H)\), and let
+  \((P_N)_{N\ge1}\) be finite-rank orthogonal projections with
+  \(P_N\to I\) strongly. Then
+  \[
+    P_NTP_N\longrightarrow T
+    \qquad\text{in }\mathcal S_p\text{-norm}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  The proof is the same finite-rank approximation argument as in
+  \Cref{lem:trace-norm-schur-compressions}. Given \(\varepsilon>0\),
+  choose a finite-rank operator \(F\) with \(\|T-F\|_p<\varepsilon\).
+  Multiplication by contractions is contractive on every Schatten class,
+  and hence
+  \[
+    \|T-P_NTP_N\|_p
+    \le 2\|T-F\|_p+\|F-P_NFP_N\|_p.
+  \]
+  Writing \(F\) as a finite sum of rank-one operators
+  \(x_\ell\otimes y_\ell\), and using
+  \(\|x\otimes y\|_p=\|x\|\,\|y\|\), strong convergence of \(P_N\) gives
+  \(P_NFP_N\to F\) in \(\mathcal S_p\)-norm. Letting
+  \(\varepsilon\downarrow0\) proves the claim.
+\end{proof}
+
+\begin{lemma}[Spectral rigidity for regularized determinants]
+  \label{lem:regularized-determinant-spectral-rigidity}
+  Let \(1\le r<\infty\), and let \(T_1,T_2\in\mathcal S_r\). If
+  \[
+    \det_r(I-zT_1)=\det_r(I-zT_2)
+  \]
+  as entire functions, then the non-zero spectra of \(T_1\) and \(T_2\)
+  coincide with algebraic multiplicity.
+\end{lemma}
+
+\begin{proof}
+  For finite-rank \(A\), the regularized determinant has the form
+  \[
+    \det_r(I-zA)
+    =
+    \det(I-zA)
+    \exp\!\left(\sum_{\ell=1}^{r-1}
+      \frac{z^\ell\Tr(A^\ell)}{\ell}\right),
+  \]
+  with the exponential factor non-vanishing on \(\CC\). Hence its zeros,
+  with order, are exactly the reciprocals of the non-zero eigenvalues of
+  \(A\), counted with algebraic multiplicity. The general
+  \(\mathcal S_r\) statement is the corresponding zero-divisor theorem
+  for regularized Fredholm determinants: the regularizing factor changes
+  the determinant by a non-vanishing entire factor and does not change
+  zero multiplicities. We use the standard construction and
+  zero-multiplicity statement from \cite[Chapter~9]{Simon2005TraceIdeals},
+  \cite{GohbergKrein1969NonSelfAdjoint}, and
+  \cite{GesztesyLatushkinMitreaZinchenko2005}. Equality of the two entire
+  functions therefore gives equality, with order, of their zero divisors,
+  and hence equality of the two non-zero spectral multisets.
+\end{proof}
+
+\begin{lemma}[Trace-class triangular equality and entry pinching]
+  \label{lem:trace-triangular-equality-pinching}
+  Let \(T\in\sone(H)\), and choose a Ringrose basis from
+  \Cref{lem:ringrose-prescribed-diagonal}. Write \(A=[a_{ij}]\) and let
+  \(d_k=a_{kk}\). Suppose that
+  \[
+    \sum_{k\ge1}\abs{d_k}=\norm{T}_1.
+  \]
+  For \(P_N\) the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\), put \(A_N=P_NTP_N\) and
+  \[
+    \delta_N:=\norm{A_N}_1-\sum_{k=1}^N\abs{d_k}.
+  \]
+  Then \(\delta_N\ge0\), \(\delta_N\to0\), and for every
+  \(1\le i<j\le N\),
+  \[
+    \abs{a_{ij}}^2\le 2\norm{A_N}_1\,\delta_N.
+  \]
+  Consequently every strict Schur entry \(a_{ij}\), \(i<j\), vanishes.
+\end{lemma}
+
+\begin{proof}
+  The compression \(A_N\) is upper triangular with diagonal
+  \(d_1,\ldots,d_N\). The finite-dimensional Weyl--Ky Fan inequality gives
+  \(\sum_{k=1}^N\abs{d_k}\le\norm{A_N}_1\), hence \(\delta_N\ge0\). Since
+  \(P_NTP_N\to T\) in trace norm by
+  \Cref{lem:trace-norm-schur-compressions} and the diagonal absolute sum
+  is \(\norm{T}_1\), we have \(\delta_N\to0\).
+
+  Fix \(i<j\le N\). Let \(R_{ij}\) be the projection onto
+  \(\operatorname{span}\{e_i,e_j\}\), let \(S_{ij}=P_N-R_{ij}\), and set
+  \(U_{ij}=R_{ij}-S_{ij}\) on \(P_NH\). The identity
+  \[
+    R_{ij}A_NR_{ij}\oplus S_{ij}A_NS_{ij}
+    =\frac12(A_N+U_{ij}A_NU_{ij})
+  \]
+  is a block-pinching identity. Convexity and unitary invariance of the
+  trace norm give
+  \[
+    \norm{A_N}_1
+    \ge \norm{R_{ij}A_NR_{ij}}_1+\norm{S_{ij}A_NS_{ij}}_1.
+  \]
+  The second block is upper triangular with diagonal entries
+  \(d_k\), \(k\ne i,j\), so the same finite-dimensional lower bound gives
+  \[
+    \delta_N\ge
+    \left\|
+      \begin{pmatrix}d_i&a_{ij}\\0&d_j\end{pmatrix}
+    \right\|_1-\abs{d_i}-\abs{d_j}.
+  \]
+  Applying \Cref{lem:two-by-two-trace-norm-pinching} to the displayed
+  \(2\times2\) block yields
+  \[
+    \abs{a_{ij}}^2
+    =
+    \left(
+      \left\|\begin{pmatrix}d_i&a_{ij}\\0&d_j\end{pmatrix}\right\|_1
+      +\abs{d_i}+\abs{d_j}
+    \right)
+    \left(
+      \left\|\begin{pmatrix}d_i&a_{ij}\\0&d_j\end{pmatrix}\right\|_1
+      -\abs{d_i}-\abs{d_j}
+    \right)
+    \le 2\norm{A_N}_1\delta_N.
+  \]
+  For fixed \(i<j\), letting \(N\to\infty\) forces \(a_{ij}=0\).
+\end{proof}
+
+\begin{lemma}[Schatten triangular equality and entry pinching]
+  \label{lem:schatten-triangular-equality-pinching}
+  Let \(1<p<\infty\), let \(T\in\mathcal S_p(H)\), and choose a Ringrose
+  basis from \Cref{lem:ringrose-prescribed-diagonal}. Write
+  \(A=[a_{ij}]\) and \(d_k=a_{kk}\). Suppose that
+  \[
+    \sum_{k\ge1}\abs{d_k}^p=\norm{T}_p^p.
+  \]
+  For \(P_N\) the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\), put \(A_N=P_NTP_N\) and
+  \[
+    \Delta_{N,p}:=\norm{A_N}_p^p-\sum_{k=1}^N\abs{d_k}^p.
+  \]
+  Then \(\Delta_{N,p}\ge0\), \(\Delta_{N,p}\to0\), and for every
+  \(1\le i<j\le N\),
+  \[
+    \left\|
+      \begin{pmatrix}d_i&a_{ij}\\0&d_j\end{pmatrix}
+    \right\|_p^p-\abs{d_i}^p-\abs{d_j}^p
+    \le \Delta_{N,p}.
+  \]
+  Consequently every strict Schur entry \(a_{ij}\), \(i<j\), vanishes.
+\end{lemma}
+
+\begin{proof}
+  The proof is the Schatten analogue of
+  \Cref{lem:trace-triangular-equality-pinching}. The finite-dimensional
+  Weyl--Ky Fan inequality applied to the upper triangular compression
+  \(A_N\) gives \(\Delta_{N,p}\ge0\), and
+  \Cref{lem:schatten-schur-compressions} plus the assumed equality gives
+  \(\Delta_{N,p}\to0\).
+
+  For fixed \(i<j\le N\), use the same projections
+  \(R_{ij}\), \(S_{ij}\), and \(U_{ij}=R_{ij}-S_{ij}\). Convexity of
+  \(X\mapsto\norm{X}_p^p\), unitary invariance, and the block-pinching
+  identity give
+  \[
+    \norm{A_N}_p^p
+    \ge \norm{R_{ij}A_NR_{ij}}_p^p+\norm{S_{ij}A_NS_{ij}}_p^p.
+  \]
+  Applying the finite-dimensional eigenvalue--singular-value inequality
+  to the second block leaves exactly the displayed two-by-two defect
+  bound. By \Cref{lem:two-by-two-schatten-pinching}, the left-hand side
+  is nonnegative and can tend to zero for fixed \(d_i,d_j\) only when
+  \(a_{ij}\to0\). Since \(\Delta_{N,p}\to0\), each fixed strict Schur
+  entry is zero.
+\end{proof}
+
+\begin{theorem}[Global trace-norm minimum and minimizer classification in a Fredholm-determinant fiber]
+  \label{thm:determinant-fiber-trace-minimality}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy the
+  summability hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and
+  write
+  \[
+    D_{\mathcal D}(z)
+    :=\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j}.
+  \]
+  Let \(M_{\mathcal D}\) and \(\Sigma_{\mathcal D}\) be the collapsed
+  multiplicity function and its support from
+  \Cref{prop:collapsed-spectral-multiplicities}. If \(T\in \sone(H)\)
+  satisfies
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  as a holomorphic germ at \(z=0\), then
+  \[
+    \|T\|_1
+    \ge \sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda)
+    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
+  \]
+  The cyclic model \(L_{\mathcal D}\) from
+  \Cref{thm:cyclic-fredholm-realisation} attains equality. Consequently,
+  \[
+    \inf\bigl\{\|T\|_1:T\in \sone,\ \det(I-zT)=D_{\mathcal D}(z)
+      \text{ near }0\bigr\}
+    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
+  \]
+  Moreover, equality
+  \[
+    \|T\|_1
+    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
+  \]
+  holds if and only if \(T\) is normal and there exist a Hilbert space
+  \(H_0\) and a unitary \(U:H\to H_0\oplus H_{\mathcal D}\) such that
+  \[
+    UTU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
+  \]
+  Thus the canonical cyclic model is the entire trace-norm minimizer class
+  in the full determinant fiber, not only in the normal category.
+\end{theorem}
+
+\begin{proof}
+  By \Cref{lem:fredholm-spectral-rigidity}, the non-zero eigenvalues of
+  \(T\), counted with algebraic multiplicity, are exactly the non-zero
+  eigenvalues encoded by \(D_{\mathcal D}\). Equivalently, by
+  \Cref{prop:collapsed-spectral-multiplicities}, the non-zero eigenvalue
+  multiset of \(T\) is the multiset in which each
+  \(\lambda\in\Sigma_{\mathcal D}\) appears with multiplicity
+  \(M_{\mathcal D}(\lambda)\).
+
+  Let \((\lambda_k(T))_{k\ge1}\) be the eigenvalues of \(T\), repeated
+  according to algebraic multiplicity and ordered so that
+  \[
+    \abs{\lambda_1(T)}\ge \abs{\lambda_2(T)}\ge \cdots,
+  \]
+  with zeros appended after the non-zero spectrum, and let
+  \((s_k(T))_{k\ge1}\) be the singular values ordered so that
+  \(s_1(T)\ge s_2(T)\ge \cdots\). By the ordered Weyl--Ky Fan lemma just
+  stated, for every \(N\ge1\),
+  \[
+    \sum_{k=1}^N \abs{\lambda_k(T)}
+    \le \sum_{k=1}^N s_k(T);
+  \]
+  Passing to the monotone limit \(N\to\infty\) yields
+  \[
+    \sum_{k\ge1}\abs{\lambda_k(T)}
+    \le \sum_{k\ge1}s_k(T)
+    =\|T\|_1.
+  \]
+  Applying this to the fixed eigenvalue multiset above gives
+  \[
+    \|T\|_1
+    \ge \sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  The second equality is the summability identity from
+  \Cref{prop:collapsed-spectral-multiplicities}.
+
+  For the cyclic model \(L_{\mathcal D}\), normality implies that its
+  singular values are exactly the moduli of its non-zero eigenvalues,
+  counted with multiplicity. Hence
+  \[
+    \|L_{\mathcal D}\|_1
+    =\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda)
+    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
+  \]
+  The last equality is again
+  \Cref{prop:collapsed-spectral-multiplicities}; equivalently, one may
+  read off the same formula from
+  \Cref{prop:sharp-trace-budget-support-obstruction}.
+  Hence the lower bound is sharp and equals the stated infimum.
+
+  Suppose now that equality holds:
+  \[
+    \|T\|_1
+    =\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  Choose a singular-value expansion
+  \[
+    T=\sum_{r\ge1}s_r(T)\,\langle \,\cdot\,,u_r\rangle v_r
+  \]
+  with orthonormal sets \((u_r)\), \((v_r)\). Then
+  \[
+    H_T:=\overline{\mathrm{span}}\{u_r,v_r:r\ge1\}
+  \]
+  is separable and reduces \(T\), while \(T\) vanishes on \(H_T^\perp\).
+  Replacing \(H\) by \(H_T\) and \(T\) by \(T|_{H_T}\) therefore loses no
+  information, so we may assume from now on that \(H\) is separable.
+
+  Applying \Cref{lem:ringrose-prescribed-diagonal} to \(T\), let
+  \((e_k)_{k\ge1}\) be such a basis and let \(A=[a_{ij}]\) be the matrix
+  of \(T\) in this basis. Since those non-zero eigenvalues are exactly the
+  multiset encoded by
+  \(D_{\mathcal D}\),
+  \[
+    \sum_{k\ge1}\abs{a_{kk}}
+    =\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda)
+    =\|T\|_1.
+  \]
+
+  \Cref{lem:trace-triangular-equality-pinching} applies to this
+  triangular representation and forces every strict upper-triangular
+  entry of \(A\) to vanish. Thus \(A\) is diagonal in an orthonormal
+  basis, so \(T\) is normal.
+
+  Now \(T\) is a normal trace-class operator with
+  \(\det(I-zT)=D_{\mathcal D}(z)\). Applying
+  \Cref{thm:cyclic-fredholm-realisation} yields a Hilbert space \(H_0\)
+  and a unitary \(U:H\to H_0\oplus H_{\mathcal D}\) such that
+  \[
+    UTU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
+  \]
+  The converse implication is immediate from the already proved equality
+  \(\|L_{\mathcal D}\|_1=\sum_jm_jn_j\abs{\beta_j}^{1/n_j}\).
+\end{proof}
+
+\begin{corollary}[Schur-entry stability for trace-norm near-minimizers]
+  \label{cor:schur-entry-stability}
+  Under the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, let \(T\in\sone(H)\)
+  satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  near \(0\), and put
+  \[
+    \tau_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  Choose a Ringrose basis from
+  \Cref{lem:ringrose-prescribed-diagonal} whose diagonal has non-zero
+  subsequence equal to the determinant-forced algebraic
+  eigenvalue multiset, and whose remaining entries are zero. Write
+  \(A=[a_{ij}]\) for the resulting upper triangular matrix. For
+  \(P_N\) the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
+  \[
+    \delta_N(T):=\|P_NTP_N\|_1-\sum_{k=1}^N\abs{a_{kk}}.
+  \]
+  Then \(\delta_N(T)\ge0\),
+  \[
+    \limsup_{N\to\infty}\delta_N(T)
+    \le \|T\|_1-\tau_{\mathcal D},
+  \]
+  and for every \(1\le i<j\le N\),
+  \[
+    \abs{a_{ij}}^2
+    \le 2\|P_NTP_N\|_1\,\delta_N(T).
+  \]
+  In particular, if \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then for
+  each fixed \(i<j\),
+  \[
+    \abs{a_{ij}}
+    \le \sqrt{2(\tau_{\mathcal D}+\varepsilon)\varepsilon}
+    \qquad(\varepsilon\downarrow0 \text{ along any near-minimizing family}).
+  \]
+\end{corollary}
+
+\begin{proof}
+  The proof is the quantitative part of the preceding argument, without
+  setting the final defect equal to zero. The compressions
+  \(P_NTP_N\to T\) in trace norm by
+  \Cref{lem:trace-norm-schur-compressions}, and the prescribed diagonal
+  is absolutely summable with total \(\tau_{\mathcal D}\). Hence
+  \[
+    \limsup_{N\to\infty}\delta_N(T)
+    \le \|T\|_1-\tau_{\mathcal D}.
+  \]
+  The pinching estimate applied to the \(i,j\) coordinates of
+  \(P_NTP_N\) gives
+  \[
+    \delta_N(T)
+    \ge
+    \left\|
+      \begin{pmatrix}a_{ii}&a_{ij}\\0&a_{jj}\end{pmatrix}
+    \right\|_1-\abs{a_{ii}}-\abs{a_{jj}}.
+  \]
+  Using \Cref{lem:two-by-two-trace-norm-pinching} and
+  \(\|B\|_1+\abs{a_{ii}}+\abs{a_{jj}}\le2\|P_NTP_N\|_1\) yields the
+  displayed entry estimate. If
+  \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then
+  \(\|P_NTP_N\|_1\le\|T\|_1\) and, after taking \(N\to\infty\) with
+  \(N\ge j\), the bound for the fixed entry follows.
+\end{proof}
+
+\begin{theorem}[Chosen-Schur-basis tail-controlled trace-norm estimate]
+  \label{thm:tail-controlled-trace-distance}
+  Under the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, let \(T\in\sone(H)\)
+  satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  near \(0\), and let
+  \[
+    \tau_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda),\qquad
+    \varepsilon:=\|T\|_1-\tau_{\mathcal D}.
+  \]
+  Choose a Ringrose basis as in
+  \Cref{lem:ringrose-prescribed-diagonal}, write
+  \(A=[a_{ij}]\), and let \(P_N\) be the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\). Suppose that, for some
+  \(N\ge1\), the diagonal tail and the compression tail satisfy
+  \[
+    \sum_{k>N}\abs{a_{kk}}\le \eta,
+    \qquad
+    \norm{T-P_NTP_N}_1\le \eta .
+  \]
+  Let
+  \[
+    D_N:=\operatorname{diag}(a_{11},\ldots,a_{NN})
+  \]
+  on \(P_NH\), and let \(S_N\) be the normal diagonal operator
+  \(D_N\oplus0\) on \(P_NH\oplus P_NH^\perp\), transported back to \(H\)
+  by the chosen basis. Then \(S_N\) is a finite truncation of the normal
+  minimizer \(0\oplus L_{\mathcal D}\), and
+  \[
+    \norm{T-S_N}_1
+    \le
+    \eta+
+    N\sqrt{(N-1)(\|T\|_1+\eta)(\varepsilon+2\eta)} .
+  \]
+  Consequently, if \(T_\nu\) is a family in the same determinant fiber
+  with \(\|T_\nu\|_1\downarrow\tau_{\mathcal D}\) and if there are
+  integers \(N_\nu\to\infty\) and numbers \(\eta_\nu\downarrow0\) such
+  that the two displayed tail bounds hold for \(T_\nu\) and
+  \[
+    N_\nu\sqrt{N_\nu-1}\sqrt{\varepsilon_\nu+2\eta_\nu}
+    \longrightarrow0,
+    \qquad
+    \varepsilon_\nu:=\norm{T_\nu}_1-\tau_{\mathcal D},
+  \]
+  then
+  \[
+    \dist_1(T_\nu,\mathcal M_{\mathcal D})
+    \longrightarrow0,
+  \]
+  where \(\mathcal M_{\mathcal D}\) is the unitary equivalence class of
+  the normal minimizers \(0_{H_0}\oplus L_{\mathcal D}\).
+
+  The hypotheses are part of the statement: they refer to the chosen
+  Ringrose basis and its compressions. No basis-free
+  infinite-dimensional trace-norm distance theorem is asserted here.
+\end{theorem}
+
+\begin{proof}
+  Set \(A_N=P_NTP_N\) and
+  \[
+    \delta_N:=\norm{A_N}_1-\sum_{k=1}^N\abs{a_{kk}}.
+  \]
+  The Weyl--Ky Fan lower bound gives \(\delta_N\ge0\). The assumed tails
+  imply
+  \[
+    \norm{A_N}_1\le\norm{T}_1+\eta
+  \]
+  and
+  \[
+    \delta_N
+    \le \norm{T}_1+\eta-(\tau_{\mathcal D}-\eta)
+    =\varepsilon+2\eta .
+  \]
+  The same two-by-two pinching argument used in
+  \Cref{thm:determinant-fiber-trace-minimality} gives, for
+  \(1\le i<j\le N\),
+  \[
+    \abs{a_{ij}}^2
+    \le2\norm{A_N}_1\delta_N
+    \le2(\norm{T}_1+\eta)(\varepsilon+2\eta).
+  \]
+  Since \(A_N-D_N\) is strictly upper triangular,
+  \[
+    \norm{A_N-D_N}_1
+    \le \sqrt N\,\norm{A_N-D_N}_2
+    \le
+    N\sqrt{(N-1)(\norm{T}_1+\eta)(\varepsilon+2\eta)}.
+  \]
+  Finally,
+  \[
+    \norm{T-S_N}_1
+    \le \norm{T-A_N}_1+\norm{A_N-D_N}_1
+  \]
+  and the first term is at most \(\eta\) by hypothesis. The operator
+  \(S_N\) is diagonal with entries drawn from the determinant-forced
+  eigenvalue multiset and zeros elsewhere, hence it is a finite truncation
+  of a normal minimizer. For the final assertion, choose the corresponding
+  full normal diagonal minimizer \(S_\nu^\ast\) by restoring the omitted
+  diagonal tail. Then
+  \[
+    \norm{S_\nu^\ast-S_{N_\nu}}_1
+    =\sum_{k>N_\nu}\abs{a_{kk}^{(\nu)}}\le\eta_\nu,
+  \]
+  The norms \(\norm{T_\nu}_1+\eta_\nu\) are bounded because
+  \(\norm{T_\nu}_1\to\tau_{\mathcal D}\) and \(\eta_\nu\to0\). Hence the
+  displayed estimate, plus the restored diagonal-tail error
+  \(\eta_\nu\), tends to zero under the stated compatibility hypothesis.
+\end{proof}
+
+\begin{theorem}[Finite-dimensional stability near the minimizer class]
+  \label{thm:finite-dimensional-trace-stability}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy the
+  summability hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and
+  let \(M_{\mathcal D}\) and \(\Sigma_{\mathcal D}\) be the collapsed
+  multiplicity function and support from
+  \Cref{prop:collapsed-spectral-multiplicities}. Assume that
+  \(\Sigma_{\mathcal D}\) is finite. Put
+  \[
+    D_{\mathcal D}(z)
+    :=\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j},
+  \]
+  and
+  \[
+    d_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}M_{\mathcal D}(\lambda),
+    \qquad
+    \tau_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  Let \(N\ge d_{\mathcal D}\), and let \(T\in M_N(\CC)\) satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z).
+  \]
+  Set
+  \[
+    \varepsilon(T):=\|T\|_1-\tau_{\mathcal D}.
+  \]
+  Then \(\varepsilon(T)\ge0\). Moreover there is a normal matrix
+  \(S\in M_N(\CC)\), unitarily equivalent to
+  \[
+    \operatorname{diag}\bigl(
+      \lambda I_{M_{\mathcal D}(\lambda)}:
+      \lambda\in\Sigma_{\mathcal D}\bigr)\oplus0_{N-d_{\mathcal D}},
+  \]
+  such that
+  \[
+    \|T-S\|_1
+    \le
+    N\sqrt{(N-1)\|T\|_1\,\varepsilon(T)}.
+  \]
+  In particular, if \(\|T\|_1\le\tau_{\mathcal D}+\varepsilon\), then
+  \[
+    \operatorname{dist}_1(T,\mathcal M_{\mathcal D,N})
+    \le
+    N\sqrt{(N-1)(\tau_{\mathcal D}+\varepsilon)\varepsilon},
+  \]
+  where \(\mathcal M_{\mathcal D,N}\) denotes the above unitary orbit of
+  finite-dimensional minimizers with \(N-d_{\mathcal D}\) zero summands.
+
+  The exponent \(1/2\) cannot be improved uniformly, even when
+  \(N=2\) and the determinant has a non-zero double root.
+\end{theorem}
+
+\begin{proof}
+  The determinant identity fixes the non-zero eigenvalues of \(T\), with
+  algebraic multiplicity, as the multiset in which
+  \(\lambda\in\Sigma_{\mathcal D}\) appears
+  \(M_{\mathcal D}(\lambda)\) times. Since \(T\) is \(N\)-dimensional,
+  the remaining \(N-d_{\mathcal D}\) eigenvalues are zero. Hence the
+  Weyl--Ky Fan lower bound gives
+  \[
+    \|T\|_1\ge\tau_{\mathcal D},
+  \]
+  so \(\varepsilon(T)\ge0\).
+
+  Choose a Schur triangularisation
+  \[
+    U^*TU=A=[a_{ij}]_{i,j=1}^N
+  \]
+  whose diagonal lists the prescribed algebraic eigenvalue multiset:
+  the non-zero eigenvalues are repeated according to
+  \(M_{\mathcal D}\), and the remaining \(N-d_{\mathcal D}\) diagonal
+  entries are zero. Let
+  \(D=\operatorname{diag}(a_{11},\ldots,a_{NN})\) and set
+  \(S=UDU^*\). Then \(S\in\mathcal M_{\mathcal D,N}\), and
+  \[
+    \sum_{i=1}^N\abs{a_{ii}}=\tau_{\mathcal D}.
+  \]
+  Thus
+  \[
+    \delta:=\|A\|_1-\sum_{i=1}^N\abs{a_{ii}}
+    =\varepsilon(T).
+  \]
+
+  Fix \(1\le i<j\le N\). Let \(R_{ij}\) be the projection onto
+  \(\operatorname{span}\{e_i,e_j\}\) and \(S_{ij}=I-R_{ij}\). The same
+  pinching argument used in the proof of
+  \Cref{thm:determinant-fiber-trace-minimality} gives
+  \[
+    \delta
+    \ge
+    \left\|
+      \begin{pmatrix}
+        a_{ii} & a_{ij}\\
+        0 & a_{jj}
+      \end{pmatrix}
+    \right\|_1-\abs{a_{ii}}-\abs{a_{jj}} .
+  \]
+  By \Cref{lem:two-by-two-trace-norm-pinching},
+  \[
+    \abs{a_{ij}}^2
+    \le
+    2\|A\|_1\,\delta
+    =
+    2\|T\|_1\,\varepsilon(T).
+  \]
+  Since \(A-D\) is strictly upper triangular,
+  \[
+    \|A-D\|_2^2
+    =
+    \sum_{1\le i<j\le N}\abs{a_{ij}}^2
+    \le N(N-1)\|T\|_1\,\varepsilon(T).
+  \]
+  The rank of \(A-D\) is at most \(N\), so
+  \[
+    \|T-S\|_1
+    =\|A-D\|_1
+    \le \sqrt N\,\|A-D\|_2
+    \le N\sqrt{(N-1)\|T\|_1\,\varepsilon(T)}.
+  \]
+  This proves the asserted distance estimate.
+
+  It remains to justify the optimality of the exponent. Fix
+  \(\lambda\in\CC\setminus\{0\}\), and for \(c\in\CC\) put
+  \[
+    A_c=\begin{pmatrix}\lambda&c\\0&\lambda\end{pmatrix},
+    \qquad
+    D=\lambda I_2 .
+  \]
+  Each \(A_c\) has determinant
+  \((1-\lambda z)^2\). By
+  \Cref{lem:two-by-two-trace-norm-pinching},
+  \[
+    \varepsilon(A_c)
+    =
+    \sqrt{4\abs{\lambda}^2+\abs c^2}
+      -2\abs{\lambda}
+    =
+    \frac{\abs c^2}
+    {\sqrt{4\abs{\lambda}^2+\abs c^2}+2\abs{\lambda}}.
+  \]
+  Thus
+  \[
+    \varepsilon(A_c)
+    =\frac{\abs c^2}{4\abs{\lambda}}+O(\abs c^4)
+    \qquad(c\to0).
+  \]
+  The minimizer
+  orbit for the determinant \((1-\lambda z)^2\) in dimension two is the
+  singleton \(\{\lambda I_2\}\), because a normal matrix with the only
+  eigenvalue \(\lambda\) is \(\lambda I_2\). Therefore
+  \[
+    \operatorname{dist}_1(A_c,\mathcal M_{\mathcal D,2})
+    =
+    \|A_c-\lambda I_2\|_1
+    =
+    \left\|\begin{pmatrix}0&c\\0&0\end{pmatrix}\right\|_1
+    =
+    \abs c .
+  \]
+  Hence
+  \[
+    \operatorname{dist}_1(A_c,\mathcal M_{\mathcal D,2})
+    =
+    2\sqrt{\abs{\lambda}}\,
+    \varepsilon(A_c)^{1/2}+O(\varepsilon(A_c)^{3/2}).
+  \]
+  No estimate of order
+  \(O(\varepsilon^\alpha)\) with \(\alpha>1/2\) can therefore hold
+  uniformly near the minimizer class.
+\end{proof}
+
+\begin{lemma}[Collapsed multiplicities under a Schatten budget]
+  \label{lem:schatten-collapsed-multiplicities}
+  Let \(1<p<\infty\), and let
+  \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
+  \[
+    n_j,m_j\in\NN,\qquad
+    \beta_j\in\CC\setminus\{0\},\qquad
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty .
+  \]
+  Define
+  \[
+    M_{\mathcal D}(\lambda)
+    :=\sum_{\{j\in J:\lambda^{n_j}=\beta_j\}}m_j,
+    \qquad
+    \Sigma_{\mathcal D}
+    :=\{\lambda\neq0:M_{\mathcal D}(\lambda)\neq0\}.
+  \]
+  Then each \(M_{\mathcal D}(\lambda)\) is finite,
+  \(\Sigma_{\mathcal D}\) is countable, and
+  \[
+    \sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}^pM_{\mathcal D}(\lambda)
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  Moreover the non-zero eigenvalue multiset of the cyclic
+  \(\mathcal S_p\)-model \(L_{\mathcal D}\) is exactly the multiset in
+  which \(\lambda\) occurs with multiplicity \(M_{\mathcal D}(\lambda)\).
+\end{lemma}
+
+\begin{proof}
+  Choose roots \(\alpha_j^{n_j}=\beta_j\). The block
+  \(C(n_j,\alpha_j)\otimes I_{m_j}\) has eigenvalues
+  \(\alpha_j\omega\), \(\omega^{n_j}=1\), each repeated \(m_j\) times.
+  Hence it contributes to the \(\lambda\)-eigenspace precisely when
+  \(\lambda^{n_j}=\beta_j\), and the multiplicity contributed is \(m_j\).
+  This gives the stated multiset description.
+
+  Since every solution of \(\lambda^{n_j}=\beta_j\) has
+  \(\abs{\lambda}^p=\abs{\beta_j}^{p/n_j}\), summing over the multiset
+  gives
+  \[
+    \sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}^pM_{\mathcal D}(\lambda)
+    =
+    \sum_{j\in J}\sum_{\lambda^{n_j}=\beta_j}
+      m_j\abs{\lambda}^p
+    =
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  The right-hand side is finite, so no non-zero \(\lambda\) can have
+  infinite multiplicity and the support is countable.
+\end{proof}
+
+\begin{theorem}[Schatten minimizer rigidity for regularized determinant fibers]
+  \label{thm:schatten-determinant-fiber-minimality}
+  Let \(1<p<\infty\), put \(r=\lceil p\rceil\), and let
+  \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
+  \[
+    \tau_{\mathcal D,p}
+    :=\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty .
+  \]
+  Choose roots \(\alpha_j^{n_j}=\beta_j\), and let
+  \(L_{\mathcal D}\) be the cyclic \(\mathcal S_p\)-model from
+  \Cref{thm:schatten-cyclic-model-membership}. If
+  \(T\in\mathcal S_p(H)\) satisfies
+  \[
+    \det_r(I-zT)=\det_r(I-zL_{\mathcal D})
+  \]
+  as entire functions, then
+  \[
+    \|T\|_p^p\ge \tau_{\mathcal D,p}.
+  \]
+  Equality holds if and only if \(T\) is normal and there exist a Hilbert
+  space \(H_0\) and a unitary \(U:H\to H_0\oplus H_{\mathcal D}\) such
+  that
+  \[
+    UTU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
+  \]
+  Thus the cyclic model is the unique \(\mathcal S_p\)-norm minimizer
+  class in the full regularized determinant fiber.
+
+  More quantitatively, let \(M_{\mathcal D}\) and
+  \(\Sigma_{\mathcal D}\) be the collapsed multiplicity function and its
+  support from \Cref{lem:schatten-collapsed-multiplicities}. Choose a
+  Ringrose basis from
+  \Cref{lem:ringrose-prescribed-diagonal} whose diagonal has non-zero
+  subsequence equal to the prescribed algebraic eigenvalue multiset, and
+  whose remaining entries are zero. Write \(A=[a_{ij}]\). For
+  \(P_N\) the projection onto
+  \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
+  \[
+    \Delta_{N,p}(T)
+    :=\|P_NTP_N\|_p^p-\sum_{k=1}^N\abs{a_{kk}}^p .
+  \]
+  Then \(\Delta_{N,p}(T)\ge0\),
+  \[
+    \limsup_{N\to\infty}\Delta_{N,p}(T)
+    \le \|T\|_p^p-\tau_{\mathcal D,p},
+  \]
+  and for every \(1\le i<j\le N\),
+  \[
+    \left\|
+      \begin{pmatrix}
+        a_{ii} & a_{ij}\\
+        0 & a_{jj}
+      \end{pmatrix}
+    \right\|_p^p-\abs{a_{ii}}^p-\abs{a_{jj}}^p
+    \le \Delta_{N,p}(T).
+  \]
+  Consequently, along any family in this regularized determinant fiber
+  with \(\|T\|_p^p\downarrow\tau_{\mathcal D,p}\), every fixed Schur
+  off-diagonal entry tends to \(0\).
+\end{theorem}
+
+\begin{proof}
+  By \Cref{lem:regularized-determinant-spectral-rigidity}, the identity
+  \[
+    \det_r(I-zT)=\det_r(I-zL_{\mathcal D})
+  \]
+  and \Cref{lem:schatten-collapsed-multiplicities} show that the non-zero
+  eigenvalue multiset of \(T\) is exactly the multiset in which
+  \(\lambda\in\Sigma_{\mathcal D}\) occurs
+  \(M_{\mathcal D}(\lambda)\) times.
+
+  Weyl--Ky Fan majorisation in Schatten form gives
+  \[
+    \sum_k\abs{\lambda_k(T)}^p
+    \le \sum_ks_k(T)^p
+    =\|T\|_p^p.
+  \]
+  The fixed eigenvalue multiset gives
+  \[
+    \sum_k\abs{\lambda_k(T)}^p
+    =\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}^pM_{\mathcal D}(\lambda)
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}
+    =\tau_{\mathcal D,p},
+  \]
+  The middle equality is \Cref{lem:schatten-collapsed-multiplicities}.
+  This proves the lower bound.
+
+  The normal cyclic model attains the bound by
+  \Cref{thm:schatten-cyclic-model-membership}. Suppose conversely
+  that \(\|T\|_p^p=\tau_{\mathcal D,p}\). Apply the Schatten-class
+  triangularisation lemma, \Cref{lem:ringrose-prescribed-diagonal}, to
+  \(T\) after the separable reduction coming from a singular-value
+  expansion.
+  In the resulting upper triangular matrix \(A=[a_{ij}]\), the diagonal
+  has non-zero subsequence equal to the prescribed algebraic eigenvalue
+  multiset, and all other diagonal entries are zero. Therefore
+  \[
+    \sum_{k\ge1}\abs{a_{kk}}^p=\tau_{\mathcal D,p}=\|T\|_p^p.
+  \]
+
+  \Cref{lem:schatten-triangular-equality-pinching} applies to this
+  triangular representation. Hence every strict upper-triangular entry of
+  \(A\) vanishes, so \(T\) is diagonal in an orthonormal basis and is
+  normal.
+
+  A normal compact operator is classified, up to unitary equivalence and
+  arbitrary zero summands, by its non-zero eigenvalues with multiplicity.
+  Since this multiset is the one encoded by \(L_{\mathcal D}\), the
+  claimed unitary equivalence follows. The converse equality implication
+  has already been noted for \(L_{\mathcal D}\).
+
+  Finally, the same compression argument without assuming equality gives
+  the stated estimates. Indeed
+  \(P_NTP_N\to T\) in \(\mathcal S_p\) and the prescribed diagonal has
+  \(p\)-sum \(\tau_{\mathcal D,p}\), so
+  \[
+    \limsup_{N\to\infty}\Delta_{N,p}(T)
+    \le \|T\|_p^p-\tau_{\mathcal D,p}.
+  \]
+  The same block-pinching estimate proved in
+  \Cref{lem:schatten-triangular-equality-pinching}, without taking the
+  zero-defect limit, gives the displayed two-by-two defect bound. If a family has
+  \(\|T\|_p^p-\tau_{\mathcal D,p}\to0\), then the corresponding
+  two-by-two defects tend to \(0\) for every fixed pair \(i<j\), and
+  \Cref{lem:two-by-two-schatten-pinching} forces the fixed Schur
+  off-diagonal entries to tend to \(0\).
+\end{proof}
+
+\begin{theorem}[Finite-dimensional Schatten stability near the minimizer class]
+  \label{thm:finite-dimensional-schatten-stability}
+  Let \(1<p<\infty\), put \(r=\lceil p\rceil\), and let
+  \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
+  \[
+    \tau_{\mathcal D,p}
+    :=\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty .
+  \]
+  Let \(M_{\mathcal D}\) and \(\Sigma_{\mathcal D}\) be the collapsed
+  multiplicity function and support from
+  \Cref{lem:schatten-collapsed-multiplicities}, and assume that
+  \(\Sigma_{\mathcal D}\) is finite. Put
+  \[
+    d_{\mathcal D}
+    :=\sum_{\lambda\in\Sigma_{\mathcal D}}M_{\mathcal D}(\lambda).
+  \]
+  Fix \(N\ge d_{\mathcal D}\), and let
+  \(\mathcal M_{\mathcal D,N}^{(p)}\) be the unitary orbit in
+  \(M_N(\CC)\) of
+  \[
+    \operatorname{diag}\bigl(
+      \lambda I_{M_{\mathcal D}(\lambda)}:
+      \lambda\in\Sigma_{\mathcal D}\bigr)\oplus0_{N-d_{\mathcal D}}.
+  \]
+  For every \(R>\tau_{\mathcal D,p}^{1/p}\) there is a nondecreasing
+  function
+  \[
+    \omega_{N,p,R,\mathcal D}:[0,\infty)\longrightarrow[0,\infty),
+    \qquad
+    \omega_{N,p,R,\mathcal D}(\varepsilon)\downarrow0
+    \quad(\varepsilon\downarrow0),
+  \]
+  such that every \(T\in M_N(\CC)\) satisfying
+  \[
+    \det_r(I-zT)=\det_r(I-zL_{\mathcal D}),
+    \qquad
+    \norm{T}_p\le R,
+  \]
+  obeys
+  \[
+    \dist_p(T,\mathcal M_{\mathcal D,N}^{(p)})
+    \le
+    \omega_{N,p,R,\mathcal D}
+      \bigl(\norm{T}_p^p-\tau_{\mathcal D,p}\bigr).
+  \]
+  Equivalently, in fixed dimension and on bounded \(\mathcal S_p\)-sets,
+  convergence of the regularized determinant-fiber budget to its sharp
+  value forces convergence in \(\mathcal S_p\)-distance to the whole
+  cyclic minimizer orbit.
+\end{theorem}
+
+\begin{proof}
+  By \Cref{thm:schatten-determinant-fiber-minimality}, every matrix in
+  the displayed regularized determinant fiber satisfies
+  \[
+    \norm{T}_p^p-\tau_{\mathcal D,p}\ge0,
+  \]
+  and equality holds exactly on
+  \(\mathcal M_{\mathcal D,N}^{(p)}\). For fixed \(N,p,R,\mathcal D\),
+  the set
+  \[
+    K_R:=
+    \{T\in M_N(\CC):
+      \det_r(I-zT)=\det_r(I-zL_{\mathcal D}),\ \norm{T}_p\le R\}
+  \]
+  is compact: it is a closed subset of the closed bounded ball in the
+  finite-dimensional space \(M_N(\CC)\), and the regularized determinant
+  coefficients are continuous functions of the matrix entries. Define
+  \[
+    \omega_{N,p,R,\mathcal D}(\varepsilon)
+    :=
+    \sup\{\dist_p(T,\mathcal M_{\mathcal D,N}^{(p)}):
+      T\in K_R,\ \norm{T}_p^p-\tau_{\mathcal D,p}\le\varepsilon\}.
+  \]
+  This function is nondecreasing. If it did not tend to \(0\) as
+  \(\varepsilon\downarrow0\), there would be a sequence
+  \(T_\nu\in K_R\) with
+  \[
+    \norm{T_\nu}_p^p-\tau_{\mathcal D,p}\to0
+  \]
+  but with distance from
+  \(\mathcal M_{\mathcal D,N}^{(p)}\) bounded below by a positive number.
+  Compactness gives a convergent subsequence \(T_{\nu_k}\to T_\infty\) in
+  \(M_N(\CC)\). The determinant identity and the \(\mathcal S_p\)-norm
+  pass to the limit, so
+  \[
+    \det_r(I-zT_\infty)=\det_r(I-zL_{\mathcal D}),
+    \qquad
+    \norm{T_\infty}_p^p=\tau_{\mathcal D,p}.
+  \]
+  The equality case of
+  \Cref{thm:schatten-determinant-fiber-minimality} puts
+  \(T_\infty\) in \(\mathcal M_{\mathcal D,N}^{(p)}\), contradicting the
+  positive lower bound on the distances. Hence
+  \(\omega_{N,p,R,\mathcal D}(\varepsilon)\to0\).
+\end{proof}
+
+\begin{remark}[What is classical and what is not in the determinant-fiber theorem]
+  \label{rem:minimizer-classification-novelty}
+  The lower bound in
+  \Cref{thm:determinant-fiber-trace-minimality} is exactly the standard
+  combination of \Cref{lem:fredholm-spectral-rigidity} with the classical
+  inequality \(\sum_k\abs{\lambda_k(T)}\le \|T\|_1\). The additional
+  trace-norm information is the quantitative pinching estimate in
+  \Cref{cor:schur-entry-stability}: near-minimal defect forces every fixed
+  Schur off-diagonal entry in the prescribed Ringrose triangularisation to
+  be small, and zero defect forces all such entries to vanish. The normal
+  classification theorem then identifies the equality case with the cyclic
+  model up to zero summands. The Schatten theorem
+  \Cref{thm:schatten-determinant-fiber-minimality} proves the analogous
+  statement for regularized determinant fibers in every
+  \(\mathcal S_p\), \(1<p<\infty\): equality in the sharp
+  \(\mathcal S_p\)-budget is again rigid, the same Schur-compression
+  mechanism gives a fixed-entry near-minimizer constraint, and
+  \Cref{thm:finite-dimensional-schatten-stability} upgrades this
+  entrywise constraint to a finite-dimensional bounded-set compactness
+  statement on bounded \(\mathcal S_p\)-sets. No infinite-dimensional
+  \(\mathcal S_p\)-distance-to-orbit estimate is asserted without an
+  additional tail hypothesis.
+\end{remark}
+
+Trace-norm minimality fixes the normal minimizers, but the determinant
+still permits arbitrary nilpotent Jordan structure at each prescribed
+non-zero eigenvalue, subject only to algebraic multiplicity. The next
+result records this residual freedom and shows that it can be approached
+at the sharp trace-norm bound, while it is attained only in the diagonal
+case.
+
+\begin{theorem}[Jordan profiles away from zero]
+  \label{thm:nonnormal-jordan-classification}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy the
+  summability hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and
+  let \(L_{\mathcal D}\) be the associated block-cyclic model. Set
+  \[
+    D_{\mathcal D}(z):=\det(I-zL_{\mathcal D}).
+  \]
+  Let \(M_{\mathcal D}\) and \(\Sigma_{\mathcal D}\) be the collapsed
+  multiplicity function and its support from
+  \Cref{prop:collapsed-spectral-multiplicities}. For each
+  \(\lambda\in \Sigma_{\mathcal D}\), let
+  \[
+    \pi_\lambda=(r_{\lambda,1},\dots,r_{\lambda,\ell_\lambda})
+  \]
+  be a finite tuple of positive integers. Then the following are
+  equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item There exists \(T\in \sone(H)\) such that
+      \[
+        \det(I-zT)=D_{\mathcal D}(z)
+      \]
+      near \(z=0\), and for every \(\lambda\in \Sigma_{\mathcal D}\)
+      the restriction of \(T\) to the generalized eigenspace at
+      \(\lambda\) has Jordan block sizes exactly \(\pi_\lambda\).
+    \item For every \(\lambda\in \Sigma_{\mathcal D}\),
+      \[
+        M_{\mathcal D}(\lambda)
+        =\sum_{q=1}^{\ell_\lambda}r_{\lambda,q}.
+      \]
+  \end{enumerate}
+  If these conditions hold, then
+  \[
+    \inf\Bigl\{\|T\|_1:T\text{ satisfies \textup{(i)}}\Bigr\}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
+  \]
+  For this fixed profile \((\pi_\lambda)_{\lambda\in\Sigma_{\mathcal D}}\),
+  this sharp infimum is attained precisely when every prescribed block has
+  size one, i.e. precisely when \(r_{\lambda,q}=1\) for every
+  \(\lambda\in \Sigma_{\mathcal D}\) and every
+  \(1\le q\le \ell_\lambda\). If the fixed profile contains a nontrivial
+  Jordan block, then the displayed bound is approached by the
+  approximating operators constructed in the proof but is not attained
+  within that fixed profile class.
+\end{theorem}
+
+\begin{proof}
+  Assume \textup{(i)}. By \Cref{lem:fredholm-spectral-rigidity}, the
+  non-zero spectrum of \(T\), counted with algebraic multiplicity, agrees
+  with that of \(L_{\mathcal D}\). By
+  \Cref{prop:collapsed-spectral-multiplicities}, the algebraic
+  multiplicity of each \(\lambda\in \Sigma_{\mathcal D}\) in
+  \(L_{\mathcal D}\) is \(M_{\mathcal D}(\lambda)\). On the
+  finite-dimensional generalized eigenspace at \(\lambda\), the sum of
+  the Jordan block sizes is exactly the algebraic multiplicity. Therefore
+  \textup{(ii)} follows.
+
+  Assume now that \textup{(ii)} holds. Let \(N_r\) denote the nilpotent
+  Jordan block of size \(r\), with ones on the superdiagonal and zeros
+  elsewhere. Since
+  \[
+    \sum_{\lambda\in \Sigma_{\mathcal D}}
+      M_{\mathcal D}(\lambda)\abs{\lambda}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}
+    <\infty
+  \]
+  by \Cref{prop:collapsed-spectral-multiplicities}, the set
+  \[
+    \mathcal B
+    :=\{(\lambda,q):\lambda\in\Sigma_{\mathcal D},
+      \ 1\le q\le \ell_\lambda\}
+  \]
+  is countable. Fix \(\varepsilon>0\), and choose numbers
+  \(\delta_{\lambda,q}>0\) such that
+  \[
+    \sum_{(\lambda,q)\in\mathcal B}\delta_{\lambda,q}<\varepsilon.
+  \]
+  For each \((\lambda,q)\in\mathcal B\), continuity of the trace norm on
+  the finite-dimensional matrix algebra \(M_{r_{\lambda,q}}(\CC)\) yields
+  a number \(t_{\lambda,q}\ge 0\) such that
+  \[
+    t_{\lambda,q}>0 \text{ if } r_{\lambda,q}\ge 2,
+    \qquad
+    \left\|\lambda I_{r_{\lambda,q}}
+      +t_{\lambda,q}N_{r_{\lambda,q}}\right\|_1
+    \le r_{\lambda,q}\abs{\lambda}+\delta_{\lambda,q}.
+  \]
+  Set
+  \[
+    B_{\lambda,q}
+    :=\lambda I_{r_{\lambda,q}}+t_{\lambda,q}N_{r_{\lambda,q}}.
+  \]
+  If \(r_{\lambda,q}\ge 2\), then \(B_{\lambda,q}\) is similar to the
+  Jordan block \(J_{r_{\lambda,q}}(\lambda)=\lambda I_{r_{\lambda,q}}
+  +N_{r_{\lambda,q}}\), because
+  \[
+    D_t^{-1}J_r(\lambda)D_t=\lambda I_r+tN_r,
+    \qquad
+    D_t:=\operatorname{diag}(1,t,\dots,t^{r-1}),
+  \]
+  for every \(t>0\). If \(r_{\lambda,q}=1\), then \(B_{\lambda,q}\) is
+  the \(1\times 1\) Jordan block \((\lambda)\).
+
+  Define
+  \[
+    H_\varepsilon
+    :=\bigoplus_{(\lambda,q)\in\mathcal B}\CC^{r_{\lambda,q}},
+    \qquad
+    T_\varepsilon
+    :=\bigoplus_{(\lambda,q)\in\mathcal B}B_{\lambda,q}.
+  \]
+  The estimate above and \textup{(ii)} give
+  \begin{align*}
+    \|T_\varepsilon\|_1
+    &\le \sum_{(\lambda,q)\in\mathcal B}
+      \left(r_{\lambda,q}\abs{\lambda}+\delta_{\lambda,q}\right) \\
+    &= \sum_{\lambda\in \Sigma_{\mathcal D}}
+      M_{\mathcal D}(\lambda)\abs{\lambda}
+      +\sum_{(\lambda,q)\in\mathcal B}\delta_{\lambda,q} \\
+    &< \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}+\varepsilon.
+  \end{align*}
+  Hence \(T_\varepsilon\in \sone(H_\varepsilon)\). By construction, for
+  each \(\lambda\in \Sigma_{\mathcal D}\) the generalized eigenspace of
+  \(T_\varepsilon\) at \(\lambda\) is the direct sum of the blocks
+  \(B_{\lambda,q}\), so the Jordan block sizes are exactly
+  \(\pi_\lambda\).
+
+  Let \(\mathcal B_N\subset \mathcal B\) be an increasing exhaustion by
+  finite sets, and set
+  \[
+    T_\varepsilon^{(N)}
+    :=\bigoplus_{(\lambda,q)\in\mathcal B_N}B_{\lambda,q}.
+  \]
+  Then
+  \[
+    \|T_\varepsilon-T_\varepsilon^{(N)}\|_1\to 0.
+  \]
+  Since each \(B_{\lambda,q}\) is upper triangular with diagonal entry
+  \(\lambda\), one has
+  \[
+    \det(I-zB_{\lambda,q})=(1-\lambda z)^{r_{\lambda,q}}.
+  \]
+  Therefore
+  \[
+    \det(I-zT_\varepsilon^{(N)})
+    =\prod_{(\lambda,q)\in\mathcal B_N}(1-\lambda z)^{r_{\lambda,q}}.
+  \]
+  By trace-norm continuity of the Fredholm determinant
+  \cite[Theorem~3.4]{Simon2005TraceIdeals},
+  \[
+    \det(I-zT_\varepsilon)
+    =\prod_{\lambda\in\Sigma_{\mathcal D}}
+      (1-\lambda z)^{M_{\mathcal D}(\lambda)}
+  \]
+  as a holomorphic germ at \(z=0\). The same product is
+  \(\det(I-zL_{\mathcal D})\), by
+  \Cref{prop:collapsed-spectral-multiplicities}. Thus
+  \[
+    \det(I-zT_\varepsilon)=D_{\mathcal D}(z)
+  \]
+  near \(z=0\). This proves \textup{(i)}.
+
+  The construction above gives, for every \(\varepsilon>0\), an operator
+  \(T_\varepsilon\) satisfying \textup{(i)} and
+  \[
+    \|T_\varepsilon\|_1
+    <\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}+\varepsilon.
+  \]
+  On the other hand, every operator satisfying \textup{(i)} obeys the
+  lower bound from \Cref{thm:determinant-fiber-trace-minimality}.
+  Consequently,
+  \[
+    \inf\Bigl\{\|T\|_1:T\text{ satisfies \textup{(i)}}\Bigr\}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
+  \]
+
+  If \(r_{\lambda,q}=1\) for every \(\lambda\) and \(q\), then
+  \(L_{\mathcal D}\) itself satisfies \textup{(i)} and attains the
+  infimum by \Cref{thm:cyclic-fredholm-realisation}. Conversely, assume
+  that the infimum is attained by some operator \(T\) satisfying
+  \textup{(i)}. Then \(\|T\|_1\) equals the lower bound from
+  \Cref{thm:determinant-fiber-trace-minimality}, so \(T\) is normal. For
+  each \(\lambda\in \Sigma_{\mathcal D}\), the restriction of \(T\) to
+  the generalized eigenspace at \(\lambda\) is a finite-dimensional normal
+  operator with the single eigenvalue \(\lambda\), hence equals
+  \(\lambda I\). Therefore every Jordan block has size \(1\).
+\end{proof}
+
+\begin{remark}[Freedom at zero]
+  \label{rem:zero-spectrum-freedom}
+  If \(Q\in \sone(K)\) is quasinilpotent, the trace-class eigenvalue
+  product formula gives \(\det(I-zQ)\equiv 1\). Thus \(T\oplus Q\) has
+  the same Fredholm determinant as \(T\).
+  \Cref{thm:nonnormal-jordan-classification} therefore identifies the
+  determinant-constrained algebraic Jordan-profile geometry away from
+  \(0\), while the quasinilpotent sector remains completely free. This is
+  not a unitary classification of the finite-dimensional root-space
+  nilpotents; that distinction is recorded in
+  \Cref{rem:algebraic-partitions-not-unitary-classes}.
+\end{remark}
+
+\begin{remark}[Algebraic partitions are not unitary classes]
+  \label{rem:algebraic-partitions-not-unitary-classes}
+  Jordan partitions classify finite-dimensional nilpotent root-space
+  restrictions only up to algebraic similarity. They do not classify them
+  up to unitary equivalence. For example, for \(t\ne0\) put
+  \[
+    N_t=\begin{pmatrix}0&t\\0&0\end{pmatrix}.
+  \]
+  The matrices \(N_t\) and \(N_s\) have the same Jordan partition \((2)\)
+  whenever \(s,t\ne0\). They are unitarily equivalent only when
+  \(\abs{s}=\abs{t}\), because the non-zero singular value of \(N_t\) is
+  \(\abs{t}\). Thus the algebraic quotient below is classified by
+  partitions, while the stable unitary skeleton retains the full unitary
+  equivalence class of each finite-dimensional nilpotent root-space
+  restriction.
+\end{remark}
+
+\begin{definition}[Stable unitary and algebraic root-space quotients]
+  \label{def:root-space-equivalence-relations}
+  Let \(\mathcal D\) satisfy the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}. For a determinant-fiber
+  element \(T\), put
+  \[
+    \mathcal R_\lambda(T)
+    :=\bigcup_{k\ge1}\ker((T-\lambda I)^k),
+    \qquad
+    N_\lambda(T):=(T-\lambda I)|_{\mathcal R_\lambda(T)}
+  \]
+  for \(\lambda\in\Sigma_{\mathcal D}\).
+
+  Two fiber elements \(T,T'\) are \emph{stably unitarily equivalent away
+  from zero}, written \(T\sim_{\mathrm u}T'\), if there exist trace-class
+  quasinilpotents \(Q,Q'\) such that \(T\oplus Q\) and \(T'\oplus Q'\)
+  are unitarily equivalent. This is the unitary relation used for the
+  inherited Hilbert-space root-space operators \(N_\lambda(T)\).
+
+  When \(\Sigma_{\mathcal D}\) is finite, two fiber elements are
+  \emph{algebraically equivalent modulo the zero quasinilpotent sector},
+  written \(T\sim_{\mathrm{alg}}T'\), if, for every
+  \(\lambda\in\Sigma_{\mathcal D}\),
+  \[
+    N_\lambda(T)\quad\text{and}\quad N_\lambda(T')
+  \]
+  are similar as nilpotent matrices. Equivalently, after the Riesz
+  decomposition away from zero, trace-class quasinilpotent summands at
+  \(0\) are ignored and only the algebraic \(GL\)-orbits of the non-zero
+  root-space nilpotents are retained.
+\end{definition}
+
+\begin{theorem}[Quasinilpotent stabilization preserves non-zero root-space invariants]
+  \label{thm:quasinilpotent-stabilization-nonzero-invariants}
+  Let \(T\in\sone(H)\), \(T'\in\sone(H')\), and let
+  \(Q\in\sone(K)\), \(Q'\in\sone(K')\) be quasinilpotent. Suppose that
+  there is a unitary
+  \[
+    U:H\oplus K\longrightarrow H'\oplus K'
+  \]
+  such that
+  \[
+    U(T\oplus Q)U^{-1}=T'\oplus Q'.
+  \]
+  Then for every \(\lambda\in\CC\setminus\{0\}\) and every \(k\ge1\),
+  \(U\) maps
+  \[
+    \ker((T-\lambda I)^k)\oplus\{0\}
+  \]
+  unitarily onto
+  \[
+    \ker((T'-\lambda I)^k)\oplus\{0\},
+  \]
+  and the restricted root-space operators are unitarily equivalent:
+  \[
+    U\bigl((T-\lambda I)|_{\ker((T-\lambda I)^k)}\oplus0\bigr)U^{-1}
+    =
+    (T'-\lambda I)|_{\ker((T'-\lambda I)^k)}\oplus0 .
+  \]
+  Consequently the stabilized unitary-equivalence class preserves the
+  full unitary equivalence class of the nilpotent restriction at every
+  non-zero eigenvalue, and therefore also its Jordan block profile. In
+  particular, a determinant-fiber element with a nontrivial Jordan block at
+  some \(\lambda\neq0\) cannot become unitarily equivalent to the normal
+  cyclic model \(L_{\mathcal D}\), even after adjoining arbitrary
+  trace-class quasinilpotent summands at zero.
+\end{theorem}
+
+\begin{proof}
+  Since \(Q\) and \(Q'\) are quasinilpotent,
+  \[
+    \sigma(Q)=\sigma(Q')=\{0\}.
+  \]
+  Hence \(Q-\lambda I\) and \(Q'-\lambda I\) are invertible for every
+  \(\lambda\neq0\). Therefore, for every \(k\ge1\),
+  \[
+    \ker((T\oplus Q-\lambda I)^k)
+    =
+    \ker((T-\lambda I)^k)\oplus\{0\},
+  \]
+  and similarly
+  \[
+    \ker((T'\oplus Q'-\lambda I)^k)
+    =
+    \ker((T'-\lambda I)^k)\oplus\{0\}.
+  \]
+  The intertwining relation
+  \(U(T\oplus Q)=(T'\oplus Q')U\) implies
+  \[
+    U(T\oplus Q-\lambda I)^k
+    =(T'\oplus Q'-\lambda I)^kU.
+  \]
+  Thus \(U\) carries the first kernel onto the second. Because \(U\) is
+  unitary on the ambient Hilbert spaces, its restriction is a unitary
+  between these finite-dimensional root spaces with their inherited inner
+  products.
+
+  The same intertwining relation, restricted to the displayed kernels,
+  gives the asserted unitary equivalence of the nilpotent root-space
+  restrictions. For compact operators the root space at a non-zero
+  eigenvalue is finite-dimensional and stabilizes after finitely many
+  powers; the dimensions of the kernels
+  \(\ker((T-\lambda I)^k)\) for \(k\ge1\), equivalently the unitary
+  equivalence class of the restricted nilpotent operator on the stabilized
+  root space, determine the Jordan block partition at \(\lambda\). Hence
+  these profiles survive quasinilpotent stabilization at zero. The final
+  assertion follows because the normal cyclic model has only one-by-one
+  Jordan blocks at its non-zero eigenvalues.
+\end{proof}
+
+\begin{theorem}[Stable unitary non-zero skeleton under quasinilpotent stabilization]
+  \label{thm:stable-nonzero-skeleton-classification}
+  Let \(T\in\sone(H)\), \(T'\in\sone(H')\), and suppose that
+  \[
+    \det(I-zT)=\det(I-zT')
+  \]
+  as germs at \(0\). For \(\lambda\neq0\), write
+  \[
+    \mathcal R_\lambda(T)
+    :=\bigcup_{k\ge1}\ker((T-\lambda I)^k),
+    \qquad
+    N_\lambda(T):=(T-\lambda I)|_{\mathcal R_\lambda(T)} .
+  \]
+  Then \(\mathcal R_\lambda(T)\) and \(\mathcal R_\lambda(T')\) are
+  finite-dimensional spaces of the same dimension. If
+  \(T\sim_{\mathrm u}T'\) in the sense of
+  \Cref{def:root-space-equivalence-relations}, then for every
+  \(\lambda\neq0\) the nilpotent root-space restrictions
+  \(N_\lambda(T)\) and \(N_\lambda(T')\), with their inherited Hilbert
+  norms, are unitarily equivalent.
+
+  For the cyclic determinant fiber over \(D_{\mathcal D}\), the
+  determinant-forced dimension of the non-zero root space at
+  \(\lambda\in\Sigma_{\mathcal D}\) is \(M_{\mathcal D}(\lambda)\). The
+  stable unitary skeleton preserves the full unitary equivalence class of
+  each finite-dimensional nilpotent root-space restriction. Separately, at
+  the algebraic similarity level, every partition of
+  \(M_{\mathcal D}(\lambda)\) occurs as the Jordan profile at
+  \(\lambda\), and different algebraic profiles remain distinct after
+  arbitrary trace-class quasinilpotent stabilization at zero.
+\end{theorem}
+
+\begin{proof}
+  Equality of Fredholm determinants fixes the non-zero spectrum with
+  algebraic multiplicity by \Cref{lem:fredholm-spectral-rigidity}. Hence
+  the root spaces at a fixed \(\lambda\neq0\) are finite-dimensional and
+  have the same dimension for \(T\) and \(T'\). If
+  \(T\sim_{\mathrm u}T'\), then
+  \Cref{thm:quasinilpotent-stabilization-nonzero-invariants} applies and
+  gives unitary equivalence of the restricted nilpotent root-space
+  operators at every non-zero \(\lambda\).
+
+  Now assume the determinant is \(D_{\mathcal D}\). The dimension formula
+  \[
+    \dim\mathcal R_\lambda(T)=M_{\mathcal D}(\lambda)
+  \]
+  follows from \Cref{prop:collapsed-spectral-multiplicities}. On this
+  finite-dimensional root space, \(T-\lambda I\) is nilpotent. Conversely,
+  \Cref{thm:nonnormal-jordan-classification} constructs determinant-fiber
+  elements with every prescribed partition of
+  \(M_{\mathcal D}(\lambda)\) at each non-zero \(\lambda\). The same
+  stabilization-invariance theorem then shows that different full unitary
+  classes of the nilpotent root-space restrictions cannot become
+  unitarily equivalent after adding quasinilpotent summands at zero. In
+  particular, different Jordan profiles remain distinct.
+\end{proof}
+
+\begin{theorem}[Finite-support algebraic quotient by trace-class quasinilpotents]
+  \label{thm:finite-support-quasinilpotent-quotient}
+  Let \(\mathcal D\) satisfy the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, and assume that
+  \(\Sigma_{\mathcal D}\) is finite. Let \(T\in\sone(H)\) satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  near \(0\). For each \(\lambda\in\Sigma_{\mathcal D}\), let
+  \[
+    \mathcal R_\lambda(T)
+    :=\bigcup_{k\ge1}\ker((T-\lambda I)^k),
+    \qquad
+    T_\lambda:=T|_{\mathcal R_\lambda(T)} .
+  \]
+  Then
+  \[
+    \dim\mathcal R_\lambda(T)=M_{\mathcal D}(\lambda)
+    \qquad(\lambda\in\Sigma_{\mathcal D}),
+  \]
+  and there is a closed \(T\)-invariant subspace \(K_T\) such that
+  \[
+    H=\left(\bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \mathcal R_\lambda(T)\right)\dotplus K_T
+  \]
+  algebraically and topologically, and the restriction
+  \(Q_T:=T|_{K_T}\) is trace-class and quasinilpotent. Consequently \(T\)
+  is similar to
+  \[
+    \left(\bigoplus_{\lambda\in\Sigma_{\mathcal D}}T_\lambda\right)
+      \oplus Q_T .
+  \]
+  Consequently the map
+  \[
+    [T]_{\sim_{\mathrm{alg}}}
+    \longmapsto
+    \bigl([N_\lambda(T)]_{GL(M_{\mathcal D}(\lambda),\CC)}
+      \bigr)_{\lambda\in\Sigma_{\mathcal D}}
+  \]
+  is a bijection
+  \[
+    \mathcal F_{\mathcal D}^{\mathrm{fin}}/\!\sim_{\mathrm{alg}}
+    \cong
+    \prod_{\lambda\in\Sigma_{\mathcal D}}
+      \mathrm{Nil}_{M_{\mathcal D}(\lambda)}(\CC)/
+      GL(M_{\mathcal D}(\lambda),\CC),
+  \]
+  where \(\mathcal F_{\mathcal D}^{\mathrm{fin}}\) is the trace-class
+  determinant fiber over \(D_{\mathcal D}\) under the present
+  finite-support hypothesis and
+  \(\mathrm{Nil}_m(\CC)\) denotes nilpotent \(m\times m\) matrices. At the
+  Jordan-profile level, the quotient is equivalently the product of the
+  partition sets of \(M_{\mathcal D}(\lambda)\). This is an algebraic
+  similarity quotient, not a unitary quotient; the stable unitary relation
+  \(\sim_{\mathrm u}\) preserves the full unitary class described in
+  \Cref{thm:stable-nonzero-skeleton-classification}. These algebraic
+  quotient classes have the same
+  sharp trace-norm infimum
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
+  \]
+  and this infimum is attained in a quotient class if and only if all of
+  its non-zero root-space nilpotents are zero.
+\end{theorem}
+
+\begin{proof}
+  Determinant rigidity and
+  \Cref{prop:collapsed-spectral-multiplicities} show that the non-zero
+  spectrum of \(T\), counted with algebraic multiplicity, is exactly the
+  multiset in which each
+  \(\lambda\in\Sigma_{\mathcal D}\) appears
+  \(M_{\mathcal D}(\lambda)\) times. Thus
+  \(\dim\mathcal R_\lambda(T)=M_{\mathcal D}(\lambda)\) for each
+  \(\lambda\in\Sigma_{\mathcal D}\), and there are no other non-zero
+  spectral points.
+
+  Since \(\Sigma_{\mathcal D}\) is finite, choose pairwise disjoint small
+  circles \(\Gamma_\lambda\) enclosing the points
+  \(\lambda\in\Sigma_{\mathcal D}\) and not enclosing \(0\). The Riesz
+  projections
+  \[
+    P_\lambda
+    :=
+    \frac{1}{2\pi i}\int_{\Gamma_\lambda}
+      (\zeta I-T)^{-1}\,d\zeta
+  \]
+  have ranges \(\mathcal R_\lambda(T)\), have finite rank, commute with
+  \(T\), and are mutually annihilating idempotents. Put
+  \[
+    P:=\sum_{\lambda\in\Sigma_{\mathcal D}}P_\lambda,
+    \qquad
+    K_T:=\Ran(I-P).
+  \]
+  The projection \(P\) is bounded, so \(K_T\) is closed, and both
+  \(\Ran P\) and \(K_T\) are \(T\)-invariant. This gives the
+  displayed topological direct sum. With respect to it, \(T\) is similar
+  to
+  \[
+    T|_{\Ran P}\oplus T|_{K_T}
+    =
+    \left(\bigoplus_{\lambda\in\Sigma_{\mathcal D}}T_\lambda\right)
+      \oplus Q_T .
+  \]
+  Because \(T\in\sone(H)\) and \(K_T\) is invariant for the bounded
+  projection \(I-P\), the restriction \(Q_T=T|_{K_T}\) is trace-class on
+  \(K_T\). The spectrum of \(Q_T\) is the part of the spectrum of \(T\)
+  outside the enclosed non-zero Riesz spectral sets, hence is contained
+  in \(\{0\}\). Thus \(Q_T\) is quasinilpotent.
+
+  The preceding decomposition shows that the algebraic relation
+  \(\sim_{\mathrm{alg}}\) is exactly equality of the finite-dimensional
+  nilpotent similarity classes \(N_\lambda(T)\), with the zero
+  quasinilpotent summand ignored. Hence the displayed map
+  is well defined and injective by definition. It is surjective because
+  \Cref{thm:nonnormal-jordan-classification} realizes, independently for
+  every \(\lambda\in\Sigma_{\mathcal D}\), every nilpotent Jordan
+  partition of size \(M_{\mathcal D}(\lambda)\), while a nilpotent
+  similarity class is determined by its Jordan partition. The statement
+  about the sharp infimum and its attainment is exactly the fixed-profile
+  infimum and equality statement in
+  \Cref{thm:nonnormal-jordan-classification}.
+\end{proof}
+
+\begin{lemma}[Background closure order of finite-support quotient strata]
+  \label{thm:finite-support-quotient-closure-order}
+  Assume the finite-support hypotheses of
+  \Cref{thm:finite-support-quasinilpotent-quotient}. For
+  \(\lambda\in\Sigma_{\mathcal D}\), let
+  \(\pi_\lambda\) and \(\rho_\lambda\) be partitions of
+  \(M_{\mathcal D}(\lambda)\), and let
+  \(\mathcal O_\pi\) and \(\mathcal O_\rho\) be the corresponding
+  finite-dimensional quotient strata, represented by determinant-fiber
+  elements whose Jordan profiles at \(\lambda\) are respectively
+  \(\pi_\lambda\) and \(\rho_\lambda\). Then
+  \[
+    \mathcal O_\rho\subseteq\overline{\mathcal O_\pi}
+  \]
+  in the finite-dimensional non-zero skeleton if and only if, for every
+  \(\lambda\in\Sigma_{\mathcal D}\),
+  \[
+    \sum_{q=1}^r\rho_{\lambda,q}
+    \le
+    \sum_{q=1}^r\pi_{\lambda,q}
+    \qquad(r\ge1),
+  \]
+  where missing parts are read as \(0\). Thus the quotient closure
+  relation is the product, over the prescribed non-zero eigenvalues, of
+  the usual dominance order on nilpotent Jordan partitions. In
+  particular the diagonal normal minimizer stratum, corresponding to the
+  partitions \((1,\ldots,1)\), is the unique closed stratum in the
+  finite-support quotient, and it lies in the closure of every quotient
+  stratum. The determinant-fiber input here is only the reduction to the
+  finite non-zero skeleton; the closure-order statement itself is the
+  classical finite-dimensional nilpotent-orbit theorem cited below.
+\end{lemma}
+
+\begin{proof}
+  The non-zero skeleton is the finite direct sum of root spaces
+  \[
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \mathcal R_\lambda,
+    \qquad
+    \dim\mathcal R_\lambda=M_{\mathcal D}(\lambda),
+  \]
+  and a quotient stratum is the product of the nilpotent similarity
+  orbits of the restrictions
+  \((T-\lambda I)|_{\mathcal R_\lambda}\). The scalar summands
+  \(\lambda I\) do not affect orbit closures, and the spectral summands
+  for distinct \(\lambda\)'s are separated by the Riesz decomposition.
+  Hence the closure relation in the non-zero skeleton is the product of
+  the closure relations for nilpotent conjugacy orbits on the spaces
+  \(\mathcal R_\lambda\).
+
+  For nilpotent matrices, the closure order of conjugacy classes is the
+  dominance order on Jordan partitions: the orbit with partition
+  \(\rho\) is contained in the Zariski, equivalently Euclidean, closure
+  of the orbit with partition \(\pi\) precisely when
+  \[
+    \sum_{q=1}^r\rho_q\le\sum_{q=1}^r\pi_q
+    \qquad(r\ge1).
+  \]
+  This is the classical Gerstenhaber--Kraft--Procesi closure theorem for
+  nilpotent orbits; see
+  \cite{Gerstenhaber1961Dominance,KraftProcesi1982Closures}. Applying it
+  independently on each \(\mathcal R_\lambda\) gives the displayed
+  product criterion.
+
+  The partition \((1,\ldots,1)\) is dominated by every partition of
+  \(M_{\mathcal D}(\lambda)\), and its nilpotent orbit consists only of
+  the zero nilpotent. Therefore the corresponding product stratum is
+  contained in every quotient-stratum closure and is itself closed. Since
+  any other partition has a non-zero nilpotent orbit whose closure also
+  contains the zero nilpotent, no other quotient stratum can be closed.
+\end{proof}
+
+\begin{theorem}[Degeneration of nonnormal quotient classes at the sharp budget]
+  \label{thm:nonnormal-quotient-degeneration}
+  Assume the finite-support hypotheses of
+  \Cref{thm:finite-support-quasinilpotent-quotient}. For each
+  \(\lambda\in\Sigma_{\mathcal D}\), fix a nilpotent matrix
+  \(N_\lambda\) on a Hilbert space of dimension
+  \(M_{\mathcal D}(\lambda)\), and put
+  \[
+    J_\lambda:=\lambda I+N_\lambda,\qquad
+    J:=\bigoplus_{\lambda\in\Sigma_{\mathcal D}}J_\lambda .
+  \]
+  Then the similarity class of \(J\) has determinant
+  \(D_{\mathcal D}\) and
+  \[
+    \inf\{\|SJS^{-1}\|_1:S \text{ invertible}\}
+    =
+    \tau_{\mathcal D}
+    :=
+    \sum_{\lambda\in\Sigma_{\mathcal D}}
+      \abs{\lambda}M_{\mathcal D}(\lambda).
+  \]
+  This infimum is attained if and only if every \(N_\lambda=0\).
+
+  More precisely, suppose some \(N_\lambda\neq0\). If
+  \(S_\nu\) is a sequence of invertible matrices on the finite-dimensional
+  space of \(J\) such that
+  \[
+    \|S_\nu JS_\nu^{-1}\|_1\longrightarrow \tau_{\mathcal D},
+  \]
+  then the similarity condition numbers must diverge:
+  \[
+    \|S_\nu\|\,\|S_\nu^{-1}\|\longrightarrow\infty .
+  \]
+  Equivalently, trace-norm minimization inside a nonnormal quotient class
+  reaches the normal minimizer orbit only outside every bounded-similarity
+  gauge.
+\end{theorem}
+
+\begin{proof}
+  The determinant of \(I-zJ_\lambda\) is
+  \((1-\lambda z)^{M_{\mathcal D}(\lambda)}\), because
+  \(J_\lambda\) has the sole eigenvalue \(\lambda\) with algebraic
+  multiplicity \(M_{\mathcal D}(\lambda)\). Multiplying over
+  \(\lambda\in\Sigma_{\mathcal D}\) and using
+  \Cref{prop:collapsed-spectral-multiplicities} gives determinant
+  \(D_{\mathcal D}\). Similarity does not change the determinant.
+  Therefore the global lower bound in
+  \Cref{thm:determinant-fiber-trace-minimality} gives
+  \[
+    \|SJS^{-1}\|_1\ge\tau_{\mathcal D}
+  \]
+  for every invertible \(S\).
+
+  We next show that the lower bound is approachable within the fixed
+  similarity class. Since only the similarity class is being considered,
+  first conjugate the finite-dimensional nilpotents \(N_\lambda\) into
+  Jordan form. On a Jordan block
+  \(J_r(\lambda)=\lambda I_r+N_r\), where \(N_r\) has ones on the
+  superdiagonal, let
+  \[
+    D_{\varepsilon,r}
+    :=
+    \operatorname{diag}(1,\varepsilon^{-1},\ldots,
+      \varepsilon^{-(r-1)})
+    \qquad(0<\varepsilon<1).
+  \]
+  Then
+  \[
+    D_{\varepsilon,r}J_r(\lambda)D_{\varepsilon,r}^{-1}
+    =
+    \lambda I_r+\varepsilon N_r .
+  \]
+  Taking the direct sum of these diagonal scalings over all Jordan blocks
+  gives invertibles \(D_\varepsilon\) such that
+  \(D_\varepsilon JD_\varepsilon^{-1}\) has the same diagonal part as
+  \(J\) and nilpotent part tending to \(0\) in operator norm. Hence
+  \[
+    D_\varepsilon JD_\varepsilon^{-1}
+    \longrightarrow
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \lambda I_{M_{\mathcal D}(\lambda)}
+  \]
+  in trace norm as \(\varepsilon\downarrow0\). The trace norm of the
+  limit is \(\tau_{\mathcal D}\), so the infimum is exactly
+  \(\tau_{\mathcal D}\).
+
+  If the infimum is attained at some \(SJS^{-1}\), then
+  \Cref{thm:determinant-fiber-trace-minimality} implies that
+  \(SJS^{-1}\) is normal and therefore diagonalizable. Similarity
+  preserves Jordan block sizes, so all nilpotent parts \(N_\lambda\) must
+  be zero. Conversely, if every \(N_\lambda=0\), then \(J\) is already the
+  normal diagonal minimizer and the infimum is attained.
+
+  It remains to prove the condition-number statement. Suppose, to the
+  contrary, that some \(N_\lambda\neq0\) and that a minimizing sequence
+  \(S_\nu JS_\nu^{-1}\) has
+  \[
+    \|S_\nu\|\,\|S_\nu^{-1}\|\le C .
+  \]
+  Multiplying \(S_\nu\) by a non-zero scalar does not change
+  \(S_\nu JS_\nu^{-1}\), so normalize \(\|S_\nu\|=1\). Then
+  \(\|S_\nu^{-1}\|\le C\). In finite dimension, after passing to a
+  subsequence, \(S_\nu\to S\) in operator norm. The inverse bound gives
+  \[
+    \|Sx\|=\lim_{\nu\to\infty}\|S_\nu x\|
+    \ge C^{-1}\|x\|
+  \]
+  for every vector \(x\), so \(S\) is invertible. Consequently
+  \(S_\nu JS_\nu^{-1}\to SJS^{-1}\) in trace norm. The limit has trace
+  norm \(\tau_{\mathcal D}\), so the preceding attainment argument forces
+  all \(N_\lambda\) to vanish, contradicting the hypothesis. Thus the
+  condition numbers diverge along every minimizing sequence in a
+  nonnormal quotient class.
+\end{proof}
+
+\begin{corollary}[Nonnormal determinant fibers are trace-norm unbounded]
+  \label{cor:nonnormal-fiber-unbounded}
+  Under the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, let
+  \[
+    \tau_{\mathcal D}
+    :=\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
+  \]
+  Then for every \(r>0\) there exists a trace-class nonnormal operator
+  \(T_r\) such that
+  \[
+    \det(I-zT_r)=D_{\mathcal D}(z)
+    \qquad\text{and}\qquad
+    \|T_r\|_1=\tau_{\mathcal D}+r.
+  \]
+  In particular, the determinant fiber over \(D_{\mathcal D}\) is
+  unbounded in trace norm once nonnormal realisations are allowed.
+\end{corollary}
+
+\begin{proof}
+  Let \((e_n)_{n\ge1}\) be the standard orthonormal basis of
+  \(\ell^2(\NN)\), and define the weighted shift \(Q\) by
+  \[
+    Qe_n:=2^{-n}e_{n+1}
+    \qquad (n\ge1).
+  \]
+  Then \(Q^*Qe_n=4^{-n}e_n\), so \(|Q|e_n=2^{-n}e_n\) and hence
+  \[
+    \|Q\|_1=\Tr|Q|=\sum_{n\ge1}2^{-n}=1.
+  \]
+  Thus \(Q\in\sone\). Moreover,
+  \[
+    Q^m e_n
+    =2^{-(n+(n+1)+\cdots+(n+m-1))}e_{n+m}
+    =2^{-(mn+\frac{m(m-1)}2)}e_{n+m},
+  \]
+  whence
+  \[
+    \|Q^m\|
+    \le 2^{-\frac{m(m+1)}2}
+    \qquad (m\ge1).
+  \]
+  Therefore
+  \[
+    r(Q)=\lim_{m\to\infty}\|Q^m\|^{1/m}=0,
+  \]
+  so \(\sigma(Q)=\{0\}\). Since \(Q^m e_n\perp e_n\) for every \(m\ge1\)
+  and every \(n\), one has \(\Tr(Q^m)=0\) for all \(m\ge1\). The
+  Fredholm--Witt expansion from \Cref{prop:fredholm-witt-bridge} therefore gives
+  \[
+    \log\det(I-zQ)^{-1}
+    =\sum_{m\ge1}\frac{\Tr(Q^m)}{m}z^m=0
+  \]
+  near \(z=0\), hence \(\det(I-zQ)=1\) on all of \(\CC\). Now set
+  \(Q_r:=rQ\). Then \(Q_r\) is trace-class and nonnormal, with
+  \[
+    \sigma(Q_r)=\{0\},\qquad
+    \det(I-zQ_r)=1,\qquad
+    \|Q_r\|_1=r.
+  \]
+  Therefore
+  \[
+    T_r:=L_{\mathcal D}\oplus Q_r
+  \]
+  is trace-class and nonnormal, and multiplicativity of Fredholm
+  determinants under direct sums gives
+  \[
+    \det(I-zT_r)
+    =\det(I-zL_{\mathcal D})\det(I-zQ_r)
+    =D_{\mathcal D}(z).
+  \]
+  Since trace norm is additive on orthogonal direct sums,
+  \[
+    \|T_r\|_1=\|L_{\mathcal D}\|_1+\|Q_r\|_1=\tau_{\mathcal D}+r,
+  \]
+  using \Cref{thm:determinant-fiber-trace-minimality} for
+  \(\|L_{\mathcal D}\|_1=\tau_{\mathcal D}\).
+\end{proof}
+
+\begin{remark}[The same obstruction persists in the full determinant fiber]
+  \label{rem:weighted-shift-obstruction}
+  The concrete weighted-shift example was already given in
+  \Cref{rem:nonnormal-obstruction-after-realisation}. The present
+  corollary strengthens that observation: after adjoining the scaled
+  quasinilpotent shifts \(Q_r=rQ\), one obtains nonnormal realisations of
+  the same determinant with arbitrarily large trace norm. Thus the
+  normal classifications in
+  \Cref{thm:cyclic-fredholm-realisation,thm:cyclic-data-classification}
+  cannot extend to all trace-class operators.
+\end{remark}
+
+\begin{theorem}[Determinant classification by collapsed spectral data]
+  \label{thm:cyclic-data-classification}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) and
+  \(\mathcal D'=\{(n_k',\beta_k',m_k')\}_{k\in K}\) satisfy the summability
+  hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and choose roots
+  \(\alpha_j^{n_j}=\beta_j\) and \((\alpha_k')^{n_k'}=\beta_k'\). Define
+  \[
+    M_{\mathcal D}(\lambda)
+    :=\sum_{\{j\in J:\lambda^{n_j}=\beta_j\}} m_j,
+    \qquad
+    M_{\mathcal D'}(\lambda)
+    :=\sum_{\{k\in K:\lambda^{n_k'}=\beta_k'\}} m_k',
+  \]
+  and write
+  \(L_{\mathcal D}\), \(L_{\mathcal D'}\) for the associated cyclic models,
+  and let
+  \[
+    \Lambda_{\mathcal D}
+    :=
+    \bigl\{\!\bigl\{\alpha_j\omega:
+      j\in J,\ \omega^{n_j}=1,\text{ repeated }m_j\text{ times}
+    \bigr\}\!\bigr\},
+  \]
+  with \(\Lambda_{\mathcal D'}\) defined analogously. Then the following are
+  equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\det(I-zL_{\mathcal D})=\det(I-zL_{\mathcal D'})\) as holomorphic
+      germs at \(z=0\).
+    \item \(M_{\mathcal D}(\lambda)=M_{\mathcal D'}(\lambda)\) for every
+      \(\lambda\in\CC\setminus\{0\}\).
+    \item \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\) as multisets.
+    \item There exist Hilbert spaces \(H_0\), \(H_0'\) and a unitary
+      \(V:H_0\oplus H_{\mathcal D}\to H_0'\oplus H_{\mathcal D'}\) such that
+      \[
+        V(0_{H_0}\oplus L_{\mathcal D})V^{-1}
+        =0_{H_0'}\oplus L_{\mathcal D'}.
+      \]
+  \end{enumerate}
+  In this situation the determinant germ determines, in the normal
+  trace-class category, a unique block-cyclic realisation class up to zero
+  summands. In particular,
+  \[
+    \dim \mathsf S(L_{\mathcal D})
+    =\dim \mathsf S(L_{\mathcal D'}),
+  \]
+  with dimension interpreted as a Hilbert-space dimension. Since \(J\) and
+  \(K\) are countable, this common value lies in
+  \(\NN\cup\{\aleph_0\}\). Separately,
+  \[
+    \|L_{\mathcal D}\|_1=\|L_{\mathcal D'}\|_1,
+    \qquad
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}
+    =\sum_{k\in K}m_k'n_k'\abs{\beta_k'}^{1/n_k'}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  The implication \textup{(iv)}\(\Rightarrow\)\textup{(i)} is immediate,
+  because unitary equivalence and zero summands do not change the Fredholm
+  determinant. For \textup{(i)}\(\Rightarrow\)\textup{(ii)}, apply
+  \Cref{lem:fredholm-spectral-rigidity} to \(L_{\mathcal D}\) and
+  \(L_{\mathcal D'}\). Their non-zero spectra therefore agree with
+  algebraic multiplicity. By
+  \Cref{prop:collapsed-spectral-multiplicities}, the multiplicity of each
+  \(\lambda\neq0\) in those spectra is exactly
+  \(M_{\mathcal D}(\lambda)\) and \(M_{\mathcal D'}(\lambda)\),
+  respectively. Hence \(M_{\mathcal D}=M_{\mathcal D'}\).
+
+  The equivalence
+  \textup{(ii)}\(\Leftrightarrow\)\textup{(iii)} is exactly the multiset
+  reformulation supplied by
+  \Cref{prop:collapsed-spectral-multiplicities}: \(\lambda\) appears in
+  \(\Lambda_{\mathcal D}\) with multiplicity \(M_{\mathcal D}(\lambda)\),
+  and similarly for \(\mathcal D'\).
+
+  Assume \textup{(ii)}. By
+  \Cref{prop:collapsed-spectral-multiplicities}, both cyclic models are
+  unitarily equivalent to the same diagonal operator
+  \[
+    \bigoplus_{\lambda\in\Sigma}\lambda I_{M_{\mathcal D}(\lambda)},
+    \qquad
+    \Sigma:=\{\lambda\neq0:M_{\mathcal D}(\lambda)\neq0\}.
+  \]
+  After adjoining arbitrary zero summands, this gives \textup{(iv)}.
+
+  The closing statements are the support-dimension and trace-norm formulas
+  from \Cref{prop:sharp-trace-budget-support-obstruction} applied to either
+  model. Thus
+  \[
+    \dim \mathsf S(L_{\mathcal D})=\dim \mathsf S(L_{\mathcal D'})
+  \]
+  is a Hilbert-space dimension identity with value in
+  \(\NN\cup\{\aleph_0\}\), while
+  \[
+    \|L_{\mathcal D}\|_1=\|L_{\mathcal D'}\|_1
+  \]
+  and the displayed trace-budget equality are genuine numerical identities
+  in \([0,\infty)\).
+\end{proof}
+
+\begin{corollary}[Determinant-intrinsic trace budget and minimizer class]
+  \label{cor:determinant-intrinsic-trace-budget}
+  Let \(\mathcal D\) and \(\mathcal D'\) be summable cyclic data as in
+  \Cref{thm:cyclic-data-classification}. If
+  \[
+    \det(I-zL_{\mathcal D})=\det(I-zL_{\mathcal D'})
+  \]
+  as holomorphic germs at \(0\), then the determinant germ fixes the same
+  trace budget in both presentations:
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}
+    =
+    \sum_{k\in K}m_k'n_k'\abs{\beta_k'}^{1/n_k'}.
+  \]
+  Moreover this common number is the infimum of \(\|T\|_1\) over the full
+  trace-class determinant fiber
+  \[
+    \{\,T\in\sone:\det(I-zT)=\det(I-zL_{\mathcal D})\text{ near }0\,\},
+  \]
+  and the equality cases are exactly the normal cyclic model class
+  \(0_{H_0}\oplus L_{\mathcal D}\), equivalently
+  \(0_{H_0'}\oplus L_{\mathcal D'}\), up to unitary equivalence and zero
+  summands.
+\end{corollary}
+
+\begin{proof}
+  By \Cref{thm:cyclic-data-classification}, equality of the determinant
+  germs is equivalent to equality of the collapsed multiplicity functions
+  \(M_{\mathcal D}=M_{\mathcal D'}\), and it gives unitary equivalence of
+  the two cyclic models after adjoining zero summands. The same theorem
+  gives the trace-budget identity displayed above. Applying
+  \Cref{thm:determinant-fiber-trace-minimality} to either presentation of
+  the common determinant germ identifies this common trace budget with the
+  full trace-class infimum and classifies equality exactly as the normal
+  cyclic model, with arbitrary zero summands. The unitary equivalence from
+  \Cref{thm:cyclic-data-classification} makes the two descriptions of the
+  minimizer class identical.
+\end{proof}
+
+\begin{remark}[Finite-dimensional specialization]
+  \label{rem:realisability-vs-rigidity}
+  Let \(A\) be a finite matrix and let \(T\in \sone\) satisfy
+  \[
+    \det(I-zT)=\det(I-zA).
+  \]
+  Then \(T\) and \(A\) have the same non-zero eigenvalues with
+  algebraic multiplicity. Thus cyclic-block constructions may enlarge
+  the ambient operator category, but they do not create spectral
+  freedom once the determinant is prescribed. This is just
+  \Cref{lem:fredholm-spectral-rigidity} applied to the finite-rank
+  operator \(A\).
+\end{remark}

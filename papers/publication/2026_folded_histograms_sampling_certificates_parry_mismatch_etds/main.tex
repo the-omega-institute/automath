@@ -129,7 +129,8 @@ All of the separate ingredients are classical.  Sturmian codings, factor
 complexity and factor frequencies go back to
 \cite{MorseHedlund1940,Slater1950DistributionIntegers,Slater1967GapsSteps} and
 are naturally part of symbolic dynamics and substitutions
-\cite{LindMarcus1995,QueffelecSubstitution,Fogg2002}. The Parry measure and
+\cite{LindMarcus1995,QueffelecSubstitution,Fogg2002,
+DurandHostSkau1999Substitutional,Durand2000LinearlyRecurrentFactors}. The Parry measure and
 the thermodynamic formalism of shifts of finite type are classical
 \cite{Parry1964IntrinsicMarkovChains,LindMarcus1995,WaltersErgodicTheory,
 ParryPollicott1990Zeta}. Fibonacci and Ostrowski numeration provide the
@@ -146,7 +147,41 @@ The contribution is the finite-resolution comparison obtained when these
 standard structures are coupled by the canonical fold: the no-collision
 theorem on the realized Sturmian language, the exact Parry block
 optimization, and the bounded-type asymptotic window for the canonical folded
-law.
+law.  The five advertised contributions are represented in the body as
+follows.
+\begin{enumerate}
+\item The no-collision and higher-block conjugacy statement for the canonical
+Sturmian slice is Theorem~\ref{thm:sturmian-no-collision-rigidity} together
+with Corollary~\ref{cor:sturmian-exact-relabeling} and
+Theorem~\ref{thm:sequence-level-transparency}.
+\item The closed-form R\'enyi and optimal-injective comparison is
+Theorem~\ref{thm:parry-kl-identity},
+Proposition~\ref{prop:parry-renyi-window},
+Theorem~\ref{thm:parry-support-barrier},
+Theorem~\ref{thm:optimal-injective-relabeling},
+Proposition~\ref{prop:small-m-endpoint-budget},
+Corollary~\ref{cor:injective-relabeling-bounded-type}, and
+Proposition~\ref{prop:canonical-golden-slope-gap}.
+\item The limited primitive positive-entropy SFT restoration interface is the
+support-envelope and injective-placement obstruction of
+Proposition~\ref{prop:primitive-sft-support-envelope} and
+Theorem~\ref{thm:primitive-sft-placement-barrier}; it is used only to explain
+why a low-complexity finite-block Sturmian factor cannot remove an
+exponential Parry cylinder budget.
+\item The canonicity of the Fibonacci weighting is
+Theorem~\ref{thm:local-zeckendorf-normalization} and
+Corollary~\ref{cor:local-normalization-church-rosser} together with
+Theorem~\ref{thm:contiguous-fibonacci-uniqueness}, with
+Proposition~\ref{prop:canonical-fold-basic} and
+Proposition~\ref{prop:fold-residue-characterization} giving the resulting
+finite-resolution residue interface.
+\item The sampling-versus-limit separation is Theorem~\ref{thm:tv-certificate-hist},
+Theorem~\ref{thm:general-window-relative-entropy-certificate},
+Proposition~\ref{prop:sturmian-microstate-kl-certificate},
+Corollary~\ref{cor:rotation-folded-kl-certificate},
+Theorem~\ref{thm:multiscale-residual-by-boundary}, and
+Corollary~\ref{cor:multiscale-residual-comparison-bound}.
+\end{enumerate}
 
 Section~2 sets up the rotation model, the fold and the Parry block law.
 Section~3 proves the sampling and relative-entropy estimates.  Section~4
@@ -193,6 +228,178 @@ The canonical fold is
 \qquad Z(N_m(\omega))=(z_1,z_2,\dots).
 \]
 \end{definition}
+
+\begin{theorem}[Local Zeckendorf normalization by uniqueness certificate]\label{thm:local-zeckendorf-normalization}
+Let \(d=(d_1,d_2,\dots)\) be a finitely supported sequence of nonnegative
+integers, and put
+\[
+V(d):=\sum_{j\ge1} d_jF_{j+1}.
+\]
+Consider the following local rewrites, whenever the displayed coordinates are
+available and the left-hand side has the required positive multiplicity:
+\[
+d_j,d_{j+1}\ge1:
+\qquad
+d_jF_{j+1}+d_{j+1}F_{j+2}
+\longmapsto
+(d_j-1)F_{j+1}+(d_{j+1}-1)F_{j+2}+F_{j+3},
+\]
+that is, subtract \(1\) from \(d_j,d_{j+1}\) and add \(1\) to \(d_{j+2}\);
+and, for double digits,
+\[
+d_1\ge2:\quad 2F_2\longmapsto F_3,
+\]
+\[
+d_2\ge2:\quad 2F_3\longmapsto F_2+F_4,
+\]
+\[
+d_j\ge2,\ j\ge3:\quad 2F_{j+1}\longmapsto F_{j-1}+F_{j+2}.
+\]
+Equivalently, the last three rules subtract \(2\) from the indicated
+coordinate and add the shown unit digits.  Every sequence of such local
+rewrites terminates.  Its terminal vector is a \(\{0,1\}\)-vector with no
+adjacent \(1\)'s, has the same value \(V(d)\), and is independent of the
+order in which the rewrites were applied.  In particular, starting from the
+binary digit vector of a word \(\omega\in\Omega_m\), every local normalization
+order gives the Zeckendorf expansion of \(N_m(\omega)\).
+\end{theorem}
+
+\begin{proof}
+Each rewrite preserves \(V(d)\).  For the adjacent-carry rule this is exactly
+\[
+F_{j+1}+F_{j+2}=F_{j+3}.
+\]
+For the double-digit rules, the identities are
+\[
+2F_2=F_3,\qquad 2F_3=F_2+F_4,
+\]
+and, for \(j\ge3\),
+\[
+2F_{j+1}=F_{j-1}+F_{j+2}.
+\]
+The last identity follows from
+\[
+F_{j+2}+F_{j-1}
+=F_{j+1}+F_j+F_{j-1}
+=F_{j+1}+F_{j+1}.
+\]
+
+Termination is elementary but important.  Since the value \(V(d)\) is fixed,
+only finitely many finitely supported nonnegative vectors can occur during
+the rewriting: if \(d_j>0\), then \(F_{j+1}\le V(d)\), and each coordinate is
+bounded by \(V(d)\).  Order these finitely many vectors lexicographically from
+the largest index downward, padding by zeros.  Every rewrite strictly
+increases this order.  Indeed, an adjacent carry first changes the highest
+affected coordinate \(j+2\) by increasing it by \(1\).  The double-digit rule
+at \(j=1\) first increases coordinate \(2\), the rule at \(j=2\) first
+increases coordinate \(3\), and the rule at \(j\ge3\) first increases
+coordinate \(j+1\).  In the last case the simultaneous new digit at
+coordinate \(j-2\) is lower in this reverse lexicographic comparison than
+both the increased coordinate \(j+1\) and the decreased coordinate \(j\), so
+it cannot undo the strict increase.  Hence an infinite rewriting chain is
+impossible.
+
+If a terminal vector had a coordinate \(d_j\ge2\), one of the double-digit
+rules would apply.  If it had adjacent positive coordinates
+\(d_j,d_{j+1}\ge1\), the adjacent-carry rule would apply.  Thus a terminal
+vector is a \(\{0,1\}\)-vector with no adjacent \(1\)'s.  It is therefore a
+Zeckendorf representation of the integer \(V(d)\).  Thus the displayed rules
+form a terminating normalization algorithm.  Its confluence is certified here
+by the global uniqueness theorem for Zeckendorf expansions, rather than by an
+unstated local-confluence calculation: Zeckendorf uniqueness
+\cite{Zeckendorf1972} implies that all terminal vectors are equal, so the
+normal form is independent of the rewrite order.
+\end{proof}
+
+\begin{corollary}[Uniqueness certificate for local normalization]
+\label{cor:local-normalization-church-rosser}
+Let \(d\) be any finitely supported nonnegative digit vector, and write
+\(\mathcal R(d)\) for the directed graph whose vertices are all digit vectors
+reachable from \(d\) by the local rules of
+Theorem~\ref{thm:local-zeckendorf-normalization}.  Then \(\mathcal R(d)\) has
+a unique sink \(z(d)\).  The sink is the Zeckendorf digit vector of \(V(d)\).
+Equivalently, for any two finite rewrite chains
+\[
+d\longrightarrow d'\qquad\text{and}\qquad d\longrightarrow d'',
+\]
+there are further rewrite chains from \(d'\) and \(d''\) to the same vector
+\(z(d)\).  In particular, if \(d\) is the binary digit vector of
+\(\omega\in\Omega_m\), then
+\[
+\Fold_m(\omega)=z(d)_1\cdots z(d)_m
+\]
+and this prefix is independent of every local normalization choice made before
+truncation.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:local-zeckendorf-normalization} gives termination, so every
+reachable vector can be extended to at least one terminal vector.  It also
+shows that every terminal vector is a legal \(\{0,1\}\)-vector and that every
+rewrite preserves the value \(V\).  Hence every terminal vector reachable from
+\(d\) is a Zeckendorf representation of the same integer \(V(d)\).
+Zeckendorf uniqueness \cite{Zeckendorf1972} therefore forces all terminal
+vectors reachable from \(d\) to be equal; call this common vector \(z(d)\).
+
+Now let \(d\to d'\) and \(d\to d''\) be two finite rewrite chains.  By
+termination, each of \(d'\) and \(d''\) reaches a terminal vector.  The
+preceding paragraph identifies both terminal vectors with \(z(d)\).  This is
+the only confluence assertion used here: it is a certificate obtained from
+termination together with global Zeckendorf uniqueness, not an independent
+local critical-pair or Church--Rosser proof for the rewrite system.  The last
+assertion is only the definition of the canonical fold after identifying
+\(z(d)\) with the Zeckendorf expansion of \(N_m(\omega)=V(d)\).
+\end{proof}
+
+\begin{theorem}[Contiguous numeration rigidity]\label{thm:contiguous-fibonacci-uniqueness}
+Let \(a_1,a_2,\dots\) be positive integers.  For \(m\ge1\), define
+\[
+W_m(u):=\sum_{j=1}^m u_ja_j,\qquad u\in X_m.
+\]
+Assume that, for every \(m\ge1\), the set of legal values is exactly the
+contiguous interval
+\[
+W_m(X_m)=\{0,1,\dots,F_{m+2}-1\}.
+\]
+Then
+\[
+a_j=F_{j+1}\qquad (j\ge1).
+\]
+Consequently the Fibonacci weights used in Definition~\ref{def:canonical-fold}
+are the unique positive weights for which the golden-mean words \(X_m\)
+enumerate contiguous initial intervals at every resolution.
+\end{theorem}
+
+\begin{proof}
+For \(m=1\), the legal words are \(0\) and \(1\), so
+\(\{0,a_1\}=\{0,1\}\), and \(a_1=1=F_2\).  For \(m=2\), the legal words are
+\(00,10,01\), so
+\[
+\{0,a_1,a_2\}=\{0,1,2\}.
+\]
+Since \(a_1=1\), this gives \(a_2=2=F_3\).
+
+Assume inductively that \(a_j=F_{j+1}\) for \(j<m\), where \(m\ge3\).  The
+words in \(X_m\) ending in \(0\) are exactly \(u0\) with \(u\in X_{m-1}\).
+By the induction hypothesis and the contiguous axiom at level \(m-1\), their
+values form
+\[
+\{0,1,\dots,F_{m+1}-1\}.
+\]
+The words in \(X_m\) ending in \(1\) are exactly \(v01\) with
+\(v\in X_{m-2}\).  Their values form
+\[
+a_m+\{0,1,\dots,F_m-1\},
+\]
+again by the induction hypothesis, now at level \(m-2\).
+
+The two families are disjoint because the full map \(W_m\) has
+\(|X_m|=F_{m+2}\) values and its image is the \(F_{m+2}\)-point interval
+\(\{0,\dots,F_{m+2}-1\}\).  The first family already occupies the initial
+block \(\{0,\dots,F_{m+1}-1\}\), and the second family has exactly \(F_m\)
+values.  Since \(F_{m+2}=F_{m+1}+F_m\), contiguity forces the second block to
+start at \(F_{m+1}\).  Hence \(a_m=F_{m+1}\), completing the induction.
+\end{proof}
 
 \begin{proposition}[Basic properties of the canonical fold]\label{prop:canonical-fold-basic}
 For every \(m\ge 1\), the map \(\Fold_m:\Omega_m\to X_m\) is surjective and
@@ -405,11 +612,73 @@ D_N^*(\alpha;x_0)
 This quantity is effective because length-$m$ rotation words are determined by a
 finite partition of the circle into interval atoms.
 
+\begin{remark}[Variation convention for interval tests]\label{rem:half-open-variation-convention}
+When a half-open interval indicator is used below, it is viewed as a
+right-continuous representative on \([0,1)\) with the endpoint \(0=1\)
+identified.  Thus \(x\mapsto \mathbf 1_{[0,a)}(x)-a\) has exactly two jumps on
+the circle for \(0<a<1\), one up and one down, and has circular total variation
+\(2\).  For \(a=0,1\) the centered indicator is constant and the corresponding
+discrepancy test contributes zero.
+\end{remark}
+
+\begin{lemma}[Ostrowski block discrepancy decomposition]\label{lem:ostrowski-block-discrepancy}
+Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
+\[
+N=\sum_{j=0}^s b_jq_j,\qquad 0\le b_j\le a_{j+1},
+\]
+be the standard Ostrowski expansion of \(N\)
+\cite[Ch.~I, Sec.~4]{Cassels1957}.  For every function
+\(f:\TT\to\mathbb R\) of bounded variation and every \(x_0\in\TT\),
+\[
+\left|
+\sum_{t=0}^{N-1} f(x_0+t\alpha)-N\int_{\TT}f\,d\leb
+\right|
+\le
+\operatorname{Var}(f)\sum_{j=0}^s b_j .
+\]
+Here \(\operatorname{Var}\) is total variation on the circle with the
+half-open representative used for interval indicators; in particular
+\(\operatorname{Var}(\mathbf 1_{[0,a)}-a)=2\) for \(0<a<1\), as in
+Remark~\ref{rem:half-open-variation-convention}, and the bound is trivial at
+\(a=0,1\).
+\end{lemma}
+
+\begin{proof}
+Set \(M_0=0\) and, for \(0\le j\le s\) and \(0\le \ell<b_j\), set
+\[
+M_{j,\ell}:=\sum_{r=0}^{j-1}b_rq_r+\ell q_j .
+\]
+The standard Ostrowski identity writes the interval of times
+\(\{0,\ldots,N-1\}\) as the disjoint concatenation
+\[
+\{M_{j,\ell},M_{j,\ell}+1,\ldots,M_{j,\ell}+q_j-1\},
+\qquad 0\le j\le s,\quad 0\le \ell<b_j,
+\]
+after omitting empty digit families.  Indeed, after all blocks with index
+less than \(j\) and the first \(\ell\) blocks of length \(q_j\) have been
+listed, the next unused time is exactly \(M_{j,\ell}\); after the final block
+the endpoint is \(\sum_{j=0}^s b_jq_j=N\).  The ascending order is only a
+bookkeeping choice, because the estimate below is uniform in the starting
+point of each block.
+
+For a block of length \(q_j\) starting at \(y\), the Denjoy--Koksma inequality
+for the rotation by \(\alpha\) at a continued-fraction denominator
+\cite[Ch.~2, Sec.~5]{KuipersNiederreiter1974} gives
+\[
+\left|
+\sum_{t=0}^{q_j-1} f(y+t\alpha)-q_j\int_{\TT}f\,d\leb
+\right|
+\le \operatorname{Var}(f).
+\]
+Summing this estimate over the \(b_j\) blocks of each denominator \(q_j\)
+proves the displayed inequality.
+\end{proof}
+
 \begin{proposition}[Continued-fraction discrepancy rate]\label{prop:rotation-discrepancy-cf-rate}
 Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
 \(q_n\) be the continued-fraction denominators.  Choose \(s=s(N)\) so that
 \(q_s\le N<q_{s+1}\), and write the standard Ostrowski expansion
-\cite{Cassels1957}
+\cite[Ch.~I, Sec.~4]{Cassels1957}
 \[
 N=\sum_{j=0}^s b_jq_j,\qquad 0\le b_j\le a_{j+1}.
 \]
@@ -436,17 +705,10 @@ D_N^*(\varphi^{-1};x_0)
 \end{proposition}
 
 \begin{proof}
-For \(0\le a\le1\), put \(f_a(x)=\mathbf{1}_{[0,a)}(x)-a\).  The
-Denjoy--Koksma inequality for rotations at continued-fraction denominators
-\cite[Chapter~2]{KuipersNiederreiter1974} gives, for every starting point
-\(y\),
-\[
-\left|\sum_{t=0}^{q_j-1} f_a(y+t\alpha)\right|
-\le \operatorname{Var}(f_a)\le 2 .
-\]
-Decompose the first \(N\) iterates into the consecutive Ostrowski blocks of
-lengths \(q_j\).  Since the preceding estimate is uniform in the starting
-point of each block,
+For \(0\le a\le1\), put \(f_a(x)=\mathbf{1}_{[0,a)}(x)-a\).  By
+Lemma~\ref{lem:ostrowski-block-discrepancy}, using
+\(\operatorname{Var}(f_a)\le2\) in the half-open convention of
+Remark~\ref{rem:half-open-variation-convention},
 \[
 \left|\sum_{t=0}^{N-1}f_a(x_0+t\alpha)\right|
 \le 2\sum_{j=0}^s b_j .
@@ -600,7 +862,7 @@ E_{m,N}
 \TV\!\left(\hat\pi_{m,N},(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\right).
 \]
 
-\begin{theorem}[Boundary criterion for the canonical fold]\label{prop:multiscale-residual-by-boundary}
+\begin{theorem}[Boundary criterion for the canonical fold]\label{thm:multiscale-residual-by-boundary}
 For \(u=u_1\cdots u_{m+1}\in\Omega_{m+1}\), let
 \(a:=u_1\cdots u_m\). Then
 \[
@@ -783,7 +1045,9 @@ The standard inequality \(\KL(p\|q)\le \chi^2(p,q)\) gives
 \le \frac{1}{q_{\min}}\sum_{x\in E}|p(x)-q(x)|^2.
 \]
 Since \(\sum_x |p(x)-q(x)|=2\TV(p,q)\), the last expression is at most
-\(4q_{\min}^{-1}\TV(p,q)^2\).
+\(4q_{\min}^{-1}\TV(p,q)^2\).  This is the finite-alphabet
+Pinsker--Csisz\'ar--type comparison used below
+\cite{Csiszar1975IdivergenceGeometry,SasonVerdu2016fDivergence}.
 \end{proof}
 
 \subsubsection{Lower bounds on the smallest rotation atom}
@@ -795,6 +1059,8 @@ c(\alpha):=\inf_{k\ge1} k\|k\alpha\|,
 \]
 where \(\|x\|\) denotes distance to the nearest integer. Thus
 \(\alpha\) is badly approximable if and only if \(c(\alpha)>0\).
+This is the one-dimensional instance of Schmidt's badly-approximable
+constant convention \cite{Schmidt1969BadlyApproximableSystems}.
 \end{definition}
 
 \begin{definition}[General window partition scale]\label{def:general-window-partition-scale}
@@ -915,9 +1181,35 @@ at least
 \]
 which proves the first claim.
 
-For \(\alpha=\varphi^{-1}\), choose \(n\ge2\) with \(F_n\le k<F_{n+1}\). The
-best-approximation property of continued-fraction denominators gives
-\(\|k\alpha\|\ge \|F_n\alpha\|=\varphi^{-n}\). Hence
+For \(\alpha=\varphi^{-1}=[0;1,1,\ldots]\), the continued-fraction
+denominators in the convention \(q_{-1}=0,q_0=1\) are
+\[
+q_j=F_{j+1}\qquad(j\ge0),
+\]
+where \(F_0=0,F_1=1\).  Since
+\(\varphi^{-1}=1/\varphi\) and \(F_n=(\varphi^n-(-\varphi)^{-n})/\sqrt5\),
+one has, for \(n\ge2\),
+\[
+F_n\varphi^{-1}-F_{n-1}=(-1)^{n+1}\varphi^{-n},
+\qquad\text{hence}\qquad
+\|F_n\varphi^{-1}\|=\varphi^{-n}.
+\]
+Equivalently, after substituting \(n=j+1\), this is Cassels' denominator
+estimate
+\[
+\|q_j\alpha\|=\|F_{j+1}\alpha\|=\varphi^{-j-1}
+\]
+in this Fibonacci indexing for \(j\ge1\) \cite[Ch.~I]{Cassels1957}.  The
+initial denominator \(q_0=F_1=1\) instead gives
+\(\|q_0\alpha\|=\alpha=\varphi^{-1}\), and hence the same lower bound for
+\(k\|k\alpha\|\).  For \(k\ge2\), choose \(n\ge2\) with
+\(F_n\le k<F_{n+1}\).  Since \(q_{n-1}=F_n\) and \(q_n=F_{n+1}\), the
+best-approximation property of continued-fraction denominators says that for
+every integer \(1\le k<q_n=F_{n+1}\) with \(k\ne q_{n-1}\),
+\[
+\|k\alpha\|\ge \|q_{n-1}\alpha\|=\|F_n\alpha\|=\varphi^{-n}.
+\]
+The same lower bound is an equality when \(k=F_n\). Hence
 \[
 k\|k\alpha\|\ge F_n\varphi^{-n}\ge \varphi^{-2},
 \]
@@ -1139,10 +1431,11 @@ truncated alternating sum
 \[
 a_t-a_{t-1}+\cdots+(-1)^{t-1}a_1
 \]
-lies in \((0,a_t)\); this follows by a backward induction on \(t\). Applying
-this to \(a_s:=F_{i_s+1}\) gives
+lies in \((0,a_t]\); this follows by a backward induction on \(t\), with
+equality possible only when \(t=1\). Applying this to
+\(a_s:=F_{i_s+1}\) gives
 \[
-0<\Delta<F_{i_t+1}\le F_{m+1}<F_{m+2}.
+0<\Delta\le F_{i_t+1}\le F_{m+1}<F_{m+2}.
 \]
 Hence \(\Delta\not\equiv 0\pmod{F_{m+2}}\). By
 Proposition~\ref{prop:fold-residue-characterization},
@@ -1263,11 +1556,27 @@ residuals built from the \(f\)-orbit of \(x_0\) coincide exactly with the
 corresponding quantities for the rotation orbit \(y_0+t\alpha\). If one uses
 the \(f\)-invariant measure \(h^{-1}_*\leb\) as the reference law on the
 state space of \(f\), then the limiting microstate and folded laws coincide
-with \(\mu_m\) and \(\pi_m^{\mathrm{fold}}\). In particular every conclusion
-in Sections~3--5 transfers verbatim to \(f\) with the same constants. If \(f\)
-is a \(C^2\) circle diffeomorphism with irrational rotation number \(\alpha\),
-the required conjugacy exists by Denjoy's theorem
-\cite{Denjoy1932CourbesTore}.
+with \(\mu_m\) and \(\pi_m^{\mathrm{fold}}\). The transfer is
+hypothesis-preserving in the following precise sense.
+\begin{enumerate}
+\item For arbitrary \(\beta\), every general-window statement proved above for
+the half-open rotation window \([0,\beta)\), including the constants \(2m\),
+\(4m+2\), the separation scale \(\lambda_m(\alpha,\beta)\), and the boundary
+residual criterion, applies to the pulled-back window \(I=h^{-1}([0,\beta))\)
+with the same constants.
+\item The Sturmian-slice statements, including no-collision rigidity,
+one-block higher-block conjugacy, entropy preservation under the fold, the
+Sturmian \(m+1\) discrepancy constant, and the injective-placement comparisons
+for the realized Sturmian law, transfer only in the case
+\(\beta=\alpha\), equivalently \(I=h^{-1}([0,\alpha))\).
+\item The finite-\(m\) Parry comparison identities transfer to the folded law
+obtained from the corresponding pulled-back itinerary; when a comparison
+theorem assumes the Sturmian slice or the golden slope, those assumptions are
+carried along unchanged.
+\end{enumerate}
+If \(f\) is a \(C^2\) circle diffeomorphism with irrational rotation number
+\(\alpha\), the required conjugacy exists by Denjoy's theorem
+\cite{Denjoy1932CourbesTore,KatokHasselblatt1995}.
 \end{theorem}
 
 \begin{proof}
@@ -1295,9 +1604,24 @@ For the limiting laws, the conjugacy pushes the \(f\)-invariant measure
 \(h^{-1}_*\leb\) to Lebesgue measure on the rotation model. Hence the
 length-\(m\) block law generated by \(f\) with respect to \(I\) is exactly the
 rotation law \(\mu_m\), and its folded pushforward is
-\(\pi_m^{\mathrm{fold}}\). Every conclusion proved earlier depends only on
-these symbolic laws and on the common itinerary, so the same statements hold
-for \(f\) without any change in constants.
+\(\pi_m^{\mathrm{fold}}\).
+
+It remains only to check that no hypothesis is lost in the transfer.  The
+general-window estimates in Sections~3--4 use the orbit, the half-open window
+\([0,\beta)\), the induced finite partition, the atom separation constants,
+and the deterministic fold.  All of these objects are carried to the
+\(f\)-model by \(h^{-1}\), so their statements and constants are identical.
+The rigidity and relabeling statements in Section~4 also assume the special
+identity \(\beta=\alpha\).  Under conjugacy this is exactly the assertion that
+the \(f\)-window is \(h^{-1}([0,\alpha))\).  In that case the symbolic language
+is the Sturmian language of slope \(\alpha\), so the support
+\(S_m(\alpha)\), the map \(J_m=\Fold_m|_{S_m(\alpha)}\), and the
+coordinatewise conjugacy \(J_m^{\mathbb Z}\) are the same objects as in the
+rotation proof.  For \(\beta\ne\alpha\) those Sturmian hypotheses are absent,
+and the theorem asserts only the general-window conclusions.  Finally, the
+Parry formulas in Section~5 are functions of the folded \(m\)-block law and
+of the fixed golden-mean reference law; hence they transfer to the conjugate
+model precisely under the hypotheses with which they were proved.
 \end{proof}
 
 \section{Comparison with the Parry measure}
@@ -1333,7 +1657,9 @@ If \(\nu\in\Delta(X_m)\), define the endpoint-class masses
 \begin{proposition}[Fiber-uniform lift decomposition]
 \label{prop:fiber-uniform-lift-decomposition}
 Let \(\mu\in\Delta(\Omega_m)\), let \(\pi:=(\Fold_m)_*\mu\), and let
-\(\eta\in\Delta(X_m)\). Then
+\(\eta\in\Delta(X_m)\). The identity below is understood in the
+extended-value sense: if \(\pi\not\ll\eta\), then both sides are \(+\infty\).
+If \(\pi\ll\eta\), then
 \[
 \KL(\mu\|Q_m\eta)=\KL(\pi\|\eta)+\KL(\mu\|Q_m\pi),
 \]
@@ -1341,6 +1667,11 @@ so the observable divergence and the within-fiber term split exactly.
 \end{proposition}
 
 \begin{proof}
+If \(\pi\not\ll\eta\), choose \(x\in X_m\) with \(\pi(x)>0\) and
+\(\eta(x)=0\).  Then \((Q_m\eta)(a)=0\) for every
+\(a\in\Fold_m^{-1}\{x\}\), while at least one such \(a\) has \(\mu(a)>0\).
+Thus \(\KL(\mu\|Q_m\eta)=+\infty\), and \(\KL(\pi\|\eta)=+\infty\).
+It remains to prove the finite case \(\pi\ll\eta\).
 For \(a\in\Omega_m\), write \(x_a:=\Fold_m(a)\). Then
 \[
 \frac{\mu(a)}{(Q_m\eta)(a)}
@@ -1396,7 +1727,8 @@ Apply Proposition~\ref{prop:fiber-uniform-lift-decomposition} with
 
 \begin{definition}[R\'enyi entropy and divergence]\label{def:renyi-entropy-divergence}
 Let \(E\) be a finite set, let \(p\in\Delta(E)\), and let \(r\in\Delta(E)\)
-with \(p\ll r\).
+with \(p\ll r\).  We use the finite-alphabet R\'enyi convention of
+\cite{Renyi1961EntropyInformation,CoverThomas2006,SasonVerdu2016fDivergence}.
 
 For \(q\in(0,\infty)\setminus\{1\}\), define the R\'enyi entropy
 \[
@@ -1423,6 +1755,41 @@ D_\infty(p\|r):=
 \log\max_{x\in\supp(p)}\frac{p(x)}{r(x)}.
 \]
 \end{definition}
+
+\begin{lemma}[Finite-alphabet R\'enyi nonnegativity]\label{lem:renyi-nonnegativity}
+Let \(E\) be finite, let \(p,r\in\Delta(E)\), and assume \(p\ll r\).  Then
+\[
+D_q(p\|r)\ge0\qquad\text{for every }q\in[0,\infty].
+\]
+\end{lemma}
+
+\begin{proof}
+For \(0<q<1\), H\"older's inequality with exponents \(1/q\) and
+\(1/(1-q)\) gives
+\[
+\sum_x p(x)^q r(x)^{1-q}\le
+\left(\sum_xp(x)\right)^q\left(\sum_xr(x)\right)^{1-q}=1.
+\]
+Since \(q-1<0\), the defining factor \(1/(q-1)\) reverses the logarithmic
+inequality and gives \(D_q(p\|r)\ge0\).  For \(q>1\), write
+\(a_x=p(x)/r(x)\) on \(\supp(r)\), with \(a_x=0\) when \(r(x)>0=p(x)\).
+Then
+\[
+\sum_xp(x)^qr(x)^{1-q}=\sum_x r(x)a_x^q
+\ge \left(\sum_xr(x)a_x\right)^q=1
+\]
+by Jensen's inequality for the convex function \(t\mapsto t^q\).  Hence
+\(D_q(p\|r)\ge0\) also for \(q>1\).  The case \(q=1\) is Gibbs'
+inequality.  For \(q=0\), \(D_0(p\|r)=-\log r(\supp p)\ge0\).  For
+\(q=\infty\),
+\[
+\max_{x\in\supp p}\frac{p(x)}{r(x)}
+\ge
+\frac{\sum_{x\in\supp p}p(x)}{\sum_{x\in\supp p}r(x)}
+=\frac1{r(\supp p)}\ge1,
+\]
+so \(D_\infty(p\|r)\ge0\).
+\end{proof}
 
 \begin{theorem}[Exact divergence identity relative to the Parry measure]\label{thm:parry-kl-identity}
 For every probability law \(\nu\in\Delta(X_m)\),
@@ -1559,9 +1926,19 @@ subtracting \(-\log c_m-H_q(\nu)\) leaves
 \frac{\sum_{u\in X_m}\nu(u)^q r(u)^{1-q}}
 {\sum_{u\in X_m}\nu(u)^q}.
 \]
-Because \(r(u)\in\{\varphi,1,\varphi^{-1}\}\), the quotient inside the
-logarithm lies between \(\varphi^{-(q-1)}\) and \(\varphi^{q-1}\). Hence the
-last term lies in \([-\log\varphi,\log\varphi]\), giving the stated bounds.
+Put \(w_u=\nu(u)^q/\sum_v\nu(v)^q\) on the support of \(\nu\).  The quotient
+is the weighted mean
+\[
+\sum_{u} w_u r(u)^{1-q}.
+\]
+If \(q>1\), then \(1-q<0\), so
+\(r(u)^{1-q}\in[\varphi^{1-q},\varphi^{q-1}]\); after taking logarithms and
+multiplying by the positive number \(1/(q-1)\), the contribution lies in
+\([-\log\varphi,\log\varphi]\).  If \(0<q<1\), then \(1-q>0\), so the same
+weighted mean lies in \([\varphi^{-(1-q)},\varphi^{1-q}]\); multiplication by
+the negative number \(1/(q-1)\) reverses the endpoints and again gives
+\([-\log\varphi,\log\varphi]\).  This proves the stated bounds for all finite
+\(q\ne1\).
 
 For \(q=1\), Theorem~\ref{thm:parry-kl-identity} shows that
 \[
@@ -1614,6 +1991,10 @@ Then
 \[
 D_q(p\|\rho)=D_q(p\|\rho^S)-\log \rho(S).
 \]
+In particular, by Lemma~\ref{lem:renyi-nonnegativity},
+\[
+D_q(p\|\rho)\ge -\log\rho(S).
+\]
 \end{proposition}
 
 \begin{proof}
@@ -1656,6 +2037,9 @@ D_\infty(p\|\rho)
 =
 D_\infty(p\|\rho^S)-\log\rho(S).
 \]
+The displayed lower bound follows by applying
+Lemma~\ref{lem:renyi-nonnegativity} on the finite alphabet \(S\) to
+\(D_q(p\|\rho^S)\).
 \end{proof}
 
 \begin{lemma}[Endpoint class counts]\label{lem:endpoint-class-counts}
@@ -1753,10 +2137,11 @@ three classes, so the displayed piecewise formula for \(M_m(k)\) follows.
 Now let \(S:=\supp(\nu)\). Proposition~\ref{prop:renyi-support-conditioning}
 gives
 \[
-D_q(\nu\|\pi_m)=D_q(\nu\|\pi_m(\cdot\mid S))-\log\pi_m(S)\ge -\log\pi_m(S),
+D_q(\nu\|\pi_m)\ge -\log\pi_m(S),
 \]
-because every R\'enyi divergence is nonnegative. Since \(|S|\le k\),
-\(\pi_m(S)\le M_m(k)\), hence
+using the finite-alphabet nonnegativity input recorded in
+Lemma~\ref{lem:renyi-nonnegativity}. Since \(|S|\le k\), \(\pi_m(S)\le
+M_m(k)\), hence
 \[
 D_q(\nu\|\pi_m)\ge -\log M_m(k).
 \]
@@ -1818,8 +2203,21 @@ If \(m\ge6\), then for every \(q\in[0,\infty]\),
 (m-1)\log\varphi-\log\pi(0)-H_q(\mu_m).
 \]
 Every injection with image contained in \(X_m^{00}\) attains this value. For
-every \(q<\infty\), these are exactly the optimal injections. Since
-\(|X_m^{00}|=F_m\), such placements exist if and only if \(m\ge6\).
+every \(q<\infty\), these are exactly the optimal injections. For
+\(q=\infty\), write
+\[
+p_*:=\max_{w\in S_m(\alpha)}\mu_m(w),\qquad
+\tau(u):=\frac{\pi_m(u)}{\pi(0)\varphi^{-(m-1)}}\in\{1,\varphi^{-1},\varphi^{-2}\}.
+\]
+An injection \(\iota\) is optimal if and only if
+\[
+\mu_m(w)\le p_*\tau(\iota(w))
+\qquad\text{for every }w\in S_m(\alpha).
+\]
+Thus \(q=\infty\) may have additional optimizers, but precisely the additional
+placements of non-maximal source atoms whose loss of Parry mass is no larger
+than their drop below the maximal source mass. Since \(|X_m^{00}|=F_m\), an
+all-\(X_m^{00}\) optimal placement exists if and only if \(m\ge6\).
 \end{theorem}
 
 \begin{proof}
@@ -1916,7 +2314,25 @@ D_\infty(\nu\|\pi_m)
 (m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m).
 \end{aligned}
 \]
-Any injection with image in \(X_m^{00}\) attains equality here as well.
+The displayed lower bound is sharp exactly when
+\[
+\max_{u\in\supp(\nu)}\frac{\nu(u)}{c_{00}\tau(u)}
+=
+\frac{\max_{u\in\supp(\nu)}\nu(u)}{c_{00}}.
+\]
+Since \(\nu=\iota_*\mu_m\) and \(\iota\) is injective, this condition is
+equivalent to
+\[
+\frac{\mu_m(w)}{\tau(\iota(w))}\le p_*
+\qquad (w\in S_m(\alpha)),
+\]
+or, equivalently, to
+\(\mu_m(w)\le p_*\tau(\iota(w))\) for every realized word \(w\).  This proves
+the asserted \(q=\infty\) optimizer characterization.  In particular, any
+injection with image in \(X_m^{00}\), for which \(\tau\equiv1\) on the image,
+attains equality here as well; other optimizers occur exactly when every atom
+placed outside \(X_m^{00}\) is small enough to satisfy the displayed
+inequality.
 
 It remains to characterize the admissible range. The Sturmian complexity is
 \(|S_m(\alpha)|=m+1\), while Lemma~\ref{lem:endpoint-class-counts} gives
@@ -1929,6 +2345,187 @@ an injective placement inside \(X_m^{00}\) exists exactly in that range, and
 the displayed infimum formula follows.
 \end{proof}
 
+\begin{proposition}[Finite small-\(m\) endpoint budgets]
+\label{prop:small-m-endpoint-budget}
+Assume \(\beta=\alpha\), fix \(1\le m\le5\), and write the masses of the
+Sturmian \(m\)-block law in nonincreasing order as
+\[
+p_1\ge p_2\ge\cdots\ge p_{m+1}>0.
+\]
+Let
+\[
+b_0(m):=|X_m^{00}|,\qquad
+b_1(m):=|X_m^{01}|+|X_m^{10}|,\qquad
+b_2(m):=|X_m^{11}|,
+\]
+with the convention \(X_1^{00}=\{0\}\), \(X_1^{11}=\{1\}\), and
+\(X_1^{01}=X_1^{10}=\varnothing\).  The endpoint capacities and the
+support-optimal endpoint budgets for an injective placement of the \(m+1\)
+Sturmian atoms are
+\[
+\begin{array}{c|c|c|c}
+m & (b_0,b_1,b_2) & \text{best support budget }(n_0,n_1,n_2)
+& \text{endpoint classes used}\\
+\hline
+1 & (1,0,1) & (1,0,1) & X_1^{00},X_1^{11}\\
+2 & (1,2,0) & (1,2,0) & X_2^{00},X_2^{01},X_2^{10}\\
+3 & (2,2,1) & (2,2,0) & X_3^{00},X_3^{01},X_3^{10}\\
+4 & (3,4,1) & (3,2,0) & X_4^{00}\text{ and two middle-class words}\\
+5 & (5,6,2) & (5,1,0) & X_5^{00}\text{ and one middle-class word}.
+\end{array}
+\]
+Here \(n_0+n_1+n_2=m+1\), and the classes are filled in the order
+\[
+X_m^{00},\qquad X_m^{01}\cup X_m^{10},\qquad X_m^{11}.
+\]
+Write
+\[
+\tau(u):=\varphi^{-\mathbf 1_{\{u_1=1\}}-\mathbf 1_{\{u_m=1\}}},
+\]
+so \(\tau=1\) on \(X_m^{00}\), \(\tau=\varphi^{-1}\) on
+\(X_m^{01}\cup X_m^{10}\), and \(\tau=\varphi^{-2}\) on \(X_m^{11}\).
+For the \(q=\infty\) formula below set
+\[
+R_{m,\infty}:=
+\max\!\left(
+\{1\}
+\cup
+\left\{\varphi\,\frac{p_{n_0+1}}{p_1}: n_1>0\right\}
+\cup
+\left\{\varphi^2\,\frac{p_{n_0+n_1+1}}{p_1}: n_2>0\right\}
+\right).
+\]
+
+For \(q\in(0,\infty)\setminus\{1\}\), the minimum over injective placements
+\(T_m:S_m(\alpha)\to X_m\) is
+\[
+\inf_{T_m}D_q((T_m)_*\mu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m)+\gamma_{m,q},
+\]
+where
+\[
+\gamma_{m,q}
+=
+\frac{1}{q-1}\log
+\frac{
+\sum_{r=1}^{n_0}p_r^q
+\;+\;\varphi^{q-1}\sum_{r=n_0+1}^{n_0+n_1}p_r^q
+\;+\;\varphi^{2(q-1)}\sum_{r=n_0+n_1+1}^{m+1}p_r^q}
+{\sum_{r=1}^{m+1}p_r^q}.
+\]
+For \(q=1\),
+\[
+\inf_{T_m}\KL((T_m)_*\mu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m)+\gamma_{m,1},
+\]
+where
+\[
+\gamma_{m,1}
+=
+\left(\sum_{r=n_0+1}^{n_0+n_1}p_r
++2\sum_{r=n_0+n_1+1}^{m+1}p_r\right)\log\varphi.
+\]
+For \(q=\infty\),
+\[
+\inf_{T_m}D_\infty((T_m)_*\mu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+\gamma_{m,\infty},
+\]
+where
+\[
+\gamma_{m,\infty}
+=
+\log R_{m,\infty}.
+\]
+For \(q=0\), the minimum is
+\[
+\inf_{T_m}D_0((T_m)_*\mu_m\|\pi_m)
+=
+-\log\!\left(
+\pi(0)\varphi^{-(m-1)}
+\bigl(n_0+n_1\varphi^{-1}+n_2\varphi^{-2}\bigr)
+\right).
+\]
+For \(q\in(0,\infty)\), the minimizers are exactly the placements with the
+endpoint budgets displayed above, with the largest source atoms assigned to the
+heaviest available endpoint classes.  For \(q=\infty\), those placements attain
+the displayed value, and an injective placement is minimizing if and only if
+\[
+\max_{a\in S_m(\alpha)}
+\frac{\mu_m(a)}{p_1\,\tau(T_m(a))}
+\le R_{m,\infty}.
+\]
+For \(q=0\), only the support budget matters.
+\end{proposition}
+
+\begin{proof}
+The capacity table follows from direct enumeration for \(m=1\) and from
+Lemma~\ref{lem:endpoint-class-counts} for \(2\le m\le5\).  Since Parry masses
+on \(X_m^{00}\), \(X_m^{01}\cup X_m^{10}\), and \(X_m^{11}\) are respectively
+\[
+\pi(0)\varphi^{-(m-1)},\qquad
+\pi(0)\varphi^{-m},\qquad
+\pi(0)\varphi^{-(m+1)},
+\]
+the support of largest Parry mass is obtained by filling the endpoint classes
+in the displayed order.  Applying this rule with \(k=m+1\) gives the five
+rows of the table.
+
+Let \(q\in(0,\infty)\setminus\{1\}\).  The endpoint-penalty identity proved in
+Theorem~\ref{thm:lossless-coarse-graining-envelope} shows that minimizing the
+divergence is the same as optimizing
+\[
+\sum_{a\in S_m(\alpha)}\mu_m(a)^q\tau(T_m(a))^{1-q},
+\]
+with the sign of \(1/(q-1)\) taken into account.  If \(q>1\), the prefactor is
+positive and the coefficients
+\[
+1,\quad \varphi^{q-1},\quad \varphi^{2(q-1)}
+\]
+increase from the \(00\)-class to the \(11\)-class.  The rearrangement
+inequality therefore assigns the largest weights \(p_r^q\) to the smallest
+available coefficients.  If \(0<q<1\), the prefactor is negative and the
+coefficients
+\[
+1,\quad \varphi^{q-1},\quad \varphi^{2(q-1)}
+\]
+decrease from the \(00\)-class to the \(11\)-class; maximizing the weighted
+sum, which minimizes the logarithm after multiplication by the negative
+prefactor, gives the same assignment.  This proves the displayed formula for
+\(\gamma_{m,q}\).
+
+For \(q=1\), Theorem~\ref{thm:lossless-coarse-graining-envelope} reduces the
+endpoint penalty to the expectation of the class costs \(0,\log\varphi\), and
+\(2\log\varphi\).  The same rearrangement argument assigns the largest masses
+to the lowest costs, giving \(\gamma_{m,1}\).  For \(q=\infty\), the problem is
+to minimize
+\[
+\max_{a\in S_m(\alpha)}\frac{\mu_m(a)}{\tau(T_m(a))}.
+\]
+The displayed class filling gives bottleneck \(p_1R_{m,\infty}\): its largest
+ratios in the three endpoint levels are \(p_1\), \(\varphi p_{n_0+1}\), and
+\(\varphi^2p_{n_0+n_1+1}\), with empty levels omitted.  Conversely, if a
+placement has bottleneck at most \(p_1R_{m,\infty}\), then it is optimal.  No
+smaller bottleneck is possible.  Indeed, a bound \(B<p_1R_{m,\infty}\) must
+fail in one of three ways: \(B<p_1\), so the largest atom already exceeds the
+bound even in \(X_m^{00}\); or \(n_1>0\) and \(B<\varphi p_{n_0+1}\), so the
+first \(n_0+1\) atoms would all have to lie in \(X_m^{00}\), whose capacity is
+only \(n_0\); or \(n_2>0\) and
+\(B<\varphi^2p_{n_0+n_1+1}\), so the first \(n_0+n_1+1\) atoms would all have
+to lie outside \(X_m^{11}\), while \(X_m^{00}\cup X_m^{01}\cup X_m^{10}\) has
+capacity only \(n_0+n_1\) in the support-optimal budget.  This proves the
+\(q=\infty\) value and the stated minimizer criterion.  For \(q=0\), the source weights
+drop out and
+\[
+D_0((T_m)_*\mu_m\|\pi_m)=-\log\pi_m(T_m(S_m(\alpha))),
+\]
+so the best support budget is exactly the support budget already listed in
+the table.  The equality cases stated in the proposition are precisely the
+equality cases in these rearrangement steps.
+\end{proof}
+
 \begin{remark}[Injective relabeling and support budgets]
 \label{rem:injective-relabeling-stronger}
 Theorem~\ref{thm:optimal-injective-relabeling} does more than constrain the
@@ -1936,9 +2533,9 @@ image support size. It fixes the realized Sturmian weight vector \(\mu_m\) and
 allows only injective placements of those \(m+1\) probabilities inside the
 ambient language \(X_m\). The resulting optimum is therefore a coding
 invariance statement for the realized source, not just a best \((m+1)\)-state
-approximation problem over arbitrary laws on \(X_m\).  The finite exceptional
-cases \(m<6\) play no role in the asymptotic statements and are absorbed into
-the \(O_\alpha(1)\) constants.
+approximation problem over arbitrary laws on \(X_m\).  The finite range
+\(m<6\) is the endpoint-budget obstruction classified in
+Proposition~\ref{prop:small-m-endpoint-budget}.
 \end{remark}
 
 \subsection{Support budgets and bounded-type asymptotics}
@@ -2053,6 +2650,421 @@ D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)\le 2\log\varphi.
 \]
 \end{proof}
 
+\begin{lemma}[Golden-slope coding audit]
+\label{lem:golden-slope-coding-audit}
+Let \(\alpha=\varphi^{-1}\), \(I=[0,\alpha)\), and code the rotation by
+\(s_j(x)=\mathbf 1_I(x+j\alpha)\).  This is the Fibonacci-word symbol
+convention in which the substitution is
+\[
+\sigma(1)=10,\qquad \sigma(0)=1.
+\]
+For the finite endpoint calculations used below, the following convention
+checks hold.
+\begin{enumerate}
+\item The length-three factors are exactly
+\[
+010,\qquad 011,\qquad 101,\qquad 110,
+\]
+and the allowed right extensions are
+\[
+010\mapsto 0101,\qquad
+110\mapsto 1101,\qquad
+011\mapsto 0110,\qquad
+101\mapsto 1010\text{ or }1011 .
+\]
+\item The length-six factors, in the same coding convention, are exactly
+\[
+010110,\quad 011010,\quad 011011,\quad 101011,\quad 101101,\quad
+110101,\quad 110110 .
+\]
+\item With the half-open window \(I=[0,\alpha)\),
+\[
+[10]=[0,1-\alpha),\qquad
+[010]=[\alpha,2-2\alpha),\qquad
+[110]=[1-\alpha,\alpha).
+\]
+Hence
+\[
+\mu([10])=\varphi^{-2},\qquad
+\mu([010])=\varphi^{-4},\qquad
+\mu([110])=\varphi^{-3}.
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The standard identification of the half-open coding of the rotation of slope
+\(\varphi^{-1}\) with the Fibonacci substitution language gives the displayed
+substitution convention \cite{QueffelecSubstitution,Fogg2002}.  The finite
+facts needed in the endpoint argument can also be checked directly from the
+rotation partition, which fixes the half-open endpoint choices.
+
+For words of length \(n\), the discontinuities of the map
+\[
+x\longmapsto
+\bigl(\mathbf 1_I(x),\mathbf 1_I(x+\alpha),\ldots,
+\mathbf 1_I(x+(n-1)\alpha)\bigr)
+\]
+are the points \(-j\alpha\pmod1\) with \(-1\le j\le n-1\).  On each
+half-open atom between consecutive discontinuities the word is constant, and
+the left endpoint belongs to the atom.
+
+For \(n=4\), the cyclic order of the discontinuities is
+\[
+0<2-3\alpha<1-\alpha<\alpha<2-2\alpha<1.
+\]
+Sampling the corresponding atoms gives
+\[
+\begin{array}{c|c}
+\text{atom} & s_0s_1s_2s_3\\
+\hline
+{[0,2-3\alpha)} & 1010\\
+{[2-3\alpha,1-\alpha)} & 1011\\
+{[1-\alpha,\alpha)} & 1101\\
+{[\alpha,2-2\alpha)} & 0101\\
+{[2-2\alpha,1)} & 0110 .
+\end{array}
+\]
+Taking the first three symbols and the fourth symbol in this table proves the
+terminal triples and their allowed right extensions.
+
+For \(n=6\), the cyclic order is
+\[
+0<2-3\alpha<1-\alpha<3-4\alpha<\alpha<2-2\alpha<4-5\alpha<1.
+\]
+The half-open atoms give
+\[
+\begin{array}{c|c}
+\text{atom} & s_0s_1s_2s_3s_4s_5\\
+\hline
+{[0,2-3\alpha)} & 101011\\
+{[2-3\alpha,1-\alpha)} & 101101\\
+{[1-\alpha,3-4\alpha)} & 110101\\
+{[3-4\alpha,\alpha)} & 110110\\
+{[\alpha,2-2\alpha)} & 010110\\
+{[2-2\alpha,4-5\alpha)} & 011010\\
+{[4-5\alpha,1)} & 011011 .
+\end{array}
+\]
+This is the asserted length-six factor list.
+
+It remains to spell out the half-open endpoint cylinders.  The word \(10\)
+means \(x\in I\) and \(x+\alpha\notin I\), hence
+\[
+[10]=[0,\alpha)\cap R_{-\alpha}(\TT\setminus I)=[0,1-\alpha).
+\]
+Similarly,
+\[
+[010]
+=
+(\TT\setminus I)\cap R_{-\alpha}I\cap R_{-2\alpha}(\TT\setminus I)
+=[\alpha,2-2\alpha),
+\]
+and
+\[
+[110]
+=
+I\cap R_{-\alpha}I\cap R_{-2\alpha}(\TT\setminus I)
+=[1-\alpha,\alpha).
+\]
+The endpoints are exactly as written because \(I\) contains \(0\) and excludes
+\(\alpha\).  Taking lengths and using
+\(\alpha=\varphi^{-1}\), \(1-\alpha=\varphi^{-2}\),
+\(2-3\alpha=\varphi^{-4}\), and \(2\alpha-1=\varphi^{-3}\) proves the three
+mass identities.
+\end{proof}
+
+\begin{lemma}[Golden-slope terminal residue skeleton]
+\label{lem:golden-terminal-residue-skeleton}
+Assume \(\beta=\alpha=\varphi^{-1}\), and let \(m\ge6\).  For
+\(a\in S_m(\varphi^{-1})\),
+\[
+N_m(a)\bmod F_{m+2}\in [F_{m+1},F_{m+2})
+\]
+if and only if the last three symbols of \(a\) are \(010\) or \(110\).
+\end{lemma}
+
+\begin{proof}
+Lemma~\ref{lem:golden-slope-coding-audit} fixes the golden-slope symbol
+convention and gives the possible terminal triples together with their
+one-step right extensions.  In terms of the new terminal triple after appending
+the next symbol, these transitions are
+\[
+010\mapsto 101,\qquad
+110\mapsto 101,\qquad
+011\mapsto 110,\qquad
+101\mapsto 010\text{ or }011 .
+\]
+
+The audited length-six factors are
+\[
+010110,\quad 011010,\quad 011011,\quad 101011,\quad 101101,\quad 110101,
+\quad 110110 .
+\]
+A direct valuation gives the base case
+\[
+\begin{array}{c|c|c}
+b\in S_6(\varphi^{-1}) & b_4b_5b_6 & N_6(b)\\
+\hline
+010110&110&15\\
+011010&010&13\\
+011011&011&26\\
+101011&011&25\\
+101101&101&22\\
+110101&101&21\\
+110110&110&16 .
+\end{array}
+\]
+Since \(F_7=13\), \(F_8=21\), and \(F_9=34\), this is exactly the pair of
+interval statements
+\[
+\begin{array}{ll}
+N_6(b)\in[F_7,F_8), & b_4b_5b_6\in\{010,110\},\\
+N_6(b)\in[F_8,F_9), & b_4b_5b_6\in\{011,101\}.
+\end{array}
+\]
+
+We now propagate these two interval assertions.  Suppose they hold at length
+\(m\).  If a length-\((m+1)\) factor is obtained from \(a\in S_m(\varphi^{-1})\)
+by appending \(c\in\{0,1\}\), then
+\[
+N_{m+1}(ac)=N_m(a)+cF_{m+2}.
+\]
+Using the transition graph above:
+\[
+\begin{array}{c|c|c}
+\text{old terminal triple} & c & \text{new terminal triple}\\
+\hline
+010&1&101\\
+110&1&101\\
+011&0&110\\
+101&0&010\\
+101&1&011 .
+\end{array}
+\]
+The corresponding interval inclusions are
+\[
+[F_{m+1},F_{m+2})+F_{m+2}\subset [F_{m+3},F_{m+4}),
+\]
+\[
+[F_{m+2},F_{m+3})\subset [F_{m+2},F_{m+3}),
+\]
+and
+\[
+[F_{m+2},F_{m+3})+F_{m+2}\subset [F_{m+3},F_{m+4}),
+\]
+where the last inclusion uses \(2F_{m+2}\ge F_{m+3}\).  Hence, at length
+\(m+1\),
+\[
+\begin{array}{ll}
+N_{m+1}(b)\in[F_{m+2},F_{m+3}), & b_{m-1}b_mb_{m+1}\in\{010,110\},\\
+N_{m+1}(b)\in[F_{m+3},F_{m+4}), & b_{m-1}b_mb_{m+1}\in\{011,101\}.
+\end{array}
+\]
+This closes the induction.
+
+For terminal triples \(010\) and \(110\), the actual value already lies in
+\([F_{m+1},F_{m+2})\), so its residue modulo \(F_{m+2}\) lies in that same
+interval.  For terminal triples \(011\) and \(101\), the actual value lies in
+\([F_{m+2},F_{m+3})\); subtracting one \(F_{m+2}\) puts the residue in
+\([0,F_{m+1})\).  This proves the criterion.
+\end{proof}
+
+\begin{lemma}[Golden-slope endpoint balance of the canonical fold]
+\label{lem:golden-fold-endpoint-masses}
+Assume \(\beta=\alpha=\varphi^{-1}\) and \(m\ge6\). Then
+\[
+\pi_m^{\mathrm{fold}}\{u:u_1=1\}
+=
+\pi_m^{\mathrm{fold}}\{u:u_m=1\}
+=
+\varphi^{-2}.
+\]
+Consequently,
+\[
+\eta_{11}(\pi_m^{\mathrm{fold}})
+-
+\eta_{00}(\pi_m^{\mathrm{fold}})
+=
+-\varphi^{-3}.
+\]
+\end{lemma}
+
+\begin{proof}
+For the golden slope, the Sturmian language is the set of length-\(m\)
+factors of the Fibonacci word, in the symbol convention determined by the
+window \([0,\alpha)\); this convention and the half-open endpoint choices are
+audited in Lemma~\ref{lem:golden-slope-coding-audit}.  We shall use two
+elementary endpoint consequences of this presentation.  First, every realized
+word begins with one of
+\[
+01,\qquad 10,\qquad 110.
+\]
+Second, Lemma~\ref{lem:golden-terminal-residue-skeleton} gives the right-end
+residue criterion.  A legal word \(x\in X_m\) has last digit \(1\) exactly when
+its Fibonacci value lies in \([F_{m+1},F_{m+2})\).  By
+Proposition~\ref{prop:fold-residue-characterization}, the folded value has the
+same residue as \(N_m(a)\) modulo \(F_{m+2}\).  Therefore
+\[
+(\Fold_m(a))_m=1
+\quad\Longleftrightarrow\quad
+a_{m-2}a_{m-1}a_m\in\{010,110\}
+\qquad (m\ge6).
+\]
+
+Let \(u=\Fold_m(a)\) with \(a\in S_m(\varphi^{-1})\).  The first endpoint is
+controlled by the same finite-transition induction used for the terminal
+residue skeleton.  In the audited length-six list of
+Lemma~\ref{lem:golden-slope-coding-audit}, a direct Zeckendorf normalization
+gives first folded digit \(1\) exactly for the two words beginning with
+\(10\), and first folded digit \(0\) for the words beginning with \(01\) or
+\(110\).  When a legal golden factor \(a\) is extended on the right by an
+  allowed symbol \(c\), the valuation changes by
+  \[
+  N_{m+1}(ac)=N_m(a)+cF_{m+2}.
+  \]
+  The first folded digit is unchanged by this extension.  We verify this at the
+  level of the raw Fibonacci digit vector before invoking uniqueness of the
+  terminal normal form.  The audited transition graph has exactly the five
+  right-extension cases
+  \[
+  010+1\to101,\qquad
+  110+1\to101,\qquad
+  011+0\to110,\qquad
+  101+0\to010,\qquad
+  101+1\to011 .
+  \]
+  In the two \(c=0\) cases the integer is unchanged, so the lower Zeckendorf
+  digits, and in particular the \(F_2\)-digit, are unchanged.  In the cases
+  \(010+1\) and \(110+1\), Lemma~\ref{lem:golden-terminal-residue-skeleton}
+  puts \(N_m(a)\) in \([F_{m+1},F_{m+2})\).  Its normal form therefore has the
+  top digit \(z_m=1\) and no digit in position \(m+1\).  Adding \(F_{m+2}\)
+  creates the adjacent pair at positions \(m,m+1\), and the local carry
+  \[
+  F_{m+1}+F_{m+2}\longmapsto F_{m+3}
+  \]
+  is supported in positions \(m,m+1,m+2\).  It cannot alter any position
+  \(\le m-1\).
+
+  The remaining \(c=1\) transition is the exceptional branch
+  \(101+1\to011\).  Here the appended raw vector has adjacent \(1\)'s at
+  positions \(m,m+1\).  Applying the same adjacent carry first replaces
+  \(d_m=d_{m+1}=1\) by \(d_m=d_{m+1}=0\), \(d_{m+2}=1\).  This removes the only
+  new contact between the appended digit and the old word.  Because the old
+  suffix is \(101\), the digit in position \(m-1\) is \(0\).  After the carry,
+  all altered digits are in positions \(m,m+1,m+2\), and positions \(m-1\) and
+  \(m\) are both \(0\).  Every remaining forbidden adjacent pair, if any, lies
+  wholly inside the unchanged prefix \(\{1,\ldots,m-2\}\): there is no adjacent
+  pair crossing from this prefix into the zero pair at \(m-1,m\), and the single
+  high digit at \(m+2\) is separated from it by the zero at \(m+1\).  Hence the
+  rest of the Zeckendorf normalization factors as the normalization of the
+  unchanged lower prefix together with the isolated high digit \(F_{m+3}\).
+  In particular the \(F_2\)-digit is the same as at length \(m\).
+  The normal form is order-independent by
+  Theorem~\ref{thm:local-zeckendorf-normalization}, so these local
+  normalizations compute the canonical fold.  Induction from the length-six
+  audit gives
+  \[
+  (\Fold_m(a))_1=1
+  \quad\Longleftrightarrow\quad
+  a_1a_2=10.
+\]
+The cylinder \([10]\) for the rotation coding is
+\[
+\{x\in\TT:\ x\in[0,\alpha),\ x+\alpha\notin[0,\alpha)\}
+=
+[0,1-\alpha),
+\]
+and has measure \(1-\alpha=\varphi^{-2}\). Therefore
+\[
+\pi_m^{\mathrm{fold}}\{u:u_1=1\}=\varphi^{-2}.
+\]
+
+By the right-end criterion, the last folded endpoint has mass
+\(\mu_m([010])+\mu_m([110])\).  Lemma~\ref{lem:golden-slope-coding-audit}
+computes these two cylinders in the same half-open convention:
+\[
+[010]=(\TT\setminus I)\cap R_{-\alpha}I\cap R_{-2\alpha}(\TT\setminus I)
+=[\alpha,2-2\alpha),
+\]
+and
+\[
+[110]=I\cap R_{-\alpha}I\cap R_{-2\alpha}(\TT\setminus I)
+=[1-\alpha,\alpha),
+\]
+so
+\[
+\mu_m([010])=\varphi^{-4},
+\qquad
+\mu_m([110])=\varphi^{-3},
+\]
+and
+\[
+\pi_m^{\mathrm{fold}}\{u:u_m=1\}
+=
+\varphi^{-4}+\varphi^{-3}
+=
+\varphi^{-2}.
+\]
+
+Finally,
+\[
+\eta_{11}(\pi_m^{\mathrm{fold}})
+-
+\eta_{00}(\pi_m^{\mathrm{fold}})
+=
+\pi_m^{\mathrm{fold}}\{u:u_1=1\}
++
+\pi_m^{\mathrm{fold}}\{u:u_m=1\}
+-
+1
+=
+2\varphi^{-2}-1
+=
+-\varphi^{-3},
+\]
+using \(\varphi^2=\varphi+1\).  This proves the asserted endpoint difference.
+\end{proof}
+
+\begin{proposition}[Canonical golden-slope gap above the injective floor]
+\label{prop:canonical-golden-slope-gap}
+Assume \(\beta=\alpha=\varphi^{-1}\).  For every \(m\ge6\),
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)-L_1(m)
+=
+\bigl(1-\varphi^{-3}\bigr)\log\varphi,
+\]
+where \(L_1(m)\) is the optimal injective value from
+Corollary~\ref{cor:injective-relabeling-bounded-type}.
+\end{proposition}
+
+\begin{proof}
+By Corollary~\ref{cor:injective-relabeling-bounded-type} and
+Theorem~\ref{thm:optimal-injective-relabeling},
+\[
+L_1(m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m).
+\]
+On the Sturmian slice the fold is an exact relabeling of \(\mu_m\), so
+Corollary~\ref{cor:no-fold-entropy-loss} gives
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)
+=
+m\log\varphi-\log\pi(0)-H_1(\mu_m)
++
+\bigl(\eta_{11}(\pi_m^{\mathrm{fold}})
+-\eta_{00}(\pi_m^{\mathrm{fold}})\bigr)\log\varphi .
+\]
+Subtracting the two formulas and using
+Lemma~\ref{lem:golden-fold-endpoint-masses} yields
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)-L_1(m)
+=
+\bigl(1-\varphi^{-3}\bigr)\log\varphi.
+\]
+\end{proof}
+
 Theorem~\ref{thm:optimal-injective-relabeling} gives the dominant comparison
 result of this section: once \(m\ge6\), the best injective placement is the
 one supported on \(X_m^{00}\).  The next theorem is a secondary refinement. It
@@ -2120,11 +3132,24 @@ where
 \frac{1}{m+1}\sum_{a\in S_m(\alpha)}\tau(T_m(a))
 \right).
 \]
-For every \(q\in[0,\infty)\),
+For \(q=\infty\),
+\[
+D_\infty(\nu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+\Gamma_\infty(T_m),
+\]
+where
+\[
+\Gamma_\infty(T_m):=
+\log\max_{a\in S_m(\alpha)}
+\frac{\mu_m(a)}
+{e^{-H_\infty(\mu_m)}\tau(T_m(a))}.
+\]
+For every \(q\in[0,\infty]\),
 \[
 0\le \Gamma_q(T_m)\le 2\log\varphi.
 \]
-If \(q\in[0,\infty)\), then
+For finite \(q\in[0,\infty)\),
 \[
 \Gamma_q(T_m)=0
 \iff
@@ -2136,18 +3161,9 @@ and
 \iff
 T_m(S_m(\alpha))\subset X_m^{11}.
 \]
-For \(q=\infty\),
-\[
-(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)
-\le
-D_\infty(\nu_m\|\pi_m)
-\]
-\[
-\le
-(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+2\log\varphi,
-\]
-with equality in the lower bound whenever \(T_m(S_m(\alpha))\subset X_m^{00}\)
-and equality in the upper bound whenever \(T_m(S_m(\alpha))\subset X_m^{11}\).
+For \(q=\infty\), the containments \(T_m(S_m(\alpha))\subset X_m^{00}\) and
+\(T_m(S_m(\alpha))\subset X_m^{11}\) are sufficient for the lower and upper
+equalities, respectively.
 
 If, in addition, the partial quotients of \(\alpha\) are bounded by \(A\),
 then, for every \(q\in[0,\infty]\),
@@ -2202,13 +3218,20 @@ D_q(\nu_m\|\pi_m)
 -\log c_{00}-H_q(\mu_m)+\Gamma_q(T_m),
 \end{aligned}
 \]
-which is the claimed identity. Because every \(\mu_m(a)\) is positive and
-\(\tau(T_m(a))\in\{1,\varphi^{-1},\varphi^{-2}\}\), the weighted average
-inside the logarithm defining \(\Gamma_q(T_m)\) lies between the minimum and
-maximum of \(\tau^{1-q}\). Therefore
+which is the claimed identity.  Put
 \[
-0\le \Gamma_q(T_m)\le 2\log\varphi.
+w_a=\frac{\mu_m(a)^q}{\sum_{b\in S_m(\alpha)}\mu_m(b)^q}.
 \]
+The logarithm in \(\Gamma_q(T_m)\) is applied to the weighted mean
+\[
+\sum_{a\in S_m(\alpha)}w_a\,\tau(T_m(a))^{1-q}.
+\]
+If \(q>1\), then \(1-q<0\), and this mean lies in
+\([1,\varphi^{2(q-1)}]\); multiplying its logarithm by the positive number
+\(1/(q-1)\) gives a value in \([0,2\log\varphi]\).  If \(0<q<1\), then
+\(1-q>0\), and the same mean lies in \([\varphi^{-2(1-q)},1]\);
+multiplying by the negative number \(1/(q-1)\) reverses the interval and
+again gives \(0\le \Gamma_q(T_m)\le2\log\varphi\).
 The lower endpoint occurs if and only if every \(\tau(T_m(a))=1\), namely
 \(T_m(S_m(\alpha))\subset X_m^{00}\). The upper endpoint occurs if and only if
 every \(\tau(T_m(a))=\varphi^{-2}\), namely
@@ -2306,6 +3329,193 @@ is exactly the same estimate rewritten with constants uniform in
 \(q\in[0,\infty]\).
 \end{proof}
 
+\subsection{Primitive-SFT placement barrier}
+
+The preceding optimization uses the endpoint collapse of the golden-mean
+Parry law.  The following result is only the primitive-SFT restoration
+interface needed here, not a replacement for the golden-mean endpoint theorem:
+it records the finite-block support envelope shared by all primitive
+positive-entropy SFTs.  A primitive Parry law has exponentially small
+cylinders, whereas finite-block factors of a Sturmian system have only linear
+block complexity, so injective placement cannot remove the order
+\(m\log\lambda-\log m\) divergence barrier.  This coarse support-envelope
+obstruction is exactly the primitive-SFT contribution of this manuscript; the
+paper does not claim a richer finite-block rigidity or optimizer
+classification for general primitive SFTs.  Thus every use of the word
+``rigidity'' in this subsection refers only to the support-budget obstruction
+proved below, with the stated sliding-block factor hypothesis, and not to a
+finite-block factor classification or to a primitive-SFT analogue of the
+golden-mean optimizer theorem.
+
+\begin{proposition}[Primitive-SFT Parry support envelope]
+\label{prop:primitive-sft-support-envelope}
+Let \(A\) be a primitive \(d\times d\) zero-one matrix with Perron root
+\(\lambda>1\), and let \(\Pi_m^A\) be the \(m\)-block marginal of its Parry
+measure on the one-sided vertex shift \(X_A\).  Define, for
+\(1\le k\le |X_A^{(m)}|\),
+\[
+M_m^A(k):=\max\{\Pi_m^A(S): S\subset X_A^{(m)},\ |S|\le k\}.
+\]
+There is a constant \(C_A\ge1\) such that, for all \(m\ge1\) and all \(k\),
+\[
+M_m^A(k)\le C_A k\lambda^{-m}.
+\]
+Consequently, if \(\nu\in\Delta(X_A^{(m)})\) has \(|\supp(\nu)|\le k\), then
+for every \(q\in[0,\infty]\),
+\[
+D_q(\nu\|\Pi_m^A)\ge m\log\lambda-\log k-\log C_A.
+\]
+In particular, any sequence of \(m\)-block laws with
+\(D_q(\nu_m\|\Pi_m^A)=O(1)\) for some fixed \(q\in[0,\infty]\) must have
+\(|\supp(\nu_m)|\ge c_A\lambda^m\) along that sequence, for a constant
+\(c_A>0\) depending only on \(A\) and on the \(O(1)\) bound.
+\end{proposition}
+
+\begin{proof}
+Let \(l,r_A\) be positive left and right Perron eigenvectors for \(A\),
+normalized by \(\sum_i l_ir_{A,i}=1\).  The Parry transition matrix is
+\[
+P_{ij}=A_{ij}\frac{r_{A,j}}{\lambda r_{A,i}},
+\]
+with stationary vector \(\pi_i=l_ir_{A,i}\).  Thus every admissible
+word \(u=u_1\cdots u_m\in X_A^{(m)}\) has Parry mass
+\[
+\Pi_m^A(u)
+=
+\pi_{u_1}P_{u_1u_2}\cdots P_{u_{m-1}u_m}
+=
+l_{u_1}r_{A,u_m}\lambda^{-(m-1)}.
+\]
+Since the state set is finite, after increasing the constant if necessary,
+\[
+\Pi_m^A(u)\le C_A\lambda^{-m}
+\qquad (u\in X_A^{(m)},\ m\ge1).
+\]
+Every \(k\)-point set therefore has Parry mass at most
+\(C_Ak\lambda^{-m}\), which proves the support-envelope estimate.
+
+Now put \(S=\supp(\nu)\).  Proposition~\ref{prop:renyi-support-conditioning}
+gives, for every \(q\in[0,\infty]\),
+\[
+D_q(\nu\|\Pi_m^A)\ge -\log\Pi_m^A(S),
+\]
+where the inequality is exactly the
+Lemma~\ref{lem:renyi-nonnegativity} consequence built into
+Proposition~\ref{prop:renyi-support-conditioning}.  Since \(|S|\le k\), the
+envelope bound gives the displayed lower bound.  Rearranging this bound gives
+the final support lower bound.
+\end{proof}
+
+\begin{theorem}[Primitive-SFT injective-placement barrier]
+\label{thm:primitive-sft-placement-barrier}
+Let \(A\) be a primitive \(d\times d\) zero-one matrix with Perron root
+\(\lambda>1\), and let \(\Pi_m^A\) be the \(m\)-block marginal of its Parry
+measure on the one-sided vertex shift \(X_A\).  Let \(\ell\ge0\), let
+\(\Theta\) be a sliding block code of window length \(\ell+1\) from a
+Sturmian subshift of slope \(\alpha\) into a finite alphabet, and let
+\(\sigma_m\) be the law of the length-\(m\) words in the factor
+\(\Theta(X_\alpha)\).  Then there is a constant \(C=C(A,\ell)\) such that, for every
+\(m\ge1\) and every injective placement
+\[
+\iota:\supp(\sigma_m)\hookrightarrow X_A^{(m)}
+\]
+into the admissible \(m\)-blocks of \(X_A\),
+\[
+\KL(\iota_*\sigma_m\|\Pi_m^A)
+\ge
+m\log\lambda-\log m-C.
+\]
+The same lower bound, with a possibly different constant \(C\), holds for
+\(D_q(\iota_*\sigma_m\|\Pi_m^A)\) for every \(q\in[0,\infty]\), uniformly in
+\(q\), whenever \(D_q\) is evaluated on an injective relabeling of
+\(\sigma_m\).  In particular no finite-block factor of a Sturmian system can
+be placed injectively inside a primitive positive-entropy SFT with \(O(1)\)
+Parry divergence along all block lengths.
+\end{theorem}
+
+\begin{proof}
+Let \(l,r_A\) be positive left and right Perron eigenvectors for \(A\),
+normalized by \(\sum_i l_ir_{A,i}=1\).  The Parry transition matrix is
+\[
+P_{ij}=A_{ij}\frac{r_{A,j}}{\lambda r_{A,i}},
+\]
+with stationary vector \(\pi_i=l_ir_{A,i}\).  Therefore every admissible
+word \(u=u_1\cdots u_m\in X_A^{(m)}\) has Parry mass
+\[
+\Pi_m^A(u)
+=
+\pi_{u_1}P_{u_1u_2}\cdots P_{u_{m-1}u_m}
+=
+l_{u_1}r_{A,u_m}\lambda^{-(m-1)}.
+\]
+Since there are only finitely many states, there is a constant \(C_A>0\) such
+that
+\[
+\Pi_m^A(u)\le C_A\lambda^{-m}
+\qquad (u\in X_A^{(m)},\ m\ge1).
+\]
+
+A length-\(m\) word in the block-code factor \(\Theta(X_\alpha)\) is
+determined by a length \(m+\ell\) word of the Sturmian source.  Hence
+\[
+|\supp(\sigma_m)|\le m+\ell+1.
+\]
+Consequently, for every \(q\in[0,\infty]\),
+\[
+H_q(\sigma_m)\le H_0(\sigma_m)\le \log(m+\ell+1).
+\]
+
+Let \(\nu=\iota_*\sigma_m\).  Since \(\iota\) is injective,
+\(H_q(\nu)=H_q(\sigma_m)\) for every \(q\).  For \(q=1\),
+\[
+\begin{aligned}
+\KL(\nu\|\Pi_m^A)
+&=
+-H_1(\nu)-\sum_{u\in X_A^{(m)}}\nu(u)\log \Pi_m^A(u)\\
+&\ge
+-H_1(\sigma_m)+m\log\lambda-\log C_A\\
+&\ge
+m\log\lambda-\log(m+\ell+1)-\log C_A.
+\end{aligned}
+\]
+Absorbing \(\ell\) and \(C_A\) into a constant gives the displayed KL lower
+bound.
+
+For \(q\in(0,\infty)\setminus\{1\}\), the cylinder estimate
+\(\Pi_m^A(u)\le C_A\lambda^{-m}\) gives
+\[
+\sum_u \nu(u)^q\Pi_m^A(u)^{1-q}
+\begin{cases}
+\ge (C_A\lambda^{-m})^{1-q}\sum_u\nu(u)^q, & q>1,\\
+\le (C_A\lambda^{-m})^{1-q}\sum_u\nu(u)^q, & 0<q<1.
+\end{cases}
+\]
+After multiplication by \(1/(q-1)\) and taking logarithms, both cases yield
+\[
+D_q(\nu\|\Pi_m^A)
+\ge
+m\log\lambda-\log C_A-H_q(\sigma_m).
+\]
+Using \(H_q(\sigma_m)\le \log(m+\ell+1)\) proves the same lower bound.  For
+\(q=0\),
+\[
+D_0(\nu\|\Pi_m^A)
+=-\log\Pi_m^A(\supp\nu)
+\ge
+-\log\bigl((m+\ell+1)C_A\lambda^{-m}\bigr),
+\]
+which is the required estimate.  For \(q=\infty\),
+\[
+D_\infty(\nu\|\Pi_m^A)
+=
+\log\max_{u\in\supp\nu}\frac{\nu(u)}{\Pi_m^A(u)}
+\ge
+m\log\lambda-\log C_A-H_\infty(\sigma_m),
+\]
+and \(H_\infty(\sigma_m)\le H_0(\sigma_m)\le\log(m+\ell+1)\).  This completes
+the proof.
+\end{proof}
+
 \begin{remark}[Numerical interpretation]
 \label{rem:numerical-interpretation}
 The numerical examples follow the two comparisons used in the proofs.  First
@@ -2361,8 +3571,15 @@ histogram, the discrepancy bound and the cross-resolution residual.  The
 overlines in Table~\ref{tab:rotation_multiscale_residual_summary} denote
 averages over the listed orbit phases; Table~\ref{tab:rotation-parry-gap-summary}
 also averages over the displayed \(\beta\)-grid.  The residual and Parry tables
-use \(N=3\times 10^5\), for which the discrepancy term is already on the order
-of \(10^{-5}\).
+use \(N=3\times 10^5\).  In the generated tables the reported star
+discrepancies are \(1.01\times10^{-5}\) for the residual table and at most
+\(9.33\times10^{-5}\) for the off-canonical Parry-gap table, so the sampling
+terms are already below the displayed deterministic gaps.
+
+The tables below are numerical illustrations of the finite formulas proved
+above.  The manuscript does not use them as additional evidence for any theorem,
+and all acceptance-critical estimates are the analytic statements in the
+preceding sections.
 
 All slope families in Table~\ref{tab:parameter-grid} are of bounded type.  The
 family \([0;B,1,1,\dots]\) is included to show the effect of a large first
@@ -2377,28 +3594,24 @@ from the Lebesgue factor law, with no averaging over \(\beta\) or \(x_0\), and
 not from a finite orbit sample.  It begins at \(m=6\), the first resolution at
 which \(X_m^{00}\) contains enough words to realize the injective optimum.
 
+% Submission note: the supplementary package contains mirrored copies of these
+% generated table fragments for reproducibility.  The main manuscript inputs
+% only the copies under generated/; do not input supplementary/generated/ in
+% this TeX run, since those fragments intentionally repeat the same table labels.
 \input{generated/tab_canonical_injective_floor_exact_en}
 
 Table~\ref{tab:canonical-injective-floor-exact} shows the finite-\(m\)
-content of Theorem~\ref{thm:optimal-injective-relabeling}. The
-optimal injective floor \(L_1(m)\) and the exact folded-to-Parry divergence
+content of Theorem~\ref{thm:optimal-injective-relabeling} and
+Proposition~\ref{prop:canonical-golden-slope-gap}. The optimal injective
+floor \(L_1(m)\) and the exact folded-to-Parry divergence
 \(\KL(\pi_m^{\mathrm{fold}}\|\pi_m)\) both grow on the scale
-\(m\log\varphi-\log m\). In the displayed range, direct enumeration of the
-finite Sturmian partition gives the constant difference
-\[
-\KL(\pi_m^{\mathrm{fold}}\|\pi_m)-L_1(m)
-=
-(1-\varphi^{-3})\log\varphi
-=
-0.3676131227688\ldots
-\]
-This is the identity of Theorem~\ref{thm:optimal-injective-relabeling}
-together with the enumerated endpoint imbalance
-\(\eta_{11}(\pi_m^{\mathrm{fold}})-\eta_{00}(\pi_m^{\mathrm{fold}})
-=-\varphi^{-3}\) for these canonical golden-slope rows.
-At these resolutions the canonical folded law is far inside the universal
-\(2\log\varphi\) additive window above the injective optimum.  This table is
-the reference point for the empirical comparisons below.
+\(m\log\varphi-\log m\), while their difference is the fixed constant
+\((1-\varphi^{-3})\log\varphi\).  The last columns are exact evaluations from
+the finite Sturmian partition and the endpoint formula in
+Theorem~\ref{thm:parry-kl-identity}.  At these resolutions the canonical
+folded law is far inside the universal \(2\log\varphi\) additive window above
+the injective optimum.  This table is the reference point for the empirical
+comparisons below.
 
 \subsection{Finite-sample validation}
 
@@ -2425,7 +3638,7 @@ star discrepancy in the reported golden slice is of order \(10^{-5}\), whereas
 the projective residual remains of order \(10^{-1}\).  For the family
 \([0;100,1,1,\dots]\), the residual is larger.  This is the phenomenon
 captured by
-Theorem~\ref{prop:multiscale-residual-by-boundary}: small orbit discrepancy
+Theorem~\ref{thm:multiscale-residual-by-boundary}: small orbit discrepancy
 does not force small cross-resolution residual, because the residual is driven
 by the frequency with which a final \(1\) is appended to prefixes whose
 Fibonacci value has already crossed the threshold \(F_{m+1}\).
@@ -2473,33 +3686,38 @@ baseline dominates the sampling term once \(m\) is moderately large.
 
 The independent comparison separates two bookkeeping regimes.  When the
 data-generating law is matched to the reference baseline, the classical
-finite-alphabet sampling envelopes below control the observed error.  For the
-rotation data, Theorem~\ref{thm:tv-certificate-hist} controls the folded
-histogram relative to \(\pi_m^{\mathrm{fold}}\), while
+finite-alphabet sampling envelopes give the right scale but grow with the
+alphabet size.  The table reports the observed seed averages only; it is not
+used as a concentration certificate for the deterministic rotation examples.
+For the rotation data, Theorem~\ref{thm:tv-certificate-hist} controls the
+folded histogram relative to \(\pi_m^{\mathrm{fold}}\), while
 Corollary~\ref{cor:tv-decomposition-parry} is the exact KL identity for the
 microstate law relative to the Parry lift \(Q_m\pi_m\).  The remaining
 comparison with the Parry block law \(\pi_m\) is therefore deterministic and
 comes from the folded-versus-Parry mismatch isolated in Section~5.
 
-For reference, the standard high-probability envelopes on a finite alphabet
-\(E\) with \(|E|=F_{m+2}\) are
+For reference, set \(K:=|E|=F_{m+2}\).  Standard high-probability
+envelopes on a finite alphabet \(E\) have the form
 \[
 \TV(\hat p_N,p)
 \lesssim
-\sqrt{\frac{\log(2^{F_{m+2}}/\delta)}{2N}},
+\sqrt{\frac{K\log 2+\log(1/\delta)}{2N}},
 \qquad
 \KL(\hat p_N\|p)
 \lesssim
-\frac{F_{m+2}\log(N+1)+\log(1/\delta)}{N}
+\frac{K\log(N+1)+\log(1/\delta)}{N}
 \]
-at confidence level \(1-\delta\); see
+at confidence level \(1-\delta\), with constants and lower-order terms
+depending on the chosen form of the inequality.  In particular, the TV
+envelope is of order \(\sqrt{K/N}\), up to constants and logarithmic
+confidence terms, rather than \(\sqrt{\log K/N}\); see
 \cite{WeissmanEtAl2003L1Empirical,DemboZeitouni2010LargeDeviations}. These
 are independent sampling envelopes on the finite alphabet \(E\). The rotation
 experiments are controlled instead by the deterministic discrepancy
 certificates of Section~3. When
-\(p=\pi_m\) and the data are Parry-distributed, the observed errors in the
-table fall well within this envelope. When \(p=\pi_m\) but the data come from
-folded rotation orbits, the deterministic Parry gap dominates.
+\(p=\pi_m\) and the data are Parry-distributed, the observed errors in the table
+are at the expected independent-sampling scale. When \(p=\pi_m\) but the data
+come from folded rotation orbits, the deterministic Parry gap dominates.
 
 \subsection{A nonlinear circle-map illustration}
 
@@ -2515,7 +3733,10 @@ with \(K=0.3\) and \(\Omega\) tuned by bisection on the lift so that the
 rotation number equals \(\varphi^{-1}\), giving
 \(\Omega\approx 0.6166931270470741\). With anchor \(a=0.2\), coding window
 \(I=[a,f(a))\), and initial point \(x_0=a\), the resulting symbolic sequence
-is the canonical golden Sturmian coding in conjugacy coordinates.
+is treated here only as an illustration.  The proof input in
+Theorem~\ref{thm:circle-map-conjugacy-transfer} would be the exact pulled-back
+interval \(h^{-1}([0,\varphi^{-1}))\); the displayed interval and tuned
+parameter are not used as theorem evidence.
 At \(m=12\) and \(N=10^5\), the empirical folded histogram satisfies
 \[
 \TV(\hat\pi_{12,N},\pi_{12}^{\mathrm{fold}})

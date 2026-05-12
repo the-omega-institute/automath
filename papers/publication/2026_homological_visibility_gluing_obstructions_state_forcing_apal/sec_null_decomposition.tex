@@ -1,4 +1,4 @@
-\section{Local objects and gluing failure}\label{sec:null-decomposition}
+﻿\section{Local objects and gluing failure}\label{sec:null-decomposition}
 
 We study the local-object problem attached to an admitted reference, extending the meet-semilattice formulation of the companion paper \cite{MaZhang2026ConditionalGluingFailure} to the pullback-based sites used here. The basic distinction is between local sectionability, compatible local sectionability, and global sectionability.
 
@@ -19,6 +19,13 @@ Fix a family of referenceable sorts
 S_{\mathrm{ref}}\subseteq S.
 \]
 For each $s\in S_{\mathrm{ref}}$, the language contains a reference sort $\mathsf{Ref}_s$ and an admissibility predicate $\Adm_s(\cdot)$.
+Layer placement is fixed as follows. The sort \(\mathsf{Ref}_s\) and its
+equality belong to \(\Sigma_1\); the admissibility predicate
+\(\Adm_s\), together with \(\LocSec_s,\CompSec_s,\Sec_s\) and the
+site-structure symbols, belongs to \(\Sigma_2\setminus\Sigma_1\). Thus a
+lower-fragment formula may quantify over references but cannot define or
+mention admission unless the statement explicitly restricts attention to the
+admitted subdomain.
 
 \begin{definition}[Reference classes]\label{def:reference-classes}
 For each state $p$ and each referenceable sort $s$, fix a set
@@ -52,7 +59,15 @@ a_i\times_a a_j
 \]
 exists in $\mathcal B_{p,s}$.
 \end{enumerate}
-Because $\mathcal B_{p,s}$ is thin, the fibre product $a_i\times_a a_j$ is the meet of $a_i$ and $a_j$ over $a$ whenever that meet exists. We write
+The fibre product clause is a condition on the site, not on a later
+\v{C}ech cochain display: if two members of a covering family are
+disjoint in a concrete presentation, their pullback must still be
+represented by an object of the site, typically a strict initial object.
+One may omit such empty pullback objects from a nonzero \v{C}ech nerve or
+from a cochain complex whose coefficient sheaf has only the zero section
+there, but not from the local reference site itself. Because
+$\mathcal B_{p,s}$ is thin, the fibre product $a_i\times_a a_j$ is the
+meet of $a_i$ and $a_j$ over $a$ whenever that meet exists. We write
 \[
 \mathcal C_{p,s}:=(\mathcal B_{p,s},\Cov_{p,s})
 \]
@@ -108,56 +123,6 @@ a_{p,s}:\mathbf{PSh}(\mathcal{B}_{p,s})\to\mathbf{Sh}(\mathcal{C}_{p,s})
 \]
 for the associated sheafification functor.
 
-\begin{proposition}[Sheafification characterizes compatible local sectionability]\label{thm:sheafification-characterization}
-Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. Then, in the pullback-based thin site $\mathcal C_{p,s}$ of \Cref{def:local-reference-frame},
-\[
-M,p\Vdash \CompSec_s(r)
-\quad\Longleftrightarrow\quad
-\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
-\]
-\end{proposition}
-
-\begin{proof}
-Let
-\[
-G:=a_{p,s}F_{p,s}.
-\]
-By the standard matching-family description of sheafification on a site \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}, an element of $G(a)$ is represented by data
-\[
-\bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
-\]
-where $\{a_i\to a\}_{i\in I}$ is a covering family in $\Cov_{p,s}(a)$ and each $\sigma_i\in F_{p,s}(a_i)$, subject to the matching condition
-\[
-\res_{a_i\times_a a_j}^{a_i}(\sigma_i)=\res_{a_i\times_a a_j}^{a_j}(\sigma_j)
-\]
-for every pair $(i,j)$. Two such representatives define the same section of $G(a)$ if and only if they agree after pullback to some common refinement of their covers.
-
-Suppose first that $M,p\Vdash\CompSec_s(r)$. By \Cref{def:existence-levels}(ii), there exist a cover $\{a_i\to a\}_{i\in I}$ and local sections $\sigma_i\in F_{p,s}(a_i)$ satisfying exactly the displayed matching condition on the pairwise pullbacks. Hence these data determine a section of $G(a)$, so $G(a)\neq\varnothing$.
-
-Conversely, suppose $G(a)\neq\varnothing$, and choose a representative
-\[
-\bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
-\]
-of an element of $G(a)$. The matching condition in the sheafification description is precisely the compatibility requirement in \Cref{def:existence-levels}(ii). Thus the same representative exhibits
-\[
-M,p\Vdash \CompSec_s(r).
-\]
-The quotient by common refinement in the construction of $G(a)$ is the same quotient relation used later to define visible value classes, but only nonemptiness is needed here.
-\end{proof}
-
-\begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}
-In the pullback-based thin site of \Cref{def:local-reference-frame}, if $F_{p,s}$ is already a sheaf at $a=[r]_p$, then global and compatible-local realizability coincide:
-\[
-M,p\Vdash \Sec_s(r).
-\quad\Longleftrightarrow\quad
-M,p\Vdash \CompSec_s(r).
-\]
-\end{corollary}
-
-\begin{proof}
-If $F_{p,s}$ is already a sheaf at $a$, then the unit $F_{p,s}\to a_{p,s}F_{p,s}$ is an isomorphism at $a$. The claim therefore follows from \Cref{thm:sheafification-characterization}.
-\end{proof}
-
 \begin{definition}[Separatedness at an object]\label{def:separated-at-a}
 Let $\mathcal C$ be a site, let $F$ be a presheaf on $\mathcal C$, and let $a$ be an object of $\mathcal C$. We say that $F$ is \emph{separated at $a$} if for every covering family
 \[
@@ -172,23 +137,335 @@ and every pair of sections $\sigma,\tau\in F(a)$, the equalities
 imply $\sigma=\tau$.
 \end{definition}
 
-\begin{corollary}[Sheafification removes gluing failure]\label{cor:sheafification-removes-glue}
-Let $\Sec_s^{\sharp}(r)$ denote global sectionability computed with the sheafified local object functor $a_{p,s}F_{p,s}$. In the pullback-based thin site of \Cref{def:local-reference-frame},
+\begin{definition}[Separatedness on the reference slice]\label{def:slice-separated-local-object}
+For an admitted reference $r:\mathsf{Ref}_s$ at $p$, write
 \[
-M,p\Vdash \Sec_s^{\sharp}(r).
+a=[r]_p,
+\qquad
+\mathcal C_a:=\mathcal C_{p,s}/a.
+\]
+The restricted local-object presheaf $F_{p,s}|_{\mathcal C_a}$ is \emph{slice-separated} if it is separated at every object of $\mathcal C_a$.
+Equivalently, separatedness is required not only at the terminal object
+$a$, but also at every cover member, every pullback overlap, and every
+object introduced by a refinement inside the slice. This distinction is
+used essentially below: equality in a sheafification value over a cover
+member gives equality of the original presheaf sections only after a
+further cover of that cover member, and the upgrade back to equality over
+the cover member itself requires separatedness at that object.
+\end{definition}
+
+\begin{lemma}[Explicit plus--plus normal form for sheafification]\label{lem:strict-sheafification-representatives}
+Let $\mathcal C$ be a site with pullbacks of covering families, let
+$F$ be a presheaf of sets on $\mathcal C$, and let
+$u:F\to aF$ be the sheafification unit. For every object $X$ and every
+section $\xi\in(aF)(X)$ there is a covering family
+\[
+\{X_i\to X\}_{i\in I}
+\]
+and sections $\sigma_i\in F(X_i)$ such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item for every pair $(i,j)$, the restrictions of $\sigma_i$ and
+$\sigma_j$ to the pullback $X_i\times_X X_j$ agree after a covering
+refinement of that pullback object;
+\item the family $(u(\sigma_i))_i$ glues in the sheaf $aF$ to $\xi$;
+\end{enumerate}
+No strict matching family of $F$ is asserted in this first conclusion.
+For an arbitrary presheaf, the compatibility obtained from a section of
+\((aF)(X)\) is only compatibility after refinements of the pairwise
+overlaps. This is exactly the loss of information caused by the two
+successive plus-construction quotient relations. In particular, the data
+in \textup{(i)} cannot be used as cover-level identity descent data unless
+the refined equalities have first been upgraded to equalities on the
+original pullback overlaps.
+
+If $F$ is separated at every object of the slice $\mathcal C/X$, then the
+equalities after covering refinements in \textup{(i)} upgrade to
+equalities in $F(X_i\times_X X_j)$; in that case the displayed data are a
+strict matching family in $F$ on the cover of $X$.
+\end{lemma}
+
+\begin{proof}
+We use the usual plus construction
+\cite[III.5]{MacLaneMoerdijk1994}, \cite[Tags 00W1, 00W3]{StacksProject},
+but we record the flattening explicitly. For an arbitrary presheaf, a
+section of \(aF\) is not a matching family of \(F\)-sections on one cover;
+it is a matching family of \(F^+\)-sections, and each of those
+\(F^+\)-sections is itself represented by \(F\)-sections only up to a
+local equivalence relation.
+
+For an object \(T\), a section of \(F^+(T)\) is an equivalence class of
+strict \(F\)-matching data
+\[
+\{T_\alpha\to T\}_{\alpha\in A},
+\qquad
+s_\alpha\in F(T_\alpha),
+\]
+whose restrictions agree strictly on each pullback
+\(T_\alpha\times_T T_\beta\). Two such matching families define the same
+element of \(F^+(T)\) precisely when their pullbacks to a common covering
+refinement agree in \(F\). More explicitly, the common refinement is taken
+after pulling the two covers back to each \(T_\alpha\times_TT'_\beta\);
+there is no assertion that the original sections agree on
+\(T_\alpha\times_TT'_\beta\) itself. In particular, if two elements of
+\(F^+(T)\) are
+represented by matching families
+\[
+\{T_\alpha\to T,s_\alpha\}_{\alpha\in A},
+\qquad
+\{T'_\beta\to T,t_\beta\}_{\beta\in B},
+\]
+then their equality in $F^+(T)$ means that, for every fibre product
+$T_\alpha\times_TT'_\beta$, there is a covering family of that fibre
+product on which the two pulled-back $F$-sections become equal. This is
+the only equality criterion used below.
+
+Since \(aF=(F^+)^+\), a section \(\xi\in(aF)(X)\) is represented by a
+covering family
+$\{Y_\ell\to X\}_{\ell\in L}$ and sections
+\[
+\eta_\ell\in F^+(Y_\ell)
+\]
+which form a strict \(F^+\)-matching family. The word ``strict'' here
+refers only to equality of the \(\eta_\ell\) in \(F^+\) on the overlaps
+\(Y_\ell\times_XY_{\ell'}\); after expanding the \(\eta_\ell\) to
+\(F\)-data, that equality again means equality only after a further cover.
+Choose, for each $\ell$, a
+plus representative
+\[
+\{Y_{\ell m}\to Y_\ell\}_{m\in M_\ell},
+\qquad
+\sigma_{\ell m}\in F(Y_{\ell m})
+\]
+of $\eta_\ell$. By pullback stability and transitivity, the composites
+$Y_{\ell m}\to X$ form a covering family of $X$.
+
+Fix two composites $Y_{\ell m}\to X$ and $Y_{\ell' m'}\to X$, and write
+\[
+T:=Y_{\ell m}\times_XY_{\ell' m'}.
+\]
+The strict matching condition in \((F^+)^+\) says that the two restrictions
+of \(\eta_\ell\) and \(\eta_{\ell'}\) to
+\(Y_\ell\times_XY_{\ell'}\) are equal as elements of \(F^+\). Pull this
+equality back to \(T\). Applying the just stated equality criterion in
+\(F^+\) to the two chosen plus representatives gives a cover
+$\{T_q\to T\}_q$ on which the restrictions of the two $F$-sections
+$\sigma_{\ell m}$ and $\sigma_{\ell' m'}$ are equal in $F(T_q)$. These
+are covers of the already formed pullback overlap \(T\), not replacements
+for \(T\) in the \v{C}ech nerve. They give exactly the local-on-overlaps
+compatibility in \textup{(i)} and nothing stronger without a separatedness
+hypothesis. The image of the family
+$(u(\sigma_{\ell m}))_{\ell,m}$ in $(F^+)^+(X)$ is the original
+representative $(\eta_\ell)_\ell$, hence glues to $\xi$; this proves
+\textup{(ii)}.
+
+If $F$ is separated at every object of $\mathcal C/X$, then in particular
+it is separated at each pullback overlap \(X_i\times_XX_j\). Two sections
+over such an overlap that agree after a covering of that overlap are
+therefore already equal by separatedness at the overlap object. This
+converts the local-on-overlaps compatibility into strict equality on every
+$X_i\times_X X_j$. Notice that no cover has been replaced at this last
+step: the output is a genuine matching family on the original cover of
+\(X\), not a matching family only after changing the \v{C}ech nerve.
+\end{proof}
+
+\begin{lemma}[Strictification of sheafified component representatives]\label{lem:strictify-component-representatives}
+Let $\mathcal C$ be a site with pullbacks of covering families, let
+$F$ be a presheaf of sets on $\mathcal C$, and let \(X\) be an object.
+Assume that \(F\) is separated at every object of the slice
+\(\mathcal C/X\). If \(\xi\in(aF)(X)\), then there is a cover
+\[
+\{X_i\to X\}_{i\in I}
+\]
+and sections \(\sigma_i\in F(X_i)\) which form a strict matching family on
+the original pullback overlaps \(X_i\times_X X_j\), and whose images under
+the sheafification unit glue to \(\xi\).
+\end{lemma}
+
+\begin{proof}
+Apply \Cref{lem:strict-sheafification-representatives}. This gives a
+cover and \(F\)-sections whose restrictions to each original pullback
+overlap agree after a further cover of that overlap. Since each overlap is
+an object of \(\mathcal C/X\), the slice-separated hypothesis lets
+\Cref{lem:slice-separated-refined-equality} upgrade all refined overlap
+equalities to equalities over the original overlaps. The same
+plus--plus representative still glues under the unit to \(\xi\).
+\end{proof}
+
+\begin{lemma}[Slice-separated descent of refined equality]\label{lem:slice-separated-refined-equality}
+Let $\mathcal C$ be a site with pullbacks of covering families, let $F$
+be a presheaf of sets on $\mathcal C$, and let $X$ be an object. Suppose
+that $F$ is separated at every object of the slice $\mathcal C/X$. If
+\[
+\{X_i\to X\}_{i\in I}
+\]
+is a cover and sections $\sigma_i\in F(X_i)$ satisfy the following
+refined-overlap condition: for every pair $(i,j)$, writing
+$X_{ij}:=X_i\times_X X_j$, the two restrictions of $\sigma_i$ and
+$\sigma_j$ to $X_{ij}$ become equal after some covering family of
+$X_{ij}$, then the family $(\sigma_i)_i$ is a strict matching family:
+\[
+\res_{X_{ij}}^{X_i}(\sigma_i)=\res_{X_{ij}}^{X_j}(\sigma_j)
+\qquad(\forall i,j).
+\]
+\end{lemma}
+
+\begin{proof}
+For each pair $(i,j)$ the overlap $X_{ij}$ is an object of the slice
+$\mathcal C/X$. By hypothesis $F$ is separated at $X_{ij}$. The two
+sections
+\[
+\res_{X_{ij}}^{X_i}(\sigma_i),
+\qquad
+\res_{X_{ij}}^{X_j}(\sigma_j)
+\]
+agree after a cover of $X_{ij}$, so separatedness at $X_{ij}$ forces
+their equality in $F(X_{ij})$. This is exactly the strict matching
+condition.
+\end{proof}
+
+\begin{lemma}[Equality in the unit is local equality]\label{lem:sheafification-unit-equality-local}
+Let $\mathcal C$ be a site with pullbacks of covering families, let
+$F$ be a presheaf of sets on $\mathcal C$, and let
+$u:F\to aF$ be the sheafification unit. If
+\[
+u_X(\sigma)=u_X(\tau)
+\qquad
+(\sigma,\tau\in F(X)),
+\]
+then there is a covering family $\{X_i\to X\}_{i\in I}$ such that
+\[
+\res_{X_i}^{X}(\sigma)=\res_{X_i}^{X}(\tau)
+\qquad(\forall i\in I).
+\]
+Conversely, equality after such a cover implies
+$u_X(\sigma)=u_X(\tau)$.
+\end{lemma}
+
+\begin{proof}
+For the plus construction, the two unit representatives of
+$\sigma,\tau\in F(X)$ are represented by the identity cover of $X$. Their
+images in $F^+(X)$ are equal exactly when, after a covering refinement of
+that identity cover, the restrictions of $\sigma$ and $\tau$ agree in
+$F$. Applying the same statement to the unit
+$F^+\to(F^+)^+=aF$, equality of $u_X(\sigma)$ and $u_X(\tau)$ gives a cover
+$\{Y_j\to X\}$ on which the two corresponding sections of $F^+$ agree.
+For each $j$, equality in $F^+(Y_j)$ gives a further cover
+$\{X_{ji}\to Y_j\}_i$ on which the restrictions of $\sigma$ and $\tau$
+agree in $F$. By transitivity, the composites $X_{ji}\to X$ form the
+required cover. The converse follows because $aF$ is a sheaf: if the two
+unit sections agree after a cover, separatedness of the sheaf $aF$ forces
+them to agree over $X$.
+\end{proof}
+
+\begin{proposition}[Compatible local sectionability gives a sheafified section]\label{prop:compsec-to-sheafification}
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. Then, in the pullback-based thin site $\mathcal C_{p,s}$ of \Cref{def:local-reference-frame},
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
+\]
+\end{proposition}
+
+\begin{proof}
+Let
+\[
+G:=a_{p,s}F_{p,s}.
+\]
+By \Cref{def:existence-levels}(ii), a proof of $M,p\Vdash\CompSec_s(r)$
+supplies a cover $\{a_i\to a\}_{i\in I}$ and local sections
+$\sigma_i\in F_{p,s}(a_i)$ satisfying the displayed matching condition on
+the pairwise pullbacks. Applying the sheafification unit on each $a_i$
+gives a matching family in the sheaf $G$; the sheaf gluing axiom for $G$
+therefore gives a section of $G(a)$.
+\end{proof}
+
+\begin{theorem}[Sheafification characterizes compatible local sectionability on slice-separated slices]\label{thm:sheafification-characterization}
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, write $a=[r]_p$, and assume that
+$F_{p,s}|_{\mathcal C_a}$ is slice-separated in the sense of
+\Cref{def:slice-separated-local-object}. Then, in the pullback-based thin
+site $\mathcal C_{p,s}$ of \Cref{def:local-reference-frame},
+\[
+M,p\Vdash \CompSec_s(r)
 \quad\Longleftrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
+\]
+\end{theorem}
+
+\begin{proof}
+The forward implication is \Cref{prop:compsec-to-sheafification}.
+Conversely, suppose
+\[
+\xi\in \bigl(a_{p,s}F_{p,s}\bigr)(a).
+\]
+Since sheafification is the plus--plus construction for an arbitrary
+presheaf, one cannot read $\xi$ directly as a strict $F$-matching family
+on the first cover that appears in a plus representative. The needed
+strict representative is exactly the conclusion of
+\Cref{lem:strictify-component-representatives}, applied to the restricted
+presheaf \(F_{p,s}|_{\mathcal C_a}\) on the slice. This gives a covering family
+\[
+\{b_\ell\to a\}_{\ell\in L}
+\]
+and sections $\tau_\ell\in F_{p,s}(b_\ell)$ satisfying the strict
+equalities
+\[
+\res_{b_\ell\times_a b_m}^{b_\ell}(\tau_\ell)
+=
+\res_{b_\ell\times_a b_m}^{b_m}(\tau_m)
+\qquad(\ell,m\in L).
+\]
+This is precisely the compatibility requirement in
+\Cref{def:existence-levels}(ii). Thus the refined strict representative
+exhibits
+\[
 M,p\Vdash \CompSec_s(r).
+\]
+\end{proof}
+
+\begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}
+In the pullback-based thin site of \Cref{def:local-reference-frame}, assume
+$F_{p,s}|_{\mathcal C_a}$ is slice-separated. If $F_{p,s}$ is already a
+sheaf at $a=[r]_p$, then global and compatible-local realizability coincide:
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash \CompSec_s(r)
+\]
+\end{corollary}
+
+\begin{proof}
+If $F_{p,s}$ is already a sheaf at $a$, then the unit $F_{p,s}\to a_{p,s}F_{p,s}$ is an isomorphism at $a$. The claim therefore follows from \Cref{thm:sheafification-characterization}.
+\end{proof}
+
+\begin{corollary}[Sheafification removes gluing failure]\label{cor:sheafification-removes-glue}
+Let $\Sec_s^{\sharp}(r)$ denote global sectionability computed with the
+sheafified local object functor $a_{p,s}F_{p,s}$. In the pullback-based
+thin site of \Cref{def:local-reference-frame}, assume that
+$F_{p,s}|_{\mathcal C_a}$ is slice-separated. Then
+\[
+M,p\Vdash \Sec_s^{\sharp}(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash \CompSec_s(r)
 \]
 In particular, no admitted reference remains in gluing failure after sheafification.
 \end{corollary}
 
 \begin{proof}
-This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p,s}F_{p,s}$. Once the presheaf has been replaced by a sheaf, compatible local existence and global existence coincide.
+By definition,
+\[
+M,p\Vdash \Sec_s^{\sharp}(r)
+\quad\Longleftrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing .
+\]
+The direct equivalence of
+\Cref{thm:sheafification-characterization} identifies the right-hand side
+with \(M,p\Vdash\CompSec_s(r)\). This avoids any need to extract strict
+compatible local sections from the already sheafified functor.
 \end{proof}
 
 \subsection{Realization prestacks and connected components}
 
-The presheaf $F_{p,s}$ records only isomorphism classes of local realizations. To recover gerbes and cohomology one needs a groupoid-valued lift whose connected components give back $F_{p,s}$ after sheafification. Once an abelian band has been fixed, split lifts always exist; the substantive issue is whether a chosen lift is gluing-sensitive at the terminal fibre.
+The presheaf $F_{p,s}$ records only isomorphism classes of local realizations. To recover gerbes and cohomology one needs a groupoid-valued lift whose connected components give back $F_{p,s}$ after sheafification. We use the standard prestack, stackification, and banded-gerbe conventions of \cite{Giraud1971,MacLaneMoerdijk1994,Moerdijk2002,StacksProject}. Once an abelian band has been fixed, split lifts always exist; the substantive issue is whether a chosen lift is gluing-sensitive at the terminal fibre.
 
 \begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
@@ -220,50 +497,95 @@ Write
 for the stackification of $\mathfrak P_r$ in groupoids \cite[Tag 02ZP]{StacksProject}.
 \end{definition}
 
-\begin{proposition}[Canonical split realization prestack]\label{prop:split-realization-prestack}
-Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write
+\begin{proposition}[Separated split realization prestack]\label{prop:split-realization-prestack}
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, write
 \[
-a=[r]_p,
-\qquad
-\mathcal C_a:=\mathcal C_{p,s}/a,
+a=[r]_p,\qquad \mathcal C_a:=\mathcal C_{p,s}/a,
 \]
-and let $\Band$ be any abelian sheaf on $\mathcal C_a$. Then there exists a realization prestack on this pullback-based slice site, without requiring $\mathcal C_a$ to come from a meet-semilattice,
+and let $\Band$ be an abelian sheaf on $\mathcal C_a$. There is a canonical split realization prestack
 \[
-\mathfrak P_r^{\mathrm{split}}\to \mathcal C_a
+\mathfrak P_r^{\mathrm{spl}}\to\mathcal C_a
 \]
-with band $\Band$ such that
+with band $\Band$ and connected-component presheaf
 \[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})
-\cong
-F_{p,s}|_{\mathcal C_a}.
+\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{spl}})
+\cong F_{p,s}|_{\mathcal C_a}.
 \]
-Explicitly, for each object $U$ of $\mathcal C_a$, the fibre
+Explicitly, for every object $U$ of $\mathcal C_a$, the groupoid
+$\mathfrak P_r^{\mathrm{spl}}(U)$ has object set $F_{p,s}(U)$ and
 \[
-\mathfrak P_r^{\mathrm{split}}(U)
+\operatorname{Hom}_{\mathfrak P_r^{\mathrm{spl}}(U)}(\sigma,\tau)=
+\begin{cases}
+\Band(U),& \sigma=\tau,\\
+\varnothing,& \sigma\ne\tau,
+\end{cases}
 \]
-has object set $F_{p,s}(U)$, every object $\sigma$ has automorphism group
-\[
-\mathrm{Aut}_{\mathfrak P_r^{\mathrm{split}}(U)}(\sigma)=\Band(U),
-\]
-and there are no morphisms between distinct objects.
+with composition given by addition in $\Band(U)$. For a morphism
+$f:V\to U$ in $\mathcal C_a$, restriction sends $\sigma$ to
+$\res_V^U(\sigma)$ and sends an automorphism $b\in\Band(U)$ to its
+restriction $b|_V\in\Band(V)$.
+
+This split prestack is separated as a prestack in groupoids, in the
+sense that every isomorphism presheaf is a sheaf, if and only if the
+restricted local-object presheaf $F_{p,s}|_{\mathcal C_a}$ is
+slice-separated in the sense of \Cref{def:slice-separated-local-object}.
 \end{proposition}
 
 \begin{proof}
-For a morphism $f:V\to U$ in $\mathcal C_a$, define pullback on objects by
+The displayed rule defines a contravariant pseudofunctor from
+$\mathcal C_a$ to groupoids. Since $\mathcal C_a$ is thin, there are no
+nontrivial coherence choices to make: functoriality of the object maps is
+the functoriality of $F_{p,s}$, and functoriality on automorphisms is the
+restriction functoriality of the sheaf $\Band$. The associated category
+over $\mathcal C_a$ is therefore fibred in groupoids. Its connected
+components over $U$ are exactly the objects $F_{p,s}(U)$, because
+distinct objects have no morphisms between them and each automorphism
+group is connected to its own object only. Hence
 \[
-f^*(\sigma):=\res_V^U(\sigma)\in F_{p,s}(V)
+\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{spl}})(U)\cong F_{p,s}(U)
 \]
-and on automorphisms by the sheaf restriction
-\[
-f^*:\Band(U)\to \Band(V).
-\]
-This gives a pseudofunctor $\mathcal C_a^{op}\to \mathbf{Grpd}$ and hence a category fibred in groupoids over $\mathcal C_a$. For any two objects $\sigma,\tau\in \mathfrak P_r^{\mathrm{split}}(U)$, the isomorphism presheaf on $\mathcal C_a/U$ is either $\Band|_U$ or the empty presheaf. Since $\Band$ is a sheaf and the empty presheaf is also a sheaf, $\mathfrak P_r^{\mathrm{split}}$ is a prestack.
+naturally in $U$.
 
-By construction, two objects of $\mathfrak P_r^{\mathrm{split}}(U)$ are isomorphic if and only if they are equal as elements of $F_{p,s}(U)$. Therefore
+For an object $\sigma\in F_{p,s}(U)$, the automorphism presheaf on
+$\mathcal C_a/U$ is
 \[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})(U)\cong F_{p,s}(U)
+V\longmapsto \operatorname{Aut}(\sigma|_V)=\Band(V),
 \]
-for every $U$, giving condition \textup{(i)} of \Cref{def:realization-prestack}. Condition \textup{(ii)} holds because the automorphism sheaf of every object $\sigma$ is exactly $\Band|_U$.
+so its sheafification is already the restriction $\Band|_{\mathcal C_a/U}$.
+Thus $\mathfrak P_r^{\mathrm{spl}}$ is a realization prestack with band
+$\Band$.
+
+It remains to prove the separatedness criterion. Suppose first that
+$F_{p,s}|_{\mathcal C_a}$ is slice-separated. Let $\sigma,\tau\in
+F_{p,s}(U)$ and let $\{U_i\to U\}_{i\in I}$ be a cover. A matching
+family of local isomorphisms
+\[
+\alpha_i:\sigma|_{U_i}\xrightarrow{\sim}\tau|_{U_i}
+\]
+can exist only when
+\[
+\sigma|_{U_i}=\tau|_{U_i}
+\qquad(\forall i).
+\]
+Slice-separatedness then gives $\sigma=\tau$. The local isomorphisms
+$\alpha_i$ are therefore sections of the sheaf $\Band$ over the $U_i$,
+and their matching condition is exactly the sheaf matching condition for
+$\Band$. Since $\Band$ is a sheaf, the $\alpha_i$ glue uniquely to a
+global element of $\Band(U)$, hence to a unique global isomorphism
+$\sigma\to\tau$. Thus every isomorphism presheaf is a sheaf.
+
+Conversely, assume that $\mathfrak P_r^{\mathrm{spl}}$ is separated. Let
+$\sigma,\tau\in F_{p,s}(U)$ have equal restrictions on a cover
+$\{U_i\to U\}_{i\in I}$. The identity element of $\Band(U_i)$ gives an
+isomorphism
+\[
+\sigma|_{U_i}\xrightarrow{\sim}\tau|_{U_i}
+\]
+for every $i$, and these identities form a matching family. Separatedness
+of the isomorphism presheaf glues them to a global isomorphism
+$\sigma\to\tau$ in the split groupoid. Such a global isomorphism exists
+only when $\sigma=\tau$. Therefore $F_{p,s}|_{\mathcal C_a}$ is separated
+at every $U$, which is slice-separatedness.
 \end{proof}
 
 \begin{proposition}[Consequences of a chosen gluing-sensitive realization datum]\label{thm:gluing-sensitive-realization}
@@ -271,7 +593,7 @@ Let $r:\mathsf{Ref}_s$ be admitted at a state $p$, and suppose $r$ is equipped w
 \begin{enumerate}[label=(\roman*),nosep]
 \item the visible value classes of $r$ are identified with $\pi_0(\mathfrak L_r)(a)$ via \Cref{thm:visible-value-components};
 \item if the cofinal gerbe-adapted-cover hypothesis of \Cref{def:cech-gluing-obstruction} is added, then each visible branch determines a component gerbe as in \Cref{thm:component-gerbe-decomposition};
-\item if, in addition, the terminal-fibre essential surjectivity above is used as global conservativity at $a$, then the comparison between global sections and neutral component gerbes is exactly the one proved later in \Cref{prop:global-sections-vs-neutral-components} and \Cref{thm:gerbe-null-semantics}.
+\item if, in addition, the terminal-fibre essential surjectivity above is used as global conservativity at $a$, and the reference slice is slice-separated when the strict predicate \(\CompSec_s\) is invoked, then the comparison between global sections and neutral component gerbes is exactly the one proved later in \Cref{prop:global-sections-vs-neutral-components} and \Cref{thm:gerbe-null-semantics}.
 \end{enumerate}
 \end{proposition}
 
@@ -295,6 +617,43 @@ Using \Cref{def:realization-prestack}(i), this becomes
 \]
 \end{proof}
 
+\begin{proposition}[Naturality of the stackification component map]\label{prop:stackification-component-unit-naturality}
+In the setting of \Cref{def:realization-prestack}, the map of component
+sheaves induced by the stackification morphism
+\[
+\iota_r:\mathfrak P_r\to a(\mathfrak P_r)=\mathfrak L_r
+\]
+is, under the identification
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a}
+\quad\text{and}\quad
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a},
+\]
+exactly the sheafification unit
+\[
+u:F_{p,s}|_{\mathcal C_a}\longrightarrow
+a_{p,s}F_{p,s}|_{\mathcal C_a}.
+\]
+Equivalently, for every object \(U\) of the slice and every
+\(y\in\mathfrak P_r(U)\),
+\[
+[\iota_r(y)]=u_U([y])
+\]
+in \(\pi_0(\mathfrak L_r)(U)\).
+\end{proposition}
+
+\begin{proof}
+\Cref{prop:stackification-components} identifies
+\(\pi_0(\mathfrak L_r)\) with the sheafification of
+\(\pi_0^{\mathrm{pre}}(\mathfrak P_r)\). This identification is induced by
+the universal morphism from a presheaf to its sheafification: applying
+\(\pi_0\) to \(\iota_r\) sends a prestack object to the same local
+component, now viewed in the sheaf of components. After the defining
+identification
+\(\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a}\), this
+universal morphism is precisely \(u\).
+\end{proof}
+
 \begin{definition}[Global conservativity at the terminal fibre]\label{def:global-conservativity}
 In the setting of \Cref{def:realization-prestack}, now over a pullback-based slice site $\mathcal C_a$, let
 \[
@@ -305,6 +664,19 @@ be the stackification morphism. We say that $\mathfrak P_r$ is \emph{globally co
 (\iota_r)_a:(\mathfrak P_r)_a\to (\mathfrak L_r)_a
 \]
 is essentially surjective.
+\end{definition}
+
+\begin{definition}[Terminal component effectivity]\label{def:terminal-component-effectivity}
+In the setting of \Cref{def:realization-prestack}, the stackification
+$\mathfrak L_r$ has \emph{effective terminal components} if the canonical
+map from isomorphism classes of terminal-fibre objects to terminal sections
+of the component sheaf,
+\[
+\pi_0\bigl(\mathfrak L_r(a)\bigr)\longrightarrow \pi_0(\mathfrak L_r)(a),
+\]
+is surjective. Equivalently, every section of the sheaf of connected
+components over $a$ is represented by an actual object of
+$\mathfrak L_r(a)$.
 \end{definition}
 
 \begin{proposition}[No new global objects at $a$]\label{prop:no-new-global-objects}
@@ -351,10 +723,272 @@ is $\sigma$;
 f^*s_U(\sigma)=s_V(\res_V^U(\sigma)).
 \]
 \end{enumerate}
-Thus the isomorphism classes of local objects admit a strict functorial choice of representatives.
+Here \(f^*\) is computed with respect to a fixed split cleavage of the
+fibred groupoid \(\mathfrak P_r\), so pullbacks compose on the nose. Thus
+the isomorphism classes of local objects admit a strict functorial choice of
+representatives. Without this split-cleavage convention the same condition
+would have to be stated with coherent cartesian isomorphisms, and the proof
+of descent below would require the corresponding triple-cocycle coherence
+instead of literal equalities of pulled-back representatives.
 \end{definition}
 
-\begin{theorem}[Rigidity of representative-rigid lifts]\label{thm:canonical-lift-rigidity}
+\begin{lemma}[Where slice-separatedness enters]\label{lem:unit-equality-on-cover-members}
+Let $\mathcal C$ be a site with pullbacks of covering families, let \(F\)
+be a presheaf of sets, let \(u:F\to aF\) be the sheafification unit, and
+let \(X\) be an object. Assume that \(F\) is separated at every object of
+the slice \(\mathcal C/X\). If
+\[
+\{X_i\to X\}_{i\in I}
+\]
+is a covering family, \(\sigma\in F(X)\), and
+\(\sigma_i\in F(X_i)\) are sections satisfying
+\[
+u_{X_i}\bigl(\res_{X_i}^{X}\sigma\bigr)=u_{X_i}(\sigma_i)
+\qquad(\forall i),
+\]
+then
+\[
+\res_{X_i}^{X}\sigma=\sigma_i
+\qquad(\forall i).
+\]
+\end{lemma}
+
+\begin{proof}
+Fix \(i\). Equality in \((aF)(X_i)\) is only sheafified equality, so it
+does not by itself give equality in \(F(X_i)\). By
+\Cref{lem:sheafification-unit-equality-local}, there is a covering family
+\(\{Y_{ik}\to X_i\}_k\) such that
+\[
+\res_{Y_{ik}}^{X}\sigma=\res_{Y_{ik}}^{X_i}\sigma_i
+\qquad(\forall k)
+\]
+in \(F(Y_{ik})\). The object \(X_i\) lies in the slice \(\mathcal C/X\),
+and the hypothesis says that \(F\) is separated at this object. Therefore
+these equalities after a cover of \(X_i\) force equality over \(X_i\)
+itself:
+\[
+\res_{X_i}^{X}\sigma=\sigma_i.
+\]
+This proves the assertion for every \(i\).
+\end{proof}
+
+\begin{lemma}[Bijective terminal unit and the terminal sheaf axiom]\label{lem:bijective-unit-terminal-sheaf-axiom}
+Let $\mathcal C$ be a site with pullbacks of covering families, let $F$
+be a presheaf of sets, let $X$ be an object, and let
+\[
+u:F\longrightarrow aF
+\]
+be the sheafification unit. Assume that \(F\) is separated at every object
+of the slice \(\mathcal C/X\). Then the following are equivalent:
+\begin{enumerate}[label=(\alph*),nosep]
+\item the map \(u_X:F(X)\to(aF)(X)\) is bijective;
+\item \(F\) satisfies the sheaf axiom at \(X\): every strict matching
+family on every cover of \(X\) has a unique amalgamation in \(F(X)\).
+\end{enumerate}
+Here separatedness on the whole slice is essential.  In the direction from
+bijectivity of \(u_X\) to the sheaf axiom, the chosen preimage of the
+glued sheaf section has restrictions which agree with the prescribed
+local sections only after applying \(u\) over each cover member.  Equality
+in \((aF)(X_i)\) gives equality in \(F\) only after a further cover of
+\(X_i\), and separatedness at \(X_i\), not merely at \(X\), is what
+descends that refined equality back to \(X_i\).
+\end{lemma}
+
+\begin{proof}
+Slice-separatedness at \(X\) implies injectivity of \(u_X\). Indeed, if
+\(u_X(\sigma)=u_X(\tau)\), then
+\Cref{lem:sheafification-unit-equality-local} gives a covering family
+\(\{X_i\to X\}_i\) on which the restrictions of \(\sigma\) and \(\tau\)
+are equal in \(F(X_i)\), and separatedness at \(X\) forces
+\(\sigma=\tau\).
+
+Assume first that \(u_X\) is bijective. Let
+\[
+\bigl(\{X_i\to X\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
+\]
+be a strict \(F\)-matching family. Applying \(u\) to the sections
+\(\sigma_i\) gives a matching family in the sheaf \(aF\), hence a unique
+section \(\xi\in(aF)(X)\). By surjectivity choose
+\(\sigma\in F(X)\) with \(u_X(\sigma)=\xi\). For each \(i\),
+\[
+u_{X_i}\bigl(\res_{X_i}^{X}\sigma\bigr)=u_{X_i}(\sigma_i)
+\]
+in \((aF)(X_i)\). This equality is not an equality in \(F(X_i)\). By
+\Cref{lem:unit-equality-on-cover-members}, applied to the cover
+\(\{X_i\to X\}_{i\in I}\), these sheafified equalities upgrade to
+\[
+\res_{X_i}^{X}\sigma=\sigma_i
+\qquad(\forall i).
+\]
+Thus \(\sigma\) is an amalgamation of the original matching family.
+Uniqueness of the amalgamation follows again from separatedness at \(X\).
+
+Conversely, assume the sheaf axiom at \(X\). Let
+\(\xi\in(aF)(X)\). By the plus--plus normal form
+\Cref{lem:strict-sheafification-representatives}, \(\xi\) is represented
+by a cover \(\{X_i\to X\}_i\) and sections
+\(\sigma_i\in F(X_i)\) whose restrictions to each pullback overlap agree
+after a further covering of that overlap. Because every such overlap is an
+object of \(\mathcal C/X\), \Cref{lem:slice-separated-refined-equality}
+upgrades the refined equalities to a strict \(F\)-matching family. The
+sheaf axiom at \(X\) gives an amalgamation \(\sigma\in F(X)\). The
+sections \(u_X(\sigma)\) and \(\xi\) restrict to the same sections of
+\(aF\) on the cover \(\{X_i\to X\}_i\), so separatedness of the sheaf
+\(aF\) gives \(u_X(\sigma)=\xi\). Hence \(u_X\) is surjective, and it is
+injective by the first paragraph.
+\end{proof}
+
+\begin{lemma}[Isomorphism torsor for a lifted component]\label{lem:canonical-lift-isom-torsor}
+Let $\mathfrak P_r$ be a representative-rigid realization prestack with band $\Band$ on $\mathcal C_a$, let
+\[
+\iota_r:\mathfrak P_r\to\mathfrak L_r:=a(\mathfrak P_r)
+\]
+be the stackification map, and let $x\in\mathfrak L_r(a)$ and $\sigma\in F_{p,s}(a)$ satisfy
+\[
+[\iota_r(s_a(\sigma))]=[x]
+\quad\text{in}\quad
+\pi_0(\mathfrak L_r)(a).
+\]
+Then the sheaf
+\[
+\mathcal I_{\sigma,x}:=
+\underline{\mathrm{Isom}}_{\mathfrak L_r}(\iota_r(s_a(\sigma)),x)
+\]
+is a $\Band$-torsor on $\mathcal C_a$. If $H^1(\mathcal C_a,\Band)=0$, then $\mathcal I_{\sigma,x}$ has a global section, equivalently
+\[
+\iota_r(s_a(\sigma))\cong x
+\quad\text{in}\quad
+\mathfrak L_r(a).
+\]
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+y:=s_a(\sigma).
+\]
+The equality of component classes in the sheaf $\pi_0(\mathfrak L_r)$ means precisely that the two objects $\iota_r(y)$ and $x$ become isomorphic after passing to a cover of $a$. Hence there is a covering family
+\[
+\{U_i\to a\}_{i\in I}
+\]
+and isomorphisms
+\[
+\phi_i:\iota_r(y)|_{U_i}\xrightarrow{\sim}x|_{U_i}.
+\]
+Thus $\mathcal I_{\sigma,x}$ is locally nonempty.
+
+For every object $U$ of $\mathcal C_a$ and every local isomorphism
+\[
+\phi:\iota_r(y)|_U\xrightarrow{\sim}x|_U,
+\]
+right composition gives a simply transitive action of
+\[
+\underline{\mathrm{Aut}}_{\mathfrak L_r}(\iota_r(y)|_U)
+\]
+on $\mathcal I_{\sigma,x}(U)$:
+\[
+\alpha\longmapsto \phi\circ\alpha.
+\]
+Because $\mathfrak L_r$ is the stackification of a $\Band$-banded prestack, the automorphism sheaf of $\iota_r(y)|_U$ is identified with $\Band|_U$; the band is abelian, so the same torsor is obtained from left composition through the automorphism sheaf of $x|_U$. Therefore $\mathcal I_{\sigma,x}$ is a $\Band$-torsor. This is the usual Isom-torsor construction for a banded stack \cite[Chap.~III]{MacLaneMoerdijk1994}, \cite[Tag 04TU]{StacksProject}.
+
+The nonabelian cohomology set $H^1(\mathcal C_a,\Band)$ classifies $\Band$-torsors on $\mathcal C_a$ up to isomorphism. Since $\Band$ is here an abelian sheaf, the distinguished point $0\in H^1(\mathcal C_a,\Band)$ is the class of the trivial torsor. If $H^1(\mathcal C_a,\Band)=0$, every $\Band$-torsor is trivial; hence $\mathcal I_{\sigma,x}$ is isomorphic to the trivial torsor $\Band$ and has a global section. Such a section is exactly an isomorphism $\iota_r(y)\cong x$ in the terminal fibre $\mathfrak L_r(a)$.
+\end{proof}
+
+\begin{lemma}[Realizing component sections by descent]\label{lem:component-section-descent-object}
+Let $\mathfrak P_r$ be a representative-rigid realization prestack on
+$\mathcal C_a$, assume that $F_{p,s}|_{\mathcal C_a}$ is
+slice-separated, and let
+\[
+\iota_r:\mathfrak P_r\to\mathfrak L_r:=a(\mathfrak P_r)
+\]
+be the stackification map. Every section
+\[
+\xi\in\pi_0(\mathfrak L_r)(a)
+\]
+is represented by an object of the terminal stack fibre $\mathfrak L_r(a)$.
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+F:=F_{p,s}|_{\mathcal C_a}.
+\]
+The identification
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}
+\]
+from \Cref{prop:stackification-components} writes $\xi$ as a sheafified
+matching datum. We now use the strictified plus--plus normal form
+explicitly, because a section of \(aF\) is not, for a general presheaf, a
+strict \(F\)-matching family on the first displayed cover. By
+\Cref{lem:strictify-component-representatives}, applied in the slice
+\(\mathcal C_a\), there is a
+covering family
+\[
+\{U_i\to a\}_{i\in I}
+\]
+and sections
+\[
+\sigma_i\in F_{p,s}(U_i)
+\]
+such that the sheaf sections \(u_{U_i}(\sigma_i)\) glue to \(\xi\), and
+such that for every pair \(i,j\), with
+\[
+U_{ij}:=U_i\times_a U_j,
+\]
+the two restrictions agree on the original overlap:
+\[
+\res_{U_{ij}}^{U_i}(\sigma_i)
+=
+\res_{U_{ij}}^{U_j}(\sigma_j)
+\qquad(\forall i,j),
+\]
+including the case where \(U_{ij}\) is the formal initial object
+representing an empty overlap. The cited strictification lemma is the
+point at which slice-separatedness, rather than separatedness only at
+\(a\), is needed: the plus--plus representative first gives equality only
+after covers of the \(U_{ij}\), and separatedness at those overlap objects
+upgrades it to equality on the original \(U_{ij}\).
+Representative-rigidity supplies strict representatives
+\[
+y_i:=s_{U_i}(\sigma_i)\in\mathfrak P_r(U_i).
+\]
+On every overlap, strict functoriality gives equality of the restricted
+representatives
+\[
+y_i|_{U_{ij}}=s_{U_{ij}}(\sigma_i|_{U_{ij}})
+=s_{U_{ij}}(\sigma_j|_{U_{ij}})=y_j|_{U_{ij}}.
+\]
+These equalities are equalities in the fibre over the actual pullback
+object \(U_{ij}\). They are not merely equalities after a further cover of
+\(U_{ij}\). This is why the following identity arrows are legitimate
+cover-level descent arrows; without the preceding slice-separated
+strictification, identity descent data on the displayed cover would not be
+defined.
+Taking the identity isomorphism of this common object on each
+$U_{ij}$ therefore gives the overlap arrow
+\[
+\theta_{ij}:y_i|_{U_{ij}}\xrightarrow{\mathrm{id}}y_j|_{U_{ij}}
+\]
+inside $\mathfrak L_r(U_{ij})$. On a triple overlap
+$U_{ijk}:=U_i\times_aU_j\times_aU_k$, the two composites
+\[
+\theta_{ik}|_{U_{ijk}},
+\qquad
+\theta_{jk}|_{U_{ijk}}\circ\theta_{ij}|_{U_{ijk}}
+\]
+are both the identity of the same restricted object, including when this
+triple overlap is the formal initial object. Thus the cocycle condition
+for descent is satisfied strictly. Since $\mathfrak L_r$ is a stack,
+this descent datum glues to an object
+\[
+x_\xi\in\mathfrak L_r(a).
+\]
+By construction, the connected-component class of $x_\xi$ is the original
+section $\xi$.
+\end{proof}
+
+\begin{theorem}[Rigidity of representative-rigid lifts over slice-separated slices]\label{thm:canonical-lift-rigidity}
 Let $r:\mathsf{Ref}_s$ be admitted at a state $p$, write
 \[
 a=[r]_p,
@@ -369,7 +1003,16 @@ be a representative-rigid realization prestack with band $\Band$. Let
 \[
 u:F_{p,s}|_{\mathcal C_a}\longrightarrow a_{p,s}F_{p,s}|_{\mathcal C_a}
 \]
-be the sheafification unit.
+be the sheafification unit. Assume throughout this theorem that
+\[
+F_{p,s}|_{\mathcal C_a}
+\]
+is slice-separated in the sense of
+\Cref{def:slice-separated-local-object}; equivalently, $F_{p,s}$ is
+separated at every object of the slice $\mathcal C_a$, including every
+cover member, every pullback overlap, and every refinement occurring below.
+Separatedness only at the terminal object $a$ is not sufficient for this
+theorem, and no assertion below is made under that weaker hypothesis.
 \begin{enumerate}[label=(\roman*),nosep]
 \item If $\mathfrak P_r$ is globally conservative at $a$, then
 \[
@@ -380,14 +1023,21 @@ is surjective.
 \[
 H^1(\mathcal C_a,\Band)=0,
 \]
-then surjectivity of $u_a$ implies that $\mathfrak P_r$ is globally conservative at $a$.
+then surjectivity of $u_a$ implies that $\mathfrak P_r$ is globally
+conservative at $a$.
 \end{enumerate}
-If, moreover, $F_{p,s}|_{\mathcal C_a}$ is separated at $a$ in the sense of \Cref{def:separated-at-a}, then under the same vanishing hypothesis the following are equivalent:
+Under the same vanishing hypothesis the following are equivalent:
 \begin{enumerate}[label=(\alph*),nosep]
 \item $\mathfrak P_r$ is globally conservative at $a$;
 \item $u_a$ is bijective;
-\item $F_{p,s}|_{\mathcal C_a}$ is a sheaf at $a$.
+\item $F_{p,s}|_{\mathcal C_a}$ satisfies the sheaf gluing condition at
+the object $a$, that is, every matching family on every cover of $a$ has
+an amalgamation in $F_{p,s}(a)$; uniqueness follows from the standing
+slice-separatedness at $a$.
 \end{enumerate}
+The last equivalence is not a consequence of separatedness at \(a\) alone.
+It uses separatedness at all cover members, pullback overlaps, and their
+refinements in the slice \(\mathcal C_a\).
 \end{theorem}
 
 \begin{proof}
@@ -395,7 +1045,8 @@ Write
 \[
 \mathfrak L_r:=a(\mathfrak P_r).
 \]
-By \Cref{prop:stackification-components}, the morphism of component sheaves induced by the stackification map
+By \Cref{prop:stackification-component-unit-naturality}, the morphism of
+component sheaves induced by the stackification map
 \[
 \iota_r:\mathfrak P_r\to \mathfrak L_r
 \]
@@ -408,11 +1059,17 @@ Assume first that $\mathfrak P_r$ is globally conservative at $a$, and let
 \[
 \xi\in \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \pi_0(\mathfrak L_r)(a).
 \]
-Choose an object
+By \Cref{lem:component-section-descent-object}, choose an object
 \[
 x\in \mathfrak L_r(a)
 \]
-whose connected-component class is $\xi$. Essential surjectivity of
+whose connected-component class is $\xi$. The cited lemma uses the
+plus--plus normal form of \Cref{lem:strict-sheafification-representatives}:
+first one represents $\xi$ by $F_{p,s}$-sections whose overlap equalities
+hold after local refinements, then slice-separatedness upgrades those
+refined overlap equalities to a strict matching family, and only then does
+effective descent in the stackification produce the terminal object.
+Essential surjectivity of
 \[
 (\iota_r)_a:(\mathfrak P_r)_a\to (\mathfrak L_r)_a
 \]
@@ -454,39 +1111,25 @@ By construction, $y$ represents the class $\sigma$ in $\pi_0^{\mathrm{pre}}(\mat
 \[
 [\iota_r(y)]=u_a(\sigma)=[x]
 \]
-in $\pi_0(\mathfrak L_r)(a)$. Therefore there exists a covering family
-\[
-\{U_i\to a\}_{i\in I}
-\]
-in $\mathcal C_a$ together with isomorphisms
-\[
-\phi_i:\iota_r(y)|_{U_i}\xrightarrow{\sim} x|_{U_i}.
-\]
-The sheaf
+in $\pi_0(\mathfrak L_r)(a)$. By \Cref{lem:canonical-lift-isom-torsor}, the sheaf
 \[
 \underline{\mathrm{Isom}}_{\mathfrak L_r}(\iota_r(y),x)
 \]
-is a $\Band$-torsor on $\mathcal C_a$, and the family $(\phi_i)_{i\in I}$ is a local section of that torsor. Since
-\[
-H^1(\mathcal C_a,\Band)=0,
-\]
-every $\Band$-torsor on $\mathcal C_a$ is trivial \cite[Chap.~III]{MacLaneMoerdijk1994}. Hence
-\[
-\underline{\mathrm{Isom}}_{\mathfrak L_r}(\iota_r(y),x)
-\]
-has a global section, that is, there exists an isomorphism
+is a $\Band$-torsor, and the vanishing of $H^1(\mathcal C_a,\Band)$ gives a global section of it. Equivalently, there exists an isomorphism
 \[
 \iota_r(y)\xrightarrow{\sim} x
 \]
 in $\mathfrak L_r(a)$. Thus every object of $\mathfrak L_r(a)$ is in the essential image of $(\iota_r)_a$, so $\mathfrak P_r$ is globally conservative at $a$.
 
-Assume now that $F_{p,s}|_{\mathcal C_a}$ is separated at $a$. If
+The standing slice-separatedness also gives injectivity of the unit at the
+terminal object. If
 \[
 u_a(\sigma)=u_a(\tau)
 \qquad
 (\sigma,\tau\in F_{p,s}(a)),
 \]
-then the two global sections define the same element of the sheafification at $a$, so by the matching-family description of sheafification there exists a cover
+then the two global sections define the same element of the sheafification at $a$.
+Applying \Cref{lem:sheafification-unit-equality-local} gives a cover
 \[
 \{U_i\to a\}_{i\in I}
 \]
@@ -496,39 +1139,78 @@ such that
 \qquad
 (\forall i\in I).
 \]
-Separatedness forces $\sigma=\tau$. Therefore $u_a$ is injective.
+Separatedness on the slice applies in particular at the terminal object
+$a$, and therefore forces $\sigma=\tau$. Thus $u_a$ is injective.
 
-Under $H^1(\mathcal C_a,\Band)=0$, part \textup{(i)} gives \textup{(a)}$\Rightarrow$\textup{(b)}, and part \textup{(ii)} together with injectivity gives \textup{(b)}$\Rightarrow$\textup{(a)}. It remains to compare \textup{(b)} and \textup{(c)}.
+Under $H^1(\mathcal C_a,\Band)=0$, part \textup{(i)} gives
+\textup{(a)}$\Rightarrow$\textup{(b)}, and part \textup{(ii)} together
+with injectivity gives \textup{(b)}$\Rightarrow$\textup{(a)}. It remains
+to identify \textup{(b)} with the terminal sheaf axiom, and we spell this
+out because this is the point where the slice-separated hypothesis is
+used beyond the terminal object.
 
-Assume \textup{(b)}. Let
+Assume \textup{(b)}, and let
 \[
-\bigl(\{U_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
-\]
-be a matching family of sections of $F_{p,s}$ over a cover of $a$. It determines an element of
-\[
-\bigl(a_{p,s}F_{p,s}\bigr)(a).
-\]
-By bijectivity of $u_a$, there exists a unique
-\[
-\sigma\in F_{p,s}(a)
-\]
-mapping to that element. By construction of the sheafification unit, the image $u_a(\sigma)$ is represented by the family of restrictions
-\[
-\bigl(\{U_i\to a\}_{i\in I},(\res_{U_i}^a(\sigma))_{i\in I}\bigr),
-\]
-so
-\[
-\res_{U_i}^a(\sigma)=\sigma_i
+\{U_i\to a\}_{i\in I},
 \qquad
-(\forall i\in I).
+\sigma_i\in F_{p,s}(U_i)
 \]
-Thus every matching family over $a$ has a unique amalgamation, and $F_{p,s}|_{\mathcal C_a}$ is a sheaf at $a$.
-
-Assume conversely that \textup{(c)} holds. Every element of
+be a strict matching family on a cover of \(a\). Applying \(u\) to the
+\(\sigma_i\) gives a matching family in the sheaf
+\(a_{p,s}F_{p,s}\), hence a unique section
 \[
-\bigl(a_{p,s}F_{p,s}\bigr)(a)
+\xi\in \bigl(a_{p,s}F_{p,s}\bigr)(a)
 \]
-is represented by a matching family over a cover of $a$, and the sheaf condition at $a$ produces a unique global amalgamation in $F_{p,s}(a)$. Therefore $u_a$ is bijective. This proves \textup{(b)}$\Leftrightarrow$\textup{(c)}.
+whose restriction to \(U_i\) is \(u_{U_i}(\sigma_i)\). By surjectivity of
+\(u_a\), choose \(\sigma\in F_{p,s}(a)\) with \(u_a(\sigma)=\xi\). For
+each \(i\),
+\[
+u_{U_i}\bigl(\res_{U_i}^{a}\sigma\bigr)=u_{U_i}(\sigma_i)
+\]
+in \((a_{p,s}F_{p,s})(U_i)\). This equality is not an equality in
+\(F_{p,s}(U_i)\). By \Cref{lem:sheafification-unit-equality-local},
+there is a covering family
+\[
+\{V_{ik}\to U_i\}_{k}
+\]
+such that
+\[
+\res_{V_{ik}}^{a}\sigma=\res_{V_{ik}}^{U_i}\sigma_i
+\qquad(\forall k)
+\]
+in \(F_{p,s}(V_{ik})\). Since \(U_i\) is an object of the slice
+\(\mathcal C_a\) and the standing hypothesis is slice-separatedness,
+\(F_{p,s}\) is separated at \(U_i\). The displayed local equalities over
+the cover of \(U_i\) therefore force
+\[
+\res_{U_i}^{a}\sigma=\sigma_i
+\]
+in \(F_{p,s}(U_i)\). Thus \(\sigma\) is an amalgamation of the original
+matching family. Its uniqueness follows from separatedness at \(a\).
+Therefore \textup{(c)} holds.
+
+Conversely, assume \textup{(c)} and let
+\[
+\xi\in \bigl(a_{p,s}F_{p,s}\bigr)(a).
+\]
+By the plus--plus normal form of
+\Cref{lem:strict-sheafification-representatives}, \(\xi\) is represented
+on a cover \(\{U_i\to a\}\) by sections
+\(\sigma_i\in F_{p,s}(U_i)\) whose restrictions to each overlap
+\[
+U_{ij}:=U_i\times_aU_j
+\]
+agree after a further covering family of \(U_{ij}\). Each \(U_{ij}\) is an
+object of the slice \(\mathcal C_a\), so slice-separatedness and
+\Cref{lem:slice-separated-refined-equality} upgrade these refined
+equalities to equalities on the original overlaps. Hence the
+\(\sigma_i\) form a strict matching family on the displayed cover. By the
+sheaf axiom at \(a\), there is an amalgamation
+\(\sigma\in F_{p,s}(a)\). The sections \(u_a(\sigma)\) and \(\xi\) have
+the same restrictions to the cover \(\{U_i\to a\}\), so separatedness of
+the sheaf \(a_{p,s}F_{p,s}\) gives \(u_a(\sigma)=\xi\). Thus \(u_a\) is
+surjective, and its injectivity was proved above. Therefore
+\textup{(b)} holds.
 \end{proof}
 
 \begin{corollary}[Nontrivial gluing semantics forces noncanonical lift data]\label{cor:no-rigid-gluing-null}
@@ -538,7 +1220,7 @@ a=[r]_p,
 \qquad
 \mathcal C_a:=\mathcal C_{p,s}/a,
 \]
-If
+assume that $F_{p,s}|_{\mathcal C_a}$ is slice-separated. If
 \[
 M,p\Vdash \Null^{\mathrm{glue}}_s(r),
 \]
@@ -570,443 +1252,30 @@ Hence the unit map
 \[
 u_a:F_{p,s}(a)\to \bigl(a_{p,s}F_{p,s}\bigr)(a)
 \]
-cannot be surjective. The contrapositive of \Cref{thm:canonical-lift-rigidity} therefore excludes global conservativity at $a$ for every representative-rigid realization prestack with band $\Band$.
+cannot be surjective. Since slice-separatedness is part of the present
+hypotheses, the contrapositive of
+\Cref{thm:canonical-lift-rigidity}(i) therefore excludes global
+conservativity at $a$ for every representative-rigid realization prestack
+with band $\Band$.
+This is not contradicted by the vacuous global-conservativity examples used
+later: in those examples the prestack and stack terminal fibres are both
+empty. Representative-rigidity is the extra hypothesis that rules out that
+vacuous case when a sheafified terminal component exists. Indeed, if such a
+prestack were representative-rigid, then
+\Cref{lem:component-section-descent-object} would turn the sheafified terminal
+component into an object of $\mathfrak L_r(a)$, contradicting the equality
+$\mathfrak P_r(a)=\varnothing=\mathfrak L_r(a)$.
 \end{proof}
 
 \begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
-\Cref{prop:split-realization-prestack} shows that, once the band has been fixed, some groupoid-valued lift is always available. What remains non-formal is the choice of a lift that is both globally conservative at $a$ and sufficiently sensitive to gluing to support component gerbes on acyclic covers. The later gerbe-theoretic and homological statements are therefore relative to such data; no canonical construction is claimed for an arbitrary local object functor.
+\Cref{prop:split-realization-prestack} constructs a split prestack for every
+presheaf \(F_{p,s}|_{\mathcal C_a}\) and every abelian sheaf \(\Band\).
+Slice-separatedness is needed exactly for this split prestack to be
+separated as a prestack in groupoids. The split construction is not
+gluing-sensitive: it records the prescribed component presheaf and band, but
+it does not by itself supply the additional gerbe data, acyclic-cover
+comparisons, or global conservativity hypotheses used later. The
+gerbe-theoretic and homological statements are therefore relative to chosen
+realization data satisfying those extra hypotheses.
 \end{remark}
 
-\subsection{Visible value classes and typed readouts}
-
-\begin{definition}[Visible value classes]\label{def:visible-value-classes}
-Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible presentation} of a value at $r$ is a matching family of local sections on some cover of $a$ in the pullback-based thin site of \Cref{def:local-reference-frame}; concretely, it is data
-\[
-\Bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\Bigr)
-\]
-with each $\sigma_i\in F_{p,s}(a_i)$ and with agreement on every pullback overlap $a_i\times_a a_j$. Two such presentations are \emph{value-equivalent} when, after pulling both families back to a common refinement of their covers in that same site, the resulting local sections agree pointwise. A \emph{visible value class} is an equivalence class under this refinement relation, and the set of all such classes is denoted by $\Vis_{p,s}(r)$.
-\end{definition}
-
-
-\begin{proposition}[Visible value classes as sections of the sheaf of connected components]\label{thm:visible-value-components}
-Assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack} over the pullback-based slice site attached to \Cref{def:local-reference-frame}. Then the visible values of $r$ are exactly the sections at $a$ of the sheafification of the local-object functor, and equivalently the sections at $a$ of the sheaf of connected components of $\mathfrak L_r$:
-\[
-\pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
-\]
-\end{proposition}
-
-\begin{proof}
-By the standard description of sheafification on a site, the value of the sheafification $a_{p,s}F_{p,s}$ at the object $a$ is the set of matching families over covers of $a$, modulo passage to common refinements.
-
-Concretely, evaluation of the sheafification on the object $a$ is
-\[
-J_a/\!\sim,\qquad
-J_a:=\left\{\left(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\right)\middle|\text{each }\sigma_i\in F_{p,s}(a_i)\text{ and the family is compatible}\right\},
-\]
-where two representatives are equivalent if they agree after pullback to a common refinement.
-This is exactly the equivalence relation imposed in \Cref{def:visible-value-classes}; hence
-\[
-\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
-\]
-The second identification is \Cref{prop:stackification-components} evaluated at $a$.
-\end{proof}
-
-
-\begin{definition}[Typed readout]\label{def:typed-readout}
-Let $r:\mathsf{Ref}_s$ and a state $p$ be given. Define the \emph{typed readout} of $r$ at $p$ by
-\[
-\Read_{p,s}(r):=
-\begin{cases}
-\Undef, & M,p\nVdash \Adm_s(r),\\[0.5ex]
-v, & \Vis_{p,s}(r)=\{v\}\ \text{for some visible value class }v,\\[0.5ex]
-\Null, & M,p\Vdash \Adm_s(r)\ \text{and}\ \Vis_{p,s}(r)\neq\{v\}\ \text{for every }v.
-\end{cases}
-\]
-Thus a non-null readout occurs exactly when the admitted reference carries a unique visible value class.
-\end{definition}
-
-\begin{proposition}[Address before value]\label{prop:address-before-value}
-If
-\[
-\Read_{p,s}(r)=v
-\qquad\text{with}\qquad
-v\notin\{\Undef,\Null\},
-\]
-then
-\[
-M,p\Vdash \Adm_s(r)
-\qquad\text{and}\qquad
-M,p\Vdash \CompSec_s(r).
-\]
-\end{proposition}
-
-\begin{proof}
-By \Cref{def:typed-readout}, a readout outside $\{\Undef,\Null\}$ occurs only in the singleton case
-\[
-\Vis_{p,s}(r)=\{v\}.
-\]
-Visible value classes are defined only for admitted references, so $M,p\Vdash \Adm_s(r)$. The existence of the visible class $v$ means that some compatible local family represents it, hence $M,p\Vdash \CompSec_s(r)$ by \Cref{def:visible-value-classes}.
-\end{proof}
-
-\begin{corollary}[Non-null readout criterion]\label{cor:nonnull-readout-criterion}
-\[
-\Read_{p,s}(r)=v
-\quad\Longleftrightarrow\quad
-\Vis_{p,s}(r)=\{v\}.
-\]
-Equivalently,
-\[
-\Read_{p,s}(r)=\Null
-\]
-if and only if $r$ is admitted and either $\Vis_{p,s}(r)=\varnothing$ or $|\Vis_{p,s}(r)|>1$.
-\end{corollary}
-
-\begin{proof}
-This is immediate from \Cref{def:typed-readout}.
-\end{proof}
-
-\begin{proposition}[Refinement stability of defined readouts]\label{prop:typed-readout-persistence}
-Let $q\le p$, and suppose
-\[
-\Read_{p,s}(r)=v
-\qquad\text{with}\qquad
-v\notin\{\Undef,\Null\}.
-\]
-Then
-\[
-\Read_{q,s}(r)=v.
-\]
-\end{proposition}
-
-\begin{proof}
-Since $v\notin\{\Undef,\Null\}$, the readout at $p$ is represented by a unique visible value class. By the refinement-conservation hypothesis~\ref{hyp:refinement-conservation}, compatible local families restrict functorially from $q$ to $p$, and a uniquely determined visible class at $p$ cannot split under further refinement. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
-\end{proof}
-
-\subsection{Structural absence}
-
-\begin{definition}[Undefined, total, and null]\label{def:undef-total-null}
-For an element $r:\mathsf{Ref}_s$ at a state $p$, define
-\begin{align*}
-M,p\Vdash \Undef_s(r)
-&\quad:\Longleftrightarrow\quad
-M,p\nVdash \Adm_s(r),\\
-M,p\Vdash \Tot_s(r)
-&\quad:\Longleftrightarrow\quad
-M,p\Vdash \Adm_s(r)\land \Sec_s(r),\\
-M,p\Vdash \Null_s(r)
-&\quad:\Longleftrightarrow\quad
-M,p\Vdash \Adm_s(r)\land \neg\Sec_s(r).
-\end{align*}
-Thus admitted references are partitioned into the total and null cases according to whether a global section exists, while non-admitted references are undefined.
-\end{definition}
-
-\begin{definition}[The three null modes]\label{def:null-failure-modes}
-For an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, define
-\begin{align*}
-\Null_s^{\mathrm{loc}}(r)
-&\quad:\Longleftrightarrow\quad
-\Adm_s(r)\land \neg\LocSec_s(r),\\
-\Null_s^{\mathrm{cmp}}(r)
-&\quad:\Longleftrightarrow\quad
-\Adm_s(r)\land \LocSec_s(r)\land \neg\CompSec_s(r),\\
-\Null_s^{\mathrm{glue}}(r)
-&\quad:\Longleftrightarrow\quad
-\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
-\end{align*}
-They record, respectively, failure already at the level of local sections, failure at compatibility, and failure only at the final gluing step.
-\end{definition}
-
-\begin{proposition}[The three modes lie inside null]\label{prop:null-modes-imply-null}
-For every admitted reference $r:\mathsf{Ref}_s$ at a state $p$,
-\[
-M,p\Vdash \Null_s^{\mathrm{loc}}(r)\ \lor\ \Null_s^{\mathrm{cmp}}(r)\ \lor\ \Null_s^{\mathrm{glue}}(r)
-\quad\Longrightarrow\quad
-M,p\Vdash \Null_s(r).
-\]
-\end{proposition}
-
-\begin{proof}
-If $M,p\Vdash \Null_s^{\mathrm{loc}}(r)$, then $r$ is admitted and $\LocSec_s(r)$ fails. By \Cref{prop:global-implies-compatible-local}, global sectionability would imply local sectionability, so $\Sec_s(r)$ fails and hence $M,p\Vdash \Null_s(r)$.
-
-If $M,p\Vdash \Null_s^{\mathrm{cmp}}(r)$, then $r$ is admitted, local sections exist, but compatible local sections do not. Again \Cref{prop:global-implies-compatible-local} shows that $\Sec_s(r)$ would imply $\CompSec_s(r)$, so $\Sec_s(r)$ fails and $M,p\Vdash \Null_s(r)$.
-
-If $M,p\Vdash \Null_s^{\mathrm{glue}}(r)$, then $r$ is admitted and $\Sec_s(r)$ fails by definition, so $M,p\Vdash \Null_s(r)$.
-\end{proof}
-
-\begin{proposition}[Mutual exclusivity of the null modes]\label{prop:null-modes-exclusive}
-No two distinct null modes can hold simultaneously for the same reference at the same state.
-\end{proposition}
-
-\begin{proof}
-The mode $\Null^{\mathrm{loc}}_s(r)$ contains $\neg\LocSec_s(r)$, while the other two contain $\LocSec_s(r)$. The mode $\Null^{\mathrm{cmp}}_s(r)$ contains $\neg\CompSec_s(r)$, while $\Null^{\mathrm{glue}}_s(r)$ contains $\CompSec_s(r)$.
-\end{proof}
-
-\begin{definition}[Decomposition decidability]\label{def:decomposition-decidability}
-Let $p$ be a state and $s\in S_{\mathrm{ref}}$. The local-object decomposition is said to be \emph{decided at $p$ for the sort $s$} if, for every admitted reference
-\[
-r:\mathsf{Ref}_s
-\]
-at $p$, both predicates
-\[
-\LocSec_s(r)
-\qquad\text{and}\qquad
-\CompSec_s(r)
-\]
-are decided at $p$ in the sense of \Cref{def:decidedness}.
-\end{definition}
-
-\begin{proposition}[Null trichotomy]\label{prop:null-trichotomy}
-Assume that the local-object decomposition is decided at $p$ for the sort $s$, and let
-\[
-r:\mathsf{Ref}_s
-\]
-be admitted at $p$. If
-\[
-M,p\Vdash \Null_s(r),
-\]
-then exactly one of the three formulas
-\[
-\Null_s^{\mathrm{loc}}(r),\qquad
-\Null_s^{\mathrm{cmp}}(r),\qquad
-\Null_s^{\mathrm{glue}}(r)
-\]
-holds at $p$.
-\end{proposition}
-
-\begin{proof}
-Since
-\[
-M,p\Vdash \Null_s(r),
-\]
-the reference $r$ is admitted and
-\[
-M,p\nVdash \Sec_s(r).
-\]
-Because the decomposition is decided at $p$ for the sort $s$, the formula $\LocSec_s(r)$ is decided.
-
-If
-\[
-M,p\nVdash \LocSec_s(r),
-\]
-then the definition of $\Null_s^{\mathrm{loc}}(r)$ gives
-\[
-M,p\Vdash \Null_s^{\mathrm{loc}}(r).
-\]
-
-Assume instead that
-\[
-M,p\Vdash \LocSec_s(r).
-\]
-The formula $\CompSec_s(r)$ is also decided. If
-\[
-M,p\nVdash \CompSec_s(r),
-\]
-then
-\[
-M,p\Vdash \Null_s^{\mathrm{cmp}}(r)
-\]
-by definition. If
-\[
-M,p\Vdash \CompSec_s(r),
-\]
-then, together with
-\[
-M,p\nVdash \Sec_s(r),
-\]
-the definition of $\Null_s^{\mathrm{glue}}(r)$ gives
-\[
-M,p\Vdash \Null_s^{\mathrm{glue}}(r).
-\]
-Hence at least one null mode holds.
-
-By \Cref{prop:null-modes-exclusive}, no two distinct null modes can hold simultaneously. Therefore exactly one of the three null modes holds.
-\end{proof}
-
-\begin{theorem}[Classification after refinement]\label{thm:null-classification-under-refinement}
-Let
-\[
-q\le p,
-\]
-assume that the local-object decomposition is decided at $q$ for the sort $s$, and let
-\[
-r:\mathsf{Ref}_s
-\]
-be admitted at $q$. If
-\[
-M,q\Vdash \Null_s(r),
-\]
-then exactly one of the formulas
-\[
-\Null_s^{\mathrm{loc}}(r),\qquad
-\Null_s^{\mathrm{cmp}}(r),\qquad
-\Null_s^{\mathrm{glue}}(r)
-\]
-holds at $q$.
-\end{theorem}
-
-\begin{proof}
-Apply \Cref{prop:null-trichotomy} at the refined state $q$.
-\end{proof}
-
-\subsection{Lower-fragment undefinability}
-
-The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. By \Cref{prop:chain-instantiation}, the reference sort $\mathsf{Ref}_s$ already belongs to the $\Sigma_1$-signature, whereas the predicates
-\[
-\Adm_s,\qquad \LocSec_s,\qquad \CompSec_s,\qquad \Sec_s
-\]
-belong to $\Sigma_2\setminus\Sigma_1$. The lower layer can therefore quantify over reference elements but cannot mention the local-object predicates themselves. To keep track of the formulas allowed in that comparison, we fix the following terminology.
-
-\begin{definition}[Automorphism-invariant lower comparison class]\label{def:lower-comparison-class}
-Let $s\in S_{\mathrm{ref}}$. The automorphism-invariant lower comparison class $\mathcal{C}_{s}^{\mathrm{inv}}$ consists of the constant-free $\Sigma_1$-formulas with exactly one free variable of sort $\mathsf{Ref}_s$, no parameters of that sort, and any number of bound variables from the ambient pointwise signature. A formula $\varphi(x)\in\mathcal{C}_{s}^{\mathrm{inv}}$ is evaluated inside the constant-free $\Sigma_1$-reduct of an $\mathbb L_1$-model, and it is required to be invariant under automorphisms of that reduct.
-\end{definition}
-
-\begin{definition}[Gluing-sensitive realization datum]\label{def:gluing-sensitive-realization}
-Fix an admitted reference $r:\mathsf{Ref}_s$ at $p$ and write $a=[r]_p$. A \emph{gluing-sensitive realization datum} for $r$ is a tuple
-\[
-(\mathfrak P_r,\mathfrak L_r,\Band,\Cov_r^{\mathrm{acyc}})
-\]
-with the following properties:
-\begin{enumerate}[label=(\roman*),nosep]
-\item $\mathfrak P_r\to\mathcal C_{p,s}/a$ is a realization prestack with band $\Band$ in the sense of \Cref{def:realization-prestack};
-\item $\mathfrak L_r$ is a $\Band$-banded stack whose connected components agree with the sheafification of $F_{p,s}$, i.e.
-\[
-\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_{p,s}/a};
-\]
-\item the stackification morphism $\iota_r:\mathfrak P_r\to\mathfrak L_r$ is globally conservative at $a$ in the sense of \Cref{def:global-conservativity};
-\item $\Cov_r^{\mathrm{acyc}}(a)$ is a filtered cofinal family of covers of $a$ whose members admit \v{C}ech nerves inside $\mathcal C_{p,s}/a$, on which the band is trivialized, and for which the \v{C}ech-to-derived comparison map of \Cref{def:cech-gluing-obstruction} is an isomorphism. When a visible branch $v$ is fixed later, we write $\Cov_v^{\mathrm{acyc}}(a)$ for the induced subfamily supporting the branch obstruction cocycle.
-\end{enumerate}
-If such a datum exists we say that $r$ admits a gluing-sensitive realization. This datum is extra structure on top of the bare local object functor: later sections treat the gerbe-theoretic layer only relative to a chosen datum of this kind and do not assert that every local object functor admits one.
-\end{definition}
-
-The following result applies the comparison class of \Cref{def:lower-comparison-class} to the local-object predicates.
-
-\begin{theorem}[Automorphism-invariant pointwise undefinability in the constant-free lower reduct]\label{thm:pointwise-irreducibility}
-There exist a model $M$, the singleton information state
-\[
-p=(\varnothing,\{\emptyset\}),
-\]
-and pairwise distinct elements
-\[
-a_1,a_2,a_3,a_4\in D_{\mathsf{Ref}_s}^M
-\]
-of one reference sort such that:
-\begin{enumerate}[label=(\roman*),nosep]
-\item each $a_i$ is admitted at $p$, and for every $\varphi(x)\in\mathcal{C}_{s}^{\mathrm{inv}}$,
-\[
-M,\emptyset[x\mapsto a_i]\models\varphi(x)
-\quad\Longleftrightarrow\quad
-M,\emptyset[x\mapsto a_j]\models\varphi(x)
-\]
-for all $i,j\in\{1,2,3,4\}$;
-\item
-\[
-M,p\Vdash \bigl(\CompSec_s(x)\land \Sec_s(x)\bigr)[a_1/x];
-\]
-\item
-\[
-M,p\Vdash \bigl(\CompSec_s(x)\land \neg\Sec_s(x)\bigr)[a_2/x];
-\]
-\item
-\[
-M,p\Vdash \bigl(\LocSec_s(x)\land \neg\CompSec_s(x)\bigr)[a_3/x];
-\]
-\item
-\[
-M,p\Vdash \bigl(\neg\LocSec_s(x)\bigr)[a_4/x].
-\]
-\end{enumerate}
-Consequently, no $\varphi(x)\in\mathcal{C}_{s}^{\mathrm{inv}}$ can define any of the predicates
-\[
-\LocSec_s,
-\qquad
-\CompSec_s,
-\qquad
-\Sec_s,
-\qquad
-\Null^{\mathrm{loc}}_s,
-\qquad
-\Null^{\mathrm{cmp}}_s,
-\qquad
-\Null^{\mathrm{glue}}_s
-\]
-on admitted reference elements. In particular, $\CompSec_s$, $\Sec_s$, and $\Null^{\mathrm{glue}}_s$ are not reducible to the automorphism-invariant pointwise fragment of the $\mathbb L_1$-reduct.
-\end{theorem}
-
-\begin{proof}
-Take one referenceable sort $s$ and let the lower-layer state be the singleton
-\[
-p=(\varnothing,\{\emptyset\}).
-\]
-Choose the constant-free $\Sigma_1$-reduct of $M$ so that the reference carrier of sort $\mathsf{Ref}_s$ is
-\[
-D_{\mathsf{Ref}_s}^M=\{(i,n)\mid i\in\{1,2,3,4\},\ n\in\mathbb N\},
-\]
-and write $a_i:=(i,0)$. Interpret the remaining symbols of the constant-free $\Sigma_1$-reduct so that no interpretation depends on the first coordinate on this sort: relations involving $\mathsf{Ref}_s$ are chosen to be unions of whole first-coordinate orbits, and functions with arguments in $\mathsf{Ref}_s$ are chosen to factor through the second coordinate or to be constant on that sort. Then every permutation of $\{1,2,3,4\}$ on the first coordinate, combined with an arbitrary permutation of $\mathbb N$ on the second coordinate, extends to an automorphism of the reduct. In particular, for any $i,j\in\{1,2,3,4\}$ there exists an automorphism $\sigma$ sending $a_i$ to $a_j$. Since formulas in $\mathcal{C}_{s}^{\mathrm{inv}}$ are parameter free and automorphism invariant, \textup{(i)} follows immediately.
-
-Now attach the $\Sigma_2$-data. Declare each $a_i$ admitted, so
-\[
-M,p\Vdash \Adm_s(x)[a_i/x]
-\qquad
-(1\le i\le 4).
-\]
-Let the local reference site $\mathcal C_{p,s}$ be the disjoint union of four rooted thin components, one over each admitted class represented by $a_i$. In the first three components, write the root as $a_i$ and choose objects
-\[
-c_i\sqsubseteq u_i\sqsubseteq a_i,
-\qquad
-c_i\sqsubseteq v_i\sqsubseteq a_i,
-\]
-with covering family $\{u_i\to a_i,v_i\to a_i\}$ and pullback $c_i=u_i\times_{a_i}v_i$. In the fourth component, let $a_4$ be the unique object and let the trivial cover $\{a_4\to a_4\}$ be the only covering family.
-
-Define the local object functor $F_{p,s}$ componentwise as follows.
-
-For $a_1$, set
-\[
-F_{p,s}(u_1)=F_{p,s}(v_1)=F_{p,s}(c_1)=F_{p,s}(a_1)=\{*\},
-\]
-with all restriction maps equal to the identity. Then the unique local family on the chosen cover is compatible and glues to the global section in $F_{p,s}(a_1)$, proving \textup{(ii)}.
-
-For $a_2$, set
-\[
-F_{p,s}(u_2)=F_{p,s}(v_2)=F_{p,s}(c_2)=\{*\},
-\qquad
-F_{p,s}(a_2)=\varnothing,
-\]
-again with identity restrictions on the nonempty fibres. Then the local family $(*,*)$ is compatible on the overlap, but there is no global section at $a_2$, proving \textup{(iii)}.
-
-For $a_3$, set
-\[
-F_{p,s}(u_3)=\{\sigma_u\},
-\quad
-F_{p,s}(v_3)=\{\sigma_v\},
-\quad
-F_{p,s}(c_3)=\{0,1\},
-\quad
-F_{p,s}(a_3)=\varnothing,
-\]
-with
-\[
-\res_{c_3}^{u_3}(\sigma_u)=0,
-\qquad
-\res_{c_3}^{v_3}(\sigma_v)=1.
-\]
-Then local sections exist on the cover, but the only available family is incompatible on the overlap, proving \textup{(iv)}.
-
-For $a_4$, set
-\[
-F_{p,s}(a_4)=\varnothing.
-\]
-Since the trivial cover is the only cover of $a_4$, there are no local sections anywhere above $a_4$, proving \textup{(v)}.
-
-Because all of this geometric data lives in $\Sigma_2\setminus\Sigma_1$, it does not alter the automorphism orbit computed in \textup{(i)}. The four admitted reference elements therefore remain indistinguishable in the lower comparison class while separating the higher predicates: $\LocSec_s$ holds at $a_1,a_2,a_3$ and fails at $a_4$; $\CompSec_s$ holds at $a_1,a_2$ and fails at $a_3,a_4$; and $\Sec_s$ holds only at $a_1$.
-Hence none of these three predicates is definable by a formula from the comparison class. The three null-mode predicates are Boolean combinations of these same existence predicates:
-\begin{align*}
-\Null_s^{\mathrm{loc}}&=\Adm_s\land \neg\LocSec_s,\\
-\Null_s^{\mathrm{cmp}}&=\Adm_s\land \LocSec_s\land \neg\CompSec_s,\\
-\Null_s^{\mathrm{glue}}&=\Adm_s\land \CompSec_s\land \neg\Sec_s.
-\end{align*}
-Since admission is fixed on all four elements and the lower formulas cannot distinguish the relevant existence predicates, none of the three null-mode predicates is definable either.
-\end{proof}
-
-\begin{remark}[Why tuples and parameters are excluded]\label{rem:tuple-parameter-limitation}
-The restriction to one free variable and no parameters is essential for the argument. If two free reference variables are allowed, equality formulas such as $x_1=x_2$ already distinguish tuples by their equality pattern, so a single orbit no longer witnesses the undefinability of $\CompSec_s$ or $\Sec_s$. Likewise, if parameters of sort $\mathsf{Ref}_s$ are available, a formula of the form $x=b$ isolates a chosen witness unless one first arranges that all witnesses lie outside the parameter support. Thus the comparison class $\mathcal{C}_{s}^{\mathrm{inv}}$ records exactly the fragment in which automorphism-invariant pointwise semantics cannot detect compatible local sectionability.
-\end{remark}

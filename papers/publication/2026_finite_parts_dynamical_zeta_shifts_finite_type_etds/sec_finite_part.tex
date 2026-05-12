@@ -5,16 +5,16 @@ Throughout this section, \(A\) denotes a primitive non-negative real
 matrix with Perron root \(\lambda>1\). The symbols \(p_n(A)\) denote the
 algebraic M\"obius coefficients of \eqref{eq:primitive-mobius}; they are
 primitive orbit counts only in the integer multigraph case fixed in
-\Cref{sec:preliminaries}. The only scalar input needed later for the
-finite-group theorem spine is the trivial-channel finite part
-\(\mathcal M(A)\). We therefore keep the finite-part formula in full and
-record the canonical cyclic-lift comparison only in a compressed fixed-
-matrix form; its determinant manipulations and supporting proofs are
-deferred to \Cref{app:cyclic-lift-package}.
+\Cref{sec:preliminaries}. For the finite-group results, the scalar role
+was delimited in \Cref{sec:intro-scope-of-results}: only the
+trivial-channel finite part \(\mathcal M(A)\) is used. We therefore keep
+the finite-part formula in full and record the lift comparison only in a
+compressed fixed-matrix form; its determinant manipulations and
+supporting proofs are deferred to \Cref{app:cyclic-lift-package}.
 
 \subsection{Finite parts and reduced determinants}
 
-\begin{proposition}[Primitive-orbit closed form for the finite part]
+\begin{lemma}[Classical scalar normalisation at the Perron pole]
   \label{thm:finite-part-primitive-closed-form}
   Let \(A\) be a primitive non-negative matrix with Perron root
   \(\lambda>1\). Then
@@ -44,11 +44,12 @@ deferred to \Cref{app:cyclic-lift-package}.
     =
     \sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}).
   \end{equation}
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
-  Put \(\zeta_A(z)=\det(I-zA)^{-1}\). For \(|z|<\lambda^{-1}\), the
-  Euler product and the determinant trace expansion give
+  This is the standard scalar Euler-product calculation, recorded here
+  only to fix the normalisation. Put
+  \(\zeta_A(z)=\det(I-zA)^{-1}\). For \(|z|<\lambda^{-1}\),
   \[
     \log\zeta_A(z)
     =
@@ -56,7 +57,7 @@ deferred to \Cref{app:cyclic-lift-package}.
     =
     \sum_{\ell\ge 1}p_\ell(A)\sum_{k\ge 1}\frac{z^{k\ell}}{k}.
   \]
-  Therefore, still for \(|z|<\lambda^{-1}\),
+  M\"obius inversion in the repetition variable gives
   \[
     \sum_{m\ge 1}\frac{\mu(m)}{m}\log\zeta_A(z^m)
     =
@@ -66,8 +67,6 @@ deferred to \Cref{app:cyclic-lift-package}.
     =
     \sum_{\ell\ge 1}p_\ell(A)z^\ell.
   \]
-  The last equality uses
-  \(\sum_{m\mid q}\mu(m)=1\) for \(q=1\) and \(0\) otherwise.
   With \(z=r/\lambda\), this says
   \[
     P_A(r)
@@ -83,8 +82,8 @@ deferred to \Cref{app:cyclic-lift-package}.
     \log\bigl((1-r)\zeta_A(r/\lambda)\bigr)
     \longrightarrow \log C(A)
   \]
-  as \(r\uparrow 1\), it remains only to pass to the limit in the
-  \(m\ge2\) sum. This is justified by the spectral-radius bound
+  as \(r\uparrow 1\), it remains to pass to the limit in the \(m\ge2\)
+  sum. This is justified by
   \[
     \log\zeta_A(\lambda^{-m})
     =
@@ -106,9 +105,8 @@ deferred to \Cref{app:cyclic-lift-package}.
       \frac{r^{kn}\lambda^{-kn}}{k}.
   \]
   By \Cref{lem:primitive-orbit-asymptotic},
-  \(\abs{p_n(A)}=O(\lambda^n/n)\). Since
-  \(\sum_{k\ge 2}\lambda^{-kn}/k=O(\lambda^{-2n})\), the double tail is
-  absolutely summable at \(r=1\). Hence
+  \(\abs{p_n(A)}=O(\lambda^n/n)\), so the \(k\ge2\) tail is absolutely
+  summable at \(r=1\). Hence
   \[
     \FP(A)
     =
@@ -203,11 +201,16 @@ only the reconstruction outputs needed for orientation and leave the
 determinant identities, M\"obius inversion on multiples, and the fixed-
 layer calculation to \Cref{app:cyclic-lift-package}.
 
-\begin{theorem}[Auxiliary fixed-matrix cyclic-lift recovery of the
+\begin{proposition}[Appendix comparison: fixed-matrix cyclic-lift recovery of the
   reduced spectrum]
   \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
   For one fixed primitive non-negative matrix \(A\in M_d(\RR)\), the
-  full branch-lifted logarithmic record \(\{\Psi_q(A)\}_{q\ge 1}\)
+  input is the full branch-lifted logarithmic record
+  \[
+    \Psi_q(A)\in \log\!\bigl(qC_\lambda(A^{\langle q\rangle})\bigr),
+    \qquad q\ge1,
+  \]
+  with a specified branch for every \(q\). This record
   determines the reduced spectral polynomial \(F_A\) of that same
   matrix and hence the
   relative non-Perron spectrum
@@ -224,19 +227,44 @@ layer calculation to \Cref{app:cyclic-lift-package}.
     \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
     =\Lambda_{\mathrm{rel}}(A).
   \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-  The proof combines the cyclic-lift determinant identity, M\"obius
-  inversion on multiples, Newton's identities, and the finite
-  exponential-sum limsup lemma; see
-  \Cref{app:cyclic-lift-package,%
-  prop:finite-part-cyclic-lift-dirichlet-multiple-sum,%
-  prop:finite-part-cyclic-lift-mobius-inversion,%
-  lem:finite-part-exponential-sum-limsup}.
+  The detailed determinant and inversion identities are proved in
+  \Cref{app:cyclic-lift-package}. By
+  \Cref{prop:finite-part-cyclic-lift-mobius-inversion}, the record
+  \(\{\Psi_q(A)\}_{q\ge 1}\) determines
+  \(u_n(A)=\sum_{j=2}^d(\mu_j/\lambda)^n\) for every \(n\ge 1\). Put
+  \(\alpha_j=\mu_j/\lambda\) and
+  \[
+    P_A(x)=\prod_{j=2}^d(x-\alpha_j)=x^{d-1}F_A(x^{-1}).
+  \]
+  Newton's identities recover the monic degree-\((d-1)\) polynomial
+  \(P_A\) from the first \(d-1\) power sums \(u_1(A),\ldots,u_{d-1}(A)\),
+  including possible zero roots. Hence the multiset
+  \(\{\alpha_2,\ldots,\alpha_d\}\), and therefore \(F_A\), is
+  determined. If \(\lambda\) is also given, multiplying each recovered
+  \(\alpha_j\) by \(\lambda\) recovers the unnormalised non-Perron
+  eigenvalues.
+
+  The estimate
+  \[
+    \Psi_q(A)=u_q(A)+O(\Lambda_{\mathrm{rel}}(A)^{2q})
+  \]
+  is exactly the explicit remainder bound in
+  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. Group the
+  nonzero values among the \(\alpha_j\)'s as
+  \(u_q(A)=\sum_{\beta\in B}m_\beta\beta^q\), with \(m_\beta\) the
+  algebraic multiplicity. If \(B=\varnothing\), both sides have
+  exponential rate \(0\). Otherwise
+  \Cref{lem:finite-part-exponential-sum-limsup} gives
+  \(\limsup_q |u_q(A)|^{1/q}=\max_{\beta\in B}|\beta|
+  =\Lambda_{\mathrm{rel}}(A)\). The displayed error has strictly smaller
+  exponential rate when \(\Lambda_{\mathrm{rel}}(A)>0\), so the same
+  limsup holds for \(\Psi_q(A)\).
 \end{proof}
 
-\begin{corollary}[Auxiliary fixed-layer discrete Fourier recovery]
+\begin{lemma}[Classical scalar normalisation: fixed-layer Fourier recovery]
   \label{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}
   Write
   \[
@@ -251,15 +279,29 @@ layer calculation to \Cref{app:cyclic-lift-package}.
       F_A(\omega_q^j)\omega_q^{-jn}
     \qquad (0\le n\le d-1).
   \]
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
-  This is the fixed-layer discrete Fourier inversion recorded in
-  \Cref{app:cyclic-lift-package}.
+  For \(0\le j\le q-1\),
+  \[
+    F_A(\omega_q^j)=\sum_{n=0}^{d-1}a_n\omega_q^{jn}.
+  \]
+  Multiplying by \(\omega_q^{-jm}\) and averaging over \(j\) gives
+  \[
+    \frac{1}{q}\sum_{j=0}^{q-1}F_A(\omega_q^j)\omega_q^{-jm}
+    =
+    \sum_{n=0}^{d-1}a_n
+      \frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{j(n-m)}.
+  \]
+  Since \(q\ge d\), for \(0\le n,m\le d-1\) the exponent \(n-m\) is a
+  multiple of \(q\) only when \(n=m\). The discrete orthogonality
+  relation therefore leaves exactly the coefficient \(a_m\), proving the
+  formula. The same fixed-layer calculation is recorded with the
+  cyclic-lift proof package in \Cref{app:cyclic-lift-package}.
 \end{proof}
 
 \noindent
 Thus the one-layer statement is exactly finite Fourier inversion for a
-degree-\((d-1)\) polynomial. It is included only to identify the
-canonical cyclic-lift comparison case and is not used in the
-Adams--M\"obius finite-group arguments.
+degree-\((d-1)\) polynomial. It is included only to identify this
+fixed-matrix comparison case and is not used in the Adams--M\"obius
+finite-group arguments.

@@ -1,0 +1,522 @@
+﻿\subsection{The two-window branch locus and conjugacy}
+\label{sec:stab:branch-and-conjugacy}
+
+\begin{theorem}[Complete classification of the two-window branch locus]\label{thm:m2-branch-locus}
+Let
+\[
+y^\ast:=(\ldots,00,00,00,\ldots)\in Y_2.
+\]
+Then
+\[
+\Phi_2^{-1}(y^\ast)=\{0^{\ZZ},1^{\ZZ}\}.
+\]
+Every other point of $Y_2$ has a singleton preimage under $\Phi_2$.
+\end{theorem}
+
+\begin{proof}
+For $m=2$ the modulus is $F_4=3$ and the two weights in $\Val_2$ are
+$F_2=1$ and $F_3=2$.  The legal words are
+\[
+X_2=\{00,10,01\},
+\]
+with residues
+\[
+\Val_2(00)=0,\qquad \Val_2(10)=1,\qquad \Val_2(01)=2.
+\]
+Thus these three legal words represent the three residue classes modulo $3$.
+For the four raw two-windows one obtains
+\[
+\Val_2(00)=0,\qquad
+\Val_2(10)=1,\qquad
+\Val_2(01)=2,\qquad
+\Val_2(11)=3\equiv0\pmod3.
+\]
+Applying Definition~\ref{def:fold} to these residues gives the complete
+two-window table
+\[
+\Fold_2(00)=00,\qquad \Fold_2(11)=00,\qquad
+\Fold_2(10)=10,\qquad \Fold_2(01)=01.
+\]
+Thus a symbol $10$ in the output determines the adjacent raw pair as $10$, a
+symbol $01$ determines the adjacent raw pair as $01$, and a symbol $00$ says
+precisely that the two adjacent raw bits are equal.
+
+If $y=y^\ast$, then every adjacent raw pair in any lift must be either $00$ or
+$11$, so all adjacent raw bits are equal.  The only two lifts are therefore
+$0^{\ZZ}$ and $1^{\ZZ}$.
+
+Now suppose $y\ne y^\ast$.  Choose an index $s$ with
+$y_s\in\{10,01\}$.  This output symbol determines the raw pair
+$(a_s,a_{s+1})$.  Moving to the right, each subsequent output symbol determines
+$a_{t+1}$ from $a_t$: if $y_t=00$ then $a_{t+1}=a_t$, while if
+$y_t=10$ or $01$ the pair is explicitly that symbol.  Moving to the left,
+the same rule determines $a_t$ from $a_{t+1}$.  Hence there is at most one
+bi-infinite lift.  Since $y\in Y_2$, at least one lift exists, so the lift is
+unique.
+\end{proof}
+
+\begin{corollary}[Exact entropy and KL defect formulas at the two-window threshold]\label{cor:m2-defect-formulas}
+Let $\mu$ be a Borel probability measure on $\{0,1\}^{\ZZ}$ and let
+$\eta:=(\Phi_2)_*\mu$.  Set
+\[
+B_0:=\{0^{\ZZ}\},\qquad B_1:=\{1^{\ZZ}\},\qquad
+p_i:=\mu(B_i),\qquad p:=p_0+p_1.
+\]
+Let $\mu=\int\mu_y\,d\eta(y)$ be a Rokhlin disintegration over $\Phi_2$,
+so that $\mu_y$ is supported on $\Phi_2^{-1}(y)$ for $\eta$-almost every
+$y$.  We use the convention
+\[
+H_\mu(\mathrm{Id}\mid\Phi_2)
+:=\int_{Y_2}H(\mu_y)\,d\eta(y),
+\]
+with extended value $+\infty$ allowed, although the formula below is finite.
+Then the conditional entropy of the raw trajectory given its stabilized
+trajectory is
+\[
+H_\mu(\mathrm{Id}\mid \Phi_2)=
+\begin{cases}
+0, & p=0,\\[1mm]
+p\,h_2(p_0/p), & p>0,
+\end{cases}
+\]
+where $h_2(s):=-s\log s-(1-s)\log(1-s)$.
+
+If $\nu$ is another Borel probability measure, $\xi:=(\Phi_2)_*\nu$,
+$q_i:=\nu(B_i)$ and $q:=q_0+q_1$, then, whenever the right-hand side is finite,
+\[
+D_{\KL}(\mu\|\nu)-D_{\KL}(\eta\|\xi)
+=
+p\,D_{\KL}\!\left(
+\left(\frac{p_0}{p},\frac{p_1}{p}\right)
+\middle\|
+\left(\frac{q_0}{q},\frac{q_1}{q}\right)
+\right),
+\]
+with the convention that the defect is $0$ when $p=0$.  If $p>0$ and $q=0$,
+then both $D_{\KL}(\mu\|\nu)$ and $D_{\KL}(\eta\|\xi)$ are infinite and no
+finite defect identity is asserted.  If $p>0$, $q>0$, and some $p_i>0=q_i$,
+then the raw divergence and the displayed defect are infinite.
+
+Equivalently, in extended-value form: if $\eta\not\ll\xi$, then
+$D_{\KL}(\eta\|\xi)=+\infty$ and data processing forces
+$D_{\KL}(\mu\|\nu)=+\infty$, so no finite difference is formed. If
+$\eta\ll\xi$ but $\mu\not\ll\nu$, then $D_{\KL}(\mu\|\nu)=+\infty$ and the
+conditional defect is $+\infty$. If $\mu\ll\nu$ and hence $\eta\ll\xi$, the
+chain rule gives the finite or infinite nonnegative defect displayed above.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:m2-branch-locus}, the conditional distribution of $a$
+given $\Phi_2(a)=y$ is a point mass for every $y\ne y^\ast$.  Over
+$y^\ast$ it is the two-point distribution
+\[
+\left(\frac{p_0}{p},\frac{p_1}{p}\right)
+\]
+when $p>0$.  Integrating the entropy of these conditional distributions gives
+the displayed conditional-entropy formula.
+
+Choose also a Rokhlin disintegration
+$\nu=\int\nu_y\,d\xi(y)$ over $\Phi_2$.  The relative-entropy chain rule for
+standard Borel spaces says that, if $\mu\ll\nu$ and hence $\eta\ll\xi$, then
+\[
+D_{\KL}(\mu\|\nu)
+=D_{\KL}(\eta\|\xi)
++\int D_{\KL}\bigl(\mu(\,\cdot\,\mid \Phi_2=y)\|
+\nu(\,\cdot\,\mid \Phi_2=y)\bigr)\,d\eta(y),
+\]
+with values in $[0,+\infty]$.  If $\eta\not\ll\xi$, then
+$D_{\KL}(\eta\|\xi)=+\infty$ and necessarily $D_{\KL}(\mu\|\nu)=+\infty$ by
+data processing.  If $\eta\ll\xi$ but $\mu\not\ll\nu$, then the raw divergence
+is $+\infty$; the finite-defect identity is asserted only in the
+absolute-continuous cases stated above.  In the present map, all conditional
+divergences vanish off $y^\ast$ because both conditional measures are the same
+point mass there.  The only possible contribution is over $y^\ast$, where the
+conditional laws are the two displayed branch distributions.  This proves the
+formula and the stated boundary cases.
+\end{proof}
+
+\begin{corollary}[Asymptotic sufficiency off the branch fiber]\label{cor:m2-asymptotic-sufficiency}
+Let
+\[
+B:=B_0\cup B_1=\{0^{\ZZ},1^{\ZZ}\}.
+\]
+On $\{0,1\}^{\ZZ}\setminus B$ the map $\Phi_2$ is a Borel isomorphism onto
+$Y_2\setminus\{y^\ast\}$.  Consequently, for any family of probability laws
+$\{\mu_u:u\in\mathcal U\}$ satisfying $\mu_u(B)=0$ for all $u$, the raw
+path-space experiment and the stabilized path-space experiment
+$\{(\Phi_2)_*\mu_u:u\in\mathcal U\}$ are deterministically equivalent.  In
+particular all decision problems based on the full trajectory and the
+path-space KL divergence are preserved.  For each fixed $u$ and each fixed
+raw cylinder, the cylinder is recovered from a sufficiently large stabilized
+block with $\mu_u$-probability tending to one.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:m2-branch-locus} gives a singleton fiber over every point of
+$Y_2\setminus\{y^\ast\}$ and shows that the whole non-singleton fiber is $B$.
+The graph rule in its proof reconstructs the unique raw sequence from any
+nonconstant output by locating one symbol $10$ or $01$ and propagating left and
+right; this gives a Borel inverse on $Y_2\setminus\{y^\ast\}$.  Thus $\Phi_2$
+is a measurable bijection between the two full-measure spaces for every
+$\mu_u$ in the family.  Transporting full-trajectory decision rules through
+this inverse gives identical risk distributions, and invariance of KL
+divergence under a bimeasurable change of variables gives the path-space KL
+claim.
+
+It remains only to justify the stated asymptotic finite-window recovery.  To
+recover a fixed raw coordinate from a finite stabilized block, search inside
+that block for a symbol $10$ or $01$ and propagate the equality rule through
+the intervening $00$ symbols.  The only obstruction inside a symmetric
+stabilized block of radius $N$ is that all visible symbols in that block are
+$00$.  The corresponding raw event is the union of the two constant cylinders
+on an interval whose length tends to infinity with $N$; these events decrease
+to $B_0\cup B_1$.  Since $\mu_u(B)=0$, their probabilities tend to zero.  A
+finite raw cylinder is recovered by applying the same argument to finitely
+many coordinates and taking a union bound.
+\end{proof}
+
+\begin{corollary}[Mod-zero invertibility at the two-window threshold]\label{cor:m2-mod-zero}
+Let $\mu$ be a Borel probability measure on $\{0,1\}^{\ZZ}$.  The map
+\[
+\Phi_2:(\{0,1\}^{\ZZ},\mu)\longrightarrow(Y_2,(\Phi_2)_*\mu)
+\]
+admits a measurable inverse modulo null sets if and only if
+\[
+\mu(\{0^{\ZZ}\})=0\quad\text{or}\quad \mu(\{1^{\ZZ}\})=0.
+\]
+In particular, if $\mu(\{0^{\ZZ},1^{\ZZ}\})=0$, then $\Phi_2$ is a mod-zero
+isomorphism.
+\end{corollary}
+
+\begin{proof}
+If both branch atoms have positive $\mu$-mass, then every full-measure subset
+of the domain contains both $0^{\ZZ}$ and $1^{\ZZ}$, and these two points have
+the same image.  No inverse can be defined modulo null sets.
+
+Conversely, suppose one of the two branch atoms is null.  Remove that null
+atom from the domain.  On the remaining full-measure set every fiber is a
+singleton by Theorem~\ref{thm:m2-branch-locus}: off $y^\ast$ this is the
+branch-locus classification, and over $y^\ast$ only the non-null branch atom
+remains.  The inverse is the Borel inverse from
+Corollary~\ref{cor:m2-asymptotic-sufficiency} off $y^\ast$, together with the
+remaining branch point at $y^\ast$ when it has positive mass.
+\end{proof}
+
+\begin{corollary}[Full block complexity of the one-sided stabilized image]\label{cor:one-sided-complexity}
+Let
+\[
+p_{Y_m^+}(n):=\#\mathcal L_n(Y_m^+)
+\]
+be the length-$n$ word complexity of the one-sided stabilized image
+$Y_m^+$.  If $m\ge3$ and $n\ge m$, then
+\[
+p_{Y_m^+}(n)=2^{n+m-1}.
+\]
+\end{corollary}
+
+\begin{proof}
+The length-$n$ words in $Y_m^+$ are exactly the image of the finite-block map
+\[
+\Phi_{m,n}:\{0,1\}^{n+m-1}\to X_m^n.
+\]
+The domain has cardinality $2^{n+m-1}$.  Since $m\ge3$ and $n\ge m$,
+Theorem~\ref{thm:block-invertibility} says that $\Phi_{m,n}$ is injective.
+Therefore its image, namely $\mathcal L_n(Y_m^+)$, has the same cardinality.
+\end{proof}
+
+\begin{corollary}[One-sided stabilized-window conjugacy]\label{cor:one-sided-conjugacy}
+For every $m\ge3$, the map
+\[
+\Phi_m^+:\{0,1\}^{\NN}\longrightarrow Y_m^+
+\]
+is a topological conjugacy of one-sided shifts onto its image.  Its inverse is
+the sliding-block code
+\[
+(\Phi_m^+)^{-1}(y)_t=\psi_m(y_t,\ldots,y_{t+m-1}),
+\qquad t\ge0,
+\]
+with memory $0$ and anticipation $m-1$.
+\end{corollary}
+
+\begin{proof}
+Surjectivity onto $Y_m^+$ is the definition of the image.  The local formula
+in Corollary~\ref{cor:explicit-decoder} applies to every one-sided trajectory
+because the block $(y_t,\ldots,y_{t+m-1})$ is available for each $t\ge0$.
+Thus it recovers every raw coordinate $a_t$.  The decoder is continuous and
+commutes with the one-sided shift, so it is a topological inverse to
+$\Phi_m^+$ on $Y_m^+$.
+\end{proof}
+
+\begin{theorem}[Two-sided finite-memory conjugacy and finite-type closure]\label{thm:two-sided-conjugacy}
+Assume $m\ge3$.  Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item The factor map
+  \[
+  \Phi_m:(\{0,1\}^{\ZZ},\sigma)\longrightarrow(Y_m,\sigma)
+  \]
+  is a topological conjugacy.  Its inverse is
+  \[
+  \Phi_m^{-1}(y)_t=\psi_m(y_t,\ldots,y_{t+m-1}).
+  \]
+  \item Let $\mathcal B_m:=\mathcal L_m(Y_m)$ and, for
+  $W\in\mathcal B_m$, let $\Psi_{m,m}(W)\in\{0,1\}^{2m-1}$ be the unique
+  raw block with $\Phi_{m,m}(\Psi_{m,m}(W))=W$.  A sequence
+  $y\in(X_m)^{\ZZ}$ belongs to $Y_m$ if and only if every length-$m$ block
+  $W_t:=(y_t,\ldots,y_{t+m-1})$ lies in $\mathcal B_m$ and the decoded raw
+  blocks satisfy the overlap condition
+  \[
+  \Psi_{m,m}(W_t)_{1,\ldots,2m-2}
+  =
+  \Psi_{m,m}(W_{t+1})_{0,\ldots,2m-3}
+  \qquad\text{for all }t\in\ZZ.
+  \]
+  \item In particular $Y_m$ is a subshift of finite type.  It is defined by
+  finitely many forbidden words of length at most $m+1$ over the alphabet
+  $X_m$.
+  \item Pushforward by $\Phi_m$ gives a bijection between shift-invariant
+  Borel probability measures on $\{0,1\}^{\ZZ}$ and shift-invariant Borel
+  probability measures on $Y_m$, with inverse pushforward by the displayed
+  local decoder.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The formula in Corollary~\ref{cor:explicit-decoder} gives a continuous
+shift-commuting left inverse to $\Phi_m$ on $Y_m$.  Since $Y_m$ is the image of
+$\Phi_m$, this left inverse is also a right inverse on $Y_m$.  Hence $\Phi_m$
+is a topological conjugacy, proving (i).
+
+If $y=\Phi_m(a)$, then each $W_t$ lies in $\mathcal B_m$ and
+$\Psi_{m,m}(W_t)=a_ta_{t+1}\ldots a_{t+2m-2}$.  Consecutive decoded raw
+blocks therefore overlap in their common $2m-2$ coordinates, so the condition
+in (ii) is necessary.
+
+Conversely, suppose a sequence $y\in(X_m)^{\ZZ}$ satisfies the two conditions
+in (ii).  The overlap condition glues the finite words
+$\Psi_{m,m}(W_t)$ into a unique bi-infinite binary sequence $a$ such that
+\[
+\Psi_{m,m}(W_t)=a_ta_{t+1}\ldots a_{t+2m-2}
+\qquad\text{for all }t.
+\]
+Applying $\Phi_{m,m}$ to this raw block gives $W_t$, so in particular
+\[
+\Fold_m(a_t,\ldots,a_{t+m-1})=y_t
+\]
+for every $t$.  Thus $y=\Phi_m(a)\in Y_m$.  This proves (ii).
+
+The criterion in (ii) depends only on adjacent length-$m$ output blocks, hence
+only on words of length $m+1$ over the finite alphabet $X_m$.  There are
+finitely many violations, so $Y_m$ is an SFT with memory at most $m$.  This
+proves (iii).
+
+Finally, a topological conjugacy sends invariant Borel probability measures
+bijectively to invariant Borel probability measures by pushforward, and the
+inverse bijection is pushforward by the inverse conjugacy.  The inverse
+conjugacy is the local decoder in (i), proving (iv).
+\end{proof}
+
+\begin{theorem}[Three-window phase transition]\label{thm:phase-transition}
+For the sliding stabilized-window factors $\Phi_m$, $m\ge2$, there are exactly
+two regimes.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item At $m=2$ the unique non-singleton path-space fiber is the branch pair
+  \[
+  \Phi_2^{-1}\bigl((\ldots,00,00,\ldots)\bigr)
+  =
+  \{0^{\ZZ},1^{\ZZ}\}.
+  \]
+  Every other point of $Y_2$ has a singleton preimage.
+  \item For every $m\ge3$ the map
+  \[
+  \Phi_m:\bigl(\{0,1\}^{\ZZ},\sigma\bigr)\to(Y_m,\sigma)
+  \]
+  is a topological conjugacy onto a subshift of finite type. Its inverse is a
+  sliding-block code with memory $0$ and anticipation $m-1$.
+\end{enumerate}
+Consequently the stabilized-window dynamics has no intermediate degeneration:
+in the whole Fibonacci family $m\ge2$, failure of path-space conjugacy occurs
+only at $m=2$, and there it consists of the single branch orbit pair displayed
+above.
+\end{theorem}
+
+\begin{proof}
+The two-window statement is exactly Theorem~\ref{thm:m2-branch-locus}.  The
+above-threshold statement is Theorem~\ref{thm:two-sided-conjugacy}.  These two
+alternatives exhaust all integers $m\ge2$.
+\end{proof}
+
+\begin{remark}[Decoder complexity]\label{rem:decoder-complexity}
+The inverse code supplied by Corollary~\ref{cor:explicit-decoder} reads a
+sliding window of length $m$ and outputs one raw bit. Equivalently, the decoder
+may be implemented by maintaining an overlap state of size $m-1$. The
+arithmetic cost is $O(m)$ per output symbol, since each decoding step involves
+at most $m$ Fibonacci-weighted additions modulo $F_{m+2}$.
+\end{remark}
+
+\begin{proposition}[Standard dynamical corollaries above threshold]\label{prop:conjugacy-consequences}
+Assume $m\ge3$.  Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item For every $n\ge1$,
+  \[
+  \#\operatorname{Fix}(\sigma^n|_{Y_m})=2^n.
+  \]
+  Hence the Artin--Mazur zeta function is
+  \[
+  \zeta_{Y_m}(z)
+  :=\exp\left(\sum_{n\ge1}
+  \frac{\#\operatorname{Fix}(\sigma^n|_{Y_m})}{n}z^n\right)
+  =
+  \frac{1}{1-2z}.
+  \]
+  \item Pushforward by $\Phi_m$ is a bijection from shift-invariant Borel
+  probability measures on $\{0,1\}^{\ZZ}$ to shift-invariant Borel
+  probability measures on $Y_m$, with inverse pushforward by the local
+  decoder in Theorem~\ref{thm:two-sided-conjugacy}.
+  \item Ergodicity, weak mixing, strong mixing, Bernoulli-ness, the
+  $K$-property, and entropy are transported exactly through this measure
+  correspondence.
+\end{enumerate}
+These are standard consequences of the topological conjugacy in
+Theorem~\ref{thm:two-sided-conjugacy}; the arithmetic contribution is the
+finite-window decoder proving that conjugacy.
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:two-sided-conjugacy}, $\Phi_m$ is a topological conjugacy
+between the full two-shift and $(Y_m,\sigma)$, with inverse given by a
+sliding-block code. Periodic points, invariant measures, entropy and the
+listed measure-theoretic properties are standard invariants of topological or
+measure-theoretic conjugacy. Thus the fixed points of $\sigma^n|_{Y_m}$ are in
+bijection with the $2^n$ fixed points of $\sigma^n$ on the full two-shift, and
+\[
+\zeta_{Y_m}(z)=
+\exp\left(\sum_{n\ge1}\frac{(2z)^n}{n}\right)
+=\exp\bigl(-\log(1-2z)\bigr)
+=\frac{1}{1-2z}.
+\]
+The measure correspondence is pushforward by $\Phi_m$, with inverse pushforward
+by the local decoder. See \cite{Walters1982} for the standard entropy and
+isomorphism invariance statements.
+\end{proof}
+
+\begin{remark}\label{rem:exact-recoding}
+For $m\ge3$ the stabilized image is a subshift of finite type topologically
+conjugate to the full two-shift by a finite-memory code. The only obstruction
+below threshold is the branch locus in Theorem~\ref{thm:m2-branch-locus}.
+\end{remark}
+
+\begin{remark}\label{rem:sofic-comparison}
+In the terminology of \cite{LindMarcus1995}, $\mathcal G_m$ is a
+right-resolving presentation of the sofic shift $Y_m$, and $\Phi_m$ has degree
+at most $2^{m-1}$ by Theorem~\ref{thm:finite-state-lift}. A right-resolving
+factor of degree~1 between irreducible shifts of finite type is a conjugacy
+\cite[Theorem~8.1.16]{LindMarcus1995}; see also \cite{Ashley1991} for the
+equal-entropy resolving theory and \cite{Boyle1983} for the lower-entropy
+obstruction. The threshold theorem says that degree~1 is achieved exactly at
+$m=3$. This is an arithmetic fact, not a formal consequence of the sofic
+framework, and it uses the explicit decoder of Lemma~\ref{lem:m3-decoder}.
+\end{remark}
+
+\begin{proposition}[Measure-theoretic entropy preservation under the stabilized-window factor]\label{prop:measure-entropy-preservation}
+Let $m\ge 2$, let $\nu$ be a shift-invariant Borel probability measure on
+$\{0,1\}^{\ZZ}$, and let
+\[
+\eta:=(\Phi_m)_*\nu
+\]
+be its image on $Y_m\subset (X_m)^{\ZZ}$. Then
+\[
+h_\eta(\sigma)=h_\nu(\sigma).
+\]
+This finite-to-one entropy preservation is a standard bounded-fiber
+consequence of Theorem~\ref{thm:finite-state-lift}; for $m\ge3$ it is
+subsumed by the conjugacy theorem.
+\end{proposition}
+
+\begin{proof}
+For $n\ge 1$, let
+\[
+A_{0:n+m-2}:=(A_0,\dots,A_{n+m-2})
+\]
+denote the raw binary block of length $n+m-1$, and let
+\[
+Y_{0:n-1}:=(Y_0,\dots,Y_{n-1}),\qquad
+Y_t=\Fold_m(A_t\cdots A_{t+m-1}),
+\]
+denote the stabilized block of length $n$.
+
+Since $Y_{0:n-1}$ is a deterministic function of $A_{0:n+m-2}$, one has
+\[
+H_\eta(Y_{0:n-1})\le H_\nu(A_{0:n+m-2}).
+\]
+Conversely, by the finite-state lift in Theorem~\ref{thm:finite-state-lift},
+once the initial overlap state
+\[
+(A_0,\dots,A_{m-2})\in\{0,1\}^{m-1}
+\]
+is specified, the entire raw block $A_{0:n+m-2}$ is uniquely determined by the
+stabilized block $Y_{0:n-1}$. Therefore
+\[
+H_\nu(A_{0:n+m-2}\mid Y_{0:n-1})\le (m-1)\log 2.
+\]
+By the chain rule,
+\[
+H_\nu(A_{0:n+m-2})
+=
+H_\eta(Y_{0:n-1})
++
+H_\nu(A_{0:n+m-2}\mid Y_{0:n-1}),
+\]
+hence
+\[
+0\le H_\nu(A_{0:n+m-2})-H_\eta(Y_{0:n-1})\le (m-1)\log 2.
+\]
+Divide by $n$ and let $n\to\infty$. The additive discrepancy is $O(1)$, so it
+disappears after normalization. The left-hand side converges to
+$h_\nu(\sigma)$ because shifting the block length by the fixed amount $m-1$
+does not affect the entropy rate, while the right-hand side converges to
+$h_\eta(\sigma)$. Thus
+\[
+h_\eta(\sigma)=h_\nu(\sigma).
+\]
+\end{proof}
+
+\begin{corollary}[Sequence-level entropy preservation]\label{cor:entropy-preservation}
+For every $m\ge 2$,
+\[
+h_{\mathrm{top}}(Y_m)=\log 2.
+\]
+\end{corollary}
+
+\begin{proof}
+The map $\Phi_m$ is a continuous factor from the full two-shift onto $Y_m$, so
+\[
+h_{\mathrm{top}}(Y_m)\le h_{\mathrm{top}}(\{0,1\}^{\ZZ})=\log 2.
+\]
+Let
+\[
+\nu_{1/2}:=\Bigl(\tfrac12,\tfrac12\Bigr)^{\otimes \ZZ}
+\]
+be the Bernoulli measure on the full two-shift, and set
+\[
+\eta_{1/2}:=(\Phi_m)_*\nu_{1/2}.
+\]
+By Proposition~\ref{prop:measure-entropy-preservation},
+\[
+h_{\eta_{1/2}}(\sigma)=h_{\nu_{1/2}}(\sigma)=\log 2.
+\]
+Since $\eta_{1/2}$ is a shift-invariant Borel probability measure on $Y_m$,
+the variational principle \cite{Walters1982} gives
+\[
+h_{\mathrm{top}}(Y_m)\ge \log 2.
+\]
+Thus equality holds.
+\end{proof}
+
+\begin{remark}
+For every $m\ge2$ the stabilized-window factor preserves entropy. Once
+$m\ge3$, the structure is stronger: $Y_m$ is conjugate to the full two-shift.
+Preservation of periodic data and invariant measures is then a consequence of
+the conjugacy, not an additional source of arithmetic content.
+Proposition~\ref{prop:low-window-counterexamples} shows that the threshold
+cannot be lowered.
+\end{remark}

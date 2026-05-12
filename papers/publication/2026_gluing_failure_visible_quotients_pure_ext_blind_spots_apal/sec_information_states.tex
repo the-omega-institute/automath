@@ -19,30 +19,51 @@ and its realization set in $M$ is
 If $\Gamma\preceq\Delta$, every $\sigma\in\Val_M(\Delta)$ restricts to an element $\sigma|_{\Gamma}\in\Val_M(\Gamma)$.
 
 \begin{definition}[Information state]\label{def:information-state}
-An \emph{information state} in $M$ is a pair
+An \emph{information state} of $M$ is a pair
 \[
 p=(\Gamma_p,R_p)
 \]
-such that $\Gamma_p$ is a context and $\varnothing\neq R_p\subseteq \Val_M(\Gamma_p)$. The set of information states in $M$ is denoted by $\St(M)$.
+where $\Gamma_p$ is a finite context and
+\[
+\varnothing\neq R_p\subseteq \Val_M(\Gamma_p)
+\]
+is the set of realizations still compatible with the information available at
+$p$. The set of all such states is denoted $\St(M)$. This is the same
+interface as \cite[Definition~3.1]{HomologicalVisibilityGluingObstructions2026},
+restated here because the flat forcing results below use the nonempty-team
+hypothesis explicitly.
 \end{definition}
 
 \begin{definition}[Refinement]\label{def:refinement}
-For states $p=(\Gamma_p,R_p)$ and $q=(\Gamma_q,R_q)$ in the same model, write $q\le p$ if
-\begin{enumerate}[label=(\roman*),nosep]
-\item $\Gamma_p\preceq\Gamma_q$,
-\item every $\sigma\in R_q$ satisfies $\sigma|_{\Gamma_p}\in R_p$.
-\end{enumerate}
+Let $p=(\Gamma_p,R_p)$ and $q=(\Gamma_q,R_q)$ be information states. We write
+\[
+q\le p
+\]
+and say that $q$ refines $p$ if $\Gamma_p\preceq\Gamma_q$ and every refined
+realization restricts to a realization allowed by $p$:
+\[
+\{\sigma|_{\Gamma_p}\mid \sigma\in R_q\}\subseteq R_p.
+\]
+Thus refinement may add variables to the context and may discard possible
+realizations. This is the refinement relation of
+\cite[Definition~3.2]{HomologicalVisibilityGluingObstructions2026}.
 \end{definition}
 
 Refinement therefore combines two monotonicities: the context may become richer, and the set of still-admissible realizations may become smaller.
 
 \begin{definition}[State forcing]\label{def:state-forcing}
-Let $p=(\Gamma_p,R_p)\in\St(M)$ and let $\varphi$ be a formula well formed in context $\Gamma_p$. We define
+For a lower-layer formula $\varphi$ whose free variables are contained in
+$\Gamma_p$, define
 \[
 M,p\Vdash\varphi
 \quad:\Longleftrightarrow\quad
-\forall \rho\in R_p\;(M,\rho\models\varphi).
+\forall \rho\in R_p\; M,\rho\models\varphi .
 \]
+If $\varphi$ is written in a smaller context $\Gamma\preceq\Gamma_p$, the
+satisfaction relation is evaluated on the restriction $\rho|_\Gamma$. This is
+the flat state-forcing clause of
+\cite[Definition~3.3]{HomologicalVisibilityGluingObstructions2026}; later
+local-object predicates are added on top of this lower-layer clause.
 \end{definition}
 
 \begin{proposition}[Flat team-style reading of lower-layer forcing]\label{prop:flat-team-reading}
@@ -67,21 +88,45 @@ For $p\in\St(M)$, define
 \end{definition}
 
 \begin{definition}[Decidedness]\label{def:decidedness}
-A formula $\varphi$ is \emph{decided} at $p$, written $M,p\Downarrow\varphi$, if
+For a formula $\varphi$ well formed at $p$, write
+\[
+M,p\Downarrow\varphi
+\]
+when $p$ decides $\varphi$, meaning
 \[
 M,p\Vdash\varphi
 \qquad\text{or}\qquad
-M,p\Vdash\neg\varphi.
+M,p\Vdash\neg\varphi .
 \]
+This is the notation of
+\cite[Definition~3.5]{HomologicalVisibilityGluingObstructions2026}. In the
+flat lower layer, decidedness is therefore a uniform truth-or-falsity condition
+over all realizations in $R_p$.
 \end{definition}
 
 \begin{proposition}[Persistence of forcing]\label{prop:forcing-persistence}
-If $q\le p$ and $M,p\Vdash\varphi$, then $M,q\Vdash\varphi^\uparrow$, where $\varphi^\uparrow$ is the same formula viewed in the larger context $\Gamma_q$.
+Let $q\le p$ and let $\varphi$ be a lower-layer formula whose free variables
+are contained in $\Gamma_p$. If
+\[
+M,p\Vdash\varphi,
+\]
+then
+\[
+M,q\Vdash\varphi .
+\]
 \leanverified{paper_information_state_forcing_persistence_publication}
 \end{proposition}
 
 \begin{proof}
-Let $\sigma\in R_q$. By \Cref{def:refinement}, its restriction $\sigma|_{\Gamma_p}$ lies in $R_p$. Since $M,p\Vdash\varphi$, we have $M,\sigma|_{\Gamma_p}\models\varphi$. The formula $\varphi$ mentions only variables from $\Gamma_p$, so the same assignment viewed in the larger context yields $M,\sigma\models\varphi^\uparrow$. As $\sigma$ was arbitrary, $M,q\Vdash\varphi^\uparrow$.
+Let $\sigma\in R_q$. Since $q\le p$, the restricted realization
+$\sigma|_{\Gamma_p}$ lies in $R_p$. The assumption $M,p\Vdash\varphi$ gives
+\[
+M,\sigma|_{\Gamma_p}\models\varphi .
+\]
+Because all free variables of $\varphi$ are in $\Gamma_p$, this is equivalent
+to $M,\sigma\models\varphi$ when $\sigma$ is viewed as a valuation on the larger
+context $\Gamma_q$. Since $\sigma\in R_q$ was arbitrary, the definition of
+state forcing gives $M,q\Vdash\varphi$.
 \end{proof}
 
 \begin{corollary}[Monotone growth of state theories]\label{cor:state-theory-monotonicity}
@@ -94,28 +139,75 @@ Immediate from \Cref{prop:forcing-persistence}.
 \end{proof}
 
 \begin{proposition}[Singleton conservativity]\label{prop:singleton-conservativity}
-Let $\rho\in\Val_M(\Gamma)$ and put $p_\rho=(\Gamma,\{\rho\})$. Then for every $\Gamma$-formula $\varphi$,
+Let $\Gamma$ be a context, let $\rho\in\Val_M(\Gamma)$, and let
+\[
+p_\rho:=(\Gamma,\{\rho\})
+\]
+be the singleton information state. For every lower-layer formula $\varphi$
+well formed in $\Gamma$,
 \[
 M,p_\rho\Vdash\varphi
 \quad\Longleftrightarrow\quad
-M,\rho\models\varphi.
+M,\rho\models\varphi .
 \]
-\leanverified{paper_information_state_singleton_conservativity_seeds}
+Consequently the state semantics is conservative over ordinary pointwise
+satisfaction on singleton states.
 \end{proposition}
 
 \begin{proof}
-Since $R_{p_\rho}=\{\rho\}$, the forcing clause in \Cref{def:state-forcing} reduces immediately to ordinary satisfaction at $\rho$.
+By \Cref{def:state-forcing}, $M,p_\rho\Vdash\varphi$ says that
+$M,\rho'\models\varphi$ for every $\rho'\in\{\rho\}$. This is exactly the
+single assertion $M,\rho\models\varphi$.
 \end{proof}
 
 \subsection{Lifted consequence}
 
 \begin{definition}[State semantic consequence]\label{def:state-semantic-consequence}
-See \cite[Definition~3.9]{HomologicalVisibilityGluingObstructions2026}.
+Let $\Phi$ be a set of formulas and let $\psi$ be a formula, all well formed in
+a common context $\Gamma$. We write
+\[
+\Phi\models_{\St}\psi
+\]
+if for every model $M$ and every information state
+$p=(\Gamma,R_p)\in\St(M)$,
+\[
+\bigl(\forall\varphi\in\Phi\; M,p\Vdash\varphi\bigr)
+\quad\Longrightarrow\quad
+M,p\Vdash\psi .
+\]
+For the empty set of premises we write $\models_{\St}\psi$. The corresponding
+ordinary pointwise consequence relation is denoted $\Phi\models\psi$:
+for every model $M$ and every valuation $\rho\in\Val_M(\Gamma)$,
+\[
+\bigl(\forall\varphi\in\Phi\; M,\rho\models\varphi\bigr)
+\quad\Longrightarrow\quad
+M,\rho\models\psi .
+\]
 \end{definition}
 
 \begin{proposition}[Lifted soundness of pointwise reasoning]\label{prop:lifted-pointwise-soundness}
-See \cite[Proposition~3.10]{HomologicalVisibilityGluingObstructions2026}.
+Let $\Phi$ be a set of lower-layer formulas and let $\psi$ be a lower-layer
+formula in the same context $\Gamma$. If
+\[
+\Phi\models\psi,
+\]
+then
+\[
+\Phi\models_{\St}\psi .
+\]
+Equivalently, every pointwise sound inference rule for lower-layer formulas
+remains sound after the formulas are evaluated by information-state forcing.
 \end{proposition}
+
+\begin{proof}
+Let $M$ be a model and let $p=(\Gamma,R_p)\in\St(M)$ satisfy
+$M,p\Vdash\varphi$ for every $\varphi\in\Phi$. To prove $M,p\Vdash\psi$, choose
+an arbitrary $\rho\in R_p$. By \Cref{def:state-forcing}, the assumptions give
+$M,\rho\models\varphi$ for every $\varphi\in\Phi$. Since
+$\Phi\models\psi$ pointwise, $M,\rho\models\psi$. The choice of $\rho$ was
+arbitrary, so another application of \Cref{def:state-forcing} yields
+$M,p\Vdash\psi$.
+\end{proof}
 
 \Cref{prop:lifted-pointwise-soundness} is the bridge from ordinary satisfaction to state forcing. It shows that familiar sound rules continue to apply once formulas are evaluated against all realizations compatible with a state.
 
