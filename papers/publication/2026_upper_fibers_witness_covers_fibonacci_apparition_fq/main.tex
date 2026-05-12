@@ -1,4 +1,8 @@
 \documentclass[11pt,letterpaper]{article}
+% Pre-submission working source. For formal submission to The Fibonacci
+% Quarterly, this file should be converted to the journal preparation files
+% supplied through the Fibonacci Association/Taylor & Francis route
+% (notably the sample .tex file with interact.cls).
 
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
@@ -193,8 +197,8 @@ This is proved in Section~\ref{sec:connected}.
 
 As secondary consequences, nonexceptional birth layers contain canonical
 principal intervals
-(Corollary~\ref{thm:canonical-principal-interval}), Boolean subposets of rank
-$\tau(n)-O(1)$ (Corollary~\ref{thm:boolean-skeleton}), and---for odd
+(Corollary~\ref{cor:canonical-principal-interval}), Boolean subposets of rank
+$\tau(n)-O(1)$ (Corollary~\ref{cor:boolean-skeleton}), and---for odd
 $n$---Bell-type lower bounds on $\#\mathcal M_n$
 (Corollary~\ref{cor:odd-primitive-cover-realization}).
 
@@ -624,6 +628,10 @@ For $n=20$, $F_{20}=6765=3\cdot 5\cdot 11\cdot 41$. The relevant atomic
 factors are $3\in\Atom(4)$, $5\in\Atom(5)$, $11\in\Atom(10)$,
 $41\in\Atom(20)$. The witness covers are $\{41\}$, $\{3,5\}$, $\{3,11\}$,
 yielding $\mathcal M_{20}=\{15,33,41\}$ and $A(20)=11$.
+Indeed, with coordinates $(2,5)$, the ranks $20$, $4,5$, and $4,10$
+respectively cover both coordinates and have the singleton essential supports
+required by Definition~\ref{def:witness-cover}; the value $A(20)=11$ is the
+exhaustive divisor/rank count reported in Table~\ref{tab:birth-layer-data}.
 \end{example}
 
 \begin{example}\label{ex:n30}
@@ -633,11 +641,17 @@ $\mathcal M_{30}=\{20,22,31,244,671\}$ and $A(30)=52$.
 With coordinates $(2,3,5)$ for $30=2\cdot3\cdot5$, these covers realize
 respectively the types $\Gamma_1$, $\Gamma_8$, $\Gamma_7$, $\Gamma_5$, and
 $\Gamma_4$.
+Here the rank supports are, respectively,
+$\alpha(31)=30$, $(\alpha(4),\alpha(5))=(6,5)$,
+$(\alpha(2),\alpha(11))=(3,10)$, $(\alpha(4),\alpha(61))=(6,15)$, and
+$(\alpha(11),\alpha(61))=(10,15)$, so each listed cover has the stated
+coordinate support and irredundant essential coordinate; $A(30)=52$ is the
+exhaustive divisor/rank count.
 \end{example}
 
 \subsection*{Substructures of nonexceptional birth layers}
 
-\begin{corollary}\label{thm:canonical-principal-interval}
+\begin{corollary}\label{cor:canonical-principal-interval}
 Let $n\ge3$, $n\notin\{6,12\}$, and let $\pi_n$ be any primitive prime
 divisor of $F_n$. Then the principal interval
 \[
@@ -658,7 +672,7 @@ interval description is the usual divisor-lattice identification obtained
 by dividing out one factor of $\pi_n$.
 \end{proof}
 
-\begin{corollary}\label{thm:boolean-skeleton}
+\begin{corollary}\label{cor:boolean-skeleton}
 Let $n\ge3$, $n\notin\{6,12\}$, and put
 \[
 \mathcal D_n^*:=\{d:\ d\mid n,\ 3\le d<n,\ d\notin\{6,12\}\}.
@@ -682,7 +696,7 @@ The primitive primes exist by Theorem~\ref{thm:primitive-divisors}. They
 are distinct, because distinct ranks of apparition cannot belong to the
 same prime. For every $d\mid n$, $\pi_d\mid F_d\mid F_n$, so the displayed
 products divide $F_n$. They all also divide a multiple of $\pi_n$ inside
-$D_n$, and Corollary~\ref{thm:canonical-principal-interval} puts every such
+$D_n$, and Corollary~\ref{cor:canonical-principal-interval} puts every such
 multiple in $B_n$.
 
 Since the primes $\pi_d$ are distinct, divisibility among the displayed
@@ -706,7 +720,7 @@ Consequently there are infinitely many $n$ for which
 \end{theorem}
 
 \begin{proof}
-Corollary~\ref{thm:boolean-skeleton} embeds a Boolean lattice of rank
+Corollary~\ref{cor:boolean-skeleton} embeds a Boolean lattice of rank
 $k=|\mathcal D_n^*|$ into $B_n$. By Sperner's theorem
 \cite{Sperner1928Subsets}, the largest antichain in this Boolean lattice
 has size $\binom{k}{\lfloor k/2\rfloor}$, giving the first inequality.
@@ -716,8 +730,8 @@ Wigert's maximal-order theorem for the divisor function
 \[
 \log \tau(n)=(\log 2+o(1))\frac{\log n}{\log\log n}.
 \]
-Replacing finitely many exceptional values by nearby members of this
-infinite sequence if necessary, we may take $n\notin\{6,12\}$. Since
+Discarding the finitely many exceptional indices $6$ and $12$ leaves an
+infinite subsequence with the same asymptotic relation. Since
 $k\ge\tau(n)-5$ and
 $\binom{k}{\lfloor k/2\rfloor}\ge 2^k/(k+1)$, we have
 \[
@@ -883,9 +897,19 @@ $\theta_1\theta_2\in\mathcal M_n$. The two displayed families are disjoint
 because their elements have respectively one and two prime-power factors.
 \end{proof}
 
-We now classify the three-support case. The abstract enumeration is a finite
-exercise; the arithmetic content lies in identifying which abstract types
-survive the primitive--ladder constraint.
+We now classify the three-support case. The interfaces are as follows. An
+abstract type records only the pairs $(I,J)$ of essential and full coordinate
+sets. A slot with $I=J$ is primitive, so it must be filled by a prime whose
+rank lies in the rank window $\mathcal R_J^\circ(n)$; the excluded indices
+$1,2,6,12$ are exactly the ranks with no primitive Fibonacci prime. A proper
+slot $I=\{i\}\subsetneq J$ is a ladder slot, so the prime-power formulas
+leave at most one candidate $\mathcal L_i^*(n)$, and that candidate is kept
+only if its rank has full-coordinate set $J$. Singleton slots may be filled
+by either mechanism. After these local choices are made, the only remaining
+condition is the matching condition that the selected prime powers have
+distinct underlying primes. The abstract enumeration below is finite; the
+arithmetic content lies in this primitive-slot, ladder-slot, and matching
+test.
 
 \begin{theorem}\label{thm:abstract-three-types}
 Let $X=\{1,2,3\}$. Consider finite collections
@@ -1129,6 +1153,12 @@ same prime-power formulas show that $\lambda$ is an atomic ladder. Lowering
 $\lambda$ reduces only the $\ell_i$-coordinate of its rank, so
 $E_n(\lambda)=\{i\}$ and $T_n(\lambda)=J$. Hence
 $\lambda\in L_{i,J}(n)$.
+The displayed primitive windows and ladder candidate sets also exhaust the
+exceptional cases: $2$ and $5$ are handled by their separate ladder lines,
+the ranks $1,2,6,12$ are removed from primitive windows, and any
+Wall--Sun--Sun plateau for $p\ne2,5$ is already absorbed in the parameter
+$h_i=\nu_{\ell_i}(F_{z_i})$ before the single possible exponent
+$h_i+a_i-s_i$ is formed.
 \end{proof}
 
 \begin{theorem}[Three-coordinate nonemptiness criterion]
@@ -1519,10 +1549,11 @@ $\alpha(q)$ by testing the divisors of $n$, forms
 $B_n=\{q\mid F_n:\alpha(q)=n\}$, and extracts $\mathcal M_n$ as the minimal
 divisibility elements of this list. Thus the computation is an exhaustive
 divisor/rank verification within the stated range only. The generated file
-\texttt{generated/tab\_birth\_layer\_data.tex} records the synchronized
-script output; the manuscript table below adds the minimal-generator column
-and follows the same data, including the boundary row $n=2$ with
-$B_2=\mathcal M_2=\varnothing$.
+\texttt{generated/tab\_birth\_layer\_data.tex} records the same columns as
+the manuscript table, including the displayed minimal-generator sets. The
+prose comments following the table, such as the assignment of the $n=30$
+covers to the types $\Gamma_i$, are manuscript annotations derived from the
+theorems above rather than additional script output.
 
 \begin{table}[ht]
 \centering
@@ -1609,7 +1640,8 @@ Table~\ref{tab:birth-layer-data} were produced by the repository script
 using the exhaustive divisor/rank method described in
 Section~\ref{sec:numerical}. The verified range is $2\le n\le30$, and the
 synchronized generated table is \texttt{tab\_birth\_layer\_data.tex} in the
-\texttt{generated} directory.
+\texttt{generated} directory; it contains the columns $n$, $\omega(n)$,
+$F_n$, $A(n)$, $\#\mathcal M_n$, and the displayed set $\mathcal M_n$.
 
 \bibliographystyle{plain}
 \bibliography{references_local}

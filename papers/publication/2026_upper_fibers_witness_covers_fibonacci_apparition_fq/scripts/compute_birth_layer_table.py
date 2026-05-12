@@ -119,6 +119,12 @@ def factorization_str(n):
             parts.append(f"{p}^{{{e}}}")
     return " \\cdot ".join(parts)
 
+def minimal_generators_str(values):
+    """LaTeX string for the full minimal-generator set."""
+    if not values:
+        return "\\varnothing"
+    return "\\{" + ",".join(str(v) for v in values) + "\\}"
+
 def main():
     n_max = 30
     print(f"Computing birth layer data for n = 2..{n_max}")
@@ -158,14 +164,15 @@ def main():
     lines.append("\\begin{table}[ht]")
     lines.append("\\centering")
     lines.append("\\small")
-    lines.append("\\caption{Birth layer data for $2 \\le n \\le 30$. "
+    lines.append("\\caption{Generated birth layer data for $2 \\le n \\le 30$. "
                  "Here $\\omega(n)$ is the number of distinct prime divisors of $n$, "
                  "$A(n)=\\#B_n$ is the birth layer cardinality, and "
                  "$\\#\\mathcal{M}_n$ is the number of minimal generators.}")
-    lines.append("\\label{tab:birth-layer-data}")
-    lines.append("\\begin{tabular}{rrcrr}")
+    lines.append("\\label{tab:birth-layer-data-generated}")
+    lines.append("\\begin{tabular}{rrcrrl}")
     lines.append("\\toprule")
-    lines.append("$n$ & $\\omega(n)$ & $F_n$ & $A(n)$ & $\\#\\mathcal{M}_n$ \\\\")
+    lines.append("$n$ & $\\omega(n)$ & $F_n$ & $A(n)$ & $\\#\\mathcal{M}_n$ & "
+                 "$\\mathcal{M}_n$ \\\\")
     lines.append("\\midrule")
 
     for r in results:
@@ -179,7 +186,8 @@ def main():
             if len(factors) > 1 or (len(factors) == 1 and factors[0][1] > 1):
                 Fn_str += f" = {factorization_str(Fn)}"
 
-        lines.append(f"  {n} & {r['omega']} & ${Fn_str}$ & {r['A']} & {r['M_count']} \\\\")
+        lines.append(f"  {n} & {r['omega']} & ${Fn_str}$ & {r['A']} & "
+                     f"{r['M_count']} & ${minimal_generators_str(r['M'])}$ \\\\")
 
     lines.append("\\bottomrule")
     lines.append("\\end{tabular}")
