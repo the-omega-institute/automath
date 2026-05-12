@@ -7,7 +7,7 @@ paper writes remain behind the Killo/golden distillation lane.
 
 Input source: `gate`.
 
-Selection gate: `1` receivable item(s), `5` blocked or review-only item(s).
+Selection gate: `1` receivable item(s), `7` blocked or review-only item(s).
 
 ## Readiness Summary
 
@@ -15,6 +15,7 @@ Selection gate: `1` receivable item(s), `5` blocked or review-only item(s).
 | --- | ---: | --- |
 | `needs_operator_review` | 3 | operator review boundary |
 | `blocked_automath_not_ready` | 2 | blocked until Automath target is selected |
+| `observe_only` | 2 | observed |
 | `ready_for_local_packet` | 1 | review packet candidate |
 
 ## Receivable NewMath Inputs
@@ -27,6 +28,8 @@ Selection gate: `1` receivable item(s), `5` blocked or review-only item(s).
 
 | Source | Kind | Readiness | Priority | Blocking reason |
 | --- | --- | --- | ---: | --- |
+| `the-omega-institute/newmath@origin/bridge/newmath-automath-consumption:docs/bridge/automath-newmath-ack.jsonl` | `scope_ledger` | `observe_only` | low | observation only |
+| `the-omega-institute/newmath@origin/bridge/newmath-automath-consumption:docs/bridge/automath-newmath-failures.jsonl` | `audit_failure` | `observe_only` | low | observation only |
 | `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/BeliefUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
 | `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/DyadicPrecisionUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
 | `the-omega-institute/newmath@origin/codex-auto-dev:lean4/BEDC/Derived/LyapunovUp/TasteGate.lean` | `taste_gate_witness` | `needs_operator_review` | low | operator review is required before this can become receivable |
