@@ -44,6 +44,7 @@
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | B-PAUSED (Oracle infra retry needed at B10) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | IMRN→Exp. Math 候选 |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | ✅ 可投稿 — C-8 (Oracle accept + Claude submit, 4/5 轮一致；需 cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
+| `2026_prefix_scan_error_boundary_rates_dynamical_systems` | legacy archive | 归档；parked；canonical ETDS route is `2026_scan_error_prefix_partitions_convergence_rates_etds` | overlap resolved by `2026_scan_error_prefix_partitions_convergence_rates_etds/cross_paper_dedup.md`; do not process independently |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit unclear failure) | — |
