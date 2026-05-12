@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-12T14:30:17+00:00`
+- Generated: `2026-05-12T21:07:54+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_detector_shells_click_record_kms_jphyscomm`
 - Gate failed: `true`
