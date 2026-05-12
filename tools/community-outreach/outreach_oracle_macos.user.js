@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      outreach-1.9
+// @version      outreach-1.21
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -43,8 +43,10 @@
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
   const NO_OUTPUT_IDLE_TIMEOUT = 420000;
+  const DEEP_NO_OUTPUT_IDLE_TIMEOUT = 7200000;
   const REFILL_NO_OUTPUT_IDLE_TIMEOUT = 1800000;
-  const SCRIPT_VERSION = "outreach-1.9";
+  const POST_THINK_NO_OUTPUT_TIMEOUT = 300000;
+  const SCRIPT_VERSION = "outreach-1.21";
   const OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
   const OPENPROBLEM_PROJECT_URL = `https://chatgpt.com${OPENPROBLEM_PROJECT_PREFIX}/project`;
 
@@ -98,6 +100,10 @@
 
   // ── Status panel (OUTREACH CHANGE: distinct color/branding) ──────────
   let panel = null;
+  let serverReachable = false;
+  let serverRequiredScriptVersion = "";
+  let serverDiagnosis = "";
+  let serverStatusLastAt = 0;
   function ensurePanel() {
     if (panel && document.body.contains(panel)) return;
     panel = document.createElement("div");
@@ -116,6 +122,9 @@
     ensurePanel();
     const statusColor = active ? (busy ? "#ff0" : "#9af") : "#f55";
     const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
+    const serverColor = serverReachable ? "#9f9" : "#f99";
+    const requiredText = serverRequiredScriptVersion ? `requires ${serverRequiredScriptVersion}` : "requires ?";
+    const diagnosisText = serverDiagnosis ? ` · ${serverDiagnosis}` : "";
     const btnText = active ? "⏸ Pause" : "▶ Start";
     const btnColor = active ? "#f55" : "#9af";
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
@@ -124,6 +133,9 @@
         <b style="color:#cdf">[Outreach Oracle ${SCRIPT_VERSION}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="outreach-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
+      </div>
+      <div style="margin-top:3px;color:${serverColor}">
+        server ${serverReachable ? "online" : "offline"} · ${requiredText}${diagnosisText}
       </div>
       <hr style="border-color:#446;margin:4px 0">
       ${lines}`;
@@ -173,6 +185,24 @@
         ontimeout: () => reject(new Error("timeout")),
       });
     });
+  }
+
+  async function refreshServerStatus(force = false) {
+    const now = Date.now();
+    if (!force && now - serverStatusLastAt < 120000) return;
+    serverStatusLastAt = now;
+    try {
+      const status = await serverGet("/status");
+      serverReachable = true;
+      serverRequiredScriptVersion = status.required_script_version || serverRequiredScriptVersion;
+      serverDiagnosis = status.diagnosis || "";
+      updatePanel();
+    } catch {
+      serverReachable = false;
+      serverDiagnosis = "status unreachable";
+      updatePanel();
+      throw new Error("status unreachable");
+    }
   }
 
   function sleep(ms) {
@@ -697,6 +727,47 @@
     }
   }
 
+  function assistantDebugSnapshot() {
+    const out = {
+      assistant_count: 0,
+      pre_submit_assistant_count: preSubmitAssistantCount,
+      last_assistant_chars: 0,
+      last_assistant_clean_chars: 0,
+      last_assistant_head: "",
+      assistant_only_chars: 0,
+    };
+    try {
+      const main = document.querySelector("main");
+      if (!main) return out;
+      const els = main.querySelectorAll("[data-message-author-role='assistant']");
+      out.assistant_count = els.length;
+      if (els.length > 0) {
+        const raw = extractTextWithMath(els[els.length - 1]) || "";
+        const clean = cleanText(raw);
+        out.last_assistant_chars = raw.length;
+        out.last_assistant_clean_chars = clean.length;
+        out.last_assistant_head = clean.slice(0, 240);
+      }
+      out.assistant_only_chars = extractAssistantOnly().length;
+    } catch (e) {
+      out.debug_error = String(e && e.message ? e.message : e).slice(0, 200);
+    }
+    return out;
+  }
+
+  function newestAssistantCleanText() {
+    try {
+      const main = document.querySelector("main");
+      if (!main) return "";
+      const els = main.querySelectorAll("[data-message-author-role='assistant']");
+      if (els.length === 0) return "";
+      const clean = cleanText(extractTextWithMath(els[els.length - 1]) || "");
+      return looksLikePromptEcho(clean) ? "" : clean;
+    } catch {
+      return "";
+    }
+  }
+
   function setSentPrompt(text) { sentPromptText = text; }
 
   function looksLikePromptEcho(text) {
@@ -789,6 +860,16 @@
       .replace(/\n{3,}/g, "\n\n")
       .trim();
     return normalized.length >= 5 ? normalized : text.trim();
+  }
+
+  function looksLikeCompleteArtifactPacket(text) {
+    const t = text || "";
+    return (
+      t.length >= 2000 &&
+      /^FILE:\s+tools\/community-outreach\/targets\//m.test(t) &&
+      (/```(?:json|markdown|python|latex|csv)?/i.test(t) ||
+        /\b(?:JSON|Markdown) ?(?:\{|#|---)/.test(t))
+    );
   }
 
   function isSsrLine(t) {
@@ -891,6 +972,48 @@
     return candidates[0].text;
   }
 
+  function isShortCompleteResponse(text) {
+    const t = String(text || "").trim();
+    if (t.length < 5 || t.length > 220) return false;
+    if (/^\s*\{\s*"verdict"\s*:\s*"(pass|fail|uncertain|PROFILE|DROP)"/i.test(t)) return true;
+    if (/^Decision:\s*(safe to run|not safe to run|uncertain)\b/i.test(t)) return true;
+    if (/^\s*(yes|no|pass|fail|drop|run|continue|stuck|complete)\s*[\.:]?/i.test(t)) return true;
+    return false;
+  }
+
+  function extractNewestAssistantSinceSubmit() {
+    const main = document.querySelector("main");
+    if (!main) return "";
+    const els = main.querySelectorAll("[data-message-author-role='assistant']");
+    if (els.length <= preSubmitAssistantCount) return "";
+
+    // Only inspect assistant turns created after this prompt was submitted.
+    // Falling back to older long assistant messages caused follow-up turns to
+    // look "complete" while the current ChatGPT answer was still a one-token
+    // partial such as "I".
+    const candidates = [];
+    for (let i = els.length - 1; i >= preSubmitAssistantCount; i--) {
+      const text = cleanText(extractTextWithMath(els[i]));
+      if (!text || looksLikePromptEcho(text)) continue;
+      candidates.push({ idx: i, text, len: text.length });
+    }
+    if (candidates.length === 0) return "";
+    candidates.sort((a, b) => b.idx - a.idx);
+    const newest = candidates[0].text;
+    if (newest.length >= 100 || isShortCompleteResponse(newest)) return newest;
+    return "";
+  }
+
+  function extractNewestResponseText() {
+    const newest = extractNewestAssistantSinceSubmit();
+    if (newest.length >= 5) return newest;
+    const assistantOnly = extractAssistantOnly();
+    if (assistantOnly.length >= 100 && preSubmitAssistantCount === 0) return assistantOnly;
+    const fallback = extractResponseText();
+    if (fallback.length >= 100 && !looksLikePromptEcho(fallback)) return fallback;
+    return "";
+  }
+
   function extractResponseText() {
     const main = document.querySelector("main");
     if (!main) return "";
@@ -981,7 +1104,7 @@
     return "";
   }
 
-  function isStillGenerating() {
+  function generationDebugSnapshot() {
     const domSignal = !!(
       document.querySelector("button[aria-label='Stop generating']") ||
       document.querySelector("button[aria-label='Stop streaming']") ||
@@ -994,7 +1117,10 @@
       document.querySelector("[class*='reasoning']") ||
       document.querySelector("[class*='progress']")
     );
-    if (domSignal) return true;
+    let textSignal = false;
+    let proPreamble = false;
+    let postThink = false;
+    let textHead = "";
     // Text-layer probe for ChatGPT 5.5 Pro reasoning indicators that don't
     // expose stable class hooks. The page text contains these literals while
     // the Pro reasoner is still thinking and before the visible answer
@@ -1002,8 +1128,19 @@
     // pages that look stable but are mid-generation. (Fix: T-20 Turn 2.)
     try {
       const main = document.querySelector("main");
-      if (!main) return false;
+      if (!main) {
+        return {
+          generating: domSignal,
+          dom_signal: domSignal,
+          text_signal: false,
+          pro_preamble: false,
+          post_think: false,
+          stop_button_present: !!document.querySelector("button[data-testid='stop-button']"),
+          text_head: "",
+        };
+      }
       const txt = main.innerText || "";
+      textHead = txt.slice(0, 240);
       // "Pro thinking" — ChatGPT 5.5 Pro reasoning state preamble
       // "Extended Pro" — appears in reasoner footer DURING reasoning, not after
       // "Thought for" — only appears AFTER reasoning completes (post-think)
@@ -1011,11 +1148,60 @@
       // present AND the post-think marker "Thought for" is NOT yet visible,
       // since "Thought for X min Ys" appears once reasoning is done and the
       // answer starts streaming.
-      const proPreamble = /Pro thinking|Extended Pro|Reasoning…/i.test(txt);
-      const postThink = /Thought for\s+\d+(?:\s*m\s*\d+\s*s|\s*s|\s+min)/i.test(txt);
-      if (proPreamble && !postThink) return true;
+      proPreamble = /Pro thinking|Extended Pro|Reasoning…/i.test(txt);
+      postThink = /Thought for\s+\d+(?:\s*m\s*\d+\s*s|\s*s|\s+min)/i.test(txt);
+      textSignal = proPreamble && !postThink;
+      // ChatGPT sometimes leaves the "Pro thinking" transcript text in the
+      // page after a compact final answer is visible. If there is no streaming
+      // DOM/stop-button signal and the newest assistant message is already a
+      // JSON gate verdict, treat the page as complete so freshness/profile
+      // gates do not hang on stale reasoning chrome.
+      if (textSignal && !domSignal) {
+        const dbg = assistantDebugSnapshot();
+        const head = String(dbg.last_assistant_head || "").trim();
+        if (
+          Number(dbg.last_assistant_clean_chars || 0) >= 80 &&
+          /^\s*\{\s*"verdict"\s*:\s*"(pass|fail|uncertain|PROFILE|DROP)"/i.test(head)
+        ) {
+          textSignal = false;
+        }
+      }
+      if (textSignal && !domSignal) {
+        const dbg = assistantDebugSnapshot();
+        const cleanChars = Number(dbg.last_assistant_clean_chars || 0);
+        const head = String(dbg.last_assistant_head || "").trim();
+        const hasAssistantAnswer = cleanChars >= 5 && dbg.assistant_count > dbg.pre_submit_assistant_count;
+        // If ChatGPT has left a one-character partial answer with no stop
+        // button for minutes, this is usually stale page chrome rather than an
+        // active generation. Let waitForResponse's normal no-output timeout or
+        // stability logic decide instead of pinning generating=true forever.
+        if (
+          (cleanChars > 0 && cleanChars < 5 && !/^Pro thinking/i.test(head)) ||
+          hasAssistantAnswer
+        ) {
+          textSignal = false;
+        }
+      }
     } catch {}
-    return false;
+    return {
+      generating: domSignal || textSignal,
+      dom_signal: domSignal,
+      text_signal: textSignal,
+      pro_preamble: proPreamble,
+      post_think: postThink,
+      stop_button_present: !!(
+        document.querySelector("button[aria-label='Stop generating']") ||
+        document.querySelector("button[aria-label='Stop streaming']") ||
+        document.querySelector("button[aria-label='停止生成']") ||
+        document.querySelector("button[aria-label='停止流式传输']") ||
+        document.querySelector("button[data-testid='stop-button']")
+      ),
+      text_head: textHead,
+    };
+  }
+
+  function isStillGenerating() {
+    return generationDebugSnapshot().generating;
   }
 
   async function waitForResponse(task_id, noOutputIdleTimeout = NO_OUTPUT_IDLE_TIMEOUT) {
@@ -1035,13 +1221,14 @@
       // because no new generation has rendered yet.
       const curCount = newAssistantCount();
       const responseText = (curCount > preSubmitAssistantCount)
-        ? extractAssistantOnly()    // count increased: take the LAST assistant message only
+        ? extractNewestResponseText()
         : "";                       // count not yet increased: don't even consider stability
       if (curCount > preSubmitAssistantCount && !countIncreasedLogged) {
         log(`new assistant message detected (count ${preSubmitAssistantCount} → ${curCount})`);
         countIncreasedLogged = true;
       }
-      const generating = isStillGenerating();
+      const genDebug = generationDebugSnapshot();
+      const generating = genDebug.generating;
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
       const nowMs = Date.now();
@@ -1059,6 +1246,8 @@
               page_chars: mainLen,
               stable_count: stableCount,
               generating,
+              generation: genDebug,
+              assistant: assistantDebugSnapshot(),
               url_tail: window.location.href.slice(-60),
             },
           });
@@ -1071,13 +1260,22 @@
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
       }
+      const postThinkNoOutput = (
+        !generating &&
+        responseText.length < 5 &&
+        genDebug.post_think &&
+        Date.now() - startTime >= POST_THINK_NO_OUTPUT_TIMEOUT
+      );
       if (
         !generating &&
         responseText.length < 5 &&
-        Date.now() - startTime >= noOutputIdleTimeout
+        (Date.now() - startTime >= noOutputIdleTimeout || postThinkNoOutput)
       ) {
+        const waitLimit = postThinkNoOutput
+          ? Math.floor(POST_THINK_NO_OUTPUT_TIMEOUT / 1000)
+          : Math.floor(noOutputIdleTimeout / 1000);
         throw new Error(
-          `No assistant output after ${Math.floor(noOutputIdleTimeout / 1000)}s ` +
+          `No assistant output after ${waitLimit}s ` +
           `(page=${mainLen}, url=${window.location.href.slice(-60)})`
         );
       }
@@ -1090,14 +1288,19 @@
           if (stableCount === 0) log(`SSR garbage detected — page hydrating, waiting`);
           stableCount = 0; lastResponseText = ""; lastStableKey = ""; continue;
         }
+        if (!generating && looksLikeCompleteArtifactPacket(responseText)) {
+          log(`Response complete: ${responseText.length} chars (artifact packet, gen=false)`);
+          return responseText;
+        }
         const stableKey = stableResponseKey(responseText);
-        if (stableKey === lastStableKey) {
-          stableCount++;
-          lastResponseText = responseText;
-          let minChecks;
-          if (responseText.length >= 2000) minChecks = STABLE_CHECKS;
-          else if (responseText.length >= 200) minChecks = STABLE_CHECKS + 2;
-          else minChecks = STABLE_CHECKS * 3;
+          if (stableKey === lastStableKey) {
+            stableCount++;
+            lastResponseText = responseText;
+            let minChecks;
+            if (isShortCompleteResponse(responseText)) minChecks = 1;
+            else if (responseText.length >= 2000) minChecks = STABLE_CHECKS;
+            else if (responseText.length >= 200) minChecks = STABLE_CHECKS + 2;
+            else minChecks = STABLE_CHECKS * 3;
           const stableEnough = stableCount >= minChecks && !generating;
           const stableOverride = stableCount >= minChecks + 3;
           if (stableEnough || stableOverride) {
@@ -1120,9 +1323,42 @@
   // ── Process a task (OUTREACH ADD: multi-turn navigation + reload-safe) ─
   async function processTask(task) {
     const { task_id, prompt, conversation_url, is_followup, conversation_id, re_extract, pdf_base64, pdf_name, tag } = task;
-    const noOutputIdleTimeout = (tag === "outreach-board-refill")
+    const noOutputIdleTimeout = (String(tag || "").includes("board-refill"))
       ? REFILL_NO_OUTPUT_IDLE_TIMEOUT
-      : NO_OUTPUT_IDLE_TIMEOUT;
+      : (String(tag || "").includes(":deep") ? DEEP_NO_OUTPUT_IDLE_TIMEOUT : NO_OUTPUT_IDLE_TIMEOUT);
+    const taskStartMs = Date.now();
+    let lastPhaseHeartbeatMs = 0;
+    async function phaseHeartbeat(phase, extra = {}, force = false) {
+      const now = Date.now();
+      if (!force && now - lastPhaseHeartbeatMs < 15000) return null;
+      lastPhaseHeartbeatMs = now;
+      const promptInput = findPromptInput();
+      const sendBtnAny = findSendButton(true);
+      const sendBtnReady = findSendButton(false);
+      try {
+        return await serverPost("/ack", {
+          task_id,
+          agent_id: agentId(),
+          heartbeat: true,
+          metrics: Object.assign({
+            phase,
+            elapsed_seconds: Math.floor((now - taskStartMs) / 1000),
+            page_chars: (document.querySelector("main")?.innerText || "").length,
+            prompt_input_present: !!promptInput,
+            prompt_input_chars: promptInput ? (promptInput.textContent || "").length : 0,
+            send_button_present: !!sendBtnAny,
+            send_button_enabled: !!sendBtnReady,
+            is_on_new_chat_page: isOnNewChatPage(),
+            in_project: isInsideBedcProject(),
+            current_url_tail: window.location.href.slice(-80),
+            generation: generationDebugSnapshot(),
+            assistant: assistantDebugSnapshot(),
+          }, extra || {}),
+        });
+      } catch {
+        return null;
+      }
+    }
     busy = true;
     updatePanel();
 
@@ -1322,6 +1558,7 @@
 
       // ACK
       try { await serverPost("/ack", { task_id, agent_id: agentId() }); } catch {}
+      await phaseHeartbeat("acked_before_prompt_input", {}, true);
       setTaskPhase("processing");
       // OUTREACH ADD: mark this task in-flight BEFORE we send. Also save the
       // task body so a full reload mid-flight can read prompt back without
@@ -1336,6 +1573,10 @@
       while (!findPromptInput() && retries < 90) {
         await sleep(1000);
         retries++;
+        const ack = await phaseHeartbeat("waiting_for_prompt_input", { wait_seconds: retries });
+        if (ack && ack.status === "cancelled") {
+          throw new Error(`Task cancelled by server: ${task_id}`);
+        }
         if (retries > 0 && retries % 15 === 0) {
           log(`Still waiting for prompt input... ${retries}s, url=${window.location.href.slice(-50)}`);
         }
@@ -1344,6 +1585,7 @@
         throw new Error(`Prompt input not found after 90s (url=${window.location.href})`);
       }
       log(`Page ready (${is_followup ? "existing conv" : "fresh chat"}) after ${retries}s`);
+      await phaseHeartbeat("prompt_input_ready", { wait_seconds: retries }, true);
 
       // OUTREACH ADD: PDF attach BEFORE prompt entry, only on first turn of a
       // fresh conversation (non-followup) AND only if server provided pdf_base64.
@@ -1364,6 +1606,7 @@
       const entered = await enterPrompt(prompt);
       if (!entered) throw new Error("Failed to enter prompt text");
       setSentPrompt(prompt);
+      await phaseHeartbeat("prompt_entered", { prompt_chars: prompt.length }, true);
 
       // Wait for send button
       log("Waiting for send button to enable...");
@@ -1372,12 +1615,19 @@
         const btn = findSendButton();
         if (btn && !btn.disabled) { sendReady = true; log(`Send ready after ${i}s`); break; }
         await sleep(1000);
+        const ack = await phaseHeartbeat("waiting_for_send_button", { wait_seconds: i + 1 });
+        if (ack && ack.status === "cancelled") {
+          throw new Error(`Task cancelled by server: ${task_id}`);
+        }
       }
       if (!sendReady) log("WARN: send still disabled after 30s, will force-click");
+      await phaseHeartbeat(sendReady ? "send_button_ready" : "send_button_not_ready", {}, true);
 
       const urlBefore = window.location.href;
+      await phaseHeartbeat("clicking_send", { url_before_tail: urlBefore.slice(-80) }, true);
       const sent = await clickSend();
       if (!sent) throw new Error("Failed to click send");
+      await phaseHeartbeat("sent_waiting_for_generation", {}, true);
 
       // For new chat: wait for URL change to /c/<id>
       // For follow-up: URL should NOT change (we stay in same /c/<id>)
@@ -1389,6 +1639,19 @@
           if (window.location.href !== urlBefore) {
             urlChanged = true;
             log(`URL changed to: ${window.location.href.slice(-40)}`);
+            const chatUrl = currentChatUrl();
+            if (chatUrl) {
+              try {
+                await serverPost("/pin-conv-url", {
+                  task_id,
+                  chatgpt_url: chatUrl,
+                  agent_id: agentId(),
+                });
+                log(`Pinned chat URL after send: ${chatUrl.slice(-50)}`);
+              } catch (e) {
+                log(`WARN: failed to pin chat URL after send: ${e.message}`);
+              }
+            }
             break;
           }
           if (isStillGenerating()) { log("Generation detected (same page)"); break; }
@@ -1549,7 +1812,12 @@
           continue;
         }
         try {
+          await refreshServerStatus();
           const task = await serverGet(`/task?agent=${encodeURIComponent(agentId())}`);
+          serverReachable = true;
+          serverRequiredScriptVersion = task.required_script_version || serverRequiredScriptVersion;
+          if (task.reason) serverDiagnosis = task.reason;
+          updatePanel();
           if (task && task.task_id && task.status !== "idle") {
             if (!_readActive()) {
               log("Task available but PAUSED — skipping");
@@ -1562,6 +1830,9 @@
             }
           }
         } catch (err) {
+          serverReachable = false;
+          serverDiagnosis = "task poll unreachable";
+          updatePanel();
           if (logHistory.length === 0 || !logHistory[logHistory.length-1].includes("unreachable")) {
             log(`Server unreachable (${SERVER})`);
           }
@@ -1574,6 +1845,7 @@
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
     log(`Outreach Oracle Bridge ${SCRIPT_VERSION} loaded — ${active ? "ACTIVE" : "PAUSED"} — agent=${agentId()}`);
+    try { await refreshServerStatus(true); } catch {}
 
     const phase = getTaskPhase();
     const navTaskId = tabGet("nav_task_id", "");

@@ -365,12 +365,30 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     print(f"Fetching arXiv papers since {since_dt.strftime('%Y-%m-%d %H:%M UTC')} from "
           f"{', '.join(args.categories)}...", file=sys.stderr)
-    papers = fetch_recent_papers(
-        categories=args.categories,
-        since=since_dt,
-        max_results=args.max_results,
-        use_nyxid=not args.no_nyxid,
-    )
+    try:
+        papers = fetch_recent_papers(
+            categories=args.categories,
+            since=since_dt,
+            max_results=args.max_results,
+            use_nyxid=not args.no_nyxid,
+        )
+    except Exception as exc:  # noqa: BLE001
+        report = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "verdict": "network_unavailable",
+            "error": str(exc),
+            "since": since_dt.isoformat(),
+            "categories": args.categories,
+            "papers_scanned": 0,
+            "todos_scanned": len(todos),
+            "hits": [],
+        }
+        if args.json:
+            args.json.parent.mkdir(parents=True, exist_ok=True)
+            args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")
+            print(f"\nJSON report: {args.json}", file=sys.stderr)
+        print(f"arxiv_watch network unavailable: {exc}", file=sys.stderr)
+        return 0
     print(f"Got {len(papers)} papers. Scanning {len(todos)} TODOs (min_overlap={args.min_overlap})...",
           file=sys.stderr)
 

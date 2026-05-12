@@ -10,7 +10,7 @@ For each item the operator chooses one of:
   o  open    — bring Mail.app foreground at this draft (no auto-send)
   e  edit    — open .md in $EDITOR; manual re-render via the matching .sh
   s  send    — osascript: send the Mail Draft (final external action — final
-               approval is THIS keystroke)
+               approval requires a local approval id + THIS keystroke)
   d  discard — delete from Mail Drafts; archive .md to drafts/discarded/<date>/
   n  next    — skip this item (also: just press Enter)
   q  quit    — exit batch
@@ -22,7 +22,8 @@ After [s]end:
     after the actual reply arrives.
 
 Hard rule: this script never auto-decides to send. Every send requires the
-operator to type 's' against the specific draft after viewing.
+operator to type 's' against the specific draft after viewing and provide an
+approval id recorded by outreach_approval.py.
 """
 
 from __future__ import annotations
@@ -45,6 +46,9 @@ DRAFTS_SENT = DRAFTS_DIR / "sent"
 DRAFTS_DISCARDED = DRAFTS_DIR / "discarded"
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+
+sys.path.insert(0, str(SCRIPT_DIR))
+from outreach_approval import find_approval  # noqa: E402
 
 
 def _today_dir() -> str:
@@ -316,9 +320,36 @@ def action_edit(item: DraftItem) -> None:
         print(f"  re-render via the matching save_*.sh script if needed before sending.")
 
 
+def _approval_artifact(item: DraftItem) -> str:
+    if item.md_path:
+        try:
+            return str(item.md_path.relative_to(SCRIPT_DIR))
+        except ValueError:
+            return str(item.md_path)
+    return f"Apple Mail Draft #{item.mail_id}"
+
+
+def _approval_ok(approval_id: str, item: DraftItem) -> tuple[bool, str]:
+    approval = find_approval(approval_id)
+    if not approval:
+        return False, "approval id not found"
+    if approval.get("action") != "send_email":
+        return False, f"approval action is {approval.get('action')!r}, expected send_email"
+    artifact = str(approval.get("artifact") or "")
+    expected = _approval_artifact(item)
+    if item.md_path and artifact not in {expected, str(item.md_path)}:
+        return False, f"approval artifact {artifact!r} does not match {expected!r}"
+    return True, ""
+
+
 def action_send(item: DraftItem) -> bool:
     if not item.mail_id:
         print("  no Mail Draft to send; render via save_*.sh first")
+        return False
+    approval_id = input("  approval_id from outreach_approval.py approve: ").strip()
+    ok_approval, approval_reason = _approval_ok(approval_id, item)
+    if not ok_approval:
+        print(f"  send refused: {approval_reason}")
         return False
     confirm = input(f"  CONFIRM SEND to {item.mail_recipient[:80]} | {item.mail_subject[:80]} ? [y/N] ").strip().lower()
     if confirm != "y":

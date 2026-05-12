@@ -26,6 +26,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 import oracle_consultant as oc  # noqa: E402
 from outreach_board_parser import parse_board  # noqa: E402
+from dispatch_worktree import (  # noqa: E402
+    _materialize_oracle_deep_research_md,
+    supervisor_profile,
+)
 
 SESS_DIR = REPO_ROOT / "tools/community-outreach/outreach_oracle/sessions"
 
@@ -265,6 +269,62 @@ def main():
               f"explicit complete/stuck verdict. Bump --max-turns or inspect transcripts.")
 
     print(f"\n[resume] done. Final turn count: {len(turns)}")
+
+    response_log_dir = REPO_ROOT / "tools/community-outreach/logs/oracle"
+    response_log_dir.mkdir(parents=True, exist_ok=True)
+    run_turns: list[dict] = []
+    for idx, turn in enumerate(turns):
+        response = turn.get("response") or ""
+        response_path = ""
+        if response:
+            response_path = str(response_log_dir / f"resume_{args.conv}_{idx}.response.txt")
+            Path(response_path).write_text(response, encoding="utf-8")
+        run_turns.append({
+            "turn": turn.get("turn", idx),
+            "prompt": turn.get("prompt", ""),
+            "prompt_source": turn.get("prompt_source", "resume"),
+            "response": response_path,
+            "response_chars": int(turn.get("response_chars") or len(response)),
+            "elapsed_seconds": int(turn.get("elapsed_seconds") or 0),
+            "task_id": turn.get("task_id", ""),
+            "error": turn.get("error", ""),
+            "evaluator_verdict": ((turn.get("evaluator") or {}).get("verdict") if isinstance(turn.get("evaluator"), dict) else ""),
+            "evaluator_reason": ((turn.get("evaluator") or {}).get("verdict_reason") if isinstance(turn.get("evaluator"), dict) else ""),
+        })
+    final_verdict = "EXHAUSTED"
+    if turns:
+        last_eval = turns[-1].get("evaluator") if isinstance(turns[-1].get("evaluator"), dict) else {}
+        if (last_eval or {}).get("verdict") == "complete":
+            final_verdict = "BREAKTHROUGH"
+        elif (last_eval or {}).get("verdict") == "stuck":
+            final_verdict = "STUCK"
+    run = {
+        "run_id": f"resume_{args.conv}_{int(time.time())}",
+        "todo_id": todo.todo_id,
+        "conversation_id": args.conv,
+        "chatgpt_url": sess.get("chatgpt_url", ""),
+        "turns": run_turns,
+        "final_verdict": final_verdict,
+        "total_elapsed_seconds": 0,
+        "stopped_at_turn": len(run_turns) - 1,
+        "run_started_at": sess.get("created_at", ""),
+        "run_completed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "max_turns": args.max_turns,
+        "latex_path": "",
+        "plain_summary": "",
+        "terminal_prompt_sent": False,
+        "terminal_latex_error": "",
+        "resumed": True,
+    }
+    consultant._merge_deep_run(slug=todo.slug(), run=run)
+    materialized = _materialize_oracle_deep_research_md(
+        todo,
+        supervisor_profile(todo, REPO_ROOT),
+        run,
+        repo_root=REPO_ROOT,
+    )
+    if materialized:
+        print(f"[resume] materialized research.md → {materialized}")
 
     # --write-latex pipeline: if any prior turn already had BREAKTHROUGH (per
     # fixed regex), short-circuit further follow-ups and send the

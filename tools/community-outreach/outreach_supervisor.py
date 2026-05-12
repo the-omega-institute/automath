@@ -20,10 +20,11 @@ Responsibilities:
          currently a stub until the Project URL is wired in)
   5. Tab health alert: macOS notify when outreach_oracle_server reports
      `queue_waiting_for_browser_agent` longer than 5 minutes.
-  6. Auto-commit: detect changes in OUTREACH_LOG.md / RESEARCH_BOARD.md only
-     (drafts/ files are never auto-committed — they need user review).
-  7. PI agent review: periodic claude consultation via outreach_pi_agent;
-     accepts adjust_cooldown autonomous actions.
+  6. Git uploads are opt-in only: --auto-commit detects changes in
+     OUTREACH_LOG.md / RESEARCH_BOARD.md only. Drafts and intermediate
+     artifacts are never auto-committed.
+  7. PI agent review: periodic Claude supervision via outreach_pi_agent.
+     Claude is otherwise reserved for explicit writeback.
 
 All external sends remain user-gated. Drafts go to drafts/, the operator
 reviews and ships manually. The supervisor never posts to GitHub / Apple
@@ -38,6 +39,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import signal
 import subprocess
 import sys
@@ -63,17 +65,32 @@ ARXIV_WATCH = SCRIPT_DIR / "arxiv_watch.py"
 LIT_STALENESS = SCRIPT_DIR / "lit_staleness.py"
 INBOX_WATCHER = SCRIPT_DIR / "outreach_inbox_watcher.py"
 BOARD_REFILL = SCRIPT_DIR / "outreach_board_refill.py"
+CONTEXT_REFRESH = SCRIPT_DIR / "outreach_context_refresh.py"
+X_OPENPROBLEM_WATCH = SCRIPT_DIR / "x_openproblem_watch.py"
+PROFILE_JUDGE = SCRIPT_DIR / "outreach_profile_judge.py"
+SCIENCE_GATE = SCRIPT_DIR / "outreach_science_gate.py"
+IMPACT_GATE = SCRIPT_DIR / "outreach_impact_gate.py"
+FRESHNESS_JUDGE = SCRIPT_DIR / "outreach_freshness_judge.py"
+ORACLE_RECONCILE = SCRIPT_DIR / "outreach_oracle_reconcile.py"
+REVIEW_QUEUE = SCRIPT_DIR / "outreach_review_queue.py"
 
-DEFAULT_PARALLEL = 1
+DEFAULT_PARALLEL = 2
 DEFAULT_POLL_INTERVAL = 300
 DEFAULT_PI_REVIEW_HOURS = 6
 DEFAULT_INBOX_WATCH_HOURS = 1
 DEFAULT_ARXIV_WATCH_HOURS = 12
 DEFAULT_LIT_STALENESS_HOURS = 24
 DEFAULT_BOARD_REFILL_HOURS = 24
+DEFAULT_CONTEXT_REFRESH_HOURS = 1
+DEFAULT_X_OPENPROBLEM_WATCH_HOURS = 24
+DEFAULT_PROFILE_JUDGE_HOURS = 24
+DEFAULT_SCIENCE_GATE_HOURS = 1
+DEFAULT_FRESHNESS_JUDGE_HOURS = 168
 DEFAULT_LOCK_STALE_HOURS = 1
 DEFAULT_INNER_RESTART_BACKOFF_S = 30
 TAB_STUCK_THRESHOLD_S = 300
+PREFLIGHT_REPAIR_COOLDOWN_S = 600
+FRONTIER_HARNESS_COOLDOWN_S = 600
 TARGET_BRANCH = "openproblem-target"
 
 AUTO_COMMIT_PATHS = [
@@ -188,6 +205,41 @@ def queue_stuck_too_long(threshold_seconds: int) -> bool:
     return any((t.get("age_seconds") or 0) > threshold_seconds for t in queued)
 
 
+def oracle_idle() -> bool:
+    s = server_status()
+    if not s:
+        return False
+    return int(s.get("queue_length") or 0) == 0 and int(s.get("agents_busy") or 0) == 0
+
+
+def oracle_has_capacity() -> bool:
+    s = server_status()
+    if not s:
+        return False
+    busy = int(s.get("agents_busy") or 0)
+    queued = int(s.get("queue_length") or 0)
+    max_agents = int(s.get("max_agents") or 1)
+    return queued == 0 and busy < max_agents
+
+
+def _process_running(pattern: str) -> bool:
+    try:
+        proc = subprocess.run(
+            ["ps", "-axo", "command"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+    except Exception:
+        return False
+    return any(pattern in line for line in (proc.stdout or "").splitlines())
+
+
+def _script_running(script_name: str) -> bool:
+    return _process_running(f"tools/community-outreach/{script_name}") or _process_running(f"/{script_name}")
+
+
 # ---------------------------------------------------------------------------
 # stale cleanup
 # ---------------------------------------------------------------------------
@@ -222,6 +274,25 @@ def stale_research_cleanup() -> int:
     except Exception as exc:
         supervisor_log(f"stale_research_cleanup error: {exc}")
         return 0
+
+
+def stale_task_cleanup() -> tuple[int, int]:
+    """Sweep stale task claims and recover orphan task JSON states."""
+    try:
+        import outreach_task_runner as task_runner  # noqa: PLC0415
+    except ImportError:
+        return 0, 0
+    claims = 0
+    states = 0
+    try:
+        claims = task_runner.cleanup_stale_claims()
+    except Exception as exc:
+        supervisor_log(f"stale_task_claim_cleanup error: {exc}")
+    try:
+        states = len(task_runner.cleanup_stale_in_progress_tasks())
+    except Exception as exc:
+        supervisor_log(f"stale_task_state_cleanup error: {exc}")
+    return claims, states
 
 
 # ---------------------------------------------------------------------------
@@ -265,7 +336,7 @@ def spawn_research_loop(parallel: int) -> subprocess.Popen:
         RESEARCH_LOOP_SCRIPT,
         log_name="inner_research.log",
         label="research_loop",
-        extra_args=["--parallel", str(parallel)],
+        extra_args=["--parallel", str(parallel), "--oracle-refill-reserve", "1"],
     )
 
 
@@ -310,13 +381,26 @@ def stop_inner(inner: subprocess.Popen, grace_seconds: int = 30) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _spawn_short_task(script: Path, label: str, extra_args: list[str] | None = None) -> None:
+def _spawn_short_task(
+    script: Path,
+    label: str,
+    extra_args: list[str] | None = None,
+    *,
+    timeout_s: int | None = None,
+) -> None:
     if not script.exists():
         supervisor_log(f"{label}: {script.name} missing, skipping")
         return
     SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_path = SUPERVISOR_LOG_DIR / f"{label}_{_now_tag_safe()}.log"
     cmd = ["python3", str(script), *(extra_args or [])]
+    if timeout_s is not None:
+        runner = (
+            "import subprocess,sys; "
+            f"cmd={cmd!r}; "
+            f"sys.exit(subprocess.run(cmd, timeout={int(timeout_s)}).returncode)"
+        )
+        cmd = ["python3", "-c", runner]
     with open(log_path, "ab") as logf:
         subprocess.Popen(
             cmd,
@@ -329,7 +413,7 @@ def _spawn_short_task(script: Path, label: str, extra_args: list[str] | None = N
 
 
 def trigger_arxiv_watch() -> None:
-    _spawn_short_task(ARXIV_WATCH, "arxiv_watch", ["--since", "7d"])
+    _spawn_short_task(ARXIV_WATCH, "arxiv_watch", ["--since", "7d"], timeout_s=420)
 
 
 def trigger_inbox_watcher() -> None:
@@ -337,11 +421,435 @@ def trigger_inbox_watcher() -> None:
 
 
 def trigger_lit_staleness() -> None:
-    _spawn_short_task(LIT_STALENESS, "lit_staleness")
+    _spawn_short_task(LIT_STALENESS, "lit_staleness", timeout_s=360)
 
 
 def trigger_board_refill() -> None:
-    _spawn_short_task(BOARD_REFILL, "board_refill")
+    if _script_running("outreach_board_refill.py"):
+        supervisor_log("board_refill: already running, skip duplicate trigger")
+        return
+    _spawn_short_task(BOARD_REFILL, "board_refill", ["--candidate-inbox", "--timeout-s", "3600"], timeout_s=3720)
+
+
+def trigger_context_refresh() -> None:
+    _spawn_short_task(CONTEXT_REFRESH, "context_refresh", ["--write"], timeout_s=90)
+
+
+def trigger_x_openproblem_watch() -> None:
+    _spawn_short_task(
+        X_OPENPROBLEM_WATCH,
+        "x_openproblem_watch",
+        ["--write", "--budget-usd", "1.0"],
+    )
+
+
+def trigger_profile_judge() -> None:
+    if _script_running("outreach_profile_judge.py"):
+        supervisor_log("profile_judge: already running, skip duplicate trigger")
+        return
+    _spawn_short_task(
+        PROFILE_JUDGE,
+        "profile_judge",
+        ["--generate-board-batch-with-codex", "--top", "4", "--min-score", "12"],
+    )
+    _spawn_short_task(
+        PROFILE_JUDGE,
+        "profile_judge_inbox",
+        ["--graduate-inbox-with-codex", "--top", "2"],
+    )
+
+
+def trigger_science_gate() -> None:
+    if _script_running("outreach_science_gate.py"):
+        supervisor_log("science_gate: already running, skip duplicate trigger")
+        return
+    _spawn_short_task(
+        SCIENCE_GATE,
+        "science_gate",
+        ["--write-ledger"],
+        timeout_s=120,
+    )
+
+
+def trigger_impact_gate() -> None:
+    if _script_running("outreach_impact_gate.py"):
+        supervisor_log("impact_gate: already running, skip duplicate trigger")
+        return
+    _spawn_short_task(
+        IMPACT_GATE,
+        "impact_gate",
+        ["--write-ledger"],
+        timeout_s=120,
+    )
+
+
+def trigger_freshness_judge(*, retry_uncertain: bool = False, top: int = 2) -> None:
+    if _script_running("outreach_freshness_judge.py"):
+        supervisor_log("freshness_judge: already running, skip duplicate trigger")
+        return
+    if _script_running("outreach_board_refill.py"):
+        supervisor_log("freshness_judge: skipped because board_refill is active")
+        return
+    if not oracle_idle():
+        supervisor_log("freshness_judge: skipped because Oracle is busy or queued")
+        return
+    args = ["auto", "--top", str(top), "--timeout-s", "900"]
+    if retry_uncertain:
+        args.append("--retry-uncertain")
+    _spawn_short_task(
+        FRESHNESS_JUDGE,
+        "freshness_judge",
+        args,
+        timeout_s=960,
+    )
+
+
+def trigger_oracle_reconcile() -> None:
+    _spawn_short_task(
+        ORACLE_RECONCILE,
+        "oracle_reconcile",
+        ["--freshness"],
+        timeout_s=120,
+    )
+
+
+def run_oracle_reconcile_sync(*, include_deep: bool = False) -> dict:
+    if not ORACLE_RECONCILE.exists():
+        return {}
+    combined: dict = {"freshness": {}, "deep": {}}
+    try:
+        proc = subprocess.run(
+            ["python3", str(ORACLE_RECONCILE), "--freshness", "--json"],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+    except Exception as exc:
+        supervisor_log(f"oracle_reconcile: error {exc}")
+        return {}
+    if proc.returncode != 0:
+        supervisor_log(f"oracle_reconcile: rc={proc.returncode} {(proc.stderr or proc.stdout)[:300]}")
+    else:
+        try:
+            payload = json.loads(proc.stdout or "{}")
+        except json.JSONDecodeError:
+            supervisor_log(f"oracle_reconcile: invalid json {(proc.stdout or '')[:300]}")
+            payload = {}
+        written = payload.get("written") or []
+        if written:
+            supervisor_log(
+                "oracle_reconcile: wrote "
+                + ", ".join(f"{r.get('todo_id')}={r.get('verdict')}" for r in written)
+            )
+        combined["freshness"] = payload
+
+    if not include_deep:
+        return combined
+
+    try:
+        proc = subprocess.run(
+            ["python3", str(ORACLE_RECONCILE), "--deep", "--json"],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+    except Exception as exc:
+        supervisor_log(f"oracle_reconcile_deep: error {exc}")
+        return combined
+    try:
+        payload = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        supervisor_log(f"oracle_reconcile_deep: invalid json {(proc.stdout or '')[:300]}")
+        return combined
+    if proc.returncode != 0:
+        supervisor_log(f"oracle_reconcile_deep: rc={proc.returncode} {(proc.stderr or proc.stdout)[:300]}")
+        return combined
+    written = payload.get("written") or []
+    if written:
+        supervisor_log(
+            "oracle_reconcile_deep: reconciled "
+            + ", ".join(
+                f"{r.get('todo_id')}:{Path(str(r.get('claim_packet') or '')).name}"
+                for r in written
+            )
+        )
+    combined["deep"] = payload
+    return combined
+
+
+def trigger_requeue_stale_ready() -> None:
+    _spawn_short_task(
+        REVIEW_QUEUE,
+        "review_queue_waiting",
+        ["--mark-waiting-external-reply"],
+        timeout_s=120,
+    )
+    _spawn_short_task(
+        REVIEW_QUEUE,
+        "review_queue_requeue",
+        ["--requeue-stale-ready"],
+        timeout_s=120,
+    )
+
+
+def run_context_refresh_sync() -> bool:
+    """Run a bounded targeted context refresh.
+
+    Apple Mail can hang inside osascript. Context refresh is useful, but it is
+    not allowed to block supervisor startup or research-loop spawning. Keep the
+    synchronous version short; the periodic async trigger can retry later.
+    """
+    if not CONTEXT_REFRESH.exists():
+        supervisor_log("context_refresh: script missing, skipping")
+        return False
+    SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = SUPERVISOR_LOG_DIR / f"context_refresh_{_now_tag_safe()}.log"
+    try:
+        with open(log_path, "ab") as logf:
+            proc = subprocess.run(
+                ["python3", str(CONTEXT_REFRESH), "--write"],
+                cwd=str(REPO_ROOT),
+                stdout=logf,
+                stderr=subprocess.STDOUT,
+                timeout=30,
+                check=False,
+            )
+    except subprocess.TimeoutExpired:
+        supervisor_log(f"context_refresh: sync timeout after 30s ({log_path.name}); continuing")
+        return False
+    supervisor_log(f"context_refresh: sync rc={proc.returncode} ({log_path.name})")
+    return proc.returncode == 0
+
+
+def _preflight_rows() -> list[dict]:
+    try:
+        from outreach_preflight import judge_board  # noqa: PLC0415
+    except Exception as exc:
+        supervisor_log(f"preflight_repair: import failed: {exc}")
+        return []
+    try:
+        rows = judge_board()
+    except Exception as exc:
+        supervisor_log(f"preflight_repair: judge_board failed: {exc}")
+        return []
+    out: list[dict] = []
+    for row in rows:
+        out.append({
+            "todo_id": row.todo_id,
+            "slug": row.slug,
+            "title": row.title,
+            "verdict": row.verdict,
+            "missing": list(row.missing or []),
+            "score": int(row.score or 0),
+        })
+    return out
+
+
+def _preflight_repair_actions(rows: list[dict]) -> dict:
+    blocked = [r for r in rows if r.get("verdict") not in {"RUN", "DROP", "HANDOFF"}]
+    actionable = [r for r in rows if r.get("verdict") == "RUN"]
+    missing_blob = "\n".join(
+        "\n".join(str(m) for m in r.get("missing") or []) for r in blocked
+    ).lower()
+    actions: list[str] = []
+    if not rows:
+        actions.append("board_refill")
+    if not actionable:
+        if "valid target-specific profile" in missing_blob or "science_contract" in missing_blob:
+            actions.append("profile_judge")
+        if "omega fit detail" in missing_blob or "numbered attack plan" in missing_blob or "precise statement" in missing_blob:
+            actions.append("board_refill")
+        if not actions:
+            actions.append("board_refill")
+    if blocked:
+        actions.append("science_gate")
+    return {
+        "rows": len(rows),
+        "actionable": len(actionable),
+        "blocked": len(blocked),
+        "actions": sorted(set(actions)),
+        "top_blocked": [
+            {
+                "todo_id": r.get("todo_id"),
+                "verdict": r.get("verdict"),
+                "score": r.get("score"),
+                "missing": (r.get("missing") or [])[:3],
+            }
+            for r in sorted(blocked, key=lambda x: (-int(x.get("score") or 0), str(x.get("todo_id"))))[:8]
+        ],
+    }
+
+
+def run_preflight_repair_controller(state: dict) -> None:
+    rows = _preflight_rows()
+    plan = _preflight_repair_actions(rows)
+    state["last_preflight_repair"] = {
+        "checked_at": _now_iso(),
+        **plan,
+    }
+    if plan["actionable"]:
+        supervisor_log(f"preflight_repair: {plan['actionable']} actionable target(s), no repair trigger")
+        return
+    actions = plan.get("actions") or []
+    if not actions:
+        supervisor_log(
+            f"preflight_repair: no actionable target and no inferred repair action; "
+            f"blocked={plan['blocked']}"
+        )
+        return
+    last = float(state.get("last_preflight_repair_trigger_ts") or 0.0)
+    if _now() - last < PREFLIGHT_REPAIR_COOLDOWN_S:
+        supervisor_log(
+            "preflight_repair: cooldown active; "
+            f"actions={','.join(actions)} blocked={plan['blocked']}"
+        )
+        return
+    supervisor_log(
+        "preflight_repair: no actionable target; "
+        f"blocked={plan['blocked']} actions={','.join(actions)} "
+        f"top={json.dumps(plan['top_blocked'][:3], ensure_ascii=False)}"
+    )
+    if "science_gate" in actions:
+        trigger_science_gate()
+    if "profile_judge" in actions:
+        trigger_profile_judge()
+    if "board_refill" in actions:
+        trigger_board_refill()
+    state["last_preflight_repair_trigger_ts"] = _now()
+
+
+def _frontier_pool_snapshot() -> dict:
+    rows = _preflight_rows()
+    actionable = [r for r in rows if r.get("verdict") == "RUN"]
+    profile_needed = [
+        r for r in rows
+        if r.get("verdict") in {"NEEDS_PROFILE", "NEEDS_BOARD_UPDATE"}
+        and any(
+            "profile" in str(m).lower() or "science_contract" in str(m).lower()
+            for m in (r.get("missing") or [])
+        )
+    ]
+    inbox_ready = 0
+    inbox_invalid = 0
+    try:
+        from outreach_candidate_inbox import list_candidates  # noqa: PLC0415
+        for row in list_candidates():
+            if row.get("status") == "needs_profile_judge":
+                inbox_ready += 1
+            elif row.get("status") == "invalid":
+                inbox_invalid += 1
+    except Exception as exc:
+        supervisor_log(f"frontier_harness: candidate inbox read failed: {exc}")
+    return {
+        "rows": len(rows),
+        "actionable": actionable,
+        "profile_needed": profile_needed,
+        "inbox_ready": inbox_ready,
+        "inbox_invalid": inbox_invalid,
+    }
+
+
+def _top_names(rows: list[dict], n: int = 4) -> str:
+    names = [str(r.get("title") or r.get("slug") or r.get("todo_id")) for r in rows[:n]]
+    return ", ".join(names) if names else "-"
+
+
+def run_frontier_harness_controller(state: dict, *, low_water: int = 2) -> None:
+    """BEDC-style low-water controller for autonomous math production.
+
+    Priority order:
+      1. If RUN targets exist, keep the research loop as the main worker.
+      2. If candidate inbox has rows, graduate them to board/profile.
+      3. If board targets need profile/science contracts, run profile judge.
+      4. If the pool is below low-water, ask ChatGPT/Oracle for new targets.
+
+    Freshness/currentness remains a risk/audit signal. It should not occupy
+    the Oracle lane while the harness has no mathematical work in flight.
+    """
+    snap = _frontier_pool_snapshot()
+    actionable = snap["actionable"]
+    state["last_frontier_harness"] = {
+        "checked_at": _now_iso(),
+        "actionable_count": len(actionable),
+        "actionable_names": [r.get("title") for r in actionable[:8]],
+        "profile_needed_count": len(snap["profile_needed"]),
+        "inbox_ready": snap["inbox_ready"],
+        "inbox_invalid": snap["inbox_invalid"],
+        "oracle_idle": oracle_idle(),
+    }
+    if len(actionable) >= low_water:
+        supervisor_log(
+            "frontier_harness: research pool ready; "
+            f"{len(actionable)} RUN target(s): {_top_names(actionable)}"
+        )
+        if oracle_has_capacity() and not _script_running("outreach_board_refill.py"):
+            last = float(state.get("last_frontier_refill_ts") or 0.0)
+            if _now() - last >= 1800:
+                supervisor_log(
+                    "frontier_harness: spare Oracle lane available; running background board refill"
+                )
+                trigger_board_refill()
+                state["last_frontier_refill_ts"] = _now()
+        return
+    if actionable:
+        supervisor_log(
+            "frontier_harness: research loop has RUN target(s), but pool is below low-water; "
+            f"{len(actionable)}<{low_water}: {_top_names(actionable)}"
+        )
+        if snap["profile_needed"]:
+            last = float(state.get("last_frontier_harness_trigger_ts") or 0.0)
+            if _now() - last >= FRONTIER_HARNESS_COOLDOWN_S:
+                supervisor_log(
+                    "frontier_harness: also repairing profile/science contracts for "
+                    + _top_names(snap["profile_needed"])
+                )
+                trigger_profile_judge()
+                state["last_frontier_harness_trigger_ts"] = _now()
+        if oracle_has_capacity() and not _script_running("outreach_board_refill.py"):
+            supervisor_log("frontier_harness: spare Oracle capacity available; topping up candidate inbox")
+            trigger_board_refill()
+            state["last_frontier_harness_trigger_ts"] = _now()
+        return
+
+    last = float(state.get("last_frontier_harness_trigger_ts") or 0.0)
+    if _now() - last < FRONTIER_HARNESS_COOLDOWN_S:
+        supervisor_log(
+            "frontier_harness: pool empty but cooldown active; "
+            f"inbox_ready={snap['inbox_ready']} profile_needed={len(snap['profile_needed'])}"
+        )
+        return
+
+    if snap["inbox_ready"] > 0:
+        supervisor_log(
+            f"frontier_harness: graduating {snap['inbox_ready']} candidate inbox row(s) via Codex"
+        )
+        trigger_profile_judge()
+        state["last_frontier_harness_trigger_ts"] = _now()
+        return
+
+    if snap["profile_needed"]:
+        supervisor_log(
+            "frontier_harness: repairing board profile/science contracts for "
+            + _top_names(snap["profile_needed"])
+        )
+        trigger_profile_judge()
+        state["last_frontier_harness_trigger_ts"] = _now()
+        return
+
+    if _script_running("outreach_board_refill.py"):
+        supervisor_log("frontier_harness: board_refill already active; waiting for candidates")
+        return
+
+    supervisor_log(
+        f"frontier_harness: RUN pool below low-water ({len(actionable)}<{low_water}); "
+        "asking Oracle/ChatGPT for new high-impact open-problem targets"
+    )
+    trigger_board_refill()
+    state["last_frontier_harness_trigger_ts"] = _now()
 
 
 # ---------------------------------------------------------------------------
@@ -403,6 +911,11 @@ def run_pi_review(supervisor_state: dict) -> dict | None:
             "lit_staleness_hours",
             "inbox_watcher_hours",
             "board_refill_hours",
+            "context_refresh_hours",
+            "x_openproblem_watch_hours",
+            "profile_judge_hours",
+            "science_gate_hours",
+            "freshness_judge_hours",
         ):
             if key in args:
                 try:
@@ -481,10 +994,26 @@ def main() -> int:
     parser.add_argument("--lit-staleness-hours", type=float, default=DEFAULT_LIT_STALENESS_HOURS)
     parser.add_argument("--board-refill-hours", type=float, default=DEFAULT_BOARD_REFILL_HOURS,
                         help="cooldown for outreach_board_refill (currently a stub)")
+    parser.add_argument("--context-refresh-hours", type=float, default=DEFAULT_CONTEXT_REFRESH_HOURS,
+                        help="cooldown for targeted issue/mail context refresh")
+    parser.add_argument("--x-openproblem-watch-hours", type=float, default=DEFAULT_X_OPENPROBLEM_WATCH_HOURS,
+                        help="cooldown for budget-limited X open-problem signal collection")
+    parser.add_argument("--profile-judge-hours", type=float, default=DEFAULT_PROFILE_JUDGE_HOURS,
+                        help="cooldown for candidate inbox profile/deep judge graduation")
+    parser.add_argument("--science-gate-hours", type=float, default=DEFAULT_SCIENCE_GATE_HOURS,
+                        help="cooldown for writing science_gate.json ledgers")
+    parser.add_argument("--freshness-judge-hours", type=float, default=DEFAULT_FRESHNESS_JUDGE_HOURS,
+                        help="cooldown for targeted freshness/currentness judge")
+    parser.add_argument("--no-freshness-judge", action="store_true",
+                        help="disable opportunistic freshness/currentness judge; freshness remains a risk flag")
+    parser.add_argument("--frontier-low-water", type=int, default=2,
+                        help="minimum RUN research targets before Oracle board refill is triggered")
     parser.add_argument("--lock-stale-hours", type=float, default=DEFAULT_LOCK_STALE_HOURS)
     parser.add_argument("--inner-restart-backoff", type=int, default=DEFAULT_INNER_RESTART_BACKOFF_S)
-    parser.add_argument("--no-auto-commit", action="store_true")
-    parser.add_argument("--no-pi-review", action="store_true")
+    parser.add_argument("--auto-commit", action="store_true",
+                        help="opt in to committing/pushing OUTREACH_LOG.md and RESEARCH_BOARD.md snapshots")
+    parser.add_argument("--no-pi-review", action="store_true",
+                        help="skip periodic Claude PI supervision")
     parser.add_argument("--no-inner", action="store_true",
                         help="do not spawn either inner daemon (research_loop + task_runner); only run short-task triggers")
     parser.add_argument("--no-research-loop", action="store_true",
@@ -509,7 +1038,7 @@ def main() -> int:
     supervisor_log(
         f"supervisor starting (parallel={args.parallel} poll={args.poll_interval}s "
         f"pi_review={'off' if args.no_pi_review else f'{args.pi_review_hours}h'} "
-        f"auto_commit={'off' if args.no_auto_commit else 'on'} "
+        f"auto_commit={'on' if args.auto_commit else 'off'} "
         f"inner={'off' if args.no_inner else 'on'} "
         f"server_spawn={'off' if args.no_server_spawn else 'on'})"
     )
@@ -523,6 +1052,11 @@ def main() -> int:
         "lit_staleness_hours": args.lit_staleness_hours,
         "inbox_watcher_hours": args.inbox_watch_hours,
         "board_refill_hours": args.board_refill_hours,
+        "context_refresh_hours": args.context_refresh_hours,
+        "x_openproblem_watch_hours": args.x_openproblem_watch_hours,
+        "profile_judge_hours": args.profile_judge_hours,
+        "science_gate_hours": args.science_gate_hours,
+        "freshness_judge_hours": args.freshness_judge_hours,
     }
 
     last_pi_ts = 0.0
@@ -530,6 +1064,11 @@ def main() -> int:
     last_arxiv_ts = 0.0
     last_lit_ts = 0.0
     last_refill_ts = 0.0
+    last_context_refresh_ts = 0.0
+    last_x_watch_ts = 0.0
+    last_profile_judge_ts = 0.0
+    last_science_gate_ts = 0.0
+    last_freshness_judge_ts = 0.0
     last_tab_alert_ts = 0.0
     last_research_exit_ts = 0.0
     last_task_exit_ts = 0.0
@@ -542,12 +1081,22 @@ def main() -> int:
             if not args.no_server_spawn:
                 ensure_server()
 
+            run_oracle_reconcile_sync(include_deep=False)
+
             cleanup_stale_lock(args.lock_stale_hours)
             cleaned = stale_research_cleanup()
             if cleaned:
                 supervisor_log(f"cleaned {cleaned} stale research claims")
+            task_claims, task_states = stale_task_cleanup()
+            if task_claims or task_states:
+                supervisor_log(
+                    f"cleaned stale task state: claims={task_claims} "
+                    f"in_progress_rows={task_states}"
+                )
 
-            if not args.no_inner:
+            if args.once and not args.no_inner:
+                supervisor_log("once mode: skipping persistent inner daemons; short tasks only")
+            if not args.no_inner and not args.once:
                 # research_loop slot
                 if not args.no_research_loop:
                     proc = supervisor_state.get("inner_research")
@@ -594,6 +1143,12 @@ def main() -> int:
                         else:
                             supervisor_state["inner_writeback"] = spawn_writeback_loop()
 
+            since_context_h = (_now() - last_context_refresh_ts) / 3600.0
+            if args.once or since_context_h >= supervisor_state["context_refresh_hours"]:
+                run_context_refresh_sync()
+                trigger_requeue_stale_ready()
+                last_context_refresh_ts = _now()
+
             since_inbox_h = (_now() - last_inbox_ts) / 3600.0
             if args.once or since_inbox_h >= supervisor_state["inbox_watcher_hours"]:
                 trigger_inbox_watcher()
@@ -604,6 +1159,36 @@ def main() -> int:
                 trigger_arxiv_watch()
                 last_arxiv_ts = _now()
 
+            since_x_h = (_now() - last_x_watch_ts) / 3600.0
+            if args.once or since_x_h >= supervisor_state["x_openproblem_watch_hours"]:
+                trigger_x_openproblem_watch()
+                last_x_watch_ts = _now()
+
+            since_profile_h = (_now() - last_profile_judge_ts) / 3600.0
+            if args.once or since_profile_h >= supervisor_state["profile_judge_hours"]:
+                trigger_profile_judge()
+                last_profile_judge_ts = _now()
+
+            since_science_h = (_now() - last_science_gate_ts) / 3600.0
+            if args.once or since_science_h >= supervisor_state["science_gate_hours"]:
+                trigger_science_gate()
+                trigger_impact_gate()
+                last_science_gate_ts = _now()
+
+            since_freshness_h = (_now() - last_freshness_judge_ts) / 3600.0
+            if (
+                not args.no_freshness_judge
+                and (args.once or since_freshness_h >= supervisor_state["freshness_judge_hours"])
+            ):
+                trigger_freshness_judge()
+                last_freshness_judge_ts = _now()
+
+            run_frontier_harness_controller(
+                supervisor_state,
+                low_water=max(0, int(args.frontier_low_water)),
+            )
+            run_preflight_repair_controller(supervisor_state)
+
             since_lit_h = (_now() - last_lit_ts) / 3600.0
             if args.once or since_lit_h >= supervisor_state["lit_staleness_hours"]:
                 trigger_lit_staleness()
@@ -611,8 +1196,11 @@ def main() -> int:
 
             since_refill_h = (_now() - last_refill_ts) / 3600.0
             if args.once or since_refill_h >= supervisor_state["board_refill_hours"]:
-                trigger_board_refill()
-                last_refill_ts = _now()
+                if oracle_has_capacity():
+                    trigger_board_refill()
+                    last_refill_ts = _now()
+                else:
+                    supervisor_log("board_refill: deferred because Oracle has no spare browser capacity")
 
             if queue_stuck_too_long(TAB_STUCK_THRESHOLD_S):
                 if _now() - last_tab_alert_ts > 600:
@@ -625,7 +1213,7 @@ def main() -> int:
                     )
                     last_tab_alert_ts = _now()
 
-            if not args.no_auto_commit:
+            if args.auto_commit:
                 try:
                     commit_and_push_if_changed()
                 except Exception as exc:
@@ -645,6 +1233,12 @@ def main() -> int:
                                 last_lit_ts = _now()
                             elif action == "run_inbox_watcher":
                                 last_inbox_ts = _now()
+                            elif action == "run_profile_judge":
+                                last_profile_judge_ts = _now()
+                            elif action == "run_science_gate":
+                                last_science_gate_ts = _now()
+                            elif action == "run_freshness_judge":
+                                last_freshness_judge_ts = _now()
 
             if args.once:
                 break

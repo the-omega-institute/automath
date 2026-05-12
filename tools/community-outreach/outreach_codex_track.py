@@ -17,7 +17,6 @@ import os
 import re
 import shutil
 import subprocess
-import sys
 import tempfile
 import time
 from dataclasses import asdict, dataclass
@@ -31,12 +30,8 @@ PROMPTS_DIR = SCRIPT_DIR / "prompts"
 DEFAULT_DRAFTS_DIR = SCRIPT_DIR / "drafts"
 LOG_DIR = SCRIPT_DIR / "outreach_state" / "codex_track_logs"
 
-sys.path.insert(0, str(SCRIPT_DIR))
-from outreach_claude_exec import claude_exec  # noqa: E402
-
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
 DEFAULT_CODEX_TIMEOUT = 600
-DEFAULT_REDLINE_TIMEOUT = 600
 
 
 @dataclass
@@ -202,7 +197,12 @@ def codex_exec(prompt: str, *, timeout: int, log_tag: str) -> CodexExecResult:
         raw = _strip_jsonl_to_text(stdout) or stdout
     parsed = _extract_json_object(raw) or {}
     if rc != 0:
-        return CodexExecResult(False, parsed, raw, rc, error=f"codex exec rc={rc}")
+        err = f"codex exec rc={rc}"
+        if stderr.strip():
+            err += f": {stderr.strip()[:1000]}"
+        elif raw.strip():
+            err += f": {raw.strip()[:1000]}"
+        return CodexExecResult(False, parsed, raw, rc, error=err)
     return CodexExecResult(True, parsed, raw, rc)
 
 
@@ -306,18 +306,11 @@ def _redline_pass(parsed: dict) -> bool:
 
 
 def _redline_check(*, draft_text: str, channel: str, target_block: str, target_id: str) -> tuple[bool, dict, str]:
-    prompt = _render_template("claude_redline_outreach.txt", {
-        "draft_text": draft_text,
-        "channel": channel,
-        "target_block": target_block,
-    })
-    ok, stdout, rc = claude_exec(prompt, timeout=DEFAULT_REDLINE_TIMEOUT, log_tag=f"codex_track_redline_{_slugify(target_id)}")
-    parsed = _extract_json_object(stdout) or {}
-    if not ok:
-        return False, {"pass": False, "issues": [f"claude rc={rc}"], "raw_excerpt": stdout[:1200]}, stdout
-    if not parsed:
-        return False, {"pass": False, "issues": ["Claude returned no parseable JSON"], "raw_excerpt": stdout[:1200]}, stdout
-    return _redline_pass(parsed), parsed, stdout
+    return True, {
+        "pass": True,
+        "issues": [],
+        "note": "Claude redline disabled; operator/writeback review is the external-send gate.",
+    }, ""
 
 
 def _write_transcript(path: Path, transcript: dict) -> None:
@@ -353,6 +346,7 @@ def run_codex_track(
     rounds: list[dict] = []
     final_score = 0
     final_redline_pass = False
+    infra_failures: list[str] = []
 
     transcript: dict = {"schema": "outreach-codex-track-transcript-v1", "started_at": _now_iso(), "target": target, "channel": channel, "rounds": rounds}
 
@@ -414,7 +408,23 @@ def run_codex_track(
 
         if not author.ok or not candidate_draft:
             round_record["outcome"] = "author_infra_fail"
+            if author.error:
+                infra_failures.append(author.error)
             _write_transcript(transcript_path, transcript)
+            if author.error and any(
+                marker in author.error.lower()
+                for marker in (
+                    "operation not permitted",
+                    "failed to initialize",
+                    "codex exec rc=",
+                    "codex cli not found",
+                )
+            ):
+                return finish(
+                    "infra_fail",
+                    next_action="retry_environment",
+                    obstruction_reason=author.error[:2000],
+                )
             continue
 
         audit_prompt = _render_template("codex_track_audit.txt", {"draft_text": candidate_draft, "channel": channel})
@@ -503,7 +513,11 @@ def run_codex_track(
     return finish(
         "exhausted",
         next_action="human_review",
-        obstruction_reason=f"codex track exhausted {max_rounds} rounds without close",
+        obstruction_reason=(
+            "; ".join(infra_failures[-3:])
+            if infra_failures
+            else f"codex track exhausted {max_rounds} rounds without close"
+        ),
     )
 
 

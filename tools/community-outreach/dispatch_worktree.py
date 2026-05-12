@@ -54,6 +54,8 @@ from outreach_board_parser import (  # noqa: E402
     TodoSpec,
     parse_board,
 )
+from outreach_profile import load_profile  # noqa: E402
+from outreach_science_gate import science_contract_block  # noqa: E402
 
 REPO_ROOT_DEFAULT = Path(__file__).resolve().parents[2]
 STATE_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_state"
@@ -140,6 +142,10 @@ Untouched 证据: {untouched}
 渠道: {submission_venue}
 格式: {submission_format}
 
+## 科学完成契约 (必须围绕这个写 research.md)
+
+{science_contract_block}
+
 ## 你的工作 (Stage A)
 
 1. 读 RESEARCH_BOARD.md 中本 TODO 完整定义
@@ -151,6 +157,7 @@ Untouched 证据: {untouched}
    - 所需 lean4/Omega 库引理清单 (给文件路径与 lemma 名)
    - 第一步具体动作 plan (写什么脚本 / 验什么参数空间 / 证什么 lemma)
    - 风险与失败时的 fallback contribution (即便不全证, 哪些数据/部分结果可发表)
+   - “Science Contract Status”: 明确当前离 terminal artifact 还差什么证据；下一步必须降低哪个 progress_metric
 4. 完成 research.md 后**停下**, 等用户审; 不要进 Stage B (草稿) 或 Stage C (双审)
 
 ## 硬约束 (违反即失败)
@@ -174,6 +181,7 @@ def build_agent_prompt(todo: TodoSpec, *, research_md_relpath: str) -> str:
     deliverables_block = "\n".join(f"- {d}" for d in todo.expanded_deliverables()) or "- (看板未列具体路径)"
     worktree_inputs_block = "\n".join(f"- {w}" for w in todo.worktree_inputs) or "- (无显式输入清单, 按需查 lean4/)"
     sub = todo.submission_target()
+    profile, _ = load_profile(todo.slug())
     return _AGENT_PROMPT.format(
         todo_id=todo.todo_id,
         title=todo.title,
@@ -193,6 +201,7 @@ def build_agent_prompt(todo: TodoSpec, *, research_md_relpath: str) -> str:
         submission_type=sub["type"],
         submission_venue=sub["venue"],
         submission_format=sub["format"],
+        science_contract_block=science_contract_block(profile),
         research_md_relpath=research_md_relpath,
     )
 
@@ -821,12 +830,15 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
                      state_dir: Path, oracle_timeout: int, max_turns: int,
                      write_latex: bool, codex_driver: bool = False,
                      ship_paper: bool = False,
-                     arxiv_hits: list[dict] | None = None) -> dict | None:
-    """Stage B-oracle-deep: multi-turn deep-reasoning loop (oracle as primary worker).
+                     arxiv_hits: list[dict] | None = None,
+                     resume_conversation_id: str = "") -> dict | None:
+    """Stage B-oracle-deep: one bounded deep-reasoning batch.
 
     Builds the initial framing prompt from the TODO's research.md (if present)
-    plus the board metadata, then drives DEFAULT_DEEPENING_PROMPTS for up to
-    `max_turns`. Each turn cumulative — ChatGPT keeps full context.
+    plus the board metadata, then drives prompts for up to `max_turns`.
+    This is an engineering watchdog for one batch, not a scientific stop
+    condition. outreach_research_loop re-runs science/impact gates after the
+    batch and schedules another batch if the target still needs evidence.
     """
     try:
         from oracle_consultant import (  # noqa: PLC0415
@@ -847,17 +859,28 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
     research_text = ""
     if research_md.exists():
         research_text = research_md.read_text(encoding="utf-8")
-    initial = _build_deep_initial_prompt(todo, research_text, arxiv_hits=arxiv_hits)
+    resume_conv = resume_conversation_id or _resume_conversation_id(profile.slug, state_dir=state_dir)
+    if resume_conv:
+        initial = _build_deep_resume_prompt(todo, resume_conversation_id=resume_conv)
+    else:
+        initial = _build_deep_initial_prompt(
+            todo,
+            research_text,
+            arxiv_hits=arxiv_hits,
+            resume_conversation_id="",
+        )
     print(f"[oracle-deep] dispatching {todo.todo_id} max_turns={max_turns} "
           f"per-turn-timeout={oracle_timeout}s; this can take up to "
           f"{max_turns} × {oracle_timeout}s = {max_turns * oracle_timeout // 60}min "
-          f"write_latex={write_latex} codex_driver={codex_driver}")
+          f"write_latex={write_latex} codex_driver={codex_driver} "
+          f"resume_conv={resume_conv[:12] if resume_conv else '-'}")
     run = consultant.deep_reasoning(
         todo, initial,
         max_turns=max_turns,
         prompt_generator=codex_driven_prompt_generator if codex_driver else None,
         per_turn_timeout=oracle_timeout,
         terminal_prompt=DEFAULT_WRITE_PAPER_LATEX_PROMPT if write_latex else None,
+        resume_conversation_id=resume_conv,
         slug=profile.slug,
     )
     print(f"[oracle-deep] {todo.todo_id} → verdict={run['final_verdict']} "
@@ -909,6 +932,94 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
                 )
                 print(f"[ship-paper] failed: {exc}", file=sys.stderr)
     return run
+
+
+def _latest_oracle_deep_response(run: dict) -> tuple[str, str]:
+    """Return (text, path) for the latest nonempty oracle deep response."""
+    for turn in reversed(run.get("turns") or []):
+        if not isinstance(turn, dict):
+            continue
+        path = str(turn.get("response") or "").strip()
+        if not path:
+            continue
+        try:
+            p = Path(path)
+            if p.exists() and p.is_file():
+                text = p.read_text(encoding="utf-8", errors="replace").strip()
+                if text:
+                    return text, str(p)
+        except OSError:
+            continue
+    return "", ""
+
+
+def _materialize_oracle_deep_research_md(
+    todo: TodoSpec,
+    profile: SupervisorProfile,
+    run: dict,
+    *,
+    repo_root: Path,
+) -> str:
+    """Persist the latest oracle deep-reasoning content as target research.md.
+
+    The research loop consumes `targets/<slug>/research.md` as the handoff
+    artifact. Without this bridge, `--oracle-deep` may make real mathematical
+    progress in logs/state while the next cycle still sees a missing terminal
+    artifact and repeats a no-op local supervisor pass.
+    """
+    text, response_path = _latest_oracle_deep_response(run)
+    if not text:
+        return ""
+    try:
+        from oracle_consultant import _materialize_file_blocks  # noqa: PLC0415
+        artifacts = _materialize_file_blocks(text)
+    except Exception:
+        artifacts = []
+    target_research_rel = f"tools/community-outreach/targets/{profile.slug}/research.md"
+    if target_research_rel in set(artifacts):
+        return str(repo_root / target_research_rel)
+    target_dir = repo_root / "tools/community-outreach/targets" / profile.slug
+    target_dir.mkdir(parents=True, exist_ok=True)
+    research_md = target_dir / "research.md"
+    completed = run.get("run_completed_at") or datetime.now(timezone.utc).isoformat(timespec="seconds")
+    turns = run.get("turns") or []
+    turn_lines = []
+    for turn in turns:
+        if not isinstance(turn, dict):
+            continue
+        turn_lines.append(
+            "- turn={turn} chars={chars} evaluator={evalv} source={source} response={resp}".format(
+                turn=turn.get("turn", "?"),
+                chars=turn.get("response_chars", 0),
+                evalv=turn.get("evaluator_verdict", "") or "-",
+                source=turn.get("prompt_source", "") or "-",
+                resp=turn.get("response", "") or "-",
+            )
+        )
+    body = "\n".join([
+        f"# Oracle Deep Research Artifact — {todo.todo_id} ({profile.slug})",
+        "",
+        f"Generated: {completed}",
+        f"Final verdict: `{run.get('final_verdict', '')}`",
+        f"Conversation: `{run.get('conversation_id', '')}`",
+        f"ChatGPT URL: {run.get('chatgpt_url', '') or '(not captured)'}",
+        f"Latest response log: `{response_path}`",
+        "",
+        "## Science Contract",
+        "",
+        science_contract_block(load_profile(todo.slug())[0]),
+        "",
+        "## Turn Index",
+        "",
+        "\n".join(turn_lines) or "(no turns recorded)",
+        "",
+        "## Latest Oracle Research Text",
+        "",
+        text,
+        "",
+    ])
+    research_md.write_text(body, encoding="utf-8")
+    return str(research_md)
 
 
 def _persist_ship_paper_result(*, state_dir: Path, slug: str, result: dict) -> None:
@@ -963,15 +1074,57 @@ def _append_outreach_log_transition(*, repo_root: Path, slug: str, result: dict)
     log_path.write_text(text, encoding="utf-8")
 
 
+def _read_research_loop_state(slug: str) -> dict:
+    path = STATE_DIR_DEFAULT / f"{slug}.research_loop.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _resume_conversation_id(slug: str, *, state_dir: Path) -> str:
+    """Return the latest reusable ChatGPT conversation for this target.
+
+    Browser/network failures should resume the same Project chat instead of
+    starting a fresh session and losing the mathematical context. We only resume
+    when the last run is non-terminal; WRITEBACK/BREAKTHROUGH flows are handled
+    by science/impact gates.
+    """
+    path = state_dir / f"{slug}.json"
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ""
+    latest_status = str(state.get("latest_oracle_deep_verdict") or "").upper()
+    if latest_status in {"BREAKTHROUGH"}:
+        return ""
+    conv = str(state.get("latest_oracle_deep_conversation_id") or "").strip()
+    if conv:
+        return conv
+    runs = state.get("oracle_deep_runs") or []
+    if isinstance(runs, list):
+        for run in reversed(runs):
+            if not isinstance(run, dict):
+                continue
+            verdict = str(run.get("final_verdict") or "").upper()
+            if verdict == "BREAKTHROUGH":
+                return ""
+            conv = str(run.get("conversation_id") or "").strip()
+            if conv:
+                return conv
+    return ""
+
+
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
-                               *, arxiv_hits: list[dict] | None = None) -> str:
+                               *, arxiv_hits: list[dict] | None = None,
+                               resume_conversation_id: str = "") -> str:
     sub = todo.submission_target()
+    profile, _ = load_profile(todo.slug())
     parts = [
         "You are the primary mathematical worker on this Omega Project outreach target.",
-        "We will iterate over many turns; your job is to push for genuine progress, not summary.",
-        "Each turn you'll get a follow-up that asks you to dig one level deeper.",
-        "Stop only when you reach a precise BREAKTHROUGH (proved, calculated, constructed)",
-        "or you hit a clearly characterized obstacle you call STUCK with the next-step bypass listed.",
+        "This is not an outreach-copywriting task. The goal is a genuine mathematical contribution.",
+        "You must work against the science contract below: every turn should lower the progress metric or explain why it cannot be lowered.",
+        "Stop only when the contract's verifier is satisfied, or when the close/re-scope condition is clearly met.",
         "",
         f"## Target",
         f"- TODO id: {todo.todo_id}",
@@ -980,6 +1133,9 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         f"- Status (per board): {todo.status}",
         f"- Untouched evidence: {todo.untouched}",
         f"- Submission target (Stage E): {sub['type']} → {sub['venue']}",
+        "",
+        "## Science contract",
+        science_contract_block(profile),
         "",
         "## Math problem statement",
         todo.statement or "(see source URL above)",
@@ -994,6 +1150,14 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         "\n".join(f"- {step}" for step in (todo.attack_plan or [])) or "- (open to your suggestion)",
         "",
     ]
+    if resume_conversation_id:
+        parts += [
+            "## Resume checkpoint",
+            f"This is a continuation in existing ChatGPT conversation `{resume_conversation_id}`.",
+            "Do not restart from the beginning. Use the previous transcript as context, then push the current science contract forward.",
+            "If the previous turn was cut off by network/UI extraction failure, reconstruct the latest useful state from the transcript and continue with the next concrete proof/computation step.",
+            "",
+        ]
     if arxiv_hits:
         parts += [
             "## Recent arXiv literature (last 14 days, freshness watch)",
@@ -1022,15 +1186,95 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
             research_text[:30000],
             "",
         ]
+    loop_state = _read_research_loop_state(todo.slug())
+    try:
+        no_progress = int(loop_state.get("no_progress_batches") or 0)
+        patience = int(loop_state.get("no_progress_patience") or 0)
+    except (TypeError, ValueError):
+        no_progress = 0
+        patience = 0
+    if patience > 0 and no_progress >= patience:
+        parts += [
+            "## Strategy-shift gate",
+            f"The outer harness recorded {no_progress}/{patience} recent batches with no artifact-level progress.",
+            "Do not continue the same proof sketch or search heuristic.",
+            "Pick exactly one of these routes and make it explicit:",
+            "- RESCOPE: shrink the target to a publishable lemma/certificate with the same source problem.",
+            "- NEW_ATTACK: switch to a different proof/computation strategy and state the new progress metric.",
+            "- CLOSE_WITH_OBSTRUCTION: write a concrete failure_analysis.md FILE block explaining the obstruction and what evidence would be needed next.",
+            "A strategy shift is not a reason to stop the project; it is the next harness state.",
+            "",
+        ]
+    try:
+        from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: PLC0415
+        gate = science_gate_evaluate(todo)
+        if getattr(gate, "missing", None):
+            parts += [
+                "## Current deterministic science-gate blockers",
+                "The repository gate has already inspected disk artifacts. Do not claim completion until these are fixed on disk or supplied as FILE blocks:",
+                "\n".join(f"- {m}" for m in gate.missing),
+                "",
+                "If a missing artifact is a file, include its exact content in this response using:",
+                "FILE: tools/community-outreach/targets/<slug>/<filename>",
+                "```<language>",
+                "<complete file content>",
+                "```",
+                "",
+            ]
+    except Exception:
+        pass
     parts += [
         "## Your first turn",
-        "Give your initial concrete attack on this problem. Aim for:",
-        "  1. A precise restatement of the most reachable sub-goal (one line).",
-        "  2. The mathematical machinery you'd use (specific lemmas / techniques).",
-        "  3. The first three concrete calculations or constructions you'd perform.",
-        "  4. The expected outcome and how you'd verify it.",
-        "Be specific. Show numbers / formulas / explicit constructions.",
-        "Do not summarize the problem back to me — go forward.",
+        "Give the first contract-driven research step. Use this exact structure:",
+        "  1. CONTRACT TARGET: the precise theorem/counterexample/construction/certificate being attempted.",
+        "  2. CURRENT SCORE: the current value/state of the progress metric, or the missing data needed to define it.",
+        "  3. MOVE: one concrete proof move, computation, construction edit, or certificate check.",
+        "  4. EVIDENCE: what artifact or calculation would verify this move.",
+        "  5. NEXT STOP TEST: whether the next turn should write back, continue, or close/re-scope.",
+        "Do not summarize the problem back to me. Start doing the mathematics.",
+    ]
+    return "\n".join(parts)
+
+
+def _build_deep_resume_prompt(todo: TodoSpec, *, resume_conversation_id: str) -> str:
+    """Short continuation prompt for an existing ChatGPT research thread.
+
+    The full initial prompt is intentionally not repeated here. Repeating it
+    makes the browser transcript look like a fresh assignment even when the
+    server correctly posts to /continue. The existing conversation already has
+    the contract, prior turns, and target context; Codex/gates only need to
+    tell Oracle what the next concrete move is.
+    """
+    profile, _ = load_profile(todo.slug())
+    blockers: list[str] = []
+    try:
+        from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: PLC0415
+        gate = science_gate_evaluate(todo)
+        blockers = list(getattr(gate, "missing", []) or [])[:8]
+        next_action = str(getattr(gate, "next_action", "") or "")
+        gate_status = str(getattr(gate, "status", "") or "")
+    except Exception:
+        next_action = ""
+        gate_status = ""
+    parts = [
+        f"Continue from the previous answer in this same conversation `{resume_conversation_id}`.",
+        "Do not restart or restate the whole problem. Use the transcript and the existing artifact packet as context.",
+        f"Target: {todo.todo_id} · {todo.title}.",
+    ]
+    if gate_status or next_action:
+        parts.append(f"Repository gate now says science_status={gate_status or 'unknown'}, next_action={next_action or 'unknown'}.")
+    if blockers:
+        parts += [
+            "The deterministic gate still needs:",
+            "\n".join(f"- {b}" for b in blockers),
+        ]
+    parts += [
+        "Make exactly one next mathematical move that lowers the science-contract progress metric.",
+        "If the last packet is a bounded certificate or obstruction, either strengthen it into a publishable result, produce the missing verifier artifact as FILE blocks, or explain the precise obstruction in a target-specific failure_analysis.md FILE block.",
+        "If you find a different meaningful side result, include it as a separate candidate packet rather than replacing this target.",
+        "",
+        "Current science contract, for reference:",
+        science_contract_block(profile),
     ]
     return "\n".join(parts)
 
@@ -1133,9 +1377,26 @@ def supervise_board(
                 codex_driver=codex_driver,
                 ship_paper=ship_paper,
                 arxiv_hits=stage0_hits,
+                resume_conversation_id=_resume_conversation_id(profile.slug, state_dir=state_dir),
             )
             if deep_run is not None:
                 analysis["oracle_deep"] = deep_run
+                materialized = _materialize_oracle_deep_research_md(
+                    todo, profile, deep_run, repo_root=repo_root,
+                )
+                if materialized:
+                    analysis["oracle_deep_materialized_research_md"] = materialized
+                    # Re-run deterministic analysis after the research artifact
+                    # lands so downstream science_gate/research_loop sees the
+                    # actual evidence instead of the pre-oracle missing state.
+                    refreshed = analyze_supervised_target(todo, profile, repo_root)
+                    refreshed["state_json_path"] = analysis.get("state_json_path", "")
+                    refreshed["commands_run"] = analysis.get("commands_run", 0)
+                    if arxiv_summary is not None:
+                        refreshed["arxiv_stage0"] = arxiv_summary
+                    refreshed["oracle_deep"] = deep_run
+                    refreshed["oracle_deep_materialized_research_md"] = materialized
+                    analysis = refreshed
 
         summaries.append(analysis)
 
@@ -1250,7 +1511,8 @@ def main(argv: Iterable[str] | None = None) -> int:
                         help="With --oracle-deep and --write-latex, polish the saved LaTeX and run the "
                              "paper pipeline to the first user gate.")
     parser.add_argument("--oracle-max-turns", type=int, default=10,
-                        help="With --oracle-deep, max rounds of deepening (default 10)")
+                        help="With --oracle-deep, max turns in this single watchdog batch. "
+                             "Science/impact gates, not this number, decide whether the target is complete.")
     parser.add_argument("--oracle-timeout", type=int, default=7200,
                         help="Per-turn oracle timeout in seconds (default 7200 = 2h)")
     parser.add_argument("--arxiv-watch", action="store_true",

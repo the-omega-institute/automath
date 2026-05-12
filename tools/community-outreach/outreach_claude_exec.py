@@ -12,9 +12,12 @@ Public API:
     claude_exec(prompt, *, timeout, log_tag, log_dir, repo_root)
         -> tuple[ok, stdout, rc]
 
-Behaviour matches the prior outreach_pi_agent.claude_exec byte-for-byte —
-prompt + stdout + stderr are written under the log_dir as
-`<log_tag>_<timestamp>.{prompt,stdout,stderr}.txt`.
+Claude is intentionally disabled for normal drafting/gating/refill stages.
+Allowed paths:
+  - PI supervision (`log_tag` beginning with `pi_`)
+  - explicit writeback (`outreach_writeback_loop.py` invokes `/killo-golden`
+    directly and does not use this wrapper)
+Set `OUTREACH_ALLOW_CLAUDE=1` only for a deliberate one-off diagnostic.
 """
 
 from __future__ import annotations
@@ -50,6 +53,13 @@ def claude_exec(
     Returns (ok, stdout, rc). On timeout returns (False, partial_stdout, -9).
     Logs prompt + stdout + stderr to log_dir for postmortem.
     """
+    allowed_pi = log_tag.startswith("pi_")
+    if not allowed_pi and os.environ.get("OUTREACH_ALLOW_CLAUDE") != "1":
+        return (
+            False,
+            "Claude disabled outside PI/writeback; set OUTREACH_ALLOW_CLAUDE=1 for an explicit diagnostic.",
+            -2,
+        )
     if not CLAUDE_PATH or not Path(CLAUDE_PATH).exists():
         return (False, f"claude CLI not found at {CLAUDE_PATH}", -1)
 

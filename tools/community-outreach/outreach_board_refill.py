@@ -9,7 +9,7 @@ the operator scoped on 2026-05-08:
                                                                        ▼
   Layer 2 (this script)   ChatGPT Project (oracle deep exploration)   ──┐
                           attached: main.pdf + READMEs                  │
-                          → 5-10 candidates                             ▼
+                          → 3-7 high-impact candidates                   ▼
   Layer 3 (local CLI)     claude judge dedup vs current RESEARCH_BOARD ──┐
                                                                          ▼
                           atomic append survivors → RESEARCH_BOARD.md
@@ -44,8 +44,14 @@ STATUS_PATH = STATE_DIR / "board_refill.status.json"
 LOG_DIR = STATE_DIR / "board_refill_logs"
 ARXIV_RECENT_PATH = STATE_DIR / "arxiv_recent.txt"
 LIT_STALENESS_PATH = STATE_DIR / "lit_staleness_recent.txt"
+CONTEXT_REFRESH_PATH = STATE_DIR / "context_refresh.json"
+X_SIGNAL_PATH = STATE_DIR / "x_openproblem_recent.json"
 RESEARCH_BOARD_PATH = SCRIPT_DIR / "RESEARCH_BOARD.md"
 PROMPT_PATH = SCRIPT_DIR / "prompts" / "outreach_board_refill.txt"
+OPERATOR_MEMORY_PATH = SCRIPT_DIR / "OPERATOR_MEMORY.md"
+
+sys.path.insert(0, str(SCRIPT_DIR))
+from outreach_candidate_inbox import academic_impact_gate  # noqa: E402
 
 ORACLE_SERVER_URL = "http://localhost:8766"
 
@@ -58,6 +64,8 @@ REFILL_PROJECT_URL = (
 
 DEFAULT_TIMEOUT_S = 5400        # 90 min total budget for the oracle call
 DEFAULT_POLL_INTERVAL = 30
+ZERO_EXTRACT_IDLE_CANCEL_S = 900
+ZERO_EXTRACT_GENERATING_CANCEL_S = 1200
 SIGNAL_TAIL_BYTES = 8000        # cap how much arxiv/lit data we feed in
 
 
@@ -111,6 +119,36 @@ def _read_signal(path: Path, max_bytes: int = SIGNAL_TAIL_BYTES) -> str:
     return text[-max_bytes:]
 
 
+def _context_refresh_signal(max_bytes: int = SIGNAL_TAIL_BYTES) -> str:
+    if not CONTEXT_REFRESH_PATH.exists():
+        return "(no targeted context refresh snapshot yet)"
+    try:
+        d = json.loads(CONTEXT_REFRESH_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return "(targeted context refresh snapshot unreadable)"
+    rows: list[str] = [
+        f"generated_at: {d.get('generated_at')}",
+        f"scope: {d.get('scope')}",
+    ]
+    for gh in (d.get("github") or [])[:12]:
+        bits = [
+            f"{gh.get('repo')} {gh.get('kind')}#{gh.get('number')}",
+            f"status={gh.get('status')}",
+            f"state={gh.get('state')}",
+            f"updated_at={gh.get('updated_at')}",
+            f"title={gh.get('title')}",
+        ]
+        rows.append("- GH " + " | ".join(str(b) for b in bits if b))
+    for mail in (d.get("mail") or [])[:12]:
+        rows.append(
+            "- Mail "
+            + f"subject={mail.get('subject')!r} email={mail.get('email')!r} "
+            + f"status={mail.get('status')} messages={len(mail.get('messages') or [])}"
+        )
+    text = "\n".join(rows)
+    return text if len(text) <= max_bytes else text[-max_bytes:]
+
+
 def _http_post(url: str, data: dict, timeout: int = 30) -> dict:
     req = urllib.request.Request(
         url,
@@ -134,6 +172,16 @@ def _server_alive() -> bool:
         return False
 
 
+def _cancel_oracle_task(task_id: str, *, reason: str) -> None:
+    if not task_id:
+        return
+    try:
+        _http_post(f"{ORACLE_SERVER_URL}/cancel", {"task_id": task_id}, timeout=10)
+        _log(f"oracle task cancelled: {task_id} ({reason})")
+    except Exception as exc:  # noqa: BLE001
+        _log(f"oracle task cancel failed for {task_id}: {exc}")
+
+
 # ---------------------------------------------------------------------------
 # oracle dispatch
 # ---------------------------------------------------------------------------
@@ -145,9 +193,19 @@ def _build_prompt() -> str:
     template = PROMPT_PATH.read_text(encoding="utf-8")
     arxiv = _read_signal(ARXIV_RECENT_PATH) or "(no recent arxiv signal — pipeline may be cold)"
     lit = _read_signal(LIT_STALENESS_PATH) or "(no recent lit_staleness signal)"
+    context = _context_refresh_signal()
+    x_signal = _read_signal(X_SIGNAL_PATH) or "(no X open-problem signal snapshot yet)"
+    operator_memory = _read_signal(OPERATOR_MEMORY_PATH) or "(operator memory unavailable)"
     # Use plain replace rather than str.format because the template has
     # literal `{` / `}` in its JSON output spec.
-    return template.replace("{arxiv_watch_recent}", arxiv).replace("{lit_staleness_recent}", lit)
+    return (
+        template
+        .replace("{operator_memory}", operator_memory)
+        .replace("{arxiv_watch_recent}", arxiv)
+        .replace("{lit_staleness_recent}", lit)
+        .replace("{targeted_context_refresh}", context)
+        .replace("{x_openproblem_recent}", x_signal)
+    )
 
 
 def _submit_oracle_task(prompt: str) -> str | None:
@@ -205,12 +263,62 @@ def _poll_oracle(task_id: str, *, timeout_s: int) -> str | None:
         try:
             r = _http_get(f"{ORACLE_SERVER_URL}/result/{task_id}", timeout=10)
         except Exception:
-            time.sleep(DEFAULT_POLL_INTERVAL)
-            continue
-        if r.get("response"):
-            return r["response"]
+            # /result/<task_id> returns 404 while a task is still pending. Keep
+            # running the live /status health checks below so stuck browser
+            # tabs are cancelled early instead of occupying an Oracle lane
+            # until the outer timeout expires.
+            r = {}
+        else:
+            if r.get("status") == "cancelled":
+                _log(f"oracle task {task_id} was cancelled")
+                return None
+            if r.get("response"):
+                text = str(r["response"] or "")
+                if _is_transport_error(text):
+                    _log(f"oracle returned transport error for {task_id}: {text[:180]}")
+                    return None
+                if len(text.strip()) < 20:
+                    _log(f"oracle returned too little content for {task_id}: {text!r}")
+                    return None
+                return text
+        try:
+            status = _http_get(f"{ORACLE_SERVER_URL}/status", timeout=5)
+            for agent_id, rec in (status.get("recent_agents") or {}).items():
+                metrics = rec.get("metrics") or {}
+                if metrics.get("task_id") != task_id:
+                    continue
+                extracted = int(metrics.get("extracted_chars") or 0)
+                elapsed = int(metrics.get("elapsed_seconds") or 0)
+                generating = bool(metrics.get("generating"))
+                generation = metrics.get("generation") if isinstance(metrics.get("generation"), dict) else {}
+                if (not generating) and extracted == 0 and elapsed >= ZERO_EXTRACT_IDLE_CANCEL_S:
+                    _cancel_oracle_task(
+                        task_id,
+                        reason=(
+                            f"board refill idle with 0 extracted chars after {elapsed}s "
+                            f"(agent={agent_id})"
+                        ),
+                    )
+                    return None
+                if (
+                    generating
+                    and extracted == 0
+                    and elapsed >= ZERO_EXTRACT_GENERATING_CANCEL_S
+                    and generation.get("text_signal")
+                ):
+                    _cancel_oracle_task(
+                        task_id,
+                        reason=(
+                            f"board refill generating with text signal but 0 extracted chars "
+                            f"after {elapsed}s (agent={agent_id})"
+                        ),
+                    )
+                    return None
+        except Exception:
+            pass
         time.sleep(DEFAULT_POLL_INTERVAL)
     _log(f"oracle poll timed out after {timeout_s}s for task {task_id}")
+    _cancel_oracle_task(task_id, reason="board refill poll timeout")
     return None
 
 
@@ -232,6 +340,8 @@ class Candidate:
     effort_estimate_days: int = 0
     risk_level: str = ""
     first_attack_step: str = ""
+    final_display_form: str = ""
+    success_gate: str = ""
     rationale: str = ""
 
 
@@ -273,6 +383,92 @@ def _parse_candidates(raw: str) -> list[Candidate]:
     return out
 
 
+def _is_transport_error(text: str) -> bool:
+    return bool(re.match(
+        r"\s*ERROR\b|\s*Task cancelled by server|No assistant output after|re-extract: nothing meaningful",
+        text or "",
+        re.IGNORECASE,
+    ))
+
+
+def _codex_extract_candidates(raw: str, *, round_idx: int) -> list[Candidate]:
+    """Use local Codex as the Oracle-output adapter, not as the source.
+
+    The Oracle's job is to search and reason. The local harness owns structure.
+    When ChatGPT returns readable candidate prose or malformed JSON, do one
+    deterministic adapter pass through Codex so the board refill loop does not
+    burn more Oracle turns only for formatting.
+    """
+    codex = shutil.which("codex") or "/opt/homebrew/bin/codex"
+    if not codex or not Path(codex).exists():
+        _log("codex candidate adapter unavailable; falling back to oracle follow-up")
+        return []
+    prompt = f"""You are the local structure adapter for Omega Outreach board refill.
+
+The text below is an Oracle/ChatGPT response to an open-problem discovery prompt.
+Your task is NOT to invent candidates. Extract only candidates explicitly present
+in the Oracle response. If none are present, output {{"candidates":[]}}.
+
+Output ONLY a JSON object with this exact top-level shape:
+{{
+  "candidates": [
+    {{
+      "title": "<short title, <=80 chars>",
+      "source_url": "<http(s) URL from the Oracle text>",
+      "type": "DECIDABLE|EXISTENCE|CLASSIFICATION|EXTREMALITY|OBSTRUCTION|RIGIDITY",
+      "statement": "<one-sentence precise mathematical statement>",
+      "untouched_evidence": "<freshness/SOTA/open evidence from the Oracle text>",
+      "omega_fit_detail": "<Omega/Automath bridge from the Oracle text>",
+      "fit_score": 0,
+      "topic_score": 0,
+      "effort_estimate_days": 1,
+      "risk_level": "low|med|high",
+      "first_attack_step": "<first concrete attack step>",
+      "final_display_form": "<concrete artifact + audience>",
+      "success_gate": "<required proof/check/certificate before any send>",
+      "rationale": "<why this is real, doable, and not already taken>"
+    }}
+  ]
+}}
+
+Preserve fit_score/topic_score/effort_estimate_days if the Oracle gave them.
+If scores are missing, assign conservative scores from explicit Oracle evidence:
+topic_score >= 8 only for named conjectures, famous/open frontier problems,
+public verifier/certificate gaps, or high-visibility specialist discussions;
+fit_score >= 5 only when the Oracle names a concrete Automath/Omega/certificate
+bridge. Reject broad directions, invented items, candidates without a public
+source URL, and items whose source/statement/final display are not explicit in
+the Oracle response.
+
+# Oracle response
+
+{raw[:24000]}
+"""
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    prompt_path = LOG_DIR / f"refill_round{round_idx}_codex_adapter_prompt.txt"
+    stdout_path = LOG_DIR / f"refill_round{round_idx}_codex_adapter_stdout.txt"
+    prompt_path.write_text(prompt, encoding="utf-8")
+    try:
+        proc = subprocess.run(
+            [codex, "exec", "--json", "--skip-git-repo-check"],
+            cwd=str(REPO_ROOT),
+            input=prompt,
+            capture_output=True,
+            text=True,
+            timeout=900,
+        )
+    except Exception as exc:  # noqa: BLE001
+        _log(f"codex candidate adapter spawn failed: {exc}")
+        return []
+    stdout_path.write_text(proc.stdout or "", encoding="utf-8")
+    if proc.returncode != 0:
+        _log(f"codex candidate adapter rc={proc.returncode}: {(proc.stderr or proc.stdout)[:300]}")
+        return []
+    candidates = _parse_candidates(proc.stdout)
+    _log(f"codex candidate adapter round {round_idx}: extracted {len(candidates)} candidates")
+    return candidates
+
+
 def _existing_board_titles_and_sources() -> list[tuple[str, str, str]]:
     """Return list of (todo_id, title, source) for current board entries."""
     try:
@@ -310,33 +506,20 @@ Omega-fit detail: {omega_fit}
 def _dedup_candidate(cand: Candidate, existing: list[tuple[str, str, str]]) -> tuple[bool, str]:
     if not existing:
         return True, "empty board, auto-keep"
-    try:
-        from outreach_claude_exec import claude_exec  # noqa: PLC0415
-    except Exception as exc:
-        _log(f"claude_exec import failed in dedup: {exc}")
-        return True, f"dedup fallback (claude unavailable: {exc})"
-    listing = "\n".join(f"{tid} | {t[:80]} | {s[:80]}" for tid, t, s in existing[:32])
-    prompt = _DEDUP_PROMPT.format(
-        title=cand.title,
-        source=cand.source_url,
-        ctype=cand.type,
-        statement=cand.statement,
-        omega_fit=cand.omega_fit_detail,
-        existing=listing,
-    )
-    ok, stdout, _ = claude_exec(
-        prompt,
-        timeout=300,
-        log_tag=f"refill_dedup_{_now_tag()}",
-        log_dir=LOG_DIR,
-        repo_root=REPO_ROOT,
-    )
-    if not ok:
-        return True, "dedup claude exec failed; default keep"
-    obj = _extract_json_object(stdout)
-    if not obj:
-        return True, "dedup claude returned non-JSON; default keep"
-    return bool(obj.get("keep", True)), str(obj.get("reason", ""))[:200]
+    # Normal board refill must not invoke Claude. Conservative lexical overlap
+    # is enough for this deterministic pre-board gate; ambiguous candidates
+    # remain in inbox/profile judgment rather than being posted directly.
+    title_l = cand.title.lower()
+    stmt_l = cand.statement.lower()
+    for tid, title, source in existing:
+        existing_l = f"{title} {source}".lower()
+        if title_l and title_l in existing_l:
+            return False, f"deterministic title duplicate of {tid}"
+        tokens = {t for t in re.findall(r"[a-z0-9_]{4,}", title_l + " " + stmt_l)}
+        existing_tokens = {t for t in re.findall(r"[a-z0-9_]{4,}", existing_l)}
+        if tokens and len(tokens & existing_tokens) >= max(4, min(8, len(tokens) // 2)):
+            return False, f"deterministic near-duplicate token overlap with {tid}"
+    return True, "deterministic dedup keep"
 
 
 # ---------------------------------------------------------------------------
@@ -368,6 +551,8 @@ def _format_candidate_block(todo_id: str, c: Candidate) -> str:
         f"| Topic value | {c.topic_score}/10 |",
         f"| Effort est | {c.effort_estimate_days} 天 |",
         f"| Risk | {c.risk_level or 'med'} |",
+        f"| Final display | {c.final_display_form or 'TBD — must be specified before run'} |",
+        f"| Success gate | {c.success_gate or 'TBD — operator-approved concrete artifact'} |",
         "",
         f"**Statement.** {c.statement}",
         "",
@@ -399,6 +584,21 @@ def _append_to_board(blocks: list[str]) -> int:
     return len(blocks)
 
 
+def _write_candidate_inbox(candidates: list[Candidate], *, source: str = "oracle_board_refill") -> list[str]:
+    if not candidates:
+        return []
+    try:
+        from outreach_candidate_inbox import add_candidate  # noqa: PLC0415
+    except Exception as exc:
+        _log(f"candidate inbox import failed: {exc}")
+        return []
+    ids: list[str] = []
+    for c in candidates:
+        row = add_candidate(asdict(c), source=source)
+        ids.append(row.get("candidate_id", ""))
+    return ids
+
+
 # ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
@@ -407,6 +607,8 @@ def _append_to_board(blocks: list[str]) -> int:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     p.add_argument("--dry-run", action="store_true", help="print prompt + parsed candidates, do not append")
+    p.add_argument("--candidate-inbox", action="store_true",
+                   help="write surviving candidates to candidate_inbox.jsonl instead of appending RESEARCH_BOARD")
     p.add_argument("--timeout-s", type=int, default=DEFAULT_TIMEOUT_S, help="oracle poll budget")
     args = p.parse_args(argv)
 
@@ -441,7 +643,7 @@ def main(argv: list[str] | None = None) -> int:
     # oracle to deepen / be more specific. Cap at MAX_ROUNDS rounds.
     MIN_GOOD_CANDIDATES = 3
     MAX_ROUNDS = 3
-    per_round_budget = max(900, args.timeout_s // MAX_ROUNDS)
+    deadline = time.time() + max(60, args.timeout_s)
 
     existing = _existing_board_titles_and_sources()
     accumulated_survivors: list[Candidate] = []
@@ -456,7 +658,16 @@ def main(argv: list[str] | None = None) -> int:
     task_id, conv_id = submit
 
     for round_idx in range(1, MAX_ROUNDS + 1):
-        raw = _poll_oracle(task_id, timeout_s=per_round_budget)
+        remaining_s = int(deadline - time.time())
+        if remaining_s <= 30:
+            round_history.append({
+                "round": round_idx,
+                "task_id": task_id,
+                "verdict": "budget_exhausted",
+            })
+            _log(f"round {round_idx}: total timeout budget exhausted, breaking")
+            break
+        raw = _poll_oracle(task_id, timeout_s=remaining_s)
         if not raw:
             round_history.append({
                 "round": round_idx, "task_id": task_id, "verdict": "timeout",
@@ -468,6 +679,10 @@ def main(argv: list[str] | None = None) -> int:
         raw_path.write_text(raw, encoding="utf-8")
 
         candidates = _parse_candidates(raw)
+        parsed_by = "oracle_json"
+        if not candidates:
+            candidates = _codex_extract_candidates(raw, round_idx=round_idx)
+            parsed_by = "codex_adapter" if candidates else "none"
         _log(f"round {round_idx}: parsed {len(candidates)} candidates from oracle response")
 
         round_survivors: list[Candidate] = []
@@ -476,6 +691,18 @@ def main(argv: list[str] | None = None) -> int:
             tl = c.title.strip().lower()
             if not tl or tl in seen_titles_lower:
                 round_drops.append((c.title, "duplicate within this refill cycle"))
+                continue
+            if not c.final_display_form.strip() or not c.success_gate.strip():
+                round_drops.append((c.title, "missing final_display_form or success_gate"))
+                continue
+            gate = academic_impact_gate(asdict(c))
+            if not gate.passed:
+                reason = (
+                    f"academic_impact_gate score={gate.score}: "
+                    + "; ".join((gate.missing + gate.risk_flags)[:5])
+                )
+                round_drops.append((c.title, reason))
+                _log(f"academic gate drop (round {round_idx}): {c.title!r} — {reason}")
                 continue
             keep, reason = _dedup_candidate(c, existing)
             if keep:
@@ -491,6 +718,7 @@ def main(argv: list[str] | None = None) -> int:
             "round": round_idx,
             "task_id": task_id,
             "raw_response_path": str(raw_path),
+            "parsed_by": parsed_by,
             "received": len(candidates),
             "kept": len(round_survivors),
             "dropped": len(round_drops),
@@ -501,6 +729,9 @@ def main(argv: list[str] | None = None) -> int:
             break
         if round_idx >= MAX_ROUNDS:
             _log(f"reached MAX_ROUNDS={MAX_ROUNDS} with {len(accumulated_survivors)} survivors")
+            break
+        if time.time() + 60 >= deadline:
+            _log("not enough total budget left for follow-up; ending refill loop")
             break
         if not conv_id:
             _log("no conversation_id retained; cannot follow up")
@@ -516,10 +747,12 @@ def main(argv: list[str] | None = None) -> int:
             f"1. Do NOT re-propose any of these (already considered or dropped):\n"
             + "\n".join(f"   - {t}" for t in dropped_titles)
             + (
-                "\n\n2. Be more specific about the omega_fit_detail — name the exact "
-                "lemma file paths in lean4/Omega/* that plug in.\n"
-                "3. Prefer candidates whose source URL is a real recent (≤ 12 months) "
-                "preprint or registry entry; cite it.\n"
+                "\n\n2. Be more specific about the omega_fit_detail — name exact "
+                "Automath/Omega modules or the certificate/checker bridge we would build.\n"
+                "3. Prefer influential named conjectures, public verifier gaps, "
+                "high-visibility GitHub/blog/X/forum/problem-list discussions, or serious "
+                "classification/rigidity/extremal targets. Do not optimize for recent arXiv "
+                "preprints unless the topic is independently high-impact.\n"
                 "4. Same JSON output schema.\n"
                 "5. If you genuinely cannot produce more, output `{\"candidates\": []}` and "
                 "explain in the rationale of an empty placeholder why."
@@ -541,13 +774,22 @@ def main(argv: list[str] | None = None) -> int:
         blocks.append(_format_candidate_block(tid, c))
         appended_ids.append(tid)
 
-    appended = _append_to_board(blocks) if blocks else 0
+    inbox_ids: list[str] = []
+    appended = 0
+    if args.candidate_inbox:
+        inbox_ids = _write_candidate_inbox(accumulated_survivors)
+    else:
+        appended = _append_to_board(blocks) if blocks else 0
     payload = {
         "ran_at": _now_iso(),
-        "verdict": "appended" if appended else ("no_candidates_parsed" if not accumulated_survivors else "all_drops"),
+        "verdict": (
+            "candidate_inbox" if inbox_ids else
+            ("appended" if appended else ("no_candidates_parsed" if not accumulated_survivors else "all_drops"))
+        ),
         "rounds": round_history,
         "candidates_total": sum(r.get("received", 0) for r in round_history),
         "appended_ids": appended_ids,
+        "candidate_inbox_ids": inbox_ids,
         "drops": accumulated_drops[:32],
     }
     _status_write(payload)

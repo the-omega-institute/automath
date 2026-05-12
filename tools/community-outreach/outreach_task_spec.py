@@ -49,9 +49,21 @@ VALID_STATUSES = {
     "gated_ready",
     "rejected",
     "blocked",  # blocked by external dep (e.g. requires_external_repo) — not workable here
+    "writeback_pending",
+    "writeback_in_progress",
+    "writeback_done",
+    "writeback_failed",
+    "waiting_external_reply",
 }
 
 DEFAULT_MAX_RETRIES = 3
+COLLABORATION_TYPE_BONUS = {
+    "email_reply_draft": 40,
+    "paper_trade": 35,
+    "issue_reply_draft": 30,
+    "code_pr_response": 20,
+    "experimental": 0,
+}
 
 
 @dataclass
@@ -111,6 +123,32 @@ class TaskSpec:
     last_verdict: str = ""
     last_reason: str = ""
     log_paths: list[str] = field(default_factory=list)
+
+    def priority_score(self) -> int:
+        """Higher score means the supervisor should try this task earlier.
+
+        Typed tasks are commitments to existing people/threads, so they outrank
+        open-ended board exploration. Within this queue, active collaborations
+        and tasks with registered external context should be worked before
+        generic experimental drafts.
+        """
+        score = COLLABORATION_TYPE_BONUS.get(self.type, 0)
+        ctx = self.context or {}
+        if ctx.get("external_party"):
+            score += 20
+        if ctx.get("thread"):
+            score += 15
+        if ctx.get("latest_reply_date") or ctx.get("latest_reply_summary"):
+            score += 20
+        if ctx.get("depends_on_task"):
+            score += 10
+        if self.deadline_iso:
+            score += 5
+        if self.status == "rejected":
+            score -= 10
+        if self.requires_external_repo:
+            score -= 40
+        return score
 
     @classmethod
     def from_dict(cls, d: dict) -> "TaskSpec":
@@ -216,8 +254,8 @@ def select_workable(
         )
         if ok:
             out.append(t)
-    # Priority: deadline_iso (earliest first), then created_at (oldest first).
-    def _key(t: TaskSpec) -> tuple[str, str]:
-        return (t.deadline_iso or "9999-12-31", t.created_at or "9999")
+    # Priority: active collaborations first, then deadline, then age.
+    def _key(t: TaskSpec) -> tuple[int, str, str]:
+        return (-t.priority_score(), t.deadline_iso or "9999-12-31", t.created_at or "9999")
     out.sort(key=_key)
     return out

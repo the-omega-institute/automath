@@ -51,6 +51,8 @@ class TodoSpec:
     topic_score: int | None
     effort: str
     risk: str
+    final_display: str
+    success_gate: str
     statement: str
     prior: str
     omega_fit_detail: str
@@ -81,6 +83,9 @@ class TodoSpec:
         if m:
             return "arxiv_" + m.group(1).replace(".", "_")
         # 5. AimPL workshop → aimpl_<name>
+        m = re.search(r"aimpl\.org/([a-z0-9]+)/(\d+)", self.source)
+        if m:
+            return f"aimpl_{m.group(1)}_{m.group(2)}"
         m = re.search(r"aimpl\.org/([a-z0-9]+)", self.source)
         if m:
             return f"aimpl_{m.group(1)}"
@@ -231,6 +236,8 @@ def parse_board(path: Path) -> dict[str, TodoSpec]:
             topic_score=_score_from_field(table.get("topic value", "")),
             effort=table.get("effort est", ""),
             risk=table.get("risk", ""),
+            final_display=table.get("final display", ""),
+            success_gate=table.get("success gate", ""),
             statement=_extract_section(body, "Statement"),
             prior=_extract_section(body, "Prior"),
             omega_fit_detail=_extract_section(body, "Omega fit detail"),

@@ -617,13 +617,25 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--cache-dir", default=str(CACHE_DIR_DEFAULT), help="HTTP cache directory")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
-    reports = check_board(
-        board_path=Path(args.board),
-        cache_dir=Path(args.cache_dir),
-        only_ids=args.todo_ids if args.todo_ids else None,
-        force_refresh=args.refresh,
-        arxiv_year_floor=args.year,
-    )
+    try:
+        reports = check_board(
+            board_path=Path(args.board),
+            cache_dir=Path(args.cache_dir),
+            only_ids=args.todo_ids if args.todo_ids else None,
+            force_refresh=args.refresh,
+            arxiv_year_floor=args.year,
+        )
+    except Exception as exc:  # noqa: BLE001
+        payload = {
+            "verdict": "network_unavailable",
+            "error": str(exc),
+            "reports": [],
+        }
+        if args.json:
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            print(f"lit_staleness network unavailable: {exc}", file=sys.stderr)
+        return 0
     if args.json:
         print(json.dumps([asdict(r) for r in reports], ensure_ascii=False, indent=2))
         return 0

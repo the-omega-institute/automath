@@ -14,11 +14,11 @@ For each pending task it:
   2. Sets task.status = "in_progress" and saves it.
   3. Dispatches a typed worker:
        - issue_reply_draft / email_reply_draft / experimental
-           single claude_exec call producing one markdown draft
+           Codex-first drafting, optionally escalated to Oracle when configured
        - paper_trade
            multi-step: download external artifact (best-effort) →
            summarize → generate annotated questions → generate library
-           pointers; each step is its own claude_exec
+           pointers; each step is its own Codex call
        - code_pr_response
            hard-blocked unless external repo checked out locally
   4. Runs outreach_gates.evaluate(task).
@@ -43,6 +43,7 @@ process; on supervisor shutdown the daemon receives SIGTERM and exits.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import signal
 import subprocess
@@ -73,6 +74,13 @@ from outreach_task_spec import (  # noqa: E402
     select_workable,
 )
 import outreach_gates  # noqa: E402
+
+try:
+    from outreach_review_queue import _context_refresh, _registered_thread_state, reply_necessity  # noqa: E402
+except Exception:  # pragma: no cover - task runner must still list tasks if review module breaks
+    _context_refresh = None
+    _registered_thread_state = None
+    reply_necessity = None
 
 
 # ---------------------------------------------------------------------------
@@ -189,17 +197,71 @@ def cleanup_stale_claims(stale_hours: float = DEFAULT_CLAIM_STALE_HOURS) -> int:
     return released
 
 
+def cleanup_stale_in_progress_tasks(
+    stale_hours: float = DEFAULT_CLAIM_STALE_HOURS,
+    *,
+    dry_run: bool = False,
+) -> list[dict]:
+    """Recover task JSON rows left in in_progress without a live claim.
+
+    A killed worker can leave `task.status == "in_progress"` even after the
+    claim marker is gone. Because task selection only works on pending/rejected
+    rows, that orphan state makes the task_runner poll forever without work.
+    """
+    recovered: list[dict] = []
+    cutoff = time.time() - stale_hours * 3600
+    for task in list_tasks():
+        if task.status != "in_progress":
+            continue
+        marker = _claim_marker(task.id)
+        pid_file = _claim_pid_file(task.id)
+        marker_live = False
+        marker_age_stale = True
+        if marker.exists():
+            try:
+                marker_age_stale = marker.stat().st_mtime < cutoff
+            except OSError:
+                marker_age_stale = True
+            pid = 0
+            if pid_file.exists():
+                try:
+                    pid = int((pid_file.read_text(encoding="utf-8").strip() or "0"))
+                except (OSError, ValueError):
+                    pid = 0
+            marker_live = (not marker_age_stale) and _pid_alive(pid)
+        if marker_live:
+            continue
+        row = {
+            "task_id": task.id,
+            "from_status": task.status,
+            "to_status": "pending",
+            "reason": "in_progress without live task claim",
+        }
+        recovered.append(row)
+        if dry_run:
+            continue
+        task.status = "pending"
+        task.last_verdict = ""
+        task.last_reason = (
+            f"auto-recovered {_now_iso()}: in_progress without live task claim"
+        )
+        task.last_run_iso = ""
+        save_task(task)
+        release(task.id)
+    return recovered
+
+
 # ---------------------------------------------------------------------------
 # workers per task type
 #
 # Author allocation (per operator decision 2026-05-08):
 #   - codex_track: primary deep-reasoning + drafting (codex authors,
-#     codex self-audits, claude does redline hygiene only)
+#     codex self-audits)
 #   - oracle (ChatGPT Project): codex_track escalations + tasks pre-flagged
 #     with context.use_oracle=True (need Project-attached files like
 #     main.pdf / READMEs / PROGRAM_BOARD.md as deep context)
-#   - claude: gate auditor (claude_review) + writeback skill (/killo-golden,
-#     handled by outreach_writeback_loop). NOT used as primary author here.
+#   - claude: PI supervision + writeback skill (/killo-golden,
+#     handled by outreach_writeback_loop). NOT used as primary author/gate here.
 # ---------------------------------------------------------------------------
 
 
@@ -268,7 +330,7 @@ def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
     T-NN entries.
 
     Saves the final response (and oracle-authored LaTeX if produced) to
-    deliverable_paths[0]. Operator + claude_review gate audits afterwards.
+    deliverable_paths[0]. Deterministic gate + operator review happen afterwards.
     """
     if not task.deliverable_paths:
         return False, "no deliverable_paths configured"
@@ -331,9 +393,15 @@ def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
         def slug(self_inner): return task.id
 
     todo_stub = _TaskTodoStub()
-    max_turns = int(ctx.get("max_turns", 6))
+    configured_max_turns = int(ctx.get("max_turns", 6))
+    max_turns = min(max(configured_max_turns, 1), 8)
     per_turn_timeout = int(ctx.get("per_turn_timeout_s", 3600))
     use_codex_driver = bool(ctx.get("use_codex_driver", False))
+    if configured_max_turns != max_turns:
+        runner_log(
+            f"{task.id}: capped oracle max_turns {configured_max_turns} -> {max_turns} "
+            "(pipeline anti-spin guard)"
+        )
     runner_log(
         f"{task.id}: oracle deep_reasoning max_turns={max_turns} "
         f"per_turn={per_turn_timeout}s codex_driver={use_codex_driver}"
@@ -351,7 +419,10 @@ def _run_oracle_drafting_task(task: TaskSpec) -> tuple[bool, str]:
         f"elapsed={run.get('total_elapsed_seconds', 0)}s"
     )
     if verdict == "FAILED":
-        return False, f"oracle deep_reasoning FAILED: {run.get('error','(no error message)')}"
+        err = run.get("error", "(no error message)")
+        if not err or err == "(no error message)":
+            err = "oracle run cancelled or returned no completed response"
+        return False, f"oracle deep_reasoning FAILED: {err}"
 
     # Pick the response body to land as the deliverable.
     # NB: oracle_consultant.deep_reasoning stores `response_log_path` (a FILE
@@ -393,14 +464,13 @@ def _run_drafting_task(task: TaskSpec) -> tuple[bool, str]:
         operator pre-decided this task needs Project-attached files like
         main.pdf / READMEs as deep-reasoning context).
       - else → outreach_codex_track.run_codex_track (codex authors + codex
-        self-audits + claude redline hygiene check). On verdict=escalate,
+        self-audits). On verdict=escalate,
         fall through to oracle deep_reasoning. On verdict=close, copy the
         codex-authored draft to the task's deliverable_paths[0] and let
-        the claude_review gate audit it as final.
+        the deterministic gate/operator review handle readiness.
 
-    Claude is no longer the primary author for any drafting task — its
-    only roles in this loop are the redline hygiene check inside
-    codex_track and the claude_review gate after the worker returns.
+    Claude is not used in this loop. Claude is reserved for PI supervision and
+    explicit writeback after operator approval.
     """
     if (task.context or {}).get("use_oracle"):
         return _run_oracle_drafting_task(task)
@@ -730,6 +800,8 @@ def process_one(task: TaskSpec) -> dict:
         runner_log(f"{task.id}: running worker {task.type}")
         ok, msg = worker(task)
         if not ok:
+            if _is_transient_environment_failure(msg):
+                return _settle_deferred(task, f"worker deferred: {msg}")
             # code_pr_response → blocked, others → retry/rejected
             if task.type == "code_pr_response":
                 return _settle_failure(task, msg, "blocked")
@@ -742,6 +814,14 @@ def process_one(task: TaskSpec) -> dict:
             f"next={verdict.next_action} reasons={verdict.reasons[:3]}"
         )
         if verdict.passed:
+            latest = load_task(task.id)
+            if latest is not None:
+                task.context = latest.context
+                task.deliverable_paths = latest.deliverable_paths
+                task.gate = latest.gate
+                task.requires_lean = latest.requires_lean
+                task.requires_external_repo = latest.requires_external_repo
+                task.max_retries = latest.max_retries
             task.status = "gated_ready"
             task.last_verdict = "pass"
             task.last_reason = "; ".join(verdict.reasons[:3])
@@ -762,7 +842,55 @@ def process_one(task: TaskSpec) -> dict:
         release(task.id)
 
 
+def _is_transient_environment_failure(msg: str) -> bool:
+    lower = (msg or "").lower()
+    transient_markers = (
+        "oracle server unreachable",
+        "outreach_oracle_server",
+        "connection refused",
+        "operation not permitted",
+        "network is unreachable",
+        "timed out waiting for oracle",
+        "oracle deep_reasoning failed",
+        "oracle returned no usable response",
+        "oracle run cancelled",
+        "codex exec rc=",
+        "failed to initialize",
+        "operation not permitted",
+    )
+    return any(marker in lower for marker in transient_markers)
+
+
+def _settle_deferred(task: TaskSpec, reason: str) -> dict:
+    """Return a task to pending without burning retries for env outages."""
+    latest = load_task(task.id)
+    if latest is not None:
+        # A long-running worker may be cancelled while an operator or supervisor
+        # reroutes task.context (for example Oracle -> Codex-first). Preserve
+        # those newer fields when recording the deferred verdict.
+        task.context = latest.context
+        task.deliverable_paths = latest.deliverable_paths
+        task.gate = latest.gate
+        task.requires_lean = latest.requires_lean
+        task.requires_external_repo = latest.requires_external_repo
+        task.max_retries = latest.max_retries
+    task.status = "pending"
+    task.last_verdict = "deferred"
+    task.last_reason = reason
+    save_task(task)
+    runner_log(f"{task.id}: deferred status=pending retries={task.retries} reason={reason}")
+    return {"task_id": task.id, "verdict": "deferred", "status": task.status, "reason": reason}
+
+
 def _settle_failure(task: TaskSpec, reason: str, next_action: Optional[str]) -> dict:
+    latest = load_task(task.id)
+    if latest is not None:
+        task.context = latest.context
+        task.deliverable_paths = latest.deliverable_paths
+        task.gate = latest.gate
+        task.requires_lean = latest.requires_lean
+        task.requires_external_repo = latest.requires_external_repo
+        task.max_retries = latest.max_retries
     task.last_verdict = "fail"
     task.last_reason = reason
     if next_action == "blocked":
@@ -777,6 +905,28 @@ def _settle_failure(task: TaskSpec, reason: str, next_action: Optional[str]) -> 
     return {"task_id": task.id, "verdict": "fail", "status": task.status, "reason": reason}
 
 
+def _settle_waiting_external(task: TaskSpec, reason: str) -> dict:
+    latest = load_task(task.id)
+    if latest is not None:
+        task.context = latest.context
+        task.deliverable_paths = latest.deliverable_paths
+        task.gate = latest.gate
+        task.requires_lean = latest.requires_lean
+        task.requires_external_repo = latest.requires_external_repo
+        task.max_retries = latest.max_retries
+    task.status = "waiting_external_reply"
+    task.last_verdict = "waiting_external_reply"
+    task.last_reason = reason
+    save_task(task)
+    runner_log(f"{task.id}: settled status=waiting_external_reply reason={reason}")
+    return {
+        "task_id": task.id,
+        "verdict": "waiting_external_reply",
+        "status": task.status,
+        "reason": reason,
+    }
+
+
 # ---------------------------------------------------------------------------
 # selection
 # ---------------------------------------------------------------------------
@@ -789,8 +939,20 @@ def select_next(*, lean_available: bool = False, allow_external_repo: bool = Fal
     )
     if not workable:
         return None
+    ctx_snapshot = _context_refresh() if _context_refresh else {}
     # Skip tasks currently claimed
     for t in workable:
+        if reply_necessity:
+            necessity = reply_necessity(t)
+            if necessity.get("action") == "wait_external":
+                runner_log(f"{t.id}: reply not needed; marking waiting_external_reply")
+                _settle_waiting_external(t, str(necessity.get("reason") or "waiting for external next step"))
+                continue
+        if _registered_thread_state:
+            thread_state = _registered_thread_state(t, ctx_snapshot)
+            if thread_state.get("status") == "waiting_external_reply":
+                runner_log(f"{t.id}: waiting_external_reply; skipping until external response")
+                continue
         if not _claim_marker(t.id).exists():
             return t
     return None
@@ -824,6 +986,10 @@ def main(argv: list[str] | None = None) -> int:
                    help=f"seconds between polls when no workable task (default {DEFAULT_POLL_INTERVAL})")
     p.add_argument("--cleanup-only", action="store_true",
                    help="sweep stale claims and exit")
+    p.add_argument("--recover-in-progress", action="store_true",
+                   help="also recover task.status=in_progress rows with no live claim")
+    p.add_argument("--dry-run", action="store_true",
+                   help="with --recover-in-progress, report stale rows without writing")
     p.add_argument("--lean-available", action="store_true",
                    help="this host CAN run Lean; un-skip requires_lean tasks")
     p.add_argument("--allow-external-repo", action="store_true",
@@ -832,7 +998,23 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cleanup_only:
         n = cleanup_stale_claims()
-        print(f"released {n} stale claim(s)")
+        recovered = []
+        if args.recover_in_progress:
+            recovered = cleanup_stale_in_progress_tasks(dry_run=args.dry_run)
+        print(json.dumps({
+            "released_claims": n,
+            "recovered_in_progress": recovered,
+            "dry_run": args.dry_run,
+        }, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.recover_in_progress:
+        recovered = cleanup_stale_in_progress_tasks(dry_run=args.dry_run)
+        print(json.dumps({
+            "released_claims": 0,
+            "recovered_in_progress": recovered,
+            "dry_run": args.dry_run,
+        }, ensure_ascii=False, indent=2))
         return 0
 
     if not args.loop and not args.once:
@@ -849,6 +1031,7 @@ def main(argv: list[str] | None = None) -> int:
 
     while not stop["stop"]:
         cleanup_stale_claims()
+        cleanup_stale_in_progress_tasks()
 
         picked: Optional[TaskSpec] = None
         if args.task_id:

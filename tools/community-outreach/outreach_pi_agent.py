@@ -38,6 +38,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[1]
 STATE_DIR = SCRIPT_DIR / "outreach_state"
 PROMPT_PATH = SCRIPT_DIR / "prompts" / "outreach_pi_agent.txt"
+OPERATOR_MEMORY_PATH = SCRIPT_DIR / "OPERATOR_MEMORY.md"
 SUPERVISOR_LOG_DIR = STATE_DIR / "supervisor_logs"
 SUPERVISOR_LOG = SUPERVISOR_LOG_DIR / "supervisor.log"
 PI_JOURNAL = STATE_DIR / "pi_journal.jsonl"
@@ -58,6 +59,7 @@ ALLOWED_AUTONOMOUS = {
     "run_arxiv_watch",
     "run_lit_staleness",
     "run_inbox_watcher",
+    "run_profile_judge",
     "mark_target_stale",
     "adjust_cooldown",
     "restart_inner",
@@ -262,6 +264,70 @@ def _research_board_summary() -> dict:
     return {"counts": counts}
 
 
+def _preflight_summary() -> dict:
+    """Summarize deterministic board gates for the PI snapshot.
+
+    Keep this local/offline. The PI should see why the research loop is idle
+    before it proposes restarts or generic discovery work.
+    """
+    try:
+        from outreach_preflight import judge_board  # noqa: PLC0415
+    except Exception as exc:
+        return {"error": f"import failed: {exc}"}
+    try:
+        rows = judge_board()
+    except Exception as exc:
+        return {"error": f"judge_board failed: {exc}"}
+
+    histogram: dict[str, int] = {}
+    actionable: list[dict] = []
+    blocked: list[dict] = []
+    for row in rows:
+        histogram[row.verdict] = histogram.get(row.verdict, 0) + 1
+        item = {
+            "todo_id": row.todo_id,
+            "slug": row.slug,
+            "title": row.title,
+            "score": row.score,
+            "verdict": row.verdict,
+            "missing": row.missing[:6],
+            "risk_flags": row.risk_flags[:4],
+            "display_kind": row.display.kind,
+            "display_artifact": row.display.artifact,
+        }
+        if row.verdict == "RUN":
+            actionable.append(item)
+        elif len(blocked) < 12:
+            blocked.append(item)
+    return {
+        "histogram": histogram,
+        "actionable": actionable[:8],
+        "top_blocked": blocked,
+    }
+
+
+def _review_queue_summary() -> dict:
+    """Read-only operator/recovery queue for PI review."""
+    try:
+        from outreach_review_queue import build_queue  # noqa: PLC0415
+    except Exception as exc:
+        return {"error": f"import failed: {exc}"}
+    try:
+        q = build_queue()
+    except Exception as exc:
+        return {"error": f"build_queue failed: {exc}"}
+    return {
+        "ready_for_operator": q.get("ready_for_operator", [])[:8],
+        "blocked_tasks": q.get("blocked_tasks", [])[:8],
+        "stale_in_progress": q.get("stale_in_progress", [])[:8],
+        "profile_candidates": q.get("profile_candidates", [])[:8],
+        "candidate_inbox": q.get("candidate_inbox", {}),
+        "freshness_judges": q.get("freshness_judges", {}),
+        "board_histogram": q.get("board_histogram", {}),
+        "external_send_policy": q.get("external_send_policy"),
+    }
+
+
 def _recent_commits(n: int = 6) -> list[str]:
     try:
         out = subprocess.run(
@@ -295,6 +361,8 @@ def collect_snapshot() -> dict:
         "mail_sent_recent": _mail_recent("sent mailbox", limit=20),
         "mail_drafts_recent": _mail_recent("drafts mailbox", limit=20),
         "oracle_server": _server_status(),
+        "preflight": _preflight_summary(),
+        "review_queue": _review_queue_summary(),
         "recent_commits": _recent_commits(),
         "supervisor_tail": _read_tail(SUPERVISOR_LOG, n=30),
     }
@@ -443,6 +511,26 @@ def _spawn_inbox_watcher(days: int = 14) -> None:
     )
 
 
+def _spawn_profile_judge() -> None:
+    judge = SCRIPT_DIR / "outreach_profile_judge.py"
+    if not judge.exists():
+        return
+    subprocess.Popen(
+        ["python3", str(judge), "--generate-board-batch-with-codex", "--top", "1", "--min-score", "15"],
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
+    subprocess.Popen(
+        ["python3", str(judge), "--graduate-inbox-with-codex", "--top", "1"],
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
+
+
 def _mark_target_stale(target_id: str, reason: str) -> bool:
     """Append a 'stale' note to the OUTREACH_LOG row matching target_id.
 
@@ -492,6 +580,9 @@ def apply_actions(plan: dict, supervisor_callbacks: dict | None = None) -> list[
                 days = args.get("days") or 14
                 _spawn_inbox_watcher(days=days)
                 applied.append(f"run_inbox_watcher days={days}")
+            elif action == "run_profile_judge":
+                _spawn_profile_judge()
+                applied.append("run_profile_judge")
             elif action == "mark_target_stale":
                 tid = args.get("target_id") or ""
                 reason = args.get("reason") or "no reason given"
@@ -646,7 +737,14 @@ def run_review(supervisor_callbacks: dict | None = None) -> dict | None:
     snapshot = collect_snapshot()
     template = PROMPT_PATH.read_text(encoding="utf-8")
     snapshot_json = json.dumps(snapshot, ensure_ascii=False, indent=2)
-    prompt = template.format(snapshot=_safe(snapshot_json[:30000]))
+    try:
+        operator_memory = OPERATOR_MEMORY_PATH.read_text(encoding="utf-8")
+    except OSError:
+        operator_memory = "(operator memory unavailable)"
+    prompt = template.format(
+        snapshot=_safe(snapshot_json[:30000]),
+        operator_memory=_safe(operator_memory[:12000]),
+    )
     ok, stdout, rc = claude_exec(prompt, timeout=PI_TIMEOUT_S, log_tag="pi_review")
 
     plan: dict | None = None

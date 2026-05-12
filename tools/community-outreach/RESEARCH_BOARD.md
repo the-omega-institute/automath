@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **🔴 DROP · profile judge DROP** — Misframed target. The board entry itself records that Erdős #1191 is an infinite Sidon-set liminf/logarithmic-density problem, while the proposed statement is a finite Sidon second-order constant/ansatz-extremality proje |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
@@ -168,7 +168,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T05:45:51+00:00 · rc=0 · science_gate=CLOSE_TARGET |
 | Source | https://www.erdosproblems.com/7 + OPG http://www.openproblemgarden.org/op/odd_incongruent_covering_systems |
 | Type | OPEN / verifiable / falsifiable |
 | Untouched | ✅ 不在 AI wiki, BBMST22 后 2024-2025 arxiv 仅零星进展 |
@@ -222,7 +222,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T00:51:22+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | http://www.openproblemgarden.org/op/a_discrete_iteration_related_to_pierce_expansions |
 | Type | OPEN / decidable |
 | Untouched | ✅ 2024-2025 arxiv 没人攻 polylog; 最新 arxiv:2405.02174 (2025) 做 Hausdorff 维数侧 |
@@ -287,7 +287,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-11T19:08:51+00:00 · science_gate=WRITEBACK_READY · impact=bounded_finite_certificate_claim |
 | Source | http://www.openproblemgarden.org/op/singmasters_conjecture |
 | Type | weakly open / falsifiable |
 | Untouched | ✅ 系统 sweep 远未做到 verified bound 极限 |
@@ -315,7 +315,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T10:27:14+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | http://aimpl.org/nscombinatorial/7/ (problem 7.1, Leth) |
 | Type | OPEN / quantitative density |
 | Untouched | ✅ Leth 2014 后无攻 |
@@ -341,7 +341,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T06:40:00+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | http://aimpl.org/nscombinatorial/3/ (problem 3.3) |
 | Type | OPEN / partition regular |
 | Untouched | ✅ Moreira 2017 / Frantzikinakis 2024 没解决 family 版 |
@@ -422,7 +422,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **🔴 DROP · profile judge DROP** — Not viable as stated: the supremum over /t/<=1 includes t=0, so the objective contains ∫ f(x)^2 dx / //f//_1^2. For nonnegative L^1 functions supported in [-1/4,1/4], this ratio is unbounded by concentrating unit L^1 mas |
 | Source | AlphaEvolve PDF + Boyer-Steinerberger arxiv:2506.16750 + arxiv:2508.02803 |
 | Type | OPEN / extremal functional |
 | Untouched | ✅ 全是 step-function 数值竞赛, 0 人攻 closed form |
@@ -475,7 +475,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T12:19:43+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | http://aimpl.org/nscombinatorial/6/ (problem 6.1, Fish) |
 | Type | OPEN / structural sumset |
 | Untouched | ✅ Fish 2017 1-D 后, 2-D 无显著进展 |
@@ -584,7 +584,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog (TIME-SENSITIVE: 论文 1 天前) |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T11:50:32+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | https://arxiv.org/abs/2604.25214 (Tong Niu, 2026-04-28) |
 | Type | OPEN / Sidon set extension |
 | Untouched | ✅ 提交昨天, 单作者, 跟随 Alexeev-Mixon 2025-10 size-5 结果, 字段 wide open |
@@ -610,7 +610,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T09:58:10+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | https://arxiv.org/abs/2604.17847 (Aradhya Goel, IIT Kanpur, 2026-04-20) |
 | Type | OPEN / Pisano-Sophie Germain bridge |
 | Untouched | ✅ v3 刚发, 单作者, 没有 DeepMind/AlphaProof/Aristotle 关注 |
@@ -636,7 +636,7 @@
 
 | field | value |
 |---|---|
-| Status | Backlog (TIME-SENSITIVE: 论坛今天活跃) |
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T11:02:00+00:00 · rc=0 · science_gate=WRITEBACK_READY |
 | Source | https://www.erdosproblems.com/forum/thread/1163 (Przemek, 2026-04-29) |
 | Type | OPEN / statistical group theory |
 | Untouched | ✅ 论坛今天才头脑风暴, 0 partial result |
@@ -760,3 +760,213 @@
 - **2026-04-30**: 建 Stage 0 工具 `tools/community-outreach/lit_staleness.py` 跨 24 条 TODO 跑 erdosproblems registry + AI wiki + arXiv API + 板子自陈 status. 全 board verdict 分布: 🔴 CLOSED × 4 (T-02/T-03/T-08/T-23), 🟠 OVERTAKEN × 2 (T-01/T-19), 🟡 PARTIAL × 8 (T-14/T-15/T-17/T-18/T-20/T-21/T-22/T-24), 🟢 FRESH × 10. **新发现 3 条 Erdős registry 已收尾的 (CLOSED)**: #199 disproved (Lean) 2026-02-24, #1026 solved (Lean), #1196 proved (Lean). T-19 是 false positive (registry 显示 #872 仍 open + Bloom 论坛今天活跃, 应以板子的 forum-active signal 为准, 不被工具的关键词噪声匹配误导).
 - **当前 high-priority 重排 (2026-04-30 lit-staleness 后)**: T-04 Erdős #1191 ($1000 Sidon, 仍 open) 升至第一梯队; T-05 Erdős #7 ($25 odd covering, verifiable, 60-year fame); T-06 Erdős #699 (binomial gcd, falsifiable); T-13 Erdős #242 (Erdős-Straus, falsifiable); T-19 #872 (Bloom 论坛活跃, 工具误判但板子保留); T-22 #1163 (今天头脑风暴); T-21 Goel arxiv 1 周新.
 - **2026-04-30 (晚)**: 建 arxiv_watch.py + 接入 supervise/Round 1 freshness 注入 + 跑 Round 1 oracle discover (conv `bf5db0c917fe493f`, 13m35s ChatGPT 5.5 Pro 思考)。Oracle 比 lit_staleness 更激进，再清出 7 条 stale: 🔴 DISCARDED/CLOSED × 3 (T-12 misframed, T-17 IMO P6 已发表, T-24 not stated open), 🟠 OVERTAKEN × 4 (T-13 Erdős-Straus 已验 $10^{18}$, T-15 Hough negatively solved, T-18 Stage 1 ended Apr 20, T-19 "untouched" 主张被 Erdős 页面 AI partial+$(23/48+o(1))n$ 上界推翻)。**Oracle Round 1 TOP-3**: T-20 Sidon size-4 (best target), T-21 Sophie Germain × Fibonacci totient (strongest Omega fit), T-06 binomial gcd (pragmatic ship). **TOP-1 sub-goal**: T-20 lemma `SingerAffineNoEmbed_1024` ($A=\{0,1,3,11\}$, $B=\{0,1,4,11\}$ no affine embed in canonical Singer set $S_q\subset\mathbb{Z}/(q^2+q+1)\mathbb{Z}$ for $13\le q\le 1024$). 当晚启动 Round 2 deep on T-20.
+
+### T-25 · Finite Sidon diameter b_inf verifier
+
+| field | value |
+|---|---|
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T01:37:16+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Source | https://terrytao.wordpress.com/2025/11/05/mathematical-exploration-and-discovery-at-scale/comment-page-1/ |
+| Type | author question / arxiv followup |
+| Untouched | Publicly inspectable as of source checks: Daniel Carter's 2025-11-07 Tao-blog comment proposes investigating the largest Sidon set in [n] / smallest Sidon diameter and says the Carter-Hunter-O'Bryant upper bound depends on unclear piecewise-affine parameters; Tao's 2025-11-09 and 2025-11-11 replies identify missing side-condition enumeration, an admissibility-checking verifier, and the 1.9526463099204112 b_inf tuple. Erdős Problems #14, last edited 2026-04-06, still marks the finite Sidon size problem OPEN and lists Carter-Hunter-O'Bryant as current record h(N) <= N^{1/2}+0.98183 N^{1/4}+O(1). Exact-string searches for 1.9526463099204112 and 1.952659676624688 found only the Tao discussion. Must rerun arXiv, MathSciNet/zbMATH if available, Google Scholar/Semantic Scholar, GitHub dcartermath/sidon, and Erdős Problems #14 checks immediately before RUN because the Tao constant is a post-paper blog-comment update. |
+| Omega fit | 8/10 |
+| Topic value | 8/10 |
+| Effort est | 14-21 天 |
+| Risk | med |
+| Final display | source-audited research note plus private outreach draft for finite Sidon/Golomb-ruler researchers, centered on an independently checkable verifier/certificate for the finite Sidon diameter b_inf piecewise-affine ansatz |
+| Success gate | Before operator approval or any send: research.md must explicitly separate Erdős #14 finite Sidon size/diameter from Erdős #1191 infinite Sidon liminf; coefficient normalization must be checked, with b_inf on the diameter side corresponding under inversion to half that constant in the N^{1/4} term for h(N); the Tao comments, Carter-Hunter-O'Bryant arXiv/Springer paper, dcartermath/sidon verifier code, Erdős Problems #14/#1191 pages, and newer literature after 2026-05-10 must be rechecked; any extremality claim must be only for a fully specified admissible parameter class and backed by a reproducible certificate or stated as failure analysis; independent oracle judge must confirm no claim of solving the global finite Sidon problem. |
+
+**Statement.** Let A be a finite Sidon set of size k and diameter diam(A). The Carter-Hunter-O'Bryant method proves diam(A) >= k^2 - b k^{3/2} - O(k) for b <= 1.96365, equivalently h(N) <= N^{1/2}+0.98183 N^{1/4}+O(1). Tao's 2025-11-11 blog-comment update reports an AlphaEvolve/Daniel Carter parameter tuple giving b_inf <= 1.9526463099204112 after admissibility checks. The target is to reconstruct the admissible theorem/verifier for the piecewise-affine tau, alpha, cs framework and either produce a rigorous closed-class certificate for that tuple, or a precise failure report identifying missing hypotheses, numerical fragility, or non-extremality within the stated admissible class.
+
+**Prior.** Baseline sources: Carter-Hunter-O'Bryant, arXiv:2310.20032 submitted 2023-10-30, later Acta Mathematica Hungarica 175 (2025), 108-126, proves b <= 1.96365 and h(N) <= N^{1/2}+0.98183 N^{1/4}+O(1) with computer assistance. GitHub https://github.com/dcartermath/sidon publicly hosts verify.py for the paper and says it verifies the Section 3 proof strategy and Theorem 3.3. Tao blog comments dated 2025-11-09 and 2025-11-11 identify the verifier side-condition problem and report b_inf <= 1.9526463099204112 with tau=1.1660611984972167, eight alpha values, and cs=(0.6338163952331487,). Erdős Problems #14, checked from a page last edited 2026-04-06, remains OPEN and lists CHO25 as the current record; Erdős #1191 is a different infinite Sidon liminf problem and must not be used as the target label. Freshness remains mandatory because the improved constant appears in a blog comment rather than a versioned paper.
+
+**Omega fit detail.** Strong fit for Omega-style tooling if scoped as verifier/certificate work rather than solving the full Sidon conjecture: formalizable side-condition extraction, exact/interval linear-program checking, rational reconstruction of floating point parameters, dual certificate verification, additive-energy and collision-count lemmas, and reusable ZMod/Sidon abstractions. Exploratory bridge: even a negative result can become a useful benchmark for verifier hardening against AlphaEvolve-style exploit modes.
+
+**Attack plan.**
+1. Build a dated source table distinguishing Erdős #14 finite Sidon diameter/size, Erdős #1191 infinite Sidon liminf, Carter-Hunter-O'Bryant 2023/2025, dcartermath/sidon verify.py, and Tao's 2025-11 comments; record currentness queries and exact access dates.
+2. Reconstruct the CHO piecewise-affine admissible parameter class from the paper and verifier code, then write a standalone mathematical theorem statement with all side conditions for tau, alpha, cs and the returned b_inf bound.
+3. Convert the reported 1.9526463099204112 floating tuple into an independently auditable certificate: interval/rational bounds for admissibility, LP feasibility/duality or verified solver output, and a reproducible script producing results.json; if this fails, document the first unverifiable dependency precisely.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_finite_sidon_diameter_inf_verifier/research.md
+- tools/community-outreach/targets/cand_finite_sidon_diameter_inf_verifier/results.json
+- tools/community-outreach/targets/cand_finite_sidon_diameter_inf_verifier/submission_draft.md
+
+_Inbox graduation rationale_: This should enter the board because it is publicly inspectable, current enough to warrant fast source-audited followup, and well matched to automated verification rather than open-ended conjecture hunting. The previous T-04 failure was a labeling and normalization error, not evidence that the finite Sidon diameter verifier target is stale. The viable contribution is a rigorous audit/certificate or a careful failure analysis of a specific post-paper bound, with explicit guardrails against claiming global optimality.
+
+---
+
+### T-26 · MRS 2026 Problem 1 · Fibonacci-Thue-Morse shift lower bound
+
+| field | value |
+|---|---|
+| Status | **Pending User Approval** — research_loop completed 2026-05-11T18:24:18+00:00 · science_gate=WRITEBACK_READY · impact=author_email/short_note/operator_review |
+| Source | https://arxiv.org/abs/2603.21645 |
+| Type | open problem |
+| Untouched | arXiv:2603.21645 is publicly inspectable, submitted 2026-03-23, v1 only as of the arXiv page checked 2026-05-10. The paper states Theorem 14 gives an O(c) upper bound for the minimal msd-first Fibonacci-DFAO generating (t(i+c))_{i>=0}, then leaves Problem 1: prove the state count is Θ(c). Freshness must be rechecked immediately before any RUN/outreach by searching the exact problem phrase, author pages, arXiv followups, and related arXiv:2603.18858; no public solution was found in the 2026-05-10 web check. |
+| Omega fit | 9/10 |
+| Topic value | 8/10 |
+| Effort est | 10-20 天 |
+| Risk | med |
+| Final display | source-audited short research note or author email for automata/combinatorics-on-words audience |
+| Success gate | Before operator approval or external send: confirm the exact Problem 1 statement in arXiv:2603.21645v1 and that no public solution/update exists; prove a uniform Ω(c) lower bound for the minimal msd-first Fibonacci-DFAO for u_c(i)=t(i+c), preferably via an explicit Myhill-Nerode family of linearly many distinguishable reachable residuals; include reproducible finite-state computations for small c; and separate proof, code, and outreach draft artifacts. |
+
+**Statement.** Let t(n) be the parity of the number of 1s in the canonical Zeckendorf/Fibonacci representation of n, read by msd-first Fibonacci-DFAOs. For each c>=0 define u_c(i)=t(i+c). Prove that the number of states in the minimal msd-first Fibonacci-DFAO generating u_c is Θ(c).
+
+**Prior.** Primary source: Moradi, Rampersad, and Shallit, 'Complexity of Linear Subsequences of Fibonacci-Automatic Sequences', arXiv:2603.21645, submitted 2026-03-23. The arXiv page checked 2026-05-10 lists v1 only; the PDF states Theorem 14 gives O(c) and Problem 1 asks for Θ(c). Related source arXiv:2603.18858, 'State Complexity of Shifts of the Fibonacci Word', submitted March 2026, resolves the shifted Fibonacci word case with O(log c), but that is a different sequence f(i+c), not the Fibonacci-Thue-Morse shift t(i+c). Web searches on 2026-05-10 for exact phrases including 'minimal automaton generating t(i+c)', 'Fibonacci-Thue-Morse Theta(c)', and '2603.21645 Problem 1' found the source paper and mirrors/summaries, not a solution. This is only a bounded freshness check, not a proof of untouchedness.
+
+**Omega fit detail.** Strong fit for Automath/Omega because the target is finite-state and proof-auditable: construct Zeckendorf normal-form transducers, enumerate/minimize small-c DFAOs, extract reachable residuals, search for a linearly sized Myhill-Nerode separating family, and convert successful finite patterns into lemmas about synchronized Fibonacci carry/defect windows. The exploratory bridge is to relate MRS Theorem 14's length-(c+1) state window to canonical residue/carry layers whose future suffix probes distinguish Ω(c) residuals.
+
+**Attack plan.**
+1. Reproduce MRS definitions: build the msd-first Fibonacci-DFAO for t(n), implement the Theorem 13/14 shift construction for u_c, minimize for a range of c, and record exact state counts plus witness suffixes distinguishing states.
+2. Audit the proposed bridge lemma C: identify a linear-size reachable canonical slab inside the Theorem 14 construction, formalize its residue/carry descriptors, and test whether short Fibonacci-valid suffix probes give pairwise different outputs.
+3. Either prove a uniform Myhill-Nerode lower bound from the slab/probe structure or produce a precise failure analysis showing where the bridge collapses, with data and counterpatterns that are useful to the authors.
+
+**Deliverables.**
+- tools/community-outreach/targets/arxiv_2603_21645/research.md
+- tools/community-outreach/targets/arxiv_2603_21645/results.json
+- tools/community-outreach/targets/arxiv_2603_21645/submission_draft.md
+
+_Inbox graduation rationale_: The candidate is a real, named, current open problem in an inspectable 2026 arXiv preprint. It has a sharply scoped missing lower bound, an existing matching O(c) upper bound, and a natural route through finite automata minimization, Zeckendorf normalization, and Myhill-Nerode witnesses. It is suitable for the outreach board because partial progress can still yield a reviewable research note or collaboration packet, while any claimed success has a clear mathematical verifier.
+
+---
+
+### T-27 · MRS 2026 Problem 2 · Tribonacci word shift state complexity
+
+| field | value |
+|---|---|
+| Status | **Pending User Approval** — research_loop completed 2026-05-11T12:47:13+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Source | https://arxiv.org/abs/2603.21645 |
+| Type | open problem |
+| Untouched | arXiv:2603.21645v1 was submitted on 2026-03-23 and its conclusion explicitly states Problem 2: determine the state complexity of (r(i+c))_{i>=0} where r is the Tribonacci word. Web searches on 2026-05-10 for the exact problem phrase, Tribonacci word shift state complexity, and arXiv:2603.21645 Problem 2 surfaced the source paper and Fibonacci-shift companion material, not a public solution; this must still be rechecked before RUN/outreach. |
+| Omega fit | 7/10 |
+| Topic value | 9/10 |
+| Effort est | 14-30 天 |
+| Risk | high |
+| Final display | source-audited research note with reproducible transition/certificate data for automata-on-words researchers; optional author email only after operator approval |
+| Success gate | Before operator approval/send, verify the exact Problem 2 statement from arXiv:2603.21645, rerun a currentness search, fix the Tribonacci numeration and DFAO conventions, and produce either a proved asymptotic bound or an auditable finite transition/carry/partition certificate with reproducible data. |
+
+**Statement.** Let r be the Tribonacci word, interpreted in its corresponding Tribonacci/Pisot numeration DFAO setting. Determine, or give sharp asymptotic upper and lower bounds for, the number of states in the minimal DFAO generating the shifted sequence (r(i+c))_{i>=0} as a function of the shift c.
+
+**Prior.** Primary source: Moradi, Rampersad, and Shallit, arXiv:2603.21645v1, submitted 2026-03-23, conclusion Problem 2 asks this exact question and immediately frames it as a Pisot-degree generalization problem. Companion context: arXiv:2603.18858, submitted 2026-03-19, proves O(log c) state complexity for shifts of the Fibonacci word, not the Tribonacci word. Currentness check on 2026-05-10 found no public solution in broad web searches, but this is not proof of untouched status; operator should recheck arXiv/Google Scholar/Semantic Scholar/author pages immediately before RUN or outreach.
+
+**Omega fit detail.** Strong exploratory fit if Omega can represent the problem as finite-state evidence: build Tribonacci numeration recognizers, bounded carry states for Y=X+c, minimization data for shifted DFAOs, and Rauzy-fractal or beta-expansion partition transitions. The bridge is not a direct reuse of existing Zeckendorf/Fibonacci modules; it is a degree-3 Pisot extension target where reproducible finite transition tables are the main Automath/Omega artifact.
+
+**Attack plan.**
+1. Source audit: extract the exact definitions of Tribonacci word, Tribonacci representation, input direction, state complexity convention, and any cited Pisot-generalized automatic framework from the paper and adjacent references.
+2. Computational baseline: implement or reuse a Tribonacci numeration normalizer, DFAO for r, shift-by-c construction for small c, DFAO minimization, and record minimal state counts for a growing certified range of c.
+3. Theory/certificate step: attempt to identify a finite carry-state or Rauzy-fractal partition invariant that proves an upper bound, and separately search for distinguishable-prefix witnesses giving lower bounds.
+
+**Deliverables.**
+- tools/community-outreach/targets/arxiv_2603_21645_2/research.md
+- tools/community-outreach/targets/arxiv_2603_21645_2/results.json
+- tools/community-outreach/targets/arxiv_2603_21645_2/submission_draft.md
+
+_Inbox graduation rationale_: This is a real, recent, inspectable open problem stated in a 2026 arXiv paper by domain authors. It is close to Omega strengths because progress can be made through finite automata, minimization, transition certificates, and reproducible state-count data even if the full asymptotic classification remains out of reach. The risk is high because the degree-3 Pisot jump may require substantial new theory, but a well-audited computational/finite-partition packet would still be a useful outreach artifact.
+
+---
+
+### T-28 · Fibonacci Cube Edge General Position Conjecture
+
+| field | value |
+|---|---|
+| Status | **Pending User Approval** — research_loop completed 2026-05-11T18:35:08+00:00 · science_gate=WRITEBACK_READY · impact=author_email/short_note/operator_review |
+| Source | https://arxiv.org/abs/2304.10114 |
+| Type | open problem |
+| Untouched | Public source is arXiv:2304.10114, submitted 2023-04-20, with journal version published 2023-05-17; the paper states Conjecture 4.5 that gp_e(Γ_n)=2F_n for n≥2 after proving the Θ_1∪Θ_n lower bound. Freshness check on 2026-05-11 found later edge-general-position papers in 2024, 2025, and a 2026 Discrete Applied Mathematics article, but surfaced no inspectable paper closing the Fibonacci-cube conjecture; before any outreach, operator must re-check arXiv, Google Scholar/Semantic Scholar citations, MathSciNet/zbMATH if available, and the authors' pages for a post-2026-05-11 resolution. |
+| Omega fit | 9/10 |
+| Topic value | 8/10 |
+| Effort est | 10-21 天 |
+| Risk | med |
+| Final display | Short research note plus reproducible ILP/certificate tables for Γ_n and an operator-approved author email to Klavžar and Tan. |
+| Success gate | Before operator approval or external send, there must be either a human-readable proof of the upper bound gp_e(Γ_n)≤2F_n for all n≥2, or a clearly labeled partial contribution with reproducible verifier output matching gp_e(Γ_n)=2F_n for a nontrivial checked range and a fresh literature audit showing the conjecture remains open. |
+
+**Statement.** Let Γ_n be the Fibonacci cube: the induced subgraph of the n-dimensional hypercube on binary strings with no consecutive 1s. Let F_0=0, F_1=1, and F_{k+2}=F_{k+1}+F_k. Prove that for every n≥2, the edge general position number of Γ_n is gp_e(Γ_n)=2F_n, where an edge set X⊆E(Γ_n) is edge-general-position if no three distinct edges of X lie on a common shortest path in Γ_n.
+
+**Prior.** The source paper arXiv:2304.10114 was submitted on 2023-04-20 and the Springer open-access version was published on 2023-05-17. It proves that Θ_1(Γ_n)∪Θ_n(Γ_n) is a maximal edge general position set and gives gp_e(Γ_n)≥2F_n, then states Conjecture 4.5 asserting equality. Searches on 2026-05-11 for exact phrases including "edge general position" + "Fibonacci cube", "Conjecture 4.5" + "Fibonacci cube", and "gp_e" + "Fibonacci" found the source paper and later general edge-general-position work, including Tian-Klavžar-Tan 2024 on extremal edge general position sets, Cao-Ji-Wang 2025 on some graphs, Cao-Ji 2025 on cactus graphs, and a 2026 graph-products/ILP article, but no inspectable closure of this Fibonacci-cube equality. This is not a proof of openness; it is a bounded freshness baseline requiring citation-database and author-page review before outreach.
+
+**Omega fit detail.** Strong automath fit: Γ_n can be represented by no-consecutive-1 binary words, already aligned with Fibonacci-word/count infrastructure and finite graph/path modules. The target separates into finite certificate generation for small n, Θ-class coordinate lemmas, shortest-path/geodesic predicates in induced hypercube subgraphs, and a possible recursive upper-bound proof using Γ_n = 0Γ_{n-1} ∪ 10Γ_{n-2}. Omega can contribute both executable certificates and formalizable lemmas about Fibonacci strings, Θ-classes, and geodesic edge triples.
+
+**Attack plan.**
+1. Implement a finite model of Γ_n with vertices as no-consecutive-1 bitstrings, edges labeled by flipped coordinate, and a checker for whether three selected edges lie on a common shortest path.
+2. Run exact maximum edge-general-position searches for n up to the largest feasible range using ILP/SAT/branch-and-bound, record gp_e(Γ_n), extremal families, and dual upper-bound certificates where possible.
+3. Use the 0Γ_{n-1} ∪ 10Γ_{n-2} decomposition and Θ-class structure to search for a recursive upper-bound proof that every edge-general-position set has size at most 2F_n.
+
+**Deliverables.**
+- tools/community-outreach/targets/arxiv_2304_10114/research.md
+- tools/community-outreach/targets/arxiv_2304_10114/results.json
+- tools/community-outreach/targets/arxiv_2304_10114/submission_draft.md
+
+_Inbox graduation rationale_: This should enter the board because it is a named, public, inspectable conjecture in a peer-reviewed Fibonacci/Lucas-cube paper, the statement is crisp and certificate-friendly, the expected exact value is small enough to support meaningful finite verification, and the mathematical objects match Omega's graph and Fibonacci-combinatorics strengths. The main risk is freshness: later edge-general-position literature exists, so operator approval must include a final citation audit.
+
+---
+
+### T-29 · Perfect codes in the 111-free Fibonacci cube
+
+| field | value |
+|---|---|
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T02:41:42+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Source | https://arxiv.org/abs/1801.04106 |
+| Type | arxiv followup |
+| Untouched | Public source is Mollard arXiv:1801.04106, submitted 2018-01-12, which proves existence for Γ_n(1^s) when n=2^p-1 and s >= 3*2^(p-2) and explicitly leaves minimum-s/existence questions open. Freshness check on 2026-05-11: exact public searches for "Γ_n(1^3)"/"Gamma_n(1^3)" + "perfect code", "111" + "generalized Fibonacci cube" + "perfect code", and "minimum s" + "perfect code" + "Gamma_n(1^s)" found Mollard 2018, the 2022 generalized Lucas-cube followup, and related cube-recognition/Padovan material, but no public classification of the s=3 line. Before any external send, rerun arXiv, Google Scholar/Semantic Scholar, zbMATH/MathSciNet if available, and exact phrase web search for the same target. |
+| Omega fit | 8/10 |
+| Topic value | 8/10 |
+| Effort est | 14-21 天 |
+| Risk | med |
+| Final display | Short research note plus reproducible exact-cover/SAT certificate package for graph theorists working on Fibonacci cubes and perfect codes |
+| Success gate | Operator approval only after either a proved classification of all n for Γ_n(111), or a genuinely new infinite family/nonexistence theorem with reproducible code, certificates for the finite base cases, and an independently reviewable proof sketch. No author email or public post before this gate. |
+
+**Statement.** Classify the integers n >= 0 for which Γ_n(111), the induced subgraph of the n-cube on binary strings with no substring 111 and edges between strings at Hamming distance 1, admits a 1-perfect code, equivalently an efficient dominating set whose closed neighborhoods partition V(Γ_n(111)).
+
+**Prior.** Baseline sources: Ashrafi-Azarija-Babai-Fathalikhani-Klavzar proved ordinary Fibonacci cubes Γ_n(11) have perfect codes iff n <= 3 in Information Processing Letters 116(5), 2016. Mollard, arXiv:1801.04106 submitted 2018-01-12 and published as IPL 140, 2018, proves an infinite family for Γ_n(1^s) at n=2^p-1 and s >= 3*2^(p-2), while the public abstract and ScienceDirect page frame generalized Fibonacci cubes as the followup to the 2016 open problem. A 2022 Mollard Lucas-cube paper cites this as precedent and treats the analogous Lucas setting, not the Γ_n(111) classification. Search freshness on 2026-05-11 found no public paper closing the s=3 line; this is not a proof of untouchedness and must be rechecked before outreach.
+
+**Omega fit detail.** Strong fit for Omega-style finite-state combinatorics: vertices are accepted words of a 3-state no-111 DFA, adjacency is one-bit Hamming flip preserving the regular language, and the perfect-code condition is an exact cover by closed neighborhoods. This can be attacked by certified finite search, transfer matrices over boundary states, and a Lean handoff formalizing Γ_n(111), closed neighborhoods, exact-cover certificates, and any recurrence/proof obligations.
+
+**Attack plan.**
+1. Implement the no-111 DFA and generate Γ_n(111) with closed neighborhoods; solve exact-cover/SAT/ILP instances for n through the largest feasible bound, storing solver logs and independently checkable certificates.
+2. Extract structural data by boundary state: codeword prefix/suffix states, domination counts, residue constraints, and transfer-matrix obstructions; infer candidate periodic families or eventual nonexistence recurrences.
+3. Prove the inferred classification by a finite-state dynamic program or recurrence whose local transitions are auditable, then formalize the graph definition and certificate checker enough for an operator to verify finite base cases and recurrence coverage.
+
+**Deliverables.**
+- tools/community-outreach/targets/arxiv_1801_04106/research.md
+- tools/community-outreach/targets/arxiv_1801_04106/results.json
+- tools/community-outreach/targets/arxiv_1801_04106/submission_draft.md
+
+_Inbox graduation rationale_: The target is concrete, inspectable, and close to existing graph-code literature without duplicating an existing board item. It has a clean automath bridge: regular languages, induced hypercube subgraphs, exact covers, and certificate checking. The main risk is freshness, so the profile requires a bounded literature audit before outreach and no external send without operator approval.
+
+---
+
+### T-30 · Fibonacci-run fixed-degree spectrum
+
+| field | value |
+|---|---|
+| Status | **Pending User Approval** — research_loop completed 2026-05-12T07:05:49+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Source | https://arxiv.org/abs/2010.05521 |
+| Type | open problem / author question |
+| Untouched | Inspectable source: arXiv:2010.05521 was submitted 2020-10-12 and the journal version 'Fibonacci-run graphs II: Degree sequences' lists Conjecture 6.7 and Question 10.1. Freshness bound from public search on 2026-05-12: visible later Fibonacci-run papers found address radius/center (2023), diameter conjecture barriers (2025), and cube polynomials (2025), not the fixed-degree count. Before any outreach, re-check MathSciNet, zbMATH, Google Scholar citing papers, and exact-title/web searches for 'Fibonacci-run graph degree k', 'Conjecture 6.7', and 'Question 10.1'. |
+| Omega fit | 8/10 |
+| Topic value | 7/10 |
+| Effort est | 7-14 天 |
+| Risk | med |
+| Final display | Short research note and author email with a transfer-matrix derivation, reproducible code/certificate, p_k(t) table for small k, and a proof of the denominator and degree bound for fixed k. |
+| Success gate | Operator approval/send only after the construction reproduces Examples 6.3-6.6 and Theorem 6.8 from the paper, a minimized or independently checkable automaton/transfer matrix is attached, and a second freshness pass finds no published solution to Conjecture 6.7 or Question 10.1. |
+
+**Statement.** Let a_{n,k}=#{v in V(R_n): deg_{R_n}(v)=k} for the Fibonacci-run graph R_n. Prove, for every fixed k>=0, that A_k(t)=sum_{n>=0} a_{n,k} t^n has the form p_k(t)/(1-t^2)^{k+1}, where p_k(t) is an explicitly computable polynomial of degree (15k+8)/2 for even k and (15k+7)/2 for odd k, and give an algorithm or closed description for p_k(t), thereby answering Question 10.1 and proving Conjecture 6.7 of arXiv:2010.05521.
+
+**Prior.** Primary source is arXiv:2010.05521, submitted 2020-10-12, with journal version in Discrete Applied Mathematics 300 (2021), 56-71, DOI 10.1016/j.dam.2021.05.018. The source explicitly states Conjecture 6.7 after Examples 6.3-6.6 and asks Question 10.1 in Section 10. Public search on 2026-05-12 found related later work on radius/center, diameter barriers, Lucas-run graphs, and cube polynomials, but no visible fixed-degree spectrum closure; this is a bounded public-web prior, not a substitute for MathSciNet/zbMATH/Google Scholar freshness before outreach.
+
+**Omega fit detail.** Good automath/Omega fit because the target reduces to regular-language enumeration of binary words with local run constraints and flip-legality annotations. The exploratory bridge is to encode run-constrained words, up/down flip legality, and degree marking as a finite-state weighted automaton, then export a rational generating-function certificate plus independent enumeration checks. Formal proof integration can remain separate from outreach until the automaton invariant and coefficient extraction are stable.
+
+**Attack plan.**
+1. Extract the exact degree-enumerator generating function from Theorem 6.1 and reproduce the published small-k examples by symbolic differentiation or coefficient extraction.
+2. Build an independent finite-state grammar for run-constrained words with boundary annotations for legal 0-to-1 and 1-to-0 flips, producing a weighted transfer matrix for F(t,x)=sum_{n,v} x^{deg(v)} t^n.
+3. Prove that fixed-k coefficient extraction yields denominator (1-t^2)^{k+1}, derive the stated numerator degree bound, and generate p_k(t) tables plus brute-force checks for n,k in a reviewer-sized range.
+
+**Deliverables.**
+- tools/community-outreach/targets/arxiv_2010_05521/research.md
+- tools/community-outreach/targets/arxiv_2010_05521/results.json
+- tools/community-outreach/targets/arxiv_2010_05521/submission_draft.md
+
+_Inbox graduation rationale_: This is a real, inspectable author question with an exact target, a natural finite-state/rational-generating-function route, and a clear verification loop. It is small enough for an outreach packet, but still mathematically substantive because it turns a conjectural fixed-degree spectrum into an explicit uniform algorithm and proof.
+
+---

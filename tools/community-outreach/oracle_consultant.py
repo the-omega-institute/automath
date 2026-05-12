@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import json
 import os
 import re
@@ -58,6 +59,12 @@ STATE_DIR = REPO_ROOT / "tools/community-outreach/outreach_state"
 COMMUNITY_PROMPTS_DIR = REPO_ROOT / "tools/community-outreach/prompts"
 DEFAULT_TIMEOUT = 7200  # 2 hours; ChatGPT Pro thinking can run 60+ min
 DEFAULT_POLL_INTERVAL = 30
+DEFAULT_ZERO_EXTRACT_CANCEL_S = int(os.environ.get("OUTREACH_ORACLE_ZERO_EXTRACT_CANCEL_S", "7200"))
+ORACLE_TRANSPORT_ERROR_RE = re.compile(
+    r"^\s*ERROR\b|No assistant output after|re-extract: nothing meaningful|"
+    r"Task cancelled by server|empty response",
+    re.IGNORECASE,
+)
 DEFAULT_WRITE_PAPER_LATEX_PROMPT = r"""You have reached a substantive result. Now write the full paper as LaTeX.
 
 Output requirements:
@@ -74,6 +81,8 @@ Length target: 8-15 pages. No outline-only content.
 # Reuse the zero-dep board parser
 sys.path.insert(0, str(Path(__file__).parent))
 from outreach_board_parser import parse_board, BOARD_PATH_DEFAULT, TodoSpec  # noqa: E402
+from outreach_profile import load_profile  # noqa: E402
+from outreach_science_gate import science_contract_block  # noqa: E402
 
 _DISTILL_LOG_DIR = None
 _distill_codex_exec = None
@@ -154,6 +163,50 @@ def oracle_poll(task_id: str, *, timeout: int = DEFAULT_TIMEOUT,
                     print(f"[oracle] done {task_id} in {int(time.time()-start)}s, "
                           f"{len(r)} chars", file=sys.stderr)
                 return r
+            if data.get("status") == "cancelled":
+                if progress:
+                    print(f"[oracle] cancelled {task_id} after {int(time.time()-start)}s", file=sys.stderr)
+                return ""
+        except Exception:
+            pass
+        try:
+            status = http_get(f"{ORACLE_SERVER}/status", timeout=5)
+            agent_rows = status.get("recent_agents") or {}
+            for agent_id, rec in agent_rows.items():
+                metrics = rec.get("metrics") or {}
+                if metrics.get("task_id") != task_id:
+                    continue
+                extracted = int(metrics.get("extracted_chars") or 0)
+                elapsed_gen = int(metrics.get("elapsed_seconds") or 0)
+                generating = bool(metrics.get("generating"))
+                generation = metrics.get("generation") if isinstance(metrics.get("generation"), dict) else {}
+                if (not generating) and generation.get("post_think") and extracted < 5 and elapsed_gen >= 600:
+                    http_post(f"{ORACLE_SERVER}/cancel", {"task_id": task_id}, timeout=10)
+                    if progress:
+                        print(
+                            f"[oracle] auto-cancel {task_id}: agent={agent_id} "
+                            f"post-think with only {extracted} extracted chars after {elapsed_gen}s",
+                            file=sys.stderr,
+                    )
+                    return ""
+                if (not generating) and extracted == 0 and elapsed_gen >= 900:
+                    http_post(f"{ORACLE_SERVER}/cancel", {"task_id": task_id}, timeout=10)
+                    if progress:
+                        print(
+                            f"[oracle] auto-cancel {task_id}: agent={agent_id} "
+                            f"idle with 0 extracted chars after {elapsed_gen}s",
+                            file=sys.stderr,
+                        )
+                    return ""
+                if generating and extracted == 0 and elapsed_gen >= DEFAULT_ZERO_EXTRACT_CANCEL_S:
+                    http_post(f"{ORACLE_SERVER}/cancel", {"task_id": task_id}, timeout=10)
+                    if progress:
+                        print(
+                            f"[oracle] auto-cancel {task_id}: agent={agent_id} "
+                            f"generating {elapsed_gen}s with 0 extracted chars",
+                            file=sys.stderr,
+                        )
+                    return ""
         except Exception:
             pass
         elapsed = int(time.time() - start)
@@ -191,6 +244,10 @@ def is_outreach_response_valid(response: str) -> bool:
         "research", "missing", "concern", "risk",
     )
     return any(a in lower for a in anchors)
+
+
+def is_oracle_transport_error(response: str) -> bool:
+    return bool(ORACLE_TRANSPORT_ERROR_RE.search(response or ""))
 
 
 # ---------------------------------------------------------------------------
@@ -550,6 +607,7 @@ class OracleConsultant:
                        follow_up_prompts: Optional[list[str]] = None,
                        prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None = None,
                        per_turn_timeout: int = DEFAULT_TIMEOUT,
+                       resume_conversation_id: str = "",
                        # Drop the leading word-boundary entirely on the
                        # all-caps markers — ChatGPT 5.5 Pro frequently emits
                        # "Thought for 39m 33sBREAKTHROUGH:" with no space
@@ -568,7 +626,8 @@ class OracleConsultant:
         """Drive multi-turn deep reasoning on `todo`.
 
         Pattern (matches Liam Price-style "keep prodding"):
-          turn 0: open conversation with `initial_prompt` (full problem framing)
+          turn 0: open conversation with `initial_prompt` (full problem framing),
+                  or post it as a follow-up when `resume_conversation_id` is set.
           turn k>0: send next follow-up prompt from `follow_up_prompts` (rotates)
           After each turn: scan response for breakthrough or stuck markers.
           If a breakthrough is found and `terminal_prompt` is not None, send
@@ -606,22 +665,42 @@ class OracleConsultant:
                 "error": f"oracle server unreachable at {self.server_url}",
             }
         turns: list[dict] = []
-        conversation_id = ""
+        conversation_id = resume_conversation_id or ""
         chatgpt_url = ""
         latex_path = ""
         plain_summary = ""
         terminal_latex_error = ""
         stuck_streak = 0
+        no_progress_streak = 0
         stop_break = re.compile(stop_breakthrough_re, re.IGNORECASE)
         stop_stuck = re.compile(stop_stuck_re, re.IGNORECASE)
         verdict = "EXHAUSTED"
         total_start = time.time()
         previous_response_text = ""
+        next_followup_override = ""
+        profile, _ = load_profile(slug or todo.slug())
+        contract_text = science_contract_block(profile)
+        patience = 2
+        if profile is not None and profile.science_contract is not None:
+            patience = profile.science_contract.no_progress_patience_turns
+        objective = "\n".join([
+            f"Target: {todo.todo_id} {todo.title}",
+            "Science contract:",
+            contract_text,
+            "Board statement:",
+            todo.statement or "",
+        ])
         for turn_idx in range(max_turns):
             prompt_source = "initial"
             if turn_idx == 0:
                 prompt = initial_prompt
-                review = self._submit_turn(initial_prompt, conversation_id="",
+                if conversation_id:
+                    prompt, prompt_source = _resume_short_prompt(
+                        todo,
+                        slug=run_slug,
+                        prompt_generator=prompt_generator,
+                    )
+                review = self._submit_turn(prompt, conversation_id=conversation_id,
                                            todo=todo, timeout=per_turn_timeout)
             else:
                 # Rotate through follow-up prompts; cycle if max_turns > prompts
@@ -629,7 +708,11 @@ class OracleConsultant:
                 template_prompt = follow_up_prompts[fup_idx]
                 prompt = template_prompt
                 prompt_source = "template"
-                if prompt_generator is not None:
+                if next_followup_override:
+                    prompt = next_followup_override
+                    prompt_source = "evaluator"
+                    next_followup_override = ""
+                elif prompt_generator is not None:
                     try:
                         generated = (prompt_generator(turn_idx, previous_response_text, turns, todo)
                                      or "").strip()
@@ -668,12 +751,87 @@ class OracleConsultant:
             except Exception:
                 response_text = ""
             previous_response_text = response_text
+            digest_result = _codex_digest_oracle_turn(
+                todo,
+                response_text,
+                response_log_path=review.response_log_path,
+            )
+            if digest_result.get("materialized_artifacts"):
+                turn_record["materialized_artifacts"] = digest_result["materialized_artifacts"]
+            if digest_result.get("claim_packet"):
+                turn_record["claim_packet"] = digest_result["claim_packet"]
+            turn_record["science_gate_after_turn"] = {
+                "status": digest_result.get("science_gate_status", ""),
+                "missing": digest_result.get("science_gate_missing", []),
+                "next_action": digest_result.get("science_gate_next_action", ""),
+            }
             if review.error:
                 verdict = "FAILED"
                 break
-            if stop_break.search(response_text):
-                verdict = "BREAKTHROUGH"
+            eval_result = codex_evaluate_progress(
+                turn_idx,
+                response_text,
+                turns,
+                objective,
+            )
+            turn_record["contribution"] = eval_result.get("contribution", "")
+            turn_record["evaluator_verdict"] = eval_result.get("verdict", "")
+            turn_record["evaluator_reason"] = eval_result.get("verdict_reason", "")
+            generated_next = (eval_result.get("next_question") or "").strip()
+            gate_missing = list(digest_result.get("science_gate_missing", [])) or _science_gate_missing_for_todo(todo)
+            gate_complete = not gate_missing
+            gate_status = str(digest_result.get("science_gate_status") or "").upper()
+            if gate_status in {"WRITEBACK_READY", "CLOSE_TARGET"}:
+                verdict = "BREAKTHROUGH" if gate_status == "WRITEBACK_READY" else "STUCK"
+                turn_record["gate_stop"] = (
+                    f"deterministic science gate reached {gate_status}; "
+                    "stop this Oracle batch and hand off to local writeback/review gates"
+                )
                 break
+            if stop_break.search(response_text):
+                if gate_complete:
+                    verdict = "BREAKTHROUGH"
+                    break
+                turn_record["gate_override"] = "breakthrough text ignored because science gate still has missing evidence"
+                next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
+                continue
+            if eval_result.get("verdict") == "complete":
+                if gate_complete:
+                    verdict = "BREAKTHROUGH"
+                    break
+                turn_record["gate_override"] = "evaluator complete ignored because science gate still has missing evidence"
+                next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
+                continue
+            if eval_result.get("verdict") == "stuck":
+                stuck_streak += 1
+            contribution = (eval_result.get("contribution") or "").lower()
+            has_progress = any(
+                term in contribution
+                for term in (
+                    "lemma", "proof", "calculation", "construction",
+                    "counterexample", "certificate", "bound", "obstruction",
+                    "reduction", "new "
+                )
+            )
+            if not has_progress and turn_idx > 0:
+                no_progress_streak += 1
+            else:
+                no_progress_streak = 0
+            if no_progress_streak >= patience:
+                turn_record["gate_override"] = (
+                    f"no substantive progress for {no_progress_streak} consecutive turns; "
+                    "forcing strategy shift instead of treating this as a scientific stop"
+                )
+                next_followup_override = (
+                    "You have repeated the same line without lowering the science-contract progress metric. "
+                    "Choose exactly one route now: RESCOPE to a smaller publishable lemma/certificate, "
+                    "NEW_ATTACK with a different proof or computation strategy and a new progress metric, "
+                    "or CLOSE_WITH_OBSTRUCTION by giving a FILE block for "
+                    f"`tools/community-outreach/targets/{todo.slug()}/failure_analysis.md` "
+                    "that identifies the concrete obstruction. Do not summarize; execute the route."
+                )
+                no_progress_streak = 0
+                continue
             if stop_stuck.search(response_text):
                 stuck_streak += 1
                 if stuck_streak >= stuck_streak_threshold:
@@ -681,6 +839,9 @@ class OracleConsultant:
                     break
             else:
                 stuck_streak = 0
+            if turn_idx == len(turns) - 1 and generated_next:
+                turn_record["generated_next_question"] = generated_next
+                next_followup_override = generated_next
         reasoning_stopped_at_turn = len(turns) - 1
         if verdict == "BREAKTHROUGH" and terminal_prompt:
             terminal_review = self._submit_turn(
@@ -778,6 +939,23 @@ class OracleConsultant:
         start = time.time()
         response = oracle_poll(task_id, timeout=timeout)
         elapsed = int(time.time() - start)
+        if (not response) or is_oracle_transport_error(response):
+            retry_review = self.retry(
+                task_id=task_id,
+                conversation_id=new_conv,
+                timeout=min(timeout, DEFAULT_TIMEOUT),
+            )
+            if (
+                retry_review is not None
+                and retry_review.response_log_path
+                and retry_review.response_chars >= 500
+                and not retry_review.error
+            ):
+                retry_review.todo_id = todo.todo_id
+                retry_review.title = todo.title
+                retry_review.parent_task_id = task_id
+                return retry_review
+            response = ""
         completed_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         response_log.write_text(response or "", encoding="utf-8")
         chatgpt_url = ""
@@ -810,6 +988,8 @@ class OracleConsultant:
         state["latest_oracle_deep_verdict"] = run["final_verdict"]
         state["latest_oracle_deep_turns"] = len(run["turns"])
         state["latest_oracle_deep_at"] = run["run_completed_at"]
+        state["latest_oracle_deep_conversation_id"] = run.get("conversation_id", "")
+        state["latest_oracle_deep_url"] = run.get("chatgpt_url", "")
         state["latest_oracle_latex_path"] = run.get("latex_path", "")
         state["latest_oracle_plain_summary"] = run.get("plain_summary", "")
         state["latest_oracle_terminal_latex_error"] = run.get("terminal_latex_error", "")
@@ -1002,6 +1182,408 @@ def _turn_response_text(turn: dict) -> str:
     return response
 
 
+def _latest_response_text_for_slug(slug: str, *, state_dir: Path = STATE_DIR) -> str:
+    path = state_dir / f"{_safe_outreach_slug(slug)}.json"
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ""
+    runs = state.get("oracle_deep_runs") or []
+    if not isinstance(runs, list):
+        return ""
+    for run in reversed(runs):
+        if not isinstance(run, dict):
+            continue
+        for turn in reversed(run.get("turns") or []):
+            if not isinstance(turn, dict):
+                continue
+            text = _turn_response_text(turn).strip()
+            if text:
+                return text
+    return ""
+
+
+def _resume_short_prompt(
+    todo: TodoSpec,
+    *,
+    slug: str,
+    prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None,
+) -> tuple[str, str]:
+    last_response = _latest_response_text_for_slug(slug)
+    gate_missing = _science_gate_missing_for_todo(todo)
+    if gate_missing and last_response:
+        return _artifact_repair_prompt(todo, gate_missing, last_response=last_response), "artifact_repair"
+    if prompt_generator is not None and last_response:
+        try:
+            generated = (prompt_generator(1, last_response, [], todo) or "").strip()
+        except Exception:
+            generated = ""
+        if generated:
+            return generated, "codex_resume"
+    if gate_missing:
+        missing_block = "\n".join(f"- {m}" for m in gate_missing)
+        return (
+            "Continue from the previous answer in this same conversation. "
+            "Do not restate the whole problem. The repository science gate is still missing:\n"
+            f"{missing_block}\n\n"
+            "Produce the next concrete artifact or proof step now. If a file is missing, return a FILE block with exact content.",
+            "resume_gate_short",
+        )
+    return (
+        "Continue from the previous answer in this same conversation. Do not restate the whole problem. "
+        "Use the last result as context and make the next concrete proof/computation move that lowers the science-contract progress metric.",
+        "resume_short",
+    )
+
+
+def _science_gate_missing_for_todo(todo: TodoSpec) -> list[str]:
+    try:
+        from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: PLC0415
+        verdict = science_gate_evaluate(todo)
+    except Exception:
+        return []
+    return list(getattr(verdict, "missing", []) or [])
+
+
+def _expected_artifact_paths_for_todo(todo: TodoSpec) -> list[str]:
+    paths: list[str] = []
+    try:
+        profile, _ = load_profile(todo.slug())
+    except Exception:
+        profile = None
+    if profile is not None:
+        for value in getattr(profile, "expected_artifacts", []) or []:
+            if isinstance(value, str) and value.strip():
+                paths.append(value.strip())
+        contract = getattr(profile, "science_contract", None)
+        terminal = getattr(contract, "terminal_artifact", "") if contract is not None else ""
+        if isinstance(terminal, str) and terminal.strip():
+            paths.append(terminal.strip())
+    for fallback in (
+        f"tools/community-outreach/targets/{todo.slug()}/research.md",
+        f"tools/community-outreach/targets/{todo.slug()}/results.json",
+    ):
+        paths.append(fallback)
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for path in paths:
+        normalized = path.strip()
+        if not normalized or normalized in seen:
+            continue
+        seen.add(normalized)
+        deduped.append(normalized)
+    return deduped
+
+
+def _fence_language_for_path(path: str) -> str:
+    suffix = Path(path).suffix.lower()
+    if suffix == ".json":
+        return "json"
+    if suffix == ".py":
+        return "python"
+    if suffix == ".csv":
+        return "csv"
+    if suffix in {".tex", ".latex"}:
+        return "latex"
+    if suffix in {".md", ".markdown"}:
+        return "markdown"
+    return "text"
+
+
+def _artifact_repair_prompt(todo: TodoSpec, missing: list[str], *, last_response: str) -> str:
+    missing_block = "\n".join(f"- {m}" for m in missing) or "- unspecified missing evidence"
+    artifact_paths = _expected_artifact_paths_for_todo(todo)
+    artifact_block = "\n\n".join(
+        f"FILE: {path}\n```{_fence_language_for_path(path)}\n... exact file content ...\n```"
+        for path in artifact_paths
+    )
+    try:
+        profile, _ = load_profile(todo.slug())
+        contract = science_contract_block(profile)
+    except Exception:
+        contract = ""
+    contract_block = f"\n\nScience contract:\n{contract.strip()}" if contract.strip() else ""
+    return f"""Continue in this same conversation from the previous answer; this is not a restart. The previous turn is NOT accepted as complete because the deterministic science gate inspected the repository and found missing disk artifacts:
+{missing_block}
+{contract_block}
+
+Do not say that files have been created unless you include their exact contents in this reply.
+
+Your task now is to produce the missing reproducible artifact packet for {todo.todo_id} ({todo.title}). Return ONLY target-specific file blocks, one after another. Use these expected paths unless the science contract explicitly requires a different verifier artifact:
+
+{artifact_block}
+
+If a mathematically honest artifact cannot be produced, return exactly one FILE block for `tools/community-outreach/targets/{todo.slug()}/failure_analysis.md` explaining the first unverifiable dependency and why the target must continue or be re-scoped. Do not include prose outside FILE blocks.
+
+Formatting is part of the task. The line immediately after each FILE line must be exactly a fenced-code opener such as ```json, ```markdown, ```python, ```latex, or ```csv. Do not write JSON{{...}}, PythonRun..., csv..., Markdown lists, or prose labels. If the full packet is too long, send only the valid fenced `results.json` block first.
+
+Previous response excerpt:
+{_compact_excerpt(last_response, 2500)}
+"""
+
+
+def _extract_file_blocks(text: str) -> list[tuple[str, str]]:
+    blocks: list[tuple[str, str]] = []
+    raw_file_markers = list(re.finditer(r"(?m)^FILE:\s*(?P<path>[^\n]+)$", text or ""))
+    pattern = re.compile(
+        r"(?m)^FILE:\s*(?P<path>[^\n]+)\n```(?:[A-Za-z0-9_+.-]+)?\n(?P<body>.*?)\n```",
+        re.DOTALL,
+    )
+    for match in pattern.finditer(text or ""):
+        path = match.group("path").strip().strip("`")
+        body = match.group("body")
+        if path and body.strip():
+            blocks.append((path, body.rstrip() + "\n"))
+    if raw_file_markers:
+        fenced_paths = {rel for rel, _body in blocks}
+        blocks.extend(_extract_flattened_file_blocks(text or "", raw_file_markers, fenced_paths))
+    if raw_file_markers and not blocks:
+        marker_paths = ", ".join(
+            (m.group("path") or "").strip() for m in raw_file_markers[:5]
+        )
+        print(
+            "[oracle] ignored malformed FILE blocks without fenced code bodies: "
+            f"{marker_paths}",
+            file=sys.stderr,
+        )
+    return blocks
+
+
+def _extract_flattened_file_blocks(
+    text: str,
+    markers: list[re.Match[str]],
+    fenced_paths: set[str],
+) -> list[tuple[str, str]]:
+    """Recover safe flattened blocks produced by ChatGPT DOM extraction.
+
+    The userscript can lose fenced-code newlines and return `JSON{...}` after a
+    FILE marker. We only recover formats with a deterministic parser. In
+    particular, flattened Python is not reconstructed here because missing
+    newlines can change semantics; the gate should ask Oracle to resend it.
+    """
+    recovered: list[tuple[str, str]] = []
+    for idx, marker in enumerate(markers):
+        path = (marker.group("path") or "").strip().strip("`")
+        if not path or path in fenced_paths:
+            continue
+        start = marker.end()
+        end = markers[idx + 1].start() if idx + 1 < len(markers) else len(text)
+        body = text[start:end].strip()
+        suffix = Path(path).suffix.lower()
+        if suffix == ".json":
+            parsed = _recover_flattened_json_body(body)
+            if parsed:
+                recovered.append((path, parsed))
+        elif suffix in {".md", ".markdown"}:
+            parsed = _recover_flattened_markdown_body(body)
+            if parsed:
+                recovered.append((path, parsed))
+        elif suffix == ".csv":
+            parsed = _recover_flattened_csv_body(body)
+            if parsed:
+                recovered.append((path, parsed))
+    return recovered
+
+
+def _recover_flattened_json_body(body: str) -> str:
+    cleaned = body.strip()
+    if cleaned.startswith("JSON"):
+        cleaned = cleaned[4:].lstrip()
+    elif cleaned.startswith("json"):
+        cleaned = cleaned[4:].lstrip()
+    if not cleaned.startswith("{"):
+        first = cleaned.find("{")
+        if first < 0:
+            return ""
+        cleaned = cleaned[first:]
+    candidate = _balanced_json_object(cleaned)
+    if not candidate:
+        return ""
+    try:
+        data = json.loads(candidate)
+    except json.JSONDecodeError as exc:
+        print(f"[oracle] flattened JSON block rejected: {exc}", file=sys.stderr)
+        return ""
+    return json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+
+
+def _recover_flattened_markdown_body(body: str) -> str:
+    cleaned = body.strip()
+    if cleaned.startswith("Markdown"):
+        cleaned = cleaned[len("Markdown"):].lstrip()
+    elif cleaned.startswith("markdown"):
+        cleaned = cleaned[len("markdown"):].lstrip()
+    if cleaned.startswith("---"):
+        return cleaned.rstrip() + "\n"
+    if not cleaned.startswith("#"):
+        return ""
+    # The DOM extractor can collapse fenced-code newlines, but Markdown prose
+    # remains semantically inspectable. Keep the text as-is rather than trying
+    # to infer paragraph breaks; science gates only need durable content.
+    return cleaned.rstrip() + "\n"
+
+
+def _balanced_json_object(text: str) -> str:
+    depth = 0
+    in_string = False
+    escaped = False
+    for idx, ch in enumerate(text):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return text[: idx + 1]
+    return ""
+
+
+def _recover_flattened_csv_body(body: str) -> str:
+    cleaned = body.strip()
+    if cleaned.startswith("csv"):
+        cleaned = cleaned[3:].lstrip()
+    if not cleaned.startswith("c,state_count"):
+        return ""
+    payload = cleaned[len("c,state_count"):].strip()
+    if not re.fullmatch(r"\d+(?:,\d+)+", payload):
+        return ""
+    pairs: list[tuple[int, int]] = []
+    pos = 0
+    c = 0
+    while pos < len(payload):
+        marker = f"{c},"
+        if not payload.startswith(marker, pos):
+            return ""
+        value_start = pos + len(marker)
+        next_marker = f"{c + 1},"
+        next_pos = payload.find(next_marker, value_start)
+        if next_pos < 0:
+            value_text = payload[value_start:]
+            pos = len(payload)
+        else:
+            value_text = payload[value_start:next_pos]
+            pos = next_pos
+        if not value_text or not value_text.isdigit():
+            return ""
+        pairs.append((c, int(value_text)))
+        c += 1
+    if not pairs or pairs[0][0] != 0:
+        return ""
+    lines = ["c,state_count", *(f"{c},{count}" for c, count in pairs)]
+    return "\n".join(lines) + "\n"
+
+
+def _materialize_file_blocks(text: str) -> list[str]:
+    written: list[str] = []
+    for rel, body in _extract_file_blocks(text):
+        p = Path(rel)
+        dest = p if p.is_absolute() else REPO_ROOT / p
+        try:
+            dest.resolve().relative_to(REPO_ROOT.resolve())
+        except ValueError:
+            continue
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(body, encoding="utf-8")
+        written.append(str(dest.relative_to(REPO_ROOT)))
+    return written
+
+
+def _codex_digest_oracle_turn(
+    todo: TodoSpec,
+    response_text: str,
+    *,
+    response_log_path: str = "",
+) -> dict:
+    """Force a local Codex-side digest after every Oracle deep turn.
+
+    Oracle is used for search/deep reasoning. It is not the owner of repository
+    state. This digest gives the deterministic harness a chance to materialize
+    safe FILE blocks, preserve meaningful non-FILE claims as target-local claim
+    packets, and re-run the science gate before the next prompt is chosen.
+    """
+    result = {
+        "materialized_artifacts": [],
+        "claim_packet": "",
+        "science_gate_status": "",
+        "science_gate_missing": [],
+        "science_gate_next_action": "",
+    }
+    text = response_text or ""
+    written = _materialize_file_blocks(text)
+    result["materialized_artifacts"] = written
+
+    gate_missing = _science_gate_missing_for_todo(todo)
+    if text.strip() and not written and gate_missing:
+        slug = todo.slug()
+        target_dir = REPO_ROOT / "tools/community-outreach/targets" / slug
+        target_dir.mkdir(parents=True, exist_ok=True)
+        digest = hashlib.sha256(text.encode("utf-8", errors="replace")).hexdigest()[:12]
+        packet = target_dir / f"oracle_claim_packet_{digest}.md"
+        if not packet.exists():
+            packet.write_text(
+                "\n".join([
+                    f"# Oracle Claim Packet — {todo.todo_id} {todo.title}",
+                    "",
+                    "This packet preserves an Oracle/ChatGPT response that did not",
+                    "materialize verifier artifacts. It is not accepted evidence until",
+                    "Codex/local scripts produce independent files and the science gate",
+                    "passes.",
+                    "",
+                    f"- source_response_log: `{response_log_path or '(not logged)'}`",
+                    f"- missing_after_turn: {json.dumps(gate_missing, ensure_ascii=False)}",
+                    "",
+                    "## Oracle Response",
+                    "",
+                    text.strip(),
+                    "",
+                ]),
+                encoding="utf-8",
+            )
+        result["claim_packet"] = str(packet.relative_to(REPO_ROOT))
+
+    gate_json = REPO_ROOT / "tools/community-outreach/targets" / todo.slug() / "science_gate.json"
+    try:
+        proc = subprocess.run(
+            [
+                "python3",
+                str(REPO_ROOT / "tools/community-outreach/outreach_science_gate.py"),
+                "--todo-id",
+                todo.todo_id,
+                "--write-ledger",
+                "--json",
+            ],
+            cwd=str(REPO_ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=120,
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            payload = json.loads(proc.stdout)
+            row = payload[0] if isinstance(payload, list) and payload else payload
+            if isinstance(row, dict):
+                result["science_gate_status"] = row.get("status", "")
+                result["science_gate_missing"] = row.get("missing", []) or []
+                result["science_gate_next_action"] = row.get("next_action", "")
+        elif gate_json.exists():
+            row = json.loads(gate_json.read_text(encoding="utf-8"))
+            result["science_gate_status"] = row.get("status", "")
+            result["science_gate_missing"] = row.get("missing", []) or []
+            result["science_gate_next_action"] = row.get("next_action", "")
+    except Exception as exc:  # noqa: BLE001
+        result["science_gate_error"] = str(exc)
+    return result
+
+
 def _prior_turns_summary(all_turns: list[dict], *, limit: int = 2000) -> str:
     parts: list[str] = []
     for idx, turn in enumerate(all_turns):
@@ -1149,7 +1731,19 @@ def codex_driven_prompt_generator(turn: int, last_response: str, all_turns: list
         or followup.startswith("(start-failed)")
         or followup.startswith("(dry run")):
         return fallback
-    return followup
+    return _as_continuation_prompt(followup)
+
+
+def _as_continuation_prompt(question: str) -> str:
+    cleaned = (question or "").strip()
+    if not cleaned:
+        return cleaned
+    if re.search(r"\b(continue|previous|last answer|same conversation|上一|继续)\b", cleaned[:240], re.IGNORECASE):
+        return cleaned
+    return (
+        "Continue from your previous answer in this same conversation; do not restart or restate the whole problem. "
+        f"{cleaned}"
+    )
 
 
 def codex_evaluate_progress(

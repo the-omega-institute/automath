@@ -25,7 +25,7 @@ Protective layer (ported from bedc-deep 2026-05-08):
     before persisting.
   - Contamination detection: reject responses containing canonical BEDC paper /
     paper-trade markers (we are openproblem outreach, not BEDC).
-  - Minimum userscript version (`outreach-1.9`): older scripts can't push
+  - Minimum userscript version (`outreach-1.18`): older scripts can't push
     results, prevents bad data from a half-upgraded environment.
 
 Usage:
@@ -44,6 +44,7 @@ Hard rules:
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import threading
@@ -59,12 +60,14 @@ PORT = 8766
 ORACLE_DIR = Path(__file__).parent / "outreach_oracle"
 SESSIONS_DIR = ORACLE_DIR / "sessions"
 RESULTS_DIR = ORACLE_DIR / "results"
+CANCELLED_PATH = ORACLE_DIR / "cancelled_tasks.json"
 
-MAX_AGENTS = 2  # operator memory: tab cap = 2 on this machine
+MAX_AGENTS = int(os.environ.get("OUTREACH_ORACLE_MAX_AGENTS", "2") or "2")
 TASK_TIMEOUT = 14400  # 4 hours; ChatGPT Pro thinking can be 60+ min/turn
 AGENT_RECENT_SECONDS = 120
+STALE_REQUEUE_SECONDS = 900
 SESSION_IDLE_RETENTION = 14 * 24 * 3600  # keep sessions on disk for 14 days
-MIN_SCRIPT_VERSION = "outreach-1.9"
+MIN_SCRIPT_VERSION = "outreach-1.20"
 OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem"
 OPENPROBLEM_PROJECT_URL = f"https://chatgpt.com{OPENPROBLEM_PROJECT_PREFIX}/project"
 
@@ -129,6 +132,91 @@ def _hydrate_sessions() -> None:
             continue
 
 
+def _hydrate_cancelled_tasks() -> None:
+    if not CANCELLED_PATH.exists():
+        return
+    try:
+        data = json.loads(CANCELLED_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    if isinstance(data, list):
+        cancelled_tasks.update(str(x) for x in data if x)
+
+
+def _write_cancelled_tasks() -> None:
+    try:
+        CANCELLED_PATH.write_text(
+            json.dumps(sorted(cancelled_tasks), ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    except OSError:
+        pass
+
+
+def _task_id_known(task_id: str) -> bool:
+    if not task_id:
+        return True
+    if task_id in results or task_id in cancelled_tasks:
+        return True
+    if any(t.get("task_id") == task_id for t in task_queue):
+        return True
+    if any(t.get("task_id") == task_id for t in pending_tasks.values()):
+        return True
+    if (RESULTS_DIR / f"{task_id}.md").exists():
+        return True
+    return False
+
+
+def _submitted_recent_enough(submitted_at: str, *, horizon_s: int = 6 * 3600) -> bool:
+    if not submitted_at:
+        return False
+    try:
+        dt = datetime.fromisoformat(str(submitted_at).replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - dt).total_seconds() <= horizon_s
+
+
+def _recover_pending_task_queue() -> int:
+    """Requeue durable pending turns after server restart.
+
+    Browser agents and client-side pollers can outlive the server process. The
+    session JSON files record submitted turns, so after restart we recover any
+    pending task that has no result/cancel record and is not already queued.
+    """
+    recovered = 0
+    for conv_id, sess in list(sessions.items()):
+        pending = sess.get("pending_turns") or []
+        if not isinstance(pending, list):
+            continue
+        for row in pending:
+            if not isinstance(row, dict):
+                continue
+            task_id = str(row.get("task_id") or "")
+            if not task_id or _task_id_known(task_id):
+                continue
+            if not _submitted_recent_enough(str(row.get("submitted_at") or "")):
+                continue
+            task = {
+                "task_id": task_id,
+                "prompt": row.get("prompt", ""),
+                "conversation_id": conv_id,
+                "conversation_url": sess.get("chatgpt_url", ""),
+                "is_followup": bool(row.get("is_followup")),
+                "model": row.get("model", "chatgpt-5.5-pro"),
+                "tag": row.get("tag", ""),
+                "submitted_at": row.get("submitted_at", ""),
+                "submitted_ts": time.time(),
+                "status": "recovered",
+                "recovered_from_session": True,
+            }
+            _queue_task(task)
+            recovered += 1
+    return recovered
+
+
 def _new_conversation_id() -> str:
     return f"conv_{uuid.uuid4().hex[:16]}"
 
@@ -146,6 +234,115 @@ def _record_turn(conv_id: str, turn: dict) -> None:
             sess["chatgpt_url"] = turn["chatgpt_url"]
         sessions[conv_id] = sess
         _write_session(sess)
+
+
+def _record_submitted_turn(conv_id: str, task: dict) -> None:
+    """Persist submitted prompt metadata before the browser returns a result.
+
+    Retry recovery must be able to re-submit the exact original prompt after a
+    transport/UI extraction failure. Previously sessions only recorded completed
+    turns, so cancelling a stuck task left `/retry` with no prompt and it fell
+    back to an unrelated generic "paste final draft" instruction.
+    """
+    if not conv_id:
+        return
+    with _lock:
+        sess = sessions.get(conv_id) or _load_session(conv_id) or {
+            "conversation_id": conv_id,
+            "created_at": _now(),
+            "turns": [],
+        }
+        pending = sess.setdefault("pending_turns", [])
+        if isinstance(pending, list):
+            pending.append({
+                "task_id": task.get("task_id", ""),
+                "prompt": task.get("prompt", ""),
+                "submitted_at": task.get("submitted_at", _now()),
+                "tag": task.get("tag", ""),
+                "is_followup": bool(task.get("is_followup")),
+            })
+        sess["updated_at"] = _now()
+        sessions[conv_id] = sess
+        _write_session(sess)
+
+
+def _recover_submitted_task(task_id: str) -> dict | None:
+    """Recover an in-flight task from durable session `pending_turns`.
+
+    This is the server-side counterpart of the browser userscript's reload
+    recovery. It lets us restart the oracle server while ChatGPT is still
+    thinking: when the old browser tab later POSTs /result, the task may no
+    longer exist in `pending_tasks`, but its prompt/session metadata is still on
+    disk.
+    """
+    if not task_id:
+        return None
+    for conv_id, sess in list(sessions.items()):
+        pending = sess.get("pending_turns") or []
+        if not isinstance(pending, list):
+            continue
+        for row in reversed(pending):
+            if not isinstance(row, dict) or row.get("task_id") != task_id:
+                continue
+            return {
+                "task_id": task_id,
+                "prompt": row.get("prompt", ""),
+                "conversation_id": conv_id,
+                "conversation_url": sess.get("chatgpt_url", ""),
+                "is_followup": bool(row.get("is_followup")),
+                "model": row.get("model", "chatgpt-5.5-pro"),
+                "tag": row.get("tag", ""),
+                "submitted_at": row.get("submitted_at", ""),
+                "submitted_ts": time.time(),
+                "status": "recovered",
+                "recovered_from_session": True,
+            }
+    for p in SESSIONS_DIR.glob("*.json"):
+        try:
+            sess = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        conv_id = sess.get("conversation_id") or p.stem
+        pending = sess.get("pending_turns") or []
+        if not isinstance(pending, list):
+            continue
+        for row in reversed(pending):
+            if not isinstance(row, dict) or row.get("task_id") != task_id:
+                continue
+            sessions[conv_id] = sess
+            return {
+                "task_id": task_id,
+                "prompt": row.get("prompt", ""),
+                "conversation_id": conv_id,
+                "conversation_url": sess.get("chatgpt_url", ""),
+                "is_followup": bool(row.get("is_followup")),
+                "model": row.get("model", "chatgpt-5.5-pro"),
+                "tag": row.get("tag", ""),
+                "submitted_at": row.get("submitted_at", ""),
+                "submitted_ts": time.time(),
+                "status": "recovered",
+                "recovered_from_session": True,
+            }
+    return None
+
+
+def _pin_session_chat_url(conv_id: str, chatgpt_url: str) -> bool:
+    if not conv_id or not chatgpt_url:
+        return False
+    if not _page_in_openproblem_project(chatgpt_url):
+        return False
+    sess = sessions.get(conv_id) or _load_session(conv_id) or {
+        "conversation_id": conv_id,
+        "created_at": _now(),
+        "turns": [],
+    }
+    if sess.get("chatgpt_url") == chatgpt_url:
+        return False
+    sess["chatgpt_url"] = chatgpt_url
+    sess["updated_at"] = _now()
+    sessions[conv_id] = sess
+    _write_session(sess)
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -232,6 +429,18 @@ def _script_version_ok(version: str) -> bool:
     return _script_version_tuple(version) >= _script_version_tuple(MIN_SCRIPT_VERSION)
 
 
+def _queue_task(task: dict) -> None:
+    tag = str(task.get("tag") or "").lower()
+    if "board-refill" in tag:
+        task_queue.appendleft(task)
+    else:
+        task_queue.append(task)
+
+
+def _agent_id_ok(agent_id: str) -> bool:
+    return bool(re.fullmatch(r"outreach_[0-9]+", agent_id or ""))
+
+
 def _page_in_openproblem_project(url: str) -> bool:
     if not url:
         return False
@@ -280,6 +489,86 @@ def _queued_summary(now: float) -> list[dict]:
             "is_followup": bool(task.get("is_followup")),
         })
     return items
+
+
+def _oracle_diagnosis_from_recent(recent: dict, pending: dict[str, dict], stale_busy: list[str]) -> str:
+    if not pending:
+        return ""
+    if stale_busy:
+        return "agent_busy_with_stale"
+    for aid in pending:
+        metrics = (recent.get(aid, {}) or {}).get("metrics") or {}
+        if not metrics:
+            continue
+        phase = str(metrics.get("phase") or "")
+        elapsed = int(metrics.get("elapsed_seconds") or 0)
+        extracted = int(metrics.get("extracted_chars") or 0)
+        page_chars = int(metrics.get("page_chars") or 0)
+        generating = bool(metrics.get("generating"))
+        assistant = metrics.get("assistant") if isinstance(metrics.get("assistant"), dict) else {}
+        generation = metrics.get("generation") if isinstance(metrics.get("generation"), dict) else {}
+        assistant_count = int(assistant.get("assistant_count") or 0)
+        pre_count = int(assistant.get("pre_submit_assistant_count") or 0)
+        last_clean = int(assistant.get("last_assistant_clean_chars") or 0)
+        assistant_only = int(assistant.get("assistant_only_chars") or 0)
+        if phase.startswith("waiting_for_prompt_input"):
+            return "agent_busy_waiting_for_prompt_input"
+        if phase.startswith("waiting_for_send_button"):
+            return "agent_busy_waiting_for_send_button"
+        if phase in {"prompt_entered", "send_button_not_ready"}:
+            return "agent_busy_prompt_entered_send_not_ready"
+        if phase in {"clicking_send", "sent_waiting_for_generation"}:
+            return "agent_busy_sent_waiting_for_generation"
+        if elapsed >= 240 and extracted == 0 and assistant_count <= pre_count:
+            return "agent_busy_waiting_for_new_assistant_dom"
+        if elapsed >= 240 and extracted == 0 and last_clean >= 100:
+            return "agent_busy_extraction_blocked"
+        if elapsed >= 240 and extracted == 0 and assistant_only >= 100:
+            return "agent_busy_response_visible_not_returned"
+        if elapsed >= 240 and extracted == 0 and page_chars >= 5000 and generating:
+            if generation.get("text_signal") and not generation.get("stop_button_present"):
+                return "agent_busy_generation_text_signal_only"
+            return "agent_busy_no_extraction"
+    return "agent_busy"
+
+
+def _requeue_stale_pending(now: float, *, recent: dict | None = None) -> list[dict]:
+    """Requeue tasks held by browser agents that stopped heartbeating.
+
+    This is intentionally much shorter than TASK_TIMEOUT. TASK_TIMEOUT protects
+    long ChatGPT generations where the userscript is still heartbeating; this
+    path only handles dead/stalled browser tabs that no longer report progress.
+    """
+    recent = recent or _agent_summary(now)
+    requeued: list[dict] = []
+    for aid, task in list(pending_tasks.items()):
+        dispatched_at = float(dispatch_times.get(aid, now))
+        if now - dispatched_at < STALE_REQUEUE_SECONDS:
+            continue
+        if _busy_agent_is_current(aid, recent.get(aid), task):
+            continue
+        task = pending_tasks.pop(aid, None)
+        dispatch_times.pop(aid, None)
+        recent_agents.pop(aid, None)
+        if not task:
+            continue
+        task["status"] = "queued"
+        task.pop("assigned_agent", None)
+        task["requeued_from_stale_agent"] = aid
+        task["requeued_at"] = _now()
+        task_queue.appendleft(task)
+        row = {
+            "agent_id": aid,
+            "task_id": task.get("task_id", ""),
+            "elapsed_seconds": int(now - dispatched_at),
+        }
+        requeued.append(row)
+        print(
+            f"[server] Requeued {row['task_id']} from stale {aid} "
+            f"after {row['elapsed_seconds']}s without current heartbeat",
+            flush=True,
+        )
+    return requeued
 
 
 def _clean_response_text(text: str) -> str:
@@ -368,6 +657,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 dispatch_times.pop(aid, None)
                 task_queue.appendleft(task)
                 print(f"[server] Agent {aid} timed out — task {task['task_id']} re-queued")
+            _requeue_stale_pending(now)
 
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -405,6 +695,14 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 _record_agent_seen(agent_id, event="poll", metrics=poll_metrics)
                 if agent_id in pending_tasks:
                     self._send_json(pending_tasks[agent_id])
+                    return
+                if not _agent_id_ok(agent_id):
+                    self._send_json({
+                        "status": "idle",
+                        "reason": "unsupported_agent_id",
+                        "agent_id": agent_id,
+                        "required_agent_id_pattern": "outreach_[0-9]+",
+                    })
                     return
                 if not compatible_script:
                     self._send_json({
@@ -448,6 +746,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                     if _script_version_ok(
                         ((recent.get(aid, {}).get("metrics") or {}).get("script_version") or "")
                     )
+                    and _agent_id_ok(aid)
                 ]
                 project_active_poll = [
                     aid for aid in compatible_active_poll
@@ -471,7 +770,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 elif task_queue and not pending_tasks and not project_active_poll:
                     diagnosis = "queue_waiting_for_project_agent"
                 elif pending_tasks:
-                    diagnosis = "agent_busy_with_stale" if stale_busy else "agent_busy"
+                    diagnosis = _oracle_diagnosis_from_recent(recent, pending_tasks, stale_busy)
                 elif task_queue:
                     diagnosis = "queue_waiting_for_free_agent"
                 else:
@@ -593,6 +892,16 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": f"unknown conversation_id {conv_id}"}, 404)
                 return
             chatgpt_url = sess.get("chatgpt_url", "")
+            if not chatgpt_url:
+                self._send_json({
+                    "error": (
+                        f"conversation {conv_id} has no pinned chatgpt_url; "
+                        "refusing to queue a follow-up that would open a fresh ChatGPT session"
+                    ),
+                    "conversation_id": conv_id,
+                    "reason": "missing_pinned_chatgpt_url",
+                }, 409)
+                return
         else:
             if not conv_id:
                 conv_id = _new_conversation_id()
@@ -625,7 +934,8 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             task["pdf_base64"] = data["pdf_base64"]
             task["pdf_name"] = data.get("pdf_name", "attachment.pdf")
         with _lock:
-            task_queue.append(task)
+            _queue_task(task)
+        _record_submitted_turn(conv_id, task)
         print(f"[server] {'CONT ' if is_continue else 'NEW  '}queued {task_id} "
               f"conv={conv_id[:12]} prompt={len(prompt)} chars "
               f"queue={len(task_queue)}")
@@ -645,14 +955,15 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
         if not task_id or not response:
             self._send_json({"error": "task_id and response required"}, 400)
             return
-        if not _page_in_openproblem_project(data.get("page_url", "")):
+        result_page_url = data.get("page_url", "") or data.get("chatgpt_url", "")
+        if not _page_in_openproblem_project(result_page_url):
             with _lock:
                 _cancel_pending_task_id(task_id, reason="outside-project result")
                 if agent_id:
                     recent_agents.pop(agent_id, None)
             print(
                 f"[server] Ignored outside-project result {task_id} "
-                f"page={str(data.get('page_url', ''))[-80:]}",
+                f"page={str(result_page_url)[-80:]}",
                 flush=True,
             )
             self._send_json({"status": "ignored_outside_project", "task_id": task_id})
@@ -661,17 +972,29 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
         with _lock:
             task = None
             freed_agent = ""
-            for aid in list(pending_tasks):
-                if pending_tasks[aid].get("task_id") == task_id:
-                    task = pending_tasks.pop(aid)
-                    dispatch_times.pop(aid, None)
-                    freed_agent = aid
-                    break
+            if agent_id and pending_tasks.get(agent_id, {}).get("task_id") == task_id:
+                task = pending_tasks.pop(agent_id)
+                dispatch_times.pop(agent_id, None)
+                freed_agent = agent_id
+            elif any(t.get("task_id") == task_id for t in pending_tasks.values()):
+                print(
+                    f"[server] Ignored unassigned-agent result {task_id} from {agent_id or '?'}",
+                    flush=True,
+                )
+                self._send_json({"status": "ignored_unassigned_agent", "task_id": task_id})
+                return
             existing = results.get(task_id)
         if task is None and existing is None:
-            print(f"[server] Ignored orphan result {task_id} ({len(response)} chars)")
-            self._send_json({"status": "ignored_orphan", "task_id": task_id})
-            return
+            task = _recover_submitted_task(task_id)
+            if task is None:
+                print(f"[server] Ignored orphan result {task_id} ({len(response)} chars)")
+                self._send_json({"status": "ignored_orphan", "task_id": task_id})
+                return
+            print(
+                f"[server] Recovered orphan result {task_id} from session "
+                f"{task.get('conversation_id', '')[:12]} ({len(response)} chars)",
+                flush=True,
+            )
         conv_id = (task or {}).get("conversation_id", "") or (existing or {}).get("conversation_id", "")
         if not chatgpt_url:
             chatgpt_url = (task or {}).get("conversation_url", "") or (existing or {}).get("chatgpt_url", "")
@@ -702,7 +1025,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             "model": data.get("model", "chatgpt-5.5-pro"),
             "agent_id": agent_id,
             "script_version": data.get("script_version", ""),
-            "page_url": data.get("page_url", ""),
+            "page_url": result_page_url,
             "completed_at": _now(),
             "status": "completed",
             "response_chars": len(response),
@@ -751,11 +1074,22 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 "script_version": data.get("script_version", ""),
                 "page_url": data.get("page_url", ""),
                 "chatgpt_url": data.get("chatgpt_url", ""),
+                "phase": metrics.get("phase"),
                 "elapsed_seconds": metrics.get("elapsed_seconds"),
                 "extracted_chars": metrics.get("extracted_chars"),
                 "page_chars": metrics.get("page_chars"),
                 "stable_count": metrics.get("stable_count"),
                 "generating": metrics.get("generating"),
+                "generation": metrics.get("generation"),
+                "assistant": metrics.get("assistant"),
+                "prompt_input_present": metrics.get("prompt_input_present"),
+                "prompt_input_chars": metrics.get("prompt_input_chars"),
+                "send_button_present": metrics.get("send_button_present"),
+                "send_button_enabled": metrics.get("send_button_enabled"),
+                "is_on_new_chat_page": metrics.get("is_on_new_chat_page"),
+                "in_project": metrics.get("in_project"),
+                "wait_seconds": metrics.get("wait_seconds"),
+                "current_url_tail": metrics.get("current_url_tail"),
                 "url_tail": metrics.get("url_tail"),
             }
         else:
@@ -785,9 +1119,19 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 assigned = pending_tasks.get(agent_id)
                 assigned_task_id = str((assigned or {}).get("task_id") or "")
                 still_pending = any(t.get("task_id") == task_id for t in pending_tasks.values())
+                pending_elsewhere = still_pending and not assigned
                 seen_url = str(metrics.get("chatgpt_url") or metrics.get("page_url") or "")
+                if assigned and assigned_task_id == task_id and metrics.get("chatgpt_url"):
+                    conv_id = str(assigned.get("conversation_id") or "")
+                    if _pin_session_chat_url(conv_id, str(metrics.get("chatgpt_url") or "")):
+                        print(
+                            f"[server] heartbeat pinned chatgpt_url={str(metrics.get('chatgpt_url'))[-50:]} "
+                            f"to conv={conv_id[:12]}",
+                            flush=True,
+                        )
                 if (
                     task_id in cancelled_tasks
+                    or pending_elsewhere
                     or (assigned_task_id and assigned_task_id != task_id)
                     or (assigned and _task_url_mismatch(assigned, seen_url))
                     or not still_pending
@@ -840,6 +1184,8 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             else:
                 self._send_json({"error": "task_id or all=true required"}, 400)
                 return
+            if cancelled:
+                _write_cancelled_tasks()
         print(f"[server] Cancelled {len(cancelled)} task(s): {cancelled}")
         self._send_json({"status": "cancelled", "tasks": cancelled})
 
@@ -919,6 +1265,17 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             if isinstance(t, dict) and t.get("prompt"):
                 original_prompt = t["prompt"]
                 break
+        if not original_prompt:
+            pending_turns = sess.get("pending_turns", []) or []
+            for t in reversed(pending_turns):
+                if isinstance(t, dict) and (not task_id or t.get("task_id") == task_id) and t.get("prompt"):
+                    original_prompt = t["prompt"]
+                    break
+            if not original_prompt:
+                for t in reversed(pending_turns):
+                    if isinstance(t, dict) and t.get("prompt"):
+                        original_prompt = t["prompt"]
+                        break
         if chatgpt_url:
             task = {
                 "task_id": new_task_id,
@@ -935,22 +1292,19 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             }
             mode = "re-extract"
         else:
-            task = {
-                "task_id": new_task_id,
-                "prompt": ("Please paste your final draft from the previous turn verbatim, "
-                           "no preamble, no commentary, just the message text."),
+            self._send_json({
+                "error": (
+                    f"cannot retry {task_id or conv_id}: conversation has no pinned chatgpt_url; "
+                    "refusing to repeat the prompt as if it were the same ChatGPT chat"
+                ),
                 "conversation_id": conv_id,
-                "conversation_url": "",
-                "is_followup": True,
-                "model": data.get("model", "chatgpt-5.5-pro"),
-                "tag": data.get("tag", "retry-repeat"),
-                "submitted_at": _now(),
-                "submitted_ts": time.time(),
-                "status": "queued",
-            }
-            mode = "repeat-prompt"
+                "reason": "missing_pinned_chatgpt_url",
+            }, 409)
+            return
         with _lock:
-            task_queue.append(task)
+            _queue_task(task)
+        if not task.get("re_extract"):
+            _record_submitted_turn(conv_id, task)
         print(f"[server] retry {mode} → queued {new_task_id} conv={conv_id[:12]}")
         self._send_json({
             "status": "queued",
@@ -963,12 +1317,15 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
 
 def main():
     _ensure_dirs()
+    _hydrate_cancelled_tasks()
     _hydrate_sessions()
+    recovered = _recover_pending_task_queue()
     server = HTTPServer(("127.0.0.1", PORT), OutreachOracleHandler)
     print(f"[outreach-oracle] running on http://localhost:{PORT}")
     print(f"[outreach-oracle] sessions dir: {SESSIONS_DIR}")
     print(f"[outreach-oracle] results dir:  {RESULTS_DIR}")
     print(f"[outreach-oracle] hydrated {len(sessions)} sessions from disk")
+    print(f"[outreach-oracle] recovered {recovered} pending task(s) from sessions")
     print(f"[outreach-oracle] max {MAX_AGENTS} concurrent tabs (multi-turn capable)")
     print(f"[outreach-oracle] required script version: {MIN_SCRIPT_VERSION}")
     print(f"[outreach-oracle] required project URL: {OPENPROBLEM_PROJECT_URL}")

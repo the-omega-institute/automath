@@ -2,15 +2,15 @@
 """x_broadcast.py — Round 6.5 X (Twitter) broadcast for solved targets.
 
 Routes POST /tweets through NyxID `api-twitter` proxy (free tier, 17/day).
-HARD RULE: never posts without --confirm-post. The pipeline can call --draft
-to generate a thread; only the user (or an explicit --confirm-post run) ever
-publishes anything.
+HARD RULE: never posts without --confirm-post and a local approval id. The
+pipeline can call --draft to generate a thread; only the user with an explicit
+approval ledger entry ever publishes anything.
 
 Workflow:
     1. `python x_broadcast.py draft T-21`
        → reads pipeline_state/<slug>.json, builds 1-3 tweet thread, prints to stdout
     2. user reads it, edits if needed, saves to drafts/<slug>_tweet.txt
-    3. `python x_broadcast.py post T-21 --confirm-post`
+    3. `python x_broadcast.py post T-21 --confirm-post --approval-id <id>`
        → reads drafts/<slug>_tweet.txt, posts via NyxID, returns tweet URL
 
 Per `feedback_never_post_without_approval` memory: the gate is mandatory.
@@ -32,6 +32,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DRAFTS_DIR = REPO_ROOT / "tools/community-outreach/drafts"
 STATE_DIR = REPO_ROOT / "tools/community-outreach/outreach_state"
 TWITTER_CHAR_LIMIT = 280
+
+sys.path.insert(0, str(REPO_ROOT / "tools/community-outreach"))
+from outreach_approval import find_approval  # noqa: E402
 
 
 @dataclass
@@ -235,10 +238,25 @@ def cmd_post(args: argparse.Namespace) -> int:
     if not args.confirm_post:
         print("ERROR: --confirm-post required to actually post (this gate is intentional).", file=sys.stderr)
         return 2
-    verify_x_service()
 
     target_id = args.target_id
     draft_path = DRAFTS_DIR / f"{target_id}_tweet.txt"
+    approval = find_approval(args.approval_id or "")
+    if not approval:
+        print("ERROR: valid --approval-id required to post.", file=sys.stderr)
+        return 2
+    if approval.get("action") != "post_x":
+        print(f"ERROR: approval action must be post_x, got {approval.get('action')!r}.", file=sys.stderr)
+        return 2
+    artifact = str(approval.get("artifact") or "")
+    if artifact not in {str(draft_path), str(draft_path.relative_to(REPO_ROOT))}:
+        print(
+            f"ERROR: approval artifact {artifact!r} does not match {draft_path.relative_to(REPO_ROOT)}.",
+            file=sys.stderr,
+        )
+        return 2
+    verify_x_service()
+
     if not draft_path.exists():
         print(f"No draft at {draft_path}. Run: x_broadcast.py draft {target_id}", file=sys.stderr)
         return 1
@@ -294,6 +312,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     p_post.add_argument("target_id")
     p_post.add_argument("--confirm-post", action="store_true",
                         help="Required gate. Without this, post refuses to fire.")
+    p_post.add_argument("--approval-id", default="",
+                        help="Required local approval id from outreach_approval.py approve")
     p_post.set_defaults(func=cmd_post)
 
     p_verify = sub.add_parser("verify", help="Check api-twitter NyxID service is active")

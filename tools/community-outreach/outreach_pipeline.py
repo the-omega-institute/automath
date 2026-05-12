@@ -69,6 +69,9 @@ INTERMEDIATE_PATH_PREFIXES = (
 AUTOMATH_REPO_URL = "https://github.com/the-omega-institute/automath"
 AUTOMATH_TRAILER = "**Repo:** https://github.com/the-omega-institute/automath"
 
+sys.path.insert(0, str(SCRIPT_DIR))
+from outreach_approval import find_approval  # noqa: E402
+
 # Priority targets: high-value repos with real communities and explicit needs.
 # These are checked FIRST before running discovery queries.
 PRIORITY_REPOS = [
@@ -2232,6 +2235,13 @@ def claude_exec(
     timeout: int = 900,
     dry_run: bool = False,
 ) -> str:
+    if os.environ.get("OUTREACH_ALLOW_CLAUDE") != "1":
+        logger.warning(
+            "Claude disabled in legacy outreach_pipeline.py; use PI/writeback paths "
+            "or set OUTREACH_ALLOW_CLAUDE=1 for an explicit diagnostic."
+        )
+        return "(claude disabled outside PI/writeback)"
+
     if dry_run:
         logger.info("[DRY RUN] claude exec in %s", work_dir)
         return "(dry run)"
@@ -5496,9 +5506,19 @@ def run_stage_c(
 # ---------------------------------------------------------------------------
 
 
-def create_issue(repo: str, title: str, body: str, *, dry_run: bool) -> str:
+def create_issue(repo: str, title: str, body: str, *, dry_run: bool, approval_id: str = "") -> str:
     if dry_run:
         return f"https://github.com/{repo}/issues/DRY-RUN"
+    approval = find_approval(approval_id)
+    if not approval:
+        raise RuntimeError("valid approval_id required before creating GitHub issue")
+    if approval.get("action") != "post_issue":
+        raise RuntimeError(f"approval action must be post_issue, got {approval.get('action')!r}")
+    artifact = str(approval.get("artifact") or "")
+    if repo not in artifact and title[:40] not in artifact:
+        raise RuntimeError(
+            "approval artifact must identify this repo or draft title before creating GitHub issue"
+        )
 
     gh_bin = ensure_binary(GH_PATH, "gh")
     result = run_cmd(
@@ -5541,7 +5561,14 @@ def run_stage_d(state: RepoState, *, dry_run: bool) -> tuple[RepoState, str]:
     while True:
         action = input("Action [approve/revise/skip]: ").strip().lower()
         if action == "approve":
-            url = create_issue(state.repo, state.draft_title, state.draft_body, dry_run=dry_run)
+            approval_id = input("approval_id from outreach_approval.py approve: ").strip()
+            url = create_issue(
+                state.repo,
+                state.draft_title,
+                state.draft_body,
+                dry_run=dry_run,
+                approval_id=approval_id,
+            )
             state.submission_url = url
             state.stage = "DONE"
             state.timestamps["completed_at"] = iso_now()
