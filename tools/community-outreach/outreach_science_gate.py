@@ -257,6 +257,76 @@ def _needs_local_reproducer(contribution_type: str, target_lane: str, combined_t
     return any(marker in lower for marker in exact_markers)
 
 
+def _verification_gate(
+    *,
+    contract,
+    target_lane: str,
+    target_dir: Path,
+    combined_text: str,
+) -> list[str]:
+    """Block premature writeback for mathematical claims.
+
+    `WRITEBACK_READY` is a presentation gate, not a proof.  For math/frontier
+    lanes the pipeline must have either an explicit non-unverified profile
+    verification status plus source-audited/partial-progress closure, or a
+    local replay artifact for certificate-style claims.  This keeps prose-only
+    Oracle/Codex packets from being treated as publishable mathematics.
+    """
+    if target_lane == "collaboration_lane":
+        return []
+    verification = str(getattr(contract, "verification_status", "") or "").strip().lower()
+    closure = str(getattr(contract, "closure_status", "") or "").strip().lower()
+    contribution_type = str(getattr(contract, "contribution_type", "") or "").strip()
+    has_reproducer = _target_has_runnable_reproducer(target_dir)
+    acceptable_verification = {
+        "source_audited",
+        "locally_verified",
+        "replayed",
+        "formalized",
+        "lean_verified",
+        "operator_approved",
+    }
+    acceptable_closure = {
+        "partial_progress",
+        "verified_obstruction",
+        "verified_certificate",
+        "proof_complete",
+        "counterexample_verified",
+        "construction_verified",
+        "closed",
+    }
+    blockers: list[str] = []
+    if verification in {"", "unverified", "seed"}:
+        blockers.append(
+            f"verification_status={verification or '-'} is not enough for mathematical writeback"
+        )
+    elif verification not in acceptable_verification:
+        blockers.append(f"verification_status={verification} is not an accepted verification gate")
+    if closure in {"", "seed", "scoped_target"}:
+        blockers.append(f"closure_status={closure or '-'} is not a mathematical closure/progress gate")
+    elif closure not in acceptable_closure:
+        blockers.append(f"closure_status={closure} is not an accepted closure/progress gate")
+
+    if target_lane == "frontier_lane" or contribution_type in FRONTIER_LANE_TYPES:
+        if not has_reproducer:
+            blockers.append("frontier/certificate writeback requires a local runnable replay artifact")
+    elif contribution_type in {"theorem", "counterexample", "construction"}:
+        if not has_reproducer and verification not in {"formalized", "lean_verified", "operator_approved"}:
+            blockers.append(
+                f"{contribution_type} writeback requires local replay/formal verification or operator approval"
+            )
+    elif contribution_type == "research_note":
+        lower = (combined_text or "").lower()
+        if (
+            verification in {"source_audited", "locally_verified", "replayed", "operator_approved"}
+            and closure in acceptable_closure
+        ):
+            pass
+        elif "no theorem is claimed" not in lower and "not a claim" not in lower:
+            blockers.append("research_note writeback requires scoped non-theorem caveat or stronger verification")
+    return blockers
+
+
 def _validate_results_json(todo: TodoSpec, rel_path: str, path: Path) -> list[str]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -568,14 +638,14 @@ def _next_action(status: str, *, writeback_ready: bool, close_ready: bool) -> tu
         return "skip", 0, "board_skipped"
     if status == NEEDS_CONTRACT:
         return "profile_judge", 2, "missing_contract"
-    if status == WRITEBACK_READY or writeback_ready:
-        return "operator_review", 0, "none"
-    if status == CLOSE_TARGET or close_ready:
-        return "operator_archive_review", 0, "math_stuck_or_closed"
     if status == NEEDS_EVIDENCE:
         return "deep_reason", 3, "needs_evidence"
     if status == CONTRACT_READY:
         return "deep_reason", 3, "none"
+    if status == WRITEBACK_READY or writeback_ready:
+        return "operator_review", 0, "none"
+    if status == CLOSE_TARGET or close_ready:
+        return "operator_archive_review", 0, "math_stuck_or_closed"
     return "hold", 0, "unknown"
 
 
@@ -806,15 +876,21 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
     close_ready = False
     continue_research = _explicitly_requests_more_research(combined)
     evidence_disk_ready = not missing_required_artifacts and not invalid_required_artifacts
+    verification_blockers = _verification_gate(
+        contract=contract,
+        target_lane=target_lane,
+        target_dir=target_dir,
+        combined_text=combined,
+    )
     if continue_research:
         reasons.append("artifact explicitly says the target should continue rather than be written back")
     elif target_lane == "collaboration_lane":
         if artifact_text and _has_any(combined, COLLABORATION_WRITEBACK_TERMS):
             writeback_ready = True
     else:
-        if artifact_text and evidence_disk_ready and _has_any(combined, WRITEBACK_TERMS):
+        if artifact_text and evidence_disk_ready and not verification_blockers and _has_any(combined, WRITEBACK_TERMS):
             writeback_ready = True
-        if final_verdict == "BREAKTHROUGH" and artifact.exists() and evidence_disk_ready:
+        if final_verdict == "BREAKTHROUGH" and artifact.exists() and evidence_disk_ready and not verification_blockers:
             writeback_ready = True
     has_close_signal = _has_any(combined, CLOSE_TERMS) or final_verdict == "STUCK"
     # Missing disk evidence means the target has not reached a scientific
@@ -843,6 +919,10 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
     elif missing:
         status = NEEDS_EVIDENCE
         reasons.append("science contract exists but evidence is incomplete")
+    elif verification_blockers:
+        status = NEEDS_EVIDENCE
+        missing.extend(f"verification gate: {b}" for b in verification_blockers)
+        reasons.append("science evidence exists but verification/closure gate blocks writeback")
     elif writeback_ready:
         status = WRITEBACK_READY
         reasons.append("artifact/deep run contains writeback evidence")
