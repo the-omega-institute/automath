@@ -127,13 +127,19 @@ def _bridge_prompt_revision(record: dict[str, Any]) -> str:
     receiving = _automath_receiving_context(record) or {}
     payload = {
         "source_path": record.get("source_path"),
-        "source_commit": record.get("source_commit"),
         "target_sections": receiving.get("target_sections", []),
         "omega_mechanisms": receiving.get("omega_mechanisms", []),
         "first_distillation_prompt": receiving.get("first_distillation_prompt", ""),
         "scope_contract_seed": receiving.get("scope_contract_seed", {}),
     }
     return hashlib.sha1(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()[:12]
+
+
+def _bridge_retry_policy_key(record: dict[str, Any]) -> str:
+    source_path = str(record.get("source_path") or "").lower()
+    if "concrete_instances/banach/singleton_certificate.tex" in source_path:
+        return "singleton_certificate:pom_empty_history:v1"
+    return f"generic:{Path(source_path).name or 'source'}"
 
 
 def _automath_receiving_context(record: dict[str, Any]) -> dict[str, Any] | None:
@@ -289,8 +295,17 @@ def _candidate_block_status(record: dict[str, Any]) -> str:
             candidate_payload = json.loads(candidate_path.read_text(encoding="utf-8"))
             if isinstance(candidate_payload, dict):
                 candidate_revision = str(candidate_payload.get("bridge_prompt_revision") or "")
+                candidate_policy_key = str(candidate_payload.get("bridge_retry_policy_key") or "")
         except (OSError, json.JSONDecodeError):
             candidate_revision = ""
+            candidate_policy_key = ""
+    else:
+        candidate_policy_key = ""
+    current_policy_key = _bridge_retry_policy_key(record)
+    source_path = str(record.get("source_path") or "").lower()
+    if "concrete_instances/banach/singleton_certificate.tex" in source_path and state_payload.get("current_stage") in {"R", "W", "E"}:
+        if not candidate_policy_key or candidate_policy_key == current_policy_key:
+            return str(state_payload.get("failure_kind") or "writeback_in_progress")
     if candidate_revision and candidate_revision != current_revision:
         return ""
     if state_payload.get("current_stage") in {"R", "W", "E"} and state_payload.get("failure_kind") in {
@@ -317,11 +332,13 @@ def _candidate_payload(record: dict[str, Any]) -> dict[str, Any]:
     target_sections = receiving.get("target_sections") or ["killo-golden", "omega paper writeback"]
     omega_mechanisms = receiving.get("omega_mechanisms") or ["killo-golden", "NewMath bridge evidence"]
     revision = _bridge_prompt_revision(record)
+    policy_key = _bridge_retry_policy_key(record)
     return {
         "schema_version": "automath-newmath-automath-writeback-candidate-v1",
         "created_at": _now_iso(),
         "status": "ready_for_automath_distillation_supervisor",
         "bridge_prompt_revision": revision,
+        "bridge_retry_policy_key": policy_key,
         "distillation_source_name": _candidate_name(record),
         "bridge_source": source,
         "bridge_record": record,
@@ -335,6 +352,7 @@ def _candidate_payload(record: dict[str, Any]) -> dict[str, Any]:
             "source_type": "bridge_packet",
             "origin": "automath_newmath_bridge",
             "bridge_prompt_revision": revision,
+            "bridge_retry_policy_key": policy_key,
             "target_sections": target_sections,
             "omega_mechanisms": omega_mechanisms,
             "scope_contract_seed": receiving.get("scope_contract_seed", {}),
@@ -392,6 +410,7 @@ def build_candidates(
             "review_failed",
             "writeback_review_failed",
             "writeback_in_progress",
+            "incomplete",
         }:
             continue
         source_path = str(record.get("source_path") or "newmath-bridge")
@@ -543,6 +562,7 @@ def seed_distillation_source(payload: dict[str, Any]) -> Path:
         "receiving_context": payload.get("receiving_context", {}),
         "auto_promoted_for_killo_golden": payload.get("auto_promoted_for_killo_golden", False),
         "bridge_prompt_revision": payload.get("bridge_prompt_revision", ""),
+        "bridge_retry_policy_key": payload.get("bridge_retry_policy_key", ""),
     }
     (state_dir / "source_candidate.json").write_text(
         json.dumps(source_candidate, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
