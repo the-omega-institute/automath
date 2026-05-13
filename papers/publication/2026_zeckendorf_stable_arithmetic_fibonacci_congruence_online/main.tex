@@ -2,6 +2,7 @@
 \documentclass[12pt,a4paper]{article}
 
 \usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{amscd}
 \usepackage{mathrsfs}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
@@ -106,6 +107,34 @@ Z(N)=(c_1,c_2,\dots)\in X_\infty.
 This is the classical Zeckendorf representation theorem; see \cite{Lekkerkerker1952,Zeckendorf1972}.
 \end{proof}
 
+\begin{lemma}[Maximum value in a finite admissible window]\label{lem:finite-window-max}
+For every \(m\ge 1\),
+\[
+\max_{w\in X_m} V_m(w)=F_{m+2}-1.
+\]
+\end{lemma}
+
+\begin{proof}
+Write \(A_m:=\max_{w\in X_m}V_m(w)\). For \(m=1\), the two admissible words have values \(0\) and \(F_2=1=F_3-1\). For \(m=2\), the admissible words are \(00,10,01\), with values \(0,1,2\), so \(A_2=2=F_4-1\).
+
+Assume the claim has been proved below level \(m\), with \(m\ge 3\). If \(w_m=0\), then deleting the final zero gives a word in \(X_{m-1}\), so
+\[
+V_m(w)\le A_{m-1}=F_{m+1}-1<F_{m+2}-1.
+\]
+If \(w_m=1\), admissibility forces \(w_{m-1}=0\); deleting the last two digits gives a word in \(X_{m-2}\), and therefore
+\[
+V_m(w)
+\le A_{m-2}+F_{m+1}
+=(F_m-1)+F_{m+1}
+=F_{m+2}-1.
+\]
+Conversely, if \(u\in X_{m-2}\) attains \(A_{m-2}\), then the word obtained by appending \(01\) to \(u\) is admissible in \(X_m\) and has value
+\[
+A_{m-2}+F_{m+1}=F_{m+2}-1.
+\]
+Thus \(A_m=F_{m+2}-1\), completing the induction.
+\end{proof}
+
 \begin{lemma}[Finite Zeckendorf window]\label{lem:zeckendorf-range-bijection}
 For every \(m\ge 1\), the map
 \[
@@ -115,7 +144,7 @@ is a bijection. Equivalently, an integer \(N\) satisfies \(0\le N<F_{m+2}\) if a
 \end{lemma}
 
 \begin{proof}
-Injectivity of \(V_m\) follows from the uniqueness in Theorem \ref{thm:zeckendorf-unique}. On the other hand, the cardinalities satisfy
+Lemma \ref{lem:finite-window-max} shows that \(V_m(w)\in\{0,1,\dots,F_{m+2}-1\}\) for every \(w\in X_m\). Injectivity of \(V_m\) follows from the uniqueness in Theorem \ref{thm:zeckendorf-unique}. On the other hand, the cardinalities satisfy
 \[
 |X_m|=|X_{m-1}|+|X_{m-2}|
 \]
