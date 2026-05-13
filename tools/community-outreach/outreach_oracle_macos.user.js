@@ -46,7 +46,8 @@
   const DEEP_NO_OUTPUT_IDLE_TIMEOUT = 7200000;
   const REFILL_NO_OUTPUT_IDLE_TIMEOUT = 1800000;
   const POST_THINK_NO_OUTPUT_TIMEOUT = 300000;
-  const SCRIPT_VERSION = "outreach-1.21";
+  const REFILL_POST_THINK_NO_OUTPUT_TIMEOUT = 1800000;
+  const SCRIPT_VERSION = "outreach-1.22";
   const OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
   const OPENPROBLEM_PROJECT_URL = `https://chatgpt.com${OPENPROBLEM_PROJECT_PREFIX}/project`;
 
@@ -1204,7 +1205,7 @@
     return generationDebugSnapshot().generating;
   }
 
-  async function waitForResponse(task_id, noOutputIdleTimeout = NO_OUTPUT_IDLE_TIMEOUT) {
+  async function waitForResponse(task_id, noOutputIdleTimeout = NO_OUTPUT_IDLE_TIMEOUT, postThinkNoOutputTimeout = POST_THINK_NO_OUTPUT_TIMEOUT) {
     log(`Waiting for ChatGPT response (pre-send assistant count was ${preSubmitAssistantCount})...`);
     const startTime = Date.now();
     let lastResponseText = "";
@@ -1264,7 +1265,7 @@
         !generating &&
         responseText.length < 5 &&
         genDebug.post_think &&
-        Date.now() - startTime >= POST_THINK_NO_OUTPUT_TIMEOUT
+        Date.now() - startTime >= postThinkNoOutputTimeout
       );
       if (
         !generating &&
@@ -1272,7 +1273,7 @@
         (Date.now() - startTime >= noOutputIdleTimeout || postThinkNoOutput)
       ) {
         const waitLimit = postThinkNoOutput
-          ? Math.floor(POST_THINK_NO_OUTPUT_TIMEOUT / 1000)
+          ? Math.floor(postThinkNoOutputTimeout / 1000)
           : Math.floor(noOutputIdleTimeout / 1000);
         throw new Error(
           `No assistant output after ${waitLimit}s ` +
@@ -1323,9 +1324,13 @@
   // ── Process a task (OUTREACH ADD: multi-turn navigation + reload-safe) ─
   async function processTask(task) {
     const { task_id, prompt, conversation_url, is_followup, conversation_id, re_extract, pdf_base64, pdf_name, tag } = task;
-    const noOutputIdleTimeout = (String(tag || "").includes("board-refill"))
+    const isBoardRefillTask = String(tag || "").includes("board-refill");
+    const noOutputIdleTimeout = isBoardRefillTask
       ? REFILL_NO_OUTPUT_IDLE_TIMEOUT
       : (String(tag || "").includes(":deep") ? DEEP_NO_OUTPUT_IDLE_TIMEOUT : NO_OUTPUT_IDLE_TIMEOUT);
+    const postThinkNoOutputTimeout = isBoardRefillTask
+      ? REFILL_POST_THINK_NO_OUTPUT_TIMEOUT
+      : POST_THINK_NO_OUTPUT_TIMEOUT;
     const taskStartMs = Date.now();
     let lastPhaseHeartbeatMs = 0;
     async function phaseHeartbeat(phase, extra = {}, force = false) {
@@ -1449,7 +1454,7 @@
       setSentPrompt(prompt);
       capturePostSendState();
       try {
-        const response = await waitForResponse(task_id, noOutputIdleTimeout);
+        const response = await waitForResponse(task_id, noOutputIdleTimeout, postThinkNoOutputTimeout);
         if (!response || response.length < 5) {
           throw new Error(`Resumed wait got no response (${response?.length || 0} chars)`);
         }
@@ -1669,7 +1674,7 @@
 
       await sleep(5000); // settle DOM
       capturePostSendState();
-      const response = await waitForResponse(task_id, noOutputIdleTimeout);
+      const response = await waitForResponse(task_id, noOutputIdleTimeout, postThinkNoOutputTimeout);
 
       if (!response || response.length < 5) {
         throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
