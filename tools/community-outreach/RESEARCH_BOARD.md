@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — The board entry is internally mismatched and not target-specific enough for automated deep reasoning. The slug/title frames this as Erdős #1191, but the statement describes a finite Sidon diameter second-order constant/a |
+| Status | **🔴 DROP · profile judge DROP** — The candidate as submitted is internally mismatched and cannot enter automated deep reasoning as a target-specific open problem profile. Erdős #1191 is the infinite Sidon-set liminf/log problem, while the statement here  |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
