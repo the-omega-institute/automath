@@ -1381,6 +1381,17 @@ def supervise_board(
             )
             if deep_run is not None:
                 analysis["oracle_deep"] = deep_run
+                if deep_run.get("skipped"):
+                    any_failure = True
+                    analysis["stage"] = "ORACLE_DEEP_SKIPPED"
+                    analysis["score"] = min(int(analysis.get("score", 0) or 0), 1)
+                    analysis.setdefault("findings", [])
+                    assert isinstance(analysis["findings"], list)
+                    analysis["findings"].insert(
+                        0,
+                        f"oracle-deep skipped: {deep_run.get('skipped')}",
+                    )
+                    continue
                 materialized = _materialize_oracle_deep_research_md(
                     todo, profile, deep_run, repo_root=repo_root,
                 )

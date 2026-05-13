@@ -570,6 +570,56 @@ def _reconcile_wrote_payload(payload: dict) -> bool:
     return isinstance(written, list) and bool(written)
 
 
+def _log_contains_transport_skip(log_path: str) -> bool:
+    if not log_path:
+        return False
+    try:
+        text = Path(log_path).read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+    lowered = text.lower()
+    markers = (
+        "[oracle-deep] server down",
+        "[oracle] server down",
+        "oracle-deep skipped",
+        "stage=oracle_deep_skipped",
+        "server unreachable",
+        "failed to initialize in-process app-server client",
+        "operation not permitted",
+    )
+    return any(marker in lowered for marker in markers)
+
+
+def _note_transport_backoff(slug: str, *, reason: str, log_path: str = "") -> None:
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    path = STATE_DIR / f"{slug}.json"
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        state = {}
+    runs = state.setdefault("oracle_deep_runs", [])
+    if not isinstance(runs, list):
+        runs = []
+        state["oracle_deep_runs"] = runs
+    runs.append({
+        "final_verdict": "FAILED",
+        "transport_backoff": True,
+        "reason": reason,
+        "log_path": log_path,
+        "recorded_at": _now_iso(),
+        "turns": [{"error": reason, "response_chars": 0}],
+    })
+    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _oracle_deep_produced_payload(rc: int, log_path: str, reconcile_payload: dict) -> bool:
+    if _reconcile_wrote_payload(reconcile_payload):
+        return True
+    if rc != 0:
+        return False
+    return not _log_contains_transport_skip(log_path)
+
+
 def _run_local_followup_after_oracle(todo_id: str, rc: int, log_path: str, timeout_s: int) -> tuple[int, str]:
     local_rc, local_log = _spawn_local_repair(todo_id, timeout_s)
     loop_log(f"{todo_id}: Codex local follow-up after Oracle rc={local_rc} ({local_log})")
@@ -705,7 +755,11 @@ def _artifact_digest(slug: str) -> str:
     for path in sorted(target_dir.glob("*")):
         if not path.is_file():
             continue
-        if path.name in {"science_gate.json", "outreach_impact_gate.json"}:
+        if path.name in {
+            "science_gate.json",
+            "outreach_impact_gate.json",
+            "local_repair_last.json",
+        }:
             continue
         try:
             stat = path.stat()
@@ -806,6 +860,42 @@ def _transport_backoff_applies(slug: str) -> bool:
     return age < max(0, TRANSPORT_FAILURE_BACKOFF_MINUTES) * 60
 
 
+def _local_repair_transport_failure(slug: str) -> bool:
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        report = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if report.get("ok") is True:
+        return False
+    stderr_log = str(report.get("stderr_log") or "")
+    if not stderr_log:
+        return False
+    log_path = REPO_ROOT / stderr_log
+    try:
+        text = log_path.read_text(encoding="utf-8", errors="replace").lower()
+    except OSError:
+        return False
+    markers = (
+        "failed to initialize in-process app-server client",
+        "operation not permitted",
+        "codex cli not found",
+        "could not update path",
+    )
+    return any(marker in text for marker in markers)
+
+
+def _local_repair_backoff_applies(slug: str) -> bool:
+    if not _local_repair_transport_failure(slug):
+        return False
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        age = _now() - path.stat().st_mtime
+    except OSError:
+        return False
+    return age < max(0, TRANSPORT_FAILURE_BACKOFF_MINUTES) * 60
+
+
 def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
     """Claim → dispatch → write summary → mark board (only if real work
     happened) → release."""
@@ -893,8 +983,18 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                     rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
                     loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
                     reconcile_payload = _reconcile_oracle_deep(todo_id)
-                    if rc == 0 or _reconcile_wrote_payload(reconcile_payload):
+                    if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
                         rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+                    else:
+                        _note_transport_backoff(
+                            slug,
+                            reason=f"oracle-deep transport/no-payload rc={rc}",
+                            log_path=log_path,
+                        )
+                        loop_log(
+                            f"{todo_id}: oracle-deep produced no usable payload; "
+                            f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                        )
             else:
                 loop_log(
                     f"{todo_id}: science_gate.next_action=deep_reason"
@@ -904,8 +1004,18 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                 rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
                 loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
                 reconcile_payload = _reconcile_oracle_deep(todo_id)
-                if rc == 0 or _reconcile_wrote_payload(reconcile_payload):
+                if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
                     rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+                else:
+                    _note_transport_backoff(
+                        slug,
+                        reason=f"oracle-deep transport/no-payload rc={rc}",
+                        log_path=log_path,
+                    )
+                    loop_log(
+                        f"{todo_id}: oracle-deep produced no usable payload; "
+                        f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                    )
             todos = _parse_board_safe()
             if todo_id in todos:
                 science_gate = science_gate_evaluate(todos[todo_id])
@@ -1032,6 +1142,12 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
         if _transport_backoff_applies(slug):
             loop_log(
                 f"{tid}: recent Oracle transport/extraction failure; "
+                f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min and trying another target"
+            )
+            continue
+        if _local_repair_backoff_applies(slug):
+            loop_log(
+                f"{tid}: recent Codex local-repair transport failure; "
                 f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min and trying another target"
             )
             continue
