@@ -179,6 +179,10 @@ def _spawn_server() -> int | None:
     return proc.pid
 
 
+def _server_process_exists() -> bool:
+    return bool(_script_rows("outreach_oracle_server.py"))
+
+
 def _spawn_supervisor(supervisor_args: list[str]) -> int | None:
     if not SUPERVISOR.exists():
         log("supervisor: script missing; cannot spawn")
@@ -203,6 +207,25 @@ def _spawn_supervisor(supervisor_args: list[str]) -> int | None:
     )
     log(f"supervisor: spawned pid={proc.pid} args={' '.join(supervisor_args)}")
     return proc.pid
+
+
+def _pid_alive(pid: int) -> bool:
+    if pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+        return True
+    except (ProcessLookupError, OSError):
+        return False
+
+
+def _runtime_supervisor_alive() -> bool:
+    runtime = _read_json(SUPERVISOR_RUNTIME)
+    try:
+        pid = int(runtime.get("pid") or 0)
+    except (TypeError, ValueError):
+        pid = 0
+    return _pid_alive(pid)
 
 
 def _reconcile_deep() -> dict:
@@ -336,24 +359,56 @@ def _request_safe_supervisor_restart_if_code_changed(server: dict) -> str:
     return f"restart_supervisor_code_changed:{runtime_head[:9]}->{current_head[:9]}"
 
 
+def _supervisor_code_status(server: dict) -> dict:
+    """Expose whether the live supervisor predates the checked-out code.
+
+    The watchdog may correctly defer a restart while Oracle/dispatch work is
+    active.  That deferment needs to be visible in status reports; otherwise an
+    operator cannot tell whether new harness code is already running or merely
+    waiting for a safe idle boundary.
+    """
+    runtime = _read_json(SUPERVISOR_RUNTIME)
+    runtime_head = str(runtime.get("git_head") or "").strip()
+    current_head = _git_head()
+    active = _has_active_pipeline_work(server)
+    stale = bool(runtime_head and current_head and runtime_head != current_head)
+    return {
+        "current_git_head": current_head,
+        "supervisor_git_head": runtime_head,
+        "supervisor_pid": runtime.get("pid"),
+        "supervisor_code_stale": stale,
+        "safe_restart_deferred": bool(stale and active),
+        "safe_restart_blocker": "active_pipeline_work" if stale and active else "",
+    }
+
+
 def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanup_orphans: bool) -> dict:
     rows = _ps_rows()
     server = _server_status()
     actions: list[str] = []
 
     if server.get("port") != 8766:
-        _spawn_server()
-        actions.append("spawn_oracle_server")
-        time.sleep(3)
-        server = _server_status()
+        if _server_process_exists():
+            actions.append("oracle_server_status_unreachable_process_exists")
+            log("oracle_server: status endpoint unavailable but process exists; deferring spawn")
+            time.sleep(2)
+            server = _server_status()
+        else:
+            _spawn_server()
+            actions.append("spawn_oracle_server")
+            time.sleep(3)
+            server = _server_status()
 
     supervisor_rows = [
         r for r in rows
         if "outreach_supervisor.py" in r["command"] and "outreach_watchdog.py" not in r["command"]
     ]
     if not supervisor_rows:
-        _spawn_supervisor(supervisor_args)
-        actions.append("spawn_supervisor")
+        if _runtime_supervisor_alive():
+            actions.append("supervisor_ps_missing_runtime_alive")
+        else:
+            _spawn_supervisor(supervisor_args)
+            actions.append("spawn_supervisor")
 
     killed_orphans: list[int] = []
     if cleanup_orphans:
@@ -362,6 +417,7 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
             actions.append(f"kill_orphan_inner:{','.join(map(str, killed_orphans))}")
 
     server = _server_status()
+    code_status = _supervisor_code_status(server)
     restart_action = _request_safe_supervisor_restart_if_code_changed(server)
     if restart_action:
         actions.append(restart_action)
@@ -411,6 +467,7 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
             "dispatch_worktree": _script_rows("dispatch_worktree.py"),
             "board_refill": _script_rows("outreach_board_refill.py"),
         },
+        "code_status": code_status,
         "active_named_targets": active_named,
         "reconcile": reconcile_payload,
     }
