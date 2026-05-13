@@ -323,8 +323,7 @@ Let \(\mathcal O\) be a class of operations on a set \(D\).  A
 \item a finite family of semantic sorts \(Y_\ell\), each equipped
   with an interpretation \(\sigma_\ell\) of one binary operation
   symbol \(\sigma\);
-\item computable readout maps
-  \(\Phi_\ell\colon N\to Y_\ell\).
+\item semantic readout maps \(\Phi_\ell\colon N\to Y_\ell\).
 \end{enumerate}
 An operation \(\theta\in\mathcal O\) of arity \(r\) is realized if
 there are a computable operation
@@ -342,11 +341,53 @@ and
 \]
 for all \(n_i\in N\).  The protocol is
 \emph{protocol-universal for \(\mathcal O\)} if every operation in
-\(\mathcal O\) is realized in this sense.  The normalizer is
-algorithmic presentation data; the only algebraic operation used in
-the readout terms is \(\sigma\), as in a canonical rewriting
-system with a decidable word problem \cite{BaaderNipkow1998}.
+\(\mathcal O\) is realized in this sense.  The computability
+requirements in this definition are exactly the normal-form and
+compiled-operation requirements on \(C\) and \(N\).  The equations in
+the semantic sorts are readout identities; unless an additional
+effective presentation of a semantic sort is specified, they are not
+claims that the elements of \(Y_\ell\), the operation \(\sigma_\ell\),
+or the maps \(\Phi_\ell\) are algorithmically presented.  Thus the
+normalizer is algorithmic presentation data, while the only algebraic
+operation used in the readout terms is \(\sigma\), as in a canonical
+rewriting system with a decidable word problem \cite{BaaderNipkow1998}.
 \end{definition}
+
+\begin{proposition}[Semantic readouts do not add hidden algorithms]
+\label{prop:semantic-readout-separation}
+In \Cref{def:prot-univ}, equality of compiled normal forms is decided
+entirely in \(N\), and realization of an operation
+\(\theta\in\mathcal O\) gives a computable normal-form operation
+\(\widehat\theta\colon N^r\to N\).  The readout clause adds only the
+semantic identity
+\[
+  \Phi_\ell(\widehat\theta(n_1,\ldots,n_r))
+  =R_\theta(\Phi_\ell(n_1),\ldots,\Phi_\ell(n_r))
+\]
+inside the specified sort \(Y_\ell\).  Consequently a protocol over an
+arbitrary semantic set is a genuine algorithmic normal-form system on
+\(N\), but it asserts computability of semantic readouts only after
+one separately supplies effective presentations of the relevant
+semantic sorts, their binary operation, and the maps \(\Phi_\ell\).
+\end{proposition}
+
+\begin{proof}
+The first item of \Cref{def:prot-univ} supplies the decidable raw-code
+set, the computable normalizer, and decidable equality on normal
+forms.  In the realization clause, \(\widehat\theta\) is explicitly
+required to be computable as a map on normal forms, so the compiled
+operation can be executed without performing any computation in the
+semantic sorts.  The two displayed identities in the definition then
+have different roles: the first is an equality in the represented
+domain \(D\), and the second is an equality in the chosen semantic
+sort \(Y_\ell\) after interpreting the single binary symbol there.
+No enumeration, equality algorithm, or composition algorithm for
+\(Y_\ell\) occurs among the data of the definition.  Hence no such
+algorithm is implied.  If these additional effective presentations are
+provided, then computability of the readout maps is an extra property
+of that enriched presentation, not a hidden hypothesis of protocol
+universality itself.
+\end{proof}
 
 \begin{corollary}[Protocol dichotomy on one level-zero orbit]
 \label{cor:level-zero-protocol-dichotomy}
@@ -408,7 +449,11 @@ is a single-primitive protocol universal for
 \(\widehat{+}=\oplus\) at level \(0\), and multiplication is
 realized by \(\widehat{\times}=\otimes\) at level \(1\).  In both
 cases the readout term is the one binary operation symbol,
-interpreted as composition on the relevant semantic sort.
+interpreted as composition on the relevant semantic sort.  The
+computable part of the theorem is the Zeckendorf normal-form
+calculus on \(X_{\infty}^{\mathrm{fin}}\); the displayed maps into
+\(\End(A)\) and \(\End(\End(A))\) are semantic readout identities in
+the sense of \Cref{prop:semantic-readout-separation}.
 \end{theorem}
 
 \begin{proof}
@@ -462,4 +507,9 @@ Thus both operations in \(\{+,\times\}\) are realized using only the
 single binary operation symbol in the readout.  The finite maps
 \(\Fold_m\) are the resolution quotients whose fibers are studied in
 \Cref{sec:L2}; they do not alter the stable readout just verified.
+Finally, because \(A\) is arbitrary, no effective presentation of
+\(\End(A)\), of composition in \(\End(A)\), or of the map
+\(n\mapsto g^{\circ n}\) is being asserted.  The algorithmic
+assertions are precisely those on the normal forms and compiled
+operations, as isolated in \Cref{prop:semantic-readout-separation}.
 \end{proof}

@@ -443,17 +443,41 @@ supply the decidable canonical-form component of
 \Cref{def:prot-univ}.
 \end{proof}
 
-\begin{corollary}\label{cor:strict-L0-L1}
-Expression universality does not imply protocol universality in
-general.
+\begin{corollary}[Strictness for compatible canonical compilation]
+\label{cor:strict-L0-L1}
+Expression universality does not imply the compatible canonical
+compilation component of protocol universality.  More precisely, the
+EML presentation \((\eml,1)\) is expression-universal for
+\(\mathcal B_{36}\), but there is no computable compilation of its
+translated Richardson fragment into protocol normal forms whose
+decidable equality predicate classifies equality of the transported
+real functions:
+\[
+  E_1=E_2 \text{ as functions }\RR\to\RR
+  \quad\Longleftrightarrow\quad
+  \mathrm{NF}(\tau(E_1))=\mathrm{NF}(\tau(E_2)).
+\]
+Thus the strict L0--L1 separation proved here is strictness for
+semantic-compatible canonical compilation, not a statement that no
+unrelated protocol can realize the same abstract operation family by
+different codes and readouts.
 \end{corollary}
 
 \begin{proof}
 The EML grammar is expression-universal by
-\Cref{thm:eml-universality}, while \Cref{thm:separation} rules out
-the required decidable normal forms already on the translated
-Richardson fragment, with equality understood in the transported
-real semantics of the represented functions.
+\Cref{thm:eml-universality}.  Suppose a compatible canonical
+compilation as displayed existed on the translated Richardson
+fragment.  Then \Cref{prop:L1-compiles-L0}, applied to the source term
+algebra of Richardson expressions with semantic equivalence given by
+equality of real functions, would decide that equivalence by computing
+the two normal forms and comparing them in the protocol codomain.
+Equivalently, taking \(E_2\) to be the zero expression would decide
+whether a Richardson expression is identically zero.  This contradicts
+\Cref{lem:richardson-fragment}, and is exactly the obstruction
+formalized in \Cref{thm:separation}.  The final sentence follows
+because the argument uses the compatibility equivalence displayed
+above, rather than an assertion that every possible protocol for the
+same operations must receive its inputs from this EML fragment.
 \end{proof}
 
 \subsection{Certificate data}
@@ -591,7 +615,8 @@ its second collision moment admits no representation
 \[
   S_2^\sharp(m)=u^{\mathsf T}A^m v\qquad(m\ge1)
 \]
-with \(A\) a fixed finite matrix and \(u,v\) fixed finite vectors.
+with \(A\in M_d(\CC)\) a fixed finite complex matrix and
+\(u,v\in\CC^d\) fixed complex vectors.
 \end{theorem}
 
 \begin{proof}
@@ -639,9 +664,9 @@ For the asserted obstruction, specialize to \(a_m=m!\).  If the
 cover were finite-state certificate-universal, then the case \(q=2\)
 in \Cref{def:cert-univ} would give a representation
 \(S_2^\sharp(m)=u^{\mathsf T}A^m v\) for a fixed finite matrix
-\(A\) and fixed vectors \(u,v\).  For any
-submultiplicative matrix norm there are constants \(C>0\) and
-\(R>0\) such that
+\(A\in M_d(\CC)\) and fixed vectors \(u,v\in\CC^d\).  By
+\Cref{prop:finite-state-coefficient-budget} there are constants
+\(C>0\) and \(R>0\) such that
 \[
   |u^{\mathsf T}A^m v|\le C R^m\qquad(m\ge1).
 \]
@@ -676,13 +701,11 @@ fixed finite matrix representation
 \[
   S_2^{(m)}=u_2^{\mathsf T}A_2^m v_2 .
 \]
-Choosing any submultiplicative matrix norm and putting
-\(R=\max\{1,\|A_2\|\}\), one has
-\[
-  |S_2^{(m)}|\le \|u_2\|\,\|v_2\|\,R^m .
-\]
-After increasing the constant if necessary this has the asserted
-form.  The realization of arbitrary computable one-spike growth is
+Here \(A_2,u_2,v_2\) live in the fixed finite-dimensional complex
+coefficient setting specified in \Cref{def:cert-univ}.  The asserted
+exponential bound is therefore exactly
+\Cref{prop:finite-state-coefficient-budget}.  The realization of
+arbitrary computable one-spike growth is
 the construction and calculation in
 \Cref{thm:finite-state-strictness}.
 \end{proof}
