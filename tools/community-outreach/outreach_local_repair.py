@@ -89,10 +89,13 @@ def _target_file_manifest(target_dir: Path) -> str:
         if not path.is_file():
             continue
         try:
-            size = path.stat().st_size
+            stat = path.stat()
+            size = stat.st_size
+            mtime = datetime.fromtimestamp(stat.st_mtime, timezone.utc).isoformat(timespec="seconds")
         except OSError:
             size = -1
-        rows.append(f"- {path.relative_to(REPO_ROOT)} ({size} bytes)")
+            mtime = "unknown"
+        rows.append(f"- {path.relative_to(REPO_ROOT)} ({size} bytes, mtime={mtime})")
     return "\n".join(rows) or "(no target-local files)"
 
 
@@ -581,6 +584,8 @@ Scientific honesty rule:
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/codex_workup.md`; this is the main handoff Oracle will read next.
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/next_oracle_question.md`; this must be the exact concise prompt that should be sent to Oracle next, based on your local workup.
 - It is not enough to append board metadata or draft a better question. Before writing the next Oracle question, actually process the target: inspect the target files, identify the newest testable claim if present, run a feasible replay/check or explicitly record why no local replay is possible yet.
+- Do not mechanically repeat an expensive verifier if a fresh `results.json` or prior command log in this same target already records the exact replay result you need. In that case, inspect and cite the fresh artifact, run only a cheap sanity check such as JSON parsing or script self-tests if useful, then write the next Oracle handoff.
+- If the only honest local computation would exceed the current timeout, write a bounded-progress `local_repair_report.md` explaining the partial computation, the command that would continue it, and the exact Oracle question. Do not leave the pipeline silent while waiting for an unbounded local run.
 - If the target-local data is enough to implement the missing verifier/replay artifact, implement it and run it.
 - If the latest Oracle packet contains a concrete construction, finite certificate, recurrence, SAT/ILP formulation, exhaustive finite case, or numerical claim, try to replay it locally and record the exact command/result.
 - If a testable Oracle claim is false or incomplete, write `tools/community-outreach/targets/{target_dir.name}/failure_analysis.md` explaining the first failed check, and repair `results.json` so unsupported local artifact references are removed or marked as planned/unverified.
