@@ -834,7 +834,12 @@ def _append_to_board(blocks: list[str]) -> int:
     return len(blocks)
 
 
-def _write_candidate_inbox(candidates: list[Candidate], *, source: str = "oracle_board_refill") -> list[str]:
+def _write_candidate_inbox(
+    candidates: list[Candidate],
+    *,
+    source: str = "oracle_board_refill",
+    operator_requested: bool = False,
+) -> list[str]:
     if not candidates:
         return []
     try:
@@ -844,7 +849,7 @@ def _write_candidate_inbox(candidates: list[Candidate], *, source: str = "oracle
         return []
     ids: list[str] = []
     for c in candidates:
-        row = add_candidate(asdict(c), source=source)
+        row = add_candidate(asdict(c), source=source, operator_requested=operator_requested)
         ids.append(row.get("candidate_id", ""))
     return ids
 
@@ -862,6 +867,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--timeout-s", type=int, default=DEFAULT_TIMEOUT_S, help="oracle poll budget")
     p.add_argument("--source-url", default="", help="triage one explicit public source URL")
     p.add_argument("--source-id", default="", help="optional source-local problem id, e.g. 367")
+    p.add_argument("--operator-requested", action="store_true",
+                   help="keep source-bounded operator-requested candidates in the inbox even if broad auto-refill gate would not graduate them")
     args = p.parse_args(argv)
 
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -964,6 +971,14 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             gate = academic_impact_gate(asdict(c))
             if not gate.passed:
+                if args.operator_requested and args.candidate_inbox:
+                    round_inbox_only.append(c)
+                    seen_titles_lower.add(tl)
+                    _log(
+                        f"operator-requested keep (round {round_idx}): "
+                        f"{c.title!r} — gate score={gate.score}"
+                    )
+                    continue
                 reason = (
                     f"academic_impact_gate score={gate.score}: "
                     + "; ".join((gate.missing + gate.risk_flags)[:5])
@@ -991,7 +1006,8 @@ def main(argv: list[str] | None = None) -> int:
         if round_inbox_only:
             ids = _write_candidate_inbox(
                 round_inbox_only,
-                source="oracle_board_refill_long_horizon",
+                source="operator_requested_source_triage" if args.operator_requested else "oracle_board_refill_long_horizon",
+                operator_requested=args.operator_requested,
             )
             _log(f"round {round_idx}: wrote {len(ids)} long-horizon candidate(s) to inbox: {ids}")
         accumulated_drops.extend(round_drops)
@@ -1059,7 +1075,11 @@ def main(argv: list[str] | None = None) -> int:
     inbox_ids: list[str] = []
     appended = 0
     if args.candidate_inbox:
-        inbox_ids = _write_candidate_inbox(accumulated_survivors)
+        inbox_ids = _write_candidate_inbox(
+            accumulated_survivors,
+            source="operator_requested_source_triage" if args.operator_requested else "oracle_board_refill",
+            operator_requested=args.operator_requested,
+        )
     else:
         appended = _append_to_board(blocks) if blocks else 0
     long_horizon_total = sum(r.get("kept_long_horizon", 0) for r in round_history)

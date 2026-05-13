@@ -230,17 +230,27 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
     return CandidateGate(passed=passed, score=score, lane=lane, reasons=reasons, missing=missing, risk_flags=risk_flags)
 
 
-def add_candidate(candidate: dict, *, source: str) -> dict:
+def add_candidate(candidate: dict, *, source: str, operator_requested: bool = False) -> dict:
     errors = validate_candidate(candidate)
     gate = academic_impact_gate(candidate)
-    if not gate.passed:
+    if operator_requested:
+        if errors:
+            status = "operator_requested_invalid"
+        elif gate.passed and gate.lane != "standard":
+            status = gate.lane
+        else:
+            status = "operator_requested_review"
+    else:
+        status = gate.lane if gate.passed and gate.lane != "standard" else ("needs_profile_judge" if not errors else "invalid")
+    if not gate.passed and not operator_requested:
         errors.extend(f"academic gate: {m}" for m in gate.missing)
         errors.extend(f"academic gate risk: {m}" for m in gate.risk_flags)
     row = {
         "candidate_id": _id_for(candidate),
         "source": source,
         "received_at_epoch": time.time(),
-        "status": gate.lane if gate.passed and gate.lane != "standard" else ("needs_profile_judge" if not errors else "invalid"),
+        "status": status,
+        "operator_requested": operator_requested,
         "errors": errors,
         "academic_impact_gate": gate.to_dict(),
         "candidate": candidate,
@@ -310,6 +320,7 @@ def main(argv: list[str] | None = None) -> int:
     add = sub.add_parser("add-json", help="add one candidate from a JSON file")
     add.add_argument("path")
     add.add_argument("--source", default="manual")
+    add.add_argument("--operator-requested", action="store_true")
     sub.add_parser("list")
     mark = sub.add_parser("mark", help="append a status event for a candidate")
     mark.add_argument("candidate_id")
@@ -320,10 +331,13 @@ def main(argv: list[str] | None = None) -> int:
         payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
         rows = payload.get("candidates") if isinstance(payload, dict) else None
         if isinstance(rows, list):
-            added = [add_candidate(c, source=args.source) for c in rows if isinstance(c, dict)]
+            added = [
+                add_candidate(c, source=args.source, operator_requested=args.operator_requested)
+                for c in rows if isinstance(c, dict)
+            ]
             print(json.dumps(added, ensure_ascii=False, indent=2))
             return 0
-        print(json.dumps(add_candidate(payload, source=args.source), ensure_ascii=False, indent=2))
+        print(json.dumps(add_candidate(payload, source=args.source, operator_requested=args.operator_requested), ensure_ascii=False, indent=2))
         return 0
     if args.cmd == "list":
         print(json.dumps(list_candidates(), ensure_ascii=False, indent=2))
