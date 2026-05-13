@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — The underlying Sidon diameter constant is a real high-impact additive-combinatorics problem, but this board entry is misframed for automated deep reasoning. It does not propose a direct attack on the invariant b, a new b |
+| Status | **🔴 DROP · profile judge DROP** — The Sidon diameter limsup constant b is a real high-impact additive-combinatorics problem, but this candidate is not framed as a direct attack on b, a new bound, a construction, or a rigorously specified reusable verifie |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
@@ -422,7 +422,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — Not viable as stated: the objective takes a supremum over /t/<=1, which includes t=0, so the ratio contains ∫ f(x)^2 dx / //f//_1^2. For nonnegative L^1 functions supported in [-1/4,1/4], this ratio is unbounded by conce |
+| Status | **🔴 DROP · profile judge DROP** — Not viable as stated. The proposed extremal constant is not a finite open closed-form problem: since the supremum over /t/ <= 1 includes t = 0, the ratio includes ∫ f(x)^2 dx / //f//_1^2. For nonnegative L^1 functions su |
 | Source | AlphaEvolve PDF + Boyer-Steinerberger arxiv:2506.16750 + arxiv:2508.02803 |
 | Type | OPEN / extremal functional |
 | Untouched | ✅ 全是 step-function 数值竞赛, 0 人攻 closed form |
@@ -968,5 +968,40 @@ _Inbox graduation rationale_: The target is concrete, inspectable, and close to 
 - tools/community-outreach/targets/arxiv_2010_05521/submission_draft.md
 
 _Inbox graduation rationale_: This is a real, inspectable author question with an exact target, a natural finite-state/rational-generating-function route, and a clear verification loop. It is small enough for an outreach packet, but still mathematically substantive because it turns a conjectural fixed-degree spectrum into an explicit uniform algorithm and proof.
+
+---
+
+### T-31 · Litt #7 · Integral points on SL_r character varieties
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://www.problemsilike.com/7 |
+| Type | open problem |
+| Untouched | Inspectable source page is marked OPEN, says there are no solutions, partial or complete, claimed in comments, has 0 comments, and was last edited 08 May 2026; page citation line records access on 2026-05-13. Freshness still requires a focused literature check for whether CL25, dJE24, LL26, or related nonabelian Hodge/arithmetic-geometry literature already implies a counterexample or stronger positive theorem. |
+| Omega fit | 5/10 |
+| Topic value | 8/10 |
+| Effort est | 14-21 天 |
+| Risk | high |
+| Final display | Human-reviewable arithmetic-geometry research memo: definition sheet, known-case/reduction graph, literature audit, and either a candidate counterexample certificate or a sharply stated proof-obligation map for the general problem. |
+| Success gate | Before operator approval or any external contact, produce either (1) a fully cited proof of potential Zariski density for a clearly stated class of (X,r), with integrality and potential-base-change conventions explicit, or (2) an explicit smooth projective complex variety X and integer r>0 plus a rigorous argument that integral points in Y(X,r) are not potentially Zariski dense, including the proper Zariski-closed subset certificate. If neither is reached, the artifact must clearly label itself as a non-outreach internal audit memo. |
+
+**Statement.** For every smooth projective complex variety X and integer r>0, let Y(X,r)=Hom(pi_1(X),SL_r)//SL_r be the character variety parametrizing conjugacy classes of semisimple rank-r representations of pi_1(X) with trivial determinant. Decide whether integral points are potentially Zariski dense in Y(X,r). The analogous quasi-projective version fixes a simple normal crossings compactification and fixed quasi-unipotent monodromy at infinity.
+
+**Prior.** The source page https://www.problemsilike.com/7 is public and inspectable; it was last edited 08 May 2026 and is marked OPEN as of access on 2026-05-13. The page states that the problem generalizes Conjecture 1.2 of LS18 on isolated points being integral; EG18 proves the reduced isolated-point case; r=2 is known by CL25 via reduction to curves using Corlette-Simpson CS08; dJE24 produces many Zbar_l-points and Zbar-points when Y(X,r) is geometrically irreducible; and the owner speculates the answer may be no and that a counterexample may already be implicit in the literature. No independent claim beyond those source statements is assumed here.
+
+**Omega fit detail.** This is not a natural finite-search target, so the Omega fit is conditional and audit-oriented rather than direct theorem proving. The useful bridge is to turn a high-end open problem into an exact, reproducible packet: formal definitions, base-case taxonomy, reduction graph, explicit quantifier conventions for potential density and integrality, and a counterexample-search checklist across higher-rank, reducible, and quasi-projective character varieties. It should enter only as a high-impact exploratory target, not as a routine bounded certificate task.
+
+**Attack plan.**
+1. Freeze the problem statement and conventions from the source: projective versus quasi-projective cases, meaning of integral points, allowed potential base changes, and the exact closed-subset certificate needed for a negative answer.
+2. Build a cited known-case table separating r=1, r=2, reduced isolated points, geometrically irreducible character varieties, reducible strata, and quasi-projective fixed-monodromy strata; mark which claims come only from the source page versus verified papers.
+3. Search for the smallest plausible negative mechanism: higher-rank reducible components, non-geometrically-irreducible varieties, rigid/isolated loci, or quasi-projective monodromy constraints where all integral points could lie in a proper closed subset.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_litt_integral_points_character_varieties/research.md
+- tools/community-outreach/targets/cand_litt_integral_points_character_varieties/results.json
+- tools/community-outreach/targets/cand_litt_integral_points_character_varieties/submission_draft.md
+
+_Inbox graduation rationale_: This is a current, public, inspectable, high-topic-value open problem rather than a narrow arXiv tail. It is risky and only moderately aligned with Automath because the main theorem lives in sophisticated arithmetic geometry, but a well-scoped audit/counterexample-search packet could have real community-visible value if it clarifies whether the problem is already settled in the literature or isolates a concrete obstruction. Graduate only with the high-risk framing intact.
 
 ---
