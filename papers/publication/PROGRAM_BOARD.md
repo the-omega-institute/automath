@@ -50,7 +50,7 @@
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | A-BLOCKED (max Stage A rounds exhausted; final audit unclear failure) | — |
 | `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | — | 待分诊 | — |
-| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | P0 | triaged 2026-05-13: substantial main.tex; canonical route for centered homotopy / cubical Stokes coefficient-bound manuscript |
+| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | PAUSED (Stage A audit infra fail after Codex structural fallback retry) | triaged 2026-05-13: substantial main.tex; canonical route for centered homotopy / cubical Stokes coefficient-bound manuscript; fix audit parser / rerun with reviewer capacity before auto-processing |
 | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | — | 待分诊 | — |
 | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | Dynamical Systems | A-BLOCKED (overlap deferred; wait for prior submitted/current sibling feedback) | prior routes include folded-histograms / DCDS-A / submitted folded siblings; also has unresolved overlap findings |
 | `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | — | 待分诊 | — |
