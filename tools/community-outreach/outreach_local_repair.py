@@ -208,6 +208,8 @@ def _verifier_stdout_passed(payload: dict, raw_stdout: str = "") -> bool:
         "certificate checks passed" in raw_lower
         or "verifier checks passed" in raw_lower
         or "checks passed" in raw_lower
+        or "all_records_pass=true" in raw_lower
+        or "status=unsat" in raw_lower
     ):
         return True
     return False
@@ -573,6 +575,43 @@ def _candidate_verifier_commands(verifier: Path, results_path: Path) -> list[lis
     ]
 
 
+def _results_artifact_replay_commands(target_dir: Path, results_path: Path) -> list[list[str]]:
+    """Build replay commands from artifact commands already recorded in results.
+
+    Target-specific Codex workers often create generators/checkers whose names
+    are not `verify*.py`.  If their command is recorded in `results.json`, the
+    harness should replay that exact target-local artifact before falling back
+    to generic verifier guessing.
+    """
+    try:
+        payload = json.loads(results_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(payload, dict):
+        return []
+    raw_commands = payload.get("commands")
+    if not isinstance(raw_commands, list):
+        return []
+    target_rel = str(target_dir.relative_to(REPO_ROOT))
+    commands: list[list[str]] = []
+    for item in raw_commands:
+        if not isinstance(item, dict):
+            continue
+        command = str(item.get("command") or "").strip()
+        if not command.startswith("python3 "):
+            continue
+        if target_rel not in command:
+            continue
+        # These commands are written by target-local Codex workers.  Run them
+        # through the shell so quoted graph6/path arguments are preserved.
+        commands.append(["/bin/zsh", "-lc", command])
+    # Prefer newer, more specific artifact checks such as generated slices over
+    # older bulk replays.  Bulk lower-bound audits can be expensive and may
+    # rewrite results.json before the newer artifact is audited.
+    commands.reverse()
+    return commands
+
+
 def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
     """Run a target-local verifier, if present, and record its result.
 
@@ -585,40 +624,47 @@ def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
     results_path = target_dir / "results.json"
     verifiers = _candidate_verifier_scripts(target_dir)
     if not verifiers or not results_path.exists():
-        return {"ran": False, "reason": "missing verify*_results.py or results.json"}
+        artifact_commands = _results_artifact_replay_commands(target_dir, results_path) if results_path.exists() else []
+        if not artifact_commands:
+            return {"ran": False, "reason": "missing verify*_results.py/results artifact commands or results.json"}
+    else:
+        artifact_commands = _results_artifact_replay_commands(target_dir, results_path)
 
     run: dict | None = None
     passed = False
     attempted: list[dict] = []
+    replay_queue: list[tuple[str, list[str]]] = []
+    for idx, cmd in enumerate(artifact_commands):
+        replay_queue.append((f"{todo_id}:{target_dir.name}:results_command_{idx}", cmd))
     for verifier in verifiers:
         for cmd in _candidate_verifier_commands(verifier, results_path):
-            started = _now_iso()
-            proc = subprocess.run(
-                cmd,
-                cwd=str(REPO_ROOT),
-                capture_output=True,
-                text=True,
-                timeout=900,
-                encoding="utf-8",
-                errors="replace",
-                check=False,
-            )
-            stdout_payload = _json_from_stdout(proc.stdout)
-            candidate_run = {
-                "label": f"{todo_id}:{target_dir.name}:{verifier.name}",
-                "command": " ".join(cmd),
-                "started_at": started,
-                "finished_at": _now_iso(),
-                "exit_status": proc.returncode,
-                "stdout": stdout_payload if stdout_payload else {"raw": (proc.stdout or "")[:4000]},
-                "stderr": (proc.stderr or "")[:4000],
-            }
-            attempted.append(candidate_run)
-            if proc.returncode == 0 and _verifier_stdout_passed(stdout_payload, proc.stdout):
-                run = candidate_run
-                passed = True
-                break
-        if passed:
+            replay_queue.append((f"{todo_id}:{target_dir.name}:{verifier.name}", cmd))
+    for label, cmd in replay_queue:
+        started = _now_iso()
+        proc = subprocess.run(
+            cmd,
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=900,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+        stdout_payload = _json_from_stdout(proc.stdout)
+        candidate_run = {
+            "label": label,
+            "command": " ".join(cmd),
+            "started_at": started,
+            "finished_at": _now_iso(),
+            "exit_status": proc.returncode,
+            "stdout": stdout_payload if stdout_payload else {"raw": (proc.stdout or "")[:4000]},
+            "stderr": (proc.stderr or "")[:4000],
+        }
+        attempted.append(candidate_run)
+        if proc.returncode == 0 and _verifier_stdout_passed(stdout_payload, proc.stdout):
+            run = candidate_run
+            passed = True
             break
     if run is None:
         run = attempted[-1]
