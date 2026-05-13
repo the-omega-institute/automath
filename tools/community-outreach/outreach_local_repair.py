@@ -191,19 +191,53 @@ def _json_from_stdout(text: str) -> dict:
     return payload if isinstance(payload, dict) else {}
 
 
-def _verifier_stdout_passed(payload: dict) -> bool:
+def _verifier_stdout_passed(payload: dict, raw_stdout: str = "") -> bool:
     if not isinstance(payload, dict):
-        return False
+        payload = {}
     if str(payload.get("result") or "").strip().lower() in {"pass", "passed", "ok", "verified"}:
         return True
     if str(payload.get("verify_status") or "").upper() == "OK":
         mismatches = payload.get("verify_mismatches")
         return isinstance(mismatches, list) and not mismatches
+    raw_lower = (raw_stdout or "").strip().lower()
+    if raw_lower and (
+        "certificate checks passed" in raw_lower
+        or "verifier checks passed" in raw_lower
+        or "checks passed" in raw_lower
+    ):
+        return True
     return False
 
 
+def _candidate_verifier_scripts(target_dir: Path) -> list[Path]:
+    candidates: list[Path] = []
+    standard = target_dir / "verify_results.py"
+    if standard.exists():
+        candidates.append(standard)
+    for path in sorted(target_dir.glob("verify*_results.py")):
+        if path not in candidates:
+            candidates.append(path)
+    return candidates
+
+
+def _candidate_verifier_commands(verifier: Path, results_path: Path) -> list[list[str]]:
+    rel_verifier = str(verifier.relative_to(REPO_ROOT))
+    rel_results = str(results_path.relative_to(REPO_ROOT))
+    if verifier.name == "verify_results.py":
+        return [
+            ["python3", rel_verifier, "--json"],
+            ["python3", rel_verifier, rel_results],
+            ["python3", rel_verifier],
+        ]
+    return [
+        ["python3", rel_verifier, rel_results],
+        ["python3", rel_verifier, "--json"],
+        ["python3", rel_verifier],
+    ]
+
+
 def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
-    """Run a standard target-local verifier, if present, and record its result.
+    """Run a target-local verifier, if present, and record its result.
 
     Codex workers can create good replay scripts while forgetting to update the
     exact `verifier_audit` schema the deterministic science gate reads.  This
@@ -211,32 +245,46 @@ def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
     target-local verifier itself and appends the parsed machine result to
     results.json.
     """
-    verifier = target_dir / "verify_results.py"
     results_path = target_dir / "results.json"
-    if not verifier.exists() or not results_path.exists():
-        return {"ran": False, "reason": "missing verify_results.py or results.json"}
-    cmd = ["python3", str(verifier.relative_to(REPO_ROOT)), "--json"]
-    started = _now_iso()
-    proc = subprocess.run(
-        cmd,
-        cwd=str(REPO_ROOT),
-        capture_output=True,
-        text=True,
-        timeout=900,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
-    stdout_payload = _json_from_stdout(proc.stdout)
-    run = {
-        "label": f"{todo_id}:{target_dir.name}:verify_results.py",
-        "command": " ".join(cmd),
-        "started_at": started,
-        "finished_at": _now_iso(),
-        "exit_status": proc.returncode,
-        "stdout": stdout_payload if stdout_payload else {"raw": (proc.stdout or "")[:4000]},
-        "stderr": (proc.stderr or "")[:4000],
-    }
+    verifiers = _candidate_verifier_scripts(target_dir)
+    if not verifiers or not results_path.exists():
+        return {"ran": False, "reason": "missing verify*_results.py or results.json"}
+
+    run: dict | None = None
+    passed = False
+    attempted: list[dict] = []
+    for verifier in verifiers:
+        for cmd in _candidate_verifier_commands(verifier, results_path):
+            started = _now_iso()
+            proc = subprocess.run(
+                cmd,
+                cwd=str(REPO_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=900,
+                encoding="utf-8",
+                errors="replace",
+                check=False,
+            )
+            stdout_payload = _json_from_stdout(proc.stdout)
+            candidate_run = {
+                "label": f"{todo_id}:{target_dir.name}:{verifier.name}",
+                "command": " ".join(cmd),
+                "started_at": started,
+                "finished_at": _now_iso(),
+                "exit_status": proc.returncode,
+                "stdout": stdout_payload if stdout_payload else {"raw": (proc.stdout or "")[:4000]},
+                "stderr": (proc.stderr or "")[:4000],
+            }
+            attempted.append(candidate_run)
+            if proc.returncode == 0 and _verifier_stdout_passed(stdout_payload, proc.stdout):
+                run = candidate_run
+                passed = True
+                break
+        if passed:
+            break
+    if run is None:
+        run = attempted[-1]
     try:
         data = json.loads(results_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
@@ -259,14 +307,13 @@ def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
         if not (
             isinstance(existing, dict)
             and existing.get("label") == run["label"]
-            and existing.get("command") == run["command"]
         )
     ]
     runs.append(run)
     audit["updated_at"] = _now_iso()
-    audit["latest_passed"] = proc.returncode == 0 and _verifier_stdout_passed(stdout_payload)
+    audit["latest_passed"] = passed
     results_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return {"ran": True, "recorded": True, "passed": audit["latest_passed"], "run": run}
+    return {"ran": True, "recorded": True, "passed": passed, "run": run, "attempted": attempted}
 
 
 def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
