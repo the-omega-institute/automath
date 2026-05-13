@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — The finite Sidon diameter constant problem is mathematically serious, but this candidate is not a well-specified automated deep-reasoning target. The board entry conflates a named Erdős problem / Sidon diameter limsup qu |
+| Status | **🔴 DROP · profile judge DROP** — The candidate is mathematically adjacent to a serious Sidon extremal problem, but it is not a valid automated deep-reasoning target as specified. The board entry conflates Erdős #1191, which is an infinite Sidon liminf/l |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
