@@ -431,7 +431,8 @@ def _script_version_ok(version: str) -> bool:
 
 def _queue_task(task: dict) -> None:
     tag = str(task.get("tag") or "").lower()
-    if "board-refill" in tag:
+    task_id = str(task.get("task_id") or "").lower()
+    if ":deep" in tag or task_id.startswith("deep_"):
         task_queue.appendleft(task)
     else:
         task_queue.append(task)

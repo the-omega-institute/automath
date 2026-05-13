@@ -233,6 +233,96 @@ def _target_has_runnable_reproducer(target_dir: Path) -> bool:
     return False
 
 
+def _load_results_json(target_dir: Path) -> dict:
+    path = target_dir / "results.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _verifier_run_passed(run: Any) -> bool:
+    if not isinstance(run, dict):
+        return False
+    try:
+        if int(run.get("exit_status")) != 0:
+            return False
+    except (TypeError, ValueError):
+        return False
+    stdout = run.get("stdout")
+    if not isinstance(stdout, dict):
+        return False
+    if str(stdout.get("verify_status") or "").upper() != "OK":
+        return False
+    mismatches = stdout.get("verify_mismatches")
+    return isinstance(mismatches, list) and not mismatches
+
+
+def _successful_verifier_runs(results: dict, *, target_dir: Path) -> list[dict]:
+    """Return successful target-local verifier runs recorded in results.json.
+
+    Oracle can propose the mathematical certificate, but this gate only credits
+    it after Codex records a local replay command.  The command/label must refer
+    to the current target directory so a stale verifier from another target
+    cannot accidentally satisfy this target's writeback gate.
+    """
+    audit = results.get("verifier_audit")
+    if not isinstance(audit, dict):
+        return []
+    runs = audit.get("runs")
+    if not isinstance(runs, list):
+        return []
+    target_rel = _rel_repo_path(target_dir)
+    passed: list[dict] = []
+    for run in runs:
+        if not _verifier_run_passed(run):
+            continue
+        command = str(run.get("command") or "")
+        label = str(run.get("label") or "")
+        if target_rel in command or label:
+            passed.append(run)
+    return passed
+
+
+def _frontier_local_replay_summary(target_dir: Path) -> tuple[bool, str, str, list[str]]:
+    """Infer dynamic verification/closure from local replay evidence.
+
+    Profiles describe the intended contract and often begin as seed/unverified.
+    This helper reads the target's results ledger and upgrades the *gate
+    verdict* only when Codex has recorded successful local verifier runs.  It
+    does not edit profile.json and it does not mark the original open problem
+    solved; it only recognizes a verified bounded/computational record.
+    """
+    results = _load_results_json(target_dir)
+    if not results:
+        return False, "", "", []
+    runs = _successful_verifier_runs(results, target_dir=target_dir)
+    if not runs:
+        return False, "", "", []
+    remaining_verifier_gaps = results.get("remaining_verifier_gaps")
+    if isinstance(remaining_verifier_gaps, list) and remaining_verifier_gaps:
+        return False, "", "", []
+
+    labels = [str(run.get("label") or "").strip() for run in runs if str(run.get("label") or "").strip()]
+    has_frontier_record = bool(results.get("progress_metric_after_this_record"))
+    has_certificate = any(
+        key.endswith("_certificate") or key.endswith("_capacity_certificate")
+        for key in results.keys()
+    )
+    target_meta = results.get("target") if isinstance(results.get("target"), dict) else {}
+    local_reproducers = target_meta.get("local_reproducer_scripts")
+    if isinstance(local_reproducers, list):
+        for rel in local_reproducers:
+            if isinstance(rel, str) and rel.startswith("tools/community-outreach/targets/"):
+                if not (REPO_ROOT / rel).exists():
+                    return False, "", "", []
+
+    if not (has_frontier_record or has_certificate):
+        return False, "", "", []
+    return True, "locally_verified", "verified_certificate", labels
+
+
 def _needs_local_reproducer(contribution_type: str, target_lane: str, combined_text: str) -> bool:
     """Detect exact computational/certificate claims that need local replay.
 
@@ -269,7 +359,7 @@ def _verification_gate(
     target_lane: str,
     target_dir: Path,
     combined_text: str,
-) -> list[str]:
+) -> tuple[list[str], str, str, list[str]]:
     """Block premature writeback for mathematical claims.
 
     `WRITEBACK_READY` is a presentation gate, not a proof.  For math/frontier
@@ -279,10 +369,16 @@ def _verification_gate(
     Oracle/Codex packets from being treated as publishable mathematics.
     """
     if target_lane == "collaboration_lane":
-        return []
+        return [], "", "", []
     verification = str(getattr(contract, "verification_status", "") or "").strip().lower()
     closure = str(getattr(contract, "closure_status", "") or "").strip().lower()
     contribution_type = str(getattr(contract, "contribution_type", "") or "").strip()
+    local_replay_ok, effective_verification, effective_closure, replay_labels = _frontier_local_replay_summary(
+        target_dir
+    )
+    if local_replay_ok and (target_lane == "frontier_lane" or contribution_type in FRONTIER_LANE_TYPES):
+        verification = effective_verification
+        closure = effective_closure
     has_reproducer = _target_has_runnable_reproducer(target_dir)
     acceptable_verification = {
         "source_audited",
@@ -330,7 +426,7 @@ def _verification_gate(
             pass
         elif "no theorem is claimed" not in lower and "not a claim" not in lower:
             blockers.append("research_note writeback requires scoped non-theorem caveat or stronger verification")
-    return blockers
+    return blockers, effective_verification, effective_closure, replay_labels
 
 
 def _validate_results_json(todo: TodoSpec, rel_path: str, path: Path) -> list[str]:
@@ -956,12 +1052,21 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
     close_ready = False
     continue_research = _explicitly_requests_more_research(combined)
     evidence_disk_ready = not missing_required_artifacts and not invalid_required_artifacts
-    verification_blockers = _verification_gate(
+    (
+        verification_blockers,
+        effective_verification_status,
+        effective_closure_status,
+        local_replay_labels,
+    ) = _verification_gate(
         contract=contract,
         target_lane=target_lane,
         target_dir=target_dir,
         combined_text=combined,
     )
+    if local_replay_labels:
+        reasons.append(
+            "local verifier replay passed: " + ", ".join(local_replay_labels[:5])
+        )
     if continue_research:
         reasons.append("artifact explicitly says the target should continue rather than be written back")
     elif target_lane == "collaboration_lane":
@@ -969,6 +1074,14 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
             writeback_ready = True
     else:
         if artifact_text and evidence_disk_ready and not verification_blockers and _has_any(combined, WRITEBACK_TERMS):
+            writeback_ready = True
+        if (
+            target_lane == "frontier_lane"
+            and local_replay_labels
+            and artifact_text
+            and evidence_disk_ready
+            and not verification_blockers
+        ):
             writeback_ready = True
         if final_verdict == "BREAKTHROUGH" and artifact.exists() and evidence_disk_ready and not verification_blockers:
             writeback_ready = True
@@ -991,6 +1104,12 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
         )
     ):
         close_ready = True
+    if writeback_ready:
+        # A verified bounded/computational record may mention "open",
+        # "already solved variant", or "remaining gaps" as claim hygiene. Those
+        # are not archive signals once local replay has made a publishable
+        # scoped artifact available for operator review.
+        close_ready = False
 
     if contract_blockers:
         status = NEEDS_CONTRACT
@@ -1028,8 +1147,8 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
         verifier=contract.verifier,
         progress_metric=contract.progress_metric,
         origin=contract.origin,
-        closure_status=contract.closure_status,
-        verification_status=contract.verification_status,
+        closure_status=effective_closure_status or contract.closure_status,
+        verification_status=effective_verification_status or contract.verification_status,
         outreach_status=contract.outreach_status,
         next_action=next_action,
         retry_budget=retry_budget,

@@ -219,7 +219,28 @@ def oracle_has_capacity() -> bool:
     busy = int(s.get("agents_busy") or 0)
     queued = int(s.get("queue_length") or 0)
     max_agents = int(s.get("max_agents") or 1)
-    return queued == 0 and busy < max_agents
+    if queued != 0 or busy >= max_agents:
+        return False
+    # A browser tab can still be generating a cancelled/abandoned task even
+    # after the server queue is empty. Treat those tabs as occupying Oracle
+    # capacity; otherwise background board-refill can steal the next available
+    # ChatGPT tab while a high-priority research follow-up is waiting.
+    for rec in (s.get("recent_agents") or {}).values():
+        if not isinstance(rec, dict) or not rec.get("recent"):
+            continue
+        metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
+        generation = metrics.get("generation") if isinstance(metrics.get("generation"), dict) else {}
+        phase = str(metrics.get("phase") or "")
+        if generation.get("generating") or phase in {
+            "clicking_send",
+            "sent_waiting_for_generation",
+            "waiting_for_prompt_input",
+            "waiting_for_send_button",
+            "prompt_entered",
+            "send_button_not_ready",
+        }:
+            return False
+    return True
 
 
 def _process_running(pattern: str) -> bool:

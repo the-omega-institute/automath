@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import fcntl
 import hashlib
 import json
 import os
@@ -50,11 +51,13 @@ STATE_DIR = SCRIPT_DIR / "outreach_state"
 RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 RESEARCH_LOOP_LOG_DIR = STATE_DIR / "research_loop_logs"
 RESEARCH_LOOP_STATUS = STATE_DIR / "research_loop.status.json"
+RESEARCH_LOOP_LOCK = STATE_DIR / "research_loop.lock"
 RESEARCH_BOARD_PATH = SCRIPT_DIR / "RESEARCH_BOARD.md"
 DRAFTS_DIR = SCRIPT_DIR / "drafts"
 TARGETS_DIR = SCRIPT_DIR / "targets"
 DISPATCH_WORKTREE = SCRIPT_DIR / "dispatch_worktree.py"
 ORACLE_RECONCILE = SCRIPT_DIR / "outreach_oracle_reconcile.py"
+LOCAL_REPAIR = SCRIPT_DIR / "outreach_local_repair.py"
 
 DEFAULT_PARALLEL = 2
 DEFAULT_POLL_INTERVAL = 120
@@ -62,7 +65,7 @@ DEFAULT_CLAIM_STALE_HOURS = 4
 DEFAULT_TARGET_TIMEOUT_S = 7200  # 2h hard cap per target
 DEFAULT_ORACLE_REFILL_RESERVE = int(os.environ.get("OUTREACH_ORACLE_REFILL_RESERVE", "1") or "1")
 SUMMARY_COOLDOWN_HOURS = 2
-TRANSPORT_FAILURE_BACKOFF_HOURS = 2
+TRANSPORT_FAILURE_BACKOFF_MINUTES = int(os.environ.get("OUTREACH_TRANSPORT_BACKOFF_MINUTES", "5") or "5")
 DEFAULT_ORACLE_TURN_TIMEOUT_S = 7200
 
 # Regex matchers for board status filtering. Case-insensitive substring tests.
@@ -390,30 +393,14 @@ def _spawn_supervise(todo_id: str, timeout_s: int) -> tuple[int, str]:
 
 
 def _oracle_batch_turns(todo_id: str) -> int:
-    """Derive the next bounded batch size from the target contract.
+    """One browser-bound Oracle turn per local harness cycle.
 
-    This is deliberately not the scientific stopping rule. It only sizes the
-    next browser-bound ChatGPT batch so the outer harness can regain control,
-    run deterministic gates, and either continue or stop for a reason.
+    Scientific stopping is not a turn-count decision.  We deliberately return
+    to the outer loop after every Oracle answer so Codex can replay/check the
+    locally testable part before the next follow-up is generated in the same
+    ChatGPT conversation.
     """
-    todos = _parse_board_safe()
-    todo = todos.get(todo_id)
-    if todo is None:
-        return 3
-    profile, _ = load_profile(todo.slug())
-    contract = profile.science_contract if profile is not None else None
-    try:
-        patience = int(getattr(contract, "no_progress_patience_turns", 2) or 2)
-    except (TypeError, ValueError):
-        patience = 2
-    lane = str(getattr(contract, "target_lane", "") or "")
-    topic = int(getattr(todo, "topic_score", 0) or 0)
-    turns = patience + 1
-    if lane == "frontier_lane":
-        turns += 1
-    if topic >= 8:
-        turns += 1
-    return max(2, min(6, turns))
+    return 1
 
 
 def _spawn_oracle_deep(todo_id: str, timeout_s: int) -> tuple[int, str]:
@@ -450,6 +437,74 @@ def _spawn_oracle_deep(todo_id: str, timeout_s: int) -> tuple[int, str]:
         )
         try:
             rc = proc.wait(timeout=hard_timeout)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(proc.pid, signal.SIGTERM)
+            except (ProcessLookupError, OSError):
+                pass
+            time.sleep(5)
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except (ProcessLookupError, OSError):
+                pass
+            return 124, str(log_path)
+    return rc, str(log_path)
+
+
+def _missing_requires_local_repair(missing: list[str]) -> bool:
+    """True when science_gate is blocked by repository-local evidence.
+
+    In this state the next owner is Codex/local execution, not Oracle.  Oracle
+    can propose mathematics, but only the local harness can honestly create,
+    run, or reject replay scripts and verifier artifacts.
+    """
+    text = "\n".join(str(x).lower() for x in missing or [])
+    needles = (
+        "referenced local artifact missing",
+        "local runnable replay artifact",
+        "local runnable reproducer",
+        "lacks a local runnable reproducer",
+        "replay/formal verification",
+        "verifier_command",
+        "checker_command",
+        "reproduction_command",
+        "enumerator_command",
+        "script_path",
+    )
+    return any(needle in text for needle in needles)
+
+
+def _spawn_local_repair(todo_id: str, timeout_s: int) -> tuple[int, str]:
+    """Run Codex local follow-up/replay for one target.
+
+    This is used both for hard missing-artifact repair and for the ordinary
+    Oracle→Codex loop: Oracle proposes or proves; Codex tries to replay the
+    locally testable part and writes the next exact handoff.
+    """
+    if not LOCAL_REPAIR.exists():
+        return 127, ""
+    RESEARCH_LOOP_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = RESEARCH_LOOP_LOG_DIR / f"local_repair_{todo_id}_{_now_tag_safe()}.log"
+    repair_timeout = max(600, min(timeout_s, 1800))
+    cmd = [
+        "python3",
+        str(LOCAL_REPAIR),
+        "--todo-id",
+        todo_id,
+        "--timeout",
+        str(repair_timeout),
+        "--json",
+    ]
+    with open(log_path, "ab") as logf:
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(REPO_ROOT),
+            stdout=logf,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+        try:
+            rc = proc.wait(timeout=repair_timeout + 300)
         except subprocess.TimeoutExpired:
             try:
                 os.killpg(proc.pid, signal.SIGTERM)
@@ -508,6 +563,19 @@ def _reconcile_oracle_deep(todo_id: str) -> dict:
             + ", ".join(str(r.get("claim_packet") or r.get("source") or "?") for r in written)
         )
     return payload
+
+
+def _reconcile_wrote_payload(payload: dict) -> bool:
+    written = payload.get("written") if isinstance(payload, dict) else None
+    return isinstance(written, list) and bool(written)
+
+
+def _run_local_followup_after_oracle(todo_id: str, rc: int, log_path: str, timeout_s: int) -> tuple[int, str]:
+    local_rc, local_log = _spawn_local_repair(todo_id, timeout_s)
+    loop_log(f"{todo_id}: Codex local follow-up after Oracle rc={local_rc} ({local_log})")
+    if local_rc != 0 and rc == 0:
+        return local_rc, local_log
+    return rc, log_path
 
 
 def _write_summary(todo_id: str, slug: str, rc: int, log_path: str) -> Path:
@@ -735,7 +803,7 @@ def _transport_backoff_applies(slug: str) -> bool:
         age = _now() - path.stat().st_mtime
     except OSError:
         return False
-    return age < TRANSPORT_FAILURE_BACKOFF_HOURS * 3600
+    return age < max(0, TRANSPORT_FAILURE_BACKOFF_MINUTES) * 60
 
 
 def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
@@ -745,6 +813,45 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
     if not claim(slug):
         return {"todo_id": todo_id, "slug": slug, "skipped": "already_claimed"}
     try:
+        todos = _parse_board_safe()
+        science_gate = science_gate_evaluate(todos[todo_id]) if todo_id in todos else None
+        if science_gate is not None and science_gate.status in {WRITEBACK_READY, CLOSE_TARGET}:
+            rc = 0
+            log_path = f"science_gate_precheck:{science_gate.status}"
+            loop_log(
+                f"{todo_id}: science_gate={science_gate.status}; "
+                "skipping research execution and routing to operator review"
+            )
+            summary_path = _write_summary(todo_id, slug, rc, log_path)
+            _append_science_gate_summary(summary_path, science_gate.to_dict())
+            impact_gate = None
+            if todo_id in todos:
+                try:
+                    impact_gate = impact_gate_evaluate(todos[todo_id])
+                    write_impact_ledger(impact_gate)
+                    _append_impact_gate_summary(summary_path, impact_gate.to_dict())
+                except Exception as exc:
+                    loop_log(f"{todo_id}: impact_gate failed: {exc}")
+            progress_state = _record_progress_after_batch(slug, science_gate.status)
+            marked = False
+            if _has_real_artifacts(slug):
+                marked = mark_pending_user_approval(
+                    todo_id,
+                    note=f"rc={rc} · science_gate={science_gate.status}",
+                )
+            elapsed = _now() - started
+            return {
+                "todo_id": todo_id,
+                "slug": slug,
+                "rc": rc,
+                "log": log_path,
+                "summary": str(summary_path),
+                "elapsed_s": round(elapsed, 1),
+                "board_marked": marked,
+                "science_gate": science_gate.to_dict(),
+                "impact_gate": impact_gate.to_dict() if impact_gate is not None else {},
+                "progress_state": progress_state,
+            }
         loop_log(f"claimed {todo_id} ({slug}); dispatching --supervise")
         rc, log_path = _spawn_supervise(todo_id, timeout_s)
         loop_log(f"{todo_id}: dispatch_worktree --supervise rc={rc} ({log_path})")
@@ -761,14 +868,44 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
             and science_gate is not None
             and science_gate.next_action == "deep_reason"
         ):
-            loop_log(
-                f"{todo_id}: science_gate.next_action=deep_reason"
-                f"{' after local supervisor produced no artifact' if not _has_real_artifacts(slug) else ''}; "
-                "dispatching oracle-deep"
-            )
-            rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
-            loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
-            _reconcile_oracle_deep(todo_id)
+            gate_missing = list(science_gate.to_dict().get("missing") or [])
+            if _missing_requires_local_repair(gate_missing):
+                loop_log(
+                    f"{todo_id}: science_gate needs local replay/verifier repair; "
+                    "dispatching Codex local_repair before any further Oracle turn"
+                )
+                rc, log_path = _spawn_local_repair(todo_id, timeout_s)
+                loop_log(f"{todo_id}: outreach_local_repair rc={rc} ({log_path})")
+                todos = _parse_board_safe()
+                if todo_id in todos:
+                    science_gate = science_gate_evaluate(todos[todo_id])
+                    gate_missing = list(science_gate.to_dict().get("missing") or [])
+                if (
+                    rc == 0
+                    and science_gate is not None
+                    and science_gate.next_action == "deep_reason"
+                    and not _missing_requires_local_repair(gate_missing)
+                ):
+                    loop_log(
+                        f"{todo_id}: local repair cleared replay/verifier blockers; "
+                        "returning to Oracle deep reasoning for proof/closure"
+                    )
+                    rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
+                    loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
+                    reconcile_payload = _reconcile_oracle_deep(todo_id)
+                    if rc == 0 or _reconcile_wrote_payload(reconcile_payload):
+                        rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+            else:
+                loop_log(
+                    f"{todo_id}: science_gate.next_action=deep_reason"
+                    f"{' after local supervisor produced no artifact' if not _has_real_artifacts(slug) else ''}; "
+                    "dispatching oracle-deep"
+                )
+                rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
+                loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
+                reconcile_payload = _reconcile_oracle_deep(todo_id)
+                if rc == 0 or _reconcile_wrote_payload(reconcile_payload):
+                    rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
             todos = _parse_board_safe()
             if todo_id in todos:
                 science_gate = science_gate_evaluate(todos[todo_id])
@@ -895,7 +1032,7 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
         if _transport_backoff_applies(slug):
             loop_log(
                 f"{tid}: recent Oracle transport/extraction failure; "
-                f"backing off {TRANSPORT_FAILURE_BACKOFF_HOURS}h and trying another target"
+                f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min and trying another target"
             )
             continue
         return tid, slug
@@ -961,6 +1098,26 @@ def _install_signal_handlers(stop_flag: dict) -> None:
             pass
 
 
+def _acquire_loop_lock():
+    """Acquire a process-level singleton lock for loop mode.
+
+    Supervisor restarts can leave an old research_loop orphaned while spawning
+    a new one. Without a lock, both loops race the same board and can dispatch
+    unrelated targets. The lock is advisory and automatically releases on
+    process exit.
+    """
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    fd = os.open(str(RESEARCH_LOOP_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        os.close(fd)
+        return None
+    os.ftruncate(fd, 0)
+    os.write(fd, f"pid={os.getpid()}\nstarted_at={_now_iso()}\n".encode("utf-8"))
+    return fd
+
+
 def _collect_finished(
     active: dict[concurrent.futures.Future, tuple[str, str]],
     *,
@@ -1020,6 +1177,8 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
             while not stop_flag["stop"] and len(active) < research_workers:
                 skip_slugs = {slug for _, slug in active.values()}
                 if args.todo_id:
+                    if active:
+                        break
                     todos = _parse_board_safe()
                     todo = todos.get(args.todo_id)
                     if todo is None:
@@ -1039,7 +1198,6 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                         )
                         return 1
                     picked: Optional[tuple[str, str]] = (args.todo_id, slug)
-                    args.todo_id = ""
                 else:
                     picked = select_next_target(skip_slugs=skip_slugs)
 
@@ -1053,6 +1211,8 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                 started_any = True
 
                 if args.once:
+                    break
+                if args.todo_id:
                     break
 
             _write_status({
@@ -1115,6 +1275,13 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.loop and not args.once:
         p.error("specify --loop or --once")
+
+    loop_lock_fd = None
+    if args.loop and not args.todo_id:
+        loop_lock_fd = _acquire_loop_lock()
+        if loop_lock_fd is None:
+            loop_log("another research_loop instance already holds the singleton lock; exiting")
+            return 0
 
     stop_flag: dict = {"stop": False}
     _install_signal_handlers(stop_flag)

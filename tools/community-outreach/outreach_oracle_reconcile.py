@@ -391,6 +391,26 @@ def _write_oracle_claim_packet(
     return str(packet_path.relative_to(SCRIPT_DIR.parents[1]))
 
 
+def _is_transport_stub_response(text: str) -> bool:
+    stripped = (text or "").strip()
+    if not stripped:
+        return True
+    lowered = stripped.lower()
+    markers = (
+        "error: task cancelled by server",
+        "error (re-extract):",
+        "error: empty response",
+        "empty response (timeout or extraction failure)",
+        "no assistant output after",
+        "re-extract: nothing meaningful",
+        "re-extract: empty response",
+        "server unreachable",
+    )
+    if any(lowered.startswith(marker) for marker in markers):
+        return True
+    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+
+
 def _append_deep_run_state(todo_id: str, slug: str, row: dict, *, artifacts: list[str], packet_path: str) -> None:
     state = _load_state(slug)
     state.setdefault("schema_version", "community-outreach-state-v3-research-board")
@@ -528,9 +548,13 @@ def reconcile_deep(*, todo_id: str = "", force: bool = False, add_side_candidate
                 continue
             if todo_id and not direct_tid and _row_mentions_todo(r, tid, slug):
                 matched.append(r)
-        matched = [r for r in matched if str(r.get("response") or "").strip()]
+        matched = [
+            r for r in matched
+            if str(r.get("response") or "").strip()
+            and not _is_transport_stub_response(str(r.get("response") or ""))
+        ]
         if not matched:
-            skipped.append({"todo_id": tid, "reason": "no deep oracle rows found"})
+            skipped.append({"todo_id": tid, "reason": "no non-transport deep oracle rows found"})
             continue
         row = matched[-1]
         target_dir = _target_dir(slug)

@@ -773,6 +773,7 @@ class OracleConsultant:
                 response_text,
                 turns,
                 objective,
+                todo=todo,
             )
             turn_record["contribution"] = eval_result.get("contribution", "")
             turn_record["evaluator_verdict"] = eval_result.get("verdict", "")
@@ -793,14 +794,35 @@ class OracleConsultant:
                     verdict = "BREAKTHROUGH"
                     break
                 turn_record["gate_override"] = "breakthrough text ignored because science gate still has missing evidence"
-                next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
+                if _missing_requires_local_artifact_repair(gate_missing):
+                    next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
+                else:
+                    missing_block = "\n".join(f"- {m}" for m in gate_missing)
+                    next_followup_override = (
+                        "Continue from your previous answer in this same conversation; do not restart. "
+                        "The repository science gate did not accept the result as closed because these "
+                        f"proof/verification gaps remain:\n{missing_block}\n\n"
+                        "Do not return FILE blocks unless a concrete file is truly missing. "
+                        "Either prove the missing closure step, identify a precise mathematical obstruction, "
+                        "or state a bounded closure criterion that would let Codex mark the current result as closed."
+                    )
                 continue
             if eval_result.get("verdict") == "complete":
                 if gate_complete:
                     verdict = "BREAKTHROUGH"
                     break
                 turn_record["gate_override"] = "evaluator complete ignored because science gate still has missing evidence"
-                next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
+                if _missing_requires_local_artifact_repair(gate_missing):
+                    next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
+                else:
+                    missing_block = "\n".join(f"- {m}" for m in gate_missing)
+                    next_followup_override = (
+                        "Continue from your previous answer in this same conversation; do not restart. "
+                        "The local evaluator thought this was complete, but the deterministic science gate "
+                        f"still reports proof/closure gaps:\n{missing_block}\n\n"
+                        "Resolve those gaps directly: give the missing proof, give a falsifying obstruction, "
+                        "or give a precise bounded-result closure statement that is honest and publishable."
+                    )
                 continue
             if eval_result.get("verdict") == "stuck":
                 stuck_streak += 1
@@ -1142,6 +1164,24 @@ def _fallback_deepening_prompt(turn: int) -> str:
     return DEFAULT_DEEPENING_PROMPTS[(turn - 1) % len(DEFAULT_DEEPENING_PROMPTS)]
 
 
+def _missing_requires_local_artifact_repair(missing: list[str]) -> bool:
+    """Return true when the gate is asking for disk artifacts, not proof work."""
+    text = "\n".join(str(x).lower() for x in missing or [])
+    needles = (
+        "referenced local artifact missing",
+        "local runnable replay artifact",
+        "local runnable reproducer",
+        "lacks a local runnable reproducer",
+        "replay/formal verification",
+        "verifier_command",
+        "checker_command",
+        "reproduction_command",
+        "enumerator_command",
+        "script_path",
+    )
+    return any(needle in text for needle in needles)
+
+
 def _load_distill_codex_exec() -> bool:
     global _DISTILL_LOG_DIR, _distill_codex_exec, _CODEX_EXEC_IMPORT_ERROR
     if _distill_codex_exec is not None:
@@ -1211,7 +1251,7 @@ def _resume_short_prompt(
 ) -> tuple[str, str]:
     last_response = _latest_response_text_for_slug(slug)
     gate_missing = _science_gate_missing_for_todo(todo)
-    if gate_missing and last_response:
+    if gate_missing and last_response and _missing_requires_local_artifact_repair(gate_missing):
         return _artifact_repair_prompt(todo, gate_missing, last_response=last_response), "artifact_repair"
     if prompt_generator is not None and last_response:
         try:
@@ -1222,11 +1262,20 @@ def _resume_short_prompt(
             return generated, "codex_resume"
     if gate_missing:
         missing_block = "\n".join(f"- {m}" for m in gate_missing)
+        artifact_sentence = (
+            "If a file is missing, return a FILE block with exact content."
+            if _missing_requires_local_artifact_repair(gate_missing)
+            else (
+                "These are proof/closure verification gaps, not a request for FILE blocks. "
+                "Prove the missing mathematical step, identify the exact obstruction, or state "
+                "whether the current result should close as a bounded computational record."
+            )
+        )
         return (
             "Continue from the previous answer in this same conversation. "
             "Do not restate the whole problem. The repository science gate is still missing:\n"
             f"{missing_block}\n\n"
-            "Produce the next concrete artifact or proof step now. If a file is missing, return a FILE block with exact content.",
+            f"Produce the next concrete artifact or proof step now. {artifact_sentence}",
             "resume_gate_short",
         )
     return (
@@ -1243,6 +1292,44 @@ def _science_gate_missing_for_todo(todo: TodoSpec) -> list[str]:
     except Exception:
         return []
     return list(getattr(verdict, "missing", []) or [])
+
+
+def _science_gate_context_for_todo(todo: TodoSpec) -> str:
+    try:
+        from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: PLC0415
+        verdict = science_gate_evaluate(todo)
+        data = verdict.to_dict()
+    except Exception as exc:  # noqa: BLE001
+        return f"science_gate unavailable: {exc}"
+    keep = {
+        "status": data.get("status", ""),
+        "next_action": data.get("next_action", ""),
+        "verification_status": data.get("verification_status", ""),
+        "closure_status": data.get("closure_status", ""),
+        "writeback_ready": data.get("writeback_ready", False),
+        "close_ready": data.get("close_ready", False),
+        "missing": data.get("missing", []) or [],
+        "reasons": data.get("reasons", []) or [],
+    }
+    return json.dumps(keep, ensure_ascii=False, indent=2)
+
+
+def _local_harness_context_for_todo(todo: TodoSpec) -> str:
+    target_dir = REPO_ROOT / "tools/community-outreach/targets" / todo.slug()
+    lines = ["Science gate now:", _science_gate_context_for_todo(todo)]
+    for name in ("local_repair_report.md", "local_repair_last.json", "results.json"):
+        p = target_dir / name
+        if not p.exists() or not p.is_file():
+            continue
+        try:
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        lines.extend([f"\n{name} excerpt:", _compact_excerpt(text, 3000)])
+    py_files = sorted(p.name for p in target_dir.glob("*.py") if p.is_file())
+    if py_files:
+        lines.append("\nTarget-local runnable scripts: " + ", ".join(py_files[:20]))
+    return "\n".join(lines)
 
 
 def _expected_artifact_paths_for_todo(todo: TodoSpec) -> list[str]:
@@ -1539,7 +1626,7 @@ def _codex_digest_oracle_turn(
     result["materialized_artifacts"] = written
 
     gate_missing = _science_gate_missing_for_todo(todo)
-    if text.strip() and not written and gate_missing:
+    if text.strip() and not written and gate_missing and not _is_transport_stub_response(text):
         slug = todo.slug()
         target_dir = REPO_ROOT / "tools/community-outreach/targets" / slug
         target_dir.mkdir(parents=True, exist_ok=True)
@@ -1599,6 +1686,26 @@ def _codex_digest_oracle_turn(
     except Exception as exc:  # noqa: BLE001
         result["science_gate_error"] = str(exc)
     return result
+
+
+def _is_transport_stub_response(text: str) -> bool:
+    stripped = (text or "").strip()
+    if not stripped:
+        return True
+    lowered = stripped.lower()
+    transport_markers = (
+        "error: task cancelled by server",
+        "error (re-extract):",
+        "error: empty response",
+        "empty response (timeout or extraction failure)",
+        "no assistant output after",
+        "re-extract: nothing meaningful",
+        "re-extract: empty response",
+        "server unreachable",
+    )
+    if any(lowered.startswith(marker) for marker in transport_markers):
+        return True
+    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
 
 
 def _prior_turns_summary(all_turns: list[dict], *, limit: int = 2000) -> str:
@@ -1703,7 +1810,11 @@ def codex_driven_prompt_generator(turn: int, last_response: str, all_turns: list
         problem_statement=_compact_excerpt(todo.statement or todo.title or "", 4000),
         prior_turns_summary=_prior_turns_summary(all_turns, limit=2000),
         last_oracle_response=_compact_excerpt(last_response, 6000),
-        omega_capabilities=OMEGA_CAPABILITIES_BLURB,
+        omega_capabilities=(
+            OMEGA_CAPABILITIES_BLURB
+            + "\n\nLocal harness context:\n"
+            + _local_harness_context_for_todo(todo)
+        ),
     )
     log_tag = f"community_followup_{task_id}"
 
@@ -1769,6 +1880,7 @@ def codex_evaluate_progress(
     all_turns: list[dict],
     objective: str,
     *,
+    todo: TodoSpec | None = None,
     timeout_s: int = 300,
 ) -> dict:
     """Spawn codex CLI to (a) summarise the new contribution this Oracle turn
@@ -1805,11 +1917,16 @@ def codex_evaluate_progress(
         )
         return fallback
 
+    local_context = _local_harness_context_for_todo(todo) if todo is not None else "(target-local harness context unavailable)"
     prompt = template.format(
         objective=_compact_excerpt(objective or "(no explicit objective)", 4000),
         prior_turns_summary=_prior_turns_summary(all_turns, limit=2000),
         last_oracle_response=_compact_excerpt(last_response, 6000),
-        omega_capabilities=OMEGA_CAPABILITIES_BLURB,
+        omega_capabilities=(
+            OMEGA_CAPABILITIES_BLURB
+            + "\n\nLocal harness context:\n"
+            + local_context
+        ),
     )
     log_tag = f"evaluator_{task_id}"
 
