@@ -59,6 +59,39 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import unquote, urlparse, parse_qs
 
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except (AttributeError, OSError):
+    pass
+
+_ORIGINAL_PRINT = print
+
+
+def _safe_print(*args, **kwargs):
+    try:
+        _ORIGINAL_PRINT(*args, **kwargs)
+    except UnicodeEncodeError:
+        sep = kwargs.get("sep", " ")
+        end = kwargs.get("end", "\n")
+        stream = kwargs.get("file", sys.stdout)
+        text = sep.join(str(arg) for arg in args) + end
+        buffer = getattr(stream, "buffer", None)
+        if buffer is not None:
+            buffer.write(text.encode("utf-8", errors="replace"))
+            if kwargs.get("flush", False):
+                buffer.flush()
+        else:
+            _ORIGINAL_PRINT(
+                text.encode("ascii", errors="replace").decode("ascii"),
+                end="",
+                file=stream,
+                flush=kwargs.get("flush", False),
+            )
+
+
+print = _safe_print
+
 PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
 SESSIONS_DIR = ORACLE_DIR / "sessions"
