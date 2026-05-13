@@ -68,13 +68,14 @@ is the adjacent defect law with top digit fixed to $1$.  In particular,
 \frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
 \]
 The tail bit is the parity of the initial run of $1$'s in the upper block and
-is the minimal exact tail statistic for the full defect family.  For stationary
-one-step Markov inputs, this tail bit is a finite-state hidden Markov
-observable whose live two-state transfer matrix has eigenvalue $-p_{11}$.
-This gives an explicit Markov analogue of the defect law, again as a
-two-component mixture, now with coefficients
-$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and hence with
-exponential convergence to the limiting law.
+is the minimal exact tail statistic for the full defect family.  We also give
+an explicit support-and-multiplicity formula for the adjacent law $\lambda_m$.
+For every stationary finite-state Markov factor of the full two-shift, the
+defect law is obtained by adjoining a four-state tail automaton to the Markov
+presentation.  In the one-step binary specialization this automaton has live
+eigenvalue $-p_{11}$, giving coefficients
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ and exponential convergence to the
+limiting law.
 \end{abstract}
 
 \maketitle
@@ -142,8 +143,9 @@ Equivalently,
 =
 \rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m},
 \]
-and Proposition~\ref{thm:explicit-count} identifies the adjacent factor on the
-right-hand side.  For fixed $m$, this yields the exact limiting law
+and Proposition~\ref{prop:adjacent-kernel-support} identifies the adjacent
+factor on the right-hand side vector by vector.  For fixed $m$, this yields the
+exact limiting law
 \[
 \frac23\delta_0+\frac13\lambda_m
 \qquad (\ell\to\infty),
@@ -159,14 +161,13 @@ family of defects $D_{n\to m}$ exactly.  This minimality statement is
 finite-state in spirit and may be compared with Myhill--Nerode minimization
 \cite{Myhill1957,Nerode1958}.  The same identification makes the Markov
 extension a finite-state factor statement rather than a separate tail count:
-after adding absorbing output states and two live parity states for the initial
-run of $1$'s, the transfer operator for the live component has eigenvalue
-$-p_{11}$.  Consequently, for every stationary one-step Markov input the defect
-law is again a two-component mixture, now with coefficient
-$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and hence
-converges exponentially.  We do not pursue higher-order dependence or other
-linear-recurrence numeration systems here.  Standard Markov-chain background
-may be found in
+for every finite-state Markov presentation of a binary sofic input, adjoining
+the four-state tail automaton gives the exact defect law by a matrix formula.
+For the one-step binary specialization the transfer operator for the live
+component has eigenvalue $-p_{11}$, so the mixture coefficient is
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$ and the law
+converges exponentially.  We do not pursue other linear-recurrence numeration
+systems here.  Standard Markov-chain background may be found in
 \cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
 
 Classical background on Zeckendorf expansions goes back to
@@ -713,6 +714,133 @@ there are $2^m-C_m$ defect-producing words in $\Omega_{m+1}$.  Dividing by
 $2^{m+1}$ gives the probability formula.
 \end{proof}
 
+
+The preceding proposition gives the total adjacent mass.  The next result gives
+its full support and all multiplicities.  For $1\le j\le m$ set
+\[
+L_{m,j}:=F_{m+2-j}
+\]
+and
+\[
+A_{m,j}:=\sum_{i=1}^{j-1}F_{m+1-i}=F_{m+2}-F_{m+3-j},
+\]
+with the convention $A_{m,1}=0$.  Define
+\[
+v_{m,j}
+:=
+\pi_{\infty\to m}(Z(F_{m+1}+A_{m,j}))
+\oplus
+\pi_{\infty\to m}(Z(A_{m,j})).
+\]
+
+\begin{proposition}[Adjacent kernel support and multiplicities]
+\label{prop:adjacent-kernel-support}
+For every $m\ge 1$, the nonzero values of
+$p\mapsto\kappa_{m+1\to m}(p,1)$ are exactly the $m$ vectors
+\[
+v_{m,1},\dots,v_{m,m}.
+\]
+They are distinct.  More precisely, for $0\le t\le F_{m+2}-2$ and
+$1\le j\le m$,
+\[
+A_{m,j}\le t<A_{m,j}+L_{m,j}
+\quad\Longrightarrow\quad
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t))=v_{m,j}.
+\]
+Consequently
+\[
+\lambda_m(0)=2^{-m}C_m,
+\qquad
+\lambda_m(v_{m,j})=2^{-m}\bigl(2^{m+1-j}-C_{m+1-j}\bigr)
+\quad (1\le j\le m),
+\]
+and $\lambda_m(v)=0$ for every other nonzero $v\in\{0,1\}^m$.
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:adjacent-threshold}, a nonzero adjacent defect with top
+bit fixed to $1$ is produced exactly by prefixes $p$ with
+\[
+s:=N(p)\ge F_{m+1}.
+\]
+Writing $s=F_{m+1}+t$, the same theorem gives
+\[
+\kappa_{m+1\to m}(p,1)
+=
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t)),
+\]
+where $0\le t\le F_{m+2}-2$.  Thus the support question is a question about
+this displayed map of the integer interval $[0,F_{m+2}-2]$.
+
+We first prove the interval claim.  The intervals
+\[
+I_{m,j}:=[A_{m,j},A_{m,j}+L_{m,j}-1]
+\qquad (1\le j\le m)
+\]
+are consecutive because $A_{m,j+1}=A_{m,j}+L_{m,j}$, and their union is
+$[0,F_{m+2}-2]$ because $A_{m,m}+L_{m,m}-1=F_{m+2}-2$.
+
+Fix $j$ and put $k:=m+1-j$.  Then $L_{m,j}=F_{k+1}$ and
+\[
+A_{m,j}=F_{m+2}-F_{k+2}.
+\]
+For $t\in I_{m,j}$ write $t=A_{m,j}+u$ with $0\le u<F_{k+1}$.  Since
+$u<F_{k+1}$, the Zeckendorf expansion of $u$ has no nonzero digit in
+positions $k,k+1,\dots$.  The elementary Fibonacci identities
+\[
+F_{m+2}-F_{k+2}=\sum_{r=k+2}^{m}F_{r+1}\quad\text{with every other term used}
+\]
+only involve positions $k+1,k+3,k+5,\dots$ after rewriting the telescoping
+sum as a Zeckendorf word.  Hence adding $u$ affects only positions below $k$.
+Equivalently, the high-digit parts of $Z(t)$ and $Z(A_{m,j})$ agree in every
+position $i\ge k$, while the low part below $k$ is precisely $Z(u)$.
+The same argument applied to
+\[
+F_{m+1}+t=F_{m+1}+A_{m,j}+u
+\]
+shows that the high-digit parts of $Z(F_{m+1}+t)$ and
+$Z(F_{m+1}+A_{m,j})$ agree in every position $i\ge k$, with the same low part
+$Z(u)$ below $k$.  Therefore the low parts cancel in the xor and the projected
+xor is independent of $u$.  It is its value at $u=0$, namely $v_{m,j}$.
+
+The vectors $v_{m,j}$ are distinct because the above intervals are consecutive
+and the displayed xor changes at their common boundary.  Indeed, at the right
+endpoint of $I_{m,j}$ the shared low part is the maximal value below
+$F_{k+1}$, whereas at the first point of $I_{m,j+1}$ a carry enters position
+$k$.  This toggles the $k$th coordinate of
+\[
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t))
+\]
+and leaves all larger coordinates in the already fixed skeleton, so
+$v_{m,j}\ne v_{m,j+1}$.  Since the first differing coordinate between
+$v_{m,i}$ and $v_{m,j}$ for $i<j$ is obtained by iterating this boundary
+argument, all $m$ vectors are distinct.
+
+It remains to count multiplicities under raw prefixes.  By
+Proposition~\ref{prop:fold-residue}, for every value
+$0\le s\le F_{m+3}-2$ the number of raw prefixes $p\in\Omega_m$ with
+$N(p)=s$ equals the number of raw words $w\in\Omega_{m}$ whose value is
+congruent to $s$ modulo $F_{m+2}$.  On the nonzero range
+$s=F_{m+1}+t$ with $t\in I_{m,j}$, remove the fixed high skeleton described
+above.  What remains is an arbitrary raw word of length $m+1-j$ whose value is
+at least $F_{m+2-j}$; otherwise the value would fall into an earlier interval.
+Thus the number of prefixes producing $v_{m,j}$ is
+\[
+\#\{w\in\Omega_{m+1-j}:\ N(w)\ge F_{m+2-j}\}
+=
+2^{m+1-j}-C_{m+1-j}.
+\]
+The zero mass is exactly the number $C_m$ of prefixes with
+$N(p)<F_{m+1}$, again by Theorem~\ref{thm:adjacent-threshold}.  Dividing all
+multiplicities by $2^m$ proves the formula for $\lambda_m$.
+\end{proof}
+
 For $n>m$ and $v\in\{0,1\}^m$, define
 \[
 \mu_{n,m}(v):=2^{-n}\#\{\omega\in\Omega_n:\ D_{n\to m}(\omega)=v\}.
@@ -1218,9 +1346,108 @@ The preceding theorem makes the Markov extension a finite-state factor of the
 shift.  The defect depends on the future block only through the hidden
 observable $\beta$, and $\beta$ is computed by a transducer which records the
 parity of the live initial run of $1$'s and then freezes the resulting output
-after the first $0$.  The next proposition isolates the corresponding transfer
-operator.  The one-step Markov law is then a corollary obtained by averaging
-the deterministic adjacent defect against this factor.
+after the first $0$.  This gives a finite-state factor theorem for every
+stationary Markov presentation of a binary sofic input; the one-step binary law
+is the two-state specialization computed afterwards.
+
+\begin{theorem}[Finite-state Markov factor law]
+\label{thm:finite-state-factor-law}
+Let $S$ be a finite set, let $P=(P_{xy})_{x,y\in S}$ be an irreducible
+stochastic matrix with stationary distribution $\pi$, and let
+$a:S\to\{0,1\}$ be a labelling map.  Let $(Y_t)_{t\ge 1}$ be the stationary
+Markov chain with transition matrix $P$, and set $\omega_t:=a(Y_t)$.  For
+$y\in S$ define the conditional adjacent laws
+\[
+\lambda_{m,y}(v)
+:=
+\PP\!\left[
+\kappa_{m+1\to m}(\omega_1\cdots\omega_m,1)=v
+\ \middle|\ Y_m=y
+\right]
+\qquad (v\in\{0,1\}^m),
+\]
+and define
+\[
+\rho_{\ell,y}:=
+\PP\!\left[
+\beta(\omega_{m+1}\cdots\omega_{m+\ell})=1
+\ \middle|\ Y_m=y
+\right].
+\]
+Then, for $n=m+\ell$,
+\[
+\Law\bigl(D_{n\to m}(\omega_1\cdots\omega_n)\bigr)
+=
+\sum_{y\in S}\pi_y\bigl((1-\rho_{\ell,y})\delta_0+
+ho_{\ell,y}\lambda_{m,y}\bigr).
+\]
+Moreover the coefficients $\rho_{\ell,y}$ are finite-state transfer
+coefficients.  Let
+\[
+Q:=\{E,O,Z_0,Z_1\},
+\]
+where $E$ and $O$ record that the initial run is still alive with even or odd
+length and $Z_i$ is the absorbing output state $i$.  Define
+$T:Q\times\{0,1\}\to Q$ by
+\[
+T(E,1)=O,
+\quad
+T(E,0)=Z_0,
+\quad
+T(O,1)=E,
+\quad
+T(O,0)=Z_1,
+\quad
+T(Z_i,b)=Z_i.
+\]
+On $S\times Q$ set
+\[
+\mathcal M_{(x,q),(y,q')}:=P_{xy}\mathbf{1}_{\{q'=T(q,a(y))\}},
+\]
+and let $h:S\times Q\to\{0,1\}$ be $h(y,O)=h(y,Z_1)=1$ and
+$h(y,E)=h(y,Z_0)=0$.  Then
+\[
+\rho_{\ell,y}=e_{(y,E)}\mathcal M^\ell h
+\qquad (\ell\ge 0).
+\]
+Thus every finite-state Markov factor of the full shift has an exact defect law
+obtained by tensoring its presentation with this four-state tail automaton.
+\end{theorem}
+
+\begin{proof}
+Fix $m$ and condition on the terminal Markov state $Y_m=y$.  By the Markov
+property, the past block $(Y_1,\dots,Y_m)$ and the future block
+$(Y_{m+1},\dots,Y_{m+\ell})$ are conditionally independent given $Y_m=y$,
+and the future distribution depends on the past only through $y$.  For a fixed
+observed prefix $p=\omega_1\cdots\omega_m$, Theorem~\ref{thm:tail-collapse}
+gives
+\[
+D_{m+\ell\to m}(p,\omega_{m+1}\cdots\omega_{m+\ell})
+=
+\kappa_{m+1\to m}(p,\beta(\omega_{m+1}\cdots\omega_{m+\ell})).
+\]
+If the tail bit is $0$ this defect is $0$, and if the tail bit is $1$ it is
+$\kappa_{m+1\to m}(p,1)$.  Conditional independence therefore gives
+\[
+\Law\bigl(D_{m+\ell\to m}(\omega_1\cdots\omega_{m+\ell})\mid Y_m=y\bigr)
+=(1-\rho_{\ell,y})\delta_0+
+ho_{\ell,y}\lambda_{m,y}.
+\]
+Averaging over the stationary law $\PP[Y_m=y]=\pi_y$ proves the mixture
+formula.
+
+It remains to identify $\rho_{\ell,y}$.  Starting from the boundary state
+$(y,E)$ before any future symbol is read, one step of the labelled Markov chain
+moves from $x$ to $y'$ with probability $P_{xy'}$ and updates the tail automaton
+by applying $T$ to the emitted label $a(y')$.  Thus after $\ell$ future symbols
+the joint law on $S\times Q$ is $e_{(y,E)}\mathcal M^\ell$.  The automaton
+outputs $1$ exactly in states $O$ and $Z_1$, which is the vector $h$.  Hence
+$\rho_{\ell,y}=e_{(y,E)}\mathcal M^\ell h$.
+\end{proof}
+
+The next proposition isolates the transfer operator in the one-step binary
+case.  The following theorem is then obtained by averaging the deterministic
+adjacent defect against this two-state specialization.
 
 \begin{proposition}[Hidden tail factor and transfer spectrum]
 \label{prop:hidden-tail-transfer}
