@@ -31,7 +31,7 @@
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
 | `submitted_2026_fibonacci_moduli_cross_resolution_arithmetic_rint` | RINT归档 | 归档；与RJ upper-fibers稿完全重复；不处理 | exact duplicate of `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` |
 | `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | RJ归档 | 归档；RJ拒稿 05-11；路线关闭；不回 Stage A | active FQ deep-revision fork: `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` |
-| `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` | Fibonacci Quarterly | A-READY-FQ-DEEPEN | RJ→FQ深改候选；先修正n=30/八类型问题并新增实质结果；不在手动投稿队列 |
+| `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` | Fibonacci Quarterly | A-BLOCKED (FQ deepening audit real block score=6) | RJ→FQ深改候选；current automatic deepening insufficient; needs new substantive result / human route decision before rerun; not in manual submission queue |
 | `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | 已投 05-11 审稿中 | Nonlinearity→DCDS-A; MSP/EditFlow Paper ID: 260511-Zhang-2 |
 | `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | J. Theoret. Probab. | 已投, peer review 中 (7 reviewers invited) | QTDS→JTP | 标题改为 "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type" |
 | `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | JNT | 已投 04-07 | — |
