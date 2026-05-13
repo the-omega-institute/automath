@@ -1087,6 +1087,30 @@ def _write_status(payload: dict) -> None:
         loop_log(f"status write failed: {exc}")
 
 
+def _visible_active_rows(active: dict[concurrent.futures.Future, tuple[str, str]]) -> list[dict]:
+    """Return active rows for status, hiding targets already gate-terminal.
+
+    A worker can be finishing stale local repair or summary work after another
+    harness component has moved the target to WRITEBACK_READY/CLOSE_TARGET.
+    Status consumers should not read that as "still researching this target";
+    otherwise the watchdog/operator view keeps reporting a solved local loop
+    as active work and blocks attention from the next target.
+    """
+    todos = _parse_board_safe()
+    rows: list[dict] = []
+    for tid, slug in active.values():
+        todo = todos.get(tid)
+        if todo is not None:
+            try:
+                gate = science_gate_evaluate(todo)
+                if gate.status in {WRITEBACK_READY, CLOSE_TARGET}:
+                    continue
+            except Exception:
+                pass
+        rows.append({"todo_id": tid, "slug": slug})
+    return rows
+
+
 def _install_signal_handlers(stop_flag: dict) -> None:
     def _handler(signum, frame):
         stop_flag["stop"] = True
@@ -1147,10 +1171,7 @@ def _collect_finished(
         _write_status({
             "last_completed": _now_iso(),
             "result": result,
-            "active": [
-                {"todo_id": tid, "slug": s}
-                for tid, s in active.values()
-            ],
+            "active": _visible_active_rows(active),
         })
         results.append(result)
     return results
@@ -1218,10 +1239,7 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
             _write_status({
                 "iter": iteration,
                 "last_poll": _now_iso(),
-                "active": [
-                    {"todo_id": tid, "slug": slug}
-                    for tid, slug in active.values()
-                ],
+                "active": _visible_active_rows(active),
                 "blocked_top": _blocked_snapshot(),
                 "parallel": max_workers,
                 "research_workers": research_workers,
