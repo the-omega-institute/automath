@@ -1237,6 +1237,7 @@ def _codex_workup_has_local_trace(text: str) -> bool:
     required_sections = (
         "## local evidence checked",
         "## commands run",
+        "## codex attempt before oracle",
         "## verifier/artifact status",
         "## proof obligations still open",
         "## next oracle question",
@@ -1245,8 +1246,11 @@ def _codex_workup_has_local_trace(text: str) -> bool:
         return False
     local_body = _extract_workup_section(stripped, "Local evidence checked")
     commands_body = _extract_workup_section(stripped, "Commands run")
+    attempt_body = _extract_workup_section(stripped, "Codex attempt before Oracle")
     artifact_body = _extract_workup_section(stripped, "Verifier/artifact status")
     if len(local_body) < 80 or len(commands_body) < 80 or len(artifact_body) < 80:
+        return False
+    if len(attempt_body) < 120:
         return False
     command_markers = (
         "```",
@@ -1290,6 +1294,8 @@ def _codex_workup_has_local_trace(text: str) -> bool:
     local_artifact_text = f"{local_body}\n{artifact_body}".lower()
     if not any(marker in local_artifact_text for marker in inspection_markers):
         return False
+    if not _text_has_codex_attempt(attempt_body):
+        return False
     trace_markers = (
         "command",
         "ran",
@@ -1307,6 +1313,36 @@ def _codex_workup_has_local_trace(text: str) -> bool:
         "python",
     )
     return any(marker in lowered for marker in trace_markers)
+
+
+def _text_has_codex_attempt(text: str) -> bool:
+    body = (text or "").strip()
+    if len(body) < 120:
+        return False
+    lowered = body.lower()
+    action_markers = (
+        "attempted", "tried", "ran", "computed", "checked", "replayed",
+        "verified", "constructed", "enumerated", "proved", "reduced",
+        "tested", "split", "derived", "bounded", "failed", "blocked",
+        "no local replay",
+    )
+    outcome_markers = (
+        "result", "outcome", "therefore", "because", "confirmed", "refuted",
+        "mismatch", "counterexample", "obstruction", "blocker", "missing",
+        "not present", "timeout", "unsat", "sat", "pass", "fail", "cannot",
+        "needs oracle",
+    )
+    math_or_artifact_markers = (
+        "proof", "lemma", "theorem", "bound", "certificate", "construction",
+        "verifier", "script", "results.json", "oracle_claim_packet", "cnf",
+        "drat", "lrat", "graph", "hash", "sha", "case", "finite",
+        "recurrence",
+    )
+    return (
+        any(marker in lowered for marker in action_markers)
+        and any(marker in lowered for marker in outcome_markers)
+        and any(marker in lowered for marker in math_or_artifact_markers)
+    )
 
 
 def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:

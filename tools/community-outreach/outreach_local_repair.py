@@ -486,6 +486,7 @@ def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
     required_sections = (
         "## local evidence checked",
         "## commands run",
+        "## codex attempt before oracle",
         "## verifier/artifact status",
         "## proof obligations still open",
         "## next oracle question",
@@ -495,11 +496,14 @@ def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
         return False, "codex_workup.md missing sections: " + ", ".join(missing_sections)
     local_body = _extract_workup_section(stripped, "Local evidence checked")
     commands_body = _extract_workup_section(stripped, "Commands run")
+    attempt_body = _extract_workup_section(stripped, "Codex attempt before Oracle")
     artifact_body = _extract_workup_section(stripped, "Verifier/artifact status")
     if len(local_body) < 80:
         return False, "Local evidence checked section too thin to prove target inspection"
     if len(commands_body) < 80:
         return False, "Commands run section too thin to prove local execution"
+    if len(attempt_body) < 120:
+        return False, "Codex attempt before Oracle section too thin to prove an actual local/proof attempt"
     if len(artifact_body) < 80:
         return False, "Verifier/artifact status section too thin to prove artifact review"
     command_markers = (
@@ -544,6 +548,8 @@ def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
     local_artifact_text = f"{local_body}\n{artifact_body}".lower()
     if not any(marker in local_artifact_text for marker in inspection_markers):
         return False, "local evidence/artifact sections do not describe an actual inspection result"
+    if not _text_has_codex_attempt(attempt_body):
+        return False, "Codex attempt before Oracle lacks a real attempt/action/outcome on the current mathematical gap"
     trace_markers = (
         "command",
         "ran",
@@ -609,6 +615,88 @@ def _text_has_concrete_local_fact(text: str) -> bool:
     return any(marker in lowered for marker in fact_markers)
 
 
+def _text_has_codex_attempt(text: str) -> bool:
+    """Require a real local/proof attempt before Oracle gets the next prompt.
+
+    File manifests and artifact searches are useful context, but they are not
+    enough.  The handoff must say what Codex actually tried on the current
+    mathematical gap and what happened: a finite replay, a script/verifier run,
+    a proof decomposition with a named blocker, a failed construction check, or
+    a justified impossibility of local execution.
+    """
+    body = (text or "").strip()
+    if len(body) < 120:
+        return False
+    lowered = body.lower()
+    action_markers = (
+        "attempted",
+        "tried",
+        "ran",
+        "computed",
+        "checked",
+        "replayed",
+        "verified",
+        "constructed",
+        "enumerated",
+        "proved",
+        "reduced",
+        "tested",
+        "split",
+        "derived",
+        "bounded",
+        "failed",
+        "blocked",
+        "no local replay",
+    )
+    outcome_markers = (
+        "result",
+        "outcome",
+        "therefore",
+        "because",
+        "confirmed",
+        "refuted",
+        "mismatch",
+        "counterexample",
+        "obstruction",
+        "blocker",
+        "missing",
+        "not present",
+        "timeout",
+        "unsat",
+        "sat",
+        "pass",
+        "fail",
+        "cannot",
+        "needs oracle",
+    )
+    math_or_artifact_markers = (
+        "proof",
+        "lemma",
+        "theorem",
+        "bound",
+        "certificate",
+        "construction",
+        "verifier",
+        "script",
+        "results.json",
+        "oracle_claim_packet",
+        "cnf",
+        "drat",
+        "lrat",
+        "graph",
+        "hash",
+        "sha",
+        "case",
+        "finite",
+        "recurrence",
+    )
+    return (
+        any(marker in lowered for marker in action_markers)
+        and any(marker in lowered for marker in outcome_markers)
+        and any(marker in lowered for marker in math_or_artifact_markers)
+    )
+
+
 def _substantive_local_workup_check(
     target_dir: Path,
     workup: str,
@@ -620,11 +708,12 @@ def _substantive_local_workup_check(
     """Decide whether the handoff contains real target work, not metadata only."""
     local_body = _extract_workup_section(workup, "Local evidence checked")
     commands_body = _extract_workup_section(workup, "Commands run")
+    attempt_body = _extract_workup_section(workup, "Codex attempt before Oracle")
     artifact_body = _extract_workup_section(workup, "Verifier/artifact status")
     obligations_body = _extract_workup_section(workup, "Proof obligations still open")
     publication_body = _extract_workup_section(workup, "Publication value / re-scope judgment")
     evidence_blob = "\n".join(
-        [local_body, commands_body, artifact_body, obligations_body, publication_body, report]
+        [local_body, commands_body, attempt_body, artifact_body, obligations_body, publication_body, report]
     )
     target_name = target_dir.name.lower()
     diagnostics: list[str] = []
@@ -633,6 +722,10 @@ def _substantive_local_workup_check(
         diagnostics.append("commands/report do not mention the target directory")
     if not _text_has_concrete_local_fact(evidence_blob):
         diagnostics.append("workup/report lacks concrete local facts from replay, search, hashes, SAT/CNF, paths, or failures")
+    if not _text_has_codex_attempt(attempt_body):
+        diagnostics.append(
+            "Codex attempt before Oracle is missing or does not describe a real proof/computation/replay attempt and outcome"
+        )
     if not _text_has_concrete_local_fact(question):
         diagnostics.append("next_oracle_question.md does not cite a concrete local fact Oracle must respect")
 
@@ -653,6 +746,7 @@ def _substantive_local_workup_check(
         "diagnostics": diagnostics,
         "question_cites_local_fact": _text_has_concrete_local_fact(question),
         "workup_has_concrete_local_fact": _text_has_concrete_local_fact(evidence_blob),
+        "workup_has_codex_attempt": _text_has_codex_attempt(attempt_body),
     }
 
 
@@ -987,6 +1081,7 @@ Required output actions:
    - `## Target claim now`
    - `## Local evidence checked`
    - `## Commands run`
+   - `## Codex attempt before Oracle`
    - `## Verifier/artifact status`
    - `## Proof obligations still open`
    - `## Next Oracle question`
@@ -999,11 +1094,12 @@ Required output actions:
    - include local computation results Oracle must respect;
    - ask for one concrete artifact/proof move/checkable obstruction.
 3. Identify the newest testable Oracle claim, if any; if there is no Oracle claim yet, build the initial local proof/computation plan from the board/profile artifacts.
-4. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
-5. Run the relevant scripts locally when feasible.
-6. Update `results.json` only to reflect actually reproducible evidence.
-7. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
-8. Stop. Do not commit.
+4. In `## Codex attempt before Oracle`, record the actual attempt you made before asking Oracle: a replay/check command and outcome; or a proof decomposition with the exact blocker; or a finite/manual construction attempt and the first failed check. A file manifest, metadata summary, or "ask Oracle to continue" is not acceptable.
+5. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
+6. Run the relevant scripts locally when feasible.
+7. Update `results.json` only to reflect actually reproducible evidence.
+8. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
+9. Stop. Do not commit.
 """
 
 
