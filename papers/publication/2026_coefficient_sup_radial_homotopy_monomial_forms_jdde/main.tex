@@ -406,8 +406,82 @@ the supremum over $x\in I^n$.
 
 \begin{proposition}[Incidence criterion]
 \label{prop:incidence-criterion}
-See \cite{MaZhangCubicalStokes2026}, Proposition~2.6.
+Let
+\[
+\omega=\sum_{\abs{I}=k}a_I(x)\,\dd x_I\in\Omega^k_{\mathrm{sm}}(I^n).
+\]
+For each ordered $(k-1)$-index $J$ set
+\[
+\mathcal A_J(\omega):=
+\{i\notin J:\ a_{J\cup\{i\}}\not\equiv 0\},
+\qquad
+m(\omega):=\max_{\abs{J}=k-1}\#\mathcal A_J(\omega),
+\]
+where $J\cup\{i\}$ is always rewritten in increasing order. Then
+\begin{equation}
+\label{eq:incidence-bound}
+\norm{\iota_X\omega}_{\coeff,\infty}
+\le
+\frac{m(\omega)}{2}\norm{\omega}_{\coeff,\infty}.
+\end{equation}
+In particular, if $\mathcal M$ is a family of ordered $k$-indices and
+\[
+\Omega^k_{\mathcal M}(I^n):=
+\left\{\sum_{I\in\mathcal M}a_I(x)\,\dd x_I\right\},
+\]
+then the estimate
+\begin{equation}
+\label{eq:universal-half-contraction}
+\norm{\iota_X\omega}_{\coeff,\infty}
+\le
+\frac12\norm{\omega}_{\coeff,\infty}
+\qquad
+(\omega\in\Omega^k_{\mathcal M}(I^n))
+\end{equation}
+holds if and only if every ordered $(k-1)$-index $J$ is contained in at most
+one member of $\mathcal M$.
 \end{proposition}
+
+\begin{proof}
+Fix an ordered $(k-1)$-index $J$. The coefficient of $\dd x_J$ in
+$\iota_X\omega$ is a signed sum over the $k$-indices obtained by adjoining one
+coordinate to $J$:
+\[
+\coeff_J(\iota_X\omega)(x)
+=
+\sum_{i\in\mathcal A_J(\omega)}
+\varepsilon(i,J)(x_i-\tfrac12)a_{J\cup\{i\}}(x),
+\]
+where $\varepsilon(i,J)\in\{-1,1\}$ is the incidence sign determined by the
+position of $i$ in the ordered set $J\cup\{i\}$. Since
+$\abs{x_i-\frac12}\le1/2$ on $I^n$, this gives
+\[
+\abs{\coeff_J(\iota_X\omega)(x)}
+\le
+\frac{\#\mathcal A_J(\omega)}{2}\norm{\omega}_{\coeff,\infty}
+\le
+\frac{m(\omega)}{2}\norm{\omega}_{\coeff,\infty}.
+\]
+Taking the maximum over $J$ and then the supremum over $x$ proves
+\eqref{eq:incidence-bound}.
+
+If every $J$ is contained in at most one member of $\mathcal M$, then
+$m(\omega)\le1$ for every $\omega\in\Omega^k_{\mathcal M}(I^n)$, and
+\eqref{eq:universal-half-contraction} follows. Conversely, suppose that some
+$J$ is contained in two distinct members $J\cup\{p\}$ and $J\cup\{q\}$ of
+$\mathcal M$. Let $\varepsilon(p,J)$ and $\varepsilon(q,J)$ be the corresponding
+incidence signs and define the constant form
+\[
+\omega:=
+\varepsilon(p,J)\,\dd x_{J\cup\{p\}}
++
+\varepsilon(q,J)\,\dd x_{J\cup\{q\}} .
+\]
+Then $\norm{\omega}_{\coeff,\infty}=1$. At any point with $x_p=x_q=1$, the
+$\dd x_J$ coefficient of $\iota_X\omega$ equals $1$. Hence
+$\norm{\iota_X\omega}_{\coeff,\infty}\ge1$, so the universal constant $1/2$
+fails. This proves the if-and-only-if criterion.
+\end{proof}
 
 \begin{remark}
 \label{rem:non-coord-monomial}
@@ -445,8 +519,98 @@ optimal estimate is the input used below.
 
 \begin{theorem}[Sharp coefficient bound for the centered homotopy operator]
 \label{thm:optimal-continuous-inverse}
-See \cite{MaZhangCubicalStokes2026}, Theorem~3.1.
+Let $1\le k\le n$ and set $K_{n+1}:=0$. Then
+\begin{equation}
+\label{eq:centered-homotopy-identity}
+\dd K_k\omega+K_{k+1}\dd\omega=\omega
+\end{equation}
+for every $\omega\in\Omega^k_{\mathrm{sm}}(I^n)$. If, in addition, $\omega$ is
+coordinate-monomial, then
+\begin{equation}
+\label{eq:sharp-K-bound}
+\norm{K_k\omega}_{\coeff,\infty}
+\le
+\frac{1}{2k}\norm{\omega}_{\coeff,\infty}.
+\end{equation}
+The constant $1/(2k)$ is sharp on closed coordinate-monomial $k$-forms. More
+precisely, if
+$R:\Omega^k_{\mathrm{sm}}(I^n)\to\Omega^{k-1}_{\mathrm{sm}}(I^n)$ is linear and
+$\dd R\omega=\omega$ for every closed coordinate-monomial $k$-form $\omega$,
+then
+\[
+\sup_{\substack{\omega\ne0\\ \omega\ {\rm closed\ coordinate\mbox{-}monomial}}}
+\frac{\norm{R\omega}_{\coeff,\infty}}{\norm{\omega}_{\coeff,\infty}}
+\ge
+\frac{1}{2k}.
+\]
 \end{theorem}
+
+\begin{proof}
+The homotopy identity follows from the standard contraction of $I^n$ to its
+midpoint. For completeness we recall the computation. Let
+$H(t,x)=c+t(x-c)$ and let $\partial_t$ denote the coordinate vector on
+$[0,1]$. Cartan's formula on $[0,1]\times I^n$ gives
+\[
+\frac{\dd}{\dd t}H_t^\ast\omega
+=
+H_t^\ast\mathcal L_{x-c}\omega
+=
+\dd\,H_t^\ast\iota_{x-c}\omega
++H_t^\ast\iota_{x-c}\dd\omega .
+\]
+Integrating from $t=0$ to $t=1$ yields
+\[
+\omega-H_0^\ast\omega
+=
+\dd\int_0^1H_t^\ast\iota_{x-c}\omega\,\dd t
++
+\int_0^1H_t^\ast\iota_{x-c}\dd\omega\,\dd t .
+\]
+For a $k$-form, $H_t^\ast\iota_{x-c}\omega$ contributes the factor $t^{k-1}$,
+and for a $(k+1)$-form, $H_t^\ast\iota_{x-c}\dd\omega$ contributes $t^k$.
+These two integrals are exactly $K_k\omega$ and $K_{k+1}\dd\omega$. Since
+$k\ge1$, the pullback of $\omega$ to the point $c$ is zero. This proves
+\eqref{eq:centered-homotopy-identity}.
+
+If $\omega$ is coordinate-monomial, Lemma~\ref{lem:contraction-estimate} gives
+\[
+\abs{(\iota_{x-c}\omega)(c+t(x-c))}_{\coeff,\infty}
+\le \frac12\norm{\omega}_{\coeff,\infty}
+\]
+for all $x$ and $t$. Therefore
+\[
+\abs{(K_k\omega)(x)}_{\coeff,\infty}
+\le
+\int_0^1 t^{k-1}\frac12\norm{\omega}_{\coeff,\infty}\,\dd t
+=
+\frac1{2k}\norm{\omega}_{\coeff,\infty},
+\]
+and taking the supremum over $x$ proves \eqref{eq:sharp-K-bound}.
+
+The constant is attained by
+$\omega_0=\dd x_1\wedge\cdots\wedge\dd x_k$. Indeed
+\eqref{eq:explicit-minimizer} gives
+$\norm{K_k\omega_0}_{\coeff,\infty}=1/(2k)$ and
+$\norm{\omega_0}_{\coeff,\infty}=1$. It remains to prove that no linear
+right-inverse can have smaller norm on closed coordinate-monomial data. Let
+$R$ be as in the statement and set $\eta:=R\omega_0$. Then
+$\dd\eta=\omega_0$. Restrict $\eta$ to the coordinate $k$-cube
+\[
+Q:=\{(x_1,\dots,x_k,\tfrac12,\dots,\tfrac12):0\le x_j\le1\}\subset I^n .
+\]
+By Stokes' theorem on $Q$,
+\[
+1=\int_Q\omega_0=\int_{\partial Q}\eta .
+\]
+The boundary of $Q$ has $2k$ coordinate faces, each of $(k-1)$-measure one,
+and on each such face the pulled-back integrand is one coordinate coefficient
+of $\eta$, up to sign. Hence
+\[
+1\le 2k\norm{\eta}_{\coeff,\infty}
+=2k\norm{R\omega_0}_{\coeff,\infty}.
+\]
+Since $\norm{\omega_0}_{\coeff,\infty}=1$, the asserted lower bound follows.
+\end{proof}
 
 \begin{proposition}[A sharp decomposition with controlled defect]
 \label{thm:homotopy-decomposition}
@@ -480,7 +644,7 @@ $C\ge1/(2(k+1))$.
 \end{proposition}
 
 \begin{proof}
-The homotopy identity from \cite[Theorem~3.1]{MaZhangCubicalStokes2026} gives
+The homotopy identity \eqref{eq:centered-homotopy-identity} gives
 \[
 \omega=\dd K_k\omega+K_{k+1}\dd\omega=\dd\eta+E.
 \]
@@ -497,8 +661,7 @@ For sharpness, take $n=k+1$ and
 \Omega_0:=\dd x_1\wedge\cdots\wedge\dd x_{k+1}.
 \]
 Let $\omega:=K_{k+1}\Omega_0$. Then
-$\dd\omega=\Omega_0$ by the homotopy identity
-\cite[Theorem~3.1]{MaZhangCubicalStokes2026}, because
+$\dd\omega=\Omega_0$ by \eqref{eq:centered-homotopy-identity}, because
 $\dd\Omega_0=0$. In any admissible decomposition
 $\omega=\dd\eta+E$ with $\dd E=\dd\omega=\Omega_0$, the $k$-form $E$ is a
 primitive of $\Omega_0$. The Stokes lower bound in the sharpness part of
@@ -561,10 +724,73 @@ FigalliZhang2022,DeMason2024} and
 CasellesFaccioloMeinhardt2009,CasellesChambolleMollNovaga2008,
 Leonardi2015,Parini2011}.
 
+\begin{definition}[The coefficient-$L^\infty$ divergence constant]
+\label{def:C-infty}
+Let $\Omega\subset\RR^n$ be a bounded Lipschitz domain and set
+$\mathrm{vol}:=\dd x_1\wedge\cdots\wedge\dd x_n$. Define
+\[
+C_\infty(\Omega):=
+\inf\left\{
+\norm{V}_{L^\infty(\Omega;\ell^\infty)}:
+\begin{array}{l}
+U\supset\overline\Omega\ {\rm open},\
+V\in C^\infty(U;\RR^n),\\
+\Div V=1\ {\rm on}\ \Omega
+\end{array}
+\right\}.
+\]
+Equivalently, $C_\infty(\Omega)$ is the infimum of
+$\norm{\eta}_{\coeff,\infty}$ over all smooth $(n-1)$-forms $\eta$ defined on a
+neighborhood of $\Omega$ and satisfying $\dd\eta=\mathrm{vol}$ on $\Omega$.
+The equivalence is through
+\begin{equation}
+\label{eq:form-vector-identification}
+\eta=
+\sum_{j=1}^n(-1)^{j-1}V_j\,
+\dd x_1\wedge\cdots\wedge\widehat{\dd x_j}\wedge\cdots\wedge\dd x_n,
+\end{equation}
+for which $\dd\eta=(\Div V)\mathrm{vol}$ and
+$\norm{\eta}_{\coeff,\infty}=\norm{V}_{L^\infty(\Omega;\ell^\infty)}$.
+\end{definition}
+
 \begin{lemma}[Anisotropic calibration bound]
 \label{lem:boundary-calibration}
-See \cite{MaZhangCubicalStokes2026}, Lemma~4.1.
+Let $\Omega\subset\RR^n$ be a bounded Lipschitz domain. If
+$V\in C^\infty(U;\RR^n)$, $U\supset\overline\Omega$, and $\Div V=1$ on
+$\Omega$, then every Lipschitz subdomain $E\subset\Omega$ satisfies
+\begin{equation}
+\label{eq:anisotropic-calibration-bound}
+\Vol(E)\le \norm{V}_{L^\infty(\Omega;\ell^\infty)}P_1(E).
+\end{equation}
+Consequently,
+\begin{equation}
+\label{eq:C-infty-lower-bound}
+C_\infty(\Omega)\ge
+\sup\left\{\frac{\Vol(E)}{P_1(E)}:\ E\subset\Omega,\ E\ {\rm Lipschitz}\right\}.
+\end{equation}
 \end{lemma}
+
+\begin{proof}
+Let $M:=\norm{V}_{L^\infty(\Omega;\ell^\infty)}$. Since $\Div V=1$ on $E$,
+the divergence theorem for Lipschitz domains gives
+\[
+\Vol(E)=\int_E\Div V\,\dd x
+=\int_{\partial E}V\cdot\nu_E\,\dd\Haus^{n-1}.
+\]
+Pointwise on $\partial E$,
+\[
+V\cdot\nu_E
+\le
+\abs{V\cdot\nu_E}
+\le
+\sum_{j=1}^n\abs{V_j}\abs{(\nu_E)_j}
+\le
+M\abs{\nu_E}_1 .
+\]
+Integrating gives \eqref{eq:anisotropic-calibration-bound}. Taking the
+infimum over all admissible $V$ and then the supremum over Lipschitz
+subdomains $E$ proves \eqref{eq:C-infty-lower-bound}.
+\end{proof}
 
 \begin{proposition}[Quantitative boundary saturation on optimal domains]
 \label{prop:quantitative-boundary-saturation}
