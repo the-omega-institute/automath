@@ -766,8 +766,31 @@ $p\mapsto\kappa_{m+1\to m}(p,1)$ are exactly the $m$ vectors
 \[
 v_{m,1},\dots,v_{m,m}.
 \]
-They are distinct.  More precisely, for $0\le t\le F_{m+2}-2$ and
-$1\le j\le m$,
+They are distinct and have the following coordinate form.  If
+$k=m+1-j$, then
+\[
+(v_{m,j})_i=
+\begin{cases}
+0,& i<k,\\
+1,& i=k,\\
+0,& i=k+1,\\
+1,& k+2\le i\le m,
+\end{cases}
+\]
+with the empty alternatives omitted when $k=m$ or $k=m-1$.  Equivalently,
+as a low-to-high word,
+\[
+\begin{array}{c|c|c}
+j & k=m+1-j & v_{m,j}\\ \hline
+1&m&0^{m-1}1\\
+2&m-1&0^{m-2}10\\
+3&m-2&0^{m-3}101\\
+\vdots&\vdots&\vdots\\
+m&1&101^{m-2}
+\end{array}
+\]
+where the last expression means $1,0$ followed by $m-2$ ones.  More precisely,
+for $0\le t\le F_{m+2}-2$ and $1\le j\le m$,
 \[
 A_{m,j}\le t<A_{m,j}+L_{m,j}
 \quad\Longrightarrow\quad
@@ -837,10 +860,47 @@ $Z(F_{m+1}+A_{m,j})$ agree in every position $i\ge k$, with the same low part
 $Z(u)$ below $k$.  Therefore the low parts cancel in the xor and the projected
 xor is independent of $u$.  It is its value at $u=0$, namely $v_{m,j}$.
 
-The same skeleton description shows that $v_{m,j}$ has a nonzero digit in
-coordinate $k=m+1-j$ and has zero digits in all coordinates below $k$.
-Therefore the first nonzero coordinate of $v_{m,j}$ is $m+1-j$, and the
-vectors $v_{m,1},\dots,v_{m,m}$ are distinct.
+We now make the skeleton description explicit.  Write only the coordinates
+$k,k+1,\dots,m$ and put $d=m-k$.  The endpoint skeletons used above are
+\[
+\begin{array}{c|c|c}
+d & \pi_{\{k,\dots,m\}}Z(A_{m,j})
+& \pi_{\{k,\dots,m\}}Z(F_{m+1}+A_{m,j})\\ \hline
+0&0&1\\
+2r+1&10(01)^r&00(10)^r\\
+2r\ (r\ge 1)&00(10)^{r-1}1&10(01)^{r-1}0.
+\end{array}
+\]
+Indeed, in each row the displayed word is admissible.  For the first column,
+the Fibonacci sums are
+\[
+F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}
+\]
+in the odd case $d=2r+1$, and
+\[
+\sum_{s=1}^r F_{k+2s+1}=F_{k+2r+2}-F_{k+2}
+\]
+in the even case $d=2r$; these are exactly $A_{m,j}=F_{m+2}-F_{k+2}$.
+For the second column with $d\ge 1$, adjoining one further digit $1$ in
+position $m+1$ gives the total value $F_{m+1}+A_{m,j}$: the corresponding sums
+are
+\[
+\sum_{s=1}^{r+1}F_{k+2s+1}=F_{k+2r+4}-F_{k+2}
+\]
+when $d=2r+1$, and
+\[
+F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}
+\]
+when $d=2r$.  The case $d=0$ is immediate.  Uniqueness of Zeckendorf expansion
+therefore gives the table.  Xoring its two columns gives
+\[
+\pi_{\{k,\dots,m\}}v_{m,j}=1\quad(d=0),
+\qquad
+\pi_{\{k,\dots,m\}}v_{m,j}=10\,1^{d-1}\quad(d\ge 1),
+\]
+and all coordinates below $k$ vanish.  This is the displayed coordinate formula
+for $v_{m,j}$.  In particular the first nonzero coordinate of $v_{m,j}$ is
+$m+1-j$, so the vectors $v_{m,1},\dots,v_{m,m}$ are distinct.
 
 It remains to count multiplicities under raw prefixes.  By
 Theorem~\ref{thm:adjacent-threshold}, zero is produced by exactly the $C_m$
@@ -1428,7 +1488,7 @@ Then, for $n=m+\ell$,
 \Law\bigl(D_{n\to m}(\omega_1\cdots\omega_n)\bigr)
 =
 \sum_{y\in S}\pi_y\bigl((1-\rho_{\ell,y})\delta_0+
-ho_{\ell,y}\lambda_{m,y}\bigr).
+\rho_{\ell,y}\lambda_{m,y}\bigr).
 \]
 Moreover the coefficients $\rho_{\ell,y}$ are finite-state transfer
 coefficients.  Let
@@ -1480,7 +1540,7 @@ $\kappa_{m+1\to m}(p,1)$.  Conditional independence therefore gives
 \[
 \Law\bigl(D_{m+\ell\to m}(\omega_1\cdots\omega_{m+\ell})\mid Y_m=y\bigr)
 =(1-\rho_{\ell,y})\delta_0+
-ho_{\ell,y}\lambda_{m,y}.
+\rho_{\ell,y}\lambda_{m,y}.
 \]
 Averaging over the stationary law $\PP[Y_m=y]=\pi_y$ proves the mixture
 formula.
@@ -1492,6 +1552,75 @@ by applying $T$ to the emitted label $a(y')$.  Thus after $\ell$ future symbols
 the joint law on $S\times Q$ is $e_{(y,E)}\mathcal M^\ell$.  The automaton
 outputs $1$ exactly in states $O$ and $Z_1$, which is the vector $h$.  Hence
 $\rho_{\ell,y}=e_{(y,E)}\mathcal M^\ell h$.
+\end{proof}
+
+\begin{corollary}[Sliding-window defect process is hidden Markov]
+\label{cor:sliding-window-hidden-markov}
+Let $(Y_t)_{t\in\ZZ}$ be the two-sided stationary Markov chain with finite
+state space $S$, irreducible transition matrix $P$, and stationary distribution
+$\pi$, and let $\omega_t=a(Y_t)$ for a labelling $a:S\to\{0,1\}$.  Fix
+$m\ge 1$ and $\ell\ge 0$.  Define the sliding-window defect process
+\[
+X_t^{(m,\ell)}
+:=
+D_{m+\ell\to m}\bigl(\omega_{t+1}\omega_{t+2}\cdots\omega_{t+m+\ell}\bigr)
+\in\{0,1\}^m
+\qquad(t\in\ZZ).
+\]
+Then $(X_t^{(m,\ell)})_{t\in\ZZ}$ is a stationary hidden Markov process with a
+finite presentation depending only on $S$, $P$, $a$, $m$, and $\ell$.  More
+precisely, if
+\[
+\mathcal S_{m,\ell}
+:=
+\{(y_1,\dots,y_{m+\ell})\in S^{m+\ell}:
+\pi_{y_1}P_{y_1y_2}\cdots P_{y_{m+\ell-1}y_{m+\ell}}>0\},
+\]
+then the block chain
+\[
+B_t:=(Y_{t+1},\dots,Y_{t+m+\ell})\in\mathcal S_{m,\ell}
+\]
+is a stationary finite-state Markov chain, and
+\[
+X_t^{(m,\ell)}=
+\Phi_{m,\ell}(B_t),
+\]
+where
+\[
+\Phi_{m,\ell}(y_1,\dots,y_{m+\ell})
+:=
+\kappa_{m+1\to m}
+\bigl(a(y_1)\cdots a(y_m),
+\beta(a(y_{m+1})\cdots a(y_{m+\ell}))\bigr).
+\]
+Equivalently, the output map may be written as
+$D_{m+\ell\to m}(a(y_1)\cdots a(y_{m+\ell}))$.
+\end{corollary}
+
+\begin{proof}
+The stationary law of $B_t$ is the image of the stationary law of
+$(Y_t)_{t\in\ZZ}$ under the finite block map.  For
+$b=(y_1,\dots,y_{m+\ell})$ and $b'=(y'_1,\dots,y'_{m+\ell})$ in
+$\mathcal S_{m,\ell}$, the transition probability of the block chain is
+\[
+\mathcal P_{b,b'}
+=
+\mathbf 1_{\{(y'_1,\dots,y'_{m+\ell-1})=(y_2,\dots,y_{m+\ell})\}}
+P_{y_{m+\ell}y'_{m+\ell}}.
+\]
+This depends only on $b$ and $b'$, so $B_t$ is a finite-state Markov chain.
+It is stationary because the original two-sided chain is stationary.  Finally,
+Theorem~\ref{thm:tail-collapse} gives, for every block $b=(y_1,\dots,y_{m+\ell})$,
+\[
+D_{m+\ell\to m}(a(y_1)\cdots a(y_{m+\ell}))
+=
+\kappa_{m+1\to m}
+\bigl(a(y_1)\cdots a(y_m),
+\beta(a(y_{m+1})\cdots a(y_{m+\ell}))\bigr),
+\]
+which is exactly the displayed output map.  Thus the entire sliding-window
+defect sequence is a deterministic finite-valued observation of the finite
+Markov chain $B_t$, hence a stationary hidden Markov process.
 \end{proof}
 
 The next proposition isolates the transfer operator in the one-step binary
