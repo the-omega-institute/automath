@@ -790,7 +790,25 @@ def _contains_contract_text(text: str, profile: OutreachProfile) -> list[str]:
     contract = profile.science_contract
     if contract is None:
         return ["science_contract"]
-    if contract.contribution_type and contract.contribution_type.lower() not in text.lower():
+    text_lower = text.lower()
+    contribution_aliases = {
+        "computational_record": (
+            "computational record",
+            "computational artifact",
+            "reproducible local",
+            "verifier-readiness",
+            "verifier readiness",
+        ),
+        "research_note": ("research note", "source-audited note", "research memo"),
+    }
+    ctype = (contract.contribution_type or "").lower()
+    if (
+        contract.contribution_type
+        and ctype not in text_lower
+        and ctype.replace("_", " ") not in text_lower
+        and ctype.replace("_", "-") not in text_lower
+        and not any(alias in text_lower for alias in contribution_aliases.get(ctype, ()))
+    ):
         missing.append(f"contribution_type marker: {contract.contribution_type}")
     for item in contract.evidence_required:
         words = [w.lower() for w in re.findall(r"[A-Za-z0-9_]{5,}", str(item))]

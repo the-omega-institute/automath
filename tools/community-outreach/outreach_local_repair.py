@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Codex local follow-up/replay for outreach math targets.
+"""Codex local workup/follow-up/replay for outreach math targets.
 
 Oracle/ChatGPT is used for search and deep mathematical reasoning.  It should
-not be asked to pretend that repository-local replay scripts exist.  When the
-deterministic science gate reports missing local artifacts, or when Oracle has
-just produced a testable mathematical claim, this script invokes Codex on the
-local workspace to create, run, or repair the verifier/replay packet.
+not be asked to pretend that repository-local replay scripts exist, and it
+should not receive a bare board card when Codex can first inspect the local
+workspace.  Before each Oracle batch, and again after any substantive Oracle
+claim, this script invokes Codex on the local workspace to produce a target
+workup, run feasible checks, and create or repair verifier/replay packets.
 
 Hard boundaries:
   - never sends/posts/emails anything externally;
@@ -13,8 +14,8 @@ Hard boundaries:
   - does not ask Oracle;
   - if a referenced claim cannot honestly be reproduced, writes a target-local
     failure_analysis.md when the claim is invalid, or records a precise
-    local_repair_report.md handoff when the remaining gap is a proof/Oracle
-    question rather than a local-computation question.
+    local_repair_report.md and codex_workup.md handoff when the remaining gap
+    is a proof/Oracle question rather than a local-computation question.
 """
 
 from __future__ import annotations
@@ -328,23 +329,26 @@ def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
         statement = todo.statement
         source = todo.source
     research_md = _read_text(target_dir / "research.md", limit=12000)
+    codex_workup = _read_text(target_dir / "codex_workup.md", limit=12000)
     results_json = _read_text(target_dir / "results.json", limit=18000)
     profile_json = _read_text(target_dir / "profile.json", limit=8000)
-    return f"""You are Codex running as the LOCAL_ORACLE_FOLLOWUP worker for the Omega outreach open-problem pipeline.
+    return f"""You are Codex running as the LOCAL_CODEX_WORKUP worker for the Omega outreach open-problem pipeline.
 
 Target: {todo_id} — {title}
 Source: {source}
 
-The Oracle/ChatGPT stage supplies mathematical ideas and deep proof attempts. Your job is the local counterpart: read the latest Oracle claim packets, run any feasible local computation/replay, create or repair verifier scripts, update results.json only when evidence is actually reproducible, and leave a clear report for the next Oracle turn.
+The Oracle/ChatGPT stage supplies mathematical ideas, search, and deep proof attempts. Your job is the local counterpart before and after Oracle: inspect the target on disk, run any feasible local computation/replay, create or repair verifier scripts when honest, and write a compact `codex_workup.md` that tells Oracle exactly what remains to prove or compute.
 
 Do not ask the user for clarification. Do not contact Oracle. Do not send email, post comments, call gh, commit, or push. Keep edits inside `tools/community-outreach/targets/{target_dir.name}/` unless a tiny pipeline-local support change is absolutely required.
 
 Scientific honesty rule:
+- Always create or refresh `tools/community-outreach/targets/{target_dir.name}/codex_workup.md`; this is the main handoff Oracle will read next.
 - If the target-local data is enough to implement the missing verifier/replay artifact, implement it and run it.
 - If the latest Oracle packet contains a concrete construction, finite certificate, recurrence, SAT/ILP formulation, exhaustive finite case, or numerical claim, try to replay it locally and record the exact command/result.
 - If a testable Oracle claim is false or incomplete, write `tools/community-outreach/targets/{target_dir.name}/failure_analysis.md` explaining the first failed check, and repair `results.json` so unsupported local artifact references are removed or marked as planned/unverified.
 - If the remaining gap is a pure proof/strategy gap and there is no honest local computation to run, do not fabricate work. Write `tools/community-outreach/targets/{target_dir.name}/local_repair_report.md` with a concise "no local replay available yet" note and the exact next question that should go back to Oracle.
 - The goal is not to make the gate pass by weakening standards. The goal is to make the next gate decision truthful and actionable.
+- For non-collaboration targets, keep asking: would this become a publicly reviewable result, note, certificate, verifier, construction, obstruction, or useful failure analysis? If not, recommend re-scope or deprioritization in the workup.
 
 Science gate snapshot:
 ```json
@@ -372,18 +376,32 @@ Existing research.md excerpt:
 {research_md or "(missing)"}
 ```
 
+Existing codex_workup.md excerpt:
+```markdown
+{codex_workup or "(missing)"}
+```
+
 Latest Oracle claim packets:
 ```markdown
 {_latest_claim_packets(target_dir)}
 ```
 
 Required output actions:
-1. Identify the newest testable Oracle claim, if any.
-2. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
-3. Run the relevant scripts locally when feasible.
-4. Update `results.json` only to reflect actually reproducible evidence.
-5. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
-6. Stop. Do not commit.
+1. Refresh `codex_workup.md` with these exact sections:
+   - `# Codex Workup`
+   - `## Target claim now`
+   - `## Local evidence checked`
+   - `## Commands run`
+   - `## Verifier/artifact status`
+   - `## Proof obligations still open`
+   - `## Next Oracle question`
+   - `## Publication value / re-scope judgment`
+2. Identify the newest testable Oracle claim, if any; if there is no Oracle claim yet, build the initial local proof/computation plan from the board/profile artifacts.
+3. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
+4. Run the relevant scripts locally when feasible.
+5. Update `results.json` only to reflect actually reproducible evidence.
+6. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
+7. Stop. Do not commit.
 """
 
 

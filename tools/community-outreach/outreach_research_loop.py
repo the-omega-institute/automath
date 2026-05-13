@@ -485,7 +485,11 @@ def _spawn_local_repair(todo_id: str, timeout_s: int) -> tuple[int, str]:
         return 127, ""
     RESEARCH_LOOP_LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_path = RESEARCH_LOOP_LOG_DIR / f"local_repair_{todo_id}_{_now_tag_safe()}.log"
-    repair_timeout = max(600, min(timeout_s, 1800))
+    try:
+        default_repair_timeout = int(os.environ.get("OUTREACH_LOCAL_WORKUP_TIMEOUT", "900") or "900")
+    except ValueError:
+        default_repair_timeout = 900
+    repair_timeout = max(600, min(timeout_s, default_repair_timeout))
     cmd = [
         "python3",
         str(LOCAL_REPAIR),
@@ -517,6 +521,38 @@ def _spawn_local_repair(todo_id: str, timeout_s: int) -> tuple[int, str]:
                 pass
             return 124, str(log_path)
     return rc, str(log_path)
+
+
+def _run_codex_workup_before_oracle(todo_id: str, slug: str, timeout_s: int) -> tuple[int, str]:
+    """Always let Codex inspect/process the target before an Oracle batch.
+
+    The Oracle prompt should be built from a local workup, not just from board
+    metadata.  This pass may create verifier scripts, replay simple checks, or
+    simply write codex_workup.md with the exact proof obligation Oracle should
+    attack next.
+    """
+    loop_log(f"{todo_id}: refreshing Codex local workup before Oracle")
+    rc, log_path = _spawn_local_repair(todo_id, timeout_s)
+    loop_log(f"{todo_id}: pre-Oracle Codex workup rc={rc} ({log_path})")
+    if rc != 0:
+        _note_local_repair_backoff(slug, reason=f"pre-oracle codex workup rc={rc}", log_path=log_path)
+    return rc, log_path
+
+
+def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") -> None:
+    target_dir = TARGETS_DIR / slug
+    target_dir.mkdir(parents=True, exist_ok=True)
+    path = target_dir / "local_repair_last.json"
+    payload = {
+        "ok": False,
+        "reason": reason,
+        "stderr_log": log_path,
+        "recorded_at": _now_iso(),
+    }
+    try:
+        path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    except OSError as exc:
+        loop_log(f"{slug}: failed to write local repair backoff marker: {exc}")
 
 
 def _reconcile_oracle_deep(todo_id: str) -> dict:
@@ -999,23 +1035,31 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                 loop_log(
                     f"{todo_id}: science_gate.next_action=deep_reason"
                     f"{' after local supervisor produced no artifact' if not _has_real_artifacts(slug) else ''}; "
-                    "dispatching oracle-deep"
+                    "running Codex workup before oracle-deep"
                 )
-                rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
-                loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
-                reconcile_payload = _reconcile_oracle_deep(todo_id)
-                if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
-                    rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
-                else:
-                    _note_transport_backoff(
-                        slug,
-                        reason=f"oracle-deep transport/no-payload rc={rc}",
-                        log_path=log_path,
-                    )
+                workup_rc, workup_log = _run_codex_workup_before_oracle(todo_id, slug, timeout_s)
+                if workup_rc != 0:
+                    rc, log_path = workup_rc, workup_log
                     loop_log(
-                        f"{todo_id}: oracle-deep produced no usable payload; "
-                        f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                        f"{todo_id}: pre-Oracle Codex workup failed; "
+                        "not asking Oracle from an unprocessed board card"
                     )
+                else:
+                    rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
+                    loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
+                    reconcile_payload = _reconcile_oracle_deep(todo_id)
+                    if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
+                        rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+                    else:
+                        _note_transport_backoff(
+                            slug,
+                            reason=f"oracle-deep transport/no-payload rc={rc}",
+                            log_path=log_path,
+                        )
+                        loop_log(
+                            f"{todo_id}: oracle-deep produced no usable payload; "
+                            f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                        )
             todos = _parse_board_safe()
             if todo_id in todos:
                 science_gate = science_gate_evaluate(todos[todo_id])

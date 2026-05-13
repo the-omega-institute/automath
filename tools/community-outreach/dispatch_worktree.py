@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -1115,15 +1116,67 @@ def _resume_conversation_id(slug: str, *, state_dir: Path) -> str:
     return ""
 
 
+def _compact_science_contract_block(profile) -> str:
+    """Small Oracle-facing contract.
+
+    Full taste obligations remain enforced by the deterministic local gate.
+    Oracle needs the target, verifier, progress metric, and stop/writeback
+    criteria, not every audit-field expansion on every turn.
+    """
+    contract = getattr(profile, "science_contract", None) if profile is not None else None
+    if contract is None:
+        return "(missing science_contract; ask for target profile repair before claiming completion)"
+    fields = [
+        ("Contribution type", getattr(contract, "contribution_type", "")),
+        ("Target lane", getattr(contract, "target_lane", "")),
+        ("Terminal artifact", getattr(contract, "terminal_artifact", "")),
+        ("Verifier", getattr(contract, "verifier", "")),
+        ("Progress metric", getattr(contract, "progress_metric", "")),
+    ]
+    lines = [f"{k}: {v or '(unspecified)'}" for k, v in fields]
+    evidence = list(getattr(contract, "evidence_required", []) or [])
+    writeback = list(getattr(contract, "writeback_when", []) or [])
+    close = list(getattr(contract, "close_when", []) or [])
+    if evidence:
+        lines.append("Evidence required:")
+        lines.extend(f"- {x}" for x in evidence[:6])
+    if writeback:
+        lines.append("Write back only when:")
+        lines.extend(f"- {x}" for x in writeback[:4])
+    if close:
+        lines.append("Close or re-scope when:")
+        lines.extend(f"- {x}" for x in close[:4])
+    lines.append(f"No-progress patience turns: {getattr(contract, 'no_progress_patience_turns', 2)}")
+    return "\n".join(lines)
+
+
+def _read_target_context_file(slug: str, name: str, *, max_chars: int) -> str:
+    path = TARGETS_DIR_DEFAULT / slug / name
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace").strip()
+    except OSError:
+        return ""
+    if len(text) <= max_chars:
+        return text
+    return text[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :]
+
+
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
                                *, arxiv_hits: list[dict] | None = None,
                                resume_conversation_id: str = "") -> str:
     sub = todo.submission_target()
     profile, _ = load_profile(todo.slug())
+    include_arxiv_noise = os.environ.get("OUTREACH_DEEP_INCLUDE_ARXIV", "").lower() in {"1", "true", "yes"}
+    research_context_chars = int(os.environ.get("OUTREACH_DEEP_RESEARCH_CONTEXT_CHARS", "1200"))
+    codex_workup_chars = int(os.environ.get("OUTREACH_DEEP_CODEX_WORKUP_CHARS", "6000"))
+    local_repair_chars = int(os.environ.get("OUTREACH_DEEP_LOCAL_REPAIR_CHARS", "1600"))
+    codex_workup = _read_target_context_file(todo.slug(), "codex_workup.md", max_chars=codex_workup_chars)
+    local_repair_report = _read_target_context_file(todo.slug(), "local_repair_report.md", max_chars=local_repair_chars)
     parts = [
         "You are the primary mathematical worker on this Omega Project outreach target.",
         "This is not an outreach-copywriting task. The goal is a genuine mathematical contribution.",
-        "You must work against the science contract below: every turn should lower the progress metric or explain why it cannot be lowered.",
+        "Codex has already inspected the local workspace before this prompt. Treat the Codex workup as the current local execution state.",
+        "Every turn should lower the progress metric, produce a checkable file block, or explicitly re-scope with a useful obstruction.",
         "Stop only when the contract's verifier is satisfied, or when the close/re-scope condition is clearly met.",
         "",
         f"## Target",
@@ -1134,22 +1187,28 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         f"- Untouched evidence: {todo.untouched}",
         f"- Submission target (Stage E): {sub['type']} → {sub['venue']}",
         "",
-        "## Science contract",
-        science_contract_block(profile),
+        "## Compact science contract",
+        _compact_science_contract_block(profile),
+        "",
+        "## Codex local workup",
+        codex_workup or "(missing codex_workup.md; if this is the first turn, proceed but request a local workup next)",
+        "",
+        "## Latest local repair/replay report",
+        local_repair_report or "(none yet)",
         "",
         "## Math problem statement",
         todo.statement or "(see source URL above)",
         "",
-        "## What is already known (prior)",
-        todo.prior or "(unknown to the board; please survey what you know)",
-        "",
-        "## Omega library tooling available",
-        todo.omega_fit_detail or "(not specified; please ask if you need a specific Lean lemma)",
-        "",
-        "## Attack plan (preliminary, refine as you go)",
-        "\n".join(f"- {step}" for step in (todo.attack_plan or [])) or "- (open to your suggestion)",
-        "",
     ]
+    if not codex_workup:
+        parts += [
+            "## Board prior and preliminary attack plan",
+            "Prior:",
+            todo.prior or "(unknown to the board; survey what you know)",
+            "Attack plan:",
+            "\n".join(f"- {step}" for step in (todo.attack_plan or [])) or "- (open to your suggestion)",
+            "",
+        ]
     if resume_conversation_id:
         parts += [
             "## Resume checkpoint",
@@ -1158,7 +1217,7 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
             "If the previous turn was cut off by network/UI extraction failure, reconstruct the latest useful state from the transcript and continue with the next concrete proof/computation step.",
             "",
         ]
-    if arxiv_hits:
+    if include_arxiv_noise and arxiv_hits:
         parts += [
             "## Recent arXiv literature (last 14 days, freshness watch)",
             "Papers whose titles/abstracts overlap our keyword space. **Treat as candidates",
@@ -1180,10 +1239,11 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
                 f"matched=[{matched}], score={h.get('overlap_score','?')}"
             )
         parts.append("")
-    if research_text:
+    if research_text and research_context_chars > 0:
         parts += [
-            "## research.md drafted by Codex (verbose; treat as background, not gospel)",
-            research_text[:30000],
+            "## Existing local artifact snapshot",
+            "This is clipped background from disk. Treat it as non-authoritative; use it only to avoid repeating prior local work.",
+            research_text[:research_context_chars],
             "",
         ]
     loop_state = _read_research_loop_state(todo.slug())
@@ -1270,11 +1330,12 @@ def _build_deep_resume_prompt(todo: TodoSpec, *, resume_conversation_id: str) ->
         ]
     parts += [
         "Make exactly one next mathematical move that lowers the science-contract progress metric.",
+        "Codex has already run the local workup/replay pass when feasible. Use that workup as the execution state; do not ask for generic metadata.",
         "If the last packet is a bounded certificate or obstruction, either strengthen it into a publishable result, produce the missing verifier artifact as FILE blocks, or explain the precise obstruction in a target-specific failure_analysis.md FILE block.",
         "If you find a different meaningful side result, include it as a separate candidate packet rather than replacing this target.",
         "",
-        "Current science contract, for reference:",
-        science_contract_block(profile),
+        "Compact science contract, for reference:",
+        _compact_science_contract_block(profile),
     ]
     return "\n".join(parts)
 
