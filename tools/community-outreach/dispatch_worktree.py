@@ -1241,11 +1241,19 @@ def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str
     workup = _read_target_context_file(slug, "codex_workup.md", max_chars=max(12000, max_chars))
     if not _codex_workup_has_local_trace(workup):
         return ""
+    workup_question = _extract_markdown_section(workup, "Next Oracle question", max_chars=max_chars)
     direct = _read_target_context_file(slug, "next_oracle_question.md", max_chars=max_chars)
     direct = direct.strip()
     if direct:
+        direct_path = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "next_oracle_question.md"
+        workup_path = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "codex_workup.md"
+        try:
+            if workup_question and workup_path.stat().st_mtime > direct_path.stat().st_mtime + 300:
+                return workup_question
+        except OSError:
+            pass
         return direct
-    return _extract_markdown_section(workup, "Next Oracle question", max_chars=max_chars)
+    return workup_question
 
 
 def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
@@ -1265,13 +1273,6 @@ def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
     question = _read_codex_next_oracle_question(slug)
     if not question.strip():
         return False, "missing concrete next_oracle_question.md or ## Next Oracle question"
-    direct = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "next_oracle_question.md"
-    if direct.exists():
-        try:
-            if direct.stat().st_mtime < (REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "codex_workup.md").stat().st_mtime - 300:
-                return False, "next_oracle_question.md is older than current codex_workup.md"
-        except OSError:
-            pass
     return True, ""
 
 

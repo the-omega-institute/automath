@@ -572,19 +572,27 @@ def _read_next_oracle_question(slug: str) -> str:
     """Return the exact Codex-selected next Oracle question, if present."""
     target_dir = TARGETS_DIR / slug
     direct = target_dir / "next_oracle_question.md"
+    workup = target_dir / "codex_workup.md"
+    workup_text = ""
+    workup_question = ""
+    try:
+        workup_text = workup.read_text(encoding="utf-8", errors="replace")
+        workup_question = _extract_next_oracle_question_from_workup(workup_text)
+    except OSError:
+        pass
     try:
         if direct.exists():
             text = direct.read_text(encoding="utf-8", errors="replace").strip()
             if text:
+                try:
+                    if workup_question and workup.stat().st_mtime > direct.stat().st_mtime + 300:
+                        return workup_question
+                except OSError:
+                    pass
                 return text
     except OSError:
         pass
-    workup = target_dir / "codex_workup.md"
-    try:
-        text = workup.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return ""
-    return _extract_next_oracle_question_from_workup(text)
+    return workup_question
 
 
 def _is_concrete_next_oracle_question(question: str) -> bool:
@@ -688,13 +696,6 @@ def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
     ok, reason = _workup_has_local_execution_trace(workup)
     if not ok:
         return False, reason
-    direct = target_dir / "next_oracle_question.md"
-    try:
-        if direct.exists() and workup_path.exists():
-            if direct.stat().st_mtime < workup_path.stat().st_mtime - 300:
-                return False, "next_oracle_question.md older than current codex_workup.md"
-    except OSError:
-        pass
     return True, ""
 
 

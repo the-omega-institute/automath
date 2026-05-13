@@ -1339,18 +1339,25 @@ def _read_target_next_oracle_question(slug: str, *, max_chars: int = 4000) -> st
     if not _target_workup_has_local_trace(workup_text):
         return ""
 
+    match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", workup_text)
+    workup_question = match.group(1).strip() if match else ""
     direct = target_dir / "next_oracle_question.md"
     try:
-        text = direct.read_text(encoding="utf-8", errors="replace").strip()
+        direct_text = direct.read_text(encoding="utf-8", errors="replace").strip()
     except OSError:
-        text = ""
-    if text:
-        return text if len(text) <= max_chars else text[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :]
-
-    match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", workup_text)
-    if not match:
+        direct_text = ""
+    if direct_text:
+        try:
+            if workup_question and workup.stat().st_mtime > direct.stat().st_mtime + 300:
+                question = workup_question
+            else:
+                question = direct_text
+        except OSError:
+            question = direct_text
+    else:
+        question = workup_question
+    if not question:
         return ""
-    question = match.group(1).strip()
     if len(question) <= max_chars:
         return question
     return question[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + question[-max_chars // 2 :]
