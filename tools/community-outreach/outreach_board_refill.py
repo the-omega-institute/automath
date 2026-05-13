@@ -952,6 +952,7 @@ def main(argv: list[str] | None = None) -> int:
         _log(f"round {round_idx}: parsed {len(candidates)} candidates from oracle response")
 
         round_survivors: list[Candidate] = []
+        round_inbox_only: list[Candidate] = []
         round_drops: list[tuple[str, str]] = []
         for c in candidates:
             tl = c.title.strip().lower()
@@ -970,6 +971,14 @@ def main(argv: list[str] | None = None) -> int:
                 round_drops.append((c.title, reason))
                 _log(f"academic gate drop (round {round_idx}): {c.title!r} — {reason}")
                 continue
+            if gate.lane == "long_horizon_review":
+                round_inbox_only.append(c)
+                seen_titles_lower.add(tl)
+                _log(
+                    f"academic gate long-horizon keep (round {round_idx}): "
+                    f"{c.title!r} — score={gate.score}"
+                )
+                continue
             keep, reason = _dedup_candidate(c, existing)
             if keep:
                 round_survivors.append(c)
@@ -979,6 +988,12 @@ def main(argv: list[str] | None = None) -> int:
                 _log(f"dedup drop (round {round_idx}): {c.title!r} — {reason}")
 
         accumulated_survivors.extend(round_survivors)
+        if round_inbox_only:
+            ids = _write_candidate_inbox(
+                round_inbox_only,
+                source="oracle_board_refill_long_horizon",
+            )
+            _log(f"round {round_idx}: wrote {len(ids)} long-horizon candidate(s) to inbox: {ids}")
         accumulated_drops.extend(round_drops)
         round_history.append({
             "round": round_idx,
@@ -987,6 +1002,7 @@ def main(argv: list[str] | None = None) -> int:
             "parsed_by": parsed_by,
             "received": len(candidates),
             "kept": len(round_survivors),
+            "kept_long_horizon": len(round_inbox_only),
             "dropped": len(round_drops),
         })
 
@@ -1046,14 +1062,22 @@ def main(argv: list[str] | None = None) -> int:
         inbox_ids = _write_candidate_inbox(accumulated_survivors)
     else:
         appended = _append_to_board(blocks) if blocks else 0
+    long_horizon_total = sum(r.get("kept_long_horizon", 0) for r in round_history)
     payload = {
         "ran_at": _now_iso(),
         "verdict": (
             "candidate_inbox" if inbox_ids else
-            ("appended" if appended else ("no_candidates_parsed" if not accumulated_survivors else "all_drops"))
+            (
+                "appended" if appended else
+                (
+                    "long_horizon_queued" if long_horizon_total else
+                    ("no_candidates_parsed" if not accumulated_survivors else "all_drops")
+                )
+            )
         ),
         "rounds": round_history,
         "candidates_total": sum(r.get("received", 0) for r in round_history),
+        "long_horizon_total": long_horizon_total,
         "appended_ids": appended_ids,
         "candidate_inbox_ids": inbox_ids,
         "drops": accumulated_drops[:32],

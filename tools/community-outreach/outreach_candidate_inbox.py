@@ -49,6 +49,7 @@ LOW_IMPACT_ARXIV_PATTERNS = (
 class CandidateGate:
     passed: bool
     score: int
+    lane: str = "standard"
     reasons: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
     risk_flags: list[str] = field(default_factory=list)
@@ -117,7 +118,7 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
     else:
         missing.append("specific one-sentence mathematical statement")
 
-    if re.search(r"(arxiv\.org|github\.com|doi\.org|terrytao\.wordpress|openproblem|aimpl|mathoverflow|wordpress|x\.com|twitter\.com)", source_url, re.I):
+    if re.search(r"(arxiv\.org|github\.com|doi\.org|terrytao\.wordpress|openproblem|problemsilike|aimpl|mathoverflow|wordpress|x\.com|twitter\.com)", source_url, re.I):
         score += 5
         reasons.append("source is inspectable")
     else:
@@ -190,12 +191,17 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
     else:
         missing.append("fit_score >= 5 or exceptional topic_score")
 
+    long_horizon = effort_days > 21 and topic_score >= 9
     if 1 <= effort_days <= 21:
         score += 3
+    elif long_horizon:
+        score += 1
+        reasons.append("long-horizon high-impact candidate")
+        risk_flags.append("long-horizon: requires PI scoping before board graduation")
     else:
         risk_flags.append("effort estimate outside 1-21 day research packet")
 
-    if len(first_step) >= 50 and re.search(r"\b(prove|compute|construct|certify|enumerate|derive|bound|verify|falsify)\b", first_step, re.I):
+    if len(first_step) >= 50 and re.search(r"\b(prove|compute|construct|certify|enumerate|derive|bound|verify|falsify|extract|write|audit|check)\b", first_step, re.I):
         score += 4
     else:
         missing.append("bounded first attack step with a concrete verb")
@@ -217,10 +223,11 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
         risk_flags.append("low-impact arXiv author-email target; prefer serious notes or public artifacts")
         score -= 5
 
+    lane = "long_horizon_review" if long_horizon else "standard"
     passed = score >= MIN_ACADEMIC_IMPACT_SCORE and not missing
     if not passed and score >= MIN_ACADEMIC_IMPACT_SCORE:
         reasons.append("score high but mandatory fields are not gate-clean")
-    return CandidateGate(passed=passed, score=score, reasons=reasons, missing=missing, risk_flags=risk_flags)
+    return CandidateGate(passed=passed, score=score, lane=lane, reasons=reasons, missing=missing, risk_flags=risk_flags)
 
 
 def add_candidate(candidate: dict, *, source: str) -> dict:
@@ -233,7 +240,7 @@ def add_candidate(candidate: dict, *, source: str) -> dict:
         "candidate_id": _id_for(candidate),
         "source": source,
         "received_at_epoch": time.time(),
-        "status": "needs_profile_judge" if not errors else "invalid",
+        "status": gate.lane if gate.passed and gate.lane != "standard" else ("needs_profile_judge" if not errors else "invalid"),
         "errors": errors,
         "academic_impact_gate": gate.to_dict(),
         "candidate": candidate,
@@ -310,8 +317,13 @@ def main(argv: list[str] | None = None) -> int:
     mark.add_argument("--note", default="")
     args = p.parse_args(argv)
     if args.cmd == "add-json":
-        candidate = json.loads(Path(args.path).read_text(encoding="utf-8"))
-        print(json.dumps(add_candidate(candidate, source=args.source), ensure_ascii=False, indent=2))
+        payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
+        rows = payload.get("candidates") if isinstance(payload, dict) else None
+        if isinstance(rows, list):
+            added = [add_candidate(c, source=args.source) for c in rows if isinstance(c, dict)]
+            print(json.dumps(added, ensure_ascii=False, indent=2))
+            return 0
+        print(json.dumps(add_candidate(payload, source=args.source), ensure_ascii=False, indent=2))
         return 0
     if args.cmd == "list":
         print(json.dumps(list_candidates(), ensure_ascii=False, indent=2))
