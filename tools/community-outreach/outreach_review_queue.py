@@ -25,6 +25,7 @@ from outreach_task_spec import list_tasks  # noqa: E402
 from outreach_task_spec import save_task  # noqa: E402
 from outreach_task_runner import cleanup_stale_in_progress_tasks  # noqa: E402
 from outreach_profile_judge import select_candidates  # noqa: E402
+from outreach_profile_judge import PROFILEABLE_INBOX_STATUSES  # noqa: E402
 from outreach_preflight import judge_board  # noqa: E402
 from outreach_candidate_inbox import list_candidates  # noqa: E402
 from outreach_freshness_judge import required_targets as freshness_required_targets  # noqa: E402
@@ -447,6 +448,9 @@ def build_queue() -> dict:
         "candidate_inbox": {
             "total": len(candidate_inbox),
             "needs_profile_judge": sum(1 for c in candidate_inbox if c.get("status") == "needs_profile_judge"),
+            "operator_requested_review": sum(1 for c in candidate_inbox if c.get("status") == "operator_requested_review"),
+            "long_horizon_review": sum(1 for c in candidate_inbox if c.get("status") == "long_horizon_review"),
+            "profileable": sum(1 for c in candidate_inbox if c.get("status") in PROFILEABLE_INBOX_STATUSES),
             "invalid": sum(1 for c in candidate_inbox if c.get("status") == "invalid"),
         },
         "freshness_judges": {

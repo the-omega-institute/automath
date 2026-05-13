@@ -27,6 +27,12 @@ from outreach_preflight import NEEDS_PROFILE, NEEDS_BOARD_UPDATE, judge_board  #
 from outreach_profile import SCHEMA_VERSION, validate_profile_dict, write_stub, profile_path_for_slug  # noqa: E402
 from outreach_candidate_inbox import append_event, get_candidate, list_candidates  # noqa: E402
 
+PROFILEABLE_INBOX_STATUSES = {
+    "needs_profile_judge",
+    "operator_requested_review",
+    "long_horizon_review",
+}
+
 
 def _operator_memory() -> str:
     try:
@@ -576,7 +582,7 @@ def select_inbox_candidates(*, top: int) -> list[dict]:
     rows = []
     for r in list_candidates():
         status = r.get("status")
-        if status == "needs_profile_judge":
+        if status in PROFILEABLE_INBOX_STATUSES:
             rows.append(r)
             continue
         if status == "profile_failed":
@@ -592,7 +598,7 @@ def graduate_inbox_with_codex(candidate_id: str) -> tuple[bool, str]:
     if not row:
         return False, f"candidate {candidate_id} not found"
     status = row.get("status")
-    if status not in {"needs_profile_judge", "profile_failed"}:
+    if status not in PROFILEABLE_INBOX_STATUSES | {"profile_failed"}:
         return False, f"candidate {candidate_id} status={status} is not profileable"
     if status == "profile_failed" and "validation failed" not in str(row.get("note") or ""):
         return False, f"candidate {candidate_id} profile_failed for non-validation reason; not auto-retrying"

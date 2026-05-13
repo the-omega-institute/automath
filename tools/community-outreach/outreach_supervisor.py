@@ -737,8 +737,13 @@ def _frontier_pool_snapshot() -> dict:
     inbox_invalid = 0
     try:
         from outreach_candidate_inbox import list_candidates  # noqa: PLC0415
+        profileable_statuses = {
+            "needs_profile_judge",
+            "operator_requested_review",
+            "long_horizon_review",
+        }
         for row in list_candidates():
-            if row.get("status") == "needs_profile_judge":
+            if row.get("status") in profileable_statuses:
                 inbox_ready += 1
             elif row.get("status") == "invalid":
                 inbox_invalid += 1
