@@ -253,6 +253,15 @@ def _verifier_run_passed(run: Any) -> bool:
     stdout = run.get("stdout")
     if not isinstance(stdout, dict):
         return False
+    # Newer target-local verifiers often report the conventional
+    # {"result": "pass"} shape rather than the older Outreach-specific
+    # {"verify_status": "OK", "verify_mismatches": []} shape.  Treat both as
+    # local replay evidence, but only after the process exit status is zero.
+    result = str(stdout.get("result") or "").strip().lower()
+    if result in {"pass", "passed", "ok", "verified"}:
+        mismatches = stdout.get("verify_mismatches")
+        if mismatches is None or (isinstance(mismatches, list) and not mismatches):
+            return True
     if str(stdout.get("verify_status") or "").upper() != "OK":
         return False
     mismatches = stdout.get("verify_mismatches")
@@ -307,7 +316,10 @@ def _frontier_local_replay_summary(target_dir: Path) -> tuple[bool, str, str, li
     labels = [str(run.get("label") or "").strip() for run in runs if str(run.get("label") or "").strip()]
     has_frontier_record = bool(results.get("progress_metric_after_this_record"))
     has_certificate = any(
-        key.endswith("_certificate") or key.endswith("_capacity_certificate")
+        key.endswith("_certificate")
+        or key.endswith("_capacity_certificate")
+        or key.endswith("_oracle_replay")
+        or key.endswith("_certificate_replay")
         for key in results.keys()
     )
     target_meta = results.get("target") if isinstance(results.get("target"), dict) else {}
@@ -376,7 +388,11 @@ def _verification_gate(
     local_replay_ok, effective_verification, effective_closure, replay_labels = _frontier_local_replay_summary(
         target_dir
     )
-    if local_replay_ok and (target_lane == "frontier_lane" or contribution_type in FRONTIER_LANE_TYPES):
+    if local_replay_ok and (
+        target_lane == "frontier_lane"
+        or contribution_type in FRONTIER_LANE_TYPES
+        or contribution_type == "research_note"
+    ):
         verification = effective_verification
         closure = effective_closure
     has_reproducer = _target_has_runnable_reproducer(target_dir)

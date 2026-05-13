@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -69,6 +70,14 @@ def _read_text(path: Path, *, limit: int = 16000) -> str:
     if len(text) <= limit:
         return text
     return text[: limit // 2] + "\n\n...[middle truncated]...\n\n" + text[-limit // 2 :]
+
+
+def _coerce_text(value: object) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return str(value)
 
 
 def _target_file_manifest(target_dir: Path) -> str:
@@ -160,6 +169,104 @@ def _compact_gate(gate: dict) -> str:
         "progress_metric": gate.get("progress_metric", ""),
     }
     return json.dumps(fields, ensure_ascii=False, indent=2)
+
+
+def _json_from_stdout(text: str) -> dict:
+    """Parse the first JSON object emitted by a target-local verifier."""
+    stripped = (text or "").strip()
+    if not stripped:
+        return {}
+    try:
+        payload = json.loads(stripped)
+        return payload if isinstance(payload, dict) else {}
+    except json.JSONDecodeError:
+        pass
+    match = re.search(r"\{.*\}", stripped, flags=re.S)
+    if not match:
+        return {}
+    try:
+        payload = json.loads(match.group(0))
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _verifier_stdout_passed(payload: dict) -> bool:
+    if not isinstance(payload, dict):
+        return False
+    if str(payload.get("result") or "").strip().lower() in {"pass", "passed", "ok", "verified"}:
+        return True
+    if str(payload.get("verify_status") or "").upper() == "OK":
+        mismatches = payload.get("verify_mismatches")
+        return isinstance(mismatches, list) and not mismatches
+    return False
+
+
+def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
+    """Run a standard target-local verifier, if present, and record its result.
+
+    Codex workers can create good replay scripts while forgetting to update the
+    exact `verifier_audit` schema the deterministic science gate reads.  This
+    harness-level pass bridges that gap without trusting prose: it runs the
+    target-local verifier itself and appends the parsed machine result to
+    results.json.
+    """
+    verifier = target_dir / "verify_results.py"
+    results_path = target_dir / "results.json"
+    if not verifier.exists() or not results_path.exists():
+        return {"ran": False, "reason": "missing verify_results.py or results.json"}
+    cmd = ["python3", str(verifier.relative_to(REPO_ROOT)), "--json"]
+    started = _now_iso()
+    proc = subprocess.run(
+        cmd,
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+        timeout=900,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    stdout_payload = _json_from_stdout(proc.stdout)
+    run = {
+        "label": f"{todo_id}:{target_dir.name}:verify_results.py",
+        "command": " ".join(cmd),
+        "started_at": started,
+        "finished_at": _now_iso(),
+        "exit_status": proc.returncode,
+        "stdout": stdout_payload if stdout_payload else {"raw": (proc.stdout or "")[:4000]},
+        "stderr": (proc.stderr or "")[:4000],
+    }
+    try:
+        data = json.loads(results_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"ran": True, "recorded": False, "run": run, "reason": "invalid results.json"}
+    if not isinstance(data, dict):
+        return {"ran": True, "recorded": False, "run": run, "reason": "results.json is not an object"}
+    audit = data.setdefault("verifier_audit", {})
+    if not isinstance(audit, dict):
+        audit = {}
+        data["verifier_audit"] = audit
+    runs = audit.setdefault("runs", [])
+    if not isinstance(runs, list):
+        runs = []
+        audit["runs"] = runs
+    # Replace the prior harness run for this verifier so results.json does not
+    # grow unboundedly during a long autonomous loop.
+    runs[:] = [
+        existing
+        for existing in runs
+        if not (
+            isinstance(existing, dict)
+            and existing.get("label") == run["label"]
+            and existing.get("command") == run["command"]
+        )
+    ]
+    runs.append(run)
+    audit["updated_at"] = _now_iso()
+    audit["latest_passed"] = proc.returncode == 0 and _verifier_stdout_passed(stdout_payload)
+    results_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"ran": True, "recorded": True, "passed": audit["latest_passed"], "run": run}
 
 
 def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
@@ -265,6 +372,32 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     target_dir = TARGETS_DIR / todo.slug()
     target_dir.mkdir(parents=True, exist_ok=True)
     gate_before = _run_science_gate(todo_id, write_ledger=True)
+    verifier_audit_before = _record_target_verifier_audit(todo_id, target_dir)
+    if verifier_audit_before.get("passed"):
+        gate_after_audit = _run_science_gate(todo_id, write_ledger=True)
+        if gate_after_audit.get("status") != gate_before.get("status") or gate_after_audit.get(
+            "verification_status"
+        ) != gate_before.get("verification_status"):
+            # If a pre-existing local verifier already clears the deterministic
+            # gate enough to change the target state, return immediately.  The
+            # research loop can then decide whether to ask Oracle for the next
+            # proof gap, rather than spending another Codex turn rediscovering
+            # the same replay.
+            report = {
+                "ok": True,
+                "todo_id": todo_id,
+                "slug": todo.slug(),
+                "started_at": _now_iso(),
+                "finished_at": _now_iso(),
+                "returncode": 0,
+                "verifier_audit": verifier_audit_before,
+                "gate_before": gate_before,
+                "gate_after": gate_after_audit,
+                "shortcut": "preexisting_verifier_audit_changed_gate",
+            }
+            state_path = target_dir / "local_repair_last.json"
+            state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            return report
     prompt = build_prompt(todo_id, gate=gate_before, target_dir=target_dir)
 
     if not CODEX_BIN or not Path(CODEX_BIN).exists():
@@ -310,8 +443,11 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         stderr_path.write_text(proc.stderr or "", encoding="utf-8")
     except subprocess.TimeoutExpired as exc:
         rc = 124
-        stdout_path.write_text(exc.stdout or "", encoding="utf-8")
-        stderr_path.write_text((exc.stderr or "") + f"\nTIMEOUT after {timeout}s\n", encoding="utf-8")
+        stdout_path.write_text(_coerce_text(exc.stdout), encoding="utf-8")
+        stderr_path.write_text(
+            _coerce_text(exc.stderr) + f"\nTIMEOUT after {timeout}s\n",
+            encoding="utf-8",
+        )
     raw = ""
     try:
         if codex_out.exists():
@@ -322,6 +458,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         except OSError:
             pass
     output_path.write_text(raw or "", encoding="utf-8")
+    verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
     gate_after = _run_science_gate(todo_id, write_ledger=True)
     report = {
         "ok": rc == 0,
@@ -334,6 +471,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
         "stderr_log": str(stderr_path.relative_to(REPO_ROOT)),
         "output_log": str(output_path.relative_to(REPO_ROOT)),
+        "verifier_audit": verifier_audit,
         "gate_before": gate_before,
         "gate_after": gate_after,
     }
