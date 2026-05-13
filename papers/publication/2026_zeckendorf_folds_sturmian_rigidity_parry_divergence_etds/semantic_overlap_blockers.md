@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-13T11:26:15+00:00`
+- Generated: `2026-05-13T14:54:00+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds`
 - Gate failed: `true`
@@ -11,9 +11,9 @@
 |---|---:|
 | `blocker` | 0 |
 | `deferred_wait_for_prior_submission` | 6 |
-| `needs_human_resolution` | 1 |
+| `needs_human_resolution` | 2 |
 | `resolved` | 1 |
-| `informational` | 21 |
+| `informational` | 20 |
 
 ## Findings
 
@@ -25,10 +25,10 @@
 | deferred_wait_for_prior_submission | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `submitted_2026_folded_rotation_histogram_etds` | defer_later_draft_until_prior_submission_feedback | `submitted_2026_folded_rotation_histogram_etds` | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | bernoulli_markov_transport, dynamical_zeta_finite_part, fibonacci_finite_window_fold, m2_branch_locus, m_ge_3_threshold, metallic_golden_exception, parry_mismatch_or_divergence, residue_window_decoder, sliding_overlap... | 1.0000 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — |  |
 | deferred_wait_for_prior_submission | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `submitted_2026_resolution_folding_core_symbolic_dynamics_jnt` | defer_later_draft_until_prior_submission_feedback | `submitted_2026_resolution_folding_core_symbolic_dynamics_jnt` | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | bernoulli_markov_transport, dynamical_zeta_finite_part, fibonacci_finite_window_fold, m_ge_3_threshold, residue_window_decoder, sliding_overlap_reconstruction, zeckendorf_normalization | 0.2000 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — |  |
 | deferred_wait_for_prior_submission | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `submitted_2026_sharp_three_window_threshold_fibonacci_conjugacy_nonlinearity` | defer_later_draft_until_prior_submission_feedback | `submitted_2026_sharp_three_window_threshold_fibonacci_conjugacy_nonlinearity` | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | bernoulli_markov_transport, dynamical_zeta_finite_part, fibonacci_finite_window_fold, m2_branch_locus, m_ge_3_threshold, metallic_golden_exception, parry_mismatch_or_divergence, residue_window_decoder, sliding_overlap... | 0.2269 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — |  |
+| needs_human_resolution | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | record_board_resolution_before_advancing | `` | `` | bernoulli_markov_transport, fibonacci_finite_window_fold, m_ge_3_threshold, residue_window_decoder, sliding_overlap_reconstruction, zeckendorf_normalization | 0.1798 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | Dynamical Systems \| P0 \| triaged 2026-05-13: substantial finite-window Zeckendorf truncation-defect manuscript; must pass overlap harness before Stage A deepening |
 | needs_human_resolution | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | record_board_resolution_before_advancing | `` | `` | bernoulli_markov_transport, fibonacci_finite_window_fold, m_ge_3_threshold, parry_mismatch_or_divergence, sliding_overlap_reconstruction, zeckendorf_normalization | 0.1818 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | — \| 待分诊 \| — |
 | resolved | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | continue_after_board_resolution | `` | `` | bernoulli_markov_transport, dynamical_zeta_finite_part, fibonacci_finite_window_fold, m_ge_3_threshold, residue_window_decoder, sliding_overlap_reconstruction, zeckendorf_normalization | 0.2000 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | Fibonacci Q. \| 拒稿 05-01；FQ/JNT 路线关闭；不回 Stage A \| ETDS→JNT→FQ; FQ editor: 更适合 dynamical systems; core 已并入/重叠 DCDS-A 在审稿件 `260511-Zhang-2` |
 | informational | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_detector_shells_click_record_kms_jphyscomm` | no_action_required | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1353 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP |
-| informational | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | no_action_required | `` | `` | bernoulli_markov_transport, fibonacci_finite_window_fold, m_ge_3_threshold, residue_window_decoder, zeckendorf_normalization | 0.1660 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | Dynamical Systems \| P0 \| triaged 2026-05-13: substantial finite-window Zeckendorf truncation-defect manuscript; must pass overlap harness before Stage A deepening |
 | informational | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_elliptic_normalization_branch_geometry_quartic_spectral` | no_action_required | `` | `` | m2_branch_locus, residue_window_decoder, sliding_overlap_reconstruction | 0.1442 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | — \| 待分诊 \| — |
 | informational | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | no_action_required | `` | `` | bernoulli_markov_transport, dynamical_zeta_finite_part, fibonacci_finite_window_fold, parry_mismatch_or_divergence, residue_window_decoder, sliding_overlap_reconstruction | 0.1974 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |
 | informational | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | no_action_required | `` | `` | dynamical_zeta_finite_part, m2_branch_locus, residue_window_decoder | 0.1435 | ETDS \| B-0 (用户确认未投稿；从 Stage B 重新入管线；F/A 预过) \| — | ETDS \| 已投 05-10 \| ScholarOne ETDS; Oracle+Claude pass, 9 rounds |
