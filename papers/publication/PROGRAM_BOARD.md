@@ -42,7 +42,7 @@
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | A-BLOCKED (max Stage A rounds exhausted; final audit real block (score=6)) | — |
 | `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | ETDS | 已投 05-10 | ScholarOne ETDS; Oracle+Claude pass, 9 rounds |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | C-DONE round 4: Oracle accept + Codex submit; needs cover letter + metadata | synced from pipeline_state DONE; manual-submit candidate, not auto-pipeline |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | C-RUNNING (Stage C final gate active 2026-05-13; B passed; awaiting final Oracle/Codex confirmation) | — |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | C-STUCK (Oracle+Claude exhausted 15 rounds) | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | B-STUCK (Oracle: reject, 20 rounds — needs human review) | IMRN→Exp. Math 候选 |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | ✅ 可投稿 — C-8 (Oracle accept + Claude submit, 4/5 轮一致；需 cover letter + metadata) | Oracle: deepen=minor revision, fresh=minor revision, 13 rounds |
 | `2026_prefix_scan_error_boundary_rates_dynamical_systems` | legacy archive | 归档；parked；canonical ETDS route is `2026_scan_error_prefix_partitions_convergence_rates_etds` | overlap resolved by `2026_scan_error_prefix_partitions_convergence_rates_etds/cross_paper_dedup.md`; do not process independently |
