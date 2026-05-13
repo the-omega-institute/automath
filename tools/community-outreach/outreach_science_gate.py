@@ -517,6 +517,20 @@ def _validate_referenced_local_artifacts(rel_path: str, data: dict) -> list[str]
     local_re = re.compile(
         r"tools/community-outreach/targets/[A-Za-z0-9_.-]+/[A-Za-z0-9_./*?\\[\\]-]+"
     )
+    non_evidence_context_markers = (
+        "newest_testable_oracle_claim",
+        "claimed_",
+        "missing_",
+        "not_replayed",
+        "unverified",
+        "failure",
+        "first_failed_check",
+        "missing_for_",
+    )
+
+    def is_non_evidence_context(context: str) -> bool:
+        lowered = (context or "").lower()
+        return any(marker in lowered for marker in non_evidence_context_markers)
 
     def check_path(path_text: str, context: str) -> None:
         raw = (path_text or "").strip().strip("`'\".,;:)")
@@ -537,6 +551,8 @@ def _validate_referenced_local_artifacts(rel_path: str, data: dict) -> list[str]
             if name in {LEDGER_NAME, "outreach_impact_gate.json", "profile.json", "freshness_judge.json"}:
                 continue
             if _is_draft_artifact(match):
+                continue
+            if is_non_evidence_context(context):
                 continue
             if not (REPO_ROOT / match).exists():
                 _append_unique(errors,

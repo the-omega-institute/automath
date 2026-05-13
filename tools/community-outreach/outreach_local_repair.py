@@ -660,7 +660,16 @@ def _collect_missing_referenced_local_paths(value: object) -> list[str]:
     """Find target-local artifact references in JSON that do not exist."""
     missing: list[str] = []
     if isinstance(value, dict):
-        for child in value.values():
+        for key, child in value.items():
+            key_lower = str(key).lower()
+            if (
+                key_lower.startswith("claimed_")
+                or key_lower.startswith("missing_")
+                or "not_replayed" in key_lower
+                or "unverified" in key_lower
+                or "failed" in key_lower
+            ):
+                continue
             missing.extend(_collect_missing_referenced_local_paths(child))
         return missing
     if isinstance(value, list):
