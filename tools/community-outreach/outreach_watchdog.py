@@ -51,6 +51,8 @@ DEFAULT_SUPERVISOR_ARGS = [
     "--auto-commit",
 ]
 
+_PS_LAST_ERROR = ""
+
 
 def _now() -> float:
     return time.time()
@@ -81,6 +83,7 @@ def _write_status(payload: dict) -> None:
 
 
 def _ps_rows() -> list[dict]:
+    global _PS_LAST_ERROR
     try:
         proc = subprocess.run(
             ["ps", "-axo", "pid,ppid,pgid,etime,stat,command"],
@@ -89,8 +92,13 @@ def _ps_rows() -> list[dict]:
             timeout=5,
             check=False,
         )
-    except Exception:
+    except Exception as exc:  # noqa: BLE001
+        _PS_LAST_ERROR = str(exc)
         return []
+    if proc.returncode != 0:
+        _PS_LAST_ERROR = (proc.stderr or proc.stdout or f"ps rc={proc.returncode}")[:500]
+        return []
+    _PS_LAST_ERROR = ""
     rows: list[dict] = []
     for line in (proc.stdout or "").splitlines()[1:]:
         parts = line.strip().split(None, 5)
@@ -111,6 +119,10 @@ def _ps_rows() -> list[dict]:
             "command": parts[5],
         })
     return rows
+
+
+def _ps_available() -> bool:
+    return not _PS_LAST_ERROR
 
 
 def _script_rows(script_name: str) -> list[dict]:
@@ -332,6 +344,15 @@ def _has_active_pipeline_work(server: dict) -> bool:
     return False
 
 
+def _observer_unreliable(server: dict) -> bool:
+    """True when watchdog cannot safely decide process/browser idleness."""
+    if _PS_LAST_ERROR:
+        return True
+    if server.get("port") != 8766:
+        return True
+    return False
+
+
 def _request_safe_supervisor_restart_if_code_changed(server: dict) -> str:
     """Ask the supervisor to restart after a commit, but only at an idle boundary.
 
@@ -346,6 +367,8 @@ def _request_safe_supervisor_restart_if_code_changed(server: dict) -> str:
     current_head = _git_head()
     if not runtime_head or not current_head or runtime_head == current_head:
         return ""
+    if _observer_unreliable(server):
+        return f"restart_deferred_observer_unreliable:{runtime_head[:9]}->{current_head[:9]}"
     if _has_active_pipeline_work(server):
         return f"restart_deferred_code_changed:{runtime_head[:9]}->{current_head[:9]}"
     try:
@@ -370,7 +393,8 @@ def _supervisor_code_status(server: dict) -> dict:
     runtime = _read_json(SUPERVISOR_RUNTIME)
     runtime_head = str(runtime.get("git_head") or "").strip()
     current_head = _git_head()
-    active = _has_active_pipeline_work(server)
+    observer_unreliable = _observer_unreliable(server)
+    active = True if observer_unreliable else _has_active_pipeline_work(server)
     stale = bool(runtime_head and current_head and runtime_head != current_head)
     return {
         "current_git_head": current_head,
@@ -378,12 +402,17 @@ def _supervisor_code_status(server: dict) -> dict:
         "supervisor_pid": runtime.get("pid"),
         "supervisor_code_stale": stale,
         "safe_restart_deferred": bool(stale and active),
-        "safe_restart_blocker": "active_pipeline_work" if stale and active else "",
+        "safe_restart_blocker": (
+            "observer_unreliable" if stale and observer_unreliable
+            else "active_pipeline_work" if stale and active
+            else ""
+        ),
     }
 
 
 def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanup_orphans: bool) -> dict:
     rows = _ps_rows()
+    ps_ok = _ps_available()
     server = _server_status()
     actions: list[str] = []
 
@@ -393,6 +422,9 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
             log("oracle_server: status endpoint unavailable but process exists; deferring spawn")
             time.sleep(2)
             server = _server_status()
+        elif not ps_ok:
+            actions.append("oracle_server_unobservable_ps_failed")
+            log(f"oracle_server: status unavailable and ps failed; not spawning duplicate ({_PS_LAST_ERROR})")
         else:
             _spawn_server()
             actions.append("spawn_oracle_server")
@@ -406,6 +438,9 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
     if not supervisor_rows:
         if _runtime_supervisor_alive():
             actions.append("supervisor_ps_missing_runtime_alive")
+        elif not ps_ok:
+            actions.append("supervisor_unobservable_ps_failed")
+            log(f"supervisor: ps failed and no trusted runtime pid; not spawning duplicate ({_PS_LAST_ERROR})")
         else:
             _spawn_supervisor(supervisor_args)
             actions.append("spawn_supervisor")
@@ -466,6 +501,10 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
             "research_loop": _script_rows("outreach_research_loop.py"),
             "dispatch_worktree": _script_rows("dispatch_worktree.py"),
             "board_refill": _script_rows("outreach_board_refill.py"),
+        },
+        "process_observer": {
+            "ps_ok": ps_ok,
+            "ps_error": _PS_LAST_ERROR,
         },
         "code_status": code_status,
         "active_named_targets": active_named,
