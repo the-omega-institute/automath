@@ -38,6 +38,7 @@ import argparse
 import json
 import os
 import re
+import signal
 import subprocess
 import sys
 import time
@@ -262,6 +263,22 @@ def plan_dispatch(
 
 def _run(cmd: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False)
+
+
+def _terminate_process_group(proc: subprocess.Popen, *, grace_seconds: float = 5.0) -> None:
+    try:
+        os.killpg(proc.pid, signal.SIGTERM)
+    except (ProcessLookupError, OSError):
+        return
+    try:
+        proc.wait(timeout=grace_seconds)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)
+    except (ProcessLookupError, OSError):
+        pass
 
 
 def _git(args: list[str], cwd: Path) -> str:
@@ -1501,16 +1518,21 @@ def _run_pre_oracle_codex_workup(todo_id: str, slug: str, *, timeout: int) -> tu
     ]
     started = time.time()
     with open(log_path, "ab") as logf:
-        proc = subprocess.run(
+        proc = subprocess.Popen(
             cmd,
             cwd=str(REPO_ROOT_DEFAULT),
             stdout=logf,
             stderr=subprocess.STDOUT,
-            timeout=max(90, min(timeout, 2100)),
-            check=False,
+            start_new_session=True,
         )
-    if proc.returncode != 0:
-        return False, f"local repair rc={proc.returncode}", str(log_path)
+        try:
+            rc = proc.wait(timeout=max(90, min(timeout, 2100)))
+        except subprocess.TimeoutExpired:
+            _terminate_process_group(proc)
+            rc = 124
+            logf.write(f"\nTIMEOUT after {max(60, min(timeout, 1800))}s; terminated local repair process group\n".encode("utf-8"))
+    if rc != 0:
+        return False, f"local repair rc={rc}", str(log_path)
     fresh_ok, fresh_reason = _pre_oracle_codex_workup_fresh_after(slug, started)
     if not fresh_ok:
         return False, fresh_reason, str(log_path)

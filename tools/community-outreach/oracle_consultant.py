@@ -1398,6 +1398,17 @@ def _pre_oracle_codex_handoff_ok(slug: str, *, require_recent: bool = True) -> t
         return False, "missing Codex-selected next_oracle_question backed by local trace"
     if not _is_concrete_oracle_question(question):
         return False, "Codex-selected next_oracle_question is generic or metadata-only"
+    target_dir = TARGETS_DIR / slug
+    try:
+        workup = (target_dir / "codex_workup.md").read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False, "missing codex_workup.md"
+    ok, reason = _target_workup_local_trace_status(workup)
+    if not ok:
+        return False, reason
+    trace_ok, trace_reason = _local_repair_last_has_codex_command_trace(slug)
+    if not trace_ok:
+        return False, trace_reason
     if require_recent:
         recent_ok, recent_reason = _pre_oracle_target_files_recent(
             slug,
@@ -1509,34 +1520,50 @@ def _run_local_codex_replay_after_oracle(
         "--json",
     ]
     started = time.time()
+    stdout_chunks: list[bytes] = []
+    stderr_chunks: list[bytes] = []
+    timed_out = False
+    proc = subprocess.Popen(
+        cmd,
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        start_new_session=True,
+    )
     try:
-        proc = subprocess.run(
-            cmd,
-            cwd=str(REPO_ROOT),
-            capture_output=True,
-            text=True,
-            timeout=timeout + 120,
-            encoding="utf-8",
-            errors="replace",
-            check=False,
-        )
-    except subprocess.TimeoutExpired as exc:
+        stdout_b, stderr_b = proc.communicate(timeout=timeout + 120)
+        stdout_chunks.append(stdout_b or b"")
+        stderr_chunks.append(stderr_b or b"")
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        _terminate_process_group(proc)
+        try:
+            stdout_b, stderr_b = proc.communicate(timeout=5)
+            stdout_chunks.append(stdout_b or b"")
+            stderr_chunks.append(stderr_b or b"")
+        except subprocess.TimeoutExpired:
+            pass
+    stdout = b"".join(stdout_chunks).decode("utf-8", errors="replace")
+    stderr = b"".join(stderr_chunks).decode("utf-8", errors="replace")
+    if timed_out:
+        stderr = (stderr + f"\nTIMEOUT after {timeout}s; terminated local repair process group").strip()
         return {
             "ok": False,
             "todo_id": todo.todo_id,
             "turn": turn_idx,
             "returncode": 124,
             "elapsed_seconds": int(time.time() - started),
-            "stdout": _compact_excerpt(exc.stdout or "", 2000),
-            "stderr": _compact_excerpt((exc.stderr or "") + f"\nTIMEOUT after {timeout}s", 2000),
+            "stdout": _compact_excerpt(stdout, 2000),
+            "stderr": _compact_excerpt(stderr, 2000),
         }
+    returncode = proc.returncode if proc.returncode is not None else 1
     payload: dict = {}
-    if proc.stdout.strip():
+    if stdout.strip():
         try:
-            payload = json.loads(proc.stdout)
+            payload = json.loads(stdout)
         except json.JSONDecodeError:
             payload = {}
-    ok = proc.returncode == 0 and bool(payload.get("ok"))
+    ok = returncode == 0 and bool(payload.get("ok"))
     target_dir = REPO_ROOT / "tools/community-outreach/targets" / todo.slug()
     state_path = target_dir / "local_repair_last.json"
     state: dict = {}
@@ -1553,15 +1580,15 @@ def _run_local_codex_replay_after_oracle(
     if isinstance(substantive, dict):
         diagnostics.extend(str(x) for x in substantive.get("diagnostics", []) or [])
     if not ok:
-        diagnostics.append(str(payload.get("error") or payload.get("returncode") or proc.stderr[:500] or "local repair failed"))
+        diagnostics.append(str(payload.get("error") or payload.get("returncode") or stderr[:500] or "local repair failed"))
     return {
         "ok": ok,
         "todo_id": todo.todo_id,
         "turn": turn_idx,
-        "returncode": proc.returncode,
+        "returncode": returncode,
         "elapsed_seconds": int(time.time() - started),
-        "stdout_excerpt": _compact_excerpt(proc.stdout or "", 2000),
-        "stderr_excerpt": _compact_excerpt(proc.stderr or "", 2000),
+        "stdout_excerpt": _compact_excerpt(stdout, 2000),
+        "stderr_excerpt": _compact_excerpt(stderr, 2000),
         "local_repair_last": str(state_path.relative_to(REPO_ROOT)) if state_path.exists() else "",
         "postcheck_ok": bool(postcheck.get("ok")) if isinstance(postcheck, dict) else False,
         "codex_command_trace_ok": bool(trace.get("ok")) if isinstance(trace, dict) else False,
@@ -1728,11 +1755,11 @@ def _read_target_next_oracle_question(slug: str, *, max_chars: int = 4000) -> st
     return question[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + question[-max_chars // 2 :]
 
 
-def _target_workup_has_local_trace(text: str) -> bool:
+def _target_workup_local_trace_status(text: str) -> tuple[bool, str]:
     """Guard resumed Oracle prompts against metadata-only next questions."""
     stripped = (text or "").strip()
     if len(stripped) < 500:
-        return False
+        return False, "codex_workup.md too short to show local processing"
     lowered = stripped.lower()
     required_sections = (
         "## local evidence checked",
@@ -1741,8 +1768,59 @@ def _target_workup_has_local_trace(text: str) -> bool:
         "## proof obligations still open",
         "## next oracle question",
     )
-    if any(section not in lowered for section in required_sections):
-        return False
+    missing = [section for section in required_sections if section not in lowered]
+    if missing:
+        return False, "codex_workup.md missing sections: " + ", ".join(missing)
+    local_body = _extract_markdown_section(stripped, "Local evidence checked", max_chars=20000)
+    commands_body = _extract_markdown_section(stripped, "Commands run", max_chars=20000)
+    artifact_body = _extract_markdown_section(stripped, "Verifier/artifact status", max_chars=20000)
+    if len(local_body) < 80:
+        return False, "Local evidence checked section too thin to prove target inspection"
+    if len(commands_body) < 80:
+        return False, "Commands run section too thin to prove local execution"
+    if len(artifact_body) < 80:
+        return False, "Verifier/artifact status section too thin to prove artifact review"
+    command_markers = (
+        "```",
+        "$ ",
+        "python3 ",
+        "python ",
+        "rg ",
+        "find ",
+        "git status",
+        "sed -n",
+        "cat ",
+        "ls ",
+        "date ",
+        "lean ",
+        "lake ",
+        "sage ",
+        "magma ",
+        "gap ",
+        "node ",
+        "npm ",
+        "pytest",
+        "curl ",
+        "unzip ",
+        "sha256sum",
+    )
+    if not any(marker in commands_body.lower() for marker in command_markers):
+        return False, "Commands run section lacks concrete shell/tool commands"
+    inspection_markers = (
+        "inspected",
+        "searched",
+        "found",
+        "confirmed",
+        "checked",
+        "ran",
+        "replayed",
+        "no oracle claim",
+        "missing",
+        "absent",
+    )
+    local_artifact_text = f"{local_body}\n{artifact_body}".lower()
+    if not any(marker in local_artifact_text for marker in inspection_markers):
+        return False, "local evidence/artifact sections do not describe an actual inspection result"
     trace_markers = (
         "command",
         "ran",
@@ -1759,7 +1837,45 @@ def _target_workup_has_local_trace(text: str) -> bool:
         "artifact",
         "python",
     )
-    return any(marker in lowered for marker in trace_markers)
+    if not any(marker in lowered for marker in trace_markers):
+        return False, "codex_workup.md lacks local command/check/artifact trace"
+    return True, ""
+
+
+def _target_workup_has_local_trace(text: str) -> bool:
+    ok, _reason = _target_workup_local_trace_status(text)
+    return ok
+
+
+def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except OSError:
+        return False, "missing local_repair_last.json"
+    except json.JSONDecodeError as exc:
+        return False, f"invalid local_repair_last.json: {exc}"
+    if not payload.get("ok"):
+        return False, "last local repair did not pass"
+    postcheck = payload.get("postcheck") if isinstance(payload, dict) else None
+    if not isinstance(postcheck, dict):
+        return False, "last local repair missing postcheck"
+    trace = postcheck.get("codex_command_trace")
+    if not isinstance(trace, dict):
+        return False, "last local repair missing Codex command trace"
+    if not trace.get("ok"):
+        return False, str(trace.get("reason") or "Codex command trace not ok")
+    if int(trace.get("target_command_count") or 0) <= 0:
+        return False, "Codex command trace has no target-local commands"
+    substantive = postcheck.get("substantive_local_work")
+    if not isinstance(substantive, dict):
+        return False, "last local repair missing substantive local-work check"
+    if not substantive.get("ok"):
+        diagnostics = substantive.get("diagnostics")
+        if isinstance(diagnostics, list) and diagnostics:
+            return False, "substantive local-work check failed: " + "; ".join(str(item) for item in diagnostics[:4])
+        return False, "substantive local-work check failed"
+    return True, ""
 
 
 def _science_gate_missing_for_todo(todo: TodoSpec) -> list[str]:
