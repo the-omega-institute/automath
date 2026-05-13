@@ -1331,6 +1331,14 @@ def _read_target_next_oracle_question(slug: str, *, max_chars: int = 4000) -> st
     after Codex already produced a concrete local workup.
     """
     target_dir = TARGETS_DIR / slug
+    workup = target_dir / "codex_workup.md"
+    try:
+        workup_text = workup.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    if not _target_workup_has_local_trace(workup_text):
+        return ""
+
     direct = target_dir / "next_oracle_question.md"
     try:
         text = direct.read_text(encoding="utf-8", errors="replace").strip()
@@ -1339,11 +1347,6 @@ def _read_target_next_oracle_question(slug: str, *, max_chars: int = 4000) -> st
     if text:
         return text if len(text) <= max_chars else text[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :]
 
-    workup = target_dir / "codex_workup.md"
-    try:
-        workup_text = workup.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return ""
     match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", workup_text)
     if not match:
         return ""
@@ -1351,6 +1354,40 @@ def _read_target_next_oracle_question(slug: str, *, max_chars: int = 4000) -> st
     if len(question) <= max_chars:
         return question
     return question[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + question[-max_chars // 2 :]
+
+
+def _target_workup_has_local_trace(text: str) -> bool:
+    """Guard resumed Oracle prompts against metadata-only next questions."""
+    stripped = (text or "").strip()
+    if len(stripped) < 500:
+        return False
+    lowered = stripped.lower()
+    required_sections = (
+        "## local evidence checked",
+        "## commands run",
+        "## verifier/artifact status",
+        "## proof obligations still open",
+        "## next oracle question",
+    )
+    if any(section not in lowered for section in required_sections):
+        return False
+    trace_markers = (
+        "command",
+        "ran",
+        "checked",
+        "verified",
+        "passed",
+        "failed",
+        "missing",
+        "not run",
+        "no local",
+        "no oracle claim",
+        "results.json",
+        "verifier",
+        "artifact",
+        "python",
+    )
+    return any(marker in lowered for marker in trace_markers)
 
 
 def _science_gate_missing_for_todo(todo: TodoSpec) -> list[str]:

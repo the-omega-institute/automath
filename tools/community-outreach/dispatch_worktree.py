@@ -1181,6 +1181,40 @@ def _extract_markdown_section(text: str, heading: str, *, max_chars: int) -> str
     return body[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + body[-max_chars // 2 :]
 
 
+def _codex_workup_has_local_trace(text: str) -> bool:
+    """Return true only when the workup shows actual local target processing."""
+    stripped = (text or "").strip()
+    if len(stripped) < 500:
+        return False
+    lowered = stripped.lower()
+    required_sections = (
+        "## local evidence checked",
+        "## commands run",
+        "## verifier/artifact status",
+        "## proof obligations still open",
+        "## next oracle question",
+    )
+    if any(section not in lowered for section in required_sections):
+        return False
+    trace_markers = (
+        "command",
+        "ran",
+        "checked",
+        "verified",
+        "passed",
+        "failed",
+        "missing",
+        "not run",
+        "no local",
+        "no oracle claim",
+        "results.json",
+        "verifier",
+        "artifact",
+        "python",
+    )
+    return any(marker in lowered for marker in trace_markers)
+
+
 def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str:
     """Read the exact next Oracle prompt selected by the local Codex workup.
 
@@ -1188,11 +1222,13 @@ def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str
     have a `## Next Oracle question` section inside codex_workup.md, so keep a
     fallback extractor to avoid regressing live targets during rollout.
     """
+    workup = _read_target_context_file(slug, "codex_workup.md", max_chars=max(12000, max_chars))
+    if not _codex_workup_has_local_trace(workup):
+        return ""
     direct = _read_target_context_file(slug, "next_oracle_question.md", max_chars=max_chars)
     direct = direct.strip()
     if direct:
         return direct
-    workup = _read_target_context_file(slug, "codex_workup.md", max_chars=max(12000, max_chars))
     return _extract_markdown_section(workup, "Next Oracle question", max_chars=max_chars)
 
 

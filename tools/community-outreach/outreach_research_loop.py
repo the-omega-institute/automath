@@ -611,9 +611,77 @@ def _is_concrete_next_oracle_question(question: str) -> bool:
     return any(marker in lowered for marker in concrete_markers)
 
 
-def _has_next_oracle_question(slug: str) -> bool:
-    """Ensure the pre-Oracle Codex pass produced an actual next question."""
-    return _is_concrete_next_oracle_question(_read_next_oracle_question(slug))
+def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
+    """Require evidence that Codex actually processed the target before Oracle.
+
+    A standalone `next_oracle_question.md` is not enough: it can be produced by
+    prompt decoration without any local replay/check.  The workup must expose
+    what was inspected, what command/check was run or why none was possible,
+    what artifact state was observed, and what proof obligations remain.
+    """
+    stripped = (text or "").strip()
+    if len(stripped) < 500:
+        return False, "codex_workup.md too short to show local processing"
+    lowered = stripped.lower()
+    required_sections = (
+        "## local evidence checked",
+        "## commands run",
+        "## verifier/artifact status",
+        "## proof obligations still open",
+        "## next oracle question",
+    )
+    missing_sections = [section for section in required_sections if section not in lowered]
+    if missing_sections:
+        return False, "codex_workup.md missing sections: " + ", ".join(missing_sections)
+    trace_markers = (
+        "command",
+        "ran",
+        "checked",
+        "verified",
+        "passed",
+        "failed",
+        "missing",
+        "not run",
+        "no local",
+        "no oracle claim",
+        "results.json",
+        "verifier",
+        "artifact",
+        "python",
+    )
+    if not any(marker in lowered for marker in trace_markers):
+        return False, "codex_workup.md lacks local command/check/artifact trace"
+    return True, ""
+
+
+def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
+    """Ensure Codex left both a concrete question and a real local workup."""
+    target_dir = TARGETS_DIR / slug
+    question = _read_next_oracle_question(slug)
+    if not _is_concrete_next_oracle_question(question):
+        return False, "missing concrete next_oracle_question"
+    workup_path = target_dir / "codex_workup.md"
+    try:
+        workup = workup_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False, "missing codex_workup.md"
+    ok, reason = _workup_has_local_execution_trace(workup)
+    if not ok:
+        return False, reason
+    direct = target_dir / "next_oracle_question.md"
+    try:
+        if direct.exists() and workup_path.exists():
+            if direct.stat().st_mtime < workup_path.stat().st_mtime - 300:
+                return False, "next_oracle_question.md older than current codex_workup.md"
+    except OSError:
+        pass
+    return True, ""
+
+
+def _has_pre_oracle_workup(slug: str) -> bool:
+    """Ensure the pre-Oracle Codex pass processed the target, not just metadata."""
+    ok, _reason = _pre_oracle_workup_status(slug)
+    return ok
 
 
 def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") -> None:
@@ -1093,19 +1161,20 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                         f"{todo_id}: local repair cleared replay/verifier blockers; "
                         "checking Codex-selected next Oracle task before proof/closure"
                     )
-                    if not _has_next_oracle_question(slug):
+                    workup_ok, workup_reason = _pre_oracle_workup_status(slug)
+                    if not workup_ok:
                         rc, log_path = 2, log_path
                         _note_local_repair_backoff(
                             slug,
                             reason=(
                                 "local repair cleared replay/verifier blockers but did not produce "
-                                "a concrete next_oracle_question"
+                                f"a usable pre-Oracle Codex workup: {workup_reason}"
                             ),
                             log_path=log_path,
                         )
                         loop_log(
-                            f"{todo_id}: local repair did not leave a concrete next_oracle_question; "
-                            "not asking Oracle from a generic prompt"
+                            f"{todo_id}: local repair did not leave a usable pre-Oracle Codex workup "
+                            f"({workup_reason}); not asking Oracle from a generic prompt"
                         )
                     else:
                         rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
@@ -1136,18 +1205,20 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                         f"{todo_id}: pre-Oracle Codex workup failed; "
                         "not asking Oracle from an unprocessed board card"
                     )
-                elif not _has_next_oracle_question(slug):
+                else:
+                    workup_ok, workup_reason = _pre_oracle_workup_status(slug)
+                if workup_rc == 0 and not workup_ok:
                     rc, log_path = 2, workup_log
                     _note_local_repair_backoff(
                         slug,
-                        reason="pre-oracle codex workup did not produce a concrete next_oracle_question",
+                        reason=f"pre-oracle codex workup unusable: {workup_reason}",
                         log_path=workup_log,
                     )
                     loop_log(
-                        f"{todo_id}: pre-Oracle Codex workup lacks a concrete next_oracle_question; "
-                        "not asking Oracle from a generic prompt"
+                        f"{todo_id}: pre-Oracle Codex workup unusable ({workup_reason}); "
+                        "not asking Oracle from a generic/unprocessed prompt"
                     )
-                else:
+                elif workup_rc == 0:
                     rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
                     loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
                     reconcile_payload = _reconcile_oracle_deep(todo_id)
