@@ -372,6 +372,21 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     target_dir = TARGETS_DIR / todo.slug()
     target_dir.mkdir(parents=True, exist_ok=True)
     gate_before = _run_science_gate(todo_id, write_ledger=True)
+    if str(gate_before.get("status") or "") in {"WRITEBACK_READY", "CLOSE_TARGET"}:
+        report = {
+            "ok": True,
+            "todo_id": todo_id,
+            "slug": todo.slug(),
+            "started_at": _now_iso(),
+            "finished_at": _now_iso(),
+            "returncode": 0,
+            "gate_before": gate_before,
+            "gate_after": gate_before,
+            "shortcut": "science_gate_already_terminal",
+        }
+        state_path = target_dir / "local_repair_last.json"
+        state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return report
     verifier_audit_before = _record_target_verifier_audit(todo_id, target_dir)
     if verifier_audit_before.get("passed"):
         gate_after_audit = _run_science_gate(todo_id, write_ledger=True)
