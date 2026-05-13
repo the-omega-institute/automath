@@ -53,6 +53,7 @@ REPO_ROOT = SCRIPT_DIR.parents[1]
 STATE_DIR = SCRIPT_DIR / "outreach_state"
 SUPERVISOR_LOG_DIR = STATE_DIR / "supervisor_logs"
 RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
+SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
 GIT_OPS_LOCK = STATE_DIR / ".git_ops.lock"
 
@@ -133,6 +134,34 @@ def _git(args: list[str], capture: bool = True) -> subprocess.CompletedProcess[s
         capture_output=capture,
         text=True,
     )
+
+
+def _git_head() -> str:
+    proc = _git(["rev-parse", "HEAD"])
+    if proc.returncode != 0:
+        return ""
+    return proc.stdout.strip()
+
+
+def write_runtime_record(args: argparse.Namespace) -> None:
+    payload = {
+        "pid": os.getpid(),
+        "started_at": _now_iso(),
+        "git_head": _git_head(),
+        "argv": sys.argv,
+        "parallel": args.parallel,
+        "poll_interval": args.poll_interval,
+        "auto_commit": bool(args.auto_commit),
+        "inner": not bool(args.no_inner),
+    }
+    try:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
+        SUPERVISOR_RUNTIME.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        supervisor_log(f"runtime record write failed: {exc}")
 
 
 def macos_notify(title: str, body: str) -> None:
@@ -1081,6 +1110,7 @@ def main() -> int:
         f"inner={'off' if args.no_inner else 'on'} "
         f"server_spawn={'off' if args.no_server_spawn else 'on'})"
     )
+    write_runtime_record(args)
 
     supervisor_state: dict = {
         "inner_research": None,

@@ -857,6 +857,22 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
     if not consultant.is_alive():
         print(f"[oracle-deep] server down at {consultant.server_url}; skipping {todo.todo_id}", file=sys.stderr)
         return {"skipped": "server_down", "server_url": consultant.server_url}
+    workup_ok, workup_reason = _pre_oracle_codex_workup_status(profile.slug)
+    if not workup_ok:
+        print(
+            f"[oracle-deep] pre-oracle Codex workup gate failed for {todo.todo_id}: {workup_reason}",
+            file=sys.stderr,
+        )
+        return {
+            "skipped": "pre_oracle_codex_workup_required",
+            "reason": workup_reason,
+            "target_slug": profile.slug,
+            "required_artifacts": [
+                f"tools/community-outreach/targets/{profile.slug}/codex_workup.md",
+                f"tools/community-outreach/targets/{profile.slug}/next_oracle_question.md",
+                f"tools/community-outreach/targets/{profile.slug}/local_repair_report.md",
+            ],
+        }
     research_text = ""
     if research_md.exists():
         research_text = research_md.read_text(encoding="utf-8")
@@ -1232,6 +1248,33 @@ def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str
     return _extract_markdown_section(workup, "Next Oracle question", max_chars=max_chars)
 
 
+def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
+    """Gate Oracle-deep on an actual local Codex workup.
+
+    The research loop normally runs outreach_local_repair.py before invoking
+    this script with --oracle-deep.  Keep the same invariant here because this
+    CLI is also used manually and by watchdog/restart paths: Oracle must receive
+    a Codex-selected mathematical gap backed by target-local inspection/replay,
+    not a board-card metadata restatement.
+    """
+    workup = _read_target_context_file(slug, "codex_workup.md", max_chars=16000)
+    if not workup.strip():
+        return False, "missing codex_workup.md"
+    if not _codex_workup_has_local_trace(workup):
+        return False, "codex_workup.md lacks required local evidence/commands/verifier/proof-obligation trace"
+    question = _read_codex_next_oracle_question(slug)
+    if not question.strip():
+        return False, "missing concrete next_oracle_question.md or ## Next Oracle question"
+    direct = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "next_oracle_question.md"
+    if direct.exists():
+        try:
+            if direct.stat().st_mtime < (REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "codex_workup.md").stat().st_mtime - 300:
+                return False, "next_oracle_question.md is older than current codex_workup.md"
+        except OSError:
+            pass
+    return True, ""
+
+
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
                                *, arxiv_hits: list[dict] | None = None,
                                resume_conversation_id: str = "") -> str:
@@ -1266,14 +1309,10 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
             "",
         ]
     else:
-        parts += [
-            "## Codex local workup",
-            codex_workup or "(missing codex_workup.md; if this is the first turn, proceed but request a local workup next)",
-            "",
-            "## Latest local repair/replay report",
-            local_repair_report or "(none yet)",
-            "",
-        ]
+        raise RuntimeError(
+            f"Oracle-deep prompt requested for {todo.todo_id} without a concrete "
+            "Codex-selected next_oracle_question backed by local workup"
+        )
     parts += [
         "## Compact science contract",
         _compact_science_contract_block(profile),

@@ -30,6 +30,7 @@ WATCHDOG_LOG = STATE_DIR / "watchdog.log"
 WATCHDOG_STATUS = STATE_DIR / "watchdog.status.json"
 SUPERVISOR_LOG_DIR = STATE_DIR / "supervisor_logs"
 SUPERVISOR_DAEMON_LOG = SUPERVISOR_LOG_DIR / "supervisor_daemon_current.log"
+SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
 RESEARCH_STATUS = STATE_DIR / "research_loop.status.json"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
 
@@ -121,17 +122,51 @@ def _script_rows(script_name: str) -> list[dict]:
     ]
 
 
+def _git_head() -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+    except Exception:
+        return ""
+    if proc.returncode != 0:
+        return ""
+    return proc.stdout.strip()
+
+
 def _server_status(timeout: int = 5) -> dict:
     try:
         with urllib.request.urlopen(f"{ORACLE_SERVER_URL}/status", timeout=timeout) as r:
             return json.loads(r.read().decode("utf-8"), strict=False)
     except Exception:
+        try:
+            proc = subprocess.run(
+                ["curl", "-fsS", "--max-time", str(max(1, int(timeout))), f"{ORACLE_SERVER_URL}/status"],
+                cwd=str(REPO_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=timeout + 2,
+                check=False,
+            )
+            if proc.returncode == 0:
+                return json.loads(proc.stdout or "{}", strict=False)
+        except Exception:
+            pass
         return {}
 
 
 def _spawn_server() -> int | None:
     if not ORACLE_SERVER.exists():
         log("oracle_server: script missing; cannot spawn")
+        return None
+    existing = _script_rows("outreach_oracle_server.py")
+    if existing:
+        log("oracle_server: status endpoint unavailable but process exists; not spawning duplicate")
         return None
     proc = subprocess.Popen(
         ["python3", str(ORACLE_SERVER)],
@@ -263,6 +298,44 @@ def _kill_orphan_inner_dedup(dry_run: bool = False) -> list[int]:
     return killed
 
 
+def _has_active_pipeline_work(server: dict) -> bool:
+    if int(server.get("agents_busy") or 0) > 0:
+        return True
+    if int(server.get("queue_length") or 0) > 0:
+        return True
+    for script in ("dispatch_worktree.py", "outreach_board_refill.py", "outreach_local_repair.py"):
+        if _script_rows(script):
+            return True
+    return False
+
+
+def _request_safe_supervisor_restart_if_code_changed(server: dict) -> str:
+    """Ask the supervisor to restart after a commit, but only at an idle boundary.
+
+    Python daemons keep the module code they imported at process start.  After a
+    pipeline architecture commit, a live supervisor/research loop can otherwise
+    keep running old prompt/gate logic for hours.  The watchdog records the HEAD
+    used by the current supervisor and writes .outreach_stop only once all
+    browser/dispatch work is idle, so active Oracle reasoning is not cut off.
+    """
+    runtime = _read_json(SUPERVISOR_RUNTIME)
+    runtime_head = str(runtime.get("git_head") or "").strip()
+    current_head = _git_head()
+    if not runtime_head or not current_head or runtime_head == current_head:
+        return ""
+    if _has_active_pipeline_work(server):
+        return f"restart_deferred_code_changed:{runtime_head[:9]}->{current_head[:9]}"
+    try:
+        STOP_FILE.write_text(
+            f"watchdog requested safe restart at {_now_iso()}: "
+            f"{runtime_head} -> {current_head}\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        return f"restart_request_failed:{exc}"
+    return f"restart_supervisor_code_changed:{runtime_head[:9]}->{current_head[:9]}"
+
+
 def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanup_orphans: bool) -> dict:
     rows = _ps_rows()
     server = _server_status()
@@ -289,6 +362,9 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
             actions.append(f"kill_orphan_inner:{','.join(map(str, killed_orphans))}")
 
     server = _server_status()
+    restart_action = _request_safe_supervisor_restart_if_code_changed(server)
+    if restart_action:
+        actions.append(restart_action)
     active_named = _active_named_targets()
     stale_busy = server.get("stale_busy_agents") or []
     reconcile_payload: dict = {}

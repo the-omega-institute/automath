@@ -237,8 +237,16 @@ def _pid_alive(pid: int) -> bool:
         return False
 
 
-def _live_dispatch_for_slug(slug: str) -> bool:
-    """Detect orphan dispatches that outlived their parent research_loop PID."""
+def _live_worker_for_target(todo_id: str, slug: str) -> bool:
+    """Detect orphan/in-flight workers for the same target.
+
+    A supervisor restart can orphan a dispatch_worktree process while its
+    Oracle call is still pending.  The claim marker may be stale or already
+    cleaned, but starting a second local_repair/oracle cycle for the same
+    target corrupts the target-local workup handoff.  Match by todo_id first
+    because it is present in worker command lines; keep a slug fallback for
+    older/manual invocations.
+    """
     try:
         proc = subprocess.run(
             ["ps", "-axo", "command"],
@@ -249,19 +257,31 @@ def _live_dispatch_for_slug(slug: str) -> bool:
         )
     except Exception:
         return False
-    needle = f"dispatch_worktree.py --supervise --supervise-id "
+    todo_markers = (
+        f"dispatch_worktree.py --supervise --supervise-id {todo_id}",
+        f"dispatch_worktree.py --supervise-id {todo_id}",
+        f"outreach_local_repair.py --todo-id {todo_id}",
+    )
     for line in (proc.stdout or "").splitlines():
-        if needle not in line:
-            continue
-        if f" {slug} " in f" {line} ":
+        if any(marker in line for marker in todo_markers):
             return True
+        if slug and f" {slug} " in f" {line} ":
+            return True
+    return False
+
+
+def _live_dispatch_for_slug(slug: str) -> bool:
+    """Backward-compatible stale-claim helper for older marker files."""
+    try:
+        todos = _parse_board_safe()
+    except Exception:
+        todos = {}
+    for todo_id, todo in todos.items():
         try:
-            todos = parse_board(RESEARCH_BOARD_PATH)
-        except Exception:
-            todos = []
-        for todo in todos:
-            if todo.slug() == slug and f"--supervise-id {todo.todo_id}" in line:
+            if todo.slug() == slug and _live_worker_for_target(todo_id, slug):
                 return True
+        except Exception:
+            continue
     return False
 
 
@@ -1081,6 +1101,9 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
     """Claim → dispatch → write summary → mark board (only if real work
     happened) → release."""
     started = _now()
+    if _live_worker_for_target(todo_id, slug):
+        loop_log(f"{todo_id}: live worker already active for {slug}; skipping duplicate claim")
+        return {"todo_id": todo_id, "slug": slug, "skipped": "live_worker_active"}
     if not claim(slug):
         return {"todo_id": todo_id, "slug": slug, "skipped": "already_claimed"}
     try:
