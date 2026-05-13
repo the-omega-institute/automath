@@ -362,12 +362,20 @@ w=L^{1/2}z+L^{-1/2}z^{-1}
 has expansion \(w=L^{1/2}z+O(z^{-1})\) at infinity, so the conformal radius of the exterior domain is \(L^{1/2}=N(r)^{1/2}\). This is exactly the logarithmic capacity of \(E_J(r)\).
 \end{proof}
 
+The next result is used as the volume interface for the primorial codebook theorem, not as an independent excursion into higher-dimensional convex geometry.  A one-dimensional Joukowsky ellipse records only the scalar norm \(N(r)\).  The diagonal ellipsoid below keeps the prime coordinates separated until the final determinant is taken; this is exactly what lets the pairwise-coprime codebook constraint turn into a product-volume minimization in Theorem \ref{prop:group-jg-min-total-godel-cost-primorial}.
+
 \begin{theorem}[A higher-dimensional ellipsoid functor for prime registers]\label{thm:group-jg-godel-ellipsoid-volume}
-Let \(r\in\mathsf P\) have support \(\{p_1,\dots,p_d\}\), and write \(r_i:=r(p_i)\). Define the diagonal ellipsoid
+Let \(P_0=\{p_1,\dots,p_d\}\) be a finite set of primes and let \(r\in\mathsf P\) be supported in \(P_0\). Write \(r_i:=r(p_i)\). Define the diagonal ellipsoid
 \[
 \mathcal E_d(r):=\left\{x\in\RR^d:\ \sum_{i=1}^{d}\frac{x_i^2}{p_i^{r_i}}\le 1\right\}.
 \]
-Then
+Let
+\[
+A_r:=\operatorname{diag}\bigl(p_1^{r_1/2},\dots,p_d^{r_d/2}\bigr).
+\]
+Then:
+\begin{enumerate}
+  \item \(\mathcal E_d(r)=A_rB_d\), and
 \[
 \mathrm{Vol}\bigl(\mathcal E_d(r)\bigr)
 =\mathrm{Vol}(B_d)\prod_{i=1}^{d}p_i^{r_i/2}
@@ -378,20 +386,59 @@ Consequently,
 \log\mathrm{Vol}\bigl(\mathcal E_d(r)\bigr)-\log\mathrm{Vol}(B_d)
 =\frac12\log N(r)=\Delta(r).
 \]
+
+  \item The assignment \(r\mapsto A_r\) is a faithful commutative monoid representation of registers supported in \(P_0\):
+  \[
+  A_{r+s}=A_rA_s,
+  \qquad
+  \det A_r=\sqrt{N(r)}.
+  \]
+  Hence the normalized ellipsoid-volume character
+  \[
+  V_d(r):=\frac{\mathrm{Vol}(\mathcal E_d(r))}{\mathrm{Vol}(B_d)}
+  \]
+  satisfies
+  \[
+  V_d(r+s)=V_d(r)V_d(s),
+  \qquad
+  \log V_d(r)=\Delta(r).
+  \]
+
+  \item If \(r_1,
+\dots,r_n\) are supported in \(P_0\), then
+  \[
+  \prod_{k=1}^{n}\mathrm{Vol}\bigl(\mathcal E_d(r_k)\bigr)
+  =\mathrm{Vol}(B_d)^n\exp\!\left(\frac12\sum_{k=1}^{n}\log N(r_k)\right).
+  \]
+  In particular, for a G\"odel-decomposable codebook \(\iota:X\hookrightarrow\NN_{\mathrm{sf},>1}\) with exponent registers \(r_x\), the ellipsoid-volume product is a strictly increasing function of the total G\"odel cost \(C(\iota)=\sum_x\log\iota(x)\). Thus the ellipsoid functor descends the prime-register decomposition to the primorial capacity minimization problem without losing the coordinatewise coprimality data before the determinant is evaluated.
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
 The ellipsoid \(\mathcal E_d(r)\) is the image of the unit ball \(B_d\) under the diagonal linear map
 \[
-T(x_1,\dots,x_d)=\bigl(p_1^{r_1/2}x_1,\dots,p_d^{r_d/2}x_d\bigr).
+A_r(x_1,\dots,x_d)=\bigl(p_1^{r_1/2}x_1,\dots,p_d^{r_d/2}x_d\bigr).
 \]
 Therefore
 \[
-\mathrm{Vol}\bigl(\mathcal E_d(r)\bigr)=|\det T|\,\mathrm{Vol}(B_d)
+\mathrm{Vol}\bigl(\mathcal E_d(r)\bigr)=|\det A_r|\,\mathrm{Vol}(B_d)
 =\left(\prod_{i=1}^{d}p_i^{r_i/2}\right)\mathrm{Vol}(B_d)
 =\sqrt{N(r)}\,\mathrm{Vol}(B_d).
 \]
 Taking logarithms yields the final identity.
+The equality \(A_{r+s}=A_rA_s\) follows coordinate by coordinate from
+\[
+p_i^{(r_i+s_i)/2}=p_i^{r_i/2}p_i^{s_i/2},
+\]
+and \(\det A_r=\prod_i p_i^{r_i/2}=\sqrt{N(r)}\). If \(A_r=A_s\), then every diagonal entry agrees, so \(p_i^{r_i/2}=p_i^{s_i/2}\) and hence \(r_i=s_i\) for all \(i\); this proves faithfulness on registers supported in \(P_0\). Dividing the volume formula by \(\mathrm{Vol}(B_d)\) gives \(V_d(r)=\det A_r\), so multiplicativity and \(\log V_d(r)=\Delta(r)\) follow.
+
+For registers \(r_1,\dots,r_n\), multiplying the volume formula gives
+\[
+\prod_{k=1}^{n}\mathrm{Vol}\bigl(\mathcal E_d(r_k)\bigr)
+=\mathrm{Vol}(B_d)^n\prod_{k=1}^{n}\sqrt{N(r_k)}
+=\mathrm{Vol}(B_d)^n\exp\!\left(\frac12\sum_{k=1}^{n}\log N(r_k)\right).
+\]
+If the registers come from a G\"odel-decomposable codebook, then \(N(r_x)=\iota(x)\), so the exponent is \(C(\iota)/2\). Since the exponential function is strictly increasing, minimizing the ellipsoid-volume product is equivalent to minimizing the total G\"odel cost. This is the precise interface used in Theorem \ref{prop:group-jg-min-total-godel-cost-primorial}.
 \end{proof}
 
 \begin{corollary}[Volume gap and ellipse area]\label{cor:group-jg-ellipse-area-ellipsoid-gap}
