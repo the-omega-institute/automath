@@ -37,6 +37,7 @@ sending SIGINT. On exit the inner loop is killed cleanly via SIGTERM.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import re
@@ -54,6 +55,7 @@ STATE_DIR = SCRIPT_DIR / "outreach_state"
 SUPERVISOR_LOG_DIR = STATE_DIR / "supervisor_logs"
 RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
+SUPERVISOR_LOCK = STATE_DIR / "supervisor.lock"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
 GIT_OPS_LOCK = STATE_DIR / ".git_ops.lock"
 
@@ -162,6 +164,25 @@ def write_runtime_record(args: argparse.Namespace) -> None:
         )
     except OSError as exc:
         supervisor_log(f"runtime record write failed: {exc}")
+
+
+def _acquire_supervisor_lock():
+    """Acquire an advisory singleton lock for the outer supervisor.
+
+    Running two supervisors at once creates duplicate inner loops and stale
+    singleton locks.  The lock is process-owned and automatically releases
+    when the supervisor exits.
+    """
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    fd = os.open(str(SUPERVISOR_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        os.close(fd)
+        return None
+    os.ftruncate(fd, 0)
+    os.write(fd, f"pid={os.getpid()}\nstarted_at={_now_iso()}\n".encode("utf-8"))
+    return fd
 
 
 def macos_notify(title: str, body: str) -> None:
@@ -1095,6 +1116,11 @@ def main() -> int:
     parser.add_argument("--once", action="store_true",
                         help="run a single tick (PI + all short tasks forced) then exit")
     args = parser.parse_args()
+
+    supervisor_lock_fd = _acquire_supervisor_lock()
+    if supervisor_lock_fd is None:
+        supervisor_log("another outreach_supervisor already holds the singleton lock; exiting")
+        return 0
 
     if STOP_FILE.exists():
         supervisor_log(f"clearing stale STOP_FILE {STOP_FILE}")

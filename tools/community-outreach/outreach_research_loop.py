@@ -853,11 +853,16 @@ def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") ->
     target_dir = TARGETS_DIR / slug
     target_dir.mkdir(parents=True, exist_ok=True)
     path = target_dir / "local_repair_last.json"
+    backoff_s = max(0, TRANSPORT_FAILURE_BACKOFF_MINUTES) * 60
+    backoff_until = _now() + backoff_s
     payload = {
         "ok": False,
         "reason": reason,
         "stderr_log": log_path,
         "recorded_at": _now_iso(),
+        "backoff_until_epoch": backoff_until,
+        "backoff_until": datetime.fromtimestamp(backoff_until, timezone.utc).isoformat(timespec="seconds"),
+        "backoff_minutes": TRANSPORT_FAILURE_BACKOFF_MINUTES,
     }
     try:
         path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -1232,9 +1237,21 @@ def _local_repair_transport_failure(slug: str) -> bool:
 
 
 def _local_repair_backoff_applies(slug: str) -> bool:
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        report = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if report.get("ok") is True:
+        return False
+    try:
+        until = float(report.get("backoff_until_epoch") or 0.0)
+    except (TypeError, ValueError):
+        until = 0.0
+    if until > _now():
+        return True
     if not _local_repair_transport_failure(slug):
         return False
-    path = TARGETS_DIR / slug / "local_repair_last.json"
     try:
         age = _now() - path.stat().st_mtime
     except OSError:
