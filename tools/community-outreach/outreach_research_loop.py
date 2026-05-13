@@ -387,6 +387,7 @@ def _spawn_supervise(todo_id: str, timeout_s: int) -> tuple[int, str]:
         "--supervise",
         "--supervise-id", todo_id,
         "--run",
+        "--no-arxiv-stage0",
     ]
     with open(log_path, "ab") as logf:
         proc = subprocess.Popen(
