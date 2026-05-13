@@ -792,6 +792,42 @@ class OracleConsultant:
             if review.error:
                 verdict = "FAILED"
                 break
+            effective_gate_status = str(digest_result.get("science_gate_status") or "").upper()
+            effective_gate_missing = list(digest_result.get("science_gate_missing", []) or [])
+            if not review.error and not is_oracle_transport_error(response_text):
+                local_replay = _run_local_codex_replay_after_oracle(
+                    todo,
+                    turn_idx=turn_idx,
+                    per_turn_timeout=per_turn_timeout,
+                )
+                turn_record["local_codex_replay"] = local_replay
+                if not local_replay.get("ok"):
+                    verdict = "FAILED"
+                    turn_record["error"] = (
+                        "post-oracle local Codex replay failed: "
+                        f"{local_replay.get('error') or local_replay.get('reason') or local_replay.get('returncode')}"
+                    )
+                    break
+                refreshed_gate = _science_gate_status_for_todo(todo)
+                refreshed_gate_missing = list(refreshed_gate.get("missing", []) or [])
+                effective_gate_status = str(refreshed_gate.get("status") or "").upper()
+                effective_gate_missing = refreshed_gate_missing
+                turn_record["science_gate_after_local_replay"] = {
+                    "status": refreshed_gate.get("status", ""),
+                    "next_action": refreshed_gate.get("next_action", ""),
+                    "missing": refreshed_gate_missing,
+                    "next_oracle_question": local_replay.get("next_oracle_question", ""),
+                }
+                if effective_gate_status in {"WRITEBACK_READY", "CLOSE_TARGET"}:
+                    verdict = "BREAKTHROUGH" if effective_gate_status == "WRITEBACK_READY" else "STUCK"
+                    turn_record["gate_stop"] = (
+                        f"post-Oracle local replay moved deterministic science gate to {effective_gate_status}; "
+                        "stop this Oracle batch and hand off to writeback/review gates"
+                    )
+                    break
+                if local_replay.get("next_oracle_question"):
+                    next_followup_override = _as_continuation_prompt(str(local_replay["next_oracle_question"]))
+
             eval_result = codex_evaluate_progress(
                 turn_idx,
                 response_text,
@@ -803,9 +839,9 @@ class OracleConsultant:
             turn_record["evaluator_verdict"] = eval_result.get("verdict", "")
             turn_record["evaluator_reason"] = eval_result.get("verdict_reason", "")
             generated_next = (eval_result.get("next_question") or "").strip()
-            gate_missing = list(digest_result.get("science_gate_missing", [])) or _science_gate_missing_for_todo(todo)
+            gate_missing = effective_gate_missing or _science_gate_missing_for_todo(todo)
             gate_complete = not gate_missing
-            gate_status = str(digest_result.get("science_gate_status") or "").upper()
+            gate_status = effective_gate_status
             if gate_status in {"WRITEBACK_READY", "CLOSE_TARGET"}:
                 verdict = "BREAKTHROUGH" if gate_status == "WRITEBACK_READY" else "STUCK"
                 turn_record["gate_stop"] = (
@@ -885,7 +921,7 @@ class OracleConsultant:
                     break
             else:
                 stuck_streak = 0
-            if turn_idx == len(turns) - 1 and generated_next:
+            if turn_idx == len(turns) - 1 and generated_next and not next_followup_override:
                 turn_record["generated_next_question"] = generated_next
                 next_followup_override = generated_next
         reasoning_stopped_at_turn = len(turns) - 1
@@ -1206,6 +1242,115 @@ def _missing_requires_local_artifact_repair(missing: list[str]) -> bool:
     return any(needle in text for needle in needles)
 
 
+def _read_next_oracle_question_for_todo(todo: TodoSpec, *, limit: int = 4000) -> str:
+    target_dir = REPO_ROOT / "tools/community-outreach/targets" / todo.slug()
+    p = target_dir / "next_oracle_question.md"
+    try:
+        text = p.read_text(encoding="utf-8", errors="replace").strip()
+    except OSError:
+        text = ""
+    if text:
+        return text[:limit]
+    workup = ""
+    try:
+        workup = (target_dir / "codex_workup.md").read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", workup)
+    if not match:
+        return ""
+    return match.group(1).strip()[:limit]
+
+
+def _run_local_codex_replay_after_oracle(
+    todo: TodoSpec,
+    *,
+    turn_idx: int,
+    per_turn_timeout: int,
+) -> dict:
+    """Run the local Codex worker after an Oracle answer and before follow-up.
+
+    The Oracle can suggest proofs, constructions, or certificate plans, but the
+    pipeline must not blindly continue the ChatGPT thread. This hook forces the
+    local harness to inspect the newly preserved claim packet / materialized
+    FILE blocks, run feasible checks, and select the next precise Oracle task.
+    """
+    script = REPO_ROOT / "tools/community-outreach/outreach_local_repair.py"
+    if not script.exists():
+        return {"ok": False, "error": f"missing local repair script at {script}"}
+    timeout = max(120, min(int(per_turn_timeout), int(os.environ.get("OUTREACH_POST_ORACLE_REPLAY_TIMEOUT", "1800"))))
+    cmd = [
+        "python3",
+        str(script),
+        "--todo-id",
+        todo.todo_id,
+        "--timeout",
+        str(timeout),
+        "--json",
+    ]
+    started = time.time()
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=timeout + 120,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        return {
+            "ok": False,
+            "todo_id": todo.todo_id,
+            "turn": turn_idx,
+            "returncode": 124,
+            "elapsed_seconds": int(time.time() - started),
+            "stdout": _compact_excerpt(exc.stdout or "", 2000),
+            "stderr": _compact_excerpt((exc.stderr or "") + f"\nTIMEOUT after {timeout}s", 2000),
+        }
+    payload: dict = {}
+    if proc.stdout.strip():
+        try:
+            payload = json.loads(proc.stdout)
+        except json.JSONDecodeError:
+            payload = {}
+    ok = proc.returncode == 0 and bool(payload.get("ok"))
+    target_dir = REPO_ROOT / "tools/community-outreach/targets" / todo.slug()
+    state_path = target_dir / "local_repair_last.json"
+    state: dict = {}
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        state = {}
+    postcheck = state.get("postcheck") if isinstance(state, dict) else {}
+    if not isinstance(postcheck, dict):
+        postcheck = {}
+    substantive = postcheck.get("substantive_local_work") if isinstance(postcheck, dict) else {}
+    trace = postcheck.get("codex_command_trace") if isinstance(postcheck, dict) else {}
+    diagnostics = []
+    if isinstance(substantive, dict):
+        diagnostics.extend(str(x) for x in substantive.get("diagnostics", []) or [])
+    if not ok:
+        diagnostics.append(str(payload.get("error") or payload.get("returncode") or proc.stderr[:500] or "local repair failed"))
+    return {
+        "ok": ok,
+        "todo_id": todo.todo_id,
+        "turn": turn_idx,
+        "returncode": proc.returncode,
+        "elapsed_seconds": int(time.time() - started),
+        "stdout_excerpt": _compact_excerpt(proc.stdout or "", 2000),
+        "stderr_excerpt": _compact_excerpt(proc.stderr or "", 2000),
+        "local_repair_last": str(state_path.relative_to(REPO_ROOT)) if state_path.exists() else "",
+        "postcheck_ok": bool(postcheck.get("ok")) if isinstance(postcheck, dict) else False,
+        "codex_command_trace_ok": bool(trace.get("ok")) if isinstance(trace, dict) else False,
+        "substantive_local_work_ok": bool(substantive.get("ok")) if isinstance(substantive, dict) else False,
+        "diagnostics": diagnostics[:8],
+        "next_oracle_question": _read_next_oracle_question_for_todo(todo),
+    }
+
+
 def _load_distill_codex_exec() -> bool:
     global _DISTILL_LOG_DIR, _distill_codex_exec, _CODEX_EXEC_IMPORT_ERROR
     if _distill_codex_exec is not None:
@@ -1424,6 +1569,20 @@ def _science_gate_context_for_todo(todo: TodoSpec) -> str:
         "reasons": data.get("reasons", []) or [],
     }
     return json.dumps(keep, ensure_ascii=False, indent=2)
+
+
+def _science_gate_status_for_todo(todo: TodoSpec) -> dict:
+    try:
+        from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: PLC0415
+        verdict = science_gate_evaluate(todo)
+        data = verdict.to_dict()
+    except Exception as exc:  # noqa: BLE001
+        return {"error": str(exc), "status": "", "next_action": "", "missing": []}
+    return {
+        "status": data.get("status", ""),
+        "next_action": data.get("next_action", ""),
+        "missing": data.get("missing", []) or [],
+    }
 
 
 def _local_harness_context_for_todo(todo: TodoSpec) -> str:
