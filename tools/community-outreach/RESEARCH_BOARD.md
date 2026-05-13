@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — The Sidon diameter limsup constant b is a real high-impact additive-combinatorics problem, but this candidate is not framed as a direct attack on b, a new bound, a construction, or a rigorously specified reusable verifie |
+| Status | **🔴 DROP · profile judge DROP** — The Sidon diameter limsup constant b is a real high-impact open problem, but this candidate is not a sufficiently specified automated-deep-reasoning target. The proposed piecewise-affine ansatz extremality claim is a der |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
