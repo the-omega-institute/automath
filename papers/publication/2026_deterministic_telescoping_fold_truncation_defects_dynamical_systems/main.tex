@@ -779,6 +779,96 @@ v_{m,j}
 \pi_{\infty\to m}(Z(A_{m,j})).
 \]
 
+\begin{lemma}[Endpoint skeletons]
+\label{lem:adjacent-endpoint-skeletons}
+Let $m\ge 1$ and $1\le j\le m$, put $k:=m+1-j$ and $d:=m-k$.  On the
+coordinate interval $\{k,k+1,\dots,m\}$ the two endpoint Zeckendorf skeletons
+are
+\[
+\begin{array}{c|c|c}
+d & \pi_{\{k,\dots,m\}}Z(A_{m,j})
+& \pi_{\{k,\dots,m\}}Z(F_{m+1}+A_{m,j})\\ \hline
+0&0&1\\
+2r+1&10(01)^r&00(10)^r\\
+2r\ (r\ge 1)&00(10)^{r-1}1&10(01)^{r-1}0.
+\end{array}
+\]
+In particular, xoring the two skeletons gives
+\[
+\pi_{\{k,\dots,m\}}v_{m,j}=1\quad(d=0),
+\qquad
+\pi_{\{k,\dots,m\}}v_{m,j}=10\,1^{d-1}\quad(d\ge 1),
+\]
+and every coordinate of $v_{m,j}$ below $k$ is zero.
+\end{lemma}
+
+\begin{proof}
+Since $A_{m,j}=F_{m+2}-F_{k+2}$, it is enough to identify the displayed
+admissible words by their Fibonacci values.  In the odd case $d=2r+1$, the
+first-column word has value
+\[
+F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}=F_{m+2}-F_{k+2}.
+\]
+In the even case $d=2r$ with $r\ge 1$, the first-column word has value
+\[
+\sum_{s=1}^r F_{k+2s+1}=F_{k+2r+2}-F_{k+2}=F_{m+2}-F_{k+2}.
+\]
+Thus the first column represents $A_{m,j}$; for $d=0$ this value is $0$.
+
+For the second column, the case $d=0$ is immediate because
+$F_{m+1}+A_{m,j}=F_{k+1}$.  If $d=2r+1$, the displayed second-column word has
+value
+\[
+\sum_{s=1}^{r+1}F_{k+2s+1}=F_{k+2r+4}-F_{k+2}=F_{m+1}+F_{m+2}-F_{k+2},
+\]
+and if $d=2r$, it has value
+\[
+F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}=F_{m+1}+F_{m+2}-F_{k+2}.
+\]
+All displayed words are admissible, so Zeckendorf uniqueness identifies the two
+skeletons.  Their xor is exactly the asserted pattern, and the definition of
+$v_{m,j}$ gives zeros below $k$ because both endpoint skeletons have no nonzero
+coordinate below $k$.
+\end{proof}
+
+\begin{lemma}[No-carry stability on adjacent intervals]
+\label{lem:adjacent-no-carry-stability}
+Let $m\ge 1$, $1\le j\le m$, and
+\[
+I_{m,j}:=[A_{m,j},A_{m,j}+L_{m,j}-1].
+\]
+Then the intervals $I_{m,j}$ are consecutive and cover $[0,F_{m+2}-2]$.  If
+$t\in I_{m,j}$, then
+\[
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t))=v_{m,j}.
+\]
+\end{lemma}
+
+\begin{proof}
+The intervals are consecutive because $A_{m,j+1}=A_{m,j}+L_{m,j}$, and their
+union is $[0,F_{m+2}-2]$ since $A_{m,m}+L_{m,m}-1=F_{m+2}-2$.
+
+Fix $j$, set $k:=m+1-j$, and write $t=A_{m,j}+u$ with $0\le u<L_{m,j}=F_k$.
+The Zeckendorf expansion of $u$ has no nonzero coordinate in positions
+$k-1,k,\dots$.  By Lemma~\ref{lem:adjacent-endpoint-skeletons}, the expansions
+of $A_{m,j}$ and $F_{m+1}+A_{m,j}$ are supported in positions at least $k$, and
+their lowest possible nonzero coordinate is either $k$ or at least $k+2$;
+moreover all nonzero coordinates in each high skeleton are separated by at
+least one zero coordinate.  Hence the support of $Z(u)$ lies strictly below the
+support of each high skeleton, with a zero separator at coordinate $k-1$ or
+$k$.  Adding $u$ therefore creates neither an adjacent pair of $1$'s nor a
+Fibonacci carry across the interface.
+
+Consequently $Z(A_{m,j}+u)$ is obtained by concatenating the low block $Z(u)$
+below $k$ with the high skeleton $Z(A_{m,j})$ on and above $k$, and
+$Z(F_{m+1}+A_{m,j}+u)$ is obtained by concatenating the same low block with the
+high skeleton $Z(F_{m+1}+A_{m,j})$.  The common low block cancels in the xor, so
+the projected xor is independent of $u$ and equals its value at $u=0$, namely
+$v_{m,j}$.
+\end{proof}
+
 \begin{proposition}[Adjacent kernel support and multiplicities]
 \label{prop:adjacent-kernel-support}
 For every $m\ge 1$, the nonzero values of
@@ -842,85 +932,12 @@ Writing $s=F_{m+1}+t$, the same theorem gives
 \oplus
 \pi_{\infty\to m}(Z(t)),
 \]
-where $0\le t\le F_{m+2}-2$.  Thus the support question is a question about
-this displayed map of the integer interval $[0,F_{m+2}-2]$.
-
-We first prove the interval claim.  The intervals
-\[
-I_{m,j}:=[A_{m,j},A_{m,j}+L_{m,j}-1]
-\qquad (1\le j\le m)
-\]
-are consecutive because $A_{m,j+1}=A_{m,j}+L_{m,j}$, and their union is
-$[0,F_{m+2}-2]$ because $A_{m,m}+L_{m,m}-1=F_{m+2}-2$.
-
-Fix $j$ and put $k:=m+1-j$.  Then $L_{m,j}=F_k$ and
-\[
-A_{m,j}=F_{m+2}-F_{k+2}.
-\]
-For $t\in I_{m,j}$ write $t=A_{m,j}+u$ with $0\le u<F_k$.  Since
-$u<F_k$, the Zeckendorf expansion of $u$ has no nonzero digit in positions
-$k-1,k,\dots$.  The Zeckendorf expansions of $A_{m,j}$ and
-$F_{m+1}+A_{m,j}$ are supported in positions at least $k$.  More precisely,
-if $d=m-k$, then a direct induction on $d$ using
-$F_{r+2}=F_{r+1}+F_r$ shows that $Z(F_{m+2}-F_{k+2})$ has its lowest nonzero
-position equal to $k$ for odd $d$ and at least $k+2$ for even $d$; the same
-statement with the parities reversed holds for
-$Z(F_{m+1}+F_{m+2}-F_{k+2})$.  All remaining nonzero positions in these two
-skeletons are spaced by at least two.  Hence the support of $Z(u)$ is separated
-from each high skeleton by at least one zero digit, so no carry or
-renormalization occurs when $u$ is added.  Thus the high-digit parts
-of $Z(t)$ and $Z(A_{m,j})$ agree in every position $i\ge k$, while the low
-part below $k$ is precisely $Z(u)$.
-The same argument applied to
-\[
-F_{m+1}+t=F_{m+1}+A_{m,j}+u
-\]
-shows that the high-digit parts of $Z(F_{m+1}+t)$ and
-$Z(F_{m+1}+A_{m,j})$ agree in every position $i\ge k$, with the same low part
-$Z(u)$ below $k$.  Therefore the low parts cancel in the xor and the projected
-xor is independent of $u$.  It is its value at $u=0$, namely $v_{m,j}$.
-
-We now make the skeleton description explicit.  Write only the coordinates
-$k,k+1,\dots,m$ and put $d=m-k$.  The endpoint skeletons used above are
-\[
-\begin{array}{c|c|c}
-d & \pi_{\{k,\dots,m\}}Z(A_{m,j})
-& \pi_{\{k,\dots,m\}}Z(F_{m+1}+A_{m,j})\\ \hline
-0&0&1\\
-2r+1&10(01)^r&00(10)^r\\
-2r\ (r\ge 1)&00(10)^{r-1}1&10(01)^{r-1}0.
-\end{array}
-\]
-Indeed, in each row the displayed word is admissible.  For the first column,
-the Fibonacci sums are
-\[
-F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}
-\]
-in the odd case $d=2r+1$, and
-\[
-\sum_{s=1}^r F_{k+2s+1}=F_{k+2r+2}-F_{k+2}
-\]
-in the even case $d=2r$; these are exactly $A_{m,j}=F_{m+2}-F_{k+2}$.
-For the second column with $d\ge 1$, adjoining one further digit $1$ in
-position $m+1$ gives the total value $F_{m+1}+A_{m,j}$: the corresponding sums
-are
-\[
-\sum_{s=1}^{r+1}F_{k+2s+1}=F_{k+2r+4}-F_{k+2}
-\]
-when $d=2r+1$, and
-\[
-F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}
-\]
-when $d=2r$.  The case $d=0$ is immediate.  Uniqueness of Zeckendorf expansion
-therefore gives the table.  Xoring its two columns gives
-\[
-\pi_{\{k,\dots,m\}}v_{m,j}=1\quad(d=0),
-\qquad
-\pi_{\{k,\dots,m\}}v_{m,j}=10\,1^{d-1}\quad(d\ge 1),
-\]
-and all coordinates below $k$ vanish.  This is the displayed coordinate formula
-for $v_{m,j}$.  In particular the first nonzero coordinate of $v_{m,j}$ is
-$m+1-j$, so the vectors $v_{m,1},\dots,v_{m,m}$ are distinct.
+where $0\le t\le F_{m+2}-2$.  Lemma~\ref{lem:adjacent-no-carry-stability}
+therefore proves the interval claim and shows that the only nonzero support
+points are among $v_{m,1},\dots,v_{m,m}$.  Lemma~\ref{lem:adjacent-endpoint-skeletons}
+gives the displayed coordinate formula.  In particular the first nonzero
+coordinate of $v_{m,j}$ is $m+1-j$, so the vectors
+$v_{m,1},\dots,v_{m,m}$ are distinct.
 
 It remains to count multiplicities under raw prefixes.  By
 Theorem~\ref{thm:adjacent-threshold}, zero is produced by exactly the $C_m$
@@ -1576,6 +1593,80 @@ by applying $T$ to the emitted label $a(y')$.  Thus after $\ell$ future symbols
 the joint law on $S\times Q$ is $e_{(y,E)}\mathcal M^\ell$.  The automaton
 outputs $1$ exactly in states $O$ and $Z_1$, which is the vector $h$.  Hence
 $\rho_{\ell,y}=e_{(y,E)}\mathcal M^\ell h$.
+\end{proof}
+
+\begin{proposition}[Sofic defect factor and invariant measures]
+\label{prop:sofic-defect-factor}
+Let $S$ be a finite alphabet, let $A$ be a zero-one transition matrix on $S$,
+and let
+\[
+\Sigma_A:=\{y\in S^{\ZZ}: A_{y_t y_{t+1}}=1\text{ for all }t\in\ZZ\}
+\]
+with the left shift $\sigma$.  Let $a:S\to\{0,1\}$ be a one-block labelling.
+For fixed $m\ge 1$ and $\ell\ge 0$, define
+\[
+\Phi_{m,\ell}:\Sigma_A\longrightarrow (\{0,1\}^m)^{\ZZ}
+\]
+by
+\[
+\bigl(\Phi_{m,\ell}(y)\bigr)_t
+:=
+D_{m+\ell\to m}
+\bigl(a(y_{t+1})a(y_{t+2})\cdots a(y_{t+m+\ell})\bigr).
+\]
+Then $\Phi_{m,\ell}$ is a sliding-block factor map:
+\[
+\Phi_{m,\ell}\circ\sigma=\sigma\circ\Phi_{m,\ell}.
+\]
+Its image $\Phi_{m,\ell}(\Sigma_A)$ is a sofic subshift of
+$(\{0,1\}^m)^{\ZZ}$.  Moreover, if $\nu$ is any $\sigma$-invariant Borel
+probability measure on $\Sigma_A$, then $(\Phi_{m,\ell})_\ast\nu$ is a
+$\sigma$-invariant measure on this sofic defect subshift.  If $\nu$ is the
+stationary Markov measure associated to an irreducible stochastic matrix $P$
+supported on $A$, the one-coordinate marginal of $(\Phi_{m,\ell})_\ast\nu$ is
+the law given in Theorem~\ref{thm:finite-state-factor-law}.
+\end{proposition}
+
+\begin{proof}
+The coordinate $(\Phi_{m,\ell}(y))_t$ depends only on the finite word
+$y_{t+1}\cdots y_{t+m+\ell}$, so $\Phi_{m,\ell}$ is continuous in the product
+topology.  The same local rule is used at every time $t$, which gives
+\[
+(\Phi_{m,\ell}(\sigma y))_t
+=D_{m+\ell\to m}(a(y_{t+2})\cdots a(y_{t+m+\ell+1}))
+=(\Phi_{m,\ell}(y))_{t+1}
+=(\sigma\Phi_{m,\ell}(y))_t.
+\]
+
+We next give an explicit sofic presentation of the image.  Put $R:=m+\ell$.
+Let $\mathcal V$ be the set of admissible words $u=u_1\cdots u_{R-1}$ in $S$ of
+length $R-1$, with the interpretation $\mathcal V=\{\ast\}$ when $R=1$.  Draw an
+edge from $u$ to $v$ whenever the suffix of $u$ of length $R-2$ equals the
+prefix of $v$ of length $R-2$ and the resulting length-$R$ word
+$w=w_1\cdots w_R$ is admissible for $A$; when $R=1$, the edges are the symbols
+$w_1\in S$ themselves.  Label this edge by
+\[
+D_{m+\ell\to m}(a(w_1)\cdots a(w_R))\in\{0,1\}^m.
+\]
+Bi-infinite paths in this finite labelled graph are exactly the overlapping
+length-$R$ windows of points of $\Sigma_A$, and the edge labels are exactly the
+coordinates of $\Phi_{m,\ell}(y)$.  Hence the image is the set of labels read
+along bi-infinite paths in a finite labelled graph, which is a sofic subshift.
+
+If $\nu$ is invariant, then for every Borel set $B\subseteq(\{0,1\}^m)^{\ZZ}$,
+\[
+(\Phi_{m,\ell})_\ast\nu(\sigma^{-1}B)
+=\nu(\Phi_{m,\ell}^{-1}\sigma^{-1}B)
+=\nu(\sigma^{-1}\Phi_{m,\ell}^{-1}B)
+=\nu(\Phi_{m,\ell}^{-1}B),
+\]
+using the factor identity and the invariance of $\nu$.  Thus the push-forward
+measure is invariant.  In the stationary Markov case, the distribution of the
+coordinate at time $0$ is exactly
+\[
+\Law(D_{m+\ell\to m}(a(Y_1)\cdots a(Y_{m+\ell}))),
+\]
+so Theorem~\ref{thm:finite-state-factor-law} gives the stated marginal law.
 \end{proof}
 
 \begin{corollary}[Sliding-window defect process is hidden Markov]
