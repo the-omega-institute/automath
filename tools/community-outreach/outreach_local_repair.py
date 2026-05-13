@@ -317,6 +317,10 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "manifest.json",
         "sha256sums",
     )
+    inspection_only_python_markers = (
+        "python3 -m json.tool",
+        "python -m json.tool",
+    )
     try:
         lines = stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()
     except OSError as exc:
@@ -360,7 +364,8 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             completed_target_command_count += 1
         if any(marker in command_lower for marker in inspection_command_markers):
             inspection_command_count += 1
-        if any(marker in command_lower for marker in replay_command_markers):
+        is_inspection_only_python = any(marker in command_lower for marker in inspection_only_python_markers)
+        if any(marker in command_lower for marker in replay_command_markers) and not is_inspection_only_python:
             replay_command_count += 1
         if any(marker in command_lower for marker in negative_search_markers) and not output.strip():
             negative_artifact_search_count += 1

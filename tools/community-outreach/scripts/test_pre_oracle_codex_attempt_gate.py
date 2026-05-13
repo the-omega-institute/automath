@@ -9,6 +9,8 @@ actual Codex attempt on the current mathematical gap.
 from __future__ import annotations
 
 import importlib.util
+import json
+import tempfile
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parents[1]
@@ -82,6 +84,50 @@ def main() -> int:
     ok, reason = local_repair._workup_has_local_execution_trace(_workup(include_attempt=True))
     if not ok:
         raise AssertionError(f"handoff with a real Codex attempt was rejected: {reason}")
+
+    with tempfile.TemporaryDirectory(dir=SCRIPT_DIR) as tmp:
+        target_dir = Path(tmp) / "demo"
+        target_dir.mkdir()
+        stdout_path = target_dir / "codex.jsonl"
+        rel_target = str(target_dir.relative_to(local_repair.REPO_ROOT))
+        shallow_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'python3 -m json.tool {rel_target}/results.json >/dev/null'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": "",
+            }
+        }
+        stdout_path.write_text(json.dumps(shallow_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("inspection_command_count") or 0) <= 0:
+            raise AssertionError(f"json.tool sanity check was not counted as inspection: {trace}")
+        if int(trace.get("replay_command_count") or 0) != 0:
+            raise AssertionError(f"json.tool sanity check was incorrectly counted as replay: {trace}")
+        substantive = local_repair._substantive_local_workup_check(
+            target_dir,
+            _workup(include_attempt=True),
+            "The local `results.json` exists but the case-3 certificate is missing.",
+            "Ran a target inspection command.",
+            codex_trace=trace,
+        )
+        if substantive.get("ok"):
+            raise AssertionError(f"inspection-only command trace should not pass substantive gate: {substantive}")
+
+        replay_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'python3 {rel_target}/scripts/check_slice.py --case finite --json'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": "checked certificate: passed sha256=abc123\n",
+            }
+        }
+        stdout_path.write_text(json.dumps(replay_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("replay_command_count") or 0) <= 0 or not trace.get("has_evidence_output"):
+            raise AssertionError(f"real target-local check was not counted as replay/evidence: {trace}")
 
     return 0
 
