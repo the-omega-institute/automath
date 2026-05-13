@@ -33,7 +33,7 @@ SUPERVISOR_DAEMON_LOG = SUPERVISOR_LOG_DIR / "supervisor_daemon_current.log"
 RESEARCH_STATUS = STATE_DIR / "research_loop.status.json"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
 
-ORACLE_SERVER_URL = "http://localhost:8766"
+ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 ORACLE_SERVER = SCRIPT_DIR / "outreach_oracle_server.py"
 SUPERVISOR = SCRIPT_DIR / "outreach_supervisor.py"
 ORACLE_RECONCILE = SCRIPT_DIR / "outreach_oracle_reconcile.py"

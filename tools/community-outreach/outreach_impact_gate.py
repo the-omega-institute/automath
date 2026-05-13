@@ -40,6 +40,7 @@ from outreach_science_gate import (  # noqa: E402
 
 NEEDS_RESEARCH = "NEEDS_RESEARCH"
 IMPACT_PLAN_READY = "IMPACT_PLAN_READY"
+NEEDS_PUBLICATION_VALUE = "NEEDS_PUBLICATION_VALUE"
 CLOSE_OR_ARCHIVE = "CLOSE_OR_ARCHIVE"
 BOARD_SKIPPED = "BOARD_SKIPPED"
 
@@ -192,6 +193,25 @@ def _is_bounded_progress_packet(text: str) -> bool:
     return any(marker in lower for marker in markers)
 
 
+def _is_publishable_channel(channel: str) -> bool:
+    return channel in {
+        "short_note",
+        "reproducible_certificate_note",
+        "registry_comment",
+        "opg_comment",
+        "blog_comment",
+        "github_comment",
+        "automath_project_update",
+        "x_thread",
+        "paper_writeback",
+    }
+
+
+def _is_collaboration_context(lane: str, display: str, todo: TodoSpec) -> bool:
+    haystack = " ".join([lane, display, todo.title or "", getattr(todo, "type_", "") or "", todo.status or ""]).lower()
+    return bool(re.search(r"\b(collaboration|collaborate|reply|email thread|waiting reply|frontier subset|paper-trade)\b", haystack))
+
+
 def _append_unique(xs: list[str], item: str) -> None:
     if item and item not in xs:
         xs.append(item)
@@ -266,11 +286,16 @@ def evaluate(todo: TodoSpec) -> ImpactGateVerdict:
     contribution = _science_field(science, slug, "contribution_type").lower()
     lane = _science_field(science, slug, "target_lane")
     display = str(getattr(profile, "final_display_form", "") if profile else "")
+    collaboration_context = _is_collaboration_context(lane, display, todo)
 
     pending_review = "pending user approval" in (todo.status or "").lower()
     ledger = _science_from_ledger(slug) if pending_review else {}
     ledger_status = str(ledger.get("status") or "")
-    if science.status == SCIENCE_BOARD_SKIPPED and not pending_review:
+    if science.status == SCIENCE_BOARD_SKIPPED or re.search(
+        r"\b(OPERATOR_DEPRIORITIZED|OPERATOR PAUSED|PAUSED|SHELVED)\b",
+        todo.status or "",
+        re.I,
+    ):
         return ImpactGateVerdict(
             todo_id=todo.todo_id,
             slug=slug,
@@ -381,9 +406,40 @@ def evaluate(todo: TodoSpec) -> ImpactGateVerdict:
             rationale.append("Automath-facing update should frame this as finite verified progress and a next-proof reduction")
         else:
             rationale.append("strong Automath fit should backflow into project-facing update material")
-    if lane == "collaboration_lane" or re.search(r"\b(email|collaboration|reply)\b", display, re.I):
+    if collaboration_context:
         _append_unique(channels, "author_email")
         rationale.append("collaboration lane should use direct email first; secondary channels remain available after the reviewed note exists")
+
+    if not collaboration_context and not any(_is_publishable_channel(ch) for ch in channels):
+        return ImpactGateVerdict(
+            todo_id=todo.todo_id,
+            slug=slug,
+            title=todo.title,
+            status=NEEDS_PUBLICATION_VALUE,
+            science_status=effective_science_status,
+            primary_channel="none",
+            channels=[],
+            audience="internal research loop",
+            draft_paths=[_target_file(slug, "research.md")],
+            impact_contract={
+                "goal": "upgrade the target from private follow-up to publishable/public mathematical contribution",
+                "science_gate_required": WRITEBACK_READY,
+                "primary_channel": "none",
+                "secondary_channels": [],
+                "disclosure_order": "no_external_disclosure",
+                "operator_decision_needed": ["decide whether to strengthen, merge into a larger note, or archive"],
+            },
+            prohibited_actions=["external_send", "public_post", "private_email_as_terminal_goal"],
+            impact_score=0,
+            rationale=[
+                "non-collaboration target lacks a publishable/public terminal artifact",
+                "private email or minor follow-up is not enough for current research lanes",
+            ],
+            required_before_send=[
+                "Strengthen into a paper/short note/public certificate/verifier/serious registry contribution before any outreach."
+            ],
+            next_action="continue_deep_reason",
+        )
 
     primary = "author_email" if "author_email" in channels else (channels[0] if channels else source_channel)
     draft_paths = [_target_file(slug, "research.md")]

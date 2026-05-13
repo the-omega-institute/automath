@@ -49,7 +49,7 @@ RESEARCH_BOARD = SCRIPT_DIR / "RESEARCH_BOARD.md"
 DRAFTS_DIR = SCRIPT_DIR / "drafts"
 TARGETS_DIR = SCRIPT_DIR / "targets"
 
-ORACLE_SERVER_URL = "http://localhost:8766"
+ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 CLAUDE_PATH = shutil.which("claude") or "/opt/homebrew/bin/claude"
 
 ESCALATE_AFTER_REPEATS = 2

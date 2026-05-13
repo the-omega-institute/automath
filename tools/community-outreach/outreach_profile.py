@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -296,12 +297,19 @@ def _validate_taste_obligations(taste: object, *, origin: str) -> list[str]:
         "reproducibility_witness",
         "layer_separation_witness",
     ]
-    weak_terms = ("placeholder", "to be filled", "tbd", "n/a", "none", "unknown")
+    weak_patterns = (
+        r"\bplaceholder\b",
+        r"\bto be filled\b",
+        r"\btbd\b",
+        r"\bn/a\b",
+        r"\bnone\b",
+        r"\bunknown\b",
+    )
     for key in required:
         value = str(taste.get(key) or "").strip()
         if len(value) < 40:
             errors.append(f"science_contract taste_obligations.{key} is too short")
-        if any(term in value.lower() for term in weak_terms):
+        if any(re.search(pattern, value, re.I) for pattern in weak_patterns):
             errors.append(f"science_contract taste_obligations.{key} is placeholder-like")
     return errors
 

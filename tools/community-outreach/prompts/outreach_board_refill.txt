@@ -30,8 +30,9 @@ You DO NOT see our current RESEARCH_BOARD (intentional — we don't want you anc
 4. **Solvable with our machinery eventually** — prefer problems where Omega/automath gives immediate leverage, but do not require an existing main-paper bridge up front. If a problem is genuinely interesting and plausibly solvable, propose it and name the bridge we would try to build later. Low current fit is acceptable only when the topic has exceptional academic impact.
 5. **Doable size** — a single oracle / codex / claude run in 1-3 weeks could produce a publishable contribution (full proof, partial proof, or finite certificate). Not a 10-year program. Not trivial restatement.
 6. **High publication value** — main structure / classification / rigidity / extremality / obstruction / impossibility theorem. Not "compute one more case of an existing pattern".
-7. **Distinguishable from our 21 publication papers** — read PROGRAM_BOARD + MAIN_PAPER_INDEX; if a candidate is already someone-else's-side-of-our-own-paper, drop it.
-8. **Clear final display form** — before proposing the candidate, decide what the first public artifact would be: registry/forum comment, author email, short note, arXiv follow-up, paper appendix, Lean-formalization handoff, or drop. If you cannot name a concrete artifact and audience, do not propose it.
+7. **Publishable terminal goal by default** — except for explicitly tracked collaboration/email lanes, the terminal artifact must be a paper, short note, public certificate/verifier package, serious forum/registry contribution, or other externally reviewable mathematical result. Do not propose a target whose natural end state is only a private email.
+8. **Distinguishable from our 21 publication papers** — read PROGRAM_BOARD + MAIN_PAPER_INDEX; if a candidate is already someone-else's-side-of-our-own-paper, drop it.
+9. **Clear final display form** — before proposing the candidate, decide what the first public artifact would be: registry/forum comment, author email, short note, arXiv follow-up, paper appendix, Lean-formalization handoff, or drop. If you cannot name a concrete artifact and audience, do not propose it.
 
 # Anti-patterns — explicitly REJECT candidates that
 
@@ -40,6 +41,7 @@ You DO NOT see our current RESEARCH_BOARD (intentional — we don't want you anc
 - Are "compute slightly larger case of <existing finite verification>".
 - Are "recent arXiv paper asks a tiny follow-up question; maybe add a small table".
 - Are low-impact author-email follow-ups where the likely artifact is only a private note to a non-influential author.
+- Are non-collaboration targets whose only plausible endpoint is email rather than a publishable or public mathematical artifact.
 - Are derivative tweaks inside another person's small paper rather than a result with independent mathematical weight.
 - Are merely broad research directions, surveys, or "maybe Automath can help" ideas without a crisp theorem/counterexample/certificate target.
 - Have low academic impact unless they are a clean certificate/theorem target that could become a short note.
@@ -49,41 +51,37 @@ You DO NOT see our current RESEARCH_BOARD (intentional — we don't want you anc
 
 # Output format
 
-Output ONLY a JSON object — no markdown fences, no surrounding prose:
+Your job is source discovery and mathematical judgment, not schema formatting.
+Natural-language bullets or a compact table are fine. A local Codex adapter will
+convert your response to the board JSON schema after you finish.
 
-```
-{
-  "candidates": [
-    {
-      "title": "<short title, ≤80 chars>",
-      "source_url": "<canonical URL>",
-      "type": "DECIDABLE|EXISTENCE|CLASSIFICATION|EXTREMALITY|OBSTRUCTION|RIGIDITY",
-      "statement": "<one-sentence precise statement of what would be proved>",
-      "untouched_evidence": "<which AI-contribution / SOTA gap leaves this open>",
-      "omega_fit_detail": "<which Omega lemmas / structures plug in, with file paths>",
-      "fit_score": <0-10>,
-      "topic_score": <0-10>,
-      "effort_estimate_days": <int>,
-      "risk_level": "low|med|high",
-      "first_attack_step": "<what the very first prompt / script we'd write looks like>",
-      "final_display_form": "<concrete public/private artifact + audience, e.g. OPG comment + author email with reproducible certificate>",
-      "success_gate": "<what must be true before any external send, e.g. theorem statement + script output + operator-approved final markdown>",
-      "rationale": "<2-3 sentences on why this is real, doable, and not already taken>"
-    }
-  ]
-}
-```
+For each candidate, make these labels explicit enough for the adapter to read:
+
+- `title`: short title, ≤80 chars
+- `source_url`: canonical public URL
+- `type`: DECIDABLE, EXISTENCE, CLASSIFICATION, EXTREMALITY, OBSTRUCTION, or RIGIDITY
+- `statement`: one-sentence precise statement of what would be proved
+- `untouched_evidence`: which AI-contribution / SOTA gap leaves this open
+- `omega_fit_detail`: which Omega lemmas / structures plug in, with file paths if known
+- `fit_score`: 0-10
+- `topic_score`: 0-10
+- `effort_estimate_days`: integer
+- `risk_level`: low, med, or high
+- `first_attack_step`: what the first prompt / script we'd write looks like
+- `final_display_form`: concrete public/private artifact + audience, e.g. OPG comment + author email with reproducible certificate
+- `success_gate`: what must be true before any external send, e.g. theorem statement + script output + operator-approved final markdown
+- `rationale`: 2-3 sentences on why this is real, doable, and not already taken
 
 # Quality bar
 
-Quality > quantity. **Three strong candidates beats ten weak ones.** If you cannot find three real candidates, output fewer (or none, with `"candidates": []`).
+Quality > quantity. **Three strong candidates beats ten weak ones.** If you cannot find three real candidates, output fewer. If none meet the bar, say so directly and explain the main rejection reasons.
 
 The local harness will discard candidates unless they pass a strict
 academic-impact gate: credible public source, specific mathematical statement,
 freshness/untouched evidence, high topic score, bounded first attack step,
 concrete final display, and a success gate. Write for that gate.
 
-Do not let `arxiv_watch_recent.txt` dominate your answer. arXiv is only one information source. If the recent arxiv_watch / lit_staleness signals point to low-impact or derivative candidates that fail the criteria, ignore them or return `[]` — that is a valid result.
+Do not let `arxiv_watch_recent.txt` dominate your answer. arXiv is only one information source. If the recent arxiv_watch / lit_staleness signals point to low-impact or derivative candidates that fail the criteria, ignore them or say no candidate passed the bar — that is a valid result.
 
 # Recent signals from our pipeline (last 7 days)
 
@@ -111,4 +109,4 @@ Do not let `arxiv_watch_recent.txt` dominate your answer. arXiv is only one info
 {targeted_context_refresh}
 ```
 
-Begin. Do not preface. Output only the JSON object.
+Begin. Do not preface. Prioritize correct research judgment over formatting.

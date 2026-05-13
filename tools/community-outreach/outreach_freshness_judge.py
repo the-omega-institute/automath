@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import time
 import urllib.request
@@ -30,7 +31,7 @@ from outreach_board_parser import parse_board  # noqa: E402
 from outreach_profile import load_profile  # noqa: E402
 from outreach_preflight import judge_board  # noqa: E402
 
-ORACLE_SERVER_URL = "http://localhost:8766"
+ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 
 
 ORACLE_PROMPT = """You are doing a short source audit for an automated math-research supervisor.

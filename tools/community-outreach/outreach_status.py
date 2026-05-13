@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import urllib.request
@@ -36,6 +37,7 @@ from outreach_board_parser import parse_board  # noqa: E402
 from outreach_task_spec import list_tasks  # noqa: E402
 import outreach_task_runner  # noqa: E402
 from outreach_review_queue import build_queue as build_review_queue  # noqa: E402
+from outreach_impact_gate import evaluate as impact_gate_evaluate  # noqa: E402
 
 
 def _clean_inline(s: str, *, limit: int = 260) -> str:
@@ -256,14 +258,21 @@ def _build_decision_view(report: dict, *, tasks: list, todos: dict, science_rows
             )
 
     for group in (report.get("readable_task_groups") or {}).get("collaborations") or []:
-        if "等待你审阅/批准" in str(group.get("status") or ""):
+        status_text = str(group.get("status") or "")
+        next_text = str(group.get("next") or "")
+        is_waiting = "等待对方回复" in status_text or "不用继续催" in next_text
+        has_unfinished_followup = any(
+            token in status_text
+            for token in ("待处理", "处理中", "退回重做", "写回失败", "阻塞")
+        )
+        if "等待你审阅/批准" in status_text and not is_waiting and not has_unfinished_followup:
             _add_unique(
                 ready,
                 {
                     "name": str(group.get("name") or ""),
                     "kind": "collaboration",
                     "why": _collaboration_ready_reason(group),
-                    "next": str(group.get("next") or "等你审阅；批准前不会发送"),
+                    "next": next_text or "等你审阅；批准前不会发送",
                 },
             )
 
@@ -272,7 +281,17 @@ def _build_decision_view(report: dict, *, tasks: list, todos: dict, science_rows
         _row_key(title=str(row.get("title") or ""), slug=str(row.get("slug") or ""), todo_id=str(row.get("todo_id") or ""))
         for row in sg.get("close_ready") or []
     }
+    impact_by_todo = {}
+    for todo in todos.values():
+        try:
+            impact_by_todo[todo.todo_id] = impact_gate_evaluate(todo)
+        except Exception:
+            pass
+
     for row in sg.get("writeback_ready") or []:
+        impact = impact_by_todo.get(str(row.get("todo_id") or ""))
+        if impact is not None and getattr(impact, "status", "") == "BOARD_SKIPPED":
+            continue
         key = _row_key(title=str(row.get("title") or ""), slug=str(row.get("slug") or ""), todo_id=str(row.get("todo_id") or ""))
         next_text = "可进入 operator review；批准后再决定论文/邮件/评论/X 的宣发形式"
         if key in close_names:
@@ -329,11 +348,25 @@ def _build_decision_view(report: dict, *, tasks: list, todos: dict, science_rows
 
 
 def _server_status() -> dict:
+    url = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766") + "/status"
     try:
-        with urllib.request.urlopen("http://localhost:8766/status", timeout=2) as r:
+        with urllib.request.urlopen(url, timeout=2) as r:
             return json.loads(r.read().decode("utf-8"), strict=False)
-    except Exception as exc:
-        return {"alive": False, "error": str(exc)}
+    except Exception as urllib_exc:  # noqa: BLE001
+        try:
+            proc = subprocess.run(
+                ["curl", "-fsS", "--max-time", "2", url],
+                capture_output=True,
+                text=True,
+                timeout=4,
+                check=False,
+            )
+            if proc.returncode == 0:
+                return json.loads(proc.stdout, strict=False)
+            curl_error = (proc.stderr or "").strip() or f"curl exited {proc.returncode}"
+        except Exception as curl_exc:  # noqa: BLE001
+            curl_error = str(curl_exc)
+        return {"alive": False, "error": f"urllib={urllib_exc}; curl={curl_error}"}
 
 
 def _matching_processes(pattern: str) -> list[dict]:

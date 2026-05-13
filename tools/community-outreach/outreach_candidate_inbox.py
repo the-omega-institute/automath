@@ -30,6 +30,16 @@ REQUIRED = {
 }
 
 MIN_ACADEMIC_IMPACT_SCORE = 36
+HARD_MISSING_PREFIXES = (
+    "missing title",
+    "missing source_url",
+    "missing statement",
+    "missing rationale",
+    "missing final_display_form",
+    "missing success_gate",
+    "source_url must be http(s)",
+    "type must be a concrete mathematical contribution class",
+)
 
 HIGH_IMPACT_PATTERNS = (
     r"\b(conjecture|problem|open problem|famous|longstanding|classical|major|central)\b",
@@ -145,19 +155,19 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
         ]
     )
 
-    if len(statement) >= 80 and re.search(r"\b(prove|show|classify|construct|decide|bound|exists?|counterexample)\b", statement, re.I):
+    if len(statement) >= 80 and re.search(r"\b(prove|show|classify|construct|find|determine|decide|bound|exists?|exhibit|give|counterexample|every|all|for every)\b", statement, re.I):
         score += 6
         reasons.append("statement is specific")
     else:
         missing.append("specific one-sentence mathematical statement")
 
-    if re.search(r"(arxiv\.org|github\.com|doi\.org|terrytao\.wordpress|openproblem|problemsilike|aimpl|mathoverflow|wordpress|x\.com|twitter\.com)", source_url, re.I):
+    if re.search(r"(arxiv\.org|github\.com|doi\.org|epoch\.ai|frontiermath|terrytao\.wordpress|openproblem|problemsilike|aimpl|mathoverflow|wordpress|x\.com|twitter\.com)", source_url, re.I):
         score += 5
         reasons.append("source is inspectable")
     else:
         missing.append("credible inspectable public source URL")
 
-    if len(untouched) >= 60 and re.search(r"\b(open|not closed|no .*202[4-6]|fresh|current|ai|sota|gap|unresolved)\b", untouched, re.I):
+    if len(untouched) >= 60 and re.search(r"\b(open|unsolved|unknown|not closed|no .*202[4-6]|no .*known|not .*known|fresh|current|ai|sota|gap|unresolved)\b", untouched, re.I):
         score += 5
         reasons.append("freshness/untouched evidence present")
     else:
@@ -234,7 +244,7 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
     else:
         risk_flags.append("effort estimate outside 1-21 day research packet")
 
-    if len(first_step) >= 50 and re.search(r"\b(prove|compute|construct|certify|enumerate|derive|bound|verify|falsify|extract|write|audit|check)\b", first_step, re.I):
+    if len(first_step) >= 50 and re.search(r"\b(prove|compute|construct|certify|enumerate|derive|bound|verify|falsify|extract|write|audit|check|clone|reimplement|implement|run|search|solve|export)\b", first_step, re.I):
         score += 4
     else:
         missing.append("bounded first attack step with a concrete verb")
@@ -257,9 +267,10 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
         score -= 5
 
     lane = "long_horizon_review" if long_horizon else "standard"
-    passed = score >= MIN_ACADEMIC_IMPACT_SCORE and not missing
+    hard_missing = [m for m in missing if any(m.startswith(prefix) for prefix in HARD_MISSING_PREFIXES)]
+    passed = score >= MIN_ACADEMIC_IMPACT_SCORE and not hard_missing
     if not passed and score >= MIN_ACADEMIC_IMPACT_SCORE:
-        reasons.append("score high but mandatory fields are not gate-clean")
+        reasons.append("score high but hard mandatory fields are not gate-clean")
     return CandidateGate(passed=passed, score=score, lane=lane, reasons=reasons, missing=missing, risk_flags=risk_flags)
 
 

@@ -48,6 +48,10 @@ SKIP_STATUS_PATTERNS = (
     "OVERTAKEN",
     "SOLVED",
     "Submitted",
+    "OPERATOR_DEPRIORITIZED",
+    "OPERATOR PAUSED",
+    "PAUSED",
+    "SHELVED",
 )
 
 HANDOFF_PATTERNS = (
@@ -64,6 +68,65 @@ CLOSED_PATTERNS = (
     "overtaken",
     "literature closed",
     "not open",
+)
+
+PUBLISHABLE_DISPLAY_PATTERNS = (
+    "paper",
+    "short note",
+    "research note",
+    "research memo",
+    "public artifact",
+    "public certificate",
+    "certificate package",
+    "certificate archive",
+    "certificate registry",
+    "verifier",
+    "reproducible",
+    "registry",
+    "forum",
+    "github",
+    "blog comment",
+    "arxiv",
+    "appendix",
+    "theorem",
+    "counterexample",
+    "construction",
+    "classification",
+    "obstruction",
+)
+
+PRIVATE_CONTACT_PATTERNS = (
+    "author email",
+    "private email",
+    "email_authors",
+    "email authors",
+    "workshop_author_email",
+    "private outreach",
+)
+
+PUBLISHABLE_MIN_TOPIC_SCORE = 8
+PUBLISHABLE_MIN_TOTAL_SCORE = 16
+PUBLISHABLE_MIN_NOVELTY_SCORE = 8
+
+LOW_IMPACT_SOURCE_PATTERNS = (
+    "arxiv.org",
+)
+
+HIGH_IMPACT_SOURCE_PATTERNS = (
+    "github.com/google-deepmind/formal-conjectures",
+    "formal-conjectures",
+)
+
+FRONTIER_TITLE_PATTERNS = (
+    "hadwiger",
+    "ramsey",
+    "r(5,5)",
+    "hadamard",
+    "maxdet",
+    "projective plane",
+    "barnette",
+    "certificate frontier",
+    "formal conjecture",
 )
 
 
@@ -206,11 +269,96 @@ def _freshness_judge_errors(slug: str) -> list[str]:
     return []
 
 
+def _profile_target_lane(profile) -> str:
+    contract = getattr(profile, "science_contract", None)
+    return str(getattr(contract, "target_lane", "") or "").strip()
+
+
+def _is_collaboration_lane(todo: TodoSpec, profile) -> bool:
+    lane = _profile_target_lane(profile)
+    if lane == "collaboration_lane":
+        return True
+    haystack = " ".join(
+        [
+            todo.title or "",
+            todo.status or "",
+            todo.type_ or "",
+            getattr(todo, "final_display", "") or "",
+            getattr(profile, "final_display_form", "") if profile is not None else "",
+        ]
+    ).lower()
+    return bool(re.search(r"\b(collaboration|collaborator|paper[- ]trade|email thread)\b", haystack))
+
+
+def _has_publishable_terminal_surface(text: str) -> bool:
+    lower = " ".join(str(text or "").lower().split())
+    return any(pat in lower for pat in PUBLISHABLE_DISPLAY_PATTERNS)
+
+
+def _looks_private_only_terminal_surface(text: str) -> bool:
+    lower = " ".join(str(text or "").lower().split())
+    if not lower:
+        return False
+    has_private = any(pat in lower for pat in PRIVATE_CONTACT_PATTERNS)
+    return has_private and not _has_publishable_terminal_surface(lower)
+
+
+def _contract_quality_value(science_gate, key: str, default: int = 0) -> int:
+    quality = getattr(science_gate, "contract_quality", {}) or {}
+    if isinstance(quality, dict):
+        value = quality.get(key, default)
+    else:
+        value = getattr(quality, key, default)
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _is_high_impact_public_source(todo: TodoSpec) -> bool:
+    source = (todo.source or "").lower()
+    title = (todo.title or "").lower()
+    if any(pat in source for pat in HIGH_IMPACT_SOURCE_PATTERNS):
+        return True
+    return any(pat in title for pat in FRONTIER_TITLE_PATTERNS)
+
+
+def _is_derivative_recent_arxiv_only(todo: TodoSpec, display_blob: str) -> bool:
+    source = (todo.source or "").lower()
+    text = " ".join(
+        [
+            todo.title or "",
+            todo.statement or "",
+            todo.untouched or "",
+            display_blob or "",
+        ]
+    ).lower()
+    if not any(pat in source for pat in LOW_IMPACT_SOURCE_PATTERNS):
+        return False
+    if _is_high_impact_public_source(todo):
+        return False
+    derivative_markers = (
+        "author email",
+        "author-facing",
+        "follow-up",
+        "small",
+        "table",
+        "compute",
+        "recent arxiv",
+        "arxiv:",
+        "private outreach",
+    )
+    return any(marker in text for marker in derivative_markers)
+
+
 def judge(todo: TodoSpec) -> PreflightVerdict:
     display = _display_plan(todo)
     reasons: list[str] = []
     missing: list[str] = []
     risk_flags: list[str] = []
+    fit = todo.fit_score or 0
+    topic = todo.topic_score or 0
+    score = fit + topic
     status_blob = " ".join(
         [
             todo.status or "",
@@ -255,14 +403,44 @@ def judge(todo: TodoSpec) -> PreflightVerdict:
         if freshness_errors:
             risk_flags.extend(f"freshness gate warning: {e}" for e in freshness_errors)
     if profile is not None and profile.slug == todo.slug():
+        display_blob = " ".join(
+            [
+                display.kind or "",
+                display.artifact or "",
+                display.audience or "",
+                display.success_gate or "",
+                profile.final_display_form or "",
+                profile.fallback_contribution or "",
+            ]
+        )
+        if not _is_collaboration_lane(todo, profile):
+            if not _has_publishable_terminal_surface(display_blob):
+                missing.append("publishable/public terminal artifact for non-collaboration target")
+            elif _looks_private_only_terminal_surface(display_blob):
+                missing.append("non-collaboration target cannot terminate in private/author email only")
         science_gate = contract_from_profile(todo)
         if science_gate.status != CONTRACT_READY:
             missing.extend(f"science gate: {m}" for m in science_gate.missing)
             risk_flags.append(f"science_gate={science_gate.status}")
+        elif not _is_collaboration_lane(todo, profile):
+            lane = getattr(science_gate, "target_lane", "") or _profile_target_lane(profile)
+            novelty = _contract_quality_value(science_gate, "novelty_score")
+            frontier_like = lane == "frontier_lane" or _is_high_impact_public_source(todo)
+            if topic < PUBLISHABLE_MIN_TOPIC_SCORE and not frontier_like:
+                missing.append(
+                    f"publishable-value gate: topic_score={topic} < {PUBLISHABLE_MIN_TOPIC_SCORE}"
+                )
+            if score < PUBLISHABLE_MIN_TOTAL_SCORE and not frontier_like:
+                missing.append(
+                    f"publishable-value gate: fit+topic={score} < {PUBLISHABLE_MIN_TOTAL_SCORE}"
+                )
+            if novelty < PUBLISHABLE_MIN_NOVELTY_SCORE and not frontier_like:
+                missing.append(
+                    f"publishable-value gate: novelty_score={novelty} < {PUBLISHABLE_MIN_NOVELTY_SCORE}"
+                )
+            if _is_derivative_recent_arxiv_only(todo, display_blob) and not frontier_like:
+                missing.append("publishable-value gate: derivative arXiv follow-up needs explicit public significance")
 
-    fit = todo.fit_score or 0
-    topic = todo.topic_score or 0
-    score = fit + topic
     if fit < 7:
         risk_flags.append(f"low Omega fit ({fit}/10)")
     if topic < 5:

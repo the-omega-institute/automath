@@ -7,7 +7,7 @@ after the supervisor analyses a target. Oracle becomes Stage B-third-opinion
 inside the existing supervise flow.
 
 Talks to:
-  - tools/community-outreach/outreach_oracle_server.py on http://localhost:8766
+  - tools/community-outreach/outreach_oracle_server.py on http://127.0.0.1:8766
   - tools/community-outreach/outreach_oracle_macos.user.js running in a ChatGPT.com
     browser tab (the userscript is the ONLY code that touches chatgpt.com)
 
@@ -52,7 +52,7 @@ from typing import Callable, Iterable, Optional
 REPO_ROOT = Path(__file__).resolve().parents[2]
 # OUTREACH-SPECIFIC: separate server (port 8766) from the paper-pipeline oracle (8765).
 # Multi-turn capable from day 1 via outreach_oracle_server.py.
-ORACLE_SERVER = "http://localhost:8766"
+ORACLE_SERVER = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 TARGETS_DIR = REPO_ROOT / "tools/community-outreach/targets"
 ORACLE_LOGS_DIR = REPO_ROOT / "tools/community-outreach/logs/oracle"
 STATE_DIR = REPO_ROOT / "tools/community-outreach/outreach_state"
@@ -112,10 +112,34 @@ def http_get(url: str, timeout: int = 10) -> dict:
     return json.loads(resp.read().decode("utf-8"), strict=False)
 
 
-def is_server_alive() -> bool:
+def _http_get_with_curl(url: str, timeout: int = 10) -> dict:
+    proc = subprocess.run(
+        ["curl", "-fsS", "--max-time", str(max(1, int(timeout))), url],
+        capture_output=True,
+        text=True,
+        timeout=timeout + 2,
+        check=False,
+    )
+    if proc.returncode != 0:
+        stderr = (proc.stderr or "").strip()
+        raise RuntimeError(stderr or f"curl exited {proc.returncode}")
+    return json.loads(proc.stdout, strict=False)
+
+
+def is_server_alive(server_url: str = ORACLE_SERVER, *, verbose: bool = False) -> bool:
     try:
-        return "queue_length" in http_get(f"{ORACLE_SERVER}/status", timeout=5)
-    except Exception:
+        return "queue_length" in http_get(f"{server_url}/status", timeout=5)
+    except Exception as exc:  # noqa: BLE001
+        urllib_exc = exc
+    try:
+        return "queue_length" in _http_get_with_curl(f"{server_url}/status", timeout=5)
+    except Exception as exc:  # noqa: BLE001
+        if verbose:
+            print(
+                f"[oracle] status check failed at {server_url}: "
+                f"urllib={urllib_exc}; curl={exc}",
+                file=sys.stderr,
+            )
         return False
 
 
@@ -415,7 +439,7 @@ class OracleConsultant:
         self.state_dir.mkdir(parents=True, exist_ok=True)
 
     def is_alive(self) -> bool:
-        return is_server_alive()
+        return is_server_alive(self.server_url, verbose=True)
 
     def review(self, todo: TodoSpec, research_md_path: Path,
                *, timeout: int = DEFAULT_TIMEOUT,

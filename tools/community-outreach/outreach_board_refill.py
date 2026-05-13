@@ -29,6 +29,7 @@ import argparse
 import html
 from html.parser import HTMLParser
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -55,7 +56,7 @@ OPERATOR_MEMORY_PATH = SCRIPT_DIR / "OPERATOR_MEMORY.md"
 sys.path.insert(0, str(SCRIPT_DIR))
 from outreach_candidate_inbox import academic_impact_gate  # noqa: E402
 
-ORACLE_SERVER_URL = "http://localhost:8766"
+ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 
 # Operator-set Project URL — once you build a NEW Project, replace this. The
 # userscript must already be configured to recognize this tab; if not, the
@@ -229,6 +230,8 @@ def _problemsilike_source_snapshot(source_url: str, source_id: str = "") -> dict
     hidden or absent. If an operator asks for a specific id, verify that exact
     id before asking Oracle to reason from it.
     """
+    if "range/1-end" in source_url.lower() and not source_id:
+        return _fetch_public_source(source_url)
     base = "https://www.problemsilike.com"
     checks: list[str] = []
     if source_id:
@@ -382,7 +385,13 @@ Goal: propose 1-3 high-impact open-problem candidates that an audit-first
 AI-for-math pipeline could plausibly attack. Prefer named conjectures,
 public problem lists, GitHub/forum/blog/X discussions, verifier gaps, and
 classification/extremal/rigidity targets. Do not chase low-impact arXiv
-followups. If nothing meets the bar, output {{"candidates":[]}}.
+followups. If nothing meets the bar, say clearly that no candidate meets the
+bar and explain the main rejection reasons.
+
+Hard policy: except for explicitly tracked collaboration/email lanes, every
+candidate must aim at a publishable or externally reviewable mathematical
+contribution. A private author email, minor follow-up, or narrow arXiv add-on is
+not a sufficient terminal goal.
 
 Hard requirements for each candidate:
 - public source URL;
@@ -393,8 +402,15 @@ Hard requirements for each candidate:
 - first local attack step that Codex can execute;
 - success gate before any outreach.
 
-Output ONLY JSON:
-{{"candidates":[{{"title":"","source_url":"","type":"DECIDABLE|EXISTENCE|CLASSIFICATION|EXTREMALITY|OBSTRUCTION|RIGIDITY","statement":"","untouched_evidence":"","omega_fit_detail":"","fit_score":0,"topic_score":0,"effort_estimate_days":1,"risk_level":"low|med|high","first_attack_step":"","final_display_form":"","success_gate":"","rationale":""}}]}}
+Output style:
+- Focus on source discovery, mathematical judgment, and attack planning.
+- Natural language, tables, or bullets are fine.
+- Do not spend reasoning budget on JSON formatting. A local Codex adapter will
+  convert your response into board schema after you finish.
+- For each candidate, make these labels easy to identify: title, source_url,
+  type, statement, untouched_evidence, omega_fit_detail, fit_score,
+  topic_score, effort_estimate_days, risk_level, first_attack_step,
+  final_display_form, success_gate, rationale.
 
 Operator memory:
 {operator_memory}
@@ -414,6 +430,12 @@ Active tracked collaborations/issues/emails to avoid duplicating:
 
 
 def _build_source_focused_prompt(*, source_url: str, source_id: str, source_text: str, final_url: str) -> str:
+    if "problemsilike.com/range/1-end" in final_url.lower() and not source_id:
+        return _build_problemsilike_index_prompt(
+            source_url=source_url,
+            source_text=source_text,
+            final_url=final_url,
+        )
     target_label = f"#{source_id.strip().lstrip('#')}" if source_id else "the supplied source"
     return f"""You are the source-bounded research triage oracle for Omega Outreach.
 
@@ -422,15 +444,60 @@ Requested item: {target_label}
 
 Use ONLY the source snapshot below. Decide whether this is a serious open
 problem candidate for our audit-first AI-for-math pipeline. If the snapshot
-does not contain a precise open problem, output {{"candidates":[]}}.
-
-Output ONLY JSON with at most one candidate:
-{{"candidates":[{{"title":"","source_url":"{final_url}","type":"DECIDABLE|EXISTENCE|CLASSIFICATION|EXTREMALITY|OBSTRUCTION|RIGIDITY","statement":"","untouched_evidence":"","omega_fit_detail":"","fit_score":0,"topic_score":0,"effort_estimate_days":1,"risk_level":"low|med|high","first_attack_step":"","final_display_form":"","success_gate":"","rationale":""}}]}}
+does not contain a precise open problem, say that directly and explain why.
 
 The candidate must name a concrete theorem/counterexample/certificate target,
 not a broad direction. Set final_display_form to a reviewable artifact and
 audience. Set success_gate to the exact proof/check required before external
 outreach. User approval is always required before sending or posting.
+
+Output style:
+- At most one candidate.
+- Natural language or a compact table is fine.
+- Do not spend reasoning budget on JSON formatting. A local Codex adapter will
+  structure your response.
+- If you do propose a candidate, include explicit labels for title, source_url,
+  type, statement, untouched_evidence, omega_fit_detail, fit_score,
+  topic_score, effort_estimate_days, risk_level, first_attack_step,
+  final_display_form, success_gate, rationale.
+
+Source snapshot:
+{source_text[:SOURCE_FETCH_BYTES]}
+"""
+
+
+def _build_problemsilike_index_prompt(*, source_url: str, source_text: str, final_url: str) -> str:
+    return f"""You are the source-bounded research triage oracle for Omega Outreach.
+
+Source URL: {final_url}
+
+Use ONLY the source snapshot below. It is an index/list of open problems.
+Select 1-3 concrete problems from this page that are serious candidates for
+our audit-first AI-for-math pipeline. Do not choose broad directions or items
+whose likely output is only a literature audit. Prefer problems with:
+- a crisp theorem/counterexample/certificate target;
+- a finite or mechanically checkable artifact surface;
+- meaningful mathematical/community impact;
+- a concrete first local step Codex can execute.
+
+Except for explicitly tracked collaboration/email lanes, the end state must be
+publishable or externally reviewable mathematics: paper/short note/public
+certificate/verifier/serious registry contribution. Do not choose items whose
+natural endpoint is just a private email.
+
+For each selected problem, include the source item number/title if visible.
+If no listed item meets the bar, say that directly and explain why.
+
+Output style:
+- Natural language or a compact table is fine.
+- Do not spend reasoning budget on JSON formatting. A local Codex adapter will
+  structure your response.
+- For each candidate, include explicit labels for title, source_url, type,
+  statement, untouched_evidence, omega_fit_detail, fit_score, topic_score,
+  effort_estimate_days, risk_level, first_attack_step, final_display_form,
+  success_gate, rationale.
+- `source_url` should be the most specific visible URL/item URL you can infer
+  from the index; if only the index is available, use {source_url}.
 
 Source snapshot:
 {source_text[:SOURCE_FETCH_BYTES]}
@@ -1087,9 +1154,10 @@ def main(argv: list[str] | None = None) -> int:
                 "high-visibility GitHub/blog/X/forum/problem-list discussions, or serious "
                 "classification/rigidity/extremal targets. Do not optimize for recent arXiv "
                 "preprints unless the topic is independently high-impact.\n"
-                "4. Same JSON output schema.\n"
-                "5. If you genuinely cannot produce more, output `{\"candidates\": []}` and "
-                "explain in the rationale of an empty placeholder why."
+                "4. Use explicit labeled fields, but natural language is fine; "
+                "the local Codex adapter will handle schema conversion.\n"
+                "5. If you genuinely cannot produce more, say so directly and "
+                "explain the rejection reasons."
             )
         )
         sub2 = _submit_followup(followup, conv_id)
@@ -1110,13 +1178,19 @@ def main(argv: list[str] | None = None) -> int:
 
     inbox_ids: list[str] = []
     appended = 0
-    if args.candidate_inbox:
+    # Discovery/refill should not bypass the profile/deep-judge gate. Even
+    # gate-clean Oracle candidates enter the local candidate inbox first; the
+    # profile judge owns graduation to RESEARCH_BOARD with a target-specific
+    # contract. The legacy direct-append path is retained only for explicit
+    # non-inbox invocations that already passed an operator workflow.
+    force_direct = bool(getattr(args, "direct_board_append", False))
+    if accumulated_survivors and (args.candidate_inbox or not force_direct):
         inbox_ids = _write_candidate_inbox(
             accumulated_survivors,
             source="operator_requested_source_triage" if args.operator_requested else "oracle_board_refill",
             operator_requested=args.operator_requested,
         )
-    else:
+    elif force_direct:
         appended = _append_to_board(blocks) if blocks else 0
     long_horizon_total = sum(r.get("kept_long_horizon", 0) for r in round_history)
     payload = {

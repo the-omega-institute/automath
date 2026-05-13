@@ -56,7 +56,7 @@ RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
 GIT_OPS_LOCK = STATE_DIR / ".git_ops.lock"
 
-ORACLE_SERVER_URL = "http://localhost:8766"
+ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 ORACLE_SERVER_SCRIPT = SCRIPT_DIR / "outreach_oracle_server.py"
 RESEARCH_LOOP_SCRIPT = SCRIPT_DIR / "outreach_research_loop.py"
 TASK_RUNNER_SCRIPT = SCRIPT_DIR / "outreach_task_runner.py"
@@ -162,7 +162,20 @@ def server_status(timeout: int = 3) -> dict:
     try:
         with urllib.request.urlopen(f"{ORACLE_SERVER_URL}/status", timeout=timeout) as r:
             return json.loads(r.read().decode("utf-8"), strict=False)
-    except Exception:
+    except Exception as urllib_exc:  # noqa: BLE001
+        try:
+            proc = subprocess.run(
+                ["curl", "-fsS", "--max-time", str(max(1, int(timeout))), f"{ORACLE_SERVER_URL}/status"],
+                capture_output=True,
+                text=True,
+                timeout=timeout + 2,
+                check=False,
+            )
+            if proc.returncode == 0:
+                return json.loads(proc.stdout, strict=False)
+        except Exception:
+            pass
+        supervisor_log(f"server status check failed: {urllib_exc}")
         return {}
 
 

@@ -33,6 +33,13 @@ PROFILEABLE_INBOX_STATUSES = {
     "long_horizon_review",
 }
 
+RETRYABLE_PROFILE_FAILURE_PATTERNS = (
+    "validation failed",
+    "failed to initialize in-process app-server client",
+    "Operation not permitted",
+    "codex spawn failed",
+)
+
 
 def _operator_memory() -> str:
     try:
@@ -54,6 +61,9 @@ Also be strict about impact: if the target is merely a low-impact arXiv follow-u
 an author-email small question, or a derivative tweak inside someone else's paper,
 DROP it unless the profile can name a broader theorem, reusable verifier,
 classification, obstruction, or serious public artifact.
+Except for explicitly tracked collaboration/email lanes, the terminal artifact
+must be publishable or externally reviewable mathematics. Do not graduate a
+candidate whose natural end state is only a private email or minor follow-up.
 
 Output ONLY a JSON object. If viable, use this schema:
 
@@ -163,6 +173,9 @@ private author-email with little independent value, output DROP. The board shoul
 prefer influential conjectures, public verifier gaps, reusable certificate
 packages, classification/rigidity/extremal problems, and targets that could
 become a serious paper, note, or public artifact.
+Except for explicitly tracked collaboration/email lanes, every graduated target
+must have a publishable or externally reviewable mathematical terminal artifact.
+Do not graduate candidates whose natural endpoint is only private email.
 
 Output ONLY a JSON object. If viable, use this schema:
 
@@ -271,6 +284,7 @@ Output ONLY a JSON object. If viable, use this schema:
 - Do not invent external facts. If freshness cannot be responsibly bounded, DROP or set a concrete prior/freshness check in board.prior.
 - Prefer GitHub/arXiv/X/forum/blog/workshop source surfaces with inspectable URLs.
 - ArXiv is only an information source, not a priority signal. Do not graduate low-impact arXiv-derived email tasks unless they have exceptional topic value or a reusable certificate/theorem package.
+- Non-collaboration targets must have `final_display` and `profile.final_display_form` centered on a publishable/public artifact, not author email alone.
 - Every viable candidate must have a final display form and success gate.
 - Every viable candidate must have a science_contract with an explicit terminal artifact, verifier, progress metric, writeback condition, and close condition.
 - Do not make "source audit only" the fallback unless the audit itself has community-visible value.
@@ -587,7 +601,7 @@ def select_inbox_candidates(*, top: int) -> list[dict]:
             continue
         if status == "profile_failed":
             note = str(r.get("note") or "")
-            if "validation failed" in note:
+            if any(pat in note for pat in RETRYABLE_PROFILE_FAILURE_PATTERNS):
                 rows.append(r)
     rows.sort(key=lambda r: r.get("received_at_epoch") or 0)
     return rows[:top]
@@ -600,7 +614,9 @@ def graduate_inbox_with_codex(candidate_id: str) -> tuple[bool, str]:
     status = row.get("status")
     if status not in PROFILEABLE_INBOX_STATUSES | {"profile_failed"}:
         return False, f"candidate {candidate_id} status={status} is not profileable"
-    if status == "profile_failed" and "validation failed" not in str(row.get("note") or ""):
+    if status == "profile_failed" and not any(
+        pat in str(row.get("note") or "") for pat in RETRYABLE_PROFILE_FAILURE_PATTERNS
+    ):
         return False, f"candidate {candidate_id} profile_failed for non-validation reason; not auto-retrying"
     candidate = row.get("candidate") or {}
     source_url = str(candidate.get("source_url") or "")
