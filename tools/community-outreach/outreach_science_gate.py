@@ -515,7 +515,7 @@ def _validate_referenced_local_artifacts(rel_path: str, data: dict) -> list[str]
     errors: list[str] = []
     seen: set[str] = set()
     local_re = re.compile(
-        r"tools/community-outreach/targets/[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+"
+        r"tools/community-outreach/targets/[A-Za-z0-9_.-]+/[A-Za-z0-9_./*?\\[\\]-]+"
     )
 
     def check_path(path_text: str, context: str) -> None:
@@ -528,6 +528,8 @@ def _validate_referenced_local_artifacts(rel_path: str, data: dict) -> list[str]
         if raw.startswith("tools/community-outreach/targets/"):
             matches.append(raw)
         for match in matches:
+            if any(ch in match for ch in "*?[]"):
+                continue
             if match in seen:
                 continue
             seen.add(match)
