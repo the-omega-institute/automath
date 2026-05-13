@@ -73,6 +73,39 @@ def validate_candidate(candidate: dict) -> list[str]:
     return errors
 
 
+def _loads_jsonish(text: str) -> dict:
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        return json.loads(_escape_invalid_json_backslashes(text))
+
+
+def _escape_invalid_json_backslashes(text: str) -> str:
+    out: list[str] = []
+    i = 0
+    valid = {'"', "\\", "/", "b", "f", "n", "r", "t"}
+    hexdigits = set("0123456789abcdefABCDEF")
+    while i < len(text):
+        ch = text[i]
+        if ch != "\\":
+            out.append(ch)
+            i += 1
+            continue
+        nxt = text[i + 1] if i + 1 < len(text) else ""
+        if nxt in valid:
+            out.append(ch)
+            out.append(nxt)
+            i += 2
+            continue
+        if nxt == "u" and i + 5 < len(text) and all(c in hexdigits for c in text[i + 2:i + 6]):
+            out.append(text[i:i + 6])
+            i += 6
+            continue
+        out.append("\\\\")
+        i += 1
+    return "".join(out)
+
+
 def academic_impact_gate(candidate: dict) -> CandidateGate:
     """Deterministic pre-board gate for broad discovery outputs.
 
@@ -328,7 +361,7 @@ def main(argv: list[str] | None = None) -> int:
     mark.add_argument("--note", default="")
     args = p.parse_args(argv)
     if args.cmd == "add-json":
-        payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
+        payload = _loads_jsonish(Path(args.path).read_text(encoding="utf-8"))
         rows = payload.get("candidates") if isinstance(payload, dict) else None
         if isinstance(rows, list):
             added = [

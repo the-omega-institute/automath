@@ -610,7 +610,43 @@ def _extract_json_object(text: str) -> dict | None:
     try:
         return json.loads(candidate)
     except json.JSONDecodeError:
-        return None
+        try:
+            return json.loads(_escape_invalid_json_backslashes(candidate))
+        except json.JSONDecodeError:
+            return None
+
+
+def _escape_invalid_json_backslashes(text: str) -> str:
+    r"""Preserve ChatGPT JSON-ish output containing LaTeX backslashes.
+
+    Oracle responses often contain fields like ``\overline`` or ``\to`` inside
+    JSON strings. Those are invalid JSON escapes, but the content is otherwise
+    structured. Escape only backslashes that are not valid JSON escapes so the
+    local harness, not the Oracle, owns format repair.
+    """
+    out: list[str] = []
+    i = 0
+    valid = {'"', "\\", "/", "b", "f", "n", "r", "t"}
+    hexdigits = set("0123456789abcdefABCDEF")
+    while i < len(text):
+        ch = text[i]
+        if ch != "\\":
+            out.append(ch)
+            i += 1
+            continue
+        nxt = text[i + 1] if i + 1 < len(text) else ""
+        if nxt in valid:
+            out.append(ch)
+            out.append(nxt)
+            i += 2
+            continue
+        if nxt == "u" and i + 5 < len(text) and all(c in hexdigits for c in text[i + 2:i + 6]):
+            out.append(text[i:i + 6])
+            i += 6
+            continue
+        out.append("\\\\")
+        i += 1
+    return "".join(out)
 
 
 def _parse_candidates(raw: str) -> list[Candidate]:
