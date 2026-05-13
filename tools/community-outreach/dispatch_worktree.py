@@ -1292,6 +1292,35 @@ def _codex_workup_has_local_trace(text: str) -> bool:
     return any(marker in lowered for marker in trace_markers)
 
 
+def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
+    """Require the last local repair report to include observed Codex commands.
+
+    This prevents a hand-written or stale `codex_workup.md` from serving as a
+    ticket into Oracle.  The local repair worker records this trace from Codex's
+    JSONL stream after it actually runs target-specific shell commands.
+    """
+    path = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug / "local_repair_last.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except OSError:
+        return False, "missing local_repair_last.json"
+    except json.JSONDecodeError as exc:
+        return False, f"invalid local_repair_last.json: {exc}"
+    if not payload.get("ok"):
+        return False, "last local repair did not pass"
+    postcheck = payload.get("postcheck") if isinstance(payload, dict) else None
+    if not isinstance(postcheck, dict):
+        return False, "last local repair missing postcheck"
+    trace = postcheck.get("codex_command_trace")
+    if not isinstance(trace, dict):
+        return False, "last local repair missing Codex command trace"
+    if not trace.get("ok"):
+        return False, str(trace.get("reason") or "Codex command trace not ok")
+    if int(trace.get("target_command_count") or 0) <= 0:
+        return False, "Codex command trace has no target-local commands"
+    return True, ""
+
+
 def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str:
     """Read the exact next Oracle prompt selected by the local Codex workup.
 
@@ -1373,6 +1402,9 @@ def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
         return False, "missing codex_workup.md"
     if not _codex_workup_has_local_trace(workup):
         return False, "codex_workup.md lacks required local evidence/commands/verifier/proof-obligation trace"
+    trace_ok, trace_reason = _local_repair_last_has_codex_command_trace(slug)
+    if not trace_ok:
+        return False, trace_reason
     question = _read_codex_next_oracle_question(slug)
     if not _is_concrete_next_oracle_question(question):
         return False, "missing concrete next_oracle_question.md or ## Next Oracle question"

@@ -759,6 +759,30 @@ def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
     return True, ""
 
 
+def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
+    """Require machine-observed Codex commands before an Oracle turn."""
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except OSError:
+        return False, "missing local_repair_last.json"
+    except json.JSONDecodeError as exc:
+        return False, f"invalid local_repair_last.json: {exc}"
+    if not payload.get("ok"):
+        return False, "last local repair did not pass"
+    postcheck = payload.get("postcheck") if isinstance(payload, dict) else None
+    if not isinstance(postcheck, dict):
+        return False, "last local repair missing postcheck"
+    trace = postcheck.get("codex_command_trace")
+    if not isinstance(trace, dict):
+        return False, "last local repair missing Codex command trace"
+    if not trace.get("ok"):
+        return False, str(trace.get("reason") or "Codex command trace not ok")
+    if int(trace.get("target_command_count") or 0) <= 0:
+        return False, "Codex command trace has no target-local commands"
+    return True, ""
+
+
 def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
     """Ensure Codex left both a concrete question and a real local workup."""
     target_dir = TARGETS_DIR / slug
@@ -773,6 +797,9 @@ def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
     ok, reason = _workup_has_local_execution_trace(workup)
     if not ok:
         return False, reason
+    trace_ok, trace_reason = _local_repair_last_has_codex_command_trace(slug)
+    if not trace_ok:
+        return False, trace_reason
     return True, ""
 
 

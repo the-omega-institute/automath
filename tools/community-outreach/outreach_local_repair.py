@@ -213,6 +213,99 @@ def _verifier_stdout_passed(payload: dict, raw_stdout: str = "") -> bool:
     return False
 
 
+def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dict:
+    """Summarize target-specific command executions from the Codex JSONL log.
+
+    The markdown handoff is useful, but it is still prose.  The pre-Oracle
+    harness also needs a machine-observed trace that Codex actually touched the
+    target-local workspace during this run.
+    """
+    stdout_path = stdout_path.resolve()
+    target_dir = target_dir.resolve()
+    target_rel = str(target_dir.relative_to(REPO_ROOT))
+    interesting_commands: list[dict] = []
+    command_count = 0
+    target_command_count = 0
+    output_markers = (
+        "self-tests passed",
+        "all_records_pass",
+        "unique_canonical_hashes",
+        "checked ",
+        "passed",
+        "failed",
+        "sha256",
+        "no such file",
+    )
+    try:
+        lines = stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as exc:
+        return {
+            "ok": False,
+            "reason": f"missing Codex stdout JSONL log: {exc}",
+            "stdout_log": str(stdout_path.relative_to(REPO_ROOT)) if stdout_path.exists() else str(stdout_path),
+            "command_count": 0,
+            "target_command_count": 0,
+            "commands": [],
+        }
+    for line in lines:
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        item = event.get("item") if isinstance(event, dict) else None
+        if not isinstance(item, dict):
+            continue
+        if item.get("type") != "command_execution":
+            continue
+        command = str(item.get("command") or "")
+        command_count += 1
+        output = str(item.get("aggregated_output") or "")
+        mentions_target = target_rel in command or target_rel in output or target_dir.name in command
+        if not mentions_target:
+            continue
+        target_command_count += 1
+        if len(interesting_commands) < 12:
+            interesting_commands.append(
+                {
+                    "command": command,
+                    "exit_code": item.get("exit_code"),
+                    "status": item.get("status"),
+                    "output_head": output[:500],
+                }
+            )
+    if target_command_count <= 0:
+        return {
+            "ok": False,
+            "reason": "Codex JSONL log contains no command_execution for this target directory",
+            "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
+            "command_count": command_count,
+            "target_command_count": target_command_count,
+            "commands": interesting_commands,
+        }
+    has_completed_target_command = any(cmd.get("status") == "completed" for cmd in interesting_commands)
+    if not has_completed_target_command:
+        return {
+            "ok": False,
+            "reason": "Codex target command trace has no completed command",
+            "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
+            "command_count": command_count,
+            "target_command_count": target_command_count,
+            "commands": interesting_commands,
+        }
+    has_evidence_output = any(
+        any(marker in str(cmd.get("output_head") or "").lower() for marker in output_markers)
+        for cmd in interesting_commands
+    )
+    return {
+        "ok": True,
+        "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
+        "command_count": command_count,
+        "target_command_count": target_command_count,
+        "has_evidence_output": has_evidence_output,
+        "commands": interesting_commands,
+    }
+
+
 def _extract_next_oracle_question_from_workup(text: str) -> str:
     if not text:
         return ""
@@ -395,7 +488,7 @@ def _collect_missing_referenced_local_paths(value: object) -> list[str]:
     return missing
 
 
-def _postcheck_local_repair_artifacts(target_dir: Path) -> dict:
+def _postcheck_local_repair_artifacts(target_dir: Path, *, codex_trace: dict | None = None) -> dict:
     target_dir = target_dir.resolve()
     diagnostics: list[str] = []
 
@@ -437,12 +530,16 @@ def _postcheck_local_repair_artifacts(target_dir: Path) -> dict:
                     "results.json references missing local artifacts: " + ", ".join(missing_refs[:8])
                 )
 
+    if codex_trace is not None and not codex_trace.get("ok"):
+        diagnostics.append(str(codex_trace.get("reason") or "Codex command trace missing"))
+
     return {
         "ok": not diagnostics,
         "diagnostics": diagnostics,
         "workup_path": str(workup_path.relative_to(REPO_ROOT)),
         "next_oracle_question_path": str(question_path.relative_to(REPO_ROOT)),
         "local_repair_report_path": str(report_path.relative_to(REPO_ROOT)),
+        "codex_command_trace": codex_trace or {},
     }
 
 
@@ -789,7 +886,8 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     output_path.write_text(raw or "", encoding="utf-8")
     verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
     gate_after = _run_science_gate(todo_id, write_ledger=True)
-    postcheck = _postcheck_local_repair_artifacts(target_dir)
+    codex_command_trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
+    postcheck = _postcheck_local_repair_artifacts(target_dir, codex_trace=codex_command_trace)
     ok = rc == 0 and bool(postcheck.get("ok"))
     report = {
         "ok": ok,
