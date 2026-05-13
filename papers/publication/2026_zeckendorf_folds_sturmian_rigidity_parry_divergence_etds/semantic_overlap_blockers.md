@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-12T22:48:42+00:00`
+- Generated: `2026-05-13T11:26:15+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds`
 - Gate failed: `true`
