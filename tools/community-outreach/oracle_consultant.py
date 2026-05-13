@@ -40,6 +40,7 @@ import hashlib
 import json
 import os
 import re
+import signal
 import subprocess
 import sys
 import time
@@ -60,6 +61,7 @@ COMMUNITY_PROMPTS_DIR = REPO_ROOT / "tools/community-outreach/prompts"
 DEFAULT_TIMEOUT = 7200  # 2 hours; ChatGPT Pro thinking can run 60+ min
 DEFAULT_POLL_INTERVAL = 30
 DEFAULT_ZERO_EXTRACT_CANCEL_S = int(os.environ.get("OUTREACH_ORACLE_ZERO_EXTRACT_CANCEL_S", "7200"))
+PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
 ORACLE_TRANSPORT_ERROR_RE = re.compile(
     r"^\s*ERROR\b|No assistant output after|re-extract: nothing meaningful|"
     r"Task cancelled by server|empty response",
@@ -688,6 +690,35 @@ class OracleConsultant:
                 "latex_path": "", "plain_summary": "",
                 "error": f"oracle server unreachable at {self.server_url}",
             }
+        pre_oracle_workup: dict = {}
+        if _is_board_research_todo(todo):
+            pre_oracle_workup = _run_pre_oracle_codex_workup_for_todo(
+                todo,
+                per_turn_timeout=per_turn_timeout,
+            )
+            if not pre_oracle_workup.get("ok"):
+                run = {
+                    "todo_id": todo.todo_id,
+                    "conversation_id": resume_conversation_id or "",
+                    "chatgpt_url": "",
+                    "turns": [],
+                    "final_verdict": "FAILED",
+                    "total_elapsed_seconds": 0,
+                    "stopped_at_turn": 0,
+                    "run_id": run_id,
+                    "run_started_at": run_started_at,
+                    "run_completed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                    "latex_path": "",
+                    "plain_summary": "",
+                    "terminal_latex_error": "",
+                    "pre_oracle_codex_workup": pre_oracle_workup,
+                    "error": (
+                        "pre-Oracle Codex local workup required before Oracle: "
+                        f"{pre_oracle_workup.get('error') or pre_oracle_workup.get('reason')}"
+                    ),
+                }
+                self._merge_deep_run(slug=run_slug, run=run)
+                return run
         turns: list[dict] = []
         conversation_id = resume_conversation_id or ""
         chatgpt_url = ""
@@ -986,6 +1017,7 @@ class OracleConsultant:
             "plain_summary": plain_summary,
             "terminal_prompt_sent": bool(verdict == "BREAKTHROUGH" and terminal_prompt),
             "terminal_latex_error": terminal_latex_error,
+            "pre_oracle_codex_workup": pre_oracle_workup,
         }
         self._merge_deep_run(slug=run_slug, run=run)
         return run
@@ -1260,6 +1292,194 @@ def _read_next_oracle_question_for_todo(todo: TodoSpec, *, limit: int = 4000) ->
     if not match:
         return ""
     return match.group(1).strip()[:limit]
+
+
+def _terminate_process_group(proc: subprocess.Popen, *, grace_seconds: float = 5.0) -> None:
+    try:
+        os.killpg(proc.pid, signal.SIGTERM)
+    except (ProcessLookupError, OSError):
+        return
+    try:
+        proc.wait(timeout=grace_seconds)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)
+    except (ProcessLookupError, OSError):
+        pass
+
+
+def _pre_oracle_target_files_recent(slug: str, *, max_age_seconds: int) -> tuple[bool, str]:
+    target_dir = TARGETS_DIR / slug
+    required = (
+        "codex_workup.md",
+        "next_oracle_question.md",
+        "local_repair_report.md",
+    )
+    oldest_age = 0.0
+    for name in required:
+        path = target_dir / name
+        try:
+            age = time.time() - path.stat().st_mtime
+        except OSError:
+            return False, f"missing {name}"
+        oldest_age = max(oldest_age, age)
+    if oldest_age > max_age_seconds:
+        return False, f"Codex handoff older than reuse window ({oldest_age:.0f}s > {max_age_seconds}s)"
+    return True, ""
+
+
+def _is_board_research_todo(todo: TodoSpec) -> bool:
+    """Return true for RESEARCH_BOARD targets that should use the math harness.
+
+    OracleConsultant.deep_reasoning is also used by operator-curated drafting
+    tasks via lightweight TodoSpec-shaped stubs.  Those tasks should still use
+    Oracle, but they are not target-local theorem/replay jobs and should not be
+    blocked by outreach_local_repair.py requiring a RESEARCH_BOARD row.
+    """
+    try:
+        todos = parse_board(BOARD_PATH_DEFAULT)
+    except Exception:
+        return False
+    board_todo = todos.get(getattr(todo, "todo_id", ""))
+    if board_todo is None:
+        return False
+    try:
+        return board_todo.slug() == todo.slug()
+    except Exception:
+        return False
+
+
+def _is_concrete_oracle_question(question: str) -> bool:
+    q = (question or "").strip()
+    if len(q) < 120:
+        return False
+    lowered = q.lower()
+    generic_markers = (
+        "continue research",
+        "继续研究",
+        "do the next step",
+        "lower the progress metric",
+        "provide metadata",
+        "review the board",
+        "look into this problem",
+        "make progress",
+        "find something useful",
+    )
+    if any(marker in lowered for marker in generic_markers):
+        return False
+    concrete_markers = (
+        "prove",
+        "disprove",
+        "certificate",
+        "construction",
+        "counterexample",
+        "verifier",
+        "exact",
+        "bound",
+        "obstruction",
+        "cnf",
+        "lrat",
+        "drat",
+        "graph",
+        "lemma",
+        "theorem",
+        "compute",
+        "enumerate",
+        "check",
+    )
+    return any(marker in lowered for marker in concrete_markers)
+
+
+def _pre_oracle_codex_handoff_ok(slug: str, *, require_recent: bool = True) -> tuple[bool, str]:
+    question = _read_target_next_oracle_question(slug)
+    if not question:
+        return False, "missing Codex-selected next_oracle_question backed by local trace"
+    if not _is_concrete_oracle_question(question):
+        return False, "Codex-selected next_oracle_question is generic or metadata-only"
+    if require_recent:
+        recent_ok, recent_reason = _pre_oracle_target_files_recent(
+            slug,
+            max_age_seconds=PRE_ORACLE_WORKUP_REUSE_SECONDS,
+        )
+        if not recent_ok:
+            return False, recent_reason
+    return True, ""
+
+
+def _run_pre_oracle_codex_workup_for_todo(todo: TodoSpec, *, per_turn_timeout: int) -> dict:
+    """Oracle-consultant-level preflight before any deep Oracle turn.
+
+    dispatch_worktree and outreach_research_loop normally run the same handoff
+    first.  This function is a final safety net for direct/manual callers:
+    Oracle must get a Codex-processed local workup, not a raw board card.
+    """
+    slug = todo.slug()
+    ok, reason = _pre_oracle_codex_handoff_ok(slug, require_recent=True)
+    if ok:
+        return {"ok": True, "slug": slug, "reused_recent": True}
+    script = REPO_ROOT / "tools/community-outreach/outreach_local_repair.py"
+    if not script.exists():
+        return {"ok": False, "slug": slug, "error": f"missing local repair script at {script}"}
+    timeout = max(
+        120,
+        min(int(per_turn_timeout), int(os.environ.get("OUTREACH_PRE_ORACLE_REPLAY_TIMEOUT", "1800") or "1800")),
+    )
+    log_dir = STATE_DIR / "research_loop_logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    tag = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_path = log_dir / f"oracle_consultant_pre_oracle_local_repair_{todo.todo_id}_{tag}.log"
+    cmd = [
+        "python3",
+        str(script),
+        "--todo-id",
+        todo.todo_id,
+        "--timeout",
+        str(timeout),
+        "--json",
+    ]
+    started = time.time()
+    with open(log_path, "ab") as logf:
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(REPO_ROOT),
+            stdout=logf,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+        try:
+            rc = proc.wait(timeout=timeout + 120)
+        except subprocess.TimeoutExpired:
+            _terminate_process_group(proc)
+            rc = 124
+            logf.write(f"\nTIMEOUT after {timeout}s; terminated local repair process group\n".encode("utf-8"))
+    if rc != 0:
+        return {
+            "ok": False,
+            "slug": slug,
+            "returncode": rc,
+            "error": f"local repair rc={rc}",
+            "log_path": str(log_path.relative_to(REPO_ROOT)),
+            "previous_reason": reason,
+        }
+    ok, reason = _pre_oracle_codex_handoff_ok(slug, require_recent=True)
+    if not ok:
+        return {
+            "ok": False,
+            "slug": slug,
+            "returncode": rc,
+            "error": reason,
+            "elapsed_seconds": int(time.time() - started),
+            "log_path": str(log_path.relative_to(REPO_ROOT)),
+        }
+    return {
+        "ok": True,
+        "slug": slug,
+        "returncode": rc,
+        "elapsed_seconds": int(time.time() - started),
+        "log_path": str(log_path.relative_to(REPO_ROOT)),
+    }
 
 
 def _run_local_codex_replay_after_oracle(

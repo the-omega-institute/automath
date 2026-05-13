@@ -25,6 +25,7 @@ import json
 import os
 import re
 import shutil
+import signal
 import subprocess
 import tempfile
 from datetime import datetime, timezone
@@ -79,6 +80,30 @@ def _coerce_text(value: object) -> str:
     if isinstance(value, bytes):
         return value.decode("utf-8", errors="replace")
     return str(value)
+
+
+def _terminate_process_group(proc: subprocess.Popen, *, grace_seconds: float = 5.0) -> None:
+    """Terminate a spawned worker and its children.
+
+    The Codex CLI is a node wrapper around a native child.  Plain
+    subprocess.run(..., timeout=...) can leave the native child alive after the
+    Python parent times out, which makes outreach_local_repair appear active
+    for hours and blocks the research loop.  Spawn workers in their own process
+    group and kill the whole group on timeout.
+    """
+    try:
+        os.killpg(proc.pid, signal.SIGTERM)
+    except (ProcessLookupError, OSError):
+        return
+    try:
+        proc.wait(timeout=grace_seconds)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)
+    except (ProcessLookupError, OSError):
+        pass
 
 
 def _target_file_manifest(target_dir: Path) -> str:
@@ -1073,21 +1098,28 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     started = _now_iso()
     try:
-        proc = subprocess.run(
+        proc = subprocess.Popen(
             cmd,
-            input=prompt,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             cwd=str(REPO_ROOT),
             env=env,
-            capture_output=True,
             text=True,
-            timeout=timeout,
             encoding="utf-8",
             errors="replace",
-            check=False,
+            start_new_session=True,
         )
-        rc = proc.returncode
-        stdout_path.write_text(proc.stdout or "", encoding="utf-8")
-        stderr_path.write_text(proc.stderr or "", encoding="utf-8")
+        try:
+            stdout, stderr = proc.communicate(input=prompt, timeout=timeout)
+            rc = proc.returncode
+        except subprocess.TimeoutExpired:
+            _terminate_process_group(proc)
+            stdout, stderr = proc.communicate()
+            rc = 124
+            stderr = (stderr or "") + f"\nTIMEOUT after {timeout}s; terminated Codex process group\n"
+        stdout_path.write_text(stdout or "", encoding="utf-8")
+        stderr_path.write_text(stderr or "", encoding="utf-8")
     except subprocess.TimeoutExpired as exc:
         rc = 124
         stdout_path.write_text(_coerce_text(exc.stdout), encoding="utf-8")
