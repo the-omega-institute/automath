@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — Misframed target. Erdős #1191 itself is a real high-impact additive-combinatorics problem, but this board entry does not propose attacking the actual invariant b or producing a new bound/construction/certificate. It redi |
+| Status | **🔴 DROP · profile judge DROP** — The underlying Sidon diameter constant is a real high-impact additive-combinatorics problem, but this board entry is misframed for automated deep reasoning. It does not propose a direct attack on the invariant b, a new b |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
