@@ -19,6 +19,7 @@
 | 论文 | 目标期刊 | 备注 |
 |------|---------|------|
 | — | — | 当前无待手动投稿项；已投稿稿件移至全量状态表，C-RUNNING 稿件等终审通过后再自动入队 |
+| `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Journal of Spectral Theory | C-DONE round 4: Oracle accept + Codex submit; 需准备 cover letter + metadata |
 
 ## 全量状态表
 
