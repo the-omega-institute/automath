@@ -1005,3 +1005,108 @@ _Inbox graduation rationale_: This is a real, inspectable author question with a
 _Inbox graduation rationale_: This is a current, public, inspectable, high-topic-value open problem rather than a narrow arXiv tail. It is risky and only moderately aligned with Automath because the main theorem lives in sophisticated arithmetic geometry, but a well-scoped audit/counterexample-search packet could have real community-visible value if it clarifies whether the problem is already settled in the literature or isolates a concrete obstruction. Graduate only with the high-risk framing intact.
 
 ---
+
+### T-32 · Litt #3 · Common finite etale cover obstruction
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://www.problemsilike.com/3 |
+| Type | open problem |
+| Untouched | Public source marks the problem OPEN; the page says it was last edited 2026-05-10, has 0 comments, and reports no claimed partial or complete solutions. The linked MathOverflow question was asked 2017-05-09 and shows no answers, with visible comment activity through 2025-10-20. Before serious effort, run a focused literature check around the cited Tamagawa affine positive result, Mochizuki characteristic-zero negative result, and Bogomolov-Tschinkel one-etale-map results to confirm the proper finite-field case remains open. |
+| Omega fit | 7/10 |
+| Topic value | 8/10 |
+| Effort est | 14-21 天 |
+| Risk | high |
+| Final display | A specialist-reviewable obstruction certificate or research note: explicit curves X,Y over k=overline(F_q), a rigorously defined invariant I, proof that I is unchanged under passage to finite etale covers or common finite etale domination, and a computation proving I(X) != I(Y). |
+| Success gate | Before operator approval or any external contact, produce a complete proof that the proposed invariant I is well-defined for smooth projective genus >=2 curves over overline(F_q), is forced to agree for any two curves with a common finite etale cover, and takes distinct explicitly computed values on named curves X and Y; additionally verify that no cited adjacent result or literature found in the focused check already resolves the same case. |
+
+**Statement.** Let k=overline(F_q). Determine whether every pair of smooth projective curves X,Y over k of genus at least 2 admits a common finite etale cover, i.e. a smooth projective curve Z over k with finite etale maps Z -> X and Z -> Y; in the negative direction, exhibit X,Y and a finite-etale-cover invariant separating them.
+
+**Prior.** As of 2026-05-13, https://www.problemsilike.com/3 lists the problem as OPEN, says the page was last edited 2026-05-10, and reports no comments or claimed partial/complete solutions. The linked MathOverflow question https://mathoverflow.net/questions/269387/uniformization-over-finite-fields was asked by Daniel Litt on 2017-05-09, has no answers, and was visibly active in comments through 2025-10-20. The source records adjacent regimes: positive affine analogues attributed to Tamagawa [T21], negative uncountable-field and countable characteristic-zero analogues via Mochizuki [M98], and positive results when only one of the two maps is required finite etale [BT02]. These citations must be checked directly before investing substantial effort.
+
+**Omega fit detail.** This is a better Omega target as an audit-first theorem/invariant search than as a brute-force computation target. The crisp formal statement, finite-etale functoriality requirement, and explicit obstruction-certificate route fit Automath's reproducible proof-audit standards: a successful packet has named objects, a verifier condition, and a short no-common-cover deduction. The weakness is that the source says the needed invariant is not known and may require new ideas, so the first run must separate mathematical evidence, literature baseline, and draft text, with no outreach unless a genuine invariant certificate or nontrivial research note emerges.
+
+**Attack plan.**
+1. Create a source-bounded research memo formalizing the equivalence: an invariant I that agrees under finite etale covers and separates X,Y proves no common finite etale cover exists.
+2. Run a literature and invariant audit: check the cited Tamagawa, Mochizuki, and Bogomolov-Tschinkel contexts; enumerate candidate invariants from etale fundamental groups, Frobenius/descent data, Jacobians, p-rank/Newton polygon style data, and nonabelian/anabelian structures; record which are invariant, non-invariant, or too weak.
+3. Attempt one explicit obstruction lane: choose a candidate invariant with plausible finite-etale stability, define explicit curve families over finite fields, and reduce success to a checkable lemma plus a computable separation; if no candidate survives, produce a no-go memo and close or rescope.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_litt_common_finite_etale_cover/research.md
+- tools/community-outreach/targets/cand_litt_common_finite_etale_cover/results.json
+- tools/community-outreach/targets/cand_litt_common_finite_etale_cover/submission_draft.md
+
+_Inbox graduation rationale_: The source is current, public, inspectable, and states a genuine open folk question in arithmetic geometry with a clean certificate route. It is high-risk and not suitable for immediate outreach, but it can justify a board slot if treated as a deep math-lane target: success would be a serious invariant/counterexample theorem, while early progress is measured by a rigorous invariant audit rather than speculative emailing.
+
+---
+
+### T-33 · Litt #3 · Common finite étale cover obstruction
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://www.problemsilike.com/3 |
+| Type | open problem |
+| Untouched | Source page is inspectable and marked OPEN; it states no partial or complete solutions are claimed in comments, has 0 comments, and was last edited 10 May 2026. This must still be backed by a literature check before serious run time because the source itself warns that relevant literature may exist. |
+| Omega fit | 7/10 |
+| Topic value | 8/10 |
+| Effort est | 14-21 for a first obstruction-audit packet; 30+ for any credible full negative construction 天 |
+| Risk | high |
+| Final display | A reviewable obstruction-certificate research note for arithmetic-geometry experts: explicit curves X,Y over an algebraic closure of a finite field, a rigorously defined common-cover invariant I, proof of finite-etale-cover invariance, and a computation showing I(X) != I(Y). |
+| Success gate | Before operator approval or any outreach, produce a complete proof that I is well-defined for smooth projective genus >=2 curves over k=overline(F_q), is equal for any two curves with a common finite etale cover, and takes distinct explicitly computed values on named curves X and Y; also complete a source-bounded literature check showing no cited adjacent result already resolves this proper-curve case. |
+
+**Statement.** Let k=overline(F_q). Determine whether every pair of smooth projective curves X,Y over k of genus at least 2 admits a smooth projective curve Z over k with finite etale maps Z -> X and Z -> Y; equivalently, find a finite-etale-common-cover obstruction separating some explicit X and Y, or prove such a common cover always exists.
+
+**Prior.** The source https://www.problemsilike.com/3 is current and public: it is marked OPEN, says the problem is a folk question, reports no claimed partial or complete solutions in comments, and was last edited 10 May 2026. The page reports positive affine analogues via Tamagawa, negative analogues over uncountable fields, and a characteristic-zero countable-field negative result of Mochizuki, but does not claim a resolution for smooth projective curves over algebraic closures of finite fields. Independent literature search remains required before major effort.
+
+**Omega fit detail.** This is a good Omega target only as an audit-first obstruction-design problem, not as immediate outreach. The natural artifact is a formal statement, invariant-candidate ledger, and reproducible proof/check package: any successful invariant must pass exact functorial checks under finite etale pullback and explicit computation on named curves. Automath can help by keeping definitions, cover-invariance obligations, and computations auditable, while avoiding public claims until a full certificate exists.
+
+**Attack plan.**
+1. Formalize the common-cover obstruction lemma: if I is invariant under finite etale covers and I(X) != I(Y), then X and Y have no common finite etale cover.
+2. Build a literature-bounded invariant ledger from the source context: affine/proper distinction, characteristic p, trace-field-style analogues, anabelian or fundamental-group candidates, Jacobian/isogeny candidates, p-rank/Newton polygon candidates, and why each candidate does or does not survive finite etale covers.
+3. Attempt one explicit obstruction route on named small-genus curves over overline(F_q), with reproducible computations and a written proof obligation for every invariance claim.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_litt_common_finite_tale_cover/research.md
+- tools/community-outreach/targets/cand_litt_common_finite_tale_cover/results.json
+- tools/community-outreach/targets/cand_litt_common_finite_tale_cover/submission_draft.md
+
+_Inbox graduation rationale_: This is a real, current, inspectable open problem from a public problem list, with a precise statement and a concrete certificate shape. It is high risk and the source calls it partly idle-interest, so it should not displace the strongest finite-certificate frontier tasks; however, a successful invariant or a rigorous null ledger would be mathematically serious and could become a credible research note or collaboration packet.
+
+---
+
+### T-34 · Litt #8 · Exceptional Shimura tautological local systems
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://www.problemsilike.com/8 |
+| Type | open problem |
+| Untouched | ProblemsILike #8 is publicly inspectable, marked OPEN, last edited 08 May 2026, and its discussion page reports 0 comments and no claimed partial or complete solution as of access on 2026-05-13. This only bounds freshness at the source surface; before any outreach, a targeted literature check must verify whether work after or outside the cited LS18/BCELMPP19/Y14/DLLZ23/KLM26 neighborhood realizes or obstructs the exact tautological local systems. |
+| Omega fit | 3/10 |
+| Topic value | 9/10 |
+| Effort est | 90-365 天 |
+| Risk | high |
+| Final display | Expert-reviewable research note reducing Problem #8 to one fixed exceptional Shimura datum and one explicit representation, with either a complete geometric-origin construction, a rigorous obstruction, or a precise cited no-result frontier for arithmetic geometers working on Shimura varieties, motives, and local systems. |
+| Success gate | Before operator approval or any external send, the target must be narrowed to a specific E6 or E7 Shimura datum and a specific algebraic representation, and the artifact must include either: (1) a proof that the associated tautological local system occurs as a direct summand, subquotient, or otherwise standard geometric-origin constituent of relative cohomology of an algebraic family over a dense open of the Shimura variety, with comparison/descent steps stated; or (2) a rigorous obstruction showing that this exact local system cannot be of geometric origin; or (3) a carefully scoped collaboration packet whose only claim is a verified literature boundary and a concrete theorem/counterexample target. |
+
+**Statement.** Let X be an exceptional Shimura variety attached to G=E6 or G=E7. For each algebraic representation rho of G, let V_rho be the associated tautological local system on X. Determine whether V_rho is of geometric origin for every rho, meaning that after restriction to a dense open it arises as a subquotient, direct summand, or accepted equivalent geometric constituent of the cohomology of a family of smooth projective varieties; alternatively produce a specific rho for which V_rho is not of geometric origin.
+
+**Prior.** The source page, ProblemsILike #8, was last edited 08 May 2026 and is marked OPEN with no comments and no claimed partial solutions as of 2026-05-13. The page states that exceptional Shimura varieties lack known moduli descriptions; that the desired conclusion would follow conjecturally from rigidity expectations such as LS18 Conjecture 1.1; that exceptional motives are difficult to construct; that E6 motives from BCELMPP19 do not deform in a family; and that the first known E6 local systems of geometric origin cited there as KLM26 are not of Shimura type. These are source-level claims, not a completed literature audit; the first run must verify the exact cited papers and search for any intervening realization/obstruction results.
+
+**Omega fit detail.** This is not a near-term finite certificate target. Its Omega value is as a high-impact long-horizon math target where audit-first discipline can still matter: isolate one precise Shimura datum, one representation, one definition of geometric origin, and one verifiable dependency chain. The Automath/Omega bridge is a reproducible theorem-audit dossier: exact representation data, cited functorial constructions, comparison-theorem dependencies, and a checkable claim graph separating proven steps from conjectural rigidity. The target should not enter proof-generation mode until the narrowed statement is small enough for expert audit.
+
+**Attack plan.**
+1. Freeze definitions and scope: choose E6 or E7, identify one standard exceptional Shimura datum, select the smallest mathematically natural representation, and write the exact local-system and geometric-origin conventions being used.
+2. Run a focused literature audit around LS18, BCELMPP19, Y14, DLLZ23, KLM26, Gross-Serre exceptional motives, and integral-model/geometric Fontaine-Mazur references to determine whether the chosen tautological local system is already realized, conjecturally realized, or known only arithmetically/geometrically in a weaker sense.
+3. Build a proof-obligation graph for the narrowed target: representation-theoretic input, construction of a candidate algebraic family or cohomological correspondence, descent/comparison requirements, deformation or Griffiths-transversality obstructions, and the exact lemma whose proof or failure would decide the first publishable contribution.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_litt_exceptional_shimura_tautological_local/research.md
+- tools/community-outreach/targets/cand_litt_exceptional_shimura_tautological_local/results.json
+- tools/community-outreach/targets/cand_litt_exceptional_shimura_tautological_local/submission_draft.md
+
+_Inbox graduation rationale_: Graduate only as a high-risk long-horizon profile, not as an immediate outreach packet. The problem is current, public, and inspectable; it has high topic value because exceptional Shimura varieties, motives, and geometric-origin local systems are central and underdeveloped. It also has a clear public gap: the source explicitly says the desired result is conjectural and no solution is claimed. The narrow board value is to turn an important but broad expert problem into a precise, auditable one-representation theorem/counterexample target; the board should drop or archive it if that narrowing cannot produce a verifier beyond a literature memo.
+
+---
