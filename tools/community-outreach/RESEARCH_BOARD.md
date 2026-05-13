@@ -1287,3 +1287,73 @@ _Inbox graduation rationale_: This should enter the board because it is a classi
 _Inbox graduation rationale_: Barnette's conjecture is a named, long-standing graph-theory problem with current public sources still describing it as open. Recent progress is explicitly computer-assisted and public-code-backed, which makes a reproducibility-grade certificate package a meaningful terminal artifact rather than a private author-email task. The target is high risk for solving the full conjecture, but the intermediate outputs are inspectable, reviewable, and aligned with Omega's exact-certificate standards.
 
 ---
+
+### T-40 · Hadamard order 668 construction certificate
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://github.com/sagemath/sage/issues/34807 |
+| Type | open problem |
+| Untouched | Public freshness evidence is inspectable: Sage issue #34807, opened 2022-11-29, states that 668 is the first order for which no construction is known; Sage combinatorics documentation crawled in May 2026 still lists 668 among unknown Hadamard orders; Shalom Eliahou, Australasian Journal of Combinatorics 93(2), 2025, says the remaining open cases n <= 1000 are 668, 716, and 892 while only improving the modular record for n=668 to modulus 64; Epoch AI's 2026 FrontierMath page also lists 'Find a Hadamard matrix of order 668' as unsolved. Before any run, recheck MathWorld/Sage docs/WebHadamard/arXiv/GitHub for a newly posted exact order-668 construction. |
+| Omega fit | 9/10 |
+| Topic value | 10/10 |
+| Effort est | 10-30 天 |
+| Risk | high |
+| Final display | A public construction certificate for a Hadamard matrix of order 668, consisting of compact structured data where possible, an exact verifier, and a short construction note aimed at combinatorial design and SageMath audiences; if full construction fails, a machine-checkable exclusion of a named structured family such as a specified Goethals-Seidel/Williamson/SDS symmetry class. |
+| Success gate | Operator approval only after an exact verifier confirms either HH^T = 668 I for an explicit 668 x 668 +/-1 matrix or a complete negative result for a precisely named finite construction family, with all normalization, symmetry reduction, and search-space pruning assumptions recorded and independently reproducible. |
+
+**Statement.** Construct a 668 x 668 matrix H with entries in {-1,+1} such that HH^T = 668 I_668. A preferred structured route is to find four +/-1 circulant blocks of length 167 satisfying the Goethals-Seidel supplementary-difference-set periodic autocorrelation equations, yielding an exact Hadamard matrix of order 4*167 = 668.
+
+**Prior.** Hadamard's conjecture predicts existence for every multiple of 4. The previous smallest open cases 268 and 428 were resolved by Sawade in 1985 and Kharaghani-Tayfeh-Rezaie in 2005. Public sources inspected for this profile: Sage issue #34807 says 668 was the first unknown order after constructions through 664; Sage docs crawled in May 2026 list unknown_hadamard = [668, 716, 892, 1132] for the implemented range through 1200; Eliahou 2025 constructs only a 64-modular Hadamard matrix of order 668 and explicitly keeps true order 668 open; Epoch AI 2026 presents order 668 as an unsolved FrontierMath problem. Freshness remains source-bounded: a pre-run audit must search for exact phrases 'Hadamard matrix of order 668', 'order 668 Hadamard constructed', and recent Sage/WebHadamard updates.
+
+**Omega fit detail.** This is a strong Omega fit because discovery is hard but verification is exact and compact. A successful certificate can be audited by deterministic integer arithmetic: either build H directly and check H H^T, or store structured SDS/circulant data over Z/167Z and verify every nonzero periodic autocorrelation sum before constructing the Goethals-Seidel array. Negative progress can also be meaningful if it is a complete, replayable search certificate for a named finite ansatz, not an informal failed search.
+
+**Attack plan.**
+1. Run a freshness audit over Sage issue #34807, Sage docs, MathWorld, WebHadamard, arXiv, Google Scholar-style web search, and public GitHub for any exact order-668 construction posted after the inspected 2025-2026 sources.
+2. Implement a small exact verifier first: accept four length-167 +/-1 sequences or subsets, compute all periodic autocorrelation sums over Z/167Z, build the Goethals-Seidel matrix when equations pass, and independently verify HH^T = 668 I using integer arithmetic.
+3. Search structured families in increasing auditability order: normalize SDS parameters and symmetries, run FFT-scored local search and exact restart logging, then CP-SAT/MILP or exhaustive subfamily searches with machine-checkable coverage records for any claimed negative family result.
+
+**Deliverables.**
+- tools/community-outreach/targets/github_sagemath_sage_34807/research.md
+- tools/community-outreach/targets/github_sagemath_sage_34807/results.json
+- tools/community-outreach/targets/github_sagemath_sage_34807/submission_draft.md
+
+_Inbox graduation rationale_: This should enter the board because it is a named, high-visibility concrete instance of the Hadamard conjecture, public and inspectable, with a clear externally reviewable terminal artifact. Unlike a private author follow-up, success would be a serious combinatorial construction; even a complete exclusion of a major structured family could be a citable computational note if the assumptions and coverage certificate are rigorous.
+
+---
+
+### T-41 · Hadamard order 668 certificate frontier
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://github.com/sagemath/sage/issues/34807 |
+| Type | open problem |
+| Untouched | Freshness checked against public inspectable surfaces on 2026-05-13/2026-05-14: SageMath issue #34807, opened 2022-11-29, explicitly says 668 is the first order for which no construction is known; Epoch AI FrontierMath 2026 lists "Find a Hadamard matrix of order 668" as unsolved and says 668 is the smallest case with no known matrix; Scientific Reports, published 2025-09-26, states that for M < 1000 the orders 668, 716, and 892 have neither been discovered nor proven to exist. A targeted web search for public claims of a constructed order-668 Hadamard matrix did not surface a closing construction. |
+| Omega fit | 9/10 |
+| Topic value | 9/10 |
+| Effort est | 10-30 天 |
+| Risk | high |
+| Final display | A public, reproducible construction/certificate package for an order-668 Hadamard matrix, or a publication-quality computational record excluding a precisely named structured family such as a normalized Goethals-Seidel/SDS/Williamson-type search class; audience: combinatorial design researchers, SageMath combinatorics maintainers, and audit-first AI-for-math reviewers. |
+| Success gate | Before operator approval or any external writeback, an exact independent verifier must confirm either HH^T = 668 I for a submitted +/-1 matrix or the exact unsatisfiability/exhaustion certificate for a fully specified construction family, with all normalization, symmetry reductions, and search bounds machine-checkable from the repository artifact. |
+
+**Statement.** Construct a 668 x 668 Hadamard matrix H with entries in {-1,+1} satisfying HH^T = 668 I_668. A preferred certificate route is to find structured data, for example four length-167 +/-1 circulant sequences or equivalent subsets of Z/167Z satisfying the Goethals-Seidel supplementary-difference-set periodic autocorrelation equations, from which a 668 x 668 Hadamard matrix is built and exactly verified.
+
+**Prior.** The problem is a named concrete frontier instance of the Hadamard conjecture. Public baseline sources checked: SageMath issue #34807 says constructions up to order 664 were the implementation frontier and that 668 is the first order with no known construction; Epoch AI FrontierMath 2026 lists order 668 as an unsolved combinatorics open problem and says the previous smallest unknown order 428 was resolved in 2004; Scientific Reports 15, article 33254, published 2025-09-26, states that the only orders below 1000 then not discovered or proven to exist were 668, 716, and 892. These sources bound freshness but do not replace a final literature check before public release.
+
+**Omega fit detail.** The target is high-risk discovery but unusually strong for Automath/Omega because the terminal artifact is exact and audit-first: a compact algebraic certificate can generate the full matrix, and the decisive check is deterministic integer arithmetic. Omega can separate heuristic search from proof by requiring a small certificate file, a builder, an exact HH^T verifier, autocorrelation tables for any SDS route, and independently replayable logs for any negative structured-family claim.
+
+**Attack plan.**
+1. Build a source-bounded research note that records the SageMath issue, Epoch AI FrontierMath status, the 2025 Scientific Reports baseline, known construction families relevant to n = 4 * 167, and the exact certificate format to be accepted.
+2. Implement an exact verifier for candidate structured certificates: parse four length-167 +/-1 sequences or subsets of Z/167Z, check the periodic autocorrelation/SDS equations, build the Goethals-Seidel block matrix, and verify HH^T = 668 I with integer arithmetic.
+3. Run staged search and audit experiments: symmetry-normalized local search/FFT scoring for SDS candidates, CP-SAT or exact-cover subproblems for residual constraints, and if no construction is found, record only rigorously exhausted named subfamilies with replayable assumptions.
+
+**Deliverables.**
+- tools/community-outreach/targets/github_sagemath_sage_34807_2/research.md
+- tools/community-outreach/targets/github_sagemath_sage_34807_2/results.json
+- tools/community-outreach/targets/github_sagemath_sage_34807_2/submission_draft.md
+
+_Inbox graduation rationale_: This should enter the board because it is a current, public, inspectable, high-visibility open construction problem whose success would be a standard publishable specialty-journal result and whose verification is exact. Unlike a private author-email follow-up, the natural endpoint is a public certificate package or a rigorous negative result for a named construction family, both aligned with audit-first mathematical discovery.
+
+---
