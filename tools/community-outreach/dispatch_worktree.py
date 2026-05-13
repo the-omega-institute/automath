@@ -1307,6 +1307,48 @@ def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str
     return workup_question
 
 
+def _is_concrete_next_oracle_question(question: str) -> bool:
+    """Reject generic continuation prompts at the dispatch/oracle boundary."""
+    q = (question or "").strip()
+    if len(q) < 120:
+        return False
+    lowered = q.lower()
+    generic_markers = (
+        "continue research",
+        "继续研究",
+        "do the next step",
+        "lower the progress metric",
+        "provide metadata",
+        "review the board",
+        "look into this problem",
+        "make progress",
+        "find something useful",
+    )
+    if any(marker in lowered for marker in generic_markers):
+        return False
+    concrete_markers = (
+        "prove",
+        "disprove",
+        "certificate",
+        "construction",
+        "counterexample",
+        "verifier",
+        "exact",
+        "bound",
+        "obstruction",
+        "cnf",
+        "lrat",
+        "drat",
+        "graph",
+        "lemma",
+        "theorem",
+        "compute",
+        "enumerate",
+        "check",
+    )
+    return any(marker in lowered for marker in concrete_markers)
+
+
 def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
     """Gate Oracle-deep on an actual local Codex workup.
 
@@ -1322,7 +1364,7 @@ def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
     if not _codex_workup_has_local_trace(workup):
         return False, "codex_workup.md lacks required local evidence/commands/verifier/proof-obligation trace"
     question = _read_codex_next_oracle_question(slug)
-    if not question.strip():
+    if not _is_concrete_next_oracle_question(question):
         return False, "missing concrete next_oracle_question.md or ## Next Oracle question"
     return True, ""
 
