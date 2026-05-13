@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-13T14:47:41+00:00`
+- Generated: `2026-05-13T16:59:33+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams`
 - Gate failed: `true`
