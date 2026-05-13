@@ -584,7 +584,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T11:50:32+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | **OPERATOR_DEPRIORITIZED · shelved 2026-05-14** — user explicitly paused this Niu/size-4 Sidon thread; do not spend research-loop or outreach budget unless the operator reactivates it |
 | Source | https://arxiv.org/abs/2604.25214 (Tong Niu, 2026-04-28) |
 | Type | OPEN / Sidon set extension |
 | Untouched | ✅ 提交昨天, 单作者, 跟随 Alexeev-Mixon 2025-10 size-5 结果, 字段 wide open |
@@ -1108,5 +1108,182 @@ _Inbox graduation rationale_: This is a real, current, inspectable open problem 
 - tools/community-outreach/targets/cand_litt_exceptional_shimura_tautological_local/submission_draft.md
 
 _Inbox graduation rationale_: Graduate only as a high-risk long-horizon profile, not as an immediate outreach packet. The problem is current, public, and inspectable; it has high topic value because exceptional Shimura varieties, motives, and geometric-origin local systems are central and underdeveloped. It also has a clear public gap: the source explicitly says the desired result is conjectural and no solution is claimed. The narrow board value is to turn an important but broad expert problem into a precise, auditable one-representation theorem/counterexample target; the board should drop or archive it if that narrowing cannot produce a verifier beyond a literature memo.
+
+---
+
+### T-35 · Hadwiger-Nelson 6-chromatic unit-distance graph certificate
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://michaelnielsen.org/polymath/index.php?title=Hadwiger-Nelson_problem |
+| Type | open problem |
+| Untouched | Freshness must be rechecked before any run: as checked on 2026-05-14, the Polymath16 wiki page publicly lists 'Find a 6-chromatic unit-distance graph in the plane' as a project goal, and current general references still state the chromatic number of the plane is unknown and narrowed to 5, 6, or 7. No inspected public source in this pass reports a finite 6-chromatic unit-distance graph. |
+| Omega fit | 9/10 |
+| Topic value | 10/10 |
+| Effort est | 7-21 天 |
+| Risk | high |
+| Final display | A public certificate package for a candidate 6-chromatic unit-distance graph: exact coordinates, edge list, algebraic field data, 5-colorability CNF, LRAT/DRAT unsat proof, verifier transcript, canonical graph hash, and rendered diagram for human inspection. |
+| Success gate | Before operator approval, the package must pass exact-coordinate unit-distance validation, graph canonicalization/isomorphism checks, independent CNF generation, and at least two SAT proof-checking paths proving non-5-colorability; it must also verify that the coloring proof uses only listed unit edges and no geometric nonedge assumption. |
+
+**Statement.** Find a finite graph G embedded in R^2 with all listed edges of Euclidean length 1 and chromatic number chi(G) at least 6; equivalently, produce a finite unit-distance graph in the plane that is not 5-colorable, raising the known lower bound for the chromatic number of the plane from 5 to 6.
+
+**Prior.** The Hadwiger-Nelson problem asks for the chromatic number of the unit-distance graph of the plane. De Grey's 2018 construction raised the lower bound from 4 to 5 via finite unit-distance graphs, and Polymath16 pursued simplification and related goals. The Polymath16 wiki page, crawled recently in public search results and checked here on 2026-05-14, lists 'Find a 6-chromatic unit-distance graph in the plane' as a goal. Current general references, including MathWorld's Hadwiger-Nelson page published/updated in May 2026 in search results, still say the answer is one of 5, 6, or 7. A final run must additionally search recent arXiv, Polymath threads, graph-coloring repositories, and known unit-distance graph catalogs for any post-2025 claim of a 6-chromatic unit-distance graph before spending search budget.
+
+**Omega fit detail.** This is a strong Omega fit because the mathematical claim has a finite, audit-first certificate surface: exact algebraic coordinates prove the graph is unit-distance, and a SAT unsat proof proves non-5-colorability. The target can be split into deterministic geometry checking, canonical graph hashing, k-colorability CNF generation, and independently checkable LRAT/DRAT proof validation. Even without a breakthrough, a reusable exact verifier for known 5-chromatic unit-distance graphs is externally reviewable and directly aligned with Automath's reproducible certificate standards.
+
+**Attack plan.**
+1. Build or adapt a strict exact checker for finite unit-distance graph packages: algebraic coordinates, edge list, squared-distance-one verification, duplicate vertex detection, canonical graph hash, and diagram export.
+2. Reproduce known benchmark cases first, including the Moser spindle and at least one public de Grey/Polymath/Parts 5-chromatic graph, by generating 4-colorability CNF and independently checking an unsat certificate.
+3. Only after benchmark validation, run constrained graph-search or mutation experiments aimed at strengthening 5-color obstructions, with every candidate reduced to exact geometry plus a 5-colorability unsat certificate.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_hadwiger_nelson_chromatic_unit_distance/research.md
+- tools/community-outreach/targets/cand_hadwiger_nelson_chromatic_unit_distance/results.json
+- tools/community-outreach/targets/cand_hadwiger_nelson_chromatic_unit_distance/submission_draft.md
+
+_Inbox graduation rationale_: This is a visible, named, long-standing open problem with a public source and a finite certificate endpoint. It is high risk as a breakthrough target, but unusually suitable for an Automath/Omega audit pipeline because success is not a vague heuristic: a claimed graph can be independently checked through exact geometry and proof-carrying SAT artifacts. The fallback verifier package for known 5-chromatic unit-distance graphs would still be a serious public artifact rather than a private author-email task.
+
+---
+
+### T-36 · R(5,5) exact value certificate frontier
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://github.com/google-deepmind/formal-conjectures/issues/2364 |
+| Type | open problem |
+| Untouched | The Formal Conjectures issue is public and still open; it was opened on 2026-02-19 and states the stale bound 43 <= R(5,5) <= 48. Angeltveit--McKay arXiv:2409.15709 was last revised on 2025-09-01 and proves R(5,5) <= 46; the Journal of Graph Theory version was published/accepted in March 2026. The Electronic Journal of Combinatorics DS1 page lists the current Dynamic Survey version as Apr 24, 2026. Before run, re-check DS1 Apr 24, 2026 and current Ramsey data pages for any post-April exact-value announcement. |
+| Omega fit | 8/10 |
+| Topic value | 10/10 |
+| Effort est | 5-14 for a serious checker/certificate package; open-ended for a full value resolution 天 |
+| Risk | high |
+| Final display | A public, reproducible Ramsey(5,5) certificate package: graph6 verifier, independent clique/complement-clique checks, canonical hashes, and either a 43-vertex lower-bound witness audit or a certified nonexistence/slice-exclusion bundle for a clearly stated subcase; audience is Ramsey theorists, Formal Conjectures maintainers, and computational-combinatorics reviewers. |
+| Success gate | For any lower-bound or witness claim, two independent K5/complement-K5 enumerators must certify the same graph6 object and hash. For any upper-bound or slice-exclusion claim, the CNF generator, canonical-generation logs, and LRAT/DRAT proof checker must reproduce from a clean checkout. For a public registry update only, the package must first reproduce at least one known small Ramsey certificate and verify the Angeltveit--McKay <=46 bibliographic update from public sources. |
+
+**Statement.** Determine the least n such that every graph on n vertices contains either a clique of size 5 or an independent set of size 5. Equivalently, decide whether R(5,5) is 43, 44, 45, or 46, given the current public bounds 43 <= R(5,5) <= 46.
+
+**Prior.** Public baseline: the GitHub issue google-deepmind/formal-conjectures#2364, opened 2026-02-19, states R(5,5) as unknown with older bounds 43 <= R(5,5) <= 48. Angeltveit--McKay, arXiv:2409.15709, submitted 2024-09-24 and revised 2025-09-01, proves R(5,5) <= 46 using linear programming plus large computer checks; the JGT record appeared in March 2026. Search on 2026-05-14 found no inspectable exact-value announcement, and the DS1 landing page reports a current Dynamic Survey version dated 2026-04-24, which must be checked directly before any claim of freshness.
+
+**Omega fit detail.** Strong certificate/checker fit. Omega can contribute an audit-first graph-certificate layer: graph6 parsing, canonical hashes, independent finite graph predicates, SAT/CNF export, proof-log checking, and a Lean-facing finite statement schema for SimpleGraph certificates. A full R(5,5) solution is unlikely in one run, but a reusable verifier and auditable slice certificates are credible public artifacts and align with Automath's exact/reproducible certificate standards.
+
+**Attack plan.**
+1. Freeze the freshness baseline: inspect DS1 Apr 24 2026, Angeltveit--McKay v2/JGT metadata, McKay data pages, and the Formal Conjectures issue state; record exact URLs and dates in research.md.
+2. Implement or assemble a minimal graph6 Ramsey(5,5,n) verifier with two independent K5/complement-K5 enumeration paths, canonical hashing, and regression tests on known lower-bound or smaller Ramsey witnesses.
+3. Build a reproducible certificate path: export selected subcases to CNF, check SAT/UNSAT proof logs with LRAT/DRAT tooling, and write a sharply scoped public note distinguishing verified certificates from conjectural search output.
+
+**Deliverables.**
+- tools/community-outreach/targets/github_google_deepm_formal_conject_2364/research.md
+- tools/community-outreach/targets/github_google_deepm_formal_conject_2364/results.json
+- tools/community-outreach/targets/github_google_deepm_formal_conject_2364/submission_draft.md
+
+_Inbox graduation rationale_: R(5,5) is a canonical, high-visibility finite extremal problem with a current public formalization issue and a known stale-bound/update gap. The full problem is high risk, but the target has a non-private terminal artifact: a reusable Ramsey certificate/checker package that can be independently inspected, and any successful witness or exclusion certificate would be mathematically serious.
+
+---
+
+### T-37 · Hadamard maxdet order 23 certificate frontier
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://github.com/google-deepmind/formal-conjectures/issues/1796 |
+| Type | open problem |
+| Untouched | Public freshness evidence as of 2026-05-14: Google DeepMind formal-conjectures issue #1796 is inspectable, opened 2026-01-20, labeled research open, and points to public maxdet references; the issue itself is closed, so closure must be interpreted only as repository triage/formal-conjecture handling unless a linked PR or comment proves the mathematical case was solved. OEIS A003432, last modified 2026-05-13, still marks the relevant binary order a(22)=662671875? with a question mark, and public summaries state that sign order 23 is the smallest open exact case. Before running, re-check issue #1796 comments/linked PRs, OEIS A003432/A003433, and Brent/Orrick maxdet pages for any post-2026-05-14 closure. |
+| Omega fit | 9/10 |
+| Topic value | 9/10 |
+| Effort est | 6-14 天 |
+| Risk | med |
+| Final display | A reproducible certificate archive and 1-2 page research note for the maxdet community and the formal-conjectures issue, containing either a new 23x23 sign matrix lower bound or an independently checkable upper-bound/exclusion certificate. |
+| Success gate | No outreach or public comment unless one gate passes: either a 23x23 {-1,+1} matrix has determinant strictly greater than 662671875*2^22 and is verified by two exact determinant implementations, or a complete upper-bound certificate covers every canonical Gram candidate above the record and a clean verifier reproduces the exclusion from a fresh checkout. |
+
+**Statement.** Determine D(23)=max{|det(A)| : A is a 23x23 matrix with entries in {-1,+1}}. The current public lower-bound target is 662671875*2^22; success is either an explicit 23x23 sign matrix with larger determinant or an exact certificate proving no larger determinant is possible.
+
+**Prior.** Hadamard's maximal determinant problem is classical and public. The formal-conjectures issue #1796 was opened on 2026-01-20 and labels the general problem as research open. The OEIS A003432 page, inspected 2026-05-14 and last modified 2026-05-13, states the equivalence g(n)=2^(n-1)*a(n-1) and lists a(22)=662671875? rather than a settled exact value. Public summaries list exact sign-matrix values through order 22 and identify order 23 as the smallest open case. This prior is bounded by public web surfaces only; the first task must verify that no post-2026-05-14 registry, OEIS, arXiv, GitHub issue/PR, or maxdet page has closed order 23.
+
+**Omega fit detail.** This is a strong Omega/Automath fit because both endpoints are audit-first finite artifacts. A lower-bound artifact is a single 23x23 sign matrix plus exact determinant logs. An upper-bound artifact can be decomposed into Gram-matrix enumeration, canonicalization, determinant ceilings, and exact SAT/PB/ILP non-decomposition certificates for AA^T=G. Each stage can emit machine-checkable JSON and short independent verifiers. The target is not tied to current Sidon, Fibonacci-totient, or collaboration-email lanes; its terminal artifact is public and reproducible rather than private correspondence.
+
+**Attack plan.**
+1. Create a bounded literature/freshness note that records the exact public status of issue #1796, OEIS A003432/A003433, and the Brent/Orrick maxdet resources, including dates and screenshots or archived URLs where useful.
+2. Implement a baseline exact verifier for the record value: parse candidate sign matrices, check entries are +/-1, compute det(A) exactly via two independent methods, convert between 0/1 and sign formulations, and emit results.json with hashes.
+3. Prototype the upper-bound route by enumerating normalized Gram candidates G=AA^T with diagonal 23, admissible odd off-diagonal entries, PSD/integrality constraints, determinant above the record, canonical row constraints, and then hand surviving G to an exact SAT/PB decomposer with reproducible exclusion certificates.
+
+**Deliverables.**
+- tools/community-outreach/targets/github_google_deepm_formal_conject_1796/research.md
+- tools/community-outreach/targets/github_google_deepm_formal_conject_1796/results.json
+- tools/community-outreach/targets/github_google_deepm_formal_conject_1796/submission_draft.md
+
+_Inbox graduation rationale_: This target has high independent mathematical visibility, a public formalization-facing source, a crisp finite success condition, and a natural certificate/verifier package. It is not a small author-email follow-up: even partial progress such as a reusable maxdet23 checker, validated record reproduction, or canonical Gram-candidate audit would be externally reviewable, while a new lower bound or complete upper bound would be a serious public contribution.
+
+---
+
+### T-38 · Projective plane of order 12 certificate frontier
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/ErdosProblems/723.lean |
+| Type | open problem |
+| Untouched | Freshness checked against public source surfaces on 2026-05-14 Asia/Singapore: Formal Conjectures main branch still tags Erdős 723 and the order-12 variant as research open; ErdősProblems #723 says the prime-power conjecture is open, comments contain no claimed partial or complete solution, and the page states order 12 remains open; 2019 and 2022/2023 Akiyama-Suetake-Tanaka/Suetake-family literature visible in public indexes only rules out specific collineation-group slices, including order 9 and order 4, rather than resolving existence. |
+| Omega fit | 9/10 |
+| Topic value | 9/10 |
+| Effort est | 5-10 天 |
+| Risk | high |
+| Final display | A public, reproducible certificate package for finite projective planes of order 12: either a 157-by-157 sparse incidence matrix with hash and verifier transcript, or a scoped unsat certificate for a named automorphism/collineation slice, written as an audit-first research note for finite-geometry/Formal Conjectures reviewers. |
+| Success gate | Before operator approval or any public comment, two independent verification paths must agree: for a positive construction, exact integer incidence counts plus a second parser/checker over the same hashed sparse matrix; for a negative slice, independently generated SAT/ILP/exact-cover instances with solver certificates or logs plus a separate orbit-matrix validator. Any claimed Lean bridge must only state the checked finite-design theorem after the certificate has passed the external checker. |
+
+**Statement.** Decide whether there exist finite sets P and L, an incidence relation I subset P x L, and order n = 12 such that |P| = |L| = n^2+n+1 = 157, every line is incident with n+1 = 13 points, every point is incident with 13 lines, any two distinct points lie on exactly one common line, and any two distinct lines meet in exactly one common point.
+
+**Prior.** Public baseline as of 2026-05-14: ErdősProblems #723 records the prime-power conjecture for finite projective planes as open and specifically names order 12 as the first open composite order after n <= 11 and the order-10 computer search. Formal Conjectures file FormalConjectures/ErdosProblems/723.lean mirrors this with theorem erdos_723.variants.eq_12 tagged research open. Publicly indexed finite-geometry literature shows exclusions for automorphism/collineation slices, including Akiyama-Suetake-Tanaka's 2019 order-9 collineation-group result and their 2022/2023 order-4 collineation-group result, but not a full existence/nonexistence decision. Before a full run, rerun bibliographic search for "projective plane of order 12 exists", "finite projective plane order 12 nonexistence", and "collineation group order 12 projective plane 12" to catch any very recent preprint or issue comment.
+
+**Omega fit detail.** This is a strong Omega fit because the mathematical object is finite and certificate-checkable. Automath can contribute a small trusted checker for symmetric 2-(157,13,1) designs, sparse incidence matrix parsing, row/column degree checks, pair-intersection checks, and optional MOLS/orthogonal-array equivalence formats. The bridge to Omega should keep discovery/search code separate from certificate verification, with any Lean/Mathlib layer limited to finite-design statements whose hypotheses are generated by audited checkers.
+
+**Attack plan.**
+1. Implement a minimal certificate format and Python checker for finite projective planes as symmetric 2-(v,k,lambda) designs, with regression fixtures for PG(2,2) and PG(2,3), then optionally PG(2,11) if a trusted generator is available.
+2. Build an exact-cover/SAT/ILP encoding for order 12 incidence matrices under explicit normalization and symmetry assumptions, recording every assumption in a machine-readable manifest rather than baking it into code comments.
+3. Target a named, reviewable slice first: reproduce or independently validate one known collineation-group exclusion at small scale, then attempt a new or cleaner certificate for a slice whose mathematical statement is precise enough to cite.
+4. Package the result as a research.md note with source baseline, certificate hashes, commands, logs, and a short explanation of which part is mathematics, which part is search, and which part is trusted checking.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_projective_plane_order_certificate_frontier/research.md
+- tools/community-outreach/targets/cand_projective_plane_order_certificate_frontier/results.json
+- tools/community-outreach/targets/cand_projective_plane_order_certificate_frontier/submission_draft.md
+
+_Inbox graduation rationale_: This should enter the board because it is a classical, inspectable finite-geometry open problem with exceptional impact and a natural audit-first terminal artifact. A full solution is high risk, but a reproducible checker and a scoped unsat/construction certificate would still be externally reviewable and valuable to Formal Conjectures and finite-geometry audiences, rather than ending as a private author email.
+
+---
+
+### T-39 · Barnette graph Hamiltonicity certificate frontier
+
+| field | value |
+|---|---|
+| Status | Backlog (candidate inbox graduation) |
+| Source | https://arxiv.org/html/2508.03531v1 |
+| Type | open problem |
+| Untouched | Freshness is inspectable but must be rechecked before any public claim: arXiv:2508.03531v1, dated 2025-08-05, states Barnette's conjecture is still open and proves only the face-size-at-most-8 case with a computational component; its GitHub repository is public and contains Sage source for checking the graph substitutions. The GD 2025 LIPIcs paper 'Approximating Barnette's Conjecture' also calls Barnette's conjecture open, cites computer verification up to 90 vertices, and frames the remaining gap through C4-expansions/subhamiltonian bounds. A 2026 MathWorld page still describes the general conjecture as open. Before run start, recheck arXiv, MathSciNet/ZbMATH if available, Google Scholar, MathWorld, and the Tobias271828 GitHub repo for any post-2025 resolution or erratum. |
+| Omega fit | 9/10 |
+| Topic value | 9/10 |
+| Effort est | 14-30 天 |
+| Risk | high |
+| Final display | Public certificate registry and reproducibility note for Barnette graph generation/Hamiltonicity: canonical graph hashes, embeddings, property-check logs, Hamilton cycles or substitution-lifting certificates, and independently replayable verifier scripts for graph theorists and computational-combinatorics reviewers. |
+| Success gate | Graduate to operator review only if two independent generation/property-check paths agree on the claimed Barnette graph class or substitution cases, every positive instance has a machine-verified Hamiltonian cycle or local lifting certificate, and all scripts plus certificates run from a clean checkout with pinned versions. A counterexample claim requires a valid cubic bipartite planar 3-connected graph certificate plus an independently reproducible non-Hamiltonicity proof; otherwise no outreach or public post. |
+
+**Statement.** Barnette's conjecture states that every finite simple cubic bipartite planar 3-connected graph is Hamiltonian. The proposed Omega target is not to claim the full conjecture immediately, but to build an auditable certificate frontier around Barnette graphs: reproduce and independently verify published bounded/computer-assisted claims such as the up-to-90-vertices frontier and/or the 2025 face-size-at-most-8 substitution proof, then attempt a publishable extension, reusable checker schema, or precisely scoped audit note.
+
+**Prior.** As of the inspected sources, the full conjecture remains open. The arXiv source https://arxiv.org/html/2508.03531v1 is dated 2025-08-05 and states the conjecture remains open, while proving Hamiltonicity for cubic bipartite planar connected graphs with all faces of size at most 8; it says parts of the proof are computer-aided and points to Sage code at https://github.com/Tobias271828/barnette-graphs-with-faces-up-to-size-8-are-hamiltonian. The GD 2025 LIPIcs paper https://drops.dagstuhl.de/storage/00lipics/lipics-vol357-gd2025/html/LIPIcs.GD.2025.6/LIPIcs.GD.2025.6.html calls Barnette's conjecture open, reports the known computer-assisted verification of all Barnette graphs up to 90 vertices, and identifies C4-expansions as the main challenge. MathWorld's Barnette's Conjecture page, crawled/published in May 2026, also says the general conjecture remains open. This prior must be refreshed before any writeback because a full resolution would obsolete the target.
+
+**Omega fit detail.** This is a strong audit-first Omega fit because the objects and claims are finite, checkable, and naturally certificate-bearing. A positive bounded claim can be audited by canonical graph generation, planarity/3-connectivity/bipartiteness/cubic checks, face-size checks from embeddings, and a Hamilton-cycle certificate per graph. The 2025 face-size-at-most-8 result is explicitly computer-assisted with public Sage code, so an independent verifier and reproducible certificate layer has standalone community value even before extending the mathematics. The exploratory bridge to Automath is a certificate registry and replayable verifier rather than informal discovery.
+
+**Attack plan.**
+1. Scaffold tools/community-outreach/targets/__SLUG__/research.md with a source-bounded literature baseline, exact definitions of Barnette graphs, and a table of claims to reproduce: up-to-90 vertices, face-size-at-most-8 substitution checks, and any smaller independently generated sanity classes.
+2. Build a small barnette_audit prototype that imports or shells out to a trusted generator such as plantri/nauty when available, normalizes graphs to canonical hashes, checks cubic/bipartite/planar/3-connected properties independently, extracts embeddings and face sizes, and verifies supplied Hamilton cycles.
+3. Replay the public Sage substitution checks from the 2025 GitHub repository in a clean environment, record exact commit/version/runtime logs, and write a verifier-facing note that separates reproduced published computation from any new extension.
+4. If reproduction succeeds, attempt one incremental public artifact: a cleaner independent certificate registry for bounded Barnette graphs, a second implementation of the face-size-at-most-8 local checks, or a narrowly stated extension of a finite bound/class with complete certificates.
+
+**Deliverables.**
+- tools/community-outreach/targets/cand_barnette_graph_hamiltonicity_certificate_fr/research.md
+- tools/community-outreach/targets/cand_barnette_graph_hamiltonicity_certificate_fr/results.json
+- tools/community-outreach/targets/cand_barnette_graph_hamiltonicity_certificate_fr/submission_draft.md
+
+_Inbox graduation rationale_: Barnette's conjecture is a named, long-standing graph-theory problem with current public sources still describing it as open. Recent progress is explicitly computer-assisted and public-code-backed, which makes a reproducibility-grade certificate package a meaningful terminal artifact rather than a private author-email task. The target is high risk for solving the full conjecture, but the intermediate outputs are inspectable, reviewable, and aligned with Omega's exact-certificate standards.
 
 ---
