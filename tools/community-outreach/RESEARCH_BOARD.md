@@ -139,7 +139,7 @@
 
 | field | value |
 |---|---|
-| Status | **🔴 DROP · profile judge DROP** — The board entry does not define a valid target-specific open-problem profile. It conflates Erdős #1191 with a different finite Sidon diameter constant problem: Erdős #1191 is an infinite Sidon-set liminf/log-density ques |
+| Status | **🔴 DROP · profile judge DROP** — The supplied entry is internally mismatched and not a valid target-specific profile for Erdős #1191: it labels the target as Erdős #1191 but describes a finite Sidon diameter second-order constant / AlphaEvolve ansatz-ex |
 | Source | Tao 2025-11 blog + AlphaEvolve PDF §3 |
 | Type | OPEN / additive combinatorics extremal |
 | Untouched | ✅ AE 给 ansatz 数值 1.952659, ImprovEvolve 1.95264, 没人证 ansatz 是充分的 |
