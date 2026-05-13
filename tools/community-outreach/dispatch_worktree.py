@@ -40,6 +40,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -63,8 +64,10 @@ STATE_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_state
 TARGETS_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/targets"
 LOGS_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/logs"
 WORKTREE_ROOT_DEFAULT = REPO_ROOT_DEFAULT.parent / "_outreach_worktrees"
+LOCAL_REPAIR_SCRIPT_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_local_repair.py"
 SCHEMA_VERSION = "community-outreach-state-v3-research-board"
 SUPERVISOR_SCHEMA_VERSION = "community-outreach-supervisor-v1"
+PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
 
 @dataclass
 class DispatchPlan:
@@ -857,15 +860,21 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
     if not consultant.is_alive():
         print(f"[oracle-deep] server down at {consultant.server_url}; skipping {todo.todo_id}", file=sys.stderr)
         return {"skipped": "server_down", "server_url": consultant.server_url}
-    workup_ok, workup_reason = _pre_oracle_codex_workup_status(profile.slug)
+    workup_ok, workup_reason, workup_log = _run_pre_oracle_codex_workup(
+        todo.todo_id,
+        profile.slug,
+        timeout=oracle_timeout,
+    )
     if not workup_ok:
         print(
-            f"[oracle-deep] pre-oracle Codex workup gate failed for {todo.todo_id}: {workup_reason}",
+            f"[oracle-deep] pre-oracle Codex workup failed for {todo.todo_id}: "
+            f"{workup_reason} ({workup_log})",
             file=sys.stderr,
         )
         return {
             "skipped": "pre_oracle_codex_workup_required",
             "reason": workup_reason,
+            "local_repair_log": workup_log,
             "target_slug": profile.slug,
             "required_artifacts": [
                 f"tools/community-outreach/targets/{profile.slug}/codex_workup.md",
@@ -873,6 +882,7 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
                 f"tools/community-outreach/targets/{profile.slug}/local_repair_report.md",
             ],
         }
+    print(f"[oracle-deep] pre-oracle Codex workup refreshed for {todo.todo_id}: {workup_log}")
     research_text = ""
     if research_md.exists():
         research_text = research_md.read_text(encoding="utf-8")
@@ -1367,6 +1377,104 @@ def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
     if not _is_concrete_next_oracle_question(question):
         return False, "missing concrete next_oracle_question.md or ## Next Oracle question"
     return True, ""
+
+
+def _pre_oracle_codex_workup_fresh_after(slug: str, started_at: float) -> tuple[bool, str]:
+    """Require the Oracle handoff to be refreshed by the current Codex pass."""
+    ok, reason = _pre_oracle_codex_workup_status(slug)
+    if not ok:
+        return ok, reason
+    target_dir = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug
+    required = (
+        "codex_workup.md",
+        "next_oracle_question.md",
+        "local_repair_report.md",
+    )
+    stale: list[str] = []
+    threshold = max(0.0, started_at - 2.0)
+    for name in required:
+        path = target_dir / name
+        try:
+            mtime = path.stat().st_mtime
+        except OSError:
+            return False, f"missing {name}"
+        if mtime < threshold:
+            stale.append(name)
+    if stale:
+        return False, "stale Codex handoff after current local pass: " + ", ".join(stale)
+    return True, ""
+
+
+def _pre_oracle_codex_workup_recent(slug: str, *, max_age_seconds: int) -> tuple[bool, str]:
+    """Accept a just-produced Codex handoff without running the same pass twice."""
+    ok, reason = _pre_oracle_codex_workup_status(slug)
+    if not ok:
+        return ok, reason
+    target_dir = REPO_ROOT_DEFAULT / "tools/community-outreach/targets" / slug
+    required = (
+        "codex_workup.md",
+        "next_oracle_question.md",
+        "local_repair_report.md",
+    )
+    oldest_age = 0.0
+    for name in required:
+        path = target_dir / name
+        try:
+            age = time.time() - path.stat().st_mtime
+        except OSError:
+            return False, f"missing {name}"
+        oldest_age = max(oldest_age, age)
+    if oldest_age > max_age_seconds:
+        return False, f"Codex handoff older than reuse window ({oldest_age:.0f}s > {max_age_seconds}s)"
+    return True, ""
+
+
+def _run_pre_oracle_codex_workup(todo_id: str, slug: str, *, timeout: int) -> tuple[bool, str, str]:
+    """Run the local Codex worker immediately before Oracle-deep.
+
+    This keeps every Oracle entry point honest.  The research loop already does
+    this before calling dispatch_worktree, but watchdog/manual/resume calls can
+    also reach --oracle-deep directly.  In all cases the next Oracle prompt
+    must come from a fresh target-local Codex replay/workup, not from stale
+    metadata or a previous round's generic continuation prompt.
+    """
+    recent_ok, recent_reason = _pre_oracle_codex_workup_recent(
+        slug,
+        max_age_seconds=PRE_ORACLE_WORKUP_REUSE_SECONDS,
+    )
+    if recent_ok:
+        return True, "", "recent Codex handoff reused"
+    if not LOCAL_REPAIR_SCRIPT_DEFAULT.exists():
+        return False, "local repair script missing", str(LOCAL_REPAIR_SCRIPT_DEFAULT)
+    log_dir = STATE_DIR_DEFAULT / "research_loop_logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    tag = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_path = log_dir / f"dispatch_pre_oracle_local_repair_{todo_id}_{tag}.log"
+    cmd = [
+        "python3",
+        str(LOCAL_REPAIR_SCRIPT_DEFAULT),
+        "--todo-id",
+        todo_id,
+        "--timeout",
+        str(max(60, min(timeout, 1800))),
+        "--json",
+    ]
+    started = time.time()
+    with open(log_path, "ab") as logf:
+        proc = subprocess.run(
+            cmd,
+            cwd=str(REPO_ROOT_DEFAULT),
+            stdout=logf,
+            stderr=subprocess.STDOUT,
+            timeout=max(90, min(timeout, 2100)),
+            check=False,
+        )
+    if proc.returncode != 0:
+        return False, f"local repair rc={proc.returncode}", str(log_path)
+    fresh_ok, fresh_reason = _pre_oracle_codex_workup_fresh_after(slug, started)
+    if not fresh_ok:
+        return False, fresh_reason, str(log_path)
+    return True, "", str(log_path)
 
 
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
