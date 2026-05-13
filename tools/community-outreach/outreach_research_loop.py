@@ -579,6 +579,20 @@ def _extract_next_oracle_question_from_workup(text: str) -> str:
     return match.group(1).strip()
 
 
+def _extract_workup_section(text: str, heading: str) -> str:
+    if not text:
+        return ""
+    pattern = re.compile(
+        r"(?ims)^##\s+"
+        + re.escape(heading).replace(r"\ ", r"\s+")
+        + r"\s*$"
+        + r"(.*?)"
+        + r"(?=^##\s+|\Z)"
+    )
+    match = pattern.search(text)
+    return match.group(1).strip() if match else ""
+
+
 def _read_next_oracle_question(slug: str) -> str:
     """Return the exact Codex-selected next Oracle question, if present."""
     target_dir = TARGETS_DIR / slug
@@ -672,6 +686,57 @@ def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
     missing_sections = [section for section in required_sections if section not in lowered]
     if missing_sections:
         return False, "codex_workup.md missing sections: " + ", ".join(missing_sections)
+    local_body = _extract_workup_section(stripped, "Local evidence checked")
+    commands_body = _extract_workup_section(stripped, "Commands run")
+    artifact_body = _extract_workup_section(stripped, "Verifier/artifact status")
+    if len(local_body) < 80:
+        return False, "Local evidence checked section too thin to prove target inspection"
+    if len(commands_body) < 80:
+        return False, "Commands run section too thin to prove local execution"
+    if len(artifact_body) < 80:
+        return False, "Verifier/artifact status section too thin to prove artifact review"
+    command_markers = (
+        "```",
+        "$ ",
+        "python3 ",
+        "python ",
+        "rg ",
+        "find ",
+        "git status",
+        "sed -n",
+        "cat ",
+        "ls ",
+        "date ",
+        "lean ",
+        "lake ",
+        "sage ",
+        "magma ",
+        "gap ",
+        "node ",
+        "npm ",
+        "pytest",
+        "curl ",
+        "unzip ",
+        "sha256sum",
+    )
+    commands_lower = commands_body.lower()
+    if not any(marker in commands_lower for marker in command_markers):
+        return False, "Commands run section lacks concrete shell/tool commands"
+    inspection_markers = (
+        "inspected",
+        "searched",
+        "found",
+        "confirmed",
+        "checked",
+        "ran",
+        "replayed",
+        "no oracle claim",
+        "missing",
+        "absent",
+    )
+    local_artifact_text = f"{local_body}\n{artifact_body}".lower()
+    if not any(marker in local_artifact_text for marker in inspection_markers):
+        return False, "local evidence/artifact sections do not describe an actual inspection result"
     trace_markers = (
         "command",
         "ran",

@@ -1197,6 +1197,10 @@ def _extract_markdown_section(text: str, heading: str, *, max_chars: int) -> str
     return body[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + body[-max_chars // 2 :]
 
 
+def _extract_workup_section(text: str, heading: str) -> str:
+    return _extract_markdown_section(text, heading, max_chars=20000)
+
+
 def _codex_workup_has_local_trace(text: str) -> bool:
     """Return true only when the workup shows actual local target processing."""
     stripped = (text or "").strip()
@@ -1211,6 +1215,53 @@ def _codex_workup_has_local_trace(text: str) -> bool:
         "## next oracle question",
     )
     if any(section not in lowered for section in required_sections):
+        return False
+    local_body = _extract_workup_section(stripped, "Local evidence checked")
+    commands_body = _extract_workup_section(stripped, "Commands run")
+    artifact_body = _extract_workup_section(stripped, "Verifier/artifact status")
+    if len(local_body) < 80 or len(commands_body) < 80 or len(artifact_body) < 80:
+        return False
+    command_markers = (
+        "```",
+        "$ ",
+        "python3 ",
+        "python ",
+        "rg ",
+        "find ",
+        "git status",
+        "sed -n",
+        "cat ",
+        "ls ",
+        "date ",
+        "lean ",
+        "lake ",
+        "sage ",
+        "magma ",
+        "gap ",
+        "node ",
+        "npm ",
+        "pytest",
+        "curl ",
+        "unzip ",
+        "sha256sum",
+    )
+    commands_lower = commands_body.lower()
+    if not any(marker in commands_lower for marker in command_markers):
+        return False
+    inspection_markers = (
+        "inspected",
+        "searched",
+        "found",
+        "confirmed",
+        "checked",
+        "ran",
+        "replayed",
+        "no oracle claim",
+        "missing",
+        "absent",
+    )
+    local_artifact_text = f"{local_body}\n{artifact_body}".lower()
+    if not any(marker in local_artifact_text for marker in inspection_markers):
         return False
     trace_markers = (
         "command",
