@@ -552,10 +552,21 @@ def _run_codex_workup_before_oracle(todo_id: str, slug: str, timeout_s: int) -> 
     attack next.
     """
     loop_log(f"{todo_id}: refreshing Codex local workup before Oracle")
+    started = _now()
     rc, log_path = _spawn_local_repair(todo_id, timeout_s)
     loop_log(f"{todo_id}: pre-Oracle Codex workup rc={rc} ({log_path})")
     if rc != 0:
         _note_local_repair_backoff(slug, reason=f"pre-oracle codex workup rc={rc}", log_path=log_path)
+        return rc, log_path
+    fresh_ok, fresh_reason = _pre_oracle_workup_fresh_after(slug, started)
+    if not fresh_ok:
+        _note_local_repair_backoff(
+            slug,
+            reason=f"pre-oracle codex workup stale/unusable after current run: {fresh_reason}",
+            log_path=log_path,
+        )
+        loop_log(f"{todo_id}: pre-Oracle Codex workup stale/unusable after current run ({fresh_reason})")
+        return 2, log_path
     return rc, log_path
 
 
@@ -696,6 +707,38 @@ def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
     ok, reason = _workup_has_local_execution_trace(workup)
     if not ok:
         return False, reason
+    return True, ""
+
+
+def _pre_oracle_workup_fresh_after(slug: str, started_at: float) -> tuple[bool, str]:
+    """Ensure the accepted workup was written by this local-repair pass.
+
+    A target can have a good old `codex_workup.md`.  That is useful context, but
+    it must not let the harness skip the current Codex pass after a new Oracle
+    packet, verifier change, or board edit.  The accepted handoff should be at
+    least as fresh as the local-repair invocation that just returned.
+    """
+    ok, reason = _pre_oracle_workup_status(slug)
+    if not ok:
+        return ok, reason
+    target_dir = TARGETS_DIR / slug
+    required = (
+        "codex_workup.md",
+        "next_oracle_question.md",
+        "local_repair_report.md",
+    )
+    stale: list[str] = []
+    threshold = max(0.0, started_at - 2.0)
+    for name in required:
+        path = target_dir / name
+        try:
+            mtime = path.stat().st_mtime
+        except OSError:
+            return False, f"missing {name}"
+        if mtime < threshold:
+            stale.append(name)
+    if stale:
+        return False, "stale local repair handoff: " + ", ".join(stale)
     return True, ""
 
 
@@ -1169,6 +1212,7 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                     f"{todo_id}: science_gate needs local replay/verifier repair; "
                     "dispatching Codex local_repair before any further Oracle turn"
                 )
+                repair_started = _now()
                 rc, log_path = _spawn_local_repair(todo_id, timeout_s)
                 loop_log(f"{todo_id}: outreach_local_repair rc={rc} ({log_path})")
                 todos = _parse_board_safe()
@@ -1185,7 +1229,7 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                         f"{todo_id}: local repair cleared replay/verifier blockers; "
                         "checking Codex-selected next Oracle task before proof/closure"
                     )
-                    workup_ok, workup_reason = _pre_oracle_workup_status(slug)
+                    workup_ok, workup_reason = _pre_oracle_workup_fresh_after(slug, repair_started)
                     if not workup_ok:
                         rc, log_path = 2, log_path
                         _note_local_repair_backoff(

@@ -635,14 +635,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     verifier_audit_before = _record_target_verifier_audit(todo_id, target_dir)
     if verifier_audit_before.get("passed"):
         gate_after_audit = _run_science_gate(todo_id, write_ledger=True)
-        if gate_after_audit.get("status") != gate_before.get("status") or gate_after_audit.get(
-            "verification_status"
-        ) != gate_before.get("verification_status"):
-            # If a pre-existing local verifier already clears the deterministic
-            # gate enough to change the target state, return immediately.  The
-            # research loop can then decide whether to ask Oracle for the next
-            # proof gap, rather than spending another Codex turn rediscovering
-            # the same replay.
+        if str(gate_after_audit.get("status") or "") in {"WRITEBACK_READY", "CLOSE_TARGET"}:
             report = {
                 "ok": True,
                 "todo_id": todo_id,
@@ -653,11 +646,17 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                 "verifier_audit": verifier_audit_before,
                 "gate_before": gate_before,
                 "gate_after": gate_after_audit,
-                "shortcut": "preexisting_verifier_audit_changed_gate",
+                "shortcut": "preexisting_verifier_audit_reached_terminal_gate",
             }
             state_path = target_dir / "local_repair_last.json"
             state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             return report
+        if gate_after_audit.get("status") != gate_before.get("status") or gate_after_audit.get(
+            "verification_status"
+        ) != gate_before.get("verification_status"):
+            # Verifier replay is real local work, but a non-terminal gate still
+            # needs a fresh Codex handoff before Oracle is asked anything.
+            gate_before = gate_after_audit
     prompt = build_prompt(todo_id, gate=gate_before, target_dir=target_dir)
 
     if not CODEX_BIN or not Path(CODEX_BIN).exists():
