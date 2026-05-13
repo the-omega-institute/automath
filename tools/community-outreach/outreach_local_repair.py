@@ -210,12 +210,183 @@ def _verifier_stdout_passed(payload: dict, raw_stdout: str = "") -> bool:
     return False
 
 
+def _extract_next_oracle_question_from_workup(text: str) -> str:
+    if not text:
+        return ""
+    match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", text)
+    if not match:
+        return ""
+    return match.group(1).strip()
+
+
+def _is_concrete_next_oracle_question(question: str) -> bool:
+    q = (question or "").strip()
+    if len(q) < 120:
+        return False
+    lowered = q.lower()
+    generic_markers = (
+        "continue research",
+        "继续研究",
+        "do the next step",
+        "lower the progress metric",
+        "provide metadata",
+        "review the board",
+        "look into this problem",
+        "make progress",
+        "find something useful",
+    )
+    if any(marker in lowered for marker in generic_markers):
+        return False
+    concrete_markers = (
+        "prove",
+        "disprove",
+        "certificate",
+        "construction",
+        "counterexample",
+        "verifier",
+        "exact",
+        "bound",
+        "obstruction",
+        "cnf",
+        "lrat",
+        "drat",
+        "graph",
+        "lemma",
+        "theorem",
+        "compute",
+        "enumerate",
+        "check",
+    )
+    return any(marker in lowered for marker in concrete_markers)
+
+
+def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
+    """Check that Codex actually processed the target before Oracle.
+
+    This mirrors the research-loop pre-Oracle gate, but runs immediately after
+    the Codex local worker returns.  The harness must not trust the worker's
+    final prose unless the target-local files exist and contain a replay/check
+    trace.
+    """
+    stripped = (text or "").strip()
+    if len(stripped) < 500:
+        return False, "codex_workup.md too short to show local processing"
+    lowered = stripped.lower()
+    required_sections = (
+        "## local evidence checked",
+        "## commands run",
+        "## verifier/artifact status",
+        "## proof obligations still open",
+        "## next oracle question",
+    )
+    missing_sections = [section for section in required_sections if section not in lowered]
+    if missing_sections:
+        return False, "codex_workup.md missing sections: " + ", ".join(missing_sections)
+    trace_markers = (
+        "command",
+        "ran",
+        "checked",
+        "verified",
+        "passed",
+        "failed",
+        "missing",
+        "not run",
+        "no local",
+        "no oracle claim",
+        "results.json",
+        "verifier",
+        "artifact",
+        "python",
+    )
+    if not any(marker in lowered for marker in trace_markers):
+        return False, "codex_workup.md lacks local command/check/artifact trace"
+    return True, ""
+
+
+def _collect_missing_referenced_local_paths(value: object) -> list[str]:
+    """Find target-local artifact references in JSON that do not exist."""
+    missing: list[str] = []
+    if isinstance(value, dict):
+        for child in value.values():
+            missing.extend(_collect_missing_referenced_local_paths(child))
+        return missing
+    if isinstance(value, list):
+        for child in value:
+            missing.extend(_collect_missing_referenced_local_paths(child))
+        return missing
+    if not isinstance(value, str):
+        return missing
+    text = value.strip()
+    if not text.startswith("tools/community-outreach/"):
+        return missing
+    if any(ch in text for ch in "*?[]"):
+        return missing
+    path = REPO_ROOT / text
+    if not path.exists():
+        missing.append(text)
+    return missing
+
+
+def _postcheck_local_repair_artifacts(target_dir: Path) -> dict:
+    target_dir = target_dir.resolve()
+    diagnostics: list[str] = []
+
+    workup_path = target_dir / "codex_workup.md"
+    workup = _read_text(workup_path, limit=40000)
+    if not workup:
+        diagnostics.append("missing codex_workup.md")
+    else:
+        ok, reason = _workup_has_local_execution_trace(workup)
+        if not ok:
+            diagnostics.append(reason)
+
+    question_path = target_dir / "next_oracle_question.md"
+    question = _read_text(question_path, limit=10000).strip()
+    if not question:
+        question = _extract_next_oracle_question_from_workup(workup)
+    if not _is_concrete_next_oracle_question(question):
+        diagnostics.append("missing concrete next_oracle_question.md")
+
+    report_path = target_dir / "local_repair_report.md"
+    report = _read_text(report_path, limit=12000)
+    if len(report.strip()) < 200:
+        diagnostics.append("missing or too-short local_repair_report.md")
+    else:
+        report_lower = report.lower()
+        if "command" not in report_lower and "ran" not in report_lower and "checked" not in report_lower:
+            diagnostics.append("local_repair_report.md lacks command/check summary")
+
+    results_path = target_dir / "results.json"
+    if results_path.exists():
+        try:
+            results_payload = json.loads(results_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            diagnostics.append(f"invalid results.json: {exc}")
+        else:
+            missing_refs = sorted(set(_collect_missing_referenced_local_paths(results_payload)))
+            if missing_refs:
+                diagnostics.append(
+                    "results.json references missing local artifacts: " + ", ".join(missing_refs[:8])
+                )
+
+    return {
+        "ok": not diagnostics,
+        "diagnostics": diagnostics,
+        "workup_path": str(workup_path.relative_to(REPO_ROOT)),
+        "next_oracle_question_path": str(question_path.relative_to(REPO_ROOT)),
+        "local_repair_report_path": str(report_path.relative_to(REPO_ROOT)),
+    }
+
+
 def _candidate_verifier_scripts(target_dir: Path) -> list[Path]:
     candidates: list[Path] = []
     standard = target_dir / "verify_results.py"
     if standard.exists():
         candidates.append(standard)
     for path in sorted(target_dir.glob("verify*_results.py")):
+        if path not in candidates:
+            candidates.append(path)
+    for path in sorted(target_dir.glob("verify*.py")):
         if path not in candidates:
             candidates.append(path)
     return candidates
@@ -549,8 +720,10 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     output_path.write_text(raw or "", encoding="utf-8")
     verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
     gate_after = _run_science_gate(todo_id, write_ledger=True)
+    postcheck = _postcheck_local_repair_artifacts(target_dir)
+    ok = rc == 0 and bool(postcheck.get("ok"))
     report = {
-        "ok": rc == 0,
+        "ok": ok,
         "todo_id": todo_id,
         "slug": todo.slug(),
         "started_at": started,
@@ -561,6 +734,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "stderr_log": str(stderr_path.relative_to(REPO_ROOT)),
         "output_log": str(output_path.relative_to(REPO_ROOT)),
         "verifier_audit": verifier_audit,
+        "postcheck": postcheck,
         "gate_before": gate_before,
         "gate_after": gate_after,
     }
