@@ -62,7 +62,7 @@ SESSIONS_DIR = ORACLE_DIR / "sessions"
 RESULTS_DIR = ORACLE_DIR / "results"
 CANCELLED_PATH = ORACLE_DIR / "cancelled_tasks.json"
 
-MAX_AGENTS = int(os.environ.get("OUTREACH_ORACLE_MAX_AGENTS", "2") or "2")
+MAX_AGENTS = int(os.environ.get("OUTREACH_ORACLE_MAX_AGENTS", "3") or "3")
 TASK_TIMEOUT = 14400  # 4 hours; ChatGPT Pro thinking can be 60+ min/turn
 AGENT_RECENT_SECONDS = 120
 STALE_REQUEUE_SECONDS = 900
