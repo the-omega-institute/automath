@@ -539,6 +539,83 @@ def _run_codex_workup_before_oracle(todo_id: str, slug: str, timeout_s: int) -> 
     return rc, log_path
 
 
+def _extract_next_oracle_question_from_workup(text: str) -> str:
+    if not text:
+        return ""
+    match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", text)
+    if not match:
+        return ""
+    return match.group(1).strip()
+
+
+def _read_next_oracle_question(slug: str) -> str:
+    """Return the exact Codex-selected next Oracle question, if present."""
+    target_dir = TARGETS_DIR / slug
+    direct = target_dir / "next_oracle_question.md"
+    try:
+        if direct.exists():
+            text = direct.read_text(encoding="utf-8", errors="replace").strip()
+            if text:
+                return text
+    except OSError:
+        pass
+    workup = target_dir / "codex_workup.md"
+    try:
+        text = workup.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    return _extract_next_oracle_question_from_workup(text)
+
+
+def _is_concrete_next_oracle_question(question: str) -> bool:
+    """Reject generic continuation prompts before they reach Oracle."""
+    q = (question or "").strip()
+    if len(q) < 120:
+        return False
+    lowered = question.lower()
+    if len(question) < 80:
+        return False
+    generic_markers = (
+        "continue research",
+        "继续研究",
+        "do the next step",
+        "lower the progress metric",
+        "provide metadata",
+        "review the board",
+        "look into this problem",
+        "make progress",
+        "find something useful",
+    )
+    if any(marker in lowered for marker in generic_markers):
+        return False
+    concrete_markers = (
+        "prove",
+        "disprove",
+        "certificate",
+        "construction",
+        "counterexample",
+        "verifier",
+        "exact",
+        "bound",
+        "obstruction",
+        "cnf",
+        "lrat",
+        "drat",
+        "graph",
+        "lemma",
+        "theorem",
+        "compute",
+        "enumerate",
+        "check",
+    )
+    return any(marker in lowered for marker in concrete_markers)
+
+
+def _has_next_oracle_question(slug: str) -> bool:
+    """Ensure the pre-Oracle Codex pass produced an actual next question."""
+    return _is_concrete_next_oracle_question(_read_next_oracle_question(slug))
+
+
 def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") -> None:
     target_dir = TARGETS_DIR / slug
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -1014,23 +1091,38 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                 ):
                     loop_log(
                         f"{todo_id}: local repair cleared replay/verifier blockers; "
-                        "returning to Oracle deep reasoning for proof/closure"
+                        "checking Codex-selected next Oracle task before proof/closure"
                     )
-                    rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
-                    loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
-                    reconcile_payload = _reconcile_oracle_deep(todo_id)
-                    if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
-                        rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
-                    else:
-                        _note_transport_backoff(
+                    if not _has_next_oracle_question(slug):
+                        rc, log_path = 2, log_path
+                        _note_local_repair_backoff(
                             slug,
-                            reason=f"oracle-deep transport/no-payload rc={rc}",
+                            reason=(
+                                "local repair cleared replay/verifier blockers but did not produce "
+                                "a concrete next_oracle_question"
+                            ),
                             log_path=log_path,
                         )
                         loop_log(
-                            f"{todo_id}: oracle-deep produced no usable payload; "
-                            f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                            f"{todo_id}: local repair did not leave a concrete next_oracle_question; "
+                            "not asking Oracle from a generic prompt"
                         )
+                    else:
+                        rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
+                        loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
+                        reconcile_payload = _reconcile_oracle_deep(todo_id)
+                        if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
+                            rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+                        else:
+                            _note_transport_backoff(
+                                slug,
+                                reason=f"oracle-deep transport/no-payload rc={rc}",
+                                log_path=log_path,
+                            )
+                            loop_log(
+                                f"{todo_id}: oracle-deep produced no usable payload; "
+                                f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                            )
             else:
                 loop_log(
                     f"{todo_id}: science_gate.next_action=deep_reason"
@@ -1043,6 +1135,17 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                     loop_log(
                         f"{todo_id}: pre-Oracle Codex workup failed; "
                         "not asking Oracle from an unprocessed board card"
+                    )
+                elif not _has_next_oracle_question(slug):
+                    rc, log_path = 2, workup_log
+                    _note_local_repair_backoff(
+                        slug,
+                        reason="pre-oracle codex workup did not produce a concrete next_oracle_question",
+                        log_path=workup_log,
+                    )
+                    loop_log(
+                        f"{todo_id}: pre-Oracle Codex workup lacks a concrete next_oracle_question; "
+                        "not asking Oracle from a generic prompt"
                     )
                 else:
                     rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)

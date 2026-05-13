@@ -343,6 +343,7 @@ Do not ask the user for clarification. Do not contact Oracle. Do not send email,
 
 Scientific honesty rule:
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/codex_workup.md`; this is the main handoff Oracle will read next.
+- Always create or refresh `tools/community-outreach/targets/{target_dir.name}/next_oracle_question.md`; this must be the exact concise prompt that should be sent to Oracle next, based on your local workup.
 - If the target-local data is enough to implement the missing verifier/replay artifact, implement it and run it.
 - If the latest Oracle packet contains a concrete construction, finite certificate, recurrence, SAT/ILP formulation, exhaustive finite case, or numerical claim, try to replay it locally and record the exact command/result.
 - If a testable Oracle claim is false or incomplete, write `tools/community-outreach/targets/{target_dir.name}/failure_analysis.md` explaining the first failed check, and repair `results.json` so unsupported local artifact references are removed or marked as planned/unverified.
@@ -396,12 +397,18 @@ Required output actions:
    - `## Proof obligations still open`
    - `## Next Oracle question`
    - `## Publication value / re-scope judgment`
-2. Identify the newest testable Oracle claim, if any; if there is no Oracle claim yet, build the initial local proof/computation plan from the board/profile artifacts.
-3. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
-4. Run the relevant scripts locally when feasible.
-5. Update `results.json` only to reflect actually reproducible evidence.
-6. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
-7. Stop. Do not commit.
+2. Create `next_oracle_question.md` as a short, direct Oracle prompt:
+   - no board metadata dump;
+   - no generic "continue research";
+   - include only the exact theorem/certificate/proof gap to attack next;
+   - include local computation results Oracle must respect;
+   - ask for one concrete artifact/proof move/checkable obstruction.
+3. Identify the newest testable Oracle claim, if any; if there is no Oracle claim yet, build the initial local proof/computation plan from the board/profile artifacts.
+4. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
+5. Run the relevant scripts locally when feasible.
+6. Update `results.json` only to reflect actually reproducible evidence.
+7. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
+8. Stop. Do not commit.
 """
 
 

@@ -1161,6 +1161,41 @@ def _read_target_context_file(slug: str, name: str, *, max_chars: int) -> str:
     return text[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :]
 
 
+def _extract_markdown_section(text: str, heading: str, *, max_chars: int) -> str:
+    """Extract a single markdown heading body from a Codex workup."""
+    if not text:
+        return ""
+    pattern = re.compile(
+        r"(?ims)^##\s+"
+        + re.escape(heading).replace(r"\ ", r"\s+")
+        + r"\s*$"
+        + r"(.*?)"
+        + r"(?=^##\s+|\Z)"
+    )
+    match = pattern.search(text)
+    if not match:
+        return ""
+    body = match.group(1).strip()
+    if len(body) <= max_chars:
+        return body
+    return body[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + body[-max_chars // 2 :]
+
+
+def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str:
+    """Read the exact next Oracle prompt selected by the local Codex workup.
+
+    Newer local-workup runs write next_oracle_question.md.  Older artifacts only
+    have a `## Next Oracle question` section inside codex_workup.md, so keep a
+    fallback extractor to avoid regressing live targets during rollout.
+    """
+    direct = _read_target_context_file(slug, "next_oracle_question.md", max_chars=max_chars)
+    direct = direct.strip()
+    if direct:
+        return direct
+    workup = _read_target_context_file(slug, "codex_workup.md", max_chars=max(12000, max_chars))
+    return _extract_markdown_section(workup, "Next Oracle question", max_chars=max_chars)
+
+
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
                                *, arxiv_hits: list[dict] | None = None,
                                resume_conversation_id: str = "") -> str:
@@ -1170,6 +1205,7 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
     research_context_chars = int(os.environ.get("OUTREACH_DEEP_RESEARCH_CONTEXT_CHARS", "1200"))
     codex_workup_chars = int(os.environ.get("OUTREACH_DEEP_CODEX_WORKUP_CHARS", "6000"))
     local_repair_chars = int(os.environ.get("OUTREACH_DEEP_LOCAL_REPAIR_CHARS", "1600"))
+    next_oracle_question = _read_codex_next_oracle_question(todo.slug())
     codex_workup = _read_target_context_file(todo.slug(), "codex_workup.md", max_chars=codex_workup_chars)
     local_repair_report = _read_target_context_file(todo.slug(), "local_repair_report.md", max_chars=local_repair_chars)
     parts = [
@@ -1190,6 +1226,15 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         "## Compact science contract",
         _compact_science_contract_block(profile),
         "",
+    ]
+    if next_oracle_question:
+        parts += [
+            "## Codex-selected next Oracle task",
+            "Codex has already processed the local target directory. Answer this task directly; do not replace it with generic metadata review.",
+            next_oracle_question,
+            "",
+        ]
+    parts += [
         "## Codex local workup",
         codex_workup or "(missing codex_workup.md; if this is the first turn, proceed but request a local workup next)",
         "",
@@ -1306,6 +1351,7 @@ def _build_deep_resume_prompt(todo: TodoSpec, *, resume_conversation_id: str) ->
     tell Oracle what the next concrete move is.
     """
     profile, _ = load_profile(todo.slug())
+    next_oracle_question = _read_codex_next_oracle_question(todo.slug())
     blockers: list[str] = []
     try:
         from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: PLC0415
@@ -1321,6 +1367,15 @@ def _build_deep_resume_prompt(todo: TodoSpec, *, resume_conversation_id: str) ->
         "Do not restart or restate the whole problem. Use the transcript and the existing artifact packet as context.",
         f"Target: {todo.todo_id} · {todo.title}.",
     ]
+    if next_oracle_question:
+        parts += [
+            "",
+            "Codex just inspected/replayed the local workspace and selected this exact next Oracle task. Answer it directly.",
+            "",
+            next_oracle_question,
+            "",
+            "Respect any local computation stated above. Do not ask for generic metadata or repeat the board card.",
+        ]
     if gate_status or next_action:
         parts.append(f"Repository gate now says science_status={gate_status or 'unknown'}, next_action={next_action or 'unknown'}.")
     if blockers:

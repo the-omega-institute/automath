@@ -1273,6 +1273,19 @@ def _resume_short_prompt(
     slug: str,
     prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None,
 ) -> tuple[str, str]:
+    next_oracle_question = _read_target_next_oracle_question(slug)
+    if next_oracle_question:
+        return (
+            "\n".join([
+                "Continue from the previous answer in this same conversation. Do not restart or restate the whole problem.",
+                "Codex just inspected/replayed the local workspace and selected this exact next Oracle task. Answer it directly.",
+                "",
+                next_oracle_question,
+                "",
+                "Respect the local facts above. Produce one concrete proof move, certificate, replay artifact, or target-specific obstruction.",
+            ]),
+            "codex_next_oracle_question",
+        )
     last_response = _latest_response_text_for_slug(slug)
     gate_missing = _science_gate_missing_for_todo(todo)
     if gate_missing and last_response and _missing_requires_local_artifact_repair(gate_missing):
@@ -1307,6 +1320,37 @@ def _resume_short_prompt(
         "Use the last result as context and make the next concrete proof/computation move that lowers the science-contract progress metric.",
         "resume_short",
     )
+
+
+def _read_target_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str:
+    """Read the local Codex-selected next Oracle prompt for a target.
+
+    This is deliberately duplicated here instead of importing dispatch_worktree:
+    oracle_consultant is the final prompt-selection layer for resumed ChatGPT
+    conversations, so it must not silently fall back to generic gate prompts
+    after Codex already produced a concrete local workup.
+    """
+    target_dir = TARGETS_DIR / slug
+    direct = target_dir / "next_oracle_question.md"
+    try:
+        text = direct.read_text(encoding="utf-8", errors="replace").strip()
+    except OSError:
+        text = ""
+    if text:
+        return text if len(text) <= max_chars else text[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :]
+
+    workup = target_dir / "codex_workup.md"
+    try:
+        workup_text = workup.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    match = re.search(r"(?ims)^##\s+Next\s+Oracle\s+question\s*$\s*(.*?)(?=^##\s+|\Z)", workup_text)
+    if not match:
+        return ""
+    question = match.group(1).strip()
+    if len(question) <= max_chars:
+        return question
+    return question[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + question[-max_chars // 2 :]
 
 
 def _science_gate_missing_for_todo(todo: TodoSpec) -> list[str]:
