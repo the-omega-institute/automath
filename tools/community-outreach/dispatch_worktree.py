@@ -1251,6 +1251,33 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         "Every turn should lower the progress metric, produce a checkable file block, or explicitly re-scope with a useful obstruction.",
         "Stop only when the contract's verifier is satisfied, or when the close/re-scope condition is clearly met.",
         "",
+    ]
+    if next_oracle_question:
+        parts += [
+            "## Current Codex-selected task",
+            "Codex has already processed the local target directory, inspected the available artifacts, and selected this exact next mathematical gap. Answer this task directly before using board metadata as background.",
+            next_oracle_question,
+            "",
+            "## Codex local workup",
+            codex_workup,
+            "",
+            "## Latest local repair/replay report",
+            local_repair_report or "(none yet)",
+            "",
+        ]
+    else:
+        parts += [
+            "## Codex local workup",
+            codex_workup or "(missing codex_workup.md; if this is the first turn, proceed but request a local workup next)",
+            "",
+            "## Latest local repair/replay report",
+            local_repair_report or "(none yet)",
+            "",
+        ]
+    parts += [
+        "## Compact science contract",
+        _compact_science_contract_block(profile),
+        "",
         f"## Target",
         f"- TODO id: {todo.todo_id}",
         f"- Title: {todo.title}",
@@ -1258,24 +1285,6 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         f"- Status (per board): {todo.status}",
         f"- Untouched evidence: {todo.untouched}",
         f"- Submission target (Stage E): {sub['type']} → {sub['venue']}",
-        "",
-        "## Compact science contract",
-        _compact_science_contract_block(profile),
-        "",
-    ]
-    if next_oracle_question:
-        parts += [
-            "## Codex-selected next Oracle task",
-            "Codex has already processed the local target directory. Answer this task directly; do not replace it with generic metadata review.",
-            next_oracle_question,
-            "",
-        ]
-    parts += [
-        "## Codex local workup",
-        codex_workup or "(missing codex_workup.md; if this is the first turn, proceed but request a local workup next)",
-        "",
-        "## Latest local repair/replay report",
-        local_repair_report or "(none yet)",
         "",
         "## Math problem statement",
         todo.statement or "(see source URL above)",

@@ -1422,7 +1422,13 @@ def _science_gate_context_for_todo(todo: TodoSpec) -> str:
 def _local_harness_context_for_todo(todo: TodoSpec) -> str:
     target_dir = REPO_ROOT / "tools/community-outreach/targets" / todo.slug()
     lines = ["Science gate now:", _science_gate_context_for_todo(todo)]
-    for name in ("local_repair_report.md", "local_repair_last.json", "results.json"):
+    for name in (
+        "next_oracle_question.md",
+        "codex_workup.md",
+        "local_repair_report.md",
+        "local_repair_last.json",
+        "results.json",
+    ):
         p = target_dir / name
         if not p.exists() or not p.is_file():
             continue
@@ -1430,7 +1436,19 @@ def _local_harness_context_for_todo(todo: TodoSpec) -> str:
             text = p.read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
-        lines.extend([f"\n{name} excerpt:", _compact_excerpt(text, 3000)])
+        limit = 5000 if name == "codex_workup.md" else 3000
+        lines.extend([f"\n{name} excerpt:", _compact_excerpt(text, limit)])
+    claim_packets = sorted(
+        target_dir.glob("oracle_claim_packet_*.md"),
+        key=lambda p: p.stat().st_mtime if p.exists() else 0,
+        reverse=True,
+    )
+    for packet in claim_packets[:1]:
+        try:
+            text = packet.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        lines.extend([f"\nLatest Oracle claim packet ({packet.name}) excerpt:", _compact_excerpt(text, 3500)])
     py_files = sorted(p.name for p in target_dir.glob("*.py") if p.is_file())
     if py_files:
         lines.append("\nTarget-local runnable scripts: " + ", ".join(py_files[:20]))
