@@ -718,7 +718,7 @@ $2^{m+1}$ gives the probability formula.
 The preceding proposition gives the total adjacent mass.  The next result gives
 its full support and all multiplicities.  For $1\le j\le m$ set
 \[
-L_{m,j}:=F_{m+2-j}
+L_{m,j}:=F_{m+1-j}
 \]
 and
 \[
@@ -753,7 +753,7 @@ Consequently
 \[
 \lambda_m(0)=2^{-m}C_m,
 \qquad
-\lambda_m(v_{m,j})=2^{-m}\bigl(2^{m+1-j}-C_{m+1-j}\bigr)
+\lambda_m(v_{m,j})=2^{-m}\frac{2^{m+1-j}-(-1)^{m+1-j}}{3}
 \quad (1\le j\le m),
 \]
 and $\lambda_m(v)=0$ for every other nonzero $v\in\{0,1\}^m$.
@@ -784,20 +784,24 @@ I_{m,j}:=[A_{m,j},A_{m,j}+L_{m,j}-1]
 are consecutive because $A_{m,j+1}=A_{m,j}+L_{m,j}$, and their union is
 $[0,F_{m+2}-2]$ because $A_{m,m}+L_{m,m}-1=F_{m+2}-2$.
 
-Fix $j$ and put $k:=m+1-j$.  Then $L_{m,j}=F_{k+1}$ and
+Fix $j$ and put $k:=m+1-j$.  Then $L_{m,j}=F_k$ and
 \[
 A_{m,j}=F_{m+2}-F_{k+2}.
 \]
-For $t\in I_{m,j}$ write $t=A_{m,j}+u$ with $0\le u<F_{k+1}$.  Since
-$u<F_{k+1}$, the Zeckendorf expansion of $u$ has no nonzero digit in
-positions $k,k+1,\dots$.  The elementary Fibonacci identities
-\[
-F_{m+2}-F_{k+2}=\sum_{r=k+2}^{m}F_{r+1}\quad\text{with every other term used}
-\]
-only involve positions $k+1,k+3,k+5,\dots$ after rewriting the telescoping
-sum as a Zeckendorf word.  Hence adding $u$ affects only positions below $k$.
-Equivalently, the high-digit parts of $Z(t)$ and $Z(A_{m,j})$ agree in every
-position $i\ge k$, while the low part below $k$ is precisely $Z(u)$.
+For $t\in I_{m,j}$ write $t=A_{m,j}+u$ with $0\le u<F_k$.  Since
+$u<F_k$, the Zeckendorf expansion of $u$ has no nonzero digit in positions
+$k-1,k,\dots$.  The Zeckendorf expansions of $A_{m,j}$ and
+$F_{m+1}+A_{m,j}$ are supported in positions at least $k$.  More precisely,
+if $d=m-k$, then a direct induction on $d$ using
+$F_{r+2}=F_{r+1}+F_r$ shows that $Z(F_{m+2}-F_{k+2})$ has its lowest nonzero
+position equal to $k$ for odd $d$ and at least $k+2$ for even $d$; the same
+statement with the parities reversed holds for
+$Z(F_{m+1}+F_{m+2}-F_{k+2})$.  All remaining nonzero positions in these two
+skeletons are spaced by at least two.  Hence the support of $Z(u)$ is separated
+from each high skeleton by at least one zero digit, so no carry or
+renormalization occurs when $u$ is added.  Thus the high-digit parts
+of $Z(t)$ and $Z(A_{m,j})$ agree in every position $i\ge k$, while the low
+part below $k$ is precisely $Z(u)$.
 The same argument applied to
 \[
 F_{m+1}+t=F_{m+1}+A_{m,j}+u
@@ -807,38 +811,55 @@ $Z(F_{m+1}+A_{m,j})$ agree in every position $i\ge k$, with the same low part
 $Z(u)$ below $k$.  Therefore the low parts cancel in the xor and the projected
 xor is independent of $u$.  It is its value at $u=0$, namely $v_{m,j}$.
 
-The vectors $v_{m,j}$ are distinct because the above intervals are consecutive
-and the displayed xor changes at their common boundary.  Indeed, at the right
-endpoint of $I_{m,j}$ the shared low part is the maximal value below
-$F_{k+1}$, whereas at the first point of $I_{m,j+1}$ a carry enters position
-$k$.  This toggles the $k$th coordinate of
-\[
-\pi_{\infty\to m}(Z(F_{m+1}+t))
-\oplus
-\pi_{\infty\to m}(Z(t))
-\]
-and leaves all larger coordinates in the already fixed skeleton, so
-$v_{m,j}\ne v_{m,j+1}$.  Since the first differing coordinate between
-$v_{m,i}$ and $v_{m,j}$ for $i<j$ is obtained by iterating this boundary
-argument, all $m$ vectors are distinct.
+The same skeleton description shows that $v_{m,j}$ has a nonzero digit in
+coordinate $k=m+1-j$ and has zero digits in all coordinates below $k$.
+Therefore the first nonzero coordinate of $v_{m,j}$ is $m+1-j$, and the
+vectors $v_{m,1},\dots,v_{m,m}$ are distinct.
 
 It remains to count multiplicities under raw prefixes.  By
-Proposition~\ref{prop:fold-residue}, for every value
-$0\le s\le F_{m+3}-2$ the number of raw prefixes $p\in\Omega_m$ with
-$N(p)=s$ equals the number of raw words $w\in\Omega_{m}$ whose value is
-congruent to $s$ modulo $F_{m+2}$.  On the nonzero range
-$s=F_{m+1}+t$ with $t\in I_{m,j}$, remove the fixed high skeleton described
-above.  What remains is an arbitrary raw word of length $m+1-j$ whose value is
-at least $F_{m+2-j}$; otherwise the value would fall into an earlier interval.
-Thus the number of prefixes producing $v_{m,j}$ is
+Theorem~\ref{thm:adjacent-threshold}, zero is produced by exactly the $C_m$
+prefixes with $N(p)<F_{m+1}$.  For the nonzero vectors, put again
+$k=m+1-j$.  The interval $F_{m+1}+I_{m,j}$ is
 \[
-\#\{w\in\Omega_{m+1-j}:\ N(w)\ge F_{m+2-j}\}
-=
-2^{m+1-j}-C_{m+1-j}.
+\bigl[F_{m+3}-F_{k+2},\ F_{m+3}-F_{k+1}-1\bigr].
 \]
-The zero mass is exactly the number $C_m$ of prefixes with
-$N(p)<F_{m+1}$, again by Theorem~\ref{thm:adjacent-threshold}.  Dividing all
-multiplicities by $2^m$ proves the formula for $\lambda_m$.
+Since the maximum raw value on $\Omega_m$ is $F_{m+3}-2$, complementing all
+$m$ digits gives a bijection from prefixes in this interval to words whose
+value lies in
+\[
+F_{k+1}-1\le N(w)\le F_{k+2}-2.
+\]
+Such a word has no nonzero digit above position $k$, so the count is
+\[
+E_k:=\#\{w\in\Omega_k:\ F_{k+1}-1\le N(w)\le F_{k+2}-2\}.
+\]
+It remains to evaluate $E_k$.  Split a word in $\Omega_k$ according to its top
+digit.  If the top digit is $1$, then the band condition becomes
+$N(w_1\cdots w_{k-1})\le F_k-2$.  If the top digit is $0$, it becomes
+$N(w_1\cdots w_{k-1})\ge F_{k+1}-1$.  Therefore
+\[
+E_k
+=
+\#\{u\in\Omega_{k-1}:N(u)\le F_k-2\}
++
+\#\{u\in\Omega_{k-1}:N(u)\ge F_{k+1}-1\}.
+\]
+The middle interval omitted from the two terms is exactly
+\[
+F_k-1\le N(u)\le F_{k+1}-2,
+\]
+so it has cardinality $E_{k-1}$.  Hence
+\[
+E_k=2^{k-1}-E_{k-1},
+\qquad
+E_1=1.
+\]
+Solving this first-order recurrence gives
+\[
+E_k=\frac{2^k-(-1)^k}{3}.
+\]
+Dividing the zero multiplicity $C_m$ and the nonzero multiplicities
+$E_{m+1-j}$ by $2^m$ proves the formula for $\lambda_m$.
 \end{proof}
 
 For $n>m$ and $v\in\{0,1\}^m$, define
