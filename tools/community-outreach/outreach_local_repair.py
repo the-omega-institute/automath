@@ -228,6 +228,10 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
     interesting_commands: list[dict] = []
     command_count = 0
     target_command_count = 0
+    completed_target_command_count = 0
+    inspection_command_count = 0
+    replay_command_count = 0
+    negative_artifact_search_count = 0
     output_markers = (
         "self-tests passed",
         "all_records_pass",
@@ -237,6 +241,56 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "failed",
         "sha256",
         "no such file",
+        "unsat",
+        "sat",
+        "vertices",
+        "edges",
+        "clauses",
+    )
+    inspection_command_markers = (
+        "find ",
+        "rg ",
+        "ls ",
+        "stat ",
+        "sed -n",
+        "cat ",
+        "wc ",
+        "python3 -m json.tool",
+        "git status",
+    )
+    replay_command_markers = (
+        "python3 ",
+        "python ",
+        "pytest",
+        "lean ",
+        "lake ",
+        "sage ",
+        "magma ",
+        "gap ",
+        "node ",
+        "npm ",
+        "unzip ",
+        "sha256sum",
+        "shasum",
+        "drat",
+        "lrat",
+        "kissat",
+        "cadical",
+        "glucose",
+    )
+    negative_search_markers = (
+        "-iname ",
+        "-name ",
+        "*.cnf",
+        "*.drat",
+        "*.lrat",
+        "*.rup",
+        "*.zip",
+        "*.g6",
+        "*.edge",
+        "*.vtx",
+        "manifest.json",
+        "sha256sums",
     )
     try:
         lines = stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()
@@ -275,6 +329,21 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
                     "output_head": output[:500],
                 }
             )
+        command_lower = command.lower()
+        output_lower = output.lower()
+        if item.get("status") == "completed":
+            completed_target_command_count += 1
+        if any(marker in command_lower for marker in inspection_command_markers):
+            inspection_command_count += 1
+        if any(marker in command_lower for marker in replay_command_markers):
+            replay_command_count += 1
+        if any(marker in command_lower for marker in negative_search_markers) and not output.strip():
+            negative_artifact_search_count += 1
+        elif (
+            any(marker in command_lower for marker in negative_search_markers)
+            and ("no such file" in output_lower or "not found" in output_lower or "missing" in output_lower)
+        ):
+            negative_artifact_search_count += 1
     if target_command_count <= 0:
         return {
             "ok": False,
@@ -292,6 +361,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
             "command_count": command_count,
             "target_command_count": target_command_count,
+            "completed_target_command_count": completed_target_command_count,
             "commands": interesting_commands,
         }
     has_evidence_output = any(
@@ -303,6 +373,10 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
         "command_count": command_count,
         "target_command_count": target_command_count,
+        "completed_target_command_count": completed_target_command_count,
+        "inspection_command_count": inspection_command_count,
+        "replay_command_count": replay_command_count,
+        "negative_artifact_search_count": negative_artifact_search_count,
         "has_evidence_output": has_evidence_output,
         "commands": interesting_commands,
     }
@@ -466,6 +540,97 @@ def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
     return True, ""
 
 
+def _text_has_concrete_local_fact(text: str) -> bool:
+    lowered = (text or "").lower()
+    fact_markers = (
+        "sha-256",
+        "sha256",
+        "unsat",
+        " sat",
+        "exit 0",
+        "exited 0",
+        "vertices",
+        "edges",
+        "clauses",
+        "variables",
+        "witness",
+        "counterexample",
+        "hash",
+        "cnf",
+        "drat",
+        "lrat",
+        "rup",
+        "graph6",
+        ".g6",
+        ".cnf",
+        ".drat",
+        ".lrat",
+        ".rup",
+        ".zip",
+        ".edge",
+        ".vtx",
+        ".json",
+        ".py",
+        "found no",
+        "no `",
+        "not present",
+        "absent",
+        "missing",
+        "failed at the first local check",
+        "verified",
+        "replayed",
+        "checked",
+    )
+    return any(marker in lowered for marker in fact_markers)
+
+
+def _substantive_local_workup_check(
+    target_dir: Path,
+    workup: str,
+    question: str,
+    report: str,
+    *,
+    codex_trace: dict | None,
+) -> dict:
+    """Decide whether the handoff contains real target work, not metadata only."""
+    local_body = _extract_workup_section(workup, "Local evidence checked")
+    commands_body = _extract_workup_section(workup, "Commands run")
+    artifact_body = _extract_workup_section(workup, "Verifier/artifact status")
+    obligations_body = _extract_workup_section(workup, "Proof obligations still open")
+    publication_body = _extract_workup_section(workup, "Publication value / re-scope judgment")
+    evidence_blob = "\n".join(
+        [local_body, commands_body, artifact_body, obligations_body, publication_body, report]
+    )
+    target_name = target_dir.name.lower()
+    diagnostics: list[str] = []
+
+    if target_name not in commands_body.lower() and target_name not in report.lower():
+        diagnostics.append("commands/report do not mention the target directory")
+    if not _text_has_concrete_local_fact(evidence_blob):
+        diagnostics.append("workup/report lacks concrete local facts from replay, search, hashes, SAT/CNF, paths, or failures")
+    if not _text_has_concrete_local_fact(question):
+        diagnostics.append("next_oracle_question.md does not cite a concrete local fact Oracle must respect")
+
+    if codex_trace is not None:
+        replay_count = int(codex_trace.get("replay_command_count") or 0)
+        inspection_count = int(codex_trace.get("inspection_command_count") or 0)
+        negative_count = int(codex_trace.get("negative_artifact_search_count") or 0)
+        evidence_output = bool(codex_trace.get("has_evidence_output"))
+        if inspection_count <= 0:
+            diagnostics.append("Codex command trace lacks target inspection commands")
+        if replay_count <= 0 and negative_count <= 0 and not evidence_output:
+            diagnostics.append(
+                "Codex command trace lacks replay/check commands, negative artifact searches, or evidence output"
+            )
+
+    return {
+        "ok": not diagnostics,
+        "diagnostics": diagnostics,
+        "question_cites_local_fact": _text_has_concrete_local_fact(question),
+        "workup_has_concrete_local_fact": _text_has_concrete_local_fact(evidence_blob),
+    }
+
+
 def _collect_missing_referenced_local_paths(value: object) -> list[str]:
     """Find target-local artifact references in JSON that do not exist."""
     missing: list[str] = []
@@ -534,6 +699,15 @@ def _postcheck_local_repair_artifacts(target_dir: Path, *, codex_trace: dict | N
 
     if codex_trace is not None and not codex_trace.get("ok"):
         diagnostics.append(str(codex_trace.get("reason") or "Codex command trace missing"))
+    substantive = _substantive_local_workup_check(
+        target_dir,
+        workup,
+        question,
+        report,
+        codex_trace=codex_trace,
+    )
+    if not substantive.get("ok"):
+        diagnostics.extend(str(item) for item in substantive.get("diagnostics", []))
 
     return {
         "ok": not diagnostics,
@@ -542,6 +716,7 @@ def _postcheck_local_repair_artifacts(target_dir: Path, *, codex_trace: dict | N
         "next_oracle_question_path": str(question_path.relative_to(REPO_ROOT)),
         "local_repair_report_path": str(report_path.relative_to(REPO_ROOT)),
         "codex_command_trace": codex_trace or {},
+        "substantive_local_work": substantive,
     }
 
 

@@ -1318,6 +1318,14 @@ def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
         return False, str(trace.get("reason") or "Codex command trace not ok")
     if int(trace.get("target_command_count") or 0) <= 0:
         return False, "Codex command trace has no target-local commands"
+    substantive = postcheck.get("substantive_local_work")
+    if not isinstance(substantive, dict):
+        return False, "last local repair missing substantive local-work check"
+    if not substantive.get("ok"):
+        diagnostics = substantive.get("diagnostics")
+        if isinstance(diagnostics, list) and diagnostics:
+            return False, "substantive local-work check failed: " + "; ".join(str(item) for item in diagnostics[:4])
+        return False, "substantive local-work check failed"
     return True, ""
 
 
