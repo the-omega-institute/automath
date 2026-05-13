@@ -26,6 +26,8 @@ Hard rules:
 from __future__ import annotations
 
 import argparse
+import html
+from html.parser import HTMLParser
 import json
 import re
 import shutil
@@ -67,6 +69,8 @@ DEFAULT_POLL_INTERVAL = 30
 ZERO_EXTRACT_IDLE_CANCEL_S = 900
 ZERO_EXTRACT_GENERATING_CANCEL_S = 1200
 SIGNAL_TAIL_BYTES = 8000        # cap how much arxiv/lit data we feed in
+SHORT_SIGNAL_BYTES = 1400
+SOURCE_FETCH_BYTES = 12000
 
 
 # ---------------------------------------------------------------------------
@@ -117,6 +121,161 @@ def _read_signal(path: Path, max_bytes: int = SIGNAL_TAIL_BYTES) -> str:
     if len(text) <= max_bytes:
         return text
     return text[-max_bytes:]
+
+
+class _VisibleTextParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.parts: list[str] = []
+        self.links: list[tuple[str, str]] = []
+        self._skip = 0
+        self._href: str | None = None
+        self._link_text: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in {"script", "style"}:
+            self._skip += 1
+            return
+        if self._skip:
+            return
+        if tag in {"p", "div", "h1", "h2", "h3", "li", "td", "th", "br", "tr"}:
+            self.parts.append("\n")
+        if tag == "a":
+            href = dict(attrs).get("href") or ""
+            self._href = href
+            self._link_text = []
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"script", "style"}:
+            if self._skip:
+                self._skip -= 1
+            return
+        if self._skip:
+            return
+        if tag == "a" and self._href:
+            label = " ".join(" ".join(self._link_text).split())
+            self.links.append((self._href, label))
+            self._href = None
+            self._link_text = []
+        if tag in {"p", "div", "h1", "h2", "h3", "li", "tr"}:
+            self.parts.append("\n")
+
+    def handle_data(self, data: str) -> None:
+        if self._skip:
+            return
+        s = " ".join(html.unescape(data).split())
+        if not s:
+            return
+        self.parts.append(s)
+        if self._href is not None:
+            self._link_text.append(s)
+
+
+def _visible_text_and_links(raw_html: str) -> tuple[str, list[tuple[str, str]]]:
+    parser = _VisibleTextParser()
+    try:
+        parser.feed(raw_html)
+    except Exception:
+        pass
+    text = "\n".join(
+        line.strip()
+        for line in "".join(parser.parts).splitlines()
+        if line.strip()
+    )
+    return text, parser.links
+
+
+def _fetch_public_source(url: str, *, max_bytes: int = SOURCE_FETCH_BYTES) -> dict:
+    """Fetch a source page and return a small, deterministic text snapshot."""
+    if not url:
+        return {"ok": False, "reason": "missing source_url", "url": url}
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "OmegaOutreach/0.1 source-bounded open-problem check",
+            "Accept": "text/html,text/plain;q=0.9,*/*;q=0.5",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=25) as resp:
+            status = getattr(resp, "status", 0)
+            final_url = resp.geturl()
+            content_type = resp.headers.get("content-type", "")
+            raw = resp.read(max_bytes * 4).decode("utf-8", errors="replace")
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "reason": f"fetch failed: {exc}", "url": url}
+    if "html" in content_type.lower() or raw.lstrip().startswith("<"):
+        text, links = _visible_text_and_links(raw)
+    else:
+        text, links = raw, []
+    text = "\n".join(line for line in text.splitlines() if line.strip())
+    not_found = bool(re.search(r"\b(No results found|404 Not Found|Not Found)\b", text, re.I))
+    return {
+        "ok": bool(status and 200 <= int(status) < 400 and text.strip() and not not_found),
+        "status": status,
+        "url": url,
+        "final_url": final_url,
+        "content_type": content_type,
+        "reason": "no public problem content found" if not_found else "",
+        "text": text[:max_bytes],
+        "links": links[:80],
+    }
+
+
+def _problemsilike_source_snapshot(source_url: str, source_id: str = "") -> dict:
+    """Bounded adapter for Litt's problemsilike pages.
+
+    `/range/1-end` can be a small public index while individual ids may be
+    hidden or absent. If an operator asks for a specific id, verify that exact
+    id before asking Oracle to reason from it.
+    """
+    base = "https://www.problemsilike.com"
+    checks: list[str] = []
+    if source_id:
+        sid = source_id.strip().lstrip("#")
+        checks.extend([
+            f"{base}/{sid}",
+            f"{base}/range/{sid}-{sid}",
+            f"{base}/range/{sid}-{sid}/open",
+            f"{base}/range/{sid}-{sid}/solved",
+        ])
+    checks.append(source_url)
+    seen: set[str] = set()
+    attempts: list[dict] = []
+    for url in checks:
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        snap = _fetch_public_source(url)
+        attempts.append({k: v for k, v in snap.items() if k not in {"text", "links"}})
+        if snap.get("ok"):
+            text = str(snap.get("text") or "")
+            if source_id:
+                has_id = bool(re.search(rf"(^|\D)#?{re.escape(source_id.strip().lstrip('#'))}(\D|$)", text))
+                link_hits = [
+                    (href, label)
+                    for href, label in snap.get("links", [])
+                    if source_id.strip().lstrip("#") in href or source_id.strip().lstrip("#") in label
+                ]
+                if not has_id and not link_hits and "range/1-end" in url:
+                    continue
+            snap["attempts"] = attempts
+            return snap
+    return {
+        "ok": False,
+        "url": source_url,
+        "source_id": source_id,
+        "reason": "requested problemsilike id is not publicly visible from checked URLs",
+        "attempts": attempts,
+    }
+
+
+def _source_snapshot(source_url: str = "", source_id: str = "") -> dict:
+    if not source_url:
+        return {"ok": False, "reason": "no source_url supplied"}
+    if "problemsilike.com" in source_url.lower():
+        return _problemsilike_source_snapshot(source_url, source_id=source_id)
+    return _fetch_public_source(source_url)
 
 
 def _context_refresh_signal(max_bytes: int = SIGNAL_TAIL_BYTES) -> str:
@@ -187,7 +346,98 @@ def _cancel_oracle_task(task_id: str, *, reason: str) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _build_prompt() -> str:
+def _build_prompt(*, source_url: str = "", source_id: str = "") -> str:
+    if source_url:
+        snap = _source_snapshot(source_url, source_id=source_id)
+        if not snap.get("ok"):
+            raise RuntimeError(
+                "source unavailable: "
+                + json.dumps({k: snap.get(k) for k in ("url", "source_id", "reason", "attempts")}, ensure_ascii=False)
+            )
+        text = str(snap.get("text") or "")
+        return _build_source_focused_prompt(
+            source_url=source_url,
+            source_id=source_id,
+            source_text=text,
+            final_url=str(snap.get("final_url") or source_url),
+        )
+    return _build_compact_prompt()
+
+
+def _build_compact_prompt() -> str:
+    """Short default refill prompt.
+
+    The old 17k prompt repeatedly timed out with zero extracted chars. Keep the
+    Oracle task source-discovery oriented and let local gates handle structure,
+    dedup, and profile expansion.
+    """
+    operator_memory = _read_signal(OPERATOR_MEMORY_PATH, max_bytes=SHORT_SIGNAL_BYTES) or "(none)"
+    arxiv = _read_signal(ARXIV_RECENT_PATH, max_bytes=SHORT_SIGNAL_BYTES) or "(none)"
+    lit = _read_signal(LIT_STALENESS_PATH, max_bytes=SHORT_SIGNAL_BYTES) or "(none)"
+    x_signal = _read_signal(X_SIGNAL_PATH, max_bytes=SHORT_SIGNAL_BYTES) or "(none)"
+    context = _context_refresh_signal(max_bytes=SHORT_SIGNAL_BYTES)
+    return f"""You are the source-discovery oracle for Omega Outreach.
+
+Goal: propose 1-3 high-impact open-problem candidates that an audit-first
+AI-for-math pipeline could plausibly attack. Prefer named conjectures,
+public problem lists, GitHub/forum/blog/X discussions, verifier gaps, and
+classification/extremal/rigidity targets. Do not chase low-impact arXiv
+followups. If nothing meets the bar, output {{"candidates":[]}}.
+
+Hard requirements for each candidate:
+- public source URL;
+- precise mathematical statement;
+- why it appears still open or not recently closed;
+- concrete first artifact: proof, counterexample, reproducible certificate,
+  short note, or forum/registry comment after operator approval;
+- first local attack step that Codex can execute;
+- success gate before any outreach.
+
+Output ONLY JSON:
+{{"candidates":[{{"title":"","source_url":"","type":"DECIDABLE|EXISTENCE|CLASSIFICATION|EXTREMALITY|OBSTRUCTION|RIGIDITY","statement":"","untouched_evidence":"","omega_fit_detail":"","fit_score":0,"topic_score":0,"effort_estimate_days":1,"risk_level":"low|med|high","first_attack_step":"","final_display_form":"","success_gate":"","rationale":""}}]}}
+
+Operator memory:
+{operator_memory}
+
+Recent arXiv signal, use only if independently high impact:
+{arxiv}
+
+Literature staleness signal:
+{lit}
+
+X/open-problem signal:
+{x_signal}
+
+Active tracked collaborations/issues/emails to avoid duplicating:
+{context}
+"""
+
+
+def _build_source_focused_prompt(*, source_url: str, source_id: str, source_text: str, final_url: str) -> str:
+    target_label = f"#{source_id.strip().lstrip('#')}" if source_id else "the supplied source"
+    return f"""You are the source-bounded research triage oracle for Omega Outreach.
+
+Source URL: {final_url}
+Requested item: {target_label}
+
+Use ONLY the source snapshot below. Decide whether this is a serious open
+problem candidate for our audit-first AI-for-math pipeline. If the snapshot
+does not contain a precise open problem, output {{"candidates":[]}}.
+
+Output ONLY JSON with at most one candidate:
+{{"candidates":[{{"title":"","source_url":"{final_url}","type":"DECIDABLE|EXISTENCE|CLASSIFICATION|EXTREMALITY|OBSTRUCTION|RIGIDITY","statement":"","untouched_evidence":"","omega_fit_detail":"","fit_score":0,"topic_score":0,"effort_estimate_days":1,"risk_level":"low|med|high","first_attack_step":"","final_display_form":"","success_gate":"","rationale":""}}]}}
+
+The candidate must name a concrete theorem/counterexample/certificate target,
+not a broad direction. Set final_display_form to a reviewable artifact and
+audience. Set success_gate to the exact proof/check required before external
+outreach. User approval is always required before sending or posting.
+
+Source snapshot:
+{source_text[:SOURCE_FETCH_BYTES]}
+"""
+
+
+def _build_legacy_prompt() -> str:
     if not PROMPT_PATH.exists():
         raise FileNotFoundError(f"prompt template missing at {PROMPT_PATH}")
     template = PROMPT_PATH.read_text(encoding="utf-8")
@@ -610,6 +860,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--candidate-inbox", action="store_true",
                    help="write surviving candidates to candidate_inbox.jsonl instead of appending RESEARCH_BOARD")
     p.add_argument("--timeout-s", type=int, default=DEFAULT_TIMEOUT_S, help="oracle poll budget")
+    p.add_argument("--source-url", default="", help="triage one explicit public source URL")
+    p.add_argument("--source-id", default="", help="optional source-local problem id, e.g. 367")
     args = p.parse_args(argv)
 
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -620,9 +872,20 @@ def main(argv: list[str] | None = None) -> int:
         return _status_noop(f"prompt template missing at {PROMPT_PATH.name}")
 
     try:
-        prompt = _build_prompt()
-    except FileNotFoundError as exc:
-        return _status_noop(str(exc))
+        prompt = _build_prompt(source_url=args.source_url, source_id=args.source_id)
+    except (FileNotFoundError, RuntimeError) as exc:
+        payload = {
+            "ran_at": _now_iso(),
+            "verdict": "source_unavailable" if args.source_url else "noop",
+            "source_url": args.source_url,
+            "source_id": args.source_id,
+            "reason": str(exc),
+        }
+        if not args.dry_run:
+            _status_write(payload)
+        _log(f"board refill source unavailable: {exc}")
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0 if args.source_url else 1
     _log(f"built refill prompt ({len(prompt)} chars)")
 
     if args.dry_run:
@@ -630,7 +893,6 @@ def main(argv: list[str] | None = None) -> int:
         print("PROMPT (head):")
         print(prompt[:1500])
         print("=" * 70)
-        _status_write({"ran_at": _now_iso(), "verdict": "dry_run"})
         return 0
 
     if not _server_alive():
@@ -641,8 +903,12 @@ def main(argv: list[str] | None = None) -> int:
     # (< MIN_GOOD_CANDIDATES kept after dedup), we send a follow-up in the
     # same conversation (so the Project context is preserved) asking the
     # oracle to deepen / be more specific. Cap at MAX_ROUNDS rounds.
-    MIN_GOOD_CANDIDATES = 3
-    MAX_ROUNDS = 3
+    if args.source_url:
+        MIN_GOOD_CANDIDATES = 1
+        MAX_ROUNDS = 1
+    else:
+        MIN_GOOD_CANDIDATES = 3
+        MAX_ROUNDS = 3
     deadline = time.time() + max(60, args.timeout_s)
 
     existing = _existing_board_titles_and_sources()
