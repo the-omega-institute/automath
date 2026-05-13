@@ -406,8 +406,73 @@ the supremum over $x\in I^n$.
 
 \begin{proposition}[Incidence criterion]
 \label{prop:incidence-criterion}
-See \cite{MaZhangCubicalStokes2026}, Proposition~2.6.
+Let
+\[
+\omega=\sum_{\abs{I}=k}a_I(x)\,\dd x_I\in\Omega^k_{\mathrm{sm}}(I^n).
+\]
+For each ordered $(k-1)$-index $J$ set
+\[
+m_J(\omega):=\#\{i\notin J:\ a_{J\cup\{i\}}\not\equiv 0\},
+\qquad
+m_\ast(\omega):=\max_{\abs{J}=k-1}m_J(\omega),
+\]
+where $J\cup\{i\}$ is always written in increasing order. Then
+\begin{equation}
+\label{eq:incidence-contraction-bound}
+\norm{\iota_X\omega}_{\coeff,\infty}
+\le
+\frac{m_\ast(\omega)}2\norm{\omega}_{\coeff,\infty}.
+\end{equation}
+In particular, let $\mathcal M$ be a family of $k$-indices and let
+$\Omega^k_{\mathcal M}(I^n)$ denote the subspace of forms
+\[
+\omega=\sum_{I\in\mathcal M}a_I(x)\,\dd x_I .
+\]
+The universal estimate
+\[
+\norm{\iota_X\omega}_{\coeff,\infty}
+\le
+\frac12\norm{\omega}_{\coeff,\infty}
+\qquad
+(\omega\in\Omega^k_{\mathcal M}(I^n))
+\]
+holds if and only if every $(k-1)$-index $J$ is contained in at most one member
+of $\mathcal M$.
 \end{proposition}
+
+\begin{proof}
+Fix an ordered $(k-1)$-index $J$. The coefficient of $\dd x_J$ in
+$\iota_X\omega$ is
+\[
+\sum_{\substack{i\notin J\\ I=J\cup\{i\}}}
+(-1)^{r(i,I)-1}(x_i-\tfrac12)a_I(x),
+\]
+where $r(i,I)$ is the position of $i$ in the ordered set $I$. Each summand has
+absolute value at most $\frac12\norm{\omega}_{\coeff,\infty}$ on $I^n$, and at
+most $m_J(\omega)$ summands are nonzero. Taking the maximum over $J$ proves
+\eqref{eq:incidence-contraction-bound}.
+
+If each $(k-1)$-index $J$ is contained in at most one member of $\mathcal M$,
+then every output coefficient of $\iota_X\omega$ has at most one contributing
+input coefficient. The same computation therefore gives the bound with the
+factor $1/2$.
+
+Conversely, suppose that some $(k-1)$-index $J$ is contained in two distinct
+members $I_1=J\cup\{p\}$ and $I_2=J\cup\{q\}$ of $\mathcal M$. Define a constant
+form
+\[
+\omega:=(-1)^{r(p,I_1)-1}\dd x_{I_1}
++(-1)^{r(q,I_2)-1}\dd x_{I_2}.
+\]
+Then $\norm{\omega}_{\coeff,\infty}=1$. At the point whose $p$- and
+$q$-coordinates are equal to $1$, the coefficient of $\dd x_J$ in
+$\iota_X\omega$ is
+\[
+(1-\tfrac12)+(1-\tfrac12)=1.
+\]
+Hence $\norm{\iota_X\omega}_{\coeff,\infty}\ge1>1/2$, so the universal
+one-half estimate fails. This proves the criterion.
+\end{proof}
 
 \begin{remark}
 \label{rem:non-coord-monomial}
@@ -445,8 +510,104 @@ optimal estimate is the input used below.
 
 \begin{theorem}[Sharp coefficient bound for the centered homotopy operator]
 \label{thm:optimal-continuous-inverse}
-See \cite{MaZhangCubicalStokes2026}, Theorem~3.1.
+Let $1\le k\le n$ and let $K_{n+1}:=0$. Then
+\begin{equation}
+\label{eq:radial-homotopy-identity}
+\dd K_k\omega+K_{k+1}\dd\omega=\omega
+\qquad
+(\omega\in\Omega^k_{\mathrm{sm}}(I^n)).
+\end{equation}
+If, in addition, $\omega$ is coordinate-monomial, then
+\begin{equation}
+\label{eq:sharp-homotopy-bound}
+\norm{K_k\omega}_{\coeff,\infty}
+\le
+\frac1{2k}\norm{\omega}_{\coeff,\infty}.
+\end{equation}
+The constant $1/(2k)$ is sharp on the class of closed coordinate-monomial
+$k$-forms. More strongly, if
+$R:\Omega^k_{\mathrm{sm}}(I^n)\to\Omega^{k-1}_{\mathrm{sm}}(I^n)$ is any
+operator such that $\dd R\omega=\omega$ for every closed coordinate-monomial
+$k$-form $\omega$, then
+\[
+\sup_{\substack{\omega\ne0\\ \omega\ {m closed}\ {m coordinate\text{-}monomial}}}
+\frac{\norm{R\omega}_{\coeff,\infty}}{\norm{\omega}_{\coeff,\infty}}
+\ge
+\frac1{2k}.
+\]
 \end{theorem}
+
+\begin{proof}
+Let $H(t,x)=c+t(x-c)$ and write $H_t(x)=H(t,x)$. The operator in
+Definition~\ref{def:homotopy-operator} is
+\[
+K_k\omega=
+\int_0^1 H_t^*(\iota_{\partial_tH}\omega)\,\dd t,
+\qquad
+\partial_tH(t,x)=x-c.
+\]
+Indeed, the pullback $H_t^*$ contributes one factor $t$ for each of the
+$k-1$ surviving differentials after contraction, giving the factor $t^{k-1}$
+in \eqref{eq:K-definition}. Cartan's homotopy formula for the map
+$H:[0,1]\times I^n\to I^n$ gives
+\[
+\frac{\dd}{\dd t}H_t^*\omega
+=
+H_t^*(\dd\iota_{\partial_tH}\omega+
+\iota_{\partial_tH}\dd\omega).
+\]
+Integrating from $0$ to $1$ yields
+\[
+H_1^*\omega-H_0^*\omega=\dd K_k\omega+K_{k+1}\dd\omega .
+\]
+Here $H_1$ is the identity and, because $k\ge1$, $H_0^*\omega=0$. This proves
+\eqref{eq:radial-homotopy-identity}; when $k=n$ the term
+$K_{n+1}\dd\omega$ is zero because $\dd\omega$ is an $(n+1)$-form.
+
+Now let $\omega=f\,\dd x_I$ be coordinate-monomial, with
+$I=\{i_1<\cdots<i_k\}$. The coefficient formula
+\eqref{eq:K-coefficient-formula} has exactly one contribution to each output
+coefficient $\dd x_{I\setminus\{i_r\}}$. Hence, for each $x\in I^n$,
+\[
+\abs{(K_k\omega)_{I\setminus\{i_r\}}(x)}
+\le
+\int_0^1 t^{k-1}\abs{x_{i_r}-\tfrac12}\,
+\norm{\omega}_{\coeff,\infty}\,\dd t
+\le
+\frac1{2k}\norm{\omega}_{\coeff,\infty}.
+\]
+Taking the maximum over $r$ and the supremum over $x$ proves
+\eqref{eq:sharp-homotopy-bound}.
+
+For sharpness of this estimate, take
+\[
+\omega_0:=\dd x_1\wedge\cdots\wedge\dd x_k.
+\]
+It is closed and coordinate-monomial, $\norm{\omega_0}_{\coeff,\infty}=1$, and
+\eqref{eq:explicit-minimizer} gives
+\[
+\norm{K_k\omega_0}_{\coeff,\infty}=\frac1{2k}.
+\]
+
+It remains to prove the operator-independent lower bound. Let $\eta$ be any
+smooth $(k-1)$-form on a neighborhood of $I^n$ such that $\dd\eta=\omega_0$.
+Fix the inactive coordinates $x_{k+1},\dots,x_n$ arbitrarily if $n>k$, and let
+$Q$ be the resulting oriented coordinate $k$-cube parallel to
+$(x_1,\dots,x_k)$. Stokes' theorem gives
+\[
+1=\int_Q\omega_0=\int_{\partial Q}\eta.
+\]
+The boundary $\partial Q$ consists of $2k$ unit coordinate $(k-1)$-faces. On
+each such face the pullback of $\eta$ is, up to sign, one coefficient of
+$\eta$ integrated over a unit cube. Therefore
+\[
+1\le 2k\norm{\eta}_{\coeff,\infty},
+\qquad
+\text{so}\qquad
+\norm{\eta}_{\coeff,\infty}\ge\frac1{2k}.
+\]
+Applying this to $\eta=R\omega_0$ proves the final assertion.
+\end{proof}
 
 \begin{proposition}[A sharp decomposition with controlled defect]
 \label{thm:homotopy-decomposition}
@@ -1210,6 +1371,12 @@ defined above,
 \]
 and
 \[
+\mathcal I(\dd\alpha)=d\mathcal I(\alpha)
+\qquad
+(\alpha\in\Omega^k_{\mathrm{sm}}(I^n)),
+\]
+where the second identity is read in degree $k+1$. Also,
+\[
 \mathcal I W\theta=\theta
 \qquad
 (\theta\in C^k(I^n;\RR)).
@@ -1225,7 +1392,7 @@ degree on a neighborhood of $I^n$.
 \end{proposition}
 
 \begin{proof}
-It is enough to check the two identities on the basis cochains
+We first check the Whitney identities on the basis cochains
 $\delta_{I,\varepsilon}$. Write
 $I=\{i_1<\cdots<i_k\}$ and fix $j\notin I$. Put $J:=I\cup\{j\}$, ordered
 increasingly, and let $s(j,J)$ be the position of $j$ in $J$. The oriented
@@ -1251,6 +1418,20 @@ $\dd x_j\wedge\dd x_I=(-1)^{s(j,J)-1}\dd x_J$, the coefficient of the
 $J$-term is exactly the same incidence sign multiplied by the product of the
 remaining inactive factors. This is precisely the coefficient of
 $W(d\delta_{I,\varepsilon})$, and hence $\dd W=W d$.
+
+The identity $\mathcal I\dd=d\mathcal I$ is Stokes' theorem with the same
+orientation convention. If $\sigma$ is an oriented $(k+1)$-cell, then
+\[
+(\mathcal I\dd\alpha)(\sigma)
+=
+\int_\sigma\dd\alpha
+=
+\int_{\partial\sigma}\alpha
+=
+(d\mathcal I\alpha)(\sigma),
+\]
+because the cubical coboundary is dual to the oriented cubical boundary,
+$(d\theta)(\sigma)=\theta(\partial\sigma)$.
 
 For $\mathcal I W=\mathrm{id}$, integrate $W(\delta_{I,\varepsilon})$ over a
 $k$-cell $\sigma_{J,\eta}$. If $J\ne I$, the pullback of $\dd x_I$ to
