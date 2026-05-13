@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-13T11:01:22+00:00`
+- Generated: `2026-05-13T14:47:25+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_detector_shells_click_record_kms_jphyscomm`
 - Gate failed: `true`
@@ -13,7 +13,7 @@
 | `deferred_wait_for_prior_submission` | 1 |
 | `needs_human_resolution` | 0 |
 | `resolved` | 1 |
-| `informational` | 12 |
+| `informational` | 13 |
 
 ## Findings
 
@@ -21,6 +21,7 @@
 |---|---|---|---|---|---|---|---:|---|---|
 | deferred_wait_for_prior_submission | `2026_detector_shells_click_record_kms_jphyscomm` | `submitted_2026_shell_geometry_detector_thermality_kms_grg` | defer_later_draft_until_prior_submission_feedback | `submitted_2026_shell_geometry_detector_thermality_kms_grg` | `2026_detector_shells_click_record_kms_jphyscomm` | bernoulli_markov_transport | 0.2226 | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP |  |
 | resolved | `2026_detector_shells_click_record_kms_jphyscomm` | `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | continue_after_board_resolution | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1354 | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP | Fibonacci Q. \| 拒稿 05-01；FQ/JNT 路线关闭；不回 Stage A \| ETDS→JNT→FQ; FQ editor: 更适合 dynamical systems; core 已并入/重叠 DCDS-A 在审稿件 `260511-Zhang-2` |
+| informational | `2026_detector_shells_click_record_kms_jphyscomm` | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | no_action_required | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1221 | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP | Dynamical Systems \| P0 \| triaged 2026-05-13: substantial finite-window Zeckendorf truncation-defect manuscript; must pass overlap harness before Stage A deepening |
 | informational | `2026_detector_shells_click_record_kms_jphyscomm` | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | no_action_required | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1249 | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP | — \| 待分诊 \| — |
 | informational | `2026_detector_shells_click_record_kms_jphyscomm` | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | no_action_required | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1835 | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |
 | informational | `2026_detector_shells_click_record_kms_jphyscomm` | `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | no_action_required | `` | `` | bernoulli_markov_transport, sliding_overlap_reconstruction | 0.1544 | J. Math. Phys. \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| GRG desk reject→JPhysComm desk reject 03-23→JMP | ETDS \| C-STUCK (Oracle+Claude exhausted 15 rounds) \| SIADS→ETDS |

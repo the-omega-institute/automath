@@ -1,6 +1,6 @@
 # Split Overlap Report
 
-- Generated: `2026-05-13T11:10:56+00:00`
+- Generated: `2026-05-13T14:47:49+00:00`
 - Publication dir: `D:\omega\automath\papers\publication`
 - Current paper: `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal`
 - Gate failed: `true`
@@ -13,7 +13,7 @@
 | `deferred_wait_for_prior_submission` | 0 |
 | `needs_human_resolution` | 2 |
 | `resolved` | 1 |
-| `informational` | 14 |
+| `informational` | 15 |
 
 ## Findings
 
@@ -22,6 +22,7 @@
 | needs_human_resolution | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | record_board_resolution_before_advancing | `` | `` | homological_visibility_pullback, sliding_overlap_reconstruction, visible_quotient_gluing | 0.4040 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | APAL \| B-STUCK (Oracle: minor revision, 20 rounds — needs human review) \| — |
 | needs_human_resolution | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `2026_recursive_addressing_prefix_sites_tac` | record_board_resolution_before_advancing | `` | `` | homological_visibility_pullback, sliding_overlap_reconstruction, visible_quotient_gluing | 0.2243 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | TAC \| P0 \| triaged 2026-05-13: substantial prefix-sites / inverse-limits manuscript; needs journal-fit and novelty gate |
 | resolved | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | continue_after_board_resolution | `` | `` | residue_window_decoder, sliding_overlap_reconstruction | 0.1301 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | Fibonacci Q. \| 拒稿 05-01；FQ/JNT 路线关闭；不回 Stage A \| ETDS→JNT→FQ; FQ editor: 更适合 dynamical systems; core 已并入/重叠 DCDS-A 在审稿件 `260511-Zhang-2` |
+| informational | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | no_action_required | `` | `` | residue_window_decoder, sliding_overlap_reconstruction | 0.1002 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | Dynamical Systems \| P0 \| triaged 2026-05-13: substantial finite-window Zeckendorf truncation-defect manuscript; must pass overlap harness before Stage A deepening |
 | informational | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `2026_elliptic_normalization_branch_geometry_quartic_spectral` | no_action_required | `` | `` | residue_window_decoder, sliding_overlap_reconstruction | 0.0977 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | — \| 待分诊 \| — |
 | informational | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | no_action_required | `` | `` | residue_window_decoder, sliding_overlap_reconstruction, visible_quotient_gluing | 0.1580 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | ETDS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |
 | informational | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | no_action_required | `` | `` | residue_window_decoder, sliding_overlap_reconstruction | 0.1763 | APAL \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — | Trans. AMS \| A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=7)) \| — |
