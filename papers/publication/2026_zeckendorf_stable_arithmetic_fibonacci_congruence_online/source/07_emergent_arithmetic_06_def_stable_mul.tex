@@ -266,7 +266,44 @@ so \(\iota_0(m+n)=\iota_0(m)\circ \iota_0(n)\). On the other hand, for any \(f\i
 Since the two endomorphisms agree on every \(f\), we conclude that \(\iota_1(m)\circ \iota_1(n)=\iota_1(mn)\). Injectivity of \(\iota_0\) is the standing hypothesis. If \(\iota_1(m)=\iota_1(n)\), then applying both sides to \(g\) gives \(g^{\circ m}=g^{\circ n}\), hence \(m=n\). Thus \(\iota_1\) is injective as well.
 \end{proof}
 
-\begin{theorem}[Primitive-free realization of the stable semiring]\label{thm:arith-composition}
+\begin{theorem}[One-layer obstruction for multiplicative readout]\label{thm:one-layer-composition-obstruction}
+Let \(A\) be a nonempty set and let \(h:A\to A\) have pairwise distinct iterates. Suppose a readout of stable addresses into the one-generated composition semigroup \(\langle h\rangle\) has the form
+\[
+\Psi(c):=h^{\circ\mathrm{Val}(c)}.
+\]
+Then composition in \(\langle h\rangle\) realizes stable addition:
+\[
+\Psi(c\oplus d)=\Psi(c)\circ\Psi(d)
+\qquad(c,d\in X_\infty),
+\]
+but it cannot realize stable multiplication by the same one-layer rule for all inputs. More precisely, there do not exist pairwise distinct iterates of \(h\) for which
+\[
+\Psi(c\otimes d)=\Psi(c)\circ\Psi(d)
+\qquad(c,d\in X_\infty)
+\]
+holds identically. Thus the second layer in Theorem \ref{thm:composition-two-layer} is forced in the cyclic-iterate readout interface.
+\end{theorem}
+
+\begin{proof}
+The additive identity follows from Theorem \ref{thm:add-definitional} and the law for iterates:
+\[
+\Psi(c\oplus d)
+=h^{\circ\mathrm{Val}(c\oplus d)}
+=h^{\circ(\mathrm{Val}(c)+\mathrm{Val}(d))}
+=h^{\circ\mathrm{Val}(c)}\circ h^{\circ\mathrm{Val}(d)}.
+\]
+Assume, for contradiction, that the same one-layer composition rule realizes multiplication. Since the iterates of \(h\) are pairwise distinct, equality
+\[
+h^{\circ\mathrm{Val}(c\otimes d)}=h^{\circ(\mathrm{Val}(c)+\mathrm{Val}(d))}
+\]
+forces
+\[
+\mathrm{Val}(c)\mathrm{Val}(d)=\mathrm{Val}(c)+\mathrm{Val}(d)
+\]
+for all \(c,d\in X_\infty\). Taking \(c=Z(2)\) and \(d=Z(3)\) gives \(6=5\), a contradiction. Therefore multiplicative readout cannot be realized on the same cyclic-iterate layer; the endomorphism-of-endomorphisms layer \(I_n(f)=f^{\circ n}\) is precisely what converts composition into multiplication of exponents.
+\end{proof}
+
+\begin{theorem}[Two-layer composition realization of the stable semiring]\label{thm:arith-composition}
 Retain Definitions \ref{def:stable-add} and \ref{def:stable-mul}, and let \(\mathrm{Val}:X_\infty\to\NN\) be the value map. For any pair \((A,g)\) as in Theorem \ref{thm:composition-two-layer}, define the process-semantics maps
 \[
 \Phi_0:X_\infty\to \mathrm{End}(A),
@@ -284,7 +321,7 @@ Then for all \(c,d\in X_\infty\),
 \qquad
 \Phi_1(c\otimes d)=\Phi_1(c)\circ\Phi_1(d).
 \]
-That is, both \(\oplus\) and \(\otimes\) on stable addresses are realized by the same primitive \(\circ\), but on two different layers of objects.
+That is, both \(\oplus\) and \(\otimes\) on stable addresses are realized by composition, but on two different layers of objects; Theorem \ref{thm:one-layer-composition-obstruction} shows that this layer separation is necessary for cyclic-iterate readouts.
 \end{theorem}
 
 \begin{proof}
@@ -336,18 +373,18 @@ Write \(c=Z(m)\) and \(d=Z(n)\). Then \(\Phi_0(c)=g^{\circ m}\), \(\Phi_0(d)=g^{
 and these identities are exactly the definitions of \(\oplus\) and \(\otimes\) transported back to \(X_\infty\).
 \end{proof}
 
-\begin{corollary}[A precise formulation of eliminating \texorpdfstring{$(+,\times)$}{(+,x)} as primitives]\label{cor:primitive-free-arith}
+\begin{corollary}[Primitive compression with a sharp layer obstruction]\label{cor:primitive-free-arith}
 At the level of configurations, arithmetic may be compressed to the following minimal generating data:
 \begin{itemize}
   \item pointwise superposition of counting configurations, i.e. the free commutative monoid structure;
   \item the local Fibonacci rewriting relations, viewed up to congruence;
   \item the canonical-section map \(\Fold_\infty\), or equivalently the pair \((\mathrm{Val},Z)\).
 \end{itemize}
-At the process level, the same content may be expressed using only the composition law \(\circ\) together with \(\Fold_\infty\): addition and multiplication are the readouts of composition on the first and second layers respectively, followed by normalization back to \(X_\infty\).
+At the process level, the same content may be expressed using composition together with \(\Fold_\infty\): addition and multiplication are the readouts of composition on the first and second layers respectively, followed by normalization back to \(X_\infty\). The layer distinction is not cosmetic: within the cyclic-iterate readout interface, Theorem \ref{thm:one-layer-composition-obstruction} rules out a single-layer realization of multiplication.
 \end{corollary}
 
 \begin{proof}
-At the configuration level, the three ingredients are exactly those isolated by Theorem \ref{thm:monoid-quotient-is-N} and Corollary \ref{cor:fold-as-section}. At the process level, the two-layer readout statements are Theorems \ref{thm:composition-two-layer} and \ref{thm:arith-composition}, while the interface with addition is supplied by Corollary \ref{cor:add-as-fold}.
+At the configuration level, the three ingredients are exactly those isolated by Theorem \ref{thm:monoid-quotient-is-N} and Corollary \ref{cor:fold-as-section}. At the process level, the two-layer readout statements are Theorems \ref{thm:composition-two-layer} and \ref{thm:arith-composition}, while the interface with addition is supplied by Corollary \ref{cor:add-as-fold}. The asserted obstruction is Theorem \ref{thm:one-layer-composition-obstruction}.
 \end{proof}
 
 \begin{remark}[Euclidean division as a choice of normal form]\label{rem:division-as-selection}

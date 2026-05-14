@@ -67,6 +67,43 @@ The output is the unique admissible word of value
 By Corollary \ref{cor:add-as-fold}, that word is exactly \(\Fold_\infty(c+d)=c\oplus d\). Leading zero padding through any \(L\ge m+2\) leaves the value unchanged and gives the online normalizer enough trailing high-order zeros to settle carries near the most significant end before the low-order scan proceeds. Since the machine performs one transition per input pair and then emits only a bounded suffix, the number of digit operations is \(O(m)\). Concrete Zeckendorf implementations of the same finite-state normalization principle are given by Ahlbach--Usatine--Frougny--Pippenger \cite{AhlbachUsatineFrougnyPippenger2013}; the Ostrowski formulation is also recorded in \cite{HieronymiTerry2018OstrowskiAddition}.
 \end{proof}
 
+\begin{theorem}[Finite-resolution addition is a residue fold with finite-state realization]\label{thm:finite-add-residue-fold-fst}
+Fix \(m\ge 1\) and set \(M_m:=F_{m+2}\). Let \(c,d\in X_m\), extend them by zeros to elements of \(X_\infty\), and put
+\[
+a:=c+d\in\mathcal{D}.
+\]
+Then finite-resolution addition is obtained by the quotient-and-fold formula
+\[
+c\boxplus_m d
+=Z_m\bigl(\mathrm{Val}(a)\bmod M_m\bigr)
+=\Pi_m\bigl(\Fold_\infty(a)\bigr).
+\]
+Moreover this operation has a finite-state digit realization at fixed resolution: a finite transducer, depending only on \(m\) and the Fibonacci numeration system and not on \(c,d\), computes \(c\boxplus_m d\) from the padded synchronous digit stream for \((c,d)\) by online Zeckendorf addition followed by the residue fold \(\Pi_m\). Thus the finite operation is not naive truncation of the infinite sum, but descent through the congruence quotient modulo \(F_{m+2}\) followed by the unique Zeckendorf representative in \(X_m\).
+\end{theorem}
+
+\begin{proof}
+By definition of \(a\),
+\[
+\mathrm{Val}(a)=V_m(c)+V_m(d).
+\]
+The definition of \(\boxplus_m\) in finite-resolution arithmetic therefore gives
+\[
+c\boxplus_m d
+=Z_m\bigl((V_m(c)+V_m(d))\bmod M_m\bigr)
+=Z_m\bigl(\mathrm{Val}(a)\bmod M_m\bigr).
+\]
+On the other hand \(\Fold_\infty(a)=Z(\mathrm{Val}(a))\), so the definition of the fold-aware residue projection \(\Pi_m\) from Proposition \ref{prop:finite-stable-compatibility-warning} yields
+\[
+\Pi_m\bigl(\Fold_\infty(a)\bigr)
+=Z_m\bigl(\mathrm{Val}(\Fold_\infty(a))\bmod M_m\bigr)
+=Z_m\bigl(\mathrm{Val}(a)\bmod M_m\bigr),
+\]
+because folding preserves value. This proves the displayed quotient-and-fold formula.
+
+For finite-state realizability, Theorem \ref{thm:zeckendorf-add-fst} computes \(\Fold_\infty(a)=c\oplus d\) from the synchronous input stream with bounded delay and finite memory. Since \(M_m\) is fixed once the resolution is fixed, the residue of the value modulo \(M_m\) can be tracked by a finite register with states in \(\ZZ/(M_m\ZZ)\): when an output digit \(u_k\) is produced by the online normalizer, update the register by adding \(u_kF_{k+1}\) modulo \(M_m\), using the Fibonacci weights modulo \(M_m\). At the end of the stream the register contains \(\mathrm{Val}(c\oplus d)\equiv\mathrm{Val}(a)\pmod {M_m}\). The bijection \(Z_m:\{0,
+\dots,M_m-1\}\to X_m\) is a fixed finite lookup table at this resolution, so appending this lookup to the finite transducer outputs \(Z_m(\mathrm{Val}(a)\bmod M_m)=c\boxplus_m d\). All state sets are finite, and the construction uses the residue fold \(\Pi_m\) rather than digit truncation.
+\end{proof}
+
 \begin{remark}[Low-to-high scans versus online numeration convention]\label{rem:online-orientation}
 The stable-address indices in the rest of the paper are written from low weight to high weight because this is convenient for the value formula \(\sum c_kF_{k+1}\). The online theorem above uses the standard numeration-theoretic convention of reading most significant digits first. This is only an interface convention: for a finite support input one first chooses the effective resolution \(L\), scans downward from \(L\), and then interprets the output back in the same stable-address coordinates.
 \end{remark}
