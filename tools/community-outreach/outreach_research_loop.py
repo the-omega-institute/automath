@@ -502,6 +502,7 @@ def _spawn_oracle_deep(todo_id: str, timeout_s: int) -> tuple[int, str]:
         "--supervise",
         "--supervise-id", todo_id,
         "--oracle-deep",
+        "--no-arxiv-stage0",
         "--codex-driver",
         "--oracle-max-turns", str(batch_turns),
         "--oracle-timeout", str(per_turn_timeout),
