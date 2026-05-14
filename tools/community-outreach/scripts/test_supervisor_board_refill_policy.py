@@ -46,6 +46,39 @@ def main() -> int:
     ]
     if supervisor._run_target_count(rows) != 2:
         raise AssertionError("RUN target counter ignored or over-counted board rows")
+
+    spawned: list[str] = []
+    logs: list[str] = []
+
+    def fake_running(script_name: str) -> bool:
+        return script_name == "outreach_local_repair.py"
+
+    def fake_spawn(script, label, extra_args=None, timeout_s=None) -> None:
+        spawned.append(str(label))
+
+    def fake_log(msg: str) -> None:
+        logs.append(msg)
+
+    old_running = supervisor._script_running
+    old_spawn = supervisor._spawn_short_task
+    old_log = supervisor.supervisor_log
+    supervisor._script_running = fake_running
+    supervisor._spawn_short_task = fake_spawn
+    supervisor.supervisor_log = fake_log
+    try:
+        supervisor.trigger_science_gate()
+        supervisor.trigger_impact_gate()
+    finally:
+        supervisor._script_running = old_running
+        supervisor._spawn_short_task = old_spawn
+        supervisor.supervisor_log = old_log
+    if spawned:
+        raise AssertionError(f"gate ledger writers spawned during local Codex workup: {spawned}")
+    joined_logs = "\n".join(logs)
+    if "science_gate: deferred because local Codex workup is active" not in joined_logs:
+        raise AssertionError("science gate did not log local-workup deferral")
+    if "impact_gate: deferred because local Codex workup is active" not in joined_logs:
+        raise AssertionError("impact gate did not log local-workup deferral")
     return 0
 
 

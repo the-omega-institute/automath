@@ -324,6 +324,10 @@ def _script_running(script_name: str) -> bool:
     return _process_running(f"tools/community-outreach/{script_name}") or _process_running(f"/{script_name}")
 
 
+def _local_codex_workup_active() -> bool:
+    return _script_running("outreach_local_repair.py")
+
+
 # ---------------------------------------------------------------------------
 # stale cleanup
 # ---------------------------------------------------------------------------
@@ -544,6 +548,9 @@ def trigger_profile_judge() -> None:
 
 
 def trigger_science_gate() -> None:
+    if _local_codex_workup_active():
+        supervisor_log("science_gate: deferred because local Codex workup is active")
+        return
     if _script_running("outreach_science_gate.py"):
         supervisor_log("science_gate: already running, skip duplicate trigger")
         return
@@ -556,6 +563,9 @@ def trigger_science_gate() -> None:
 
 
 def trigger_impact_gate() -> None:
+    if _local_codex_workup_active():
+        supervisor_log("impact_gate: deferred because local Codex workup is active")
+        return
     if _script_running("outreach_impact_gate.py"):
         supervisor_log("impact_gate: already running, skip duplicate trigger")
         return
