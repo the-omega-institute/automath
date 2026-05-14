@@ -768,6 +768,17 @@ def _preflight_repair_actions(rows: list[dict]) -> dict:
     }
 
 
+def _run_target_count(rows: list[dict] | None = None) -> int:
+    if rows is None:
+        rows = _preflight_rows()
+    return sum(1 for r in rows if r.get("verdict") == "RUN")
+
+
+def _generic_board_refill_allowed(run_target_count: int, low_water: int) -> bool:
+    """Generic source discovery must not steal Oracle from active math work."""
+    return run_target_count < max(0, low_water)
+
+
 def run_preflight_repair_controller(state: dict) -> None:
     rows = _preflight_rows()
     plan = _preflight_repair_actions(rows)
@@ -875,14 +886,11 @@ def run_frontier_harness_controller(state: dict, *, low_water: int = 2) -> None:
             "frontier_harness: research pool ready; "
             f"{len(actionable)} RUN target(s): {_top_names(actionable)}"
         )
-        if oracle_has_capacity() and not _script_running("outreach_board_refill.py"):
-            last = float(state.get("last_frontier_refill_ts") or 0.0)
-            if _now() - last >= 1800:
-                supervisor_log(
-                    "frontier_harness: spare Oracle lane available; running background board refill"
-                )
-                trigger_board_refill()
-                state["last_frontier_refill_ts"] = _now()
+        if _script_running("outreach_board_refill.py"):
+            supervisor_log(
+                "frontier_harness: board_refill is active despite a ready research pool; "
+                "waiting for it to finish instead of starting another refill"
+            )
         return
     if actionable:
         supervisor_log(
@@ -898,7 +906,11 @@ def run_frontier_harness_controller(state: dict, *, low_water: int = 2) -> None:
                 )
                 trigger_profile_judge()
                 state["last_frontier_harness_trigger_ts"] = _now()
-        if oracle_has_capacity() and not _script_running("outreach_board_refill.py"):
+        if (
+            _generic_board_refill_allowed(len(actionable), low_water)
+            and oracle_has_capacity()
+            and not _script_running("outreach_board_refill.py")
+        ):
             supervisor_log("frontier_harness: spare Oracle capacity available; topping up candidate inbox")
             trigger_board_refill()
             state["last_frontier_harness_trigger_ts"] = _now()
@@ -1291,7 +1303,15 @@ def main() -> int:
 
             since_refill_h = (_now() - last_refill_ts) / 3600.0
             if args.once or since_refill_h >= supervisor_state["board_refill_hours"]:
-                if oracle_has_capacity():
+                run_targets = _run_target_count()
+                low_water = max(0, int(args.frontier_low_water))
+                if not _generic_board_refill_allowed(run_targets, low_water):
+                    supervisor_log(
+                        "board_refill: deferred because active RUN target pool is above low-water "
+                        f"({run_targets}>={low_water}); reserve Oracle for deep research"
+                    )
+                    last_refill_ts = _now()
+                elif oracle_has_capacity():
                     trigger_board_refill()
                     last_refill_ts = _now()
                 else:
