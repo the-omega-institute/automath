@@ -7,7 +7,9 @@ import importlib.util
 import json
 import sys
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
+from types import SimpleNamespace
 
 SCRIPT_DIR = Path(__file__).resolve().parents[1]
 MODULE_PATH = SCRIPT_DIR / "outreach_research_loop.py"
@@ -21,6 +23,36 @@ def _load_research_loop():
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+@dataclass
+class Todo:
+    todo_id: str
+    title: str
+    source: str
+    status: str = "Backlog"
+    fit_score: int = 10
+    topic_score: int = 10
+
+    def slug(self) -> str:
+        return f"problemsilike_{int(self.source.rsplit('/', 1)[-1]):02d}"
+
+
+def _patch_actionable_gates(loop, todos: dict[str, Todo]):
+    loop._parse_board_safe = lambda: todos
+    loop.judge = lambda todo: SimpleNamespace(
+        verdict=next(iter(loop.ACTIONABLE_VERDICTS)),
+        missing=[],
+        reasons=[],
+    )
+    loop.science_gate_evaluate = lambda todo: SimpleNamespace(
+        status="NEEDS_EVIDENCE",
+        next_action="deep_reason",
+    )
+    loop._global_oracle_bridge_backoff_applies = lambda: False
+    loop._cooldown_applies = lambda todo_id, slug, cooldown_hours: False
+    loop._transport_backoff_applies = lambda slug: False
+    loop._local_repair_backoff_applies = lambda slug: False
 
 
 def main() -> int:
@@ -56,6 +88,31 @@ def main() -> int:
             raise AssertionError(f"Oracle-active claim should not be released, got {released}")
         if not (claim_dir / ".in_progress").exists():
             raise AssertionError("Oracle-active claim marker was removed")
+
+        target_root = state_dir / "targets"
+        target_root.mkdir()
+        loop.TARGETS_DIR = target_root
+        todos = {
+            "T-44": Todo(
+                todo_id="T-44",
+                title="Problems I Like #4 active in Oracle",
+                source="https://www.problemsilike.com/4",
+            ),
+            "T-45": Todo(
+                todo_id="T-45",
+                title="Problems I Like #5 next open target",
+                source="https://www.problemsilike.com/5",
+            ),
+        }
+        _patch_actionable_gates(loop, todos)
+        picked = loop.select_next_target()
+        if picked != ("T-45", "problemsilike_05"):
+            raise AssertionError(f"selector should skip Oracle-active #4 and pick #5, got {picked}")
+
+        _patch_actionable_gates(loop, {"T-44": todos["T-44"]})
+        picked = loop.select_next_target()
+        if picked is not None:
+            raise AssertionError(f"selector should not busy-loop on only Oracle-active target, got {picked}")
     return 0
 
 
