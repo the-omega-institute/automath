@@ -57,6 +57,7 @@ RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
 SUPERVISOR_LOCK = STATE_DIR / "supervisor.lock"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
+RESTART_DRAIN_FILE = SCRIPT_DIR / ".outreach_restart_drain"
 GIT_OPS_LOCK = STATE_DIR / ".git_ops.lock"
 
 ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
@@ -143,6 +144,22 @@ def _git_head() -> str:
     if proc.returncode != 0:
         return ""
     return proc.stdout.strip()
+
+
+def _restart_drain_requested(start_head: str) -> bool:
+    """Return true when this supervisor should stop starting new work.
+
+    Watchdog writes `.outreach_restart_drain` after a structural commit so an
+    old supervisor can drain instead of launching fresh research/Oracle tasks
+    with stale Python code.  The supervisor exits only after existing inner
+    subprocesses are stopped in the normal finally block.
+    """
+    if not RESTART_DRAIN_FILE.exists():
+        return False
+    current_head = _git_head()
+    if not start_head or not current_head or current_head == start_head:
+        return False
+    return True
 
 
 def write_runtime_record(args: argparse.Namespace) -> None:
@@ -1191,10 +1208,23 @@ def main() -> int:
     if STOP_FILE.exists():
         supervisor_log(f"clearing stale STOP_FILE {STOP_FILE}")
         STOP_FILE.unlink()
+    if RESTART_DRAIN_FILE.exists():
+        current_head = _git_head()
+        try:
+            txt = RESTART_DRAIN_FILE.read_text(encoding="utf-8")
+        except OSError:
+            txt = ""
+        if current_head and current_head in txt:
+            supervisor_log(f"clearing stale restart drain file {RESTART_DRAIN_FILE}")
+            try:
+                RESTART_DRAIN_FILE.unlink()
+            except OSError:
+                pass
 
     SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
     RESEARCH_CLAIMS_DIR.mkdir(parents=True, exist_ok=True)
     _install_signal_handlers()
+    start_git_head = _git_head()
     supervisor_log(
         f"supervisor starting (parallel={args.parallel} poll={args.poll_interval}s "
         f"pi_review={'off' if args.no_pi_review else f'{args.pi_review_hours}h'} "
@@ -1238,6 +1268,12 @@ def main() -> int:
     try:
         while not STOP_FILE.exists():
             tick_started = _now()
+
+            if _restart_drain_requested(start_git_head):
+                supervisor_log(
+                    "restart drain requested after code change; exiting before starting new work"
+                )
+                break
 
             if not args.no_server_spawn:
                 ensure_server()

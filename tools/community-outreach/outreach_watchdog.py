@@ -35,6 +35,7 @@ SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
 SUPERVISOR_LOCK = STATE_DIR / "supervisor.lock"
 RESEARCH_STATUS = STATE_DIR / "research_loop.status.json"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
+RESTART_DRAIN_FILE = SCRIPT_DIR / ".outreach_restart_drain"
 
 ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766")
 ORACLE_SERVER = SCRIPT_DIR / "outreach_oracle_server.py"
@@ -208,6 +209,13 @@ def _spawn_supervisor(supervisor_args: list[str]) -> int | None:
         pass
     except OSError as exc:
         log(f"supervisor: could not remove .outreach_stop: {exc}")
+    try:
+        RESTART_DRAIN_FILE.unlink()
+        log("supervisor: removed stale .outreach_restart_drain before spawn")
+    except FileNotFoundError:
+        pass
+    except OSError as exc:
+        log(f"supervisor: could not remove .outreach_restart_drain: {exc}")
     SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
     logf = SUPERVISOR_DAEMON_LOG.open("ab")
     logf.write(f"\n=== watchdog supervisor spawn at {_now_iso()} ===\n".encode())
@@ -378,6 +386,21 @@ def _has_active_pipeline_work(server: dict) -> bool:
     return False
 
 
+def _has_active_oracle_work(server: dict) -> bool:
+    """Return true only for work that should not be interrupted by a restart.
+
+    Browser/Oracle generation is the scarce stateful resource: interrupting it
+    can lose an in-flight ChatGPT answer.  Local Codex repair and dispatch work
+    is replayable from target artifacts, so it must not be allowed to keep an
+    old supervisor alive indefinitely after a harness commit.
+    """
+    if int(server.get("agents_busy") or 0) > 0:
+        return True
+    if int(server.get("queue_length") or 0) > 0:
+        return True
+    return False
+
+
 def _observer_unreliable(server: dict) -> bool:
     """True when watchdog cannot safely decide process/browser idleness."""
     if _PS_LAST_ERROR:
@@ -401,10 +424,18 @@ def _request_safe_supervisor_restart_if_code_changed(server: dict) -> str:
     current_head = _git_head()
     if not runtime_head or not current_head or runtime_head == current_head:
         return ""
+    try:
+        RESTART_DRAIN_FILE.write_text(
+            f"watchdog requested supervisor drain at {_now_iso()}: "
+            f"{runtime_head} -> {current_head}\n",
+            encoding="utf-8",
+        )
+    except OSError:
+        pass
     if _observer_unreliable(server):
         return f"restart_deferred_observer_unreliable:{runtime_head[:9]}->{current_head[:9]}"
-    if _has_active_pipeline_work(server):
-        return f"restart_deferred_code_changed:{runtime_head[:9]}->{current_head[:9]}"
+    if _has_active_oracle_work(server):
+        return f"restart_deferred_oracle_active:{runtime_head[:9]}->{current_head[:9]}"
     try:
         STOP_FILE.write_text(
             f"watchdog requested safe restart at {_now_iso()}: "
@@ -428,7 +459,7 @@ def _supervisor_code_status(server: dict) -> dict:
     runtime_head = str(runtime.get("git_head") or "").strip()
     current_head = _git_head()
     observer_unreliable = _observer_unreliable(server)
-    active = True if observer_unreliable else _has_active_pipeline_work(server)
+    active = True if observer_unreliable else _has_active_oracle_work(server)
     stale = bool(runtime_head and current_head and runtime_head != current_head)
     return {
         "current_git_head": current_head,
@@ -438,7 +469,7 @@ def _supervisor_code_status(server: dict) -> dict:
         "safe_restart_deferred": bool(stale and active),
         "safe_restart_blocker": (
             "observer_unreliable" if stale and observer_unreliable
-            else "active_pipeline_work" if stale and active
+            else "active_oracle_work" if stale and active
             else ""
         ),
     }
