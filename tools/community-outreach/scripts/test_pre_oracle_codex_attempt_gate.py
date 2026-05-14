@@ -414,6 +414,48 @@ def main() -> int:
         if "science_gate.json" in diagnostics or "outreach_impact_gate.json" in diagnostics:
             raise AssertionError(f"harness-refreshed ledgers should be ignored: {postcheck}")
 
+        old_handoff = {
+            "codex_workup.md": (target_dir / "codex_workup.md").read_text(encoding="utf-8"),
+            "next_oracle_question.md": (target_dir / "next_oracle_question.md").read_text(encoding="utf-8"),
+            "local_repair_report.md": (target_dir / "local_repair_report.md").read_text(encoding="utf-8"),
+        }
+        handoff_before = local_repair._snapshot_handoff_files(target_dir)
+        (target_dir / "codex_workup.md").write_text("", encoding="utf-8")
+        (target_dir / "next_oracle_question.md").unlink()
+        (target_dir / "local_repair_report.md").write_text("truncated\n", encoding="utf-8")
+        restore = local_repair._restore_handoff_files(target_dir, handoff_before)
+        if not restore.get("triggered") or restore.get("errors"):
+            raise AssertionError(f"handoff restore failed: {restore}")
+        for name, expected in old_handoff.items():
+            actual = (target_dir / name).read_text(encoding="utf-8")
+            if actual != expected:
+                raise AssertionError(f"{name} was not restored byte-for-byte")
+        stale_after_restore = local_repair._postcheck_local_repair_artifacts(
+            target_dir,
+            codex_trace=trace,
+            reserved_before=local_repair._snapshot_reserved_harness_files(target_dir),
+            run_started_at="2999-01-01T00:00:00+00:00",
+        )
+        stale_after_restore_diagnostics = " ".join(stale_after_restore.get("diagnostics", []))
+        if stale_after_restore.get("ok") or "was not refreshed by this local repair run" not in stale_after_restore_diagnostics:
+            raise AssertionError(
+                "restored old handoff should preserve context but fail current-run freshness gate: "
+                f"{stale_after_restore}"
+            )
+
+        no_previous_dir = target_dir / "no_previous_handoff"
+        no_previous_dir.mkdir()
+        no_previous_before = local_repair._snapshot_handoff_files(no_previous_dir)
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            (no_previous_dir / name).write_text("new failed partial\n", encoding="utf-8")
+        restore = local_repair._restore_handoff_files(no_previous_dir, no_previous_before)
+        if sorted(restore.get("removed", [])) != sorted(
+            ["codex_workup.md", "next_oracle_question.md", "local_repair_report.md"]
+        ):
+            raise AssertionError(f"new failed handoffs should be removed when no prior snapshot existed: {restore}")
+        if any((no_previous_dir / name).exists() for name in local_repair.HANDOFF_FILES):
+            raise AssertionError("restore left failed new handoff files behind")
+
         watchdog_stdout = target_dir / "watchdog.jsonl"
         inspection_event = {
             "item": {

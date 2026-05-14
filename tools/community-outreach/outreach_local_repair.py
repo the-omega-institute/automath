@@ -1153,6 +1153,12 @@ RESERVED_HARNESS_FILES = (
     "outreach_impact_gate.json",
 )
 
+HANDOFF_FILES = (
+    "codex_workup.md",
+    "next_oracle_question.md",
+    "local_repair_report.md",
+)
+
 
 def _snapshot_reserved_harness_files(target_dir: Path) -> dict[str, dict]:
     snapshots: dict[str, dict] = {}
@@ -1171,6 +1177,65 @@ def _snapshot_reserved_harness_files(target_dir: Path) -> dict[str, dict]:
             "sha256": hashlib.sha256(data).hexdigest(),
         }
     return snapshots
+
+
+def _snapshot_handoff_files(target_dir: Path) -> dict[str, dict]:
+    """Capture exact handoff bytes before a Codex worker edits them."""
+    snapshots: dict[str, dict] = {}
+    for name in HANDOFF_FILES:
+        path = target_dir / name
+        try:
+            stat = path.stat()
+            data = path.read_bytes()
+        except OSError:
+            snapshots[name] = {"exists": False}
+            continue
+        snapshots[name] = {
+            "exists": True,
+            "mtime_ns": stat.st_mtime_ns,
+            "size": stat.st_size,
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "data": data,
+        }
+    return snapshots
+
+
+def _restore_handoff_files(target_dir: Path, before: dict[str, dict] | None) -> dict:
+    """Restore handoff files after a failed local repair attempt.
+
+    Codex may delete or truncate the next Oracle handoff before a timeout or
+    wrapper failure.  Preserve the previous local context for operator/debug
+    continuity, while the current failed `local_repair_last.json` still stops
+    the restored old handoff from being treated as fresh evidence.
+    """
+    if not before:
+        return {"triggered": True, "restored": [], "removed": [], "errors": ["missing snapshot"]}
+    restored: list[str] = []
+    removed: list[str] = []
+    errors: list[str] = []
+    for name in HANDOFF_FILES:
+        path = target_dir / name
+        snapshot = before.get(name, {"exists": False})
+        try:
+            if snapshot.get("exists"):
+                data = snapshot.get("data")
+                if not isinstance(data, bytes):
+                    errors.append(f"{name}: snapshot missing bytes")
+                    continue
+                path.write_bytes(data)
+                restored.append(name)
+            else:
+                if path.exists():
+                    path.unlink()
+                    removed.append(name)
+        except OSError as exc:
+            errors.append(f"{name}: {exc}")
+    return {
+        "triggered": True,
+        "restored": restored,
+        "removed": removed,
+        "errors": errors,
+    }
 
 
 def _reserved_harness_file_mutations(
@@ -1818,6 +1883,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     stderr_path = LOG_DIR / f"{tag}.stderr.txt"
     output_path = LOG_DIR / f"{tag}.out.txt"
     reserved_before = _snapshot_reserved_harness_files(target_dir)
+    handoff_before = _snapshot_handoff_files(target_dir)
     harness_refreshed = {"science_gate.json", "outreach_impact_gate.json"}
     prompt_path.write_text(prompt, encoding="utf-8")
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False, suffix=".txt") as tmp:
@@ -1962,6 +2028,9 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     status_note = ""
     if postcheck_ok and rc != 0:
         status_note = "codex_cli_nonzero_but_artifacts_ok"
+    handoff_restore = {"triggered": False}
+    if not postcheck_ok:
+        handoff_restore = _restore_handoff_files(target_dir, handoff_before)
     report = {
         "ok": ok,
         "todo_id": todo_id,
@@ -1975,6 +2044,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "output_log": str(output_path.relative_to(REPO_ROOT)),
         "verifier_audit": verifier_audit,
         "postcheck": postcheck,
+        "handoff_restore": handoff_restore,
         "artifact_watchdog": artifact_watchdog,
         "incomplete_handoff_watchdog": incomplete_handoff_watchdog,
         "status_note": status_note,
