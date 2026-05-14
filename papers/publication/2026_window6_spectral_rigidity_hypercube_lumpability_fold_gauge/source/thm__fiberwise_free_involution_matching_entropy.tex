@@ -14,12 +14,16 @@ Then:
   =\prod_{b\in B}\frac{(2r_b)!}{2^{r_b}\,r_b!}
   =\prod_{b\in B}(2r_b-1)!!.
   \]
-  \item \textbf{(Lower bound on external information)} Any deterministic protocol that specifies a fiberwise free involution without changing \(p\) must use at least
+  \item \textbf{(Lower bound on external information)} In the deterministic protocol model in which a finite message space \(\mathcal R\) is decoded by a fixed map
+  \[
+  \delta:\mathcal R\longrightarrow \mathrm{Inv}_{\mathrm{free}}(p),
+  \]
+  and every fiberwise free involution must be selectable by some message, the injectivity/surjectivity requirement forces at least
   \[
   \mathsf I_{\min}\ \ge\ \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)
   =\sum_{b\in B}\log_2\!\bigl((2r_b-1)!!\bigr)
   \]
-  bits of externally variable information.
+  bits of externally variable information, where \(\mathsf I_{\min}:=\log_2|\mathcal R|\) is minimized over such deterministic message spaces.
 \end{enumerate}
 \leanpartial{no\_free\_involution\_on\_odd}{Formalized item (1), the odd-cardinality obstruction; the full fiberwise product count and information lower bound in items (2) and (3) are not yet fully formalized.}
 \leanpartial{freeInvolutionCount\_formula}{Formalized the single-fiber counting factor \((2r)!/(2^r r!)\) in item (2); the promotion to the total product count remains incomplete.}
@@ -77,10 +81,7 @@ If \(|E_b|=2r_b\), then the number of perfect matchings is the classical count
 obtained by ordering the \(2r_b\) elements and then dividing by the redundancy coming from swapping the two elements inside each pair and permuting the pairs themselves.
 Since the fibers are independent, the total number of fiberwise free involutions is the product of these factors, which proves (2).
 \par
-For (3), suppose an external register or certificate can assume only \(\mathcal R\) distinct states across all admissible inputs.
-Then it can distinguish at most \(|\mathcal R|\) different choices.
-To specify deterministically one element among \(\#\mathrm{Inv}_{\mathrm{free}}(p)\) possible involutions, one must have \(|\mathcal R|\ge \#\mathrm{Inv}_{\mathrm{free}}(p)\).
-Taking binary logarithms yields \(\mathsf I_{\min}\ge \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)\). \qedhere
+For (3), fix a deterministic protocol with finite message space \(\mathcal R\) and decoder \(\delta:\mathcal R\to\mathrm{Inv}_{\mathrm{free}}(p)\).  The protocol is required to be able to specify every admissible fiberwise free involution; equivalently, \(\delta\) is surjective.  Choosing one message for each element of \(\mathrm{Inv}_{\mathrm{free}}(p)\) gives an injection \(\mathrm{Inv}_{\mathrm{free}}(p)\hookrightarrow\mathcal R\), so \(|\mathcal R|\ge\#\mathrm{Inv}_{\mathrm{free}}(p)\).  Taking binary logarithms yields \(\mathsf I_{\min}\ge \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)\). \qedhere
 \end{proof}
 
 \begin{corollary}[Binary jumps and \(2\)-torsion in the center of the gauge group]\label{cor:autp-center-z2-by-twofibers}
