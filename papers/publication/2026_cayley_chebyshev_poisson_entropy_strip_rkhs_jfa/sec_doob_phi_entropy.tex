@@ -9,6 +9,116 @@ u_t(x):=\frac{h_t(x)}{g_t(x)}
 admits a closed evolution equation with respect to the Cauchy generator.
 This identifies the entropy decay as a nonlocal Bregman dissipation.
 
+\begin{lemma}[Cutoff justification for the Cauchy Doob calculus]%
+\label{lem:cauchy-doob-cutoff-calculus}
+Let $[a,b]\subset(0,\infty)$ and let $\nu$ have finite centred second
+moment.  For $t\in[a,b]$ put $h_t=P_t*\nu$, $g_t=P_t(\cdot-
+\bar\gamma)$, and $u_t=h_t/g_t$.  Then the following assertions hold
+uniformly for $t\in[a,b]$.
+\begin{enumerate}[label=(\roman*)]
+\item
+      The functions $u_t$ and $\partial_xu_t$ are bounded.  Moreover
+      $h_t,g_t,\partial_xh_t,\partial_xg_t,\partial_th_t,\partial_tg_t$
+      belong to $L^1(\RR)$, and
+      \[
+      \partial_th_t=Lh_t,
+      \qquad
+      \partial_tg_t=Lg_t
+      \]
+      pointwise, where $L$ is the principal-value Cauchy generator.
+\item
+      If $q$ is a bounded Lipschitz function and
+      $p\in\{h_t,g_t\}$, then the bilinear Cauchy form
+      \[
+      \mathcal E(p,q)
+      :=\frac{1}{2\pi}\iint_{\RR^2}
+      \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y
+      \]
+      is absolutely convergent and
+      \begin{equation}\label{eq:cutoff-cauchy-bilinear}
+      \int_{\RR}q(x)Lp(x)\dd x=-\mathcal E(p,q).
+      \end{equation}
+      The identity is obtained as the limit of the compactly supported
+      identities with $q$ replaced by $\chi_Rq$, where
+      $\chi_R(x)=\chi(x/R)$, $\chi\in C_c^\infty(\RR)$,
+      $\chi\equiv1$ on $[-1,1]$.
+\item
+      If $f$ is bounded $C^2$ with bounded first and second derivatives,
+      in particular if $f=u_t$, then
+      \begin{equation}\label{eq:cutoff-doob-product-rule}
+      L(g_tf)(x)-f(x)Lg_t(x)
+      =\frac1\pi\operatorname{p.v.}\int_{\RR}
+      \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
+      \end{equation}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Write $x=\bar\gamma+ty$ and $\varepsilon=(\gamma-\bar\gamma)/t$.  The
+quotient kernel
+\[
+R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2}
+\]
+satisfies, for $j=0,1,2$, bounds of the form
+\[
+\sup_{y\in\RR}|\partial_y^jR_\varepsilon(y)|\le C_j(1+\varepsilon^2).
+\]
+Indeed, after differentiating, the numerator has degree at most two in
+$(y-\varepsilon)$ and coefficients bounded by a constant multiple of
+$1+\varepsilon^2$, while the denominator has degree at least the numerator
+degree.  Integrating these estimates against~$\nu$ gives the asserted
+uniform bounds for $u_t$ and $\partial_xu_t$ on $[a,b]$.
+
+The $L^1$ assertions follow from convolution and scaling:
+\[
+\|\partial_xP_t\|_1\le C_a,
+\qquad
+\|\partial_tP_t\|_1\le C_a
+\qquad(a\le t\le b).
+\]
+The identity $\partial_tP_t=LP_t$ is the one-dimensional Cauchy-semigroup
+generator identity in the principal-value normalization used here
+\cite[Definition~2.2 and Proposition~2.4]{Kwasnicki2017}.  Convolution with
+the finite measure~$\nu$ and dominated convergence give
+$\partial_th_t=Lh_t$; the same argument with the point mass at
+$\bar\gamma$ gives $\partial_tg_t=Lg_t$.
+
+For the bilinear identity, first take $q\in C_c^\infty(\RR)$.  The usual
+principal-value formula for the Cauchy generator and symmetrization give
+\eqref{eq:cutoff-cauchy-bilinear}.  For bounded Lipschitz $q$, replace it
+by $q_R=\chi_Rq$.  Since $p,\partial_xp\in L^1(\RR)$ and $q$ is bounded
+and Lipschitz,
+\[
+\iint_{|x-y|<1}
+\frac{|p(x)-p(y)|\,|q(x)-q(y)|}{|x-y|^2}\dd x\dd y
+\le 2\|q\|_{\operatorname{Lip}}\|\partial_xp\|_1,
+\]
+while
+\[
+\iint_{|x-y|\ge1}
+\frac{|p(x)-p(y)|\,|q(x)-q(y)|}{|x-y|^2}\dd x\dd y
+\le 4\|q\|_\infty\|p\|_1.
+\]
+These estimates also dominate the cutoff errors because
+$\|q_R\|_\infty\le\|q\|_\infty$ and
+$\|q_R\|_{\operatorname{Lip}}\le C\|q\|_\infty+
+\|q\|_{\operatorname{Lip}}$, and the pointwise cutoff error tends to zero.
+Dominated convergence on the form side and
+$Lp=\partial_tp\in L^1(\RR)$ on the integral side prove the limiting
+identity.
+
+Finally apply the principal-value formula to $g_tf$ and to $g_t$.  In the
+truncated integrals over $|x-y|>\rho$ the difference is exactly
+\[
+\frac1\pi\int_{|x-y|>\rho}
+\frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
+\]
+The integrand has a finite principal-value limit because near $y=x$ the
+linear part contributes an odd kernel and the remaining term is bounded,
+while away from $x$ it is integrable.  Letting $\rho\downarrow0$ gives
+\eqref{eq:cutoff-doob-product-rule}.
+\end{proof}
+
 \begin{theorem}[Non-autonomous Doob transform and $\Phi$-entropy dissipation]\label{thm:poisson-doob-phi-entropy}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
 finite centered second moment.  For $t>0$ define
@@ -152,21 +262,16 @@ convex function $s\mapsto(1+s)^{-1}$ on $[0,\infty)$.
 Thus $u_t$ is bounded for every fixed $t>0$.
 
 By Proposition~\ref{prop:poisson-semigroup-law},
-$\partial_t h_t=-|D|h_t$ and $\partial_t g_t=-|D|g_t$.
-The singular-integral representation of the Cauchy generator
-\cite[Definition~2.2 and Proposition~2.4]{Kwasnicki2017} gives
-\[
-\partial_t h_t=Lh_t,
-\qquad
-\partial_t g_t=Lg_t,
-\]
-with $L$ as above.  Since $h_t=u_tg_t$ and $g_t(x)>0$,
+$\partial_t h_t=-|D|h_t$ and $\partial_t g_t=-|D|g_t$.  The cutoff
+calculus of Lemma~\ref{lem:cauchy-doob-cutoff-calculus} identifies these
+derivatives with $Lh_t$ and $Lg_t$ in the principal-value sense and permits
+the product-rule passage below.  Since $h_t=u_tg_t$ and $g_t(x)>0$,
 \[
 \partial_tu_t(x)
 =\frac{Lh_t(x)-u_t(x)Lg_t(x)}{g_t(x)}.
 \]
-Substituting $h_t=u_tg_t$ and combining the two principal-value integrals
-yields
+Substituting $h_t=u_tg_t$ in
+\eqref{eq:cutoff-doob-product-rule} yields
 \[
 \partial_tu_t(x)
 =\frac{1}{\pi g_t(x)}\operatorname{p.v.}\int_{\RR}
@@ -175,8 +280,9 @@ yields
 This is \eqref{eq:quotient-flow-equation} and proves
 \eqref{eq:doob-generator-kernel}; part~(i) follows.
 
-For part~(ii), let $f,\psi\in C_c^\infty(\RR)$.  By
-\eqref{eq:doob-generator-kernel},
+For part~(ii), let $f,\psi\in C_c^\infty(\RR)$.  The truncated integrals in
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} justify using
+\eqref{eq:doob-generator-kernel} under the outer integral, and hence
 \[
 \int_{\RR}f(x)(\mathcal L_t\psi)(x)\,g_t(x)^2\dd x
 =
@@ -208,7 +314,12 @@ Consequently,
 is dominated by an $L^1(\RR^2)$-function, uniformly for $t\in[a,b]$,
 because $g_t\in L^1(\RR)$ and
 $\int_{\RR}\min\{|x-y|^{-2},1\}\dd y<\infty$.  It follows that
-$\mathcal H_\Phi(t)$ is finite and differentiable on~$[a,b]$, with
+$\mathcal H_\Phi(t)$ is finite.  Lemma~\ref{lem:cauchy-doob-cutoff-calculus}
+also gives uniform $L^1$ bounds for $\partial_th_t$ and $\partial_tg_t$;
+therefore $t\mapsto h_t$ and $t\mapsto g_t$ are absolutely continuous as
+$L^1$-valued maps on $[a,b]$.  Since $u_t$ remains in a compact interval
+and $\Phi'$ is Lipschitz there, the chain rule for
+$g\Phi(h/g)$ gives $\mathcal H_\Phi\in AC([a,b])$ and, for a.e. $t$,
 \[
 \frac{\dd}{\dd t}\mathcal H_\Phi(t)
 =
@@ -217,16 +328,9 @@ $\mathcal H_\Phi(t)$ is finite and differentiable on~$[a,b]$, with
 \int_{\RR}\bigl(\Phi(u_t)-u_t\Phi'(u_t)\bigr)\partial_tg_t\dd x.
 \]
 Substituting $\partial_th_t=L(u_tg_t)$ and $\partial_tg_t=Lg_t$, and then
-applying the bilinear identity associated with the principal-value
-formula for~$L$,
-\[
-\int_{\RR}\varphi\,Lf\dd x
-=
--\frac{1}{2\pi}\iint_{\RR^2}
-\frac{\bigl(f(x)-f(y)\bigr)\bigl(\varphi(x)-\varphi(y)\bigr)}
-{(x-y)^2}\dd x\dd y,
-\]
-gives
+applying the cutoff bilinear identity
+\eqref{eq:cutoff-cauchy-bilinear} with the bounded Lipschitz test
+functions $\Phi'(u_t)$ and $\Phi(u_t)-u_t\Phi'(u_t)$, gives
 \[
 \frac{\dd}{\dd t}\mathcal H_\Phi(t)
 =
