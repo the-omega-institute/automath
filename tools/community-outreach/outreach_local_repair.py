@@ -1181,6 +1181,10 @@ RESERVED_HARNESS_FILES = (
     "outreach_impact_gate.json",
 )
 
+WARN_ONLY_RESERVED_HARNESS_FILES = {
+    "local_repair_last.json",
+}
+
 HANDOFF_FILES = (
     "codex_workup.md",
     "next_oracle_question.md",
@@ -1318,11 +1322,24 @@ def _postcheck_local_repair_artifacts(
         reserved_before,
         ignore_names=ignore_reserved_names,
     )
-    if reserved_mutations:
+    reserved_warn_only_mutations = [
+        name for name in reserved_mutations if name in WARN_ONLY_RESERVED_HARNESS_FILES
+    ]
+    reserved_blocking_mutations = [
+        name for name in reserved_mutations if name not in WARN_ONLY_RESERVED_HARNESS_FILES
+    ]
+    warnings: list[str] = []
+    if reserved_blocking_mutations:
         diagnostics.append(
             "Codex modified reserved harness files: "
-            + ", ".join(reserved_mutations)
+            + ", ".join(reserved_blocking_mutations)
             + "; write worker status to local_repair_report.md instead"
+        )
+    if reserved_warn_only_mutations:
+        warnings.append(
+            "Codex modified warn-only harness status files: "
+            + ", ".join(reserved_warn_only_mutations)
+            + "; the harness overwrites these state files after postcheck"
         )
 
     workup_path = target_dir / "codex_workup.md"
@@ -1392,6 +1409,9 @@ def _postcheck_local_repair_artifacts(
         "next_oracle_question_path": str(question_path.relative_to(REPO_ROOT)),
         "local_repair_report_path": str(report_path.relative_to(REPO_ROOT)),
         "reserved_harness_file_mutations": reserved_mutations,
+        "reserved_harness_file_blocking_mutations": reserved_blocking_mutations,
+        "reserved_harness_file_warn_only_mutations": reserved_warn_only_mutations,
+        "warnings": warnings,
         "codex_command_trace": codex_trace or {},
         "substantive_local_work": substantive,
     }

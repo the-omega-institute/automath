@@ -320,6 +320,21 @@ def main() -> int:
         if shallow_skip is not None:
             raise AssertionError(f"inspection-only trace should not skip verifier replay: {shallow_skip}")
 
+        inspection_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'find {rel_target} -maxdepth 2 -type f | sort'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": f"{rel_target}/results.json\n{rel_target}/scripts/check_slice.py\n",
+            }
+        }
+        stdout_path.write_text(
+            json.dumps(inspection_event) + "\n" + json.dumps(replay_event) + "\n",
+            encoding="utf-8",
+        )
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+
         artifact_results = target_dir / "results.json"
         artifact_results.write_text(
             json.dumps(
@@ -407,8 +422,15 @@ def main() -> int:
             codex_trace=trace,
             reserved_before=reserved_before,
         )
-        if postcheck.get("ok") or "local_repair_last.json" not in " ".join(postcheck.get("diagnostics", [])):
-            raise AssertionError(f"reserved harness overwrite was not rejected: {postcheck}")
+        if not postcheck.get("ok"):
+            raise AssertionError(
+                "local_repair_last.json is harness-overwritten final state and should be warn-only: "
+                f"{postcheck}"
+            )
+        if "local_repair_last.json" not in " ".join(postcheck.get("warnings", [])):
+            raise AssertionError(f"warn-only local_repair_last.json mutation was not recorded: {postcheck}")
+        if postcheck.get("reserved_harness_file_blocking_mutations"):
+            raise AssertionError(f"local_repair_last.json should not be a blocking mutation: {postcheck}")
 
         postcheck = local_repair._postcheck_local_repair_artifacts(
             target_dir,
@@ -438,6 +460,20 @@ def main() -> int:
         diagnostics = " ".join(postcheck.get("diagnostics", []))
         if "science_gate.json" in diagnostics or "outreach_impact_gate.json" in diagnostics:
             raise AssertionError(f"harness-refreshed ledgers should be ignored: {postcheck}")
+
+        reserved_before = local_repair._snapshot_reserved_harness_files(target_dir)
+        (target_dir / "science_gate.json").write_text(
+            json.dumps({"status": "worker_overwrite"}) + "\n",
+            encoding="utf-8",
+        )
+        postcheck = local_repair._postcheck_local_repair_artifacts(
+            target_dir,
+            codex_trace=trace,
+            reserved_before=reserved_before,
+        )
+        diagnostics = " ".join(postcheck.get("diagnostics", []))
+        if postcheck.get("ok") or "science_gate.json" not in diagnostics:
+            raise AssertionError(f"non-ignored science_gate.json mutation should remain blocking: {postcheck}")
 
         old_handoff = {
             "codex_workup.md": (target_dir / "codex_workup.md").read_text(encoding="utf-8"),

@@ -440,7 +440,9 @@ def _queue_task(task: dict) -> None:
 
 
 def _agent_id_ok(agent_id: str) -> bool:
-    return bool(re.fullmatch(r"outreach_[0-9]+", agent_id or ""))
+    # outreach-1.22 adds a short random suffix so refreshed browser tabs do not
+    # collide with stale agents that used the same numeric tab id.
+    return bool(re.fullmatch(r"outreach_[0-9]+(?:_[a-z0-9]+)?", agent_id or ""))
 
 
 def _page_in_openproblem_project(url: str) -> bool:
