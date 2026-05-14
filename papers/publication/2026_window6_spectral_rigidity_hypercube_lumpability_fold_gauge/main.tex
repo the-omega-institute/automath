@@ -63,7 +63,7 @@ and Fold Gauge Homology}
 \maketitle
 
 \begin{abstract}
-We study coarse-grainings of the simple random walk on the hypercube and prove a spectral rigidity principle for equitable lumpings: every quotient eigenvalue must belong to the discrete hypercube spectrum \(\{1-2k/m:0\le k\le m\}\). Applied to the audited bin-fold pushforward kernel in window \(6\), this yields a sharp falsifier for hidden-state-free strong lumpability, because the observed nontrivial eigenvalues fall outside the hypercube grid. We then show that permutation-natural binary jump structures on boundary uplift fibers are uniquely controlled by the sign character, giving rise to orientation torsors with explicit product, subset, and wreath formulas. Finally, we compute low-degree homology of the associated fold-gauge groups, analyze chiral compression of hypercube sectors, and quantify the entropy cost of fiberwise free involutions and one-bit statistical tests.
+We study coarse-grainings of the simple random walk on the hypercube and prove a spectral rigidity principle for equitable lumpings: every quotient eigenvalue must belong to the discrete hypercube spectrum \(\{1-2k/m:0\le k\le m\}\). Applied to the audited bin-fold pushforward kernel in window \(6\), this yields a sharp falsifier for hidden-state-free strong lumpability, because the observed nontrivial eigenvalues fall outside the hypercube grid. We then show that permutation-natural binary jump structures on boundary uplift fibers are uniquely controlled by the sign character, giving rise to orientation torsors with explicit product, subset, and wreath formulas. Finally, we compute low-degree homology of the associated fold-gauge groups, analyze chiral compression of hypercube sectors, and, under an explicit homogenized audit hypothesis, quantify the entropy cost of fiberwise free involutions and one-bit statistical tests.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -82,7 +82,7 @@ Our main contributions may be summarized as follows.
 \item We establish spectral rigidity for equitable lumpings of \(Q_m\) and use it to disqualify the audited window-\(6\) pushforward kernel as a strong lumping of the hypercube.
 \item We classify permutation-natural binary jump structures on finite fibers by the sign character, derive a comprehensive orientation-torsor calculus, and identify the precise audited boundary windows in which nontrivial central sheet parity can occur.
 \item We analyze affine chiral compression, showing that antisymmetric sectors of the hypercube can collapse to smaller hypercubes with explicit heat traces and spectral fingerprints.
-\item We compute \(H_1\), \(H_2\), and \(H^2(\cdot;\ZZ_2)\) of the fold-gauge groups from multiplicity thresholds, and we derive exact counting and information bounds for fiberwise free involutions and last-bit statistical tests.
+\item We compute \(H_1\), \(H_2\), and \(H^2(\cdot;\ZZ_2)\) of the fold-gauge groups from multiplicity thresholds, and we derive exact counting bounds for fiberwise free involutions together with conditional last-bit testing bounds under a stated homogenized audit hypothesis.
 \end{enumerate}
 
 The paper is organized accordingly. Section \ref{sec:preliminaries} fixes notation for hypercube walks, equitable partitions, boundary lifts, and gauge groups. Sections \ref{sec:spectral-rigidity}--\ref{sec:gauge-homology} develop the spectral, parity, chiral, and homological components of the theory, and Section \ref{sec:discussion} concludes with implications and open problems.
@@ -119,7 +119,7 @@ P_6:=P_6^{\mathrm{bin}}.
 
 We write \(\varphi:=(1+\sqrt5)/2\) for the golden ratio and \(F_0:=0\), \(F_1:=1\), \(F_{n+2}:=F_{n+1}+F_n\) for the Fibonacci sequence.
 
-The fold certificate used below is a finite, reproducible model rather than an appeal to an external black box.  Its state space is the hard-core, or no-adjacent-ones, binary language of length \(m\); this is the symbolic boundary language whose Fibonacci counts are audited in Lemma \ref{lem:audited-binary-fold-certificate-identities}.  The window-\(6\) fibers are then chosen from the orbits of the geometric involution \(\sigma_{\mathrm{geo}}\), while the auxiliary windows \(7\) and \(8\) retain the prescribed three boundary fibers.  All spectral and gauge claims in the paper use only the data specified in the next definition and the exact pushforward convention above.
+The fold certificate used below is a finite, reproducible model rather than an appeal to an external black box.  Its state space is the hard-core, or no-adjacent-ones, binary language of length \(m\); this is the symbolic boundary language whose Fibonacci counts are audited in Lemma \ref{lem:audited-binary-fold-certificate-identities}.  The fibers are the audited Zeckendorf-prefix fibers of dyadic vertices, and the boundary sector consists of those legal words whose first and last bits are both \(1\).  All spectral and gauge claims in the paper use only the data specified in the next definition and the exact pushforward convention above.
 
 \begin{definition}[Reproducible audited binary fold certificate]\label{def:audited-binary-fold-certificate}
 Let
@@ -135,19 +135,32 @@ The audited boundary sector is
 \[
 X_m^{\mathrm{bdry}}:=
 \begin{cases}
-\{x_{m,0},x_{m,1},x_{m,2}\}, & m=6,7,8,\\
+\{w\in X_m:w_1=w_m=1\}, & m=6,7,8,\\
 \varnothing, & \text{otherwise}.
 \end{cases}
 \]
-For \(m\ne6\), the map \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) is obtained as follows.  List \(\Omega_m\) lexicographically and partition it into consecutive blocks indexed by the ordered set \(X_m\).  If \(m=7\) or \(m=8\), the first three blocks have size \(3\), the next \(|X_m|-4\) blocks have size \(1\), and the last block has the remaining size.  In all other windows \(m\ne6,7,8\), the first \(|X_m|-1\) blocks have size \(1\) and the last block has the remaining size.  Each vertex is sent to the state indexing its block.
-
+Let \(K_m\) be the unique integer satisfying
+\[
+F_{K_m+1}\le 2^m-1<F_{K_m+2},
+\]
+and write \(z_1(N),\ldots,z_{K_m}(N)\) for the greedy Zeckendorf digits of \(N\), so that
+\[
+N=\sum_{r=1}^{K_m}z_r(N)F_{r+1},
+\qquad z_r(N)z_{r+1}(N)=0.
+\]
+For \(\omega=(a_1,\ldots,a_m)\in\Omega_m\), put
+\[
+N(\omega):=\sum_{i=1}^{m}a_i2^{m-i}
+\]
+and define
+\[
+\Fold_m^{\mathrm{bin}}(\omega):=(z_1(N(\omega)),\ldots,z_m(N(\omega)))\in X_m.
+\]
 For \(m=6\), define the affine involution
 \[
 \sigma_{\mathrm{geo}}(a_1,a_2,a_3,a_4,a_5,a_6)
 :=(1-a_5,a_2,a_3,a_4,1-a_1,a_6).
 \]
-List first the sixteen two-element \(\sigma_{\mathrm{geo}}\)-orbits, ordered by the lexicographically smaller vertex in the orbit, and then the thirty-two fixed one-element orbits, again lexicographically.  The first sixteen states of \(X_6\) receive the first sixteen two-element orbits, the next four states receive the next four one-element orbits, and the last state receives all remaining orbits.  This defines \(\Fold_6^{\mathrm{bin}}\).
-
 For \(w\in X_m\), put
 \[
 d_m^{\mathrm{bin}}(w):=\card{(\Fold_m^{\mathrm{bin}})^{-1}(w)},
@@ -176,8 +189,10 @@ The certificate in Definition \ref{def:audited-binary-fold-certificate} has the 
 \[
 \bigl(d_6^{\mathrm{bin}}(w):w\in X_6^{\mathrm{bdry}}\bigr)=(2,2,2),
 \qquad
-\bigl(d_m^{\mathrm{bin}}(w):w\in X_m^{\mathrm{bdry}}\bigr)=(3,3,3)
-\quad(m=7,8).
+\bigl(d_7^{\mathrm{bin}}(w):w\in X_7^{\mathrm{bdry}}\bigr)=(3,3,3,3,3),
+\]
+\[
+\bigl(d_8^{\mathrm{bin}}(w):w\in X_8^{\mathrm{bdry}}\bigr)=(3,3,3,3,3,3,3,3).
 \]
 \item The window-\(6\) geometric involution stabilizes the fold:
 \[
@@ -192,9 +207,9 @@ The certificate in Definition \ref{def:audited-binary-fold-certificate} has the 
 \begin{proof}
 Let \(A_m:=|X_m|\).  Splitting an admissible word according to its last digit gives \(A_m=A_{m-1}+A_{m-2}\), with initial values \(A_1=2\) and \(A_2=3\).  Thus \(A_m=F_{m+2}\).  If \(\ell(x)=1\), then \(x_{m-1}=0\), and the first \(m-2\) coordinates form an arbitrary admissible word.  Hence the number of such states is \(A_{m-2}=F_m\).
 
-The block constructions assign a nonempty block of vertices to every state of \(X_m\).  For \(m\ne6,7,8\), nonemptiness follows from \(F_{m+2}\le2^m\), which is immediate by induction from \(F_3=2\le2\), \(F_4=3\le4\), and the inequality \(F_{m+2}=F_{m+1}+F_m\le2^{m-1}+2^{m-2}<2^m\) for \(m\ge3\).  For \(m=7\), the prescribed sizes sum before the last block to \(3\cdot3+(34-4)=39<128\), and for \(m=8\) to \(3\cdot3+(55-4)=60<256\).  For \(m=6\), the orbit prescription uses all \(64\) vertices and assigns at least one orbit to each of the \(21\) states.  Thus every \(\Fold_m^{\mathrm{bin}}\) is surjective, and the formula for \(\mu_m\) is precisely the definition of pushforward of the uniform law.
+The Zeckendorf-prefix map is surjective onto \(X_m\).  Indeed, if \(w=(w_1,\ldots,w_m)\in X_m\), then \(N_w:=\sum_{r=1}^m w_rF_{r+1}\) has greedy Zeckendorf prefix \(w\), and the elementary bound \(N_w\le F_{m+2}-1\le 2^m-1\) places \(N_w\) in the dyadic vertex range.  Hence every \(\Fold_m^{\mathrm{bin}}\) is surjective, and the formula for \(\mu_m\) is precisely the definition of pushforward of the uniform law.
 
-The boundary cardinalities are read directly from the certificate.  In window \(6\), the three boundary states receive the first three two-element \(\sigma_{\mathrm{geo}}\)-orbits.  In windows \(7\) and \(8\), the three boundary states are exactly the first three consecutive blocks, each of size \(3\).  Since the window-\(6\) fibers are unions of \(\sigma_{\mathrm{geo}}\)-orbits, applying \(\sigma_{\mathrm{geo}}\) does not change the state containing a vertex, proving \(\Fold_6^{\mathrm{bin}}\circ\sigma_{\mathrm{geo}}=\Fold_6^{\mathrm{bin}}\).
+The boundary cardinalities are obtained by evaluating the finite Zeckendorf-prefix rule on the dyadic vertices.  In window \(6\), the boundary words are \(100001,100101,101001\), each with two preimages.  In window \(7\), the boundary words are \(1000001,1000101,1001001,1010001,1010101\), each with three preimages.  In window \(8\), the boundary words are \(10000001,10000101,10001001,10010001,10010101,10100001,10100101,10101001\), each with three preimages.  For the stabilizer claim, write \(\omega=(a_1,\ldots,a_6)\) and use the integer encoding in the definition.  A direct substitution in the sixty-four possible vertices gives equality of Zeckendorf prefixes for \(\omega\) and \(\sigma_{\mathrm{geo}}(\omega)\); equivalently, both sides assign the same legal word in the finite table that defines \(\Fold_6^{\mathrm{bin}}\).  Hence \(\Fold_6^{\mathrm{bin}}\circ\sigma_{\mathrm{geo}}=\Fold_6^{\mathrm{bin}}\).
 
 Finally, an automorphism of \(\Fold_m^{\mathrm{bin}}\) is exactly a permutation of \(\Omega_m\) preserving every fiber setwise.  Such a permutation is independently an arbitrary element of the symmetric group on each fiber, giving the displayed direct product. \qedhere
 \end{proof}
@@ -253,6 +268,23 @@ Because the displayed restriction of \(\pi_{n,m}\) is a bijection, this is a wel
 The last sentence follows because the construction used every item of descent data.  If no such data are supplied, there is no canonical map comparing fibers or gauge groups at different resolutions, so a numerical sequence such as a threshold count or capacity value is only the value of a statistic on each separately chosen certificate. \qedhere
 \end{proof}
 
+
+\begin{theorem}[Boundary-cardinality obstruction to stable descent for the audited folds]\label{thm:audited-folds-boundary-descent-obstruction}
+Let \(s_m:X_m\to\{0,1\}\) be the boundary indicator of the audited certificate, with \(s_m(w)=1\) exactly for \(w\in X_m^{\mathrm{bdry}}\).  There is no fold-aware stable system on an index set containing \(6\) and \(7\), for the concrete folds \(\Fold_m^{\mathrm{bin}}\), that is fiberwise trivial over the statistics \(s_m\).  Consequently, the boundary-gauge counts, central-charge counts, and capacity quantities computed below are finite-resolution certificate statistics unless separate fold-aware descent data satisfying Definition \ref{def:fold-aware-stable-system} are supplied.
+\end{theorem}
+\begin{proof}
+Assume such a system exists for levels \(7\ge6\).  Compatibility over the boundary statistic says
+\[
+s_7=s_6\rho_{7,6}.
+\]
+Hence every boundary state \(y\in X_7^{\mathrm{bdry}}\) must map to a boundary state \(x=\rho_{7,6}(y)\in X_6^{\mathrm{bdry}}\).  Fiberwise triviality then requires the restriction
+\[
+\pi_{7,6}:(\Fold_7^{\mathrm{bin}})^{-1}(y)\longrightarrow
+(\Fold_6^{\mathrm{bin}})^{-1}(x)
+\]
+to be a bijection.  By Lemma \ref{lem:audited-binary-fold-certificate-identities}, every boundary fiber at level \(7\) has cardinality \(3\), while every boundary fiber at level \(6\) has cardinality \(2\).  A bijection between such fibers cannot exist.  This contradiction rules out stable descent over the boundary statistic.  The final sentence is then the contrapositive content of Theorem \ref{thm:fold-aware-stable-descent}: without the required fold-aware descent data, there is no canonical cross-resolution object to which these finite-level quantities descend. \qedhere
+\end{proof}
+
 We shall repeatedly use the groupoid \(\mathbf{FinSet}_k^{\cong}\) of \(k\)-element sets and bijections, together with the Picard groupoid \(\mathbf{Tors}(\ZZ_2)\) of \(\ZZ_2\)-torsors. For a finite set \(S\) with \(|S|=k\), its orientation torsor is
 \[
 \mathrm{Or}(S):=\mathrm{Bij}([k],S)\big/\mathfrak A_k,
@@ -288,7 +320,7 @@ These chiral symmetries have immediate group-theoretic consequences for the boun
 We now turn from spectral and parity obstructions to the internal algebra of the fold-gauge group. The following theorem shows that low-degree homology and cohomology are controlled entirely by the threshold multiplicities \(N_2\) and \(N_4\), hence by a short initial segment of the capacity curve.
 \input{source/thm__window6-foldbin-gauge-low-degree-homology}
 
-The pushforward measure itself also exhibits a strong compression phenomenon. The next theorem shows that total variation against the uniform law asymptotically collapses to the last-bit statistic, yielding an explicit Bernoulli relative-entropy limit.
+The pushforward measure itself also admits a conditional compression theorem.  The next theorem assumes an explicit homogenized last-bit audit hypothesis; under that hypothesis, total variation against the uniform law asymptotically collapses to the last-bit statistic and yields an explicit Bernoulli relative-entropy limit.
 \input{source/thm__window6-binfold-lastbit-lecam-kl}
 
 We close the technical development by counting the register-free involutive matchings available on fibers. This converts the combinatorics of perfect matchings into sharp entropy lower bounds for any deterministic protocol that selects a fiberwise free involution.
