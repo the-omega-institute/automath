@@ -21,6 +21,7 @@ Hard boundaries:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -870,9 +871,64 @@ def _collect_missing_referenced_local_paths(value: object) -> list[str]:
     return missing
 
 
-def _postcheck_local_repair_artifacts(target_dir: Path, *, codex_trace: dict | None = None) -> dict:
+RESERVED_HARNESS_FILES = (
+    "local_repair_last.json",
+    "science_gate.json",
+    "outreach_impact_gate.json",
+)
+
+
+def _snapshot_reserved_harness_files(target_dir: Path) -> dict[str, dict]:
+    snapshots: dict[str, dict] = {}
+    for name in RESERVED_HARNESS_FILES:
+        path = target_dir / name
+        try:
+            stat = path.stat()
+            data = path.read_bytes()
+        except OSError:
+            snapshots[name] = {"exists": False}
+            continue
+        snapshots[name] = {
+            "exists": True,
+            "mtime_ns": stat.st_mtime_ns,
+            "size": stat.st_size,
+            "sha256": hashlib.sha256(data).hexdigest(),
+        }
+    return snapshots
+
+
+def _reserved_harness_file_mutations(target_dir: Path, before: dict[str, dict] | None) -> list[str]:
+    if not before:
+        return []
+    after = _snapshot_reserved_harness_files(target_dir)
+    mutations: list[str] = []
+    for name in RESERVED_HARNESS_FILES:
+        old = before.get(name, {"exists": False})
+        new = after.get(name, {"exists": False})
+        if old.get("exists") != new.get("exists"):
+            mutations.append(name)
+            continue
+        if old.get("exists") and old.get("sha256") != new.get("sha256"):
+            mutations.append(name)
+    return mutations
+
+
+def _postcheck_local_repair_artifacts(
+    target_dir: Path,
+    *,
+    codex_trace: dict | None = None,
+    reserved_before: dict[str, dict] | None = None,
+) -> dict:
     target_dir = target_dir.resolve()
     diagnostics: list[str] = []
+
+    reserved_mutations = _reserved_harness_file_mutations(target_dir, reserved_before)
+    if reserved_mutations:
+        diagnostics.append(
+            "Codex modified reserved harness files: "
+            + ", ".join(reserved_mutations)
+            + "; write worker status to local_repair_report.md instead"
+        )
 
     workup_path = target_dir / "codex_workup.md"
     workup = _read_text(workup_path, limit=40000)
@@ -930,6 +986,7 @@ def _postcheck_local_repair_artifacts(target_dir: Path, *, codex_trace: dict | N
         "workup_path": str(workup_path.relative_to(REPO_ROOT)),
         "next_oracle_question_path": str(question_path.relative_to(REPO_ROOT)),
         "local_repair_report_path": str(report_path.relative_to(REPO_ROOT)),
+        "reserved_harness_file_mutations": reserved_mutations,
         "codex_command_trace": codex_trace or {},
         "substantive_local_work": substantive,
     }
@@ -1113,6 +1170,10 @@ The Oracle/ChatGPT stage supplies mathematical ideas, search, and deep proof att
 
 Do not ask the user for clarification. Do not contact Oracle. Do not send email, post comments, call gh, commit, or push. Keep edits inside `tools/community-outreach/targets/{target_dir.name}/` unless a tiny pipeline-local support change is absolutely required.
 
+Reserved harness files:
+- Do not create, edit, truncate, or replace `local_repair_last.json`, `science_gate.json`, or `outreach_impact_gate.json`. These are written by the supervisor/gate harness after your run.
+- If you need to record worker-local status, write it into `local_repair_report.md` or a clearly named target artifact such as `verifier_notes.md`.
+
 Scientific honesty rule:
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/codex_workup.md`; this is the main handoff Oracle will read next.
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/next_oracle_question.md`; this must be the exact concise prompt that should be sent to Oracle next, based on your local workup.
@@ -1275,6 +1336,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     stdout_path = LOG_DIR / f"{tag}.stdout.jsonl"
     stderr_path = LOG_DIR / f"{tag}.stderr.txt"
     output_path = LOG_DIR / f"{tag}.out.txt"
+    reserved_before = _snapshot_reserved_harness_files(target_dir)
     prompt_path.write_text(prompt, encoding="utf-8")
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False, suffix=".txt") as tmp:
         codex_out = Path(tmp.name)
@@ -1334,7 +1396,18 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
     gate_after = _run_science_gate(todo_id, write_ledger=True)
     codex_command_trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
-    postcheck = _postcheck_local_repair_artifacts(target_dir, codex_trace=codex_command_trace)
+    # science_gate.json is intentionally refreshed by the harness above; do
+    # not charge that mutation to the Codex worker.
+    reserved_for_worker = {
+        name: snap
+        for name, snap in reserved_before.items()
+        if name != "science_gate.json"
+    }
+    postcheck = _postcheck_local_repair_artifacts(
+        target_dir,
+        codex_trace=codex_command_trace,
+        reserved_before=reserved_for_worker,
+    )
     ok = rc == 0 and bool(postcheck.get("ok"))
     report = {
         "ok": ok,

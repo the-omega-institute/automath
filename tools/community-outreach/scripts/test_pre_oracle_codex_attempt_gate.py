@@ -152,6 +152,33 @@ def main() -> int:
         if int(trace.get("replay_command_count") or 0) <= 0 or not trace.get("has_evidence_output"):
             raise AssertionError(f"real target-local check was not counted as replay/evidence: {trace}")
 
+        reserved_before = local_repair._snapshot_reserved_harness_files(target_dir)
+        (target_dir / "local_repair_last.json").write_text(
+            json.dumps({"status": "worker_overwrite"}) + "\n",
+            encoding="utf-8",
+        )
+        substantive_workup = _workup(include_attempt=True)
+        for name, text in {
+            "codex_workup.md": substantive_workup,
+            "next_oracle_question.md": (
+                "The local check produced sha256=abc123 for the finite certificate replay. "
+                "Prove the missing case-3 lemma or provide a checkable obstruction."
+            ),
+            "local_repair_report.md": (
+                "Ran command `python3 demo/scripts/check_slice.py --case finite --json`; "
+                "the finite certificate replay passed with sha256=abc123, but case 3 still "
+                "needs an Oracle-supplied lemma."
+            ),
+        }.items():
+            (target_dir / name).write_text(text, encoding="utf-8")
+        postcheck = local_repair._postcheck_local_repair_artifacts(
+            target_dir,
+            codex_trace=trace,
+            reserved_before=reserved_before,
+        )
+        if postcheck.get("ok") or "local_repair_last.json" not in " ".join(postcheck.get("diagnostics", [])):
+            raise AssertionError(f"reserved harness overwrite was not rejected: {postcheck}")
+
     return 0
 
 
