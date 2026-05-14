@@ -1580,6 +1580,50 @@ def _pre_oracle_codex_workup_fresh_after(slug: str, started_at: float) -> tuple[
     return True, ""
 
 
+def _is_transport_stub_response(text: str) -> bool:
+    stripped = (text or "").strip()
+    if not stripped:
+        return True
+    lowered = stripped.lower()
+    markers = (
+        "error: task cancelled by server",
+        "error (re-extract):",
+        "error: empty response",
+        "empty response (timeout or extraction failure)",
+        "no assistant output after",
+        "re-extract: nothing meaningful",
+        "re-extract: empty response",
+        "server unreachable",
+    )
+    if any(lowered.startswith(marker) for marker in markers):
+        return True
+    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+
+
+def _claim_packet_oracle_response(text: str) -> str:
+    marker = "## Oracle Response"
+    idx = text.find(marker)
+    if idx < 0:
+        return text
+    return text[idx + len(marker) :].strip()
+
+
+def _latest_substantive_claim_packet(target_dir: Path) -> Path | None:
+    packets = sorted(
+        target_dir.glob("oracle_claim_packet_*.md"),
+        key=lambda p: p.stat().st_mtime if p.exists() else 0,
+        reverse=True,
+    )
+    for packet in packets:
+        try:
+            text = packet.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not _is_transport_stub_response(_claim_packet_oracle_response(text)):
+            return packet
+    return None
+
+
 def _pre_oracle_codex_workup_recent(slug: str, *, max_age_seconds: int) -> tuple[bool, str]:
     """Accept a just-produced Codex handoff without running the same pass twice."""
     ok, reason = _pre_oracle_codex_workup_status(slug)
@@ -1592,15 +1636,27 @@ def _pre_oracle_codex_workup_recent(slug: str, *, max_age_seconds: int) -> tuple
         "local_repair_report.md",
     )
     oldest_age = 0.0
+    oldest_mtime = time.time()
     for name in required:
         path = target_dir / name
         try:
-            age = time.time() - path.stat().st_mtime
+            stat = path.stat()
+            age = time.time() - stat.st_mtime
         except OSError:
             return False, f"missing {name}"
         oldest_age = max(oldest_age, age)
+        oldest_mtime = min(oldest_mtime, stat.st_mtime)
     if oldest_age > max_age_seconds:
         return False, f"Codex handoff older than reuse window ({oldest_age:.0f}s > {max_age_seconds}s)"
+    latest_claim = _latest_substantive_claim_packet(target_dir)
+    if latest_claim is not None:
+        claim_mtime = latest_claim.stat().st_mtime
+        if oldest_mtime < claim_mtime:
+            return (
+                False,
+                "Codex handoff is older than latest substantive Oracle claim "
+                f"({latest_claim.name}); Codex must locally replay/process that claim before the next Oracle turn",
+            )
     return True, ""
 
 
