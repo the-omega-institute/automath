@@ -68,6 +68,7 @@ REPO_ROOT_DEFAULT = Path(__file__).resolve().parents[2]
 STATE_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_state"
 TARGETS_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/targets"
 LOGS_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/logs"
+ORACLE_SESSIONS_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_oracle/sessions"
 WORKTREE_ROOT_DEFAULT = REPO_ROOT_DEFAULT.parent / "_outreach_worktrees"
 LOCAL_REPAIR_SCRIPT_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_local_repair.py"
 SCHEMA_VERSION = "community-outreach-state-v3-research-board"
@@ -1187,7 +1188,7 @@ def _resume_conversation_id(slug: str, *, state_dir: Path) -> str:
         return ""
     conv = str(state.get("latest_oracle_deep_conversation_id") or "").strip()
     if conv:
-        return conv
+        return conv if _oracle_conversation_has_pinned_url(conv) else ""
     runs = state.get("oracle_deep_runs") or []
     if isinstance(runs, list):
         for run in reversed(runs):
@@ -1197,9 +1198,30 @@ def _resume_conversation_id(slug: str, *, state_dir: Path) -> str:
             if verdict == "BREAKTHROUGH":
                 return ""
             conv = str(run.get("conversation_id") or "").strip()
-            if conv:
+            if conv and _oracle_conversation_has_pinned_url(conv):
                 return conv
     return ""
+
+
+def _oracle_conversation_has_pinned_url(conv_id: str) -> bool:
+    """Return True only when the Oracle server can navigate this conversation.
+
+    A bare `conversation_id` is not enough for ChatGPT browser automation. If a
+    follow-up prompt is queued without a pinned `/c/<id>` URL, the userscript can
+    remain on the Project fresh-chat page and send a continuation prompt into a
+    new conversation. Treat unpinned sessions as non-resumable; the caller will
+    send a full fresh prompt instead.
+    """
+    conv_id = str(conv_id or "").strip()
+    if not conv_id:
+        return False
+    path = ORACLE_SESSIONS_DIR_DEFAULT / f"{conv_id}.json"
+    try:
+        session = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    url = str(session.get("chatgpt_url") or "").strip()
+    return "chatgpt.com" in url and "/c/" in url
 
 
 def _compact_science_contract_block(profile) -> str:

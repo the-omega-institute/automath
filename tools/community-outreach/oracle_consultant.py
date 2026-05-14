@@ -59,6 +59,7 @@ TARGETS_DIR = REPO_ROOT / "tools/community-outreach/targets"
 ORACLE_LOGS_DIR = REPO_ROOT / "tools/community-outreach/logs/oracle"
 STATE_DIR = REPO_ROOT / "tools/community-outreach/outreach_state"
 COMMUNITY_PROMPTS_DIR = REPO_ROOT / "tools/community-outreach/prompts"
+ORACLE_SESSIONS_DIR = REPO_ROOT / "tools/community-outreach/outreach_oracle/sessions"
 DEFAULT_TIMEOUT = 7200  # 2 hours; ChatGPT Pro thinking can run 60+ min
 DEFAULT_POLL_INTERVAL = 30
 DEFAULT_ZERO_EXTRACT_CANCEL_S = int(os.environ.get("OUTREACH_ORACLE_ZERO_EXTRACT_CANCEL_S", "7200"))
@@ -286,6 +287,20 @@ def oracle_submit(task_id: str, prompt: str, *,
     except Exception as exc:  # noqa: BLE001
         print(f"[oracle] submit failed: {exc}", file=sys.stderr)
         return {"error": str(exc)}
+
+
+def _oracle_conversation_has_pinned_url(conversation_id: str) -> bool:
+    """True only if a follow-up can be routed to an existing ChatGPT `/c/` URL."""
+    conversation_id = str(conversation_id or "").strip()
+    if not conversation_id:
+        return False
+    path = ORACLE_SESSIONS_DIR / f"{conversation_id}.json"
+    try:
+        session = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    url = str(session.get("chatgpt_url") or "").strip()
+    return "chatgpt.com" in url and "/c/" in url
 
 
 def oracle_poll(task_id: str, *, timeout: int = DEFAULT_TIMEOUT,
@@ -1170,6 +1185,21 @@ class OracleConsultant:
         response_log = self.logs_dir / f"{task_id}.response.txt"
         prompt_log.write_text(prompt, encoding="utf-8")
         is_followup = bool(conversation_id)
+        if is_followup and not _oracle_conversation_has_pinned_url(conversation_id):
+            submitted_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+            return OracleReview(
+                todo_id=todo.todo_id, title=todo.title, task_id=task_id,
+                conversation_id=conversation_id, chatgpt_url="",
+                submitted_at=submitted_at, completed_at=submitted_at,
+                elapsed_seconds=0, response_chars=0, response_valid=False,
+                verdict="", score="", top_risk="", top_recommendation="",
+                response_log_path="", prompt_log_path=str(prompt_log),
+                is_followup=True, parent_task_id="",
+                error=(
+                    "refusing follow-up without pinned ChatGPT conversation URL; "
+                    "start a fresh full-context Oracle turn instead"
+                ),
+            )
         submit_resp = oracle_submit(
             task_id, prompt,
             conversation_id=conversation_id or None,

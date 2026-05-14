@@ -356,6 +356,53 @@ def main() -> int:
         if not ok:
             raise AssertionError(f"handoff refreshed after claim should pass: {reason}")
 
+        state_path = repo_root / "tools/community-outreach/outreach_state/demo.json"
+        sessions_dir = repo_root / "tools/community-outreach/outreach_oracle/sessions"
+        sessions_dir.mkdir(parents=True, exist_ok=True)
+        old_sessions_dir = dispatch.ORACLE_SESSIONS_DIR_DEFAULT
+        dispatch.ORACLE_SESSIONS_DIR_DEFAULT = sessions_dir
+        try:
+            state_path.write_text(
+                json.dumps({
+                    "latest_oracle_deep_conversation_id": "conv_unpinned",
+                    "oracle_deep_runs": [
+                        {"conversation_id": "conv_pinned", "final_verdict": "EXHAUSTED"}
+                    ],
+                }),
+                encoding="utf-8",
+            )
+            (sessions_dir / "conv_unpinned.json").write_text(
+                json.dumps({"conversation_id": "conv_unpinned", "turns": []}),
+                encoding="utf-8",
+            )
+            (sessions_dir / "conv_pinned.json").write_text(
+                json.dumps({
+                    "conversation_id": "conv_pinned",
+                    "chatgpt_url": "https://chatgpt.com/g/g-p-demo-openproblem/c/abc123",
+                }),
+                encoding="utf-8",
+            )
+            conv = dispatch._resume_conversation_id("demo", state_dir=state_path.parent)
+            if conv:
+                raise AssertionError(
+                    f"latest unpinned conversation must block resume, got {conv!r}"
+                )
+
+            state_path.write_text(
+                json.dumps({
+                    "oracle_deep_runs": [
+                        {"conversation_id": "conv_missing", "final_verdict": "EXHAUSTED"},
+                        {"conversation_id": "conv_pinned", "final_verdict": "EXHAUSTED"},
+                    ],
+                }),
+                encoding="utf-8",
+            )
+            conv = dispatch._resume_conversation_id("demo", state_dir=state_path.parent)
+            if conv != "conv_pinned":
+                raise AssertionError(f"pinned conversation should be resumable, got {conv!r}")
+        finally:
+            dispatch.ORACLE_SESSIONS_DIR_DEFAULT = old_sessions_dir
+
     return 0
 
 
