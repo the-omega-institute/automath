@@ -844,6 +844,68 @@ def _text_has_mathematical_processing(text: str) -> bool:
     )
 
 
+def _text_has_proof_decomposition_attempt(text: str) -> bool:
+    """Accept a proof-only Codex attempt only when it names the actual blocker.
+
+    Some targets have no local certificate to replay yet.  In that case Codex
+    can still do useful work before Oracle, but it must decompose the proof into
+    named obligations and identify the first exact lemma/case that blocks
+    closure.  A vague "no local replay, ask Oracle" handoff is not enough.
+    """
+    body = (text or "").strip().lower()
+    if len(body) < 260:
+        return False
+    decomposition_markers = (
+        "proof decomposition",
+        "decomposed",
+        "decompose",
+        "split into",
+        "split the theorem into",
+        "split the proof into",
+        "reduced the proof to",
+        "reduced the theorem to",
+    )
+    named_obligation_markers = (
+        "lemma",
+        "sublemma",
+        "claim",
+        "proof obligation",
+        "case",
+        "invariant",
+    )
+    blocker_markers = (
+        "first blocker",
+        "first blocked",
+        "first failed",
+        "blocked by",
+        "fails because",
+        "cannot close because",
+        "missing lemma",
+        "missing proof",
+        "missing certificate",
+        "needs oracle",
+        "unproved lemma",
+        "unproved case",
+    )
+    named_markers = (
+        "lemma ",
+        "claim ",
+        "case ",
+        "obligation ",
+        "sublemma ",
+        "theorem ",
+        "invariant ",
+        "base case",
+        "induction step",
+    )
+    return (
+        any(marker in body for marker in decomposition_markers)
+        and any(marker in body for marker in named_obligation_markers)
+        and any(marker in body for marker in blocker_markers)
+        and any(marker in body for marker in named_markers)
+    )
+
+
 def _substantive_local_workup_check(
     target_dir: Path,
     workup: str,
@@ -891,11 +953,14 @@ def _substantive_local_workup_check(
         replay_count = int(codex_trace.get("replay_command_count") or 0)
         inspection_count = int(codex_trace.get("inspection_command_count") or 0)
         evidence_output = bool(codex_trace.get("has_evidence_output"))
+        proof_decomposition = _text_has_proof_decomposition_attempt(
+            "\n".join([attempt_body, obligations_body, report])
+        )
         if inspection_count <= 0:
             diagnostics.append("Codex command trace lacks target inspection commands")
-        if replay_count <= 0 and not evidence_output:
+        if replay_count <= 0 and not evidence_output and not proof_decomposition:
             diagnostics.append(
-                "Codex command trace lacks replay/check commands or evidence output; artifact search alone is not enough before Oracle"
+                "Codex command trace lacks replay/check commands or evidence output, and the workup lacks a named proof decomposition; artifact search alone is not enough before Oracle"
             )
 
     return {
@@ -906,6 +971,9 @@ def _substantive_local_workup_check(
         "workup_has_concrete_local_fact": _text_has_concrete_local_fact(evidence_blob),
         "workup_has_codex_attempt": _text_has_codex_attempt(attempt_body),
         "workup_has_mathematical_processing": _text_has_mathematical_processing(
+            "\n".join([attempt_body, obligations_body, report])
+        ),
+        "workup_has_proof_decomposition_attempt": _text_has_proof_decomposition_attempt(
             "\n".join([attempt_body, obligations_body, report])
         ),
     }

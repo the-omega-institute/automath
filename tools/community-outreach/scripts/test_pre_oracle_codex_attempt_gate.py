@@ -75,6 +75,62 @@ commands; otherwise the failure analysis is still useful.
 """
 
 
+def _proof_decomposition_workup() -> str:
+    return """
+# Codex Workup
+
+## Target claim now
+
+The target claim is a proof-only open problem where no local certificate has
+been supplied yet.  The current workup must reduce the claim to a checkable
+Oracle obligation before any external reasoning turn.
+
+## Local evidence checked
+
+I inspected `tools/community-outreach/targets/demo/research.md` and found no
+certificate, no verifier script, and no `results.json`; this target currently
+has only a proof strategy sketch and the local directory fact must be respected.
+
+## Commands run
+
+```bash
+rg -n "certificate|verifier|results.json|lemma" tools/community-outreach/targets/demo
+sed -n '1,180p' tools/community-outreach/targets/demo/research.md
+```
+
+## Codex attempt before Oracle
+
+No local replay is available yet, so I did a proof decomposition instead of
+only forwarding metadata.  I split the theorem into Claim 1 (normal-form
+reduction), Lemma 2 (finite obstruction for the reduced form), and Lemma 3
+(lifting the obstruction back to the original statement).  Claim 1 follows
+from the written normal-form argument in `research.md`, but the first blocker
+is Lemma 2: the finite obstruction is named but unproved, and no local
+certificate exists to test it.  The next Oracle turn must prove Lemma 2 or
+produce a checkable obstruction showing the reduction route cannot close.
+
+## Verifier/artifact status
+
+The local artifact status is negative: no verifier script, no certificate, and
+no `results.json` are present under `tools/community-outreach/targets/demo`.
+
+## Proof obligations still open
+
+Lemma 2 is the first unproved case.  If Oracle proves Lemma 2, Codex can next
+try to turn the finite obstruction into a verifier/certificate; if Oracle
+refutes it, the target should be re-scoped.
+
+## Next Oracle question
+
+`tools/community-outreach/targets/demo/research.md` has no local verifier or certificate, and Codex reduced the proof route to Lemma 2 as the first blocker. Prove Lemma 2, the finite obstruction for the reduced normal form, or give a checkable obstruction showing this reduction route cannot close.
+
+## Publication value / re-scope judgment
+
+A proof of Lemma 2 would be publishable as a short note only if the lifting
+Lemma 3 can then be made checkable.
+"""
+
+
 def main() -> int:
     local_repair = _load_local_repair()
     ok, reason = local_repair._workup_has_local_execution_trace(_workup(include_attempt=False))
@@ -137,6 +193,32 @@ def main() -> int:
         )
         if substantive.get("ok"):
             raise AssertionError(f"negative artifact search alone should not pass substantive gate: {substantive}")
+
+        proof_decomposition_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'rg -n \"certificate|verifier|results.json|lemma\" {rel_target}'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": "research.md:17:Lemma 2 is currently unproved\n",
+            }
+        }
+        stdout_path.write_text(json.dumps(proof_decomposition_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        proof_decomposition = _proof_decomposition_workup()
+        substantive = local_repair._substantive_local_workup_check(
+            target_dir,
+            proof_decomposition,
+            (
+                "Codex found no local verifier or certificate under "
+                "`tools/community-outreach/targets/demo/research.md`, and reduced the proof route to "
+                "Lemma 2 as the first blocker. Prove Lemma 2."
+            ),
+            "Ran target inspection and decomposed the proof into Claim 1, Lemma 2, and Lemma 3; Lemma 2 is the first blocker.",
+            codex_trace=trace,
+        )
+        if not substantive.get("ok") or not substantive.get("workup_has_proof_decomposition_attempt"):
+            raise AssertionError(f"named proof decomposition should pass substantive gate: {substantive}")
 
         replay_event = {
             "item": {
