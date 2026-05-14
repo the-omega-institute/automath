@@ -29,6 +29,15 @@ Here the canonical stream is
 \[
 \texttt{m=<m>;X=<lex words>;d=<lex fiber sizes>;bd=<boundary word:size list>}.
 \]
+Explicitly, the three lexicographic fiber-cardinality vectors are
+\[
+\begin{aligned}
+d_6={}&(4,2,4,4,2,4,2,3,4,2,3,4,2,4,2,3,4,2,4,2,3),\\
+d_7={}&(5,3,4,4,3,4,3,4,5,3,4,4,3,5,3,4,4,3,4,3,4,5,3,4,4,3,4,3,4,5,3,4,4,3),\\
+d_8={}&(6,3,6,6,3,6,3,5,6,3,5,6,3,6,3,5,6,3,6,3,5,6,3,5,6,3,6,3,5,6,3,5,\
+&6,3,6,3,6,6,3,6,3,5,6,3,5,6,3,6,3,5,6,3,6,3,5).
+\end{aligned}
+\]
 \item For \(m=6\), the lexicographic state list is
 \[
 \begin{gathered}
@@ -42,7 +51,7 @@ The canonical stream
 \]
 for the directed edge-count matrix in Proposition \ref{prop:foldbin6-exact-pushforward-matrix} has SHA--256 hash
 \[
-\texttt{3c53256c7ef18f4dd91c7164ee0dd559fc25da4b4184381ea1ca5cc509f57846}.
+\texttt{2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0}.
 \]
 \item Let
 \[
@@ -77,6 +86,75 @@ The canonical Sturm-sign stream has SHA--256 hash
 \[
 \texttt{3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0}.
 \]
+\item The following Sage/Python witness is a complete executable specification of the finite audit.  It recomputes the three fiber vectors, the sparse edge matrix, the cleared determinant factor, and the Sturm sign strings from the definitions above; the final assertions are exactly the hashes and integer streams displayed in this appendix.
+\begingroup\small
+\begin{verbatim}
+from hashlib import sha256
+from itertools import product
+
+F=[0,1]
+for _ in range(200): F.append(F[-1]+F[-2])
+
+def legal(m):
+    return [''.join(b) for b in product('01', repeat=m)
+            if '11' not in ''.join(b)]
+
+def zprefix(N,m):
+    z=[0]*200; r=N
+    while r>0:
+        j=max(i for i in range(1,150) if F[i+1] <= r)
+        z[j-1]=1; r -= F[j+1]
+    return ''.join(str(a) for a in z[:m])
+
+def audit(m):
+    X=legal(m); d=dict((x,0) for x in X)
+    for N in range(2**m): d[zprefix(N,m)] += 1
+    bd=[x for x in X if x[0]=='1' and x[-1]=='1']
+    dv=[d[x] for x in X]
+    stream='m=%d;X=%s;d=%s;bd=%s' % (
+        m, ','.join(X), ','.join(map(str,dv)),
+        ','.join('%s:%d' % (x,d[x]) for x in bd))
+    return X,dv,bd,sha256(stream.encode()).hexdigest()
+
+assert audit(6)[3] == '3b3a9f44074afc02177af79f9f4107aea061789f817bf7d288cb9fd473cdeee5'
+assert audit(7)[3] == '4a182c2503f6a82433ed6501cdea0997d5d274ef7b35415e3b0ec0d2cb7e7232'
+assert audit(8)[3] == 'cce73204f542296c6966285ca60f307f97a630814b9fd108c85cd3b974351c36'
+
+X,d,bd,_ = audit(6); pos={x:i for i,x in enumerate(X)}
+Nmat=[[0 for _ in X] for _ in X]
+for a in product([0,1], repeat=6):
+    s=''.join(map(str,a)); i=pos[zprefix(int(s,2),6)]
+    for k in range(6):
+        b=list(a); b[k]=1-b[k]
+        t=''.join(map(str,b)); j=pos[zprefix(int(t,2),6)]
+        Nmat[i][j] += 1
+rows=['%d:%s' % (i, ','.join('%d:%d' % (j,c)
+      for j,c in enumerate(row) if c)) for i,row in enumerate(Nmat)]
+estream='m=6;states=%s;d=%s;N=%s' % (
+    ','.join(X), ','.join(map(str,d)), ';'.join(rows))
+assert sha256(estream.encode()).hexdigest() == '2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0'
+
+R.<t> = PolynomialRing(QQ)
+P = Matrix(QQ, [[QQ(Nmat[i][j])/(6*d[i]) for j in range(len(X))]
+                for i in range(len(X))])
+L = 3234734993627557134336
+Q = (L*(P.charpoly(t)//(t-1))).change_ring(ZZ)
+coeffs = Q.list()[::-1]
+assert sha256(('Q6='+','.join(map(str,coeffs))).encode()).hexdigest() == 'a4f32303d20419c1608c177dafdc43904e3831f0c2eaf6f65895d49c654667dd'
+
+def sgn(v): return '+' if v>0 else '-' if v<0 else '0'
+S = Q.sturm_sequence()
+pts = [QQ(4841207858)/10**10, QQ(4841207859)/10**10,
+       QQ(-6030939755)/10**10, QQ(-6030939754)/10**10]
+signs = [''.join(sgn(p(a)) for p in S) for a in pts]
+assert signs == ['-++++++++++++++++++++','+++++++++++++++++++++',
+                 '+-+-+-+-+-+-+-+-+-+-+','--+-+-+-+-+-+-+-+-+-+']
+pts = [QQ(2420603929)/5000000000, QQ(4841207859)/10000000000,
+       QQ(-1206187951)/2000000000, QQ(-3015469877)/5000000000]
+sst=';'.join('%s:%s' % (pts[i], signs[i]) for i in range(4))
+assert sha256(sst.encode()).hexdigest() == '3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0'
+\end{verbatim}
+\endgroup
 \end{enumerate}
 Consequently the finite enumeration, the window-\(6\) matrix, the characteristic polynomial factor, and the two Sturm root counts are recoverable from explicit integer data and canonical text streams.
 \end{proposition}
