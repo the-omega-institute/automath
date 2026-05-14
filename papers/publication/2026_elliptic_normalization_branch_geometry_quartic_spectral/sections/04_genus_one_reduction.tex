@@ -157,8 +157,9 @@ Squaring and substituting \(Y^2=c^2-4a\lambda^3-4d\lambda-4g\) gives \eqref{eq:b
 
 \subsection{Real projection structure for the balanced family}
 
-The next theorem is used only as descriptive background for the specialization studied later.
-It records the componentwise real \(y\)-images of a smooth balanced quartic and the finite comparisons that decide whether those component images are disjoint, adjacent, or overlapping.
+The next theorem is a finite structural tool for the specialization studied later.
+It is included only to justify the componentwise real \(y\)-images needed for Corollary~\ref{cor:two-interval-specialization}; no consequences for unrelated balanced quartics are used in the sequel.
+The statement records the finite comparisons that decide whether the relevant component images are disjoint, adjacent, or overlapping.
 
 \begin{theorem}[Real projection structure for the balanced family]\label{thm:balanced-real-projection}
 Let $a,c,d,g\in\RR$ with $a\neq0$ and assume \eqref{eq:balanced-genus-condition}, so that $E_{a,c,d,g}$ is a smooth genus-one curve.
@@ -252,6 +253,7 @@ All three cases are therefore decided by explicit comparisons among the finitely
 \end{theorem}
 
 \begin{proof}
+We prove only the finite projection statement needed to specialize the balanced model.
 The description of the real locus comes from the standard sign analysis of the cubic \(F(\lambda)\).
 The set \(\{\lambda\in\RR:F(\lambda)\ge 0\}\) is either a single unbounded interval or the union of one bounded and one unbounded interval, according as \(F\) has one real root or three distinct real roots.
 These are exactly the \(\lambda\)-projections of the connected components of \(E_{a,c,d,g}(\RR)\), yielding~(1).
@@ -413,8 +415,14 @@ Expanding both sides and collecting powers of $\lambda$ gives the degree-$5$ pol
 16a\lambda^5+9a^2\lambda^4+16d\lambda^3+(16g+6ad-4c^2)\lambda^2+d^2,
 \]
 which is exactly \eqref{eq:balanced-quintic}.
-The factorization used later (for example, in \eqref{eq:ramification-poly}) was verified algebraically and checked by the short SageMath script archived with the reproducibility bundle.
-This explicit elimination is typical of the symbolic steps that appear elsewhere in the paper; whenever the resulting polynomial is too long to display, Appendix~\ref{app:pseudocode} references the auxiliary scripts used to confirm the computation.
+After the specialization \((a,c,d,g)=(-1,-1,1,0)\), this polynomial becomes
+\[
+-16\lambda^5+9\lambda^4+16\lambda^3-10\lambda^2+1
+=
+-(\lambda-1)(\lambda+1)(16\lambda^3-9\lambda^2+1),
+\]
+which is the factorization used later in \eqref{eq:ramification-poly}.
+All central eliminations used below are displayed either here or in Appendix~\ref{app:disc}; the scripts referenced in Appendix~\ref{app:pseudocode} are reproducibility checks for these algebraic identities, not substitutes for the eliminations.
 
 \subsection{Specialization to the quartic transfer family}
 
@@ -493,7 +501,19 @@ The corresponding branch values are obtained from
 y = \lambda^2 + \xi = \frac{4\lambda^3 - 3\lambda^2 - 2\lambda + 1}{4\lambda}.
 \]
 At \(\lambda=1\), this gives \(y=0\); at \(\lambda=-1\), it gives \(y=1\).
-Eliminating \(\lambda\) between \(16\lambda^3-9\lambda^2+1=0\) and the displayed expression for \(y\) yields the cubic branch polynomial \(c(y)=256y^3+411y^2+165y+32\).
+For the cubic factor, put
+\[
+p(\lambda)=16\lambda^3-9\lambda^2+1,
+\qquad
+q(\lambda,y)=4y\lambda-(4\lambda^3-3\lambda^2-2\lambda+1).
+\]
+Then eliminating \(\lambda\) is the explicit resultant computation
+\begin{equation}\label{eq:cubic-branch-resultant}
+\Res_\lambda\bigl(p(\lambda),q(\lambda,y)\bigr)
+=
+-64\bigl(256y^3+411y^2+165y+32\bigr).
+\end{equation}
+Hence the remaining finite branch values are exactly the roots of \(c(y)=256y^3+411y^2+165y+32\).
 \end{proof}
 
 \begin{lemma}[Simplicity of the finite ramification skeleton]\label{lem:finite-ramification-simple}
@@ -689,7 +709,7 @@ The discriminant of \(\Pi(\lambda,y)\) with respect to \(\lambda\) factors as
 By Lemma~\ref{lem:repeated-root-ramification}, a finite value \(y_0\) is a branch value of \(y:E\to \mathbf P^1_y\) if and only if \(\Pi(\cdot,y_0)\) has a repeated root.
 Equivalently, the finite branch values are exactly the zeros of \(\Disc_\lambda\Pi(\lambda,y)\).
 Theorem~\ref{thm:elliptic-reduction} identifies them as \(y=0\), \(y=1\), and the roots of \(c(y)=256y^3+411y^2+165y+32\).
-Appendix~\ref{app:disc} computes the resultant explicitly and shows that \(\Disc_\lambda\Pi\) is a degree-\(5\) polynomial in \(y\) with leading coefficient \(-1\).
+Appendix~\ref{app:disc} displays the Sylvester resultant and expands it as \(-256y^5-155y^4+246y^3+133y^2+32y\), so \(\Disc_\lambda\Pi\) is a degree-\(5\) polynomial in \(y\) with leading coefficient \(-256\).
 These roots and the leading coefficient determine the factorization uniquely, giving \eqref{eq:disc-factor-new}.
 \end{proof}
 
