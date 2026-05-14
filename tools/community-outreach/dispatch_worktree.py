@@ -1455,6 +1455,15 @@ def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
         if isinstance(diagnostics, list) and diagnostics:
             return False, "substantive local-work check failed: " + "; ".join(str(item) for item in diagnostics[:4])
         return False, "substantive local-work check failed"
+    if not substantive.get("report_declares_pre_oracle_processing"):
+        return False, "local repair report does not declare the pre-Oracle mathematical action"
+    math_action_count = int(
+        substantive.get("mathematical_action_command_count")
+        or trace.get("mathematical_action_command_count")
+        or 0
+    )
+    if math_action_count <= 0:
+        return False, "Codex command trace has no target-local mathematical action before Oracle"
     return True, ""
 
 

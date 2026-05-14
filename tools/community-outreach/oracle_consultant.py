@@ -1379,6 +1379,9 @@ def _pre_oracle_target_files_recent(slug: str, *, max_age_seconds: int) -> tuple
     repair_finished, repair_reason = _last_local_repair_finished_at(slug)
     if repair_finished is None:
         return False, repair_reason
+    trace_ok, trace_reason = _local_repair_last_has_codex_command_trace(slug)
+    if not trace_ok:
+        return False, trace_reason
     if oldest_mtime < repair_finished - 2.0:
         return False, "Codex handoff files are older than last local repair completion"
     latest_claim = _latest_substantive_claim_packet(target_dir)
@@ -2090,6 +2093,15 @@ def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
         if isinstance(diagnostics, list) and diagnostics:
             return False, "substantive local-work check failed: " + "; ".join(str(item) for item in diagnostics[:4])
         return False, "substantive local-work check failed"
+    if not substantive.get("report_declares_pre_oracle_processing"):
+        return False, "local repair report does not declare the pre-Oracle mathematical action"
+    math_action_count = int(
+        substantive.get("mathematical_action_command_count")
+        or trace.get("mathematical_action_command_count")
+        or 0
+    )
+    if math_action_count <= 0:
+        return False, "Codex command trace has no target-local mathematical action before Oracle"
     return True, ""
 
 

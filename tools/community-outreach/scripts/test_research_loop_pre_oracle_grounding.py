@@ -91,9 +91,12 @@ def _local_repair_last(stdout_log: str, *, finished_at: float, ok: bool = True) 
                 "codex_command_trace": {
                     "ok": True,
                     "target_command_count": 2,
+                    "mathematical_action_command_count": 1,
                 },
                 "substantive_local_work": {
                     "ok": True,
+                    "report_declares_pre_oracle_processing": True,
+                    "mathematical_action_command_count": 1,
                 },
             },
         },
@@ -151,6 +154,23 @@ def main() -> int:
         ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
         if not ok:
             raise AssertionError(f"fresh Codex handoff should be reusable before Oracle: {reason}")
+
+        weak_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now - 2))
+        weak_payload["postcheck"]["substantive_local_work"].pop("report_declares_pre_oracle_processing")
+        (target_dir / "local_repair_last.json").write_text(
+            json.dumps(weak_payload, indent=2),
+            encoding="utf-8",
+        )
+        ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
+        if ok or "pre-Oracle mathematical action" not in reason:
+            raise AssertionError(
+                "research loop accepted local repair without explicit pre-Oracle action declaration: "
+                f"ok={ok} reason={reason!r}"
+            )
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=now - 2),
+            encoding="utf-8",
+        )
 
         time.sleep(0.02)
         (target_dir / "oracle_claim_packet_new.md").write_text(
