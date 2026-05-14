@@ -49,6 +49,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Iterable, Optional
+from urllib.parse import urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 # OUTREACH-SPECIFIC: separate server (port 8766) from the paper-pipeline oracle (8765).
@@ -61,6 +62,11 @@ COMMUNITY_PROMPTS_DIR = REPO_ROOT / "tools/community-outreach/prompts"
 DEFAULT_TIMEOUT = 7200  # 2 hours; ChatGPT Pro thinking can run 60+ min
 DEFAULT_POLL_INTERVAL = 30
 DEFAULT_ZERO_EXTRACT_CANCEL_S = int(os.environ.get("OUTREACH_ORACLE_ZERO_EXTRACT_CANCEL_S", "7200"))
+POST_THINK_TINY_ASSISTANT_CANCEL_S = int(
+    os.environ.get("OUTREACH_ORACLE_POST_THINK_TINY_ASSISTANT_CANCEL_S", "900")
+)
+MIN_SCRIPT_VERSION = "outreach-1.24"
+OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem"
 PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
 ALLOW_PRE_ORACLE_WORKUP_REUSE = os.environ.get(
     "OUTREACH_ALLOW_PRE_ORACLE_WORKUP_REUSE",
@@ -136,6 +142,31 @@ def _http_get_with_curl(url: str, timeout: int = 10) -> dict:
     return json.loads(proc.stdout, strict=False)
 
 
+def _script_version_tuple(version: str) -> tuple[int, ...]:
+    m = re.search(r"(\d+(?:\.\d+)*)", version or "")
+    if not m:
+        return ()
+    return tuple(int(p) for p in m.group(1).split("."))
+
+
+def _script_version_ok(version: str) -> bool:
+    return _script_version_tuple(version) >= _script_version_tuple(MIN_SCRIPT_VERSION)
+
+
+def _agent_id_ok(agent_id: str) -> bool:
+    return bool(re.fullmatch(r"outreach_[0-9]+_[a-z0-9]+", agent_id or ""))
+
+
+def _page_in_openproblem_project(url: str) -> bool:
+    if not url:
+        return False
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return False
+    return parsed.netloc in {"chatgpt.com", "chat.openai.com"} and parsed.path.startswith(OPENPROBLEM_PROJECT_PREFIX)
+
+
 def is_server_alive(server_url: str = ORACLE_SERVER, *, verbose: bool = False) -> bool:
     try:
         return "queue_length" in http_get(f"{server_url}/status", timeout=5)
@@ -174,9 +205,32 @@ def oracle_bridge_readiness(server_url: str = ORACLE_SERVER) -> tuple[bool, str,
     compatible = status.get("compatible_active_poll_agents") or []
     project_active = status.get("project_active_poll_agents") or []
     active = status.get("active_poll_agents") or []
+    recent_agents = status.get("recent_agents") or {}
+
+    def _compatible_project_recent_agents() -> list[str]:
+        out: list[str] = []
+        if not isinstance(recent_agents, dict):
+            return out
+        for agent_id, rec in recent_agents.items():
+            if not isinstance(rec, dict) or not rec.get("recent"):
+                continue
+            metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
+            if not _script_version_ok(str(metrics.get("script_version") or "")):
+                continue
+            if not _agent_id_ok(str(agent_id)):
+                continue
+            page_url = str(metrics.get("page_url") or metrics.get("chatgpt_url") or "")
+            if not _page_in_openproblem_project(page_url):
+                continue
+            out.append(str(agent_id))
+        return out
+
+    compatible_project_recent = _compatible_project_recent_agents()
+    if compatible_project_recent:
+        return True, "", status
     if not compatible:
         seen_versions: list[str] = []
-        for rec in (status.get("recent_agents") or {}).values():
+        for rec in recent_agents.values() if isinstance(recent_agents, dict) else []:
             if not isinstance(rec, dict):
                 continue
             metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
@@ -260,6 +314,9 @@ def oracle_poll(task_id: str, *, timeout: int = DEFAULT_TIMEOUT,
                 elapsed_gen = int(metrics.get("elapsed_seconds") or 0)
                 generating = bool(metrics.get("generating"))
                 generation = metrics.get("generation") if isinstance(metrics.get("generation"), dict) else {}
+                assistant = metrics.get("assistant") if isinstance(metrics.get("assistant"), dict) else {}
+                assistant_only = int(assistant.get("assistant_only_chars") or 0)
+                last_clean = int(assistant.get("last_assistant_clean_chars") or 0)
                 if (not generating) and generation.get("post_think") and extracted < 5 and elapsed_gen >= 600:
                     http_post(f"{ORACLE_SERVER}/cancel", {"task_id": task_id}, timeout=10)
                     if progress:
@@ -268,6 +325,23 @@ def oracle_poll(task_id: str, *, timeout: int = DEFAULT_TIMEOUT,
                             f"post-think with only {extracted} extracted chars after {elapsed_gen}s",
                             file=sys.stderr,
                     )
+                    return ""
+                if (
+                    (not generating)
+                    and generation.get("post_think")
+                    and elapsed_gen >= POST_THINK_TINY_ASSISTANT_CANCEL_S
+                    and max(assistant_only, last_clean) < 20
+                    and extracted < 500
+                ):
+                    http_post(f"{ORACLE_SERVER}/cancel", {"task_id": task_id}, timeout=10)
+                    if progress:
+                        print(
+                            f"[oracle] auto-cancel {task_id}: agent={agent_id} "
+                            f"post-think extraction mismatch after {elapsed_gen}s "
+                            f"(extracted={extracted}, assistant_only={assistant_only}, "
+                            f"last_clean={last_clean})",
+                            file=sys.stderr,
+                        )
                     return ""
                 if (not generating) and extracted == 0 and elapsed_gen >= 900:
                     http_post(f"{ORACLE_SERVER}/cancel", {"task_id": task_id}, timeout=10)
