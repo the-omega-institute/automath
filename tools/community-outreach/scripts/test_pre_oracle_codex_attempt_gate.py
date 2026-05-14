@@ -241,7 +241,11 @@ def main() -> int:
                 "`tools/community-outreach/targets/demo/research.md`, and reduced the proof route to "
                 "Lemma 2 as the first blocker. Prove Lemma 2."
             ),
-            "Ran target inspection and decomposed the proof into Claim 1, Lemma 2, and Lemma 3; Lemma 2 is the first blocker.",
+            (
+                "Pre-Oracle mathematical action: ran target inspection and decomposed the proof "
+                "into Claim 1, Lemma 2, and Lemma 3 before asking Oracle; Lemma 2 is the first "
+                "proof blocker."
+            ),
             codex_trace=trace,
         )
         if not substantive.get("ok") or not substantive.get("workup_has_proof_decomposition_attempt"):
@@ -263,6 +267,25 @@ def main() -> int:
         duplicate_skip = local_repair._post_codex_duplicate_replay_skip(trace)
         if not duplicate_skip or duplicate_skip.get("reason") != "post_codex_replay_trace_present_skip_duplicate_replay":
             raise AssertionError(f"post-Codex duplicate replay was not skipped from trace evidence: {duplicate_skip}")
+        missing_pre_oracle_report = local_repair._substantive_local_workup_check(
+            target_dir,
+            _workup(include_attempt=True),
+            (
+                "The local check found `results.json` and sha256=abc123 but the case-3 proof "
+                "certificate is missing. Prove the exact case-3 lemma."
+            ),
+            (
+                "Ran command `python3 demo/scripts/check_slice.py --case finite --json`; "
+                "the finite certificate replay passed with sha256=abc123, but case 3 still "
+                "needs an Oracle-supplied lemma."
+            ),
+            codex_trace=trace,
+        )
+        if missing_pre_oracle_report.get("ok") or missing_pre_oracle_report.get("report_declares_pre_oracle_processing"):
+            raise AssertionError(
+                "report without explicit pre-Oracle mathematical action should fail: "
+                f"{missing_pre_oracle_report}"
+            )
         shallow_replay_skip = local_repair._post_codex_duplicate_replay_skip(
             {"replay_command_count": 1, "mathematical_action_command_count": 0, "has_evidence_output": True}
         )
@@ -308,9 +331,9 @@ def main() -> int:
                 "remaining obstruction in a complete publishable argument."
             ),
             (
-                "Ran command `python3 demo/scripts/check_slice.py --case finite --json`; "
-                "the finite certificate replay passed with sha256=abc123, but case 3 still "
-                "needs an Oracle-supplied lemma."
+                "Pre-Oracle mathematical action: ran command `python3 demo/scripts/check_slice.py "
+                "--case finite --json` before asking Oracle; the finite certificate replay passed "
+                "with sha256=abc123, but case 3 still needs an Oracle-supplied lemma."
             ),
             codex_trace=trace,
         )
@@ -325,9 +348,9 @@ def main() -> int:
                 "explain the remaining obstruction in a complete publishable argument."
             ),
             (
-                "Ran command `python3 demo/scripts/check_slice.py --case finite --json`; "
-                "the finite certificate replay passed with sha256=abc123, but case 3 still "
-                "needs an Oracle-supplied lemma."
+                "Pre-Oracle mathematical action: ran command `python3 demo/scripts/check_slice.py "
+                "--case finite --json` before asking Oracle; the finite certificate replay passed "
+                "with sha256=abc123, but case 3 still needs an Oracle-supplied lemma."
             ),
             codex_trace=trace,
         )
@@ -347,9 +370,10 @@ def main() -> int:
                 "Prove the missing case-3 lemma or provide a checkable obstruction."
             ),
             "local_repair_report.md": (
-                "Ran command `python3 demo/scripts/check_slice.py --case finite --json`; "
-                "the finite certificate replay passed with sha256=abc123, but case 3 still "
-                "needs an Oracle-supplied lemma."
+                "Pre-Oracle mathematical action: ran command `python3 demo/scripts/check_slice.py "
+                "--case finite --json` before writing `next_oracle_question.md`; the finite "
+                "certificate replay passed with sha256=abc123, but case 3 still needs an "
+                "Oracle-supplied lemma."
             ),
         }.items():
             (target_dir / name).write_text(text, encoding="utf-8")
@@ -405,11 +429,14 @@ def main() -> int:
             encoding="utf-8",
         )
         (target_dir / "local_repair_report.md").write_text(
-            "Ran command `find {rel_target} -maxdepth 2 -type f | sort` and confirmed "
-            "`results.json` plus `scripts/check_slice.py` are present. Ran command "
-            "`python3 {rel_target}/scripts/check_slice.py --case finite --json`; "
-            "the finite certificate replay passed with sha256=abc123, but case 3 still "
-            "needs an Oracle-supplied lemma.\n".format(rel_target=rel_target),
+            "Pre-Oracle mathematical action: ran command "
+            "`python3 {rel_target}/scripts/check_slice.py --case finite --json` before "
+            "writing `next_oracle_question.md`; the finite certificate replay passed "
+            "with sha256=abc123, but case 3 still needs an Oracle-supplied lemma. "
+            "Also ran command `find {rel_target} -maxdepth 2 -type f | sort` and "
+            "confirmed `results.json` plus `scripts/check_slice.py` are present.\n".format(
+                rel_target=rel_target
+            ),
             encoding="utf-8",
         )
         complete, details = local_repair._codex_artifacts_complete_while_process_alive(

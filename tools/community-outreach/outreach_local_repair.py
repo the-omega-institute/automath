@@ -891,6 +891,69 @@ def _text_has_mathematical_processing(text: str) -> bool:
     )
 
 
+def _report_declares_pre_oracle_processing(report: str) -> bool:
+    """Require the worker report to name the action done before Oracle.
+
+    `codex_workup.md` and `next_oracle_question.md` are both prose handoff
+    artifacts.  A worker can make those look polished without actually doing
+    target work first.  The report is the audit trail for ordering: it must say
+    what mathematical action was completed before the next Oracle question was
+    written.
+    """
+    body = (report or "").strip().lower()
+    if len(body) < 120:
+        return False
+    ordering_markers = (
+        "pre-oracle mathematical action",
+        "pre-oracle local action",
+        "before oracle",
+        "before asking oracle",
+        "before writing next_oracle_question",
+        "before writing `next_oracle_question.md`",
+        "before writing next oracle question",
+        "oracle question is based on",
+    )
+    action_markers = (
+        "ran ",
+        "replayed",
+        "checked",
+        "computed",
+        "enumerated",
+        "constructed",
+        "tested",
+        "verified",
+        "decomposed",
+        "split the proof",
+        "reduced the proof",
+        "bounded",
+    )
+    math_markers = (
+        "verifier",
+        "certificate",
+        "proof",
+        "lemma",
+        "case",
+        "cnf",
+        "sat",
+        "unsat",
+        "drat",
+        "lrat",
+        "graph",
+        "hash",
+        "sha",
+        "finite",
+        "construction",
+        "counterexample",
+        "obstruction",
+        "bound",
+    )
+    return (
+        any(marker in body for marker in ordering_markers)
+        and any(marker in body for marker in action_markers)
+        and any(marker in body for marker in math_markers)
+    )
+
+
 def _text_has_proof_decomposition_attempt(text: str) -> bool:
     """Accept a proof-only Codex attempt only when it names the actual blocker.
 
@@ -986,6 +1049,10 @@ def _substantive_local_workup_check(
         diagnostics.append(
             "Codex attempt before Oracle does not show a mathematical processing step such as a verifier/replay, finite check, proof decomposition, case split, construction test, or named proof blocker"
         )
+    if not _report_declares_pre_oracle_processing(report):
+        diagnostics.append(
+            "local_repair_report.md must explicitly name the pre-Oracle mathematical action completed before writing next_oracle_question.md"
+        )
     if not _text_has_concrete_local_fact(question):
         diagnostics.append("next_oracle_question.md does not cite a concrete local fact Oracle must respect")
     grounded, grounding_reason = _question_is_grounded_in_local_work(
@@ -1028,6 +1095,7 @@ def _substantive_local_workup_check(
         "workup_has_proof_decomposition_attempt": _text_has_proof_decomposition_attempt(
             "\n".join([attempt_body, obligations_body, report])
         ),
+        "report_declares_pre_oracle_processing": _report_declares_pre_oracle_processing(report),
         "mathematical_action_command_count": int(codex_trace.get("mathematical_action_command_count") or 0)
         if codex_trace
         else 0,
@@ -1513,6 +1581,7 @@ Scientific honesty rule:
 - An artifact search can support the workup, but artifact search alone is not a valid pre-Oracle attempt. If no local artifact exists, do a proof decomposition or bounded toy/sanity check before asking Oracle.
 - Do not mechanically repeat an expensive verifier if a fresh `results.json` or prior command log in this same target already records the exact replay result you need. In that case, inspect and cite the fresh artifact, then do a new bounded mathematical step that advances the state: replay a smaller derived check, compute a target-relevant hash/CNF/SAT/count/determinant, test one certificate fragment, or write a named proof decomposition with the first exact blocker. JSON parsing, `py_compile`, file listing, artifact search, and prompt wording edits do not count as the required mathematical step.
 - If the only honest local computation would exceed the current timeout, write a bounded-progress `local_repair_report.md` explaining the partial computation, the command that would continue it, and the exact Oracle question. Do not leave the pipeline silent while waiting for an unbounded local run.
+- Prefer chunked/checkpointed local computations over a single silent long run. If a check may take more than a few minutes, run a bounded slice first, write the slice result and continuation command, and ask Oracle only from that observed local boundary.
 - If the target-local data is enough to implement the missing verifier/replay artifact, implement it and run it.
 - If the latest Oracle packet contains a concrete construction, finite certificate, recurrence, SAT/ILP formulation, exhaustive finite case, or numerical claim, try to replay it locally and record the exact command/result.
 - If a testable Oracle claim is false or incomplete, write `tools/community-outreach/targets/{target_dir.name}/failure_analysis.md` explaining the first failed check, and repair `results.json` so unsupported local artifact references are removed or marked as planned/unverified.
@@ -1580,6 +1649,8 @@ Required output actions:
 6. Run the relevant scripts locally when feasible.
 7. Update `results.json` only to reflect actually reproducible evidence.
 8. Leave a short `local_repair_report.md` in the target directory summarizing what you changed, what command you ran, what was confirmed/refuted, and what exact question should go back to Oracle.
+   - It must include a line starting `Pre-Oracle mathematical action:` naming the verifier/search/proof step completed before `next_oracle_question.md` was written.
+   - If a longer computation remains, include `Continuation command:` and the exact bounded next slice, not an unbounded silent command.
 9. Stop. Do not commit.
 """
 
