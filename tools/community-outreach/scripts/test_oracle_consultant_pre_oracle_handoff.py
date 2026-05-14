@@ -75,6 +75,49 @@ If the case-7 certificate closes, this becomes a bounded verifier note.
 """
 
 
+def _computed_fact_workup() -> str:
+    return """
+# Codex Workup
+
+## Target claim now
+
+The target is Problems I Like #12, Serre's ordinary-reduction conjecture.
+
+## Local evidence checked
+
+Codex created and ran `scripts/check_cm_elliptic_ordinarity.py`. The exact
+finite-field checker verified all 45 good primes p <= 200 for the curve
+`E/Q: y^2 = x^3 - x` and found zero mismatches against the known CM prediction.
+
+## Commands run
+
+```bash
+python3 tools/community-outreach/targets/problemsilike_12/scripts/check_cm_elliptic_ordinarity.py --bound 200 --out tools/community-outreach/targets/problemsilike_12/cm_elliptic_check_bound_200.json
+```
+
+## Codex attempt before Oracle
+
+Codex ran the checker and confirmed zero mismatches for all 45 good primes
+p <= 200. This is only a bounded replay of a known special case.
+
+## Verifier/artifact status
+
+`cm_elliptic_check_bound_200.json` exists and records zero mismatches.
+
+## Proof obligations still open
+
+The general Serre ordinary-reduction conjecture still needs a proof,
+counterexample, or sharp obstruction memo.
+
+## Next Oracle question
+
+For Problem #12, Codex locally checked an exact point-count script: all 45 good
+primes p <= 200 had ordinary reduction exactly when p == 1 mod 4, with zero
+mismatches. Provide one concrete lemma or obstruction beyond the known
+elliptic/CM/surface cases.
+"""
+
+
 def _iso_from_epoch(ts: float) -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%S+00:00", time.gmtime(ts))
 
@@ -159,6 +202,19 @@ def main() -> int:
     )
     if slug_only:
         raise AssertionError("slug-only Oracle question should not count as locally grounded")
+
+    computed_fact_grounded = oracle._question_is_grounded_in_local_work(
+        (
+            "For Problem #12, Codex locally checked an exact point-count script: "
+            "all 45 good primes p <= 200 had ordinary reduction exactly when "
+            "p == 1 mod 4, with zero mismatches. Provide one concrete lemma "
+            "or obstruction beyond the known elliptic/CM/surface cases."
+        ),
+        _computed_fact_workup(),
+        "problemsilike_12",
+    )
+    if not computed_fact_grounded:
+        raise AssertionError("oracle consultant should accept computed local facts as grounded")
 
     with tempfile.TemporaryDirectory(dir=SCRIPT_DIR) as tmp:
         target_root = Path(tmp)

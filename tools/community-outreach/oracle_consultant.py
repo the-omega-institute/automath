@@ -1601,6 +1601,13 @@ def _local_grounding_tokens(text: str) -> set[str]:
         r"\b(?:sha-?256|hash)\s*[:= ]\s*[a-f0-9]{6,64}\b",
         r"\bcase[- ]?\d+\b",
         r"\b(?:n|k|m)\s*=\s*\d+\b",
+        r"\bp\s*(?:<=|<|=)\s*\d+\b",
+        r"\b\d+\s+good\s+primes\b",
+        r"\b\d+\s+(?:ordinary|supersingular|nonordinary)\s+primes\b",
+        r"\b(?:zero|0)\s+mismatches\b",
+        r"\bmismatches\s*(?:against|=|:)\s*(?:the\s+)?[A-Za-z0-9_.+\-/ ]{1,80}",
+        r"\bordinary\s+reduction\s+exactly\s+when\b",
+        r"\bp\s*==\s*1\s+mod\s+4\b",
         r"\b(?:\d+)\s+(?:vertices|edges|clauses|variables)\b",
     )
     for pattern in patterns:

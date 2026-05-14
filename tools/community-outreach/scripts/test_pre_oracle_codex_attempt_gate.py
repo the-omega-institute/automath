@@ -451,6 +451,69 @@ def main() -> int:
         if postcheck.get("reserved_harness_file_blocking_mutations"):
             raise AssertionError(f"local_repair_last.json should not be a blocking mutation: {postcheck}")
 
+        computed_fact_workup = """
+# Codex Workup
+
+## Local evidence checked
+
+Codex created and ran `scripts/check_cm_elliptic_ordinarity.py`. The exact
+finite-field checker verified all 45 good primes p <= 200 for the curve
+`E/Q: y^2 = x^3 - x` and found zero mismatches against the known CM prediction.
+
+## Commands run
+
+```bash
+python3 tools/community-outreach/targets/problemsilike_12/scripts/check_cm_elliptic_ordinarity.py --bound 200 --out tools/community-outreach/targets/problemsilike_12/cm_elliptic_check_bound_200.json
+```
+
+## Codex attempt before Oracle
+
+Codex ran the checker and confirmed zero mismatches for all 45 good primes
+p <= 200. This is only a bounded replay of a known special case.
+
+## Verifier/artifact status
+
+`cm_elliptic_check_bound_200.json` exists and records zero mismatches.
+
+## Proof obligations still open
+
+The general Serre ordinary-reduction conjecture still needs a proof,
+counterexample, or sharp obstruction memo.
+"""
+        computed_fact_report = (
+            "Pre-Oracle mathematical action: ran "
+            "`python3 tools/community-outreach/targets/problemsilike_12/scripts/"
+            "check_cm_elliptic_ordinarity.py --bound 200` before asking Oracle; "
+            "the local exact point-count checker verified all 45 good primes "
+            "p <= 200 with zero mismatches. Also inspected "
+            "`tools/community-outreach/targets/problemsilike_12/cm_elliptic_check_bound_200.json`."
+        )
+        computed_fact_trace = {
+            "ok": True,
+            "target_command_count": 1,
+            "inspection_command_count": 1,
+            "mathematical_action_command_count": 1,
+            "replay_command_count": 1,
+            "has_evidence_output": True,
+        }
+        problemsilike_12_dir = (
+            local_repair.REPO_ROOT / "tools/community-outreach/targets/problemsilike_12"
+        )
+        computed_fact_gate = local_repair._substantive_local_workup_check(
+            problemsilike_12_dir,
+            computed_fact_workup,
+            (
+                "For Problem #12, Codex locally checked an exact point-count script: "
+                "all 45 good primes p <= 200 had ordinary reduction exactly when "
+                "p == 1 mod 4, with zero mismatches. Provide one concrete lemma "
+                "or obstruction beyond the known elliptic/CM/surface cases."
+            ),
+            computed_fact_report,
+            codex_trace=computed_fact_trace,
+        )
+        if not computed_fact_gate.get("ok") or not computed_fact_gate.get("question_grounded_in_local_work"):
+            raise AssertionError(f"computed local facts should ground the Oracle handoff: {computed_fact_gate}")
+
         postcheck = local_repair._postcheck_local_repair_artifacts(
             target_dir,
             codex_trace=trace,
