@@ -25,7 +25,7 @@ Protective layer (ported from bedc-deep 2026-05-08):
     before persisting.
   - Contamination detection: reject responses containing canonical BEDC paper /
     paper-trade markers (we are openproblem outreach, not BEDC).
-  - Minimum userscript version (`outreach-1.18`): older scripts can't push
+  - Minimum userscript version (`outreach-1.24`): older scripts can't push
     results, prevents bad data from a half-upgraded environment.
 
 Usage:
@@ -67,8 +67,8 @@ TASK_TIMEOUT = 14400  # 4 hours; ChatGPT Pro thinking can be 60+ min/turn
 AGENT_RECENT_SECONDS = 120
 STALE_REQUEUE_SECONDS = 900
 SESSION_IDLE_RETENTION = 14 * 24 * 3600  # keep sessions on disk for 14 days
-MIN_SCRIPT_VERSION = "outreach-1.23"
-RECOMMENDED_SCRIPT_VERSION = "outreach-1.23"
+MIN_SCRIPT_VERSION = "outreach-1.24"
+RECOMMENDED_SCRIPT_VERSION = "outreach-1.24"
 OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem"
 OPENPROBLEM_PROJECT_URL = f"https://chatgpt.com{OPENPROBLEM_PROJECT_PREFIX}/project"
 
@@ -354,6 +354,22 @@ def _pin_session_chat_url(conv_id: str, chatgpt_url: str) -> bool:
 def _record_agent_seen(agent_id: str, *, event: str, metrics: dict | None = None) -> None:
     if not agent_id:
         return
+    metrics = metrics or {}
+    old = recent_agents.get(agent_id)
+    if old and event == "poll":
+        old_metrics = old.get("metrics") if isinstance(old.get("metrics"), dict) else {}
+        old_recent = time.time() - float(old.get("last_seen", 0.0)) <= AGENT_RECENT_SECONDS
+        old_ok = (
+            old_recent
+            and _script_version_ok(str(old_metrics.get("script_version") or ""))
+            and _page_in_openproblem_project(str(old_metrics.get("page_url") or ""))
+        )
+        new_ok = (
+            _script_version_ok(str(metrics.get("script_version") or ""))
+            and _page_in_openproblem_project(str(metrics.get("page_url") or ""))
+        )
+        if old_ok and not new_ok:
+            return
     rec = {
         "agent_id": agent_id,
         "event": event,
@@ -440,9 +456,9 @@ def _queue_task(task: dict) -> None:
 
 
 def _agent_id_ok(agent_id: str) -> bool:
-    # outreach-1.22 adds a short random suffix so refreshed browser tabs do not
-    # collide with stale agents that used the same numeric tab id.
-    return bool(re.fullmatch(r"outreach_[0-9]+(?:_[a-z0-9]+)?", agent_id or ""))
+    # outreach-1.24 requires a per-tab random suffix so refreshed browser tabs
+    # do not collide with stale agents that used the same numeric tab id.
+    return bool(re.fullmatch(r"outreach_[0-9]+_[a-z0-9]+", agent_id or ""))
 
 
 def _page_in_openproblem_project(url: str) -> bool:
@@ -678,15 +694,18 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 "chatgpt_url": (qs.get("chatgpt_url", [""])[0] or ""),
             }
             compatible_script = _script_version_ok(poll_metrics["script_version"])
+            valid_agent_id = _agent_id_ok(agent_id)
             in_project = _page_in_openproblem_project(poll_metrics["page_url"])
             with _lock:
                 if not in_project:
                     cancelled_id = ""
-                    if agent_id in pending_tasks:
+                    if valid_agent_id and compatible_script and agent_id in pending_tasks:
                         cancelled_id = _cancel_pending_for_agent(
                             agent_id,
                             reason=f"outside openproblem Project poll ({poll_metrics['page_url'][-80:]})",
                         )
+                    elif not compatible_script or not valid_agent_id:
+                        pass
                     else:
                         recent_agents.pop(agent_id, None)
                     self._send_json({
@@ -696,16 +715,12 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                         "reason": "agent outside openproblem Project",
                     })
                     return
-                _record_agent_seen(agent_id, event="poll", metrics=poll_metrics)
-                if agent_id in pending_tasks:
-                    self._send_json(pending_tasks[agent_id])
-                    return
-                if not _agent_id_ok(agent_id):
+                if not valid_agent_id:
                     self._send_json({
                         "status": "idle",
                         "reason": "unsupported_agent_id",
                         "agent_id": agent_id,
-                        "required_agent_id_pattern": "outreach_[0-9]+",
+                        "required_agent_id_pattern": "outreach_[0-9]+_[a-z0-9]+",
                     })
                     return
                 if not compatible_script:
@@ -715,6 +730,10 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                         "recommended_script_version": RECOMMENDED_SCRIPT_VERSION,
                         "agent_script_version": poll_metrics["script_version"],
                     })
+                    return
+                _record_agent_seen(agent_id, event="poll", metrics=poll_metrics)
+                if agent_id in pending_tasks:
+                    self._send_json(pending_tasks[agent_id])
                     return
                 if task_queue and len(pending_tasks) < MAX_AGENTS:
                     task = task_queue.popleft()
@@ -1107,10 +1126,19 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
             }
         with _lock:
             in_project = _page_in_openproblem_project(metrics.get("page_url", ""))
+            compatible_script = _script_version_ok(str(metrics.get("script_version") or ""))
+            valid_agent_id = _agent_id_ok(agent_id)
             if not in_project:
                 cancelled_id = ""
-                if task_id and pending_tasks.get(agent_id, {}).get("task_id") == task_id:
+                if (
+                    valid_agent_id
+                    and compatible_script
+                    and task_id
+                    and pending_tasks.get(agent_id, {}).get("task_id") == task_id
+                ):
                     cancelled_id = _cancel_pending_for_agent(agent_id, reason="outside-project ack/heartbeat")
+                elif not compatible_script or not valid_agent_id:
+                    pass
                 else:
                     recent_agents.pop(agent_id, None)
                 self._send_json({

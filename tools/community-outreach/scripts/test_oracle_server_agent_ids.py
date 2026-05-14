@@ -22,15 +22,17 @@ def _load_server():
 def main() -> int:
     server = _load_server()
     accepted = [
-        "outreach_2",
         "outreach_6187_euxi",
         "outreach_7409_rqxq",
         "outreach_1043_s7wu",
+        "outreach_1_m3s9kabcd",
     ]
     rejected = [
         "",
         "default",
         "outreach",
+        "outreach_2",
+        "outreach_1",
         "outreach_agent_1",
         "outreach_abc",
         "other_6187_euxi",
@@ -49,6 +51,31 @@ def main() -> int:
         raise AssertionError("OpenProblem conversation URL should be accepted")
     if server._page_in_openproblem_project("https://chatgpt.com/g/another-project/project"):
         raise AssertionError("other ChatGPT project URLs should not be accepted")
+
+    agent_id = "outreach_1_m3s9kabcd"
+    old_poll = {
+        "script_version": "outreach-1.24",
+        "page_url": server.OPENPROBLEM_PROJECT_URL,
+        "chatgpt_url": "",
+    }
+    stale_poll = {
+        "script_version": "outreach-1.22",
+        "page_url": conversation_url,
+        "chatgpt_url": conversation_url,
+    }
+    server.recent_agents.clear()
+    server._record_agent_seen(agent_id, event="poll", metrics=old_poll)
+    server._record_agent_seen(agent_id, event="poll", metrics=stale_poll)
+    metrics = server.recent_agents[agent_id]["metrics"]
+    if metrics["script_version"] != "outreach-1.24":
+        raise AssertionError("stale/incompatible poll overwrote compatible active agent")
+
+    # The compatibility predicate itself is the first line of defense used
+    # before returning pending tasks or cancelling same-id pending tasks.
+    if server._script_version_ok("outreach-1.23"):
+        raise AssertionError("outreach-1.23 should not satisfy the 1.24 guard")
+    if not server._script_version_ok("outreach-1.24"):
+        raise AssertionError("outreach-1.24 should satisfy the 1.24 guard")
     return 0
 
 

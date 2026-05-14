@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      outreach-1.23
+// @version      outreach-1.24
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -47,7 +47,7 @@
   const REFILL_NO_OUTPUT_IDLE_TIMEOUT = 1800000;
   const POST_THINK_NO_OUTPUT_TIMEOUT = 300000;
   const REFILL_POST_THINK_NO_OUTPUT_TIMEOUT = 1800000;
-  const SCRIPT_VERSION = "outreach-1.23";
+  const SCRIPT_VERSION = "outreach-1.24";
   const OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
   const OPENPROBLEM_PROJECT_URL = `https://chatgpt.com${OPENPROBLEM_PROJECT_PREFIX}/project`;
 
@@ -1725,38 +1725,33 @@
   // the server dispatches the same task to all of them concurrently. Use
   // sessionStorage (per-tab) instead, fall back to window.name + URL flag.
   //
-  // OUTREACH FIX (cross-tab contamination): agentId is now PINNED on first call
-  // and reused for the lifetime of this tab. Previously, a `?outreach=N` flag
-  // returned `outreach_N` only while the URL had the flag; once ChatGPT
-  // redirected /?outreach=N → /c/<uuid> the URL lost the flag and agentId
-  // started returning a NEW random sessionStorage id. So a tab's identity
-  // changed mid-task, and worse, the per-tab GM_setValue namespace also
-  // changed (see tabSet/tabGet below). Pinning to sessionStorage on the
-  // very first call gives every tab a stable identity for its full session.
+  // OUTREACH FIX (cross-tab contamination): agentId is pinned on first call and
+  // reused for the lifetime of this tab. The URL flag is only a human-readable
+  // tab hint. Even `?outreach=1` must get a per-tab suffix, otherwise a stale
+  // conversation tab and a freshly refreshed Project tab both report
+  // `outreach_1` and the server's health/pending-task records trample each
+  // other.
+  function freshAgentId(flag) {
+    const suffix = Date.now().toString(36).slice(-5)
+      + Math.random().toString(36).slice(2, 6);
+    const cleanFlag = String(flag || "").match(/^\d+$/) ? String(flag) : "1";
+    return `outreach_${cleanFlag}_${suffix}`;
+  }
+
   function agentId() {
     try {
-      // URL flag is authoritative when present: overwrite any stale stored
-      // value (e.g. left over from a prior userscript version that randomized
-      // here). After ChatGPT redirects /?outreach=N → /c/<uuid> the URL flag is
-      // gone, but the sessionStorage value we just wrote keeps the tab pinned.
       const m = window.location.search.match(/[?&]outreach=([^&]+)/);
-      if (m) {
-        const id = `outreach_${m[1]}`;
-        sessionStorage.setItem("outreach_agent_id", id);
-        return id;
-      }
       let stored = sessionStorage.getItem("outreach_agent_id");
-      if (stored) return stored;
-      stored = `outreach_${Math.floor(Math.random() * 9000) + 1000}_${Date.now().toString(36).slice(-4)}`;
+      if (stored && /^outreach_\d+_[a-z0-9]+$/.test(stored)) return stored;
+      const flag = m ? m[1] : "";
+      stored = freshAgentId(flag || (stored || "").match(/^outreach_(\d+)$/)?.[1] || "");
       sessionStorage.setItem("outreach_agent_id", stored);
       return stored;
     } catch {
       // Private mode / sessionStorage disabled — fall back to window.name
-      if (!window.name || !window.name.startsWith("outreach_")) {
+      if (!/^outreach_\d+_[a-z0-9]+$/.test(window.name || "")) {
         const m = window.location.search.match(/[?&]outreach=([^&]+)/);
-        window.name = m
-          ? `outreach_${m[1]}`
-          : `outreach_${Math.floor(Math.random() * 9000) + 1000}_${Date.now().toString(36).slice(-4)}`;
+        window.name = freshAgentId(m ? m[1] : "");
       }
       return window.name;
     }
@@ -1772,7 +1767,7 @@
   function tabGet(k, d) { return GM_getValue(`${agentId()}_${k}`, d); }
 
   function outreachFlagForAgent() {
-    const flagMatch = agentId().match(/^outreach_(\d+)$/);
+    const flagMatch = agentId().match(/^outreach_(\d+)(?:_|$)/);
     return flagMatch ? flagMatch[1] : (outreachFlagFromUrl() || "1");
   }
 
