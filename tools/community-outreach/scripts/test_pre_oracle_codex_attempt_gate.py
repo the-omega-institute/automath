@@ -263,6 +263,11 @@ def main() -> int:
         duplicate_skip = local_repair._post_codex_duplicate_replay_skip(trace)
         if not duplicate_skip or duplicate_skip.get("reason") != "post_codex_replay_trace_present_skip_duplicate_replay":
             raise AssertionError(f"post-Codex duplicate replay was not skipped from trace evidence: {duplicate_skip}")
+        shallow_replay_skip = local_repair._post_codex_duplicate_replay_skip(
+            {"replay_command_count": 1, "mathematical_action_command_count": 0, "has_evidence_output": True}
+        )
+        if shallow_replay_skip is not None:
+            raise AssertionError(f"non-mathematical replay trace should not skip verifier replay: {shallow_replay_skip}")
         shallow_skip = local_repair._post_codex_duplicate_replay_skip({"replay_command_count": 0, "has_evidence_output": True})
         if shallow_skip is not None:
             raise AssertionError(f"inspection-only trace should not skip verifier replay: {shallow_skip}")

@@ -1399,13 +1399,15 @@ def _post_codex_duplicate_replay_skip(codex_command_trace: dict | None) -> dict 
     """
     trace = codex_command_trace or {}
     replay_count = int(trace.get("replay_command_count") or 0)
+    math_action_count = int(trace.get("mathematical_action_command_count") or 0)
     has_evidence_output = bool(trace.get("has_evidence_output"))
-    if replay_count <= 0 or not has_evidence_output:
+    if replay_count <= 0 or math_action_count <= 0 or not has_evidence_output:
         return None
     return {
         "ran": False,
         "reason": "post_codex_replay_trace_present_skip_duplicate_replay",
         "codex_replay_command_count": replay_count,
+        "codex_mathematical_action_command_count": math_action_count,
         "codex_trace_has_evidence_output": True,
     }
 
