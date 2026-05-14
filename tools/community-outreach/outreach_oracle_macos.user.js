@@ -458,7 +458,12 @@
     return null;
   }
 
+  function isOnConversationPage() {
+    return /\/c\/[a-f0-9-]{6,}/.test(window.location.href);
+  }
+
   function isOnNewChatPage() {
+    if (isOnConversationPage()) return false;
     const msgs = document.querySelectorAll("[data-message-author-role]");
     return msgs.length === 0;
   }
@@ -548,7 +553,10 @@
     const btn = findNewChatButton();
     if (!btn) return false;
     btn.click();
-    await sleep(2000); // SPA transition settle
+    for (let i = 0; i < 10; i++) {
+      await sleep(1000);
+      if (!isOnConversationPage() && isOnNewChatPage()) return true;
+    }
     // Verify we landed on fresh chat
     return isOnNewChatPage();
   }
