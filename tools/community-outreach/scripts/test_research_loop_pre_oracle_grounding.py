@@ -127,6 +127,55 @@ def main() -> int:
     if slug_only:
         raise AssertionError("slug-only Oracle question should not count as locally grounded")
 
+    computed_fact_workup = """
+# Codex Workup
+
+## Local evidence checked
+
+Codex created and ran `scripts/check_cm_elliptic_ordinarity.py`.  The exact
+finite-field checker verified all 45 good primes p <= 200 for the curve
+`E/Q: y^2 = x^3 - x` and found zero mismatches against the known CM prediction.
+
+## Commands run
+
+```bash
+python3 tools/community-outreach/targets/problemsilike_12/scripts/check_cm_elliptic_ordinarity.py --bound 200 --out tools/community-outreach/targets/problemsilike_12/cm_elliptic_check_bound_200.json
+```
+
+## Codex attempt before Oracle
+
+Codex ran the checker and confirmed zero mismatches for all 45 good primes
+p <= 200.  This is only a bounded replay of a known special case.
+
+## Verifier/artifact status
+
+`cm_elliptic_check_bound_200.json` exists and records zero mismatches.
+
+## Proof obligations still open
+
+The general Serre ordinary-reduction conjecture still needs a proof,
+counterexample, or sharp obstruction memo.
+
+## Next Oracle question
+
+For Problem #12, Codex locally checked an exact point-count script for
+`E/Q: y^2 = x^3 - x`: all 45 good primes p <= 200 had ordinary reduction
+exactly when p == 1 mod 4, with zero mismatches.  Provide one concrete lemma
+or obstruction beyond the known elliptic/CM/surface cases.
+"""
+    computed_fact_grounded = loop._question_is_grounded_in_local_work(
+        (
+            "For Problem #12, Codex locally checked an exact point-count script: "
+            "all 45 good primes p <= 200 matched the CM prediction, with zero "
+            "mismatches. Provide one concrete lemma or obstruction beyond the "
+            "known elliptic/CM/surface cases."
+        ),
+        computed_fact_workup,
+        "problemsilike_12",
+    )
+    if not computed_fact_grounded:
+        raise AssertionError("computed local fact in Oracle question should count as grounded")
+
     with tempfile.TemporaryDirectory(dir=SCRIPT_DIR) as tmp:
         state_dir = Path(tmp)
         target_root = state_dir / "targets"

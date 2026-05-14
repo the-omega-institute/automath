@@ -760,6 +760,11 @@ def _local_grounding_tokens(text: str) -> set[str]:
         r"\b(?:sha-?256|hash)\s*[:= ]\s*[a-f0-9]{6,64}\b",
         r"\bcase[- ]?\d+\b",
         r"\b(?:n|k|m)\s*=\s*\d+\b",
+        r"\bp\s*(?:<=|<|=)\s*\d+\b",
+        r"\b\d+\s+good\s+primes\b",
+        r"\b\d+\s+(?:ordinary|supersingular|nonordinary)\s+primes\b",
+        r"\b(?:zero|0)\s+mismatches\b",
+        r"\bmismatches\s*(?:against|=|:)\s*(?:the\s+)?[A-Za-z0-9_.+\-/ ]{1,80}",
         r"\b(?:\d+)\s+(?:vertices|edges|clauses|variables)\b",
     )
     for pattern in patterns:
@@ -798,7 +803,27 @@ def _question_is_grounded_in_local_work(question: str, workup: str, slug: str) -
     obligations_body = _extract_workup_section(workup, "Proof obligations still open")
     evidence = "\n".join([local_body, commands_body, attempt_body, artifact_body, obligations_body])
     tokens = _local_grounding_tokens(evidence)
-    return any(token and token in q for token in tokens)
+    if any(token and token in q for token in tokens):
+        return True
+
+    # Valid handoffs sometimes cite compact computed facts rather than exact
+    # filenames. Accept those when the same fact appears elsewhere in the
+    # current workup or local-repair report, while still requiring command-trace
+    # validation below in _pre_oracle_workup_status.
+    broad_tokens = _local_grounding_tokens(workup)
+    if any(token and token in q for token in broad_tokens):
+        return True
+
+    report_path = TARGETS_DIR / slug / "local_repair_report.md"
+    try:
+        report = report_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        report = ""
+    report_tokens = _local_grounding_tokens(report)
+    if any(token and token in q for token in report_tokens):
+        return True
+
+    return False
 
 
 def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
