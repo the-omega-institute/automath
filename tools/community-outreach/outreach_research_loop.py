@@ -912,6 +912,14 @@ def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
         return False, str(trace.get("reason") or "Codex command trace not ok")
     if int(trace.get("target_command_count") or 0) <= 0:
         return False, "Codex command trace has no target-local commands"
+    stdout_log = str(payload.get("stdout_log") or "")
+    if not stdout_log:
+        return False, "last local repair missing stdout_log"
+    stdout_path = REPO_ROOT / stdout_log
+    if not stdout_path.exists():
+        return False, f"last local repair stdout_log is missing: {stdout_log}"
+    if _parse_iso_time(str(payload.get("finished_at") or "")) is None:
+        return False, "last local repair missing valid finished_at"
     substantive = postcheck.get("substantive_local_work")
     if not isinstance(substantive, dict):
         return False, "last local repair missing substantive local-work check"
@@ -921,6 +929,30 @@ def _local_repair_last_has_codex_command_trace(slug: str) -> tuple[bool, str]:
             return False, "substantive local-work check failed: " + "; ".join(str(item) for item in diagnostics[:4])
         return False, "substantive local-work check failed"
     return True, ""
+
+
+def _parse_iso_time(value: str) -> float | None:
+    text = (value or "").strip()
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
+
+
+def _last_local_repair_finished_at(slug: str) -> tuple[float | None, str]:
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except OSError:
+        return None, "missing local_repair_last.json"
+    except json.JSONDecodeError as exc:
+        return None, f"invalid local_repair_last.json: {exc}"
+    finished = _parse_iso_time(str(payload.get("finished_at") or ""))
+    if finished is None:
+        return None, "last local repair missing valid finished_at"
+    return finished, ""
 
 
 def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
@@ -1053,11 +1085,22 @@ def _pre_oracle_workup_recent(slug: str, *, max_age_seconds: int) -> tuple[bool,
         oldest_age = max(oldest_age, time.time() - stat.st_mtime)
     if oldest_age > max_age_seconds:
         return False, f"Codex handoff older than reuse window ({oldest_age:.0f}s > {max_age_seconds}s)"
+    repair_finished, repair_reason = _last_local_repair_finished_at(slug)
+    if repair_finished is None:
+        return False, repair_reason
+    if oldest_mtime < repair_finished - 2.0:
+        return False, "Codex handoff files are older than last local repair completion"
     latest_claim = _latest_substantive_claim_packet(target_dir)
     if latest_claim is not None and oldest_mtime < latest_claim.stat().st_mtime:
         return (
             False,
             "Codex handoff is older than latest substantive Oracle claim "
+            f"({latest_claim.name}); Codex must locally replay/process that claim before the next Oracle turn",
+        )
+    if latest_claim is not None and repair_finished < latest_claim.stat().st_mtime:
+        return (
+            False,
+            "last local repair completed before latest substantive Oracle claim "
             f"({latest_claim.name}); Codex must locally replay/process that claim before the next Oracle turn",
         )
     return True, ""

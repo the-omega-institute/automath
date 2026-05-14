@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import os
 import sys
 import tempfile
 import time
@@ -74,21 +76,29 @@ If the case-7 certificate closes, this becomes a bounded verifier note.
 """
 
 
-def _local_repair_last() -> str:
-    return """
-{
-  "ok": true,
-  "postcheck": {
-    "codex_command_trace": {
-      "ok": true,
-      "target_command_count": 2
-    },
-    "substantive_local_work": {
-      "ok": true
-    }
-  }
-}
-"""
+def _iso_from_epoch(ts: float) -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%S+00:00", time.gmtime(ts))
+
+
+def _local_repair_last(stdout_log: str, *, finished_at: float) -> str:
+    return json.dumps(
+        {
+            "ok": True,
+            "started_at": _iso_from_epoch(finished_at - 1),
+            "finished_at": _iso_from_epoch(finished_at),
+            "stdout_log": stdout_log,
+            "postcheck": {
+                "codex_command_trace": {
+                    "ok": True,
+                    "target_command_count": 2,
+                },
+                "substantive_local_work": {
+                    "ok": True,
+                },
+            },
+        },
+        indent=2,
+    )
 
 
 def main() -> int:
@@ -100,9 +110,21 @@ def main() -> int:
         target_dir.mkdir(parents=True)
         dispatch.REPO_ROOT_DEFAULT = repo_root
         dispatch.TARGETS_DIR_DEFAULT = target_root
+        log_dir = repo_root / "tools/community-outreach/outreach_state/local_repair_logs"
+        log_dir.mkdir(parents=True)
+        stdout_log = log_dir / "codex.jsonl"
+        stdout_log.write_text("{}\n", encoding="utf-8")
+        rel_stdout = str(stdout_log.relative_to(repo_root))
         for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
             (target_dir / name).write_text(_workup(), encoding="utf-8")
-        (target_dir / "local_repair_last.json").write_text(_local_repair_last(), encoding="utf-8")
+        now = time.time()
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            path = target_dir / name
+            os.utime(path, (now - 1, now - 1))
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=now - 2),
+            encoding="utf-8",
+        )
 
         ok, reason = dispatch._pre_oracle_codex_workup_recent("demo", max_age_seconds=3600)
         if not ok:
@@ -122,9 +144,15 @@ def main() -> int:
             )
 
         time.sleep(0.02)
+        refreshed = time.time() + 2
         for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
             path = target_dir / name
             path.write_text(path.read_text(encoding="utf-8") + "\nRefreshed after claim.\n", encoding="utf-8")
+            os.utime(path, (refreshed + 1, refreshed + 1))
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=refreshed),
+            encoding="utf-8",
+        )
         ok, reason = dispatch._pre_oracle_codex_workup_recent("demo", max_age_seconds=3600)
         if not ok:
             raise AssertionError(f"handoff refreshed after claim should pass: {reason}")

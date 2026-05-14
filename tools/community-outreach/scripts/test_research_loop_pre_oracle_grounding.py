@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import time
@@ -75,10 +76,17 @@ case 7. Prove the case-7 lemma or provide a checkable obstruction.
 """
 
 
-def _local_repair_last(*, ok: bool = True) -> str:
+def _iso_from_epoch(ts: float) -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%S+00:00", time.gmtime(ts))
+
+
+def _local_repair_last(stdout_log: str, *, finished_at: float, ok: bool = True) -> str:
     return json.dumps(
         {
             "ok": ok,
+            "started_at": _iso_from_epoch(finished_at - 1),
+            "finished_at": _iso_from_epoch(finished_at),
+            "stdout_log": stdout_log,
             "postcheck": {
                 "codex_command_trace": {
                     "ok": True,
@@ -122,9 +130,23 @@ def main() -> int:
         target_dir = target_root / "demo"
         target_dir.mkdir(parents=True)
         loop.TARGETS_DIR = target_root
+        log_dir = state_dir / "logs"
+        log_dir.mkdir()
+        stdout_log = log_dir / "codex.jsonl"
+        stdout_log.write_text("{}\n", encoding="utf-8")
+        rel_stdout = str(stdout_log.relative_to(loop.REPO_ROOT))
         for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
             (target_dir / name).write_text(workup, encoding="utf-8")
-        (target_dir / "local_repair_last.json").write_text(_local_repair_last(), encoding="utf-8")
+        now = time.time()
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            os_path = target_dir / name
+            os_path.touch()
+            # The handoff must be at least as fresh as the local-repair finish.
+            os.utime(os_path, (now - 1, now - 1))
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=now - 2),
+            encoding="utf-8",
+        )
 
         ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
         if not ok:
@@ -144,9 +166,15 @@ def main() -> int:
             )
 
         time.sleep(0.02)
+        refreshed = time.time() + 2
         for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
             path = target_dir / name
             path.write_text(path.read_text(encoding="utf-8") + "\nRefreshed after claim.\n", encoding="utf-8")
+            os.utime(path, (refreshed + 1, refreshed + 1))
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=refreshed),
+            encoding="utf-8",
+        )
         ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
         if not ok:
             raise AssertionError(f"fresh post-claim Codex handoff should be reusable: {reason}")
