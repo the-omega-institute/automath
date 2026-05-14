@@ -1608,35 +1608,40 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     started = _now_iso()
     try:
-        proc = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=str(REPO_ROOT),
-            env=env,
-            text=True,
+        with open(stdout_path, "w", encoding="utf-8") as stdout_f, open(
+            stderr_path,
+            "w",
             encoding="utf-8",
-            errors="replace",
-            start_new_session=True,
-        )
-        try:
-            stdout, stderr = proc.communicate(input=prompt, timeout=timeout)
-            rc = proc.returncode
-        except subprocess.TimeoutExpired:
-            _terminate_process_group(proc)
-            stdout, stderr = proc.communicate()
-            rc = 124
-            stderr = (stderr or "") + f"\nTIMEOUT after {timeout}s; terminated Codex process group\n"
-        stdout_path.write_text(stdout or "", encoding="utf-8")
-        stderr_path.write_text(stderr or "", encoding="utf-8")
+        ) as stderr_f:
+            proc = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=stdout_f,
+                stderr=stderr_f,
+                cwd=str(REPO_ROOT),
+                env=env,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                start_new_session=True,
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+                rc = proc.returncode
+            except subprocess.TimeoutExpired:
+                _terminate_process_group(proc)
+                try:
+                    proc.communicate(timeout=5)
+                except subprocess.TimeoutExpired:
+                    pass
+                rc = 124
+                stderr_f.write(f"\nTIMEOUT after {timeout}s; terminated Codex process group\n")
     except subprocess.TimeoutExpired as exc:
         rc = 124
-        stdout_path.write_text(_coerce_text(exc.stdout), encoding="utf-8")
-        stderr_path.write_text(
-            _coerce_text(exc.stderr) + f"\nTIMEOUT after {timeout}s\n",
-            encoding="utf-8",
-        )
+        if not stdout_path.exists():
+            stdout_path.write_text(_coerce_text(exc.stdout), encoding="utf-8")
+        with open(stderr_path, "a", encoding="utf-8") as stderr_f:
+            stderr_f.write(_coerce_text(exc.stderr) + f"\nTIMEOUT after {timeout}s\n")
     raw = ""
     try:
         if codex_out.exists():
