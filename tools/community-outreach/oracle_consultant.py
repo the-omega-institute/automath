@@ -145,6 +145,52 @@ def is_server_alive(server_url: str = ORACLE_SERVER, *, verbose: bool = False) -
         return False
 
 
+def oracle_bridge_readiness(server_url: str = ORACLE_SERVER) -> tuple[bool, str, dict]:
+    """Return whether the browser bridge can currently accept Oracle work.
+
+    The HTTP server being alive is not sufficient: after a userscript bump the
+    server can be reachable while all ChatGPT tabs are still running an older
+    script version. Treat that as an operator-refresh health state instead of a
+    mathematical transport failure.
+    """
+    try:
+        status = http_get(f"{server_url}/status", timeout=5)
+    except Exception as exc:  # noqa: BLE001
+        try:
+            status = _http_get_with_curl(f"{server_url}/status", timeout=5)
+        except Exception as curl_exc:  # noqa: BLE001
+            return False, f"server unreachable: urllib={exc}; curl={curl_exc}", {}
+    if "queue_length" not in status:
+        return False, "server status missing queue_length", status
+    required = str(status.get("required_script_version") or "")
+    compatible = status.get("compatible_active_poll_agents") or []
+    project_active = status.get("project_active_poll_agents") or []
+    active = status.get("active_poll_agents") or []
+    if not compatible:
+        seen_versions: list[str] = []
+        for rec in (status.get("recent_agents") or {}).values():
+            if not isinstance(rec, dict):
+                continue
+            metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
+            version = str(metrics.get("script_version") or "")
+            if version and version not in seen_versions:
+                seen_versions.append(version)
+        if active:
+            detail = (
+                f"no compatible Outreach Oracle tab; required={required or '-'} "
+                f"seen={','.join(seen_versions) or '-'} active={len(active)}"
+            )
+        elif project_active:
+            detail = (
+                f"project tabs are active but not compatible; required={required or '-'} "
+                f"seen={','.join(seen_versions) or '-'}"
+            )
+        else:
+            detail = f"no active Outreach Oracle tab; required={required or '-'}"
+        return False, detail, status
+    return True, "", status
+
+
 # ---------------------------------------------------------------------------
 # Submit + poll (adapted from oracle_pipeline.py:771-840 — same wire format)
 # ---------------------------------------------------------------------------

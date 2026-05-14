@@ -334,6 +334,40 @@ def _server_alive() -> bool:
         return False
 
 
+def _oracle_bridge_ready() -> tuple[bool, str]:
+    try:
+        s = _http_get(f"{ORACLE_SERVER_URL}/status", timeout=5)
+    except Exception as exc:  # noqa: BLE001
+        return False, f"outreach_oracle_server (:8766) not alive: {exc}"
+    if s.get("port") != 8766:
+        return False, "outreach_oracle_server status did not report port 8766"
+    required = str(s.get("required_script_version") or "")
+    compatible = s.get("compatible_active_poll_agents") or []
+    active = s.get("active_poll_agents") or []
+    if compatible:
+        return True, ""
+    seen_versions: list[str] = []
+    for rec in (s.get("recent_agents") or {}).values():
+        if not isinstance(rec, dict):
+            continue
+        metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
+        version = str(metrics.get("script_version") or "")
+        if version and version not in seen_versions:
+            seen_versions.append(version)
+    if active:
+        return (
+            False,
+            "no compatible Outreach Oracle tab; "
+            f"required={required or '-'} seen={','.join(seen_versions) or '-'} "
+            "refresh/update outreach_oracle_macos.user.js",
+        )
+    return (
+        False,
+        f"no active Outreach Oracle tab; required={required or '-'} "
+        "refresh/open the Outreach Oracle tabs",
+    )
+
+
 def _cancel_oracle_task(task_id: str, *, reason: str) -> None:
     if not task_id:
         return
@@ -1005,8 +1039,9 @@ def main(argv: list[str] | None = None) -> int:
         print("=" * 70)
         return 0
 
-    if not _server_alive():
-        return _status_noop("outreach_oracle_server (:8766) not alive — skipping cycle")
+    bridge_ready, bridge_reason = _oracle_bridge_ready()
+    if not bridge_ready:
+        return _status_noop(bridge_reason)
 
     # ── Multi-round oracle loop with follow-ups ────────────────────────
     # Round 1 sends the full prompt. If parsed candidates are insufficient

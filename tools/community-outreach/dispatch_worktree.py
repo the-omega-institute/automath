@@ -867,6 +867,7 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
             OracleConsultant,
             codex_driven_prompt_generator,
             generate_outreach_paper,
+            oracle_bridge_readiness,
             run_paper_pipeline,
         )
     except Exception as exc:  # noqa: BLE001
@@ -877,6 +878,20 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
     if not consultant.is_alive():
         print(f"[oracle-deep] server down at {consultant.server_url}; skipping {todo.todo_id}", file=sys.stderr)
         return {"skipped": "server_down", "server_url": consultant.server_url}
+    ready, ready_reason, ready_status = oracle_bridge_readiness(consultant.server_url)
+    if not ready:
+        print(
+            f"[oracle-deep] bridge not ready for {todo.todo_id}: {ready_reason}",
+            file=sys.stderr,
+        )
+        return {
+            "skipped": "bridge_not_ready",
+            "reason": ready_reason,
+            "server_url": consultant.server_url,
+            "required_script_version": ready_status.get("required_script_version", ""),
+            "active_poll_agents": ready_status.get("active_poll_agents", []),
+            "compatible_active_poll_agents": ready_status.get("compatible_active_poll_agents", []),
+        }
     workup_ok, workup_reason, workup_log = _run_pre_oracle_codex_workup(
         todo.todo_id,
         profile.slug,
