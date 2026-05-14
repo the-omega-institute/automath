@@ -1214,7 +1214,12 @@ def _results_artifact_replay_commands(target_dir: Path, results_path: Path) -> l
     return commands
 
 
-def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
+def _record_target_verifier_audit(
+    todo_id: str,
+    target_dir: Path,
+    *,
+    include_results_artifact_commands: bool = True,
+) -> dict:
     """Run a target-local verifier, if present, and record its result.
 
     Codex workers can create good replay scripts while forgetting to update the
@@ -1226,11 +1231,19 @@ def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
     results_path = target_dir / "results.json"
     verifiers = _candidate_verifier_scripts(target_dir)
     if not verifiers or not results_path.exists():
-        artifact_commands = _results_artifact_replay_commands(target_dir, results_path) if results_path.exists() else []
+        artifact_commands = (
+            _results_artifact_replay_commands(target_dir, results_path)
+            if include_results_artifact_commands and results_path.exists()
+            else []
+        )
         if not artifact_commands:
             return {"ran": False, "reason": "missing verify*_results.py/results artifact commands or results.json"}
     else:
-        artifact_commands = _results_artifact_replay_commands(target_dir, results_path)
+        artifact_commands = (
+            _results_artifact_replay_commands(target_dir, results_path)
+            if include_results_artifact_commands
+            else []
+        )
 
     run: dict | None = None
     passed = False
@@ -1487,7 +1500,11 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         state_path = target_dir / "local_repair_last.json"
         state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return report
-    verifier_audit_before = _record_target_verifier_audit(todo_id, target_dir)
+    verifier_audit_before = _record_target_verifier_audit(
+        todo_id,
+        target_dir,
+        include_results_artifact_commands=False,
+    )
     if verifier_audit_before.get("passed"):
         gate_after_audit = _run_science_gate(todo_id, write_ledger=True)
         if str(gate_after_audit.get("status") or "") in {"WRITEBACK_READY", "CLOSE_TARGET"}:

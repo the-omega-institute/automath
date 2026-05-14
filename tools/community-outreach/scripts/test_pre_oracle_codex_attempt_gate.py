@@ -239,6 +239,35 @@ def main() -> int:
         shallow_skip = local_repair._post_codex_duplicate_replay_skip({"replay_command_count": 0, "has_evidence_output": True})
         if shallow_skip is not None:
             raise AssertionError(f"inspection-only trace should not skip verifier replay: {shallow_skip}")
+
+        artifact_results = target_dir / "results.json"
+        artifact_results.write_text(
+            json.dumps(
+                {
+                    "commands": [
+                        {
+                            "command": (
+                                f"python3 {rel_target}/scripts/expensive_batch.py "
+                                f"--json-out {rel_target}/expensive_batch.json"
+                            )
+                        }
+                    ]
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        no_artifact_pre_audit = local_repair._record_target_verifier_audit(
+            "T-DEMO",
+            target_dir,
+            include_results_artifact_commands=False,
+        )
+        if no_artifact_pre_audit.get("ran"):
+            raise AssertionError(
+                "pre-Codex verifier audit must not run results.json artifact commands: "
+                f"{no_artifact_pre_audit}"
+            )
+
         ungrounded = local_repair._substantive_local_workup_check(
             target_dir,
             _workup(include_attempt=True),
