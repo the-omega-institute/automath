@@ -117,6 +117,38 @@ P_m^{\mathrm{bin}}:=P_{\Fold_m^{\mathrm{bin}}},
 P_6:=P_6^{\mathrm{bin}}.
 \]
 
+\begin{lemma}[Equitability, strong lumpability, and the audited pushforward]\label{lem:equitable-strong-lumpability-audited-pushforward}
+Let \(F:\Omega_m\twoheadrightarrow X\) be a surjection, let \(M\) be its block-indicator matrix, and let \(D_F=M^\top M\).  For \(\omega\in\Omega_m\) and \(y\in X\), set
+\[
+ r_\omega(y):=\sum_{\eta\in F^{-1}(y)}T_m(\omega,\eta)
+ =\frac{1}{m}\#\{1\le i\le m:F(\omega+e_i)=y\}.
+\]
+The following conditions are equivalent.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The partition is equitable: there is a matrix \(B\) with \(A_mM=MB\).
+\item The hypercube walk is strongly lumpable with respect to \(F\): whenever \(F(\omega)=F(\omega')\), one has \(r_\omega(y)=r_{\omega'}(y)\) for every \(y\in X\).
+\item There is a row-stochastic matrix \(P\) on \(X\) such that \(T_mM=MP\).
+\end{enumerate}
+When these conditions hold, the strong-lumpability kernel is unique and is exactly the audited pushforward:
+\[
+P=P_F=D_F^{-1}M^\top T_mM.
+\]
+Consequently an audited kernel can be hidden-state-free strongly lumpable only when it is the equitable quotient kernel of the same partition.
+\end{lemma}
+\begin{proof}
+The \((\omega,y)\)-entry of \(A_mM\) is the number of neighbors of \(\omega\) in the fiber \(F^{-1}(y)\), namely \(m r_\omega(y)\).  Thus \(A_mM=MB\) holds if and only if, for each fixed block \(x=F(\omega)\), this number depends only on \(x\) and \(y\), which is exactly the row-wise independence in \textup{(ii)} after division by \(m\).  In that case the common values define
+\[
+P(x,y):=r_\omega(y)\qquad(\omega\in F^{-1}(x)),
+\]
+and every row of \(P\) sums to one because \(T_m\) is row-stochastic.  The identity \(T_mM=MP\) is then just the equality of the entries \((T_mM)(\omega,y)=r_\omega(y)=P(F(\omega),y)=(MP)(\omega,y)\).  This proves \textup{(ii)}\(\Rightarrow\)\textup{(iii)}, and the same entrywise identity proves \textup{(iii)}\(\Rightarrow\)\textup{(ii)}.  Since \(T_m=A_m/m\), \textup{(i)} is equivalent to \textup{(iii)} with \(P=B/m\).
+
+Finally, if \(T_mM=MP\), then multiplying on the left by \(D_F^{-1}M^\top\) gives
+\[
+D_F^{-1}M^\top T_mM=D_F^{-1}M^\top MP=D_F^{-1}D_FP=P,
+\]
+because the columns of \(M\) are disjoint fiber indicators.  Conversely, the preceding equivalences show that whenever a genuine strong-lumpability kernel exists, it must be this matrix. \qedhere
+\end{proof}
+
 We write \(\varphi:=(1+\sqrt5)/2\) for the golden ratio and \(F_0:=0\), \(F_1:=1\), \(F_{n+2}:=F_{n+1}+F_n\) for the Fibonacci sequence.
 
 The fold certificate used below is a finite, reproducible model rather than an appeal to an external black box.  Its state space is the hard-core, or no-adjacent-ones, binary language of length \(m\); this is the symbolic boundary language whose Fibonacci counts are audited in Lemma \ref{lem:audited-binary-fold-certificate-identities}.  The fibers are the audited Zeckendorf-prefix fibers of dyadic vertices, and the boundary sector consists of those legal words whose first and last bits are both \(1\).  All spectral and gauge claims in the paper use only the data specified in the next definition and the exact pushforward convention above.
@@ -270,7 +302,7 @@ The last sentence follows because the construction used every item of descent da
 
 
 \begin{theorem}[Boundary-cardinality obstruction to stable descent for the audited folds]\label{thm:audited-folds-boundary-descent-obstruction}
-Let \(s_m:X_m\to\{0,1\}\) be the boundary indicator of the audited certificate, with \(s_m(w)=1\) exactly for \(w\in X_m^{\mathrm{bdry}}\).  There is no fold-aware stable system on an index set containing \(6\) and \(7\), for the concrete folds \(\Fold_m^{\mathrm{bin}}\), that is fiberwise trivial over the statistics \(s_m\).  Consequently, the boundary-gauge counts, central-charge counts, and capacity quantities computed below are finite-resolution certificate statistics unless separate fold-aware descent data satisfying Definition \ref{def:fold-aware-stable-system} are supplied.
+Let \(s_m:X_m\to\{0,1\}\) be the boundary indicator of the audited certificate, with \(s_m(w)=1\) exactly for \(w\in X_m^{\mathrm{bdry}}\).  There is no fold-aware stable system on an index set containing \(6\) and \(7\), for the concrete folds \(\Fold_m^{\mathrm{bin}}\), that is fiberwise trivial over the boundary statistics \(s_m\).
 \end{theorem}
 \begin{proof}
 Assume such a system exists for levels \(7\ge6\).  Compatibility over the boundary statistic says
@@ -282,8 +314,12 @@ Hence every boundary state \(y\in X_7^{\mathrm{bdry}}\) must map to a boundary s
 \pi_{7,6}:(\Fold_7^{\mathrm{bin}})^{-1}(y)\longrightarrow
 (\Fold_6^{\mathrm{bin}})^{-1}(x)
 \]
-to be a bijection.  By Lemma \ref{lem:audited-binary-fold-certificate-identities}, every boundary fiber at level \(7\) has cardinality \(3\), while every boundary fiber at level \(6\) has cardinality \(2\).  A bijection between such fibers cannot exist.  This contradiction rules out stable descent over the boundary statistic.  The final sentence is then the contrapositive content of Theorem \ref{thm:fold-aware-stable-descent}: without the required fold-aware descent data, there is no canonical cross-resolution object to which these finite-level quantities descend. \qedhere
+to be a bijection.  By Lemma \ref{lem:audited-binary-fold-certificate-identities}, every boundary fiber at level \(7\) has cardinality \(3\), while every boundary fiber at level \(6\) has cardinality \(2\).  A bijection between such fibers cannot exist.  This contradiction rules out stable descent over the boundary statistic. \qedhere
 \end{proof}
+
+\begin{remark}[Scope of the cross-resolution obstruction]\label{rem:cross-resolution-statistics-warning}
+Theorem \ref{thm:audited-folds-boundary-descent-obstruction} proves only the boundary-indicator obstruction.  The boundary-gauge counts, central-charge counts, homology ranks, and capacity quantities appearing below are therefore used as finite-resolution statistics of the audited certificate family.  Promoting any one of them to a cross-resolution invariant requires its own fold-aware descent data satisfying Definition \ref{def:fold-aware-stable-system}; no separate nonexistence theorem for those related statistics is asserted here.
+\end{remark}
 
 We shall repeatedly use the groupoid \(\mathbf{FinSet}_k^{\cong}\) of \(k\)-element sets and bijections, together with the Picard groupoid \(\mathbf{Tors}(\ZZ_2)\) of \(\ZZ_2\)-torsors. For a finite set \(S\) with \(|S|=k\), its orientation torsor is
 \[
@@ -332,6 +368,11 @@ The results of this paper identify three complementary rigidity mechanisms for c
 From the viewpoint of stochastic modeling, the window-\(6\) audit is especially instructive. Its pushforward kernel violates the discrete spectral law required by equitable lumpability, yet its boundary sector still remembers a highly structured parity object and a chiral \(Q_4\) fingerprint. This combination suggests that realistic coarse models may preserve selected geometric and gauge-theoretic shadows of the ambient walk even after they cease to be exact Markov quotients. Understanding which invariants survive such failures should be relevant both for probabilistic model reduction and for coding-theoretic coarse descriptions on Hamming graphs \cite{macwilliams1977theory,godsil2001algebraic}.
 
 Several problems remain open. First, one would like a sharp converse to the spectral obstruction: which additional constraints, beyond spectral inclusion, characterize those audited pushforward kernels that truly arise from equitable hypercube partitions? Second, the orientation-torsor formalism should extend to other product graphs and association schemes, where higher-sign or determinant-type obstructions may coexist with non-binary local systems. Third, Theorem \ref{thm:fold-aware-stable-descent} shows exactly what extra transition data are needed before low-degree homology or capacity statistics can be promoted to cross-resolution invariants; constructing nontrivial stable fold systems with secondary operations and Schur-multiplier relations beyond degree \(2\) remains open \cite{brown1982cohomology,nakaoka1961homology}. Finally, the underlying Lean formalization suggests a program of computer-verified coarse-graining theory in which spectral, parity, and entropy obstructions are certified simultaneously rather than independently.
+
+\appendix
+
+\section{Audited computation certificate}\label{app:audited-computation-certificate}
+\input{source/thm__audited-computation-reproducibility-certificate}
 
 %% ============================================================
 \bibliographystyle{plain}
