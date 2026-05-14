@@ -365,7 +365,17 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         if any(marker in command_lower for marker in inspection_command_markers):
             inspection_command_count += 1
         is_inspection_only_python = any(marker in command_lower for marker in inspection_only_python_markers)
-        if any(marker in command_lower for marker in replay_command_markers) and not is_inspection_only_python:
+        is_artifact_search_command = any(marker in command_lower for marker in negative_search_markers) and (
+            "find " in command_lower
+            or "rg " in command_lower
+            or "ls " in command_lower
+            or "fd " in command_lower
+        )
+        if (
+            any(marker in command_lower for marker in replay_command_markers)
+            and not is_inspection_only_python
+            and not is_artifact_search_command
+        ):
             replay_command_count += 1
         if any(marker in command_lower for marker in negative_search_markers) and not output.strip():
             negative_artifact_search_count += 1
@@ -702,6 +712,72 @@ def _text_has_codex_attempt(text: str) -> bool:
     )
 
 
+def _text_has_mathematical_processing(text: str) -> bool:
+    """Detect a real mathematical step, not just metadata/file bookkeeping."""
+    body = (text or "").strip().lower()
+    if len(body) < 180:
+        return False
+    processing_markers = (
+        "case split",
+        "case analysis",
+        "base case",
+        "induction",
+        "invariant",
+        "lemma",
+        "sublemma",
+        "theorem",
+        "proof obligation",
+        "reduced to",
+        "reduction",
+        "canonical",
+        "normal form",
+        "enumerated",
+        "exhaustive",
+        "search space",
+        "bounded search",
+        "finite check",
+        "certificate",
+        "verifier",
+        "sat",
+        "unsat",
+        "cnf",
+        "drat",
+        "lrat",
+        "graph",
+        "matrix",
+        "determinant",
+        "construction",
+        "counterexample",
+        "obstruction",
+        "recurrence",
+        "bound",
+    )
+    outcome_markers = (
+        "blocked by",
+        "first failed",
+        "fails because",
+        "confirmed",
+        "refuted",
+        "proved",
+        "not proved",
+        "cannot close",
+        "missing lemma",
+        "missing certificate",
+        "counterexample",
+        "obstruction",
+        "pass",
+        "fail",
+        "unsat",
+        "sat",
+        "hash",
+        "sha",
+        "therefore",
+    )
+    return any(marker in body for marker in processing_markers) and any(
+        marker in body for marker in outcome_markers
+    )
+
+
 def _substantive_local_workup_check(
     target_dir: Path,
     workup: str,
@@ -731,19 +807,22 @@ def _substantive_local_workup_check(
         diagnostics.append(
             "Codex attempt before Oracle is missing or does not describe a real proof/computation/replay attempt and outcome"
         )
+    if not _text_has_mathematical_processing("\n".join([attempt_body, obligations_body, report])):
+        diagnostics.append(
+            "Codex attempt before Oracle does not show a mathematical processing step such as a verifier/replay, finite check, proof decomposition, case split, construction test, or named proof blocker"
+        )
     if not _text_has_concrete_local_fact(question):
         diagnostics.append("next_oracle_question.md does not cite a concrete local fact Oracle must respect")
 
     if codex_trace is not None:
         replay_count = int(codex_trace.get("replay_command_count") or 0)
         inspection_count = int(codex_trace.get("inspection_command_count") or 0)
-        negative_count = int(codex_trace.get("negative_artifact_search_count") or 0)
         evidence_output = bool(codex_trace.get("has_evidence_output"))
         if inspection_count <= 0:
             diagnostics.append("Codex command trace lacks target inspection commands")
-        if replay_count <= 0 and negative_count <= 0 and not evidence_output:
+        if replay_count <= 0 and not evidence_output:
             diagnostics.append(
-                "Codex command trace lacks replay/check commands, negative artifact searches, or evidence output"
+                "Codex command trace lacks replay/check commands or evidence output; artifact search alone is not enough before Oracle"
             )
 
     return {
@@ -752,6 +831,9 @@ def _substantive_local_workup_check(
         "question_cites_local_fact": _text_has_concrete_local_fact(question),
         "workup_has_concrete_local_fact": _text_has_concrete_local_fact(evidence_blob),
         "workup_has_codex_attempt": _text_has_codex_attempt(attempt_body),
+        "workup_has_mathematical_processing": _text_has_mathematical_processing(
+            "\n".join([attempt_body, obligations_body, report])
+        ),
     }
 
 
@@ -1027,14 +1109,16 @@ def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
 Target: {todo_id} — {title}
 Source: {source}
 
-The Oracle/ChatGPT stage supplies mathematical ideas, search, and deep proof attempts. Your job is the local counterpart before and after Oracle: inspect the target on disk, run any feasible local computation/replay, create or repair verifier scripts when honest, and write a compact `codex_workup.md` that tells Oracle exactly what remains to prove or compute.
+The Oracle/ChatGPT stage supplies mathematical ideas, search, and deep proof attempts. Your job is the local counterpart before and after Oracle: inspect the target on disk, do one real local mathematical processing step, run any feasible local computation/replay, create or repair verifier scripts when honest, and write a compact `codex_workup.md` that tells Oracle exactly what remains to prove or compute.
 
 Do not ask the user for clarification. Do not contact Oracle. Do not send email, post comments, call gh, commit, or push. Keep edits inside `tools/community-outreach/targets/{target_dir.name}/` unless a tiny pipeline-local support change is absolutely required.
 
 Scientific honesty rule:
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/codex_workup.md`; this is the main handoff Oracle will read next.
 - Always create or refresh `tools/community-outreach/targets/{target_dir.name}/next_oracle_question.md`; this must be the exact concise prompt that should be sent to Oracle next, based on your local workup.
-- It is not enough to append board metadata or draft a better question. Before writing the next Oracle question, actually process the target: inspect the target files, identify the newest testable claim if present, run a feasible replay/check or explicitly record why no local replay is possible yet.
+- It is not enough to append board metadata, list files, search for artifacts, or draft a better question. Before writing the next Oracle question, actually process the target: inspect the target files, identify the newest testable claim if present, and then do at least one mathematical step on that claim.
+- A valid mathematical step is one of: run/replay a verifier or finite checker; implement and run a small bounded search; test a construction or counterexample; compute a hash/determinant/CNF/SAT result that bears on the claim; split the proof into named lemmas and identify the first lemma that fails; reduce the target to a concrete finite certificate; or prove a local lemma by hand in `codex_workup.md` and state exactly where the proof stops.
+- An artifact search can support the workup, but artifact search alone is not a valid pre-Oracle attempt. If no local artifact exists, do a proof decomposition or bounded toy/sanity check before asking Oracle.
 - Do not mechanically repeat an expensive verifier if a fresh `results.json` or prior command log in this same target already records the exact replay result you need. In that case, inspect and cite the fresh artifact, run only a cheap sanity check such as JSON parsing or script self-tests if useful, then write the next Oracle handoff.
 - If the only honest local computation would exceed the current timeout, write a bounded-progress `local_repair_report.md` explaining the partial computation, the command that would continue it, and the exact Oracle question. Do not leave the pipeline silent while waiting for an unbounded local run.
 - If the target-local data is enough to implement the missing verifier/replay artifact, implement it and run it.
@@ -1099,7 +1183,7 @@ Required output actions:
    - include local computation results Oracle must respect;
    - ask for one concrete artifact/proof move/checkable obstruction.
 3. Identify the newest testable Oracle claim, if any; if there is no Oracle claim yet, build the initial local proof/computation plan from the board/profile artifacts.
-4. In `## Codex attempt before Oracle`, record the actual attempt you made before asking Oracle: a replay/check command and outcome; or a proof decomposition with the exact blocker; or a finite/manual construction attempt and the first failed check. A file manifest, metadata summary, or "ask Oracle to continue" is not acceptable.
+4. In `## Codex attempt before Oracle`, record the actual mathematical attempt you made before asking Oracle: a replay/check command and outcome; or a bounded computation/search; or a proof decomposition with named lemmas and the first exact blocker; or a finite/manual construction attempt and the first failed check. A file manifest, negative artifact search, metadata summary, or "ask Oracle to continue" is not acceptable.
 5. Edit or create target-local scripts/data only when they are needed for an honest replay/check.
 6. Run the relevant scripts locally when feasible.
 7. Update `results.json` only to reflect actually reproducible evidence.

@@ -115,6 +115,29 @@ def main() -> int:
         if substantive.get("ok"):
             raise AssertionError(f"inspection-only command trace should not pass substantive gate: {substantive}")
 
+        negative_search_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'find {rel_target} -name \"*.lrat\" -o -name \"*.drat\"'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": "",
+            }
+        }
+        stdout_path.write_text(json.dumps(negative_search_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("negative_artifact_search_count") or 0) <= 0:
+            raise AssertionError(f"negative artifact search was not counted: {trace}")
+        substantive = local_repair._substantive_local_workup_check(
+            target_dir,
+            _workup(include_attempt=True),
+            "The local `.lrat` certificate search found no proof file.",
+            "Ran a target artifact search and found no LRAT/DRAT certificate.",
+            codex_trace=trace,
+        )
+        if substantive.get("ok"):
+            raise AssertionError(f"negative artifact search alone should not pass substantive gate: {substantive}")
+
         replay_event = {
             "item": {
                 "type": "command_execution",
