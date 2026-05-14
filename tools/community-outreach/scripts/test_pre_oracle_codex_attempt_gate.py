@@ -151,6 +151,22 @@ def main() -> int:
         trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
         if int(trace.get("replay_command_count") or 0) <= 0 or not trace.get("has_evidence_output"):
             raise AssertionError(f"real target-local check was not counted as replay/evidence: {trace}")
+        ungrounded = local_repair._substantive_local_workup_check(
+            target_dir,
+            _workup(include_attempt=True),
+            (
+                "Prove the exact theorem by finding a new certificate and explain the "
+                "remaining obstruction in a complete publishable argument."
+            ),
+            (
+                "Ran command `python3 demo/scripts/check_slice.py --case finite --json`; "
+                "the finite certificate replay passed with sha256=abc123, but case 3 still "
+                "needs an Oracle-supplied lemma."
+            ),
+            codex_trace=trace,
+        )
+        if ungrounded.get("ok") or ungrounded.get("question_grounded_in_local_work"):
+            raise AssertionError(f"ungrounded concrete Oracle question should fail: {ungrounded}")
 
         reserved_before = local_repair._snapshot_reserved_harness_files(target_dir)
         (target_dir / "local_repair_last.json").write_text(

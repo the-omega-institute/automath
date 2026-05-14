@@ -67,7 +67,8 @@ TASK_TIMEOUT = 14400  # 4 hours; ChatGPT Pro thinking can be 60+ min/turn
 AGENT_RECENT_SECONDS = 120
 STALE_REQUEUE_SECONDS = 900
 SESSION_IDLE_RETENTION = 14 * 24 * 3600  # keep sessions on disk for 14 days
-MIN_SCRIPT_VERSION = "outreach-1.22"
+MIN_SCRIPT_VERSION = "outreach-1.21"
+RECOMMENDED_SCRIPT_VERSION = "outreach-1.22"
 OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem"
 OPENPROBLEM_PROJECT_URL = f"https://chatgpt.com{OPENPROBLEM_PROJECT_PREFIX}/project"
 
@@ -709,6 +710,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                     self._send_json({
                         "status": "idle",
                         "required_script_version": MIN_SCRIPT_VERSION,
+                        "recommended_script_version": RECOMMENDED_SCRIPT_VERSION,
                         "agent_script_version": poll_metrics["script_version"],
                     })
                     return
@@ -795,6 +797,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                     "port": PORT,
                     "kind": "outreach-oracle",
                     "required_script_version": MIN_SCRIPT_VERSION,
+                    "recommended_script_version": RECOMMENDED_SCRIPT_VERSION,
                     "required_project_url": OPENPROBLEM_PROJECT_URL,
                     "diagnosis": diagnosis,
                 })
@@ -1329,6 +1332,7 @@ def main():
     print(f"[outreach-oracle] recovered {recovered} pending task(s) from sessions")
     print(f"[outreach-oracle] max {MAX_AGENTS} concurrent tabs (multi-turn capable)")
     print(f"[outreach-oracle] required script version: {MIN_SCRIPT_VERSION}")
+    print(f"[outreach-oracle] recommended script version: {RECOMMENDED_SCRIPT_VERSION}")
     print(f"[outreach-oracle] required project URL: {OPENPROBLEM_PROJECT_URL}")
     print(f"[outreach-oracle] open tabs:")
     for i in range(1, MAX_AGENTS + 1):

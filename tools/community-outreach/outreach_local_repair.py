@@ -631,6 +631,71 @@ def _text_has_concrete_local_fact(text: str) -> bool:
     return any(marker in lowered for marker in fact_markers)
 
 
+def _local_grounding_tokens(text: str) -> set[str]:
+    """Extract target-local tokens that can ground the next Oracle question.
+
+    Generic mathematical words are intentionally ignored here.  The question
+    should reuse something Codex actually observed: a target path, artifact
+    name, command/script, hash, finite case label, or exact local status token.
+    """
+    body = text or ""
+    lowered = body.lower()
+    tokens: set[str] = set()
+    patterns = (
+        r"tools/community-outreach/targets/[A-Za-z0-9_.\-/]+",
+        r"\b[A-Za-z0-9_.\-/]*(?:results\.json|verify[A-Za-z0-9_.-]*\.py|check[A-Za-z0-9_.-]*\.py|oracle_claim_packet_[A-Za-z0-9_.-]*\.md)\b",
+        r"\b[A-Za-z0-9_.\-/]+\.(?:json|py|cnf|drat|lrat|rup|g6|graph6|edge|vtx|sage|m)\b",
+        r"\b(?:sha-?256|hash)\s*[:= ]\s*[a-f0-9]{6,64}\b",
+        r"\bcase[- ]?\d+\b",
+        r"\b(?:n|k|m)\s*=\s*\d+\b",
+        r"\b(?:\d+)\s+(?:vertices|edges|clauses|variables)\b",
+    )
+    for pattern in patterns:
+        for match in re.findall(pattern, body, flags=re.IGNORECASE):
+            token = match if isinstance(match, str) else " ".join(match)
+            token = re.sub(r"\s+", " ", token.strip().lower())
+            if len(token) >= 4:
+                tokens.add(token)
+    local_status_phrases = (
+        "no local replay",
+        "found no",
+        "not present",
+        "first failed check",
+        "missing certificate",
+        "missing lemma",
+        "missing proof",
+        "failed at the first local check",
+        "exit 0",
+        "exited 0",
+        "unsat",
+        "sat",
+    )
+    for phrase in local_status_phrases:
+        if phrase in lowered:
+            tokens.add(phrase)
+    return tokens
+
+
+def _question_is_grounded_in_local_work(question: str, evidence: str, *, target_name: str = "") -> tuple[bool, str]:
+    """Require the next Oracle question to be based on Codex's local workup."""
+    q = (question or "").lower()
+    if not q.strip():
+        return False, "next_oracle_question.md is empty"
+    evidence_tokens = _local_grounding_tokens(evidence)
+    if target_name:
+        evidence_tokens.add(target_name.lower())
+    matched = sorted(token for token in evidence_tokens if token and token in q)
+    if matched:
+        return True, ""
+    return (
+        False,
+        "next_oracle_question.md is not grounded in this Codex workup: it must reuse "
+        "a target-local path/artifact, command result, hash, finite case label, or "
+        "explicit local failure that appears in Local evidence checked / Commands run / "
+        "Verifier status / local_repair_report.md",
+    )
+
+
 def _text_has_codex_attempt(text: str) -> bool:
     """Require a real local/proof attempt before Oracle gets the next prompt.
 
@@ -814,6 +879,13 @@ def _substantive_local_workup_check(
         )
     if not _text_has_concrete_local_fact(question):
         diagnostics.append("next_oracle_question.md does not cite a concrete local fact Oracle must respect")
+    grounded, grounding_reason = _question_is_grounded_in_local_work(
+        question,
+        evidence_blob,
+        target_name=target_name,
+    )
+    if not grounded:
+        diagnostics.append(grounding_reason)
 
     if codex_trace is not None:
         replay_count = int(codex_trace.get("replay_command_count") or 0)
@@ -830,6 +902,7 @@ def _substantive_local_workup_check(
         "ok": not diagnostics,
         "diagnostics": diagnostics,
         "question_cites_local_fact": _text_has_concrete_local_fact(question),
+        "question_grounded_in_local_work": grounded,
         "workup_has_concrete_local_fact": _text_has_concrete_local_fact(evidence_blob),
         "workup_has_codex_attempt": _text_has_codex_attempt(attempt_body),
         "workup_has_mathematical_processing": _text_has_mathematical_processing(
