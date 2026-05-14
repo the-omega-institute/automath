@@ -1,0 +1,139 @@
+\begin{corollary}[One-scale transport identity under the Lee--Yang unit-circle hypothesis]\label{cor:leyang-transport-identity}
+In the setting of Theorem \ref{thm:pullback-factorization}, assume that \(K\subseteq\CC\), that every zero \(z_j\) of \(P\) satisfies \(|z_j|=1\), and that \(r\in\RR_{>0}\). Then for every \(z\in\CC^\times\),
+\[
+Q_r\!\bigl(J_r(z)\bigr)=a_n^{-1}r^n\,P(z)\,P\!\bigl(r^{-2}z^{-1}\bigr).
+\]
+Although the algebraic identity itself does not use the unit-circle hypothesis, we retain that assumption here because it is needed in the geometric corollaries below.
+\end{corollary}
+
+\begin{proof}
+By Theorem \ref{thm:pullback-factorization},
+\[
+r^n z^n\,Q_r\!\bigl(J_r(z)\bigr)=P(z)\,P^{\vee}(r^2 z).
+\]
+Since \(P^{\vee}(u)=a_n^{-1}u^nP(1/u)\), substituting \(u=r^2 z\) gives
+\[
+P^{\vee}(r^2 z)=a_n^{-1}r^{2n}z^n P(r^{-2}z^{-1}).
+\]
+Cancelling the common factor \(z^n\) yields the claim.
+\end{proof}
+
+\begin{corollary}[Double-resultant elimination and concentric spectral shells]\label{cor:leyang-double-resultant}
+Retain the hypotheses of Corollary \ref{cor:leyang-transport-identity}, and define
+\[
+S_r(z):=\operatorname{Res}_w\!\bigl(Q_r(w),\,r z^2-w z+r^{-1}\bigr)\in K(r)[z].
+\]
+Then
+\[
+S_r(z)=a_n^{-1} r^{n}\,P(z)\,\Bigl[z^{n}P\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+\]
+Consequently,
+\[
+\mathrm{Zero}(S_r)
+=\{z_1,\dots,z_n\}\cup\{r^{-2}z_1^{-1},\dots,r^{-2}z_n^{-1}\},
+\]
+where the two clusters lie on the circles \(|z|=1\) and \(|z|=r^{-2}\), respectively.
+\end{corollary}
+
+\begin{proof}
+Because \(r z^2-w z+r^{-1}=z(J_r(z)-w)\) is linear in \(w\), the resultant convention fixed in Section \ref{sec:preliminaries} gives
+\[
+\operatorname{Res}_w\!\bigl(Q_r(w),\,r z^2-w z+r^{-1}\bigr)
+=z^n\,Q_r\!\left(\frac{r z^2+r^{-1}}{z}\right)
+=z^n Q_r\!\bigl(J_r(z)\bigr).
+\]
+Substituting Corollary \ref{cor:leyang-transport-identity} yields
+\[
+S_r(z)=z^n a_n^{-1}r^n P(z)P(r^{-2}z^{-1})
+=a_n^{-1}r^{n}P(z)\,\Bigl[z^{n}P\!\bigl(r^{-2}z^{-1}\bigr)\Bigr],
+\]
+which is the required factorization. The description of the zero set follows immediately from the two factors.
+\end{proof}
+
+\begin{definition}[Noiseless full-polynomial Lee--Yang reconstruction data]\label{def:noiseless-leyang-reconstruction-data}
+A noiseless one-scale Lee--Yang reconstruction datum is a pair \((r,Q)\) with the following exact information.
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item The scale \(r\in\RR\) is known exactly and satisfies \(r>1\).
+  \item The polynomial \(Q\in\CC[w]\) is given by its full coefficient list, not by samples, truncations, moments, or noisy approximations.
+  \item The datum is certified to lie in the monic Lee--Yang transport class: there exists a monic polynomial \(P\in\CC[u]\), all of whose zeros lie on \(\TT\), such that \(Q=Q_r\) for \(P\) under Definition \ref{def:reciprocal-transport-normalization}.
+\end{enumerate}
+The degree of the hidden Lee--Yang polynomial is part of the recovered information, not an external input: it is
+\[
+n=\deg_w Q,
+\]
+because the leading coefficient of \(Q_r\) is \(a_0\ne0\).  Exact shell selection means the following algebraic operation.  Form
+\[
+S_{r,Q}(z):=\operatorname{Res}_w\!\bigl(Q(w),\,r z^2-w z+r^{-1}\bigr),
+\]
+factor it over its exact splitting field with multiplicities, and select the sub-divisor supported on \(|z|=1\).  Equivalently, after choosing any exact real \(\rho\) with \(r^{-2}<\rho<1\), select the degree-\(n\) sub-divisor supported in \(|z|>\rho\).  This definition excludes partial coefficient data, numerical thresholding, and stability assertions under perturbation.
+\end{definition}
+
+\begin{proposition}[Exact reconstruction interface and shell-factor selection]\label{prop:exact-reconstruction-interface}
+Fix a noiseless one-scale Lee--Yang reconstruction datum \((r,Q)\) in the sense of Definition \ref{def:noiseless-leyang-reconstruction-data}, and let \(P\) be the certified monic Lee--Yang source polynomial.  Put \(n=\deg_w Q\) and define
+\[
+S_{r,Q}(z):=\operatorname{Res}_w\!\bigl(Q(w),\,r z^2-w z+r^{-1}\bigr).
+\]
+The reconstruction interface is the following exact algebraic procedure.
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item Recover \(n\) as \(\deg_w Q\).
+  \item Compute the resultant \(S_{r,Q}\) as a polynomial in \(z\).  Equivalently, because \(r z^2-wz+r^{-1}=z(J_r(z)-w)\), compute \(S_{r,Q}(z)=z^n Q(J_r(z))\) and expand.
+  \item Factor \(S_{r,Q}\) over the exact splitting field, keeping multiplicities in its zero divisor.
+  \item Select precisely the degree-\(n\) sub-divisor supported on \(|z|=1\), equivalently the degree-\(n\) sub-divisor in \(|z|>\rho\) for any exact \(\rho\) with \(r^{-2}<\rho<1\), and define \(P_{\mathrm{rec}}\) to be the unique monic polynomial whose zero divisor is that selected sub-divisor.
+\end{enumerate}
+Then \(P_{\mathrm{rec}}=P\).  In particular, repeated Lee--Yang zeros are reconstructed with their original multiplicities, and the normalization ambiguity is removed by the final monic normalization.
+\end{proposition}
+
+\begin{proof}
+Since \(P\) is monic, the double-resultant identity of Corollary \ref{cor:leyang-double-resultant} gives
+\[
+S_{r,Q}(z)=r^n P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+\]
+Since \(Q=Q_r\) has leading coefficient \(a_0\ne0\), its degree is the degree \(n\) of \(P\), proving the degree-recovery step.  If \(\zeta\) is a zero of \(P\) of multiplicity \(m\), then \(|\zeta|=1\) and the first factor contributes exactly multiplicity \(m\) at \(z=\zeta\).  The corresponding zero of the second factor is \(r^{-2}\zeta^{-1}\), again with multiplicity \(m\), and it lies on the circle \(|z|=r^{-2}<1\).  Thus the two factors of \(S_{r,Q}\) have disjoint radial supports: one shell is \(|z|=1\), and the other is \(|z|=r^{-2}\).  Selection of the unit-circle sub-divisor is therefore well-defined and preserves all multiplicities, even when several zeros of \(P\) coincide.  The annular selection with \(r^{-2}<\rho<1\) is equivalent because the outer shell is precisely \(|z|=1\) and the inner shell is precisely \(|z|=r^{-2}\).
+
+The monic polynomial with a prescribed finite zero divisor is unique, namely \(\prod_\zeta (z-\zeta)^{m_\zeta}\).  Applying this to the selected unit-circle divisor yields exactly the original monic polynomial \(P\).  The computation uses the exact value of \(r\), the full polynomial \(Q_r\), and exact factorization or equivalent exact zero-divisor data; no numerical thresholding or partial observation enters the argument.
+\end{proof}
+
+\begin{theorem}[Exact one-scale Lee--Yang inverse theorem]\label{thm:leyang-single-scale-reconstruction}
+Fix an exact real number \(r>1\).  Let \(\mathcal L\) be the class of all monic polynomials \(P\in\CC[z]\) of positive degree with every zero on \(\TT\), counted with multiplicity, and with nonzero constant term.  For \(P\in\mathcal L\), let \(Q_r\) be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}.  Then the one-scale transport map
+\[
+\mathcal T_r:\ P\longmapsto Q_r
+\]
+is injective on \(\mathcal L\).  More explicitly, the input consists exactly of the noiseless full-polynomial datum \((r,Q_r)\): the scale \(r\) is known exactly, every coefficient of \(Q_r\) is known exactly, and the datum is certified to lie in the monic Lee--Yang transport class.  The output is the unique source polynomial \(P\), recovered by the following finite algebraic procedure:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item set \(n=\deg_w Q_r\);
+  \item form
+  \[
+  S_r(z)=\operatorname{Res}_w\!\bigl(Q_r(w),rz^2-wz+r^{-1}\bigr);
+  \]
+  \item take the degree-\(n\) zero sub-divisor of \(S_r\) supported on \(|z|=1\), equivalently supported in \(|z|>\rho\) for any exact \(\rho\) with \(r^{-2}<\rho<1\);
+  \item return the monic polynomial with that zero divisor.
+\end{enumerate}
+This theorem asserts exact uniqueness and reconstruction only in the certified noiseless full-coefficient regime.  It excludes noisy observations, truncated coefficient lists, unknown scale, approximate shell separation, and stability under perturbation.
+\end{theorem}
+
+\begin{proof}
+For each \(P\in\mathcal L\), the hypotheses of Corollary \ref{cor:leyang-double-resultant} hold with \(K=\CC\), and monicity gives \(a_n=1\).  Hence
+\[
+S_r(z)=r^n\,P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+\]
+When \(r>1\), every zero of the second factor lies on \(|z|=r^{-2}<1\), whereas the zeros of \(P\) lie on \(|z|=1\). The two spectral shells are therefore disjoint.  Also \(Q_r\) has degree \(n=\deg P\), because the leading coefficient in the transport polynomial is the nonzero constant term of the monic source polynomial.
+
+The procedure listed in the theorem is exactly the procedure in Proposition \ref{prop:exact-reconstruction-interface}; that proposition proves that the selected unit-circle zero divisor, with multiplicities, is the zero divisor of \(P\), and the monic polynomial with a prescribed zero divisor is unique.  Therefore the output of the procedure is the original source polynomial.  If \(\mathcal T_r(P_1)=\mathcal T_r(P_2)\), then the same input pair \((r,Q_r)\) gives the same resultant and hence the same selected unit-circle divisor; the reconstruction procedure returns both \(P_1\) and \(P_2\), so \(P_1=P_2\).  The final exclusions are precisely the hypotheses not used in the algebraic shell argument: the proof requires exact \(r\), the full polynomial \(Q_r\), certification of the Lee--Yang transport class, and exact factorization or equivalent exact zero-divisor data.
+\end{proof}
+
+\begin{corollary}[Annular shell projection certificate]\label{cor:leyang-annular-shell-projection}
+Under the hypotheses of Theorem \ref{thm:leyang-single-scale-reconstruction}, let \(\rho\) be any real number satisfying
+\[
+r^{-2}<\rho<1.
+\]
+Then \(P\) is equivalently recovered as the unique monic degree-\(n\) factor of \(S_r\) whose zeros lie in the exterior annulus \(\{|z|>\rho\}\). The complementary monic factor has all its zeros in \(\{|z|<\rho\}\). Thus the one-scale reconstruction used here is an exact spectral-shell projection, not a partial-data or noisy inverse theorem.
+\end{corollary}
+
+\begin{proof}
+By Corollary \ref{cor:leyang-double-resultant}, the zeros of \(S_r\) are the disjoint union
+\[
+\{z_1,
+\dots,z_n\}\cup\{r^{-2}z_1^{-1},\dots,r^{-2}z_n^{-1}\}.
+\]
+The first set lies on \(|z|=1\), hence in \(|z|>\rho\). The second lies on \(|z|=r^{-2}\), hence in \(|z|<\rho\). Therefore exactly \(n\) zeros of \(S_r\), counted with multiplicity, lie in the exterior annulus \(|z|>\rho\), and they are precisely the zeros of \(P\). Since \(P\) is monic, these zeros determine the monic degree-\(n\) factor uniquely. The final sentence records the hypotheses used in the argument: the full polynomial \(Q_r\), the exact value of \(r\), and the exact shell separation are all part of the reconstruction input.
+\end{proof}
