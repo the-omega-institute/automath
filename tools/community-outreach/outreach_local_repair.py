@@ -111,8 +111,11 @@ def _target_file_manifest(target_dir: Path) -> str:
     if not target_dir.exists():
         return "(target directory missing)"
     rows: list[str] = []
+    hidden_names = set(RESERVED_HARNESS_FILES) if "RESERVED_HARNESS_FILES" in globals() else set()
     for path in sorted(target_dir.glob("*")):
         if not path.is_file():
+            continue
+        if path.name in hidden_names:
             continue
         try:
             stat = path.stat()
@@ -1311,16 +1314,25 @@ def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
         title = todo.title
         statement = todo.statement
         source = todo.source
-    research_md = _read_text(target_dir / "research.md", limit=12000)
-    codex_workup = _read_text(target_dir / "codex_workup.md", limit=12000)
-    results_json = _read_text(target_dir / "results.json", limit=18000)
-    profile_json = _read_text(target_dir / "profile.json", limit=8000)
+    # Keep the prompt execution-shaped.  The worker has filesystem access and
+    # should inspect target files itself; dumping every prior artifact into the
+    # prompt makes it behave like a summarizer instead of a local executor.
+    research_md = _read_text(target_dir / "research.md", limit=5000)
+    codex_workup = _read_text(target_dir / "codex_workup.md", limit=5000)
+    results_json = _read_text(target_dir / "results.json", limit=8000)
+    profile_json = _read_text(target_dir / "profile.json", limit=4000)
     return f"""You are Codex running as the LOCAL_CODEX_WORKUP worker for the Omega outreach open-problem pipeline.
 
 Target: {todo_id} — {title}
 Source: {source}
 
 The Oracle/ChatGPT stage supplies mathematical ideas, search, and deep proof attempts. Your job is the local counterpart before and after Oracle: inspect the target on disk, do one real local mathematical processing step, run any feasible local computation/replay, create or repair verifier scripts when honest, and write a compact `codex_workup.md` that tells Oracle exactly what remains to prove or compute.
+
+Immediate execution contract:
+- First inspect the target directory and identify the current newest testable claim or proof blocker.
+- Then perform one target-local mathematical action before writing `next_oracle_question.md`: run/replay a checker, build and run a bounded finite test, verify/refute a certificate fragment, compute a relevant exact value/hash/CNF/SAT result, or decompose a proof into named lemmas and isolate the first blocker.
+- Only after that action, write the Oracle question as the remaining gap discovered by your local action.
+- Do not merely add metadata, rewrite the board card, restate the science gate, or improve the wording of a prompt.
 
 Do not ask the user for clarification. Do not contact Oracle. Do not send email, post comments, call gh, commit, or push. Keep edits inside `tools/community-outreach/targets/{target_dir.name}/` unless a tiny pipeline-local support change is absolutely required.
 
@@ -1354,29 +1366,29 @@ Target file manifest:
 Problem statement:
 {statement}
 
-Existing profile.json excerpt:
+Existing profile.json excerpt (clipped; read the file directly if needed):
 ```json
 {profile_json or "{}"}
 ```
 
-Existing results.json excerpt:
+Existing results.json excerpt (clipped; read the file directly if needed):
 ```json
 {results_json or "{}"}
 ```
 
-Existing research.md excerpt:
+Existing research.md excerpt (clipped; read the file directly if needed):
 ```markdown
 {research_md or "(missing)"}
 ```
 
-Existing codex_workup.md excerpt:
+Existing codex_workup.md excerpt (clipped; read the file directly if needed):
 ```markdown
 {codex_workup or "(missing)"}
 ```
 
-Latest Oracle claim packets:
+Latest substantive Oracle claim packet (clipped; read older packets directly only if needed):
 ```markdown
-{_latest_claim_packets(target_dir)}
+{_latest_claim_packets(target_dir, count=1, limit_each=8000)}
 ```
 
 Required output actions:
