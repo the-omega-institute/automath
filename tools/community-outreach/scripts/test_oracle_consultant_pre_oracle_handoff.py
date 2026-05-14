@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+import tempfile
+import time
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parents[1]
@@ -103,6 +105,39 @@ def main() -> int:
     )
     if slug_only:
         raise AssertionError("slug-only Oracle question should not count as locally grounded")
+
+    with tempfile.TemporaryDirectory(dir=SCRIPT_DIR) as tmp:
+        target_root = Path(tmp)
+        target_dir = target_root / "demo"
+        target_dir.mkdir()
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            (target_dir / name).write_text(_workup(), encoding="utf-8")
+        oracle.TARGETS_DIR = target_root
+        ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
+        if not ok:
+            raise AssertionError(f"fresh handoff without claim packet should pass: {reason}")
+
+        time.sleep(0.02)
+        claim = target_dir / "oracle_claim_packet_new.md"
+        claim.write_text(
+            "# Oracle Claim Packet\n\n## Oracle Response\n\n"
+            "Here is a substantive claim: the finite verifier closes case 7 with sha256=abc123.\n",
+            encoding="utf-8",
+        )
+        ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
+        if ok or "older than latest substantive Oracle claim" not in reason:
+            raise AssertionError(
+                "handoff older than newest substantive Oracle claim was not rejected: "
+                f"ok={ok} reason={reason!r}"
+            )
+
+        time.sleep(0.02)
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            path = target_dir / name
+            path.write_text(path.read_text(encoding="utf-8") + "\nRefreshed after claim.\n", encoding="utf-8")
+        ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
+        if not ok:
+            raise AssertionError(f"handoff refreshed after claim should pass: {reason}")
 
     return 0
 
