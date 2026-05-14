@@ -961,17 +961,27 @@ def _parse_iso_time(value: str) -> float | None:
         return None
 
 
-def _last_local_repair_finished_at(slug: str) -> tuple[float | None, str]:
+def _last_local_repair_window(slug: str) -> tuple[float | None, float | None, str]:
     path = TARGETS_DIR / slug / "local_repair_last.json"
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except OSError:
-        return None, "missing local_repair_last.json"
+        return None, None, "missing local_repair_last.json"
     except json.JSONDecodeError as exc:
-        return None, f"invalid local_repair_last.json: {exc}"
+        return None, None, f"invalid local_repair_last.json: {exc}"
+    started = _parse_iso_time(str(payload.get("started_at") or ""))
+    if started is None:
+        return None, None, "last local repair missing valid started_at"
     finished = _parse_iso_time(str(payload.get("finished_at") or ""))
     if finished is None:
-        return None, "last local repair missing valid finished_at"
+        return None, None, "last local repair missing valid finished_at"
+    return started, finished, ""
+
+
+def _last_local_repair_finished_at(slug: str) -> tuple[float | None, str]:
+    _started, finished, reason = _last_local_repair_window(slug)
+    if finished is None:
+        return None, reason
     return finished, ""
 
 
@@ -1105,11 +1115,11 @@ def _pre_oracle_workup_recent(slug: str, *, max_age_seconds: int) -> tuple[bool,
         oldest_age = max(oldest_age, time.time() - stat.st_mtime)
     if oldest_age > max_age_seconds:
         return False, f"Codex handoff older than reuse window ({oldest_age:.0f}s > {max_age_seconds}s)"
-    repair_finished, repair_reason = _last_local_repair_finished_at(slug)
-    if repair_finished is None:
+    repair_started, repair_finished, repair_reason = _last_local_repair_window(slug)
+    if repair_started is None or repair_finished is None:
         return False, repair_reason
-    if oldest_mtime < repair_finished - 2.0:
-        return False, "Codex handoff files are older than last local repair completion"
+    if oldest_mtime < repair_started - 2.0:
+        return False, "Codex handoff files are older than last local repair start"
     latest_claim = _latest_substantive_claim_packet(target_dir)
     if latest_claim is not None and oldest_mtime < latest_claim.stat().st_mtime:
         return (

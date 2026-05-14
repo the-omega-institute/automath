@@ -133,6 +133,33 @@ def main() -> int:
         if not ok:
             raise AssertionError(f"fresh handoff without claim packet should pass: {reason}")
 
+        long_run_finished = now + 600
+        long_run_payload = json.loads(_local_repair_last(rel_stdout, finished_at=long_run_finished))
+        long_run_payload["started_at"] = _iso_from_epoch(now - 2)
+        (target_dir / "local_repair_last.json").write_text(json.dumps(long_run_payload, indent=2), encoding="utf-8")
+        ok, reason = dispatch._pre_oracle_codex_workup_recent("demo", max_age_seconds=3600)
+        if not ok:
+            raise AssertionError(
+                "handoff written during a long local-repair run should be reusable after finish: "
+                f"{reason}"
+            )
+        stale_started_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now + 600))
+        stale_started_payload["started_at"] = _iso_from_epoch(now + 5)
+        (target_dir / "local_repair_last.json").write_text(
+            json.dumps(stale_started_payload, indent=2),
+            encoding="utf-8",
+        )
+        ok, reason = dispatch._pre_oracle_codex_workup_recent("demo", max_age_seconds=3600)
+        if ok or "older than last local repair start" not in reason:
+            raise AssertionError(
+                "handoff older than local-repair start should not be reusable: "
+                f"ok={ok} reason={reason!r}"
+            )
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=now - 2),
+            encoding="utf-8",
+        )
+
         dispatch.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
         dispatch.LOCAL_REPAIR_SCRIPT_DEFAULT = repo_root / "missing_local_repair.py"
         ok, reason, _log = dispatch._run_pre_oracle_codex_workup("T-DEMO", "demo", timeout=60)

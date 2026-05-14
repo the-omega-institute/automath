@@ -181,6 +181,33 @@ def main() -> int:
         if not ok:
             raise AssertionError(f"fresh handoff without claim packet should pass: {reason}")
 
+        long_run_finished = now + 600
+        long_run_payload = json.loads(_local_repair_last(rel_stdout, finished_at=long_run_finished))
+        long_run_payload["started_at"] = _iso_from_epoch(now - 2)
+        (target_dir / "local_repair_last.json").write_text(json.dumps(long_run_payload, indent=2), encoding="utf-8")
+        ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
+        if not ok:
+            raise AssertionError(
+                "handoff written during a long local-repair run should be reusable after finish: "
+                f"{reason}"
+            )
+        stale_started_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now + 600))
+        stale_started_payload["started_at"] = _iso_from_epoch(now + 5)
+        (target_dir / "local_repair_last.json").write_text(
+            json.dumps(stale_started_payload, indent=2),
+            encoding="utf-8",
+        )
+        ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
+        if ok or "older than last local repair start" not in reason:
+            raise AssertionError(
+                "handoff older than local-repair start should not be reusable: "
+                f"ok={ok} reason={reason!r}"
+            )
+        (target_dir / "local_repair_last.json").write_text(
+            _local_repair_last(rel_stdout, finished_at=now - 2),
+            encoding="utf-8",
+        )
+
         old_repo_root = oracle.REPO_ROOT
         oracle.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
         oracle.REPO_ROOT = target_root / "fake_repo_without_local_repair"
