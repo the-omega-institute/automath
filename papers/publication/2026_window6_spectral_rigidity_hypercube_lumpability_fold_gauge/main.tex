@@ -100,9 +100,26 @@ Let \(F:\Omega_m\twoheadrightarrow X\) be a surjection onto a finite state space
 \[
 A_m M = M B.
 \]
-Equivalently, every vertex in a block has the same number of neighbors in every other block; in that case \(P:=m^{-1}B\) is the transition matrix of the quotient chain. We refer to \(P\) as the pushforward kernel or quotient kernel associated with \(F\).
+Equivalently, every vertex in a block has the same number of neighbors in every other block; in that case \(P:=m^{-1}B\) is the transition matrix of the quotient chain. We refer to \(P\) as the equitable quotient kernel associated with \(F\).
+
+Even when \(F\) is not equitable there is a canonical audited pushforward obtained by choosing the lift inside the current fiber uniformly, making one hypercube step, and then forgetting the lift.
+Let \(D_F:=\operatorname{diag}(|F^{-1}(x)|:x\in X)\).  The audited pushforward kernel of \(T_m\) along \(F\) is the row-stochastic matrix
+\[
+P_F:=D_F^{-1}M^\top T_mM,
+\qquad
+P_F(x,y)=\frac{1}{m|F^{-1}(x)|}
+\#\{(\omega,i):\omega\in F^{-1}(x),\ F(\omega+e_i)=y\}.
+\]
+Thus an equitable partition is precisely the case in which the audited pushforward agrees with the genuine Markov quotient.  For the audited binary fold we write
+\[
+P_m^{\mathrm{bin}}:=P_{\Fold_m^{\mathrm{bin}}},
+\qquad
+P_6:=P_6^{\mathrm{bin}}.
+\]
 
 We write \(\varphi:=(1+\sqrt5)/2\) for the golden ratio and \(F_0:=0\), \(F_1:=1\), \(F_{n+2}:=F_{n+1}+F_n\) for the Fibonacci sequence.
+
+The fold certificate used below is a finite, reproducible model rather than an appeal to an external black box.  Its state space is the hard-core, or no-adjacent-ones, binary language of length \(m\); this is the symbolic boundary language whose Fibonacci counts are audited in Lemma \ref{lem:audited-binary-fold-certificate-identities}.  The window-\(6\) fibers are then chosen from the orbits of the geometric involution \(\sigma_{\mathrm{geo}}\), while the auxiliary windows \(7\) and \(8\) retain the prescribed three boundary fibers.  All spectral and gauge claims in the paper use only the data specified in the next definition and the exact pushforward convention above.
 
 \begin{definition}[Reproducible audited binary fold certificate]\label{def:audited-binary-fold-certificate}
 Let
@@ -182,6 +199,60 @@ The boundary cardinalities are read directly from the certificate.  In window \(
 Finally, an automorphism of \(\Fold_m^{\mathrm{bin}}\) is exactly a permutation of \(\Omega_m\) preserving every fiber setwise.  Such a permutation is independently an arbitrary element of the symmetric group on each fiber, giving the displayed direct product. \qedhere
 \end{proof}
 
+\begin{definition}[Fold-aware stable systems]\label{def:fold-aware-stable-system}
+Let \(I\subseteq\NN\) be directed by the usual order.  A fold-aware stable system on \(I\) consists of folds \(F_m:\Omega_m\twoheadrightarrow X_m\), surjections \(\rho_{n,m}:X_n\twoheadrightarrow X_m\) for \(n\ge m\), and surjections \(\pi_{n,m}:\Omega_n\to\Omega_m\) such that
+\[
+\rho_{m,m}=\operatorname{id},\qquad
+\rho_{p,m}=\rho_{n,m}\rho_{p,n},
+\qquad
+\pi_{m,m}=\operatorname{id},
+\qquad
+\pi_{p,m}=\pi_{n,m}\pi_{p,n},
+\]
+and
+\[
+F_m\pi_{n,m}=\rho_{n,m}F_n
+\qquad(n\ge m).
+\]
+It is fiberwise trivial over a compatible family of statistics \(s_m:X_m\to S\), with common target set \(S\), if the values satisfy \(s_n=s_m\rho_{n,m}\) and, for every \(y\in X_n\), the restriction
+\[
+\pi_{n,m}:F_n^{-1}(y)\longrightarrow F_m^{-1}(\rho_{n,m}(y))
+\]
+is a bijection.
+\end{definition}
+
+\begin{theorem}[Stable descent criterion for fold-gauge data]\label{thm:fold-aware-stable-descent}
+Let \((F_m,\rho_{n,m},\pi_{n,m})\) be a fold-aware stable system that is fiberwise trivial over statistics \(s_m:X_m\to S\) with common target set \(S\).  Then the statistics \(s_m\) descend to a single pro-object: for every \(p\ge n\ge m\),
+\[
+s_p=s_m\rho_{n,m}\rho_{p,n}.
+\]
+Moreover, the fiberwise bijections induce compatible diagonal embeddings of gauge groups
+\[
+\iota_{n,m}:\prod_{x\in X_m}\Sym(F_m^{-1}(x))
+\hookrightarrow
+\prod_{y\in X_n}\Sym(F_n^{-1}(y)),
+\]
+given on the factor over \(x\) by copying the same permutation to every fiber \(F_n^{-1}(y)\) with \(\rho_{n,m}(y)=x\) through the bijection \(\pi_{n,m}|_{F_n^{-1}(y)}\).  These embeddings satisfy
+\[
+\iota_{p,m}=\iota_{p,n}\iota_{n,m}.
+\]
+Consequently a cross-resolution gauge or capacity quantity is an invariant only after such fold-aware descent data have been specified; without them it is merely a statistic of the chosen certificate family.
+\end{theorem}
+\begin{proof}
+The first assertion is exactly the compatibility in Definition \ref{def:fold-aware-stable-system}:
+\[
+s_p=s_n\rho_{p,n}=s_m\rho_{n,m}\rho_{p,n}=s_m\rho_{p,m}.
+\]
+For the group statement, fix \(g=(g_x)_{x\in X_m}\in\prod_x\Sym(F_m^{-1}(x))\).  If \(y\in X_n\) and \(x=\rho_{n,m}(y)\), define
+\[
+\iota_{n,m}(g)|_{F_n^{-1}(y)}
+:=(\pi_{n,m}|_{F_n^{-1}(y)})^{-1}\,g_x\,(\pi_{n,m}|_{F_n^{-1}(y)}).
+\]
+Because the displayed restriction of \(\pi_{n,m}\) is a bijection, this is a well-defined permutation of the fiber over \(y\).  Different fibers of \(F_n\) are disjoint, so these permutations assemble uniquely into an element of the product gauge group at resolution \(n\).  The assignment is a homomorphism, since conjugation and direct products preserve multiplication.  If \(g\ne h\), choose a fiber \(x\) with \(g_x\ne h_x\).  Because \(\rho_{n,m}\) is a map between the state spaces of a stable system over the folds and the relevant fibers are nonempty, any nonempty preimage fiber over \(x\) detects the difference after conjugation; hence the displayed map is injective on the descended subsystem.  Finally, the identities \(\rho_{p,m}=\rho_{n,m}\rho_{p,n}\) and \(\pi_{p,m}=\pi_{n,m}\pi_{p,n}\) imply that conjugating directly from level \(m\) to level \(p\) is the same as conjugating first to level \(n\) and then to level \(p\).  This proves \(\iota_{p,m}=\iota_{p,n}\iota_{n,m}\).
+
+The last sentence follows because the construction used every item of descent data.  If no such data are supplied, there is no canonical map comparing fibers or gauge groups at different resolutions, so a numerical sequence such as a threshold count or capacity value is only the value of a statistic on each separately chosen certificate. \qedhere
+\end{proof}
+
 We shall repeatedly use the groupoid \(\mathbf{FinSet}_k^{\cong}\) of \(k\)-element sets and bijections, together with the Picard groupoid \(\mathbf{Tors}(\ZZ_2)\) of \(\ZZ_2\)-torsors. For a finite set \(S\) with \(|S|=k\), its orientation torsor is
 \[
 \mathrm{Or}(S):=\mathrm{Bij}([k],S)\big/\mathfrak A_k,
@@ -228,7 +299,7 @@ The results of this paper identify three complementary rigidity mechanisms for c
 
 From the viewpoint of stochastic modeling, the window-\(6\) audit is especially instructive. Its pushforward kernel violates the discrete spectral law required by equitable lumpability, yet its boundary sector still remembers a highly structured parity object and a chiral \(Q_4\) fingerprint. This combination suggests that realistic coarse models may preserve selected geometric and gauge-theoretic shadows of the ambient walk even after they cease to be exact Markov quotients. Understanding which invariants survive such failures should be relevant both for probabilistic model reduction and for coding-theoretic coarse descriptions on Hamming graphs \cite{macwilliams1977theory,godsil2001algebraic}.
 
-Several problems remain open. First, one would like a sharp converse to the spectral obstruction: which additional constraints, beyond spectral inclusion, characterize those audited pushforward kernels that truly arise from equitable hypercube partitions? Second, the orientation-torsor formalism should extend to other product graphs and association schemes, where higher-sign or determinant-type obstructions may coexist with non-binary local systems. Third, the low-degree homology formulas invite a stable theory for the family \(\mathcal G_m^{\mathrm{bin}}\), including explicit secondary operations and relations with Schur multipliers beyond degree \(2\) \cite{brown1982cohomology,nakaoka1961homology}. Finally, the underlying Lean formalization suggests a program of computer-verified coarse-graining theory in which spectral, parity, and entropy obstructions are certified simultaneously rather than independently.
+Several problems remain open. First, one would like a sharp converse to the spectral obstruction: which additional constraints, beyond spectral inclusion, characterize those audited pushforward kernels that truly arise from equitable hypercube partitions? Second, the orientation-torsor formalism should extend to other product graphs and association schemes, where higher-sign or determinant-type obstructions may coexist with non-binary local systems. Third, Theorem \ref{thm:fold-aware-stable-descent} shows exactly what extra transition data are needed before low-degree homology or capacity statistics can be promoted to cross-resolution invariants; constructing nontrivial stable fold systems with secondary operations and Schur-multiplier relations beyond degree \(2\) remains open \cite{brown1982cohomology,nakaoka1961homology}. Finally, the underlying Lean formalization suggests a program of computer-verified coarse-graining theory in which spectral, parity, and entropy obstructions are certified simultaneously rather than independently.
 
 %% ============================================================
 \bibliographystyle{plain}

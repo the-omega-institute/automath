@@ -1,9 +1,93 @@
-\begin{lemma}[Exact interval certificate for the audited window-\texorpdfstring{$6$}{6} eigenvalues]\label{lem:foldbin6-eigenvalue-interval-certificate}
-For the audited window-\(6\) pushforward kernel \(P_6\), the finite audit certificate consists of two real spectral values \(\lambda_1,\lambda_2\in\Spec(P_6)\) satisfying the rational enclosures
+\begin{proposition}[Exact audited window-\texorpdfstring{$6$}{6} pushforward matrix]\label{prop:foldbin6-exact-pushforward-matrix}
+Order \(X_6\) lexicographically as \(x_0,\ldots,x_{20}\).  For the fold certificate of Definition \ref{def:audited-binary-fold-certificate}, the audited pushforward kernel \(P_6\) is determined by the following directed edge-count matrix \(N=(N_{ij})_{0\le i,j\le 20}\):
 \[
-\frac{2420603929}{5000000000}<\lambda_1<\frac{4841207859}{10000000000},
+P_6(i,j)=\frac{N_{ij}}{6d_i},
 \qquad
-\frac{3015469877}{5000000000}<\lambda_2<\frac{1206187951}{2000000000}.
+(d_0,\ldots,d_{20})=(\underbrace{2,\ldots,2}_{16},1,1,1,1,28),
+\]
+where the nonzero entries of each row of \(N\) are
+\[
+\begin{array}{c|l}
+i&\{(j,N_{ij}):N_{ij}\ne0\}\\ \hline
+0&(1,2),(2,2),(4,2),(8,2),(16,2),(20,2)\\
+1&(0,2),(3,2),(5,2),(9,2),(17,2),(20,2)\\
+2&(0,2),(3,2),(6,2),(10,2),(18,2),(20,2)\\
+3&(1,2),(2,2),(7,2),(11,2),(19,2),(20,2)\\
+4&(0,2),(5,2),(6,2),(12,2),(20,4)\\
+5&(1,2),(4,2),(7,2),(13,2),(20,4)\\
+6&(2,2),(4,2),(7,2),(14,2),(20,4)\\
+7&(3,2),(5,2),(6,2),(15,2),(20,4)\\
+8&(0,2),(9,2),(10,2),(12,2),(20,4)\\
+9&(1,2),(8,2),(11,2),(13,2),(20,4)\\
+10&(2,2),(8,2),(11,2),(14,2),(20,4)\\
+11&(3,2),(9,2),(10,2),(15,2),(20,4)\\
+12&(4,2),(8,2),(13,2),(14,2),(20,4)\\
+13&(5,2),(9,2),(12,2),(15,2),(20,4)\\
+14&(6,2),(10,2),(12,2),(15,2),(20,4)\\
+15&(7,2),(11,2),(13,2),(14,2),(20,4)\\
+16&(0,2),(17,1),(18,1),(20,2)\\
+17&(1,2),(16,1),(19,1),(20,2)\\
+18&(2,2),(16,1),(19,1),(20,2)\\
+19&(3,2),(17,1),(18,1),(20,2)\\
+20&(0,2),(1,2),(2,2),(3,2),(4,4),(5,4),(6,4),(7,4)\\
+ &(8,4),(9,4),(10,4),(11,4),(12,4),(13,4),(14,4),(15,4)\\
+ &(16,2),(17,2),(18,2),(19,2),(20,104).
+\end{array}
+\]
+Equivalently, \(N_{ij}\) counts pairs \((\omega,k)\) with \(\omega\in(\Fold_6^{\mathrm{bin}})^{-1}(x_i)\), \(1\le k\le6\), and \(\Fold_6^{\mathrm{bin}}(\omega+e_k)=x_j\).
+\end{proposition}
+\begin{proof}
+By Definition \ref{def:audited-binary-fold-certificate}, the first sixteen fibers of \(\Fold_6^{\mathrm{bin}}\) are the sixteen two-point orbits of \(\sigma_{\mathrm{geo}}\), the next four fibers are singletons, and the last fiber contains the remaining twenty-eight vertices.  Hence the displayed vector \((d_i)\) is exactly the list of fiber cardinalities.  The formula for \(P_6(i,j)\) is the averaging convention for the non-equitable audited pushforward kernel introduced in Section \ref{sec:preliminaries}.  Directly enumerating the six bit flips from every vertex in the fiber over \(x_i\) gives the displayed table.  Each row sums to \(6d_i\), so the resulting matrix is row stochastic and is exactly \(D^{-1}M^\top T_6M\). \qedhere
+\end{proof}
+
+\begin{lemma}[Machine-checkable characteristic certificate]\label{lem:foldbin6-characteristic-certificate}
+For the exact matrix of Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, the characteristic polynomial factors over \(\QQ\) as
+\[
+\begin{aligned}
+\chi_{P_6}(t)=&\ t^2(t-1)(3t-1)^2(3t+1)
+(324t^4-54t^2+1)^2 \\
+&\cdot(189t^3-117t^2+9t+1)
+(324t^4+432t^3+162t^2+12t-1)
+/173564379072 .
+\end{aligned}
+\]
+In particular, \(P_6\) has real spectral values \(\lambda_1\in(19/50,39/100)\) and \(\lambda_2\in(1/2,51/100)\).
+\end{lemma}
+\begin{proof}
+The characteristic polynomial is obtained from the explicit rational matrix of Proposition \ref{prop:foldbin6-exact-pushforward-matrix} by fraction-free Gaussian elimination over \(\QQ[t]\); every entry of the input matrix is one of the rational numbers displayed in that proposition, so this is a finite exact certificate.  Multiplying the displayed factorization by the nonzero rational constant \(173564379072\) and expanding gives the monic determinant \(\det(tI-P_6)\), which is a purely rational identity.
+
+It remains to isolate the two positive off-grid roots used below.  Put
+\[
+q(t):=324t^4-54t^2+1,
+\qquad
+r(t):=189t^3-117t^2+9t+1.
+\]
+For \(q\), a Sturm sequence is
+\[
+q,
+\quad 1296t^3-108t,
+\quad 27t^2-1,
+\quad t,
+\quad 1,
+\]
+after multiplying individual members by positive rational constants.  The signs of this sequence at \(19/50\) are \((- ,+,+,+,+)\), while the signs at \(39/100\) are \((+,+,+,+,+)\).  Thus the variation count drops by one, so the interval contains exactly one root.  Explicitly \(q(19/50)=-65249/1562500<0\) and \(q(39/100)=7053721/25000000>0\).  Hence \(q\) has a root \(\lambda_1\in(19/50,39/100)\), and the factorization shows \(\lambda_1\in\Spec(P_6)\).
+
+For \(r\), a Sturm sequence is
+\[
+r,
+\quad 567t^2-234t+9,
+\quad 212t-34,
+\quad 1,
+\]
+again up to positive rational multiples.  The signs at \(1/2\) are \((-,+,+,+)\), while the signs at \(51/100\) are \((+,+,+,+)\), so the variation count again drops by one.  Explicitly \(r(1/2)=-1/8<0\) and \(r(51/100)=229339/1000000>0\).  Hence \(r\) has a root \(\lambda_2\in(1/2,51/100)\), and again the factorization places \(\lambda_2\) in \(\Spec(P_6)\). \qedhere
+\end{proof}
+
+\begin{lemma}[Exact interval certificate for the audited window-\texorpdfstring{$6$}{6} eigenvalues]\label{lem:foldbin6-eigenvalue-interval-certificate}
+For the audited window-\(6\) pushforward kernel \(P_6\), there are spectral values \(\lambda_1,\lambda_2\in\Spec(P_6)\) satisfying
+\[
+\frac{19}{50}<\lambda_1<\frac{39}{100},
+\qquad
+\frac12<\lambda_2<\frac{51}{100}.
 \]
 In particular, \(\lambda_1\) and \(\lambda_2\) are not elements of
 \[
@@ -11,25 +95,11 @@ In particular, \(\lambda_1\) and \(\lambda_2\) are not elements of
 \]
 \end{lemma}
 \begin{proof}
-The displayed rational intervals are part of the finite window-\(6\) audit certificate.  It remains only to check that these certified intervals are disjoint from the hypercube grid.  The first interval satisfies
-\[
-\frac13<\frac{2420603929}{5000000000}<\lambda_1<\frac{4841207859}{10000000000}<\frac23,
-\]
-because \(3\cdot2420603929=7261811787>5000000000\) and \(3\cdot4841207859=14523623577<20000000000\).  The second satisfies
-\[
-\frac13<\frac{3015469877}{5000000000}<\lambda_2<\frac{1206187951}{2000000000}<\frac23,
-\]
-because \(3\cdot3015469877=9046409631>5000000000\) and \(3\cdot1206187951=3618563853<4000000000\).  Thus both certified values lie strictly between \(1/3\) and \(2/3\), while the only grid points in that closed interval are its endpoints. \qedhere
+The existence and the displayed intervals are exactly Lemma \ref{lem:foldbin6-characteristic-certificate}.  Both intervals lie strictly between \(1/3\) and \(2/3\), and neither contains either endpoint.  The only hypercube grid points in the closed interval \([1/3,2/3]\) are \(1/3\) and \(2/3\).  Thus the two certified values are off the window-\(6\) hypercube grid. \qedhere
 \end{proof}
 
 \begin{corollary}[Window-\(6\) is spectrally nonlumpable]\label{cor:terminal-window6-nonlumpable-by-spectrum}
-Assume that the audited window-\(6\) pushforward kernel \(P_6\) has the certified eigenvalues of Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate}.
-If \(m=6\), the only spectral values compatible with an equitable quotient are
-\[
-\left\{\,1,\ \frac23,\ \frac13,\ 0,\ -\frac13,\ -\frac23,\ -1\,\right\}.
-\]
-Hence \(\mathrm{spec}(P_6)\) contains eigenvalues outside the allowed set, and the stable-type coarse-graining of window \(6\) cannot arise from a one-step equitable quotient chain on \(Q_6\).
-Equivalently, strong lumpability is ruled out directly by the spectral certificate.
+The audited window-\(6\) pushforward kernel \(P_6\) associated with \(\Fold_6^{\mathrm{bin}}\) is not the transition kernel of an equitable quotient chain on \(Q_6\).  Equivalently, the window-\(6\) certificate is not hidden-state-free strongly lumpable.
 \end{corollary}
 
 \begin{proof}
@@ -37,5 +107,5 @@ By Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity}, every equitab
 \(
 \{1-2k/6:0\le k\le 6\}
 \).
-Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate} supplies two certified spectral values of \(P_6\) outside this set, so \(P_6\) cannot come from an equitable quotient of \(Q_6\). \qedhere
+Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate} supplies two spectral values of the exact audited pushforward matrix \(P_6\) outside this set.  Therefore \(P_6\) cannot be the transition matrix of an equitable quotient of the hypercube walk. \qedhere
 \end{proof}
