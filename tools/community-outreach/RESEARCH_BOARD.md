@@ -1681,3 +1681,39 @@ _Problems I Like intake rationale_: Curated-source policy admits OPEN entries in
 _Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
 
 ---
+
+### T-51 · Problems I Like #6 · Let X be a smooth projective variety over a perfect field k of characteristic p>0....
+
+| field | value |
+|---|---|
+| Status | SOLVED_EXTERNAL (Problems I Like original statement solved; derivative-only) |
+| Source | https://www.problemsilike.com/6 |
+| Type | solved_external |
+| Untouched | Problems I Like source status=SOLVED; last edited 13 May 2026; 4 comments; comment claim status=none; tags=positivity, positive characteristic. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Derivative verification/formalization target only: verify the published counterexample or study the stronger remaining variant p > rk(E), never the solved original statement. |
+| Success gate | Before any writeback, verify actual source bytes for the published counterexample or produce a complete proof/obstruction for the stronger p > rk(E) variant; do not claim the original Problems I Like #6 statement as new work. |
+
+**Statement.** Let $X$ be a smooth projective variety over a perfect field $k$ of characteristic $p>0$. Let $\mathscr{E}$ be an ample vector bundle on $X$ and $\mathscr{G}$ a coherent sheaf on $X$. Let $F: X\to X$ be the absolute Frobenius morphism. Is it necessarily the case that for all $i\geq \text{rk}(\mathscr{E})$, we have $$H^i(X, (F^n)^*\mathscr{E}\otimes \mathscr{G})=0$$ for $n$ sufficiently large?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/6, status SOLVED, last edited 13 May 2026, comments=4, comments_claim=none, and visible reaction metadata {"Likes this problem": "DMallory", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_06/research.md
+- tools/community-outreach/targets/problemsilike_06/results.json
+- tools/community-outreach/targets/problemsilike_06/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_06/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
