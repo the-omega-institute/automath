@@ -52,6 +52,7 @@ RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 RESEARCH_LOOP_LOG_DIR = STATE_DIR / "research_loop_logs"
 RESEARCH_LOOP_STATUS = STATE_DIR / "research_loop.status.json"
 RESEARCH_LOOP_LOCK = STATE_DIR / "research_loop.lock"
+CODEX_TRANSPORT_STATE = STATE_DIR / "codex_transport.json"
 RESEARCH_BOARD_PATH = SCRIPT_DIR / "RESEARCH_BOARD.md"
 DRAFTS_DIR = SCRIPT_DIR / "drafts"
 TARGETS_DIR = SCRIPT_DIR / "targets"
@@ -67,6 +68,9 @@ DEFAULT_ORACLE_REFILL_RESERVE = int(os.environ.get("OUTREACH_ORACLE_REFILL_RESER
 SUMMARY_COOLDOWN_HOURS = 2
 TRANSPORT_FAILURE_BACKOFF_MINUTES = int(os.environ.get("OUTREACH_TRANSPORT_BACKOFF_MINUTES", "5") or "5")
 DEFAULT_ORACLE_TURN_TIMEOUT_S = 7200
+CODEX_TRANSPORT_BACKOFF_MINUTES = int(
+    os.environ.get("OUTREACH_CODEX_TRANSPORT_BACKOFF_MINUTES", str(TRANSPORT_FAILURE_BACKOFF_MINUTES)) or "5"
+)
 
 # Regex matchers for board status filtering. Case-insensitive substring tests.
 SKIP_STATUS_PATTERNS = [
@@ -96,6 +100,10 @@ def _now() -> float:
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def _iso_from_epoch(epoch: float) -> str:
+    return datetime.fromtimestamp(epoch, timezone.utc).isoformat(timespec="seconds")
 
 
 def _now_tag_safe() -> str:
@@ -1124,6 +1132,54 @@ def _has_pre_oracle_workup(slug: str) -> bool:
     return ok
 
 
+def _path_contains_codex_transport_failure(log_path: str) -> bool:
+    if not log_path:
+        return False
+    try:
+        text = Path(log_path).read_text(encoding="utf-8", errors="replace").lower()
+    except OSError:
+        return False
+    markers = (
+        "failed to initialize in-process app-server client",
+        "operation not permitted",
+        "codex cli not found",
+        "could not update path",
+    )
+    return any(marker in text for marker in markers)
+
+
+def _note_global_codex_transport_backoff(*, reason: str, log_path: str = "") -> None:
+    backoff_s = max(0, CODEX_TRANSPORT_BACKOFF_MINUTES) * 60
+    backoff_until = _now() + backoff_s
+    payload = {
+        "ok": False,
+        "transport_backoff": True,
+        "reason": reason,
+        "stderr_log": log_path,
+        "recorded_at": _now_iso(),
+        "backoff_until_epoch": backoff_until,
+        "backoff_until": _iso_from_epoch(backoff_until),
+        "backoff_minutes": CODEX_TRANSPORT_BACKOFF_MINUTES,
+    }
+    try:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
+        CODEX_TRANSPORT_STATE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    except OSError as exc:
+        loop_log(f"failed to write global Codex transport backoff marker: {exc}")
+
+
+def _global_codex_transport_backoff_applies() -> bool:
+    try:
+        state = json.loads(CODEX_TRANSPORT_STATE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    try:
+        until = float(state.get("backoff_until_epoch") or 0.0)
+    except (TypeError, ValueError):
+        until = 0.0
+    return _now() < until
+
+
 def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") -> None:
     target_dir = TARGETS_DIR / slug
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -1143,6 +1199,8 @@ def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") ->
         path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     except OSError as exc:
         loop_log(f"{slug}: failed to write local repair backoff marker: {exc}")
+    if _path_contains_codex_transport_failure(log_path):
+        _note_global_codex_transport_backoff(reason=reason, log_path=log_path)
 
 
 def _reconcile_oracle_deep(todo_id: str) -> dict:
@@ -1497,18 +1555,7 @@ def _local_repair_transport_failure(slug: str) -> bool:
     stderr_log = str(report.get("stderr_log") or "")
     if not stderr_log:
         return False
-    log_path = REPO_ROOT / stderr_log
-    try:
-        text = log_path.read_text(encoding="utf-8", errors="replace").lower()
-    except OSError:
-        return False
-    markers = (
-        "failed to initialize in-process app-server client",
-        "operation not permitted",
-        "codex cli not found",
-        "could not update path",
-    )
-    return any(marker in text for marker in markers)
+    return _path_contains_codex_transport_failure(stderr_log)
 
 
 def _local_repair_backoff_applies(slug: str) -> bool:
@@ -1850,6 +1897,8 @@ def _blocked_snapshot(limit: int = 8) -> list[dict]:
     todos = _parse_board_safe()
     rows: list[dict] = []
     for tid, todo in todos.items():
+        if _global_codex_transport_backoff_applies():
+            return []
         status = getattr(todo, "status", "") or ""
         if _is_skipped(status):
             continue
@@ -2002,7 +2051,11 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
             _collect_finished(active)
 
             started_any = False
+            codex_transport_paused = False
             while not stop_flag["stop"] and len(active) < research_workers:
+                if _global_codex_transport_backoff_applies():
+                    codex_transport_paused = True
+                    break
                 skip_slugs = {slug for _, slug in active.values()}
                 if args.todo_id:
                     if active:
@@ -2051,6 +2104,7 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                 "parallel": max_workers,
                 "research_workers": research_workers,
                 "oracle_refill_reserve": oracle_refill_reserve,
+                "codex_transport_paused": codex_transport_paused,
             })
 
             if args.once:
@@ -2059,7 +2113,13 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                 return 0
 
             if not active and not started_any:
-                loop_log(f"no actionable target this poll (iter={iteration})")
+                if codex_transport_paused:
+                    loop_log(
+                        f"Codex local-repair transport backoff active; "
+                        f"pausing target selection for {CODEX_TRANSPORT_BACKOFF_MINUTES}min"
+                    )
+                else:
+                    loop_log(f"no actionable target this poll (iter={iteration})")
                 time.sleep(args.poll_interval)
                 continue
 

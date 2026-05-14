@@ -90,6 +90,17 @@ def _coerce_text(value: object) -> str:
     return str(value)
 
 
+def _text_contains_codex_transport_failure(text: str) -> bool:
+    lowered = text.lower()
+    markers = (
+        "failed to initialize in-process app-server client",
+        "operation not permitted",
+        "codex cli not found",
+        "could not update path",
+    )
+    return any(marker in lowered for marker in markers)
+
+
 def _terminate_process_group(proc: subprocess.Popen, *, grace_seconds: float = 5.0) -> None:
     """Terminate a spawned worker and its children.
 
@@ -2035,6 +2046,8 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     if incomplete_handoff_watchdog.get("postcheck") and not artifact_watchdog.get("postcheck"):
         postcheck = incomplete_handoff_watchdog["postcheck"]
     postcheck_ok = bool(postcheck.get("ok"))
+    stderr_text = _read_text(stderr_path, limit=4000)
+    codex_transport_failure = _text_contains_codex_transport_failure(stderr_text)
     # Codex CLI can occasionally return a nonzero process status after writing a
     # complete target-local workup and a terminal JSONL `turn.completed` event.
     # Treat the deterministic harness artifacts as the source of truth here:
@@ -2065,6 +2078,8 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "artifact_watchdog": artifact_watchdog,
         "incomplete_handoff_watchdog": incomplete_handoff_watchdog,
         "status_note": status_note,
+        "failure_kind": "codex_transport" if codex_transport_failure and not postcheck_ok else "",
+        "transport_failure": codex_transport_failure and not postcheck_ok,
         "gate_before": gate_before,
         "gate_after": gate_after,
     }
