@@ -198,6 +198,26 @@ def main() -> int:
         if substantive.get("ok"):
             raise AssertionError(f"py_compile-only command trace should not pass substantive gate: {substantive}")
 
+        tannakian_action_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'python3 {rel_target}/surface_curve_sign_obstruction.py'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": (
+                    '{"checked_route":"representation-side sign obstruction for smooth ample curves",'
+                    '"status":"conditional_on_geometric_sign_theorem",'
+                    '"representation_invariant_form":"orthogonal","dimension":14}'
+                ),
+            }
+        }
+        stdout_path.write_text(json.dumps(tannakian_action_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("replay_command_count") or 0) <= 0:
+            raise AssertionError(f"Tannakian checker should count as replay: {trace}")
+        if int(trace.get("mathematical_action_command_count") or 0) <= 0:
+            raise AssertionError(f"Tannakian checker should count as mathematical action: {trace}")
+
         metadata_update_event = {
             "item": {
                 "type": "command_execution",
