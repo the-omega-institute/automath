@@ -161,6 +161,8 @@ def main() -> int:
             raise AssertionError(f"json.tool sanity check was not counted as inspection: {trace}")
         if int(trace.get("replay_command_count") or 0) != 0:
             raise AssertionError(f"json.tool sanity check was incorrectly counted as replay: {trace}")
+        if int(trace.get("mathematical_action_command_count") or 0) != 0:
+            raise AssertionError(f"json.tool sanity check was incorrectly counted as mathematical action: {trace}")
         substantive = local_repair._substantive_local_workup_check(
             target_dir,
             _workup(include_attempt=True),
@@ -170,6 +172,31 @@ def main() -> int:
         )
         if substantive.get("ok"):
             raise AssertionError(f"inspection-only command trace should not pass substantive gate: {substantive}")
+
+        py_compile_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'python3 -m py_compile {rel_target}/scripts/check_slice.py'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": "",
+            }
+        }
+        stdout_path.write_text(json.dumps(py_compile_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("replay_command_count") or 0) != 0:
+            raise AssertionError(f"py_compile was incorrectly counted as replay: {trace}")
+        if int(trace.get("mathematical_action_command_count") or 0) != 0:
+            raise AssertionError(f"py_compile was incorrectly counted as mathematical action: {trace}")
+        substantive = local_repair._substantive_local_workup_check(
+            target_dir,
+            _workup(include_attempt=True),
+            "The local `results.json` exists but the case-3 certificate is missing.",
+            "Ran only py_compile on a local script.",
+            codex_trace=trace,
+        )
+        if substantive.get("ok"):
+            raise AssertionError(f"py_compile-only command trace should not pass substantive gate: {substantive}")
 
         negative_search_event = {
             "item": {

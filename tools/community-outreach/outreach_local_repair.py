@@ -260,7 +260,10 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
     completed_target_command_count = 0
     inspection_command_count = 0
     replay_command_count = 0
+    mathematical_action_command_count = 0
     negative_artifact_search_count = 0
+    has_completed_target_command = False
+    has_evidence_output = False
     output_markers = (
         "self-tests passed",
         "all_records_pass",
@@ -324,6 +327,36 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
     inspection_only_python_markers = (
         "python3 -m json.tool",
         "python -m json.tool",
+        "python3 -m py_compile",
+        "python -m py_compile",
+    )
+    mechanical_python_markers = (
+        "python3 -m json.tool",
+        "python -m json.tool",
+        "python3 -m py_compile",
+        "python -m py_compile",
+    )
+    mathematical_command_markers = (
+        "verify",
+        "check",
+        "sat",
+        "cnf",
+        "drat",
+        "lrat",
+        "rup",
+        "graph",
+        "matrix",
+        "det",
+        "enumerat",
+        "search",
+        "proof",
+        "lemma",
+        "certificate",
+        "construct",
+        "counterexample",
+        "bound",
+        "ramsey",
+        "color",
     )
     try:
         lines = stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()
@@ -366,9 +399,11 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         output_lower = output.lower()
         if item.get("status") == "completed":
             completed_target_command_count += 1
+            has_completed_target_command = True
         if any(marker in command_lower for marker in inspection_command_markers):
             inspection_command_count += 1
         is_inspection_only_python = any(marker in command_lower for marker in inspection_only_python_markers)
+        is_mechanical_python = any(marker in command_lower for marker in mechanical_python_markers)
         is_artifact_search_command = any(marker in command_lower for marker in negative_search_markers) and (
             "find " in command_lower
             or "rg " in command_lower
@@ -381,6 +416,15 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             and not is_artifact_search_command
         ):
             replay_command_count += 1
+            if (
+                item.get("status") == "completed"
+                and not is_mechanical_python
+                and (
+                    any(marker in command_lower for marker in mathematical_command_markers)
+                    or any(marker in output_lower for marker in output_markers)
+                )
+            ):
+                mathematical_action_command_count += 1
         if any(marker in command_lower for marker in negative_search_markers) and not output.strip():
             negative_artifact_search_count += 1
         elif (
@@ -388,6 +432,8 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             and ("no such file" in output_lower or "not found" in output_lower or "missing" in output_lower)
         ):
             negative_artifact_search_count += 1
+        if any(marker in output_lower for marker in output_markers):
+            has_evidence_output = True
     if target_command_count <= 0:
         return {
             "ok": False,
@@ -397,7 +443,6 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             "target_command_count": target_command_count,
             "commands": interesting_commands,
         }
-    has_completed_target_command = any(cmd.get("status") == "completed" for cmd in interesting_commands)
     if not has_completed_target_command:
         return {
             "ok": False,
@@ -408,10 +453,6 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             "completed_target_command_count": completed_target_command_count,
             "commands": interesting_commands,
         }
-    has_evidence_output = any(
-        any(marker in str(cmd.get("output_head") or "").lower() for marker in output_markers)
-        for cmd in interesting_commands
-    )
     return {
         "ok": True,
         "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
@@ -420,6 +461,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "completed_target_command_count": completed_target_command_count,
         "inspection_command_count": inspection_command_count,
         "replay_command_count": replay_command_count,
+        "mathematical_action_command_count": mathematical_action_command_count,
         "negative_artifact_search_count": negative_artifact_search_count,
         "has_evidence_output": has_evidence_output,
         "commands": interesting_commands,
@@ -952,6 +994,7 @@ def _substantive_local_workup_check(
 
     if codex_trace is not None:
         replay_count = int(codex_trace.get("replay_command_count") or 0)
+        math_action_count = int(codex_trace.get("mathematical_action_command_count") or 0)
         inspection_count = int(codex_trace.get("inspection_command_count") or 0)
         evidence_output = bool(codex_trace.get("has_evidence_output"))
         proof_decomposition = _text_has_proof_decomposition_attempt(
@@ -959,6 +1002,10 @@ def _substantive_local_workup_check(
         )
         if inspection_count <= 0:
             diagnostics.append("Codex command trace lacks target inspection commands")
+        if math_action_count <= 0 and not proof_decomposition:
+            diagnostics.append(
+                "Codex command trace lacks a target-local mathematical action command; py_compile/json.tool/search/metadata bookkeeping do not count"
+            )
         if replay_count <= 0 and not evidence_output and not proof_decomposition:
             diagnostics.append(
                 "Codex command trace lacks replay/check commands or evidence output, and the workup lacks a named proof decomposition; artifact search alone is not enough before Oracle"
@@ -977,6 +1024,9 @@ def _substantive_local_workup_check(
         "workup_has_proof_decomposition_attempt": _text_has_proof_decomposition_attempt(
             "\n".join([attempt_body, obligations_body, report])
         ),
+        "mathematical_action_command_count": int(codex_trace.get("mathematical_action_command_count") or 0)
+        if codex_trace
+        else 0,
     }
 
 
