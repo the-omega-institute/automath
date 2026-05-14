@@ -1357,3 +1357,327 @@ _Inbox graduation rationale_: This should enter the board because it is a named,
 _Inbox graduation rationale_: This should enter the board because it is a current, public, inspectable, high-visibility open construction problem whose success would be a standard publishable specialty-journal result and whose verification is exact. Unlike a private author-email follow-up, the natural endpoint is a public certificate package or a rigorous negative result for a named construction family, both aligned with audit-first mathematical discovery.
 
 ---
+
+### T-42 · Problems I Like #1 · Fix G\in \mathbb{Q}(z, y_0, y_1, \cdots, y_{n-1}), N\in \mathbb{Z}_{>0} and suppose...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/1 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 12 May 2026; 0 comments; comment claim status=none; tags=algebraic differential equations. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Fix $G\in \mathbb{Q}(z, y_0, y_1, \cdots, y_{n-1}), N\in \mathbb{Z}_{>0}$ and suppose $f(z)\in \mathbb{Z}[\frac{1}{N}][[z]]$ satisfies $$f^{(n)}(z)=G(z, f(z), f'(z), \cdots, f^{(n-1)}(z)).$$ Suppose further that $G(0, f(0), \cdots, f^{(n-1)}(0))$ is defined. Is it necessarily the case that $f(z)$ is the Taylor expansion at $0$ of an algebraic function?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/1, status OPEN, last edited 12 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "fridirick , JoseBrox", "Interested in collaborating": "JoseBrox", "Currently working on this problem": "JoseBrox", "This problem looks difficult": "None", "This problem looks tractable": "JoseBrox", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_01/research.md
+- tools/community-outreach/targets/problemsilike_01/results.json
+- tools/community-outreach/targets/problemsilike_01/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_01/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-43 · Problems I Like #2 · Let f: X\to Y be a smooth proper morphism of smooth R-schemes, where R\subset...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/2 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 08 May 2026; 0 comments; comment claim status=none; tags=algebraic differential equations. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Let $f: X\to Y$ be a smooth proper morphism of smooth $R$-schemes, where $R\subset \mathbb{C}$ is a finitely-generated $\mathbb{Z}$-algebra. Fix $i\geq 0$ and let $(\mathscr{E}, \nabla)$ be a summand of the relative de Rham cohomology $R^if_*\Omega^\star_{X/S}$ equipped with its Gauss-Manin connection. Suppose the $p$-curvature of $(\mathscr{E}, \nabla) \bmod p$ vanishes for almost all primes $p$. Does $(\mathscr{E}, \nabla)_{\mathbb{C}}$ have finite monodromy?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/2, status OPEN, last edited 08 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_02/research.md
+- tools/community-outreach/targets/problemsilike_02/results.json
+- tools/community-outreach/targets/problemsilike_02/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_02/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-44 · Problems I Like #4 · Let \text{Mod}_{g,n} be the mapping class group of an orientable genus g surface with...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/4 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 07 May 2026; 0 comments; comment claim status=none; tags=mapping class groups, moduli of curves. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Let $\text{Mod}_{g,n}$ be the mapping class group of an orientable genus $g$ surface with $n$ punctures. If $g\geq 3$, are all irreducible complex representations of $\text{Mod}_{g,n}$ (cohomologically) rigid? If so, can they be classified? A very ambitious version of such a classification might be: does every irreducible representation of $\text{Mod}_{g,n}$ for $g\geq 3$ arise as a sub-quotient of the cohomology of an iterated Kodaira-Parshin construction?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/4, status OPEN, last edited 07 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_04/research.md
+- tools/community-outreach/targets/problemsilike_04/results.json
+- tools/community-outreach/targets/problemsilike_04/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_04/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-45 · Problems I Like #5 · There are a number of conditions on a semisimple local system on a smooth complex...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/5 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 08 May 2026; 0 comments; comment claim status=none; tags=local systems. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** There are a number of conditions on a semisimple local system on a smooth complex variety $X$ that are supposed to be equivalent to the statement that it is of geometric origin (i.e. that its restriction to a dense open $U\subset X$ arises as a subquotient of the cohomology of a family of smooth projective varieties over $U$). For example: • (Non-abelian analogue of the Hodge conjecture, Conjecture 12.4 of [S97] ) For a semisimple $\mathbb{C}$-local system $\mathbb{V}_{\mathbb{C}}$ on $X^{\text{an}}$, it should be of geometric origin if and only if it is a summand of a local system underlying a $\mathbb{Z}$-variation of Hodge structure. • (Non-abelian analogue of the Tate conjecture, Conjecture 1 Bis of [P23] ) For a semisimple lisse $\overline{\mathbb{Q}}_\ell$-sheaf $\mathbb{V}_{\ell}$ on $X$, it should be of geometric origin if and only if it is arithmetic, i.e. if and only if there exists a finitely generated field $k\subset \mathbb{C}$, a descent $\widetilde{X}$ of $X$ to $k$, and a descent of $\mathbb{V}_{\ell}$ to $\widetilde{X}$. • (Non-abelian analogue of a conjecture of Ogus, Appendix to Chapter V of [A89] ) For a flat vector bundle $(\mathscr{E},\nabla)$ on $X$, it should be of geometric origin if and only if there exists a finitely-generated $\mathbb{Z}$-algebra $R\subset \mathbb{C}$, and a descent of $(X, \mathscr{E},\nabla)$ to $R$ such that for all maximal ideals $\mathfrak{p}\subset R$ of residue characteristic $p$, the $p$-curvature of $(\mathscr{E},\nabla)\bmod \mathfrak{p}$ is nilpotent • and so on... Can one show that any of these conditions imply one other (for example, that if a $\mathbb{Q}$-local system $\mathbb{V}$ on $X$ satisfies that $\mathbb{V}\otimes \overline{\mathbb{Q}}_\ell$ is arithmetic, then $\mathbb{V}\otimes \mathbb{C}$ is a summand of a local system underlying a $\mathbb{Z}$-variation of Hodge structure)? Can one prove that any of them do in fact imply that a local system is of geometric origin?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/5, status OPEN, last edited 08 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_05/research.md
+- tools/community-outreach/targets/problemsilike_05/results.json
+- tools/community-outreach/targets/problemsilike_05/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_05/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-46 · Problems I Like #9 · Let X be a smooth projective variety over a finite field k, and let \ell be a prime...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/9 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 08 May 2026; 0 comments; comment claim status=none; tags=algebraic cycles, finite fields. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Let $X$ be a smooth projective variety over a finite field $k$, and let $\ell$ be a prime different from $\text{char}(k)$. Is the cycle class map $$\text{cl}: \text{CH}^1(X)\otimes \mathbb{Q}_\ell\to H^2(X, \mathbb{Q}_\ell(1))^{\text{Gal}(\bar{k}/k)}$$ surjective?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/9, status OPEN, last edited 08 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_09/research.md
+- tools/community-outreach/targets/problemsilike_09/results.json
+- tools/community-outreach/targets/problemsilike_09/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_09/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-47 · Problems I Like #10 · Let \Sigma_{g,n} be an orientable genus g surface with n punctures. What is the...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/10 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 08 May 2026; 0 comments; comment claim status=none; tags=mapping class groups, surface groups. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Let $\Sigma_{g,n}$ be an orientable genus $g$ surface with $n$ punctures. What is the minimum rank of a complex representation of $\pi_1(\Sigma_{g,n})$ with infinite image and whose conjugacy class has finite orbit under the mapping class group $\text{Mod}_{g,n}$? What is the minimum rank of a semisimple complex representation of $\pi_1(\Sigma_{g,n})$ with infinite image and finite orbit under $\text{Mod}_{g,n}$?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/10, status OPEN, last edited 08 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_10/research.md
+- tools/community-outreach/targets/problemsilike_10/results.json
+- tools/community-outreach/targets/problemsilike_10/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_10/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-48 · Problems I Like #11 · Which \mathbb{Q}-Hodge structures of weight 2 with Hodge numbers h^{2,0}=n...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/11 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 13 May 2026; 2 comments; comment claim status=none; tags=motives, Hodge theory. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Which $\mathbb{Q}$-Hodge structures of weight $2$ with Hodge numbers $$h^{2,0}=n, h^{1,1}=0, h^{0,2}=n,$$ with $n\geq 2$, are motivic?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/11, status OPEN, last edited 13 May 2026, comments=2, comments_claim=none, and visible reaction metadata {"Likes this problem": "Antoni-K_Piotr , qln4roe64", "Interested in collaborating": "None", "Currently working on this problem": "Antoni-K_Piotr", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_11/research.md
+- tools/community-outreach/targets/problemsilike_11/results.json
+- tools/community-outreach/targets/problemsilike_11/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_11/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-49 · Problems I Like #12 · Let A be an abelian variety over a number field K. Are there infinitely many places...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/12 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited 13 May 2026; 0 comments; comment claim status=none; tags=abelian varieties. Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Let $A$ be an abelian variety over a number field $K$. Are there infinitely many places of $K$ at which $A$ has good ordinary reduction?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/12, status OPEN, last edited 13 May 2026, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_12/research.md
+- tools/community-outreach/targets/problemsilike_12/results.json
+- tools/community-outreach/targets/problemsilike_12/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_12/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
+
+### T-50 · Problems I Like #13 · Let A be an Abelian variety. The convolution product on the (derived) category of...
+
+| field | value |
+|---|---|
+| Status | Backlog (Problems I Like curated OPEN intake) |
+| Source | https://www.problemsilike.com/13 |
+| Type | open problem |
+| Untouched | Problems I Like source status=OPEN; last edited not visible; 0 comments; comment claim status=none; tags=(none visible). Impact assumed high enough for exploratory math-lane entry by operator policy. |
+| Omega fit | 0/10 (curated-source entry; generic fit score is not a blocker) |
+| Topic value | 10/10 (Problems I Like curated source; generic topic score is not a blocker) |
+| Effort est | 7-21 天 for first harness cycle; longer only if progress justifies it |
+| Risk | high |
+| Final display | Internal math-lane research memo first; after progress, decide among Problems I Like comment, author email, Automath writeback, paper/short note, X thread, or internal close. |
+| Success gate | No outreach/writeback unless Codex local replay verifies a proof, counterexample, reproducible computation, or valuable obstruction memo. Operator approval is required before any external action. |
+
+**Statement.** Let $A$ be an Abelian variety. The convolution product on the (derived) category of constructible sheaves on $A$ induces, by [KW15] , the structure of a Tannakian category on a certain quotient of the category of perverse sheaves on $A$. Thus, given a subvariety $X\subset A$, one may associate to it an algebraic group $G(X)$ by taking the Tannaka group associated to $IC_X$, the intersection copmlex of $X$. Let $H$ be a simple algebraic group of type $G_2, E_7, E_8,$ or $F_4$. Does there exist an abelian variety $A$ and a subvariety $X\subset A$ with $G(X)\simeq H$?
+
+**Prior.** Local source snapshot records canonical URL https://www.problemsilike.com/13, status OPEN, last edited not visible, comments=0, comments_claim=none, and visible reaction metadata {"Likes this problem": "None", "Interested in collaborating": "None", "Currently working on this problem": "None", "This problem looks difficult": "None", "This problem looks tractable": "None", "The results on this problem could be formalisable": "None", "I am working on formalising the results on this problem": "None"}. This is source metadata, not mathematical progress; each run must still do local literature/source verification before any writeback.
+
+**Omega fit detail.** Generic Automath/Omega fit does not gate this source. The first harness cycle should convert the curated open problem into an auditable local proof/counterexample/search profile, separating source facts from mathematical evidence and keeping all outreach blocked until science_gate=WRITEBACK_READY.
+
+**Attack plan.**
+1. Re-read the canonical problem page and freeze the exact statement, status metadata, tags, comments-claim status, visible interest/working metadata, and cited context.
+2. Perform Codex local source/profile workup: identify the first concrete theorem, counterexample, computation, or obstruction route and write a grounded next_oracle_question.
+3. Send Oracle a continuation/deep-reasoning prompt only after local workup; after Oracle returns, replay/check locally and update research.md, results.json, and next_oracle_question without public outreach.
+
+**Deliverables.**
+- tools/community-outreach/targets/problemsilike_13/research.md
+- tools/community-outreach/targets/problemsilike_13/results.json
+- tools/community-outreach/targets/problemsilike_13/next_oracle_question.md
+- tools/community-outreach/targets/problemsilike_13/submission_draft.md
+
+_Problems I Like intake rationale_: Curated-source policy admits OPEN entries into exploratory math lane without generic fit/topic/publishable-value filtering. Science and impact gates remain strict; source metadata is not a result.
+
+---
