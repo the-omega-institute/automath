@@ -89,6 +89,7 @@ from outreach_preflight import ACTIONABLE_VERDICTS, judge  # noqa: E402
 from outreach_science_gate import CLOSE_TARGET, WRITEBACK_READY, evaluate as science_gate_evaluate  # noqa: E402
 from outreach_impact_gate import (  # noqa: E402
     IMPACT_PLAN_READY,
+    NEEDS_PUBLICATION_VALUE as IMPACT_NEEDS_PUBLICATION_VALUE,
     CLOSE_OR_ARCHIVE as IMPACT_CLOSE_OR_ARCHIVE,
     evaluate as impact_gate_evaluate,
     write_ledger as write_impact_ledger,
@@ -136,6 +137,22 @@ def _impact_allows_operator_review(impact_gate) -> bool:
     """
     status = str(getattr(impact_gate, "status", "") or "")
     return status in {IMPACT_PLAN_READY, IMPACT_CLOSE_OR_ARCHIVE}
+
+
+def _impact_requests_continued_research(impact_gate) -> bool:
+    """Return whether a science-ready packet should be treated as nonterminal.
+
+    Science gate can correctly recognize a locally coherent scoped note, route
+    obstruction, or bounded check as `WRITEBACK_READY`.  That should not stop a
+    high-impact open-problem target when impact gate says the packet is too
+    small to surface.  In that case the outer harness must keep asking Codex and
+    Oracle to attack the original problem rather than parking the target.
+    """
+    if impact_gate is None:
+        return False
+    status = str(getattr(impact_gate, "status", "") or "")
+    next_action = str(getattr(impact_gate, "next_action", "") or "")
+    return status == IMPACT_NEEDS_PUBLICATION_VALUE and next_action == "continue_deep_reason"
 
 
 # ---------------------------------------------------------------------------
@@ -1794,6 +1811,53 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                     "not surfacing as ready because this is not yet a real publishable math result"
                 )
             if (
+                science_gate.status == WRITEBACK_READY
+                and _impact_requests_continued_research(impact_gate)
+            ):
+                loop_log(
+                    f"{todo_id}: science-ready scoped packet is below impact threshold; "
+                    "continuing deep research on the original target"
+                )
+                rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
+                loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
+                reconcile_payload = _reconcile_oracle_deep(todo_id)
+                if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
+                    rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+                else:
+                    if _path_contains_oracle_bridge_not_ready(log_path):
+                        _note_global_oracle_bridge_backoff(
+                            reason=f"oracle bridge not ready for {todo_id}",
+                            log_path=log_path,
+                        )
+                    _note_transport_backoff(
+                        slug,
+                        reason=f"oracle-deep transport/no-payload rc={rc}",
+                        log_path=log_path,
+                    )
+                    loop_log(
+                        f"{todo_id}: oracle-deep produced no usable payload; "
+                        f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of marking ready"
+                    )
+                todos = _parse_board_safe()
+                science_gate = science_gate_evaluate(todos[todo_id]) if todo_id in todos else science_gate
+                impact_gate = impact_gate_evaluate(todos[todo_id]) if todo_id in todos else impact_gate
+                if impact_gate is not None:
+                    write_impact_ledger(impact_gate)
+                progress_state = _record_progress_after_batch(slug, science_gate.status)
+                elapsed = _now() - started
+                return {
+                    "todo_id": todo_id,
+                    "slug": slug,
+                    "rc": rc,
+                    "log": log_path,
+                    "summary": str(summary_path),
+                    "elapsed_s": round(elapsed, 1),
+                    "board_marked": False,
+                    "science_gate": science_gate.to_dict(),
+                    "impact_gate": impact_gate.to_dict() if impact_gate is not None else {},
+                    "progress_state": progress_state,
+                }
+            if (
                 _has_real_artifacts(slug)
                 and impact_gate is not None
                 and _impact_allows_operator_review(impact_gate)
@@ -2110,7 +2174,12 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
                         f"{tid}: science_gate=WRITEBACK_READY but impact_gate={impact.status}; "
                         "not treating bounded/audit output as a real result"
                     )
-                continue
+                    if _impact_requests_continued_research(impact):
+                        loop_log(
+                            f"{tid}: impact gate requests continued deep research after scoped packet"
+                        )
+                    else:
+                        continue
             elif gate.status == CLOSE_TARGET:
                 impact = impact_gate_evaluate(todo)
                 write_impact_ledger(impact)
