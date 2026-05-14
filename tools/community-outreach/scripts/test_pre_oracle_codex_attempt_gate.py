@@ -390,6 +390,39 @@ def main() -> int:
         if "science_gate.json" in diagnostics or "outreach_impact_gate.json" in diagnostics:
             raise AssertionError(f"harness-refreshed ledgers should be ignored: {postcheck}")
 
+        watchdog_stdout = target_dir / "watchdog.jsonl"
+        inspection_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'find {rel_target} -maxdepth 2 -type f | sort'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": f"{rel_target}/results.json\n{rel_target}/scripts/check_slice.py\n",
+            }
+        }
+        watchdog_stdout.write_text(
+            json.dumps(inspection_event) + "\n" + json.dumps(replay_event) + "\n",
+            encoding="utf-8",
+        )
+        (target_dir / "local_repair_report.md").write_text(
+            "Ran command `find {rel_target} -maxdepth 2 -type f | sort` and confirmed "
+            "`results.json` plus `scripts/check_slice.py` are present. Ran command "
+            "`python3 {rel_target}/scripts/check_slice.py --case finite --json`; "
+            "the finite certificate replay passed with sha256=abc123, but case 3 still "
+            "needs an Oracle-supplied lemma.\n".format(rel_target=rel_target),
+            encoding="utf-8",
+        )
+        complete, details = local_repair._codex_artifacts_complete_while_process_alive(
+            target_dir,
+            watchdog_stdout,
+            reserved_before=local_repair._snapshot_reserved_harness_files(target_dir),
+            ignore_reserved_names={"science_gate.json", "outreach_impact_gate.json"},
+            run_started_at="2000-01-01T00:00:00+00:00",
+            idle_seconds=0,
+        )
+        if not complete or not details.get("postcheck", {}).get("ok"):
+            raise AssertionError(f"artifact-complete watchdog did not accept valid handoff: {complete} {details}")
+
     return 0
 
 

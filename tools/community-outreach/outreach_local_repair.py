@@ -29,6 +29,7 @@ import shutil
 import signal
 import subprocess
 import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,6 +41,9 @@ LOG_DIR = STATE_DIR / "local_repair_logs"
 BOARD_PATH = SCRIPT_DIR / "RESEARCH_BOARD.md"
 
 CODEX_BIN = shutil.which("codex") or "/opt/homebrew/bin/codex"
+CODEX_ARTIFACT_WATCHDOG_IDLE_SECONDS = float(
+    os.environ.get("OUTREACH_CODEX_ARTIFACT_WATCHDOG_IDLE_SECONDS", "45") or "45"
+)
 
 sys_path_added = False
 try:
@@ -1220,6 +1224,58 @@ def _postcheck_local_repair_artifacts(
     }
 
 
+def _codex_stdout_has_terminal_event(stdout_path: Path) -> bool:
+    try:
+        lines = stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return False
+    for line in reversed(lines[-20:]):
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if event.get("type") in {"turn.completed", "turn.failed"}:
+            return True
+    return False
+
+
+def _codex_artifacts_complete_while_process_alive(
+    target_dir: Path,
+    stdout_path: Path,
+    *,
+    reserved_before: dict[str, dict] | None,
+    ignore_reserved_names: set[str],
+    run_started_at: str,
+    idle_seconds: float | None = None,
+) -> tuple[bool, dict]:
+    """Return true when Codex has produced a valid handoff but did not exit.
+
+    The Codex wrapper can occasionally keep the process alive after it has
+    finished writing target-local artifacts.  The research loop should not
+    stall forever in that case.  This watchdog only accepts completion when
+    the JSONL has a terminal event or has been idle for a short period, and
+    the same deterministic postcheck used after normal process exit passes.
+    """
+    idle_seconds = CODEX_ARTIFACT_WATCHDOG_IDLE_SECONDS if idle_seconds is None else idle_seconds
+    if not stdout_path.exists():
+        return False, {}
+    try:
+        mtime = stdout_path.stat().st_mtime
+    except OSError:
+        return False, {}
+    if not _codex_stdout_has_terminal_event(stdout_path) and (time.time() - mtime) < idle_seconds:
+        return False, {}
+    trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
+    postcheck = _postcheck_local_repair_artifacts(
+        target_dir,
+        codex_trace=trace,
+        reserved_before=reserved_before,
+        ignore_reserved_names=ignore_reserved_names,
+        run_started_at=run_started_at,
+    )
+    return bool(postcheck.get("ok")), {"codex_command_trace": trace, "postcheck": postcheck}
+
+
 def _candidate_verifier_scripts(target_dir: Path) -> list[Path]:
     candidates: list[Path] = []
     standard = target_dir / "verify_results.py"
@@ -1616,6 +1672,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     stderr_path = LOG_DIR / f"{tag}.stderr.txt"
     output_path = LOG_DIR / f"{tag}.out.txt"
     reserved_before = _snapshot_reserved_harness_files(target_dir)
+    harness_refreshed = {"science_gate.json", "outreach_impact_gate.json"}
     prompt_path.write_text(prompt, encoding="utf-8")
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False, suffix=".txt") as tmp:
         codex_out = Path(tmp.name)
@@ -1632,6 +1689,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     ]
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     started = _now_iso()
+    artifact_watchdog: dict = {"triggered": False}
     try:
         with open(stdout_path, "w", encoding="utf-8") as stdout_f, open(
             stderr_path,
@@ -1651,8 +1709,34 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                 start_new_session=True,
             )
             try:
-                proc.communicate(input=prompt, timeout=timeout)
-                rc = proc.returncode
+                if proc.stdin:
+                    proc.stdin.write(prompt)
+                    proc.stdin.close()
+                deadline = time.monotonic() + max(1, timeout)
+                while True:
+                    rc_poll = proc.poll()
+                    if rc_poll is not None:
+                        rc = rc_poll
+                        break
+                    if time.monotonic() >= deadline:
+                        raise subprocess.TimeoutExpired(cmd, timeout)
+                    complete, details = _codex_artifacts_complete_while_process_alive(
+                        target_dir,
+                        stdout_path,
+                        reserved_before=reserved_before,
+                        ignore_reserved_names=harness_refreshed,
+                        run_started_at=started,
+                    )
+                    if complete:
+                        artifact_watchdog = {"triggered": True, **details}
+                        _terminate_process_group(proc)
+                        rc = proc.returncode if proc.returncode is not None else 0
+                        stderr_f.write(
+                            "\nARTIFACT_WATCHDOG: valid local handoff detected while Codex wrapper "
+                            "was still alive; terminated process group after artifact completion\n"
+                        )
+                        break
+                    time.sleep(2)
             except subprocess.TimeoutExpired:
                 _terminate_process_group(proc)
                 try:
@@ -1677,7 +1761,10 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         except OSError:
             pass
     output_path.write_text(raw or "", encoding="utf-8")
-    codex_command_trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
+    codex_command_trace = artifact_watchdog.get("codex_command_trace") or _codex_jsonl_local_command_trace(
+        stdout_path,
+        target_dir,
+    )
     # Do not immediately replay an expensive target-local computation that the
     # Codex worker just ran and recorded in the JSONL trace.  The postcheck
     # below verifies that the handoff cites local facts from that trace; a
@@ -1689,8 +1776,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     gate_after = _run_science_gate(todo_id, write_ledger=True)
     # These ledgers may be refreshed by harness code around the Codex worker;
     # do not charge those deterministic supervisor writes to the worker.
-    harness_refreshed = {"science_gate.json", "outreach_impact_gate.json"}
-    postcheck = _postcheck_local_repair_artifacts(
+    postcheck = artifact_watchdog.get("postcheck") or _postcheck_local_repair_artifacts(
         target_dir,
         codex_trace=codex_command_trace,
         reserved_before=reserved_before,
@@ -1721,6 +1807,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "output_log": str(output_path.relative_to(REPO_ROOT)),
         "verifier_audit": verifier_audit,
         "postcheck": postcheck,
+        "artifact_watchdog": artifact_watchdog,
         "status_note": status_note,
         "gate_before": gate_before,
         "gate_after": gate_after,
