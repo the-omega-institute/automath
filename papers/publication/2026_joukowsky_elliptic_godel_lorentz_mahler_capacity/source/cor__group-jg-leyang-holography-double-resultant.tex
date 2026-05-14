@@ -1,7 +1,7 @@
 \begin{corollary}[Holographic identity under the Lee--Yang unit-circle hypothesis]\label{cor:group-jg-leyang-holographic-identity}
 In the setting of Theorem \ref{thm:group-jg-pullback-factorization}, assume that \(K\subseteq\CC\), that every zero \(z_j\) of \(P\) satisfies \(|z_j|=1\), and that \(r\in\RR_{>0}\). Then for every \(z\in\CC^\times\),
 \[
-Q_r\!\bigl(J_r(z)\bigr)=r^n\,P(z)\,P\!\bigl(r^{-2}z^{-1}\bigr).
+Q_r\!\bigl(J_r(z)\bigr)=a_n^{-1}r^n\,P(z)\,P\!\bigl(r^{-2}z^{-1}\bigr).
 \]
 Although the algebraic identity itself does not use the unit-circle hypothesis, we retain that assumption here because it is needed in the geometric corollaries below.
 \end{corollary}
@@ -11,9 +11,9 @@ By Theorem \ref{thm:group-jg-pullback-factorization},
 \[
 r^n z^n\,Q_r\!\bigl(J_r(z)\bigr)=P(z)\,P^{\vee}(r^2 z).
 \]
-Since \(P^{\vee}(u)=u^nP(1/u)\), substituting \(u=r^2 z\) gives
+Since \(P^{\vee}(u)=a_n^{-1}u^nP(1/u)\), substituting \(u=r^2 z\) gives
 \[
-P^{\vee}(r^2 z)=r^{2n}z^n P(r^{-2}z^{-1}).
+P^{\vee}(r^2 z)=a_n^{-1}r^{2n}z^n P(r^{-2}z^{-1}).
 \]
 Cancelling the common factor \(z^n\) yields the claim.
 \end{proof}
@@ -25,7 +25,7 @@ S_r(z):=\operatorname{Res}_w\!\bigl(Q_r(w),\,r z^2-w z+r^{-1}\bigr)\in K(r)[z].
 \]
 Then
 \[
-S_r(z)=(-1)^n r^{n}\,P(z)\,\Bigl[z^{n}P\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+S_r(z)=(-1)^n a_n^{-1} r^{n}\,P(z)\,\Bigl[z^{n}P\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
 \]
 Consequently,
 \[
@@ -44,28 +44,52 @@ Because \(r z^2-w z+r^{-1}\) is linear in \(w\), the linear specialization formu
 \]
 Substituting Corollary \ref{cor:group-jg-leyang-holographic-identity} yields
 \[
-S_r(z)=(-z)^n r^n P(z)P(r^{-2}z^{-1})
-=(-1)^n r^{n}P(z)\,\Bigl[z^{n}P\!\bigl(r^{-2}z^{-1}\bigr)\Bigr],
+S_r(z)=(-z)^n a_n^{-1}r^n P(z)P(r^{-2}z^{-1})
+=(-1)^n a_n^{-1}r^{n}P(z)\,\Bigl[z^{n}P\!\bigl(r^{-2}z^{-1}\bigr)\Bigr],
 \]
 which is the required factorization. The description of the zero set follows immediately from the two factors.
 \end{proof}
 
+\begin{proposition}[Exact reconstruction interface and shell-factor selection]\label{prop:group-jg-exact-reconstruction-interface}
+Fix exact data consisting of a real number \(r>1\) and the full coefficient list of a polynomial \(Q_r\in\CC[w]\) known to arise from a monic Lee--Yang polynomial \(P\) of degree \(n\) through Definition \ref{def:reciprocal-transport-normalization}.  Define
+\[
+S_r(z):=\operatorname{Res}_w\!\bigl(Q_r(w),\,r z^2-w z+r^{-1}\bigr).
+\]
+The reconstruction interface is the following exact algebraic procedure.
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item Compute the resultant \(S_r\) as a polynomial in \(z\).  Equivalently, because the second input is linear in \(w\), compute \(S_r(z)=(-z)^n Q_r(J_r(z))\) and expand.
+  \item Factor \(S_r\) over the exact splitting field, keeping multiplicities in its zero divisor.
+  \item Select precisely the sub-divisor supported on \(|z|=1\), and define \(P_{\mathrm{rec}}\) to be the unique monic polynomial whose zero divisor is that selected sub-divisor.
+\end{enumerate}
+Then \(P_{\mathrm{rec}}=P\).  In particular, repeated Lee--Yang zeros are reconstructed with their original multiplicities, and the normalization ambiguity is removed by the final monic normalization.
+\end{proposition}
+
+\begin{proof}
+Since \(P\) is monic, the double-resultant identity of Corollary \ref{cor:group-jg-leyang-double-resultant} gives
+\[
+S_r(z)=(-1)^n r^n P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+\]
+If \(\zeta\) is a zero of \(P\) of multiplicity \(m\), then \(|\zeta|=1\) and the first factor contributes exactly multiplicity \(m\) at \(z=\zeta\).  The corresponding zero of the second factor is \(r^{-2}\zeta^{-1}\), again with multiplicity \(m\), and it lies on the circle \(|z|=r^{-2}<1\).  Thus the two factors of \(S_r\) have disjoint radial supports: one shell is \(|z|=1\), and the other is \(|z|=r^{-2}\).  Selection of the unit-circle sub-divisor is therefore well-defined and preserves all multiplicities, even when several zeros of \(P\) coincide.
+
+The monic polynomial with a prescribed finite zero divisor is unique, namely \(\prod_\zeta (z-\zeta)^{m_\zeta}\).  Applying this to the selected unit-circle divisor yields exactly the original monic polynomial \(P\).  The computation uses the exact value of \(r\), the full polynomial \(Q_r\), and exact factorization or equivalent exact zero-divisor data; no numerical thresholding or partial observation enters the argument.
+\end{proof}
+
 \begin{corollary}[Exact single-scale holographic reconstruction]\label{cor:group-jg-leyang-single-scale-reconstruction}
-In the setting of Corollary \ref{cor:group-jg-leyang-double-resultant}, assume further that \(r>1\) and that \(P\) is separable and monic. Then the transport map
+In the setting of Corollary \ref{cor:group-jg-leyang-double-resultant}, assume further that \(r>1\) and that \(P\) is monic. Then the transport map
 \[
 \mathcal T_r:\ P\longmapsto Q_r
 \]
-is injective on this exact Lee--Yang class. Moreover, \(P\) can be reconstructed uniquely from the noiseless full pair \((r,Q_r)\): compute \(S_r\) from \(Q_r\), and then \(P\) is the unique monic degree-\(n\) factor of \(S_r\) whose zeros all lie on the unit circle.
+is injective on this exact Lee--Yang class. Moreover, \(P\) can be reconstructed uniquely from the noiseless full pair \((r,Q_r)\) by the interface of Proposition \ref{prop:group-jg-exact-reconstruction-interface}: compute \(S_r\) from \(Q_r\), and then \(P\) is the unique monic degree-\(n\) factor of \(S_r\) whose zeros all lie on the unit circle.
 \end{corollary}
 
 \begin{proof}
 By Corollary \ref{cor:group-jg-leyang-double-resultant},
 \[
-S_r(z)=(-1)^n r^n\,P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+S_r(z)=(-1)^n a_n^{-1}r^n\,P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
 \]
 When \(r>1\), every zero of the second factor lies on \(|z|=r^{-2}<1\), whereas the zeros of \(P\) lie on \(|z|=1\). The two spectral shells are therefore disjoint.
 
-Hence \(S_r\) has exactly one degree-\(n\) factor whose zeros lie on the unit circle, namely \(P\) itself up to normalization. Since \(P\) is monic, that normalization is unique. If \(\mathcal T_r(P_1)=\mathcal T_r(P_2)\), then the corresponding polynomials \(S_r\) coincide, so the unit-circle factor is the same in both cases; thus \(P_1=P_2\).
+By Proposition \ref{prop:group-jg-exact-reconstruction-interface}, selection of the unit-circle zero divisor of \(S_r\), with multiplicities, gives exactly \(P\).  Equivalently, \(S_r\) has exactly one monic degree-\(n\) factor whose zeros lie on the unit circle, namely \(P\). If \(\mathcal T_r(P_1)=\mathcal T_r(P_2)\), then the corresponding polynomials \(S_r\) coincide, so the unit-circle factor is the same in both cases; thus \(P_1=P_2\).
 \end{proof}
 
 \begin{corollary}[Annular shell projection certificate]\label{cor:group-jg-leyang-annular-shell-projection}

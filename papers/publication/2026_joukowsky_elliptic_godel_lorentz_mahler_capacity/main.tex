@@ -73,6 +73,26 @@ Our second theme concerns the multiplicative encoding of prime data by finitely 
 
 The third theme is potential-theoretic. For a polynomial \(P\) with nonzero constant term, the two-scale Joukowsky transform \(J_r(z)=rz+r^{-1}z^{-1}\) generates a transport polynomial \(Q_r\) whose pullback along the circle factors exactly as a product of \(P\) and its reciprocal polynomial. This identity leads to transported Jensen formulas on the ellipse, a shell-counting interpretation of the free-energy slope, a closed Bessel representation for the exponential moment generating function of the pushed-forward Haar measure, and a Lee--Yang free-energy law when the zeros of \(P\) lie on the unit circle \citep{LeeYang1952I,LeeYang1952II,Mahler1962,Smyth1981,Boyd1981,EverestWard1999}. At the level of elimination theory, the same factorization yields explicit discriminant formulas and an exact one-scale holographic reconstruction procedure under noiseless full-polynomial data \citep{GKZ1994}.
 
+
+Thus the common complex-variable object throughout the paper is the boundary of a Joukowsky ellipse.  The Fourier and \(p\)-adic part studies this boundary through the speed of the covering \(z\mapsto z^m+c z^{-m}\); the G\"odel--Lorentz part studies the same confocal family through its scale, capacity, area, and condition number; and the Mahler/resultant part studies how a polynomial divisor on the unit circle is transported to that boundary by \(J_r\).  The arithmetic quantities are therefore not separate decorations: they are invariants of the same ellipse boundary under spectral, capacity/Mahler, and elimination-theoretic probes.
+
+\begin{theorem}[Main theorem map]\label{thm:main-theorem-map}
+The results of this paper form the following dependency chain.
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item The notation and normalization in Definition \ref{def:reciprocal-transport-normalization} determine the two transport objects \(P^\vee\) and \(Q_r\).  With these conventions, Theorems \ref{thm:group-jg-pullback-factorization} and \ref{thm:group-jg-discriminant-factorization} give the algebraic transport and pair-interaction identities used in Sections \ref{sec:mahler-free-energy} and \ref{sec:discriminant}.
+  \item The elliptic-gate results in Section \ref{sec:elliptic-gates} are independent of the polynomial \(P\) but use the same Joukowsky ellipse boundary: their Fourier-support, \(p\)-adic slope, reconstruction, and finite-audit obstruction statements are consequences of the explicit parametrization \(J_{c,m}(\TT)=E_c\).
+  \item The G\"odel--Lorentz results in Section \ref{sec:godel-lorentz} identify multiplicative prime-register addition with rapidity addition for the confocal Joukowsky scale, and the resulting capacity, area, condition-number, and ellipsoid-volume extremal statements depend only on that scale dictionary.
+  \item The Mahler and Lee--Yang identities in Section \ref{sec:mahler-free-energy} are obtained by integrating the pullback factorization of Theorem \ref{thm:group-jg-pullback-factorization} over \(\TT\), while the discriminant and holographic statements in Section \ref{sec:discriminant} are obtained from Theorem \ref{thm:group-jg-discriminant-factorization} and the resultant construction of Proposition \ref{prop:group-jg-exact-reconstruction-interface}.
+\end{enumerate}
+Consequently every headline block in the article is tied to the same confocal Joukowsky-ellipse chain, and the later reconstruction theorem uses no data beyond the exact scale \(r\), the full polynomial \(Q_r\), and the shell separation supplied by \(r>1\).
+\end{theorem}
+
+\begin{proof}
+Definition \ref{def:reciprocal-transport-normalization} fixes the coefficient and root conventions for the transport polynomial, so Theorem \ref{thm:group-jg-pullback-factorization} is a direct algebraic identity in those objects.  The proof of Theorem \ref{thm:group-jg-discriminant-factorization} differentiates only the pairwise differences of the transported roots \(J_r(z_i)-J_r(z_j)\), hence depends on the same normalization and gives the elimination input for Section \ref{sec:discriminant}.  The statements in Section \ref{sec:mahler-free-energy} explicitly invoke Theorem \ref{thm:group-jg-pullback-factorization} and average it with respect to the pushed-forward Haar measure on \(E_r=J_r(\TT)\), so their dependence is exactly the pullback factorization.
+
+The elliptic-gate section uses the map \(e^{i\theta}\mapsto e^{im\theta}+c e^{-im\theta}\), whose image is the same type of Joukowsky ellipse as \(J_r(\TT)\) after the scale change encoded by the semi-axes.  Its Fourier and \(p\)-adic conclusions therefore probe the boundary parametrization rather than an unrelated arithmetic object.  The G\"odel--Lorentz section writes multiplicative registers in logarithmic rapidity coordinates; its capacity and extremal formulas are functions of the corresponding Joukowsky scale and hence of the same confocal ellipse family.  Finally, Proposition \ref{prop:group-jg-exact-reconstruction-interface} gives the formal resultant interface used by the single-scale reconstruction corollaries.  These references account for all arrows listed above, proving that the theorem blocks form one chain rather than independent fragments.
+\end{proof}
+
 The paper is organized as follows. Section \ref{sec:preliminaries} fixes notation and records the pullback/discriminant factorizations that drive the later arguments. Section \ref{sec:elliptic-gates} develops the Fourier and \(p\)-adic rigidity theory for elliptic projection gates. Section \ref{sec:godel-lorentz} constructs the Gödel--Lorentz dictionary and its extremal consequences. Section \ref{sec:mahler-free-energy} establishes the Mahler/free-energy identities and the associated ellipse dynamics. Section \ref{sec:discriminant} derives discriminant and resultant corollaries, and Section \ref{sec:discussion} closes with consequences for capacity theory, \(p\)-adic asymptotics, and several open problems.
 
 %% ============================================================
@@ -109,17 +129,33 @@ If \(f\in L^1(\TT)\), its Fourier coefficients are
 \qquad (k\in\ZZ).
 \]
 
-Let \(K\) be a field and let
+Let \(K\) be a field.  The following convention fixes the normalization used everywhere below.
+
+\begin{definition}[Reciprocal and transport normalization]\label{def:reciprocal-transport-normalization}
+Let
 \[
-P(u)=a_n\prod_{j=1}^{n}(u-z_j)\in K[u],
+P(u)=\sum_{k=0}^{n}a_k u^k=a_n\prod_{j=1}^{n}(u-z_j)\in K[u],
 \qquad
-a_0=P(0)\neq 0,
+n\ge 1,
+\qquad
+ a_n a_0\ne0,
 \]
-with roots taken in a fixed algebraic closure of \(K\). We use the reciprocal polynomial
+with roots taken in a fixed algebraic closure of \(K\).  Its reciprocal polynomial is the root-normalized reciprocal
 \[
-P^{\vee}(u):=u^nP(1/u),
+P^{\vee}(u):=a_n^{-1}u^nP(1/u)=\prod_{j=1}^{n}(1-u z_j),
 \]
-the zero set notation \(\mathrm{Zero}(F)\) for a polynomial \(F\), and the standard resultant/discriminant notation \(\operatorname{Res}\) and \(\operatorname{Disc}\) \citep{GKZ1994}. For \(\rho>0\), we define the logarithmic circular mean
+so the leading coefficient of \(P^\vee\) is \(a_0/a_n\) and the constant coefficient is \(1\).  The unnormalized reciprocal is \(u^nP(1/u)=a_nP^\vee(u)\).  For an indeterminate \(r\), or for \(r\in K^\times\), the associated Joukowsky transport polynomial is
+\[
+Q_r(w):=a_0\prod_{j=1}^{n}\Bigl(w-r z_j-r^{-1}z_j^{-1}\Bigr)\in K(r)[w].
+\]
+Thus \(Q_r\) is normalized with leading coefficient \(a_0\).  If a monic transport polynomial is required, we write
+\[
+\widetilde Q_r(w):=a_0^{-1}Q_r(w).
+\]
+The phrase ``monic Lee--Yang input'' always refers to \(P\) being monic in the variable \(u\); the induced \(Q_r\) has leading coefficient \(a_0=(-1)^n\prod_j z_j\), while \(\widetilde Q_r\) is the corresponding monic transport polynomial with the same zero divisor.
+\end{definition}
+
+We use the zero set notation \(\mathrm{Zero}(F)\) for a polynomial \(F\), and the standard resultant/discriminant notation \(\operatorname{Res}\) and \(\operatorname{Disc}\) \citep{GKZ1994}. For \(\rho>0\), we define the logarithmic circular mean
 \[
 \mathcal M_\rho(P):=\frac{1}{2\pi}\int_{0}^{2\pi}\log|P(\rho e^{i\theta})|\,\dd\theta,
 \]
@@ -128,11 +164,7 @@ so that \(\mathcal M_1(P)\) is the logarithmic Mahler measure of \(P\) \citep{Ma
 The next two identities are the algebraic input for the Mahler, discriminant, and holographic statements in Sections \ref{sec:mahler-free-energy} and \ref{sec:discriminant}.
 
 \begin{theorem}[Pullback factorization]\label{thm:group-jg-pullback-factorization}
-Let \(P(u)=a_n\prod_{j=1}^{n}(u-z_j)\in K[u]\) with \(a_0\neq 0\), and let \(r\) be an indeterminate or an element of \(K^\times\). Define
-\[
-Q_r(w):=a_0\prod_{j=1}^{n}\Bigl(w-r z_j-r^{-1}z_j^{-1}\Bigr).
-\]
-Then \(Q_r(w)\in K(r)[w]\), and for every \(z\in\CC^\times\) one has
+Let \(P\), \(P^\vee\), and \(Q_r\) be as in Definition \ref{def:reciprocal-transport-normalization}, and let \(r\) be an indeterminate or an element of \(K^\times\). Then \(Q_r(w)\in K(r)[w]\), and for every \(z\in\CC^\times\) one has
 \[
 \boxed{\;
 r^n z^n\,Q_r\!\bigl(J_r(z)\bigr)=P(z)\,P^\vee(r^2 z).
@@ -160,7 +192,7 @@ Q_r\!\bigl(J_r(z)\bigr)
 \]
 The first factor is \(P(z)\), while
 \[
-P^\vee(r^2 z)=a_n\prod_{j=1}^{n}(1-r^2 z z_j)=a_n(-1)^n\prod_{j=1}^{n}(r^2 z z_j-1).
+P^\vee(r^2 z)=\prod_{j=1}^{n}(1-r^2 z z_j)=(-1)^n\prod_{j=1}^{n}(r^2 z z_j-1).
 \]
 Combining the two identities gives the stated factorization.
 \end{proof}
