@@ -85,6 +85,33 @@ Our main contributions may be summarized as follows.
 \item At each fixed resolution we compute \(H_1\), \(H_2\), and \(H^2(\cdot;\ZZ_2)\) of the fold-gauge groups from multiplicity thresholds.  These homology ranks, the associated capacity values, and the later last-bit quantities are used as finite-resolution certificate-family statistics unless independent fold-aware descent data are supplied; the last-bit testing and KL limits are conditional on the stated homogenized audit hypothesis.
 \end{enumerate}
 
+The following theorem packages the precise form of the main result, including the finite-resolution and conditional clauses that are used later in the paper.
+
+\begin{theorem}[Main theorem package]\label{thm:main-theorem-package}
+For the audited binary fold certificate of Definition \ref{def:audited-binary-fold-certificate}, the following statements hold.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \textup{(Spectral nonlumpability.)}  If a surjection from \(Q_m\) is an equitable, equivalently hidden-state-free strongly lumpable, quotient of the simple random walk, then every quotient eigenvalue lies in \(\{1-2k/m:0\le k\le m\}\).  In window \(6\), the audited kernel \(P_6^{\mathrm{bin}}\) has certified eigenvalues in
+\[
+(0.4841207858,0.4841207859),
+\qquad
+(-0.6030939755,-0.6030939754),
+\]
+so it is not the quotient kernel of an equitable partition of \(Q_6\).
+\item \textup{(Boundary orientation rigidity.)}  On every audited boundary uplift fiber \(\Delta_m^{\mathrm{bdry}}(w)\) of size at least \(2\), every permutation-natural nontrivial binary jump structure factors uniquely through the sign character of the corresponding symmetric group.  Equivalently, the canonical object is the orientation torsor \(\mathrm{Or}(\Delta_m^{\mathrm{bdry}}(w))\); the window-\(6\) two-sheet parity is its two-point specialization, while higher boundary fibers have no functorial distinguished sheet label.
+\item \textup{(Fixed-resolution gauge homology.)}  For each fixed \(m\), the fold-gauge group splits as
+\[
+\mathcal G_m^{\mathrm{bin}}\cong\prod_{w\in X_m}\mathfrak S_{d_m^{\mathrm{bin}}(w)},
+\]
+and its low-degree homology and \(\ZZ_2\)-extension classes are the symmetric-group threshold formulas proved in Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology}.  These homology ranks and the associated capacity and central-charge counts are fixed-resolution certificate statistics unless a fold-aware stable system satisfying Definition \ref{def:fold-aware-stable-system} is supplied.
+\item \textup{(Stable-system obstruction.)}  The concrete audited folds admit no fold-aware stable system over the boundary indicator on any index set containing \(6\) and \(7\).  More generally, every fiberwise-trivial stable descent over a statistic is obstructed by any two comparable fibers over equal statistic value whose audited fiber cardinalities differ; hence the boundary obstruction is the instance \(2\ne3\) certified by Lemma \ref{lem:audited-binary-fold-certificate-identities}.
+\item \textup{(Conditional entropy and one-bit tests.)}  The total-variation collapse to the last-bit statistic and the Bernoulli KL limit in Theorem \ref{thm:window6-binfold-lastbit-lecam-equivalence} and Corollary \ref{cor:window6-binfold-kl-limit-constant} are conditional on the homogenized last-bit audit hypothesis of Definition \ref{def:homogenized-lastbit-audit-hypothesis}.  Without that analytic hypothesis they are not asserted; without fold-aware probability-space descent maps they are asymptotic finite-certificate statements rather than cross-resolution invariants.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Part \textup{(i)} is the combination of Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity}, Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, Lemma \ref{lem:foldbin6-characteristic-certificate}, Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate}, and Corollary \ref{cor:terminal-window6-nonlumpable-by-spectrum}: the general theorem gives spectral inclusion for every equitable quotient, while the audited characteristic and Sturm certificates place two eigenvalues of \(P_6^{\mathrm{bin}}\) outside the window-\(6\) grid.  Part \textup{(ii)} is Theorem \ref{thm:bdry-z2-jump-functor-uniqueness} together with Corollary \ref{cor:bdry-uplift-orientation-parity} and Theorem \ref{thm:window6-bdry-sheet-parity-nonfunctorial-extension}.  Part \textup{(iii)} follows from Lemma \ref{lem:audited-binary-fold-certificate-identities} and Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology}, with the fixed-resolution status supplied by Theorem \ref{thm:fold-aware-stable-descent}.  Part \textup{(iv)} is Theorem \ref{thm:fiber-cardinality-obstruction-stable-descent} specialized in Theorem \ref{thm:audited-folds-boundary-descent-obstruction}.  Part \textup{(v)} is Proposition \ref{prop:lastbit-homogenization-interface}, Theorem \ref{thm:lastbit-certificate-logical-scope-stability}, Theorem \ref{thm:window6-binfold-lastbit-lecam-equivalence}, and Corollary \ref{cor:window6-binfold-kl-limit-constant}. \qedhere
+\end{proof}
+
 The separation between the classical input and the new certificate is the following.  The equivalence between equitability, strong lumpability, and an intertwining relation is a standard finite-state Markov-chain tool, and the resulting spectral inclusion for an equitable quotient is the usual invariant-subspace consequence of an intertwining.  What is not supplied by those general facts is an exact audited fold, an exact pushforward matrix for that fold, or an orientation calculus for the boundary gauge data.  Those are the paper-specific objects constructed and certified here.  The finite audit is also supplied as a standalone supplemental Sage/Python script, \texttt{supplement/window6\_audit\_certificate.sage}, whose source hash is recorded in Appendix \ref{app:audited-computation-certificate}.
 
 \begin{proposition}[Classical--audited interface of the main theorem chain]\label{prop:classical-audited-interface-main-chain}
@@ -327,6 +354,24 @@ For the group statement, fix \(g=(g_x)_{x\in X_m}\in\prod_x\Sym(F_m^{-1}(x))\). 
 Because the displayed restriction of \(\pi_{n,m}\) is a bijection, this is a well-defined permutation of the fiber over \(y\).  Different fibers of \(F_n\) are disjoint, so these permutations assemble uniquely into an element of the product gauge group at resolution \(n\).  The assignment is a homomorphism, since conjugation and direct products preserve multiplication.  If \(g\ne h\), choose a fiber \(x\) with \(g_x\ne h_x\).  Because \(\rho_{n,m}\) is a map between the state spaces of a stable system over the folds and the relevant fibers are nonempty, any nonempty preimage fiber over \(x\) detects the difference after conjugation; hence the displayed map is injective on the descended subsystem.  Finally, the identities \(\rho_{p,m}=\rho_{n,m}\rho_{p,n}\) and \(\pi_{p,m}=\pi_{n,m}\pi_{p,n}\) imply that conjugating directly from level \(m\) to level \(p\) is the same as conjugating first to level \(n\) and then to level \(p\).  This proves \(\iota_{p,m}=\iota_{p,n}\iota_{n,m}\).
 
 The last sentence follows because the construction used every item of descent data.  If no such data are supplied, there is no canonical map comparing fibers, gauge groups, central-charge sectors, or probability spaces at different resolutions, so a numerical sequence such as a threshold count, a capacity value, a homology rank, or a last-bit testing statistic is only the value of a statistic on each separately chosen certificate. \qedhere
+\end{proof}
+
+
+\begin{theorem}[Fiber-cardinality obstruction to fiberwise-trivial stable descent]\label{thm:fiber-cardinality-obstruction-stable-descent}
+Let \((F_m,\rho_{n,m},\pi_{n,m})\) be a fold-aware stable system on an index set \(I\), and suppose it is fiberwise trivial over compatible statistics \(s_m:X_m\to S\).  Then for every \(n\ge m\) in \(I\) and every \(y\in X_n\), one has
+\[
+\card{F_n^{-1}(y)}=
+\card{F_m^{-1}(\rho_{n,m}(y))}.
+\]
+Consequently, if for some \(n\ne m\) every statistic-compatible candidate map \(\rho:X_n\twoheadrightarrow X_m\), meaning \(s_n=s_m\rho\), sends at least one state \(y\in X_n\) to a state \(x=\rho(y)\) with unequal fiber cardinalities, then no fiberwise-trivial fold-aware stable system over the statistics \((s_m)\) exists on an index set containing \(m\) and \(n\).
+\end{theorem}
+
+\begin{proof}
+By Definition \ref{def:fold-aware-stable-system}, fiberwise triviality says that, for every \(y\in X_n\), the restriction
+\[
+\pi_{n,m}:F_n^{-1}(y)\longrightarrow F_m^{-1}(\rho_{n,m}(y))
+\]
+is a bijection.  Bijections preserve cardinality, proving the displayed equality.  For the consequence, assume a stable system exists.  Its structure map \(\rho_{n,m}\) is one of the statistic-compatible candidate maps because compatibility gives \(s_n=s_m\rho_{n,m}\).  The first part then forces equality of fiber cardinalities for every \(y\), contradicting the stated mismatch condition for that candidate map. \qedhere
 \end{proof}
 
 
