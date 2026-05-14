@@ -69,6 +69,7 @@ LOCAL_REPAIR_SCRIPT_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outr
 SCHEMA_VERSION = "community-outreach-state-v3-research-board"
 SUPERVISOR_SCHEMA_VERSION = "community-outreach-supervisor-v1"
 PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
+PRE_ORACLE_WORKUP_GATE_CHARS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_GATE_CHARS", "60000") or "60000")
 
 @dataclass
 class DispatchPlan:
@@ -1404,7 +1405,11 @@ def _read_codex_next_oracle_question(slug: str, *, max_chars: int = 4000) -> str
     have a `## Next Oracle question` section inside codex_workup.md, so keep a
     fallback extractor to avoid regressing live targets during rollout.
     """
-    workup = _read_target_context_file(slug, "codex_workup.md", max_chars=max(12000, max_chars))
+    workup = _read_target_context_file(
+        slug,
+        "codex_workup.md",
+        max_chars=max(PRE_ORACLE_WORKUP_GATE_CHARS, max_chars),
+    )
     if not _codex_workup_has_local_trace(workup):
         return ""
     workup_question = _extract_markdown_section(workup, "Next Oracle question", max_chars=max_chars)
@@ -1473,7 +1478,11 @@ def _pre_oracle_codex_workup_status(slug: str) -> tuple[bool, str]:
     a Codex-selected mathematical gap backed by target-local inspection/replay,
     not a board-card metadata restatement.
     """
-    workup = _read_target_context_file(slug, "codex_workup.md", max_chars=16000)
+    workup = _read_target_context_file(
+        slug,
+        "codex_workup.md",
+        max_chars=PRE_ORACLE_WORKUP_GATE_CHARS,
+    )
     if not workup.strip():
         return False, "missing codex_workup.md"
     if not _codex_workup_has_local_trace(workup):
