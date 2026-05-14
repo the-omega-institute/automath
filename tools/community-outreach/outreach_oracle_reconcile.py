@@ -400,6 +400,7 @@ def _is_transport_stub_response(text: str) -> bool:
         "error: task cancelled by server",
         "error (re-extract):",
         "error: empty response",
+        "error: no assistant output after",
         "empty response (timeout or extraction failure)",
         "no assistant output after",
         "re-extract: nothing meaningful",
