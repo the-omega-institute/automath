@@ -150,6 +150,86 @@ def main() -> int:
             )
         dispatch.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
 
+        class FakeConsultant:
+            server_url = "http://127.0.0.1:8766"
+
+            def is_alive(self) -> bool:
+                return True
+
+            def deep_reasoning(self, *_args, **_kwargs):
+                if os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV) != "1":
+                    raise AssertionError("dispatch did not mark handoff as verified before Oracle deep reasoning")
+                return {
+                    "final_verdict": "EXHAUSTED",
+                    "turns": [],
+                    "total_elapsed_seconds": 0,
+                    "conversation_id": "conv_demo",
+                }
+
+        old_run_pre = dispatch._run_pre_oracle_codex_workup
+        old_build_initial = dispatch._build_deep_initial_prompt
+        old_resume_conv = dispatch._resume_conversation_id
+        old_env = os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV)
+        dispatch._run_pre_oracle_codex_workup = lambda *_args, **_kwargs: (True, "", "test handoff")
+        dispatch._build_deep_initial_prompt = lambda *_args, **_kwargs: "initial"
+        dispatch._resume_conversation_id = lambda *_args, **_kwargs: ""
+        os.environ.pop(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV, None)
+        try:
+            import types
+
+            fake_oracle_module = types.SimpleNamespace(
+                DEFAULT_WRITE_PAPER_LATEX_PROMPT="write latex",
+                OracleConsultant=lambda state_dir=None: FakeConsultant(),
+                codex_driven_prompt_generator=None,
+                generate_outreach_paper=lambda path: path,
+                oracle_bridge_readiness=lambda server_url: (True, "", {}),
+                run_paper_pipeline=lambda *_args, **_kwargs: {},
+            )
+            sys.modules["oracle_consultant"] = fake_oracle_module
+            fake_profile = types.SimpleNamespace(slug="demo")
+            result = dispatch._run_oracle_deep(
+                dispatch.TodoSpec(
+                    todo_id="T-DEMO",
+                    title="Demo certificate",
+                    status="active",
+                    source="local",
+                    type_="open_problem",
+                    untouched="",
+                    fit_score=10,
+                    topic_score=10,
+                    effort="small",
+                    risk="low",
+                    final_display="short note",
+                    success_gate="verifier passes",
+                    statement="demo",
+                    prior="",
+                    omega_fit_detail="",
+                    attack_plan=[],
+                    worktree_inputs=[],
+                    deliverables=[],
+                    raw_block="",
+                ),
+                fake_profile,
+                repo_root=repo_root,
+                state_dir=repo_root / "tools/community-outreach/outreach_state",
+                oracle_timeout=60,
+                max_turns=1,
+                write_latex=False,
+            )
+        finally:
+            dispatch._run_pre_oracle_codex_workup = old_run_pre
+            dispatch._build_deep_initial_prompt = old_build_initial
+            dispatch._resume_conversation_id = old_resume_conv
+            sys.modules.pop("oracle_consultant", None)
+            if old_env is None:
+                os.environ.pop(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV, None)
+            else:
+                os.environ[dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV] = old_env
+        if not result or result.get("conversation_id") != "conv_demo":
+            raise AssertionError(f"fake oracle-deep did not return expected run: {result}")
+        if os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV) != old_env:
+            raise AssertionError("dispatch leaked the verified-handoff env var after oracle deep reasoning")
+
         weak_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now - 2))
         weak_payload["postcheck"]["substantive_local_work"].pop("report_declares_pre_oracle_processing")
         (target_dir / "local_repair_last.json").write_text(

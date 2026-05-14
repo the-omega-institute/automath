@@ -73,6 +73,10 @@ ALLOW_PRE_ORACLE_WORKUP_REUSE = os.environ.get(
     "OUTREACH_ALLOW_PRE_ORACLE_WORKUP_REUSE",
     "",
 ).lower() in {"1", "true", "yes"}
+DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF"
+DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_TODO_ID"
+DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_SLUG"
+DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_LOG"
 PRE_ORACLE_WORKUP_GATE_CHARS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_GATE_CHARS", "60000") or "60000")
 
 @dataclass
@@ -938,15 +942,30 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
           f"{max_turns} × {oracle_timeout}s = {max_turns * oracle_timeout // 60}min "
           f"write_latex={write_latex} codex_driver={codex_driver} "
           f"resume_conv={resume_conv[:12] if resume_conv else '-'}")
-    run = consultant.deep_reasoning(
-        todo, initial,
-        max_turns=max_turns,
-        prompt_generator=codex_driven_prompt_generator if codex_driver else None,
-        per_turn_timeout=oracle_timeout,
-        terminal_prompt=DEFAULT_WRITE_PAPER_LATEX_PROMPT if write_latex else None,
-        resume_conversation_id=resume_conv,
-        slug=profile.slug,
-    )
+    dispatch_handoff_env = {
+        DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV: "1",
+        DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV: todo.todo_id,
+        DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV: profile.slug,
+        DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV: workup_log,
+    }
+    old_handoff_env = {name: os.environ.get(name) for name in dispatch_handoff_env}
+    os.environ.update(dispatch_handoff_env)
+    try:
+        run = consultant.deep_reasoning(
+            todo, initial,
+            max_turns=max_turns,
+            prompt_generator=codex_driven_prompt_generator if codex_driver else None,
+            per_turn_timeout=oracle_timeout,
+            terminal_prompt=DEFAULT_WRITE_PAPER_LATEX_PROMPT if write_latex else None,
+            resume_conversation_id=resume_conv,
+            slug=profile.slug,
+        )
+    finally:
+        for name, old_value in old_handoff_env.items():
+            if old_value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = old_value
     print(f"[oracle-deep] {todo.todo_id} → verdict={run['final_verdict']} "
           f"turns={len(run['turns'])} elapsed={run['total_elapsed_seconds']}s "
           f"conv={run.get('conversation_id','')[:12]}")
@@ -1943,13 +1962,13 @@ def _build_deep_resume_prompt(todo: TodoSpec, *, resume_conversation_id: str) ->
         gate_status = ""
     parts = [
         f"Continue from the previous answer in this same conversation `{resume_conversation_id}`.",
-        "Do not restart or restate the whole problem. Use the transcript and the existing artifact packet as context.",
+        "Do not restart or restate the whole problem.",
         f"Target: {todo.todo_id} · {todo.title}.",
     ]
     if next_oracle_question:
         parts += [
             "",
-            "Codex just inspected/replayed the local workspace and selected this exact next Oracle task. Answer it directly.",
+            "Codex just replayed/checked the local workspace and selected this exact next task. Answer it directly.",
             "",
             next_oracle_question,
             "",

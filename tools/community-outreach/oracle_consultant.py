@@ -66,6 +66,10 @@ ALLOW_PRE_ORACLE_WORKUP_REUSE = os.environ.get(
     "OUTREACH_ALLOW_PRE_ORACLE_WORKUP_REUSE",
     "",
 ).lower() in {"1", "true", "yes"}
+DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF"
+DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_TODO_ID"
+DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_SLUG"
+DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_LOG"
 ORACLE_TRANSPORT_ERROR_RE = re.compile(
     r"^\s*ERROR\b|No assistant output after|re-extract: nothing meaningful|"
     r"Task cancelled by server|empty response",
@@ -1606,6 +1610,23 @@ def _run_pre_oracle_codex_workup_for_todo(todo: TodoSpec, *, per_turn_timeout: i
     """
     slug = todo.slug()
     reason = ""
+    if _dispatch_verified_pre_oracle_handoff(todo):
+        ok, reason = _pre_oracle_codex_handoff_ok(slug, require_recent=True)
+        if ok:
+            return {
+                "ok": True,
+                "slug": slug,
+                "todo_id": todo.todo_id,
+                "reused_dispatch_verified": True,
+                "log_path": os.environ.get(DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV, ""),
+            }
+        return {
+            "ok": False,
+            "slug": slug,
+            "todo_id": todo.todo_id,
+            "handoff_signal": DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV,
+            "error": f"dispatch-verified pre-Oracle handoff failed validation: {reason}",
+        }
     if ALLOW_PRE_ORACLE_WORKUP_REUSE:
         ok, reason = _pre_oracle_codex_handoff_ok(slug, require_recent=True)
         if ok:
@@ -1671,6 +1692,20 @@ def _run_pre_oracle_codex_workup_for_todo(todo: TodoSpec, *, per_turn_timeout: i
         "elapsed_seconds": int(time.time() - started),
         "log_path": str(log_path.relative_to(REPO_ROOT)),
     }
+
+
+def _dispatch_verified_pre_oracle_handoff(todo: TodoSpec) -> bool:
+    """True only for dispatch_worktree's same-process verified handoff."""
+    enabled = str(os.environ.get(DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV) or "").lower()
+    if enabled not in {"1", "true", "yes"}:
+        return False
+    env_todo = str(os.environ.get(DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV) or "")
+    env_slug = str(os.environ.get(DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV) or "")
+    if env_todo and env_todo != todo.todo_id:
+        return False
+    if env_slug and env_slug != todo.slug():
+        return False
+    return True
 
 
 def _run_local_codex_replay_after_oracle(
@@ -1850,7 +1885,7 @@ def _resume_short_prompt(
         return (
             "\n".join([
                 "Continue from the previous answer in this same conversation. Do not restart or restate the whole problem.",
-                "Codex just inspected/replayed the local workspace and selected this exact next Oracle task. Answer it directly.",
+                "Codex just replayed/checked the local workspace and selected this exact next task. Answer it directly.",
                 "",
                 next_oracle_question,
                 "",

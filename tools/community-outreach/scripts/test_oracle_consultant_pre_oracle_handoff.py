@@ -212,12 +212,84 @@ def main() -> int:
             )
         oracle.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
 
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV] = "1"
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV] = "T-DEMO"
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV] = "demo"
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV] = "dispatch-log"
+        old_popen = oracle.subprocess.Popen
+        oracle.subprocess.Popen = lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("dispatch-verified handoff should not spawn local repair")
+        )
+        try:
+            ok_result = oracle._run_pre_oracle_codex_workup_for_todo(
+                _todo(oracle),
+                per_turn_timeout=120,
+            )
+        finally:
+            oracle.subprocess.Popen = old_popen
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV, None)
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV, None)
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV, None)
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV, None)
+        if not ok_result.get("ok") or not ok_result.get("reused_dispatch_verified"):
+            raise AssertionError(
+                "oracle consultant did not validate/reuse a dispatch-verified handoff without spawning local repair: "
+                f"{ok_result}"
+            )
+        if ok_result.get("log_path") != "dispatch-log":
+            raise AssertionError(f"dispatch handoff log path was not preserved: {ok_result}")
+
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV] = "1"
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV] = "T-OTHER"
+        old_repo_root = oracle.REPO_ROOT
+        oracle.REPO_ROOT = target_root / "fake_repo_without_local_repair"
+        try:
+            wrong_target_result = oracle._run_pre_oracle_codex_workup_for_todo(
+                _todo(oracle),
+                per_turn_timeout=120,
+            )
+        finally:
+            oracle.REPO_ROOT = old_repo_root
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV, None)
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV, None)
+        if wrong_target_result.get("ok") or "missing local repair script" not in str(
+            wrong_target_result.get("error") or ""
+        ):
+            raise AssertionError(
+                "oracle consultant reused a dispatch-verified handoff for the wrong todo id: "
+                f"{wrong_target_result}"
+            )
+
         weak_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now - 2))
         weak_payload["postcheck"]["substantive_local_work"].pop("report_declares_pre_oracle_processing")
         (target_dir / "local_repair_last.json").write_text(
             json.dumps(weak_payload, indent=2),
             encoding="utf-8",
         )
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV] = "1"
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV] = "T-DEMO"
+        os.environ[oracle.DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV] = "demo"
+        old_popen = oracle.subprocess.Popen
+        oracle.subprocess.Popen = lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("bad dispatch-verified handoff should fail validation before local repair")
+        )
+        try:
+            bad_dispatch_result = oracle._run_pre_oracle_codex_workup_for_todo(
+                _todo(oracle),
+                per_turn_timeout=120,
+            )
+        finally:
+            oracle.subprocess.Popen = old_popen
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV, None)
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV, None)
+            os.environ.pop(oracle.DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV, None)
+        if bad_dispatch_result.get("ok") or "dispatch-verified pre-Oracle handoff failed validation" not in str(
+            bad_dispatch_result.get("error") or ""
+        ):
+            raise AssertionError(
+                "oracle consultant should fail a stale/bad dispatch-verified handoff instead of spawning local repair: "
+                f"{bad_dispatch_result}"
+            )
         ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
         if ok or "pre-Oracle mathematical action" not in reason:
             raise AssertionError(
