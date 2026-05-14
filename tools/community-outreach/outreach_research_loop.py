@@ -95,6 +95,10 @@ from outreach_impact_gate import (  # noqa: E402
     write_ledger as write_impact_ledger,
 )
 from outreach_profile import load_profile  # noqa: E402
+from outreach_oracle_response_gate import (  # noqa: E402
+    claim_packet_oracle_response,
+    is_non_substantive_oracle_response,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -1113,31 +1117,11 @@ def _pre_oracle_workup_fresh_after(slug: str, started_at: float) -> tuple[bool, 
 
 
 def _is_transport_stub_response(text: str) -> bool:
-    stripped = (text or "").strip()
-    if not stripped:
-        return True
-    lowered = stripped.lower()
-    markers = (
-        "error: task cancelled by server",
-        "error (re-extract):",
-        "error: empty response",
-        "empty response (timeout or extraction failure)",
-        "no assistant output after",
-        "re-extract: nothing meaningful",
-        "re-extract: empty response",
-        "server unreachable",
-    )
-    if any(lowered.startswith(marker) for marker in markers):
-        return True
-    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+    return is_non_substantive_oracle_response(text)
 
 
 def _claim_packet_oracle_response(text: str) -> str:
-    marker = "## Oracle Response"
-    idx = text.find(marker)
-    if idx < 0:
-        return text
-    return text[idx + len(marker) :].strip()
+    return claim_packet_oracle_response(text)
 
 
 def _latest_substantive_claim_packet(target_dir: Path) -> Path | None:

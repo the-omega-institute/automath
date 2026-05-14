@@ -29,6 +29,24 @@ def main() -> int:
         "No assistant output after 300s (page=15357, url=...)",
         "ERROR: Task cancelled by server: deep_demo",
         "ERROR (re-extract): re-extract: nothing meaningful (0 chars)",
+        "\n".join([
+            "You are the primary mathematical worker on this Omega Project outreach target.",
+            "This is not an outreach-copywriting task.",
+            "",
+            "## Current Codex-selected task",
+            "Codex has already processed the local target directory.",
+            "",
+            "## Codex local workup",
+            "Local background that was sent to the Oracle.",
+            "",
+            "## Compact science contract",
+            "Verifier: A writeback-ready result requires evidence.",
+            "",
+            "## Your first turn",
+            "Give the first contract-driven research step. Use this exact structure:",
+            "  1. CONTRACT TARGET: ...",
+            "Do not summarize the problem back to me. Start doing the mathematics.",
+        ]),
     ]
     for text in stubs:
         if not rec._is_transport_stub_response(text):

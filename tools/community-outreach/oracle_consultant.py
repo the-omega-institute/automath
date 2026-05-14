@@ -99,6 +99,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from outreach_board_parser import parse_board, BOARD_PATH_DEFAULT, TodoSpec  # noqa: E402
 from outreach_profile import load_profile  # noqa: E402
 from outreach_science_gate import science_contract_block  # noqa: E402
+from outreach_oracle_response_gate import (  # noqa: E402
+    claim_packet_oracle_response,
+    is_non_substantive_oracle_response,
+)
 
 _DISTILL_LOG_DIR = None
 _distill_codex_exec = None
@@ -387,6 +391,8 @@ def is_outreach_response_valid(response: str) -> bool:
     if not response:
         return False
     cleaned = response.strip()
+    if is_non_substantive_oracle_response(cleaned):
+        return False
     if len(cleaned) < 1500:
         return False
     if len(cleaned.split()) < 40:
@@ -401,7 +407,7 @@ def is_outreach_response_valid(response: str) -> bool:
 
 
 def is_oracle_transport_error(response: str) -> bool:
-    return bool(ORACLE_TRANSPORT_ERROR_RE.search(response or ""))
+    return bool(ORACLE_TRANSPORT_ERROR_RE.search(response or "")) or is_non_substantive_oracle_response(response or "")
 
 
 # ---------------------------------------------------------------------------
@@ -1503,11 +1509,7 @@ def _pre_oracle_target_files_recent(slug: str, *, max_age_seconds: int) -> tuple
 
 
 def _claim_packet_oracle_response(text: str) -> str:
-    marker = "## Oracle Response"
-    idx = text.find(marker)
-    if idx < 0:
-        return text
-    return text[idx + len(marker) :].strip()
+    return claim_packet_oracle_response(text)
 
 
 def _latest_substantive_claim_packet(target_dir: Path) -> Path | None:
@@ -2708,23 +2710,7 @@ def _codex_digest_oracle_turn(
 
 
 def _is_transport_stub_response(text: str) -> bool:
-    stripped = (text or "").strip()
-    if not stripped:
-        return True
-    lowered = stripped.lower()
-    transport_markers = (
-        "error: task cancelled by server",
-        "error (re-extract):",
-        "error: empty response",
-        "empty response (timeout or extraction failure)",
-        "no assistant output after",
-        "re-extract: nothing meaningful",
-        "re-extract: empty response",
-        "server unreachable",
-    )
-    if any(lowered.startswith(marker) for marker in transport_markers):
-        return True
-    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+    return is_non_substantive_oracle_response(text)
 
 
 def _prior_turns_summary(all_turns: list[dict], *, limit: int = 2000) -> str:

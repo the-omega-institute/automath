@@ -28,6 +28,7 @@ LEDGER_NAME = "science_gate.json"
 
 sys.path.insert(0, str(SCRIPT_DIR))
 from outreach_board_parser import TodoSpec, parse_board  # noqa: E402
+from outreach_oracle_response_gate import is_non_substantive_oracle_response  # noqa: E402
 from outreach_profile import OutreachProfile, load_profile  # noqa: E402
 
 
@@ -650,6 +651,11 @@ def _deep_run_transport_failed(run: dict) -> bool:
     return True
 
 
+def _deep_run_non_substantive(run: dict) -> bool:
+    text = _deep_response_text(run)
+    return bool(text and is_non_substantive_oracle_response(text))
+
+
 def _has_any(text: str, terms: tuple[str, ...]) -> bool:
     lower = text.lower()
     return any(term in lower for term in terms)
@@ -1084,6 +1090,10 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
     deep_run = _latest_deep_run(state)
     deep_text = _deep_response_text(deep_run)
     transport_failed = _deep_run_transport_failed(deep_run)
+    non_substantive_deep = _deep_run_non_substantive(deep_run)
+    if non_substantive_deep:
+        transport_failed = True
+        deep_text = ""
     combined = "\n\n".join([artifact_text, deep_text])
 
     if artifact_text:
@@ -1182,7 +1192,7 @@ def evaluate(todo: TodoSpec, *, include_pending_review: bool = False) -> Science
         reasons.append("artifact/deep run indicates closure or hard obstruction")
     elif transport_failed:
         status = NEEDS_EVIDENCE
-        reasons.append("latest oracle deep run failed at transport/extraction layer, not as a mathematical closure")
+        reasons.append("latest oracle deep run failed at transport/extraction/prompt-echo layer, not as a mathematical closure")
     else:
         status = CONTRACT_READY
         reasons.append("contract exists; evidence does not yet satisfy writeback/close")

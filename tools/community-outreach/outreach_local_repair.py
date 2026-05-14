@@ -56,9 +56,15 @@ try:
     sys_path_added = True
     from outreach_board_parser import parse_board  # noqa: E402
     from outreach_science_gate import evaluate as science_gate_evaluate  # noqa: E402
+    from outreach_oracle_response_gate import (  # noqa: E402
+        claim_packet_oracle_response,
+        is_non_substantive_oracle_response,
+    )
 except Exception as exc:  # noqa: BLE001
     parse_board = None  # type: ignore[assignment]
     science_gate_evaluate = None  # type: ignore[assignment]
+    claim_packet_oracle_response = None  # type: ignore[assignment]
+    is_non_substantive_oracle_response = None  # type: ignore[assignment]
     IMPORT_ERROR = str(exc)
 else:
     IMPORT_ERROR = ""
@@ -147,32 +153,20 @@ def _target_file_manifest(target_dir: Path) -> str:
 
 
 def _is_transport_stub_response(text: str) -> bool:
+    if is_non_substantive_oracle_response is not None:
+        return bool(is_non_substantive_oracle_response(text))
     stripped = (text or "").strip()
-    if not stripped:
-        return True
-    lowered = stripped.lower()
-    markers = (
-        "error: task cancelled by server",
-        "error (re-extract):",
-        "error: empty response",
-        "empty response (timeout or extraction failure)",
-        "no assistant output after",
-        "re-extract: nothing meaningful",
-        "re-extract: empty response",
-        "server unreachable",
-    )
-    if any(lowered.startswith(marker) for marker in markers):
-        return True
-    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+    return not stripped
 
 
 def _claim_packet_oracle_response(text: str) -> str:
+    if claim_packet_oracle_response is not None:
+        return str(claim_packet_oracle_response(text))
     marker = "## Oracle Response"
     idx = text.find(marker)
     if idx < 0:
         return text
-    response = text[idx + len(marker) :].strip()
-    return response
+    return text[idx + len(marker) :].strip()
 
 
 def _latest_claim_packets(target_dir: Path, *, count: int = 3, limit_each: int = 12000) -> str:

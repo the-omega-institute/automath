@@ -44,6 +44,7 @@ from outreach_board_parser import parse_board  # noqa: E402
 from outreach_candidate_inbox import add_candidate  # noqa: E402
 from outreach_freshness_judge import judge_path, load_judge, record  # noqa: E402
 from oracle_consultant import _materialize_file_blocks  # noqa: E402
+from outreach_oracle_response_gate import is_non_substantive_oracle_response  # noqa: E402
 
 
 def _extract_urls(text: str) -> list[str]:
@@ -392,24 +393,7 @@ def _write_oracle_claim_packet(
 
 
 def _is_transport_stub_response(text: str) -> bool:
-    stripped = (text or "").strip()
-    if not stripped:
-        return True
-    lowered = stripped.lower()
-    markers = (
-        "error: task cancelled by server",
-        "error (re-extract):",
-        "error: empty response",
-        "error: no assistant output after",
-        "empty response (timeout or extraction failure)",
-        "no assistant output after",
-        "re-extract: nothing meaningful",
-        "re-extract: empty response",
-        "server unreachable",
-    )
-    if any(lowered.startswith(marker) for marker in markers):
-        return True
-    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+    return is_non_substantive_oracle_response(text)
 
 
 def _append_deep_run_state(todo_id: str, slug: str, row: dict, *, artifacts: list[str], packet_path: str) -> None:
