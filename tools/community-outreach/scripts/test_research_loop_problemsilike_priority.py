@@ -102,6 +102,42 @@ def main() -> int:
             )
             if solved_ranked[0][0] != "T-90":
                 raise AssertionError("solved_external Problems I Like target was prioritized as active")
+
+            loop.TARGETS_DIR = target_root
+            profile_dir = target_root / fresh_pil.slug()
+            profile_dir.mkdir(parents=True, exist_ok=True)
+            (profile_dir / "profile.json").write_text(
+                """{
+  "schema_version": "outreach-target-profile-v1",
+  "todo_id": "T-43",
+  "slug": "problemsilike_02",
+  "title": "Problems I Like #2",
+  "source_url": "https://www.problemsilike.com/2",
+  "profile_status": "ready",
+  "final_display_form": "math result only",
+  "success_gate": "proof or counterexample",
+  "no_external_send_without_operator_approval": true,
+  "canonical_draft_paths": ["tools/community-outreach/targets/problemsilike_02/research.md"],
+  "expected_artifacts": ["tools/community-outreach/targets/problemsilike_02/research.md"],
+  "first_experiments": [{"label": "x", "command": [], "expected_outputs": [], "success_predicate": "x"}],
+  "fallback_contribution": "valuable obstruction only",
+  "science_contract": {
+    "contribution_type": "research_note",
+    "target_lane": "math_lane",
+    "terminal_artifact": "tools/community-outreach/targets/problemsilike_02/research.md",
+    "verifier": "local check",
+    "progress_metric": "proof gap count",
+    "evidence_required": ["evidence"],
+    "writeback_when": ["proof"],
+    "close_when": ["already solved"],
+    "no_progress_patience_turns": 2
+  }
+}
+""",
+                encoding="utf-8",
+            )
+            if loop._no_progress_patience(fresh_pil.slug()) < 20:
+                raise AssertionError("Problems I Like targets must get at least 20 no-progress turns")
         finally:
             loop.TARGETS_DIR = old_targets
     return 0

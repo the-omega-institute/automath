@@ -124,7 +124,7 @@ Output ONLY a JSON object. If viable, use this schema:
       "close_when": [
         "<condition under which target should be dropped, archived, or re-scoped>"
       ],
-      "no_progress_patience_turns": 2
+      "no_progress_patience_turns": 20
     }},
     "main_paper_bridge": {{
       "required_before_run": false,
@@ -253,7 +253,7 @@ Output ONLY a JSON object. If viable, use this schema:
       "close_when": [
         "<condition under which target should be dropped, archived, or re-scoped>"
       ],
-      "no_progress_patience_turns": 2
+      "no_progress_patience_turns": 20
     }},
     "main_paper_bridge": {{
       "required_before_run": false,

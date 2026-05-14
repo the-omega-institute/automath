@@ -1614,6 +1614,14 @@ def _no_progress_patience(slug: str) -> int:
         n = int(getattr(contract, "no_progress_patience_turns", 2) or 2)
     except (TypeError, ValueError):
         n = 2
+    source = str(getattr(profile, "source_url", "") if profile is not None else "").lower()
+    curated_problem = (
+        slug.startswith("problemsilike_")
+        or "problemsilike.com" in source
+        or slug.startswith("cand_litt_")
+    )
+    if curated_problem:
+        n = max(n, 20)
     return max(1, n)
 
 
