@@ -391,6 +391,17 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "bound",
         "ramsey",
         "color",
+        "curvature",
+        "pcurvature",
+        "monodromy",
+        "etale",
+        "étale",
+        "cover",
+        "rank",
+        "connection",
+        "morphism",
+        "mapping class",
+        "local system",
     )
     try:
         lines = stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()

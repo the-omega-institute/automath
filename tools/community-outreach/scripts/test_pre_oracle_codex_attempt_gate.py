@@ -292,6 +292,25 @@ def main() -> int:
         duplicate_skip = local_repair._post_codex_duplicate_replay_skip(trace)
         if not duplicate_skip or duplicate_skip.get("reason") != "post_codex_replay_trace_present_skip_duplicate_replay":
             raise AssertionError(f"post-Codex duplicate replay was not skipped from trace evidence: {duplicate_skip}")
+
+        pcurvature_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'python3 {rel_target}/rank_one_log_pcurvature.py'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": (
+                    "D = d/dt + a/t: p-curvature coefficient is a(a-1)...(a-p+1)=a^p-a\n"
+                    "zero coefficients for p=[7, 17]\n"
+                    "nonzero coefficients for p=[3, 5]\n"
+                ),
+            }
+        }
+        stdout_path.write_text(json.dumps(pcurvature_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("mathematical_action_command_count") or 0) <= 0:
+            raise AssertionError(f"p-curvature checker should count as mathematical action: {trace}")
+
         missing_pre_oracle_report = local_repair._substantive_local_workup_check(
             target_dir,
             _workup(include_attempt=True),
