@@ -46,6 +46,48 @@ V_m(w\boxtimes_m v)\equiv V_m(w)\,V_m(v)\pmod{F_{m+2}}.
 Since these operations are transported from the residue ring along a bijection, they endow \(X_m\) with a commutative ring structure for which \(V_m\) is a ring isomorphism. Uniqueness follows from bijectivity: any operations making \(V_m\) into a ring homomorphism must coincide with the pullback formulas above.
 \end{proof}
 
+\begin{proposition}[Finite windows are residue folds, not stable truncations]\label{prop:finite-stable-compatibility-warning}
+Fix \(m\ge 1\) and write \(M_m:=F_{m+2}\). Define the fold-aware residue projection
+\[
+\Pi_m:X_\infty\longrightarrow X_m,
+\qquad
+\Pi_m(c):=Z_m\bigl(\mathrm{Val}(c)\bmod M_m\bigr).
+\]
+Then \(\Pi_m\) is a semiring homomorphism from \((X_\infty,\oplus,\otimes)\) to \((X_m,\boxplus_m,\boxtimes_m)\). By contrast, the naive digit truncation \(\pi_m:X_\infty\to X_m\) is not, in general, compatible with finite-resolution arithmetic; already for \(m=1\) it fails to preserve addition.
+\end{proposition}
+
+\begin{proof}
+For \(c,d\in X_\infty\), Theorems \ref{thm:add-definitional} and \ref{thm:mul-definitional} give
+\[
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d),
+\qquad
+\mathrm{Val}(c\otimes d)=\mathrm{Val}(c)\mathrm{Val}(d).
+\]
+Reducing these identities modulo \(M_m\) and applying the definition of \(Z_m\) gives
+\[
+\Pi_m(c\oplus d)
+=Z_m\bigl((\mathrm{Val}(c)+\mathrm{Val}(d))\bmod M_m\bigr)
+=\Pi_m(c)\boxplus_m\Pi_m(d),
+\]
+because \(V_m(\Pi_m(c))\equiv \mathrm{Val}(c)\pmod {M_m}\), and similarly
+\[
+\Pi_m(c\otimes d)
+=Z_m\bigl((\mathrm{Val}(c)\mathrm{Val}(d))\bmod M_m\bigr)
+=\Pi_m(c)\boxtimes_m\Pi_m(d).
+\]
+The zero and one elements are also preserved, since \(\Pi_m(Z(0))=Z_m(0)=0_m\) and \(\Pi_m(Z(1))=Z_m(1)=1_m\). Hence \(\Pi_m\) is a semiring homomorphism.
+
+For the failure of naive truncation, take \(m=1\), \(c=Z(1)=e_1\), and \(d=Z(2)=e_2\). In stable arithmetic,
+\[
+c\oplus d=Z(3)=e_3,
+\]
+so \(\pi_1(c\oplus d)=0_1\). On the other hand, \(\pi_1(c)=e_1\), \(\pi_1(d)=0_1\), and therefore
+\[
+\pi_1(c)\boxplus_1\pi_1(d)=e_1\boxplus_1 0_1=e_1\ne 0_1.
+\]
+Thus digit truncation is not a semiring homomorphism from the stable semiring to the finite-resolution ring. The correct cross-resolution map is the residue fold \(\Pi_m\), which first descends through the value modulo \(F_{m+2}\) and only then chooses the finite Zeckendorf representative.
+\end{proof}
+
 \begin{corollary}[Field phase: uniform arithmetic at Fibonacci-prime resolutions]\label{cor:field-phase-fib-prime}
 Let \(m\ge 1\) and set \(M:=F_{m+2}\). If \(M\) is a prime \(p\), then
 \[

@@ -8,6 +8,51 @@ c\otimes d:=\mathrm{Val}^{-1}\bigl(\mathrm{Val}(c)\cdot\mathrm{Val}(d)\bigr)\in 
 \leanverified{stableMul}
 \end{definition}
 
+\begin{proposition}[Fibonacci-kernel convolution followed by normal form]\label{prop:mul-convolution-normal-form}
+For \(i,j\ge 1\), let
+\[
+K_{ij}:=Z(F_{i+1}F_{j+1})\in X_\infty,
+\qquad
+K_{ij,k}:=(K_{ij})_k.
+\]
+For \(c,d\in X_\infty\), define the finite raw convolution configuration
+\[
+\mathcal{C}(c,d):=
+\sum_{i,j\ge 1}c_i d_j K_{ij}
+=\sum_{k\ge 1}\left(\sum_{i,j\ge 1}c_i d_jK_{ij,k}\right)e_k
+\in\mathcal{D}.
+\]
+Then
+\[
+c\otimes d=\Fold_\infty\bigl(\mathcal{C}(c,d)\bigr).
+\]
+Consequently stable multiplication admits a digit-level construction: form the finite Fibonacci-kernel convolution of the two normal words and then apply the finite local normalization procedure of Proposition \ref{prop:finite-local-fold-normalization}.
+\end{proposition}
+
+\begin{proof}
+The sums defining \(\mathcal{C}(c,d)\) are finite because \(c\) and \(d\) have finite support, and each \(K_{ij}=Z(F_{i+1}F_{j+1})\) has finite support by Theorem \ref{thm:zeckendorf-unique}. Thus \(\mathcal{C}(c,d)\in\mathcal{D}\). By construction and additivity of \(\mathrm{Val}\) on \(\mathcal{D}\),
+\[
+\mathrm{Val}\bigl(\mathcal{C}(c,d)\bigr)
+=\sum_{i,j\ge 1}c_i d_j\mathrm{Val}(K_{ij})
+=\sum_{i,j\ge 1}c_i d_jF_{i+1}F_{j+1}.
+\]
+Factoring the finite double sum gives
+\[
+\mathrm{Val}\bigl(\mathcal{C}(c,d)\bigr)
+=\left(\sum_{i\ge 1}c_iF_{i+1}\right)
+ \left(\sum_{j\ge 1}d_jF_{j+1}\right)
+=\mathrm{Val}(c)\mathrm{Val}(d).
+\]
+Therefore
+\[
+\Fold_\infty\bigl(\mathcal{C}(c,d)\bigr)
+=Z\bigl(\mathrm{Val}(\mathcal{C}(c,d))\bigr)
+=Z\bigl(\mathrm{Val}(c)\mathrm{Val}(d)\bigr)
+=c\otimes d,
+\]
+where the last equality is Definition \ref{def:stable-mul}. Proposition \ref{prop:finite-local-fold-normalization} supplies the promised terminating local normalization from the raw convolution configuration to this normal form.
+\end{proof}
+
 \begin{theorem}[Definitional isomorphism for multiplication]\label{thm:mul-definitional}
 \((X_\infty,\oplus,\otimes)\) is a commutative semiring, and \(\mathrm{Val}\) is a semiring isomorphism from \((X_\infty,\oplus,\otimes)\) onto \((\NN,+,\times)\).
 \leanverified{paper\_stable\_commutative\_ring}

@@ -84,6 +84,41 @@ so \(a\equiv c\). Uniqueness follows from uniqueness of Zeckendorf expansion: if
 \end{itemize}
 \end{proof}
 
+\begin{definition}[Stable folding map]\label{def:stable-fold}
+For \(a\in\mathcal{D}\), define
+\[
+\Fold_\infty(a):=Z\bigl(\mathrm{Val}(a)\bigr)\in X_\infty.
+\]
+Equivalently, \(\Fold_\infty\) is the canonical-section map obtained by taking the value invariant of a finite counting configuration and then returning its Zeckendorf normal representative.
+\end{definition}
+
+\begin{proposition}[Finite local normalization by Fibonacci moves]\label{prop:finite-local-fold-normalization}
+For every \(a\in\mathcal{D}\), the normal form \(\Fold_\infty(a)
+=Z(\mathrm{Val}(a))\) is computable by a finite sequence of value-preserving local Fibonacci rewrites. More precisely, allow the elementary moves, in either direction and in any additive context,
+\[
+e_2\longleftrightarrow 2e_1,
+\qquad
+e_{k+2}\longleftrightarrow e_{k+1}+e_k\quad(k\ge 1).
+\]
+Then there is an explicit terminating procedure which starts at \(a\), ends at \(\Fold_\infty(a)\), and every intermediate configuration has the same value as \(a\).
+\end{proposition}
+
+\begin{proof}
+The procedure has two finite phases. First expand every occurrence of every basis vector down to the first scale. Namely, replace each occurrence of \(e_2\) by \(2e_1\), and for \(j\ge 3\) replace each occurrence of \(e_j\) by \(e_{j-1}+e_{j-2}\), continuing recursively until no basis vector other than \(e_1\) remains. This phase terminates because each replacement strictly lowers the largest index appearing in the occurrence being expanded, and the input has finite support with finite multiplicities. The result is exactly
+\[
+\mathrm{Val}(a)e_1,
+\]
+since the same recursion gives \(e_j\rightsquigarrow F_{j+1}e_1\) for each \(j\), with the base case \(e_2\rightsquigarrow 2e_1=F_3e_1\).
+
+Second compute the Zeckendorf expansion \(c=Z(\mathrm{Val}(a))\) by the greedy algorithm. Because \(c\) has finite support, expanding each nonzero basis vector in \(c\) by the same downward recursion gives a finite value-preserving rewrite sequence
+\[
+c\rightsquigarrow \mathrm{Val}(c)e_1=\mathrm{Val}(a)e_1.
+\]
+Reverse this finite sequence. Concatenating the first phase with the reversed second phase gives a finite sequence of the stated elementary local moves from \(a\) to \(c=\Fold_\infty(a)\).
+
+Each elementary move preserves value: this is exactly the verification in Proposition \ref{prop:val-invariant}. Hence every intermediate configuration has value \(\mathrm{Val}(a)\). The output is admissible and unique by Theorem \ref{thm:zeckendorf-unique}; therefore the procedure computes the stated fold map and terminates.
+\end{proof}
+
 \begin{corollary}[Folding as a computable section of the quotient map]\label{cor:fold-as-section}
 The preceding theorem may be summarized as
 \[
@@ -95,8 +130,9 @@ where the inclusion of \(X_\infty\) supplies a computable section selecting the 
 \[
 \text{folding}=\text{passing to an invariant/quotient}+\text{choosing normal form}.
 \]
+The local realization of this section is Proposition \ref{prop:finite-local-fold-normalization}.
 \end{corollary}
 
 \begin{proof}
-This is an immediate restatement of Theorem \ref{thm:monoid-quotient-is-N}.
+This is an immediate restatement of Theorem \ref{thm:monoid-quotient-is-N}, with computability and local finite realization supplied by Proposition \ref{prop:finite-local-fold-normalization}.
 \end{proof}

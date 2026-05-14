@@ -12,6 +12,27 @@ The reason for recording the isomorphism anyway is twofold. First, it fixes nota
 \end{itemize}
 \end{remark}
 
+\begin{lemma}[Specialization of online normalization to the paper's coordinates]\label{lem:online-zeckendorf-specialization}
+Use the Fibonacci numeration sequence \(U_i:=F_{i+2}\) for \(i\ge 0\), so that the paper's digit \(c_k\) at weight \(F_{k+1}\) is the usual numeration digit at position \(i=k-1\). Let \(L\ge 1\), let \(s_1,\dots,s_L\in\{0,1,2\}\), and read the padded word from high weight to low weight as
+\[
+s_L,s_{L-1},\dots,s_1.
+\]
+There is a finite-state online normalizer, with delay bounded independently of \(L\), whose output is the unique admissible word \(u\in X_\infty\) satisfying
+\[
+\mathrm{Val}(u)=\sum_{k=1}^{L}s_kF_{k+1}.
+\]
+Leading zero padding at positions \(k>L\) does not change either the value or the eventual output, except for harmless leading zeros in the high-to-low stream.
+\end{lemma}
+
+\begin{proof}
+Frougny's online-addition theorem for Pisot numeration systems applies to the golden-ratio system because \(\phi\) is a Pisot unit and the Fibonacci recurrence gives the associated numeration scale \(U_i=F_{i+2}\) \cite{Frougny1999OnlineAddition}. In that theorem, normalization from a fixed finite input alphabet of integer digits to the canonical digit language is performed by a finite transducer reading most significant digits first, with a delay depending only on the numeration system and the chosen input alphabet.
+
+In the present specialization the input alphabet after preliminary digitwise addition is \(\{0,1,2\}\), and the target canonical language is the golden-mean language of binary words with no adjacent \(1\)'s. The change from the usual positions \(i=0,1,\dots\) to the paper's positions \(k=1,2,\dots\) is only the index shift \(U_{k-1}=F_{k+1}\). Reading \(s_L,
+s_{L-1},\dots,s_1\) is therefore exactly the usual most-significant-to-least-significant online convention. The theorem supplies a finite set of states, a transition/output rule, a constant delay, and a bounded terminal flush for this fixed alphabet and fixed numeration system.
+
+The normalizer is value preserving in the Fibonacci numeration system. Hence its output represents \(\sum_{k=1}^{L}s_kF_{k+1}\). By Theorem \ref{thm:zeckendorf-unique}, there is only one admissible binary representative of that value, namely the stated \(u\in X_\infty\). Since prepending leading zeros contributes no value and keeps the input inside the same finite alphabet, it cannot change the normalized representative; it only delays the same stream by leading zero symbols.
+\end{proof}
+
 \begin{theorem}[Digit-level realization of Zeckendorf addition with finite delay]\label{thm:zeckendorf-add-fst}
 Let \(c,d\in X_\infty\) have finite support, and let
 \[
@@ -32,9 +53,18 @@ and constants \(D,B\), independent of \(m,c,d\), such that after reading through
 \end{theorem}
 
 \begin{proof}
-This is the golden-ratio instance of Frougny's online-addition theorem for numeration systems with Pisot base: for such systems, digitwise addition followed by normalization is realized by an online finite automaton with bounded delay \cite{Frougny1999OnlineAddition}. In the present notation the base is the Pisot unit \(\phi\), the admissible language is the golden-mean language of words with no factor \(11\), the input alphabet for addition is the synchronous pair alphabet \(\{0,1\}^2\), and the preliminary digitwise sum lies in the finite alphabet \(\{0,1,2\}\). The cited online interface reads from most significant digit to least significant digit and supplies a delay bounded by a constant depending only on the numeration system, not on the input length.
+Apply Lemma \ref{lem:online-zeckendorf-specialization} to the digitwise sum
+\[
+s_i:=c_i+d_i\in\{0,1,2\}\qquad(1\le i\le L).
+\]
+The preliminary letter map \((a,b)\mapsto a+b\) from the synchronous pair alphabet \(\{0,1\}^2\) to \(\{0,1,2\}\) is itself finite-state and memoryless. Composing this letter map with the finite-state normalizer from the lemma gives the required transducer \((Q,q_0,\tau,\omega,D,B)\). The constants \(D\) and \(B\) are those of the fixed golden-ratio normalizer, enlarged if necessary by an absolute amount to absorb the terminal flush; they are independent of \(m,c,d\).
 
-Composing the letter map \((a,b)\mapsto a+b\) from \(\{0,1\}^2\) to \(\{0,1,2\}\) with this finite-state normalizer gives the required transducer \((Q,q_0,\tau,\omega,D,B)\). The normalizer is value preserving and returns the unique admissible Zeckendorf representative; by Corollary \ref{cor:add-as-fold}, that representative is exactly \(c\oplus d\). Leading zero padding does not change value, and the final-output map emits only a bounded suffix because the online delay is bounded and the numeration system is fixed. Since one transition is performed per input pair and only bounded final output remains, the running time is linear in \(m\). Concrete Zeckendorf implementations of the same finite-state normalization principle are given by Ahlbach--Usatine--Frougny--Pippenger \cite{AhlbachUsatineFrougnyPippenger2013}; the Ostrowski formulation is also recorded in \cite{HieronymiTerry2018OstrowskiAddition}.
+The output is the unique admissible word of value
+\[
+\sum_{i=1}^{L}(c_i+d_i)F_{i+1}
+=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+By Corollary \ref{cor:add-as-fold}, that word is exactly \(\Fold_\infty(c+d)=c\oplus d\). Leading zero padding through any \(L\ge m+2\) leaves the value unchanged and gives the online normalizer enough trailing high-order zeros to settle carries near the most significant end before the low-order scan proceeds. Since the machine performs one transition per input pair and then emits only a bounded suffix, the number of digit operations is \(O(m)\). Concrete Zeckendorf implementations of the same finite-state normalization principle are given by Ahlbach--Usatine--Frougny--Pippenger \cite{AhlbachUsatineFrougnyPippenger2013}; the Ostrowski formulation is also recorded in \cite{HieronymiTerry2018OstrowskiAddition}.
 \end{proof}
 
 \begin{remark}[Low-to-high scans versus online numeration convention]\label{rem:online-orientation}
