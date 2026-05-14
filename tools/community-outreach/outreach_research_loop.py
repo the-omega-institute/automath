@@ -53,6 +53,7 @@ RESEARCH_LOOP_LOG_DIR = STATE_DIR / "research_loop_logs"
 RESEARCH_LOOP_STATUS = STATE_DIR / "research_loop.status.json"
 RESEARCH_LOOP_LOCK = STATE_DIR / "research_loop.lock"
 CODEX_TRANSPORT_STATE = STATE_DIR / "codex_transport.json"
+ORACLE_BRIDGE_STATE = STATE_DIR / "oracle_bridge.json"
 RESEARCH_BOARD_PATH = SCRIPT_DIR / "RESEARCH_BOARD.md"
 DRAFTS_DIR = SCRIPT_DIR / "drafts"
 TARGETS_DIR = SCRIPT_DIR / "targets"
@@ -1190,6 +1191,55 @@ def _global_codex_transport_backoff_applies() -> bool:
     return _now() < until
 
 
+def _path_contains_oracle_bridge_not_ready(log_path: str) -> bool:
+    if not log_path:
+        return False
+    try:
+        text = Path(log_path).read_text(encoding="utf-8", errors="replace").lower()
+    except OSError:
+        return False
+    markers = (
+        "bridge not ready",
+        "bridge_not_ready",
+        "no compatible outreach oracle tab",
+        "queue_waiting_for_compatible_agent",
+        "queue_waiting_for_project_agent",
+    )
+    return any(marker in text for marker in markers)
+
+
+def _note_global_oracle_bridge_backoff(*, reason: str, log_path: str = "") -> None:
+    backoff_s = max(0, TRANSPORT_FAILURE_BACKOFF_MINUTES) * 60
+    backoff_until = _now() + backoff_s
+    payload = {
+        "ok": False,
+        "bridge_backoff": True,
+        "reason": reason,
+        "stderr_log": log_path,
+        "recorded_at": _now_iso(),
+        "backoff_until_epoch": backoff_until,
+        "backoff_until": _iso_from_epoch(backoff_until),
+        "backoff_minutes": TRANSPORT_FAILURE_BACKOFF_MINUTES,
+    }
+    try:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
+        ORACLE_BRIDGE_STATE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    except OSError as exc:
+        loop_log(f"failed to write global Oracle bridge backoff marker: {exc}")
+
+
+def _global_oracle_bridge_backoff_applies() -> bool:
+    try:
+        state = json.loads(ORACLE_BRIDGE_STATE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    try:
+        until = float(state.get("backoff_until_epoch") or 0.0)
+    except (TypeError, ValueError):
+        until = 0.0
+    return _now() < until
+
+
 def _read_local_repair_report(slug: str) -> dict:
     path = TARGETS_DIR / slug / "local_repair_last.json"
     try:
@@ -1328,6 +1378,8 @@ def _log_contains_transport_skip(log_path: str) -> bool:
     markers = (
         "[oracle-deep] server down",
         "[oracle] server down",
+        "[oracle-deep] bridge not ready",
+        "bridge_not_ready",
         "oracle-deep skipped",
         "stage=oracle_deep_skipped",
         "server unreachable",
@@ -1754,6 +1806,11 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                         if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
                             rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
                         else:
+                            if _path_contains_oracle_bridge_not_ready(log_path):
+                                _note_global_oracle_bridge_backoff(
+                                    reason=f"oracle bridge not ready for {todo_id}",
+                                    log_path=log_path,
+                                )
                             _note_transport_backoff(
                                 slug,
                                 reason=f"oracle-deep transport/no-payload rc={rc}",
@@ -1808,6 +1865,11 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                     if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
                         rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
                     else:
+                        if _path_contains_oracle_bridge_not_ready(log_path):
+                            _note_global_oracle_bridge_backoff(
+                                reason=f"oracle bridge not ready for {todo_id}",
+                                log_path=log_path,
+                            )
                         _note_transport_backoff(
                             slug,
                             reason=f"oracle-deep transport/no-payload rc={rc}",
@@ -1875,6 +1937,8 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
 def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str, str]]:
     """Return (todo_id, slug) of the next actionable target, or None."""
     skip_slugs = skip_slugs or set()
+    if _global_oracle_bridge_backoff_applies():
+        return None
     todos = _parse_board_safe()
     if not todos:
         return None
@@ -1960,7 +2024,7 @@ def _blocked_snapshot(limit: int = 8) -> list[dict]:
     todos = _parse_board_safe()
     rows: list[dict] = []
     for tid, todo in todos.items():
-        if _global_codex_transport_backoff_applies():
+        if _global_codex_transport_backoff_applies() or _global_oracle_bridge_backoff_applies():
             return []
         status = getattr(todo, "status", "") or ""
         if _is_skipped(status):
@@ -2115,9 +2179,13 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
 
             started_any = False
             codex_transport_paused = False
+            oracle_bridge_paused = False
             while not stop_flag["stop"] and len(active) < research_workers:
                 if _global_codex_transport_backoff_applies():
                     codex_transport_paused = True
+                    break
+                if _global_oracle_bridge_backoff_applies():
+                    oracle_bridge_paused = True
                     break
                 skip_slugs = {slug for _, slug in active.values()}
                 if args.todo_id:
@@ -2168,6 +2236,7 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                 "research_workers": research_workers,
                 "oracle_refill_reserve": oracle_refill_reserve,
                 "codex_transport_paused": codex_transport_paused,
+                "oracle_bridge_paused": oracle_bridge_paused,
             })
 
             if args.once:
@@ -2180,6 +2249,11 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                     loop_log(
                         f"Codex local-repair transport backoff active; "
                         f"pausing target selection for {CODEX_TRANSPORT_BACKOFF_MINUTES}min"
+                    )
+                elif oracle_bridge_paused:
+                    loop_log(
+                        f"Oracle bridge backoff active; "
+                        f"pausing target selection for {TRANSPORT_FAILURE_BACKOFF_MINUTES}min"
                     )
                 else:
                     loop_log(f"no actionable target this poll (iter={iteration})")
@@ -2251,6 +2325,21 @@ def main(argv: list[str] | None = None) -> int:
         cleanup_stale_claims()
 
         # Pick target.
+        if _global_oracle_bridge_backoff_applies():
+            loop_log(
+                f"Oracle bridge backoff active; "
+                f"pausing target selection for {TRANSPORT_FAILURE_BACKOFF_MINUTES}min"
+            )
+            _write_status({
+                "iter": iteration,
+                "last_poll": _now_iso(),
+                "picked": None,
+                "oracle_bridge_paused": True,
+            })
+            if args.once:
+                return 0
+            time.sleep(args.poll_interval)
+            continue
         if args.todo_id:
             todos = _parse_board_safe()
             todo = todos.get(args.todo_id)
