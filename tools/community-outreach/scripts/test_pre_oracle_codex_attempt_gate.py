@@ -233,6 +233,12 @@ def main() -> int:
         trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
         if int(trace.get("replay_command_count") or 0) <= 0 or not trace.get("has_evidence_output"):
             raise AssertionError(f"real target-local check was not counted as replay/evidence: {trace}")
+        duplicate_skip = local_repair._post_codex_duplicate_replay_skip(trace)
+        if not duplicate_skip or duplicate_skip.get("reason") != "post_codex_replay_trace_present_skip_duplicate_replay":
+            raise AssertionError(f"post-Codex duplicate replay was not skipped from trace evidence: {duplicate_skip}")
+        shallow_skip = local_repair._post_codex_duplicate_replay_skip({"replay_command_count": 0, "has_evidence_output": True})
+        if shallow_skip is not None:
+            raise AssertionError(f"inspection-only trace should not skip verifier replay: {shallow_skip}")
         ungrounded = local_repair._substantive_local_workup_check(
             target_dir,
             _workup(include_attempt=True),

@@ -1301,6 +1301,29 @@ def _record_target_verifier_audit(todo_id: str, target_dir: Path) -> dict:
     return {"ran": True, "recorded": True, "passed": passed, "run": run, "attempted": attempted}
 
 
+def _post_codex_duplicate_replay_skip(codex_command_trace: dict | None) -> dict | None:
+    """Return a verifier_audit placeholder when Codex already ran a replay.
+
+    The local-repair worker is the pre-Oracle execution step.  If its JSONL
+    trace shows a target-local replay/check command with evidence output, the
+    harness should not immediately run the same potentially expensive command
+    again just to populate `verifier_audit`; that can block the research loop
+    after the Codex handoff is already valid.  Dedicated verifier replay still
+    happens when a later gate actually needs a deterministic writeback audit.
+    """
+    trace = codex_command_trace or {}
+    replay_count = int(trace.get("replay_command_count") or 0)
+    has_evidence_output = bool(trace.get("has_evidence_output"))
+    if replay_count <= 0 or not has_evidence_output:
+        return None
+    return {
+        "ran": False,
+        "reason": "post_codex_replay_trace_present_skip_duplicate_replay",
+        "codex_replay_command_count": replay_count,
+        "codex_trace_has_evidence_output": True,
+    }
+
+
 def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
     if parse_board is None:
         title = ""
@@ -1557,9 +1580,16 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         except OSError:
             pass
     output_path.write_text(raw or "", encoding="utf-8")
-    verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
-    gate_after = _run_science_gate(todo_id, write_ledger=True)
     codex_command_trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
+    # Do not immediately replay an expensive target-local computation that the
+    # Codex worker just ran and recorded in the JSONL trace.  The postcheck
+    # below verifies that the handoff cites local facts from that trace; a
+    # deterministic verifier replay can happen in a later target-specific audit
+    # step when it is actually needed for writeback.
+    verifier_audit = _post_codex_duplicate_replay_skip(codex_command_trace)
+    if verifier_audit is None:
+        verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
+    gate_after = _run_science_gate(todo_id, write_ledger=True)
     # These ledgers may be refreshed by harness code around the Codex worker;
     # do not charge those deterministic supervisor writes to the worker.
     harness_refreshed = {"science_gate.json", "outreach_impact_gate.json"}
