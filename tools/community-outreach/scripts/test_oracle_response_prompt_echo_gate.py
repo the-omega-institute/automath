@@ -56,6 +56,39 @@ Do not summarize the problem back to me. Start doing the mathematics.
 """
 
 
+SHORT_PROMPT_ECHO = """You are the Oracle math worker for this Omega Project open-problem target.
+Goal: make a genuine mathematical contribution, not outreach copy.
+
+## Selected Task
+Prove or obstruct the next local gap.
+
+## Local Facts
+Codex checked a local verifier and found a blocked formal reduction.
+
+## Compact science contract
+Verifier: proof, counterexample, computation, or valuable obstruction.
+
+## Target
+- ID: T-43
+- Source: https://www.problemsilike.com/2
+
+## Problem Statement
+Let f: X -> Y be smooth proper.
+
+## Deterministic Gate Blockers
+- verification gate: verification_status=unverified
+
+## Output
+Use exactly:
+1. CONTRACT TARGET:
+2. CURRENT SCORE:
+3. MOVE:
+4. EVIDENCE:
+5. NEXT STOP TEST:
+Do not summarize or restart. Start with the next mathematical move.
+"""
+
+
 REAL_ANSWER = """1. CONTRACT TARGET: prove the rank-one geometric-summand reduction under finite determinant.
 2. CURRENT SCORE: the summand-to-ambient Katz route is blocked by a direct-sum toy obstruction.
 3. MOVE: use the Picard-Vessiot Galois group of the rank-one summand and Katz's theorem for algebraic solutions.
@@ -74,6 +107,8 @@ def main() -> int:
 
     if not gate.is_prompt_echo_response(PROMPT_ECHO):
         raise AssertionError("prompt echo was not detected")
+    if not gate.is_prompt_echo_response(SHORT_PROMPT_ECHO):
+        raise AssertionError("short prompt echo was not detected")
     if not gate.is_non_substantive_oracle_response(PROMPT_ECHO):
         raise AssertionError("prompt echo should be non-substantive")
     if not consultant._is_transport_stub_response(PROMPT_ECHO):
@@ -82,6 +117,8 @@ def main() -> int:
         raise AssertionError("research loop should reject prompt echo as transport/extraction failure")
     if consultant.is_outreach_response_valid(PROMPT_ECHO):
         raise AssertionError("prompt echo should not be a valid outreach response")
+    if consultant.is_outreach_response_valid(SHORT_PROMPT_ECHO):
+        raise AssertionError("short prompt echo should not be a valid outreach response")
 
     if gate.is_prompt_echo_response(REAL_ANSWER):
         raise AssertionError("real answer incorrectly classified as prompt echo")

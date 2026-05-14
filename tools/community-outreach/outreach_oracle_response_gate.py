@@ -27,14 +27,21 @@ TRANSPORT_MARKERS = (
 
 PROMPT_ECHO_MARKERS = (
     "you are the primary mathematical worker on this omega project outreach target.",
+    "you are the oracle math worker for this omega project open-problem target.",
     "## current codex-selected task",
+    "## selected task",
     "## codex local workup",
+    "## local facts",
     "## compact science contract",
+    "## deterministic gate blockers",
     "## target",
     "## math problem statement",
+    "## problem statement",
     "## current deterministic science-gate blockers",
     "## your first turn",
+    "## output",
     "do not summarize the problem back to me. start doing the mathematics.",
+    "do not summarize or restart. start with the next mathematical move.",
 )
 
 
@@ -69,7 +76,11 @@ def is_prompt_echo_response(text: str) -> bool:
         return False
     lowered = stripped.lower()
     head = lowered[:12000]
-    if "you are the primary mathematical worker on this omega project outreach target." not in head[:1000]:
+    role_markers = (
+        "you are the primary mathematical worker on this omega project outreach target.",
+        "you are the oracle math worker for this omega project open-problem target.",
+    )
+    if not any(marker in head[:1000] for marker in role_markers):
         return False
     marker_count = sum(1 for marker in PROMPT_ECHO_MARKERS if marker in head)
     if marker_count >= 4:

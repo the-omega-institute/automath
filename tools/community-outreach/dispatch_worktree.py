@@ -1247,6 +1247,44 @@ def _read_target_context_file(slug: str, name: str, *, max_chars: int) -> str:
     return text[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :]
 
 
+def _compact_codex_workup_for_oracle(slug: str, *, max_chars: int = 1600) -> str:
+    """Return only the local facts Oracle needs for the next step.
+
+    Full `codex_workup.md` files can be several thousand characters and tend
+    to make first-turn Oracle prompts look like repeated board assignments.
+    The next-oracle question is the contract; this excerpt is just execution
+    state for local computations and failed proof moves.
+    """
+    workup = _read_target_context_file(
+        slug,
+        "codex_workup.md",
+        max_chars=max(PRE_ORACLE_WORKUP_GATE_CHARS, max_chars),
+    )
+    if not workup:
+        return ""
+    preferred = [
+        "Local evidence checked",
+        "Codex attempt before Oracle",
+        "Verifier/artifact status",
+        "Proof obligations still open",
+    ]
+    chunks: list[str] = []
+    for heading in preferred:
+        body = _extract_markdown_section(workup, heading, max_chars=max_chars // 2)
+        if body:
+            chunks.append(f"## {heading}\n{body}")
+    if not chunks:
+        return _compact_text(workup, max_chars)
+    return _compact_text("\n\n".join(chunks), max_chars)
+
+
+def _compact_text(text: str, max_chars: int) -> str:
+    text = (text or "").strip()
+    if len(text) <= max_chars:
+        return text
+    return text[: max_chars // 2].rstrip() + "\n\n...[middle truncated]...\n\n" + text[-max_chars // 2 :].lstrip()
+
+
 def _extract_markdown_section(text: str, heading: str, *, max_chars: int) -> str:
     """Extract a single markdown heading body from a Codex workup."""
     if not text:
@@ -1789,30 +1827,28 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
     sub = todo.submission_target()
     profile, _ = load_profile(todo.slug())
     include_arxiv_noise = os.environ.get("OUTREACH_DEEP_INCLUDE_ARXIV", "").lower() in {"1", "true", "yes"}
-    research_context_chars = int(os.environ.get("OUTREACH_DEEP_RESEARCH_CONTEXT_CHARS", "1200"))
-    codex_workup_chars = int(os.environ.get("OUTREACH_DEEP_CODEX_WORKUP_CHARS", "6000"))
-    local_repair_chars = int(os.environ.get("OUTREACH_DEEP_LOCAL_REPAIR_CHARS", "1600"))
+    research_context_chars = int(os.environ.get("OUTREACH_DEEP_RESEARCH_CONTEXT_CHARS", "0"))
+    codex_workup_chars = int(os.environ.get("OUTREACH_DEEP_CODEX_WORKUP_CHARS", "1600"))
+    local_repair_chars = int(os.environ.get("OUTREACH_DEEP_LOCAL_REPAIR_CHARS", "700"))
     next_oracle_question = _read_codex_next_oracle_question(todo.slug())
-    codex_workup = _read_target_context_file(todo.slug(), "codex_workup.md", max_chars=codex_workup_chars)
+    codex_workup = _compact_codex_workup_for_oracle(todo.slug(), max_chars=codex_workup_chars)
     local_repair_report = _read_target_context_file(todo.slug(), "local_repair_report.md", max_chars=local_repair_chars)
     parts = [
-        "You are the primary mathematical worker on this Omega Project outreach target.",
-        "This is not an outreach-copywriting task. The goal is a genuine mathematical contribution.",
-        "Codex has already inspected the local workspace before this prompt. Treat the Codex workup as the current local execution state.",
-        "Every turn should lower the progress metric, produce a checkable file block, or explicitly re-scope with a useful obstruction.",
-        "Stop only when the contract's verifier is satisfied, or when the close/re-scope condition is clearly met.",
+        "You are the Oracle math worker for this Omega Project open-problem target.",
+        "Goal: make a genuine mathematical contribution, not outreach copy.",
+        "Codex already inspected the local workspace. Treat the selected task and local facts below as execution state.",
+        "Return one concrete proof move, computation, certificate, FILE block, or target-specific obstruction.",
         "",
     ]
     if next_oracle_question:
         parts += [
-            "## Current Codex-selected task",
-            "Codex has already processed the local target directory, inspected the available artifacts, and selected this exact next mathematical gap. Answer this task directly before using board metadata as background.",
+            "## Selected Task",
             next_oracle_question,
             "",
-            "## Codex local workup",
+            "## Local Facts",
             codex_workup,
             "",
-            "## Latest local repair/replay report",
+            "## Latest Local Replay",
             local_repair_report or "(none yet)",
             "",
         ]
@@ -1825,18 +1861,20 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         "## Compact science contract",
         _compact_science_contract_block(profile),
         "",
-        f"## Target",
-        f"- TODO id: {todo.todo_id}",
+        "## Target",
+        f"- ID: {todo.todo_id}",
         f"- Title: {todo.title}",
         f"- Source: {todo.source}",
-        f"- Status (per board): {todo.status}",
-        f"- Untouched evidence: {todo.untouched}",
-        f"- Submission target (Stage E): {sub['type']} → {sub['venue']}",
-        "",
-        "## Math problem statement",
-        todo.statement or "(see source URL above)",
+        f"- Source status note: {todo.untouched}",
+        f"- Possible final channel after verification: {sub['type']} -> {sub['venue']}",
         "",
     ]
+    if todo.statement:
+        parts += [
+            "## Problem Statement",
+            _compact_text(todo.statement, 1200),
+            "",
+        ]
     if not codex_workup:
         parts += [
             "## Board prior and preliminary attack plan",
@@ -1907,8 +1945,8 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         gate = science_gate_evaluate(todo)
         if getattr(gate, "missing", None):
             parts += [
-                "## Current deterministic science-gate blockers",
-                "The repository gate has already inspected disk artifacts. Do not claim completion until these are fixed on disk or supplied as FILE blocks:",
+                "## Deterministic Gate Blockers",
+                "Do not claim completion until these are fixed on disk or supplied as valid FILE blocks:",
                 "\n".join(f"- {m}" for m in gate.missing),
                 "",
                 "If a missing artifact is a file, include its exact content in this response using:",
@@ -1921,14 +1959,14 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
     except Exception:
         pass
     parts += [
-        "## Your first turn",
-        "Give the first contract-driven research step. Use this exact structure:",
-        "  1. CONTRACT TARGET: the precise theorem/counterexample/construction/certificate being attempted.",
-        "  2. CURRENT SCORE: the current value/state of the progress metric, or the missing data needed to define it.",
-        "  3. MOVE: one concrete proof move, computation, construction edit, or certificate check.",
-        "  4. EVIDENCE: what artifact or calculation would verify this move.",
-        "  5. NEXT STOP TEST: whether the next turn should write back, continue, or close/re-scope.",
-        "Do not summarize the problem back to me. Start doing the mathematics.",
+        "## Output",
+        "Use exactly:",
+        "1. CONTRACT TARGET:",
+        "2. CURRENT SCORE:",
+        "3. MOVE:",
+        "4. EVIDENCE:",
+        "5. NEXT STOP TEST:",
+        "Do not summarize or restart. Start with the next mathematical move.",
     ]
     return "\n".join(parts)
 
