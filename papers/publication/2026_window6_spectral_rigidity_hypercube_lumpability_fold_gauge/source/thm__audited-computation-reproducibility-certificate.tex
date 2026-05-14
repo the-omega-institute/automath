@@ -7,7 +7,7 @@ from the paper root.  The required interpreter is SageMath running Python \(3\),
 \begin{center}
 \begin{minipage}{0.9\linewidth}
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-21d2fd032e7ac0d080d81b048f9b7a8ab2895679bebd89103cdaff4961f9a69b
+320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429
 \end{Verbatim}
 \end{minipage}
 \end{center}
@@ -122,7 +122,7 @@ The canonical Sturm-sign stream has SHA--256 hash
 \end{Verbatim}
 \end{minipage}
 \end{center}
-\item The following compact Sage/Python witness is the executable specification of the finite audit.  It recomputes the three fiber vectors, the sparse edge matrix, the cleared determinant factor, and the Sturm sign strings from the definitions above; the final assertions are exactly the hashes and integer streams displayed in this appendix.  The printed supplement is reproducible precisely when its executable text is byte-for-byte identical to this witness, apart from line-ending normalization.
+\item The following compact Sage/Python witness is the executable specification of the finite audit.  It recomputes the three fiber vectors, the sparse edge matrix, the geometric stabilizer identity, the residual witness counts, the cleared determinant factor, and the Sturm sign strings from the definitions above; the final assertions are exactly the hashes and integer streams displayed in this appendix.  The printed supplement is reproducible precisely when its executable text is byte-for-byte identical to this witness, apart from line-ending normalization.
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
 from hashlib import sha256
 from itertools import product
@@ -168,6 +168,24 @@ rows=['%d:%s' % (i, ','.join('%d:%d' % (j,c)
 estream='m=6;states=%s;d=%s;N=%s' % (
     ','.join(X), ','.join(map(str,d)), ';'.join(rows))
 assert sha256(estream.encode()).hexdigest() == '2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0'
+
+def sigma_geo(s):
+    a=[int(c) for c in s]
+    return ''.join(map(str, [1-a[4], a[1], a[2], a[3], 1-a[0], a[5]]))
+
+for a in product([0,1], repeat=6):
+    s=''.join(map(str,a))
+    assert zprefix(int(s,2),6) == zprefix(int(sigma_geo(s),2),6)
+
+def neighbor_count(source,target):
+    N=int(source,2)
+    return sum(1 for k in range(6)
+               if zprefix(N^(1 << (5-k)),6) == target)
+
+assert zprefix(int('000000',2),6) == '000000'
+assert zprefix(int('010101',2),6) == '000000'
+assert neighbor_count('000000','000100') == 0
+assert neighbor_count('010101','000100') == 1
 
 R.<t> = PolynomialRing(QQ)
 P = Matrix(QQ, [[QQ(Nmat[i][j])/(6*d[i]) for j in range(len(X))]
@@ -218,7 +236,7 @@ S_{r+1}=-\operatorname{rem}(S_{r-1},S_r)
 \]
 over \(\QQ[t]\), clearing positive scalar denominators if desired because such clearing does not change signs.  Its degrees are \(20,19,\ldots,0\).  Evaluating this sequence at the four rational endpoints gives the displayed sign strings and variation counts.  Sturm's theorem therefore gives \(1-0=1\) zero in \((4841207858/10^{10},4841207859/10^{10})\) and \(20-19=1\) zero in \((-6030939755/10^{10},-6030939754/10^{10})\), which is the integer Sturm data used in Lemma \ref{lem:foldbin6-characteristic-certificate}.
 
-For \textup{(vi)}, every operation in the verbatim block is one of the operations just described: standard-library iteration and SHA--256 hashing for the canonical streams, and SageMath exact rational, integer, matrix, polynomial, characteristic-polynomial, and Sturm-sequence routines for the algebraic certificate.  Since all inputs are printed in the block and every acceptance condition is an assertion against a displayed integer stream or hash, executing the block under SageMath with Python \(3\) is a complete referee reproduction interface for the finite audit. \qedhere
+For \textup{(vi)}, every operation in the verbatim block is one of the operations just described: standard-library iteration and SHA--256 hashing for the canonical streams, direct enumeration of the affine map \(\sigma_{\mathrm{geo}}\) and the two residual neighbor counts, and SageMath exact rational, integer, matrix, polynomial, characteristic-polynomial, and Sturm-sequence routines for the algebraic certificate.  Since all inputs are printed in the block and every acceptance condition is an assertion against a displayed integer stream, hash, stabilizer identity, or residual count, executing the block under SageMath with Python \(3\) is a complete referee reproduction interface for the finite audit. \qedhere
 \end{proof}
 
 \endinput

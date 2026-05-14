@@ -90,6 +90,55 @@ in coordinate order.  Exactly the first of these is \(000100\), so \(c_{010101}(
 Theorem \ref{thm:local-residual-certificate-hypercube-folds}, applied with \(m=6\), now rules out any matrix \(P\) satisfying \(T_6M=MP\).  The same theorem gives the residual lower bound with \(\delta=1\): at least one of the two audited residual entries has absolute value at least \(1/(2\cdot6)=1/12\). \qedhere
 \end{proof}
 
+\begin{theorem}[Single exact certificate for the audited window-\texorpdfstring{$6$}{6} bin-fold]\label{thm:single-exact-fold6-certificate}
+The audited window-\(6\) certificate consists of the following finite algebraic-combinatorial data.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The state set is
+\[
+X_6=\{x\in\{0,1\}^6:x_i x_{i+1}=0\text{ for }1\le i<6\},
+\qquad |X_6|=21,
+\]
+ordered lexicographically, and the fold is the Zeckendorf-prefix map
+\(\Fold_6^{\mathrm{bin}}:\Omega_6\twoheadrightarrow X_6\) from Definition \ref{def:audited-binary-fold-certificate}.
+\item The fiber multiplicities in this order are
+\[
+(4,2,4,4,2,4,2,3,4,2,3,4,2,4,2,3,4,2,4,2,3).
+\]
+\item The exact edge-count matrix is the integer matrix \(N\) displayed in Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, and the audited pushforward kernel is
+\[
+P_6(i,j)=\frac{N_{ij}}{6d_i}.
+\]
+\item The same-fiber residual witness is
+\[
+\Fold_6^{\mathrm{bin}}(000000)=\Fold_6^{\mathrm{bin}}(010101)=000000,
+\qquad
+c_{000000}(000100)=0,
+\qquad
+c_{010101}(000100)=1.
+\]
+Hence no matrix \(P\) satisfies \(T_6M=MP\), and the audited residual \(R_6=T_6M-MP_6\) has one of the two corresponding entries of absolute value at least \(1/12\).
+\item The nontrivial characteristic factor is the degree-\(20\) rational polynomial \(q_6(t)=\det(tI-P_6)/(t-1)\) of Lemma \ref{lem:foldbin6-characteristic-certificate}.  With
+\[
+L_6=3234734993627557134336,
+\]
+the polynomial \(Q_6=L_6q_6\) has the exact integer coefficient stream recorded in Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(iv)}.
+\item The Sturm signs recorded in Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(v)} isolate one root in each interval
+\[
+(0.4841207858,0.4841207859),
+\qquad
+(-0.6030939755,-0.6030939754).
+\]
+Both intervals are disjoint from the window-\(6\) hypercube spectrum \(\{1,2/3,1/3,0,-1/3,-2/3,-1\}\).
+\end{enumerate}
+Consequently the audited window-\(6\) bin-fold pushforward is not a hidden-state-free strongly lumpable quotient of the simple random walk on \(Q_6\), and the conclusion is certified both by an entrywise residual obstruction and by an off-grid spectral obstruction.
+\end{theorem}
+
+\begin{proof}
+Item \textup{(i)} is exactly the specialization to \(m=6\) of Definition \ref{def:audited-binary-fold-certificate}; the cardinality \(|X_6|=21\) is the standard Fibonacci count for no-adjacent-ones words, also enumerated in Lemma \ref{lem:audited-binary-fold-certificate-identities}.  Item \textup{(ii)} is the window-\(6\) multiplicity vector in Proposition \ref{prop:foldbin6-exact-pushforward-matrix}.  Item \textup{(iii)} is precisely the matrix formula and edge-count interpretation of that proposition.  Item \textup{(iv)} is Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness}, together with Theorem \ref{thm:local-residual-certificate-hypercube-folds}.  Item \textup{(v)} is Lemma \ref{lem:foldbin6-characteristic-certificate} and the integer coefficient stream of Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(iv)}.  Item \textup{(vi)} is Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate}, whose proof uses the Sturm data from Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(v)}.
+
+The final assertion follows in two independent ways.  The residual witness in \textup{(iv)} violates the row-wise target-fiber count condition of Theorem \ref{thm:local-residual-certificate-hypercube-folds}, so no intertwining \(T_6M=MP\) exists.  Separately, Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} says that any equitable quotient kernel of \(Q_6\) has spectrum contained in \(\{1-2k/6:0\le k\le6\}\), while \textup{(vi)} gives two eigenvalues of \(P_6\) outside that set. \qedhere
+\end{proof}
+
 \begin{lemma}[Characteristic polynomial and numerical root certificate]\label{lem:foldbin6-characteristic-certificate}
 For the exact matrix of Proposition \ref{prop:foldbin6-exact-pushforward-matrix},
 \[
@@ -178,4 +227,20 @@ By Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity}, every equitab
 \{1-2k/6:0\le k\le 6\}
 \).
 Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate} supplies two spectral values of the exact audited pushforward matrix \(P_6\) outside this set.  Therefore \(P_6\) cannot be the transition matrix of an equitable quotient of the hypercube walk. \qedhere
+\end{proof}
+
+\begin{theorem}[Boundary of the obstruction: no hidden-refinement exclusion]\label{thm:hidden-refinement-boundary}
+The window-\(6\) nonlumpability conclusions in Theorem \ref{thm:single-exact-fold6-certificate} and Corollary \ref{cor:terminal-window6-nonlumpable-by-spectrum} are exactly statements about the audited one-step quotient on the visible state set \(X_6\).  They rule out the existence of a kernel \(P\) on \(X_6\) satisfying
+\[
+T_6M=MP
+\]
+for the block-indicator matrix \(M\) of \(\Fold_6^{\mathrm{bin}}\), and they rule out realizing the audited matrix \(P_6\) itself as an equitable quotient kernel of \(Q_6\) on those same visible blocks.  They do not rule out the existence of a different finite state space \(Y\), a surjection \(H:\Omega_6\twoheadrightarrow Y\), and a factor map \(\rho:Y\twoheadrightarrow X_6\) with \(\Fold_6^{\mathrm{bin}}=\rho\circ H\), for which the partition defined by \(H\) is equitable.
+\end{theorem}
+
+\begin{proof}
+Theorem \ref{thm:local-residual-certificate-hypercube-folds} applies to a specified surjection \(F:\Omega_m\twoheadrightarrow X\) and the corresponding block-indicator matrix.  In the audited window-\(6\) application, that specified surjection is \(F=\Fold_6^{\mathrm{bin}}\) and the block-indicator matrix is its visible-fiber matrix \(M\).  Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness} gives two vertices in one visible fiber and one visible target state whose one-step target-fiber counts differ.  Therefore the theorem proves that no kernel on the same visible state set \(X_6\) can satisfy \(T_6M=MP\).
+
+Likewise, the spectral obstruction in Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} is applied to the audited pushforward matrix \(P_6=D^{-1}M^\top T_6M\) associated with this same visible matrix \(M\).  Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate} shows that \(P_6\) has off-grid eigenvalues, so \(P_6\) cannot be an equitable quotient kernel on those visible blocks.
+
+A hidden refinement replaces \(M\) by another block-indicator matrix \(M_H\) for a different surjection \(H:\Omega_6\twoheadrightarrow Y\).  The residual counts, the audited pushforward matrix, and the quotient spectrum tested by the above theorems are then those of \(H\), not those of \(\Fold_6^{\mathrm{bin}}\).  Since the hypotheses and computed certificates in this paper contain no data for all such refinements \(H\), the logical conclusion is exactly the stated visible one-step obstruction and not a universal no-hidden-refinement theorem. \qedhere
 \end{proof}
