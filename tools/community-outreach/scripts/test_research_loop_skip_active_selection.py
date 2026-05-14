@@ -60,6 +60,10 @@ def main() -> int:
         old_judge = loop.judge
         old_gate = loop.science_gate_evaluate
         old_live = loop._live_worker_for_target
+        old_transport_backoff = loop._transport_backoff_applies
+        old_local_backoff = loop._local_repair_backoff_applies
+        old_cooldown = loop._cooldown_applies
+        old_global_oracle_backoff = loop._global_oracle_bridge_backoff_applies
         try:
             active = Todo("T-44", "Problems I Like #4", "https://www.problemsilike.com/4")
             next_target = Todo("T-45", "Problems I Like #5", "https://www.problemsilike.com/5")
@@ -67,6 +71,10 @@ def main() -> int:
             loop.judge = lambda _todo: Preflight(missing=[], reasons=[])
             loop.science_gate_evaluate = lambda _todo: Gate()
             loop._live_worker_for_target = lambda tid, slug: slug == "problemsilike_04"
+            loop._transport_backoff_applies = lambda _slug: False
+            loop._local_repair_backoff_applies = lambda _slug: False
+            loop._cooldown_applies = lambda _tid, _slug, _hours: False
+            loop._global_oracle_bridge_backoff_applies = lambda: False
 
             picked = loop.select_next_target()
             if picked != ("T-45", "problemsilike_05"):
@@ -77,6 +85,10 @@ def main() -> int:
             loop.judge = old_judge
             loop.science_gate_evaluate = old_gate
             loop._live_worker_for_target = old_live
+            loop._transport_backoff_applies = old_transport_backoff
+            loop._local_repair_backoff_applies = old_local_backoff
+            loop._cooldown_applies = old_cooldown
+            loop._global_oracle_bridge_backoff_applies = old_global_oracle_backoff
     return 0
 
 

@@ -2044,7 +2044,7 @@ def _target_has_completed_initial_harness_cycle(slug: str) -> bool:
     )
     if not all(p.exists() and p.stat().st_size > 0 for p in required):
         return False
-    return any(p.is_file() and p.stat().st_size > 0 for p in target_dir.glob("oracle_claim_packet*.md"))
+    return _latest_substantive_claim_packet(target_dir) is not None
 
 
 def _selection_priority(item) -> tuple[int, int, int, str]:
