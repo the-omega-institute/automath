@@ -86,7 +86,12 @@ SKIP_STATUS_PATTERNS = [
 sys.path.insert(0, str(SCRIPT_DIR))
 from outreach_preflight import ACTIONABLE_VERDICTS, judge  # noqa: E402
 from outreach_science_gate import CLOSE_TARGET, WRITEBACK_READY, evaluate as science_gate_evaluate  # noqa: E402
-from outreach_impact_gate import evaluate as impact_gate_evaluate, write_ledger as write_impact_ledger  # noqa: E402
+from outreach_impact_gate import (  # noqa: E402
+    IMPACT_PLAN_READY,
+    CLOSE_OR_ARCHIVE as IMPACT_CLOSE_OR_ARCHIVE,
+    evaluate as impact_gate_evaluate,
+    write_ledger as write_impact_ledger,
+)
 from outreach_profile import load_profile  # noqa: E402
 
 
@@ -117,6 +122,19 @@ def loop_log(msg: str) -> None:
     print(line, flush=True)
     with open(RESEARCH_LOOP_LOG_DIR / "research_loop.log", "a", encoding="utf-8") as f:
         f.write(line + "\n")
+
+
+def _impact_allows_operator_review(impact_gate) -> bool:
+    """Only operator-surface real results or explicit archive decisions.
+
+    Science gate says whether a local mathematical packet is internally
+    coherent.  Impact gate says whether it is worth interrupting the operator
+    as an external-facing result.  Bounded verifier/audit packets may satisfy
+    the former while still being too low-value for this project's current
+    research lane.
+    """
+    status = str(getattr(impact_gate, "status", "") or "")
+    return status in {IMPACT_PLAN_READY, IMPACT_CLOSE_OR_ARCHIVE}
 
 
 # ---------------------------------------------------------------------------
@@ -1711,10 +1729,6 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
         if science_gate is not None and science_gate.status in {WRITEBACK_READY, CLOSE_TARGET}:
             rc = 0
             log_path = f"science_gate_precheck:{science_gate.status}"
-            loop_log(
-                f"{todo_id}: science_gate={science_gate.status}; "
-                "skipping research execution and routing to operator review"
-            )
             summary_path = _write_summary(todo_id, slug, rc, log_path)
             _append_science_gate_summary(summary_path, science_gate.to_dict())
             impact_gate = None
@@ -1727,10 +1741,25 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                     loop_log(f"{todo_id}: impact_gate failed: {exc}")
             progress_state = _record_progress_after_batch(slug, science_gate.status)
             marked = False
-            if _has_real_artifacts(slug):
+            if impact_gate is not None and _impact_allows_operator_review(impact_gate):
+                loop_log(
+                    f"{todo_id}: science_gate={science_gate.status}; "
+                    f"impact_gate={impact_gate.status}; routing to operator review"
+                )
+            else:
+                impact_status = getattr(impact_gate, "status", "unknown") if impact_gate is not None else "unknown"
+                loop_log(
+                    f"{todo_id}: science_gate={science_gate.status} but impact_gate={impact_status}; "
+                    "not surfacing as ready because this is not yet a real publishable math result"
+                )
+            if (
+                _has_real_artifacts(slug)
+                and impact_gate is not None
+                and _impact_allows_operator_review(impact_gate)
+            ):
                 marked = mark_pending_user_approval(
                     todo_id,
-                    note=f"rc={rc} · science_gate={science_gate.status}",
+                    note=f"rc={rc} · science_gate={science_gate.status} · impact_gate={impact_gate.status}",
                 )
             elapsed = _now() - started
             return {
@@ -1897,13 +1926,24 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
             slug,
             science_gate.status if science_gate is not None else "unknown",
         )
-        # Only mark Pending User Approval when concrete artifacts landed.
-        # Empty supervisor_profiles (T-NN entries without registered
-        # commands) return rc=0 instantly and should NOT mark the board.
+        # Only mark Pending User Approval when concrete artifacts landed and
+        # impact_gate agrees this is worth operator/public review.  Empty
+        # supervisor_profiles and low-value bounded/audit packets must not
+        # interrupt the user as "ready" mathematical contributions.
         marked = False
         gate_status = science_gate.status if science_gate is not None else ""
-        if _has_real_artifacts(slug) and gate_status in {WRITEBACK_READY, CLOSE_TARGET}:
-            marked = mark_pending_user_approval(todo_id, note=f"rc={rc} · science_gate={gate_status}")
+        impact_ready = impact_gate is not None and _impact_allows_operator_review(impact_gate)
+        if _has_real_artifacts(slug) and gate_status in {WRITEBACK_READY, CLOSE_TARGET} and impact_ready:
+            marked = mark_pending_user_approval(
+                todo_id,
+                note=f"rc={rc} · science_gate={gate_status} · impact_gate={impact_gate.status}",
+            )
+        elif gate_status in {WRITEBACK_READY, CLOSE_TARGET} and not impact_ready:
+            impact_status = getattr(impact_gate, "status", "unknown") if impact_gate is not None else "unknown"
+            loop_log(
+                f"{todo_id}: science_gate={gate_status} but impact_gate={impact_status}; "
+                "continuing/deprioritizing instead of marking Pending User Approval"
+            )
         else:
             loop_log(
                 f"{todo_id}: not marking — "
@@ -2018,16 +2058,28 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
             elif gate.status == WRITEBACK_READY:
                 impact = impact_gate_evaluate(todo)
                 write_impact_ledger(impact)
-                loop_log(
-                    f"{tid}: science_gate=WRITEBACK_READY; "
-                    f"impact primary={impact.primary_channel} channels={','.join(impact.channels) or '-'}; "
-                    "waiting for operator review"
-                )
+                if _impact_allows_operator_review(impact):
+                    loop_log(
+                        f"{tid}: science_gate=WRITEBACK_READY; "
+                        f"impact primary={impact.primary_channel} channels={','.join(impact.channels) or '-'}; "
+                        "waiting for operator review"
+                    )
+                else:
+                    loop_log(
+                        f"{tid}: science_gate=WRITEBACK_READY but impact_gate={impact.status}; "
+                        "not treating bounded/audit output as a real result"
+                    )
                 continue
             elif gate.status == CLOSE_TARGET:
                 impact = impact_gate_evaluate(todo)
                 write_impact_ledger(impact)
-                loop_log(f"{tid}: science_gate=CLOSE_TARGET; waiting for operator archive review")
+                if _impact_allows_operator_review(impact):
+                    loop_log(f"{tid}: science_gate=CLOSE_TARGET; waiting for operator archive review")
+                else:
+                    loop_log(
+                        f"{tid}: science_gate=CLOSE_TARGET but impact_gate={impact.status}; "
+                        "not surfacing low-value closure as ready"
+                    )
                 continue
             else:
                 terminal_next_actions = {
