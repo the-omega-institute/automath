@@ -2141,6 +2141,9 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
             continue
         if _claim_marker(slug).exists():
             continue
+        if _live_worker_for_target(tid, slug):
+            loop_log(f"{tid}: live worker already active for {slug}; trying another target")
+            continue
         if _cooldown_applies(tid, slug, SUMMARY_COOLDOWN_HOURS):
             continue
         if _transport_backoff_applies(slug):
