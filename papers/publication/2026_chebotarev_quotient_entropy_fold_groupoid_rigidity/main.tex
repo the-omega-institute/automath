@@ -67,6 +67,48 @@ We consider two coarse-observation problems, one arithmetic and one operator-alg
 \section{Introduction}\label{sec:introduction}
 Many counting and rigidity problems are naturally observed through a loss of resolution. On the arithmetic side one often sees only the image of a Frobenius class in a quotient, or only a restricted collection of subset counts. On the operator-algebraic side the ambient algebra may be large, while the available observables belong to a small central or commutative subalgebra. In both situations the basic issue is the same: which invariants remain visible after coarse observation, and how much of the hidden structure can be reconstructed from the visible data?
 
+The two halves of the paper are joined by a deliberately finite principle rather than by an asserted geometric identification between Chebotarev covers and fold groupoids. In both settings there is a fine finite object, a quotient map, a uniform reference measure, and a distinguished observable algebra. The arithmetic theorems analyze the special case where the fine object is a finite abelian Frobenius-label group and the quotients are group quotients; the fold theorems analyze the finite equivalence-relation groupoid of an arbitrary fiber map and show what central observables do, and do not, reconstruct from its block structure. The fold section is therefore not an independent operator-algebra paper inserted for analogy only: it is the finite-dimensional obstruction model for the same quotient-data problem, with central idempotents replacing character kernels and the Watatani index replacing quotient-visible quadratic energy.
+
+\begin{theorem}[Common finite quotient skeleton]\label{thm:common-finite-quotient-skeleton}
+Let \(q:\Omega\twoheadrightarrow X\) be a surjection of finite sets. Let \(u_\Omega\) and \(u_X\) be the uniform laws, let \(\mathcal C_q\subset L^2(\Omega,u_\Omega)\) be the subspace of functions constant on the fibers of \(q\), and let \(P_q\) be the orthogonal projection onto \(\mathcal C_q\). For any probability measure \(\mu\) on \(\Omega\), put \(r=\mu/u_\Omega\), \(\mu_X=q_\ast\mu\), and \(r_X=\mu_X/u_X\). Then the following assertions hold.
+\begin{enumerate}
+\normalfont
+  \item If all fibers of \(q\) have the same cardinality, then
+  \[
+  D(\mu\Vert u_\Omega)=D(\mu_X\Vert u_X)+\sum_{x\in X}\mu_X(x)D(\mu(\cdot\mid x)\Vert u_{q^{-1}(x)}).
+  \]
+  \item Without any equal-fiber hypothesis, the normalized fiberwise expectation
+  \[
+  (P_qr)(\omega):=\frac{1}{|q^{-1}(q(\omega))|}\sum_{\eta\in q^{-1}(q(\omega))}r(\eta)
+  \]
+  satisfies the orthogonal decomposition
+  \[
+  \|r-1\|_{L^2(u_\Omega)}^2=\|P_qr-1\|_{L^2(u_\Omega)}^2+\|r-P_qr\|_{L^2(u_\Omega)}^2.
+  \]
+  \item For the equivalence-relation groupoid \(\Omega\times_X\Omega\), its complex groupoid algebra is canonically
+  \[
+  \CC[\Omega\times_X\Omega]\cong\bigoplus_{x\in X}\End(\CC[q^{-1}(x)]),
+  \]
+  so the minimal central projections are indexed by quotient fibers and the normalized trace weights them by \(|q^{-1}(x)|/|\Omega|\).
+\end{enumerate}
+Consequently, the arithmetic quotient identities and the fold-groupoid reconstruction theorems are two specializations of one finite quotient skeleton: group quotients add harmonic characters and exact kernels, while general fold maps add matrix blocks, central projections, and finite-index central observables.
+\end{theorem}
+
+\begin{proof}
+For (1), write \(\mu(\omega)=\mu_X(q(\omega))\mu(\omega\mid q(\omega))\). If every fiber has size \(h\), then \(|\Omega|=h|X|\) and
+\[
+u_\Omega(\omega)=|\Omega|^{-1}=|X|^{-1}h^{-1}=u_X(q(\omega))u_{q^{-1}(q(\omega))}(\omega).
+\]
+Taking logarithms in the quotient of these two factorizations, multiplying by \(\mu(\omega)\), and summing over \(\omega\) gives exactly the displayed chain rule.
+
+For (2), the subspace \(\mathcal C_q\) is finite-dimensional and consists of functions that are constant on each fiber. Averaging over each fiber is the orthogonal projection in \(L^2(\Omega,u_\Omega)\): for \(g\in\mathcal C_q\), the inner product of \(r-P_qr\) with \(g\) is a sum, fiber by fiber, of a constant times the difference between a function and its fiber average, hence is zero. Since the constant function \(1\) belongs to \(\mathcal C_q\), Pythagoras applied to
+\[
+r-1=(P_qr-1)+(r-P_qr)
+\]
+gives the asserted \(L^2\)-identity.
+
+For (3), decompose \(\Omega\times_X\Omega\) as the disjoint union of the pair groupoids \(q^{-1}(x)\times q^{-1}(x)\). The basis element \([\omega,\eta]\) in the \(x\)-fiber acts on \(\CC[q^{-1}(x)]\) as the matrix unit sending \(\delta_\eta\) to \(\delta_\omega\) and killing the other basis vectors. The convolution and involution formulas are precisely the matrix-unit product and adjoint, so the algebra is the displayed direct sum. The identity of the \(x\)-summand is the corresponding minimal central projection, and its trace under \(|\Omega|^{-1}\sum_x\Tr_x\) is \(|q^{-1}(x)|/|\Omega|\). The final statement follows by applying (1)--(2) to group quotients and (3) to fold maps.
+\end{proof}
 \subsection{Arithmetic results}
 Chebotarev density and its refinements relate counting functions to the spectral data carried by Artin-type factors; see, for instance, \cite{Tschebotareff1926,Serre1981,NeukirchSchmidtWingberg2008}. The arithmetic part of the paper is conditional by design. We do not attempt to establish a new Chebotarev theorem. Instead, we fix an abstract spectral expansion for primitive counts, together with the accompanying Artin factorization, and ask what can be deduced from this input alone about passage to quotients and about the reconstruction of exact spectral information from coarse statistics. The underlying entropy and harmonic-analysis tools are classical \cite{CoverThomas2006,CsiszarKorner2011,DemboZeitouni1998,Diaconis1988,Terras1999}; the point is to arrange them in a form adapted to quotient data.
 
@@ -343,12 +385,12 @@ with the nontrivial quotient formula following by division by the trivial factor
 \end{proof}
 
 \subsection{Exact Quotient Identities}
-We now turn to the exact identities governing passage from a fine label distribution to its quotient. The first is entropic, and the second is the corresponding \(L^2\)-decomposition together with its Fourier interpretation.
+We now turn to the exact identities governing passage from a fine label distribution to its quotient. The following results specialize Theorem \ref{thm:common-finite-quotient-skeleton} to finite abelian group quotients and add the character-theoretic bookkeeping needed for exact-kernel tomography. The first lemma makes explicit that all quotient counts used below are pushforwards of a single fine Chebotarev count vector. The first proposition is entropic, and the second is the corresponding \(L^2\)-decomposition together with its Fourier interpretation.
 
 \input{source/thm__chebotarev-quotient-entropy-energy}
 
 \subsection{Tomography on the Quotient Lattice}
-The preceding identities become substantially more rigid when they are assembled over the full subgroup lattice. The next two results show that the family of quotient-visible \(L^2\)-defects determines the exact-kernel spectral mass by M\"obius inversion, and that the quotient relative entropies recover the same information to second order.
+The preceding identities become substantially more rigid when they are assembled over the full subgroup lattice. This subsection is restricted to finite abelian \(G\): exact kernels are kernels of ordinary characters, and quotient visibility is the condition \(\chi|_H\equiv1\). The next two results show that the family of quotient-visible \(L^2\)-defects determines the exact-kernel spectral mass by M\"obius inversion, and that the quotient relative entropies recover the same information to second order.
 
 \input{source/thm__chebotarev-quotient-tomography}
 
@@ -490,38 +532,56 @@ Having established rigidity of the fingerprint, we study the center of the fold-
 \subsection{Preparatory Material}
 We begin by isolating the fold-specific input and the basic facts about the relevant conditional expectations.
 
+\begin{definition}[The concrete finite fold model]\label{def:concrete-finite-fold-model}
+The concrete fold family used in the reconstruction results is the following finite-dimensional stress-test model. For every \(m\), set \(\Omega_m:=\{0,1\}^m\) with lexicographic order. If \(m\ne6\), set \(X_m:=\{\ast\}\) and let \(\Fold_m\) be the constant map. If \(m=6\), list
+\[
+\Omega_6=\{\omega_1<\omega_2<\cdots<\omega_{64}\}
+\]
+lexicographically, put
+\[
+X_6:=\{(2,i):1\le i\le8\}\sqcup\{(3,i):1\le i\le4\}\sqcup\{(4,i):1\le i\le9\},
+\]
+and define the consecutive intervals
+\[
+B_{2,i}:=\{\omega_{2i-1},\omega_{2i}\}\qquad(1\le i\le8),
+\]
+\[
+B_{3,i}:=\{\omega_{16+3(i-1)+1},\omega_{16+3(i-1)+2},\omega_{16+3(i-1)+3}\}\qquad(1\le i\le4),
+\]
+\[
+B_{4,i}:=\{\omega_{28+4(i-1)+1},\omega_{28+4(i-1)+2},\omega_{28+4(i-1)+3},\omega_{28+4(i-1)+4}\}\qquad(1\le i\le9).
+\]
+Then \(\Fold_6(\omega):=(j,i)\) exactly when \(\omega\in B_{j,i}\). This definition is intentionally finite and enumerative; the fold-groupoid theorems below use it only through the fiber data proved in Proposition \ref{prop:concrete-finite-fold-data}.
+\end{definition}
+
 \begin{proposition}[Concrete finite fold data]\label{prop:concrete-finite-fold-data}
-There is a concrete family of fold maps \(\Fold_m:\Omega_m\to X_m\), with \(\Omega_m=\{0,1\}^m\), for which the maximal-fiber fingerprint is constant on \(\mathcal M_m\) for every \(m\). For the lexicographic scan and reversal of Definition \ref{def:fold-equivalence-groupoid-algebra}, the common fingerprint on maximal fibers is
+For the fold family of Definition \ref{def:concrete-finite-fold-model}, the maximal-fiber fingerprint is constant on \(\mathcal M_m\) for every \(m\). For the lexicographic scan and reversal of Definition \ref{def:fold-equivalence-groupoid-algebra}, the common fingerprint on maximal fibers is
 \[
 \chi_m=\bigl((-1)^{D_m-1},\,(-1)^{D_m(D_m-1)/2}\bigr).
 \]
-For \(m=6\), the same concrete family satisfies
+For \(m=6\), the fiber data are
 \[
 d_6(x)\in\{2,3,4\},\qquad
 \#\{x:d_6(x)=2\}=8,\quad
 \#\{x:d_6(x)=3\}=4,\quad
 \#\{x:d_6(x)=4\}=9.
 \]
+Equivalently, \(|X_6|=21\) and
+\[
+\sum_{x\in X_6}d_6(x)=2\cdot8+3\cdot4+4\cdot9=64=|\Omega_6|.
+\]
 \end{proposition}
 
 \begin{proof}
-For \(m\ne6\), let \(X_m=\{\ast\}\) and let \(\Fold_m:\{0,1\}^m\to\{\ast\}\) be the constant map. Then \(D_m=2^m\) and \(\mathcal M_m=\{\ast\}\), so the maximal-fiber fingerprint is automatically constant.
+For \(m\ne6\), the map is constant by Definition \ref{def:concrete-finite-fold-model}. Thus \(D_m=2^m\) and \(\mathcal M_m=\{\ast\}\), so the maximal-fiber fingerprint is automatically constant.
 
-For \(m=6\), list \(\Omega_6=\{0,1\}^6\) lexicographically as \(\omega_1<\cdots<\omega_{64}\). Let
+For \(m=6\), the displayed sets in Definition \ref{def:concrete-finite-fold-model} are pairwise disjoint consecutive intervals in the lexicographic list: the first family occupies indices \(1,\ldots,16\), the second occupies \(17,\ldots,28\), and the third occupies \(29,\ldots,64\). Their cardinalities are respectively \(2\), \(3\), and \(4\), and the endpoint count
 \[
-X_6:=\{(2,i):1\le i\le8\}\sqcup\{(3,i):1\le i\le4\}\sqcup\{(4,i):1\le i\le9\}.
+16+12+36=64
 \]
-Partition the ordered list into consecutive blocks
-\[
-B_{2,i}\ (1\le i\le8),\qquad B_{3,i}\ (1\le i\le4),\qquad B_{4,i}\ (1\le i\le9),
-\]
-where \(|B_{2,i}|=2\), \(|B_{3,i}|=3\), and \(|B_{4,i}|=4\). Such a partition exists because
-\[
-8\cdot2+4\cdot3+9\cdot4=64.
-\]
-Define \(\Fold_6(\omega)=(j,i)\) exactly when \(\omega\in B_{j,i}\). Then the fibers are precisely these blocks, so their multiplicities are eight fibers of size \(2\), four fibers of size \(3\), and nine fibers of size \(4\). The maximal fibers are exactly the nine blocks \(B_{4,i}\), all of size \(D_6=4\), hence all have the same scan and reversal signs.
+shows that they partition all of \(\Omega_6\). Since \(\Fold_6\) is defined to be constant exactly on each interval \(B_{j,i}\) and to take distinct values \((j,i)\) on distinct intervals, its fibers are precisely these intervals. Hence there are eight fibers of size \(2\), four fibers of size \(3\), and nine fibers of size \(4\). The maximal fibers are exactly the nine sets \(B_{4,i}\), all of size \(D_6=4\), and therefore all maximal fibers have the same scan and reversal signs.
 
-It remains only to compute those signs uniformly. On an ordered fiber of size \(d\), the scan permutation is a \(d\)-cycle and has sign \((-1)^{d-1}\). The reversal permutation has \(\lfloor d/2\rfloor\) transpositions, whose parity is \((-1)^{d(d-1)/2}\). Applying this with \(d=D_m\) on maximal fibers gives the displayed formula for \(\chi_m\).
+It remains only to compute those signs uniformly. On an ordered fiber of size \(d\), the scan permutation is a \(d\)-cycle and has sign \((-1)^{d-1}\). The reversal permutation pairs the first point with the last, the second with the penultimate, and so on, so it is a product of \(\lfloor d/2\rfloor\) disjoint transpositions and has sign \((-1)^{\lfloor d/2\rfloor}\). Since \(\lfloor d/2\rfloor\equiv d(d-1)/2\pmod 2\), this sign is also \((-1)^{d(d-1)/2}\). Applying these formulas with \(d=D_m\) on maximal fibers gives the displayed formula for \(\chi_m\).
 \end{proof}
 
 \begin{proposition}\label{prop:fold-condexp-index-maxfiber}
@@ -644,7 +704,13 @@ This is exactly the window-\(6\) part of Proposition \ref{prop:concrete-finite-f
 In the remainder of Section \ref{sec:central-idempotents} the fold-specific inputs enter only through the proven finite fold-data statements above.
 
 \subsection{Central Idempotents and Signed Moments}
-The central involutions associated with scan and reversal encode the fingerprint intrinsically inside the center. Once they are in place, the Watatani index element yields a natural family of signed moments. These moments recover maximal-fiber data in general and, in window \(6\), determine the sectorwise multiplicity profile explicitly.
+The central involutions associated with scan and reversal encode the fingerprint intrinsically inside the center. Explicitly, after the Wedderburn decomposition, they are the central elements
+\[
+\varepsilon_{\mathrm{scan}}:=\sum_{x\in X_m}\operatorname{sgn}(c_x)\,\widetilde P_x,
+\qquad
+\varepsilon_{\mathrm{rev}}:=\sum_{x\in X_m}\operatorname{sgn}(\iota_x)\,\widetilde P_x.
+\]
+The normalized trace used below is the microstate-normalized block trace \(\tau_{m,1}(A)=2^{-m}\sum_x\Tr(A_x)\), where \(\Tr\) is the unnormalized matrix trace on the \(x\)-block. Once these observables are in place, the Watatani index element yields a natural family of signed moments. These moments recover maximal-fiber data in general and, in window \(6\), determine the sectorwise multiplicity profile explicitly.
 
 \input{source/thm__fold-groupoid-z2x2-central-idempotents}
 
@@ -714,3 +780,6 @@ Finally, because the only fiber sizes are \(2\), \(3\), and \(4\), the fiber-spe
 \bibliography{references}
 
 \end{document}
+
+
+
