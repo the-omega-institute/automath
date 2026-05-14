@@ -147,6 +147,7 @@ def _git_head() -> str:
 
 def write_runtime_record(args: argparse.Namespace) -> None:
     payload = {
+        "status": "running",
         "pid": os.getpid(),
         "started_at": _now_iso(),
         "git_head": _git_head(),
@@ -164,6 +165,49 @@ def write_runtime_record(args: argparse.Namespace) -> None:
         )
     except OSError as exc:
         supervisor_log(f"runtime record write failed: {exc}")
+
+
+def mark_runtime_stopped() -> None:
+    """Mark the supervisor runtime record inactive on clean exit.
+
+    The advisory lock is process-owned, but `supervisor.runtime.json` is just a
+    diagnostic file.  Leaving a dead pid and old git head there makes watchdog
+    and operator health checks look stale or ambiguous after an intentional
+    restart.
+    """
+    try:
+        payload = json.loads(SUPERVISOR_RUNTIME.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            payload = {}
+    except (OSError, json.JSONDecodeError):
+        payload = {}
+    recorded_pid = payload.get("pid")
+    try:
+        recorded_pid_int = int(recorded_pid or 0)
+    except (TypeError, ValueError):
+        recorded_pid_int = 0
+    if recorded_pid_int and recorded_pid_int != os.getpid():
+        supervisor_log(
+            "runtime stopped record skipped: runtime belongs to "
+            f"pid={recorded_pid_int}, current pid={os.getpid()}"
+        )
+        return
+    payload.update(
+        {
+            "status": "stopped",
+            "finished_at": _now_iso(),
+            "pid": os.getpid(),
+            "git_head": payload.get("git_head") or _git_head(),
+        }
+    )
+    try:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
+        SUPERVISOR_RUNTIME.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        supervisor_log(f"runtime stopped record write failed: {exc}")
 
 
 def _acquire_supervisor_lock():
@@ -1383,6 +1427,7 @@ def main() -> int:
                 STOP_FILE.unlink()
             except OSError:
                 pass
+        mark_runtime_stopped()
         supervisor_log("supervisor exiting")
     return 0
 

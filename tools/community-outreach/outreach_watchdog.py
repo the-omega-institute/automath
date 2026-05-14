@@ -13,6 +13,7 @@ default.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import signal
@@ -31,6 +32,7 @@ WATCHDOG_STATUS = STATE_DIR / "watchdog.status.json"
 SUPERVISOR_LOG_DIR = STATE_DIR / "supervisor_logs"
 SUPERVISOR_DAEMON_LOG = SUPERVISOR_LOG_DIR / "supervisor_daemon_current.log"
 SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
+SUPERVISOR_LOCK = STATE_DIR / "supervisor.lock"
 RESEARCH_STATUS = STATE_DIR / "research_loop.status.json"
 STOP_FILE = SCRIPT_DIR / ".outreach_stop"
 
@@ -233,11 +235,43 @@ def _pid_alive(pid: int) -> bool:
 
 def _runtime_supervisor_alive() -> bool:
     runtime = _read_json(SUPERVISOR_RUNTIME)
+    if str(runtime.get("status") or "").strip().lower() == "stopped":
+        return False
     try:
         pid = int(runtime.get("pid") or 0)
     except (TypeError, ValueError):
         pid = 0
     return _pid_alive(pid)
+
+
+def _runtime_supervisor_stopped() -> bool:
+    runtime = _read_json(SUPERVISOR_RUNTIME)
+    return str(runtime.get("status") or "").strip().lower() == "stopped"
+
+
+def _supervisor_lock_held() -> bool:
+    """Return true when another process currently owns the supervisor lock.
+
+    On macOS sandboxed runs, `ps` and `kill(pid, 0)` can both be unavailable or
+    permission-denied even while the process is alive.  The advisory lock is the
+    actual singleton guard, so test it directly before spawning duplicates.
+    """
+    try:
+        fd = os.open(str(SUPERVISOR_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
+    except OSError:
+        return False
+    try:
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return True
+        return False
+    finally:
+        try:
+            fcntl.flock(fd, fcntl.LOCK_UN)
+        except OSError:
+            pass
+        os.close(fd)
 
 
 def _reconcile_deep() -> dict:
@@ -438,6 +472,11 @@ def one_tick(*, supervisor_args: list[str], stale_reconcile_seconds: int, cleanu
     if not supervisor_rows:
         if _runtime_supervisor_alive():
             actions.append("supervisor_ps_missing_runtime_alive")
+        elif _supervisor_lock_held():
+            actions.append("supervisor_lock_held_ps_unavailable")
+        elif not ps_ok and _runtime_supervisor_stopped():
+            _spawn_supervisor(supervisor_args)
+            actions.append("spawn_supervisor_runtime_stopped_ps_unavailable")
         elif not ps_ok:
             actions.append("supervisor_unobservable_ps_failed")
             log(f"supervisor: ps failed and no trusted runtime pid; not spawning duplicate ({_PS_LAST_ERROR})")

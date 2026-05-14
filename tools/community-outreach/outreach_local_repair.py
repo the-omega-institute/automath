@@ -344,6 +344,21 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "python3 -m py_compile",
         "python -m py_compile",
     )
+    maintenance_command_markers = (
+        "metadata",
+        "profile",
+        "board",
+        "preflight",
+        "refill",
+        "status",
+        "ledger",
+        "queue",
+        "task_queue",
+        "science_gate",
+        "impact_gate",
+        "outreach_state",
+        "local_repair_last",
+    )
     mathematical_command_markers = (
         "verify",
         "check",
@@ -415,6 +430,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             inspection_command_count += 1
         is_inspection_only_python = any(marker in command_lower for marker in inspection_only_python_markers)
         is_mechanical_python = any(marker in command_lower for marker in mechanical_python_markers)
+        is_maintenance_command = any(marker in command_lower for marker in maintenance_command_markers)
         is_artifact_search_command = any(marker in command_lower for marker in negative_search_markers) and (
             "find " in command_lower
             or "rg " in command_lower
@@ -430,6 +446,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             if (
                 item.get("status") == "completed"
                 and not is_mechanical_python
+                and not is_maintenance_command
                 and (
                     any(marker in command_lower for marker in mathematical_command_markers)
                     or any(marker in output_lower for marker in output_markers)

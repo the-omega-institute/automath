@@ -198,6 +198,31 @@ def main() -> int:
         if substantive.get("ok"):
             raise AssertionError(f"py_compile-only command trace should not pass substantive gate: {substantive}")
 
+        metadata_update_event = {
+            "item": {
+                "type": "command_execution",
+                "command": f"/bin/zsh -lc 'python3 {rel_target}/scripts/update_profile_metadata.py --board-status RUN'",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": "updated profile metadata for graph bound target\n",
+            }
+        }
+        stdout_path.write_text(json.dumps(metadata_update_event) + "\n", encoding="utf-8")
+        trace = local_repair._codex_jsonl_local_command_trace(stdout_path, target_dir)
+        if int(trace.get("target_command_count") or 0) <= 0:
+            raise AssertionError(f"metadata update should still count as a target-local command: {trace}")
+        if int(trace.get("mathematical_action_command_count") or 0) != 0:
+            raise AssertionError(f"metadata/profile update was incorrectly counted as mathematical action: {trace}")
+        substantive = local_repair._substantive_local_workup_check(
+            target_dir,
+            _workup(include_attempt=True),
+            "The local `results.json` exists but the case-3 certificate is missing.",
+            "Updated only target metadata/profile state before asking Oracle.",
+            codex_trace=trace,
+        )
+        if substantive.get("ok"):
+            raise AssertionError(f"metadata/profile update should not pass substantive gate: {substantive}")
+
         negative_search_event = {
             "item": {
                 "type": "command_execution",
