@@ -1,4 +1,4 @@
-﻿\subsection{Zeckendorf value and the numerical realization of stable addresses}\label{subsec:emergent-arithmetic-zeckendorf-value-address}
+\subsection{Zeckendorf value and the numerical realization of stable addresses}\label{subsec:emergent-arithmetic-zeckendorf-value-address}
 
 For \(w=w_1\cdots w_m\in X_m\), define its Zeckendorf value by
 \[
@@ -12,7 +12,11 @@ is well defined, and
 \[
 N=V_m\bigl(Z_m(N)\bigr).
 \]
-Thus \(X_m\) may be regarded as a canonical address space for the integers in the range \(0\le N<F_{m+2}\).
+Thus \(X_m\) may be regarded as a canonical address space for the integers in the range \(0\le N<F_{m+2}\). We extend this notation to residue classes by writing
+\[
+Z_m(\alpha):=Z_m(r),\qquad \alpha\in\ZZ/(F_{m+2}\ZZ),
+\]
+where \(r\) is the unique representative of \(\alpha\) with \(0\le r<F_{m+2}\). Equivalently, whenever an integer expression is written inside \(Z_m(\,\cdot\,)\) modulo \(F_{m+2}\), the representative in \(\{0,1,\dots,F_{m+2}-1\}\) is chosen first.
 
 \subsubsection{Finite-resolution arithmetic and modular structure}
 To turn finite-resolution readout into a closed algebraic object, we define the operations on \(X_m\) by pulling modular arithmetic back along the value map. The next theorem records the quotient reason for the modulus \(F_{m+2}\): at depth \(m\), adding the single local period relation that kills the next Fibonacci scale collapses the free configuration monoid exactly to residues modulo \(F_{m+2}\), and \(X_m\) is the canonical residue-fold transversal.
@@ -51,13 +55,19 @@ Fix \(m\ge 1\) and set \(M_m:=F_{m+2}\). Let \(\equiv_m\) be the smallest congru
 \[
 e_{m+1}\equiv_m 0.
 \]
-Then the residue value map
+Then, for all \(a,b\in\mathcal D\),
+\[
+a\equiv_m b
+\qquad\Longleftrightarrow\qquad
+\mathrm{Val}(a)\equiv \mathrm{Val}(b)\pmod {M_m}.
+\]
+Consequently the residue value map
 \[
 \overline{\mathrm{Val}}_m:\mathcal{D}/\!\equiv_m\longrightarrow \ZZ/(M_m\ZZ),
 \qquad
 [a]_m\longmapsto [\mathrm{Val}(a)]_{M_m},
 \]
-is an isomorphism of commutative monoids. Moreover, every \(\equiv_m\)-class contains a unique representative in \(X_m\), namely
+is an isomorphism of finite commutative monoids, where \(\ZZ/(M_m\ZZ)\) is regarded as its additive cyclic monoid. Moreover, every \(\equiv_m\)-class contains a unique representative in \(X_m\), namely
 \[
 \Fold_m(a):=Z_m\bigl(\mathrm{Val}(a)\bmod M_m\bigr).
 \]
@@ -69,38 +79,37 @@ The ordinary Fibonacci relations preserve \(\mathrm{Val}\) by Proposition \ref{p
 \[
 \mathrm{Val}(e_{m+1})=F_{m+2}=M_m\equiv0\pmod {M_m}.
 \]
-Thus \(\overline{\mathrm{Val}}_m\) is a well-defined homomorphism of commutative monoids.
+Thus every generating relation for \(\equiv_m\) preserves residue value, so
+\[
+a\equiv_m b\quad\Longrightarrow\quad \mathrm{Val}(a)\equiv\mathrm{Val}(b)\pmod {M_m}.
+\]
 
-Let \(\varepsilon:=[e_1]_m\). As in Theorem \ref{thm:monoid-quotient-is-N}, the Fibonacci relations imply
+For the converse, first recall the reduction inside the ordinary Fibonacci quotient. In \(\mathcal D/\!\equiv\), with \(\varepsilon:=[e_1]\), Theorem \ref{thm:monoid-quotient-is-N} gives
 \[
-[e_k]_m=F_{k+1}\varepsilon\qquad(k\ge1).
+[a]=\mathrm{Val}(a)\varepsilon
+\qquad(a\in\mathcal D).
 \]
-The additional relation gives \(M_m\varepsilon=[e_{m+1}]_m=0\). Hence the map
+Equivalently, each \(a\in\mathcal D\) can be connected to \(\mathrm{Val}(a)e_1\) by finitely many Fibonacci congruence moves, and hence by finitely many \(\equiv_m\)-moves. If \(\mathrm{Val}(a)\equiv\mathrm{Val}(b)\pmod {M_m}\), write
 \[
-\alpha:
-\ZZ/(M_m\ZZ)\longrightarrow\mathcal{D}/\!\equiv_m,
-\qquad
-[n]_{M_m}\longmapsto n\varepsilon,
+\mathrm{Val}(a)+qM_m=\mathrm{Val}(b)+pM_m
 \]
-is well defined. It is a homomorphism, and
+with \(p,q\in\NN\); for instance, take \(p,q\) to be the positive and negative parts of \((\mathrm{Val}(a)-\mathrm{Val}(b))/M_m\). Since \(M_me_1\equiv_m e_{m+1}\equiv_m0\), closure under addition gives
 \[
-\overline{\mathrm{Val}}_m(\alpha([n]_{M_m}))=[n]_{M_m},
+\mathrm{Val}(a)e_1
+\equiv_m \bigl(\mathrm{Val}(a)+qM_m\bigr)e_1
+=\bigl(\mathrm{Val}(b)+pM_m\bigr)e_1
+\equiv_m \mathrm{Val}(b)e_1.
 \]
-since \(\mathrm{Val}(e_1)=F_2=1\). Conversely, for any \(a=\sum_k a_ke_k\in\mathcal{D}\),
-\[
-[a]_m
-=\sum_k a_k[e_k]_m
-=\left(\sum_k a_kF_{k+1}\right)\varepsilon
-=\mathrm{Val}(a)\varepsilon
-=\alpha\bigl([\mathrm{Val}(a)]_{M_m}\bigr).
-\]
-Thus \(\alpha\) and \(\overline{\mathrm{Val}}_m\) are inverse isomorphisms.
+Combining this with the reductions of \(a\) and \(b\) to their first-scale representatives proves \(a\equiv_m b\). This proves the displayed equivalence, not merely a group-completed universal property.
 
-By Lemma \ref{lem:zeckendorf-range-bijection}, the map \(V_m:X_m\to\{0,1,\dots,M_m-1\}\) is bijective. Therefore \(Z_m(r)\) is defined and unique for each residue representative \(0\le r<M_m\). For a configuration \(a\), the word \(\Fold_m(a)=Z_m(\mathrm{Val}(a)\bmod M_m)\) lies in the same \(\equiv_m\)-class because the two configurations have the same image under the isomorphism \(\overline{\mathrm{Val}}_m\). If two words \(w,v\in X_m\) lie in the same class, then \(V_m(w)\equiv V_m(v)\pmod {M_m}\). Both values lie between \(0\) and \(M_m-1\), hence they are equal; the bijectivity of \(V_m\) gives \(w=v\). This proves that \(X_m\) is the unique canonical transversal.
+The map \(\overline{\mathrm{Val}}_m\) is now well defined, injective by the equivalence, and surjective because \(ne_1\) has residue value \([n]_{M_m}\). It is additive since \(\mathrm{Val}\) is additive, so it is an isomorphism of commutative monoids onto the additive cyclic residue monoid.
+
+By Lemma \ref{lem:zeckendorf-range-bijection}, the map \(V_m:X_m\to\{0,1,\dots,M_m-1\}\) is bijective. Therefore \(Z_m(r)\) is defined and unique for each residue representative \(0\le r<M_m\). For a configuration \(a\), the word \(\Fold_m(a)=Z_m(\mathrm{Val}(a)\bmod M_m)\) lies in the same \(\equiv_m\)-class by the equivalence just proved. If two words \(w,v\in X_m\) lie in the same class, then \(V_m(w)\equiv V_m(v)\pmod {M_m}\). Both values lie between \(0\) and \(M_m-1\), hence they are equal; the bijectivity of \(V_m\) gives \(w=v\). This proves that \(X_m\) is the unique canonical transversal.
 
 For \(w,v\in X_m\), quotient addition followed by the transversal sends their classes to the unique word of residue
 \[
-V_m(w)+V_m(v)\bmod M_m,
+V_m(w)+V_m(v)
+\quad\text{in }\ZZ/(M_m\ZZ),
 \]
 which is exactly the definition of \(w\boxplus_m v\). The same argument with residue products shows that any multiplication compatible with \(\overline{\mathrm{Val}}_m\) must send \((w,v)\) to the unique word of residue \(V_m(w)V_m(v)\bmod M_m\), namely \(w\boxtimes_m v\). Hence the finite ring operations are forced by the quotient skeleton and the canonical residue-fold representative.
 \end{proof}
@@ -479,3 +488,4 @@ Parts (1) and (2) are standard facts about profinite inverse limits: a product o
 \begin{remark}[Relation with the projective limit of admissible prefixes]\label{rem:fib-adic-vs-syntax}
 The ring \(\ZZ_{\mathrm{Fib},2}\) should be distinguished from the projective limit formed by admissible Fibonacci words under truncation. The latter is a syntactic object describing compatibility of visible prefixes in the Fibonacci shift, whereas \(\ZZ_{\mathrm{Fib},2}\) is an arithmetic object describing compatibility of finite quotient rings along a divisibility tower. These are complementary limiting constructions inside the same folding framework.
 \end{remark}
+

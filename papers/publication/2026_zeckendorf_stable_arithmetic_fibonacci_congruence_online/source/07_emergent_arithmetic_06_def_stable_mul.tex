@@ -54,15 +54,15 @@ where the last equality is Definition \ref{def:stable-mul}. Proposition \ref{pro
 \end{proof}
 
 \begin{theorem}[Fixed-resolution multiplication is residue-fold realization, not a uniform online multiplier]\label{thm:finite-mul-fixed-resolution-fst}
-Fix \(m\ge 1\) and set \(M_m:=F_{m+2}\). There is a finite transducer depending only on \(m\) which, on input two words \(c,d\in X_m\), outputs
+Fix \(m\ge 1\) and set \(M_m:=F_{m+2}\). There is a fixed-resolution output machine in the sense of Definition \ref{def:fixed-resolution-output-machine}, depending only on \(m\), which, on input two words \(c,d\in X_m\), outputs
 \[
 c\boxtimes_m d=Z_m\bigl(V_m(c)V_m(d)\bmod M_m\bigr).
 \]
-Equivalently, at each fixed resolution multiplication descends through the finite residue fold classified by Theorems \ref{thm:finite-quotient-residue-fold-classification} and \ref{thm:residue-fold-factorization-rigidity}. This theorem is deliberately fixed-resolution: since every operation on the finite set \(X_m\) has a finite lookup-table implementation, the content is the residue-fold compatibility that forces the table to be \(\boxtimes_m\), not a bounded-delay online multiplication theorem uniform in \(m\).
+Equivalently, at each fixed resolution multiplication descends through the finite residue fold classified by Theorems \ref{thm:finite-quotient-residue-fold-classification} and \ref{thm:residue-fold-factorization-rigidity}. This theorem is deliberately fixed-resolution: since every operation on the finite set \(X_m\) has a finite lookup-table implementation, the content is the residue-register compatibility that forces the terminal table to be \(\boxtimes_m\), not a bounded-delay online multiplication theorem uniform in \(m\).
 \end{theorem}
 
 \begin{proof}
-At fixed \(m\), the input language \(X_m\times X_m\) is finite. A concrete transducer may be described by its state register
+At fixed \(m\), the input language \(X_m\times X_m\) is finite. A concrete low-to-high register machine may be described by its state register
 \[
 (r,s,u,v)\in \bigl(\ZZ/(M_m\ZZ)\bigr)^4,
 \]
@@ -85,12 +85,12 @@ s\leftarrow s+d_{q+1}v,
 \qquad
 (u,v)\leftarrow(v,u+v),
 \]
-modulo \(M_m\). After the last of the \(m\) digit pairs has been read, the registers contain \(r=V_m(c)\bmod M_m\) and \(s=V_m(d)\bmod M_m\). The machine then forms the residue \(rs\bmod M_m\) in its finite control and uses the fixed lookup table supplied by Lemma \ref{lem:zeckendorf-range-bijection},
+modulo \(M_m\). A counter \(q\in\{0,1,\dots,m\}\) may be included in the finite control to mark the synchronized input position and to halt exactly after the length-\(m\) word has been read. After the last of the \(m\) digit pairs has been read, the registers contain \(r=V_m(c)\bmod M_m\) and \(s=V_m(d)\bmod M_m\). The machine then forms the residue \(rs\bmod M_m\) in its finite control and uses the fixed lookup table supplied by Lemma \ref{lem:zeckendorf-range-bijection},
 \[
 \{0,1,\dots,M_m-1\}\longrightarrow X_m,
 \qquad n\longmapsto Z_m(n),
 \]
-to emit \(Z_m(rs\bmod M_m)\). By Definition \ref{def:finite-resolution-arithmetic}, this output is precisely \(c\boxtimes_m d\). All state sets and lookup tables are finite because \(m\) is fixed.
+as the terminal output map \(\Omega_m\) of Definition \ref{def:fixed-resolution-output-machine}. Thus the machine emits the synchronized length-\(m\) word \(Z_m(rs\bmod M_m)\) only after the full residue has been accumulated. By Definition \ref{def:finite-resolution-arithmetic}, this output is precisely \(c\boxtimes_m d\). All state sets and lookup tables are finite because \(m\) is fixed.
 \end{proof}
 
 \begin{theorem}[Definitional isomorphism for multiplication]\label{thm:mul-definitional}
@@ -266,6 +266,10 @@ S_0:=\langle g\rangle=\{g^{\circ n}:n\in\NN\}\subseteq \mathrm{End}(A),
 S_1:=\{I_n:n\in\NN\}\subseteq \mathrm{End}(\mathrm{End}(A)),
 \]
 where \(I_n(f):=f^{\circ n}\). The only operation on either level is composition \(\circ\).
+
+\begin{example}[The canonical shift supplies the hypotheses]\label{ex:canonical-shift-distinct-iterates}
+Take \(A=\NN\) and \(g(n)=n+1\). Then \(g^{\circ r}(0)=r\) for every \(r\in\NN\). Hence \(g^{\circ r}=g^{\circ s}\) implies \(r=s\), so the iterates of \(g\) are pairwise distinct. Thus the two-layer composition interface below is nonempty and includes the usual successor shift as its canonical model.
+\end{example}
 
 \begin{theorem}[A single primitive \texorpdfstring{$\circ$}{o} generates both \texorpdfstring{$+$}{+} and \texorpdfstring{$\times$}{x} through two-layer readout]\label{thm:composition-two-layer}
 The maps
