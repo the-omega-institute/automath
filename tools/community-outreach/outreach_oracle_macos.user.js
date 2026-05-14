@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      outreach-1.22
+// @version      outreach-1.23
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -47,7 +47,7 @@
   const REFILL_NO_OUTPUT_IDLE_TIMEOUT = 1800000;
   const POST_THINK_NO_OUTPUT_TIMEOUT = 300000;
   const REFILL_POST_THINK_NO_OUTPUT_TIMEOUT = 1800000;
-  const SCRIPT_VERSION = "outreach-1.22";
+  const SCRIPT_VERSION = "outreach-1.23";
   const OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
   const OPENPROBLEM_PROJECT_URL = `https://chatgpt.com${OPENPROBLEM_PROJECT_PREFIX}/project`;
 
