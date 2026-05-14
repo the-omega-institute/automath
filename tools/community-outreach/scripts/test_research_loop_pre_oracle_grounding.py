@@ -10,7 +10,10 @@ explicit local failure.
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
+import tempfile
+import time
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parents[1]
@@ -72,6 +75,24 @@ case 7. Prove the case-7 lemma or provide a checkable obstruction.
 """
 
 
+def _local_repair_last(*, ok: bool = True) -> str:
+    return json.dumps(
+        {
+            "ok": ok,
+            "postcheck": {
+                "codex_command_trace": {
+                    "ok": True,
+                    "target_command_count": 2,
+                },
+                "substantive_local_work": {
+                    "ok": True,
+                },
+            },
+        },
+        indent=2,
+    )
+
+
 def main() -> int:
     loop = _load_research_loop()
     workup = _workup()
@@ -94,6 +115,41 @@ def main() -> int:
     )
     if slug_only:
         raise AssertionError("slug-only Oracle question should not count as locally grounded")
+
+    with tempfile.TemporaryDirectory(dir=SCRIPT_DIR) as tmp:
+        state_dir = Path(tmp)
+        target_root = state_dir / "targets"
+        target_dir = target_root / "demo"
+        target_dir.mkdir(parents=True)
+        loop.TARGETS_DIR = target_root
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            (target_dir / name).write_text(workup, encoding="utf-8")
+        (target_dir / "local_repair_last.json").write_text(_local_repair_last(), encoding="utf-8")
+
+        ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
+        if not ok:
+            raise AssertionError(f"fresh Codex handoff should be reusable before Oracle: {reason}")
+
+        time.sleep(0.02)
+        (target_dir / "oracle_claim_packet_new.md").write_text(
+            "# Oracle Claim Packet\n\n## Oracle Response\n\n"
+            "Substantive claim: the case-7 certificate exists with sha256=abc123.\n",
+            encoding="utf-8",
+        )
+        ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
+        if ok or "older than latest substantive Oracle claim" not in reason:
+            raise AssertionError(
+                "handoff older than newest substantive Oracle claim should force local replay: "
+                f"ok={ok} reason={reason!r}"
+            )
+
+        time.sleep(0.02)
+        for name in ("codex_workup.md", "next_oracle_question.md", "local_repair_report.md"):
+            path = target_dir / name
+            path.write_text(path.read_text(encoding="utf-8") + "\nRefreshed after claim.\n", encoding="utf-8")
+        ok, reason = loop._pre_oracle_workup_recent("demo", max_age_seconds=3600)
+        if not ok:
+            raise AssertionError(f"fresh post-claim Codex handoff should be reusable: {reason}")
 
     return 0
 

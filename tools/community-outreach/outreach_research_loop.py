@@ -981,6 +981,88 @@ def _pre_oracle_workup_fresh_after(slug: str, started_at: float) -> tuple[bool, 
     return True, ""
 
 
+def _is_transport_stub_response(text: str) -> bool:
+    stripped = (text or "").strip()
+    if not stripped:
+        return True
+    lowered = stripped.lower()
+    markers = (
+        "error: task cancelled by server",
+        "error (re-extract):",
+        "error: empty response",
+        "empty response (timeout or extraction failure)",
+        "no assistant output after",
+        "re-extract: nothing meaningful",
+        "re-extract: empty response",
+        "server unreachable",
+    )
+    if any(lowered.startswith(marker) for marker in markers):
+        return True
+    return len(stripped) < 80 and "cancelled" in lowered and "server" in lowered
+
+
+def _claim_packet_oracle_response(text: str) -> str:
+    marker = "## Oracle Response"
+    idx = text.find(marker)
+    if idx < 0:
+        return text
+    return text[idx + len(marker) :].strip()
+
+
+def _latest_substantive_claim_packet(target_dir: Path) -> Path | None:
+    packets = sorted(
+        target_dir.glob("oracle_claim_packet_*.md"),
+        key=lambda p: p.stat().st_mtime if p.exists() else 0,
+        reverse=True,
+    )
+    for packet in packets:
+        try:
+            text = packet.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not _is_transport_stub_response(_claim_packet_oracle_response(text)):
+            return packet
+    return None
+
+
+def _pre_oracle_workup_recent(slug: str, *, max_age_seconds: int) -> tuple[bool, str]:
+    """Accept a fresh Codex handoff without rerunning local repair.
+
+    Oracle still never receives a raw board card: this reuses only a handoff
+    that already passed the same machine-observed Codex command trace gate and
+    is newer than the latest substantive Oracle claim packet.
+    """
+    ok, reason = _pre_oracle_workup_status(slug)
+    if not ok:
+        return ok, reason
+    target_dir = TARGETS_DIR / slug
+    required = (
+        "codex_workup.md",
+        "next_oracle_question.md",
+        "local_repair_report.md",
+    )
+    oldest_mtime = time.time()
+    oldest_age = 0.0
+    for name in required:
+        path = target_dir / name
+        try:
+            stat = path.stat()
+        except OSError:
+            return False, f"missing {name}"
+        oldest_mtime = min(oldest_mtime, stat.st_mtime)
+        oldest_age = max(oldest_age, time.time() - stat.st_mtime)
+    if oldest_age > max_age_seconds:
+        return False, f"Codex handoff older than reuse window ({oldest_age:.0f}s > {max_age_seconds}s)"
+    latest_claim = _latest_substantive_claim_packet(target_dir)
+    if latest_claim is not None and oldest_mtime < latest_claim.stat().st_mtime:
+        return (
+            False,
+            "Codex handoff is older than latest substantive Oracle claim "
+            f"({latest_claim.name}); Codex must locally replay/process that claim before the next Oracle turn",
+        )
+    return True, ""
+
+
 def _has_pre_oracle_workup(slug: str) -> bool:
     """Ensure the pre-Oracle Codex pass processed the target, not just metadata."""
     ok, _reason = _pre_oracle_workup_status(slug)
@@ -1517,20 +1599,32 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                                 f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
                             )
             else:
-                loop_log(
-                    f"{todo_id}: science_gate.next_action=deep_reason"
-                    f"{' after local supervisor produced no artifact' if not _has_real_artifacts(slug) else ''}; "
-                    "running Codex workup before oracle-deep"
+                reuse_ok, reuse_reason = _pre_oracle_workup_recent(
+                    slug,
+                    max_age_seconds=max(900, int(timeout_s)),
                 )
-                workup_rc, workup_log = _run_codex_workup_before_oracle(todo_id, slug, timeout_s)
-                if workup_rc != 0:
-                    rc, log_path = workup_rc, workup_log
+                if reuse_ok:
                     loop_log(
-                        f"{todo_id}: pre-Oracle Codex workup failed; "
-                        "not asking Oracle from an unprocessed board card"
+                        f"{todo_id}: reusing fresh Codex local workup for oracle-deep; "
+                        "not rerunning local repair"
                     )
+                    workup_rc, workup_log = 0, log_path
+                    workup_ok, workup_reason = True, ""
                 else:
-                    workup_ok, workup_reason = _pre_oracle_workup_status(slug)
+                    loop_log(
+                        f"{todo_id}: science_gate.next_action=deep_reason"
+                        f"{' after local supervisor produced no artifact' if not _has_real_artifacts(slug) else ''}; "
+                        f"running Codex workup before oracle-deep ({reuse_reason})"
+                    )
+                    workup_rc, workup_log = _run_codex_workup_before_oracle(todo_id, slug, timeout_s)
+                    if workup_rc != 0:
+                        rc, log_path = workup_rc, workup_log
+                        loop_log(
+                            f"{todo_id}: pre-Oracle Codex workup failed; "
+                            "not asking Oracle from an unprocessed board card"
+                        )
+                    else:
+                        workup_ok, workup_reason = _pre_oracle_workup_status(slug)
                 if workup_rc == 0 and not workup_ok:
                     rc, log_path = 2, workup_log
                     _note_local_repair_backoff(
