@@ -356,6 +356,16 @@ def main() -> int:
         if postcheck.get("ok") or "local_repair_last.json" not in " ".join(postcheck.get("diagnostics", [])):
             raise AssertionError(f"reserved harness overwrite was not rejected: {postcheck}")
 
+        postcheck = local_repair._postcheck_local_repair_artifacts(
+            target_dir,
+            codex_trace=trace,
+            reserved_before=local_repair._snapshot_reserved_harness_files(target_dir),
+            run_started_at="2999-01-01T00:00:00+00:00",
+        )
+        stale_diagnostics = " ".join(postcheck.get("diagnostics", []))
+        if postcheck.get("ok") or "was not refreshed by this local repair run" not in stale_diagnostics:
+            raise AssertionError(f"stale handoff should be rejected: {postcheck}")
+
         reserved_before = local_repair._snapshot_reserved_harness_files(target_dir)
         (target_dir / "science_gate.json").write_text(
             json.dumps({"status": "harness_refreshed"}) + "\n",

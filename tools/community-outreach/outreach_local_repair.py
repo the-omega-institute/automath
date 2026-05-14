@@ -1113,15 +1113,28 @@ def _reserved_harness_file_mutations(
     return mutations
 
 
+def _iso_to_epoch(value: str) -> float | None:
+    text = (value or "").strip()
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
+
+
 def _postcheck_local_repair_artifacts(
     target_dir: Path,
     *,
     codex_trace: dict | None = None,
     reserved_before: dict[str, dict] | None = None,
     ignore_reserved_names: set[str] | None = None,
+    run_started_at: str | None = None,
 ) -> dict:
     target_dir = target_dir.resolve()
     diagnostics: list[str] = []
+    run_started_epoch = _iso_to_epoch(run_started_at or "")
+    fresh_threshold = max(0.0, run_started_epoch - 2.0) if run_started_epoch is not None else None
 
     reserved_mutations = _reserved_harness_file_mutations(
         target_dir,
@@ -1140,6 +1153,8 @@ def _postcheck_local_repair_artifacts(
     if not workup:
         diagnostics.append("missing codex_workup.md")
     else:
+        if fresh_threshold is not None and workup_path.stat().st_mtime < fresh_threshold:
+            diagnostics.append("codex_workup.md was not refreshed by this local repair run")
         ok, reason = _workup_has_local_execution_trace(workup)
         if not ok:
             diagnostics.append(reason)
@@ -1150,12 +1165,20 @@ def _postcheck_local_repair_artifacts(
         question = _extract_next_oracle_question_from_workup(workup)
     if not _is_concrete_next_oracle_question(question):
         diagnostics.append("missing concrete next_oracle_question.md")
+    elif fresh_threshold is not None:
+        try:
+            if question_path.stat().st_mtime < fresh_threshold:
+                diagnostics.append("next_oracle_question.md was not refreshed by this local repair run")
+        except OSError:
+            diagnostics.append("missing next_oracle_question.md")
 
     report_path = target_dir / "local_repair_report.md"
     report = _read_text(report_path, limit=12000)
     if len(report.strip()) < 200:
         diagnostics.append("missing or too-short local_repair_report.md")
     else:
+        if fresh_threshold is not None and report_path.stat().st_mtime < fresh_threshold:
+            diagnostics.append("local_repair_report.md was not refreshed by this local repair run")
         report_lower = report.lower()
         if "command" not in report_lower and "ran" not in report_lower and "checked" not in report_lower:
             diagnostics.append("local_repair_report.md lacks command/check summary")
@@ -1670,6 +1693,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         codex_trace=codex_command_trace,
         reserved_before=reserved_before,
         ignore_reserved_names=harness_refreshed,
+        run_started_at=started,
     )
     postcheck_ok = bool(postcheck.get("ok"))
     # Codex CLI can occasionally return a nonzero process status after writing a
