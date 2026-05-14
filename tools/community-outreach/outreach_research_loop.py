@@ -665,6 +665,59 @@ def _is_concrete_next_oracle_question(question: str) -> bool:
     return any(marker in lowered for marker in concrete_markers)
 
 
+def _local_grounding_tokens(text: str) -> set[str]:
+    body = text or ""
+    lowered = body.lower()
+    tokens: set[str] = set()
+    patterns = (
+        r"tools/community-outreach/targets/[A-Za-z0-9_.\-/]+",
+        r"\b[A-Za-z0-9_.\-/]*(?:results\.json|verify[A-Za-z0-9_.-]*\.py|check[A-Za-z0-9_.-]*\.py|oracle_claim_packet_[A-Za-z0-9_.-]*\.md)\b",
+        r"\b[A-Za-z0-9_.\-/]+\.(?:json|py|cnf|drat|lrat|rup|g6|graph6|edge|vtx|sage|m)\b",
+        r"\b(?:sha-?256|hash)\s*[:= ]\s*[a-f0-9]{6,64}\b",
+        r"\bcase[- ]?\d+\b",
+        r"\b(?:n|k|m)\s*=\s*\d+\b",
+        r"\b(?:\d+)\s+(?:vertices|edges|clauses|variables)\b",
+    )
+    for pattern in patterns:
+        for match in re.findall(pattern, body, flags=re.IGNORECASE):
+            token = match if isinstance(match, str) else " ".join(match)
+            token = re.sub(r"\s+", " ", token.strip().lower())
+            if len(token) >= 4:
+                tokens.add(token)
+    for phrase in (
+        "no local replay",
+        "found no",
+        "not present",
+        "first failed check",
+        "missing certificate",
+        "missing lemma",
+        "missing proof",
+        "failed at the first local check",
+        "exit 0",
+        "exited 0",
+        "unsat",
+        "sat",
+    ):
+        if phrase in lowered:
+            tokens.add(phrase)
+    return tokens
+
+
+def _question_is_grounded_in_local_work(question: str, workup: str, slug: str) -> bool:
+    q = (question or "").lower()
+    if not q.strip():
+        return False
+    local_body = _extract_workup_section(workup, "Local evidence checked")
+    commands_body = _extract_workup_section(workup, "Commands run")
+    attempt_body = _extract_workup_section(workup, "Codex attempt before Oracle")
+    artifact_body = _extract_workup_section(workup, "Verifier/artifact status")
+    obligations_body = _extract_workup_section(workup, "Proof obligations still open")
+    evidence = "\n".join([local_body, commands_body, attempt_body, artifact_body, obligations_body])
+    tokens = _local_grounding_tokens(evidence)
+    tokens.add(slug.lower())
+    return any(token and token in q for token in tokens)
+
+
 def _workup_has_local_execution_trace(text: str) -> tuple[bool, str]:
     """Require evidence that Codex actually processed the target before Oracle.
 
@@ -885,6 +938,12 @@ def _pre_oracle_workup_status(slug: str) -> tuple[bool, str]:
     ok, reason = _workup_has_local_execution_trace(workup)
     if not ok:
         return False, reason
+    if not _question_is_grounded_in_local_work(question, workup, slug):
+        return False, (
+            "next_oracle_question is not grounded in this local workup; "
+            "it must reuse a target-local path/artifact, command result, hash, "
+            "finite case label, or explicit local failure"
+        )
     trace_ok, trace_reason = _local_repair_last_has_codex_command_trace(slug)
     if not trace_ok:
         return False, trace_reason

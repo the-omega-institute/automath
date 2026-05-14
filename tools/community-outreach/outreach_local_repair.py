@@ -1481,7 +1481,17 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         codex_trace=codex_command_trace,
         reserved_before=reserved_for_worker,
     )
-    ok = rc == 0 and bool(postcheck.get("ok"))
+    postcheck_ok = bool(postcheck.get("ok"))
+    # Codex CLI can occasionally return a nonzero process status after writing a
+    # complete target-local workup and a terminal JSONL `turn.completed` event.
+    # Treat the deterministic harness artifacts as the source of truth here:
+    # keep the raw process status for diagnosis, but do not throw away a
+    # locally checked mathematical handoff solely because the wrapper exited
+    # nonzero after completion.
+    ok = postcheck_ok and rc in (0, 1)
+    status_note = ""
+    if postcheck_ok and rc != 0:
+        status_note = "codex_cli_nonzero_but_artifacts_ok"
     report = {
         "ok": ok,
         "todo_id": todo_id,
@@ -1495,6 +1505,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "output_log": str(output_path.relative_to(REPO_ROOT)),
         "verifier_audit": verifier_audit,
         "postcheck": postcheck,
+        "status_note": status_note,
         "gate_before": gate_before,
         "gate_after": gate_after,
     }
