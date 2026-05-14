@@ -12,22 +12,28 @@ The reason for recording the isomorphism anyway is twofold. First, it fixes nota
 \end{itemize}
 \end{remark}
 
-\begin{lemma}[Frougny's online normalizer in the paper's coordinates]\label{lem:online-zeckendorf-specialization}
+\begin{theorem}[Finite-state online Zeckendorf normalizer interface]\label{thm:online-zeckendorf-normalizer-interface}
 Specialize Frougny's on-line addition theorem \cite[Proposition~13 and Corollary~4]{Frougny1999OnlineAddition} to the Fibonacci numeration sequence \(U_i:=F_{i+2}\) for \(i\ge 0\), so that the paper's digit \(c_k\) at weight \(F_{k+1}\) is the usual Fibonacci-numeration digit at position \(i=k-1\). Let \(L\ge 1\), let \(s_1,\dots,s_L\in\{0,1,2\}\), and read the padded word from high weight to low weight as
 \[
 s_L,s_{L-1},\dots,s_1.
 \]
-There is a finite-state online normalizer over the input alphabet \(\{0,1,2\}\) and output alphabet \(\{0,1\}\), with delay \(3\), whose transition-output rule processes this high-to-low stream and whose terminal function flushes a bounded final suffix. Its output is the unique admissible word \(u\in X_\infty\) satisfying
+There are a finite state set \(Q\), an initial state \(q_0\), maps
+\[
+\tau:Q\times\{0,1,2\}\longrightarrow Q\times\{0,1\}^*,
+\qquad
+\omega:Q\longrightarrow \{0,1\}^*,
+\]
+and a constant \(B\), all depending only on Fibonacci numeration and not on \(L\) or on the input word, with the following property. Starting at \(q_0\), iterating \(\tau\) on the high-to-low stream outputs a binary stream with online delay \(3\): after the symbol at weight \(F_{i+1}\) has been read, all output digits at weights at least \(F_{i+4}\) are irrevocably determined. After the final low-weight symbol \(s_1\) has been read, the terminal map \(\omega\) emits the remaining suffix of length at most \(B\) and the computation halts. Interpreting the concatenated output back in the paper's low-to-high coordinates gives the unique admissible word \(u\in X_\infty\) satisfying
 \[
 \mathrm{Val}(u)=\sum_{k=1}^{L}s_kF_{k+1}.
 \]
-Leading zero padding at positions \(k>L\) does not change either the value or the eventual output, except for harmless leading zeros in the high-to-low stream.
-\end{lemma}
+Leading zero padding at positions \(k>L\) does not change either the value or the eventual output, except for harmless leading zeros in the high-to-low stream. Appending low-order zero symbols after \(s_1\) is not part of the convention; the bounded terminal flush \(\omega\) is the operation that resolves the final suffix.
+\end{theorem}
 
 \begin{proof}
 We use the specific Fibonacci result rather than an unspecified Pisot black box. Frougny proves that addition in base \(\tau=(1+\sqrt5)/2\) on the digit set \(\{0,1\}\) is realized by an on-line finite automaton with delay \(3\) \cite[Proposition~13]{Frougny1999OnlineAddition}. The same paper then translates this construction to the Fibonacci numeration system and states that addition on \(\{0,1\}\) in that system is computable by an on-line finite automaton with delay \(3\), with a terminal function giving the normal Fibonacci representation \cite[Corollary~4]{Frougny1999OnlineAddition}. The input alphabet of the transducer after pointwise addition of two binary input streams is exactly \(\{0,1,2\}\), and the output alphabet is \(\{0,1\}\).
 
-The change from Frougny's usual positions \(i=0,1,\dots\) to the paper's positions \(k=1,2,\dots\) is only the index shift \(U_{k-1}=F_{k+1}\). Reading \(s_L,s_{L-1},\dots,s_1\) is therefore exactly the most-significant-to-least-significant convention used in on-line numeration. The cited automaton supplies a finite state set, transition rule, output rule, delay \(3\), and terminal flush for this fixed alphabet and fixed numeration system.
+The change from Frougny's usual positions \(i=0,1,\dots\) to the paper's positions \(k=1,2,\dots\) is only the index shift \(U_{k-1}=F_{k+1}\). Reading \(s_L,s_{L-1},\dots,s_1\) is therefore exactly the most-significant-to-least-significant convention used in on-line numeration. The cited automaton supplies the finite state set, transition-output rule, delay \(3\), and terminal function for this fixed alphabet and fixed numeration system; writing these data as \((Q,q_0,\tau,\omega)\) gives the displayed interface. Finiteness of \(Q\) and the fixed delay imply a uniform bound on the number of low-order symbols that can remain unresolved when the input ends; this gives the constant \(B\).
 
 The normalizer is value preserving in the Fibonacci numeration system. Hence its output represents \(\sum_{k=1}^{L}s_kF_{k+1}\). By Theorem \ref{thm:zeckendorf-unique}, there is only one admissible binary representative of that value, namely the stated \(u\in X_\infty\). Since prepending leading zeros contributes no value and keeps the input inside the same finite alphabet, it cannot change the normalized representative; it only shifts the same on-line computation by leading zero symbols.
 \end{proof}
@@ -48,15 +54,15 @@ where \(c_i=d_i=0\) for \(i>m\). There are a finite set of states \(Q\), an init
 \qquad
 \omega:Q\longrightarrow \{0,1\}^*,
 \]
-and a constant \(B\), independent of \(m,c,d\), such that after reading through input position \(i\) the transducer has irrevocably output all result digits in positions at least \(i-3\). After the final pair \((c_1,d_1)\) is read, the final-output map \(\omega\) emits the remaining low-order suffix of length at most \(B\) and the computation halts. Hence \(c\oplus d\) is computed in \(O(m)\) digit operations without constructing \(\mathrm{Val}(c)\) or \(\mathrm{Val}(d)\).
+and a constant \(B\), independent of \(m,c,d\), such that after reading through input position \(i\) the transducer has irrevocably output all result digits in positions at least \(i+3\). After the final pair \((c_1,d_1)\) is read, the final-output map \(\omega\) emits the remaining low-order suffix of length at most \(B\) and the computation halts. Hence \(c\oplus d\) is computed in \(O(m)\) digit operations without constructing \(\mathrm{Val}(c)\) or \(\mathrm{Val}(d)\).
 \end{theorem}
 
 \begin{proof}
-Apply Lemma \ref{lem:online-zeckendorf-specialization} to the digitwise sum
+Apply Theorem \ref{thm:online-zeckendorf-normalizer-interface} to the digitwise sum
 \[
 s_i:=c_i+d_i\in\{0,1,2\}\qquad(1\le i\le L).
 \]
-The preliminary letter map \((a,b)\mapsto a+b\) from the synchronous pair alphabet \(\{0,1\}^2\) to \(\{0,1,2\}\) is itself finite-state and memoryless. Composing this letter map with the finite-state normalizer from the lemma gives the required transducer \((Q,q_0,\tau,\omega)\). The on-line delay is the delay \(3\) quoted in Lemma \ref{lem:online-zeckendorf-specialization}, and the bounded terminal flush contributes the constant \(B\); both are independent of \(m,c,d\).
+The preliminary letter map \((a,b)\mapsto a+b\) from the synchronous pair alphabet \(\{0,1\}^2\) to \(\{0,1,2\}\) is itself finite-state and memoryless. Composing this letter map with the finite-state normalizer from Theorem \ref{thm:online-zeckendorf-normalizer-interface} gives the required transducer \((Q,q_0,\tau,\omega)\). The on-line delay is the delay \(3\) quoted there, and the bounded terminal flush contributes the constant \(B\); both are independent of \(m,c,d\).
 
 The output is the unique admissible word of value
 \[
