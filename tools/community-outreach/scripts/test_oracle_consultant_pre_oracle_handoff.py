@@ -96,6 +96,14 @@ def main() -> int:
     if not grounded:
         raise AssertionError("grounded Oracle question was not recognized")
 
+    slug_only = oracle._question_is_grounded_in_local_work(
+        "For demo, prove the exact theorem and explain the remaining obstruction.",
+        _workup(),
+        "demo",
+    )
+    if slug_only:
+        raise AssertionError("slug-only Oracle question should not count as locally grounded")
+
     return 0
 
 

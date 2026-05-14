@@ -1410,7 +1410,6 @@ def _question_is_grounded_in_local_work(question: str, workup: str, slug: str) -
     obligations_body = _extract_workup_section(workup, "Proof obligations still open")
     evidence = "\n".join([local_body, commands_body, attempt_body, artifact_body, obligations_body])
     tokens = _local_grounding_tokens(evidence)
-    tokens.add(slug.lower())
     return any(token and token in q for token in tokens)
 
 

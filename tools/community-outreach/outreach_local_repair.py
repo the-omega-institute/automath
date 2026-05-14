@@ -685,8 +685,6 @@ def _question_is_grounded_in_local_work(question: str, evidence: str, *, target_
     if not q.strip():
         return False, "next_oracle_question.md is empty"
     evidence_tokens = _local_grounding_tokens(evidence)
-    if target_name:
-        evidence_tokens.add(target_name.lower())
     matched = sorted(token for token in evidence_tokens if token and token in q)
     if matched:
         return True, ""
