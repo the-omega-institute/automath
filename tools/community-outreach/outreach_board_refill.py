@@ -223,6 +223,14 @@ def _fetch_public_source(url: str, *, max_bytes: int = SOURCE_FETCH_BYTES) -> di
     }
 
 
+def _canonical_problemsilike_url(url: str) -> str:
+    """Return canonical Problems I Like problem URL, or empty for non-item URLs."""
+    m = re.search(r"https?://(?:www\.)?problemsilike\.com/(?:go_to/)?(\d+)(?:[/?#].*)?$", str(url or ""), re.I)
+    if not m:
+        return ""
+    return f"https://www.problemsilike.com/{int(m.group(1))}"
+
+
 def _problemsilike_source_snapshot(source_url: str, source_id: str = "") -> dict:
     """Bounded adapter for Litt's problemsilike pages.
 
@@ -505,28 +513,29 @@ def _build_problemsilike_index_prompt(*, source_url: str, source_text: str, fina
 
 Source URL: {final_url}
 
-Use ONLY the source snapshot below. It is an index/list of open problems.
-Select 1-3 concrete problems from this page that are serious candidates for
-our audit-first AI-for-math pipeline. Do not choose broad directions or items
-whose likely output is only a literature audit. Prefer problems with:
-- a crisp theorem/counterexample/certificate target;
-- a finite or mechanically checkable artifact surface;
-- meaningful mathematical/community impact;
-- a concrete first local step Codex can execute.
+Use ONLY the source snapshot below. It is an index/list from Problems I Like,
+which the operator has designated as a curated high-impact mathematical source.
+Do not rank-filter its OPEN problems by generic fit_score/topic_score or
+publishable-value gates. Intake every OPEN problem that is visible in the
+snapshot as an exploratory math-lane candidate. SOLVED problems must not be
+admitted as active OPEN targets; if useful, propose only a derivative target for
+verification/formalization of the published resolution or a clearly stated
+stronger remaining variant.
 
 Except for explicitly tracked collaboration/email lanes, the end state must be
 publishable or externally reviewable mathematics: paper/short note/public
 certificate/verifier/serious registry contribution. Do not choose items whose
 natural endpoint is just a private email.
 
-For each selected problem, include the source item number/title if visible.
-If no listed item meets the bar, say that directly and explain why.
+For each OPEN problem, include the source item number/title if visible. If an
+item is SOLVED, state that it is solved_external and do not create an active
+original-problem target.
 
 Output style:
 - Natural language or a compact table is fine.
 - Do not spend reasoning budget on JSON formatting. A local Codex adapter will
   structure your response.
-- For each candidate, include explicit labels for title, source_url, type,
+- For each OPEN candidate, include explicit labels for title, source_url, type,
   statement, untouched_evidence, omega_fit_detail, fit_score, topic_score,
   effort_estimate_days, risk_level, first_attack_step, final_display_form,
   success_gate, rationale.
@@ -896,6 +905,11 @@ def _dedup_candidate(cand: Candidate, existing: list[tuple[str, str, str]]) -> t
     # Normal board refill must not invoke Claude. Conservative lexical overlap
     # is enough for this deterministic pre-board gate; ambiguous candidates
     # remain in inbox/profile judgment rather than being posted directly.
+    canonical = _canonical_problemsilike_url(cand.source_url)
+    if canonical:
+        for tid, _title, source in existing:
+            if _canonical_problemsilike_url(source) == canonical:
+                return False, f"canonical Problems I Like duplicate of {tid} ({canonical})"
     title_l = cand.title.lower()
     stmt_l = cand.statement.lower()
     for tid, title, source in existing:

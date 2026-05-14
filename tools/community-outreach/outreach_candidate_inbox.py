@@ -55,6 +55,12 @@ LOW_IMPACT_ARXIV_PATTERNS = (
 )
 
 
+PROBLEMSILIKE_SOURCE_RE = re.compile(
+    r"https?://(?:www\.)?problemsilike\.com/(?:range/)?(?:\d+|1-end)(?:[/?#].*)?$",
+    re.I,
+)
+
+
 @dataclass
 class CandidateGate:
     passed: bool
@@ -81,6 +87,11 @@ def validate_candidate(candidate: dict) -> list[str]:
     if not str(candidate.get("source_url") or "").startswith(("http://", "https://")):
         errors.append("source_url must be http(s)")
     return errors
+
+
+def is_curated_problemsilike_source(source_url: str) -> bool:
+    """Problems I Like is an operator-approved curated open-problem source."""
+    return bool(PROBLEMSILIKE_SOURCE_RE.search(str(source_url or "").strip()))
 
 
 def _loads_jsonish(text: str) -> dict:
@@ -127,14 +138,53 @@ def academic_impact_gate(candidate: dict) -> CandidateGate:
     risk_flags: list[str] = []
     score = 0
 
+    source_url = str(candidate.get("source_url") or "")
     ctype = str(candidate.get("type") or "").upper()
+
+    if is_curated_problemsilike_source(source_url):
+        status_blob = " ".join(
+            str(candidate.get(k) or "")
+            for k in ("status", "problem_status", "untouched_evidence", "rationale", "statement")
+        )
+        solved_external = bool(re.search(r"\b(SOLVED|solved_external|already solved|resolution)\b", status_blob, re.I))
+        hard_missing = [m for m in missing if any(m.startswith(prefix) for prefix in HARD_MISSING_PREFIXES)]
+        if hard_missing:
+            return CandidateGate(
+                passed=False,
+                score=0,
+                lane="curated_math_source",
+                reasons=["Problems I Like source recognized but mandatory schema fields are missing"],
+                missing=missing,
+                risk_flags=["curated source cannot override missing source/title/statement/display/success schema"],
+            )
+        reasons.extend([
+            "Problems I Like is an operator-approved curated high-impact source",
+            "generic fit/topic/publishable-value scores do not block exploratory math-lane entry",
+        ])
+        if solved_external:
+            return CandidateGate(
+                passed=False,
+                score=MIN_ACADEMIC_IMPACT_SCORE,
+                lane="solved_external",
+                reasons=reasons + ["source/status indicates solved_external; original statement must not enter active OPEN lane"],
+                missing=["solved_external original problem requires derivative verification/formalization target"],
+                risk_flags=[],
+            )
+        return CandidateGate(
+            passed=True,
+            score=max(MIN_ACADEMIC_IMPACT_SCORE, 40),
+            lane="curated_math_source",
+            reasons=reasons,
+            missing=missing,
+            risk_flags=[],
+        )
+
     if ctype in {"DECIDABLE", "EXISTENCE", "CLASSIFICATION", "EXTREMALITY", "OBSTRUCTION", "RIGIDITY"}:
         score += 5
     else:
         missing.append("type must be a concrete mathematical contribution class")
 
     statement = str(candidate.get("statement") or "")
-    source_url = str(candidate.get("source_url") or "")
     rationale = str(candidate.get("rationale") or "")
     untouched = str(candidate.get("untouched_evidence") or "")
     omega_fit = str(candidate.get("omega_fit_detail") or "")

@@ -91,6 +91,8 @@ def _source_channel(todo: TodoSpec) -> tuple[str, str]:
         return "registry_comment", "problem-page readers and maintainers"
     if "openproblemgarden.org" in source:
         return "opg_comment", "OPG maintainers, proposers, and nearby specialists"
+    if "problemsilike.com" in source:
+        return "problem_page_comment", "Problems I Like readers, problem owner, and nearby specialists"
     if "terrytao.wordpress.com" in source or "wordpress.com" in source:
         return "blog_comment", "blog-thread participants and specialist readers"
     if "aimpl" in source:
@@ -198,6 +200,7 @@ def _is_publishable_channel(channel: str) -> bool:
         "short_note",
         "reproducible_certificate_note",
         "registry_comment",
+        "problem_page_comment",
         "opg_comment",
         "blog_comment",
         "github_comment",
@@ -446,7 +449,7 @@ def evaluate(todo: TodoSpec) -> ImpactGateVerdict:
     for ch in channels:
         if ch in {"author_email", "private_author_email"}:
             _append_unique(draft_paths, _target_file(slug, "author_email.md"))
-        elif ch in {"registry_comment", "opg_comment", "blog_comment", "github_comment", "x_reply_or_thread"}:
+        elif ch in {"registry_comment", "problem_page_comment", "opg_comment", "blog_comment", "github_comment", "x_reply_or_thread"}:
             _append_unique(draft_paths, _target_file(slug, "submission_draft.md"))
         elif ch == "x_thread":
             _append_unique(draft_paths, f"tools/community-outreach/drafts/{slug}_tweet.txt")

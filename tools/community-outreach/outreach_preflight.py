@@ -115,6 +115,7 @@ LOW_IMPACT_SOURCE_PATTERNS = (
 HIGH_IMPACT_SOURCE_PATTERNS = (
     "github.com/google-deepmind/formal-conjectures",
     "formal-conjectures",
+    "problemsilike.com",
 )
 
 FRONTIER_TITLE_PATTERNS = (

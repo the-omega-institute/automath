@@ -93,16 +93,20 @@ class TodoSpec:
         m = re.search(r"openproblemgarden\.org/op/([a-z0-9_]+)", self.source)
         if m:
             return f"opg_{m.group(1)[:24]}"
-        # 7. Tao blog → tao_<first-2-words>
+        # 7. Problems I Like -> problemsilike_N
+        m = re.search(r"problemsilike\.com/(\d+)", self.source)
+        if m:
+            return f"problemsilike_{int(m.group(1)):02d}"
+        # 8. Tao blog → tao_<first-2-words>
         m = re.search(r"terrytao\.wordpress\.com/[\d/]+/([a-z0-9-]+)", self.source)
         if m:
             parts = [p for p in m.group(1).split("-") if p][:2]
             return "tao_" + "_".join(parts) if parts else "tao_post"
-        # 8. erdosproblems.com/N → erdos_N
+        # 9. erdosproblems.com/N → erdos_N
         m = re.search(r"erdosproblems\.com/(\d+)", self.source)
         if m:
             return f"erdos_{m.group(1)}"
-        # 9. Fallback: title first 2-3 alphabetic words, max 32
+        # 10. Fallback: title first 2-3 alphabetic words, max 32
         words = [w.lower() for w in re.findall(r"[A-Za-z]{3,}", self.title)][:3]
         base = "_".join(words)[:32]
         return base or self.todo_id.replace("-", "_").lower()
@@ -136,6 +140,8 @@ class TodoSpec:
             return {"type": "email_authors", "venue": "AimPL workshop email", "format": "markdown_or_pdf"}
         if "openproblemgarden.org" in s:
             return {"type": "comment_or_email", "venue": "OPG comment + author email", "format": "markdown"}
+        if "problemsilike.com" in s:
+            return {"type": "problem_page_comment", "venue": "Problems I Like problem page or author email", "format": "markdown"}
         return {"type": "unknown", "venue": s, "format": "markdown"}
 
 
