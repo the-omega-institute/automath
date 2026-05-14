@@ -1,14 +1,19 @@
-\begin{theorem}[Last-bit testing equivalence for the bin-fold pushforward law: total variation collapses to one bit]\label{thm:window6-binfold-lastbit-lecam-equivalence}
-Let \(\mu_m\) be the pushforward distribution of the bin-fold model on \(X_m\), and let \(u_m:=\mathrm{Unif}(X_m)\).
-Let \(\ell:X_m\to\{0,1\}\) be the last-bit statistic introduced in Section \ref{sec:preliminaries}.
-Assume there exists a ``within-block homogenized'' distribution \(\bar\mu_m\) and parameters \(\beta_m\) such that
+\begin{definition}[Homogenized last-bit audit hypothesis]\label{def:homogenized-lastbit-audit-hypothesis}
+The homogenized last-bit audit hypothesis is the assertion that there are probability laws \(\bar\mu_m\) on \(X_m\), constants \(C>0\), and real parameters \(\beta_m\) such that
 \[
-\bar\mu_m(x)\ \propto\ u_m(x)\,e^{-\beta_m\ell(x)},
+\bar\mu_m(x)=\frac{u_m(x)e^{-\beta_m\ell(x)}}{\sum_{y\in X_m}u_m(y)e^{-\beta_m\ell(y)}},
 \qquad
-D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\ \le\ C\Bigl(\frac{\varphi}{2}\Bigr)^m,
+D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\le C\Bigl(\frac{\varphi}{2}\Bigr)^m,
 \qquad
 \beta_m\to\log\varphi.
 \]
+The two results in this section are conditional on this analytic homogenization certificate; the finite state counts used below are part of the internal fold certificate and are proved in Lemma \ref{lem:audited-binary-fold-certificate-identities}.
+\end{definition}
+
+\begin{theorem}[Last-bit testing equivalence for the bin-fold pushforward law: total variation collapses to one bit]\label{thm:window6-binfold-lastbit-lecam-equivalence}
+Let \(\mu_m\) be the pushforward distribution of the bin-fold model on \(X_m\), and let \(u_m:=\mathrm{Unif}(X_m)\).
+Let \(\ell:X_m\to\{0,1\}\) be the last-bit statistic introduced in Section \ref{sec:preliminaries}.
+Assume the homogenized last-bit audit hypothesis of Definition \ref{def:homogenized-lastbit-audit-hypothesis}.
 Then for every \(m\ge 1\),
 \[
 \boxed{\;
@@ -43,7 +48,6 @@ Combining the two inequalities proves the claim. \qedhere
 
 \begin{corollary}[The limiting relative entropy constant for bin-fold: a closed Bernoulli KL formula]\label{cor:window6-binfold-kl-limit-constant}
 In the setting of Theorem \ref{thm:window6-binfold-lastbit-lecam-equivalence}, let \(D(\cdot\|\cdot)\) denote Kullback--Leibler relative entropy.
-Assume in addition that \(|X_m|=F_{m+2}\) and that exactly \(F_m\) states of \(X_m\) satisfy \(\ell(x)=1\).
 Then the limit
 \[
 \lim_{m\to\infty}D(\mu_m\|u_m)=:\mathcal D_\infty
@@ -66,7 +70,7 @@ Since \(\bar\mu_m\propto u_m e^{-\beta_m\ell}\), one has
 \(
 D(\bar\mu_m\|u_m)=D(\ell_\#\bar\mu_m\|\ell_\#u_m)
 \).
-By the counting assumption,
+By Lemma \ref{lem:audited-binary-fold-certificate-identities}, \(|X_m|=F_{m+2}\) and exactly \(F_m\) states satisfy \(\ell(x)=1\).  Therefore
 \(
 \ell_\#u_m(1)=F_m/F_{m+2}\to \varphi^{-2}
 \),
