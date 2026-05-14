@@ -168,7 +168,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T05:45:51+00:00 · rc=0 · science_gate=CLOSE_TARGET |
+| Status | Backlog (not publishable yet; impact_gate=NEEDS_PUBLICATION_VALUE after 2026-05-15 audit) |
 | Source | https://www.erdosproblems.com/7 + OPG http://www.openproblemgarden.org/op/odd_incongruent_covering_systems |
 | Type | OPEN / verifiable / falsifiable |
 | Untouched | ✅ 不在 AI wiki, BBMST22 后 2024-2025 arxiv 仅零星进展 |
@@ -222,7 +222,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T00:51:22+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | http://www.openproblemgarden.org/op/a_discrete_iteration_related_to_pierce_expansions |
 | Type | OPEN / decidable |
 | Untouched | ✅ 2024-2025 arxiv 没人攻 polylog; 最新 arxiv:2405.02174 (2025) 做 Hausdorff 维数侧 |
@@ -287,7 +287,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-11T19:08:51+00:00 · science_gate=WRITEBACK_READY · impact=bounded_finite_certificate_claim |
+| Status | Backlog (bounded packet only; continue toward real mathematical contribution) |
 | Source | http://www.openproblemgarden.org/op/singmasters_conjecture |
 | Type | weakly open / falsifiable |
 | Untouched | ✅ 系统 sweep 远未做到 verified bound 极限 |
@@ -315,7 +315,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T10:27:14+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | http://aimpl.org/nscombinatorial/7/ (problem 7.1, Leth) |
 | Type | OPEN / quantitative density |
 | Untouched | ✅ Leth 2014 后无攻 |
@@ -341,7 +341,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T06:40:00+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | http://aimpl.org/nscombinatorial/3/ (problem 3.3) |
 | Type | OPEN / partition regular |
 | Untouched | ✅ Moreira 2017 / Frantzikinakis 2024 没解决 family 版 |
@@ -475,7 +475,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T12:19:43+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | http://aimpl.org/nscombinatorial/6/ (problem 6.1, Fish) |
 | Type | OPEN / structural sumset |
 | Untouched | ✅ Fish 2017 1-D 后, 2-D 无显著进展 |
@@ -610,7 +610,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T09:58:10+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | https://arxiv.org/abs/2604.17847 (Aradhya Goel, IIT Kanpur, 2026-04-20) |
 | Type | OPEN / Pisano-Sophie Germain bridge |
 | Untouched | ✅ v3 刚发, 单作者, 没有 DeepMind/AlphaProof/Aristotle 关注 |
@@ -636,7 +636,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T11:02:00+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | https://www.erdosproblems.com/forum/thread/1163 (Przemek, 2026-04-29) |
 | Type | OPEN / statistical group theory |
 | Untouched | ✅ 论坛今天才头脑风暴, 0 partial result |
@@ -765,7 +765,7 @@
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T01:37:16+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; specific verifier progress is not a complete result) |
 | Source | https://terrytao.wordpress.com/2025/11/05/mathematical-exploration-and-discovery-at-scale/comment-page-1/ |
 | Type | author question / arxiv followup |
 | Untouched | Publicly inspectable as of source checks: Daniel Carter's 2025-11-07 Tao-blog comment proposes investigating the largest Sidon set in [n] / smallest Sidon diameter and says the Carter-Hunter-O'Bryant upper bound depends on unclear piecewise-affine parameters; Tao's 2025-11-09 and 2025-11-11 replies identify missing side-condition enumeration, an admissibility-checking verifier, and the 1.9526463099204112 b_inf tuple. Erdős Problems #14, last edited 2026-04-06, still marks the finite Sidon size problem OPEN and lists Carter-Hunter-O'Bryant as current record h(N) <= N^{1/2}+0.98183 N^{1/4}+O(1). Exact-string searches for 1.9526463099204112 and 1.952659676624688 found only the Tao discussion. Must rerun arXiv, MathSciNet/zbMATH if available, Google Scholar/Semantic Scholar, GitHub dcartermath/sidon, and Erdős Problems #14 checks immediately before RUN because the Tao constant is a post-paper blog-comment update. |
@@ -800,7 +800,7 @@ _Inbox graduation rationale_: This should enter the board because it is publicly
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-11T18:24:18+00:00 · science_gate=WRITEBACK_READY · impact=author_email/short_note/operator_review |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | https://arxiv.org/abs/2603.21645 |
 | Type | open problem |
 | Untouched | arXiv:2603.21645 is publicly inspectable, submitted 2026-03-23, v1 only as of the arXiv page checked 2026-05-10. The paper states Theorem 14 gives an O(c) upper bound for the minimal msd-first Fibonacci-DFAO generating (t(i+c))_{i>=0}, then leaves Problem 1: prove the state count is Θ(c). Freshness must be rechecked immediately before any RUN/outreach by searching the exact problem phrase, author pages, arXiv followups, and related arXiv:2603.18858; no public solution was found in the 2026-05-10 web check. |
@@ -835,7 +835,7 @@ _Inbox graduation rationale_: The candidate is a real, named, current open probl
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-11T12:47:13+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; continue deep reasoning on Tribonacci target) |
 | Source | https://arxiv.org/abs/2603.21645 |
 | Type | open problem |
 | Untouched | arXiv:2603.21645v1 was submitted on 2026-03-23 and its conclusion explicitly states Problem 2: determine the state complexity of (r(i+c))_{i>=0} where r is the Tribonacci word. Web searches on 2026-05-10 for the exact problem phrase, Tribonacci word shift state complexity, and arXiv:2603.21645 Problem 2 surfaced the source paper and Fibonacci-shift companion material, not a public solution; this must still be rechecked before RUN/outreach. |
@@ -870,7 +870,7 @@ _Inbox graduation rationale_: This is a real, recent, inspectable open problem s
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-11T18:35:08+00:00 · science_gate=WRITEBACK_READY · impact=author_email/short_note/operator_review |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | https://arxiv.org/abs/2304.10114 |
 | Type | open problem |
 | Untouched | Public source is arXiv:2304.10114, submitted 2023-04-20, with journal version published 2023-05-17; the paper states Conjecture 4.5 that gp_e(Γ_n)=2F_n for n≥2 after proving the Θ_1∪Θ_n lower bound. Freshness check on 2026-05-11 found later edge-general-position papers in 2024, 2025, and a 2026 Discrete Applied Mathematics article, but surfaced no inspectable paper closing the Fibonacci-cube conjecture; before any outreach, operator must re-check arXiv, Google Scholar/Semantic Scholar citations, MathSciNet/zbMATH if available, and the authors' pages for a post-2026-05-11 resolution. |
@@ -905,7 +905,7 @@ _Inbox graduation rationale_: This should enter the board because it is a named,
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T02:41:42+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | https://arxiv.org/abs/1801.04106 |
 | Type | arxiv followup |
 | Untouched | Public source is Mollard arXiv:1801.04106, submitted 2018-01-12, which proves existence for Γ_n(1^s) when n=2^p-1 and s >= 3*2^(p-2) and explicitly leaves minimum-s/existence questions open. Freshness check on 2026-05-11: exact public searches for "Γ_n(1^3)"/"Gamma_n(1^3)" + "perfect code", "111" + "generalized Fibonacci cube" + "perfect code", and "minimum s" + "perfect code" + "Gamma_n(1^s)" found Mollard 2018, the 2022 generalized Lucas-cube followup, and related cube-recognition/Padovan material, but no public classification of the s=3 line. Before any external send, rerun arXiv, Google Scholar/Semantic Scholar, zbMATH/MathSciNet if available, and exact phrase web search for the same target. |
@@ -940,7 +940,7 @@ _Inbox graduation rationale_: The target is concrete, inspectable, and close to 
 
 | field | value |
 |---|---|
-| Status | **Pending User Approval** — research_loop completed 2026-05-12T07:05:49+00:00 · rc=0 · science_gate=WRITEBACK_READY |
+| Status | Backlog (not publishable yet; science/impact gate requires deeper evidence) |
 | Source | https://arxiv.org/abs/2010.05521 |
 | Type | open problem / author question |
 | Untouched | Inspectable source: arXiv:2010.05521 was submitted 2020-10-12 and the journal version 'Fibonacci-run graphs II: Degree sequences' lists Conjecture 6.7 and Question 10.1. Freshness bound from public search on 2026-05-12: visible later Fibonacci-run papers found address radius/center (2023), diameter conjecture barriers (2025), and cube polynomials (2025), not the fixed-degree count. Before any outreach, re-check MathSciNet, zbMATH, Google Scholar citing papers, and exact-title/web searches for 'Fibonacci-run graph degree k', 'Conjecture 6.7', and 'Question 10.1'. |
