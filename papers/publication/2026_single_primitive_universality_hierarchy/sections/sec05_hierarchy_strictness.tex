@@ -107,194 +107,161 @@ rational constant \(0\).  Thus the two decision problems are
 many-one equivalent for this fragment, and both are undecidable.
 \end{proof}
 
-\begin{lemma}[Richardson-compatible EML witnesses]
-\label{lem:eml-real-witness-library}
-There is a finite, effectively fixed library of principal-branch EML
-terms over the constant \(1\) for exactly the Richardson primitives
-used below.  Let
+\begin{lemma}[Printed EML core witnesses]
+\label{lem:eml-printed-core}
+In the principal-branch EML semantics of \Cref{def:eml}, the following
+displayed macros expand to pure EML terms over the terminal \(1\) and
+their indicated input leaves:
 \[
   E(u)=\eml(u,1),
   \qquad
-  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr).
+  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr),
 \]
-On \(u>0\), \(L(u)=\log u\), and for
-\(u\in\RR\setminus\{0\}\), \(\exp L(u)=u\).  Choose once and for all
-fixed pure EML terms
 \[
-  W_{\exp},W_{\log},W_+,W_-,W_{\mathrm{neg}},
-  W_{\times},W_{\div},W_{\mathrm{sq}},
-  W_{\sqrt{\phantom{x}}},W_{\pi},W_{\sin}
+  D(a,b)=\eml\!\bigl(L(a),E(b)\bigr),
+  \qquad
+  P(u)=\eml\!\bigl(u,E(u)\bigr),
 \]
-from the verified Odrzywo{\l}ek compiler output, with
-\(W_{\exp}=E\), \(W_{\log}=L\), and
-\(W_{\mathrm{sq}}(u)=W_{\times}(u,u)\).  The following table is the
-complete finite witness interface used in the Richardson reduction:
 \[
-\begin{array}{c|c|c}
-\text{real primitive} & \text{fixed verified witness} & \text{real-domain use}\\
-\hline
-\exp u & W_{\exp}(u)=\eml(u,1) & u\in\RR\\
-\operatorname{Log} u & W_{\log}(u)=L(u) & u>0\\
-u-v & W_-(u,v) & u,v\in\RR\\
--u & W_{\mathrm{neg}}(u)=1-\bigl(e-((e-1)-u)\bigr) & u\in\RR\\
-u+v & W_+(u,v) & u,v\in\RR\\
-1/u & W_{\div}(1,u) & u\ne0\\
-uv & W_{\times}(u,v) & u,v\in\RR\\
-u/v & W_{\div}(u,v) & v\ne0\\
-u^2 & W_{\mathrm{sq}}(u)=W_{\times}(u,u) & u\in\RR\\
-\sqrt u & W_{\sqrt{\phantom{x}}}(u) & u\ge0\\
-\pi & W_{\pi} & \text{constant}\\
-\sin u & W_{\sin}(u) & u\in\RR .
-\end{array}
+  N(u)=D(P(u),E(u)),
+  \qquad
+  A(u,v)=D\bigl(E(u),D(P(u),v)\bigr),
 \]
-Here ``Part~II'' means the verification part of the ancillary
-Supplementary Information of arXiv:2603.21852v2.  Section~2.1 defines
-the EML compiler macros, Section~2.3 gives the symbolic verification
-of the compiled identities under the stated real-domain assumptions,
-Section~2.4 prints representative compiled expressions, and
-Section~2.5 gives Lemmas~1--3, Corollary~4, the table of remaining
-primitives, and Theorem~5 for the Table~1 class
-\cite[Supplementary Information, Part~II, Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
-The symbols \(W_-\), \(W_+\), \(W_{\times}\), \(W_{\div}\),
-\(W_{\sqrt{\phantom{x}}}\), \(W_{\pi}\), and \(W_{\sin}\) name the
-fixed compiled witnesses from that verification record; the displayed
-negation row is the clean positive-real witness described at the end
-of Part~II, Section~2.5.  After substituting the already fixed
-witnesses for subtraction and for \(e=E(1)\), it is a pure EML term.
-Thus the present Richardson translation does not rely on the shorter
-extended-real convention \(L(0)=-\infty\).
-
-The witness symbols in the table are not open search instructions.
-They are the fixed pure EML terms chosen once from the cited Part~II
-compiler and verification record.  The fixed witness used in the
-translation is the verified Part~II compiled EML term for that
-Table~1 primitive, restricted to the real-domain use in the
-right-hand column.  Thus the arithmetic witnesses for \(u\pm v\),
-\(-u\), \(uv\), and \(u/v\) are used for all real arguments on which
-the operation is defined; the logarithm row is used only on \(u>0\),
-and the square-root row only on \(u\ge0\).  Every later occurrence is
-obtained by substituting into these finitely many fixed entries, and
-no branch choice, witness search, or unlisted EML identity from the
-source is used in the Richardson reduction.  With these fixed choices
-the following real-domain properties hold.
-\begin{enumerate}
-\item For all \(u,v\in\RR\), the chosen witnesses for
-  \(u+v\), \(u-v\), and \(uv\) are defined and have those real
-  values; the chosen witness for \(u/v\) is defined and has that
-  value whenever \(v\ne0\).
-\item For all \(u\in\RR\), the chosen witnesses for
-  \(\exp u\) and \(\sin u\) are defined and have those real values.
-\item The chosen square-root witness is defined for every
-  \(t\in\RR_{\ge0}\) and returns the nonnegative square root.
-\item There are fixed witnesses for \(\pi\) and \(\log 2\), and
-  there is an effective construction of a witness for every rational
-  constant.
-\end{enumerate}
-The middle column records the chosen witness symbol or compact formula
-for each fixed verified witness, not an additional hypothesis or a
-lookup instruction.  Principal-domain validity is taken from the
-Part~II verification, and each later use in this paper is restricted
-to the corresponding real-domain entry in the right-hand column.
+\[
+  S(u,v)=A(u,N(v)).
+\]
+They have the following real-domain meanings:
+\[
+  E(u)=e^u\quad(u\in\RR),
+  \qquad
+  L(u)=\log u\quad(u>0),
+\]
+\[
+  D(a,b)=a-b\quad(a>0,\ b\in\RR),
+  \qquad
+  P(u)=e^u-u>0\quad(u\in\RR),
+\]
+and therefore
+\[
+  N(u)=-u,
+  \qquad
+  A(u,v)=u+v,
+  \qquad
+  S(u,v)=u-v
+\]
+for all real \(u,v\).  In particular, the exponential,
+positive-real logarithm, all-real negation, all-real addition, and
+all-real subtraction witnesses used below are printed here and require
+no compiler oracle or extended-real convention.
 \end{lemma}
 
 \begin{proof}
-Odrzywo{\l}ek's main Table~1 fixes the scientific-calculator basis,
-and Supplementary Information, Part~II, gives a finite compiler from
-that basis to pure EML terms using only the terminal \(1\), variables,
-and the binary operation \(\eml\)
-\cite[Table~1 and Supplementary Information, Part~II,
-Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
-Because the Richardson reduction uses only the finite list displayed
-above, choose from this verified compiler output one pure EML term for
-each row.  These choices are made once from the Part~II verification
-record under the corresponding real-domain assumptions; Part~I's
-discovery chain is not used as an additional proof input.  The choices
-are finite and effective, and substituting one chosen term into another
-is a purely syntactic operation in the grammar
-\(S\to1\mid x_i\mid\eml(S,S)\).
-
-For \(\exp\), the chosen entry is the displayed identity
-\[
-  e^u=\eml(u,1),
-\]
-whose second EML input is the nonzero constant \(1\).
-For the logarithm entry,
+Each displayed expression is a pure EML tree after recursively
+expanding the macros: the only terminal constant is \(1\), the only
+variables are the formal input leaves, and the only operation symbol is
+\(\eml\).  For \(u\in\RR\), the second input of \(E(u)=\eml(u,1)\) is
+the nonzero constant \(1\), so \(E(u)=e^u\).  If \(u>0\), then
 \[
   L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr)
        =e-\operatorname{Log}(e^e/u)
-       =\log u
+       =\log u,
 \]
-when \(u>0\), since \(e^e/u\) is then positive real.  The square-root
-entry is used only on \(\RR_{\ge0}\), where the principal square root
-is the ordinary nonnegative real square root.  The sine entry is used
-on the real axis, as in the remaining-primitives table of Part~II,
-Section~2.5.
-The arithmetic rows are the verified compiled Table~1 witnesses,
-restricted to their displayed real domains; therefore their values are
-the ordinary real \(+,-,\times\), and division values wherever those
-operations are defined.
+because \(e^e/u\) is positive real.  Hence, for \(a>0\) and
+\(b\in\RR\), both second EML inputs in
+\(D(a,b)=\eml(L(a),E(b))\) are nonzero and
+\[
+  D(a,b)=\exp(L(a))-\operatorname{Log}(e^b)=a-b .
+\]
+For every real \(u\),
+\[
+  P(u)=\eml(u,E(u))=e^u-u.
+\]
+The function \(e^u-u\) has derivative \(e^u-1\), its unique minimum
+on \(\RR\) occurs at \(u=0\), and that minimum is \(1\).  Thus
+\(P(u)>0\) for all real \(u\), so every occurrence of \(D(P(u),-)
+\) below is within its proved domain.  Consequently
+\[
+  N(u)=D(P(u),E(u))=(e^u-u)-e^u=-u,
+\]
+and
+\[
+  A(u,v)=D\bigl(E(u),D(P(u),v)\bigr)
+        =e^u-\bigl((e^u-u)-v\bigr)=u+v .
+\]
+Finally \(S(u,v)=A(u,N(v))=u-v\).  The same calculation also checks
+all domain requirements: the first inputs of the three uses of \(D\)
+are \(P(u)>0\), \(E(u)>0\), and \(P(v)>0\), respectively.
+\end{proof}
 
-The constant \(0\) is obtained as \(1-1\), integers are obtained by
-iterated addition and subtraction, and a rational \(a/b\) with
-\(b>0\) is obtained by applying the chosen division witness to the
-integer witnesses for \(a\) and \(b\); the denominator witness is
-nonzero.  Finally, \(\log 2\) is obtained from the positive-real
-logarithm witness applied to \(2=1+1\).  These are finite syntactic
-constructions, uniform in the rational input, and each is evaluated
-only on the real domain on which the corresponding principal-branch
-witness is defined.
+\begin{proposition}[External Richardson--EML witness input]
+\label{prop:external-richardson-eml-witnesses}
+The only external EML witness theorem used in the Richardson reduction
+is the following cited finite translation result.  In the
+principal-branch convention of \Cref{def:eml}, Odrzywo{\l}ek's
+Table~1 compiler and verification record provide finite pure EML
+terms, over \(1\) and formal input leaves, for the remaining
+Richardson primitives not printed in \Cref{lem:eml-printed-core}:
+real multiplication, division by a nonzero real, the principal
+square-root witness on \(\RR_{\ge0}\), the constant \(\pi\), and
+\(\sin\) on the real axis.  The same finite record gives an effective
+constructor for rational constants from \(1\).  These witnesses are
+valid on exactly the real domains just stated.
+\end{proposition}
+
+\begin{proof}
+This is the part of Odrzywo{\l}ek's representation theorem invoked as
+a cited tool, specialized to the finite list of primitives needed for
+Richardson's language.  Table~1 fixes the scientific-calculator
+basis, and Supplementary Information, Part~II, Sections~2.1--2.5 give
+the compiler macros, symbolic real-domain verification, representative
+compiled expressions, and the constructive completeness theorem for
+that Table~1 class
+\cite[Table~1 and Supplementary Information, Part~II,
+Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.  The present
+paper does not use Part~I's search procedure as a proof step and does
+not perform any later witness search.  It imports only this finite
+translation theorem, restricted to multiplication, nonzero-division,
+square root on the nonnegative real axis, \(\pi\), \(\sin\), and the
+rational-constant constructors.  All other EML identities needed for
+exponential, positive logarithm, addition, subtraction, and negation
+are the printed and verified identities of \Cref{lem:eml-printed-core}.
 \end{proof}
 
 \begin{corollary}[Finite EML witness locking]
 \label{cor:eml-witness-locking}
-There is a finite list
-\[
-  \mathcal W_{\mathcal R}
-  =
-  \{W_{\exp},W_{\log},W_+,W_-,W_{\mathrm{neg}},
-    W_{\times},W_{\div},W_{\mathrm{sq}},W_{\sqrt{\phantom{x}}},
-    W_{\pi},W_{\sin}\}
-\]
-of pure EML trees over \(1\) and formal input leaves such that every
-translation used in \Cref{lem:richardson-translation} is obtained by
-substituting translated subexpressions and rational-constant
-constructor trees into this one list.  The list is fixed once and for
-all by Odrzywo{\l}ek's Table~1 compiler and Supplementary
-Information, Part~II, Sections~2.1--2.5; no further source identities
-or witness choices are made during the Richardson reduction.  For
-each \(W\in\mathcal W_{\mathcal R}\), the principal-branch real-domain
-validity is exactly the validity recorded in the right-hand column of
-\Cref{lem:eml-real-witness-library}.
+There is a finite Richardson witness interface
+\(\mathcal W_{\mathcal R}\) with no hidden search parameter: the
+printed core witnesses of \Cref{lem:eml-printed-core}, together with
+the finite cited witnesses of
+\Cref{prop:external-richardson-eml-witnesses}.  Every EML translation
+used in \Cref{lem:richardson-translation} is obtained by substituting
+translated subexpressions and rational-constant constructor trees into
+this fixed finite interface, and every later use is restricted to the
+real domain on which the corresponding witness has just been proved or
+cited.
 \end{corollary}
 
 \begin{proof}
-\Cref{lem:eml-real-witness-library} chooses one verified pure EML
-term for each primitive needed from Richardson's language.  The
-Richardson grammar used here has only the variable, rational
+The Richardson grammar used here has only the variable, rational
 constants, \(\pi\), \(\log 2\), the operations \(+,-,\times\),
 composition, and the total real functions \(\exp\), \(\sin\), and
-\(|\cdot|\).  The listed witnesses cover the nonconstant primitive
-operations: \(|\cdot|\) is handled by \(W_{\mathrm{sq}}\) followed by
-\(W_{\sqrt{\phantom{x}}}\), and \(\log 2\) is obtained by applying
-\(W_{\log}\) to the rational-constant constructor for \(2\).  A
-rational constant \(a/b\) is built from the fixed terminal \(1\) by
-the fixed addition, subtraction, negation, and division witnesses, so
-rational constants require no additional analytic identities beyond
-the same finite list.
-
-Since each witness is a finite tree and the list has finitely many
-entries, syntactic substitution into input leaves produces a pure EML
-tree effectively.  The semantic assertions for these entries,
-including the principal-branch domain restrictions, are precisely the
-assertions proved in \Cref{lem:eml-real-witness-library}.  Hence the
-later translation is a recursion over a fixed finite witness library,
-not a new search through Odrzywo{\l}ek's source or an appeal to
-unlisted EML identities.
+\(|\cdot|\).  The printed core gives \(\exp\), positive logarithm,
+addition, subtraction, and negation with complete real-domain checks.
+The proposition supplies multiplication, nonzero-division, square root
+on \(\RR_{\ge0}\), \(\pi\), \(\sin\), and rational constructors as the
+explicit cited input.  The constant \(\log 2\) is then obtained from
+the printed positive-logarithm witness applied to the printed
+addition witness for \(2=A(1,1)\).  Absolute value is represented by
+the square-root witness applied to the square built from the cited
+multiplication witness.  Since the interface is finite and every entry
+is a finite pure EML tree, syntactic substitution into formal input
+leaves is effective and introduces no new analytic identity or witness
+choice.
 \end{proof}
 
 \begin{lemma}[Effective Richardson translation]
 \label{lem:richardson-translation}
-Using the witnesses of \Cref{lem:eml-real-witness-library}, there is
+Using the fixed witness interface of \Cref{cor:eml-witness-locking}, there is
 an effective map \(E\mapsto\tau(E)\) from Richardson expressions to
 principal-branch EML terms over \((\eml,1)\), together with a
 transported real semantics
@@ -330,7 +297,7 @@ that the EML tree size and substitution depth satisfy
 \begin{proof}
 Define \(\tau\) by structural recursion.  A variable is sent to the
 same variable.  Constants are sent to the constant witnesses from
-\Cref{lem:eml-real-witness-library}.  If an expression is formed by
+\Cref{cor:eml-witness-locking}.  If an expression is formed by
 \(+,-,\times,\exp\), or \(\sin\), apply the corresponding chosen EML
 witness to the translated subexpressions.  If an expression is a
 composition \(G\circ F\), substitute the translated inner expression
@@ -347,7 +314,9 @@ are immediate from the witness library.  For
 \(+,-,\times,\exp\), and \(\sin\), the induction hypothesis says
 that the translated subexpressions are defined at the given real
 input and evaluate to the corresponding real subexpression values;
-\Cref{lem:eml-real-witness-library} then gives definedness and the
+\Cref{lem:eml-printed-core},
+\Cref{prop:external-richardson-eml-witnesses}, and
+\Cref{cor:eml-witness-locking} then give definedness and the
 correct value for the chosen primitive witness on those real
 arguments.  For a composition \(G\circ F\), the induction hypothesis
 first gives \(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\);
