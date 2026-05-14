@@ -40,6 +40,9 @@ from outreach_review_queue import build_queue as build_review_queue  # noqa: E40
 from outreach_impact_gate import evaluate as impact_gate_evaluate  # noqa: E402
 
 
+HIGH_VALUE_RESULT_STATUSES = {"IMPACT_PLAN_READY"}
+
+
 def _clean_inline(s: str, *, limit: int = 260) -> str:
     """Compact mail/forum snippets for operator-facing status."""
     text = " ".join(str(s or "").replace("\u2028", " ").replace("\r", " ").split())
@@ -290,7 +293,7 @@ def _build_decision_view(report: dict, *, tasks: list, todos: dict, science_rows
 
     for row in sg.get("writeback_ready") or []:
         impact = impact_by_todo.get(str(row.get("todo_id") or ""))
-        if impact is not None and getattr(impact, "status", "") != "IMPACT_PLAN_READY":
+        if impact is not None and getattr(impact, "status", "") not in HIGH_VALUE_RESULT_STATUSES:
             continue
         key = _row_key(title=str(row.get("title") or ""), slug=str(row.get("slug") or ""), todo_id=str(row.get("todo_id") or ""))
         next_text = "可进入 operator review；批准后再决定论文/邮件/评论/X 的宣发形式"
@@ -301,7 +304,7 @@ def _build_decision_view(report: dict, *, tasks: list, todos: dict, science_rows
             {
                 "name": _research_name(row),
                 "kind": row.get("contribution_type") or "research",
-                "why": "已有研究产物和 gate 证据",
+                "why": "通过 science gate 和 impact gate；可作为真实数学结果审阅",
                 "next": next_text,
             },
         )

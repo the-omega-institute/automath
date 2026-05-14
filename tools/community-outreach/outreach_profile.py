@@ -280,8 +280,8 @@ def _validate_science_contract(contract: object) -> list[str]:
         patience = int(contract.get("no_progress_patience_turns") or 0)
     except (TypeError, ValueError):
         patience = 0
-    if patience < 1 or patience > 5:
-        errors.append("science_contract no_progress_patience_turns must be between 1 and 5")
+    if patience < 1 or patience > 50:
+        errors.append("science_contract no_progress_patience_turns must be between 1 and 50")
     return errors
 
 

@@ -545,7 +545,7 @@ def _profile(problem: dict, todo_id: str) -> dict:
     contribution = "source_audit_note" if solved else "research_note"
     close_when = [
         "Focused local/Oracle cycle finds the problem is already solved or substantially subsumed in the literature.",
-        "After no-progress patience, only source summary/speculation exists and no valuable obstruction memo has emerged.",
+        "PI/operator explicitly archives the target after a written failure analysis; ordinary no-progress only forces strategy changes.",
     ]
     if solved:
         close_when.insert(0, "The derivative verification/formalization lane cannot be separated from re-solving the solved original statement.")
@@ -608,7 +608,7 @@ def _profile(problem: dict, todo_id: str) -> dict:
                 "The impact gate has selected the final channel and the operator has approved exact text.",
             ],
             "close_when": close_when,
-            "no_progress_patience_turns": 2,
+            "no_progress_patience_turns": 20,
         },
         "main_paper_bridge": {
             "required_before_run": False,

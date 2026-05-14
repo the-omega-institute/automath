@@ -792,6 +792,8 @@ class OracleConsultant:
         patience = 2
         if profile is not None and profile.science_contract is not None:
             patience = profile.science_contract.no_progress_patience_turns
+        if _is_curated_or_high_impact_todo(todo):
+            patience = max(patience, 20)
         objective = "\n".join([
             f"Target: {todo.todo_id} {todo.title}",
             "Science contract:",
@@ -991,11 +993,14 @@ class OracleConsultant:
                 )
                 next_followup_override = (
                     "You have repeated the same line without lowering the science-contract progress metric. "
-                    "Choose exactly one route now: RESCOPE to a smaller publishable lemma/certificate, "
+                    "Choose exactly one route now, with priority on a real mathematical contribution: "
+                    "PROOF for the original target, COUNTEREXAMPLE/CONSTRUCTION for the original target, "
+                    "RESCOPE to a publishable lemma that materially advances the original target, "
                     "NEW_ATTACK with a different proof or computation strategy and a new progress metric, "
                     "or CLOSE_WITH_OBSTRUCTION by giving a FILE block for "
                     f"`tools/community-outreach/targets/{todo.slug()}/failure_analysis.md` "
-                    "that identifies the concrete obstruction. Do not summarize; execute the route."
+                    "that identifies the concrete obstruction. Bounded audits or source summaries are not "
+                    "acceptable final outputs unless they prove a serious obstruction. Do not summarize; execute the route."
                 )
                 no_progress_streak = 0
                 continue
@@ -1298,6 +1303,19 @@ DEFAULT_DEEPENING_PROMPTS: list[str] = [
     "Build an explicit small computational test that would either confirm your strongest current claim or break it. Specify exact parameter ranges, expected output, and how you'd interpret the result.",
     "If after all this you still cannot make further progress, write 'STUCK' on its own line and give a final summary of where the next person should pick up. Otherwise continue with the deepest open thread.",
 ]
+
+
+def _is_curated_or_high_impact_todo(todo: TodoSpec) -> bool:
+    source = str(getattr(todo, "source", "") or "").lower()
+    title = str(getattr(todo, "title", "") or "").lower()
+    return (
+        "problemsilike.com" in source
+        or "r(5,5)" in title
+        or "hadamard" in title
+        or "hadwiger" in title
+        or "projective plane" in title
+        or "barnette" in title
+    )
 
 
 OMEGA_CAPABILITIES_BLURB = (
