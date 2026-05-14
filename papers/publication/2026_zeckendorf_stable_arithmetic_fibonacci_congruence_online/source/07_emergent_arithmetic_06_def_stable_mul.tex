@@ -53,6 +53,46 @@ Therefore
 where the last equality is Definition \ref{def:stable-mul}. Proposition \ref{prop:finite-local-fold-normalization} supplies the promised terminating local normalization from the raw convolution configuration to this normal form.
 \end{proof}
 
+\begin{theorem}[Fixed-resolution multiplication is finite-state, not a uniform online multiplier]\label{thm:finite-mul-fixed-resolution-fst}
+Fix \(m\ge 1\) and set \(M_m:=F_{m+2}\). There is a finite transducer depending only on \(m\) which, on input two words \(c,d\in X_m\), outputs
+\[
+c\boxtimes_m d=Z_m\bigl(V_m(c)V_m(d)\bmod M_m\bigr).
+\]
+Equivalently, at each fixed resolution multiplication descends through the finite residue fold of Theorem \ref{thm:finite-resolution-mod}. This theorem is deliberately fixed-resolution: it supplies the finite-state realization needed for the finite algebra in the paper, but it is not a bounded-delay online multiplication theorem uniform in \(m\).
+\end{theorem}
+
+\begin{proof}
+At fixed \(m\), the input language \(X_m\times X_m\) is finite. A concrete transducer may be described by its state register
+\[
+(r,s,u,v)\in \bigl(\ZZ/(M_m\ZZ)\bigr)^4,
+\]
+where after reading the first \(q\) low-to-high digit pairs the registers contain
+\[
+r\equiv \sum_{k=1}^{q}c_kF_{k+1},
+\qquad
+s\equiv \sum_{k=1}^{q}d_kF_{k+1},
+\qquad
+u\equiv F_{q+1},
+\qquad
+v\equiv F_{q+2}
+\pmod {M_m}.
+\]
+The initial state is \((0,0,F_1,F_2)=(0,0,1,1)\bmod M_m\). On reading \((c_{q+1},d_{q+1})\), the machine updates
+\[
+r\leftarrow r+c_{q+1}v,
+\qquad
+s\leftarrow s+d_{q+1}v,
+\qquad
+(u,v)\leftarrow(v,u+v),
+\]
+modulo \(M_m\). After the last of the \(m\) digit pairs has been read, the registers contain \(r=V_m(c)\bmod M_m\) and \(s=V_m(d)\bmod M_m\). The machine then forms the residue \(rs\bmod M_m\) in its finite control and uses the fixed lookup table supplied by Lemma \ref{lem:zeckendorf-range-bijection},
+\[
+\{0,1,\dots,M_m-1\}\longrightarrow X_m,
+\qquad n\longmapsto Z_m(n),
+\]
+to emit \(Z_m(rs\bmod M_m)\). By Definition \ref{def:finite-resolution-arithmetic}, this output is precisely \(c\boxtimes_m d\). All state sets and lookup tables are finite because \(m\) is fixed.
+\end{proof}
+
 \begin{theorem}[Definitional isomorphism for multiplication]\label{thm:mul-definitional}
 \((X_\infty,\oplus,\otimes)\) is a commutative semiring, and \(\mathrm{Val}\) is a semiring isomorphism from \((X_\infty,\oplus,\otimes)\) onto \((\NN,+,\times)\).
 \leanverified{paper\_stable\_commutative\_ring}

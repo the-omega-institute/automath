@@ -12,12 +12,12 @@ The reason for recording the isomorphism anyway is twofold. First, it fixes nota
 \end{itemize}
 \end{remark}
 
-\begin{lemma}[Specialization of online normalization to the paper's coordinates]\label{lem:online-zeckendorf-specialization}
-Use the Fibonacci numeration sequence \(U_i:=F_{i+2}\) for \(i\ge 0\), so that the paper's digit \(c_k\) at weight \(F_{k+1}\) is the usual numeration digit at position \(i=k-1\). Let \(L\ge 1\), let \(s_1,\dots,s_L\in\{0,1,2\}\), and read the padded word from high weight to low weight as
+\begin{lemma}[Frougny's online normalizer in the paper's coordinates]\label{lem:online-zeckendorf-specialization}
+Use the Fibonacci numeration sequence \(U_i:=F_{i+2}\) for \(i\ge 0\), so that the paper's digit \(c_k\) at weight \(F_{k+1}\) is the usual Fibonacci-numeration digit at position \(i=k-1\). Let \(L\ge 1\), let \(s_1,\dots,s_L\in\{0,1,2\}\), and read the padded word from high weight to low weight as
 \[
 s_L,s_{L-1},\dots,s_1.
 \]
-There is a finite-state online normalizer, with delay bounded independently of \(L\), whose output is the unique admissible word \(u\in X_\infty\) satisfying
+There is a finite-state online normalizer, with delay \(3\) and a bounded terminal flush, whose output is the unique admissible word \(u\in X_\infty\) satisfying
 \[
 \mathrm{Val}(u)=\sum_{k=1}^{L}s_kF_{k+1}.
 \]
@@ -25,12 +25,11 @@ Leading zero padding at positions \(k>L\) does not change either the value or th
 \end{lemma}
 
 \begin{proof}
-Frougny's online-addition theorem for Pisot numeration systems applies to the golden-ratio system because \(\phi\) is a Pisot unit and the Fibonacci recurrence gives the associated numeration scale \(U_i=F_{i+2}\) \cite{Frougny1999OnlineAddition}. In that theorem, normalization from a fixed finite input alphabet of integer digits to the canonical digit language is performed by a finite transducer reading most significant digits first, with a delay depending only on the numeration system and the chosen input alphabet.
+We use the specific Fibonacci result rather than an unspecified Pisot black box. Frougny proves that addition in base \(\tau=(1+\sqrt5)/2\) on the digit set \(\{0,1\}\) is realized by an on-line finite automaton with delay \(3\) \cite[Proposition~13]{Frougny1999OnlineAddition}. The same paper then translates this construction to the Fibonacci numeration system and states that addition on \(\{0,1\}\) in that system is computable by an on-line finite automaton with delay \(3\), with a terminal function giving the normal Fibonacci representation \cite[Corollary~4]{Frougny1999OnlineAddition}. The input alphabet of the transducer after pointwise addition of two binary input streams is exactly \(\{0,1,2\}\), and the output alphabet is \(\{0,1\}\).
 
-In the present specialization the input alphabet after preliminary digitwise addition is \(\{0,1,2\}\), and the target canonical language is the golden-mean language of binary words with no adjacent \(1\)'s. The change from the usual positions \(i=0,1,\dots\) to the paper's positions \(k=1,2,\dots\) is only the index shift \(U_{k-1}=F_{k+1}\). Reading \(s_L,
-s_{L-1},\dots,s_1\) is therefore exactly the usual most-significant-to-least-significant online convention. The theorem supplies a finite set of states, a transition/output rule, a constant delay, and a bounded terminal flush for this fixed alphabet and fixed numeration system.
+The change from Frougny's usual positions \(i=0,1,\dots\) to the paper's positions \(k=1,2,\dots\) is only the index shift \(U_{k-1}=F_{k+1}\). Reading \(s_L,s_{L-1},\dots,s_1\) is therefore exactly the most-significant-to-least-significant convention used in on-line numeration. The cited automaton supplies a finite state set, transition rule, output rule, delay \(3\), and terminal flush for this fixed alphabet and fixed numeration system.
 
-The normalizer is value preserving in the Fibonacci numeration system. Hence its output represents \(\sum_{k=1}^{L}s_kF_{k+1}\). By Theorem \ref{thm:zeckendorf-unique}, there is only one admissible binary representative of that value, namely the stated \(u\in X_\infty\). Since prepending leading zeros contributes no value and keeps the input inside the same finite alphabet, it cannot change the normalized representative; it only delays the same stream by leading zero symbols.
+The normalizer is value preserving in the Fibonacci numeration system. Hence its output represents \(\sum_{k=1}^{L}s_kF_{k+1}\). By Theorem \ref{thm:zeckendorf-unique}, there is only one admissible binary representative of that value, namely the stated \(u\in X_\infty\). Since prepending leading zeros contributes no value and keeps the input inside the same finite alphabet, it cannot change the normalized representative; it only shifts the same on-line computation by leading zero symbols.
 \end{proof}
 
 \begin{theorem}[Digit-level realization of Zeckendorf addition with finite delay]\label{thm:zeckendorf-add-fst}
