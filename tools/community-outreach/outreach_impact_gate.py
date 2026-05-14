@@ -210,6 +210,10 @@ def _is_publishable_channel(channel: str) -> bool:
     }
 
 
+def _is_curated_problemsilike(todo: TodoSpec) -> bool:
+    return "problemsilike.com" in (todo.source or "").lower()
+
+
 def _is_collaboration_context(lane: str, display: str, todo: TodoSpec) -> bool:
     haystack = " ".join([lane, display, todo.title or "", getattr(todo, "type_", "") or "", todo.status or ""]).lower()
     return bool(re.search(r"\b(collaboration|collaborate|reply|email thread|waiting reply|frontier subset|paper-trade)\b", haystack))
@@ -412,6 +416,60 @@ def evaluate(todo: TodoSpec) -> ImpactGateVerdict:
     if collaboration_context:
         _append_unique(channels, "author_email")
         rationale.append("collaboration lane should use direct email first; secondary channels remain available after the reviewed note exists")
+
+    serious_math_claim = strong_claim and contribution in {"theorem", "counterexample", "construction", "research_note"}
+    curated_problem_result = _is_curated_problemsilike(todo) and (strong_claim or scoped_negative)
+    serious_certificate = (
+        "certificate" in contribution
+        and strong_claim
+        and not bounded_progress
+        and not scoped_negative
+        and topic >= 8
+    )
+    if (
+        not collaboration_context
+        and not serious_math_claim
+        and not curated_problem_result
+        and not serious_certificate
+    ):
+        if bounded_progress or scoped_negative or "computational" in contribution or "certificate" in contribution:
+            return ImpactGateVerdict(
+                todo_id=todo.todo_id,
+                slug=slug,
+                title=todo.title,
+                status=NEEDS_PUBLICATION_VALUE,
+                science_status=effective_science_status,
+                primary_channel="none",
+                channels=[],
+                audience="internal research loop",
+                draft_paths=[_target_file(slug, "research.md")],
+                impact_contract={
+                    "goal": "defer low-publication-value bounded/audit output and keep the main loop focused on real mathematical contributions",
+                    "science_gate_required": WRITEBACK_READY,
+                    "primary_channel": "none",
+                    "secondary_channels": [],
+                    "disclosure_order": "no_external_disclosure",
+                    "claim_strength": (
+                        "bounded_or_obstruction_record_not_publication_grade"
+                        if (bounded_progress or scoped_negative)
+                        else "computational_record_not_publication_grade"
+                    ),
+                    "operator_decision_needed": [
+                        "only revive if the operator explicitly asks to publish this scoped record",
+                        "otherwise continue toward a full proof, counterexample, high-impact certificate, or Problems I Like target",
+                    ],
+                },
+                prohibited_actions=["external_send", "public_post", "draft_as_solved_result"],
+                impact_score=0,
+                rationale=[
+                    "science gate found a locally verified scoped record, but current project policy prioritizes real mathematical contributions",
+                    "bounded/audit/obstruction packets should not interrupt operator review unless they solve a curated target or support a serious public result",
+                ],
+                required_before_send=[
+                    "Strengthen into a full proof/counterexample/high-impact certificate or combine into a serious note before outreach."
+                ],
+                next_action="continue_deep_reason",
+            )
 
     if not collaboration_context and not any(_is_publishable_channel(ch) for ch in channels):
         return ImpactGateVerdict(

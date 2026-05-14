@@ -290,7 +290,7 @@ def _build_decision_view(report: dict, *, tasks: list, todos: dict, science_rows
 
     for row in sg.get("writeback_ready") or []:
         impact = impact_by_todo.get(str(row.get("todo_id") or ""))
-        if impact is not None and getattr(impact, "status", "") == "BOARD_SKIPPED":
+        if impact is not None and getattr(impact, "status", "") != "IMPACT_PLAN_READY":
             continue
         key = _row_key(title=str(row.get("title") or ""), slug=str(row.get("slug") or ""), todo_id=str(row.get("todo_id") or ""))
         next_text = "可进入 operator review；批准后再决定论文/邮件/评论/X 的宣发形式"
