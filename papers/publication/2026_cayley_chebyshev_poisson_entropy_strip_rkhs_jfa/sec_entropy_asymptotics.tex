@@ -361,6 +361,138 @@ Taking real and imaginary parts after the binomial expansion gives
 \eqref{eq:cayley-mode-odd-fourier}.
 \end{proof}
 
+\subsection{All-order coefficient calculus}%
+\label{subsec:all-order-coefficient-calculus}
+
+The coefficient calculus is universal once the Cayley--Chebyshev modes have
+been fixed.  For integers $r\ge2$ and $n_1,\dots,n_r\ge2$ define the
+Cauchy-weighted mode integral
+\begin{equation}\label{eq:mode-integral-definition}
+I(n_1,\dots,n_r):=I_{n_1,\dots,n_r}:=
+\int_{\RR}u_{n_1}(y)\cdots u_{n_r}(y)\,\omega(\dd y),
+\qquad
+\omega(\dd y):=\frac{\dd y}{\pi(1+y^2)}.
+\end{equation}
+If $\nu$ has centred moments $\mu_n=\int (\gamma-\bar\gamma)^n\dd\nu$ up
+to order~$k$, set
+\begin{equation}\label{eq:universal-entropy-coefficient}
+A_k(\nu):=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1,\dots,n_r\ge2\\ n_1+\cdots+n_r=k}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\dots,n_r),
+\end{equation}
+with the convention that an empty sum is zero.  Thus $A_0=A_1=A_2=A_3=0$.
+
+\begin{theorem}[Universal entropy coefficient formula]%
+\label{thm:universal-entropy-coefficients}
+For every integer $k\ge0$, the expression \eqref{eq:universal-entropy-coefficient}
+is a finite polynomial in the centred moments of~$\nu$ and in the universal
+mode integrals \eqref{eq:mode-integral-definition}.  Moreover
+\begin{equation}\label{eq:universal-odd-coefficients-vanish}
+A_k(\nu)=0\qquad\text{whenever }k\text{ is odd}.
+\end{equation}
+Formally, if
+\[
+\delta_t(\bar\gamma+ty)
+=\sum_{n\ge2}\mu_n u_n(y)t^{-n}
+\]
+and powers are multiplied before collecting equal total $t$-degree, then
+the coefficient of $t^{-k}$ in
+\[
+\int_{\RR}\bigl((1+\delta_t)\log(1+\delta_t)-\delta_t\bigr)\,\dd\omega
+\]
+is precisely $A_k(\nu)$.
+\end{theorem}
+
+\begin{proof}
+The Taylor series
+\[
+(1+s)\log(1+s)-s
+=\sum_{r=2}^{\infty}\frac{(-1)^r}{r(r-1)}s^r
+\]
+has no constant or linear term.  In the formal substitution for
+$\delta_t$, a monomial in the $r$th power has the form
+\[
+\mu_{n_1}\cdots\mu_{n_r}
+u_{n_1}(y)\cdots u_{n_r}(y)t^{-(n_1+\cdots+n_r)},
+\qquad n_j\ge2.
+\]
+For fixed total degree~$k$ there are only finitely many such monomials, and
+necessarily $2\le r\le\lfloor k/2\rfloor$.  Integrating the degree-$k$ part
+against~$\omega$ gives exactly \eqref{eq:universal-entropy-coefficient}.
+
+It remains to prove the odd cancellation.  By
+\eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$, while
+$\omega(\dd y)$ is even.  Hence the integrand in
+$I(n_1,\dots,n_r)$ is odd whenever $n_1+\cdots+n_r$ is odd, and then the
+integral vanishes.  Every summand in $A_k(\nu)$ has total index~$k$, so
+all summands vanish when $k$ is odd.
+\end{proof}
+
+\begin{theorem}[Finite Fourier algorithm for mode integrals]%
+\label{thm:finite-fourier-mode-integral-algorithm}
+For each $n\ge1$ define a Laurent polynomial $Q_n$ on the unit circle by
+\begin{equation}\label{eq:mode-laurent-polynomial-definition}
+Q_n(e^{2\ii\theta}):=u_n(\tan\theta),
+\qquad -\pi/2<\theta<\pi/2.
+\end{equation}
+Explicitly, for $m\ge1$ and $m\ge0$, respectively,
+\begin{equation}\label{eq:mode-laurent-even}
+Q_{2m}(z)=(-1)^m2^{-2m}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}
+\bigl(z^{j+1}+z^{-(j+1)}\bigr),
+\end{equation}
+and
+\begin{equation}\label{eq:mode-laurent-odd}
+Q_{2m+1}(z)=(-1)^m\frac{2^{-2m}}{2\ii}
+\sum_{j=0}^{2m}\binom{2m}{j}
+\bigl(z^{j+1}-z^{-(j+1)}\bigr).
+\end{equation}
+Consequently, for every $r\ge2$ and $n_1,\dots,n_r\ge1$,
+\begin{equation}\label{eq:mode-integral-constant-term}
+I(n_1,\dots,n_r)
+=\bigl[z^0\bigr]\prod_{a=1}^{r}Q_{n_a}(z),
+\end{equation}
+where $[z^0]$ denotes constant Laurent coefficient.  Equivalently, if
+$M>n_1+\cdots+n_r$, then
+\begin{equation}\label{eq:mode-integral-root-of-unity-algorithm}
+I(n_1,\dots,n_r)
+=\frac1M\sum_{\zeta\in\mu_M}\prod_{a=1}^{r}Q_{n_a}(\zeta).
+\end{equation}
+Thus every universal coefficient $A_k(\nu)$ is obtained by finitely many
+Laurent-polynomial multiplications and constant-coefficient extractions.
+\end{theorem}
+
+\begin{proof}
+Equations \eqref{eq:mode-laurent-even} and \eqref{eq:mode-laurent-odd} are
+exactly the finite Fourier formulas
+\eqref{eq:cayley-mode-even-fourier} and
+\eqref{eq:cayley-mode-odd-fourier} after writing
+$z=e^{2\ii\theta}$,
+\[
+\cos(2\ell\theta)=\frac{z^\ell+z^{-\ell}}2,
+\qquad
+\sin(2\ell\theta)=\frac{z^\ell-z^{-\ell}}{2\ii}.
+\]
+The change of variables $y=\tan\theta$ gives
+\[
+\omega(\dd y)=\frac{\dd\theta}{\pi}
+\qquad(-\pi/2<\theta<\pi/2),
+\]
+and $z=e^{2\ii\theta}$ pushes $\dd\theta/\pi$ to normalized Haar measure
+on~$\TT$.  Hence $I(n_1,\dots,n_r)$ is the Haar integral of the Laurent
+polynomial $\prod_a Q_{n_a}$, which is its constant coefficient.  The
+support of $Q_n$ is contained in $\{-n,\dots,-1,1,\dots,n\}$; therefore
+the product has Fourier support contained in
+$\{-(n_1+\cdots+n_r),\dots,n_1+\cdots+n_r\}$.  Averaging over the $M$th
+roots of unity with $M>n_1+\cdots+n_r$ kills every nonzero exponent in this
+support and keeps the constant coefficient, proving
+\eqref{eq:mode-integral-root-of-unity-algorithm}.  The last assertion
+follows by substituting \eqref{eq:mode-integral-constant-term} into
+\eqref{eq:universal-entropy-coefficient}.
+\end{proof}
+
 \begin{proposition}[Finite mode truncations]%
 \label{prop:cayley-mode-remainder}
 For every integer $N\ge 1$ there exists a rational function
@@ -455,6 +587,69 @@ $M_N:=\|v_N\|_{L^\infty(\RR^2)}$.  Taking expectations gives
 \]
 This is the asserted uniform estimate.  Since $\omega$ is a probability
 measure, the same bound also gives the displayed $L^1(\omega)$ estimate.
+\end{proof}
+
+\begin{theorem}[Finite-moment density remainder]%
+\label{thm:finite-moment-density-remainder}
+Let $L\ge2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
+on~$\RR$ with mean $\bar\gamma$ and finite centred $(L+\eta)$th absolute
+moment.  Put
+$\Delta=\gamma-\bar\gamma$,
+$\mu_n=\int\Delta^n\dd\nu(\gamma)$, and
+\[
+\delta_t(\bar\gamma+ty):=\frac{(P_t*\nu)(\bar\gamma+ty)}
+{P_t(ty)}-1.
+\]
+Then there are constants $C_{\nu,L,\eta}<\infty$ and $T_{\nu,L,\eta}\ge1$
+such that
+\begin{equation}\label{eq:finite-moment-density-remainder}
+\delta_t(\bar\gamma+ty)
+=\sum_{n=2}^{L}\mu_n u_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\sup_y|\rho_{L,t}(y)|+\|\rho_{L,t}\|_{L^1(\omega)}
+\le C_{\nu,L,\eta}t^{-(L+\eta)}.
+\end{equation}
+Moreover
+\begin{equation}\label{eq:finite-moment-density-smallness}
+\sup_y|\delta_t(\bar\gamma+ty)|\le C_{\nu,L,\eta}t^{-2},
+\qquad t\ge1,
+\end{equation}
+and $\sup_y|\delta_t(\bar\gamma+ty)|\le1/2$ for $t\ge T_{\nu,L,\eta}$.
+\end{theorem}
+
+\begin{proof}
+With $x=\bar\gamma+ty$ and $g_t(x)=P_t(x-\bar\gamma)=P_t(ty)$,
+\[
+\frac{(P_t*\nu)(x)}{g_t(x)}
+=\int_{\RR}R_{\Delta/t}(y)\dd\nu(\gamma).
+\]
+For $|\varepsilon|\le1$, Proposition~\ref{prop:cayley-mode-remainder} and
+the boundedness of $v_L$ give
+\[
+\left|R_\varepsilon(y)-\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+\le \|v_L\|_\infty |\varepsilon|^{L+1}
+\le \|v_L\|_\infty |\varepsilon|^{L+\eta}.
+\]
+For $|\varepsilon|>1$, write $y=z+\varepsilon$.  Then
+\[
+R_\varepsilon(y)=\frac{1+(z+\varepsilon)^2}{1+z^2}
+\le 3(1+\varepsilon^2),
+\]
+uniformly in~$z$.  The modes $u_0,\dots,u_L$ are bounded, so the finite
+polynomial $\sum_{n=0}^{L}u_n(y)\varepsilon^n$ is bounded by a constant
+times $|\varepsilon|^L$.  Since $L\ge2$ and $0<\eta\le1$, both bounds are
+at most a constant times $|\varepsilon|^{L+\eta}$ for
+$|\varepsilon|>1$.  Thus the pointwise remainder is bounded by
+$C_L|\varepsilon|^{L+\eta}$ uniformly in~$y$.
+Taking $\varepsilon=\Delta/t$ and expectations yields the displayed
+$t^{-(L+\eta)}$ bound in both $L^\infty$ and $L^1(\omega)$, since $\omega$
+has total mass one.  Since $\mu_0=1$ and $\mu_1=0$, subtracting the
+constant term gives \eqref{eq:finite-moment-density-remainder}.  Each
+$u_n$ is bounded by Theorem~\ref{thm:cayley-chebyshev-mode}; hence the
+finite sum begins at order~$t^{-2}$ and the remainder is
+$O(t^{-(L+\eta)})=O(t^{-2})$, proving
+\eqref{eq:finite-moment-density-smallness}.  Taking $T_{\nu,L,\eta}$ large
+enough gives the final smallness assertion.
 \end{proof}
 
 For later use we record the first modes explicitly:
@@ -941,7 +1136,7 @@ $t^{-(2N+2)}=o(t^{-2N})$ and
 $t^{-(2N+1)}=o(t^{-2N})$ give the final claim.
 \end{proof}
 
-\begin{theorem}[Odd orders vanish in the entropy expansion]%
+\begin{theorem}[All-order Poisson entropy coefficient expansion]%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge 2$ and let $\nu$ be a probability measure on~$\RR$ with mean
 $\bar\gamma$ and finite centred $(2N+1)$st absolute moment.  Set
@@ -956,13 +1151,15 @@ h_t:=P_t*\nu,
 \qquad
 g_t(x):=P_t(x-\bar\gamma).
 \]
-Then there exist real coefficients $c_4,c_6,\dots,c_{2N}$ such that
+Then the universal coefficients $A_k(\nu)$ defined in
+\eqref{eq:universal-entropy-coefficient} satisfy
 \begin{equation}\label{eq:poisson-kl-even-orders}
 D_{\mathrm{KL}}(h_t\|g_t)
-=\sum_{m=2}^{N}c_{2m}\,t^{-2m}+o(t^{-2N})
+=\sum_{k=4}^{2N}A_k(\nu)t^{-k}+o(t^{-2N})
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
 \qquad(t\to\infty).
 \end{equation}
-In particular, no odd power occurs in the expansion through order~$t^{-2N}$.
+Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \end{theorem}
 
 \begin{proof}
@@ -996,16 +1193,112 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k}
 +o(t^{-2N}),
 \]
-where $I_{n_1,\dots,n_k}$ is given in
-Lemma~\ref{lem:mode-parity-vanish}.  By the lemma all odd~$m$-terms
-vanish, so only even powers remain.  Reindexing $m=2r$ gives
+where $I_{n_1,\dots,n_k}=I(n_1,\dots,n_k)$ is the mode integral from
+\eqref{eq:mode-integral-definition}.  Comparing the coefficient of
+$t^{-m}$ with \eqref{eq:universal-entropy-coefficient} gives $A_m(\nu)$.
+The parity part of Theorem~\ref{thm:universal-entropy-coefficients} gives
+$A_m(\nu)=0$ for odd~$m$, so only even powers remain.  Reindexing $m=2r$
+gives
 \[
-=\sum_{r=2}^{N} c_{2r}\,t^{-2r}+o(t^{-2N}),
+=\sum_{r=2}^{N} A_{2r}(\nu)\,t^{-2r}+o(t^{-2N}),
 \]
 which is \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
-\begin{theorem}[Eighth-order entropy expansion]%
+\begin{theorem}[Analytic compact-support interchange]%
+\label{thm:analytic-compact-support-interchange}
+Let $\nu$ be a probability measure with mean $\bar\gamma$ and compactly
+supported centred variable $\Delta=\gamma-\bar\gamma$.  Then there is
+$T_\nu\ge1$ such that, for $t\ge T_\nu$, the series
+\begin{equation}\label{eq:analytic-density-series}
+\delta_t(\bar\gamma+ty)
+=\sum_{n=2}^{\infty}\mu_nu_n(y)t^{-n}
+\end{equation}
+converges absolutely and uniformly in $y\in\RR$.  The entropy Taylor series
+\begin{equation}\label{eq:analytic-entropy-series}
+D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+=\sum_{k=4}^{\infty}A_k(\nu)t^{-k}
+\end{equation}
+also converges absolutely for $t\ge T_\nu$, where $A_k(\nu)$ is defined by
+\eqref{eq:universal-entropy-coefficient}.  In particular the all-order
+coefficients are the genuine analytic coefficients under this strong
+compact-support hypothesis, while Theorem~\ref{thm:finite-moment-entropy-remainder}
+below gives the separate finite-moment asymptotic justification.
+\end{theorem}
+
+\begin{proof}
+Let $|\Delta|\le M$ almost surely.  The generating function for the
+Chebyshev polynomials gives
+\[
+R_\varepsilon(\tan\theta)
+=\sum_{n=0}^{\infty}\cos^n\theta\,U_n(\sin\theta)\varepsilon^n.
+\]
+Since $|U_n(s)|\le n+1$ for $|s|\le1$ and $|\cos\theta|\le1$, the series is
+dominated uniformly by $\sum_{n\ge0}(n+1)|\varepsilon|^n$ whenever
+$|\varepsilon|<1$.  Choose $T_\nu\ge2M$.  Then
+$|\Delta|/t\le1/2$, so dominated convergence permits termwise integration
+against~$\nu$ and gives the absolutely and uniformly convergent density
+series.  The $n=0$ term is one and the $n=1$ term is zero because
+$\EE\Delta=0$, which proves \eqref{eq:analytic-density-series}.
+
+The uniform convergence gives $\delta_t=O(t^{-2})$ uniformly.  Enlarging
+$T_\nu$ if needed, $|\delta_t|\le1/2$, and the Taylor series for
+$\Phi(s)=(1+s)\log(1+s)-s$ converges absolutely and uniformly after the
+substitution $s=\delta_t(\bar\gamma+ty)$.  Fubini's theorem applies because
+$\omega$ has total mass one and the absolute majorants are summable.  The
+degree-$k$ coefficient obtained by multiplying the density series is the
+finite expression in \eqref{eq:universal-entropy-coefficient}; hence
+\eqref{eq:analytic-entropy-series} follows.
+\end{proof}
+
+\begin{theorem}[Finite $2N+\eta$ entropy remainder]%
+\label{thm:finite-moment-entropy-remainder}
+Let $N\ge2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
+on~$\RR$ with mean $\bar\gamma$ and finite centred $(2N+\eta)$th absolute
+moment.  With $h_t=P_t*\nu$, $g_t(x)=P_t(x-\bar\gamma)$, and the
+coefficients $A_k(\nu)$ from \eqref{eq:universal-entropy-coefficient},
+\begin{equation}\label{eq:finite-moment-entropy-remainder}
+D_{\mathrm{KL}}(h_t\|g_t)
+=\sum_{k=4}^{2N}A_k(\nu)t^{-k}+o(t^{-2N})
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}).
+\end{equation}
+More precisely, after subtracting the displayed polynomial the remainder is
+$O(t^{-(2N+\eta)})+O(t^{-(2N+2)})$.
+\end{theorem}
+
+\begin{proof}
+Apply Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$.
+It gives
+\[
+\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
+\qquad
+A_{N,t}(y)=\sum_{n=2}^{2N}\mu_nu_n(y)t^{-n},
+\]
+with $\|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}=
+O(t^{-(2N+\eta)})$ and $\|\delta_t\|_\infty=O(t^{-2})$.  For all large
+$t$, $|\delta_t|\le1/2$, and therefore
+\[
+\Phi(\delta_t)=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r
++O(t^{-(2N+2)})
+\]
+uniformly and in $L^1(\omega)$, because $\delta_t^{N+1}=O(t^{-2N-2})$.
+For each $2\le r\le N$,
+\[
+\delta_t^r-A_{N,t}^r
+=\sum_{\ell=1}^{r}\binom r\ell A_{N,t}^{r-\ell}\rho_{N,t}^{\ell},
+\]
+whose $L^1(\omega)$ norm is $O(t^{-(2N+\eta)})$, using
+$A_{N,t}=O(t^{-2})$ and the $L^\infty/L^1$ bounds on~$\rho_{N,t}$.
+Expanding the finite products $A_{N,t}^r$ and discarding only monomials of
+total degree $>2N$ leaves an $O(t^{-(2N+1)})$ finite polynomial tail, hence
+also $O(t^{-(2N+\eta)})$ for $0<\eta\le1$.  Integrating the retained terms
+against~$\omega$ gives exactly the coefficient formula
+\eqref{eq:universal-entropy-coefficient}.  Odd coefficients vanish by
+Theorem~\ref{thm:universal-entropy-coefficients}, and the asserted
+remainder follows.
+\end{proof}
+
+\begin{corollary}[Eighth-order entropy expansion]%
 \label{thm:poisson-kl-eighth}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
 variance $\sigma^2>0$, and finite centred seventh absolute moment.  Then,
@@ -1048,7 +1341,7 @@ that, for all $t\ge T_{\nu,8}$,
 \le B_{\nu,8}t^{-9}.
 \end{split}
 \end{equation}
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 Let $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$.  With
@@ -1150,7 +1443,8 @@ B_{\nu,8}:=
 +K_\Phi H_\nu^5 .
 \end{equation}
 This bound is used in the quantitative large-time corollary below; the
-coefficient calculation itself is the following finite expansion.  Since
+following computation is the first explicit instance of the universal
+coefficient formula \eqref{eq:universal-entropy-coefficient}.  Since
 the preceding estimates imply $\delta_t=O(t^{-2})$, $d_t=O(t^{-2})$, and
 $\theta_t=O(t^{-7})$ uniformly, we have
 \[
@@ -1234,7 +1528,9 @@ Lemma~\ref{lem:mode-parity-vanish} gives
 \[
 \int_{\RR}B_5\,\dd\omega=\int_{\RR}B_7\,\dd\omega=0.
 \]
-The remaining coefficients are obtained from the identities in
+The remaining coefficients are obtained by the finite Fourier algorithm,
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}; the resulting
+constant-term arithmetic for these low orders is recorded in
 Appendix~\ref{app:entropy-integrals}:
 \[
 \int_{\RR}B_4\,\dd\omega
@@ -1267,7 +1563,7 @@ Since $\omega(\RR)=1$, the explicit uniform bound
 coefficients proves \eqref{eq:poisson-kl-eighth}.
 \end{proof}
 
-\begin{proposition}[Finite phase verification]%
+\begin{proposition}[Eighth-order finite phase examples]%
 \label{prop:eighth-order-finite-phase-verification}
 Let $n_1,\dots,n_k\ge2$ and put
 \[
@@ -1328,7 +1624,10 @@ by~$N$.  The character average over $\mu_N$ is thus $1$ on the constant
 term and $0$ on every other term, which proves
 \eqref{eq:finite-grid-mode-product-verification}.
 
-The proof of Theorem~\ref{thm:poisson-kl-eighth} uses only mode products
+This is the specialization of
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} to the products
+needed by Corollary~\ref{thm:poisson-kl-eighth}.  That corollary uses only
+mode products
 whose total index is at most~$8$:
 \[
 u_2^2,\quad
