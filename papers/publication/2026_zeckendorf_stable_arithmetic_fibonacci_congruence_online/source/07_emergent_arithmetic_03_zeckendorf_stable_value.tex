@@ -105,6 +105,54 @@ V_m(w)+V_m(v)\bmod M_m,
 which is exactly the definition of \(w\boxplus_m v\). The same argument with residue products shows that any multiplication compatible with \(\overline{\mathrm{Val}}_m\) must send \((w,v)\) to the unique word of residue \(V_m(w)V_m(v)\bmod M_m\), namely \(w\boxtimes_m v\). Hence the finite ring operations are forced by the quotient skeleton and the canonical residue-fold representative.
 \end{proof}
 
+\begin{theorem}[Universal residue-fold factorization and operation rigidity]\label{thm:residue-fold-factorization-rigidity}
+Fix \(m\ge1\), set \(M_m:=F_{m+2}\), and let \(\Fold_m:\mathcal D\to X_m\) be the residue-fold map from Theorem \ref{thm:finite-quotient-residue-fold-classification}. Then:
+\begin{enumerate}
+  \item \textbf{(no hidden finite fold invariants)} for every set \(Y\), composition with \(\Fold_m\) gives a bijection between maps \(g:X_m\to Y\) and maps \(f:\mathcal D\to Y\) that are constant on \(\equiv_m\)-classes:
+\[
+g\longmapsto g\circ\Fold_m,
+\qquad
+\{g:X_m\to Y\}\cong\{f:\mathcal D\to Y:\ a\equiv_m b\Rightarrow f(a)=f(b)\};
+\]
+  \item \textbf{(finite operation classification)} for every arity \(r\ge1\), composition with \(V_m\) gives a bijection between operations \(T:X_m^r\to X_m\) and residue operations \(\tau:(\ZZ/(M_m\ZZ))^r\to\ZZ/(M_m\ZZ)\), namely
+\[
+V_m\bigl(T(w_1,\dots,w_r)\bigr)
+=\tau\bigl(V_m(w_1),\dots,V_m(w_r)\bigr);
+\]
+  \item under this classification, the only binary operations compatible with quotient addition and quotient multiplication are respectively \(\boxplus_m\) and \(\boxtimes_m\).
+\end{enumerate}
+Consequently, a fixed-resolution table or automaton on \(X_m\) has mathematical content here only through its compatibility with the residue fold; the classified quotient skeleton, rather than transport along an arbitrary bijection, is what forces the finite arithmetic used in the sequel.
+\end{theorem}
+
+\begin{proof}
+First note that \(\Fold_m\) is the identity on \(X_m\). Indeed, if \(w\in X_m\), then \(V_m(w)\in\{0,\dots,M_m-1\}\) and Lemma \ref{lem:zeckendorf-range-bijection} gives
+\[
+\Fold_m(w)=Z_m(V_m(w))=w.
+\]
+
+Let \(f:\mathcal D\to Y\) be constant on \(\equiv_m\)-classes. By Theorem \ref{thm:finite-quotient-residue-fold-classification}, every \(a\in\mathcal D\) satisfies \(a\equiv_m\Fold_m(a)\). Hence
+\[
+f(a)=f(\Fold_m(a)).
+\]
+Thus \(f=g\circ\Fold_m\), where \(g\) is the restriction of \(f\) to \(X_m\). This factorization is unique because \(\Fold_m\) is the identity on \(X_m\). Conversely, if \(f=g\circ\Fold_m\) and \(a\equiv_m b\), then Theorem \ref{thm:finite-quotient-residue-fold-classification} gives \(\Fold_m(a)=\Fold_m(b)\), so \(f(a)=f(b)\). This proves the first assertion.
+
+For the operation classification, use the bijection \(V_m:X_m\to\ZZ/(M_m\ZZ)\) from Theorem \ref{thm:finite-resolution-mod}. Given \(T:X_m^r\to X_m\), define
+\[
+\tau(\alpha_1,
+\dots,\alpha_r)
+:=V_m\bigl(T(Z_m(\alpha_1),\dots,Z_m(\alpha_r))\bigr),
+\]
+where \(Z_m(\alpha)\) denotes the unique element of \(X_m\) with residue \(\alpha\). This \(\tau\) is forced by the displayed compatibility identity, because the entries \(w_i\) may be chosen as \(Z_m(\alpha_i)\). Conversely, given \(\tau\), the formula
+\[
+T_\tau(w_1,
+\dots,w_r)
+:=Z_m\bigl(\tau(V_m(w_1),\dots,V_m(w_r))\bigr)
+\]
+defines the unique operation inducing \(\tau\). This proves the second assertion.
+
+If a binary operation is required to realize quotient addition, its residue operation is necessarily \((x,y)\mapsto x+y\) in \(\ZZ/(M_m\ZZ)\), so the preceding bijection gives exactly \(\boxplus_m\). If it is required to realize quotient multiplication, its residue operation is necessarily \((x,y)\mapsto xy\), and the same bijection gives exactly \(\boxtimes_m\). The final sentence is the stated interpretation of this classification.
+\end{proof}
+
 \begin{proposition}[Finite windows are residue folds, not stable truncations]\label{prop:finite-stable-compatibility-warning}
 Fix \(m\ge 1\) and write \(M_m:=F_{m+2}\). Define the fold-aware residue projection
 \[
@@ -351,6 +399,8 @@ This proves commutativity of the square. Since each \(V_{m_k}\) is a ring isomor
 Taking inverse limits of the commuting squares gives a bijection \(\widehat V\) from compatible stable-address threads to compatible residue threads. The ring operations and topology on \(X_{\mathrm{Fib},2}\) are therefore transported coordinatewise from \(\ZZ_{\mathrm{Fib},2}\). With these transported operations, \(\widehat V\) is an isomorphism of rings; because both inverse-limit topologies are the subspace topologies inside products of finite discrete sets and each coordinate map \(V_{m_k}\) is a bijection, \(\widehat V\) is also a homeomorphism.
 \end{proof}
 
+The next proposition records standard profinite consequences after the divisibility subtower has been chosen. The paper-specific point is not compactness itself, but the fold-aware maps \(\rho^X_{k+1\to k}\) in Proposition \ref{prop:transported-dyadic-stable-address-system}, which identify the finite residue quotients with compatible stable-address threads.
+
 \begin{proposition}[Basic properties of the inverse-limit ring: finite quotients and a compact unit group]\label{prop:fib-adic-basic}
 Let \(\ZZ_{\mathrm{Fib},2}\) be as in Definition \ref{def:fib-adic-ring}. Then:
 \begin{enumerate}
@@ -368,7 +418,7 @@ and these projections satisfy the compatibility relation \(\rho_{k+1\to k}\circ 
 \end{proposition}
 
 \begin{proof}
-Parts (1) and (2) are standard facts about inverse limits: a product of finite discrete rings is compact, the inverse limit is a closed subset of that product, and the ring operations are inherited componentwise. For (3), if \(x=(x_k)_k\in \ZZ_{\mathrm{Fib},2}\) is invertible, then each coordinate \(x_k=\pi_k(x)\) is invertible because \(\pi_k\) is a ring homomorphism. Conversely, assume that every \(x_k\) is a unit and write \(y_k:=x_k^{-1}\). Since \(\rho_{k+1\to k}(x_{k+1})=x_k\), applying \(\rho_{k+1\to k}\) to \(x_{k+1}y_{k+1}=1\) shows that \(\rho_{k+1\to k}(y_{k+1})\) is an inverse of \(x_k\); by uniqueness of inverses, \(\rho_{k+1\to k}(y_{k+1})=y_k\). Thus \((y_k)_k\) belongs to the inverse limit and is the inverse of \(x\). Hence the unit group is exactly the inverse limit of the finite unit groups and is compact as a closed subgroup of a compact product.
+Parts (1) and (2) are standard facts about profinite inverse limits: a product of finite discrete rings is compact, the inverse limit is a closed subset of that product, and the ring operations are inherited componentwise. For (3), if \(x=(x_k)_k\in \ZZ_{\mathrm{Fib},2}\) is invertible, then each coordinate \(x_k=\pi_k(x)\) is invertible because \(\pi_k\) is a ring homomorphism. Conversely, assume that every \(x_k\) is a unit and write \(y_k:=x_k^{-1}\). Since \(\rho_{k+1\to k}(x_{k+1})=x_k\), applying \(\rho_{k+1\to k}\) to \(x_{k+1}y_{k+1}=1\) shows that \(\rho_{k+1\to k}(y_{k+1})\) is an inverse of \(x_k\); by uniqueness of inverses, \(\rho_{k+1\to k}(y_{k+1})=y_k\). Thus \((y_k)_k\) belongs to the inverse limit and is the inverse of \(x\). Hence the unit group is exactly the inverse limit of the finite unit groups and is compact as a closed subgroup of a compact product. The nonstandard input from this paper is supplied earlier by the Fibonacci divisibility tower and the fold-aware stable-address projections, not by these general profinite conclusions.
 \end{proof}
 
 \begin{remark}[Relation with the projective limit of admissible prefixes]\label{rem:fib-adic-vs-syntax}
