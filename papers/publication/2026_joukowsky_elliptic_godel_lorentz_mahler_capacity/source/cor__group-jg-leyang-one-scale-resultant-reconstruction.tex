@@ -50,75 +50,103 @@ S_r(z)=z^n a_n^{-1}r^n P(z)P(r^{-2}z^{-1})
 which is the required factorization. The description of the zero set follows immediately from the two factors.
 \end{proof}
 
-\begin{definition}[Noiseless full-polynomial Lee--Yang reconstruction data]\label{def:noiseless-leyang-reconstruction-data}
-A noiseless one-scale Lee--Yang reconstruction datum is a pair \((r,Q)\) with the following exact information.
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item The scale \(r\in\RR\) is known exactly and satisfies \(r>1\).
-  \item The polynomial \(Q\in\CC[w]\) is given by its full coefficient list, not by samples, truncations, moments, or noisy approximations.
-  \item The datum is certified to lie in the monic Lee--Yang transport class: there exists a monic polynomial \(P\in\CC[u]\), all of whose zeros lie on \(\TT\), such that \(Q=Q_r\) for \(P\) under Definition \ref{def:reciprocal-transport-normalization}.
-\end{enumerate}
-The degree of the hidden Lee--Yang polynomial is part of the recovered information, not an external input: it is
+
+\begin{definition}[Full-polynomial transport inverse data]\label{def:noiseless-leyang-reconstruction-data}
+Fix \(r>1\) and a polynomial \(Q\in\CC[w]\) of degree \(n\ge1\).  Its pulled-back doubled polynomial is
 \[
-n=\deg_w Q,
+S_{r,Q}(z):=\operatorname{Res}_w\!\bigl(Q(w),\,r z^2-w z+r^{-1}\bigr)=z^nQ(J_r(z)).
 \]
-because the leading coefficient of \(Q_r\) is \(a_0\ne0\).  Exact shell selection means the following algebraic operation.  Form
-\[
-S_{r,Q}(z):=\operatorname{Res}_w\!\bigl(Q(w),\,r z^2-w z+r^{-1}\bigr),
-\]
-factor it over its exact splitting field with multiplicities, and select the sub-divisor supported on \(|z|=1\).  Equivalently, after choosing any exact real \(\rho\) with \(r^{-2}<\rho<1\), select the degree-\(n\) sub-divisor supported in \(|z|>\rho\).  This definition excludes partial coefficient data, numerical thresholding, and stability assertions under perturbation.
+A noiseless one-scale Lee--Yang datum is a pair \((r,Q)\) for which there exists a monic polynomial \(P\in\CC[z]\), all of whose zeros lie on \(\TT\), such that \(Q=Q_r\) for \(P\).  A multiscale transport datum consists of distinct exact scales \(r_0,
+\dots,r_n>1\) and the full coefficient lists of \(Q_{r_0},\dots,Q_{r_n}\), all known to arise from the same monic degree-\(n\) source polynomial with nonzero constant term.
 \end{definition}
 
 \begin{proposition}[Exact reconstruction interface and shell-factor selection]\label{prop:exact-reconstruction-interface}
-Fix a noiseless one-scale Lee--Yang reconstruction datum \((r,Q)\) in the sense of Definition \ref{def:noiseless-leyang-reconstruction-data}, and let \(P\) be the certified monic Lee--Yang source polynomial.  Put \(n=\deg_w Q\) and define
+Fix a noiseless one-scale Lee--Yang reconstruction datum \((r,Q)\), and let \(P\) be the certified monic Lee--Yang source polynomial.  Put \(n=\deg_w Q\).  The exact algebraic procedure
 \[
-S_{r,Q}(z):=\operatorname{Res}_w\!\bigl(Q(w),\,r z^2-w z+r^{-1}\bigr).
+S_{r,Q}(z)=\operatorname{Res}_w\!\bigl(Q(w),rz^2-wz+r^{-1}\bigr),
 \]
-The reconstruction interface is the following exact algebraic procedure.
-\begin{enumerate}[label=\textup{(\alph*)}]
-  \item Recover \(n\) as \(\deg_w Q\).
-  \item Compute the resultant \(S_{r,Q}\) as a polynomial in \(z\).  Equivalently, because \(r z^2-wz+r^{-1}=z(J_r(z)-w)\), compute \(S_{r,Q}(z)=z^n Q(J_r(z))\) and expand.
-  \item Factor \(S_{r,Q}\) over the exact splitting field, keeping multiplicities in its zero divisor.
-  \item Select precisely the degree-\(n\) sub-divisor supported on \(|z|=1\), equivalently the degree-\(n\) sub-divisor in \(|z|>\rho\) for any exact \(\rho\) with \(r^{-2}<\rho<1\), and define \(P_{\mathrm{rec}}\) to be the unique monic polynomial whose zero divisor is that selected sub-divisor.
-\end{enumerate}
-Then \(P_{\mathrm{rec}}=P\).  In particular, repeated Lee--Yang zeros are reconstructed with their original multiplicities, and the normalization ambiguity is removed by the final monic normalization.
+followed by selection of the degree-\(n\) zero sub-divisor supported on \(|z|=1\), equivalently supported in \(|z|>\rho\) for any exact \(\rho\) satisfying \(r^{-2}<\rho<1\), returns the original polynomial \(P\).  Repeated roots are recovered with multiplicity.
 \end{proposition}
 
 \begin{proof}
-Since \(P\) is monic, the double-resultant identity of Corollary \ref{cor:leyang-double-resultant} gives
+By Corollary \ref{cor:leyang-double-resultant},
 \[
-S_{r,Q}(z)=r^n P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+S_{r,Q}(z)=r^nP(z)\Bigl[z^nP(r^{-2}z^{-1})\Bigr]
 \]
-Since \(Q=Q_r\) has leading coefficient \(a_0\ne0\), its degree is the degree \(n\) of \(P\), proving the degree-recovery step.  If \(\zeta\) is a zero of \(P\) of multiplicity \(m\), then \(|\zeta|=1\) and the first factor contributes exactly multiplicity \(m\) at \(z=\zeta\).  The corresponding zero of the second factor is \(r^{-2}\zeta^{-1}\), again with multiplicity \(m\), and it lies on the circle \(|z|=r^{-2}<1\).  Thus the two factors of \(S_{r,Q}\) have disjoint radial supports: one shell is \(|z|=1\), and the other is \(|z|=r^{-2}\).  Selection of the unit-circle sub-divisor is therefore well-defined and preserves all multiplicities, even when several zeros of \(P\) coincide.  The annular selection with \(r^{-2}<\rho<1\) is equivalent because the outer shell is precisely \(|z|=1\) and the inner shell is precisely \(|z|=r^{-2}\).
-
-The monic polynomial with a prescribed finite zero divisor is unique, namely \(\prod_\zeta (z-\zeta)^{m_\zeta}\).  Applying this to the selected unit-circle divisor yields exactly the original monic polynomial \(P\).  The computation uses the exact value of \(r\), the full polynomial \(Q_r\), and exact factorization or equivalent exact zero-divisor data; no numerical thresholding or partial observation enters the argument.
+because the source is monic.  The first factor has all zeros on \(|z|=1\), and the second has all zeros on \(|z|=r^{-2}\).  The two shells are disjoint, so the selected degree-\(n\) divisor is exactly the zero divisor of \(P\).  A monic polynomial is uniquely determined by its zero divisor, proving the claim.
 \end{proof}
 
-\begin{theorem}[Exact one-scale Lee--Yang inverse theorem]\label{thm:leyang-single-scale-reconstruction}
-Fix an exact real number \(r>1\).  Let \(\mathcal L\) be the class of all monic polynomials \(P\in\CC[z]\) of positive degree with every zero on \(\TT\), counted with multiplicity, and with nonzero constant term.  For \(P\in\mathcal L\), let \(Q_r\) be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}.  Then the one-scale transport map
-\[
-\mathcal T_r:\ P\longmapsto Q_r
-\]
-is injective on \(\mathcal L\).  More explicitly, the input consists exactly of the noiseless full-polynomial datum \((r,Q_r)\): the scale \(r\) is known exactly, every coefficient of \(Q_r\) is known exactly, and the datum is certified to lie in the monic Lee--Yang transport class.  The output is the unique source polynomial \(P\), recovered by the following finite algebraic procedure:
+\begin{theorem}[Algebraic Mahler transport inverse package]\label{thm:algebraic-mahler-transport-inverse-package}
+Let \(n\ge1\), and let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(z_1\cdots z_n\ne0\).  For each \(r>1\), let \(Q_r\) be the Joukowsky transport polynomial.  The following inverse statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
-  \item set \(n=\deg_w Q_r\);
-  \item form
+  \item \textbf{Multiscale Laurent interpolation.}  If \(r_0,
+  \dots,r_n>1\) are distinct and the full polynomials \(Q_{r_0},
+  \dots,Q_{r_n}\) are known, then \(P\) is reconstructed uniquely.  More explicitly, the constant term of \(Q_r\) is
   \[
-  S_r(z)=\operatorname{Res}_w\!\bigl(Q_r(w),rz^2-wz+r^{-1}\bigr);
+  Q_r(0)=\sum_{m=-n}^{n}c_m r^m,
   \]
-  \item take the degree-\(n\) zero sub-divisor of \(S_r\) supported on \(|z|=1\), equivalently supported in \(|z|>\rho\) for any exact \(\rho\) with \(r^{-2}<\rho<1\);
-  \item return the monic polynomial with that zero divisor.
+  a Laurent polynomial with no powers congruent to \(n-1\) modulo \(2\), whose top coefficient is \((-1)^n\) and whose bottom coefficient is \((-1)^n(z_1\cdots z_n)^{-2}\).  The same interpolation applied to all coefficients of \(Q_r(w)\) recovers the elementary symmetric functions of the unordered pairs \(\{z_j,z_j^{-1}\}\), and hence the doubled divisor
+  \[
+  \{z_1,
+  \dots,z_n\}\cup\{z_1^{-1},
+  \dots,z_n^{-1}\}.
+  \]
+  Together with the recovered product \(z_1\cdots z_n\) from the bottom coefficient, this determines the original monic source polynomial.
+
+  \item \textbf{One-scale resonance fibers.}  Fix one scale \(r>1\), and suppose the roots are indexed so that the unordered pairs
+  \[
+  \{z_j,r^{-2}/z_j\},\qquad 1\le j\le n,
+  \]
+  are read from the doubled polynomial \(S_{r,Q_r}\).  Every monic source polynomial \(\widetilde P\) with nonzero constant term and the same one-scale transport polynomial \(Q_r\) is obtained by replacing, for a subset \(S\subset\{1,
+  \dots,n\}\), the roots \(z_j\) with \(r^{-2}/z_j\) for exactly the indices in \(S\), subject to the finite subset-resonance condition
+  \[
+  \prod_{j\in S}z_j^2=r^{-2|S|}.
+  \]
+  Conversely every such resonant subset gives the same monic one-scale transport polynomial.
+
+  \item \textbf{Lee--Yang and separation injectivity.}  If \(|z_j|=1\) for all \(j\), then no nonempty subset can satisfy the resonance condition, because its left side has modulus one and its right side has modulus \(r^{-2|S|}<1\).  Hence the one-scale map is injective on the monic Lee--Yang class.  More generally, one-scale injectivity holds for every source divisor for which no nonempty subset satisfies the displayed resonance.
 \end{enumerate}
-This theorem asserts exact uniqueness and reconstruction only in the certified noiseless full-coefficient regime.  It excludes noisy observations, truncated coefficient lists, unknown scale, approximate shell separation, and stability under perturbation.
 \end{theorem}
 
 \begin{proof}
-For each \(P\in\mathcal L\), the hypotheses of Corollary \ref{cor:leyang-double-resultant} hold with \(K=\CC\), and monicity gives \(a_n=1\).  Hence
+For (i), write
 \[
-S_r(z)=r^n\,P(z)\,\Bigl[z^nP\!\bigl(r^{-2}z^{-1}\bigr)\Bigr].
+Q_r(w)=\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1}).
 \]
-When \(r>1\), every zero of the second factor lies on \(|z|=r^{-2}<1\), whereas the zeros of \(P\) lie on \(|z|=1\). The two spectral shells are therefore disjoint.  Also \(Q_r\) has degree \(n=\deg P\), because the leading coefficient in the transport polynomial is the nonzero constant term of the monic source polynomial.
+The coefficient of \(w^{n-k}\) in
+\[
+Q_r(w)=\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1})
+\]
+is
+\[
+(-1)^k\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}).
+\]
+It is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\), hence after factoring \(r^{-k}\) it is a polynomial of degree \(k\le n\) in \(r^2\).  Its highest \(r\)-power coefficient is \((-1)^k e_k(z_1,\dots,z_n)\).  The \(n+1\) distinct scale values determine this Laurent polynomial uniquely by interpolation, for every \(k\).  Thus all elementary symmetric functions of \(z_1,\dots,z_n\) are recovered, and these are precisely the coefficients of the monic polynomial \(P\).
 
-The procedure listed in the theorem is exactly the procedure in Proposition \ref{prop:exact-reconstruction-interface}; that proposition proves that the selected unit-circle zero divisor, with multiplicities, is the zero divisor of \(P\), and the monic polynomial with a prescribed zero divisor is unique.  Therefore the output of the procedure is the original source polynomial.  If \(\mathcal T_r(P_1)=\mathcal T_r(P_2)\), then the same input pair \((r,Q_r)\) gives the same resultant and hence the same selected unit-circle divisor; the reconstruction procedure returns both \(P_1\) and \(P_2\), so \(P_1=P_2\).  The final exclusions are precisely the hypotheses not used in the algebraic shell argument: the proof requires exact \(r\), the full polynomial \(Q_r\), certification of the Lee--Yang transport class, and exact factorization or equivalent exact zero-divisor data.
+For (ii), the resultant identity gives
+\[
+S_{r,Q_r}(z)=r^nP(z)\Bigl[z^nP(r^{-2}z^{-1})\Bigr],
+\]
+so any source with the same \(Q_r\) must choose exactly one element from each unordered pair \(\{z_j,r^{-2}/z_j\}\); otherwise the doubled zero divisor would differ.  Replacing the roots indexed by \(S\) changes the product of all source roots by the factor
+\[
+\prod_{j\in S}\frac{r^{-2}/z_j}{z_j}=r^{-2|S|}\prod_{j\in S}z_j^{-2}.
+\]
+The transported root multiset is unchanged by the replacement.  The full polynomial \(Q_r\), including its leading coefficient, is unchanged exactly when the source constant term is unchanged, equivalently when the displayed product factor is one, which is precisely
+\(\prod_{j\in S}z_j^2=r^{-2|S|}\).  Under that condition the same \(Q_r\) is obtained.  This proves both necessity and sufficiency.
+
+Clause (iii) follows immediately from the modulus argument stated in the theorem.  The same proof shows the general separation criterion: if no nonempty subset satisfies the finite resonance equation, then only \(S=\varnothing\) is possible in (ii).
+\end{proof}
+
+\begin{theorem}[Exact one-scale Lee--Yang inverse theorem]\label{thm:leyang-single-scale-reconstruction}
+Fix an exact real number \(r>1\).  Let \(\mathcal L\) be the class of all monic polynomials \(P\in\CC[z]\) of positive degree with every zero on \(\TT\), counted with multiplicity.  For \(P\in\mathcal L\), let \(Q_r\) be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}.  Then the one-scale transport map
+\[
+\mathcal T_r:\ P\longmapsto Q_r
+\]
+is injective on \(\mathcal L\), and the original source is recovered from \((r,Q_r)\) by the shell selection of Proposition \ref{prop:exact-reconstruction-interface}.
+\end{theorem}
+
+\begin{proof}
+This is the Lee--Yang case of Theorem \ref{thm:algebraic-mahler-transport-inverse-package}(iii), with the constructive shell recovery supplied by Proposition \ref{prop:exact-reconstruction-interface}.
 \end{proof}
 
 \begin{corollary}[Annular shell projection certificate]\label{cor:leyang-annular-shell-projection}
@@ -126,14 +154,56 @@ Under the hypotheses of Theorem \ref{thm:leyang-single-scale-reconstruction}, le
 \[
 r^{-2}<\rho<1.
 \]
-Then \(P\) is equivalently recovered as the unique monic degree-\(n\) factor of \(S_r\) whose zeros lie in the exterior annulus \(\{|z|>\rho\}\). The complementary monic factor has all its zeros in \(\{|z|<\rho\}\). Thus the one-scale reconstruction used here is an exact spectral-shell projection, not a partial-data or noisy inverse theorem.
+Then \(P\) is equivalently recovered as the unique monic degree-\(n\) factor of \(S_{r,Q_r}\) whose zeros lie in the exterior annulus \(\{|z|>\rho\}\).  The complementary monic factor has all its zeros in \(\{|z|<\rho\}\).
 \end{corollary}
 
 \begin{proof}
-By Corollary \ref{cor:leyang-double-resultant}, the zeros of \(S_r\) are the disjoint union
+The zeros of \(S_{r,Q_r}\) are the disjoint union
 \[
 \{z_1,
-\dots,z_n\}\cup\{r^{-2}z_1^{-1},\dots,r^{-2}z_n^{-1}\}.
+\dots,z_n\}\cup\{r^{-2}z_1^{-1},
+\dots,r^{-2}z_n^{-1}\}.
 \]
-The first set lies on \(|z|=1\), hence in \(|z|>\rho\). The second lies on \(|z|=r^{-2}\), hence in \(|z|<\rho\). Therefore exactly \(n\) zeros of \(S_r\), counted with multiplicity, lie in the exterior annulus \(|z|>\rho\), and they are precisely the zeros of \(P\). Since \(P\) is monic, these zeros determine the monic degree-\(n\) factor uniquely. The final sentence records the hypotheses used in the argument: the full polynomial \(Q_r\), the exact value of \(r\), and the exact shell separation are all part of the reconstruction input.
+The first set lies on \(|z|=1\), and the second lies on \(|z|=r^{-2}\).  The chosen \(\rho\) separates the two shells, so the exterior factor is exactly \(P\).
 \end{proof}
+
+\begin{theorem}[Quantitative annular Rouch\'e stability]\label{thm:quantitative-annular-rouche-stability}
+Let \(P\in\mathcal L\) have degree \(n\), let \(r>1\), let \(Q_r\) be its transport polynomial, and define
+\[
+S_r(z):=S_{r,Q_r}(z)=z^nQ_r(J_r(z)).
+\]
+Choose radii
+\[
+r^{-2}<\rho_-<\rho_+<1
+\]
+and set
+\[
+\Gamma_-:=\{|z|=\rho_-\},\qquad
+\Gamma_+:=\{|z|=\rho_+\},\qquad
+\Gamma_0:=\{|z|=\rho_+^{-1}\},
+\]
+so that the annulus \(\rho_+<|z|<\infty\) contains precisely the \(n\) unit-circle zeros of \(S_r\), while the disk \(|z|<\rho_-\) contains precisely the \(n\) inner zeros.  Define the Rouch\'e envelope
+\[
+\Delta(r,P;\rho_-,\rho_+):=\frac12\min\left\{
+\inf_{z\in\Gamma_-}|S_r(z)|,
+\inf_{z\in\Gamma_+}|S_r(z)|,
+\inf_{z\in\Gamma_0}|S_r(z)|
+\right\}>0.
+\]
+If \(\widetilde Q\in\CC[w]\) has \(\deg \widetilde Q\le n\) and
+\[
+\sup_{z\in\Gamma_-\cup\Gamma_+\cup\Gamma_0}
+\left|z^n\widetilde Q(J_r(z))-S_r(z)\right|<\Delta(r,P;\rho_-,\rho_+),
+\]
+then \(\widetilde S(z):=z^n\widetilde Q(J_r(z))\) has exactly \(n\) zeros, counted with multiplicity, in the annulus
+\[
+\rho_+<|z|<\rho_+^{-1}
+\]
+and no zeros on \(\Gamma_+\) or \(\Gamma_0\).  The monic degree-\(n\) polynomial formed from the zeros in \(\rho_+<|z|<\rho_+^{-1}\) is the unique canonical annular factor associated with \(\widetilde Q\).  For \(\widetilde Q=Q_r\) this factor is exactly \(P\).
+\end{theorem}
+
+\begin{proof}
+The zeros of \(S_r\) are on \(|z|=r^{-2}\) and \(|z|=1\), so none of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\) meets the zero set.  Hence the three infima in the definition of \(\Delta\) are positive.  On each contour the perturbation is strictly smaller than \(|S_r|\), so Rouch\'e's theorem implies that \(\widetilde S\) and \(S_r\) have the same number of zeros in the disks bounded by these contours.  Thus \(\widetilde S\) has \(n\) zeros in \(|z|<\rho_-\), \(n\) zeros in \(|z|<\rho_+\), and \(2n\) zeros in \(|z|<\rho_+^{-1}\).  Therefore no zeros lie in \(\rho_-<|z|<\rho_+\), and exactly \(n\) zeros lie in \(\rho_+<|z|<\rho_+^{-1}\).  A finite zero divisor determines a unique monic polynomial, so those \(n\) annular zeros define a unique canonical annular factor.  In the unperturbed case the annular zeros are precisely the zeros of \(P\).
+\end{proof}
+
+
