@@ -173,6 +173,45 @@ def _is_scoped_negative_or_obstruction(text: str) -> bool:
     return any(marker in lower for marker in markers)
 
 
+def _is_publishable_obstruction(text: str) -> bool:
+    """Return whether a negative packet is itself a real math contribution.
+
+    A routine failure analysis is useful internally, but it is not the kind of
+    result this project should surface to the operator as outreach-ready.  A
+    negative packet only counts as public-facing when it gives a reusable
+    no-go theorem, a complete obstruction, or a route-killing reduction that
+    changes how the original problem should be attacked.
+    """
+    lower = text.lower()
+    obstruction_markers = (
+        "publishable obstruction",
+        "complete obstruction",
+        "new obstruction",
+        "no-go theorem",
+        "impossibility theorem",
+        "route-killing obstruction",
+        "rules out this approach",
+        "rules out the approach",
+        "refutes the standard route",
+        "refutes a standard route",
+        "changes the attack surface",
+        "previously unstated obstruction",
+        "strictly stronger obstruction",
+    )
+    if not any(marker in lower for marker in obstruction_markers):
+        return False
+    weak_markers = (
+        "toy check",
+        "sanity check",
+        "source summary",
+        "metadata only",
+        "no theorem is claimed",
+        "not publication grade",
+        "bounded-progress only",
+    )
+    return not any(marker in lower for marker in weak_markers)
+
+
 def _is_bounded_progress_packet(text: str) -> bool:
     lower = text.lower()
     markers = (
@@ -418,12 +457,13 @@ def evaluate(todo: TodoSpec) -> ImpactGateVerdict:
         rationale.append("collaboration lane should use direct email first; secondary channels remain available after the reviewed note exists")
 
     serious_math_claim = strong_claim and contribution in {"theorem", "counterexample", "construction", "research_note"}
-    curated_problem_result = _is_curated_problemsilike(todo) and (strong_claim or scoped_negative)
+    publishable_obstruction = scoped_negative and _is_publishable_obstruction(text)
+    curated_problem_result = _is_curated_problemsilike(todo) and (strong_claim or publishable_obstruction)
     serious_certificate = (
         "certificate" in contribution
         and strong_claim
         and not bounded_progress
-        and not scoped_negative
+        and not publishable_obstruction
         and topic >= 8
     )
     if (

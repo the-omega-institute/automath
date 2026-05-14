@@ -60,8 +60,9 @@ TARGETS_DIR = SCRIPT_DIR / "targets"
 DISPATCH_WORKTREE = SCRIPT_DIR / "dispatch_worktree.py"
 ORACLE_RECONCILE = SCRIPT_DIR / "outreach_oracle_reconcile.py"
 LOCAL_REPAIR = SCRIPT_DIR / "outreach_local_repair.py"
+ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766/status")
 
-DEFAULT_PARALLEL = 2
+DEFAULT_PARALLEL = 4
 DEFAULT_POLL_INTERVAL = 120
 DEFAULT_CLAIM_STALE_HOURS = 4
 DEFAULT_TARGET_TIMEOUT_S = 7200  # 2h hard cap per target
@@ -283,16 +284,46 @@ def _live_worker_for_target(todo_id: str, slug: str) -> bool:
             check=False,
         )
     except Exception:
-        return False
+        proc = None
     todo_markers = (
         f"dispatch_worktree.py --supervise --supervise-id {todo_id}",
         f"dispatch_worktree.py --supervise-id {todo_id}",
         f"outreach_local_repair.py --todo-id {todo_id}",
     )
-    for line in (proc.stdout or "").splitlines():
-        if any(marker in line for marker in todo_markers):
+    if proc is not None:
+        for line in (proc.stdout or "").splitlines():
+            if any(marker in line for marker in todo_markers):
+                return True
+            if slug and f" {slug} " in f" {line} ":
+                return True
+    if _oracle_task_active_for_target(todo_id, slug):
+        return True
+    return False
+
+
+def _oracle_task_active_for_target(todo_id: str, slug: str) -> bool:
+    """Return true if the Oracle bridge has an active task for this target."""
+    if not slug and not todo_id:
+        return False
+    try:
+        import urllib.request
+
+        with urllib.request.urlopen(ORACLE_SERVER_URL, timeout=3) as resp:  # noqa: S310 - localhost status endpoint.
+            payload = json.loads(resp.read().decode("utf-8", errors="replace"))
+    except Exception:
+        return False
+    active = payload.get("agents")
+    if not isinstance(active, dict):
+        return False
+    slug_marker = f"deep_{slug}_"
+    id_marker = f"_{todo_id.lower()}_"
+    for row in active.values():
+        if not isinstance(row, dict):
+            continue
+        task_id = str(row.get("task_id") or "")
+        if slug and slug_marker in task_id:
             return True
-        if slug and f" {slug} " in f" {line} ":
+        if todo_id and id_marker in task_id.lower():
             return True
     return False
 
@@ -338,7 +369,8 @@ def cleanup_stale_claims(stale_hours: float = DEFAULT_CLAIM_STALE_HOURS) -> int:
                 pid = int((pid_file.read_text(encoding="utf-8").strip() or "0"))
             except (OSError, ValueError):
                 pid = 0
-        if mtime > cutoff and (_pid_alive(pid) or _live_dispatch_for_slug(d.name)):
+        live = _pid_alive(pid) or _live_dispatch_for_slug(d.name)
+        if live:
             continue
         # stale claim: either too old or pid is gone
         try:
