@@ -450,6 +450,31 @@ def main() -> int:
         if not complete or not details.get("postcheck", {}).get("ok"):
             raise AssertionError(f"artifact-complete watchdog did not accept valid handoff: {complete} {details}")
 
+        stale_workup = target_dir / "codex_workup.md"
+        stale_question = target_dir / "next_oracle_question.md"
+        stale_report = target_dir / "local_repair_report.md"
+        for path in (stale_workup, stale_question, stale_report):
+            path.write_text(path.read_text(encoding="utf-8") + "\nolder handoff\n", encoding="utf-8")
+        incomplete_stdout = target_dir / "incomplete_handoff.jsonl"
+        incomplete_stdout.write_text(json.dumps(replay_event) + "\n", encoding="utf-8")
+        incomplete, incomplete_details = local_repair._codex_handoff_incomplete_after_local_work(
+            target_dir,
+            incomplete_stdout,
+            reserved_before=local_repair._snapshot_reserved_harness_files(target_dir),
+            ignore_reserved_names={"science_gate.json", "outreach_impact_gate.json"},
+            run_started_at="2999-01-01T00:00:00+00:00",
+            idle_seconds=0,
+        )
+        if not incomplete:
+            raise AssertionError(
+                "incomplete-handoff watchdog should reject completed local math without refreshed handoff: "
+                f"{incomplete_details}"
+            )
+        if not incomplete_details.get("postcheck") or incomplete_details["postcheck"].get("ok"):
+            raise AssertionError(f"incomplete-handoff watchdog did not preserve failing postcheck: {incomplete_details}")
+        if int(incomplete_details.get("codex_command_trace", {}).get("mathematical_action_command_count") or 0) <= 0:
+            raise AssertionError(f"incomplete-handoff watchdog lost math command trace: {incomplete_details}")
+
     return 0
 
 

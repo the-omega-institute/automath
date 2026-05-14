@@ -44,6 +44,9 @@ CODEX_BIN = shutil.which("codex") or "/opt/homebrew/bin/codex"
 CODEX_ARTIFACT_WATCHDOG_IDLE_SECONDS = float(
     os.environ.get("OUTREACH_CODEX_ARTIFACT_WATCHDOG_IDLE_SECONDS", "45") or "45"
 )
+CODEX_INCOMPLETE_HANDOFF_IDLE_SECONDS = float(
+    os.environ.get("OUTREACH_CODEX_INCOMPLETE_HANDOFF_IDLE_SECONDS", "120") or "120"
+)
 
 sys_path_added = False
 try:
@@ -259,6 +262,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
     target_dir = target_dir.resolve()
     target_rel = str(target_dir.relative_to(REPO_ROOT))
     interesting_commands: list[dict] = []
+    target_command_status_by_id: dict[str, str] = {}
     command_count = 0
     target_command_count = 0
     completed_target_command_count = 0
@@ -383,6 +387,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             continue
         if item.get("type") != "command_execution":
             continue
+        item_id = str(item.get("id") or "")
         command = str(item.get("command") or "")
         command_count += 1
         output = str(item.get("aggregated_output") or "")
@@ -390,6 +395,8 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         if not mentions_target:
             continue
         target_command_count += 1
+        if item_id:
+            target_command_status_by_id[item_id] = str(item.get("status") or "")
         if len(interesting_commands) < 12:
             interesting_commands.append(
                 {
@@ -447,6 +454,9 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             "target_command_count": target_command_count,
             "commands": interesting_commands,
         }
+    active_target_command_count = sum(
+        1 for status in target_command_status_by_id.values() if status == "in_progress"
+    )
     if not has_completed_target_command:
         return {
             "ok": False,
@@ -454,6 +464,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
             "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
             "command_count": command_count,
             "target_command_count": target_command_count,
+            "active_target_command_count": active_target_command_count,
             "completed_target_command_count": completed_target_command_count,
             "commands": interesting_commands,
         }
@@ -462,6 +473,7 @@ def _codex_jsonl_local_command_trace(stdout_path: Path, target_dir: Path) -> dic
         "stdout_log": str(stdout_path.relative_to(REPO_ROOT)),
         "command_count": command_count,
         "target_command_count": target_command_count,
+        "active_target_command_count": active_target_command_count,
         "completed_target_command_count": completed_target_command_count,
         "inspection_command_count": inspection_command_count,
         "replay_command_count": replay_command_count,
@@ -1344,6 +1356,69 @@ def _codex_artifacts_complete_while_process_alive(
     return bool(postcheck.get("ok")), {"codex_command_trace": trace, "postcheck": postcheck}
 
 
+def _codex_handoff_incomplete_after_local_work(
+    target_dir: Path,
+    stdout_path: Path,
+    *,
+    reserved_before: dict[str, dict] | None,
+    ignore_reserved_names: set[str],
+    run_started_at: str,
+    idle_seconds: float | None = None,
+) -> tuple[bool, dict]:
+    """Detect a worker that did math but failed to write the handoff.
+
+    This is intentionally not a success path.  It exists to keep the research
+    loop from blocking on a Codex wrapper after the child has already completed
+    target-local mathematical commands but never refreshed the handoff files
+    that the Oracle gate consumes.  In that case the right outcome is a quick,
+    explicit local_repair failure, not a stale Oracle prompt and not a long
+    silent wait.
+    """
+    idle_seconds = CODEX_INCOMPLETE_HANDOFF_IDLE_SECONDS if idle_seconds is None else idle_seconds
+    if not stdout_path.exists():
+        return False, {}
+    try:
+        mtime = stdout_path.stat().st_mtime
+    except OSError:
+        return False, {}
+    if (time.time() - mtime) < idle_seconds:
+        return False, {}
+    trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
+    if not trace.get("ok"):
+        return False, {"codex_command_trace": trace}
+    if int(trace.get("mathematical_action_command_count") or 0) <= 0:
+        return False, {"codex_command_trace": trace}
+    if int(trace.get("active_target_command_count") or 0) > 0:
+        return False, {"codex_command_trace": trace}
+    postcheck = _postcheck_local_repair_artifacts(
+        target_dir,
+        codex_trace=trace,
+        reserved_before=reserved_before,
+        ignore_reserved_names=ignore_reserved_names,
+        run_started_at=run_started_at,
+    )
+    if postcheck.get("ok"):
+        return False, {"codex_command_trace": trace, "postcheck": postcheck}
+    diagnostics = " ".join(str(item) for item in postcheck.get("diagnostics", []))
+    handoff_missing_or_stale = any(
+        marker in diagnostics
+        for marker in (
+            "codex_workup.md was not refreshed",
+            "next_oracle_question.md was not refreshed",
+            "local_repair_report.md was not refreshed",
+            "missing codex_workup.md",
+            "missing concrete next_oracle_question.md",
+            "missing or too-short local_repair_report.md",
+        )
+    )
+    return handoff_missing_or_stale, {
+        "codex_command_trace": trace,
+        "postcheck": postcheck,
+        "idle_seconds": round(time.time() - mtime, 3),
+        "reason": "local mathematical action completed but Codex handoff files were not refreshed",
+    }
+
+
 def _candidate_verifier_scripts(target_dir: Path) -> list[Path]:
     candidates: list[Path] = []
     standard = target_dir / "verify_results.py"
@@ -1761,6 +1836,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     started = _now_iso()
     artifact_watchdog: dict = {"triggered": False}
+    incomplete_handoff_watchdog: dict = {"triggered": False}
     try:
         with open(stdout_path, "w", encoding="utf-8") as stdout_f, open(
             stderr_path,
@@ -1807,6 +1883,24 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                             "was still alive; terminated process group after artifact completion\n"
                         )
                         break
+                    incomplete, incomplete_details = _codex_handoff_incomplete_after_local_work(
+                        target_dir,
+                        stdout_path,
+                        reserved_before=reserved_before,
+                        ignore_reserved_names=harness_refreshed,
+                        run_started_at=started,
+                    )
+                    if incomplete:
+                        incomplete_handoff_watchdog = {"triggered": True, **incomplete_details}
+                        _terminate_process_group(proc)
+                        rc = 125
+                        stderr_f.write(
+                            "\nINCOMPLETE_HANDOFF_WATCHDOG: target-local mathematical commands "
+                            "completed, but Codex did not refresh codex_workup.md, "
+                            "next_oracle_question.md, and local_repair_report.md; "
+                            "terminated process group so the supervisor can retry cleanly\n"
+                        )
+                        break
                     time.sleep(2)
             except subprocess.TimeoutExpired:
                 _terminate_process_group(proc)
@@ -1832,9 +1926,10 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         except OSError:
             pass
     output_path.write_text(raw or "", encoding="utf-8")
-    codex_command_trace = artifact_watchdog.get("codex_command_trace") or _codex_jsonl_local_command_trace(
-        stdout_path,
-        target_dir,
+    codex_command_trace = (
+        artifact_watchdog.get("codex_command_trace")
+        or incomplete_handoff_watchdog.get("codex_command_trace")
+        or _codex_jsonl_local_command_trace(stdout_path, target_dir)
     )
     # Do not immediately replay an expensive target-local computation that the
     # Codex worker just ran and recorded in the JSONL trace.  The postcheck
@@ -1854,6 +1949,8 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         ignore_reserved_names=harness_refreshed,
         run_started_at=started,
     )
+    if incomplete_handoff_watchdog.get("postcheck") and not artifact_watchdog.get("postcheck"):
+        postcheck = incomplete_handoff_watchdog["postcheck"]
     postcheck_ok = bool(postcheck.get("ok"))
     # Codex CLI can occasionally return a nonzero process status after writing a
     # complete target-local workup and a terminal JSONL `turn.completed` event.
@@ -1879,6 +1976,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "verifier_audit": verifier_audit,
         "postcheck": postcheck,
         "artifact_watchdog": artifact_watchdog,
+        "incomplete_handoff_watchdog": incomplete_handoff_watchdog,
         "status_note": status_note,
         "gate_before": gate_before,
         "gate_after": gate_after,
