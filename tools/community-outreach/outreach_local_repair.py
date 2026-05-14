@@ -2081,6 +2081,13 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     handoff_restore = {"triggered": False}
     if not postcheck_ok:
         handoff_restore = _restore_handoff_files(target_dir, handoff_before)
+    incomplete_handoff_failure = bool(incomplete_handoff_watchdog.get("triggered")) and not postcheck_ok
+    transport_failure = bool(codex_transport_failure and not postcheck_ok and not incomplete_handoff_failure)
+    failure_kind = ""
+    if incomplete_handoff_failure:
+        failure_kind = "incomplete_handoff"
+    elif transport_failure:
+        failure_kind = "codex_transport"
     report = {
         "ok": ok,
         "todo_id": todo_id,
@@ -2098,8 +2105,9 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         "artifact_watchdog": artifact_watchdog,
         "incomplete_handoff_watchdog": incomplete_handoff_watchdog,
         "status_note": status_note,
-        "failure_kind": "codex_transport" if codex_transport_failure and not postcheck_ok else "",
-        "transport_failure": codex_transport_failure and not postcheck_ok,
+        "failure_kind": failure_kind,
+        "transport_failure": transport_failure,
+        "incomplete_handoff": incomplete_handoff_failure,
         "gate_before": gate_before,
         "gate_after": gate_after,
     }

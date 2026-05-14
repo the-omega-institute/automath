@@ -1190,13 +1190,62 @@ def _global_codex_transport_backoff_applies() -> bool:
     return _now() < until
 
 
+def _read_local_repair_report(slug: str) -> dict:
+    path = TARGETS_DIR / slug / "local_repair_last.json"
+    try:
+        report = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return report if isinstance(report, dict) else {}
+
+
+def _local_repair_failure_kind(slug: str) -> str:
+    report = _read_local_repair_report(slug)
+    if report.get("ok") is True:
+        return ""
+    kind = str(report.get("failure_kind") or "")
+    if kind:
+        return kind
+    if report.get("incomplete_handoff") is True:
+        return "incomplete_handoff"
+    if report.get("incomplete_handoff_watchdog", {}).get("triggered") is True:
+        return "incomplete_handoff"
+    if report.get("transport_failure") is True:
+        return "codex_transport"
+    return ""
+
+
+def _local_repair_backoff_label(slug: str) -> str:
+    kind = _local_repair_failure_kind(slug)
+    if kind == "incomplete_handoff":
+        return "Codex incomplete handoff"
+    if kind == "codex_transport":
+        return "Codex local-repair transport failure"
+    return "Codex local-repair failure"
+
+
 def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") -> None:
     target_dir = TARGETS_DIR / slug
     target_dir.mkdir(parents=True, exist_ok=True)
     path = target_dir / "local_repair_last.json"
+    existing = _read_local_repair_report(slug)
+    failure_kind = str(existing.get("failure_kind") or "")
+    incomplete_handoff = bool(
+        existing.get("incomplete_handoff") is True
+        or existing.get("incomplete_handoff_watchdog", {}).get("triggered") is True
+    )
+    transport_failure = bool(existing.get("transport_failure") is True)
+    if not failure_kind and incomplete_handoff:
+        failure_kind = "incomplete_handoff"
+    if not failure_kind and transport_failure:
+        failure_kind = "codex_transport"
+    if not failure_kind and _path_contains_codex_transport_failure(log_path):
+        failure_kind = "codex_transport"
+        transport_failure = True
     backoff_s = max(0, TRANSPORT_FAILURE_BACKOFF_MINUTES) * 60
     backoff_until = _now() + backoff_s
-    payload = {
+    payload = dict(existing) if existing else {}
+    payload.update({
         "ok": False,
         "reason": reason,
         "stderr_log": log_path,
@@ -1204,12 +1253,16 @@ def _note_local_repair_backoff(slug: str, *, reason: str, log_path: str = "") ->
         "backoff_until_epoch": backoff_until,
         "backoff_until": datetime.fromtimestamp(backoff_until, timezone.utc).isoformat(timespec="seconds"),
         "backoff_minutes": TRANSPORT_FAILURE_BACKOFF_MINUTES,
-    }
+    })
+    if failure_kind:
+        payload["failure_kind"] = failure_kind
+    payload["incomplete_handoff"] = incomplete_handoff
+    payload["transport_failure"] = transport_failure and failure_kind == "codex_transport"
     try:
         path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     except OSError as exc:
         loop_log(f"{slug}: failed to write local repair backoff marker: {exc}")
-    if _path_contains_codex_transport_failure(log_path):
+    if failure_kind == "codex_transport":
         _note_global_codex_transport_backoff(reason=reason, log_path=log_path)
 
 
@@ -1555,13 +1608,13 @@ def _transport_backoff_applies(slug: str) -> bool:
 
 
 def _local_repair_transport_failure(slug: str) -> bool:
-    path = TARGETS_DIR / slug / "local_repair_last.json"
-    try:
-        report = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return False
+    report = _read_local_repair_report(slug)
     if report.get("ok") is True:
         return False
+    if _local_repair_failure_kind(slug) == "incomplete_handoff":
+        return False
+    if report.get("transport_failure") is True:
+        return True
     stderr_log = str(report.get("stderr_log") or "")
     if not stderr_log:
         return False
@@ -1895,7 +1948,7 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
             continue
         if _local_repair_backoff_applies(slug):
             loop_log(
-                f"{tid}: recent Codex local-repair transport failure; "
+                f"{tid}: recent {_local_repair_backoff_label(slug)}; "
                 f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min and trying another target"
             )
             continue

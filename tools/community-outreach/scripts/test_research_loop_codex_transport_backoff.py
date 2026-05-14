@@ -52,6 +52,44 @@ def main() -> int:
         if loop._global_codex_transport_backoff_applies():
             raise AssertionError("expired global Codex transport backoff should not apply")
 
+        slug = "incomplete_handoff_case"
+        target_dir = state_dir / "targets" / slug
+        target_dir.mkdir(parents=True)
+        loop.TARGETS_DIR = state_dir / "targets"
+        loop.TRANSPORT_FAILURE_BACKOFF_MINUTES = 5
+        incomplete_log = state_dir / "incomplete.stderr.txt"
+        incomplete_log.write_text(
+            "INCOMPLETE_HANDOFF_WATCHDOG: target-local mathematical commands completed\n",
+            encoding="utf-8",
+        )
+        (target_dir / "local_repair_last.json").write_text(
+            json.dumps({
+                "ok": False,
+                "returncode": 125,
+                "stderr_log": str(incomplete_log),
+                "failure_kind": "incomplete_handoff",
+                "transport_failure": False,
+                "incomplete_handoff": True,
+                "incomplete_handoff_watchdog": {"triggered": True},
+            }),
+            encoding="utf-8",
+        )
+
+        loop._note_local_repair_backoff(slug, reason="pre-oracle codex workup rc=125", log_path=str(incomplete_log))
+        report = json.loads((target_dir / "local_repair_last.json").read_text(encoding="utf-8"))
+        if report.get("failure_kind") != "incomplete_handoff":
+            raise AssertionError(f"incomplete handoff failure_kind was not preserved: {report}")
+        if report.get("transport_failure") is not False:
+            raise AssertionError(f"incomplete handoff should not be transport_failure: {report}")
+        if not loop._local_repair_backoff_applies(slug):
+            raise AssertionError("incomplete handoff should still create a short local backoff")
+        if loop._local_repair_transport_failure(slug):
+            raise AssertionError("incomplete handoff should not classify as local-repair transport failure")
+        if loop._local_repair_backoff_label(slug) != "Codex incomplete handoff":
+            raise AssertionError("incomplete handoff backoff label should be human-readable and distinct")
+        if loop._global_codex_transport_backoff_applies():
+            raise AssertionError("incomplete handoff should not trigger global Codex transport backoff")
+
     return 0
 
 
