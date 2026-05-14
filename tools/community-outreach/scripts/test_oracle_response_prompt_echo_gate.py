@@ -89,6 +89,12 @@ Do not summarize or restart. Start with the next mathematical move.
 """
 
 
+METADATA_WRAPPED_CANCEL = """<!-- outreach-oracle: {"task_id": "deep_demo", "status": "completed"} -->
+
+ERROR: Task cancelled by server: deep_demo
+"""
+
+
 REAL_ANSWER = """1. CONTRACT TARGET: prove the rank-one geometric-summand reduction under finite determinant.
 2. CURRENT SCORE: the summand-to-ambient Katz route is blocked by a direct-sum toy obstruction.
 3. MOVE: use the Picard-Vessiot Galois group of the rank-one summand and Katz's theorem for algebraic solutions.
@@ -111,6 +117,8 @@ def main() -> int:
         raise AssertionError("short prompt echo was not detected")
     if not gate.is_non_substantive_oracle_response(PROMPT_ECHO):
         raise AssertionError("prompt echo should be non-substantive")
+    if not gate.is_non_substantive_oracle_response(METADATA_WRAPPED_CANCEL):
+        raise AssertionError("metadata-wrapped transport stub should be non-substantive")
     if not consultant._is_transport_stub_response(PROMPT_ECHO):
         raise AssertionError("consultant should reject prompt echo as transport/extraction failure")
     if not loop._is_transport_stub_response(PROMPT_ECHO):

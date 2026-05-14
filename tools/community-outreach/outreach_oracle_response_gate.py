@@ -53,8 +53,18 @@ def claim_packet_oracle_response(text: str) -> str:
     return (text or "")[idx + len(marker) :].strip()
 
 
+def strip_oracle_metadata_header(text: str) -> str:
+    stripped = (text or "").lstrip()
+    if not stripped.startswith("<!-- outreach-oracle:"):
+        return text or ""
+    end = stripped.find("-->")
+    if end < 0:
+        return stripped
+    return stripped[end + 3 :].strip()
+
+
 def is_transport_stub_response(text: str) -> bool:
-    stripped = (text or "").strip()
+    stripped = strip_oracle_metadata_header(text).strip()
     if not stripped:
         return True
     lowered = stripped.lower()
@@ -71,7 +81,7 @@ def is_prompt_echo_response(text: str) -> bool:
     text starts with the worker-role sentence and contains several prompt
     section headings near the front, treat it as extraction failure.
     """
-    stripped = (text or "").strip()
+    stripped = strip_oracle_metadata_header(text).strip()
     if not stripped:
         return False
     lowered = stripped.lower()
