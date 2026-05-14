@@ -277,6 +277,25 @@ def main() -> int:
         if postcheck.get("ok") or "local_repair_last.json" not in " ".join(postcheck.get("diagnostics", [])):
             raise AssertionError(f"reserved harness overwrite was not rejected: {postcheck}")
 
+        reserved_before = local_repair._snapshot_reserved_harness_files(target_dir)
+        (target_dir / "science_gate.json").write_text(
+            json.dumps({"status": "harness_refreshed"}) + "\n",
+            encoding="utf-8",
+        )
+        (target_dir / "outreach_impact_gate.json").write_text(
+            json.dumps({"status": "harness_refreshed"}) + "\n",
+            encoding="utf-8",
+        )
+        postcheck = local_repair._postcheck_local_repair_artifacts(
+            target_dir,
+            codex_trace=trace,
+            reserved_before=reserved_before,
+            ignore_reserved_names={"science_gate.json", "outreach_impact_gate.json"},
+        )
+        diagnostics = " ".join(postcheck.get("diagnostics", []))
+        if "science_gate.json" in diagnostics or "outreach_impact_gate.json" in diagnostics:
+            raise AssertionError(f"harness-refreshed ledgers should be ignored: {postcheck}")
+
     return 0
 
 

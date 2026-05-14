@@ -1038,12 +1038,20 @@ def _snapshot_reserved_harness_files(target_dir: Path) -> dict[str, dict]:
     return snapshots
 
 
-def _reserved_harness_file_mutations(target_dir: Path, before: dict[str, dict] | None) -> list[str]:
+def _reserved_harness_file_mutations(
+    target_dir: Path,
+    before: dict[str, dict] | None,
+    *,
+    ignore_names: set[str] | None = None,
+) -> list[str]:
     if not before:
         return []
+    ignored = ignore_names or set()
     after = _snapshot_reserved_harness_files(target_dir)
     mutations: list[str] = []
     for name in RESERVED_HARNESS_FILES:
+        if name in ignored:
+            continue
         old = before.get(name, {"exists": False})
         new = after.get(name, {"exists": False})
         if old.get("exists") != new.get("exists"):
@@ -1059,11 +1067,16 @@ def _postcheck_local_repair_artifacts(
     *,
     codex_trace: dict | None = None,
     reserved_before: dict[str, dict] | None = None,
+    ignore_reserved_names: set[str] | None = None,
 ) -> dict:
     target_dir = target_dir.resolve()
     diagnostics: list[str] = []
 
-    reserved_mutations = _reserved_harness_file_mutations(target_dir, reserved_before)
+    reserved_mutations = _reserved_harness_file_mutations(
+        target_dir,
+        reserved_before,
+        ignore_names=ignore_reserved_names,
+    )
     if reserved_mutations:
         diagnostics.append(
             "Codex modified reserved harness files: "
@@ -1537,17 +1550,14 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
     gate_after = _run_science_gate(todo_id, write_ledger=True)
     codex_command_trace = _codex_jsonl_local_command_trace(stdout_path, target_dir)
-    # science_gate.json is intentionally refreshed by the harness above; do
-    # not charge that mutation to the Codex worker.
-    reserved_for_worker = {
-        name: snap
-        for name, snap in reserved_before.items()
-        if name != "science_gate.json"
-    }
+    # These ledgers may be refreshed by harness code around the Codex worker;
+    # do not charge those deterministic supervisor writes to the worker.
+    harness_refreshed = {"science_gate.json", "outreach_impact_gate.json"}
     postcheck = _postcheck_local_repair_artifacts(
         target_dir,
         codex_trace=codex_command_trace,
-        reserved_before=reserved_for_worker,
+        reserved_before=reserved_before,
+        ignore_reserved_names=harness_refreshed,
     )
     postcheck_ok = bool(postcheck.get("ok"))
     # Codex CLI can occasionally return a nonzero process status after writing a
