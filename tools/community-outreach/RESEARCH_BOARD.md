@@ -1045,7 +1045,7 @@ _Inbox graduation rationale_: The source is current, public, inspectable, and st
 
 | field | value |
 |---|---|
-| Status | Backlog (candidate inbox graduation) |
+| Status | OPERATOR_DEPRIORITIZED · duplicate of T-32 by canonical Problems I Like URL https://www.problemsilike.com/3 |
 | Source | https://www.problemsilike.com/3 |
 | Type | open problem |
 | Untouched | Source page is inspectable and marked OPEN; it states no partial or complete solutions are claimed in comments, has 0 comments, and was last edited 10 May 2026. This must still be backed by a literature check before serious run time because the source itself warns that relevant literature may exist. |
