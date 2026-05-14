@@ -29,6 +29,58 @@ Z_m:=\sum_{y\in X_m}u_m(y)e^{-\beta_m\ell(y)}.
 The total-variation estimate and convergence of \(\beta_m\) are precisely the two remaining clauses in Definition \ref{def:homogenized-lastbit-audit-hypothesis}.  No compatibility map between different resolutions is part of that definition, so cross-resolution interpretations are justified only as estimates for the chosen sequence of finite certificates unless a fold-aware stable system is separately supplied. \qedhere
 \end{proof}
 
+\begin{theorem}[Exact logical scope and stability of the conditional last-bit certificate]\label{thm:lastbit-certificate-logical-scope-stability}
+Let \(\nu_m\) be any sequence of probability laws on \(X_m\).  Suppose that there are laws
+\[
+\widehat\nu_m(x)=\frac{u_m(x)e^{-\gamma_m\ell(x)}}{\sum_{y\in X_m}u_m(y)e^{-\gamma_m\ell(y)}},
+\qquad
+\gamma_m\to\log\varphi,
+\]
+and numbers \(\varepsilon_m\to0\) such that \(D_{\mathrm{TV}}(\nu_m,\widehat\nu_m)\le\varepsilon_m\).  Then
+\[
+\Bigl|D_{\mathrm{TV}}(\nu_m,u_m)-D_{\mathrm{TV}}(\ell_\#\nu_m,\ell_\#u_m)\Bigr|
+\le 2\varepsilon_m,
+\]
+and
+\[
+D(\widehat\nu_m\|u_m)	o
+D\!\left(\mathrm{Bern}\!\left(\frac{1}{1+\varphi^2}\right)\Big\|\mathrm{Bern}\!\left(\frac{1}{\varphi^2}\right)\right).
+\]
+If, in addition, \(\varepsilon_m\log |X_m|+h(\varepsilon_m)\to0\), where \(h\) is the binary entropy function, then \(D(\nu_m\|u_m)\) has the same limit.  Consequently the one-bit testing and KL asymptotics in this section are theorems for the class of laws admitting such a one-bit exponential approximation certificate; in the audited bin-fold application this class membership is exactly the conditional homogenized last-bit audit hypothesis of Definition \ref{def:homogenized-lastbit-audit-hypothesis}.
+\end{theorem}
+\begin{proof}
+The likelihood ratio \(\widehat\nu_m/u_m\) is a function of \(\ell\) alone.  Hence the optimal total-variation test for the pair \((\widehat\nu_m,u_m)\) is \(\ell\)-measurable, and therefore
+\[
+D_{\mathrm{TV}}(\widehat\nu_m,u_m)=D_{\mathrm{TV}}(\ell_\#\widehat\nu_m,\ell_\#u_m).
+\]
+Since total variation is contractive under the pushforward by \(\ell\),
+\[
+D_{\mathrm{TV}}(\ell_\#\nu_m,
+\ell_\#\widehat\nu_m)
+\le D_{\mathrm{TV}}(\nu_m,\widehat\nu_m)
+\le\varepsilon_m.
+\]
+Two applications of the triangle inequality give the displayed \(2\varepsilon_m\) bound.
+
+For the entropy limit, again use that \(\widehat\nu_m/u_m\) depends only on \(\ell\), so
+\[
+D(\widehat\nu_m\|u_m)=D(\ell_\#\widehat\nu_m\|\ell_\#u_m).
+\]
+Lemma \ref{lem:audited-binary-fold-certificate-identities} gives \(|X_m|=F_{m+2}\) and \(|\ell^{-1}(1)|=F_m\), whence \(\ell_\#u_m(1)=F_m/F_{m+2}\to\varphi^{-2}\).  The exponential tilt with \(\gamma_m\to\log\varphi\) gives
+\[
+\ell_\#\widehat\nu_m(1)
+=\frac{e^{-\gamma_m}F_m/F_{m+2}}{(1-F_m/F_{m+2})+e^{-\gamma_m}F_m/F_{m+2}}
+\longrightarrow \frac{1}{1+\varphi^2}.
+\]
+Continuity of Bernoulli relative entropy on \((0,1)^2\) proves the displayed limit for \(D(\widehat\nu_m\|u_m)\).  Finally,
+\[
+\bigl|D(\nu_m\|u_m)-D(\widehat\nu_m\|u_m)\bigr|
+=|H(\widehat\nu_m)-H(\nu_m)|
+\le \varepsilon_m\log(|X_m|-1)+h(\varepsilon_m)
+\]
+by the standard finite entropy-continuity inequality.  The additional hypothesis makes this last bound tend to zero.  Applying the theorem with \(\nu_m=\mu_m\), \(\widehat\nu_m=\bar\mu_m\), \(\gamma_m=\beta_m\), and \(\varepsilon_m=C(\varphi/2)^m\) is precisely the conditional audit hypothesis, completing the connection to the bin-fold theorem chain. \qedhere
+\end{proof}
+
 \begin{theorem}[Conditional last-bit testing equivalence: total variation collapses to one bit]\label{thm:window6-binfold-lastbit-lecam-equivalence}
 Let \(\mu_m\) be the pushforward distribution of the bin-fold model on \(X_m\), and let \(u_m:=\mathrm{Unif}(X_m)\).
 Let \(\ell:X_m\to\{0,1\}\) be the last-bit statistic introduced in Section \ref{sec:preliminaries}.
