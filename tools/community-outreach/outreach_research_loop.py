@@ -1934,6 +1934,60 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
 # ---------------------------------------------------------------------------
 
 
+def _is_problemsilike_target(todo) -> bool:
+    return bool(re.search(r"https?://(?:www\.)?problemsilike\.com/\d+", getattr(todo, "source", "") or "", re.I))
+
+
+def _problemsilike_problem_id(todo) -> int:
+    m = re.search(r"problemsilike\.com/(\d+)", getattr(todo, "source", "") or "", re.I)
+    if not m:
+        return 10**9
+    try:
+        return int(m.group(1))
+    except ValueError:
+        return 10**9
+
+
+def _target_has_completed_initial_harness_cycle(slug: str) -> bool:
+    """Best-effort local marker for source -> Oracle -> local replay completion.
+
+    This intentionally checks only local bytes.  A target counts as having had
+    a first full cycle only after it has local workup/replay artifacts, a next
+    Oracle question, and an Oracle claim packet in the target directory.
+    """
+    target_dir = TARGETS_DIR / slug
+    required = (
+        target_dir / "research.md",
+        target_dir / "results.json",
+        target_dir / "next_oracle_question.md",
+        target_dir / "local_repair_last.json",
+    )
+    if not all(p.exists() and p.stat().st_size > 0 for p in required):
+        return False
+    return any(p.is_file() and p.stat().st_size > 0 for p in target_dir.glob("oracle_claim_packet*.md"))
+
+
+def _selection_priority(item) -> tuple[int, int, int, str]:
+    """Sort key for research target selection.
+
+    Problems I Like is a curated high-impact source and is currently hot.  OPEN
+    entries should be consumed before lower-yield frontier churn, especially
+    before repeatedly revisiting targets that have already produced only
+    NEEDS_EVIDENCE artifacts.  Science and impact gates still decide readiness;
+    this only chooses the next internal math-lane target.
+    """
+    _, t = item
+    topic = getattr(t, "topic_score", None) or 0
+    fit = getattr(t, "fit_score", None) or 0
+    if _is_problemsilike_target(t) and not _is_skipped(getattr(t, "status", "") or ""):
+        problem_id = _problemsilike_problem_id(t)
+        slug = t.slug()
+        if not _target_has_completed_initial_harness_cycle(slug):
+            return (0, problem_id, -(topic + fit), t.todo_id)
+        return (1, problem_id, -(topic + fit), t.todo_id)
+    return (2, 10**9, -(topic + fit), t.todo_id)
+
+
 def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str, str]]:
     """Return (todo_id, slug) of the next actionable target, or None."""
     skip_slugs = skip_slugs or set()
@@ -1942,14 +1996,7 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
     todos = _parse_board_safe()
     if not todos:
         return None
-    # Sort by topic_score desc then todo_id asc for determinism.
-    def _key(item):
-        _, t = item
-        topic = getattr(t, "topic_score", None) or 0
-        fit = getattr(t, "fit_score", None) or 0
-        return (-(topic + fit), t.todo_id)
-
-    for tid, todo in sorted(todos.items(), key=_key):
+    for tid, todo in sorted(todos.items(), key=_selection_priority):
         status = getattr(todo, "status", "") or ""
         if _is_skipped(status):
             continue
