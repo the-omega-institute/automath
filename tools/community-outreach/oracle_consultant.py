@@ -1476,6 +1476,26 @@ def _local_grounding_tokens(text: str) -> set[str]:
     return tokens
 
 
+def _extract_markdown_section(text: str, heading: str, *, max_chars: int) -> str:
+    """Extract one `## Heading` section from a target-local Codex workup."""
+    if not text:
+        return ""
+    pattern = re.compile(
+        r"(?ims)^##\s+"
+        + re.escape(heading).replace(r"\ ", r"\s+")
+        + r"\s*$"
+        + r"(.*?)"
+        + r"(?=^##\s+|\Z)"
+    )
+    match = pattern.search(text)
+    if not match:
+        return ""
+    body = match.group(1).strip()
+    if len(body) <= max_chars:
+        return body
+    return body[: max_chars // 2] + "\n\n...[middle truncated]...\n\n" + body[-max_chars // 2 :]
+
+
 def _question_is_grounded_in_local_work(question: str, workup: str, slug: str) -> bool:
     q = (question or "").lower()
     if not q.strip():
