@@ -62,6 +62,10 @@ DEFAULT_TIMEOUT = 7200  # 2 hours; ChatGPT Pro thinking can run 60+ min
 DEFAULT_POLL_INTERVAL = 30
 DEFAULT_ZERO_EXTRACT_CANCEL_S = int(os.environ.get("OUTREACH_ORACLE_ZERO_EXTRACT_CANCEL_S", "7200"))
 PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
+ALLOW_PRE_ORACLE_WORKUP_REUSE = os.environ.get(
+    "OUTREACH_ALLOW_PRE_ORACLE_WORKUP_REUSE",
+    "",
+).lower() in {"1", "true", "yes"}
 ORACLE_TRANSPORT_ERROR_RE = re.compile(
     r"^\s*ERROR\b|No assistant output after|re-extract: nothing meaningful|"
     r"Task cancelled by server|empty response",
@@ -1601,9 +1605,11 @@ def _run_pre_oracle_codex_workup_for_todo(todo: TodoSpec, *, per_turn_timeout: i
     Oracle must get a Codex-processed local workup, not a raw board card.
     """
     slug = todo.slug()
-    ok, reason = _pre_oracle_codex_handoff_ok(slug, require_recent=True)
-    if ok:
-        return {"ok": True, "slug": slug, "reused_recent": True}
+    reason = ""
+    if ALLOW_PRE_ORACLE_WORKUP_REUSE:
+        ok, reason = _pre_oracle_codex_handoff_ok(slug, require_recent=True)
+        if ok:
+            return {"ok": True, "slug": slug, "reused_recent": True}
     script = REPO_ROOT / "tools/community-outreach/outreach_local_repair.py"
     if not script.exists():
         return {"ok": False, "slug": slug, "error": f"missing local repair script at {script}"}

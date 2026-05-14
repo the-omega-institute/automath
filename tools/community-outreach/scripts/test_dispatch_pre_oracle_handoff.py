@@ -133,6 +133,23 @@ def main() -> int:
         if not ok:
             raise AssertionError(f"fresh handoff without claim packet should pass: {reason}")
 
+        dispatch.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
+        dispatch.LOCAL_REPAIR_SCRIPT_DEFAULT = repo_root / "missing_local_repair.py"
+        ok, reason, _log = dispatch._run_pre_oracle_codex_workup("T-DEMO", "demo", timeout=60)
+        if ok or "local repair script missing" not in reason:
+            raise AssertionError(
+                "direct dispatch path reused a recent handoff without explicit supervisor allowance: "
+                f"ok={ok} reason={reason!r}"
+            )
+        dispatch.ALLOW_PRE_ORACLE_WORKUP_REUSE = True
+        ok, reason, log = dispatch._run_pre_oracle_codex_workup("T-DEMO", "demo", timeout=60)
+        if not ok or "reused" not in log:
+            raise AssertionError(
+                "supervisor-allowed dispatch path did not reuse the current fresh handoff: "
+                f"ok={ok} reason={reason!r} log={log!r}"
+            )
+        dispatch.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
+
         weak_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now - 2))
         weak_payload["postcheck"]["substantive_local_work"].pop("report_declares_pre_oracle_processing")
         (target_dir / "local_repair_last.json").write_text(

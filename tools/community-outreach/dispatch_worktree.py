@@ -69,6 +69,10 @@ LOCAL_REPAIR_SCRIPT_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outr
 SCHEMA_VERSION = "community-outreach-state-v3-research-board"
 SUPERVISOR_SCHEMA_VERSION = "community-outreach-supervisor-v1"
 PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
+ALLOW_PRE_ORACLE_WORKUP_REUSE = os.environ.get(
+    "OUTREACH_ALLOW_PRE_ORACLE_WORKUP_REUSE",
+    "",
+).lower() in {"1", "true", "yes"}
 PRE_ORACLE_WORKUP_GATE_CHARS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_GATE_CHARS", "60000") or "60000")
 
 @dataclass
@@ -1721,12 +1725,13 @@ def _run_pre_oracle_codex_workup(todo_id: str, slug: str, *, timeout: int) -> tu
     must come from a fresh target-local Codex replay/workup, not from stale
     metadata or a previous round's generic continuation prompt.
     """
-    recent_ok, recent_reason = _pre_oracle_codex_workup_recent(
-        slug,
-        max_age_seconds=PRE_ORACLE_WORKUP_REUSE_SECONDS,
-    )
-    if recent_ok:
-        return True, "", "recent Codex handoff reused"
+    if ALLOW_PRE_ORACLE_WORKUP_REUSE:
+        recent_ok, recent_reason = _pre_oracle_codex_workup_recent(
+            slug,
+            max_age_seconds=PRE_ORACLE_WORKUP_REUSE_SECONDS,
+        )
+        if recent_ok:
+            return True, "", "recent Codex handoff reused from current supervisor pass"
     if not LOCAL_REPAIR_SCRIPT_DEFAULT.exists():
         return False, "local repair script missing", str(LOCAL_REPAIR_SCRIPT_DEFAULT)
     log_dir = STATE_DIR_DEFAULT / "research_loop_logs"

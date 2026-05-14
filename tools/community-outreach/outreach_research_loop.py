@@ -447,11 +447,14 @@ def _spawn_oracle_deep(todo_id: str, timeout_s: int) -> tuple[int, str]:
         "--oracle-max-turns", str(batch_turns),
         "--oracle-timeout", str(per_turn_timeout),
     ]
+    env = os.environ.copy()
+    env["OUTREACH_ALLOW_PRE_ORACLE_WORKUP_REUSE"] = "1"
     hard_timeout = max(timeout_s, batch_turns * per_turn_timeout + 300)
     with open(log_path, "ab") as logf:
         proc = subprocess.Popen(
             cmd,
             cwd=str(REPO_ROOT),
+            env=env,
             stdout=logf,
             stderr=subprocess.STDOUT,
             start_new_session=True,

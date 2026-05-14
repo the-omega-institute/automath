@@ -103,6 +103,30 @@ def _local_repair_last(stdout_log: str, *, finished_at: float) -> str:
     )
 
 
+def _todo(oracle: object) -> object:
+    return oracle.TodoSpec(
+        todo_id="T-DEMO",
+        title="Demo certificate",
+        status="active",
+        source="local",
+        type_="open_problem",
+        untouched="",
+        fit_score=10,
+        topic_score=10,
+        effort="small",
+        risk="low",
+        final_display="short note",
+        success_gate="verifier passes",
+        statement="demo",
+        prior="",
+        omega_fit_detail="",
+        attack_plan=[],
+        worktree_inputs=[],
+        deliverables=["tools/community-outreach/targets/demo/research.md"],
+        raw_block="",
+    )
+
+
 def main() -> int:
     oracle = _load_oracle_consultant()
     section = oracle._extract_markdown_section(_workup(), "Commands run", max_chars=20000)
@@ -156,6 +180,37 @@ def main() -> int:
         ok, reason = oracle._pre_oracle_target_files_recent("demo", max_age_seconds=3600)
         if not ok:
             raise AssertionError(f"fresh handoff without claim packet should pass: {reason}")
+
+        old_repo_root = oracle.REPO_ROOT
+        oracle.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
+        oracle.REPO_ROOT = target_root / "fake_repo_without_local_repair"
+        try:
+            ok_result = oracle._run_pre_oracle_codex_workup_for_todo(
+                _todo(oracle),
+                per_turn_timeout=120,
+            )
+        finally:
+            oracle.REPO_ROOT = old_repo_root
+            oracle.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
+        if ok_result.get("ok") or ok_result.get("reused_recent"):
+            raise AssertionError(
+                "oracle consultant direct path reused a recent handoff without explicit supervisor allowance: "
+                f"{ok_result}"
+            )
+        if "missing local repair script" not in str(ok_result.get("error") or ""):
+            raise AssertionError(f"direct path should have tried local repair instead of reuse: {ok_result}")
+
+        oracle.ALLOW_PRE_ORACLE_WORKUP_REUSE = True
+        ok_result = oracle._run_pre_oracle_codex_workup_for_todo(
+            _todo(oracle),
+            per_turn_timeout=120,
+        )
+        if not ok_result.get("ok") or not ok_result.get("reused_recent"):
+            raise AssertionError(
+                "oracle consultant did not reuse a fresh handoff when supervisor allowance was explicit: "
+                f"{ok_result}"
+            )
+        oracle.ALLOW_PRE_ORACLE_WORKUP_REUSE = False
 
         weak_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now - 2))
         weak_payload["postcheck"]["substantive_local_work"].pop("report_declares_pre_oracle_processing")
