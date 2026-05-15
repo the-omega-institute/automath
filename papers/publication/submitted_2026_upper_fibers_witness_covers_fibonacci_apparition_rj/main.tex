@@ -169,7 +169,7 @@ Let \(I_k\) denote the number of irredundant covers of a \(k\)-element set and
 let \(CI_k\) denote the number of connected irredundant covers.
 
 \begin{theorem}\label{thm:intro-odd-irredundant}
-If \(n\) is odd and \(k=\#\Coord(n)\), then fixed primitive primes realize every
+If \(n\ge3\) is odd and \(k=\#\Coord(n)\), then fixed primitive primes realize every
 irredundant cover of \(\Coord(n)\) as a distinct element of \(\mathcal M_n\).
 Connected covers realize connected minimal generators. Consequently
 \[
@@ -200,19 +200,22 @@ Theorem~\ref{thm:three-coordinate-nonemptiness}, with the finite recipe in
 Proposition~\ref{prop:three-coordinate-finite-recipe}).
 
 \begin{theorem}\label{thm:intro-connected}
-Let $q\in B_n$. Form the support hypergraph on $\mathcal P(n)$ whose
-hyperedges are the prime-coordinate supports of the apparition indices of
-the prime-power factors of $q$. If its connected components are
-$C_1,\ldots,C_s$, then
+Let $q\in B_n$. Form the support hypergraph on $\Coord(n)$, equivalently on
+$\mathcal P(n)$ through Lemma~\ref{lem:coordinate-label-bridge}, whose
+hyperedges are the coordinate supports of the apparition indices of the
+prime-power factors of $q$. If its connected components are
+$C_1,\ldots,C_s\subseteq\Coord(n)$, then
 \[
 q=q_{C_1}\cdots q_{C_s},\qquad \alpha(q_{C_j})=n_{C_j}
 \quad(1\le j\le s),
 \]
-where $q_{C_j}\in B_{n_{C_j}}$ is connected. This factorization is unique.
+where $q_{C_j}\in B_{n_{C_j}}$ is connected. This factorization is unique, and
+the same formula for \(n_{C_j}\) is obtained after transporting the blocks to
+prime labels.
 The same statement holds for minimal generators, with
 $q_{C_j}\in\mathcal M_{n_{C_j}}$. Consequently
 \[
-A(n)=\sum_{\pi\in\Part(\mathcal P(n))}
+A(n)=\sum_{\pi\in\Part(\Coord(n))}
        \prod_{C\in\pi} A^{\mathrm{conn}}(n_C),
 \]
 and the analogous formula holds for $\#\mathcal M_n$. The full statement,
@@ -298,6 +301,32 @@ full exponent present in \(n\); positive but non-full exponents are not counted
 as covering that coordinate.
 \end{definition}
 
+\begin{lemma}[Coordinate-label identification]\label{lem:coordinate-label-bridge}
+For \(n\ge2\), the map
+\[
+\lambda_n:\Coord(n)\longrightarrow\mathcal P(n),
+\qquad \lambda_n\bigl(\ell^{\nu_\ell(n)}\bigr)=\ell,
+\]
+is a bijection. It preserves exponents in the following sense: if
+\(C\subseteq\Coord(n)\) and \(C^\#:=\lambda_n(C)\subseteq\mathcal P(n)\), then
+\[
+n_C=\prod_{\ell\in C^\#}\ell^{\nu_\ell(n)}.
+\]
+Consequently partitions, covers, and connected hypergraphs on \(\Coord(n)\) may
+be transported to \(\mathcal P(n)\), and all transported blocks have the same
+block index \(n_C\).
+\end{lemma}
+
+\begin{proof}
+Every coordinate of \(\Coord(n)\) has the form
+\(\ell^{\nu_\ell(n)}\) for a unique prime \(\ell\mid n\), so \(\lambda_n\) is a
+bijection. The displayed formula is exactly Definition~\ref{def:coordinate-notation}
+after replacing each coordinate \(\ell^{\nu_\ell(n)}\in C\) by its label
+\(\ell\). Since a bijection preserves inclusions, intersections, unions, and
+incidence of vertices with hyperedges, it also transports partitions, covers,
+and connected components without changing the associated products \(n_C\).
+\end{proof}
+
 \subsection{Primitive divisors}\label{subsec:primitive}
 
 \begin{theorem}\label{thm:primitive-divisors}
@@ -339,8 +368,64 @@ Sections~\ref{sec:upper-fibers}--\ref{sec:connected} are independent of them.
 \subsection{Prime-power apparition formulas}\label{subsec:prime-power}
 
 \begin{proposition}\label{prop:prime-power-ladders}
-See \cite[Proposition~2.3]{MaZhang2026UpperFibersWitnessCoversFQ}.
+The ranks of apparition of prime powers are as follows.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item
+\[
+\alpha(2)=3,
+\qquad
+\alpha(4)=6,
+\qquad
+\alpha(2^e)=3\cdot 2^{e-2}\quad(e\ge3).
+\]
+\item For every \(e\ge1\),
+\[
+\alpha(5^e)=5^e.
+\]
+\item If \(p\ne2,5\), \(z_p=\alpha(p)\), and
+\(h_p=\nu_p(F_{z_p})\), then for every \(e\ge1\),
+\[
+\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p.
+\]
+\end{enumerate}
 \end{proposition}
+
+\begin{proof}
+We use the standard Fibonacci valuation formulas of
+Fulton--Morris \cite{FultonMorris1969ArithmeticalFunctions} and
+Lengyel \cite{Lengyel1995OrderFibonacciLucas}.  For odd \(p\ne5\), if
+\(z_p=\alpha(p)\), then
+\[
+\nu_p(F_m)=0\quad(z_p\nmid m),
+\qquad
+\nu_p(F_{z_pt})=\nu_p(F_{z_p})+\nu_p(t)\quad(t\ge1).
+\]
+Thus \(p^e\mid F_m\) first occurs when \(m=z_pt\) and
+\(\nu_p(t)\ge e-h_p\).  If \(e\le h_p\), the least such \(t\) is \(1\); if
+\(e>h_p\), the least such \(t\) is \(p^{e-h_p}\). This proves (iii).
+
+For \(p=5\), the corresponding valuation formula is
+\(\nu_5(F_m)=0\) when \(5\nmid m\), and
+\(\nu_5(F_m)=\nu_5(m)\) when \(5\mid m\). Hence the least \(m\) for which
+\(5^e\mid F_m\) is \(m=5^e\), proving (ii).
+
+For powers of \(2\), the standard formula is
+\[
+\nu_2(F_m)=
+\begin{cases}
+0,&3\nmid m,\\
+1,&m\equiv3\pmod 6,\\
+3,&m\equiv6\pmod {12},\\
+\nu_2(m)+2,&12\mid m.
+\end{cases}
+\]
+The least index with positive \(2\)-adic valuation is \(3\), giving
+\(\alpha(2)=3\).  The least index with valuation at least \(2\), and also at
+least \(3\), is \(6\), giving \(\alpha(4)=\alpha(8)=6\).  For \(e\ge4\), the
+least possible index must be divisible by \(12\) and must satisfy
+\(\nu_2(m)+2\ge e\); the least such index is \(3\cdot2^{e-2}\). This proves
+(i), including the case \(e=3\).
+\end{proof}
 
 \begin{definition}\label{def:atomic-families}
 For a prime power \(\theta=p^e\) with \(e\ge1\), set
@@ -476,8 +561,60 @@ $B_n$, which gives the displayed decomposition.
 \end{proof}
 
 \begin{theorem}\label{thm:minimal-generators}
-See \cite[Theorem~3.3]{MaZhang2026UpperFibersWitnessCoversFQ}.
+Let
+\[
+m=\prod_{i=1}^r p_i^{e_i}
+\]
+be the prime-power factorization of a divisor of \(F_n\), and put
+\(d_i=\alpha(p_i^{e_i})\) and \(d_i^- =\alpha(p_i^{e_i-1})\), with
+\(\alpha(1)=1\). Then \(m\in\mathcal M_n\) if and only if
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item
+\[
+\lcmop(d_1,\ldots,d_r)=n;
+\]
+\item for every \(i\),
+\[
+\lcmop(d_1,\ldots,d_{i-1},d_i^-,d_{i+1},\ldots,d_r)<n.
+\]
+\end{enumerate}
+Equivalently, \(m\) is a minimal generator exactly when the apparition ranks of
+its prime-power factors have lcm \(n\), and lowering any one prime-power factor
+by one exponent makes that lcm drop below \(n\).
 \end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:rank-basics},
+\[
+\alpha(m)=\lcmop(d_1,\ldots,d_r).
+\]
+Thus condition \textup{(i)} is equivalent to \(m\in B_n\). Suppose first that
+\(m\in\mathcal M_n\).  If condition \textup{(ii)} failed for some \(i\), then
+\[
+m_i^-:=p_i^{e_i-1}\prod_{j\ne i}p_j^{e_j}
+\]
+would satisfy \(m_i^-<m\), \(m_i^-\mid F_n\), and
+\[
+\alpha(m_i^-)=\lcmop(d_1,\ldots,d_{i-1},d_i^-,d_{i+1},\ldots,d_r)=n,
+\]
+again by Proposition~\ref{prop:rank-basics}. Hence \(m_i^-\in B_n\),
+contradicting the minimality of \(m\).
+
+Conversely assume \textup{(i)} and \textup{(ii)}. Then \(m\in B_n\). Let
+\(s\mid m\) with \(s<m\). Write \(s=\prod_i p_i^{f_i}\), where
+\(0\le f_i\le e_i\), and choose an index \(i\) with \(f_i<e_i\). Since
+\(p_i^{f_i}\mid p_i^{e_i-1}\), the monotonicity following from
+Proposition~\ref{prop:rank-basics}(i) gives
+\(\alpha(p_i^{f_i})\mid d_i^-\); for \(j\ne i\) we have
+\(\alpha(p_j^{f_j})\mid d_j\). Therefore
+\[
+\alpha(s)=\lcmop_i\alpha(p_i^{f_i})
+\mid
+\lcmop(d_1,\ldots,d_{i-1},d_i^-,d_{i+1},\ldots,d_r)<n.
+\]
+Thus \(\alpha(s)\ne n\), so no proper divisor of \(m\) lies in \(B_n\). Hence
+\(m\in\mathcal M_n\).
+\end{proof}
 
 \subsection*{Witness covers}
 
@@ -1224,15 +1361,19 @@ step above the first atomic level.
 \section{Connected block factorizations}\label{sec:connected}
 %% ====================================================================
 
-Throughout this section, when \(C\subseteq\mathcal P(n)\) is a set of prime
-labels, write
+Throughout this section, all coordinate blocks may be written either as subsets
+of \(\Coord(n)\) or, after the bijection
+\(\lambda_n\) of Lemma~\ref{lem:coordinate-label-bridge}, as subsets of
+\(\mathcal P(n)\).  When \(C\subseteq\mathcal P(n)\) is a set of prime labels,
+write
 \[
 n_C:=\prod_{\ell\in C}\ell^{\nu_\ell(n)}.
 \]
-When \(C\subseteq\Coord(n)\) is a set of prime-power coordinates, the notation
-\(n_C\) has the meaning of Definition~\ref{def:coordinate-notation}; the two
-conventions agree under the evident bijection
-\(\ell\leftrightarrow\ell^{\nu_\ell(n)}\).
+When \(C\subseteq\Coord(n)\), the notation \(n_C\) has the meaning of
+Definition~\ref{def:coordinate-notation}; Lemma~\ref{lem:coordinate-label-bridge}
+shows that the two conventions agree exactly.  Thus the partition formulas
+below may be read over \(\Part(\Coord(n))\) or over the transported lattice
+\(\Part(\mathcal P(n))\) without changing any block index.
 
 \begin{definition}\label{def:support-hypergraph}
 Let $q\in D_n$ and write
@@ -1360,18 +1501,19 @@ forces \(s_C=m_C\) for all \(C\), so \(s=m\). Hence \(m\in\mathcal M_n\).
 \end{proof}
 
 \begin{corollary}[Partition formulas]\label{cor:partition-formulas}
-For every \(n\ge2\),
+For every \(n\ge2\), equivalently over either labelled-coordinate lattice
+identified in Lemma~\ref{lem:coordinate-label-bridge},
 \begin{equation}\label{eq:partition-formula}
-A(n)=\sum_{\pi\in\Part(\mathcal P(n))}
+A(n)=\sum_{\pi\in\Part(\Coord(n))}
 \prod_{C\in\pi}A^{\mathrm{conn}}(n_C),
 \qquad
-\#\mathcal M_n=\sum_{\pi\in\Part(\mathcal P(n))}
+\#\mathcal M_n=\sum_{\pi\in\Part(\Coord(n))}
 \prod_{C\in\pi}M^{\mathrm{conn}}(n_C).
 \end{equation}
 Equivalently, by Mobius inversion on the partition lattice,
 \begin{equation}\label{eq:connected-inversion}
 A^{\mathrm{conn}}(n)=
-\sum_{\pi\in\Part(\mathcal P(n))}
+\sum_{\pi\in\Part(\Coord(n))}
 (-1)^{|\pi|-1}(|\pi|-1)!\prod_{C\in\pi}A(n_C),
 \end{equation}
 and the same formula with \(A\) replaced by \(\#\mathcal M\) and
@@ -1429,7 +1571,7 @@ irredundant covers of that set.
 
 \begin{theorem}[Odd Irredundant Cover Realization]
 \label{thm:odd-irredundant-cover-realization}
-Let \(n\) be odd. For each nonempty \(C\subseteq\Coord(n)\), choose once and
+Let \(n\ge3\) be odd. For each nonempty \(C\subseteq\Coord(n)\), choose once and
 for all a prime \(\pi_C\) with \(\alpha(\pi_C)=n_C\). If \(\mathcal U\) is an
 irredundant cover of \(\Coord(n)\), then
 \[
@@ -1475,7 +1617,7 @@ factorization of \(m_{\mathcal U}\). Therefore the map is injective.
 \end{proof}
 
 \begin{corollary}\label{cor:odd-cover-lower-bounds}
-Let \(n\) be odd and put \(k=\#\Coord(n)\). Then
+Let \(n\ge3\) be odd and put \(k=\#\Coord(n)\). Then
 \[
 \#\mathcal M_n\ge I_k,
 \qquad
@@ -1495,7 +1637,7 @@ irredundant cover, so the Bell bound is the partition subfamily.
 \end{proof}
 
 \begin{corollary}\label{cor:connected-irredundant-cover-bound}
-Let \(n\) be odd and put \(k=\#\Coord(n)\). Connected irredundant covers of
+Let \(n\ge3\) be odd and put \(k=\#\Coord(n)\). Connected irredundant covers of
 \(\Coord(n)\) inject into connected minimal generators of \(B_n\). Hence
 \[
 M^{\mathrm{conn}}(n)\ge CI_k.
@@ -1515,7 +1657,7 @@ theorem.
 \end{proof}
 
 \begin{corollary}\label{cor:partition-ci-lower-bound}
-Let \(n\) be odd. Then
+Let \(n\ge3\) be odd. Then
 \[
 \#\mathcal M_n\ge
 \sum_{\pi\in\Part(\Coord(n))}\prod_{C\in\pi}CI_{|C|}.
@@ -1535,7 +1677,7 @@ from Corollary~\ref{cor:partition-formulas} yields the displayed bound.
 \end{proof}
 
 \begin{corollary}\label{cor:odd-primitive-cover-realization}
-Let \(n\) be odd. For every partition
+Let \(n\ge3\) be odd. For every partition
 \(\pi\in\Part(\Coord(n))\) there is a minimal generator
 \[
 m_\pi=\prod_{C\in\pi}\rho_C\in\mathcal M_n
@@ -1563,7 +1705,9 @@ each partition block.
 obtained by exhaustive enumeration of all subfamilies of the nonempty subsets
 of \(\{1,\ldots,k\}\), retaining precisely those families that cover the set
 and have a private vertex in every edge; connectedness is ordinary hypergraph
-connectedness.}
+connectedness.  The deterministic script
+\texttt{scripts/enumerate\_cover\_counts.py} produces the displayed
+\(I_k\) and \(CI_k\) columns for \(1\le k\le4\).}
 \label{tab:cover-counts}
 \begin{tabular}{rrrr}
 \toprule
