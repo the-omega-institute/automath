@@ -1769,13 +1769,11 @@ Theorem~\ref{thm:three-coordinate-nonemptiness}, not consequences of the
 $n=30$ data.
 
 The table is exhaustively verified for $2\le n\le30$ by the reproducibility
-files included with the source package,
-\[
-\text{\texttt{scripts/compute\_birth\_layer\_table.py}},\qquad
-\text{\texttt{generated/tab\_birth\_layer\_data.tex}} .
-\]
+files included with the source package as supplementary verification material.
 The following proposition records the finite divisor/rank interface used for
-that computation.
+that computation; Proposition~\ref{prop:birth-layer-reproducibility-certificate}
+then gives the stable source-package certificate tying the script to the table
+printed in the paper.
 
 \begin{proposition}[Effective divisor/rank computation]
 \label{prop:effective-birth-layer-computation}
@@ -1831,15 +1829,68 @@ $d\le n$ gives the stated naive evaluation bound; faster doubling methods can
 replace this without changing the finite divisor/rank interface.
 \end{proof}
 
-The script implements Proposition~\ref{prop:effective-birth-layer-computation}:
-for each $2\le n\le30$ it computes $F_n$ exactly, enumerates all divisors of
-$F_n$, determines $\alpha(q)$ by testing the divisors of $n$, forms
-$B_n=\{q\mid F_n:\alpha(q)=n\}$, and extracts $\mathcal M_n$ as the minimal
-divisibility elements. The generated table source contains the same numerical
-columns as Table~\ref{tab:birth-layer-data}, including the displayed
-minimal-generator sets. The comments following the table, such as the
-assignment of the $n=30$ covers to the types $\Gamma_i$, are derived from the
-theorems above rather than from additional computation.
+\begin{proposition}[Source-package reproducibility certificate]
+\label{prop:birth-layer-reproducibility-certificate}
+The submitted source package contains the following two verification files:
+\[
+\text{\texttt{scripts/compute\_birth\_layer\_table.py}},\qquad
+\text{\texttt{generated/tab\_birth\_layer\_data.tex}} .
+\]
+With SHA--256 digests
+\[
+\begin{array}{l}
+\texttt{scripts/compute\_birth\_layer\_table.py},\\
+\texttt{EECF7B0BA90CACCC209A76F38BB46C5823BB49078AC191FA74B375D8609A65A3},\\[2mm]
+\texttt{generated/tab\_birth\_layer\_data.tex},\\
+\texttt{0F54A8687FC736CCDEE382D75EEB85705858D872D53AA0C1314C4359AF1D9C10},
+\end{array}
+\]
+the command
+\[
+\texttt{python scripts/compute\_birth\_layer\_table.py}
+\]
+regenerates the displayed table source.  Consequently
+Table~\ref{tab:birth-layer-data} is a reproducible finite computation of
+$A(n)$ and $\#\mathcal M_n$ for every $2\le n\le30$, in the precise sense of
+Proposition~\ref{prop:effective-birth-layer-computation}.
+\end{proposition}
+
+\begin{proof}
+The digest values identify the byte strings of the script and generated table
+included in the submission source package.  It remains only to check that the
+script is an implementation of Proposition~\ref{prop:effective-birth-layer-computation}
+and that its output is the table source input below.
+
+The function computing $F_n$ uses the elementary recurrence
+$F_0=0$, $F_1=1$, $F_{r+1}=F_r+F_{r-1}$, and the modular Fibonacci routine uses
+the same recurrence reduced modulo the tested divisor.  The trial-division
+factorization routine returns the complete prime-power factorization of the
+integer supplied to it: each loop removes the full power of the current divisor,
+and when the loop stops any remaining factor is prime because no smaller divisor
+is left.  The divisor routine then forms all products of prime powers from that
+factorization, so it enumerates exactly $\operatorname{Div}(F_n)$ and
+$\operatorname{Div}(n)$ in the two places where the algorithm requires these
+sets.
+
+For each divisor $q$ of $F_n$, the script tests the divisors $d$ of $n$ in
+increasing order and returns the first one with $q\mid F_d$.  This is precisely
+the number $\alpha_n(q)$ in Proposition~\ref{prop:effective-birth-layer-computation}.
+It then appends exactly those divisors $q\ge2$ for which this value is $n$,
+which is the finite set $B_n$, and records $A(n)$ as its cardinality.  Finally,
+it scans the sorted set $B_n$ and retains an element exactly when no retained
+proper divisor divides it.  Since every proper divisor of an integer is smaller
+than the integer, this is exactly the extraction of the minimal elements
+$\mathcal M_n$ in the divisibility poset.
+
+The main loop applies this computation for the fixed range $2\le n\le30$ and
+writes a LaTeX table whose rows contain, in order, $n$, $\omega(n)$, the exact
+value or factorization of $F_n$, $A(n)$, $\#\mathcal M_n$, and the displayed
+minimal-generator set.  The manuscript inputs the generated file directly, so
+the printed Table~\ref{tab:birth-layer-data} is the generated table.  The
+comments preceding the table, such as the assignment of the $n=30$ covers to
+the types $\Gamma_i$, are derived from the theorems above rather than from
+additional computation.
+\end{proof}
 
 \input{generated/tab_birth_layer_data.tex}
 
