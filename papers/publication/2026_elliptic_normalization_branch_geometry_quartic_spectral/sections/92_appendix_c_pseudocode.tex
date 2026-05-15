@@ -1,47 +1,8 @@
-\section{Supplementary reproducibility notes}\label{app:pseudocode}
+\section{Computational reproducibility policy}\label{app:pseudocode}
 
-This appendix describes optional numerical checks for the statements proved in the main text.
-It is not proof-bearing: the algebraic eliminations are displayed in Sections~\ref{sec:genus-one}--\ref{sec:boundary-zeros} and Appendix~\ref{app:disc}, while Appendix~\ref{app:endpoint-branching} supplies the analytic endpoint estimates used in Theorem~\ref{thm:endpoint-zero-quantization}.
-The material below is intended only to make the independent computations reproducible.
+This appendix records the editorial policy for computations accompanying the article.
+All results used in the proof chain are the labelled algebraic and analytic statements in Sections~\ref{sec:genus-one}--\ref{sec:boundary-zeros}, the discriminant computation in Appendix~\ref{app:disc}, and the endpoint expansion package in Appendix~\ref{app:endpoint-branching}.
+The numerical checks reported in Section~\ref{sec:verification} are independent consistency checks and are not assumptions in any theorem or proof.
 
-\subsection{Entry point}
-
-The repository contains a single helper script,
-\[
-\texttt{scripts/generate\_validation\_figure.py}.
-\]
-Running
-\[
-\texttt{python3\ scripts/generate\_validation\_figure.py}
-\]
-reconstructs the recurrence polynomials from \eqref{eq:recurrence}, computes roots of the spectral polynomial \eqref{eq:spectral-poly}, removes the known factor \((y+1)^2\) when checking Proposition~\ref{prop:double-zero}, and writes optional diagnostic plots and data files.
-The exact theorem statements do not depend on the availability of this script or on any plotted output.
-
-\subsection{Independent high-precision check}
-
-For the delicate real branch values one may also run the following high-precision check in a Python session with \texttt{mpmath} installed.
-It evaluates the four roots of \(\Pi(\lambda,y)\) and reports the ordered moduli near \(0\), \(1\), and \(\ySub\); this is a numerical consistency check of Theorem~\ref{thm:ep-classification} and Proposition~\ref{prop:global-dominance}.
-
-\begin{verbatim}
-from mpmath import mp
-mp.dps = 80
-
-def roots_at(y):
-    coeffs = [mp.mpf(1), mp.mpf(-1), -(2*y + 1), mp.mpf(1), y*(y+1)]
-    return mp.polyroots(coeffs, maxsteps=200, error=False)
-
-ysub = mp.findroot(lambda y: 256*y**3 + 411*y**2 + 165*y + 32, -0.6)
-for y in [mp.mpf('-1e-8'), mp.mpf('1e-8'),
-          1-mp.mpf('1e-8'), 1+mp.mpf('1e-8'),
-          ysub-mp.mpf('1e-8'), ysub+mp.mpf('1e-8')]:
-    mods = sorted([abs(z) for z in roots_at(y)], reverse=True)
-    print(y)
-    for value in mods:
-        print(mp.nstr(value, 40))
-\end{verbatim}
-
-\subsection{Precision and role of the computations}
-
-The optional global plots may be produced in standard double precision, since they are visual consistency checks over compact sampled windows.
-Near the branch values, the high-precision calculation above is preferable because the moduli being compared can be close.
-In all cases, the numerical work is supplementary to the exact proof chain: the real-root counts, dominance separation, endpoint expansion, and zero quantization are established by the labelled results in the main text and Appendix~\ref{app:endpoint-branching}.
+For reproducibility, the computations consist of recurrence construction from \eqref{eq:recurrence}, high-precision evaluation of the four roots of \eqref{eq:spectral-poly} near the real branch values, symbolic removal of the forced factor \((y+1)^2\) from Proposition~\ref{prop:double-zero}, and comparison of the nearest negative zeros with Theorem~\ref{thm:endpoint-zero-quantization}.
+The accompanying code and optional plotting instructions are maintained as supplementary material rather than as part of the article source.
