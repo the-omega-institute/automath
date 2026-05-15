@@ -323,7 +323,8 @@ displayed formula.
 
 \subsection{Prime-power apparition formulas}\label{subsec:prime-power}
 
-\begin{proposition}\label{prop:prime-power-ladders}
+\begin{proposition}[Classical prime-power rank lifting]
+\label{prop:prime-power-ladders}
 Let $p$ be prime, and put $z_p:=\alpha(p)$. For $p\ne2,5$, put
 $h_p:=\nu_p(F_{z_p})$. Then the ranks of apparition of prime powers are as
 follows:
@@ -341,24 +342,44 @@ and, for $p\ne2,5$,
 \end{proposition}
 
 \begin{proof}
-These are the standard prime-power rank formulas for the Fibonacci sequence.
-Wall proves the rank-divisibility and lifting framework for Fibonacci
-periods and ranks \cite{Wall1960FibonacciModm}, and Lengyel gives the
-explicit $p$-adic order formula for Fibonacci and Lucas numbers
-\cite[Theorems~1 and~2]{Lengyel1995OrderFibonacciLucas}. In the notation
-above, those formulas say that for $p\ne2,5$, once $p^e$ first appears at
-rank $z_p$, the rank remains $z_p$ up to exponent $h_p=\nu_p(F_{z_p})$ and
-then is multiplied by one further factor of $p$ at each additional
-$p$-adic level. This gives
-$\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p$.
+We record the standard formulas in the present notation.  Wall's
+rank-divisibility theorem gives, for every prime $p$ and integer $r\ge1$,
+\[
+p\mid F_r\qquad\Longleftrightarrow\qquad z_p\mid r,
+\]
+where $z_p=\alpha(p)$ \cite{Wall1960FibonacciModm}.  Lengyel's valuation
+formulas \cite[Theorems~1 and~2]{Lengyel1995OrderFibonacciLucas} give the
+following sharpened forms.  If $p\ne2,5$, then for $r=z_p u$,
+\[
+\nu_p(F_r)=h_p+\nu_p(u),
+\qquad h_p=\nu_p(F_{z_p}),
+\]
+and no factor $p$ occurs when $z_p\nmid r$.  Hence $p^e\mid F_r$ holds
+exactly when $r=z_pu$ and $\nu_p(u)\ge e-h_p$; the least such $r$ is
+$z_p p^{\max\{e-h_p,0\}}$.  This proves the asserted formula for
+$p\ne2,5$ and makes the plateau explicit: the rank stays equal to $z_p$
+for $1\le e\le h_p$, then gains one factor of $p$ at each further level.
 
-The same cited formulas contain the exceptional Fibonacci primes $2$ and
-$5$. Since $F_3=2$, $F_6=8$, and $\nu_2(F_6)=3$, one obtains
-$\alpha(2)=3$, $\alpha(4)=\alpha(8)=6$, and thereafter each additional
-power of $2$ doubles the rank, giving
-$\alpha(2^e)=3\cdot2^{e-2}$ for $e\ge3$. Since $F_5=5$ and the $5$-adic
-lifting is linear at the rank $5$, one obtains $\alpha(5^e)=5^e$ for all
-$e\ge1$.
+For the exceptional primes the same cited valuation formulas specialize to
+\[
+\nu_5(F_r)=\nu_5(r)
+\]
+and
+\[
+\nu_2(F_r)=
+\begin{cases}
+0, & 3\nmid r,\\
+1, & r\equiv3\pmod 6,\\
+3, & r\equiv6\pmod {12},\\
+\nu_2(r)+2, & 12\mid r.
+\end{cases}
+\]
+The first identity shows that the least $r$ with $5^e\mid F_r$ is
+$r=5^e$.  For $2$, the least indices with valuation at least $1$, $2$, and
+$3$ are respectively $3$, $6$, and $6$; for $e\ge4$ the least multiple of
+$12$ satisfying $\nu_2(r)+2\ge e$ is $r=3\cdot2^{e-2}$.  Thus
+$\alpha(2)=3$, $\alpha(4)=\alpha(8)=6$, and the displayed formula
+$\alpha(2^e)=3\cdot2^{e-2}$ holds for every $e\ge3$.
 \end{proof}
 
 \begin{definition}\label{def:atomic-families}
@@ -1390,6 +1411,98 @@ Theorems~\ref{thm:fibonacci-three-coordinate-types} and
 \ref{thm:three-coordinate-nonemptiness}.
 \end{proof}
 
+\begin{proposition}[Reader's checklist for the three-coordinate table]
+\label{prop:three-coordinate-table-checklist}
+Assume $\mathcal P(n)=\{\ell_1,
+\ell_2,\ell_3\}$.  The following finite procedure returns exactly
+$\mathcal M_n$.
+\begin{enumerate}[label=(\roman*)]
+\item For every nonempty $J\subseteq[3]$, compute the primitive window
+$\mathcal R_J^\circ(n)$ and the rank classes
+$\Pi_\alpha(d)$ for $d\in\mathcal R_J^\circ(n)$ by
+Lemma~\ref{lem:primitive-prime-mobius-count}.  This gives every primitive
+slot $P_J(n)$.
+\item For each coordinate $i$, compute the single possible ladder candidate
+$\mathcal L_i^*(n)$ from
+Proposition~\ref{prop:three-coordinate-arithmetic-tests}, then retain it in
+$L_{i,J}(n)$ exactly for those $J$ for which its rank divides $n$ and has
+full-coordinate set $J$.
+\item For each coordinate permutation of each of the eight rows in
+Table~\ref{tab:three-coordinate-classification}, replace the displayed slots
+by the finite sets found in (i) and (ii), with
+$S_i(n)=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$.
+\item Keep precisely those row fillings whose selected prime powers have
+distinct underlying primes, equivalently those satisfying the Hall
+inequalities in Lemma~\ref{lem:finite-slot-selection}; multiply the selected
+prime powers.
+\end{enumerate}
+The products retained in (iv) are exactly the minimal generators listed in
+Theorem~\ref{thm:low-support-classification-package}.  In particular, the
+table is a closed finite classification for fixed $n$, not an interface to an
+additional infinite search.
+\end{proposition}
+
+\begin{proof}
+Step (i) is precisely the primitive-slot identity in
+Proposition~\ref{prop:three-coordinate-arithmetic-tests}; the M\"obius formula
+there is Lemma~\ref{lem:primitive-prime-mobius-count}.  Step (ii) is the
+ladder-slot identity in the same proposition, which says that every
+$L_{i,J}(n)$ is empty or consists of the displayed single candidate.  Step
+(iii) is only the coordinate-labelling convention of
+Theorem~\ref{thm:three-coordinate-nonemptiness}.  By that theorem, after the
+slots of a labelled row are replaced by their finite admissible sets, a row
+realizes a minimal generator if and only if the slot-selection test in step
+(iv) succeeds; Lemma~\ref{lem:finite-slot-selection} is exactly the stated
+Hall criterion for distinct underlying primes.  The one-factor rows
+$\Gamma_1$ and $\Gamma_3$ are the atomic generators with full
+three-coordinate support.  Conversely, every minimal generator with
+three-coordinate support has, by
+Corollary~\ref{cor:three-coordinate-realization}, one fixed labelled
+coordinate permutation of one of the eight row types and therefore appears in
+this procedure.  This proves both exhaustion and uniqueness with the same
+labelled-slot convention as Theorem~\ref{thm:three-coordinate-nonemptiness}.
+\end{proof}
+
+\begin{example}[Applying the checklist at $n=42$]
+\label{ex:n42-three-coordinate-checklist}
+Let $n=42=2\cdot3\cdot7$ and label the coordinates by
+$(\ell_1,\ell_2,\ell_3)=(2,3,7)$.  The prime factors of
+\[
+F_{42}=2^3\cdot13\cdot29\cdot211\cdot421
+\]
+have ranks
+\[
+\alpha(2)=3,
+\alpha(4)=6,
+\alpha(13)=7,
+\alpha(29)=14,
+\alpha(421)=21,
+\alpha(211)=42.
+\]
+Thus $\Atom(42)=\{211\}$.  The primitive windows used below are
+$P_{12}(42)=\varnothing$, $P_{13}(42)=\{29\}$,
+$P_{23}(42)=\{421\}$, and $P_{123}(42)=\{211\}$.  Singleton slots are
+$S_1(42)=\varnothing$, $S_2(42)=\{2\}$, and $S_3(42)=\{13\}$.  The proper
+ladder slots relevant here are
+$L_{1,12}(42)=\{4\}$, $L_{1,123}(42)=\varnothing$,
+$L_{2,J}(42)=\varnothing$, and $L_{3,J}(42)=\varnothing$.
+
+The table then gives the following non-atomic generators.  The row
+$\Gamma_4$ with the permuted slots $P_{13}$ and $P_{23}$ gives
+$29\cdot421=12209$.  The row $\Gamma_5$ gives
+$4\cdot421=1684$ from $L_{1,12}$ and $P_{23}$, while the analogous
+coordinate permutation with a primitive $P_{13}$ partner is not a row of type
+$\Gamma_5$ for this ladder orientation.  The row $\Gamma_7$ gives
+$2\cdot29=58$ from $S_2$ and $P_{13}$ after relabeling.  The row $\Gamma_8$
+gives $13\cdot4=52$ from $S_3$ and the permuted ladder slot $L_{1,12}$.
+All other rows fail because one of the required slots is empty.  Hence
+\[
+\mathcal M_{42}=\{52,58,211,1684,12209\}.
+\]
+The example illustrates the theorem's reading rule: every success or failure
+is decided by a finite slot list and a coprimeness check.
+\end{example}
+
 \begin{theorem}[Complete low-support classification package]
 \label{thm:low-support-classification-package}
 Let $n\ge2$.
@@ -1490,7 +1603,9 @@ two-coordinate products displayed in Theorem~\ref{thm:low-support-classification
 and for $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$ take all products admitted by
 the eight rows of Table~\ref{tab:three-coordinate-classification}, after
 permuting the coordinates and imposing the stated arithmetic realization and
-coprimeness tests. Then the full birth layer is
+coprimeness tests. This is a minimal-generator classification of the birth
+layer: it identifies the antichain of generators of the upper set $B_n$, not a
+disjoint enumeration of all elements of $B_n$.  The full birth layer is
 \[
 B_n=\bigcup_{g\in\mathcal G_n}\{q\in D_n:\ g\mid q\}.
 \]
