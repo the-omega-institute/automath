@@ -99,9 +99,9 @@ real function
 is an admissible choice of Richardson's unary primitive \(\mu\), since
 it agrees with \(|x|\) for every nonzero real input.  Consequently,
 replacing each occurrence of \(\mu(F)\) by the EML term
-\(G(M(F,F))\), where \(G\) is the positive square-root macro of
-\Cref{lem:eml-real-witness-library}, gives an effective Richardson
-fragment to which the cited theorem applies.
+\(\Abs(F)\), where \(\Abs\) is the locked nonnegative square-root
+witness of \Cref{lem:eml-zero-absolute-witness}, gives an effective
+Richardson fragment to which the cited theorem applies.
 \end{lemma}
 
 \begin{proof}
@@ -112,8 +112,8 @@ is a partial function with full domain, so the concrete choice
 \(\mu(0)=0\) and \(\mu(x)=|x|\) elsewhere is allowed by the published
 hypothesis.  For a translated subexpression \(F\), the multiplication
 macro gives \(M(F,F)=F^2\) on real inputs.  Since \(F(x)^2\ge0\), the
-positive square-root macro returns
-\(G(M(F,F))(x)=\sqrt{F(x)^2}=|F(x)|\), including at zeros of \(F\).
+locked square-root witness returns
+\(\Abs(F)(x)=\sqrt{F(x)^2}=|F(x)|\), including at zeros of \(F\).
 Thus the replacement realizes an admissible Richardson \(\mu\)-symbol
 by a fixed EML expression scheme.  The replacement is syntactic and
 effective, so a decision procedure for identity-to-zero in the
@@ -255,25 +255,30 @@ Its SHA--256 digest is
 \[
 \texttt{F791A36AF611B1406A29B9EFDF766C80D84E05255859C62113E7DE8EE268281C}.
 \]
-The certificate is verified by the following finite procedure:
+The only external analytic input from the catalogue is the following
+finite-witness theorem of Odrzywo{\l}ek: the named Table~1 compiler
+entries for \(\pi\), real \(\sin\), and principal square root on
+\(\RR_{\ge0}\) are pure EML trees over \((\eml,1)\) with exactly the
+real-domain values displayed below
+\cite[Table~1 and Supplementary Information, Part~II,
+Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.  The catalogue
+locks the particular finite trees used here by the following procedure:
 \begin{enumerate}
 \item compute the displayed digest for the catalogue file;
 \item parse the three right-hand sides against the displayed grammar;
 \item replace every \texttt{EML[A,B]} by \(\eml(A,B)\);
-\item apply the principal-branch symbolic verifications for Odrzywo{\l}ek's
-Table~1 compiler entries for \(\pi\) and real \(\sin\), as recorded in
-Supplementary Information, Part~II, Sections~2.1--2.5 of
-\cite{Odrzywolek2026SingleBinaryOperator}.
+\item identify the three resulting trees with those finite compiler
+entries for \(\pi\), real \(\sin\), and principal square root in the cited
+finite-witness theorem.
 \end{enumerate}
-After this procedure the first two strings are fixed witnesses
+After this procedure the three strings are fixed witnesses
 \[
   W_{\pi}=\pi,
-  \qquad W_{\sin}(x)=\sin x\quad(x\in\RR)
+  \qquad W_{\sin}(x)=\sin x\quad(x\in\RR),
+  \qquad W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0})
 \]
-for the Richardson interface.  The third string is retained only as a
-catalogued comparison witness; the translation in this article uses the
-self-contained positive-real square-root macro \(G\) of
-\Cref{lem:eml-real-witness-library} instead.
+for the Richardson interface, with principal-branch real-domain
+definedness on every input in the displayed domains.
 \end{lemma}
 
 \begin{proof}
@@ -287,21 +292,22 @@ leaf \(x\).  Replacing \texttt{EML[A,B]} by \(\eml(A,B)\) is then a
 literal syntactic translation into the grammar \eqref{eq:eml-grammar}.
 No search or minimization is involved.
 
-The analytic content of the two retained non-core entries is precisely
-the cited principal-branch symbolic verification of Odrzywo{\l}ek's
-finite compiler output for the named constant \(\pi\) and the real sine
-function.  The cited supplementary sections give the construction
-macros, the branch conventions, and the symbolic checks for those
-Table~1 entries.  Thus, conditional only on that cited finite
-verification and on the byte-for-byte catalogue fixed above, the two
-terms used in the Richardson translation have the displayed real-domain
-values.  The square-root entry is not used as a proof input here, so no
-additional identity is imported from the catalogue.
+The analytic content of the three non-core entries is precisely the
+cited principal-branch symbolic verification of Odrzywo{\l}ek's finite
+compiler output for the named constant \(\pi\), the real sine function,
+and the principal real square root on \(\RR_{\ge0}\).  The cited
+supplementary sections give the construction macros, the branch
+conventions, and the symbolic checks for those Table~1 entries.  Thus,
+conditional only on that cited finite verification and on the
+byte-for-byte catalogue fixed above, the three terms used in the
+Richardson translation have the displayed real-domain values and no
+additional Table~1 entries are imported.
 \end{proof}
 \begin{lemma}[Richardson EML witness library]
 \label{lem:eml-real-witness-library}
 The printed core witnesses of \Cref{lem:eml-printed-core}, together
-with the locked ancillary witnesses \(W_{\pi}\) and \(W_{\sin}\) of
+with the locked ancillary witnesses \(W_{\pi}\), \(W_{\sin}\), and
+\(W_{\sqrt{}}\) of
 \Cref{lem:eml-ancillary-certificate}, form a finite principal-branch
 real witness library for the Richardson primitives used below.  The
 remaining algebraic constructors are the following finite macros:
@@ -330,11 +336,14 @@ locked ancillary witnesses satisfy
 \[
   W_{\pi}=\pi,
   \qquad
-  W_{\sin}(x)=\sin x\quad(x\in\RR).
+  W_{\sin}(x)=\sin x\quad(x\in\RR),
+  \qquad
+  W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0}).
 \]
 Consequently rational constants are constructed effectively from
-\(1\), and Richardson's unary \(\mu\)-primitive is represented on its
-required domain by \(G(M(x,x))=|x|\) for \(x\ne0\).
+\(1\).  The nonnegative square-root entry is available on its full real
+domain and will be composed with \(M\) in
+\Cref{lem:eml-zero-absolute-witness}.
 \end{lemma}
 
 \begin{proof}
@@ -363,13 +372,38 @@ Integers are therefore built by binary repeated doubling and addition,
 signs by \(N\), and rationals by one use of \(J\) with a positive
 integer denominator.
 
-The identities for \(W_{\pi}\) and \(W_{\sin}\) are exactly the
-locked ancillary certificate of \Cref{lem:eml-ancillary-certificate}.
-If \(x\ne0\), then \(M(x,x)=x^2>0\), so the self-contained
-positive-square-root witness gives
-\(G(M(x,x))=\sqrt{x^2}=|x|\).  No claim about a value at \(x=0\) is
-needed, because \(\mu\) is used only on the punctured real domain
-specified in \Cref{lem:richardson-fragment}.
+The identities for \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are
+exactly the locked ancillary certificate of
+\Cref{lem:eml-ancillary-certificate}.  The zero-domain use of square
+root is isolated in \Cref{lem:eml-zero-absolute-witness}; the positive
+macro \(G\) is used only on strictly positive real inputs.
+\end{proof}
+
+\begin{lemma}[Zero-domain EML absolute-value witness]
+\label{lem:eml-zero-absolute-witness}
+Define the finite EML macro
+\[
+  \Abs(u)=W_{\sqrt{}}(M(u,u)).
+\]
+Then \(\Abs(u)\) is defined for every real \(u\) in the transported
+principal-branch semantics and satisfies
+\[
+  \Abs(u)=|u|\qquad(u\in\RR).
+\]
+In particular the witness is defined at \(u=0\).
+\end{lemma}
+
+\begin{proof}
+By \Cref{lem:eml-real-witness-library}, the multiplication macro
+\(M\) is all-real and \(M(u,u)=u^2\).  Therefore \(M(u,u)\in
+\RR_{\ge0}\) for every \(u\in\RR\), including \(u=0\).  The locked
+ancillary square-root witness of \Cref{lem:eml-ancillary-certificate}
+is defined on the whole nonnegative real axis and has value
+\(W_{\sqrt{}}(t)=\sqrt t\) there.  Substituting \(t=u^2\) gives
+\[
+  \Abs(u)=W_{\sqrt{}}(u^2)=\sqrt{u^2}=|u|,
+\]
+with no punctured-domain exception.
 \end{proof}
 
 \begin{corollary}[Finite witness locking]
@@ -380,8 +414,9 @@ represents exactly the primitive interface used to translate the
 Richardson language \(\mathcal R\): the constants \(0\), \(1\),
 \(\pi\), and \(\log 2\); rational constants via the fixed integer and
 division constructor scheme; the unary functions \(\exp\), \(\sin\),
-negation, and positive-real square root; and the binary operations
-addition, subtraction, multiplication, and division by a nonzero real.
+negation, nonnegative-real square root, and absolute value; and the
+binary operations addition, subtraction, multiplication, and division by
+a nonzero real.
 Each entry of \(\mathcal W_{\mathcal R}\) has the principal-branch
 real-domain value asserted for the corresponding Richardson primitive.
 The list is independent of the Richardson expression being translated;
@@ -391,8 +426,10 @@ formal input leaves is allowed.
 
 \begin{proof}
 Take \(E,L,D,P,N,A,S,T,R_+,M,J,H,G\) from
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}, together
-with the two locked ancillary strings \(W_{\pi}\) and \(W_{\sin}\) of
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}, take
+\(\Abs\) from \Cref{lem:eml-zero-absolute-witness}, and use these together
+with the three locked ancillary strings \(W_{\pi}\), \(W_{\sin}\), and
+\(W_{\sqrt{}}\) of
 \Cref{lem:eml-ancillary-certificate}.  The zero witness is
 \(S(1,1)\), and \(\log 2\) is the printed positive-logarithm witness
 applied to the printed addition witness for \(2=A(1,1)\).  Integer
@@ -404,16 +441,16 @@ witnesses just listed; after a rational token is expanded by the fixed
 scheme, no further analytic choice is made.
 
 The real-domain identities for the core entries, multiplication,
-division, and square root are exactly those proved in
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; the two
-non-core entries \(\pi\) and \(\sin\) are locked by
-\Cref{lem:eml-ancillary-certificate}.  Absolute value is not a new
-primitive witness: on Richardson's required domain it is represented by
-the square-root witness applied to the square built from the printed
-multiplication witness.  Since every listed entry is a finite pure EML
-tree, substituting translated subterms into its formal input leaves is
-an effective syntactic operation and introduces no compiler oracle,
-extended-real convention, or additional analytic identity.
+division, positive square root, and all-real absolute value are exactly
+those proved in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library,lem:eml-zero-absolute-witness};
+the three non-core entries \(\pi\), \(\sin\), and \(W_{\sqrt{}}\) are
+locked by \Cref{lem:eml-ancillary-certificate}.  Absolute value is not
+a new external primitive: it is the finite composite
+\(\Abs(u)=W_{\sqrt{}}(M(u,u))\).  Since every listed entry is a finite
+pure EML tree, substituting translated subterms into its formal input
+leaves is an effective syntactic operation and introduces no compiler
+oracle, extended-real convention, or additional analytic identity.
 \end{proof}
 
 \begin{lemma}[Effective Richardson translation]
@@ -430,7 +467,7 @@ transported real semantics
 for every Richardson expression \(E\).  Absolute value is represented
 by
 \[
-  |F|=\sqrt{F^2}
+  |F|=\Abs(F)=W_{\sqrt{}}(M(F,F))
 \]
 using the principal square root on the nonnegative real axis.
 Moreover, let \(|E|\) denote the number of nodes in the expanded
@@ -459,9 +496,8 @@ same variable.  Constants are sent to the constant witnesses from
 witness to the translated subexpressions.  If an expression is a
 composition \(G\circ F\), substitute the translated inner expression
 \(\tau(F)\) into the translated outer expression \(\tau(G)\).  If
-\(E=|F|\), translate it as the square-root witness applied to
-\(\tau(F)^2\), where the square is built using the multiplication
-witness.
+\(E=|F|\), translate it as the fixed \(\Abs\)-witness applied to
+\(\tau(F)\).
 
 This recursion is algorithmic because all primitive witnesses are
 finite terms and syntactic substitution is computable.  We prove the
@@ -480,11 +516,9 @@ first gives \(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\);
 applying the induction hypothesis for \(G\) at the real input
 \(F(x)\) proves the composition case.  Finally, for
 \(E=|F|\), the induction hypothesis gives
-\(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\), so the
-multiplication witness gives \(F(x)^2\in\RR_{\ge0}\).  The
-square-root witness is defined on this input and returns the
-nonnegative square root, hence
-\(\sqrt{F(x)^2}=|F(x)|\).  Thus every translated term agrees with
+\(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\), and
+\Cref{lem:eml-zero-absolute-witness} gives all-real definedness and the
+value \(\Abs(F(x))=|F(x)|\).  Thus every translated term agrees with
 the original Richardson expression as a real function.  The
 statement concerns this transported real semantics; it makes no
 branch-independent assertion about equality of arbitrary raw EML
@@ -529,8 +563,8 @@ variable leaf of \(\tau(G)\) gives
 \]
 and the substitution depth is at most the sum of the two depths,
 hence at most \(K(|G|+|F|)\le K|G\circ F|\).  The absolute-value case
-is a primitive square, followed by the fixed square-root witness, so
-it is covered by the same unary-operation estimate.  This proves the
+is the fixed unary witness \(\Abs\), so it is covered by the same
+unary-operation estimate.  This proves the
 claimed expression-tree and substitution-depth bounds.
 \end{proof}
 
