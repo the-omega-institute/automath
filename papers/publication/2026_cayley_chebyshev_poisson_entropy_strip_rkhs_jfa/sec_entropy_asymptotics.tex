@@ -13,9 +13,8 @@ they are used:
 and finite centred fourth moment, through a direct Taylor expansion of
 $R_\varepsilon$.
 \item Theorem~\ref{thm:poisson-kl-even-orders} uses a finite centred
-$(2N+1)$st absolute moment,
-Lemma~\ref{lem:tail-uniform-cayley-mode-remainder}, and
-Lemma~\ref{lem:mode-parity-vanish}.
+$(2N+\eta)$th absolute moment, the finite-moment density remainder, and
+the Cayley parity theorem.
 \item Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}
 uses the same finite mode calculus at order four and a finite centred
 fifth absolute moment to recover $(\sigma^2,\mu_3,\mu_4)$ from phase
@@ -1136,21 +1135,20 @@ $t^{-(2N+2)}=o(t^{-2N})$ and
 $t^{-(2N+1)}=o(t^{-2N})$ give the final claim.
 \end{proof}
 
-Theorem~\ref{thm:poisson-kl-even-orders} is the convenient uniform-remainder
-presentation of the all-order coefficient calculus: it keeps the density and
-entropy remainders under a single finite $(2N+1)$-moment hypothesis and is the
-form used when extracting a finite polynomial through order $t^{-2N}$.
-The sharper finite-moment asymptotic statement is
-Theorem~\ref{thm:finite-moment-entropy-remainder} below, which lowers the
-hypothesis to a finite centred $(2N+\eta)$th absolute moment and records the
-corresponding remainder size.  Thus the finite-moment theorem, not the
-uniform presentation, is the endpoint matching the abstract's finite-moment
-claim.
+Theorem~\ref{thm:poisson-kl-even-orders} is the definitive all-order
+finite-moment asymptotic statement.  The earlier uniform density estimates
+construct the universal coefficient polynomial; the final entropy expansion
+itself requires only a finite centred $(2N+\eta)$th absolute moment, with the
+explicit remainder below.  The label
+Theorem~\ref{thm:finite-moment-entropy-remainder} is retained as a roadmap
+alias for the same finite-moment result.
 
-\begin{theorem}[All-order Poisson entropy coefficient expansion]%
+\begin{theorem}[All-order finite-moment Poisson entropy expansion]%
 \label{thm:poisson-kl-even-orders}
-Let $N\ge 2$ and let $\nu$ be a probability measure on~$\RR$ with mean
-$\bar\gamma$ and finite centred $(2N+1)$st absolute moment.  Set
+\label{thm:finite-moment-entropy-remainder}
+Let $N\ge 2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
+on~$\RR$ with mean $\bar\gamma$ and finite centred $(2N+\eta)$th absolute
+moment.  Set
 \[
 \Delta:=\gamma-\bar\gamma,
 \qquad
@@ -1170,39 +1168,58 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
 \qquad(t\to\infty).
 \end{equation}
-Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
+More precisely, after subtracting the displayed polynomial the remainder is
+$O(t^{-(2N+\eta)})+O(t^{-(2N+2)})$.  Equivalently, no odd power occurs in
+the expansion through order~$t^{-2N}$.
 \end{theorem}
 
 \begin{proof}
+Apply Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$.
 With $x=\bar\gamma+ty$ one has
 \[
 \delta_t(x):=\frac{h_t(x)}{g_t(x)}-1
 =\int_{\RR}\bigl(R_{\Delta/t}(y)-1\bigr)\dd\nu(\gamma).
 \]
-Lemma~\ref{lem:entropy-uniform-remainder} gives the uniform mode
-expansion, the Taylor remainder for
-$\Phi(z)=(1+z)\log(1+z)-z$, and the $L^1(\omega)$ control needed to
-integrate term by term.  More explicitly, for each $2\le k\le N$ it gives
+The finite-moment density remainder gives
 \[
-\bigl(\delta_t(\bar\gamma+ty)\bigr)^k
-=P_{k,N,t}(y)+\varepsilon_{k,N,t}(y),
+A_{N,t}(y):=\sum_{n=2}^{2N}\mu_nu_n(y)t^{-n},
 \qquad
-\|\varepsilon_{k,N,t}\|_{L^1(\omega)}
-=O(t^{-(2N+1)}),
+\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
 \]
-so integrating a power of $\delta_t$ contributes the integral of the
-complete polynomial $P_{k,N,t}$ plus only an additive
-$o(t^{-2N})$ error.  Therefore
+with
+\[
+\|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
+=O(t^{-(2N+\eta)})
+\]
+and $\|\delta_t\|_\infty=O(t^{-2})$.  Hence, for all large $t$,
+$|\delta_t|\le1/2$.  The Taylor expansion
+$\Phi(z)=(1+z)\log(1+z)-z$ therefore gives, uniformly and in
+$L^1(\omega)$,
+\[
+\Phi(\delta_t)=
+\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r
++O(t^{-(2N+2)}),
+\]
+because $\delta_t^{N+1}=O(t^{-2N-2})$.
+
+For each $2\le r\le N$,
+\[
+\delta_t^r-A_{N,t}^r
+=\sum_{\ell=1}^{r}\binom r\ell A_{N,t}^{r-\ell}\rho_{N,t}^{\ell}.
+\]
+Since $A_{N,t}=O(t^{-2})$ and $\rho_{N,t}$ has the displayed
+$L^\infty/L^1$ bounds, this difference has $L^1(\omega)$ norm
+$O(t^{-(2N+\eta)})$.  Expanding the finite products $A_{N,t}^r$ and
+discarding only monomials of total degree $>2N$ leaves an
+$O(t^{-(2N+1)})$, hence $O(t^{-(2N+\eta)})$, finite polynomial tail.
+Consequently
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
-=\int_{\RR}\frac{\Phi(\delta_t(\bar\gamma+ty))}{\pi(1+y^2)}\dd y
-\]
-\[
 =\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
 \sum_{m=2k}^{2N}\frac{1}{t^m}
 \sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
 \mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k}
-+o(t^{-2N}),
++O(t^{-(2N+\eta)})+O(t^{-(2N+2)}),
 \]
 where $I_{n_1,\dots,n_k}=I(n_1,\dots,n_k)$ is the mode integral from
 \eqref{eq:mode-integral-definition}.  Comparing the coefficient of
@@ -1213,7 +1230,8 @@ gives
 \[
 =\sum_{r=2}^{N} A_{2r}(\nu)\,t^{-2r}+o(t^{-2N}),
 \]
-which is \eqref{eq:poisson-kl-even-orders}.
+with the sharper displayed remainder before the final $o(t^{-2N})$ notation.
+This proves \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
 \begin{theorem}[Analytic compact-support interchange]%
@@ -1234,7 +1252,7 @@ also converges absolutely for $t\ge T_\nu$, where $A_k(\nu)$ is defined by
 \eqref{eq:universal-entropy-coefficient}.  In particular the all-order
 coefficients are the genuine analytic coefficients under this strong
 compact-support hypothesis, while Theorem~\ref{thm:finite-moment-entropy-remainder}
-below gives the separate finite-moment asymptotic justification.
+gives the separate finite-moment asymptotic justification.
 \end{theorem}
 
 \begin{proof}
@@ -1262,52 +1280,6 @@ finite expression in \eqref{eq:universal-entropy-coefficient}; hence
 \eqref{eq:analytic-entropy-series} follows.
 \end{proof}
 
-\begin{theorem}[Finite $2N+\eta$ entropy remainder]%
-\label{thm:finite-moment-entropy-remainder}
-Let $N\ge2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
-on~$\RR$ with mean $\bar\gamma$ and finite centred $(2N+\eta)$th absolute
-moment.  With $h_t=P_t*\nu$, $g_t(x)=P_t(x-\bar\gamma)$, and the
-coefficients $A_k(\nu)$ from \eqref{eq:universal-entropy-coefficient},
-\begin{equation}\label{eq:finite-moment-entropy-remainder}
-D_{\mathrm{KL}}(h_t\|g_t)
-=\sum_{k=4}^{2N}A_k(\nu)t^{-k}+o(t^{-2N})
-=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}).
-\end{equation}
-More precisely, after subtracting the displayed polynomial the remainder is
-$O(t^{-(2N+\eta)})+O(t^{-(2N+2)})$.
-\end{theorem}
-
-\begin{proof}
-Apply Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$.
-It gives
-\[
-\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
-\qquad
-A_{N,t}(y)=\sum_{n=2}^{2N}\mu_nu_n(y)t^{-n},
-\]
-with $\|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}=
-O(t^{-(2N+\eta)})$ and $\|\delta_t\|_\infty=O(t^{-2})$.  For all large
-$t$, $|\delta_t|\le1/2$, and therefore
-\[
-\Phi(\delta_t)=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r
-+O(t^{-(2N+2)})
-\]
-uniformly and in $L^1(\omega)$, because $\delta_t^{N+1}=O(t^{-2N-2})$.
-For each $2\le r\le N$,
-\[
-\delta_t^r-A_{N,t}^r
-=\sum_{\ell=1}^{r}\binom r\ell A_{N,t}^{r-\ell}\rho_{N,t}^{\ell},
-\]
-whose $L^1(\omega)$ norm is $O(t^{-(2N+\eta)})$, using
-$A_{N,t}=O(t^{-2})$ and the $L^\infty/L^1$ bounds on~$\rho_{N,t}$.
-Expanding the finite products $A_{N,t}^r$ and discarding only monomials of
-total degree $>2N$ leaves an $O(t^{-(2N+1)})$ finite polynomial tail, hence
-also $O(t^{-(2N+\eta)})$ for $0<\eta\le1$.  Integrating the retained terms
-against~$\omega$ gives exactly the coefficient formula
-\eqref{eq:universal-entropy-coefficient}.  Odd coefficients vanish by
-Theorem~\ref{thm:universal-entropy-coefficients}, and the asserted
-remainder follows.
-\end{proof}
 
 \begin{corollary}[Eighth-order entropy expansion]%
 \label{thm:poisson-kl-eighth}
