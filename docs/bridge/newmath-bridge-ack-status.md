@@ -1,16 +1,16 @@
 # NewMath Bridge ACK Status
 
 - Source ref: `origin/bridge/newmath-automath-consumption`
-- ACK rows: `20`
+- ACK rows: `29`
 - Failure rows: `0`
 
 ## Status Counts
 
 | Status | Count |
 | --- | ---: |
-| `blocked` | 8 |
-| `consumed` | 6 |
-| `evidence_only` | 6 |
+| `blocked` | 11 |
+| `consumed` | 9 |
+| `evidence_only` | 9 |
 
 ## Latest ACK/NACK Rows
 
@@ -36,6 +36,15 @@
 | `blocked` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_doob_phi_entropy.tex | no_specific_board_claim |
 | `consumed` | `B-677` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_cayley_gate.tex | accepted_into_bedc_board |
 | `consumed` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_cayley_gate.tex | duplicate_board_title |
+| `consumed` | `` | the-omega-institute/automath@origin/dev:lean4/Omega/CircleDimension/KilloGodelCompressionNotFiniteRankHomologizable.lean | duplicate_board_title |
+| `consumed` | `` | the-omega-institute/automath@origin/dev:lean4/Omega/CircleDimension/KilloGrothendieckCompletionPreservesInjection.lean | duplicate_board_title |
+| `consumed` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_cayley_gate.tex | duplicate_board_title |
+| `evidence_only` | `` | the-omega-institute/automath@origin/dev:lean4/scripts/codex_formalize.py | evidence_only:pipeline_status |
+| `evidence_only` | `` | the-omega-institute/automath@origin/dev:lean4/scripts/omega_ci.py | evidence_only:pipeline_status |
+| `evidence_only` | `` | the-omega-institute/automath@origin/dev:tools/chatgpt-oracle/oracle_pipeline.py | evidence_only:pipeline_status |
+| `blocked` | `` | the-omega-institute/automath@origin/dev:lean4/Omega/CircleDimension/KilloS4BurnsideKaniRosenPrymSquare.lean | no_specific_board_claim |
+| `blocked` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_appendix.tex | no_specific_board_claim |
+| `blocked` | `` | the-omega-institute/automath@origin/dev:papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/sec_doob_phi_entropy.tex | no_specific_board_claim |
 
 ## Boundary
 

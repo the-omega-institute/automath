@@ -6,8 +6,8 @@ It does not write Automath paper or Lean content directly.
 
 ## Current Signal
 
-- NewMath-to-Automath gate rows: `8`
-- Killo/golden writeback-eligible rows: `2`
+- NewMath-to-Automath gate rows: `7`
+- Killo/golden writeback-eligible rows: `1`
 - Killo/golden review-blocked bridge sources: `1`
 - PI actions: `4`
 
@@ -22,9 +22,9 @@ It does not write Automath paper or Lean content directly.
 
 | Status | Count |
 | --- | ---: |
-| `blocked` | 8 |
-| `consumed` | 6 |
-| `evidence_only` | 6 |
+| `blocked` | 11 |
+| `consumed` | 9 |
+| `evidence_only` | 9 |
 
 ## Killo/Golden Review Blocks
 
