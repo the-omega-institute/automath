@@ -1,5 +1,5 @@
-﻿\begin{definition}[Finite-field quotient notation]\label{def:finite-field-quotient-notation}
-Let \(U/\FF_q\) be a smooth geometrically connected curve and let \(V\to U\) be a geometrically connected finite \etale abelian Galois cover with group \(G\). For \(c\in G\) put
+\begin{definition}[Finite-field quotient notation]\label{def:finite-field-quotient-notation}
+Let \(U/\FF_q\) be a smooth geometrically connected curve and let \(V\to U\) be a geometrically connected finite \etale{} abelian Galois cover with group \(G\). For \(c\in G\) put
 \[
 B_n(c):=\#\{v\in |U|:\deg v=n,\ \mathrm{Frob}_v=c\},
 \qquad
@@ -9,6 +9,7 @@ and, for all \(n\) with \(N_n>0\), define the primitive Frobenius-label law
 \[
 \mu_n(c):=\frac{B_n(c)}{N_n}\qquad(c\in G).
 \]
+By Lemma \ref{lem:finite-field-eventual-positive-degrees} below, there is an integer \(n_0(U)\) such that \(N_n>0\) for every \(n\ge n_0(U)\). All later assertions involving \(\mu_n\) are made only in this range.
 For a subgroup \(H\le G\) write
 \[
 \pi_H:G\twoheadrightarrow G/H,
@@ -29,6 +30,33 @@ E_n(K):=
 \]
 and denote by \(\mu_{\mathrm{sub}}(K,J)\) the M\"obius function of the finite subgroup lattice of \(G\), ordered by inclusion.
 \end{definition}
+
+\begin{lemma}[Eventual positivity of primitive degrees]\label{lem:finite-field-eventual-positive-degrees}
+Let \(U/\FF_q\) be a smooth geometrically connected curve. With
+\[
+N_n=\#\{v\in |U|:\deg v=n\},
+\]
+there is an integer \(n_0(U)\) such that \(N_n>0\) for every \(n\ge n_0(U)\). More precisely,
+\[
+N_n=\frac{q^n}{n}+O_U\!\left(\frac{q^{n/2}}{n}\right).
+\]
+\end{lemma}
+
+\begin{proof}
+The closed-point identity
+\[
+\#U(\FF_{q^r})=\sum_{d\mid r}dN_d
+\]
+and M\"obius inversion give
+\[
+nN_n=\sum_{d\mid n}\mu(d)\#U(\FF_{q^{n/d}}),
+\]
+where \(\mu\) is the ordinary integer M\"obius function. The Weil bound for the smooth projective compactification of \(U\), together with the finitely many removed boundary points, gives
+\[
+\#U(\FF_{q^m})=q^m+O_U(q^{m/2})+O_U(1).
+\]
+The term \(d=1\) is therefore \(q^n+O_U(q^{n/2})\), while the sum of all terms with \(d>1\) is \(O_U(q^{n/2})\). Hence \(nN_n=q^n+O_U(q^{n/2})\), which proves the asymptotic. For all sufficiently large \(n\), the main term dominates the error, so \(N_n>0\).
+\end{proof}
 
 \begin{proposition}[Normalized reciprocal-zero formula]\label{prop:finite-field-normalized-reciprocal-zero-formula}
 Assume the notation of Definition \ref{def:finite-field-quotient-notation}. Let \(\chi\in\widehat G\setminus\{\ind\}\), and write the Artin \(L\)-function of \(\chi\) on \(U\) in the form
@@ -82,8 +110,65 @@ Division by \(q^{n/2}\) is the displayed formula. Since \(|\chi(\mathrm{Frob}_v^
 which proves the uniform bound for \(R_n(\chi)\). If \(U\subset C\) is obtained by removing a finite set \(S\), then each boundary point of degree dividing \(n\) contributes at most its degree to the closed-point sum, so the total boundary correction in \(nB_n(\chi)\) is \(O_U(n)\), hence is \(O_U(nq^{-n/2})\) after normalization. In the projective case \(S=\emptyset\).
 \end{proof}
 
-\begin{theorem}[Finite-field Chebotarev quotient entropy tomography]\label{thm:finite-field-chebotarev-entropy-tomography}
-Let \(V\to U\) be a geometrically connected finite \etale abelian Galois cover of a smooth geometrically connected curve over \(\FF_q\), with group \(G\). Use the notation of Definition \ref{def:finite-field-quotient-notation}. Then the quantities \(A_n(\chi)\) are bounded uniformly in \(n\) and \(\chi\ne\ind\), and, uniformly for all subgroups \(H\le G\),
+\begin{proposition}[Unitary Artin expansion with Cesaro-negligible remainder]\label{prop:finite-field-unitary-artin-expansion}
+Assume the notation of Definition \ref{def:finite-field-quotient-notation}. For every nontrivial character \(\chi\in\widehat G\), there are finitely many coefficients \(b_{\chi,\zeta}\in\CC\), indexed by unit complex numbers \(\zeta\), and an error term \(e_n(\chi)\) such that
+\[
+A_n(\chi)=\sum_{\zeta}b_{\chi,\zeta}\zeta^n+e_n(\chi),
+\qquad
+\frac1N\sum_{n\le N}|e_n(\chi)|^2\longrightarrow0.
+\]
+More explicitly, the unitary part contains the terms
+\[
+-\sum_{\substack{1\le j\le m_\chi\\ |\alpha_{\chi,j}|=q^{1/2}}}
+\left(\frac{\alpha_{\chi,j}}{q^{1/2}}\right)^n
+\]
+from the reciprocal zeros of \(L(U,\chi,T)\). If \(\chi\) is quadratic, it also contains the imprimitive trivial-channel term \(-\mathbf 1_{2\mid n}=-(1+(-1)^n)/2\). All other proper-divisor and boundary contributions are absorbed into \(e_n(\chi)\).
+\end{proposition}
+
+\begin{proof}
+Put
+\[
+P_n(\psi):=n\sum_{\substack{v\in |U|\\ \deg v=n}}\psi(\mathrm{Frob}_v)
+\]
+for any character \(\psi\), including the trivial one, and
+\[
+S_r(\psi):=\sum_{d\mid r}P_d(\psi^{r/d}).
+\]
+The logarithmic derivative identity used in Proposition \ref{prop:finite-field-normalized-reciprocal-zero-formula} says that, for nontrivial \(\psi\),
+\[
+S_r(\psi)=-\sum_j\alpha_{\psi,j}^{\,r},
+\]
+while for the trivial character \(S_r(\ind)=\#U(\FF_{q^r})\). The divisor relation
+\[
+S_n(\chi)=\sum_{e\mid n}P_{n/e}(\chi^e)
+\]
+has the M\"obius inverse
+\[
+P_n(\chi)=\sum_{e\mid n}\mu(e)S_{n/e}(\chi^e).
+\]
+Indeed, after expanding the right side, the coefficient of \(P_{n/k}(\chi^k)\) is \(\sum_{e\mid k}\mu(e)\), which is \(1\) for \(k=1\) and \(0\) otherwise. Dividing by \(q^{n/2}\) gives an exact expression for \(A_n(\chi)\).
+
+The term \(e=1\) contributes
+\[
+-q^{-n/2}\sum_j\alpha_{\chi,j}^{\,n}.
+\]
+The summands with \(|\alpha_{\chi,j}|=q^{1/2}\) are exactly the displayed unitary exponentials; those with \(|\alpha_{\chi,j}|<q^{1/2}\) have Cesaro mean square zero. If \(e\ge2\) and \(\chi^e\ne\ind\), the Weil bound \(|\alpha_{\chi^e,j}|\le q^{1/2}\) gives
+\[
+q^{-n/2}|S_{n/e}(\chi^e)|=O(q^{-n(e-1)/(2e)})
+\]
+for each fixed divisor \(e\), and the sum over all such divisors has Cesaro mean square zero. If \(\chi^e=\ind\), then
+\[
+q^{-n/2}S_{n/e}(\ind)=q^{-n/2}\#U(\FF_{q^{n/e}})=q^{-n(1/2-1/e)}+O_U(q^{-n(1/2-1/(2e))})+O_U(q^{-n/2}).
+\]
+This is Cesaro-square negligible for \(e>2\). For \(e=2\), which occurs exactly when \(\chi\) is quadratic and \(2\mid n\), the contribution is
+\[
+\mu(2)q^{-n/2}\#U(\FF_{q^{n/2}})=-\mathbf 1_{2\mid n}+O_U(q^{-n/4})+O_U(q^{-n/2}),
+\]
+and the indicator is the unitary exponential combination \((1+(-1)^n)/2\). Finally, the boundary term for nonprojective \(U\) is \(O_U(nq^{-n/2})\) by Proposition \ref{prop:finite-field-normalized-reciprocal-zero-formula}, hence has Cesaro mean square zero. Combining these estimates gives the asserted decomposition.
+\end{proof}
+
+\begin{theorem}[Projective finite-field Chebotarev entropy tomography]\label{thm:projective-finite-field-chebotarev-entropy-tomography}
+Let \(V\to C\) be a geometrically connected finite \etale{} abelian Galois cover of a smooth projective geometrically connected curve over \(\FF_q\), with group \(G\). Use the notation of Definition \ref{def:finite-field-quotient-notation} with \(U=C\), and choose an integer \(n_0(V/C)\) large enough that Lemma \ref{lem:finite-field-eventual-positive-degrees} gives \(N_n>0\) and the entropy Taylor expansion in the proof below is valid for every \(n\ge n_0(V/C)\). For every \(n\ge n_0(V/C)\), the law \(\mu_n\) is defined. The quantities \(A_n(\chi)\) are bounded uniformly in \(n\ge n_0(V/C)\) and \(\chi\ne\ind\), and, uniformly for all subgroups \(H\le G\),
 \[
 \chi^2\!\left(\mu_n^H\,\middle\|\,\mathrm{unif}_{G/H}\right)
 =
@@ -177,6 +262,26 @@ E_n(K)=
 \sum_{\chi\in J^\perp\setminus\{\ind\}}|A_n(\chi)|^2.
 \]
 Substituting the exact Parseval identity before the expansion gives the displayed exact \(\chi^2\)-identity. Substituting the entropy expansion and multiplying by \(2q^n\) gives the relative-entropy recovery formula, because the subgroup lattice is finite and \(2q^nO(q^{-3n/2})=O(q^{-n/2})\).
+\end{proof}
+\begin{corollary}[Open-curve Chebotarev entropy tomography]\label{thm:finite-field-chebotarev-entropy-tomography}
+Let \(V\to U\) be a geometrically connected finite \etale{} abelian Galois cover of a smooth geometrically connected curve over \(\FF_q\), with group \(G\). Use the notation of Definition \ref{def:finite-field-quotient-notation}, and choose an integer \(n_0(V/U)\) large enough that Lemma \ref{lem:finite-field-eventual-positive-degrees} gives \(N_n>0\) and the entropy Taylor expansion in the proof of Theorem \ref{thm:projective-finite-field-chebotarev-entropy-tomography} is valid for every \(n\ge n_0(V/U)\). Then, for every \(n\ge n_0(V/U)\), the law \(\mu_n\) is defined and all conclusions of Theorem \ref{thm:projective-finite-field-chebotarev-entropy-tomography} hold with \(U\) in place of \(C\). In particular, uniformly in \(H\le G\) and \(K\le G\),
+\[
+\chi^2\!\left(\mu_n^H\middle\|\mathrm{unif}_{G/H}\right)
+=q^{-n}\sum_{\chi\in H^\perp\setminus\{\ind\}}|A_n(\chi)|^2+O(q^{-3n/2}),
+\]
+\[
+D\!\left(\mu_n^H\middle\|\mathrm{unif}_{G/H}\right)
+=\frac12q^{-n}\sum_{\chi\in H^\perp\setminus\{\ind\}}|A_n(\chi)|^2+O(q^{-3n/2}),
+\]
+and
+\[
+E_n(K)=2q^n\sum_{J\supseteq K}\mu_{\mathrm{sub}}(K,J)
+D\!\left(\mu_n^J\middle\|\mathrm{unif}_{G/J}\right)+O(q^{-n/2}).
+\]
+\end{corollary}
+
+\begin{proof}
+The proof of Theorem \ref{thm:projective-finite-field-chebotarev-entropy-tomography} uses only the normalized reciprocal-zero formula, the Weil bound for the reciprocal zeros, the prime number theorem for the trivial channel, finite Fourier inversion, and subgroup-lattice M\"obius inversion. Proposition \ref{prop:finite-field-normalized-reciprocal-zero-formula} gives the same normalized formula for a smooth open curve, with the omitted boundary contributing \(O_U(nq^{-n/2})\), and Lemma \ref{lem:finite-field-eventual-positive-degrees} gives \(N_n=q^n/n+O_U(q^{n/2}/n)\) and eventual positivity. The boundary correction is smaller than the square-root scale used in the theorem and is already included in the uniform boundedness of \(A_n(\chi)\). The same argument therefore gives the displayed \(\chi^2\), entropy, and inversion formulas for all \(n\ge n_0(V/U)\).
 \end{proof}
 
 \begin{example}[Cyclic Kummer cover]\label{ex:cyclic-kummer-quotient-tomography}
