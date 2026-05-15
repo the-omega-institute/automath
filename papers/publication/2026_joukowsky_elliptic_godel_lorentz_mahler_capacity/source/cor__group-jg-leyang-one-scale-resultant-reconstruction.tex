@@ -76,65 +76,115 @@ S_{r,Q}(z)=r^nP(z)\Bigl[z^nP(r^{-2}z^{-1})\Bigr]
 because the source is monic.  The first factor has all zeros on \(|z|=1\), and the second has all zeros on \(|z|=r^{-2}\).  The two shells are disjoint, so the selected degree-\(n\) divisor is exactly the zero divisor of \(P\).  A monic polynomial is uniquely determined by its zero divisor, proving the claim.
 \end{proof}
 
+\begin{lemma}[One-scale fiber matching with multiplicities]\label{lem:one-scale-orbit-fiber-matching}
+Fix \(r>1\) and put
+\[
+\tau_r(z):=r^{-2}z^{-1},
+\qquad
+T_r(z):=rz+r^{-1}z^{-1}
+\qquad(z\in\CC^\times).
+\]
+Let \(P\) be monic of degree \(n\) with zero divisor
+\[
+D=\sum_{x\in\CC^\times}m_x[x]
+\]
+and let \(Q_r\) be its transport polynomial with the normalization of Definition \ref{def:reciprocal-transport-normalization}.  A monic polynomial \(\widetilde P\) of degree \(n\), with zero divisor
+\[
+\widetilde D=\sum_{x\in\CC^\times}\widetilde m_x[x],
+\]
+has the same one-scale transport polynomial \(Q_r\) if and only if the following two conditions hold:
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item for every orbit \(O\) of the involution \(\tau_r\) on \(\CC^\times\),
+  \[
+  \sum_{x\in O}\widetilde m_x=\sum_{x\in O}m_x;
+  \]
+  \item the source-root product is unchanged,
+  \[
+  \prod_{x\in\CC^\times}x^{\widetilde m_x-m_x}=1.
+  \]
+\end{enumerate}
+In particular, if the \(2n\) points \(z_j\) and \(r^{-2}/z_j\) are pairwise distinct, then the fiber is obtained by choosing, for each indexed pair \(\{z_j,r^{-2}/z_j\}\), exactly one point, and the choices indexed by \(S\subset\{1,\dots,n\}\) preserve \(Q_r\) exactly when
+\[
+\prod_{j\in S}z_j^2=r^{-2|S|}.
+\]
+\end{lemma}
+
+\begin{proof}
+For \(u,v\in\CC^\times\), the equation \(T_r(u)=T_r(v)\) is equivalent to
+\[
+0=r(u-v)+r^{-1}(u^{-1}-v^{-1})=(u-v)\left(r-\frac{r^{-1}}{uv}\right).
+\]
+Hence \(u=v\) or \(v=r^{-2}/u=\tau_r(u)\).  Thus the fibers of \(T_r\) on \(\CC^\times\) are exactly the \(\tau_r\)-orbits, with the fixed points \(u=\pm r^{-1}\) allowed as one-point orbits.
+
+Writing the actual normalized transport polynomial in divisor form gives
+\[
+Q_r(w)=(-1)^n\left(\prod_x x^{m_x}\right)
+\prod_x\bigl(w-T_r(x)\bigr)^{m_x},
+\]
+and the same formula with \(m_x\) replaced by \(\widetilde m_x\) holds for \(\widetilde P\).  Equality of the monic factors in \(w\) is therefore exactly equality of the pushed-forward divisors \((T_r)_\ast D=(T_r)_\ast\widetilde D\), which is condition \textup{(a)} by the fiber computation above.  After the monic factors agree, equality of the full normalized polynomials is exactly equality of their leading coefficients, namely
+\[
+(-1)^n\prod_xx^{m_x}=(-1)^n\prod_xx^{\widetilde m_x},
+\]
+which is condition \textup{(b)}.  This proves the equivalence.
+
+Under the pairwise-distinct hypothesis every \(\tau_r\)-orbit meeting the source divisor contains exactly one original point \(z_j\) and exactly one reflected point \(r^{-2}/z_j\), each with total orbit multiplicity one.  Condition \textup{(a)} says that a competitor chooses exactly one point from each indexed pair.  If the chosen reflected indices are \(S\), then the root product changes by
+\[
+\prod_{j\in S}\frac{r^{-2}/z_j}{z_j}
+=r^{-2|S|}\prod_{j\in S}z_j^{-2}.
+\]
+Condition \textup{(b)} says that this factor is one, which is precisely the displayed subset-resonance equation.
+\end{proof}
+
 \begin{theorem}[Algebraic Mahler transport inverse package]\label{thm:algebraic-mahler-transport-inverse-package}
 Let \(n\ge1\), and let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(z_1\cdots z_n\ne0\).  For each \(r>1\), let \(Q_r\) be the Joukowsky transport polynomial.  The following inverse statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
   \item \textbf{Multiscale Laurent interpolation.}  If \(r_0,
   \dots,r_n>1\) are distinct and the full polynomials \(Q_{r_0},
-  \dots,Q_{r_n}\) are known, then \(P\) is reconstructed uniquely.  More explicitly, the constant term of \(Q_r\) is
+  \dots,Q_{r_n}\) are known with the normalization of Definition \ref{def:reciprocal-transport-normalization}, then \(P\) is reconstructed uniquely.  More explicitly, the leading coefficient of every \(Q_r\) is
+  \[
+  a_0=(-1)^n z_1\cdots z_n,
+  \]
+  and the coefficient \(A_k(r)\) of \(w^{n-k}\) in \(Q_r(w)\) is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\) whose highest coefficient is \((-1)^k a_0 e_k(z_1,
+  \dots,z_n)\).  In particular, the constant term is
   \[
   Q_r(0)=\sum_{m=-n}^{n}c_m r^m,
   \]
-  a Laurent polynomial with no powers congruent to \(n-1\) modulo \(2\), whose top coefficient is \((-1)^n\) and whose bottom coefficient is \((-1)^n(z_1\cdots z_n)^{-2}\).  The same interpolation applied to all coefficients of \(Q_r(w)\) recovers the elementary symmetric functions of the unordered pairs \(\{z_j,z_j^{-1}\}\), and hence the doubled divisor
-  \[
-  \{z_1,
-  \dots,z_n\}\cup\{z_1^{-1},
-  \dots,z_n^{-1}\}.
-  \]
-  Together with the recovered product \(z_1\cdots z_n\) from the bottom coefficient, this determines the original monic source polynomial.
+  with no powers congruent to \(n-1\) modulo \(2\), top coefficient \((z_1\cdots z_n)^2\), and bottom coefficient \(1\).  Equivalently, the monic transport \(a_0^{-1}Q_r\) has constant-term top coefficient \((-1)^n z_1\cdots z_n\) and bottom coefficient \((-1)^n(z_1\cdots z_n)^{-1}\).  Interpolating the Laurent coefficients \(A_k(r)\) from the \(n+1\) scales and dividing their top coefficients by the known leading coefficient \(a_0\) recovers all elementary symmetric functions \(e_k(z_1,
+  \dots,z_n)\), hence the original monic source polynomial.
 
-  \item \textbf{One-scale resonance fibers.}  Fix one scale \(r>1\), and suppose the roots are indexed so that the unordered pairs
-  \[
-  \{z_j,r^{-2}/z_j\},\qquad 1\le j\le n,
-  \]
-  are read from the doubled polynomial \(S_{r,Q_r}\).  Every monic source polynomial \(\widetilde P\) with nonzero constant term and the same one-scale transport polynomial \(Q_r\) is obtained by replacing, for a subset \(S\subset\{1,
-  \dots,n\}\), the roots \(z_j\) with \(r^{-2}/z_j\) for exactly the indices in \(S\), subject to the finite subset-resonance condition
+  \item \textbf{One-scale resonance fibers.}  Fix one scale \(r>1\), and let \(\tau_r(z)=r^{-2}/z\).  The full one-scale fiber, including repeated roots, overlapping reflected pairs, and the fixed critical points \(z=\pm r^{-1}\), is the \(\tau_r\)-orbit matching set described in Lemma \ref{lem:one-scale-orbit-fiber-matching}: a competitor must preserve the total multiplicity on every \(\tau_r\)-orbit and must preserve the product of all source roots.  In the separated simple case where the \(2n\) points \(z_j\) and \(r^{-2}/z_j\) are pairwise distinct, this reduces to choosing one element from each indexed pair \(\{z_j,r^{-2}/z_j\}\), subject exactly to the finite subset-resonance condition
   \[
   \prod_{j\in S}z_j^2=r^{-2|S|}.
   \]
-  Conversely every such resonant subset gives the same monic one-scale transport polynomial.
 
-  \item \textbf{Lee--Yang and separation injectivity.}  If \(|z_j|=1\) for all \(j\), then no nonempty subset can satisfy the resonance condition, because its left side has modulus one and its right side has modulus \(r^{-2|S|}<1\).  Hence the one-scale map is injective on the monic Lee--Yang class.  More generally, one-scale injectivity holds for every source divisor for which no nonempty subset satisfies the displayed resonance.
+  \item \textbf{Lee--Yang and separation injectivity.}  If \(|z_j|=1\) for all \(j\), then the one-scale map is injective on the monic Lee--Yang class, including repeated roots.  More generally, one-scale injectivity holds for every source divisor \(D\) for which the only divisor \(\widetilde D\) satisfying the two orbit-matching conditions in Lemma \ref{lem:one-scale-orbit-fiber-matching} is \(D\) itself.  In the separated simple case this criterion is exactly the absence of a nonempty subset satisfying the displayed resonance equation.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
 For (i), write
 \[
-Q_r(w)=\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1}).
+\widetilde Q_r(w)=\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1}).
 \]
-The coefficient of \(w^{n-k}\) in
+for the monic transport and remember that the actual transport polynomial is multiplied by
 \[
-Q_r(w)=\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1})
+a_0=(-1)^n z_1\cdots z_n,
+\]
+which is read off as the leading coefficient of any one of the known polynomials \(Q_{r_i}\).  The coefficient \(A_k(r)\) of \(w^{n-k}\) in the actual polynomial
+\[
+Q_r(w)=a_0\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1})
 \]
 is
 \[
-(-1)^k\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}).
+(-1)^k a_0\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}).
 \]
-It is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\), hence after factoring \(r^{-k}\) it is a polynomial of degree \(k\le n\) in \(r^2\).  Its highest \(r\)-power coefficient is \((-1)^k e_k(z_1,\dots,z_n)\).  The \(n+1\) distinct scale values determine this Laurent polynomial uniquely by interpolation, for every \(k\).  Thus all elementary symmetric functions of \(z_1,\dots,z_n\) are recovered, and these are precisely the coefficients of the monic polynomial \(P\).
+It is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\), hence after multiplying by \(r^k\) it is a polynomial of degree \(k\le n\) in \(r^2\).  Since the numbers \(r_i^2\) are distinct, the \(n+1\) scale values determine this Laurent polynomial uniquely by interpolation, for every \(k\).  Its highest \(r\)-power coefficient is \((-1)^k a_0 e_k(z_1,\dots,z_n)\), so division by the already known nonzero coefficient \(a_0\) recovers \(e_k(z_1,
+\dots,z_n)\).  For \(k=n\), this also gives the stated check on the constant term: its highest coefficient is \((-1)^n a_0(z_1\cdots z_n)=(z_1\cdots z_n)^2\), and its lowest coefficient is \((-1)^n a_0(z_1\cdots z_n)^{-1}=1\).  Dividing by \(a_0\) gives the displayed top and bottom coefficients for the monic transport.  Thus all elementary symmetric functions of \(z_1,
+\dots,z_n\) are recovered, and these are precisely the coefficients of the monic polynomial \(P\).
 
-For (ii), the resultant identity gives
-\[
-S_{r,Q_r}(z)=r^nP(z)\Bigl[z^nP(r^{-2}z^{-1})\Bigr],
-\]
-so any source with the same \(Q_r\) must choose exactly one element from each unordered pair \(\{z_j,r^{-2}/z_j\}\); otherwise the doubled zero divisor would differ.  Replacing the roots indexed by \(S\) changes the product of all source roots by the factor
-\[
-\prod_{j\in S}\frac{r^{-2}/z_j}{z_j}=r^{-2|S|}\prod_{j\in S}z_j^{-2}.
-\]
-The transported root multiset is unchanged by the replacement.  The full polynomial \(Q_r\), including its leading coefficient, is unchanged exactly when the source constant term is unchanged, equivalently when the displayed product factor is one, which is precisely
-\(\prod_{j\in S}z_j^2=r^{-2|S|}\).  Under that condition the same \(Q_r\) is obtained.  This proves both necessity and sufficiency.
+For (ii), apply Lemma \ref{lem:one-scale-orbit-fiber-matching}.  It gives the necessary and sufficient orbit-multiplicity matching condition for arbitrary repeated and overlapping reflected roots, and its final separated-case clause gives the indexed-pair subset formula and the displayed resonance equation.
 
-Clause (iii) follows immediately from the modulus argument stated in the theorem.  The same proof shows the general separation criterion: if no nonempty subset satisfies the finite resonance equation, then only \(S=\varnothing\) is possible in (ii).
+For (iii), assume first that all source roots lie on \(\TT\).  Let \(\widetilde D\) satisfy the two orbit-matching conditions of Lemma \ref{lem:one-scale-orbit-fiber-matching}.  Moving one unit of multiplicity from a unit-circle point \(x\) to its reflected point \(\tau_r(x)=r^{-2}/x\) changes the modulus of the source-root product by the factor \(r^{-2}\); moving in the reverse direction changes it by \(r^2\).  Since the original divisor has no mass on the inner shell \(|z|=r^{-2}\), every nontrivial orbit redistribution away from the original Lee--Yang divisor decreases the product modulus by a positive power of \(r^2\).  It therefore cannot satisfy the product-preservation condition.  Hence \(\widetilde D=D\), proving Lee--Yang injectivity even with repeated roots.  The stated general criterion is precisely the uniqueness of the divisor satisfying Lemma \ref{lem:one-scale-orbit-fiber-matching}; in the separated simple case, the last clause of that lemma identifies this uniqueness condition with absence of nonempty resonant subsets.
 \end{proof}
 
 \begin{theorem}[Exact one-scale Lee--Yang inverse theorem]\label{thm:leyang-single-scale-reconstruction}
@@ -165,6 +215,22 @@ The zeros of \(S_{r,Q_r}\) are the disjoint union
 \dots,r^{-2}z_n^{-1}\}.
 \]
 The first set lies on \(|z|=1\), and the second lies on \(|z|=r^{-2}\).  The chosen \(\rho\) separates the two shells, so the exterior factor is exactly \(P\).
+\end{proof}
+
+\begin{lemma}[Outer Rouch\'e count prevents degree loss]\label{lem:outer-rouche-prevents-degree-loss}
+Let \(S\) be a polynomial of degree \(2n\), let \(R>0\), and assume that every zero of \(S\) lies in \(|z|<R\).  Let \(\widetilde Q\in\CC[w]\) have degree at most \(n\), and put
+\[
+\widetilde S(z):=z^n\widetilde Q(J_r(z)).
+\]
+If
+\[
+|\widetilde S(z)-S(z)|<|S(z)|\qquad(|z|=R),
+\]
+then \(\widetilde S\) has exactly \(2n\) finite zeros in \(|z|<R\), counted with multiplicity.  In particular \(\widetilde S\) is a polynomial of degree exactly \(2n\); no part of the Rouch\'e count is lost to a zero at infinity.
+\end{lemma}
+
+\begin{proof}
+Since \(\deg\widetilde Q\le n\), each summand in \(z^n\widetilde Q(J_r(z))\) is a linear combination of powers \(z^{n-\ell},z^{n-\ell+2},\dots,z^{n+\ell}\) with \(0\le\ell\le n\).  Thus \(\widetilde S\) is a genuine polynomial and \(\deg\widetilde S\le 2n\).  Rouch\'e's theorem on \(|z|=R\) gives the same number of zeros for \(\widetilde S\) and \(S\) in the disk \(|z|<R\).  The polynomial \(S\) has all its \(2n\) zeros there by hypothesis, so \(\widetilde S\) has \(2n\) zeros there as well.  A nonzero polynomial of degree at most \(2n\) with \(2n\) finite zeros has degree exactly \(2n\), counted with multiplicity.  Hence no leading-degree loss, equivalently no zero at infinity, occurs.
 \end{proof}
 
 \begin{theorem}[Quantitative annular Rouch\'e stability]\label{thm:quantitative-annular-rouche-stability}
@@ -203,7 +269,50 @@ and no zeros on \(\Gamma_+\) or \(\Gamma_0\).  The monic degree-\(n\) polynomial
 \end{theorem}
 
 \begin{proof}
-The zeros of \(S_r\) are on \(|z|=r^{-2}\) and \(|z|=1\), so none of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\) meets the zero set.  Hence the three infima in the definition of \(\Delta\) are positive.  On each contour the perturbation is strictly smaller than \(|S_r|\), so Rouch\'e's theorem implies that \(\widetilde S\) and \(S_r\) have the same number of zeros in the disks bounded by these contours.  Thus \(\widetilde S\) has \(n\) zeros in \(|z|<\rho_-\), \(n\) zeros in \(|z|<\rho_+\), and \(2n\) zeros in \(|z|<\rho_+^{-1}\).  Therefore no zeros lie in \(\rho_-<|z|<\rho_+\), and exactly \(n\) zeros lie in \(\rho_+<|z|<\rho_+^{-1}\).  A finite zero divisor determines a unique monic polynomial, so those \(n\) annular zeros define a unique canonical annular factor.  In the unperturbed case the annular zeros are precisely the zeros of \(P\).
+The zeros of \(S_r\) are on \(|z|=r^{-2}\) and \(|z|=1\), so none of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\) meets the zero set.  Hence the three infima in the definition of \(\Delta\) are positive.  On each contour the perturbation is strictly smaller than \(|S_r|\), so Rouch\'e's theorem implies that \(\widetilde S\) and \(S_r\) have the same number of zeros in the disks bounded by these contours.  The outer contour case is exactly Lemma \ref{lem:outer-rouche-prevents-degree-loss} with \(R=\rho_+^{-1}\), since all zeros of \(S_r\) lie in \(|z|<\rho_+^{-1}\); therefore \(\widetilde S\) is degree \(2n\) and the count on \(\Gamma_0\) is a finite zero count rather than a count with missing zeros at infinity.  Thus \(\widetilde S\) has \(n\) zeros in \(|z|<\rho_-\), \(n\) zeros in \(|z|<\rho_+\), and \(2n\) zeros in \(|z|<\rho_+^{-1}\).  Therefore no zeros lie in \(\rho_-<|z|<\rho_+\), and exactly \(n\) zeros lie in \(\rho_+<|z|<\rho_+^{-1}\).  A finite zero divisor determines a unique monic polynomial, so those \(n\) annular zeros define a unique canonical annular factor.  In the unperturbed case the annular zeros are precisely the zeros of \(P\).
 \end{proof}
 
+\begin{corollary}[Coefficient-level annular stability certificate]\label{cor:coefficient-annular-rouche-stability}
+Retain the hypotheses and notation of Theorem \ref{thm:quantitative-annular-rouche-stability}, and write
+\[
+Q_r(w)=\sum_{\ell=0}^{n}b_\ell w^\ell,
+\qquad
+\widehat Q(w)=\sum_{\ell=0}^{n}\widehat b_\ell w^\ell,
+\]
+allowing \(\widehat b_n=0\) if \(\deg\widehat Q<n\).  Put
+\[
+\mathfrak B_n(r;\rho_-,\rho_+)
+:=
+\max_{z\in\Gamma_-\cup\Gamma_+\cup\Gamma_0}
+|z|^n\sum_{\ell=0}^{n}|J_r(z)|^\ell.
+\]
+If the coefficient errors satisfy
+\[
+\max_{0\le \ell\le n}|\widehat b_\ell-b_\ell|
+<
+\frac{\Delta(r,P;\rho_-,\rho_+)}{\mathfrak B_n(r;\rho_-,\rho_+)},
+\]
+then \(\widehat S(z):=z^n\widehat Q(J_r(z))\) satisfies the Rouch\'e envelope in Theorem \ref{thm:quantitative-annular-rouche-stability}.  Consequently \(\widehat Q\) has a unique canonical annular factor of degree \(n\), and for \(\widehat Q=Q_r\) this factor is exactly \(P\).  More generally, the same conclusion holds under the weighted \(\ell^1\) coefficient condition
+\[
+\max_{z\in\Gamma_-\cup\Gamma_+\cup\Gamma_0}
+|z|^n\sum_{\ell=0}^{n}|\widehat b_\ell-b_\ell|\,|J_r(z)|^\ell
+<\Delta(r,P;\rho_-,\rho_+).
+\]
+\end{corollary}
 
+\begin{proof}
+For each point of the three contours,
+\[
+\left|z^n\widehat Q(J_r(z))-S_r(z)\right|
+=
+\left|z^n\sum_{\ell=0}^{n}(\widehat b_\ell-b_\ell)J_r(z)^\ell\right|
+\le
+|z|^n\sum_{\ell=0}^{n}|\widehat b_\ell-b_\ell|\,|J_r(z)|^\ell.
+\]
+The weighted \(\ell^1\) hypothesis is exactly the assertion that the right side is uniformly smaller than \(\Delta(r,P;\rho_-,\rho_+)\).  The simpler maximum-coefficient hypothesis implies it because the last display is at most
+\[
+\max_{0\le \ell\le n}|\widehat b_\ell-b_\ell|\,
+\mathfrak B_n(r;\rho_-,\rho_+).
+\]
+Thus the contour hypothesis of Theorem \ref{thm:quantitative-annular-rouche-stability} holds with \(\widetilde Q=\widehat Q\), and the announced annular factor statement follows from that theorem.
+\end{proof}
