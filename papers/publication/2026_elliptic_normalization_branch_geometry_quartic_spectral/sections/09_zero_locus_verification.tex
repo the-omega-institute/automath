@@ -9,7 +9,7 @@ Set
 \[
 \Omega:=\CC\setminus\bigl(\Branch\cup\{-1,0,1\}\bigr).
 \]
-For each fixed $y \in \Omega$, the spectral polynomial $\Pi(\cdot, y)$ has four simple roots $\lambda_1(y), \dots, \lambda_4(y)$, and Appendix~\ref{app:vacuum-edge} gives the spectral decomposition
+For each fixed $y \in \Omega$, the spectral polynomial $\Pi(\cdot, y)$ has four simple roots $\lambda_1(y), \dots, \lambda_4(y)$, and Appendix~\ref{app:endpoint-branching} gives the spectral decomposition
 \[
 Z_m(y)=\sum_{j=1}^4 C_j(y)\lambda_j(y)^m,
 \qquad
@@ -26,45 +26,19 @@ Therefore, on the generic set \(\Omega\), the limiting accumulation set is gover
 \]
 Branch points in $\Branch$ arise as natural endpoints or singularities of such equimodular curves.
 
-\subsection{A numerical consistency figure}
+\subsection{Numerical consistency checks}
 
-Figure~\ref{fig:validation} summarizes a representative numerical check generated directly from the order-$4$ recurrence \eqref{eq:recurrence} and the quartic spectral polynomial \eqref{eq:spectral-poly}.
-No fitting parameters are introduced: all markers correspond to the exact branch values from Theorem~\ref{thm:elliptic-reduction} and Theorem~\ref{thm:ep-classification}.
-
-\begin{figure}[t]
-\centering
-\IfFileExists{figures/zero_locus_validation.pdf}{%
-\includegraphics[width=\textwidth]{figures/zero_locus_validation.pdf}%
-}{%
-\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
-\centering\vspace{2cm}%
-[Validation figure not included in this build.]%
-\vspace{2cm}}}%
-}
-\caption{
-\textbf{Left:} ordered root moduli of $\Pi(\lambda,y)=0$ along the real axis.
-At $y=0$, the top two moduli meet, confirming that the dominant branch over $y>0$ terminates there.
-At $y=1$, only the lower pair collides while the dominant root remains isolated.
-At $y=\ySub$, the colliding double root lies strictly below the dominant modulus, as predicted by Theorem~\ref{thm:ep-classification}.
-\textbf{Center:} zeros of $Z_{80}(y)$ and $Z_{120}(y)$ in the complex $y$-plane.
-The zero clouds organize around the same branch-value window and terminate at $y=0$ rather than at $y=\ySub$.
-The algebraically forced multiplicity-two zero at $y=-1$ (Proposition~\ref{prop:double-zero}) is present for every $m\ge 2$, while no comparable zero accumulation appears near $y=1$.
-\textbf{Right:} scaled negative zeros $-m^2y_{m,k}$ for $k=1,\dots,4$.
-Filled markers are exact zeros of $Z_m$ for $m=80,120,200$; open markers are the two-term asymptotic prediction from Theorem~\ref{thm:vacuum-zero-quantization}; the black line is the leading odd-integer law $\pi^2(2k-1)^2/2$.
-The data are consistent with both the $m^{-2}$ edge scale and the odd-integer quantization inherited from the square-root branch point.
-}
-\label{fig:validation}
-\end{figure}
-
-The three panels are consistent with the exact results: the dominant-modulus collision occurs at \(y=0\), the endpoint-scale zeros follow the odd-integer law of Theorem~\ref{thm:vacuum-zero-quantization}, and the multiplicity-two zero at \(y=-1\) is pinned for every \(m\ge 2\).
+The numerical material in this section is supplementary: it checks the exact formulas against independently evaluated roots of the recurrence polynomials, but no theorem above depends on it.
+The checks used for the submission source are the following.
+\begin{enumerate}
+\item Along the real axis, the ordered moduli of the four roots of \(\Pi(\lambda,y)=0\) show that the dominant-modulus collision occurs at \(y=0\), while the collisions at \(y=1\) and \(y=\ySub\) are subdominant, in agreement with Theorem~\ref{thm:ep-classification} and Proposition~\ref{prop:global-dominance}.
+\item Direct recurrence evaluation of \(Z_m\) for \(m=80,120,200\) gives negative zeros whose scaled values \(-m^2y_{m,k}\), for fixed \(k\), agree with the leading constants \(\pi^2(2k-1)^2/2\) and the two-term correction in Theorem~\ref{thm:endpoint-zero-quantization}.
+\item The algebraically forced factor \((y+1)^2\) from Proposition~\ref{prop:double-zero} is present for every tested \(m\ge2\), and no analogous forced zero appears at the subdominant branch value \(y=1\).
+\end{enumerate}
+These computations are included as reproducibility evidence rather than as graphical data in the article source.
 
 \medskip
 \noindent\textbf{Reproducibility.}
-Appendix~\ref{app:pseudocode} lists the dependable entry point \texttt{scripts/generate\_validation\_figure.py} and the precise commands needed to reproduce the plots.
-Running
-\[
-\texttt{python3\ scripts/generate\_validation\_figure.py}
-\]
-with Python~3.11, NumPy~1.26, Matplotlib~3.8, SymPy~1.12, and mpmath~1.3 regenerates Figure~\ref{fig:validation}, writes \texttt{figures/zero\_locus\_validation.pdf}, and records the modulus gaps along the sampled grid.
-The script factors out $(y+1)^2$ symbolically (Proposition~\ref{prop:double-zero}) before solving for the zeros so that the enforced double zero at $y=-1$ is verified algebraically.
-Appendix~\ref{app:pseudocode} also provides a short mpmath snippet for the 80-digit cross-check of the modulus ordering near $y\in\{0,1,y_{\mathrm{sub}}\}$.
+Appendix~\ref{app:pseudocode} records optional commands for reproducing the numerical checks outside the proof.
+The script constructs \(Z_m(y)\) from the recurrence \eqref{eq:recurrence}, evaluates the roots of \eqref{eq:spectral-poly}, factors out \((y+1)^2\) symbolically when Proposition~\ref{prop:double-zero} applies, and writes diagnostic tables and optional plots.
+A separate high-precision check verifies the modulus ordering near \(y\in\{0,1,y_{\mathrm{sub}}\}\).
