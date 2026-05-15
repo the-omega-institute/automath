@@ -95,6 +95,41 @@ Apply the Zeckendorf-prefix rule of Definition \ref{def:audited-binary-fold-cert
 so every element of \(\Omega_6\) appears exactly once.  Therefore the table is exactly the graph of \(\Fold_6^{\mathrm{bin}}\), and the displayed equivalence is the definition of the associated block-indicator matrix.  The hash is the SHA--256 digest of the stated canonical stream, so it is a compact check on transcription rather than an additional hypothesis. \qedhere
 \end{proof}
 
+\begin{theorem}[Reusable exact certificate interface for hypercube folds]\label{thm:reusable-exact-certificate-interface-hypercube-folds}
+Let \(F:\Omega_m\twoheadrightarrow X\) be any finite hypercube fold with block-indicator matrix \(M\).  Suppose an audited certificate supplies the following finite integer data:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item the ordered fiber table of \(F\);
+\item the neighbor-count lists \(\mathcal C_{x,y}(F)=\bigl(c_\omega(y)\bigr)_{\omega\in F^{-1}(x)}\), where
+\[
+c_\omega(y)=\#\{1\le i\le m:F(\omega+e_i)=y\};
+\]
+\item the cleared characteristic polynomial of the averaged pushforward kernel
+\[
+P_F=D_F^{-1}M^\top T_mM
+\]
+and a rational Sturm transcript for any asserted real isolating intervals.
+\end{enumerate}
+Then the certificate has the following referee-checkable consequences.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The fold is strongly lumpable on the visible state space if and only if every integer list \(\mathcal C_{x,y}(F)\) is constant.  In that case the quotient kernel is uniquely \(P_F\), and \(\Spec(P_F)\subseteq\{1-2k/m:0\le k\le m\}\).
+\item If some \(\mathcal C_{x,y}(F)\) has diameter \(\delta>0\), then a two-row subcertificate in that single source fiber proves
+\[
+\inf_{P\in\RR^{X\times X}}\|T_mM-MP\|_\infty\ge \frac{\delta}{2m}.
+\]
+In particular no visible kernel can satisfy the exact intertwining equation.
+\item If the Sturm transcript certifies a real zero of the cleared characteristic polynomial in a rational interval disjoint from \(\{1-2k/m:0\le k\le m\}\), then the exact averaged kernel \(P_F\) is not the transition kernel of any equitable quotient of \(Q_m\) on the same visible blocks.
+\end{enumerate}
+Consequently the data in \textup{(a)}--\textup{(c)} form a reusable exact certificate interface: the only fold-specific work is finite integer enumeration and exact Sturm verification, while the mathematical conclusions follow uniformly from the hypercube lumpability and spectral-rigidity theorems.
+\end{theorem}
+
+\begin{proof}
+The fiber table determines \(M\), and the displayed lists are exactly the entries of \(T_mM\) after multiplying by \(m\): for \(\omega\in F^{-1}(x)\), the \((\omega,y)\)-entry of \(T_mM\) is \(c_\omega(y)/m\).  Hence \(T_mM=MP\) can hold for some matrix \(P\) precisely when, for each pair \((x,y)\), this entry is independent of the choice of \(\omega\in F^{-1}(x)\).  This is exactly constancy of every \(\mathcal C_{x,y}(F)\).  When the lists are constant, Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward} identifies the unique quotient with \(P_F\), and Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} gives the hypercube spectral inclusion.  This proves \textup{(i)}.
+
+If a list has diameter \(\delta\), choose two entries in that list attaining its minimum and maximum.  Theorem \ref{thm:local-residual-certificate-hypercube-folds} applied to these two rows gives the lower bound \(\delta/(2m)\) for every visible compression matrix and rules out exact intertwining.  This proves \textup{(ii)}.
+
+For \textup{(iii)}, clearing denominators in \(\det(tI-P_F)\) does not change the real zeros.  Sturm's theorem counts zeros in a rational interval from the signs of the exact Sturm sequence at the two endpoints.  If such an interval avoids the hypercube grid but contains a zero of the cleared characteristic polynomial, then \(P_F\) has an off-grid eigenvalue.  The contrapositive statement in Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} therefore excludes \(P_F\) from the class of equitable quotient kernels on the same visible blocks.  The final sentence is only the assembly of these three proved implications. \qedhere
+\end{proof}
+
 \begin{theorem}[Fold\texorpdfstring{$_m^{\mathrm{bin}}$}{m bin} finite residual certificate package]\label{thm:foldbin-family-certificate-algorithm}
 For every \(m\ge1\), the binary Zeckendorf-prefix fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) admits a finite integer residual certificate package deciding strong lumpability on its visible state space and classifying all approximate visible intertwiners.  More precisely, let
 \[
@@ -122,6 +157,7 @@ All entries in this criterion are obtained by finite integer enumeration of the 
 \mathcal F_m=\bigl(x:(\Fold_m^{\mathrm{bin}})^{-1}(x)\bigr)_{x\in X_m},
 \]
 so the window-\(6\) table in Proposition \ref{prop:foldbin6-canonical-fiber-table}, the matrix of Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, the exact residual distribution in Theorem \ref{thm:foldbin6-exact-residual-diameter-distribution}, and the spectral certificate of Theorem \ref{thm:single-exact-fold6-certificate} are the audited \(m=6\) specialization of this criterion.
+Equivalently, they are the audited \(m=6\) specialization of the reusable interface in Theorem \ref{thm:reusable-exact-certificate-interface-hypercube-folds}.
 \end{theorem}
 
 \begin{proof}
@@ -440,7 +476,7 @@ the polynomial \(Q_6=L_6q_6\) has the exact integer coefficient stream recorded 
 \qquad
 (-0.6030939755,-0.6030939754).
 \]
-Both intervals are disjoint from the window-\\(6\\) hypercube spectrum displayed in Section \\ref{sec:preliminaries}.
+Both intervals are disjoint from the window-\(6\) hypercube spectrum displayed in Section \ref{sec:preliminaries}.
 \end{enumerate}
 Consequently the audited window-\(6\) bin-fold pushforward is not a strongly lumpable visible-state quotient of the simple random walk on \(Q_6\), and the conclusion is certified both by an entrywise residual obstruction and by an off-grid spectral obstruction.
 \end{theorem}

@@ -313,6 +313,23 @@ No item in this guide uses floating-point arithmetic.  Decimal strings such as \
 Item \textup{(i)} is exactly the deterministic enumeration in Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(i)}--\textup{(ii)} specialized to \(m=6\), and Proposition \ref{prop:foldbin6-canonical-fiber-table} is the same enumeration printed as a block-indicator table.  Item \textup{(ii)} is the second finite sum in the proof of Proposition \ref{prop:audited-computation-reproducibility-certificate}: flipping each coordinate of each source vertex counts the pairs \((\omega,k)\), so it produces the integer matrix \(N\); division by \(6d_i\) is the exact formula for averaging the simple random walk over the source fiber.  Item \textup{(iii)} is the residual assertion explicitly checked in the displayed SageMath witness and proved by hand in Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness}.  Item \textup{(iv)} follows from fraction-free determinant computation over \(\QQ[t]\), denominator clearing by \(L_6\), and Sturm's theorem over \(\QQ[t]\), as detailed in the proof of Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(iv)}--\textup{(v)} and in Lemma \ref{lem:foldbin6-characteristic-certificate}.  Each operation is addition, multiplication, comparison, Euclidean division, or hashing of printed finite integer streams.  Thus the certificate is exact and independent of floating-point approximations. \qedhere
 \end{proof}
 
+
+
+\begin{proposition}[Artifact manifest and verifier transcript for the Fold\texorpdfstring{$_6$}{6} audit]\label{prop:window6-artifact-manifest-verifier-transcript}
+The exact audit for Theorem \ref{thm:main-fold6-nonlumpability} is completely described by the following artifact manifest and verifier transcript.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item \texttt{supplement/window6\_audit\_certificate.sage}: executable verifier, accepted by the source SHA--256 in Proposition \ref{prop:window6-audit-output-wrapper}\textup{(a)}.
+\item \(d_6,d_7,d_8\): fiber-cardinality streams, accepted by the three SHA--256 hashes in Proposition \ref{prop:window6-audit-output-wrapper}\textup{(b)}.
+\item \(N_{ij}\): the window-\(6\) directed edge stream, accepted by the SHA--256 hash in Proposition \ref{prop:window6-audit-output-wrapper}\textup{(c)}.
+\item Stabilizer and residual streams: the geometric and nonintertwining checks, accepted by the two SHA--256 hashes in Proposition \ref{prop:window6-audit-output-wrapper}\textup{(d)}.
+\item \(Q_6(t)\): the cleared determinant factor, accepted by the coefficient hash in Proposition \ref{prop:window6-audit-output-wrapper}\textup{(e)}.
+\item Sturm signs: the rational root-isolation transcript, accepted by the sign-stream hash in Proposition \ref{prop:window6-audit-output-wrapper}\textup{(f)}.
+\end{enumerate}
+A verifier that recomputes these six rows from the definitions accepts exactly when every displayed hash, integer stream, residual count, determinant coefficient, and Sturm sign string agrees with the printed data.  Upon acceptance, all finite data used in Theorem \ref{thm:main-fold6-nonlumpability}, Corollary \ref{cor:main-fold6-companion-consequences}, and Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate} have been checked by exact arithmetic.
+\end{proposition}
+
+\begin{proof}
+The first row fixes the byte-normalized executable verifier.  The second and third rows fix the finite fold table and the directed edge-count matrix, hence the block-indicator matrix and the rational pushforward kernel by Propositions \ref{prop:foldbin6-canonical-fiber-table} and \ref{prop:foldbin6-exact-pushforward-matrix}.  The fourth row fixes the two finite auxiliary assertions used outside the matrix itself: the geometric stabilizer identity used in the chiral and boundary consequences and the two-count residual witness used in Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness}.  The fifth row fixes the cleared characteristic factor of the exact rational matrix.  The sixth row fixes the signs of the rational Sturm sequence at the four rational endpoints, which is the complete transcript needed by Sturm's theorem to certify one zero in each isolating interval.  Proposition \ref{prop:window6-audit-output-wrapper} proves that these rows are precisely the finite objects invoked by the main theorem chain; therefore an accepting verifier has checked all of them and no unlisted finite datum remains. \qedhere
+\end{proof}
+
 \endinput
-
-
