@@ -7,7 +7,7 @@ from the paper root.  The required interpreter is SageMath running Python \(3\),
 \[
 \texttt{320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429}.
 \]
-No external black-box data file is used: the witness block in item \textup{(vi)} recomputes the finite lists, matrix, characteristic-polynomial factor, and Sturm signs from the definitions.
+No external black-box data file is used: the witness block in item \textup{(vi)} recomputes the finite lists, matrix, characteristic-polynomial factor, and Sturm signs from the definitions.  The companion printed file \texttt{supplement/window6\_exact\_determinant\_sturm\_certificate.txt} records the determinant identity, the full integer polynomial, the rational Sturm endpoint convention, and the residual witness as an independent referee checklist.
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item For each \(m\), enumerate \(\Omega_m\) in increasing dyadic order and enumerate \(X_m\) lexicographically.  For \(N\in[0,2^m-1]\), compute its greedy Zeckendorf digits by repeatedly subtracting the largest available Fibonacci weight \(F_{r+1}\) and then skipping the adjacent weight.  The fold value is the length-\(m\) prefix \((z_1(N),\ldots,z_m(N))\).
 \item For \(m=6,7,8\), the boundary words and boundary fiber cardinalities are as follows:
@@ -190,7 +190,7 @@ sst=';'.join('%s:%s' % (pts[i], signs[i]) for i in range(4))
 assert sha256(sst.encode()).hexdigest() == '3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0'
 \end{Verbatim}
 \end{enumerate}
-Consequently the finite enumeration, the window-\(6\) matrix, the characteristic polynomial factor, and the two Sturm root counts are recoverable from explicit integer data and canonical text streams.
+Consequently the finite enumeration, the window-\(6\) matrix, the characteristic polynomial factor, and the two Sturm root counts are recoverable from explicit integer data and canonical text streams.  The printed supplement \texttt{supplement/window6\_exact\_determinant\_sturm\_certificate.txt} contains the same determinant and Sturm certificate without relying on a numerical eigenvalue routine.
 \end{proposition}
 \begin{proof}
 The algorithm in \textup{(i)} is deterministic because at each step the largest Fibonacci weight not exceeding the current remainder is uniquely defined, and the skip rule is the standard greedy Zeckendorf rule.  The bound in Lemma \ref{lem:audited-binary-fold-certificate-identities} ensures that every legal length-\(m\) word occurs as the prefix of some dyadic vertex, so the enumeration is over finite lists of sizes \(2^6,2^7,2^8\) for the only audited windows used here.
@@ -219,6 +219,27 @@ S_{r+1}=-\operatorname{rem}(S_{r-1},S_r)
 over \(\QQ[t]\), clearing positive scalar denominators if desired because such clearing does not change signs.  Its degrees are \(20,19,\ldots,0\).  Evaluating this sequence at the four rational endpoints gives the displayed sign strings and variation counts.  Sturm's theorem therefore gives \(1-0=1\) zero in \((4841207858/10^{10},4841207859/10^{10})\) and \(20-19=1\) zero in \((-6030939755/10^{10},-6030939754/10^{10})\), which is the integer Sturm data used in Lemma \ref{lem:foldbin6-characteristic-certificate}.
 
 For \textup{(vi)}, every operation in the verbatim block is one of the operations just described: standard-library iteration and SHA--256 hashing for the canonical streams, direct enumeration of the affine map \(\sigma_{\mathrm{geo}}\) and the two residual neighbor counts, and SageMath exact rational, integer, matrix, polynomial, characteristic-polynomial, and Sturm-sequence routines for the algebraic certificate.  Since all inputs are printed in the block and every acceptance condition is an assertion against a displayed integer stream, hash, stabilizer identity, or residual count, executing the block under SageMath with Python \(3\) is a complete referee reproduction interface for the finite audit. \qedhere
+\end{proof}
+
+\begin{proposition}[Audit-output wrapper for every finite datum]\label{prop:window6-audit-output-wrapper}
+All displayed finite data used by the window-\(6\) certificate are tied to the following acceptance table.  The endpoint convention is that every decimal endpoint printed in the main text is the indicated rational number with denominator \(10^{10}\); equivalently the left positive endpoint may be written as \(2420603929/5000000000\), the right positive endpoint as \(4841207859/10000000000\), the left negative endpoint as \(-1206187951/2000000000\), and the right negative endpoint as \(-3015469877/5000000000\).
+\begin{center}
+\scriptsize
+\begin{tabular}{p{0.22\linewidth}|p{0.18\linewidth}|p{0.50\linewidth}}
+datum&acceptance string&displayed finite object\\ \hline
+Sage source&\texttt{320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429}&byte-normalized source of \texttt{supplement/window6\_audit\_certificate.sage}\\
+fiber vectors \(m=6,7,8\)&\texttt{3b3a9f44074afc02177af79f9f4107aea061789f817bf7d288cb9fd473cdeee5}; \texttt{4a182c2503f6a82433ed6501cdea0997d5d274ef7b35415e3b0ec0d2cb7e7232}; \texttt{cce73204f542296c6966285ca60f307f97a630814b9fd108c85cd3b974351c36}&canonical streams \(\texttt{m=<m>;X=<lex words>;d=<lex fiber sizes>;bd=<boundary word:size list>}\) and the printed vectors \(d_6,d_7,d_8\)\\
+edge-count matrix \(N\)&\texttt{2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0}&canonical stream \(\texttt{m=6;states=<lex words>;d=<lex fiber sizes>;N=<sparse directed edge rows>}\), hence Proposition \ref{prop:foldbin6-exact-pushforward-matrix}\\
+geometric stabilizer and residual witness&\texttt{74c06d9b2d8cf118170272b1f9320782f73d4e82d940061dcd37f85b7d1f87bf}; \texttt{701cfebf8b51ad99e38663841599aa1b1a492957040c4db6d4dd3e2def69fcf2}&the identity \(\Fold_6^{\mathrm{bin}}\sigma_{\mathrm{geo}}=\Fold_6^{\mathrm{bin}}\) and the counts \(000000,010101\mapsto000100\) equal to \(0,1\)\\
+cleared characteristic factor&\texttt{a4f32303d20419c1608c177dafdc43904e3831f0c2eaf6f65895d49c654667dd}&coefficient stream \(\texttt{Q6=}\) followed by the displayed decreasing-degree coefficients of \(Q_6(t)=L_6\det(tI-P_6)/(t-1)\), with \(L_6=3234734993627557134336\)\\
+Sturm signs&\texttt{3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0}&sign stream at \(4841207858/10^{10}\), \(4841207859/10^{10}\), \(-6030939755/10^{10}\), \(-6030939754/10^{10}\): \verb|-++++++++++++++++++++|, \verb|+++++++++++++++++++++|, \verb|+-+-+-+-+-+-+-+-+-+-+|, \verb|--+-+-+-+-+-+-+-+-+-+|
+\end{tabular}
+\end{center}
+Consequently a referee who checks the rows of this table has checked every finite object used in Theorem \ref{thm:main-fold6-nonlumpability}: the fiber table, the pushforward matrix, the stabilizer identity, the residual obstruction, the cleared determinant factor, and the two Sturm variation drops.
+\end{proposition}
+
+\begin{proof}
+The first row is the source hash stated at the start of Proposition \ref{prop:audited-computation-reproducibility-certificate}.  The next two rows are exactly the canonical fiber and directed-edge streams in items \textup{(ii)} and \textup{(iii)} of that proposition.  The stabilizer and residual row is asserted by the executable block in item \textup{(vi)} and supplies Lemma \ref{lem:window6-geometric-stabilizer-audit} and Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness}.  The characteristic row is item \textup{(iv)} with the denominator-clearing integer \(L_6\), so it fixes the polynomial used in Lemma \ref{lem:foldbin6-characteristic-certificate}.  The final row is item \textup{(v)} with the rational endpoint convention displayed above; Sturm's theorem then converts the two sign variation drops into the two root counts used in Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate}.  These are precisely the finite inputs invoked in the proof of Theorem \ref{thm:main-fold6-nonlumpability}; no additional finite datum enters that proof. \qedhere
 \end{proof}
 
 \begin{proposition}[Referee guide to the exact window-\texorpdfstring{$6$}{6} audit]\label{prop:referee-guide-exact-window6-audit}

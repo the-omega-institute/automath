@@ -1,4 +1,4 @@
-﻿\begin{proposition}[Exact audited window-\texorpdfstring{$6$}{6} pushforward matrix]\label{prop:foldbin6-exact-pushforward-matrix}
+\begin{proposition}[Exact audited window-\texorpdfstring{$6$}{6} pushforward matrix]\label{prop:foldbin6-exact-pushforward-matrix}
 Order \(X_6\) lexicographically as \(x_0,\ldots,x_{20}\).  For the fold certificate of Definition \ref{def:audited-binary-fold-certificate}, the pushforward kernel \(P_6\) is determined by the following directed edge-count matrix \(N=(N_{ij})_{0\le i,j\le 20}\).  The canonical edge-count stream for this matrix is the one in Proposition \ref{prop:audited-computation-reproducibility-certificate}\textup{(iii)}.
 \[
 P_6(i,j)=\frac{N_{ij}}{6d_i},
@@ -128,6 +128,64 @@ The first two alternatives are Theorem \ref{thm:finite-certificate-dichotomy-hyp
 For the spectral certificate, multiplying \(\det(tI-P_m^{\mathrm{bin}})\) by a nonzero integer does not change its real zeros.  Since the entries of \(P_m^{\mathrm{bin}}\) are rational, such a clearing denominator exists.  Sturm's theorem applied to \(C_m\) counts the zeros in \((a,b)\) when neither endpoint is a zero; a positive variation drop therefore supplies an eigenvalue of \(P_m^{\mathrm{bin}}\) in that interval.  If the interval is disjoint from the hypercube grid, the spectral inclusion in the equitable case is impossible, so the audited pushforward is not an equitable quotient kernel.  The window-\(6\) certificate is obtained by substituting the printed fiber table, edge-count matrix, and characteristic-polynomial/Sturm data into the same construction. \qedhere
 \end{proof}
 
+\begin{theorem}[Complete residual-budget skeleton for all binary folds]\label{thm:foldbin-complete-residual-budget-skeleton}
+For every \(m\ge1\), the visible obstruction to strong lumpability of the binary fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) is completely controlled by the integer diameter tensor
+\[
+\Delta_m(x,y):=\max_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)} c_\omega(y)
+-
+\min_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)} c_\omega(y),
+\qquad x,y\in X_m,
+\]
+where \(c_\omega(y)=\#\{1\le i\le m:\Fold_m^{\mathrm{bin}}(\omega+e_i)=y\}\).  Put \(\Delta_m:=\max_{x,y}\Delta_m(x,y)\).  Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \(\Fold_m^{\mathrm{bin}}\) is an equitable quotient of \(Q_m\) if and only if \(\Delta_m=0\).
+\item If \(\Delta_m>0\), then every proposed visible kernel \(P\) satisfies the uniform lower bound
+\[
+\|T_mM_m-M_mP\|_\infty\ge \frac{\Delta_m}{2m},
+\]
+where \(M_m\) is the block-indicator matrix and \(\|\cdot\|_\infty\) denotes the largest absolute entry.
+\item For the audited pushforward \(P_m^{\mathrm{bin}}=D^{-1}M_m^\top T_mM_m\), one has
+\[
+\frac{\Delta_m}{2m}\le
+\|T_mM_m-M_mP_m^{\mathrm{bin}}\|_\infty
+\le \frac{\Delta_m}{m}.
+\]
+Moreover the residual entries in a fixed source fiber \(x\) and target column \(y\) are exactly
+\[
+\frac{1}{m}\left(c_\omega(y)-\frac{1}{d_x}
+\sum_{\eta\in(\Fold_m^{\mathrm{bin}})^{-1}(x)}c_\eta(y)\right),
+\qquad \omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x).
+\]
+\item Every failure is represented by a two-row, one-column bad-example skeleton: if \(\Delta_m(x,y)=\Delta_m\), choose \(\omega_-,\omega_+\in(\Fold_m^{\mathrm{bin}})^{-1}(x)\) attaining the minimum and maximum of \(c_\omega(y)\).  Then \((\omega_-,\omega_+;y)\) alone proves nonintertwining and gives the lower bound in \textup{(ii)}.
+\end{enumerate}
+Thus the family-level obstruction is not a floating-point or spectral accident: at every window it is an integral diameter certificate on target-fiber neighbor-count lists, and the window-\(6\) witness in Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness} is the \(\Delta_6\ge1\) instance used in the main theorem chain.
+\end{theorem}
+
+\begin{proof}
+For fixed \(x,y\), the entries of the column \(T_mM_m(\cdot,y)\) on the source fiber over \(x\) are precisely \(c_\omega(y)/m\).  Hence all rows in a source fiber are identical for every target column if and only if every diameter \(\Delta_m(x,y)\) is zero.  By Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward}, this is exactly the equitable, or strongly lumpable, condition.  This proves \textup{(i)}.
+
+Assume \(\Delta_m>0\), and choose \(x,y\) and vertices \(\omega_-,\omega_+\in(\Fold_m^{\mathrm{bin}})^{-1}(x)\) with
+\[
+c_{\omega_+}(y)-c_{\omega_-}(y)=\Delta_m.
+\]
+For any matrix \(P\), the two corresponding entries of \(M_mP\) in the column \(y\) are both the same number, namely \(P(x,y)\).  Therefore
+\[
+\max\left\{
+\left|\frac{c_{\omega_-}(y)}{m}-P(x,y)\right|,
+\left|\frac{c_{\omega_+}(y)}{m}-P(x,y)\right|
+\right\}
+\ge \frac{\Delta_m}{2m},
+\]
+because any point on the real line is at distance at least half the separation from one endpoint of an interval.  This proves \textup{(ii)} and the two-row skeleton assertion in \textup{(iv)}.
+
+For the audited pushforward, the entry \(P_m^{\mathrm{bin}}(x,y)\) is the average of \(c_\eta(y)/m\) over \(\eta\in(\Fold_m^{\mathrm{bin}})^{-1}(x)\).  Substituting this average gives the displayed residual formula.  The lower bound follows from \textup{(ii)} by taking \(P=P_m^{\mathrm{bin}}\).  The upper bound follows because every entry in the fixed list lies within its full diameter of its average, so
+\[
+\left|\frac{c_\omega(y)}{m}-P_m^{\mathrm{bin}}(x,y)\right|
+\le \frac{\Delta_m(x,y)}{m}
+\le \frac{\Delta_m}{m}.
+\]
+This proves \textup{(iii)} and completes the classification of bad-example skeletons. \qedhere
+\end{proof}
 \begin{proposition}[Explicit window-\texorpdfstring{$6$}{6} nonintertwining witness]\label{prop:foldbin6-explicit-nonintertwining-witness}
 For the audited fold \(\Fold_6^{\mathrm{bin}}:\Omega_6\to X_6\), the two vertices
 \[
