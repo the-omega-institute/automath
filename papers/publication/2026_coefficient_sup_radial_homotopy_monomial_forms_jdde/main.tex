@@ -288,9 +288,12 @@ cellwise primitive or potential is controlled by an interior norm while the
 quantity exchanged with neighboring cells is the trace on a common face. In such
 systems, an interior primitive bound supplies a stability certificate for the
 boundary flux exchanged between cells: equality identifies the canonical flux,
-and a small saturation gap bounds the trace error. Section~5 gives the one-cell
-cochain form of this mechanism. A global cubical complex requires compatibility
-of the local homotopies across adjacent cells and is not proved here.
+and a small saturation gap bounds the trace error. Corollary~\ref{cor:local-cell-interface-stability}
+makes this interpretation precise for every bounded face functional on a single
+rectangular cell. Section~5 gives the one-cell cochain form of the same local
+mechanism. No global well-posedness, convergence, or dynamics theorem is claimed
+here; on a full cubical complex one also needs compatibility of the local
+homotopies and interface unknowns across adjacent cells.
 
 \medskip
 \noindent\textbf{Outline of the paper.}
@@ -298,8 +301,9 @@ Section~2 introduces the notation and recalls the centered homotopy operator.
 Section~3 records the sharp coefficient estimate on the coordinate-monomial
 class together with the decomposition theorem. Section~4 contains the inverse
 part of the paper: the extremal primitive problem on boxes, the quantitative
-boundary readout theorem, and the sliced extension to higher-dimensional
-boxes. Section~5 gives the one-cube Whitney counterpart and records the
+boundary readout theorem, the resulting local interface-stability certificate,
+and the sliced extension to higher-dimensional boxes. Section~5 gives the
+one-cube Whitney counterpart and records the
 auxiliary Whitney identities needed for that argument.
 
 \section{Preliminaries and the centered homotopy operator}
@@ -1236,6 +1240,7 @@ $\delta=0$.
 
 \begin{theorem}[Sharp trace-error skeleton and minimizer kernel]
 \label{thm:box-minimizer-structure}
+\label{cor:box-minimizer-structure}
 Let $R=\prod_{j=1}^k[0,L_j]$, let $\eta_R$ and $m_R$ be as in
 Theorem~\ref{thm:box-boundary-stability}, and let
 $\eta\in\Omega^{k-1}_{\mathrm{sm}}(R)$ satisfy $\dd\eta=\omega_R$. For a
@@ -1408,6 +1413,70 @@ $F_{j,0}$ it is $-a$, so $q_{j,L_j}=a$ and $q_{j,0}=-a$. Taking $a>0$ attains
 the upper cap on $F_{j,L_j}$, and taking $a<0$ attains it on $F_{j,0}$.
 \end{proof}
 
+\begin{corollary}[Local interface stability for one cell]
+\label{cor:local-cell-interface-stability}
+Let $R=\prod_{j=1}^k[0,L_j]$, let $\eta_R$ and $m_R$ be as in
+Theorem~\ref{thm:box-boundary-stability}, and let
+$\eta\in\Omega^{k-1}_{\mathrm{sm}}(R)$ satisfy $\dd\eta=\omega_R$. Suppose that,
+for some $\delta\ge0$,
+\[
+\norm{\eta}_{\coeff,\infty}\le m_R+\delta .
+\]
+For each coordinate face $F_{j,\lambda}$, write
+\[
+\iota_{j,\lambda}^\ast(\eta-\eta_R)
+=g_{j,\lambda}\,
+\dd x_1\wedge\cdots\wedge\widehat{\dd x_j}\wedge\cdots\wedge\dd x_k,
+\]
+and let $\psi_{j,\lambda}\in L^\infty(F_{j,\lambda})$ be arbitrary face weights.
+Define the linear one-cell interface observable
+\[
+\mathcal I_\psi(\eta):=
+\sum_{j=1}^k\sum_{\lambda\in\{0,L_j\}}
+\int_{F_{j,\lambda}}\psi_{j,\lambda}g_{j,\lambda}
+\,\dd\Haus^{k-1} .
+\]
+Then
+\begin{equation}
+\label{eq:local-cell-interface-stability}
+\abs{\mathcal I_\psi(\eta)}
+\le
+2P_1(R)\delta\,
+\max_{j,\lambda}\norm{\psi_{j,\lambda}}_{L^\infty(F_{j,\lambda})} .
+\end{equation}
+In particular, every bounded linear face-flux readout used by a one-cell
+evolution or balance-law update has the canonical value of $\eta_R$ at
+deficit zero and has error bounded linearly by the interior saturation gap.
+\end{corollary}
+
+\begin{proof}
+By Corollary~\ref{cor:box-delta-trace-stability},
+\[
+\sum_{j=1}^k\sum_{\lambda\in\{0,L_j\}}
+\int_{F_{j,\lambda}}\abs{g_{j,\lambda}}\,\dd\Haus^{k-1}
+\le 2P_1(R)\delta .
+\]
+Therefore
+\[
+\begin{aligned}
+\abs{\mathcal I_\psi(\eta)}
+&\le
+\sum_{j=1}^k\sum_{\lambda\in\{0,L_j\}}
+\norm{\psi_{j,\lambda}}_{L^\infty(F_{j,\lambda})}
+\int_{F_{j,\lambda}}\abs{g_{j,\lambda}}\,\dd\Haus^{k-1} \\
+&\le
+\max_{j,\lambda}\norm{\psi_{j,\lambda}}_{L^\infty(F_{j,\lambda})}
+\sum_{j=1}^k\sum_{\lambda\in\{0,L_j\}}
+\int_{F_{j,\lambda}}\abs{g_{j,\lambda}}\,\dd\Haus^{k-1} \\
+&\le
+2P_1(R)\delta\,
+\max_{j,\lambda}\norm{\psi_{j,\lambda}}_{L^\infty(F_{j,\lambda})} .
+\end{aligned}
+\]
+If $\delta=0$, the same corollary gives $g_{j,\lambda}=0$ on every face, so
+all such interface observables coincide with those of the affine minimizer
+$\eta_R$.
+\end{proof}
 \begin{definition}[Face trace]
 \label{def:face-trace}
 For $\eta\in\Omega^{k-1}_{\mathrm{sm}}(I^k)$ and
