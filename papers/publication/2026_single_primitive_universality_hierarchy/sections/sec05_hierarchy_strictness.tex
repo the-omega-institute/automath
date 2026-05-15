@@ -179,6 +179,48 @@ the two decision problems are many-one equivalent for this fragment,
 and both are undecidable.
 \end{proof}
 
+\begin{theorem}[Abstract normalizer obstruction]
+\label{thm:abstract-normalizer-obstruction}
+Let \(\mathcal S\) be a computably enumerable source term language with
+an undecidable semantic equality relation \(\equiv_{\mathcal S}\).  Let
+\(\mathcal T\) be a computably presented target expression language, and
+suppose there is a total computable translation
+\(\tau\colon\mathcal S\to\mathcal T\) such that
+\[
+  A\equiv_{\mathcal S} B
+  \quad\Longleftrightarrow\quad
+  \tau(A)\equiv_{\tau} \tau(B)
+\]
+for all source terms \(A,B\), where \(\equiv_{\tau}\) denotes the target
+semantic equality transported to the subset \(\tau(\mathcal S)\).
+Then there is no computable finite normalizer for this transported
+fragment: more precisely, there do not exist a decidable set
+\(N\subseteq\{0,1\}^*\), a decidable equality predicate on \(N\), and a
+total computable map
+\(\mathrm{NF}\colon\tau(\mathcal S)\to N\) satisfying
+\[
+  \mathrm{NF}(\tau(A))=\mathrm{NF}(\tau(B))
+  \quad\Longleftrightarrow\quad
+  \tau(A)\equiv_{\tau}\tau(B)
+\]
+for every pair \(A,B\in\mathcal S\).  Equivalently, an effective
+translation of an undecidable source equality problem cannot be equipped
+with computable finite decidable canonical forms classifying the
+transported target equality.
+\end{theorem}
+
+\begin{proof}
+Assume such \(N\) and \(\mathrm{NF}\) exist.  Given two source terms
+\(A,B\), compute the target expressions \(\tau(A)\) and \(\tau(B)\), then
+compute their normal forms.  Because \(N\) consists of finite objects
+with a decidable equality predicate, one can decide whether
+\(\mathrm{NF}(\tau(A))=\mathrm{NF}(\tau(B))\).  By the defining property
+of the normalizer this is equivalent to
+\(\tau(A)\equiv_{\tau}\tau(B)\), and by semantic compatibility of
+\(\tau\) this is equivalent to \(A\equiv_{\mathcal S}B\).  Thus source
+semantic equality would be decidable, contradicting the hypothesis.
+\end{proof}
+
 \begin{lemma}[Printed EML core witnesses]
 \label{lem:eml-printed-core}
 In the principal-branch EML semantics of \Cref{def:eml}, the following
@@ -416,6 +458,87 @@ uses a bounded finite certificate plus the cited symbolic identities, not
 an unprinted compiler oracle.
 \end{proof}
 
+\begin{lemma}[Source-level check of the printed EML witnesses]
+\label{lem:eml-source-level-check}
+The witness package used for the Richardson reduction is fixed by a
+finite source-level verification, not by an unexpanded compiler call.
+Precisely, the printed table in
+\Cref{lem:eml-ancillary-certificate}, together with the catalogue
+fingerprints displayed there, verifies the following data.
+\begin{enumerate}
+\item The straight-line program has terminals only \(1\) and, for unary
+  witnesses, the input leaf \(x\), and every nonterminal entry is an
+  application of the single binary operation \(\eml\).
+\item The dependency graph is the total order
+  \(U_0,U_1,\ldots,U_{126}\): for each \(j\ge2\), both arguments of the
+  displayed expression defining \(U_j\) are among
+  \(U_0,\ldots,U_{j-1}\).
+\item Recursive expansion of the roots \(U_{47}\), \(U_{111}\), and
+  \(U_{126}\) gives pure EML trees of, respectively, \(96\), \(399\),
+  and \(69\) EML nodes and depths \(34\), \(63\), and \(32\), with the
+  three SHA--256 fingerprints printed in
+  \Cref{lem:eml-ancillary-certificate}.
+\item The only analytic facts imported for these roots are the exact
+  real-domain identities
+  \[
+    U_{47}=\pi,
+    \qquad U_{111}(x)=\sin x\quad(x\in\RR),
+    \qquad U_{126}(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+  \]
+\end{enumerate}
+Consequently the Richardson translation below uses a self-contained
+finite EML witness skeleton plus exactly these three cited real-domain
+identities.
+\end{lemma}
+
+\begin{proof}
+Items (1) and (2) are read directly from the displayed table.  The base
+entries are \(U_0=1\) and \(U_1=x\), and each later line has the form
+\(U_j=\mathsf E(U_a,U_b)\) with \(a,b<j\).  Induction on \(j\) therefore
+expands every register to a finite pure EML tree: at the induction step
+the already expanded trees for \(U_a\) and \(U_b\) are joined by one new
+root labelled \(\eml\).  This also proves that there are no hidden
+constants, no additional primitive symbols, and no cycles in the printed
+straight-line program.
+
+For item (3), define the node count \(n\) and depth \(d\) recursively by
+\(n(1)=n(x)=0\), \(d(1)=d(x)=0\),
+\[
+  n(\eml(A,B))=1+n(A)+n(B),
+  \qquad
+  d(\eml(A,B))=1+\max\{d(A),d(B)\}.
+\]
+Applying these two recursions along the same topological order gives the
+three displayed count-depth pairs.  The expanded strings are obtained by
+the deterministic recursion
+\[
+  \operatorname{str}(\eml(A,B))=
+  \texttt{EML[}\operatorname{str}(A)\texttt{,}\operatorname{str}(B)
+  \texttt{]},
+\]
+with \(\operatorname{str}(1)=\texttt{1}\) and
+\(\operatorname{str}(x)=\texttt{x}\).  The catalogue records these three
+strings, and the displayed SHA--256 values are a finite byte-level check
+that the strings read from the catalogue are exactly the strings obtained
+from the table.  This check is reproducible by hand from the displayed
+recursion or mechanically by
+\texttt{ancillary/check\_eml\_witnesses.py}; either way it is a finite
+verification of printed data, not a search or compilation step.
+
+Item (4) is the only place where external analysis enters.  The three
+expanded roots are the corresponding named witnesses in
+Odrzywo{\l}ek's Table~1, and the cited Supplementary Information gives
+the principal-branch symbolic checks on exactly the domains displayed in
+item (4).  No broader complex-domain identity is used here.  The later
+Richardson translation applies the square-root root only as
+\(U_{126}(M(u,u))\), and \Cref{lem:eml-real-witness-library} proves
+\(M(u,u)=u^2\ge0\) for real \(u\); hence every square-root occurrence is
+inside the cited nonnegative-real domain.  The sine root is applied only
+to real-valued translated subterms, and the constant root has no input
+domain.  Thus the printed finite skeleton and these exact real-domain
+identities are the whole witness package used below.
+\end{proof}
+
 \begin{proposition}[Reproducible Richardson witness certificate]
 \label{prop:eml-certificate-reproducibility}
 The Richardson translation in
@@ -510,6 +633,7 @@ Odrzywo{\l}ek verification enters the strictness proof.  It is a
 stability and audit criterion: any independently checked replacement for
 the same three identities gives the same obstruction, while no other
 analytic identity from the Table~1 compiler is used below.
+
 
 \begin{proposition}[Three-witness source reduction]
 \label{prop:three-witness-stability}
@@ -935,13 +1059,13 @@ isolated in \Cref{prop:three-witness-stability}: by
 \Cref{cor:eml-witness-locking,lem:richardson-translation}, the map
 \(E\mapsto\tau(E)\) is effective and preserves the real function defined
 by \(E\), using only syntactic substitution into that locked witness
-list.  If the asserted normal form existed on this translated fragment,
-then for a Richardson expression \(E\) one could translate \(E\) and the
-zero expression into EML terms and compare their normal forms.  The
-decidable equality predicate on \(N_{\mathcal R}\), together with the
-displayed equivalence, would decide whether \(E\) is identically zero in
-Richardson's sense, as a real function.  This contradicts
-\Cref{lem:richardson-fragment}.  Thus the expression grammar, although
+list.  The semantic equality relation on \(\mathcal R\) is undecidable by
+\Cref{lem:richardson-fragment}.  Therefore
+\Cref{thm:abstract-normalizer-obstruction}, applied with
+\(\mathcal S=\mathcal R\), with target language the pure EML grammar, and
+with \(\equiv_\tau\) equal to equality of the transported real functions
+on \(\tau(\mathcal R)\), rules out the asserted computable finite
+normalizer.  Thus the expression grammar, although
 universal in the sense of \Cref{def:expr-univ}, cannot by itself supply
 the decidable canonical-form component of \Cref{def:prot-univ}.
 \end{proof}
