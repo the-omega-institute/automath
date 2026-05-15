@@ -90,35 +90,58 @@ asks whether the real function represented by an expression is zero.
 
 \begin{lemma}[Richardson absolute-value interface]
 \label{lem:richardson-punctured-mu-reduction}
-Richardson's undecidability theorem applies to the concrete
-absolute-value representative used in this paper.  Namely, the total
-real function
+Richardson's undecidability theorem applies to the concrete total
+absolute-value representative used in this paper.  More precisely, his
+identity-problem theorem assumes a real expression system whose
+represented functions contain \(\log 2\), \(\pi\), \(e^x\), \(\sin x\),
+the rational constants and identity function, are effectively closed
+under \(+,-,\times\) and composition, and contain a unary function
+\(\mu\) satisfying only the punctured condition
 \[
-  x\longmapsto \sqrt{x^2}
+  \mu(x)=|x|\qquad(x\ne0)
 \]
-is an admissible choice of Richardson's unary primitive \(\mu\), since
-it agrees with \(|x|\) for every nonzero real input.  Consequently,
-replacing each occurrence of \(\mu(F)\) by the EML term
-\(\Abs(F)\) of \Cref{lem:eml-zero-absolute-witness} gives an effective
-Richardson fragment to which the cited theorem applies.
+\cite{Richardson1968}.  The theorem therefore covers the special
+choice
+\[
+  \mu_0(x)=\sqrt{x^2}\qquad(x\in\RR),
+\]
+which agrees with \(|x|\) off zero.  Consequently, after the EML
+witness \(\Abs(F)=W_{\sqrt{}}(M(F,F))\) is constructed in
+\Cref{lem:eml-zero-absolute-witness}, replacing every occurrence of
+\(\mu(F)\) by \(\Abs(F)\) is an effective reduction from
+Richardson's identity problem to the concrete EML-translated fragment.
 \end{lemma}
 
 \begin{proof}
-Richardson's hypothesis on \(\mu\) is an off-zero hypothesis: the
-primitive must represent a real function satisfying \(\mu(x)=|x|\) for
-\(x\ne0\), and its value at zero is not constrained.  A total function
-is a partial function with full domain, so the concrete choice
-\(\mu(0)=0\) and \(\mu(x)=|x|\) elsewhere is allowed by the published
-hypothesis.  For a translated subexpression \(F\), the multiplication
-macro gives \(M(F,F)=F^2\) on real inputs.  Since \(F(x)^2\ge0\), the
-printed square-root witness returns
-\(\Abs(F)(x)=W_{\sqrt{}}(F(x)^2)=\sqrt{F(x)^2}=|F(x)|\), including at
-zeros of \(F\).  Thus the replacement realizes an admissible Richardson
-\(\mu\)-symbol by a fixed EML expression scheme.  The replacement is syntactic and
-effective, so a decision procedure for identity-to-zero in the
-resulting fragment would be a decision procedure for the Richardson
-fragment with this admissible \(\mu\), contradicting Richardson's
-theorem.
+Richardson states the theorem for any pair \((E,E^*)\) satisfying his
+closure assumptions and, for the identity problem, his conditions (1)
+and (2).  Condition (2) requires the existence in \(E^*\) of a function
+equal to \(|x|\) for \(x\ne0\); it does not prescribe the value at
+\(0\).  Thus the theorem is uniform over all completions of that
+punctured absolute-value symbol, and the total completion
+\(\mu_0(x)=\sqrt{x^2}\) is one admissible instance.
+
+It remains only to check that the representative used in the EML
+translation is exactly this instance and not a stronger, unproved
+variant.  Let \(F\) be any already translated real subexpression.  The
+multiplication macro below gives \(M(F,F)=F^2\) on real inputs, and the
+printed square-root witness is used only on nonnegative real arguments.
+Therefore, for every real \(t\) in the domain of \(F\),
+\[
+  W_{\sqrt{}}(M(F,F))(t)
+    = W_{\sqrt{}}(F(t)^2)
+    = \sqrt{F(t)^2}
+    = \mu_0(F(t)).
+\]
+This includes zeros of \(F\), but Richardson's theorem needs only the
+off-zero agreement.  The replacement is a structural recursion on the
+finite expression tree: constants and the variable are unchanged,
+\(+,-,\times\), \(\exp\), and \(\sin\) are sent to the fixed witnesses
+listed below, and \(\mu(G)\) is sent to
+\(W_{\sqrt{}}(M(\tau(G),\tau(G)))\).  Hence, if identity-to-zero were
+decidable for the resulting concrete translated fragment, applying this
+recursive map first would decide identity-to-zero for Richardson's
+admissible \(\mu_0\)-fragment.  That contradicts the cited theorem.
 \end{proof}
 
 \begin{lemma}[Richardson fragment and equality reduction]
@@ -316,12 +339,30 @@ W_{\pi}&=U_{47}, & W_{\sin}(x)&=U_{111}, & W_{\sqrt{}}(x)&=U_{126}.
 \end{align*}
 
 \endgroup
-The table is a finite certificate: expanding the definitions of the
-\(U_j\)'s gives pure EML trees over the constant \(1\) and, in the unary
-cases, the single input variable \(x\).  The entries \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are the
-named Odrzywo{\l}ek Table~1 witnesses for the constant \(\pi\), the real
-sine function, and the principal square root on the nonnegative real
-axis.  On their principal-branch real domains they satisfy
+The table is a finite certificate in the following checkable sense.
+For every \(j\ge2\), the right side defining \(U_j\) mentions only
+registers \(U_a,U_b\) with \(a,b<j\); hence the table expands to three
+pure EML trees.  The ancillary file
+\texttt{ancillary/eml\_witness\_catalogue.txt} stores those three fully
+expanded grammar strings, and
+\texttt{ancillary/check\_eml\_witnesses.py} verifies the parse,
+acyclicity, expansion, and SHA--256 fingerprints.  The catalogue digest is
+\[
+\texttt{f791a36af611b1406a29b9efdf766c80d84e05255859c62113e7de8ee268281c}.
+\]
+The individual expanded witnesses have
+\[
+\begin{array}{c|c|c|c}
+\text{witness} & \text{root} & \#\eml\text{-nodes} & \text{depth} \\\hline
+W_{\pi} & U_{47} & 96 & 34 \\
+W_{\sin} & U_{111} & 399 & 63 \\
+W_{\sqrt{}} & U_{126} & 69 & 32 .
+\end{array}
+\]
+The entries \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are the named
+Odrzywo{\l}ek Table~1 witnesses for the constant \(\pi\), the real sine
+function, and the principal square root on the nonnegative real axis.
+On their principal-branch real domains they satisfy
 \[
   W_{\pi}=\pi,
   \qquad W_{\sin}(x)=\sin x\quad(x\in\RR),
@@ -338,9 +379,19 @@ Induction on \(j\) therefore expands every \(U_j\) to a pure EML tree in
 the grammar \eqref{eq:eml-grammar}.  Hence \(W_{\pi}\),
 \(W_{\sin}\), and \(W_{\sqrt{}}\) are printed finite terms, and checking
 this assertion requires only the bounded parse of the displayed table.
-The real-domain identities asserted for \(W_{\pi}\), \(W_{\sin}\), and
-\(W_{\sqrt{}}\) are exactly the three cited symbolic verifications for
-these named Table~1 entries.  No unprinted compiler output is used.
+The ancillary checker implements exactly this induction: it parses the
+\(127\) registers in the displayed table, rejects any forward reference,
+recursively expands the roots \(U_{47},U_{111},U_{126}\), and compares the
+three expansions with the locked catalogue.  Its reported node counts and
+depths are obtained by the same recursion, counting one node for each
+\(\eml\) application and taking depth zero on terminal leaves.  These
+checks do not establish the analytic identities; they establish that the
+long finite strings being cited are precisely the strings printed by the
+straight-line certificate.  The analytic real-domain identities asserted
+for \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are the three cited
+symbolic verifications for these named Table~1 entries.  Thus the proof
+uses a bounded finite certificate plus the cited symbolic identities, not
+an unprinted compiler oracle.
 \end{proof}
 \begin{lemma}[Richardson EML witness library]
 \label{lem:eml-real-witness-library}
