@@ -1330,6 +1330,109 @@ controlled by the eventual $t^{-2}$ bound for the density perturbation.  After
 integration, the remaining finite polynomial is exactly the universal
 coefficient polynomial.
 
+\begin{lemma}[Explicit finite-moment entropy constant ledger]%
+\label{lem:explicit-entropy-constant-ledger}
+Let $N\ge2$, $0<\eta\le1$, and let $\nu$ satisfy the hypotheses of
+Theorem~\ref{thm:poisson-kl-even-orders}.  Put
+\[
+C_\rho:=C_{\nu,2N,\eta},
+\qquad
+M_A:=\sum_{n=2}^{2N}|\mu_n|\,\|u_n\|_{\infty},
+\qquad
+S:=S_{\nu,2N,\eta},
+\]
+where $C_{\nu,2N,\eta}$ and $S_{\nu,2N,\eta}$ are the constants in
+Theorem~\ref{thm:finite-moment-density-remainder}.  Define the finite sums
+\begin{align}
+\mathfrak P_{N,\eta}(\nu)
+&:=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{\ell=1}^{r}\binom r\ell M_A^{r-\ell}C_\rho^\ell,
+\label{eq:entropy-constant-product-error}
+\\
+\mathfrak Q_N(\nu)
+&:=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{m=2N+1}^{2Nr}
+\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+|\mu_{n_1}\cdots\mu_{n_r}|
+\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)} .
+\label{eq:entropy-constant-truncation-error}
+\end{align}
+Then for every
+\[
+t\ge T_{N,\eta}^{\rm ent}(\nu):=
+\max\{1,T_{\nu,2N,\eta}\}
+\]
+the error terms in the density-to-entropy passage may be chosen as
+\begin{equation}\label{eq:explicit-entropy-constant-ledger}
+C_{N,\eta}^{\rm dens}(\nu)
+=\mathfrak P_{N,\eta}(\nu)+\mathfrak Q_N(\nu),
+\qquad
+C_{N,\eta}^{\rm Tay}(\nu)=2S^{N+1}.
+\end{equation}
+In particular these are closed finite expressions in the density-remainder
+constant from Theorem~\ref{thm:finite-moment-density-remainder}, the moments
+through order $2N$, and the universal mode norms through order $2N$.
+\end{lemma}
+
+\begin{proof}
+The density theorem with $L=2N$ gives
+\[
+\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
+\qquad
+A_{N,t}(y):=\sum_{n=2}^{2N}\mu_nu_n(y)t^{-n},
+\]
+with
+\[
+\|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
+\le C_\rho t^{-(2N+\eta)},
+\qquad
+\|A_{N,t}\|_\infty\le M_A t^{-2},
+\qquad
+\|\delta_t\|_\infty\le S t^{-2}.
+\]
+For $2\le r\le N$,
+\[
+\delta_t^r-A_{N,t}^r
+=\sum_{\ell=1}^{r}\binom r\ell A_{N,t}^{r-\ell}\rho_{N,t}^{\ell}.
+\]
+Using one $\rho_{N,t}$ factor in $L^1(\omega)$ and all remaining factors in
+$L^\infty$, and using $t\ge1$, gives
+\[
+\|\delta_t^r-A_{N,t}^r\|_{L^1(\omega)}
+\le
+\sum_{\ell=1}^{r}\binom r\ell
+M_A^{r-\ell}C_\rho^\ell t^{-(2N+\eta)}.
+\]
+After multiplication by the entropy Taylor coefficient $1/(r(r-1))$ and
+summation in $r$, this is exactly the contribution
+\eqref{eq:entropy-constant-product-error}.
+
+Expanding $A_{N,t}^r$ gives monomials
+\[
+\mu_{n_1}\cdots\mu_{n_r}
+u_{n_1}\cdots u_{n_r}t^{-(n_1+\cdots+n_r)}.
+\]
+The monomials with total degree $m>2N$ contribute at most the finite quantity
+in \eqref{eq:entropy-constant-truncation-error} times $t^{-(2N+1)}$.
+Since $0<\eta\le1$ and $t\ge1$, $t^{-(2N+1)}\le t^{-(2N+\eta)}$, so this is
+absorbed with constant $\mathfrak Q_N(\nu)$.
+
+It remains only to record the Taylor remainder of
+$\Phi(z)=(1+z)\log(1+z)-z$.  For $|z|\le1/2$,
+\[
+\left|\Phi(z)-\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}z^r\right|
+\le \sum_{r=N+1}^{\infty}|z|^r
+\le 2|z|^{N+1}.
+\]
+The threshold $T_{\nu,2N,\eta}$ ensures $\|\delta_t\|_\infty\le1/2$;
+therefore the Taylor tail has $L^1(\omega)$ norm at most
+$2S^{N+1}t^{-(2N+2)}$, because $\omega$ is a probability measure.  Combining
+the three displayed estimates proves \eqref{eq:explicit-entropy-constant-ledger}.
+\end{proof}
+
 \begin{theorem}[All-order finite-moment Poisson entropy expansion]%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge 2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
@@ -1354,9 +1457,9 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
 \qquad(t\to\infty).
 \end{equation}
-More precisely, there exist constants $C_{N,\eta}^{\rm dens}(\nu)$ and
-$C_{N,\eta}^{\rm Tay}(\nu)$ and a threshold $T_{N,\eta}(\nu)$ such that, for
-$t\ge T_{N,\eta}(\nu)$,
+More precisely, with the constants and threshold from
+Lemma~\ref{lem:explicit-entropy-constant-ledger}, for
+$t\ge T_{N,\eta}^{\rm ent}(\nu)$,
 \begin{equation}\label{eq:poisson-kl-even-orders-explicit-remainder}
 \left|
 D_{\mathrm{KL}}(h_t\|g_t)-\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
@@ -1365,12 +1468,10 @@ D_{\mathrm{KL}}(h_t\|g_t)-\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
 C_{N,\eta}^{\rm dens}(\nu)t^{-(2N+\eta)}
 +C_{N,\eta}^{\rm Tay}(\nu)t^{-(2N+2)}.
 \end{equation}
-Here $C_{N,\eta}^{\rm dens}(\nu)$ depends only on $N$, $\eta$, the
-finite-density-remainder constant in
-Theorem~\ref{thm:finite-moment-density-remainder}, the moments
-$|\mu_2|,\ldots,|\mu_{2N}|$, the finite Taylor-product combinatorics, and the
-universal mode bounds up to order~$2N$; $C_{N,\eta}^{\rm Tay}(\nu)$ depends
-only on $N$ and the eventual constant in $\|\delta_t\|_\infty\le Ct^{-2}$.
+Here $C_{N,\eta}^{\rm dens}(\nu)$ and $C_{N,\eta}^{\rm Tay}(\nu)$ are the closed
+finite expressions in \eqref{eq:explicit-entropy-constant-ledger}; they are
+not sharp constants, but no unspecified asymptotic dependency is hidden in the
+statement.
 Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \end{theorem}
 
@@ -1471,12 +1572,11 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{r=2}^{N} A_{2r}(\nu)\,t^{-2r}+o(t^{-2N}),
 \]
 with the sharper displayed remainder before the final $o(t^{-2N})$ notation.
-The preceding displayed bounds give
-\eqref{eq:poisson-kl-even-orders-explicit-remainder}: the
-$t^{-(2N+\eta)}$ constant is a finite expression in $N$, $\eta$, $C_\rho$,
-$C_A$, and the finite number of discarded product coefficients, while the
-$t^{-(2N+2)}$ constant is bounded by $C_N\,C_\delta^{N+1}$ from the Taylor
-remainder.  This proves \eqref{eq:poisson-kl-even-orders}.
+Lemma~\ref{lem:explicit-entropy-constant-ledger} identifies the constants in
+the last two error terms with the closed finite expressions in
+\eqref{eq:explicit-entropy-constant-ledger}.  This gives
+\eqref{eq:poisson-kl-even-orders-explicit-remainder} and proves
+\eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
 \begin{theorem}[Finite-moment entropy remainder]%
@@ -1494,12 +1594,10 @@ Then
 =O(t^{-(2N+\eta)})+O(t^{-(2N+2)})
 \qquad(t\to\infty),
 \]
-with the explicit dependence recorded in
+with the explicit constants recorded in
 \eqref{eq:poisson-kl-even-orders-explicit-remainder}: the
-$t^{-(2N+\eta)}$ constant depends only on $N$, $\eta$, the density-remainder
-constant and the universal mode bounds up to order~$2N$, while the
-$t^{-(2N+2)}$ constant depends only on $N$ and the eventual $t^{-2}$ bound for
-$\delta_t$,
+$t^{-(2N+\eta)}$ and $t^{-(2N+2)}$ constants are the finite expressions in
+Lemma~\ref{lem:explicit-entropy-constant-ledger},
 and in particular $\mathcal R_N(t;\nu)=o(t^{-2N})$.
 Equivalently, after the universal even coefficient polynomial is subtracted,
 the finite centred $(2N+\eta)$th absolute moment hypothesis leaves no further
