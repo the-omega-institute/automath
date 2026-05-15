@@ -535,8 +535,7 @@ and, for coordinate-monomial inputs, the coefficient estimate
 \le
 \frac1{2k}\norm{\omega}_{\coeff,\infty};
 \]
-these are the sharp linear-inverse estimates cited in the following remark. The
-new assertion here is the same obstruction without linearity: if
+these estimates are sharp, even without assuming linearity of the inverse: if
 $R:\Omega^k_{\mathrm{sm}}(I^n)\to\Omega^{k-1}_{\mathrm{sm}}(I^n)$ is any
 operator such that $\dd R\omega=\omega$ for every closed coordinate-monomial
 $k$-form $\omega$, then
@@ -548,18 +547,52 @@ $k$-form $\omega$, then
 \]
 \end{theorem}
 
-\begin{remark}
-The homotopy identity, the coefficient estimate, and sharpness for linear right
-inverses are Theorem~3.1 of \cite{MaZhangCubicalStokes2026}. The increment in
-Theorem~\ref{thm:optimal-continuous-inverse} is the same lower bound for an
-arbitrary, not necessarily linear, right inverse on the closed
-coordinate-monomial class.
-\end{remark}
-
 \begin{proof}
-The cited theorem supplies the displayed identity, the displayed bound, and the
-linear right-inverse sharpness statement. It remains only to remove the
-linearity assumption in the lower bound. Take
+We first prove the homotopy identity. Let $F:[0,1]\times I^n\to I^n$ be
+$F(t,x)=c+t(x-c)$ and let $\partial_t$ denote the unit vector field in the
+$t$-direction. The pullback of a $k$-form $\omega$ decomposes uniquely as
+\[
+F^\ast\omega=\alpha(t,x)+\dd t\wedge\beta(t,x),
+\]
+where $\alpha(t,\cdot)=H_t^\ast\omega$ and
+\[
+\beta(t,\cdot)=\iota_{\partial_t}F^\ast\omega
+=t^{k-1}\bigl(\iota_{x-c}\omega\bigr)\bigl(c+t(x-c)\bigr).
+\]
+If $\dd_x$ is the exterior derivative in the cube variables, then
+$\dd F^\ast\omega=F^\ast\dd\omega$ gives
+\[
+\partial_t\alpha=\dd_x\beta+\beta_{\dd\omega},
+\]
+where
+\[
+\beta_{\dd\omega}(t,\cdot)
+=t^k\bigl(\iota_{x-c}\dd\omega\bigr)\bigl(c+t(x-c)\bigr).
+\]
+Integrating in $t$ and using $H_1=\mathrm{id}$ and the fact that
+$H_0$ is constant, so $H_0^\ast\omega=0$ for $k\ge1$, yields
+\[
+\omega=\int_0^1\partial_t H_t^\ast\omega\,\dd t
+=\dd K_k\omega+K_{k+1}\dd\omega .
+\]
+
+Next assume that $\omega=f\,\dd x_I$ is coordinate-monomial. By the
+coefficient formula \eqref{eq:K-coefficient-formula}, each coefficient of
+$K_k\omega$ has the form
+\[
+\pm (x_i-c_i)\int_0^1 t^{k-1}f(c+t(x-c))\,\dd t
+\]
+for some $i\in I$. Hence
+\[
+\abs{\coeff_J(K_k\omega)(x)}
+\le \frac12\norm{\omega}_{\coeff,\infty}\int_0^1t^{k-1}\,\dd t
+=\frac1{2k}\norm{\omega}_{\coeff,\infty}
+\]
+for every output coefficient $J$ and every $x\in I^n$. This proves the
+coefficient estimate.
+
+It remains to prove the lower bound, which also shows sharpness of the linear
+constant. Take
 \[
 \omega_0:=\dd x_1\wedge\cdots\wedge\dd x_k.
 \]
@@ -854,14 +887,33 @@ is admissible and satisfies
 \end{lemma}
 
 \begin{proof}
-Fix $j$. By slicing $E$ by lines parallel to the $x_j$-axis and applying the
-one-dimensional inequality
+Fix $j$ and write $x=(x_j,x')$ with
+$x'\in R'_j:=\prod_{i\ne j}[0,L_i]$. Since $E$ is Lipschitz, it has finite
+perimeter, and the BV slicing theorem for sets of finite perimeter
+\cite[Sec.~5.10]{EvansGariepy2015} gives, for almost every $x'\in R'_j$, a
+finite-perimeter one-dimensional slice
+\[
+E_{x'}^j:=\{s\in[0,L_j]:(s,x')\in E\}
+\]
+and the sliced variation identity
+\begin{equation}
+\label{eq:box-sliced-variation}
+\int_{R'_j}P(E_{x'}^j;\RR)\,\dd x'
+=|D_{x_j}\mathbf 1_E|(\RR^k)
+=\int_{\partial E}\abs{(\nu_E)_j}\,\dd\Haus^{k-1}.
+\end{equation}
+Here the slices are extended by zero outside $[0,L_j]$, so the relative
+end-point jumps at $0$ and $L_j$ are included in $P(E_{x'}^j;\RR)$. For every
+measurable $A\subset[0,L_j]$ of finite perimeter, this one-dimensional perimeter
+satisfies
 \[
 P(A; \RR)\ge \frac{2}{L_j}\abs{A}
 \qquad
 (A\subset[0,L_j]),
 \]
-we obtain
+because a non-null subset of the interval has at least two boundary jumps after
+extension by zero, while the right-hand side is at most $2$. Applying this to
+almost every slice and using \eqref{eq:box-sliced-variation} and Fubini yields
 \[
 \int_{\partial E}\abs{(\nu_E)_j}\,\dd\Haus^{k-1}
 \ge
