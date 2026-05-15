@@ -1334,7 +1334,8 @@ invisible orthogonal obstruction.
 
 
 
-\begin{theorem}[Sharp invisible-component obstruction]
+
+\begin{theorem}[Sharp invisible-component and minimax obstruction]
 \label{thm:poisson-integer-invisible-obstruction}
 The subspace
 \[
@@ -1343,20 +1344,44 @@ The subspace
 is infinite dimensional.  More sharply, if $E\subset[0,2\pi)$ has positive
 measure, then there exists a nonzero $F_E\in\mathcal N_{\ZZ}$ whose Fourier
 transform is supported in $E\cup(E+2\pi)$.  Consequently, for every integer
-data sequence $\alpha\in\ell^2(\ZZ)$ and every $r>0$, the fiber
+data sequence $\alpha\in\ell^2(\ZZ)$ and every
+$\rho\ge \|F_\alpha\|_{\mathcal H_K}$, the observed fiber inside the RKHS ball
 \[
-\{F\in\mathcal H_K:R_{\ZZ}F=\alpha\}
+\mathbb B_\rho:=\{F\in\mathcal H_K:
+\|F\|_{\mathcal H_K}\le\rho\}
 \]
-contains infinitely many mutually distinct functions with norm at most
+is exactly
 \[
-\|F_\alpha\|_{\mathcal H_K}^2+r^2,
+\{F\in\mathbb B_\rho:R_{\ZZ}F=\alpha\}
+=F_\alpha+
+\{G\in\mathcal N_{\ZZ}:
+\|G\|_{\mathcal H_K}^2
+\le \rho^2-\|F_\alpha\|_{\mathcal H_K}^2
+\},
 \]
 where $F_\alpha\in\mathcal H_K(\ZZ)$ is the minimal-norm cardinal interpolant
-from Corollary~\ref{cor:poisson-cardinal-reconstruction}.  Thus integer-orbit
-observations have an exact finite-budget lower bound: no procedure depending
-only on $(F(n))_{n\in\ZZ}$ can distinguish, even inside the RKHS ball of radius
-$(\|F_\alpha\|_{\mathcal H_K}^2+r^2)^{1/2}$, the cardinal representative from
-arbitrarily many perturbations by invisible strip components.
+from Corollary~\ref{cor:poisson-cardinal-reconstruction}.  If
+$\rho>\|F_\alpha\|_{\mathcal H_K}$ this set contains infinitely many mutually
+distinct functions with the same integer samples.
+
+Moreover its exact Chebyshev radius in~$\mathcal H_K$ is
+\begin{equation}\label{eq:integer-orbit-minimax-radius}
+r_{\mathrm{obs}}(\alpha,\rho)
+:=\bigl(\rho^2-\|F_\alpha\|_{\mathcal H_K}^2\bigr)^{1/2}.
+\end{equation}
+Equivalently, among all reconstruction rules whose output depends only on the
+integer data~$\alpha$, the minimax error on
+\[
+\{F\in\mathbb B_\rho:R_{\ZZ}F=\alpha\}
+\]
+is exactly $r_{\mathrm{obs}}(\alpha,\rho)$, and it is attained by the cardinal
+representative $F_\alpha$.  Applied to the Poisson observation samples
+$\alpha(t)=(F_t(n))_{n\in\ZZ}$ in
+Theorem~\ref{thm:poisson-observation-lattice-sampling}, the cardinal
+reconstruction $\Pi_{\ZZ}F_t=F_{\alpha(t)}$ is therefore not merely a convenient
+interpolant: it is the unique center of the sharp integer-observable budget
+ball, while every nonzero component in~$\mathcal N_{\ZZ}$ is intrinsically
+unrecoverable from the integer orbit.
 \end{theorem}
 
 \begin{proof}
@@ -1402,23 +1427,63 @@ linearly independent invisible vectors.  Thus $\mathcal N_{\ZZ}$ is infinite
 dimensional.
 
 Now fix $\alpha\in\ell^2(\ZZ)$.  Corollary~\ref{cor:poisson-integer-observation-quotient}
-identifies the fiber over~$\alpha$ as
+identifies the unrestricted fiber over~$\alpha$ as
 \[
 F_\alpha+\mathcal N_{\ZZ},
 \]
 with the orthogonal decomposition
-$F_\alpha\perp\mathcal N_{\ZZ}$.  For any $G\in\mathcal N_{\ZZ}$ with
-$\|G\|_{\mathcal H_K}\le r$, the function $F_\alpha+G$ has the same integer
-samples as $F_\alpha$ and satisfies
+$F_\alpha\perp\mathcal N_{\ZZ}$.  Hence, for $G\in\mathcal N_{\ZZ}$,
 \[
 \|F_\alpha+G\|_{\mathcal H_K}^2
-=\|F_\alpha\|_{\mathcal H_K}^2+\|G\|_{\mathcal H_K}^2
-\le \|F_\alpha\|_{\mathcal H_K}^2+r^2.
+=\|F_\alpha\|_{\mathcal H_K}^2+\|G\|_{\mathcal H_K}^2.
 \]
-Since $\mathcal N_{\ZZ}$ is infinite dimensional, its radius-$r$ ball contains
-infinitely many distinct choices of~$G$.  All procedures using only the integer
-data assign the same input to these functions, so no such procedure can
-separate them within the stated budget.
+The displayed identity proves the exact description of the intersection with
+$\mathbb B_\rho$.  If $\rho>\|F_\alpha\|_{\mathcal H_K}$, its invisible radius
+$r_{\mathrm{obs}}(\alpha,\rho)$ is positive, and the infinite-dimensionality of
+$\mathcal N_{\ZZ}$ gives infinitely many distinct $G$ in the invisible ball.
+
+It remains to prove the exact minimax radius.  Let
+\[
+\mathcal F_{\alpha,\rho}:=
+F_\alpha+
+\{G\in\mathcal N_{\ZZ}:
+\|G\|_{\mathcal H_K}\le r_{\mathrm{obs}}(\alpha,\rho)\}.
+\]
+The cardinal representative satisfies
+\[
+\sup_{F\in\mathcal F_{\alpha,\rho}}
+\|F-F_\alpha\|_{\mathcal H_K}
+=r_{\mathrm{obs}}(\alpha,\rho),
+\]
+so the Chebyshev radius is at most the displayed value.  Conversely take any
+candidate output $Y\in\mathcal H_K$.  Decompose
+\[
+Y-F_\alpha=Y_0+Y_1,
+\qquad Y_0\in\mathcal H_K(\ZZ),\quad Y_1\in\mathcal N_{\ZZ}.
+\]
+Orthogonality gives
+\[
+\sup_{\|G\|\le r_{\mathrm{obs}}}
+\|F_\alpha+G-Y\|_{\mathcal H_K}^2
+=
+\|Y_0\|_{\mathcal H_K}^2+
+\sup_{\|G\|\le r_{\mathrm{obs}}}
+\|G-Y_1\|_{\mathcal H_K}^2 .
+\]
+The last supremum is at least $r_{\mathrm{obs}}^2$: if $Y_1=0$, choose any
+invisible vector of norm $r_{\mathrm{obs}}$; if $Y_1\ne0$, take
+$G=-r_{\mathrm{obs}}Y_1/\|Y_1\|_{\mathcal H_K}$.  If $Y\ne F_\alpha$, this
+choice gives a strictly larger worst-case error: either $\|Y_0\|>0$, or
+$Y_1\ne0$ and the displayed invisible supremum is at least
+$(r_{\mathrm{obs}}+\|Y_1\|_{\mathcal H_K})^2$ when $r_{\mathrm{obs}}>0$, while
+for $r_{\mathrm{obs}}=0$ the singleton fiber already forces $Y=F_\alpha$ for
+zero error.  Thus every possible output has worst-case error at least
+$r_{\mathrm{obs}}(\alpha,\rho)$, with equality only at $F_\alpha$.  Since all
+procedures depending only on the integer samples must use a single output for
+the common datum~$\alpha$, the same lower bound holds for all such procedures,
+and the preceding paragraph shows that $F_\alpha$ uniquely attains it.  For the Poisson samples $\alpha(t)$, Theorem~\ref{thm:poisson-observation-lattice-sampling}
+identifies $F_{\alpha(t)}$ with $\Pi_{\ZZ}F_t$, completing the advertised
+observation-channel specialization.
 \end{proof}
 
 \begin{corollary}[Poisson-specific content of the lattice chain]%
@@ -1500,3 +1565,4 @@ interpolation norm completely explicit, yielding the closed formula for
 $\sigma$ and the cardinal norm identity
 \eqref{eq:cardinal-norm-formula}.
 \end{remark}
+
