@@ -76,10 +76,11 @@ lattices, upper sets, witness covers, atomic decompositions.
 \section{Introduction}\label{sec:intro}
 %% ====================================================================
 
-For an integer $q\ge 2$, the \emph{rank of apparition} (or \emph{order of
+For an integer $q\ge 1$, the \emph{rank of apparition} (or \emph{order of
 appearance}) $\alpha(q)$ is the least positive index $n$ such that $q\mid
 F_n$, where $(F_n)_{n\ge 0}$ denotes the Fibonacci sequence with $F_0=0$,
-$F_1=1$. We use the harmless conventions $\alpha(1)=1$ and
+$F_1=1$; the existence of this least index for every $q$ is recorded in
+Lemma~\ref{lem:finite-rank}. We use the harmless conventions $\alpha(1)=1$ and
 $D_1=\operatorname{Div}(F_1)=\{1\}$ in divisor-lattice formulas. For each
 $n\ge 2$, write
 \[
@@ -217,6 +218,25 @@ Section~\ref{sec:questions} records further questions.
 
 \subsection{Rank of apparition and Fibonacci divisibility}\label{subsec:fib-div}
 
+\begin{lemma}[Finite rank of apparition]\label{lem:finite-rank}
+For every integer $q\ge1$, the rank of apparition $\alpha(q)$ is finite.  More
+precisely, $\alpha(1)=1$, and for every $q\ge2$ there is a positive integer
+$r$ such that $q\mid F_r$.
+\end{lemma}
+
+\begin{proof}
+The case $q=1$ is the stated convention.  Let $q\ge2$.  Work modulo $q$ with
+the Fibonacci state vector $(F_m,F_{m+1})$.  The transition
+\[
+(x,y)\longmapsto (y,x+y)
+\]
+has inverse $(x,y)\mapsto (y-x,x)$ modulo $q$, so it is a permutation of the
+finite set $(\ZZ/q\ZZ)^2$.  Therefore the orbit of the initial state $(0,1)$
+is periodic and returns to $(0,1)$ after some positive number $r$ of steps.
+Thus $(F_r,F_{r+1})\equiv(0,1)\pmod q$, in particular $q\mid F_r$.  The
+least such positive $r$ exists by well ordering.
+\end{proof}
+
 \begin{proposition}\label{prop:rank-basics}
 Let $q,u,v\ge1$ and let $a,b,m\ge1$. Then:
 \begin{enumerate}[label=(\roman*)]
@@ -277,6 +297,29 @@ A_{\mathrm{pr}}(n)=\sum_{d\mid n}\mu(n/d)\,\omega(F_d).
 \end{equation}
 We regard these as known corollaries; the results of
 Sections~\ref{sec:upper-fibers}--\ref{sec:connected} are independent of them.
+
+\begin{lemma}[Primitive-prime M\"obius count]\label{lem:primitive-prime-mobius-count}
+For $d\ge1$, put
+\[
+\Pi_\alpha(d):=\{p\text{ prime}:\alpha(p)=d\}.
+\]
+Then $\Pi_\alpha(d)$ is finite and
+\[
+\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\,\omega(F_c).
+\]
+\end{lemma}
+
+\begin{proof}
+For each $d\ge1$, the primes with rank dividing $d$ are exactly the prime
+divisors of $F_d$: indeed, for a prime $p$, Proposition~\ref{prop:rank-basics}
+gives $p\mid F_d$ if and only if $\alpha(p)\mid d$.  Hence
+\[
+\omega(F_d)=\sum_{c\mid d}\#\Pi_\alpha(c).
+\]
+The right-hand side is finite because $F_d$ has only finitely many prime
+divisors.  Applying M\"obius inversion on the divisor lattice of $d$ gives the
+displayed formula.
+\end{proof}
 
 \subsection{Prime-power apparition formulas}\label{subsec:prime-power}
 
@@ -1142,10 +1185,8 @@ $a_i:=\nu_{\ell_i}(n)$. For nonempty $J\subseteq[3]$ put
 \qquad
 \mathcal R_J^\circ(n):=\mathcal R_J(n)\setminus\{1,2,6,12\}.
 \]
-Also put
-\[
-\Pi_\alpha(d):=\{p\text{ prime}:\alpha(p)=d\}.
-\]
+Use the rank classes $\Pi_\alpha(d)$ from
+Lemma~\ref{lem:primitive-prime-mobius-count}.
 Then
 \[
 P_J(n)=\bigcup_{d\in\mathcal R_J^\circ(n)}\Pi_\alpha(d),
@@ -1212,7 +1253,7 @@ at least one prime of rank $d$ for every
 $d\in\mathcal R_J^\circ(n)$. Therefore $P_J(n)$ is nonempty exactly when
 $\mathcal R_J^\circ(n)$ is nonempty. The version with a forbidden finite set
 $S$ is the same statement rank by rank. The formula for $\#\Pi_\alpha(d)$ is
-the prime case of the M\"obius inversion in \eqref{eq:mobius-birth}.
+Lemma~\ref{lem:primitive-prime-mobius-count}.
 
 It remains to identify the ladder families. Let
 $\theta=p^e\in L_{i,J}(n)$. By
@@ -1840,9 +1881,9 @@ With SHA--256 digests
 \[
 \begin{array}{l}
 \texttt{scripts/compute\_birth\_layer\_table.py},\\
-\texttt{EECF7B0BA90CACCC209A76F38BB46C5823BB49078AC191FA74B375D8609A65A3},\\[2mm]
+\texttt{EA30DAAE25BE7D5635495F72D9D9EDF7F92AC6B53D272317F16D1D92E7E78263},\\[2mm]
 \texttt{generated/tab\_birth\_layer\_data.tex},\\
-\texttt{0F54A8687FC736CCDEE382D75EEB85705858D872D53AA0C1314C4359AF1D9C10},
+\texttt{3088643983DC07C1665605A95641E2DD26EE4ABAB5ECCA2E6361CE211A6B9159},
 \end{array}
 \]
 the command
