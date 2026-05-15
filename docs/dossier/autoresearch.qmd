@@ -1,0 +1,222 @@
+---
+title: "Autoresearch Pipeline"
+subtitle: "How Automath and NewMath turn formal evidence, paper drafts, and open-problem signals into reviewable research artifacts"
+author: "The Omega Project"
+date: 2026-05-10
+description: "ASCII architecture notes for the Automath/NewMath autoresearch pipeline: formalization, paper distillation, open-problem discovery, review, and human-approved outreach."
+---
+
+## What This Page Shows
+
+This page describes the automation layer around Automath/NewMath. It is not a list of collaboration examples. It is a map of the pipelines we use to move from formal evidence and research signals to artifacts that a human can review: Lean files, paper sections, research notes, email drafts, issue comments, and open-problem attack packets.
+
+The important boundary is simple: the system may draft, check, route, and organize, but external communication and publication decisions remain human-approved.
+
+## Shared Control Surface
+
+Both pipelines use the same operating pattern: a supervisor keeps the loop alive, deterministic Python gates handle routine state, LLM agents are used only where judgment or synthesis is useful, and every outward-facing artifact lands in a reviewable draft state before it can leave the machine.
+
+```text
+                 ┌──────────────────────────────┐
+                 │        supervisor loop        │
+                 │  health checks / cooldowns /  │
+                 │  stale-state recovery / logs  │
+                 └───────────────┬──────────────┘
+                                 │
+                                 v
+        ┌────────────────────────────────────────────────┐
+        │ deterministic Python gates                      │
+        │ - freshness / dedup / preflight                 │
+        │ - board state / task claims / retry budgets     │
+        │ - file presence / size / contract checks        │
+        └───────────────┬────────────────────────────────┘
+                        │
+                        v
+        ┌────────────────────────────────────────────────┐
+        │ judgment agents                                 │
+        │ - Codex for code, synthesis, paper drafting     │
+        │ - ChatGPT Project oracle for attached-context   │
+        │   deep reasoning when needed                    │
+        │ - Claude only for PI supervision and writeback  │
+        └───────────────┬────────────────────────────────┘
+                        │
+                        v
+        ┌────────────────────────────────────────────────┐
+        │ reviewable artifact                             │
+        │ - local draft / packet / Lean patch / note      │
+        │ - no automatic email, post, or submission       │
+        └────────────────────────────────────────────────┘
+```
+
+## Wenlin-Side Outreach and Open-Problem Loop
+
+This loop starts from Automath/Omega evidence, public research signals, and already-registered collaboration threads. Its job is to find targets where the project may contribute, decide the correct artifact form, reason deeply enough to produce something useful, and then stop at a human review gate.
+
+```text
+ SOURCES
+ ┌─────────────────────────────────────────────────────────┐
+ │ Automath/Omega Lean + papers                            │
+ │ GitHub issues / PRs already being tracked               │
+ │ arXiv and open-problem signals                          │
+ │ targeted email-thread refresh                           │
+ │ budget-limited public signal watch                      │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ PREFLIGHT
+ ┌─────────────────────────────────────────────────────────┐
+ │ outreach_preflight.py                                   │
+ │ - final display form: email / issue comment / note      │
+ │ - outreach target or drop                               │
+ │ - missing profile / freshness / attack plan             │
+ │ - no broad rereading; only targeted refresh             │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ BOARD + CANDIDATE INBOX
+ ┌─────────────────────────────────────────────────────────┐
+ │ RESEARCH_BOARD / candidate_inbox                        │
+ │ - existing collaborations are progressed, not re-added  │
+ │ - new candidates require profile judgment               │
+ │ - low-confidence items stay out of the active board     │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ TASK RUNNER
+ ┌─────────────────────────────────────────────────────────┐
+ │ outreach_task_runner.py                                 │
+ │ - Codex-first drafting and reasoning                    │
+ │ - ChatGPT Project oracle only when attached context     │
+ │   or deeper external judgment is needed                 │
+ │ - anti-spin guards, retry budgets, stale recovery       │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ PI + WRITEBACK
+ ┌─────────────────────────────────────────────────────────┐
+ │ PI supervision                                          │
+ │ - periodic self-check of stuck loops and bad routing    │
+ │ - proposes safe autonomous maintenance actions          │
+ │                                                         │
+ │ writeback                                               │
+ │ - turns approved draft material into paper-local form   │
+ │ - uses explicit writeback skill, not ordinary drafting  │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ HUMAN REVIEW
+ ┌─────────────────────────────────────────────────────────┐
+ │ review queue                                            │
+ │ - ready / needs-refresh / blocked                       │
+ │ - newer email or GitHub activity invalidates stale      │
+ │   ready states before send                              │
+ │ - operator approval required for every external action  │
+ └─────────────────────────────────────────────────────────┘
+```
+
+The first public artifact is decided before deep work begins. A target may produce an author email, a GitHub issue comment, a short note, a Lean-formalization handoff, or a paper draft. If the system cannot name the artifact and audience, it should not run.
+
+## Loning-Side Paper and Formalization Loop
+
+This loop is paper-centered. Its job is to turn paper claims, unfinished theorem environments, source queues, and review failures into formalization targets, paper writebacks, and promotion-ready publication artifacts.
+
+```text
+ PAPER / CLAIM SOURCES
+ ┌─────────────────────────────────────────────────────────┐
+ │ paper TeX trees                                         │
+ │ claim environments and labels                          │
+ │ Lean registry / existing declarations                  │
+ │ source queues and paper-local PIPELINE.md context       │
+ │ reviewer-style failure reports                         │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ TARGET PREPARATION
+ ┌─────────────────────────────────────────────────────────┐
+ │ omega_ci.py / autoresearch prepare                      │
+ │ - collect paper claims                                  │
+ │ - detect missing Lean coverage                          │
+ │ - prioritize unformalized theorem targets               │
+ │ - avoid duplicate or already-claimed work               │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ FORMALIZATION LOOP
+ ┌─────────────────────────────────────────────────────────┐
+ │ codex_formalize.py                                      │
+ │ - dispatch rounds, optionally in parallel               │
+ │ - create isolated worktrees                             │
+ │ - generate Lean proof attempts                          │
+ │ - run build gates and release stale claims              │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ DISTILLATION / WRITEBACK
+ ┌─────────────────────────────────────────────────────────┐
+ │ distillation supervisor                                 │
+ │ - claim source candidates                               │
+ │ - research / deepen / write back into paper sections    │
+ │ - reject unsupported theorem-strength claims            │
+ │ - keep writeback review and commit hygiene separate     │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ REVIEW + PROMOTION
+ ┌─────────────────────────────────────────────────────────┐
+ │ review gates                                            │
+ │ - paper-review style critique                           │
+ │ - build and label consistency checks                    │
+ │ - source-export / standalone repo preparation           │
+ │ - optional media generation for public presentation     │
+ └─────────────────────────────────────────────────────────┘
+```
+
+The Loning-side loop is optimized for paper production and formalization coverage. It asks: which claims are missing formal support, which proof targets are feasible next, which writebacks are too shallow or too broad, and which artifacts are ready to become part of a submitted paper or standalone repository.
+
+## Shared Safety Rules
+
+The pipelines are allowed to be persistent, but not autonomous in the publication sense.
+
+```text
+ allowed automatically
+ ├─ refresh targeted context
+ ├─ recover stale task claims
+ ├─ run deterministic gates
+ ├─ draft local artifacts
+ ├─ update local review queues
+ └─ propose maintenance actions
+
+ requires human approval
+ ├─ send email
+ ├─ post to GitHub / X / forum
+ ├─ submit a paper
+ ├─ publish a claim externally
+ └─ push public-facing intermediate material
+```
+
+Intermediate artifacts are local by default. Existing email and GitHub threads are progress-tracked until closed; they are not recycled as fresh board items. Deterministic gates are preferred whenever Python can make the decision reliably. LLM calls are reserved for synthesis, judgment, and language tasks that cannot be stabilized cheaply in code.
+
+## Artifact Types
+
+The system produces artifacts that can be reviewed, edited, and either approved or rejected.
+
+| Artifact | Typical use |
+|---|---|
+| Lean patch | formalize or repair a claim |
+| paper section draft | move verified or scoped material into a manuscript |
+| scope ledger | separate proved input, bridge framing, and open items |
+| author email | ask a targeted collaborator or paper author for a concrete next step |
+| GitHub issue comment | contribute a bounded result or proposal to an existing public thread |
+| open-problem profile | decide whether a public problem is fresh, relevant, and attackable |
+| research packet | bundle audit pointers, attack plan, and reviewable deliverables |
+| media packet | slide/audio/repository presentation for a submitted paper |
+
+## Where This Is Going
+
+The long-term goal is not to automate mathematical publication end to end. The goal is to make AI-assisted research legible, auditable, and useful enough that humans can spend more time judging mathematical substance and less time moving context between tools.
+
+For Automath/Omega, that means using the formal corpus as a source of reusable structural evidence: splitting large discoveries into publishable papers, finding external open problems where the evidence applies, and producing drafts with line-anchored audit trails.
+
+For NewMath, that means treating research organization itself as a first-class object: candidate discovery, project memory, collaboration state, paper decomposition, and review queues become explicit data rather than private chat history.
+
+For both loops, the intended output is a human-approved research artifact: a theorem file, a paper section, a short note, a collaboration packet, or a carefully scoped public reply.
