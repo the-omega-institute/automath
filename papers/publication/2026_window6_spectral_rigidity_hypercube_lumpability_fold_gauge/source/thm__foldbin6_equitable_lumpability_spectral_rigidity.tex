@@ -119,7 +119,7 @@ Then the certificate has the following referee-checkable consequences.
 In particular no visible kernel can satisfy the exact intertwining equation.
 \item If the Sturm transcript certifies a real zero of the cleared characteristic polynomial in a rational interval disjoint from \(\{1-2k/m:0\le k\le m\}\), then the exact averaged kernel \(P_F\) is not the transition kernel of any equitable quotient of \(Q_m\) on the same visible blocks.
 \end{enumerate}
-Consequently the data in \textup{(a)}--\textup{(c)} form a reusable exact certificate interface: the only fold-specific work is finite integer enumeration and exact Sturm verification, while the mathematical conclusions follow uniformly from the hypercube lumpability and spectral-rigidity theorems.
+Consequently the data in \textup{(a)}--\textup{(c)} form a reusable exact certificate interface: the only fold-specific work is finite integer enumeration and exact Sturm verification, while the mathematical conclusions follow uniformly from the hypercube lumpability and spectral-rigidity theorems.  The interface is intrinsic to the block system: replacing the ordered set \(X\) by a relabeled ordered set conjugates the displayed matrices and permutes the lists \(\mathcal C_{x,y}(F)\), without changing constancy, residual diameters, Chebyshev radii, or the existence of an off-grid spectral witness.
 \end{theorem}
 
 \begin{proof}
@@ -127,10 +127,39 @@ The fiber table determines \(M\), and the displayed lists are exactly the entrie
 
 If a list has diameter \(\delta\), choose two entries in that list attaining its minimum and maximum.  Theorem \ref{thm:local-residual-certificate-hypercube-folds} applied to these two rows gives the lower bound \(\delta/(2m)\) for every visible compression matrix and rules out exact intertwining.  This proves \textup{(ii)}.
 
-For \textup{(iii)}, clearing denominators in \(\det(tI-P_F)\) does not change the real zeros.  Sturm's theorem counts zeros in a rational interval from the signs of the exact Sturm sequence at the two endpoints.  If such an interval avoids the hypercube grid but contains a zero of the cleared characteristic polynomial, then \(P_F\) has an off-grid eigenvalue.  The contrapositive statement in Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} therefore excludes \(P_F\) from the class of equitable quotient kernels on the same visible blocks.  The final sentence is only the assembly of these three proved implications. \qedhere
+For \textup{(iii)}, clearing denominators in \(\det(tI-P_F)\) does not change the real zeros.  Sturm's theorem counts zeros in a rational interval from the signs of the exact Sturm sequence at the two endpoints.  If such an interval avoids the hypercube grid but contains a zero of the cleared characteristic polynomial, then \(P_F\) has an off-grid eigenvalue.  The contrapositive statement in Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} therefore excludes \(P_F\) from the class of equitable quotient kernels on the same visible blocks.
+
+Finally, let \(\sigma:X\to X'\) be a relabeling and let \(S\) be its permutation matrix.  The relabeled block matrix is \(MS\), the averaged pushforward is \(S^{-1}P_FS\), and the count list indexed by \((\sigma x,\sigma y)\) is the same multiset as the old list indexed by \((x,y)\).  Thus all diameter and interval assertions are merely reindexed.  Conjugation preserves characteristic polynomials, so Sturm witnesses and off-grid eigenvalues are unchanged.  The final sentence is only the assembly of these proved implications. \qedhere
 \end{proof}
 
-\begin{theorem}[Fold\texorpdfstring{$_m^{\mathrm{bin}}$}{m bin} finite residual certificate package]\label{thm:foldbin-family-certificate-algorithm}
+\begin{theorem}[Algorithmic residual-certificate schema for the bin-fold family]\label{thm:foldbin-algorithmic-certificate-schema}
+There is a uniform finite algorithm which, on input \(m\), constructs from the rule defining \(\Fold_m^{\mathrm{bin}}\) an intrinsic certificate
+\[
+\mathfrak C_m=\bigl(\mathcal F_m,\{\mathcal C_{x,y}\}_{x,y\in X_m},\Delta_m,
+\mathcal S_m, C_m(t),\mathcal I_m\bigr)
+\]
+with the following properties.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \(\mathcal F_m\) is the complete fiber table, \(\mathcal C_{x,y}\) is the target-fiber neighbor-count list, \(\Delta_m\) is the residual diameter tensor, and \(\mathcal S_m\) is the set of extremal two-row skeletons \((x,y;\omega_-,\omega_+)\) with
+\[
+\omega_-,\omega_+\in(\Fold_m^{\mathrm{bin}})^{-1}(x),
+\qquad
+c_{\omega_+}(y)-c_{\omega_-}(y)=\Delta_m(x,y)>0.
+\]
+\item The certificate decides visible strong lumpability and classifies all real \(\epsilon\)-intertwiners by the interval product of Theorem \ref{thm:foldbin-complete-residual-budget-skeleton}.  In particular, \(\mathcal S_m\ne\varnothing\) if and only if the visible fold is not strongly lumpable, and the skeletons with largest value of \(\Delta_m(x,y)\) force the sharp residual lower bound \(\Delta_m/(2m)\).
+\item The capacity curve \(C_m(t)=\sum_{x\in X_m}\min\{|(\Fold_m^{\mathrm{bin}})^{-1}(x)|,t\}\) recovers the threshold counts used by the fold-gauge homology theorem, and \(\mathcal I_m\) is any exact characteristic-polynomial/Sturm transcript for the audited pushforward when such spectral certification is requested.
+\item The whole certificate is invariant under relabeling of \(X_m\): relabeling only conjugates matrices and reindexes \(\mathcal F_m\), \(\mathcal C_{x,y}\), \(\Delta_m\), \(\mathcal S_m\), and \(C_m\).  Hence the schema is an algebraic-combinatorial certificate method for this family, not a structural classification of all folds or a numerical observation tied to a preferred ordering of states.
+\end{enumerate}
+For \(m=6\), the tables and Sturm data printed in Theorem \ref{thm:single-exact-fold6-certificate} are exactly the specialization \(\mathfrak C_6\), and the main theorem uses \(\mathfrak C_6\) through this schema.
+\end{theorem}
+
+\begin{proof}
+For fixed \(m\), enumerate the finite set \(\Omega_m=\{0,1\}^m\).  Definition \ref{def:audited-binary-fold-certificate} gives \(\Fold_m^{\mathrm{bin}}(\omega)\) by a finite greedy Zeckendorf-prefix computation, so collecting equal values constructs \(X_m\) and the fiber table \(\mathcal F_m\).  For each \(\omega\in\Omega_m\), each coordinate flip \(\omega+e_i\), and each target \(y\in X_m\), counting the occurrences of \(\Fold_m^{\mathrm{bin}}(\omega+e_i)=y\) constructs the integer lists \(\mathcal C_{x,y}\).  Taking maxima and minima in those finite lists constructs \(\Delta_m(x,y)\), and retaining all pairs attaining a positive difference constructs \(\mathcal S_m\).  The capacity curve is obtained by summing the displayed finite expression over the computed fiber sizes.  Since \(P_m^{\mathrm{bin}}\) has rational entries obtained from the same finite edge counts, clearing denominators in \(\det(tI-P_m^{\mathrm{bin}})\) gives an integer polynomial; Sturm sequences over \(\QQ[t]\) are finite Euclidean-algorithm computations, so the optional transcript \(\mathcal I_m\) is finite whenever requested.
+
+The decision and classification statements are exactly Theorem \ref{thm:foldbin-complete-residual-budget-skeleton}, applied to the constructed lists.  That theorem also proves that positive-diameter two-row skeletons are precisely the local obstructions and that the maximum-diameter ones force the sharp radius \(\Delta_m/(2m)\).  The capacity assertion follows from the jump identity in Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology}.  Under a relabeling \(\sigma:X_m\to X'_m\), the block-indicator matrix is multiplied on the right by the associated permutation matrix, target-count lists are renamed from \((x,y)\) to \((\sigma x,\sigma y)\), and all maxima, minima, skeleton equalities, fiber sizes, and characteristic polynomials are preserved.  Thus the certificate is intrinsic up to relabeling.  Substituting the audited \(m=6\) fiber table, edge-count matrix, residual tensor, capacity data, and Sturm transcript gives exactly the data package summarized in Theorem \ref{thm:single-exact-fold6-certificate}, so the main theorem is an application of the schema rather than an isolated computation. \qedhere
+\end{proof}
+
+\begin{theorem}[Fold\texorpdfstring{$_m^{\mathrm{bin}}$}{m bin} algorithmic residual-certificate package]\label{thm:foldbin-family-certificate-algorithm}
 For every \(m\ge1\), the binary Zeckendorf-prefix fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) admits a finite integer residual certificate package deciding strong lumpability on its visible state space and classifying all approximate visible intertwiners.  More precisely, let
 \[
 d_x=\bigl| (\Fold_m^{\mathrm{bin}})^{-1}(x)\bigr|,
@@ -601,4 +630,3 @@ Likewise, the spectral obstruction in Theorem \ref{thm:window6-strong-lumpabilit
 
 A hidden refinement replaces \(M\) by another block-indicator matrix \(M_H\) for a different surjection \(H:\Omega_6\twoheadrightarrow Y\).  The residual counts, the pushforward matrix, and the quotient spectrum tested by the above theorems are then those of \(H\), not those of \(\Fold_6^{\mathrm{bin}}\).  Since the hypotheses and computed certificates in this paper contain no data for all such refinements \(H\), the logical conclusion is exactly the stated visible one-step obstruction and not a universal no-hidden-refinement theorem. \qedhere
 \end{proof}
-
