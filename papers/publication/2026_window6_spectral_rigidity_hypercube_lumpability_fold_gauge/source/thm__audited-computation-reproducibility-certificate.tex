@@ -1,16 +1,12 @@
-\begin{proposition}[Reproducibility certificate for the finite audit]\label{prop:audited-computation-reproducibility-certificate}
+\begin{proposition}[Reproducibility certificate for the finite computation]\label{prop:audited-computation-reproducibility-certificate}
 The finite computations used in Lemma \ref{lem:audited-binary-fold-certificate-identities}, Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, and Lemma \ref{lem:foldbin6-characteristic-certificate} are reproduced by the following deterministic workflow.  Run
 \[
 \texttt{sage supplement/window6\_audit\_certificate.sage}
 \]
 from the paper root.  The required interpreter is SageMath running Python \(3\), with Sage's exact objects \(\QQ\), \(\ZZ\), \texttt{Matrix}, and \texttt{PolynomialRing}; the remaining imports are from the Python standard library.  The supplement has SHA--256 source hash
-\begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429
-\end{Verbatim}
-\end{minipage}
-\end{center}
+\[
+\texttt{320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429}.
+\]
 No external black-box data file is used: the witness block in item \textup{(vi)} recomputes the finite lists, matrix, characteristic-polynomial factor, and Sturm signs from the definitions.
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item For each \(m\), enumerate \(\Omega_m\) in increasing dyadic order and enumerate \(X_m\) lexicographically.  For \(N\in[0,2^m-1]\), compute its greedy Zeckendorf digits by repeatedly subtracting the largest available Fibonacci weight \(F_{r+1}\) and then skipping the adjacent weight.  The fold value is the length-\(m\) prefix \((z_1(N),\ldots,z_m(N))\).
@@ -31,21 +27,19 @@ For \(m=8\), the corresponding pairs are
 \]
 The full lexicographic fiber-cardinality vectors for \(m=6,7,8\) have SHA--256 hashes
 \begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-h6 = 3b3a9f44074afc02177af79f9f4107aea061789f817bf7d288cb9fd473cdeee5
-h7 = 4a182c2503f6a82433ed6501cdea0997d5d274ef7b35415e3b0ec0d2cb7e7232
-h8 = cce73204f542296c6966285ca60f307f97a630814b9fd108c85cd3b974351c36
-\end{Verbatim}
-\end{minipage}
+\scriptsize
+\begin{tabular}{c|l}
+\(m\)&SHA--256 hash\\ \hline
+6&\texttt{3b3a9f44074afc02177af79f9f4107aea061789f817bf7d288cb9fd473cdeee5}\\
+7&\texttt{4a182c2503f6a82433ed6501cdea0997d5d274ef7b35415e3b0ec0d2cb7e7232}\\
+8&\texttt{cce73204f542296c6966285ca60f307f97a630814b9fd108c85cd3b974351c36}.
+\end{tabular}
 \end{center}
-Here the canonical stream is
+Here the canonical stream has the form
 \begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-m=<m>;X=<lex words>;d=<lex fiber sizes>;bd=<boundary word:size list>
-\end{Verbatim}
-\end{minipage}
+\small\ttfamily
+m=<m>;X=<lex words>;d=<lex fiber sizes>;\\
+bd=<boundary word:size list>.
 \end{center}
 Explicitly, the three lexicographic fiber-cardinality vectors are
 \begin{center}
@@ -74,13 +68,9 @@ m=6;states=<lex words>;d=<lex fiber sizes>;N=<sparse directed edge rows>
 \end{minipage}
 \end{center}
 for the directed edge-count matrix in Proposition \ref{prop:foldbin6-exact-pushforward-matrix} has SHA--256 hash
-\begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0
-\end{Verbatim}
-\end{minipage}
-\end{center}
+\[
+\texttt{2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0}.
+\]
 \item Let
 \[
 Q_6(t):=3234734993627557134336\,q_6(t).
@@ -98,11 +88,7 @@ Its integer coefficients, in decreasing degree order, are
 \]
 The canonical coefficient stream \(\texttt{Q6=<coefficients>}\) has SHA--256 hash
 \begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-a4f32303d20419c1608c177dafdc43904e3831f0c2eaf6f65895d49c654667dd
-\end{Verbatim}
-\end{minipage}
+\scriptsize\texttt{a4f32303d20419c1608c177dafdc43904e3831f0c2eaf6f65895d49c654667dd}.
 \end{center}
 \item The signed Sturm data for the two isolating intervals in Lemma \ref{lem:foldbin6-characteristic-certificate} are
 \begin{center}
@@ -115,14 +101,10 @@ a4f32303d20419c1608c177dafdc43904e3831f0c2eaf6f65895d49c654667dd
 \end{tabular}
 \end{center}
 The canonical Sturm-sign stream has SHA--256 hash
-\begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0
-\end{Verbatim}
-\end{minipage}
-\end{center}
-\item The following compact Sage/Python witness is the executable specification of the finite audit.  It recomputes the three fiber vectors, the sparse edge matrix, the geometric stabilizer identity, the residual witness counts, the cleared determinant factor, and the Sturm sign strings from the definitions above; the final assertions are exactly the hashes and integer streams displayed in this appendix.  The printed supplement is reproducible precisely when its executable text is byte-for-byte identical to this witness, apart from line-ending normalization.
+\[
+\texttt{3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0}.
+\]
+\item The supplement contains the following compact Sage/Python witness as the executable specification of the finite computation.  It recomputes the three fiber vectors, the sparse edge matrix, the geometric stabilizer identity, the residual witness counts, the cleared determinant factor, and the Sturm sign strings from the definitions above; the final assertions are exactly the hashes and integer streams displayed in this appendix.  The printed supplement is reproducible precisely when its executable text is byte-for-byte identical to this witness, apart from line-ending normalization.
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
 from hashlib import sha256
 from itertools import product
