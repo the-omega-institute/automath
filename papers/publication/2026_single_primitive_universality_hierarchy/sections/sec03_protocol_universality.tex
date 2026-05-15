@@ -38,6 +38,43 @@ The existence and uniqueness of this residue representative follow
 from \Cref{prop:fold-confluence}.
 \end{definition}
 
+\begin{lemma}[Greedy Zeckendorf normalizer]
+\label{lem:greedy-zeckendorf-normalizer}
+For every \(n\in\NN\) the following greedy procedure terminates and
+returns the unique element \(c\in X_{\infty}^{\mathrm{fin}}\) with
+\(\Val(c)=n\).  If \(n=0\), return the zero word.  Otherwise choose
+the largest Fibonacci number \(F_j\le n\) with \(j\ge2\), write a
+\(1\) in position \(j-1\), replace \(n\) by \(n-F_j\), and iterate.
+No two chosen positions are adjacent.
+\end{lemma}
+
+\begin{proof}
+At each nonzero step the remainder strictly decreases, so the
+procedure terminates.  Suppose the first chosen summand is \(F_j\).
+Then the remainder \(r\) satisfies \(0\le r<n-F_j<F_{j+1}-F_j=F_{j-1}\),
+because maximality gives \(n<F_{j+1}\).  Thus the next possible
+summand is at most \(F_{j-2}\), so the adjacent Fibonacci number
+\(F_{j-1}\) is never chosen.  The same argument applies recursively
+and proves legality.
+
+For uniqueness, let \(c,d\in X_{\infty}^{\mathrm{fin}}\) have the same
+value and choose the largest index \(j\) at which their digits differ.
+Assume \(c_{j-1}=1\) and \(d_{j-1}=0\), so the value contributed by
+\(c\) at that top index is \(F_j\).  The largest value representable by
+legal digits in positions below \(j-1\) is \(F_j-1\), as follows by
+induction from the recurrence
+\[
+  M_t=\max(M_{t-1},F_{t+1}+M_{t-2}),\qquad M_0=0,\quad M_1=1.
+\]
+Hence the lower digits of \(d\) cannot compensate for the missing
+\(F_j\), a contradiction.  Thus the legal expansion is unique, and the
+terminating greedy output is the unique preimage under \(\Val\).  This
+is the usual Zeckendorf theorem in its greedy form
+\cite{Zeckendorf1972}; digit-local addition and normalization belong to
+the standard Zeckendorf--Ostrowski arithmetic literature
+\cite{AhlbachEtAl2013,HieronymiTerry2018}.
+\end{proof}
+
 \begin{proposition}[Finite fold normal forms]
 \label{prop:fold-confluence}
 For every \(m\ge1\), the map
@@ -59,23 +96,19 @@ is a bijection \(X_{\infty}^{\mathrm{fin}}\to\NN\).
 \end{proposition}
 
 \begin{proof}
-By Zeckendorf's theorem, every \(n\ge0\) has a unique expression as
-a sum of nonconsecutive Fibonacci numbers \(F_{k+1}\)
-\cite{Zeckendorf1972}.  If \(0\le n<F_{m+2}\), then no summand
-\(F_{m+2}\) or larger appears, so the digits lie in the positions
-\(1,\ldots,m\).  This gives a legal word in \(X_m\).  Conversely,
-if \(M_m\) is the maximum of \(\Val_m\) on \(X_m\), then
-\[
-  M_m=\max(M_{m-1},F_{m+1}+M_{m-2}),\qquad M_0=0,\quad M_1=1,
-\]
-and induction gives \(M_m=F_{m+2}-1\).  Thus every legal word has
-value in the displayed range, and uniqueness in Zeckendorf's theorem
-proves the finite bijection.  The infinite statement is the same
-theorem without the upper bound; eventual vanishing makes the sum
-finite.  Computability follows either from the greedy Zeckendorf
-algorithm or from standard finite-automaton methods for
-Zeckendorf--Ostrowski arithmetic
-\cite{AhlbachEtAl2013,HieronymiTerry2018}.
+Let \(0\le n<F_{m+2}\).  By
+\Cref{lem:greedy-zeckendorf-normalizer}, \(n\) has a unique legal
+Zeckendorf expansion.  Since the first summand chosen by the greedy
+algorithm is strictly smaller than \(F_{m+2}\), no digit beyond
+position \(m\) occurs.  Thus \(n\) is in the image of \(\Val_m\).
+The same lemma gives injectivity, because two words in \(X_m\) are in
+particular two eventually-zero legal words.  Hence \(\Val_m\) is a
+bijection onto \(\{0,1,\ldots,F_{m+2}-1\}\).  The infinite statement is
+\Cref{lem:greedy-zeckendorf-normalizer} itself.  Computability follows
+from the terminating greedy algorithm.  The finite-automaton viewpoint
+on the same Zeckendorf--Ostrowski arithmetic is standard
+\cite{AhlbachEtAl2013,HieronymiTerry2018}, but no automaton theorem is
+used in this proof.
 \end{proof}
 
 The finite map \(\Fold_m\) is a residue-level normalizer.  The
@@ -95,7 +128,7 @@ normalization attached to the value \(\Val\), not a limit operation on
 the compact completion.  We use only the classical Zeckendorf uniqueness
 and effective arithmetic anchors \cite{Zeckendorf1972,AhlbachEtAl2013,
 HieronymiTerry2018}, in the value-transported form proved in
-\Cref{prop:fold-confluence,thm:semiring}.
+\Cref{lem:greedy-zeckendorf-normalizer,prop:fold-confluence,prop:finite-residue-not-stable,thm:semiring}.
 
 The finite legal-word spaces also form an inverse system under
 coordinate truncation.  The arithmetic used below lives on its
@@ -125,6 +158,7 @@ operation on eventually-zero addresses, not on the full compact
 inverse limit.
 \end{remark}
 
+
 \subsection{Arithmetic by readout}
 \label{ssec:arith}
 
@@ -143,6 +177,44 @@ then normalizing; this is the same as coordinatewise digit addition
 followed by Zeckendorf carrying.
 \end{definition}
 
+\begin{proposition}[Finite residue arithmetic is not stable arithmetic]
+\label{prop:finite-residue-not-stable}
+For each \(m\ge1\), let \(\rho_m\colon
+X_{\infty}^{\mathrm{fin}}\to X_m\) be the finite residue readout
+\[
+  \rho_m(c)=\Val_m^{-1}\bigl(\Val(c)\bmod F_{m+2}\bigr).
+\]
+Transporting addition and multiplication on \(\ZZ/F_{m+2}\ZZ\)
+through \(\Val_m\) makes \(X_m\) a finite ring, and \(\rho_m\) is the
+corresponding semiring homomorphism from
+\((X_{\infty}^{\mathrm{fin}},\oplus,\otimes)\) to this residue ring.
+However no single finite level \(X_m\) carries the stable arithmetic:
+\(\rho_m\) is not injective and therefore cannot distinguish all
+stable normal forms.
+\end{proposition}
+
+\begin{proof}
+The bijection \(\Val_m\colon X_m\to\ZZ/F_{m+2}\ZZ\) is
+\Cref{prop:fold-confluence}; transporting the two ring operations along
+this bijection gives a ring on \(X_m\).  By definition of \(\rho_m\),
+\[
+  \Val_m(\rho_m(c\oplus d))
+  \equiv \Val(c)+\Val(d)
+  \equiv \Val_m(\rho_m(c))+\Val_m(\rho_m(d))
+  \pmod{F_{m+2}},
+\]
+and the identical calculation with products proves compatibility with
+\(\otimes\).  Thus \(\rho_m\) is precisely residue transport through
+\(\ZZ/F_{m+2}\ZZ\).
+
+It is not injective: if \(0_X=\Val^{-1}(0)\) and
+\(u_m=\Val^{-1}(F_{m+2})\), then \(0_X\ne u_m\) in
+\(X_{\infty}^{\mathrm{fin}}\), while
+\(\rho_m(0_X)=\rho_m(u_m)\) because their values are congruent modulo
+\(F_{m+2}\).  Therefore the finite transported ring records only a
+residue class and cannot be the stable arithmetic on the full set of
+eventually-zero normal forms.
+\end{proof}
 \begin{proposition}[Transported semiring structure]
 \label{thm:semiring}
 \((X_{\infty}^{\mathrm{fin}},\oplus,\otimes)\) is a commutative
@@ -153,23 +225,18 @@ multiplicative identity \(\Val^{-1}(1)\).  The valuation map
   (X_{\infty}^{\mathrm{fin}},\oplus,\otimes)
   \xrightarrow{\ \sim\ }(\NN,+,\times)
 \]
-is a semiring isomorphism.  At finite resolution, transporting the
-ring operations on \(\ZZ/F_{m+2}\ZZ\) through the bijection
-\(\Val_m\colon X_m\to\ZZ/F_{m+2}\ZZ\) gives a ring structure on
-\(X_m\) isomorphic to \(\ZZ/F_{m+2}\ZZ\).  This finite ring
-structure records only the residue-level structure; the stable
-semiring operation is the one on
-\(X_{\infty}^{\mathrm{fin}}\).
+is a semiring isomorphism.  At finite resolution, the only arithmetic
+asserted is the residue-level transport through \(\ZZ/F_{m+2}\ZZ\)
+proved in \Cref{prop:finite-residue-not-stable}; the stable semiring
+operation is the one on \(X_{\infty}^{\mathrm{fin}}\).
 \end{proposition}
 
 \begin{proof}
 The operations \(\oplus\) and \(\otimes\) are the pullbacks of
 \(+\) and \(\times\) along the bijection \(\Val\).  The semiring
 axioms and the asserted isomorphism are immediate.  The finite
-statement is the same transport of structure through \(\Val_m\),
-with values taken modulo \(F_{m+2}\).
+statement is \Cref{prop:finite-residue-not-stable}.
 \end{proof}
-
 Thus arithmetic has not been added as a primitive operation on
 words.  It is read through valuation and stable Zeckendorf
 normalization; residue reduction is only the finite-resolution
@@ -496,8 +563,10 @@ Let \(C\) be the decidable set of finite binary words and let
 \(N=X_{\infty}^{\mathrm{fin}}\).  The normal form of a raw word is
 \(\mathrm{NF}_{\infty}\), obtained by computing the integer
 \(\sum_k\omega_kF_{k+1}\) and applying the greedy Zeckendorf
-algorithm.  Equality of normal forms is literal equality of finite
-legal words, hence is decidable by \Cref{prop:fold-confluence}.  The
+normalizer of \Cref{lem:greedy-zeckendorf-normalizer}, the classical
+Zeckendorf theorem in effective form \cite{Zeckendorf1972}.  Equality
+of normal forms is literal equality of finite legal words, hence is
+decidable by \Cref{prop:fold-confluence}.  The
 decoding map is \(\nu=\Val\).
 
 Interpret the single operation symbol as composition on both
@@ -516,7 +585,8 @@ the Zeckendorf normal form.  The semantic clause is
 \[
   \nu(c_m\oplus c_n)=m+n,
 \]
-by \Cref{thm:semiring}.  The readout clause at level \(0\) is
+by \Cref{thm:semiring}, whose computability input is exactly
+\Cref{lem:value-transported-suffices}.  The readout clause at level \(0\) is
 \[
   \Phi_0(c_m\oplus c_n)
   =g^{\circ(m+n)}
@@ -541,10 +611,14 @@ At level \(1\), \Cref{thm:two-level} gives
 Thus both operations in \(\{+,\times\}\) are realized using only the
 single binary operation symbol in the readout.  The finite maps
 \(\Fold_m\) are the resolution quotients whose fibers are studied in
-\Cref{sec:L2}; they do not alter the stable readout just verified.
+\Cref{sec:L2}; by \Cref{prop:finite-residue-not-stable} they are
+only residue quotients and do not alter the stable readout just
+verified.
 Finally, because \(A\) is arbitrary, no effective presentation of
 \(\End(A)\), of composition in \(\End(A)\), or of the map
 \(n\mapsto g^{\circ n}\) is being asserted.  The algorithmic
 assertions are precisely those on the normal forms and compiled
 operations, as isolated in \Cref{prop:semantic-readout-separation}.
 \end{proof}
+
+
