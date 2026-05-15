@@ -650,7 +650,7 @@ mode space into it through the explicit formulas
 \eqref{eq:lattice-symbol}, \eqref{eq:cardinal-kernel-fourier}, and
 \eqref{eq:cardinal-norm-formula}.
 
-\begin{lemma}[Background principal-symbol sampling criterion]%
+\begin{lemma}[Classical principal-symbol sampling criterion]%
 \label{lem:background-principal-symbol-sampling}
 Let $\mathcal H$ be a Hilbert space and let
 $(\varphi_n)_{n\in\ZZ}$ be a family whose Gram matrix is Toeplitz,
@@ -689,8 +689,9 @@ unique interpolant $R^{-1}\alpha$ satisfies
 \end{equation}
 The cardinal element $L:=R^{-1}\delta_0$ is synthesized by
 $d=G^{-1}\delta_0$, equivalently $\widetilde d=\sigma^{-1}$ a.e.
-This is the standard principal shift-invariant-space symbol criterion,
-used here only as a cited background tool
+This is the classical principal shift-invariant-space symbol criterion,
+included here only as a cited background tool and not as a new theorem of
+this article
 \cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
 \end{lemma}
 
@@ -1323,6 +1324,91 @@ the Poisson observation samples in
 Theorem~\ref{thm:poisson-observation-lattice-sampling} gives the final
 assertions about $F_t$, including the full-recovery criterion and the
 invisible orthogonal obstruction.
+\end{proof}
+
+
+
+\begin{theorem}[Sharp invisible-component obstruction]
+\label{thm:poisson-integer-invisible-obstruction}
+The subspace
+\[
+\mathcal N_{\ZZ}=\mathcal H_K(\ZZ)^\perp
+\]
+is infinite dimensional.  More sharply, if $E\subset[0,2\pi)$ has positive
+measure, then there exists a nonzero $F_E\in\mathcal N_{\ZZ}$ whose Fourier
+transform is supported in $E\cup(E+2\pi)$.  Consequently, for every integer
+data sequence $\alpha\in\ell^2(\ZZ)$ and every $r>0$, the fiber
+\[
+\{F\in\mathcal H_K:R_{\ZZ}F=\alpha\}
+\]
+contains infinitely many mutually distinct functions with norm at most
+\[
+\|F_\alpha\|_{\mathcal H_K}^2+r^2,
+\]
+where $F_\alpha\in\mathcal H_K(\ZZ)$ is the minimal-norm cardinal interpolant
+from Corollary~\ref{cor:poisson-cardinal-reconstruction}.  Thus integer-orbit
+observations have an exact finite-budget lower bound: no procedure depending
+only on $(F(n))_{n\in\ZZ}$ can distinguish, even inside the RKHS ball of radius
+$(\|F_\alpha\|_{\mathcal H_K}^2+r^2)^{1/2}$, the cardinal representative from
+arbitrarily many perturbations by invisible strip components.
+\end{theorem}
+
+\begin{proof}
+Choose a nonzero $q\in L^2(E)$ and set
+\[
+\widehat F_E(\xi)
+:=q(\xi)\mathbf 1_E(\xi)
+-q(\xi-2\pi)\mathbf 1_{E+2\pi}(\xi).
+\]
+Since $E\cup(E+2\pi)$ has finite measure and is bounded, the norm identity in
+Proposition~\ref{prop:gram-space-poisson-image} gives
+\[
+\|F_E\|_{\mathcal H_K}^2
+=\frac{1}{2\pi^2}\int_E
+\bigl(e^{2|\xi|}+e^{2|\xi+2\pi|}\bigr)|q(\xi)|^2\dd\xi<\infty,
+\]
+so $F_E\in\mathcal H_K$ and $F_E\ne0$.  For every $n\in\ZZ$, the kernel-section
+Fourier formula from Proposition~\ref{prop:gram-space-poisson-image} gives
+\[
+\langle F_E,K(\cdot,n)\rangle_{\mathcal H_K}
+=\frac1{2\pi}\int_{\RR}
+\widehat F_E(\xi)e^{\ii n\xi}\dd\xi .
+\]
+Substituting the definition of~$\widehat F_E$ and changing variables in the
+second integral yield
+\[
+\begin{split}
+\langle F_E,K(\cdot,n)\rangle_{\mathcal H_K}
+&=\frac1{2\pi}\int_E q(\xi)e^{\ii n\xi}\dd\xi
+ -\frac1{2\pi}\int_E q(\xi)e^{\ii n(\xi+2\pi)}\dd\xi \\
+&=0.
+\end{split}
+\]
+Hence $F_E$ vanishes at every integer and belongs to
+$\mathcal N_{\ZZ}$ by Corollary~\ref{cor:poisson-integer-observation-quotient}.
+Taking disjoint positive-measure subsets $E_j\subset[0,2\pi)$ produces
+nonzero invisible vectors with disjoint Fourier supports, and therefore
+linearly independent invisible vectors.  Thus $\mathcal N_{\ZZ}$ is infinite
+dimensional.
+
+Now fix $\alpha\in\ell^2(\ZZ)$.  Corollary~\ref{cor:poisson-integer-observation-quotient}
+identifies the fiber over~$\alpha$ as
+\[
+F_\alpha+\mathcal N_{\ZZ},
+\]
+with the orthogonal decomposition
+$F_\alpha\perp\mathcal N_{\ZZ}$.  For any $G\in\mathcal N_{\ZZ}$ with
+$\|G\|_{\mathcal H_K}\le r$, the function $F_\alpha+G$ has the same integer
+samples as $F_\alpha$ and satisfies
+\[
+\|F_\alpha+G\|_{\mathcal H_K}^2
+=\|F_\alpha\|_{\mathcal H_K}^2+\|G\|_{\mathcal H_K}^2
+\le \|F_\alpha\|_{\mathcal H_K}^2+r^2.
+\]
+Since $\mathcal N_{\ZZ}$ is infinite dimensional, its radius-$r$ ball contains
+infinitely many distinct choices of~$G$.  All procedures using only the integer
+data assign the same input to these functions, so no such procedure can
+separate them within the stated budget.
 \end{proof}
 
 \begin{corollary}[Poisson-specific content of the lattice chain]%
