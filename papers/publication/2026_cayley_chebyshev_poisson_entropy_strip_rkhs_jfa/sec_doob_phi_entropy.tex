@@ -222,6 +222,86 @@ subinterval of $(0,\infty)$, so $\Phi$ is bounded on the range and
 $\int g_t|\Phi(u_t)|\le\sup_{[m_{a,b},M_{a,b}]}|\Phi|$.
 \end{proof}
 
+\begin{lemma}[Second-moment KL decay to the translated Poisson profile]%
+\label{lem:poisson-second-moment-kl-decay}
+Let $\nu$ be a probability measure on~$\RR$ with mean $\bar\gamma$ and
+finite centred second moment.  Put
+\[
+h_t:=P_t*\nu,
+\qquad
+g_t(x):=P_t(x-\bar\gamma).
+\]
+Then
+\[
+D_{\mathrm{KL}}(h_t\|g_t)\longrightarrow0
+\qquad(t\to\infty).
+\]
+\end{lemma}
+
+\begin{proof}
+Write $\Delta=\gamma-\bar\gamma$ and $x=\bar\gamma+ty$.  Since
+$g_t(\bar\gamma+ty)=(\pi t)^{-1}(1+y^2)^{-1}$,
+\[
+u_t(\bar\gamma+ty):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}
+=\int_{\RR}\frac{1+y^2}{1+(y-\Delta/t)^2}\dd\nu(\gamma).
+\]
+For $A>0$ decompose $\nu=\nu_A+\nu_A^c$ according to
+$|\Delta|\le A$ and $|\Delta|>A$.  The elementary kernel bound
+\begin{equation}\label{eq:second-moment-kl-kernel-bound}
+\frac{1+y^2}{1+(y-\varepsilon)^2}
+\le 2(1+\varepsilon^2)
+\qquad(y,\varepsilon\in\RR)
+\end{equation}
+implies
+\[
+0\le u_{t,A}^c(y):=\int_{|\Delta|>A}
+\frac{1+y^2}{1+(y-\Delta/t)^2}\dd\nu(\gamma)
+\le 2\int_{|\Delta|>A}\left(1+\frac{\Delta^2}{t^2}\right)\dd\nu(\gamma).
+\]
+Hence, for $t\ge1$,
+\begin{equation}\label{eq:second-moment-kl-tail-sup}
+\sup_y u_{t,A}^c(y)
+\le 2\nu(|\Delta|>A)+2\int_{|\Delta|>A}\Delta^2\dd\nu.
+\end{equation}
+
+The bounded part has total mass $m_A:=\nu(|\Delta|\le A)$ and first centred
+moment $b_A:=\int_{|\Delta|\le A}\Delta\dd\nu$.  The exact expansion
+\[
+\frac{1+y^2}{1+(y-\varepsilon)^2}
+=1+\frac{2y}{1+y^2}\varepsilon
++\frac{(3y^2-1)\varepsilon^2-2y\varepsilon^3}
+{(1+y^2)(1+(y-\varepsilon)^2)}
+\]
+shows that, for each fixed $A$,
+\begin{equation}\label{eq:bounded-truncated-quotient-limit}
+u_{t,A}(y):=\int_{|\Delta|\le A}
+\frac{1+y^2}{1+(y-\Delta/t)^2}\dd\nu(
+\gamma)
+=m_A+\frac{2yb_A}{t(1+y^2)}+O_A(t^{-2})
+\end{equation}
+uniformly in~$y$.  Since
+$b_A=-\int_{|\Delta|>A}\Delta\dd\nu$, Cauchy--Schwarz gives
+$|b_A|\le (\int_{|\Delta|>A}\Delta^2\dd\nu)^{1/2}$.  Combining this with
+\eqref{eq:second-moment-kl-tail-sup} and
+\eqref{eq:bounded-truncated-quotient-limit} yields
+\[
+\limsup_{t\to\infty}\|u_t-1\|_{L^\infty(\RR)}
+\le 1-m_A+2\nu(|\Delta|>A)+2\int_{|\Delta|>A}\Delta^2\dd\nu.
+\]
+Letting $A\to\infty$ gives $\|u_t-1\|_\infty\to0$.
+
+For all sufficiently large $t$ we therefore have
+$|u_t-1|\le1/2$.  With $\delta_t=u_t-1$ and using
+$\int g_t\delta_t=\int(h_t-g_t)=0$,
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}g_t\bigl((1+\delta_t)\log(1+\delta_t)-\delta_t\bigr)\dd x
+\le 2\|\delta_t\|_\infty^2,
+\]
+because $(1+s)\log(1+s)-s\le2s^2$ for $|s|\le1/2$.  The right-hand side
+tends to zero.
+\end{proof}
+
 
 \begin{theorem}[Non-autonomous Doob transform and $\Phi$-entropy dissipation]\label{thm:poisson-doob-phi-entropy}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
@@ -478,10 +558,10 @@ For part~(iv), if $\Phi(s)=s\log s$, then
 The corresponding Bregman divergence is exactly
 $D_\Phi(a,b)=\Lambda(a,b)$.  Hence
 \eqref{eq:relative-entropy-dissipation-rate} is the specialization of
-\eqref{eq:phi-entropy-dissipation}.  Proposition~\ref{prop:poisson-second-order}
-gives $D_{\mathrm{KL}}(h_t\|g_t)=O(t^{-4})$ as $t\to\infty$, so
-$D_{\mathrm{KL}}(h_t\|g_t)\to 0$.  Integrating the derivative identity from
-$t$ to $\infty$ proves
+\eqref{eq:phi-entropy-dissipation}.  Lemma~\ref{lem:poisson-second-moment-kl-decay}
+gives $D_{\mathrm{KL}}(h_t\|g_t)\to0$ under the same finite-second-moment
+hypothesis as the theorem.  Integrating the derivative identity from $t$ to
+$\infty$ proves
 \eqref{eq:relative-entropy-integrated-dissipation}.
 \end{proof}
 
