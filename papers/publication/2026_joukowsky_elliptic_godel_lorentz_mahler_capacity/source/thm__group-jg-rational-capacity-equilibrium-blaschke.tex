@@ -25,17 +25,63 @@ where the supremum ranges over all admissible finite-energy lifts \(\mu\) on \(K
 The singular sets in the formula have the following explicit interpretation.  The diagonal singularity is the usual logarithmic collision \(z=t\).  The off-diagonal equation \(\Psi_R(z,t)=0\) is exactly the branch-graph collision relation \(R(z)=R(t)\) with \(z\ne t\).  The diagonal zeros \(\Psi_R(z,z)=0\) are the branch points of \(R\).  Each of these sets contributes the value \(-\infty\) to the pullback kernel, and an admissible finite-energy lift gives them zero \(\mu\times\mu\)-mass.
 \end{theorem}
 
+\begin{lemma}[Extended pullback energy equals pushforward energy]\label{lem:extended-pullback-energy-equals-pushforward-energy}
+Let \(X\) be a compact metric space, let \(F:X\to\CC\) be continuous, and let \(\mu\in\mathcal P(X)\).  Define
+\[
+L_F(x,y):=
+\begin{cases}
+\log|F(x)-F(y)|,&F(x)\ne F(y),\\
+-\infty,&F(x)=F(y),
+\end{cases}
+\]
+and let \(\nu=F_\ast\mu\).  If both logarithmic integrals are interpreted by lower truncation, namely as the limit of the kernels \(\max\{\log|\cdot|,-M\}\) as \(M\to\infty\), then
+\[
+\iint_{X\times X}L_F(x,y)\,\dd\mu(x)\dd\mu(y)
+=
+\iint_{F(X)\times F(X)}\log|u-v|\,\dd\nu(u)\dd\nu(v)
+\]
+as an identity in \([ -\infty,\infty)\).  In particular the left-hand side is greater than \(-\infty\) if and only if the pushforward logarithmic energy is greater than \(-\infty\).
+\end{lemma}
+
+\begin{proof}
+For \(M>0\), put \(h_M(u,v)=\max\{\log|u-v|,-M\}\).  This is a bounded Borel function on the compact set \(F(X)\times F(X)\), with the value \(-M\) on the diagonal.  Since \((F\times F)_\ast(\mu\times\mu)=\nu\times\nu\),
+\[
+\iint_{X\times X} h_M(F(x),F(y))\,\dd\mu(x)\dd\mu(y)
+=
+\iint_{F(X)\times F(X)}h_M(u,v)\,\dd\nu(u)\dd\nu(v).
+\]
+As \(M\to\infty\), the kernels \(h_M\) decrease pointwise to the extended logarithmic kernel \(\log|u-v|\), with value \(-\infty\) on the diagonal.  The image \(F(X)\) is compact, so these kernels are bounded above uniformly.  Applying monotone convergence to a fixed upper bound minus the two sides gives equality of the lower-truncated limits.  The final equivalence is the same identity read in the extended real line.
+\end{proof}
+
+\begin{lemma}[Compact-fiber Borel selection]\label{lem:compact-fiber-borel-selection}
+Let \(X\) and \(Y\) be compact metric spaces, and let \(G\subset X\times Y\) be closed with every vertical section
+\[
+G_x:=\{y\in Y:(x,y)\in G\}
+\]
+nonempty.  Then there is a Borel map \(s:X\to Y\) such that \((x,s(x))\in G\) for every \(x\in X\).
+\end{lemma}
+
+\begin{proof}
+Choose a compatible metric \(d_Y\) on \(Y\), and for each \(m\ge1\) choose a finite cover of \(Y\) by open balls of radius \(2^{-m}\), with centers \(y_{m,1},\dots,y_{m,N_m}\).  Define Borel sets inductively by taking the first ball in the list that meets the section and, after the first step, also meets the previously chosen ball.  More explicitly, once \(C_{m-1}(x)\) has been chosen, let \(C_m(x)\) be the first ball \(B(y_{m,j},2^{-m})\) such that
+\[
+G_x\cap C_{m-1}(x)\cap B(y_{m,j},2^{-m})\ne\varnothing,
+\]
+with \(C_0(x)=Y\).  The set of \(x\)'s for which a fixed finite word of choices occurs is obtained from closed sets by finitely many projections of compact sets, hence is Borel.  Therefore the center map \(x\mapsto y_m(x)\) of the chosen ball is Borel for every \(m\).
+
+For each \(x\), the compact sets \(G_x\cap \overline{C_1(x)}\cap\cdots\cap\overline{C_m(x)}\) are nonempty and have diameters tending to zero.  Their intersection consists of a single point; call it \(s(x)\).  Since \(d_Y(s(x),y_m(x))\le2^{-m+1}\), the pointwise limit of the Borel maps \(y_m(x)\) is \(s(x)\).  Thus \(s\) is Borel and belongs to \(G_x\) for every \(x\).
+\end{proof}
+
 \begin{proof}
 For \(z,t\in K\) with \(z\ne t\), coprimality and the assumption \(B\ne0\) on \(K\) give
 \[
 R(z)-R(t)=\frac{A(z)B(t)-A(t)B(z)}{B(z)B(t)}
 =\frac{(z-t)\Psi_R(z,t)}{B(z)B(t)}.
 \]
-Taking logarithmic absolute values gives the displayed pullback kernel away from the collision locus.  On the diagonal and on the off-diagonal set \(R(z)=R(t)\), both sides have the same logarithmic value \(-\infty\); the truncated-kernel convention therefore gives
+Taking logarithmic absolute values gives the displayed pullback kernel away from the collision locus.  On the diagonal \(z=t\), the factor \(\log|z-t|\) contributes \(-\infty\); at a branch point the additional factor \(\log|\Psi_R(z,z)|\) is also \(-\infty\).  On the off-diagonal collision set \(R(z)=R(t)\), equivalently \(\Psi_R(z,t)=0\), the factor \(\log|\Psi_R(z,t)|\) contributes \(-\infty\).  Since \(B\) is nonzero on \(K\), the two \(B\)-terms are bounded continuous functions.  Thus the displayed extended kernel is exactly \(L_R(z,t)=\log|R(z)-R(t)|\), with value \(-\infty\) on every diagonal, branch-graph, and off-diagonal collision point.  Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} gives
 \[
 \mathcal E_R(\mu)=\iint_{R(K)\times R(K)}\log|x-y|\,\dd(R_\ast\mu)(x)\dd(R_\ast\mu)(y)
 \]
-whenever either side is finite, and both sides are \(-\infty\) otherwise.
+for every \(\mu\in\mathcal P(K)\), as an identity of lower-truncated extended integrals.  Consequently \(R_\ast\mu\) has finite logarithmic energy if and only if the displayed pullback integral is greater than \(-\infty\).
 
 The logarithmic capacity of a compact nonpolar set \(E\) is characterized by
 \[
@@ -53,7 +99,7 @@ Conversely, let \(\nu_E\) be the equilibrium measure of \(E=R(K)\).  Since \(K\)
 \[
 \{(x,z)\in E\times K:R(z)=x\}
 \]
-has nonempty compact vertical sections.  A Borel selection theorem gives a Borel map \(s:E\to K\) with \(R(s(x))=x\).  Set \(\mu=s_\ast\nu_E\).  Then \(R_\ast\mu=\nu_E\), hence \(\mu\) is an admissible finite-energy lift and
+has nonempty compact vertical sections.  Lemma \ref{lem:compact-fiber-borel-selection} gives a Borel map \(s:E\to K\) with \(R(s(x))=x\).  Set \(\mu=s_\ast\nu_E\).  Then \(R_\ast\mu=\nu_E\), hence \(\mu\) is an admissible finite-energy lift and
 \[
 \mathcal E_R(\mu)=\iint\log|x-y|\,\dd\nu_E(x)\dd\nu_E(y)
 =\log\operatorname{cap}(E).
@@ -142,6 +188,36 @@ which proves the two modewise bounds.  Equality in the left or right coefficient
 Since every term in the deficit is nonnegative and \(1-r^{-2k}>0\), one has \(I(J_{r\ast}\mu)\le\log r\), with equality only when \(\widehat\mu(k)=0\) for all \(k\ne0\), that is, when \(\mu\) is Haar measure on \(\TT\).  The map \(J_r:\TT\to E_r\) is a homeomorphism for \(r>1\), so every probability measure on \(E_r\) is of the form \(J_{r\ast}\mu\).  Hence \(\mu_r\) is the unique equilibrium measure on \(E_r\), and its maximal energy is \(\log r\).  By the capacity variational principle, \(\operatorname{cap}(E_r)=r\).
 \end{proof}
 
+
+\begin{lemma}[Boundary covering formula for finite Blaschke products]\label{lem:finite-blaschke-boundary-covering-formula}
+Let \(B\) be a finite Blaschke product of degree \(d\ge1\).  Then \(B\) has no critical point on \(\TT\), the boundary map \(B:\TT\to\TT\) is an orientation-preserving degree-\(d\) covering, and for every continuous function \(f\) on \(\TT\),
+\[
+\int_{0}^{2\pi} f(B(e^{i\theta}))\,|B'(e^{i\theta})|\,\dd\theta
+=d\int_{0}^{2\pi}f(e^{it})\,\dd t.
+\]
+Consequently the probability measure
+\[
+\dd\mu_B(e^{i\theta})=\frac{|B'(e^{i\theta})|}{2\pi d}\,\dd\theta
+\]
+satisfies \(B_\ast\mu_B=\dd t/(2\pi)\).
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+B(z)=\zeta\prod_{j=1}^{d}\frac{z-a_j}{1-\overline{a_j}z},
+\qquad |\zeta|=1,
+\qquad a_j\in\DD.
+\]
+For \(z=e^{i\theta}\), differentiating a continuous boundary argument \(B(e^{i\theta})=e^{i\beta(\theta)}\) on any local arc gives
+\[
+\beta'(\theta)=\operatorname{Re}\left(\frac{e^{i\theta}B'(e^{i\theta})}{B(e^{i\theta})}\right)
+=
+\sum_{j=1}^{d}\frac{1-|a_j|^2}{|e^{i\theta}-a_j|^2}>0.
+\]
+Thus \(B'(e^{i\theta})\ne0\) on \(\TT\), and \(|B'(e^{i\theta})|=\beta'(\theta)\).  The argument increase over one full turn is \(\beta(2\pi)-\beta(0)=2\pi d\), so \(B:\TT\to\TT\) is an orientation-preserving covering of degree \(d\).  Partition \([0,2\pi]\) into the \(d\) inverse branches on which \(\beta\) maps the branch interval bijectively onto an interval of length \(2\pi\).  On each branch the substitution \(t=\beta(\theta)\) gives one copy of \(\int_0^{2\pi}f(e^{it})\,\dd t\).  Summing the \(d\) branches proves the change-of-variables formula, and division by \(2\pi d\) gives the asserted pushforward identity.
+\end{proof}
+
 \begin{theorem}[Finite Blaschke--Joukowsky covers]\label{thm:finite-blaschke-joukowsky-cover}
 Let \(B\) be a finite Blaschke product of degree \(d\ge1\), let \(r>1\), and set
 \[
@@ -168,16 +244,7 @@ Among them is the canonical absolutely continuous lift
 \begin{proof}
 The identity \((R_{B,r})_\ast\mu=J_{r\ast}(B_\ast\mu)=J_{r\ast}\eta\) reduces the deficit formula directly to Theorem \ref{thm:sharp-joukowsky-equilibrium-stability}.  The same theorem also shows that equality in the maximal-energy problem occurs exactly when \(\eta\) is Haar measure.  This proves the characterization of all equilibrium lifts.
 
-It remains to verify the canonical density.  On \(\TT\), write \(B(e^{i\theta})=e^{i\beta(\theta)}\), choosing \(\beta\) locally.  A finite Blaschke product is an orientation-preserving degree-\(d\) covering of \(\TT\), and
-\[
-\beta'(\theta)=|B'(e^{i\theta})|.
-\]
-Therefore, for every continuous \(f\) on \(\TT\), the change of variables along the \(d\) covering sheets gives
-\[
-\int_{\TT} f(B(e^{i\theta}))\frac{|B'(e^{i\theta})|}{2\pi d}\,\dd\theta
-=\int_{0}^{2\pi}f(e^{it})\frac{\dd t}{2\pi}.
-\]
-Hence \(B_\ast\mu_B\) is Haar measure, so \(\mu_B\) is an equilibrium lift.
+It remains to verify the canonical density.  Lemma \ref{lem:finite-blaschke-boundary-covering-formula} applies to every continuous test function on \(\TT\) and gives \(B_\ast\mu_B\) equal to Haar measure.  Thus \(\mu_B\) is an equilibrium lift.
 \end{proof}
 
 \begin{proposition}[Canonical Blaschke lift source energy]\label{prop:canonical-blaschke-lift-source-energy}

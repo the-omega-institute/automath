@@ -135,6 +135,27 @@ Under the pairwise-distinct hypothesis every \(\tau_r\)-orbit meeting the source
 Condition \textup{(b)} says that this factor is one, which is precisely the displayed subset-resonance equation.
 \end{proof}
 
+
+\begin{lemma}[Parity-restricted Laurent interpolation]\label{lem:parity-restricted-laurent-interpolation}
+Fix \(k\ge0\) and distinct positive numbers \(r_0,
+\dots,r_k\).  The evaluation map
+\[
+\sum_{j=0}^{k}\alpha_j r^{k-2j}
+\longmapsto
+\left(\sum_{j=0}^{k}\alpha_j r_i^{k-2j}\right)_{i=0}^{k}
+\]
+from the \((k+1)\)-dimensional space spanned by \(r^k,r^{k-2},\dots,r^{-k}\) to \(\CC^{k+1}\) is an isomorphism.  Hence any coefficient family supported on this parity class is determined by its values at \(k+1\) distinct scales; in particular \(n+1\) distinct scales determine it for every \(0\le k\le n\).
+\end{lemma}
+
+\begin{proof}
+Multiplication by \(r^k\) sends the displayed Laurent polynomial to
+\[
+\sum_{j=0}^{k}\alpha_j r^{2k-2j}
+=\sum_{j=0}^{k}\alpha_j (r^2)^{k-j},
+\]
+a polynomial of degree at most \(k\) in \(u=r^2\).  The evaluation matrix at \(u_i=r_i^2\) is the Vandermonde matrix \((u_i^{k-j})_{0\le i,j\le k}\), whose determinant is, up to sign, \(\prod_{0\le i<j\le k}(u_j-u_i)\).  This determinant is nonzero because the scales \(r_i\) are distinct and positive.  Therefore the evaluations determine the coefficients \(\alpha_j\) uniquely.  If \(n+1\) scales are available and \(k\le n\), restricting to any \(k+1\) of them already gives the stated interpolation.
+\end{proof}
+
 \begin{theorem}[Algebraic Mahler transport inverse package]\label{thm:algebraic-mahler-transport-inverse-package}
 Let \(n\ge1\), and let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(z_1\cdots z_n\ne0\).  For each \(r>1\), let \(Q_r\) be the Joukowsky transport polynomial.  The following inverse statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
@@ -178,7 +199,7 @@ is
 \[
 (-1)^k a_0\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}).
 \]
-It is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\), hence after multiplying by \(r^k\) it is a polynomial of degree \(k\le n\) in \(r^2\).  Since the numbers \(r_i^2\) are distinct, the \(n+1\) scale values determine this Laurent polynomial uniquely by interpolation, for every \(k\).  Its highest \(r\)-power coefficient is \((-1)^k a_0 e_k(z_1,\dots,z_n)\), so division by the already known nonzero coefficient \(a_0\) recovers \(e_k(z_1,
+It is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\).  Lemma \ref{lem:parity-restricted-laurent-interpolation} applies to this parity-restricted family: after multiplication by \(r^k\), its coefficient values form a degree-at-most-\(k\) polynomial in \(r^2\), and the Vandermonde matrix on any \(k+1\) of the available \(n+1\) distinct scales has full rank.  Hence the scale values determine this Laurent polynomial uniquely, for every \(k\le n\).  Its highest \(r\)-power coefficient is \((-1)^k a_0 e_k(z_1,\dots,z_n)\), so division by the already known nonzero coefficient \(a_0\) recovers \(e_k(z_1,
 \dots,z_n)\).  For \(k=n\), this also gives the stated check on the constant term: its highest coefficient is \((-1)^n a_0(z_1\cdots z_n)=(z_1\cdots z_n)^2\), and its lowest coefficient is \((-1)^n a_0(z_1\cdots z_n)^{-1}=1\).  Dividing by \(a_0\) gives the displayed top and bottom coefficients for the monic transport.  Thus all elementary symmetric functions of \(z_1,
 \dots,z_n\) are recovered, and these are precisely the coefficients of the monic polynomial \(P\).
 
@@ -218,19 +239,38 @@ The first set lies on \(|z|=1\), and the second lies on \(|z|=r^{-2}\).  The cho
 \end{proof}
 
 \begin{lemma}[Outer Rouch\'e count prevents degree loss]\label{lem:outer-rouche-prevents-degree-loss}
-Let \(S\) be a polynomial of degree \(2n\), let \(R>0\), and assume that every zero of \(S\) lies in \(|z|<R\).  Let \(\widetilde Q\in\CC[w]\) have degree at most \(n\), and put
+Let \(S\) be a polynomial of degree \(2n\), let \(R>0\), and assume that every zero of \(S\) lies in \(|z|<R\).  Let
 \[
-\widetilde S(z):=z^n\widetilde Q(J_r(z)).
+\widetilde Q(w)=\sum_{\ell=0}^{n}\widetilde b_\ell w^\ell
 \]
-If
+with coefficients allowed to satisfy \(\widetilde b_n=0\), and put
+\[
+\widetilde S(z):=z^n\widetilde Q(J_r(z)),
+\qquad J_r(z)=rz+r^{-1}z^{-1}.
+\]
+Then \(\widetilde S\) is a polynomial with expansion
+\[
+\widetilde S(z)=
+\sum_{\ell=0}^{n}\widetilde b_\ell
+\sum_{j=0}^{\ell}\binom{\ell}{j}r^{2j-\ell}z^{n-\ell+2j}.
+\]
+Its trailing coefficient is \(r^{-n}\widetilde b_n\), and its leading coefficient is \(r^n\widetilde b_n\).  If
 \[
 |\widetilde S(z)-S(z)|<|S(z)|\qquad(|z|=R),
 \]
-then \(\widetilde S\) has exactly \(2n\) finite zeros in \(|z|<R\), counted with multiplicity.  In particular \(\widetilde S\) is a polynomial of degree exactly \(2n\); no part of the Rouch\'e count is lost to a zero at infinity.
+then \(\widetilde b_n\ne0\), \(\deg\widetilde S=2n\), and \(\widetilde S\) has exactly \(2n\) finite zeros in \(|z|<R\), counted with multiplicity.  Thus no part of the Rouch\'e count is lost through a vanished leading coefficient or a zero at infinity.
 \end{lemma}
 
 \begin{proof}
-Since \(\deg\widetilde Q\le n\), each summand in \(z^n\widetilde Q(J_r(z))\) is a linear combination of powers \(z^{n-\ell},z^{n-\ell+2},\dots,z^{n+\ell}\) with \(0\le\ell\le n\).  Thus \(\widetilde S\) is a genuine polynomial and \(\deg\widetilde S\le 2n\).  Rouch\'e's theorem on \(|z|=R\) gives the same number of zeros for \(\widetilde S\) and \(S\) in the disk \(|z|<R\).  The polynomial \(S\) has all its \(2n\) zeros there by hypothesis, so \(\widetilde S\) has \(2n\) zeros there as well.  A nonzero polynomial of degree at most \(2n\) with \(2n\) finite zeros has degree exactly \(2n\), counted with multiplicity.  Hence no leading-degree loss, equivalently no zero at infinity, occurs.
+For \(0\le\ell\le n\), the binomial expansion gives
+\[
+z^nJ_r(z)^\ell
+=z^n\sum_{j=0}^{\ell}\binom{\ell}{j}(rz)^j(r^{-1}z^{-1})^{\ell-j}
+=\sum_{j=0}^{\ell}\binom{\ell}{j}r^{2j-\ell}z^{n-\ell+2j}.
+\]
+This proves the displayed expansion and shows that \(\widetilde S\) is a polynomial of degree at most \(2n\).  The only term capable of contributing to degree \(0\) is \(\ell=n,j=0\), so the trailing coefficient is \(r^{-n}\widetilde b_n\).  The only term capable of contributing to degree \(2n\) is \(\ell=n,j=n\), so the leading coefficient is \(r^n\widetilde b_n\).
+
+Rouch\'e's theorem on \(|z|=R\) gives the same number of zeros for \(\widetilde S\) and \(S\) in the disk \(|z|<R\).  Since all \(2n\) zeros of the degree-\(2n\) polynomial \(S\) lie in this disk, \(\widetilde S\) has \(2n\) finite zeros there, counted with multiplicity.  A nonzero polynomial of degree at most \(2n\) with \(2n\) finite zeros must have degree at least \(2n\), hence exactly \(2n\).  The leading coefficient formula then forces \(\widetilde b_n\ne0\), and the trailing coefficient is nonzero as well.  This rules out both the possible degree loss from \(\deg\widetilde Q<n\) and any missing zero at infinity.
 \end{proof}
 
 \begin{theorem}[Quantitative annular Rouch\'e stability]\label{thm:quantitative-annular-rouche-stability}
