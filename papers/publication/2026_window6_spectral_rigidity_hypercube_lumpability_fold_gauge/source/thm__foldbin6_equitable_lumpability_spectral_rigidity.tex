@@ -125,11 +125,62 @@ Consequently the data in \textup{(a)}--\textup{(c)} form a reusable exact certif
 \begin{proof}
 The fiber table determines \(M\), and the displayed lists are exactly the entries of \(T_mM\) after multiplying by \(m\): for \(\omega\in F^{-1}(x)\), the \((\omega,y)\)-entry of \(T_mM\) is \(c_\omega(y)/m\).  Hence \(T_mM=MP\) can hold for some matrix \(P\) precisely when, for each pair \((x,y)\), this entry is independent of the choice of \(\omega\in F^{-1}(x)\).  This is exactly constancy of every \(\mathcal C_{x,y}(F)\).  When the lists are constant, Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward} identifies the unique quotient with \(P_F\), and Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} gives the hypercube spectral inclusion.  This proves \textup{(i)}.
 
-If a list has diameter \(\delta\), choose two entries in that list attaining its minimum and maximum.  Theorem \ref{thm:local-residual-certificate-hypercube-folds} applied to these two rows gives the lower bound \(\delta/(2m)\) for every visible compression matrix and rules out exact intertwining.  This proves \textup{(ii)}.
+If a list has diameter \(\delta\), choose two entries in that list attaining its minimum and maximum.  Theorem \ref{thm:foldbin-complete-residual-budget-skeleton} applied to the finite fold \(F\) gives the exact Chebyshev radius; restricting it to the two entries attaining the diameter \(\delta\) gives the lower bound \(\delta/(2m)\) for every visible compression matrix and rules out exact intertwining.  This proves \textup{(ii)}.
 
 For \textup{(iii)}, clearing denominators in \(\det(tI-P_F)\) does not change the real zeros.  Sturm's theorem counts zeros in a rational interval from the signs of the exact Sturm sequence at the two endpoints.  If such an interval avoids the hypercube grid but contains a zero of the cleared characteristic polynomial, then \(P_F\) has an off-grid eigenvalue.  The contrapositive statement in Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} therefore excludes \(P_F\) from the class of equitable quotient kernels on the same visible blocks.
 
 Finally, let \(\sigma:X\to X'\) be a relabeling and let \(S\) be its permutation matrix.  The relabeled block matrix is \(MS\), the averaged pushforward is \(S^{-1}P_FS\), and the count list indexed by \((\sigma x,\sigma y)\) is the same multiset as the old list indexed by \((x,y)\).  Thus all diameter and interval assertions are merely reindexed.  Conjugation preserves characteristic polynomials, so Sturm witnesses and off-grid eigenvalues are unchanged.  The final sentence is only the assembly of these proved implications. \qedhere
+\end{proof}
+
+
+\begin{lemma}[Fibonacci-tail prefix recursion]\label{lem:foldbin-fibonacci-tail-prefix-recursion}
+Fix \(m\ge1\), and let \(K_m\) be the integer from Definition \ref{def:audited-binary-fold-certificate}.  For \(m<r\le K_m+1\) and \(b\in\{0,1\}\), let \(\mathcal T_r^{(b)}\) be the finite sets defined by
+\[
+\mathcal T_{K_m+1}^{(0)}=\mathcal T_{K_m+1}^{(1)}=\{0\},
+\]
+and, for \(m<r\le K_m\), by
+\[
+\mathcal T_r^{(1)}=\mathcal T_{r+1}^{(0)},
+\qquad
+\mathcal T_r^{(0)}=
+\mathcal T_{r+1}^{(0)}\cup\bigl(F_{r+1}+\mathcal T_{r+1}^{(1)}\bigr).
+\]
+Then \(\mathcal T_r^{(b)}\) is exactly the set of values
+\[
+\sum_{s=r}^{K_m} u_sF_{s+1}
+\]
+where \((u_r,\ldots,u_{K_m})\in\{0,1\}^{K_m-r+1}\) and the concatenated word \((b,u_r,\ldots,u_{K_m})\) has no adjacent ones.  Consequently, for every \(x=(x_1,\ldots,x_m)\in X_m\), with
+\[
+V_m(x)=\sum_{r=1}^{m}x_rF_{r+1},
+\]
+one has
+\[
+(\Fold_m^{\mathrm{bin}})^{-1}(x)
+=\{\omega\in\Omega_m:N(\omega)-V_m(x)\in\mathcal T_{m+1}^{(x_m)}\},
+\]
+and
+\[
+d_m^{\mathrm{bin}}(x)
+=\#\bigl(\mathcal T_{m+1}^{(x_m)}\cap[-V_m(x),2^m-1-V_m(x)]\bigr).
+\]
+For \(\omega\in\Omega_m\) and \(y\in X_m\), the target-fiber neighbor count is
+\[
+c_\omega(y)=\sum_{i=1}^{m}\mathbf 1_{\mathcal T_{m+1}^{(y_m)}}
+\bigl(N(\omega\oplus e_i)-V_m(y)\bigr),
+\]
+where \(\omega\oplus e_i\) denotes bit-flip in coordinate \(i\).
+\end{lemma}
+
+\begin{proof}
+We prove the tail description by backward induction on \(r\).  At the terminal index \(r=K_m+1\) there are no remaining Zeckendorf positions, so the only tail value is the empty sum \(0\), independently of the previous digit \(b\).  This is the displayed terminal condition.
+
+Assume the assertion is known at \(r+1\).  If the previous digit is \(1\), the no-adjacent-ones constraint forces \(u_r=0\); the admissible tail values are therefore exactly the values of a tail beginning at \(r+1\) with previous digit \(0\), namely \(\mathcal T_{r+1}^{(0)}\).  This gives \(\mathcal T_r^{(1)}=\mathcal T_{r+1}^{(0)}\).  If the previous digit is \(0\), either \(u_r=0\), giving the values \(\mathcal T_{r+1}^{(0)}\), or \(u_r=1\), contributing \(F_{r+1}\) and then forcing the next tail to begin with previous digit \(1\), giving \(F_{r+1}+\mathcal T_{r+1}^{(1)}\).  This is precisely the displayed recursion for \(\mathcal T_r^{(0)}\).  The induction proves that the recursion enumerates exactly, and only, legal Fibonacci tails.
+
+Now let \(N\in[0,2^m-1]\), and let \(z_1(N),\ldots,z_{K_m}(N)\) be its greedy Zeckendorf digits.  Definition \ref{def:audited-binary-fold-certificate} and the choice of \(K_m\) ensure that these positions contain the whole expansion: the largest weight needed for any \(N\le2^m-1\) is at most \(F_{K_m+1}\), while \(F_{K_m+2}>2^m-1\) excludes a nonzero digit beyond \(K_m\).  The prefix condition \((z_1(N),\ldots,z_m(N))=x\) is therefore equivalent to
+\[
+N=V_m(x)+\sum_{s=m+1}^{K_m}z_s(N)F_{s+1}
+\]
+with the tail legal after the previous digit \(x_m\).  By the induction just proved, this is equivalent to \(N-V_m(x)\in\mathcal T_{m+1}^{(x_m)}\).  Translating the dyadic interval \(0\le N\le2^m-1\), identified with \(\Omega_m\) by \(\omega\mapsto N(\omega)\), gives the fiber formula and the cardinality formula.  Finally, \(c_\omega(y)\) counts the coordinates whose flipped dyadic integer has greedy prefix \(y\); applying the same membership criterion to each flipped word gives the stated sum of indicators. \qedhere
 \end{proof}
 
 \begin{theorem}[Exact finite-certificate structure and Fibonacci recursion for the bin-fold family]\label{thm:foldbin-algorithmic-certificate-schema}
@@ -189,150 +240,114 @@ For fixed \(m\), enumerate the finite set \(\Omega_m=\{0,1\}^m\).  Definition \r
 
 The decision and classification statements are exactly Theorem \ref{thm:foldbin-complete-residual-budget-skeleton}, applied to the constructed lists.  That theorem also proves that positive-diameter two-row skeletons are precisely the local obstructions and that the maximum-diameter ones force the sharp radius \(\Delta_m/(2m)\).  The capacity assertion follows from the jump identity in Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology}.  Under a relabeling \(\sigma:X_m\to X'_m\), the block-indicator matrix is multiplied on the right by the associated permutation matrix, target-count lists are renamed from \((x,y)\) to \((\sigma x,\sigma y)\), and all maxima, minima, skeleton equalities, fiber sizes, and characteristic polynomials are preserved.  Thus the certificate is intrinsic up to relabeling.
 
-It remains only to justify the displayed recursive formula.  Let \(N=\sum_{r\ge1}z_r(N)F_{r+1}\) be the greedy Zeckendorf expansion and let \((z_1(N),\ldots,z_m(N))=x\).  The prefix contributes \(V_m(x)\).  The remaining contribution is a legal tail in positions \(m+1,\ldots,K_m\); if the previous digit is \(1\), the next tail digit is forced to be \(0\), while if the previous digit is \(0\), the next tail digit may be \(0\) or \(1\).  This is exactly the backward recursion defining \(\mathcal T_r^{(b)}\).  Conversely, appending any tail counted by that recursion to the legal prefix \(x\) gives a legal Zeckendorf digit string with first \(m\) digits equal to \(x\).  Since greedy Zeckendorf representation is unique, the integers whose first \(m\) greedy digits equal \(x\) are precisely \(V_m(x)+\mathcal T_{m+1}^{(x_m)}\).  Intersecting with the dyadic range \([0,2^m)\), identified with \(\Omega_m\) by \(\omega\mapsto N(\omega)\), gives the fiber formula and cardinality.  Applying the same tail-membership test after each of the \(m\) bit-flips gives the formula for \(c_\omega(y)\).  Substituting the audited \(m=6\) fiber table, edge-count matrix, residual tensor, capacity data, and Sturm transcript gives exactly the data package summarized in Theorem \ref{thm:single-exact-fold6-certificate}, so the main theorem is an application of this finite-certificate structure theorem rather than an isolated computation. \qedhere
+The Fibonacci-tail formulas in \textup{(v)} are Lemma \ref{lem:foldbin-fibonacci-tail-prefix-recursion}.  Substituting the audited \(m=6\) fiber table, edge-count matrix, residual tensor, capacity data, and Sturm transcript gives exactly the data package summarized in Theorem \ref{thm:single-exact-fold6-certificate}, so the main theorem is an application of this finite-certificate structure theorem rather than an isolated computation. \qedhere
 \end{proof}
 
-\begin{theorem}[Fold\texorpdfstring{$_m^{\mathrm{bin}}$}{m bin} residual dichotomy and interval classification]\label{thm:foldbin-family-certificate-algorithm}
-For every \(m\ge1\), the binary Zeckendorf-prefix fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) admits a finite integer residual certificate package deciding strong lumpability on its visible state space and classifying all approximate visible intertwiners.  More precisely, let
+
+\begin{remark}[Fold\texorpdfstring{$_m^{\mathrm{bin}}$}{m bin} certificate algorithm]\label{thm:foldbin-family-certificate-algorithm}
+For every \(m\ge1\), the binary Zeckendorf-prefix fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) admits a finite integer certificate package deciding visible strong lumpability, classifying all approximate visible intertwiners, and testing the audited pushforward for off-grid spectrum.  The package is obtained by the Fibonacci-tail recursion of Lemma \ref{lem:foldbin-fibonacci-tail-prefix-recursion}; its residual and interval-polytope conclusions are exactly the specialization of Theorem \ref{thm:foldbin-complete-residual-budget-skeleton} to \(F=\Fold_m^{\mathrm{bin}}\).  Explicitly, if
 \[
-d_x=\bigl| (\Fold_m^{\mathrm{bin}})^{-1}(x)\bigr|,
-\qquad
+c_\omega(y)=\#\{1\le i\le m:\Fold_m^{\mathrm{bin}}(\omega+e_i)=y\},
+\]
+then all neighbor-count lists, the edge counts
+\[
 N_{xy}=\#\{(\omega,i):\Fold_m^{\mathrm{bin}}(\omega)=x,
 \ \Fold_m^{\mathrm{bin}}(\omega+e_i)=y\},
 \]
-and set \(P_m^{\mathrm{bin}}(x,y)=N_{xy}/(m d_x)\).  For \(\omega\in\Omega_m\) and \(y\in X_m\), put
+the pushforward entries \(P_m^{\mathrm{bin}}(x,y)=N_{xy}/(m d_x)\), and the residual diameter tensor are finite integer sums of the tail-membership indicators in Lemma \ref{lem:foldbin-fibonacci-tail-prefix-recursion}.  If every source-fiber target-count list is constant, then \(\Fold_m^{\mathrm{bin}}\) is an equitable quotient and \(\Spec(P_m^{\mathrm{bin}})\subseteq\{1-2k/m:0\le k\le m\}\).  If a list is nonconstant, two entries in that list give the two-row residual skeleton of Theorem \ref{thm:foldbin-complete-residual-budget-skeleton}.  If a cleared characteristic polynomial of \(P_m^{\mathrm{bin}}\) has a rational Sturm isolating interval disjoint from the same grid, then the audited pushforward is not an equitable quotient kernel.  In window \(6\), the printed fiber table, edge-count matrix, exact residual distribution, stochastic endpoint-sum table, and Sturm certificate are precisely this audited specialization.
+\par
+This is a direct specialization of the preceding results.  Lemma \ref{lem:foldbin-fibonacci-tail-prefix-recursion} gives the finite formulas for fibers and neighbor counts.  Summing the neighbor counts over a source fiber gives \(N_{xy}\), and division by \(m d_x\) is the pushforward convention \(D^{-1}M^\top T_mM\).  Theorem \ref{thm:foldbin-complete-residual-budget-skeleton} gives the exact strong-lumpability criterion, interval product, residual radius, and two-row skeletons; Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward} and Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} supply the quotient-kernel and spectral-grid clauses.  The Sturm clause is the usual exact-arithmetic certificate for a real zero of a cleared characteristic polynomial.  The window-\(6\) assertion is obtained by substituting the audited streams printed in Propositions \ref{prop:foldbin6-canonical-fiber-table} and \ref{prop:foldbin6-exact-pushforward-matrix}, Theorems \ref{thm:foldbin6-exact-residual-diameter-distribution} and \ref{thm:foldbin-stochastic-budget-classification}, and Lemma \ref{lem:foldbin6-characteristic-certificate}.
+\end{remark}
+
+\begin{theorem}[Exact residual-budget classification for a finite hypercube fold]\label{thm:foldbin-complete-residual-budget-skeleton}
+Let \(F:\Omega_m\twoheadrightarrow X\) be any finite hypercube fold with block-indicator matrix \(M\).  For \(x,y\in X\) and \(\omega\in F^{-1}(x)\), put
 \[
-c_\omega(y)=\#\{1\le i\le m:\Fold_m^{\mathrm{bin}}(\omega+e_i)=y\}.
+c_\omega(y):=\#\{1\le i\le m:F(\omega+e_i)=y\}.
 \]
-Then the following effective structural dichotomy holds.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item If, for every pair \(x,y\in X_m\), the list \(\bigl(c_\omega(y)\bigr)_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)}\) is constant, then \(\Fold_m^{\mathrm{bin}}\) is an equitable quotient of \(Q_m\), its quotient kernel is exactly \(P_m^{\mathrm{bin}}\), and
+Let \(D_F=M^\top M\), let \(P_F:=D_F^{-1}M^\top T_mM\), and define
 \[
-\Spec(P_m^{\mathrm{bin}})\subseteq\{1-2k/m:0\le k\le m\}.
-\]
-\item If one such list is not constant, then any two unequal entries give a two-vertex residual certificate: no matrix \(P\) satisfies \(T_mM_m=M_mP\), where \(M_m\) is the block-indicator matrix of \(\Fold_m^{\mathrm{bin}}\).  If the two entries differ by \(\delta\), then every visible matrix has one of the two corresponding entries of absolute residual at least \(\delta/(2m)\).
-\item The same enumeration computes the residual diameter tensor \(\Delta_m(x,y)\) of Theorem \ref{thm:foldbin-complete-residual-budget-skeleton}.  Consequently it computes the exact interval product \(\mathcal P_m(\epsilon)\) of all visible matrices with \(\|T_mM_m-M_mP\|_\infty\le\epsilon\), and in particular the sharp unconstrained residual radius \(\Delta_m/(2m)\).
-\item Independently, let \(C_m(t)\in\ZZ[t]\) be any nonzero integer multiple of \(\det(tI-P_m^{\mathrm{bin}})\).  If a Sturm sequence for \(C_m\) has a variation drop on a rational interval \((a,b)\) disjoint from \(\{1-2k/m:0\le k\le m\}\), with \(C_m(a)C_m(b)\ne0\), then \(P_m^{\mathrm{bin}}\) has an off-grid eigenvalue and therefore is not an equitable quotient kernel of \(Q_m\).
-\end{enumerate}
-All entries in this criterion are obtained by the Fibonacci-tail tensor formula of Theorem \ref{thm:foldbin-algorithmic-certificate-schema}\textup{(v)} and, equivalently, by finite integer enumeration of the block-indicator encoding
-\[
-\mathcal F_m=\bigl(x:(\Fold_m^{\mathrm{bin}})^{-1}(x)\bigr)_{x\in X_m},
-\]
-so the window-\(6\) table in Proposition \ref{prop:foldbin6-canonical-fiber-table}, the matrix of Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, the exact residual distribution in Theorem \ref{thm:foldbin6-exact-residual-diameter-distribution}, and the spectral certificate of Theorem \ref{thm:single-exact-fold6-certificate} are the audited \(m=6\) specialization of this criterion.
-Equivalently, they are the audited \(m=6\) specialization of the reusable interface in Theorem \ref{thm:reusable-exact-certificate-interface-hypercube-folds}.
-\end{theorem}
-
-\begin{proof}
-For fixed \(m\), the set \(\Omega_m\) is finite and Definition \ref{def:audited-binary-fold-certificate} gives an explicit value of \(\Fold_m^{\mathrm{bin}}(\omega)\) for each \(\omega\).  Theorem \ref{thm:foldbin-algorithmic-certificate-schema}\textup{(v)} gives the equivalent structural formula: a fiber is a translated Fibonacci-tail set, and each neighbor count is a sum of membership indicators in such tail sets.  Thus the fiber table \(\mathcal F_m\), the cardinalities \(d_x\), the neighbor-count lists \(c_\omega(y)\), and the edge counts \(N_{xy}\) are finite integer sums with an explicit recursive description.  The formula for \(P_m^{\mathrm{bin}}\) is exactly the audited pushforward formula \(D^{-1}M_m^\top T_mM_m\) from Section \ref{sec:preliminaries}.
-
-The first two alternatives are Theorem \ref{thm:finite-certificate-dichotomy-hypercube-folds} applied to the particular surjection \(F=\Fold_m^{\mathrm{bin}}\).  In the constant-list case, Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward} identifies the unique strong-lumpability kernel with the audited pushforward, and Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} gives the hypercube spectral inclusion.  In the nonconstant-list case, Theorem \ref{thm:local-residual-certificate-hypercube-folds} gives the nonintertwining conclusion and the residual bound \(\delta/(2m)\).
-
-The tensor \(\Delta_m(x,y)\) is obtained from the same neighbor-count lists by taking integer maxima and minima.  The interval product \(\mathcal P_m(\epsilon)\), the sharp residual radius, and the classifying two-row skeletons are exactly Theorem \ref{thm:foldbin-complete-residual-budget-skeleton} applied to this tensor.  This proves \textup{(iii)}.
-
-For the spectral certificate, multiplying \(\det(tI-P_m^{\mathrm{bin}})\) by a nonzero integer does not change its real zeros.  Since the entries of \(P_m^{\mathrm{bin}}\) are rational, such a clearing denominator exists.  Sturm's theorem applied to \(C_m\) counts the zeros in \((a,b)\) when neither endpoint is a zero; a positive variation drop therefore supplies an eigenvalue of \(P_m^{\mathrm{bin}}\) in that interval.  If the interval is disjoint from the hypercube grid, the spectral inclusion in the equitable case is impossible, so the audited pushforward is not an equitable quotient kernel.  The window-\(6\) certificate is obtained by substituting the printed fiber table, edge-count matrix, and characteristic-polynomial/Sturm data into the same construction. \qedhere
-\end{proof}
-
-\begin{theorem}[Exact residual-budget classification for a binary fold]\label{thm:foldbin-complete-residual-budget-skeleton}
-For every fixed \(m\ge1\), the visible obstruction to strong lumpability of the binary fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\) is completely controlled by the integer diameter tensor
-\[
-\Delta_m(x,y):=\max_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)} c_\omega(y)
+\Delta_F(x,y):=\max_{\omega\in F^{-1}(x)} c_\omega(y)
 -
-\min_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)} c_\omega(y),
-\qquad x,y\in X_m,
+\min_{\omega\in F^{-1}(x)} c_\omega(y),
+\qquad
+\Delta_F:=\max_{x,y}\Delta_F(x,y).
 \]
-where \(c_\omega(y)=\#\{1\le i\le m:\Fold_m^{\mathrm{bin}}(\omega+e_i)=y\}\).  Put \(\Delta_m:=\max_{x,y}\Delta_m(x,y)\).  For \(\epsilon\ge0\), define the residual interval
+For \(\epsilon\ge0\), define
 \[
-I_\epsilon(x,y):=
+I_\epsilon^F(x,y):=
 \left[
-\frac{1}{m}\max_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)}c_\omega(y)-\epsilon,
-\frac{1}{m}\min_{\omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x)}c_\omega(y)+\epsilon
+\frac{1}{m}\max_{\omega\in F^{-1}(x)}c_\omega(y)-\epsilon,
+\frac{1}{m}\min_{\omega\in F^{-1}(x)}c_\omega(y)+\epsilon
 \right].
 \]
 Then:
 \begin{enumerate}[label=\textup{(\roman*)}]
-\item \(\Fold_m^{\mathrm{bin}}\) is an equitable quotient of \(Q_m\) if and only if \(\Delta_m=0\).  In that case the unique visible intertwining matrix is the audited pushforward \(P_m^{\mathrm{bin}}=D^{-1}M_m^\top T_mM_m\).
-\item For an arbitrary real matrix \(P\) on \(X_m\),
+\item The fold \(F\) is an equitable, equivalently strongly lumpable, quotient of \(Q_m\) if and only if \(\Delta_F=0\).  In that case the unique visible intertwining matrix is \(P_F\).
+\item For an arbitrary real matrix \(P\) on \(X\),
 \[
-\|T_mM_m-M_mP\|_\infty\le\epsilon
+\|T_mM-MP\|_\infty\le\epsilon
 \]
 holds if and only if
 \[
-P(x,y)\in I_\epsilon(x,y)
-\qquad\text{for every }x,y\in X_m.
+P(x,y)\in I_\epsilon^F(x,y)
+\qquad\text{for every }x,y\in X.
 \]
-Consequently the set of all \(\epsilon\)-intertwiners is the explicit interval product
-\[
-\mathcal P_m(\epsilon):=
-\prod_{x,y\in X_m}I_\epsilon(x,y),
-\]
-intersected, if one insists on Markov kernels, with the row-stochastic simplex.
+Thus the set of all real \(\epsilon\)-intertwiners is the interval product \(\prod_{x,y}I_\epsilon^F(x,y)\), intersected with the row-stochastic simplex if one insists on Markov kernels.
 \item The unconstrained visible Chebyshev radius is exactly
 \[
-\inf_{P\in\RR^{X_m\times X_m}}
-\|T_mM_m-M_mP\|_\infty
-=\frac{\Delta_m}{2m}.
+\inf_{P\in\RR^{X\times X}}
+\|T_mM-MP\|_\infty
+=\frac{\Delta_F}{2m}.
 \]
-It is attained precisely by those real matrices \(P\) with
+It is attained precisely by those real matrices \(P\) with \(P(x,y)\in I_{\Delta_F/(2m)}^F(x,y)\) for every \(x,y\).  In particular, if \(\Delta_F>0\), then every visible Markov kernel has entrywise residual at least \(\Delta_F/(2m)\).
+\item For the averaged pushforward \(P_F\),
 \[
-P(x,y)\in I_{\Delta_m/(2m)}(x,y)
-\qquad\text{for every }x,y\in X_m.
+\frac{\Delta_F}{2m}\le
+\|T_mM-MP_F\|_\infty
+\le \frac{\Delta_F}{m}.
 \]
-In particular, if \(\Delta_m>0\), then every proposed visible Markov kernel satisfies the uniform lower bound
+More precisely, for \(\omega\in F^{-1}(x)\) the residual entry in target column \(y\) is
 \[
-\|T_mM_m-M_mP\|_\infty\ge \frac{\Delta_m}{2m}.
+\frac{1}{m}\left(c_\omega(y)-\frac{1}{|F^{-1}(x)|}
+\sum_{\eta\in F^{-1}(x)}c_\eta(y)\right).
 \]
-\item For the audited pushforward \(P_m^{\mathrm{bin}}=D^{-1}M_m^\top T_mM_m\), one has
-\[
-\frac{\Delta_m}{2m}\le
-\|T_mM_m-M_mP_m^{\mathrm{bin}}\|_\infty
-\le \frac{\Delta_m}{m}.
-\]
-Moreover the residual entries in a fixed source fiber \(x\) and target column \(y\) are exactly
-\[
-\frac{1}{m}\left(c_\omega(y)-\frac{1}{d_x}
-\sum_{\eta\in(\Fold_m^{\mathrm{bin}})^{-1}(x)}c_\eta(y)\right),
-\qquad \omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x).
-\]
-\item Every positive residual budget has a classifiable two-row, one-column bad-example skeleton: if \(\Delta_m(x,y)>0\), choose \(\omega_-,\omega_+\in(\Fold_m^{\mathrm{bin}})^{-1}(x)\) attaining the minimum and maximum of \(c_\omega(y)\).  Then \((\omega_-,\omega_+;y)\) alone proves that every visible matrix has error at least \(\Delta_m(x,y)/(2m)\) on this source--target coordinate.  Pairs with \(\Delta_m(x,y)=\Delta_m\) are exactly the skeletons that force the global radius in \textup{(iii)}.
+\item Every positive residual budget has a classifiable two-row, one-column bad-example skeleton: if \(\Delta_F(x,y)>0\), choose \(\omega_-,\omega_+\in F^{-1}(x)\) attaining the minimum and maximum of \(c_\omega(y)\).  Then \((x,y;\omega_-,\omega_+)\) alone proves that every visible matrix has error at least \(\Delta_F(x,y)/(2m)\) on this source--target coordinate.  Pairs with \(\Delta_F(x,y)=\Delta_F\) are exactly the skeletons forcing the global radius in \textup{(iii)}.
 \end{enumerate}
-Thus the obstruction at each fixed window is not a floating-point or spectral accident: it is an integral diameter tensor whose interval polytope classifies all exact and approximate visible intertwiners.  In window \(6\), Theorem \ref{thm:foldbin6-exact-residual-diameter-distribution} computes this tensor and its extremal skeletons explicitly enough for the main theorem chain.
+For the binary fold \(F=\Fold_m^{\mathrm{bin}}\), we write \(M_m\), \(P_m^{\mathrm{bin}}\), \(\Delta_m(x,y)\), \(\Delta_m\), and \(I_\epsilon(x,y)\) for these objects.
 \end{theorem}
 
 \begin{proof}
-For fixed \(x,y\), the entries of the column \(T_mM_m(\cdot,y)\) on the source fiber over \(x\) are precisely \(c_\omega(y)/m\).  Since the column of \(M_mP\) is constant on that same source fiber and has value \(P(x,y)\), the residual inequalities for this single source--target coordinate are
+For fixed \(x,y\), the entries of the column \(T_mM(\cdot,y)\) on the source fiber over \(x\) are precisely \(c_\omega(y)/m\).  The corresponding column of \(MP\) is constant on that source fiber and has value \(P(x,y)\).  Therefore the single-coordinate residual inequalities are
 \[
 \left|\frac{c_\omega(y)}{m}-P(x,y)\right|\le\epsilon,
-\qquad \omega\in(\Fold_m^{\mathrm{bin}})^{-1}(x).
+\qquad \omega\in F^{-1}(x),
 \]
-Their common solution set is the intersection of the intervals
+and their common solution set is the intersection of the intervals
 \[
 \left[\frac{c_\omega(y)}{m}-\epsilon,
 \frac{c_\omega(y)}{m}+\epsilon\right],
 \]
-which is exactly \(I_\epsilon(x,y)\).  The coordinates \((x,y)\) are independent for the entrywise norm, so the product of these intervals is precisely the full set of real matrices satisfying \(\|T_mM_m-M_mP\|_\infty\le\epsilon\).  If stochasticity is imposed, no residual equation changes; one simply intersects this interval product with the affine inequalities defining row-stochastic Markov kernels.  This proves \textup{(ii)}.
+which is exactly \(I_\epsilon^F(x,y)\).  Since the entrywise norm imposes these conditions independently for each ordered pair \((x,y)\), the full real feasible set is the displayed interval product.  Adding stochasticity imposes only the independent row-simplex constraints.  This proves \textup{(ii)}.
 
-The interval \(I_\epsilon(x,y)\) is nonempty if and only if
+The interval \(I_\epsilon^F(x,y)\) is nonempty if and only if
 \[
-\frac{1}{m}\max_{\omega}c_\omega(y)-\epsilon
+\frac{1}{m}\max_{\omega\in F^{-1}(x)}c_\omega(y)-\epsilon
 \le
-\frac{1}{m}\min_{\omega}c_\omega(y)+\epsilon,
+\frac{1}{m}\min_{\omega\in F^{-1}(x)}c_\omega(y)+\epsilon,
 \]
-where the extrema are taken over \((\Fold_m^{\mathrm{bin}})^{-1}(x)\).  This is equivalent to
-\[
-\epsilon\ge \frac{\Delta_m(x,y)}{2m}.
-\]
-Therefore all coordinate intervals are simultaneously nonempty if and only if \(\epsilon\ge\Delta_m/(2m)\), proving the exact Chebyshev-radius formula and the minimizer description in \textup{(iii)}.  The same argument applied to a single pair \((x,y)\), with two vertices attaining the minimum and maximum, gives the two-row skeleton statement in \textup{(v)} and the lower bound for Markov kernels in \textup{(iii)}.
+which is equivalent to \(\epsilon\ge \Delta_F(x,y)/(2m)\).  Hence all coordinate intervals are simultaneously nonempty if and only if \(\epsilon\ge\Delta_F/(2m)\).  This proves the radius formula and the minimizer description in \textup{(iii)}.  The same inequality restricted to two entries attaining the minimum and maximum proves the two-row skeleton statement in \textup{(v)}.
 
-Taking \(\epsilon=0\) in \textup{(ii)} shows that an exact visible intertwining exists if and only if every interval \(I_0(x,y)\) is nonempty, equivalently if and only if every source-fiber target-count list is constant, equivalently if and only if \(\Delta_m=0\).  By Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward}, this is exactly the equitable, or strongly lumpable, condition.  The same lemma also identifies the exact visible kernel with \(D^{-1}M_m^\top T_mM_m=P_m^{\mathrm{bin}}\).  This proves \textup{(i)}.
+Taking \(\epsilon=0\) in \textup{(ii)} shows that an exact visible intertwining exists if and only if every source-fiber target-count list is constant, equivalently if and only if \(\Delta_F=0\).  This is the standard equitable-partition criterion recorded in Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward}; the same lemma identifies the unique quotient with \(P_F=D_F^{-1}M^\top T_mM\).  This proves \textup{(i)}.
 
-For the audited pushforward, the entry \(P_m^{\mathrm{bin}}(x,y)\) is the average of \(c_\eta(y)/m\) over \(\eta\in(\Fold_m^{\mathrm{bin}})^{-1}(x)\).  Substituting this average gives the displayed residual formula.  The lower bound follows from \textup{(iii)} by taking \(P=P_m^{\mathrm{bin}}\).  The upper bound follows because every entry in a fixed list lies within its full diameter of its average, so
+Finally, \(P_F(x,y)\) is the average of \(c_\eta(y)/m\) over \(\eta\in F^{-1}(x)\).  Substituting this average gives the displayed residual formula.  The lower bound follows from \textup{(iii)} by taking \(P=P_F\).  The upper bound follows because every entry in a fixed list lies within its full diameter of its average:
 \[
-\left|\frac{c_\omega(y)}{m}-P_m^{\mathrm{bin}}(x,y)\right|
-\le \frac{\Delta_m(x,y)}{m}
-\le \frac{\Delta_m}{m}.
+\left|\frac{c_\omega(y)}{m}-P_F(x,y)\right|
+\le \frac{\Delta_F(x,y)}{m}
+\le \frac{\Delta_F}{m}.
 \]
-This proves \textup{(iv)} and completes the residual-budget classification. \qedhere
+This proves \textup{(iv)} and completes the classification. \qedhere
 \end{proof}
+
 \begin{theorem}[Row-stochastic residual-budget classification]\label{thm:foldbin-stochastic-budget-classification}
 Fix \(m\ge1\) and the binary fold \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\).  For \(x,y\in X_m\), set
 \[
