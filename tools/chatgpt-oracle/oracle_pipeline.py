@@ -110,13 +110,20 @@ PAPERS_PUB_DIR_CONST = REPO_ROOT / "papers" / "publication"
 
 # Platform-aware Codex discovery
 def _find_codex() -> str:
-    found = shutil.which("codex")
-    if found:
-        return found
     if sys.platform == "win32":
-        npm_codex = Path.home() / "AppData" / "Roaming" / "npm" / "codex.cmd"
-        if npm_codex.exists():
-            return str(npm_codex)
+        sandbox_codex = Path.home() / ".codex" / ".sandbox-bin" / "codex.exe"
+        if sandbox_codex.exists():
+            return str(sandbox_codex)
+    for name in ("codex", "codex.exe", "codex.cmd"):
+        found = shutil.which(name)
+        if found:
+            return found
+    if sys.platform == "win32":
+        for p in (
+            Path.home() / "AppData" / "Roaming" / "npm" / "codex.cmd",
+        ):
+            if p.exists():
+                return str(p)
     elif sys.platform == "darwin":
         for p in ("/opt/homebrew/bin/codex", "/usr/local/bin/codex"):
             if Path(p).exists():
@@ -279,6 +286,8 @@ def _load_board_journals() -> dict[str, str]:
     ):
         paper_desc = m.group(1).strip()
         raw_journal = m.group(2).strip()
+        if _journal_missing(raw_journal):
+            continue
 
         # Expand abbreviated journal name
         journal = _BOARD_JOURNAL_EXPAND.get(raw_journal.lower(), raw_journal)
@@ -306,6 +315,7 @@ def _load_board_journals() -> dict[str, str]:
 # and to refuse unregistered papers.
 
 _board_entries: Optional[dict[str, dict]] = None
+_board_entries_mtime: Optional[float] = None
 
 
 def _load_board_entries() -> dict[str, dict]:
@@ -341,22 +351,30 @@ def _load_board_entries() -> dict[str, dict]:
 
 
 def _get_board_entries() -> dict[str, dict]:
-    global _board_entries
-    if _board_entries is None:
+    global _board_entries, _board_entries_mtime
+    try:
+        current_mtime = PROGRAM_BOARD.stat().st_mtime if PROGRAM_BOARD.exists() else None
+    except OSError:
+        current_mtime = None
+    if _board_entries is None or _board_entries_mtime != current_mtime:
         _board_entries = _load_board_entries()
+        _board_entries_mtime = current_mtime
     return _board_entries
 
 
 def _invalidate_board_cache() -> None:
     """Invalidate cached board entries (call after updating the file)."""
-    global _board_entries, _board_journals
+    global _board_entries, _board_entries_mtime, _board_journals
     _board_entries = None
+    _board_entries_mtime = None
     _board_journals = None
 
 
 def _board_skip(status: str) -> bool:
     """Return True if this paper should be skipped by the pipeline."""
     s = status.strip()
+    if is_recoverable_stage_a_block_status(s):
+        return False
     skip_prefixes = (
         "\u5df2\u6295",       # submitted
         "\u5df2\u63a5\u6536", # accepted
@@ -372,6 +390,12 @@ def _board_skip(status: str) -> bool:
         "published",
         "rejected",
         "archived",
+        "a-blocked",
+        "b-stuck",
+        "c-stuck",
+        "c-done",
+        "time-stuck",
+        "paused",
     )
     s_lower = s.lower()
     for prefix in skip_prefixes:
@@ -381,6 +405,10 @@ def _board_skip(status: str) -> bool:
         "\u5ba1\u7a3f\u4e2d", # under review
         "peer review",
         "under review",
+        "needs_human_resolution",
+        "overlap deferred",
+        "\u53ef\u6295\u7a3f", # ready for manual submission
+        "ready to submit",
     ):
         if marker in s or marker in s_lower:
             return True
@@ -389,6 +417,79 @@ def _board_skip(status: str) -> bool:
         if s.startswith(prefix):
             return True
     return False
+
+
+def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
+    """Return True if board metadata marks a discovered paper non-runnable.
+
+    Recoverable A-BLOCKED statuses are allowed to re-enter Stage A for Oracle
+    escalation, but submitted_* directories are historical route archives in
+    this pipeline.  They remain available as overlap siblings and can still be
+    run by an explicit CLI path, but automatic discovery must not process them.
+    """
+    if paper_name.startswith("submitted_"):
+        return True
+    if not entry:
+        return False
+    if _board_skip(entry.get("status", "")):
+        return True
+    archive_text = " ".join(
+        str(entry.get(key, "")) for key in ("journal", "notes", "reroute")
+    ).lower()
+    return any(marker in archive_text for marker in (
+        "archive",
+        "legacy archive",
+        "submitted legacy route",
+        "\u5f52\u6863",
+        "parked",
+    ))
+
+
+def is_recoverable_stage_a_block_status(status: str) -> bool:
+    """Return True for Stage A blocks that should escalate to Oracle.
+
+    Hard gates such as overlap/submission chronology stay blocked.  This
+    recognizes the separate case where Codex exhausted its local theoremization
+    loop and needs Oracle to choose a substantive mathematical route.
+    """
+    s = status.lower()
+    if "a-blocked" not in s and "stage a blocked" not in s:
+        return False
+    hard_markers = (
+        "overlap deferred",
+        "needs_human_resolution",
+        "human_decision",
+        "overlap needs",
+        "overlap with earlier submitted",
+        "earlier submitted/current",
+        "prior submitted sibling",
+        "submitted sibling feedback",
+        "canonical route before advancing",
+        "wait for prior",
+        "duplicate of canonical",
+        "parked",
+        "oracle escalation park",
+        "legacy archive",
+    )
+    if any(marker in s for marker in hard_markers):
+        return False
+    recoverable_markers = (
+        "a2 fake extension",
+        "fake extension",
+        "manual theorem-deepening",
+        "max stage a rounds exhausted",
+        "max stage a theoremization rounds exhausted",
+        "final audit real block",
+        "final audit unclear failure",
+        "final audit failed",
+        "pre-restart stale-round path",
+        "manual-review before any rerun",
+        "manual-review",
+        "codex ceiling",
+    )
+    if any(marker in s for marker in recoverable_markers):
+        return True
+    return "a-blocked" in s or "stage a blocked" in s
 
 
 # Cache board journals at module load (derived from board entries)
@@ -418,7 +519,7 @@ def detect_target_journal(paper_dir: str) -> str:
     # 1. PROGRAM_BOARD exact match on dir name
     entries = _get_board_entries()
     entry = entries.get(paper_path.name)
-    if entry and entry["journal"] and entry["journal"] != "—":
+    if entry and entry["journal"] and not _journal_missing(entry["journal"]):
         journal = entry["journal"]
         return _BOARD_JOURNAL_EXPAND.get(journal.lower(), journal)
 
@@ -473,6 +574,17 @@ CLAUDE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
 ORACLE_CANCELLED_RESPONSE = "__ORACLE_TASK_CANCELLED__"
 MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS = 2
+
+
+def _journal_missing(journal: str) -> bool:
+    """Return True for board placeholders that are not real journal targets."""
+    normalized = (journal or "").strip()
+    if not normalized:
+        return True
+    return normalized in {
+        "—", "â€”", "-", "--", "–", "â€“", "pending",
+        "(pending N0 selection)",
+    }
 
 # Borrowed from outreach pipeline: escalation & early-skip constants
 DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
@@ -680,8 +792,20 @@ def save_state(state: PaperState) -> None:
     with _state_lock:
         path = _state_file(state.paper_name)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(state.to_dict(), f, indent=2, ensure_ascii=False)
+        tmp_path = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+        try:
+            with open(tmp_path, "w", encoding="utf-8") as f:
+                json.dump(state.to_dict(), f, indent=2, ensure_ascii=False)
+                f.write("\n")
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp_path, path)
+        except Exception:
+            try:
+                tmp_path.unlink()
+            except OSError:
+                pass
+            raise
 
 
 
@@ -846,6 +970,17 @@ def run_cmd(cmd: list[str], *, cwd: Optional[Path] = None,
         stdin=subprocess.DEVNULL,
         encoding="utf-8", errors="replace",
     )
+
+
+def command_failure_summary(proc: subprocess.CompletedProcess,
+                            *, max_chars: int = 500) -> str:
+    """Compact command failure details for single-line operational logs."""
+    output = " ".join(
+        ((proc.stderr or "") + " " + (proc.stdout or "")).split()
+    )
+    if len(output) > max_chars:
+        output = output[: max_chars - 3].rstrip() + "..."
+    return f"rc={proc.returncode}" + (f"; {output}" if output else "")
 
 
 def http_post(url: str, data: dict, timeout: int = 30) -> dict:
@@ -1250,13 +1385,20 @@ def is_oracle_response_valid(response: str) -> bool:
     if not response:
         return False
     cleaned = response.strip()
-    if len(cleaned) < 2000:
-        return False
     lower = cleaned.lower()
     # Structural anchors expected in a substantive review
     anchors = ("verdict", "revision", "blocker", "medium", "accept",
                "reject", "issue", "referee")
-    if not any(a in lower for a in anchors):
+    has_anchors = any(a in lower for a in anchors)
+    has_labelled_verdict = (
+        "verdict" in lower
+        and extract_verdict(cleaned) in {
+            "accept", "minor revision", "major revision", "reject"
+        }
+    )
+    if len(cleaned) < 2000:
+        return has_labelled_verdict and has_anchors and len(cleaned.split()) >= 50
+    if not has_anchors:
         return False
     # Reject single-phrase thinking preambles like "I", "s to change..."
     if len(cleaned.split()) < 50:
@@ -1294,6 +1436,13 @@ def oracle_poll(task_id: str, timeout: int = 7200,
     wait_start = time.time()
     active_start: Optional[float] = None
     last_log_bucket = -1
+    short_extract_seen_at: Optional[float] = None
+    short_extract_key = ""
+    short_extract_stall_s = 15 * 60
+    active_phases = {
+        "active", "ack", "preparing", "submitting", "waiting_response",
+        "response_observed", "extracting", "uploading", "sent",
+    }
     try:
         while True:
             try:
@@ -1315,21 +1464,52 @@ def oracle_poll(task_id: str, timeout: int = 7200,
             phase = oracle_task_status(task_id)
             now = time.time()
             phase_name = phase.get("phase", "unknown")
-            if phase_name == "active":
-                server_elapsed = phase.get("elapsed")
-                if isinstance(server_elapsed, int):
-                    active_elapsed = server_elapsed
-                    active_start = now - active_elapsed
-                else:
-                    if active_start is None:
+            if phase_name in active_phases:
+                if active_start is None:
+                    server_elapsed = phase.get("elapsed")
+                    if isinstance(server_elapsed, int):
+                        active_start = now - server_elapsed
+                    else:
                         active_start = now
-                    active_elapsed = int(now - active_start)
+                active_elapsed = int(now - active_start)
                 if active_elapsed >= timeout:
                     return ""
                 log_elapsed = active_elapsed
-                log_state = f"active/{phase.get('agent_id', '?')}"
+                agent_id = phase.get("agent_id", "?")
+                log_state = (
+                    f"active/{agent_id}"
+                    if phase_name == "active"
+                    else f"{phase_name}/{agent_id}"
+                )
+                detail = str(phase.get("detail") or "")
+                extracted_match = re.search(r"\bextracted=(\d+)", detail)
+                gen_false = re.search(r"\bgen=false\b", detail) is not None
+                if phase_name == "response_observed" and gen_false and extracted_match:
+                    extracted = int(extracted_match.group(1))
+                    if extracted < 200:
+                        key = f"{phase_name}:{extracted}"
+                        if key != short_extract_key:
+                            short_extract_key = key
+                            short_extract_seen_at = now
+                        elif (
+                            short_extract_seen_at is not None
+                            and now - short_extract_seen_at >= short_extract_stall_s
+                        ):
+                            logger.warning(
+                                f"Oracle task {task_id} extraction stalled "
+                                f"below minimum ({detail}); cancelling retry path"
+                            )
+                            return ""
+                    else:
+                        short_extract_key = ""
+                        short_extract_seen_at = None
+                else:
+                    short_extract_key = ""
+                    short_extract_seen_at = None
             elif phase_name == "queued":
                 active_start = None
+                short_extract_key = ""
+                short_extract_seen_at = None
                 log_elapsed = int(now - wait_start)
                 log_state = f"queued pos={phase.get('position', '?')}/{phase.get('queue_length', '?')}"
             else:
@@ -2077,13 +2257,22 @@ def summarize_content_changes(paper_path: Path,
     return "; ".join(parts)
 
 
-def update_program_board(paper_name: str, stage: str, detail: str) -> None:
+def update_program_board(paper_name: str, stage: str, detail: str, *,
+                         deterministic: bool = False) -> None:
     """Update PROGRAM_BOARD.md status column for a paper in-place.
 
     Finds the row whose backtick-wrapped dir name matches paper_name
     and overwrites the status cell.  Thread-safe via _git_lock.
     """
-    if not CLAUDE_ENABLED:
+    terminal_statuses = {
+        "A-BLOCKED",
+        "B-STUCK",
+        "C-STUCK",
+        "TIME-STUCK",
+        "PAUSED",
+    }
+    should_write = deterministic or stage in terminal_statuses
+    if not CLAUDE_ENABLED and not should_write:
         logger.info(
             "PROGRAM_BOARD update skipped in --no-claude mode: "
             f"{paper_name} -> {stage}"
@@ -2198,6 +2387,7 @@ def verify_substantive_change(paper_path: Path,
     pre_content_len = sum(len(body) for _, body in pre_theorems)
     post_content_len = sum(len(body) for _, body in post_theorems)
     content_delta = post_content_len - pre_content_len
+    signed_delta = f"{content_delta:+d}"
 
     # Also check raw .tex line count delta
     total_lines = 0
@@ -2211,19 +2401,19 @@ def verify_substantive_change(paper_path: Path,
     if len(new_labels) >= min_new_theorems and content_delta >= min_new_content_chars:
         return True, (f"Added {len(new_labels)} new theorem(s): "
                       f"{', '.join(sorted(new_labels)[:5])}; "
-                      f"+{content_delta} chars content")
+                      f"{signed_delta} chars content")
 
     if len(new_labels) == 0 and content_delta < min_new_content_chars:
         return False, (f"FAKE EXTENSION: no new theorems added, "
-                       f"content delta only +{content_delta} chars "
+                       f"content delta only {signed_delta} chars "
                        f"(threshold: {min_new_content_chars}). "
                        f"Codex likely rephrased without adding substance.")
 
     if len(new_labels) == 0 and content_delta >= min_new_content_chars:
-        return True, (f"No new labels but +{content_delta} chars content "
+        return True, (f"No new labels but {signed_delta} chars content "
                       f"(existing theorems expanded)")
 
-    return True, (f"{len(new_labels)} new labels, +{content_delta} chars")
+    return True, (f"{len(new_labels)} new labels, {signed_delta} chars")
 
 
 def extract_theorem_statements(paper_path: Path) -> list[tuple[str, str]]:
@@ -2845,6 +3035,211 @@ def build_theoremization_prompt(paper_dir: str, target_journal: str,
         Compile after editing:
           cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
     """)
+
+
+def build_stage_a_oracle_escalation_prompt(state: PaperState,
+                                           reason: str) -> str:
+    return textwrap.dedent(f"""\
+        You are the Oracle deep-reasoning escalation gate for Stage A.
+
+        Paper directory: {state.paper_dir}
+        Target journal: {state.target_journal}
+        Codex ceiling reason: {reason}
+
+        Context files to inspect:
+        - main.tex and all included source files
+        - research_directive.md
+        - scope_contract.md / scope_contract.json
+        - theorem_inventory.md / theorem_inventory.json
+        - stage_a_audit.json
+        - semantic_overlap_blockers.md/json if present
+
+        The deterministic overlap/submission-order gate has already run before
+        this escalation.  Do not approve a route that duplicates an earlier
+        submitted/current sibling.
+
+        Decide whether this manuscript has a publishable mathematical route
+        beyond Codex's local theoremization ceiling.  If yes, give Codex a
+        concrete theorem package to add or strengthen.  If no, say park and
+        explain why.
+
+        Return only JSON:
+        {{
+          "verdict": "rerun_stage_a|park|human_decision",
+          "publishable_route": true,
+          "core_theorem_direction": "...",
+          "required_theorem_package": ["..."],
+          "journal_route": "keep|retarget|undecided",
+          "target_journal": "...",
+          "park_reason": "",
+          "human_decision_needed": "",
+          "codex_instructions": [
+            "Specific source-level instruction for Stage A2."
+          ]
+        }}
+    """)
+
+
+def _append_oracle_stage_a_directive(paper_path: Path, data: dict,
+                                     reason: str) -> None:
+    directive = paper_path / "research_directive.md"
+    existing = directive.read_text(encoding="utf-8") if directive.exists() else ""
+    instructions = data.get("codex_instructions") or []
+    package = data.get("required_theorem_package") or []
+    block = [
+        "",
+        "## Oracle Stage A Escalation",
+        "",
+        f"Codex ceiling reason: {reason}",
+        "",
+        f"Oracle verdict: {data.get('verdict', '')}",
+        f"Core theorem direction: {data.get('core_theorem_direction', '')}",
+        "",
+        "Required theorem package:",
+    ]
+    block.extend(f"- {item}" for item in package)
+    block.extend(["", "Codex instructions:"])
+    block.extend(f"- {item}" for item in instructions)
+    if data.get("target_journal"):
+        block.extend(["", f"Oracle target journal: {data.get('target_journal')}"])
+    directive.write_text(existing.rstrip() + "\n" + "\n".join(block) + "\n",
+                         encoding="utf-8")
+
+
+def _reset_stage_a_for_oracle_escalation(state: PaperState) -> None:
+    state.stage_a_rounds = 0
+    state.current_round = 0
+    state.stage_a_scores = []
+    state.stage_a_passed = False
+    state.stage_a_audit_rounds = 0
+    state.stage_a_audit_metrics = {}
+    state.stage_a_failure_classes = []
+    state.error = ""
+
+
+def _stage_a_oracle_terminal_reason(verdict: str, detail: str) -> str:
+    if verdict == "park":
+        return f"Oracle escalation parked: {detail}"
+    if verdict == "human_decision":
+        return f"Oracle escalation human_decision: {detail}"
+    return f"Oracle escalation {verdict}: {detail}"
+
+
+def _stage_a_oracle_terminal_artifact_reason(paper_path: Path) -> str:
+    artifact = paper_path / "oracle_stage_a_escalation.json"
+    if not artifact.exists():
+        return ""
+    try:
+        data = json.loads(artifact.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    verdict = str(data.get("verdict", "")).lower()
+    if verdict not in {"park", "human_decision"}:
+        return ""
+    detail = (
+        data.get("park_reason")
+        or data.get("human_decision_needed")
+        or "prior Oracle terminal verdict"
+    )
+    return _stage_a_oracle_terminal_reason(verdict, str(detail))
+
+
+def _stage_a_oracle_terminal_active(state: PaperState) -> bool:
+    return state.error.startswith("Stage A blocked: Oracle escalation ")
+
+
+def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
+                                   dry_run: bool = False,
+                                   oracle_timeout: int = 7200,
+                                   tag: str = "") -> bool:
+    if not is_recoverable_stage_a_block_status(f"A-BLOCKED ({reason})"):
+        return False
+    paper_path = Path(state.paper_dir)
+    artifact = paper_path / "oracle_stage_a_escalation.json"
+    if artifact.exists():
+        try:
+            data = json.loads(artifact.read_text(encoding="utf-8"))
+        except Exception:
+            data = {}
+        verdict = str(data.get("verdict", "")).lower()
+        if verdict in {"rerun_stage_a", "proceed", "revise"}:
+            _reset_stage_a_for_oracle_escalation(state)
+            state.log_event("A", "oracle_escalation_reuse",
+                            detail=json.dumps(data, ensure_ascii=False)[:8000])
+            save_state(state)
+            return True
+        if verdict in {"park", "human_decision"}:
+            detail = data.get("park_reason") or data.get("human_decision_needed") or reason
+            _stage_a_block(
+                state,
+                _stage_a_oracle_terminal_reason(verdict, detail),
+                dry_run=dry_run,
+                tag=tag,
+            )
+            return False
+
+    if dry_run:
+        data = {
+            "verdict": "rerun_stage_a",
+            "publishable_route": True,
+            "core_theorem_direction": "dry-run",
+            "required_theorem_package": ["dry-run theorem package"],
+            "journal_route": "keep",
+            "codex_instructions": ["dry-run Stage A rerun"],
+        }
+    else:
+        safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
+        task_id = f"stage_a_escalate_{safe_name}_{time.time_ns()}"
+        prompt = build_stage_a_oracle_escalation_prompt(state, reason)
+        pdf_path = Path(state.pdf_path) if state.pdf_path else None
+        if not oracle_submit(
+            task_id, prompt, pdf_path,
+            context_mode="deep_reasoning",
+            agent_role="stage_a_oracle_escalation",
+        ):
+            return _stage_a_pause(
+                state, "stage_a_oracle_escalation_submit_failed", tag=tag)
+        raw = oracle_poll(task_id, timeout=oracle_timeout)
+        if raw == ORACLE_CANCELLED_RESPONSE:
+            return _stage_a_pause(
+                state, "stage_a_oracle_escalation_cancelled", tag=tag)
+        data = parse_json_from_output(raw)
+        if not data:
+            return _stage_a_pause(
+                state, "stage_a_oracle_escalation_unparseable", tag=tag)
+        data["_raw_response"] = raw[:12000]
+
+    artifact.write_text(json.dumps(data, indent=2, ensure_ascii=False),
+                        encoding="utf-8")
+    state.log_event("A", "oracle_escalation",
+                    verdict=str(data.get("verdict", "")),
+                    detail=json.dumps(data, ensure_ascii=False)[:12000])
+    verdict = str(data.get("verdict", "")).lower()
+    if verdict in {"rerun_stage_a", "proceed", "revise"}:
+        _append_oracle_stage_a_directive(paper_path, data, reason)
+        if data.get("target_journal") and data.get("journal_route") == "retarget":
+            state.retarget_history.append({
+                "from": state.target_journal,
+                "to": data.get("target_journal"),
+                "reason": "stage_a_oracle_escalation",
+                "timestamp": datetime.now().isoformat(),
+            })
+            state.target_journal = str(data.get("target_journal"))
+        _reset_stage_a_for_oracle_escalation(state)
+        git_commit(paper_path, "stage-A: oracle escalation directive", tag=tag)
+        save_state(state)
+        return True
+    if verdict in {"park", "human_decision"}:
+        detail = data.get("park_reason") or data.get("human_decision_needed") or reason
+        _stage_a_block(
+            state,
+            _stage_a_oracle_terminal_reason(verdict, detail),
+            dry_run=dry_run,
+            tag=tag,
+        )
+        return False
+    return _stage_a_pause(state, "stage_a_oracle_escalation_unknown_verdict",
+                          tag=tag)
 
 
 def build_split_hygiene_prompt(paper_dir: str, target_journal: str,
@@ -3762,6 +4157,16 @@ def build_backflow_apply_prompt(paper_dir: str, main_paper_dir: str,
 
 def parse_json_from_output(text: str) -> dict:
     """Extract first JSON block from codex/claude output."""
+    accepted_keys = (
+        "overall_score", "verdict", "backflow_items",
+        "scores", "issues", "valid", "metrics",
+        "in_scope_present", "placements",
+        "approved", "quality_verdict",
+        "system_verdict", "work_packages",
+        "codex_work_packages", "candidates",
+        "fit_score", "fit_verdict", "suggested_journals",
+        "recommended_journal", "adjusted_fit_score",
+    )
     m = re.search(r"```json\s*(\{.*?\})\s*```", text, re.DOTALL)
     if m:
         try:
@@ -3769,17 +4174,13 @@ def parse_json_from_output(text: str) -> dict:
         except json.JSONDecodeError:
             pass
     # Try bare JSON
-    for m2 in re.finditer(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', text, re.DOTALL):
+    decoder = json.JSONDecoder()
+    for m2 in re.finditer(r"\{", text):
         try:
-            d = json.loads(m2.group(0))
-            if any(k in d for k in ("overall_score", "verdict", "backflow_items",
-                                      "scores", "issues", "valid", "metrics",
-                                      "in_scope_present", "placements",
-                                      "approved", "quality_verdict",
-                                      "system_verdict", "work_packages",
-                                      "codex_work_packages", "candidates")):
+            d, _ = decoder.raw_decode(text[m2.start():])
+            if isinstance(d, dict) and any(k in d for k in accepted_keys):
                 return d
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, TypeError):
             continue
     return {}
 
@@ -4656,7 +5057,7 @@ def _read_json_artifact(paper_path: Path, filename: str) -> dict:
     if not path.exists():
         return {}
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
         return data if isinstance(data, dict) else {}
     except Exception:
         return {}
@@ -4928,19 +5329,56 @@ def _strip_tex_for_contract(text: str, limit: int = 700) -> str:
 
 
 def _read_stage_a_source_text(paper_path: Path, max_chars: int = 80000) -> str:
+    paper_root = paper_path.resolve()
+    input_re = re.compile(r"\\(?:input|include)\{([^}]+)\}")
+
+    def resolve_tex(base: Path, raw: str) -> Optional[Path]:
+        rel = raw.strip()
+        if not rel or rel.startswith(("/", "\\")):
+            return None
+        candidate = (base / rel).resolve()
+        if candidate.suffix == "":
+            candidate = candidate.with_suffix(".tex")
+        try:
+            candidate.relative_to(paper_root)
+        except ValueError:
+            return None
+        return candidate if candidate.exists() and candidate.suffix == ".tex" else None
+
+    seen: set[Path] = set()
+
+    def read_expanded(path: Path, depth: int = 0) -> str:
+        path = path.resolve()
+        if path in seen or depth > 8:
+            return ""
+        try:
+            path.relative_to(paper_root)
+        except ValueError:
+            return ""
+        if not path.exists() or path.name.endswith(".bak") or path.suffix != ".tex":
+            return ""
+        seen.add(path)
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            return ""
+        out = [text]
+        for m in input_re.finditer(text):
+            child = resolve_tex(path.parent, m.group(1))
+            if child is not None:
+                expanded = read_expanded(child, depth + 1)
+                if expanded:
+                    out.append(expanded)
+        return "\n\n".join(out)
+
     parts = []
     preferred = [paper_path / "main.tex"]
     preferred.extend(sorted(paper_path.glob("sec*.tex")))
     preferred.extend(sorted(paper_path.glob("*.tex")))
-    seen: set[Path] = set()
     for path in preferred:
-        if path in seen or not path.exists() or path.name.endswith(".bak"):
-            continue
-        seen.add(path)
-        try:
-            parts.append(path.read_text(encoding="utf-8", errors="replace"))
-        except Exception:
-            continue
+        text = read_expanded(path)
+        if text:
+            parts.append(text)
         if sum(len(p) for p in parts) >= max_chars:
             break
     return "\n\n".join(parts)[:max_chars]
@@ -5440,6 +5878,31 @@ def _audit_issue_category_count(audit_result: dict) -> int:
     return len(issues)
 
 
+def _stage_a_substantive_issue_count(audit_result: dict) -> int:
+    if not isinstance(audit_result, dict):
+        return 0
+    count = 0
+    for key in ("blockers", "required_revisions", "work_packages",
+                "split_reasons"):
+        for item in _coerce_items(audit_result.get(key)):
+            if isinstance(item, dict):
+                reason = str(item.get("reason") or item.get("task") or "")
+                auditor = str(item.get("auditor") or "")
+            else:
+                reason = str(item)
+                auditor = ""
+            reason_l = reason.lower()
+            auditor_l = auditor.lower()
+            is_parse_failure = (
+                "audit json was empty or missing required metrics" in reason_l
+                or "empty/unparseable" in reason_l
+                or "unparseable" in auditor_l
+            )
+            if not is_parse_failure:
+                count += 1
+    return count
+
+
 def _classify_stage_a_failure(state, audit_result) -> str:
     del state
     audit = audit_result if isinstance(audit_result, dict) else {}
@@ -5448,11 +5911,13 @@ def _classify_stage_a_failure(state, audit_result) -> str:
     metrics_complete = isinstance(metrics, dict) and required.issubset(metrics)
     final_score = _audit_final_score(audit)
     if (
-        not metrics_complete
-        or final_score is None
-        or audit.get("exception")
+        audit.get("exception")
         or audit.get("error")
     ):
+        return "infra_fail"
+    if not metrics_complete or final_score is None:
+        if _stage_a_substantive_issue_count(audit) > 0:
+            return "real_block"
         return "infra_fail"
 
     threshold = min(STAGE_A_METRIC_THRESHOLDS.values())
@@ -5490,6 +5955,30 @@ def _stage_a_score_from_audit(audit: dict) -> int:
     return min(vals) if vals else 0
 
 
+def _compact_board_detail(reason: str, *, limit: int = 120) -> str:
+    """Make a board-safe status detail without cutting words mid-token."""
+    text = " ".join((reason or "").split())
+    fake = re.search(
+        r"A2 produced no substantive theorem change: FAKE EXTENSION: "
+        r"no new theorems added, content delta only \+?(-?\d+) chars "
+        r"\(threshold: (\d+)\)",
+        text,
+        re.IGNORECASE,
+    )
+    if fake:
+        delta, threshold = fake.groups()
+        signed_delta = f"{int(delta):+d}"
+        return (
+            "A2 fake extension: no new theorems; "
+            f"delta {signed_delta} < threshold {threshold}; "
+            "manual theorem-deepening required"
+        )
+    if len(text) <= limit:
+        return text
+    clipped = text[:limit].rsplit(" ", 1)[0].rstrip(".,;:(")
+    return clipped + "..."
+
+
 def _stage_a_block(state: PaperState, reason: str, *,
                    dry_run: bool = False, tag: str = "") -> bool:
     state.stage_a_passed = False
@@ -5497,7 +5986,16 @@ def _stage_a_block(state: PaperState, reason: str, *,
     logger.error(f"{tag} {state.error}")
     state.log_event("A", "blocked", detail=reason)
     if not dry_run:
-        update_program_board(state.paper_name, "A-BLOCKED", reason[:120])
+        deterministic = (
+            reason.startswith("semantic overlap requires explicit board resolution")
+            or reason.startswith("overlap with earlier submitted/current paper")
+        )
+        update_program_board(
+            state.paper_name,
+            "A-BLOCKED",
+            _compact_board_detail(reason),
+            deterministic=deterministic,
+        )
     save_state(state)
     return False
 
@@ -5578,6 +6076,7 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                             dry_run: bool = False,
                             tag: str = "") -> dict:
     paper_path = Path(state.paper_dir)
+    safe_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", state.paper_name)[:120]
     use_deterministic_no_claude_audit = False
     if use_deterministic_no_claude_audit and not CLAUDE_ENABLED and not dry_run:
         logger.info(f"{tag} A3 audit round {audit_round}: "
@@ -5611,7 +6110,11 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                              timeout_seconds=900, model=model,
                              dry_run=dry_run,
                              context_mode="scope_bound_review",
-                             agent_role="stage_a_codex_math_audit")
+                             agent_role="stage_a_codex_math_audit",
+                             log_tag=(
+                                 f"{safe_name}_stage_a_R{audit_round}_"
+                                 f"codex_math"
+                             ))
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CODEX_MATH_METRICS},
                 "verdict": "pass",
@@ -5636,7 +6139,11 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
             out = codex_exec(prompt, work_dir=paper_path,
                              timeout_seconds=900, model=model, dry_run=dry_run,
                              context_mode="scope_bound_review",
-                             agent_role="stage_a_structural_audit")
+                             agent_role="stage_a_structural_audit",
+                             log_tag=(
+                                 f"{safe_name}_stage_a_R{audit_round}_"
+                                 f"structural"
+                             ))
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CLAUDE_STRUCTURAL_METRICS},
                 "verdict": "pass",
@@ -5680,9 +6187,19 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
 
 
 def run_stage_a(state: PaperState, *, dry_run: bool = False,
-                model: Optional[str] = None) -> bool:
+                model: Optional[str] = None,
+                oracle_timeout: int = 7200) -> bool:
     tag = f"[{state.paper_name}|A]"
     paper_path = Path(state.paper_dir)
+
+    terminal_reason = _stage_a_oracle_terminal_artifact_reason(paper_path)
+    if terminal_reason:
+        return _stage_a_block(
+            state,
+            terminal_reason,
+            dry_run=dry_run,
+            tag=tag,
+        )
 
     # Snapshot theorems at Stage A start for content change summary
     _stage_a_pre_theorems = extract_theorem_statements(paper_path)
@@ -5724,6 +6241,18 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         state, dry_run=dry_run, tag=tag
     ):
         return False
+
+    if state.error.startswith("Stage A blocked:"):
+        prior_reason = state.error.split(":", 1)[1].strip()
+        if _maybe_stage_a_oracle_escalate(
+            state, prior_reason, dry_run=dry_run,
+            oracle_timeout=oracle_timeout, tag=tag
+        ):
+            return run_stage_a(
+                state, dry_run=dry_run, model=model,
+                oracle_timeout=oracle_timeout)
+        if _stage_a_oracle_terminal_active(state):
+            return False
 
     def _record_stage_a_failure_class(audit: dict, audit_round: int) -> str:
         classification = _classify_stage_a_failure(state, audit)
@@ -5928,7 +6457,8 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             save_state(state)
 
             if action in ("missing_in_scope_results",
-                          "weak_in_scope_core_results"):
+                          "weak_in_scope_core_results",
+                          "proof_gaps"):
                 run_stage_a_dedup(state, round_num=rnd, model=model,
                                   dry_run=dry_run, tag=tag)
                 h2 = git_commit(paper_path,
@@ -6201,10 +6731,21 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                     state, "stage_a_final_audit_infra_fail_after_retry",
                     tag=tag)
             if failure_class == "real_block":
-                return _stage_a_block(
-                    state,
+                reason = (
                     f"max Stage A rounds exhausted; final audit real block "
-                    f"(score={score})",
+                    f"(score={score})"
+                )
+                if _maybe_stage_a_oracle_escalate(
+                    state, reason, dry_run=dry_run,
+                    oracle_timeout=oracle_timeout, tag=tag
+                ):
+                    return run_stage_a(
+                        state, dry_run=dry_run, model=model,
+                        oracle_timeout=oracle_timeout)
+                if _stage_a_oracle_terminal_active(state):
+                    return False
+                return _stage_a_block(
+                    state, reason,
                     dry_run=dry_run, tag=tag)
             if failure_class == "work_pending" and not _stage_a_audit_has_actionable_issues(audit):
                 state.log_event("A", "final_audit_work_pending",
@@ -6213,9 +6754,18 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 continue
             if failure_class == "unclear":
+                reason = "max Stage A rounds exhausted; final audit unclear failure"
+                if _maybe_stage_a_oracle_escalate(
+                    state, reason, dry_run=dry_run,
+                    oracle_timeout=oracle_timeout, tag=tag
+                ):
+                    return run_stage_a(
+                        state, dry_run=dry_run, model=model,
+                        oracle_timeout=oracle_timeout)
+                if _stage_a_oracle_terminal_active(state):
+                    return False
                 return _stage_a_block(
-                    state,
-                    "max Stage A rounds exhausted; final audit unclear failure",
+                    state, reason,
                     dry_run=dry_run, tag=tag)
 
             actionable = _stage_a_audit_has_actionable_issues(audit)
@@ -6307,25 +6857,62 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                     save_state(state)
                     return run_stage_a(
                         state, dry_run=dry_run, model=model)
-                return _stage_a_block(
-                    state,
+                reason = (
                     f"max Stage A rounds exhausted; final audit failed "
-                    f"(score={score})",
-                    dry_run=dry_run, tag=tag)
+                    f"(score={score})"
+                )
+                if _maybe_stage_a_oracle_escalate(
+                    state, reason, dry_run=dry_run,
+                    oracle_timeout=oracle_timeout, tag=tag
+                ):
+                    return run_stage_a(
+                        state, dry_run=dry_run, model=model,
+                        oracle_timeout=oracle_timeout)
+                if _stage_a_oracle_terminal_active(state):
+                    return False
+                return _stage_a_block(
+                    state, reason, dry_run=dry_run, tag=tag)
 
+            reason = "max Stage A rounds exhausted; final audit failed without plan"
+            if _maybe_stage_a_oracle_escalate(
+                state, reason, dry_run=dry_run,
+                oracle_timeout=oracle_timeout, tag=tag
+            ):
+                return run_stage_a(
+                    state, dry_run=dry_run, model=model,
+                    oracle_timeout=oracle_timeout)
+            if _stage_a_oracle_terminal_active(state):
+                return False
             return _stage_a_block(
-                state,
-                "max Stage A rounds exhausted; final audit failed without plan",
+                state, reason,
                 dry_run=dry_run, tag=tag)
 
+        reason = "max Stage A rounds exhausted; final audit failed max audit rounds"
+        if _maybe_stage_a_oracle_escalate(
+            state, reason, dry_run=dry_run,
+            oracle_timeout=oracle_timeout, tag=tag
+        ):
+            return run_stage_a(
+                state, dry_run=dry_run, model=model,
+                oracle_timeout=oracle_timeout)
+        if _stage_a_oracle_terminal_active(state):
+            return False
         return _stage_a_block(
-            state,
-            "max Stage A rounds exhausted; final audit failed max audit rounds",
+            state, reason,
             dry_run=dry_run, tag=tag)
 
+    reason = f"max Stage A theoremization rounds exhausted ({MAX_STAGE_A_ROUNDS})"
+    if _maybe_stage_a_oracle_escalate(
+        state, reason, dry_run=dry_run,
+        oracle_timeout=oracle_timeout, tag=tag
+    ):
+        return run_stage_a(
+            state, dry_run=dry_run, model=model,
+            oracle_timeout=oracle_timeout)
+    if _stage_a_oracle_terminal_active(state):
+        return False
     return _stage_a_block(
-        state,
-        f"max Stage A theoremization rounds exhausted ({MAX_STAGE_A_ROUNDS})",
+        state, reason,
         dry_run=dry_run,
         tag=tag)
 
@@ -7231,16 +7818,48 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 return False
             if not is_oracle_final_response_valid(raw):
-                state.error = (
-                    f"{PAUSED_ERROR_PREFIX} Stage C Oracle infra pause at "
-                    f"C{rnd}: no valid final-review response; rerun will "
-                    "re-submit this same final gate"
+                logger.warning(
+                    f"{tag} Stage C C{rnd}: invalid Oracle final-review "
+                    "response; retrying once with extraction-safe prompt"
                 )
-                logger.warning(f"{tag} {state.error}")
-                state.log_event("C", "oracle_infra_pause",
-                                round_num=rnd, detail=state.error)
-                save_state(state)
-                return False
+                retry_task_id = f"{task_id}_retry"
+                retry_prompt = (
+                    prompt
+                    + "\n\nEXTRACTION SAFEGUARD: Your first visible characters must be "
+                    + "`Overall verdict:`. Do not include any preamble, UI text, "
+                    + "thinking summary, salutation, or markdown fence before the "
+                    + "verdict line."
+                )
+                if oracle_submit(
+                    retry_task_id, retry_prompt, pdf_path,
+                    context_mode="fresh_review",
+                    agent_role="stage_c_oracle_final",
+                ):
+                    retry_raw = oracle_poll(retry_task_id, timeout=oracle_timeout)
+                    if (retry_raw != ORACLE_CANCELLED_RESPONSE
+                            and is_oracle_final_response_valid(retry_raw)):
+                        raw = retry_raw
+                    else:
+                        state.error = (
+                            f"{PAUSED_ERROR_PREFIX} Stage C Oracle infra pause at "
+                            f"C{rnd}: no valid final-review response after retry; "
+                            "rerun will re-submit this same final gate"
+                        )
+                        logger.warning(f"{tag} {state.error}")
+                        state.log_event("C", "oracle_infra_pause",
+                                        round_num=rnd, detail=state.error)
+                        save_state(state)
+                        return False
+                else:
+                    state.error = (
+                        f"{PAUSED_ERROR_PREFIX} Stage C Oracle infra pause at "
+                        f"C{rnd}: invalid final-review response and retry submit failed"
+                    )
+                    logger.warning(f"{tag} {state.error}")
+                    state.log_event("C", "oracle_infra_pause",
+                                    round_num=rnd, detail=state.error)
+                    save_state(state)
+                    return False
             oracle_response = raw
             done_dir = SCRIPT_DIR / "oracle" / "done"
             done_dir.mkdir(parents=True, exist_ok=True)
@@ -7894,6 +8513,40 @@ def build_journal_selection_prompt(topic: str, outline: str) -> str:
     """)
 
 
+def _paper_journal_selection_context(paper_path: Path) -> tuple[str, str]:
+    """Build a compact local topic/outline for review-mode journal selection."""
+    text = ""
+    main_tex = paper_path / "main.tex"
+    try:
+        text = main_tex.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        text = ""
+    title = paper_path.name
+    m = re.search(r"\\title\{(.+?)\}", text, re.DOTALL)
+    if m:
+        title = re.sub(r"\s+", " ", m.group(1)).strip()
+    abstract = ""
+    m = re.search(
+        r"\\begin\{abstract\}(.+?)\\end\{abstract\}",
+        text,
+        re.DOTALL | re.IGNORECASE,
+    )
+    if m:
+        abstract = re.sub(r"\s+", " ", m.group(1)).strip()
+    section_lines = []
+    for m in re.finditer(r"\\section\*?\{(.+?)\}", text, re.DOTALL):
+        section_lines.append("- " + re.sub(r"\s+", " ", m.group(1)).strip())
+        if len(section_lines) >= 12:
+            break
+    outline_parts = []
+    if abstract:
+        outline_parts.append("Abstract:\n" + abstract[:2000])
+    if section_lines:
+        outline_parts.append("Sections:\n" + "\n".join(section_lines))
+    outline_parts.append("Directory:\n" + str(paper_path))
+    return title, "\n\n".join(outline_parts)
+
+
 def run_new_paper_pipeline(
     topic: str,
     *,
@@ -8167,9 +8820,51 @@ def run_paper_pipeline(
         logger.info(f"[{paper_name}] Reusing state target journal: "
                     f"{state.target_journal}")
     else:
-        state.target_journal = DEFAULT_TARGET_JOURNAL
-        logger.info(f"[{paper_name}] No journal metadata found; defaulting to "
-                    f"{DEFAULT_TARGET_JOURNAL}")
+        state.target_journal = ""
+    selected_missing_journal = False
+    if _journal_missing(state.target_journal):
+        topic, outline = _paper_journal_selection_context(paper_path)
+        logger.info(f"[{paper_name}] No journal metadata found; "
+                    "running Codex journal selection")
+        out_n0 = codex_exec(
+            build_journal_selection_prompt(topic, outline),
+            work_dir=paper_path,
+            timeout_seconds=600,
+            model=model,
+            dry_run=dry_run,
+        )
+        j_data = parse_json_from_output(out_n0) if not dry_run else {
+            "recommended_journal": DEFAULT_TARGET_JOURNAL,
+            "fit_score": 6,
+            "rationale": "dry run default journal selection",
+            "alternatives": [],
+        }
+        selected = j_data.get("recommended_journal") or DEFAULT_TARGET_JOURNAL
+        state.target_journal = selected
+        state.current_stage = "F"
+        state.stage_f_fit_score = 0
+        state.stage_f_original_journal = ""
+        state.stage_f_suggested_journal = ""
+        state.stage_f_passed = False
+        state.current_round = 0
+        state.stage_a_rounds = 0
+        state.stage_a_scores = []
+        state.stage_a_passed = False
+        state.stage_a_inventory = {}
+        state.stage_a_audit_rounds = 0
+        state.stage_a_audit_metrics = {}
+        state.stage_a_failure_classes = []
+        state.stage_a_split_candidates = []
+        selected_missing_journal = True
+        state.log_event(
+            "F",
+            "codex_journal_selection",
+            score=j_data.get("fit_score", 0),
+            detail=json.dumps(j_data, ensure_ascii=False)[:10000],
+        )
+        save_state(state)
+        logger.info(f"[{paper_name}] Selected journal: {selected} "
+                    f"(fit={j_data.get('fit_score', '?')})")
     if main_paper_dir:
         mp = Path(main_paper_dir)
         if not mp.is_absolute():
@@ -8178,6 +8873,9 @@ def run_paper_pipeline(
 
     if skip_to and skip_to in STAGE_ORDER:
         state.current_stage = skip_to
+    elif selected_missing_journal:
+        logger.info(f"[{paper_name}] Journal selection changed routing; "
+                    "restarting at Stage F")
 
     if state.current_stage in ("B", "C", "D") and not stage_a_ready_for_b(state):
         logger.warning(f"[{paper_name}] Later-stage state lacks strict "
@@ -8222,7 +8920,7 @@ def run_paper_pipeline(
                     f"/{PAPER_TIME_BUDGET_HOURS}h) ===")
         try:
             kwargs = dict(dry_run=dry_run, model=model)
-            if stage in ("B", "C"):
+            if stage in ("A", "B", "C"):
                 kwargs["oracle_timeout"] = oracle_timeout
             ok = runner(state, **kwargs)
         except Exception as exc:
@@ -8263,9 +8961,25 @@ def run_paper_pipeline(
 PAPERS_PUB_DIR = PAPERS_PUB_DIR_CONST
 
 
-def discover_papers(paper_dirs: Optional[list[str]] = None,
-                    *, respect_assignment: bool = True) -> list[str]:
-    """Discover papers to process.
+def _discovery_diagnosis(summary: dict) -> str:
+    if summary.get("runnable_count", 0) > 0:
+        return "runnable"
+    if summary.get("candidate_count", 0) == 0:
+        return "no_candidate_dirs"
+    if (
+        summary.get("skipped_status_count", 0)
+        or summary.get("skipped_done_count", 0)
+        or summary.get("skipped_unregistered_count", 0)
+        or summary.get("skipped_assignment_count", 0)
+    ):
+        return "gate_exhausted"
+    return "empty"
+
+
+def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
+                           *, respect_assignment: bool = True,
+                           log: bool = False) -> dict:
+    """Discover runnable papers and explain skipped candidates.
 
     Filtering chain (all must pass):
       1. PROGRAM_BOARD.md status — skip 已投/已发表/骨架/待分诊
@@ -8273,25 +8987,47 @@ def discover_papers(paper_dirs: Optional[list[str]] = None,
       3. Machine assignment — only this machine's papers (if respect_assignment)
     """
     if paper_dirs:
-        return paper_dirs
+        return {
+            "diagnosis": "explicit_filter",
+            "candidate_count": len(paper_dirs),
+            "runnable_count": len(paper_dirs),
+            "papers": paper_dirs,
+            "skipped_status": [],
+            "skipped_done": [],
+            "skipped_unregistered": [],
+            "skipped_assignment": [],
+            "skipped_status_count": 0,
+            "skipped_done_count": 0,
+            "skipped_unregistered_count": 0,
+            "skipped_assignment_count": 0,
+        }
 
     board = _get_board_entries()
     my_papers = get_my_papers() if respect_assignment else []
     papers = []
     skipped_status = []
+    skipped_done = []
     skipped_unreg = []
+    skipped_assignment = []
+    candidate_count = 0
 
     for base in (PAPERS_PUB_DIR, THEORY_DIR):
         if base.exists():
             for d in sorted(base.iterdir()):
                 if not d.is_dir() or not (d / "main.tex").exists():
                     continue
+                candidate_count += 1
 
                 # 1. Board status filter
                 entry = board.get(d.name)
-                if entry and _board_skip(entry["status"]):
+                if _board_entry_skip(d.name, entry):
                     skipped_status.append(
-                        f"  {d.name}: {entry['status']}")
+                        f"  {d.name}: {entry['status'] if entry else 'submitted archive directory'}")
+                    continue
+
+                state = load_state(d.name)
+                if state and state.current_stage == "DONE":
+                    skipped_done.append(d.name)
                     continue
 
                 # 2. Board registration filter
@@ -8301,21 +9037,48 @@ def discover_papers(paper_dirs: Optional[list[str]] = None,
 
                 # 3. Machine assignment filter
                 if my_papers and d.name not in my_papers:
+                    skipped_assignment.append(d.name)
                     continue
 
                 papers.append(str(d))
 
-    if skipped_status:
+    summary = {
+        "candidate_count": candidate_count,
+        "runnable_count": len(papers),
+        "papers": papers,
+        "skipped_status": skipped_status,
+        "skipped_done": skipped_done,
+        "skipped_unregistered": skipped_unreg,
+        "skipped_assignment": skipped_assignment,
+        "skipped_status_count": len(skipped_status),
+        "skipped_done_count": len(skipped_done),
+        "skipped_unregistered_count": len(skipped_unreg),
+        "skipped_assignment_count": len(skipped_assignment),
+    }
+    summary["diagnosis"] = _discovery_diagnosis(summary)
+
+    if log and skipped_status:
         logger.info(f"Board status filter skipped {len(skipped_status)} papers:\n"
                     + "\n".join(skipped_status))
-    if skipped_unreg:
+    if log and skipped_done:
+        logger.info(
+            f"Pipeline state DONE filter skipped {len(skipped_done)} papers:\n"
+            + "\n".join(f"  {n}" for n in skipped_done))
+    if log and skipped_unreg:
         logger.warning(
             f"Unregistered in PROGRAM_BOARD.md (skipped, add row to process):\n"
             + "\n".join(f"  {n}" for n in skipped_unreg))
-    if my_papers:
+    if log and my_papers:
         logger.info(f"Machine filter ({sys.platform}): "
                     f"{len(papers)} papers to process")
-    return papers
+    return summary
+
+
+def discover_papers(paper_dirs: Optional[list[str]] = None,
+                    *, respect_assignment: bool = True) -> list[str]:
+    summary = discover_paper_summary(
+        paper_dirs, respect_assignment=respect_assignment, log=True)
+    return list(summary["papers"])
 
 
 def _auto_parallel() -> int:
@@ -8720,7 +9483,7 @@ def _release_pipeline_lock_atexit() -> None:
         pass
 
 
-def main() -> int:
+def main(*, continuous_sleep_seconds: float = 300) -> int:
     global CLAUDE_ENABLED
     parser = argparse.ArgumentParser(
         description="Oracle Pipeline v2 — new-paper + review automation",
@@ -8863,8 +9626,10 @@ def main() -> int:
         sync = run_cmd(["git", "pull", "--rebase", "origin",
                         "dev-automation-integration"], timeout=60)
         if sync.returncode != 0:
-            logger.warning(f"Git pull failed (rc={sync.returncode}), "
-                           f"continuing with local state")
+            logger.warning(
+                "Git pull failed (%s), continuing with local state",
+                command_failure_summary(sync),
+            )
         else:
             logger.info("Git sync OK")
 
@@ -8872,7 +9637,7 @@ def main() -> int:
     paper_dirs = args.paper or (
         discover_papers(respect_assignment=not args.no_assign) if args.all else None
     )
-    if not paper_dirs:
+    if not paper_dirs and not (args.continuous and args.all):
         print("Specify --paper or --all", file=sys.stderr)
         return 1
 
@@ -8900,15 +9665,30 @@ def main() -> int:
             cycle += 1
             logger.info(f"=== Continuous cycle {cycle} ===")
             # Re-discover papers each cycle (picks up new P0 entries)
-            paper_dirs = discover_papers(respect_assignment=not args.no_assign)
+            discovery = discover_paper_summary(
+                respect_assignment=not args.no_assign,
+                log=True,
+            )
+            paper_dirs = list(discovery["papers"])
             if not paper_dirs:
-                logger.info("No papers to process, sleeping 300s...")
-                time.sleep(300)
+                logger.info(
+                    "No papers to process "
+                    f"(diagnosis={discovery['diagnosis']}; "
+                    f"candidates={discovery['candidate_count']}; "
+                    f"status_skipped={discovery['skipped_status_count']}; "
+                    f"done_skipped={discovery['skipped_done_count']}; "
+                    "unregistered_skipped="
+                    f"{discovery['skipped_unregistered_count']}; "
+                    "assignment_skipped="
+                    f"{discovery['skipped_assignment_count']}), "
+                    "sleeping 300s..."
+                )
+                time.sleep(continuous_sleep_seconds)
                 continue
             s, f = run_rolling(paper_dirs, parallel=args.parallel, **kwargs)
             logger.info(f"Cycle {cycle} done: {s} succeeded, {f} failed")
-            logger.info("Sleeping 300s before next cycle...")
-            time.sleep(300)
+            logger.info(f"Sleeping {continuous_sleep_seconds:g}s before next cycle...")
+            time.sleep(continuous_sleep_seconds)
     else:
         s, f = run_rolling(paper_dirs, parallel=args.parallel, **kwargs)
         logger.info(f"Done: {s} succeeded, {f} failed")
