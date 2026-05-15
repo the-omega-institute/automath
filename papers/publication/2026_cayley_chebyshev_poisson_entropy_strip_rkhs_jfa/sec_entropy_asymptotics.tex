@@ -326,6 +326,21 @@ Hence \eqref{eq:poisson-kl-rate} holds.
 
 \subsection{Cayley--Chebyshev mode calculus}
 
+The entropy section is organized in three layers.  First,
+Theorem~\ref{thm:cayley-chebyshev-mode} and
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} are pure algebra:
+they compute the Cauchy--Haar mode integrals and the formal polynomials
+$A_k^{\rm form}$.  Second,
+Theorems~\ref{thm:finite-moment-density-remainder},
+\ref{thm:poisson-kl-even-orders}, and
+\ref{thm:finite-moment-entropy-remainder} justify these polynomials as actual
+Poisson entropy coefficients under the finite centred $(2N+\eta)$th absolute
+moment hypothesis, with fixed-law constants.  Third,
+Theorem~\ref{thm:poisson-kl-eighth} and the defect and stability results that
+follow are consequences of this coefficient calculus at the first nontrivial
+orders.  The compact-support theorem below is a separate analytic-interchange
+check; it is not used to replace the finite-moment remainder theorem.
+
 For $\varepsilon\in\RR$ and $y\in\RR$ set
 \begin{equation}\label{eq:cayley-comparison-kernel}
 R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2}.
@@ -409,6 +424,16 @@ Taking real and imaginary parts after the binomial expansion gives
 \subsection{All-order coefficient calculus}%
 \label{subsec:all-order-coefficient-calculus}
 
+This subsection deliberately separates four coefficient interfaces.  The
+display \eqref{eq:universal-entropy-coefficient} defines a formal algebraic
+object; Proposition~\ref{prop:universal-entropy-coefficient-evaluation}
+evaluates that object only when the required moments exist;
+Theorem~\ref{thm:analytic-compact-support-interchange} proves genuine analytic
+interchange only in the compact-support regime; and
+Theorem~\ref{thm:poisson-kl-even-orders} supplies the finite-moment asymptotic
+meaning used by the rest of the paper.  These four assertions have different
+hypotheses and should not be conflated.
+
 The coefficient calculus is universal once the Cayley--Chebyshev modes have
 been fixed.  For integers $r\ge2$ and $n_1,\dots,n_r\ge2$ define the
 Cauchy-weighted mode integral
@@ -457,7 +482,7 @@ $t$-degree at most~$k$.  If
 then the coefficient of $t^{-k}$ in the formal expression
 \[
 \int_{\RR}\bigl((1+\delta^{\rm form}_t)\log(1+\delta^{\rm form}_t)
--\delta^{\rm form}_tigr)\,\dd\omega
+-\delta^{\rm form}_t\bigr)\,\dd\omega
 \]
 is precisely $A_k^{\rm form}$ in
 \eqref{eq:universal-entropy-coefficient}.  Moreover,
@@ -487,7 +512,7 @@ It remains to prove the odd cancellation.  By
 \eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$, while
 $\omega(\dd y)$ is even.  Hence the integrand in
 $I(n_1,\dots,n_r)$ is odd whenever $n_1+\cdots+n_r$ is odd, and then the
-integral vanishes.  Every summand in $A_k(\nu)$ has total index~$k$, so
+integral vanishes.  Every summand in $A_k^{\rm form}$ has total index~$k$, so
 all summands vanish when $k$ is odd.
 \end{proof}
 
@@ -518,7 +543,8 @@ finite-moment evaluation.  In this paper the asserted large-time expansion is
 always the finite-moment statement of Theorem~\ref{thm:poisson-kl-even-orders},
 together with the remainder theorem below; the formal coefficient identity is
 used there to identify the finite polynomial that the density and entropy
-remainders justify.
+remainders justify.  Proposition~\ref{prop:coefficient-interface-separation}
+is the formal/evaluated/analytic/finite-moment interface for this convention.
 
 \begin{theorem}[Finite Fourier algorithm for mode integrals]%
 \label{thm:finite-fourier-mode-integral-algorithm}
@@ -554,8 +580,10 @@ The strict inequality $M>n_1+\cdots+n_r$ is the aliasing barrier: the
 Laurent support of $\prod_{a=1}^rQ_{n_a}$ is contained in
 $[-(n_1+\cdots+n_r),n_1+\cdots+n_r]$, so no nonzero exponent can be congruent
 to zero modulo~$M$ under the root-of-unity average.
-Thus every universal coefficient $A_k(\nu)$ is obtained by finitely many
-Laurent-polynomial multiplications and constant-coefficient extractions.
+Thus every formal universal coefficient $A_k^{\rm form}$, and every evaluated
+coefficient $A_k(\nu)$ when the required moments exist, is obtained by
+finitely many Laurent-polynomial multiplications and constant-coefficient
+extractions.
 \end{theorem}
 
 \begin{proof}
@@ -1500,11 +1528,13 @@ for all larger $t$,
 \|A_{N,t}\|_\infty\le C_A t^{-2},\qquad
 \|\delta_t\|_\infty\le C_\delta t^{-2}.
 \]
-Here $C_\rho$ is the constant supplied by
-Theorem~\ref{thm:finite-moment-density-remainder}; $C_A$ is controlled by
-the moments $|\mu_2|,\ldots,|\mu_{2N}|$ and the universal suprema of the
-modes $u_2,\ldots,u_{2N}$; and $C_\delta$ is obtained from $C_A+C_\rho$ after
-increasing the threshold.
+Here $C_\rho$ is the constant $C_{\nu,2N,\eta}$ supplied by
+Theorem~\ref{thm:finite-moment-density-remainder}, and one may take
+$C_A=\sum_{n=2}^{2N}|\mu_n|\|u_n\|_\infty$.  After increasing the threshold if
+necessary, one may take any fixed $C_\delta\ge C_A+C_\rho$.  Thus these
+constants depend only on the specified law~$\nu$, on $N$ and~$\eta$, and on
+the listed universal mode bounds; no class-uniform constant is used in this
+proof.
 
 For each $2\le r\le N$,
 \[
@@ -1696,6 +1726,52 @@ degree-$k$ coefficient obtained by multiplying the density series is the
 finite-moment evaluation of the formal expression in
 \eqref{eq:universal-entropy-coefficient}; hence
 \eqref{eq:analytic-entropy-series} follows.
+\end{proof}
+
+
+\begin{proposition}[Coefficient-interface separation]%
+\label{prop:coefficient-interface-separation}
+Fix $N\ge2$ and $0<\eta\le1$.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item The polynomials $A_k^{\rm form}$ for $k\le2N$ are determined entirely
+by the finite Cayley--Chebyshev mode algebra and the mode integrals
+\eqref{eq:mode-integral-definition}; no probability measure is involved.
+\item If a law $\nu$ has centred moments through order $2N$, then
+$A_k(\nu)$ for $k\le2N$ are precisely the finite evaluations of these formal
+polynomials, and no value is asserted for a coefficient whose required
+moments are absent.
+\item If the centred law of $\nu$ is compactly supported, then for all large
+$t$ the analytic entropy series
+\eqref{eq:analytic-entropy-series} converges absolutely and has coefficients
+$A_k(\nu)$.
+\item If $\nu$ has finite centred $(2N+\eta)$th absolute moment, then the
+same evaluated coefficients are the actual Poisson entropy asymptotic
+coefficients through order $t^{-2N}$, with the fixed-law remainder constants
+of Lemma~\ref{lem:explicit-entropy-constant-ledger} and
+Theorem~\ref{thm:finite-moment-entropy-remainder}.
+\end{enumerate}
+Consequently every later use of an unsuperscripted coefficient $A_{2m}(\nu)$
+as an entropy coefficient, with $2\le m\le N$, is justified by the finite
+centred $(2N+\eta)$th absolute moment theorem unless a stronger
+compact-support hypothesis is explicitly stated.
+\end{proposition}
+
+\begin{proof}
+The first assertion is exactly the definition
+\eqref{eq:universal-entropy-coefficient} together with the mode formula of
+Theorem~\ref{thm:cayley-chebyshev-mode} and the finite Fourier algorithm of
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}.  The second is
+Proposition~\ref{prop:universal-entropy-coefficient-evaluation} applied for
+each $k\le2N$.  The third is
+Theorem~\ref{thm:analytic-compact-support-interchange}.  The fourth is
+Theorem~\ref{thm:poisson-kl-even-orders}, with its explicit remainder
+constants supplied by Lemma~\ref{lem:explicit-entropy-constant-ledger} and
+repackaged in Theorem~\ref{thm:finite-moment-entropy-remainder}.  The final
+sentence is therefore only the combination of these four implication layers:
+the notation $A_{2m}(\nu)$ is a finite evaluation once the moments exist, but
+its interpretation as an entropy coefficient is supplied by either the
+compact-support interchange theorem or, in the main finite-moment route, by
+Theorem~\ref{thm:poisson-kl-even-orders}.
 \end{proof}
 
 
@@ -2795,3 +2871,4 @@ proof reduces it to the fourth-moment polynomial
 \eqref{eq:defect-sixth-fourth-moment} before applying an explicit coupling
 to the symmetric two-point law.
 \end{remark}
+
