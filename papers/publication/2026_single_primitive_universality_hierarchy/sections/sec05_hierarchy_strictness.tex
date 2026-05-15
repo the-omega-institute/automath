@@ -240,49 +240,64 @@ This proves all displayed identities and the asserted all-real domains
 for the core arithmetic witnesses.
 \end{proof}
 
-\begin{lemma}[Ancillary finite EML certificate]
+\begin{lemma}[Supplementary finite EML certificate]
 \label{lem:eml-ancillary-certificate}
-The catalogue file
-\path{ancillary/eml_witness_catalogue.txt} contains the exact
-pure EML strings \texttt{W\_PI\_EML},
-\texttt{W\_SIN\_EML\_X}, and \texttt{W\_SQRT\_EML\_X} in the grammar
+The supplementary catalogue file
+\path{ancillary/eml_witness_catalogue.txt} is a finite, reproducibly
+checkable certificate for the non-core EML witnesses used in the
+Richardson translation.  It contains exactly the pure strings named
+\texttt{W\_PI\_EML}, \texttt{W\_SIN\_EML\_X}, and
+\texttt{W\_SQRT\_EML\_X} in the grammar
 \[
   S\longrightarrow 1\mid x\mid \texttt{EML}[S,S].
 \]
 Its SHA--256 digest is
 \[
-\texttt{12AB9906713E0C913EFD2E12AE4A98BE48FC85FB0E0D5225454C5B2D7E36EBD6}.
+\texttt{F791A36AF611B1406A29B9EFDF766C80D84E05255859C62113E7DE8EE268281C}.
 \]
-After replacing \texttt{EML[A,B]} by \(\eml(A,B)\), the first two
-strings are the locked principal-branch witnesses for \(\pi\) and
-\(\sin x\) used in the Richardson translation.  Their symbolic
-principal-branch verification is imported here as certified finite
-data from Odrzywo{\l}ek's catalogue, rather than rederived in this
-article.  The third string is recorded only as an external
-Odrzywo{\l}ek catalogue witness; the translation below uses instead
-the self-contained positive-real square-root macro \(G\) of
-\Cref{lem:eml-real-witness-library}.
+The certificate is verified by the following finite procedure:
+\begin{enumerate}
+\item compute the displayed digest for the catalogue file;
+\item parse the three right-hand sides against the displayed grammar;
+\item replace every \texttt{EML[A,B]} by \(\eml(A,B)\);
+\item apply the principal-branch symbolic verifications for Odrzywo{\l}ek's
+Table~1 compiler entries for \(\pi\) and real \(\sin\), as recorded in
+Supplementary Information, Part~II, Sections~2.1--2.5 of
+\cite{Odrzywolek2026SingleBinaryOperator}.
+\end{enumerate}
+After this procedure the first two strings are fixed witnesses
+\[
+  W_{\pi}=\pi,
+  \qquad W_{\sin}(x)=\sin x\quad(x\in\RR)
+\]
+for the Richardson interface.  The third string is retained only as a
+catalogued comparison witness; the translation in this article uses the
+self-contained positive-real square-root macro \(G\) of
+\Cref{lem:eml-real-witness-library} instead.
 \end{lemma}
 
 \begin{proof}
-The file is a finite text certificate for the strings, and an external
-certified-data input for the two non-core symbolic identities.  Each
-displayed witness is a
-finite word over \(\{\texttt{EML},\texttt{1},\texttt{x},\texttt{[},
-\texttt{]},\texttt{,}\}\), and direct parsing against the displayed
-grammar gives a finite EML tree with terminal leaves only \(1\) and,
-for the unary entries, \(x\).  The digest in the statement fixes the
-exact strings, so later references to \texttt{W\_PI\_EML} and
-\texttt{W\_SIN\_EML\_X} are references to those concrete trees rather
-than to a search procedure.  Their principal-branch symbolic
-verification is the cited finite verification of Odrzywo{\l}ek's
-Table~1 compiler for the named constants and real sine
-\cite[Table~1 and Supplementary Information, Part~II,
-Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.  This supplies a
-stable external certificate for the two non-core exact terms retained
-from the catalogue.
-\end{proof}
+The digest step fixes the catalogue byte-for-byte.  Since the file is
+finite, the parsing step is a terminating deterministic check: scan each
+right-hand side recursively, accepting exactly the tokens \(1\), \(x\),
+and balanced expressions \texttt{EML[}\(S\)\texttt{,}\(S\)\texttt{]}.
+A successful parse therefore produces three finite EML trees whose only
+leaves are the constant \(1\) and, for the unary entries, the input
+leaf \(x\).  Replacing \texttt{EML[A,B]} by \(\eml(A,B)\) is then a
+literal syntactic translation into the grammar \eqref{eq:eml-grammar}.
+No search or minimization is involved.
 
+The analytic content of the two retained non-core entries is precisely
+the cited principal-branch symbolic verification of Odrzywo{\l}ek's
+finite compiler output for the named constant \(\pi\) and the real sine
+function.  The cited supplementary sections give the construction
+macros, the branch conventions, and the symbolic checks for those
+Table~1 entries.  Thus, conditional only on that cited finite
+verification and on the byte-for-byte catalogue fixed above, the two
+terms used in the Richardson translation have the displayed real-domain
+values.  The square-root entry is not used as a proof input here, so no
+additional identity is imported from the catalogue.
+\end{proof}
 \begin{lemma}[Richardson EML witness library]
 \label{lem:eml-real-witness-library}
 The printed core witnesses of \Cref{lem:eml-printed-core}, together
@@ -522,12 +537,14 @@ claimed expression-tree and substitution-depth bounds.
 \begin{theorem}[Expression universality does not give normal forms]
 \label{thm:separation}
 The EML system \((\eml,1)\) is expression-universal for
-\(\mathcal B_{36}\).  Let \(\tau(E)\) be the effective
-principal-branch EML representative of a Richardson expression
-given by \Cref{lem:richardson-translation}.
-There is no computably presented normal-form codomain
-\(N_{\mathcal R}\) of finite objects with decidable equality and no
-total computable map
+\(\mathcal B_{36}\).  On the Richardson sublanguage, however, the
+translation used in the obstruction is generated only from the fixed
+finite witness list \(\mathcal W_{\mathcal R}\) of
+\Cref{cor:eml-witness-locking}.  Let \(\tau(E)\) be the effective
+principal-branch EML representative of a Richardson expression given by
+\Cref{lem:richardson-translation}.  There is no computably presented
+normal-form codomain \(N_{\mathcal R}\) of finite objects with decidable
+equality and no total computable map
 \(\mathrm{NF}\colon\tau(\mathcal R)\to N_{\mathcal R}\) satisfying
 \[
   \mathrm{NF}(\tau(E_1))=\mathrm{NF}(\tau(E_2))
@@ -540,28 +557,32 @@ for all Richardson expressions \(E_1,E_2\in\mathcal R\).
 
 \begin{proof}
 The expression-universality assertion is \Cref{thm:eml-universality}.
-By \Cref{lem:richardson-translation}, the map \(E\mapsto\tau(E)\)
-is effective and preserves the real function defined by \(E\).  If
-the asserted normal form existed on this translated fragment, then
-for a Richardson expression \(E\) one could translate \(E\) and the
+The obstruction itself uses the smaller finite package
+\(\mathcal W_{\mathcal R}\): by
+\Cref{cor:eml-witness-locking,lem:richardson-translation}, the map
+\(E\mapsto\tau(E)\) is effective and preserves the real function defined
+by \(E\), using only syntactic substitution into that locked witness
+list.  If the asserted normal form existed on this translated fragment,
+then for a Richardson expression \(E\) one could translate \(E\) and the
 zero expression into EML terms and compare their normal forms.  The
-decidable equality predicate on \(N_{\mathcal R}\), together with
-the displayed equivalence, would decide whether \(E\) is identically
-zero in Richardson's sense, as a real function.  This contradicts
+decidable equality predicate on \(N_{\mathcal R}\), together with the
+displayed equivalence, would decide whether \(E\) is identically zero in
+Richardson's sense, as a real function.  This contradicts
 \Cref{lem:richardson-fragment}.  Thus the expression grammar, although
-universal in the sense of \Cref{def:expr-univ}, cannot by itself
-supply the decidable canonical-form component of
-\Cref{def:prot-univ}.
+universal in the sense of \Cref{def:expr-univ}, cannot by itself supply
+the decidable canonical-form component of \Cref{def:prot-univ}.
 \end{proof}
 
 \begin{corollary}[Strictness for compatible canonical compilation]
 \label{cor:strict-L0-L1}
 Expression universality does not imply the compatible canonical
-compilation component of protocol universality.  More precisely, the
-EML presentation \((\eml,1)\) is expression-universal for
-\(\mathcal B_{36}\), but there is no computable compilation of its
-translated Richardson fragment into protocol normal forms whose
-decidable equality predicate classifies equality of the transported
+compilation component of protocol universality.  More precisely, the EML
+presentation \((\eml,1)\) is expression-universal for
+\(\mathcal B_{36}\), but the translated Richardson fragment is only the
+finite-witness fragment supplied by
+\Cref{cor:eml-witness-locking,lem:richardson-translation}, and there is
+no computable compilation of that fragment into protocol normal forms
+whose decidable equality predicate classifies equality of the transported
 real functions:
 \[
   E_1=E_2 \text{ as functions }\RR\to\RR
@@ -575,22 +596,19 @@ different codes and readouts.
 \end{corollary}
 
 \begin{proof}
-The EML grammar is expression-universal by
-\Cref{thm:eml-universality}.  Suppose a compatible canonical
-compilation as displayed existed on the translated Richardson
-fragment.  Then \Cref{prop:L1-compiles-L0}, applied to the source term
-algebra of Richardson expressions with semantic equivalence given by
-equality of real functions, would decide that equivalence by computing
-the two normal forms and comparing them in the protocol codomain.
-Equivalently, taking \(E_2\) to be the zero expression would decide
-whether a Richardson expression is identically zero.  This contradicts
-\Cref{lem:richardson-fragment}, and is exactly the obstruction
-formalized in \Cref{thm:separation}.  The final sentence follows
-because the argument uses the compatibility equivalence displayed
-above, rather than an assertion that every possible protocol for the
-same operations must receive its inputs from this EML fragment.
+Suppose a compatible canonical compilation as displayed existed on that
+finite-witness translated fragment.  Then \Cref{prop:L1-compiles-L0},
+applied to the source term algebra of Richardson expressions with
+semantic equivalence given by equality of real functions, would decide
+that equivalence by computing the two normal forms and comparing them in
+the protocol codomain.  Equivalently, taking \(E_2\) to be the zero
+expression would decide whether a Richardson expression is identically
+zero.  This contradicts \Cref{lem:richardson-fragment}, and is exactly
+the obstruction formalized in \Cref{thm:separation}.  The final sentence
+follows because the argument uses the compatibility equivalence displayed
+above, rather than an assertion that every possible protocol for the same
+operations must receive its inputs from this EML fragment.
 \end{proof}
-
 \subsection{Certificate data}
 \label{ssec:L2-strict}
 
@@ -844,4 +862,7 @@ fixed finite-matrix representation in the resolution parameter.  This
 contradicts the defining finite-state clause for \(q=2\), and proves
 the claimed non-implication.
 \end{proof}
+
+
+
 
