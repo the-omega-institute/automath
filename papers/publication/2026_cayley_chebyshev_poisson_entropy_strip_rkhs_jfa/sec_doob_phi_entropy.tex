@@ -85,27 +85,64 @@ $\bar\gamma$ gives $\partial_tg_t=Lg_t$.
 
 For the bilinear identity, first take $q\in C_c^\infty(\RR)$.  The usual
 principal-value formula for the Cauchy generator and symmetrization give
-\eqref{eq:cutoff-cauchy-bilinear}.  For bounded Lipschitz $q$, replace it
-by $q_R=\chi_Rq$.  Since $p,\partial_xp\in L^1(\RR)$ and $q$ is bounded
-and Lipschitz,
+\eqref{eq:cutoff-cauchy-bilinear}.  The same compactly supported identity
+holds for compactly supported Lipschitz tests by mollifying them and using the
+estimates below.  For bounded Lipschitz $q$, replace it by
+$q_R=\chi_Rq$, $R\ge1$.  Then
+\[
+\|q_R\|_\infty\le \|q\|_\infty,
+\qquad
+\|q_R\|_{\operatorname{Lip}}
+\le \|q\|_{\operatorname{Lip}}+\|\chi'\|_\infty\|q\|_\infty,
+\]
+so the cutoff family has bounds independent of~$R$.  Since
+$p,\partial_xp\in L^1(\RR)$ and $q$ is bounded and Lipschitz, the near
+diagonal part satisfies, uniformly in~$R$,
 \[
 \iint_{|x-y|<1}
-\frac{|p(x)-p(y)|\,|q(x)-q(y)|}{|x-y|^2}\dd x\dd y
-\le 2\|q\|_{\operatorname{Lip}}\|\partial_xp\|_1,
+\frac{|p(x)-p(y)|\,|q_R(x)-q_R(y)|}{|x-y|^2}\dd x\dd y
+\le 2\|q_R\|_{\operatorname{Lip}}\|\partial_xp\|_1,
 \]
-while
+because
+$p(x)-p(y)=\int_0^1p'(y+s(x-y))(x-y)\dd s$.  The far part satisfies,
+again uniformly in~$R$,
 \[
 \iint_{|x-y|\ge1}
-\frac{|p(x)-p(y)|\,|q(x)-q(y)|}{|x-y|^2}\dd x\dd y
-\le 4\|q\|_\infty\|p\|_1.
+\frac{|p(x)-p(y)|\,|q_R(x)-q_R(y)|}{|x-y|^2}\dd x\dd y
+\le 8\|q\|_\infty\|p\|_1,
 \]
-These estimates also dominate the cutoff errors because
-$\|q_R\|_\infty\le\|q\|_\infty$ and
-$\|q_R\|_{\operatorname{Lip}}\le C\|q\|_\infty+
-\|q\|_{\operatorname{Lip}}$, and the pointwise cutoff error tends to zero.
-Dominated convergence on the form side and
-$Lp=\partial_tp\in L^1(\RR)$ on the integral side prove the limiting
-identity.
+since
+$\int_{|x-y|\ge1}|x-y|^{-2}\dd y=2$ and the same estimate holds after
+interchanging $x$ and~$y$.  It remains to show that the cutoff error tends to
+zero.  Put $e_R:=q_R-q$.  Then $e_R=0$ on $[-R,R]$,
+$\|e_R\|_\infty\le2\|q\|_\infty$, and
+$\|e_R\|_{\operatorname{Lip}}\le
+\|q\|_{\operatorname{Lip}}+\|\chi'\|_\infty\|q\|_\infty$.  For the near
+diagonal contribution, $e_R(x)-e_R(y)\ne0$ and $|x-y|<1$ imply that the line
+segment between $x$ and~$y$ lies in $\{|z|>R-1\}$.  Therefore
+\[
+\iint_{|x-y|<1}
+\frac{|p(x)-p(y)|\,|e_R(x)-e_R(y)|}{|x-y|^2}\dd x\dd y
+\le C_q\int_{|z|>R-1}|p'(z)|\dd z\longrightarrow0.
+\]
+For the far contribution, using $|e_R(z)|\le2\|q\|_\infty\mathbf 1_{|z|>R}$
+gives a sum of four terms.  The two terms in which the same variable carries
+both $p$ and $e_R$ are bounded by
+$4\|q\|_\infty\int_{|z|>R}|p(z)|\dd z$.  The cross terms are bounded by
+\[
+2\|q\|_\infty\int_{\RR}|p(x)|
+\int_{\substack{|y|>R\\ |x-y|\ge1}}\frac{\dd y}{|x-y|^2}\dd x,
+\]
+and the analogous expression with $x$ and~$y$ interchanged; the inner integral
+is bounded by~$2$ and tends to zero for each fixed outer variable, so dominated
+convergence and $p\in L^1$ make the cross terms vanish.  Hence the bilinear
+forms with $q_R$ converge to the form with~$q$.  On the one-variable side,
+\[
+|e_R(x)Lp(x)|\le 2\|q\|_\infty |Lp(x)|,
+\qquad Lp=\partial_tp\in L^1(\RR),
+\]
+and $e_RLp\to0$ pointwise.  Hence the cutoff identities pass to the limit and
+prove \eqref{eq:cutoff-cauchy-bilinear} for bounded Lipschitz~$q$.
 
 Finally apply the principal-value formula to $g_tf$ and to $g_t$.  In the
 truncated integrals over $|x-y|>\rho$ the difference is exactly
@@ -220,6 +257,64 @@ $t\in[a,b]$; the second term is identical after exchanging $x$ and~$y$.
 Finally, \eqref{eq:doob-compact-range-bound} puts $u_t$ in a compact
 subinterval of $(0,\infty)$, so $\Phi$ is bounded on the range and
 $\int g_t|\Phi(u_t)|\le\sup_{[m_{a,b},M_{a,b}]}|\Phi|$.
+\end{proof}
+
+\begin{lemma}[Compact-range approximation for range-local $C^{1,1}$ entropies]%
+\label{lem:compact-range-phi-approximation}
+Let $[a,b]\subset(0,\infty)$, and let $h_t$, $g_t$, and $u_t=h_t/g_t$ be as
+in Lemma~\ref{lem:doob-range-bregman-integrability}.  Let
+$J=[m_{a,b},M_{a,b}]$ be the compact interval from its proof.  If
+$\Phi:(0,\infty)\to\RR$ is convex, $C^1$, and $\Phi'$ is Lipschitz on compact
+subintervals of $(0,\infty)$, then there are convex functions
+$\Phi_\varepsilon\in C^\infty((0,\infty))$, defined for all sufficiently small
+$\varepsilon>0$, such that
+\[
+\sup_{s\in J}|\Phi_\varepsilon(s)-\Phi(s)|
++\sup_{s\in J}|\Phi_\varepsilon'(s)-\Phi'(s)|\longrightarrow0,
+\]
+the functions $\Phi_\varepsilon'$ have a common Lipschitz constant on~$J$, and
+\[
+\sup_{\alpha,\beta\in J}
+|D_{\Phi_\varepsilon}(\alpha,\beta)-D_\Phi(\alpha,\beta)|\longrightarrow0.
+\]
+Consequently the entropy functionals and the Bregman dissipation integrands in
+Theorem~\ref{thm:poisson-doob-phi-entropy} may be obtained as limits from the
+same formulas for the smooth convex functions $\Phi_\varepsilon$, with the
+same compact-range majorants on every time interval $[a,b]$.
+\end{lemma}
+
+\begin{proof}
+Choose an open interval $J_*$ with compact closure in $(0,\infty)$ and
+$J\subset J_*$.  Since $\Phi$ is convex and $C^1$, $\Phi'$ is nondecreasing;
+by hypothesis it has some Lipschitz constant $L_*$ on~$J_*$.  Extend
+$\Phi'|_{J_*}$ to a globally defined nondecreasing Lipschitz function
+$\Psi$ on~$\RR$ with Lipschitz constant $L_*$, for instance by continuing it
+linearly with slope~$0$ outside $J_*$.  Let $\rho_\varepsilon$ be a standard
+nonnegative even mollifier and set
+$\Psi_\varepsilon=\rho_\varepsilon*\Psi$.  For $\varepsilon$ smaller than the
+distance from $J$ to $\RR\setminus J_*$, the functions
+$\Psi_\varepsilon$ are smooth, nondecreasing, have Lipschitz constant at most
+$L_*$ on~$J$, and converge uniformly to $\Phi'$ on~$J$.
+Define
+\[
+\Phi_\varepsilon(s):=\Phi(1)+\int_1^s\Psi_\varepsilon(r)\dd r,
+\]
+after any smooth convex extension away from $J_*$ if necessary.  Then
+$\Phi_\varepsilon$ is smooth and convex on $(0,\infty)$, and the displayed
+uniform convergence of $\Phi_\varepsilon$ and $\Phi_\varepsilon'$ on~$J$
+follows by integrating the uniform convergence of the derivatives on the
+compact interval.  The Bregman convergence is immediate from
+\[
+|D_{\Phi_\varepsilon}(\alpha,\beta)-D_\Phi(\alpha,\beta)|
+\le 2\sup_J|\Phi_\varepsilon-\Phi|
+ +(M_{a,b}-m_{a,b})\sup_J|\Phi_\varepsilon'-\Phi'|.
+\]
+Lemma~\ref{lem:doob-range-bregman-integrability} gives the common bound
+$0\le D_{\Phi_\varepsilon}(u_t(x),u_t(y))
+\le C\min\{|x-y|^2,1\}$ with $C$ independent of~$\varepsilon$, and it also
+puts $u_t$ in~$J$.  Since $\int g_t=1$, dominated convergence applies to the
+one-variable entropy integrals and to the two-variable Bregman dissipation
+integrals.  This proves the limiting assertion.
 \end{proof}
 
 \begin{lemma}[Second-moment KL decay to the translated Poisson profile]%
@@ -367,12 +462,9 @@ Then the following assertions hold.
       Then $\mathcal H_\Phi(t)<\infty$ for every $t>0$,
       $t\mapsto\mathcal H_\Phi(t)$ is absolutely continuous on compact
       subintervals of $(0,\infty)$, the double integral below is finite
-      for every $t>0$, and the differentiation below is justified by the
-      following regularity package: on each compact time interval the quotient
-      range of $u_t$ stays in a compact subinterval of $(0,\infty)$, the
-      principal-value identities are obtained as limits of the cutoff formulas
-      in Lemma~\ref{lem:cauchy-doob-cutoff-calculus}, and $h_t$ and $g_t$ are
-      absolutely continuous as $L^1$-valued maps.  Consequently
+      for every $t>0$, and Lemma~\ref{lem:compact-range-phi-approximation}
+      supplies the approximation passage from smooth convex entropies to this
+      range-local $C^{1,1}$ class.  Consequently
       \begin{equation}\label{eq:phi-entropy-dissipation}
       -\frac{\dd}{\dd t}\mathcal H_\Phi(t)
       =
@@ -550,7 +642,14 @@ E_t(x,y)=g_t(x)D_\Phi(u_t(x),u_t(y))
 +g_t(y)D_\Phi(u_t(y),u_t(x)).
 \]
 Substituting this identity proves
-\eqref{eq:phi-entropy-dissipation}.  Convexity of~$\Phi$ gives
+\eqref{eq:phi-entropy-dissipation} for the stated range-local class.  One way
+to read the preceding chain-rule step is to first prove it for the smooth
+convex approximants $\Phi_\varepsilon$ supplied by
+Lemma~\ref{lem:compact-range-phi-approximation}; their derivatives have a
+common Lipschitz constant on the compact quotient range, so all cutoff and
+Bregman majorants above are independent of~$\varepsilon$, and dominated
+convergence lets $\varepsilon\downarrow0$ in both sides.  This isolates the
+only approximation used for noncompact quotients.  Convexity of~$\Phi$ gives
 $D_\Phi\ge 0$, so $\mathcal H_\Phi$ is nonincreasing.  Since the choice
 of $[a,b]$ was arbitrary, part~(iii) follows.
 
