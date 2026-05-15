@@ -1,31 +1,79 @@
 ---
 title: "Autoresearch Pipeline"
-subtitle: "How Automath and NewMath turn formal evidence, paper drafts, and open-problem signals into reviewable research artifacts"
+subtitle: "Four operating directions around the extension core: formalization, paper automation, paper deepening, and outreach"
 author: "The Omega Project"
-date: 2026-05-10
-description: "ASCII architecture notes for the Automath/NewMath autoresearch pipeline: formalization, paper distillation, open-problem discovery, review, and human-approved outreach."
+date: 2026-05-15
+description: "Architecture notes for the Omega autoresearch system, organized by research direction rather than internal chronology. The formalization pipeline and extension core are the main line; paper automation, deepening, and outreach are supporting channels."
 ---
 
 ## What This Page Shows
 
-This page describes the automation layer around Automath/NewMath. It is not a list of collaboration examples. It is a map of the pipelines we use to move from formal evidence and research signals to artifacts that a human can review: Lean files, paper sections, research notes, email drafts, issue comments, and open-problem attack packets.
+This page describes the automation layer around the Omega project as a set of research directions, not as a list of names, examples, or historical log entries.
 
-The important boundary is simple: the system may draft, check, route, and organize, but external communication and publication decisions remain human-approved.
+The priority order is deliberate. The main line is the **formalization pipeline**: extending the verified kernel, preserving conservative-extension discipline, and turning mathematical claims into Lean-checkable artifacts. The paper and outreach systems are useful, but they are supporting channels. They package, stress-test, explain, and distribute what the formal core can actually support.
+
+The distinctive mechanism is not a one-shot prompt. It is supervised self-iteration: agents read the current input, produce an output, pass it through deterministic and mathematical gates, then use the resulting failures, diffs, logs, and review signals as the next input. The supervisor keeps that input-output loop coherent: it claims work, watches health, detects stalling, routes failures to the right agent or gate, and prevents unreviewed material from escaping.
+
+The boundary is also deliberate: the system may draft, check, route, and organize, but external communication and publication decisions remain human-approved.
+
+## Direction Map
+
+```text
+                         MAIN LINE
+ ┌───────────────────────────────────────────────────────────┐
+ │  1. Formalization and extension core                      │
+ │  - Lean theorem growth                                    │
+ │  - conservative-extension checks                          │
+ │  - verified interfaces between new layers                 │
+ │  - regression gates for symbol, import, and proof health  │
+ └────────────────────────────┬──────────────────────────────┘
+                              │
+                              v
+                  SUPPORTING RESEARCH CHANNELS
+ ┌────────────────────────────┬──────────────────────────────┐
+ │ 2. Paper automation         │ 3. Paper deepening           │
+ │ - claim extraction          │ - gap finding                │
+ │ - manuscript assembly       │ - referee-style critique     │
+ │ - bibliography/build gates  │ - theorem rescoping          │
+ │ - submission readiness      │ - writeback into TeX/Lean    │
+ └────────────────────────────┴──────────────────────────────┘
+                              │
+                              v
+ ┌───────────────────────────────────────────────────────────┐
+ │ 4. Outreach and open-problem routing                      │
+ │ - external problem triage                                 │
+ │ - evidence packets and scoped notes                       │
+ │ - collaborator drafts                                     │
+ │ - human-approved public communication                     │
+ └───────────────────────────────────────────────────────────┘
+                              ^
+                              │
+ ┌───────────────────────────────────────────────────────────┐
+ │ Supervisor-mediated self-iteration                        │
+ │ input -> agent output -> gates -> diff/log/review signal   │
+ │ -> next input, retry, rescope, or human review             │
+ └───────────────────────────────────────────────────────────┘
+```
+
+The lower layers are not separate goals. They are ways of making the extension core useful: papers expose formal content to mathematical readers, deepening turns weak drafts into stronger claims or honest obstructions, and outreach looks for places where existing structural evidence can help an external problem.
 
 ## Shared Control Surface
 
-Both pipelines use the same operating pattern: a supervisor keeps the loop alive, deterministic Python gates handle routine state, LLM agents are used only where judgment or synthesis is useful, and every outward-facing artifact lands in a reviewable draft state before it can leave the machine.
+All directions use the same operating pattern: a supervisor turns agent work into a self-iterating research loop. It is not only a process watchdog. It maintains task claims, chooses the next action from current evidence, compares input/output against gates, recognizes no-progress cycles, recovers stale state, and routes failures back into proof repair, paper repair, deeper reasoning, or human review. Deterministic gates handle routine state; LLM agents are used only where judgment or synthesis is useful; every outward-facing artifact lands in a reviewable draft state before it can leave the machine.
 
 ```text
-                 ┌──────────────────────────────┐
-                 │        supervisor loop        │
-                 │  health checks / cooldowns /  │
-                 │  stale-state recovery / logs  │
-                 └───────────────┬──────────────┘
-                                 │
-                                 v
         ┌────────────────────────────────────────────────┐
-        │ deterministic Python gates                      │
+        │ supervisor                                     │
+        │ - claim work and monitor worker health          │
+        │ - read input, output, diffs, logs, and gates    │
+        │ - detect stalling and repeated failure modes    │
+        │ - choose retry / rescope / deepen / review      │
+        └───────────────┬────────────────────────────────┘
+                        │
+                        v
+        ┌────────────────────────────────────────────────┐
+        │ deterministic gates                             │
+        │ - build / proof / import checks                 │
         │ - freshness / dedup / preflight                 │
         │ - board state / task claims / retry budgets     │
         │ - file presence / size / contract checks        │
@@ -34,144 +82,209 @@ Both pipelines use the same operating pattern: a supervisor keeps the loop alive
                         v
         ┌────────────────────────────────────────────────┐
         │ judgment agents                                 │
-        │ - Codex for code, synthesis, paper drafting     │
-        │ - ChatGPT Project oracle for attached-context   │
-        │   deep reasoning when needed                    │
-        │ - Claude only for PI supervision and writeback  │
+        │ - code and proof repair                         │
+        │ - paper synthesis and critique                  │
+        │ - attached-context mathematical reasoning       │
+        │ - scoped drafting for human review              │
         └───────────────┬────────────────────────────────┘
-                        │
+                        │ output
                         v
         ┌────────────────────────────────────────────────┐
         │ reviewable artifact                             │
-        │ - local draft / packet / Lean patch / note      │
+        │ - Lean patch / local note / paper section       │
+        │ - evidence packet / draft reply / review memo   │
         │ - no automatic email, post, or submission       │
-        └────────────────────────────────────────────────┘
+        └───────────────┬────────────────────────────────┘
+                        │ gate result / diff / review signal
+                        └─────────────── back to supervisor
 ```
 
-## Wenlin-Side Outreach and Open-Problem Loop
+In other words, the pipeline is a closed research control loop. A worker does not merely produce text; it produces a state transition. The supervisor decides whether that transition is progress, noise, a reusable obstruction, or a reason to change strategy.
 
-This loop starts from Automath/Omega evidence, public research signals, and already-registered collaboration threads. Its job is to find targets where the project may contribute, decide the correct artifact form, reason deeply enough to produce something useful, and then stop at a human review gate.
+## 1. Formalization and Extension Core
+
+This is the primary pipeline. Its job is to grow the verified kernel without weakening earlier layers. Every new interface should either be formally checked, reduced to a precise local obligation, or rejected as too speculative for the kernel.
 
 ```text
- SOURCES
+ CLAIM / EXTENSION SOURCES
  ┌─────────────────────────────────────────────────────────┐
- │ Automath/Omega Lean + papers                            │
- │ GitHub issues / PRs already being tracked               │
- │ arXiv and open-problem signals                          │
- │ targeted email-thread refresh                           │
- │ budget-limited public signal watch                      │
+ │ paper theorem environments                              │
+ │ existing Lean declarations                              │
+ │ extension-core interfaces                               │
+ │ conservative-extension obligations                      │
+ │ failed proof attempts and missing lemmas                │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- PREFLIGHT
+ TARGET SELECTION
  ┌─────────────────────────────────────────────────────────┐
- │ outreach_preflight.py                                   │
- │ - final display form: email / issue comment / note      │
- │ - outreach target or drop                               │
- │ - missing profile / freshness / attack plan             │
- │ - no broad rereading; only targeted refresh             │
+ │ formalization planner                                   │
+ │ - locate claims without Lean support                    │
+ │ - prioritize kernel-relevant extension obligations      │
+ │ - avoid duplicate or already-claimed targets            │
+ │ - keep speculative claims outside the verified core     │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- BOARD + CANDIDATE INBOX
+ PROOF WORK LOOP
  ┌─────────────────────────────────────────────────────────┐
- │ RESEARCH_BOARD / candidate_inbox                        │
- │ - existing collaborations are progressed, not re-added  │
- │ - new candidates require profile judgment               │
- │ - low-confidence items stay out of the active board     │
+ │ Lean patch generation and repair                        │
+ │ - isolated worktrees for parallel proof attempts        │
+ │ - import and namespace hygiene                          │
+ │ - theorem statement stabilization                       │
+ │ - proof search, simplification, and refactoring         │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- TASK RUNNER
+ KERNEL GATES
  ┌─────────────────────────────────────────────────────────┐
- │ outreach_task_runner.py                                 │
- │ - Codex-first drafting and reasoning                    │
- │ - ChatGPT Project oracle only when attached context     │
- │   or deeper external judgment is needed                 │
- │ - anti-spin guards, retry budgets, stale recovery       │
+ │ verification gates                                      │
+ │ - Lean build succeeds                                   │
+ │ - no accidental axiom / sorry / placeholder leakage     │
+ │ - declarations match paper labels where applicable      │
+ │ - extension does not silently redefine lower layers     │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- PI + WRITEBACK
+ VERIFIED CORE UPDATE
  ┌─────────────────────────────────────────────────────────┐
- │ PI supervision                                          │
- │ - periodic self-check of stuck loops and bad routing    │
- │ - proposes safe autonomous maintenance actions          │
- │                                                         │
- │ writeback                                               │
- │ - turns approved draft material into paper-local form   │
- │ - uses explicit writeback skill, not ordinary drafting  │
- └──────────────────────────┬──────────────────────────────┘
-                            │
-                            v
- HUMAN REVIEW
- ┌─────────────────────────────────────────────────────────┐
- │ review queue                                            │
- │ - ready / needs-refresh / blocked                       │
- │ - newer email or GitHub activity invalidates stale      │
- │   ready states before send                              │
- │ - operator approval required for every external action  │
+ │ accepted Lean artifact                                  │
+ │ - new theorem, definition, interface, or regression     │
+ │ - paper-facing label or source map when useful          │
+ │ - reusable evidence for later papers and outreach       │
  └─────────────────────────────────────────────────────────┘
 ```
 
-The first public artifact is decided before deep work begins. A target may produce an author email, a GitHub issue comment, a short note, a Lean-formalization handoff, or a paper draft. If the system cannot name the artifact and audience, it should not run.
+The core question is always: does this extend the verified structure without breaking the meaning of what came before? If the answer is unclear, the pipeline should produce a smaller lemma, a counterexample, or a clear obstruction rather than a stronger-looking but unsupported claim.
 
-## Loning-Side Paper and Formalization Loop
+## 2. Paper Automation Pipeline
 
-This loop is paper-centered. Its job is to turn paper claims, unfinished theorem environments, source queues, and review failures into formalization targets, paper writebacks, and promotion-ready publication artifacts.
+The paper automation pipeline packages verified and near-verified material into manuscripts. It is not the source of mathematical authority. Its value is operational: keeping many paper projects buildable, reviewable, and aligned with the formal core.
 
 ```text
- PAPER / CLAIM SOURCES
+ PAPER SOURCES
  ┌─────────────────────────────────────────────────────────┐
- │ paper TeX trees                                         │
- │ claim environments and labels                          │
- │ Lean registry / existing declarations                  │
- │ source queues and paper-local PIPELINE.md context       │
- │ reviewer-style failure reports                         │
+ │ TeX manuscript trees                                    │
+ │ theorem labels and source maps                          │
+ │ Lean-backed result inventories                          │
+ │ bibliography and journal-profile context                │
+ │ pipeline state from previous review rounds              │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- TARGET PREPARATION
+ ASSEMBLY
  ┌─────────────────────────────────────────────────────────┐
- │ omega_ci.py / autoresearch prepare                      │
- │ - collect paper claims                                  │
- │ - detect missing Lean coverage                          │
- │ - prioritize unformalized theorem targets               │
- │ - avoid duplicate or already-claimed work               │
+ │ publication pipeline                                    │
+ │ - structure and section planning                        │
+ │ - claim inventory and paper-local scope contract        │
+ │ - bibliography normalization                            │
+ │ - journal-style rewrite when appropriate                │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- FORMALIZATION LOOP
+ BUILD + CONSISTENCY GATES
  ┌─────────────────────────────────────────────────────────┐
- │ codex_formalize.py                                      │
- │ - dispatch rounds, optionally in parallel               │
- │ - create isolated worktrees                             │
- │ - generate Lean proof attempts                          │
- │ - run build gates and release stale claims              │
+ │ manuscript checks                                       │
+ │ - LaTeX builds                                          │
+ │ - labels and references resolve                         │
+ │ - theorem strength matches available evidence           │
+ │ - submission checklist is explicit                      │
  └──────────────────────────┬──────────────────────────────┘
                             │
                             v
- DISTILLATION / WRITEBACK
+ REVIEWABLE PAPER ARTIFACT
  ┌─────────────────────────────────────────────────────────┐
- │ distillation supervisor                                 │
- │ - claim source candidates                               │
- │ - research / deepen / write back into paper sections    │
- │ - reject unsupported theorem-strength claims            │
- │ - keep writeback review and commit hygiene separate     │
- └──────────────────────────┬──────────────────────────────┘
-                            │
-                            v
- REVIEW + PROMOTION
- ┌─────────────────────────────────────────────────────────┐
- │ review gates                                            │
- │ - paper-review style critique                           │
- │ - build and label consistency checks                    │
- │ - source-export / standalone repo preparation           │
- │ - optional media generation for public presentation     │
+ │ local manuscript state                                  │
+ │ - draft / revised draft / submission-ready packet       │
+ │ - never treated as public without human approval        │
  └─────────────────────────────────────────────────────────┘
 ```
 
-The Loning-side loop is optimized for paper production and formalization coverage. It asks: which claims are missing formal support, which proof targets are feasible next, which writebacks are too shallow or too broad, and which artifacts are ready to become part of a submitted paper or standalone repository.
+This pipeline should follow the formal core. When the manuscript says more than the kernel or audited derivation supports, the paper pipeline must weaken the claim, mark it as conjectural, or route it to paper deepening.
+
+## 3. Paper Deepening Pipeline
+
+The deepening pipeline is the bridge between draft text and real mathematical substance. It audits weak claims, asks for missing lemmas, tests whether a proof route can be made precise, and writes back only what survives review.
+
+```text
+ WEAK OR UNFINISHED MATERIAL
+ ┌─────────────────────────────────────────────────────────┐
+ │ proof gaps                                              │
+ │ referee-style objections                                │
+ │ unsupported theorem-strength phrasing                   │
+ │ unclear relation between TeX and Lean                   │
+ │ stale or over-broad manuscript sections                 │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ DEEPENING PASS
+ ┌─────────────────────────────────────────────────────────┐
+ │ mathematical repair                                     │
+ │ - isolate the exact missing claim                       │
+ │ - search for a smaller theorem                          │
+ │ - produce obstruction or counterexample when needed     │
+ │ - identify the Lean target if formalization is feasible │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ WRITEBACK DISCIPLINE
+ ┌─────────────────────────────────────────────────────────┐
+ │ accepted paper-local update                             │
+ │ - theorem strengthened only when evidence improves      │
+ │ - unsupported content demoted to remark/open problem    │
+ │ - formalization handoff created for kernel-relevant     │
+ │   claims                                                │
+ └─────────────────────────────────────────────────────────┘
+```
+
+Deepening is not public presentation. It is internal pressure: if a manuscript claim is weak, either make it true, make it smaller, or mark the obstruction honestly.
+
+## 4. Outreach and Open-Problem Pipeline
+
+Outreach is a supporting channel, not the center of the system. Its job is to route existing evidence toward useful external contexts: open problems, collaborator threads, issue discussions, and short explanatory notes. It should never outrun the verified core.
+
+```text
+ SIGNALS
+ ┌─────────────────────────────────────────────────────────┐
+ │ public open problems                                    │
+ │ existing collaboration threads                          │
+ │ issue / PR contexts already under discussion            │
+ │ papers or claims that need a scoped response            │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ TRIAGE
+ ┌─────────────────────────────────────────────────────────┐
+ │ outreach gates                                          │
+ │ - freshness and relevance                               │
+ │ - can the formal/paper evidence actually help?          │
+ │ - is there a concrete artifact and audience?            │
+ │ - if not, drop or defer                                 │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ EVIDENCE PACKET
+ ┌─────────────────────────────────────────────────────────┐
+ │ local research packet                                   │
+ │ - problem statement                                     │
+ │ - verified or audited evidence                          │
+ │ - known gaps and non-claims                             │
+ │ - exact mathematical question for deeper reasoning      │
+ └──────────────────────────┬──────────────────────────────┘
+                            │
+                            v
+ HUMAN-REVIEWED OUTPUT
+ ┌─────────────────────────────────────────────────────────┐
+ │ possible artifact                                       │
+ │ - author email draft                                    │
+ │ - issue comment draft                                   │
+ │ - short note                                            │
+ │ - formalization handoff                                 │
+ │ - paper-local writeback                                 │
+ └─────────────────────────────────────────────────────────┘
+```
+
+The outreach loop should stop when the evidence is only promotional. It should continue only when it can produce a bounded mathematical contribution, a useful obstruction, or a clearly scoped question for another researcher.
 
 ## Shared Safety Rules
 
@@ -194,29 +307,25 @@ The pipelines are allowed to be persistent, but not autonomous in the publicatio
  └─ push public-facing intermediate material
 ```
 
-Intermediate artifacts are local by default. Existing email and GitHub threads are progress-tracked until closed; they are not recycled as fresh board items. Deterministic gates are preferred whenever Python can make the decision reliably. LLM calls are reserved for synthesis, judgment, and language tasks that cannot be stabilized cheaply in code.
+Intermediate artifacts are local by default. Deterministic gates are preferred whenever code can make the decision reliably. LLM calls are reserved for synthesis, judgment, and language tasks that cannot be stabilized cheaply in code.
 
 ## Artifact Types
 
 The system produces artifacts that can be reviewed, edited, and either approved or rejected.
 
-| Artifact | Typical use |
-|---|---|
-| Lean patch | formalize or repair a claim |
-| paper section draft | move verified or scoped material into a manuscript |
-| scope ledger | separate proved input, bridge framing, and open items |
-| author email | ask a targeted collaborator or paper author for a concrete next step |
-| GitHub issue comment | contribute a bounded result or proposal to an existing public thread |
-| open-problem profile | decide whether a public problem is fresh, relevant, and attackable |
-| research packet | bundle audit pointers, attack plan, and reviewable deliverables |
-| media packet | slide/audio/repository presentation for a submitted paper |
+| Artifact | Primary direction | Typical use |
+|---|---|---|
+| Lean patch | formalization core | formalize or repair a claim |
+| extension interface note | formalization core | define the next conservative layer boundary |
+| paper section draft | paper automation | move verified or scoped material into a manuscript |
+| referee memo | paper deepening | identify proof gaps, overclaims, and missing lemmas |
+| obstruction note | paper deepening / outreach | record why a route currently fails |
+| evidence packet | outreach / deep reasoning | bundle the problem, checked evidence, gaps, and exact question |
+| author email or issue draft | outreach | ask for or contribute a bounded next step |
+| media packet | outreach | present an already supported result after review |
 
 ## Where This Is Going
 
 The long-term goal is not to automate mathematical publication end to end. The goal is to make AI-assisted research legible, auditable, and useful enough that humans can spend more time judging mathematical substance and less time moving context between tools.
 
-For Automath/Omega, that means using the formal corpus as a source of reusable structural evidence: splitting large discoveries into publishable papers, finding external open problems where the evidence applies, and producing drafts with line-anchored audit trails.
-
-For NewMath, that means treating research organization itself as a first-class object: candidate discovery, project memory, collaboration state, paper decomposition, and review queues become explicit data rather than private chat history.
-
-For both loops, the intended output is a human-approved research artifact: a theorem file, a paper section, a short note, a collaboration packet, or a carefully scoped public reply.
+For this project, the main output is the extension core: a growing verified structure whose lower layers remain stable while new layers add expressive power. The paper pipelines exist to make that structure readable and publishable. The outreach pipeline exists to find places where the structure can be tested, explained, or applied. Public communication is downstream of mathematical support, not a substitute for it.
