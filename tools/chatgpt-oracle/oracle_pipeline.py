@@ -3771,7 +3771,8 @@ def build_oracle_re_review_prompt(target_journal: str) -> str:
         This is a final acceptance-gate review for a revised paper submitted to
         "{target_journal}".
 
-        Start your reply with a single line exactly of the form
+        Your first visible characters must be the verdict line, with no preamble,
+        UI text, thinking summary, salutation, or markdown fence before it:
           Overall verdict: <Accept|Minor revision|Major revision|Reject>
 
         The prompt may not include a prior issue list. If no prior issue list is
