@@ -393,6 +393,121 @@ symbolic verifications for these named Table~1 entries.  Thus the proof
 uses a bounded finite certificate plus the cited symbolic identities, not
 an unprinted compiler oracle.
 \end{proof}
+
+The next proposition records the exact interface at which the external
+Odrzywo{\l}ek verification enters the strictness proof.  It is a
+stability criterion: any independently checked replacement for the same
+three identities gives the same obstruction, while no other analytic
+identity from the Table~1 compiler is used below.
+
+\begin{proposition}[Three-witness stability of the Richardson obstruction]
+\label{prop:three-witness-stability}
+Let \(\mathsf P\) be a closed pure EML term, and let
+\(\mathsf S(x)\) and \(\mathsf R(t)\) be unary pure EML terms, all in
+the principal-branch semantics of \Cref{def:eml}.  Suppose that on the
+real domains relevant to Richardson's theorem they satisfy
+\[
+  \mathsf P=\pi,
+  \qquad
+  \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad
+  \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+\]
+Then the printed core witnesses of \Cref{lem:eml-printed-core},
+together with \(\mathsf P\), \(\mathsf S\), and \(\mathsf R\), give an
+effective translation \(E\mapsto\tau_{\mathsf P,\mathsf S,
+\mathsf R}(E)\) of Richardson expressions into pure EML terms such that
+\[
+  \llbracket \tau_{\mathsf P,\mathsf S,\mathsf R}(E)\rrbracket_{\RR}(x)
+  =E(x)\qquad(x\in\RR)
+\]
+for every expression in the Richardson fragment.  Moreover, for this
+translated fragment there is no computably presented codomain of finite
+normal forms with decidable equality that classifies equality of the
+transported real functions.  If \(|E|\) denotes Richardson tree size
+after expanding rational constants by the fixed constructor scheme, then
+there is a constant \(K_{\mathsf P,\mathsf S,\mathsf R}\) such that
+\[
+  |\tau_{\mathsf P,\mathsf S,\mathsf R}(E)|_{\eml}
+  \le K_{\mathsf P,\mathsf S,\mathsf R}^{2|E|},
+  \qquad
+  \operatorname{depth}\tau_{\mathsf P,\mathsf S,\mathsf R}(E)
+  \le K_{\mathsf P,\mathsf S,\mathsf R}|E| .
+\]
+In particular, the strictness theorem uses Odrzywo{\l}ek's supplementary
+verification only through the three displayed identities for the printed
+terms \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\).
+\end{proposition}
+
+\begin{proof}
+Use the printed core witnesses
+\(E,L,D,P,N,A,S\) of \Cref{lem:eml-printed-core}.  These core witnesses give, by direct real-domain calculation,
+\[
+\begin{aligned}
+  T(u,v)&=E(A(L(u),L(v)))=uv\qquad(u,v>0),\\
+  R_+(u)&=E(N(L(u)))=1/u\qquad(u>0),
+\end{aligned}
+\]
+and hence the all-real multiplication and nonzero-division macros
+\[
+\begin{aligned}
+  M(u,v)&=S\Bigl(A\bigl(T(Q(u),Q(v)),T(P(u),P(v))\bigr),\\
+        &\hspace{4.3em}A\bigl(T(Q(u),P(v)),T(P(u),Q(v))\bigr)\Bigr)=uv,\\
+  J(u,v)&=M\bigl(u,M(v,R_+(M(v,v)))\bigr)=u/v\qquad(v\ne0),
+\end{aligned}
+\]
+where \(Q(u)=E(u)>0\) and \(P(u)=S(E(u),u)>0\).  Thus integer
+constants are built from \(1\) by repeated addition and negation,
+rational constants are built using one application of \(J\) with a
+positive integer denominator, and \(\log 2\) is the core witness
+\(L(A(1,1))\).  The assumed terms \(\mathsf P\) and \(\mathsf S\) give
+the required witnesses for \(\pi\) and \(\sin\).  Finally
+\[
+  \Abs_{\mathsf R}(u)=\mathsf R(M(u,u))
+\]
+is defined for every real \(u\), because \(M(u,u)=u^2\ge0\), and it
+satisfies \(\Abs_{\mathsf R}(u)=\sqrt{u^2}=|u|\).  This supplies the
+concrete total representative of Richardson's punctured absolute-value
+symbol justified in \Cref{lem:richardson-punctured-mu-reduction}.
+
+Define \(\tau_{\mathsf P,\mathsf S,\mathsf R}\) by structural recursion:
+variables are left as input leaves; constants are replaced by the
+corresponding witnesses just listed; \(+,-,\times,\exp\), and \(\sin\)
+are replaced by their fixed unary or binary EML macros; and an occurrence
+of Richardson's absolute-value symbol is replaced by
+\(\Abs_{\mathsf R}\) applied to the translated subterm.  Composition is
+translated by substituting the already translated inner tree into every
+input leaf of the already translated outer tree.  The preceding
+paragraph proves the value identity at each atomic and primitive step,
+and the composition clause preserves it by ordinary substitution of real
+functions.  Induction on the expression tree therefore gives
+\(
+\llbracket \tau_{\mathsf P,\mathsf S,\mathsf R}(E)\rrbracket_{\RR}=E
+\)
+on \(\RR\).
+
+Because \(\mathsf P\), \(\mathsf S\), \(\mathsf R\), and the core macros
+are fixed finite trees, there is a constant bounding the size and depth
+increase of each primitive replacement.  An elementary induction gives
+the displayed \(K_{\mathsf P,\mathsf S,\mathsf R}^{2|E|}\) size bound
+and linear depth
+bound; composition multiplies tree sizes and adds depths, while every
+other constructor has uniformly bounded arity and uniformly bounded
+replacement size.
+
+If a computable finite normal form with decidable equality classified
+equality of the transported real functions on this translated fragment,
+then, given Richardson expressions \(E_1,E_2\), one could compute
+\(\tau_{\mathsf P,\mathsf S,\mathsf R}(E_1)\) and
+\(\tau_{\mathsf P,\mathsf S,\mathsf R}(E_2)\) and compare their normal
+forms.  By the value identity just proved, this would decide equality of
+Richardson real functions, equivalently identity-to-zero by
+\Cref{lem:richardson-fragment}.  That contradicts Richardson's theorem.
+For the printed witnesses of \Cref{lem:eml-ancillary-certificate}, the
+three hypotheses are exactly the cited Odrzywo{\l}ek symbolic
+verifications, so the final assertion follows.
+\end{proof}
+
 \begin{lemma}[Richardson EML witness library]
 \label{lem:eml-real-witness-library}
 The core witnesses of \Cref{lem:eml-printed-core}, together
@@ -681,7 +796,8 @@ for all Richardson expressions \(E_1,E_2\in\mathcal R\).
 \begin{proof}
 The expression-universality assertion is \Cref{thm:eml-universality}.
 The obstruction itself uses the smaller finite package
-\(\mathcal W_{\mathcal R}\): by
+\(\mathcal W_{\mathcal R}\), whose three non-core analytic inputs are
+isolated in \Cref{prop:three-witness-stability}: by
 \Cref{cor:eml-witness-locking,lem:richardson-translation}, the map
 \(E\mapsto\tau(E)\) is effective and preserves the real function defined
 by \(E\), using only syntactic substitution into that locked witness
@@ -985,6 +1101,8 @@ fixed finite-matrix representation in the resolution parameter.  This
 contradicts the defining finite-state clause for \(q=2\), and proves
 the claimed non-implication.
 \end{proof}
+
+
 
 
 
