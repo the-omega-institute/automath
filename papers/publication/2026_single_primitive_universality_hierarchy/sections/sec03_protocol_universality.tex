@@ -174,7 +174,43 @@ with values taken modulo \(F_{m+2}\).
 Thus arithmetic has not been added as a primitive operation on
 words.  It is read through valuation and stable Zeckendorf
 normalization; residue reduction is only the finite-resolution
-version used for certificates.
+version used for certificates.  This article uses only this
+value-transported arithmetic.  Intrinsic digit-local and online
+algorithms for stable Zeckendorf arithmetic require additional carry
+analysis and belong to the companion treatment
+\cite{ZeckendorfStableArithmetic2026}.
+
+\begin{lemma}[Value-transported arithmetic is sufficient for the protocol]
+\label{lem:value-transported-suffices}
+The operations \(\oplus\) and \(\otimes\) of
+\Cref{def:stable-arith} are total computable operations on
+\(X_{\infty}^{\mathrm{fin}}\).  Moreover, the proof of
+\Cref{thm:zeckendorf-protocol-univ} uses no intrinsic online
+Zeckendorf addition or multiplication theorem: it uses only the
+computable bijection \(\Val\colon X_{\infty}^{\mathrm{fin}}\to\NN\),
+ordinary integer arithmetic in \(\NN\), and re-normalization by
+\(\Val^{-1}\).
+\end{lemma}
+
+\begin{proof}
+An element of \(X_{\infty}^{\mathrm{fin}}\) is a finite legal
+Fibonacci word, so \(\Val(c)\) is computed by a finite sum.  Given
+\(n\in\NN\), the inverse \(\Val^{-1}(n)\) is computed by the greedy
+Zeckendorf algorithm, or equivalently by the finite normalizer of
+\Cref{prop:fold-confluence} applied at any resolution large enough to
+contain the Zeckendorf support of \(n\).  Hence
+\[
+  (c,d)\longmapsto \Val^{-1}(\Val(c)+\Val(d))
+  \quad\text{and}\quad
+  (c,d)\longmapsto \Val^{-1}(\Val(c)\Val(d))
+\]
+are total computable operations on eventually-zero legal words.  The
+realization equations used below are exactly the semiring identities
+obtained by applying \(\Val\) to these two displayed formulas and then
+reading the resulting integer through the chosen semantic maps.  No
+step requires a bounded-window carry rule, an online transducer, or an
+intrinsic digit-local multiplication algorithm.
+\end{proof}
 
 \subsection{Composition as the primitive}
 \label{ssec:sole}
