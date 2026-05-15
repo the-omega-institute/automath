@@ -1090,6 +1090,49 @@ because ladder atoms have singleton essential support. Hence the remaining
 families are empty.
 \end{proof}
 
+\begin{lemma}[Finite slot-selection test]
+\label{lem:finite-slot-selection}
+Let $X$ be a set of at most three labelled slots.  For each $x\in X$, let
+$C_x$ be a finite set of admissible prime powers.  Define
+\[
+u(C_x):=\{p:\ p\text{ is the underlying prime of some }p^e\in C_x\}.
+\]
+There are choices $\theta_x\in C_x$ whose underlying primes are pairwise
+distinct if and only if, for every $Y\subseteq X$,
+\[
+\#\bigcup_{y\in Y}u(C_y)\ge \#Y .
+\]
+Consequently, in the three-coordinate classification below, a row is decided
+by the finite bipartite graph whose left vertices are the row slots and whose
+right vertices are the admissible underlying primes supplied by the primitive
+rank windows and the explicit ladder candidates.
+\end{lemma}
+
+\begin{proof}
+The necessity is immediate: $\#Y$ slots filled by pairwise distinct underlying
+primes must use at least $\#Y$ primes from the displayed union.  Conversely,
+write $N_x=u(C_x)$.  The cases $\#X\le2$ are direct: for two slots the only
+possible obstruction, after both individual sets are nonempty, is
+$N_{x_1}=N_{x_2}$ a singleton, which is exactly the failure of the displayed
+inequality for $Y=X$.
+
+It remains to treat $X=\{1,2,3\}$.  If some $N_i$ is a singleton, say
+$N_1=\{p\}$, fill the first slot with a prime power above $p$.  For any
+$Y\subseteq\{2,3\}$ the inequality applied to $Y\cup\{1\}$ gives
+$\#((\bigcup_{y\in Y}N_y)\setminus\{p\})\ge\#Y$; the two-slot case therefore
+fills the remaining slots without using $p$.
+
+We may now assume that every $N_i$ has at least two elements.  Choose any
+$p\in N_1$.  If the two residual sets $N_2\setminus\{p\}$ and
+$N_3\setminus\{p\}$ satisfy the two-slot inequality, we fill slots $2$ and $3$
+there and are done.  Otherwise their union has size at most one.  Since
+$N_2$ and $N_3$ each have at least two elements, this forces
+$N_2=N_3=\{p,q\}$ for some $q$.  The inequality for $Y=X$ then implies that
+$N_1$ contains an element $r\notin\{p,q\}$.  Fill slot $1$ using $r$, and fill
+slots $2$ and $3$ using $p$ and $q$.  This gives the required distinct
+underlying primes.
+\end{proof}
+
 \begin{proposition}[Arithmetic tests for the three-coordinate atom families]
 \label{prop:three-coordinate-arithmetic-tests}
 Assume $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$, and write
@@ -1143,7 +1186,14 @@ L_{i,J}(n)=
 \{k:\nu_{\ell_k}(\alpha(\lambda))=a_k\}=J\}.
 \]
 Thus every ladder family $L_{i,J}(n)$ is empty or consists of the single
-displayed prime power.
+displayed prime power.  Hence every labelled three-coordinate slot has an
+explicit finite admissible set: a primitive slot is the finite disjoint union
+of the rank classes $\Pi_\alpha(d)$ with
+$d\in\mathcal R_J^\circ(n)$, and a ladder slot is decided by the displayed
+single candidate.  Pairwise-coprime filling of any row is therefore exactly
+the finite slot-selection test of Lemma~\ref{lem:finite-slot-selection}; the
+primitive multiplicities are
+$\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\omega(F_c)$.
 \end{proposition}
 
 \begin{proof}
@@ -1226,11 +1276,14 @@ prime from $\bigcup_{d\in\mathcal R_{\{i\}}^\circ(n)}\Pi_\alpha(d)$ or the
 unique ladder candidate in $L_{i,\{i\}}(n)$;
 \item the chosen prime powers have distinct underlying primes.
 \end{enumerate}
-Equivalently, after the possible ladder candidates are fixed, the primitive
-choices are a finite matching problem in the explicit rank windows
-$\mathcal R_J^\circ(n)$, with vertex multiplicities
-$\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\omega(F_c)$ and with any already used
-ladder prime deleted from the matching pool.
+Equivalently, form for each slot its finite admissible set $C_j$: for a
+primitive slot use
+$\bigcup_{d\in\mathcal R_{J_j}^\circ(n)}\Pi_\alpha(d)$, for a proper ladder
+slot use $L_{i,J_j}(n)$, and for a singleton slot use
+$P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$.  The row succeeds precisely when these
+sets satisfy the Hall inequalities of Lemma~\ref{lem:finite-slot-selection},
+with underlying-prime multiplicities in each primitive rank window given by
+$\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\omega(F_c)$.
 
 In that case $m=\theta_1\cdots\theta_r$ is the realizing minimal generator,
 and every realization with these fixed labelled coordinate supports is
@@ -1310,13 +1363,19 @@ Let $n\ge2$.
  $m\in\mathcal M_n$ is obtained uniquely after fixing the labelled coordinate
  supports $E_n,T_n\subseteq\{1,2,3\}$, up to relabeling equal slots, from one
  coordinate permutation of one of the eight rows in
- Table~\ref{tab:three-coordinate-classification}. The displayed rows are
- representatives modulo coordinate relabeling: all coordinate permutations of
- every displayed row are part of the classification. In the table,
- $S_i(n):=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$; a product of selected slots is
- admitted exactly when the selected prime powers have distinct underlying
- primes.
+ Table~\ref{tab:three-coordinate-classification}.
 \end{enumerate}
+For the three-coordinate case, the rows in
+Table~\ref{tab:three-coordinate-classification} are not examples.  Each row is
+a necessary-and-sufficient finite realization test for that abstract cover
+type, and the table is read after applying all permutations of the labelled
+coordinates $1,2,3$.  Thus the displayed rows are representatives modulo
+coordinate relabeling, while every coordinate permutation of every row is part
+of the theorem.  In the table,
+$S_i(n):=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$; a product of selected slots is
+admitted exactly when the selected prime powers have distinct underlying
+primes, equivalently when the finite Hall inequalities of
+Lemma~\ref{lem:finite-slot-selection} hold for the slot sets in that row.
 \begin{table}[ht]
 \centering
 \small
