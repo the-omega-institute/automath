@@ -611,6 +611,59 @@ allowed; what is forbidden is that every coordinate lost by lowering
 $\theta$ is already supplied at full exponent by the remaining atoms.
 \end{definition}
 
+\begin{lemma}[Coordinate test for lowering one atom]
+\label{lem:coordinate-lowering-test}
+Let $n\ge2$, and let
+$\Theta=\{\theta_1,\ldots,\theta_r\}$ be a pairwise coprime set of atomic
+prime powers with $d(\theta_i)\mid n$ and
+\[
+\lcmop(d(\theta_1),\ldots,d(\theta_r))=n.
+\]
+Fix $\theta_i=p_i^{e_i}$, and put
+\[
+N_i^-:=\lcmop\bigl(d^-(\theta_i),\ d(\theta_j):j\ne i\bigr).
+\]
+Then $N_i^-=n$ if and only if
+\[
+E_n(\theta_i)\subseteq\bigcup_{j\ne i}T_n(\theta_j).
+\]
+Equivalently, lowering $\theta_i$ to $p_i^{e_i-1}$ keeps the apparition lcm
+equal to $n$ exactly when every coordinate lost by the lowering is supplied at
+full exponent by some other atom. If
+$\ell\in E_n(\theta_i)\setminus\bigcup_{j\ne i}T_n(\theta_j)$, then
+$\nu_\ell(N_i^-)<\nu_\ell(n)$, so $N_i^-<n$.
+\end{lemma}
+
+\begin{proof}
+Since $d^-(\theta_i)\mid d(\theta_i)\mid n$ and $d(\theta_j)\mid n$ for
+$j\ne i$, the integer $N_i^-$ divides $n$. Hence $N_i^-=n$ is equivalent to
+saying that every prime coordinate $\ell\in\mathcal P(n)$ occurs in $N_i^-$
+with valuation $\nu_\ell(n)$.
+
+Assume first that
+$E_n(\theta_i)\subseteq\bigcup_{j\ne i}T_n(\theta_j)$, and fix
+$\ell\in\mathcal P(n)$. Because the original lcm is $n$, at least one of the
+numbers $d(\theta_1),\ldots,d(\theta_r)$ supplies the full
+$\ell$-adic valuation of $n$. If such a supplier is some $d(\theta_j)$ with
+$j\ne i$, then $\ell\in T_n(\theta_j)$ and the same full valuation appears in
+$N_i^-$. The only remaining case is that $\theta_i$ itself supplies the full
+valuation and no other atom does, so $\ell\in T_n(\theta_i)$ and
+$\ell\notin\bigcup_{j\ne i}T_n(\theta_j)$. The assumed containment then gives
+$\ell\notin E_n(\theta_i)$. By the definition of $E_n(\theta_i)$,
+$\nu_\ell(d^-(\theta_i))=\nu_\ell(n)$, so the lowered factor still supplies the
+full $\ell$-coordinate in $N_i^-$. Thus every coordinate of $n$ is still
+present at full valuation, and $N_i^-=n$.
+
+Conversely, suppose that some coordinate
+$\ell\in E_n(\theta_i)$ is not in $\bigcup_{j\ne i}T_n(\theta_j)$. The
+membership $\ell\in E_n(\theta_i)$ says
+$\nu_\ell(d^-(\theta_i))<\nu_\ell(n)$. For every $j\ne i$, the exclusion
+$\ell\notin T_n(\theta_j)$ says
+$\nu_\ell(d(\theta_j))<\nu_\ell(n)$. Therefore the lcm defining $N_i^-$ also
+has $\ell$-adic valuation strictly below $\nu_\ell(n)$. Since $N_i^-\mid n$,
+this proves $N_i^-<n$.
+\end{proof}
+
 \begin{theorem}\label{thm:witness-classification}
 For every $n\ge 2$,
 $\mathcal M_n=\bigl\{\prod_{\theta\in\Theta}\theta:\
@@ -811,7 +864,7 @@ divisors excluded from $\mathcal D_n^*$ are contained in
 $\{1,2,6,12,n\}$, so $|\mathcal D_n^*|\ge\tau(n)-5$.
 \end{proof}
 
-\begin{theorem}\label{thm:maximal-order}
+\begin{corollary}[Optional width consequence]\label{thm:maximal-order}
 For every $n\ge3$ with $n\notin\{6,12\}$,
 \[
 \widthop(B_n)\ge
@@ -822,7 +875,7 @@ Consequently there are infinitely many $n$ for which
 \log\log \widthop(B_n)
 \ge (\log 2+o(1))\frac{\log n}{\log\log n}.
 \]
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 Corollary~\ref{cor:boolean-skeleton} embeds a Boolean lattice of rank
@@ -849,6 +902,13 @@ lower bound.
 %% ====================================================================
 \section{Low-support classifications}\label{sec:low-support}
 %% ====================================================================
+
+This section keeps the low-support classification in the main theorem stream
+and suppresses only routine finite matching.  The essential point is that the
+witness-cover theorem reduces every case with at most three prime coordinates
+to a finite list of atomic slots.  The arithmetic tests for filling those slots
+are stated here; the reader-facing checklist and the worked $n=42$ verification
+are collected in Appendix~\ref{app:three-coordinate-checklist}.
 
 \begin{theorem}\label{thm:primitive-ladder-dichotomy}
 Let $\theta=p^e\in\Atom(d)$ and suppose $d\mid n$. If $e=1$, then
@@ -1453,97 +1513,9 @@ Theorems~\ref{thm:fibonacci-three-coordinate-types} and
 \ref{thm:three-coordinate-nonemptiness}.
 \end{proof}
 
-\begin{proposition}[Reader's checklist for the three-coordinate table]
-\label{prop:three-coordinate-table-checklist}
-Assume $\mathcal P(n)=\{\ell_1,
-\ell_2,\ell_3\}$.  The following finite procedure returns exactly
-$\mathcal M_n$.
-\begin{enumerate}[label=(\roman*)]
-\item For every nonempty $J\subseteq[3]$, compute the primitive window
-$\mathcal R_J^\circ(n)$ and the rank classes
-$\Pi_\alpha(d)$ for $d\in\mathcal R_J^\circ(n)$ by
-Lemma~\ref{lem:primitive-prime-mobius-count}.  This gives every primitive
-slot $P_J(n)$.
-\item For each coordinate $i$, compute the single possible ladder candidate
-$\mathcal L_i^*(n)$ from
-Proposition~\ref{prop:three-coordinate-arithmetic-tests}, then retain it in
-$L_{i,J}(n)$ exactly for those $J$ for which its rank divides $n$ and has
-full-coordinate set $J$.
-\item For each coordinate permutation of each of the eight rows in
-Table~\ref{tab:three-coordinate-classification}, replace the displayed slots
-by the finite sets found in (i) and (ii), with
-$S_i(n)=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$.
-\item Keep precisely those row fillings whose selected prime powers have
-distinct underlying primes, equivalently those satisfying the Hall
-inequalities in Lemma~\ref{lem:finite-slot-selection}; multiply the selected
-prime powers.
-\end{enumerate}
-The products retained in (iv) are exactly the minimal generators listed in
-Theorem~\ref{thm:low-support-classification-package}.  In particular, the
-table is a closed finite classification for fixed $n$, not an interface to an
-additional infinite search.
-\end{proposition}
-
-\begin{proof}
-Step (i) is precisely the primitive-slot identity in
-Proposition~\ref{prop:three-coordinate-arithmetic-tests}; the M\"obius formula
-there is Lemma~\ref{lem:primitive-prime-mobius-count}.  Step (ii) is the
-ladder-slot identity in the same proposition, which says that every
-$L_{i,J}(n)$ is empty or consists of the displayed single candidate.  Step
-(iii) is only the coordinate-labelling convention of
-Theorem~\ref{thm:three-coordinate-nonemptiness}.  By that theorem, after the
-slots of a labelled row are replaced by their finite admissible sets, a row
-realizes a minimal generator if and only if the slot-selection test in step
-(iv) succeeds; Lemma~\ref{lem:finite-slot-selection} is exactly the stated
-Hall criterion for distinct underlying primes.  The one-factor rows
-$\Gamma_1$ and $\Gamma_3$ are the atomic generators with full
-three-coordinate support.  Conversely, every minimal generator with
-three-coordinate support has, by
-Corollary~\ref{cor:three-coordinate-realization}, one fixed labelled
-coordinate permutation of one of the eight row types and therefore appears in
-this procedure.  This proves both exhaustion and uniqueness with the same
-labelled-slot convention as Theorem~\ref{thm:three-coordinate-nonemptiness}.
-\end{proof}
-
-\begin{example}[Applying the checklist at $n=42$]
-\label{ex:n42-three-coordinate-checklist}
-Let $n=42=2\cdot3\cdot7$ and label the coordinates by
-$(\ell_1,\ell_2,\ell_3)=(2,3,7)$.  The prime factors of
-\[
-F_{42}=2^3\cdot13\cdot29\cdot211\cdot421
-\]
-have ranks
-\[
-\alpha(2)=3,
-\alpha(4)=6,
-\alpha(13)=7,
-\alpha(29)=14,
-\alpha(421)=21,
-\alpha(211)=42.
-\]
-Thus $\Atom(42)=\{211\}$.  The primitive windows used below are
-$P_{12}(42)=\varnothing$, $P_{13}(42)=\{29\}$,
-$P_{23}(42)=\{421\}$, and $P_{123}(42)=\{211\}$.  Singleton slots are
-$S_1(42)=\varnothing$, $S_2(42)=\{2\}$, and $S_3(42)=\{13\}$.  The proper
-ladder slots relevant here are
-$L_{1,12}(42)=\{4\}$, $L_{1,123}(42)=\varnothing$,
-$L_{2,J}(42)=\varnothing$, and $L_{3,J}(42)=\varnothing$.
-
-The table then gives the following non-atomic generators.  The row
-$\Gamma_4$ with the permuted slots $P_{13}$ and $P_{23}$ gives
-$29\cdot421=12209$.  The row $\Gamma_5$ gives
-$4\cdot421=1684$ from $L_{1,12}$ and $P_{23}$, while the analogous
-coordinate permutation with a primitive $P_{13}$ partner is not a row of type
-$\Gamma_5$ for this ladder orientation.  The row $\Gamma_7$ gives
-$2\cdot29=58$ from $S_2$ and $P_{13}$ after relabeling.  The row $\Gamma_8$
-gives $13\cdot4=52$ from $S_3$ and the permuted ladder slot $L_{1,12}$.
-All other rows fail because one of the required slots is empty.  Hence
-\[
-\mathcal M_{42}=\{52,58,211,1684,12209\}.
-\]
-The example illustrates the theorem's reading rule: every success or failure
-is decided by a finite slot list and a coprimeness check.
-\end{example}
+The finite slot-selection algorithm behind Table~\ref{tab:three-coordinate-classification}
+is recorded in Appendix~\ref{app:three-coordinate-checklist}; it is used below
+only to justify that the displayed table is an effective closed classification.
 
 \begin{theorem}[Complete low-support classification]
 \label{thm:low-support-classification-package}
@@ -1633,6 +1605,35 @@ labelled data, while Theorem~\ref{thm:witness-classification} identifies the
 resulting products with the elements of $\mathcal M_n$.
 \end{proof}
 
+\begin{corollary}[Low-support normal form]
+\label{cor:low-support-normal-form}
+Let $n\ge2$ with $\omega(n)\le3$, and let $\mathcal G_n$ be the finite
+classified generator set supplied by Theorem~\ref{thm:low-support-classification-package}.
+Then $\mathcal G_n$ is a canonical antichain in $D_n$ and, for every
+$q\in D_n$,
+\[
+q\in B_n\quad\Longleftrightarrow\quad
+\text{there exists }g\in\mathcal G_n\text{ with }g\mid q.
+\]
+Moreover $q$ is a minimal element of $B_n$ if and only if $q\in\mathcal G_n$.
+Thus in support at most three the birth layer is decided by a finite list of
+atomic slot tests followed by divisibility in $D_n$.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:low-support-classification-package} identifies the finite set
+$\mathcal G_n$ with $\mathcal M_n$, with the convention
+$\mathcal G_2=\varnothing=\mathcal M_2$.  Minimal elements of an upper set are
+pairwise incomparable, so $\mathcal G_n$ is an antichain in $D_n$.  The
+upper-fiber theorem, Theorem~\ref{thm:upper-fiber}, gives
+\[
+B_n=\bigcup_{m\in\mathcal M_n}\{q\in D_n:m\mid q\}.
+\]
+Replacing $\mathcal M_n$ by $\mathcal G_n$ gives the displayed membership
+criterion.  Finally, the minimal elements of this union of principal upper
+ideals are exactly the generators $\mathcal G_n$, because no two elements of
+$\mathcal G_n$ are comparable.
+\end{proof}
 \begin{corollary}[Complete low-support birth layers]
 \label{cor:low-support-birth-layer-package}
 Let $n\ge2$ and suppose $\omega(n)\le3$. Define $\mathcal G_n$ by the
@@ -2183,6 +2184,106 @@ their frequency or size.
 generally, to strong divisibility sequences equipped with a
 rank-of-apparition map and a primitive-divisor theorem.
 \end{enumerate}
+
+
+\appendix
+
+\section{Finite verification for the three-coordinate table}
+\label{app:three-coordinate-checklist}
+
+\begin{proposition}[Reader's checklist for the three-coordinate table]
+\label{prop:three-coordinate-table-checklist}
+Assume $\mathcal P(n)=\{\ell_1,
+\ell_2,\ell_3\}$.  The following finite procedure returns exactly
+$\mathcal M_n$.
+\begin{enumerate}[label=(\roman*)]
+\item For every nonempty $J\subseteq[3]$, compute the primitive window
+$\mathcal R_J^\circ(n)$ and the rank classes
+$\Pi_\alpha(d)$ for $d\in\mathcal R_J^\circ(n)$ by
+Lemma~\ref{lem:primitive-prime-mobius-count}.  This gives every primitive
+slot $P_J(n)$.
+\item For each coordinate $i$, compute the single possible ladder candidate
+$\mathcal L_i^*(n)$ from
+Proposition~\ref{prop:three-coordinate-arithmetic-tests}, then retain it in
+$L_{i,J}(n)$ exactly for those $J$ for which its rank divides $n$ and has
+full-coordinate set $J$.
+\item For each coordinate permutation of each of the eight rows in
+Table~\ref{tab:three-coordinate-classification}, replace the displayed slots
+by the finite sets found in (i) and (ii), with
+$S_i(n)=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$.
+\item Keep precisely those row fillings whose selected prime powers have
+distinct underlying primes, equivalently those satisfying the Hall
+inequalities in Lemma~\ref{lem:finite-slot-selection}; multiply the selected
+prime powers.
+\end{enumerate}
+The products retained in (iv) are exactly the minimal generators listed in
+Theorem~\ref{thm:low-support-classification-package}.  In particular, the
+table is a closed finite classification for fixed $n$, not an interface to an
+additional infinite search.
+\end{proposition}
+
+\begin{proof}
+Step (i) is precisely the primitive-slot identity in
+Proposition~\ref{prop:three-coordinate-arithmetic-tests}; the M\"obius formula
+there is Lemma~\ref{lem:primitive-prime-mobius-count}.  Step (ii) is the
+ladder-slot identity in the same proposition, which says that every
+$L_{i,J}(n)$ is empty or consists of the displayed single candidate.  Step
+(iii) is only the coordinate-labelling convention of
+Theorem~\ref{thm:three-coordinate-nonemptiness}.  By that theorem, after the
+slots of a labelled row are replaced by their finite admissible sets, a row
+realizes a minimal generator if and only if the slot-selection test in step
+(iv) succeeds; Lemma~\ref{lem:finite-slot-selection} is exactly the stated
+Hall criterion for distinct underlying primes.  The one-factor rows
+$\Gamma_1$ and $\Gamma_3$ are the atomic generators with full
+three-coordinate support.  Conversely, every minimal generator with
+three-coordinate support has, by
+Corollary~\ref{cor:three-coordinate-realization}, one fixed labelled
+coordinate permutation of one of the eight row types and therefore appears in
+this procedure.  This proves both exhaustion and uniqueness with the same
+labelled-slot convention as Theorem~\ref{thm:three-coordinate-nonemptiness}.
+\end{proof}
+
+\begin{example}[Applying the checklist at $n=42$]
+\label{ex:n42-three-coordinate-checklist}
+Let $n=42=2\cdot3\cdot7$ and label the coordinates by
+$(\ell_1,\ell_2,\ell_3)=(2,3,7)$.  The prime factors of
+\[
+F_{42}=2^3\cdot13\cdot29\cdot211\cdot421
+\]
+have ranks
+\[
+\alpha(2)=3,
+\alpha(4)=6,
+\alpha(13)=7,
+\alpha(29)=14,
+\alpha(421)=21,
+\alpha(211)=42.
+\]
+Thus $\Atom(42)=\{211\}$.  The primitive windows used below are
+$P_{12}(42)=\varnothing$, $P_{13}(42)=\{29\}$,
+$P_{23}(42)=\{421\}$, and $P_{123}(42)=\{211\}$.  Singleton slots are
+$S_1(42)=\varnothing$, $S_2(42)=\{2\}$, and $S_3(42)=\{13\}$.  The proper
+ladder slots relevant here are
+$L_{1,12}(42)=\{4\}$, $L_{1,123}(42)=\varnothing$,
+$L_{2,J}(42)=\varnothing$, and $L_{3,J}(42)=\varnothing$.
+
+The table then gives the following non-atomic generators.  The row
+$\Gamma_4$ with the permuted slots $P_{13}$ and $P_{23}$ gives
+$29\cdot421=12209$.  The row $\Gamma_5$ gives
+$4\cdot421=1684$ from $L_{1,12}$ and $P_{23}$, while the analogous
+coordinate permutation with a primitive $P_{13}$ partner is not a row of type
+$\Gamma_5$ for this ladder orientation.  The row $\Gamma_7$ gives
+$2\cdot29=58$ from $S_2$ and $P_{13}$ after relabeling.  The row $\Gamma_8$
+gives $13\cdot4=52$ from $S_3$ and the permuted ladder slot $L_{1,12}$.
+All other rows fail because one of the required slots is empty.  Hence
+\[
+\mathcal M_{42}=\{52,58,211,1684,12209\}.
+\]
+The example illustrates the theorem's reading rule: every success or failure
+is decided by a finite slot list and a coprimeness check.
+\end{example}
+
+%% ====================================================================
 
 %% ====================================================================
 \section*{Table source note}
