@@ -7,7 +7,7 @@ from the paper root.  The reference software class is SageMath \(10.x\) running 
 \[
 \texttt{320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429}.
 \]
-No external black-box data file is used: the SageMath check in item \textup{(vi)} recomputes the finite lists, matrix, characteristic-polynomial factor, and Sturm signs from the definitions.  A non-Sage Python \(3.10+\) stream verifier is also supplied for the canonical fiber, edge, stabilizer, residual, and stochastic endpoint-sum streams; it does not certify the determinant or Sturm sequence.  The companion printed determinant--Sturm file records the determinant identity, the full integer polynomial, the rational Sturm endpoint convention, and the residual witness as an independent referee checklist.  These files are part of the submitted journal supplement.  The same byte-normalized source files and expected transcript strings displayed below are the complete data package to deposit in a DOI-bearing permanent archive before final submission or at acceptance.
+No external black-box data file is used: the SageMath check in item \textup{(vi)} recomputes the finite lists, matrix, characteristic-polynomial factor, and Sturm signs from the definitions.  A non-Sage Python \(3.10+\) stream verifier is also supplied for the canonical fiber, edge, stabilizer, residual, and stochastic endpoint-sum streams; it does not certify the determinant or Sturm sequence.  The companion printed determinant--Sturm file records the determinant identity, the full integer polynomial, the rational Sturm endpoint convention, and the residual witness as an independent referee checklist.  These files are part of the submitted journal supplement.  The same byte-normalized source files and expected transcript strings displayed below are the complete permanent-archive payload.  The DOI or stable repository URL for that payload is a bibliographic field to be filled after the final accepted files are deposited; no mathematical assertion in the paper depends on a mutable repository state.
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item For each \(m\), enumerate \(\Omega_m\) in increasing dyadic order and enumerate \(X_m\) lexicographically.  For \(N\in[0,2^m-1]\), compute its greedy Zeckendorf digits by repeatedly subtracting the largest available Fibonacci weight \(F_{r+1}\) and then skipping the adjacent weight.  The fold value is the length-\(m\) prefix \((z_1(N),\ldots,z_m(N))\).
 \item For \(m=6,7,8\), the boundary words and boundary fiber cardinalities are as follows:
@@ -336,7 +336,7 @@ The exact audit for Theorem \ref{thm:main-fold6-nonlumpability} is completely de
 \begin{center}
 \begin{minipage}{0.92\linewidth}
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-ca0f8e2e5b21255c8a851603f5ffc58b8eee4f8921739698645ea2fdfc4e8c11
+79f8b860db6fb9f2a3c9c020189c4ef471c899a7e2cf4b0a9863b0477d96d2e1
 \end{Verbatim}
 \end{minipage}
 \end{center}
@@ -354,19 +354,66 @@ This second verifier checks the canonical fiber, edge, stabilizer, and residual 
 \begin{center}
 \begin{minipage}{0.92\linewidth}
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
-27ed3bca3b073e59ec598098427b04d5a7dd4986f79da1c2f4a1f240419957fc
+aead653619acac27ce0f82c722f3fe788d04737b821679e1e7d8fd65d1921fbb
 649a35038136cd944cce17740a6dc9c30e2671e5f59aeccc64235f25aa733a99
 \end{Verbatim}
 \end{minipage}
 \end{center}
 recording the stream contents, determinant identity, coefficient stream, Sturm endpoint signs, residual witness, and expected executable output.
-\item Permanent archive package: the four files in this manifest, together with \texttt{main.tex}, the included source files, and \texttt{references.bib}, form the journal supplement and the DOI-deposit payload.  The archive record must list the byte-normalized SHA--256 digests above so that later readers can reproduce the exact determinant and Sturm certificate without depending on mutable repository state.
+\item Permanent archive package: the four files in this manifest, together with \texttt{main.tex}, the included source files, and \texttt{references.bib}, form the journal supplement and the permanent-archive payload.  The archive record must list the byte-normalized SHA--256 digests above and its DOI or stable repository URL will be inserted in the final bibliographic metadata after deposit, so that later readers can reproduce the exact determinant and Sturm certificate without depending on mutable repository state.
 \end{enumerate}
 A verifier that recomputes these rows from the definitions accepts exactly when every displayed hash, integer stream, residual count, determinant coefficient, Sturm sign string, and expected output line agrees with the printed data.  Upon acceptance, all finite data used in Theorem \ref{thm:main-fold6-nonlumpability}, Corollaries \ref{cor:main-fold6-boundary-orientation-consequence}--\ref{cor:main-fold6-register-entropy-consequence}, and Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate} have been checked by exact arithmetic.
 \end{proposition}
 
 \begin{proof}
 The first row fixes the byte-normalized exact-arithmetic verifier and its successful transcript.  The second row gives an independent pure-Python check for the non-algebraic streams and records its successful transcript, so a reader without SageMath can still verify the finite enumeration, edge-count, stabilizer, and residual data.  The fiber and directed-edge rows fix the finite fold table and the directed edge-count matrix, hence the block-indicator matrix and the rational pushforward kernel by Propositions \ref{prop:foldbin6-canonical-fiber-table} and \ref{prop:foldbin6-exact-pushforward-matrix}.  The stabilizer and residual row fixes the two finite auxiliary assertions used outside the matrix itself: the geometric stabilizer identity used in the chiral and boundary consequences and the two-count residual witness used in Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness}.  The determinant row fixes the cleared characteristic factor of the exact rational matrix.  The Sturm row fixes the signs of the rational Sturm sequence at the four rational endpoints, which is the complete transcript needed by Sturm's theorem to certify one zero in each isolating interval.  The printed-transcript row provides a stable human-readable copy of these same streams, and the archive row specifies the permanent supplementary data package.  Proposition \ref{prop:window6-audit-output-wrapper} proves that these rows are precisely the finite objects invoked by the main theorem chain; therefore an accepting verifier has checked all of them and no unlisted finite datum remains. \qedhere
+\end{proof}
+
+\begin{proposition}[Journal-facing exact-computation proof protocol]\label{prop:journal-facing-computation-proof-protocol}
+The determinant and Sturm claims used in Lemma \ref{lem:foldbin6-characteristic-certificate}, Lemma \ref{lem:foldbin6-eigenvalue-interval-certificate}, and Theorem \ref{thm:main-fold6-nonlumpability} are valid under the following finite verification protocol.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \textup{(Environment.)}  The exact verifier is run from the paper root by
+\[
+\texttt{sage supplement/window6\_audit\_certificate.sage}.
+\]
+The required software class is SageMath \(10.x\) with Python \(3\), using exact rational and integer arithmetic in \(\QQ\), \(\ZZ\), \texttt{Matrix}, and \texttt{PolynomialRing}; floating-point eigensolvers are not part of the protocol.  The independent stream-only check is run by
+\[
+\texttt{python supplement/verify\_window6\_streams.py}
+\]
+under Python \(3.10+\).
+\item \textup{(Fixed artifacts.)}  Before executing the commands, the verifier checks that the byte-normalized SHA--256 digests of the two executable files and the two printed transcript files are
+\begin{center}
+\begin{minipage}{0.94\linewidth}
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\scriptsize]
+320f9fe5a906225bec46b07e0266e6ea0143382a52bea38c4052c44983ece429  supplement/window6_audit_certificate.sage
+79f8b860db6fb9f2a3c9c020189c4ef471c899a7e2cf4b0a9863b0477d96d2e1  supplement/verify_window6_streams.py
+aead653619acac27ce0f82c722f3fe788d04737b821679e1e7d8fd65d1921fbb  supplement/window6_canonical_streams.txt
+649a35038136cd944cce17740a6dc9c30e2671e5f59aeccc64235f25aa733a99  supplement/window6_exact_determinant_sturm_certificate.txt
+\end{Verbatim}
+\end{minipage}
+\end{center}
+and checks the internal stream digests listed in Proposition \ref{prop:window6-audit-output-wrapper}.
+\item \textup{(Acceptance.)}  The Sage command accepts exactly when it prints
+\begin{center}
+\texttt{window6 finite audit certificate: all assertions passed},
+\end{center}
+after recomputing the finite fold table, the directed edge-count matrix \(N\), the rational pushforward \(P_6(i,j)=N_{ij}/(6d_i)\), the determinant identity \(\det(tI-P_6)=(t-1)q_6(t)\), the cleared integer polynomial \(Q_6=L_6q_6\), and the rational Sturm endpoint signs.  The Python command accepts exactly when it prints
+\begin{center}
+\texttt{window6 canonical streams: all assertions passed},
+\end{center}
+after recomputing the canonical fiber, edge, stabilizer, residual, and endpoint-sum streams.
+\item \textup{(Mathematical criterion.)}  Acceptance requires equality, over \(\ZZ\) or \(\QQ\), with every printed stream and coefficient in Propositions \ref{prop:audited-computation-reproducibility-certificate} and \ref{prop:window6-audit-output-wrapper}.  In particular, the accepted Sturm sign strings must give variation drops \(1	o0\) on \((4841207858/10^{10},4841207859/10^{10})\) and \(20	o19\) on \((-6030939755/10^{10},-6030939754/10^{10})\).  These two variation drops certify one real zero of \(Q_6\), hence of \(q_6\), in each displayed interval.
+\item \textup{(Archive metadata.)}  The permanent supplementary archive for the accepted version consists of exactly the four files in item \textup{(ii)}, the submitted \texttt{main.tex}, all included \texttt{source/*.tex} files, and \texttt{references.bib}, with the SHA--256 digests printed in the archive record.  The DOI or stable repository URL is not used as evidence for the theorem; it is the durable pointer to the already specified byte-level evidence.
+\end{enumerate}
+Consequently, any accepting implementation of this protocol independently verifies the determinant factor, the two Sturm root counts, the residual witness, and every finite datum from which the window-\(6\) nonlumpability theorem is derived.
+\end{proposition}
+
+\begin{proof}
+The environment clause fixes the arithmetic model: Sage constructs \(N\), \(P_6\), \(\det(tI-P_6)\), and the Sturm sequence in exact rings, so all comparisons are finite equality tests in \(\ZZ\) or \(\QQ\).  The artifact clause prevents a verifier from substituting a different script or transcript: SHA--256 equality identifies the byte-normalized inputs, and Proposition \ref{prop:window6-audit-output-wrapper} identifies the internal mathematical streams those inputs must reproduce.
+
+If the Sage command accepts, its asserted determinant identity gives the same polynomial \(Q_6\) as Lemma \ref{lem:foldbin6-characteristic-certificate}.  Sturm's theorem over \(\QQ[t]\) says that the number of distinct real roots of \(Q_6\) in an interval avoiding endpoints is the difference between the numbers of sign variations of the Sturm sequence at the two endpoints.  The accepted sign strings therefore give exactly one root in each of the two rational intervals in item \textup{(iv)}.  Because the endpoints are rational and the displayed signs are nonzero, no endpoint root is being counted.  Dividing by the nonzero scalar \(L_6\) and by the already separated factor \(t-1\) preserves these two off-grid roots for \(q_6\), hence for \(\det(tI-P_6)\).
+
+If the Python stream verifier accepts, it supplies an independent exact check of the finite enumeration, edge stream, stabilizer identity, and residual witness.  These are precisely the non-spectral data used by Proposition \ref{prop:foldbin6-exact-pushforward-matrix}, Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness}, and Lemma \ref{lem:window6-geometric-stabilizer-audit}.  The archive clause contributes no new mathematical hypothesis; it only requires the final public record to point to the same byte-level artifacts.  Thus an accepting verifier has checked every finite computation invoked by Lemmas \ref{lem:foldbin6-characteristic-certificate} and \ref{lem:foldbin6-eigenvalue-interval-certificate} and by Theorem \ref{thm:main-fold6-nonlumpability}. \qedhere
 \end{proof}
 
 \endinput
