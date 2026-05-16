@@ -489,7 +489,7 @@ A_k(\nu):={\rm ev}_{\nu,k}(A_k^{\rm form}),
 \end{equation}
 for the resulting finite-moment evaluation.
 
-\begin{theorem}[Universal entropy coefficients: formal layer]%
+\begin{theorem}[Universal entropy coefficient package]%
 \label{thm:universal-entropy-coefficients}
 Let $k\ge0$.  In the completed formal Laurent algebra
 $\mathcal P_k[[t^{-1}]]$, truncate every product after collecting total
@@ -503,10 +503,34 @@ then the coefficient of $t^{-k}$ in the formal expression
 -\delta^{\rm form}_t\bigr)\,\dd\omega
 \]
 is precisely $A_k^{\rm form}$ in
-\eqref{eq:universal-entropy-coefficient}.  Moreover,
+\eqref{eq:universal-entropy-coefficient}.  Moreover, if $\nu$ is a
+probability measure on~$\RR$ with mean $\bar\gamma$ and centred moments
+$\mu_n=\int(\gamma-\bar\gamma)^n\dd\nu$ through order~$k$, then the evaluated
+coefficient defined by \eqref{eq:universal-entropy-coefficient-evaluation} is
+the explicit finite polynomial
+\begin{equation}\label{eq:universal-coefficient-theorem-evaluated}
+A_k(\nu)
+=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1,\dots,n_r\ge2\\ n_1+\cdots+n_r=k}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\dots,n_r),
+\end{equation}
+and is equivalently the coefficient of $t^{-k}$ in
+\begin{equation}\label{eq:universal-coefficient-theorem-generating}
+\int_{\RR}
+\left(
+\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+\log\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+-\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}
+\right)\dd\omega,
+\end{equation}
+after formal truncation at total $t$-degree~$k$.  Finally,
 \begin{equation}\label{eq:universal-odd-coefficients-vanish}
 A_k^{\rm form}=0\qquad\text{whenever }k\text{ is odd}.
 \end{equation}
+Consequently $A_k(\nu)=0$ for odd~$k$ whenever the moments required to evaluate
+$A_k(\nu)$ exist.
 \end{theorem}
 
 \begin{proof}
@@ -525,13 +549,21 @@ u_{n_1}(y)\cdots u_{n_r}(y)t^{-(n_1+\cdots+n_r)},
 For fixed total degree~$k$ there are only finitely many such monomials, and
 necessarily $2\le r\le\lfloor k/2\rfloor$.  Integrating the degree-$k$ part
 against~$\omega$ gives exactly \eqref{eq:universal-entropy-coefficient}.
+Evaluation by ${\rm ev}_{\nu,k}$ is a homomorphism from the finite polynomial
+algebra $\mathcal P_k$ to~$\RR$.  Applying it to
+\eqref{eq:universal-entropy-coefficient} gives
+\eqref{eq:universal-coefficient-theorem-evaluated}, and applying it
+coefficient-by-coefficient to the finite truncated formal generating identity
+gives \eqref{eq:universal-coefficient-theorem-generating}.  This evaluation
+uses only the centred moments through order~$k$.
 
 It remains to prove the odd cancellation.  By
 \eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$, while
 $\omega(\dd y)$ is even.  Hence the integrand in
 $I(n_1,\dots,n_r)$ is odd whenever $n_1+\cdots+n_r$ is odd, and then the
 integral vanishes.  Every summand in $A_k^{\rm form}$ has total index~$k$, so
-all summands vanish when $k$ is odd.
+all summands vanish when $k$ is odd.  Evaluating this formal identity gives
+the asserted odd vanishing of $A_k(\nu)$.
 \end{proof}
 
 \begin{proposition}[Universal entropy coefficients: finite-moment layer]%
@@ -1726,6 +1758,97 @@ $2S^{N+1}t^{-(2N+2)}$, because $\omega$ is a probability measure.  Combining
 the three displayed estimates proves \eqref{eq:explicit-entropy-constant-bound}.
 \end{proof}
 
+\begin{lemma}[Moment-ball domination of density and entropy constants]%
+\label{lem:moment-ball-uniform-constant-domination}
+Fix $N\ge2$, $0<\eta\le1$, and $M<\infty$, and put $p=2N+\eta$.  There are
+finite constants
+\[
+\overline C_{N,\eta,M}^{\rho},\qquad
+\overline S_{N,\eta,M},
+\qquad
+\overline C_{N,\eta,M}^{\rm dens},
+\qquad
+\overline C_{N,\eta,M}^{\rm Tay},
+\qquad
+\overline T_{N,\eta,M}^{\rm ent}
+\]
+depending only on $N$, $\eta$, $M$, and the universal norms of the modes
+$u_2,\ldots,u_{2N}$, such that every probability measure $\nu$ with finite
+mean $\bar\gamma$ and
+\[
+\int_{\RR}|\gamma-\bar\gamma|^p\dd\nu(\gamma)\le M
+\]
+satisfies
+\begin{align*}
+C_{\nu,2N,\eta}&\le \overline C_{N,\eta,M}^{\rho},
+&
+S_{\nu,2N,\eta}&\le \overline S_{N,\eta,M},
+\\
+C_{N,\eta}^{\rm dens}(\nu)&\le
+\overline C_{N,\eta,M}^{\rm dens},
+&
+C_{N,\eta}^{\rm Tay}(\nu)&\le
+\overline C_{N,\eta,M}^{\rm Tay},
+&
+T_{N,\eta}^{\rm ent}(\nu)&\le
+\overline T_{N,\eta,M}^{\rm ent}.
+\end{align*}
+Consequently the density remainder
+\eqref{eq:finite-moment-density-remainder}, the density smallness threshold
+\eqref{eq:finite-moment-density-smallness}, and the entropy constants in
+\eqref{eq:explicit-entropy-constant-bound} are uniformly dominated on the
+centred $p$-moment ball.
+\end{lemma}
+
+\begin{proof}
+For $2\le n\le2N$, Lyapunov's inequality gives
+$|\mu_n|\le M^{n/p}$.  The density theorem with $L=2N$ gives the explicit
+constant
+\[
+C_{\nu,2N,\eta}=2C_{2N}\EE|\Delta|^p\le2C_{2N}M,
+\]
+where $C_{2N}$ is determined only by $2N$ and the universal bounded remainders
+and mode norms.  Thus we may take
+$\overline C_{N,\eta,M}^{\rho}=2C_{2N}M$.  Since
+\[
+S_{\nu,2N,\eta}=B_{2N}\sum_{n=2}^{2N}|\mu_n|+C_{\nu,2N,\eta},
+\]
+the same moment bounds give the uniform finite number
+\[
+\overline S_{N,\eta,M}:=
+B_{2N}\sum_{n=2}^{2N}M^{n/p}+2C_{2N}M .
+\]
+The threshold definition then yields
+\[
+T_{N,\eta}^{\rm ent}(\nu)=\max\{1,T_{\nu,2N,\eta}\}
+\le \max\{1,(2\overline S_{N,\eta,M})^{1/2}\}
+=:\overline T_{N,\eta,M}^{\rm ent}.
+\]
+
+It remains only to dominate the finite entropy sums in
+Lemma~\ref{lem:explicit-entropy-constant-bound}.  Let
+\[
+\overline M_{A,N,\eta,M}:=
+\sum_{n=2}^{2N}M^{n/p}\|u_n\|_\infty .
+\]
+Substituting the bounds
+$M_A\le\overline M_{A,N,\eta,M}$ and
+$C_\rho\le\overline C_{N,\eta,M}^{\rho}$ into the finite sum
+\eqref{eq:entropy-constant-product-error} gives a uniform bound for
+$\mathfrak P_{N,\eta}(\nu)$.  Substituting
+$|\mu_{n_j}|\le M^{n_j/p}$ into the finite sum
+\eqref{eq:entropy-constant-truncation-error} gives a uniform bound for
+$\mathfrak Q_N(\nu)$; its remaining factors are the fixed universal quantities
+$\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)}$, bounded in turn by the displayed
+mode norms because $\omega$ has mass one.  These two uniform finite bounds
+define $\overline C_{N,\eta,M}^{\rm dens}$.  Finally
+$C_{N,\eta}^{\rm Tay}(\nu)=2S_{\nu,2N,\eta}^{N+1}$ is bounded by
+\[
+\overline C_{N,\eta,M}^{\rm Tay}:=2\overline S_{N,\eta,M}^{N+1}.
+\]
+All constants are therefore controlled by the announced data alone.
+\end{proof}
+
 \begin{proposition}[Finite-moment entropy descent interface]%
 \label{prop:finite-moment-entropy-descent-interface}
 Let $N\ge2$, $0<\eta\le1$, and let $\nu$ have mean $\bar\gamma$ and finite
@@ -2013,28 +2136,20 @@ remain the moment polynomials of the individual law.
 \end{corollary}
 
 \begin{proof}
-Let $p:=2N+\eta$.  For $2\le n\le2N$, Lyapunov's inequality gives
-$|\mu_n|\le M^{n/p}$.  In Theorem~\ref{thm:finite-moment-density-remainder}
-with $L=2N$, the density constant satisfies
-$C_{\nu,2N,\eta}=2C_{2N}\EE|\Delta|^p\le2C_{2N}M$, where $C_{2N}$ is the
-universal constant defined there.  Hence the quantities
-\[
-M_A=\sum_{n=2}^{2N}|\mu_n|\|u_n\|_\infty,
-\qquad
-S_{\nu,2N,\eta}=B_{2N}\sum_{n=2}^{2N}|\mu_n|+C_{\nu,2N,\eta}
-\]
-which enter Lemma~\ref{lem:explicit-entropy-constant-bound} are bounded by
-finite constants depending only on $N$, $\eta$, $M$, and the universal mode
-norms.  Substituting these bounds in the finite sums
-\eqref{eq:entropy-constant-product-error} and
-\eqref{eq:entropy-constant-truncation-error} gives a uniform upper bound for
-$C_{N,\eta}^{\rm dens}(\nu)$; substituting the uniform bound for
-$S_{\nu,2N,\eta}$ in $2S^{N+1}$ gives a uniform upper bound for
-$C_{N,\eta}^{\rm Tay}(\nu)$.  The same bound for $S_{\nu,2N,\eta}$ gives a
-uniform threshold for $T_{N,\eta}^{\rm ent}(\nu)$.  Applying
-Theorem~\ref{thm:poisson-kl-even-orders} with these three dominating constants
-proves \eqref{eq:uniform-moment-ball-entropy-remainder} uniformly over the
-moment ball.
+Apply Lemma~\ref{lem:moment-ball-uniform-constant-domination}.  It gives
+uniform dominating constants for the density remainder constant
+$C_{\nu,2N,\eta}$, the smallness quantity $S_{\nu,2N,\eta}$, the entropy
+constants $C_{N,\eta}^{\rm dens}(\nu)$ and $C_{N,\eta}^{\rm Tay}(\nu)$ from
+\eqref{eq:explicit-entropy-constant-bound}, and the threshold
+$T_{N,\eta}^{\rm ent}(\nu)$, all depending only on $N$, $\eta$, $M$, and the
+universal mode norms.  Choose
+$C_{N,\eta,M}^{\rm dens}$, $C_{N,\eta,M}^{\rm Tay}$, and
+$T_{N,\eta,M}^{\rm ent}$ to be those dominating constants.  The explicit
+remainder estimate in Theorem~\ref{thm:poisson-kl-even-orders}, with these
+larger constants substituted, gives
+\eqref{eq:uniform-moment-ball-entropy-remainder} for every law in the moment
+ball.  The coefficients are still the evaluated moment polynomials of the
+individual law, so only the remainder constants and threshold are made uniform.
 \end{proof}
 
 \begin{theorem}[Finite-moment entropy remainder]%
