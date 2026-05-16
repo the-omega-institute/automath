@@ -5,6 +5,42 @@
 Since $Z(t,y)=N(t,y)/D(t,y)$ with $\deg_t D=4$, the sequence $\{Z_m(y)\}$ satisfies a linear recurrence of order at most $4$.
 Away from the standard degeneracy set in $y$, there is no numerator--denominator cancellation, so the order is exactly $4$; this is a standard property of reduced rational generating functions \cite{Stanley2012,FlajoletSedgewick2009,Partington1989}.
 
+\begin{lemma}[Reduced rational sequences and Hankel rank]\label{lem:reduced-rational-hankel}
+Let
+\[
+A(t)=\sum_{m\ge0}a_m t^m=\frac{P(t)}{Q(t)}\in\CC[[t]],
+\qquad
+Q(0)=1,
+\]
+with \(P,Q\in\CC[t]\), \(\gcd(P,Q)=1\), and \(r=\deg Q\ge1\).
+Then the least order of a constant-coefficient recurrence satisfied by \(\{a_m\}_{m\ge0}\) for all sufficiently large \(m\) is \(r\).
+If in addition \(\deg P<r\), then the infinite Hankel matrix \((a_{i+j})_{i,j\ge0}\) has rank \(r\).
+\end{lemma}
+
+\begin{proof}
+Write \(Q(t)=1+q_1t+\cdots+q_rt^r\) with \(q_r\ne0\).
+The coefficient identity \(Q(t)A(t)=P(t)\) gives
+\[
+a_m+q_1a_{m-1}+\cdots+q_ra_{m-r}=0
+\]
+for all \(m>\deg P\), so an order-\(r\) tail recurrence holds.
+Conversely, suppose a tail recurrence of order \(s<r\) holds, and put \(L(t)=1+\ell_1t+\cdots+\ell_st^s\) for its monic recurrence polynomial.
+Then \(L(t)A(t)\) has only finitely many nonzero coefficients outside its initial polynomial part, so \(L(t)A(t)=B(t)\) is a polynomial.
+Thus \(L(t)P(t)=B(t)Q(t)\).
+Since \(P\) and \(Q\) are coprime, \(Q\mid L\), impossible because \(\deg L=s<r=\deg Q\).
+Hence the tail order is exactly \(r\).
+
+Assume now \(\deg P<r\), so no polynomial part is present and the recurrence begins at \(m=r\).
+The recurrence expresses every Hankel column with index \(j\ge r\) as a linear combination of the preceding \(r\) columns, hence the Hankel rank is at most \(r\).
+If the rank were at most \(r-1\), then the first \(r\) columns would be linearly dependent: for some nonzero vector \((c_0,\ldots,c_{r-1})\),
+\[
+\sum_{j=0}^{r-1}c_j a_{i+j}=0
+\qquad (i\ge0).
+\]
+After dividing by the highest nonzero coefficient and shifting indices, this is a recurrence of order at most \(r-1\) beginning from some finite index, contradicting the minimal tail order just proved.
+Therefore the Hankel rank is exactly \(r\).
+\end{proof}
+
 \begin{theorem}[Generic reduced recurrence and Hankel rank]\label{thm:minimal-order}
 For \(y\notin\{-1,0,1\}\), the polynomials \(N(t,y)\) and \(D(t,y)\) are coprime in \(\CC[t]\).
 Consequently, the minimal linear recurrence order of \(\{Z_m(y)\}_{m\ge 0}\) is \(4\), and its Hankel rank is \(4\).
@@ -16,13 +52,12 @@ Appendix~\ref{app:degeneracies} records the resultant
 \operatorname{Res}_t(N,D)=y^3(y-1)^3(y+1)^6,
 \end{equation}
 showing that cancellations occur only at \(y\in\{-1,0,1\}\).
-For all other $y$, the rational function $Z(t,y)$ is reduced with a denominator of degree $4$, so the recurrence order cannot drop below $4$.
-Equation~\eqref{eq:recurrence} already shows that order-$4$ relations hold, proving minimality.
+For all other $y$, the rational function $Z(t,y)$ is reduced with a denominator of degree $4$ and a numerator of degree less than $4$.
+Lemma~\ref{lem:reduced-rational-hankel} therefore shows both that the recurrence order cannot drop below $4$ and that the Hankel rank is $4$.
+Equation~\eqref{eq:recurrence} already displays the order-$4$ relation explicitly.
 
 Let \(H=(Z_{i+j}(y))_{i,j\ge 0}\) be the infinite Hankel matrix.
-The recurrence \eqref{eq:recurrence} forces every column with index \(j\ge 4\) to lie in the span of the preceding four columns, hence \(\operatorname{rank} H\le 4\).
-If $\operatorname{rank}H<4$, the first four columns would be dependent, giving a recurrence of order at most $3$, which contradicts the minimality established above.
-Therefore the Hankel rank is exactly $4$.
+The preceding paragraph applies the finite-rank part of the lemma to this $H$.
 \end{proof}
 
 \subsection{Degenerate parameters}
@@ -65,7 +100,7 @@ N(t,-1)=D(t,-1)=1-t+t^2-t^3,
 \]
 and hence \(Z(t,-1)=1\).  These identities prove the entries in the first three columns of the table.
 
-The recurrence order column follows from the standard reduced-denominator criterion for rational sequences: a reduced denominator of degree \(r\) is the minimal denominator of the sequence after removing any finite polynomial part, and its coefficients give the minimal tail recurrence of order \(r\).  Thus the two geometric sequences at \(y=0\) and \(y=1\) have order one, while the polynomial generating function at \(y=-1\) has tail order zero.
+The recurrence order column follows from Lemma~\ref{lem:reduced-rational-hankel}: a reduced denominator of degree \(r\) is the minimal denominator of the sequence after removing any finite polynomial part, and its coefficients give the minimal tail recurrence of order \(r\).  Thus the two geometric sequences at \(y=0\) and \(y=1\) have order one, while the polynomial generating function at \(y=-1\) has tail order zero.
 
 It remains only to compute the Hankel ranks.  For \(y=0\), \(Z_m(0)=1\), so
 \[
