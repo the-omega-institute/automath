@@ -6,16 +6,16 @@ It does not write Automath paper or Lean content directly.
 
 ## Current Signal
 
-- NewMath-to-Automath gate rows: `7`
-- Killo/golden writeback-eligible rows: `1`
-- Killo/golden review-blocked bridge sources: `1`
-- PI actions: `4`
+- NewMath-to-Automath gate rows: `9`
+- Killo/golden writeback-eligible rows: `0`
+- Killo/golden review-blocked bridge sources: `0`
+- PI actions: `3`
 
 ## Blocked Counts
 
 | Reason | Count |
 | --- | ---: |
-| `awaiting_operator_acceptance` | 4 |
+| `awaiting_operator_acceptance` | 7 |
 | `observe_only` | 2 |
 
 ## NewMath ACK Status Counts
@@ -30,15 +30,14 @@ It does not write Automath paper or Lean content directly.
 
 | Source | Source Path |
 | --- | --- |
-| `NewMath bridge source: intro and carrier` | `papers/bedc/parts/concrete_instances/banach/intro_and_carrier.tex` |
+| _none_ | _none_ |
 
 ## PI Actions
 
 | Action | Effect | Severity |
 | --- | --- | --- |
 | `pi:automath:killo_golden_codex_fallback` | `use_codex_when_claude_unavailable` | `high` |
-| `pi:automath:run_killo_golden_writeback` | `bridge_supervisor_may_apply_writeback_adapter` | `high` |
-| `pi:automath:killo_golden_review_blocked` | `refine_bridge_source_context_and_retry` | `high` |
+| `pi:automath:no_eligible_writeback` | `continue_scanning_and_wait_for_accepted_or_consumed_rows` | `medium` |
 | `pi:automath:consume_newmath_ack_status` | `use_ack_reasons_to_adjust_next_scan` | `info` |
 
 ## Control Policy
