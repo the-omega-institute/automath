@@ -969,11 +969,12 @@ $\{1,2,6,12,n\}$, so $|\mathcal D_n^*|\ge\tau(n)-5$.
 %% ====================================================================
 
 This section keeps the low-support classification in the main theorem stream
-and suppresses only routine finite matching.  The essential point is that the
-witness-cover theorem reduces every case with at most three prime coordinates
-to a finite list of atomic slots.  The arithmetic tests for filling those slots
-are stated here; the reader-facing checklist and the worked $n=42$ verification
-are collected in Appendix~\ref{app:three-coordinate-checklist}.
+while treating the slot mechanics as proof support.  The FQ-facing conclusion is
+Theorem~\ref{thm:low-support-classification-package}: for support three there
+are exactly eight admissible families, and every remaining decision is a finite
+slot-filling test.  The arithmetic tests for filling those slots are stated here;
+the reader-facing checklist and the worked $n=42$ verification are collected in
+Appendix~\ref{app:three-coordinate-checklist}.
 
 \begin{theorem}\label{thm:primitive-ladder-dichotomy}
 Let $\theta=p^e\in\Atom(d)$ and suppose $d\mid n$. If $e=1$, then
@@ -1127,8 +1128,10 @@ $\theta_1\theta_2\in\mathcal M_n$. The two displayed families are disjoint
 because their elements have respectively one and two prime-power factors.
 \end{proof}
 
-We now classify the three-support case. The reader should keep the following
-four-step pipeline in mind.
+We now classify the three-support case.  The lemmas until
+Theorem~\ref{thm:low-support-classification-package} are the proof machinery for
+one visible result rather than separate endpoints.  The reader should keep the
+following four-step pipeline in mind.
 \begin{center}
 \small
 \begin{tabular}{p{0.08\linewidth}p{0.82\linewidth}}
@@ -1635,7 +1638,7 @@ The finite slot-selection algorithm behind Table~\ref{tab:three-coordinate-class
 is recorded in Appendix~\ref{app:three-coordinate-checklist}; it is used below
 only to justify that the displayed table is an effective closed classification.
 
-\begin{theorem}[Complete low-support classification]
+\begin{theorem}[Complete low-support classification: eight support-three families]
 \label{thm:low-support-classification-package}
 Let $n\ge2$.  The minimal generators $\mathcal M_n$ are classified for
 $\omega(n)\le3$ as follows.
@@ -1786,6 +1789,52 @@ $\mathcal M_n$ in all cases $\omega(n)\le3$, including the boundary convention
 $\mathcal G_2=\varnothing=\mathcal M_2$.  In the three-coordinate case the
 finiteness of the primitive and ladder slot sets and the exact slot enumeration
 are supplied by Proposition~\ref{prop:three-coordinate-table-checklist}.
+\end{proof}
+
+\begin{corollary}[Support-three obstruction certificates]
+\label{cor:support-three-obstruction-certificates}
+Assume $\omega(n)=3$ and let a proposed support-three minimal-generator shape be
+specified by an irredundant finite list of atomic slots whose full-support sets
+cover the labelled coordinates $\{1,2,3\}$.  Exactly one of the following
+alternatives occurs.
+\begin{enumerate}[label=(\alph*)]
+\item The shape is the excluded skeleton $\Gamma_2$, equivalently it requires an
+atom with $1<\#E_n(\theta)<\#T_n(\theta)=3$; then no Fibonacci minimal
+generator has that shape.
+\item After relabeling it is one of the eight rows in
+Table~\ref{tab:three-coordinate-classification}.  The row contributes exactly
+the products obtained from the finite candidate sets
+$\mathfrak C(P_J)$, $\mathfrak C(L_{i,J})$, and $\mathfrak C(S_i)$ by choosing
+one prime power in each row slot with distinct underlying primes.
+\item The row is one of the eight admissible skeletons but the finite
+distinct-prime Hall inequalities of Lemma~\ref{lem:finite-slot-selection} fail;
+then the row contributes no element of $\mathcal M_n$.
+\end{enumerate}
+Thus every failure in support three has a certificate of one of two kinds: the
+single structural Fibonacci obstruction $\Gamma_2$, or a finite Hall deficiency
+inside an otherwise admissible slot row.
+\end{corollary}
+
+\begin{proof}
+By Lemma~\ref{lem:abstract-three-types}, every irredundant three-coordinate
+witness skeleton is one of $\Gamma_1,\ldots,\Gamma_9$.  The primitive--ladder
+dichotomy, Theorem~\ref{thm:primitive-ladder-dichotomy}, excludes precisely the
+case in which an atom has a proper nonsingleton essential set inside a larger
+full-support set; among the nine skeletons this is exactly $\Gamma_2$, proving
+(a).
+
+For every remaining skeleton, Lemma~\ref{lem:three-coordinate-atom-families}
+translates each abstract slot into one of the primitive slots $P_J(n)$, ladder
+slots $L_{i,J}(n)$, or singleton slots $S_i(n)$.  Lemma~\ref{lem:three-coordinate-arithmetic-tests}
+identifies these as the finite candidate sets displayed in
+Theorem~\ref{thm:low-support-classification-package}.  A selected row therefore
+forms a witness cover exactly when its chosen prime powers are pairwise
+coprime, and for prime powers this is exactly distinctness of underlying primes.
+Lemma~\ref{lem:finite-slot-selection} is precisely the Hall criterion for such a
+selection.  If the criterion holds, Theorem~\ref{thm:witness-classification}
+turns the selected witness cover into the corresponding element of
+$\mathcal M_n$; if it fails, no coprime filling of that row exists.  These are
+(b) and (c), and the alternatives exhaust all support-three possibilities.
 \end{proof}
 
 \begin{corollary}[Low-support birth layers and counting]
@@ -2208,11 +2257,11 @@ includes the short script that performs this enumeration and the generated
 table file input below; these files are supplementary to the mathematical
 criterion rather than part of the theorem stream.
 
-\begin{proposition}[Finite divisor/rank enumeration with supplied factorization]
+\begin{proposition}[Finite divisor/rank verification with supplied factorization]
 \label{prop:effective-birth-layer-computation}
 Let $n\ge2$ and suppose the integer factorization of $F_n$ is known. Then
-$B_n$, $A(n)$, and $\mathcal M_n$ are computable by the following finite
-algorithm.
+$B_n$, $A(n)$, and $\mathcal M_n$ are recovered exactly by the following finite
+divisor/rank test.
 \begin{enumerate}[label=(\alph*)]
 \item Enumerate the divisor set $D_n=\operatorname{Div}(F_n)$ from the
  factorization of $F_n$.
@@ -2227,17 +2276,6 @@ algorithm.
  retain exactly those $m\in B_n$ for which no previously retained element
  divides $m$; the retained set is $\mathcal M_n$.
 \end{enumerate}
-The operation count here is a high-level enumeration count after the integer
-factorization of $F_n$ is supplied: it counts divisibility tests $q\mid F_d$,
-divisor comparisons, and naive Fibonacci recurrence steps, but it is not a
-bit-complexity bound and includes neither the cost of factoring $F_n$ nor the
-bit sizes of the integers involved. In this model the number of divisibility
-tests is at most $\tau(F_n)\tau(n)$, and the minimal-generator extraction
-requires at most $\tau(F_n)^2$ divisor comparisons. Thus, apart from the
-integer factorization of $F_n$, the computation uses polynomially many
-high-level divisibility/comparison operations in $\tau(F_n)$ and $\tau(n)$;
-with naive Fibonacci evaluation it is bounded by
-$O(n\tau(F_n)\tau(n)+\tau(F_n)^2)$ such high-level steps.
 \end{proposition}
 
 \begin{proof}
@@ -2258,15 +2296,16 @@ processed in increasing size, then every proper divisor of the current element
 has already been processed. Therefore an element is retained exactly when no
 smaller element of $B_n$ divides it, which is the definition of being minimal
 in the divisibility poset. This retained set is $\mathcal M_n$.
-
-The stated bounds are loop counts in the high-level model described in the
-proposition, not bit-operation estimates. There are $\tau(F_n)$ choices of
-$q$ and $\tau(n)$ possible indices $d$ in the rank test. Comparing each pair
-of elements of $B_n$ gives the crude upper bound $\tau(F_n)^2$ for the
-minimality step. Computing each $F_d$ by the elementary recurrence for
-$d\le n$ gives the stated naive evaluation bound; faster doubling methods can
-replace this without changing the finite divisor/rank interface.
 \end{proof}
+
+\begin{remark}[Reproducibility scope]
+The preceding proposition is used only to document the finite verification
+interface for the table, not as a complexity theorem.  After the factorization
+of $F_n$ has been supplied, the displayed loops involve only the finite divisor
+sets of $F_n$ and $n$, ordinary divisibility tests $q\mid F_d$, and divisor
+comparisons inside $B_n$.  The manuscript makes no bit-complexity assertion and
+does not include the cost of factoring $F_n$ in the numerical evidence.
+\end{remark}
 
 \paragraph{Table generation.}
 The source files
