@@ -1624,6 +1624,71 @@ $2S^{N+1}t^{-(2N+2)}$, because $\omega$ is a probability measure.  Combining
 the three displayed estimates proves \eqref{eq:explicit-entropy-constant-bound}.
 \end{proof}
 
+\begin{proposition}[Finite-moment entropy descent interface]%
+\label{prop:finite-moment-entropy-descent-interface}
+Let $N\ge2$, $0<\eta\le1$, and let $\nu$ have mean $\bar\gamma$ and finite
+centred $(2N+\eta)$th absolute moment.  Define $h_t=P_t*\nu$,
+$g_t(x)=P_t(x-\bar\gamma)$,
+\[
+\delta_t(\bar\gamma+ty):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1,
+\qquad
+A_{N,t}(y):=\sum_{n=2}^{2N}\mu_nu_n(y)t^{-n}.
+\]
+Then the following implication holds entirely under this finite
+$(2N+\eta)$-moment hypothesis.  The density remainder of
+Theorem~\ref{thm:finite-moment-density-remainder} gives constants
+$C_\rho,M_A,S$ and a threshold $T$ such that, for $t\ge T$,
+\[
+\delta_t=A_{N,t}+\rho_{N,t},
+\qquad
+\|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
+\le C_\rho t^{-(2N+\eta)},
+\]
+\[
+\|A_{N,t}\|_\infty\le M_A t^{-2},
+\qquad
+\|\delta_t\|_\infty\le \min\{1/2,S t^{-2}\}.
+\]
+Consequently Lemma~\ref{lem:density-to-entropy-domination} applies and gives
+\begin{align*}
+D_{\mathrm{KL}}(h_t\|g_t)
+&=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}
+\sum_{m=2r}^{2N}t^{-m}
+\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+\mu_{n_1}\cdots\mu_{n_r}I(n_1,\dots,n_r)\\
+&\qquad +O(t^{-(2N+\eta)})+O(t^{-(2N+2)}).
+\end{align*}
+The constants in the two error terms are fixed-law constants of the kind
+recorded in Lemma~\ref{lem:explicit-entropy-constant-bound}.  In particular
+the auxiliary strong-moment Lemma~\ref{lem:entropy-uniform-remainder} is not an
+input to this implication; it is only a bookkeeping device for displaying the
+same finite coefficient algebra when a centred $(2N+1)$st absolute moment is
+available.
+\end{proposition}
+
+\begin{proof}
+Apply Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$.  Its
+finite-moment remainder gives the displayed decomposition in
+$L^\infty(\RR)\cap L^1(\omega)$, with
+$C_\rho=C_{\nu,2N,\eta}$, with
+$M_A=\sum_{n=2}^{2N}|\mu_n|\|u_n\|_\infty$, and with $S$ and $T$ chosen from
+the eventual $O(t^{-2})$ bound for $\delta_t$.  The hypotheses of
+Lemma~\ref{lem:density-to-entropy-domination} are therefore satisfied with
+$A_t=A_{N,t}$ and $\rho_t=\rho_{N,t}$.  Since
+\[
+D_{\mathrm{KL}}(h_t\|g_t)=\int_{\RR}\Phi(\delta_t(\bar\gamma+ty))\,\omega(\dd y),
+\]
+that lemma gives exactly the displayed finite polynomial and the two remainder
+orders.  Lemma~\ref{lem:explicit-entropy-constant-bound} is obtained by
+substituting these same constants into the finite sums of
+Lemma~\ref{lem:density-to-entropy-domination}, so the stated dependence of the
+error constants follows.  No step in the argument invokes
+Lemma~\ref{lem:entropy-uniform-remainder}; that lemma assumes the stronger
+$(2N+1)$st moment only to organize coefficient arithmetic, whereas the present
+descent uses the finite $(2N+\eta)$ density remainder directly.
+\end{proof}
+
 \begin{theorem}[All-order finite-moment Poisson entropy expansion]%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge 2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
@@ -1665,17 +1730,21 @@ Lemma~\ref{lem:explicit-entropy-constant-bound}.  They depend on the single
 law~$\nu$, on $N$ and~$\eta$, and on the listed universal mode norms; no
 uniformity over a class of laws and no sharpness of these constants is
 asserted.
+The finite-moment descent is precisely the interface isolated in
+Proposition~\ref{prop:finite-moment-entropy-descent-interface}: density-ratio
+control in $L^\infty\cap L^1(\omega)$, finite Taylor expansion of
+$\Phi(z)=(1+z)\log(1+z)-z$, and integration of the remaining finite mode
+polynomial.  The auxiliary strong-moment Lemma~\ref{lem:entropy-uniform-remainder}
+is not part of the hypotheses of this theorem.
 Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \end{theorem}
 
 \begin{proof}
-The auxiliary Lemma~\ref{lem:entropy-uniform-remainder} shows how the
-coefficient polynomial is obtained under the stronger $(2N+1)$st-moment
-assumption: expand the density ratio additively, expand each finite product,
-discard only total degrees above $2N$, and integrate the resulting
-$L^1(\omega)$ identity.  We now repeat the same finite algebra with the
-sharper finite-moment density remainder, so no strong-moment assumption is
-used in the theorem itself.
+Proposition~\ref{prop:finite-moment-entropy-descent-interface} is the proof
+interface: it performs the KL integration from the density-ratio expansion with
+only the finite centred $(2N+\eta)$th absolute moment, and it records the two
+dominating errors separately.  Thus the strong-moment bookkeeping lemma is used
+only for coefficient display, not for the finite-moment asymptotic claim.
 
 Apply Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$.
 With $x=\bar\gamma+ty$ one has
@@ -1878,6 +1947,15 @@ contribution at any order $t^{-k}$ with $k\le 2N$.
 \end{theorem}
 
 \begin{proof}
+The descent interface used here is
+Proposition~\ref{prop:finite-moment-entropy-descent-interface}: the density
+remainder is integrated in $L^1(\omega)$ after a finite Taylor expansion, with
+the density error and Taylor tail kept as the two displayed orders.  Hence the
+present theorem is the submitted finite centred $(2N+\eta)$-moment remainder
+statement.  The auxiliary Lemma~\ref{lem:entropy-uniform-remainder} has no role
+in this proof except as optional strong-moment bookkeeping for finite
+coefficient arithmetic.
+
 Theorem~\ref{thm:poisson-kl-even-orders} gives
 \eqref{eq:poisson-kl-even-orders-explicit-remainder}, hence in particular
 \[
