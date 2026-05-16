@@ -303,12 +303,12 @@ operator.
 
 \subsection{Higher secant kernels and coefficient representation}
 
-This subsection supplies only the RKHS organization used by the coefficient
-calculus.  It is not an additional entropy principle and not a second RKHS
-coefficient theory: for the kernel under consideration, the multilinear
-integrals appearing in the entropy expansion from
-Section~\ref{sec:entropy-asymptotics} can be organized as derivatives of
-explicit multilinear kernels built from the same secant family.
+This subsection supplies only the local RKHS organization used by the
+coefficient calculus.  It is not an additional entropy principle and not a
+second RKHS coefficient theory: for the kernel under consideration, the
+multilinear mode integrals appearing in the entropy expansion from
+Section~\ref{sec:entropy-asymptotics} are the Taylor coefficients at the
+origin of multilinear secant germs built from the same family.
 
 \begin{theorem}[Higher secant kernels and coefficient representation]
 \label{thm:higher-secant-kernels}
@@ -330,7 +330,7 @@ Then the following hold.
       \mathcal J_m(\varepsilon_1,\dots,\varepsilon_m)
       =
       \sum_{j=1}^m
-      \frac{\varepsilon_j(\varepsilon_j+2\ii)}
+      \frac{\bigl(\varepsilon_j(\varepsilon_j+2\ii)\bigr)^{m-1}}
       {\displaystyle\prod_{\ell\ne j}
       (\varepsilon_j-\varepsilon_\ell)
       (\varepsilon_j-\varepsilon_\ell+2\ii)}.
@@ -350,30 +350,31 @@ Then the following hold.
       \[
       \Gamma_2(\varepsilon_1,\varepsilon_2)=K(\varepsilon_1,\varepsilon_2).
       \]
-\item Let $N\ge 2$, and assume that $\nu$ has finite centered
-      $(2N+1)$st absolute moment.  If
+\item Let $N\ge 2$, let $0<\eta\le1$, and assume that $\nu$ has finite
+      centred $(2N+\eta)$th absolute moment.  If
       \[
       D_{\mathrm{KL}}(h_t\|g_t)
-      =\sum_{r=2}^{N}c_{2r}\,t^{-2r}+o(t^{-2N})
+      =\sum_{r=2}^{N}A_{2r}(\nu)\,t^{-2r}+o(t^{-2N})
       \qquad(t\to\infty)
       \]
       is the expansion from
-      Theorem~\ref{thm:poisson-kl-even-orders}, then
+      Theorem~\ref{thm:poisson-kl-even-orders}, then for every
+      $2\le M\le N$
       \begin{equation}\label{eq:higher-secant-coefficients}
-      c_{2N}
+      A_{2M}(\nu)
       =
-      \sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
-      \sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=2N}}
+      \sum_{k=2}^{M}\frac{(-1)^k}{k(k-1)}
+      \sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=2M}}
       \mu_{n_1}\cdots\mu_{n_k}\,
       \frac{
       \partial_1^{n_1-1}\cdots \partial_k^{n_k-1}
       \Gamma_k(0,\dots,0)}
       {(n_1-1)!\cdots(n_k-1)!}.
       \end{equation}
-      Consequently, within this model every coefficient in the Poisson
-      entropy expansion is recovered as a Taylor coefficient of the
-      higher secant kernels $\Gamma_k$; this is only a repackaging of the
-      universal coefficient formula used in
+      Consequently, within this finite-order expansion, the coefficient
+      polynomial is recovered from the Taylor coefficients at the origin of
+      the local higher secant germs $\Gamma_k$; this is only a repackaging of
+      the universal coefficient formula used in
       Theorem~\ref{thm:poisson-kl-even-orders}.
 \end{enumerate}
 \end{theorem}
@@ -384,16 +385,16 @@ $\varepsilon_1,\dots,\varepsilon_m\in\RR$ set
 \[
 F_m(z)
 :=
-\frac{1+z^2}{\prod_{j=1}^m(1+(z-\varepsilon_j)^2)}.
+\frac{(1+z^2)^{m-1}}{\prod_{j=1}^m(1+(z-\varepsilon_j)^2)}.
 \]
-Since $F_m(z)=O(|z|^{2-2m})$ in the upper half-plane, the residue
+Since $F_m(z)=O(|z|^{-2})$ in the upper half-plane, the residue
 theorem applies on semicircles of radius tending to infinity.  The poles
 in the upper half-plane are the simple poles
 $z=\varepsilon_j+\ii$ $(1\le j\le m)$.  For each such $j$,
 \[
 \operatorname{Res}_{z=\varepsilon_j+\ii}F_m
 =
-\frac{1+(\varepsilon_j+\ii)^2}
+\frac{\bigl(1+(\varepsilon_j+\ii)^2\bigr)^{m-1}}
 {2\ii\displaystyle\prod_{\ell\ne j}
 \bigl(1+(\varepsilon_j+\ii-\varepsilon_\ell)^2\bigr)}.
 \]
@@ -411,7 +412,7 @@ the residue identity becomes
 \[
 \operatorname{Res}_{z=\varepsilon_j+\ii}F_m
 =
-\frac{\varepsilon_j(\varepsilon_j+2\ii)}
+\frac{\bigl(\varepsilon_j(\varepsilon_j+2\ii)\bigr)^{m-1}}
 {2\ii\displaystyle\prod_{\ell\ne j}
 (\varepsilon_j-\varepsilon_\ell)
 (\varepsilon_j-\varepsilon_\ell+2\ii)}.
@@ -423,6 +424,8 @@ Hence
 =2\ii\sum_{j=1}^m \operatorname{Res}_{z=\varepsilon_j+\ii}F_m,
 \]
 which is exactly \eqref{eq:higher-secant-residue}.  This proves~(i).
+For $m=2$ this is the residue formula used in
+Theorem~\ref{thm:mode-gram-kernel} for the quadratic Gram kernel.
 
 For~(ii), continuity of $\Gamma_m$ on $\RR^m$ follows from dominated
 convergence on compact parameter sets.  Indeed, if
@@ -454,54 +457,55 @@ Multiplying these identities and integrating against $\omega$ gives
 \]
 and using the conventions $\mathcal J_0:=1$ and
 $\mathcal J_1(\varepsilon):=1$.
+The integral definition of $\Gamma_m$ is the continuous extension of this
+quotient formula across the coordinate hyperplanes.
 
 To prove the analyticity statement near the origin, fix $0<\rho<1$.
-Proposition~\ref{prop:cayley-mode-remainder} yields, for every integer
-$N\ge 1$,
+The Chebyshev expansion in Corollary~\ref{cor:mode-quadratic-integrals}
+and the bound $|u_n(y)|\le1$ for $n\ge1$ give, uniformly for
+$y\in\RR$ and $|\varepsilon|\le\rho$,
 \[
-\Psi_\varepsilon(y)
-=\sum_{n=1}^{N}u_n(y)\varepsilon^{n-1}
-+\varepsilon^N v_N(y,\varepsilon),
-\qquad |\varepsilon|\le \rho,
+\Psi_\varepsilon(y)=\sum_{n=1}^{\infty}u_n(y)\varepsilon^{n-1}.
 \]
-where $v_N$ is bounded on $\RR\times[-\rho,\rho]$.  Since
-$|u_n(y)|\le 1$ for every $n\ge 1$ and $y\in\RR$, multiplying the
-preceding expansions for $\Psi_{\varepsilon_1},\dots,\Psi_{\varepsilon_m}$
-shows that
+The product of the $m$ uniformly absolutely convergent series may therefore
+be multiplied term by term and integrated against the probability measure
+$\omega$.  Hence, for $|\varepsilon_j|<1$,
 \[
 \Gamma_m(\varepsilon_1,\dots,\varepsilon_m)
 =
-\sum_{n_1,\dots,n_m=1}^{N}
+\sum_{n_1,\dots,n_m\ge1}
 I_{n_1,\dots,n_m}\,
-\varepsilon_1^{n_1-1}\cdots\varepsilon_m^{n_m-1}
-+\sum_{j=1}^m\varepsilon_j^N G_{j,N}(\varepsilon_1,\dots,\varepsilon_m),
+\varepsilon_1^{n_1-1}\cdots\varepsilon_m^{n_m-1},
 \]
-where each $G_{j,N}$ is bounded on $[-\rho,\rho]^m$ and
+where
 \[
 I_{n_1,\dots,n_m}
 :=
 \int_{\RR}
 u_{n_1}(y)\cdots u_{n_m}(y)\,\omega(\dd y).
 \]
-This is exactly the Taylor expansion of $\Gamma_m$ at the origin, so
-$\Gamma_m$ is real-analytic there.  The identity $\Gamma_2=K$ is
-Theorem~\ref{thm:mode-gram-kernel}.
-
-For~(iii), the Taylor expansion from~(ii) gives
+The series is normally convergent on every closed polydisc
+$|\varepsilon_j|\le\rho<1$, so $\Gamma_m$ is real-analytic near the
+origin and
 \[
-I_{n_1,\dots,n_k}
+I_{n_1,\dots,n_m}
 =
 \frac{
-\partial_1^{n_1-1}\cdots\partial_k^{n_k-1}\Gamma_k(0,\dots,0)}
-{(n_1-1)!\cdots(n_k-1)!}
-\qquad(n_1,\dots,n_k\ge 1).
+\partial_1^{n_1-1}\cdots\partial_m^{n_m-1}\Gamma_m(0,\dots,0)}
+{(n_1-1)!\cdots(n_m-1)!}.
 \]
-The proof of Theorem~\ref{thm:poisson-kl-even-orders} yields
+This proves the stated derivative identification without using the closed
+formula for $\mathcal J_m$.  The identity $\Gamma_2=K$ is
+Theorem~\ref{thm:mode-gram-kernel}.
+
+For~(iii), fix $2\le M\le N$.  The coefficient formula
+\eqref{eq:universal-entropy-coefficient-evaluation} in
+Theorem~\ref{thm:poisson-kl-even-orders} yields
 \[
-c_{2N}
+A_{2M}(\nu)
 =
-\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
-\sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=2N}}
+\sum_{k=2}^{M}\frac{(-1)^k}{k(k-1)}
+\sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=2M}}
 \mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k}.
 \]
 Substituting the derivative formula for $I_{n_1,\dots,n_k}$ proves
@@ -533,7 +537,7 @@ A_{2M}(\nu)
 Consequently the support supplied by Theorem~\ref{thm:higher-secant-kernels}
 is exactly the RKHS packaging of the coefficient algebra used by the main
 entropy theorem: no additional sampling or entropy hypothesis is introduced
-by passing from the Cauchy mode integrals to higher secant kernels.
+by passing from the Cauchy mode integrals to higher-secant germs.
 \end{corollary}
 
 \begin{proof}
