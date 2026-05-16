@@ -575,9 +575,9 @@ formal expression
 \begin{equation}\label{eq:universal-coefficient-package-generating}
 \int_{\RR}
 \left(
-\left(1+\sum_{n=2}^{k}\mu_nu_n(y)t^{-n}\right)
-\log\left(1+\sum_{n=2}^{k}\mu_nu_n(y)t^{-n}\right)
--\sum_{n=2}^{k}\mu_nu_n(y)t^{-n}
+\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+\log\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+-\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}
 \right)\dd\omega,
 \end{equation}
 after formal truncation at total $t$-degree~$k$.  In particular
@@ -1397,6 +1397,128 @@ controlled by the eventual $t^{-2}$ bound for the density perturbation.  After
 integration, the remaining finite polynomial is exactly the universal
 coefficient polynomial.
 
+\begin{lemma}[Density-to-entropy domination at finite moment order]%
+\label{lem:density-to-entropy-domination}
+Let $N\ge2$, $0<\eta\le1$, and suppose that, for all $t\ge T$, measurable
+functions $\delta_t,A_t,\rho_t$ on~$\RR$ satisfy
+\[
+\delta_t=A_t+\rho_t,
+\qquad
+A_t(y)=\sum_{n=2}^{2N}\mu_n\,u_n(y)t^{-n},
+\]
+where $u_2,\dots,u_{2N}$ are bounded and all products
+$u_{n_1}\cdots u_{n_r}$ with $2\le r\le N$ and
+$2\le n_j\le2N$ belong to $L^1(\omega)$.  Assume further that, for fixed
+finite constants $C_\rho,M_A,S$,
+\[
+\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}
+\le C_\rho t^{-(2N+\eta)},
+\qquad
+\|A_t\|_\infty\le M_A t^{-2},
+\qquad
+\|\delta_t\|_\infty\le \min\{1/2,S t^{-2}\}.
+\]
+Define
+\[
+\mathcal P_{N,t}:=
+\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}
+\sum_{m=2r}^{2N}t^{-m}
+\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,
+\dots,n_r).
+\]
+Then $\Phi(\delta_t)\in L^1(\omega)$ and, for all $t\ge\max\{1,T\}$,
+\begin{equation}\label{eq:density-to-entropy-domination-bound}
+\left|
+\int_{\RR}\Phi(\delta_t)\,\dd\omega-\mathcal P_{N,t}
+\right|
+\le
+\mathfrak P_N(C_\rho,M_A)t^{-(2N+\eta)}
++\mathfrak Q_N(\mu,u)t^{-(2N+\eta)}
++2S^{N+1}t^{-(2N+2)},
+\end{equation}
+where
+\begin{align*}
+\mathfrak P_N(C_\rho,M_A)
+&:=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{\ell=1}^{r}\binom r\ell M_A^{r-\ell}C_\rho^\ell,\\
+\mathfrak Q_N(\mu,u)
+&:=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{m=2N+1}^{2Nr}
+\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+|\mu_{n_1}\cdots\mu_{n_r}|
+\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)} .
+\end{align*}
+In particular, the passage from the finite-moment density-ratio expansion to
+the entropy integral loses only the density remainder
+$O(t^{-(2N+\eta)})$ and the Taylor tail $O(t^{-(2N+2)})$.
+\end{lemma}
+
+\begin{proof}
+The bound $\|\delta_t\|_\infty\le1/2$ places the density ratio in the disk of
+the Taylor expansion
+\[
+\Phi(z)=(1+z)\log(1+z)-z
+=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}z^r+R_{N+1}(z),
+\qquad |R_{N+1}(z)|\le2|z|^{N+1}.
+\]
+Hence $\Phi(\delta_t)$ is bounded, and therefore belongs to $L^1(\omega)$,
+because $\omega$ is a probability measure.  Moreover
+\[
+\|R_{N+1}(\delta_t)\|_{L^1(\omega)}
+\le2\|\delta_t\|_\infty^{N+1}
+\le 2S^{N+1}t^{-(2N+2)} .
+\]
+
+For $2\le r\le N$ we have
+\[
+\delta_t^r-A_t^r
+=\sum_{\ell=1}^{r}\binom r\ell A_t^{r-\ell}\rho_t^\ell.
+\]
+Using one factor $\rho_t$ in $L^1(\omega)$ and all remaining factors in
+$L^\infty$ gives
+\[
+\|\delta_t^r-A_t^r\|_{L^1(\omega)}
+\le
+\sum_{\ell=1}^{r}\binom r\ell
+M_A^{r-\ell}C_\rho^\ell
+t^{-2(r-\ell)}t^{-\ell(2N+\eta)} .
+\]
+Since $t\ge1$ and $\ell\ge1$, each exponent on the right is at least
+$2N+\eta$, so the whole expression is bounded by the first finite sum in
+\eqref{eq:density-to-entropy-domination-bound} at order
+$t^{-(2N+\eta)}$ after multiplication by the entropy coefficients.
+
+It remains to compare the finite polynomial $A_t$ with the displayed
+coefficient polynomial.  Expanding $A_t^r$ gives
+\[
+\int_{\RR}A_t(y)^r\,\dd\omega(y)
+=
+\sum_{m=2r}^{2Nr}t^{-m}
+\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\dots,n_r).
+\]
+The part with $m\le2N$ is exactly the $r$th part of $\mathcal P_{N,t}$.
+The part with $m>2N$ has absolute value at most
+\[
+t^{-(2N+1)}
+\sum_{m=2N+1}^{2Nr}
+\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+|\mu_{n_1}\cdots\mu_{n_r}|
+\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)} .
+\]
+Because $0<\eta\le1$ and $t\ge1$, this is bounded by the same finite sum
+times $t^{-(2N+\eta)}$.  Combining the Taylor tail, the product error, and
+the discarded finite-product degrees proves
+\eqref{eq:density-to-entropy-domination-bound}.
+\end{proof}
+
 \begin{lemma}[Explicit finite-moment entropy constants]%
 \label{lem:explicit-entropy-constant-bound}
 Let $N\ge2$, $0<\eta\le1$, and let $\nu$ satisfy the hypotheses of
@@ -1451,7 +1573,7 @@ The density theorem with $L=2N$ gives
 \[
 \delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
 \qquad
-A_{N,t}(y):=\sum_{n=2}^{2N}\mu_nu_n(y)t^{-n},
+A_{N,t}(y):=\sum_{n=2}^{2N}\mu_n\,u_n(y)t^{-n},
 \]
 with
 \[
@@ -1572,60 +1694,30 @@ with
 \|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
 =O(t^{-(2N+\eta)})
 \]
-and $\|\delta_t\|_\infty=O(t^{-2})$.  Hence, for all large $t$,
-$|\delta_t|\le1/2$.  The Taylor expansion
-$\Phi(z)=(1+z)\log(1+z)-z$ therefore gives, uniformly and in
-$L^1(\omega)$,
-\[
-\Phi(\delta_t)=
-\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r
-+O(t^{-(2N+2)}),
-\]
-because $\delta_t^{N+1}=O(t^{-2N-2})$.
+and $\|\delta_t\|_\infty=O(t^{-2})$.
 
-For later reference fix constants $C_\rho$, $C_A$, and $C_\delta$ so that,
+Fix constants $C_\rho$, $M_A$, and $S$ so that,
 for all larger $t$,
 \[
 \|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
 \le C_\rho t^{-(2N+\eta)},\qquad
-\|A_{N,t}\|_\infty\le C_A t^{-2},\qquad
-\|\delta_t\|_\infty\le C_\delta t^{-2}.
+\|A_{N,t}\|_\infty\le M_A t^{-2},\qquad
+\|\delta_t\|_\infty\le \min\{1/2,S t^{-2}\}.
 \]
 Here $C_\rho$ is the constant $C_{\nu,2N,\eta}$ supplied by
 Theorem~\ref{thm:finite-moment-density-remainder}, and one may take
-$C_A=\sum_{n=2}^{2N}|\mu_n|\|u_n\|_\infty$.  After increasing the threshold if
-necessary, one may take any fixed $C_\delta\ge C_A+C_\rho$.  Thus these
-constants depend only on the specified law~$\nu$, on $N$ and~$\eta$, and on
-the listed universal mode bounds; no class-uniform constant is used in this
-proof.
+\[
+M_A=\sum_{n=2}^{2N}|\mu_n|\,\|u_n\|_\infty .
+\]
+After increasing the threshold if necessary, such an $S$ exists by the
+finite-moment density remainder.  Thus these constants depend only on the
+specified law~$\nu$, on $N$ and~$\eta$, and on the listed universal mode
+bounds; no class-uniform constant is used in this proof.
 
-For each $2\le r\le N$,
-\[
-\delta_t^r-A_{N,t}^r
-=\sum_{\ell=1}^{r}\binom r\ell A_{N,t}^{r-\ell}\rho_{N,t}^{\ell}.
-\]
-Since $A_{N,t}=O(t^{-2})$ and $\rho_{N,t}$ has the displayed
-$L^\infty/L^1$ bounds, this difference has $L^1(\omega)$ norm at most
-\[
-\sum_{\ell=1}^{r}\binom r\ell
-C_A^{r-\ell}C_\rho^\ell t^{-2(r-\ell)}t^{-\ell(2N+\eta)}
-\le C_r(C_A,C_\rho)t^{-(2N+\eta)}.
-\]
-The Taylor tail is bounded in $L^1(\omega)$ by
-$C_N\,C_\delta^{N+1}t^{-(2N+2)}$ once $|\delta_t|\le1/2$.  Expanding the
-finite products $A_{N,t}^r$ and discarding only monomials of total degree
-$>2N$ leaves a finite polynomial tail bounded by
-\[
-t^{-(2N+1)}
-\max_{\substack{2\le n_1,\dots,n_r\le2N}}
-\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)}
-\sum_{m=2N+1}^{2Nr}
-\sum_{\substack{2\le n_1,\dots,n_r\le2N\\
-n_1+\cdots+n_r=m}}
-|\mu_{n_1}\cdots\mu_{n_r}|,
-\]
-and is therefore $O(t^{-(2N+\eta)})$ because $0<\eta\le1$ and $t\ge1$.
-Consequently
+Lemma~\ref{lem:density-to-entropy-domination}, applied with
+$A_t=A_{N,t}$ and $\rho_t=\rho_{N,t}$, gives the explicit
+$L^1(\omega)$ domination needed for integration of the Taylor expansion.
+In particular,
 \begin{align*}
 D_{\mathrm{KL}}(h_t\|g_t)
 &=\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
@@ -2065,8 +2157,8 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \]
 Set
 \[
-a_2:=\sigma^2u_2,\qquad a_3:=\mu_3u_3,\qquad a_4:=\mu_4u_4,
-\qquad a_5:=\mu_5u_5,\qquad a_6:=\mu_6u_6.
+a_2:=\sigma^2\,u_2,\qquad a_3:=\mu_3\,u_3,\qquad a_4:=\mu_4\,u_4,
+\qquad a_5:=\mu_5\,u_5,\qquad a_6:=\mu_6\,u_6.
 \]
 Write
 \[
@@ -2285,7 +2377,7 @@ $L^\infty(\RR)$ error bounded by $B_{\nu,8}t^{-9}$,
 where the functions $B_m$ are the finite products displayed in that proof.
 After integration against $\omega$, the definitions of $B_4$, $B_6$, and $B_8$
 are exactly the degree-$4$, degree-$6$, and degree-$8$ terms obtained by
-substituting the finite mode expansion $\sum_{n=2}^{6}\mu_nu_nt^{-n}$ into
+substituting the finite mode expansion $\sum_{n=2}^{6}\mu_n\,u_n\,t^{-n}$ into
 \[
 \Phi(z)=\sum_{r\ge2}\frac{(-1)^r}{r(r-1)}z^r
 \]
