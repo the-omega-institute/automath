@@ -329,6 +329,87 @@ one-variable entropy integrals and to the two-variable Bregman dissipation
 integrals.  This proves the limiting assertion.
 \end{proof}
 
+\begin{proposition}[Doob--Bregman domain audit certificate]%
+\label{prop:doob-bregman-domain-audit-certificate}
+Let $[a,b]\subset(0,\infty)$, let $\nu$ have finite centred second moment, and
+use the notation
+\[
+h_t=P_t*\nu,
+\qquad
+g_t=P_t(\cdot-\bar\gamma),
+\qquad
+u_t=h_t/g_t .
+\]
+Let $\Phi$ be convex on $(0,\infty)$ and assume that, on every compact
+subinterval of $(0,\infty)$, $\Phi$ is $C^1$ and $\Phi'$ is Lipschitz.  Then,
+uniformly for $t\in[a,b]$, the following analytic interfaces hold.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item The principal-value identities for $Lh_t$, $Lg_t$, and
+$L(g_tu_t)-u_tLg_t$ are the limits of the cutoff identities in
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus}; the associated bilinear Cauchy
+forms are absolutely convergent.
+\item The quotient range $u_t(\RR)$ is contained in one compact interval
+$J_{a,b}\Subset(0,\infty)$, and the Bregman integrand
+\[
+\frac{g_t(x)D_\Phi(u_t(x),u_t(y))
+      +g_t(y)D_\Phi(u_t(y),u_t(x))}{(x-y)^2}
+\]
+is absolutely integrable on $\RR^2$, with a bound independent of
+$t\in[a,b]$.
+\item The map
+\[
+t\longmapsto \mathcal H_\Phi(t):=
+\int_{\RR}g_t(x)\Phi(u_t(x))\dd x
+\]
+is absolutely continuous on $[a,b]$, and its derivative is obtained by
+first proving the identity for the cutoff bilinear forms and then letting the
+cutoff radius tend to infinity.
+\item The passage from smooth convex entropies to the above range-local
+$C^{1,1}$ class is justified by the approximants
+$\Phi_\varepsilon$ of Lemma~\ref{lem:compact-range-phi-approximation}; on
+$J_{a,b}$ the entropies, first derivatives, and Bregman divergences converge
+under the same integrable majorants as in~\textup{(ii)}.
+\end{enumerate}
+Consequently the dissipation formula
+\eqref{eq:phi-entropy-dissipation} is a domain statement in the stated
+principal-value normalization, not a formal application of a nonlocal product
+rule.
+\end{proposition}
+
+\begin{proof}
+Part (i) is exactly Lemma~\ref{lem:cauchy-doob-cutoff-calculus}.  That lemma
+first proves the compactly supported Cauchy-generator identities, then replaces
+the test function by $\chi_Rq$ and passes to the limit using the near-diagonal
+estimate controlled by $\partial_xp\in L^1$ and the far-field estimate
+controlled by $p\in L^1$.  Thus the limiting forms are absolutely convergent
+and fix the principal-value convention used here.
+
+Lemma~\ref{lem:doob-range-bregman-integrability} proves the compact quotient
+range and the bound \eqref{eq:doob-bregman-integrability-bound}.  Its proof
+uses the integral form of the Bregman remainder on the compact range, so
+$D_\Phi(a,b)\le C_{a,b}|a-b|^2$ there, and the cutoff energy estimate for
+$u_t$ supplies the two-variable majorant.  This gives (ii).
+
+For (iii), Lemma~\ref{lem:cauchy-doob-cutoff-calculus} gives uniform
+$L^1$ bounds for $\partial_th_t$ and $\partial_tg_t$ on $[a,b]$; hence
+$t\mapsto h_t$ and $t\mapsto g_t$ are absolutely continuous as $L^1$-valued
+maps.  On the compact quotient range, $\Phi$ and $\Phi'$ are bounded and
+$\Phi'$ is Lipschitz, so the Nemytskii chain rule in $L^1$ gives absolute
+continuity of $\mathcal H_\Phi$.  Applying the cutoff identity from part (i) to
+the bounded Lipschitz tests $\Phi'(u_t)$ and
+$\Phi(u_t)-u_t\Phi'(u_t)$ gives the displayed derivative at the cutoff level;
+the absolute majorants from parts (i) and (ii) justify passage to the limit in
+the cutoff radius.
+
+Finally, Lemma~\ref{lem:compact-range-phi-approximation} constructs smooth
+convex $\Phi_\varepsilon$ that agree with $\Phi$ to first order on the compact
+range in the limit and have uniformly bounded second derivatives there.  The
+one-variable entropy terms are dominated by $g_t$ times a constant, and the
+two-variable Bregman terms are dominated by the majorant from (ii).  Dominated
+convergence therefore passes the smooth identity to the range-local
+$C^{1,1}$ entropy.  This proves all four interfaces.
+\end{proof}
+
 \begin{lemma}[Second-moment KL decay to the translated Poisson profile]%
 \label{lem:poisson-second-moment-kl-decay}
 Let $\nu$ be a probability measure on~$\RR$ with mean $\bar\gamma$ and
@@ -482,7 +563,9 @@ Then the following assertions hold.
       compact subinterval of $(0,\infty)$.  The right side is interpreted as
       the finite cutoff-limit integral justified by
       Lemmas~\ref{lem:cauchy-doob-cutoff-calculus} and
-      \ref{lem:doob-range-bregman-integrability}.  Moreover
+      \ref{lem:doob-range-bregman-integrability}; the four domain checks are
+      recorded together in
+      Proposition~\ref{prop:doob-bregman-domain-audit-certificate}.  Moreover
       Lemma~\ref{lem:compact-range-phi-approximation} supplies the only
       approximation passage from smooth convex entropies to this range-local
       $C^{1,1}$ class.  Consequently
@@ -663,9 +746,12 @@ E_t(x,y)=g_t(x)D_\Phi(u_t(x),u_t(y))
 +g_t(y)D_\Phi(u_t(y),u_t(x)).
 \]
 Substituting this identity proves
-\eqref{eq:phi-entropy-dissipation} for the stated range-local class.  One way
-to read the preceding chain-rule step is to first prove it for the smooth
-convex approximants $\Phi_\varepsilon$ supplied by
+\eqref{eq:phi-entropy-dissipation} for the stated range-local class.  The
+cutoff convergence, absolute convergence, time differentiability, and
+$C^{1,1}$ approximation passage used in this paragraph are precisely the four
+parts of Proposition~\ref{prop:doob-bregman-domain-audit-certificate}.  In
+particular one may first prove the chain-rule step for the smooth convex
+approximants $\Phi_\varepsilon$ supplied by
 Lemma~\ref{lem:compact-range-phi-approximation}; their derivatives have a
 common Lipschitz constant on the compact quotient range, so all cutoff and
 Bregman majorants above are independent of~$\varepsilon$, and dominated
