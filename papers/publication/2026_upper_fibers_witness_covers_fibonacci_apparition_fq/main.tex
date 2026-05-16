@@ -736,7 +736,7 @@ $\ell(\theta)\in E_n(\theta)\setminus\bigcup_{\eta\neq\theta}T_n(\eta)$.
 Hence $\omega(m)=\#\Theta\le\omega(n)$.
 \end{proof}
 
-\begin{corollary}[Finite witness-cover types at fixed support]
+\begin{corollary}[Finite witness-cover grammar at fixed support]
 \label{cor:finite-witness-cover-types}
 Fix $k\ge1$. Up to relabeling of the $k$ prime coordinates of $n$, only
 finitely many witness-cover support types can occur for minimal generators
@@ -744,11 +744,24 @@ $m\in\mathcal M_n$ with $\omega(n)=k$. More explicitly, if
 \[
 N_k:=\#\{(I,J):\varnothing\ne I\subseteq J\subseteq [k]\}=3^k-2^k,
 \]
-then the number of labelled support types is at most
+then every labelled support type is a word-free finite grammar
+\[
+\mathcal S=\{(I_1,J_1),\ldots,(I_r,J_r)
+ :1\le r\le k,
+ \varnothing\ne I_a\subseteq J_a\subseteq[k]\},
+\]
+subject only to
+\[
+\bigcup_{a=1}^rJ_a=[k],\qquad
+I_a\nsubseteq\bigcup_{b\ne a}J_b\quad(1\le a\le r).
+\]
+Consequently the number of labelled support types is at most
 \[
 \sum_{r=0}^k \binom{N_k}{r},
 \]
-and the number of unlabelled support types is bounded by the same constant.
+and the number of unlabelled support types is bounded by the same constant; a
+sharper canonical count is obtained by quotienting this finite family by the
+coordinate action of $S_k$.
 When the coordinates are identified with $[k]$, the type of $m$ is determined
 by a finite set
 \[
@@ -759,8 +772,8 @@ most $k$ elements drawn from the finite collection of pairs
 \[
 \{(I,J):\varnothing\ne I\subseteq J\subseteq [k]\}.
 \]
-Thus this corollary supplies only an abstract finite support skeleton for
-general $k$; explicit arithmetic enumeration in this paper is pursued only for
+Thus this corollary supplies a canonical finite grammar for general $k$;
+explicit arithmetic enumeration in this paper is pursued only for
 $\omega(n)\le3$. When $k=3$, the arithmetic realization layer is the
 support-three slot test of Lemma~\ref{lem:three-coordinate-nonemptiness} and
 Theorem~\ref{thm:low-support-classification-package}.
@@ -781,14 +794,21 @@ many pairs $(I,J)$ with $\varnothing\ne I\subseteq J\subseteq[k]$.
 The number of pairs $(I,J)$ with $\varnothing\ne I\subseteq J\subseteq[k]$ is
 $3^k-2^k$: for each coordinate one chooses whether it lies outside $J$, in
 $J\setminus I$, or in $I$, and then deletes the $2^k$ choices with $I=
-\varnothing$. The support type records no arithmetic data beyond these pairs.
+\varnothing$. The coverage and irredundance clauses in
+Definition~\ref{def:witness-cover} are exactly the two displayed grammar rules
+after the coordinate set $\mathcal P(n)$ is identified with $[k]$. Conversely,
+any witness cover has a type obeying these two rules, and forgetting the
+arithmetic prime powers but retaining the set of pairs loses no support-type
+data.
+
 Since a type uses at most $k$ atoms, the number of labelled sets of possible
 pairs is bounded by $\sum_{r=0}^k\binom{3^k-2^k}{r}$. Relabeling the
 coordinates merely quotients this finite collection by the finite symmetric
 group $S_k$, so the same expression is also an upper bound for the unlabelled
-types. The final sentence is a scope statement: the later sections replace this
-abstract skeleton by explicit arithmetic slot enumeration only in supports one,
-two, and three.
+types. The sharper canonical count is the number of $S_k$-orbits of the finite
+subfamily satisfying the two grammar rules. The final sentence is a scope
+statement: the later sections replace this abstract grammar by explicit
+arithmetic slot enumeration only in supports one, two, and three.
 \end{proof}
 
 \begin{corollary}\label{cor:support-bound-sharp}
@@ -1658,33 +1678,11 @@ respectively for $\Gamma_1,\Gamma_3,\Gamma_4,\Gamma_5,\Gamma_6,\Gamma_7,
 Let $\mathcal G_n$ denote the finite set displayed in (i), (ii), or (iii), with
 the convention $\mathcal G_2=\varnothing$.  Then, for every $n\ge2$ with
 $\omega(n)\le3$,
-\label{cor:low-support-normal-form}
-\label{cor:low-support-birth-layer-package}
-\label{prop:low-support-cardinality-formula}
 \[
 \mathcal G_n=\mathcal M_n,
 \]
-$\mathcal G_n$ is the canonical antichain of minimal elements of $B_n$, and for
-every $q\in D_n$,
-\[
-q\in B_n\quad\Longleftrightarrow\quad
-\text{there exists }g\in\mathcal G_n\text{ with }g\mid q.
-\]
-Equivalently,
-\[
-B_n=\bigcup_{g\in\mathcal G_n}\{q\in D_n:\ g\mid q\},
-\]
-where the union is taken inside the divisor lattice $D_n$ and is not asserted
-to be disjoint.  Finally, the birth-layer cardinality is given by the closed
-finite formula
-\begin{equation}\label{eq:low-support-cardinality-formula}
-A(n)=
-\sum_{\varnothing\ne\mathcal S\subseteq\mathcal G_n}
-(-1)^{|\mathcal S|+1}
-\tau\left(\frac{F_n}{\lcmop(g:g\in\mathcal S)}\right),
-\end{equation}
-with the convention that the empty sum is $0$.
-The table should be read in three passes.  First choose one of the eight
+and the displayed list is a canonical minimal-generator classification.  The
+table should be read in three passes.  First choose one of the eight
 unlabelled support skeletons and then apply an arbitrary permutation of the
 coordinate labels $1,2,3$.  Next replace every displayed slot by its explicit
 finite candidate set $\mathfrak C(\cdot)$, so primitive slots are tested through
@@ -1775,10 +1773,45 @@ resulting products with the elements of $\mathcal M_n$.
 
 Thus the displayed support-dependent set $\mathcal G_n$ equals
 $\mathcal M_n$ in all cases $\omega(n)\le3$, including the boundary convention
-$\mathcal G_2=\varnothing=\mathcal M_2$.  Minimal elements of an upper set are
-pairwise incomparable, so $\mathcal G_n$ is an antichain in $D_n$.  The
-upper-fiber theorem, Theorem~\ref{thm:upper-fiber}, gives for every $n\ge2$
-the principal-upper-ideal decomposition
+$\mathcal G_2=\varnothing=\mathcal M_2$.  In the three-coordinate case the
+finiteness of the primitive and ladder slot sets and the exact slot enumeration
+are supplied by Proposition~\ref{prop:three-coordinate-table-checklist}.
+\end{proof}
+
+\begin{corollary}[Low-support birth layers and counting]
+\label{cor:low-support-normal-form}
+\label{cor:low-support-birth-layer-package}
+\label{prop:low-support-cardinality-formula}
+Let $n\ge2$ with $\omega(n)\le3$, and let $\mathcal G_n$ be the finite
+minimal-generator set described in
+Theorem~\ref{thm:low-support-classification-package}.  Then $\mathcal G_n$ is
+the canonical antichain of minimal elements of $B_n$, and for every $q\in D_n$,
+\[
+q\in B_n\quad\Longleftrightarrow\quad
+\text{there exists }g\in\mathcal G_n\text{ with }g\mid q.
+\]
+Equivalently,
+\[
+B_n=\bigcup_{g\in\mathcal G_n}\{q\in D_n:\ g\mid q\},
+\]
+where the union is taken inside the divisor lattice $D_n$ and is not asserted
+to be disjoint.  The birth-layer cardinality is the closed finite formula
+\begin{equation}\label{eq:low-support-cardinality-formula}
+A(n)=
+\sum_{\varnothing\ne\mathcal S\subseteq\mathcal G_n}
+(-1)^{|\mathcal S|+1}
+\tau\left(\frac{F_n}{\lcmop(g:g\in\mathcal S)}\right),
+\end{equation}
+with the convention that the empty sum is $0$.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:low-support-classification-package} gives
+$\mathcal G_n=\mathcal M_n$ for $\omega(n)\le3$, including the boundary
+convention $\mathcal G_2=\varnothing=\mathcal M_2$. Minimal elements of an
+upper set are pairwise incomparable, so $\mathcal G_n$ is an antichain in
+$D_n$.  The upper-fiber theorem, Theorem~\ref{thm:upper-fiber}, gives for every
+$n\ge2$ the principal-upper-ideal decomposition
 \[
 B_n=\bigcup_{m\in\mathcal M_n}\{q\in D_n:m\mid q\}.
 \]
@@ -1808,9 +1841,7 @@ Hence
 \]
 Ordinary finite inclusion--exclusion applied to
 $B_n=\bigcup_{g\in\mathcal G_n}U_g$ proves
-\eqref{eq:low-support-cardinality-formula}.  In the three-coordinate case the
-finiteness of the primitive and ladder slot sets and the exact slot enumeration
-are supplied by Proposition~\ref{prop:three-coordinate-table-checklist}.
+\eqref{eq:low-support-cardinality-formula}.
 \end{proof}
 
 \begin{corollary}[Primitive three-coordinate skeleton]
