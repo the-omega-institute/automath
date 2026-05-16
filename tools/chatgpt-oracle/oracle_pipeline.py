@@ -7860,6 +7860,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                     logger.warning(f"{tag} {state.error}")
                     state.log_event("C", "oracle_infra_pause",
                                     round_num=rnd, detail=state.error)
+                    state.stage_c_rounds = max(0, rnd - 1)
                     save_state(state)
                     return False
             oracle_response = raw
