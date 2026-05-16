@@ -107,7 +107,8 @@ RESULTS_RING_MAX = 200  # keep last N results across restarts
 task_queue: deque[dict] = deque()
 results: dict[str, dict] = {}             # task_id -> result
 pending_tasks: dict[str, dict] = {}       # agent_id -> task currently in flight
-dispatch_times: dict[str, float] = {}     # agent_id -> dispatch timestamp
+dispatch_times: dict[str, float] = {}     # agent_id -> latest activity heartbeat
+active_start_times: dict[str, float] = {} # agent_id -> first dispatch timestamp
 sessions: dict[str, dict] = {}            # conversation_id -> session record
 _lock = threading.RLock()  # reentrant: handlers may chain helper calls under lock
 
@@ -118,7 +119,18 @@ SOURCE_SHA = ""
 def _is_extraction_failure_response(response: str) -> bool:
     """Detect userscript diagnostics that are not substantive reviews."""
     cleaned = response.strip()
-    return cleaned.startswith("ERROR: Response too short or empty")
+    if not cleaned:
+        return True
+    lower = cleaned.lower()
+    if cleaned.startswith("ERROR: Response too short or empty"):
+        return True
+    if len(cleaned) < 300:
+        ui_fragments = (
+            "chatgpt 说", "chatgpt said", "已思考", "thought for",
+            "展开收起", "进阶专业", "thinking", "advanced voice",
+        )
+        return any(fragment in lower for fragment in ui_fragments)
+    return False
 
 
 def _now_iso() -> str:
@@ -208,10 +220,15 @@ def _persist_queue_state() -> None:
             aid: ts for aid, ts in dispatch_times.items()
             if aid in clean_pending
         }
+        clean_active_start = {
+            aid: ts for aid, ts in active_start_times.items()
+            if aid in clean_pending
+        }
         payload = {
             "task_queue": clean_queue,
             "pending_tasks": clean_pending,
             "dispatch_times": clean_dispatch,
+            "active_start_times": clean_active_start,
             "saved_at": _now_iso(),
         }
         QUEUE_STATE_PATH.write_text(
@@ -261,6 +278,7 @@ def _hydrate_queue_state() -> None:
     raw_queue = data.get("task_queue") or []
     raw_pending = data.get("pending_tasks") or {}
     raw_dispatch = data.get("dispatch_times") or {}
+    raw_active_start = data.get("active_start_times") or {}
     now = time.time()
     requeued = 0
     skipped_disposable = 0
@@ -284,6 +302,7 @@ def _hydrate_queue_state() -> None:
         else:
             pending_tasks[aid] = task
             dispatch_times[aid] = ts
+            active_start_times[aid] = float(raw_active_start.get(aid) or ts)
     if requeued:
         print(f"[server] hydrate: re-queued {requeued} orphan pending task(s) past {TASK_TIMEOUT}s timeout")
     if skipped_disposable:
@@ -329,6 +348,14 @@ def _record_turn(conv_id: str, turn: dict) -> None:
         _write_session(sess)
 
 
+class BoundedThreadingHTTPServer(ThreadingHTTPServer):
+    """Threaded HTTP server tuned for long-running local browser polling."""
+
+    daemon_threads = True
+    block_on_close = False
+    request_queue_size = 64
+
+
 class OracleHandler(BaseHTTPRequestHandler):
     """HTTP request handler for oracle bridge."""
 
@@ -359,6 +386,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             for aid in stale:
                 task = pending_tasks.pop(aid)
                 dispatch_times.pop(aid, None)
+                active_start_times.pop(aid, None)
                 task_queue.appendleft(task)  # re-queue at front
                 print(f"[server] Agent {aid} timed out — task {task['task_id']} returned to queue")
             if stale:
@@ -401,14 +429,16 @@ class OracleHandler(BaseHTTPRequestHandler):
                         self._send_json({
                             "status": "busy",
                             "assigned_agent": agent_id,
-                            "elapsed": int(time.time() - dispatch_times.get(agent_id, time.time())),
+                            "elapsed": int(time.time() - active_start_times.get(agent_id, time.time())),
                         })
                     return
                 if task_queue and len(pending_tasks) < MAX_AGENTS:
                     task = task_queue.popleft()
                     task["assigned_agent"] = agent_id
                     pending_tasks[agent_id] = task
-                    dispatch_times[agent_id] = time.time()
+                    now = time.time()
+                    dispatch_times[agent_id] = now
+                    active_start_times[agent_id] = now
                     _persist_queue_state()
                     print(f"[server] Dispatched {task['task_id']} -> {agent_id} "
                           f"(conv={(task.get('conversation_id') or '-')[:12]} "
@@ -426,7 +456,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                     aid: {
                         "task_id": t.get("task_id", "?"),
                         "conversation_id": t.get("conversation_id", "") or "",
-                        "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                        "elapsed": int(time.time() - active_start_times.get(aid, time.time())),
+                        "last_activity_s": int(time.time() - dispatch_times.get(aid, time.time())),
                     }
                     for aid, t in pending_tasks.items()
                 }
@@ -467,9 +498,11 @@ class OracleHandler(BaseHTTPRequestHandler):
                     if task.get("task_id") == task_id:
                         self._send_json({
                             "task_id": task_id,
-                            "phase": "active",
+                            "phase": task.get("phase") or "active",
+                            "detail": task.get("phase_detail", ""),
                             "agent_id": aid,
-                            "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                            "elapsed": int(time.time() - active_start_times.get(aid, time.time())),
+                            "last_activity_s": int(time.time() - dispatch_times.get(aid, time.time())),
                         })
                         return
                 for idx, task in enumerate(task_queue, start=1):
@@ -543,11 +576,17 @@ class OracleHandler(BaseHTTPRequestHandler):
         if self.path == "/cancel":
             self._handle_cancel(data)
             return
+        if self.path == "/release":
+            self._handle_release(data)
+            return
         if self.path == "/result":
             self._handle_result(data)
             return
         if self.path == "/ack":
             self._handle_ack(data)
+            return
+        if self.path == "/phase":
+            self._handle_phase(data)
             return
         if self.path == "/close":
             self._handle_close(data)
@@ -668,6 +707,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 if task.get("task_id") == task_id:
                     del pending_tasks[aid]
                     dispatch_times.pop(aid, None)
+                    active_start_times.pop(aid, None)
                     removed_agents.append(aid)
 
             results[task_id] = {
@@ -688,6 +728,42 @@ class OracleHandler(BaseHTTPRequestHandler):
             "task_id": task_id,
             "removed_queue": removed_queue,
             "removed_agents": removed_agents,
+        })
+
+    def _handle_release(self, data: dict) -> None:
+        """Release an active task back to the queue without marking it failed.
+
+        The browser userscript calls this when it has claimed a task but cannot
+        safely send the prompt, for example after losing the foreground tab.
+        """
+        task_id = data.get("task_id", "")
+        agent_id = data.get("agent_id", "")
+        reason = data.get("reason", "released")
+        if not task_id or not agent_id:
+            self._send_json({"error": "need task_id and agent_id"}, 400)
+            return
+
+        released = False
+        with _lock:
+            task = pending_tasks.get(agent_id)
+            if task and task.get("task_id") == task_id:
+                task = pending_tasks.pop(agent_id)
+                dispatch_times.pop(agent_id, None)
+                active_start_times.pop(agent_id, None)
+                task["status"] = "queued"
+                task["released_at"] = _now_iso()
+                task["release_reason"] = reason
+                task_queue.appendleft(task)
+                released = True
+                _persist_queue_state()
+
+        print(f"[server] Released {task_id} from {agent_id}: {reason} "
+              f"released={released}")
+        self._send_json({
+            "status": "released" if released else "not_active",
+            "task_id": task_id,
+            "agent_id": agent_id,
+            "queue_length": len(task_queue),
         })
 
     def _handle_result(self, data: dict) -> None:
@@ -711,6 +787,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 if pending_tasks[aid].get("task_id") == task_id:
                     task = pending_tasks.pop(aid)
                     dispatch_times.pop(aid, None)
+                    active_start_times.pop(aid, None)
                     break
             extraction_failed = _is_extraction_failure_response(response)
             conv_id = (task or {}).get("conversation_id", "") or ""
@@ -776,6 +853,21 @@ class OracleHandler(BaseHTTPRequestHandler):
             if agent_id in dispatch_times:
                 dispatch_times[agent_id] = time.time()
         print(f"[server] Ack: {task_id} by {agent_id}")
+        self._send_json({"status": "ok"})
+
+    def _handle_phase(self, data: dict) -> None:
+        task_id = data.get("task_id", "")
+        agent_id = data.get("agent_id", "?")
+        phase = str(data.get("phase", "") or "")[:80]
+        detail = str(data.get("detail", "") or "")[:500]
+        with _lock:
+            task = pending_tasks.get(agent_id)
+            if task and (not task_id or task.get("task_id") == task_id):
+                dispatch_times[agent_id] = time.time()
+                task["phase"] = phase or "active"
+                task["phase_detail"] = detail
+                task["phase_at"] = _now_iso()
+        print(f"[server] Phase: {task_id} by {agent_id}: {phase} {detail[:120]}")
         self._send_json({"status": "ok"})
 
     def _handle_close(self, data: dict) -> None:
@@ -1048,7 +1140,7 @@ def main():
     _hydrate_queue_state()
     _hydrate_results_ring()
     SOURCE_SHA = _compute_source_sha()
-    server = ThreadingHTTPServer(("127.0.0.1", PORT), OracleHandler)
+    server = BoundedThreadingHTTPServer(("127.0.0.1", PORT), OracleHandler)
     print(f"[server] Oracle server running on http://localhost:{PORT}")
     print(f"[server] Source sha: {SOURCE_SHA}")
     print(f"[server] Sessions dir: {SESSIONS_DIR}")
