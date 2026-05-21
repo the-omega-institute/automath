@@ -899,7 +899,8 @@ partial-sum inequality therefore yields the final claim.
   finite-dimensional minimizers with \(N-d_{\mathcal D}\) zero summands.
 
   The exponent \(1/2\) cannot be improved uniformly, even when
-  \(N=2\) and the determinant has a non-zero double root.
+  \(N=2\) and the determinant has a non-zero double root; the explicit
+  obstruction is \Cref{prop:two-by-two-square-root-sharpness}.
 \end{theorem}
 
 \begin{proof}
@@ -969,56 +970,73 @@ partial-sum inequality therefore yields the final claim.
     \le \sqrt N\,\|A-D\|_2
     \le N\sqrt{(N-1)\|T\|_1\,\varepsilon(T)}.
   \]
-  This proves the asserted distance estimate.
+  This proves the asserted distance estimate. The optimality of the
+  exponent is exactly \Cref{prop:two-by-two-square-root-sharpness}.
+\end{proof}
 
-  It remains to justify the optimality of the exponent. Fix
-  \(\lambda\in\CC\setminus\{0\}\), and for \(c\in\CC\) put
+\begin{proposition}[Two-by-two square-root sharpness]
+  \label{prop:two-by-two-square-root-sharpness}
+  Fix \(\lambda\in\CC\setminus\{0\}\). For \(c\in\CC\), set
   \[
-    A_c=\begin{pmatrix}\lambda&c\\0&\lambda\end{pmatrix},
-    \qquad
-    D=\lambda I_2 .
+    A_c=\begin{pmatrix}\lambda&c\\0&\lambda\end{pmatrix}.
   \]
-  Each \(A_c\) has determinant
-  \((1-\lambda z)^2\). By
-  \Cref{lem:two-by-two-trace-norm-pinching},
+  Then each \(A_c\) lies in the determinant fiber
   \[
-    \varepsilon(A_c)
-    =
-    \sqrt{4\abs{\lambda}^2+\abs c^2}
-      -2\abs{\lambda}
+    \det(I-zA_c)=(1-\lambda z)^2,
+  \]
+  whose two-dimensional minimizer class is \(\{\lambda I_2\}\), and
+  \[
+    \|A_c\|_1-2\abs\lambda
     =
     \frac{\abs c^2}
-    {\sqrt{4\abs{\lambda}^2+\abs c^2}+2\abs{\lambda}}.
+    {\sqrt{4\abs{\lambda}^2+\abs c^2}+2\abs{\lambda}}
+    =\frac{\abs c^2}{4\abs\lambda}+O(\abs c^4).
   \]
-  Thus
+  Moreover
   \[
-    \varepsilon(A_c)
-    =\frac{\abs c^2}{4\abs{\lambda}}+O(\abs c^4)
-    \qquad(c\to0).
+    \operatorname{dist}_1(A_c,\{\lambda I_2\})=\abs c.
   \]
-  The minimizer
-  orbit for the determinant \((1-\lambda z)^2\) in dimension two is the
-  singleton \(\{\lambda I_2\}\), because a normal matrix with the only
-  eigenvalue \(\lambda\) is \(\lambda I_2\). Therefore
+  Hence no estimate
+  \(\operatorname{dist}_1(T,\mathcal M)=O(\varepsilon(T)^\alpha)\),
+  with \(\alpha>1/2\), can hold uniformly near the minimizer class in
+  finite-dimensional determinant fibers.
+\end{proposition}
+
+\begin{proof}
+  The determinant identity is immediate because \(A_c\) is triangular with
+  diagonal entries \(\lambda,\lambda\). The normal matrices in this fiber
+  have the single eigenvalue \(\lambda\), and therefore are equal to
+  \(\lambda I_2\); hence the minimizer class is the singleton
+  \(\{\lambda I_2\}\) by
+  \Cref{thm:finite-dimensional-trace-stability}, or directly by normality.
+
+  To compute the trace norm, write
   \[
-    \operatorname{dist}_1(A_c,\mathcal M_{\mathcal D,2})
-    =
-    \|A_c-\lambda I_2\|_1
-    =
-    \left\|\begin{pmatrix}0&c\\0&0\end{pmatrix}\right\|_1
-    =
-    \abs c .
+    A_c^*A_c=
+    \begin{pmatrix}
+      \abs\lambda^2 & \overline\lambda c\\
+      \lambda\overline c & \abs\lambda^2+\abs c^2
+    \end{pmatrix}.
   \]
-  Hence
+  Its trace is \(2\abs\lambda^2+\abs c^2\) and its determinant is
+  \(\abs\lambda^4\). For a positive \(2\times2\) matrix with eigenvalues
+  \(s_1^2,s_2^2\), one has
+  \((s_1+s_2)^2=s_1^2+s_2^2+2s_1s_2\). Therefore
   \[
-    \operatorname{dist}_1(A_c,\mathcal M_{\mathcal D,2})
-    =
-    2\sqrt{\abs{\lambda}}\,
-    \varepsilon(A_c)^{1/2}+O(\varepsilon(A_c)^{3/2}).
+    \|A_c\|_1^2
+    =2\abs\lambda^2+\abs c^2+2\abs\lambda^2
+    =4\abs\lambda^2+\abs c^2,
   \]
-  No estimate of order
-  \(O(\varepsilon^\alpha)\) with \(\alpha>1/2\) can therefore hold
-  uniformly near the minimizer class.
+  and the displayed formula for \(\|A_c\|_1-2\abs\lambda\) follows by
+  rationalizing the difference. Finally,
+  \[
+    A_c-\lambda I_2=\begin{pmatrix}0&c\\0&0\end{pmatrix}
+  \]
+  has rank one and singular value \(\abs c\), so its trace norm is
+  \(\abs c\). Since
+  \(\|A_c\|_1-2\abs\lambda\sim \abs c^2/(4\abs\lambda)\), the distance is
+  a non-zero constant multiple of the square root of the defect to first
+  order. This rules out every uniform exponent \(\alpha>1/2\).
 \end{proof}
 
 \begin{lemma}[Collapsed multiplicities under a Schatten budget]
@@ -1646,6 +1664,65 @@ case.
   root-space nilpotents are retained.
 \end{definition}
 
+\begin{lemma}[Riesz decomposition with quasinilpotent complement]
+  \label{lem:compact-riesz-root-space-quasinilpotent-complement}
+  Let \(T\in\sone(H)\), and let \(F\subset\sigma(T)\setminus\{0\}\)
+  be a finite set containing all non-zero spectral points of \(T\). For
+  \(\lambda\in F\), let
+  \[
+    \mathcal R_\lambda(T)=\bigcup_{k\ge1}\ker((T-\lambda I)^k)
+  \]
+  be the Riesz root space. Then each \(\mathcal R_\lambda(T)\) is
+  finite-dimensional, and there is a closed \(T\)-invariant subspace
+  \(K_T\) such that
+  \[
+    H=\left(\bigoplus_{\lambda\in F}\mathcal R_\lambda(T)\right)
+      \dotplus K_T
+  \]
+  algebraically and topologically. With respect to this decomposition,
+  \(T\) is similar to
+  \[
+    \left(\bigoplus_{\lambda\in F}T|_{\mathcal R_\lambda(T)}\right)
+      \oplus Q_T,
+    \qquad Q_T:=T|_{K_T},
+  \]
+  where \(Q_T\in\sone(K_T)\) is quasinilpotent. The summands and
+  projections are the standard Riesz spectral summands for compact
+  operators \cite[Chapter~1]{Ringrose1971CompactNonSelfAdjoint}.
+\end{lemma}
+
+\begin{proof}
+  Since \(T\) is compact, every non-zero spectral point is an isolated
+  eigenvalue of finite algebraic multiplicity, and the corresponding Riesz
+  projection has finite-dimensional range. Choose pairwise disjoint small
+  positively oriented circles \(\Gamma_\lambda\), \(\lambda\in F\), each
+  enclosing \(\lambda\) and no other point of \(\sigma(T)\), and none
+  enclosing \(0\). Set
+  \[
+    P_\lambda=\frac{1}{2\pi i}\int_{\Gamma_\lambda}
+      (\zeta I-T)^{-1}\,d\zeta .
+  \]
+  The Riesz calculus gives commuting finite-rank idempotents with
+  \(\Ran P_\lambda=\mathcal R_\lambda(T)\), and
+  \(P_\lambda P_\mu=0\) for \(\lambda\ne\mu\). Put
+  \[
+    P=\sum_{\lambda\in F}P_\lambda,
+    \qquad K_T=\Ran(I-P).
+  \]
+  Then \(P\) is a bounded projection commuting with \(T\), so \(K_T\) is
+  closed and \(T\)-invariant, and the displayed topological direct sum
+  follows. The block diagonal similarity is simply the representation of
+  \(T\) on the range of \(P\) and the range of \(I-P\).
+
+  Because \(Q_T=T|_{K_T}\) is the restriction of a trace-class operator to
+  a complemented invariant subspace, it is trace-class on \(K_T\). The
+  spectrum of \(Q_T\) is the part of \(\sigma(T)\) outside the Riesz
+  spectral sets enclosed by the curves \(\Gamma_\lambda\), together with
+  the possible point \(0\). Since \(F\) contains all non-zero spectral
+  points of \(T\), this spectrum is contained in \(\{0\}\). Thus the
+  spectral radius of \(Q_T\) is zero, so \(Q_T\) is quasinilpotent.
+\end{proof}
+
 \begin{theorem}[Quasinilpotent stabilization preserves non-zero root-space invariants]
   \label{thm:quasinilpotent-stabilization-nonzero-invariants}
   Let \(T\in\sone(H)\), \(T'\in\sone(H')\), and let
@@ -1902,38 +1979,16 @@ case.
   \(\lambda\in\Sigma_{\mathcal D}\), and there are no other non-zero
   spectral points.
 
-  Since \(\Sigma_{\mathcal D}\) is finite, choose pairwise disjoint small
-  circles \(\Gamma_\lambda\) enclosing the points
-  \(\lambda\in\Sigma_{\mathcal D}\) and not enclosing \(0\). The Riesz
-  projections
+  Applying
+  \Cref{lem:compact-riesz-root-space-quasinilpotent-complement} with
+  \(F=\Sigma_{\mathcal D}\) gives the displayed complemented direct-sum
+  decomposition, the similarity
   \[
-    P_\lambda
-    :=
-    \frac{1}{2\pi i}\int_{\Gamma_\lambda}
-      (\zeta I-T)^{-1}\,d\zeta
-  \]
-  have ranges \(\mathcal R_\lambda(T)\), have finite rank, commute with
-  \(T\), and are mutually annihilating idempotents. Put
-  \[
-    P:=\sum_{\lambda\in\Sigma_{\mathcal D}}P_\lambda,
-    \qquad
-    K_T:=\Ran(I-P).
-  \]
-  The projection \(P\) is bounded, so \(K_T\) is closed, and both
-  \(\Ran P\) and \(K_T\) are \(T\)-invariant. This gives the
-  displayed topological direct sum. With respect to it, \(T\) is similar
-  to
-  \[
-    T|_{\Ran P}\oplus T|_{K_T}
-    =
+    T\sim
     \left(\bigoplus_{\lambda\in\Sigma_{\mathcal D}}T_\lambda\right)
-      \oplus Q_T .
+      \oplus Q_T,
   \]
-  Because \(T\in\sone(H)\) and \(K_T\) is invariant for the bounded
-  projection \(I-P\), the restriction \(Q_T=T|_{K_T}\) is trace-class on
-  \(K_T\). The spectrum of \(Q_T\) is the part of the spectrum of \(T\)
-  outside the enclosed non-zero Riesz spectral sets, hence is contained
-  in \(\{0\}\). Thus \(Q_T\) is quasinilpotent.
+  and the fact that \(Q_T\) is trace-class and quasinilpotent.
 
   The preceding decomposition shows that the algebraic relation
   \(\sim_{\mathrm{alg}}\) is exactly equality of the finite-dimensional
