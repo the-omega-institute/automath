@@ -1,6 +1,68 @@
 \subsection{Trace-class threshold and normal classification}
 \label{subsec:trace-class-threshold-normal-classification}
 
+\begin{proposition}[Fredholm and regularized zero-divisor correspondence]
+  \label{prop:fredholm-regularized-zero-divisor-correspondence}
+  Let \(r\in\NN\). If \(T\in\mathcal S_r(H)\), then
+  \(z\mapsto\det_r(I-zT)\) is an entire function with value \(1\) at
+  \(z=0\), and its zero divisor is
+  \[
+    \sum_{\lambda\in\sigma(T)\setminus\{0\}}
+      m_{\mathrm{alg}}(\lambda;T)\,[\lambda^{-1}],
+  \]
+  where \(m_{\mathrm{alg}}(\lambda;T)\) denotes algebraic multiplicity.
+  Thus the order of the zero at \(z=\lambda^{-1}\) is exactly
+  \(m_{\mathrm{alg}}(\lambda;T)\), and there are no other zeros. For
+  \(r=1\), this is the ordinary Fredholm determinant; in particular
+  \[
+    \det(I-zT)
+    =\prod_{\lambda\in\sigma(T)\setminus\{0\}}
+      (1-z\lambda)^{m_{\mathrm{alg}}(\lambda;T)}
+  \]
+  locally uniformly on compact subsets of \(\CC\). Consequently a
+  trace-class quasinilpotent operator \(Q\) satisfies
+  \(\det(I-zQ)\equiv1\), and an \(\mathcal S_r\)-quasinilpotent satisfies
+  \(\det_r(I-zQ)\equiv1\).
+\end{proposition}
+
+\begin{proof}
+  For finite-rank \(A\), the regularized determinant is
+  \[
+    \det_r(I-zA)
+    =\det(I-zA)
+      \exp\!\left(\sum_{\ell=1}^{r-1}
+        \frac{z^\ell\Tr(A^\ell)}{\ell}\right),
+  \]
+  with the empty sum understood as \(0\) when \(r=1\). The exponential
+  factor is non-vanishing, so the zeros, with order, are precisely the
+  reciprocals of the non-zero eigenvalues of \(A\), counted with algebraic
+  multiplicity. The general Schatten-class statement is the standard
+  extension of this construction and zero-multiplicity theorem for
+  regularized Fredholm determinants; see Simon's accounts of infinite and
+  regularized determinants
+  \cite{Simon1977InfiniteDeterminants,Simon2005TraceIdeals}, the
+  Gohberg--Krein determinant theory
+  \cite{GohbergKrein1969NonSelfAdjoint}, the continuity treatment of
+  Gohberg--Goldberg--Krupnik
+  \cite{GohbergGoldbergKrupnik1996TracesDeterminants}, and the
+  regularized determinant product formulas in
+  \cite{GesztesyLatushkinMitreaZinchenko2005}. In the trace-class case,
+  the same theorem gives the displayed canonical product, whose local
+  uniform convergence follows from
+  \(\sum_{
+    \lambda\ne0}\abs{\lambda}m_{\mathrm{alg}}(\lambda;T)<\infty\).
+  If \(Q\) is trace-class and quasinilpotent, the ordinary product is
+  empty and therefore \(\det(I-zQ)\equiv1\). More generally, if
+  \(Q\in\mathcal S_r\) is quasinilpotent, then \(Q^n\) is trace-class for
+  every \(n\ge r\), and Lidskii's theorem gives \(\Tr(Q^n)=0\). The local
+  expansion
+  \[
+    \log\det_r(I-zQ)=-\sum_{n\ge r}\frac{z^n\Tr(Q^n)}{n}
+  \]
+  is therefore identically zero near the origin. Since
+  \(\det_r(I-zQ)\) is entire, it follows that \(\det_r(I-zQ)\equiv1\).
+\end{proof}
+
 \begin{lemma}[Classical Fredholm determinant rigidity]
   \label{lem:fredholm-spectral-rigidity}
   Let \(T_1,T_2\in \sone\). If
@@ -18,16 +80,13 @@
 \end{lemma}
 
 \begin{proof}
-  For \(T\in\sone(H)\), the Fredholm determinant \(z\mapsto\det(I-zT)\)
-  is entire, and its zeros are exactly the reciprocals of the non-zero
-  eigenvalues of \(T\), with the order of the zero at \(z=\lambda^{-1}\)
-  equal to the algebraic multiplicity of the eigenvalue \(\lambda\). This
-  is the standard zero-multiplicity correspondence of
-  \cite{Simon1977InfiniteDeterminants,GohbergKrein1969NonSelfAdjoint,GohbergGoldbergKrupnik1996TracesDeterminants,GesztesyLatushkinMitreaZinchenko2005}
-  and \cite[Theorem~3.7 and Chapter~3]{Simon2005TraceIdeals}. Equality as holomorphic
-  germs at \(0\) therefore extends to all of \(\CC\), and the non-zero
-  spectra of \(T_1\) and \(T_2\) must coincide with algebraic
-  multiplicity.
+  By
+  \Cref{prop:fredholm-regularized-zero-divisor-correspondence}, the
+  ordinary Fredholm determinant is entire and its zero divisor records
+  exactly the reciprocals of the non-zero eigenvalues, with algebraic
+  multiplicity. Equality as holomorphic germs at \(0\) therefore extends
+  to all of \(\CC\), identifies the zero divisors, and forces the non-zero
+  spectra of \(T_1\) and \(T_2\) to coincide with algebraic multiplicity.
 
   The same germ equality also identifies the coefficients in the
   Fredholm--Witt expansion from \Cref{prop:fredholm-witt-bridge}, so
@@ -278,6 +337,56 @@ realisation theorem first.
   \]
   The converse is immediate because zero summands do not change the
   Fredholm determinant.
+\end{proof}
+
+\begin{corollary}[Intrinsic normal trace-class realisability criterion]
+  \label{cor:arbitrary-collapsed-multiset-normal-realisation}
+  Let \(M:\CC^\times\to\NN\cup\{0\}\) have countable support. Then the
+  following are equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item The collapsed multiset is summable:
+      \[
+        \sum_{\lambda\in\CC^\times}\abs{\lambda}M(\lambda)<\infty.
+      \]
+    \item There exist a Hilbert space \(H\) and a normal trace-class
+      operator \(N\in\sone(H)\) whose non-zero eigenvalue multiset is
+      exactly \(M\), counted with algebraic multiplicity.
+  \end{enumerate}
+  Whenever these conditions hold, the realisation is unique up to unitary
+  equivalence and arbitrary zero summands, and its Fredholm determinant is
+  \[
+    D_M(z)=\prod_{\lambda\in\CC^\times}(1-\lambda z)^{M(\lambda)}.
+  \]
+  If \(M=M_{\mathcal D}\) for summable cyclic data \(\mathcal D\), then the
+  cyclic model \(L_{\mathcal D}\) is one concrete presentation of this
+  intrinsic normal realisation; changing the Euler-factor packaging without
+  changing \(M_{\mathcal D}\) does not change the normal trace-class
+  realisation class.
+\end{corollary}
+
+\begin{proof}
+  If the summability condition holds, the diagonal normal operator \(N_M\)
+  from \Cref{thm:collapsed-multiset-normal-realisation} is trace-class and
+  has exactly the prescribed non-zero eigenvalue multiset. Conversely,
+  suppose \(N\in\sone(H)\) is normal and has non-zero eigenvalue multiset
+  \(M\). The compact spectral theorem gives a unitary decomposition of the
+  non-zero spectral part as
+  \[
+    \bigoplus_{\lambda\in\Sigma_M}\lambda I_{M(\lambda)}.
+  \]
+  Hence
+  \[
+    \sum_{\lambda\in\CC^\times}\abs{\lambda}M(\lambda)
+    \le \Tr|N|=\|N\|_1<\infty,
+  \]
+  with equality after ignoring the kernel summand. The uniqueness and
+  determinant formula are precisely
+  \Cref{thm:collapsed-multiset-normal-realisation}. For cyclic data,
+  \Cref{prop:collapsed-spectral-multiplicities} identifies the non-zero
+  spectral multiplicity of \(L_{\mathcal D}\) with \(M_{\mathcal D}\), so
+  \(L_{\mathcal D}\) is unitarily equivalent to \(N_{M_{\mathcal D}}\) up
+  to the harmless ordering of the direct sum. The last assertion follows
+  from the same uniqueness statement.
 \end{proof}
 
 The equivalence in \Cref{thm:normal-realizability-threshold} is independent
