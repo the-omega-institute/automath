@@ -271,6 +271,60 @@ partial-sum inequality therefore yields the final claim.
   functions of the entries of a \(2\times2\) matrix.
 \end{proof}
 
+\begin{lemma}[Uniform two-by-two Schatten pinching modulus]
+  \label{lem:uniform-two-by-two-schatten-modulus}
+  Let \(1<p<\infty\), let \(E\subset\CC\) be finite, and let \(R>0\). For
+  \(a,b,c\in\CC\), set
+  \[
+    B(a,b,c):=\begin{pmatrix}a&c\\0&b\end{pmatrix},
+    \qquad
+    \Phi_p(a,b,c):=\|B(a,b,c)\|_p^p-\abs a^p-\abs b^p .
+  \]
+  Define
+  \[
+    \Theta_{p,E,R}(\varepsilon)
+    :=
+    \sup\{\abs c:
+      a,b\in E,
+      \|B(a,b,c)\|_p\le R,
+      \Phi_p(a,b,c)\le\varepsilon\},
+  \]
+  with the convention that the supremum of the empty set is \(0\). Then
+  \(\Theta_{p,E,R}\) is a finite nondecreasing function on
+  \([0,\infty)\) and
+  \[
+    \Theta_{p,E,R}(\varepsilon)\downarrow0
+    \qquad(\varepsilon\downarrow0).
+  \]
+  Consequently, whenever \(a,b\in E\), \(\|B(a,b,c)\|_p\le R\), and
+  \(\Phi_p(a,b,c)\le\varepsilon\), one has
+  \(\abs c\le\Theta_{p,E,R}(\varepsilon)\).
+\end{lemma}
+
+\begin{proof}
+  The function is nondecreasing because the defining set increases with
+  \(\varepsilon\). It is finite since each admissible matrix satisfies
+  \(\abs c\le \|B(a,b,c)\|_2\), while finite rank norm comparison gives
+  \[
+    \|B(a,b,c)\|_2
+    \le 2^{\max\{1/2-1/p,0\}}\|B(a,b,c)\|_p
+    \le 2^{\max\{1/2-1/p,0\}}R .
+  \]
+
+  Suppose that \(\Theta_{p,E,R}(\varepsilon)\) does not tend to \(0\) as
+  \(\varepsilon\downarrow0\). Then there are \(\rho>0\), numbers
+  \(\varepsilon_\nu\downarrow0\), and triples
+  \((a_\nu,b_\nu,c_\nu)\) with \(a_\nu,b_\nu\in E\),
+  \(\|B(a_\nu,b_\nu,c_\nu)\|_p\le R\),
+  \(\Phi_p(a_\nu,b_\nu,c_\nu)\le\varepsilon_\nu\), and
+  \(\abs{c_\nu}\ge\rho\). Passing to a subsequence, the finiteness of
+  \(E\) makes \(a_\nu=a\) and \(b_\nu=b\) constant. The preceding bound on
+  \(c_\nu\) gives a further subsequence with \(c_\nu\to c\). Continuity of
+  singular values gives \(\Phi_p(a,b,c)=0\), so
+  \Cref{lem:two-by-two-schatten-pinching} implies \(c=0\), contradicting
+  \(\abs c\ge\rho\).
+\end{proof}
+
 \begin{lemma}[Trace-norm convergence of Schur compressions]
   \label{lem:trace-norm-schur-compressions}
   Let \(T\in\sone(H)\), and let \((P_N)_{N\ge1}\) be finite-rank
@@ -1224,7 +1278,7 @@ partial-sum inequality therefore yields the final claim.
   off-diagonal entries to tend to \(0\).
 \end{proof}
 
-\begin{theorem}[Qualitative finite-dimensional Schatten stability on bounded sets]
+\begin{theorem}[Finite-dimensional Schatten stability with inverse pinching modulus]
   \label{thm:finite-dimensional-schatten-stability}
   Let \(1<p<\infty\), put \(r=\lceil p\rceil\), and let
   \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
@@ -1248,15 +1302,21 @@ partial-sum inequality therefore yields the final claim.
       \lambda I_{M_{\mathcal D}(\lambda)}:
       \lambda\in\Sigma_{\mathcal D}\bigr)\oplus0_{N-d_{\mathcal D}}.
   \]
-  For every \(R>\tau_{\mathcal D,p}^{1/p}\) there is a nondecreasing
-  function
+  Put \(E_{\mathcal D}:=\Sigma_{\mathcal D}\cup\{0\}\). For every
+  \(R>\tau_{\mathcal D,p}^{1/p}\) define
   \[
-    \omega_{N,p,R,\mathcal D}:[0,\infty)\longrightarrow[0,\infty),
-    \qquad
-    \omega_{N,p,R,\mathcal D}(\varepsilon)\downarrow0
-    \quad(\varepsilon\downarrow0),
+    \omega_{N,p,R,\mathcal D}^{\mathrm{Sch}}(\varepsilon)
+    :=
+    N^{\max\{1/p-1/2,0\}}
+    \sqrt{\frac{N(N-1)}{2}}\,
+    \Theta_{p,E_{\mathcal D},R}(\varepsilon),
   \]
-  such that every \(T\in M_N(\CC)\) satisfying
+  where \(\Theta_{p,E_{\mathcal D},R}\) is the two-by-two inverse
+  pinching modulus of
+  \Cref{lem:uniform-two-by-two-schatten-modulus}. Then
+  \(\omega_{N,p,R,\mathcal D}^{\mathrm{Sch}}\) is finite,
+  nondecreasing, and tends to \(0\) at the origin. Every
+  \(T\in M_N(\CC)\) satisfying
   \[
     \det_r(I-zT)=\det_r(I-zL_{\mathcal D}),
     \qquad
@@ -1266,61 +1326,70 @@ partial-sum inequality therefore yields the final claim.
   \[
     \dist_p(T,\mathcal M_{\mathcal D,N}^{(p)})
     \le
-    \omega_{N,p,R,\mathcal D}
+    \omega_{N,p,R,\mathcal D}^{\mathrm{Sch}}
       \bigl(\norm{T}_p^p-\tau_{\mathcal D,p}\bigr).
   \]
-  This is a qualitative bounded-set stability statement: the modulus is
-  the compactness modulus defined in the proof, not an asserted explicit
-  numerical rate. Equivalently, in fixed dimension and on bounded
-  \(\mathcal S_p\)-sets, convergence of the regularized determinant-fiber
-  budget to its sharp value forces convergence in \(\mathcal S_p\)-distance
-  to the whole cyclic minimizer orbit.
+  Thus, in fixed dimension and on bounded \(\mathcal S_p\)-sets,
+  convergence of the regularized determinant-fiber budget to its sharp
+  value forces convergence in \(\mathcal S_p\)-distance to the whole cyclic
+  minimizer orbit with the displayed inverse-pinching modulus.
 \end{theorem}
 
 \begin{proof}
-  By \Cref{thm:schatten-determinant-fiber-minimality}, every matrix in
-  the displayed regularized determinant fiber satisfies
+  Let
   \[
-    \norm{T}_p^p-\tau_{\mathcal D,p}\ge0,
+    \varepsilon_p(T):=\norm{T}_p^p-\tau_{\mathcal D,p}.
   \]
-  and equality holds exactly on
-  \(\mathcal M_{\mathcal D,N}^{(p)}\). For fixed \(N,p,R,\mathcal D\),
-  the set
+  By \Cref{thm:schatten-determinant-fiber-minimality},
+  \(\varepsilon_p(T)\ge0\). Choose a Schur triangularisation
+  \(U^*TU=A=[a_{ij}]_{i,j=1}^N\) whose diagonal lists the determinant-forced
+  algebraic eigenvalue multiset: the elements of \(\Sigma_{\mathcal D}\)
+  occur with multiplicities \(M_{\mathcal D}\), and the remaining
+  \(N-d_{\mathcal D}\) entries are zero. Let
+  \(D=\operatorname{diag}(a_{11},\ldots,a_{NN})\) and put \(S=UDU^*\). Then
+  \(S\in\mathcal M_{\mathcal D,N}^{(p)}\) and
   \[
-    K_R:=
-    \{T\in M_N(\CC):
-      \det_r(I-zT)=\det_r(I-zL_{\mathcal D}),\ \norm{T}_p\le R\}
+    \sum_{i=1}^N\abs{a_{ii}}^p=\tau_{\mathcal D,p}.
   \]
-  is compact: it is a closed subset of the closed bounded ball in the
-  finite-dimensional space \(M_N(\CC)\), and the regularized determinant
-  coefficients are continuous functions of the matrix entries. Define
+
+  For \(1\le i<j\le N\), compressing to the \(i,j\) coordinates and using
+  the same block-pinching estimate as in
+  \Cref{thm:schatten-determinant-fiber-minimality} gives
   \[
-    \omega_{N,p,R,\mathcal D}(\varepsilon)
-    :=
-    \sup\{\dist_p(T,\mathcal M_{\mathcal D,N}^{(p)}):
-      T\in K_R,\ \norm{T}_p^p-\tau_{\mathcal D,p}\le\varepsilon\}.
+    \left\|
+      \begin{pmatrix}a_{ii}&a_{ij}\\0&a_{jj}\end{pmatrix}
+    \right\|_p^p-
+    \abs{a_{ii}}^p-\abs{a_{jj}}^p
+    \le \varepsilon_p(T).
   \]
-  This function is nondecreasing. If it did not tend to \(0\) as
-  \(\varepsilon\downarrow0\), there would be a sequence
-  \(T_\nu\in K_R\) with
+  Moreover the two-by-two compression has \(\mathcal S_p\)-norm at most
+  \(\norm{T}_p\le R\), and \(a_{ii},a_{jj}\in E_{\mathcal D}\). Therefore
+  \Cref{lem:uniform-two-by-two-schatten-modulus} yields
   \[
-    \norm{T_\nu}_p^p-\tau_{\mathcal D,p}\to0
+    \abs{a_{ij}}
+    \le
+    \Theta_{p,E_{\mathcal D},R}\bigl(\varepsilon_p(T)\bigr)
+    \qquad(1\le i<j\le N).
   \]
-  but with distance from
-  \(\mathcal M_{\mathcal D,N}^{(p)}\) bounded below by a positive number.
-  Compactness gives a convergent subsequence \(T_{\nu_k}\to T_\infty\) in
-  \(M_N(\CC)\). The determinant identity and the \(\mathcal S_p\)-norm
-  pass to the limit, so
+
+  Since \(A-D\) is strictly upper triangular,
   \[
-    \det_r(I-zT_\infty)=\det_r(I-zL_{\mathcal D}),
-    \qquad
-    \norm{T_\infty}_p^p=\tau_{\mathcal D,p}.
+    \|A-D\|_2
+    \le
+    \sqrt{\frac{N(N-1)}{2}}\,
+    \Theta_{p,E_{\mathcal D},R}\bigl(\varepsilon_p(T)\bigr).
   \]
-  The equality case of
-  \Cref{thm:schatten-determinant-fiber-minimality} puts
-  \(T_\infty\) in \(\mathcal M_{\mathcal D,N}^{(p)}\), contradicting the
-  positive lower bound on the distances. Hence
-  \(\omega_{N,p,R,\mathcal D}(\varepsilon)\to0\).
+  The rank of \(A-D\) is at most \(N\), so finite-rank norm comparison gives
+  \[
+    \|T-S\|_p
+    =\|A-D\|_p
+    \le
+    N^{\max\{1/p-1/2,0\}}\|A-D\|_2 .
+  \]
+  Combining the last two displays gives the asserted distance bound. The
+  finiteness, monotonicity, and vanishing at the origin of
+  \(\omega_{N,p,R,\mathcal D}^{\mathrm{Sch}}\) follow directly from
+  \Cref{lem:uniform-two-by-two-schatten-modulus}.
 \end{proof}
 
 \begin{remark}[What is classical and what is not in the determinant-fiber theorem]
@@ -1341,8 +1410,9 @@ partial-sum inequality therefore yields the final claim.
   \(\mathcal S_p\)-budget is again rigid, the same Schur-compression
   mechanism gives a fixed-entry near-minimizer constraint, and
   \Cref{thm:finite-dimensional-schatten-stability} upgrades this
-  entrywise constraint to a finite-dimensional bounded-set compactness
-  statement on bounded \(\mathcal S_p\)-sets. No infinite-dimensional
+  entrywise constraint to a finite-dimensional bounded-set modulus
+  statement, with the modulus supplied by the inverse two-by-two Schatten
+  pinching function. No infinite-dimensional
   \(\mathcal S_p\)-distance-to-orbit estimate is asserted without an
   additional tail hypothesis.
 \end{remark}
