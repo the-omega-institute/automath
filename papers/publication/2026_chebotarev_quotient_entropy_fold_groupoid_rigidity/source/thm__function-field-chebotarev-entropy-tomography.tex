@@ -58,12 +58,19 @@ where \(\mu\) is the ordinary integer M\"obius function. The Weil bound for the 
 The term \(d=1\) is therefore \(q^n+O_U(q^{n/2})\), while the sum of all terms with \(d>1\) is \(O_U(q^{n/2})\). Hence \(nN_n=q^n+O_U(q^{n/2})\), which proves the asymptotic. For all sufficiently large \(n\), the main term dominates the error, so \(N_n>0\).
 \end{proof}
 
+The next proposition is the explicit-formula input in the normalization used by
+the entropy theorem.  It separates three sources that occur at different
+scales: the square-root normalized reciprocal-zero term of the Artin factor on
+the compact curve, the imprimitive contribution from proper divisors of \(n\),
+and the finite boundary correction caused by replacing a projective curve by an
+open curve.
+
 \begin{proposition}[Normalized reciprocal-zero formula and scale separation]\label{prop:finite-field-normalized-reciprocal-zero-formula}
-Assume the notation of Definition \ref{def:finite-field-quotient-notation}. Let \(\chi\in\widehat G\setminus\{\ind\}\), and write the Artin \(L\)-function of \(\chi\) on \(U\) in the form
+Assume the notation of Definition \ref{def:finite-field-quotient-notation}. Let \(\chi\in\widehat G\setminus\{\ind\}\). After the standard separation of the trivial channel, write the nontrivial Artin factor attached to \(\chi\) as
 \[
 L(U,\chi,T)=\prod_{j=1}^{m_\chi}(1-\alpha_{\chi,j}T)
 \]
-after the trivial factors have been separated. Then
+for the open curve \(U\). Then
 \[
 A_n(\chi)
 =
@@ -79,11 +86,11 @@ R_n(\chi):=
  d\sum_{\substack{v\in |U|\\ \deg v=d}}
  \chi\!\left(\mathrm{Frob}_v^{n/d}\right).
 \]
-The proper-divisor term satisfies \(R_n(\chi)=O_U(1)\), uniformly in \(\chi\) and \(n\). If \(U=C\) is projective, there is no boundary contribution. For a nonprojective open \(U\subset C\), the finitely many omitted boundary local factors change the corresponding compactified trace formula by at most \(O_U(q^{-n/2})\) after the same normalization. In particular the square-root normalized explicit formula has two different error scales: lower-degree primitive-prime terms are uniformly bounded at the \(A_n\)-scale, while finite boundary or local-factor modifications are exponentially small, of size \(O_U(q^{-n/2})\).
+The term \(-q^{-n/2}\sum_j\alpha_{\chi,j}^{\,n}\) is the normalized Artin-zero contribution. The term \(R_n(\chi)\) is exactly the imprimitive proper-divisor contribution and satisfies \(R_n(\chi)=O_U(1)\), uniformly in \(\chi\) and \(n\). If \(U=C\) is projective, there is no boundary contribution. For a nonprojective open \(U\subset C\), comparison with the middle-extension factor on \(C\) changes the logarithmic-derivative coefficient only through the finitely many boundary local factors; after division by \(q^{n/2}\), this boundary correction is \(O_U(q^{-n/2})\). Thus the formula distinguishes the Artin reciprocal-zero term, the proper-divisor imprimitive term at the \(A_n\)-scale, and the exponentially small open-curve boundary/local-factor term.
 \end{proposition}
 
 \begin{proof}
-The logarithmic derivative of the Euler product gives, for every \(r\ge1\),
+The logarithmic derivative of the Artin Euler product gives, for every \(r\ge1\),
 \[
 \sum_{d\mid r}d\sum_{\substack{v\in |U|\\ \deg v=d}}
 \chi\!\left(\mathrm{Frob}_v^{r/d}\right)
@@ -100,14 +107,36 @@ nB_n(\chi)
  d\sum_{\substack{v\in |U|\\ \deg v=d}}
  \chi\!\left(\mathrm{Frob}_v^{n/d}\right).
 \]
-Division by \(q^{n/2}\) is the displayed formula. Since \(|\chi(\mathrm{Frob}_v^{n/d})|=1\), the proper-divisor sum is bounded in absolute value by
+Division by \(q^{n/2}\) is the displayed formula for the open-curve Artin factor. Since \(|\chi(\mathrm{Frob}_v^{n/d})|=1\), the proper-divisor sum is bounded in absolute value by
 \[
 \sum_{\substack{d\mid n\\d<n}}d\#\{v\in |U|:\deg v=d\}
 \le
 \sum_{d\le n/2}\#U(\FF_{q^d})
 =O_U(q^{n/2}),
 \]
-which proves the uniform bound for \(R_n(\chi)\). If \(U\subset C\) is obtained by removing a finite set \(S\), then each boundary closed point of degree dividing \(n\) contributes at most its degree to the logarithmic-derivative coefficient. Hence the total boundary correction in the degree-\(n\) coefficient is bounded by \(\sum_{s\in S}\deg(s)=O_U(1)\), and after division by \(q^{n/2}\) it is \(O_U(q^{-n/2})\). In the projective case \(S=\emptyset\).
+which proves the uniform bound for \(R_n(\chi)\). If \(U\subset C\) is obtained by removing a finite set \(S\), the compact middle-extension factor and the open Artin factor differ by the local factors at \(S\). Each boundary closed point of degree dividing \(n\) contributes at most its degree to the logarithmic-derivative coefficient. Hence the total boundary correction in the degree-\(n\) coefficient is bounded by \(\sum_{s\in S}\deg(s)=O_U(1)\), and after division by \(q^{n/2}\) it is \(O_U(q^{-n/2})\). In the projective case \(S=\emptyset\).
+\end{proof}
+
+\begin{lemma}[Uniform boundary Euler-factor comparison]\label{lem:finite-field-boundary-euler-factor-comparison}
+Let \(j:U\hookrightarrow C\) be a smooth curve inside its smooth projective compactification, let \(S=C\setminus U\), and let \(V\to U\) be a finite \etale{} abelian Galois cover with group \(G\). For each \(\chi\in\widehat G\), compare the Artin \(L\)-function on \(U\) with the compactly supported middle-extension factor on \(C\) in the usual function-field Artin formalism. Then their ratio is a finite product of local boundary factors
+\[
+L(U,\chi,T)=L(C,j_\ast\chi,T)
+\prod_{s\in S}P_{s,\chi}(T)^{-1},
+\]
+where each \(P_{s,\chi}(T)\) is a polynomial of degree at most \(\deg s\) and every reciprocal root has absolute value at most \(1\). Consequently, if \(\Delta_{\partial,n}(\chi)\) denotes the difference between the degree-\(n\) logarithmic-derivative coefficients of the two sides before square-root normalization, then
+\[
+|\Delta_{\partial,n}(\chi)|
+\le \sum_{s\in S}\deg(s)
+\]
+for all \(n\ge1\), uniformly in \(\chi\in\widehat G\). Equivalently, the induced change in the normalized Artin amplitude is
+\[
+\left|q^{-n/2}\Delta_{\partial,n}(\chi)\right|
+\le \left(\sum_{s\in S}\deg(s)\right)q^{-n/2}.
+\]
+\end{lemma}
+
+\begin{proof}
+For a lisse rank-one Artin sheaf attached to \(\chi\), the Euler product for \(L(U,\chi,T)\) is the product over closed points of \(U\), while the middle-extension factor on \(C\) is obtained by adjoining the finitely many local factors at points of \(S\); this is the standard Artin \(L\)-function formalism over function fields, as in Rosen's account of function-field zeta and Artin factors \cite{Rosen2002} or Serre's Chebotarev formalism \cite{Serre1981}. At a boundary point \(s\), the local factor is the characteristic polynomial of geometric Frobenius on the inertia-invariant stalk. The sheaf has rank one before taking invariants, so this local factor has degree at most one over the residue field of \(s\), equivalently at most \(\deg s\) when written as a polynomial in \(T\) over \(\FF_q\). Its eigenvalues are roots of unity or zero because the cover is finite \etale{} and the monodromy group is finite, so every reciprocal root contributing to \(-T(P'_{s,\chi}/P_{s,\chi})\) has absolute value at most \(1\). The coefficient of \(T^n\) in the logarithmic derivative of a degree-\(d\) polynomial all of whose reciprocal roots have modulus at most \(1\) is bounded by \(d\). Summing over the finitely many boundary points gives the displayed uniform bound, and division by \(q^{n/2}\) gives the normalized estimate.
 \end{proof}
 
 \begin{proposition}[Unitary Artin expansion with complete imprimitive decomposition]\label{prop:finite-field-unitary-artin-expansion}
@@ -275,8 +304,56 @@ Hence
 Multiplying this coefficient estimate by either of the uniformly bounded finite energy sums proves the two displayed replacement formulas.
 \end{proof}
 
+\begin{lemma}[Admissible effective cutoff for the entropy expansion]\label{lem:finite-field-admissible-cutoff}
+Assume the notation of Definition \ref{def:finite-field-quotient-notation}. Fix constants \(C_U\ge1\) and \(M_{V/U}\ge1\) such that, for every \(n\ge1\),
+\[
+\left|\frac{nN_n}{q^n}-1\right|\le C_Uq^{-n/2}
+\qquad\text{and}\qquad
+\max_{\chi\ne\ind}|A_n(\chi)|\le M_{V/U}.
+\]
+Such constants are effective for a fixed cover: \(C_U\) is obtained from the Weil bound for the smooth compactification and the finite boundary set, and \(M_{V/U}\) is obtained from the reciprocal-zero formula of Proposition \ref{prop:finite-field-normalized-reciprocal-zero-formula}, the Weil bound for Artin reciprocal zeros, and the fixed finite character group. Put \(g=|G|\), and choose
+\[
+n_0(V/U)
+\ge
+\left\lceil
+\frac{2}{\log q}
+\log\!\bigl(\max\{2C_U,4(g-1)M_{V/U},1\}\bigr)
+\right\rceil .
+\]
+Then for every \(n\ge n_0(V/U)\) one has \(N_n>0\), and for every subgroup \(H\le G\) and every class \(\bar c\in G/H\), writing
+\[
+|G/H|\mu_n^H(\bar c)=1+\delta_n^H(\bar c),
+\]
+one has \(|\delta_n^H(\bar c)|\le1/2\). Hence the entropy Taylor expansion used in Theorem \ref{thm:projective-finite-field-chebotarev-entropy-tomography} is valid uniformly over all quotients for every \(n\ge n_0(V/U)\).
+\end{lemma}
+
+\begin{proof}
+The first displayed inequality and the definition of \(n_0(V/U)\) give \(|nN_n/q^n-1|\le1/2\), hence \(N_n>0\) and
+\[
+\frac{q^{n/2}}{nN_n}
+=q^{-n/2}\left(\frac{nN_n}{q^n}\right)^{-1}
+\le 2q^{-n/2}.
+\]
+Let \(Q=G/H\). Fourier inversion for the count vector on \(Q\) gives
+\[
+|Q|\mu_n^H(\bar c)-1
+=\frac1{N_n}
+\sum_{\psi\in\widehat Q\setminus\{\ind\}}
+B_n(\psi\circ\pi_H)\overline{\psi(\bar c)}.
+\]
+Since \(|B_n(\psi\circ\pi_H)|=q^{n/2}|A_n(\psi\circ\pi_H)|/n\), the amplitude bound gives
+\[
+|\delta_n^H(\bar c)|
+\le (|Q|-1)M_{V/U}\frac{q^{n/2}}{nN_n}
+\le 2(g-1)M_{V/U}q^{-n/2}
+\le\frac12.
+\]
+This is precisely the uniform smallness condition needed for
+\((1+x)\log(1+x)=x+x^2/2+O(|x|^3)\) with an absolute remainder constant.
+\end{proof}
+
 \begin{theorem}[Projective finite-field Chebotarev entropy tomography]\label{thm:projective-finite-field-chebotarev-entropy-tomography}
-Let \(V\to C\) be a geometrically connected finite \etale{} abelian Galois cover of a smooth projective geometrically connected curve over \(\FF_q\), with group \(G\). Use the notation of Definition \ref{def:finite-field-quotient-notation} with \(U=C\), and choose an integer \(n_0(V/C)\) large enough that Lemma \ref{lem:finite-field-eventual-positive-degrees} gives \(N_n>0\) and the entropy Taylor expansion in the proof below is valid for every \(n\ge n_0(V/C)\). For every \(n\ge n_0(V/C)\), the law \(\mu_n\) is defined. The quantities \(A_n(\chi)\) are bounded uniformly in \(n\ge n_0(V/C)\) and \(\chi\ne\ind\), and, uniformly for all subgroups \(H\le G\),
+Let \(V\to C\) be a geometrically connected finite \etale{} abelian Galois cover of a smooth projective geometrically connected curve over \(\FF_q\), with group \(G\). Use the notation of Definition \ref{def:finite-field-quotient-notation} with \(U=C\), and choose \(n_0(V/C)\) by Lemma \ref{lem:finite-field-admissible-cutoff}. For every \(n\ge n_0(V/C)\), the law \(\mu_n\) is defined. The quantities \(A_n(\chi)\) are bounded uniformly in \(n\ge n_0(V/C)\) and \(\chi\ne\ind\), and, uniformly for all subgroups \(H\le G\),
 \[
 \chi^2\!\left(\mu_n^H\,\middle\|\,\mathrm{unif}_{G/H}\right)
 =
@@ -339,8 +416,11 @@ For \(|x|\le1/2\),
 \[
 (1+x)\log(1+x)=x+\frac{x^2}{2}+O(|x|^3).
 \]
-For all sufficiently large \(n\) this expansion may be applied to every \(\delta_n^H(\bar c)\), and \(
-|Q_H|^{-1}\sum_{\bar c}\delta_n^H(\bar c)=0\). Hence
+For all sufficiently large \(n\) this expansion may be applied to every \(\delta_n^H(\bar c)\). Also
+\[
+|Q_H|^{-1}\sum_{\bar c}\delta_n^H(\bar c)=0.
+\]
+Hence
 \[
 D(\mu_n^H\|\mathrm{unif}_{Q_H})
 =
@@ -413,31 +493,99 @@ Consequently, if two geometrically connected finite \etale{} abelian covers over
 The exact identity is the \(\chi^2\)-identity in Theorem \ref{thm:projective-finite-field-chebotarev-entropy-tomography}, carried to open curves by Corollary \ref{thm:finite-field-chebotarev-entropy-tomography}, solved for \(E_n(K)\). The relative-entropy formula is exactly the entropy inversion formula in Corollary \ref{thm:finite-field-chebotarev-entropy-tomography}. If two covers have the same quotient \(\chi^2\)-profile, the right-hand side of the exact formula is the same for each \(K\). If they have the same relative-entropy profile, subtracting the two displayed asymptotic formulas gives a difference bounded by the sum of the two uniform \(O(q^{-n/2})\) errors; since the subgroup lattice is finite and depends only on \(G\), this remains \(O(q^{-n/2})\) uniformly in \(K\).
 \end{proof}
 
-\begin{example}[Cyclic Kummer quotient-lattice template]\label{ex:cyclic-kummer-quotient-tomography}
-Assume \(\ell\) is an odd prime with \(\ell\mid(q-1)\), and consider the connected Kummer cover
+\begin{example}[Worked quadratic Kummer cover of the torus]\label{ex:cyclic-kummer-quotient-tomography}
+Assume that \(q\) is odd, and consider the connected Kummer cover
 \[
 V=\Spec \FF_q[z,z^{-1}]\longrightarrow U=\mathbb{G}_{m,\FF_q},
-\qquad t=z^\ell.
+\qquad t=z^2.
 \]
-It is finite \etale over \(U\) with Galois group \(G\cong\mu_\ell\cong\ZZ/\ell\ZZ\). The subgroup lattice has only \(\{1\}\subset G\), and every nontrivial character has exact kernel \(\{1\}\). Therefore
+It is finite \etale{} over \(U\) with Galois group \(G=\{1,\sigma\}\cong\ZZ/2\ZZ\). Let \(\chi\) be the nontrivial character. For a closed point \(v\in|\mathbb G_m|\) of degree \(n\), represented by a monic irreducible polynomial \(f(t)\in\FF_q[t]\) with \(f\ne t\), the Frobenius class is determined by the quadratic residue symbol
 \[
-E_n(\{1\})=\sum_{k=1}^{\ell-1}|A_n(\chi_k)|^2,
-\qquad
-E_n(G)=0.
+\chi(\mathrm{Frob}_v)=\left(\frac{t}{f}\right)=(-1)^n\frac{f(0)}{\text{its leading coefficient}}.
 \]
-The full quotient \(G/\{1\}\) is the only nontrivial quotient, while the quotient by \(G\) is a point. Since
+Equivalently, if \(a\) is a root of \(f\) in \(\FF_{q^n}\) and \(\eta_n\) is the quadratic character of \(\FF_{q^n}^{\ast}\), then \(\chi(\mathrm{Frob}_v)=\eta_n(a)\). Hence the degree-\(n\) twisted primitive count is the quadratic-character sum over elements of exact degree \(n\):
 \[
-\mu_{\mathrm{sub}}(\{1\},\{1\})=1,
-\qquad
-\mu_{\mathrm{sub}}(\{1\},G)=-1,
+nB_n(\chi)=
+\sum_{\substack{a\in\FF_{q^n}^{\ast}\\ [\FF_q(a):\FF_q]=n}}
+\eta_n(a).
 \]
-and \(D((\pi_G)_\ast\mu_n\|\mathrm{unif}_{G/G})=0\), Theorem \ref{thm:finite-field-chebotarev-entropy-tomography} gives the concrete recovery formula
+For \(e\mid n\), the restriction of \(\eta_n\) to \(\FF_{q^{n/e}}^{\ast}\) is \(\eta_{n/e}\) if \(e\) is odd and is the trivial character if \(e\) is even. M\"obius inversion over the subfields of \(\FF_{q^n}\) therefore gives the closed formula
+\[
+nB_n(\chi)
+=\sum_{\substack{e\mid n\\ e\text{ even}}}
+\mu(e)(q^{n/e}-1).
+\]
+Thus
+\[
+A_n(\chi)=q^{-n/2}
+\sum_{\substack{e\mid n\\ e\text{ even}}}
+\mu(e)(q^{n/e}-1).
+\]
+In particular,
+\[
+A_n(\chi)=0\quad(n\text{ odd}),
+\]
+while, writing \(n=2m\),
+\[
+A_{2m}(\chi)
+=q^{-m}\sum_{e\mid m}
+\mu(2e)(q^{m/e}-1)
+=-1+O(q^{-m/2}).
+\]
+For example, the first even degrees give
+\[
+A_2(\chi)=-1+q^{-1},
+\qquad
+A_4(\chi)=-1+q^{-2},
+\qquad
+A_6(\chi)=-1+q^{-2}.
+\]
+The corresponding degree-\(n\) Frobenius counts are
+\[
+B_n(1)=\frac{N_n+B_n(\chi)}2,
+\qquad
+B_n(\sigma)=\frac{N_n-B_n(\chi)}2,
+\qquad
+nN_n=\sum_{e\mid n}\mu(e)(q^{n/e}-1).
+\]
+Thus
+\[
+\begin{array}{c|c|c|c}
+n& nB_n(\chi)& B_n(1)&B_n(\sigma)\\ \hline
+1&0&(q-1)/2&(q-1)/2\\
+2&-(q-1)&(q-1)^2/4&(q^2-1)/4\\
+3&0&(q^3-q)/6&(q^3-q)/6\\
+4&-(q^2-1)&(q^2-1)^2/8&(q^4-1)/8
+\end{array}
+\]
+The subgroup lattice is \(\{1\}\subset G\), and the only exact nontrivial kernel is \(\{1\}\), so
+\[
+E_n(\{1\})=|A_n(\chi)|^2,
+\qquad E_n(G)=0.
+\]
+The full quotient law is
+\[
+\mu_n(1)=\frac12\left(1+\frac{B_n(\chi)}{N_n}\right),
+\qquad
+\mu_n(\sigma)=\frac12\left(1-\frac{B_n(\chi)}{N_n}\right),
+\]
+and therefore its exact quadratic profile is
+\[
+\chi^2(\mu_n\|\mathrm{unif}_G)
+=\left(\frac{B_n(\chi)}{N_n}\right)^2
+=\frac{q^n}{n^2N_n^2}|A_n(\chi)|^2.
+\]
+The quotient by \(G\) is a point and has zero entropy. Since \(\mu_{\mathrm{sub}}(\{1\},\{1\})=1\) and \(\mu_{\mathrm{sub}}(\{1\},G)=-1\), the tomography formula recovers the actual degree-\(n\) energy as
 \[
 E_n(\{1\})
-=
-2q^nD(\mu_n\|\mathrm{unif}_G)+O(q^{-n/2}).
+=\frac{n^2N_n^2}{q^n}\chi^2(\mu_n\|\mathrm{unif}_G)
+=|A_n(\chi)|^2,
 \]
-Thus, in this cyclic Kummer template, the single nontrivial quotient entropy recovers exactly the total nontrivial Artin square-root energy. The example records the subgroup-lattice template for the tomography theorem; the numerical Artin amplitudes depend on the chosen Kummer sheaf and are not separately evaluated here.
+and the entropy version gives
+\[
+E_n(\{1\})=2q^nD(\mu_n\|\mathrm{unif}_G)+O(q^{-n/2}).
+\]
+Thus this cover displays the complete arithmetic data: the Frobenius labels are split by quadratic norms, the nontrivial Artin amplitude is given by the closed formula above, and the single nontrivial quotient profile recovers the exact-kernel energy degree by degree.
 \end{example}
 
 \begin{example}[Biquadratic Kummer quotient lattice]\label{ex:biquadratic-kummer-quotient-lattice}
