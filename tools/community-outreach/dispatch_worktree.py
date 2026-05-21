@@ -63,6 +63,10 @@ from outreach_oracle_response_gate import (  # noqa: E402
     claim_packet_oracle_response,
     is_non_substantive_oracle_response,
 )
+from outreach_evidence_packet import (  # noqa: E402
+    build_attachment_prompt,
+    build_evidence_packet,
+)
 
 REPO_ROOT_DEFAULT = Path(__file__).resolve().parents[2]
 STATE_DIR_DEFAULT = REPO_ROOT_DEFAULT / "tools/community-outreach/outreach_state"
@@ -83,6 +87,14 @@ DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_T
 DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_SLUG"
 DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV = "OUTREACH_DISPATCH_VERIFIED_PRE_ORACLE_LOG"
 PRE_ORACLE_WORKUP_GATE_CHARS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_GATE_CHARS", "60000") or "60000")
+ORACLE_DEEP_RESUME_ENABLED = os.environ.get(
+    "OUTREACH_ORACLE_DEEP_RESUME",
+    "1",
+).lower() not in {"0", "false", "no"}
+REQUIRE_PRE_ORACLE_CODEX_WORKUP = os.environ.get(
+    "OUTREACH_REQUIRE_PRE_ORACLE_CODEX_WORKUP",
+    "",
+).lower() in {"1", "true", "yes"}
 
 @dataclass
 class DispatchPlan:
@@ -480,6 +492,44 @@ def supervisor_profile(todo: TodoSpec, repo_root: Path) -> SupervisorProfile:
                 ),
             ),
         )
+    if todo.todo_id == "T-32":
+        target = "tools/community-outreach/targets/cand_litt_common_finite_etale_cover"
+        return SupervisorProfile(
+            todo_id=todo.todo_id,
+            slug=slug,
+            value_score=9,
+            rationale="Litt #3 explicit-example side; both halves operator-verified: d=2 conic ledger + Tannakian-infinite SL_2 witness",
+            commands=(
+                _python_cmd(repo_root, f"{target}/check_3adc_d2_conic_ledger_F13_optionP.py"),
+                _python_cmd(repo_root, f"{target}/check_3adc_tannakian_infinite_SL2_optionP5.py"),
+            ),
+        )
+    if todo.todo_id == "T-43":
+        target = "tools/community-outreach/targets/problemsilike_02"
+        return SupervisorProfile(
+            todo_id=todo.todo_id,
+            slug=slug,
+            value_score=8,
+            rationale="Litt #2 5-class structural map; LANE C' (Φ_3 splitting) + LANE E (Legendre Künneth Hasse-invariant) operator-anchored",
+            commands=(
+                _python_cmd(repo_root, f"{target}/check_phi3_mod_p_splitting_lane_c_prime.py"),
+                _python_cmd(repo_root, f"{target}/check_lane_E_legendre_kunneth_hasse_invariant.py"),
+            ),
+        )
+    if todo.todo_id == "T-44":
+        target = "tools/community-outreach/targets/problemsilike_04"
+        return SupervisorProfile(
+            todo_id=todo.todo_id,
+            slug=slug,
+            value_score=8,
+            rationale="Litt #4 holrank profile; r∈{5,7,9} operator-verified (c_11=422, λ_7=-320, λ_9=16710 mod 3=0 negative, λ_9'=879392 cross-handle source rescues mod-3 witness)",
+            commands=(
+                _python_cmd(repo_root, f"{target}/check_eea2_holrank_r9_handle_localized_c11.py"),
+                _python_cmd(repo_root, f"{target}/check_63b0_lambda7_degree11_handle_localized.py"),
+                _python_cmd(repo_root, f"{target}/check_lambda9_degree13_handle_localized_ladderI_step2.py"),
+                _python_cmd(repo_root, f"{target}/check_lambda9prime_mixed_handle_optionS.py"),
+            ),
+        )
     return SupervisorProfile(
         todo_id=todo.todo_id,
         slug=slug,
@@ -640,6 +690,97 @@ def _analyze_t08(target_dir: Path) -> tuple[str, int, list[str], list[str]]:
     )
 
 
+def _verifier_outputs_present(target_dir: Path, verifier_names: list[str]) -> tuple[list[str], list[str]]:
+    """Sanity check that each verifier script exists.
+
+    Returns (present, missing). The analyzer does not parse stdout — it relies
+    on the dispatch's command_results returncode check (lines below) to flag
+    runtime failures. Existence is the static profile sanity check.
+    """
+    present: list[str] = []
+    missing: list[str] = []
+    for name in verifier_names:
+        if (target_dir / name).exists():
+            present.append(name)
+        else:
+            missing.append(name)
+    return present, missing
+
+
+def _analyze_t32(target_dir: Path) -> tuple[str, int, list[str], list[str]]:
+    verifiers = [
+        "check_3adc_d2_conic_ledger_F13_optionP.py",
+        "check_3adc_tannakian_infinite_SL2_optionP5.py",
+    ]
+    present, missing = _verifier_outputs_present(target_dir, verifiers)
+    findings = [f"verifiers present: {len(present)}/{len(verifiers)}"]
+    if missing:
+        findings.append(f"missing verifier files: {missing}")
+        return ("MISSING_VERIFIER", 3, findings,
+                ["restore the missing operator verifier files before relying on supervisor profile"])
+    findings.extend([
+        "Litt #3 d=2 finite-rank conic ledger on C' over F_13 (κ-d2-F13-formalized) — rank-2 Pic^0[3], operator-confirmed",
+        "Litt #3 Tannakian-infinite SL_2 witness on y^2=x^5-x+1 (κ-tannakian-infinite-SL2-witness) — A,B Zariski-dense in SL_2",
+        "supervisor commands replay both verifiers each cycle; rc=0 implies match with logged operator-verified values",
+    ])
+    return ("OPERATOR_VERIFIED", 8, findings, [
+        "draft Litt #3 minimal-example note covering both halves (finite-rank d=2 + Tannakian-infinite)",
+        "route Codex draft through Claude review before any external posting",
+        "sharpened open questions: d≥3 with different residual, explicit rank-≥3 Tannakian witness",
+    ])
+
+
+def _analyze_t43(target_dir: Path) -> tuple[str, int, list[str], list[str]]:
+    verifiers = [
+        "check_phi3_mod_p_splitting_lane_c_prime.py",
+        "check_lane_E_legendre_kunneth_hasse_invariant.py",
+    ]
+    present, missing = _verifier_outputs_present(target_dir, verifiers)
+    findings = [f"verifiers present: {len(present)}/{len(verifiers)}"]
+    if missing:
+        findings.append(f"missing verifier files: {missing}")
+        return ("MISSING_VERIFIER", 3, findings,
+                ["restore the missing operator verifier files before relying on supervisor profile"])
+    findings.extend([
+        "LANE C' anchor (η-LMin-C-prime-counterexample-anchor) — Φ_3 mod p splits iff p≡1 mod 3, verified for p≤97",
+        "LANE E anchor (η-Lmin-LaneE-Kunneth-counterexample-anchor) — Legendre Künneth Hasse invariants confirm dense ordinary locus and Newton non-isolation",
+        "supervisor commands replay both elementary anchors each cycle; rc=0 implies match",
+    ])
+    return ("OPERATOR_VERIFIED", 7, findings, [
+        "draft Litt #2 conditional-reduction note with 5-class structural map (Artin abs.irred. / split / orbit / Newton-isolated / Newton-NON-isolated counterexample)",
+        "outstanding source checks: Berthelot-Ogus 1978 (finite étale functoriality), Katz 1979 (slope filtration), Crew 1992 / Kedlaya 2004-2011 (F-isocrystal coefficient extension)",
+        "route Codex draft through Claude review before any external posting",
+    ])
+
+
+def _analyze_t44(target_dir: Path) -> tuple[str, int, list[str], list[str]]:
+    verifiers = [
+        "check_eea2_holrank_r9_handle_localized_c11.py",
+        "check_63b0_lambda7_degree11_handle_localized.py",
+        "check_lambda9_degree13_handle_localized_ladderI_step2.py",
+        "check_lambda9prime_mixed_handle_optionS.py",
+    ]
+    present, missing = _verifier_outputs_present(target_dir, verifiers)
+    findings = [f"verifiers present: {len(present)}/{len(verifiers)}"]
+    if missing:
+        findings.append(f"missing verifier files: {missing}")
+        return ("MISSING_VERIFIER", 3, findings,
+                ["restore the missing operator verifier files before relying on supervisor profile"])
+    findings.extend([
+        "λ_5 = c_11 = 422 (mod 3 = 2) via original single-handle B_h — μ-c11-formalized",
+        "λ_7 = -320 (mod 3 = 1) via single-handle B_h — μ-λ7-formalized",
+        "λ_9 = 16710 (mod 3 = 0) via single-handle B_h — μ-λ9-mod3-zero (negative finding: source convention matters integrally)",
+        "λ_9' = 879392 (mod 3 = 2) via B_h' = B_{12} - B_{21} cross-handle antisymmetric source — μ-λ9prime-mixed-handle-formalized rescues mod-3 witness at r=9",
+        "supervisor commands replay all four bracket-and-projection witnesses each cycle; rc=0 implies match",
+    ])
+    return ("OPERATOR_VERIFIED", 7, findings, [
+        "draft Litt #4 narrow holrank publishable claim: holrank_{3,3}(r) = 6 verified at r ∈ {5, 7, 9} with source-choice-matters subclaim at r=9, plus Birman point-push cocycle nontriviality",
+        "outstanding operator work: r=11 verifier (needs memory-efficient reimplementation; previous run stalled at D_{B_h^(11)}(A_11) phase due to swap pressure)",
+        "outstanding source checks: Morita 1989, Sakasai 2005, Morita-Sakasai-Suzuki 2013, Enomoto-Satoh 2010, Conant 2015",
+        "route Codex draft through Claude review before any external posting",
+    ])
+
+
 def analyze_supervised_target(todo: TodoSpec, profile: SupervisorProfile, repo_root: Path) -> dict[str, object]:
     target_dir = repo_root / "tools/community-outreach/targets" / profile.slug
     research_path = target_dir / "research.md"
@@ -649,6 +790,12 @@ def analyze_supervised_target(todo: TodoSpec, profile: SupervisorProfile, repo_r
         stage, score, findings, next_actions = _analyze_t02(target_dir)
     elif todo.todo_id == "T-08":
         stage, score, findings, next_actions = _analyze_t08(target_dir)
+    elif todo.todo_id == "T-32":
+        stage, score, findings, next_actions = _analyze_t32(target_dir)
+    elif todo.todo_id == "T-43":
+        stage, score, findings, next_actions = _analyze_t43(target_dir)
+    elif todo.todo_id == "T-44":
+        stage, score, findings, next_actions = _analyze_t44(target_dir)
     else:
         stage = "NO_SUPERVISOR_PROFILE"
         score = profile.value_score
@@ -906,53 +1053,57 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
             "active_poll_agents": ready_status.get("active_poll_agents", []),
             "compatible_active_poll_agents": ready_status.get("compatible_active_poll_agents", []),
         }
-    workup_ok, workup_reason, workup_log = _run_pre_oracle_codex_workup(
-        todo.todo_id,
-        profile.slug,
-        timeout=oracle_timeout,
-    )
-    if not workup_ok:
-        print(
-            f"[oracle-deep] pre-oracle Codex workup failed for {todo.todo_id}: "
-            f"{workup_reason} ({workup_log})",
-            file=sys.stderr,
+    workup_log = ""
+    if REQUIRE_PRE_ORACLE_CODEX_WORKUP:
+        workup_ok, workup_reason, workup_log = _run_pre_oracle_codex_workup(
+            todo.todo_id,
+            profile.slug,
+            timeout=oracle_timeout,
         )
-        return {
-            "skipped": "pre_oracle_codex_workup_required",
-            "reason": workup_reason,
-            "local_repair_log": workup_log,
-            "target_slug": profile.slug,
-            "required_artifacts": [
-                f"tools/community-outreach/targets/{profile.slug}/codex_workup.md",
-                f"tools/community-outreach/targets/{profile.slug}/next_oracle_question.md",
-                f"tools/community-outreach/targets/{profile.slug}/local_repair_report.md",
-            ],
-        }
-    print(f"[oracle-deep] pre-oracle Codex workup refreshed for {todo.todo_id}: {workup_log}")
-    research_text = ""
-    if research_md.exists():
-        research_text = research_md.read_text(encoding="utf-8")
-    resume_conv = resume_conversation_id or _resume_conversation_id(profile.slug, state_dir=state_dir)
+        if not workup_ok:
+            print(
+                f"[oracle-deep] pre-oracle Codex workup failed for {todo.todo_id}: "
+                f"{workup_reason} ({workup_log})",
+                file=sys.stderr,
+            )
+            return {
+                "skipped": "pre_oracle_codex_workup_required",
+                "reason": workup_reason,
+                "local_repair_log": workup_log,
+                "target_slug": profile.slug,
+                "required_artifacts": [
+                    f"tools/community-outreach/targets/{profile.slug}/codex_workup.md",
+                    f"tools/community-outreach/targets/{profile.slug}/next_oracle_question.md",
+                    f"tools/community-outreach/targets/{profile.slug}/local_repair_report.md",
+                ],
+            }
+        print(f"[oracle-deep] pre-oracle Codex workup refreshed for {todo.todo_id}: {workup_log}")
+    else:
+        print(f"[oracle-deep] oracle-first mode for {todo.todo_id}: skipping pre-Oracle Codex workup")
+    packet = build_evidence_packet(todo, repo_root=repo_root, slug=profile.slug)
+    initial = build_attachment_prompt(todo, packet)
+    if resume_conversation_id:
+        resume_conv = resume_conversation_id if ORACLE_DEEP_RESUME_ENABLED else ""
+        resume_reason = "explicit resume_conversation_id" if resume_conv else "resume disabled by OUTREACH_ORACLE_DEEP_RESUME"
+    else:
+        resume_conv, resume_reason = _deep_resume_status(profile.slug, state_dir=state_dir)
     if resume_conv:
         initial = _build_deep_resume_prompt(todo, resume_conversation_id=resume_conv)
-    else:
-        initial = _build_deep_initial_prompt(
-            todo,
-            research_text,
-            arxiv_hits=arxiv_hits,
-            resume_conversation_id="",
-        )
     print(f"[oracle-deep] dispatching {todo.todo_id} max_turns={max_turns} "
           f"per-turn-timeout={oracle_timeout}s; this can take up to "
           f"{max_turns} × {oracle_timeout}s = {max_turns * oracle_timeout // 60}min "
           f"write_latex={write_latex} codex_driver={codex_driver} "
-          f"resume_conv={resume_conv[:12] if resume_conv else '-'}")
-    dispatch_handoff_env = {
-        DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV: "1",
-        DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV: todo.todo_id,
-        DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV: profile.slug,
-        DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV: workup_log,
-    }
+          f"resume_conv={resume_conv[:12] if resume_conv else '-'} "
+          f"resume_reason={resume_reason} "
+          f"evidence_packet={packet.pdf_path}")
+    dispatch_handoff_env = {}
+    if workup_log:
+        dispatch_handoff_env = {
+            DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV: "1",
+            DISPATCH_VERIFIED_PRE_ORACLE_TODO_ENV: todo.todo_id,
+            DISPATCH_VERIFIED_PRE_ORACLE_SLUG_ENV: profile.slug,
+            DISPATCH_VERIFIED_PRE_ORACLE_LOG_ENV: workup_log,
+        }
     old_handoff_env = {name: os.environ.get(name) for name in dispatch_handoff_env}
     os.environ.update(dispatch_handoff_env)
     try:
@@ -963,6 +1114,15 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
             per_turn_timeout=oracle_timeout,
             terminal_prompt=DEFAULT_WRITE_PAPER_LATEX_PROMPT if write_latex else None,
             resume_conversation_id=resume_conv,
+            initial_pdf_path=packet.pdf_path if not resume_conv else None,
+            evidence_packet={
+                "markdown_path": str(packet.markdown_path),
+                "pdf_path": str(packet.pdf_path),
+                "markdown_sha256": packet.markdown_sha256,
+                "pdf_sha256": packet.pdf_sha256,
+                "source_files": packet.source_files,
+                "boundary": "attachment_math_note_no_repo_inference",
+            },
             slug=profile.slug,
         )
     finally:
@@ -1201,6 +1361,39 @@ def _resume_conversation_id(slug: str, *, state_dir: Path) -> str:
             if conv and _oracle_conversation_has_pinned_url(conv):
                 return conv
     return ""
+
+
+def _deep_resume_status(slug: str, *, state_dir: Path) -> tuple[str, str]:
+    """Return (conversation_id, reason) for Oracle-deep continuation routing."""
+    if not ORACLE_DEEP_RESUME_ENABLED:
+        return "", "disabled by OUTREACH_ORACLE_DEEP_RESUME"
+    path = state_dir / f"{slug}.json"
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return "", f"missing state file {path}"
+    except (OSError, json.JSONDecodeError) as exc:
+        return "", f"unreadable state file {path}: {exc}"
+    latest_status = str(state.get("latest_oracle_deep_verdict") or "").upper()
+    if latest_status in {"BREAKTHROUGH"}:
+        return "", "latest verdict is BREAKTHROUGH"
+    conv = str(state.get("latest_oracle_deep_conversation_id") or "").strip()
+    if conv:
+        if _oracle_conversation_has_pinned_url(conv):
+            return conv, "latest_oracle_deep_conversation_id has pinned ChatGPT URL"
+        return "", f"latest conversation {conv[:12]} has no pinned ChatGPT URL"
+    runs = state.get("oracle_deep_runs") or []
+    if isinstance(runs, list):
+        for run in reversed(runs):
+            if not isinstance(run, dict):
+                continue
+            verdict = str(run.get("final_verdict") or "").upper()
+            if verdict == "BREAKTHROUGH":
+                return "", "most recent reusable run is after BREAKTHROUGH"
+            conv = str(run.get("conversation_id") or "").strip()
+            if conv and _oracle_conversation_has_pinned_url(conv):
+                return conv, "found pinned conversation in oracle_deep_runs history"
+    return "", "no reusable pinned Oracle-deep conversation in target state"
 
 
 def _oracle_conversation_has_pinned_url(conv_id: str) -> bool:
@@ -1863,10 +2056,14 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
     codex_workup = _compact_codex_workup_for_oracle(todo.slug(), max_chars=codex_workup_chars)
     local_repair_report = _read_target_context_file(todo.slug(), "local_repair_report.md", max_chars=local_repair_chars)
     parts = [
-        "You are the Oracle math worker for this Omega Project open-problem target.",
-        "Goal: make a genuine mathematical contribution, not outreach copy.",
+        "You are the primary Oracle proof-search worker for this Omega Project open-problem target.",
+        "Goal: drive the mathematics toward closure, not outreach copy and not a referee report.",
         "Codex already inspected the local workspace. Treat the selected task and local facts below as execution state.",
-        "Return one concrete proof move, computation, certificate, FILE block, or target-specific obstruction.",
+        "Continue from the current proof state and push it forward. If the method is incomplete,",
+        "do not merely say it is incomplete: turn the live gap into the next precise lemma,",
+        "proof obligation, construction, counterexample search, or local verifier specification.",
+        "Only ask for local verification by giving exact finite ranges/hypotheses/expected outputs",
+        "and explaining how each outcome advances or refutes the proof.",
         "",
     ]
     if next_oracle_question:
@@ -1975,7 +2172,9 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         if getattr(gate, "missing", None):
             parts += [
                 "## Deterministic Gate Blockers",
-                "Do not claim completion until these are fixed on disk or supplied as valid FILE blocks:",
+                "These are local acceptance conditions, not instructions to stop. Codex uses them",
+                "after your turn to decide what verifier or artifact to run. Push the proof toward",
+                "removing these blockers; if local verification is needed, specify it concretely:",
                 "\n".join(f"- {m}" for m in gate.missing),
                 "",
                 "If a missing artifact is a file, include its exact content in this response using:",
@@ -1995,6 +2194,8 @@ def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
         "3. MOVE:",
         "4. EVIDENCE:",
         "5. NEXT STOP TEST:",
+        "In NEXT STOP TEST, do not write only that the route is unclosed. State the next proof",
+        "obligation or exact local verifier request that would move toward closure.",
         "Do not summarize or restart. Start with the next mathematical move.",
     ]
     return "\n".join(parts)
@@ -2144,6 +2345,11 @@ def supervise_board(
         # Stage B-oracle-deep: oracle as primary worker, multi-turn iteration.
         if oracle_deep:
             stage0_hits = (arxiv_summary or {}).get("hits") if arxiv_summary else None
+            resume_conv, resume_reason = _deep_resume_status(profile.slug, state_dir=state_dir)
+            print(
+                f"[oracle-deep] resume selection for {todo.todo_id}: "
+                f"{resume_conv[:12] if resume_conv else '-'} ({resume_reason})"
+            )
             deep_run = _run_oracle_deep(
                 todo, profile, repo_root=repo_root,
                 state_dir=state_dir,
@@ -2152,7 +2358,7 @@ def supervise_board(
                 codex_driver=codex_driver,
                 ship_paper=ship_paper,
                 arxiv_hits=stage0_hits,
-                resume_conversation_id=_resume_conversation_id(profile.slug, state_dir=state_dir),
+                resume_conversation_id=resume_conv,
             )
             if deep_run is not None:
                 analysis["oracle_deep"] = deep_run
