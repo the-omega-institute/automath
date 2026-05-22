@@ -19,7 +19,8 @@ Task:
 Produce exactly ONE follow-up question to send to ChatGPT.
 
 Goal:
-Push the oracle one level deeper than the last response.
+Make the oracle act as the primary proof-search worker and push one level
+closer to closure than the last response.
 This is always a continuation inside the same ChatGPT conversation. The prompt
 you output must make that clear in natural language and must not read like a
 fresh initial assignment.
@@ -30,33 +31,58 @@ consume that local Codex workup, including the concrete commands/checks already
 run and the exact evidence gap still open. Do not generate a generic metadata
 question and do not merely ask the oracle to continue research.
 
-The question should force concrete mathematical progress, not a recap.
+The question should force concrete mathematical progress, not a recap and not
+a referee verdict. If the oracle said the route is not closed, convert that
+statement into the next proof obligation, corrected theorem, construction, or
+local verifier specification.
 
 Good follow-up directions include:
-- A specific calculation that tests the current claim.
-- A counterexample probe against the weakest hypothesis.
-- A lemma formalization with explicit assumptions and conclusion.
-- A boundary case where the proposed method might fail.
-- A structural reframe that changes the algebraic, combinatorial, dynamical,
-  probabilistic, or computational viewpoint.
+- A specific lemma that closes the live proof gap.
+- A verifier specification with exact finite ranges/hypotheses/pass-fail
+  predicates when local computation is the next proof step.
+- A counterexample or obstruction that produces a corrected useful theorem,
+  not just a negative verdict.
+- A boundary theorem that is smaller than the target but fully provable and
+  materially advances the original problem.
+- A structural reframe that bypasses the current gap and has a concrete next
+  lemma.
 
 Choose the single direction that is most likely to expose new information.
 
 Use the prior turns only to avoid repetition and to locate the live thread.
 
 If the last response contains a promising but vague claim, ask for the smallest
-precise lemma or calculation that would make it real.
+precise lemma or verifier-ready calculation that would make it real.
 
-If the last response contains a proof sketch, ask for the missing local step,
-with enough detail that the oracle must either prove it or find the obstruction.
+If the last response contains a proof sketch, ask the oracle to prove the
+missing step now, or to specify exactly what Codex should verify locally and
+how that verification closes or redirects the proof.
 
 If the last response contains an obstacle, ask for one targeted bypass attempt
-or one finite model that distinguishes real obstruction from lack of technique.
+or one finite/local verifier that distinguishes a genuine obstruction from lack
+of technique.
 
 If the last response is broad or discursive, narrow it to one testable assertion.
 
 If the last response proposes multiple routes, pick the route with the clearest
 Omega leverage and ask for the next irreversible calculation or lemma.
+
+If the last response is a "scoped non-theorem" memo, an "obstruction memo", a
+"limitation note", or any other soft-retreat artifact in place of the demanded
+proof object, treat that as evasion. Force the next prompt to either (a) demand
+the concrete verifier-grade object — explicit data, predicate with source and
+hash, or a worked verified example — that would actually close the open gate,
+or (b) require a one-line route-terminated statement with reason, not another
+memo.
+
+If the last response is enumerating elements of a sequence in a fixed schema
+(rows, pairs, certificates), continue the enumeration: ask for the next single
+uncovered element in the exact same schema. Do not change framing or scope.
+
+If the last response gives a reconstruction (Tietze words, presentations, words
+in generators) without a verifier predicate, ask for the corresponding embedded
+boolean equality gate: predicate source, its hash, and one worked example that
+has actually been evaluated.
 
 Do not ask for a survey.
 
@@ -65,6 +91,33 @@ Do not ask for a summary.
 Do not mention Codex, this template, the driver, or the transcript mechanics.
 
 Do not include bullets, numbering, headings, preamble, or explanation.
+
+STABLE-POINT GAP DISCIPLINE (applies before VERBATIM PASS-THROUGH):
+The loop attacks open conjectures by approximating the goal through anchored
+stable points (locally-verified lemmas, explicit invariants, finite
+computations preserved under the problem's structural moves). The follow-up
+must target the smallest single unverified step closest to closure — the
+current GAP — not a longer leap. If the target directory contains a
+`stable_points.md` file, your question must reference its `current_gap` and
+`next_minimum_stable_point` sections by name. Reject any question that skips
+the current GAP for an easier or more glamorous direction. Verifier specs
+embedded in the question must check a stable point: an object/value that
+remains invariant under a named structural move and that, if verified,
+demonstrably shrinks the current GAP.
+
+VERBATIM PASS-THROUGH (highest priority, overrides paraphrasing):
+If `next_oracle_question.md` contains any of the following — a hard-ban list of
+labels/patterns, an explicit "Required output: exactly one of (X)/(Y)/..." menu,
+an explicit accepted-progress list to not restate, a strict schema block, or any
+instruction that the response must avoid named internal-state artifacts — your
+follow-up MUST quote those constraints verbatim, in full, with no rephrasing,
+omission, softening, or summarization. The ban list, the required-output menu,
+the accepted-progress list, and the schema block are not optional context;
+they are part of the question. Paraphrasing them strips the constraint and
+causes the oracle to repeat banned content. If `next_oracle_question.md` is
+already a complete self-contained instruction (problem-frame + bans + required
+output), output it verbatim as your follow-up question with no preamble or
+rewriting.
 
 Output:
 Continuation question text only.

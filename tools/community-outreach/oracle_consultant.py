@@ -66,7 +66,7 @@ DEFAULT_ZERO_EXTRACT_CANCEL_S = int(os.environ.get("OUTREACH_ORACLE_ZERO_EXTRACT
 POST_THINK_TINY_ASSISTANT_CANCEL_S = int(
     os.environ.get("OUTREACH_ORACLE_POST_THINK_TINY_ASSISTANT_CANCEL_S", "900")
 )
-MIN_SCRIPT_VERSION = "outreach-1.24"
+MIN_SCRIPT_VERSION = "outreach-1.28"
 OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem"
 PRE_ORACLE_WORKUP_REUSE_SECONDS = int(os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_REUSE_SECONDS", "900") or "900")
 ALLOW_PRE_ORACLE_WORKUP_REUSE = os.environ.get(
@@ -82,6 +82,14 @@ ORACLE_TRANSPORT_ERROR_RE = re.compile(
     r"Task cancelled by server|empty response",
     re.IGNORECASE,
 )
+REQUIRE_PRE_ORACLE_CODEX_WORKUP = os.environ.get(
+    "OUTREACH_REQUIRE_PRE_ORACLE_CODEX_WORKUP",
+    "",
+).lower() in {"1", "true", "yes"}
+ORACLE_CLOSURE_CHECK_ENABLED = os.environ.get(
+    "OUTREACH_ORACLE_CLOSURE_CHECK",
+    "1",
+).lower() not in {"0", "false", "no"}
 DEFAULT_WRITE_PAPER_LATEX_PROMPT = r"""You have reached a substantive result. Now write the full paper as LaTeX.
 
 Output requirements:
@@ -783,6 +791,8 @@ class OracleConsultant:
                        prompt_generator: Callable[[int, str, list[dict], TodoSpec], str] | None = None,
                        per_turn_timeout: int = DEFAULT_TIMEOUT,
                        resume_conversation_id: str = "",
+                       initial_pdf_path: Path | None = None,
+                       evidence_packet: dict | None = None,
                        # Drop the leading word-boundary entirely on the
                        # all-caps markers — ChatGPT 5.5 Pro frequently emits
                        # "Thought for 39m 33sBREAKTHROUGH:" with no space
@@ -839,8 +849,8 @@ class OracleConsultant:
                 "latex_path": "", "plain_summary": "",
                 "error": f"oracle server unreachable at {self.server_url}",
             }
-        pre_oracle_workup: dict = {}
-        if _is_board_research_todo(todo):
+        pre_oracle_workup: dict = {"mode": "oracle_first", "ok": True, "skipped": "pre_oracle_codex_workup_not_required"}
+        if REQUIRE_PRE_ORACLE_CODEX_WORKUP and _is_board_research_todo(todo):
             pre_oracle_workup = _run_pre_oracle_codex_workup_for_todo(
                 todo,
                 per_turn_timeout=per_turn_timeout,
@@ -907,7 +917,8 @@ class OracleConsultant:
                         prompt_generator=prompt_generator,
                     )
                 review = self._submit_turn(prompt, conversation_id=conversation_id,
-                                           todo=todo, timeout=per_turn_timeout)
+                                           todo=todo, timeout=per_turn_timeout,
+                                           pdf_path=None if conversation_id else initial_pdf_path)
             else:
                 # Rotate through follow-up prompts; cycle if max_turns > prompts
                 fup_idx = (turn_idx - 1) % len(follow_up_prompts)
@@ -984,12 +995,39 @@ class OracleConsultant:
                 )
                 turn_record["local_codex_replay"] = local_replay
                 if not local_replay.get("ok"):
-                    verdict = "FAILED"
-                    turn_record["error"] = (
-                        "post-oracle local Codex replay failed: "
-                        f"{local_replay.get('error') or local_replay.get('reason') or local_replay.get('returncode')}"
+                    replay_reason = (
+                        local_replay.get("error")
+                        or local_replay.get("reason")
+                        or local_replay.get("returncode")
+                        or "unknown"
                     )
-                    break
+                    turn_record["local_replay_warning"] = (
+                        "post-oracle local Codex replay failed; continuing Oracle proof-search "
+                        f"in the same conversation: {replay_reason}"
+                    )
+                    if local_replay.get("next_oracle_question"):
+                        next_followup_override = _as_continuation_prompt(
+                            str(local_replay["next_oracle_question"])
+                        )
+                    else:
+                        next_followup_override = (
+                            "Continue from your previous answer in this same conversation; do not restart. "
+                            "The local Codex replay/verification helper failed before producing a usable "
+                            "postcheck. Treat this as missing local assistance, not as a mathematical stop. "
+                            "Proceed as the primary proof-search worker: close the next proof obligation "
+                            "directly, or give an exact verifier-ready request with objects, ranges, "
+                            "pass/fail predicates, and how each outcome advances the proof."
+                        )
+                    effective_gate_status = str(digest_result.get("science_gate_status") or "").upper()
+                    effective_gate_missing = list(digest_result.get("science_gate_missing", []) or [])
+                    turn_record["science_gate_after_local_replay"] = {
+                        "status": effective_gate_status,
+                        "next_action": digest_result.get("science_gate_next_action", ""),
+                        "missing": effective_gate_missing,
+                        "next_oracle_question": local_replay.get("next_oracle_question", ""),
+                        "local_replay_failed_but_continued": True,
+                    }
+                    continue
                 refreshed_gate = _science_gate_status_for_todo(todo)
                 refreshed_gate_missing = list(refreshed_gate.get("missing", []) or [])
                 effective_gate_status = str(refreshed_gate.get("status") or "").upper()
@@ -1025,6 +1063,25 @@ class OracleConsultant:
             gate_complete = not gate_missing
             gate_status = effective_gate_status
             if gate_status in {"WRITEBACK_READY", "CLOSE_TARGET"}:
+                if gate_status == "WRITEBACK_READY" and ORACLE_CLOSURE_CHECK_ENABLED:
+                    closure_check = self._closure_check_turn(
+                        todo,
+                        candidate_response=response_text,
+                        gate_status=gate_status,
+                        gate_missing=gate_missing,
+                        per_turn_timeout=per_turn_timeout,
+                        prover_conversation_id=conversation_id,
+                    )
+                    turn_record["oracle_closure_check"] = closure_check
+                    if not closure_check.get("closed"):
+                        next_followup_override = _closure_gap_followup(
+                            closure_check.get("gap") or closure_check.get("response") or "",
+                        )
+                        turn_record["gate_override"] = (
+                            "independent Oracle checker did not accept closure; "
+                            "continuing prover with checker gap"
+                        )
+                        continue
                 verdict = "BREAKTHROUGH" if gate_status == "WRITEBACK_READY" else "STUCK"
                 turn_record["gate_stop"] = (
                     f"deterministic science gate reached {gate_status}; "
@@ -1033,38 +1090,93 @@ class OracleConsultant:
                 break
             if stop_break.search(response_text):
                 if gate_complete:
+                    if ORACLE_CLOSURE_CHECK_ENABLED:
+                        closure_check = self._closure_check_turn(
+                            todo,
+                            candidate_response=response_text,
+                            gate_status=gate_status,
+                            gate_missing=gate_missing,
+                            per_turn_timeout=per_turn_timeout,
+                            prover_conversation_id=conversation_id,
+                        )
+                        turn_record["oracle_closure_check"] = closure_check
+                        if not closure_check.get("closed"):
+                            next_followup_override = _closure_gap_followup(
+                                closure_check.get("gap") or closure_check.get("response") or "",
+                            )
+                            turn_record["gate_override"] = (
+                                "breakthrough marker rejected by independent Oracle checker; "
+                                "continuing prover with checker gap"
+                            )
+                            continue
                     verdict = "BREAKTHROUGH"
                     break
                 turn_record["gate_override"] = "breakthrough text ignored because science gate still has missing evidence"
                 if _missing_requires_local_artifact_repair(gate_missing):
                     next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
                 else:
-                    missing_block = "\n".join(f"- {m}" for m in gate_missing)
-                    next_followup_override = (
-                        "Continue from your previous answer in this same conversation; do not restart. "
-                        "The repository science gate did not accept the result as closed because these "
-                        f"proof/verification gaps remain:\n{missing_block}\n\n"
-                        "Do not return FILE blocks unless a concrete file is truly missing. "
-                        "Either prove the missing closure step, identify a precise mathematical obstruction, "
-                        "or state a bounded closure criterion that would let Codex mark the current result as closed."
-                    )
+                    operator_question = _read_next_oracle_question_for_todo(todo)
+                    if operator_question:
+                        next_followup_override = (
+                            "Continue from your previous answer in this same conversation; do not restart.\n\n"
+                            f"{operator_question}"
+                        )
+                    else:
+                        missing_block = "\n".join(f"- {m}" for m in gate_missing)
+                        next_followup_override = (
+                            "Continue from your previous answer in this same conversation; do not restart. "
+                            "The local science gate is the current proof-state checklist. "
+                            "These closure/verification gaps remain:\n"
+                            f"{missing_block}\n\n"
+                            "Do not return FILE blocks unless a concrete file is truly missing. "
+                            "Produce one concrete next step: a complete lemma with proof, a counterexample, "
+                            "a reduction to a named open conjecture, or an exact verifier specification "
+                            "Codex can run. Do not emit internal-status memos or boundary-theorem placeholders."
+                        )
                 continue
             if eval_result.get("verdict") == "complete":
                 if gate_complete:
+                    if ORACLE_CLOSURE_CHECK_ENABLED:
+                        closure_check = self._closure_check_turn(
+                            todo,
+                            candidate_response=response_text,
+                            gate_status=gate_status,
+                            gate_missing=gate_missing,
+                            per_turn_timeout=per_turn_timeout,
+                            prover_conversation_id=conversation_id,
+                        )
+                        turn_record["oracle_closure_check"] = closure_check
+                        if not closure_check.get("closed"):
+                            next_followup_override = _closure_gap_followup(
+                                closure_check.get("gap") or closure_check.get("response") or "",
+                            )
+                            turn_record["gate_override"] = (
+                                "local evaluator complete rejected by independent Oracle checker; "
+                                "continuing prover with checker gap"
+                            )
+                            continue
                     verdict = "BREAKTHROUGH"
                     break
                 turn_record["gate_override"] = "evaluator complete ignored because science gate still has missing evidence"
                 if _missing_requires_local_artifact_repair(gate_missing):
                     next_followup_override = _artifact_repair_prompt(todo, gate_missing, last_response=response_text)
                 else:
-                    missing_block = "\n".join(f"- {m}" for m in gate_missing)
-                    next_followup_override = (
-                        "Continue from your previous answer in this same conversation; do not restart. "
-                        "The local evaluator thought this was complete, but the deterministic science gate "
-                        f"still reports proof/closure gaps:\n{missing_block}\n\n"
-                        "Resolve those gaps directly: give the missing proof, give a falsifying obstruction, "
-                        "or give a precise bounded-result closure statement that is honest and publishable."
-                    )
+                    operator_question = _read_next_oracle_question_for_todo(todo)
+                    if operator_question:
+                        next_followup_override = (
+                            "Continue from your previous answer in this same conversation; do not restart.\n\n"
+                            f"{operator_question}"
+                        )
+                    else:
+                        missing_block = "\n".join(f"- {m}" for m in gate_missing)
+                        next_followup_override = (
+                            "Continue from your previous answer in this same conversation; do not restart. "
+                            "The deterministic science gate reports proof-state gaps:\n"
+                            f"{missing_block}\n\n"
+                            "Resolve those gaps as the proof-search worker: give the missing proof, give the "
+                            "sharp corrected theorem if the original claim is false, or give a precise verifier "
+                            "request whose pass/fail outcomes determine the next proof step."
+                        )
                 continue
             if eval_result.get("verdict") == "stuck":
                 stuck_streak += 1
@@ -1106,9 +1218,17 @@ class OracleConsultant:
                     break
             else:
                 stuck_streak = 0
-            if turn_idx == len(turns) - 1 and generated_next and not next_followup_override:
-                turn_record["generated_next_question"] = generated_next
-                next_followup_override = generated_next
+            if turn_idx == len(turns) - 1 and not next_followup_override:
+                operator_question = _read_next_oracle_question_for_todo(todo)
+                if operator_question:
+                    turn_record["operator_next_question"] = True
+                    next_followup_override = (
+                        "Continue from your previous answer in this same conversation; do not restart.\n\n"
+                        f"{operator_question}"
+                    )
+                elif generated_next:
+                    turn_record["generated_next_question"] = generated_next
+                    next_followup_override = generated_next
         reasoning_stopped_at_turn = len(turns) - 1
         if verdict == "BREAKTHROUGH" and terminal_prompt:
             terminal_review = self._submit_turn(
@@ -1172,12 +1292,114 @@ class OracleConsultant:
             "terminal_prompt_sent": bool(verdict == "BREAKTHROUGH" and terminal_prompt),
             "terminal_latex_error": terminal_latex_error,
             "pre_oracle_codex_workup": pre_oracle_workup,
+            "evidence_packet": evidence_packet or {},
         }
         self._merge_deep_run(slug=run_slug, run=run)
         return run
 
+    def _closure_check_turn(
+        self,
+        todo: TodoSpec,
+        *,
+        candidate_response: str,
+        gate_status: str,
+        gate_missing: list[str],
+        per_turn_timeout: int,
+        prover_conversation_id: str = "",
+    ) -> dict:
+        """Ask an independent fresh Oracle conversation to audit closure.
+
+        The prover conversation may be locally coherent but overconfident.  This
+        checker is intentionally a fresh ChatGPT conversation with a narrow job:
+        decide whether the candidate proof is closed, and if not, return the
+        smallest live gap so the prover can continue from that obligation.
+        """
+        task_id = f"check_{todo.slug()}_t{int(time.time() * 1000)}"
+        missing_block = "\n".join(f"- {m}" for m in (gate_missing or [])) or "- none"
+        prompt = "\n".join([
+            "You are an independent mathematical proof checker, not the prover.",
+            "Do not continue the proof unless a tiny local clarification is needed to judge closure.",
+            "Your task is to decide whether the candidate proof below is fully closed.",
+            "",
+            "Return exactly this structure:",
+            "CHECKER_VERDICT: CLOSED or NOT_CLOSED",
+            "MINIMAL_GAP: one precise missing lemma / invalid step / verifier obligation, or NONE",
+            "WHY: concise mathematical reason",
+            "",
+            f"Target: {todo.todo_id} {todo.title}",
+            "Statement:",
+            todo.statement or "",
+            "",
+            f"Local science gate status: {gate_status or '-'}",
+            "Local science gate missing items:",
+            missing_block,
+            "",
+            f"Prover conversation id: {prover_conversation_id or '-'}",
+            "",
+            "Candidate proof / claimed closure:",
+            _compact_excerpt(candidate_response, 18000),
+        ])
+        prompt_log = self.logs_dir / f"{task_id}.prompt.txt"
+        response_log = self.logs_dir / f"{task_id}.response.txt"
+        prompt_log.write_text(prompt, encoding="utf-8")
+        submit_resp = oracle_submit(
+            task_id,
+            prompt,
+            is_followup=False,
+            tag=f"{todo.todo_id}:closure-check",
+        )
+        submitted_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        if "error" in submit_resp:
+            return {
+                "ok": False,
+                "closed": False,
+                "task_id": task_id,
+                "error": f"submit error: {submit_resp.get('error')}",
+                "submitted_at": submitted_at,
+                "prompt_log_path": str(prompt_log),
+            }
+        start = time.time()
+        response = oracle_poll(task_id, timeout=min(per_turn_timeout, DEFAULT_TIMEOUT))
+        elapsed = int(time.time() - start)
+        if (not response) or is_oracle_transport_error(response):
+            retry_review = self.retry(
+                task_id=task_id,
+                conversation_id=submit_resp.get("conversation_id", ""),
+                timeout=min(per_turn_timeout, DEFAULT_TIMEOUT),
+            )
+            if retry_review and retry_review.response_log_path and not retry_review.error:
+                try:
+                    response = Path(retry_review.response_log_path).read_text(encoding="utf-8")
+                except OSError:
+                    response = ""
+        response_log.write_text(response or "", encoding="utf-8")
+        verdict_match = re.search(r"CHECKER_VERDICT:\s*(CLOSED|NOT_CLOSED)", response or "", re.I)
+        verdict_text = (verdict_match.group(1).upper() if verdict_match else "")
+        gap_match = re.search(
+            r"MINIMAL_GAP:\s*(.*?)(?:\n\s*WHY:|\Z)",
+            response or "",
+            re.I | re.S,
+        )
+        gap = re.sub(r"\s+", " ", (gap_match.group(1) if gap_match else "")).strip()
+        closed = verdict_text == "CLOSED"
+        return {
+            "ok": bool(response),
+            "closed": closed,
+            "verdict": verdict_text or "UNKNOWN",
+            "gap": "" if closed and gap.upper() == "NONE" else gap,
+            "task_id": task_id,
+            "conversation_id": submit_resp.get("conversation_id", ""),
+            "elapsed_seconds": elapsed,
+            "response_chars": len(response or ""),
+            "response_log_path": str(response_log),
+            "prompt_log_path": str(prompt_log),
+            "response": _compact_excerpt(response or "", 4000),
+            "error": "" if response else "empty checker response",
+        }
+
     def _submit_turn(self, prompt: str, *, conversation_id: str,
-                     todo: TodoSpec, timeout: int) -> OracleReview:
+                     todo: TodoSpec, timeout: int,
+                     pdf_path: Path | None = None) -> OracleReview:
         """Submit one turn (initial or follow-up) and poll. Returns OracleReview-shaped record."""
         slug = todo.slug()
         task_id = f"deep_{slug}_t{int(time.time() * 1000)}"
@@ -1205,6 +1427,7 @@ class OracleConsultant:
             conversation_id=conversation_id or None,
             is_followup=is_followup,
             tag=f"{todo.todo_id}:deep",
+            pdf_path=pdf_path if not is_followup else None,
         )
         submitted_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         if "error" in submit_resp:
@@ -1265,14 +1488,24 @@ class OracleConsultant:
             state = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         except json.JSONDecodeError:
             state = {}
+        previous_conv = str(state.get("latest_oracle_deep_conversation_id") or "")
+        previous_url = str(state.get("latest_oracle_deep_url") or "")
         runs = state.setdefault("oracle_deep_runs", [])
         if isinstance(runs, list):
             runs.append(run)
         state["latest_oracle_deep_verdict"] = run["final_verdict"]
         state["latest_oracle_deep_turns"] = len(run["turns"])
         state["latest_oracle_deep_at"] = run["run_completed_at"]
-        state["latest_oracle_deep_conversation_id"] = run.get("conversation_id", "")
-        state["latest_oracle_deep_url"] = run.get("chatgpt_url", "")
+        run_conv = str(run.get("conversation_id") or "")
+        run_url = str(run.get("chatgpt_url") or "")
+        if run_conv:
+            state["latest_oracle_deep_conversation_id"] = run_conv
+            state["latest_oracle_deep_url"] = run_url
+        else:
+            state["latest_oracle_deep_conversation_id"] = previous_conv
+            state["latest_oracle_deep_url"] = previous_url
+            if previous_conv:
+                run["resume_conversation_retained_after_empty_run"] = previous_conv
         state["latest_oracle_latex_path"] = run.get("latex_path", "")
         state["latest_oracle_plain_summary"] = run.get("plain_summary", "")
         state["latest_oracle_terminal_latex_error"] = run.get("terminal_latex_error", "")
@@ -1402,16 +1635,16 @@ class OracleConsultant:
 # ChatGPT chooses the right depth. Tuned to push for concrete math content
 # rather than meta-commentary.
 DEFAULT_DEEPENING_PROMPTS: list[str] = [
-    "Continue. Take the most promising thread from your previous turn and push one full level deeper. Show concrete calculations, not summaries. If you reach an obstacle, name it precisely and propose ONE specific bypass attempt.",
-    "Find the weakest link in what you just argued. Try to break it. Construct a small finite counterexample if you can, or precisely identify the unproven gap.",
-    "Pick the most concrete sub-claim you've made and formalize it as a precise lemma with explicit hypotheses. Then attempt a complete proof, calculation, or detailed proof sketch.",
-    "Test your current line of attack on a small concrete example. Do the actual arithmetic. Do the prediction and the verification match? If not, what does the discrepancy tell you?",
-    "Step back. Are you attacking the right sub-problem? Is there a different angle (algebraic / combinatorial / probabilistic / generating-function) that might be cheaper? If yes, sketch it; if no, justify why your current angle is the best.",
-    "Where are you most stuck right now? Name the precise obstacle in one sentence. Then propose ONE concrete experiment or computation that would reveal whether the obstacle is real.",
-    "Survey your work so far. List in 5 bullets: (1) what is rigorously proved, (2) what is plausibly true with sketch, (3) what is still open, (4) the next single most informative experiment, (5) the most likely failure mode.",
-    "Try a completely different angle now: pretend you've never seen the problem before. Re-derive your strongest result from scratch. Did you arrive at the same conclusion? If your re-derivation differs, which is correct?",
-    "Build an explicit small computational test that would either confirm your strongest current claim or break it. Specify exact parameter ranges, expected output, and how you'd interpret the result.",
-    "If after all this you still cannot make further progress, write 'STUCK' on its own line and give a final summary of where the next person should pick up. Otherwise continue with the deepest open thread.",
+    "Continue from the previous answer and close the next live proof obligation. State it as a precise lemma with hypotheses and conclusion, then prove it as far as possible. Do not merely report that the route is unclosed.",
+    "Take the proof gap you identified last time and turn it into an executable plan: either prove the missing lemma now, or give a concrete local verifier specification with exact inputs, finite ranges or hypotheses, expected outputs, and how each outcome changes the proof state.",
+    "Push the strongest current route one full level deeper. If a comparison, descent, integrality, finiteness, or compatibility claim is missing, formulate it precisely and attempt the proof directly before proposing any alternative.",
+    "Derive a smaller theorem that would materially advance the original target and can be fully closed in this conversation. Give the theorem statement and proof, then explain how it feeds back into the main target.",
+    "If the current method appears false, do not stop at invalidating it. Construct the sharpest counterexample or obstruction, then extract the corrected lemma or boundary theorem that remains true and useful.",
+    "Specify the next local verification Codex should run only if proof cannot proceed symbolically. Include exact objects, parameters, pass/fail predicates, and the mathematical interpretation of each result.",
+    "Continue along the route that has the shortest path to closure. Avoid surveys and restatements; produce a proof step, calculation, construction, counterexample, or verifier-ready claim.",
+    "Rework the live argument into a chain of named lemmas. Mark each lemma as proved here, requiring local verification, or still open, and then attack the first still-open lemma immediately.",
+    "Choose a different mathematical attack only if it can bypass the current proof obligation. State the bypass lemma precisely and prove or verifier-specify it now.",
+    "Continue until you either close the target, close a publishable subtheorem, or give an exact verifier request that Codex can execute. Do not write STUCK unless you have proved a genuine obstruction to further progress by reasoning alone.",
 ]
 
 
@@ -1852,6 +2085,16 @@ def _run_local_codex_replay_after_oracle(
     local harness to inspect the newly preserved claim packet / materialized
     FILE blocks, run feasible checks, and select the next precise Oracle task.
     """
+    skip_post_replay = str(os.environ.get("OUTREACH_SKIP_POST_ORACLE_LOCAL_REPLAY") or "").lower()
+    if skip_post_replay in {"1", "true", "yes"}:
+        return {
+            "ok": True,
+            "todo_id": todo.todo_id,
+            "turn": turn_idx,
+            "skipped": True,
+            "reason": "OUTREACH_SKIP_POST_ORACLE_LOCAL_REPLAY enabled",
+            "next_oracle_question": "",
+        }
     script = REPO_ROOT / "tools/community-outreach/outreach_local_repair.py"
     if not script.exists():
         return {"ok": False, "error": f"missing local repair script at {script}"}
@@ -2358,6 +2601,7 @@ def _local_harness_context_for_todo(todo: TodoSpec) -> str:
     target_dir = REPO_ROOT / "tools/community-outreach/targets" / todo.slug()
     lines = ["Science gate now:", _science_gate_context_for_todo(todo)]
     for name in (
+        "stable_points.md",
         "next_oracle_question.md",
         "codex_workup.md",
         "local_repair_report.md",
@@ -2913,6 +3157,19 @@ def _as_continuation_prompt(question: str) -> str:
     return (
         "Continue from your previous answer in this same conversation; do not restart or restate the whole problem. "
         f"{cleaned}"
+    )
+
+
+def _closure_gap_followup(gap: str) -> str:
+    cleaned = _compact_excerpt(gap or "", 4000)
+    if not cleaned:
+        cleaned = "The independent checker did not certify closure but did not return a parsable gap. Re-audit your last proof, find the first unproved step, and close it."
+    return (
+        "Continue from your previous answer in this same conversation; do not restart. "
+        "An independent Oracle checker did not certify the proof as closed. "
+        "Treat the checker output as the next proof obligation, not as a final verdict. "
+        "Close this gap directly, or give the exact local verifier specification whose pass/fail result would close it.\n\n"
+        f"Checker gap:\n{cleaned}"
     )
 
 
