@@ -1027,26 +1027,32 @@ class OracleConsultant:
                         "next_oracle_question": local_replay.get("next_oracle_question", ""),
                         "local_replay_failed_but_continued": True,
                     }
-                    continue
-                refreshed_gate = _science_gate_status_for_todo(todo)
-                refreshed_gate_missing = list(refreshed_gate.get("missing", []) or [])
-                effective_gate_status = str(refreshed_gate.get("status") or "").upper()
-                effective_gate_missing = refreshed_gate_missing
-                turn_record["science_gate_after_local_replay"] = {
-                    "status": refreshed_gate.get("status", ""),
-                    "next_action": refreshed_gate.get("next_action", ""),
-                    "missing": refreshed_gate_missing,
-                    "next_oracle_question": local_replay.get("next_oracle_question", ""),
-                }
-                if effective_gate_status in {"WRITEBACK_READY", "CLOSE_TARGET"}:
-                    verdict = "BREAKTHROUGH" if effective_gate_status == "WRITEBACK_READY" else "STUCK"
-                    turn_record["gate_stop"] = (
-                        f"post-Oracle local replay moved deterministic science gate to {effective_gate_status}; "
-                        "stop this Oracle batch and hand off to writeback/review gates"
-                    )
-                    break
-                if local_replay.get("next_oracle_question"):
-                    next_followup_override = _as_continuation_prompt(str(local_replay["next_oracle_question"]))
+                    # Fall through to codex_evaluate_progress so the stable-points
+                    # discipline (current_anchors / current_gap /
+                    # next_minimum_stable_point) is still captured for this turn
+                    # even when the local replay postcheck rejected the workup
+                    # format. Gate refresh and BREAKTHROUGH/STUCK detection are
+                    # skipped in this branch since gate state is stale.
+                else:
+                    refreshed_gate = _science_gate_status_for_todo(todo)
+                    refreshed_gate_missing = list(refreshed_gate.get("missing", []) or [])
+                    effective_gate_status = str(refreshed_gate.get("status") or "").upper()
+                    effective_gate_missing = refreshed_gate_missing
+                    turn_record["science_gate_after_local_replay"] = {
+                        "status": refreshed_gate.get("status", ""),
+                        "next_action": refreshed_gate.get("next_action", ""),
+                        "missing": refreshed_gate_missing,
+                        "next_oracle_question": local_replay.get("next_oracle_question", ""),
+                    }
+                    if effective_gate_status in {"WRITEBACK_READY", "CLOSE_TARGET"}:
+                        verdict = "BREAKTHROUGH" if effective_gate_status == "WRITEBACK_READY" else "STUCK"
+                        turn_record["gate_stop"] = (
+                            f"post-Oracle local replay moved deterministic science gate to {effective_gate_status}; "
+                            "stop this Oracle batch and hand off to writeback/review gates"
+                        )
+                        break
+                    if local_replay.get("next_oracle_question"):
+                        next_followup_override = _as_continuation_prompt(str(local_replay["next_oracle_question"]))
 
             eval_result = codex_evaluate_progress(
                 turn_idx,
