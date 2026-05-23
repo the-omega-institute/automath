@@ -47,6 +47,7 @@ CODEX_ARTIFACT_WATCHDOG_IDLE_SECONDS = float(
 CODEX_INCOMPLETE_HANDOFF_IDLE_SECONDS = float(
     os.environ.get("OUTREACH_CODEX_INCOMPLETE_HANDOFF_IDLE_SECONDS", "120") or "120"
 )
+LOCAL_REPAIR_PROGRESS_LOG_ENV = "OUTREACH_LOCAL_REPAIR_PROGRESS_LOG"
 
 sys_path_added = False
 try:
@@ -76,6 +77,19 @@ def _now_iso() -> str:
 
 def _now_tag() -> str:
     return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+def _progress_log(message: str) -> None:
+    path_text = os.environ.get(LOCAL_REPAIR_PROGRESS_LOG_ENV, "")
+    if not path_text:
+        return
+    try:
+        path = Path(path_text)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a", encoding="utf-8") as f:
+            f.write(f"[{_now_iso()}] {message}\n")
+    except OSError:
+        pass
 
 
 def _read_text(path: Path, *, limit: int = 16000) -> str:
@@ -1185,6 +1199,15 @@ def _collect_missing_referenced_local_paths(value: object) -> list[str]:
                 or "not_replayed" in key_lower
                 or "unverified" in key_lower
                 or "failed" in key_lower
+                or "expected_by" in key_lower
+                or "_expected" in key_lower
+                or key_lower.endswith("_expected")
+                or key_lower.startswith("expected_")
+                or "absent" in key_lower
+                or "proposed" in key_lower
+                or "requested" in key_lower
+                or "not_runnable" in key_lower
+                or "not_materialized" in key_lower
             ):
                 continue
             missing.extend(_collect_missing_referenced_local_paths(child))
@@ -1653,6 +1676,10 @@ def _record_target_verifier_audit(
             else []
         )
         if not artifact_commands:
+            _progress_log(
+                f"{todo_id}: verifier audit skipped; "
+                "no verifier/results artifact command available"
+            )
             return {"ran": False, "reason": "missing verify*_results.py/results artifact commands or results.json"}
     else:
         artifact_commands = (
@@ -1671,17 +1698,34 @@ def _record_target_verifier_audit(
         for cmd in _candidate_verifier_commands(verifier, results_path):
             replay_queue.append((f"{todo_id}:{target_dir.name}:{verifier.name}", cmd))
     for label, cmd in replay_queue:
+        _progress_log(f"{todo_id}: verifier audit running {label}: {' '.join(cmd)}")
         started = _now_iso()
-        proc = subprocess.run(
-            cmd,
-            cwd=str(REPO_ROOT),
-            capture_output=True,
-            text=True,
-            timeout=900,
-            encoding="utf-8",
-            errors="replace",
-            check=False,
-        )
+        try:
+            proc = subprocess.run(
+                cmd,
+                cwd=str(REPO_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=900,
+                encoding="utf-8",
+                errors="replace",
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exc:
+            _progress_log(f"{todo_id}: verifier audit timeout {label}")
+            candidate_run = {
+                "label": label,
+                "command": " ".join(cmd),
+                "started_at": started,
+                "finished_at": _now_iso(),
+                "exit_status": 124,
+                "stdout": {"raw": _coerce_text(exc.stdout)[:4000]},
+                "stderr": _coerce_text(exc.stderr)[:4000] + "\nTIMEOUT after 900s",
+            }
+            attempted.append(candidate_run)
+            run = candidate_run
+            continue
+        _progress_log(f"{todo_id}: verifier audit finished {label} rc={proc.returncode}")
         stdout_payload = _json_from_stdout(proc.stdout)
         candidate_run = {
             "label": label,
@@ -1895,17 +1939,24 @@ def _run_science_gate(todo_id: str, *, write_ledger: bool = True) -> dict:
 
 
 def run_local_repair(todo_id: str, *, timeout: int) -> dict:
+    _progress_log(f"{todo_id}: local_repair start timeout={timeout}s")
     if IMPORT_ERROR:
+        _progress_log(f"{todo_id}: import failed: {IMPORT_ERROR}")
         return {"ok": False, "error": f"import failed: {IMPORT_ERROR}"}
     if parse_board is None:
+        _progress_log(f"{todo_id}: parse_board unavailable")
         return {"ok": False, "error": "parse_board unavailable"}
+    _progress_log(f"{todo_id}: parsing board")
     todos = parse_board(BOARD_PATH)
     if todo_id not in todos:
+        _progress_log(f"{todo_id}: not found on board")
         return {"ok": False, "error": f"{todo_id} not found"}
     todo = todos[todo_id]
     target_dir = TARGETS_DIR / todo.slug()
     target_dir.mkdir(parents=True, exist_ok=True)
+    _progress_log(f"{todo_id}: target={todo.slug()} running science gate")
     gate_before = _run_science_gate(todo_id, write_ledger=True)
+    _progress_log(f"{todo_id}: science gate before={gate_before.get('status')}")
     if str(gate_before.get("status") or "") in {"WRITEBACK_READY", "CLOSE_TARGET"}:
         report = {
             "ok": True,
@@ -1920,14 +1971,22 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         }
         state_path = target_dir / "local_repair_last.json"
         state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        _progress_log(f"{todo_id}: shortcut terminal gate")
         return report
+    _progress_log(f"{todo_id}: running preexisting verifier audit")
     verifier_audit_before = _record_target_verifier_audit(
         todo_id,
         target_dir,
         include_results_artifact_commands=False,
     )
+    _progress_log(
+        f"{todo_id}: verifier audit before ran={verifier_audit_before.get('ran')} "
+        f"passed={verifier_audit_before.get('passed')}"
+    )
     if verifier_audit_before.get("passed"):
+        _progress_log(f"{todo_id}: verifier audit passed; rerunning science gate")
         gate_after_audit = _run_science_gate(todo_id, write_ledger=True)
+        _progress_log(f"{todo_id}: science gate after verifier={gate_after_audit.get('status')}")
         if str(gate_after_audit.get("status") or "") in {"WRITEBACK_READY", "CLOSE_TARGET"}:
             report = {
                 "ok": True,
@@ -1943,6 +2002,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
             }
             state_path = target_dir / "local_repair_last.json"
             state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            _progress_log(f"{todo_id}: shortcut verifier reached terminal gate")
             return report
         if gate_after_audit.get("status") != gate_before.get("status") or gate_after_audit.get(
             "verification_status"
@@ -1950,9 +2010,11 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
             # Verifier replay is real local work, but a non-terminal gate still
             # needs a fresh Codex handoff before Oracle is asked anything.
             gate_before = gate_after_audit
+    _progress_log(f"{todo_id}: building Codex prompt")
     prompt = build_prompt(todo_id, gate=gate_before, target_dir=target_dir)
 
     if not CODEX_BIN or not Path(CODEX_BIN).exists():
+        _progress_log(f"{todo_id}: codex CLI not found at {CODEX_BIN}")
         return {"ok": False, "error": f"codex CLI not found at {CODEX_BIN}", "gate_before": gate_before}
 
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -1982,6 +2044,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     started = _now_iso()
     artifact_watchdog: dict = {"triggered": False}
     incomplete_handoff_watchdog: dict = {"triggered": False}
+    _progress_log(f"{todo_id}: launching Codex CLI")
     try:
         with open(stdout_path, "w", encoding="utf-8") as stdout_f, open(
             stderr_path,
@@ -2000,15 +2063,18 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                 errors="replace",
                 start_new_session=True,
             )
+            _progress_log(f"{todo_id}: Codex CLI spawned pid={proc.pid}")
             try:
                 if proc.stdin:
                     proc.stdin.write(prompt)
                     proc.stdin.close()
+                    _progress_log(f"{todo_id}: prompt sent to Codex CLI")
                 deadline = time.monotonic() + max(1, timeout)
                 while True:
                     rc_poll = proc.poll()
                     if rc_poll is not None:
                         rc = rc_poll
+                        _progress_log(f"{todo_id}: Codex CLI exited rc={rc}")
                         break
                     if time.monotonic() >= deadline:
                         raise subprocess.TimeoutExpired(cmd, timeout)
@@ -2021,6 +2087,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                     )
                     if complete:
                         artifact_watchdog = {"triggered": True, **details}
+                        _progress_log(f"{todo_id}: artifact watchdog completed handoff")
                         _terminate_process_group(proc)
                         rc = proc.returncode if proc.returncode is not None else 0
                         stderr_f.write(
@@ -2037,6 +2104,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                     )
                     if incomplete:
                         incomplete_handoff_watchdog = {"triggered": True, **incomplete_details}
+                        _progress_log(f"{todo_id}: incomplete handoff watchdog triggered")
                         _terminate_process_group(proc)
                         rc = 125
                         stderr_f.write(
@@ -2048,6 +2116,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                         break
                     time.sleep(2)
             except subprocess.TimeoutExpired:
+                _progress_log(f"{todo_id}: Codex CLI timeout after {timeout}s")
                 _terminate_process_group(proc)
                 try:
                     proc.communicate(timeout=5)
@@ -2057,6 +2126,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
                 stderr_f.write(f"\nTIMEOUT after {timeout}s; terminated Codex process group\n")
     except subprocess.TimeoutExpired as exc:
         rc = 124
+        _progress_log(f"{todo_id}: outer timeout after {timeout}s")
         if not stdout_path.exists():
             stdout_path.write_text(_coerce_text(exc.stdout), encoding="utf-8")
         with open(stderr_path, "a", encoding="utf-8") as stderr_f:
@@ -2071,6 +2141,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
         except OSError:
             pass
     output_path.write_text(raw or "", encoding="utf-8")
+    _progress_log(f"{todo_id}: reading Codex trace and running postcheck")
     codex_command_trace = (
         artifact_watchdog.get("codex_command_trace")
         or incomplete_handoff_watchdog.get("codex_command_trace")
@@ -2083,7 +2154,9 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     # step when it is actually needed for writeback.
     verifier_audit = _post_codex_duplicate_replay_skip(codex_command_trace)
     if verifier_audit is None:
+        _progress_log(f"{todo_id}: running post-Codex verifier audit")
         verifier_audit = _record_target_verifier_audit(todo_id, target_dir)
+    _progress_log(f"{todo_id}: running science gate after Codex")
     gate_after = _run_science_gate(todo_id, write_ledger=True)
     # These ledgers may be refreshed by harness code around the Codex worker;
     # do not charge those deterministic supervisor writes to the worker.
@@ -2144,6 +2217,7 @@ def run_local_repair(todo_id: str, *, timeout: int) -> dict:
     }
     state_path = target_dir / "local_repair_last.json"
     state_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _progress_log(f"{todo_id}: local_repair finished ok={ok} rc={rc}")
     return report
 
 
