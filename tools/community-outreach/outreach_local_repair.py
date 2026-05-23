@@ -1817,6 +1817,7 @@ def build_prompt(todo_id: str, *, gate: dict, target_dir: Path) -> str:
     codex_workup = _read_text(target_dir / "codex_workup.md", limit=5000)
     results_json = _read_text(target_dir / "results.json", limit=8000)
     profile_json = _read_text(target_dir / "profile.json", limit=4000)
+    stable_points = _read_text(target_dir / "stable_points.md", limit=6000)
     return f"""You are Codex running as the LOCAL_CODEX_WORKUP worker for the Omega outreach open-problem pipeline.
 
 Target: {todo_id} — {title}
@@ -1881,6 +1882,11 @@ Existing research.md excerpt (clipped; read the file directly if needed):
 Existing codex_workup.md excerpt (clipped; read the file directly if needed):
 ```markdown
 {codex_workup or "(missing)"}
+```
+
+AUTHORITATIVE stable_points.md — current_gap and next_minimum_stable_point in this file OVERRIDE any direction implied by codex_workup.md. When the workup history is mid-enumeration on a side branch (e.g. row-37 K3 cursor slices) but stable_points.md names a different `## Current GAP` (e.g. index 25 cube-ratio), your next_oracle_question.md MUST attack the stable_points.md GAP, not extend the side enumeration. Side-enumeration progress may be noted under anchored stable points but must not become the next Oracle question while a higher-priority GAP is open.
+```markdown
+{stable_points or "(no stable_points.md — derive current GAP from codex_workup.md)"}
 ```
 
 Latest substantive Oracle claim packet (clipped; read older packets directly only if needed):
