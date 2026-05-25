@@ -601,6 +601,73 @@ argument in \Cref{thm:separation} therefore proceeds verbatim, and no
 additional table entry or compiler output can enter the proof.
 \end{proof}
 
+\begin{theorem}[Minimal analytic witness interface]
+\label{thm:minimal-eml-witness-interface}
+Fix the principal-branch EML semantics of \Cref{def:eml}.  The
+Richardson obstruction proved in \Cref{thm:separation} depends on
+Odrzywo{\l}ek's long Table~1 data only through the following three
+real-domain assertions for the three printed pure EML trees locked in
+\Cref{lem:eml-ancillary-certificate}:
+\[
+  W_{\pi}=\pi,
+  \qquad W_{\sin}(x)=\sin x\quad(x\in\RR),
+  \qquad W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+\]
+More precisely, let \(\mathsf P\) be any closed pure EML term and let
+\(\mathsf S(x)\), \(\mathsf R(t)\) be any unary pure EML terms such that
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+\]
+If the Richardson translation is rebuilt with
+\((\mathsf P,\mathsf S,\mathsf R)\) in place of
+\((W_{\pi},W_{\sin},W_{\sqrt{}})\), and with the internally proved core
+EML witnesses of \Cref{lem:eml-printed-core}, then the resulting
+translation is effective, preserves the represented real function on
+Richardson's language \(\mathcal R\), and admits no computable normalizer
+into decidable finite objects classifying equality of the transported
+real functions.  Consequently the proof of \Cref{thm:separation} is
+stable under replacement of the Odrzywo{\l}ek witnesses by any other
+three pure EML terms satisfying exactly these real-domain identities.
+\end{theorem}
+
+\begin{proof}
+Construct the translation by the same structural recursion as in
+\Cref{lem:richardson-translation}, replacing only the three non-core
+leaves \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\).  Effectivity is
+purely syntactic: the three replacement trees are fixed finite strings,
+the core EML macros in \Cref{lem:eml-printed-core} are fixed finite
+strings, and a Richardson expression is translated by bounded recursive
+substitution into those strings.
+
+The value calculation is identical to the proof of
+\Cref{prop:three-witness-stability}.  The core macros give addition,
+subtraction, negation, exponentiation, positive logarithm, multiplication,
+division away from zero, rational constants, and the positive square-root
+macro on their stated real domains.  The replacement \(\mathsf P\) gives
+the constant \(\pi\), and the replacement \(\mathsf S\) gives sine on all
+real arguments.  The only use of the nonnegative square-root interface in
+the Richardson language is the absolute-value representative
+\(u\mapsto \mathsf R(M(u,u))\).  Since the multiplication macro satisfies
+\(M(u,u)=u^2\ge0\) for every real \(u\) by
+\Cref{lem:eml-real-witness-library}, this occurrence is always inside the
+assumed domain of \(\mathsf R\) and has value \(|u|\), including at
+\(u=0\).  Thus the rebuilt translation preserves the represented real
+function of every Richardson expression.
+
+If a computable normalizer into decidable finite objects classified
+equality of the transported rebuilt EML terms, then applying it to the
+translations of two Richardson expressions would decide equality of the
+corresponding Richardson real functions.  In particular, comparing a
+translated expression with the translated zero expression would decide
+Richardson's identity problem on \(\mathcal R\), contradicting
+\Cref{lem:richardson-fragment}.  Hence no such normalizer exists.  The
+argument uses no information about the source of the three replacement
+terms beyond their fixed finite syntax and the three displayed
+real-domain identities, proving the asserted stability.
+\end{proof}
+
 \begin{lemma}[Three-witness real-domain audit]
 \label{lem:three-witness-domain-audit}
 The strictness proof uses the non-core EML witnesses only through the
@@ -1082,7 +1149,9 @@ for all Richardson expressions \(E_1,E_2\in\mathcal R\).
 The expression-universality assertion is \Cref{thm:eml-universality}.
 The obstruction itself uses the smaller finite package
 \(\mathcal W_{\mathcal R}\), whose three non-core analytic inputs are
-isolated in \Cref{prop:three-witness-stability}: by
+isolated in \Cref{prop:three-witness-stability} and strengthened by the
+replacement-stability theorem
+\Cref{thm:minimal-eml-witness-interface}: by
 \Cref{cor:eml-witness-locking,lem:richardson-translation}, the map
 \(E\mapsto\tau(E)\) is effective and preserves the real function defined
 by \(E\), using only syntactic substitution into that locked witness
@@ -1163,9 +1232,12 @@ The contradiction at the end of the separation proof is precisely
 Richardson undecidability in \Cref{lem:richardson-fragment}, combined
 with the canonical-form implication of \Cref{cor:compile-scope}.  No
 step appeals to representatives for the remaining operations in
-\(\mathcal B_{36}\).  Therefore the proof survives with the smaller
-locked Richardson package, while the full calculator-basis theorem
-continues to serve only as the external L0 universality example.
+\(\mathcal B_{36}\).  Moreover,
+\Cref{thm:minimal-eml-witness-interface} shows that even the three long
+non-core representatives enter only through their stated real-domain
+identities.  Therefore the proof survives with the smaller locked
+Richardson package, while the full calculator-basis theorem continues to
+serve only as the external L0 universality example.
 \end{proof}
 
 \subsection{Certificate data}
