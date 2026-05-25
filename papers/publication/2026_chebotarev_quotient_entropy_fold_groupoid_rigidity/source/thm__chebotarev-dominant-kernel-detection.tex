@@ -215,23 +215,42 @@ E_n(K)=\sum_{J\supseteq K}\mu_{\mathrm{sub}}(K,J)Y_n(J).
 \]
 
 More generally, let \(\mathcal O\) be any collection of observed subgroups.
-The observation map
+Put
+\[
+\mathcal K_G:=\{\ker\chi:\chi\in\widehat G\setminus\{\ind\}\}
+\]
+and let
+\[
+M_{\mathcal O}:\RR^{\mathcal K_G}\longrightarrow \RR^{\mathcal O},
+\qquad
+(M_{\mathcal O}E)(H):=\sum_{\substack{K\in\mathcal K_G\\K\supseteq H}}E(K).
+\]
+Then the restricted quotient family \(\mathcal O\) determines every possible
+exact-kernel energy function on \(\mathcal K_G\) if and only if the incidence
+matrix
+\[
+\bigl(1_{H\subseteq K}\bigr)_{H\in\mathcal O,\ K\in\mathcal K_G}
+\]
+has column rank \(|\mathcal K_G|\). If the rank is smaller, there are two
+distinct nonnegative exact-kernel energy functions on \(\mathcal K_G\) with the
+same \(\mathcal O\)-quotient-visible energies. In particular, the observation map
 \[
 E:K\longmapsto E(K)
 \quad\rightsquigarrow\quad
 \left(\sum_{K\supseteq H}E(K)\right)_{H\in\mathcal O}
 \]
-cannot distinguish two exact kernels \(K_1,K_2\le G\) for which
+cannot distinguish two exact kernels \(K_1,K_2\in\mathcal K_G\) for which
 \[
 \{H\in\mathcal O:H\subseteq K_1\}
 =
 \{H\in\mathcal O:H\subseteq K_2\}.
 \]
-Indeed, any transfer of energy from \(K_1\) to \(K_2\) leaves every observed
-quotient-visible energy unchanged.  Thus exact-kernel detection from a
-restricted quotient family is possible only after this finite subgroup-lattice
-obstruction has been removed; for \(\mathcal O=\{H:H\le G\}\), it is removed
-exactly by the M\"obius formula above.
+
+Equivalently, if one observes only \(\mathcal O\), the worst possible obstruction
+is exactly the kernel of this finite incidence operator.  Thus exact-kernel
+detection from a restricted quotient family is possible precisely after this
+finite subgroup-lattice obstruction has been removed; for
+\(\mathcal O=\{H:H\le G\}\), it is removed exactly by the M\"obius formula above.
 \end{theorem}
 
 \begin{proof}
@@ -252,25 +271,38 @@ Y_n(H)=
 M\"obius inversion on the finite subgroup lattice gives the displayed recovery
 formula.
 
-For the obstruction, write
-\(\mathbf v_K(H)=1\) if \(H\subseteq K\) and \(0\) otherwise, for
-\(H\in\mathcal O\).  The observation vector of a unit energy supported at
-\(K\) is precisely \(\mathbf v_K\).  The stated equality of lower shadows in
-\(\mathcal O\) says \(\mathbf v_{K_1}=\mathbf v_{K_2}\).  Hence replacing an
-energy function \(E\) by
+For a restricted family \(\mathcal O\), the observed visible-energy vector is
+exactly the image under the displayed incidence operator \(M_{\mathcal O}\).
+If the incidence matrix has full column rank, elementary finite-dimensional
+linear algebra gives a left inverse, so the observed vector determines every
+coordinate \(E(K)\), \(K\in\mathcal K_G\).  Conversely, if the column rank is
+smaller than \(|\mathcal K_G|\), choose a nonzero vector
+\(a\in\ker M_{\mathcal O}\).  Write
 \[
-E'(K_1)=E(K_1)-t,
+a=a^+-a^-,
 \qquad
-E'(K_2)=E(K_2)+t,
+a^+(K):=\max(a(K),0),
 \qquad
-E'(K)=E(K)\quad(K\notin\{K_1,K_2\}),
+a^-(K):=\max(-a(K),0).
 \]
-for any real \(t\) for which the displayed values remain nonnegative, changes
-the exact-kernel energies but not the observed vector
-\((\sum_{K\supseteq H}E(K))_{H\in\mathcal O}\).  Thus the restricted quotient
-family has a genuine finite-lattice indistinguishability obstruction.  When
-all subgroups are observed, the M\"obius formula just proved provides an
-explicit inverse, so no such obstruction remains.
+Since \(a\ne0\), the two nonnegative functions \(a^+\) and \(a^-\) are
+distinct, and
+\[
+M_{\mathcal O}a^+=M_{\mathcal O}a^-.
+\]
+Indeed this equality is equivalent to \(M_{\mathcal O}a=0\).  Thus two distinct
+nonnegative exact-kernel energy functions have the same restricted quotient
+profile.  This proves the rank criterion.
+
+The lower-shadow obstruction is the special case in which the two columns
+\(\mathbf v_{K_1}\) and \(\mathbf v_{K_2}\) of the incidence matrix are equal,
+where \(\mathbf v_K(H)=1\) if \(H\subseteq K\) and \(0\) otherwise.  Moving any
+positive amount of energy between those two columns leaves all observed
+quotient-visible energies unchanged.  Finally, when all subgroups are observed,
+the full subgroup-lattice zeta transform is inverted by the M\"obius function;
+hence the incidence matrix restricted to the actual kernel set \(\mathcal K_G\)
+has full column rank, and the displayed M\"obius formula gives the explicit
+inverse.
 \end{proof}
 
 \begin{corollary}[Cesaro quotient-profile recovery of persistent support]\label{cor:cesaro-averaged-quotient-profile-persistent-support}
@@ -335,7 +367,7 @@ the elementary character condition: an exact-kernel character with kernel
 quotient through which every persistent exact-kernel character is visible is
 the quotient by the intersection of the persistent kernels.
 
-For the entropy version, Corollary
+For the entropy version, Theorem
 \ref{thm:finite-field-chebotarev-entropy-tomography} gives, uniformly in
 \(K\),
 \[
