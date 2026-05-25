@@ -161,11 +161,13 @@ admissible \(\mu_0\)-fragment.  That contradicts the cited theorem.
 For the language \(\mathcal R\) just specified, there is no
 algorithm which decides, from an expression \(E\in\mathcal R\),
 whether the represented partially defined real function is identically
-zero on its domain.  Consequently the functional equality problem for
-pairs of \(\mathcal R\)-expressions is undecidable.  More precisely, an
-identity-to-zero decision procedure would decide equality by applying it
-to \(E_1-E_2\), and an equality decision procedure would decide
-identity-to-zero by comparing \(E\) with the zero expression.
+zero on its domain.  Consequently the following common-domain equality
+predicate is also undecidable: for expressions \(E_1,E_2\), write
+\(E_1\equiv_{\mathcal R}^{\cap}E_2\) when their represented partial real
+functions agree at every point of
+\(\dom(E_1)\cap\dom(E_2)\).  No algorithm decides
+\(E_1\equiv_{\mathcal R}^{\cap}E_2\) for all pairs
+\(E_1,E_2\in\mathcal R\).
 \end{lemma}
 
 \begin{proof}
@@ -176,14 +178,13 @@ by \Cref{lem:richardson-punctured-mu-reduction}: the fragment contains
 the identity function,
 rational constants, \(\pi\), \(\log 2\), \(\exp\), \(\sin\), and a
 unary function agreeing with \(|x|\) away from zero, and is closed
-under addition, subtraction, multiplication, and composition.  Since
-the grammar is closed under subtraction, two expressions define the
-same Richardson single-valued partial real function exactly when their
-difference is defined on the common Richardson domain and defines the
-zero function there.  Conversely, identity-to-zero is the
-special case of equality against the rational constant \(0\).  Thus
-the two decision problems are many-one equivalent for this fragment,
-and both are undecidable.
+under addition, subtraction, multiplication, and composition.  If the
+common-domain equality predicate were decidable, then, given an
+expression \(E\), one would compare \(E\) with the rational constant
+zero.  Since the zero expression is defined on all of \(\RR\), the common
+domain is exactly \(\dom(E)\), and the comparison holds if and only if
+\(E\) is identically zero on its own domain.  This would decide
+Richardson's identity-to-zero problem, contradicting the theorem.
 \end{proof}
 
 \begin{theorem}[Abstract normalizer obstruction]
@@ -226,6 +227,57 @@ of the normalizer this is equivalent to
 \(\tau(A)\equiv_{\tau}\tau(B)\), and by semantic compatibility of
 \(\tau\) this is equivalent to \(A\equiv_{\mathcal S}B\).  Thus source
 semantic equality would be decidable, contradicting the hypothesis.
+\end{proof}
+
+\begin{lemma}[Transported partial-function normalizer obstruction]
+\label{lem:transported-partial-normalizer-obstruction}
+Let \(\mathcal S\) be a computably enumerable source language whose
+terms denote single-valued partial functions \(f_A\colon\RR\rightharpoonup
+\RR\).  Define common-domain equality by
+\[
+  A\equiv_{\mathcal S}^{\cap}B
+  \quad\Longleftrightarrow\quad
+  f_A(x)=f_B(x)\text{ for every }x\in\dom(f_A)\cap\dom(f_B).
+\]
+Suppose this relation is undecidable.  Let \(\tau\colon\mathcal S\to
+\mathcal T\) be a total computable translation into pure EML terms.  For
+a pure EML term \(T\), let \(\llbracket T\rrbracket_{\RR}\) be the
+single-valued partial real function whose domain consists of those real
+inputs for which the principal-branch EML evaluation is defined at every
+subterm and the final value is real.  On the transported fragment set
+\[
+  \tau(A)\equiv_{\tau}^{\cap}\tau(B)
+  \quad\Longleftrightarrow\quad
+  \llbracket\tau(A)\rrbracket_{\RR}(x)
+   =\llbracket\tau(B)\rrbracket_{\RR}(x)
+  \quad(x\in
+  \dom\llbracket\tau(A)\rrbracket_{\RR}
+  \cap\dom\llbracket\tau(B)\rrbracket_{\RR}).
+\]
+If \(\tau\) preserves common-domain semantics, meaning
+\[
+  A\equiv_{\mathcal S}^{\cap}B
+  \quad\Longleftrightarrow\quad
+  \tau(A)\equiv_{\tau}^{\cap}\tau(B)
+  \qquad(A,B\in\mathcal S),
+\]
+then there is no computably presented codomain of finite objects with
+decidable equality and no total computable map from \(\tau(\mathcal S)\)
+to that codomain whose equality classes are exactly
+\(\equiv_{\tau}^{\cap}\).
+\end{lemma}
+
+\begin{proof}
+This is \Cref{thm:abstract-normalizer-obstruction} applied to the
+source equality relation \(\equiv_{\mathcal S}^{\cap}\) and to the target
+relation \(\equiv_{\tau}^{\cap}\).  Indeed, if such finite normal forms
+existed, then for any two source terms \(A,B\) one could compute
+\(\tau(A)\) and \(\tau(B)\), compute their normal forms, and compare them
+using the decidable equality predicate in the codomain.  By the assumed
+classification property this would decide
+\(\tau(A)\equiv_{\tau}^{\cap}\tau(B)\), and by semantic preservation this
+would decide \(A\equiv_{\mathcal S}^{\cap}B\), contrary to the
+undecidability hypothesis.
 \end{proof}
 
 \begin{lemma}[Printed EML core witnesses]
@@ -624,10 +676,12 @@ If the Richardson translation is rebuilt with
 \((\mathsf P,\mathsf S,\mathsf R)\) in place of
 \((W_{\pi},W_{\sin},W_{\sqrt{}})\), and with the internally proved core
 EML witnesses of \Cref{lem:eml-printed-core}, then the resulting
-translation is effective, preserves the represented real function on
-Richardson's language \(\mathcal R\), and admits no computable normalizer
-into decidable finite objects classifying equality of the transported
-real functions.  Consequently the proof of \Cref{thm:separation} is
+translation is effective, preserves the represented partial real
+function and its real domain on Richardson's language \(\mathcal R\), and
+admits no computable normalizer
+into decidable finite objects classifying common-domain equality of the
+transported partial real functions.  Consequently the proof of
+\Cref{thm:separation} is
 stable under replacement of the Odrzywo{\l}ek witnesses by any other
 three pure EML terms satisfying exactly these real-domain identities.
 \end{theorem}
@@ -657,12 +711,13 @@ assumed domain of \(\mathsf R\) and has value \(|u|\), including at
 function of every Richardson expression.
 
 If a computable normalizer into decidable finite objects classified
-equality of the transported rebuilt EML terms, then applying it to the
-translations of two Richardson expressions would decide equality of the
-corresponding Richardson real functions.  In particular, comparing a
-translated expression with the translated zero expression would decide
-Richardson's identity problem on \(\mathcal R\), contradicting
-\Cref{lem:richardson-fragment}.  Hence no such normalizer exists.  The
+common-domain equality of the transported rebuilt EML terms, then
+applying it to the translations of two Richardson expressions would
+decide common-domain equality of the corresponding Richardson partial
+real functions.  In particular, comparing a translated expression with
+the translated zero expression would decide Richardson's identity
+problem on \(\mathcal R\), contradicting \Cref{lem:richardson-fragment}.
+Hence no such normalizer exists.  The
 argument uses no information about the source of the three replacement
 terms beyond their fixed finite syntax and the three displayed
 real-domain identities, proving the asserted stability.
@@ -743,12 +798,15 @@ effective translation \(E\mapsto\tau_{\mathsf P,\mathsf S,
 \mathsf R}(E)\) of Richardson expressions into pure EML terms such that
 \[
   \llbracket \tau_{\mathsf P,\mathsf S,\mathsf R}(E)\rrbracket_{\RR}(x)
-  =E(x)\qquad(x\in\RR)
+  =E(x)\qquad(x\in\dom(E))
 \]
-for every expression in the Richardson fragment.  Moreover, for this
-translated fragment there is no computably presented codomain of finite
-normal forms with decidable equality that classifies equality of the
-transported real functions.  If \(|E|\) denotes Richardson tree size
+and
+\(\dom\llbracket \tau_{\mathsf P,\mathsf S,\mathsf R}(E)\rrbracket_{\RR}
+=\dom(E)\) for every expression in the Richardson fragment.  Moreover,
+for this translated fragment there is no computably presented codomain
+of finite normal forms with decidable equality that classifies
+common-domain equality of the transported partial real functions.  If
+\(|E|\) denotes Richardson tree size
 after expanding rational constants by the fixed constructor scheme, then
 there is a constant \(K_{\mathsf P,\mathsf S,\mathsf R}\) such that
 \[
@@ -818,12 +876,14 @@ of Richardson's absolute-value symbol is replaced by
 translated by substituting the already translated inner tree into every
 input leaf of the already translated outer tree.  The preceding
 paragraph proves the value identity at each atomic and primitive step,
-and the composition clause preserves it by ordinary substitution of real
-functions.  Induction on the expression tree therefore gives
+with the same partial-domain check as in
+\Cref{lem:richardson-translation}, and the composition clause preserves
+it by ordinary substitution of partial real functions.  Induction on the
+expression tree therefore gives
 \(
 \llbracket \tau_{\mathsf P,\mathsf S,\mathsf R}(E)\rrbracket_{\RR}=E
 \)
-on \(\RR\).
+with equality of domains.
 
 Because \(\mathsf P\), \(\mathsf S\), \(\mathsf R\), and the core macros
 are fixed finite trees, there is a constant bounding the size and depth
@@ -835,12 +895,13 @@ other constructor has uniformly bounded arity and uniformly bounded
 replacement size.
 
 If a computable finite normal form with decidable equality classified
-equality of the transported real functions on this translated fragment,
+common-domain equality of the transported partial real functions on this
+translated fragment,
 then, given Richardson expressions \(E_1,E_2\), one could compute
 \(\tau_{\mathsf P,\mathsf S,\mathsf R}(E_1)\) and
 \(\tau_{\mathsf P,\mathsf S,\mathsf R}(E_2)\) and compare their normal
-forms.  By the value identity just proved, this would decide equality of
-Richardson real functions, equivalently identity-to-zero by
+forms.  By the domain and value identity just proved, this would decide
+\(\equiv_{\mathcal R}^{\cap}\), contradicting
 \Cref{lem:richardson-fragment}.  That contradicts Richardson's theorem.
 For the printed witnesses of \Cref{lem:eml-ancillary-certificate}, the
 finite straight-line table supplies the terms and their locked syntactic
@@ -879,10 +940,11 @@ code-and-data snapshot on Zenodo
 Then the fixed finite witness package consisting of
 \Cref{lem:eml-printed-core} and the three locked strings of
 \Cref{lem:eml-ancillary-certificate} gives an effective Richardson-to-EML
-translation preserving the represented real function on \(\RR\).  On the
-resulting translated Richardson fragment there is no computably presented
-codomain of finite normal forms with decidable equality that classifies
-equality of the transported real functions.
+translation preserving the represented partial real function and its
+real domain.  On the resulting translated Richardson fragment there is
+no computably presented codomain of finite normal forms with decidable
+equality that classifies common-domain equality of the transported
+partial real functions.
 \end{corollary}
 
 \begin{proof}
@@ -896,7 +958,8 @@ three cited real-domain identities for those fixed strings.  Applying
 (W_{\pi},W_{\sin},W_{\sqrt{}})\) gives the effective translation and the
 real-function value identity.  The same proposition also gives the
 normal-form obstruction, because such a normalizer would decide equality
-in Richardson's fragment, contradicting \Cref{lem:richardson-fragment}.
+in Richardson's common-domain partial-function fragment, contradicting
+\Cref{lem:richardson-fragment}.
 No other analytic identity from the Odrzywo{\l}ek table is invoked.
 \end{proof}
 
@@ -1060,10 +1123,18 @@ transported real semantics
 \(\llbracket\tau(E)\rrbracket_{\RR}\), such that
 \[
   \llbracket\tau(E)\rrbracket_{\RR}(x)
-  =E(x)\qquad(x\in\RR)
+  =E(x)\qquad(x\in\dom(E))
 \]
-for every Richardson expression \(E\).  Absolute value is represented
-by
+for every Richardson expression \(E\), and
+\(\dom\llbracket\tau(E)\rrbracket_{\RR}=\dom(E)\).  Hence the translation
+preserves the common-domain equality relation of
+\Cref{lem:richardson-fragment}:
+\[
+  E_1\equiv_{\mathcal R}^{\cap}E_2
+  \quad\Longleftrightarrow\quad
+  \tau(E_1)\equiv_{\tau}^{\cap}\tau(E_2).
+\]
+Absolute value is represented by
 \[
   |F|=\Abs(F)=W_{\sqrt{}}(M(F,F))
 \]
@@ -1099,28 +1170,32 @@ composition \(G\circ F\), substitute the translated inner expression
 
 This recursion is algorithmic because all primitive witnesses are
 finite terms and syntactic substitution is computable.  We prove the
-semantic assertion, including definedness on every real input, by
-induction on the expression tree.  The variable and constant cases
+domain and value assertions by induction on the expression tree.  The
+variable and constant cases
 are immediate from the witness library.  For
 \(+,-,\times,\exp\), and \(\sin\), the induction hypothesis says
-that the translated subexpressions are defined at the given real
-input and evaluate to the corresponding real subexpression values;
+that, at exactly the real inputs for which the source subexpressions are
+defined, the translated subexpressions are defined and evaluate to the
+corresponding real subexpression values;
 \Cref{lem:eml-printed-core},
 \Cref{lem:eml-real-witness-library}, and
 \Cref{cor:eml-witness-locking} then give definedness and the
 correct value for the chosen primitive witness on those real
 arguments.  For a composition \(G\circ F\), the induction hypothesis
-first gives \(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\);
-applying the induction hypothesis for \(G\) at the real input
-\(F(x)\) proves the composition case.  Finally, for
+first identifies the domain of \(\tau(F)\) with \(\dom(F)\); for such
+an \(x\), the outer translated term is defined exactly when
+\(F(x)\in\dom(G)\), and then its value is \(G(F(x))\).  This is exactly
+the partial domain and value of \(G\circ F\).  Finally, for
 \(E=|F|\), the induction hypothesis gives
-\(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\), and
+\(\dom\llbracket\tau(F)\rrbracket_{\RR}=\dom(F)\) and, on that domain,
+\(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\).  Then
 \Cref{lem:eml-zero-absolute-witness} gives all-real definedness and the
 value \(\Abs(F(x))=|F(x)|\).  Thus every translated term agrees with
-the original Richardson expression as a real function.  The
-statement concerns this transported real semantics; it makes no
-branch-independent assertion about equality of arbitrary raw EML
-terms on a complex domain.
+the original Richardson expression on exactly the same real partial
+domain.  The equivalence of common-domain equalities follows by applying
+this domain and value identity to both translated terms.  The statement
+concerns this transported real semantics; it makes no branch-independent
+assertion about equality of arbitrary raw EML terms on a complex domain.
 
 It remains to record the quantitative bound.  The size convention in
 the statement charges the full constructor cost of every rational
@@ -1184,10 +1259,11 @@ equality and no total computable map
 \[
   \mathrm{NF}(\tau(E_1))=\mathrm{NF}(\tau(E_2))
   \quad\Longleftrightarrow\quad
-  E_1 \text{ and } E_2
-  \text{ define the same function } \RR\to\RR
+  E_1\equiv_{\mathcal R}^{\cap}E_2
 \]
-for all Richardson expressions \(E_1,E_2\in\mathcal R\).
+for all Richardson expressions \(E_1,E_2\in\mathcal R\), equivalently
+classifying common-domain equality of the transported partial real EML
+functions on \(\tau(\mathcal R)\).
 \end{theorem}
 
 \begin{proof}
@@ -1200,15 +1276,16 @@ the conditional cited hypotheses of
 replacement-stability theorem
 \Cref{thm:minimal-eml-witness-interface}: by
 \Cref{cor:eml-witness-locking,lem:richardson-translation}, the map
-\(E\mapsto\tau(E)\) is effective and preserves the real function defined
-by \(E\), using only syntactic substitution into that locked witness
-list.  The semantic equality relation on \(\mathcal R\) is undecidable by
-\Cref{lem:richardson-fragment}.  Therefore
-\Cref{thm:abstract-normalizer-obstruction}, applied with
+\(E\mapsto\tau(E)\) is effective and preserves the partial real function
+and its real domain, using only syntactic substitution into that locked
+witness list.  The common-domain equality relation on \(\mathcal R\) is
+undecidable by \Cref{lem:richardson-fragment}.  Therefore
+\Cref{lem:transported-partial-normalizer-obstruction}, applied with
 \(\mathcal S=\mathcal R\), with target language the pure EML grammar, and
-with \(\equiv_\tau\) equal to equality of the transported real functions
-on \(\tau(\mathcal R)\), rules out the asserted computable finite
-normalizer.  Thus the expression grammar, although
+with \(\equiv_{\tau}^{\cap}\) equal to common-domain equality of the
+transported partial real functions on \(\tau(\mathcal R)\), rules out the
+asserted computable finite normalizer.  Thus the expression grammar,
+although
 universal in the sense of \Cref{def:expr-univ}, cannot by itself supply
 the decidable canonical-form component of \Cref{def:prot-univ}.
 \end{proof}
@@ -1222,10 +1299,10 @@ presentation \((\eml,1)\) is expression-universal for
 finite-witness fragment supplied by
 \Cref{cor:eml-witness-locking,lem:richardson-translation}, and there is
 no computable compilation of that fragment into protocol normal forms
-whose decidable equality predicate classifies equality of the transported
-real functions:
+whose decidable equality predicate classifies common-domain equality of
+the transported partial real functions:
 \[
-  E_1=E_2 \text{ as functions }\RR\to\RR
+  E_1\equiv_{\mathcal R}^{\cap}E_2
   \quad\Longleftrightarrow\quad
   \mathrm{NF}(\tau(E_1))=\mathrm{NF}(\tau(E_2)).
 \]
@@ -1239,12 +1316,13 @@ different codes and readouts.
 Suppose a compatible canonical compilation as displayed existed on that
 finite-witness translated fragment.  Then \Cref{prop:L1-compiles-L0},
 applied to the source term algebra of Richardson expressions with
-semantic equivalence given by equality of real functions, would decide
-that equivalence by computing the two normal forms and comparing them in
-the protocol codomain.  Equivalently, taking \(E_2\) to be the zero
-expression would decide whether a Richardson expression is identically
-zero.  This contradicts \Cref{lem:richardson-fragment}, and is exactly
-the obstruction formalized in \Cref{thm:separation}.  The final sentence
+semantic equivalence given by common-domain equality of partial real
+functions, would decide that equivalence by computing the two normal
+forms and comparing them in the protocol codomain.  Equivalently, taking
+\(E_2\) to be the zero expression would decide whether a Richardson
+expression is identically zero.  This contradicts
+\Cref{lem:richardson-fragment}, and is exactly the obstruction
+formalized in \Cref{thm:separation}.  The final sentence
 follows because the argument uses the compatibility equivalence displayed
 above, rather than an assertion that every possible protocol for the same
 operations must receive its inputs from this EML fragment.
