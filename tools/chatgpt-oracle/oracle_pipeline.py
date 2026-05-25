@@ -255,6 +255,19 @@ JOURNAL_ABBREV = {
 
 
 PROGRAM_BOARD = REPO_ROOT / "papers" / "publication" / "PROGRAM_BOARD.md"
+PROGRAM_BOARD_MACHINE = (
+    REPO_ROOT / "papers" / "publication" / "PROGRAM_BOARD_MACHINE.md"
+)
+
+
+def _board_source_path() -> Path:
+    """Return the structured board used by pipeline automation.
+
+    PROGRAM_BOARD.md is the human-facing tracking board.  If the local
+    machine board exists, all parser/gate/update operations use it so human
+    notes can stay readable without leaking scheduling markers into the UI.
+    """
+    return PROGRAM_BOARD_MACHINE if PROGRAM_BOARD_MACHINE.exists() else PROGRAM_BOARD
 
 # Normalized short names used in PROGRAM_BOARD.md → match to dir names
 _BOARD_JOURNAL_EXPAND = {
@@ -272,10 +285,11 @@ _BOARD_JOURNAL_EXPAND = {
 def _load_board_journals() -> dict[str, str]:
     """Parse PROGRAM_BOARD.md and return {dir_keyword: full_journal_name}."""
     result: dict[str, str] = {}
-    if not PROGRAM_BOARD.exists():
+    board_path = _board_source_path()
+    if not board_path.exists():
         return result
     try:
-        text = PROGRAM_BOARD.read_text(encoding="utf-8")
+        text = board_path.read_text(encoding="utf-8")
     except Exception:
         return result
 
@@ -327,10 +341,11 @@ def _load_board_entries() -> dict[str, dict]:
     Returns {dir_name: {"journal": str, "status": str, "reroute": str}}.
     """
     result: dict[str, dict] = {}
-    if not PROGRAM_BOARD.exists():
+    board_path = _board_source_path()
+    if not board_path.exists():
         return result
     try:
-        text = PROGRAM_BOARD.read_text(encoding="utf-8")
+        text = board_path.read_text(encoding="utf-8")
     except Exception:
         return result
 
@@ -352,8 +367,9 @@ def _load_board_entries() -> dict[str, dict]:
 
 def _get_board_entries() -> dict[str, dict]:
     global _board_entries, _board_entries_mtime
+    board_path = _board_source_path()
     try:
-        current_mtime = PROGRAM_BOARD.stat().st_mtime if PROGRAM_BOARD.exists() else None
+        current_mtime = board_path.stat().st_mtime if board_path.exists() else None
     except OSError:
         current_mtime = None
     if _board_entries is None or _board_entries_mtime != current_mtime:
@@ -393,6 +409,10 @@ def _board_skip(status: str) -> bool:
         "a-blocked",
         "b-stuck",
         "c-stuck",
+        "c-near-pass",
+        "c-hard-stuck",
+        "c-infra-stuck",
+        "c-scope-stuck",
         "c-done",
         "time-stuck",
         "paused",
@@ -571,6 +591,7 @@ PAPER_TIME_BUDGET_HOURS = float(
     os.environ.get("ORACLE_PAPER_TIME_BUDGET_HOURS", "24"))
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
+ORACLE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
 ORACLE_CANCELLED_RESPONSE = "__ORACLE_TASK_CANCELLED__"
 MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS = 2
@@ -881,6 +902,143 @@ def _state_has_stage_a_evidence(state: PaperState) -> bool:
     )
 
 
+def _stage_c_recent_verdicts(state: PaperState, n: int = 3) -> list[str]:
+    return [
+        str(v).strip().lower()
+        for v in state.stage_c_verdicts[-n:]
+        if str(v).strip()
+    ]
+
+
+def _stage_c_recent_history_text(state: PaperState, n: int = 8) -> str:
+    chunks: list[str] = []
+    for entry in state.history[-n:]:
+        if not isinstance(entry, dict):
+            continue
+        chunks.append(str(entry.get("action", "")))
+        chunks.append(str(entry.get("verdict", "")))
+        chunks.append(str(entry.get("detail", ""))[:4000])
+    for event in state.events[-n:]:
+        if not isinstance(event, dict):
+            continue
+        chunks.append(str(event.get("action", "")))
+        chunks.append(str(event.get("detail", ""))[:4000])
+    return "\n".join(chunks).lower()
+
+
+def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
+    """Classify a max-round Stage C exit into a scheduling lane.
+
+    Stage C max-round exhaustion is not one failure mode.  A manuscript whose
+    last gates were Oracle accept + Codex submit should move to human final
+    review / possible C+1 override, while repeated major-revision/reject
+    rounds need deeper rewrite or retargeting.
+    """
+    recent = _stage_c_recent_verdicts(state)
+    recent_text = "\n".join(recent)
+    history_text = _stage_c_recent_history_text(state)
+    recent_actions = " ".join(
+        str(entry.get("action", "")).lower()
+        for entry in state.history[-8:]
+        if isinstance(entry, dict)
+    )
+
+    if (
+        any(marker in recent_actions for marker in (
+            "oracle_infra_pause",
+            "oracle_cancelled",
+        ))
+        or any(marker in history_text for marker in (
+            "invalid oracle final-review response",
+            "no valid final-review response",
+            "retry submit failed",
+            "bad response",
+        ))
+    ):
+        return (
+            "C-INFRA-STUCK",
+            f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with Oracle "
+            "extraction/infra symptoms; retry infra repair before review",
+        )
+
+    hard_markers = ("major revision", "reject", "revise")
+    hard_count = sum(
+        1 for verdict in recent
+        if any(marker in verdict for marker in hard_markers)
+    )
+    accept_submit_count = recent.count("oracle:accept;claude:submit")
+    if recent and accept_submit_count >= min(2, len(recent)):
+        return (
+            "C-NEAR-PASS",
+            f"near-pass final gate after {MAX_STAGE_C_ROUNDS} rounds; "
+            "recent Oracle accept + Codex submit; needs final review / "
+            "possible C+1 override",
+        )
+
+    scope_markers = (
+        "not suitable",
+        "journal fit",
+        "scope",
+        "novelty",
+        "not deep enough",
+        "too modest",
+        "major new contribution",
+    )
+    if hard_count and any(marker in history_text for marker in scope_markers):
+        return (
+            "C-SCOPE-STUCK",
+            f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with repeated "
+            "scope/novelty or journal-fit blockers; route to novelty "
+            "escalation or retarget",
+        )
+
+    if hard_count >= 2 or (recent and hard_count == len(recent)):
+        return (
+            "C-HARD-STUCK",
+            f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with repeated "
+            "major revision/reject/revise verdicts; return to Stage B or "
+            "deep rewrite",
+        )
+
+    if "oracle:accept;claude:submit" in recent_text:
+        return (
+            "C-NEAR-PASS",
+            f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with at least one "
+            "recent Oracle accept + Codex submit; needs manual final review",
+        )
+
+    return (
+        "C-STUCK",
+        f"Oracle+Codex exhausted {MAX_STAGE_C_ROUNDS} rounds; needs manual "
+        "classification",
+    )
+
+
+def _state_is_post_rejection_retarget_reopen(state: PaperState) -> bool:
+    """Return True for a rejected, previously completed paper reopened locally.
+
+    Such states intentionally reset the paper to a fresh target while keeping
+    historical logs.  Rebuilding round counters from old commits would make the
+    new route inherit the prior journal's exhausted A/B/C counters.
+    """
+    if state.completed_at:
+        return False
+    if state.current_stage not in {"F", "A"}:
+        return False
+    if any(
+        isinstance(item, dict)
+        and item.get("reason") == "post_rejection_retarget_reopen"
+        for item in state.retarget_history
+    ):
+        return True
+    return any(
+        isinstance(h, dict)
+        and h.get("stage") == "F"
+        and h.get("action") == "post_rejection_retarget_reopen"
+        for h in state.history
+    )
+
+
 def rebuild_rounds_from_git(state: PaperState) -> None:
     """Recover max prior round numbers from commit history.
 
@@ -889,6 +1047,11 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
     'stage-A R\\d+' etc and advance state counters to the observed maximum so
     subsequent rounds don't silently repeat work already committed.
     """
+    if _state_is_post_rejection_retarget_reopen(state):
+        logger.info(f"[{state.paper_name}] git-rebuild: skipped old round "
+                    "recovery for post-rejection retarget reopen")
+        return
+
     paper_path = Path(state.paper_dir)
     if not paper_path.exists():
         return
@@ -2259,7 +2422,7 @@ def summarize_content_changes(paper_path: Path,
 
 def update_program_board(paper_name: str, stage: str, detail: str, *,
                          deterministic: bool = False) -> None:
-    """Update PROGRAM_BOARD.md status column for a paper in-place.
+    """Update the machine board status column for a paper in-place.
 
     Finds the row whose backtick-wrapped dir name matches paper_name
     and overwrites the status cell.  Thread-safe via _git_lock.
@@ -2268,6 +2431,10 @@ def update_program_board(paper_name: str, stage: str, detail: str, *,
         "A-BLOCKED",
         "B-STUCK",
         "C-STUCK",
+        "C-NEAR-PASS",
+        "C-HARD-STUCK",
+        "C-INFRA-STUCK",
+        "C-SCOPE-STUCK",
         "TIME-STUCK",
         "PAUSED",
     }
@@ -2278,12 +2445,13 @@ def update_program_board(paper_name: str, stage: str, detail: str, *,
             f"{paper_name} -> {stage}"
         )
         return
-    if not PROGRAM_BOARD.exists():
+    board_path = _board_source_path()
+    if not board_path.exists():
         return
     new_status = f"{stage} ({detail})" if detail else stage
     try:
         with git_repo_lock():
-            text = PROGRAM_BOARD.read_text(encoding="utf-8")
+            text = board_path.read_text(encoding="utf-8")
             lines = text.split("\n")
             updated = False
             needle = f"`{paper_name}`"
@@ -2298,12 +2466,14 @@ def update_program_board(paper_name: str, stage: str, detail: str, *,
                     updated = True
                 break
             if updated:
-                PROGRAM_BOARD.write_text("\n".join(lines), encoding="utf-8")
+                board_path.write_text("\n".join(lines), encoding="utf-8")
                 _invalidate_board_cache()
-                logger.info(f"PROGRAM_BOARD updated: {paper_name} -> {new_status}")
+                logger.info(
+                    f"{board_path.name} updated: {paper_name} -> {new_status}"
+                )
             else:
                 logger.warning(
-                    f"Paper {paper_name} not found in PROGRAM_BOARD.md — "
+                    f"Paper {paper_name} not found in {board_path.name} — "
                     f"add a row to track it")
     except Exception as e:
         logger.warning(f"Failed to update PROGRAM_BOARD: {e}")
@@ -2318,11 +2488,12 @@ def _add_to_submission_queue(paper_name: str, target_journal: str,
     scanning the full status table. Idempotent: if the paper is already
     in the queue, no-op.
     """
-    if not PROGRAM_BOARD.exists():
+    board_path = PROGRAM_BOARD
+    if not board_path.exists():
         return
     try:
         with git_repo_lock():
-            text = PROGRAM_BOARD.read_text(encoding="utf-8")
+            text = board_path.read_text(encoding="utf-8")
             lines = text.split("\n")
 
             queue_start = None
@@ -2355,7 +2526,7 @@ def _add_to_submission_queue(paper_name: str, target_journal: str,
             safe_note = (note or "").replace("|", "\\|").replace("\n", " ")
             new_row = f"| `{paper_name}` | {target_journal or '—'} | {safe_note} |"
             lines.insert(insert_pos, new_row)
-            PROGRAM_BOARD.write_text("\n".join(lines), encoding="utf-8")
+            board_path.write_text("\n".join(lines), encoding="utf-8")
             _invalidate_board_cache()
             logger.info(
                 f"PROGRAM_BOARD queue: enqueued {paper_name} "
@@ -2529,7 +2700,7 @@ def detect_semantic_submission_overlaps(
     min_shared_markers: int = 4,
 ) -> list[dict]:
     """Compatibility wrapper around the deterministic split-overlap harness."""
-    board_entries = split_overlap_harness.parse_board_entries(PROGRAM_BOARD)
+    board_entries = split_overlap_harness.parse_board_entries(_board_source_path())
     current_record = split_overlap_harness.build_paper_record(
         current_paper, board_entries
     )
@@ -2622,7 +2793,7 @@ def run_semantic_submission_overlap_gate(
     paper_path = Path(state.paper_dir)
     report = split_overlap_harness.build_overlap_report(
         publication_dir=PAPERS_PUB_DIR_CONST,
-        board_path=PROGRAM_BOARD,
+        board_path=_board_source_path(),
         current_paper=paper_path,
     )
     if not report.get("gate_failed"):
@@ -3058,6 +3229,24 @@ def build_stage_a_oracle_escalation_prompt(state: PaperState,
         this escalation.  Do not approve a route that duplicates an earlier
         submitted/current sibling.
 
+        The local Codex pipeline has already reasoned until it hit a
+        referee-standard ceiling.  Your job is not to polish prose.  Your job
+        is to do deep mathematical research on the current manuscript and find
+        genuinely new publishable content, if such content exists.
+
+        Mandatory research instruction:
+        根據本文内容深入研究，找到能够惊艳到你的深刻结论。请研究到一些有发表价值的结论再结束，不要挤牙膏。不要重复之前内容。不要重复其他人已经发表公开的推理过程（定理、推论、猜想、命题及证明），可以使用其他人的结论并引用。不要中间过程结论。请使用学术化语言表达，禁止口语。
+
+        Operational interpretation:
+        - Do not return incremental lemmas, wording changes, or restatements.
+        - Do not approve a route unless you can name a theorem package that
+          would materially change a referee's novelty assessment.
+        - The package may rely on known published results, but it must state
+          clearly which part is new in this manuscript and which part is cited.
+        - Prefer one strong theorem package over several weak observations.
+        - If no such package exists without duplicating earlier submitted or
+          public work, return park or human_decision.
+
         Decide whether this manuscript has a publishable mathematical route
         beyond Codex's local theoremization ceiling.  If yes, give Codex a
         concrete theorem package to add or strengthen.  If no, say park and
@@ -3069,6 +3258,8 @@ def build_stage_a_oracle_escalation_prompt(state: PaperState,
           "publishable_route": true,
           "core_theorem_direction": "...",
           "required_theorem_package": ["..."],
+          "novelty_claim": "...",
+          "known_results_to_cite": ["..."],
           "journal_route": "keep|retarget|undecided",
           "target_journal": "...",
           "park_reason": "",
@@ -3154,6 +3345,10 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
                                    tag: str = "") -> bool:
     if not is_recoverable_stage_a_block_status(f"A-BLOCKED ({reason})"):
         return False
+    if not ORACLE_ENABLED:
+        logger.info(f"{tag} Stage A Oracle escalation disabled; "
+                    "leaving local block for later Oracle-capable run")
+        return False
     paper_path = Path(state.paper_dir)
     artifact = paper_path / "oracle_stage_a_escalation.json"
     if artifact.exists():
@@ -3192,6 +3387,12 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
         task_id = f"stage_a_escalate_{safe_name}_{time.time_ns()}"
         prompt = build_stage_a_oracle_escalation_prompt(state, reason)
         pdf_path = Path(state.pdf_path) if state.pdf_path else None
+        if not pdf_path or not pdf_path.exists():
+            compiled_pdf = compile_pdf(paper_path, dry_run=False)
+            if compiled_pdf:
+                pdf_path = compiled_pdf
+                state.pdf_path = str(compiled_pdf)
+                save_state(state)
         if not oracle_submit(
             task_id, prompt, pdf_path,
             context_mode="deep_reasoning",
@@ -4750,13 +4951,13 @@ def extract_verdict(text: str) -> str:
     t = text.strip()
 
     # Priority 1: labelled verdict line
-    label = re.search(
+    labels = re.findall(
         r"(?:overall\s+verdict|recommendation|decision|final\s+verdict)\s*[:\-]\s*"
         r"(accept(?:ed)?|minor\s+revision|major\s+revision|reject(?:ion)?)",
         t, re.IGNORECASE,
     )
-    if label:
-        v = label.group(1).lower().strip()
+    if labels:
+        v = labels[-1].lower().strip()
         v = re.sub(r"\s+", " ", v)
         if v.startswith("accept"):
             return "accept"
@@ -7816,6 +8017,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 logger.info(f"{tag} {state.error}")
                 state.log_event("C", "oracle_cancelled",
                                 round_num=rnd, detail=state.error)
+                state.stage_c_rounds = max(0, rnd - 1)
                 save_state(state)
                 return False
             if not is_oracle_final_response_valid(raw):
@@ -7982,10 +8184,10 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_C_ROUNDS} complete, "
                     f"looping for re-review")
 
-    state.error = f"Stage C stuck: joint Oracle+Claude gate exhausted {MAX_STAGE_C_ROUNDS} rounds"
+    stage_c_status, stage_c_detail = classify_stage_c_terminal(state)
+    state.error = f"{stage_c_status}: {stage_c_detail}"
     logger.warning(f"{tag} {state.error}")
-    update_program_board(state.paper_name, "C-STUCK",
-                         f"Oracle+Claude exhausted {MAX_STAGE_C_ROUNDS} rounds")
+    update_program_board(state.paper_name, stage_c_status, stage_c_detail)
     state.stage_c_passed = False
     save_state(state)
     return False
@@ -8777,6 +8979,19 @@ STAGE_RUNNERS = {
 }
 
 
+def _pause_if_oracle_stage_disabled(state: PaperState, stage: str,
+                                    tag: str = "") -> bool:
+    if ORACLE_ENABLED or stage not in {"B", "C"}:
+        return False
+    state.error = (
+        f"{PAUSED_ERROR_PREFIX} Stage {stage} waiting for Oracle; "
+        "rerun without --no-oracle"
+    )
+    logger.warning(f"{tag} {state.error}")
+    save_state(state)
+    return True
+
+
 def run_paper_pipeline(
     paper_dir: str,
     *,
@@ -8915,6 +9130,8 @@ def run_paper_pipeline(
             return False, state
 
         stage = state.current_stage
+        if _pause_if_oracle_stage_disabled(state, stage, tag):
+            return False, state
         runner = STAGE_RUNNERS.get(stage)
         if not runner:
             break
@@ -9231,6 +9448,31 @@ def _print(msg: str):
     else:
         print(msg)
 
+
+STRUCTURED_TERMINAL_STATUSES = (
+    "C-NEAR-PASS",
+    "C-HARD-STUCK",
+    "C-INFRA-STUCK",
+    "C-SCOPE-STUCK",
+    "A-BLOCKED",
+    "B-STUCK",
+    "C-STUCK",
+    "TIME-STUCK",
+)
+
+
+def _dashboard_stage_cell(state_data: dict) -> str:
+    err = str(state_data.get("error", ""))
+    stage_cell = str(state_data.get("current_stage", "?"))
+    if err.startswith(PAUSED_ERROR_PREFIX):
+        return "PAUSED"
+    for status in STRUCTURED_TERMINAL_STATUSES:
+        if err.startswith(f"{status}:") or err.startswith(f"{status} ("):
+            return status
+    if err:
+        return "FAILED"
+    return stage_cell
+
 def print_dashboard():
     """Compact one-line-per-paper table showing pipeline progress.
 
@@ -9262,12 +9504,7 @@ def print_dashboard():
                           default=None)
         a_last = audit_score if audit_score is not None else (
             d.get("stage_a_scores", [0])[-1] if d.get("stage_a_scores") else "-")
-        err = str(d.get("error", ""))
-        stage_cell = d.get("current_stage", "?")
-        if err.startswith(PAUSED_ERROR_PREFIX):
-            stage_cell = "PAUSED"
-        elif err:
-            stage_cell = "FAILED"
+        stage_cell = _dashboard_stage_cell(d)
         rows.append((
             d.get("paper_name", f.stem)[:55],
             stage_cell,
@@ -9487,7 +9724,7 @@ def _release_pipeline_lock_atexit() -> None:
 
 
 def main(*, continuous_sleep_seconds: float = 300) -> int:
-    global CLAUDE_ENABLED
+    global CLAUDE_ENABLED, ORACLE_ENABLED
     parser = argparse.ArgumentParser(
         description="Oracle Pipeline v2 — new-paper + review automation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -9552,6 +9789,10 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
                               "testing. Stage C keeps fixing Oracle issues "
                               "and pauses when final Claude approval or "
                               "Stage D backflow approval is required."))
+    parser.add_argument("--no-oracle", action="store_true",
+                        help=("Disable ChatGPT/Oracle stages and escalation "
+                              "for local Codex-only runs. Use with "
+                              "`--stop-after A` to keep work before Stage B."))
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
     parser.add_argument("--status", action="store_true")
@@ -9592,6 +9833,9 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
         no_claude=args.no_claude,
     ):
         return 2
+    ORACLE_ENABLED = not args.no_oracle
+    if args.no_oracle and not args.dry_run:
+        logger.warning("Oracle disabled by --no-oracle; local Codex-only mode")
 
     # ── New-paper mode ─────────────────────────────────────────
     if args.new:
@@ -9608,7 +9852,7 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
             print("--new requires --topic or --outline", file=sys.stderr)
             return 1
 
-        if not args.dry_run and not oracle_server_alive():
+        if ORACLE_ENABLED and not args.dry_run and not oracle_server_alive():
             logger.warning("Oracle server not running — Stage B will fail")
 
         ok, st = run_new_paper_pipeline(
@@ -9644,7 +9888,7 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
         print("Specify --paper or --all", file=sys.stderr)
         return 1
 
-    if not args.dry_run and not oracle_server_alive():
+    if ORACLE_ENABLED and not args.dry_run and not oracle_server_alive():
         logger.warning("Oracle server not running — Stage B will fail")
         logger.warning("Start: python3 tools/chatgpt-oracle/oracle_server.py")
 
