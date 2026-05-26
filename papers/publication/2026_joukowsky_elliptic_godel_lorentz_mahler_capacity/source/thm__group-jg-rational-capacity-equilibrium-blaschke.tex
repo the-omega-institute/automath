@@ -48,6 +48,43 @@ nonempty.  Then there is a Borel map \(s:X\to Y\) such that \((x,s(x))\in G\) fo
 This is the compact-valued case of the Kuratowski--Ryll-Nardzewski measurable-selection theorem, equivalently the closed-section form of the Jankov--von Neumann uniformization theorem for standard Borel spaces \citep[Theorem~18.13]{Kechris1995}.  Indeed, compact metric spaces are Polish and carry their standard Borel structures, while the multifunction \(x\mapsto G_x\) has nonempty closed values and Borel graph, because \(G\) is closed in \(X\times Y\).  The theorem therefore gives a Borel selector \(s:X\to Y\) with \(s(x)\in G_x\) for every \(x\in X\), which is precisely \((x,s(x))\in G\).
 \end{proof}
 
+\begin{lemma}[Divided-difference kernel for rational pullbacks]\label{lem:rational-divided-difference-kernel}
+Let \(R=A/B\) be a rational map with coprime \(A,B\in\CC[z]\), and set
+\[
+\Phi_R(z,t):=A(z)B(t)-A(t)B(z).
+\]
+Then \(\Phi_R\) is divisible by \(z-t\) in \(\CC[z,t]\).  The quotient
+\[
+\Psi_R(z,t):=\frac{\Phi_R(z,t)}{z-t}
+\]
+is therefore a polynomial in the two variables and has diagonal value
+\[
+\Psi_R(z,z)=A'(z)B(z)-A(z)B'(z).
+\]
+If \(K\subset\CC\) is compact and \(B\ne0\) on \(K\), then, as lower-truncated extended kernels on \(K\times K\),
+\[
+\log|R(z)-R(t)|
+=
+\log|z-t|+\log|\Psi_R(z,t)|-
+\log|B(z)|-\log|B(t)|,
+\]
+where both sides take the value \(-\infty\) on the collision set \(R(z)=R(t)\).  Consequently, for every \(\mu\in\mathcal P(K)\), the lower-truncated integral of the displayed pullback kernel is finite if and only if \(R_\ast\mu\) has finite logarithmic energy.
+\end{lemma}
+
+\begin{proof}
+The polynomial \(\Phi_R\) vanishes identically on the diagonal \(z=t\).  Dividing \(\Phi_R\) by \(z-t\), viewed as a monic polynomial in \(z\) with coefficients in \(\CC[t]\), leaves a remainder depending only on \(t\); evaluating at \(z=t\) shows that this remainder is zero.  Hence \(\Psi_R\in\CC[z,t]\).  Taking the limit as \(t\to z\), equivalently differentiating \(\Phi_R(z,t)\) in the second variable and accounting for the denominator \(z-t\), gives
+\[
+\Psi_R(z,z)=A'(z)B(z)-A(z)B'(z).
+\]
+
+For \(z\ne t\) with \(B(z)B(t)\ne0\),
+\[
+R(z)-R(t)=\frac{A(z)B(t)-A(t)B(z)}{B(z)B(t)}
+=\frac{(z-t)\Psi_R(z,t)}{B(z)B(t)}.
+\]
+Taking logarithmic absolute values gives the asserted identity away from the collision set.  On the collision set the factor \((z-t)\Psi_R(z,t)\) vanishes and the logarithmic kernel is \(-\infty\); the two terms involving \(B\) remain bounded and continuous on \(K\), because \(B\) has no zeros there.  Thus the equality holds for the lower-truncated extended kernels.  Applying Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} to the continuous map \(R:K\to R(K)\) proves the final equivalence of finite energies.
+\end{proof}
+
 
 \begin{theorem}[Finite-degree rational-image capacity and equilibrium lifts]\label{thm:finite-degree-rational-image-capacity}
 Let \(R=A/B\) be a nonconstant rational map of finite degree, with coprime polynomials \(A,B\in\CC[z]\), and let \(K\subset\CC\) be compact and nonpolar with \(B\ne0\) on \(K\).  Put
@@ -194,12 +231,7 @@ Applying the lower-truncated logarithmic energy functional to both sides proves 
 \begin{proof}[Proof of Theorem \ref{thm:finite-degree-rational-image-capacity}]
 Lemma \ref{lem:nonpolar-rational-image} shows that \(E:=R(K)\) is compact and nonpolar, so the equilibrium variational principle for \(E\) is available.
 
-For \(z,t\in K\) with \(z\ne t\), coprimality and the assumption \(B\ne0\) on \(K\) give
-\[
-R(z)-R(t)=\frac{A(z)B(t)-A(t)B(z)}{B(z)B(t)}
-=\frac{(z-t)\Psi_R(z,t)}{B(z)B(t)}.
-\]
-Taking logarithmic absolute values gives the displayed pullback kernel away from the collision locus.  On the diagonal \(z=t\), the factor \(\log|z-t|\) contributes \(-\infty\); at a branch point the additional factor \(\log|\Psi_R(z,z)|\) is also \(-\infty\).  On the off-diagonal collision set \(R(z)=R(t)\), equivalently \(\Psi_R(z,t)=0\), the factor \(\log|\Psi_R(z,t)|\) contributes \(-\infty\).  Since \(B\) is nonzero on \(K\), the two \(B\)-terms are bounded continuous functions.  Thus the displayed extended kernel is exactly \(L_R(z,t)=\log|R(z)-R(t)|\), with value \(-\infty\) on every diagonal, branch-graph, and off-diagonal collision point.  Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} gives
+Lemma \ref{lem:rational-divided-difference-kernel} shows that the displayed extended kernel is exactly \(L_R(z,t)=\log|R(z)-R(t)|\), with value \(-\infty\) on every diagonal, branch-graph, and off-diagonal collision point.  Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} gives
 \[
 \mathcal E_R(\mu)=\iint_{R(K)\times R(K)}\log|x-y|\,\dd(R_\ast\mu)(x)\dd(R_\ast\mu)(y)
 \]
@@ -212,7 +244,7 @@ By the compact-set equilibrium theorem recalled at the beginning of the section,
 \]
 with the supremum attained by a unique equilibrium measure.  Applying this to the nonpolar set \(E=R(K)\) shows immediately that
 \[
-\sup_{\mu\in\mathcal P(K)}\mathcal E_R(\mu)
+\sup_{\mu\ \mathrm{admissible}}\mathcal E_R(\mu)
 \le \log\operatorname{cap}(R(K)),
 \]
 because every admissible lift pushes forward to a probability measure on \(R(K)\).
@@ -221,7 +253,7 @@ Conversely, let \(\nu_E\) be the equilibrium measure of \(E=R(K)\).  Since \(K\)
 \[
 \{(x,z)\in E\times K:R(z)=x\}
 \]
-has nonempty compact vertical sections.  Lemma \ref{lem:compact-fiber-borel-selection} gives a Borel map \(s:E\to K\) with \(R(s(x))=x\).  Set \(\mu=s_\ast\nu_E\), a Borel probability measure on \(K\).  Because \(s\) is Borel and \(R\circ s=\operatorname{id}_E\), this selected lift has pushforward exactly equal to the equilibrium measure:
+has nonempty compact sections over the first coordinate.  Lemma \ref{lem:compact-fiber-borel-selection} gives a Borel map \(s:E\to K\) with \(R(s(x))=x\).  Set \(\mu=s_\ast\nu_E\), a Borel probability measure on \(K\).  Because \(s\) is Borel and \(R\circ s=\operatorname{id}_E\), this selected lift has pushforward exactly equal to the equilibrium measure:
 \[
 R_\ast\mu=(R\circ s)_\ast\nu_E=\nu_E.
 \]
