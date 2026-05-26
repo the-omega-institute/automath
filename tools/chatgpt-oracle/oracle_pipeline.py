@@ -451,8 +451,12 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
         return True
     if not entry:
         return False
-    if _board_skip(entry.get("status", "")):
+    status = str(entry.get("status", ""))
+    if _board_skip(status):
         return True
+    status_lower = status.lower()
+    if status_lower.startswith("a-ready") or status_lower.startswith("stage a ready"):
+        return False
     archive_text = " ".join(
         str(entry.get(key, "")) for key in ("journal", "notes", "reroute")
     ).lower()

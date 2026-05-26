@@ -119,6 +119,23 @@ class SupervisorHelpersTests(unittest.TestCase):
             "A-BLOCKED (overlap needs_human_resolution before Stage A)"
         ))
 
+    def test_board_entry_skip_allows_active_route_with_parked_legacy_note(self):
+        entry = {
+            "journal": "retarget physics-math venue",
+            "status": "A-READY (canonical merged rewrite route; overlap resolved)",
+            "notes": (
+                "Existing folder remains canonical; prior GRG route "
+                "`submitted_2026_shell_geometry_detector_thermality_kms_grg` "
+                "is parked and superseded into this merged rewrite"
+            ),
+            "reroute": "rerun Stage A with both rejection reasons",
+        }
+
+        self.assertFalse(oracle_pipeline._board_entry_skip(
+            "2026_detector_shells_click_record_kms_jphyscomm",
+            entry,
+        ))
+
     def test_board_skip_allows_codex_ceiling_for_oracle_escalation(self):
         self.assertFalse(oracle_pipeline._board_skip(
             "A-BLOCKED (A2 fake extension: no new theorems; "
