@@ -90,3 +90,12 @@ No new accepted T-32 closure evidence was produced since the prior monitoring up
 - The newest visible Oracle content repeats the fourth-row claim `primitive_c4_fixed_0011_22` with counts matching the earlier `(0,24,0,350)` pattern.
 - This remains unaccepted until local replay proves the row is a valid primitive C4 torsor, recomputes smooth normalized counts, and checks non-duplication against prior audited rows.
 - The main mathematical direction remains the global `d4 mod 8` torsor proof, not additional prose or duplicate row claims.
+
+
+## Monitoring Update 2026-05-26 23:09 SGT
+
+No new accepted T-32 mathematical progress since the prior checkpoint.
+
+- The newest evaluator says the Oracle restated the primitive C4 Chevalley-Weil/Prym sector theorem: `H1(C)-H1(C2)` is identified with the faithful `phi4` sector, with `Q(i)` action and the expected dimension bookkeeping.
+- This is useful packaging but not the decisive step. It does not prove that occurrence of the trace-1 elliptic factor in the faithful primitive sector forces the PE2/sign coefficient system where the local `d4 mod 8` contradiction applies.
+- The next useful target is now sharper: prove the semisimple Frobenius-`Q(i)` multiplicity lemma handling both Frobenius commuting with the deck generator and Frobenius sending it to inverse.

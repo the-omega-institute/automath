@@ -113,3 +113,16 @@ No new accepted T-44 progress was produced since the previous monitoring update.
 - Recent evaluator output says Oracle supplied another `B2=T_{b2}` source-style block on `W_chi0`.
 - That block matches already replayed B2 evidence and does not answer the active request for `A3=T_{a3}`.
 - The smallest active gap remains a citation-grade `A3` block in basis `[a2,b2,a3,b3]`, matching or correcting `[[1,0,0,0],[0,1,0,0],[0,0,1,1],[0,0,0,1]]`, with source locator, `pi_1` lift, Fox/Jacobian derivation, and named-vector sanity check.
+
+
+## Monitoring Update 2026-05-26 23:09 SGT
+
+T-44 advanced partially but is still not closed.
+
+- Oracle supplied an `A3=T_{a3}` block on `W_chi0`, and local arithmetic replay artifacts exist, including `0c7c_A3_packet_replay_20260526_output.json` and A3 acceptance-gate outputs.
+- The claimed matrix is the expected candidate in basis `[a2,b2,a3,b3]`: `[[1,0,0,0],[0,1,0,0],[0,0,1,1],[0,0,0,1]]`.
+- Evaluator still marks this as source-blocked: the arithmetic check is not enough. Missing is citation-grade certification that `[a2,b2,a3,b3]` is the actual KP level-3/F3 `W_chi0` quotient basis and that `T_{a3}` acts on that quotient by the displayed matrix.
+
+Next useful action:
+
+- Ask for the exact source bridge, not another arithmetic A3 packet: a primary theorem/proposition/formula with page or line window and generator dictionary proving the quotient basis and `b3 -> a3*b3` action on the KP/Prym quotient.

@@ -66,3 +66,14 @@ No closure change:
 
 - T-32 remains at the primitive C4 `d4 mod 8` frontier. The latest fourth-row claim is still not accepted without local replay and duplicate-row checking.
 - T-44 remains on the KP level-3 source-matrix route. Recent turns repeated B2 evidence rather than delivering the active A3 block.
+
+
+## Monitoring Update 2026-05-26 23:09 SGT
+
+Pipeline health improved from the idle checkpoint but is still under-saturated: `agents_busy=1/3`, `queue_length=0`, with the active T-32 task in `sent_waiting_for_generation`. All browser poll agents remain recent; there is no stale or mismatched busy agent.
+
+Progress assessment:
+
+- T-44 produced and locally replayed A3 arithmetic artifacts, but evaluator still marks the A3 source bridge as unclosed because the source citations do not yet certify the specific `W_chi0` quotient basis and `T_{a3}` action.
+- T-32 did not produce new accepted closure evidence; the latest evaluator says primitive C4 sector bookkeeping was restated without the trace-1-to-PE2/sign bridge.
+- T-43 did not improve beyond the existing negative-boundary memo; later A5 same-`W` turns restated finite A5 algebra without closing the first geometric source gap.

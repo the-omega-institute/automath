@@ -93,3 +93,12 @@ Next useful action:
 
 - Treat T-43 as a locally recordable negative-boundary result unless a new theorem-numbered primary source appears.
 - Do not continue the abstract arbitrary-summand theorem search by repetition.
+
+
+## Monitoring Update 2026-05-26 23:09 SGT
+
+No new accepted T-43 progress beyond the standalone negative-boundary memo.
+
+- Latest evaluator output says the A5 same-`W` route repeated the finite representation fragment: `|A5|=60`, `e=I-J/5`, rank 4, standard character irreducible, determinant 1, and stable integral lattice.
+- The first geometric source gap remains unchanged: certify `H^1_dR(Ytilde_C)=0` for the Rungtanapirom A5 cover by theorem-numbered primary source or explicit model/equation replay.
+- The arbitrary-summand theorem is still not closed; the local negative-boundary memo remains the durable T-43 stage result.
