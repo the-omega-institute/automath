@@ -58,8 +58,18 @@ and
 \begin{equation}\label{eq:primitive-class-series-def}
   \Pi_\phi(z):=\sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}.
 \end{equation}
+The fixed-label Euler transform of the primitive series is
+\begin{equation}\label{eq:fixed-label-euler-transform-def}
+  F_\phi(z):=\sum_{r\ge1}\frac{\Pi_\phi(z^r)}{r}.
+\end{equation}
 Since \(\phi\) is bounded and \(p_n(A)\ll \lambda^n/n\), the series
 \(\Pi_\phi(z)\) converges absolutely for \(|z|<\lambda^{-1}\).
+The transform \(F_\phi\) also converges absolutely in this disc. It is
+important that \(F_\phi\) is not the Artin logarithm
+\(\mathcal L_\phi\): by \Cref{lem:class-logarithm-primitive-expansion},
+\(\mathcal L_\phi(z)=\sum_{r\ge1}\Pi_{\psi^r\phi}(z^r)/r\), where the
+label is changed by the Adams operation under repetition, whereas
+\(F_\phi\) keeps the primitive label fixed in every Euler factor.
 These symbols are generating functions for deterministic orbit data.
 They are not transition kernels or probabilities attached to repeated
 measurements.
@@ -671,6 +681,83 @@ primitive inversion operates.
     \Pi_\phi(z).
   \]
   This is \eqref{eq:class-adams-mobius-inversion}.
+\end{proof}
+
+\begin{theorem}[Fixed-label Euler transform]
+  \label{thm:fixed-label-euler-transform}
+  Let \(\phi:G\to\CC\) be a class function. For every
+  \(|z|<\lambda^{-1}\), the fixed-label Euler transform satisfies
+  \begin{equation}\label{eq:fixed-label-euler-transform-adams-mobius}
+    F_\phi(z)
+    =
+    \sum_{r\ge1}\sum_{m\ge1}
+      \frac{\mu(m)}{rm}\,
+      \mathcal L_{\psi^m\phi}(z^{rm}).
+  \end{equation}
+  Equivalently,
+  \begin{equation}\label{eq:fixed-label-euler-transform-vs-artin}
+    \mathcal L_\phi(z)
+    =
+    \sum_{r\ge1}\frac{\Pi_{\psi^r\phi}(z^r)}{r},
+    \qquad
+    F_\phi(z)
+    =
+    \sum_{r\ge1}\frac{\Pi_\phi(z^r)}{r}.
+  \end{equation}
+  Thus the Artin logarithm \(\mathcal L_\phi\) and the primitive-label
+  Euler transform \(F_\phi\) agree only in channels where the Adams powers
+  do not change the relevant primitive labels. If \(\lambda>1\),
+  \(\eta<\lambda\), and \(\phi\) is orthogonal to the trivial character,
+  then \(F_\phi(\lambda^{-1})\) is well defined by absolute convergence,
+  and \eqref{eq:fixed-label-euler-transform-adams-mobius} extends to
+  \(z=\lambda^{-1}\) by the boundary logarithmic branches specified in
+  this section.
+\end{theorem}
+
+\begin{proof}
+  For \(|z|<\lambda^{-1}\), absolute convergence of \(F_\phi\) follows
+  from
+  \[
+    \sum_{r\ge1}\frac{1}{r}
+      \sum_{\gamma\in\cP}\abs{\phi(\tau(\gamma))}|z|^{r|\gamma|}
+    \le
+    \norm{\phi}_\infty
+    \sum_{n\ge1}p_n(A)\sum_{r\ge1}\frac{|z|^{rn}}{r}
+    <\infty,
+  \]
+  since \(p_n(A)\ll\lambda^n/n\) and \(\lambda|z|<1\). Substituting
+  \Cref{cor:class-function-adams-mobius} into
+  \eqref{eq:fixed-label-euler-transform-def} gives
+  \[
+    F_\phi(z)
+    =
+    \sum_{r\ge1}\frac{1}{r}
+      \sum_{m\ge1}\frac{\mu(m)}{m}
+        \mathcal L_{\psi^m\phi}(z^{rm}).
+  \]
+  The rearrangement is justified by the same majorant used in the proof
+  of \Cref{cor:class-function-adams-mobius}, with \(|z|\) replaced by
+  \(|z|^r\), giving \eqref{eq:fixed-label-euler-transform-adams-mobius}.
+  The first identity in
+  \eqref{eq:fixed-label-euler-transform-vs-artin} is exactly
+  \Cref{lem:class-logarithm-primitive-expansion}, because
+  \((\psi^r\phi)(\tau(\gamma))=\phi(\tau(\gamma)^r)\); the second is the
+  definition of \(F_\phi\).
+
+  Now assume \(\lambda>1\), \(\eta<\lambda\), and
+  \(\langle\phi,\mathbf1\rangle=0\). Expand
+  \(\phi=\sum_{\varrho\neq\mathbf1}\widehat\phi(\varrho)\chi_\varrho\).
+  By \Cref{lem:nontrivial-perron-point-convergence}, each
+  \(\Pi_\varrho(\lambda^{-1})\) is absolutely convergent, and the proof of
+  that lemma gives \(\Pi_\varrho(\lambda^{-r})=O(\lambda^{-r})\)
+  uniformly for \(r\ge2\). Hence
+  \(\sum_{r\ge1}\Pi_\phi(\lambda^{-r})/r\) converges absolutely. For the
+  determinant side, the finitely many \(rm=1\) non-trivial logarithms are
+  regular by the twisted gap, and the tail \(rm\ge2\) is dominated by a
+  constant multiple of
+  \(\sum_{r,m\ge1,\,rm\ge2}\lambda^{1-rm}/(rm)\), which converges. Thus
+  dominated convergence from \(z=t\lambda^{-1}\), \(0<t<1\), gives the
+  stated Perron-point continuation and branch convention.
 \end{proof}
 
 \begin{remark}[Relation to necklace/Witt inversion and twisted-zeta

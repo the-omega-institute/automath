@@ -285,6 +285,218 @@
   display. In particular, \eqref{eq:class-mertens-log} holds.
 \end{proof}
 
+\begin{theorem}[Adams-corrected Frobenius-class Euler-product Mertens
+  constants]
+  \label{thm:class-euler-product-mertens}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}. For a
+  conjugacy class \(C\subset G\), set
+  \begin{equation}\label{eq:class-euler-product-def}
+    P_C(N):=
+    \prod_{\substack{\gamma\in\cP\,:\\ |\gamma|\le N\\
+      \tau(\gamma)\in C}}
+      \left(1-\lambda^{-|\gamma|}\right).
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:class-euler-product-asymptotic}
+    P_C(N)=K_C\,N^{-|C|/|G|}\bigl(1+O(N^{-1})\bigr),
+  \end{equation}
+  where the positive branch of the constant is
+  \begin{equation}\label{eq:class-euler-product-k-mc}
+    K_C=
+    \exp\!\left(
+      -\mathcal M_C(A,\tau;G)
+      -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    \right).
+  \end{equation}
+  Equivalently,
+  \begin{equation}\label{eq:class-euler-product-k-f}
+    K_C=
+    \exp\!\left(
+      -\frac{|C|}{|G|}
+      \left(
+        \gamma+\log C(A)
+        +\sum_{\varrho\neq\mathbf1}
+          \chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
+      \right)
+    \right).
+  \end{equation}
+  The summation in \eqref{eq:class-euler-product-k-mc} is absolutely
+  convergent, and \(F_\varrho(\lambda^{-1})\) is the fixed-label Euler
+  transform of \eqref{eq:fixed-label-euler-transform-def}, not the Artin
+  logarithm \(\mathcal L_\varrho(\lambda^{-1})\).
+\end{theorem}
+
+\begin{proof}
+  Taking logarithms in \eqref{eq:class-euler-product-def} gives
+  \[
+    \log P_C(N)
+    =
+    \sum_{\substack{n\le N}}
+      p_{n,C}\log(1-\lambda^{-n})
+    =
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+      -
+      \sum_{r\ge2}\frac{1}{r}
+        \sum_{n\le N}p_{n,C}\lambda^{-rn}.
+  \]
+  Since \(p_{n,C}=O(\lambda^n/n)\), the double series with \(r\ge2\) is
+  absolutely convergent, and its tail after \(n>N\) is
+  \(O(\lambda^{-N}/N)\). Therefore
+  \[
+    \log P_C(N)
+    =
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(\lambda^{-N}/N).
+  \]
+  Substitute \eqref{eq:class-mertens-log} from
+  \Cref{thm:class-mertens-explicit}:
+  \[
+    \log P_C(N)
+    =
+    -\frac{|C|}{|G|}\log N
+    -\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(N^{-1}).
+  \]
+  Exponentiating gives \eqref{eq:class-euler-product-asymptotic} and
+  \eqref{eq:class-euler-product-k-mc}.
+
+  It remains to rewrite the constant. By
+  \Cref{prop:class-indicator-expansion},
+  \[
+    \mathbf1_C
+    =
+    \frac{|C|}{|G|}\mathbf1
+    +
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)\chi_\varrho.
+  \]
+  Hence
+  \[
+    \sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    =
+    \frac{|C|}{|G|}\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+    +
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)
+      \sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r},
+  \]
+  with absolute convergence as above. Combining this identity with
+  \eqref{eq:class-mertens-constant} yields
+  \[
+    \mathcal M_C(A,\tau;G)
+    +\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    =
+    \frac{|C|}{|G|}
+    \left(
+      \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+      +\sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
+    \right).
+  \]
+  The scalar finite-part identity \eqref{eq:finite-part-primitive-closed}
+  gives
+  \[
+    \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+    =
+    \gamma+
+    \FP(A)+\sum_{\gamma\in\cP}\sum_{r\ge2}
+      \frac{\lambda^{-r|\gamma|}}{r}
+    =
+    \gamma+\log C(A),
+  \]
+  because
+  \(\FP(A)=\log C(A)+\sum_\gamma(\lambda^{-|\gamma|}
+  +\log(1-\lambda^{-|\gamma|}))\) and
+  \(\sum_{r\ge2}\lambda^{-r|\gamma|}/r
+  =-\log(1-\lambda^{-|\gamma|})-\lambda^{-|\gamma|}\). Substituting this
+  into the previous display proves \eqref{eq:class-euler-product-k-f}.
+\end{proof}
+
+\begin{proposition}[Determinant formula for fixed-label Perron values]
+  \label{prop:fixed-label-determinant-perron}
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, every
+  non-trivial \(\varrho\in\Irr(G)\) satisfies
+  \begin{equation}\label{eq:fixed-label-determinant-perron}
+    F_\varrho(\lambda^{-1})
+    =
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+        a_{\varrho,\pi}^{(m)}
+        \log\det(I-\lambda^{-rm}A_\pi)^{-1}.
+  \end{equation}
+  The logarithms use the normalized branch from \(z=0\); for
+  \(rm=1\) and \(\pi\neq\mathbf1\) this means the regular continuation to
+  \(z=\lambda^{-1}\) given by the twisted spectral gap. The omitted
+  singular term has coefficient
+  \(a_{\varrho,\mathbf1}^{(1)}=0\), so no scalar Perron logarithm occurs
+  in the non-trivial fixed-label value.
+\end{proposition}
+
+\begin{proof}
+  Substitute the determinant linearisation
+  \eqref{eq:class-logarithm-determinant-linearisation} into
+  \eqref{eq:fixed-label-euler-transform-adams-mobius} and set
+  \(z=t\lambda^{-1}\), \(0<t<1\). This gives the displayed formula with
+  \(\lambda^{-rm}\) replaced by \(t^{rm}\lambda^{-rm}\). The only
+  possible singular scalar determinant is
+  \((r,m,\pi)=(1,1,\mathbf1)\). Its coefficient is
+  \(a_{\varrho,\mathbf1}^{(1)}=\langle\chi_\varrho,\mathbf1\rangle=0\)
+  because \(\varrho\neq\mathbf1\), so the term is absent. The remaining
+  \(rm=1\) terms have \(\pi\neq\mathbf1\) and are regular at the Perron
+  point by \(\rho(A_\pi)<\lambda\).
+
+  For \(rm\ge2\), the proof of
+  \Cref{lem:perron-boundary-determinant-evaluation} gives a uniform bound
+  \[
+    \abs{\log\det(I-t^{rm}\lambda^{-rm}A_\pi)^{-1}}
+    \le C\lambda^{1-rm}
+  \]
+  for \(0\le t\le1\). Together with
+  \(\abs{a_{\varrho,\pi}^{(m)}}\le\dim\varrho\), this is dominated by a
+  constant multiple of
+  \(\sum_{r,m\ge1,\,rm\ge2}\lambda^{1-rm}/(rm)\), which converges because
+  \(\sum_{rm=k}1/(rm)=d(k)/k\) and
+  \(\sum_{k\ge2}d(k)\lambda^{1-k}/k<\infty\). Dominated convergence as
+  \(t\uparrow1\), together with \Cref{thm:fixed-label-euler-transform},
+  proves \eqref{eq:fixed-label-determinant-perron} and the branch
+  statement.
+\end{proof}
+
+\begin{proposition}[Comparison with classical Frobenius-class products]
+  \label{prop:class-product-comparison}
+  The exponent \(|C|/|G|\) in
+  \eqref{eq:class-euler-product-asymptotic} is the classical Frobenius
+  density exponent arising from Chebotarev/Mertens orbit asymptotics for
+  finite homogeneous extensions, in the sense of
+  \cite{Sharp1991Mertens,ParryPollicott1986Chebotarev,%
+  NooraniParry1992ChebotarevShifts}. The new finite-state contribution
+  of \Cref{thm:class-euler-product-mertens} is the Adams-corrected
+  constant: the class-product constant is controlled by the fixed-label
+  transforms \(F_\varrho(\lambda^{-1})\) and the determinant formula
+  \eqref{eq:fixed-label-determinant-perron}, not by substituting ordinary
+  Artin logarithms \(\mathcal L_\varrho(\lambda^{-1})\).
+\end{proposition}
+
+\begin{proof}
+  The cited Chebotarev and dynamical Mertens theorems give the leading
+  Frobenius-class density and product exponent in the usual orbit-counting
+  framework. In the present finite-state setting the same exponent also
+  follows directly from \eqref{eq:class-mertens-log}, and the proof of
+  \Cref{thm:class-euler-product-mertens} shows that all information beyond
+  this leading exponent is contained in the constant
+  \eqref{eq:class-euler-product-k-f}. By
+  \Cref{thm:fixed-label-euler-transform} this constant uses
+  \(F_\varrho=\sum_{r\ge1}\Pi_\varrho(z^r)/r\), whereas the Artin
+  logarithm is
+  \(\mathcal L_\varrho=\sum_{r\ge1}\Pi_{\psi^r\varrho}(z^r)/r\). The two
+  are generally different because repetitions apply Adams operations to
+  labels. Finally \Cref{prop:fixed-label-determinant-perron} expresses
+  these corrected constants in terms of the finite twisted determinant
+  data. This proves both the classical attribution of the exponent and the
+  advertised Adams-corrected determinant content of the present theorem.
+\end{proof}
+
 \begin{remark}[Comparison with classical Mertens and Chebotarev
   asymptotics]
   \label{rem:class-mertens-comparison}
