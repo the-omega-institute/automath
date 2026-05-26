@@ -1330,7 +1330,7 @@ mechanism suppresses low-frequency fluctuations throughout the parameter range.
 Once the covariance tail is geometric, both the spectral density and the Fano
 factor follow from summing the resulting series.
 
-\begin{proposition}[Spectral density and universal antibunching]\label{prop:spectrum-main}
+\begin{proposition}[Spectral density and universal antibunching, derived from the covariance tail]\label{prop:spectrum-main}
 For the stationary boundary-reset recovery record,
 \begin{equation}\label{eq:spectrum-main}
 f(\theta)=
@@ -1355,11 +1355,20 @@ the parameter range.
 \end{proposition}
 
 \begin{proof}
+The spectral-density convention here is the Herglotz covariance convention for
+the stationary discrete-time binary process: a summable covariance sequence
+$(\gamma_n)_{n\in\mathbb Z}$ has density
+$f(\theta)=\sum_{n\in\mathbb Z}\gamma_n e^{in\theta}$ with
+$\gamma_n=\operatorname{Cov}(A_0,A_n)$. No renewal spectral formula is imported
+at this step; the required covariance sequence is the one already proved in the
+main recovery theorem.
 By \Cref{thm:recovery-main},
 \[
 \operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},\qquad n\ge1.
 \]
-By Lemma~\ref{lem:stationary-main}, $|\lambda_{\mathrm{hid}}|<1$. Hence
+By Lemma~\ref{lem:stationary-main}, $|\lambda_{\mathrm{hid}}|<1$. Therefore the
+covariance sequence is absolutely summable, uniformly enough to justify the
+following termwise summation of the Fourier series. Hence
 \[
 \sum_{n\ge1}\lambda_{\mathrm{hid}}^{\,n-1}e^{in\theta}
 =\frac{e^{i\theta}}{1-\lambda_{\mathrm{hid}} e^{i\theta}},
@@ -1381,11 +1390,13 @@ R_{\lambda_{\mathrm{hid}}}'(x)=
 \]
 Since $a-\rho<0$ by Lemma~\ref{lem:stationary-main}, $f$ is strictly decreasing as a function of $x$. Because $\cos\theta$ is strictly decreasing on $[0,\pi]$, $f(\theta)$ is strictly increasing on that interval.
 
-For the counting variance, stationarity gives
+For the counting variance, stationarity and the exact finite sum identity give
 \[
 \Var(N_N)=N\rho(1-\rho)+2\sum_{n=1}^{N-1}(N-n)\operatorname{Cov}(A_0,A_n).
 \]
-Divide by $\EE N_N=N\rho$ and let $N\to\infty$. The geometric covariance tail yields
+Divide by $\EE N_N=N\rho$ and let $N\to\infty$. Since
+$\sum_{n\ge1}n|\operatorname{Cov}(A_0,A_n)|<\infty$, dominated convergence for
+the weights $(1-n/N)\mathbf 1_{n<N}$ yields
 \[
 \lim_{N\to\infty}\frac{\Var(N_N)}{\EE N_N}
 =
@@ -3157,6 +3168,95 @@ well-defined, and the continuous mapping theorem gives
 Dividing the CLT for $\sqrt N(\widehat\gamma_2-\gamma_2)$ by the consistent
 positive denominator $\widehat\sigma_{2,N}$ therefore gives the studentized
 limit by Slutsky's theorem.
+\end{proof}
+
+\begin{corollary}[Application of the cycle CLT to the sampled boundary-reset recovery record]\label{cor:boundary-reset-cycle-clt-main}
+Consider the sampled one-recovery-opportunity boundary-reset kernels
+\eqref{eq:t0-t1-main} with $\Gamma,\kappa_{\mathrm r},\Delta\tau>0$, and let
+$(A_n)_{n\in\mathbb Z}$ be their stationary visible record. Let $G$ denote the
+post-click zero-run length from \Cref{lem:renewal-gap-main}, put
+\[
+\pi_g=\PP(G=g),
+\qquad
+m_1=\EE G,
+\qquad
+m_2=\EE G^2,
+\]
+and let $\rho$ be the click density from \eqref{eq:rho-main}. With
+$\lambda_{\mathrm{hid}}$ as in \eqref{eq:lambda-hid-main}, set
+\[
+\gamma_2=\operatorname{Cov}(A_0,A_2)
+=\rho(a-\rho)\lambda_{\mathrm{hid}},
+\qquad
+\mu_2=\rho^2+\gamma_2,
+\]
+\[
+\alpha=2\rho^2-\mu_2,
+\qquad
+\beta=\alpha-2\rho,
+\]
+and define the explicit sampled-law cycle variance
+\begin{equation}\label{eq:tau2-boundary-reset-main}
+\tau_{2,\mathrm{br}}^2
+=
+\alpha^2m_2
++2\alpha\beta m_1
++\beta^2
++(2\alpha+2\beta+1)\pi_1
++(4\beta+1)\pi_0^2
++2\pi_0^3.
+\end{equation}
+Then the lag-two estimator from \Cref{def:cycle-block-main} satisfies
+\[
+\sqrt N\,(\widehat\gamma_2-\gamma_2)
+\Rightarrow
+\mathcal N\!\left(0,
+\frac{\tau_{2,\mathrm{br}}^2}{\EE(G+1)}\right).
+\]
+The separated-batch estimator \eqref{eq:cycle-block-est-main} is consistent for
+the displayed variance, and the studentized normal limit holds precisely under
+the explicit nondegeneracy check
+\[
+\tau_{2,\mathrm{br}}^2>0.
+\]
+Combined with \Cref{thm:recovery-main}, the mean being estimated is zero if and
+only if
+\[
+\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau),
+\]
+while away from that rate its sign is the sign prescribed by the hidden-mode
+covariance phase in \Cref{thm:recovery-main}. Thus a one-record Wald diagnostic
+for the memory transition is theorem-level justified only after the sampled-law
+cycle-variance criterion \eqref{eq:tau2-boundary-reset-main} is positive.
+\end{corollary}
+
+\begin{proof}
+\Cref{thm:recovery-main} supplies the hypotheses needed to specialize
+\Cref{thm:cycle-block-main}: the sampled boundary-reset visible process is a
+stationary renewal process, click times are regeneration times by
+\Cref{lem:renewal-gap-main}, and the zero-run law is exactly the law
+$(\pi_g)_{g\ge0}$. Its tail is exponential. Indeed, when
+$\kappa_{\mathrm r}\neq\Gamma$, \eqref{eq:gap-closed-main} and
+$0<p,c<1$ bound $\PP(G=k)$ by a constant times
+$\max\{p,c\}^k$; in the equal-rate case
+\eqref{eq:equal-rate-survival-hazard-main} gives
+$\PP(G\ge k)=p^k(1+\Gamma\Delta\tau\,k)$, which is again exponentially bounded.
+
+The covariance identity in \Cref{thm:recovery-main} gives
+$\gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}}$ and hence
+$\mu_2=\rho^2+\gamma_2$. Therefore the constants
+$\alpha,\beta,\pi_0,\pi_1,m_1,m_2$ appearing in
+\Cref{thm:cycle-block-main} are exactly the sampled-law constants displayed in
+the statement, and \eqref{eq:tau2-explicit-main} becomes
+\eqref{eq:tau2-boundary-reset-main}. Applying \Cref{thm:cycle-block-main} gives
+the CLT, consistency of the separated-batch variance estimator, and the
+studentized limit under the sole extra condition
+$\tau_{2,\mathrm{br}}^2>0$. Finally, the equivalence
+$\gamma_2=0\iff\lambda_{\mathrm{hid}}=0\iff
+\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and the sign phase away from the
+critical rate are precisely the covariance conclusions of
+\Cref{thm:recovery-main}. This proves the claimed application of the generic
+cycle CLT to the sampled boundary-reset law.
 \end{proof}
 
 \begin{remark}[Why the theorem starts with the prefix estimator]\label{rem:prefix-proof-device-main}
