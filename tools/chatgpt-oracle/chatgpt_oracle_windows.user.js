@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.20
+// @version      5.21
 // @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -20,12 +20,13 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.20";
+  const SCRIPT_VERSION = "5.21";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
   const DEFAULT_MIN_RESPONSE_LENGTH = 1000;
+  const SHORT_RESPONSE_STALL_MS = 12 * 60 * 1000;
   const REQUIRE_FOREGROUND_TO_CLAIM = false;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
@@ -1592,6 +1593,55 @@
     return false;
   }
 
+  function scrollConversationToBottom() {
+    const selectors = [
+      "button[aria-label='Scroll to bottom']",
+      "button[aria-label='Jump to latest']",
+      "button[aria-label='滚动到底部']",
+      "button[aria-label='滚动至底部']",
+      "button[aria-label='跳至最新']",
+    ];
+
+    for (const sel of selectors) {
+      try {
+        const btn = document.querySelector(sel);
+        if (btn && btn.offsetParent !== null) btn.click();
+      } catch {}
+    }
+
+    try {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" });
+    } catch {
+      try { window.scrollTo(0, document.body.scrollHeight); } catch {}
+    }
+
+    const roots = [document];
+    for (const el of document.querySelectorAll("*")) {
+      if (el.shadowRoot) roots.push(el.shadowRoot);
+    }
+
+    for (const root of roots) {
+      try {
+        const assistantEls = root.querySelectorAll(
+          "[data-message-author-role='assistant'], article, div[class*='markdown'], div[class*='prose'], [class*='agent-turn']"
+        );
+        const last = assistantEls[assistantEls.length - 1];
+        if (last && last.scrollIntoView) {
+          last.scrollIntoView({ block: "end", inline: "nearest" });
+        }
+      } catch {}
+
+      try {
+        const all = root.querySelectorAll("main, [role='main'], [class*='conversation'], [class*='thread'], div, section");
+        for (const el of Array.from(all)) {
+          if (el.scrollHeight > el.clientHeight + 100) {
+            el.scrollTop = el.scrollHeight;
+          }
+        }
+      } catch {}
+    }
+  }
+
   async function waitForResponse(task_id, minResponseLength = DEFAULT_MIN_RESPONSE_LENGTH) {
     log("Waiting for ChatGPT response...");
 
@@ -1600,9 +1650,13 @@
     let stableCount = 0;
     let lastLogTime = 0;
     let lastHeartbeat = 0;
+    let shortObservedSince = 0;
+    let shortObservedText = "";
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
+      scrollConversationToBottom();
+      await sleep(500);
 
       let responseText = extractResponseText();
       const generating = isStillGenerating();
@@ -1675,10 +1729,29 @@
           if (stableCount === 0) {
             log(`Too short (${responseText.length} < ${minResponseLength} chars) - waiting for complete response`);
           }
+          if (!generating) {
+            if (responseText === shortObservedText) {
+              if (!shortObservedSince) shortObservedSince = Date.now();
+              const shortStallMs = Date.now() - shortObservedSince;
+              if (shortStallMs >= SHORT_RESPONSE_STALL_MS) {
+                throw new Error(
+                  `Response extraction stalled below minimum (${responseText.length} < ${minResponseLength} chars for ${Math.floor(shortStallMs / 1000)}s)`
+                );
+              }
+            } else {
+              shortObservedText = responseText;
+              shortObservedSince = Date.now();
+            }
+          } else {
+            shortObservedSince = 0;
+            shortObservedText = "";
+          }
           stableCount = 0;
           lastText = "";
           continue;
         }
+        shortObservedSince = 0;
+        shortObservedText = "";
 
         // CRITICAL: never accept a prompt echo as a response.
         if (looksLikePromptEcho(responseText)) {

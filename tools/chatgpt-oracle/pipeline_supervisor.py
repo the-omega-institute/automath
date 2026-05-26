@@ -67,6 +67,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except (AttributeError, OSError):
+    pass
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 
@@ -78,6 +84,7 @@ PIPELINE_STATE_DIR = SCRIPT_DIR / "pipeline_state"
 PUBLICATION_DIR = REPO_ROOT / "papers" / "publication"
 SUPERVISOR_LOG_DIR = SCRIPT_DIR / "supervisor_logs"
 STOP_FILE = SCRIPT_DIR / ".pipeline_supervisor.stop"
+PID_FILE = SCRIPT_DIR / ".pipeline_supervisor.pid"
 SERVER_RESTART_FILE = SCRIPT_DIR / ".server.restart"
 INNER_RESTART_FILE = SCRIPT_DIR / ".inner.restart"
 SUPERVISOR_BRANCH_DEFAULT = "dev-automation-integration"
@@ -210,6 +217,16 @@ def desktop_notify(title: str, body: str) -> None:
 # ---------------------------------------------------------------------------
 
 
+def command_failure_summary(proc: subprocess.CompletedProcess,
+                            *, max_chars: int = 500) -> str:
+    output = " ".join(
+        ((proc.stderr or "") + " " + (proc.stdout or "")).split()
+    )
+    if len(output) > max_chars:
+        output = output[: max_chars - 3].rstrip() + "..."
+    return f"rc={proc.returncode}" + (f"; {output}" if output else "")
+
+
 def _detached_popen_kwargs() -> dict:
     """Return Popen kwargs that detach the child from this process group.
 
@@ -255,6 +272,123 @@ def _python() -> str:
     return sys.executable or ("python" if IS_WINDOWS else "python3")
 
 
+def _subprocess_env() -> dict[str, str]:
+    env = os.environ.copy()
+    env.setdefault("PYTHONIOENCODING", "utf-8")
+    env.setdefault("PYTHONUTF8", "1")
+    env.setdefault("ORACLE_MAX_AGENTS", "5")
+    return env
+
+
+def process_alive(pid: int | None) -> bool:
+    if not pid:
+        return False
+    if IS_WINDOWS:
+        proc = subprocess.run(
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                f"Get-Process -Id {pid} -ErrorAction SilentlyContinue | Select-Object -First 1",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=5,
+            check=False,
+        )
+        return proc.returncode == 0 and bool((proc.stdout or "").strip())
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
+
+
+def read_pid_record(path: Path | None = None) -> dict[str, Any]:
+    if path is None:
+        path = PID_FILE
+    try:
+        raw = path.read_text(encoding="utf-8").strip()
+    except OSError:
+        return {"pid": None, "started_ts": None, "script": ""}
+    if not raw:
+        return {"pid": None, "started_ts": None, "script": ""}
+    if raw.startswith("{"):
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            return {"pid": None, "started_ts": None, "script": ""}
+        try:
+            pid = int(data.get("pid") or 0)
+        except (TypeError, ValueError):
+            pid = 0
+        try:
+            started_ts = float(data["started_ts"]) if data.get("started_ts") is not None else None
+        except (TypeError, ValueError):
+            started_ts = None
+        return {
+            "pid": pid if pid > 0 else None,
+            "started_ts": started_ts,
+            "script": str(data.get("script") or ""),
+        }
+    try:
+        pid = int(raw)
+    except ValueError:
+        pid = 0
+    return {"pid": pid if pid > 0 else None, "started_ts": None, "script": ""}
+
+
+def write_pid_record(started_ts: float, path: Path | None = None) -> None:
+    if path is None:
+        path = PID_FILE
+    path.write_text(
+        json.dumps(
+            {
+                "pid": os.getpid(),
+                "started_ts": started_ts,
+                "script": str(Path(__file__).name),
+            },
+            ensure_ascii=True,
+            sort_keys=True,
+        ) + "\n",
+        encoding="utf-8",
+    )
+
+
+def claim_supervisor_singleton(started_ts: float) -> bool:
+    record = read_pid_record()
+    existing_pid = record.get("pid")
+    script_name = str(record.get("script") or "")
+    same_supervisor_script = not script_name or script_name == Path(__file__).name
+    if (
+        existing_pid
+        and existing_pid != os.getpid()
+        and same_supervisor_script
+        and process_alive(existing_pid)
+    ):
+        supervisor_log(
+            f"supervisor already running pid={existing_pid}; exiting without starting duplicate"
+        )
+        return False
+    try:
+        write_pid_record(started_ts)
+    except OSError as exc:
+        supervisor_log(f"WARN: failed to write supervisor pid file: {exc}")
+    return True
+
+
+def cleanup_supervisor_pid() -> None:
+    record = read_pid_record()
+    if record.get("pid") == os.getpid():
+        try:
+            PID_FILE.unlink()
+        except OSError:
+            pass
+
+
 # ---------------------------------------------------------------------------
 # server health
 # ---------------------------------------------------------------------------
@@ -270,6 +404,22 @@ def server_status(timeout: int = 3) -> dict:
 
 def server_alive(timeout: int = 3) -> bool:
     return server_status(timeout).get("port") == 8765
+
+
+def oracle_work_in_flight(status: dict[str, Any] | None = None) -> bool:
+    """Return True when restarting inner would orphan active Oracle work."""
+    s = status if status is not None else server_status()
+    try:
+        queue_length = int(s.get("queue_length") or 0)
+    except (TypeError, ValueError):
+        queue_length = 0
+    try:
+        agents_busy = int(s.get("agents_busy") or 0)
+    except (TypeError, ValueError):
+        agents_busy = 0
+    queued_tasks = s.get("queued_tasks") or []
+    queued = s.get("queued") or []
+    return queue_length > 0 or agents_busy > 0 or bool(queued_tasks) or bool(queued)
 
 
 def ensure_server() -> subprocess.Popen | None:
@@ -300,6 +450,7 @@ def ensure_server() -> subprocess.Popen | None:
             cwd=str(REPO_ROOT),
             stdout=server_log,
             stderr=subprocess.STDOUT,
+            env=_subprocess_env(),
             **_detached_popen_kwargs(),
         )
     except Exception as exc:
@@ -324,6 +475,24 @@ def disk_source_sha(path: Path) -> str:
         return hashlib.sha1(path.read_bytes()).hexdigest()[:12]
     except OSError:
         return ""
+
+
+def maybe_log_supervisor_drift(*, running_sha: str,
+                               last_alert_ts: float) -> float:
+    disk_sha = disk_source_sha(Path(__file__))
+    if (
+        running_sha
+        and disk_sha
+        and running_sha != disk_sha
+        and _now() - last_alert_ts > 1800
+    ):
+        supervisor_log(
+            f"DRIFT: pipeline_supervisor.py on disk (sha={disk_sha}) differs "
+            f"from running supervisor (sha={running_sha}); restart supervisor "
+            "to apply."
+        )
+        return _now()
+    return last_alert_ts
 
 
 def queue_stuck_too_long(threshold_seconds: int) -> bool:
@@ -417,6 +586,9 @@ def surface_log_alerts() -> int:
         try:
             size = path.stat().st_size
         except OSError:
+            continue
+        if tag not in _log_offsets:
+            _log_offsets[tag] = size
             continue
         offset = _log_offsets.get(tag, 0)
         if size < offset:  # rotated / truncated
@@ -521,7 +693,151 @@ def _paper_priority_key(paper_dir: Path) -> tuple[int, float, str]:
     return (in_progress, -mtime, paper_dir.name)
 
 
+_last_discovery_summary: dict[str, Any] = {}
+
+
+def _recoverable_stage_a_block_from_status(status: str) -> bool:
+    s = status.lower()
+    if "a-blocked" not in s and "stage a blocked" not in s:
+        return False
+    hard_markers = (
+        "overlap deferred",
+        "needs_human_resolution",
+        "human_decision",
+        "overlap needs",
+        "overlap with earlier submitted",
+        "earlier submitted/current",
+        "prior submitted sibling",
+        "submitted sibling feedback",
+        "canonical route before advancing",
+        "wait for prior",
+        "duplicate of canonical",
+        "parked",
+        "oracle escalation park",
+        "legacy archive",
+    )
+    if any(marker in s for marker in hard_markers):
+        return False
+    recoverable_markers = (
+        "a2 fake extension",
+        "fake extension",
+        "manual theorem-deepening",
+        "max stage a rounds exhausted",
+        "max stage a theoremization rounds exhausted",
+        "final audit real block",
+        "final audit unclear failure",
+        "final audit failed",
+        "pre-restart stale-round path",
+        "manual-review before any rerun",
+        "manual-review",
+        "codex ceiling",
+    )
+    if any(marker in s for marker in recoverable_markers):
+        return True
+    return "a-blocked" in s or "stage a blocked" in s
+
+
+def _paper_name_from_skipped_status(line: str) -> str:
+    stripped = line.strip()
+    if not stripped:
+        return ""
+    if stripped.startswith("`"):
+        end = stripped.find("`", 1)
+        return stripped[1:end] if end > 1 else ""
+    return stripped.split(":", 1)[0].strip()
+
+
+def recoverable_stage_a_blocked_papers(summary: dict[str, Any]) -> list[str]:
+    papers: list[str] = []
+    for line in summary.get("skipped_status", []) or []:
+        text = str(line)
+        if _recoverable_stage_a_block_from_status(text):
+            name = _paper_name_from_skipped_status(text)
+            if name:
+                papers.append(name)
+    return sorted(set(papers))
+
+
+def watchdog_wake_recoverable_stage_a_blocks(summary: dict[str, Any]) -> int:
+    """Wake inner scheduling when Codex-ceiling Stage A blocks are found.
+
+    This does not cancel or kill running work.  It drops the same soft restart
+    signal operators already use so the next safe supervisor tick re-runs
+    discovery with the updated recoverable-block gate.
+    """
+    papers = recoverable_stage_a_blocked_papers(summary)
+    if not papers:
+        return 0
+    try:
+        INNER_RESTART_FILE.write_text(
+            "recoverable Stage A block watchdog\n"
+            + "\n".join(papers)
+            + "\n",
+            encoding="utf-8",
+        )
+        supervisor_log(
+            f"watchdog: recoverable Stage A block(s) need Oracle escalation: "
+            f"{', '.join(papers[:5])}"
+            + (" ..." if len(papers) > 5 else "")
+        )
+    except OSError as exc:
+        supervisor_log(f"WARN: failed to write {INNER_RESTART_FILE.name}: {exc}")
+    return len(papers)
+
+
+def format_discovery_summary(summary: dict[str, Any]) -> str:
+    return (
+        f"diagnosis={summary.get('diagnosis', 'unknown')}; "
+        f"candidates={summary.get('candidate_count', 0)}; "
+        f"runnable={summary.get('runnable_count', 0)}; "
+        f"status_skipped={summary.get('skipped_status_count', 0)}; "
+        f"done_skipped={summary.get('skipped_done_count', 0)}; "
+        "unregistered_skipped="
+        f"{summary.get('skipped_unregistered_count', 0)}; "
+        "assignment_skipped="
+        f"{summary.get('skipped_assignment_count', 0)}"
+    )
+
+
+def _pipeline_discovery_summary(only: list[str] | None = None) -> dict[str, Any]:
+    code = (
+        "import json, sys; "
+        f"sys.path.insert(0, {str(SCRIPT_DIR)!r}); "
+        "import oracle_pipeline; "
+        f"paper_dirs = {only!r}; "
+        "summary = oracle_pipeline.discover_paper_summary("
+        "paper_dirs, respect_assignment=False, log=False); "
+        "print(json.dumps(summary, ensure_ascii=True))"
+    )
+    proc = subprocess.run(
+        [_python(), "-c", code],
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=30,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(command_failure_summary(proc))
+    return json.loads(proc.stdout)
+
+
 def discover_runnable_papers(only: list[str] | None = None) -> list[Path]:
+    global _last_discovery_summary
+    try:
+        summary = _pipeline_discovery_summary(only)
+        _last_discovery_summary = summary
+        candidates = [Path(p) for p in summary.get("papers", [])]
+        candidates = [p for p in candidates if _has_main_tex(p) and not _is_done(p)]
+        candidates.sort(key=_paper_priority_key)
+        return candidates
+    except Exception as exc:
+        _last_discovery_summary = {}
+        supervisor_log(f"WARN: pipeline discovery summary failed; using fallback scan: {exc}")
+
     if not PUBLICATION_DIR.exists():
         return []
     candidates = []
@@ -588,12 +904,15 @@ def spawn_inner_pool(parallel: int, *, target_journal: str = "",
         cmd.extend(["--target-journal", target_journal])
     if extra_args:
         cmd.extend(extra_args)
+    if not paper_filter and "--no-assign" not in cmd:
+        cmd.append("--no-assign")
     try:
         proc = subprocess.Popen(
             cmd,
             cwd=str(REPO_ROOT),
             stdout=log_handle,
             stderr=subprocess.STDOUT,
+            env=_subprocess_env(),
             **_detached_popen_kwargs(),
         )
     except Exception as exc:
@@ -674,6 +993,7 @@ def trigger_pi_review(*, codex_timeout: int = 900, claude_timeout: int = 600) ->
                 cwd=str(REPO_ROOT),
                 stdout=logf,
                 stderr=subprocess.STDOUT,
+                env=_subprocess_env(),
                 **_detached_popen_kwargs(),
             )
     except Exception as exc:
@@ -689,19 +1009,17 @@ def trigger_refill(project_url: str, *, limit: int = 5,
     if not REFILL_SCRIPT.exists():
         supervisor_log(f"refill skipped: {REFILL_SCRIPT.name} missing")
         return False
-    if not project_url:
-        supervisor_log("refill skipped: --refill-project-url not set")
-        return False
     SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_path = SUPERVISOR_LOG_DIR / f"refill_{_now_tag_safe()}.log"
     cmd = [
         _python(),
         str(REFILL_SCRIPT),
-        "--project-url", project_url,
         "--limit", str(limit),
         "--timeout", str(timeout),
         "--model", model,
     ]
+    if project_url:
+        cmd.extend(["--project-url", project_url])
     try:
         with open(log_path, "ab") as logf:
             subprocess.Popen(
@@ -709,6 +1027,7 @@ def trigger_refill(project_url: str, *, limit: int = 5,
                 cwd=str(REPO_ROOT),
                 stdout=logf,
                 stderr=subprocess.STDOUT,
+                env=_subprocess_env(),
                 **_detached_popen_kwargs(),
             )
     except Exception as exc:
@@ -719,6 +1038,44 @@ def trigger_refill(project_url: str, *, limit: int = 5,
         f"candidates will land in {REFILL_QUEUE_PATH.name}"
     )
     return True
+
+
+def refill_disabled_message() -> str:
+    return "refill local-context mode available; --refill-project-url not set"
+
+
+def maybe_refill_drained_backlog(args: Any) -> None:
+    cooldown_s = max(0.0, args.refill_cooldown_hours * 3600.0)
+    since_refill_s = _now() - refill_last_run_ts()
+    if since_refill_s >= cooldown_s:
+        if not args.refill_project_url:
+            supervisor_log(refill_disabled_message())
+        trigger_refill(
+            args.refill_project_url,
+            limit=args.refill_limit,
+            timeout=args.refill_timeout,
+        )
+    else:
+        remaining_h = (cooldown_s - since_refill_s) / 3600.0
+        supervisor_log(f"refill cooldown not met ({remaining_h:.1f}h remaining)")
+
+
+def default_auto_commit_paths() -> list[str]:
+    return [
+        "papers/publication",
+        "tools/chatgpt-oracle/pipeline_state",
+        "tools/chatgpt-oracle/oracle_pipeline.py",
+        "tools/chatgpt-oracle/oracle_server.py",
+        "tools/chatgpt-oracle/chatgpt_oracle_windows.user.js",
+        "tools/chatgpt-oracle/chatgpt_oracle_macos.user.js",
+        "tools/chatgpt-oracle/pipeline_supervisor.py",
+        "tools/chatgpt-oracle/pipeline_health.py",
+        "tools/chatgpt-oracle/tests/test_pipeline_supervisor.py",
+        "tools/chatgpt-oracle/tests/test_pipeline_health.py",
+        "tools/chatgpt-oracle/split_overlap_harness.py",
+        "tools/chatgpt-oracle/tests/test_split_overlap_harness.py",
+        "tools/chatgpt-oracle/SPLIT_SAFETY.md",
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -860,16 +1217,20 @@ def main() -> int:
                         help="Run a single tick (advance one paper, or just check) then exit")
     args = parser.parse_args()
 
+    SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    PIPELINE_STATE_DIR.mkdir(parents=True, exist_ok=True)
+    _install_signal_handlers()
+
+    supervisor_started_ts = _now()
+    if not claim_supervisor_singleton(supervisor_started_ts):
+        return 1
+
     if STOP_FILE.exists():
         supervisor_log(f"clearing stale STOP_FILE {STOP_FILE}")
         try:
             STOP_FILE.unlink()
         except OSError:
             pass
-
-    SUPERVISOR_LOG_DIR.mkdir(parents=True, exist_ok=True)
-    PIPELINE_STATE_DIR.mkdir(parents=True, exist_ok=True)
-    _install_signal_handlers()
 
     supervisor_log(
         f"supervisor starting "
@@ -882,15 +1243,14 @@ def main() -> int:
 
     last_commit_ts = 0.0
     last_tab_alert_ts = 0.0
+    supervisor_running_sha = disk_source_sha(Path(__file__))
     last_drift_alert_ts = 0.0
+    last_supervisor_drift_alert_ts = 0.0
     last_pi_review_ts = pi_review_last_run_ts()
     server_proc: subprocess.Popen | None = None
     inner: subprocess.Popen | None = None
 
-    auto_commit_paths = [
-        "papers/publication",
-        "tools/chatgpt-oracle/pipeline_state",
-    ]
+    auto_commit_paths = default_auto_commit_paths()
 
     paper_filter: list[str] = []
     if args.paper:
@@ -944,18 +1304,29 @@ def main() -> int:
                         )
                         last_drift_alert_ts = _now()
 
+            last_supervisor_drift_alert_ts = maybe_log_supervisor_drift(
+                running_sha=supervisor_running_sha,
+                last_alert_ts=last_supervisor_drift_alert_ts,
+            )
+
             # P1: handle .inner.restart signal — terminate the current inner
             # so the next tick picks the next runnable paper with new code.
             if INNER_RESTART_FILE.exists():
-                supervisor_log(f"inner restart signal seen ({INNER_RESTART_FILE.name})")
-                if inner is not None and inner.poll() is None:
-                    _terminate(inner, grace_seconds=20)
-                inner = None
-                current_paper = None
-                try:
-                    INNER_RESTART_FILE.unlink()
-                except OSError:
-                    pass
+                if oracle_work_in_flight():
+                    supervisor_log(
+                        f"inner restart signal deferred ({INNER_RESTART_FILE.name}); "
+                        "Oracle work is still in flight"
+                    )
+                else:
+                    supervisor_log(f"inner restart signal seen ({INNER_RESTART_FILE.name})")
+                    if inner is not None and inner.poll() is None:
+                        _terminate(inner, grace_seconds=20)
+                    inner = None
+                    current_paper = None
+                    try:
+                        INNER_RESTART_FILE.unlink()
+                    except OSError:
+                        pass
 
             if not args.no_inner:
                 if inner is None or inner.poll() is not None:
@@ -981,22 +1352,16 @@ def main() -> int:
                                 f"no runnable paper(s) match filter {paper_filter!r}; will retry next tick"
                             )
                         else:
-                            supervisor_log("no runnable papers (all DONE or none with main.tex)")
-                            # Backlog drained → maybe trigger fallback refill.
-                            if args.refill_project_url:
-                                cooldown_s = max(0.0, args.refill_cooldown_hours * 3600.0)
-                                since_refill_s = _now() - refill_last_run_ts()
-                                if since_refill_s >= cooldown_s:
-                                    trigger_refill(
-                                        args.refill_project_url,
-                                        limit=args.refill_limit,
-                                        timeout=args.refill_timeout,
-                                    )
-                                else:
-                                    remaining_h = (cooldown_s - since_refill_s) / 3600.0
-                                    supervisor_log(
-                                        f"refill cooldown not met ({remaining_h:.1f}h remaining)"
-                                    )
+                            detail = (
+                                format_discovery_summary(_last_discovery_summary)
+                                if _last_discovery_summary
+                                else "fallback_scan_no_candidates"
+                            )
+                            supervisor_log(f"no runnable papers ({detail})")
+                            watchdog_wake_recoverable_stage_a_blocks(
+                                _last_discovery_summary
+                            )
+                            maybe_refill_drained_backlog(args)
                     else:
                         inner = spawn_inner_pool(
                             args.parallel,
@@ -1103,6 +1468,7 @@ def main() -> int:
                 STOP_FILE.unlink()
             except OSError:
                 pass
+        cleanup_supervisor_pid()
         supervisor_log("supervisor exiting")
     return 0
 

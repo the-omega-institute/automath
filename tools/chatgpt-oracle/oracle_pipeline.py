@@ -926,6 +926,29 @@ def _stage_c_recent_history_text(state: PaperState, n: int = 8) -> str:
     return "\n".join(chunks).lower()
 
 
+STRUCTURED_TERMINAL_STATUSES = (
+    "C-NEAR-PASS",
+    "C-HARD-STUCK",
+    "C-INFRA-STUCK",
+    "C-SCOPE-STUCK",
+    "A-BLOCKED",
+    "B-STUCK",
+    "C-STUCK",
+    "TIME-STUCK",
+)
+
+
+def structured_terminal_status_from_error(error: str) -> str:
+    """Return the structured terminal lane encoded in an error string."""
+    err = str(error or "").strip()
+    for status in STRUCTURED_TERMINAL_STATUSES:
+        if err.startswith(f"{status}:") or err.startswith(f"{status} ("):
+            return status
+    if err.startswith(PAUSED_ERROR_PREFIX):
+        return "PAUSED"
+    return ""
+
+
 def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
     """Classify a max-round Stage C exit into a scheduling lane.
 
@@ -1012,6 +1035,37 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
         f"Oracle+Codex exhausted {MAX_STAGE_C_ROUNDS} rounds; needs manual "
         "classification",
     )
+
+
+def normalize_stage_c_terminal_state(state: PaperState, *,
+                                     persist: bool = False) -> bool:
+    """Park exhausted Stage C states in their structured terminal lane.
+
+    This protects near-pass manuscripts from being re-routed into Stage A when
+    an older state has `stage_c_rounds == MAX_STAGE_C_ROUNDS` but its
+    `current_stage` or `error` field was cleared by a later daemon pass.
+    """
+    if state.stage_c_passed:
+        return False
+    if state.stage_c_rounds < MAX_STAGE_C_ROUNDS:
+        return False
+    status, detail = classify_stage_c_terminal(state)
+    new_error = f"{status}: {detail}"
+    changed = (
+        state.current_stage != "C"
+        or state.current_round != state.stage_c_rounds
+        or structured_terminal_status_from_error(state.error) != status
+        or state.error != new_error
+    )
+    if not changed:
+        return False
+    state.current_stage = "C"
+    state.current_round = state.stage_c_rounds
+    state.error = new_error
+    update_program_board(state.paper_name, status, detail)
+    if persist:
+        save_state(state)
+    return True
 
 
 def _state_is_post_rejection_retarget_reopen(state: PaperState) -> bool:
@@ -9015,11 +9069,21 @@ def run_paper_pipeline(
             paper_name=paper_name,
             started_at=datetime.now().isoformat(),
         )
-    elif state.error:
-        logger.info(f"[{paper_name}] Clearing previous pipeline error: "
-                    f"{state.error[:200]}")
-        state.error = ""
-        save_state(state)
+    else:
+        if normalize_stage_c_terminal_state(state, persist=True):
+            logger.info(f"[{paper_name}] Preserving structured Stage C "
+                        f"terminal state: {state.error[:200]}")
+            return False, state
+        terminal_status = structured_terminal_status_from_error(state.error)
+        if terminal_status.startswith("C-"):
+            logger.info(f"[{paper_name}] Preserving structured Stage C "
+                        f"terminal error: {state.error[:200]}")
+            return False, state
+        if state.error:
+            logger.info(f"[{paper_name}] Clearing previous pipeline error: "
+                        f"{state.error[:200]}")
+            state.error = ""
+            save_state(state)
 
     # Recover round counters from git log if state was reset or started fresh.
     # Prevents redoing Codex/Oracle work already committed in prior sessions.
@@ -9094,6 +9158,11 @@ def run_paper_pipeline(
     elif selected_missing_journal:
         logger.info(f"[{paper_name}] Journal selection changed routing; "
                     "restarting at Stage F")
+
+    if normalize_stage_c_terminal_state(state, persist=True):
+        logger.info(f"[{paper_name}] Stage C terminal state restored after "
+                    "round-counter recovery")
+        return False, state
 
     if state.current_stage in ("B", "C", "D") and not stage_a_ready_for_b(state):
         logger.warning(f"[{paper_name}] Later-stage state lacks strict "
@@ -9449,26 +9518,14 @@ def _print(msg: str):
         print(msg)
 
 
-STRUCTURED_TERMINAL_STATUSES = (
-    "C-NEAR-PASS",
-    "C-HARD-STUCK",
-    "C-INFRA-STUCK",
-    "C-SCOPE-STUCK",
-    "A-BLOCKED",
-    "B-STUCK",
-    "C-STUCK",
-    "TIME-STUCK",
-)
-
-
 def _dashboard_stage_cell(state_data: dict) -> str:
     err = str(state_data.get("error", ""))
     stage_cell = str(state_data.get("current_stage", "?"))
     if err.startswith(PAUSED_ERROR_PREFIX):
         return "PAUSED"
-    for status in STRUCTURED_TERMINAL_STATUSES:
-        if err.startswith(f"{status}:") or err.startswith(f"{status} ("):
-            return status
+    terminal_status = structured_terminal_status_from_error(err)
+    if terminal_status:
+        return terminal_status
     if err:
         return "FAILED"
     return stage_cell

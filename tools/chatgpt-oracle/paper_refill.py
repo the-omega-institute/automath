@@ -42,6 +42,7 @@ REPO_ROOT = SCRIPT_DIR.parent.parent
 PUBLICATION_DIR = REPO_ROOT / "papers" / "publication"
 QUEUE_PATH = PUBLICATION_DIR / "_refill_queue.json"
 REFILL_LOG_DIR = SCRIPT_DIR / "supervisor_logs"
+RESEARCH_LEDGER_PATH = SCRIPT_DIR / "research_ledger" / "research_ledger.jsonl"
 
 DEFAULT_LIMIT = 5
 DEFAULT_TIMEOUT = 1800
@@ -83,8 +84,63 @@ def _existing_proposed_titles(queue: dict[str, Any]) -> list[str]:
     return out
 
 
+def _load_ledger_seed_candidates(limit: int = 25) -> list[dict[str, Any]]:
+    if not RESEARCH_LEDGER_PATH.exists():
+        return []
+    seeds_by_fingerprint: dict[str, dict[str, Any]] = {}
+    try:
+        lines = RESEARCH_LEDGER_PATH.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return []
+    for line in lines:
+        if not line.strip():
+            continue
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        category = str(record.get("category") or "")
+        if category not in {"split_candidates", "out_of_scope_strong_results"}:
+            continue
+        item = record.get("item")
+        if not isinstance(item, dict):
+            item = {}
+        title = str(
+            item.get("candidate_title")
+            or record.get("candidate_title")
+            or item.get("label")
+            or ""
+        ).strip()
+        if not title:
+            continue
+        fingerprint = str(record.get("fingerprint") or title)
+        seeds_by_fingerprint[fingerprint] = {
+            "candidate_title": title,
+            "source_paper": record.get("source_paper", ""),
+            "source_journal": record.get("target_journal", ""),
+            "reason": item.get("reason") or record.get("why_recorded", ""),
+            "source_contribution": (
+                item.get("source_contribution")
+                or record.get("source_contribution")
+                or ""
+            ),
+            "scope_mismatch": item.get("scope_mismatch") or record.get("scope_mismatch", ""),
+            "independent_paper_rationale": (
+                item.get("independent_paper_rationale")
+                or record.get("independent_paper_rationale")
+                or ""
+            ),
+            "needed_to_split": item.get("needed_to_split") or [],
+            "ledger_category": category,
+        }
+    return list(seeds_by_fingerprint.values())[-limit:]
+
+
 def build_refill_prompt(limit: int, existing_papers: list[str],
-                        existing_proposals: list[str]) -> str:
+                        existing_proposals: list[str],
+                        ledger_seeds: list[dict[str, Any]] | None = None,
+                        *,
+                        context_mode: str = "local") -> str:
     schema = {
         "candidates": [
             {
@@ -106,11 +162,22 @@ def build_refill_prompt(limit: int, existing_papers: list[str],
             }
         ]
     }
+    seed_text = json.dumps(ledger_seeds or [], ensure_ascii=False, indent=2)
+    source_context = (
+        "Use the local research ledger seeds below as the source context. "
+        "They were emitted by Stage A when a mature result was out of scope "
+        "for a current manuscript. If no seed is strong enough, return fewer "
+        "than the limit."
+        if context_mode == "local"
+        else "The main theory paper attached to this ChatGPT Project is the source of truth."
+    )
     return (
         "You are the Oracle backlog producer for the Omega publication pipeline.\n"
-        "The main theory paper (already attached to this Project) is the source of truth. "
+        f"{source_context} "
         "We split it into journal-targeted papers; each split must be a coherent, "
         "publishable result, not a fragment.\n\n"
+        "Local research-ledger candidate seeds (use these; do not invent unrelated papers):\n"
+        f"{seed_text}\n\n"
         "Existing publication directories (do NOT propose duplicates of these):\n"
         f"{json.dumps(existing_papers, ensure_ascii=False, indent=2)}\n\n"
         "Existing refill candidates already on the queue (do NOT propose duplicates):\n"
@@ -207,14 +274,30 @@ def run_refill(*, project_url: str, limit: int, timeout: int, model: str,
     existing_papers = _existing_paper_names()
     queue = _load_existing_queue()
     existing_proposals = _existing_proposed_titles(queue)
-    prompt = build_refill_prompt(limit, existing_papers, existing_proposals)
+    ledger_seeds = _load_ledger_seed_candidates()
+    context_mode = "project" if project_url else "local"
+    prompt = build_refill_prompt(
+        limit,
+        existing_papers,
+        existing_proposals,
+        ledger_seeds,
+        context_mode=context_mode,
+    )
 
     if dry_run:
         print("=== DRY RUN — prompt that would be sent ===")
         print(prompt)
         print(f"\n=== existing_papers: {len(existing_papers)} ===")
         print(f"=== existing_proposals: {len(existing_proposals)} ===")
-        return {"status": "dry_run", "candidates": [], "prompt_chars": len(prompt)}
+        print(f"=== ledger_seeds: {len(ledger_seeds)} ===")
+        print(f"=== context_mode: {context_mode} ===")
+        return {
+            "status": "dry_run",
+            "candidates": [],
+            "prompt_chars": len(prompt),
+            "ledger_seeds": len(ledger_seeds),
+            "context_mode": context_mode,
+        }
 
     task_name = f"paper_refill_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     record = oracle_dispatch.dispatch_direct_record(
@@ -264,18 +347,14 @@ def run_refill(*, project_url: str, limit: int, timeout: int, model: str,
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Paper backlog refill (low-frequency producer)")
     parser.add_argument("--project-url", default="",
-                        help="ChatGPT Project URL with main paper attached. "
-                             "Required unless --dry-run.")
+                        help="Optional ChatGPT Project URL. If omitted, refill uses "
+                             "local research-ledger seeds as context.")
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT)
     parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--dry-run", action="store_true",
                         help="Skip Oracle call; just shape and print the prompt.")
     args = parser.parse_args(argv)
-
-    if not args.dry_run and not args.project_url:
-        print("[refill] --project-url required (or pass --dry-run)", file=sys.stderr)
-        return 2
 
     result = run_refill(
         project_url=args.project_url,

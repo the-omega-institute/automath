@@ -54,6 +54,102 @@ tab resumes polling without a manual refresh.
 | `/result/<id>` | GET | Poll for a completed result |
 | `/status` | GET | Inspect queue and browser-agent state |
 
+## Health Check
+
+Use the read-only health summarizer when the pipeline appears idle:
+
+```bash
+python tools/chatgpt-oracle/pipeline_health.py
+```
+
+It combines Oracle `/status`, the supervisor heartbeat, supervisor PID liveness,
+board discovery, refill state, and the manual submission queue. A `healthy_idle`
+report with `reason=gate_exhausted` means the supervisor and Oracle are alive but
+every paper is currently blocked, submitted, parked, or otherwise skipped by the
+board gate. In that case, the next action is either a listed manual submission
+candidate or refill; it is not a browser refresh or a hard restart. Refill can
+use `--refill-project-url` when a ChatGPT Project holds the source context, or
+local-context mode when only ordinary Oracle tabs are open. Local-context refill
+uses `tools/chatgpt-oracle/research_ledger/research_ledger.jsonl` split seeds
+and writes only `papers/publication/_refill_queue.json` for operator review; it
+does not auto-create papers or bypass overlap gates. The supervisor section also reports `poll_s` and
+`next_tick_eta_s` so an operator can distinguish a quiet 5-minute polling
+interval from a stale supervisor. When all candidates are skipped, the discovery
+section reports `skip_categories` to show whether the backlog is mostly
+submitted, archived or parked, overlap-deferred, stuck for review, publication
+ready, or blocked by Stage A. If a paper is marked `C-DONE` or `✅ 可投稿` in
+the full board but is missing from the manual submission queue, the report lists
+it under `ready_not_manual` instead of silently hiding it in the skipped count.
+
+For machine-readable monitoring:
+
+```bash
+python tools/chatgpt-oracle/pipeline_health.py --json
+```
+
+For scheduled checks, add `--check`: exit code `0` means healthy or runnable,
+`1` means attention needed, and `2` means blocked. A
+`ready_not_in_manual_queue` attention result is a board triage problem, not a
+process failure: either add the paper to the manual submission queue, mark it as
+submitted, or park it explicitly. Refill can still run in local-context mode
+while this attention remains, but the ready-not-manual paper should be resolved
+before treating the board as green.
+
+To persist a timestamped health sample without changing pipeline state, add
+`--snapshot`. This appends one JSONL record to
+`tools/chatgpt-oracle/supervisor_logs/health.jsonl`, which is a runtime artifact
+and should not be committed.
+
+To summarize recent samples:
+
+```bash
+python tools/chatgpt-oracle/pipeline_health.py --history 5
+```
+
+For a single ordered monitor command that first records a fresh sample and then
+prints the recent trend:
+
+```bash
+python tools/chatgpt-oracle/pipeline_health.py --snapshot --history 10
+```
+
+Add `--check` to that command when a scheduler should fail on the latest
+snapshot's status:
+
+```bash
+python tools/chatgpt-oracle/pipeline_health.py --snapshot --history 10 --check
+```
+
+If the command is used by an external scheduler, add a freshness bound so stale
+history cannot hide a stopped monitor:
+
+```bash
+python tools/chatgpt-oracle/pipeline_health.py --snapshot --history 10 --check --max-snapshot-age-s 120
+```
+
+## Supervisor Runtime
+
+`pipeline_supervisor.py` writes `tools/chatgpt-oracle/.pipeline_supervisor.pid`
+as JSON with the running PID, script name, and start timestamp. A second
+supervisor process checks this file before touching `.pipeline_supervisor.stop`;
+if the recorded PID is still alive, the duplicate exits and leaves the stop file
+intact. This prevents accidental parallel outer loops and preserves operator
+stop requests for the already-running supervisor.
+
+To stop the supervisor, create:
+
+```bash
+tools/chatgpt-oracle/.pipeline_supervisor.stop
+```
+
+The running supervisor removes the stop file during clean shutdown. If
+`pipeline_health.py --check` reports `supervisor_pid_missing`,
+`supervisor_pid_stale`, `supervisor_process_dead`, or
+`supervisor_pid_script_mismatch`, restart the supervisor at a safe boundary
+after confirming Oracle has no active queued or busy work. If it reports
+`supervisor_code_changed`, use the same safe-boundary restart so the running
+supervisor loads the updated code.
+
 ## Notes
 
 The distillation pipeline can use this bridge as an optional Stage R deep

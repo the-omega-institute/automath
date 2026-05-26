@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import sys
 import threading
 import time
@@ -98,7 +99,7 @@ SESSIONS_DIR = ORACLE_DIR / "sessions"
 QUEUE_STATE_PATH = ORACLE_DIR / "queue_state.json"
 RESULTS_RING_PATH = ORACLE_DIR / "results_ring.json"
 
-MAX_AGENTS = 3          # max concurrent browser tabs
+MAX_AGENTS = int(os.environ.get("ORACLE_MAX_AGENTS", "3"))  # max concurrent browser tabs
 TASK_TIMEOUT = 14400    # 4 hours — ChatGPT Pro can think 60+ min per task
 SESSION_RETENTION_S = 14 * 24 * 3600  # keep sessions on disk for 14 days
 RESULTS_RING_MAX = 200  # keep last N results across restarts
@@ -109,6 +110,7 @@ results: dict[str, dict] = {}             # task_id -> result
 pending_tasks: dict[str, dict] = {}       # agent_id -> task currently in flight
 dispatch_times: dict[str, float] = {}     # agent_id -> latest activity heartbeat
 active_start_times: dict[str, float] = {} # agent_id -> first dispatch timestamp
+agent_poll_times: dict[str, float] = {}   # agent_id -> latest /task poll
 sessions: dict[str, dict] = {}            # conversation_id -> session record
 _lock = threading.RLock()  # reentrant: handlers may chain helper calls under lock
 
@@ -421,6 +423,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                         or "default")
             resume_task_id = qs.get("resume", [""])[0]
             with _lock:
+                agent_poll_times[agent_id] = time.time()
                 if agent_id in pending_tasks:
                     task = pending_tasks[agent_id]
                     if resume_task_id and resume_task_id == task.get("task_id"):
@@ -456,10 +459,20 @@ class OracleHandler(BaseHTTPRequestHandler):
                     aid: {
                         "task_id": t.get("task_id", "?"),
                         "conversation_id": t.get("conversation_id", "") or "",
+                        "state": "busy",
                         "elapsed": int(time.time() - active_start_times.get(aid, time.time())),
                         "last_activity_s": int(time.time() - dispatch_times.get(aid, time.time())),
+                        "last_poll_s": int(time.time() - agent_poll_times.get(aid, time.time())),
                     }
                     for aid, t in pending_tasks.items()
+                }
+                idle_agents = {
+                    aid: {
+                        "state": "idle",
+                        "last_poll_s": int(time.time() - ts),
+                    }
+                    for aid, ts in agent_poll_times.items()
+                    if aid not in pending_tasks
                 }
                 queued_tasks = [
                     {
@@ -477,7 +490,12 @@ class OracleHandler(BaseHTTPRequestHandler):
                     "agents_busy": len(pending_tasks),
                     "max_agents": MAX_AGENTS,
                     "agents": agents_info,
-                    "active_recent_agents": list(agents_info.keys()),
+                    "idle_agents": idle_agents,
+                    "registered_agents": len(set(agent_poll_times) | set(pending_tasks)),
+                    "active_recent_agents": sorted(
+                        aid for aid, ts in agent_poll_times.items()
+                        if time.time() - ts < 120
+                    ),
                     "completed": len(results),
                     "active_sessions": len(sessions),
                     "diagnosis": self._diagnosis(),

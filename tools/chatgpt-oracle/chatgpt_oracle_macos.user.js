@@ -23,6 +23,7 @@
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
   const DEFAULT_MIN_RESPONSE_LENGTH = 1000;
+  const SHORT_RESPONSE_STALL_MS = 12 * 60 * 1000;
   const REQUIRE_FOREGROUND_TO_CLAIM = false;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
@@ -1198,6 +1199,8 @@
     let stableCount = 0;
     let lastLogTime = 0;
     let lastHeartbeat = 0;
+    let shortObservedSince = 0;
+    let shortObservedText = "";
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
@@ -1272,10 +1275,29 @@
           if (stableCount === 0) {
             log(`Too short (${responseText.length} < ${minResponseLength} chars) - waiting for complete response`);
           }
+          if (!generating) {
+            if (responseText === shortObservedText) {
+              if (!shortObservedSince) shortObservedSince = Date.now();
+              const shortStallMs = Date.now() - shortObservedSince;
+              if (shortStallMs >= SHORT_RESPONSE_STALL_MS) {
+                throw new Error(
+                  `Response extraction stalled below minimum (${responseText.length} < ${minResponseLength} chars for ${Math.floor(shortStallMs / 1000)}s)`
+                );
+              }
+            } else {
+              shortObservedText = responseText;
+              shortObservedSince = Date.now();
+            }
+          } else {
+            shortObservedSince = 0;
+            shortObservedText = "";
+          }
           stableCount = 0;
           lastText = "";
           continue;
         }
+        shortObservedSince = 0;
+        shortObservedText = "";
 
         // CRITICAL: never accept a prompt echo as a response.
         if (looksLikePromptEcho(responseText)) {
