@@ -82,3 +82,25 @@ The next required artifact is a nontrivial stored 728-frontier transporter:
 Continue the level-3 / `F_3` Fox-Jacobian route. Do not return to the old
 `T_d` route or the retired KP2 bridge unless a new source-grade presentation
 artifact appears.
+
+
+## Monitoring Update 2026-05-26 19:03 SGT
+
+The KP level-3 route has its first concrete source-matrix shaped payload.
+
+New stage result:
+
+- Oracle supplied an `A2=T_{a2}` block on `W_chi0` with basis `[a2,b2,a3,b3]`.
+- The claimed action is `b2 -> a2+b2`, represented by the column-convention matrix `[[1,1,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]`.
+- This is the first useful move beyond repeating that finite `Sp_6(F_3)` shadows do not determine actual Fox/Prym transport.
+
+Why it is still not closed:
+
+- The block is not locally replayed from exact source windows.
+- Missing checks remain: explicit `pi_1` automorphism, evaluated Fox-Jacobian, `d1/d2` descent, quotient-basis derivation, source citations tied to exact pages/windows, and a materialized `kp_level3_source_matrices.json` entry.
+- The global 728-sector still needs transporter blocks beyond this first `A2` fiber action.
+
+Next useful action:
+
+- Certify or falsify the submitted `A2` block locally before asking for more framework prose.
+- If accepted, extend to the next required generator/transporter block in `kp_level3_source_matrices_v1`.

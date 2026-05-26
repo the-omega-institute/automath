@@ -59,3 +59,25 @@ Stop asking for another prose obstruction. The next useful work is a real
 Sage/Magma/Python computation that emits the divisor-basis certificate or the
 single-row point-count audit. Without one of those artifacts, the C4 frontier
 does not move.
+
+
+## Monitoring Update 2026-05-26 19:03 SGT
+
+The primitive C4 frontier has a sharper live obstruction than the original single-row audit framing.
+
+Durable progress:
+
+- The current useful invariant is `d4 = #C_L2(F_11^4) - #C_L(F_11^4) mod 8`.
+- Previously audited primitive C4 rows satisfy `d4 == 0 mod 8`.
+- The PE2/sign finite-window survivor `(c1,c2,c3,c4)=(0,42,0,683)` has `d4 == 4 mod 8`, so a global `d4 == 0 mod 8` theorem for actual primitive C4 torsors would eliminate the current survivor.
+- The evaluator has begun treating the `d4 mod 8` torsor proof route as a current anchor, but this still requires local replay before closure.
+
+Unaccepted claims:
+
+- A claimed fourth row `primitive_c4_fixed_0011_22` duplicates the already seen count/coefficient pattern `(0,24,0,350)` and is not evidence until a target-local verifier proves smooth normalization, primitive C4 status, point counts, and non-duplication against the audited rows.
+
+Next useful action:
+
+- Locally replay the claimed `d4 mod 8` torsor proof first.
+- If that fails, require the first failed atom rather than broader prose.
+- If a new row is claimed, require a parseable verifier with equations, counts over `F_11^n` for `n=1,2,3,4`, Prym coefficients, PE2/sign flags, and duplicate-row check.
