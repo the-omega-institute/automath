@@ -1,0 +1,61 @@
+# T-32 Primitive C4 Frontier
+
+Date: 2026-05-26
+
+Status: not closed. This note records the durable progress and failed routes for
+`cand_litt_common_finite_etale_cover` so the branch does not lose the current
+mathematical frontier.
+
+## Stable Progress
+
+The earlier finite cover search has been reduced to a concrete primitive C4
+frontier.
+
+- Degree 1 is excluded by the supersingular/ordinary mismatch for the Fermat
+  quartic witness versus the trace-1 elliptic target.
+- Degree 2 is exhausted over the nonzero `J_Y[2]` classes.
+- The extended order-3 / `F_121` Kummer ledger is closed.
+- The first uncontrolled family is now primitive cyclic order-4 covers.
+- The C4 normal-form layer has a bounded shape: primitive cyclic order-4
+  subgroups reduce to a finite representative audit, with the current focus on
+  `primitive_c4_fixed_0000_11`.
+- A representation-theoretic narrowing was found: if the trace-1 elliptic
+  factor appears in a primitive C4 Prym, it must appear with even multiplicity.
+  The relevant audit target is therefore `P_E(T)^2`, not merely `P_E(T)`.
+
+## Failed Or Insufficient Routes
+
+The following routes should not be repeated as if they were still open proof
+attempts.
+
+- Cusp-line single-ratio ansatz: rejected. It does not hit the required
+  primitive C4 trace vector.
+- Cusp-line double-ratio ansatz: rejected. The bounded Frobenius-fixed scan
+  gives no candidate with the required condition.
+- Conditional C4 module arithmetic: useful as a manifest, but insufficient
+  without tying the normal form to the actual Fermat-quartic `J_Y[4]`.
+- Claimed `primitive_c4_single_row_audit.json` deliverables: not accepted unless
+  the artifact is parseable and includes actual equations/descent and point
+  counts. Recent Oracle responses restated the gate but did not provide a valid
+  audit file.
+
+## Current Gap
+
+The smallest unresolved step is one of the following.
+
+- Produce a target-local `J_Y[4]` divisor-basis certificate for
+  `Y/F_11: x^4 + y^4 + z^4 = 0`, including explicit divisor classes,
+  exact order/generation, Weil pairing, Frobenius relations, and reproducible
+  arithmetic hashes.
+- Or produce a parseable single-row primitive C4 audit for
+  `primitive_c4_fixed_0000_11`, with explicit `F_11` equations/descent for
+  `C_L: T4^4 = f_L` and `C_L2: T2^2 = f_L`, point counts over `F_11^n` for
+  `n=1,2,3,4`, the resulting trace vector, the reconstructed primitive Prym
+  polynomial, and `P_E^2` / sign-guard booleans.
+
+## Next Useful Action
+
+Stop asking for another prose obstruction. The next useful work is a real
+Sage/Magma/Python computation that emits the divisor-basis certificate or the
+single-row point-count audit. Without one of those artifacts, the C4 frontier
+does not move.
