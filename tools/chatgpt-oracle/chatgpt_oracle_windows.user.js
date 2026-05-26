@@ -1233,6 +1233,7 @@
     return (t || "")
       .replace(/^ChatGPT\s*(?:said|说)[：:]?\s*/i, "")
       .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
+      .replace(/^(?:Show moreShow less\s*)+/i, "")
       .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
       .trim();
   }
