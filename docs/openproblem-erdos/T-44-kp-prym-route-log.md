@@ -1,0 +1,84 @@
+# T-44 KP/Prym Route Log
+
+Date: 2026-05-26
+
+Status: not closed. This note records the useful progress and retired routes
+for `problemsilike_04`.
+
+## Retired Boundary-Twist Route
+
+The original `T_d` / accepted-14 boundary-twist route should be considered
+retired unless a genuinely new presentation certificate appears.
+
+What failed:
+
+- Finite `Sp_6(F_3)` identities cannot identify the named mapping-class
+  boundary twist.
+- The word `(A1 B1)^6` is circular for the intended chain relation.
+- The complementary word `(A2 B2 C2 B3)^10` has useful finite-shadow behavior,
+  but it lacks a source-anchored proof that its boundary is the named
+  `boundary(N(a1 union b1))`.
+- Massuyeau / Farb-Margalit windows support generic chain relations and naming
+  conventions, but not the specific accepted-14 boundary identity.
+
+Required artifact if this route is ever reopened:
+
+- a source diagram extraction;
+- or a Wajnryb/Gervais/Lickorish accepted-14 presentation word;
+- or a serialized normal-closure / Tietze certificate for the named internal
+  twist.
+
+## KP2 Route Outcome
+
+The KP2 stabilizer-fiber bridge for `rho_odd_theta_27` has been narrowed and
+effectively excluded for the checked route.
+
+Stable points:
+
+- Finite `Sp_6(F_2)` arithmetic for `rho_odd_theta_27` and the odd-theta
+  projection was checked.
+- The KP2 displayed fiber `W` does not provide the required finite target map.
+- The square-defect lemma gives the route-local obstruction: if target
+  generators are involutions, any stabilizer-lift map from `W` to the finite
+  target factors through `W / sum im(s_i^2-I)`.
+- For the checked KP2 fiber, this quotient is zero, so the KP2 stabilizer-fiber
+  bridge has multiplicity zero for this target.
+
+Scope:
+
+- This does not exclude all KP/Prym constructions.
+- It only retires the checked KP2 stabilizer-fiber bridge.
+
+## Current Level-3 / F3 Direction
+
+The active route is now the actual `KP_level3/F_3` Fox/Prym fiber in the
+728-sector.
+
+Recent progress:
+
+- The first easy single-transporter certificate was produced with `t=B1`.
+- It sends `chi0=e0` to `chi1=[1,1,0,0,0,0]`.
+- In that easy case `F_t=I_4`, the complement basis remains
+  `a2,b2,a3,b3`, and the cubic-defect conjugacy identity checks.
+
+Why this is insufficient:
+
+- The `B1` transporter is too easy: the fiber map is identity and the tested
+  stabilizer generators do not change in a meaningful way.
+- It does not prove propagation across the 728 frontier.
+
+## Current Gap
+
+The next required artifact is a nontrivial stored 728-frontier transporter:
+
+- `F_t` should be non-identity on the actual Fox/Prym fiber;
+- at least one `t s t^-1` should be nontrivial for
+  `s in {A2,B2,A3,B3}`;
+- the packet must include bases, `F_t`, `F_t^-1`, transported stabilizer
+  matrices, and a runnable verifier for the cubic-defect conjugacy identities.
+
+## Next Useful Action
+
+Continue the level-3 / `F_3` Fox-Jacobian route. Do not return to the old
+`T_d` route or the retired KP2 bridge unless a new source-grade presentation
+artifact appears.
