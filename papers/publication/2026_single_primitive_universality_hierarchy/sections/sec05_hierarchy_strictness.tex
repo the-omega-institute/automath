@@ -99,9 +99,9 @@ domain.
 
 \begin{lemma}[Richardson absolute-value interface]
 \label{lem:richardson-punctured-mu-reduction}
-Richardson's undecidability theorem applies to any concrete total
-absolute-value representative whose real-domain identity is supplied to
-the translation.  More precisely, his
+Richardson's undecidability theorem applies after fixing any one concrete
+total completion of the punctured absolute-value representative whose
+real-domain identity is supplied to the translation.  More precisely, his
 identity-problem theorem on p.~520 assumes a real expression system whose
 represented functions contain \(\log 2\), \(\pi\), \(e^x\), \(\sin x\),
 the rational constants and identity function, are effectively closed
@@ -110,8 +110,8 @@ under \(+,-,\times\) and composition, and contain a unary function
 \[
   \mu(x)=|x|\qquad(x\ne0)
 \]
-\cite[pp.~514, 520, Theorem~2]{Richardson1968}.  The theorem therefore covers the special
-choice
+\cite[pp.~514, 520, Theorem~2]{Richardson1968}.  Instantiating that
+hypothesis with the concrete choice
 \[
   \mu_0(x)=\sqrt{x^2}\qquad(x\in\RR),
 \]
@@ -136,9 +136,20 @@ Condition (2) asks only for a function \(\mu\in E^*\) with
 then that, if conditions (1) and (2) hold, the identity problem for
 \((E,E^*)\) is unsolvable.  No hypothesis or proof step specifies
 \(\mu(0)\); the reduction uses only the displayed off-zero condition.
-Thus the theorem is uniform over all completions of that punctured
-absolute-value symbol, and the total completion
-\(\mu_0(x)=\sqrt{x^2}\) is one admissible instance.  The semantics used
+Equivalently, for any chosen real number \(c\), the same theorem applies
+to the concrete total completion
+\[
+  \mu_c(x)=
+  \begin{cases}
+    |x|,&x\ne0,\\
+    c,&x=0,
+  \end{cases}
+\]
+because \(\mu_c\) satisfies exactly Richardson's condition (2).  This is
+not a further uniformity assertion about a family of reductions: it is
+the original cited theorem instantiated with one admissible function
+\(\mu_c\).  In particular the total completion
+\(\mu_0(x)=\sqrt{x^2}\) is an admissible instance.  The semantics used
 below are therefore the original real single-valued partial-function
 semantics: equality means equality at every real point at which the two
 sides are defined, and no multivalued branch convention is imported from
@@ -1567,6 +1578,62 @@ unary-operation estimate.  This proves the
 claimed expression-tree and substitution-depth bounds.
 \end{proof}
 
+\begin{proposition}[Quantitative locked Richardson interface]
+\label{prop:richardson-translation-bookkeeping}
+Assume \((H_{\mathcal W})\).  The translation
+\(E\mapsto\tau(E)\) of \Cref{lem:richardson-translation} has a constant
+\(K\ge2\), depending only on the fixed witness library of
+\Cref{cor:eml-witness-locking}, with the following properties for every
+expanded Richardson expression tree \(E\):
+\[
+  |\tau(E)|_{\eml}\le K^{2|E|},
+  \qquad
+  \operatorname{depth}\tau(E)\le K|E| .
+\]
+The real domains preserved by the translation are exactly these branch
+admissibility clauses: \(E\), \(A\), \(S\), \(N\), and \(M\) are used on
+all real inputs of their arities; \(L\), \(T\), \(R_+\), and \(G\) are
+used only on positive real inputs; \(J(u,v)\) is used only when
+\(v\ne0\); \(W_{\sin}\) is used on all real inputs;
+\(W_{\sqrt{}}\) is used on \(\RR_{\ge0}\); and
+\(\Abs(u)=W_{\sqrt{}}(M(u,u))\) is used on all real inputs.  Therefore
+\(\dom\llbracket\tau(E)\rrbracket_{\RR}=\dom(E)\), and the only domain
+tests introduced by translation are the same positive-logarithm,
+nonzero-division, composition, and nonnegative-square-root tests already
+present in these listed clauses.
+\end{proposition}
+
+\begin{proof}
+The domain list is the union of the real-domain interfaces proved in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library,lem:eml-zero-absolute-witness,cor:eml-witness-locking}.
+The important point for the absolute-value symbol is that its square-root
+argument is always \(M(u,u)=u^2\in\RR_{\ge0}\); hence zeros introduce no
+extra branch exception.  In a composition \(G\circ F\), the outer term is
+defined exactly when the already translated inner value lies in
+\(\dom(G)\), so the composition domain is the original Richardson partial
+domain and not a new EML branch condition.  This gives the asserted
+domain equality by the same structural induction as
+\Cref{lem:richardson-translation}.
+
+For the quantitative estimates, choose \(K\) larger than the size, depth,
+and input-leaf multiplicity of every finite witness in
+\(\mathcal W_{\mathcal R}\), and larger than the corresponding constants
+for the fixed expansion scheme for integer and rational constants.  A
+primitive unary or binary constructor replaces its children by a fixed
+tree with at most \(K\) overhead and at most \(K\) copies of each input;
+after increasing \(K\) once, this sends child bounds
+\(|\tau(E_i)|_{\eml}\le K^{2|E_i|}\) to
+\(|\tau(E)|_{\eml}\le K^{2|E|}\) and increases depth by at most \(K\).
+For a syntactic composition \(G\circ F\), substitution gives
+\(|\tau(G\circ F)|_{\eml}\le |\tau(G)|_{\eml}|\tau(F)|_{\eml}\) and depth
+at most the sum of the two depths.  Since the expanded source size is
+additive up to the root node, these inequalities give
+\(|\tau(G\circ F)|_{\eml}\le K^{2|G\circ F|}\) and
+\(\operatorname{depth}\tau(G\circ F)\le K|G\circ F|\).  The variable and
+constant cases are covered by the choice of \(K\), so induction proves
+the bounds.
+\end{proof}
+
 \begin{theorem}[Conditional finite Richardson witness package]
 \label{thm:conditional-richardson-witness-package}
 Assume \((H_{\mathcal W})\).  The Richardson obstruction used in this
@@ -1579,8 +1646,10 @@ the internally proved core EML witnesses
 \(\Abs(u)=W_{\sqrt{}}(M(u,u))\).  This package supplies an effective
 translation of Richardson's language \(\mathcal R\) into pure EML terms
 over \((\eml,1)\), preserves the represented partial real function and
-its real domain, and uses the three long printed roots only through the
-three real-domain identities in \((H_{\mathcal W})\).  Consequently the
+its real domain, satisfies the size and substitution-depth bounds of
+\Cref{prop:richardson-translation-bookkeeping}, and uses the three long
+printed roots only through the three real-domain identities in
+\((H_{\mathcal W})\).  Consequently the
 translated Richardson fragment has no computable normalizer into finite
 objects with decidable equality whose comparison with the translated
 zero expression decides identity to zero on the transported real domain.
@@ -1598,8 +1667,9 @@ including their sizes, depths, and fingerprints, is proved in
 Under \((H_{\mathcal W})\),
 \Cref{cor:eml-witness-locking} gives the finite Richardson witness
 library and \Cref{lem:richardson-translation} gives the effective
-translation, real-domain preservation, value preservation, and the
-uniform size and depth bounds.  The only occurrence of the square-root
+translation, real-domain preservation, and value preservation, while
+\Cref{prop:richardson-translation-bookkeeping} gives the uniform size,
+depth, and branch-admissibility bookkeeping.  The only occurrence of the square-root
 root in the translation is through \(\Abs(u)=W_{\sqrt{}}(M(u,u))\); by
 \Cref{lem:eml-real-witness-library}, \(M(u,u)=u^2\ge0\), so this use is
 inside the nonnegative real domain specified in \((H_{\mathcal W})\).
