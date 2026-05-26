@@ -23,7 +23,7 @@
 |------|------|------|------|
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory；备选：Operators and Matrices / Complex Analysis and Operator Theory | JST 已拒 2026-05-21；David Damanik/EditFlow：editors concluded it was not suitable for Journal of Spectral Theory；无技术审稿意见。Codex-only retarget：IEOT fit=8/10；no-Oracle Stage A 已推进到第 8 轮并多次本地增补，但最终 A2 只产生 +313 chars 且无新增 theorem，被 deterministic fake-extension gate 拦截 | 在原文件夹中改，不新建文件夹；需要人工 theorem-deepening/重写 operator-theory framing 后再回 Stage A；暂不触发 Oracle |
 | `upperfiber` | Fibonacci Quarterly | RJ 已拒；RJ 反馈：贡献偏形式包装、算术深度不足，且 n=30 数据不支持“八类型”说法；RINT 是重复历史路线 | 在原 upper-fibers/FQ 文件夹中改，不新建文件夹；目标 FQ；从 Stage A 重新深改，修正 n=30/八类型并加入新实质结果 |
-| `detector-shells` | 待重新选物理/数学物理期刊 | GRG 和 JPhysComm 都已拒；JPhysComm 版本是 GRG route 后续版本；需要带着两次拒稿背景重新处理 | 在现有 `2026_detector_shells_click_record_kms_jphyscomm` 文件夹中改；从 Stage A 重新走，prompt 需附 GRG/JPhysComm 拒稿背景和应用/期刊适配问题 |
+| `2026_detector_shells_click_record_kms_jphyscomm` | 待重新选物理/数学物理期刊 | canonical merged rewrite route；GRG 和 JPhysComm 都已拒；JPhysComm 版本是 GRG route 后续版本；overlap resolved；需要带着两次拒稿背景重新处理 | 在现有文件夹中改；从 Stage A 重新走，prompt 需附 GRG/JPhysComm 拒稿背景和应用/期刊适配问题；不拆成两篇 |
 | `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS / symbolic dynamics venue | SIADS 已拒；理由是缺少应用影响，不是技术审稿；建议转投。当前 ETDS 版本与 Zeckendorf-fold/Sturmian-Parry 稿高度重叠 | 合并 `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` 素材，从 Stage A 进入深改；不要拆成两篇同时投 |
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | Journal of Functional Analysis | Oracle 审稿门已过；还不是投稿包 | 进入最终投稿确认 |
 | `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | Oracle 审稿门已过；还不是投稿包 | 进入最终投稿确认 |
@@ -50,6 +50,7 @@
 | `submitted_2026_folded_rotation_histogram_etds` | ETDS | 这条就是 folded-histograms/SIADS 拒稿路线的历史记录；已并入 canonical folded-histograms route | 不独立处理 |
 | `submitted_2026_resolution_folding_core_symbolic_dynamics_jnt` | Journal of Number Theory | 已拒；后续由 DCDS-A `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` 转投承接 | DCDS-A 在审期间不独立处理 |
 | `submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp` | Journal of Theoretical Probability | 已拒；后续由 `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` 转投承接 | tilt-dynamics JTP 在审期间不独立处理 |
+| `submitted_2026_shell_geometry_detector_thermality_kms_grg` | GRG | rejected history route；parked；superseded by canonical active route `2026_detector_shells_click_record_kms_jphyscomm` | GRG/JPhysComm both rejected；do not process independently；background feeds the canonical detector-shells rewrite |
 | `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | 待选 | 与 DCDS-A / folded-histograms / Zeckendorf-fold routes 重叠 | 暂停 |
 | `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | Dynamical Systems | 与 folded symbolic dynamics family 重叠 | 暂停 |
 | `2026_golden_mean_folding_stable_types_auditable_addressing` | 待选 | 与 DCDS-A three-window route 重叠 | 等 DCDS-A 反馈 |
