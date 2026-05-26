@@ -104,3 +104,12 @@ Next useful action:
 
 - Certify or falsify the submitted `A2` block locally before asking for more framework prose.
 - If accepted, extend to the next required generator/transporter block in `kp_level3_source_matrices_v1`.
+
+
+## Monitoring Update 2026-05-26 21:26 SGT
+
+No new accepted T-44 progress was produced since the previous monitoring update.
+
+- Recent evaluator output says Oracle supplied another `B2=T_{b2}` source-style block on `W_chi0`.
+- That block matches already replayed B2 evidence and does not answer the active request for `A3=T_{a3}`.
+- The smallest active gap remains a citation-grade `A3` block in basis `[a2,b2,a3,b3]`, matching or correcting `[[1,0,0,0],[0,1,0,0],[0,0,1,1],[0,0,0,1]]`, with source locator, `pi_1` lift, Fox/Jacobian derivation, and named-vector sanity check.

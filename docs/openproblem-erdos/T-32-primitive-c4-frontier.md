@@ -81,3 +81,12 @@ Next useful action:
 - Locally replay the claimed `d4 mod 8` torsor proof first.
 - If that fails, require the first failed atom rather than broader prose.
 - If a new row is claimed, require a parseable verifier with equations, counts over `F_11^n` for `n=1,2,3,4`, Prym coefficients, PE2/sign flags, and duplicate-row check.
+
+
+## Monitoring Update 2026-05-26 21:26 SGT
+
+No new accepted T-32 closure evidence was produced since the prior monitoring update.
+
+- The newest visible Oracle content repeats the fourth-row claim `primitive_c4_fixed_0011_22` with counts matching the earlier `(0,24,0,350)` pattern.
+- This remains unaccepted until local replay proves the row is a valid primitive C4 torsor, recomputes smooth normalized counts, and checks non-duplication against prior audited rows.
+- The main mathematical direction remains the global `d4 mod 8` torsor proof, not additional prose or duplicate row claims.

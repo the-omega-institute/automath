@@ -67,3 +67,29 @@ source-grade local replay for:
 Do not search for another toy example until the A5 source chain is replayed.
 The next useful commit should be a source-verifier packet mapping every A5
 claim to primary citations and local checks.
+
+
+## Monitoring Update 2026-05-26 21:26 SGT
+
+The T-43 branch has a new locally verified stage artifact, but the problem is still not closed.
+
+New durable artifact:
+
+- `tools/community-outreach/targets/problemsilike_02/t43_research_note.md` now exists in the main worktree as a standalone negative-boundary memo for Litt #2.
+- `python3 tools/community-outreach/targets/problemsilike_02/t43_research_note_field_audit.py --write-results` passed with `PASS_T43_RESEARCH_NOTE_FIELD_AUDIT`.
+- Payload sha256: `27dd2ac294f380075b05a354cd75ac22a075a5faa99948fb92a5691a06410010`.
+
+Scope:
+
+- The memo explicitly does not claim to solve Litt #2 in either direction.
+- It records the missing theorem boundary for arbitrary E-G geometric-origin summands/subquotients with almost-all zero `p`-curvature.
+- It preserves the residual one-object route through same-`W` rigidity, all-closed-points zero `p`-curvature model, and strong integrality.
+
+Residual caveat:
+
+- `post_tick149_research_note_readiness_check.py --write-results` still fails on the newest Oracle packet because the packet lacks the anchor phrase `current sources support conditional one-object closure only`. This is a packet-readiness failure, not a failure of the local `t43_research_note.md` field audit.
+
+Next useful action:
+
+- Treat T-43 as a locally recordable negative-boundary result unless a new theorem-numbered primary source appears.
+- Do not continue the abstract arbitrary-summand theorem search by repetition.

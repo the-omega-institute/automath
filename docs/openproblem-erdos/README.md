@@ -52,3 +52,17 @@ Current strongest stage results have shifted since the initial notes.
 - T-43 remains a negative theorem-boundary result: no theorem-numbered primary source has been identified proving finite monodromy for arbitrary E-G geometric-origin summands/subquotients with almost-all zero `p`-curvature.
 
 Pipeline status at this checkpoint was active but imperfect: all three workers were assigned tasks, while the T-32 browser agent was marked stale by the supervisor. No raw runtime artifacts are recorded here.
+
+
+## Monitoring Update 2026-05-26 21:26 SGT
+
+Current pipeline health changed from the previous checkpoint: the supervisor is idle with `queue_length=0` and `agents_busy=0/3`, while all three browser poll agents remain recent and compatible. This is not a browser-agent crash, but the automated loop is not currently feeding new work.
+
+New durable stage result:
+
+- T-43 now has a local standalone negative-boundary memo at `tools/community-outreach/targets/problemsilike_02/t43_research_note.md` in the main worktree. The field audit passed with `PASS_T43_RESEARCH_NOTE_FIELD_AUDIT` and payload sha256 `27dd2ac294f380075b05a354cd75ac22a075a5faa99948fb92a5691a06410010`.
+
+No closure change:
+
+- T-32 remains at the primitive C4 `d4 mod 8` frontier. The latest fourth-row claim is still not accepted without local replay and duplicate-row checking.
+- T-44 remains on the KP level-3 source-matrix route. Recent turns repeated B2 evidence rather than delivering the active A3 block.
