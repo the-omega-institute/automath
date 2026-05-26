@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from contextlib import redirect_stdout
 from fractions import Fraction
+from pathlib import Path
+import sys
 
 
 J = 3
@@ -79,7 +82,7 @@ R15_TERMS = [
 ]
 
 
-def main() -> None:
+def write_certificate() -> None:
     e7_lo, e7_hi = print_term_block("E7", E7_TERMS)
     r15_lo, r15_hi = print_term_block("R15", R15_TERMS)
 
@@ -151,6 +154,92 @@ def main() -> None:
         "Pi_rho",
     )
     print("  coarse windows verified")
+
+    q8_lo, q8_hi = print_term_block(
+        "Q8",
+        [
+            ("-(1/2) log(2)", Fraction(-1, 2), Fraction(2, 1)),
+            ("-(1/4) log(8/7)", Fraction(-1, 4), Fraction(8, 7)),
+            ("-(1/8) log(128/127)", Fraction(-1, 8), Fraction(128, 127)),
+            ("-(1/16) log(32768/32767)", Fraction(-1, 16), Fraction(32768, 32767)),
+        ],
+    )
+    b_epsilon = Fraction(1, 16) * Fraction(1, 2**31) / (1 - Fraction(1, 2**32))
+
+    s32_terms = []
+    for k, a_k, b_k in [
+        (1, 0, 1),
+        (2, -1, 0),
+        (3, -1, 1),
+        (4, -1, 0),
+        (8, -1, 0),
+        (9, -1, 1),
+        (16, -1, 0),
+        (27, -1, 1),
+        (32, -1, 0),
+    ]:
+        if k != 1 and a_k:
+            s32_terms.append(
+                (
+                    f"({a_k}/{k}) log(1-2^(1-{k}))^(-1)",
+                    Fraction(a_k, k),
+                    Fraction(1, 1) / (1 - Fraction(1, 2 ** (k - 1))),
+                )
+            )
+        if b_k:
+            s32_terms.append(
+                (
+                    f"(-{b_k}/{k}) log(1+2^(-{k}))",
+                    Fraction(-b_k, k),
+                    1 + Fraction(1, 2**k),
+                )
+            )
+    s32_lo, s32_hi = print_term_block("S32", s32_terms)
+    b_rho = Fraction(5, 33) * Fraction(1, 2**32)
+
+    f_epsilon_lo = q8_lo - b_epsilon
+    f_epsilon_hi = q8_hi
+    f_rho_lo = s32_lo - b_rho
+    f_rho_hi = s32_hi + b_rho
+
+    print("Fixed-label total certificates")
+    print(f"  Q8 lower = {fmt(q8_lo)}")
+    print(f"  Q8 upper = {fmt(q8_hi)}")
+    print(f"  B_epsilon = {fmt(b_epsilon)}")
+    print(f"  F_epsilon lower = {fmt(f_epsilon_lo)}")
+    print(f"  F_epsilon upper = {fmt(f_epsilon_hi)}")
+    print(f"  S32 lower = {fmt(s32_lo)}")
+    print(f"  S32 upper = {fmt(s32_hi)}")
+    print(f"  B_rho = {fmt(b_rho)}")
+    print(f"  F_rho lower = {fmt(f_rho_lo)}")
+    print(f"  F_rho upper = {fmt(f_rho_hi)}")
+    print()
+
+    check_window(
+        f_epsilon_lo,
+        f_epsilon_hi,
+        Fraction(-381, 1000),
+        Fraction(-380, 1000),
+        "F_epsilon",
+    )
+    check_window(
+        f_rho_lo,
+        f_rho_hi,
+        Fraction(-923, 1000),
+        Fraction(-922, 1000),
+        "F_rho",
+    )
+    print("  fixed-label windows verified")
+
+
+def main() -> None:
+    if len(sys.argv) == 3 and sys.argv[1] == "--write-cert":
+        out_path = Path(sys.argv[2])
+        with out_path.open("w", encoding="ascii", newline="\n") as handle:
+            with redirect_stdout(handle):
+                write_certificate()
+        return
+    write_certificate()
 
 
 if __name__ == "__main__":
