@@ -283,6 +283,50 @@ step requires a bounded-window carry rule, an online transducer, or an
 intrinsic digit-local multiplication algorithm.
 \end{proof}
 
+\begin{proposition}[Value transport is exactly the arithmetic used]
+\label{prop:value-transport-exact-interface}
+Let \(\mathcal A\) be the smallest class of algorithms on
+\(X_{\infty}^{\mathrm{fin}}\) obtained from the following three routines:
+computing \(\Val(c)\), applying ordinary integer arithmetic to the
+computed values, and returning the greedy Zeckendorf normal form
+\(\Val^{-1}(n)\).  Then \(\oplus\), \(\otimes\), the stable normalizer
+\(\mathrm{NF}_{\infty}\), and all compiled operations used in
+\Cref{thm:zeckendorf-protocol-univ} belong to \(\mathcal A\).  Conversely,
+the proof of \Cref{thm:zeckendorf-protocol-univ} uses no operation on
+Zeckendorf strings except members of this value-transport class and the
+literal equality test on finite legal words.
+
+Thus the protocol theorem is a computable address/readout theorem.  It is
+not a bounded-window, online, finite-state, or intrinsic digit-local
+arithmetic theorem for Zeckendorf multiplication.
+\end{proposition}
+
+\begin{proof}
+By definition,
+\(c\oplus d=\Val^{-1}(\Val(c)+\Val(d))\) and
+\(c\otimes d=\Val^{-1}(\Val(c)\Val(d))\), so both operations are in
+\(\mathcal A\).  For a raw finite binary word \(\omega\), the stable
+normalizer first computes the integer
+\(N(\omega)=\sum_k \omega_kF_{k+1}\) and then returns
+\(\Val^{-1}(N(\omega))\), hence it is also in \(\mathcal A\).  Literal
+equality of normal forms is decidable because a normal form is a finite
+legal word, with trailing zeroes suppressed.
+
+The remaining assertions in \Cref{thm:zeckendorf-protocol-univ} are
+readout identities.  At level zero the normal form \(c_n\) is sent to
+\(g^{\circ n}\), and the equality
+\(g^{\circ(m+n)}=g^{\circ m}\circ g^{\circ n}\) is a semantic identity in
+\(\End(A)\).  At level one the normal form \(c_n\) is sent to
+\(I_n\), and \(I_{mn}=I_m\circ I_n\) is a semantic identity in
+\(\End(\End(A))\).  Neither step manipulates Zeckendorf digits by a local
+carry rule; it only reads the value already computed by the
+value-transport routines and applies \Cref{thm:two-level}.  Inspecting
+the proof of \Cref{thm:zeckendorf-protocol-univ} shows that these are all
+the compiled operations and tests used there.  Therefore the theorem has
+exactly the advertised value-transport interface and no stronger
+digit-local arithmetic content.
+\end{proof}
+
 \subsection{Composition as the primitive}
 \label{ssec:sole}
 

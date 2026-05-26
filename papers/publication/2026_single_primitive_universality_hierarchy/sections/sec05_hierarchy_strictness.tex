@@ -99,8 +99,9 @@ domain.
 
 \begin{lemma}[Richardson absolute-value interface]
 \label{lem:richardson-punctured-mu-reduction}
-Richardson's undecidability theorem applies to the concrete total
-absolute-value representative used in this paper.  More precisely, his
+Richardson's undecidability theorem applies to any concrete total
+absolute-value representative whose real-domain identity is supplied to
+the translation.  More precisely, his
 identity-problem theorem on p.~520 assumes a real expression system whose
 represented functions contain \(\log 2\), \(\pi\), \(e^x\), \(\sin x\),
 the rational constants and identity function, are effectively closed
@@ -114,11 +115,14 @@ choice
 \[
   \mu_0(x)=\sqrt{x^2}\qquad(x\in\RR),
 \]
-which agrees with \(|x|\) off zero.  Consequently, after the EML
-witness \(\Abs(F)=W_{\sqrt{}}(M(F,F))\) is constructed in
-\Cref{lem:eml-zero-absolute-witness}, replacing every occurrence of
-\(\mu(F)\) by \(\Abs(F)\) is an effective reduction from
-Richardson's identity problem to the concrete EML-translated fragment.
+which agrees with \(|x|\) off zero.  Consequently, after either a finite
+replacement square-root witness with the displayed real-domain identity
+is supplied or the printed-root hypothesis \((H_{\mathcal W})\) is
+assumed, replacing every occurrence of \(\mu(F)\) by
+\(\Abs(F)=R(M(F,F))\) is an effective reduction from Richardson's
+identity problem to the corresponding concrete EML-translated fragment.
+For the printed roots, \(R=W_{\sqrt{}}\) and this conclusion is
+conditional exactly on \((H_{\mathcal W})\).
 \end{lemma}
 
 \begin{proof}
@@ -142,13 +146,16 @@ the complex EML presentation.
 
 It remains only to check that the representative used in the EML
 translation is exactly this instance and not a stronger, unproved
-variant.  Let \(F\) be any already translated real subexpression.  The
-multiplication macro below gives \(M(F,F)=F^2\) on real inputs, and the
-printed square-root witness is used only on nonnegative real arguments.
-Therefore, for every real \(t\) in the domain of \(F\),
+variant.  Let \(R\) be a supplied finite square-root witness satisfying
+\(R(t)=\sqrt t\) on \(\RR_{\ge0}\); in the printed-root route this is
+\(R=W_{\sqrt{}}\) under \((H_{\mathcal W})\).  Let \(F\) be any already
+translated real subexpression.  The multiplication macro below gives
+\(M(F,F)=F^2\) on real inputs, and the square-root witness is used only on
+nonnegative real arguments.  Therefore, for every real \(t\) in the
+domain of \(F\),
 \[
-  W_{\sqrt{}}(M(F,F))(t)
-    = W_{\sqrt{}}(F(t)^2)
+  R(M(F,F))(t)
+    = R(F(t)^2)
     = \sqrt{F(t)^2}
     = \mu_0(F(t)).
 \]
@@ -157,7 +164,7 @@ off-zero agreement.  The replacement is a structural recursion on the
 finite expression tree: constants and the variable are unchanged,
 \(+,-,\times\), \(\exp\), and \(\sin\) are sent to the fixed witnesses
 listed below, and \(\mu(G)\) is sent to
-\(W_{\sqrt{}}(M(\tau(G),\tau(G)))\).  Hence, if identity-to-zero were
+\(R(M(\tau(G),\tau(G)))\).  Hence, if identity-to-zero were
 decidable for the resulting concrete translated fragment, applying this
 recursive map first would decide identity-to-zero for Richardson's
 admissible \(\mu_0\)-fragment.  That contradicts the cited theorem.
@@ -515,16 +522,22 @@ witness & first 32 hex digits & last 32 hex digits \\\hline
 \end{center}
 The finite table and catalogue check prove the syntactic facts just
 listed: acyclicity, pure-EML expansion, node counts, depths, and locked
-fingerprints.  The analytic values used below are the following cited
-identities for these printed strings.  The entries \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are the
-named Odrzywo{\l}ek Table~1 witnesses for the constant \(\pi\), the real
-sine function, and the principal square root on the nonnegative real
-axis, and on their principal-branch real domains they satisfy
+fingerprints.  The analytic interface used below is not proved by this
+finite table.  It is the explicit conditional hypothesis
+\((H_{\mathcal W})\): the entries \(W_{\pi}\), \(W_{\sin}\), and
+\(W_{\sqrt{}}\) are the named Odrzywo{\l}ek Table~1 witnesses for the
+constant \(\pi\), the real sine function, and the principal square root on
+the nonnegative real axis, and the printed-root Richardson add-on assumes
+that on their principal-branch real domains they satisfy
 \[
   W_{\pi}=\pi,
   \qquad W_{\sin}(x)=\sin x\quad(x\in\RR),
   \qquad W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0})
 \]
+The citation to Table~1 and Supplementary Information, Part~II,
+Sections~2.1--2.5 identifies the source and intended verification of
+these three named entries, but this article uses them for the printed
+roots only through \((H_{\mathcal W})\)
 \cite[Table~1 and Supplementary Information, Part~II,
 Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator}.
 \end{lemma}
@@ -544,11 +557,11 @@ depths are obtained by the same recursion, counting one node for each
 \(\eml\) application and taking depth zero on terminal leaves.  These
 checks do not establish the analytic identities; they establish that the
 long finite strings being cited are precisely the strings printed by the
-straight-line certificate.  The analytic real-domain identities asserted
-for \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are the three cited
-symbolic verifications for these named Table~1 entries.  Thus the proof
-uses a bounded finite certificate plus a stable cited theorem for the
-three printed strings, not an unprinted compiler oracle.
+straight-line certificate.  The analytic real-domain identities for
+\(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) are exactly the separate
+interface \((H_{\mathcal W})\).  Thus the proved content of this lemma is
+the bounded finite certificate, not an unprinted compiler oracle and not
+an internal proof of the three printed-root meanings.
 \end{proof}
 
 \begin{lemma}[Source-level certificate for the printed EML witnesses]
@@ -571,8 +584,8 @@ fingerprints displayed there, records the following reproducible data.
   and \(69\) EML nodes and depths \(34\), \(63\), and \(32\), with the
   three SHA--256 fingerprints printed in
   \Cref{lem:eml-ancillary-certificate}.
-\item The only analytic facts imported for these roots are the exact
-  real-domain identities
+\item The only analytic interface ever used for these roots is the
+  conditional real-domain package \((H_{\mathcal W})\), namely
   \[
     U_{47}=\pi,
     \qquad U_{111}(x)=\sin x\quad(x\in\RR),
@@ -581,7 +594,7 @@ fingerprints displayed there, records the following reproducible data.
 \end{enumerate}
 Consequently the Richardson translation below uses a finite EML witness
 skeleton proved in the manuscript plus exactly these three real-domain
-identities, isolated as \((H_{\mathcal W})\) for the printed roots.
+identities when \((H_{\mathcal W})\) is assumed for the printed roots.
 \end{lemma}
 
 \begin{proof}
@@ -745,9 +758,8 @@ For the three printed roots
 Richardson separation proved in \Cref{thm:separation} is conditional
 exactly on \((H_{\mathcal W})\).  More precisely, the manuscript proves
 unconditionally that these roots are fixed finite EML strings, that the
-core arithmetic and positive square-root macros satisfy the real-domain
-identities of
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}, and that the
+core arithmetic macros of \Cref{lem:eml-printed-core} satisfy their
+real-domain identities, and that the
 translation uses the three long roots only through the real-domain
 assertions
 \[
@@ -768,9 +780,8 @@ The syntactic claims are exactly the content of
 \Cref{lem:eml-ancillary-certificate}: the recurrence is finite and
 acyclic as a string table, and it names the three roots
 \(U_{47}\), \(U_{111}\), and \(U_{126}\) together with their recorded
-fingerprints.  The internally proved analytic claims for the short
-macros are those of
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; their proofs
+fingerprints.  The internally proved analytic claims for the short core
+macros are those of \Cref{lem:eml-printed-core}; their proofs
 use only the defining principal-branch semantics of \(\eml\) on the
 domains explicitly checked there.
 
@@ -946,7 +957,10 @@ witnesses only through their names \(W_{\pi}\), \(W_{\sin}\), and
 trees at occurrences of \(\pi\), \(\sin\), and the nonnegative square-root
 interface.  The value calculation for the remaining Richardson
 constructors uses the internally proved core EML witnesses in
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}.
+\Cref{lem:eml-printed-core}; the multiplication and division composites
+are the explicit positive-input reductions displayed in
+\Cref{lem:eml-real-witness-library} and do not require the three long
+printed roots.
 
 Thus the syntactic role of the long table is exhausted by the three
 root expansions and their recorded fingerprints, while the analytic
@@ -1066,9 +1080,10 @@ The translation in \Cref{prop:three-witness-stability} is a structural
 induction over Richardson expressions.  Constants, rational operations,
 \(\exp\), \(\log\) on positive real arguments, addition, subtraction,
 multiplication, and division by a nonzero real are supplied by the
-internally proved core witnesses of
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; hence they keep
-real inputs on the real line.  The sine primitive is translated by
+internally proved core witnesses of \Cref{lem:eml-printed-core} together
+with the algebraic positive-input composites displayed in
+\Cref{lem:eml-real-witness-library}; these core calculations do not use
+the three long roots and keep real inputs on the real line.  The sine primitive is translated by
 substituting a real-valued translated subterm into \(W_{\sin}\), so only
 the all-real sine identity is used.  The absolute-value primitive is
 translated as \(W_{\sqrt{}}(M(u,u))\).  By
@@ -1694,8 +1709,8 @@ computable finite normalizer with decidable equality.
 Conversely, without \((H_{\mathcal W})\) and without a replacement triple,
 the available internal facts are only the finite string locks of
 \Cref{lem:eml-ancillary-certificate,lem:eml-source-level-check}, the core
-EML identities of \Cref{lem:eml-printed-core,lem:eml-real-witness-library},
-and the dependency audit of \Cref{lem:three-witness-domain-audit}.  These
+EML identities of \Cref{lem:eml-printed-core}, and the dependency audit of
+\Cref{lem:three-witness-domain-audit}.  These
 facts omit the semantic interpretations of exactly the three non-core
 witnesses required by the Richardson fragment.  The translated terms
 therefore have no proved value-preservation theorem for Richardson's
