@@ -57,6 +57,41 @@ theorem therefore gives a Borel selector \(s:X\to Y\) with
 \((x,s(x))\in G\).
 \end{proof}
 
+\begin{lemma}[Bounded-term separation for lower-truncated kernels]\label{lem:lower-truncated-bounded-term-separation}
+Let \(X\) be a compact metric space, let \(L:X\times X\to[-\infty,M]\) be an upper-bounded Borel kernel, and let \(b:X\times X\to\RR\) be bounded and Borel.  For \(N>0\) put
+\[
+L_N:=\max\{L,-N\},
+\qquad
+(L+b)_N:=\max\{L+b,-N\}.
+\]
+Then for every \(\mu\in\mathcal P(X)\),
+\[
+\lim_{N\to\infty}\iint (L+b)_N\,\dd\mu\dd\mu
+=
+\lim_{N\to\infty}\iint L_N\,\dd\mu\dd\mu
++
+\iint b\,\dd\mu\dd\mu
+\]
+as an identity in \([-\infty,\infty)\).  In particular, a symbolic decomposition of a logarithmic pullback kernel into a singular part plus bounded pole terms is legitimate only after lower truncation has been applied to the single extended kernel, and it preserves the distinction between finite and \(-\infty\) energy.
+\end{lemma}
+
+\begin{proof}
+Let \(C=\|b\|_\infty\).  For \(N>C\),
+\[
+L_{N+C}-C\le (L+b)_N\le L_{N-C}+C.
+\]
+If the lower-truncated integral of \(L\) is \(-\infty\), the right-hand side tends to \(-\infty\) after integration, so the lower-truncated integral of \(L+b\) is also \(-\infty\).  Suppose therefore that the lower-truncated integral of \(L\) is finite.  Since \(L\) is upper bounded, this implies that the negative part of \(L\) is integrable and that \(L> -\infty\) for \(\mu\times\mu\)-almost every point.  The truncation map \(T_N(s)=\max\{s,-N\}\) is one-Lipschitz, hence
+\[
+\left|(L+b)_N-L_N\right|=\left|T_N(L+b)-T_N(L)\right|\le C.
+\]
+For almost every point, \(T_N(L+b)-T_N(L)\to b\).  Dominated convergence gives
+\[
+\lim_{N\to\infty}\iint\bigl((L+b)_N-L_N\bigr)\,\dd\mu\dd\mu
+=\iint b\,\dd\mu\dd\mu,
+\]
+which is the asserted identity in the finite case.  Since \(b\) is bounded, the same argument also proves that adding \(b\) cannot turn a finite lower-truncated integral into \(-\infty\), or remove a \(-\infty\) singular-energy contribution.
+\end{proof}
+
 \begin{lemma}[Divided-difference kernel for rational pullbacks]\label{lem:rational-divided-difference-kernel}
 Let \(R=A/B\) be a rational map with coprime \(A,B\in\CC[z]\), and set
 \[
@@ -77,7 +112,7 @@ If \(K\subset\CC\) is compact and \(B\ne0\) on \(K\), then, as lower-truncated e
 \log|z-t|+\log|\Psi_R(z,t)|-
 \log|B(z)|-\log|B(t)|,
 \]
-where the right-hand side is notation for the single extended kernel obtained from the rational identity, not an ordinary sum of independently defined logarithms on the collision or branch set.  Thus both sides take the value \(-\infty\) exactly on \(R(z)=R(t)\), and the finite continuous pole terms \(-\log|B(z)|-\log|B(t)|\) may be separated before integration only after the lower truncation has been applied to the single extended kernel.  Consequently, for every \(\mu\in\mathcal P(K)\), the lower-truncated integral of the displayed pullback kernel is finite if and only if \(R_\ast\mu\) has finite logarithmic energy.
+where the right-hand side is notation for the single extended kernel obtained from the rational identity, not an ordinary sum of independently defined logarithms on the collision or branch set.  Thus both sides take the value \(-\infty\) exactly on \(R(z)=R(t)\), and the finite continuous pole terms \(-\log|B(z)|-\log|B(t)|\) may be separated before integration only by the rule of Lemma \ref{lem:lower-truncated-bounded-term-separation}.  Consequently, for every \(\mu\in\mathcal P(K)\), the lower-truncated integral of the displayed pullback kernel is finite if and only if \(R_\ast\mu\) has finite logarithmic energy.
 \end{lemma}
 
 \begin{proof}
@@ -91,7 +126,7 @@ For \(z\ne t\) with \(B(z)B(t)\ne0\),
 R(z)-R(t)=\frac{A(z)B(t)-A(t)B(z)}{B(z)B(t)}
 =\frac{(z-t)\Psi_R(z,t)}{B(z)B(t)}.
 \]
-Taking logarithmic absolute values gives the asserted identity away from the collision set.  On the collision set the factor \((z-t)\Psi_R(z,t)\) vanishes and the logarithmic kernel is \(-\infty\); the two terms involving \(B\) remain bounded and continuous on \(K\), because \(B\) has no zeros there.  Thus the equality holds for the lower-truncated extended kernels.  Applying Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} to the continuous map \(R:K\to R(K)\) proves the final equivalence of finite energies.
+Taking logarithmic absolute values gives the asserted identity away from the collision set.  On the collision set the factor \((z-t)\Psi_R(z,t)\) vanishes and the logarithmic kernel is \(-\infty\); the two terms involving \(B\) remain bounded and continuous on \(K\), because \(B\) has no zeros there.  Thus the equality holds for the single lower-truncated extended kernel, and Lemma \ref{lem:lower-truncated-bounded-term-separation} is exactly the permitted separation of the bounded pole terms from the singular collision terms.  Applying Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} to the continuous map \(R:K\to R(K)\) proves the final equivalence of finite energies.
 \end{proof}
 
 
@@ -292,6 +327,8 @@ where the second factor is continuous and nonzero on \(\TT^2\).
 \begin{proof}
 By Theorem \ref{thm:degree-two-joukowsky-capacity-collision-relation}, the full collision set for \(J_r\) is the union of the diagonal \(z=t\) and the involutive partner relation \(zt=r^{-2}\).  On \(\TT^2\) the second relation is impossible, because \(|zt|=1\) while \(r^{-2}<1\).  Hence the only boundary collision for \(J_r\) is the ordinary diagonal.  The displayed identity is the same theorem specialized to \(K=\TT\), and the factor \(r-r^{-1}z^{-1}t^{-1}\) cannot vanish on \(\TT^2\), since vanishing would again imply \(|zt|=r^{-2}\).
 \end{proof}
+
+The next theorem is stated here because its collision and descent identities are used to organize the finite-cover discussion.  Its sharp variational assertion explicitly depends on the Fourier diagonalization in Theorem \ref{thm:sharp-joukowsky-equilibrium-stability} below; that later theorem uses only the degree-two kernel identity above and not the present descent theorem, so the reference is forward but not circular.
 
 \begin{theorem}[Exact boundary descent for Joukowsky covers]\label{thm:exact-boundary-descent-joukowsky-covers}
 Let \(r>1\), put \(E_r=J_r(\TT)\), and interpret logarithmic energies by lower truncation.  Then the boundary parametrization \(J_r:\TT\to E_r\) is a homeomorphism, and every \(\sigma\in\mathcal P(E_r)\) has a unique source measure \(\mu\in\mathcal P(\TT)\) satisfying \(J_{r\ast}\mu=\sigma\).  For this source measure,
