@@ -198,6 +198,53 @@ Multiplication by \(r^k\) sends the displayed Laurent polynomial to
 a polynomial of degree at most \(k\) in \(u=r^2\).  The evaluation matrix at \(u_i=r_i^2\) is the Vandermonde matrix \((u_i^{k-j})_{0\le i,j\le k}\), whose determinant is, up to sign, \(\prod_{0\le i<j\le k}(u_j-u_i)\).  This determinant is nonzero because the scales \(r_i\) are distinct and positive.  Therefore the evaluations determine the coefficients \(\alpha_j\) uniquely.  If \(n+1\) scales are available and \(k\le n\), restricting to any \(k+1\) of them already gives the stated interpolation.
 \end{proof}
 
+\begin{lemma}[Full and monic multiscale normalization interface]\label{lem:full-monic-multiscale-normalization-interface}
+Let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(z_1\cdots z_n\ne0\), let
+\[
+Q_r(w)=\sum_{k=0}^{n}A_k(r)w^{n-k},
+\qquad
+\widetilde Q_r(w):=a_0^{-1}Q_r(w)=\sum_{k=0}^{n}\widetilde A_k(r)w^{n-k},
+\qquad
+a_0=(-1)^nz_1\cdots z_n,
+\]
+and let \(r_0,
+\dots,r_n>0\) be distinct.  The source polynomial is reconstructed by the following two normalization algorithms.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \emph{Full-normalized data.}  If the coefficient lists of \(Q_{r_i}\) are known, then the common leading coefficient gives \(a_0\).  For each \(k\), interpolate \(A_k(r)\) in the parity-supported Laurent span \(r^k,r^{k-2},
+\dots,r^{-k}\); then
+\[
+e_k(z_1,
+\dots,z_n)=(-1)^k a_0^{-1}[r^k]A_k(r).
+\]
+\item \emph{Monic-normalized data.}  If only nonzero scalar multiples of the coefficient lists are known, divide each list by its leading entry, obtaining the monic lists of \(\widetilde Q_{r_i}\).  For each \(k\), interpolate \(\widetilde A_k(r)\) in the same parity-supported Laurent span; then
+\[
+e_k(z_1,
+\dots,z_n)=(-1)^k[r^k]\widetilde A_k(r),
+\qquad
+a_0=(-1)^ne_n(z_1,
+\dots,z_n)=[r^n]\widetilde A_n(r).
+\]
+\end{enumerate}
+In both cases the recovered elementary symmetric functions determine the original monic source polynomial \(P\).
+\end{lemma}
+
+\begin{proof}
+The leading coefficient of \(Q_r\) is the nonzero scalar \(a_0\), independent of \(r\), so full-normalized data immediately identify it.  If a known list is multiplied by an unknown nonzero scalar, its leading entry is multiplied by the same scalar; division by that leading entry therefore gives the coefficient list of the monic transport \(\widetilde Q_r\).
+
+For fixed \(k\), the coefficient of \(w^{n-k}\) in \(Q_r\) is
+\[
+A_k(r)=(-1)^k a_0\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}),
+\]
+and hence is supported on the exponents \(k,k-2,
+\dots,-k\).  Lemma \ref{lem:parity-restricted-laurent-interpolation} reconstructs this Laurent polynomial from any \(k+1\) of the available scale values, and therefore from the displayed \(n+1\) scales.  Its highest coefficient is \((-1)^ka_0e_k(z_1,
+\dots,z_n)\), proving the full-normalized formula.  Dividing the same identity by \(a_0\) gives
+\[
+\widetilde A_k(r)=(-1)^k\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}),
+\]
+whose highest coefficient is \((-1)^ke_k(z_1,
+\dots,z_n)\), proving the monic-normalized formula.  For \(k=n\), the highest coefficient of \(\widetilde A_n\) is \((-1)^ne_n=a_0\), so the leading coefficient of the full transport is also recovered from monic-normalized data.  Finally, the monic polynomial \(P(z)=z^n-e_1z^{n-1}+\cdots+(-1)^ne_n\) is determined by the recovered elementary symmetric functions.
+\end{proof}
+
 \begin{theorem}[Algebraic Mahler transport inverse package]\label{thm:algebraic-mahler-transport-inverse-package}
 Let \(n\ge1\), and let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(z_1\cdots z_n\ne0\).  For each \(r>1\), let \(Q_r\) be the Joukowsky transport polynomial from Definition \ref{def:reciprocal-transport-normalization}, so
 \[
@@ -205,7 +252,7 @@ Q_r(w)=\sum_{k=0}^{n}A_k(r)w^{n-k},
 \qquad
 A_0(r)=a_0=(-1)^n z_1\cdots z_n\ne0.
 \]
-The observable data at a scale \(r_i\) may be either the full coefficient list \((A_0(r_i),\dots,A_n(r_i))\), or any nonzero scalar multiple of this list, because the latter is first normalized to the monic transport polynomial \(a_0^{-1}Q_{r_i}\).  In either normalization the observed coefficients are the complete coefficients of the degree-\(n\) transported zero divisor, not samples of the polynomial at points.  The following inverse statements hold.
+The observable data at a scale \(r_i\) may be either the full coefficient list \((A_0(r_i),\dots,A_n(r_i))\), or any nonzero scalar multiple of this list, because the latter is first normalized to the monic transport polynomial \(a_0^{-1}Q_{r_i}\).  In either normalization the observed coefficients are the complete coefficients of the degree-\(n\) transported zero divisor, not samples of the polynomial at points.  Algorithmically, full-normalized data keep the common scalar \(a_0\) visible at every scale and recover \(e_k\) from the top Laurent coefficient of \(A_k/a_0\).  Monic-normalized data first discard the unknown list scalar, interpolate the coefficients of \(\widetilde Q_r=a_0^{-1}Q_r\), recover \(e_k\) directly from the top Laurent coefficient of \(\widetilde A_k\), and recover the discarded transport scalar at the end from \(a_0=[r^n]\widetilde A_n\).  This separation is formalized in Lemma \ref{lem:full-monic-multiscale-normalization-interface}.  The following inverse statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
   \item \textbf{Multiscale Laurent interpolation.}  If \(r_0,
   \dots,r_n>1\) are distinct and the transported coefficient lists of \(Q_{r_0},
@@ -219,7 +266,7 @@ The observable data at a scale \(r_i\) may be either the full coefficient list \
   Q_r(0)=\sum_{m=-n}^{n}c_m r^m,
   \]
   with no powers congruent to \(n-1\) modulo \(2\), top coefficient \((z_1\cdots z_n)^2\), and bottom coefficient \(1\).  Equivalently, the monic transport \(a_0^{-1}Q_r\) has constant-term top coefficient \((-1)^n z_1\cdots z_n\) and bottom coefficient \((-1)^n(z_1\cdots z_n)^{-1}\), and the coefficient of \(r^k\) in \(a_0^{-1}A_k(r)\) is \((-1)^ke_k(z_1,\dots,z_n)\).  Interpolating the parity-restricted Laurent coefficients from the \(n+1\) scales therefore recovers all elementary symmetric functions \(e_k(z_1,
-  \dots,z_n)\), hence the original monic source polynomial.  The budget \(n+1\) is sufficient because the largest coefficient family, \(A_n(r)\), lives in the \((n+1)\)-dimensional Laurent span \(r^n,r^{n-2},\dots,r^{-n}\); it is necessary for this unrestricted parity-restricted coefficient interface because fewer scale values cannot determine an arbitrary element of that span.
+  \dots,z_n)\), hence the original monic source polynomial.  Equivalently, Lemma \ref{lem:full-monic-multiscale-normalization-interface} gives the explicit reconstruction algorithm in both the full-normalized and monic-normalized data models.  The budget \(n+1\) is sufficient because the largest coefficient family, \(A_n(r)\), lives in the \((n+1)\)-dimensional Laurent span \(r^n,r^{n-2},\dots,r^{-n}\); it is necessary for this unrestricted parity-restricted coefficient interface because fewer scale values cannot determine an arbitrary element of that span.
 
   \item \textbf{One-scale resonance fibers.}  Fix one scale \(r>1\), and let \(\tau_r(z)=r^{-2}/z\).  The full one-scale fiber, including repeated roots, overlapping reflected pairs, and the fixed critical points \(z=\pm r^{-1}\), is the \(\tau_r\)-orbit matching set described in Lemma \ref{lem:one-scale-orbit-fiber-matching}: a competitor must preserve the total multiplicity on every \(\tau_r\)-orbit and must preserve the product of all source roots.  Equivalently, on each two-point orbit \(O=\{x,\tau_r(x)\}\) with total multiplicity \(N_O\), a competitor chooses an integer \(c_O\in\{0,\dots,N_O\}\) as the multiplicity at \(x\), while a one-point fixed orbit \(x=\tau_r(x)\) has no choice.  These choices are allowed exactly when
   \[
@@ -257,7 +304,7 @@ is
 (-1)^k a_0\sum_{|I|=k}\prod_{j\in I}(rz_j+r^{-1}z_j^{-1}).
 \]
 It is a Laurent polynomial in \(r\) with exponents \(k,k-2,\dots,-k\).  Lemma \ref{lem:parity-restricted-laurent-interpolation} applies to this parity-restricted family: after multiplication by \(r^k\), its coefficient values form a degree-at-most-\(k\) polynomial in \(r^2\), and the Vandermonde matrix on any \(k+1\) of the available \(n+1\) distinct scales has full rank.  Hence the scale values determine this Laurent polynomial uniquely, for every \(k\le n\).  Its highest \(r\)-power coefficient is \((-1)^k a_0 e_k(z_1,\dots,z_n)\), so division by the already known nonzero coefficient \(a_0\) recovers \(e_k(z_1,
-\dots,z_n)\).  In the monic-normalized data model the same conclusion follows from the highest coefficient of \(a_0^{-1}A_k(r)\), namely \((-1)^ke_k(z_1,\dots,z_n)\), after the preceding interpolation has recovered \(a_0\) from the constant term.  For \(k=n\), this also gives the stated check on the constant term: its highest coefficient is \((-1)^n a_0(z_1\cdots z_n)=(z_1\cdots z_n)^2\), and its lowest coefficient is \((-1)^n a_0(z_1\cdots z_n)^{-1}=1\).  Dividing by \(a_0\) gives the displayed top and bottom coefficients for the monic transport.  Thus all elementary symmetric functions of \(z_1,
+\dots,z_n)\).  In the monic-normalized data model the same conclusion follows from the highest coefficient of \(\widetilde A_k(r)=a_0^{-1}A_k(r)\), namely \((-1)^ke_k(z_1,\dots,z_n)\); for \(k=n\) this highest coefficient is \((-1)^ne_n(z_1,\dots,z_n)=a_0\), so the full transport scalar is recovered after the monic interpolation.  For \(k=n\), the full-normalized constant term has highest coefficient \((-1)^n a_0(z_1\cdots z_n)=(z_1\cdots z_n)^2\), and its lowest coefficient is \((-1)^n a_0(z_1\cdots z_n)^{-1}=1\).  Dividing by \(a_0\) gives the displayed top and bottom coefficients for the monic transport.  Thus all elementary symmetric functions of \(z_1,
 \dots,z_n\) are recovered, and these are precisely the coefficients of the monic polynomial \(P\).
 
 The sufficiency and necessity of the uniform scale count are also contained in Lemma \ref{lem:parity-restricted-laurent-interpolation}.  The largest coefficient level has parity-restricted Laurent support \(r^n,r^{n-2},\dots,r^{-n}\), a vector space of dimension \(n+1\).  Values at \(n+1\) distinct positive scales give a nonsingular Vandermonde system in \(r^2\), while values at only \(n\) prescribed scales leave a nonzero kernel on this unrestricted coefficient space.  Thus \(n+1\) is exactly the uniform number of scales forced by the parity-restricted Laurent interface, even though lower coefficient levels use only their smaller sharp budgets.
@@ -267,9 +314,9 @@ For (ii), apply Lemma \ref{lem:one-scale-orbit-fiber-matching}.  It gives the ne
 For (iii), assume first that all source roots lie on \(\TT\).  Let \(\widetilde D\) satisfy the two orbit-matching conditions of Lemma \ref{lem:one-scale-orbit-fiber-matching}.  Moving one unit of multiplicity from a unit-circle point \(x\) to its reflected point \(\tau_r(x)=r^{-2}/x\) changes the modulus of the source-root product by the factor \(r^{-2}\); moving in the reverse direction changes it by \(r^2\).  Since the original divisor has no mass on the inner shell \(|z|=r^{-2}\), every nontrivial orbit redistribution away from the original Lee--Yang divisor decreases the product modulus by a positive power of \(r^2\).  It therefore cannot satisfy the product-preservation condition.  Hence \(\widetilde D=D\), proving Lee--Yang injectivity even with repeated roots.  The stated general criterion is precisely the uniqueness of the orbitwise integer choice satisfying the resonance product in (ii).  In the separated simple case the original choice is \(S=\varnothing\); an actual competitor must have \(S\ne\varnothing\), so injectivity is equivalent to the nonexistence of such a nonempty resonant subset.  Repeated roots and overlapping reflected pairs are not indexed by subsets: they are governed by the orbit totals \(N_O\), while fixed orbits remain forced.
 \end{proof}
 
-\begin{corollary}[Sharp coefficient budgets inside the uniform multiscale reconstruction]\label{cor:sharp-coefficient-scale-budgets}
+\begin{corollary}[Sharp coefficient-interface budgets inside the uniform multiscale reconstruction]\label{cor:sharp-coefficient-scale-budgets}
 In the setting of Theorem \ref{thm:algebraic-mahler-transport-inverse-package}\textup{(i)}, let \(A_k(r)\) denote the coefficient of \(w^{n-k}\) in \(Q_r(w)\).  For each fixed \(k\), the values of \(A_k(r)\) at any \(k+1\) distinct positive scales determine the full Laurent polynomial \(A_k(r)\) and hence determine \(e_k(z_1,
-\dots,z_n)\), once the common leading coefficient \(a_0\) is known.  The number \(k+1\) is sharp for unrestricted parity-supported Laurent families: values at only \(k\) distinct scales do not determine all coefficients in the span of \(r^k,r^{k-2},\dots,r^{-k}\).  Consequently the \(n+1\) scales in Theorem \ref{thm:algebraic-mahler-transport-inverse-package}\textup{(i)} are a uniform sufficient budget that simultaneously covers every coefficient level \(0\le k\le n\); the coefficient \(A_k\) itself uses only the smaller sharp budget \(k+1\).
+\dots,z_n)\), once the common leading coefficient \(a_0\) is known; in the monic-normalized data model the same statement applies to \(\widetilde A_k=A_k/a_0\), and \(a_0\) is then recovered as in Lemma \ref{lem:full-monic-multiscale-normalization-interface}.  The number \(k+1\) is sharp for the coefficient-interface vector space of unrestricted parity-supported Laurent families: values at only \(k\) distinct scales do not determine all coefficients in the span of \(r^k,r^{k-2},\dots,r^{-k}\).  This sharpness is not asserted as a global lower bound for every possible source-polynomial inverse problem or for every structured subclass.  Consequently the \(n+1\) scales in Theorem \ref{thm:algebraic-mahler-transport-inverse-package}\textup{(i)} are a uniform sufficient budget that simultaneously covers every coefficient level \(0\le k\le n\); the coefficient \(A_k\) itself uses only the smaller sharp budget \(k+1\).
 \end{corollary}
 
 \begin{proof}
