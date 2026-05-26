@@ -746,6 +746,78 @@ partial-sum inequality therefore yields the final claim.
   \(N\ge j\), the bound for the fixed entry follows.
 \end{proof}
 
+\begin{proposition}[Finite chosen-Schur-window distance bound]
+  \label{prop:finite-chosen-schur-window-distance-bound}
+  Under the hypotheses of
+  \Cref{thm:determinant-fiber-trace-minimality}, let
+  \(T\in\sone(H)\) satisfy
+  \[
+    \det(I-zT)=D_{\mathcal D}(z)
+  \]
+  near \(0\). Choose a Ringrose basis as in
+  \Cref{lem:ringrose-prescribed-diagonal}, write \(A=[a_{ij}]\), let
+  \(P_N\) be the projection onto the first \(N\) basis vectors, and put
+  \[
+    A_N=P_NTP_N,
+    \qquad
+    D_N=\operatorname{diag}(a_{11},\ldots,a_{NN}),
+  \]
+  on \(P_NH\). With
+  \[
+    \delta_N(T):=\|A_N\|_1-\sum_{k=1}^N\abs{a_{kk}},
+  \]
+  one has
+  \[
+    \|A_N-D_N\|_1
+    \le
+    N\sqrt{(N-1)\|A_N\|_1\,\delta_N(T)} .
+  \]
+  In particular, if
+  \[
+    \sum_{k>N}\abs{a_{kk}}\le\eta,
+    \qquad
+    \|T-P_NTP_N\|_1\le\eta,
+  \]
+  and \(\varepsilon:=\|T\|_1-\tau_{\mathcal D}\), then
+  \[
+    \|A_N-D_N\|_1
+    \le
+    N\sqrt{(N-1)(\|T\|_1+\eta)(\varepsilon+2\eta)} .
+  \]
+\end{proposition}
+
+\begin{proof}
+  The quantity \(\delta_N(T)\) is non-negative by the Weyl--Ky Fan lower
+  bound applied to the finite matrix \(A_N\). By
+  \Cref{cor:schur-entry-stability}, for every \(1\le i<j\le N\),
+  \[
+    \abs{a_{ij}}^2\le 2\|A_N\|_1\delta_N(T).
+  \]
+  Since \(A_N-D_N\) is strictly upper triangular,
+  \[
+    \|A_N-D_N\|_2^2
+    =\sum_{1\le i<j\le N}\abs{a_{ij}}^2
+    \le N(N-1)\|A_N\|_1\delta_N(T).
+  \]
+  The rank of \(A_N-D_N\) is at most \(N\), hence
+  \(\|A_N-D_N\|_1\le\sqrt N\|A_N-D_N\|_2\), and the first displayed bound
+  follows.
+
+  Under the two chosen-tail hypotheses,
+  \[
+    \|A_N\|_1\le\|T\|_1+\eta
+  \]
+  and
+  \[
+    \delta_N(T)
+    \le \|T\|_1+\eta-(\tau_{\mathcal D}-\eta)
+    =\varepsilon+2\eta .
+  \]
+  Substitution gives the second estimate. This is the finite-window
+  estimate that the following chosen-tail theorem globalizes after the two
+  tails have been imposed in the chosen Schur gauge.
+\end{proof}
+
 \subsubsection{Schur-tail stability for near minimizers}
 
 \begin{theorem}[Chosen-Schur-basis tail-controlled trace-norm estimate]
@@ -1292,6 +1364,54 @@ partial-sum inequality therefore yields the final claim.
   two-by-two defects tend to \(0\) for every fixed pair \(i<j\), and
   \Cref{lem:two-by-two-schatten-pinching} forces the fixed Schur
   off-diagonal entries to tend to \(0\).
+\end{proof}
+
+\begin{corollary}[Prescribed-budget scope of Schatten minimizer rigidity]
+  \label{cor:schatten-minimizer-prescribed-budget-scope}
+  \Cref{thm:schatten-determinant-fiber-minimality} is a sharp lower-bound
+  and equality-rigidity theorem in the prescribed cyclic-product
+  \(\mathcal S_p\)-budget fiber
+  \[
+    \mathfrak F_{p,\mathcal D}
+    :=\{T\in\mathcal S_p:
+      \det_r(I-zT)=\det_r(I-zL_{\mathcal D})\},
+    \qquad r=\lceil p\rceil .
+  \]
+  It does not extend to a classification of the full natural
+  \(\mathcal S_r\)-domain of \(\det_r\). More precisely, when \(p<r\)
+  there are cyclic data \(\mathcal E\) and a normal cyclic model
+  \(L_{\mathcal E}\in\mathcal S_r\setminus\mathcal S_p\) for which
+  \(\det_r(I-zL_{\mathcal E})\) is defined and has the prescribed cyclic
+  zero divisor, but \(L_{\mathcal E}\notin\mathfrak F_{p,\mathcal E}\) and
+  the \(\mathcal S_p\)-budget
+  \(\sum_jm_jn_j\abs{\beta_j}^{p/n_j}\) is infinite.
+\end{corollary}
+
+\begin{proof}
+  The definition of \(\mathfrak F_{p,\mathcal D}\) is exactly the hypothesis
+  class in \Cref{thm:schatten-determinant-fiber-minimality}; the theorem
+  proves \(\|T\|_p^p\ge\tau_{\mathcal D,p}\) on that class and identifies
+  precisely the equality case. This is the asserted prescribed-budget
+  statement.
+
+  To see that the boundary is substantive when \(p<r\), use the explicit
+  data from \Cref{prop:regularized-domain-boundary}: take
+  \(J=\{j\ge2\}\), \(n_j=m_j=1\), and \(\beta_j=j^{-1/p}\). Then
+  \[
+    \sum_{j\ge2}m_jn_j\abs{\beta_j}^{p/n_j}
+    =\sum_{j\ge2}j^{-1}=\infty,
+  \]
+  whereas
+  \[
+    \sum_{j\ge2}m_jn_j\abs{\beta_j}^{r/n_j}
+    =\sum_{j\ge2}j^{-r/p}<\infty .
+  \]
+  Hence the corresponding normal cyclic model belongs to
+  \(\mathcal S_r\) and has a standard regularized determinant
+  \(\det_r(I-zL_{\mathcal E})\), but it does not belong to
+  \(\mathcal S_p\). Thus it lies in the natural domain of \(\det_r\) while
+  being outside the prescribed \(\mathcal S_p\)-budget fiber to which
+  \Cref{thm:schatten-determinant-fiber-minimality} applies.
 \end{proof}
 
 \begin{theorem}[Finite-dimensional Schatten stability with inverse pinching modulus]
