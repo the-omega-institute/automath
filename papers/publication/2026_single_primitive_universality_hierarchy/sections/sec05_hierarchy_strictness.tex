@@ -10,7 +10,9 @@ uses the Zeckendorf and finite-fiber ingredients.  The Richardson
 obstruction is recorded as a separate interface theorem: the long
 Odrzywo{\l}ek witnesses are locked as finite strings in
 \Cref{lem:eml-ancillary-certificate}, their real-domain meanings are
-verified in \Cref{thm:printed-richardson-witnesses-verified}, and any
+verified in \Cref{thm:printed-richardson-witnesses-verified}; the exact
+conditional interface is isolated in
+\Cref{thm:exact-richardson-witness-conditionality}; and any
 finite replacement triple with internally proved real-domain identities
 gives the same obstruction.
 
@@ -1673,6 +1675,96 @@ follows from the finite witness package and no further compiler
 output or Table~1 identity is used.
 \end{proof}
 
+\begin{theorem}[Exact Richardson witness conditionality]
+\label{thm:exact-richardson-witness-conditionality}
+Fix the source-locked Richardson translation scheme of
+\Cref{lem:richardson-translation}: the internally proved core witnesses
+\(E,L,D,P,N,A,S,T,R_+,M,J,H,G\) represent the elementary arithmetic,
+exponential, positive-logarithm, multiplication, division, and rational
+constant operations; the printed roots
+\(W_{\pi}=U_{47}\), \(W_{\sin}=U_{111}\), and
+\(W_{\sqrt{}}=U_{126}\) of \Cref{lem:eml-ancillary-certificate} are used
+respectively for the Richardson constant \(\pi\), the sine operation, and
+only through
+\[
+  \Abs(u)=W_{\sqrt{}}(M(u,u))
+\]
+for the concrete Richardson absolute-value representative
+\(\mu_0(u)=\sqrt{u^2}\).
+Then the following two assertions are equivalent.
+\begin{enumerate}
+\item The three printed roots satisfy \((H_{\mathcal W})\), namely
+\[
+  W_{\pi}=\pi,
+  \qquad
+  W_{\sin}(x)=\sin x\quad(x\in\RR),
+  \qquad
+  W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+\]
+\item The source-locked translation \(\tau_{\mathcal W}\) is an exact
+real Richardson representation: for every expression
+\(F\in\mathcal R\), with Richardson's punctured absolute-value symbol
+instantiated by \(\mu_0\),
+\[
+  \dom\llbracket\tau_{\mathcal W}(F)\rrbracket_{\RR}=\dom(F),
+  \qquad
+  \llbracket\tau_{\mathcal W}(F)\rrbracket_{\RR}(x)=F(x)
+  \quad(x\in\dom(F)).
+\]
+For this translated fragment there is consequently no computable
+normalizer into finite objects with decidable equality whose comparison
+with the translated zero expression decides identity to zero on the
+transported real domain, and the quantitative bounds of
+\Cref{prop:richardson-translation-bookkeeping} hold.
+\end{enumerate}
+Thus the printed-root Richardson route has exactly one analytic
+conditional interface: the three real-domain identities in
+\((H_{\mathcal W})\).  The finite recurrence, hash locks, and source
+checker identify the three strings, but they neither add a fourth analytic
+input nor permit any one of the three displayed identities to be omitted.
+\end{theorem}
+
+\begin{proof}
+Assume first \((H_{\mathcal W})\).  The terms in the fixed translation
+scheme are finite by \Cref{lem:eml-printed-core,lem:eml-real-witness-library}
+and by the source locks of
+\Cref{lem:eml-ancillary-certificate,lem:eml-source-level-check}.  Under
+the three identities in \((H_{\mathcal W})\),
+\Cref{thm:conditional-richardson-witness-package} gives the effective
+translation, equality of represented partial real functions, equality of
+real domains, the size and substitution-depth bounds, and the normalizer
+obstruction.  This proves the second assertion.
+
+Conversely assume the second assertion for the source-locked translation.
+Apply it first to the Richardson constant expression \(F=\pi\).  The
+translation scheme sends this expression to the closed printed term
+\(W_{\pi}\), so value preservation gives \(W_{\pi}=\pi\).  Apply it next
+to the expression \(F(x)=\sin x\), whose real domain is all of \(\RR\).
+The scheme sends this to \(W_{\sin}(x)\), hence domain equality and value
+preservation give \(W_{\sin}(x)=\sin x\) for every real \(x\).
+
+Finally apply the same assertion to the Richardson expression
+\(F(x)=\mu_0(x)=\sqrt{x^2}\).  Its translated term is
+\(W_{\sqrt{}}(M(x,x))\).  The internally proved multiplication witness in
+\Cref{lem:eml-real-witness-library} gives \(M(x,x)=x^2\) for every real
+\(x\), and domain equality says that this translated term is defined for
+every real \(x\).  Value preservation therefore gives
+\[
+  W_{\sqrt{}}(x^2)=\sqrt{x^2}\qquad(x\in\RR).
+\]
+If \(t\ge0\), choose the nonnegative real \(x\) with \(x^2=t\).  The last
+identity gives \(W_{\sqrt{}}(t)=x=\sqrt t\).  Hence the square-root
+identity in \((H_{\mathcal W})\) holds on all of \(\RR_{\ge0}\).
+Together with the two previous primitive tests this proves
+\((H_{\mathcal W})\).
+
+The final sentence follows from the equivalence just proved and from
+\Cref{prop:printed-table-needs-analytic-interface,prop:locked-three-witness-interface}:
+the table and checker lock the finite strings, whereas the exact semantic
+validity of the printed-root Richardson translation is equivalent to the
+three displayed real-domain identities and to no weaker list.
+\end{proof}
+
 \begin{corollary}[Richardson witness alternatives]
 \label{cor:richardson-witness-alternative}
 The Richardson obstruction in this section has two finite witness routes.
@@ -1680,8 +1772,11 @@ The Richardson obstruction in this section has two finite witness routes.
 \item For the specific printed roots of
   \Cref{lem:eml-ancillary-certificate},
   \Cref{thm:printed-richardson-witnesses-verified} supplies the three
-  real-domain identities, and the translated printed-root fragment has the
-  normalizer obstruction of \Cref{thm:separation}.
+  real-domain identities; by
+  \Cref{thm:exact-richardson-witness-conditionality} this is exactly the
+  semantic interface for the printed-root translation, and the translated
+  printed-root fragment has the normalizer obstruction of
+  \Cref{thm:separation}.
 \item For any finite replacement triple of pure EML terms satisfying
   \(\mathsf P=\pi\),
   \(\mathsf S(x)=\sin x\) on \(\RR\), and
