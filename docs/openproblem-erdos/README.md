@@ -106,3 +106,31 @@ No substantive mathematical progress since the prior checkpoint:
 - T-44 has no new accepted progress beyond the prior A3 source-bridge boundary.
 
 Operational implication: the loop is not dead, but it is currently idle and the recent retries did not lower the proof gaps.
+
+
+## Monitoring Update 2026-05-27 23:14 SGT
+
+Pipeline health: the daemon is alive but still under-saturated. Status moved
+from `agents_busy=1/3` to `agents_busy=2/3` during this check, with
+`queue_length=0`, no stale busy agents, no mismatched busy agents, and no
+limit alert. The busy tasks are T-32
+`deep_cand_litt_common_finite_etale_cover_t1779893256570`, still in
+`agent_busy_waiting_for_new_assistant_dom` with no response file landed, and
+T-43 `deep_problemsilike_02_t1779894825926`, newly sent and generating.
+
+Progress since the prior checkpoint:
+
+- T-43 produced a new Oracle response labeled
+  `D_CERTIFICATE_EG6_1_REMARK6_2_SOURCE_WINDOW_A5`. It is a candidate
+  source-window certificate for the named A5 same-`W` E-G Theorem 6.1 /
+  Remark 6.2 bridge. It is not accepted yet: no newer evaluator output or
+  local source-window audit result has confirmed it.
+- T-32 has no accepted new progress. The latest accepted evaluator state still
+  leaves the actual-cover two-cycle descent theorem or direct normalized
+  point-count packet as the first failed obligation.
+- T-44 has no new recent activity and remains at the A3 source-bridge boundary.
+
+Operational implication: do not mark any of the three targets closed. T-43 is
+the only target with a fresh candidate to evaluate and an active follow-up;
+T-32 may be stuck in a generation/DOM extraction wait if the current response
+does not materialize.

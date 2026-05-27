@@ -124,3 +124,34 @@ Latest evaluator state:
 - The exact remaining target is to certify that the pipeline base `Y` equals Rungtanapirom quotient `X := source-Y/Etilde` and that pipeline `Ytilde -> Y` equals `source-Y -> X` after `G=A5` specialization and base change to `C`.
 
 Avoid repeating faithfully-flat p-curvature descent, finite A5 algebra, spreadout restatements, or arbitrary-summand theorem speculation.
+
+
+## Monitoring Update 2026-05-27 23:12 SGT
+
+T-43 now has a fresh Oracle candidate, but not a verified closure.
+
+New candidate:
+
+- The latest response is labeled
+  `D_CERTIFICATE_EG6_1_REMARK6_2_SOURCE_WINDOW_A5`.
+- It claims page/line windows for E-G Theorem 6.1, the cohomological-rigidity
+  criterion, Remark 6.2, and the Proposition 8.2 boundary.
+- Its intended bridge is still the one-object route: same-`W`
+  cohomological rigidity plus all-closed-points zero p-curvature gives
+  unitarity by E-G Theorem 6.1; same-`W` strong integrality plus unitarity
+  gives finite monodromy by E-G Remark 6.2.
+
+Acceptance status:
+
+- This is not yet an accepted stage result. The latest evaluator output before
+  the response still says `No substantive progress` and asks for exact
+  primary-source support for the one-object E-G bridge.
+- No local `problemsilike_02` E-G source-window output file was found at this
+  checkpoint.
+
+Next useful action:
+
+- Run or request a local source-window audit for this exact candidate. If the
+  cited E-G windows are byte-accurate and the theorem hypotheses match the
+  named A5 same-`W` packet, T-43 would move from source-gap to theorem-bridge
+  replay. If not, the first failing theorem clause should be recorded.
