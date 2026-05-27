@@ -121,3 +121,16 @@ Current exact gap:
 
 - Prove a two-cycle descent/invariant theorem for `L <-> pi(L)`, or produce explicit equations and normalized point counts over `F_11^n`, `n=1,2,3,4`, for the named two-cycle object.
 - Fixed-row proofs and repeated sector bookkeeping are no longer sufficient.
+
+
+## Monitoring Update 2026-05-27 17:12 SGT
+
+No new accepted T-32 progress since the two-cycle frontier checkpoint.
+
+Latest evaluator state:
+
+- `L4_normalization_descent_bridge` remains the first failed lemma.
+- Oracle repeated the known boundary: support-only corrections are too small, standalone reciprocal Weil ranks `2`, `4`, and `6` are impossible, and small split elliptic-block models fail before rank `8`.
+- The requested artifact remains unchanged: either a self-contained two-cycle normalization/descent theorem proving the required corrections, or a direct normalized point-count packet for the actual descended cover over `F_11^n`, `n=1,2,3,4`.
+
+Do not ask for more fixed-row audits, support arithmetic, sector bookkeeping, or coefficient-plane algebra. Those are already accepted and do not close the descent bridge.

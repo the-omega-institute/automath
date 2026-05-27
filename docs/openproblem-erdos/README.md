@@ -93,3 +93,16 @@ No closure change:
 - T-32 still needs an actual two-cycle descent/invariant theorem or point-count audit tying the two-cycle object to the excluded branch.
 - T-43 remains at the negative-boundary memo plus unresolved A5 same-`W` geometric gap.
 - T-44 remains blocked at source-level evidence for the KP level-3 A3 quotient basis/action.
+
+
+## Monitoring Update 2026-05-27 17:12 SGT
+
+Pipeline health: the supervisor returned to idle with `queue_length=0` and `agents_busy=0/3`. All three browser poll agents remain recent and compatible, so this is not a browser-agent failure. Recent activity was mostly retry traffic with many zero-byte responses.
+
+No substantive mathematical progress since the prior checkpoint:
+
+- T-32 remains blocked at `L4_normalization_descent_bridge` for the first primitive C4 Frobenius two-cycle. The latest evaluator again requests either a direct normalized point-count packet or a self-contained descent theorem.
+- T-43 remains blocked at the Rungtanapirom quotient/base identification step for the A5 same-`W` route.
+- T-44 has no new accepted progress beyond the prior A3 source-bridge boundary.
+
+Operational implication: the loop is not dead, but it is currently idle and the recent retries did not lower the proof gaps.

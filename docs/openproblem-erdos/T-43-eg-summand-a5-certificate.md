@@ -111,3 +111,16 @@ No new accepted T-43 mathematical progress since the prior checkpoint.
 - Current T-43 activity shows repeated empty-response/retry behavior before the latest prompt, with no new accepted evaluator result beyond the existing negative-boundary memo.
 - The durable artifact remains `t43_research_note.md` with the prior passing field audit.
 - If T-43 is continued, the useful target is still the first A5 same-`W` geometric source gap: certify `H^1_dR(Ytilde_C)=0` for the Rungtanapirom A5 cover, not another repetition of the finite A5 representation algebra.
+
+
+## Monitoring Update 2026-05-27 17:12 SGT
+
+No new accepted T-43 progress since the prior checkpoint.
+
+Latest evaluator state:
+
+- The A5 same-`W` route has moved to a precise source/model identification gap.
+- `PASS_T43_H1_YTILDE_IDENTIFICATION_FRONTIER_CHECK` carries the Rungtanapirom H1 source replay, but the first failed identification check is `ID_4_BASE_Y_EQUALS_SOURCE_QUOTIENT_X`.
+- The exact remaining target is to certify that the pipeline base `Y` equals Rungtanapirom quotient `X := source-Y/Etilde` and that pipeline `Ytilde -> Y` equals `source-Y -> X` after `G=A5` specialization and base change to `C`.
+
+Avoid repeating faithfully-flat p-curvature descent, finite A5 algebra, spreadout restatements, or arbitrary-summand theorem speculation.
