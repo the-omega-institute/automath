@@ -77,3 +77,19 @@ Progress assessment:
 - T-44 produced and locally replayed A3 arithmetic artifacts, but evaluator still marks the A3 source bridge as unclosed because the source citations do not yet certify the specific `W_chi0` quotient basis and `T_{a3}` action.
 - T-32 did not produce new accepted closure evidence; the latest evaluator says primitive C4 sector bookkeeping was restated without the trace-1-to-PE2/sign bridge.
 - T-43 did not improve beyond the existing negative-boundary memo; later A5 same-`W` turns restated finite A5 algebra without closing the first geometric source gap.
+
+
+## Monitoring Update 2026-05-27 12:28 SGT
+
+Pipeline health: `agents_busy=1/3`, `queue_length=0`, no stale or mismatched busy agents. The active task is T-32 and is not yet producing a new response file. T-43 has repeated empty-response/retry behavior and T-44 is currently not busy.
+
+New durable stage movement:
+
+- T-32 has shifted from fixed-row primitive C4 audits to a two-cycle descent frontier. Local output records that fixed-row-only descent covers only 56 of 1036 audit representatives and misses 980 Frobenius two-cycle representatives. The first named two-cycle is `L=[0,0,0,0,0,1]`, `pi(L)=[0,0,0,0,1,0]`.
+- T-44 now has local A3 transvection verification and source-bridge gate outputs. The local matrix arithmetic is verified, but neither the source bridge nor a byte-supported impossibility proof is writeback-ready.
+
+No closure change:
+
+- T-32 still needs an actual two-cycle descent/invariant theorem or point-count audit tying the two-cycle object to the excluded branch.
+- T-43 remains at the negative-boundary memo plus unresolved A5 same-`W` geometric gap.
+- T-44 remains blocked at source-level evidence for the KP level-3 A3 quotient basis/action.

@@ -99,3 +99,25 @@ No new accepted T-32 mathematical progress since the prior checkpoint.
 - The newest evaluator says the Oracle restated the primitive C4 Chevalley-Weil/Prym sector theorem: `H1(C)-H1(C2)` is identified with the faithful `phi4` sector, with `Q(i)` action and the expected dimension bookkeeping.
 - This is useful packaging but not the decisive step. It does not prove that occurrence of the trace-1 elliptic factor in the faithful primitive sector forces the PE2/sign coefficient system where the local `d4 mod 8` contradiction applies.
 - The next useful target is now sharper: prove the semisimple Frobenius-`Q(i)` multiplicity lemma handling both Frobenius commuting with the deck generator and Frobenius sending it to inverse.
+
+
+## Monitoring Update 2026-05-27 12:28 SGT
+
+The C4 frontier has moved from fixed-row auditing to a two-cycle descent problem, but closure has not been achieved.
+
+New local boundary result:
+
+- `primitive_c4_twocycle_descent_boundary_output.json` reports `all_local_checks_passed=true` for the fixed-vs-two-cycle boundary audit.
+- Fixed-row-only descent covers only `56/1036` audit representatives and misses `980` Frobenius two-cycle representatives.
+- The first local two-cycle candidate is `L=[0,0,0,0,0,1]`, with `pi(L)=[0,0,0,0,1,0]`, orbit length 2 over `F_11`, and fixed over `F_121`.
+- Conditional branch algebra says the trace-factor branch would have `d4 mod 8` residues `[2,4,5,7]`, while actual cyclic C4 torsors require `d4 == 0 mod 8`; the intersection is empty only after a valid two-cycle descent hypothesis is proved.
+
+Additional local check:
+
+- `oracle_a2ad89_twocycle_geometric_descent_certificate_output.json` verifies finite-field consistency of the displayed `F_121` two-cycle equations and the `PE*Psign` block-swap algebra.
+- Its own conclusion still leaves point counts and a target-specific `J_Y[4]` class-to-equation certificate open.
+
+Current exact gap:
+
+- Prove a two-cycle descent/invariant theorem for `L <-> pi(L)`, or produce explicit equations and normalized point counts over `F_11^n`, `n=1,2,3,4`, for the named two-cycle object.
+- Fixed-row proofs and repeated sector bookkeeping are no longer sufficient.

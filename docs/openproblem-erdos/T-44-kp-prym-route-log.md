@@ -126,3 +126,21 @@ T-44 advanced partially but is still not closed.
 Next useful action:
 
 - Ask for the exact source bridge, not another arithmetic A3 packet: a primary theorem/proposition/formula with page or line window and generator dictionary proving the quotient basis and `b3 -> a3*b3` action on the KP/Prym quotient.
+
+
+## Monitoring Update 2026-05-27 12:28 SGT
+
+T-44 has a clearer source-bridge boundary but is not closed.
+
+Local status:
+
+- `A3_source_bridge_gate_20260527_output.json` verifies the local A3 transvection: in basis `[a2,b2,a3,b3]`, the candidate sends `b3` to `a3+b3` and has the expected matrix `[[1,0,0,0],[0,1,0,0],[0,0,1,1],[0,0,0,1]]`.
+- The same gate says `certifies_A3_source_bridge=false` and fails first at `L2_source_bridge_artifact_exists_and_is_complete`.
+- `c52d_A3_source_bridge_impossible_audit_20260527_output.json` checks internal consistency of a negative source-bridge packet but does not prove literature impossibility. It reports `writeback_ready=false`.
+
+Current exact gap:
+
+- Either produce `kp_level3_A3_source_bridge.json` with `source_bridge_complete=true`, including quotient-basis citation, `T_a3` action on `b3`, and match to the local candidate;
+- or produce a byte-supported impossibility memo with source files, page windows, line ranges, and reproducible search transcript.
+
+Arithmetic A3 packets alone no longer move the proof state.
