@@ -9105,6 +9105,14 @@ def run_paper_pipeline(
                         f"terminal error: {state.error[:200]}")
             return False, state
         if state.error:
+            if (
+                str(state.current_stage).upper() == "A"
+                and state.error.startswith("Stage A blocked:")
+                and not is_recoverable_stage_a_block_status(state.error)
+            ):
+                logger.info(f"[{paper_name}] Preserving hard Stage A block: "
+                            f"{state.error[:200]}")
+                return False, state
             logger.info(f"[{paper_name}] Clearing previous pipeline error: "
                         f"{state.error[:200]}")
             state.error = ""
