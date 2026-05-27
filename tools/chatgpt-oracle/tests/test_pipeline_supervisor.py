@@ -1081,6 +1081,7 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
 
         self.assertEqual(status, "C-NEAR-PASS")
         self.assertIn("final review", detail)
+        self.assertIn("report to the user", detail)
 
     def test_stage_c_terminal_classifies_repeated_revisions_as_hard_stuck(self):
         state = oracle_pipeline.PaperState(
@@ -1098,6 +1099,7 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
 
         self.assertEqual(status, "C-HARD-STUCK")
         self.assertIn("major revision", detail.lower())
+        self.assertIn("ask the user", detail)
 
     def test_stage_c_terminal_does_not_treat_extraction_word_as_infra(self):
         state = oracle_pipeline.PaperState(

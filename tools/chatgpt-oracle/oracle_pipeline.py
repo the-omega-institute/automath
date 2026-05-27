@@ -987,7 +987,9 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
         return (
             "C-INFRA-STUCK",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with Oracle "
-            "extraction/infra symptoms; retry infra repair before review",
+            "extraction/infra symptoms; next action: repair extraction or "
+            "re-submit final-review task, then ask human to review the "
+            "recovered final verdict",
         )
 
     hard_markers = ("major revision", "reject", "revise")
@@ -1001,7 +1003,8 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
             "C-NEAR-PASS",
             f"near-pass final gate after {MAX_STAGE_C_ROUNDS} rounds; "
             "recent Oracle accept + Codex submit; needs final review / "
-            "possible C+1 override",
+            "possible C+1 override; next action: report to the user for "
+            "manual final review, not another ordinary rewrite loop",
         )
 
     scope_markers = (
@@ -1018,7 +1021,8 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
             "C-SCOPE-STUCK",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with repeated "
             "scope/novelty or journal-fit blockers; route to novelty "
-            "escalation or retarget",
+            "escalation or retarget; next action: ask the user to choose "
+            "deep rewrite, merge, or lower/alternate venue",
         )
 
     if hard_count >= 2 or (recent and hard_count == len(recent)):
@@ -1026,20 +1030,23 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
             "C-HARD-STUCK",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with repeated "
             "major revision/reject/revise verdicts; return to Stage B or "
-            "deep rewrite",
+            "deep rewrite; next action: report blockers and ask the user "
+            "whether to rewrite, merge, or park",
         )
 
     if "oracle:accept;claude:submit" in recent_text:
         return (
             "C-NEAR-PASS",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with at least one "
-            "recent Oracle accept + Codex submit; needs manual final review",
+            "recent Oracle accept + Codex submit; next action: report to "
+            "the user for manual final review / possible C+1 override",
         )
 
     return (
         "C-STUCK",
-        f"Oracle+Codex exhausted {MAX_STAGE_C_ROUNDS} rounds; needs manual "
-        "classification",
+        f"Oracle+Codex exhausted {MAX_STAGE_C_ROUNDS} Stage C rounds without "
+        "a clean terminal pattern; next action: report to the user for manual "
+        "classification before any further automatic rewrite",
     )
 
 
