@@ -253,6 +253,18 @@ def _is_curated_problemsilike(todo: TodoSpec) -> bool:
     return "problemsilike.com" in (todo.source or "").lower()
 
 
+def _is_public_comment_channel(channel: str) -> bool:
+    return channel in {
+        "registry_comment",
+        "problem_page_comment",
+        "opg_comment",
+        "blog_comment",
+        "github_comment",
+        "x_reply_or_thread",
+        "x_thread",
+    }
+
+
 def _is_collaboration_context(lane: str, display: str, todo: TodoSpec) -> bool:
     haystack = " ".join([lane, display, todo.title or "", getattr(todo, "type_", "") or "", todo.status or ""]).lower()
     return bool(re.search(r"\b(collaboration|collaborate|reply|email thread|waiting reply|frontier subset|paper-trade)\b", haystack))
@@ -567,6 +579,14 @@ def evaluate(todo: TodoSpec) -> ImpactGateVerdict:
         required.append("X thread must be derivative of the reviewed note/email, not the first disclosure.")
     if "author_email" in channels or "private_author_email" in channels:
         required.append("Email draft must use the operator-approved sending account and remain a draft until approval.")
+    if any(_is_public_comment_channel(ch) for ch in channels):
+        required.extend(
+            [
+                "Any public comment prepared with AI assistance must explicitly disclose that assistance.",
+                "Before posting, the operator must independently verify all mathematical claims, code, numerical data, and cited sources without AI assistance.",
+                "Public forum comments must be short; long proof logs, raw AI transcripts, and exploratory intermediate artifacts stay internal or in a separately reviewed note.",
+            ]
+        )
 
     impact_score = min(
         10,

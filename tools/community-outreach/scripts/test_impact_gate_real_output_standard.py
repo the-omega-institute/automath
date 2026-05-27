@@ -106,6 +106,14 @@ Proof complete. The obstruction is reproducible from the included verifier.
                     "complete publishable obstruction on a curated target should be reviewable: "
                     f"{verdict.status}"
                 )
+            required = "\n".join(verdict.required_before_send).lower()
+            for phrase in (
+                "ai assistance",
+                "independently verify all mathematical claims",
+                "public forum comments must be short",
+            ):
+                if phrase not in required:
+                    raise AssertionError(f"Problems I Like public-comment policy missing {phrase!r}: {required}")
         finally:
             gate.TARGETS_DIR = old_targets
     return 0
