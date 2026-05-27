@@ -118,10 +118,11 @@ hypothesis with the concrete choice
 \[
   \mu_0(x)=\sqrt{x^2}\qquad(x\in\RR),
 \]
-which agrees with \(|x|\) off zero.  Consequently, after either the verified
-printed square-root witness of \Cref{thm:printed-richardson-witnesses-verified}
-or a finite replacement square-root witness with the displayed real-domain
-identity is supplied, replacing every occurrence of \(\mu(F)\) by
+which agrees with \(|x|\) off zero.  Consequently, after either the
+conditional printed square-root interface of
+\Cref{thm:printed-richardson-witnesses-verified} is assumed or a finite
+replacement square-root witness with the displayed real-domain identity is
+supplied, replacing every occurrence of \(\mu(F)\) by
 \(\Abs(F)=R(M(F,F))\) is an effective reduction from Richardson's
 identity problem to the corresponding concrete EML-translated fragment.
 For the printed roots, \(R=W_{\sqrt{}}\).
@@ -1552,13 +1553,37 @@ unary-operation estimate.  This proves the
 claimed expression-tree and substitution-depth bounds.
 \end{proof}
 
-\begin{proposition}[Quantitative locked Richardson interface]
+\begin{proposition}[Tabulated quantitative Richardson interface]
 \label{prop:richardson-translation-bookkeeping}
 Assume \((H_{\mathcal W})\).  The translation
 \(E\mapsto\tau(E)\) of \Cref{lem:richardson-translation} has a constant
 \(K\ge2\), depending only on the fixed witness library of
 \Cref{cor:eml-witness-locking}, with the following properties for every
-expanded Richardson expression tree \(E\):
+expanded Richardson expression tree \(E\).  Term by term, \(\tau\) is the
+following recursive constructor:
+\[
+\begin{array}{c|c|c}
+\text{Richardson form} & \text{EML replacement} & \text{real-domain clause}\\\hline
+x & x & x\in\RR\\
+0 & S(1,1) & \RR\\
+1 & 1 & \RR\\
+n\in\ZZ & \operatorname{Int}(n) & \RR\\
+a/b\ (b>0) & J(\operatorname{Int}(a),\operatorname{Int}(b)) & \RR\\
+\pi & W_{\pi} & \RR\\
+\log2 & L(A(1,1)) & \RR\\
+F+G & A(\tau F,\tau G) & \dom F\cap\dom G\\
+F-G & S(\tau F,\tau G) & \dom F\cap\dom G\\
+FG & M(\tau F,\tau G) & \dom F\cap\dom G\\
+\exp F & E(\tau F) & \dom F\\
+\sin F & W_{\sin}(\tau F) & \dom F\\
+\mu(F) & W_{\sqrt{}}(M(\tau F,\tau F)) & \dom F\\
+G\circ F & \tau(G)[x:=\tau(F)] & x\in\dom F,\ F(x)\in\dom G .
+\end{array}
+\]
+Here \(\operatorname{Int}(n)\) is the fixed integer tree obtained from
+\(1\) by repeated addition and negation, and every rational token in the
+source has already been expanded by the displayed integer-and-division
+scheme before its contribution to \(|E|\) is counted.  With this convention,
 \[
   |\tau(E)|_{\eml}\le K^{2|E|},
   \qquad
@@ -1578,6 +1603,19 @@ present in these listed clauses.
 \end{proposition}
 
 \begin{proof}
+The table is exactly the structural recursion used in
+\Cref{lem:richardson-translation}, now with every constructor displayed.
+The clauses for \(x\), \(0\), \(1\), integers, rationals, and \(\log2\)
+come from the fixed schemes in \Cref{cor:eml-witness-locking}: integers are
+built from \(1\) by \(A\), \(S\), and \(N\), a rational \(a/b\) with
+\(b>0\) is \(J(\operatorname{Int}(a),\operatorname{Int}(b))\), and
+\(\log2\) is \(L(A(1,1))\).  The clauses for \(\pi\), \(\sin\), and
+\(\mu\) use the printed roots only through the conditional interface
+\((H_{\mathcal W})\).  In the last row,
+\(\tau(G)[x:=\tau(F)]\) means literal syntactic substitution of the inner
+translated tree into every input leaf of the outer translated tree; hence it
+is computable from the two finite trees.
+
 The domain list is the union of the real-domain interfaces proved in
 \Cref{lem:eml-printed-core,lem:eml-real-witness-library,lem:eml-zero-absolute-witness,cor:eml-witness-locking}.
 The important point for the absolute-value symbol is that its square-root
@@ -1589,23 +1627,38 @@ domain and not a new EML branch condition.  This gives the asserted
 domain equality by the same structural induction as
 \Cref{lem:richardson-translation}.
 
-For the quantitative estimates, choose \(K\) larger than the size, depth,
-and input-leaf multiplicity of every finite witness in
-\(\mathcal W_{\mathcal R}\), and larger than the corresponding constants
-for the fixed expansion scheme for integer and rational constants.  A
-primitive unary or binary constructor replaces its children by a fixed
-tree with at most \(K\) overhead and at most \(K\) copies of each input;
-after increasing \(K\) once, this sends child bounds
-\(|\tau(E_i)|_{\eml}\le K^{2|E_i|}\) to
-\(|\tau(E)|_{\eml}\le K^{2|E|}\) and increases depth by at most \(K\).
-For a syntactic composition \(G\circ F\), substitution gives
-\(|\tau(G\circ F)|_{\eml}\le |\tau(G)|_{\eml}|\tau(F)|_{\eml}\) and depth
-at most the sum of the two depths.  Since the expanded source size is
-additive up to the root node, these inequalities give
+For the quantitative estimates, let \(s(W)\), \(d(W)\), and \(m(W)\) be
+respectively the EML-node count, depth, and maximum number of occurrences
+of any formal input leaf in a finite witness tree \(W\).  Choose \(K\)
+larger than \(2\), than all numbers \(s(W)+d(W)+m(W)
+\) for the finitely many constructor witnesses appearing in the table, and
+than the corresponding constants for the fixed integer and rational
+expansion scheme.  The base rows of the table then satisfy the two bounds.
+For any non-composition unary or binary constructor row represented by a
+fixed witness \(W\), substitution gives the explicit recurrence
+\begin{align*}
+  |\tau(E)|_{\eml}
+  &\le s(W)+m(W)\sum_i |\tau(E_i)|_{\eml},\\
+  \operatorname{depth}\tau(E)
+  &\le d(W)+\max_i\operatorname{depth}\tau(E_i).
+\end{align*}
+Using the induction hypotheses and the inequality
+\(|E|=1+\sum_i |E_i|\), the choice of \(K\) gives
+\(|\tau(E)|_{\eml}\le K^{2|E|}\) and
+\(\operatorname{depth}\tau(E)\le K|E|\).  For a syntactic composition
+\(G\circ F\), the substitution row gives the separate recurrence
+\[
+  |\tau(G\circ F)|_{\eml}
+    \le |\tau(G)|_{\eml}|\tau(F)|_{\eml},
+  \qquad
+  \operatorname{depth}\tau(G\circ F)
+    \le \operatorname{depth}\tau(G)+\operatorname{depth}\tau(F).
+\]
+Since the expanded source size is additive up to the root node, the
+induction hypotheses again imply
 \(|\tau(G\circ F)|_{\eml}\le K^{2|G\circ F|}\) and
-\(\operatorname{depth}\tau(G\circ F)\le K|G\circ F|\).  The variable and
-constant cases are covered by the choice of \(K\), so induction proves
-the bounds.
+\(\operatorname{depth}\tau(G\circ F)\le K|G\circ F|\).  This proves the
+recursive size and depth bounds for every row of the constructor table.
 \end{proof}
 
 \begin{theorem}[Conditional finite Richardson witness package]
@@ -1794,7 +1847,7 @@ source-level interfaces used in this article.
 \begin{proposition}[No hidden Richardson interface]
 \label{prop:no-third-richardson-interface}
 The source-level Richardson obstruction uses no compiler oracle beyond the
-three verified non-core identities.  More precisely, after the internally
+three supplied non-core identities.  More precisely, after the internally
 proved core witnesses of \Cref{lem:eml-printed-core,lem:eml-real-witness-library}
 are fixed, the only additional analytic inputs are
 \[
@@ -1802,7 +1855,7 @@ are fixed, the only additional analytic inputs are
   \qquad W_{\sin}(x)=\sin x\quad(x\in\RR),
   \qquad W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0}),
 \]
-verified for the printed strings in
+assumed for the printed strings through \((H_{\mathcal W})\) in
 \Cref{thm:printed-richardson-witnesses-verified}, or the corresponding
 three identities for a replacement triple.  With those inputs the same
 transported-normalizer contradiction proves the obstruction; without them,
