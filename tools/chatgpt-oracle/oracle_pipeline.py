@@ -484,6 +484,8 @@ def is_recoverable_stage_a_block_status(status: str) -> bool:
         "needs_human_resolution",
         "human_decision",
         "overlap needs",
+        "semantic overlap requires explicit board resolution",
+        "explicit board resolution",
         "overlap with earlier submitted",
         "earlier submitted/current",
         "prior submitted sibling",
