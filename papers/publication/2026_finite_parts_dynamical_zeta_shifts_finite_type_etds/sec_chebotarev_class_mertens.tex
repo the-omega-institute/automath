@@ -346,9 +346,23 @@
       \sum_{r\ge2}\frac{1}{r}
         \sum_{n\le N}p_{n,C}\lambda^{-rn}.
   \]
-  Since \(p_{n,C}=O(\lambda^n/n)\), the double series with \(r\ge2\) is
-  absolutely convergent, and its tail after \(n>N\) is
-  \(O(\lambda^{-N}/N)\). Therefore
+  Since \(p_{n,C}=O(\lambda^n/n)\),
+  \[
+    \sum_{r\ge2}\frac1r\sum_{n\ge1}p_{n,C}\lambda^{-rn}
+    \ll
+    \sum_{r\ge2}\frac1r\sum_{n\ge1}\frac{\lambda^{(1-r)n}}{n}<\infty .
+  \]
+  Its omitted tail after \(n>N\) is
+  \[
+    \ll
+    \sum_{r\ge2}\frac1r\sum_{n>N}\frac{\lambda^{(1-r)n}}{n}
+    \le
+    \frac{1}{N+1}
+    \sum_{r\ge2}\frac{\lambda^{(1-r)(N+1)}}{r(1-\lambda^{1-r})}
+    =O(\lambda^{-N}/N),
+  \]
+  because the term \(r=2\) dominates the exponentially decaying tail.
+  Therefore
   \[
     \log P_C(N)
     =
@@ -369,55 +383,159 @@
   Exponentiating gives \eqref{eq:class-euler-product-asymptotic} and
   \eqref{eq:class-euler-product-k-mc}.
 
-  It remains to rewrite the constant. By
-  \Cref{prop:class-indicator-expansion},
+  \Cref{lem:class-product-constant-equivalence} rewrites the exponent in
+  \eqref{eq:class-euler-product-k-mc} as the exponent in
+  \eqref{eq:class-euler-product-k-f}. This proves the equivalent
+  character formula and completes the proof.
+\end{proof}
+
+\begin{lemma}[Audit identity for class Euler-product constants]
+  \label{lem:class-product-constant-equivalence}
+  Under the hypotheses of \Cref{thm:class-euler-product-mertens}, every
+  conjugacy class \(C\subset G\) satisfies
+  \begin{equation}\label{eq:class-product-constant-audit-identity}
+    \mathcal M_C(A,\tau;G)
+    +\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    =
+    \frac{|C|}{|G|}
+    \left(
+      \gamma+\log C(A)
+      +\sum_{\varrho\neq\mathbf1}
+        \chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
+    \right).
+  \end{equation}
+  All sums in \eqref{eq:class-product-constant-audit-identity} are
+  absolutely convergent after the indicated separation of the scalar
+  harmonic term. Consequently the constants in
+  \eqref{eq:class-euler-product-k-mc} and
+  \eqref{eq:class-euler-product-k-f} are exactly the same positive real
+  number.
+\end{lemma}
+
+\begin{proof}
+  The class-indicator expansion gives the identity of class functions
   \[
     \mathbf1_C
     =
     \frac{|C|}{|G|}\mathbf1
     +
     \frac{|C|}{|G|}
-      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)\chi_\varrho.
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)\chi_\varrho .
   \]
-  Hence
-  \[
+  Since \(r\ge2\), the primitive series are evaluated strictly inside
+  their common disc of absolute convergence. Hence linearity may be used
+  term by term, and
+  \begin{equation}\label{eq:class-product-tail-split-audit}
     \sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
     =
     \frac{|C|}{|G|}\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
     +
     \frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)
-      \sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r},
+      \sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r}.
+  \end{equation}
+  The convergence used here follows from
+  \(\Pi_\phi(\lambda^{-r})\ll_\phi\lambda^{1-r}\) for bounded class
+  functions and \(r\ge2\): indeed \(p_n(A)\ll\lambda^n/n\) gives
+  \[
+    \abs{\Pi_\phi(\lambda^{-r})}
+    \le
+    \norm{\phi}_\infty\sum_{n\ge1}p_n(A)\lambda^{-rn}
+    \ll_\phi
+    \sum_{n\ge1}\frac{\lambda^{(1-r)n}}{n}
+    \ll_\phi \lambda^{1-r}.
   \]
-  with absolute convergence as above. Combining this identity with
-  \eqref{eq:class-mertens-constant} yields
+
+  Next insert the additive class Mertens constant formula
+  \eqref{eq:class-mertens-constant}:
   \[
     \mathcal M_C(A,\tau;G)
-    +\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
     =
+    \frac{|C|}{|G|}\mathcal M(A)
+    +
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}
+        \chi_\varrho^\ast(C)\Pi_\varrho(\lambda^{-1}).
+  \]
+  Adding this display to \eqref{eq:class-product-tail-split-audit} and
+  grouping the non-trivial channels gives
+  \begin{equation}\label{eq:class-product-before-scalar-normalisation}
+    \begin{aligned}
+    \mathcal M_C(A,\tau;G)
+    +\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    & =
     \frac{|C|}{|G|}
     \left(
       \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
-      +\sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
-    \right).
-  \]
-  The scalar finite-part identity \eqref{eq:finite-part-primitive-closed}
-  gives
+    \right) \\
+    &\quad+
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)
+      \left(
+        \Pi_\varrho(\lambda^{-1})
+        +\sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r}
+      \right).
+    \end{aligned}
+  \end{equation}
+  By the definition of the fixed-label Euler transform, together with the
+  non-trivial Perron-point convergence supplied by the twisted gap,
   \[
+    F_\varrho(\lambda^{-1})
+    =
+    \Pi_\varrho(\lambda^{-1})
+    +\sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r}
+    \qquad(\varrho\neq\mathbf1).
+  \]
+  Thus only the scalar parenthesis in
+  \eqref{eq:class-product-before-scalar-normalisation} remains to be
+  normalized.
+
+  The scalar Mertens convention in this paper is
+  \(\mathcal M(A)=\gamma+\FP(A)\). Hence
+  \begin{equation}\label{eq:scalar-product-normalisation-audit}
     \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
     =
-    \gamma+
-    \FP(A)+\sum_{\gamma\in\cP}\sum_{r\ge2}
-      \frac{\lambda^{-r|\gamma|}}{r}
+    \gamma+\FP(A)+
+    \sum_{\gamma_0\in\cP}\sum_{r\ge2}
+      \frac{\lambda^{-r|\gamma_0|}}{r}.
+  \end{equation}
+  The double series is absolutely convergent because
+  \(p_n(A)\ll\lambda^n/n\). From
+  \eqref{eq:finite-part-primitive-closed},
+  \[
+    \FP(A)
     =
-    \gamma+\log C(A),
+    \log C(A)+
+    \sum_{\gamma_0\in\cP}
+      \left(
+        \lambda^{-|\gamma_0|}
+        +\log(1-\lambda^{-|\gamma_0|})
+      \right).
   \]
-  because
-  \(\FP(A)=\log C(A)+\sum_\gamma(\lambda^{-|\gamma|}
-  +\log(1-\lambda^{-|\gamma|}))\) and
-  \(\sum_{r\ge2}\lambda^{-r|\gamma|}/r
-  =-\log(1-\lambda^{-|\gamma|})-\lambda^{-|\gamma|}\). Substituting this
-  into the previous display proves \eqref{eq:class-euler-product-k-f}.
+  For each primitive orbit \(\gamma_0\), with
+  \(x=\lambda^{-|\gamma_0|}\in(0,1)\),
+  \[
+    x+\log(1-x)+\sum_{r\ge2}\frac{x^r}{r}
+    =x+\log(1-x)-\log(1-x)-x=0.
+  \]
+  Substituting this cancellation into
+  \eqref{eq:scalar-product-normalisation-audit} gives
+  \[
+    \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+    =\gamma+\log C(A).
+  \]
+  Combining this scalar identity with
+  \eqref{eq:class-product-before-scalar-normalisation} proves
+  \eqref{eq:class-product-constant-audit-identity}.
+
+  Finally, \eqref{eq:class-euler-product-k-mc} is the exponential of the
+  negative left-hand side of
+  \eqref{eq:class-product-constant-audit-identity}, and
+  \eqref{eq:class-euler-product-k-f} is the exponential of the negative
+  right-hand side. The equality of the exponents proves equality of the
+  constants. Positivity follows from
+  \eqref{eq:class-euler-product-k-mc}: its exponent is real, and the
+  exponential is the ordinary real exponential.
 \end{proof}
 
 \begin{lemma}[Positive real branch for the character formula]
