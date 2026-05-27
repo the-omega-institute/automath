@@ -1099,6 +1099,33 @@ def _state_is_post_rejection_retarget_reopen(state: PaperState) -> bool:
     )
 
 
+def _state_has_later_stage_history(state: PaperState) -> bool:
+    """Return True when this manuscript already reached Oracle review lanes."""
+    return bool(
+        state.stage_b_rounds
+        or state.stage_c_rounds
+        or state.stage_b_passed
+        or state.stage_c_passed
+        or state.stage_b_verdicts
+        or state.stage_c_verdicts
+    )
+
+
+def _stage_a_rework_directive_active(state: PaperState) -> bool:
+    """True after Oracle explicitly asks Codex to rerun Stage A locally."""
+    return any(
+        isinstance(event, dict)
+        and event.get("stage") == "A"
+        and event.get("action") in {"oracle_escalation", "oracle_escalation_reuse"}
+        and any(
+            token in str(event.get(key, "")).lower()
+            for key in ("verdict", "detail")
+            for token in ("rerun_stage_a", "revise", "proceed")
+        )
+        for event in state.history[-20:]
+    )
+
+
 def rebuild_rounds_from_git(state: PaperState) -> None:
     """Recover max prior round numbers from commit history.
 
@@ -6254,6 +6281,21 @@ def _compact_board_detail(reason: str, *, limit: int = 120) -> str:
             f"delta {signed_delta} < threshold {threshold}; "
             "manual theorem-deepening required"
         )
+    oracle_rework = re.search(
+        r"Oracle-directed Stage A rework did not add substantive theorem "
+        r"content: FAKE EXTENSION: no new theorems added, content delta "
+        r"only \+?(-?\d+) chars \(threshold: (\d+)\)",
+        text,
+        re.IGNORECASE,
+    )
+    if oracle_rework:
+        delta, threshold = oracle_rework.groups()
+        signed_delta = f"{int(delta):+d}"
+        return (
+            "post-rejection Oracle-directed rework not implemented; "
+            f"delta {signed_delta} < threshold {threshold}; "
+            "prior B/C evidence preserved; needs fresh theorem patch"
+        )
     if len(text) <= limit:
         return text
     clipped = text[:limit].rsplit(" ", 1)[0].rstrip(".,;:(")
@@ -6723,6 +6765,21 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                             state,
                             f"codex_empty_after_{action}",
                             tag=tag)
+                    if (_state_has_later_stage_history(state)
+                        and _stage_a_rework_directive_active(state)):
+                        state.log_event(
+                            "A",
+                            "oracle_directed_rework_not_implemented",
+                            round_num=rnd,
+                            detail=reason,
+                        )
+                        return _stage_a_block(
+                            state,
+                            "Oracle-directed Stage A rework did not add "
+                            f"substantive theorem content: {reason}. "
+                            "Preserving prior B/C evidence; rerun requires "
+                            "fresh Oracle directive or manual theorem patch.",
+                            dry_run=dry_run, tag=tag)
                     return _stage_a_block(
                         state,
                         f"A2 produced no substantive theorem change: {reason}",

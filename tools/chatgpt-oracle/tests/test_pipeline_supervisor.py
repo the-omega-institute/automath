@@ -263,6 +263,39 @@ class SupervisorHelpersTests(unittest.TestCase):
             self.assertIn("Oracle Stage A Escalation", directive)
             self.assertIn("Add one substantive theorem", directive)
 
+    def test_oracle_directed_rework_failure_preserves_later_stage_context(self):
+        state = oracle_pipeline.PaperState(
+            paper_dir=".",
+            paper_name="2026_retargeted",
+            target_journal="Retarget Journal",
+            current_stage="A",
+            stage_b_rounds=13,
+            stage_c_rounds=9,
+            stage_b_verdicts=["accept"],
+            stage_c_verdicts=["oracle accept"],
+        )
+        state.log_event(
+            "A",
+            "oracle_escalation_reuse",
+            detail=json.dumps({"verdict": "rerun_stage_a"}),
+        )
+
+        self.assertTrue(oracle_pipeline._state_has_later_stage_history(state))
+        self.assertTrue(oracle_pipeline._stage_a_rework_directive_active(state))
+
+        reason = (
+            "Oracle-directed Stage A rework did not add substantive theorem "
+            "content: FAKE EXTENSION: no new theorems added, content delta "
+            "only -383 chars (threshold: 500). Preserving prior B/C evidence; "
+            "rerun requires fresh Oracle directive or manual theorem patch."
+        )
+        detail = oracle_pipeline._compact_board_detail(reason)
+
+        self.assertIn("post-rejection Oracle-directed rework", detail)
+        self.assertIn("prior B/C evidence preserved", detail)
+        self.assertEqual(state.stage_b_rounds, 13)
+        self.assertEqual(state.stage_c_rounds, 9)
+
     def test_no_oracle_mode_skips_stage_a_oracle_escalation(self):
         with tempfile.TemporaryDirectory() as tmp:
             paper = Path(tmp) / "2026_local_only"
