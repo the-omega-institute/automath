@@ -505,10 +505,11 @@ scalar normalisation.
 \begin{theorem}[Determinant rigidity and Artin obstruction for
   Adams-corrected constants]
   \label{thm:class-product-determinant-rigidity}
-  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  The
-  following is an assembly statement for the product theorem, not a separate
-  leading-asymptotic theorem.  It records the exact information retained by
-  the constant term once the classical Frobenius exponent has been removed.
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  After the
+  classical Frobenius exponent and the scalar base normalisation have been
+  removed, the Adams-corrected Frobenius-class product constants are a
+  rigid finite-determinant readout: their non-scalar coordinates are exactly
+  the fixed-label Perron values, and no further class information is present.
   Put \(\alpha_A:=\gamma+\log C(A)\), and define the normalised logarithmic
   product vector
   \begin{equation}\label{eq:class-product-log-vector}
@@ -544,7 +545,43 @@ scalar normalisation.
     \{\det(I-zA_\pi):\pi\in\Irr(G)\}
     \]
   through the fixed-label Adams--M\"obius values
-  \(F_\varrho(\lambda^{-1})\), \(\varrho\ne\mathbf1\).  Conversely, after
+  \(F_\varrho(\lambda^{-1})\), \(\varrho\ne\mathbf1\), with the normalized
+  Abel branches of \Cref{prop:fixed-label-determinant-perron}.  More
+  concretely, for \(M\ge1\) set
+  \begin{equation}\label{eq:class-product-finite-truncation-coordinate}
+    F^{(M)}_\varrho
+    :=
+    \sum_{\substack{r,m\ge1\\rm\le M}}
+      \frac{\mu(m)}{rm}
+      \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+        a_{\varrho,\pi}^{(m)}
+        \log\det(I-\lambda^{-rm}A_\pi)^{-1}
+  \end{equation}
+  and
+  \begin{equation}\label{eq:class-product-finite-truncation-constant}
+    K_C^{(M)}
+    :=
+    \exp\!\left(
+      -\frac{|C|}{|G|}
+      \left(
+        \alpha_A+
+        \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)F^{(M)}_\varrho
+      \right)
+    \right).
+  \end{equation}
+  Then there are constants \(B_C\), depending only on the finite data
+  \((A,\tau,G,C)\), such that
+  \begin{equation}\label{eq:class-product-finite-truncation-error}
+    \abs{\log K_C-\log K_C^{(M)}}
+    \le
+    B_C
+    \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k},
+  \end{equation}
+  where \(\mathrm d(k)\) is the divisor function.  Thus the determinant
+  package supplies an error-controlled exhaustion of the Adams-corrected
+  constants by finitely many evaluations of the finitely many twisted
+  determinant polynomials.
+  Conversely, after
   the same scalar normalisation, any class-product vector satisfying
   \eqref{eq:class-product-normalisation-constraint} determines a unique zero-mean
   Peter--Weyl coordinate vector by
@@ -580,11 +617,13 @@ scalar normalisation.
   fixed-Euler constant together with the Peter--Weyl obstruction to an
   Artin-logarithm substitution.
 
-  In short, this theorem does not assert novelty for Frobenius-class
-  product asymptotics themselves.  Its new assertion is that, after the
-  classical exponent and existence theorem have been separated, the
-  fixed-label Adams--M\"obius determinant data are exactly the missing
-  non-scalar coordinates of the product constant.
+  In short, the Frobenius density and leading product exponent are the
+  classical input.  The theorem proved here is the finite-state rigidity of
+  the constant term: the Adams-corrected determinant coordinates are exactly
+  the missing non-scalar coordinates, they are computably exhausted by
+  \eqref{eq:class-product-finite-truncation-coordinate}--\eqref{eq:class-product-finite-truncation-error},
+  and the obstruction to substituting periodic Artin logarithms is precisely
+  the failure of these coordinates to agree.
 \end{theorem}
 
 \begin{proof}
@@ -610,6 +649,32 @@ scalar normalisation.
   determinant family by \Cref{prop:fixed-label-determinant-perron}.
   Substitution in \eqref{eq:class-euler-product-k-f} gives the asserted
   forward determination of \((K_C)_C\).
+  The same determinant formula, truncated to the indices \(rm\le M\), gives
+  \eqref{eq:class-product-finite-truncation-coordinate}.  By
+  \Cref{lem:fixed-label-perron-double-majorant}, for each non-trivial
+  \(\varrho\) there is a constant \(C_\varrho\) such that the omitted part of
+  the determinant series is bounded by
+  \[
+    C_\varrho
+    \sum_{\substack{r,m\ge1\\rm>M}}\frac{\lambda^{1-rm}}{rm}
+    =
+    C_\varrho
+    \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}.
+  \]
+  Multiplying these bounds by the finite coefficients
+  \((|C|/|G|)\chi_\varrho^\ast(C)\) in the logarithm of
+  \eqref{eq:class-euler-product-k-f}, and summing over the finitely many
+  non-trivial irreducible representations, proves
+  \eqref{eq:class-product-finite-truncation-error} with
+  \[
+    B_C=\frac{|C|}{|G|}
+    \sum_{\varrho\ne\mathbf1}
+      \abs{\chi_\varrho^\ast(C)}C_\varrho .
+  \]
+  Hence each finite truncation uses only finitely many evaluations of the
+  fixed finite family of determinant polynomials, and the displayed
+  exponentially summable tail gives the claimed finite-determinant
+  computability.
 
   For the converse, define
   \[
