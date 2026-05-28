@@ -8,21 +8,12 @@ Where a sign count is invoked, the primitive Sturm sequence, its sign-controllin
 Where endpoint constants are invoked, the branch ansatz, coefficient equations, and resulting constants are printed before use.
 Consequently the algebraic verification of the theorem chain is internal to the manuscript.
 
-For an independent submission check, the repository includes the short exact-arithmetic script
-\[
-\texttt{scripts/check\_algebraic\_certificates.py}.
-\]
-Run it from the paper directory by
+As optional supplementary verification, an exact-arithmetic checker may be run from the paper directory:
 \[
 \texttt{python scripts/check\_algebraic\_certificates.py}.
 \]
-The script recomputes, over rational function fields or exact algebraic extensions as appropriate, the printed resultants \(\Res_\lambda(\Pi,\partial_\lambda\Pi)\), \(\Res_t(N,D)\), the cubic branch resultant, the opposite-modulus resultant, the rational Sturm remainders and primitive pseudo-remainders, the positive-axis Sturm sign table and denominator-cell check, and the endpoint branch/amplitude coefficient equations displayed in Appendix~\ref{app:endpoint-branching}.
-Successful execution prints one \texttt{ok:} line for each certificate and terminates with
-\[
-\texttt{all algebraic certificate checks passed}.
-\]
-This script is not a hidden proof dependency: each assertion it checks is already printed in the manuscript, and the script is only a compact rerunnable audit that the printed inputs and outputs remain synchronized.
-Temporary extraction files, build logs, or generated scratch files are not part of the proof record; the stable proof record consists of the displayed formulas in the submission source together with the optional script named above.
+It recomputes the printed resultants, Sturm and pseudo-remainder data, positive-axis sign table, and endpoint branch/amplitude coefficient equations displayed in the appendices.
+The article does not rely on the checker as an oracle: the proof record is the collection of displayed formulas, determinant inputs, sign tables, and coefficient comparisons in the manuscript.
 \begin{enumerate}
 \item Appendix~\ref{app:disc} gives the \(7\times7\) Sylvester determinant for \(\Res_\lambda(\Pi,\partial_\lambda\Pi)\), the Bareiss pivots, the expanded polynomial \eqref{eq:disc-expanded-polynomial}, and its factorization.
 \item Lemma~\ref{lem:cubic-branch-elimination} gives the two input polynomials for the cubic branch-resultant computation, the corresponding \(6\times6\) Sylvester determinant, and its primitive output \(-64(256y^3+411y^2+165y+32)\).
@@ -34,30 +25,10 @@ Temporary extraction files, build logs, or generated scratch files are not part 
 The logical dependencies for the theorems are the labelled results and the displayed exact algebraic identities in the preceding sections and appendices.
 
 \paragraph{Printed-certificate dependency summary.}
-Every theorem, proposition, lemma, or corollary in the main proof chain that uses an exact computed certificate depends only on one of the displayed algebraic identities listed below.
-For each named certificate, the manuscript prints both the algebraic inputs and the algebraic output used in the proof: the relevant Sylvester or pseudo-remainder inputs are displayed before the determinant/resultant value is invoked, the Sturm signs are read from the printed leading coefficients and final constant term, and the endpoint coefficient computations display the local ansatz, the coefficient equations, and the resulting constants.
-The dependency list is:
-\begin{enumerate}
-\item Proposition~\ref{prop:minimal-order} uses the displayed numerator \(N(t,y)\), denominator \(D(t,y)\), the \(7\times7\) Sylvester determinant for \(\Res_t(N,D)\), its Bareiss pivots, and the printed factorization
-\[
-\Res_t(N,D)=y^3(y-1)^3(y+1)^6
-\]
-in Appendix~\ref{app:degeneracies}.  The proof uses only the vanishing locus of this displayed resultant and the separately printed exceptional cancellations at \(y=-1,0,1\).
-\item Theorem~\ref{thm:elliptic-reduction} uses the displayed normalization substitution \(\eta=y-\lambda^2\), \(Y=2y+1-2\lambda^2\), the ramification polynomial \eqref{eq:ramification-poly}, and the cubic branch-resultant identity \eqref{eq:cubic-branch-elimination-identity}.  The inputs to that resultant are exactly the two polynomials printed in Lemma~\ref{lem:cubic-branch-elimination}.
-\item Lemma~\ref{lem:cubic-branch-elimination} uses the two displayed input polynomials, its printed \(6\times6\) Sylvester determinant, and the primitive output
-\[
--64(256y^3+411y^2+165y+32).
-\]
-No later argument uses an unprinted specialization of this elimination.
-\item Corollary~\ref{cor:disc-factor} uses the displayed \(7\times7\) Sylvester determinant for \(\Res_\lambda(\Pi,\partial_\lambda\Pi)\), the printed Bareiss pivots, the expanded polynomial \eqref{eq:disc-expanded-polynomial}, and the displayed factorization in Appendix~\ref{app:disc}.
-\item Lemma~\ref{lem:positive-axis-dominance-criterion} and Theorem~\ref{thm:canonical-branch-dominance} use the discriminant determinant from Appendix~\ref{app:disc}, the endpoint substitutions \eqref{eq:positive-axis-resultants}, the opposite-modulus resultant \eqref{eq:opposite-modulus-resultant}, and the primitive Sturm pseudo-remainders and variation table of Proposition~\ref{prop:positive-axis-sturm-chain}.  The Sturm input polynomial, derivative, pseudo-remainders, excluded denominator factors, sign-controlling factors \(1\), \(4\), \(16y+11\), \(-(y^2-17y-2)\), \(-y(y-1)c(y)\), and sign-variation table are all printed before they are used to count roots on the positive-axis cells.
-\item Proposition~\ref{prop:endpoint-cosine-hypotheses}, Lemma~\ref{lem:two-branch-oscillation-law}, Lemma~\ref{lem:endpoint-coordinate-transfer}, and Theorem~\ref{thm:endpoint-zero-quantization} use the endpoint coefficient comparisons and compact-uniform remainder estimates printed in Lemma~\ref{lem:endpoint-coefficient-computation} and Proposition~\ref{prop:endpoint-expansion}.  The displayed inputs are the branch ansatz in the coordinate \(y=s^2\), the residue formula, the exact coefficient comparisons for \(Z_0,Z_1,Z_2,Z_3\), and the two noncolliding-branch estimates leading to \(R_m(-u^2/m^2)=O_K(m^{-2})\).
-\item Lemma~\ref{lem:projective-infinity-consistency} uses the homogeneous balance and coefficient comparison \eqref{eq:infinity-expansion} printed in Appendix~\ref{app:projective-infinity}.
-\end{enumerate}
-Inspecting the cited proofs gives the advertised dependency separation.
-Proposition~\ref{prop:minimal-order} invokes only the vanishing locus of \(\Res_t(N,D)\), whose determinant, pivots, and factorization are printed in Appendix~\ref{app:degeneracies}.
-Theorem~\ref{thm:elliptic-reduction}, Lemma~\ref{lem:cubic-branch-elimination}, and Corollary~\ref{cor:disc-factor} cite only the displayed substitution, resultant matrices, Bareiss pivots, expanded polynomials, and coefficient factorizations recorded in Section~\ref{sec:genus-one} and Appendix~\ref{app:disc}.
-Lemma~\ref{lem:positive-axis-dominance-criterion} states its certificate explicitly before its proof: the discriminant determinant, endpoint substitutions, opposite-modulus resultant, and the primitive Sturm chain of Proposition~\ref{prop:positive-axis-sturm-chain}; Theorem~\ref{thm:canonical-branch-dominance} uses that lemma as its positive-axis algebraic input.
+The main certificate dependencies are local and displayed.
+Proposition~\ref{prop:minimal-order} uses the printed Sylvester determinant and factorization of \(\Res_t(N,D)\), together with the exceptional cancellations at \(y=-1,0,1\).
+Theorem~\ref{thm:elliptic-reduction}, Lemma~\ref{lem:cubic-branch-elimination}, and Corollary~\ref{cor:disc-factor} use the displayed substitution, resultant matrices, Bareiss pivots, expanded polynomials, and factorizations in Section~\ref{sec:genus-one} and Appendix~\ref{app:disc}.
+Lemma~\ref{lem:positive-axis-dominance-criterion} uses the discriminant determinant, endpoint substitutions \eqref{eq:positive-axis-resultants}, opposite-modulus resultant \eqref{eq:opposite-modulus-resultant}, and the primitive Sturm chain and variation table of Proposition~\ref{prop:positive-axis-sturm-chain}.
 The endpoint zero theorem and its preparatory results use the branch expansions, amplitude identities, coefficient comparisons, coordinate transfer, and uniform remainder estimates displayed in Appendix~\ref{app:endpoint-branching} and Lemma~\ref{lem:endpoint-coordinate-transfer}.
-Finally, Lemma~\ref{lem:projective-infinity-consistency} is itself a coefficient comparison in Appendix~\ref{app:projective-infinity}.
-Thus every certificate-facing proof reads from a printed formula whose input and output have already been displayed in the manuscript.
+Lemma~\ref{lem:projective-infinity-consistency} is the coefficient comparison \eqref{eq:infinity-expansion} in Appendix~\ref{app:projective-infinity}.
+Thus every certificate-dependent proof reads from a displayed formula whose algebraic input and output are printed in the article.
