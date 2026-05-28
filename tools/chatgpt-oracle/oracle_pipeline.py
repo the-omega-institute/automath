@@ -5065,7 +5065,7 @@ def extract_verdict(text: str) -> str:
 
     # Priority 1: labelled verdict line
     labels = re.findall(
-        r"(?:overall\s+verdict|recommendation|decision|final\s+verdict)\s*[:\-]\s*"
+        r"(?:overall\s+verdict|recommendation|decision|final\s+verdict|verdict)\s*[:\-]\s*"
         r"(accept(?:ed)?|minor\s+revision|major\s+revision|reject(?:ion)?)",
         t, re.IGNORECASE,
     )
