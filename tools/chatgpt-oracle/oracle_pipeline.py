@@ -4457,8 +4457,9 @@ def build_backflow_apply_prompt(paper_dir: str, main_paper_dir: str,
 def parse_json_from_output(text: str) -> dict:
     """Extract first JSON block from codex/claude output."""
     accepted_keys = (
-        "overall_score", "verdict", "backflow_items",
-        "scores", "issues", "valid", "metrics",
+        "overall_score", "verdict", "publishable_route",
+        "core_theorem_direction", "required_theorem_package",
+        "backflow_items", "scores", "issues", "valid", "metrics",
         "in_scope_present", "placements",
         "approved", "quality_verdict",
         "system_verdict", "work_packages",
