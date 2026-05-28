@@ -780,7 +780,7 @@ The identification with the endpoint branches used below follows because \(
 This is exactly the elementary EP2 situation covered by the Puiseux normal form of Lemma~\ref{lem:generic-ep2-branching}; no higher-order singularity or matrix Jordan-chain input is being used beyond the scalar analytic-perturbation theorem cited there.
 \end{proof}
 
-\begin{lemma}[Fixed-window two-branch oscillation lemma]\label{lem:two-branch-oscillation-law}
+\begin{lemma}[Fixed-window two-branch scaling asymptotic]\label{lem:two-branch-scaling-asymptotic}
 Let \(y_c\in\RR\), and let \(\{Z_m(y)\}_{m\ge 0}\) be holomorphic in a neighborhood of \(y_c\).
 Assume also that \(Z_m(y)\) is real for real \(y\) near \(y_c\).
 Assume that there exists \(s_0>0\) such that, for \(|s|<s_0\),
@@ -814,16 +814,14 @@ Define
 \[
 F_m(u):=
 \frac{e^{b u^2/m}}{2A_*\lambda_c^m}
-Z_m\!\left(y_c-\frac{u^2}{m^2}\right).
+Z_m\!\left(y_c-\frac{u^2}{m^2}\right)
 \]
-Set
+and
 \[
 g_m(u):=\cos\!\left(\left(a-\frac{B_*}{A_*m}\right)u\right).
 \]
-This lemma is a fixed-window assertion: every compact set, every index set, and every half-window below is chosen independently of \(m\) before the estimates are applied.
-Under these hypotheses, for every fixed compact \(K\subset\CC\), there are constants
-\(C_K>0\) and \(m_K^{(0)}\), depending only on \(K\), the branch
-expansions, and the remainder constant for \(K\), such that
+Then, for every fixed compact \(K\subset\CC\), there are constants
+\(C_K>0\) and \(m_K^{(0)}\), depending only on \(K\), the branch expansions, and the remainder constant for \(K\), such that
 \begin{equation}\label{eq:universal-ep2-scaling-explicit-bound}
 \sup_{u\in K}\abs{F_m(u)-g_m(u)}\le \frac{C_K}{m^2}
 \qquad (m\ge m_K^{(0)}).
@@ -837,6 +835,64 @@ a u-\frac{B_*}{A_*}\frac{u}{m}
 \right)+O_K(m^{-2})
 \end{equation}
 uniformly for \(u\in K\).
+\end{lemma}
+
+\begin{proof}
+Fix a compact set \(K\subset\CC\) and set \(s=iu/m\), so that \(y=y_c-u^2/m^2\).
+For all sufficiently large \(m\), the set \(iK/m\) lies in \(|s|<s_0\), so the chosen branch and amplitude labels are used on a single domain throughout the compact window.
+Because the expansions are holomorphic in \(s\), the \(O(s^3)\) and \(O(s^2)\) remainders are uniform on compact subsets of \(\CC\) near \(0\).
+The nonvanishing of \(\lambda_\pm\) permits the logarithmic form on this disc, and the nonvanishing of \(C_\pm\) ensures that the leading amplitude \(A_*\) cannot be cancelled by a zero of either maximal branch.
+Therefore,
+\[
+\lambda_\pm\!\left(\frac{iu}{m}\right)^m
+=
+\lambda_c^m
+\exp\!\left(
+\pm iau-\frac{bu^2}{m}+O_K(m^{-2})
+\right),
+\]
+and similarly
+\[
+C_\pm\!\left(\frac{iu}{m}\right)
+=
+A_*\mp iB_*\frac{u}{m}+O_K(m^{-2}).
+\]
+Multiplying and adding the two maximal-modulus contributions gives
+\begin{align*}
+\frac{e^{b u^2/m}}{2A_*\lambda_c^m}
+\bigl(C_+\lambda_+^m + C_-\lambda_-^m\bigr)
+&=
+\cos(au)+\frac{B_*}{A_*}\frac{u}{m}\sin(au)+O_K(m^{-2}).
+\end{align*}
+Using
+\[
+\cos(\theta-\delta)=\cos\theta+\delta\sin\theta+O(\delta^2),
+\qquad
+\delta=\frac{B_*}{A_*}\frac{u}{m},
+\]
+we obtain
+\[
+\frac{e^{b u^2/m}}{2A_*\lambda_c^m}
+\bigl(C_+\lambda_+^m + C_-\lambda_-^m\bigr)
+=
+g_m(u)+O_K(m^{-2}).
+\]
+The constants in the last display are obtained by bounding the holomorphic remainders in the branch and amplitude expansions on the fixed compact set \(K\), multiplying by the bounded factors \(\exp(\pm iau-bu^2/m)\), and adding the normalized remainder term
+\[
+\frac{e^{b u^2/m}}{2A_*\lambda_c^m}
+R_m\!\left(y_c-\frac{u^2}{m^2}\right).
+\]
+Thus, after increasing the threshold if necessary, there is a constant \(C_K\) such that
+\[
+\sup_{u\in K}\abs{F_m(u)-g_m(u)}\le \frac{C_K}{m^2}.
+\]
+The compact set \(K\) has been fixed throughout this estimate, so the constants just obtained are the constants for that compact endpoint window.
+This is \eqref{eq:universal-ep2-scaling-explicit-bound}, and \eqref{eq:universal-ep2-scaling} is its asymptotic form.
+\end{proof}
+
+\begin{lemma}[Fixed-window zero isolation for the two-branch cosine limit]\label{lem:two-branch-oscillation-law}
+Assume the hypotheses and notation of Lemma~\ref{lem:two-branch-scaling-asymptotic}.
+This lemma is a fixed-window assertion: every compact set, every index set, and every half-window below is chosen independently of \(m\) before the Rouch\'e estimates are applied.
 Fix \(k\ge 1\) and set
 \[
 q_k:=\frac{(2k-1)\pi}{2},
@@ -916,67 +972,8 @@ The constants and the threshold are attached to the fixed window \(Q_U\), the fi
 \end{lemma}
 
 \begin{proof}
-The argument is the usual two-dominant-branch Beraha--Kahane--Weiss reduction followed by Rouch\'e isolation on fixed compact windows; the estimates are recorded explicitly because the theorem is used with constants later \cite{BerahaKahaneWeiss1975,BerahaKahaneWeiss1978,Sokal2004}.
-Fix a compact set \(K\subset\CC\) and set \(s=iu/m\), so that \(y=y_c-u^2/m^2\).
-For all sufficiently large \(m\), the set \(iK/m\) lies in \(|s|<s_0\), so the chosen branch and amplitude labels are used on a single domain throughout the compact window.
-Because the expansions are holomorphic in \(s\), the \(O(s^3)\) and \(O(s^2)\) remainders are uniform on compact subsets of \(\CC\) near \(0\).
-The nonvanishing of \(\lambda_\pm\) permits the logarithmic form on this disc, and the nonvanishing of \(C_\pm\) ensures that the leading amplitude \(A_*\) cannot be cancelled by a zero of either maximal branch.
-Therefore,
-\[
-\lambda_\pm\!\left(\frac{iu}{m}\right)^m
-=
-\lambda_c^m
-\exp\!\left(
-\pm iau-\frac{bu^2}{m}+O_K(m^{-2})
-\right),
-\]
-and similarly
-\[
-C_\pm\!\left(\frac{iu}{m}\right)
-=
-A_*\mp iB_*\frac{u}{m}+O_K(m^{-2}).
-\]
-Multiplying and adding the two maximal-modulus contributions gives
-\begin{align*}
-\frac{e^{b u^2/m}}{2A_*\lambda_c^m}
-\bigl(C_+\lambda_+^m + C_-\lambda_-^m\bigr)
-&=
-\cos(au)+\frac{B_*}{A_*}\frac{u}{m}\sin(au)+O_K(m^{-2}).
-\end{align*}
-Using
-\[
-\cos(\theta-\delta)=\cos\theta+\delta\sin\theta+O(\delta^2),
-\qquad
-\delta=\frac{B_*}{A_*}\frac{u}{m},
-\]
-we obtain
-\[
-\frac{e^{b u^2/m}}{2A_*\lambda_c^m}
-\bigl(C_+\lambda_+^m + C_-\lambda_-^m\bigr)
-=
-g_m(u)+O_K(m^{-2}),
-\]
-where
-\[
-g_m(u):=\cos\!\left(a u-\frac{B_*}{A_*}\frac{u}{m}\right).
-\]
-The constants in the last display are obtained by bounding the holomorphic
-remainders in the branch and amplitude expansions on the fixed compact set
-\(K\), multiplying by the bounded factors
-\(\exp(\pm iau-bu^2/m)\), and adding the normalized remainder term
-\[
-\frac{e^{b u^2/m}}{2A_*\lambda_c^m}
-R_m\!\left(y_c-\frac{u^2}{m^2}\right).
-\]
-Thus, after increasing the threshold if necessary, there is a constant
-\(C_K\) such that
-\[
-\sup_{u\in K}\abs{F_m(u)-g_m(u)}\le \frac{C_K}{m^2}.
-\]
-The compact set \(K\) has been fixed throughout this estimate, so the constants just obtained are the constants for that compact endpoint window.
-This is \eqref{eq:universal-ep2-scaling-explicit-bound}, and
-\eqref{eq:universal-ep2-scaling} is its asymptotic form.
-Thus the lemma uses BKW--Sokal theory only as motivation for retaining the two dominant branches; the quantitative remainder needed here is the explicit hypothesis above, and in the quartic application it is verified directly in Appendix~\ref{app:endpoint-branching}.
+Lemma~\ref{lem:two-branch-scaling-asymptotic} supplies the compact-uniform estimate \eqref{eq:universal-ep2-scaling-explicit-bound} on every fixed compact set used below.
+The BKW--Sokal principle is therefore used only as motivation for retaining the two dominant branches; the quantitative input for the present proof is the explicit two-branch expansion and the compact remainder hypothesis, which are verified for the quartic application in Appendix~\ref{app:endpoint-branching}.
 
 Now fix \(k\ge1\).
 Choose \(\eta_k>0\) so small that \(\cos(au)\) has no zero on the circle \(\abs{u-u_k^{(0)}}=\eta_k\).
