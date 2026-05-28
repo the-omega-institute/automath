@@ -2219,6 +2219,67 @@ realize the same operations.  Applying this to
 protocol universality for \(\{+,\times\}\).
 \end{proof}
 
+\begin{theorem}[Computable covers are exactly computable fiber-size data]
+\label{thm:finite-fiber-cover-realization}
+Let \(b_m\colon X_m\to\NN_{\ge1}\) be a uniformly computable family of
+positive integer functions: on input \((m,x)\), with \(x\in X_m\), an
+algorithm outputs \(b_m(x)\).  Then there is a computable finite-fiber
+cover \((\Omega_m^b,\Fold_m^b)\) of the Zeckendorf resolution data such
+that
+\[
+  |(\Fold_m^b)^{-1}(x)|=b_m(x)\qquad(x\in X_m)
+\]
+and hence
+\[
+  S_q^b(m)=\sum_{x\in X_m}b_m(x)^q\qquad(q\ge0).
+\]
+Conversely, every computable finite-fiber cover determines such a
+uniformly computable family
+\(b_m(x)=|(\Fold_m^\sharp)^{-1}(x)|\).  Under this correspondence the
+stable normal forms, valuation, addition and multiplication operations,
+and readouts are unchanged.  Therefore the finite-fiber certificate
+clauses over the fixed Zeckendorf protocol are exactly finite-atomic data
+attached to the computable fiber-size functions \(b_m\); no finite-state
+transfer law in the resolution variable is forced by those clauses.
+\end{theorem}
+
+\begin{proof}
+Given \(b_m\), define
+\[
+  \Omega_m^b=\{(x,j):x\in X_m,\ 1\le j\le b_m(x)\},
+  \qquad
+  \Fold_m^b(x,j)=x .
+\]
+The set \(X_m\) has a computable no-repetition list by the Zeckendorf
+finite-resolution data.  Since \(b_m(x)\) is computable uniformly, an
+algorithm lists \(\Omega_m^b\) without repetition by listing each
+\((x,1),\ldots,(x,b_m(x))\) as \(x\) runs through that list.  Membership
+in \(\Omega_m^b\) is decidable by checking \(x\in X_m\), computing
+\(b_m(x)\), and testing \(1\le j\le b_m(x)\).  The map \(\Fold_m^b\) is
+uniformly computable and surjective because every \(b_m(x)\) is positive.
+Thus \((\Omega_m^b,\Fold_m^b)\) is a computable finite-fiber cover in the
+sense of \Cref{def:computable-cover}.  Its fiber over \(x\) is exactly
+\(\{(x,j):1\le j\le b_m(x)\}\), giving the displayed formula for the
+fiber sizes and collision moments.
+
+Conversely, let \((\Omega_m^\sharp,\Fold_m^\sharp)\) be a computable
+finite-fiber cover.  The definition provides a uniform finite list of
+\(\Omega_m^\sharp\) and a uniform algorithm for \(\Fold_m^\sharp\).  For
+fixed \((m,x)\), count the listed elements \(\omega\in\Omega_m^\sharp\)
+with \(\Fold_m^\sharp(\omega)=x\).  This gives a uniformly computable
+positive integer because \(\Fold_m^\sharp\) is surjective onto \(X_m\).
+
+The cover changes only the finite preimages over the already fixed
+normal-form set \(X_m\).  By \Cref{lem:cover-preserves-protocol}, the
+stable normal forms, valuation, operations, and readouts are exactly the
+Zeckendorf protocol data.  By
+\Cref{thm:L2-fiber-multiset-factorization,cor:L2-load-split}, Hankel
+positivity and finite Prony reconstruction at a fixed resolution depend
+only on the resulting finite multiset of fiber sizes.  The preceding
+correspondence imposes no recurrence, rational generating series, or
+matrix-coefficient representation as \(m\) varies; those are precisely
+the additional finite-state transfer requirements separated below.
+\end{proof}
 \begin{theorem}[Finite-fiber certificates do not force finite-state transfer]
 \label{thm:finite-state-strictness}
 Let \(a_m\ge1\) be any computable integer sequence.  There is a
@@ -2374,6 +2435,7 @@ fixed finite-matrix representation in the resolution parameter.  This
 contradicts the defining finite-state clause for \(q=2\), and proves
 the claimed non-implication.
 \end{proof}
+
 
 
 
