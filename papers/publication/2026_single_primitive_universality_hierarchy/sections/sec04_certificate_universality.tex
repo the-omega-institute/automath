@@ -26,7 +26,12 @@ Since every legal word folds to itself, \(\Fold_m\) is onto and
 The detailed asymptotic thermodynamics of these fiber multiplicities is
 not used here.  The present article uses only the fixed-resolution
 finite lists and the elementary finite-atomic moment facts defined
-below.
+below.  These facts are classical finite-support moment and exponential-sum
+facts: Hankel positivity is the finite positive-measure case of the moment
+problem \cite{Hamburger1920,ShohatTamarkin1943,Akhiezer1965}, and the
+recovery of atoms from finitely many moments is the finite Prony method
+\cite{Prony1795,BatenkovYomdin2013}.  The theorem below packages exactly the
+small skeleton needed by the hierarchy.
 
 \begin{definition}[Collision moment]\label{def:collision-moment}
 For \(q\ge0\) and \(m\ge1\), define
@@ -40,6 +45,79 @@ have the same fold image, with the convention
 \end{definition}
 
 In particular \(S_0(m)=F_{m+2}\) and \(S_1(m)=2^m\).
+
+\begin{proposition}[Classical finite-atomic certificate skeleton]
+\label{prop:classical-finite-atomic-skeleton}
+Let \(D\) be a finite multiset of \(N\) positive integers, and put
+\(M_q(D)=\sum_{d\in D} d^q\), counted with multiplicity, for \(q\ge0\).
+Then the following data and only these data are determined at the fixed
+resolution by the finite-fiber certificate clauses.
+\begin{enumerate}
+\item The Hankel forms \([M_{i+j}(D)]_{0\le i,j\le r}\) are positive
+  semidefinite for every \(r\), and their principal minors give the usual
+  finite log-convexity inequalities.
+\item The moment segment \(M_0(D),\ldots,M_{2N-1}(D)\) determines the multiset
+  \(D\) uniquely.  More sharply, if \(a_1<\cdots<a_s\) are the distinct
+  entries of \(D\), then \(M_0(D),\ldots,M_{2s-1}(D)\) determine the support
+  values \(a_i\) and their multiplicities by the Prony recurrence and a
+  Vandermonde solve.
+\item Any two finite-fiber systems whose fixed-resolution fiber-size
+  multisets agree have identical collision moments, Hankel blocks, and Prony
+  reconstruction output at that resolution; if the above segment agrees, the
+  multisets agree.
+\end{enumerate}
+Consequently the finite-fiber part of \(L2\) is a fixed-resolution finite
+atomic measure certificate.  It supplies no relation between different
+resolutions and no finite-state transfer representation in the resolution
+variable.
+\end{proposition}
+
+\begin{proof}
+Write the multiset as distinct values \(a_1<\cdots<a_s\), with
+multiplicities \(n_1,
+\ldots,n_s\).  Then
+\[
+  M_q(D)=\sum_{i=1}^s n_i a_i^q .
+\]
+For any polynomial \(Q(t)=\sum_{i=0}^r c_i t^i\),
+\[
+  \sum_{i,j=0}^r c_i c_j M_{i+j}(D)
+    =\sum_{a\in D} Q(a)^2\ge0,
+\]
+which proves Hankel positivity.  The log-convexity inequalities are the
+nonnegativity of the adjacent \(2\times2\) principal minors, and the ratio
+monotonicity follows after division by the positive moments.  This is exactly
+the finite positive atomic instance of the classical moment problem.
+
+For reconstruction, the functions \(q\mapsto a_i^q\) are linearly independent
+because the Vandermonde matrix \([a_i^q]_{0\le q<s,1\le i\le s}\) is
+nonsingular.  Hence the infinite Hankel matrix has rank \(s\): the leading
+\(s\times s\) block is positive definite, while the columns satisfy the
+recurrence whose characteristic polynomial is
+\[
+  P(z)=\prod_{i=1}^s (z-a_i)=z^s+p_{s-1}z^{s-1}+\cdots+p_0 .
+\]
+Indeed,
+\[
+  M_{q+s}+p_{s-1}M_{q+s-1}+\cdots+p_0M_q=0\qquad(q\ge0).
+\]
+The first singular leading Hankel block detects \(s\); if no singular block
+occurs before size \(N\), then \(s=N\).  Once \(s\) is known, the nonsingular
+Hankel system using the moments through index \(2s-1\) determines the
+coefficients of \(P\), hence the distinct support values.  The first \(s\)
+moments then determine the multiplicities \(n_i\) by the nonsingular
+Vandermonde system.  If only the a priori support bound \(s\le N\) is known,
+the segment through \(M_{2N-1}\) contains every moment needed for this
+procedure.
+
+The final assertion follows because the construction uses only the multiset
+\(D\) at the single resolution under discussion.  Equal multisets plainly give
+the same moments and therefore the same Hankel and Prony data; equal moment
+segments through \(2N-1\) reconstruct equal multisets by the preceding
+paragraph.  No step constructs matrices or recurrences in a resolution
+parameter, so finite-state transfer remains an additional hypothesis rather
+than a consequence of the finite-atomic certificate.
+\end{proof}
 
 \subsection{Hankel positivity}
 \label{ssec:hankel}
@@ -59,6 +137,9 @@ is positive semidefinite for every \(r\ge0\).  Consequently:
 \end{proposition}
 
 \begin{proof}
+This is \Cref{prop:classical-finite-atomic-skeleton} applied to the multiset
+\(D_m=\{d_m(x):x\in X_m\}\).  We spell out the Gram factorization because it
+is the only part of the classical moment theory used here.
 Let
 \[
   \nu_m=\sum_{x\in X_m}\delta_{d_m(x)} .
@@ -70,8 +151,8 @@ Then \(S_q(m)=\int t^q\,d\nu_m(t)\).  For
   =\sum_{x\in X_m}
     \Bigl(\sum_{i=0}^r c_i d_m(x)^i\Bigr)^2\ge0.
 \]
-This is positive semidefiniteness, the finite case of the Hamburger
-moment criterion \cite{Hamburger1920}.  The \(2\times2\) principal
+This is positive semidefiniteness, the finite positive-atomic case of the
+Hamburger moment criterion \cite{Hamburger1920,ShohatTamarkin1943,Akhiezer1965}.  The \(2\times2\) principal
 minors give log-convexity, and division by
 \(S_q(m)S_{q-1}(m)>0\) gives the monotonicity of the consecutive
 ratios.
@@ -111,6 +192,10 @@ More precisely:
 \end{proposition}
 
 \begin{proof}
+This is the finite Prony reconstruction in
+\Cref{prop:classical-finite-atomic-skeleton}, applied to the finite atomic
+measure \(\sum_{x\in X_m}\delta_{d_m(x)}\).  For completeness we give the
+short recurrence proof.
 The moments have the representation
 \[
   S_q(m)=\sum_{i=1}^{r_m} n_i a_i^q .
@@ -151,8 +236,8 @@ polynomial recovers the support \(\{a_i\}\).  Finally,
 \]
   is a nonsingular Vandermonde system for the \(n_i\).  This is the
   elementary finite Hankel recurrence proof of the reconstruction; it is
-  the finite-support special case of the usual Prony method, for which
-  \cite{BatenkovYomdin2013} is only background.
+  the finite-support special case of the usual Prony method
+  \cite{Prony1795,BatenkovYomdin2013}.
 \end{proof}
 
 Thus the segment through \(S_{2N_m-1}(m)\) certifies the fiber-size
@@ -404,7 +489,7 @@ Fix \(m\).  The finite atomic measure
 has moments \(S_q^{(m)}\).  Hankel positivity is the Gram
 factorization in \Cref{rem:hankel-psd-generic}.  Since \(\nu_m\) has support size at
 most \(|N_m|\), the elementary Prony--Hankel argument of
-\Cref{thm:prony}, applied to this finite measure, reconstructs the
+\Cref{prop:classical-finite-atomic-skeleton,thm:prony}, applied to this finite measure, reconstructs the
 distinct values among the \(d_m(n)\) and their multiplicities from the
 moments through index \(2|N_m|-1\).  The lists in
 \Cref{def:effective-resolution-data} make \(|N_m|\), the fibers, and
@@ -434,7 +519,7 @@ transfer law.  Finite-window Zeckendorf thermodynamics and related
 asymptotic transfer questions are not used in this finite-fiber
 certificate proof.  More precisely, the Hankel positivity clause
 is the finite-atomic positivity clause of
-\Cref{prop:finite-fiber-certificate-taxonomy}, and the finite spectral
+\Cref{prop:classical-finite-atomic-skeleton,prop:finite-fiber-certificate-taxonomy}, and the finite spectral
 reconstruction clause is the corresponding finite-atomic Prony clause,
 with the computable a priori bound
 \(2|X_m|-1=2F_{m+2}-1\) on the required final moment index.  The
@@ -458,7 +543,7 @@ surjection by \Cref{prop:fold-confluence}.  Hence the data fit
 \(N_m=X_m\), and \(\mathrm{NF}_m=\Fold_m\); the fiber sizes
 \(d_m(x)=|\Fold_m^{-1}(x)|\) are finite and define the moments in
 \Cref{def:collision-moment}.  Applying
-\Cref{prop:finite-fiber-certificate-taxonomy} proves that the Hankel
+\Cref{prop:classical-finite-atomic-skeleton,prop:finite-fiber-certificate-taxonomy} proves that the Hankel
 matrices \([S_{i+j}(m)]_{i,j}\) are positive semidefinite for each fixed
 resolution and that the finite list
 \[
@@ -524,7 +609,7 @@ size \(|N_m|\) have the same moment segment through
 \(S_{2|N_m|-1}^{(m)}\).  Each associated finite atomic measure
 \(\sum_{d\in\mathcal D_m}\delta_d\), with multiplicities counted, has
 support size at most \(|N_m|\).  Applying the finite Prony reconstruction
-of \Cref{thm:prony} to either measure recovers exactly the distinct support
+of \Cref{prop:classical-finite-atomic-skeleton,thm:prony} to either measure recovers exactly the distinct support
 values and their multiplicities from that common segment.  Therefore the
 two recovered multisets coincide, so the original fiber-size multisets are
 equal.  This proves the asserted completeness of the moment segment.
@@ -611,7 +696,7 @@ budget comparison of \Cref{prop:finite-state-coefficient-budget} and
 \end{corollary}
 
 \begin{proof}
-Fix a resolution \(m\).  The proofs of \Cref{thm:hankel-psd} and
+Fix a resolution \(m\).  The proofs of \Cref{prop:classical-finite-atomic-skeleton,thm:hankel-psd} and
 \Cref{thm:prony} use only the finite atomic measure
 \(\sum_x\delta_{d_m(x)}\), where the sum ranges over the finite
 normal-form set and \(d_m(x)\) is the corresponding fiber size.  If a
@@ -647,12 +732,12 @@ Hankel--Prony reconstruction clauses.
 \begin{proof}
 The finite-fiber clauses in \Cref{prop:zeckendorf-cert-univ} are obtained
 by first fixing the L1 data from \Cref{thm:zeckendorf-protocol-univ} and
-then applying \Cref{prop:finite-fiber-certificate-taxonomy} to the finite
+then applying \Cref{prop:classical-finite-atomic-skeleton,prop:finite-fiber-certificate-taxonomy} to the finite
 surjections \(\Fold_m\colon\Omega_m\to X_m\).  The proof of that taxonomy
 uses only the finite list of fiber sizes at the fixed value of \(m\): its
 Hankel assertion is the Gram factorization of
 \Cref{rem:hankel-psd-generic}, and its reconstruction assertion is the
-finite-atomic Prony argument of \Cref{thm:prony}.  These arguments neither
+finite-atomic Prony argument of \Cref{prop:classical-finite-atomic-skeleton,thm:prony}.  These arguments neither
 define the normalizer nor transport addition or multiplication; those
 data have already been supplied at L1.  They also do not construct fixed
 matrices in the resolution variable, as
