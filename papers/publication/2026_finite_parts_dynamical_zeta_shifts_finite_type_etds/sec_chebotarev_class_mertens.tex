@@ -17,8 +17,9 @@ follow all concern the same constants.  The main sequence is
 \]
 Here \Cref{thm:class-mertens-explicit} supplies the additive constants,
 while \Cref{thm:fixed-label-euler-transform,thm:class-euler-product-mertens}
-prove Main Theorem~III.  The determinant formula is
-\Cref{prop:fixed-label-determinant-perron,thm:class-product-determinant-rigidity};
+prove Main Theorem~III.  The determinant formula and its finite
+truncation algorithm are
+\Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm,thm:class-product-determinant-rigidity};
 \Cref{prop:class-product-comparison} then separates the classical
 Frobenius-density contribution from the Adams-corrected constant.  The
 subsequent stability, obstruction, and quotient-shadow statements use that
@@ -498,6 +499,43 @@ formula without introducing further product constants.
   \]
   Exponentiating gives \eqref{eq:class-euler-product-asymptotic} and
   \eqref{eq:class-euler-product-k-mc}.
+
+  We now record the normalization calculation that produces the single
+  global factor \(|C|/|G|\) in the character formula.  The Hermitian
+  class-indicator expansion is
+  \[
+    \mathbf1_C
+    =
+    \frac{|C|}{|G|}\mathbf1+
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)\chi_\varrho .
+  \]
+  Applying this identity first to the additive class-Mertens constant and
+  then to the absolutely convergent Euler-product tail gives
+  \[
+  \begin{aligned}
+    &\mathcal M_C(A,\tau;G)+
+      \sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r} \\
+    &\quad=
+      \frac{|C|}{|G|}
+      \left(
+        \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+      \right) \\
+    &\qquad+
+      \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)
+      \left(
+        \Pi_\varrho(\lambda^{-1})+
+        \sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r}
+      \right).
+  \end{aligned}
+  \]
+  The non-trivial parenthesis is exactly
+  \(F_\varrho(\lambda^{-1})\), while the scalar parenthesis is
+  \(\gamma+\log C(A)\) by the scalar finite-part product normalization.
+  Thus the factor \(|C|/|G|\) comes from the class-indicator Fourier
+  coefficient and multiplies the scalar term and every fixed-label Fourier
+  contribution before the outer minus sign is applied.
 
   \Cref{lem:class-product-constant-equivalence} rewrites the exponent in
   \eqref{eq:class-euler-product-k-mc} as the exponent in
@@ -1637,6 +1675,98 @@ formula without introducing further product constants.
   \(t\uparrow1\), together with \Cref{thm:fixed-label-euler-transform},
   proves \eqref{eq:fixed-label-determinant-perron} and the branch
   statement.
+\end{proof}
+
+\begin{proposition}[Finite algorithm for fixed-label Perron evaluation]
+  \label{prop:fixed-label-perron-finite-algorithm}
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, the value
+  \(F_\varrho(\lambda^{-1})\) for every non-trivial
+  \(\varrho\in\Irr(G)\) is obtained by the following finite-input,
+  convergent truncation algorithm.
+  \begin{enumerate}[label=\textup{(\alph*)},leftmargin=*]
+    \item The determinant inputs are the finite character table of \(G\),
+      the power maps \(g\mapsto g^m\) on conjugacy classes, and the finite
+      determinant polynomials
+      \(\det(I-zA_\pi)\), \(\pi\in\Irr(G)\).
+    \item For each \(m\ge1\), compute the Adams coefficients
+      \begin{equation}\label{eq:fixed-label-algorithm-adams-coefficients}
+        a_{\varrho,\pi}^{(m)}
+        =\bigl\langle \psi^m\chi_\varrho,\chi_\pi\bigr\rangle_G,
+        \qquad
+        (\psi^m\chi_\varrho)(g)=\chi_\varrho(g^m),
+      \end{equation}
+      by the finite character-table inner product.
+    \item Omit the single scalar Perron term
+      \((r,m,\pi)=(1,1,\mathbf1)\) before any logarithm is evaluated.  Its
+      coefficient is
+      \(a_{\varrho,\mathbf1}^{(1)}=0\), so the algorithm never assigns a
+      finite part or a branch value to
+      \(\log\det(I-\lambda^{-1}A_{\mathbf1})^{-1}\).
+    \item Normalize every remaining logarithm from the germ
+      \(\Log\det(I-zA_\pi)^{-1}=0\) at \(z=0\).  For \(rm=1\) this means
+      Abel continuation along \(z=t\lambda^{-1}\), \(0\le t\uparrow1\), and
+      necessarily \(\pi\neq\mathbf1\).  For \(rm\ge2\) it means the ordinary
+      value of the same germ at \(z=\lambda^{-rm}\), where the determinant
+      is strictly inside its Perron radius.
+    \item For \(M\ge1\), form the finite truncation
+      \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-truncation}
+        F_\varrho^{(M)}
+        :=
+        \sum_{\substack{r,m\ge1\\rm\le M}}
+        \frac{\mu(m)}{rm}
+        \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+          a_{\varrho,\pi}^{(m)}
+          \Log\det(I-\lambda^{-rm}A_\pi)^{-1},
+      \end{equation}
+      with the branch convention in (d).  Then
+      \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-error}
+        \abs{F_\varrho(\lambda^{-1})-F_\varrho^{(M)}}
+        \le
+        C_\varrho
+        \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k},
+      \end{equation}
+      for a constant \(C_\varrho\) depending only on the finite determinant
+      package and \(\varrho\).  Hence the truncations converge absolutely
+      and exponentially, and the same finite procedure gives certified
+      interval enclosures by truncating after any prescribed tail budget.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  Items (a) and (b) are finite because \(G\) has finitely many conjugacy
+  classes and irreducible representations, and
+  \eqref{eq:fixed-label-algorithm-adams-coefficients} is the standard
+  finite character inner product defining the Adams multiplicities.  Item
+  (c) follows from
+  \(a_{\varrho,\mathbf1}^{(1)}=\langle\chi_\varrho,\mathbf1\rangle_G=0\)
+  for \(\varrho\neq\mathbf1\); this is the omitted singular term rule in
+  \Cref{prop:fixed-label-determinant-perron}.  Item (d) is exactly the
+  branch normalization stated there.  The twisted spectral gap makes the
+  non-trivial \(rm=1\) determinants invertible along the Abel path, and
+  \(rm\ge2\) gives \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\), so the
+  ordinary germ value is defined by its absolutely convergent logarithmic
+  power series.
+
+  With these conventions, \eqref{eq:fixed-label-determinant-perron} is the
+  limit of the finite truncations
+  \eqref{eq:fixed-label-perron-finite-algorithm-truncation}.  The tail with
+  \(rm>M\) is bounded by
+  \Cref{lem:fixed-label-perron-double-majorant}, applied to
+  \(\phi=\chi_\varrho\), and regrouping the pairs \((r,m)\) by
+  \(k=rm\) gives
+  \[
+    C_\varrho
+    \sum_{\substack{r,m\ge1\\rm>M}}\frac{\lambda^{1-rm}}{rm}
+    =
+    C_\varrho\sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}.
+  \]
+  This proves \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Since
+  the divisor function has subexponential growth and \(\lambda>1\), the
+  displayed tail tends to zero exponentially.  Therefore the finite
+  determinant truncations converge to the Perron value, and any prescribed
+  enclosure follows by choosing \(M\) so that the explicit tail is below the
+  requested tolerance and enclosing the finitely many determinant logarithms
+  using their specified branches.
 \end{proof}
 
 \begin{corollary}[Rigidity of the Adams-corrected class-product constants]
