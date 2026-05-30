@@ -23,6 +23,8 @@ and creation of a `papers/publication/2026_*` directory.
   two-page presentation-only shape.
 - [x] `case_evidence_note.md` records exact evidence for the four CICM brief
   case studies.
+- [x] `case_table_seed.md` records the compact four-case table without
+  promoting the seed.
 
 ## Promotion Requirements Still Open
 
@@ -39,13 +41,14 @@ and creation of a `papers/publication/2026_*` directory.
   presentation-only was verified open on 2026-05-31 with a 2026-06-15
   deadline.
 - [ ] Re-check the official page again immediately before actual submission.
-- [ ] Decide whether the promoted manuscript uses the pinned newmath commit or
-  a documented source update.
+- [x] Decide whether the promoted manuscript uses the pinned newmath commit or
+  a documented source update; see `source_decision_note.md`.
 - [x] Copy exact machine-board/log evidence for the four CICM brief case
   studies into a manuscript working note.
 - [x] Record the post-promotion active creation dry run in
   `active_creation_dry_run.md`.
-- [ ] Reduce `case_evidence_note.md` into a compact table after promotion.
+- [x] Reduce `case_evidence_note.md` into a compact pre-promotion seed table;
+  re-check evidence again after promotion.
 - [ ] Choose active paper slug, suggested:
   `2026_auditable_theory_to_paper_pipeline`.
 - [ ] Human approves promotion.

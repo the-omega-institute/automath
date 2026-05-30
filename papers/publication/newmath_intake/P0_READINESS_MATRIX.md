@@ -35,6 +35,7 @@ Already prepared:
 - `cicm_two_page_packet.md`
 - `cicm_promotion_brief.md`
 - `case_evidence_note.md`
+- `case_table_seed.md`
 - `gate_table.md`
 - `failure_modes.md`
 - `promotion_decision_memo.md`
