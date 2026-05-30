@@ -6,6 +6,21 @@
 
 处理原则：拒稿路线优先处理。若拒稿稿件和其他稿件重叠很大，就合并成一个 canonical 重写稿再投；若它和仍在审的稿件高度重叠，就先等在审稿件反馈。
 
+## Newmath intake candidates
+
+`newmath` 来源的候选投稿单元先进入
+`papers/publication/newmath_intake/`。这些目录不是 active paper track，
+不进入 Stage A/P0-P7，只有 promotion checklist 通过后才创建正式
+`2026_*` 论文目录。
+
+| seed | 优先级 | 当前状态 | 下一步 |
+|------|------|------|------|
+| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | intake-ready；系统/自动化论文候选 | 写 scope contract、metrics table、venue deadline 表 |
+| `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | intake-ready；有限核逻辑论文候选 | 抽取 FKernel/GroundCompiler/NameCert theorem inventory |
+| `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | intake-ready；Rule110 finite-witness artifact 论文候选 | 复核 artifact counts、验证命令、limitation ledger |
+| `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | intake-ready；MetaCIC 类型论 note 候选 | 做 related-work audit 和 exact theorem boundary |
+| `newmath_intake/seeds/observer_state_semantics` | P1 | intake-ready；observer-state semantics 候选 | 降调成 workshop/position framing，避免 AI-consciousness 强主张 |
+
 ## 已投稿：等待反馈
 
 | 论文或路线 | 期刊 | 当前状态 | 下一步 |

@@ -1,0 +1,48 @@
+# Newmath Publication Intake
+
+This directory stages publication candidates sourced from `D:/omega/newmath`.
+It is an intake queue, not an active paper pipeline.
+
+The directories under `seeds/` deliberately do not use the `2026_*` naming
+pattern and do not contain `main.tex` or `PIPELINE.md`. They are therefore not
+eligible for `pipeline_auto.py` stage execution until a human promotes a seed
+into a formal `papers/publication/2026_*` paper track.
+
+## Source Snapshot
+
+- Source repo: `D:/omega/newmath`
+- Source ref: `origin/dev`
+- Source commit: `3fb3d6a0641767388a401883062aa522ea0b397b`
+- Intake created from automath commit: `45b83891689f7f942f482665e326969858d50e3a`
+- Intake date: 2026-05-30
+
+## Operating Rules
+
+1. Agents may read seed packets for scope, source-map, theorem, artifact, and
+   venue planning.
+2. Agents must not run Stage A, P0-P7, or manuscript rewrite tasks against a
+   seed directory.
+3. A seed becomes active only after promotion into a `2026_*` directory with
+   `README.md`, `PIPELINE.md`, `research_directive.md`, `SOURCE_MAP.md`,
+   `THEOREM_LIST.md` or `ARTIFACT_INVENTORY.md`, `BIB_SCOPE.md`, and
+   `main.tex`.
+4. Formal manuscripts must pin a source commit. They must not cite a floating
+   `newmath` branch as their source of truth.
+5. If `newmath` changes after promotion, record the delta in a source update
+   note rather than silently editing the source-map commit.
+
+## Seed Priorities
+
+| Seed | Priority | Status | Intended first action |
+|---|---:|---|---|
+| `bedc_automation_pipeline` | P0 | intake-ready | Draft scope contract and metrics table |
+| `bedc_finite_kernel_calculus` | P0 | intake-ready | Build theorem inventory and non-claim boundary |
+| `bedc_rule110_finite_witness` | P0 | intake-ready | Build artifact inventory and venue ladder |
+| `metacic_closed_normal_consistency` | P1 | intake-ready | Related-work and theorem-scope audit |
+| `observer_state_semantics` | P1 | intake-ready | Workshop/position-paper framing audit |
+
+## Venue Timing
+
+Current verified venue timing is tracked in `VENUE_DEADLINES.md`. Agents must
+read that file before writing a venue ladder, promotion memo, or submission
+plan.

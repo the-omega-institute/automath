@@ -1,0 +1,67 @@
+# Seed Packet: BEDC Automation Pipeline
+
+## Proposed Paper Unit
+
+An audit-driven systems paper on AI-assisted Lean formalization and
+theory-to-paper publication automation under strict proof and manuscript gates.
+
+## Priority
+
+P0.
+
+## Source of Truth
+
+- Repo: `D:/omega/newmath`
+- Ref: `origin/dev`
+- Commit: `3fb3d6a0641767388a401883062aa522ea0b397b`
+- Companion repo for publication-workflow comparison: `D:/omega/automath`
+
+## Candidate Claim
+
+The paper claims that a large Lean-backed theory project can be advanced by
+parallel AI agents when every increment is routed through mechanical gates:
+Lean build, axiom keyword checks, transitive axiom-purity, paper-Lean marker
+audits, anti-hollow lints, critical-path scheduling, and source-map based
+publication tracking.
+
+## Non-Claims
+
+- It does not claim that AI replaces mathematicians.
+- It does not claim that generated theorems are valuable merely because they
+  compile.
+- It does not claim to be a Lean hammer or a general ATP integration.
+- It does not claim journal acceptance is automated.
+
+## Key Source Paths
+
+- `docs/dossier/discovery-loop.qmd`
+- `docs/dossier/formalization-routes.qmd`
+- `lean4/scripts/bedc_ci.py`
+- `lean4/scripts/critical_path.py`
+- `lean4/scripts/phase_d_lint.py`
+- `lean4/scripts/codex_formalize.py`
+- `papers/bedc/scripts/codex_revise.py`
+- `papers/bedc/tools/auto-ai-quality/README.md`
+- `tools/auto_heal_base.py`
+- `D:/omega/automath/papers/publication/AUTOMATION.md`
+- `D:/omega/automath/papers/publication/pipeline_auto.py`
+- `D:/omega/automath/papers/publication/pub_check.py`
+
+## Evidence to Extract
+
+- Gate list and failure modes: `axiom-purity --strict`, marker drift,
+  duplicate labels, shape saturation, parameter echo, missing BEDC touchpoint.
+- Scheduling logic: critical-path scores, top-window dispatch, capstone
+  candidates, formal-axis targets.
+- Publication workflow: `SOURCE_MAP.md`, `THEOREM_LIST.md`, `WORKBOARD.md`,
+  `JOURNAL_PROFILE.md`, and `PIPELINE.md` conventions from automath.
+- Case studies from 6-10 tracks showing missing theorem maps, venue-fit issues,
+  overlap blockers, citation gaps, or manuscript-stage gates found by the
+  automation.
+
+## Promotion Target
+
+Candidate active directory:
+
+`papers/publication/2026_auditable_theory_to_paper_pipeline/`
+
