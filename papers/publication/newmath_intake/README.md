@@ -30,6 +30,9 @@ into a formal `papers/publication/2026_*` paper track.
    `newmath` branch as their source of truth.
 5. If `newmath` changes after promotion, record the delta in a source update
    note rather than silently editing the source-map commit.
+6. If `newmath` changes before promotion, copy
+   `SOURCE_UPDATE_NOTE_TEMPLATE.md` into the relevant seed under a descriptive
+   name and record the old/new commits before editing any seed source-map.
 
 ## Intake Guard
 
@@ -61,3 +64,6 @@ read that file before writing a venue ladder, promotion memo, or submission
 plan.
 
 The current P0 decision state is summarized in `P0_READINESS_MATRIX.md`.
+
+Use `SOURCE_UPDATE_NOTE_TEMPLATE.md` for any source commit movement, whether the
+candidate is still a seed or has already been promoted.

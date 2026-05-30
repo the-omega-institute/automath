@@ -38,6 +38,7 @@ Already prepared:
 - `gate_table.md`
 - `failure_modes.md`
 - `promotion_decision_memo.md`
+- `active_creation_dry_run.md`
 - `source_verification_note.md`
 
 Still required before active paper creation:

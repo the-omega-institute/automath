@@ -41,6 +41,8 @@ and creation of a `papers/publication/2026_*` directory.
   a documented source update.
 - [x] Copy exact machine-board/log evidence for the four CICM brief case
   studies into a manuscript working note.
+- [x] Record the post-promotion active creation dry run in
+  `active_creation_dry_run.md`.
 - [ ] Reduce `case_evidence_note.md` into a compact table after promotion.
 - [ ] Choose active paper slug, suggested:
   `2026_auditable_theory_to_paper_pipeline`.
