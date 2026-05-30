@@ -15,7 +15,7 @@ Dates can change; agents must re-check the official page before submission.
 | ALIFE 2026 late-breaking abstracts | `observer_state_semantics`, `bedc_rule110_finite_witness` | 2026-07-20 AoE | 2026-07-27 | Good for workshop-like visibility; late-breaking abstracts are not proceedings papers | `https://2026.alife.org/call-for-papers/` |
 | POPL 2027 | `bedc_automation_pipeline`, `metacic_closed_normal_consistency` | 2026-07-09 AoE | 2026-10-05; final acceptance 2026-11-09 | High-impact, high-bar route; use only if paper has strong PL/formal-methods contribution and anonymized artifacts | `https://popl27.sigplan.org/track/POPL-2027-popl-research-papers` |
 | COLM 2026 workshop contributions | `bedc_automation_pipeline`, `observer_state_semantics` | suggested 2026-06-23 | mandatory accept/reject by 2026-07-24 | Monitor specific workshops; useful for AI/LLM/formal reasoning audience if a matching workshop opens | `https://colmweb.org/cfw.html` |
-| ICTAI 2026 | `bedc_automation_pipeline`, `observer_state_semantics` | 2026-06-30 | not verified in intake | Possible broad AI tools route; verify official CFP before use | `https://ictai.computer.org/2026/` |
+| ICTAI 2026 | `bedc_automation_pipeline`, `observer_state_semantics` | 2026-06-30 | 2026-09-10 | Broad AI tools route; official CFP also lists camera-ready due 2026-09-25 | `https://ictai.computer.org/2026/` |
 
 ## 2026 Routes Already Closed or Mostly Closed
 
@@ -57,4 +57,3 @@ Dates can change; agents must re-check the official page before submission.
    Do not rush CogMI Round 1 unless the non-claim boundary is already polished.
 5. Keep `metacic_closed_normal_consistency` for journal or next-cycle LFMTP/CICM
    unless POPL-level framing becomes realistic.
-
