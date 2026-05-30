@@ -13,6 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent
+PUBLICATION_ROOT = ROOT.parent
 SEEDS = ROOT / "seeds"
 REQUIRED_SEEDS = {
     "bedc_automation_pipeline",
@@ -71,12 +72,16 @@ def check_seed(seed_dir: Path) -> list[str]:
 
 
 def check_index_file(path: Path, required_phrases: list[str]) -> list[str]:
+    try:
+        display_path = path.relative_to(ROOT).as_posix()
+    except ValueError:
+        display_path = path.relative_to(PUBLICATION_ROOT).as_posix()
     if not path.exists():
-        return [f"{path.relative_to(ROOT).as_posix()}: missing required intake index"]
+        return [f"{display_path}: missing required intake index"]
     text = path.read_text(encoding="utf-8", errors="replace")
     missing = [phrase for phrase in required_phrases if phrase not in text]
     return [
-        f"{path.relative_to(ROOT).as_posix()}: missing boundary phrase {phrase!r}"
+        f"{display_path}: missing boundary phrase {phrase!r}"
         for phrase in missing
     ]
 
@@ -121,6 +126,21 @@ def run_check() -> tuple[list[str], list[str]]:
         check_index_file(
             ROOT / "AGENT_WORK_QUEUE.md",
             ["P0_GATE_AUDIT.md", "not a daemon queue"],
+        )
+    )
+    seed_row_phrases = [
+        f"newmath_intake/seeds/{name}" for name in sorted(REQUIRED_SEEDS)
+    ]
+    errors.extend(
+        check_index_file(
+            PUBLICATION_ROOT / "PROGRAM_BOARD.md",
+            seed_row_phrases + ["active paper track", "Stage A/P0-P7"],
+        )
+    )
+    errors.extend(
+        check_index_file(
+            PUBLICATION_ROOT / "PROGRAM_BOARD_MACHINE.md",
+            seed_row_phrases + ["INTAKE-NOT-ACTIVE", "do not run Stage A"],
         )
     )
 
