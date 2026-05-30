@@ -262,3 +262,47 @@ specific (g, n, branch) frontier. The corrected status of T-44 is:
 
 This is a downgrade from the previous monitoring entry, recorded here to
 maintain honest scope.
+
+
+## Monitoring Update 2026-05-31 01:15 SGT — Third sub-gap discovered: MCG-image hitting
+
+A further codex audit (codex_LLS_definition_level_centralizer_and_trace_scope_20260531)
+identifies a THIRD distinct sub-gap in the conditional-negative T-44 closure:
+
+Even if LLS definition-level deck-centralizing is granted on the compact branched
+cover H^1, and even if the LLS W_1 → branched H-isotypic identification is granted,
+the Schur trace obstruction "ρ_168 ≠ W_{ρ_3a/3b}" requires one further input:
+
+> The remaining proof gap is the same-subgroup comparison: either prove that the
+> order-6 ρ_168 trace witness, or another element with trace not divisible by 3,
+> lies in the image of the relevant virtual KP stabilizer Mod_φ for the
+> PSL_2(7), g=10, n=1, 2A cover; or prove abstractly that ρ_168 restricted to
+> that subgroup still has some trace not divisible by 3. Without this, the Schur
+> trace obstruction is verified for H-linear KP operators but not yet a complete
+> global non-subquotient theorem for ρ_168.
+
+In other words: the native χ_168(M) = 8 witness is for a specific block-diagonal
+M ∈ Sp_6(F_3). For the Schur obstruction to apply, the actual MCG image at
+(PSL_2(7), g=10, n=1, c=2A) must HIT either M itself (up to conjugacy in PSp_6(3))
+or some other PSp_6(3) element with χ_168-trace ≢ 0 mod 3.
+
+If the MCG image at this branched frontier turns out to be a proper subgroup of
+PSp_6(3) on which all χ_168 traces happen to be divisible by 3, the trace
+obstruction is vacuous and ρ_168 could still occur as a subquotient.
+
+Refined gap structure:
+
+1. LLS Theorem 9.8 / Corollary 9.9: KP connected monodromy ⊂ derived centralizer
+   of H. Applicable at the branched g=10 frontier? OPEN.
+2. LLS Lemma 7.16 + W_1 weight filtration: compact branched cover H^1 admits
+   H-isotypic decomposition with H-linear MCG action. Applicable here? OPEN.
+3. MCG-image hitting: the actual MCG image must contain an element with
+   χ_168-trace ≢ 0 mod 3 in some PSp_6(3) embedding. OPEN.
+
+All three sub-gaps are independently source-grade and not native-reducible.
+
+Refined status: T-44 ρ_168 instance of Litt #4 Q3 is CONDITIONALLY NEGATIVE
+modulo three independent source-grade hypotheses (LLS branched applicability,
+W_1 H-isotypic identification, MCG-image hitting). The native chain is still
+closure-grade; what's conditional is the full bridge to a global non-subquotient
+theorem.
