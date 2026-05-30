@@ -82,6 +82,64 @@ does not assert a general word-problem theorem for arbitrary
 single-primitive expression grammars, nor does it add an evaluator to
 Odrzywo{\l}ek's EML theorem.
 
+\begin{theorem}[No compiler hidden in compatible compilation]
+\label{thm:compatible-compiler-boundary}
+The statements \Cref{prop:L1-compiles-L0,cor:compile-scope} are exactly a
+conditional compatibility interface.  They do not construct, or assert the
+existence of, a computable evaluator from Odrzywo{\l}ek's EML term algebra
+into the Zeckendorf protocol.  More precisely, suppose a later argument in
+this article uses \Cref{prop:L1-compiles-L0} for an expression algebra
+\(T\).  Then that argument must already supply all of the following data:
+\begin{enumerate}
+\item a computable map \(\mathrm{eval}\colon T\to C'\) into the code set of a
+  specified protocol-universal system;
+\item the normal-form map \(\mathrm{NF}'\) and decidable equality on its
+  codomain \(N'\);
+\item the two implications in the semantic compatibility equivalence
+  \eqref{eq:semantic-compatibility} for every pair of terms in \(T\).
+\end{enumerate}
+Without these supplied data, \Cref{prop:L1-compiles-L0,cor:compile-scope}
+has no conclusion about \(T\).  Consequently the imported EML representation
+theorem \Cref{thm:eml-universality} cannot be combined with
+\Cref{prop:L1-compiles-L0} to obtain an EML-to-Zeckendorf compiler or a
+normalizer; the only consequence available from the proposition is that such
+a compiler, if it also satisfied \eqref{eq:semantic-compatibility}, would make
+the source semantic equivalence relation decidable.  In the Richardson
+fragment this is used only contrapositive: Richardson undecidability rules out
+the compatible evaluator, rather than producing one.
+\end{theorem}
+
+\begin{proof}
+The proof is a logical unpacking of the hypotheses.  The map
+\(\mathrm{eval}\), the protocol normal form \(\mathrm{NF}'\), decidable
+equality on \(N'\), and the equivalence
+\eqref{eq:semantic-compatibility} are assumptions in
+\Cref{prop:L1-compiles-L0}; none is produced inside that proposition.  Under
+those assumptions, the proposition proves only that
+\(\mathrm{NF}'\circ\mathrm{eval}\) is constant on semantic equivalence classes
+and separates distinct classes.  This gives an injection
+\(T/{\sim}\to N'\) and hence a decision procedure for \(\sim\) by computing
+and comparing two normal forms.  If any one of the listed assumptions is
+missing, this argument cannot even form the comparison
+\(\mathrm{NF}'(\mathrm{eval}(t_1))=
+\mathrm{NF}'(\mathrm{eval}(t_2))\), so the proposition has no conclusion for
+that source algebra.
+
+The imported EML theorem \Cref{thm:eml-universality} supplies a different
+kind of datum: finite EML representatives for the listed calculator symbols
+on their stated principal-branch domains.  By
+\Cref{cor:external-compiler-isolation,thm:eml-public-record-audit}, it supplies
+neither a computable map into the Zeckendorf code set nor a proof of the
+compatibility equivalence \eqref{eq:semantic-compatibility}.  Therefore the
+two results cannot be composed to manufacture an EML-to-Zeckendorf compiler.
+In the Richardson application, \Cref{cor:compile-scope} is applied only after
+the source equivalence relation has been identified with Richardson's
+undecidable identity-to-zero problem in \Cref{lem:richardson-fragment}; the
+conclusion is the nonexistence of any evaluator satisfying the displayed
+compatibility condition.  This is an obstruction interface, not a compiler
+construction.
+\end{proof}
+
 \subsection{The Richardson obstruction}
 \label{ssec:L0-not-L1}
 
