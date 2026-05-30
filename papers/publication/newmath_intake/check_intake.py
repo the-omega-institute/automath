@@ -20,6 +20,11 @@ REQUIRED_SEEDS = {
     "bedc_finite_kernel_calculus",
     "bedc_rule110_finite_witness",
 }
+KNOWN_P1_SEEDS = {
+    "metacic_closed_normal_consistency",
+    "observer_state_semantics",
+}
+KNOWN_SEEDS = REQUIRED_SEEDS | KNOWN_P1_SEEDS
 REQUIRED_SEED_FILES = {
     "bedc_automation_pipeline": {
         "active_creation_dry_run.md",
@@ -92,8 +97,8 @@ def run_check() -> tuple[list[str], list[str]]:
 
     seed_dirs = iter_seed_dirs(SEEDS)
     found = {p.name for p in seed_dirs}
-    for name in sorted(REQUIRED_SEEDS - found):
-        errors.append(f"seeds/{name}: missing required P0 seed directory")
+    for name in sorted(KNOWN_SEEDS - found):
+        errors.append(f"seeds/{name}: missing required intake seed directory")
 
     for seed_dir in seed_dirs:
         errors.extend(check_seed(seed_dir))
@@ -129,7 +134,7 @@ def run_check() -> tuple[list[str], list[str]]:
         )
     )
     seed_row_phrases = [
-        f"newmath_intake/seeds/{name}" for name in sorted(REQUIRED_SEEDS)
+        f"newmath_intake/seeds/{name}" for name in sorted(KNOWN_SEEDS)
     ]
     errors.extend(
         check_index_file(
@@ -145,8 +150,7 @@ def run_check() -> tuple[list[str], list[str]]:
     )
 
     for seed_dir in seed_dirs:
-        known_prefix = seed_dir.name.startswith(("metacic_", "observer_"))
-        if seed_dir.name not in REQUIRED_SEEDS and not known_prefix:
+        if seed_dir.name not in KNOWN_SEEDS:
             warnings.append(
                 f"seeds/{seed_dir.name}: unrecognized intake seed; verify priority manually"
             )
