@@ -24,8 +24,10 @@ and creation of a `papers/publication/2026_*` directory.
 
 - [x] Select three to six concrete case studies with exact source paths,
   observed failures, and recovery commits or notes.
+- [x] Verify that cited newmath and automath source paths exist at the pinned
+  source/workspace state; see `source_verification_note.md`.
 - [ ] Re-run or explicitly defer the source verification commands from
-  `gate_table.md`.
+  `gate_table.md`.  The latest note verifies paths only, not command success.
 - [ ] Re-check the official page for the first venue.
 - [ ] Decide whether the promoted manuscript uses the pinned newmath commit or
   a documented source update.

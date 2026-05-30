@@ -68,6 +68,8 @@ publication tracking.
 - `promotion_checklist.md`: explicit intake status and hard no-promotion rules.
 - `case_studies.md`: six concrete candidate case-study rows grounded in current
   automath/newmath evidence.
+- `source_verification_note.md`: path-level verification for pinned source
+  references, with command and venue checks still blocked.
 
 ## Current First Route
 
