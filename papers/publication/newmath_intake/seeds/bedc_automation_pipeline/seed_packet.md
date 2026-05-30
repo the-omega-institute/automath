@@ -70,6 +70,8 @@ publication tracking.
   automath/newmath evidence.
 - `source_verification_note.md`: path-level verification for pinned source
   references, with command and venue checks still blocked.
+- `cicm_promotion_brief.md`: a two-page CICM presentation-only shape with four
+  selected case studies and remaining promotion blockers.
 
 ## Current First Route
 

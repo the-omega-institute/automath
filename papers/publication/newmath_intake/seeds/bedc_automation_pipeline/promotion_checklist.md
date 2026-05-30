@@ -19,6 +19,8 @@ and creation of a `papers/publication/2026_*` directory.
 - [x] `submission_memo.md` records first-route strategy and blockers.
 - [x] `case_studies.md` records six concrete candidate cases from current
   automath/newmath evidence.
+- [x] `cicm_promotion_brief.md` reduces the case/gate material to a CICM
+  two-page presentation-only shape.
 
 ## Promotion Requirements Still Open
 
@@ -34,6 +36,8 @@ and creation of a `papers/publication/2026_*` directory.
 - [ ] Re-check the official page again immediately before actual submission.
 - [ ] Decide whether the promoted manuscript uses the pinned newmath commit or
   a documented source update.
+- [ ] Copy exact machine-board/log evidence for the four CICM brief case
+  studies into a manuscript working note.
 - [ ] Choose active paper slug, suggested:
   `2026_auditable_theory_to_paper_pipeline`.
 - [ ] Human approves promotion.
