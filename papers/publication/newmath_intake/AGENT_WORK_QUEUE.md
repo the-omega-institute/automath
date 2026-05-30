@@ -19,8 +19,8 @@ active paper list.
 
 | Seed | Safe automath-only work | Requires human approval | Current stop condition |
 |---|---|---|---|
-| `bedc_automation_pipeline` | Tighten the CICM case-study table; refine `bibliography_scope_seed.md`; refine non-claims; keep the active creation dry run current | Promotion as `2026_auditable_theory_to_paper_pipeline`; final live CICM check | Stop before active file creation |
-| `bedc_finite_kernel_calculus` | Refine exact theorem-spine summaries; maintain `current_declaration_map.md`; draft source-update note shell without changing source commit | Source-side work in `D:/omega/newmath`; later journal/workshop promotion | Stop before editing Lean/source files or claiming a packaging theorem exists |
+| `bedc_automation_pipeline` | Tighten the CICM case-study table; refine `bibliography_scope_seed.md`; refine non-claims; keep the active creation dry run and `source_decision_note.md` current | Promotion as `2026_auditable_theory_to_paper_pipeline`; final live CICM check | Stop before active file creation |
+| `bedc_finite_kernel_calculus` | Refine exact theorem-spine summaries; maintain `current_declaration_map.md`; keep `groundcompiler_placement_decision.md` aligned with the theorem spine; draft source-update note shell without changing source commit | Source-side work in `D:/omega/newmath`; later journal/workshop promotion | Stop before editing Lean/source files or claiming a packaging theorem exists |
 | `bedc_rule110_finite_witness` | Refine rerun result tables; maintain `current_static_status_map.md`; record toolchain prerequisites | Installing/using build toolchain; running Rule110 dynamic suite; later promotion | Stop before treating static evidence as artifact validation |
 
 ## Dispatch Order

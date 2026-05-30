@@ -14,8 +14,8 @@ paper track.
 
 | Seed | Current readiness | Can promote now? | Blocking item | Next owner/action |
 |---|---|---:|---|---|
-| `bedc_automation_pipeline` | CICM presentation-only packet prepared; case evidence and gate table ready | only with human approval | final human promotion decision; final live CICM page re-check; source commit/update choice | Human decides whether to promote as `2026_auditable_theory_to_paper_pipeline` |
-| `bedc_finite_kernel_calculus` | exact statements read; theorem spine selected; packaging work order prepared | no for journal route | add or identify upstream packaging theorem in `D:/omega/newmath` | Source-side theorem work using `upstream_packaging_work_order.md` |
+| `bedc_automation_pipeline` | CICM presentation-only packet prepared; case evidence, gate table, and source decision note ready | only with human approval | final human promotion decision; final live CICM page re-check | Human decides whether to promote as `2026_auditable_theory_to_paper_pipeline` |
+| `bedc_finite_kernel_calculus` | exact statements read; theorem spine selected; GroundCompiler placement decided; packaging work order prepared | no for journal route | add or identify upstream packaging theorem in `D:/omega/newmath` | Source-side theorem work using `upstream_packaging_work_order.md` |
 | `bedc_rule110_finite_witness` | static recheck done; count drift and collision-audit contradiction recorded; rerun packet prepared | no | install/use `make` plus C compiler and rerun dynamic artifact suite | Toolchain/artifact rerun using `artifact_rerun_packet.md` |
 
 ## Route Decisions
@@ -41,6 +41,7 @@ Already prepared:
 - `active_creation_dry_run.md`
 - `bibliography_scope_seed.md`
 - `source_verification_note.md`
+- `source_decision_note.md`
 
 Still required before active paper creation:
 
@@ -48,7 +49,7 @@ Still required before active paper creation:
 - active slug confirmation, currently suggested as
   `2026_auditable_theory_to_paper_pipeline`;
 - final live CICM page check immediately before submission;
-- source decision: pinned commit as-is or documented source update note.
+- source update note only if the promoted paper needs newer source evidence.
 
 ### `bedc_finite_kernel_calculus`
 
@@ -60,12 +61,12 @@ Already prepared:
 - `packaging_theorem_proposal.md`
 - `upstream_packaging_work_order.md`
 - `current_declaration_map.md`
+- `groundcompiler_placement_decision.md`
 
 Still required before journal-style promotion:
 
 - source-side packaging theorem or theorem family in `D:/omega/newmath`;
 - exact source path and exact statement summary after the source change;
-- decision on GroundCompiler material: appendix/interface only or main section;
 - live venue re-check.
 
 ### `bedc_rule110_finite_witness`

@@ -21,8 +21,8 @@ requires a human decision and a new active `2026_*` directory.
   the selected core `Mark`/`Hist`/`Ext`/`Cont`/`Bundle`/`Ask` declarations.
 - [x] Write a non-claim registry distinguishing primitive kernel objects from
   downstream mathematical interfaces.
-- [ ] Decide whether GroundCompiler material is appendix/interface only or a
-  section of the main paper.
+- [x] Decide whether GroundCompiler material is appendix/interface only or a
+  section of the main paper; see `groundcompiler_placement_decision.md`.
 - [x] Inspect the exact statement of every selected declaration before it is
   quoted in a promoted manuscript; see `exact_statement_note.md`.
 - [x] Decide whether the main result needs a new upstream packaging theorem in
