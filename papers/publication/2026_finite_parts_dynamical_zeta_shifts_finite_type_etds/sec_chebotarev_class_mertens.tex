@@ -2100,9 +2100,20 @@ computational-certificate, or operator-algebraic papers.
         \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k},
       \end{equation}
       for a constant \(C_\varrho\) depending only on the finite determinant
-      package and \(\varrho\).  Hence the truncations converge absolutely
+      package and \(\varrho\).  For an exact certificate one may replace the
+      right-hand side by any rational upper bound.  Concretely, if rational
+      numbers \(\theta<1\) and \(Q_\varrho\) satisfy
+      \(\lambda^{-1}<\theta\) and \(C_\varrho\lambda<Q_\varrho\), then
+      \begin{equation}\label{eq:fixed-label-rational-tail-envelope}
+        C_\varrho
+        \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+        \le
+        Q_\varrho\frac{\theta^{M+1}}{1-\theta},
+      \end{equation}
+      because \(\mathrm d(k)\le k\).  Thus the truncations converge absolutely
       and exponentially, and the same finite procedure gives certified
-      interval enclosures by truncating after any prescribed tail budget.  If
+      interval enclosures by truncating after any prescribed rational tail
+      budget.  If
       the finitely many logarithms occurring in
       \eqref{eq:fixed-label-perron-finite-algorithm-truncation} are each
       enclosed on the specified branch with radius at most \(\epsilon_0\), then
@@ -2153,7 +2164,12 @@ computational-certificate, or operator-algebraic papers.
   the divisor function has subexponential growth and \(\lambda>1\), the
   displayed tail tends to zero exponentially; hence the search in
   \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} terminates and
-  the finite determinant truncations converge to the Perron value.
+  the finite determinant truncations converge to the Perron value.  The
+  rational envelope \eqref{eq:fixed-label-rational-tail-envelope} follows by
+  choosing rational \(\theta\) and \(Q_\varrho\) with the stated strict
+  inequalities, using \(\lambda^{1-k}=\lambda(\lambda^{-1})^k\), and summing
+  the resulting geometric series.  The inequalities defining \(\theta\) and
+  \(Q_\varrho\) are finite comparisons in the algebraic determinant package.
 
   It remains only to justify the stated certificate format.  For fixed
   \(M\), the set of triples \((r,m,\pi)\) with \(rm\le M\) is finite, all
@@ -2169,14 +2185,16 @@ computational-certificate, or operator-algebraic papers.
   explicit.
 \end{proof}
 
-\begin{proposition}[Machine-checkable certificate interface for Perron readout]
+\begin{proposition}[Finite certificate protocol for Perron readout]
   \label{prop:fixed-label-certificate-artifact-interface}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  Fix a
   non-trivial \(\varrho\in\Irr(G)\), a tolerance \(\epsilon>0\), and a
   truncation level \(M\) satisfying
   \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice}.  The finite
-  algorithm of \Cref{prop:fixed-label-perron-finite-algorithm} admits an exact
-  certificate record consisting only of rational and algebraic finite data:
+  algorithm of \Cref{prop:fixed-label-perron-finite-algorithm} admits the
+  following script-independent certificate protocol.  A certificate record is
+  accepted if it consists only of finite algebraic model data and rational
+  inequalities of the following four kinds:
   \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
     \item the list of triples \((r,m,\pi)\) with \(rm\le M\), with the scalar
       Perron triple \((1,1,\mathbf1)\) deleted;
@@ -2185,31 +2203,31 @@ computational-certificate, or operator-algebraic papers.
       the finite character table and class-power table;
     \item for every listed triple, a branch tag specifying either the Abel
       non-trivial Perron branch \((rm=1,\pi\ne\mathbf1)\) or the ordinary germ
-      value inside the Perron disc \((rm\ge2)\), together with an interval
-      enclosure for
+      value inside the Perron disc \((rm\ge2)\), together with a rational
+      rectangular interval enclosure for
       \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\);
-    \item the two rational error budgets: the analytic tail in
-      \eqref{eq:fixed-label-perron-finite-algorithm-error} and the finite
-      interval-propagation bound in
-      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
+    \item two rational error budgets \(R_M\) and \(R_{\mathrm{num}}\): the
+      tail budget \(R_M\) is certified either directly from
+      \eqref{eq:fixed-label-perron-finite-algorithm-error} or from the
+      rational envelope \eqref{eq:fixed-label-rational-tail-envelope}, and
+      \(R_{\mathrm{num}}\) is certified from the finite interval-propagation
+      bound \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
   \end{enumerate}
-  Any checker which verifies these four finite records by exact interval
-  arithmetic certifies the inclusion
+  Any checker which verifies these four records by exact algebraic comparison
+  and rational interval arithmetic produces a rational rectangular interval
+  \(I_M\subset\CC\) enclosing the finite sum \(F_\varrho^{(M)}\) and certifies
+  the inclusion
   \begin{equation}\label{eq:fixed-label-certificate-interface-inclusion}
     F_\varrho(\lambda^{-1})
     \in
-    F_\varrho^{(M)}+
-    \left[-R_M-R_{\mathrm{num}},R_M+R_{\mathrm{num}}\right],
+    I_M+
+    \left\{w\in\CC:
+      \abs{w}\le R_M+R_{\mathrm{num}}\right\},
   \end{equation}
-  where
-  \[
-    R_M:=C_\varrho\sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}
-  \]
-  and \(R_{\mathrm{num}}\) is the finite roundoff radius in
-  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  Consequently a
+  where all sides of \(I_M\) and both radii are rational.  Consequently a
   supplemental certificate file or script for a concrete model is not an
-  additional hypothesis: it is a mechanically checkable serialization of the
-  same theorem-chain data used in
+  additional hypothesis: it is a
+  mechanically checkable serialization of the same theorem-chain data used in
   \Cref{prop:fixed-label-perron-finite-algorithm,cor:class-product-constant-rigidity}.
 \end{proposition}
 
@@ -2228,14 +2246,20 @@ computational-certificate, or operator-algebraic papers.
   Abel branch at \(rm=1\), made regular by the strict twisted gap, or the
   ordinary logarithmic germ at \(rm\ge2\), where
   \(\rho(\lambda^{-rm}A_\pi)<1\).  Thus every tagged interval encloses a
-  uniquely specified logarithm.  Multiplying these finitely many intervals by
-  the certified coefficients \(\mu(m)a_{\varrho,\pi}^{(m)}/(rm)\) and summing
-  them gives an interval centred at the stated finite truncation, with radius
-  at most \(R_{\mathrm{num}}\) by the triangle inequality used in
+  uniquely specified logarithm.  Multiplying the rational rectangular
+  intervals by the certified coefficients \(\mu(m)a_{\varrho,\pi}^{(m)}/(rm)\),
+  enclosing each algebraic product by exact comparison in a rational rectangle,
+  and summing those rectangles gives a rational rectangular interval \(I_M\)
+  which contains the stated finite truncation.  Its excess radius is at most
+  \(R_{\mathrm{num}}\) by the triangle inequality used in
   \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  The discarded
-  terms with \(rm>M\) have total absolute value at most \(R_M\) by
-  \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Adding the two
-  independent radii proves
+  terms with \(rm>M\) have total absolute value at most the rational number
+  \(R_M\), either because the certificate compares \(R_M\) with the algebraic
+  tail in \eqref{eq:fixed-label-perron-finite-algorithm-error}, or because it
+  records rational \(\theta,Q_\varrho\) satisfying
+  \eqref{eq:fixed-label-rational-tail-envelope} and
+  \(R_M\ge Q_\varrho\theta^{M+1}/(1-\theta)\).  All these checks are finite
+  algebraic or rational inequalities.  Adding the two independent radii proves
   \eqref{eq:fixed-label-certificate-interface-inclusion}.  Finally,
   \Cref{cor:class-product-constant-rigidity} applies finite Fourier inversion
   to the certified fixed-label Perron vector, so the same certificate record
