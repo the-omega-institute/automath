@@ -23,10 +23,13 @@ requires a human decision and a new active `2026_*` directory.
   downstream mathematical interfaces.
 - [ ] Decide whether GroundCompiler material is appendix/interface only or a
   section of the main paper.
-- [ ] Inspect the exact statement of every selected declaration before it is
-  quoted in a promoted manuscript.
-- [ ] Decide whether the main result needs a new upstream packaging theorem in
-  `D:/omega/newmath`.
+- [x] Inspect the exact statement of every selected declaration before it is
+  quoted in a promoted manuscript; see `exact_statement_note.md`.
+- [x] Decide whether the main result needs a new upstream packaging theorem in
+  `D:/omega/newmath`.  Current assessment: yes, unless this becomes a modest
+  short note.
+- [ ] Add or identify the upstream packaging theorem before journal-style
+  promotion.
 - [ ] Re-check current live venue options.
 - [ ] Human approves promotion and active paper slug.
 

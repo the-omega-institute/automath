@@ -60,15 +60,19 @@ objects.
   from the pinned source.
 - `non_claim_registry.md`: explicit overclaim boundary for any promoted
   manuscript.
+- `exact_statement_note.md`: exact statement summary and promotion assessment
+  for the selected spine.
 - `promotion_checklist.md`: remaining tasks before active paper promotion.
 
 ## Current Route
 
-This seed remains intake-only.  A first theorem spine has been curated, but it
-still needs exact-statement reading and a decision on whether the promoted paper
-should add one upstream packaging theorem in `D:/omega/newmath`.  It is stronger
-as a logic/formal-calculus paper than as a fast short-window submission.  Do
-not merge it with the automation-pipeline or Rule110 artifact papers.
+This seed remains intake-only.  The selected theorem spine has now been read at
+the exact-statement level.  The current assessment is that the spine is coherent
+but too local and constructor-driven for journal-style promotion unless one
+upstream packaging theorem is added in `D:/omega/newmath`.  It is stronger as a
+modest finite-calculus note or as supporting evidence for the automation paper
+than as a fast standalone submission.  Do not merge it with the Rule110 artifact
+paper.
 
 ## Promotion Target
 
