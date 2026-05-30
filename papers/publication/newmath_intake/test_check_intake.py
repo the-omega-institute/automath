@@ -49,6 +49,17 @@ class NewmathIntakeGuardTests(unittest.TestCase):
             "P0_GATE_AUDIT.md\nnot a daemon queue\n",
             encoding="utf-8",
         )
+        (self.root / "PROMOTION_HANDOFF.md").write_text(
+            "\n".join(
+                [
+                    "not a promotion command",
+                    "do not create any `papers/publication/2026_*`",
+                    "do not add `main.tex`",
+                    "do not add `PIPELINE.md`",
+                ]
+            ),
+            encoding="utf-8",
+        )
         (self.publication_root / "PROGRAM_BOARD.md").write_text(
             "active paper track\nStage A/P0-P7\n" + seed_rows,
             encoding="utf-8",

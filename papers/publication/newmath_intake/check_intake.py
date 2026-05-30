@@ -149,6 +149,19 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
             publication_root=publication_root,
         )
     )
+    errors.extend(
+        check_index_file(
+            root / "PROMOTION_HANDOFF.md",
+            [
+                "not a promotion command",
+                "do not create any `papers/publication/2026_*`",
+                "do not add `main.tex`",
+                "do not add `PIPELINE.md`",
+            ],
+            root=root,
+            publication_root=publication_root,
+        )
+    )
     seed_row_phrases = [
         f"newmath_intake/seeds/{name}" for name in sorted(KNOWN_SEEDS)
     ]

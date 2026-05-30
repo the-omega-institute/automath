@@ -14,6 +14,8 @@ active paper list.
 - Run `python papers\publication\newmath_intake\check_intake.py` after edits.
 - Use `P0_GATE_AUDIT.md` to distinguish safe intake work from promotion,
   source-side theorem work, and artifact reruns.
+- Use `PROMOTION_HANDOFF.md` to see what becomes active-paper work only after
+  an explicit human promotion command.
 - If `D:/omega/newmath` source changes, use
   `SOURCE_UPDATE_NOTE_TEMPLATE.md` before editing a seed source map.
 
