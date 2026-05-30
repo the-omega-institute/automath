@@ -409,3 +409,43 @@ Refined three-sub-gap structure:
 Status unchanged: T-44 ρ_168 instance CONDITIONALLY NEGATIVE. The sub-gap
 structure is finer-grained: sub-gap #2 has partial structural backing;
 sub-gaps #1 and #3 are the principal open work.
+
+
+## Monitoring Update 2026-05-31 04:45 SGT — Route A vs Route B distinction recognized
+
+`codex_minimal_rho168_exclusion_routes_20260531` (04:26) identifies two
+logically distinct closure routes for T-44 ρ_168 exclusion and notes that
+Route A bypasses sub-gap #3 entirely.
+
+Route A (irreducibility): assume sub-gap #2 (compact W_1 binding gives
+deck-centralizing on W_{ρ_3a/3b}). Then every MCG operator on the 168-dim
+W_{ρ_3a} factors as I_3 ⊗ A_T on V_3 ⊗ M_56. The image is contained in
+I_3 ⊗ GL(56), which is GL(56) up to a scalar tensor. Hence W_{ρ_3a} as
+an MCG-rep has every irreducible MCG-subquotient of dimension ≤ 56, not
+168. So ρ_168 (which is 168-dim and irreducible over PSp_6(3)) cannot be
+an MCG-subquotient of W_{ρ_3a}.
+
+Route B (trace witness): assume sub-gap #2 + sub-gap #3 (MCG image at
+the active frontier contains an element with χ_168-trace ≢ 0 mod 3).
+Then the Schur form trace identity forces a contradiction.
+
+Route A's hypothesis is strictly weaker than Route B's. The original
+Oracle response (2026-05-30) was Route B; codex now flags that Route A
+suffices and is the cleaner closure path. The transvection counterexample
+that witnessed sub-gap #3's necessity for Route B remains valid; it just
+shows Route B is the more demanding route, not the only route.
+
+Refined three-sub-gap status:
+1. LLS threshold (open, g > 64 vs active 10) — independent.
+2. W_1 / H-linear binding (partially source-supported by LLS lines
+   83-89, 168-180, 1608-1622, 1708-1713) — KEY closure pivot.
+3. MCG-image hitting (necessity witnessed for Route B but redundant
+   for Route A).
+
+Effective T-44 closure work: prove sub-gap #2 (compact W_1 binding) at
+the branched g = 10 frontier. With that single certificate, Route A
+delivers the negative answer to the ρ_168 instance of Litt #4 Q3.
+
+T-44 status revised: CONDITIONALLY NEGATIVE via Route A, contingent on
+a single source-supported certificate (sub-gap #2 at branched g = 10).
+The closure is cleaner than the prior three-sub-gap framing suggested.
