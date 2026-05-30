@@ -9,7 +9,7 @@ paper-stage automation until promoted.
 |---|---:|---|---|---|
 | `bedc_automation_pipeline` | P0 | systems / automation paper | intake-hardened; not promoted | Re-check CICM presentation-only CFP and source verification commands; then ask human whether to promote |
 | `bedc_finite_kernel_calculus` | P0 | finite-kernel logic paper | theorem spine selected; not promoted | Read exact selected statements and decide whether to add one upstream packaging theorem before venue fit |
-| `bedc_rule110_finite_witness` | P0 | artifact / minimal-trust witness paper | intake-hardened; not promoted | Re-run artifact commands/counts and decide collision-audit blocker vs scoped diagnostic |
+| `bedc_rule110_finite_witness` | P0 | artifact / minimal-trust witness paper | static recheck found count drift; not promoted | Run full `make` suite in a suitable environment and resolve collision-audit contradiction |
 | `metacic_closed_normal_consistency` | P1 | mechanized type-theory note | intake-ready | Audit related work and isolate the closed-normal consistency theorem boundary |
 | `observer_state_semantics` | P1 | observer-state semantics / position paper | intake-ready | Reframe away from AI-consciousness claims and toward ledger-bounded semantics |
 

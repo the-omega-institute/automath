@@ -30,9 +30,18 @@ submission.
 - Separate finite-witness claims from Cook phase-exact universality claims in
   the abstract.
 
+## Latest Intake Recheck
+
+See `recheck_results.md` for the 2026-05-31 static recheck.  The dynamic
+artifact suite was not run because this Windows environment does not currently
+provide `make`.  Static counts already show drift in test binaries and top-level
+C LOC relative to `STATUS.md`, while source manifest counts still match.
+
 ## Added Intake Controls
 
 - `limitation_ledger.md` records the required collision-audit disclosure.
 - `recheck_plan.md` lists the exact count families and commands to recompute.
+- `recheck_results.md` records the latest static count drift and the unresolved
+  collision-audit contradiction in `STATUS.md`.
 - `scope_contract.md` separates finite artifact claims from universal proof
   closure.

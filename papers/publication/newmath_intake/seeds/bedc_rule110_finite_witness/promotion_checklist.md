@@ -18,8 +18,10 @@ requires a human decision and a new active `2026_*` directory.
 
 ## Open Before Promotion
 
-- [ ] Re-run artifact commands at the chosen source commit.
-- [ ] Recompute manifest counts after `make test` materialization.
+- [ ] Re-run artifact commands at the chosen source commit.  Current Windows
+  environment has no `make`; see `recheck_results.md`.
+- [ ] Recompute manifest counts after `make test` materialization.  Static
+  source counts were recomputed, but generated manifests are not materialized.
 - [ ] Decide whether collision-audit failures are blockers or scoped
   diagnostics.
 - [ ] Write a trust-chain table with final LOC/count values.
