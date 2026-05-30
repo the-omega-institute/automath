@@ -31,6 +31,19 @@ into a formal `papers/publication/2026_*` paper track.
 5. If `newmath` changes after promotion, record the delta in a source update
    note rather than silently editing the source-map commit.
 
+## Intake Guard
+
+Run the deterministic intake guard before promotion work or after adding new
+seed materials:
+
+```powershell
+python papers\publication\newmath_intake\check_intake.py
+```
+
+The guard fails if a seed contains `main.tex`, `PIPELINE.md`, or a `2026_*`
+subdirectory, and it checks that the intake indexes still state the non-active
+boundary.
+
 ## Seed Priorities
 
 | Seed | Priority | Status | Intended first action |
