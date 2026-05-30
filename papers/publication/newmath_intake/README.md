@@ -59,3 +59,5 @@ boundary.
 Current verified venue timing is tracked in `VENUE_DEADLINES.md`. Agents must
 read that file before writing a venue ladder, promotion memo, or submission
 plan.
+
+The current P0 decision state is summarized in `P0_READINESS_MATRIX.md`.
