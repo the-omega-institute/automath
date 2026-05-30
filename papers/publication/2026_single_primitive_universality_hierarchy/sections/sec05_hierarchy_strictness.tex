@@ -1273,6 +1273,89 @@ terms beyond their fixed finite syntax and the three displayed
 real-domain identities, proving the asserted stability.
 \end{proof}
 
+\begin{theorem}[Richardson witness dependency cut]
+\label{thm:richardson-witness-dependency-cut}
+Fix the internally proved core EML witnesses of
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library} and fix three
+finite pure EML terms \((\mathsf P,\mathsf S,\mathsf R)\).  Form the
+Richardson translation \(\tau_{\mathsf P,\mathsf S,\mathsf R}\) by the
+structural recursion of \Cref{lem:richardson-translation}, replacing the
+three non-core leaves by \(\mathsf P\) for \(\pi\), \(\mathsf S\) for sine,
+and
+\[
+  \mu(u)\longmapsto \mathsf R(M(u,u))
+\]
+for Richardson's absolute-value symbol, where \(M\) is the internally
+proved multiplication witness.  Then the following two assertions are
+equivalent.
+\begin{enumerate}
+\item The finite triple has the three real-domain identities
+\[
+  \mathsf P=\pi,
+  \qquad
+  \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad
+  \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+\]
+\item The translation \(\tau_{\mathsf P,\mathsf S,\mathsf R}\) preserves
+the witness-interface generators \(\pi\), \(\sin\), and the nonnegative
+square-root operation used to build
+\(\mu_0(u)=\sqrt{u^2}\) on their real domains, and hence preserves the
+represented partial real function and real domain of every Richardson
+expression.
+\end{enumerate}
+Whenever these equivalent conditions hold, the translated Richardson
+fragment has no computable finite normalizer with decidable equality whose
+comparison with the translated zero expression decides identity to zero on
+the transported real domain.  For the printed roots
+\((W_{\pi},W_{\sin},W_{\sqrt{}})\), condition (1) is exactly the conditional
+interface \((H_{\mathcal W})\) of \Cref{ass:HW}; it is not a consequence of
+the finite recurrence or hash locks alone.  Thus a replacement-triple
+Richardson obstruction is unconditional precisely after those three
+real-domain identities have been proved for the chosen replacement triple.
+\end{theorem}
+
+\begin{proof}
+Assume first the three displayed identities.  By
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}, all arithmetic,
+exponential, positive-logarithm, multiplication, division, and rational
+constant constructors in the translation are finite pure EML terms with the
+stated real-domain meanings.  The identity \(\mathsf P=\pi\) gives the
+constant \(\pi\), and \(\mathsf S(x)=\sin x\) gives the sine constructor on
+the whole real line.  For the absolute-value constructor, the multiplication
+witness gives \(M(u,u)=u^2\ge0\) for real \(u\), so the third identity gives
+\[
+  \mathsf R(M(u,u))=\sqrt{u^2}=\mu_0(u)
+\]
+for every real \(u\).  A structural induction on Richardson expressions,
+with the usual partial-domain rule for composition, therefore proves that
+\(\tau_{\mathsf P,\mathsf S,\mathsf R}\) preserves both values and real
+domains for every expression.  This is exactly the calculation in
+\Cref{thm:minimal-eml-witness-interface}, now recorded as the forward
+implication.
+
+Conversely assume that the translation preserves the three named
+witness-interface generators in item (2).  Apply this preservation to the
+closed generator \(\pi\); its translation is \(\mathsf P\), so
+\(\mathsf P=\pi\).  Apply it to the expression \(\sin x\); its translation
+is \(\mathsf S(x)\), so \(\mathsf S(x)=\sin x\) for every real \(x\).  Apply
+it finally to the nonnegative square-root generator on its real domain; its
+translation is \(\mathsf R(t)\), so
+\(\mathsf R(t)=\sqrt t\) for every \(t\in\RR_{\ge0}\).  Hence the three
+real-domain identities are necessary.
+
+Under either equivalent condition, \Cref{prop:three-witness-stability}
+supplies an effective Richardson-equivalent translation, and
+\Cref{lem:transported-partial-normalizer-obstruction}, together with
+Richardson undecidability in \Cref{lem:richardson-fragment}, rules out the
+displayed finite normalizer.  For the printed roots, the three identities
+are precisely \((H_{\mathcal W})\) by \Cref{ass:HW} and
+\Cref{thm:printed-richardson-witnesses-verified}.  By
+\Cref{prop:printed-table-needs-analytic-interface}, the finite table,
+source locks, and fingerprints identify strings only and do not prove those
+analytic identities.  This proves the stated dependency cut.
+\end{proof}
+
 \begin{lemma}[Three-witness real-domain audit]
 \label{lem:three-witness-domain-audit}
 The strictness proof uses the non-core EML witnesses only through the
@@ -2138,8 +2221,9 @@ The EML system \((\eml,1)\) is expression-universal for
 \(\mathcal B_{36}\), using Odrzywo{\l}ek's external theorem only in the
 quarantined representative-existence sense of
 \Cref{prop:eml-import-dependency-cut}.  On the Richardson sublanguage, the
-normal-form obstruction has the following finite witness interface, with the
-verified-triple route as the unconditional statement.
+normal-form obstruction has the following finite witness interface, with
+\Cref{thm:richardson-witness-dependency-cut} giving the exact condition under
+which a replacement-triple instance is unconditional.
 \begin{enumerate}
 \item For any specified finite replacement triple
   \((\mathsf P,\mathsf S,\mathsf R)\) of pure EML terms for which the following
@@ -2151,7 +2235,8 @@ verified-triple route as the unconditional statement.
     \qquad
     \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0}).
   \]
-  the structural recursion of \Cref{prop:three-witness-stability} gives an
+  the dependency cut of \Cref{thm:richardson-witness-dependency-cut} and the
+  structural recursion of \Cref{prop:three-witness-stability} give an
   effective Richardson translation \(\tau\) into pure EML terms and the
   normal-form obstruction below.  This alternative uses no printed-root
   analytic assertion.
