@@ -59,9 +59,23 @@ publication tracking.
   overlap blockers, citation gaps, or manuscript-stage gates found by the
   automation.
 
+## Intake Artifacts Added
+
+- `scope_contract.md`: exact scope, non-claims, and promotion evidence.
+- `gate_table.md`: gate/source/failure/recovery table for the promoted draft.
+- `failure_modes.md`: concrete failure-mode taxonomy and case-study schema.
+- `submission_memo.md`: first-route strategy, fallback routes, and blockers.
+- `promotion_checklist.md`: explicit intake status and hard no-promotion rules.
+
+## Current First Route
+
+First route: CICM 2026 presentation-only, subject to official deadline
+re-verification before submission.  COLM workshop and ICTAI are fallback routes
+if the framing is shifted toward AI systems or LLM-governed formal reasoning.
+Journal routes such as JAR/JFR should wait for stronger case-study evidence.
+
 ## Promotion Target
 
 Candidate active directory:
 
 `papers/publication/2026_auditable_theory_to_paper_pipeline/`
-

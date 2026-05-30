@@ -21,3 +21,15 @@
 - Comparison table: Lean-auto / ProofWala / Physics-as-Code / BEDC-Automath
   complementarity.
 
+## Intake Tables Now Drafted
+
+- `gate_table.md` drafts the gate-by-gate architecture table.
+- `failure_modes.md` drafts the failure taxonomy and case-study requirements.
+- `submission_memo.md` drafts the route strategy and promoted-draft outline.
+
+## Missing Before Promotion
+
+- Concrete case-study rows with exact track names and source paths.
+- Re-run status or explicit deferral notes for the verification commands.
+- Venue-specific formatting constraints after official CFP re-check.
+- A comparison matrix against current AI-for-math/formalization systems.

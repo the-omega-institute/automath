@@ -21,3 +21,17 @@
 This file requires current web verification before promotion. Do not submit
 using remembered deadlines.
 
+## Current Route Decision
+
+The first route is CICM 2026 presentation-only if the presentation-only CFP is
+still open when the seed is promoted.  This route needs a concise, table-driven
+paper emphasizing mathematical software, formal-knowledge management, and
+reproducible workflow gates.
+
+Fallback route order:
+
+1. COLM workshop contribution, if a workshop accepts AI-for-formal-reasoning or
+   AI-for-science tooling papers.
+2. ICTAI 2026, if the manuscript is reframed as an AI workflow and agent
+   governance paper.
+3. JAR/JFR, after workshop feedback and after the case-study table is stronger.

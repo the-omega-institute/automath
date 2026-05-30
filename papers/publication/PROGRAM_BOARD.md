@@ -15,7 +15,7 @@
 
 | seed | 优先级 | 当前状态 | 下一步 |
 |------|------|------|------|
-| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | intake-ready；系统/自动化论文候选 | 写 scope contract、metrics table、venue deadline 表 |
+| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | intake-hardened；系统/自动化论文候选；仍非 active paper track | 补 3-6 个真实 case-study rows，提交前复核 CICM presentation-only / COLM / ICTAI CFP，然后再决定是否 promotion |
 | `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | intake-ready；有限核逻辑论文候选 | 抽取 FKernel/GroundCompiler/NameCert theorem inventory |
 | `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | intake-ready；Rule110 finite-witness artifact 论文候选 | 复核 artifact counts、验证命令、limitation ledger |
 | `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | intake-ready；MetaCIC 类型论 note 候选 | 做 related-work audit 和 exact theorem boundary |

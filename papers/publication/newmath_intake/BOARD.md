@@ -7,7 +7,7 @@ paper-stage automation until promoted.
 
 | Seed | Priority | Target shape | Current status | Next action |
 |---|---:|---|---|---|
-| `bedc_automation_pipeline` | P0 | systems / automation paper | intake-ready | Write a scope contract around audit-driven AI formalization and theory-to-paper automation |
+| `bedc_automation_pipeline` | P0 | systems / automation paper | intake-hardened; not promoted | Fill concrete case-study rows, re-check CICM presentation-only CFP, then ask human whether to promote |
 | `bedc_finite_kernel_calculus` | P0 | finite-kernel logic paper | intake-ready | Extract a theorem inventory for marks, histories, continuations, packages, gaps, and NameCert |
 | `bedc_rule110_finite_witness` | P0 | artifact / minimal-trust witness paper | intake-ready | Convert Rule 110 status data into an artifact inventory and limitation ledger |
 | `metacic_closed_normal_consistency` | P1 | mechanized type-theory note | intake-ready | Audit related work and isolate the closed-normal consistency theorem boundary |
@@ -26,4 +26,3 @@ below are true.
 - `venue_ladder.md` has a primary venue and at least two fallback venues.
 - `risk_register.md` includes kill criteria that prevent overclaiming.
 - A human approves promotion and creates a `2026_*` paper directory.
-
