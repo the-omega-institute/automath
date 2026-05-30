@@ -23,7 +23,7 @@ while \Cref{thm:fixed-label-euler-transform,thm:class-euler-product-mertens}
 prove Main Theorem~III.  The determinant formula and its finite
 truncation algorithm are
 \Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm,thm:class-product-determinant-rigidity};
-\Cref{prop:fixed-label-certificate-artifact-interface,prop:class-product-comparison} then separates the certified finite
+\Cref{prop:fixed-label-certificate-artifact-interface,thm:class-product-comparison} then separates the certified finite
 readout format and the classical
 Frobenius-density contribution from the Adams-corrected constant, and
 \Cref{prop:finite-data-main-spine-closure,rem:assembled-readout-dependency-order}
@@ -89,7 +89,7 @@ black boxes.
     \Cref{thm:fixed-label-euler-transform};
     \item the final equivalence is the scalar-normalised Fourier inversion
     \eqref{eq:comparison-fixed-label-inverse} of
-    \Cref{prop:class-product-comparison}, equivalently the rigidity formula
+    \Cref{thm:class-product-comparison}, equivalently the rigidity formula
     of \Cref{thm:class-product-determinant-rigidity}.
   \end{enumerate}
   Consequently the finite determinant package, together with the stated
@@ -1353,10 +1353,12 @@ orbit-distribution antecedents
 Nearby finite-data and skew-product works such as
 \cite{CrismaleDelVecchioGrisetaRossi2025NoncommutativeSkewProduct,OHare2025FiniteDataRigidity}
 address different rigidity or extension questions.  The finite-state
-primitive-label contribution needed here is the following scalar-normalised
-classification theorem.
+primitive-label contribution needed here is the following named comparison
+theorem: it is the Adams correction to the Frobenius-class Mertens product,
+not merely a restatement of the classical density theorem.
 
-\begin{proposition}[Scalar-normalised product-coordinate classification]
+\begin{theorem}[Adams correction to Frobenius-class Mertens products]
+  \label{thm:class-product-comparison}
   \label{prop:class-product-comparison}
   Under the hypotheses of \Cref{thm:class-euler-product-mertens}, the
   following assertions hold after the classical exponent and the scalar base
@@ -1507,7 +1509,7 @@ classification theorem.
     into the classical exponent, the existence statement, or the scalar base
     constant.
   \end{enumerate}
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
   The displayed comparison table is a restatement of the ordered assertions
@@ -2243,6 +2245,90 @@ operator-algebraic papers.
   to the certified fixed-label Perron vector, so the same certificate record
   serializes the product constants rather than introducing a new analytic
   premise.
+\end{proof}
+
+\begin{corollary}[Canonical finite certificate schema for fixed-label Perron
+  readout]
+  \label{cor:fixed-label-perron-certificate-schema}
+  Under the hypotheses and notation of
+  \Cref{prop:fixed-label-certificate-artifact-interface}, the preceding
+  analytic certificate can be serialized without any extra mathematical
+  choices by the following five-field schema:
+  \begin{center}
+  \small
+  \begin{tabular}{@{}L{0.19\textwidth}L{0.33\textwidth}L{0.36\textwidth}@{}}
+    \toprule
+    field & finite content & verifier check\\
+    \midrule
+    model
+      & \(A,\lambda,G\), the class table, the irreducible character table,
+        and the power maps \(C\mapsto C^m\)
+      & exact Perron equation for \(\lambda\), character orthogonality, and
+        the class-power table\\
+    window
+      & the tolerance \(\epsilon\), truncation level \(M\), and every
+        \((r,m,\pi)\) with \(rm\le M\) except \((1,1,\mathbf1)\)
+      & \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} and the
+        stated deletion of the singular scalar channel\\
+    Adams
+      & all integers \(a_{\varrho,
+        \pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\)
+      & recomputation from the finite character and power tables\\
+    branch
+      & for each listed triple, either the non-trivial Abel tag
+        \((rm=1,\pi\ne\mathbf1)\) or the ordinary Perron-disc tag
+        \((rm\ge2)\), with an algebraic or rational interval enclosing the
+        corresponding determinant logarithm
+      & uniqueness of the tagged branch from the gap or from
+        \(\rho(\lambda^{-rm}A_\pi)<1\), followed by interval evaluation of
+        \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\)\\
+    budget
+      & the interval-propagation radius \(R_{\mathrm{num}}\) and the tail
+        radius \(R_M=C_\varrho\sum_{k>M}\mathrm d(k)\lambda^{1-k}/k\)
+      & signed interval summation of the finite window and the tail estimate
+        \eqref{eq:fixed-label-perron-finite-algorithm-error}\\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  The checker accepting this schema returns exactly the interval inclusion
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.  Conversely, every
+  finite certificate record admitted by
+  \Cref{prop:fixed-label-certificate-artifact-interface} determines the five
+  fields above after harmless reordering of the finite window.  Thus the
+  appendix files, for example
+  \texttt{certificates/s3\_log\_certificates.py} and its generated certificate
+  text, are reproducible arithmetic transcripts for this schema, not new
+  analytic assumptions.
+\end{corollary}
+
+\begin{proof}
+  Starting from the four records in
+  \Cref{prop:fixed-label-certificate-artifact-interface}, put the base matrix,
+  Perron algebraic number, group table, class table, character table, and
+  class-power table in the model field.  The window field is the finite triple
+  list in record \textup{(i)} together with \(M\) and \(\epsilon\).  The Adams
+  field is record \textup{(ii)}.  The branch field is record \textup{(iii)}.
+  The budget field is record \textup{(iv)}.  Therefore the schema contains no
+  datum beyond the analytic certificate proposition.
+
+  The verifier checks listed in the last column are precisely the proof steps
+  of \Cref{prop:fixed-label-certificate-artifact-interface}: finite character
+  orthogonality recomputes the Adams coefficients; the deleted scalar triple is
+  the unique singular Perron logarithm and has zero coefficient for
+  \(\varrho\ne\mathbf1\); the two branch tags are the two regularity cases in
+  \Cref{prop:fixed-label-perron-finite-algorithm}; interval multiplication by
+  \(\mu(m)a_{\varrho,
+  \pi}^{(m)}/(rm)\) and finite summation give radius
+  \(R_{\mathrm{num}}\); and the discarded triples with \(rm>M\) contribute at
+  most \(R_M\).  Hence acceptance gives
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.
+
+  Conversely, any accepted four-record certificate already specifies the same
+  model data, finite window, Adams coefficients, branch intervals, and two
+  radii; ordering the finite triple list lexicographically is the only
+  normalization needed to place it in the displayed schema.  The cited
+  \(S_3\) files instantiate the same fields with exact rational arithmetic,
+  so their role is a serialized transcript of this finite verification.
 \end{proof}
 
 \begin{corollary}[Rigidity of the Adams-corrected class-product constants]
