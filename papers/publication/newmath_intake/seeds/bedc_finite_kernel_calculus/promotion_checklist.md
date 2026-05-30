@@ -28,6 +28,8 @@ requires a human decision and a new active `2026_*` directory.
 - [x] Decide whether the main result needs a new upstream packaging theorem in
   `D:/omega/newmath`.  Current assessment: yes, unless this becomes a modest
   short note.
+- [x] Write a source-side work order for the packaging theorem; see
+  `upstream_packaging_work_order.md`.
 - [ ] Add or identify the upstream packaging theorem before journal-style
   promotion.
 - [ ] Re-check current live venue options.
