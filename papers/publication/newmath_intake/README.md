@@ -52,8 +52,8 @@ boundary.
 | Seed | Priority | Status | Intended first action |
 |---|---:|---|---|
 | `bedc_automation_pipeline` | P0 | ready for human promotion decision; not active | Human decides whether to promote for CICM presentation-only as `2026_auditable_theory_to_paper_pipeline` |
-| `bedc_finite_kernel_calculus` | P0 | exact statements read; not active | Use `packaging_theorem_proposal.md` to add or identify an upstream packaging theorem before journal-style promotion |
-| `bedc_rule110_finite_witness` | P0 | static recheck found count drift and missing build toolchain; not active | Use `build_environment_plan.md` to run the full Rule110 suite in a toolchain-equipped environment before promotion |
+| `bedc_finite_kernel_calculus` | P0 | exact statements read; route templates prepared; not active | Use `blocker_ledger.md`, `short_note_route_memo.md`, and `upstream_packaging_work_order.md`; do not journal-promote before a packaging theorem |
+| `bedc_rule110_finite_witness` | P0 | static recheck found count drift and missing build toolchain; trust-chain and diagnostic templates prepared; not active | Use `trust_chain_template.md` and `diagnostic_route_memo.md` after the Rule110 suite is rerun in a toolchain-equipped environment |
 | `metacic_closed_normal_consistency` | P1 | intake-ready | Related-work and theorem-scope audit |
 | `observer_state_semantics` | P1 | intake-ready | Workshop/position-paper framing audit |
 

@@ -16,8 +16,8 @@
 | seed | 优先级 | 当前状态 | 下一步 |
 |------|------|------|------|
 | `newmath_intake/seeds/bedc_automation_pipeline` | P0 | ready for human promotion decision；仍非 active paper track；推荐 CICM presentation-only narrow-claim route | 是否批准 promotion 为 `2026_auditable_theory_to_paper_pipeline`；未批准前不创建 `2026_*`、`main.tex` 或 `PIPELINE.md` |
-| `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | exact statements 已读；当前 theorem spine 偏局部构造/等式/确定性，不宜直接 journal promotion | 先在 upstream 增加或识别一个 packaging theorem；当前可作为 automation paper 支撑材料或后续短 note |
-| `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | static recheck 发现 count drift；本机 Windows/WSL 都缺 `make` 和 C compiler；仍非 active paper track | 安装/使用 build toolchain 后重跑 full suite，并解决 collision-audit 33 行中 `26/33 PASS, 7 FAIL` 与全通过说法的矛盾 |
+| `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | exact statements 已读；blocker ledger、related-work scaffold、short-note memo 已准备；当前 theorem spine 偏局部构造/等式/确定性，不宜直接 journal promotion | 先在 upstream 增加或识别一个 packaging theorem；若你明确选择 modest workshop/short-note route，则按 `short_note_route_memo.md` 降级推进 |
+| `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | static recheck 发现 count drift；本机 Windows/WSL 都缺 `make` 和 C compiler；trust-chain template 和 diagnostic route memo 已准备；仍非 active paper track | 安装/使用 build toolchain 后重跑 full suite，填写 trust-chain，并解决或公开 collision-audit 33 行中 `26/33 PASS, 7 FAIL` 与全通过说法的矛盾 |
 | `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | intake-ready；MetaCIC 类型论 note 候选 | 做 related-work audit 和 exact theorem boundary |
 | `newmath_intake/seeds/observer_state_semantics` | P1 | intake-ready；observer-state semantics 候选 | 降调成 workshop/position framing，避免 AI-consciousness 强主张 |
 

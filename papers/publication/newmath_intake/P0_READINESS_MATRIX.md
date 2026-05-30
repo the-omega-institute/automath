@@ -15,8 +15,8 @@ paper track.
 | Seed | Current readiness | Can promote now? | Blocking item | Next owner/action |
 |---|---|---:|---|---|
 | `bedc_automation_pipeline` | CICM presentation-only packet prepared; case evidence, gate table, and source decision note ready | only with human approval | final human promotion decision; final live CICM page re-check | Human decides whether to promote as `2026_auditable_theory_to_paper_pipeline` |
-| `bedc_finite_kernel_calculus` | exact statements read; theorem spine selected; GroundCompiler placement decided; packaging work order prepared | no for journal route | add or identify upstream packaging theorem in `D:/omega/newmath` | Source-side theorem work using `upstream_packaging_work_order.md` |
-| `bedc_rule110_finite_witness` | static recheck done; count drift and collision-audit contradiction recorded; rerun packet prepared | no | install/use `make` plus C compiler and rerun dynamic artifact suite | Toolchain/artifact rerun using `artifact_rerun_packet.md` |
+| `bedc_finite_kernel_calculus` | exact statements read; theorem spine selected; GroundCompiler placement decided; blocker ledger, bibliography scaffold, short-note memo, and packaging work order prepared | no for journal route | add or identify upstream packaging theorem in `D:/omega/newmath`; or explicitly choose a modest short-note route | Source-side theorem work using `upstream_packaging_work_order.md`, or human short-note decision using `short_note_route_memo.md` |
+| `bedc_rule110_finite_witness` | static recheck done; count drift and collision-audit contradiction recorded; rerun packet, trust-chain template, and diagnostic route memo prepared | no | install/use `make` plus C compiler and rerun dynamic artifact suite | Toolchain/artifact rerun using `artifact_rerun_packet.md`, then fill `trust_chain_template.md` and apply `diagnostic_route_memo.md` if limits remain |
 
 ## Route Decisions
 
@@ -63,6 +63,9 @@ Already prepared:
 - `upstream_packaging_work_order.md`
 - `current_declaration_map.md`
 - `groundcompiler_placement_decision.md`
+- `blocker_ledger.md`
+- `bibliography_scope_seed.md`
+- `short_note_route_memo.md`
 
 Still required before journal-style promotion:
 
@@ -81,6 +84,9 @@ Already prepared:
 - `build_environment_plan.md`
 - `artifact_rerun_packet.md`
 - `current_static_status_map.md`
+- `evidence_separation_note.md`
+- `trust_chain_template.md`
+- `diagnostic_route_memo.md`
 
 Still required before promotion:
 
@@ -88,9 +94,9 @@ Still required before promotion:
 - dynamic rerun logs for `make`, `make test`, `make test-collision-audit`, and
   `make test-scale`;
 - refreshed manifest and LOC counts after materialization;
+- filled trust-chain table with final command results and limitations;
 - explicit decision on whether collision-audit failures are blockers or scoped
-  diagnostics;
-- trust-chain table with final command results and limitations.
+  diagnostics, using `diagnostic_route_memo.md` if failures remain.
 
 ## Deterministic Guard
 
