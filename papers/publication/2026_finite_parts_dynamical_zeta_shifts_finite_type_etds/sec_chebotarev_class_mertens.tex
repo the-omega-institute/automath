@@ -893,6 +893,10 @@ Artin logarithm.
 
 \begin{theorem}[Finite-determinant recovery of Adams-corrected constants]
   \label{thm:class-product-determinant-rigidity}
+  \label{cor:class-product-hyperplane-stability}
+  \label{cor:assembled-adams-frobenius-product-formula}
+  \label{cor:assembled-adams-frobenius-product-package}
+  \label{cor:class-product-stability-scalar-independence}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  The input
   data for this rigidity statement are exactly the scalar Perron
   normalisation \(C(A)\), the finite character table of \(G\), the finite
@@ -928,6 +932,72 @@ Artin logarithm.
     =
     \sum_{\varrho\ne\mathbf1}|F_\varrho(\lambda^{-1})|^2.
   \end{equation}
+  Conversely, after the scalar value \(\alpha_A\) is fixed, these identities
+  classify all positive class-product vectors satisfying the forced scalar
+  product constraint.  Namely let
+  \[
+    \mathscr K_{\alpha_A}:=
+    \left\{(L_C)_C:\ L_C>0,
+      \prod_{C\subset G}L_C=\exp(-\alpha_A)\right\}
+  \]
+  and let
+  \[
+    \mathcal H_G:=
+    \left\{H\text{ real class function}\;:\;
+      \sum_C\frac{|C|}{|G|}H(C)=0\right\}.
+  \]
+  Then
+  \begin{equation}\label{eq:class-product-coordinate-map}
+    H\longmapsto
+    \left(
+      \exp\!\left(-\frac{|C|}{|G|}
+        \bigl(\alpha_A+H(C)\bigr)\right)
+    \right)_{C\subset G}
+  \end{equation}
+  is a bijection from \(\mathcal H_G\) onto
+  \(\mathscr K_{\alpha_A}\), with inverse
+  \begin{equation}\label{eq:class-product-coordinate-map-inverse}
+    (L_C)_C\longmapsto H_L,
+    \qquad
+    H_L(C):=-\frac{|G|}{|C|}\log L_C-\alpha_A .
+  \end{equation}
+  The non-trivial irreducible characters give an isometric coordinate system
+  on this hyperplane:
+  \begin{equation}\label{eq:class-product-hyperplane-expansion}
+    H(C)=
+    \sum_{\varrho\ne\mathbf1}
+      \chi_\varrho^\ast(C)
+      \sum_D\frac{|D|}{|G|}H(D)\chi_\varrho(D),
+  \end{equation}
+  and
+  \begin{equation}\label{eq:class-product-stability-isometry}
+    \sum_{C\subset G}\frac{|C|}{|G|}|H(C)-H'(C)|^2
+    =
+    \sum_{\varrho\ne\mathbf1}
+      \left|
+        \sum_C\frac{|C|}{|G|}(H(C)-H'(C))\chi_\varrho(C)
+      \right|^2 .
+  \end{equation}
+  Hence two admissible determinant-coordinate data sets with the same scalar
+  normalisation and branch convention give the same Frobenius-class product
+  constants if and only if their non-trivial fixed-label Perron vectors agree.
+  For cocycles \(\tau,\tau'\) over the same base matrix, this equivalence is
+  the exact stability identity
+  \begin{equation}\label{eq:class-product-stability-forward}
+    -\frac{|G|}{|C|}\log K_C^\tau
+    +\frac{|G|}{|C|}\log K_C^{\tau'}
+    =
+    \sum_{\varrho\neq\mathbf1}
+      \chi_\varrho^\ast(C)
+      \bigl(F_\varrho^\tau(\lambda^{-1})
+            -F_\varrho^{\tau'}(\lambda^{-1})\bigr),
+  \end{equation}
+  together with Parseval for the two sides.  In particular, the zero-mean
+  class-product factor has real dimension
+  \(\#\{\text{conjugacy classes of }G\}-1\).  Any scalar fixed-matrix
+  record, such as \(C(A)\), \(\mathcal M(A)\), \(\FP(A)\), or a fixed-matrix
+  cyclic-lift record, has rank \(0\) on this factor and cannot replace the
+  non-trivial Peter--Weyl coordinates.
   The vector \((K_C)_{C\subset G}\) is therefore determined by precisely the
   finite determinant-coordinate input listed in the first sentence.  This is a
   rigidity statement only for the Adams-corrected constant vector in those
@@ -988,6 +1058,27 @@ Artin logarithm.
   identity in \eqref{eq:class-product-fourier-coordinates} and the Parseval
   identity \eqref{eq:class-product-parseval} are the standard Hermitian
   character orthogonality relations for the zero-mean class-function space.
+
+  The same orthogonality proves the converse classification.  If
+  \(H\in\mathcal H_G\), then the product of the entries in
+  \eqref{eq:class-product-coordinate-map} is \(\exp(-\alpha_A)\), because the
+  weighted mean of \(H\) is zero.  Conversely, if
+  \((L_C)_C\in\mathscr K_{\alpha_A}\), the positive logarithm in
+  \eqref{eq:class-product-coordinate-map-inverse} has weighted mean zero
+  exactly because \(\prod_C L_C=\exp(-\alpha_A)\).  These two assignments are
+  inverse by direct substitution.  Fourier inversion on the orthogonal
+  complement of the trivial character gives
+  \eqref{eq:class-product-hyperplane-expansion}; applying Parseval to
+  \(H-H'\) gives \eqref{eq:class-product-stability-isometry}.  Substituting
+  the dynamical vectors \(H_{K^\tau}\) and \(H_{K^{\tau'}}\), and then using
+  \eqref{eq:class-product-fourier-coordinates} for each cocycle, gives
+  \eqref{eq:class-product-stability-forward} and its Parseval identity.
+  Hence equality of the product constants is equivalent to equality of all
+  non-trivial fixed-label Perron coordinates.  The dimension and rank
+  assertions follow because \(\mathcal H_G\) is the codimension-one subspace
+  orthogonal to the trivial character, while every listed scalar fixed-matrix
+  record is constant as the non-trivial Peter--Weyl coordinates vary with the
+  scalar normalisation fixed.
 
   Each value \(F_\varrho(\lambda^{-1})\) is recovered from the finite twisted
   determinant family by \Cref{prop:fixed-label-determinant-perron}.
@@ -1065,83 +1156,6 @@ Artin logarithm.
 
 
 
-\begin{corollary}[Hyperplane classification and stability]
-  \label{cor:class-product-hyperplane-stability}
-  Fix the scalar value \(\alpha_A\).  The map
-  \begin{equation}\label{eq:class-product-coordinate-map}
-    \mathcal F:
-    (F_\varrho)_{\varrho\ne\mathbf1}
-    \longmapsto
-    \left(
-      \exp\!\left(-\frac{|C|}{|G|}
-      \left(
-        \alpha_A+
-        \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)F_\varrho
-      \right)\right)
-    \right)_{C\subset G}
-  \end{equation}
-  is a bijection from the real zero-mean Peter--Weyl coordinate tuples
-  (equivalently, the tuples satisfying the usual contragredient conjugation
-  relations) onto the positive product-constant hyperplane
-  \begin{equation}\label{eq:class-product-hyperplane-classification}
-    \mathscr K_{\alpha_A}
-    :=\left\{(L_C)_C:\ L_C>0,
-      \prod_{C\subset G}L_C=\exp(-\alpha_A)\right\}
-  \end{equation}
-  after positive-branch logarithms are taken.  Its inverse is
-  \begin{equation}\label{eq:class-product-coordinate-map-inverse}
-    F_\pi=
-    \sum_{C\subset G}\frac{|C|}{|G|}
-      \left(-\frac{|G|}{|C|}\log L_C-\alpha_A\right)\chi_\pi(C),
-    \qquad \pi\ne\mathbf1 .
-  \end{equation}
-  Hence, in the fixed finite-coordinate model with the same scalar
-  normalisation and branch convention, two admissible data sets have the same
-  Frobenius-class Euler-product constants if and only if their non-trivial
-  fixed-label Perron vectors
-  \((F_\varrho(\lambda^{-1}))_{\varrho\ne\mathbf1}\) agree.  Quantitatively,
-  if \((K_C)_C\) and \((K'_C)_C\) are the product vectors of two such
-  cocycles over the same \(A\), and if \(H_K,H_{K'}\) are defined by
-  \eqref{eq:class-product-log-vector}, then
-  \begin{equation}\label{eq:class-product-stability-isometry}
-    \sum_{C\subset G}\frac{|C|}{|G|}\abs{H_K(C)-H_{K'}(C)}^2
-    =
-    \sum_{\varrho\ne\mathbf1}
-      \abs{F_\varrho(\lambda^{-1})-F'_\varrho(\lambda^{-1})}^2 .
-  \end{equation}
-\end{corollary}
-
-\begin{proof}
-  If \((F_\varrho)_{\varrho\ne\mathbf1}\) is a real zero-mean Peter--Weyl
-  coordinate tuple, the logarithmic vector in
-  \eqref{eq:class-product-coordinate-map} has normalised profile
-  \[
-    H(C)=\sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)F_\varrho .
-  \]
-  Its weighted mean is zero, so multiplication over all conjugacy classes
-  gives \(\prod_C L_C=\exp(-\alpha_A)\); hence the image lies in
-  \(\mathscr K_{\alpha_A}\).  Conversely, if
-  \((L_C)_C\in\mathscr K_{\alpha_A}\), the vector
-  \[
-    H_L(C):=-\frac{|G|}{|C|}\log L_C-\alpha_A
-  \]
-  has weighted mean zero, because the defining product constraint for
-  \(\mathscr K_{\alpha_A}\) is exactly
-  \(\sum_C(|C|/|G|)H_L(C)=0\).  Fourier expansion in the zero-mean
-  class-function space gives
-  \[
-    H_L(C)=\sum_{\pi\ne\mathbf1}\chi_\pi^\ast(C)
-      \sum_{D\subset G}\frac{|D|}{|G|}H_L(D)\chi_\pi(D),
-  \]
-  which is precisely the inverse formula
-  \eqref{eq:class-product-coordinate-map-inverse}.  Thus
-  \eqref{eq:class-product-coordinate-map} and
-  \eqref{eq:class-product-coordinate-map-inverse} are inverse maps.  Applying
-  this bijection to two dynamical product vectors over the same base matrix
-  proves the equality criterion for two cocycles.  Applying Parseval to the
-  zero-mean difference \(H_K-H_{K'}\) gives the isometry
-  \eqref{eq:class-product-stability-isometry}.
-\end{proof}
 
 \begin{corollary}[Scalar-normalised fixed-coordinate obstruction skeleton]
   \label{thm:class-product-minimal-obstruction-skeleton}
@@ -2455,6 +2469,74 @@ computational-certificate, or operator-algebraic papers.
   premise.
 \end{proof}
 
+\begin{theorem}[Finite certificate sufficiency for the fixed-label Perron coordinate]
+  \label{thm:fixed-label-perron-finite-certificate-sufficiency}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and fix a
+  non-trivial irreducible character \(\varrho\).  The following finite record is
+  sufficient, and is necessary for the certificate interface used in this
+  paper, to certify the fixed-label Perron coordinate
+  \(F_\varrho(\lambda^{-1})\) to any prescribed rational accuracy:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the finite determinant data
+      \(A,\lambda,G\), the character table, the power maps on conjugacy
+      classes, and the determinant polynomials
+      \(D_\pi(z)=\det(I-zA_\pi)\);
+    \item a finite window \(M\) and the finitely many Adams coefficients
+      \(a_{\varrho,
+      \pi}^{(m)}\) with \(rm\le M\), with the sole scalar Perron triple
+      \((r,m,\pi)=(1,1,\mathbf1)\) deleted before any logarithm is evaluated;
+    \item for every remaining triple, the branch tag fixed by the germ at
+      \(z=0\): Abel continuation to \(z=\lambda^{-1}\) when
+      \(rm=1\) and \(\pi\ne\mathbf1\), and the ordinary interior-disc value at
+      \(z=\lambda^{-rm}\) when \(rm\ge2\);
+    \item rational rectangular enclosures for these finitely many logarithms
+      and a rational number \(R\) dominating both interval-propagation error
+      and the determinant tail
+      \(C_\varrho\sum_{k>M}\mathrm d(k)\lambda^{1-k}/k\).
+  \end{enumerate}
+  From this record one obtains a rational rectangle \(J\subset\CC\) with
+  \(F_\varrho(\lambda^{-1})\in J\) and diameter bounded by the requested
+  tolerance.  Conversely, every certificate accepted by
+  \Cref{prop:fixed-label-certificate-protocol} reduces to such a record after
+  replacing its two radii \(R_M\) and \(R_{\mathrm{num}}\) by
+  \(R_M+R_{\mathrm{num}}\).  Through finite Fourier inversion in
+  \Cref{thm:class-product-determinant-rigidity,cor:class-product-constant-rigidity},
+  the same finite certificate determines the corresponding certified enclosure
+  for every Adams-corrected Frobenius-class product constant.
+\end{theorem}
+
+\begin{proof}
+  The sufficiency direction is exactly the finite truncation theorem and the
+  protocol interface in compressed form.  Items \textup{(i)} and
+  \textup{(ii)} are finite by the finiteness of \(\Irr(G)\), the finite
+  character table, and the finite set \(\{(r,m):rm\le M\}\).  The scalar
+  Perron triple is deleted by
+  \Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm}
+  because its coefficient is zero for \(\varrho\ne\mathbf1\).  Item
+  \textup{(iii)} is the two-branch convention proved in
+  \Cref{prop:fixed-label-perron-finite-algorithm}: the non-trivial boundary
+  terms are regular Abel limits by the twisted spectral gap, while all terms
+  with \(rm\ge2\) lie strictly inside the Perron disc.  Summing the certified
+  finite rectangles with coefficients
+  \(\mu(m)a_{\varrho,
+  \pi}^{(m)}/(rm)\) gives an enclosure of
+  \(F_\varrho^{(M)}\), and enlarging by the rational radius in item
+  \textup{(iv)} contains the discarded tail by
+  \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Choosing \(M\) from
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} and refining the
+  finite interval arithmetic gives any prescribed rational diameter.
+
+  Conversely, the certificate protocol consists precisely of the determinant
+  record, the finite window and Adams coefficients, the branch-tagged finite
+  logarithm enclosures, and the two rational radii appearing in
+  \eqref{eq:fixed-label-certificate-interface-inclusion}; replacing those
+  two radii by their sum produces item \textup{(iv)} without changing any
+  mathematical content.  The last assertion follows because the passage from
+  the certified non-trivial Perron vector to the class-product constants is a
+  finite character-table computation in
+  \Cref{thm:class-product-determinant-rigidity,cor:class-product-constant-rigidity}.
+\end{proof}
+
 \begin{corollary}[Finite bookkeeping schema for the fixed-label Perron recovery]
   \label{cor:fixed-label-perron-certificate-schema}
   Under the hypotheses and notation of
@@ -3228,261 +3310,6 @@ computational-certificate, or operator-algebraic papers.
   \Cref{lem:perron-boundary-determinant-evaluation}.
 \end{proof}
 
-\begin{corollary}[Determinant coordinates after scalar normalisation]
-  \label{cor:assembled-adams-frobenius-product-formula}
-  \label{cor:assembled-adams-frobenius-product-package}
-  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and put
-  \(\alpha_A:=\gamma+
-  \log C(A)\).  This corollary is the real-coordinate restatement of the
-  classification in \Cref{thm:class-product-determinant-rigidity}, included
-  only to make the rank count explicit: after the scalar normalisation is
-  fixed, the remaining product data are exactly the zero-mean Peter--Weyl
-  coordinates read from the finite determinant data.  No cocycle-level
-  or extension-level classification is part of this corollary.  Let
-  \(\mathscr K_A(G)\) be the set of positive real
-  class-indexed vectors \(K=(K_C)_{C\subset G}\) satisfying the scalar
-  product constraint
-  \[
-    \prod_{C\subset G}K_C=\exp(-\alpha_A),
-  \]
-  and let
-  \[
-    \mathcal H_G
-    :=
-    \left\{
-      H:G\to\mathbb R\;\middle|\;
-      H\text{ is a class function and }
-      \sum_{C\subset G}\frac{|C|}{|G|}H(C)=0
-    \right\}.
-  \]
-  Then
-  \begin{equation}\label{eq:class-product-hyperplane-parametrisation}
-    H\longmapsto K^H,
-    \qquad
-    K^H_C:=\exp\!\left(-\frac{|C|}{|G|}\bigl(\alpha_A+H(C)\bigr)\right)
-  \end{equation}
-  is a bijection from \(\mathcal H_G\) onto \(\mathscr K_A(G)\), with
-  inverse
-  \begin{equation}\label{eq:class-product-hyperplane-inverse-log}
-    K\longmapsto H_K,
-    \qquad
-    H_K(C):=-\frac{|G|}{|C|}\log K_C-\alpha_A.
-  \end{equation}
-  Moreover, the non-trivial irreducible characters give an isometric
-  coordinate system on \(\mathcal H_G\): for
-  \(\pi\ne\mathbf1\), set
-  \begin{equation}\label{eq:class-product-hyperplane-fourier}
-    \widehat H(\pi)
-    :=
-    \sum_{C\subset G}\frac{|C|}{|G|}H(C)\chi_\pi(C).
-  \end{equation}
-  Then every \(H\in\mathcal H_G\) has the expansion
-  \begin{equation}\label{eq:class-product-hyperplane-expansion}
-    H(C)=
-    \sum_{\varrho\ne\mathbf1}
-      \chi_\varrho^\ast(C)\widehat H(\varrho),
-  \end{equation}
-  and Parseval's identity gives
-  \begin{equation}\label{eq:class-product-hyperplane-parseval}
-    \sum_{C\subset G}\frac{|C|}{|G|}|H(C)|^2
-    =
-    \sum_{\varrho\ne\mathbf1}|\widehat H(\varrho)|^2.
-  \end{equation}
-
-  Consequently the maps
-  \[
-    K\longmapsto H_K\longmapsto
-    \bigl(\widehat{H_K}(\varrho)\bigr)_{\varrho\ne\mathbf1}
-  \]
-  and, on tuples satisfying the usual conjugation relations for a real
-  zero-mean class function,
-  \[
-    (a_\varrho)_{\varrho\ne\mathbf1}
-    \longmapsto
-    \left(
-      \exp\!\left(
-        -\frac{|C|}{|G|}
-        \left(
-          \alpha_A+
-          \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)a_\varrho
-        \right)
-      \right)
-    \right)_{C\subset G}
-  \]
-  are inverse linear-logarithmic coordinate systems between
-  \(\mathscr K_A(G)\) and the zero-mean Peter--Weyl boundary.  In particular,
-  after fixing the scalar normalisation \(C(A)\), recovering all constrained
-  product vectors is equivalent to recovering all non-trivial character
-  coordinates.  Any real linear functional on the logarithmic product side that
-  is injective on \(\mathscr K_A(G)\) must therefore have rank at least
-  \(\#\{\text{conjugacy classes of }G\}-1\); scalar fixed-matrix records have
-  rank \(0\) on this zero-mean factor.
-
-  For the actual Adams-corrected product constants of
-  \Cref{thm:class-euler-product-mertens}, the classified point is
-  \(H_K=\mathfrak K\) from
-  \eqref{eq:class-product-normalised-log-vector}, and its non-trivial
-  Fourier coordinates are exactly
-  \[
-    \widehat{H_K}(\varrho)=F_\varrho(\lambda^{-1})
-    \qquad(\varrho\ne\mathbf1).
-  \]
-  Consequently the finite twisted determinant data, with the branch
-  convention of \Cref{prop:fixed-label-determinant-perron}, selects a
-  unique point of \(\mathscr K_A(G)\), and every constrained positive
-  class-product vector arises from exactly one zero-mean real
-  Peter--Weyl boundary class function.  Thus the only degrees of freedom
-  left after scalar normalisation are the non-trivial Peter--Weyl
-  coordinates; no scalar cyclic-lift record or other fixed-matrix scalar
-  invariant can supply additional class-product coordinates.
-\end{corollary}
-
-\begin{proof}
-  First let \(H\in\mathcal H_G\).  The vector
-  \(K^H\) in \eqref{eq:class-product-hyperplane-parametrisation} is
-  positive, and
-  \[
-    \sum_{C\subset G}\log K^H_C
-    =
-    -\sum_{C\subset G}\frac{|C|}{|G|}\bigl(\alpha_A+H(C)\bigr)
-    =
-    -\alpha_A,
-  \]
-  so \(K^H\in\mathscr K_A(G)\).  Conversely, if
-  \(K\in\mathscr K_A(G)\), then \(H_K\) is a real-valued class function and
-  the product constraint gives
-  \[
-    \sum_{C\subset G}\frac{|C|}{|G|}H_K(C)
-    =
-    -\sum_{C\subset G}\log K_C-
-      \alpha_A\sum_{C\subset G}\frac{|C|}{|G|}
-    =
-    0.
-  \]
-  Hence \(H_K\in\mathcal H_G\).  The two displayed formulas are inverse to
-  one another by direct substitution, proving the claimed bijection.
-
-  The irreducible characters are an orthonormal basis for the Hermitian
-  space of complex class functions with inner product
-  \[
-    \langle f,h\rangle
-    =
-    \sum_C \frac{|C|}{|G|} f(C)\overline{h(C)}.
-  \]
-  The zero-mean condition is exactly orthogonality to the trivial
-  character.  Therefore the non-trivial irreducible characters form an
-  orthonormal basis of \(\mathcal H_G\otimes_{\mathbb R}\mathbb C\), and
-  Fourier inversion and Parseval give
-  \eqref{eq:class-product-hyperplane-expansion} and
-  \eqref{eq:class-product-hyperplane-parseval}.  For real-valued \(H\) the
-  usual conjugation relations among the coefficients are automatic; no
-  extra class-product degrees of freedom are present.
-
-  The two displayed maps after \eqref{eq:class-product-hyperplane-parseval}
-  are the same bijection written first in logarithmic coordinates and then in
-  Fourier coordinates.  The rank lower bound follows because
-  \(\mathcal H_G\) has real dimension one less than the number of conjugacy
-  classes, and an injective linear map on a finite-dimensional vector space
-  has rank at least the dimension of that space.  A scalar fixed-matrix
-  record is unchanged when \(H\) varies with \(A\) fixed, so its restriction
-  to this zero-mean factor has rank \(0\).
-
-  For the dynamical constants, \Cref{cor:class-product-constant-rigidity}
-  identifies \(H_K\) with \(\mathfrak K\) and proves that its non-trivial
-  Fourier coordinates are precisely the fixed-label Perron values
-  \(F_\varrho(\lambda^{-1})\).  Finally
-  \Cref{prop:fixed-label-determinant-perron} evaluates each of these
-  coordinates from the finite twisted determinant data in the stated
-  logarithm branches.  Thus the determinant data determine a unique
-  point of the classified set \(\mathscr K_A(G)\), while the inverse
-  logarithmic and Fourier maps recover the corresponding non-trivial
-  Peter--Weyl boundary vector from any point of \(\mathscr K_A(G)\).  The
-  final scalar-invariant assertion follows because every listed scalar
-  record depends only on \(A\), whereas the class-product coordinates in
-  the classification are exactly the non-trivial Peter--Weyl coordinates.
-\end{proof}
-
-\begin{corollary}[Stability in non-scalar coordinates]
-  \label{cor:class-product-stability-scalar-independence}
-  Fix a primitive base matrix \(A\), a finite group \(G\), and two cocycles
-  \(\tau,\tau':E_A\to G\) satisfying the twisted spectral gap.  Let
-  \(K_C^\tau\) and \(K_C^{\tau'}\) be the corresponding
-  Adams-corrected Frobenius-class product constants, and let
-  \(F_\varrho^\tau(\lambda^{-1})\) and
-  \(F_\varrho^{\tau'}(\lambda^{-1})\) denote the non-trivial fixed-label
-  Perron values.  Define the normalised logarithmic product difference
-  \[
-    \mathfrak D_{\tau,\tau'}(C)
-    :=
-    -\frac{|G|}{|C|}\log K_C^\tau
-    +\frac{|G|}{|C|}\log K_C^{\tau'}.
-  \]
-  This is a comparison corollary for already constructed product vectors,
-  not a second product theorem: it isolates exactly the non-trivial
-  Peter--Weyl coordinates invisible to scalar fixed-matrix records.  Then
-  \begin{equation}\label{eq:class-product-stability-forward}
-    \mathfrak D_{\tau,\tau'}(C)
-    =
-    \sum_{\varrho\neq\mathbf1}
-      \chi_\varrho^\ast(C)
-      \bigl(F_\varrho^\tau(\lambda^{-1})
-            -F_\varrho^{\tau'}(\lambda^{-1})\bigr)
-  \end{equation}
-  for every conjugacy class \(C\), and the exact Parseval identity
-  \begin{equation}\label{eq:class-product-stability-parseval}
-    \sum_{C\subset G}\frac{|C|}{|G|}
-      \abs{\mathfrak D_{\tau,\tau'}(C)}^2
-    =
-    \sum_{\varrho\neq\mathbf1}
-      \abs{F_\varrho^\tau(\lambda^{-1})
-            -F_\varrho^{\tau'}(\lambda^{-1})}^2
-  \end{equation}
-  holds.  Consequently the following are equivalent:
-  \begin{enumerate}[label=\textup{(\roman*)}]
-    \item \(K_C^\tau=K_C^{\tau'}\) for every conjugacy class \(C\);
-    \item \(\mathfrak D_{\tau,\tau'}\equiv0\);
-    \item \(F_\varrho^\tau(\lambda^{-1})
-      =F_\varrho^{\tau'}(\lambda^{-1})\) for every non-trivial
-      \(\varrho\in\Irr(G)\).
-  \end{enumerate}
-  In particular, for any family of gap cocycles over the same \(A\), every
-  record formed only from the scalar matrix \(A\), such as \(C(A)\),
-  \(\mathcal M(A)\), \(\FP(A)\), or a fixed-matrix cyclic-lift record, is
-  constant on the family and cannot distinguish the fibers of the
-  class-product map.  The fibers are exactly the common fibers of the
-  non-trivial fixed-label Perron vector.
-\end{corollary}
-
-\begin{proof}
-  Apply \Cref{eq:class-product-rigidity-forward} to \(\tau\) and \(\tau'\).
-  The scalar term \(\gamma+\log C(A)\) is the same for both cocycles
-  because the base matrix is fixed.  Subtracting the two identities gives
-  \eqref{eq:class-product-stability-forward}.
-
-  The irreducible characters form an orthonormal basis of the Hermitian
-  class-function space with inner product
-  \[
-    \langle f,h\rangle_G
-    :=
-    \sum_{C\subset G}\frac{|C|}{|G|}f(C)\overline{h(C)}.
-  \]
-  The expansion \eqref{eq:class-product-stability-forward} has only
-  non-trivial character components.  Parseval's identity therefore gives
-  \eqref{eq:class-product-stability-parseval}.  The equivalence of
-  \textup{(i)}, \textup{(ii)}, and \textup{(iii)} follows immediately:
-  \textup{(i)} is the vanishing of the displayed logarithmic difference,
-  \textup{(ii)} is its class-function form, and
-  \eqref{eq:class-product-stability-parseval} shows that this class
-  function vanishes exactly when every non-trivial coefficient difference
-  vanishes.
-
-  Finally, the listed scalar records depend only on the fixed matrix
-  \(A\), so they have the same value for \(\tau\) and \(\tau'\).  They
-  therefore cannot separate two cocycles in the same fiber of the
-  non-trivial fixed-label Perron vector, nor can they identify two
-  cocycles in distinct fibers.  The preceding equivalence identifies those
-  fibers with the fibers of the class-product map.
-\end{proof}
 
 \begin{remark}[On the twisted spectral-gap hypothesis]
   \label{rem:twisted-spectral-gap-role}
