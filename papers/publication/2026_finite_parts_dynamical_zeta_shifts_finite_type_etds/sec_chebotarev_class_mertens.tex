@@ -23,7 +23,8 @@ while \Cref{thm:fixed-label-euler-transform,thm:class-euler-product-mertens}
 prove Main Theorem~III.  The determinant formula and its finite
 truncation algorithm are
 \Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm,thm:class-product-determinant-rigidity};
-\Cref{prop:class-product-comparison} then separates the classical
+\Cref{prop:fixed-label-certificate-artifact-interface,prop:class-product-comparison} then separates the certified finite
+readout format and the classical
 Frobenius-density contribution from the Adams-corrected constant, and
 \Cref{prop:finite-data-main-spine-closure,rem:assembled-readout-dependency-order}
 record the formal finite-data closure and readout order for the main theorem
@@ -2145,6 +2146,80 @@ operator-algebraic papers.
   rigorous output interval of radius at most \(\epsilon\).  Thus the input,
   branch convention, finite output, and error bound are all finite and
   explicit.
+\end{proof}
+
+\begin{proposition}[Machine-checkable certificate interface for Perron readout]
+  \label{prop:fixed-label-certificate-artifact-interface}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  Fix a
+  non-trivial \(\varrho\in\Irr(G)\), a tolerance \(\epsilon>0\), and a
+  truncation level \(M\) satisfying
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice}.  The finite
+  algorithm of \Cref{prop:fixed-label-perron-finite-algorithm} admits an exact
+  certificate record consisting only of rational and algebraic finite data:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the list of triples \((r,m,\pi)\) with \(rm\le M\), with the scalar
+      Perron triple \((1,1,\mathbf1)\) deleted;
+    \item the Adams coefficients \(a_{\varrho,
+      \pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\), written from
+      the finite character table and class-power table;
+    \item for every listed triple, a branch tag specifying either the Abel
+      non-trivial Perron branch \((rm=1,\pi\ne\mathbf1)\) or the ordinary germ
+      value inside the Perron disc \((rm\ge2)\), together with an interval
+      enclosure for
+      \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\);
+    \item the two rational error budgets: the analytic tail in
+      \eqref{eq:fixed-label-perron-finite-algorithm-error} and the finite
+      interval-propagation bound in
+      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
+  \end{enumerate}
+  Any checker which verifies these four finite records by exact interval
+  arithmetic certifies the inclusion
+  \begin{equation}\label{eq:fixed-label-certificate-interface-inclusion}
+    F_\varrho(\lambda^{-1})
+    \in
+    F_\varrho^{(M)}+
+    \left[-R_M-R_{\mathrm{num}},R_M+R_{\mathrm{num}}\right],
+  \end{equation}
+  where
+  \[
+    R_M:=C_\varrho\sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+  \]
+  and \(R_{\mathrm{num}}\) is the finite roundoff radius in
+  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  Consequently a
+  supplemental certificate file or script for a concrete model is not an
+  additional hypothesis: it is a mechanically checkable serialization of the
+  same theorem-chain data used in
+  \Cref{prop:fixed-label-perron-finite-algorithm,cor:class-product-constant-rigidity}.
+\end{proposition}
+
+\begin{proof}
+  The first two records are finite because the set
+  \(\{(r,m):rm\le M\}\) and \(\Irr(G)\) are finite, and because the Adams
+  coefficients are finite character-table inner products.  The deleted scalar
+  triple is exactly the omitted term in
+  \Cref{prop:fixed-label-perron-finite-algorithm}; its coefficient is zero for
+  \(\varrho\ne\mathbf1\), so no certificate record must assign a finite value
+  to the singular scalar logarithm.
+
+  For each remaining triple, the branch tag is one of the two cases already
+  proved in item \textup{(d)} of
+  \Cref{prop:fixed-label-perron-finite-algorithm}: either the non-trivial
+  Abel branch at \(rm=1\), made regular by the strict twisted gap, or the
+  ordinary logarithmic germ at \(rm\ge2\), where
+  \(\rho(\lambda^{-rm}A_\pi)<1\).  Thus every tagged interval encloses a
+  uniquely specified logarithm.  Multiplying these finitely many intervals by
+  the certified coefficients \(\mu(m)a_{\varrho,\pi}^{(m)}/(rm)\) and summing
+  them gives an interval centred at the stated finite truncation, with radius
+  at most \(R_{\mathrm{num}}\) by the triangle inequality used in
+  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  The discarded
+  terms with \(rm>M\) have total absolute value at most \(R_M\) by
+  \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Adding the two
+  independent radii proves
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.  Finally,
+  \Cref{cor:class-product-constant-rigidity} applies finite Fourier inversion
+  to the certified fixed-label Perron vector, so the same certificate record
+  serializes the product constants rather than introducing a new analytic
+  premise.
 \end{proof}
 
 \begin{corollary}[Rigidity of the Adams-corrected class-product constants]
