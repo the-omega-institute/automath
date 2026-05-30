@@ -33,6 +33,8 @@ and creation of a `papers/publication/2026_*` directory.
 - [x] Re-run or explicitly defer the source verification commands from
   `gate_table.md`.  Decision: defer for CICM presentation-only and use a
   narrowed claim; see `promotion_decision_memo.md`.
+- [x] Record an intake-level bibliography and comparison scaffold in
+  `bibliography_scope_seed.md`.
 - [x] Re-check the official page for the first venue.  CICM 2026
   presentation-only was verified open on 2026-05-31 with a 2026-06-15
   deadline.

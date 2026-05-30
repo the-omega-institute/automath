@@ -27,7 +27,7 @@ The first active files should be:
 | `research_directive.md` | `cicm_promotion_brief.md` | Scope-bound writing directive |
 | `SOURCE_MAP.md` | `source_map.md`, `source_verification_note.md` | Pinned source paths and source-update rule |
 | `ARTIFACT_INVENTORY.md` | `artifact_inventory.md`, `case_evidence_note.md` | Evidence table and case-study inputs |
-| `BIB_SCOPE.md` | `venue_ladder.md`, `submission_memo.md` | Bibliography boundary and related-work targets |
+| `BIB_SCOPE.md` | `bibliography_scope_seed.md`, `venue_ladder.md`, `submission_memo.md` | Bibliography boundary and related-work targets |
 | `main.tex` | `cicm_two_page_packet.md` | Two-page CICM manuscript draft |
 
 No other new active paper should be created for this seed unless the human
