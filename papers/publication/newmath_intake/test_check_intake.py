@@ -104,6 +104,23 @@ class NewmathIntakeGuardTests(unittest.TestCase):
 
         self.assertTrue(any("active-paper trigger file" in error for error in errors))
 
+    def test_active_trigger_file_case_variant_fails(self):
+        (self.root / "seeds" / "bedc_automation_pipeline" / "Main.TEX").write_text(
+            "not allowed\n",
+            encoding="utf-8",
+        )
+        (self.root / "seeds" / "bedc_automation_pipeline" / "pipeline.md").write_text(
+            "not allowed\n",
+            encoding="utf-8",
+        )
+
+        errors, _warnings = check_intake.run_check(self.root)
+
+        trigger_errors = [
+            error for error in errors if "active-paper trigger file" in error
+        ]
+        self.assertEqual(len(trigger_errors), 2, errors)
+
     def test_missing_p0_required_file_fails(self):
         (
             self.root

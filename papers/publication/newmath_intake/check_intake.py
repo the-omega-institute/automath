@@ -56,7 +56,7 @@ REQUIRED_SEED_FILES = {
         "trust_chain_template.md",
     },
 }
-ACTIVE_TRIGGER_FILES = {"main.tex", "PIPELINE.md"}
+ACTIVE_TRIGGER_FILES = {"main.tex", "pipeline.md"}
 
 
 def iter_seed_dirs(seed_root: Path) -> list[Path]:
@@ -69,7 +69,7 @@ def check_seed(seed_dir: Path, root: Path = ROOT) -> list[str]:
     problems: list[str] = []
     for path in seed_dir.rglob("*"):
         rel = path.relative_to(root).as_posix()
-        if path.is_file() and path.name in ACTIVE_TRIGGER_FILES:
+        if path.is_file() and path.name.lower() in ACTIVE_TRIGGER_FILES:
             problems.append(f"{rel}: active-paper trigger file is forbidden in intake")
         if path.is_dir() and path.name.startswith("2026_"):
             problems.append(f"{rel}: active-paper directory name is forbidden in intake")
