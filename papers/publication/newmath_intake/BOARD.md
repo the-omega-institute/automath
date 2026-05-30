@@ -5,6 +5,9 @@ Machine-facing scheduling remains in `../PROGRAM_BOARD_MACHINE.md`; these
 seeds are marked `INTAKE-NOT-ACTIVE` there and must not be picked up by
 paper-stage automation until promoted.
 
+Pre-promotion agent work is listed in `AGENT_WORK_QUEUE.md`.  That file is an
+intake work queue only; it does not authorize active paper creation.
+
 | Seed | Priority | Target shape | Current status | Next action |
 |---|---:|---|---|---|
 | `bedc_automation_pipeline` | P0 | systems / automation paper | ready for human promotion decision; not promoted; CICM two-page packet prepared | Ask human whether to promote for CICM presentation-only as `2026_auditable_theory_to_paper_pipeline`; use `cicm_two_page_packet.md` after approval |

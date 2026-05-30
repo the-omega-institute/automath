@@ -67,3 +67,6 @@ The current P0 decision state is summarized in `P0_READINESS_MATRIX.md`.
 
 Use `SOURCE_UPDATE_NOTE_TEMPLATE.md` for any source commit movement, whether the
 candidate is still a seed or has already been promoted.
+
+Use `AGENT_WORK_QUEUE.md` for safe pre-promotion work that agents can perform
+inside the intake layer without creating active paper tracks.
