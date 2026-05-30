@@ -9,6 +9,9 @@ Pre-promotion agent work is listed in `AGENT_WORK_QUEUE.md`.  That file is an
 intake work queue only; it does not authorize active paper creation.
 Current human decisions are collected in `P0_DECISION_PACKET.md`; that file is
 also intake-only and does not authorize promotion.
+The current source-pin and local-HEAD drift status is recorded in
+`SOURCE_PIN_STATUS.md`; these seeds remain pinned to the recorded `origin/dev`
+commit until an explicit source update note is adopted.
 
 | Seed | Priority | Target shape | Current status | Next action |
 |---|---:|---|---|---|

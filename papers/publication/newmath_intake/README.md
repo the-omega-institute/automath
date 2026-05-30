@@ -72,6 +72,9 @@ That file is still intake-only and must not be read as a promotion command.
 
 Use `SOURCE_UPDATE_NOTE_TEMPLATE.md` for any source commit movement, whether the
 candidate is still a seed or has already been promoted.
+The current source-pin drift check is recorded in `SOURCE_PIN_STATUS.md`; the
+intake remains pinned to `origin/dev` commit
+`3fb3d6a0641767388a401883062aa522ea0b397b`.
 
 Use `AGENT_WORK_QUEUE.md` for safe pre-promotion work that agents can perform
 inside the intake layer without creating active paper tracks.

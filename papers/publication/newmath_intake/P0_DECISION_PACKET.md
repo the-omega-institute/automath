@@ -9,6 +9,7 @@ permission to create an active paper directory.
 - source repo: `D:/omega/newmath`
 - pinned source commit:
   `3fb3d6a0641767388a401883062aa522ea0b397b`
+- source-pin drift note: `SOURCE_PIN_STATUS.md`
 
 ## Decision Summary
 
@@ -88,4 +89,3 @@ Expected result:
 ```text
 OK: newmath intake seeds are not active paper tracks
 ```
-

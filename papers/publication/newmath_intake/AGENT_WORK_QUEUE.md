@@ -20,6 +20,9 @@ active paper list.
   an explicit human promotion command.
 - If `D:/omega/newmath` source changes, use
   `SOURCE_UPDATE_NOTE_TEMPLATE.md` before editing a seed source map.
+- Check `SOURCE_PIN_STATUS.md` before using local `D:/omega/newmath` files;
+  current P0 seed evidence remains pinned to `origin/dev` commit
+  `3fb3d6a0641767388a401883062aa522ea0b397b`, not the local working `HEAD`.
 
 ## P0 Queue
 
