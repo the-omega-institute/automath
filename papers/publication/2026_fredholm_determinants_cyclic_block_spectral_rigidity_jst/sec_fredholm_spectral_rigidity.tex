@@ -434,6 +434,10 @@ partial-sum inequality therefore yields the final claim.
 \end{lemma}
 
 \begin{proof}
+  The projections \(P_N\) are the initial-segment projections of the chosen
+  Ringrose basis, and therefore \(P_N\to I\) strongly.  Hence
+  \Cref{lem:trace-norm-schur-compressions} applies to this particular Schur
+  basis; no unconditional-basis or truncation invariance is being used.
   The compression \(A_N\) is upper triangular with diagonal
   \(d_1,\ldots,d_N\). The finite-dimensional Weyl--Ky Fan inequality gives
   \(\sum_{k=1}^N\abs{d_k}\le\norm{A_N}_1\), hence \(\delta_N\ge0\).
@@ -471,7 +475,11 @@ partial-sum inequality therefore yields the final claim.
     \abs{a_{ij}}^2
     \le 2\norm{A_N}_1\delta_N .
   \]
-  For fixed \(i<j\), letting \(N\to\infty\) forces \(a_{ij}=0\).
+  For fixed \(i<j\), the estimate holds for every \(N\ge j\).  The sequence
+  \((\norm{A_N}_1)_N\) is bounded because it converges to \(\norm{T}_1\),
+  while \(\delta_N\to0\).  Letting \(N\to\infty\) therefore forces
+  \(a_{ij}=0\).  Since this applies to each strict Schur entry separately,
+  the triangular matrix has no strict upper-triangular part.
 \end{proof}
 
 \begin{lemma}[Schatten triangular equality and entry pinching]
@@ -521,6 +529,44 @@ partial-sum inequality therefore yields the final claim.
   \(a_{ij}\to0\). Since \(\Delta_{N,p}\to0\), each fixed strict Schur
   entry is zero.
 \end{proof}
+
+\subsubsection{Notation for the determinant-fiber rigidity package}
+
+We collect the notation used in the main trace-class rigidity package and
+in the finite-dimensional consequences below.  For cyclic data
+\(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfying the trace-class
+summability hypothesis, \Cref{prop:collapsed-spectral-multiplicities}
+defines the collapsed multiplicity function
+\[
+  M_{\mathcal D}(\lambda)
+  =\sum_{\{j:\lambda^{n_j}=\beta_j\}}m_j,
+  \qquad \lambda\in\CC^\times,
+\]
+and its support \(\Sigma_{\mathcal D}=\{\lambda:M_{\mathcal D}(\lambda)>0\}\).
+The trace and Schatten budgets are
+\[
+  \tau_{\mathcal D}
+  :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+    \abs\lambda M_{\mathcal D}(\lambda)
+  =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
+  \qquad
+  \tau_{\mathcal D,p}
+  :=\sum_{\lambda\in\Sigma_{\mathcal D}}
+    \abs\lambda^p M_{\mathcal D}(\lambda).
+\]
+When \(\Sigma_{\mathcal D}\) is finite, set
+\[
+  d_{\mathcal D}:=\sum_{\lambda\in\Sigma_{\mathcal D}}
+    M_{\mathcal D}(\lambda).
+\]
+For each \(N\ge d_{\mathcal D}\), \(\Lambda_{\mathcal D,N}\) denotes the
+\(N\)-tuple obtained by listing each \(\lambda\in\Sigma_{\mathcal D}\)
+with multiplicity \(M_{\mathcal D}(\lambda)\) and adjoining
+\(N-d_{\mathcal D}\) zeros; \(a_{\mathcal D,N}
+=(a_1,\ldots,a_N)\) is the decreasing rearrangement of the moduli in
+\(\Lambda_{\mathcal D,N}\).  Thus \(\tau_{\mathcal D,p}
+=\sum_{i=1}^N a_i^p\) for every such \(N\), with padded zeros making no
+contribution.
 
 \subsubsection{Main trace-class determinant-fiber theorem}
 
@@ -1097,19 +1143,20 @@ orbit-distance theorem.
   \]
   Assume moreover that this chosen-tail modulus is compatible with the
   finite-window pinching loss, namely
-  \[
+  \begin{equation*}
     N\sqrt{(N-1)(B+\omega(N))\omega(N)}\longrightarrow0 .
-  \]
+  \end{equation*}
   then every \(T\in\mathfrak C\) satisfies the explicit orbit-distance
   estimate
-  \[
+  \begin{equation*}
+  \begin{split}
     \dist_1(T,\mathcal M_{\mathcal D})
-    \le
-    2\omega(N)+
-    N\sqrt{(N-1)(B+\omega(N))
-      (\varepsilon(T)+2\omega(N))}
-    \qquad(N\ge1).
-  \]
+    &\le 2\omega(N) \\
+    &\quad +N\sqrt{(N-1)(B+\omega(N))
+      (\varepsilon(T)+2\omega(N))},
+    \qquad N\ge1 .
+  \end{split}
+  \end{equation*}
   Consequently, for any sequence \((T_\nu)\subset\mathfrak C\) with
   \(\varepsilon(T_\nu)\to0\), one has
   \[
@@ -1315,7 +1362,14 @@ finite-dimensional determinant fiber.
     \end{split}
   \]
   This notation is fixed-dimensional; no transition maps between the bodies
-  for different values of \(N\) are part of the definition.
+  for different values of \(N\) are part of the definition. If
+  \(N>d_{\mathcal D}\), then \(a_{\mathcal D,N}\) contains zeros; the product
+  inequalities are read with the standard zero-product convention, so any
+  product containing a zero is zero and the terminal equality forces
+  \(\prod_i s_i=0\). Equivalently, this is the singular case of the
+  Li--Mathias--Horn theorem, or can be obtained by deleting common terminal
+  zero coordinates and applying the positive-coordinate statement on the
+  remaining block.
 \end{definition}
 
 \begin{theorem}[Finite-dimensional Weyl--Horn determinant fiber]
@@ -1388,7 +1442,11 @@ finite-dimensional determinant fiber.
   contains zeros, the terminal eigenvalue product is zero, the terminal
   singular-value product is forced to be zero, and the zero singular entries
   are part of the exact finite-dimensional theorem rather than an epsilon
-  limit.  Applying Theorem~1.1 of \cite{LiMathias2001Construction} to any
+  limit. If one uses a source that states only the strictly positive version,
+  the same conclusion follows by applying the theorem to the non-zero
+  coordinates after removing the common terminal zero singular values and then
+  adjoining the resulting zero eigenvalue and zero singular-value block.
+  Applying Theorem~1.1 of \cite{LiMathias2001Construction} to any
   ordering of \(\Lambda_{\mathcal D,N}\) gives a matrix
   \(T\) with eigenvalue multiset \(\Lambda_{\mathcal D,N}\) and singular
   values \(s\).  Therefore
@@ -1878,14 +1936,14 @@ finite-dimensional determinant fiber.
     \Longleftrightarrow
     \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty .
   \]
-  Consequently, if the displayed \(p\)-budget is infinite, then the natural
-  regularized-determinant fiber \(\mathfrak G_{r,\mathcal E}\) contains an
-  operator with no finite \(\mathcal S_p\)-budget, and no
-  \(\mathcal S_p\)-budget lower-bound or equality-rigidity statement can be
-  a theorem on all of \(\mathfrak G_{r,\mathcal E}\).  In the integral case
-  \(p=r\), this particular domain enlargement disappears; the theorem then
-  concerns the fixed regularized-determinant fiber inside \(\mathcal S_p\),
-  not an additional classification of unrelated \(\det_p\)-fibers.
+  Consequently, if the displayed \(p\)-budget is infinite, then
+  \(\mathfrak G_{r,\mathcal E}\) contains an operator with no finite
+  \(\mathcal S_p\)-budget.  Thus no \(\mathcal S_p\)-budget lower-bound or
+  equality-rigidity statement can hold on all of
+  \(\mathfrak G_{r,\mathcal E}\).  In the integral case \(p=r\), this
+  particular domain enlargement disappears; the theorem then concerns the
+  fixed regularized-determinant fiber inside \(\mathcal S_p\), not an
+  additional classification of unrelated \(\det_p\)-fibers.
 \end{proposition}
 
 \begin{proof}
