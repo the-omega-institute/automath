@@ -267,3 +267,22 @@ Status:
 
 The 43-signature frontier is the active T-32 sub-frontier; not closure, but
 a quantified narrowing of the previously open noncommuting case.
+
+
+## Monitoring Update 2026-05-31 01:45 SGT — Base-aut bookkeeping cuts cross-pair counts
+
+Pipeline-side `check_litt3_degree3_base_aut_group_structure` (01:42) records:
+- Aut(X) = V_4 (Klein four), order 4
+- Aut(Y) = C_5, order 5
+- PGL_2(F_11) maps X to Y: 0 (no projective F_11 isomorphism class transport)
+
+After quotienting by base automorphism actions on the 40 C3 classes per curve
+and 60 S3 classes per curve, the cross-pair counts drop substantially:
+- C3 cross-pair lower bound after base quotient: 80 (down from 1600 raw)
+- S3 cross-pair lower bound after base quotient: 180 (down from 3600 raw)
+- raw_total_degree3_cross_pairs = 5200
+
+This is a quantitative narrowing of the option-1 noncommuting frontier
+(43-signature work above) for the eventual pair test. Closure still requires
+either explicit degree-3 cover equations / canonical cover-with-deck invariants,
+or a stronger finite-index π_1 commensurability invariant.

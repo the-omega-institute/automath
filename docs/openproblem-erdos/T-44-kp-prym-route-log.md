@@ -306,3 +306,20 @@ modulo three independent source-grade hypotheses (LLS branched applicability,
 W_1 H-isotypic identification, MCG-image hitting). The native chain is still
 closure-grade; what's conditional is the full bridge to a global non-subquotient
 theorem.
+
+
+## Monitoring Update 2026-05-31 01:45 SGT — LLS threshold sharpened to g > 64
+
+A further codex audit (codex_LLS_oracle_citation_boundary_20260531) pins the
+LLS Theorem 9.8 / Corollary 9.9 applicability threshold concretely: it requires
+g > 64. Our active frontier sits at g = 10, so the LLS-direct-applicability gap
+is g = 10 vs threshold 64 — a wide gap, not a near-miss.
+
+This sharpens the previous "Theorem 9.8 alone does not apply at g=10" statement
+into a precise numerical threshold gap. It does not change the three-sub-gap
+structure recorded in the previous monitoring entry, but it does make the first
+sub-gap (LLS branched-applicability at g=10) considerably more demanding: any
+attempt to bridge LLS to the g=10 frontier must cross a 54-unit threshold gap.
+
+T-44 ρ_168 instance of Litt #4 Q3 stays at CONDITIONALLY NEGATIVE, with the
+first sub-gap now precisely quantified.
