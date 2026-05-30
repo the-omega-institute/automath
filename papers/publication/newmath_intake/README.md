@@ -66,6 +66,7 @@ plan.
 The current P0 decision state is summarized in `P0_READINESS_MATRIX.md`.
 The current P0 gate state and non-promotion rules are summarized in
 `P0_GATE_AUDIT.md`.
+The current human action packet is summarized in `P0_DECISION_PACKET.md`.
 The active-paper handoff boundary is summarized in `PROMOTION_HANDOFF.md`.
 That file is still intake-only and must not be read as a promotion command.
 

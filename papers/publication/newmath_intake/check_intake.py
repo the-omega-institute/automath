@@ -149,6 +149,20 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
     )
     errors.extend(
         check_index_file(
+            root / "P0_DECISION_PACKET.md",
+            [
+                "not a promotion command",
+                "bedc_automation_pipeline",
+                "bedc_finite_kernel_calculus",
+                "bedc_rule110_finite_witness",
+                "do not create `papers/publication/2026_*`",
+            ],
+            root=root,
+            publication_root=publication_root,
+        )
+    )
+    errors.extend(
+        check_index_file(
             root / "AGENT_WORK_QUEUE.md",
             ["P0_GATE_AUDIT.md", "not a daemon queue"],
             root=root,

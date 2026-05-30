@@ -49,6 +49,18 @@ class NewmathIntakeGuardTests(unittest.TestCase):
             "P0_GATE_AUDIT.md\nnot a daemon queue\n",
             encoding="utf-8",
         )
+        (self.root / "P0_DECISION_PACKET.md").write_text(
+            "\n".join(
+                [
+                    "not a promotion command",
+                    "bedc_automation_pipeline",
+                    "bedc_finite_kernel_calculus",
+                    "bedc_rule110_finite_witness",
+                    "do not create `papers/publication/2026_*`",
+                ]
+            ),
+            encoding="utf-8",
+        )
         (self.root / "PROMOTION_HANDOFF.md").write_text(
             "\n".join(
                 [
