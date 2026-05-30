@@ -32,6 +32,8 @@ requires a human decision and a new active `2026_*` directory.
   `upstream_packaging_work_order.md`.
 - [x] Record a current local declaration map without replacing the pinned
   source evidence; see `current_declaration_map.md`.
+- [x] Record blocker classes for promotion, source work, and venue checks; see
+  `blocker_ledger.md`.
 - [ ] Add or identify the upstream packaging theorem before journal-style
   promotion.
 - [ ] Re-check current live venue options.

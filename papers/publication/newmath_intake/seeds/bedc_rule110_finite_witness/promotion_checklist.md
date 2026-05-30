@@ -17,6 +17,8 @@ requires a human decision and a new active `2026_*` directory.
   template for a toolchain-equipped environment.
 - [x] `current_static_status_map.md` records a current local static source
   baseline without replacing pinned source evidence.
+- [x] `evidence_separation_note.md` separates reported, static, dynamic, and
+  limitation evidence before promotion.
 - [x] `risk_register.md` lists overclaim risks and kill criteria.
 - [x] `venue_ladder.md` lists artifact and journal routes.
 

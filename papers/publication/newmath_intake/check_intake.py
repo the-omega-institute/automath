@@ -35,6 +35,7 @@ REQUIRED_SEED_FILES = {
         "source_verification_note.md",
     },
     "bedc_finite_kernel_calculus": {
+        "blocker_ledger.md",
         "current_declaration_map.md",
         "exact_statement_note.md",
         "groundcompiler_placement_decision.md",
@@ -45,6 +46,7 @@ REQUIRED_SEED_FILES = {
     "bedc_rule110_finite_witness": {
         "artifact_rerun_packet.md",
         "current_static_status_map.md",
+        "evidence_separation_note.md",
         "limitation_ledger.md",
         "promotion_checklist.md",
         "recheck_results.md",
