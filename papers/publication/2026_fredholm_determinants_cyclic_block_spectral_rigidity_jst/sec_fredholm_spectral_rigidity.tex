@@ -1441,33 +1441,86 @@ finite-dimensional determinant fiber.
     \prod_{i=1}^N s_i .
   \]
   The products are interpreted in \([0,\infty)\), so a product containing a zero
-  factor is zero.
+  factor is zero.  In particular, the statement includes rank-deficient
+  matrices, zero eigenvalues, and zero singular values; it is not obtained in
+  this paper by deleting the zero coordinates.
 \end{lemma}
 
 \begin{proof}
-  This is precisely the zero-inclusive form of the finite Horn theorem packaged
-  as Theorem~1.1 of Li--Mathias
-  \cite[Theorem~1.1, p.~115]{LiMathias2001Construction}.  Their data are an
-  arbitrary complex eigenvalue list, ordered by decreasing modulus, and a
-  non-negative singular-value list in decreasing order; their conditions are
-  the displayed multiplicative inequalities together with terminal product
-  equality.  No invertibility hypothesis is imposed in that statement.
-  Consequently zero eigenvalues and zero singular values are part of the
-  theorem, not a limiting convention.  Weyl's inequalities give the necessity,
-  while the converse is
-  the classical Horn--Kaplansky sufficiency theorem, originating with Horn's
-  finite singular-value/eigenvalue theorem \cite{Horn1954DoublyStochastic}, in
-  the zero-inclusive construction form supplied by Li--Mathias.
+  This is exactly Theorem~1.1 of Li--Mathias
+  \cite[Theorem~1.1, p.~115]{LiMathias2001Construction}, specialized only by
+  notation.  Their theorem fixes complex numbers
+  \(\lambda_1,\ldots,\lambda_N\), ordered so that
+  \(\abs{\lambda_1}\ge\cdots\ge\abs{\lambda_N}\), and non-negative numbers
+  \(\sigma_1\ge\cdots\ge\sigma_N\ge0\).  It asserts that an
+  \(N\times N\) matrix with eigenvalues \(\lambda_i\) and singular values
+  \(\sigma_i\) exists if and only if
+  \[
+    \prod_{i=1}^k \abs{\lambda_i}
+    \le
+    \prod_{i=1}^k \sigma_i
+    \quad(1\le k<N),
+    \qquad
+    \prod_{i=1}^N \abs{\lambda_i}
+    =
+    \prod_{i=1}^N \sigma_i .
+  \]
+  The lists in that statement are allowed to contain zeros: the singular values
+  are merely assumed non-negative, the eigenvalues are arbitrary complex
+  numbers, and no invertibility or positive-determinant hypothesis appears.
+  Hence rank-deficient cases and zero-padded lists are covered directly by the
+  cited theorem.  The displayed formulation above includes the harmless
+  \(k=N\) weak inequality, which follows from the terminal equality.  Weyl's
+  inequalities give the necessity, while the converse is the finite
+  Horn--Kaplansky sufficiency theorem in the zero-inclusive constructive form
+  supplied by Li--Mathias; see also Horn's original finite theorem
+  \cite{Horn1954DoublyStochastic}.
+\end{proof}
 
-  Equivalently, if one wants an explicit reduction, let
-  \(q=\#\{i:s_i>0\}\). If \(q<N\), then the inequality with
-  \(k=q+1\) has right-hand side \(0\), and hence forces
-  \(b_{q+1}=0\); since \(b\) is decreasing, \(b_i=0\) for all \(i>q\).
-  If \(q=N\), no zero reduction is needed. In either case the initial
-  \(q\)-tuples satisfy the same Horn inequalities with positive terminal
-  product, so the non-singular finite theorem realizes them on \(\CC^q\).
-  Taking the direct sum with the zero operator on \(\CC^{N-q}\) gives exactly
-  the original list, with the forced zero eigenvalues and zero singular values.
+\begin{lemma}[Zero-inclusive log-majorization implies Fan dominance]
+  \label{lem:zero-inclusive-log-majorization-fan-dominance}
+  Let \(x_1\ge\cdots\ge x_N\ge0\) and \(y_1\ge\cdots\ge y_N\ge0\).  Suppose
+  that
+  \[
+    \prod_{i=1}^k x_i\le \prod_{i=1}^k y_i
+    \qquad (1\le k\le N),
+  \]
+  where products containing zero are interpreted as zero.  Then
+  \(x\prec_w y\), that is,
+  \[
+    \sum_{i=1}^k x_i\le \sum_{i=1}^k y_i
+    \qquad (1\le k\le N).
+  \]
+  Consequently \(\Phi(x)\le\Phi(y)\) for every symmetric gauge norm \(\Phi\) on
+  \(\RR^N\).
+\end{lemma}
+
+\begin{proof}
+  Fix \(k\).  If \(x_k>0\), then the first \(k\) coordinates of both lists may
+  be treated by the usual positive-vector implication from weak
+  log-majorization to weak majorization, as recorded in Bhatia's treatment of
+  log-majorization \cite[Chapter~II]{Bhatia1997MatrixAnalysis}.  Hence
+  \(\sum_{i=1}^k x_i\le\sum_{i=1}^k y_i\).
+
+  If \(x_k=0\), let \(r=\max\{i\le k:x_i>0\}\), with \(r=0\) if no such index
+  exists.  For \(r=0\) the desired inequality is immediate.  For \(r>0\), all
+  entries \(x_1,\ldots,x_r\) are positive, and the hypothesis gives
+  \(\prod_{i=1}^m x_i\le\prod_{i=1}^m y_i\) for \(1\le m\le r\).  Since
+  \(x_r>0\), these inequalities force \(y_1,
+  \ldots,y_r\) to be positive as well.  Applying the positive-vector
+  implication to the initial \(r\)-tuples gives
+  \[
+    \sum_{i=1}^k x_i=
+    \sum_{i=1}^r x_i
+    \le
+    \sum_{i=1}^r y_i
+    \le
+    \sum_{i=1}^k y_i .
+  \]
+  This proves \(x\prec_w y\) in the fixed dimension \(N\), without deleting any
+  coordinates or inferring equality of the numbers of zero entries.  The final
+  assertion is Ky Fan dominance for symmetric gauge norms, in the same chapter
+  of Bhatia.
 \end{proof}
 
 \begin{theorem}[Finite-dimensional Weyl--Horn determinant fiber]
@@ -1587,46 +1640,12 @@ finite-dimensional determinant fiber.
   products with a zero factor are zero, and terminal product equality is read
   with that convention.
 
-  We now pass from log-majorization to weak majorization without losing the
-  zero coordinates.  If all coordinates are positive, this is the standard
-  implication \(x\prec_{\log}y\Rightarrow x\prec_w y\).  If zeros occur and
-  \(a_{\mathcal D,N}=0\), there is nothing to prove.  Otherwise put
-  \(r=\max\{i:a_i>0\}\).  For each \(0<\epsilon<a_r\), set
-  \[
-    a^{(\epsilon)}=(a_1,\ldots,a_r,\epsilon,\ldots,\epsilon),
-    \qquad
-    s^{(\epsilon)}=(s_1+\epsilon,\ldots,s_N+\epsilon),
-  \]
-  Then both lists are positive and decreasing.  Since
-  \(a_j=0\) for \(j>r\), the Horn product inequalities give, for
-  \(1\le k\le r\),
-  \[
-    \prod_{i=1}^k a_i
-    \le
-    \prod_{i=1}^k s_i
-    \le
-    \prod_{i=1}^k (s_i+\epsilon).
-  \]
-  For \(r<k\le N\), the product of the first \(k\) coordinates of
-  \(a^{(\epsilon)}\) is \(\epsilon^{k-r}\prod_{i=1}^r a_i\), while the
-  product of the first \(k\) coordinates of \(s^{(\epsilon)}\) is at least
-  \(\epsilon^{k-r}\prod_{i=1}^r (s_i+\epsilon)\); the case \(k=r\) above
-  therefore also gives the required inequality.  The terminal products need
-  not be equal, but the standard positive-vector implication from weak
-  log-majorization to weak majorization uses only the initial product
-  inequalities, so it yields
-  \(a^{(\epsilon)}\prec_w s^{(\epsilon)}\).  Letting
-  \(\epsilon\downarrow0\) in each finite partial sum gives
-  \(a_{\mathcal D,N}\prec_w s\).  This is the usual zero-coordinate convention
-  in the log-majorization and Fan-dominance results of
-  \cite[Chapter~II]{Bhatia1997MatrixAnalysis}.  Fan dominance then gives
-  \(\Phi(x)\le\Phi(y)\) for every symmetric gauge norm whenever
-  \(x\prec_w y\). Thus
+  Applying
+  \Cref{lem:zero-inclusive-log-majorization-fan-dominance} to
+  \(x=a_{\mathcal D,N}\) and \(y=s\), in this same fixed dimension \(N\), gives
   \[
     a_{\mathcal D,N}\prec_w s.
   \]
-  See, for instance, the log-majorization and Fan dominance results in the
-  standard majorization treatment of \cite[Chapter~II]{Bhatia1997MatrixAnalysis}.
   Hence \(\Phi(a_{\mathcal D,N})\le\Phi(s)\).
 
   The diagonal normal model with diagonal entries
