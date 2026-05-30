@@ -20,7 +20,7 @@ active paper list.
 | Seed | Safe automath-only work | Requires human approval | Current stop condition |
 |---|---|---|---|
 | `bedc_automation_pipeline` | Tighten the CICM case-study table; refine `bibliography_scope_seed.md`; refine non-claims; keep the active creation dry run current | Promotion as `2026_auditable_theory_to_paper_pipeline`; final live CICM check | Stop before active file creation |
-| `bedc_finite_kernel_calculus` | Refine exact theorem-spine summaries; map each desired packaging role to current source declarations; draft source-update note shell without changing source commit | Source-side work in `D:/omega/newmath`; later journal/workshop promotion | Stop before editing Lean/source files or claiming a packaging theorem exists |
+| `bedc_finite_kernel_calculus` | Refine exact theorem-spine summaries; maintain `current_declaration_map.md`; draft source-update note shell without changing source commit | Source-side work in `D:/omega/newmath`; later journal/workshop promotion | Stop before editing Lean/source files or claiming a packaging theorem exists |
 | `bedc_rule110_finite_witness` | Refine rerun result tables; record toolchain prerequisites; reconcile static-count notes against existing source files | Installing/using build toolchain; running Rule110 dynamic suite; later promotion | Stop before treating static evidence as artifact validation |
 
 ## Dispatch Order

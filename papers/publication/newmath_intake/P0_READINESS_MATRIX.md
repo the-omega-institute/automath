@@ -59,6 +59,7 @@ Already prepared:
 - `non_claim_registry.md`
 - `packaging_theorem_proposal.md`
 - `upstream_packaging_work_order.md`
+- `current_declaration_map.md`
 
 Still required before journal-style promotion:
 

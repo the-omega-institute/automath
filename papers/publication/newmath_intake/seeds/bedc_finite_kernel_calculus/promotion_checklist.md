@@ -30,6 +30,8 @@ requires a human decision and a new active `2026_*` directory.
   short note.
 - [x] Write a source-side work order for the packaging theorem; see
   `upstream_packaging_work_order.md`.
+- [x] Record a current local declaration map without replacing the pinned
+  source evidence; see `current_declaration_map.md`.
 - [ ] Add or identify the upstream packaging theorem before journal-style
   promotion.
 - [ ] Re-check current live venue options.
