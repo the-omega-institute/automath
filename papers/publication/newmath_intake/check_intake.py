@@ -59,10 +59,10 @@ def iter_seed_dirs(seed_root: Path) -> list[Path]:
     return sorted(p for p in seed_root.iterdir() if p.is_dir())
 
 
-def check_seed(seed_dir: Path) -> list[str]:
+def check_seed(seed_dir: Path, root: Path = ROOT) -> list[str]:
     problems: list[str] = []
     for path in seed_dir.rglob("*"):
-        rel = path.relative_to(ROOT).as_posix()
+        rel = path.relative_to(root).as_posix()
         if path.is_file() and path.name in ACTIVE_TRIGGER_FILES:
             problems.append(f"{rel}: active-paper trigger file is forbidden in intake")
         if path.is_dir() and path.name.startswith("2026_"):
@@ -71,16 +71,22 @@ def check_seed(seed_dir: Path) -> list[str]:
     required_files = REQUIRED_SEED_FILES.get(seed_dir.name, set())
     for filename in sorted(required_files):
         if not (seed_dir / filename).is_file():
-            rel = (seed_dir / filename).relative_to(ROOT).as_posix()
+            rel = (seed_dir / filename).relative_to(root).as_posix()
             problems.append(f"{rel}: missing required P0 intake evidence file")
     return problems
 
 
-def check_index_file(path: Path, required_phrases: list[str]) -> list[str]:
+def check_index_file(
+    path: Path,
+    required_phrases: list[str],
+    *,
+    root: Path = ROOT,
+    publication_root: Path = PUBLICATION_ROOT,
+) -> list[str]:
     try:
-        display_path = path.relative_to(ROOT).as_posix()
+        display_path = path.relative_to(root).as_posix()
     except ValueError:
-        display_path = path.relative_to(PUBLICATION_ROOT).as_posix()
+        display_path = path.relative_to(publication_root).as_posix()
     if not path.exists():
         return [f"{display_path}: missing required intake index"]
     text = path.read_text(encoding="utf-8", errors="replace")
@@ -91,33 +97,39 @@ def check_index_file(path: Path, required_phrases: list[str]) -> list[str]:
     ]
 
 
-def run_check() -> tuple[list[str], list[str]]:
+def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
+    publication_root = root.parent
+    seeds = root / "seeds"
     warnings: list[str] = []
     errors: list[str] = []
 
-    seed_dirs = iter_seed_dirs(SEEDS)
+    seed_dirs = iter_seed_dirs(seeds)
     found = {p.name for p in seed_dirs}
     for name in sorted(KNOWN_SEEDS - found):
         errors.append(f"seeds/{name}: missing required intake seed directory")
 
     for seed_dir in seed_dirs:
-        errors.extend(check_seed(seed_dir))
+        errors.extend(check_seed(seed_dir, root=root))
 
     errors.extend(
         check_index_file(
-            ROOT / "README.md",
+            root / "README.md",
             ["not an active paper pipeline", "must not run Stage A"],
+            root=root,
+            publication_root=publication_root,
         )
     )
     errors.extend(
         check_index_file(
-            ROOT / "BOARD.md",
+            root / "BOARD.md",
             ["INTAKE-NOT-ACTIVE", "must not be picked up"],
+            root=root,
+            publication_root=publication_root,
         )
     )
     errors.extend(
         check_index_file(
-            ROOT / "P0_GATE_AUDIT.md",
+            root / "P0_GATE_AUDIT.md",
             [
                 "promotion-decision gate",
                 "source-theorem gate",
@@ -125,12 +137,16 @@ def run_check() -> tuple[list[str], list[str]]:
                 "Do not promote",
                 "must not promote or queue",
             ],
+            root=root,
+            publication_root=publication_root,
         )
     )
     errors.extend(
         check_index_file(
-            ROOT / "AGENT_WORK_QUEUE.md",
+            root / "AGENT_WORK_QUEUE.md",
             ["P0_GATE_AUDIT.md", "not a daemon queue"],
+            root=root,
+            publication_root=publication_root,
         )
     )
     seed_row_phrases = [
@@ -138,14 +154,18 @@ def run_check() -> tuple[list[str], list[str]]:
     ]
     errors.extend(
         check_index_file(
-            PUBLICATION_ROOT / "PROGRAM_BOARD.md",
+            publication_root / "PROGRAM_BOARD.md",
             seed_row_phrases + ["active paper track", "Stage A/P0-P7"],
+            root=root,
+            publication_root=publication_root,
         )
     )
     errors.extend(
         check_index_file(
-            PUBLICATION_ROOT / "PROGRAM_BOARD_MACHINE.md",
+            publication_root / "PROGRAM_BOARD_MACHINE.md",
             seed_row_phrases + ["INTAKE-NOT-ACTIVE", "do not run Stage A"],
+            root=root,
+            publication_root=publication_root,
         )
     )
 
