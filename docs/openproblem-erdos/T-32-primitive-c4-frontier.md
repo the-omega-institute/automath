@@ -134,3 +134,51 @@ Latest evaluator state:
 - The requested artifact remains unchanged: either a self-contained two-cycle normalization/descent theorem proving the required corrections, or a direct normalized point-count packet for the actual descended cover over `F_11^n`, `n=1,2,3,4`.
 
 Do not ask for more fixed-row audits, support arithmetic, sector bookkeeping, or coefficient-plane algebra. Those are already accepted and do not close the descent bridge.
+
+
+## Monitoring Update 2026-05-30 22:30 SGT — Pivot to degree-3 cyclic C3 frontier
+
+The operator pivoted T-32 away from the primitive C4 / J_Y[4] divisor-basis
+direction (which had been the cron-set next-step contract) to a degree-3
+cyclic C3 frontier on an explicit hyperelliptic pair over F_11.
+
+Current frontier (from the live next_oracle_question.md):
+
+- Explicit hyperelliptic genus-2 pair over F_11:
+  - X: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-5)
+  - Y: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-6)
+- Degree 2 closed: all 15×15 J[2] double-cover pairs have disjoint
+  geometric PGL_2(F_121) signatures; all 15 genus-2 J[2] covers are
+  hyperelliptic.
+- Degree 3 monodromy frontier: g(Z) = 4.
+  - C3 cyclic classes = 40
+  - S3 non-Galois classes = 60
+- Local exclusions checked:
+  - cyclic-C3 same-deck: pgl2_F11_size = 1320, pgl2_transports_X_to_Y = 0,
+    so same-deck-subgroup common-source is excluded.
+  - commuting C3×C3: codex obstruction check passes,
+    X_stabilizer_order_histogram = {1: 1, 2: 3},
+    Y_stabilizer_order_histogram = {1: 1, 5: 4}, neither X nor Y has an
+    order-3 automorphism. Commuting C3×C3 common-source excluded.
+
+Active gap:
+
+- Classify or exclude the non-commuting case: a genus-4 Z with two distinct
+  fixed-point-free order-3 subgroups H_X, H_Y, Z/H_X ≅ X and Z/H_Y ≅ Y,
+  applying the classification to the two listed branch sets;
+- OR: produce explicit equations / invariants and a replayable comparison
+  for the 40 × 40 cyclic triple-cover torsor pairs of X and Y.
+
+Auxiliary partial artifact from this session (not closing): a codex worker
+verified the smoothness of the Fermat plane quartic Y: X^4 + Y^4 + Z^4 = 0
+over F_11, enumerated all 28 bitangents over F_121, separated 16 non-hyperflex
+candidates, and verified Frobenius closure of the bitangent set. The next
+steps (symplectic J_Y[4] basis, f_L with div f_L = 4 L, T^4 = f_L point
+counts, Δ-decision) were honestly refused as unproven; this artifact is
+material for the earlier J_Y[4] direction, not for the now-active degree-3
+cyclic C3 frontier.
+
+Operator action: no closure to file; T-32 is the only one of the three
+targets without a closure-grade NEGATIVE this session. Next concrete move
+is exactly the active gap above.
+

@@ -155,3 +155,54 @@ Next useful action:
   cited E-G windows are byte-accurate and the theorem hypotheses match the
   named A5 same-`W` packet, T-43 would move from source-gap to theorem-bridge
   replay. If not, the first failing theorem clause should be recorded.
+
+
+## Monitoring Update 2026-05-30 22:30 SGT — Binary closure NEGATIVE / NOT YET PROVEN
+
+T-43 outreach instance (arbitrary E-G-style geometric-origin summand /
+subquotient of Gauss-Manin, p-curvature = 0 a.e. ⟹ finite C-monodromy?)
+is now closed at the binary "either citation or obstruction memo" level,
+with answer (2) NEGATIVE / NOT YET PROVEN.
+
+Oracle returned a 7913-character theorem-numbered obstruction memo:
+
+- Katz, Inv.Math. 18 (1972) Thm 5.1: full R^n f_* Ω^•(log D) + suitable
+  finite-group factor only; arbitrary direct summand not covered. André
+  explains the Cartier/Hodge-filtration compatibility requires the
+  auxiliary object existing only for finite-automorphism factors.
+- Esnault-Groechenig arXiv:1711.06436 / Selecta Math 24 (2018) Thm 1.1:
+  integrality for irreducible cohomologically rigid local systems only.
+- Esnault-Groechenig Acta Math 225(1) (2020) Thm 1.4: nilpotent p-curvature
+  for rigid flat connections; Thm 1.8: rigid + strict ψ_p = 0 ⟹ UNITARY
+  monodromy (not automatically finite); Prop 8.2: finite monodromy only
+  after rigidity + integrality + all-conjugates input.
+- André, "Sur la conjecture des p-courbures de Grothendieck-Katz et un
+  problème de Dwork," 2004, Thm 0.7.1: subquotient of tensor construction
+  on H_f assumes motivic Galois CONNECTEDNESS — André flags this as a
+  "lacuna in the then-available motivic theory."
+- Lam-Litt arXiv:2501.13175 (2025) Thm 1.3.3: cycle-class initial conditions
+  only. Remark 3.3.5: proving the conjecture at arbitrary initial conditions
+  would resolve the p-curvature conjecture for summands of Picard-Fuchs,
+  "which is open."
+- Strict-vs-nilpotent ψ_p gap: not bridgeable in arbitrary summand case.
+  Geometric-origin subquotients give nilpotent (not strict zero); strict zero
+  requires further rigidity/integrality.
+- No known counterexample. Dwork's elliptic-log example fails the hypothesis
+  (ψ_p = 0 set has density 0, not 1).
+- Litt's Problem #2 itself (problemsilike.com/2) is marked OPEN; Litt's own
+  remarks state Katz covers full Picard-Fuchs but "the same statement
+  remains open for general summands."
+
+Closure semantics: this is an "honest concession + source-grade obstruction
+memo" closure of the outreach instance, not a refutation of any specific
+candidate. The arbitrary-summand extension of E-G is genuinely open with
+sharp known boundaries. The A5 same-W candidate from the earlier checkpoint
+is not refuted; it is now correctly contextualised as a candidate whose
+finite-monodromy proof would need to clear the listed boundaries, which the
+existing literature has not done.
+
+Operator action: confirm the Katz / E-G / André / Lam-Litt theorem numbers
+and the cited remarks (Lam-Litt Rem 3.3.5 in particular) say what the Oracle
+quoted. If confirmed, T-43 outreach is closed as a recorded negative-
+boundary stage result.
+

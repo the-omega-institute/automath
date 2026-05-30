@@ -134,3 +134,37 @@ Operational implication: do not mark any of the three targets closed. T-43 is
 the only target with a fresh candidate to evaluate and an active follow-up;
 T-32 may be stuck in a generation/DOM extraction wait if the current response
 does not materialize.
+
+
+## Monitoring Update 2026-05-30 22:30 SGT — Two closure-grade NEGATIVEs
+
+Two of the three targets now have closure-grade NEGATIVE answers at the
+outreach-instance level. T-32 remains the only target with an open active
+frontier.
+
+- T-44 ρ_168 instance of Litt #4 Q3: CLOSED NEGATIVE.
+  Chain combines five native gates (SO-parity, (E1)+(E2) frontier reduction,
+  full Chevalley-Weil decomposition, trace-mod-3 witness, Schur reduction)
+  with one Oracle-sourced LLS citation (Geom.Top. 29(5) 2025 Thm 9.8 +
+  Cor 9.9 + Lem 7.16). See T-44-kp-prym-route-log.md.
+- T-43 arbitrary E-G summand / subquotient case: CLOSED NEGATIVE / NOT YET
+  PROVEN. Oracle returned a 7913-char theorem-numbered obstruction memo
+  citing Katz Inv.Math. 18 (1972), E-G Selecta 24 (2018) + Acta Math 225
+  (2020), André 2004, Lam-Litt 2501.13175. Litt's Problem #2 itself is
+  marked OPEN. See T-43-eg-summand-a5-certificate.md.
+- T-32: operator pivoted to a degree-3 cyclic C3 frontier on an explicit
+  hyperelliptic pair over F_11; degree 2 closed (J[2] covers all
+  hyperelliptic), same-deck and commuting-C3×C3 cases excluded, non-
+  commuting genus-4 case is the open frontier. See
+  T-32-primitive-c4-frontier.md.
+
+Both closures require an operator-grade citation audit (LLS Thm 9.8 /
+Cor 9.9 / Lem 7.16 for T-44; Katz/E-G/André/Lam-Litt theorem numbers and
+Lam-Litt Rem 3.3.5 in particular for T-43). Without that audit the chain
+is closure-grade but not signed off.
+
+Pipeline status at this checkpoint: all three browser poll agents recent,
+two Oracle deep tasks still in flight (T-32 fresh degree-3 prompt and a
+T-43 follow-up on the c5d9 named-T direction). The polluted T-32 ChatGPT
+URL pinned to conv c/6a086390 has been unpinned at the disk-state level
+(in-memory session still pinned until next dispatch creates a fresh conv).
