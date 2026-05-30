@@ -74,6 +74,8 @@ publication tracking.
   selected case studies and remaining promotion blockers.
 - `case_evidence_note.md`: exact source evidence for the four selected CICM
   case studies.
+- `promotion_decision_memo.md`: recommends narrowed-claim promotion for CICM
+  presentation-only instead of full source-gate rerun before promotion.
 
 ## Current First Route
 

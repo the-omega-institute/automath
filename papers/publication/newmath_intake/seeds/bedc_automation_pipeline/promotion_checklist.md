@@ -30,8 +30,9 @@ and creation of a `papers/publication/2026_*` directory.
   observed failures, and recovery commits or notes.
 - [x] Verify that cited newmath and automath source paths exist at the pinned
   source/workspace state; see `source_verification_note.md`.
-- [ ] Re-run or explicitly defer the source verification commands from
-  `gate_table.md`.  The latest note verifies paths only, not command success.
+- [x] Re-run or explicitly defer the source verification commands from
+  `gate_table.md`.  Decision: defer for CICM presentation-only and use a
+  narrowed claim; see `promotion_decision_memo.md`.
 - [x] Re-check the official page for the first venue.  CICM 2026
   presentation-only was verified open on 2026-05-31 with a 2026-06-15
   deadline.
