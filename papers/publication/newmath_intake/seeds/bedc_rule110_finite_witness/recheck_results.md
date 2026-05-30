@@ -18,6 +18,15 @@ Get-Command make
 The term 'make' is not recognized as the name of a cmdlet, function, script file, or operable program.
 ```
 
+Additional Windows/WSL toolchain probe on 2026-05-31:
+
+| Environment | Probe | Result |
+|---|---|---|
+| Windows PATH | `make`, `mingw32-make`, `gcc`, `cc`, `clang` | not found |
+| Windows PATH | `bash`, `wsl` | found |
+| WSL Ubuntu | `/mnt/d/omega/newmath/rule110` | accessible |
+| WSL Ubuntu | `make`, `gcc`, `clang` | not found |
+
 Therefore this note records only static source-tree counts and source-text
 consistency checks.  The dynamic commands in `recheck_plan.md` remain required
 before promotion:
@@ -76,6 +85,8 @@ Do not promote this seed until one of the following is true:
    audit failures disclosed as diagnostics, and the target venue accepts that
    limitation.
 
-The current best next action is to install/use an environment with `make`, run
-the dynamic commands from `recheck_plan.md`, and update this note with the exact
-command outputs and exit codes.
+The current best next action is to install/use an environment with `make` and a
+C compiler, run the dynamic commands from `recheck_plan.md`, and update this
+note with the exact command outputs and exit codes.  The existing WSL Ubuntu
+instance is path-accessible but does not currently provide the required build
+tools.

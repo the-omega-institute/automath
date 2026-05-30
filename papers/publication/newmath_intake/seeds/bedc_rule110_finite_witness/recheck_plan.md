@@ -25,6 +25,10 @@ make test-collision-audit
 make test-scale
 ```
 
+Environment requirement: these commands need `make` and a C compiler.  As of
+2026-05-31, neither Windows PATH nor the available WSL Ubuntu instance provides
+the required toolchain.
+
 ## Counts to Recompute
 
 | Count | Command family |
