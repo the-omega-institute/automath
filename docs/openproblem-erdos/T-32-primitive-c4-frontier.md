@@ -236,3 +236,34 @@ The next T-32 step is to switch focus from the option-2 computational
 comparison route to the option-1 classification/exclusion of the non-
 commuting case.
 
+
+
+## Monitoring Update 2026-05-31 00:45 SGT — Noncommuting C3 narrowed to 43-signature frontier
+
+The active T-32 option-1 direction (non-commuting genus-4 Z with two distinct
+fixed-point-free order-3 subgroups H_X, H_Y, Z/H_X ≅ X and Z/H_Y ≅ Y, on the
+explicit hyperelliptic pair over F_11) has been narrowed by pipeline-side
+checkers to a finite signature frontier.
+
+From `check_litt3_degree3_noncommuting_c3_signature_frontier`:
+- signature_count = 43 surviving Riemann-Hurwitz signature classes
+- quotient_genus_histogram = {0: 42, 1: 1} (42 with Z/H ≅ P^1 branched,
+  1 with Z/H ≅ elliptic branched)
+- candidate_group_order_count = 19 distinct candidate generated-group orders
+- signature_count_without_order3_branch_index = 11
+
+From `check_litt3_degree3_noncommuting_c3_small_perm_search`: small
+permutation representations up to degree 6 did NOT decide the 43-signature
+frontier. The next certificate must either supply an unbounded group/action
+theorem or explicit cyclic triple-cover equations for the actual generating
+vectors on the named X and Y branch sets.
+
+Status:
+- Option-2 (F_11-rational comparison) closed empty in the prior checkpoint.
+- Option-1 (non-commuting case) now has a concrete bounded frontier: 43
+  signature classes to decide.
+- Each surviving signature requires deciding whether a generated group with
+  H_X, H_Y free of order 3 admits the required X, Y quotient identifications.
+
+The 43-signature frontier is the active T-32 sub-frontier; not closure, but
+a quantified narrowing of the previously open noncommuting case.
