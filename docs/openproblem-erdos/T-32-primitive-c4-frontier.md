@@ -286,3 +286,26 @@ This is a quantitative narrowing of the option-1 noncommuting frontier
 (43-signature work above) for the eventual pair test. Closure still requires
 either explicit degree-3 cover equations / canonical cover-with-deck invariants,
 or a stronger finite-index π_1 commensurability invariant.
+
+
+## Monitoring Update 2026-05-31 02:45 SGT — Lemma sequence L0–L4 verified, L5 open
+
+`check_litt3_degree3_obligation_decomposition` (02:37) records a clean
+lemma sequence for the T-32 option-1 degree-3 frontier:
+
+Verified lemmas:
+- L0: degree-2 case closed (all 15 × 15 J[2] covers hyperelliptic, prior)
+- L1: cyclic degree-3 count = 40 per curve (geometric F̄_11 count)
+- L2: S3 degree-3 count = 60 per curve
+- L3: degree-3 finite workload bounded (5200 raw, 260 orbit-pair LB after
+  base-aut quotient)
+- L4: group / Riemann-Hurwitz only exclusion refuted (must go beyond RH+group)
+
+Open first blocker:
+- L5: equation-level cover incidence — construct actual C3 / S3 degree-3
+  source covers for X and Y, then decide geometric source-with-map
+  isomorphism. Alternative: supply a proved F̄_q finite-index π_1 invariant.
+
+Status unchanged: T-32 (b) grinding. The L5 blocker is the explicit equation-
+level construction step; pipeline checkers cannot decide it without a
+ground-truth cover catalogue.

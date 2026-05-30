@@ -350,3 +350,32 @@ the Schur trace obstruction would be vacuous and ρ_168 could still occur.
 Status confirmation: the three-sub-gap structure recorded in the prior
 checkpoint is intact and the third sub-gap (MCG-image hitting) is now
 provably required, not just precautionary.
+
+
+## Monitoring Update 2026-05-31 02:45 SGT — LLS threshold formula + LLS Question 10.2 cite
+
+Two codex outputs sharpen the LLS applicability picture further:
+
+`codex_LLS_active_g10_route_split_20260531` (02:41) records the precise
+threshold formula for the LLS Theorem 9.8 / Corollary 9.9 "full H route":
+
+  g > max(2s + 1, s²),  where  s = max dim of an Irr(H) appearing non-trivially
+                                   on the branch class
+
+For H = PSL_2(7), s = 8, so threshold = max(17, 64) = 64; minimum_integer_g = 65.
+Active T-44 frontier g = 10 vs threshold 65 confirms the 54-unit applicability
+gap noted in the prior monitoring entry.
+
+Independently, codex flags LLS Question 10.2 (referenced as line 2151 of the
+arXiv source) as an open strengthening of the LLS framework to small g
+(g ≥ 3). LLS themselves mark this as a future direction; there is no
+published theorem covering the active branched g = 10 frontier directly.
+
+Two additional codex artifacts (block_diagonal_trace_census 02:14;
+handle_involution_trace_slice 02:27) map out which specific Sp_6(F_3) elements
+relevant to a KP construction have χ_168 trace ≢ 0 mod 3. These do not close
+the third sub-gap (MCG-image hitting); they catalogue candidate witnesses.
+
+Status unchanged: T-44 ρ_168 instance is CONDITIONALLY NEGATIVE; the three
+sub-gaps remain. New: the first sub-gap is now exactly characterized by the
+formula g > max(2s + 1, s²) and the open LLS Question 10.2 strengthening.
