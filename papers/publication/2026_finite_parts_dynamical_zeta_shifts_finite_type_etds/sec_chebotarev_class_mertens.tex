@@ -648,6 +648,13 @@ Adams--M\"obius determinant calculation.
   fixed-label Euler transform, and it may be replaced by the periodic
   Artin logarithm only in the channels satisfying the coefficient
   obstruction \eqref{eq:channel-separation-obstruction}.
+  The obstruction theorem
+  \Cref{thm:class-product-minimal-obstruction-skeleton} below makes this
+  last sentence sharp: after the scalar coordinate is fixed, every bad
+  replacement of the determinant boundary data is exactly a non-zero vector
+  in the \((q-1)\)-dimensional zero-mean class-function skeleton, where
+  \(q\) is the number of conjugacy classes of \(G\), and no scalar,
+  exponent-level, or notation-level record can hide it.
 \end{proposition}
 
 \begin{proof}
@@ -668,7 +675,12 @@ Adams--M\"obius determinant calculation.
   between \(F_\phi\) and \(\mathcal L_\phi\) is equivalent to
   \eqref{eq:channel-separation-obstruction}.  Main Theorem~III uses
   precisely the values \(F_\varrho(\lambda^{-1})\) in its non-trivial
-  Fourier coordinates, so the stated product-constant roles follow.
+  Fourier coordinates, so the stated product-constant roles follow.  The
+  final roadmap sentence is the specialisation of
+  \Cref{thm:class-product-minimal-obstruction-skeleton} to the boundary-error
+  vector
+  \(B_\varrho=\mathcal L_\varrho(\lambda^{-1})\), or more generally to any
+  branch-compatible substitute \((B_\varrho)_{\varrho\ne\mathbf1}\).
 \end{proof}
 
 \begin{theorem}[Main Theorem III: Adams-corrected Frobenius-class
@@ -1304,12 +1316,12 @@ Artin logarithm.
   \(F_\varrho(\lambda^{-1})=\mathcal L_\varrho(\lambda^{-1})\) for every
   non-trivial \(\varrho\).
 \end{proof}
-\begin{proposition}[Finite determinant recovery closure for the main chain]
+\begin{proposition}[Finite determinant data determine the main-chain outputs]
   \label{prop:finite-data-main-chain-closure}
   \label{prop:finite-data-main-spine-closure}
   Assume \(\lambda>1\) and the twisted spectral gap
-  \(\eta<\lambda\) of \Cref{thm:class-mertens-explicit}.  Let the finite input
-  data be
+  \(\eta<\lambda\) of \Cref{thm:class-mertens-explicit}.  Encode the finite
+  group by its multiplication table and let the finite determinant datum be
   \begin{equation*}
     \begin{aligned}
       \mathfrak D(A,\tau;G):=
@@ -1318,13 +1330,10 @@ Artin logarithm.
       &C(A),\ \{\det(I-zA_\pi):\pi\in\Irr(G)\}\Bigr).
     \end{aligned}
   \end{equation*}
-  From these finite data one obtains the primitive coefficients by coefficient
-  extraction, character-table linear algebra, Adams coefficients, and finite
-  Fourier inversion.  The constants at the Perron boundary are then the
-  specified Abel-path and logarithm-branch values of the determinant series in
-  \Cref{thm:class-mertens-explicit,prop:fixed-label-determinant-perron,thm:class-product-determinant-rigidity}.
-  In this sense \(\mathfrak D(A,\tau;G)\) determines the complete output of
-  the three main theorems:
+  Together with the Abel-path branch convention fixed in
+  \Cref{thm:class-mertens-explicit,prop:fixed-label-determinant-perron}, this
+  finite datum determines, and is used here only to determine, the following
+  outputs of the three main theorems:
   \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
     \item every primitive Peter--Weyl coefficient
     \(\pi_{n,\varrho}(A,\tau)\) and hence every primitive class count
@@ -1335,9 +1344,14 @@ Artin logarithm.
     \item every fixed-label value \(F_\varrho(\lambda^{-1})\) and every
     Frobenius-class Euler-product constant \(K_C\).
   \end{enumerate}
-  For the last two items, ``determines'' means this analytic recovery from
-  finite determinant polynomials, not a finite algebraic expression in the
-  polynomial coefficients.  The singular scalar determinant logarithm is never
+  The recovery in item~\textup{(i)} is purely algebraic: coefficient
+  extraction from the finitely many determinant polynomials, finite
+  character-table linear algebra, Adams coefficients, M\"obius inversion, and
+  finite Fourier inversion.  The recovery in items~\textup{(ii)} and
+  \textup{(iii)} is the branch-compatible Perron-boundary evaluation of those
+  same finite determinant polynomials under \(\eta<\lambda\), not a claim that
+  the boundary constants are finite algebraic expressions in the polynomial
+  coefficients alone.  The singular scalar determinant logarithm is never
   evaluated; the scalar normalisation uses the positive Perron constant
   \(C(A)\).  Conversely, after the scalar normalisation
   \(C(A)\), the product-constant vector \((K_C)_C\) determines exactly the
@@ -2480,21 +2494,40 @@ computational-certificate, or operator-algebraic papers.
   than a template for an arbitrary finite-group certification framework.
 \end{proof}
 
-\begin{proposition}[Manuscript scope of the fixed-label certificate interface]
+\begin{proposition}[Finite certificate theorem for fixed-label product data]
   \label{prop:fixed-label-certificate-manuscript-scope}
   The certificate protocol of
   \Cref{prop:fixed-label-perron-finite-algorithm,prop:fixed-label-certificate-protocol,cor:fixed-label-perron-certificate-schema}
-  is exactly a finite proof interface for the determinant-coordinate values
-  used in Main Theorem~III and for the printed \(S_3\) witness in the
-  appendices.  More precisely, it proves the following three statements and no
-  broader software-infrastructure claim.
+  is a finite mathematical certificate for the determinant-coordinate values
+  used in Main Theorem~III.  Fix a non-trivial irreducible character
+  \(\varrho\), a truncation window \(M\), rational branch rectangles for every
+  non-deleted triple \((r,m,\pi)\) with \(rm\le M\), the Adams coefficients
+  \(a_{\varrho,\pi}^{(m)}\), and rational radii \(R_M,R_{\mathrm{num}}\) as in
+  \Cref{prop:fixed-label-certificate-protocol}.  If these finite records pass
+  the exact character-table, branch-tag, interval-propagation, and tail-bound
+  checks of that proposition, then they certify the explicit enclosure
+  \[
+    F_\varrho(\lambda^{-1})
+    \in
+    I_M+
+    \{w\in\CC:|w|\le R_M+R_{\mathrm{num}}\},
+  \]
+  where \(I_M\) is the rational interval obtained from the finite determinant
+  sum.  Applying this finite certificate for all
+  \(\varrho\ne\mathbf1\) and then applying the finite Fourier inverse of
+  \Cref{cor:class-product-constant-rigidity} certifies rational enclosures for
+  the logarithms of all class-product constants \(K_C\).  Thus the statement
+  proves the following four assertions and no broader
+  software-infrastructure claim.
   \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-    \item For the fixed finite matrices \(A_\pi\), fixed character table, fixed
-      branch convention, and fixed tolerance appearing in this manuscript, the
-      finite records of \Cref{prop:fixed-label-certificate-protocol} are
-      sufficient to verify rational enclosures for
-      \(F_\varrho(\lambda^{-1})\) and hence, by finite Fourier inversion, for
-      the class-product constants of \Cref{thm:class-euler-product-mertens}.
+    \item The accepted finite record for \(\varrho\) determines a rigorous
+      rational enclosure for the single fixed-label Perron value
+      \(F_\varrho(\lambda^{-1})\), with the scalar Perron logarithm deleted
+      before any boundary value is taken.
+    \item The collection of accepted records over
+      \(\varrho\ne\mathbf1\) determines, by finite Fourier inversion and the
+      fixed scalar normalisation \(C(A)\), rigorous enclosures for the
+      class-product constants of \Cref{thm:class-euler-product-mertens}.
     \item The \(S_3\) appendix records instantiate this finite interface as a
       witness to the non-abelian Artin-substitution obstruction; they add no
       new analytic hypothesis to Main Theorem~III.
@@ -2506,20 +2539,26 @@ computational-certificate, or operator-algebraic papers.
 \end{proposition}
 
 \begin{proof}
-  Statement (i) is a direct combination of the two preceding finite-interface
-  results.  \Cref{prop:fixed-label-certificate-protocol} proves that the four
+  The displayed enclosure is exactly
+  \eqref{eq:fixed-label-certificate-interface-inclusion} from
+  \Cref{prop:fixed-label-certificate-protocol}.  That proposition proves that
+  the four
   finite records enclose the truncated determinant sum and its discarded tail,
-  giving the inclusion
-  \eqref{eq:fixed-label-certificate-interface-inclusion} for each non-trivial
-  \(F_\varrho(\lambda^{-1})\).  The values involved are precisely the
-  fixed-label determinant coordinates appearing in
-  \Cref{prop:fixed-label-determinant-perron}.  Applying the finite Fourier
-  inversion of \Cref{cor:class-product-constant-rigidity} then transports those
-  enclosures to the logarithms of the class-product constants in
-  \Cref{thm:class-euler-product-mertens}.  No limiting orbit data or external
-  numerical assumption is introduced in this passage.
+  and it also proves that the omitted scalar Perron triple has coefficient
+  zero for \(\varrho\ne\mathbf1\).  Thus (i) is a finite consequence of the
+  determinant formula in \Cref{prop:fixed-label-determinant-perron}; no
+  limiting orbit count, unrecorded branch choice, or numerical assumption is
+  introduced.
 
-  Statement (ii) follows from
+  Applying the same accepted-record argument to every non-trivial irreducible
+  character gives enclosures for the full non-trivial vector
+  \((F_\varrho(\lambda^{-1}))_{\varrho\ne\mathbf1}\).  The inverse and forward
+  transforms in \Cref{cor:class-product-constant-rigidity} are finite
+  character-table operations after \(C(A)\) has fixed the scalar coordinate.
+  Therefore those enclosures transport to the logarithms of the class-product
+  constants in \Cref{thm:class-euler-product-mertens}, proving (ii).
+
+  Statement (iii) follows from
   \Cref{cor:fixed-label-perron-certificate-schema}: the appendix files are
   serialized arithmetic transcripts for the same five bookkeeping fields.  The
   concrete \(S_3\) obstruction in
@@ -2528,7 +2567,7 @@ computational-certificate, or operator-algebraic papers.
   determinant-coordinate formula.  Hence the witness illustrates and certifies
   the obstruction but does not enlarge the theorem hypotheses.
 
-  For (iii), inspect the inputs permitted in
+  For (iv), inspect the inputs permitted in
   \Cref{prop:fixed-label-perron-finite-algorithm}: the group, character table,
   power maps, determinant polynomials, Perron root, strict-gap certificate,
   branch convention, majorant, truncation window, and rational interval bounds
