@@ -64,6 +64,8 @@ read that file before writing a venue ladder, promotion memo, or submission
 plan.
 
 The current P0 decision state is summarized in `P0_READINESS_MATRIX.md`.
+The current P0 gate state and non-promotion rules are summarized in
+`P0_GATE_AUDIT.md`.
 
 Use `SOURCE_UPDATE_NOTE_TEMPLATE.md` for any source commit movement, whether the
 candidate is still a seed or has already been promoted.

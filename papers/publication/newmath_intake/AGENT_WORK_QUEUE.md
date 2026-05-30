@@ -12,6 +12,8 @@ active paper list.
 - Do not add `main.tex` or `PIPELINE.md` to any seed.
 - Do not run publication daemon stages against seed directories.
 - Run `python papers\publication\newmath_intake\check_intake.py` after edits.
+- Use `P0_GATE_AUDIT.md` to distinguish safe intake work from promotion,
+  source-side theorem work, and artifact reruns.
 - If `D:/omega/newmath` source changes, use
   `SOURCE_UPDATE_NOTE_TEMPLATE.md` before editing a seed source map.
 
