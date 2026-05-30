@@ -26,10 +26,20 @@
 - `gate_table.md` drafts the gate-by-gate architecture table.
 - `failure_modes.md` drafts the failure taxonomy and case-study requirements.
 - `submission_memo.md` drafts the route strategy and promoted-draft outline.
+- `case_studies.md`, `case_evidence_note.md`, and `case_table_seed.md` record
+  concrete intake-stage case rows for the CICM presentation-only shape.
+- `bibliography_scope_seed.md` records the comparison buckets and live
+  literature-pass rules that must become `BIB_SCOPE.md` only after promotion.
+- `cicm_two_page_packet.md` and `cicm_promotion_brief.md` reduce the artifact
+  inventory into a two-page presentation-only route.
 
-## Missing Before Promotion
+## Still Open Before Promotion
 
-- Concrete case-study rows with exact track names and source paths.
-- Re-run status or explicit deferral notes for the verification commands.
-- Venue-specific formatting constraints after official CFP re-check.
-- A comparison matrix against current AI-for-math/formalization systems.
+- Human approval naming the seed and active slug.
+- Immediate live re-check of the official CICM page before any submission.
+- Decision to use the pinned source commit or a documented source update.
+- Active-paper files such as `BIB_SCOPE.md`, `SOURCE_MAP.md`,
+  `ARTIFACT_INVENTORY.md`, `PIPELINE.md`, and `main.tex`; these are forbidden
+  in the seed directory and must be created only after promotion.
+- Any command reruns or source updates that the promoted route chooses to make
+  load-bearing.
