@@ -379,3 +379,33 @@ the third sub-gap (MCG-image hitting); they catalogue candidate witnesses.
 Status unchanged: T-44 ρ_168 instance is CONDITIONALLY NEGATIVE; the three
 sub-gaps remain. New: the first sub-gap is now exactly characterized by the
 formula g > max(2s + 1, s²) and the open LLS Question 10.2 strengthening.
+
+
+## Monitoring Update 2026-05-31 03:15 SGT — Sub-gap #2 partially source-supported
+
+`codex_compact_W1_same_subgroup_gate_20260531` (02:52) reports that the
+compact W_1 / H-linear binding (the second sub-gap in the three-sub-gap
+structure) is in fact source-supported by specific LLS line ranges:
+
+  LLS lines 83-89, 168-180, 1608-1622, 1708-1713.
+
+These cover the definition-level deck-centralizer structure, the H-isotypic
+decomposition (Lemma 7.16), and the W_1 weight filtration setup. The codex
+audit flags this sub-gap as source-supported at the definition / structural
+level, while emphasizing that the SAME-SUBGROUP comparison (sub-gap #3) is
+still uncertified locally.
+
+Refined three-sub-gap structure:
+1. LLS Thm 9.8 / Cor 9.9 applicability at g = 10 (threshold g > 64):
+   OPEN. Requires either an LLS Question 10.2 small-g strengthening proof
+   or an alternative theorem.
+2. LLS W_1 / H-linear identification: PARTIALLY SOURCE-SUPPORTED at the
+   structural / definition level (LLS lines 83-89, 168-180, 1608-1622,
+   1708-1713) but not yet certified at the same-subgroup comparison level.
+3. MCG-image hitting / same-subgroup trace certificate: OPEN, with
+   necessity witnessed by the transvection counterexample from the
+   prior checkpoint.
+
+Status unchanged: T-44 ρ_168 instance CONDITIONALLY NEGATIVE. The sub-gap
+structure is finer-grained: sub-gap #2 has partial structural backing;
+sub-gaps #1 and #3 are the principal open work.

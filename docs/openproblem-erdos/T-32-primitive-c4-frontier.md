@@ -309,3 +309,23 @@ Open first blocker:
 Status unchanged: T-32 (b) grinding. The L5 blocker is the explicit equation-
 level construction step; pipeline checkers cannot decide it without a
 ground-truth cover catalogue.
+
+
+## Monitoring Update 2026-05-31 03:15 SGT — Commensurability L5 alternative recorded
+
+`check_litt3_commensurability_invariant_obligation` (03:12) records the
+alternative L5 route (computable π_1 commensurability invariant over F̄_q
+instead of equation-level cover construction) with current local status:
+
+- 49 bounded pairs checked
+- local_reduction = NoObviousNumericalCommensurabilityInvariant
+- Open first blocker: produce a computable invariant or criterion for
+  finite-index commensurability of geometric / tame π_1 over F̄_q, prove
+  it is unchanged under finite étale covers, and apply it to an explicit
+  pair of genus ≥ 2 curves; OR prove Tamagawa-style finiteness can be
+  upgraded to finite-index commensurability separation.
+
+This is the alternative L5 path noted earlier. Without a computable
+invariant, the pipeline cannot decide cross-pair commensurability
+directly. Status: open frontier alongside the equation-level cover
+incidence path.
