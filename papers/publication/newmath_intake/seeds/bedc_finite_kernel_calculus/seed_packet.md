@@ -56,14 +56,19 @@ objects.
 - `scope_contract.md`: exact paper unit, non-claims, and route boundary.
 - `declaration_inventory_seed.md`: first exact Lean declaration seed from the
   pinned `origin/dev` source snapshot.
+- `theorem_spine_selection.md`: 24-item exact-declaration core spine selected
+  from the pinned source.
+- `non_claim_registry.md`: explicit overclaim boundary for any promoted
+  manuscript.
 - `promotion_checklist.md`: remaining tasks before active paper promotion.
 
 ## Current Route
 
-This seed should remain intake-only until a smaller theorem spine is curated
-from `declaration_inventory_seed.md`.  It is stronger as a logic/formal-calculus
-paper than as a fast short-window submission.  Do not merge it with the
-automation-pipeline or Rule110 artifact papers.
+This seed remains intake-only.  A first theorem spine has been curated, but it
+still needs exact-statement reading and a decision on whether the promoted paper
+should add one upstream packaging theorem in `D:/omega/newmath`.  It is stronger
+as a logic/formal-calculus paper than as a fast short-window submission.  Do
+not merge it with the automation-pipeline or Rule110 artifact papers.
 
 ## Promotion Target
 

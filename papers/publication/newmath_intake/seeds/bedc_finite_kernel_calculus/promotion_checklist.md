@@ -16,12 +16,17 @@ requires a human decision and a new active `2026_*` directory.
 
 ## Open Before Promotion
 
-- [ ] Select a theorem spine from `declaration_inventory_seed.md`.
-- [ ] Re-check exact Lean target names against the chosen source commit.
-- [ ] Write a non-claim registry distinguishing primitive kernel objects from
+- [x] Select a theorem spine from `declaration_inventory_seed.md`.
+- [x] Re-check exact Lean target names against the chosen source commit for
+  the selected core `Mark`/`Hist`/`Ext`/`Cont`/`Bundle`/`Ask` declarations.
+- [x] Write a non-claim registry distinguishing primitive kernel objects from
   downstream mathematical interfaces.
 - [ ] Decide whether GroundCompiler material is appendix/interface only or a
   section of the main paper.
+- [ ] Inspect the exact statement of every selected declaration before it is
+  quoted in a promoted manuscript.
+- [ ] Decide whether the main result needs a new upstream packaging theorem in
+  `D:/omega/newmath`.
 - [ ] Re-check current live venue options.
 - [ ] Human approves promotion and active paper slug.
 
