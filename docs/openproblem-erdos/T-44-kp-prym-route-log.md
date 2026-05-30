@@ -208,3 +208,57 @@ Scope:
 - The retired KP2 stabilizer-fiber bridge and the level-3 / F_3 Fox/Prym
   direction (above) are independent of this closure and remain as recorded.
 
+
+
+## Monitoring Update 2026-05-30 23:15 SGT — CORRECTION: T-44 closure is downgraded to CONDITIONAL
+
+A follow-up codex audit chain (codex_LLS_716_tensor_binding_audit_20260530 +
+codex_LLS_g10_applicability_mixing_gate_20260530) on the previously
+committed T-44 ρ_168 closure flagged that the LLS theorem citation does
+NOT immediately deliver the deck-centralizing conclusion at the specific
+branched PSL_2(7), g=10, n=1, c=2A Kodaira-Parshin family. The closure as
+recorded in the previous monitoring section is therefore downgraded from
+"CLOSURE-GRADE NEGATIVE" to "CONDITIONAL NEGATIVE, source gap explicit".
+
+Substantive gap (verbatim from the codex_LLS_g10_applicability_mixing_gate
+audit):
+
+> Theorem 9.8 / Corollary 9.9 alone do not apply at g=10. The remaining
+> primary-source step is a proof, valid for the branched PSL_2(7), g=10,
+> n=1, class-2A Kodaira-Parshin family, that the Lemma-9.10 monodromy on
+> W_1 H^1(Σ, V_{ρ_3a}) and W_1 H^1(Σ, V_{ρ_3b}) is realized inside the
+> compact-cover H-isotypic summands V_{ρ_3a}^∨ ⊗ M_56 and
+> V_{ρ_3b}^∨ ⊗ M_56 by H-linear operators.
+
+What is still solid:
+
+- The five native gates (SO-parity, (E1)+(E2) frontier, Chevalley-Weil
+  decomposition, χ_168(M)=8 mod 3 = 2 witness, Schur reduction
+  identity trace(I_3 ⊗ A) = 3·trace(A)) are all unaffected.
+- The CONDITIONAL implication "deck-centralizing MCG on W_{ρ_3a/3b} ⟹
+  ρ_168 ≠ W_{ρ_3a/3b}" is mathematically tight.
+- LLS Section 1 / Lemma 7.16 / Lemma 9.10 / Question 10.2 are the right
+  source references for the structural framework.
+
+What is the open gap:
+
+- For the specific branched g=10, n=1, c=2A PSL_2(7) Kodaira-Parshin
+  family, the identification of the Lemma 9.10 (open-curve W_1 H^1)
+  monodromy with the H-linear / Schur-form action on V_{ρ_3a}^∨ ⊗ M_56
+  is NOT directly proved by LLS Theorem 9.8 or Corollary 9.9 alone.
+- The Oracle response and the original LLS Lemma 7.16 statement together
+  give the right framework but not the right named theorem for this
+  branched configuration.
+
+Operator action: the closure remains a credible NEGATIVE under the
+H-linear hypothesis, but is conditional pending either (i) a primary-
+source identification proof for this branched config, or (ii) a paper-
+length argument bridging Lemma 9.10 to the H-isotypic Schur form at this
+specific (g, n, branch) frontier. The corrected status of T-44 is:
+
+  T-44 ρ_168 instance of Litt #4 Q3: CONDITIONALLY NEGATIVE.
+  Native chain is closure-grade; LLS bridge is conditional.
+  Source gap explicit and recorded.
+
+This is a downgrade from the previous monitoring entry, recorded here to
+maintain honest scope.
