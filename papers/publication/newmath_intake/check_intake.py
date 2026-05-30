@@ -35,21 +35,25 @@ REQUIRED_SEED_FILES = {
         "source_verification_note.md",
     },
     "bedc_finite_kernel_calculus": {
+        "bibliography_scope_seed.md",
         "blocker_ledger.md",
         "current_declaration_map.md",
         "exact_statement_note.md",
         "groundcompiler_placement_decision.md",
         "promotion_checklist.md",
+        "short_note_route_memo.md",
         "theorem_spine_selection.md",
         "upstream_packaging_work_order.md",
     },
     "bedc_rule110_finite_witness": {
         "artifact_rerun_packet.md",
         "current_static_status_map.md",
+        "diagnostic_route_memo.md",
         "evidence_separation_note.md",
         "limitation_ledger.md",
         "promotion_checklist.md",
         "recheck_results.md",
+        "trust_chain_template.md",
     },
 }
 ACTIVE_TRIGGER_FILES = {"main.tex", "PIPELINE.md"}

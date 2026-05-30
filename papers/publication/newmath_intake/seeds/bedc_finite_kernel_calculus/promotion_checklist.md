@@ -34,6 +34,10 @@ requires a human decision and a new active `2026_*` directory.
   source evidence; see `current_declaration_map.md`.
 - [x] Record blocker classes for promotion, source work, and venue checks; see
   `blocker_ledger.md`.
+- [x] Record a seed-level related-work scaffold; see
+  `bibliography_scope_seed.md`.
+- [x] Record the only possible short-note route before source packaging; see
+  `short_note_route_memo.md`.
 - [ ] Add or identify the upstream packaging theorem before journal-style
   promotion.
 - [ ] Re-check current live venue options.

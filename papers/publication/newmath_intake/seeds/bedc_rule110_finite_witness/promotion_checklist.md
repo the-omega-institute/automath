@@ -19,6 +19,9 @@ requires a human decision and a new active `2026_*` directory.
   baseline without replacing pinned source evidence.
 - [x] `evidence_separation_note.md` separates reported, static, dynamic, and
   limitation evidence before promotion.
+- [x] `trust_chain_template.md` defines the fields needed after dynamic rerun.
+- [x] `diagnostic_route_memo.md` records the only acceptable route if collision
+  audit limitations remain after rerun.
 - [x] `risk_register.md` lists overclaim risks and kill criteria.
 - [x] `venue_ladder.md` lists artifact and journal routes.
 
