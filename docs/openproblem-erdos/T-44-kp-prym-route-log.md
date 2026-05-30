@@ -449,3 +449,35 @@ delivers the negative answer to the ρ_168 instance of Litt #4 Q3.
 T-44 status revised: CONDITIONALLY NEGATIVE via Route A, contingent on
 a single source-supported certificate (sub-gap #2 at branched g = 10).
 The closure is cleaner than the prior three-sub-gap framing suggested.
+
+
+## Monitoring Update 2026-05-31 06:45 SGT — Final LLS binding truth table
+
+`codex_final_LLS_binding_truth_table_20260531` (06:37) produces a definitive
+closure-status snapshot for T-44 ρ_168 exclusion. The truth table:
+
+| Row | Gate                                                                            | Value |
+| --- | ------------------------------------------------------------------------------- | ----- |
+| A   | Oracle claims full negative closure                                             | true  |
+| B   | Source says compact action commutes with H (definition-level deck-centralizing) | true  |
+| C   | Full-H Theorem 9.8 / Corollary 9.9 route applies at g = 10                      | **false** |
+| D   | Single-ρ W_1 route (LLS Thm 1.9 / Lem 9.10) applies to rows 3a/3b at g = 10     | true  |
+| E   | Active compact W_1 same-quotient + same-subgroup binding verified at branched g=10 | **false** |
+| F   | ρ_168 trace-mod-3 obstruction verified                                          | true  |
+| G   | Writeback-grade exclusion proved                                                | **false (requires E)** |
+
+Interpretation:
+- Routes are verified at the framework level (A, B, D).
+- The full-H route does not apply at the active g = 10 (C false; threshold g > 64).
+- The single-ρ route applies in principle (D true) but the SPECIFIC binding
+  between LLS-W_1 H^1 and the compact branched-cover H-isotypic block at the
+  active frontier (E) is not yet certified.
+- The native chi_168(M)=8 mod-3 trace obstruction is present (F true) but only
+  bites once E is closed.
+- Writeback-grade closure G = false until E is closed.
+
+T-44 closure work reduces unambiguously to: prove gate E (the L6 lemma).
+This is a single source-grade certificate / paragraph.
+
+Status: T-44 ρ_168 instance of Litt #4 Q3 is CONDITIONALLY NEGATIVE with
+exactly one open gate, precisely characterized.
