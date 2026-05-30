@@ -1453,6 +1453,26 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         self.assertEqual(summary["papers"], [str(self.root / "2026_registered_active")])
         self.assertFalse(any("newmath_intake" in p for p in summary["papers"]))
 
+    def test_publication_sibling_scan_ignores_newmath_intake(self):
+        current = self._write_paper("2026_current_overlap", "Current paper.")
+        sibling = self._write_paper("submitted_2026_prior_overlap", "Prior paper.")
+        intake_seed = (
+            self.root
+            / "newmath_intake"
+            / "seeds"
+            / "bedc_automation_pipeline"
+        )
+        intake_seed.mkdir(parents=True)
+        (intake_seed / "seed_packet.md").write_text(
+            "intake only; not an active paper\n",
+            encoding="utf-8",
+        )
+
+        siblings = oracle_pipeline._publication_sibling_papers(current)
+
+        self.assertEqual(siblings, [sibling])
+        self.assertFalse(any("newmath_intake" in str(path) for path in siblings))
+
 class OraclePipelineStateMigrationTests(unittest.TestCase):
     def setUp(self):
         import tempfile

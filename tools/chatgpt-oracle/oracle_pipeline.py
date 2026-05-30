@@ -2785,6 +2785,10 @@ def _publication_sibling_papers(current_paper: Path) -> list[Path]:
             continue
         if p.name in ("oracle", "backflow", "strategy"):
             continue
+        if not p.name.startswith(("2026_", "submitted_2026_")):
+            continue
+        if not (p / "main.tex").exists():
+            continue
         if p.resolve() == current_paper.resolve():
             continue
         siblings.append(p)
