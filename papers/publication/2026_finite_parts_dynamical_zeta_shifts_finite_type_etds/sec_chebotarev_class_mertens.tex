@@ -34,7 +34,7 @@ lem:class-product-sign-normalisation-conventions}; they verify that the
 same coordinate vector gives positive real product constants with the stated
 normalisation.  The obstruction statements are
 \Cref{cor:class-product-artin-obstruction-readout,%
-thm:adams-obstruction-class-product,thm:adams-obstruction-budget,%
+thm:adams-obstruction-class-product,cor:adams-obstruction-budget,%
 cor:main-iii-obstruction-refinements-downstream}; they compare the
 fixed-label transform with the periodic Artin logarithm after the product
 constant has already been recovered.  Thus the subsequent stability,
@@ -1005,8 +1005,8 @@ transform from \Cref{thm:fixed-label-euler-transform}.
   \eqref{eq:class-product-stability-isometry}.
 \end{proof}
 
-\begin{corollary}[Corollary-level minimal obstruction skeleton]
-  \label{thm:class-product-minimal-obstruction-skeleton}
+\begin{corollary}[Downstream minimal obstruction skeleton]
+  \label{cor:class-product-minimal-obstruction-skeleton}
   Fix a finite group \(G\) and a real scalar normalisation \(\alpha\).  Let
   \(q\) be the number of conjugacy classes of \(G\), and let
   \[
@@ -1331,7 +1331,7 @@ address different rigidity or extension questions.  The finite-state
 primitive-label contribution needed here is the following scalar-normalised
 classification theorem.
 
-\begin{theorem}[Scalar-normalised product-coordinate classification]
+\begin{proposition}[Scalar-normalised product-coordinate classification]
   \label{prop:class-product-comparison}
   Under the hypotheses of \Cref{thm:class-euler-product-mertens}, the
   following assertions hold after the classical exponent and the scalar base
@@ -1437,7 +1437,7 @@ classification theorem.
     \end{equation}
     and all class constants are unchanged by this substitution if and only if
     \(F_\varrho(\lambda^{-1})=\mathcal L_\varrho(\lambda^{-1})\) for every
-    non-trivial \(\varrho\).  Thus the novelty calibrated by this theorem
+    non-trivial \(\varrho\).  Thus the novelty calibrated by this proposition
     is exactly the fixed-label Adams--M\"obius determinant constant and the
     Peter--Weyl obstruction to replacing it by an ordinary Artin logarithm.
     \item The preceding obstruction is quantitatively sharp in the following
@@ -1482,7 +1482,7 @@ classification theorem.
     into the classical exponent, the existence statement, or the scalar base
     constant.
   \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
   The displayed comparison table is a restatement of the ordered assertions
@@ -2004,17 +2004,27 @@ operator-algebraic papers.
   statement.
 \end{proof}
 
-\begin{proposition}[Finite algorithm for fixed-label Perron evaluation]
+\begin{proposition}[Certified finite algorithm for fixed-label Perron evaluation]
   \label{prop:fixed-label-perron-finite-algorithm}
   Under the hypotheses of \Cref{thm:class-mertens-explicit}, the value
   \(F_\varrho(\lambda^{-1})\) for every non-trivial
   \(\varrho\in\Irr(G)\) is obtained by the following finite-input,
-  convergent truncation algorithm.
+  branch-specified, certified truncation algorithm.  More precisely, from the
+  finite data in \textup{(a)} and a requested tolerance \(\epsilon>0\), the
+  algorithm produces an integer \(M\), a finite sum \(F_\varrho^{(M)}\), and a
+  rigorous output error radius at most \(\epsilon\), after the finitely many
+  determinant logarithms in that sum are evaluated on the branches specified
+  below.
   \begin{enumerate}[label=\textup{(\alph*)},leftmargin=*]
-    \item The determinant inputs are the finite character table of \(G\),
-      the power maps \(g\mapsto g^m\) on conjugacy classes, and the finite
-      determinant polynomials
-      \(\det(I-zA_\pi)\), \(\pi\in\Irr(G)\).
+    \item The determinant inputs are finite: the character table of \(G\),
+      the class-power maps \(C\mapsto C^m\) on conjugacy classes, the finite
+      determinant polynomials \(D_\pi(z):=\det(I-zA_\pi)\),
+      \(\pi\in\Irr(G)\), the Perron root \(\lambda>1\), the twisted
+      spectral-gap certificate \(\eta<\lambda\), and an explicit majorant
+      constant \(C_\varrho\) furnished by
+      \Cref{lem:fixed-label-perron-double-majorant} for
+      \(\phi=\chi_\varrho\).  No primitive-orbit enumeration, limiting orbit
+      count, or unbounded symbolic-dynamics datum is an input.
     \item For each \(m\ge1\), compute the Adams coefficients
       \begin{equation}\label{eq:fixed-label-algorithm-adams-coefficients}
         a_{\varrho,\pi}^{(m)}
@@ -2038,7 +2048,14 @@ operator-algebraic papers.
       necessarily \(\pi\neq\mathbf1\).  For \(rm\ge2\) it means the ordinary
       value of the same germ at \(z=\lambda^{-rm}\), where the determinant
       is strictly inside its Perron radius.
-    \item For \(M\ge1\), form the finite truncation
+    \item Given \(\epsilon>0\), choose \(M\) so that the computable tail
+      \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-tail-choice}
+        C_\varrho
+        \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+        \le \epsilon/2 .
+      \end{equation}
+      This finite search terminates because \(\lambda>1\).  Form the finite
+      truncation
       \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-truncation}
         F_\varrho^{(M)}
         :=
@@ -2062,7 +2079,22 @@ operator-algebraic papers.
       for a constant \(C_\varrho\) depending only on the finite determinant
       package and \(\varrho\).  Hence the truncations converge absolutely
       and exponentially, and the same finite procedure gives certified
-      interval enclosures by truncating after any prescribed tail budget.
+      interval enclosures by truncating after any prescribed tail budget.  If
+      the finitely many logarithms occurring in
+      \eqref{eq:fixed-label-perron-finite-algorithm-truncation} are each
+      enclosed on the specified branch with radius at most \(\epsilon_0\), then
+      the total output radius is bounded by the tail in
+      \eqref{eq:fixed-label-perron-finite-algorithm-error} plus
+      \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-roundoff}
+        \epsilon_0
+        \sum_{\substack{r,m\ge1\\rm\le M}}
+          \frac{|\mu(m)|}{rm}
+          \sum_{\pi\in\Irr(G)}|a_{\varrho,\pi}^{(m)}| .
+      \end{equation}
+      Choosing \(\epsilon_0\) so that
+      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff} is at most
+      \(\epsilon/2\) gives a certified enclosure of radius at most
+      \(\epsilon\) by finite interval arithmetic.
   \end{enumerate}
 \end{proposition}
 
@@ -2096,11 +2128,22 @@ operator-algebraic papers.
   \]
   This proves \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Since
   the divisor function has subexponential growth and \(\lambda>1\), the
-  displayed tail tends to zero exponentially.  Therefore the finite
-  determinant truncations converge to the Perron value, and any prescribed
-  enclosure follows by choosing \(M\) so that the explicit tail is below the
-  requested tolerance and enclosing the finitely many determinant logarithms
-  using their specified branches.
+  displayed tail tends to zero exponentially; hence the search in
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} terminates and
+  the finite determinant truncations converge to the Perron value.
+
+  It remains only to justify the stated certificate format.  For fixed
+  \(M\), the set of triples \((r,m,\pi)\) with \(rm\le M\) is finite, all
+  Adams coefficients in it are computed by finite character-table sums, and
+  each determinant logarithm is evaluated on the branch fixed in item (d).
+  Replacing each such logarithm by an interval of radius \(\epsilon_0\) changes
+  the weighted finite sum by at most the triangle-inequality bound in
+  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  Choosing
+  \(\epsilon_0\) so that this finite bound is at most \(\epsilon/2\), and
+  choosing \(M\) so that the analytic tail is at most \(\epsilon/2\), gives a
+  rigorous output interval of radius at most \(\epsilon\).  Thus the input,
+  branch convention, finite output, and error bound are all finite and
+  explicit.
 \end{proof}
 
 \begin{corollary}[Rigidity of the Adams-corrected class-product constants]
@@ -2410,8 +2453,7 @@ operator-algebraic papers.
   Peter--Weyl splitting statement.
 \end{proof}
 
-\begin{corollary}[Corollary-level product-constant Adams obstruction norm]
-  \label{thm:adams-obstruction-budget}
+\begin{corollary}[Downstream product-constant Adams obstruction norm]
   \label{cor:adams-obstruction-budget}
   Assume the hypotheses and notation of
   \Cref{thm:adams-obstruction-class-product}.  This is a Parseval statement for
@@ -2533,8 +2575,8 @@ operator-algebraic papers.
   fixed-label constants \(K_C\), the finite determinant evaluation of
   \(F_\varrho(\lambda^{-1})\), and the Adams--M\"obius obstruction to the
   naive Artin substitution.  The minimal skeleton of
-  \Cref{thm:class-product-minimal-obstruction-skeleton} and the Parseval
-  budget of \Cref{thm:adams-obstruction-budget} are determined functorially by
+  \Cref{cor:class-product-minimal-obstruction-skeleton} and the Parseval
+  budget of \Cref{cor:adams-obstruction-budget} are determined functorially by
   those data: if two finite-state extensions have the same scalar baseline
   \(\gamma+\log C(A)\) and the same non-trivial fixed-label boundary values
   \(F_\varrho(\lambda^{-1})\), then they have the same scalar-normalised
@@ -2557,7 +2599,7 @@ operator-algebraic papers.
   \]
   Thus the scalar baseline together with the tuple
   \((F_\varrho(\lambda^{-1}))_{\varrho\ne\mathbf1}\) determines every
-  \(K_C\), and \Cref{thm:class-product-minimal-obstruction-skeleton} then
+  \(K_C\), and \Cref{cor:class-product-minimal-obstruction-skeleton} then
   identifies this tuple with the unique zero-mean Peter--Weyl coordinate
   skeleton of the scalar-normalised product vector.  The same corollary gives
   the converse: equality of scalar-normalised product skeletons implies
@@ -2570,7 +2612,7 @@ operator-algebraic papers.
   \(D_\varrho=F_\varrho(\lambda^{-1})-
   \mathcal L_\varrho(\lambda^{-1})\), the zero-mean classwise error
   \(\mathcal E(C)\), and the norm identity in
-  \Cref{thm:adams-obstruction-budget} are all functions of the already fixed
+  \Cref{cor:adams-obstruction-budget} are all functions of the already fixed
   Main Theorem~III data and of the corresponding periodic Artin logarithms.
   No additional asymptotic input, determinant channel, or Perron-point
   hypothesis is introduced.  This proves the asserted downstream status.
