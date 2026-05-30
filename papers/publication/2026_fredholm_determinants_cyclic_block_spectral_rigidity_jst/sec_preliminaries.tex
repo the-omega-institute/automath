@@ -1,52 +1,75 @@
 \section{Finite-State Symbolic Motivation}
 \label{sec:preliminaries}
 
-\begin{proposition}[Primitive symbolic Euler data are not trace-class summable]
+\begin{proposition}[Finite-state zeta determinant and Euler product]
   \label{thm:primitive-symbolic-exclusion}
-  Let \(A\) be a primitive \(0\)-\(1\) adjacency matrix for a finite
-  one-sided subshift of finite type. Thus multiple edges are not encoded in
-  this proposition. Put \(a_n(A)=\Tr(A^n)\), and let
+  Let \(A\) be a finite square matrix with entries in \(\NN\), regarded as
+  the adjacency matrix of a finite directed graph with possible multiple
+  edges. Put \(a_n(A)=\Tr(A^n)\), and let
   \[
     p_n(A)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(A)
   \]
-  be the primitive-orbit counts; equivalently,
+  be the primitive closed-orbit counts. Equivalently,
   \begin{equation}\label{eq:trace-primitive-identity}
     a_n(A)=\sum_{d\mid n}d\,p_d(A).
   \end{equation}
-  Then, for the Perron root \(\lambda\) of \(A\),
+  Then \(p_n(A)\in\NN\cup\{0\}\) for every \(n\), and
   \[
     \zeta_A(z)
     :=\exp\!\left(\sum_{n\ge 1}\frac{a_n(A)}{n}z^n\right)
     =\det(I-zA)^{-1}
     =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}
   \]
-  for every \(|z|<\lambda^{-1}\). The Euler product identity is an
-  equality of holomorphic germs at \(z=0\); equivalently, it is an
-  identity of formal power series. Moreover,
-  \[
-    \sum_{n\ge1} n\,p_n(A)<\infty
-    \qquad\Longleftrightarrow\qquad
-    A=[1].
-  \]
+  as holomorphic germs at \(z=0\); equivalently, as formal power series.
+  If \(\rho(A)>0\), the displayed identity is analytic for
+  \(|z|<\rho(A)^{-1}\).
 \end{proposition}
 
 \begin{proof}
-  The formulas for \(p_n(A)\) and \eqref{eq:trace-primitive-identity} are
-  the usual necklace/Witt inversion identities
-  \cite{MetropolisRota1983}. The determinant formula for shifts of finite
-  type is classical; see
-  \cite{ArtinMazur1965,BowenLanford1970Zeta,LindMarcus1995}. Since \(A\)
-  is finite-dimensional, it also follows by summing
-  \(-\log(1-z\lambda_i)\) over the eigenvalues \(\lambda_i\) of \(A\) and
-  using \(\sum_i\lambda_i^n=\Tr(A^n)\). Substituting
+  The formula for \(p_n(A)\) is the usual necklace/Witt inversion formula
+  \cite{MetropolisRota1983}. Combinatorially, \(a_n(A)=\Tr(A^n)\) counts
+  based closed directed walks of length \(n\), with multiplicity when the
+  graph has multiple edges. Each primitive closed orbit of least period
+  \(d\) contributes exactly \(d\) based closed walks to \(a_n(A)\) whenever
+  \(d\mid n\), and contributes none otherwise. This proves
+  \eqref{eq:trace-primitive-identity}; Möbius inversion gives the displayed
+  formula for \(p_n(A)\) and also proves that the numbers \(p_n(A)\) are
+  non-negative integers.
+
+  The determinant formula for shifts of finite type is classical; see
+  \cite{ArtinMazur1965,BowenLanford1970Zeta,LindMarcus1995}. Equivalently,
+  in finite dimension one may sum \(-\log(1-z\lambda_i)\) over the
+  eigenvalues \(\lambda_i\) of \(A\), counted algebraically, and use
+  \(\sum_i\lambda_i^n=\Tr(A^n)\). This gives
+  \[
+    -\log\det(I-zA)
+    =\sum_{n\ge1}\frac{a_n(A)}{n}z^n
+  \]
+  as a holomorphic identity for \(|z|<\rho(A)^{-1}\) when \(\rho(A)>0\),
+  and as a formal identity in all cases. Substituting
   \eqref{eq:trace-primitive-identity} gives
   \[
     \sum_{n\ge1}\frac{a_n(A)}{n}z^n
     =\sum_{m\ge1}\sum_{r\ge1}\frac{p_m(A)}{r}z^{mr}
     =-\sum_{m\ge1}p_m(A)\log(1-z^m)
   \]
-  as a germ at \(0\), which is the stated Euler product.
+  as a germ at \(0\), which is precisely the Euler product.
+\end{proof}
 
+\begin{corollary}[Primitive symbolic Euler data are not trace-class summable]
+  \label{cor:primitive-symbolic-summability-exclusion}
+  Let \(A\) be a primitive \(0\)-\(1\) adjacency matrix for a finite
+  one-sided subshift of finite type. Thus multiple edges are not encoded in
+  this corollary. With \(p_n(A)\) as in
+  \Cref{thm:primitive-symbolic-exclusion},
+  \[
+    \sum_{n\ge1} n\,p_n(A)<\infty
+    \qquad\Longleftrightarrow\qquad
+    A=[1].
+  \]
+\end{corollary}
+
+\begin{proof}
   If \(A=[1]\), then \(a_n(A)=1\) for all \(n\), so \(p_1(A)=1\) and
   \(p_n(A)=0\) for \(n\ge2\). Conversely suppose \(A\ne[1]\). Under the
   present \(0\)-\(1\) SFT convention, a one-symbol primitive matrix is
@@ -67,7 +90,9 @@
   \label{rem:symbolic-product-role}
   For primitive finite matrices, the numbers \(p_n(A)\) are non-negative
   integers because they count primitive periodic orbits. This arithmetic
-  feature belongs to the finite-state category. The proposition shows that,
+  feature belongs to the finite-state category. The proposition records the
+  classical finite-state determinant/Euler-product identity, while
+  \Cref{cor:primitive-symbolic-summability-exclusion} shows that,
   except for the one-symbol fixed-point shift, the primitive symbolic Euler
   product
   \[
