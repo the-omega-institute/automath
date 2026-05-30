@@ -1422,6 +1422,37 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         self.assertEqual(summary["skipped_unregistered_count"], 1)
         self.assertEqual(summary["diagnosis"], "gate_exhausted")
 
+    def test_discovery_ignores_newmath_intake_seed_directories(self):
+        intake_seed = (
+            self.root
+            / "newmath_intake"
+            / "seeds"
+            / "bedc_automation_pipeline"
+        )
+        intake_seed.mkdir(parents=True)
+        (intake_seed / "seed_packet.md").write_text(
+            "intake only; not an active paper\n",
+            encoding="utf-8",
+        )
+        self._write_paper("2026_registered_active", "Active paper.")
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_registered_active` | Test J. | A-0 | - |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+
+        self.assertEqual(summary["candidate_count"], 1)
+        self.assertEqual(summary["papers"], [str(self.root / "2026_registered_active")])
+        self.assertFalse(any("newmath_intake" in p for p in summary["papers"]))
+
 class OraclePipelineStateMigrationTests(unittest.TestCase):
     def setUp(self):
         import tempfile
