@@ -56,9 +56,22 @@ cyclic-tag systems and Rule 110 direct-carrier manifests.
 - Limitation ledger distinguishing finite witnesses from universal theorem
   claims.
 
+## Intake Artifacts Added
+
+- `scope_contract.md`: exact artifact-paper unit and non-claim boundary.
+- `limitation_ledger.md`: finite-witness limits and collision-audit handling.
+- `recheck_plan.md`: commands and counts to recompute before promotion.
+- `promotion_checklist.md`: remaining tasks before active paper promotion.
+
+## Current Route
+
+This seed is suitable for a CICM presentation/artifact route after rechecking
+artifact counts and deciding how to report the collision-audit limitation.  It
+should not be merged into `bedc_automation_pipeline` except as a possible case
+study.
+
 ## Promotion Target
 
 Candidate active directory:
 
 `papers/publication/2026_rule110_finite_witness_artifacts/`
-

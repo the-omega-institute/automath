@@ -51,9 +51,22 @@ objects.
 - A short non-claim registry explaining which ordinary mathematical objects
   are outside the finite kernel and only appear as derived interfaces.
 
+## Intake Artifacts Added
+
+- `scope_contract.md`: exact paper unit, non-claims, and route boundary.
+- `declaration_inventory_seed.md`: first exact Lean declaration seed from the
+  pinned `origin/dev` source snapshot.
+- `promotion_checklist.md`: remaining tasks before active paper promotion.
+
+## Current Route
+
+This seed should remain intake-only until a smaller theorem spine is curated
+from `declaration_inventory_seed.md`.  It is stronger as a logic/formal-calculus
+paper than as a fast short-window submission.  Do not merge it with the
+automation-pipeline or Rule110 artifact papers.
+
 ## Promotion Target
 
 Candidate active directory:
 
 `papers/publication/2026_bedc_finite_kernel_calculus/`
-

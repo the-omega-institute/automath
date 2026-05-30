@@ -18,3 +18,12 @@ Do not promote this seed if:
 - strict collision-audit failures are neither fixed nor clearly scoped as
   non-blocking diagnostics.
 
+## Current Risk Controls
+
+- `scope_contract.md` fixes the paper unit as a finite artifact paper.
+- `limitation_ledger.md` requires the 26/33 collision-audit result to be either
+  fixed or disclosed as scoped diagnostic evidence.
+- `recheck_plan.md` prevents stale artifact counts from being copied into a
+  promoted manuscript without rerun.
+- `promotion_checklist.md` blocks active paper creation until a human approves
+  the route.

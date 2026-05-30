@@ -27,3 +27,9 @@ families with exact Lean declaration names and paper labels.
 - The manuscript must not cite a family name when an exact theorem target is
   needed.
 
+## Exact-Name Seed
+
+See `declaration_inventory_seed.md` for the first exact-name extraction from
+the pinned source.  That file is still broader than a manuscript theorem list;
+promotion requires selecting a small theorem spine and excluding example or
+interface-only declarations.

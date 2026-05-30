@@ -30,3 +30,9 @@ submission.
 - Separate finite-witness claims from Cook phase-exact universality claims in
   the abstract.
 
+## Added Intake Controls
+
+- `limitation_ledger.md` records the required collision-audit disclosure.
+- `recheck_plan.md` lists the exact count families and commands to recompute.
+- `scope_contract.md` separates finite artifact claims from universal proof
+  closure.

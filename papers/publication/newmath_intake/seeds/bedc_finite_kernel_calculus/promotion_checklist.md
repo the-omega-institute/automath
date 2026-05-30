@@ -1,0 +1,32 @@
+# Promotion Checklist: BEDC Finite Kernel Calculus
+
+This seed is intake-only.  Passing this checklist does not promote it; promotion
+requires a human decision and a new active `2026_*` directory.
+
+## Intake Completeness
+
+- [x] `seed_packet.md` states the proposed finite-kernel paper unit.
+- [x] `source_map.md` pins `D:/omega/newmath` to commit
+  `3fb3d6a0641767388a401883062aa522ea0b397b`.
+- [x] `theorem_inventory.md` lists theorem families.
+- [x] `declaration_inventory_seed.md` records a first exact-declaration seed.
+- [x] `scope_contract.md` separates this paper from automation and Rule110.
+- [x] `risk_register.md` lists overclaim risks and kill criteria.
+- [x] `venue_ladder.md` lists journal and workshop directions.
+
+## Open Before Promotion
+
+- [ ] Select a theorem spine from `declaration_inventory_seed.md`.
+- [ ] Re-check exact Lean target names against the chosen source commit.
+- [ ] Write a non-claim registry distinguishing primitive kernel objects from
+  downstream mathematical interfaces.
+- [ ] Decide whether GroundCompiler material is appendix/interface only or a
+  section of the main paper.
+- [ ] Re-check current live venue options.
+- [ ] Human approves promotion and active paper slug.
+
+## Hard Prohibitions Before Promotion
+
+- Do not create a `papers/publication/2026_*` directory.
+- Do not add `main.tex` or `PIPELINE.md` to this seed directory.
+- Do not run P0-P7 or Stage A/C automation against this seed directory.
