@@ -78,7 +78,7 @@ bundle_ask_interface_certificate
 Without editing `D:/omega/newmath`, agents may still:
 
 - refine the manuscript role table using the declaration locations above;
-- draft a source update note shell if the local `dc06a0...` snapshot should
+- use `source_update_note_shell.md` if the local `dc06a0...` snapshot should
   replace the pinned `3fb3d6...` snapshot later;
 - decide whether GroundCompiler belongs only in an appendix/interface note.
 
