@@ -66,6 +66,8 @@ publication tracking.
 - `failure_modes.md`: concrete failure-mode taxonomy and case-study schema.
 - `submission_memo.md`: first-route strategy, fallback routes, and blockers.
 - `promotion_checklist.md`: explicit intake status and hard no-promotion rules.
+- `case_studies.md`: six concrete candidate case-study rows grounded in current
+  automath/newmath evidence.
 
 ## Current First Route
 

@@ -7,7 +7,7 @@ paper-stage automation until promoted.
 
 | Seed | Priority | Target shape | Current status | Next action |
 |---|---:|---|---|---|
-| `bedc_automation_pipeline` | P0 | systems / automation paper | intake-hardened; not promoted | Fill concrete case-study rows, re-check CICM presentation-only CFP, then ask human whether to promote |
+| `bedc_automation_pipeline` | P0 | systems / automation paper | intake-hardened; not promoted | Re-check CICM presentation-only CFP and source verification commands; then ask human whether to promote |
 | `bedc_finite_kernel_calculus` | P0 | finite-kernel logic paper | intake-hardened; not promoted | Curate a 12-25 item theorem spine from `declaration_inventory_seed.md`; then re-check venue fit |
 | `bedc_rule110_finite_witness` | P0 | artifact / minimal-trust witness paper | intake-hardened; not promoted | Re-run artifact commands/counts and decide collision-audit blocker vs scoped diagnostic |
 | `metacic_closed_normal_consistency` | P1 | mechanized type-theory note | intake-ready | Audit related work and isolate the closed-normal consistency theorem boundary |

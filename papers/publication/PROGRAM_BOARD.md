@@ -15,7 +15,7 @@
 
 | seed | 优先级 | 当前状态 | 下一步 |
 |------|------|------|------|
-| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | intake-hardened；系统/自动化论文候选；仍非 active paper track | 补 3-6 个真实 case-study rows，提交前复核 CICM presentation-only / COLM / ICTAI CFP，然后再决定是否 promotion |
+| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | intake-hardened；系统/自动化论文候选；仍非 active paper track；已有 6 个候选 case-study rows | 提交前复核 CICM presentation-only / COLM / ICTAI CFP 和 source verification commands，然后再决定是否 promotion |
 | `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | intake-hardened；有限核逻辑论文候选；仍非 active paper track | 从 `declaration_inventory_seed.md` 精选 12-25 个 theorem spine，再复核 APAL/LMCS/CICM 等 venue fit |
 | `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | intake-hardened；Rule110 finite-witness artifact 论文候选；仍非 active paper track | 重跑 artifact commands/counts，决定 collision-audit 是 blocker 还是 scoped diagnostic |
 | `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | intake-ready；MetaCIC 类型论 note 候选 | 做 related-work audit 和 exact theorem boundary |

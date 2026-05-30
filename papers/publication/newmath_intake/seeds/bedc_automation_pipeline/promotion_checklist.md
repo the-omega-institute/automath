@@ -17,10 +17,12 @@ and creation of a `papers/publication/2026_*` directory.
 - [x] `gate_table.md` records gate/source/failure/recovery rows.
 - [x] `failure_modes.md` records concrete failure-mode classes.
 - [x] `submission_memo.md` records first-route strategy and blockers.
+- [x] `case_studies.md` records six concrete candidate cases from current
+  automath/newmath evidence.
 
 ## Promotion Requirements Still Open
 
-- [ ] Select three to six concrete case studies with exact source paths,
+- [x] Select three to six concrete case studies with exact source paths,
   observed failures, and recovery commits or notes.
 - [ ] Re-run or explicitly defer the source verification commands from
   `gate_table.md`.
