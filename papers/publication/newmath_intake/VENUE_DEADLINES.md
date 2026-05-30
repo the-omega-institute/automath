@@ -1,6 +1,6 @@
 # Venue Deadlines for Newmath Intake
 
-Snapshot date: 2026-05-30.
+Snapshot date: 2026-05-31.
 
 This file records verified venue timing for the newmath-derived seed queue.
 Dates can change; agents must re-check the official page before submission.
@@ -9,13 +9,13 @@ Dates can change; agents must re-check the official page before submission.
 
 | Venue | Best seed fit | Submission deadline | Notification | Status on 2026-05-30 | Official source |
 |---|---|---:|---:|---|---|
-| CICM 2026 presentation-only papers | `bedc_automation_pipeline`, `bedc_rule110_finite_witness`, `bedc_finite_kernel_calculus` | 2026-06-15 | not separately stated; formal notification was 2026-06-10 | Live short-window route; suitable for visibility and feedback, not archival full paper | `https://cicm-conference.org/2026/cicm.php?event=&menu=cfp` |
+| CICM 2026 presentation-only papers | `bedc_automation_pipeline`, `bedc_rule110_finite_witness`, `bedc_finite_kernel_calculus` | 2026-06-15 | not separately stated; formal notification was 2026-06-10 | Live short-window route; official CFP says work-in-progress presentation-only papers are 2 pages plus bibliography and are shown in presentation/poster sessions | `https://cicm-conference.org/2026/cicm.php?event=&menu=cfp` |
 | IEEE CogMI 2026 Round 1 | `observer_state_semantics` | 2026-06-01 AoE | 2026-07-25 | Very short window; only use if a concise observer-state / self-model paper can be assembled immediately | `https://www.sis.pitt.edu/lersais/conference/cogmi/2026/call-for-papers/` |
 | IEEE CogMI 2026 Round 2 | `observer_state_semantics` | 2026-08-15 AoE | 2026-09-20 | Better target than Round 1 for a careful observer-state paper | `https://www.sis.pitt.edu/lersais/conference/cogmi/2026/call-for-papers/` |
 | ALIFE 2026 late-breaking abstracts | `observer_state_semantics`, `bedc_rule110_finite_witness` | 2026-07-20 AoE | 2026-07-27 | Good for workshop-like visibility; late-breaking abstracts are not proceedings papers | `https://2026.alife.org/call-for-papers/` |
 | POPL 2027 | `bedc_automation_pipeline`, `metacic_closed_normal_consistency` | 2026-07-09 AoE | 2026-10-05; final acceptance 2026-11-09 | High-impact, high-bar route; use only if paper has strong PL/formal-methods contribution and anonymized artifacts | `https://popl27.sigplan.org/track/POPL-2027-popl-research-papers` |
-| COLM 2026 workshop contributions | `bedc_automation_pipeline`, `observer_state_semantics` | suggested 2026-06-23 | mandatory accept/reject by 2026-07-24 | Monitor specific workshops; useful for AI/LLM/formal reasoning audience if a matching workshop opens | `https://colmweb.org/cfw.html` |
-| ICTAI 2026 | `bedc_automation_pipeline`, `observer_state_semantics` | 2026-06-30 | 2026-09-10 | Broad AI tools route; official CFP also lists camera-ready due 2026-09-25 | `https://ictai.computer.org/2026/` |
+| COLM 2026 workshop contributions | `bedc_automation_pipeline`, `observer_state_semantics` | suggested 2026-06-23 | mandatory accept/reject by 2026-07-24 | Monitor specific workshops; workshop contributions are workshop-dependent and may be non-archival | `https://colmweb.org/cfw.html` |
+| ICTAI 2026 | `bedc_automation_pipeline`, `observer_state_semantics` | 2026-06-30 | 2026-09-10 | Broad AI tools route; double-blind IEEE-style full/short paper route; official CFP also lists camera-ready due 2026-09-25 | `https://ictai.computer.org/2026/` |
 
 ## 2026 Routes Already Closed or Mostly Closed
 

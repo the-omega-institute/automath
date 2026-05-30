@@ -28,7 +28,10 @@ and creation of a `papers/publication/2026_*` directory.
   source/workspace state; see `source_verification_note.md`.
 - [ ] Re-run or explicitly defer the source verification commands from
   `gate_table.md`.  The latest note verifies paths only, not command success.
-- [ ] Re-check the official page for the first venue.
+- [x] Re-check the official page for the first venue.  CICM 2026
+  presentation-only was verified open on 2026-05-31 with a 2026-06-15
+  deadline.
+- [ ] Re-check the official page again immediately before actual submission.
 - [ ] Decide whether the promoted manuscript uses the pinned newmath commit or
   a documented source update.
 - [ ] Choose active paper slug, suggested:

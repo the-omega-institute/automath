@@ -23,16 +23,17 @@ Rationale:
   without needing a full archival journal treatment.
 - The paper can gather feedback before a stronger JAR/JFR submission.
 
-Pre-submission warning: venue dates were recorded in `VENUE_DEADLINES.md` with a
-2026-05-30 snapshot.  Agents must re-check the official venue page before
-submission.
+Venue check: re-verified on 2026-05-31 against the official CICM 2026 CFP.  The
+presentation-only deadline is 2026-06-15, and the route is for
+work-in-progress papers of 2 pages plus bibliography.  Agents must still
+re-check the official page immediately before submission.
 
 ## Fallback Routes
 
 | Route | When to use | Required framing |
 |---|---|---|
 | COLM workshop contribution | If a workshop accepts AI-for-formal-reasoning or AI-for-science tooling papers | Emphasize LLM governance, deterministic gates, and evaluation of load-bearing outputs |
-| ICTAI 2026 | If the paper is broadened into an AI tools/workflow paper | Emphasize agent orchestration, failure recovery, and reproducibility rather than BEDC theory |
+| ICTAI 2026 | If the paper is broadened into a double-blind AI tools/workflow paper | Emphasize agent orchestration, failure recovery, and reproducibility rather than BEDC theory; use IEEE full/short format |
 | JAR | After workshop feedback and stronger artifact tables | Emphasize automated reasoning methodology and proof-assistant gate architecture |
 | JFR | If the formalization-workflow evidence becomes central | Emphasize formalized reasoning workflow, source traceability, and reproducibility |
 
@@ -58,6 +59,6 @@ Do not promote until:
 - `gate_table.md` is converted into a manuscript-ready table;
 - at least three concrete case studies are selected from actual automath or
   newmath history;
-- venue page is re-checked;
+- venue page is re-checked again immediately before submission;
 - source snapshot is confirmed or updated with a note;
 - a human chooses the first venue and approves the active paper slug.
