@@ -15,6 +15,8 @@ requires a human decision and a new active `2026_*` directory.
 - [x] `recheck_plan.md` lists pre-promotion commands and counts.
 - [x] `artifact_rerun_packet.md` defines the dynamic rerun and result recording
   template for a toolchain-equipped environment.
+- [x] `current_static_status_map.md` records a current local static source
+  baseline without replacing pinned source evidence.
 - [x] `risk_register.md` lists overclaim risks and kill criteria.
 - [x] `venue_ladder.md` lists artifact and journal routes.
 

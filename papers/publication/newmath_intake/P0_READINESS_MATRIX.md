@@ -78,6 +78,7 @@ Already prepared:
 - `recheck_results.md`
 - `build_environment_plan.md`
 - `artifact_rerun_packet.md`
+- `current_static_status_map.md`
 
 Still required before promotion:
 
