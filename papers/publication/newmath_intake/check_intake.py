@@ -19,6 +19,31 @@ REQUIRED_SEEDS = {
     "bedc_finite_kernel_calculus",
     "bedc_rule110_finite_witness",
 }
+REQUIRED_SEED_FILES = {
+    "bedc_automation_pipeline": {
+        "active_creation_dry_run.md",
+        "case_table_seed.md",
+        "cicm_two_page_packet.md",
+        "promotion_checklist.md",
+        "source_decision_note.md",
+        "source_verification_note.md",
+    },
+    "bedc_finite_kernel_calculus": {
+        "current_declaration_map.md",
+        "exact_statement_note.md",
+        "groundcompiler_placement_decision.md",
+        "promotion_checklist.md",
+        "theorem_spine_selection.md",
+        "upstream_packaging_work_order.md",
+    },
+    "bedc_rule110_finite_witness": {
+        "artifact_rerun_packet.md",
+        "current_static_status_map.md",
+        "limitation_ledger.md",
+        "promotion_checklist.md",
+        "recheck_results.md",
+    },
+}
 ACTIVE_TRIGGER_FILES = {"main.tex", "PIPELINE.md"}
 
 
@@ -36,6 +61,12 @@ def check_seed(seed_dir: Path) -> list[str]:
             problems.append(f"{rel}: active-paper trigger file is forbidden in intake")
         if path.is_dir() and path.name.startswith("2026_"):
             problems.append(f"{rel}: active-paper directory name is forbidden in intake")
+
+    required_files = REQUIRED_SEED_FILES.get(seed_dir.name, set())
+    for filename in sorted(required_files):
+        if not (seed_dir / filename).is_file():
+            rel = (seed_dir / filename).relative_to(ROOT).as_posix()
+            problems.append(f"{rel}: missing required P0 intake evidence file")
     return problems
 
 
