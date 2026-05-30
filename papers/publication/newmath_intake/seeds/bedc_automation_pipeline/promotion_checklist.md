@@ -21,6 +21,8 @@ and creation of a `papers/publication/2026_*` directory.
   automath/newmath evidence.
 - [x] `cicm_promotion_brief.md` reduces the case/gate material to a CICM
   two-page presentation-only shape.
+- [x] `case_evidence_note.md` records exact evidence for the four CICM brief
+  case studies.
 
 ## Promotion Requirements Still Open
 
@@ -36,8 +38,9 @@ and creation of a `papers/publication/2026_*` directory.
 - [ ] Re-check the official page again immediately before actual submission.
 - [ ] Decide whether the promoted manuscript uses the pinned newmath commit or
   a documented source update.
-- [ ] Copy exact machine-board/log evidence for the four CICM brief case
+- [x] Copy exact machine-board/log evidence for the four CICM brief case
   studies into a manuscript working note.
+- [ ] Reduce `case_evidence_note.md` into a compact table after promotion.
 - [ ] Choose active paper slug, suggested:
   `2026_auditable_theory_to_paper_pipeline`.
 - [ ] Human approves promotion.

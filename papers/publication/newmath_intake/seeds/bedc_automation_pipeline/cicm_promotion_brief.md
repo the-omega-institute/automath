@@ -39,9 +39,9 @@ Use exactly four cases in the first two-page version:
 | Case | Why it fits two pages | Evidence status |
 |---|---|---|
 | Newmath intake isolation | Shows the architectural boundary between candidate material and active publication automation. | Current intake check verifies no `main.tex`, no `PIPELINE.md`, and no `2026_*` under `newmath_intake`. |
-| Upper-fibers overlap block | Shows deterministic submitted/overlap gate preventing random venue hopping. | Machine-board and inner-log evidence exist; exact status text should be copied into a manuscript working note before promotion. |
-| Fake-extension block after theoremization | Shows why compile-looking or rewrite-looking progress is insufficient. | Machine-board and Stage A fake-extension notes exist; exact examples should be selected before manuscript assembly. |
-| Rule110 finite-witness limitation | Shows artifact honesty and non-claim enforcement. | Intake recheck found count drift and a collision-audit contradiction, making it a strong limitation case rather than a success-only example. |
+| Upper-fibers overlap block | Shows deterministic submitted/overlap gate preventing random venue hopping. | Exact machine-board and log evidence summarized in `case_evidence_note.md`. |
+| Fake-extension block after theoremization | Shows why compile-looking or rewrite-looking progress is insufficient. | Exact machine-board examples summarized in `case_evidence_note.md`. |
+| Rule110 finite-witness limitation | Shows artifact honesty and non-claim enforcement. | Intake recheck found count drift and a collision-audit contradiction; evidence summarized in `case_evidence_note.md`. |
 
 Do not include C-INFRA-STUCK or C-NEAR-PASS in the first CICM version unless
 space remains.  They are better for a longer systems paper.
@@ -68,8 +68,8 @@ active paper directory.  Before that approval, the following blockers remain:
 - decide whether to re-run the source command suite before the two-page CICM
   submission or explicitly narrow the evidence claim to path-verified
   architecture plus case studies;
-- copy exact machine-board and log evidence for the four selected case studies
-  into a manuscript working note;
+- carry `case_evidence_note.md` into the promoted manuscript workspace and
+  reduce it to a compact case-study table;
 - re-check the CICM page immediately before submission.
 
 ## Suggested Promotion Slug

@@ -72,6 +72,8 @@ publication tracking.
   references, with command and venue checks still blocked.
 - `cicm_promotion_brief.md`: a two-page CICM presentation-only shape with four
   selected case studies and remaining promotion blockers.
+- `case_evidence_note.md`: exact source evidence for the four selected CICM
+  case studies.
 
 ## Current First Route
 
