@@ -518,6 +518,70 @@ Adams--M\"obius determinant calculation.
 
 \subsubsection{Product asymptotic and constant equivalence}
 
+\begin{lemma}[Explicit product-tail budget]
+  \label{lem:class-euler-product-tail-budget}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  For every
+  conjugacy class \(C\subset G\), put
+  \[
+    T_C(N):=
+      \sum_{r\ge2}\frac1r\sum_{n\le N}p_{n,C}\lambda^{-rn}.
+  \]
+  Then
+  \begin{equation}\label{eq:class-product-tail-budget}
+    T_C(N)=
+      \sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+      +O(\lambda^{-N}/N),
+  \end{equation}
+  uniformly in \(C\). Consequently, if
+  \begin{equation}\label{eq:class-product-log-budget-input}
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \frac{|C|}{|G|}\log N+\mathcal M_C(A,\tau;G)+O(N^{-1}),
+  \end{equation}
+  then
+  \begin{equation}\label{eq:class-product-log-budget-output}
+    \log P_C(N)=
+    -\frac{|C|}{|G|}\log N
+    -\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(N^{-1}).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  The primitive counting functions satisfy \(p_{n,C}=O(\lambda^n/n)\),
+  uniformly in the finite set of conjugacy classes. Hence the full tail
+  \(T_C(\infty)-T_C(N)\) is bounded by a constant multiple of
+  \[
+    \sum_{r\ge2}\frac1r\sum_{n>N}\frac{\lambda^{(1-r)n}}{n}.
+  \]
+  Since \(n\ge N+1\) on the inner tail,
+  \[
+    \sum_{r\ge2}\frac1r\sum_{n>N}\frac{\lambda^{(1-r)n}}{n}
+    \le
+    \frac{1}{N+1}
+    \sum_{r\ge2}\frac{\lambda^{(1-r)(N+1)}}{r(1-\lambda^{1-r})}.
+  \]
+  Write \(q=\lambda^{-1}<1\).  The last sum equals
+  \[
+    \sum_{r\ge2}\frac{q^{(r-1)(N+1)}}{r(1-q^{r-1})}
+    \le
+    \frac{1}{2(1-q)}\sum_{s\ge1}q^{s(N+1)}
+    =O(q^{N+1}),
+  \]
+  with a constant independent of \(C\).  This proves
+  \eqref{eq:class-product-tail-budget}.  Taking logarithms in the finite
+  Euler product gives
+  \[
+    \log P_C(N)=
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}-T_C(N).
+  \]
+  Substituting \eqref{eq:class-product-log-budget-input} and
+  \eqref{eq:class-product-tail-budget} gives
+  \eqref{eq:class-product-log-budget-output}, because
+  \(O(\lambda^{-N}/N)\) is absorbed by \(O(N^{-1})\).
+\end{proof}
+
 \begin{proposition}[Three logarithmic interfaces at the product constant]
   \label{prop:three-logarithm-product-interface}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and let
@@ -640,32 +704,11 @@ Adams--M\"obius determinant calculation.
       \sum_{r\ge2}\frac{1}{r}
         \sum_{n\le N}p_{n,C}\lambda^{-rn}.
   \]
-  Since \(p_{n,C}=O(\lambda^n/n)\),
-  \[
-    \sum_{r\ge2}\frac1r\sum_{n\ge1}p_{n,C}\lambda^{-rn}
-    \ll
-    \sum_{r\ge2}\frac1r\sum_{n\ge1}\frac{\lambda^{(1-r)n}}{n}<\infty .
-  \]
-  Its omitted tail after \(n>N\) is
-  \[
-    \ll
-    \sum_{r\ge2}\frac1r\sum_{n>N}\frac{\lambda^{(1-r)n}}{n}
-    \le
-    \frac{1}{N+1}
-    \sum_{r\ge2}\frac{\lambda^{(1-r)(N+1)}}{r(1-\lambda^{1-r})}
-    =O(\lambda^{-N}/N),
-  \]
-  because the term \(r=2\) dominates the exponentially decaying tail.
-  Therefore
-  \[
-    \log P_C(N)
-    =
-    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
-    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
-    +O(\lambda^{-N}/N).
-  \]
-  Substitute the logarithmic form \eqref{eq:class-mertens-log} from
-  \Cref{cor:class-mertens-log-form}:
+  The full \(r\ge2\) tail, its truncation error, and the passage from the
+  additive class-Mertens estimate to the product logarithm are exactly
+  \Cref{lem:class-euler-product-tail-budget}.  Substituting the logarithmic
+  form \eqref{eq:class-mertens-log} from \Cref{cor:class-mertens-log-form}
+  into \eqref{eq:class-product-log-budget-output} gives
   \[
     \log P_C(N)
     =
@@ -1957,6 +2000,66 @@ computational-certificate, or operator-algebraic papers.
 
 \subsubsection{Determinant evaluation of fixed-label constants}
 
+\begin{lemma}[Singular-triple and branch ledger]
+  \label{lem:fixed-label-singular-triple-ledger}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and fix a
+  non-trivial irreducible representation \(\varrho\in\Irr(G)\).  For
+  \(0<t<1\), the Abel-regularized fixed-label determinant expression is
+  \begin{equation}\label{eq:fixed-label-singular-ledger-abel}
+    F_\varrho(t\lambda^{-1})
+    =
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+        a_{\varrho,\pi}^{(m)}
+        \Log\det(I-t^{rm}\lambda^{-rm}A_\pi)^{-1},
+  \end{equation}
+  where every logarithm is the normalized germ at the origin.  In the limit
+  \(t\uparrow1\), the deleted triple \((r,m,\pi)=(1,1,\mathbf1)\) is the
+  only scalar Perron singularity. Its coefficient is
+  \(a_{\varrho,\mathbf1}^{(1)}=0\), so the singular logarithm is absent
+  before the boundary limit is taken.  All remaining \(rm=1\) terms are
+  non-trivial twisted branches regular at \(z=\lambda^{-1}\), and all
+  \(rm\ge2\) terms, including scalar terms arising from Adams powers, are
+  ordinary logarithms inside the Perron disc.  The deleted-series convention
+  therefore has a unique Abel limit, and the convergence to that limit is
+  justified by an absolute majorant independent of \(t\in(0,1)\).
+\end{lemma}
+
+\begin{proof}
+  For \(0<t<1\), both the fixed-label Euler transform and every determinant
+  logarithm are evaluated inside their discs of convergence. Substituting
+  \eqref{eq:class-logarithm-determinant-linearisation} into
+  \eqref{eq:fixed-label-euler-transform-adams-mobius} gives the same
+  formula as \eqref{eq:fixed-label-singular-ledger-abel} with the scalar
+  triple included.  Its coefficient is
+  \[
+    a_{\varrho,\mathbf1}^{(1)}
+    =\langle\psi^1\chi_\varrho,\mathbf1\rangle_G
+    =\langle\chi_\varrho,\mathbf1\rangle_G=0,
+  \]
+  by finite-character orthogonality, because \(\varrho\neq\mathbf1\).
+  Thus deleting that summand changes no Abel value for \(0<t<1\), and no
+  finite part is assigned to
+  \(\Log\det(I-\lambda^{-1}A_{\mathbf1})^{-1}\).
+
+  If \(rm=1\) and \(\pi\neq\mathbf1\), then \(r=m=1\) and the strict twisted
+  spectral gap gives \(\rho(A_\pi)<\lambda\); hence
+  \(I-	heta\lambda^{-1}A_\pi\) is invertible for \(0\le\theta\le1\), and
+  the normalized germ has the stated Abel-path boundary value. If
+  \(rm\ge2\), then for every \(\pi\in\Irr(G)\),
+  \[
+    \rho(\lambda^{-rm}A_\pi)
+    \le \lambda^{1-rm}<1,
+  \]
+  so the normalized logarithm is the ordinary value of the convergent
+  determinant power series at \(\lambda^{-rm}\).  The double tail after the
+  finitely many \(rm=1\) terms is dominated by
+  \Cref{lem:fixed-label-perron-double-majorant}, namely by a constant
+  multiple of \(\sum_{rm\ge2}\lambda^{1-rm}/(rm)\).  This majorant is
+  summable and independent of \(t\), and dominated convergence gives the
+  unique Abel limit with exactly the branch convention stated above.
+\end{proof}
+
 \begin{proposition}[Determinant formula for fixed-label Perron values]
   \label{prop:fixed-label-determinant-perron}
   Under the hypotheses of \Cref{thm:class-mertens-explicit}, every
@@ -1998,33 +2101,18 @@ computational-certificate, or operator-algebraic papers.
 \end{proposition}
 
 \begin{proof}
-  Substitute the determinant linearisation
-  \eqref{eq:class-logarithm-determinant-linearisation} into
-  \eqref{eq:fixed-label-euler-transform-adams-mobius} and set
-  \(z=t\lambda^{-1}\), \(0<t<1\). This gives the displayed formula with
-  \(\lambda^{-rm}\) replaced by \(t^{rm}\lambda^{-rm}\). The local
-  exclusion in the statement is made before the Abel limit is taken. The
-  only possible singular scalar determinant is
-  \((r,m,\pi)=(1,1,\mathbf1)\). Its coefficient is
-  \(a_{\varrho,\mathbf1}^{(1)}=\langle\chi_\varrho,\mathbf1\rangle=0\)
-  because \(\varrho\neq\mathbf1\), so the term is absent rather than
-  regularized. The remaining \(rm=1\) terms have \(\pi\neq\mathbf1\) and
-  are regular at the Perron point by \(\rho(A_\pi)<\lambda\).
-
-  The Abel family of double determinant series is controlled by
-  \Cref{lem:fixed-label-perron-double-majorant}, with
-  \(\phi=\chi_\varrho\). The only scalar Perron logarithm corresponds to
-  \((r,m,\pi)=(1,1,\mathbf1)\), and its coefficient is zero. The finitely
-  many remaining \(rm=1\) logarithms are regular along the Abel path, and
-  the \(rm\ge2\) tail, including any scalar components produced by Adams
-  powers with \(m\ge2\), is dominated by
-  \[
-    C_\varrho\sum_{rm\ge2}\frac{\lambda^{1-rm}}{rm}.
-  \]
-  Dominated convergence as
-  \(t\uparrow1\), together with \Cref{thm:fixed-label-euler-transform},
-  proves \eqref{eq:fixed-label-determinant-perron} and the branch
-  statement.
+  Apply \Cref{lem:fixed-label-singular-triple-ledger} to the Abel identity
+  \eqref{eq:fixed-label-singular-ledger-abel}.  That lemma makes the local
+  deletion before the boundary limit explicit: the only scalar Perron
+  logarithm is \((r,m,\pi)=(1,1,\mathbf1)\), its coefficient is zero by
+  non-trivial-channel orthogonality, and every scalar term with \(rm\ge2\)
+  lies strictly inside the Perron disc.  The same ledger supplies the branch
+  convention for the non-trivial \(rm=1\) terms and the absolute majorant for
+  the \(rm\ge2\) double tail.  Dominated convergence as \(t\uparrow1\),
+  together with the existence of the non-trivial Perron value in
+  \Cref{thm:fixed-label-euler-transform}, proves
+  \eqref{eq:fixed-label-determinant-perron} with exactly the displayed
+  exclusion and branch choices.
 \end{proof}
 
 \begin{proposition}[Certified finite algorithm for fixed-label Perron evaluation]
