@@ -74,6 +74,24 @@ def run_check() -> tuple[list[str], list[str]]:
             ["INTAKE-NOT-ACTIVE", "must not be picked up"],
         )
     )
+    errors.extend(
+        check_index_file(
+            ROOT / "P0_GATE_AUDIT.md",
+            [
+                "promotion-decision gate",
+                "source-theorem gate",
+                "artifact-rerun gate",
+                "Do not promote",
+                "must not promote or queue",
+            ],
+        )
+    )
+    errors.extend(
+        check_index_file(
+            ROOT / "AGENT_WORK_QUEUE.md",
+            ["P0_GATE_AUDIT.md", "not a daemon queue"],
+        )
+    )
 
     for seed_dir in seed_dirs:
         known_prefix = seed_dir.name.startswith(("metacic_", "observer_"))
