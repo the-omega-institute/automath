@@ -1,0 +1,245 @@
+\section{Finite fixed-label certificate records}
+
+This appendix records the protocol-level finite certificate formats used by
+\Cref{prop:fixed-label-perron-finite-algorithm}.  The main text uses only
+the finite determinant computability theorem and the determinant-to-product
+Fourier map; the tabular records below are included to make the concrete
+\(S_3\) certificate auditable without adding a fourth main theorem chain.
+
+\begin{proposition}[Finite rational certificate record]
+  \label{prop:fixed-label-rational-certificate-record}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  Fix a
+  non-trivial \(\varrho\in\Irr(G)\), a tolerance \(\epsilon>0\), and a
+  truncation level \(M\) satisfying
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice}.  The output of
+  \Cref{prop:fixed-label-perron-finite-algorithm} is certified by the following
+  finite data.  A certificate consists only of finite algebraic model data and
+  rational inequalities of the following four kinds:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the list of triples \((r,m,\pi)\) with \(rm\le M\), with the scalar
+      Perron triple \((1,1,\mathbf1)\) deleted;
+    \item the Adams coefficients \(a_{\varrho,
+      \pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\), written from
+      the finite character table and class-power table;
+    \item for every listed triple, a branch tag specifying either the Abel
+      non-trivial Perron branch \((rm=1,\pi\ne\mathbf1)\) or the ordinary germ
+      value inside the Perron disc \((rm\ge2)\), together with a rational
+      rectangular interval enclosure for
+      \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\);
+    \item two rational error bounds \(R_M\) and \(R_{\mathrm{num}}\): the
+      tail bound \(R_M\) is certified either directly from
+      \eqref{eq:fixed-label-perron-finite-algorithm-error} or from the
+      rational envelope \eqref{eq:fixed-label-rational-tail-envelope}, and
+      \(R_{\mathrm{num}}\) is certified from the finite interval-propagation
+      bound \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
+  \end{enumerate}
+  Any checker which verifies these four records by exact algebraic comparison
+  and rational interval arithmetic produces a rational rectangular interval
+  \(I_M\subset\CC\) enclosing the finite sum \(F_\varrho^{(M)}\) and certifies
+  the inclusion
+  \begin{equation}\label{eq:fixed-label-certificate-interface-inclusion}
+    F_\varrho(\lambda^{-1})
+    \in
+    I_M+
+    \left\{w\in\CC:
+      \abs{w}\le R_M+R_{\mathrm{num}}\right\},
+  \end{equation}
+  where all sides of \(I_M\) and both radii are rational.  Consequently the
+  mathematical certificate is the displayed finite record itself; any external
+  file or script for a concrete model is only an optional serialization of the
+  same rational checks used in
+  \Cref{prop:fixed-label-perron-finite-algorithm,cor:class-product-constant-rigidity}.
+  No claim is made here that this record is a polished software package or a
+  universal certified-computation infrastructure for arbitrary finite groups,
+  arbitrary matrix families, or arbitrary branch conventions.
+\end{proposition}
+
+\begin{proof}
+  The first two records are finite because the set
+  \(\{(r,m):rm\le M\}\) and \(\Irr(G)\) are finite, and because the Adams
+  coefficients are finite character-table inner products.  The deleted scalar
+  triple is exactly the omitted term in
+  \Cref{prop:fixed-label-perron-finite-algorithm}; its coefficient is zero for
+  \(\varrho\ne\mathbf1\), so no certificate record must assign a finite value
+  to the singular scalar logarithm.
+
+  For each remaining triple, the branch tag is one of the two cases already
+  proved in item \textup{(d)} of
+  \Cref{prop:fixed-label-perron-finite-algorithm}: either the non-trivial
+  Abel branch at \(rm=1\), made regular by the strict twisted gap, or the
+  ordinary logarithmic germ at \(rm\ge2\), where
+  \(\rho(\lambda^{-rm}A_\pi)<1\).  Thus every tagged interval encloses a
+  uniquely specified logarithm.  Multiplying the rational rectangular
+  intervals by the certified coefficients \(\mu(m)a_{\varrho,\pi}^{(m)}/(rm)\),
+  enclosing each algebraic product by exact comparison in a rational rectangle,
+  and summing those rectangles gives a rational rectangular interval \(I_M\)
+  which contains the stated finite truncation.  Its excess radius is at most
+  \(R_{\mathrm{num}}\) by the triangle inequality used in
+  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  The discarded
+  terms with \(rm>M\) have total absolute value at most the rational number
+  \(R_M\), either because the certificate compares \(R_M\) with the algebraic
+  tail in \eqref{eq:fixed-label-perron-finite-algorithm-error}, or because it
+  records rational \(\theta,Q_\varrho\) satisfying
+  \eqref{eq:fixed-label-rational-tail-envelope} and
+  \(R_M\ge Q_\varrho\theta^{M+1}/(1-\theta)\).  All these checks are finite
+  algebraic or rational inequalities.  Adding the two independent radii proves
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.  Finally,
+  \Cref{cor:class-product-constant-rigidity} applies finite Fourier inversion
+  to the certified fixed-label Perron vector, so the same certificate record
+  serializes the product constants rather than introducing a new analytic
+  premise.
+\end{proof}
+
+\begin{proposition}[Finite input--output certificate summary]
+  \label{prop:fixed-label-finite-io-certificate-summary}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and fix a
+  non-trivial irreducible character \(\varrho\).  The following finite record is
+  sufficient, and is necessary for the certificates used in this paper, to
+  certify the fixed-label Perron coordinate
+  \(F_\varrho(\lambda^{-1})\) to any prescribed rational accuracy:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the finite determinant data
+      \(A,\lambda,G\), the character table, the power maps on conjugacy
+      classes, and the determinant polynomials
+      \(D_\pi(z)=\det(I-zA_\pi)\);
+    \item a finite window \(M\) and the finitely many Adams coefficients
+      \(a_{\varrho,
+      \pi}^{(m)}\) with \(rm\le M\), with the sole scalar Perron triple
+      \((r,m,\pi)=(1,1,\mathbf1)\) deleted before any logarithm is evaluated;
+    \item for every remaining triple, the branch tag fixed by the germ at
+      \(z=0\): Abel continuation to \(z=\lambda^{-1}\) when
+      \(rm=1\) and \(\pi\ne\mathbf1\), and the ordinary interior-disc value at
+      \(z=\lambda^{-rm}\) when \(rm\ge2\);
+    \item rational rectangular enclosures for these finitely many logarithms
+      and a rational number \(R\) dominating both interval-propagation error
+      and the determinant tail
+      \(C_\varrho\sum_{k>M}\mathrm d(k)\lambda^{1-k}/k\).
+  \end{enumerate}
+  From this record one obtains a rational rectangle \(J\subset\CC\) with
+  \(F_\varrho(\lambda^{-1})\in J\) and diameter bounded by the requested
+  tolerance.  Conversely, every certificate accepted by
+  \Cref{prop:fixed-label-certificate-protocol} reduces to such a record after
+  replacing its two radii \(R_M\) and \(R_{\mathrm{num}}\) by
+  \(R_M+R_{\mathrm{num}}\).  Through finite Fourier inversion in
+  \Cref{thm:class-product-determinant-rigidity,cor:class-product-constant-rigidity},
+  the same finite certificate determines the corresponding certified enclosure
+  for every Adams-corrected Frobenius-class product constant.
+\end{proposition}
+
+\begin{proof}
+  The sufficiency direction is exactly the finite truncation theorem in
+  compressed form.  Items \textup{(i)} and
+  \textup{(ii)} are finite by the finiteness of \(\Irr(G)\), the finite
+  character table, and the finite set \(\{(r,m):rm\le M\}\).  The scalar
+  Perron triple is deleted by
+  \Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm}
+  because its coefficient is zero for \(\varrho\ne\mathbf1\).  Item
+  \textup{(iii)} is the two-branch convention proved in
+  \Cref{prop:fixed-label-perron-finite-algorithm}: the non-trivial boundary
+  terms are regular Abel limits by the twisted spectral gap, while all terms
+  with \(rm\ge2\) lie strictly inside the Perron disc.  Summing the certified
+  finite rectangles with coefficients
+  \(\mu(m)a_{\varrho,
+  \pi}^{(m)}/(rm)\) gives an enclosure of
+  \(F_\varrho^{(M)}\), and enlarging by the rational radius in item
+  \textup{(iv)} contains the discarded tail by
+  \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Choosing \(M\) from
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} and refining the
+  finite interval arithmetic gives any prescribed rational diameter.
+
+  Conversely, the certificate consists precisely of the determinant
+  record, the finite window and Adams coefficients, the branch-tagged finite
+  logarithm enclosures, and the two rational radii appearing in
+  \eqref{eq:fixed-label-certificate-interface-inclusion}; replacing those
+  two radii by their sum produces item \textup{(iv)} without changing any
+  mathematical content.  The last assertion follows because the passage from
+  the certified non-trivial Perron vector to the class-product constants is a
+    finite character-table computation in
+  \Cref{thm:class-product-determinant-rigidity,cor:class-product-constant-rigidity}.
+\end{proof}
+
+\begin{corollary}[Five-field finite certificate schema]
+  \label{cor:fixed-label-five-field-certificate-schema}
+  Under the hypotheses and notation of
+  \Cref{prop:fixed-label-certificate-protocol}, the preceding
+  analytic certificate can be recorded for the finite verification used in
+  this paper by the following five fields:
+  \begin{center}
+  \small
+  \begin{tabular}{@{}L{0.19\textwidth}L{0.33\textwidth}L{0.36\textwidth}@{}}
+    \toprule
+    field & finite content & verifier check\\
+    \midrule
+    model
+      & \(A,\lambda,G\), the class table, the irreducible character table,
+        and the power maps \(C\mapsto C^m\)
+      & exact Perron equation for \(\lambda\), character orthogonality, and
+        the class-power table\\
+    window
+      & the tolerance \(\epsilon\), truncation level \(M\), and every
+        \((r,m,\pi)\) with \(rm\le M\) except \((1,1,\mathbf1)\)
+      & \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} and the
+        stated deletion of the singular scalar channel\\
+    Adams
+      & all integers \(a_{\varrho,
+        \pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\)
+      & recomputation from the finite character and power tables\\
+    branch
+      & for each listed triple, either the non-trivial Abel tag
+        \((rm=1,\pi\ne\mathbf1)\) or the ordinary Perron-disc tag
+        \((rm\ge2)\), with an algebraic or rational interval enclosing the
+        corresponding determinant logarithm
+      & uniqueness of the tagged branch from the gap or from
+        \(\rho(\lambda^{-rm}A_\pi)<1\), followed by interval evaluation of
+        \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\)\\
+    bound
+      & the interval-propagation radius \(R_{\mathrm{num}}\) and the tail
+        radius \(R_M=C_\varrho\sum_{k>M}\mathrm d(k)\lambda^{1-k}/k\)
+      & signed interval summation of the finite window and the tail estimate
+        \eqref{eq:fixed-label-perron-finite-algorithm-error}\\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  A checker for these fields returns exactly the interval inclusion
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.  Conversely, every
+  finite certificate record used by
+  \Cref{prop:fixed-label-certificate-protocol} determines the five
+  fields above after harmless reordering of the finite window.  Thus the
+  appendix files, for example
+  \texttt{certificates/s3\_log\_certificates.py} and its generated certificate
+  text, are reproducible arithmetic transcripts for the local \(S_3\)
+  verification, not new analytic assumptions or a general certificate theory.
+\end{corollary}
+
+\begin{proof}
+  Starting from the four records in
+  \Cref{prop:fixed-label-certificate-protocol}, put the base matrix,
+  Perron algebraic number, group table, class table, character table, and
+  class-power table in the model field.  The window field is the finite triple
+  list in record \textup{(i)} together with \(M\) and \(\epsilon\).  The Adams
+  field is record \textup{(ii)}.  The branch field is record \textup{(iii)}.
+  The bound field is record \textup{(iv)}.  Therefore the schema contains no
+  datum beyond the analytic certificate proposition.
+
+  The verifier checks listed in the last column are precisely the proof steps
+  of \Cref{prop:fixed-label-certificate-protocol}: finite character
+  orthogonality recomputes the Adams coefficients; the deleted scalar triple is
+  the unique singular Perron logarithm and has zero coefficient for
+  \(\varrho\ne\mathbf1\); the two branch tags are the two regularity cases in
+  \Cref{prop:fixed-label-perron-finite-algorithm}; interval multiplication by
+  \(\mu(m)a_{\varrho,
+  \pi}^{(m)}/(rm)\) and finite summation give radius
+  \(R_{\mathrm{num}}\); and the discarded triples with \(rm>M\) contribute at
+  most \(R_M\).  Hence acceptance gives
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.
+
+  Conversely, any four-record certificate of the kind used here already
+  specifies the same
+  model data, finite window, Adams coefficients, branch intervals, and two
+  radii; ordering the finite triple list lexicographically is the only
+  normalization needed to place it in the displayed fields.  The cited
+  \(S_3\) files instantiate these fields with exact rational arithmetic,
+  so their role is a serialized transcript of this finite verification rather
+  than a template for an arbitrary finite-group certification framework.
+\end{proof}
+
