@@ -89,11 +89,11 @@ class NewmathIntakeGuardTests(unittest.TestCase):
             encoding="utf-8",
         )
         (self.publication_root / "PROGRAM_BOARD.md").write_text(
-            "active paper track\nStage A/P0-P7\n" + seed_rows,
+            "active paper track\nStage A/P0-P7\nCURRENT_STATUS.md\n" + seed_rows,
             encoding="utf-8",
         )
         (self.publication_root / "PROGRAM_BOARD_MACHINE.md").write_text(
-            "INTAKE-NOT-ACTIVE\ndo not run Stage A\n" + seed_rows,
+            "INTAKE-NOT-ACTIVE\ndo not run Stage A\nCURRENT_STATUS.md\n" + seed_rows,
             encoding="utf-8",
         )
 

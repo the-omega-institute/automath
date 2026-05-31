@@ -8,6 +8,8 @@
 
 ## Newmath intake candidates
 
+Current P0 gate snapshot: `newmath_intake/CURRENT_STATUS.md`.
+
 `newmath` 来源的候选投稿单元先进入
 `papers/publication/newmath_intake/`。这些目录不是 active paper track，
 不进入 Stage A/P0-P7，只有 promotion checklist 通过后才创建正式

@@ -234,7 +234,8 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
     errors.extend(
         check_index_file(
             publication_root / "PROGRAM_BOARD.md",
-            seed_row_phrases + ["active paper track", "Stage A/P0-P7"],
+            seed_row_phrases
+            + ["active paper track", "Stage A/P0-P7", "CURRENT_STATUS.md"],
             root=root,
             publication_root=publication_root,
         )
@@ -242,7 +243,8 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
     errors.extend(
         check_index_file(
             publication_root / "PROGRAM_BOARD_MACHINE.md",
-            seed_row_phrases + ["INTAKE-NOT-ACTIVE", "do not run Stage A"],
+            seed_row_phrases
+            + ["INTAKE-NOT-ACTIVE", "do not run Stage A", "CURRENT_STATUS.md"],
             root=root,
             publication_root=publication_root,
         )
