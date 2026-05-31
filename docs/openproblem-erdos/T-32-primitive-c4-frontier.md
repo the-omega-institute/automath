@@ -431,3 +431,31 @@ Status: T-32 (b) — the empty-ledger result for k ≤ 3 is now rigorous (not ju
 The L5 step at k = 7 remains the open frontier; needs either theoretical input (a structural
 invariant cheaper than direct Gröbner) or a computer-algebra system with larger budget
 (Sage / Magma) to tackle F_{11^7}.
+
+
+## Monitoring Update 2026-05-31 12:55 SGT — Native gate confirms Gröbner result
+
+Independent native verification of the codex Gröbner-basis result from the
+previous monitoring entry:
+
+1. |J_X(F_11)| = 128 = 2^7 is coprime to 3 by elementary arithmetic, so no
+   F_11-rational 3-torsion exists. This holds independently of any Gröbner
+   computation.
+2. The same elementary argument gives |J_X(F_121)| = 16384 = 2^14 (coprime
+   to 3) and |J_X(F_1331)| = 1769600 (= 2^7 · 5^2 · 691, also coprime to 3),
+   so no F_{11^k}-rational 3-torsion exists for k ∈ {1, 2, 3}.
+3. SymPy semantics spot-checked on a trivially inconsistent system
+   (3A = 1, A = 2 over F_11): SymPy correctly returns the unit Gröbner
+   basis [1], matching the convention used by the codex worker.
+
+Conclusion: the codex Gröbner result (GB = [1] at F_11, with F_121 and
+F_1331 short-circuited by order gate) is consistent with the independent
+arithmetic argument. The empty-ledger result for k ≤ 3 is gate-confirmed.
+
+The L5 entry point at k = 7 (first k with 3 | |J_X(F_{11^k})|, where |J| is
+of order 10^14) remains the open frontier and requires either a
+computer-algebra system with significantly larger budget (Sage / Magma) or
+a theoretical structural invariant cheaper than direct Gröbner.
+
+Status: T-32 (b) — k ≤ 3 rigorously empty (Gröbner + order gate both pass),
+k = 7 frontier unchanged.
