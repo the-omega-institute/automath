@@ -22,6 +22,8 @@ an intake-only control document, not a daemon queue and not a promotion command.
 Agents must not promote or queue a P0 seed when any of the following holds:
 
 - no explicit human promotion command has named the seed and active slug;
+- the approval wording is not exactly of the form
+  `promotion <seed> as <active_slug>`;
 - the seed directory would need `main.tex` or `PIPELINE.md`;
 - the action would create a `papers/publication/2026_*` directory;
 - the action would cite a newer `D:/omega/newmath` commit without a source
@@ -55,4 +57,3 @@ The expected result is:
 ```text
 OK: newmath intake seeds are not active paper tracks
 ```
-

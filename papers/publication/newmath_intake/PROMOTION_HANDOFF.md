@@ -19,6 +19,14 @@ Until a human explicitly approves a named seed and active slug:
 - do not run Stage A, Stage B, Stage C, or P0-P7 automation on a seed;
 - do not cite a newer `D:/omega/newmath` commit without a source update note.
 
+The only promotion wording that authorizes active-paper creation is:
+
+```text
+promotion <seed> as <active_slug>
+```
+
+Discussion of a slug, venue, route, or handoff file is not promotion approval.
+
 ## Handoff Table
 
 | Seed | Current gate | First eligible active slug | Earliest route | Promotion trigger | First active-paper actions after approval |
@@ -49,4 +57,3 @@ Stop and ask for an explicit human decision when the next action would:
 - run the Rule110 dynamic artifact suite;
 - fetch or rely on live venue pages;
 - submit, upload, or prepare final submission materials.
-

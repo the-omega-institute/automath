@@ -33,6 +33,12 @@ Approval wording should name both:
 - seed: `bedc_automation_pipeline`;
 - active slug: `2026_auditable_theory_to_paper_pipeline`.
 
+The promotion command must be explicit and use the exact form:
+
+```text
+promotion bedc_automation_pipeline as 2026_auditable_theory_to_paper_pipeline
+```
+
 Without that explicit approval, do not create `papers/publication/2026_*`,
 `main.tex`, or `PIPELINE.md`.
 

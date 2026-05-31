@@ -41,6 +41,7 @@ class NewmathIntakeGuardTests(unittest.TestCase):
                     "artifact-rerun gate",
                     "Do not promote",
                     "must not promote or queue",
+                    "promotion <seed> as <active_slug>",
                 ]
             ),
             encoding="utf-8",
@@ -56,6 +57,7 @@ class NewmathIntakeGuardTests(unittest.TestCase):
                     "bedc_automation_pipeline",
                     "bedc_finite_kernel_calculus",
                     "bedc_rule110_finite_witness",
+                    "promotion bedc_automation_pipeline as 2026_auditable_theory_to_paper_pipeline",
                     "do not create `papers/publication/2026_*`",
                 ]
             ),
@@ -68,6 +70,7 @@ class NewmathIntakeGuardTests(unittest.TestCase):
                     "do not create any `papers/publication/2026_*`",
                     "do not add `main.tex`",
                     "do not add `PIPELINE.md`",
+                    "promotion <seed> as <active_slug>",
                 ]
             ),
             encoding="utf-8",
