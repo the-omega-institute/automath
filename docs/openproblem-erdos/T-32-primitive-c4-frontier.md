@@ -679,3 +679,33 @@ Implication: the D=3 S3 source-cover construction recipe Z_{S,r} (with W^2
 = F_S(U) and R^3 - 3 kappa_S (U - r) R + 2 (s + m (U - r)) = 0) has all its
 finite-field constants verified, so a codex-side replay of the branch-decic
 PGL_2 pair test for the 16 pairs is well-defined arithmetic.
+
+
+## Monitoring Update 2026-06-01 03:15 SGT — A={0,1} X0 row separated from all 4 Y rows via cross-ratio
+
+Pipeline-side `check_litt3_2ce6_A01_cross_ratio_Fbar_certificate` (02:59,
+theorem-labeled `Litt3A01CrossRatioFbarCertificateReplay`) records:
+
+- `X0_separated_from_each_Yj_at_lambda: True`
+- `ordered_cross_ratio_multiplicity_at_lambda: {X0: 4, Y0: 0, Y1: 0, Y2: 0, Y3: 0}`
+- `modulus_irreducible_degree_8: True`
+
+This means: for the A={0,1} sign-resolvent, evaluated at the named cross-ratio
+parameter lambda over F-bar_11, the X0 source-row has multiplicity 4 while all
+four Y source-rows have multiplicity 0. The cross-ratio invariant therefore
+SEPARATES the X0 row from every Y row over F-bar_11.
+
+Combined with `latest_1cd24_A01_PGL2_F11_offset_search` (100/1320 PGL_2(F_11)
+matrices tested, `any_PGL2_F11_equivalence_found: False`) from the earlier
+monitoring window, we now have:
+
+- F_11-level: no PGL_2(F_11) equivalence found in the partial 100/1320 scan
+- F-bar_11 level: cross-ratio separator excludes X0 from all 4 Y rows
+
+The remaining X rows (X1, X2, X3 with X1=7 and X2, X3 the alpha-conjugate
+pair) still need analogous separator checks before the A={0,1} sign-resolvent
+is fully closed.
+
+Status: T-32 (b) — first concrete F-bar_11 separator established for one row
+of one sign-resolvent. Three X rows remain for A={0,1}; A={1,2} sign-resolvent
+materialized but not yet separator-tested.
