@@ -237,3 +237,41 @@ geometric-origin summands with ψ_p = 0 a.e.
 Closure interpretation: this terminal artifact reaffirms the prior binary
 NEGATIVE closure (2026-05-30) at a sharper, Pro-acknowledged level. T-43
 outreach instance is fully sealed at the negative-boundary memo level.
+
+
+## Monitoring Update 2026-05-31 15:15 SGT — Verifier recipe supplement for future bypass proofs
+
+Oracle deep task `deep_problemsilike_02_t1780209425259` (post-purge, on
+non-polluted conv 6a0858fe) returned a 1957-character verifier-recipe
+supplement to the T-43 negative closure. Verdict label "(B) Direct-summand
+GK bypass obstruction: no published concrete (X → Y, W) with W a horizontal
+direct summand, almost-all zero p-curvature, and provably infinite C-monodromy."
+
+Additional sources cited:
+- Katz, Inv.Math. 18 (1972), pp. 1-118: formulates finite-monodromy
+  implication but not the direct-summand theorem.
+- Katz, IHÉS 39 (1970), pp. 175-232 ("Nilpotent connections and the
+  monodromy theorem"): local p-curvature formalism, not global finite image.
+
+Verifier recipe (10 steps) any future bypass proof must clear:
+  1. Construct H_p = crystalline realization of R^i f_*
+  2. Reduce W to flat summand W_p
+  3. Verify p-curvature(W_p) = 0
+  4. Construct crystalline Frobenius F_p on H_p
+  5. Test F_p(W_p) = W_p
+  6. (false) fail at Frobenius-stable support
+  7. (true) semisimplify W_p as F-isocrystal
+  8. Compare simple factors of W_p with W_C
+  9. (mismatch) fail at finite-prime / complex identification
+  10. (match) invoke finite-image input
+
+Three explicit obstruction points pinpointed: Frobenius-stable support
+(step 5), finite-prime / complex identification (step 8), and finite-image
+input (step 10).
+
+Status: T-43 outreach closure (NEGATIVE / NOT YET PROVEN, with TERMINAL
+artifact reaffirmation from earlier today) remains in force. The verifier
+recipe is a precise procedural specification for any future direct-summand
+bypass proof.
+
+Artifact: `tools/community-outreach/targets/problemsilike_02/deep_responses/oracle_T43_verifier_recipe_supplement_20260531_1510.md`.
