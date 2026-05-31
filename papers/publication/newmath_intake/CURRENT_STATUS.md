@@ -30,6 +30,29 @@ submission plans are not promotion approval.
 | `bedc_finite_kernel_calculus` | source-theorem gate | Maintain theorem-spine notes, blocker ledger, and short-note memo | Journal-style promotion until a source-side packaging theorem is added or identified |
 | `bedc_rule110_finite_witness` | artifact-rerun gate | Maintain rerun packet, static status map, limitation ledger, and trust-chain template | Artifact-paper promotion until dynamic rerun logs exist |
 
+## Current Intake Pass
+
+The safe automath-only P0 intake pass is complete as of 2026-05-31:
+
+- `bedc_automation_pipeline` has its CICM presentation-only packet, case
+  evidence, source decision note, bibliography scope, and active-creation dry
+  run prepared. The next meaningful action is a human promotion decision, not
+  another seed-level rewrite.
+- `bedc_finite_kernel_calculus` has exact-statement notes, theorem-spine
+  selection, GroundCompiler placement, blocker ledger, bibliography scaffold,
+  short-note memo, and upstream packaging work order prepared. The next
+  meaningful action is source-side theorem work or an explicit modest
+  short-note decision.
+- `bedc_rule110_finite_witness` has static recheck results, count-drift
+  disclosure, limitation ledger, rerun packet, build-environment plan,
+  trust-chain template, and diagnostic route memo prepared. The next meaningful
+  action is a dynamic artifact rerun in a `make` plus C compiler environment.
+
+Agents should therefore avoid repeatedly re-auditing these P0 seeds as if they
+were missing intake scaffolding. Continue only with synchronization edits,
+guard checks, source-update notes after an approved source commit movement, or
+the explicit human decisions listed below.
+
 ## Exact Next Human Commands
 
 Fastest visible route:
