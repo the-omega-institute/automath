@@ -19,6 +19,7 @@ from typing import Any
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 SUPERVISOR_LOG = SCRIPT_DIR / "supervisor_logs" / "supervisor.log"
+INNER_LOG = SCRIPT_DIR / "supervisor_logs" / "inner.log"
 HEALTH_SNAPSHOT_LOG = SCRIPT_DIR / "supervisor_logs" / "health.jsonl"
 SUPERVISOR_PID_FILE = SCRIPT_DIR / ".pipeline_supervisor.pid"
 REFILL_QUEUE = REPO_ROOT / "papers" / "publication" / "_refill_queue.json"
@@ -356,8 +357,15 @@ def build_health_report(
     supervisor_pid_started_ts: float | None,
     supervisor_pid_script: str,
     supervisor_pid_alive: bool,
+    inner_log_mtime: float = 0.0,
+    inner_worker_alive: bool = False,
 ) -> dict[str, Any]:
-    stale_supervisor = not supervisor_log_mtime or now_ts - supervisor_log_mtime > 900
+    inner_log_fresh = bool(inner_log_mtime) and now_ts - inner_log_mtime <= 900
+    inner_activity_fresh = inner_log_fresh and inner_worker_alive
+    stale_supervisor = (
+        (not supervisor_log_mtime or now_ts - supervisor_log_mtime > 900)
+        and not inner_activity_fresh
+    )
     supervisor_code_changed = (
         bool(supervisor_code_mtime)
         and bool(supervisor_started_ts)
@@ -489,6 +497,8 @@ def build_health_report(
         },
         "supervisor": {
             "log_age_s": int(now_ts - supervisor_log_mtime) if supervisor_log_mtime else None,
+            "inner_log_age_s": int(now_ts - inner_log_mtime) if inner_log_mtime else None,
+            "inner_worker_alive": inner_worker_alive,
             "last_line": supervisor_tail[-1] if supervisor_tail else "",
             "started_ts": supervisor_started_ts or None,
             "exited_ts": supervisor_exited_ts or None,
@@ -677,6 +687,12 @@ def format_text_report(report: dict[str, Any]) -> str:
         )
     supervisor = report["supervisor"]
     lines.append(f"supervisor_log_age_s={supervisor['log_age_s']}")
+    if supervisor.get("inner_log_age_s") is not None:
+        lines.append(
+            "inner_activity="
+            f"log_age_s={supervisor['inner_log_age_s']} "
+            f"worker_alive={str(supervisor.get('inner_worker_alive')).lower()}"
+        )
     if supervisor.get("next_tick_eta_s") is not None:
         lines.append(f"supervisor_next_tick_eta_s={supervisor['next_tick_eta_s']}")
     if supervisor.get("pid") is not None:
@@ -724,11 +740,13 @@ def build_current_report(
     supervisor_code_mtime_reader=lambda: file_mtime(SCRIPT_DIR / "pipeline_supervisor.py"),
     supervisor_pid_record_reader=read_supervisor_pid_record,
     process_alive_reader=process_alive,
+    inner_log_mtime_reader=lambda: file_mtime(INNER_LOG),
 ) -> dict[str, Any]:
     supervisor_log_lines = supervisor_log_reader()
     supervisor_tail = supervisor_log_lines[-40:]
     supervisor_pid_record = supervisor_pid_record_reader()
     supervisor_pid = supervisor_pid_record.get("pid")
+    supervisor_pid_alive = process_alive_reader(supervisor_pid)
     return build_health_report(
         oracle_status=oracle_status_reader(),
         discovery_summary=discovery_reader(),
@@ -747,7 +765,9 @@ def build_current_report(
         supervisor_pid=supervisor_pid,
         supervisor_pid_started_ts=supervisor_pid_record.get("started_ts"),
         supervisor_pid_script=str(supervisor_pid_record.get("script") or ""),
-        supervisor_pid_alive=process_alive_reader(supervisor_pid),
+        supervisor_pid_alive=supervisor_pid_alive,
+        inner_log_mtime=inner_log_mtime_reader(),
+        inner_worker_alive=supervisor_pid_alive,
     )
 
 
