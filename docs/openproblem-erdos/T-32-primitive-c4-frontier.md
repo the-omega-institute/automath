@@ -507,3 +507,50 @@ research-grade work (Tamagawa-style anabelian methods).
 Status: T-32 (b) — k <= 3 rigorously empty + Prym-Schottky thresholds
 identified at d >= 7 + two no-go theorems on simple invariants. The
 remaining open work needs deep arithmetic geometry input.
+
+
+## Monitoring Update 2026-05-31 22:15 SGT — Non-hyperflex C4 row explicit certificate (d_4 == 0 mod 8)
+
+Oracle deep task `deep_cand_litt_common_finite_etale_cover_t1780234775681`
+(11563 chars on non-polluted T-32 conv 6a086228) produced an explicit
+non-hyperflex C4 divisor certificate on the Fermat quartic Y over K = F_{11^4}.
+
+Working field: K = F_{11^4}. Choose a in F_121 subset K with a^4 = -1
+and a^{11} = a^3. Set i = a^2 so i^2 = -1.
+
+Non-hyperflex C4 divisor: **L = [P_a - P_{a^3}]** where P_r = (1 : r : 0).
+Kummer function: **f_L = (x + a^3 y) / (x + a y)** with div(f_L) = 4 L.
+L has exact order 4 (non-hyperelliptic Y rules out 2L principal).
+
+Frobenius descent: sigma(L) = 3L on F_11, so <L> is F_11-defined with
+deck-inversion descent.
+
+Order-4 Fermat automorphism: rho(x : y : z) = (y : -x : z) with rho^* L = 3L.
+Fixed locus of rho on Y(K) is rigorously empty.
+
+Corrected character transport: chi_L(rho P) = chi_L(P)^3 (corrects the
+audited false universal sign-flip step).
+
+Local-unit / character calculation:
+- Length-2 orbits: {P_a, P_{a^3}} and {P_{-a}, P_{-a^3}}, each contributes
+  chi_4 = -1 at all four points. Total contribution to N_{-1} - N_1: +4.
+- Length-4 orbits: character sequence is (1,1,1,1), (-1,-1,-1,-1), or
+  (i,-i,i,-i); all contributions are 0 mod 4.
+
+Theorem-grade conclusion: **d_4 = #C_{L^2}(F_{11^4}) - #C_L(F_{11^4}) == 0 mod 8**
+for this non-hyperflex C4 row.
+
+Interpretation: the named target classes Delta = (0, 42, 0, -398) for m=2
+and (0, 84, 0, -796) for m=4 have d_4 mod 8 equal to 2 and 4 respectively.
+The explicit row L = [P_a - P_{a^3}] satisfies d_4 == 0 mod 8, so it does
+NOT match either named class. The certificate corrects the prior audit gap
+and gives an explicit divisor / function / Frobenius descent / automorphism
+chain that any further C4 row analysis can build on.
+
+Status: this is a substantive partial advance on the cron-contract
+direction (J_Y[4] divisor-basis certificate), although the operator pivoted
+the active T-32 frontier to the degree-3 cyclic C3 non-commuting case
+earlier in the session. The non-hyperflex C4 row above is the most
+explicit divisor-level Pro output T-32 has received in the session.
+
+Artifact: `tools/community-outreach/targets/cand_litt_common_finite_etale_cover/deep_responses/oracle_T32_nonhyperflex_C4_row_rho3_parity_certificate_20260531_2200.md`.
