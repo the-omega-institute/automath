@@ -650,3 +650,32 @@ decic comparison to decide pair non-equivalence on the explicit X, Y. Most
 substantive D=3 source content T-32 has received in the session.
 
 Artifact: `tools/community-outreach/targets/cand_litt_common_finite_etale_cover/deep_responses/oracle_T32_D3_S3_hyperelliptic_flags_A01_A12_materialization_20260531_2345.md`.
+
+
+## Monitoring Update 2026-06-01 00:45 SGT — Native gate PASS on A={1,2} polynomial identities
+
+Independent native re-derivation in sympy mod 11 verifies every explicit
+polynomial identity in the A={1,2} response (the second of the two D=3 S3
+materializations committed above).
+
+Verified:
+- H_X(U) = (1 - 3U)(1 - 4U)(1 - 5U) = -60 U^3 + 47 U^2 - 12 U + 1
+  which reduces mod 11 to -5 U^3 + 3 U^2 - U + 1 (Oracle's stated form).
+- H_Y(U) = (1 - 3U)(1 - 4U)(1 - 6U) = -72 U^3 + 54 U^2 - 13 U + 1
+  which reduces mod 11 to 5 U^3 - U^2 - 2 U + 1.
+- Psi_X = 2 H_X H_X'' - (H_X')^2 = -2 U^4 - 5 U^3 - 3 U^2 - 5 U mod 11
+  = -2 U (U + 4) (U^2 + 4 U + 2) mod 11. ✓
+- Psi_Y = 2 H_Y H_Y'' - (H_Y')^2 = -2 U^4 + 2 U^3 - 5 U^2 + 5 U + 3 mod 11
+  = -2 (U + 1) (U + 4) (U^2 + 5 U + 1) mod 11. ✓
+- Root checks: Psi_X(0) = 0, Psi_X(7) = 0; Psi_Y(7) = 0, Psi_Y(10) = 0
+  (consistent with the linear factors U and U+4 for X, and U+1, U+4 for Y).
+- Constants: kappa_X = 3 with kappa_X^3 = 27 = 5 mod 11 = -lc(H_X) mod 11 ✓;
+            kappa_Y = 8 with kappa_Y^3 = 512 = 6 mod 11 = -lc(H_Y) mod 11 ✓.
+
+Gate status: PASS. The explicit polynomial identities in the A={1,2}
+hyperelliptic flag materialization are arithmetically consistent over F_11.
+
+Implication: the D=3 S3 source-cover construction recipe Z_{S,r} (with W^2
+= F_S(U) and R^3 - 3 kappa_S (U - r) R + 2 (s + m (U - r)) = 0) has all its
+finite-field constants verified, so a codex-side replay of the branch-decic
+PGL_2 pair test for the 16 pairs is well-defined arithmetic.
