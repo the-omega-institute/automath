@@ -4066,9 +4066,10 @@ def build_oracle_review_prompt(target_journal: str,
     prompt = textwrap.dedent(f"""\
         You are a referee for "{target_journal}". Review the attached paper.
 
-        Start your reply with a single line exactly of the form
+        Your first visible characters must be the verdict line, with no preamble,
+        UI text, thinking summary, salutation, or markdown fence before it:
           Overall verdict: <Accept|Minor revision|Major revision|Reject>
-        so the verdict can be parsed unambiguously. Then provide the full review.
+        Then provide the full review.
 
         1. **Overall verdict** (labelled as above)
         2. **Novelty rating** per main theorem: HIGH / MEDIUM / LOW with a
