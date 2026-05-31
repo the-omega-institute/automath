@@ -15,11 +15,17 @@ permission to create an active paper directory.
 
 | Seed | Current state | Decision needed | If approved | If deferred |
 |---|---|---|---|---|
-| `bedc_automation_pipeline` | Ready for human promotion decision | Promote for CICM presentation-only as `2026_auditable_theory_to_paper_pipeline`? | Create one active paper track and assemble the two-page CICM manuscript from the prepared packet | Keep as intake seed; no active paper work |
+| `bedc_automation_pipeline` | Promoted on 2026-05-31 to `2026_auditable_theory_to_paper_pipeline` | No further promotion decision needed | Active paper track exists; continue P1/P2 work there | Seed remains archive/source packet |
 | `bedc_finite_kernel_calculus` | Source-theorem gate | Approve source-side packaging theorem work, or choose the modest short-note route? | Source-side work records theorem path/name/statement before journal promotion; short-note route uses `short_note_route_memo.md` | Keep as support material for the automation paper |
 | `bedc_rule110_finite_witness` | Artifact-rerun gate | Provide or approve a `make` plus C compiler environment for dynamic rerun? | Run the Rule110 suite, fill the trust-chain table, then decide full artifact vs diagnostic route | Keep as static intake package with no artifact-validation claim |
 
 ## Decision 1: Automation Pipeline Promotion
+
+Status: completed.  The active track is:
+
+```text
+papers/publication/2026_auditable_theory_to_paper_pipeline
+```
 
 Prepared evidence:
 

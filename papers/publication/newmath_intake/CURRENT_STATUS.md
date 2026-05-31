@@ -26,7 +26,7 @@ submission plans are not promotion approval.
 
 | Seed | Current gate | Safe automath-only action | Blocked action |
 |---|---|---|---|
-| `bedc_automation_pipeline` | promotion-decision gate | Maintain the CICM packet, case table, source notes, and bibliography scaffold | Active paper creation until exact promotion command |
+| `bedc_automation_pipeline` | promoted | Maintain seed as archive/source packet for active track `2026_auditable_theory_to_paper_pipeline` | Running Stage A/P0-P7 against the seed itself |
 | `bedc_finite_kernel_calculus` | source-theorem gate | Maintain theorem-spine notes, blocker ledger, and short-note memo | Journal-style promotion until a source-side packaging theorem is added or identified |
 | `bedc_rule110_finite_witness` | artifact-rerun gate | Maintain rerun packet, static status map, limitation ledger, and trust-chain template | Artifact-paper promotion until dynamic rerun logs exist |
 
@@ -34,10 +34,9 @@ submission plans are not promotion approval.
 
 The safe automath-only P0 intake pass is complete as of 2026-05-31:
 
-- `bedc_automation_pipeline` has its CICM presentation-only packet, case
-  evidence, source decision note, bibliography scope, and active-creation dry
-  run prepared. The next meaningful action is a human promotion decision, not
-  another seed-level rewrite.
+- `bedc_automation_pipeline` has been promoted to active paper track
+  `2026_auditable_theory_to_paper_pipeline`. The next meaningful action is
+  active-paper P1/P2 work in that directory, not another seed-level rewrite.
 - `bedc_finite_kernel_calculus` has exact-statement notes, theorem-spine
   selection, GroundCompiler placement, blocker ledger, bibliography scaffold,
   short-note memo, and upstream packaging work order prepared. The next
@@ -55,10 +54,10 @@ the explicit human decisions listed below.
 
 ## Exact Next Human Commands
 
-Fastest visible route:
+Promoted route:
 
 ```text
-promotion bedc_automation_pipeline as 2026_auditable_theory_to_paper_pipeline
+2026_auditable_theory_to_paper_pipeline
 ```
 
 Finite-kernel route:
@@ -75,7 +74,8 @@ approve Rule110 dynamic artifact rerun in a make/C-compiler environment
 
 ## Non-Active Boundary
 
-Until an exact promotion command is present, agents must not:
+For unpromoted seeds, and for the archived `bedc_automation_pipeline` seed
+itself, agents must not:
 
 - create any `papers/publication/2026_*` directory for these seeds;
 - add `main.tex` or `PIPELINE.md` to a seed directory;

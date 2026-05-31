@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics}
+\author{Haobo Ma \and Wenlin Zhang}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Large formal-mathematics projects increasingly use AI agents for drafting,
+review, theorem search, and manuscript preparation, but ungated agent output can
+produce shallow theorem growth, stale source references, duplicated submission
+routes, and premature paper promotion.  We report an auditable
+theory-to-paper pipeline used around a Lean-backed BEDC/newmath project and its
+automath publication workspace.  The architecture separates source
+development, intake packets, active paper directories, Oracle review loops,
+deterministic gates, and human promotion decisions.  Four case studies show the
+role of these gates: an intake boundary preventing seed material from entering
+the active manuscript daemon, an overlap/submitted gate preventing random venue
+hopping, a fake-extension gate blocking theorem-looking but content-poor edits,
+and an artifact gate exposing count drift and an unresolved collision-audit
+discrepancy.  The claim is deliberately narrow: AI outputs are advisory, while
+load-bearing evidence must remain tied to source paths, command logs,
+deterministic checks, and human-approved promotion.
+\end{abstract}
+
+\section{Problem and Contribution}
+
+AI assistance can scale review and drafting in a formal-mathematics project,
+but file edits and plausible theorem statements are not evidence by
+themselves.  The failure modes are structural: a generated theorem may be a
+mechanical expansion, a manuscript route may overlap a submitted sibling, an
+artifact count may drift from its status file, or an intake note may
+accidentally become a daemon-visible paper.  The contribution of this note is
+an auditable workflow discipline that treats AI output as advisory and routes
+load-bearing claims through deterministic gates.
+
+\section{Architecture}
+
+The workflow separates two repositories and two paper states.  The
+BEDC/newmath source workspace contains Lean and artifact sources.  The
+automath publication workspace contains intake packets, active paper tracks,
+review logs, and submission metadata.  A candidate from the source workspace
+first enters an intake seed.  It becomes an active paper only after a human
+promotion decision creates a \texttt{2026\_*} directory with a manuscript and
+pipeline metadata.  This boundary prevents background source organization from
+being mistaken for a submission route.
+
+The pinned source contains a discovery-gate calculus: statement or code
+generation is not discovery; mechanical expansion and compression are not
+discovery by themselves; certificate ledgers and lineage records are required;
+unsupported claims can be demoted; and scheduler selection should favor
+classifier-shifting work rather than easy local edits.  These principles are
+implemented as source maps, inventories, lints, review gates, and publication
+checks rather than as free-form agent judgment.
+
+\section{Gate Summary}
+
+\begin{center}
+\begin{tabular}{p{0.25\linewidth}p{0.31\linewidth}p{0.31\linewidth}}
+\toprule
+Gate & Evidence surface & Failure prevented \\
+\midrule
+Lean and axiom checks & Lean build, axiom and purity audits & broken or impure formal targets \\
+Inventory and markers & declaration inventories and marker audits & stale paper labels and missing source facts \\
+Anti-hollow lint & Phase-D and theorem-growth checks & parameter echo and shallow theoremization \\
+Scheduling & critical-path scoring & duplicated or random agent dispatch \\
+Promotion detector & active \texttt{2026\_*} paper metadata & intake seeds entering the daemon prematurely \\
+Publication checks & submission-pack and review gates & missing metadata and unreviewed claims \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Case Studies}
+
+\begin{center}
+\begin{tabular}{p{0.21\linewidth}p{0.22\linewidth}p{0.43\linewidth}}
+\toprule
+Case & Gate & Lesson \\
+\midrule
+Newmath intake isolation & active-paper detector & candidate source packets can be prepared without becoming active manuscript jobs \\
+Upper-fibers overlap block & overlap/submitted gate & venue selection must be stateful; the scheduler cannot randomly advance a similar manuscript \\
+Fake-extension block & theorem-content gate & agent progress is not accepted merely because a file changed or a draft compiles \\
+Rule110 limitation gate & artifact ledger & limitations are disclosed or block claims rather than being laundered into the manuscript \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Scope}
+
+This note does not claim that AI output is proof evidence, that the workflow is
+a theorem prover, that all BEDC declarations have been freshly rebuilt, or that
+the Rule110 artifact suite has been rerun for this submission.  Its narrower
+claim is that a theory-to-paper pipeline can preserve traceability by
+separating source evidence, deterministic gates, agent suggestions, and human
+promotion decisions.
+
+\nocite{bedc-newmath-source,automath-publication-pipeline}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

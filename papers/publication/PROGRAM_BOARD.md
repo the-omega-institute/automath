@@ -17,7 +17,7 @@ Current P0 gate snapshot: `newmath_intake/CURRENT_STATUS.md`.
 
 | seed | 优先级 | 当前状态 | 下一步 |
 |------|------|------|------|
-| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | ready for human promotion decision；仍非 active paper track；推荐 CICM presentation-only narrow-claim route | 是否批准 promotion 为 `2026_auditable_theory_to_paper_pipeline`；未批准前不创建 `2026_*`、`main.tex` 或 `PIPELINE.md` |
+| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | promoted to active track `2026_auditable_theory_to_paper_pipeline`; seed is archive/source packet | Continue in active paper directory; do not process seed independently |
 | `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | exact statements 已读；blocker ledger、related-work scaffold、short-note memo 已准备；当前 theorem spine 偏局部构造/等式/确定性，不宜直接 journal promotion | 先在 upstream 增加或识别一个 packaging theorem；若你明确选择 modest workshop/short-note route，则按 `short_note_route_memo.md` 降级推进 |
 | `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | static recheck 发现 count drift；本机 Windows/WSL 都缺 `make` 和 C compiler；trust-chain template 和 diagnostic route memo 已准备；仍非 active paper track | 安装/使用 build toolchain 后重跑 full suite，填写 trust-chain，并解决或公开 collision-audit 33 行中 `26/33 PASS, 7 FAIL` 与全通过说法的矛盾 |
 | `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | intake-ready；MetaCIC 类型论 note 候选 | 做 related-work audit 和 exact theorem boundary |
@@ -37,6 +37,7 @@ Current P0 gate snapshot: `newmath_intake/CURRENT_STATUS.md`.
 
 | 论文或路线 | 期刊 | 当前状态 | 下一步 |
 |------|------|------|------|
+| `2026_auditable_theory_to_paper_pipeline` | CICM presentation-only / mathematical software workshop route | Newmath BEDC automation pipeline promoted 2026-05-31；P0 complete；initial 2-page PDF compiles；claim remains narrow until live venue/bibliography/source-command checks finish | Continue P1 two-page draft strengthening, then P2 venue and bibliography verification |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory；备选：Operators and Matrices / Complex Analysis and Operator Theory | JST 已拒 2026-05-21；David Damanik/EditFlow：editors concluded it was not suitable for Journal of Spectral Theory；无技术审稿意见。Codex-only retarget：IEOT fit=8/10；R11 final repair 后 A3 audit 仍为 revise，但已复用 Oracle escalation 并重新进入 Stage A；当前问题集中在 zero-inclusive Weyl-Horn/Fan-dominance 修复、finite-support polynomial bridge、主定理层级和 journal-register polish | 在原文件夹中改，不新建文件夹；让当前 Stage A theorem-deepening 继续跑；若再次 fake-extension 或 final-audit 不过，再进入人工 theorem-deepening/降刊判断 |
 | `upperfiber` | Fibonacci Quarterly | RJ 已拒；RJ 反馈：贡献偏形式包装、算术深度不足，且 n=30 数据不支持“八类型”说法；RINT 是重复历史路线 | 在原 upper-fibers/FQ 文件夹中改，不新建文件夹；目标 FQ；从 Stage A 重新深改，修正 n=30/八类型并加入新实质结果 |
 | `2026_detector_shells_click_record_kms_jphyscomm` | 待重新选物理/数学物理期刊 | canonical merged rewrite route；GRG 和 JPhysComm 都已拒；JPhysComm 版本是 GRG route 后续版本；overlap resolved；需要带着两次拒稿背景重新处理 | 在现有文件夹中改；从 Stage A 重新走，prompt 需附 GRG/JPhysComm 拒稿背景和应用/期刊适配问题；不拆成两篇 |
