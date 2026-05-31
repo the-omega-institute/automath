@@ -391,3 +391,43 @@ the symbolic divisor work, or (ii) operator-level theoretical input
 identifying a cheaper structural invariant.
 
 T-32 status unchanged: (b) grinding; L5 frontier confirmed research-grade.
+
+
+## Monitoring Update 2026-05-31 12:30 SGT — Rigorous Gröbner-basis proof of empty F_{11^k} ledger for k ≤ 3
+
+A retry codex-worker `claude_worker_t32_C3_groebner_basis_sympy` (with SymPy 1.14.0
+installed via `pip3 install --user --break-system-packages sympy`) delivered the first
+rigorous symbolic check of the F_{11}-rational 3-torsion ledger on X.
+
+Results:
+- F_11 full Cantor-tripling Gröbner basis (Mumford constraint + triple-divisor = identity
+  + field equations x^11 = x) reduces to **[1] in 3.80 s**. This is the rigorous symbolic
+  proof that no F_11-rational non-trivial 3-torsion Mumford divisor exists on X.
+  (Upgrades the prior empirical pure-Python brute-force result from earlier in the session
+  to a Gröbner-basis-certified result.)
+- F_121 and F_1331 levels confirmed empty by Jacobian-order argument: using the Weil
+  polynomial L_X(T) = T^4 + 6T^2 + 121, the cardinalities are
+    |J_X(F_11)|     = 128
+    |J_X(F_{121})|  = 16384
+    |J_X(F_{1331})| = 1769600
+  None divisible by 3. So no F_{11^k}-rational 3-torsion divisor exists at k ∈ {1, 2, 3}.
+  These levels were short-circuited by the order gate rather than running the much larger
+  extension-coordinate Gröbner systems.
+
+Methodology notes:
+- The originally suggested cubic z^3 + 2z + 1 for the F_{1331} model was found reducible
+  over F_11; codex substituted the irreducible z^3 + z + 4 instead (and recorded the
+  substitution honestly).
+
+Gates passed (7): sympy_imported, cantor_implemented, mumford_constraint_enforced,
+F11_gb_done, F121_gb_done, F1331_gb_attempted, verification_done_if_solution_found.
+
+Honest scope: no F_{11^k}-rational 3-torsion divisor for k ∈ {1, 2, 3}. The first extension
+where 3 | |J_X(F_{11^k})| is k = 7 (computed earlier; |J_X(F_{11^7})| ≈ 3.8 × 10^14). Direct
+Gröbner over F_{11^7} is not tractable in the worker budget. No cover equation constructed
+(refused fabrication).
+
+Status: T-32 (b) — the empty-ledger result for k ≤ 3 is now rigorous (not just empirical).
+The L5 step at k = 7 remains the open frontier; needs either theoretical input (a structural
+invariant cheaper than direct Gröbner) or a computer-algebra system with larger budget
+(Sage / Magma) to tackle F_{11^7}.
