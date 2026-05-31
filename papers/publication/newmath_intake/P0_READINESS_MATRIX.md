@@ -9,14 +9,15 @@ paper track.
 - pinned source commit:
   `3fb3d6a0641767388a401883062aa522ea0b397b`
 - automath intake root: `papers/publication/newmath_intake`
+- latest source extraction pass: `P0_SOURCE_EXTRACTION_PASS.md`
 
 ## Summary
 
 | Seed | Current readiness | Can promote now? | Blocking item | Next owner/action |
 |---|---|---:|---|---|
-| `bedc_automation_pipeline` | CICM presentation-only packet prepared; case evidence, gate table, and source decision note ready | only with human approval | final human promotion decision; final live CICM page re-check | Human decides whether to promote as `2026_auditable_theory_to_paper_pipeline` |
-| `bedc_finite_kernel_calculus` | exact statements read; theorem spine selected; GroundCompiler placement decided; blocker ledger, bibliography scaffold, short-note memo, and packaging work order prepared | no for journal route | add or identify upstream packaging theorem in `D:/omega/newmath`; or explicitly choose a modest short-note route | Source-side theorem work using `upstream_packaging_work_order.md`, or human short-note decision using `short_note_route_memo.md` |
-| `bedc_rule110_finite_witness` | static recheck done; count drift and collision-audit contradiction recorded; rerun packet, trust-chain template, and diagnostic route memo prepared | no | install/use `make` plus C compiler and rerun dynamic artifact suite | Toolchain/artifact rerun using `artifact_rerun_packet.md`, then fill `trust_chain_template.md` and apply `diagnostic_route_memo.md` if limits remain |
+| `bedc_automation_pipeline` | CICM presentation-only packet prepared; discovery-gate theorem spine now extracted from pinned source; case evidence, gate table, and source decision note ready | only with human approval | final human promotion decision; final live CICM page re-check | Human decides whether to promote as `2026_auditable_theory_to_paper_pipeline`; after promotion, draft should center the discovery-gate calculus |
+| `bedc_finite_kernel_calculus` | exact statements read; theorem spine selected; additional `Sig`, `Package`, `NameCert`, and `GroundCompiler` declarations extracted; blocker ledger, bibliography scaffold, short-note memo, and packaging work order prepared | no for journal route | add or identify upstream packaging theorem in `D:/omega/newmath`; or explicitly choose a modest short-note route | Source-side theorem work using `upstream_packaging_work_order.md`, or choose the core-only short-note spine using `short_note_route_memo.md` |
+| `bedc_rule110_finite_witness` | static recheck done; pinned positive STATUS evidence and trust-chain layers extracted; count drift and collision-audit contradiction recorded; rerun packet, trust-chain template, and diagnostic route memo prepared | no | install/use `make` plus C compiler and rerun dynamic artifact suite | Toolchain/artifact rerun using `artifact_rerun_packet.md`, then fill `trust_chain_template.md` and apply `diagnostic_route_memo.md` if limits remain |
 
 ## Route Decisions
 
@@ -32,6 +33,8 @@ paper track.
 
 Already prepared:
 
+- `P0_SOURCE_EXTRACTION_PASS.md` records the cross-seed source extraction pass
+  and P0 ordering.
 - `cicm_two_page_packet.md`
 - `cicm_promotion_brief.md`
 - `case_evidence_note.md`
@@ -56,6 +59,8 @@ Still required before active paper creation:
 
 Already prepared:
 
+- `P0_SOURCE_EXTRACTION_PASS.md` records the exact-name expansion and confirms
+  the blocker is packaging, not missing content.
 - `theorem_spine_selection.md`
 - `exact_statement_note.md`
 - `non_claim_registry.md`
@@ -77,6 +82,8 @@ Still required before journal-style promotion:
 
 Already prepared:
 
+- `P0_SOURCE_EXTRACTION_PASS.md` records pinned STATUS/trust-chain evidence
+  and confirms the blocker is rerun evidence, not missing content.
 - `artifact_inventory.md`
 - `limitation_ledger.md`
 - `recheck_plan.md`

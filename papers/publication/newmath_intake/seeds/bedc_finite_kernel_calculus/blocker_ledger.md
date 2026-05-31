@@ -14,16 +14,19 @@ active paper, and does not assert that the missing packaging theorem exists.
 
 Do not promote this seed for a journal-style standalone logic paper yet.
 
-The current theorem spine is useful but still mostly local: constructor
-generation, equality, no-confusion, totality, determinacy, associativity, and
-field-projection facts. A standalone paper needs either a source-level packaging
-theorem or an explicitly modest workshop/short-note route.
+The current theorem spine is useful and now has enough source material for
+active manuscript planning.  The blocker is not absence of content.  The pinned
+source includes local finite syntax, generated sameness, extension,
+continuation, bundle, asking, signature, package, name-certificate, and
+GroundCompiler boundary declarations.  A standalone journal-style paper still
+needs either a source-level packaging theorem or an explicitly modest
+workshop/short-note route.
 
 ## Blocker Table
 
 | Blocker | Class | Current evidence | Required resolution |
 |---|---|---|---|
-| Missing manuscript-scale packaging theorem | `newmath-source` | `packaging_theorem_proposal.md`, `upstream_packaging_work_order.md`, `exact_statement_note.md` | Add or identify a theorem such as `finite_kernel_interface_soundness`, or a small theorem family that packages the finite-kernel interface |
+| Missing manuscript-scale packaging theorem | `newmath-source` | `current_declaration_map.md`, `packaging_theorem_proposal.md`, `upstream_packaging_work_order.md`, `exact_statement_note.md` | Add or identify a theorem such as `finite_kernel_interface_soundness`, or a small theorem family that packages syntax, extension, signature/package, and certificate boundaries |
 | Source verification for any new theorem | `newmath-source` | `upstream_packaging_work_order.md` | Run `lake build`, `bedc_ci.py inventory`, and `bedc_ci.py axiom-purity --strict` after source-side work |
 | Pinned commit differs from current local source observation | `source-update` | `current_declaration_map.md` | Use `SOURCE_UPDATE_NOTE_TEMPLATE.md` before adopting a newer source commit |
 | Related-work comparison for journal route | `automath-only` | `risk_register.md` kill criteria | Prepare a seed-level bibliography/comparison scope before active journal promotion |
@@ -36,6 +39,8 @@ theorem or an explicitly modest workshop/short-note route.
 The following work can continue inside this seed:
 
 - refine declaration-to-manuscript role tables;
+- choose whether the paper spine is core-only, core-plus-signature/package, or
+  certificate/compiler-boundary;
 - prepare a seed-level bibliography/comparison scope;
 - refine the short-note route decision memo without choosing it for the human;
 - keep the GroundCompiler appendix/interface-only boundary explicit;
@@ -52,4 +57,3 @@ Do not:
   theorem;
 - silently move from the pinned source commit to the observed local source
   state.
-

@@ -33,6 +33,26 @@ Top-level `rule110` entries observed in the local source tree:
 | `tests/` | C test programs |
 | `tools/` | auxiliary tooling |
 
+## Pinned Origin/Dev STATUS Evidence
+
+The pinned source status is evidence-rich and should be carried forward before
+any promotion decision.  It reports the following surfaces:
+
+| Surface | Pinned reported evidence | Promotion consequence |
+|---|---|---|
+| Tier A | cyclic-tag witness shipped | usable as a finite witness claim after rerun or explicit pinned-status citation |
+| Tier B | Rule 110 physical witness shipped for FKernel direct-carrier and Cook packet coverage | usable only with finite-scope language |
+| direct-carrier coverage | `.r110.ct` covers FKernel/GroundCompiler `.enum.ct` manifests | needs materialization/rerun before artifact submission |
+| Cook packet coverage | `.algo.r110.ct` covers 22 `.algo.ct` manifests | must remain outside phase-exact universality claims |
+| tests | `make test` reported exit 0 | intake must rerun before using as current command evidence |
+| Lean trust boundary | 0 axiom invariant reported | must be rechecked if promoted as a verified artifact paper |
+| manifest counts | 37 `.enum.ct`, 22 `.algo.ct`, 59 `.r110.ct`, 22 `.algo.r110.ct`, 118 total `.ct` after materialization | current static checkout does not materialize generated manifests, so rerun is required |
+| semantic cases | 32 Mark cases and 470 FKernel/GroundCompiler semantic cases | strong candidate evidence for a finite-witness paper |
+| scale surface | 6 Cook packet scale cases through `scale_2p_16t_16384` | needs rerun before claiming artifact adequacy |
+
+The safe reading is: the seed is blocked by missing current rerun evidence, not
+by missing source content.
+
 ## Static Counts Observed
 
 These counts were read from the local source filesystem without running
@@ -75,6 +95,18 @@ the safe paper position remains:
 - Martinez collision table status is unverified for promotion;
 - finite-witness claims must not be inflated into phase-exact universality
   claims.
+
+## Pinned Trust-Chain Evidence
+
+`rule110/docs/trust_chain.md` supplies the intended evidence stack:
+
+| Layer | Pinned content | Safe use |
+|---|---|---|
+| Rule 110 evaluator | truth table `{0,1,1,1,0,1,1,0}`, fixed-zero boundary, deterministic update | implementation-level evaluator description |
+| cyclic-tag evaluator | head `1` appends then drops, head `0` drops, program counter modulo productions, halting by empty/step/OOM | finite execution semantics |
+| GroundCompiler encoder | `b0 -> 0`, `b1 -> 10`, terminator `11` | ties artifacts to `ChannelEncoding.lean` |
+| Minimal prototype reject surface | reject reasons aligned with `MinimalPrototype.lean` | audit/checklist evidence |
+| Cook layer caveat | experimental behavioral scaffold rather than phase-exact Cook 2004 construction | mandatory limitation language |
 
 ## Remaining Required Dynamic Evidence
 

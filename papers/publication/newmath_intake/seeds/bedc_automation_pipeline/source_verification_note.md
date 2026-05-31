@@ -26,6 +26,41 @@ commit:
 | `papers/bedc/tools/auto-ai-quality/README.md` | yes | AI quality packet and load-bearing review layer. |
 | `tools/auto_heal_base.py` | yes | Self-heal daemon evidence. |
 
+## Pinned Discovery-Gate Theorem Spine
+
+The pinned source also contains a structured theorem spine in:
+
+```text
+papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex
+```
+
+These labels should be treated as the first promoted-draft spine if this seed
+is turned into a CICM-style two-page paper:
+
+| Label | Proposed manuscript role |
+|---|---|
+| `thm:automated-discovery-dna-completeness-obligation` | shows that discovery claims require a complete source and evidence ledger |
+| `cor:automated-discovery-statement-code-insufficient` | blocks code/statement generation from being counted as discovery |
+| `thm:automated-discovery-mechanical-not-discovery` | separates routine mechanical expansion from research contribution |
+| `thm:automated-discovery-compression-not-discovery` | prevents compression-only improvements from being marketed as novelty |
+| `thm:automated-discovery-certificate-ledger-required` | justifies certificate ledgers as load-bearing infrastructure |
+| `thm:automated-discovery-positive-implies-discovery` | gives the positive case for a genuine discovery transition |
+| `thm:automated-discovery-scored-claims-public-weights` | supports public scoring weights and reproducible claim triage |
+| `thm:automated-discovery-gate-kind-sound` | states gate-kind soundness |
+| `thm:automated-discovery-demotion-soundness` | supports demoting unsupported AI-produced claims |
+| `thm:automated-discovery-lineage-dag` | supports lineage DAGs for non-random routing |
+| `thm:automated-discovery-lowest-score-not-best-target` | motivates scheduler discipline rather than low-score chasing |
+| `thm:automated-discovery-selection-favours-classifier-change` | explains why classifier-shifting work outranks easy local edits |
+| `thm:automated-discovery-no-unpaid-discovery` | blocks unearned novelty claims |
+| `thm:automated-discovery-pipeline-safety` | provides the safety statement for the pipeline boundary |
+| `thm:automated-discovery-pipeline-theorem` | main theorem candidate for the promoted two-page paper |
+| `prin:automated-discovery-principle` | concise expository principle for the introduction |
+
+Promotion consequence: the seed is not merely an operations anecdote.  It has
+a source-level discovery-gate calculus that can be used as the central
+contribution, with automath/newmath case studies serving as evidence rather
+than as the only content.
+
 The following automath companion paths were checked in the current workspace:
 
 | Path | Exists locally | Intended use |

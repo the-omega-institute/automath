@@ -21,6 +21,13 @@ source-mapped architecture that separates theory-source development, intake
 planning, active paper promotion, overlap/submitted blocking, and manuscript
 readiness checks.
 
+The pinned `newmath` source gives this claim a formal/expository spine rather
+than leaving it as a workflow report.  The promoted version should center the
+discovery-gate calculus: statement generation, mechanical expansion, and
+compression are explicitly demoted unless they pass a certificate-ledger and
+lineage-gate discipline, while positive discovery is reserved for recorded
+classifier-shifting transitions.
+
 ## Minimal Paper Shape
 
 | Section | Target length | Content |
@@ -57,6 +64,27 @@ space remains.  They are better for a longer systems paper.
 | Critical-path scheduling | `lean4/scripts/critical_path.py` | Random or duplicated agent dispatch | Backlog control |
 | Active-paper detector | `papers/publication/pipeline_auto.py` | Intake seed treated as active paper | Promotion boundary |
 | Publication check | `papers/publication/pub_check.py` | Missing submission metadata or manuscript readiness gaps | Submission-pack gate |
+
+## Source Theorem Spine To Carry Into Draft
+
+Use the following compact subset from
+`automated_theory_discovery_pipeline_calculus.tex` if the seed is promoted:
+
+| Draft claim | Source label |
+|---|---|
+| statement/code output is not discovery | `cor:automated-discovery-statement-code-insufficient` |
+| mechanical expansion is not discovery | `thm:automated-discovery-mechanical-not-discovery` |
+| compression is not discovery by itself | `thm:automated-discovery-compression-not-discovery` |
+| certificate ledgers are required | `thm:automated-discovery-certificate-ledger-required` |
+| unsupported claims can be demoted soundly | `thm:automated-discovery-demotion-soundness` |
+| lineage must form a DAG | `thm:automated-discovery-lineage-dag` |
+| scheduler selection should favor classifier change | `thm:automated-discovery-selection-favours-classifier-change` |
+| pipeline-level safety theorem | `thm:automated-discovery-pipeline-safety` |
+| main pipeline theorem | `thm:automated-discovery-pipeline-theorem` |
+
+This spine should replace any vague "AI pipeline works" framing.  The paper's
+visible contribution is an auditable discovery-gate discipline with case
+studies, not a claim that agents independently prove mathematics.
 
 ## Promotion Blockers Remaining
 

@@ -32,6 +32,34 @@ The promoted paper must decide whether this is:
 
 It cannot be omitted.
 
+## Pinned Status Is Positive But Not Sufficient
+
+The same pinned source status reports substantial shipped evidence:
+
+| Positive surface | Reported evidence |
+|---|---|
+| Tier A | cyclic-tag witness shipped |
+| Tier B | Rule 110 physical witness shipped for FKernel direct-carrier and Cook packet coverage |
+| direct-carrier route | FKernel/GroundCompiler `.enum.ct` manifests covered by `.r110.ct` surfaces |
+| Cook packet route | 22 `.algo.ct` manifests covered by `.algo.r110.ct` surfaces |
+| test suite | 50 test binaries and `make test` reported exit 0 |
+| semantic coverage | 32 Mark cases and 470 FKernel/GroundCompiler semantic cases |
+| scale tests | 6 Cook packet scale cases through `scale_2p_16t_16384` |
+
+This evidence should be used to advance the seed, not to park it as
+content-missing.  The correct blocker is current reproducibility and the
+collision-audit contradiction.
+
+## Required Scope Sentence
+
+Any promoted manuscript or abstract should say, in substance:
+
+```text
+The artifacts provide finite witness and trust-chain evidence for the stated
+BEDC surfaces; they do not constitute a phase-exact Rule 110 universality proof
+or a replacement for Lean proof checking.
+```
+
 ## Required Abstract Language
 
 Any promoted abstract must include the phrase "finite witness" or an equivalent
