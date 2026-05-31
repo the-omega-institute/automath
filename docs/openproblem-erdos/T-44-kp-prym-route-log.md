@@ -481,3 +481,51 @@ This is a single source-grade certificate / paragraph.
 
 Status: T-44 ρ_168 instance of Litt #4 Q3 is CONDITIONALLY NEGATIVE with
 exactly one open gate, precisely characterized.
+
+
+## Monitoring Update 2026-05-31 13:15 SGT — Formal refutation: closure needs G + H + V2
+
+`codex_latest_oracle_closure_claim_refutation_20260531` (12:59) carries out a
+formal Boolean proof-gate analysis of the Oracle closure claim against
+locally accepted atoms. The result tightens (and partially corrects) the
+prior "single L6 gate" framing.
+
+Locally accepted atoms (all true):
+- A: source_Mod_φ_preserves_kernel
+- B: source_compact_action_H_centralizing
+- C: source_W1_compact_tensor_identity
+- D: finite_3a_3b_peripheral_kernel_dimensions
+- E: single_ρ_LLS_threshold_g10_r3 (Thm 1.9 / Lem 9.10 cover r = 3 at g ≥ 3)
+- F: ρ_168_trace_mod3_obstruction (native χ_168(M) = 8, mod 3 = 2)
+
+Status: ACCEPTING A–F together still does NOT close the row-preserving
+ρ_168 exclusion. The minimal missing packages, as proven by the Boolean
+gate analysis, are:
+
+  {G, H, V2}   OR   {G, H, V6}
+
+where:
+- G = active same-family same-subgroup binding
+- H = no 3a/3b permutation or duality on the restricted block
+- V2 = compared subgroup contains ⟨(T_1·T_2)³⟩
+- V6 = compared subgroup contains ⟨T_1·T_2⟩ (a strictly stronger version)
+
+The subgroup-minimal visibility witness is **⟨(T_1·T_2)³⟩**, an explicit
+finite subgroup of the MCG image which must be contained in the compared
+subgroup for the trace obstruction to bite.
+
+Codex's recorded finite facts (verifiable):
+- insufficient_visibility_subgroups: ⟨(T_1·T_2)²⟩, ⟨(T_1·T_2)⁶⟩
+- minimal_sufficient_visibility_subgroup: ⟨(T_1·T_2)³⟩
+- ρ_168 order-6 trace = 8 (mod 3 = 2) — confirms F.
+
+Implication: the prior "single L6 gate" framing was an under-count. The
+actual remaining work is THREE distinct conditions (G + H + V2), not one,
+though V2 is a concrete finite-group-theoretic condition that could
+potentially be checked once explicit MCG-image data is available for the
+active branched g = 10 frontier.
+
+Status: T-44 ρ_168 instance of Litt #4 Q3 remains CONDITIONALLY NEGATIVE.
+Honest correction: the closure path is more demanding than the prior
+framings suggested; the "minimal missing" set is now precisely
+characterized as {G, H, V2}.
