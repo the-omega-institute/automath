@@ -586,3 +586,67 @@ verifying the prior monitoring entry's interpretation.
 
 Gate status: PASS. Oracle's non-hyperflex C4 row certificate is consistent
 with independent native verification at every checkable step.
+
+
+## Monitoring Update 2026-06-01 00:15 SGT — D=3 S3 hyperelliptic flag materializations for A=01 and A=12
+
+Two simultaneous Oracle deep responses on non-polluted T-32 conv 6a086228
+delivered explicit materializations of the D=3 S3 source covers for two
+distinct J[2] sign-resolvents on the active hyperelliptic pair.
+
+Common setup:
+  X: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-5)
+  Y: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-6)
+
+### A = {0, 1} (task t1780243427724, 16875 chars)
+
+Common coordinate xi = x/(6x - 1).
+X Prym elliptic: eta^2 = 4 xi^3 + 9 xi^2 + 2 xi + 10
+  psi_X = xi^4 + 3 xi^3 + xi^2 + 10 xi + 1
+  kappa_X^3 = 7
+Y Prym elliptic: eta^2 = 9 xi^3 + 4 xi^2 + 2 xi + 1
+  psi_Y = xi^4 + xi^3 + 9 xi^2 + 9 xi + 1
+  kappa_Y^3 = 2
+
+Source construction (4 X-rows + 4 Y-rows, all qkernel_dim = 3):
+  For each root alpha of psi_S, with beta^2 = f_S^E(alpha), m = (f_S^E)'(alpha)/(2 beta):
+    y^2 = F_S(x)
+    T^3 - 3 kappa (x/(6x-1) - alpha) T + 2 beta + 2 m (x/(6x-1) - alpha) = 0
+
+PGL_2 pair test for 16 pairs:
+  B_{Y, k}(aU + bV, cU + dV) == lambda B_{X, j}(U, V) with non-membership
+  certificate via saturation identity.
+
+### A = {1, 2} (task t1780243550265, 10944 chars)
+
+Coordinate U = 1/x. Sign-resolvent double cover v^2 = (1 - U)(1 - 2U).
+X Prym elliptic: H_X(U) = -5 U^3 + 3 U^2 - U + 1
+Y Prym elliptic: H_Y(U) = 5 U^3 - U^2 - 2 U + 1
+
+3-torsion equations:
+  Psi_X(U) = -2 U (U + 4) (U^2 + 4 U + 2)
+  Psi_Y(U) = -2 (U + 1) (U + 4) (U^2 + 5 U + 1)
+
+Roots: R_X = {0, 7, alpha, alpha'} with alpha^2 + 4 alpha + 2 = 0;
+       R_Y = {7, 10, beta, beta'} with beta^2 + 5 beta + 1 = 0.
+Constants: kappa_X = 3 (kappa^3 = 5 = -lc(H_X)),
+           kappa_Y = 8 (kappa^3 = 6 = -lc(H_Y)).
+
+Same uniform source construction as A = {0, 1} with the appropriate kappa
+and H per sign-resolvent.
+
+### Status
+
+These responses materialize the explicit D=3 / S3 source covers that the
+pipeline had been requesting (per `c3_cover_construction_contract` and
+the sign-resolvent gates). Both deliver explicit elliptic Prym 3-torsion
+equations + explicit cubic source equations + explicit hyperelliptic
+branch decics + qkernel_dim = 3 for all 8 source models per sign-resolvent
++ a PGL_2 saturated branch-decic equivalence test recipe for the 16-pair
+comparison.
+
+These are CANDIDATE materializations awaiting codex-side replay / branch-
+decic comparison to decide pair non-equivalence on the explicit X, Y. Most
+substantive D=3 source content T-32 has received in the session.
+
+Artifact: `tools/community-outreach/targets/cand_litt_common_finite_etale_cover/deep_responses/oracle_T32_D3_S3_hyperelliptic_flags_A01_A12_materialization_20260531_2345.md`.
