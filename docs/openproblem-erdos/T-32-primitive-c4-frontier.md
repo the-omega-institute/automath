@@ -353,3 +353,41 @@ remaining 79.
 Status: T-32 (b) — option-1 noncommuting frontier now has a concrete
 finite obligation set (80 pairs, all joint descent degree 20) ready for
 the L5 cover-construction step. No closure yet; this is the L5 entry point.
+
+
+## Monitoring Update 2026-05-31 09:55 SGT — Honest L5 attempt: scaffold without divisor
+
+A codex-worker `claude_worker_t32_C3_cover_first_obligation_symbolic` was
+assigned the L5 step for the first C3 obligation `C3_diag_X00_Y00_phase0`
+(J[3] vector [0, 0, 0, 1] on both X and Y). It returned a partial artifact:
+
+Completed:
+- Interpretation of the pipeline's J[3] projective-line convention recorded
+  (projective F_3 line in a 4D model of geometric J_C[3] mod ι; the ±-pair
+  identification under the hyperelliptic involution accounts for the
+  "40 cyclic C3 classes" geometric count).
+- Cantor-tripling polynomial system recorded explicitly (cubic-contact form
+  f − b² = λ · a³ expanded into 7 coefficient equations in A, B, C_0, C_1,
+  C_2, C_3, λ).
+- F_11 full-fast-branch search completed; no solution.
+- Bounded grid search over F_{11^d} for d = 2..7; no solution found in budget.
+
+Not completed (honest scope):
+- No 3-torsion divisor coordinates constructed.
+- No cover equation u³ = f.
+- No point counts.
+
+Concrete blockers recorded:
+(a) Pipeline does not publish a basis-to-Mumford-divisor map, so even a found
+    3-torsion divisor cannot be certified as specifically the [0,0,0,1] vector.
+(b) SymPy not available on this machine's Python; pure-Python fallback used.
+(c) Full enumeration over F_{11^7} (≈ 10¹⁴ elements) is computationally
+    infeasible; bounded grid search for d ≥ 2 found nothing in the budget.
+
+Outcome: the obligation remains not closed. This honest scaffold documents
+the precise obstacle. Autonomous per-obligation grinding on T-32 cannot
+progress without either (i) a computer-algebra system (Sage / Magma) for
+the symbolic divisor work, or (ii) operator-level theoretical input
+identifying a cheaper structural invariant.
+
+T-32 status unchanged: (b) grinding; L5 frontier confirmed research-grade.
