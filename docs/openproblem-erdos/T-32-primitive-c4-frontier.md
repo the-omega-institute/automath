@@ -772,3 +772,40 @@ invariant. The combination of (i) F_11 separators excluding most pairs
 and (ii) explicit F_13 witnesses where matches exist gives a
 multi-field picture of where the common-cover obstacle does and does
 not bite.
+
+
+## Monitoring Update 2026-06-01 07:45 SGT — Pair-descent count theorem reduces closure to two equations
+
+Pipeline-side `check_litt3_27d5_pair_descent_count_theorem` (07:42) records
+a theorem-grade pair-descent reduction for the C4 survivor closure.
+
+Abstract pair-descent consequence:
+- If a Kummer representative f_L over F_121 is supplied and f_{piL} is
+  normalized to sigma(f_L), then the semilinear operator Phi swaps C_L and
+  C_{piL} and has Phi^2 = F (Frobenius). The semilinear pair-descent then
+  reduces the survivor C4 test to two component-difference equations.
+
+Reduction:
+- The surviving branch (sign-twist of m=4 named class) is hit exactly when
+  the two component differences satisfy
+    d2_k2 = #C_{L^2}(F_121) - #C_L(F_121) = -42
+    d4_k2 = #C_{L^2}(F_{121^2}) - #C_L(F_{121^2}) = 398
+
+These are the per-component half of the prior survivor power sums
+[0, -84, 0, 796] = (0, 2*d2_k2, 0, 2*d4_k2), consistent with the
+two-component descent picture (L and pi(L) each contributing).
+
+Remaining gap: provide the explicit normalized Kummer representative
+f_L over F_121(Y) for L = [0, 0, 0, 0, 0, 1] (or equivalent), then
+compute the two normalized cover-difference counts and check whether
+they equal (-42, 398).
+
+Status: T-32 (b) — the closure test for the surviving C4 branch is
+now reduced to two specific finite-field component-difference numbers.
+If a future codex-side computation produces explicit f_L plus the two
+count differences over F_121 and F_{121^2}, the C4 survivor question
+is mechanically decidable.
+
+This complements the multi-field separator+witness picture earlier (F_11
+A={0,1}/A={0,3} X0 separators + F_13 deck-intertwining witness) with a
+sharper pair-descent closure recipe for the C4 frontier specifically.
