@@ -96,6 +96,24 @@ following source-binding record:
 \path{thm:automated-discovery-pipeline-theorem}.
 \end{quote}
 
+The exact source interface used by the proof below was extracted from the pinned
+commit on 2026-06-01.  At lines 248--255, the source states that candidates
+supplying only a statement locus or only legal theorem code do not pass the
+discovery gate as theorem genomes.  At lines 258--267 and 269--278, it states
+that mechanical expansion and same-classifier genome compression do not imply
+discovery.  At lines 280--291, it states that a discovery transition supplies a
+semantic naming certificate and a ledger witness.  At lines 334--345, it states
+that gate demotion leaves a claim kind no stronger than its actual evidence.  At
+lines 366--374, it states that lineage-consistent accepted claims form an
+auditable acyclic lineage graph.  At lines 441--454, pipeline safety states that
+accepted discovery claims have classifier change, semantic naming certificate,
+ledger witness, DNA-complete theorem genome, score certificate, lineage witness,
+and an explicit not-claimed boundary.  At lines 457--475, the main pipeline
+theorem separates record growth, score reduction, recombination, classifier
+change, and ledgered discovery.  These paraphrases are used only as a stable
+interface to the pinned source theorem spine; no stronger source rebuild claim is
+made here.
+
 \section{Operational interface}
 
 For this short systems paper, the following finite interface is sufficient.  A
@@ -114,6 +132,19 @@ commits, commands, logs, inventories, and witness records cited for a claim.
 \emph{Accepted work} is the subset of candidate claims recorded in a manuscript
 or submission ledger after the relevant deterministic gate passes and, when a
 route boundary is crossed, after human promotion.
+
+The deterministic dispatch function $\Gamma$ from claim kinds to gates is part
+of the operational interface.  Its domain is
+\[
+\{\text{formal-source},\text{ traceability},\text{ route},
+\text{ submission},\text{ artifact},\text{ discovery}\}.
+\]
+It sends formal-source claims to the build and axiom-purity gates; traceability
+claims to inventory and marker-existence gates; route claims to promotion,
+overlap, and submission-state gates; submission claims to submission-pack gates;
+artifact claims to status and limitation-ledger gates; and discovery claims to
+the pinned discovery gate above.  For mixed claims, $\Gamma$ returns the union of
+the gate sets for the claim kinds present.
 
 A \emph{case witness record} is path-complete when its evidence surface gives a
 concrete source or artifact path for each load-bearing component of the row.  A
@@ -134,12 +165,33 @@ also records the command, source commit, environment, exit code, and log path
 for a fresh run.  The present draft uses path-verified architecture and case
 evidence unless explicitly marked command-run.
 
+\begin{proposition}[Deterministic claim-kind dispatch]
+\label{prop:claim-kind-dispatch}
+For every load-bearing manuscript claim whose kind lies in the six-kind domain
+above, $\Gamma$ assigns a unique finite set of deterministic gates.  A mixed
+load-bearing claim is accepted only if it passes every gate in the union assigned
+to its component kinds.
+\end{proposition}
+
+\begin{proof}
+The six atomic clauses in the definition of $\Gamma$ assign one explicitly named
+finite gate set to each atomic claim kind.  Hence an atomic claim has a unique
+assigned gate set.  For a mixed claim, the component-kind set is finite because
+it is a subset of the six-kind domain; taking the union of the corresponding
+finite gate sets is deterministic and finite.  If any component gate is omitted,
+then the projection of the mixed claim to that component kind would be recorded
+without the gate assigned by $\Gamma$, contradicting the definition of accepted
+work as gated recording.  Therefore accepted mixed claims must pass every gate
+in the union.\qed
+\end{proof}
+
 \begin{theorem}[Publication safety interface]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above.
 Assume that every load-bearing claim in an active manuscript is either rejected
 or is recorded together with an evidence surface; that every advisory output is
-demoted unless the relevant deterministic gate passes; that discovery claims are
+demoted unless the deterministic gate set $\Gamma$ for its claim kind passes;
+that discovery claims are
 checked through the pinned discovery-gate interface, in particular its pipeline
 safety and main pipeline theorem labels; and that no inactive intake seed is
 treated as publication work without human promotion.  Then any accepted
@@ -157,17 +209,18 @@ after the relevant deterministic gate passes, and if recording crosses the
 publication boundary it follows a human promotion.  The first assumption gives
 an evidence surface for $c$, so the gate decision is attached to a checkable
 source path, artifact path, command log, inventory, or witness record rather
-than to generated prose alone.  If $c$ is not a discovery claim, this is exactly
-the required gate passage for its claim kind: formal-source claims use build and
-axiom gates, traceability claims use inventory or marker gates, route claims use
-promotion and overlap gates, and submission claims use submission-pack gates.
-If $c$ is a discovery claim, the third assumption routes it through the pinned
-discovery-gate interface.  The imported insufficiency, ledger, demotion,
-lineage, pipeline-safety, and pipeline-theorem labels state precisely that
-statement-only, code-only, mechanical-expansion, and compression-only records do
-not become accepted discovery claims without the required certificate, ledger,
-and lineage witnesses.  Hence every accepted load-bearing claim has gate
-passage before publication recording, and discovery claims receive the stronger
+than to generated prose alone.  Proposition~\ref{prop:claim-kind-dispatch}
+identifies the required finite gate set: formal-source claims use build and
+axiom gates, traceability claims use inventory and marker gates, route claims
+use promotion, overlap, and submission-state gates, artifact claims use status
+and limitation-ledger gates, submission claims use submission-pack gates, and
+mixed claims use the union.  If $c$ is a discovery claim, the third assumption
+routes it through the pinned discovery-gate interface.  The source-interface
+paragraph above records the imported statements used here: statement-only,
+code-only, mechanical-expansion, and compression-only records do not become
+accepted discovery claims without the required certificate, ledger, and lineage
+witnesses.  Hence every accepted load-bearing claim has gate passage before
+publication recording, and discovery claims receive the stronger
 source-interface guarantee.\qed
 \end{proof}
 
@@ -189,6 +242,7 @@ Gate & Evidence surface & Failure prevented \\
 Formal-source gate & Lean build, axiom checks, axiom-purity audits & broken or impure formal targets \\
 Traceability gate & declaration inventory, source maps, marker audits & stale paper labels and missing source facts \\
 Discovery gate & certificate ledger, demotion, lineage DAG & statement-only, code-only, or mechanical ``discoveries'' \\
+Artifact-limitation gate & status files, limitation ledgers, rerun logs when present & drift from bounded artifact evidence to stronger dynamic claims \\
 Scheduler gate & critical-path scoring and backlog windows & duplicated or random agent dispatch \\
 Promotion gate & active \texttt{2026\_*} directory plus pipeline metadata & intake seeds entering the daemon prematurely \\
 Submission gate & review, venue, bibliography, and metadata checks & unreviewed or under-specified submission packs \\
@@ -269,6 +323,53 @@ uses \path{D:/omega/newmath/rule110/STATUS.md},
 \path{D:/omega/newmath/rule110/docs/collision_audit_findings.md},
 \path{D:/omega/newmath/rule110/docs/exhaustiveness_audit_findings.md}, and
 \path{D:/omega/newmath/rule110/docs/papers_research_report.md}.
+
+\begin{proposition}[Case-row completeness certificate]
+\label{prop:case-row-completeness-certificate}
+The four case-study rows used by this paper are path-complete witnesses.  More
+explicitly, each row supplies the required fields as follows.
+\begin{enumerate}
+\item Newmath intake isolation: the source surface is the intake-seed path and
+active-paper detector; the failed invariant is active-paper status before human
+promotion; the gate decision is that daemon entry is blocked until a
+\path{2026_*} directory with \path{main.tex} and \path{PIPELINE.md} exists; the
+allowed claim is inactive preparation only; the safe lesson is that candidate
+packets can remain outside publication state.
+\item Upper-fibers overlap block: the source surface is the route identity,
+submitted sibling marker, overlap ledgers, and program-board state listed above;
+the failed invariant is route disjointness; the gate decision is
+\path{deferred_wait_for_prior_submission}; the allowed next actions are closure,
+merge, supersession, or waiting for prior-route feedback; the safe lesson is
+that venue selection is stateful.
+\item Fake-extension block: the source surface is the phase-D hard-lint script
+and theorem-content delta inventory; the failed invariant is substantive theorem
+growth; the gate decision is rejection by the theorem-content gate; the allowed
+claim is that file churn or compilation alone is insufficient; the safe lesson
+is that extension claims require load-bearing mathematical content.
+\item Rule110 limitation gate: the artifact surface is the status file,
+collision-audit ledger, exhaustiveness ledger, and paper-data reference listed
+above; the failed invariant is unqualified artifact consistency; the gate
+decision is disclosure or blocked promotion rather than fresh dynamic
+validation; the allowed claim is the bounded limitation statement; the safe
+lesson is that limitations must be disclosed or must block artifact claims.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Each item names the exact evidence surface from the preceding path catalogue and
+then gives the four operational fields required by
+Lemma~\ref{lem:gate-witness-criterion}: failed invariant, gate decision,
+bounded allowed claim or next actions, and safe manuscript lesson.  The second
+item is a route-overlap witness because it additionally names route identity,
+submitted sibling, overlap reason, gate decision, and allowed next actions.  The
+fourth item is an artifact-limitation witness because it additionally names the
+artifact status path, limitation-ledger paths, observed limitation, gate
+decision, and allowed manuscript claim.  The first and third items are the same
+path-verified interface with promotion and theorem-content gates in place of the
+specialized route-overlap and artifact-limitation gates.  Therefore every row
+has the complete field set needed for
+Proposition~\ref{prop:path-complete-case-witnesses}.\qed
+\end{proof}
 
 \begin{table}
 \caption{Path-verified case-study witnesses}
