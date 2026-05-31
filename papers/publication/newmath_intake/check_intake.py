@@ -148,7 +148,22 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
     errors.extend(
         check_index_file(
             root / "README.md",
-            ["not an active paper pipeline", "must not run Stage A"],
+            ["not an active paper pipeline", "must not run Stage A", "CURRENT_STATUS.md"],
+            root=root,
+            publication_root=publication_root,
+        )
+    )
+    errors.extend(
+        check_index_file(
+            root / "CURRENT_STATUS.md",
+            [
+                "not a promotion command",
+                "promotion <seed> as <active_slug>",
+                "bedc_automation_pipeline",
+                "bedc_finite_kernel_calculus",
+                "bedc_rule110_finite_witness",
+                "do not run Stage A",
+            ],
             root=root,
             publication_root=publication_root,
         )
@@ -194,7 +209,7 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
     errors.extend(
         check_index_file(
             root / "AGENT_WORK_QUEUE.md",
-            ["P0_GATE_AUDIT.md", "not a daemon queue"],
+            ["P0_GATE_AUDIT.md", "CURRENT_STATUS.md", "not a daemon queue"],
             root=root,
             publication_root=publication_root,
         )

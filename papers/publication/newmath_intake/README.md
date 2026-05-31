@@ -76,5 +76,9 @@ The current source-pin drift check is recorded in `SOURCE_PIN_STATUS.md`; the
 intake remains pinned to `origin/dev` commit
 `3fb3d6a0641767388a401883062aa522ea0b397b`.
 
+Use `CURRENT_STATUS.md` as the first quick status snapshot before assigning
+agents to P0 BEDC intake work.  It records the exact promotion-command boundary
+and the current gate for each P0 seed.
+
 Use `AGENT_WORK_QUEUE.md` for safe pre-promotion work that agents can perform
 inside the intake layer without creating active paper tracks.

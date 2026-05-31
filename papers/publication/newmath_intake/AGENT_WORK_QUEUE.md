@@ -14,6 +14,8 @@ active paper list.
 - Run `python papers\publication\newmath_intake\check_intake.py` after edits.
 - Use `P0_GATE_AUDIT.md` to distinguish safe intake work from promotion,
   source-side theorem work, and artifact reruns.
+- Read `CURRENT_STATUS.md` first for the current P0 gate snapshot and exact
+  promotion-command boundary.
 - Use `P0_DECISION_PACKET.md` to see which human decision is currently needed
   before active-paper or source-side work.
 - Use `PROMOTION_HANDOFF.md` to see what becomes active-paper work only after

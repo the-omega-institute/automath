@@ -26,7 +26,20 @@ class NewmathIntakeGuardTests(unittest.TestCase):
             for name in sorted(check_intake.KNOWN_SEEDS)
         )
         (self.root / "README.md").write_text(
-            "not an active paper pipeline\nmust not run Stage A\n",
+            "not an active paper pipeline\nmust not run Stage A\nCURRENT_STATUS.md\n",
+            encoding="utf-8",
+        )
+        (self.root / "CURRENT_STATUS.md").write_text(
+            "\n".join(
+                [
+                    "not a promotion command",
+                    "promotion <seed> as <active_slug>",
+                    "bedc_automation_pipeline",
+                    "bedc_finite_kernel_calculus",
+                    "bedc_rule110_finite_witness",
+                    "do not run Stage A",
+                ]
+            ),
             encoding="utf-8",
         )
         (self.root / "BOARD.md").write_text(
@@ -47,7 +60,7 @@ class NewmathIntakeGuardTests(unittest.TestCase):
             encoding="utf-8",
         )
         (self.root / "AGENT_WORK_QUEUE.md").write_text(
-            "P0_GATE_AUDIT.md\nnot a daemon queue\n",
+            "P0_GATE_AUDIT.md\nCURRENT_STATUS.md\nnot a daemon queue\n",
             encoding="utf-8",
         )
         (self.root / "P0_DECISION_PACKET.md").write_text(
@@ -182,6 +195,16 @@ class NewmathIntakeGuardTests(unittest.TestCase):
 
         self.assertTrue(
             any("metacic_closed_normal_consistency" in error for error in errors),
+            errors,
+        )
+
+    def test_missing_current_status_fails(self):
+        (self.root / "CURRENT_STATUS.md").unlink()
+
+        errors, _warnings = check_intake.run_check(self.root)
+
+        self.assertTrue(
+            any("CURRENT_STATUS.md" in error for error in errors),
             errors,
         )
 
