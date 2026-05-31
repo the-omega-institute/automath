@@ -14,9 +14,10 @@
 
 ## Current Stage
 
-P0 complete: active paper directory created from approved newmath intake
-promotion.  The next step is P1 manuscript assembly followed by P2
-literature and venue verification.
+P4 complete: the promoted draft has been assembled, the CICM
+presentation-only route has been checked, initial related-work citations have
+been added, the manuscript compiles under LNCS style, and an evidence-boundary
+review has been recorded.  The next step is final human submission decision.
 
 ## P0 Promotion Checklist
 
@@ -29,9 +30,61 @@ literature and venue verification.
 - [x] `THEOREM_LIST.md` created as discovery-gate theorem spine.
 - [x] `ARTIFACT_INVENTORY.md` created from gate and case-study evidence.
 - [x] `BIB_SCOPE.md` created from seed bibliography scope.
-- [ ] Live venue page rechecked.
-- [ ] Related-work citations verified and tightened.
+- [x] Live venue page rechecked.
+- [x] Related-work citations verified and tightened.
+- [x] LNCS style conversion compiled.
+- [x] P4 evidence-boundary review recorded.
 - [ ] Source command rerun decision finalized.
+
+## P1 Manuscript Assembly
+
+P1 complete on 2026-06-01.
+
+- `main.tex` now has a stable short-paper structure: problem/contribution,
+  architecture, gate summary, case studies, evidence boundary, and scope.
+- The draft compiles as 2 content pages plus bibliography under the current
+  article format.
+- The central contribution is the discovery-gate discipline, not a generic
+  project report.
+
+## P2 Venue Check
+
+Venue page checked on 2026-06-01.  See `VENUE_CHECK.md`.
+
+- CICM 2026 presentation-only route is open until 2026-06-15.
+- Page budget is 2 pages plus bibliography.
+- The official call points to EasyChair and Springer LNCS style files.
+
+P2 complete on 2026-06-01.
+
+- CICM 2026 presentation-only route is open until 2026-06-15.
+- Page budget is 2 pages plus bibliography.
+- The official call points to EasyChair and Springer LNCS style files.
+- Related-work seeds were added for Lean, LeanDojo, Draft--Sketch--Prove, and
+  AFP.
+
+Submission-format conversion remains open for P3.
+
+## P3 Format Check
+
+P3 complete on 2026-06-01.
+
+- `main.tex` now uses `llncs`.
+- Bibliography style is `splncs04`.
+- The manuscript compiles as 2 body pages plus bibliography.
+- Remaining layout warnings are small table underfull boxes caused by narrow
+  short-paper tables.
+
+## P4 Review
+
+P4 complete on 2026-06-01.  See `P4_REVIEW.md`.
+
+Submission-blocking decisions remaining:
+
+- public artifact/source link strategy;
+- source-command rerun decision or explicit no-rerun statement;
+- final author/affiliation confirmation in the CICM form;
+- AI disclosure if the form asks for one.
 
 ## Route Decision
 
@@ -52,11 +105,8 @@ the relevant commands in `SOURCE_MAP.md` must be rerun and logged first.
 
 ## Submission Blockers
 
-1. Live venue check for presentation-only availability, page limit,
-   bibliography policy, and submission mechanics.
-2. Bibliography pass for proof-assistant workflows, AI-assisted
-   formalization, mathematical knowledge management, and artifact
-   reproducibility.
+1. Public artifact/source link decision.
+2. Final source-command rerun decision or explicit no-rerun statement.
 3. Decide whether to rerun the newmath command suite or explicitly keep the
    evidence claim at path-verified architecture plus case studies.
 4. Confirm author list, affiliations, competing interests, and AI disclosure
@@ -64,8 +114,7 @@ the relevant commands in `SOURCE_MAP.md` must be rerun and logged first.
 
 ## Next Actions
 
-- P1: strengthen `main.tex` into a polished two-page draft.
-- P2: perform live venue and bibliography verification.
-- P3: compile and fix formatting.
+- Final: make submission decision after the remaining human-facing items are
+  resolved.
 - Later review gate: run independent review and Oracle final-review gate after
   drafting, venue review, and formatting have finished.

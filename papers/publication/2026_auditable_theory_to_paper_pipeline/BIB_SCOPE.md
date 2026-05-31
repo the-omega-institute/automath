@@ -39,3 +39,31 @@ formalization workflow infrastructure.
 2. Add verified citations for each bucket actually used.
 3. Remove any comparison bucket not supported by a citation.
 4. Record the literature pass date and exact sources checked.
+
+## Venue Check Status
+
+Completed on 2026-06-01 for CICM 2026.  See `VENUE_CHECK.md`.
+
+The confirmed presentation-only route is 2 pages plus bibliography, with a
+submission deadline of 2026-06-15.  The related-work pass remains incomplete:
+the current `references.bib` contains only local source placeholders and must
+be replaced or supplemented with verified literature before submission.
+
+## Related-Work Pass
+
+Completed initial pass on 2026-06-01.
+
+| Bucket | Added citation | Verification source |
+|---|---|---|
+| proof-assistant workflow | `deMouraKADR2015Lean` | KIT/DBLP-style publication page for the CADE 2015 Lean system description |
+| AI-assisted formalization | `YangEtAl2023LeanDojo` | DBLP record for NeurIPS 2023 LeanDojo |
+| informal-to-formal guidance | `JiangEtAl2023DraftSketchProve` | arXiv record `2210.12283`, revised 2023 |
+| proof archive/artifact traceability | `BlanchetteHMN2015AFP` | CICM 2015 page for Mining the Archive of Formal Proofs |
+
+Remaining bibliography work:
+
+- replace local-source placeholders with public artifact/source references if
+  a public link is available before submission;
+- add exact URLs or DOIs for any venue-required bibliography style;
+- keep the related-work paragraph short enough for the presentation-only page
+  budget.
