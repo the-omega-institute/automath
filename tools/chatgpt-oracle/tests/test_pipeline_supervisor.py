@@ -1377,6 +1377,48 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
 
         self.assertEqual(dedup_calls, [(paper.name, 1)])
 
+    def test_stage_a_oracle_escalation_can_skip_old_rerun_directive(self):
+        paper = self._write_paper(
+            "2026_stage_a_final_repair_exhausted",
+            "Initial paper.",
+        )
+        (paper / "oracle_stage_a_escalation.json").write_text(
+            json.dumps({
+                "verdict": "rerun_stage_a",
+                "codex_instructions": ["old directive"],
+            }),
+            encoding="utf-8",
+        )
+        exhausted_rounds = (
+            oracle_pipeline.MAX_STAGE_A_ROUNDS
+            + oracle_pipeline.MAX_STAGE_A_FINAL_REPAIR_ROUNDS
+        )
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="A",
+            target_journal="Test Journal",
+            stage_a_rounds=exhausted_rounds,
+            current_round=exhausted_rounds,
+            stage_a_scope_done=True,
+        )
+
+        with mock.patch.object(
+            oracle_pipeline,
+            "ORACLE_ENABLED",
+            True,
+        ):
+            reused = oracle_pipeline._maybe_stage_a_oracle_escalate(
+                state,
+                "max Stage A rounds exhausted; final audit failed (score=7)",
+                reuse_existing_directive=False,
+            )
+
+        self.assertFalse(reused)
+        self.assertEqual(state.stage_a_rounds, exhausted_rounds)
+        self.assertEqual(state.stage_a_scores, [])
+        self.assertEqual(state.error, "")
+
     def test_discover_skips_done_state_even_if_board_status_is_stale(self):
         paper = self._write_paper("2026_done_but_stale_board", "Done paper.")
         oracle_pipeline.PROGRAM_BOARD.write_text(

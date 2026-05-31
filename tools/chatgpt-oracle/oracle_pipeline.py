@@ -3443,7 +3443,8 @@ def _stage_a_oracle_terminal_active(state: PaperState) -> bool:
 def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
                                    dry_run: bool = False,
                                    oracle_timeout: int = 7200,
-                                   tag: str = "") -> bool:
+                                   tag: str = "",
+                                   reuse_existing_directive: bool = True) -> bool:
     if not is_recoverable_stage_a_block_status(f"A-BLOCKED ({reason})"):
         return False
     if not ORACLE_ENABLED:
@@ -3452,6 +3453,10 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
         return False
     paper_path = Path(state.paper_dir)
     artifact = paper_path / "oracle_stage_a_escalation.json"
+    if artifact.exists() and not reuse_existing_directive:
+        logger.info(f"{tag} Existing Stage A Oracle escalation directive "
+                    "already consumed; not reusing it for this block")
+        return False
     if artifact.exists():
         try:
             data = json.loads(artifact.read_text(encoding="utf-8"))
@@ -7087,7 +7092,8 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 )
                 if _maybe_stage_a_oracle_escalate(
                     state, reason, dry_run=dry_run,
-                    oracle_timeout=oracle_timeout, tag=tag
+                    oracle_timeout=oracle_timeout, tag=tag,
+                    reuse_existing_directive=False,
                 ):
                     return run_stage_a(
                         state, dry_run=dry_run, model=model,
