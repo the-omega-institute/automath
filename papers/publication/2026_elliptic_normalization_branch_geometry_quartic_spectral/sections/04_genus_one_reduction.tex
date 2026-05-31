@@ -350,8 +350,8 @@ Thus the theorem is a self-contained normalization and ramification result for t
 \subsection{Real projection structure for fixed balanced members}
 
 This subsection supplies the real-projection input for Theorem~B.
-Theorem~\ref{thm:theorem-a-balanced-elliptic-normalization} gives the balanced normalization; Definition~\ref{def:balanced-projection-datum} and Proposition~\ref{prop:balanced-projection-datum-complete} list the endpoint and critical values for one fixed member; Theorem~\ref{thm:balanced-real-projection} turns that finite list into interval images; and Corollary~\ref{cor:quartic-real-projection-framework} evaluates the list for \((a,c,d,g)=(-1,-1,1,0)\).
-All comparisons used in the canonical specialization are displayed sign inequalities or named polynomial factorizations.
+The general balanced-family material is only a short fixed-member preliminary: once a smooth real member has been chosen, endpoints and real critical values determine the interval image of each real oval.
+The result used later is the canonical proposition for \((a,c,d,g)=(-1,-1,1,0)\), where all comparisons are displayed sign inequalities or named polynomial factorizations.
 
 \begin{lemma}[Real Weierstrass ovals and regular values]\label{lem:real-weierstrass-oval-covering-count}
 Let \(F\in\RR[\lambda]\) be a squarefree cubic with leading coefficient nonzero, and let \(E\) be the smooth projective real curve obtained from
@@ -471,339 +471,43 @@ These alternatives cover all points of the real component, proving the exhaustio
 \end{proof}
 
 
-\begin{definition}[Fixed-member projection datum]\label{def:balanced-projection-datum}
-Let $a,c,d,g\in\RR$ with $a\neq0$ and assume \eqref{eq:balanced-genus-condition}, so that $E_{a,c,d,g}$ is a smooth genus-one curve.
-Let $F(\lambda)=c^2-4a\lambda^3-4d\lambda-4g$ be the cubic in \eqref{eq:balanced-weierstrass}, and let
+\begin{lemma}[Fixed-member endpoint-and-extrema test]\label{def:balanced-projection-datum}\label{prop:balanced-transition-support-reduction}\label{prop:balanced-projection-datum-complete}\label{prop:balanced-real-projection-fixed-extrema}\label{prop:balanced-real-projection}\label{rem:balanced-projection-reading}\label{rem:balanced-finite-comparison-algorithm}\label{rem:balanced-real-interval-alternatives}\label{rem:balanced-fixed-criterion-complete}\label{cor:fixed-member-projection-comparison}
+Fix one smooth real balanced member with $a\ne0$, and let
 \[
-R_{a,c,d,g}(\lambda)
-=
-16a\lambda^5+9a^2\lambda^4+16d\lambda^3+(16g+6ad-4c^2)\lambda^2+d^2
+F(\lambda)=c^2-4a\lambda^3-4d\lambda-4g,
+\qquad
+R_{a,c,d,g}(\lambda)=16a\lambda^5+9a^2\lambda^4+16d\lambda^3+(16g+6ad-4c^2)\lambda^2+d^2.
 \]
-be the ramification polynomial from \eqref{eq:balanced-quintic}.
-For every closed connected component $J\subset\{\lambda\in\RR:F(\lambda)\ge0\}$ set
+For each closed component $J\subset\{F\ge0\}$ define the reduced transition set
 \begin{align}\label{eq:balanced-real-extrema-set}
 \mathcal V(J)
-&:=
-\{\beta^2+\tfrac{c}{2}:\beta\in J,\ F(\beta)=0\}
+&=
+\{\beta^2+\tfrac c2: \beta\in J,\ F(\beta)=0\}
 \notag\\
-&\quad{}
-\cup
-\left\{
-\lambda^2+\frac{3a\lambda^2+d}{4\lambda}+\frac{c}{2}:
-\lambda\in J\setminus\{0\},\ R_{a,c,d,g}(\lambda)=0
-\right\}
+&\quad\cup
+\left\{\lambda^2+\frac{3a\lambda^2+d}{4\lambda}+\frac c2:
+\lambda\in J\setminus\{0\},\ R_{a,c,d,g}(\lambda)=0\right\}
 \notag\\
-&\quad{}
-\cup\ \mathcal Z(J),
+&\quad\cup\mathcal Z(J),
 \end{align}
-where
-\[
-\mathcal Z(J):=
-\begin{cases}
-\left\{\dfrac{c+\sqrt{F(0)}}{2},\dfrac{c-\sqrt{F(0)}}{2}\right\},
-& 0\in J,\ d=0,\ F(0)>0,\\[7pt]
-\left\{\dfrac{c}{2}\right\},
-& 0\in J,\ d=0,\ F(0)=0,\\[7pt]
-\emptyset, & \text{otherwise.}
-\end{cases}
-\]
-The fixed-member projection datum is
-\[
-\mathfrak D(E_{a,c,d,g})=
-\bigl(\#\{\text{real roots of }F\},\{\mathcal V(J):J\subset\{F\ge0\}\}\bigr),
-\]
-together, in the two-component case, with the signed comparison $\Delta=m_{\mathrm n}-M_{\mathrm c}$ defined in Theorem~\ref{thm:balanced-real-projection}.
-\end{definition}
-
-\begin{proposition}[Reduced transition support versus ramification divisors]\label{prop:balanced-transition-support-reduction}
-Fix one smooth real balanced member as in Definition~\ref{def:balanced-projection-datum}, and let $J$ be a closed connected component of $\{F\ge0\}$.
-Let $\mathcal E_J$ be the reduced divisor on $E_J(\RR)$ supported on the affine endpoint points $(\beta,0)$ with $\beta\in J$ and $F(\beta)=0$, and let $\mathcal R^{\mathrm{fin}}_{y,J}$ be the finite real support of the ramification divisor of the morphism $y:E_{a,c,d,g}\to\mathbf P^1_y$ on the same real component, omitting the point at infinity when it lies on the unbounded component.
-Then
-\[
-\mathcal V(J)=
-y\bigl(\abs{\mathcal E_J}\cup\abs{\mathcal R^{\mathrm{fin}}_{y,J}}\bigr)
-\]
-as reduced subsets of $\RR$.
-Thus $\mathcal V(J)$ is the reduced image-transition set, not the ramification divisor itself: it forgets ramification multiplicities and also identifies distinct endpoint or ramification points that have the same $y$-value.
-Nevertheless this reduced set is complete for the two uses made in Theorem~\ref{thm:balanced-real-projection}: the extrema of the interval image of $E_J(\RR)$ are extrema of $\mathcal V(J)$, and the real fibre count is constant on every connected component of $\RR\setminus\mathcal V(J)$.
-\end{proposition}
+where $\mathcal Z(J)$ consists of $(c\pm\sqrt{F(0)})/2$ if $0\in J$, $d=0$, and $F(0)>0$, consists of $\{c/2\}$ if $0\in J$, $d=0$, and $F(0)=0$, and is empty otherwise.
+Then $\mathcal V(J)$ is exactly the reduced set of finite endpoint values and finite critical values of the morphism $y=\lambda^2+(Y+c)/2$ on the real component above $J$.
+The fibre count over that component is constant on each connected component of $\RR\setminus\mathcal V(J)$.
+If the component is compact, its image is the closed interval with endpoints $\min\mathcal V(J)$ and $\max\mathcal V(J)$; if it is the unbounded component, then $y$ has a pole of order $4$ at infinity and its image is $[\min\mathcal V(J),\infty)$.
+Thus, in the two-oval case, the only internal-gap comparison is $M_{\mathrm c}\ge m_{\mathrm n}$, with $M_{\mathrm c}=\max\mathcal V(J_{\mathrm c})$ and $m_{\mathrm n}=\min\mathcal V(J_{\mathrm n})$.
+This is only a fixed-member lemma; it is not a parameter-space chamber classification.
+\end{lemma}
 
 \begin{proof}
-The endpoint support $\abs{\mathcal E_J}$ gives exactly the first line of \eqref{eq:balanced-real-extrema-set}.
-It remains to identify the finite real ramification support away from endpoints.
-On the interior of $J$ one has $Y\ne0$, so $\lambda$ is a local coordinate on each sheet and
-\[
-\frac{\dd y}{\dd\lambda}=2\lambda-\frac{3a\lambda^2+d}{Y}.
-\]
-Hence a finite interior point is ramified for $y$ precisely when
-\[
-2\lambda Y=3a\lambda^2+d.
-\]
-If $\lambda\ne0$, substituting $Y=(3a\lambda^2+d)/(2\lambda)$ gives the critical value in the second line of \eqref{eq:balanced-real-extrema-set}, and squaring the same relation against $Y^2=F(\lambda)$ gives $R_{a,c,d,g}(\lambda)=0$.
-Conversely, a real $\lambda\in J\setminus\{0\}$ with $R_{a,c,d,g}(\lambda)=0$ and the displayed value arises from a real point satisfying the same ramification equation, because the value formula records the corresponding sign of $Y$ on the real sheet.
-If $\lambda=0$ and $F(0)>0$, the derivative condition is equivalent to $d=0$, and the two possible values are $(c\pm\sqrt{F(0)})/2$; if $F(0)=0$ the point is already an endpoint and, when $d=0$, contributes the same reduced value $c/2$.
-These are precisely the alternatives in $\mathcal Z(J)$.
-Therefore the displayed equality of reduced value sets holds.
-
-The equality is deliberately set-theoretic.
-Taking the support of the ramification divisor discards the ramification index at a point, and taking the image under $y$ further identifies different points with coincident critical values.
-This loses no information needed for the fixed real projection theorem.
-Indeed, on any connected interval $I\subset\RR\setminus\mathcal V(J)$ there are no finite endpoint values and no finite ramification values over $I$; Lemma~\ref{lem:real-projection-proper-covering} therefore makes the restriction over $I$ a finite covering, so the fibre count is constant on $I$.
-For image endpoints, a finite maximum or minimum of $y$ on a compact component, or a finite lower endpoint on the unbounded component where $y\to+\infty$ at infinity, is attained either at an endpoint of the closed $\lambda$-interval or at an interior critical point.
-By the equality just proved, its value lies in $\mathcal V(J)$, so the numerical extrema are the corresponding minimum or maximum of the reduced transition set.
+Lemma~\ref{lem:real-component-extrema-enumeration} gives precisely the three displayed classes: endpoint values, the $\lambda\ne0$ critical values obtained from $2\lambda Y=3a\lambda^2+d$, and the exceptional $\lambda=0$ values.
+Taking the reduced image forgets ramification multiplicities and coincident realizations, but interval endpoints and regular fibre counts depend only on the real value.
+On any interval avoiding $\mathcal V(J)$, Lemma~\ref{lem:real-projection-proper-covering} makes the restriction a finite real covering, so the fibre count is constant.
+The same lemma gives the compact-component image as the interval between its attained finite extrema.
+On the unbounded component the Weierstrass parameter at $O$ gives $\lambda$ a pole of order $2$ and $Y$ a pole of order $3$, hence $y=\lambda^2+(Y+c)/2$ tends to $+\infty$ along both real ends; the finite lower endpoint is therefore $\min\mathcal V(J)$.
+The two-oval alternative follows by taking the union of $[m_{\mathrm c},M_{\mathrm c}]$ and $[m_{\mathrm n},\infty)$.
 \end{proof}
 
-\begin{proposition}[Completeness of the fixed projection datum]\label{prop:balanced-projection-datum-complete}
-For one fixed smooth real balanced member as in Definition~\ref{def:balanced-projection-datum}, the set $\mathcal V(J)$ is exactly the finite endpoint-and-critical-value list for $y$ on the real component over $J$.
-Coincident real values are identified set-theoretically: endpoint values, non-endpoint ramification values, exceptional $\lambda=0$ values, and values arising from different components may coincide, but such coincidences change only whether two interval images touch or overlap, not the list of possible transition values.
-Moreover, if
-\[
-N_J(t):=\#\{p\in E_J(\RR):y(p)=t\},
-\]
-then $N_J(t)$ is constant on each connected component of $\RR\setminus\mathcal V(J)$; in the two-component case the total count $N(t)=N_{J_{\mathrm c}}(t)+N_{J_{\mathrm n}}(t)$ is constant on each connected component of $\RR\setminus(\mathcal V(J_{\mathrm c})\cup\mathcal V(J_{\mathrm n}))$.
-Thus no image endpoint or real-fibre transition for this fixed map can occur outside the finite algebraic datum \(\mathfrak D(E_{a,c,d,g})\).
-\end{proposition}
-
-\begin{proof}
-Proposition~\ref{prop:balanced-transition-support-reduction} identifies $\mathcal V(J)$ with the reduced image-transition support obtained from the endpoint divisor and the finite real ramification support of $y$.
-Lemma~\ref{lem:real-component-extrema-enumeration} applies to every closed component $J\subset\{F\ge0\}$.
-Its endpoint values give the first line of \eqref{eq:balanced-real-extrema-set}, its $\lambda\ne0$ critical values give the rational values in the second line with the ramification equation $R_{a,c,d,g}(\lambda)=0$, and its exceptional $\lambda=0$ alternatives give exactly $\mathcal Z(J)$, including the boundary case $F(0)=0$ where the value is the endpoint value $c/2$.
-The smoothness assumption forbids repeated roots of $F$, but it does not forbid coincidences among the resulting real values; extrema and covering transitions depend on the value in $\RR$, not on how many listed points realize it.
-The polynomial $R_{a,c,d,g}$ has degree five, $F$ has finitely many real roots, and $\mathcal Z(J)$ has at most two values, so the list is finite.
-
-Apply Lemma~\ref{lem:real-projection-proper-covering} to the morphism $y:E\to\mathbf P^1_y$ and the finite transition set $T_J=\mathcal V(J)$.
-On any connected interval $U\subset\RR\setminus\mathcal V(J)$ disjoint from the image, the fibre count is zero; otherwise the restriction over $U$ is a finite covering, so its covering degree $N_J(t)$ is constant on $U$.
-Adding the componentwise constants proves the total-count assertion in the two-component case.
-Since a component image endpoint would force the count to change across that real value, no unlisted image endpoint or transition value exists.
-\end{proof}
-
-\begin{theorem}[Fixed-member real-projection criterion for one balanced quartic]\label{thm:balanced-real-projection}
-Fix $a,c,d,g\in\RR$ with $a\neq0$ satisfying \eqref{eq:balanced-genus-condition}, and use the finite datum $\mathcal V(J)$ of Definition~\ref{def:balanced-projection-datum}.
-For this fixed real map $y:E_{a,c,d,g}(\RR)\to\RR$, the real image is determined as follows using only the finite endpoint, ramification, and exceptional-value datum.
-\begin{enumerate}
-\item In the one-oval case, equivalently when $F$ has exactly one real root and $J_{\mathrm n}$ is the unique unbounded component of $\{F\ge0\}$, the image is the single interval
-\[
-y\bigl(E_{a,c,d,g}(\RR)\bigr)=[m_{\mathrm n},\infty),
-\qquad
-m_{\mathrm n}=\min\mathcal V(J_{\mathrm n}).
-\]
-\item In the two-oval case, equivalently when $F$ has three distinct real roots and $J_{\mathrm c}$ and $J_{\mathrm n}$ are respectively the bounded and unbounded components of $\{F\ge0\}$, the two oval images are exactly
-\[
-y\bigl(E_{\mathrm c}(\RR)\bigr)=[m_{\mathrm c},M_{\mathrm c}],
-\qquad
-y\bigl(E_{\mathrm n}(\RR)\bigr)=[m_{\mathrm n},\infty),
-\]
-where
-\[
-m_{\mathrm c}=\min\mathcal V(J_{\mathrm c}),
-\qquad
-M_{\mathrm c}=\max\mathcal V(J_{\mathrm c}),
-\qquad
-m_{\mathrm n}=\min\mathcal V(J_{\mathrm n}).
-\]
-Consequently the total real image is one closed interval when $M_{\mathrm c}\ge m_{\mathrm n}$ and two disjoint closed intervals when $M_{\mathrm c}<m_{\mathrm n}$; equality is exactly endpoint touching.
-\end{enumerate}
-Equivalently, in the two-oval case the only internal-gap obstruction is the single signed algebraic comparison
-\[
-\Delta=m_{\mathrm n}-M_{\mathrm c}.
-\]
-The finite values used here are exactly the endpoint, ramification, and exceptional critical values supplied by Proposition~\ref{prop:balanced-projection-datum-complete}; no further real-locus data can change the interval endpoints.
-The canonical spectral-quartic Theorem~\ref{thm:theorem-b-real-projection-criterion} is obtained by substituting $(a,c,d,g)=(-1,-1,1,0)$ into this fixed-member criterion and evaluating these finite comparisons.
-No assertion is made here about how the datum varies with $(a,c,d,g)$; chamber decompositions in the balanced parameter space would require a separate analysis of degeneracy walls, wall crossing, and singular boundary members.
-\end{theorem}
-
-\begin{proof}
-Write
-\[
-E(\RR)=\{(\lambda,Y)\in\RR^2:Y^2=F(\lambda)\}\cup\{O\}.
-\]
-Since $F$ is a real nonsingular cubic, its real roots are either one simple root or three simple roots.
-By Lemma~\ref{lem:real-weierstrass-oval-covering-count}, the affine real locus is the two-sheeted cover of the closed set $\{F\ge0\}$, with the two sheets glued exactly at finite endpoints where $F=0$, and the unique unbounded component completed by $O$.
-Thus one real root gives one real oval over the unique unbounded component $J_{\mathrm n}$, while three real roots give the compact oval over $J_{\mathrm c}$ and the noncompact oval over $J_{\mathrm n}$.
-
-On a compact real component, the continuous function $y$ has image a compact interval, and Proposition~\ref{prop:balanced-projection-datum-complete} says that its endpoint values are the minimum and maximum of $\mathcal V(J)$.
-Equivalently, Proposition~\ref{prop:balanced-transition-support-reduction} says that these extrema are extrema of the reduced image-transition support, so multiplicities in the ramification divisor and coincidences of critical values play no role in the interval endpoints.
-On the unbounded component, the projective point $O$ is the only point at infinity; the Weierstrass local parameter gives $\lambda$ a pole of order $2$ and $Y$ a pole of order $3$ there, hence $y=\lambda^2+(Y+c)/2$ has a pole of order $4$ at $O$ and tends to $+\infty$ along both real ends.
-The unbounded component is therefore proper over $\RR$ and has image $[\min\mathcal V(J_{\mathrm n}),\infty)$ by the same completeness proposition.
-This proves the displayed one- and two-component image formulas.
-In the two-component case their union is $[m_{\mathrm c},M_{\mathrm c}]\cup[m_{\mathrm n},\infty)$, which is connected, endpoint-touching, or separated according as $M_{\mathrm c}>m_{\mathrm n}$, $M_{\mathrm c}=m_{\mathrm n}$, or $M_{\mathrm c}<m_{\mathrm n}$.
-The comparison uses only the finite algebraic values in Definition~\ref{def:balanced-projection-datum}, and the final sentence is exactly the stated specialization step.
-\end{proof}
-
-\begin{remark}[Reading the fixed-member projection criterion]\label{rem:balanced-projection-reading}
-Fix one smooth real balanced member \(E_{a,c,d,g}\) as in Theorem~\ref{thm:balanced-real-projection}.
-The finite datum \(\mathfrak D(E_{a,c,d,g})\) consists of the number of real roots of \(F\), the finite tagged value sets \(\mathcal V(J)\) for the closed components \(J\subset\{F\ge0\}\), and, in the two-component case, the signed number \(\Delta=m_{\mathrm n}-M_{\mathrm c}\).
-Theorem~\ref{thm:balanced-real-projection} and Proposition~\ref{prop:balanced-projection-datum-complete} use this datum as follows.
-\begin{enumerate}
-\item The number of real roots of the cubic \(F\) decides whether there is one real component or two.
-\item For each closed component \(J\subset\{F\ge0\}\), the finite set \(\mathcal V(J)\) of \eqref{eq:balanced-real-extrema-set} is the complete list of endpoint values and finite critical values of \(y\) on the corresponding real component.
-\item In the one-component case the whole image is \([m_{\mathrm n},\infty)\), with \(m_{\mathrm n}=\min\mathcal V(J_{\mathrm n})\).
-In the two-component case the whole image is
-\[
-\begin{gathered}
-[m_{\mathrm c},M_{\mathrm c}]\cup[m_{\mathrm n},\infty),\\
-m_{\mathrm c}=\min\mathcal V(J_{\mathrm c}),\qquad
-M_{\mathrm c}=\max\mathcal V(J_{\mathrm c}),\qquad
-m_{\mathrm n}=\min\mathcal V(J_{\mathrm n}).
-\end{gathered}
-\]
-\item Consequently the only internal gap obstruction in the two-component case is the single signed algebraic number
-\[
-\Delta=m_{\mathrm n}-M_{\mathrm c}.
-\]
-The alternatives are respectively overlap, endpoint touching, and a genuine gap according as \(\Delta<0\), \(\Delta=0\), and \(\Delta>0\).
-\item On each connected component of \(\RR\setminus\bigcup_J\mathcal V(J)\), the real fibre count of \(y:E_{a,c,d,g}(\RR)\to\RR\) is constant; hence no transition value or further interval component exists outside the finite datum \(\mathfrak D(E_{a,c,d,g})\).
-\end{enumerate}
-Thus Remark~\ref{rem:balanced-finite-comparison-algorithm} and Remark~\ref{rem:balanced-fixed-criterion-complete} are readings of the finite datum \(\mathfrak D(E_{a,c,d,g})\): finite comparison, interval alternatives, and transition completeness for one fixed member.
-For the canonical quartic, Theorem~\ref{thm:theorem-b-real-projection-criterion} is obtained only by substituting \((a,c,d,g)=(-1,-1,1,0)\) into this map and evaluating the resulting finite algebraic comparisons.
-The justification is the proof of Theorem~\ref{thm:balanced-real-projection}: the real-oval classification gives the component images, Proposition~\ref{prop:balanced-projection-datum-complete} supplies the complete finite transition set including the exceptional \(\lambda=0\) convention, and the union of \([m_{\mathrm c},M_{\mathrm c}]\) with \([m_{\mathrm n},\infty)\) is decided by the single comparison \(M_{\mathrm c}\) versus \(m_{\mathrm n}\).
-No parameter-space chamber statement is introduced: throughout this paper the datum is evaluated only after the balanced member has been fixed, and no wall-crossing or stability assertion for varying \((a,c,d,g)\) is used.
-\end{remark}
-
-\begin{remark}[Finite comparison for the fixed real projection]\label{rem:balanced-finite-comparison-algorithm}
-Fix one smooth balanced quartic in the two-oval case of Theorem~\ref{thm:balanced-real-projection}.
-For this fixed member, the following finite algebraic procedure is a necessary and sufficient criterion for the real image of the balanced map \(y:E_{a,c,d,g}(\RR)\to\RR\) to be one interval rather than two disjoint intervals.
-\begin{enumerate}
-\item Isolate the three real roots of \(F\) and hence the bounded and unbounded components \(J_{\mathrm c}\) and \(J_{\mathrm n}\) of \(\{F\ge0\}\).
-\item Form the two finite sets \(\mathcal V(J_{\mathrm c})\) and \(\mathcal V(J_{\mathrm n})\) from \eqref{eq:balanced-real-extrema-set}, using exactly the endpoint, ramification-root, and exceptional-\(\lambda=0\) conventions stated in Definition~\ref{def:balanced-projection-datum}.
-\item Compute
-\[
-m_{\mathrm c}=\min\mathcal V(J_{\mathrm c}),
-\qquad
-M_{\mathrm c}=\max\mathcal V(J_{\mathrm c}),
-\qquad
-m_{\mathrm n}=\min\mathcal V(J_{\mathrm n}).
-\]
-Then
-\[
-y(E_{a,c,d,g}(\RR))\text{ has one connected component}
-\quad\Longleftrightarrow\quad
-M_{\mathrm c}\ge m_{\mathrm n},
-\]
-while \(M_{\mathrm c}<m_{\mathrm n}\) is equivalent to a disjoint two-interval image with gap \((M_{\mathrm c},m_{\mathrm n})\).
-The equality case is adjacent touching at one algebraic value, and the strict inequality \(M_{\mathrm c}>m_{\mathrm n}\) is genuine interval overlap.
-\end{enumerate}
-All comparisons used in this paper are comparisons of real algebraic numbers obtained from the two explicitly displayed polynomials \(F\) and \(R_{a,c,d,g}\) and the exceptional values in \(\mathcal Z(J)\).
-All comparisons are finite algebraic comparisons for the chosen member.
-\end{remark}
-
-\begin{remark}[Fixed-member interval alternatives]\label{rem:balanced-real-interval-alternatives}
-In the two-component case of Theorem~\ref{thm:balanced-real-projection}, put
-\[
-I_{\mathrm c}=[m_{\mathrm c},M_{\mathrm c}],
-\qquad
-I_{\mathrm n}=[m_{\mathrm n},\infty).
-\]
-Here $m_{\mathrm c}$, $M_{\mathrm c}$, and $m_{\mathrm n}$ are the extrema of the finite algebraic sets in Definition~\ref{def:balanced-projection-datum}, with the endpoint and exceptional-$\lambda=0$ conventions of \eqref{eq:balanced-real-extrema-set}.
-Then
-\[
-y(E_{a,c,d,g}(\RR))\text{ is one interval}
-\quad\Longleftrightarrow\quad
-M_{\mathrm c}\ge m_{\mathrm n},
-\]
-and it is a disjoint union of two intervals if and only if $M_{\mathrm c}<m_{\mathrm n}$.
-More precisely, exactly one of the following mutually exclusive alternatives occurs.
-\begin{enumerate}
-\item \emph{Disjoint image:} if \(M_{\mathrm c}<m_{\mathrm n}\), then
-\[
-y(E_{a,c,d,g}(\RR))=I_{\mathrm c}\sqcup I_{\mathrm n}
-\]
-has two connected components, with gap \((M_{\mathrm c},m_{\mathrm n})\).
-\item \emph{Adjacent one-interval image with a touching value:} if \(M_{\mathrm c}=m_{\mathrm n}\), then
-\[
-y(E_{a,c,d,g}(\RR))=[m_{\mathrm c},\infty),
-\]
-and the two component images meet only at the common endpoint \(M_{\mathrm c}=m_{\mathrm n}\).
-\item \emph{Overlapping one-interval image:} if \(M_{\mathrm c}>m_{\mathrm n}\), then
-\[
-y(E_{a,c,d,g}(\RR))=[\min(m_{\mathrm c},m_{\mathrm n}),\infty),
-\]
-and the overlap is the nondegenerate interval
-\[
-I_{\mathrm c}\cap I_{\mathrm n}=[m_{\mathrm n},M_{\mathrm c}].
-\]
-\end{enumerate}
-The degenerate endpoint convention is that if the same algebraic value is produced by several endpoints, critical points, or exceptional $\lambda=0$ entries, it is used once in the set-theoretic extrema defining $m_{\mathrm c},M_{\mathrm c},m_{\mathrm n}$.
-If $M_{\mathrm c}=m_{\mathrm n}$ the union has one connected component but the two oval images are only adjacent, whereas if $M_{\mathrm c}>m_{\mathrm n}$ their overlap is a genuine interval; if $M_{\mathrm c}<m_{\mathrm n}$ the open gap is exactly $(M_{\mathrm c},m_{\mathrm n})$.
-No further degeneration is hidden in this trichotomy: the smoothness hypothesis excludes repeated roots of \(F\), the two real components are distinct ovals, \(I_{\mathrm c}\) is a compact interval, \(I_{\mathrm n}\) is an unbounded interval, and every endpoint used above is one of the finitely many algebraic values in \(\mathcal V(J_{\mathrm c})\cup\mathcal V(J_{\mathrm n})\).
-\end{remark}
-
-\begin{remark}[Completeness of the fixed-member real-projection criterion]\label{rem:balanced-fixed-criterion-complete}
-Fix a smooth real balanced member in the two-oval case of Theorem~\ref{thm:balanced-real-projection}.
-Let
-\[
-\Sigma
-=
-\mathcal V(J_{\mathrm c})\sqcup\mathcal V(J_{\mathrm n})
-\]
-be the tagged finite framework of endpoint, ramification, and exceptional-$\lambda=0$ values from \eqref{eq:balanced-real-extrema-set}, where the two copies are kept tagged by the real oval on which they occur.
-Then the tagged order type of \(\Sigma\), together with the three distinguished extrema
-\[
-m_{\mathrm c}=\min\mathcal V(J_{\mathrm c}),
-\qquad
-M_{\mathrm c}=\max\mathcal V(J_{\mathrm c}),
-\qquad
-m_{\mathrm n}=\min\mathcal V(J_{\mathrm n}),
-\]
-is a complete fixed-member criterion for the real projection in the following sense.
-\begin{enumerate}
-\item The connected-component alternative for \(y(E_{a,c,d,g}(\RR))\) is decided by the single tagged comparison \(M_{\mathrm c}\ge m_{\mathrm n}\).
-The strict reverse inequality gives the unique gap \((M_{\mathrm c},m_{\mathrm n})\), equality gives adjacent touching, and strict overlap gives one ray with nondegenerate overlap.
-\item For every connected component \(U\) of \(\RR\setminus\Sigma\), the componentwise fibre counts over \(U\) are constant; hence the tagged framework also contains every possible real-fibre transition value of this fixed projection.
-\item The ordered tagged framework is the complete finite obstruction list for the fixed map: after the three distinguished extrema have been read from it, the one-interval, adjacent, or two-disjoint-interval alternative is determined by the single comparison \(M_{\mathrm c}\) versus \(m_{\mathrm n}\).
-After one componentwise fibre count is sampled in each connected component of \(\RR\setminus\Sigma\), all componentwise fibre counts on the real line are determined.
-\end{enumerate}
-Thus the real-projection theorem used in this article is the finite algebraic criterion for a fixed smooth real member.
-This completeness is exactly the combination of Proposition~\ref{prop:balanced-projection-datum-complete}, which proves constancy of fibre counts away from \(\Sigma\), with Theorem~\ref{thm:balanced-real-projection}, which reduces interval connectedness to the three extrema above.
-\end{remark}
-
-
-
-\begin{corollary}[Fixed-member-to-canonical projection bridge]\label{cor:fixed-member-projection-comparison}
-The real-projection input used later for the canonical quartic factors through the fixed-member criterion and is exhausted by the following fixed-member data:
-\[
-F(\lambda)=4\lambda^3-4\lambda+1,
-\qquad
-R_{-1,-1,1,0}(\lambda),
-\qquad
-\mathcal V(J_{\mathrm c})\sqcup\mathcal V(J_{\mathrm n}).
-\]
-After these data have been evaluated for the single member \((a,c,d,g)=(-1,-1,1,0)\), the subsequent real-root count, interval-overlap conclusion, and branch-dominance arguments depend only on the two interval images
-\[
-y(E_{\mathrm c}(\RR))=[\ySub,1],
-\qquad
-y(E_{\mathrm n}(\RR))=[0,\infty).
-\]
-Consequently Theorem~\ref{thm:theorem-b-real-projection-criterion} is the canonical specialization of the fixed-member criterion: Theorem~\ref{thm:balanced-real-projection} and Remark~\ref{rem:balanced-fixed-criterion-complete} give the finite test for one smooth real balanced member, and Corollary~\ref{cor:quartic-real-projection-framework} evaluates that test at \((-1,-1,1,0)\).
-\end{corollary}
-
-\begin{proof}
-Theorem~\ref{thm:balanced-real-projection} identifies the real image of one fixed smooth member from the cubic \(F\), the ramification polynomial \(R_{a,c,d,g}\), and the exceptional \(\lambda=0\) convention included in \(\mathcal V(J)\).
-Remark~\ref{rem:balanced-finite-comparison-algorithm} and Remark~\ref{rem:balanced-fixed-criterion-complete} then show that, for that same fixed member, the connectedness alternative and all real-fibre transition values are determined by the tagged finite framework \(\mathcal V(J_{\mathrm c})\sqcup\mathcal V(J_{\mathrm n})\).
-
-For the canonical specialization, Corollary~\ref{cor:quartic-real-projection-framework} performs this finite evaluation and gives exactly
-\[
-y(E_{\mathrm c}(\RR))=[\ySub,1],
-\qquad
-y(E_{\mathrm n}(\RR))=[0,\infty).
-\]
-Theorem~\ref{thm:theorem-b-real-projection-criterion} uses these two intervals to count real roots by the two-to-one covering of the interiors of the oval images, and Theorem~\ref{thm:canonical-branch-dominance} later uses the same branch values and real-root separation as its canonical real input.
-The three enumerated assertions now follow from the same implications.
-Theorem~\ref{thm:balanced-real-projection} and Remark~\ref{rem:balanced-fixed-criterion-complete} are fixed-member statements, Corollary~\ref{cor:quartic-real-projection-framework} is the canonical substitution into them, and Theorem~\ref{thm:theorem-b-real-projection-criterion} records exactly that substituted result for \(\Pi\).
-\end{proof}
-
-\begin{remark}[Use of the projection criterion]
-Theorem~\ref{thm:balanced-real-projection}, Remark~\ref{rem:balanced-finite-comparison-algorithm}, Remark~\ref{rem:balanced-real-interval-alternatives}, Remark~\ref{rem:balanced-fixed-criterion-complete}, and Corollary~\ref{cor:fixed-member-projection-comparison} are used below only as finite fixed-member tests for a fixed smooth member.
-For the specialization \((a,c,d,g)=(-1,-1,1,0)\), Corollary~\ref{cor:quartic-real-projection-framework} performs the resulting comparison explicitly and gives
-\[
-y(E_{\mathrm c}(\RR))=[y_{\mathrm{sub}},1],
-\qquad
-y(E_{\mathrm n}(\RR))=[0,\infty).
-\]
-These two intervals and their overlap \([0,1]\) are the balanced-family real-projection inputs used later in Theorem~\ref{thm:theorem-b-real-projection-criterion} and Theorem~\ref{thm:canonical-branch-dominance}.
-\end{remark}
-
-\begin{corollary}[Canonical quartic finite real-projection evaluation]\label{cor:quartic-real-projection-framework}
+\begin{proposition}[Canonical quartic real projection]\label{cor:quartic-real-projection-framework}
 For the specialization $(a,c,d,g)=(-1,-1,1,0)$ the cubic $F(\lambda)=4\lambda^3-4\lambda+1$ has three distinct real roots $\beta_1<\beta_2<\beta_3$ (the discriminant $\Delta=37>0$ confirms this).
 Thus $E_{-1,-1,1,0}(\RR)$ has two real ovals.
 The finite obstruction framework for the real projection consists of
@@ -833,7 +537,7 @@ The compact oval has exactly the two real ramification points whose values are $
 Consequently the compact oval maps under $y$ to the interval $[y_{\mathrm{sub}},1]$, every regular interior value of this interval has exactly two real preimages on the compact oval, and the noncompact oval maps to $[0,+\infty)$.
 Thus the total real image is $[y_{\mathrm{sub}},\infty)$ with an overlap on $[0,1]$.
 The regular real-root count and its minimal transition table are not restated here; they are the advertised canonical real-projection statement, Theorem~\ref{thm:theorem-b-real-projection-criterion}.
-\end{corollary}
+\end{proposition}
 
 \begin{proof}
 For this specialization one has
@@ -887,7 +591,7 @@ y(\alpha)=y_{\mathrm{sub}}
 \]
 By Lemma~\ref{lem:cubic-branch-real-root}, this last number is the unique real zero of \(256y^3+411y^2+165y+32\), hence \(y_{\mathrm{sub}}\in(-2,-1)\).
 The required ordering follows from the displayed sign checks for \(F\), from the sign checks locating \(\alpha\), and from the polynomial sign isolation of \(y_{\mathrm{sub}}\); these are exact algebraic comparisons inside the proof.
-Theorem~\ref{thm:balanced-real-projection} now shows that the displayed endpoint values and these three critical values are the complete finite obstruction framework for the real projection, giving precisely the two sets \(\mathcal V(J_{\mathrm c})\) and \(\mathcal V(J_{\mathrm n})\) in the statement.
+Lemma~\ref{prop:balanced-real-projection-fixed-extrema} now shows, for this fixed member, that the displayed endpoint values and these three critical values are the complete finite obstruction framework for the real projection, giving precisely the two sets \(\mathcal V(J_{\mathrm c})\) and \(\mathcal V(J_{\mathrm n})\) in the statement.
 Therefore on \(J_{\mathrm c}\) the finite endpoint and critical candidates are ordered within
 \[
 y_{\mathrm{sub}}< -1 < \beta_2^2-\frac12<0<\beta_1^2-\frac12<1,
@@ -909,12 +613,12 @@ The definitive real-root count derived from these two fixed images is Theorem~\r
 \end{corollary}
 
 \begin{proof}
-This is exactly Corollary~\ref{cor:quartic-real-projection-framework}: the compact component has extrema \(y_{\mathrm{sub}}\) and \(1\), while the noncompact component has finite minimum \(0\) and a pole at infinity.
+This is exactly Proposition~\ref{cor:quartic-real-projection-framework}: the compact component has extrema \(y_{\mathrm{sub}}\) and \(1\), while the noncompact component has finite minimum \(0\) and a pole at infinity.
 The final counting table is not repeated here; it follows in Theorem~\ref{thm:theorem-b-real-projection-criterion} by applying the two-to-one covering property over the interiors of these images.
 \end{proof}
 
 \begin{remark}\label{rem:balanced-family-generality}
-Theorem~\ref{thm:balanced-real-projection} is stated with balanced parameters because the proof is no harder in that notation, but later arguments use only its canonical specialization to \(P_{-1,-1,1,0}\) and the resulting interval images.
+The fixed-member lemma is retained only to justify the canonical substitution.  Later arguments use only Proposition~\ref{cor:quartic-real-projection-framework}, namely the interval images for \(P_{-1,-1,1,0}\).
 \end{remark}
 
 \subsection{Double-root normalization inside the balanced family}
@@ -1171,7 +875,7 @@ All central eliminations used below are displayed either here or in Appendix~\re
 
 \subsection{Specialization to the quartic transfer family}
 
-\begin{theorem}[Canonical computation from Theorem A: affine model and branch geometry]\label{thm:elliptic-reduction}
+\begin{proposition}[Canonical computation from Theorem A: affine model and branch geometry]\label{prop:elliptic-reduction}
 The spectral polynomial \(\Pi(\lambda,y)\) from \eqref{eq:spectral-poly} is the specialization
 \[
 \Pi(\lambda,y)=P_{-1,-1,1,0}(\lambda,y).
@@ -1216,8 +920,8 @@ c(\ySub)=c(\eta)=c(\overline\eta)=0,
 \eta\notin\RR.
 \end{equation}
 This proves the canonical specialization.
-The specialization is retained in theorem form because its concrete equations, branch values, and naming convention are the inputs used throughout the real classification and the positive-real maximal-modulus analysis.
-\end{theorem}
+The proposition records the concrete equations, branch values, and naming convention used throughout the real classification and the positive-real maximal-modulus analysis.
+\end{proposition}
 
 \begin{proof}
 Substituting \((a,c,d,g)=(-1,-1,1,0)\) into \eqref{eq:balanced-family} gives
@@ -1497,7 +1201,7 @@ The discriminant of \(\Pi(\lambda,y)\) with respect to \(\lambda\) factors as
 By Lemma~\ref{lem:repeated-root-ramification}, a finite value \(y_0\) is a branch value of \(y:E\to \mathbf P^1_y\) if and only if \(\Pi(\cdot,y_0)\) has a repeated root.
 The equivalence there includes the exclusion of the only possible denominator locus in the implicit derivative, namely \(Y=\Pi_y=0\), so no finite branch value is lost before passing to the resultant.
 Equivalently, the finite branch values are exactly the zeros of \(\Disc_\lambda\Pi(\lambda,y)\).
-Theorem~\ref{thm:elliptic-reduction} identifies them as \(y=0\), \(y=1\), and the roots of \(c(y)=256y^3+411y^2+165y+32\).
+Proposition~\ref{prop:elliptic-reduction} identifies them as \(y=0\), \(y=1\), and the roots of \(c(y)=256y^3+411y^2+165y+32\).
 The computation in Appendix~\ref{app:disc} displays the Sylvester matrix for \(\Res_\lambda(\Pi,\partial_\lambda\Pi)\) and expands it in \eqref{eq:disc-expanded-polynomial} as \(-256y^5-155y^4+246y^3+133y^2+32y\), so \(\Disc_\lambda\Pi\) is a degree-\(5\) polynomial in \(y\) with leading coefficient \(-256\).
 These roots and the leading coefficient determine the factorization uniquely, giving \eqref{eq:disc-factor-new}.
 \end{proof}
@@ -1537,8 +1241,8 @@ Thus the canonical specialization, projective normalization, branch values, and 
 
 \begin{proof}
 The double-root selection is Theorem~\ref{thm:canonical-specialization-up-to-normalization} applied with the fixed normalized collisions \((\lambda,y)=(1,0)\) and \((-1,1)\), equivalently its fixed-coordinate input Lemma~\ref{lem:balanced-classification}.
-The affine model, the formula for \(y\), the degree of the cover, and the finite branch values are exactly Theorem~\ref{thm:elliptic-reduction}, which is the specialization of Theorem~\ref{thm:theorem-a-balanced-elliptic-normalization} at \((a,c,d,g)=(-1,-1,1,0)\).
-Theorem~\ref{thm:elliptic-reduction} gives the smooth cubic model \(E\), and Lemma~\ref{lem:projective-normalization} proves that the resulting morphism from \(E\) to the projective quartic closure is finite and birational with \(E\) normal, hence is the normalization.
+The affine model, the formula for \(y\), the degree of the cover, and the finite branch values are exactly Proposition~\ref{prop:elliptic-reduction}, which is the specialization of Theorem~\ref{thm:theorem-a-balanced-elliptic-normalization} at \((a,c,d,g)=(-1,-1,1,0)\).
+Proposition~\ref{prop:elliptic-reduction} gives the smooth cubic model \(E\), and Lemma~\ref{lem:projective-normalization} proves that the resulting morphism from \(E\) to the projective quartic closure is finite and birational with \(E\) normal, hence is the normalization.
 Finally, Corollary~\ref{cor:disc-factor} identifies the zeros of \(\Disc_\lambda\Pi\) with the finite branch values and fixes the leading coefficient from the Sylvester determinant computation in Appendix~\ref{app:disc}, giving the displayed factorization.
 These cited results prove precisely the four components listed in the statement.
 \end{proof}
