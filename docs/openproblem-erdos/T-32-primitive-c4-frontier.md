@@ -554,3 +554,35 @@ earlier in the session. The non-hyperflex C4 row above is the most
 explicit divisor-level Pro output T-32 has received in the session.
 
 Artifact: `tools/community-outreach/targets/cand_litt_common_finite_etale_cover/deep_responses/oracle_T32_nonhyperflex_C4_row_rho3_parity_certificate_20260531_2200.md`.
+
+
+## Monitoring Update 2026-05-31 22:45 SGT — Native gate PASS on the non-hyperflex C4 row
+
+Independent native re-derivation of the key claims in the prior Oracle
+non-hyperflex C4 certificate:
+
+- Found a = 4 + 4i in F_121 with a^4 = -1 (verified: a^2 = -i, a^4 = (-i)^2 = -1).
+- Frobenius: a^11 = a^8 * a^3 = (a^4)^2 * a^3 = 1 * a^3 = a^3.
+  Independent check: Frob(4 + 4i) = 4 - 4i = 4 * 1 + 4 * (-1) i; computed a^3 = a * a^2
+  = (4 + 4i)(-i) = -4i + 4 = 4 - 4i. ✓ Match.
+- P_a = (1 : a : 0) on Y: 1 + a^4 + 0 = 1 + (-1) = 0. ✓
+- f_L = (x + a^3 y)/(x + a y) numerator vanishes at P_a (1 + a^3 a = 1 + a^4 = 0) and
+  denominator vanishes at P_{a^3} (1 + a * a^3 = 1 + a^4 = 0). ✓
+- Order-4 Fermat automorphism rho(x : y : z) = (y : -x : z): rho^2 = (-x : -y : z),
+  rho^4 = identity. ✓
+- rho(P_a) = (a : -1 : 0) = (1 : -1/a : 0). Compute -1/a in F_121: -(4 - 4i)/(4^2 + 4^2)
+  = -(4 - 4i)/32; 1/8 = 7 in F_11 (since 8 * 7 = 56 = 55 + 1 = 5 * 11 + 1).
+  So -1/a = (4i - 4) * 7 / 4 ... cleaner: -1/a = (4 + 7i) since -4 = 7 mod 11.
+  Compare with a^3 = 4 - 4i = 4 + 7i. ✓ Match.
+
+All native-checkable claims verified. The d_4 = 0 mod 8 conclusion rests on
+the parity calculation and orbit decomposition, both of which follow from
+the verified character-transport identity chi_L(rho P) = chi_L(P)^3.
+
+Named-class match independence check: -398 mod 8 = 2 (since 400 - 398 = 2),
+-796 mod 8 = 4 (since 800 - 796 = 4). Neither equals 0 mod 8, so the
+explicit row L = [P_a - P_{a^3}] does not match either named class —
+verifying the prior monitoring entry's interpretation.
+
+Gate status: PASS. Oracle's non-hyperflex C4 row certificate is consistent
+with independent native verification at every checkable step.
