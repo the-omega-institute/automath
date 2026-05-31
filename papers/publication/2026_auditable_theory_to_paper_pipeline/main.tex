@@ -115,6 +115,17 @@ commits, commands, logs, inventories, and witness records cited for a claim.
 or submission ledger after the relevant deterministic gate passes and, when a
 route boundary is crossed, after human promotion.
 
+A \emph{case witness record} is path-complete when its evidence surface gives a
+concrete source or artifact path for each load-bearing component of the row.  A
+route-overlap witness has the fields \emph{route identity}, \emph{submitted
+sibling}, \emph{overlap reason}, \emph{gate decision}, and \emph{allowed next
+actions}.  An artifact-limitation witness has the fields \emph{artifact status
+path}, \emph{limitation ledger path}, \emph{observed limitation}, \emph{gate
+decision}, and \emph{allowed manuscript claim}.  The inventory files
+\path{ARTIFACT_INVENTORY.md} and \path{SOURCE_MAP.md} are part of the evidence
+surface for this paper and give the compact path catalogue used by
+Table~\ref{tab:case-witnesses}.
+
 We distinguish two evidence levels.  A claim is \emph{path-verified} when this
 paper records the relevant source path, artifact path, pinned commit or local
 publication path, and gate decision, but does not assert that a command was
@@ -205,24 +216,72 @@ path-verified fields supports the bounded case-study claim and cannot be used
 as evidence for a fresh command-run assertion.\qed
 \end{proof}
 
+\begin{proposition}[Path-complete case witnesses]
+\label{prop:path-complete-case-witnesses}
+Suppose a case-study row is used as load-bearing evidence for
+Theorem~\ref{thm:publication-safety-interface}.  If the row is path-complete in
+the sense above, then the row supplies exactly the evidence surface required for
+a path-verified case claim.  In particular, a route-overlap row is sufficient
+only for the bounded claim that the overlap/submitted gate blocked advancement
+until one of the recorded next actions occurs, and an artifact-limitation row is
+sufficient only for the bounded claim that the artifact limitation must be
+disclosed or must block promotion.
+\end{proposition}
+
+\begin{proof}
+Let $r$ be a path-complete case row.  By definition, every load-bearing
+component of $r$ has a concrete source or artifact path.  The route-overlap
+interface names the active route, the submitted sibling that creates the
+chronology constraint, the reason for overlap, the gate decision, and the finite
+set of permitted next actions.  These are precisely the data needed to check
+whether advancement is allowed without appealing to generated prose.  The
+artifact-limitation interface names the status file, the limitation ledger, the
+observed limitation, the gate decision, and the only manuscript claim that may
+be carried forward.  These are precisely the data needed to prevent a failed or
+bounded artifact check from being promoted into a stronger dynamic-validation
+claim.  Lemma~\ref{lem:gate-witness-criterion} then applies to each such row:
+the named paths give the source surface, the interface fields give the failed
+invariant and decision, and the last field gives the safe lesson.  The same
+lemma also rules out upgrading the row to a command-run claim unless the extra
+command-run fields are recorded.\qed
+\end{proof}
+
 \section{Case studies}
 
 Each row of Table~\ref{tab:case-witnesses} is a witness in the sense of
-Lemma~\ref{lem:gate-witness-criterion}: source or artifact, failed invariant,
-gate decision, and safe manuscript lesson are all explicit.
+Lemma~\ref{lem:gate-witness-criterion} and
+Proposition~\ref{prop:path-complete-case-witnesses}: source or artifact paths,
+failed invariant, gate decision, and safe manuscript lesson are all explicit.
+The exact path catalogue is as follows.  Newmath intake isolation uses
+\path{D:/omega/automath/papers/publication/newmath_intake/seeds/bedc_automation_pipeline}
+and \path{D:/omega/automath/papers/publication/pipeline_auto.py}.  The
+upper-fibers route-overlap record uses route identity
+\path{D:/omega/automath/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq},
+submitted sibling
+\path{D:/omega/automath/papers/publication/submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj/SUBMITTED},
+overlap ledgers
+\path{D:/omega/automath/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/semantic_overlap_blockers.json}
+and \path{semantic_overlap_blockers.md}, and board state
+\path{D:/omega/automath/papers/publication/PROGRAM_BOARD_MACHINE.md}.  The
+fake-extension case uses \path{D:/omega/newmath/lean4/scripts/phase_d_lint.py}
+and this paper's \path{ARTIFACT_INVENTORY.md}.  The Rule110 limitation record
+uses \path{D:/omega/newmath/rule110/STATUS.md},
+\path{D:/omega/newmath/rule110/docs/collision_audit_findings.md},
+\path{D:/omega/newmath/rule110/docs/exhaustiveness_audit_findings.md}, and
+\path{D:/omega/newmath/rule110/docs/papers_research_report.md}.
 
 \begin{table}
 \caption{Path-verified case-study witnesses}
 \label{tab:case-witnesses}
 \small
-\begin{tabular}{p{0.18\linewidth}p{0.20\linewidth}p{0.23\linewidth}p{0.27\linewidth}}
+\begin{tabular}{p{0.17\linewidth}p{0.25\linewidth}p{0.30\linewidth}p{0.16\linewidth}}
 \toprule
 Case & Witness surface & Failed invariant and gate decision & Safe manuscript lesson \\
 \midrule
-Newmath intake isolation & \texttt{papers/publication/newmath\_intake/seeds/bedc\_automation\_pipeline}; \texttt{pipeline\_auto.py} & active-paper invariant failed until human promotion creates \texttt{2026\_*}, \texttt{main.tex}, and \texttt{PIPELINE.md}; detector blocks daemon entry & candidate source packets can be prepared without becoming active manuscript jobs \\
-Upper-fibers overlap block & publication route state and submitted-sibling ledger & route-disjointness invariant failed because related Fibonacci routes overlapped; overlap/submitted gate blocks advancement until closure, merge, supersession, or waiting & venue selection must be stateful; the scheduler cannot randomly advance a similar manuscript \\
-Fake-extension block & \texttt{phase\_d\_lint.py} and theorem-content delta review & substantive-theorem-growth invariant failed when edits changed files without load-bearing content; theorem-content gate rejects the extension & agent progress is not accepted merely because a file changed or a draft compiles \\
-Rule110 limitation gate & Rule110 artifact status files and limitation ledger & artifact-consistency invariant failed because count drift and a collision-audit contradiction prevented clean claims; limitation gate requires disclosure or blocks promotion & limitations are disclosed or block claims rather than being laundered into the manuscript \\
+Newmath intake isolation & intake seed and active-paper detector & active-paper invariant failed until human promotion creates \path{2026_*}, \path{main.tex}, and \path{PIPELINE.md}; detector blocks daemon entry & candidate source packets can remain inactive \\
+Upper-fibers overlap block & route identity, submitted sibling, overlap ledger, board state & route-disjointness invariant failed: the ledger records \path{deferred_wait_for_prior_submission}; decision blocks advancement while overlap remains; allowed next actions are closure, merge, supersession, or waiting for prior-route feedback & venue selection is stateful \\
+Fake-extension block & phase-D hard lint and theorem-content delta review & substantive-theorem-growth invariant failed when edits changed files without load-bearing content; theorem-content gate rejects the extension & file churn or compilation alone is not progress \\
+Rule110 limitation gate & artifact status, collision-audit ledger, exhaustiveness ledger, paper-data reference & artifact-consistency invariant is bounded by recorded audit findings, including the \path{make test-collision-audit} status surface; limitation gate permits disclosure or blocks promotion, not fresh dynamic validation & limitations disclose or block claims \\
 \bottomrule
 \end{tabular}
 \end{table}
