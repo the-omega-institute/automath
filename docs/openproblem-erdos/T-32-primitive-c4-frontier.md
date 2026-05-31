@@ -459,3 +459,51 @@ a theoretical structural invariant cheaper than direct Gröbner.
 
 Status: T-32 (b) — k ≤ 3 rigorously empty (Gröbner + order gate both pass),
 k = 7 frontier unchanged.
+
+
+## Monitoring Update 2026-05-31 18:45 SGT — Two no-go results on simple invariants
+
+Two pipeline-side findings sharpen the structural picture of what kind of
+invariant can decide T-32 for the explicit hyperelliptic pair.
+
+### GenusOnlyFiniteEtaleInvariantNoGo (18:41)
+
+`check_litt3_genus_only_invariant_no_go` proves a bounded no-go:
+- Checked 361 ordered genus pairs (g_X, g_Y) with g_X, g_Y in [2, 20].
+- Every pair is Riemann-Hurwitz equalizable by arbitrary degrees.
+- Conclusion: arbitrary degree 11 over X erases the genus / Euler obstruction
+  at the level of Riemann-Hurwitz arithmetic.
+- Theorem label: `GenusOnlyFiniteEtaleInvariantNoGo`.
+- First exact blocker: find a non-genus finite-index commensurability
+  invariant of the FULL geometric pi_1 over F-bar_q, prove it stable under
+  all open subgroups (including p-primary index), and compute distinct
+  values on explicit genus >= 2 curves.
+
+### Repaired prime-to-p finite-index obstruction (18:37)
+
+`check_litt3_repaired_prime_to_p_finite_index_obstruction` records:
+- The packet IS locally correct as a prime-to-11 finite-index
+  non-commensurability certificate for pi_1^(11') of the explicit pair.
+- BUT it is NOT a T-32 obstruction because the invariant v_{11}(g − 1) is
+  not stable under arbitrary finite etale covers of 11-divisible degree.
+- Explicit equalization example: common source genus 12 with degree 11 over
+  X (not prime to 11) and degree 1 over Y (prime to 11). The prime-to-p
+  quotient alone cannot supply the bridge.
+
+### Implication
+
+Both results sharpen the L5 frontier: simple genus / Euler / prime-to-p
+invariants are demonstrably insufficient to decide T-32 for the explicit
+hyperelliptic pair. The required invariant must be:
+- non-genus-determined,
+- finite-index-commensurability-stable in the FULL geometric pi_1 (not
+  just the prime-to-p quotient),
+- computable on explicit curves to distinguish them.
+
+This raises the closure bar for T-32 from "find any structural separator"
+to "find a p-sensitive finite-index commensurability invariant", which is
+research-grade work (Tamagawa-style anabelian methods).
+
+Status: T-32 (b) — k <= 3 rigorously empty + Prym-Schottky thresholds
+identified at d >= 7 + two no-go theorems on simple invariants. The
+remaining open work needs deep arithmetic geometry input.
