@@ -686,10 +686,11 @@ The proof separates four inputs.  First, Fredholm determinant rigidity fixes
 the non-zero algebraic eigenvalue multiset from the germ.  Second, the
 Weyl--Ky Fan lower bound converts that multiset into the trace-norm budget
 \(\sum_{\lambda}\abs\lambda M_{\mathcal D}(\lambda)\). Third, Ringrose
-triangularization supplies a Schur gauge whose diagonal is precisely the
-determinant-forced eigenvalue list.  The new step is the equality analysis:
-finite-compression pinching shows that equality in the global trace lower
-bound kills every strict upper-triangular Schur entry, so a full-fiber
+triangularization supplies a Schur gauge whose non-zero diagonal subsequence is
+the determinant-forced eigenvalue list, with zero positions not prescribed.
+The new step is the equality analysis: finite-compression pinching uses only
+the absolute diagonal-sum identity and shows that equality in the global trace
+lower bound kills every strict upper-triangular Schur entry, so a full-fiber
 minimizer is forced back into the normal cyclic model class.
 
 \begin{proof}
@@ -870,7 +871,8 @@ orbit-distance theorem.
   Choose a Ringrose basis from
   \Cref{lem:ringrose-prescribed-diagonal} whose diagonal has non-zero
   subsequence equal to the determinant-forced algebraic
-  eigenvalue multiset, and whose remaining entries are zero. Write
+  eigenvalue multiset, with the remaining zero entries in the unspecified
+  positions supplied by the triangularisation. Write
   \(A=[a_{ij}]\) for the resulting upper triangular matrix. For
   \(P_N\) the projection onto
   \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
@@ -1429,13 +1431,14 @@ singular-value image of that fixed-dimensional determinant fiber.
     \prod_{i=1}^N s_i .
   \]
   The products are interpreted in \([0,\infty)\), so a product containing a zero
-  factor is zero.  In particular, the statement includes rank-deficient
-  matrices, zero eigenvalues, and zero singular values; it is not obtained in
-  this paper by deleting the zero coordinates.
+  factor is zero.  This is the cited finite-dimensional Horn--Li--Mathias
+  interface used below: the statement includes rank-deficient matrices, zero
+  eigenvalues, and zero singular values, and it is not obtained in this paper
+  by deleting the zero coordinates.
 \end{lemma}
 
 \begin{proof}
-  This is exactly Theorem~1.1 of Li--Mathias
+  This is exactly the cited theorem of Li--Mathias
   \cite[Theorem~1.1, p.~115]{LiMathias2001Construction}, specialized only by
   notation.  Their theorem fixes complex numbers
   \(\lambda_1,\ldots,\lambda_N\), ordered so that
@@ -1683,8 +1686,9 @@ singular-value image of that fixed-dimensional determinant fiber.
   \Cref{thm:finite-dimensional-trace-stability} at zero defect, gives unitary
   equivalence to the zero-padded normal diagonal model.
 
-  For \textup{(iii)}, choose a Schur triangularisation of a minimizer whose
-  diagonal lists the determinant-forced eigenvalue multiset and then zeros.
+  For \textup{(iii)}, choose a finite-dimensional Schur triangularisation of a
+  minimizer whose diagonal is the determinant-forced eigenvalue multiset with
+  the ambient zero padding.
   Equality in the Schatten minimum says that the \(p\)-sum of singular values
   equals the \(p\)-sum of this diagonal eigenvalue list. The finite-dimensional
   form of \Cref{lem:schatten-triangular-equality-pinching} therefore kills
@@ -1712,9 +1716,13 @@ singular-value image of that fixed-dimensional determinant fiber.
     \sum_{\lambda\in\Sigma_{\mathcal D}}
       \abs\lambda^p M_{\mathcal D}(\lambda).
   \]
-  If \(N=1\), this range is the singleton
-  \(\{\tau_{\mathcal D,p}\}\).  If \(N\ge2\) and the determinant fiber is
-  non-empty, the range is unbounded above.
+  Under the stated hypotheses the zero-padded normal diagonal model makes the
+  fixed-dimensional fiber non-empty. If one discusses a fixed dimension outside
+  these hypotheses, an empty determinant fiber has empty budget range. In the
+  non-empty case with \(N=1\), this range is the singleton
+  \(\{\tau_{\mathcal D,p}\}\).  If it is non-empty and \(N\ge2\), the range is
+  unbounded above.  Thus, inside a fixed ambient dimension, the scalar
+  one-dimensional non-empty fiber is the only bounded case.
 \end{corollary}
 
 \begin{proof}
@@ -1724,24 +1732,21 @@ singular-value image of that fixed-dimensional determinant fiber.
   Schatten special case of
   \Cref{cor:universal-finite-dimensional-symmetric-gauge-minimization}.
 
-  If \(N=1\), the determinant fixes the single eigenvalue, and hence fixes
-  the single singular value.  Now suppose \(N\ge2\).  The finite-dimensional
-  fiber is non-empty because the normal diagonal model exists.  Choose two
-  diagonal positions in that model.  If their diagonal entries are
-  \(\mu\) and \(\nu\), replace the corresponding two-by-two diagonal block by
-  \[
-    B_t=\begin{pmatrix}\mu&t\\0&\nu\end{pmatrix},
-    \qquad t>0,
-  \]
-  and leave all other diagonal entries unchanged.  The resulting matrix is
-  triangular with the same diagonal multiset \(\Lambda_{\mathcal D,N}\), and
-  therefore has the same determinant.  Its operator norm is at least
-  \(t-\max\{\abs\mu,\abs\nu\}\), because the strictly upper triangular part
-  \(\begin{psmallmatrix}0&t\\0&0\end{psmallmatrix}\) has norm \(t\).  Thus
-  a singular value, and hence \(\sum_i s_i(T)^p\), tends to infinity with
+  If one works outside the non-empty hypotheses and the fixed-dimensional fiber
+  is empty, there are no attainable budgets. If \(N=1\) and the fiber is
+  non-empty, the determinant fixes the single eigenvalue, and hence fixes the
+  single singular value. Now suppose \(N\ge2\) and the fiber is non-empty.
+  Choose any matrix in the fiber and put it in Schur triangular form. Pick two
+  Schur indices \(i<j\), replace the \((i,j)\)-entry by \(t>0\), and leave all
+  other entries unchanged. The resulting triangular matrix has the same
+  diagonal multiset, and therefore the same characteristic polynomial and
+  determinant \(\det(I-zT)\). Its operator norm is at least \(t\), since the
+  magnitude of any matrix entry in an orthonormal basis is bounded by the
+  operator norm. Thus a singular value, and hence \(\sum_i s_i(T)^p\), tends to
+  infinity with
   \(t\).  This proves unboundedness for every fixed non-empty fiber with
-  \(N\ge2\), including the scalar non-zero determinant with one added zero
-  summand.
+  \(N\ge2\), including the cases in which both selected diagonal entries are
+  zero.
 \end{proof}
 
 \paragraph{Horn-boundary interpretation.}
@@ -1930,7 +1935,8 @@ For \(1<p<\infty\), regularized determinants give an analogue only after the cyc
   Ringrose basis from
   \Cref{lem:ringrose-prescribed-diagonal} whose diagonal has non-zero
   subsequence equal to the prescribed algebraic eigenvalue multiset, and
-  whose remaining entries are zero. Write \(A=[a_{ij}]\). For
+  whose remaining zero entries occupy only the positions supplied by that
+  triangularisation. Write \(A=[a_{ij}]\). For
   \(P_N\) the projection onto
   \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
   \[
@@ -1995,7 +2001,8 @@ For \(1<p<\infty\), regularized determinants give an analogue only after the cyc
   expansion.
   In the resulting upper triangular matrix \(A=[a_{ij}]\), the diagonal
   has non-zero subsequence equal to the prescribed algebraic eigenvalue
-  multiset, and all other diagonal entries are zero. Therefore
+  multiset, with all other diagonal entries equal to zero in their chosen
+  Ringrose positions. Therefore
   \[
     \sum_{k\ge1}\abs{a_{kk}}^p=\tau_{\mathcal D,p}=\|T\|_p^p.
   \]
