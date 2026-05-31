@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.23
+// @version      5.24
 // @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3|4|5 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -20,13 +20,14 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.23";
+  const SCRIPT_VERSION = "5.24";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
   const DEFAULT_MIN_RESPONSE_LENGTH = 1000;
   const SHORT_RESPONSE_STALL_MS = 12 * 60 * 1000;
+  const EMPTY_EXTRACTION_STALL_MS = 5 * 60 * 1000;
   const REQUIRE_FOREGROUND_TO_CLAIM = false;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
@@ -1719,6 +1720,7 @@
     let lastHeartbeat = 0;
     let shortObservedSince = 0;
     let shortObservedText = "";
+    let emptyObservedSince = 0;
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
@@ -1739,7 +1741,9 @@
 
       if (Date.now() - lastHeartbeat >= 60000) {
         lastHeartbeat = Date.now();
-        const phase = generating ? "waiting_response" : "response_observed";
+        const phase = generating
+          ? "waiting_response"
+          : (responseText.length >= 5 ? "response_observed" : "extraction_wait");
         const detail = `elapsed=${elapsed}s; extracted=${responseText.length}; page=${mainLen}; stable=${stableCount}; gen=${generating}`;
         try { await postPhase(task_id, phase, detail); } catch {}
         await throwIfTaskCancelledOnServer(task_id);
@@ -1886,6 +1890,23 @@
         }
       } else if (generating) {
         // Still generating but no extracted text yet — keep waiting
+        stableCount = 0;
+        emptyObservedSince = 0;
+      } else {
+        // Generation has apparently stopped, but the assistant message is not
+        // extractable yet.  This is the common virtualized-DOM failure mode:
+        // the page shows a completed reply after manual scrolling, while the
+        // userscript sees an empty transcript.  Retry aggressively, then fail
+        // fast so the pipeline can re-submit/re-extract instead of occupying
+        // one Oracle tab until the outer poll timeout.
+        nudgeVirtualizedTranscriptToBottom();
+        if (!emptyObservedSince) emptyObservedSince = Date.now();
+        const emptyStallMs = Date.now() - emptyObservedSince;
+        if (emptyStallMs >= EMPTY_EXTRACTION_STALL_MS) {
+          throw new Error(
+            `Response extraction stalled empty after generation stopped for ${Math.floor(emptyStallMs / 1000)}s`
+          );
+        }
         stableCount = 0;
       }
     }

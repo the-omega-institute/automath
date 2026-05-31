@@ -1701,7 +1701,7 @@ def oracle_poll(task_id: str, timeout: int = 7200,
     short_extract_stall_s = 15 * 60
     active_phases = {
         "active", "ack", "preparing", "submitting", "waiting_response",
-        "response_observed", "extracting", "uploading", "sent",
+        "response_observed", "extraction_wait", "extracting", "uploading", "sent",
     }
     try:
         while True:
@@ -1744,7 +1744,7 @@ def oracle_poll(task_id: str, timeout: int = 7200,
                 detail = str(phase.get("detail") or "")
                 extracted_match = re.search(r"\bextracted=(\d+)", detail)
                 gen_false = re.search(r"\bgen=false\b", detail) is not None
-                if phase_name == "response_observed" and gen_false and extracted_match:
+                if phase_name in {"response_observed", "extraction_wait"} and gen_false and extracted_match:
                     extracted = int(extracted_match.group(1))
                     if extracted < 200:
                         key = f"{phase_name}:{extracted}"
