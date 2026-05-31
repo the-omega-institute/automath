@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.21
-// @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
+// @version      5.22
+// @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3|4|5 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -20,7 +20,7 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.21";
+  const SCRIPT_VERSION = "5.22";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -74,6 +74,8 @@
 
   let busy = false;
   let active = GM_getValue(GM_KEY("oracle_active"), true); // oracle tabs auto-start
+  let lastPollAt = GM_getValue(GM_KEY("last_poll_at"), "");
+  let lastPollStatus = GM_getValue(GM_KEY("last_poll_status"), "not yet polled");
 
   // ── Logging ──────────────────────────────────────────────────────────
   const logHistory = [];
@@ -90,6 +92,14 @@
     active = !active;
     GM_setValue(GM_KEY("oracle_active"), active);
     log(active ? "ACTIVATED — polling will start" : "PAUSED");
+    updatePanel();
+  }
+
+  function recordPollStatus(status) {
+    lastPollAt = new Date().toLocaleTimeString();
+    lastPollStatus = status;
+    GM_setValue(GM_KEY("last_poll_at"), lastPollAt);
+    GM_setValue(GM_KEY("last_poll_status"), lastPollStatus);
     updatePanel();
   }
 
@@ -168,6 +178,8 @@
         <button id="oracle-label-1" title="Open Tab #1" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">1</button>
         <button id="oracle-label-2" title="Open Tab #2" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">2</button>
         <button id="oracle-label-3" title="Open Tab #3" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">3</button>
+        <button id="oracle-label-4" title="Open Tab #4" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">4</button>
+        <button id="oracle-label-5" title="Open Tab #5" style="background:#cdf;color:#000;border:none;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px;font-weight:bold">5</button>
       </div>`;
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
@@ -179,11 +191,12 @@
         ${collapseBtn}
       </div>
       ${labelShortcuts}
+      <div style="color:#9af;font-size:10px;margin-top:3px">poll: ${lastPollStatus} ${lastPollAt ? `@ ${lastPollAt}` : ""}</div>
       <hr style="border-color:#333;margin:4px 0">
       ${lines}`;
     const btn = document.getElementById("oracle-toggle");
     if (btn) btn.addEventListener("click", toggleActive);
-    for (const tag of ["1", "2", "3"]) {
+    for (const tag of ["1", "2", "3", "4", "5"]) {
       const el = document.getElementById(`oracle-label-${tag}`);
       if (el) el.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -2044,6 +2057,7 @@
             continue;
           }
           const task = await serverGet(`/task?agent=${AGENT_ID}`);
+          recordPollStatus(task && task.status === "idle" ? "idle" : (task && task.task_id ? "task" : "unknown"));
           if (task && task.task_id && task.status !== "idle") {
             // Double-check active right before processing
             if (!GM_getValue(GM_KEY("oracle_active"), true)) {
@@ -2054,6 +2068,7 @@
           }
         } catch (err) {
           // Server offline — silently continue
+          recordPollStatus("server unreachable");
           if (logHistory.length === 0 || !logHistory[logHistory.length-1].includes("unreachable")) {
             log(`Server unreachable`);
           }
