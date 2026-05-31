@@ -709,3 +709,29 @@ is fully closed.
 Status: T-32 (b) — first concrete F-bar_11 separator established for one row
 of one sign-resolvent. Three X rows remain for A={0,1}; A={1,2} sign-resolvent
 materialized but not yet separator-tested.
+
+
+## Monitoring Update 2026-06-01 04:45 SGT — A={0,3} X0 row also separated via cross-ratio
+
+Pipeline-side `check_litt3_abf5_A03_cross_ratio_replay` (04:37, theorem
+`Litt3PacketAbf5A03CrossRatioRootListReplay`) reproduces the cross-ratio
+separation for the A={0,3} sign-resolvent:
+
+- `X0_separated_from_each_Yj_at_lambda: True`
+- `ordered_cross_ratio_multiplicity_at_lambda: {X0: 4, Y0: 0, Y1: 0, Y2: 0, Y3: 0}`
+- `modulus_irreducible_degree_24: True`
+
+The cross-ratio invariant SEPARATES X0 of A={0,3} from every Y row over
+F-bar_11, just as the A={0,1} case did (prior commit c1173e8d1). The modulus
+here has degree 24 (vs degree 8 for A={0,1}), reflecting the larger splitting
+field needed for the A={0,3} configuration.
+
+Remaining open per the recorded blocker:
+- Reconstruct the Y_A03 branch decics from D_j, N_j, L_{j, t} (not yet done)
+- Verify the printed roots annihilate those decics
+- Prove Frobenius propagation from X_A01_0 to the full X orbit
+
+Status: T-32 (b) — second sign-resolvent (A={0,3}) now has the X0-vs-all-Y
+F-bar_11 cross-ratio separator. The full A={0,3} branch-decic certificate is
+not yet established. Combined with the prior A={0,1} X0 separator commit,
+we have F-bar_11 separation for X0 in TWO of the active sign-resolvents.
