@@ -101,8 +101,16 @@ C_plus = amplitude(lambda_plus)
 C_minus = amplitude(lambda_minus)
 assert_zero("C_+(s)", trunc(C_plus, 3) - (sp.Rational(1, 2) - 3*rt2*s/16 + sp.Rational(7, 16)*s**2))
 assert_zero("C_-(s)", trunc(C_minus, 3) - (sp.Rational(1, 2) + 3*rt2*s/16 + sp.Rational(7, 16)*s**2))
-assert_zero("log lambda_+", trunc(sp.log(lambda_plus), 3) - (s/rt2 + sp.Rational(3, 8)*s**2))
-assert_zero("log lambda_-", trunc(sp.log(lambda_minus), 3) - (-s/rt2 + sp.Rational(3, 8)*s**2))
+assert_zero(
+    "log lambda_+",
+    trunc(sp.log(lambda_plus), 4)
+    - (s/rt2 + sp.Rational(3, 8)*s**2 - sp.Rational(217, 192)*s**3/rt2),
+)
+assert_zero(
+    "log lambda_-",
+    trunc(sp.log(lambda_minus), 4)
+    - (-s/rt2 + sp.Rational(3, 8)*s**2 + sp.Rational(217, 192)*s**3/rt2),
+)
 
 # Fixed-window cosine constants produced by the two-branch expansion.
 m = sp.symbols("m", positive=True)
