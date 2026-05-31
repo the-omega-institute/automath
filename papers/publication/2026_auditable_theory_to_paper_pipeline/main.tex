@@ -47,14 +47,17 @@ failure modes are equally structural: a route may overlap a submitted sibling,
 an artifact status file may drift from generated counts, or an intake note may
 accidentally become a daemon-visible manuscript.
 
-This note contributes a compact workflow pattern for avoiding these failures:
+This presentation draft contributes a compact workflow pattern for avoiding these failures:
 an auditable theory-to-paper pipeline in which AI agents propose, review, and
 triage, while deterministic gates decide what may be treated as load-bearing
 evidence.  The pattern is instantiated in local BEDC and automath workspaces.
 The mathematical content of the note is the explicit safety interface for this
 workflow: definitions for gate vocabulary, a pinned imported theorem spine, a
 proved publication-safety theorem, and witness records for the four required
-cases.
+cases.  The complete manuscript is a longer technical record; the CICM
+presentation-only submission must use a two-page abstracting version plus
+bibliography, with this longer draft and the review bundle supplied only as
+background material.
 
 The setting is adjacent to proof-assistant systems such as Lean
 \cite{deMouraKADR2015Lean}, machine-learning interfaces to formal proving such
@@ -147,7 +150,12 @@ at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}; the extraction
 date is 2026-06-01.  The table is the machine-checkable source-interface record
 used by this paper: it binds each imported label to a source path, pinned commit,
 line range, extraction date, and bounded statement summary.  The same record is
-mirrored for scripted checks in \path{source_interface_record.json}.
+mirrored for scripted checks in \path{source_interface_record.json}.  For
+external review, the source-interface file is copied into the supplemental review
+bundle at
+\path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
+and the bundle manifest is \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}
+\cite{auditable-pipeline-review-bundle}.
 
 \begin{lemma}[Source-interface extraction correctness]
 \label{lem:source-interface-extraction-correctness}
@@ -179,6 +187,37 @@ form than the corresponding bounded summary.  Thus the table is complete for the
 imported interface of this paper and correct at the stated evidence level: exact
 as to path, commit, label, line range, method, date, and summary mode, and
 bounded as to mathematical restatement.\qed
+\end{proof}
+
+\begin{proposition}[Reviewable source-snapshot interface]
+\label{prop:reviewable-source-snapshot-interface}
+The imported discovery-gate spine used in
+Theorem~\ref{thm:publication-safety-interface} has a reviewer-facing source
+interface.  Namely, the tuple consisting of the pinned local source path, commit
+\path{3fb3d6a0641767388a401883062aa522ea0b397b},
+Table~\ref{tab:source-interface-record}, \path{source_interface_record.json},
+and the supplemental copy
+\path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex}
+is sufficient to inspect every imported source label used by this paper at the
+path-verified evidence level.  If an archival URL or DOI is assigned before
+submission, it may replace the local bundle path in the bibliography without
+changing the theorem interface.
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:source-interface-extraction-correctness} proves that the only
+imported source labels used by the paper are the ten rows of
+Table~\ref{tab:source-interface-record}, each with a fixed line range and bounded
+summary.  The paragraph preceding that lemma fixes the original local source
+path, source commit, extraction date, and JSON mirror.  The supplemental copy is
+a file-level snapshot of the same source-interface document, named by the same
+commit hash.  Therefore a reviewer does not need access to the author's absolute
+path in order to inspect the imported interface: the table gives the labels and
+line ranges, the JSON record gives the machine-readable binding, and the bundle
+copy gives the text snapshot against which those ranges are checked.  Replacing
+the bundle path by a later public archive changes only the distribution location,
+not the label, commit, line-range, or bounded-summary data on which the theorem
+chain depends.\qed
 \end{proof}
 
 \section{Operational interface}
@@ -234,7 +273,11 @@ extension claim identifies load-bearing mathematical content, and failing means
 that compilation, file churn, or surface edits may not be reported as substantive
 theorem growth.
 
-A \emph{case witness record} is path-complete when its evidence surface gives a
+A \emph{reviewable artifact} for this paper is either a public or supplemental
+file included with the submission, an archived snapshot named by URL or DOI, or
+an explicit historical-evidence boundary stating that the local path is used only
+as path-verified evidence and not as a fresh command-run claim.  A \emph{case
+witness record} is path-complete when its evidence surface gives a
 concrete source or artifact path for each load-bearing component of the row.  A
 route-overlap witness has the fields \emph{route identity}, \emph{submitted
 sibling}, \emph{overlap reason}, \emph{gate decision}, and \emph{allowed next
@@ -246,8 +289,9 @@ fields \emph{candidate surface}, \emph{human promotion evidence},
 claim}.  A theorem-content witness has the fields \emph{changed surface},
 \emph{theorem inventory or hard-lint surface}, \emph{substantive-content delta},
 \emph{gate decision}, and \emph{allowed manuscript claim}.  The inventory files
-\path{ARTIFACT_INVENTORY.md} and \path{SOURCE_MAP.md} are part of the evidence
-surface for this paper and give the compact path catalogue used by
+\path{ARTIFACT_INVENTORY.md}, \path{SOURCE_MAP.md}, and
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} are part of the evidence surface
+for this paper and give the compact path catalogue used by
 Table~\ref{tab:case-witnesses}.
 
 We distinguish two evidence levels.  A claim is \emph{path-verified} when this
@@ -351,14 +395,17 @@ or is recorded together with an evidence surface; that every advisory output is
 demoted unless the deterministic gate set $\Gamma$ for its claim kind passes;
 that discovery claims are
 checked through the pinned discovery-gate interface certified by
-Lemma~\ref{lem:source-interface-extraction-correctness}, in particular its
+Lemma~\ref{lem:source-interface-extraction-correctness} and
+Proposition~\ref{prop:reviewable-source-snapshot-interface}, in particular its
 pipeline safety and main pipeline theorem labels; and that no inactive intake
 seed is treated as publication work without human promotion.  Then any accepted
 load-bearing claim in the manuscript has passed the gate required for its claim
 kind before publication recording.  Moreover, accepted discovery claims inherit
 the pinned source-interface guarantee that statement-only, code-only,
 mechanical-expansion, and compression-only outputs are not accepted as discovery
-without the required certificate, ledger, and lineage witnesses.
+without the required certificate, ledger, and lineage witnesses; and every case
+row used below is reviewable only at the evidence level certified in
+Proposition~\ref{prop:case-evidence-accessibility-certificate}.
 \end{theorem}
 
 \begin{proof}
@@ -377,14 +424,20 @@ submission claims use submission-pack gates, extension-style discovery claims us
 the theorem-content delta gate together with the pinned discovery gate,
 work-selection claims use the scheduler gate, and mixed claims use the union.
 If $c$ is a discovery claim, the third assumption routes it through the pinned
-discovery-gate interface.  The source-interface table above records the imported
+discovery-gate interface.  Proposition~\ref{prop:reviewable-source-snapshot-interface}
+supplies the corresponding reviewer-facing snapshot interface, so this routing
+does not depend on a reviewer's access to the author's absolute source path.  The
+source-interface table above records the imported
 statements used here: statement-only, code-only, mechanical-expansion, and
 compression-only records do not become accepted discovery claims without the
 required certificate, ledger, and lineage witnesses, and classifier-shift
 selection remains bounded by the discovery gate as shown in
 Proposition~\ref{prop:scheduler-selection-advisory}.  Hence every accepted
 load-bearing claim has gate passage before publication recording, and discovery
-claims receive the stronger source-interface guarantee.\qed
+claims receive the stronger source-interface guarantee.  The final case-row
+clause follows from Proposition~\ref{prop:case-evidence-accessibility-certificate},
+which maps the four local case surfaces to either supplemental artifacts or an
+explicit historical-evidence boundary.\qed
 \end{proof}
 
 \section{Gate summary}
@@ -551,6 +604,36 @@ surface, theorem inventory and hard-lint surface, failed substantive-content
 delta, rejection decision, and bounded manuscript claim.  Therefore every row has
 the complete field set needed for
 Proposition~\ref{prop:path-complete-case-witnesses}.\qed
+\end{proof}
+
+\begin{proposition}[Case-evidence accessibility certificate]
+\label{prop:case-evidence-accessibility-certificate}
+For the four case studies in Table~\ref{tab:case-witnesses}, every local path is
+mapped either to a reviewable supplemental artifact or to an explicit historical
+evidence boundary.  The Newmath intake, upper-fibers overlap, fake-extension,
+and Rule110 limitation rows are therefore reviewable as path-verified evidence,
+but none of them is promoted to a fresh command-run claim.
+\end{proposition}
+
+\begin{proof}
+The manifest \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} has one entry for
+each of the four case-study rows.  In the Newmath intake entry, the local intake
+seed and active-paper detector paths are mapped to the manuscript inventories
+\path{ARTIFACT_INVENTORY.md} and \path{SOURCE_MAP.md}, with the explicit boundary
+that no fresh daemon run is claimed.  In the upper-fibers entry, the active route,
+submitted-sibling marker, overlap ledgers, and program-board state are mapped to
+the same path catalogue and to a historical route-state boundary; this is exactly
+the evidence level used by the overlap row and no stronger public archive claim
+is asserted.  In the fake-extension entry, the phase-D lint path and this paper's
+artifact inventory are mapped to the theorem-content witness surface, again with
+the boundary that no fresh full-source command run is claimed.  In the Rule110
+entry, the status file, collision-audit ledger, exhaustiveness ledger, and paper
+data reference are mapped to the limitation-gate row and to a historical
+limitation boundary, not to a fresh dynamic artifact rerun.  These four manifest
+entries exhaust the four rows of Table~\ref{tab:case-witnesses} and exactly match
+the local paths listed in the path catalogue above.  Hence each case path has a
+reviewable artifact interface or an explicit historical-evidence boundary, and
+the proposition follows.\qed
 \end{proof}
 
 \begin{table}

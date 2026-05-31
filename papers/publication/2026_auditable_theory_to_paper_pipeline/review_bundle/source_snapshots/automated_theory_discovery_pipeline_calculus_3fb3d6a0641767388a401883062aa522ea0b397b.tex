@@ -1,0 +1,498 @@
+\chapter{Automated Theory-Discovery Pipeline Calculus}
+\label{ch:automated-theory-discovery-pipeline-calculus}
+\origin{ai}
+
+\autoref{ch:visions-classifier-level-information},
+\autoref{ch:theorem-dna-complexity-scoring},
+\autoref{ch:theorem-dna-scoring-taste-gate}, and
+\autoref{ch:theorem-genome-evolution} separate four audit coordinates:
+record growth, role-complete theorem genomes, public complexity scoring, and
+classifier-level change. This chapter packages those coordinates as a calculus
+for automated theory discovery. The purpose is not to let an automation label
+its own output as discovery, but to specify the certificate conditions under
+which a pipeline output may be admitted as a discovery claim.
+
+\section{Pipeline states}
+\label{sec:automated-discovery-pipeline-states}
+
+\begin{definition}[Certified theory state]
+\label{def:automated-discovery-certified-theory-state}
+A certified theory state is a tuple
+$$
+\mathcal T=(S_{\mathcal T},P_{\mathcal T},L_{\mathcal T},
+C_{\mathcal T},N_{\mathcal T})
+$$
+where
+$$
+S_{\mathcal T},P_{\mathcal T},L_{\mathcal T}:\Hist\to\mathsf{Prop},
+\qquad
+C_{\mathcal T}:\Hist\to\Hist\to\mathsf{Prop},
+$$
+and
+$$
+N_{\mathcal T}:
+\SemanticNameCert(S_{\mathcal T},P_{\mathcal T},
+L_{\mathcal T},C_{\mathcal T}).
+$$
+The five fields record source, pattern, ledger, classifier, and semantic
+naming certificate.
+\end{definition}
+
+\begin{definition}[Automation record]
+\label{def:automated-discovery-automation-record}
+An automation record is a finite family $R$ of generated material. Its entries
+may be event flows, theorem candidates, theorem genomes, candidate
+certificates, ledger entries, score certificates, or lineage edges. The record
+is an audit surface; it is not itself a classifier state.
+\end{definition}
+
+\begin{definition}[Pipeline state]
+\label{def:automated-discovery-pipeline-state}
+A pipeline state is a tuple
+$$
+\mathcal P=(\mathcal T,R,\Gamma,\Lambda,\mathbf w,B)
+$$
+where $\mathcal T$ is a certified theory state, $R$ is an automation record,
+$\Gamma$ is a population of theorem genomes, $\Lambda$ is a lineage ledger,
+$\mathbf w\in\mathbb N^9$ is a public theorem-genome weight profile, and
+$B:\Gamma\to\mathbb N$ is a genome-budget function.
+\end{definition}
+
+\begin{definition}[Genome extractor]
+\label{def:automated-discovery-genome-extractor}
+A genome extractor is a partial operation
+$$
+\mathsf{Extract}:\EventFlow\rightharpoonup\Gamma
+$$
+whose value, when defined on a theorem candidate flow $T$, is a theorem genome
+$(T,R,D_R(T))$ with all eight theorem-DNA loci. A theorem candidate is
+DNA-complete when $\mathsf{Extract}(T)$ is defined.
+\end{definition}
+
+\begin{definition}[Score certificate]
+\label{def:automated-discovery-score-certificate}
+For a genome $\Gamma$ in a pipeline state, a score certificate consists of the
+public weight profile $\mathbf w$, the budget value $B(\Gamma)$, and the
+inequality
+$$
+\mathsf{Score}_{\mathbf w}(\Gamma)\leq B(\Gamma).
+$$
+It certifies a visible upper bound, not minimality.
+\end{definition}
+
+\section{Transition classes}
+\label{sec:automated-discovery-transition-classes}
+
+\begin{definition}[Pipeline transition]
+\label{def:automated-discovery-pipeline-transition}
+A pipeline transition is a change
+$$
+\mathcal P\longrightarrow\mathcal P'
+$$
+between states
+$$
+\mathcal P=(\mathcal T,R,\Gamma,\Lambda,\mathbf w,B),
+\qquad
+\mathcal P'=(\mathcal T',R',\Gamma',\Lambda',\mathbf w',B').
+$$
+Unless the transition explicitly changes the scoring protocol, the weight
+profile is held fixed.
+\end{definition}
+
+\begin{definition}[Mechanical expansion]
+\label{def:automated-discovery-mechanical-expansion}
+A transition is a mechanical expansion when $\mathcal T'=\mathcal T$ and
+$R'$ is obtained from $R$ by adding material generated under the same
+classifier state. It may extend the record, but it does not change the
+certified classifier.
+\end{definition}
+
+\begin{definition}[Genome compression]
+\label{def:automated-discovery-genome-compression}
+A transition is a genome compression when $\mathcal T'=\mathcal T$ and some
+genome mutation satisfies
+$$
+\mathsf{Score}_{\mathbf w}(\Gamma')<
+\mathsf{Score}_{\mathbf w}(\Gamma)
+$$
+while the theorem classifier phenotype is unchanged.
+\end{definition}
+
+\begin{definition}[Genome recombination]
+\label{def:automated-discovery-genome-recombination}
+A genome recombination combines loci from parent genomes
+$\Gamma_1,\ldots,\Gamma_k$ and yields a child genome $\Gamma'$ only when the
+child again satisfies theorem-genome soundness. Locus exchange without a
+soundness witness is only a candidate recombination.
+\end{definition}
+
+\begin{definition}[Classifier-shift transition]
+\label{def:automated-discovery-classifier-shift}
+A transition is a classifier-shift transition when
+$$
+\neg(\mathcal T\equiv_{\mathsf{cls}}\mathcal T')
+$$
+holds on the common source carrier. It changes the classifier coordinate,
+regardless of whether the record length or genome score decreases.
+\end{definition}
+
+\begin{definition}[Discovery transition]
+\label{def:automated-discovery-discovery-transition}
+A classifier-shift transition is a discovery transition when the target theory
+state is certified and ledgered:
+$$
+\mathcal T'=(S',P',L',C',N'),
+\qquad
+N':\SemanticNameCert(S',P',L',C'),
+$$
+and
+$$
+\exists h:\Hist,\;L'(h).
+$$
+\end{definition}
+
+\begin{definition}[Positive discovery transition]
+\label{def:automated-discovery-positive-discovery-transition}
+Relative to an external cost observer $\mu$ and transition cost $\kappa$, a
+discovery transition is positive when some finite family $X$ satisfies
+$$
+\mu_{\mathcal T'}(X)+\kappa(\mathcal T\to\mathcal T')
+<
+\mu_{\mathcal T}(X).
+$$
+The inequality charges the certificate, ledger, recognizer, and seal costs to
+the transition rather than hiding them in prose.
+\end{definition}
+
+\section{Discovery claims}
+\label{sec:automated-discovery-claims}
+
+\begin{definition}[Discovery claim]
+\label{def:automated-discovery-claim}
+A discovery claim is an audit packet
+$$
+\mathsf{Claim}=
+(K,\Gamma,\mathcal T,\mathcal T',d,N',L',\mathbf w,B,\Lambda,\mathcal B)
+$$
+where $K$ is a claim kind, $\Gamma$ is the principal genome,
+$\mathcal T,\mathcal T'$ are source and target theory states,
+$d\in\{0,1\}$ is the classifier-change bit, $N'$ and $L'$ are the target
+certificate and ledger policy, $\mathbf w$ and $B$ are the scoring protocol,
+$\Lambda$ is the lineage ledger, and $\mathcal B$ is the explicit
+not-claimed boundary.
+\end{definition}
+
+\begin{definition}[Claim kinds]
+\label{def:automated-discovery-claim-kinds}
+The claim kinds are
+$$
+\mathsf{mechanical},\quad
+\mathsf{compression},\quad
+\mathsf{recombination},\quad
+\mathsf{classifierShift},\quad
+\mathsf{discovery},\quad
+\mathsf{positiveDiscovery}.
+$$
+They respectively name record extension, score reduction without phenotype
+change, locus recombination, classifier change, ledgered certified classifier
+change, and ledgered certified classifier change with net compression gain.
+\end{definition}
+
+\begin{definition}[Well-formed claim]
+\label{def:automated-discovery-well-formed-claim}
+A claim is well formed when its kind matches its evidence:
+mechanical claims do not assert classifier change; compression claims carry a
+score comparison under a public weight profile and have $d=0$; classifier-shift
+claims have $d=1$; discovery claims have $d=1$, a target semantic naming
+certificate, and a ledger witness; positive-discovery claims additionally
+carry the net compression inequality. Any theorem-like principal object must
+be DNA-complete, and any scored claim must expose its weight profile.
+\end{definition}
+
+\begin{definition}[Discovery gate]
+\label{def:automated-discovery-gate}
+The predicate $\mathsf{DiscoveryGate}(\mathsf{Claim})$ holds when the claim is
+well formed, its principal theorem-like object is a DNA-complete genome, it
+has a score certificate whenever it is scored, its discovery assertions carry
+semantic naming certificate and ledger witnesses, its positive-discovery
+assertions carry the net cost inequality, its lineage ledger records the
+parents and transition kind, its not-claimed boundary is explicit, and its
+support is formal or certificate-level rather than prose-only.
+\end{definition}
+
+\begin{definition}[Gate demotion]
+\label{def:automated-discovery-gate-demotion}
+Gate demotion maps an over-strong claim kind to the strongest kind supported by
+the available evidence. A positive-discovery claim without the cost inequality
+is treated as discovery at most; a discovery claim without certificate or
+ledger is treated as classifier-shift at most; a classifier-shift claim with
+$d=0$ is treated as compression or mechanical; an unscored compression claim is
+treated as an unscored mutation; a DNA-incomplete theorem-like object is
+treated as a theorem candidate.
+\end{definition}
+
+\section{Gate theorems}
+\label{sec:automated-discovery-gate-theorems}
+
+\begin{theorem}[DNA completeness is a gate obligation]
+\label{thm:automated-discovery-dna-completeness-obligation}
+A theorem candidate that is not DNA-complete cannot be the principal theorem
+genome of a gate-passed discovery claim.
+\end{theorem}
+\begin{proof}
+\autoref{def:automated-discovery-gate} requires the principal theorem-like
+object to be a DNA-complete genome. If extraction is undefined, the object
+does not supply the eight-locus theorem-DNA profile required by the gate.
+\end{proof}
+
+\begin{corollary}[Statement-only and code-only candidates are insufficient]
+\label{cor:automated-discovery-statement-code-insufficient}
+A candidate supplying only a statement locus, or only legal theorem code, does
+not pass the discovery gate as a theorem genome.
+\end{corollary}
+\begin{proof}
+Both cases lack the complete theorem-genome extraction required by
+\autoref{thm:automated-discovery-dna-completeness-obligation}.
+\end{proof}
+
+\begin{theorem}[Mechanical expansion is not discovery]
+\label{thm:automated-discovery-mechanical-not-discovery}
+Mechanical expansion does not imply discovery.
+\end{theorem}
+\begin{proof}
+For mechanical expansion, $\mathcal T'=\mathcal T$. Hence the classifier
+states are classifier-equivalent and the classifier-change bit is $0$.
+Discovery requires a classifier-shift transition and therefore a
+classifier-change bit of $1$.
+\end{proof}
+
+\begin{theorem}[Genome compression is not discovery by itself]
+\label{thm:automated-discovery-compression-not-discovery}
+Genome compression without classifier change is not discovery.
+\end{theorem}
+\begin{proof}
+Compression lowers $\mathsf{Score}_{\mathbf w}$ under the same classifier
+phenotype. If the classifier-change bit is $0$, the transition violates the
+classifier-shift obligation in
+\autoref{def:automated-discovery-discovery-transition}.
+\end{proof}
+
+\begin{theorem}[Discovery requires certificate and ledger]
+\label{thm:automated-discovery-certificate-ledger-required}
+If a transition is a discovery transition with target state
+$\mathcal T'=(S',P',L',C',N')$, then
+$$
+N':\SemanticNameCert(S',P',L',C')
+$$
+and
+$$
+\exists h:\Hist,\;L'(h).
+$$
+\end{theorem}
+\begin{proof}
+This is exactly the target-state obligation in
+\autoref{def:automated-discovery-discovery-transition}. The semantic
+certificate supplies the naming certificate, and the ledger witness is part of
+the discovery condition rather than an optional annotation.
+\end{proof}
+
+\begin{theorem}[Positive discovery implies discovery]
+\label{thm:automated-discovery-positive-implies-discovery}
+Every positive discovery transition is a discovery transition.
+\end{theorem}
+\begin{proof}
+\autoref{def:automated-discovery-positive-discovery-transition} defines
+positive discovery by adding a net compression inequality to a discovery
+transition.
+\end{proof}
+
+\begin{theorem}[Scored claims require public weights]
+\label{thm:automated-discovery-scored-claims-public-weights}
+Any claim asserting a genome score, a score reduction, or a positive-discovery
+cost inequality must expose the weight profile used for the comparison.
+\end{theorem}
+\begin{proof}
+The score is the dot product of the public weight profile with the genome
+complexity vector. Without the weight profile, the scalar has no determinate
+audit meaning, and score comparisons cannot be reproduced.
+\end{proof}
+
+\begin{theorem}[Discovery gate is kind-sound]
+\label{thm:automated-discovery-gate-kind-sound}
+If $\mathsf{DiscoveryGate}(\mathsf{Claim})$ holds, then the obligations
+attached to the claim kind hold.
+\end{theorem}
+\begin{proof}
+The discovery gate includes well-formedness, and well-formedness assigns each
+claim kind exactly its evidence obligations. Thus a gate-passed compression
+claim has public score comparison and no classifier change; a classifier-shift
+claim has classifier change; a discovery claim has classifier change,
+semantic naming certificate, and ledger witness; and a positive-discovery
+claim additionally has the net cost inequality.
+\end{proof}
+
+\begin{theorem}[Demotion preserves audit soundness]
+\label{thm:automated-discovery-demotion-soundness}
+After gate demotion, the resulting claim kind is no stronger than the evidence
+actually supplied by the claim.
+\end{theorem}
+\begin{proof}
+The clauses of \autoref{def:automated-discovery-gate-demotion} remove exactly
+the unsupported obligation: cost inequality for positive discovery,
+certificate or ledger for discovery, classifier change for classifier-shift,
+public score for compression, and theorem-DNA completeness for theorem-genome
+claims. The resulting label therefore does not assert evidence absent from the
+packet.
+\end{proof}
+
+\section{Lineage and selection}
+\label{sec:automated-discovery-lineage-selection}
+
+\begin{definition}[Lineage ledger]
+\label{def:automated-discovery-lineage-ledger}
+A lineage ledger is a directed acyclic graph $\Lambda=(V,E)$ whose vertices
+are theorem genomes and whose edges are labelled by transition kind:
+mechanical, compression, recombination, classifier-shift, discovery, or
+positive-discovery.
+\end{definition}
+
+\begin{definition}[Lineage-consistent claim]
+\label{def:automated-discovery-lineage-consistent-claim}
+A claim is lineage-consistent when its parent genomes, child genome, and
+transition kind are recorded in $\Lambda$ and the resulting ledger remains
+acyclic.
+\end{definition}
+
+\begin{theorem}[Accepted claims form an auditable lineage DAG]
+\label{thm:automated-discovery-lineage-dag}
+If every accepted claim is lineage-consistent, the accepted theorem genomes
+form an auditable directed acyclic lineage graph.
+\end{theorem}
+\begin{proof}
+Each accepted claim contributes labelled parent-to-child edges. By
+lineage-consistency, adding those edges does not introduce a cycle. Iterating
+over accepted claims preserves acyclicity.
+\end{proof}
+
+\begin{definition}[Discovery potential]
+\label{def:automated-discovery-potential}
+For selection among candidate genomes, a discovery-potential functional has
+the form
+$$
+\mathsf{DP}(\Gamma)=
+\alpha\,\mathsf{Cls}(\Gamma)
++\beta\,\mathsf{Unification}(\Gamma)
++\gamma\,\mathsf{Reuse}(\Gamma)
++\delta\,\mathsf{Transfer}(\Gamma)
+-\lambda\,\mathsf{Score}_{\mathbf w}(\Gamma)
+-\rho\,\mathsf{LedgerRisk}(\Gamma).
+$$
+Here $\mathsf{Cls}$ records classifier change, while the remaining positive
+terms record unification, reuse, and transfer. The negative terms charge
+complexity and ledger risk.
+\end{definition}
+
+\begin{theorem}[Lowest score need not be the best discovery target]
+\label{thm:automated-discovery-lowest-score-not-best-target}
+A genome with lower score can have lower discovery potential than a genome
+with higher score.
+\end{theorem}
+\begin{proof}
+Take one genome with low score and zero classifier change, unification, reuse,
+and transfer. Take another with higher score, classifier change, high
+unification, high reuse, and controlled ledger risk. For sufficiently large
+positive coefficients on the structural terms, the second genome has greater
+discovery potential despite its higher score.
+\end{proof}
+
+\begin{theorem}[Classifier change is favoured when other terms are fixed]
+\label{thm:automated-discovery-selection-favours-classifier-change}
+If a selection operator maximizes $\mathsf{DP}$ and $\alpha>0$, then among
+candidates equal in all other coordinates it favours the candidate with
+classifier change.
+\end{theorem}
+\begin{proof}
+The difference in discovery potential between the classifier-changing
+candidate and the fixed-classifier candidate is exactly $\alpha$, which is
+positive.
+\end{proof}
+
+\section{Pipeline adequacy}
+\label{sec:automated-discovery-pipeline-adequacy}
+
+\begin{definition}[Unpaid discovery claim]
+\label{def:automated-discovery-unpaid-discovery-claim}
+An unpaid discovery claim is a claim that asserts discovery while lacking at
+least one of classifier change, semantic naming certificate, ledger witness,
+theorem genome, score or cost account, lineage witness, or not-claimed
+boundary.
+\end{definition}
+
+\begin{theorem}[No unpaid discovery passes the gate]
+\label{thm:automated-discovery-no-unpaid-discovery}
+No unpaid discovery claim passes $\mathsf{DiscoveryGate}$.
+\end{theorem}
+\begin{proof}
+The discovery gate requires all of the obligations listed in
+\autoref{def:automated-discovery-unpaid-discovery-claim}. An unpaid claim
+lacks at least one of them, so it violates the gate.
+\end{proof}
+
+\begin{theorem}[Pipeline safety]
+\label{thm:automated-discovery-pipeline-safety}
+If an automated pipeline accepts discovery and positive-discovery claims only
+after $\mathsf{DiscoveryGate}$ and records accepted claims in a
+lineage-consistent ledger, then every accepted discovery has classifier change,
+semantic naming certificate, ledger witness, DNA-complete theorem genome, score
+certificate, lineage witness, and an explicit not-claimed boundary.
+\end{theorem}
+\begin{proof}
+The gate supplies well-formedness, DNA completeness, score certificate,
+certificate and ledger obligations for discovery claims, the net inequality for
+positive-discovery claims, and the not-claimed boundary. The acceptance rule
+adds lineage consistency. Combining these clauses gives the listed
+obligations.
+\end{proof}
+
+\begin{theorem}[Automated theory-discovery pipeline theorem]
+\label{thm:automated-discovery-pipeline-theorem}
+An automated theory-discovery pipeline that extracts theorem genomes, exposes
+public scoring weights, demotes unsupported claim kinds, gates discovery
+claims, and records accepted claims in a lineage ledger distinguishes record
+growth, score reduction, recombination, classifier change, and ledgered
+discovery.
+\end{theorem}
+\begin{proof}
+Record growth is covered by mechanical expansion and does not imply discovery
+by \autoref{thm:automated-discovery-mechanical-not-discovery}. Score reduction
+is covered by genome compression and does not imply discovery by
+\autoref{thm:automated-discovery-compression-not-discovery}. Recombination
+requires its own soundness witness by
+\autoref{def:automated-discovery-genome-recombination}. Classifier change is a
+separate transition class by
+\autoref{def:automated-discovery-classifier-shift}. Ledgered discovery is the
+stronger gate-passed condition supplied by
+\autoref{thm:automated-discovery-pipeline-safety}.
+\end{proof}
+
+\begin{principle}[Automated discovery principle]
+\label{prin:automated-discovery-principle}
+Automation explores genome space; the gate decides claim strength. More output
+is record growth. A shorter proof is compression. A recombined theorem profile
+is a candidate until soundness is witnessed. Discovery requires classifier
+change paid for by semantic naming certificate, ledger, score account, and
+lineage.
+\end{principle}
+
+\begin{principle}[Compiler-closure placement]
+\label{prin:automated-discovery-compiler-closure-placement}
+Compiler-closure audit, as isolated in
+\autoref{ch:compiler-closure-self-compilation}, sits after theorem-genome
+extraction and scoring. It does not merely ask whether a candidate theorem
+genome is role-complete; it asks whether a genome flow certifiably expresses a
+recognized compiler phenotype whose ledgered feedback exports a later accepted
+genome flow. Discovery self-compilation then adds classifier shift, semantic
+naming certificate, and ledger witness to that loop.
+\end{principle}
+
+\concretizedIn{ch:concrete-instances-discovery-pipeline-calculus-namecert}{Discovery pipeline calculus is realized as finite theory-state, automation-record, genome, score, lineage, classifier-shift, and NameCert rows.}
