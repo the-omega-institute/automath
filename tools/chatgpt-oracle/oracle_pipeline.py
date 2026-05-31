@@ -1699,9 +1699,19 @@ def oracle_poll(task_id: str, timeout: int = 7200,
     short_extract_seen_at: Optional[float] = None
     short_extract_key = ""
     short_extract_stall_s = 15 * 60
+    prompt_phase_seen_at: Optional[float] = None
+    prompt_phase_key = ""
+    prompt_phase_stall_s = 5 * 60
     active_phases = {
         "active", "ack", "preparing", "submitting", "waiting_response",
         "response_observed", "extraction_wait", "extracting", "uploading", "sent",
+    }
+    prompt_input_phases = {
+        "foreground_claimed", "page_ready", "waiting_prompt_input",
+        "prompt_ready", "enter_prompt_start", "enter_prompt_textarea",
+        "enter_prompt_execcommand", "enter_prompt_clipboard",
+        "enter_prompt_synthetic_paste", "enter_prompt_innerhtml",
+        "enter_prompt_done", "prompt_inserted",
     }
     try:
         while True:
@@ -1725,6 +1735,8 @@ def oracle_poll(task_id: str, timeout: int = 7200,
             now = time.time()
             phase_name = phase.get("phase", "unknown")
             if phase_name in active_phases:
+                prompt_phase_key = ""
+                prompt_phase_seen_at = None
                 if active_start is None:
                     server_elapsed = phase.get("elapsed")
                     if isinstance(server_elapsed, int):
@@ -1770,9 +1782,40 @@ def oracle_poll(task_id: str, timeout: int = 7200,
                 active_start = None
                 short_extract_key = ""
                 short_extract_seen_at = None
+                prompt_phase_key = ""
+                prompt_phase_seen_at = None
                 log_elapsed = int(now - wait_start)
                 log_state = f"queued pos={phase.get('position', '?')}/{phase.get('queue_length', '?')}"
+            elif phase_name in prompt_input_phases:
+                if active_start is None:
+                    server_elapsed = phase.get("elapsed")
+                    if isinstance(server_elapsed, int):
+                        active_start = now - server_elapsed
+                    else:
+                        active_start = now
+                active_elapsed = int(now - active_start)
+                if active_elapsed >= timeout:
+                    return ""
+                agent_id = phase.get("agent_id", "?")
+                log_elapsed = active_elapsed
+                log_state = f"{phase_name}/{agent_id}"
+                detail = str(phase.get("detail") or "")
+                key = f"{phase_name}:{detail[:160]}"
+                if key != prompt_phase_key:
+                    prompt_phase_key = key
+                    prompt_phase_seen_at = now
+                elif (
+                    prompt_phase_seen_at is not None
+                    and now - prompt_phase_seen_at >= prompt_phase_stall_s
+                ):
+                    logger.warning(
+                        f"Oracle task {task_id} prompt insertion stalled "
+                        f"at phase={phase_name} ({detail}); cancelling retry path"
+                    )
+                    return ""
             else:
+                prompt_phase_key = ""
+                prompt_phase_seen_at = None
                 log_elapsed = int(now - wait_start)
                 log_state = phase_name
                 if log_elapsed >= 600:

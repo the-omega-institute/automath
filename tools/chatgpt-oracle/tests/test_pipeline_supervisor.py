@@ -808,6 +808,36 @@ class SupervisorHelpersTests(unittest.TestCase):
                 "",
             )
 
+    def test_oracle_poll_prompt_ready_stall_returns_timeout(self):
+        fake_now = {"value": 1_000_000.0}
+
+        def fake_http_get(url: str, timeout: int = 10) -> dict:
+            raise RuntimeError("not ready")
+
+        def fake_task_status(task_id: str) -> dict:
+            return {
+                "task_id": task_id,
+                "phase": "prompt_ready",
+                "agent_id": "oracle_3",
+                "elapsed": int(fake_now["value"] - 1_000_000.0),
+                "detail": "visible; url=https://chatgpt.com/?oracle=3",
+            }
+
+        def fake_time() -> float:
+            return fake_now["value"]
+
+        def fake_sleep(seconds: float) -> None:
+            fake_now["value"] += 60.0
+
+        with mock.patch.object(oracle_pipeline, "http_get", side_effect=fake_http_get), \
+             mock.patch.object(oracle_pipeline, "oracle_task_status", side_effect=fake_task_status), \
+             mock.patch.object(oracle_pipeline.time, "time", side_effect=fake_time), \
+             mock.patch.object(oracle_pipeline.time, "sleep", side_effect=fake_sleep):
+            self.assertEqual(
+                oracle_pipeline.oracle_poll("task_prompt_stall", timeout=7200, poll_interval=1),
+                "",
+            )
+
 
 class OraclePipelineOverlapGuardTests(unittest.TestCase):
     def setUp(self):
