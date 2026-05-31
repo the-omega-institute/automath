@@ -121,6 +121,21 @@ class NewmathIntakeGuardTests(unittest.TestCase):
         ]
         self.assertEqual(len(trigger_errors), 2, errors)
 
+    def test_promotion_only_file_fails_before_promotion(self):
+        (
+            self.root
+            / "seeds"
+            / "bedc_automation_pipeline"
+            / "research_directive.md"
+        ).write_text(
+            "not allowed\n",
+            encoding="utf-8",
+        )
+
+        errors, _warnings = check_intake.run_check(self.root)
+
+        self.assertTrue(any("active-paper trigger file" in error for error in errors))
+
     def test_missing_p0_required_file_fails(self):
         (
             self.root
