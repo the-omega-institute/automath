@@ -480,7 +480,10 @@ def build_health_report(
             "active_sessions": oracle_status.get("active_sessions"),
             "queued_count": len(oracle_status.get("queued") or []),
             "queued_tasks_count": len(oracle_status.get("queued_tasks") or []),
-            "registered_agents": len(oracle_status.get("agents") or {}),
+            "registered_agents": oracle_status.get(
+                "registered_agents",
+                len(oracle_status.get("agents") or {}),
+            ),
             "active_recent_agents": len(oracle_status.get("active_recent_agents") or []),
         },
         "discovery": {

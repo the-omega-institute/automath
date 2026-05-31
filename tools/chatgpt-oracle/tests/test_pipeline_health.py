@@ -426,6 +426,52 @@ class PipelineHealthTests(unittest.TestCase):
         self.assertEqual(report["oracle"]["registered_agents"], 2)
         self.assertEqual(report["oracle"]["active_recent_agents"], 1)
 
+    def test_report_uses_server_registered_agent_count_when_idle(self):
+        report = pipeline_health.build_health_report(
+            oracle_status={
+                "diagnosis": "idle",
+                "queue_length": 0,
+                "queued": [],
+                "queued_tasks": [],
+                "agents": {},
+                "idle_agents": {
+                    "oracle_1": {"state": "idle", "last_poll_s": 10},
+                    "oracle_2": {"state": "idle", "last_poll_s": 400},
+                },
+                "registered_agents": 2,
+                "active_recent_agents": ["oracle_1"],
+                "completed": 200,
+                "active_sessions": 128,
+            },
+            discovery_summary={
+                "diagnosis": "gate_exhausted",
+                "candidate_count": 43,
+                "runnable_count": 0,
+                "skipped_status_count": 43,
+            },
+            supervisor_tail=[
+                "[2026-05-14T08:18:47+00:00] refill disabled: "
+                "--refill-project-url not set; backlog drained",
+            ],
+            now_ts=1_000.0,
+            supervisor_log_mtime=995.0,
+            refill_queue_exists=False,
+            refill_project_url="",
+            manual_submission_queue=[],
+            supervisor_code_mtime=700.0,
+            supervisor_started_ts=800.0,
+            supervisor_exited_ts=0.0,
+            supervisor_last_log_ts=800.0,
+            supervisor_poll_s=300,
+            supervisor_pid=2464,
+            supervisor_pid_started_ts=800.0,
+            supervisor_pid_script="pipeline_supervisor.py",
+            supervisor_pid_alive=True,
+        )
+
+        self.assertEqual(report["oracle"]["registered_agents"], 2)
+        self.assertEqual(report["oracle"]["active_recent_agents"], 1)
+
     def test_classifies_stale_supervisor_log(self):
         report = pipeline_health.build_health_report(
             oracle_status={"diagnosis": "idle", "queue_length": 0},
