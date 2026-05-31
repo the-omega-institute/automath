@@ -4107,8 +4107,10 @@ def build_oracle_review_prompt(target_journal: str,
             === FRESH REVIEW BRIEFING ===
             You are receiving this paper for first-pass editorial review. By design,
             you have NO prior reviewer comments - this is a clean-room evaluation.
-            Do not request prior reviews; assess the submitted PDF on its own merits
-            as if you are a new {journal} referee receiving the paper today.
+            Do not request prior reviews; assess the attached PDF in this task as the
+            only operative manuscript, ignoring any older PDFs, stale artifacts, or
+            conversation memory. Review it on its own merits as if you are a new
+            {journal} referee receiving the paper today.
             The pipeline routes papers through multiple internal review rounds before
             they reach you; your job is the independent first-look acceptance gate.
             === END FRESH REVIEW BRIEFING ===
