@@ -5,6 +5,7 @@
 \usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{xurl}
 
 \setlist{nosep,leftmargin=*}
@@ -91,6 +92,7 @@ following source-binding record:
 \path{thm:automated-discovery-certificate-ledger-required};
 \path{thm:automated-discovery-demotion-soundness};
 \path{thm:automated-discovery-lineage-dag};
+\path{thm:automated-discovery-lowest-score-not-best-target};
 \path{thm:automated-discovery-selection-favours-classifier-change};
 \path{thm:automated-discovery-pipeline-safety};
 \path{thm:automated-discovery-pipeline-theorem}.
@@ -105,14 +107,47 @@ discovery.  At lines 280--291, it states that a discovery transition supplies a
 semantic naming certificate and a ledger witness.  At lines 334--345, it states
 that gate demotion leaves a claim kind no stronger than its actual evidence.  At
 lines 366--374, it states that lineage-consistent accepted claims form an
-auditable acyclic lineage graph.  At lines 441--454, pipeline safety states that
-accepted discovery claims have classifier change, semantic naming certificate,
-ledger witness, DNA-complete theorem genome, score certificate, lineage witness,
-and an explicit not-claimed boundary.  At lines 457--475, the main pipeline
-theorem separates record growth, score reduction, recombination, classifier
-change, and ledgered discovery.  These paraphrases are used only as a stable
-interface to the pinned source theorem spine; no stronger source rebuild claim is
-made here.
+auditable acyclic lineage graph.  At lines 393--418, it states that the lowest
+score need not be the best target and that, when all other discovery-potential
+coordinates are fixed, a positive classifier-change coefficient makes the
+selection operator favor the classifier-changing candidate.  At lines 441--454,
+pipeline safety states that accepted discovery claims have classifier change,
+semantic naming certificate, ledger witness, DNA-complete theorem genome, score
+certificate, lineage witness, and an explicit not-claimed boundary.  At lines
+457--475, the main pipeline theorem separates record growth, score reduction,
+recombination, classifier change, and ledgered discovery.  These paraphrases are
+used only as a stable interface to the pinned source theorem spine; no stronger
+source rebuild claim is made here.
+
+\begin{table}
+\caption{Checked source-interface record for imported discovery-gate labels}
+\label{tab:source-interface-record}
+\small
+\begin{tabularx}{\linewidth}{p{0.32\linewidth}p{0.18\linewidth}X}
+\toprule
+Imported label & Lines & Statement summary \\
+\midrule
+\path{cor:automated-discovery-statement-code-insufficient} & 248--255 & statement-only and code-only candidates do not pass as theorem genomes \\
+\path{thm:automated-discovery-mechanical-not-discovery} & 258--267 & mechanical expansion has no classifier shift and therefore is not discovery \\
+\path{thm:automated-discovery-compression-not-discovery} & 269--278 & same-classifier compression is not discovery by itself \\
+\path{thm:automated-discovery-certificate-ledger-required} & 280--297 & discovery supplies a semantic naming certificate and a ledger witness \\
+\path{thm:automated-discovery-demotion-soundness} & 334--345 & demotion records no stronger kind than the evidence supports \\
+\path{thm:automated-discovery-lineage-dag} & 366--374 & lineage-consistent accepted claims form an auditable acyclic graph \\
+\path{thm:automated-discovery-lowest-score-not-best-target} & 393--406 & lower score alone can be a worse target than a structurally stronger genome \\
+\path{thm:automated-discovery-selection-favours-classifier-change} & 408--418 & with positive classifier-change weight and other coordinates fixed, selection favors classifier change \\
+\path{thm:automated-discovery-pipeline-safety} & 441--455 & accepted discovery has classifier change, certificate, ledger, genome, score, lineage, and boundary witnesses \\
+\path{thm:automated-discovery-pipeline-theorem} & 457--475 & the pipeline separates record growth, score reduction, recombination, classifier change, and ledgered discovery \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+All rows in Table~\ref{tab:source-interface-record} are extracted from
+\path{D:/omega/newmath/papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}; the extraction
+date is 2026-06-01.  The table is the machine-checkable source-interface record
+used by this paper: it binds each imported label to a source path, pinned commit,
+line range, extraction date, and bounded statement summary.  The same record is
+mirrored for scripted checks in \path{source_interface_record.json}.
 
 \section{Operational interface}
 
@@ -137,14 +172,16 @@ The deterministic dispatch function $\Gamma$ from claim kinds to gates is part
 of the operational interface.  Its domain is
 \[
 \{\text{formal-source},\text{ traceability},\text{ route},
-\text{ submission},\text{ artifact},\text{ discovery}\}.
+\text{ submission},\text{ artifact},\text{ discovery},\text{ work-selection}\}.
 \]
 It sends formal-source claims to the build and axiom-purity gates; traceability
 claims to inventory and marker-existence gates; route claims to promotion,
 overlap, and submission-state gates; submission claims to submission-pack gates;
-artifact claims to status and limitation-ledger gates; and discovery claims to
-the pinned discovery gate above.  For mixed claims, $\Gamma$ returns the union of
-the gate sets for the claim kinds present.
+artifact claims to status and limitation-ledger gates; discovery claims to the
+pinned discovery gate above; and work-selection claims to the scheduler gate,
+whose evidence surface is a critical-path score or backlog window together with
+the claim kind that the selected item is meant to advance.  For mixed claims,
+$\Gamma$ returns the union of the gate sets for the claim kinds present.
 
 A \emph{case witness record} is path-complete when its evidence surface gives a
 concrete source or artifact path for each load-bearing component of the row.  A
@@ -167,22 +204,62 @@ evidence unless explicitly marked command-run.
 
 \begin{proposition}[Deterministic claim-kind dispatch]
 \label{prop:claim-kind-dispatch}
-For every load-bearing manuscript claim whose kind lies in the six-kind domain
+For every load-bearing manuscript claim whose kind lies in the seven-kind domain
 above, $\Gamma$ assigns a unique finite set of deterministic gates.  A mixed
 load-bearing claim is accepted only if it passes every gate in the union assigned
 to its component kinds.
 \end{proposition}
 
 \begin{proof}
-The six atomic clauses in the definition of $\Gamma$ assign one explicitly named
+The seven atomic clauses in the definition of $\Gamma$ assign one explicitly named
 finite gate set to each atomic claim kind.  Hence an atomic claim has a unique
 assigned gate set.  For a mixed claim, the component-kind set is finite because
-it is a subset of the six-kind domain; taking the union of the corresponding
+it is a subset of the seven-kind domain; taking the union of the corresponding
 finite gate sets is deterministic and finite.  If any component gate is omitted,
 then the projection of the mixed claim to that component kind would be recorded
 without the gate assigned by $\Gamma$, contradicting the definition of accepted
 work as gated recording.  Therefore accepted mixed claims must pass every gate
 in the union.\qed
+\end{proof}
+
+\begin{proposition}[Scheduler selection is advisory before discovery gating]
+\label{prop:scheduler-selection-advisory}
+Let $s$ be a scheduler or critical-path score attached to a candidate claim
+$c$.  If $s$ recommends selecting $c$, then the recommendation is a
+work-selection claim and by itself can only pass the scheduler gate.  If $c$ is
+also asserted to be a discovery or classifier-shifting contribution, then the
+accepted mixed claim must pass both the scheduler gate and the discovery gate.
+Consequently, critical-path scores may prioritize review order, and the imported
+classifier-shift selection rule may break ties among otherwise equal discovery
+potential coordinates, but neither score nor recommendation accepts a
+classifier-shift discovery unless the discovery gate also supplies the required
+certificate, ledger, and lineage witnesses.
+\end{proposition}
+
+\begin{proof}
+By the definition of $\Gamma$, a scheduler recommendation has claim kind
+work-selection, so its atomic gate is the scheduler gate.  The scheduler gate's
+evidence surface records a score, backlog window, or analogous critical-path
+priority; none of these fields is a semantic naming certificate, a ledger
+witness, a DNA-complete theorem genome, a score certificate for a discovery
+claim, a lineage witness, or a not-claimed boundary.  Hence scheduler passage
+alone records only that $c$ is an eligible or prioritized work item.
+
+Now suppose that the same recorded assertion also says that $c$ is a discovery
+or classifier-shifting contribution.  Then the assertion is mixed: it has a
+work-selection component and a discovery component.  Proposition~\ref{prop:claim-kind-dispatch}
+therefore requires passage through every gate in the union assigned by $\Gamma$,
+namely the scheduler gate for the work-selection component and the pinned
+discovery gate for the discovery component.  The source-interface record in
+Table~\ref{tab:source-interface-record} includes the imported classifier-change
+selection theorem only in its bounded form: with positive classifier-change
+weight and all other coordinates fixed, such a selection operator favors the
+classifier-changing candidate.  The same source-interface record also includes
+pipeline safety, which requires certificate, ledger, genome, score, lineage, and
+boundary witnesses for accepted discovery.  Combining these two imported
+interfaces gives the stated conclusion: scheduling and classifier-shift scoring
+can advise selection order, but discovery acceptance still occurs only through
+the discovery gate.\qed
 \end{proof}
 
 \begin{theorem}[Publication safety interface]
@@ -213,15 +290,17 @@ than to generated prose alone.  Proposition~\ref{prop:claim-kind-dispatch}
 identifies the required finite gate set: formal-source claims use build and
 axiom gates, traceability claims use inventory and marker gates, route claims
 use promotion, overlap, and submission-state gates, artifact claims use status
-and limitation-ledger gates, submission claims use submission-pack gates, and
-mixed claims use the union.  If $c$ is a discovery claim, the third assumption
-routes it through the pinned discovery-gate interface.  The source-interface
-paragraph above records the imported statements used here: statement-only,
-code-only, mechanical-expansion, and compression-only records do not become
-accepted discovery claims without the required certificate, ledger, and lineage
-witnesses.  Hence every accepted load-bearing claim has gate passage before
-publication recording, and discovery claims receive the stronger
-source-interface guarantee.\qed
+and limitation-ledger gates, submission claims use submission-pack gates,
+work-selection claims use the scheduler gate, and mixed claims use the union.
+If $c$ is a discovery claim, the third assumption routes it through the pinned
+discovery-gate interface.  The source-interface table above records the imported
+statements used here: statement-only, code-only, mechanical-expansion, and
+compression-only records do not become accepted discovery claims without the
+required certificate, ledger, and lineage witnesses, and classifier-shift
+selection remains bounded by the discovery gate as shown in
+Proposition~\ref{prop:scheduler-selection-advisory}.  Hence every accepted
+load-bearing claim has gate passage before publication recording, and discovery
+claims receive the stronger source-interface guarantee.\qed
 \end{proof}
 
 \section{Gate summary}
