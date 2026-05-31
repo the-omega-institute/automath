@@ -735,3 +735,40 @@ Status: T-32 (b) — second sign-resolvent (A={0,3}) now has the X0-vs-all-Y
 F-bar_11 cross-ratio separator. The full A={0,3} branch-decic certificate is
 not yet established. Combined with the prior A={0,1} X0 separator commit,
 we have F-bar_11 separation for X0 in TWO of the active sign-resolvents.
+
+
+## Monitoring Update 2026-06-01 05:45 SGT — First explicit F_13 deck-intertwining witness
+
+Pipeline-side `check_litt3_F13_first_witness_replay` (05:42, theorem
+`Litt3F13FirstWitnessReplay`) records the first explicit deck-intertwining
+witness recovered on the F_13 base field (a different attack from the
+F_11 sign-resolvent work above).
+
+Witness specifics:
+- field: F_13
+- covers_reconstructed: 140
+- source_curve_id: 8, source_subset_index: 4
+- target_curve_id: 9, target_subset_index: 2
+- split_type: (2, 1, 1, 1, 1) — one length-2 orbit plus four length-1
+- mu_target_to_source: [1, 6, 0, 1]
+- witness_invariant: [2, 188, 2234]
+- invariant_pairs_scanned_until_first_witness: 1
+
+Interpretation: there exists at least one cover-pair over F_13 with the
+listed split-type-(2,1,1,1,1) data where the deck-intertwining invariant
+is shared. The 140 covers reconstructed give a finite database for the
+F_13 witness reproducibility check.
+
+Status: T-32 (b) — first concrete F_13 deck-intertwining witness alongside
+the F_11 sign-resolvent separator work. The remaining open task per the
+record is the bucket-level witness records and metric reconciliation
+against the F_11 data (each unordered curve pair vs each cover-pair
+counted separately).
+
+This complements the F_11 sign-resolvent work (A={0,1} and A={0,3} X0
+separators committed earlier) with a different attack: explicit
+witnesses on F_13 where some cover-pairs actually DO match the deck
+invariant. The combination of (i) F_11 separators excluding most pairs
+and (ii) explicit F_13 witnesses where matches exist gives a
+multi-field picture of where the common-cover obstacle does and does
+not bite.
