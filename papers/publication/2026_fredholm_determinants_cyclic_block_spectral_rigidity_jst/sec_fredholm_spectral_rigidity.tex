@@ -222,13 +222,16 @@ and consequently
   \((\mu_q)_{q\in Q}\), where \(Q=\{1,
   \ldots,m\}\) or \(Q=\NN\), be any prescribed ordering of the non-zero
   eigenvalues of \(K\), each repeated according to algebraic multiplicity.
-  Then there is an orthonormal triangular representation of \(K\), with
-  diagonal sequence \((d_k)\), such that the non-zero subsequence of
-  \((d_k)\) is exactly \((\mu_q)_{q\in Q}\) in the prescribed order, and
-  every diagonal entry not belonging to this subsequence is zero. In the
-  finite-dimensional case the same statement is read with a finite
-  orthonormal basis. If \(K\) has no non-zero eigenvalues, the prescribed
-  list is empty and the assertion says that all diagonal entries are zero.
+  Then there is an orthonormal basis \((e_k)\) and an upper triangular matrix
+  \(A=(\langle Ke_j,e_i\rangle)\) for \(K\) in that basis, with diagonal
+  sequence \((d_k)\), such that the subsequence obtained by deleting all zero
+  diagonal entries is exactly \((\mu_q)_{q\in Q}\) in the prescribed order, and
+  every diagonal entry not belonging to this prescribed subsequence is zero.
+  Equivalently, the lemma prescribes the order of the non-zero diagonal values
+  but not the locations of the zero diagonal positions. In the finite-dimensional
+  case the same statement is read with a finite orthonormal basis. If \(K\) has
+  no non-zero eigenvalues, the prescribed list is empty and the assertion says
+  that all diagonal entries are zero.
 \end{lemma}
 
 \begin{proof}
@@ -439,7 +442,8 @@ and consequently
   This is exactly \(\Phi_p(a,b,c)\ge0\).
 
   It remains to identify the equality case by a direct \(2\times2\)
-  computation.  Write \(x_1\ge x_2\) for the decreasing rearrangement of
+  computation, rather than by any equality theorem for weak majorization.  Write
+  \(x_1\ge x_2\) for the decreasing rearrangement of
   \((|a|,|b|)\).  The singular-value product and Hilbert--Schmidt identities
   for this block are
   \[
@@ -828,7 +832,10 @@ and consequently
   \Cref{lem:two-by-two-schatten-pinching}---proved from the singular-value
   product and Hilbert--Schmidt identities, rather than from a general
   equality case for weak majorization---the left-hand side is nonnegative
-  and can tend to zero for fixed \(d_i,d_j\) only when \(a_{ij}\to0\).
+  and can tend to zero for fixed \(d_i,d_j\) only when \(a_{ij}\to0\).  Thus
+  the equality step in this triangular lemma is the elementary two-by-two
+  computation of \Cref{lem:two-by-two-schatten-pinching}, not a hidden
+  strict-convexity equality assertion for weak majorization.
   Since \(\Delta_{N,p}\to0\), each fixed strict Schur entry is zero.
 \end{proof}
 
@@ -953,10 +960,19 @@ Weyl--Ky Fan lower bound converts that multiset into the trace-norm budget
 \(\sum_{\lambda}\abs\lambda M_{\mathcal D}(\lambda)\). Third, Ringrose
 triangularization supplies a Schur gauge whose non-zero diagonal subsequence is
 the determinant-forced eigenvalue list, with zero positions not prescribed.
-The new step is the equality analysis: finite-compression pinching uses only
-the absolute diagonal-sum identity and shows that equality in the global trace
-lower bound kills every strict upper-triangular Schur entry, so a full-fiber
-minimizer is forced back into the normal cyclic model class.
+  The collapsed budget is the elementary identity
+  \[
+    \sum_{\lambda\in\Sigma_{\mathcal D}}\abs{\lambda}M_{\mathcal D}(\lambda)
+    =\sum_{j\in J}m_j\sum_{\lambda^{n_j}=\beta_j}\abs{\lambda}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
+  \]
+  because all roots of \(\lambda^{n_j}=\beta_j\) have modulus
+  \(\abs{\beta_j}^{1/n_j}\).  No conjugation identity or determinant linearity is
+  involved in this collapse. The new step is the equality analysis:
+  finite-compression pinching uses only the absolute diagonal-sum identity and
+  shows that equality in the global trace lower bound kills every strict
+  upper-triangular Schur entry, so a full-fiber minimizer is forced back into the
+  normal cyclic model class.
 
 \begin{proof}
   By \Cref{lem:fredholm-spectral-rigidity}, the non-zero eigenvalues of
@@ -1728,10 +1744,13 @@ length-\(N\) list.
   \[
     \sum_{i=1}^N a_{\mathcal D,N,i}\le\sum_{i=1}^Ns_i.
   \]
-  Equality-rigidity for minimizers is only asserted for the strict
-  weak-majorization gauges, the trace norm, and the strictly convex Schatten
-  cases covered by \(\Cref{thm:finite-dimensional-trace-stability}\); arbitrary
-  non-strict gauges can have non-normal minimizers outside the normal orbit.
+  This is exactly the fixed finite Horn--Li--Mathias theorem applied after the
+  determinant has fixed the eigenvalue tuple; no inverse-limit, asymptotic, or
+  cross-dimensional Horn theorem is asserted. Equality-rigidity for minimizers
+  is only asserted for the strict weak-majorization gauges, the trace norm, and
+  the strictly convex Schatten cases covered by
+  \(\Cref{thm:finite-dimensional-trace-stability}\); arbitrary non-strict gauges
+  can have non-normal minimizers outside the normal orbit.
 \end{corollary}
 
 \begin{proof}
@@ -1900,18 +1919,27 @@ length-\(N\) list.
 
 \subsection{Schatten regularized prescribed-budget rigidity}\label{sec:schatten-prescribed-budget-rigidity}
 
-This subsection is a prescribed-budget regularized-determinant analogue of the
-trace-class minimization theorem.  For \(1<p<\infty\), both the finite-subset
-cyclic product and the \(\mathcal S_p\)-budget are part of the data.  We keep
-two classes distinct.  The product-realized class is defined by locally uniform
-convergence of the prescribed finite-subset regularized cyclic products to
-\(\det_r(I-zT)\).  The determinant-equality class is defined, once
-\(L_{\mathcal D}\in\mathcal S_p\) has been constructed, by equality with
-\(\det_r(I-zL_{\mathcal D})\).  The localization result below proves their
-equivalence only after the finite \(\mathcal S_p\)-budget has been forced or
-prescribed.  The natural-domain obstruction at the end marks where this method
-stops: it is not a classification of all \(\det_r\)-fibers on the full
-\(\mathcal S_r\)-domain.
+  This subsection is a prescribed-budget regularized-determinant analogue of the
+  trace-class minimization theorem.  For \(1<p<\infty\), both the finite-subset
+  cyclic product and the \(\mathcal S_p\)-budget are part of the data.  We keep
+  two classes distinct.  The product-realized class is
+  \[
+    \mathcal P_{p,\mathcal D}(H)
+    :=\{T\in\mathcal S_p(H):P_F^{(r)}\to\det_r(I-zT)
+    \text{ locally uniformly on }\CC\},
+  \]
+  where \(P_F^{(r)}\) denotes the finite-subset regularized cyclic product.  The
+  determinant-equality class, defined once \(L_{\mathcal D}\in\mathcal S_p\) has
+  been constructed, is
+  \[
+    \mathcal F_{p,\mathcal D}(H)
+    :=\{T\in\mathcal S_p(H):
+    \det_r(I-zT)=\det_r(I-zL_{\mathcal D})\}.
+  \]
+  The localization result below proves their equivalence only after the finite
+  \(\mathcal S_p\)-budget has been forced or prescribed.  The natural-domain
+  obstruction at the end marks where this method stops: it is not a
+  classification of all \(\det_r\)-fibers on the full \(\mathcal S_r\)-domain.
 \begin{theorem}[Finite-subset prescribed-budget cyclic-product \(\mathcal S_p\)-fiber rigidity]
   \label{thm:schatten-determinant-fiber-minimality}
   Let \(1<p<\infty\), put \(r=\lceil p\rceil\), and let
@@ -1942,13 +1970,15 @@ stops: it is not a classification of all \(\det_r\)-fibers on the full
     \right\}.
   \]
   All assertions of this theorem are assertions inside this finite-budget
-  determinant-equality class.  The finite-subset cyclic product, the collapsed
-  non-zero eigenvalue multiset encoded by \(\mathcal D\), and the finite
-  \(\mathcal S_p\)-budget are part of the input; by
+  determinant-equality class, namely
+  \(\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)
+  =\mathcal F_{p,\mathcal D}(H)\).  The finite-subset cyclic product, the
+  collapsed non-zero eigenvalue multiset encoded by \(\mathcal D\), and the
+  finite \(\mathcal S_p\)-budget are part of the input; by
   \Cref{prop:schatten-finite-budget-localization} this class is the same as the
-  corresponding product-realized class only under that finite-budget
-  hypothesis.  In particular the statement is not made on the full natural
-  \(\mathcal S_r\)-domain of \(\det_r\). If
+  product-realized class \(\mathcal P_{p,\mathcal D}(H)\) only under that
+  finite-budget hypothesis.  In particular the statement is not made on the full
+  natural \(\mathcal S_r\)-domain of \(\det_r\). If
   \(T\in\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)\), then
   \[
     \|T\|_p^p\ge \tau_{\mathcal D,p}.
