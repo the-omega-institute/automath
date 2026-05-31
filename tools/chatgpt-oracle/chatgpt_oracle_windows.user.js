@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.22
+// @version      5.23
 // @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3|4|5 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -20,7 +20,7 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.22";
+  const SCRIPT_VERSION = "5.23";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -1656,6 +1656,59 @@
     }
   }
 
+  function nudgeVirtualizedTranscriptToBottom() {
+    // ChatGPT can keep long completed answers partially virtualized until the
+    // viewport is explicitly nudged.  The normal scrollTop=scrollHeight path is
+    // not always enough, especially after background generation.
+    scrollConversationToBottom();
+
+    const scrollTargets = new Set([window, document.documentElement, document.body]);
+    const roots = [document];
+    for (const el of document.querySelectorAll("*")) {
+      if (el.shadowRoot) roots.push(el.shadowRoot);
+    }
+
+    for (const root of roots) {
+      try {
+        const candidates = root.querySelectorAll(
+          "main, [role='main'], [class*='conversation'], [class*='thread'], " +
+          "[class*='scroll'], [class*='overflow'], div, section"
+        );
+        for (const el of Array.from(candidates)) {
+          if (el.scrollHeight > el.clientHeight + 100) scrollTargets.add(el);
+        }
+      } catch {}
+    }
+
+    for (const target of scrollTargets) {
+      try {
+        if (target === window) {
+          window.scrollBy(0, window.innerHeight || 900);
+          window.scrollTo(0, document.body.scrollHeight);
+        } else if (target) {
+          target.scrollTop = target.scrollHeight;
+          target.dispatchEvent(new Event("scroll", { bubbles: true }));
+          target.dispatchEvent(new WheelEvent("wheel", {
+            bubbles: true,
+            cancelable: true,
+            deltaY: 1600,
+            deltaMode: 0,
+          }));
+        }
+      } catch {}
+    }
+
+    try {
+      document.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "End",
+        code: "End",
+        keyCode: 35,
+        which: 35,
+        bubbles: true,
+      }));
+    } catch {}
+  }
+
   async function waitForResponse(task_id, minResponseLength = DEFAULT_MIN_RESPONSE_LENGTH) {
     log("Waiting for ChatGPT response...");
 
@@ -1676,6 +1729,13 @@
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
+
+      if (!generating && mainLen > Math.max(minResponseLength * 4, 4000)
+          && responseText.length < minResponseLength) {
+        nudgeVirtualizedTranscriptToBottom();
+        await sleep(1200);
+        responseText = extractResponseText();
+      }
 
       if (Date.now() - lastHeartbeat >= 60000) {
         lastHeartbeat = Date.now();

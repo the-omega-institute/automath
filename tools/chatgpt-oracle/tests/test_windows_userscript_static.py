@@ -44,3 +44,13 @@ def test_windows_userscript_panel_exposes_poll_state() -> None:
     assert "last_poll_status" in source
     assert "function recordPollStatus(status)" in source
     assert "poll: ${lastPollStatus}" in source
+
+
+def test_windows_userscript_nudges_virtualized_completed_responses() -> None:
+    source = _source()
+
+    assert "function nudgeVirtualizedTranscriptToBottom()" in source
+    assert "WheelEvent(\"wheel\"" in source
+    assert 'key: "End"' in source
+    assert "mainLen > Math.max(minResponseLength * 4, 4000)" in source
+    assert "responseText = extractResponseText();" in source
