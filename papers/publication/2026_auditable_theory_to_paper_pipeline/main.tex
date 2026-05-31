@@ -149,6 +149,38 @@ used by this paper: it binds each imported label to a source path, pinned commit
 line range, extraction date, and bounded statement summary.  The same record is
 mirrored for scripted checks in \path{source_interface_record.json}.
 
+\begin{lemma}[Source-interface extraction correctness]
+\label{lem:source-interface-extraction-correctness}
+For the pinned source path
+\path{D:/omega/newmath/papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b},
+Table~\ref{tab:source-interface-record} is the complete imported interface used
+by this paper.  Its extraction certificate is: manual line-range audit against
+the pinned file, mirrored in \path{source_interface_record.json}, extraction date
+2026-06-01, and summary mode ``bounded paraphrase'' rather than replacement of
+the full source statements.  Consequently every use below of an imported
+discovery-gate label is limited to the corresponding row's label, path, commit,
+line range, and bounded paraphrase.
+\end{lemma}
+
+\begin{proof}
+The first two columns of Table~\ref{tab:source-interface-record} give, for every
+imported label named in the source-binding record, the source label and the line
+range from which the interface is extracted.  The paragraph immediately before
+the table fixes the only source file and commit used for those labels; the
+paragraph immediately after the table fixes the extraction date and identifies
+\path{source_interface_record.json} as the mirrored check record.  The third
+column deliberately records bounded paraphrases: each row states only the
+interface property needed later, such as insufficiency of statement-only records,
+certificate-and-ledger requirements, demotion soundness, lineage acyclicity,
+bounded classifier-change selection, or pipeline safety.  No later theorem cites
+an imported label outside this ten-row list, and no later proof uses a stronger
+form than the corresponding bounded summary.  Thus the table is complete for the
+imported interface of this paper and correct at the stated evidence level: exact
+as to path, commit, label, line range, method, date, and summary mode, and
+bounded as to mathematical restatement.\qed
+\end{proof}
+
 \section{Operational interface}
 
 For this short systems paper, the following finite interface is sufficient.  A
@@ -178,10 +210,29 @@ It sends formal-source claims to the build and axiom-purity gates; traceability
 claims to inventory and marker-existence gates; route claims to promotion,
 overlap, and submission-state gates; submission claims to submission-pack gates;
 artifact claims to status and limitation-ledger gates; discovery claims to the
-pinned discovery gate above; and work-selection claims to the scheduler gate,
-whose evidence surface is a critical-path score or backlog window together with
-the claim kind that the selected item is meant to advance.  For mixed claims,
-$\Gamma$ returns the union of the gate sets for the claim kinds present.
+pinned discovery gate above and, for extension claims, to the theorem-content
+delta gate; and work-selection claims to the scheduler gate, whose evidence
+surface is a critical-path score or backlog window together with the claim kind
+that the selected item is meant to advance.  For mixed claims, $\Gamma$ returns
+the union of the gate sets for the claim kinds present.
+
+The route gates have separate operational meanings.  The \emph{promotion gate}
+uses the active-paper evidence surface, namely a human promotion act producing a
+\path{2026_*} directory with \path{main.tex} and \path{PIPELINE.md}; passing
+means the candidate may be daemon-visible publication work, and failing means it
+remains intake or source material.  The \emph{overlap gate} uses route identity,
+semantic-overlap ledgers, submitted-sibling paths, and program-board state;
+passing means advancement is route-disjoint or has a recorded resolution, and
+failing means advancement is blocked until closure, merge, supersession, or
+waiting for prior feedback.  The \emph{submission-state gate} uses submission
+markers, venue state, board state, and submission-pack metadata; passing means
+the route's publication state permits the proposed action, and failing means the
+action would duplicate, race, or under-specify an active or submitted route.  The
+\emph{theorem-content delta gate} uses theorem inventories, hard-lint output, and
+delta records such as \path{ARTIFACT_INVENTORY.md}; passing means that an
+extension claim identifies load-bearing mathematical content, and failing means
+that compilation, file churn, or surface edits may not be reported as substantive
+theorem growth.
 
 A \emph{case witness record} is path-complete when its evidence surface gives a
 concrete source or artifact path for each load-bearing component of the row.  A
@@ -189,7 +240,12 @@ route-overlap witness has the fields \emph{route identity}, \emph{submitted
 sibling}, \emph{overlap reason}, \emph{gate decision}, and \emph{allowed next
 actions}.  An artifact-limitation witness has the fields \emph{artifact status
 path}, \emph{limitation ledger path}, \emph{observed limitation}, \emph{gate
-decision}, and \emph{allowed manuscript claim}.  The inventory files
+decision}, and \emph{allowed manuscript claim}.  A promotion witness has the
+fields \emph{candidate surface}, \emph{human promotion evidence},
+\emph{active-paper markers}, \emph{gate decision}, and \emph{allowed manuscript
+claim}.  A theorem-content witness has the fields \emph{changed surface},
+\emph{theorem inventory or hard-lint surface}, \emph{substantive-content delta},
+\emph{gate decision}, and \emph{allowed manuscript claim}.  The inventory files
 \path{ARTIFACT_INVENTORY.md} and \path{SOURCE_MAP.md} are part of the evidence
 surface for this paper and give the compact path catalogue used by
 Table~\ref{tab:case-witnesses}.
@@ -220,6 +276,31 @@ then the projection of the mixed claim to that component kind would be recorded
 without the gate assigned by $\Gamma$, contradicting the definition of accepted
 work as gated recording.  Therefore accepted mixed claims must pass every gate
 in the union.\qed
+\end{proof}
+
+\begin{proposition}[Gate-interface separation]
+\label{prop:gate-interface-separation}
+The promotion, overlap, submission-state, and theorem-content delta gates are
+separate deterministic interfaces.  None can be replaced by passage of another
+one when a load-bearing claim has the corresponding component.
+\end{proposition}
+
+\begin{proof}
+Each named gate has a distinct invariant and evidence surface in the operational
+definition.  Promotion asks whether a candidate has crossed the human
+publication boundary; its evidence is the active-paper directory and pipeline
+metadata.  Overlap asks whether the route duplicates or conflicts with a sibling
+route; its evidence is route identity, overlap ledgers, submitted-sibling paths,
+and board state.  Submission-state asks whether the proposed publication action
+is compatible with submission markers, venue state, and submission-pack metadata.
+The theorem-content delta gate asks whether an asserted extension contains
+load-bearing theorem growth; its evidence is an inventory, hard-lint surface, or
+delta record.  These predicates are logically independent at the interface
+level: an active paper can still overlap a submitted sibling, a route with no
+overlap can still have an impermissible submission state, and a compiling edit in
+a permissible route can still lack theorem-content delta.  Therefore a
+load-bearing claim with any one of these components must pass that component's
+own gate, and passage through the others cannot supply the missing evidence.\qed
 \end{proof}
 
 \begin{proposition}[Scheduler selection is advisory before discovery gating]
@@ -269,9 +350,10 @@ Assume that every load-bearing claim in an active manuscript is either rejected
 or is recorded together with an evidence surface; that every advisory output is
 demoted unless the deterministic gate set $\Gamma$ for its claim kind passes;
 that discovery claims are
-checked through the pinned discovery-gate interface, in particular its pipeline
-safety and main pipeline theorem labels; and that no inactive intake seed is
-treated as publication work without human promotion.  Then any accepted
+checked through the pinned discovery-gate interface certified by
+Lemma~\ref{lem:source-interface-extraction-correctness}, in particular its
+pipeline safety and main pipeline theorem labels; and that no inactive intake
+seed is treated as publication work without human promotion.  Then any accepted
 load-bearing claim in the manuscript has passed the gate required for its claim
 kind before publication recording.  Moreover, accepted discovery claims inherit
 the pinned source-interface guarantee that statement-only, code-only,
@@ -286,11 +368,13 @@ after the relevant deterministic gate passes, and if recording crosses the
 publication boundary it follows a human promotion.  The first assumption gives
 an evidence surface for $c$, so the gate decision is attached to a checkable
 source path, artifact path, command log, inventory, or witness record rather
-than to generated prose alone.  Proposition~\ref{prop:claim-kind-dispatch}
-identifies the required finite gate set: formal-source claims use build and
-axiom gates, traceability claims use inventory and marker gates, route claims
-use promotion, overlap, and submission-state gates, artifact claims use status
-and limitation-ledger gates, submission claims use submission-pack gates,
+than to generated prose alone.  Proposition~\ref{prop:claim-kind-dispatch} and
+Proposition~\ref{prop:gate-interface-separation} identify the required finite
+gate set: formal-source claims use build and axiom gates, traceability claims
+use inventory and marker gates, route claims use promotion, overlap, and
+submission-state gates, artifact claims use status and limitation-ledger gates,
+submission claims use submission-pack gates, extension-style discovery claims use
+the theorem-content delta gate together with the pinned discovery gate,
 work-selection claims use the scheduler gate, and mixed claims use the union.
 If $c$ is a discovery claim, the third assumption routes it through the pinned
 discovery-gate interface.  The source-interface table above records the imported
@@ -321,10 +405,13 @@ Gate & Evidence surface & Failure prevented \\
 Formal-source gate & Lean build, axiom checks, axiom-purity audits & broken or impure formal targets \\
 Traceability gate & declaration inventory, source maps, marker audits & stale paper labels and missing source facts \\
 Discovery gate & certificate ledger, demotion, lineage DAG & statement-only, code-only, or mechanical ``discoveries'' \\
+Theorem-content delta gate & theorem inventory, phase-D hard lint, delta inventory & file churn or compilation reported as substantive theorem growth \\
 Artifact-limitation gate & status files, limitation ledgers, rerun logs when present & drift from bounded artifact evidence to stronger dynamic claims \\
 Scheduler gate & critical-path scoring and backlog windows & duplicated or random agent dispatch \\
 Promotion gate & active \texttt{2026\_*} directory plus pipeline metadata & intake seeds entering the daemon prematurely \\
-Submission gate & review, venue, bibliography, and metadata checks & unreviewed or under-specified submission packs \\
+Overlap gate & route identity, semantic-overlap ledgers, submitted-sibling paths, board state & duplicate or racing paper routes \\
+Submission-state gate & submission markers, venue state, board state, submission metadata & invalid advancement of active or submitted routes \\
+Submission-pack gate & review, venue, bibliography, and metadata checks & unreviewed or under-specified submission packs \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -354,25 +441,38 @@ as evidence for a fresh command-run assertion.\qed
 Suppose a case-study row is used as load-bearing evidence for
 Theorem~\ref{thm:publication-safety-interface}.  If the row is path-complete in
 the sense above, then the row supplies exactly the evidence surface required for
-a path-verified case claim.  In particular, a route-overlap row is sufficient
-only for the bounded claim that the overlap/submitted gate blocked advancement
-until one of the recorded next actions occurs, and an artifact-limitation row is
-sufficient only for the bounded claim that the artifact limitation must be
-disclosed or must block promotion.
+a path-verified case claim.  In particular, a promotion row is sufficient only
+for the bounded claim that an intake packet is not daemon-visible publication
+work before human promotion; a route-overlap row is sufficient only for the
+bounded claim that the overlap and submission-state gates blocked advancement
+until one of the recorded next actions occurs; a theorem-content row is
+sufficient only for the bounded claim that file churn or compilation did not
+show substantive theorem growth; and an artifact-limitation row is sufficient
+only for the bounded claim that the artifact limitation must be disclosed or must
+block promotion.
 \end{proposition}
 
 \begin{proof}
 Let $r$ be a path-complete case row.  By definition, every load-bearing
-component of $r$ has a concrete source or artifact path.  The route-overlap
-interface names the active route, the submitted sibling that creates the
-chronology constraint, the reason for overlap, the gate decision, and the finite
-set of permitted next actions.  These are precisely the data needed to check
-whether advancement is allowed without appealing to generated prose.  The
-artifact-limitation interface names the status file, the limitation ledger, the
-observed limitation, the gate decision, and the only manuscript claim that may
-be carried forward.  These are precisely the data needed to prevent a failed or
-bounded artifact check from being promoted into a stronger dynamic-validation
-claim.  Lemma~\ref{lem:gate-witness-criterion} then applies to each such row:
+component of $r$ has a concrete source or artifact path.  The promotion
+interface names the candidate surface, human-promotion evidence, active-paper
+markers, gate decision, and the bounded manuscript claim; these fields are
+precisely the data needed to distinguish inactive intake from publication work.
+The route-overlap interface names the active route, the submitted sibling that
+creates the chronology constraint, the reason for overlap, the gate decision,
+and the finite set of permitted next actions.  These are precisely the data
+needed to check whether advancement is allowed without appealing to generated
+prose, and the submission-state evidence prevents a route from racing an already
+submitted sibling.  The theorem-content interface names the changed surface,
+the theorem inventory or hard-lint surface, the substantive-content delta, the
+gate decision, and the allowed manuscript claim; these fields are precisely the
+data needed to reject extension claims based only on file churn or successful
+compilation.  The artifact-limitation interface names the status file, the
+limitation ledger, the observed limitation, the gate decision, and the only
+manuscript claim that may be carried forward.  These are precisely the data
+needed to prevent a failed or bounded artifact check from being promoted into a
+stronger dynamic-validation claim.  Lemma~\ref{lem:gate-witness-criterion} then
+applies to each such row:
 the named paths give the source surface, the interface fields give the failed
 invariant and decision, and the last field gives the safe lesson.  The same
 lemma also rules out upgrading the row to a command-run claim unless the extra
@@ -443,10 +543,13 @@ item is a route-overlap witness because it additionally names route identity,
 submitted sibling, overlap reason, gate decision, and allowed next actions.  The
 fourth item is an artifact-limitation witness because it additionally names the
 artifact status path, limitation-ledger paths, observed limitation, gate
-decision, and allowed manuscript claim.  The first and third items are the same
-path-verified interface with promotion and theorem-content gates in place of the
-specialized route-overlap and artifact-limitation gates.  Therefore every row
-has the complete field set needed for
+decision, and allowed manuscript claim.  The first item is a promotion witness:
+it names the candidate surface, the required human-promotion evidence, the
+active-paper markers, the blocking decision, and the bounded inactive-preparation
+claim.  The third item is a theorem-content witness: it names the changed
+surface, theorem inventory and hard-lint surface, failed substantive-content
+delta, rejection decision, and bounded manuscript claim.  Therefore every row has
+the complete field set needed for
 Proposition~\ref{prop:path-complete-case-witnesses}.\qed
 \end{proof}
 
