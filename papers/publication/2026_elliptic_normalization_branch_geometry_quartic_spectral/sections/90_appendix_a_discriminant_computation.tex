@@ -1,27 +1,17 @@
 \section{Discriminant computation}\label{app:disc}
 
-This appendix is part of the proof of Corollary~\ref{cor:disc-factor}: it supplies the displayed \(7\times7\) Sylvester determinant and the expanded resultant \eqref{eq:disc-expanded-polynomial} used there to fix the leading coefficient and exclude hidden branch factors.
-The same factorization is imported in Lemma~\ref{lem:positive-axis-dominance-criterion} and Theorem~\ref{thm:canonical-branch-dominance} through the discriminant identity \(\Disc_\lambda\Pi=-y(y-1)(256y^3+411y^2+165y+32)\).
-All eliminations in this appendix are performed in \(\QQ[y]\); hence the displayed Sylvester determinant is an exact polynomial identity, not a floating-point or sampled computation.
+This appendix records the exact discriminant identity used in Corollary~\ref{cor:disc-factor} and Lemma~\ref{lem:positive-axis-dominance-criterion}.  The reproducibility script of Appendix~\ref{app:reproducibility-note} independently checks the same resultant.
 Recall
 \[
-\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1).
+\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1),
+\qquad
+\partial_\lambda\Pi=4\lambda^3-3\lambda^2-2(2y+1)\lambda+1.
 \]
-Its derivative with respect to \(\lambda\) is
+Since \(\Pi\) is monic of degree four,
 \[
-\partial_\lambda \Pi(\lambda,y)=4\lambda^3-3\lambda^2-2(2y+1)\lambda+1.
+\Disc_\lambda\Pi=\Res_\lambda(\Pi,\partial_\lambda\Pi).
 \]
-
-For a monic polynomial \(P(\lambda)\) of degree \(n\), the discriminant satisfies
-\[
-\Disc_\lambda P = (-1)^{n(n-1)/2}\Res_\lambda(P,P').
-\]
-Here \(n=4\) so \((-1)^{n(n-1)/2}=(-1)^6=1\), and thus
-\[
-\Disc_\lambda \Pi(\lambda,y)=\Res_\lambda\bigl(\Pi(\lambda,y),\partial_\lambda \Pi(\lambda,y)\bigr).
-\]
-
-The resultant is the determinant of the following \(7\times 7\) Sylvester matrix, formed from the coefficient rows of \(\Pi\) and \(\partial_\lambda\Pi\):
+The Sylvester determinant is
 \begin{center}
 \resizebox{\textwidth}{!}{%
 $\displaystyle
@@ -40,27 +30,14 @@ $\displaystyle
 $%
 }
 \end{center}
-Expanding this determinant gives the polynomial
+Exact expansion gives
 \begin{equation}\label{eq:disc-expanded-polynomial}
 \Res_\lambda\bigl(\Pi,\partial_\lambda\Pi\bigr)
 =
 -256y^5-155y^4+246y^3+133y^2+32y.
 \end{equation}
-This expansion is obtained by fraction-free Gaussian elimination over $\QQ[y]$; the Bareiss divisions below are exact divisions in that ring, so their intermediate pivots are not additional hypotheses on the parameter \(y\).
-With the displayed row order, the Bareiss pivots are
-\begin{gather*}
-1,\quad 1,\quad 1,\quad 6y+1,\\
--4(4y^3+6y^2+9y+2),
-\end{gather*}
+Factoring \eqref{eq:disc-expanded-polynomial} yields
 \[
-2y(32y^3+35y^2-7y+12),
-\quad -y(y-1)(256y^3+411y^2+165y+32).
+\Disc_{\lambda}\Pi(\lambda,y)=-y(y-1)\bigl(256y^3+411y^2+165y+32\bigr).
 \]
-Since the matrix is square, the last Bareiss pivot is the determinant.
-Multiplying out the last factor gives exactly the right-hand side of \eqref{eq:disc-expanded-polynomial}, so this is an exact elimination identity rather than a numerical expansion.
-Factoring \eqref{eq:disc-expanded-polynomial} yields the complete factorization
-\[
-\Disc_{\lambda}\Pi(\lambda,y)=-y(y-1)\bigl(256y^3+411y^2+165y+32\bigr),
-\]
-which is the claim in Corollary~\ref{cor:disc-factor}.
-
+This is the only discriminant input imported elsewhere in the paper.

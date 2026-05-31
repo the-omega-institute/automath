@@ -1,21 +1,32 @@
-\section{Displayed algebraic certificates}\label{app:reproducibility-note}
+\section{Reproducible exact certificates}\label{app:reproducibility-note}
 
-The proof uses the following printed exact-algebra inputs.  Each entry lists the displayed computation and the result that imports it.
+All determinant, resultant, Sturm, and endpoint-amplitude calculations used in the proof are finite exact-algebra checks.  A minimal ancillary verifier is included with the source as
+\[
+\texttt{certificates/verify\_exact\_certificates.py}.
+\]
+From the paper root it is run by
+\[
+\texttt{python certificates/verify\_exact\_certificates.py}.
+\]
+The script uses SymPy with exact rational and algebraic arithmetic only.  Its assertions reproduce the identities listed in Table~\ref{tab:exact-certificates}; a successful run prints \texttt{all exact certificates verified}.  The paper itself keeps only the identities and sign tables needed by the proofs.
 
-\begin{center}
+\begin{table}[H]
+\centering
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.39\textwidth}>{\raggedright\arraybackslash}p{0.29\textwidth}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.40\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}}
 \toprule
-Location & Printed certificate & Used by\\
+Location & Verified certificate & Used by\\
 \midrule
-Appendix~\ref{app:disc} & \(7\times7\) Sylvester determinant for \(\Res_\lambda(\Pi,\partial_\lambda\Pi)\), Bareiss pivots, expanded discriminant \eqref{eq:disc-expanded-polynomial}, and factorization & Corollary~\ref{cor:disc-factor}; Lemma~\ref{lem:positive-axis-dominance-criterion}\\
-Lemma~\ref{lem:cubic-branch-elimination} & Two cubic branch-resultant inputs, the \(6\times6\) Sylvester determinant, and primitive output \(-64(256y^3+411y^2+165y+32)\) & Proposition~\ref{prop:elliptic-reduction}; Proposition~\ref{prop:ep-classification}\\
-Lemma~\ref{lem:positive-axis-dominance-criterion} & Endpoint substitutions \eqref{eq:positive-axis-resultants} and opposite-modulus resultant \eqref{eq:opposite-modulus-resultant} & Theorem~\ref{thm:canonical-branch-dominance}\\
-Appendix~\ref{app:degeneracies} & Sylvester determinant for \(\Res_t(N,D)\), Bareiss pivots, resultant \(y^3(y-1)^3(y+1)^6\), exceptional cancellations at \(y=-1,0,1\), and Sturm pseudo-remainder variation table & Proposition~\ref{prop:minimal-order}; Lemma~\ref{lem:positive-axis-dominance-criterion}\\
-Appendix~\ref{app:endpoint-branching} & Endpoint branch and amplitude expansions from \eqref{eq:endpoint-recursive-polynomial}, residue formula, coefficient comparisons for \(Z_0,Z_1,Z_2,Z_3\), and remainder estimate \(R_m(-u^2/m^2)=O_K(m^{-2})\) & Proposition~\ref{prop:endpoint-cosine-hypotheses}; Theorem~\ref{thm:endpoint-zero-quantization}\\
-Appendix~\ref{app:projective-infinity} & Projective-infinity balance \(\Pi_\infty=(\lambda^2-y)^2\) and coefficient comparison \eqref{eq:infinity-expansion} & Lemma~\ref{lem:projective-infinity-consistency}\\
+Appendix~\ref{app:disc} & \(\Res_\lambda(\Pi,\partial_\lambda\Pi)=-y(y-1)(256y^3+411y^2+165y+32)\), together with endpoint substitutions \(\Pi(-1,y)=\Pi(1,y)=y(y-1)\), \(\Pi(0,y)=y(y+1)\) & Corollary~\ref{cor:disc-factor}; Lemma~\ref{lem:positive-axis-dominance-criterion}\\
+Lemma~\ref{lem:cubic-branch-elimination} & \(\Res_\lambda(16\lambda^3-9\lambda^2+1,\,4y\lambda-(4\lambda^3-3\lambda^2-2\lambda+1))=-64(256y^3+411y^2+165y+32)\) & Proposition~\ref{prop:elliptic-reduction}; Proposition~\ref{prop:ep-classification}\\
+Lemma~\ref{lem:positive-axis-dominance-criterion} & \(\Pi(-x,y)-\Pi(x,y)=2x(x^2-1)\) and \(\Res_x(\Pi(x,y),\Pi(-x,y))=16y^3(y-1)^2(y+1)\) & Theorem~\ref{thm:canonical-branch-dominance}\\
+Appendix~\ref{app:degeneracies} & \(\Res_t(N,D)=y^3(y-1)^3(y+1)^6\), the exceptional gcds at \(y=-1,0,1\), the three printed pseudo-remainder identities for \(S_0,\ldots,S_4\), and the nonzero wall resultant at \(y^2-17y-2=0\) & Proposition~\ref{prop:minimal-order}; Lemma~\ref{lem:positive-axis-dominance-criterion}\\
+Appendix~\ref{app:endpoint-branching} & The endpoint branch expansion \(\lambda_\pm(s)=1\pm s/\sqrt2+5s^2/8\mp43s^3/(64\sqrt2)+O(s^4)\), the residue amplitudes \(C_\pm(s)=1/2\mp3\sqrt2\,s/16+7s^2/16+O(s^3)\), and the first-order cosine coefficient in \eqref{eq:appendix-scaling} & Proposition~\ref{prop:fixed-window-endpoint-isolation}; Theorem~\ref{thm:endpoint-zero-quantization}\\
+Appendix~\ref{app:projective-infinity} & Projective-infinity balance \(\Pi_\infty=(\lambda^2-y)^2\) and the coefficient comparison \eqref{eq:infinity-expansion} & Lemma~\ref{lem:projective-infinity-consistency}\\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{Finite exact certificates reproduced by the ancillary verifier.}
+\label{tab:exact-certificates}
+\end{table}
 
-The manuscript is self-contained with respect to these finite exact-algebra inputs: the resultants, Sturm and pseudo-remainder data, positive-axis sign table, and endpoint branch/amplitude coefficient equations used later are printed in the cited locations.
+The verifier is not an additional hypothesis in any argument: each proof cites the displayed identity or sign table at the location indicated above.  Its purpose is to make the finite algebraic reductions independently reproducible without retyping the longer determinant or pseudo-remainder computations.
