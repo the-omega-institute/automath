@@ -1,4 +1,587 @@
-\input{sec_fredholm_witt_cyclic}
-\input{sec_fredholm_cyclic_construction}
-\input{sec_fredholm_threshold_classification}
-\input{sec_fredholm_spectral_rigidity}
+\section{Fredholm determinants and cyclic divisors}\label{sec:fredholm}
+
+We collect the determinant facts needed for the paper in one place.  The
+point is not a new Fredholm determinant construction, but the bookkeeping that
+occurs when the zero divisor is presented by cyclic factors.
+
+\subsection{The cyclic model}
+
+\begin{proposition}[Fredholm and regularized zero-divisor correspondence]
+  \label{prop:fredholm-regularized-zero-divisor-correspondence}
+  \label{lem:fredholm-spectral-rigidity}
+  For \(T\in\mathcal S_1\), the zero of \(\det(I-zT)\) at
+  \(z=\lambda^{-1}\) has order equal to the algebraic multiplicity of the
+  non-zero eigenvalue \(\lambda\).  The same zero-divisor statement holds for
+  \(\det_r(I-zT)\) when \(T\in\mathcal S_r\).
+\end{proposition}
+
+\begin{proof}
+  This is the standard Fredholm product over non-zero eigenvalues; the
+  regularizing exponential factor in \(\det_r\) is zero-free and therefore
+  does not change the non-zero zero divisor.
+\end{proof}
+
+\begin{proposition}[Fredholm--Witt bridge]
+  \label{prop:fredholm-witt-bridge}
+  The logarithm of \(\det(I-zT)^{-1}\) has Witt coordinates determined by
+  \(\Tr(T^n)\) whenever \(T\in\mathcal S_1\).  In this paper these coordinates
+  are used only to motivate the cyclic divisor presentation, not as extra
+  invariants beyond the collapsed zero divisor.
+\end{proposition}
+
+\begin{proof}
+  For small \(z\), expand
+  \(-\log\det(I-zT)=\sum_{n\ge1}\Tr(T^n)z^n/n\) and compare with the standard
+  Witt product expansion.  The comparison is purely formal after the analytic
+  identity is known near the origin.
+\end{proof}
+
+For a trace-class operator \(T\) on a separable Hilbert space we use
+\[
+  \det(I-zT)=\prod_{\lambda\in\spec(T)\setminus\{0\}}
+       (1-z\lambda)^{a_T(\lambda)},
+\]
+where \(a_T(\lambda)\) is algebraic multiplicity; the product converges
+locally uniformly because
+\(\sum_{\lambda}a_T(\lambda)\abs{\lambda}<\infty\).  Conversely, a multiset
+\(\Lambda\subset\CC\setminus\{0\}\) with multiplicities \(M(\lambda)\) is the
+non-zero spectrum of a normal trace-class operator if and only if
+\(\sum_{\lambda}M(\lambda)\abs{\lambda}<\infty\).  These are the standard Fredholm
+facts used below; see, for instance, \cite[Chs.~3--4]{Simon2005TraceIdeals}.
+For \(T\in\mathcal S_r\), the regularized determinant of order \(r\) is written
+unambiguously as follows.  In words, \(\det_r\) means ``the regularized
+Fredholm determinant of order \(r\)'':
+\[
+\begin{aligned}
+  \det_{r}(I-zT)
+  :=
+  \prod_{\lambda\ne0}
+  \left(
+    (1-z\lambda)
+    \exp\!\left(\sum_{q=1}^{r-1}\frac{(z\lambda)^q}{q}\right)
+  \right)^{a_T(\lambda)} .
+\end{aligned}
+\]
+has the same non-zero zero divisor.
+
+Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be countable data with
+\(n_j,m_j\in\NN\) and \(\beta_j\in\CC^\times\).  Define
+\[
+\begin{aligned}
+  b_1(\mathcal D)
+  &:=\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j},\\
+  M_{\mathcal D}(\lambda)
+  &:=\sum_{\{j:\lambda^{n_j}=\beta_j\}}m_j .
+\end{aligned}
+\]
+Thus \(M_{\mathcal D}\) denotes the collapsed multiplicity function, not a
+choice of individual cyclic blocks.
+The associated trace budget can be read directly from the roots:
+\[
+\begin{aligned}
+  \sum_{\lambda\ne0}M_{\mathcal D}(\lambda)\abs{\lambda}
+  &=
+  \sum_{\lambda\ne0}\abs{\lambda}
+    \sum_{\{j:\lambda^{n_j}=\beta_j\}}m_j \\
+  &=
+  \sum_{j\in J}m_j
+    \sum_{\lambda^{n_j}=\beta_j}\abs{\lambda}
+  =
+  \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
+\end{aligned}
+\]
+Only the fact that all roots of \(\lambda^{n_j}=\beta_j\) have modulus
+\(\abs{\beta_j}^{1/n_j}\) is used in this identity.
+The product-side zero divisor is the collapsed multiset
+\(M_{\mathcal D}\), since
+\[
+  (1-\beta z^n)=\prod_{\lambda^n=\beta}(1-z\lambda).
+\]
+For each triple choose once and for all the roots of \(x^{n_j}=\beta_j\) and
+let \(L_{j}\) be the diagonal normal block containing those roots, repeated
+\(m_j\) times.  The cyclic normal model is
+\(L_{\mathcal D}=\bigoplus_{j\in J}L_j\); changing the chosen roots only
+unitarily relabels finite-dimensional summands.  Its non-zero spectral
+multiplicity is \(M_{\mathcal D}\) and
+\[
+  \|L_{\mathcal D}\|_1=b_1(\mathcal D).
+\]
+
+\begin{theorem}[Cyclic Fredholm determinant fiber]
+  \label{thm:cyclic-fredholm-realization}
+  \label{thm:cyclic-data-classification}
+  \label{thm:determinant-fiber-trace-minimality}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be as above and put
+  \[
+    D_{\mathcal D}(z)=\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j}.
+  \]
+  The following are equivalent.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(b_1(\mathcal D)<\infty\).
+    \item The cyclic model \(L_{\mathcal D}\) is trace class and
+    \(D_{\mathcal D}(z)=\det(I-zL_{\mathcal D})\) locally uniformly in
+    \(z\in\CC\).
+    \item There exists a trace-class operator \(T\) with
+    \(D_{\mathcal D}(z)=\det(I-zT)\).
+  \end{enumerate}
+  When these conditions hold, every trace-class realization has non-zero
+  eigenvalue multiplicities \(M_{\mathcal D}\).  Hence the normal realizations
+  are exactly the normal operators unitarily equivalent to
+  \(L_{\mathcal D}\oplus0\), after collapsing repeated roots and adding an
+  arbitrary zero summand.  Moreover, in the full trace-class determinant fiber,
+  \[
+    \|T\|_1\ge \sum_{\lambda\ne0}M_{\mathcal D}(\lambda)\abs{\lambda}
+    =b_1(\mathcal D),
+  \]
+  and equality holds if and only if \(T\) is unitarily equivalent to
+  \(L_{\mathcal D}\oplus0\).
+\end{theorem}
+
+\begin{proof}
+  If \(b_1(\mathcal D)<\infty\), then the direct sum defining
+  \(L_{\mathcal D}\) is trace class and its trace norm is the displayed sum.
+  Multiplicativity of the finite-dimensional determinant on finite partial
+  sums gives
+  \[
+    \det(I-zL_F)=\prod_{j\in F}(1-\beta_jz^{n_j})^{m_j}.
+  \]
+  Since \(L_F\to L_{\mathcal D}\) in trace norm, standard determinant
+  continuity gives the asserted locally uniform limit, proving
+  \textup{(i)}\(\Rightarrow\)\textup{(ii)}\(\Rightarrow\)\textup{(iii)}.
+
+  Conversely, if \(T\in\mathcal S_1\) has determinant \(D_{\mathcal D}\), the
+  order of the zero at \(z=\lambda^{-1}\) is the algebraic multiplicity of the
+  non-zero eigenvalue \(\lambda\).  Comparing with the factorization above
+  gives exactly \(a_T(\lambda)=M_{\mathcal D}(\lambda)\).  Weyl's inequality
+  for compact operators gives
+  \(\sum_{\lambda}a_T(\lambda)\abs{\lambda}\le\|T\|_1<\infty\).  The left-hand side is
+  \(b_1(\mathcal D)\), so \textup{(iii)} implies \textup{(i)} and also gives
+  the lower bound for every realization.
+
+  If \(T\) is normal, the spectral theorem identifies it, up to a zero
+  summand, with the diagonal normal operator whose non-zero diagonal multiset is
+  \(M_{\mathcal D}\).  For the equality case in the lower bound, choose a
+  Ringrose triangularization ordered by the non-zero eigenvalues and then the
+  zero spectral part.  The trace norm dominates the \(\ell^1\)-sum of the
+  diagonal entries.  Equality in the Ky Fan--Weyl inequality forces equality in
+  each finite Schur compression; equivalently the strictly upper triangular
+  entries vanish on the non-zero spectral root spaces and the zero sector has
+  trace norm zero.  Thus \(T\) is normal with precisely the collapsed non-zero
+  spectral multiset, hence is unitarily equivalent to
+  \(L_{\mathcal D}\oplus0\).  The converse equality is immediate for the
+  normal cyclic model.
+\end{proof}
+
+\begin{corollary}[Final trace-class cyclic-divisor package]
+  \label{cor:trace-class-rigidity-consequences}
+  \label{prop:collapsed-spectral-multiplicities}
+  Under the equivalent hypotheses of
+  \Cref{thm:cyclic-fredholm-realization}, the Fredholm determinant remembers
+  precisely the collapsed non-zero spectral multiplicity function
+  \(M_{\mathcal D}\).  It does not remember the particular Euler-factor
+  presentation of the same collapsed multiset, and it does not classify the
+  determinant-invisible quasinilpotent zero sector.  The trace-class fiber is
+  nevertheless rigid at the sharp trace budget: the unique minimizer class is
+  \(L_{\mathcal D}\oplus0\).
+\end{corollary}
+
+\begin{proof}
+  This is the classification, lower-bound, and equality part of
+  \Cref{thm:cyclic-fredholm-realization}.  If two cyclic presentations produce
+  the same function \(M_{\mathcal D}\), then their determinants have the same
+  zero divisor and the same normal minimizer class.  Direct summing any
+  trace-class quasinilpotent operator in the zero sector changes neither the
+  non-zero zero divisor nor the Fredholm determinant, which is why no stronger
+  classification is asserted.
+\end{proof}
+
+\begin{remark}[Nonnormality after realization]
+  \label{rem:nonnormal-obstruction-after-realization}
+  The determinant fixes algebraic multiplicities but not Jordan form away from
+  zero and not quasinilpotent summands at zero.  The appendix records this
+  finite non-zero algebraic skeleton separately.
+\end{remark}
+
+\subsection{Stability and finite-dimensional shadows}
+
+Two standard consequences are useful, but they should not obscure the main
+statement.  First, if a Ringrose Schur basis is fixed and
+\(\|T\|_1\le b_1(\mathcal D)+\varepsilon\), then every fixed finite block of
+strictly upper triangular Schur entries is controlled by \(\varepsilon\).  In
+particular, for a two-by-two compression
+\(
+  \begin{psmallmatrix}a&x\\0&b\end{psmallmatrix}
+\)
+one has
+\[
+  \left\|\begin{pmatrix}a&x\\0&b\end{pmatrix}\right\|_1
+  \ge |a|+|b|,
+\]
+with equality only when \(x=0\); compactness of a fixed finite window gives a
+modulus for \(x\).  Infinite-dimensional distance-to-orbit estimates require
+an externally supplied Schur-tail modulus and are therefore not asserted as an
+intrinsic orbit-distance theorem.
+
+Second, when the collapsed support is finite, the possible singular-value
+vectors in any fixed dimension are exactly the classical Weyl--Horn body for
+the zero-padded eigenvalue vector.  Thus all fixed-dimensional symmetric-gauge
+minimization statements reduce to Horn's theorem and its usual equality cases;
+there is no cross-dimensional Horn inverse system in this paper.
+
+
+
+\subsection{Conventions for fibers and zero summands}
+
+Several possible meanings of ``the determinant fiber'' occur in the literature,
+so we fix the convention used here.  The unrestricted trace-class fiber of a
+function \(D\) is the class of all \(T\in\mathcal S_1\) satisfying
+\(D(z)=\det(I-zT)\).  This is the class in which the trace-norm lower bound is
+proved.  It is intentionally large: it contains normal diagonal realizations,
+finite Jordan perturbations on non-zero root spaces, and arbitrary trace-class
+quasinilpotent direct summands at zero.  The theorem says that this large class
+has a unique equality class for the trace-norm problem; it does not say that
+the determinant is a complete invariant of the large class.
+
+The normal fiber is smaller.  Once normality is imposed, the spectral theorem
+turns the determinant data into a diagonal multiset.  The only freedom left is
+the Hilbert-space multiplicity of the zero eigenspace, which the Fredholm
+determinant cannot see.  Thus normal classification is really classification
+of the non-zero diagonal multiset together with permission to append a zero
+summand.  This is why the statement repeatedly says ``up to a zero summand''.
+No compactness, trace-class, or determinant argument can recover the dimension
+of an unused zero summand.
+
+The cyclic presentation is smaller in a different direction.  It remembers a
+chosen product decomposition into factors \((1-\beta_jz^{n_j})^{m_j}\), while
+the determinant remembers only the roots after all these factors have been
+split over \(\CC\).  The map
+\[
+  \mathcal D\longmapsto M_{\mathcal D}
+\]
+is therefore many-to-one.  The paper treats \(\mathcal D\) as prescribed input
+for the construction and for the budget formula, but treats
+\(M_{\mathcal D}\) as the invariant of the determinant fiber.  This distinction
+is essential: without it, one would incorrectly assign uniqueness to a cyclic
+factorization that the analytic determinant cannot distinguish.
+
+The finite non-zero skeleton used in the appendix is a third quotient.  It
+forgets the zero sector and forgets unitary geometry, retaining only algebraic
+similarity classes on finite-dimensional Riesz root spaces away from zero.  In
+that quotient, the determinant fixes the sizes of the partitions but not the
+partitions themselves.  The normal minimizer corresponds to the most split
+partition, while larger Jordan blocks represent nonnormal directions at the
+same determinant.  This appendix-level invariant is useful for locating the
+boundary of the main theorem, but it is not needed to prove existence of the
+normal cyclic model.
+
+The prescribed Schatten fiber is narrower than the unrestricted regularized
+fiber.  It includes the cyclic product data and the finite \(p\)-budget as part
+of the problem.  The reason is not technical convenience but mathematical
+honesty: regularized determinants preserve the non-zero zero divisor, but their
+natural domains and exponential correction terms carry information not present
+in the ordinary trace-class product.  The Schatten theorem therefore proves the
+parallel minimization statement exactly where the cyclic product realization is
+specified, and it explicitly refrains from a larger natural-domain assertion.
+
+These conventions keep the article focused.  The main theorem is a
+trace-class theorem about a large Fredholm determinant fiber and its sharp
+normal minimizer.  The Schatten theorem is a prescribed-budget analogue.  The
+appendix records the finite algebraic non-zero residue.  Statements about
+cross-dimensional Horn systems, global orbit-distance estimates without tail
+control, unrestricted regularized determinant domains, or classification of the
+quasinilpotent zero sector are outside the asserted results.
+\subsection{Examples of collapse and sharpness}
+
+We include a few elementary examples because they make clear why the theorem is
+stated in terms of the collapsed multiplicity function rather than the original
+list of cyclic factors.  If
+\[
+  (1-\beta z^2)(1+\beta z^2)=1-\beta^2z^4,
+\]
+then the two displayed cyclic presentations need not be remembered separately
+by the determinant.  What is remembered is the multiset of roots of
+\(x^2=\beta\) together with the roots of \(x^2=-\beta\), which is the same as
+the multiset of roots of \(x^4=\beta^2\), with the appropriate multiplicities.
+The canonical normal operator is therefore attached to this collapsed root
+multiset.  A choice of square or fourth roots is only a basis labelling of the
+same normal diagonal summand.
+
+A second example shows why the summability condition is not cosmetic.  Suppose
+that the data consist of factors \((1-\beta_jz)\), each with multiplicity one.
+Then \(D_{\mathcal D}\) is a trace-class Fredholm determinant exactly when
+\(\sum_j|\beta_j|<\infty\).  If this sum diverges, the formal product may still
+make sense in a smaller analytic or formal category, but it cannot be the
+Fredholm determinant of a trace-class operator: the non-zero eigenvalues would
+have to be precisely the \(\beta_j\), counted with multiplicity, and Weyl's
+inequality would force their absolute sum to be finite.  The general cyclic
+threshold is the same observation after replacing each factor by all roots of
+\(x^{n_j}=\beta_j\).
+
+The equality statement is also sharp.  For a single factor
+\((1-\beta z)^m\), the diagonal normal block \(\beta I_m\) and the Jordan block
+\(J_m(\beta)\) have the same determinant factor.  If \(m>1\), the latter is
+nonnormal and has larger trace norm unless the nilpotent part vanishes.  Thus
+minimal trace norm selects the diagonal block, while the determinant alone
+allows the whole finite Jordan family.  Appending a nilpotent block at zero
+makes the trace norm arbitrarily large without changing the determinant at all.
+This is why the paper separates determinant-fiber minimization from any claim
+of full nonnormal classification.
+
+Finally, the finite-state symbolic motivation lies at the boundary of the
+trace-class theorem.  For a nontrivial primitive finite shift, primitive orbit
+counts grow fast enough that \(\sum_n n p_n(A)=\infty\).  The reciprocal zeta
+identity is still a meaningful finite-state dynamical identity, but it is not a
+summable cyclic zero divisor of the kind classified by
+\Cref{thm:cyclic-fredholm-realization}.  This separation prevents the paper
+from importing dynamical claims that are irrelevant to the Fredholm determinant
+fiber under study.
+
+\subsection{Proof details behind the trace-class package}
+
+We spell out the two points in \Cref{thm:cyclic-fredholm-realization} where the
+cyclic notation can otherwise obscure the classical argument.  The first is
+convergence.  If \(F\subset J\) is finite and \(L_F=\bigoplus_{j\in F}L_j\),
+then the trace-norm tail satisfies
+\[
+  \|L_{\mathcal D}-L_F\|_1
+  =\sum_{j\notin F}m_jn_j|\beta_j|^{1/n_j}.
+\]
+Thus finite partial cyclic products form a Cauchy net in the trace-norm
+Fredholm determinant topology.  The standard estimate
+\[
+  |\det(I+A)-\det(I+B)|
+  \le \|A-B\|_1
+      \exp(1+\|A\|_1+\|B\|_1)
+\]
+for trace-class perturbations, applied to \(A=-zL_F\) and
+\(B=-zL_{\mathcal D}\) on compact \(z\)-sets, gives the required locally
+uniform convergence.  No summation over a preferred ordering of \(J\) is
+involved; the determinant is the limit over finite subsets.
+
+The second point is the equality case.  Let \((d_k)\) be the diagonal sequence
+of a Ringrose triangular representation of \(T\), ordered first by the non-zero
+root spaces and then by the zero spectral part.  Repeating each non-zero
+eigenvalue according to algebraic multiplicity, the diagonal sequence contains
+exactly the collapsed multiset and then zeros.  Weyl--Ky Fan gives
+\[
+  \sum_k |d_k| \le \sum_k s_k(T)=\|T\|_1.
+\]
+Equality in the global determinant-fiber bound therefore means that the
+finite-compression defects
+\[
+  \delta_N:=\|P_NTP_N\|_1-
+  \sum_{k=1}^N\abs{d_k}
+\]
+are non-negative and tend to zero along the increasing Schur exhaustion.  The
+pinching input is completely elementary.  For
+\[
+  B=\begin{pmatrix}a&c\\0&b\end{pmatrix}
+\]
+with singular values \(\sigma_1,\sigma_2\),
+\[
+\begin{aligned}
+  \|B\|_1^2
+  &=(\sigma_1+\sigma_2)^2
+    =\Tr(B^*B)+2\sqrt{\det(B^*B)} \\
+  &=\abs{a}^2+\abs{b}^2+\abs{c}^2+2\abs{ab}
+    =(\abs{a}+\abs{b})^2+\abs{c}^2 .
+\end{aligned}
+\]
+Thus equality \(\|B\|_1=\abs a+\abs b\) holds exactly when \(c=0\).
+Applying this two-by-two pinching to coordinate planes in each finite Schur
+compression and then letting \(N\to\infty\) removes all strictly upper triangular
+Schur entries on the non-zero root-space part.  The remaining zero spectral
+summand has trace norm zero, hence is the zero operator.  This is why equality
+in the trace budget is stronger than equality of determinants: it rules out all
+nonnormal determinant-invisible directions.
+
+The same discussion explains the near-minimal statements used later.  On a
+fixed finite Schur window, the map from the strictly upper triangular entries
+to the excess trace norm over the diagonal absolute sum is continuous and
+vanishes only at the zero off-diagonal matrix.  Compactness on bounded windows
+therefore gives a modulus: if the trace-norm excess is at most \(\varepsilon\),
+then each fixed off-diagonal entry is bounded by a quantity tending to zero
+with \(\varepsilon\).  This is a chosen-basis statement.  Without an external
+condition controlling the Schur tail, it does not become an intrinsic global
+operator-distance estimate to the unitary orbit of the normal model.
+
+\subsection{What the determinant does not classify}
+
+The determinant sees the non-zero zero divisor and hence the algebraic
+multiplicities away from zero.  It does not see the cyclic factorization before
+collapse, the Jordan profile away from zero, or the quasinilpotent part at
+zero.  These omissions are not defects in the proof; they are sharp boundaries
+of the invariant.  For example, replacing a diagonal block
+\(\lambda I_m\) by any Jordan matrix with eigenvalue \(\lambda\) and total size
+\(m\) leaves the determinant factor \((1-z\lambda)^m\) unchanged.  Likewise,
+for any trace-class quasinilpotent \(Q\),
+\[
+  \det(I-z(T\oplus Q))=\det(I-zT),
+\]
+because \(Q\) contributes no non-zero eigenvalues.  The trace-norm minimizer
+statement in \Cref{thm:cyclic-fredholm-realization} is therefore best possible:
+it identifies the unique equality class, but it cannot turn the determinant
+into a complete invariant of the whole nonnormal fiber.
+
+For finite collapsed support, the residual non-zero algebraic information is
+finite-dimensional and is exactly the Jordan partition at each non-zero root.
+This is the purpose of the appendix.  The appendix is not a second
+classification theorem for trace-class determinant fibers; it is a finite
+bookkeeping supplement that records what remains once the determinant has fixed
+the algebraic multiplicities and the trace-norm equality case has selected the
+normal partition.
+
+\subsection{A prescribed-budget Schatten extension}
+
+For \(1<p<\infty\) let \(r=\lceil p\rceil\) and set
+\[
+  b_p(\mathcal D):=\sum_{j\in J}m_j n_j\abs{\beta_j}^{p/n_j}.
+\]
+Once \(b_p(\mathcal D)<\infty\), define the prescribed cyclic finite-budget
+determinant fiber by
+\[
+  \mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)
+  :=\{T\in\mathcal S_p(H):\textup{(C1) and \textup{(C2)} hold}\}.
+\]
+Here
+\[
+  \textup{(C1)}\qquad
+  \det_{r}(I-zT)=\det_{r}(I-zL_{\mathcal D}),
+\]
+and \textup{(C2)} says that the prescribed finite-subset cyclic products
+converge locally uniformly in \(z\) to the determinant in \textup{(C1)}.
+Here the superscript \(\mathrm{cyc}\) labels the prescribed cyclic-product
+localization; it is not an additional operation on the determinant.
+The following theorem is intentionally localized to the cyclic product class
+with finite prescribed budget.  It is not a classification of the whole natural
+\(\det_r\)-domain.
+
+\begin{theorem}[Prescribed-budget Schatten extension]
+  \label{thm:schatten-determinant-fiber-minimality}
+  Let \(1<p<\infty\), \(r=\lceil p\rceil\), and assume
+  \(b_p(\mathcal D)<\infty\).  Then the cyclic model
+  \(L_{\mathcal D}\) belongs to \(\mathcal S_p\),
+  \[
+    \sum_{\lambda\ne0}M_{\mathcal D}(\lambda)\abs{\lambda}^{p}
+    =b_p(\mathcal D),
+  \]
+  and the regularized determinant
+  \(\det_r(I-zL_{\mathcal D})\) has the non-zero zero divisor prescribed by
+  \(D_{\mathcal D}\).
+
+  Within \(\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)\), every realization
+  satisfies
+  \[
+    \|T\|_p^p\ge b_p(\mathcal D).
+  \]
+  Equality holds if and only if \(T\) is unitarily equivalent to
+  \(L_{\mathcal D}\oplus0\).  Conversely, any operator in this localized class
+  forces the displayed finite budget.
+\end{theorem}
+
+\begin{proof}
+  The membership statement follows directly from the diagonal model: each root
+  of \(x^{n_j}=\beta_j\) has modulus \(|\beta_j|^{1/n_j}\), so the
+  \(p\)-Schatten sum is exactly \(b_p(\mathcal D)\).  The definition of
+  \(\det_r\) shows that its zeros away from the origin are exactly
+  \(z=\lambda^{-1}\), with order equal to algebraic multiplicity, hence the
+  same collapsed divisor \(M_{\mathcal D}\).
+
+  For a localized realization \(T\), the same zero-divisor comparison gives
+  the non-zero algebraic multiplicities \(M_{\mathcal D}\).  The Schatten
+  Weyl--Fan inequality gives
+  \[
+    \sum_{\lambda\ne0}M_{\mathcal D}(\lambda)\abs{\lambda}^{p}
+    \le \|T\|_p^p,
+  \]
+  proving both the lower bound and the forced-budget assertion.  Equality in
+  the Schatten Weyl--Fan inequality, read in a Ringrose triangularization,
+  forces the same Schur pinching as in the trace-class case: the non-zero root
+  spaces are normal diagonal blocks and the zero sector has zero
+  \(p\)-Schatten norm.  Therefore equality is exactly the normal cyclic model
+  up to a zero summand.
+\end{proof}
+
+
+\subsection{Finite-dimensional and regularized perspectives}
+
+We close the main section by making explicit how the finite-dimensional and
+regularized statements should be read.  These paragraphs replace the longer
+chain of corollaries one might otherwise state separately.
+
+When \(M_{\mathcal D}\) has finite support, choose an integer \(N\) at least as
+large as \(\sum_{\lambda}M_{\mathcal D}(\lambda)\).  The eigenvalue vector in dimension \(N\)
+is obtained by listing the non-zero roots with their collapsed multiplicities
+and padding by zeros.  Horn's theorem describes exactly which singular-value
+vectors can occur for \(N\times N\) matrices with that eigenvalue vector.  In
+particular, every unitarily invariant norm is minimized at the normal diagonal
+matrix with those eigenvalues.  This is not an additional infinite-dimensional
+classification: it is the fixed-dimensional matrix shadow of the determinant
+fiber.  If \(N\) changes, one is changing the ambient Horn problem by adding
+more zero eigenvalues, and no projective compatibility across all dimensions is
+asserted.
+
+The same fixed-dimensional viewpoint clarifies the finite non-zero skeleton.
+In a finite matrix fiber, the determinant fixes only the characteristic
+polynomial away from zero.  The algebraic similarity classes over each
+non-zero eigenvalue are then indexed by partitions of the corresponding
+algebraic multiplicity.  The normal minimizer is the partition into ones at
+every non-zero eigenvalue.  Other partitions are valid determinant-fiber
+points, but they carry nilpotent Jordan directions and therefore lose the
+trace-norm equality case.  This is precisely the algebraic bookkeeping isolated
+in the appendix.
+
+For \(\det_r\), the reason for keeping the word ``prescribed'' in the
+Schatten theorem is that a regularized determinant is not merely the ordinary
+Fredholm product with a different convergence condition.  The factor attached
+to an eigenvalue \(\lambda\) is
+\[
+  (1-z\lambda)
+  \exp\left(\sum_{q=1}^{r-1}\frac{(z\lambda)^q}{q}\right),
+\]
+so the zero divisor is unchanged but the analytic function also contains
+regularizing exponential data.  The theorem uses only the zero-divisor part for
+rigidity and keeps the finite cyclic product realization as part of the
+hypothesis.  This avoids the stronger and generally different problem of
+classifying all operators in the natural domain of \(\det_r\) with a given
+regularized determinant.
+
+The budget condition \(b_p(\mathcal D)<\infty\) is exactly the Schatten analogue
+of the trace-class threshold.  Each cyclic block contributes
+\(m_j n_j|\beta_j|^{p/n_j}\) to \(\|L_{\mathcal D}\|_p^p\), because all roots of
+\(x^{n_j}=\beta_j\) have modulus \(|\beta_j|^{1/n_j}\).  Conversely, if an
+operator in the prescribed class has the same regularized zero divisor, the
+Schatten Weyl--Fan inequality forces the same collapsed eigenvalue
+\(p\)-sum to be no larger than \(\|T\|_p^p\).  Equality again means equality in
+the triangular pinching argument, hence normality on the non-zero root spaces
+and no Schatten mass in the zero sector.
+
+This is the sense in which the Schatten result is parallel to the trace-class
+main theorem while remaining local.  It gives the sharp budget and equality
+class for the cyclic product class that the paper studies.  It deliberately
+leaves open, and does not need, a natural-domain theorem that would compare
+regularized determinants with the same zeros but different exponential
+regularization data.
+
+\begin{proposition}[Scope of the regularized determinant assertion]
+  \label{prop:regularized-domain-boundary}
+  The preceding theorem is a finite-budget localization theorem.  It does not
+  assert that every element of the natural \(\det_r\)-domain with the same
+  regularized determinant belongs to the prescribed cyclic-product class, nor
+  does it classify determinant-invisible quasinilpotent zero summands.
+\end{proposition}
+
+\begin{proof}
+  Regularized determinants encode the non-zero zero divisor, but the
+  exponential regularization also introduces lower-order trace data and is
+  naturally defined on a larger Schatten domain.  The theorem therefore keeps
+  the finite cyclic product data as part of the hypothesis.  Quasinilpotent
+  zero-sector summands have no non-zero zero divisor and so remain outside the
+  asserted classification, exactly as in the trace-class case.
+\end{proof}
+
+
+
+
+
+
