@@ -52,6 +52,10 @@ and creation of a `papers/publication/2026_*` directory.
 - [ ] Choose active paper slug, suggested:
   `2026_auditable_theory_to_paper_pipeline`.
 - [ ] Human approves promotion.
+  The exact approval command is:
+  `promotion bedc_automation_pipeline as 2026_auditable_theory_to_paper_pipeline`.
+  More generally, promotion requires the form
+  `promotion <seed> as <active_slug>`.
 
 ## Hard Prohibitions Before Promotion
 

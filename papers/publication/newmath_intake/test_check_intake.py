@@ -89,7 +89,10 @@ class NewmathIntakeGuardTests(unittest.TestCase):
             seed_dir = self.root / "seeds" / name
             seed_dir.mkdir()
             for filename in check_intake.REQUIRED_SEED_FILES.get(name, set()):
-                (seed_dir / filename).write_text("required evidence\n", encoding="utf-8")
+                text = "required evidence\n"
+                if filename == "promotion_checklist.md":
+                    text += "promotion <seed> as <active_slug>\n"
+                (seed_dir / filename).write_text(text, encoding="utf-8")
 
     def test_valid_intake_tree_passes(self):
         errors, warnings = check_intake.run_check(self.root)
@@ -151,6 +154,21 @@ class NewmathIntakeGuardTests(unittest.TestCase):
 
         self.assertTrue(
             any("source_decision_note.md" in error for error in errors),
+            errors,
+        )
+
+    def test_seed_promotion_checklist_requires_exact_command_boundary(self):
+        (
+            self.root
+            / "seeds"
+            / "bedc_automation_pipeline"
+            / "promotion_checklist.md"
+        ).write_text("required evidence\n", encoding="utf-8")
+
+        errors, _warnings = check_intake.run_check(self.root)
+
+        self.assertTrue(
+            any("promotion <seed> as <active_slug>" in error for error in errors),
             errors,
         )
 

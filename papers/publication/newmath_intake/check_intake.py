@@ -56,6 +56,11 @@ REQUIRED_SEED_FILES = {
         "trust_chain_template.md",
     },
 }
+P0_SEED_PROMOTION_CHECKLISTS = {
+    "bedc_automation_pipeline": "promotion_checklist.md",
+    "bedc_finite_kernel_calculus": "promotion_checklist.md",
+    "bedc_rule110_finite_witness": "promotion_checklist.md",
+}
 CASE_INSENSITIVE_ACTIVE_TRIGGER_FILES = {
     "main.tex",
     "pipeline.md",
@@ -129,6 +134,16 @@ def run_check(root: Path = ROOT) -> tuple[list[str], list[str]]:
 
     for seed_dir in seed_dirs:
         errors.extend(check_seed(seed_dir, root=root))
+        checklist_name = P0_SEED_PROMOTION_CHECKLISTS.get(seed_dir.name)
+        if checklist_name:
+            errors.extend(
+                check_index_file(
+                    seed_dir / checklist_name,
+                    ["promotion <seed> as <active_slug>"],
+                    root=root,
+                    publication_root=publication_root,
+                )
+            )
 
     errors.extend(
         check_index_file(

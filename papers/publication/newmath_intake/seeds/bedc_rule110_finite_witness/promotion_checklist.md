@@ -37,6 +37,8 @@ requires a human decision and a new active `2026_*` directory.
 - [ ] Write a trust-chain table with final LOC/count values.
 - [ ] Re-check live CICM/artifact/workshop venue pages.
 - [ ] Human approves promotion and active paper slug.
+  The approval must use the exact form
+  `promotion <seed> as <active_slug>`.
 
 ## Hard Prohibitions Before Promotion
 
