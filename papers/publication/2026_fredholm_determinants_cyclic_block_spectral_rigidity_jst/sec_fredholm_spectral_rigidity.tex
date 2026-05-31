@@ -21,7 +21,7 @@ trace-norm minimization theorem and a chosen triangular representative.
 \Cref{sec:fixed-dimensional-weyl-horn-consequences} is a fixed-ambient-dimension
 Horn consequence after the collapsed eigenvalue tuple has been fixed.
   \Cref{sec:schatten-prescribed-budget-rigidity} treats regularized
-  determinants under a prescribed finite-subset cyclic product and finite
+  determinants under prescribed finite-subset regularized cyclic products and finite
   \(\mathcal S_p\)-budget; its product-realized and determinant-equality
   classes are identified by
 \Cref{prop:schatten-finite-budget-localization} and is not the full natural
@@ -294,7 +294,7 @@ and consequently
   quasinilpotent part at the spectral point \(0\).
 \end{proof}
 
-\begin{lemma}[Classical Ringrose triangularization in Schatten ideals]
+\begin{lemma}[Ringrose triangular representation with prescribed non-zero diagonal]
   \label{lem:ringrose-prescribed-diagonal}
   Let \(1\le p<\infty\) and let \(T\in\mathcal S_p(H)\). After replacing \(H\)
   by the reducing subspace
@@ -329,7 +329,13 @@ and consequently
   triangularization with the prescribed non-zero diagonal subsequence and
   zero remaining diagonal entries is exactly
   \Cref{lem:compact-prescribed-ringrose-triangularization} applied to
-  \(T|_{H_T}\). The Schatten assumption is not part of the Ringrose input;
+  \(T|_{H_T}\). Its proof uses Ringrose's compact maximal-chain theorem
+  \cite[Chapter~1, Theorem~3, pp.~6--8]{Ringrose1971CompactNonSelfAdjoint}
+  after first building the finite-dimensional Riesz root-space flag.
+  Equivalently, this is the standard compact-operator triangular representation
+  with characteristic values repeated by algebraic multiplicity and the remaining
+  diagonal equal to zero; see also Gohberg--Krein
+  \cite[pp.~162--163]{GohbergKrein1969NonSelfAdjoint}. The Schatten assumption is not part of the Ringrose input;
   it enters only to make the diagonal \(p\)-sum finite and to justify the
   later Schatten pinching arguments. No convergence of Schur truncations is
   imported from Ringrose: the later arguments use finite coordinate
@@ -403,6 +409,70 @@ and consequently
   \]
   The equality characterization follows immediately, since the square
   root is strictly increasing on \([0,\infty)\).
+\end{proof}
+
+\begin{lemma}[Finite Schur-window compactness modulus]
+  \label{lem:finite-schur-window-compactness-modulus}
+  Fix integers \(N\ge1\) and a bound \(R>0\).  Let
+  \(\mathcal U_N\) be the vector space of strictly upper triangular
+  \(N\times N\) matrices, and define
+  \[
+    \Phi_{N,R}(\delta)
+    :=
+    \sup\left\{
+      \|U\|_1:
+      \begin{array}{l}
+        D=\operatorname{diag}(d_1,\ldots,d_N),\ U\in\mathcal U_N,\\[2pt]
+        \|D+U\|_1\le R,\\[2pt]
+        0\le \|D+U\|_1-\sum_{k=1}^N |d_k|\le\delta
+      \end{array}
+    \right\}.
+  \]
+  Here the supremum over the empty set is interpreted as \(0\).  Then
+  \(\Phi_{N,R}(\delta)<\infty\), the function \(\Phi_{N,R}\) is
+  nondecreasing in \(\delta\), and
+  \[
+    \Phi_{N,R}(\delta)\longrightarrow0
+    \qquad(\delta\downarrow0).
+  \]
+  Equivalently, for this specified window size \(N\) and norm bound \(R\),
+  trace-norm excess at most \(\delta\) forces the whole strict Schur window
+  \(U\) to be at most \(\Phi_{N,R}(\delta)\) in trace norm.  The modulus is
+  finite-dimensional and depends on the chosen pair \((N,R)\); it is not a
+  determinant-intrinsic or dimension-free modulus.
+\end{lemma}
+
+\begin{proof}
+  If \(D+U\) occurs in the defining set, then
+  \(\sum_k|d_k|\le\|D+U\|_1\le R\) by Weyl--Ky Fan. Hence
+  \(\|D\|_1\le R\) and
+  \[
+    \|U\|_1\le \|D+U\|_1+\|D\|_1
+    \le 2R.
+  \]
+  Thus the feasible pairs lie in the compact subset
+  \(\{(D,U):\|D\|_1\le R,
+  U\in\mathcal U_N,
+  \|U\|_1\le2R\}\) of the finite-dimensional space of diagonal-plus-strictly
+  upper triangular matrices.  The excess function
+  \[
+    E(D,U):=\|D+U\|_1-\sum_{k=1}^N|d_k|
+  \]
+  is continuous and nonnegative.  Its zero set in this compact domain has
+  \(U=0\): indeed, if \(E(D,U)=0\), the diagonal estimate and trace-norm
+  contractivity of two-block pinching force equality on each two-by-two Schur
+  compression; then \Cref{lem:two-by-two-trace-norm-pinching} forces the
+  corresponding strict Schur entry to vanish.  Therefore the compact sets
+  \[
+    K_\delta:=\{(D,U):\|D+U\|_1\le R,
+    0\le E(D,U)\le\delta\}
+  \]
+  decrease to \(K_0\subset\{U=0\}\) as \(\delta\downarrow0\).  If
+  \(\Phi_{N,R}(\delta)\) did not tend to zero, there would be
+  \(\rho>0\), \(\delta_m\downarrow0\), and \((D_m,U_m)\in K_{\delta_m}\)
+  with \(\|U_m\|_1\ge\rho\).  A compact subsequence would converge to some
+  \((D,U)\in K_0\), contradicting \(U=0\).  Monotonicity is immediate from
+  the definition.
 \end{proof}
 
 \begin{lemma}[Two-by-two Schatten pinching rigidity]
@@ -1122,7 +1192,7 @@ Schur-tail modulus is external data: it is not recovered from the determinant or
 from the scalar trace defect, and the resulting statements are not intrinsic
 global orbit-distance theorems.
 
-\begin{corollary}[Schur-entry stability for trace-norm near-minimizers]
+\begin{corollary}[Finite Schur-window pinching lemma for trace-norm near-minimizers]
   \label{cor:schur-entry-stability}
   Under the hypotheses of
   \Cref{thm:determinant-fiber-trace-minimality}, let \(T\in\sone(H)\)
@@ -1140,7 +1210,9 @@ global orbit-distance theorems.
   \Cref{lem:ringrose-prescribed-diagonal} whose diagonal has non-zero
   subsequence equal to the determinant-forced algebraic
   eigenvalue multiset, with the remaining zero entries in the unspecified
-  positions supplied by the triangularization. Write
+  positions supplied by the triangularization. This is a chosen-basis,
+  finite-window statement only: the determinant and scalar trace defect do not
+  supply a basis-free global orbit-distance bound or a tail modulus. Write
   \(A=[a_{ij}]\) for the resulting upper triangular matrix. For
   \(P_N\) the projection onto
   \(\operatorname{span}\{e_1,\ldots,e_N\}\), set
@@ -1401,7 +1473,7 @@ coordinates to determinant-intrinsic invariants.
   \(\eta_\nu\), tends to zero under the stated compatibility hypothesis.
 \end{proof}
 
-\begin{corollary}[Chosen-tail stability criterion]
+\begin{corollary}[Chosen-tail consequence of finite Schur-window pinching]
   \label{cor:chosen-tail-stability-criterion}
   Under the hypotheses of
   \Cref{thm:determinant-fiber-trace-minimality}, let
@@ -1434,11 +1506,11 @@ coordinates to determinant-intrinsic invariants.
   \[
     \dist_1(T_\nu,\mathcal M_{\mathcal D})\longrightarrow0 .
   \]
-  Thus infinite-dimensional trace-distance stability in this package
-  is a tail-localized criterion in a chosen Schur gauge: the determinant
-  and the scalar trace defect supply the entrywise pinching, while the two
-  displayed tail conditions are the additional data that convert it into an
-  orbit-distance conclusion.
+  Thus the distance conclusion is a tail-localized consequence of finite
+  Schur-window pinching in a chosen gauge: the determinant and the scalar trace
+  defect supply only the entrywise pinching, while the two displayed tail
+  conditions are extra data.  This corollary is not a basis-free or
+  determinant-intrinsic global orbit-distance theorem.
 \end{corollary}
 
 \begin{proof}
@@ -1452,7 +1524,7 @@ coordinates to determinant-intrinsic invariants.
   full minimizer class \(\mathcal M_{\mathcal D}\) also tends to zero.
 \end{proof}
 
-\begin{theorem}[Uniform chosen-Schur-tail stability modulus]
+\begin{theorem}[Uniform finite Schur-window pinching modulus]
   \label{thm:uniform-chosen-schur-tail-modulus}
   Under the hypotheses of
   \Cref{thm:determinant-fiber-trace-minimality}, let
@@ -1519,9 +1591,9 @@ coordinates to determinant-intrinsic invariants.
   \[
     \dist_1(T_\nu,\mathcal M_{\mathcal D})\longrightarrow0 .
   \]
-  This is a genuine infinite-dimensional stability statement only after the
-  uniform chosen-basis tail modulus has been supplied; the modulus is extra
-  structure and is not read from the Fredholm determinant.
+  This is a uniform finite Schur-window pinching estimate converted into a
+  distance bound only after the chosen-basis tail modulus has been supplied; the
+  modulus is extra structure and is not read from the Fredholm determinant.
 \end{theorem}
 
 \begin{proof}
@@ -1972,7 +2044,8 @@ length-\(N\) list.
   All assertions of this theorem are assertions inside this finite-budget
   determinant-equality class, namely
   \(\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)
-  =\mathcal F_{p,\mathcal D}(H)\).  The finite-subset cyclic product, the
+  =\mathcal F_{p,\mathcal D}(H)\).  The finite-subset regularized cyclic product
+  net \(P_F^{(r)}\), the
   collapsed non-zero eigenvalue multiset encoded by \(\mathcal D\), and the
   finite \(\mathcal S_p\)-budget are part of the input; by
   \Cref{prop:schatten-finite-budget-localization} this class is the same as the
@@ -1991,11 +2064,11 @@ length-\(N\) list.
   \]
   Thus the cyclic model is the unique \(\mathcal S_p\)-norm minimizer class in
   the finite-budget determinant-equality problem localized by the prescribed
-  finite-subset cyclic product, namely the prescribed part in which the non-zero
+  finite-subset regularized cyclic product, namely the prescribed part in which the non-zero
   eigenvalue multiset is the collapsed multiset forced by \(\mathcal D\). As in
   \Cref{prop:regularized-domain-boundary}, this is not a classification of the
   full natural \(\mathcal S_r\)-domain of \(\det_r\), nor of the full
-  \(\det_r\)-fiber without the explicit prescribed finite-subset cyclic-product
+  \(\det_r\)-fiber without the explicit prescribed finite-subset regularized cyclic-product
   and \(\mathcal S_p\)-budget restrictions.
 
   More quantitatively, let \(M_{\mathcal D}\) and
@@ -2135,7 +2208,7 @@ length-\(N\) list.
     \le \|T\|_p^p<\infty .
   \]
   Consequently the cyclic model \(L_{\mathcal D}\) belongs to
-  \(\mathcal S_p\), the same product is exactly
+  \(\mathcal S_p\), the same regularized product net has limit exactly
   \(\det_r(I-zL_{\mathcal D})\), and
   \(T\in\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)
   \) in the sense of \Cref{thm:schatten-determinant-fiber-minimality}.  If
@@ -2580,7 +2653,8 @@ Schatten regularized determinant theorem in this article is exactly the
       \qquad
       \,\tau_{\mathcal D,p}\le\norm{T}_p^p.
     \]
-    The same product is then \(\det_r(I-zL_{\mathcal D})\), and
+    The same regularized product net then has limit
+    \(\det_r(I-zL_{\mathcal D})\), and
     \(T\) lies in the prescribed finite-budget fiber
     \(\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)\).
     \item On that localized fiber the sharp minimum and equality class are
@@ -2615,7 +2689,8 @@ Schatten regularized determinant theorem in this article is exactly the
   \(\tau_{\mathcal D,p}\le\norm{T}_p^p\), hence the finiteness of the
   prescribed budget, and then invokes
   \Cref{thm:schatten-cyclic-model-membership,thm:schatten-cyclic-regularized-determinant}
-  to identify the same product with \(\det_r(I-zL_{\mathcal D})\).  This is
+  to identify the same regularized product net with
+  \(\det_r(I-zL_{\mathcal D})\).  This is
   precisely the membership condition for
   \(\mathfrak F_{p,\mathcal D}^{\mathrm{cyc}}(H)\).
 
@@ -3039,7 +3114,7 @@ consequences and are not inputs to the trace-class minimum.
     \Cref{cor:schur-entry-stability,cor:chosen-tail-stability-criterion,thm:uniform-chosen-schur-tail-modulus,thm:finite-dimensional-weyl-horn-cyclic-determinant-fiber,prop:finite-horn-subordinate-trace-chain,thm:finite-support-quasinilpotent-quotient}.
 Every downstream consequence in this section factors through the same
     invariant \((M_{\mathcal D},\Sigma_{\mathcal D},\tau_{\mathcal D})\):
-    the chosen-Schur stability estimates use the trace defect above only after a
+    the finite Schur-window pinching estimates use the trace defect above only after a
     Ringrose--Schur gauge has been fixed and an external Schur-tail modulus has
     been supplied, so they are not determinant-intrinsic orbit-distance
     theorems; the fixed-dimensional
@@ -3090,10 +3165,10 @@ The prescribed Schatten theorem is not an extra trace-class
   its attainment criterion, namely vanishing of the nilpotent profile.
 \end{proof}
 
-\begin{corollary}[Stability with chosen Schur tails]
+\begin{corollary}[Finite Schur-window pinching with chosen tails]
   \label{cor:trace-rigidity-stability-boundary-package}
-  In the setting of \Cref{thm:trace-class-rigidity-consequences}, the stability
-  results proved in this section are pinching and finite-window consequences of
+  In the setting of \Cref{thm:trace-class-rigidity-consequences}, the
+  estimates proved in this section are pinching and finite-window consequences of
   trace minimality.  Near-minimal trace defect controls chosen Schur upper-tail
   entries and, when the chosen diagonal and compression tails are supplied,
   distance to the normal minimizer class.  The uniform infinite-dimensional
@@ -3103,8 +3178,8 @@ The prescribed Schatten theorem is not an extra trace-class
 \end{corollary}
 
 \begin{proof}
-  The infinite-dimensional estimates are the Schur-entry stability corollary,
-  the chosen-tail stability criterion, and the uniform chosen-tail modulus
+  The infinite-dimensional estimates are the finite Schur-window pinching
+  corollary, the chosen-tail consequence, and the uniform chosen-tail modulus
   theorem, namely
   \Cref{cor:schur-entry-stability,cor:chosen-tail-stability-criterion,thm:uniform-chosen-schur-tail-modulus}.
   Each is stated after choosing a Ringrose--Schur gauge and a finite tail
