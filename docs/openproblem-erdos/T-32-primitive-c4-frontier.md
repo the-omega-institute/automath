@@ -931,3 +931,34 @@ every checkable algebraic step. The {2: 12, 4: 48} f_rank_histogram and
 geometric (connectedness / etale-ness / genus-4 / p-rank stability) claims
 remain to be independently verified by either further codex-worker enumeration
 or a full S3-row proof.
+
+
+## Monitoring Update 2026-06-01 14:45 SGT — A2 D=2 hyperelliptic branch certificate (d=1 + d=2 closed)
+
+Pipeline-side `check_litt3_378cd_A2_D2_hyperelliptic_branch_certificate`
+(14:36, theorem `A2D2HyperellipticBranchCertificateReplay`) records the
+first explicit cross-curve closure of the low-degree rows for the explicit
+genus-2 hyperelliptic pair (X: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-5),
+Y: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-6) over F_11).
+
+d=1 row (degree-1 covers, i.e., X and Y themselves):
+- H_4(X) (Frobenius char-poly histogram) = {2: 4, 3: 11}
+- H_4(Y) = {2: 5, 3: 10}
+- Different distributions -> X and Y are NOT isomorphic to each other
+  via degree-1.
+
+d=2 row (degree-2 covers):
+- X has 6 distinct branch-decic hash signatures
+- Y has 3 distinct branch-decic hash signatures
+- Hash intersection: EMPTY
+- Therefore no degree-2 cover of X shares a branch-decic signature with
+  any degree-2 cover of Y -> no common cover at degree 2.
+
+This closes the bounded rows d = 1, 2 for the explicit pair. The next
+unchecked row is d = 3 (genus Z = 4), where prior pipeline work has
+40 cyclic C3 + 60 S3 source models per curve.
+
+Status: T-32 (b) — first explicit "no common cover at fixed low degree"
+result for the cron-contract explicit pair. d <= 2 closed; d = 3 + d = 4
++ ... remain open per the prior 1036-row primitive C4 and 80 C3 + 180 S3
+cross-pair workloads identified earlier.
