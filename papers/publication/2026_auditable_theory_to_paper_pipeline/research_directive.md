@@ -5,52 +5,49 @@ This file is the stable directive for the promoted active paper
 
 ## Publication Goal
 
-Prepare a compact workshop/presentation paper on auditable theory-to-paper
-pipelines for AI-assisted formal mathematics.  The paper should be suitable for
-a CICM-style mathematical software or formal-methods venue after live venue and
+Prepare a compact workshop/presentation paper on an auditable theory compiler
+for AI-assisted formal mathematics.  The paper should be suitable for a
+CICM-style mathematical software or formal-methods venue after live venue and
 bibliography verification.
 
 ## Central Claim
 
-AI agents can help scale formalization, manuscript drafting, review, and
-publication triage only when their outputs are advisory and every load-bearing
-claim is routed through deterministic gates.  In the BEDC/newmath and automath
-workflow, this discipline is implemented through source maps, Lean and axiom
-checks, marker/inventory audits, anti-hollow theorem lints, critical-path
-scheduling, active-paper promotion boundaries, overlap/submitted gates, and
-submission-pack checks.
+Large AI-assisted mathematics projects need a compiler-level architecture that
+keeps source theory, formal verification, finite substrate witnesses, discovery
+automation, and publication-facing claims separate.  In the BEDC/newmath and
+automath workflow, BEDC supplies the structured mathematical source theory,
+Lean supplies an independent verification axis, manifest/evaluator records
+supply finite-witness substrate evidence, agents supply proposals and review,
+and automath compiles accepted increments into reviewable paper tracks.
 
 ## Required Spine
 
-The manuscript must center the discovery-gate calculus extracted from the
-pinned newmath source:
+The manuscript must center the theory-compiler architecture:
 
-- statement or code generation is not by itself discovery;
-- mechanical expansion is not by itself discovery;
-- compression is not by itself discovery;
-- certificate ledgers and lineage DAGs are required for load-bearing claims;
-- unsupported claims can be demoted;
-- selection should favor classifier-shifting contributions over easy local
-  edits;
-- the pipeline safety theorem is the main organizing result.
+- BEDC is finite-kernel theory plus proof obligations plus separate
+  implementation contracts;
+- theoretical closure and formal verification are distinct audit axes;
+- Lean markers are meaningful verification records but do not create
+  object-language closure;
+- finite substrate claims are carried by manifest rows and evaluator outcomes;
+- agents may propose/search/review but cannot certify theory increments;
+- automath is the final publication compiler, not the whole contribution.
 
-## Required Case Studies
+## Case-Study Discipline
 
-Use exactly these four case studies in the first short version:
-
-1. Newmath intake isolation.
-2. Upper-fibers overlap/submitted block.
-3. Fake-extension theorem-content block.
-4. Rule110 limitation/artifact gate.
-
-Additional C-STUCK, A-BLOCKED, or B20 cases may be reserved for a longer paper.
+The two-page CICM version should not be organized around individual rejected
+papers, overlap incidents, or local route names.  Concrete case evidence belongs
+in `main.tex` and `review_bundle/`.  The short paper may mention examples only
+when they illustrate a system layer such as finite witnesses, theorem-content
+gates, or route governance.
 
 ## Scope Discipline
 
 Do not broaden this draft into a general AI safety paper, a Lean hammer paper,
-or a complete BEDC theory paper.  The target contribution is an auditable
-workflow architecture with specific deterministic gates and traceable case
-evidence.
+or a complete BEDC theory paper.  The target contribution is an auditable theory
+compiler architecture in which Lean is necessary but not the sole trust
+boundary, and publication automation is one output layer rather than the whole
+story.
 
 ## Verification Rule
 

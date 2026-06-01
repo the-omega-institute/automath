@@ -1,8 +1,8 @@
-# Auditable Theory-to-Paper Pipeline
+# Auditable Theory Compiler
 
 ## Snapshot
 
-- Working title: `Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics`
+- Working title: `An Auditable Theory Compiler for AI-Assisted Formal Mathematics`
 - Primary route: `CICM presentation-only / mathematical software workshop route`
 - Source seed: `papers/publication/newmath_intake/seeds/bedc_automation_pipeline`
 - Source repo: `D:/omega/newmath`
@@ -12,35 +12,37 @@
 
 ## Positioning
 
-This is a narrow systems and mathematical-software note about auditable
-AI-assisted formal-mathematics workflows.  The paper studies how source maps,
-deterministic gates, active-paper promotion boundaries, overlap/submitted
-checks, and review loops prevent agent output from becoming unsupported
-mathematical or publication claims.
+This is a systems and mathematical-software note about an auditable theory
+compiler for AI-assisted formal mathematics.  The paper studies how a structured
+mathematical source theory, Lean verification, finite substrate witnesses,
+agent-driven discovery automation, and a publication compiler can be kept as
+separate audit axes.
 
-The contribution is not a new theorem prover and not a claim that AI output is
-proof evidence.  The load-bearing claim is an auditable theory-to-paper
-discipline: AI agents may propose, draft, triage, and review, while formal
-source paths, command logs, deterministic checks, and human promotion decisions
-carry the evidential burden.
+The contribution is not a new theorem prover, not a claim that Lean alone is the
+full trust boundary, and not a claim that AI output is proof evidence.  The
+load-bearing claim is typed evidence separation: BEDC theoretical closure, Lean
+checking, finite manifest witnesses, theorem-content growth, and
+publication-facing claims have different evidence surfaces and must not be
+collapsed into one another.
 
 ## Scope Kept
 
-- source-to-paper traceability for Lean-backed mathematics projects;
-- active intake versus active paper promotion;
-- deterministic gates for source, theorem, artifact, overlap, and publication
-  readiness;
-- discovery-gate calculus from the pinned BEDC source;
-- four concrete case studies from the automath/newmath workflow.
+- BEDC as structured source theory with finite-kernel proof obligations;
+- Lean as a crucial but non-exclusive verification axis;
+- finite-witness substrate evidence through manifests and evaluator contracts;
+- agent proposal/search/review under deterministic theorem-content gates;
+- automath as the publication compiler and route-governance layer.
 
 ## Scope Cut
 
 - no claim of fully automatic theorem proving;
+- no claim that Lean verification creates BEDC object-language closure;
 - no claim of complete rebuild of all BEDC source declarations;
-- no claim that Rule110 artifacts have been dynamically rerun for this note;
+- no claim that substrate artifacts have been dynamically rerun for this note;
 - no claim of automatic venue acceptance or automatic novelty judgment.
 
 ## Immediate Pipeline Goal
 
-Turn the promoted intake packet into a compact two-page workshop/presentation
-draft, then run a live venue check and related-work pass before any submission.
+Keep the promoted intake packet framed as a compact two-page system note about
+the theory compiler architecture, with the longer supplement carrying exact
+source interfaces, case evidence, and command-run boundaries.

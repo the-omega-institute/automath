@@ -1,4 +1,4 @@
-# Pipeline: Auditable Theory-to-Paper Pipeline
+# Pipeline: Auditable Theory Compiler
 
 ## Metadata
 
@@ -15,10 +15,13 @@
 
 ## Current Stage
 
-P4 complete: the promoted draft has been assembled, the CICM
-presentation-only route has been checked, initial related-work citations have
-been added, the manuscript compiles under LNCS style, and an evidence-boundary
-review has been recorded.  The next step is final human submission decision.
+P4 revision in progress: the promoted draft has been reframed from a narrow
+theory-to-paper workflow note into a system note on an auditable theory compiler.
+The CICM presentation-only route has been checked, initial related-work
+citations have been added, the manuscript compiles under LNCS style, and the
+short paper now centers typed evidence separation across BEDC theory, Lean
+verification, finite witnesses, agent discovery, and publication compilation.
+The next step is final human review of the new framing.
 
 ## P0 Promotion Checklist
 
@@ -45,8 +48,8 @@ P1 complete on 2026-06-01.
   architecture, gate summary, case studies, evidence boundary, and scope.
 - The draft compiles as 2 content pages plus bibliography under the current
   article format.
-- The central contribution is the discovery-gate discipline, not a generic
-  project report.
+- The central contribution is the auditable theory-compiler architecture, not a
+  generic project report and not merely a publication workflow.
 
 ## P2 Venue Check
 
@@ -85,6 +88,9 @@ Submission-blocking decisions remaining:
 - source-command rerun decision or explicit no-rerun statement;
 - final author/affiliation confirmation in the CICM form;
 - AI disclosure if the form asks for one.
+- final human approval that the two-page text correctly presents automath,
+  newmath/BEDC, Lean, finite-witness evidence, and publication compilation as
+  separate audit axes.
 
 Resolved artifact/source link decision:
 
@@ -99,16 +105,18 @@ Resolved artifact/source link decision:
 
 ## Route Decision
 
-Use a narrow workshop/presentation claim first.  The first draft should not
+Use a narrow workshop/presentation claim first.  The short draft should not
 wait for a full rebuild of the entire newmath source tree, provided the paper
-states that it is reporting path-verified architecture, deterministic gate
-design, and case studies.  If the manuscript claims current command results,
-the relevant commands in `SOURCE_MAP.md` must be rerun and logged first.
+states that it is reporting the theory-compiler architecture and its evidence
+boundaries rather than fresh command-run validation.  If the manuscript claims
+current command results, the relevant commands in `SOURCE_MAP.md` must be rerun
+and logged first.
 
 ## Non-Claims
 
 - AI output is not proof evidence.
 - This paper does not introduce a new theorem prover.
+- Lean verification is not claimed to be the only BEDC trust substrate.
 - This paper does not claim complete verification of all BEDC declarations.
 - This paper does not claim successful dynamic rerun of the Rule110 suite.
 - This paper does not claim automatic journal acceptance or automatic novelty
