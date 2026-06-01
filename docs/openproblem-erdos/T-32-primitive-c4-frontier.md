@@ -1038,3 +1038,34 @@ Status: T-32 (b) — structural gap exposed in Lemma 5. The committed
 explicit point-count rulings (fb78cced4, 07723f52f) for the first C4
 two-cycle representative remain valid; the Lemma 5 reduction to PE^2/sign
 systems is the link now flagged as needing geometric reinforcement.
+
+
+## Monitoring Update 2026-06-01 18:45 SGT — d ≤ 3 closed for the explicit cron-contract pair
+
+Pipeline-side `check_litt3_854d_A2_D3_equal_genus2_replay` (18:40, artifact
+`A2_D3_equal_genus2_PrymSchottky_replay_certificate`) extends the prior
+d=1, d=2 closure (commit d237d8d0b) to d=3 for the explicit hyperelliptic
+pair (X: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-5),
+Y: y^2 = x(x-1)(x-2)(x-3)(x-4)(x-6) over F_11).
+
+Key data:
+- H_4(X) = {2: 4, 3: 11}, H_4(Y) = {2: 5, 3: 10} (matching prior d=1 data)
+- L_poly_X = [1, 0, 6, 0, 121]
+- double_hash_intersection: EMPTY (extends through all compatible rows
+  with max(dX, dY) <= 3)
+- hom_hits: [] (no Hom incidence at this degree bound)
+
+Net: the explicit genus-2 pair (X, Y) is now KNOWN to admit NO common
+finite étale cover at any (dX, dY) with max <= 3 -- a bounded-degree
+non-incidence certificate.
+
+Remaining open: d >= 4 (where the prior Prym-Schottky positive codimension
+results kick in at d = 4 with codim 3, and at d = 7 with codim 18 and
+gZ = 8 per earlier commits), plus the universal F-bar_q finite-index
+commensurability invariant question (the genuinely open frontier per
+the GenusOnlyFiniteEtaleInvariantNoGo and Tamagawa-gap audits from
+2026-05-30).
+
+Status: T-32 (b) — bounded-degree closure now d <= 3 (was d <= 2).
+The remaining all-degrees / very-general open frontier is anabelian /
+Tamagawa-style and research-grade.
