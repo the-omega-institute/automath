@@ -1101,3 +1101,37 @@ Status: T-32 (b) — bounded-degree closure now d <= 4. The next degree-pair
 obligation (dX, dY) = (8, 2) requires enumeration of all 1023 connected
 geometric double covers of Y, a much larger workload than the prior
 bounded-d4 sweep, but still finite.
+
+
+## Monitoring Update 2026-06-01 20:45 SGT — First two-cycle scalar-class exhaustion
+
+Pipeline-side `check_litt3_e97e_first_twocycle_scalar_exhaustive` (20:11)
+records that the scalar-class normalizations of the first primitive C4
+Frobenius two-cycle (the f_L = (X-rho*Y)/(X-rho*Z) representative from
+prior commits fb78cced4 + 07723f52f) are now EXHAUSTED at the finite-field
+row level.
+
+Explicit character histograms at the displayed scalar:
+- F_121: {1: 58, -1: 50, i: 40, -i: 40} (sum 16, matches prior commit 07723f52f)
+- F_{121^2}: {1: 3660, -1: 3344, i: 3456, -i: 3456} (sum 632)
+
+Scalar-class correction analysis:
+- Possible correction pairs relative to gamma_1 displayed scalar:
+    [[0, 0], [32, 2528], [64, 0]]
+- Possible pair deltas (n=2, n=4):
+    [[-32, -1264], [0, 1264], [32, -1264]]
+- Required corrections for survivor hit:
+    (n2, n4) = (66, 858) for survivor delta (0, -84, 0, 796)
+- NONE of the three achievable correction pairs match (+66, +858).
+
+Conclusion: the scalar-normalized first two-cycle CANNOT supply the
+survivor target. No scalar transformation reaches the m=4 sign-twist
+survivor (0, -84, 0, 796) from this F_L representative.
+
+Status: T-32 (b) — first Frobenius two-cycle representative is now
+EXHAUSTED at the scalar-class level (not just one specific scalar).
+This generalizes the prior point-count ruling (07723f52f) to show ALL
+scalar normalizations of f_L = (X-rho*Y)/(X-rho*Z) miss the survivor.
+The next gap remains: a NEW orbit-distinct primitive C4 representative
+(or geometric proof that this exhaustion covers all actual C4 torsors)
+to close the remaining rows.
