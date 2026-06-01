@@ -850,3 +850,46 @@ the prior multi-field separator/witness picture (F_11 A={0,1}/A={0,3}
 X0 separators + F_13 deck-intertwining witness), the closure work
 narrows to the remaining representative enumeration or universal mod-8
 theorem.
+
+
+## Monitoring Update 2026-06-01 13:45 SGT — X-side S3 geometric p-rank certificate v3 (alternative pair)
+
+Oracle deep task `deep_cand_litt_common_finite_etale_cover_t1780292034555`
+(9880 chars on existing T-32 conv 6a086228) produced the explicit
+artifact `T32_e3_X_side_S3_geometric_pRank_certificate_v3` on the
+alternative curve X: y^2 = x^5 - x over F-bar_11 (NOT the cron-contract
+Fermat quartic — this is the y^2 = x^5 - x vs y^2 = x^25 - x pair
+explored in recent Sylow p-rank checker work).
+
+Theorem: S3_f_rank_histogram = {2: 12, 4: 48} for the S3 block of the
+X-side 100-cover p-rank audit.
+
+A0 representative [inf, 0]:
+- Sign-resolvent R_0: s^2 = x, y^2 = x^5 - x
+- Prym quotient E_0: v^2 = q^4 - 1, cubic chart u = 1/(q - 1) giving
+  w^2 = f_0(u) = 4u^3 + 6u^2 + 4u + 1
+- Four explicit Prym[3] lines with explicit (alpha, beta, m, kappa):
+  eta0_2 (alpha=2, beta=i, m=6i, kappa=6),
+  eta0_8 (alpha=8, beta=1, m=5, kappa=6),
+  eta0_plus (alpha=5+2i, beta=2+9i, m=1+i, kappa=6),
+  eta0_minus (alpha=5+9i, beta=2+2i, m=1-i, kappa=6)
+- Tangent identity: (beta + m(u - alpha))^2 - f_0(u) = kappa^3 (u - alpha)^3
+- Degree-3 quotient equation: (x-1) T^3 + 4(1-alpha(x-1)) T + 2 beta (x-1)
+  + 2 m (1-alpha(x-1)) = 0
+
+A1 representative [inf, 1]:
+- Sign-resolvent R_1: s^2 = x - 1
+- Prym quotient E_1: v^2 = q(q+1)(q^2+1), cubic chart u = 1/q giving
+  w^2 = f_1(u) = u^3 + u^2 + u + 1
+- q_1(u) = u^4 + 5u^3 + 2u^2 + 4u + 1 irreducible over F_11
+- For each root r_j of q_1: explicit (beta_j, m_j) with kappa = 10
+- Degree-3 quotient: x T^3 + 3(1-r_j x) T + 2 beta_j x + 2 m_j(1-r_j x) = 0
+
+Status: most explicit geometric materialization T-32 has received on the
+alternative pair direction. Explicit Prym[3] equations, tangent identities,
+cubic chart parameters, and degree-3 cover equations for 4 A0 + 4 A1
+representatives. Remaining open work: connectedness + etale-ness + genus-4
++ stable p-rank verification across all 60 S3 rows (per histogram
+{2: 12, 4: 48}), plus PGL_2-equivariant transport.
+
+Artifact: `tools/community-outreach/targets/cand_litt_common_finite_etale_cover/deep_responses/oracle_T32_e3_X_side_S3_geometric_pRank_certificate_v3_20260601_1340.md`.
