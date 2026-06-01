@@ -1135,3 +1135,32 @@ scalar normalizations of f_L = (X-rho*Y)/(X-rho*Z) miss the survivor.
 The next gap remains: a NEW orbit-distinct primitive C4 representative
 (or geometric proof that this exhaustion covers all actual C4 torsors)
 to close the remaining rows.
+
+
+## Monitoring Update 2026-06-01 21:15 SGT — First two-cycle EXHAUSTED under independent scalar pair relaxation
+
+Pipeline-side `check_litt3_20260601_e97e_independent_scalar_pair_relaxation`
+(21:09) strengthens the prior coupled-scalar exhaustion result (commit
+a44752a89) by relaxing to INDEPENDENT scalar choices on the two pair
+components L and pi L.
+
+Result: 16 relaxed rows (4 scalars × 4 scalars, one per component) tested:
+- relaxed_pair_count: 16
+- Unique observed (s2, s4) delta pairs across all 16 rows:
+    [[-32, -1264], [-16, 0], [0, -1264], [0, 1264], [16, 0], [32, -1264]]
+- Survivor delta (s2, s4) = (-84, 796): NOT among any of the 16 relaxed rows
+- Required correction pair (66, 858): NOT achievable with independent scalars
+- target_hit_count: 0
+- max_abs_residual: 84 (the closest relaxed row is residual_84 from the
+  survivor target plane)
+
+This generalizes the prior commit a44752a89 (which used coupled scalars,
+giving only 3 correction pairs) to the strictly stronger independent-scalar
+case with 16 relaxed rows. The first Frobenius two-cycle representative
+is now exhausted under BOTH coupled and independent scalar choices.
+
+Status: T-32 (b) — first C4 representative robustly ruled out across the
+full scalar-pair space. The remaining gap (per the pipeline's own analysis)
+is an actual-cover descent theorem or direct normalized point counts for
+C_L and C_pi-L, OR a NEW orbit-distinct primitive C4 representative not
+in the f_L = (X − rho*Y) / (X − rho*Z) family.
