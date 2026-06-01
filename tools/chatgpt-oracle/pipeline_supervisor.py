@@ -1078,6 +1078,32 @@ def default_auto_commit_paths() -> list[str]:
     ]
 
 
+AUTO_COMMIT_DENY_PATTERNS = (
+    ".tmp/",
+    ".tmp\\",
+    "/.tmp",
+    "\\.tmp",
+    ".tmp.",
+    "_env_index",
+    "envs_",
+    "all_labels.tmp",
+    "theorem_envs_fresh",
+    "theorem_inventory_env",
+    "theorem_inventory_live_envs",
+    "theorem_envs_fresh_readable.txt",
+    ".make_inventory.py",
+    "write_inventory.py",
+)
+
+
+def auto_commit_allowed_file(path: str) -> bool:
+    normalized = path.replace("\\", "/")
+    lowered = normalized.lower()
+    if "/__pycache__/" in lowered or lowered.endswith(".pyc"):
+        return False
+    return not any(pattern.lower() in lowered for pattern in AUTO_COMMIT_DENY_PATTERNS)
+
+
 # ---------------------------------------------------------------------------
 # auto-commit
 # ---------------------------------------------------------------------------
@@ -1115,7 +1141,11 @@ def commit_and_push_if_changed(allowed_branch: str, paths: list[str]) -> bool:
     for line in diff.stdout.splitlines():
         parts = line.strip().split(None, 1)
         if len(parts) == 2:
-            files.append(parts[1])
+            path = parts[1]
+            if auto_commit_allowed_file(path):
+                files.append(path)
+            else:
+                supervisor_log(f"auto-commit skip generated scratch: {path}")
     if not files:
         return False
 
