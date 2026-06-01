@@ -962,3 +962,38 @@ Status: T-32 (b) — first explicit "no common cover at fixed low degree"
 result for the cron-contract explicit pair. d <= 2 closed; d = 3 + d = 4
 + ... remain open per the prior 1036-row primitive C4 and 80 C3 + 180 S3
 cross-pair workloads identified earlier.
+
+
+## Monitoring Update 2026-06-01 17:15 SGT — Explicit point counts on first C4 two-cycle (deliverable B style)
+
+Pipeline-side `check_litt3_50fb_first_twocycle_direct_normalized_count`
+(16:47) produces explicit normalized point counts on the cyclic-C4 cover
+associated with the first primitive C4 Frobenius two-cycle (same F_L =
+(X − rho * Y)/(X − rho * Z) as prior commit fb78cced4).
+
+Explicit cover point counts:
+- F_121: #C_L = 232, #C_{L^2} = 216, so d_{121} = -16
+- F_{121^2}: #C_L = 14640, #C_{L^2} = 14008, so d_{121^2} = -632
+
+Quartic character histograms:
+- F_121: {+2: 58, -2: 50, 0: 80}, sum = 16
+- F_{121^2}: {+2: 3660, -2: 3344, 0: 6912}, sum = 632
+
+Descended delta (0, -32, 0, -1264) under the pair-descent factor-of-2
+(consistent with the prior commit fb78cced4 derivation). Coefficients
+(0, 16, 0, 444), d_4 mod 8 = 0.
+
+Result: this representative is a NON-HIT against the survivor target
+(0, -84, 0, 796) / per-component (0, -42, 0, 398). The full first
+Frobenius two-cycle is now ruled out at the explicit point-count level
+(not just the abstract Kummer / character argument from fb78cced4).
+
+Remaining open: the recipe must now supply a NEW orbit-distinct primitive
+C4 row, a finite coverage certificate for all remaining representatives,
+OR a F-bar_q-geometric invariant. The pipeline confirms: "next substantive
+step cannot be another recount of this row."
+
+Status: T-32 (b) — first explicit point-count ruling-out of the first
+C4 representative; reinforces prior fb78cced4 (which used the abstract
+scalar-normalized character argument) with concrete cover-point counts
+on F_121 and F_{121^2}.
