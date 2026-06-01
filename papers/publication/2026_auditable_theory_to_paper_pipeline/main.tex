@@ -47,14 +47,14 @@ failure modes are equally structural: a route may overlap a submitted sibling,
 an artifact status file may drift from generated counts, or an intake note may
 accidentally become a daemon-visible manuscript.
 
-This presentation draft contributes a compact workflow pattern for avoiding these failures:
+This long technical supplement records a compact workflow pattern for avoiding these failures:
 an auditable theory-to-paper pipeline in which AI agents propose, review, and
 triage, while deterministic gates decide what may be treated as load-bearing
 evidence.  The pattern is instantiated in local BEDC and automath workspaces.
 The mathematical content of the note is the explicit safety interface for this
 workflow: definitions for gate vocabulary, a pinned imported theorem spine, a
 proved publication-safety theorem, and witness records for the four required
-cases.  The complete manuscript is a longer technical record; the CICM
+cases.  This source is the long technical supplement; the CICM
 presentation-only submission must use a two-page abstracting version plus
 bibliography, with this longer draft and the review bundle supplied only as
 background material through the supplemental-upload interface certified below.
@@ -225,43 +225,45 @@ unrecorded private dependency.\qed
 
 \begin{proposition}[Source-interface record-file consistency]
 \label{prop:source-interface-record-file-consistency}
-The source-interface table, its JSON mirror, and the bundled source snapshot
-agree on the imported discovery-gate interface used by
-Theorem~\ref{thm:publication-safety-interface}.  The verification certificate is
-as follows: a local byte comparison on 2026-06-01 found that the original source
-file at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b} and the bundled
-snapshot
-\path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex}
-both have 20746 bytes and identical SHA-256 digest
-\path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2}.
-The same check found 498 snapshot lines; for each of the ten line ranges in
-\path{source_interface_record.json}, the corresponding imported label occurs in
-the stated snapshot range; and the ten triples
-\emph{label, line range, bounded summary} in
-Table~\ref{tab:source-interface-record} are identical to the ten JSON records.
-Hence the manuscript table, JSON record, and bundled snapshot define one
+The source-interface table, its JSON mirror, and the bundled source snapshot give
+one record-level imported discovery-gate interface for
+Theorem~\ref{thm:publication-safety-interface}.  The record fields are as
+follows: the source commit is
+\path{3fb3d6a0641767388a401883062aa522ea0b397b}; the bundled snapshot is
+\path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex};
+the byte count recorded for the source and snapshot is 20746; the recorded
+SHA-256 digest is
+\path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2};
+the recorded snapshot length is 498 lines; for each of the ten line ranges in
+\path{source_interface_record.json}, the corresponding imported label is recorded
+inside the stated snapshot range; and the ten triples \emph{label, line range,
+bounded summary} in Table~\ref{tab:source-interface-record} are the ten JSON
+records.  Hence, at the path-verified record level and not as a fresh command-run
+claim, the manuscript table, JSON record, and bundled snapshot define one
 consistent imported-source interface.
 \end{proposition}
 
 \begin{proof}
-There are three finite comparisons.  First, byte equality of the original source
-file and the bundle copy, witnessed by the common byte count and SHA-256 digest,
-implies that every line-range statement checked in the bundled copy is the same
-line-range statement in the pinned source file.  Second, the JSON record contains
-exactly ten records, and Table~\ref{tab:source-interface-record} has exactly ten
-rows.  Comparing the ordered first two fields gives the same ten label--range
-pairs: 248--255, 258--267, 269--278, 280--297, 334--345, 366--374, 393--406,
-408--418, 441--455, and 457--475.  Third, the bounded-summary strings in the
-table match the JSON \path{statement_summary} fields row by row.  For each range,
-the label-occurrence check verifies that the named source label lies inside the
-corresponding snapshot interval, so no row points to a disjoint part of the
-source file.  The comparisons exhaust the finite imported interface, and the
-claim follows.\qed
+The proposition uses the submitted record fields as finite proof inputs.  The
+common byte count and SHA-256 digest recorded for the pinned source and bundled
+snapshot are the record-level witness that the line-range interface is attached
+to the same file content.  The JSON record contains ten records, and
+Table~\ref{tab:source-interface-record} has ten rows.  Reading the ordered first
+two fields gives the same ten label--range pairs: 248--255, 258--267, 269--278,
+280--297, 334--345, 366--374, 393--406, 408--418, 441--455, and 457--475.  The
+bounded-summary strings in the table are the JSON \path{statement_summary}
+fields row by row.  The recorded label occurrence for each range places the
+named source label inside its stated snapshot interval, so no row points to a
+disjoint part of the source file.  These record fields exhaust the finite
+imported interface.  Since no command, environment, exit code, or log path is
+part of this proposition, the conclusion is exactly the stated path-verified
+record consistency claim and no stronger rerun claim.\qed
 \end{proof}
 
 \section{Operational interface}
 
-For this short systems paper, the following finite interface is sufficient.  A
+For this long technical supplement and its two-page CICM presentation artifact,
+the following finite interface is sufficient.  A
 \emph{claim} is a manuscript assertion that can affect a mathematical,
 artifact, route, or submission decision.  A \emph{load-bearing claim} is a
 claim whose removal would change a theorem statement, a case-study conclusion,
@@ -274,9 +276,15 @@ editorial act that moves a candidate into publication state, for example by
 creating an active \texttt{2026\_*} paper directory with \texttt{main.tex} and
 \texttt{PIPELINE.md}.  An \emph{evidence surface} is the set of source paths,
 commits, commands, logs, inventories, and witness records cited for a claim.
-\emph{Accepted work} is the subset of candidate claims recorded in a manuscript
-or submission ledger after the relevant deterministic gate passes and, when a
-route boundary is crossed, after human promotion.
+An \emph{acceptance entry} is a manuscript or submission-ledger record that marks
+a candidate claim as usable in the publication-facing argument.  \emph{Accepted
+work} is the subset of candidate claims with such an entry.  This is a status
+notion only: the definition records that an editorial acceptance entry exists,
+but it does not by itself assert that the entry is gate-sound.  A pipeline is
+\emph{gate-sound for acceptance} when each acceptance entry records the claim
+kind, the evidence surface, the evidence level, and a pass record for every gate
+in $\Gamma$ assigned to that claim kind, and when a route-boundary entry also
+records human promotion.
 
 The deterministic dispatch function $\Gamma$ from claim kinds to gates is part
 of the operational interface.  Its domain is
@@ -338,15 +346,16 @@ paper records the relevant source path, artifact path, pinned commit or local
 publication path, and gate decision, but does not assert that a command was
 freshly rerun for this submission.  A claim is \emph{command-run} when the paper
 also records the command, source commit, environment, exit code, and log path
-for a fresh run.  The present draft uses path-verified architecture and case
-evidence unless explicitly marked command-run.
+for a fresh run.  This long technical supplement uses path-verified architecture
+and case evidence unless explicitly marked command-run.
 
 \begin{proposition}[Deterministic claim-kind dispatch]
 \label{prop:claim-kind-dispatch}
 For every load-bearing manuscript claim whose kind lies in the seven-kind domain
-above, $\Gamma$ assigns a unique finite set of deterministic gates.  A mixed
-load-bearing claim is accepted only if it passes every gate in the union assigned
-to its component kinds.
+above, $\Gamma$ assigns a unique finite set of deterministic gates.  In a
+pipeline that is gate-sound for acceptance, a mixed load-bearing claim may be
+used as accepted work only if its acceptance entry records passage through every
+gate in the union assigned to its component kinds.
 \end{proposition}
 
 \begin{proof}
@@ -354,11 +363,12 @@ The seven atomic clauses in the definition of $\Gamma$ assign one explicitly nam
 finite gate set to each atomic claim kind.  Hence an atomic claim has a unique
 assigned gate set.  For a mixed claim, the component-kind set is finite because
 it is a subset of the seven-kind domain; taking the union of the corresponding
-finite gate sets is deterministic and finite.  If any component gate is omitted,
-then the projection of the mixed claim to that component kind would be recorded
-without the gate assigned by $\Gamma$, contradicting the definition of accepted
-work as gated recording.  Therefore accepted mixed claims must pass every gate
-in the union.\qed
+finite gate sets is deterministic and finite.  Gate-soundness for acceptance
+requires the acceptance entry of a load-bearing claim to record passage through
+every gate assigned by $\Gamma$.  If a component gate of a mixed claim were
+omitted, then the projection of the claim to that component kind would lack its
+assigned pass record.  Such an entry would not be gate-sound.  Therefore accepted
+mixed claims in a gate-sound pipeline must pass every gate in the union.\qed
 \end{proof}
 
 \begin{proposition}[Gate-interface separation]
@@ -391,8 +401,9 @@ own gate, and passage through the others cannot supply the missing evidence.\qed
 Let $s$ be a scheduler or critical-path score attached to a candidate claim
 $c$.  If $s$ recommends selecting $c$, then the recommendation is a
 work-selection claim and by itself can only pass the scheduler gate.  If $c$ is
-also asserted to be a discovery or classifier-shifting contribution, then the
-accepted mixed claim must pass both the scheduler gate and the discovery gate.
+also asserted to be a discovery or classifier-shifting contribution in a
+gate-sound pipeline, then the accepted mixed claim must pass both the scheduler
+gate and the discovery gate.
 Consequently, critical-path scores may prioritize review order, and the imported
 classifier-shift selection rule may break ties among otherwise equal discovery
 potential coordinates, but neither score nor recommendation accepts a
@@ -428,60 +439,65 @@ the discovery gate.\qed
 
 \begin{theorem}[Publication safety interface]
 \label{thm:publication-safety-interface}
-Consider a theory-to-paper pipeline with the operational interface above.
-Assume that every load-bearing claim in an active manuscript is either rejected
-or is recorded together with an evidence surface; that every advisory output is
-demoted unless the deterministic gate set $\Gamma$ for its claim kind passes;
-that discovery claims are
-checked through the pinned discovery-gate interface certified by
+Consider a theory-to-paper pipeline with the operational interface above.  Assume
+that every load-bearing claim in an active manuscript is either rejected or has an
+acceptance entry with an evidence surface; that the pipeline is gate-sound for
+acceptance; that every advisory output is demoted unless the deterministic gate
+set $\Gamma$ for its claim kind passes; that discovery claims are checked through
+the pinned discovery-gate interface certified by
 Lemma~\ref{lem:source-interface-extraction-correctness} and
 Propositions~\ref{prop:reviewable-source-snapshot-interface} and
 \ref{prop:source-interface-record-file-consistency}, in particular its pipeline
 safety and main pipeline theorem labels; and that no inactive intake seed is
 treated as publication work without human promotion.  Then any accepted
-load-bearing claim in the manuscript has passed the gate required for its claim
-kind before publication recording.  Moreover, accepted discovery claims inherit
-the pinned source-interface guarantee that statement-only, code-only,
-mechanical-expansion, and compression-only outputs are not accepted as discovery
-without the required certificate, ledger, and lineage witnesses; and every case
-row used below is reviewable only at the evidence level certified in
-Proposition~\ref{prop:case-evidence-accessibility-certificate}.
+load-bearing claim in the manuscript has a recorded evidence surface and a prior
+pass record for every gate required for its claim kind.  Moreover, accepted
+discovery claims inherit the pinned source-interface guarantee that
+statement-only, code-only, mechanical-expansion, and compression-only outputs are
+not accepted as discovery without the required certificate, ledger, and lineage
+witnesses.
 \end{theorem}
 
 \begin{proof}
-Let $c$ be an accepted load-bearing claim in the manuscript.  By definition of
-accepted work, $c$ is not merely advisory output: it has been recorded only
-after the relevant deterministic gate passes, and if recording crosses the
-publication boundary it follows a human promotion.  The first assumption gives
-an evidence surface for $c$, so the gate decision is attached to a checkable
-source path, artifact path, command log, inventory, or witness record rather
-than to generated prose alone.  Proposition~\ref{prop:claim-kind-dispatch} and
-Proposition~\ref{prop:gate-interface-separation} identify the required finite
-gate set: formal-source claims use build and axiom gates, traceability claims
-use inventory and marker gates, route claims use promotion, overlap, and
-submission-state gates, artifact claims use status and limitation-ledger gates,
-submission claims use submission-pack gates, extension-style discovery claims use
-the theorem-content delta gate together with the pinned discovery gate,
+Let $c$ be an accepted load-bearing claim in the manuscript.  Since accepted work
+is only the status of having an acceptance entry, gate passage is not built into
+the definition of $c$.  The first assumption supplies an acceptance entry and an
+evidence surface for $c$, so the relevant decision is attached to a source path,
+artifact path, command log, inventory, or witness record rather than to generated
+prose alone.  Gate-soundness for acceptance supplies the non-tautological step:
+the entry must record the claim kind, evidence level, and a pass record for every
+gate assigned by $\Gamma$, with human promotion also recorded whenever the route
+boundary is crossed.
+
+Propositions~\ref{prop:claim-kind-dispatch} and
+\ref{prop:gate-interface-separation} identify the required finite gate set:
+formal-source claims use build and axiom gates, traceability claims use inventory
+and marker gates, route claims use promotion, overlap, and submission-state
+gates, artifact claims use status and limitation-ledger gates, submission claims
+use submission-pack gates, extension-style discovery claims use the
+theorem-content delta gate together with the pinned discovery gate,
 work-selection claims use the scheduler gate, and mixed claims use the union.
-If $c$ is a discovery claim, the third assumption routes it through the pinned
-discovery-gate interface.  Proposition~\ref{prop:reviewable-source-snapshot-interface}
+Thus $c$ has a prior pass record for the gates required by its kind.  The
+advisory-output assumption prevents an agent draft, review packet, score, or
+repair proposal from being promoted by prose alone: without the relevant pass
+records it remains demoted.  The promotion assumption similarly prevents an
+inactive intake seed from becoming publication work merely because a local source
+path exists.
+
+If $c$ is a discovery claim, the discovery-routing assumption sends it through
+the pinned discovery-gate interface.  Proposition~\ref{prop:reviewable-source-snapshot-interface}
 supplies the corresponding reviewer-facing snapshot interface, so this routing
 does not depend on a reviewer's access to the author's absolute source path.  The
 record-file consistency certificate in
-Proposition~\ref{prop:source-interface-record-file-consistency} further shows
-that the manuscript table, JSON mirror, and bundled source snapshot agree on the
-same finite imported interface.  The
-source-interface table above records the imported
-statements used here: statement-only, code-only, mechanical-expansion, and
-compression-only records do not become accepted discovery claims without the
-required certificate, ledger, and lineage witnesses, and classifier-shift
-selection remains bounded by the discovery gate as shown in
-Proposition~\ref{prop:scheduler-selection-advisory}.  Hence every accepted
-load-bearing claim has gate passage before publication recording, and discovery
-claims receive the stronger source-interface guarantee.  The final case-row
-clause follows from Proposition~\ref{prop:case-evidence-accessibility-certificate},
-which maps the four local case surfaces to either supplemental artifacts or an
-explicit historical-evidence boundary.\qed
+Proposition~\ref{prop:source-interface-record-file-consistency} further shows, at
+the path-verified record level, that the manuscript table, JSON mirror, and
+bundled source snapshot name the same finite imported interface.  The
+source-interface table records the imported statements used here:
+statement-only, code-only, mechanical-expansion, and compression-only records do
+not become accepted discovery claims without the required certificate, ledger,
+and lineage witnesses, and classifier-shift selection remains bounded by the
+discovery gate as shown in Proposition~\ref{prop:scheduler-selection-advisory}.
+The stated safety interface follows.\qed
 \end{proof}
 
 \section{Gate summary}
@@ -653,34 +669,39 @@ Proposition~\ref{prop:path-complete-case-witnesses}.\qed
 \begin{proposition}[Case-path manifest coverage certificate]
 \label{prop:review-bundle-coverage-for-case-paths}
 The path catalogue used by the four rows of Table~\ref{tab:case-witnesses} is
-covered by \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, modulo the explicit
-historical-evidence boundaries stated there.  The coverage check compared the
-thirteen local paths named in the catalogue with the manifest's four
-\path{case_evidence} entries on 2026-06-01.  It found four manifest entries,
-thirteen manifest local-path strings, and no missing catalogue path after
-resolving this paper's relative \path{ARTIFACT_INVENTORY.md} to
+represented in \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, modulo the
+explicit historical-evidence boundaries stated there.  At the path-verified
+record level, the manifest contains four \path{case_evidence} entries and records
+thirteen local-path strings corresponding to the catalogue's thirteen paths,
+after resolving this paper's relative \path{ARTIFACT_INVENTORY.md} to
 \path{D:/omega/automath/papers/publication/2026_auditable_theory_to_paper_pipeline/ARTIFACT_INVENTORY.md}.
-Each manifest entry also records a boundary sentence: no fresh daemon run for
-the Newmath intake row, historical route-state evidence for the upper-fibers
-overlap row, no fresh full-source command run for the fake-extension row, and no
-fresh Rule110 dynamic artifact rerun for the limitation row.
+Each manifest entry also records a boundary sentence: no fresh daemon run for the
+Newmath intake row, historical route-state evidence for the upper-fibers overlap
+row, no fresh full-source command run for the fake-extension row, and no fresh
+Rule110 dynamic artifact rerun for the limitation row.  This proposition supports
+reviewability and path coverage only; it is not a dynamic artifact validation,
+publication-daemon execution claim, full-source rebuild claim, or Rule110 rerun
+claim.
 \end{proposition}
 
 \begin{proof}
-The catalogue immediately preceding Proposition~\ref{prop:case-row-completeness-certificate}
-has four finite blocks.  The Newmath block has two paths, both listed in the
-manifest entry named \emph{Newmath intake isolation}.  The upper-fibers block
-has five paths: the active route, submitted-sibling marker, two overlap ledgers,
-and program-board state; all five are listed in the manifest entry named
+The proposition is a finite record-coverage statement about the submitted path
+catalogue and manifest, not a report of a fresh validation command.  The catalogue
+immediately preceding Proposition~\ref{prop:case-row-completeness-certificate}
+has four finite blocks.  The Newmath block has two paths, both represented in the
+manifest entry named \emph{Newmath intake isolation}.  The upper-fibers block has
+five paths: the active route, submitted-sibling marker, two overlap ledgers, and
+program-board state; all five are represented in the manifest entry named
 \emph{Upper-fibers overlap block}.  The fake-extension block has two paths.  The
-phase-D lint script is listed verbatim, while the relative inventory path in the
-manuscript denotes the same file as the manifest's absolute path inside this
-paper directory.  The Rule110 block has four paths, all listed in the manifest
-entry named \emph{Rule110 limitation gate}.  Thus the counts agree:
-$2+5+2+4=13$ catalogue paths and thirteen manifest local-path strings after the
-single relative-to-absolute normalization.  Finally, each manifest entry carries
-the boundary quoted in the proposition, so the coverage is not used to strengthen
-the rows into command-run claims.\qed
+phase-D lint script is represented verbatim, while the relative inventory path in
+the manuscript denotes the same file as the manifest's absolute path inside this
+paper directory.  The Rule110 block has four paths, all represented in the
+manifest entry named \emph{Rule110 limitation gate}.  Hence the catalogue has
+$2+5+2+4=13$ paths and the manifest records thirteen corresponding local-path
+strings after the single relative-to-absolute normalization.  Finally, each
+manifest entry carries the boundary quoted in the proposition, so the coverage is
+not used to strengthen the rows into command-run claims, daemon-execution claims,
+full-source rebuild claims, dynamic-validation claims, or Rule110 rerun claims.\qed
 \end{proof}
 
 \begin{proposition}[Case-evidence accessibility certificate]
@@ -707,12 +728,12 @@ the boundary that no fresh full-source command run is claimed.  In the Rule110
 entry, the status file, collision-audit ledger, exhaustiveness ledger, and paper
 data reference are mapped to the limitation-gate row and to a historical
 limitation boundary, not to a fresh dynamic artifact rerun.  These four manifest
-entries exhaust the four rows of Table~\ref{tab:case-witnesses}.  The explicit
-coverage comparison is Proposition~\ref{prop:review-bundle-coverage-for-case-paths}:
-it checks all thirteen catalogue paths against the manifest after resolving this
-paper's relative inventory path.  Hence each case path has a reviewable artifact
-interface or an explicit historical-evidence boundary, and the proposition
-follows.\qed
+entries exhaust the four rows of Table~\ref{tab:case-witnesses}.  The record-coverage certificate is Proposition~\ref{prop:review-bundle-coverage-for-case-paths}:
+it states that the manifest represents the thirteen catalogue paths after
+resolving this paper's relative inventory path, and it expressly excludes fresh
+command execution, daemon execution, full-source rebuild, dynamic validation, and
+Rule110 rerun claims.  Hence each case path has a reviewable artifact interface
+or an explicit historical-evidence boundary, and the proposition follows.\qed
 \end{proof}
 
 \begin{table}
@@ -734,13 +755,14 @@ Rule110 limitation gate & artifact status, collision-audit ledger, exhaustivenes
 \section{Evidence boundary}
 
 \begin{lemma}[Two-page presentation abstraction preserves the safety interface]
-\label{prop:two-page-presentation-abstraction-preserves-safety-interface}
+\label{lem:two-page-presentation-abstraction-preserves-safety-interface}
 Let $A$ be a CICM presentation-only abstract prepared from this longer technical
 record.  Suppose $A$ is the source artifact \path{submission_abstract.tex}, is
 intended to compile as \path{submission_abstract.pdf}, and contains: (i) the
 central rule that AI outputs are advisory until the relevant deterministic gates
-pass; (ii) the statement of Theorem~\ref{thm:publication-safety-interface} in
-abbreviated form, including the pinned discovery-gate source interface; (iii)
+pass; (ii) the statement of the publication-safety rule in abbreviated form, with a pointer to
+Theorem~\ref{thm:publication-safety-interface} and its proof in this supplement
+and with the pinned discovery-gate source interface; (iii)
 one sentence or compact table naming the four case rows of
 Table~\ref{tab:case-witnesses}; (iv) the evidence-level boundary distinguishing
 path-verified claims from command-run claims; and (v) the supplemental-upload
@@ -781,9 +803,9 @@ kind, gate, evidence surface, or boundary.\qed
 \begin{proposition}[Submission artifact interface]
 \label{prop:submission-artifact-interface}
 For the current presentation-only route, \path{main.tex} is the long technical
-supplement and \path{submission_abstract.tex} is the checked short submission
-source.  If the short source satisfies the five hypotheses of
-Lemma~\ref{prop:two-page-presentation-abstraction-preserves-safety-interface}
+supplement and \path{submission_abstract.tex} is the two-page CICM presentation
+artifact source.  If the short source satisfies the five hypotheses of
+Lemma~\ref{lem:two-page-presentation-abstraction-preserves-safety-interface}
 and the supplemental manifest records (a) \path{submission_abstract.tex}, (b) the
 intended output \path{submission_abstract.pdf}, (c) \path{main.tex} as the long
 technical supplement, and (d) \path{review_bundle/} as the supplemental upload
@@ -794,7 +816,7 @@ treating the seventeen-page technical record as the two-page artifact.
 \begin{proof}
 The proposition separates three objects that otherwise can be conflated.  The
 first object is the short abstract source \path{submission_abstract.tex}.  By the
-hypothesis that it satisfies Lemma~\ref{prop:two-page-presentation-abstraction-preserves-safety-interface},
+hypothesis that it satisfies Lemma~\ref{lem:two-page-presentation-abstraction-preserves-safety-interface},
 its load-bearing claims are exactly the preserved safety-interface claims: the
 abbreviated theorem spine, the four case witnesses, the source-snapshot
 boundary, the case-path coverage boundary, and the negative boundary on fresh
@@ -811,7 +833,7 @@ has a determinate short-artifact interface and does not identify the long
 technical record with the two-page submission.\qed
 \end{proof}
 
-The present draft reports path-verified source architecture and case evidence.
+This long technical supplement reports path-verified source architecture and case evidence.
 It does not claim a fresh rebuild of the full newmath source tree.  Any later
 claim that a command was run for this submission must record the source commit,
 environment, command, exit code, and log path.  This boundary is deliberate:
