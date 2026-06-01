@@ -3,6 +3,7 @@
 - source seed:
   `papers/publication/newmath_intake/seeds/bedc_automation_pipeline`
 - source repo: `D:/omega/newmath`
+- public source URL: `https://github.com/the-omega-institute/newmath`
 - source ref: `origin/dev`
 - source commit:
   `3fb3d6a0641767388a401883062aa522ea0b397b`

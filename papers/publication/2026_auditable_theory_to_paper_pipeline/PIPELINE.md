@@ -7,6 +7,7 @@
 - fallback venues: COLM workshop; ICTAI-style AI systems venue; later JAR/JFR
   systems paper after stronger artifact evidence
 - source seed: `papers/publication/newmath_intake/seeds/bedc_automation_pipeline`
+- public source URL: `https://github.com/the-omega-institute/newmath`
 - newmath source ref: `origin/dev`
 - newmath source commit:
   `3fb3d6a0641767388a401883062aa522ea0b397b`
@@ -81,10 +82,20 @@ P4 complete on 2026-06-01.  See `P4_REVIEW.md`.
 
 Submission-blocking decisions remaining:
 
-- public artifact/source link strategy;
 - source-command rerun decision or explicit no-rerun statement;
 - final author/affiliation confirmation in the CICM form;
 - AI disclosure if the form asks for one.
+
+Resolved artifact/source link decision:
+
+- use the public newmath repository
+  `https://github.com/the-omega-institute/newmath` at pinned commit
+  `3fb3d6a0641767388a401883062aa522ea0b397b` as the source link for the
+  imported theorem spine;
+- upload `review_bundle/` and `main.tex` as supplemental review material for
+  the CICM presentation-only route;
+- do not claim a fresh full rebuild or full artifact evaluation unless the
+  relevant command logs are rerun and recorded.
 
 ## Route Decision
 
@@ -105,11 +116,10 @@ the relevant commands in `SOURCE_MAP.md` must be rerun and logged first.
 
 ## Submission Blockers
 
-1. Public artifact/source link decision.
-2. Final source-command rerun decision or explicit no-rerun statement.
-3. Decide whether to rerun the newmath command suite or explicitly keep the
+1. Final source-command rerun decision or explicit no-rerun statement.
+2. Decide whether to rerun the newmath command suite or explicitly keep the
    evidence claim at path-verified architecture plus case studies.
-4. Confirm author list, affiliations, competing interests, and AI disclosure
+3. Confirm author list, affiliations, competing interests, and AI disclosure
    expected by the selected venue.
 
 ## Next Actions
