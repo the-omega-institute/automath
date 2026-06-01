@@ -997,3 +997,44 @@ Status: T-32 (b) — first explicit point-count ruling-out of the first
 C4 representative; reinforces prior fb78cced4 (which used the abstract
 scalar-normalized character argument) with concrete cover-point counts
 on F_121 and F_{121^2}.
+
+
+## Monitoring Update 2026-06-01 17:45 SGT — Lemma 5 inversion case has explicit linear-algebra countermodels
+
+Pipeline-side `check_litt3_1f67_lemma5_inversion_countermodel` (17:29)
+plus `check_litt3_1f67_inversion_auxiliary_family` (17:34) demonstrates
+that Lemma 5 (the proposed Frobenius-inversion bridge to PE^2/sign
+coefficient systems) is INCOMPLETE as currently stated.
+
+Countermodel structure (Frobenius-inversion case, F tau F^{-1} = tau^{-1}
+with tau^2 = -I):
+- Lemma 5 claims primitive coefficients are forced to
+    [1, 0, 42, 0, 683, 0, 5082, 0, 14641]
+- Countermodel found:
+    [1, 0, 34, 0, 515, 0, 4114, 0, 14641]
+  is an exact 8-dimensional model satisfying the same deck / Frobenius /
+  Q(i) representation data, with P_+ and P_- each occurring ONCE rather
+  than twice.
+
+Auxiliary-family scan (`1f67_inversion_auxiliary_family`):
+- 13 Hasse-bounded auxiliary factors H_a tested for a in {-6, ..., 6}
+- forced_hit_a_values: [-1, 1] (the 2 values that give the Lemma 5 doubled pair)
+- formal_countermodel_a_values: [-6, -5, -4, -3, -2, 0, 2, 3, 4, 5, 6]
+  (11 values giving exact even degree-8 formal models P_+ P_- H_a H_a(-T))
+- d_4 residues observed mod 8: {2, 4} — matching both named target classes
+  m=2 and m=4
+
+Conclusion: Lemma 5 cannot be used as the PE^2/sign bridge without an
+ADDITIONAL geometric input that excludes every auxiliary H_a with a not in
+{-1, 1}. The packet's inversion-case multiplicity jump is NOT a consequence
+of the stated linear-algebra data plus the elliptic Weil bound.
+
+Implication: the C4 closure recipe via Lemma 5 needs either (a) a genuine
+actual-curve geometric condition that rules out the 11 countermodel a
+values, (b) a direct point-count/J_Y[4] certificate replacing Lemma 5, or
+(c) the Lemma 5 statement is revised/abandoned.
+
+Status: T-32 (b) — structural gap exposed in Lemma 5. The committed
+explicit point-count rulings (fb78cced4, 07723f52f) for the first C4
+two-cycle representative remain valid; the Lemma 5 reduction to PE^2/sign
+systems is the link now flagged as needing geometric reinforcement.
