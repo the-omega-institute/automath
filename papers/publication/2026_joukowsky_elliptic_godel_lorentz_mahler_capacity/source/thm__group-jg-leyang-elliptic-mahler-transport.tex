@@ -1,4 +1,4 @@
-\begin{theorem}[Two-scale logarithmic mean identity on the Joukowsky elliptic boundary]\label{thm:elliptic-two-scale-stokes-mean}
+\begin{theorem}[Jensen--Mahler identities for one Joukowsky transport]\label{thm:elliptic-two-scale-stokes-mean}\label{thm:transported-jensen-shell-count}\label{thm:leyang-mahler-transport}\label{thm:mahler-jensen-leyang-rigidity}
 Specialize the algebraic notation of Theorem \ref{thm:pullback-factorization} to complex coefficients, and let \(r>1\). Let \(P(z)\in\CC[z]\) have degree \(n\ge 1\) and satisfy \(P(0)\neq 0\). Set
 \[
 J_r(e^{i\theta})=r e^{i\theta}+r^{-1}e^{-i\theta},
@@ -10,7 +10,13 @@ and let \(\mu_r\) be the pushforward of Haar measure \(\frac{\dd\theta}{2\pi}\) 
 \mathcal M_\rho(P):=\frac1{2\pi}\int_{0}^{2\pi}\log|P(\rho e^{i\theta})|\,\dd\theta.
 \]
 These circular logarithmic means are interpreted by the global lower-truncated/Lebesgue convention fixed in Section \ref{sec:preliminaries}.
-Then one has the exact identity
+Write \(P(z)=a_n\prod_{j=1}^{n}(z-z_j)\), counted with multiplicity, and for \(s>0\) put
+\[
+\mathcal F(s):=\int_{E_{e^s}}\log|Q_{e^s}(w)|\,\dd\mu_{e^s}(w).
+\]
+Then the following Jensen--Mahler consequences of the pullback factorization hold.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item \emph{Mean identity.}  One has
 \[
 \boxed{\;
 \int_{E_r}\log|Q_r(w)|\,\dd\mu_r(w)
@@ -18,6 +24,26 @@ Then one has the exact identity
 \mathcal M_{1}(P)+\mathcal M_{r^{-2}}(P)+n\log r-\log|a_n|.
 \;}
 \]
+\item \emph{Derivative shell count.}  For every \(s>0\),
+\[
+\mathcal F(s)=\log|a_n|+ns+
+\sum_{j=1}^{n}\log\max\{1,|z_j|\}+
+\sum_{j=1}^{n}\log\max\{e^{-2s},|z_j|\}.
+\]
+Consequently, at every regular value \(s>0\) with \(e^{-2s}\ne |z_j|\) for all \(j\),
+\[
+\frac{\dd\mathcal F}{\dd s}(s)=n-2\#\{j:\ |z_j|<e^{-2s}\}.
+\]
+\item \emph{Unit-circle identity.}  If all zeros of \(P\) lie on \(\TT\), then
+\[
+\int_{E_r}\log|Q_r(w)|\,\dd\mu_r(w)=\log|P(0)|+n\log r.
+\]
+\item \emph{Unit-circle criterion.}  If \(|a_0|=|a_n|\), then all zeros of \(P\) lie on \(\TT\) if and only if \(\mathcal F(s)-ns\) is constant on \((0,\infty)\), equivalently if and only if \(\mathcal F(s_2)-\mathcal F(s_1)=n(s_2-s_1)\) for every \(0<s_1<s_2\).  More precisely,
+\[
+\mathcal F(s_2)-\mathcal F(s_1)-n(s_2-s_1)
+=-2\sum_{j=1}^{n}\operatorname{meas}\{s\in(s_1,s_2): |z_j|<e^{-2s}\}.
+\]
+\end{enumerate}
 \end{theorem}
 \begin{proof}
 By Theorem \ref{thm:pullback-factorization}, for \(|z|=1\) one has
@@ -46,7 +72,16 @@ Hence
 \frac1{2\pi}\int_{0}^{2\pi}\log|P^\vee(r^2 e^{i\theta})|\,\dd\theta
 =2n\log r+\mathcal M_{r^{-2}}(P)-\log|a_n|,
 \]
-and substituting this into the previous identity gives the claim.
+ and substituting this into the previous identity gives part \textup{(a)}.
+
+Jensen's root formula for circular logarithmic means gives, for every \(\rho>0\),
+\[
+\mathcal M_\rho(P)=\log|a_n|+
+\sum_{j=1}^{n}\log\max\{\rho,|z_j|\}.
+\]
+Substituting \(\rho=1\) and \(\rho=e^{-2s}\) into part \textup{(a)} gives the displayed expression for \(\mathcal F(s)\).  Away from the finitely many breakpoints \(s=-\frac12\log|z_j|\), the derivative of \(\log\max\{e^{-2s},|z_j|\}\) is \(-2\) precisely when \(|z_j|<e^{-2s}\) and is zero otherwise.  This proves part \textup{(b)}.
+
+If all zeros lie on \(\TT\), then \(\mathcal M_1(P)=\log|a_n|\) and \(\mathcal M_{r^{-2}}(P)=\log|a_n|\).  Since \(|P(0)|=|a_n|\) in this case, part \textup{(a)} gives part \textup{(c)}.  Finally, integrating the derivative formula between \(s_1\) and \(s_2\) gives the displayed deficit formula in part \textup{(d)}.  The deficit vanishes for all intervals exactly when no zero satisfies \(|z_j|<1\); under \(|a_0|=|a_n|\), the product identity \(|a_0|=|a_n|\prod_j|z_j|\) then forces all \(|z_j|=1\).  The converse is immediate from part \textup{(c)}.
 \end{proof}
 
 \begin{remark}[Supporting multiplicative form of the elliptic logarithmic mean]\label{rem:elliptic-two-scale-mahler-multiplicative}
@@ -61,86 +96,6 @@ Under the hypotheses of Theorem \ref{thm:elliptic-two-scale-stokes-mean},
 Exponentiating both sides of Theorem \ref{thm:elliptic-two-scale-stokes-mean} gives the result.
 \end{proof}
 
-\begin{theorem}[Transported Jensen shell count for Joukowsky ellipses]\label{thm:transported-jensen-shell-count}
-In the setting of Theorem \ref{thm:elliptic-two-scale-stokes-mean}, write the zeros of \(P\) as \(z_1,\dots,z_n\), counted with multiplicity, and set \(s:=\log r>0\). Define
-\[
-\mathcal F(s):=\int_{E_{e^s}}\log|Q_{e^s}(w)|\,\dd\mu_{e^s}(w).
-\]
-Then
-\[
-\mathcal F(s)=\log|a_n|+ns+
-\sum_{j=1}^{n}\log\max\{1,|z_j|\}+
-\sum_{j=1}^{n}\log\max\{e^{-2s},|z_j|\}.
-\]
-Consequently, at every \(s>0\) with \(e^{-2s}\ne |z_j|\) for all \(j\),
-\[
-\frac{\dd\mathcal F}{\dd s}(s)
-=n-2\#\{j:\ |z_j|<e^{-2s}\}.
-\]
-In particular the elliptic transport logarithmic mean detects the radial zero-counting function inside the moving circle \(|z|=e^{-2s}\). If, in addition, \(|a_0|=|a_n|\), then all zeros of \(P\) lie on the unit circle if and only if \(\mathcal F'(s)=n\) for every regular value \(s>0\).
-\end{theorem}
-
-\begin{proof}
-Jensen's root formula for circular logarithmic means, applied with multiplicities to \(P(z)=a_n\prod_j(z-z_j)\) (see, e.g., \citet[Chap.~1]{EverestWard1999} or \citet{Mahler1962}), gives for every \(\rho>0\),
-\[
-\mathcal M_\rho(P)=\log|a_n|+
-\sum_{j=1}^{n}\log\max\{\rho,|z_j|\}.
-\]
-Substituting \(\rho=1\) and \(\rho=e^{-2s}\) into Theorem \ref{thm:elliptic-two-scale-stokes-mean} gives the displayed expression for \(\mathcal F(s)\). Away from the finitely many breakpoints \(s=-\frac12\log|z_j|\), the only terms depending nonlinearly on \(s\) are
-\[
-\log\max\{e^{-2s},|z_j|\},
-\]
-whose derivative is \(-2\) precisely when \(|z_j|<e^{-2s}\), and is \(0\) precisely when \(|z_j|>e^{-2s}\). This proves the derivative formula and the zero-counting assertion.
-
-If all zeros lie on \(|z|=1\), then \(|a_0|=|a_n|\) and no zero lies inside \(|z|=e^{-2s}\) for \(s>0\), so \(\mathcal F'(s)=n\) at every regular value. Conversely, assume \(|a_0|=|a_n|\) and \(\mathcal F'(s)=n\) for every regular value \(s>0\). The derivative formula implies that no zero satisfies \(|z_j|<e^{-2s}\) for any \(s>0\). Letting \(s\downarrow0\), we obtain \(|z_j|\ge1\) for every \(j\). Since
-\[
-|a_0|=|a_n|\prod_{j=1}^{n}|z_j|,
-\]
-the hypothesis \(|a_0|=|a_n|\) forces \(\prod_j|z_j|=1\). With every factor at least \(1\), this is possible only when \(|z_j|=1\) for all \(j\).
-\end{proof}
-
-\begin{theorem}[Jensen identity under the unit-circle zero hypothesis]\label{thm:leyang-mahler-transport}
-Specialize the algebraic notation of Theorem \ref{thm:pullback-factorization} to complex coefficients, and let \(r>1\). Let \(P(z)\in\CC[z]\) have degree \(n\ge 1\), and assume the classical unit-circle zero condition that all zeros satisfy \(|z_j|=1\). Set
-\[
-J_r(e^{i\theta})=r e^{i\theta}+r^{-1}e^{-i\theta},
-\qquad
-E_r:=J_r(\{e^{i\theta}:\theta\in[0,2\pi)\}),
-\]
-and let \(\mu_r\) be the pushforward of Haar measure \(\frac{\dd\theta}{2\pi}\) under \(J_r\). Then the transported Jensen shell count of Theorem \ref{thm:transported-jensen-shell-count} has no interior shell contribution, and one has the exact identity
-\[
-\boxed{\;
-\int_{E_r}\log|Q_r(w)|\,\dd\mu_r(w)=\log|a_0|+n\log r\; }.
-\]
-In particular, if \(P\) is monic, then
-\[
-\int_{E_r}\log|Q_r(w)|\,\dd\mu_r(w)=n\log r.
-\]
-\end{theorem}
-
-\begin{proof}
-By Theorem \ref{thm:pullback-factorization}, for \(|z|=1\) one has
-\[
-r^n z^n Q_r\!\left(r z+r^{-1}z^{-1}\right)=P(z)\,P^{\vee}(r^2 z).
-\]
-Taking logarithmic absolute values and integrating over \(|z|=1\) against \(\frac{\dd\theta}{2\pi}\), while observing that \(\log|z|=0\), gives
-\[
-\int_{E_r}\log|Q_r(w)|\,\dd\mu_r(w)
-=\int_{0}^{2\pi}\log|P(e^{i\theta})|\,\frac{\dd\theta}{2\pi}
-\ +\ \int_{0}^{2\pi}\log|P^{\vee}(r^2 e^{i\theta})|\,\frac{\dd\theta}{2\pi}
-\ -\ n\log r.
-\]
-Since all zeros of \(P\) lie on the unit circle, Jensen's formula for Mahler measure \citep{Mahler1962,EverestWard1999} yields
-\[
-\int_{0}^{2\pi}\log|P(e^{i\theta})|\,\frac{\dd\theta}{2\pi}=\log|a_n|.
-\]
-On the other hand, the leading coefficient of \(P^\vee(u)=a_n^{-1}u^n P(1/u)\) is \(a_0/a_n\), and the zeros of \(P^\vee(r^2 z)\) are \((r^2 z_j)^{-1}\), all of modulus \(r^{-2}<1\).
-Applying Jensen's formula once more, we find
-\[
-\int_{0}^{2\pi}\log|P^{\vee}(r^2 e^{i\theta})|\,\frac{\dd\theta}{2\pi}
-=\log|(a_0/a_n) r^{2n}|=\log|a_0/a_n|+2n\log r.
-\]
-Substituting this into the previous identity gives the stated formula.
-\end{proof}
 
 \begin{remark}[Differential reading of the unit-circle Jensen identity]\label{rem:leyang-linear-log-response}
 Under the hypotheses of Theorem \ref{thm:leyang-mahler-transport}, define
@@ -154,52 +109,6 @@ Then \(\mathcal F(r)=\log|a_0|+n\log r\), and hence
 This derivative is only a convenient reading of the Jensen identity in Theorem \ref{thm:leyang-mahler-transport}.  The structural assertion is the Jensen shell-counting obstruction in Theorem \ref{thm:transported-jensen-shell-count}.
 \end{remark}
 
-\begin{theorem}[Jensen unit-circle criterion and off-circle obstruction]\label{thm:mahler-jensen-leyang-rigidity}
-\emergencystretch=2em
-Let \(P(z)=a_n\prod_{j=1}^{n}(z-z_j)\) be a degree-\(n\) polynomial with
-\(P(0)\ne0\), and let \(Q_r\) be its Joukowsky transport polynomial.  For
-\(s>0\) put
-\[
-\mathcal F(s):=\int_{E_{e^s}}\log|Q_{e^s}(w)|\,\dd\mu_{e^s}(w)
-\]
-in the lower-truncated logarithmic sense of Theorem \ref{thm:elliptic-two-scale-stokes-mean}.  Assume \(|a_0|=|a_n|\).  Then the unit-circle zero condition is characterized purely by the transported Jensen increments: the following are equivalent:
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item every zero of \(P\) lies on \(\TT\);
-\item \(\mathcal F(s)-ns\) is constant on \((0,\infty)\);
-\item for every \(0<s_1<s_2\),
-\[
-\mathcal F(s_2)-\mathcal F(s_1)=n(s_2-s_1).
-\]
-\end{enumerate}
-Equivalently, the Jensen deficit measure of the function \(s\mapsto\mathcal F(s)-ns\) is exactly twice the radial zero-counting measure of the reciprocal interior shells.  More concretely, if \(0<s_1<s_2\), then
-\[
-\boxed{\;
-\mathcal F(s_2)-\mathcal F(s_1)-n(s_2-s_1)
-=-2\sum_{j=1}^{n}\operatorname{meas}\{s\in(s_1,s_2): |z_j|<e^{-2s}\}.
-\;}
-\]
-Consequently any zero with \(|z_j|<1\) forces a strict negative Jensen deficit on every interval crossing the breakpoint \(-\frac12\log|z_j|\).  Thus the Jensen identity of Theorem \ref{thm:leyang-mahler-transport} has no off-circle false positives under the reciprocal modulus condition \(|a_0|=|a_n|\).
-\end{theorem}
-
-\begin{proof}
-Theorem \ref{thm:transported-jensen-shell-count} gives, with multiplicities,
-\[
-\mathcal F(s)=\log|a_n|+ns+
-\sum_{j=1}^{n}\log\max\{1,|z_j|\}+
-\sum_{j=1}^{n}\log\max\{e^{-2s},|z_j|\}.
-\]
-For each root define
-\[
-\ell_j(s_1,s_2):=\operatorname{meas}\{s\in(s_1,s_2): |z_j|<e^{-2s}\}.
-\]
-The function \(s\mapsto\log\max\{e^{-2s},|z_j|\}\) is absolutely continuous away from its single breakpoint and has derivative \(-2\) exactly on the set \(|z_j|<e^{-2s}\) and derivative \(0\) exactly on the complementary regular set.  Integrating this derivative from \(s_1\) to \(s_2\) yields
-\[
-\mathcal F(s_2)-\mathcal F(s_1)-n(s_2-s_1)=-2\sum_{j=1}^{n}\ell_j(s_1,s_2),
-\]
-which is the displayed deficit formula.
-
-If every zero lies on \(\TT\), then \(|z_j|=1\) for all \(j\), so \(e^{-2s}<1=|z_j|\) for every \(s>0\).  Hence every \(\ell_j(s_1,s_2)\) vanishes, proving both constancy of \(\mathcal F(s)-ns\) and all finite-interval equalities.  Conversely, if all finite-interval equalities hold, then every \(\ell_j(s_1,s_2)\) must vanish on every interval.  Therefore there is no index with \(|z_j|<1\), since such an index would give positive length on intervals meeting \(( -\frac12\log|z_j|,\infty)\).  Thus \(|z_j|\ge1\) for every \(j\).  The hypothesis \(|a_0|=|a_n|\) says \(\prod_j |z_j|=1\), and the inequalities \(|z_j|\ge1\) force \(|z_j|=1\) for all \(j\).  This proves \textup{(iii)} implies \textup{(i)}; \textup{(ii)} and \textup{(iii)} are equivalent because a function is constant exactly when all of its finite increments vanish.  The strict-deficit statement is the same interval formula applied to a zero with \(|z_j|<1\).
-\end{proof}
 
 \begin{theorem}[Unit-circle shell separation from one elliptic transport]\label{thm:leyang-elliptic-shell-separation}
 Let \(r>1\), and let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(|z_j|=1\), counted with multiplicity.  Let
