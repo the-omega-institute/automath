@@ -893,3 +893,41 @@ representatives. Remaining open work: connectedness + etale-ness + genus-4
 {2: 12, 4: 48}), plus PGL_2-equivariant transport.
 
 Artifact: `tools/community-outreach/targets/cand_litt_common_finite_etale_cover/deep_responses/oracle_T32_e3_X_side_S3_geometric_pRank_certificate_v3_20260601_1340.md`.
+
+
+## Monitoring Update 2026-06-01 14:15 SGT — Native gate PASS on X-side S3 cert polynomial identities
+
+Independent sympy mod-11 verification of the explicit polynomial identities
+in the prior X-side S3 geometric p-rank certificate (commit 4db1fa067):
+
+A0 cubic chart verification:
+- Substituting q = 1 + 1/u, v = w/u^2 (i.e., u = 1/(q-1), w = v/(q-1)^2) into
+  E_0: v^2 = q^4 - 1 yields
+  w^2 = ((q-1+1)^4 - (q-1)^4) under change of variable
+  = (u+1)^4 - u^4
+  = 4 u^3 + 6 u^2 + 4 u + 1
+  matching the Oracle expression. ✓
+
+A1 cubic chart verification:
+- Substituting q = 1/u, v = w/u^2 into E_1: v^2 = q(q+1)(q^2+1) yields
+  w^2 = (u+1)(u^2+1) = u^3 + u^2 + u + 1
+  matching the Oracle expression. ✓
+
+A1 irreducibility:
+- q_1(u) = u^4 + 5 u^3 + 2 u^2 + 4 u + 1 factorization over F_11 via sympy
+  gives a single irreducible quartic factor. ✓
+
+A0 / A1 tangent-identity scalar:
+- A0 lines: kappa = 6, kappa^3 = 216 mod 11 = 7. Cert says kappa^3 = 7. ✓
+- A1 lines: kappa = 10, kappa^3 = 1000 mod 11 = 10. Cert says kappa^3 = 10. ✓
+
+All checkable polynomial / arithmetic identities verified. The cubic-chart
+transformations, irreducibility, and tangent-identity scalars are
+arithmetically consistent over F_11.
+
+Gate status: PASS. The Oracle X-side S3 geometric p-rank certificate
+(artifact T32_e3_X_side_S3_geometric_pRank_certificate_v3) is verified at
+every checkable algebraic step. The {2: 12, 4: 48} f_rank_histogram and
+geometric (connectedness / etale-ness / genus-4 / p-rank stability) claims
+remain to be independently verified by either further codex-worker enumeration
+or a full S3-row proof.
