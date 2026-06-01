@@ -1069,3 +1069,35 @@ the GenusOnlyFiniteEtaleInvariantNoGo and Tamagawa-gap audits from
 Status: T-32 (b) — bounded-degree closure now d <= 3 (was d <= 2).
 The remaining all-degrees / very-general open frontier is anabelian /
 Tamagawa-style and research-grade.
+
+
+## Monitoring Update 2026-06-01 19:15 SGT — d ≤ 4 closure extension; D=5+ requires 1023 double covers
+
+Pipeline-side `check_litt3_b1d1210_A2_D4_genus5_factor_replay` (18:55,
+artifact `A2_D4_genus2_to_genus5_Jacobian_factor_replay`) extends the prior
+d ≤ 3 closure (commit 36dde3ea6) to d = 4 for the explicit cron-contract pair.
+
+Key data:
+- Compatible row at max(dX, dY) <= 4: only (dX = 4, dY = 1, gZ = 5)
+- Y_point_counts(F_{11^k}) for k = 1..5: [8, 112, 1400, 14912, 162248]
+- Y_power_sums(F_{11^k}) for k = 1..5: [4, 10, -68, -270, -1196]
+- P_Y reciprocal L-poly for genus-5 cover (degree 10):
+  [1, -4, 3, 32, -40, 32, -440, 3872, 3993, -58564, 161051]
+- Conclusion: J_X is NOT a geometric isogeny factor of J_Y, so no étale
+  degree-4 map Y -> X exists for this explicit pair.
+
+So d <= 4 closure extends the prior d <= 3 result.
+
+Next obligation (`b1d1210_next_row_obligation` 19:09):
+- New row to rule out: (dX = 8, dY = 2, gZ = 9)
+- Connected geometric étale double covers of Y: 1023 (= 2^10 - 1 mod
+  hyperelliptic involution, all of geometric J[2] minus identity)
+- finite F_11 branch roots of f_Y: [9]
+- First blocker: enumerate / theoretically control the 1023 connected
+  geometric double covers Z -> Y and rule out étale degree-8 map Z -> X,
+  equivalently rule out a J_X factor in the relevant double-cover Pryms.
+
+Status: T-32 (b) — bounded-degree closure now d <= 4. The next degree-pair
+obligation (dX, dY) = (8, 2) requires enumeration of all 1023 connected
+geometric double covers of Y, a much larger workload than the prior
+bounded-d4 sweep, but still finite.
