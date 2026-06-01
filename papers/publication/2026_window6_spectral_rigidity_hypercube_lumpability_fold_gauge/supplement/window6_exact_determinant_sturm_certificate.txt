@@ -1,0 +1,178 @@
+# Exact determinant and Sturm certificate for the window-6 fold audit
+
+This supplement is a printed, self-contained acceptance certificate for the
+algebraic part of the window-6 computation.  It is intentionally redundant with
+Appendix A: the manuscript states the theorem-level use of the data, while this
+file records the exact determinant factor, the Sturm endpoint convention, and
+the independent arithmetic checks a referee can perform without floating-point
+eigenvalue routines.
+
+## State and matrix construction
+
+The window-6 state list, in lexicographic order, is
+
+```
+000000,000001,000010,000100,000101,001000,001001,001010,010000,010001,010010,010100,010101,100000,100001,100010,100100,100101,101000,101001,101010
+```
+
+The fiber-size vector in this order is
+
+```
+(4,2,4,4,2,4,2,3,4,2,3,4,2,4,2,3,4,2,4,2,3)
+```
+
+The directed edge-count matrix `N` is the sparse integer matrix printed in
+Proposition 2.2 of `source/thm__foldbin6_equitable_lumpability_spectral_rigidity.tex`.
+The rational pushforward matrix is
+
+```
+P_6(i,j) = N_ij / (6 d_i).
+```
+
+The canonical edge stream
+
+```
+m=6;states=<lex words>;d=<lex fiber sizes>;N=<sparse directed edge rows>
+```
+
+has SHA--256 digest
+
+```
+2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0
+```
+
+## Determinant certificate
+
+Let
+
+```
+L_6 = 3234734993627557134336
+q_6(t) = det(t I - P_6)/(t - 1)
+Q_6(t) = L_6 q_6(t).
+```
+
+Then `Q_6(t)` is the following integer polynomial of degree 20, written in
+decreasing powers of `t`:
+
+```
+3234734993627557134336*t^20
++3234734993627557134336*t^19
+-929736716918414376960*t^18
+-1604818477741277970432*t^17
+-37213373633648394240*t^16
++274861786482497028096*t^15
++27490186797617774592*t^14
+-20963031405293076480*t^13
+-2504964852327628800*t^12
++755171629347778560*t^11
++85984204088613888*t^10
+-13188370284900864*t^9
+-1223485221619584*t^8
++111098113329888*t^7
++6546577075200*t^6
+-443400182568*t^5
+-10707639048*t^4
++664613406*t^3
++2729310*t^2
+-220217*t
+-115
+```
+
+Equivalently, the coefficient stream
+
+```
+Q6=3234734993627557134336,3234734993627557134336,-929736716918414376960,-1604818477741277970432,-37213373633648394240,274861786482497028096,27490186797617774592,-20963031405293076480,-2504964852327628800,755171629347778560,85984204088613888,-13188370284900864,-1223485221619584,111098113329888,6546577075200,-443400182568,-10707639048,664613406,2729310,-220217,-115
+```
+
+has SHA--256 digest
+
+```
+a4f32303d20419c1608c177dafdc43904e3831f0c2eaf6f65895d49c654667dd
+```
+
+The determinant assertion is the exact identity in `QQ[t]`
+
+```
+Q_6(t) = L_6 * det(t I - P_6)/(t - 1).
+```
+
+This is verified by fraction-free determinant computation over `QQ[t]`, or by
+checking that `(t - 1) Q_6(t) - L_6 det(t I - P_6)` is the zero polynomial.
+
+## Sturm endpoint certificate
+
+Let `S_0=Q_6`, `S_1=Q_6'`, and
+
+```
+S_{r+1} = -rem(S_{r-1}, S_r)
+```
+
+over `QQ[t]` until a constant is reached.  The sequence has degrees
+`20,19,...,0`.  At the four rational endpoints, the signs of the full Sturm
+sequence are:
+
+```
+4841207858/10000000000   -++++++++++++++++++++   V=1
+4841207859/10000000000   +++++++++++++++++++++   V=0
+-6030939755/10000000000  +-+-+-+-+-+-+-+-+-+-+   V=20
+-6030939754/10000000000  --+-+-+-+-+-+-+-+-+-+   V=19
+```
+
+The canonical Sturm stream
+
+```
+2420603929/5000000000:-++++++++++++++++++++;4841207859/10000000000:+++++++++++++++++++++;-1206187951/2000000000:+-+-+-+-+-+-+-+-+-+-+;-3015469877/5000000000:--+-+-+-+-+-+-+-+-+-+
+```
+
+has SHA--256 digest
+
+```
+3f456cb31806cf82559e07691386f8a42b2a0555d409e74f2a03063238592ec0
+```
+
+By Sturm's theorem, `Q_6` has one real root in each interval
+
+```
+(4841207858/10000000000, 4841207859/10000000000)
+(-6030939755/10000000000, -6030939754/10000000000)
+```
+
+Both intervals are disjoint from the hypercube grid
+
+```
+{1, 2/3, 1/3, 0, -1/3, -2/3, -1}.
+```
+
+Therefore the rational matrix `P_6` has off-grid eigenvalues and cannot be an
+equitable quotient kernel of the simple random walk on `Q_6`.
+
+## Residual certificate
+
+The two vertices `000000` and `010101` satisfy
+
+```
+Fold_6^bin(000000) = Fold_6^bin(010101) = 000000.
+```
+
+Their one-step target-fiber counts into `000100` are
+
+```
+c_000000(000100) = 0
+c_010101(000100) = 1
+```
+
+Thus no matrix `P` satisfies `T_6 M = M P`.  For the audited pushforward
+residual `R_6 = T_6 M - M P_6`, at least one of the corresponding two entries
+has absolute value at least `1/12`.
+
+## Executable witness
+
+The file `supplement/window6_audit_certificate.sage` recomputes all data above
+from the fold definition and asserts the displayed hashes, determinant factor,
+Sturm sign strings, stabilizer identity, and residual witness.  Successful
+execution prints:
+
+```
+window6 finite audit certificate: all assertions passed
+```
+
