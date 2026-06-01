@@ -1,0 +1,82 @@
+﻿\documentclass[runningheads]{llncs}
+
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{array}
+
+\title{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics}
+\titlerunning{Auditable Theory-to-Paper Pipelines}
+\author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
+\authorrunning{H. Ma and W. Zhang}
+\institute{AELF PTE LTD. \email{auric@aelf.io} \and
+National University of Singapore \email{e1327962@u.nus.edu}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Large formal-mathematics projects increasingly use AI agents for drafting,
+review, theorem search, and manuscript preparation.  Ungated agent output,
+however, can create theorem-looking but content-poor edits, stale source
+references, duplicated submission routes, and premature paper promotion.  We
+present an auditable theory-to-paper pipeline used around a Lean-backed BEDC
+source workspace and an automath publication workspace.  The central rule is
+that AI output is advisory: load-bearing mathematical and submission claims must
+pass deterministic gates before they can be recorded as accepted work.
+\end{abstract}
+
+\paragraph{Safety interface.}
+The long technical record \path{main.tex} states the publication-safety theorem:
+if a theory-to-paper pipeline (1) treats AI-generated text, schedules, and review
+packets only as advisory proposals, (2) assigns each load-bearing claim to the
+appropriate deterministic gates, (3) accepts a claim only after those gates pass,
+and (4) records demotion rather than promotion when evidence is insufficient,
+then accepted manuscript claims are traceable to their source or artifact
+surfaces and unsupported agent output cannot become publication evidence merely
+by being written into the paper.  The imported theorem spine is pinned to
+\path{D:/omega/newmath/papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}.
+
+\paragraph{Deterministic gates.}
+The pipeline separates source development, intake packets, active paper tracks,
+AI review loops, deterministic gates, and human promotion decisions.  The gate
+interfaces include source builds and axiom checks, source-map and marker audits,
+anti-hollow theorem-content linting, overlap/submitted blocking, publication
+state checks, and submission-pack checks.  Passing one gate does not replace a
+different gate: for example, compilation does not prove theorem growth, and a
+human promotion marker does not resolve route overlap.
+
+\begin{center}\small
+\begin{tabular}{p{0.24\linewidth}p{0.31\linewidth}p{0.31\linewidth}}
+\toprule
+Case & Gate decision & Safe lesson \\
+\midrule
+Newmath intake isolation & active-paper detector blocks daemon entry until human promotion creates \path{2026_*}, \path{main.tex}, and \path{PIPELINE.md} & candidate source packets can remain inactive \\
+Upper-fibers overlap block & overlap gate records \path{deferred_wait_for_prior_submission} and blocks advancement while sibling overlap remains & venue selection is stateful \\
+Fake-extension block & theorem-content gate rejects file churn without load-bearing theorem delta & compilation or edits alone are not progress \\
+Rule110 limitation gate & artifact-limitation gate permits disclosure or blocks promotion, not fresh dynamic validation & limitations disclose or block claims \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Evidence boundary and artifacts.}
+This presentation submission uses path-verified source architecture and
+historical case evidence.  It does not claim a fresh rebuild of the full newmath
+source tree, a fresh publication-daemon run, or a fresh Rule110 dynamic artifact
+rerun.  Any later command-run claim must record the source commit, environment,
+command, exit code, and log path.  The review interface is supplemental upload
+only at this submission state: upload \path{review_bundle/} together with this
+short abstract, with \path{main.tex} as the long technical supplement.  No public
+archive URL or DOI is asserted here; if one is assigned later, it must be added
+to \path{references.bib} and \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.
+
+\bibliographystyle{splncs04}
+\begin{thebibliography}{9}
+\bibitem{Lean} L. de Moura et al. The Lean Theorem Prover. CADE-25, 2015.
+\bibitem{LeanDojo} K. Yang et al. LeanDojo: Theorem Proving with Retrieval-Augmented Language Models. NeurIPS, 2023.
+\bibitem{DSP} A. Q. Jiang et al. Draft, Sketch, and Prove. arXiv:2210.12283, 2023.
+\bibitem{AFP} J. Blanchette et al. Mining the Archive of Formal Proofs. CICM, 2015.
+\end{thebibliography}
+
+\end{document}
