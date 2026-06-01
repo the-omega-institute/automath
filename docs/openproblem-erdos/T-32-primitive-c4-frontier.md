@@ -809,3 +809,44 @@ is mechanically decidable.
 This complements the multi-field separator+witness picture earlier (F_11
 A={0,1}/A={0,3} X0 separators + F_13 deck-intertwining witness) with a
 sharper pair-descent closure recipe for the C4 frontier specifically.
+
+
+## Monitoring Update 2026-06-01 09:15 SGT — First Frobenius two-cycle representative explicitly ruled out
+
+Pipeline-side `check_litt3_2e050_scalar_normalized_kummer_replay` (09:11)
+finally produces an EXPLICIT scalar-normalized Kummer representative for
+the first primitive C4 Frobenius two-cycle and runs the character-sum
+test against the survivor target.
+
+Explicit data:
+- Kummer representative: F_L = (X − ρ·Y) / (X − ρ·Z)
+- Support units: u_P = 3, u_Q = 4
+- Character sums computed over Y(F_121) and Y(F_{121^2})
+  - S_121 = 16
+  - S_14641 = 632
+- Descended pair delta: (0, −32, 0, −1264)
+
+Result: the descended pair delta (0, −32, 0, −1264) does NOT equal the
+survivor target (0, −84, 0, 796) from the prior pair-descent recipe
+(commit 5e2f06f16). branch_hit = False. The first Frobenius two-cycle
+representative is therefore a NON-HIT for the C4 survivor branch.
+
+Remaining gap (verbatim from the local conclusion):
+"The first two-cycle is locally ruled out. The remaining C4 gap is not
+another scalar normalization for this L, but a finite certificate covering
+the OTHER primitive C4 representatives/orbits, OR a theorem that every
+primitive C4 representative has d4 = #C_{L^2}(F_{11^4}) − #C_L(F_{11^4})
+congruent to 0 mod 8 and therefore misses the survivor d4 = 398."
+
+Status: T-32 (b) — first explicit C4 representative ruled out via explicit
+F_L. The next concrete step is either (i) a finite enumeration covering the
+remaining C4 representatives/orbits, or (ii) a universal theorem that all
+primitive C4 representatives have d4 ≡ 0 mod 8 (thereby uniformly missing
+the survivor d4 = 398).
+
+This is the first concrete computational ruling-out using an explicit
+Kummer F_L (vs the prior abstract pair-descent reduction). Combined with
+the prior multi-field separator/witness picture (F_11 A={0,1}/A={0,3}
+X0 separators + F_13 deck-intertwining witness), the closure work
+narrows to the remaining representative enumeration or universal mod-8
+theorem.
