@@ -1,51 +1,375 @@
-\section{Scalar finite-part boundary}
+\section{Scalar boundary checks}
 \label{app:scalar-boundaries}
 
-This appendix records the only scalar-boundary fact needed by the present
-finite-group theorem chain.  The scalar finite part
-\(\mathcal M(A)=\gamma+\FP(A)\) is the trivial-channel normalisation in
-Main Theorems~II--III.  It depends on the base matrix \(A\), while the
-non-trivial class data depend on the fixed-label twisted determinants of
-\((A,\tau,G)\).  Thus scalar finite parts and the canonical cyclic-lift
-records of \Cref{app:cyclic-lift-comparison} are retained here only as
-normalisation and comparison tools.
+This appendix records the scalar finite-part facts used to police the boundary
+between fixed-matrix normalisation and finite-group class data.  The scalar
+quantity \(\mathcal M(A)=\gamma+\FP(A)\) supplies the trivial-channel
+normalisation in Main Theorems~II--III.  The non-trivial class data are instead
+the fixed-label Perron values determined by the twisted determinants of
+\((A,\tau,G)\).  The results below make this separation explicit: scalar
+variation and scalar truncation are useful finite-matrix tools, but they do not
+descend to the non-trivial fixed-label product coordinates unless those
+coordinates are already constant or vanish.
 
-Questions about holomorphic variation of \(\FP(A)\), effective observation of
-truncations, arithmetic refinements of root-of-unity records, and
-growing-family estimates are not used as hidden inputs for Main
-Theorems~I--III.
-
-\begin{lemma}[Scalar records enter only through the trivial channel]
-  \label{lem:scalar-boundary-trivial-channel-only}
-  Fix a primitive matrix \(A\), a finite group \(G\), and a non-empty family
-  \(\mathscr T\subset\mathcal T_{\mathrm{gap}}(A,G)\) of edge cocycles for
-  which the hypotheses of Main Theorems~II--III hold.  Let \(\mathcal R(A)\)
-  be any scalar fixed-matrix record depending only on \(A\), for instance
-  \(\FP(A)\), \(\mathcal M(A)\), the reduced determinant \(C(A)\), or a
-  canonical cyclic-lift record named in \Cref{app:cyclic-lift-comparison}.
-  Then \(\mathcal R(A)\) is constant as \(\tau\in\mathscr T\) varies and can
-  determine the normalised class-Mertens profile of Main Theorem~II on
-  \(\mathscr T\) only up to the trivial projection
-  \(\mathcal M(A)\mathbf1_G\).  It determines the non-trivial class profile
-  only in the degenerate case where all non-trivial Perron-point channels
-  \(\Pi_\varrho^\tau(\lambda^{-1})\), \(\varrho\ne\mathbf1\), are already
-  independent of \(\tau\) on \(\mathscr T\).
-\end{lemma}
+\begin{theorem}[Scalar finite part under local parameter variation]
+  \label{thm:finite-part-holomorphic-variation}
+  Let \(U\subset\CC\) be a domain and let
+  \(\theta\mapsto A(\theta)\in M_d(\CC)\) be holomorphic.  Suppose that
+  \(\lambda(\theta)\) is a holomorphic simple eigenvalue of \(A(\theta)\) on
+  \(U\), that \(|\lambda(\theta)|>1\), and that every other eigenvalue \(\nu\)
+  of \(A(\theta)\) satisfies \(|\nu|<|\lambda(\theta)|\).  Fix
+  \(\theta_0\in U\).  After shrinking to a simply connected neighbourhood
+  \(V\Subset U\) of \(\theta_0\), the scalar finite part admits a holomorphic
+  branch
+  \[
+    \mathfrak{FP}_{V}(\theta)
+    =
+    \log C(\theta)
+    +\sum_{m\ge2}\frac{\mu(m)}{m}
+      \log\det(I-\lambda(\theta)^{-m}A(\theta))^{-1},
+  \]
+  where
+  \[
+    C(\theta):=
+    \lim_{z\to\lambda(\theta)^{-1}}
+      (1-\lambda(\theta)z)\det(I-zA(\theta))^{-1}.
+  \]
+  The series converges normally on \(V\).  If \(A(\theta)\) is primitive
+  non-negative for real \(\theta\in V\cap\RR\), with Perron root
+  \(\lambda(\theta)>1\), then
+  \(\mathfrak{FP}_{V}(\theta)=\FP(A(\theta))\) for the compatible real
+  logarithm branch.  Moreover, on \(V\),
+  \[
+  \begin{aligned}
+    \frac{d}{d\theta}\mathfrak{FP}_{V}(\theta)
+    &=
+    \frac{d}{d\theta}\log C(\theta)  \\
+    &\quad+
+    \sum_{m\ge2}\frac{\mu(m)}{m}
+      \Tr\!\left(
+        (I-\lambda(\theta)^{-m}A(\theta))^{-1}
+        \frac{d}{d\theta}
+          \bigl(\lambda(\theta)^{-m}A(\theta)\bigr)
+      \right),
+  \end{aligned}
+  \]
+  and the differentiated series also converges normally on compact subsets of
+  \(V\).
+\end{theorem}
 
 \begin{proof}
-  The fixed-matrix record \(\mathcal R(A)\) does not involve the cocycle
-  \(\tau\), so it is constant on \(\mathscr T\).  By
-  \Cref{cor:fixed-matrix-scalar-interface-only}, the constant projection of
-  the normalised class-Mertens profile is exactly
-  \(\mathcal M(A)\mathbf1_G\), and the complementary zero-mean projection is
-  the class function with Peter--Weyl coefficients
-  \(\Pi_\varrho^\tau(\lambda^{-1})\) for
-  \(\varrho\ne\mathbf1\).  A scalar record depending only on \(A\) can
-  recover that complementary projection throughout \(\mathscr T\) only if the
-  complementary projection itself is constant on \(\mathscr T\), equivalently
-  only if all displayed non-trivial coefficients are independent of \(\tau\).
+  Since \(\lambda(\theta_0)\) is simple and spectrally separated from the
+  remaining eigenvalues, analytic perturbation theory gives, after shrinking
+  \(U\) if necessary, a holomorphic spectral projection for this eigenvalue and
+  a number \(\kappa\in(0,1)\) such that the non-Perron spectrum of
+  \(A(\theta)\) lies in \(|\nu|\le\kappa|\lambda(\theta)|\) on a neighbourhood
+  \(V\Subset U\) of \(\theta_0\).  We also shrink \(V\) so that it is simply
+  connected and \(|\lambda(\theta)|\ge\lambda_0>1\).
+
+  Factor
+  \[
+    \det(I-zA(\theta))=(1-\lambda(\theta)z)D(\theta,z),
+    \qquad
+    D(\theta,z):=\frac{\det(I-zA(\theta))}{1-\lambda(\theta)z}.
+  \]
+  The removable singularity at \(z=\lambda(\theta)^{-1}\) is removed by the
+  simple spectral projection, so \(D\) is holomorphic near
+  \(\{(\theta,\lambda(\theta)^{-1}):\theta\in V\}\).  The spectral separation
+  gives \(D(\theta,\lambda(\theta)^{-1})\ne0\), hence
+  \(C(\theta)=D(\theta,\lambda(\theta)^{-1})^{-1}\) is holomorphic and
+  non-vanishing.  Since \(V\) is simply connected, \(
+  \log C(\theta)\) has a holomorphic branch.
+
+  For \(m\ge2\), the matrix \(I-\lambda(\theta)^{-m}A(\theta)\) is invertible.
+  The Perron eigenvalue contributes \(1-\lambda(\theta)^{1-m}\ne0\), and every
+  other eigenvalue \(\nu\) contributes a factor with
+  \[
+    |\nu\lambda(\theta)^{-m}|
+    \le \kappa|\lambda(\theta)|^{1-m}
+    \le \kappa\lambda_0^{1-m}<1.
+  \]
+  Thus the determinant logarithms in the series are holomorphic on \(V\), after
+  choosing their branches from the base point \(\theta_0\).
+
+  Let \(K\Subset V\).  Put
+  \[
+    L:=\inf_{\theta\in K}|\lambda(\theta)|>1,
+    \qquad
+    B:=\sup_{\theta\in K}\norm{A(\theta)}.
+  \]
+  For all large \(m\), \(\norm{\lambda(\theta)^{-m}A(\theta)}\le BL^{-m}\le1/2\)
+  uniformly on \(K\).  The identity
+  \[
+    \log\det(I-X)^{-1}=\sum_{j\ge1}\frac{\Tr(X^j)}{j}
+  \]
+  for \(\norm X<1\) gives
+  \[
+    \left|
+      \log\det(I-\lambda(\theta)^{-m}A(\theta))^{-1}
+    \right|
+    \le d\sum_{j\ge1}\frac{(BL^{-m})^j}{j}
+    \le 2dB L^{-m},
+  \]
+  uniformly on \(K\).  The Weierstrass test proves normal convergence.  Applying
+  the same bound on a slightly larger compact subset and using Cauchy's formula
+  gives normal convergence of the differentiated series on \(K\).  Termwise
+  differentiation is therefore allowed, and
+  \[
+    \frac{d}{d\theta}\log\det B(\theta)^{-1}
+    =-\Tr(B(\theta)^{-1}B'(\theta))
+  \]
+  with \(B(\theta)=I-\lambda(\theta)^{-m}A(\theta)\) gives the displayed
+  derivative.
+
+  Finally, for real primitive non-negative matrices the base branch can be
+  chosen to agree with the positive real reduced determinant branch.  The
+  fixed-matrix closed form \Cref{thm:finite-part-primitive-closed-form} then
+  identifies the holomorphic expression with \(\FP(A(\theta))\) along the real
+  parameter branch.
 \end{proof}
 
-Consequently the finite-group information in Main Theorems~I--III comes from
-the fixed-label determinant family and the Adams--M\"obius inversion in the
-main text, not from scalar finite-matrix records alone.
+\begin{proposition}[Scalar perturbations do not create class corrections]
+  \label{prop:scalar-boundary-no-class-correction}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  Let \(V\) be a
+  holomorphic perturbation neighbourhood for the scalar finite part of \(A\) as
+  in \Cref{thm:finite-part-holomorphic-variation}.  Suppose one tries to replace
+  all class Mertens constants by scalar perturbations, in the sense that there
+  are complex numbers \(b_C\), depending only on the conjugacy class \(C\), for
+  which
+  \[
+    \mathcal M_C(A,\tau;G)=b_C+\frac{|C|}{|G|}\mathfrak{FP}_{V}(\theta_0)
+  \]
+  at the base point \(A=A(\theta_0)\).  Then necessarily
+  \[
+    b_C=\frac{|C|}{|G|}\gamma
+      +\frac{|C|}{|G|}
+        \sum_{\varrho\ne\mathbf1}
+          \chi_\varrho^\ast(C)\Pi_\varrho(\lambda^{-1}).
+  \]
+  In particular, the scalar branch accounts only for the trivial Perron-channel
+  term.  The Peter--Weyl correction vanishes for all classes if and only if
+  \(\Pi_\varrho(\lambda^{-1})=0\) for every non-trivial
+  \(\varrho\in\Irr(G)\).
+\end{proposition}
+
+\begin{proof}
+  Along the real primitive branch through the base point,
+  \Cref{thm:finite-part-holomorphic-variation} gives
+  \(\mathfrak{FP}_{V}(\theta_0)=\FP(A)\).  The scalar normalisation in
+  \Cref{thm:finite-part-primitive-closed-form} gives
+  \(\mathcal M(A)=\gamma+\FP(A)\).  Subtracting
+  \((|C|/|G|)\FP(A)\) from the class constant formula
+  \eqref{eq:class-mertens-constant} in \Cref{thm:class-mertens-explicit} yields
+  the displayed expression for \(b_C\).
+
+  Hence the scalar branch supplies exactly the universal factor
+  \((|C|/|G|)\FP(A)\); all non-scalar class information is the finite
+  Peter--Weyl sum over non-trivial irreducible representations.  If every
+  non-trivial Perron-point value vanishes, this correction is zero for every
+  class after subtracting the universal Euler constant contribution.  Conversely,
+  if the correction is zero for every conjugacy class, then the class function
+  \[
+    C\longmapsto
+    \sum_{\varrho\ne\mathbf1}
+      \chi_\varrho^\ast(C)\Pi_\varrho(\lambda^{-1})
+  \]
+  is identically zero.  Irreducible characters form an orthonormal basis for
+  class functions on \(G\), so every non-trivial Fourier coefficient
+  \(\Pi_\varrho(\lambda^{-1})\) is zero.
+\end{proof}
+
+\begin{theorem}[Scalar records do not determine class products]
+  \label{thm:scalar-class-product-no-descent}
+  Fix a primitive base matrix \(A\) with Perron root \(\lambda>1\), fix a finite
+  group \(G\), and let
+  \[
+    \mathcal T_{\mathrm{gap}}(A,G)
+    :=\{\tau:E_A\to G:\eta(\tau)<\lambda\}.
+  \]
+  Let \(\mathscr T\subset\mathcal T_{\mathrm{gap}}(A,G)\) be non-empty.  For
+  \(\tau\in\mathscr T\), write \(K_C(A,\tau;G)\) for the positive product
+  constants of \Cref{thm:class-euler-product-mertens}.  If a scalar
+  fixed-matrix record \(\mathcal R(A)\) determines all normalized class-product
+  constants on \(\mathscr T\), then every non-trivial fixed-label Perron
+  coordinate \(\Pi_\varrho^\tau(\lambda^{-1})\), \(\varrho\ne\mathbf1\), is
+  independent of \(\tau\) on \(\mathscr T\).  More precisely, for any
+  \(\tau,\tau'\in\mathscr T\),
+  \begin{equation}\label{eq:scalar-product-no-descent-distance}
+    \sum_C\frac{|C|}{|G|}
+      \left|
+        \log\frac{K_C(A,\tau;G)}{K_C(A,\tau';G)}
+      \right|^2
+    =
+    \sum_{\varrho\ne\mathbf1}
+      \left|
+        \Pi_\varrho^\tau(\lambda^{-1})
+        -\Pi_\varrho^{\tau'}(\lambda^{-1})
+      \right|^2,
+  \end{equation}
+  with the logarithms taken on the real positive branch.  Consequently scalar
+  data descend to the class-product package only on fibres where the
+  non-trivial fixed-label Perron vector is already constant.
+\end{theorem}
+
+\begin{proof}
+  By \Cref{thm:class-euler-product-mertens}, the positive product constants
+  satisfy the logarithmic formula \eqref{eq:class-euler-product-k-f}.  The
+  scalar part is the same for \(\tau\) and \(\tau'\), because it depends only on
+  \(A\).  Subtracting the two logarithmic formulas therefore gives, for each
+  conjugacy class \(C\),
+  \[
+    \log\frac{K_C(A,\tau;G)}{K_C(A,\tau';G)}
+    =-
+      \sum_{\varrho\ne\mathbf1}
+        \chi_\varrho^\ast(C)
+        \bigl(
+          \Pi_\varrho^\tau(\lambda^{-1})
+          -\Pi_\varrho^{\tau'}(\lambda^{-1})
+        \bigr).
+  \]
+  Multiplication by the outer minus sign does not change the squared norm.
+  The irreducible characters form an orthonormal basis for class functions with
+  inner product \(
+  \langle f,h\rangle=\sum_C |C|f(C)\overline{h(C)}/|G|
+  \).  Applying Parseval to the displayed class function gives
+  \eqref{eq:scalar-product-no-descent-distance}.
+
+  If \(\mathcal R(A)\) determines all normalized class-product constants on
+  \(\mathscr T\), then those normalized constants are the same for any two
+  cocycles in the same scalar fibre; here the whole family has the same scalar
+  fibre because \(A\) is fixed.  The left side of
+  \eqref{eq:scalar-product-no-descent-distance} is then zero, so every
+  non-trivial coefficient difference on the right is zero.  Conversely, if the
+  non-trivial Perron vector is constant, the same formula shows that the
+  normalized product vector is constant.  Thus scalar descent is possible
+  exactly on such fibres.
+\end{proof}
+
+\begin{theorem}[Effective scalar finite-part truncation]
+  \label{thm:logM-truncation-bound}
+  Let \(A\) be a primitive non-negative \(d\times d\) matrix with Perron root
+  \(\lambda>1\), and put
+  \[
+    K_{\mathrm{tr}}(A):=
+    \sup_{j\ge1}\frac{|\Tr(A^j)|}{\lambda^j}.
+  \]
+  For \(M\ge2\), define the \(M\)-term determinant truncation
+  \[
+    \FP_M(A):=
+    \log C(A)+\sum_{2\le m\le M}\frac{\mu(m)}{m}
+      \log\det(I-\lambda^{-m}A)^{-1}.
+  \]
+  Then
+  \[
+    |\FP(A)-\FP_M(A)|
+    \le
+    \frac{K_{\mathrm{tr}}(A)\lambda^{-M}}
+      {(M+1)(1-\lambda^{-M})(1-\lambda^{-1})}.
+  \]
+  Consequently the same bound controls the scalar orbit-Mertens
+  normalisation:
+  \[
+    |\mathcal M(A)-(\gamma+\FP_M(A))|
+    \le
+    \frac{K_{\mathrm{tr}}(A)\lambda^{-M}}
+      {(M+1)(1-\lambda^{-M})(1-\lambda^{-1})}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  By \Cref{thm:finite-part-primitive-closed-form},
+  \[
+    \FP(A)-\FP_M(A)
+    =
+    \sum_{m>M}\frac{\mu(m)}{m}
+      \log\det(I-\lambda^{-m}A)^{-1}.
+  \]
+  For \(m\ge2\), the spectral radius of \(\lambda^{-m}A\) is
+  \(\lambda^{1-m}<1\), and hence
+  \[
+    \log\det(I-\lambda^{-m}A)^{-1}
+    =
+    \sum_{j\ge1}\frac{\Tr(A^j)}{j}\lambda^{-mj}.
+  \]
+  Therefore
+  \[
+  \begin{aligned}
+    \left|
+      \log\det(I-\lambda^{-m}A)^{-1}
+    \right|
+    &\le
+    K_{\mathrm{tr}}(A)
+      \sum_{j\ge1}\frac{\lambda^j\lambda^{-mj}}{j}  \\
+    &=
+    K_{\mathrm{tr}}(A)
+      \sum_{j\ge1}\frac{\lambda^{-(m-1)j}}{j}
+    =
+    K_{\mathrm{tr}}(A)\bigl[-\log(1-\lambda^{1-m})\bigr].
+  \end{aligned}
+  \]
+  Since \(m>M\), one has \(\lambda^{1-m}\le\lambda^{-M}\).  The elementary
+  inequality \(-\log(1-x)\le x/(1-x)\), \(0\le x<1\), gives
+  \[
+    -\log(1-\lambda^{1-m})
+    \le
+    \frac{\lambda^{1-m}}{1-\lambda^{-M}}.
+  \]
+  Hence
+  \[
+  \begin{aligned}
+    |\FP(A)-\FP_M(A)|
+    &\le
+    \frac{K_{\mathrm{tr}}(A)}{1-\lambda^{-M}}
+      \sum_{m>M}\frac{\lambda^{1-m}}{m} \\
+    &\le
+    \frac{K_{\mathrm{tr}}(A)}{(M+1)(1-\lambda^{-M})}
+      \sum_{m=M+1}^{\infty}\lambda^{1-m}  \\
+    &=
+    \frac{K_{\mathrm{tr}}(A)\lambda^{-M}}
+      {(M+1)(1-\lambda^{-M})(1-\lambda^{-1})}.
+  \end{aligned}
+  \]
+  The assertion for \(\mathcal M(A)=\gamma+\FP(A)\) follows by adding the same
+  constant \(\gamma\) to both finite-part quantities.
+\end{proof}
+
+\begin{corollary}[Finite scalar normalisation certificate]
+  \label{cor:scalar-finite-part-finite-io-certificate}
+  Under the hypotheses of \Cref{thm:logM-truncation-bound}, fix a tolerance
+  \(\epsilon>0\).  The finite certificate inputs are the matrix \(A\), its
+  Perron root \(\lambda>1\), the scalar normalising constant \(\log C(A)\), the
+  determinant polynomial \(\det(I-zA)\), and a trace majorant
+  \(K_{\mathrm{tr}}(A)\).  Choose a truncation level \(M\ge2\) for which
+  \[
+    B_M(A):=
+    \frac{K_{\mathrm{tr}}(A)\lambda^{-M}}
+      {(M+1)(1-\lambda^{-M})(1-\lambda^{-1})}
+    \le \epsilon/2 .
+  \]
+  If \(I_M\subset\RR\) is any rational interval enclosing \(\FP_M(A)\), with
+  numerical radius \(R_{\mathrm{num}}\le\epsilon/2-B_M(A)\), then
+  \[
+    \FP(A)
+    \in
+  \(B_M(A)+R_{\mathrm{num}}\le\epsilon/2+(\epsilon/2-B_M(A))=\epsilon\)
+  \]
+  After adding \(\gamma\), the same interval encloses \(\mathcal M(A)\).  This
+  scalar certificate is a finite normalisation record only; by
+  \Cref{thm:scalar-class-product-no-descent}, it certifies class-product
+  constants only after the non-trivial fixed-label Perron vector has been
+  supplied separately or is already constant on the cocycle fibre.
+\end{corollary}
+
+\begin{proof}
+  The truncation theorem gives \(|\FP(A)-\FP_M(A)|\le B_M(A)\).  The interval
+  \(I_M\) contains the computed value \(\FP_M(A)\) with radius
+  \(R_{\mathrm{num}}\).  The triangle inequality therefore places \(\FP(A)\) in
+  the displayed Minkowski sum.  The choice
+  \(B_M(A)+R_{\mathrm{num}}\le\epsilon/2+(\epsilon/2-B_M(A))=\epsilon\)
+  gives the requested tolerance.  Adding the constant \(\gamma\) translates the
+  interval and hence encloses \(\mathcal M(A)=\gamma+\FP(A)\).  The final
+  sentence is exactly the no-descent conclusion of
+  \Cref{thm:scalar-class-product-no-descent}: the scalar certificate depends
+  only on \(A\), while the non-trivial product coordinates are the
+  fixed-label Perron values.
+\end{proof}
