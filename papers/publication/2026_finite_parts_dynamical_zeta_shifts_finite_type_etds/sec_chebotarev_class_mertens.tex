@@ -757,6 +757,83 @@ Adams--M\"obius determinant calculation.
   many constants gives the uniform assertion.
 \end{proof}
 
+\begin{proposition}[Isolated reduction to Main Theorem II and the product tail]
+  \label{prop:class-euler-product-main-chain-reduction}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  For a fixed
+  conjugacy class \(C\), put
+  \[
+    P_C(N):=
+    \prod_{\substack{\gamma\in\cP\,:\\ |\gamma|\le N\\
+      \tau(\gamma)\in C}}
+      \left(1-\lambda^{-|\gamma|}\right).
+  \]
+  Then the logarithmic Main Theorem~II estimate
+  \eqref{eq:class-mertens-log}, the \(r\ge2\) product-tail identity
+  \eqref{eq:class-product-tail-bound}, and
+  \Cref{lem:class-product-log-to-product-error} imply
+  \begin{equation}\label{eq:class-euler-product-reduction-asymptotic}
+    P_C(N)=
+    \exp\!\left(
+      -\mathcal M_C(A,\tau;G)
+      -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    \right)
+    N^{-|C|/|G|}\bigl(1+O(N^{-1})\bigr).
+  \end{equation}
+  Moreover the two constant formulas in Main Theorem~III are equivalent
+  exactly through the fixed-label normalisation identity
+  \begin{equation}\label{eq:class-euler-product-reduction-normalisation}
+    \mathcal M_C(A,\tau;G)
+    +\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    =
+    \frac{|C|}{|G|}
+    \left(
+      \gamma+
+      \log C(A)+
+      \sum_{\varrho\ne\mathbf1}
+        \chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
+    \right).
+  \end{equation}
+  Thus the proof of \Cref{thm:class-euler-product-mertens} has a short
+  auditable spine: Main Theorem~II controls the \(r=1\) logarithm, the
+  product-tail lemma controls all \(r\ge2\) repetitions, and the fixed-label
+  transform supplies the determinant-ready coordinates for the same constant.
+\end{proposition}
+
+\begin{proof}
+  The logarithm of the finite Euler product is
+  \[
+    \log P_C(N)
+    =
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    -
+    \sum_{r\ge2}\frac1r\sum_{n\le N}p_{n,C}\lambda^{-rn}.
+  \]
+  Substituting \eqref{eq:class-mertens-log} into the first term and
+  \eqref{eq:class-product-tail-bound} into the second term gives
+  \[
+    \log P_C(N)
+    =
+    -\frac{|C|}{|G|}\log N
+    -\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(N^{-1}).
+  \]
+  Since \(P_C(N)>0\), \Cref{lem:class-product-log-to-product-error}
+  exponentiates this estimate and proves
+  \eqref{eq:class-euler-product-reduction-asymptotic}.
+
+  The constants in \eqref{eq:class-euler-product-k-mc} and
+  \eqref{eq:class-euler-product-k-f} are both written on the positive real
+  branch.  Taking real logarithms of those two displayed expressions shows
+  that their equality is precisely
+  \eqref{eq:class-euler-product-reduction-normalisation}.  Conversely,
+  substituting \eqref{eq:class-euler-product-reduction-normalisation} into
+  the exponent of \eqref{eq:class-euler-product-k-mc} gives exactly the
+  exponent of \eqref{eq:class-euler-product-k-f}.  Hence the two formulas are
+  equivalent through the stated normalisation and no additional analytic input
+  is hidden in the comparison.
+\end{proof}
+
 \begin{proposition}[Three logarithmic interfaces at the product constant]
   \label{prop:three-logarithm-product-interface}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and let
@@ -897,6 +974,13 @@ Adams--M\"obius determinant calculation.
 \end{theorem}
 
 \begin{proof}
+  We spell out the short proof chain isolated in
+  \Cref{prop:class-euler-product-main-chain-reduction}.  That proposition
+  reduces the product asymptotic to the logarithmic form of Main Theorem~II,
+  the explicit \(r\ge2\) product tail, and the fixed-label normalisation.
+  It remains here only to verify those inputs with the branch and positivity
+  conventions stated in the theorem.
+
   Taking logarithms in \eqref{eq:class-euler-product-def} gives
   \[
     \log P_C(N)
@@ -1135,6 +1219,12 @@ Artin logarithm.
 
 
 \subsubsection{Finite-determinant rigidity}
+
+The theorem in this subsubsection is the determinant-coordinate form of Main
+Theorem~III.  The supporting corollaries that follow are finite-dimensional
+linear algebra in this fixed coordinate chart; they are recorded for audit and
+reproducibility, not as additional main theorems or as new hypotheses for the
+class-product asymptotic.
 
 \begin{theorem}[Finite-determinant recovery of Adams-corrected constants]
   \label{thm:class-product-determinant-rigidity}
@@ -2615,16 +2705,16 @@ computational-certificate, or operator-algebraic papers.
   convergence ambiguity.
 \end{proof}
 
-\begin{proposition}[Finite determinant-to-product certificate]
+\begin{proposition}[Finite reproducibility support for determinant constants]
   \label{prop:fixed-label-perron-finite-algorithm}
   The displayed label
   \verb|prop:fixed-label-perron-finite-algorithm| is the single reader-facing
-  label for this certificate proposition.
+  label for this finite reproducibility proposition.
 
   Under the hypotheses of \Cref{thm:class-mertens-explicit}, the value
   \(F_\varrho(\lambda^{-1})\) for every non-trivial
   \(\varrho\in\Irr(G)\) is obtained by the following finite-input,
-  branch-specified, certified truncation algorithm.  More precisely, from the
+  branch-specified reproducibility procedure.  More precisely, from the
   finite data in \textup{(a)} and a requested tolerance \(\epsilon>0\), the
   algorithm produces an integer \(M\), a finite sum \(F_\varrho^{(M)}\), and a
   rigorous output error radius at most \(\epsilon\), after the finitely many
@@ -2726,8 +2816,8 @@ computational-certificate, or operator-algebraic papers.
   \end{enumerate}
 \end{proposition}
 \begin{proof}
-  The proof shows that the certificate is a finite form of the
-  Adams-corrected determinant formula.
+  The proof shows that this finite record is a reproducibility form of the
+  Adams-corrected determinant formula, not an additional analytic input.
 
   Items (a) and (b) are finite because \(G\) has finitely many conjugacy
   classes and irreducible representations, and
@@ -2782,8 +2872,8 @@ computational-certificate, or operator-algebraic papers.
 \end{proof}
 
 \medskip
-\noindent\textit{Appendix-level certificate records.}
-  The local rational certificate record and five-field \(S_3\) audit format are
+\noindent\textit{Appendix-level reproducibility records.}
+  The local rational reproducibility record and five-field \(S_3\) audit format are
   placed in \Cref{prop:fixed-label-rational-certificate-record,cor:fixed-label-five-field-certificate-schema}.
   They are appendix-level audit formats for the finite determinant
   computability theorem \Cref{prop:fixed-label-perron-finite-algorithm}; the
@@ -2792,9 +2882,9 @@ computational-certificate, or operator-algebraic papers.
 
 \medskip
 \noindent\textit{Product-level finite consequence.}
-  The finite certificate of
+  The finite reproducibility record of
   \Cref{prop:fixed-label-perron-finite-algorithm}
-  is a finite mathematical certificate for the determinant-coordinate values
+  is finite mathematical support for the determinant-coordinate values
   used in Main Theorem~III.  Fix a non-trivial irreducible character
   \(\varrho\), a truncation window \(M\), rational branch rectangles for every
   non-deleted triple \((r,m,\pi)\) with \(rm\le M\), the Adams coefficients
