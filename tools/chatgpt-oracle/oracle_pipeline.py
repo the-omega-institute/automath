@@ -7589,10 +7589,19 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 time.sleep(300)
                 attempt += 1
                 task_id = f"{task_id_base}_a{attempt}"
+                retry_prompt = (
+                    prompt
+                    + "\n\nEXTRACTION SAFEGUARD: Your first visible characters must be "
+                    + "`Overall verdict:`. Do not include any preamble, UI text, "
+                    + "thinking summary, salutation, markdown fence, or quoted "
+                    + "prompt text before the verdict line."
+                )
                 if not oracle_submit(
-                    task_id, prompt, pdf_path,
-                    context_mode="fresh_review",
+                    task_id, retry_prompt, submit_pdf,
+                    context_mode="multi_turn_deepen" if is_followup_turn else "fresh_review",
                     agent_role="stage_b_oracle_referee_retry",
+                    conversation_id=submit_conv_id,
+                    is_followup=is_followup_turn,
                 ):
                     state.error = f"Oracle re-submit failed B{rnd} attempt {attempt}"
                     return False
