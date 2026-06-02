@@ -332,16 +332,21 @@ of summation and Abel limiting.
     =
     C_\varrho\sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}.
   \]
-  This proves \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Since
-  the divisor function has subexponential growth and \(\lambda>1\), the
-  displayed tail tends to zero exponentially; hence the search in
-  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} terminates and
-  the finite determinant truncations converge to the Perron value.  The
-  rational envelope \eqref{eq:fixed-label-rational-tail-envelope} follows by
-  choosing rational \(\theta\) and \(Q_\varrho\) with the stated strict
-  inequalities, using \(\lambda^{1-k}=\lambda(\lambda^{-1})^k\), and summing
-  the resulting geometric series.  The inequalities defining \(\theta\) and
-  \(Q_\varrho\) are finite comparisons in the algebraic determinant data.
+  This proves \eqref{eq:fixed-label-perron-finite-algorithm-error}.  Choose
+  rationals \(\theta\) and \(Q_\varrho\) with
+  \(\lambda^{-1}<\theta<1\) and \(C_\varrho\lambda<Q_\varrho\); existence is by
+  density of \(\QQ\), and the strict inequalities are finite algebraic
+  comparisons against the determinant data.  Since
+  \(Q_\varrho\theta^{M+1}/(1-\theta)\to0\), the search in
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}
+  terminates.  The rational envelope
+  \eqref{eq:fixed-label-rational-tail-envelope} follows from
+  \(\mathrm d(k)\le k\), from
+  \(\lambda^{1-k}=\lambda(\lambda^{-1})^k\le Q_\varrho\theta^k/C_\varrho\),
+  and from summing the geometric tail.  Therefore the analytic tail check
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice} is a consequence
+  of the rational record; no infinite decimal exploration is part of the
+  certificate.
 
   The canonicity assertion is immediate from this inclusion.  Any accepted
   record with the same determinant polynomials, class-power maps, character
@@ -359,17 +364,18 @@ of summation and Abel limiting.
   Replacing each such logarithm by an interval of radius \(\epsilon_0\) changes
   the weighted finite sum by at most the triangle-inequality bound in
   \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  Choosing
-  \(\epsilon_0\) so that this finite bound is at most \(\epsilon/2\), and
-  choosing \(M\) so that the analytic tail is at most \(\epsilon/2\), gives a
-  rigorous output interval of radius at most \(\epsilon\).  Thus the input,
-  branch convention, finite output, and error bound are all finite and
-  explicit.
+  \(\epsilon_0\) so that this finite bound is at most the remaining budget
+  after the rational tail radius in
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}, and
+  choosing \(M\) by that rational inequality, gives a rigorous output interval
+  of radius at most \(\epsilon\).  Thus the input, branch convention, finite
+  output, and error bound are all finite and explicit.
 \end{proof}
 
 \medskip
 \noindent\textit{Appendix-level reproducibility records.}
   The local rational reproducibility record and five-field \(S_3\) certificate format are
-  placed in \Cref{prop:fixed-label-rational-certificate-record,prop:fixed-label-finite-io-certificate-summary,cor:fixed-label-five-field-certificate-schema}.
+  placed in \Cref{prop:fixed-label-certificate-normal-form,prop:fixed-label-rational-certificate-record,prop:fixed-label-finite-io-certificate-summary,cor:fixed-label-five-field-certificate-schema}.
   They are appendix-level certificate formats for the finite determinant
   computability theorem \Cref{prop:fixed-label-perron-finite-algorithm}; the
   main proof path uses only the determinant formula, the finite truncation
@@ -380,7 +386,8 @@ of summation and Abel limiting.
   Under the hypotheses of \Cref{thm:class-euler-product-mertens}, hence in
   particular \(\lambda>1\) and \(\eta<\lambda\), fix for every
   non-trivial irreducible representation \(\varrho\) a finite record consisting
-  of the model data, a truncation window \(M_\varrho\), all Adams coefficients
+  of the model data, rational tail data
+  \((C_\varrho,Q_\varrho,\theta_\varrho,M_\varrho)\), all Adams coefficients
   \(a_{\varrho,\pi}^{(m)}\) with \(rm\le M_\varrho\), the branch-tagged
   determinant-logarithm enclosures for all non-deleted triples
   \((r,m,\pi)\), and rational radii \(R_{M,\varrho}\) and
@@ -401,13 +408,16 @@ of summation and Abel limiting.
     \item The branch field checks that every \(rm=1\) term is a non-trivial
       Abel-boundary determinant allowed by \(\eta<\lambda\), and that every
       \(rm\ge2\) term is evaluated by the ordinary germ inside the Perron disc.
-    \item The bound field verifies
+    \item The bound field verifies the rational comparisons
       \[
-        R_{M,\varrho}\ge
-        C_\varrho\sum_{k>M_\varrho}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+        \lambda^{-1}<\theta_\varrho<1,
+        \qquad C_\varrho\lambda<Q_\varrho,
+        \qquad
+        R_{M,\varrho}=Q_\varrho\frac{\theta_\varrho^{M_\varrho+1}}
+          {1-\theta_\varrho}
       \]
-      and verifies the finite interval-propagation radius
-      \(R_{\mathrm{num},\varrho}\) from
+      with \(R_{M,\varrho}\) below the requested tail budget, and verifies the
+      finite interval-propagation radius \(R_{\mathrm{num},\varrho}\) from
       \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
   \end{enumerate}
   When these checks pass, the record certifies
@@ -587,6 +597,93 @@ assert recovery of the cocycle or any branch-free inverse spectral datum.
   converse determination from the normalised product constants and shows
   injectivity of the fixed-label vector.  This proves the rigidity
   statement.
+\end{proof}
+
+\begin{proposition}[Certificate normal form for fixed-label product recovery]
+  \label{prop:fixed-label-certificate-normal-form}
+  Under the hypotheses of \Cref{thm:class-euler-product-mertens}, a finite
+  reproducibility record for the Main Theorem~III product constants consists,
+  for each non-trivial \(\varrho\in\Irr(G)\), exactly of the following finite
+  fields:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the determinant model
+      \((D_\pi(z))_{\pi\in\Irr(G)}\), the Perron root \(\lambda\), the twisted
+      gap certificate \(\eta<\lambda\), the character table, and the
+      class-power maps;
+    \item rational tail data \(C_\varrho,Q_\varrho,\theta,M\) satisfying the
+      majorant hypothesis of \Cref{lem:fixed-label-perron-double-majorant},
+      \(\lambda^{-1}<\theta<1\), \(C_\varrho\lambda<Q_\varrho\), and
+      \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice};
+    \item the finite window of all triples \((r,m,\pi)\) with \(rm\le M\), with
+      only \((1,1,\mathbf1)\) deleted, and all Adams coefficients
+      \(a_{\varrho,\pi}^{(m)}\) in that window;
+    \item for every non-deleted listed triple, a branch tag and a rational
+      rectangular enclosure for
+      \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\), using the Abel tag for
+      \((rm=1,\pi\ne\mathbf1)\) and the ordinary Perron-disc tag for
+      \(rm\ge2\);
+    \item the rational finite-propagation radius obtained from
+      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}, and the rational
+      tail radius \(R_{M,\varrho}=Q_\varrho\theta^{M+1}/(1-\theta)\).
+  \end{enumerate}
+  The checker which verifies these fields returns a disc
+  \[
+    I_\varrho+
+    \{w\in\CC:|w|\le R_{M,\varrho}+R_{\mathrm{num},\varrho}\}
+  \]
+  containing \(F_\varrho(\lambda^{-1})\), where \(I_\varrho\) is the interval
+  evaluation of the finite sum
+  \eqref{eq:fixed-label-perron-finite-algorithm-truncation}.  Conversely,
+  every accepted finite enclosure produced by
+  \Cref{prop:fixed-label-perron-finite-algorithm} is equivalent, after
+  reordering the finite window and splitting the total error into its tail and
+  finite-propagation parts, to such a five-field record.  Applying these
+  records for all non-trivial \(\varrho\) and then the Fourier formula
+  \eqref{eq:class-product-rigidity-forward} gives
+  implementation-independent rational enclosures for all Frobenius-class
+  product constants \((K_C)_C\).  Thus the appendix certificates are
+  serializations of this finite record and are not additional computational
+  hypotheses.
+\end{proposition}
+
+\begin{proof}
+  The model field is finite because the group has finitely many irreducible
+  representations and conjugacy classes, and because each twisted determinant
+  is a finite polynomial.  The tail field is finite and checkable by algebraic
+  comparison: \(C_\varrho\) is a certified majorant from
+  \Cref{lem:fixed-label-perron-double-majorant}, the inequalities for
+  \(Q_\varrho\) and \(\theta\) are rational/algebraic comparisons, and
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice} is a
+  rational inequality.  By \Cref{prop:fixed-label-perron-finite-algorithm},
+  this tail field gives the analytic error bound
+  \eqref{eq:fixed-label-perron-finite-algorithm-error} through the rational
+  envelope \eqref{eq:fixed-label-rational-tail-envelope}.
+
+  For the finite window, the Adams coefficients are recomputed from the finite
+  character-table inner product
+  \eqref{eq:fixed-label-algorithm-adams-coefficients}.  The branch field is
+  exactly the two-branch convention of
+  \Cref{prop:fixed-label-perron-finite-algorithm}: the strict twisted gap makes
+  every non-trivial \(rm=1\) Abel determinant regular at the boundary, while
+  \(rm\ge2\) lies inside the Perron disc.  Signed interval summation over this
+  finite window gives \(I_\varrho\).  Enlarging by the finite-propagation radius
+  of \eqref{eq:fixed-label-perron-finite-algorithm-roundoff} and by
+  \(R_{M,\varrho}\) contains the exact value by the triangle inequality and by
+  the tail estimate already proved.  This proves the checker soundness.
+
+  Conversely, the output of \Cref{prop:fixed-label-perron-finite-algorithm}
+  has no further analytic datum: it uses the same determinant model, the same
+  Adams coefficients, the same deleted-triple and branch convention, a finite
+  truncation level, finitely many determinant-logarithm enclosures, and the sum
+  of one tail error and one finite interval-propagation error.  Recording those
+  entries in the five fields above, and replacing an exact tail comparison by
+  any rational envelope satisfying
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}, gives
+  the same certified disc.  Finally,
+  \Cref{cor:class-product-constant-rigidity} expresses the normalized product
+  logarithms by the finite character-table Fourier transform
+  \eqref{eq:class-product-rigidity-forward}; exponentiating the resulting real
+  intervals gives the stated enclosures for the positive constants \(K_C\).
 \end{proof}
 
 \begin{proposition}[Coordinate fibre after scalar normalisation]
