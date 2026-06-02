@@ -183,30 +183,33 @@ determinant expansion of the fixed-label transform.
   convergence ambiguity.
 \end{proof}
 
-\begin{proposition}[Finite reproducibility support for determinant constants]
+\begin{proposition}[Finite algorithm for fixed-label Perron constants]
   \label{prop:fixed-label-perron-finite-algorithm}
-  Under the hypotheses of \Cref{thm:class-mertens-explicit}, the value
-  \(F_\varrho(\lambda^{-1})\) for every non-trivial
-  \(\varrho\in\Irr(G)\) is obtained by the following finite-input,
-  branch-specified reproducibility procedure.  More precisely, from the
-  finite data in \textup{(a)} and a requested tolerance \(\epsilon>0\), the
-  algorithm produces an integer \(M\), a finite sum \(F_\varrho^{(M)}\), and a
-  rigorous output error radius at most \(\epsilon\), after the finitely many
-  determinant logarithms in that sum are evaluated on the branches specified
-  below.  The product-constant enclosures obtained from this finite record are
-  consequences of the single Adams-corrected determinant formula proved here,
-  together with finite character-table Fourier inversion.
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, fix a
+  non-trivial irreducible representation \(\varrho\in\Irr(G)\) and a tolerance
+  \(\epsilon>0\).  There is a deterministic finite algorithm which, from the
+  input in \textup{(a)} below and with the branch convention in
+  \textup{(c)}, returns a finite determinant sum
+  \(F_\varrho^{(M)}\) and a certified radius \(E_M\le\epsilon\) such that
+  \[
+    F_\varrho(\lambda^{-1})
+    \in F_\varrho^{(M)}+\{w\in\CC:|w|\le E_M\}.
+  \]
+  Consequently every Frobenius-class product constant in Main Theorem~III is
+  certified from finitely many twisted determinant polynomials, finite
+  character-table operations, the scalar normalisation \(C(A)\), and the stated
+  Abel branch; no primitive-orbit enumeration or limiting orbit count is an
+  input.  The algorithm is the following.
   \begin{enumerate}[label=\textup{(\alph*)},leftmargin=*]
-    \item The determinant inputs are finite: the character table of \(G\),
+    \item \emph{Input.}  The determinant inputs are finite: the character table of \(G\),
       the class-power maps \(C\mapsto C^m\) on conjugacy classes, the finite
       determinant polynomials \(D_\pi(z):=\det(I-zA_\pi)\),
       \(\pi\in\Irr(G)\), the Perron root \(\lambda>1\), the twisted
       spectral-gap certificate \(\eta<\lambda\), and an explicit majorant
       constant \(C_\varrho\) furnished by
       \Cref{lem:fixed-label-perron-double-majorant} for
-      \(\phi=\chi_\varrho\).  No primitive-orbit enumeration, limiting orbit
-      count, or unbounded symbolic-dynamics datum is an input.
-    \item For each \(m\ge1\), compute the Adams coefficients
+      \(\phi=\chi_\varrho\).
+    \item \emph{Finite coefficients.}  For each \(m\ge1\), compute the Adams coefficients
       \begin{equation}\label{eq:fixed-label-algorithm-adams-coefficients}
         a_{\varrho,\pi}^{(m)}
         =\bigl\langle \psi^m\chi_\varrho,\chi_\pi\bigr\rangle_G,
@@ -217,19 +220,19 @@ determinant expansion of the fixed-label transform.
       complex for non-real irreducible pairs; the final class constants are
       real by conjugation symmetry of the full character sum, not by termwise
       realness.
-    \item Omit the single scalar Perron term
+    \item \emph{Branch and deletion rule.}  Omit the single scalar Perron term
       \((r,m,\pi)=(1,1,\mathbf1)\) before any logarithm is evaluated.  Its
       coefficient is
       \(a_{\varrho,\mathbf1}^{(1)}=0\), so the algorithm never assigns a
       finite part or a branch value to
       \(\log\det(I-\lambda^{-1}A_{\mathbf1})^{-1}\).
-    \item Normalize every remaining logarithm from the germ
+      Normalize every remaining logarithm from the germ
       \(\Log\det(I-zA_\pi)^{-1}=0\) at \(z=0\).  For \(rm=1\) this means
       Abel continuation along \(z=t\lambda^{-1}\), \(0\le t\uparrow1\), and
       necessarily \(\pi\neq\mathbf1\).  For \(rm\ge2\) it means the ordinary
       value of the same germ at \(z=\lambda^{-rm}\), where the determinant
       is strictly inside its Perron radius.
-    \item Given \(\epsilon>0\), choose \(M\) so that the computable tail
+    \item \emph{Truncation rule.}  Choose \(M\) so that the computable tail
       \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-tail-choice}
         C_\varrho
         \sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}
@@ -248,7 +251,7 @@ determinant expansion of the fixed-label transform.
       \end{equation}
       where the scalar Perron term \((1,1,\mathbf1)\) has already been
       omitted, the only possible \(rm=1\) terms use the non-trivial Abel
-      branch from (d), and all \(rm\ge2\) terms use the ordinary germ value
+      branch from \textup{(c)}, and all \(rm\ge2\) terms use the ordinary germ value
       inside the Perron disc.  The truncation error is the effective tail
       estimate
       \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-error}
@@ -271,7 +274,8 @@ determinant expansion of the fixed-label transform.
       because \(\mathrm d(k)\le k\).  Thus the truncations converge absolutely
       and exponentially, and the same finite procedure gives certified
       interval enclosures by truncating after any prescribed rational tail
-      bound.  If
+      bound.
+    \item \emph{Output guarantee.}  If
       the finitely many logarithms occurring in
       \eqref{eq:fixed-label-perron-finite-algorithm-truncation} are each
       enclosed on the specified branch with radius at most \(\epsilon_0\), then
@@ -286,7 +290,8 @@ determinant expansion of the fixed-label transform.
       Choosing \(\epsilon_0\) so that
       \eqref{eq:fixed-label-perron-finite-algorithm-roundoff} is at most
       \(\epsilon/2\) gives a certified enclosure of radius at most
-      \(\epsilon\) by finite interval arithmetic.
+      \(\epsilon\) by finite interval arithmetic.  This certified disc is the
+      algorithmic output.
   \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -297,10 +302,10 @@ determinant expansion of the fixed-label transform.
   classes and irreducible representations, and
   \eqref{eq:fixed-label-algorithm-adams-coefficients} is the standard
   finite character inner product defining the Adams multiplicities.  Item
-  (c) follows from
+  (c) has two parts.  The deletion rule follows from
   \(a_{\varrho,\mathbf1}^{(1)}=\langle\chi_\varrho,\mathbf1\rangle_G=0\)
   for \(\varrho\neq\mathbf1\); this is the omitted singular term rule in
-  \Cref{prop:fixed-label-determinant-perron}.  Item (d) is exactly the
+  \Cref{prop:fixed-label-determinant-perron}.  The branch rule is exactly the
   branch normalization stated there.  The twisted spectral gap makes the
   non-trivial \(rm=1\) determinants invertible along the Abel path, and
   \(rm\ge2\) gives \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\), so the
@@ -334,7 +339,7 @@ determinant expansion of the fixed-label transform.
   It remains only to justify the stated certificate format.  For fixed
   \(M\), the set of triples \((r,m,\pi)\) with \(rm\le M\) is finite, all
   Adams coefficients in it are computed by finite character-table sums, and
-  each determinant logarithm is evaluated on the branch fixed in item (d).
+  each determinant logarithm is evaluated on the branch fixed in item (c).
   Replacing each such logarithm by an interval of radius \(\epsilon_0\) changes
   the weighted finite sum by at most the triangle-inequality bound in
   \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  Choosing
