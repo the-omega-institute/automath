@@ -5,7 +5,7 @@ This subsection presents the product theorem and then its finite determinant
 consequences.  The first two subsubsections prove Main Theorems~II and III:
 additive class constants, then Adams-corrected class Euler products.  The
 determinant formula, stability statements, and obstruction certificates that
-follow all concern the same constants.  The proof route is:
+follow all concern the same scalar-normalised vector.  The proof route is:
 \[
 \begin{array}{c}
   \text{class Mertens constants}\\
@@ -17,39 +17,57 @@ follow all concern the same constants.  The proof route is:
   \text{stability and Artin obstruction}.
 \end{array}
 \]
-Here \Cref{thm:class-mertens-explicit} supplies the additive constants,
-while \Cref{thm:fixed-label-euler-transform,thm:class-euler-product-mertens}
-prove Main Theorem~III.  The fixed-label definition, determinant Perron
-formula, and \(K_C\)-formula are tied by the finite coordinate equivalence
-below.  The determinant formula and
-its finite truncation algorithm are
-\Cref{prop:fixed-label-determinant-perron,thm:class-product-determinant-rigidity,prop:class-product-fixed-coordinate-equivalence};
-\Cref{prop:fixed-label-perron-finite-algorithm,thm:class-product-comparison,prop:class-product-coordinate-observation-budget} then separates the certified finite
-determinant arithmetic, its \(S_3\) witness role, and the classical
-Frobenius-density contribution from the Adams-corrected constant, and
-\Cref{prop:finite-data-main-chain-closure,rem:assembled-recovery-dependency-order}
-record the finite determinant dependence and recovery order for the three main
-theorems; the subsequent roadmap note explains the downstream status of the
-product-constant refinements.  These are
-synthesis statements: for hypotheses, branch conventions,
-and the classical-versus-new calibration one should use the individual theorem
-packages cited in their statements and proofs.  The
-hyperplane and branch checks are
-\Cref{cor:class-product-hyperplane-stability,lem:class-product-positive-real-branch,lem:class-product-sign-normalisation-conventions}; they verify that the
-same coordinate vector gives positive real product constants with the stated
-normalisation.  The obstruction statements are
-\Cref{cor:class-product-artin-obstruction-recovery,thm:adams-obstruction-class-product,cor:adams-obstruction-bound}; they compare the
-fixed-label transform with the periodic Artin logarithm after the product
-constant has already been recovered.  Thus the subsequent stability,
-obstruction, and quotient-shadow statements use the formula above without
-introducing further product constants.
+Here \Cref{thm:class-mertens-explicit} supplies the additive constants, while
+\Cref{thm:fixed-label-euler-transform,thm:class-euler-product-mertens} prove
+Main Theorem~III.  The remaining results in the subsection have three roles:
+finite determinant evaluation
+\Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm,thm:class-product-determinant-rigidity},
+coordinate and branch verification
+\Cref{prop:class-product-fixed-coordinate-equivalence,thm:class-product-comparison,cor:class-product-hyperplane-stability},
+and Artin-substitution obstruction
+\Cref{thm:adams-obstruction-class-product,cor:adams-obstruction-bound}.  Thus
+the subsequent stability, obstruction, and quotient-shadow statements use the
+same recovered product vector without introducing further product constants.
+
+The notation and dependencies for Main Theorem~III are as follows.
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}L{0.18\textwidth}L{0.40\textwidth}L{0.34\textwidth}@{}}
+\toprule
+Symbol & Meaning in this subsection & Role in the theorem chain \\
+\midrule
+\(\Pi_\varrho(z)\) & Primitive Peter--Weyl channel obtained from Adams--M\"obius determinant inversion & Perron value gives the non-trivial additive class constant coordinate. \\
+\(F_\varrho(z)\) & Fixed-label Euler transform \(\sum_{r\ge1}\Pi_\varrho(z^r)/r\) & New product-coordinate input in Main Theorem~III. \\
+\(\mathcal L_\varrho(z)\) & Periodic Artin determinant logarithm \(\log\det(I-zA_\varrho)^{-1}\) & Comparison object; it is not substituted for \(F_\varrho\) in \(K_C\). \\
+\(\mathcal M_C(A,\tau;G)\) & Additive Frobenius-class Mertens constant & Output of Main Theorem~II and scalar finite-part normalisation input for products. \\
+\(K_C\) & Positive Frobenius-class Euler-product constant & Output of Main Theorem~III, recovered from \(C(A)\) and \((F_\varrho(\lambda^{-1}))_{\varrho\ne\mathbf1}\). \\
+\(\chi_\varrho^\ast(C)\) & Hermitian convention \(\overline{\chi_\varrho(C)}\) & Forward class transform; inverse readout uses \(\chi_\varrho(C)\). \\
+Branch & Principal determinant branches in the open disc; Abel-path boundary values at \(\lambda^{-1}\); positive real branch for \(K_C\) & Keeps the scalar singular determinant deleted and the class products positive. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The constant normalisation is therefore visible in one line:
+\[
+  \{\mathcal M_C\}_C
+  \Longleftrightarrow
+  \{\Pi_\varrho(\lambda^{-1})\}_{\varrho\ne\mathbf1},
+  \qquad
+  \{K_C\}_C+C(A)
+  \Longleftrightarrow
+  \{F_\varrho(\lambda^{-1})\}_{\varrho\ne\mathbf1}.
+\]
+The first equivalence is the additive class-Mertens formula together with the
+Hermitian class transform.  The second is the scalar finite-part identity
+\(\mathcal M(A)=\gamma+\FP(A)=\gamma+\log C(A)\) combined with the fixed-label
+Euler transform and the positive-branch product formula for \(K_C\).
 
 For reference, the finite-data closure statement below is placed at the
 front because the section intentionally proves several consequences of the
 same scalar-normalised vector rather than scattering them into independent
 black boxes.
 
-For dependency checking, the large proof spine should be read in the following
+For dependency checking, the proof spine should be read in the following
 order.  First, \Cref{thm:class-mertens-explicit} proves the additive
 Chebotarev--Mertens asymptotic under the two headline hypotheses
 \(\lambda>1\) and \(\eta<\lambda\).  Second,
@@ -57,15 +75,13 @@ Chebotarev--Mertens asymptotic under the two headline hypotheses
 those additive constants into the fixed-label Euler-product constants; this is
 the only step where the distinction between the fixed-label transform
 \(F_\varrho\) and the periodic Artin logarithm \(\mathcal L_\varrho\) enters.
-Third,
-\Cref{prop:fixed-label-determinant-perron,prop:fixed-label-perron-finite-algorithm,thm:class-product-determinant-rigidity,cor:assembled-adams-frobenius-product-formula}
-evaluate the non-trivial Perron coordinates from the finite determinant data
-and record the effective truncation convention.  Finally,
-\Cref{prop:class-product-comparison,cor:class-product-minimal-obstruction-skeleton,prop:class-product-coordinate-observation-budget,thm:adams-obstruction-class-product,cor:adams-obstruction-bound}
-are comparison and obstruction consequences of the already recovered product
-vector.  Thus the later rigidity, stability, and \(S_3\) certificate statements
-do not feed back into the proofs of Main Theorems~II--III; they only test or
-separate the product constants produced by this ordered chain.
+Third, the determinant and rigidity results evaluate the non-trivial Perron
+coordinates from finite determinant data and record the effective truncation
+convention.  Finally, the comparison, observation-budget, and obstruction
+results are consequences of the already recovered product vector.  Thus the
+later rigidity, stability, and \(S_3\) certificate statements do not feed back
+into the proofs of Main Theorems~II--III; they only test or separate the
+product constants produced by this ordered chain.
 
 \begin{proposition}[Finite-data closure for Main Theorems II--III]
   \label{prop:class-mertens-product-dependency-chain}
