@@ -94,6 +94,115 @@ Fourier map, and the stated finite windows.
   premise.
 \end{proof}
 
+
+\begin{proposition}[Certificate normal form for fixed-label product recovery]\label{prop:fixed-label-certificate-normal-form}
+  Under the hypotheses of \Cref{thm:class-euler-product-mertens}, a finite
+  reproducibility record for the Main Theorem~III product constants consists,
+  for each non-trivial \(\varrho\in\Irr(G)\), exactly of the following finite
+  fields:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the determinant model
+      \((D_\pi(z))_{\pi\in\Irr(G)}\), the Perron root \(\lambda\), the twisted
+      gap certificate \(\eta<\lambda\), the character table, and the
+      class-power maps;
+    \item rational tail data \(C_\varrho,Q_\varrho,\theta,M\) satisfying the
+      majorant hypothesis of \Cref{lem:fixed-label-perron-double-majorant},
+      \(\lambda^{-1}<\theta<1\), \(C_\varrho\lambda<Q_\varrho\), and
+      \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice};
+    \item the finite window of all triples \((r,m,\pi)\) with \(rm\le M\), with
+      only \((1,1,\mathbf1)\) deleted, and all Adams coefficients
+      \(a_{\varrho,\pi}^{(m)}\) in that window;
+    \item for every non-deleted listed triple, a branch tag and a rational
+      rectangular enclosure for
+      \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\), using the Abel tag for
+      \((rm=1,\pi\ne\mathbf1)\) and the ordinary Perron-disc tag for
+      \(rm\ge2\);
+    \item the rational finite-propagation radius obtained from
+      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}, and the rational
+      tail radius \(R_{M,\varrho}=Q_\varrho\theta^{M+1}/(1-\theta)\).
+  \end{enumerate}
+  The checker which verifies these fields returns a disc
+  \[
+    I_\varrho+
+    \{w\in\CC:|w|\le R_{M,\varrho}+R_{\mathrm{num},\varrho}\}
+  \]
+  containing \(F_\varrho(\lambda^{-1})\), where \(I_\varrho\) is the interval
+  evaluation of the finite sum
+  \eqref{eq:fixed-label-perron-finite-algorithm-truncation}.  Conversely,
+  every accepted finite enclosure produced by
+  \Cref{prop:fixed-label-perron-finite-algorithm} is equivalent, after
+  reordering the finite window and splitting the total error into its tail and
+  finite-propagation parts, to such a five-field record.  Applying these
+  records for all non-trivial \(\varrho\) and then the Fourier formula
+  \eqref{eq:class-product-rigidity-forward} gives rational enclosures for all
+  Frobenius-class product constants \((K_C)_C\).  Thus the appendix
+  certificates, including any optional exact-arithmetic transcripts under
+  \texttt{certificates/}, are serializations of this finite record and are not
+  additional computational hypotheses.
+\end{proposition}
+
+\begin{proof}
+  The model field is finite because the group has finitely many irreducible
+  representations and conjugacy classes, and because each twisted determinant
+  is a finite polynomial.  The tail field is finite and checkable by algebraic
+  comparison: \(C_\varrho\) is a certified majorant from
+  \Cref{lem:fixed-label-perron-double-majorant}, the inequalities for
+  \(Q_\varrho\) and \(\theta\) are rational/algebraic comparisons, and
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice} is a
+  rational inequality.  By \Cref{prop:fixed-label-perron-finite-algorithm},
+  this tail field gives the analytic error bound
+  \eqref{eq:fixed-label-perron-finite-algorithm-error} through the rational
+  envelope \eqref{eq:fixed-label-rational-tail-envelope}.
+
+  For the finite window, the Adams coefficients are recomputed from the finite
+  character-table inner product
+  \eqref{eq:fixed-label-algorithm-adams-coefficients}.  The branch field is
+  exactly the two-branch convention of
+  \Cref{prop:fixed-label-perron-finite-algorithm}: the strict twisted gap makes
+  every non-trivial \(rm=1\) Abel determinant regular at the boundary, while
+  \(rm\ge2\) lies inside the Perron disc.  Signed interval summation over this
+  finite window gives \(I_\varrho\).  Enlarging by the finite-propagation radius
+  of \eqref{eq:fixed-label-perron-finite-algorithm-roundoff} and by
+  \(R_{M,\varrho}\) contains the exact value by the triangle inequality and by
+  the tail estimate already proved.  This proves the checker soundness.
+
+  Conversely, the output of \Cref{prop:fixed-label-perron-finite-algorithm}
+  has no further analytic datum: it uses the same determinant model, the same
+  Adams coefficients, the same deleted-triple and branch convention, a finite
+  truncation level, finitely many determinant-logarithm enclosures, and the sum
+  of one tail error and one finite interval-propagation error.  Recording those
+  entries in the five fields above, and replacing an exact tail comparison by
+  any rational envelope satisfying
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}, gives
+  the same certified disc.  Finally,
+  \Cref{cor:class-product-constant-rigidity} expresses the normalized product
+  logarithms by the finite character-table Fourier transform
+  \eqref{eq:class-product-rigidity-forward}; exponentiating the resulting real
+  intervals gives the stated enclosures for the positive constants \(K_C\).
+\end{proof}
+
+\begin{corollary}[Fixed-label product certificate audit]
+  \label{cor:fixed-label-product-certificate-audit}
+  Under the hypotheses of \Cref{thm:class-euler-product-mertens}, every finite
+  product-constant certificate accepted by the fixed-label algorithm has exactly
+  the five-field normal form of
+  \Cref{prop:fixed-label-certificate-normal-form}.  Conversely, any accepted
+  five-field normal-form record gives rational enclosures for all positive
+  Frobenius-class product constants \((K_C)_C\).
+\end{corollary}
+
+\begin{proof}
+  This is the soundness and converse assertion of
+  \Cref{prop:fixed-label-certificate-normal-form}: the determinant model,
+  rational tail data, finite triple window, branch-tagged logarithm enclosures,
+  and the two error radii are precisely the data used by
+  \Cref{prop:fixed-label-perron-finite-algorithm}.  The final passage from the
+  fixed-label Perron enclosures to product-constant enclosures is the finite
+  character-table Fourier transform
+  \eqref{eq:class-product-rigidity-forward}, followed by exponentiation on the
+  positive branch of \Cref{thm:class-euler-product-mertens}.
+\end{proof}
+
 \begin{proposition}[Finite rational Perron enclosure data]\label{prop:fixed-label-finite-io-certificate-summary}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and fix a
   non-trivial irreducible character \(\varrho\).  The following finite record is
