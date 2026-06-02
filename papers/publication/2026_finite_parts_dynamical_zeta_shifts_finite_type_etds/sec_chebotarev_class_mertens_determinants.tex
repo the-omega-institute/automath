@@ -362,48 +362,93 @@ of summation and Abel limiting.
 \medskip
 \noindent\textit{Appendix-level reproducibility records.}
   The local rational reproducibility record and five-field \(S_3\) certificate format are
-  placed in \Cref{prop:fixed-label-rational-certificate-record,cor:fixed-label-five-field-certificate-schema}.
+  placed in \Cref{prop:fixed-label-rational-certificate-record,prop:fixed-label-finite-io-certificate-summary,cor:fixed-label-five-field-certificate-schema}.
   They are appendix-level certificate formats for the finite determinant
   computability theorem \Cref{prop:fixed-label-perron-finite-algorithm}; the
   main proof path uses only the determinant formula, the finite truncation
   bound, and finite character-table Fourier inversion.
 
-\medskip
-\noindent\textit{Product-level finite consequence.}
-  The finite reproducibility record of
-  \Cref{prop:fixed-label-perron-finite-algorithm}
-  is finite mathematical support for the determinant-coordinate values
-  used in Main Theorem~III.  Fix a non-trivial irreducible character
-  \(\varrho\), a truncation window \(M\), rational branch rectangles for every
-  non-deleted triple \((r,m,\pi)\) with \(rm\le M\), the Adams coefficients
-  \(a_{\varrho,\pi}^{(m)}\), and rational radii \(R_M,R_{\mathrm{num}}\) as in
-  \Cref{prop:fixed-label-perron-finite-algorithm}.  If these finite records pass
-  the exact character-table, branch-tag, interval-propagation, and tail-bound
-  checks of that proposition, then they certify the explicit enclosure
+\begin{corollary}[Certificate-level audit of the product constants]
+  \label{cor:fixed-label-product-certificate-audit}
+  Under the hypotheses of \Cref{thm:class-euler-product-mertens}, fix for every
+  non-trivial irreducible representation \(\varrho\) a finite record consisting
+  of the model data, a truncation window \(M_\varrho\), all Adams coefficients
+  \(a_{\varrho,\pi}^{(m)}\) with \(rm\le M_\varrho\), the branch-tagged
+  determinant-logarithm enclosures for all non-deleted triples
+  \((r,m,\pi)\), and rational radii \(R_{M,\varrho}\) and
+  \(R_{\mathrm{num},\varrho}\) as in
+  \Cref{prop:fixed-label-perron-finite-algorithm}.  The following finite audit
+  is necessary and sufficient for the certificate records used in this paper.
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item The model field verifies the determinant polynomials
+      \(D_\pi(z)=\det(I-zA_\pi)\), the Perron equation for \(\lambda\), the
+      character table, and the class-power maps.
+    \item The window and Adams fields recompute the finite set of triples
+      \(rm\le M_\varrho\), delete only \((1,1,\mathbf1)\), and recompute
+      \(a_{\varrho,\pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\)
+      from the character table.
+    \item The branch field checks that every \(rm=1\) term is a non-trivial
+      Abel-boundary determinant allowed by \(\eta<\lambda\), and that every
+      \(rm\ge2\) term is evaluated by the ordinary germ inside the Perron disc.
+    \item The bound field verifies
+      \[
+        R_{M,\varrho}\ge
+        C_\varrho\sum_{k>M_\varrho}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+      \]
+      and verifies the finite interval-propagation radius
+      \(R_{\mathrm{num},\varrho}\) from
+      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
+  \end{enumerate}
+  When these checks pass, the record certifies
   \[
     F_\varrho(\lambda^{-1})
     \in
-    I_M+
-    \{w\in\CC:|w|\le R_M+R_{\mathrm{num}}\},
+    I_\varrho+
+    \{w\in\CC:|w|\le R_{M,\varrho}+R_{\mathrm{num},\varrho}\},
   \]
-  where \(I_M\) is the rational interval obtained from the finite determinant
-  sum.  Applying this finite certificate for all
-  \(\varrho\ne\mathbf1\) and then applying the finite Fourier inverse of
-  \Cref{cor:class-product-constant-rigidity} certifies rational enclosures for
-  the logarithms of all class-product constants \(K_C\).  This follows directly from \Cref{prop:fixed-label-perron-finite-algorithm}:
-  the displayed enclosure is the finite truncation plus the certified discarded
-  tail, with the scalar Perron logarithm deleted before any boundary value is
-  taken.  Repeating the same accepted-record argument over all
-  \(\varrho\ne\mathbf1\) gives enclosures for the full non-trivial vector
-  \((F_\varrho(\lambda^{-1}))_{\varrho\ne\mathbf1}\).  The inverse and forward
-  transforms in \Cref{cor:class-product-constant-rigidity} are finite
-  character-table operations once \(C(A)\) has fixed the scalar coordinate, so
-  those enclosures transport to the logarithms of the class-product constants
-  in \Cref{thm:class-euler-product-mertens}.  The appendix records the same
-  finite rational fields for the \(S_3\) witness; it supplies transcripts for
-  the obstruction, not a general parser, branch tracker, interval-arithmetic
-  library, or universal certification theory for all finite groups and
-  matrices.
+  where \(I_\varrho\) is the certified finite determinant sum.  Applying the
+  accepted records for all \(\varrho\ne\mathbf1\) and then the finite Fourier
+  inverse of \Cref{cor:class-product-constant-rigidity} gives certified
+  rational enclosures for the logarithms of all Frobenius-class product
+  constants \(K_C\).  Conversely, every finite record accepted by the appendix
+  finite-IO schema in
+  \Cref{prop:fixed-label-rational-certificate-record,prop:fixed-label-finite-io-certificate-summary,cor:fixed-label-five-field-certificate-schema}
+  is exactly a serialization of the four checks above, after reordering the
+  finite window and adding the two rational radii.
+\end{corollary}
+
+\begin{proof}
+  The first three audit checks are precisely the finite input, coefficient,
+  deletion, and branch requirements in
+  \Cref{prop:fixed-label-perron-finite-algorithm}.  The only scalar boundary
+  singularity is the triple \((1,1,\mathbf1)\), and it is deleted before any
+  logarithm is evaluated; for \(\varrho\ne\mathbf1\) the coefficient of this
+  deleted term is zero by character orthogonality.  The strict twisted gap
+  gives the Abel continuation of the remaining \(rm=1\) non-trivial blocks,
+  and the inequality \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\) gives the
+  ordinary logarithmic germ for \(rm\ge2\).
+
+  The fourth audit check is the effective tail and roundoff estimate proved in
+  \Cref{prop:fixed-label-perron-finite-algorithm}.  Therefore the accepted
+  finite sum \(I_\varrho\), enlarged by
+  \(R_{M,\varrho}+R_{\mathrm{num},\varrho}\), contains the unique Perron value
+  \(F_\varrho(\lambda^{-1})\).  Since the non-trivial irreducible set is finite,
+  applying this argument to every \(\varrho\ne\mathbf1\) gives a certified
+  enclosure for the whole fixed-label vector.  The passage from this vector to
+  \((\log K_C)_C\) in
+  \Cref{cor:class-product-constant-rigidity} is finite character-table linear
+  algebra together with the fixed scalar normalisation \(C(A)\), so ordinary
+  interval arithmetic propagates the certified radii to all product constants
+  without any primitive-orbit enumeration or limiting orbit count.
+
+  Finally,
+  \Cref{prop:fixed-label-rational-certificate-record,prop:fixed-label-finite-io-certificate-summary,cor:fixed-label-five-field-certificate-schema}
+  record exactly the same model, window, Adams, branch, and bound fields in
+  appendix notation.  Their converses state that every accepted appendix
+  finite-IO certificate determines these fields, and the proof above shows
+  that these fields determine the same enclosure.  This proves both the
+  product-level audit and its equivalence with the appendix finite records.
+\end{proof}
 
 \subsubsection{Product-vector rigidity after scalar normalisation}
 \label{subsubsec:class-product-vector-rigidity}
