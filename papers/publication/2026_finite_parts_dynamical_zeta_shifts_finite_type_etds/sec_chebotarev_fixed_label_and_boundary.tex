@@ -1,0 +1,509 @@
+\begin{lemma}[Primitive expansion of class-function logarithms]
+  \label{lem:class-logarithm-primitive-expansion}
+  For every class function \(\phi:G\to\CC\) and every
+  \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-logarithm-primitive-expansion}
+    \mathcal L_\phi(z)
+    =
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{\phi(\tau(\gamma)^r)}{r}z^{r|\gamma|}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Every fixed point of \(\sigma^n\) lies on a unique primitive orbit
+  \(\gamma\) whose length \(\ell=|\gamma|\) divides \(n\). Writing
+  \(n=r\ell\), the \(r\)-fold repetition of \(\gamma\) contributes
+  exactly \(\ell\) fixed points to \(\operatorname{Fix}(\sigma^n)\), one
+  for each starting edge of \(\gamma\). If
+  \(g=\tau(e_0)\cdots\tau(e_{\ell-1})\) is the label from one starting
+  point and \(h=\tau(e_0)\cdots\tau(e_{a-1})\) is the prefix leading to
+  another starting point, then the new primitive label is conjugate to
+  \(g\), namely \(h^{-1}gh\). Its \(r\)-fold repeated label is therefore
+  conjugate to \(g^r\). Since \(\phi\) is a class function, all these
+  \(\ell\) fixed points have the same value, namely
+  \(\phi(\tau(\gamma)^r)\). Their total contribution to
+  \(T_{\phi,n}z^n/n\) is therefore
+  \[
+    \frac{\ell}{r\ell}\phi(\tau(\gamma)^r)z^{r\ell}
+    =
+    \frac{\phi(\tau(\gamma)^r)}{r}z^{r|\gamma|}.
+  \]
+  Summing over primitive orbits and repetitions gives
+  \eqref{eq:class-logarithm-primitive-expansion}.
+
+  The rearrangement is justified by absolute convergence. Indeed,
+  \[
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{|z|^{r|\gamma|}}{r}
+    =
+    \sum_{n\ge 1}\frac{\#\operatorname{Fix}(\sigma^n)}{n}|z|^n
+    \le
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^n
+    <\infty
+  \]
+  for \(|z|<\lambda^{-1}\).
+\end{proof}
+
+\begin{remark}[Where ordinary M\"obius inversion stops]
+  \label{rem:ordinary-mobius-stops}
+  If \(\phi=\mathbf 1\), the factor
+  \(\phi(\tau(\gamma)^r)\) in
+  \eqref{eq:class-logarithm-primitive-expansion} is independent of
+  \(r\), and \Cref{cor:class-function-adams-mobius} reduces to the
+  usual scalar M\"obius inversion for primitive orbit counts. For a
+  non-trivial class function this independence fails: the \(r\)-fold
+  repetition changes the label from \(g\) to \(g^r\). The Adams operator
+  \(\psi^r\) is exactly the bookkeeping needed for this change. Thus the
+  primitive finite-group step below is not obtained by applying the
+  scalar formula representation by representation; it uses the Adams
+  action on the character ring before M\"obius inversion can remove
+  repetitions. For the general ``primitive from repetitions'' viewpoint,
+  compare the necklace/Witt formalism in
+  \cite{MetropolisRota1983Necklaces,Wehrhahn1990AperiodicRings}.
+\end{remark}
+
+\begin{corollary}[Main Theorem I(b): Adams--M\"obius primitive
+  inversion]
+  \label{cor:class-function-adams-mobius}
+  For every class function \(\phi:G\to\CC\) and every \(|z|<\lambda^{-1}\),
+  \begin{equation}\label{eq:class-adams-mobius-inversion}
+    \Pi_\phi(z)
+    =
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\,
+      \mathcal L_{\psi^m\phi}(z^m).
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  For each \(m\ge 1\), apply
+  \Cref{lem:class-logarithm-primitive-expansion} to \(\psi^m\phi\) and
+  then substitute \(z^m\). Since
+  \((\psi^m\phi)(\tau(\gamma)^r)=\phi(\tau(\gamma)^{mr})\), one gets
+  \[
+    \mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{\phi(\tau(\gamma)^{mr})}{r}z^{mr|\gamma|}.
+  \]
+  Multiply by \(\mu(m)/m\) and sum over \(m\ge 1\). The resulting
+  \(m,r,\gamma\) series may be rearranged absolutely: since \(\phi\) is
+  bounded,
+  \[
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{\gamma\in\cP}\sum_{r\ge 1}
+        \frac{\abs{\phi(\tau(\gamma)^{mr})}}{r}|z|^{mr|\gamma|}
+    \le
+    \norm{\phi}_\infty
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn},
+  \]
+  where the inner identity
+  \[
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}\frac{|z|^{mr|\gamma|}}{r}
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
+  \]
+  is \eqref{eq:class-logarithm-primitive-expansion} with
+  \(\phi=\mathbf 1\). Tonelli's theorem then gives
+  \[
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
+      \bigl(-\log(1-|z|^n)\bigr).
+  \]
+  By \Cref{lem:pf-trace-bound},
+  \(\Tr(A^n)\le C_A\lambda^n\) for some \(C_A>0\), and
+  \[
+    -\log(1-|z|^n)\le \frac{|z|^n}{1-|z|^n}\le \frac{|z|^n}{1-|z|}.
+  \]
+  Hence the majorant is bounded by
+  \[
+    \frac{C_A}{1-|z|}
+    \sum_{n\ge 1}\frac{(\lambda|z|)^n}{n},
+  \]
+  which converges for \(|z|<\lambda^{-1}\). Therefore
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\sum_{m,r\ge 1}
+      \frac{\mu(m)}{mr}\phi(\tau(\gamma)^{mr})z^{mr|\gamma|}.
+  \]
+  Now set \(s:=mr\). For fixed \(\gamma\) and \(s\), the coefficient of
+  \(\phi(\tau(\gamma)^s)z^{s|\gamma|}\) is
+  \[
+    \sum_{m\mid s}\frac{\mu(m)}{m(s/m)}
+    =
+    \frac{1}{s}\sum_{m\mid s}\mu(m).
+  \]
+  Hence
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\sum_{s\ge 1}
+      \frac{\phi(\tau(\gamma)^s)}{s}z^{s|\gamma|}
+      \sum_{m\mid s}\mu(m).
+  \]
+  The divisor sum is \(1\) when \(s=1\) and \(0\) when \(s>1\), so only
+  the primitive term remains:
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
+    \sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}
+    =
+    \Pi_\phi(z).
+  \]
+  This is \eqref{eq:class-adams-mobius-inversion}.
+\end{proof}
+
+\begin{theorem}[Fixed-label Euler transform]
+  \label{thm:fixed-label-euler-transform}
+  Let \(\phi:G\to\CC\) be a class function. For every
+  \(|z|<\lambda^{-1}\), the fixed-label Euler transform satisfies
+  \begin{equation}\label{eq:fixed-label-euler-transform-adams-mobius}
+    F_\phi(z)
+    =
+    \sum_{r\ge1}\sum_{m\ge1}
+      \frac{\mu(m)}{rm}\,
+      \mathcal L_{\psi^m\phi}(z^{rm}).
+  \end{equation}
+  Equivalently,
+  \begin{equation}\label{eq:fixed-label-euler-transform-vs-artin}
+    \mathcal L_\phi(z)
+    =
+    \sum_{r\ge1}\frac{\Pi_{\psi^r\phi}(z^r)}{r},
+    \qquad
+    F_\phi(z)
+    =
+    \sum_{r\ge1}\frac{\Pi_\phi(z^r)}{r}.
+  \end{equation}
+  Thus the Artin logarithm \(\mathcal L_\phi\) and the primitive-label
+  Euler transform \(F_\phi\) agree only in channels where the Adams powers
+  do not change the relevant primitive labels. If \(\lambda>1\),
+  \(\eta<\lambda\), and \(\phi\) is orthogonal to the trivial character,
+  then \(F_\phi(\lambda^{-1})\) is well defined by absolute convergence.
+  Its determinant continuation at the Perron point is the local
+  determinant evaluation of \Cref{prop:fixed-label-determinant-perron}:
+  the single singular scalar summand
+  \((r,m,\pi)=(1,1,\mathbf1)\) is omitted before any logarithm is
+  evaluated, while scalar components of \(\psi^m\phi\) with \(rm\ge2\)
+  remain in the formula and are regular because
+  \(\lambda^{-rm}A_{\mathbf1}\) lies strictly inside the Perron disc.
+  Thus non-trivial characters may acquire trivial components under Adams
+  powers, but only away from the scalar Perron boundary.  The later
+  product-constant role of this fixed-label value, and the obstruction to
+  substituting \(\mathcal L_\phi\), are isolated in
+  \Cref{prop:three-logarithm-product-interface}.
+\end{theorem}
+
+\begin{proof}
+  For \(|z|<\lambda^{-1}\), absolute convergence of \(F_\phi\) follows
+  from
+  \[
+    \sum_{r\ge1}\frac{1}{r}
+      \sum_{\gamma\in\cP}\abs{\phi(\tau(\gamma))}|z|^{r|\gamma|}
+    \le
+    \norm{\phi}_\infty
+    \sum_{n\ge1}p_n(A)\sum_{r\ge1}\frac{|z|^{rn}}{r}
+    <\infty,
+  \]
+  since \(p_n(A)\ll\lambda^n/n\) and \(\lambda|z|<1\). Substituting
+  \Cref{cor:class-function-adams-mobius} into
+  \eqref{eq:fixed-label-euler-transform-def} gives
+  \[
+    F_\phi(z)
+    =
+    \sum_{r\ge1}\frac{1}{r}
+      \sum_{m\ge1}\frac{\mu(m)}{m}
+        \mathcal L_{\psi^m\phi}(z^{rm}).
+  \]
+  The rearrangement is justified by the same majorant used in the proof
+  of \Cref{cor:class-function-adams-mobius}, with \(|z|\) replaced by
+  \(|z|^r\), giving \eqref{eq:fixed-label-euler-transform-adams-mobius}.
+  The first identity in
+  \eqref{eq:fixed-label-euler-transform-vs-artin} is exactly
+  \Cref{lem:class-logarithm-primitive-expansion}, because
+  \((\psi^r\phi)(\tau(\gamma))=\phi(\tau(\gamma)^r)\); the second is the
+  definition of \(F_\phi\).
+
+  Now assume \(\lambda>1\), \(\eta<\lambda\), and
+  \(\langle\phi,\mathbf1\rangle=0\). Expand
+  \(\phi=\sum_{\varrho\neq\mathbf1}\widehat\phi(\varrho)\chi_\varrho\).
+  By \Cref{lem:nontrivial-perron-point-convergence}, the term
+  \(\Pi_\varrho(\lambda^{-1})\) is absolutely convergent for every
+  non-trivial \(\varrho\).  The remaining fixed-label tail is controlled
+  directly from primitive-orbit counting: for any bounded class function
+  \(\psi\) and every \(r\ge2\),
+  \[
+    \abs{\Pi_\psi(\lambda^{-r})}
+    \le
+    \norm{\psi}_\infty\sum_{n\ge1}p_n(A)\lambda^{-rn}
+    \ll_\psi
+    \sum_{n\ge1}\frac{\lambda^{(1-r)n}}{n},
+  \]
+  and the last quantity is summable after division by \(r\) over
+  \(r\ge2\). Hence \(\sum_{r\ge1}\Pi_\phi(\lambda^{-r})/r\) converges
+  absolutely. For the determinant expansion of the same boundary value, apply
+  \Cref{lem:fixed-label-perron-double-majorant}. It supplies an explicit
+  summable majorant for the whole \((r,m)\)-determinant tail and removes
+  the only scalar Perron logarithm by character orthogonality: the term
+  \((r,m,\pi)=(1,1,\mathbf1)\) is excluded before the limit is taken, and
+  its coefficient is the trivial Fourier coefficient of \(\phi\), hence is
+  zero under \(\langle\phi,\mathbf1\rangle=0\). Dominated
+  convergence from \(z=t\lambda^{-1}\), \(0<t<1\), therefore gives the
+  stated Perron-point continuation and branch convention.
+\end{proof}
+
+\begin{proposition}[Periodic, primitive, and fixed-label logarithms]
+  \label{prop:logarithmic-channel-separation}
+  Let \(\phi:G\to\CC\) be a class function. On \(|z|<\lambda^{-1}\) the
+  following three logarithmic channels are related, and only related, by
+  the displayed Adams operations:
+  \begin{align}
+    \mathcal L_\phi(z)
+    &=\sum_{r\ge1}\frac{\Pi_{\psi^r\phi}(z^r)}{r},
+      \label{eq:channel-separation-artin}\\
+    \Pi_\phi(z)
+    &=\sum_{m\ge1}\frac{\mu(m)}{m}
+      \mathcal L_{\psi^m\phi}(z^m),
+      \label{eq:channel-separation-primitive}\\
+    F_\phi(z)
+    &=\sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \mathcal L_{\psi^m\phi}(z^{rm}).
+      \label{eq:channel-separation-fixed}
+  \end{align}
+  Consequently the Artin logarithm \(\mathcal L_\phi\) and the fixed-label
+  Euler transform \(F_\phi\) have the same coefficients for the given
+  finite mixing SFT and finite-group cocycle if and only if
+  \begin{equation}\label{eq:channel-separation-obstruction}
+    \sum_{r\mid n}\frac{1}{r}
+      P_{n/r}(\psi^r\phi-\phi)=0
+    \qquad(n\ge1),
+  \end{equation}
+  where
+  \(P_k(\psi):=\sum_{|\gamma|=k}\psi(\tau(\gamma))\) is the primitive
+  length-\(k\) \(\psi\)-weighted label sum. In particular, no theorem in
+  this paper may replace \(F_\phi(\lambda^{-1})\) by
+  \(\mathcal L_\phi(\lambda^{-1})\) unless the primitive
+  Adams-difference coefficients in \eqref{eq:channel-separation-obstruction}
+  vanish in the channel under discussion.
+\end{proposition}
+
+\begin{proof}
+  The first identity is \Cref{lem:class-logarithm-primitive-expansion}; the
+  second is \Cref{cor:class-function-adams-mobius}; the third is
+  \Cref{thm:fixed-label-euler-transform}. Absolute convergence on
+  \(|z|<\lambda^{-1}\) is proved in those statements, so coefficient
+  comparison is legitimate.
+
+  Write
+  \[
+    \Pi_\psi(z)=\sum_{k\ge1}P_k(\psi)z^k.
+  \]
+  From \eqref{eq:channel-separation-artin} and the definition of
+  \(F_\phi\), the coefficient of \(z^n\) in
+  \(\mathcal L_\phi(z)-F_\phi(z)\) is
+  \[
+    \sum_{r\mid n}\frac{1}{r}
+      \bigl(P_{n/r}(\psi^r\phi)-P_{n/r}(\phi)\bigr)
+    =
+    \sum_{r\mid n}\frac{1}{r}P_{n/r}(\psi^r\phi-\phi).
+  \]
+  Hence the two analytic germs agree exactly when
+  \eqref{eq:channel-separation-obstruction} holds for every \(n\). Since
+  the Perron-point constants of \Cref{thm:class-euler-product-mertens} are
+  obtained by radial continuation of the fixed-label germ under the strict
+  gap, the same obstruction is the only valid passage from the fixed-label
+  constant to the periodic Artin logarithm. This proves the proposition.
+\end{proof}
+
+\begin{lemma}[Trace-power majorant for Perron-boundary determinant logarithms]
+  \label{lem:perron-boundary-trace-power-majorant}
+  Assume \(\lambda>1\) and \(\eta<\lambda\). Let
+  \(\mathscr A:=\{A_\pi:\\pi\in\Irr(G)\}\). There is a constant
+  \(C_{\mathscr A}\) with the following properties.
+  \begin{enumerate}
+  \item For every \(B\in\mathscr A\), every \(\ell\ge1\), and every
+    \(k\ge2\),
+    \begin{equation}\label{eq:trace-power-perron-bound}
+      \abs{\Tr(B^\ell)}\le C_{\mathscr A}\lambda^\ell,
+      \qquad
+      \abs{\log\det(I-t^k\lambda^{-k}B)^{-1}}
+      \le C_{\mathscr A}\lambda^{1-k}
+    \end{equation}
+    uniformly for \(0\le t\le1\), where the logarithm is the power-series
+    branch normalised to vanish at \(t=0\).
+  \item For every non-trivial \(\pi\in\Irr(G)\), the path
+    \(0\le t\le1\mapsto I-t\lambda^{-1}A_\pi\) is invertible. Hence the
+    normalized determinant logarithm
+    \(\log\det(I-t\lambda^{-1}A_\pi)^{-1}\) continues uniquely and remains
+    bounded on this Abel path.
+  \item If \(c_{m,\pi}\) is any coefficient family with
+    \(\sup_{m,\pi}\abs{c_{m,
+    \pi}}<\infty\), then every determinant-log series of the form
+    \[
+      \sum_{m\ge1}\frac{\mu(m)}{m}
+      \sum_{\substack{\pi\in\Irr(G)\\(m,\pi)\neq(1,\mathbf1)}}
+        c_{m,\pi}\log\det(I-t^m\lambda^{-m}A_\pi)^{-1}
+    \]
+    has an Abel majorant independent of \(t\in[0,1]\): the finitely many
+    \(m=1\), \(\pi\neq\mathbf1\) terms are bounded by item~2, and the
+    \(m\ge2\) tail is dominated by a constant multiple of
+    \(\sum_{m\ge2}\lambda^{1-m}/m\).
+  \item If \(c_{r,m,
+    \pi}\) is any coefficient family with
+    \(\sup_{r,m,
+    \pi}\abs{c_{r,m,
+    \pi}}<\infty\), then every determinant-log series of the form
+    \[
+      \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+        c_{r,m,
+        \pi}
+        \log\det(I-t^{rm}\lambda^{-rm}A_\pi)^{-1}
+    \]
+    has an Abel majorant independent of \(t\in[0,1]\): the finitely many
+    \(rm=1\), \(\pi\neq\mathbf1\) terms are bounded by item~2, and the
+    \(rm\ge2\) tail is dominated by a constant multiple of
+    \begin{equation}\label{eq:double-trace-power-majorant}
+      \sum_{\substack{r,m\ge1\\rm\ge2}}\frac{\lambda^{1-rm}}{rm}<\infty .
+    \end{equation}
+  \end{enumerate}
+  Consequently the only possible scalar Perron singularity in such
+  normalized determinant expansions is the single term with
+  \((m,\pi)=(1,\mathbf1)\), respectively
+  \((r,m,\pi)=(1,1,\mathbf1)\). If its coefficient is zero, dominated
+  convergence along any of the displayed Abel paths is legitimate at
+  \(t=1\).
+\end{lemma}
+
+\begin{proof}
+  The set \(\mathscr A\) is finite. If the eigenvalues of
+  \(B\in\mathscr A\) are \(\alpha_1,\ldots,\alpha_d\), counted with
+  algebraic multiplicity, then
+  \(\rho(B)\le\lambda\) because the skew-product adjacency matrix is
+  non-negative with Perron root \(\lambda\), and
+  \Cref{prop:kernel-peter-weyl-block-diagonalisation} places each
+  \(A_\pi\) as a block of it. Thus
+  \[
+    \abs{\Tr(B^\ell)}
+    =\abs{\sum_{j=1}^d\alpha_j^\ell}
+    \le d\lambda^\ell
+    \le C_0\lambda^\ell
+  \]
+  for a uniform constant \(C_0\). This is the trace-power bound; no
+  diagonalizability is being assumed, since traces of powers are sums of
+  eigenvalue powers with algebraic multiplicity, equivalently after Schur
+  triangularisation.
+
+  For \(k\ge2\),
+  \(\rho(t^k\lambda^{-k}B)\le\lambda^{1-k}<1\). Hence
+  \[
+    \log\det(I-t^k\lambda^{-k}B)^{-1}
+    =\sum_{\ell\ge1}
+      \frac{t^{k\ell}\lambda^{-k\ell}}{\ell}\Tr(B^\ell)
+  \]
+  in the normalized power-series branch. The preceding trace bound gives
+  \[
+    \abs{\log\det(I-t^k\lambda^{-k}B)^{-1}}
+    \le C_0\sum_{\ell\ge1}\frac{\lambda^{(1-k)\ell}}{\ell}.
+  \]
+  Since \(0<\lambda^{1-k}\le\lambda^{-1}<1\) for all \(k\ge2\), the last
+  sum is bounded by a uniform constant times \(\lambda^{1-k}\), after
+  enlarging the constant. This proves item~1.
+
+  If \(\pi\neq\mathbf1\), the twisted gap gives
+  \(\rho(A_\pi)<\lambda\). Therefore
+  \(1/t\lambda^{-1}\) is not an eigenvalue of \(A_\pi\) for
+  \(0\le t\le1\), or equivalently \(I-t\lambda^{-1}A_\pi\) is invertible
+  on the entire compact Abel path. The determinant has no zero there, so
+  the logarithm normalized at \(t=0\) continues uniquely and is bounded.
+  This proves item~2.
+
+  For item~3, the \(m=1\), \(\pi\neq\mathbf1\) terms form a finite bounded
+  family by item~2. The tail with \(m\ge2\) is bounded by item~1 and the
+  assumed coefficient bound by a constant multiple of
+  \(\sum_{m\ge2}\lambda^{1-m}/m\), which converges. Item~4 is identical
+  with \(k=rm\): the tail is bounded by
+  \(\sum_{rm\ge2}\lambda^{1-rm}/(rm)\), and
+  \[
+    \sum_{\substack{r,m\ge1\\rm\ge2}}\frac{\lambda^{1-rm}}{rm}
+    =\sum_{k\ge2}\frac{d(k)}{k}\lambda^{1-k}<\infty
+  \]
+  because the divisor function has subexponential growth while
+  \(\lambda^{1-k}\) decays exponentially. The final statement is then
+  exactly the dominated-convergence consequence of the displayed
+  majorants, after the scalar Perron term with coefficient zero has been
+  omitted before evaluating any logarithm.
+\end{proof}
+
+\begin{lemma}[Perron-boundary majorant for the fixed-label double series]
+  \label{lem:fixed-label-perron-double-majorant}
+  Assume \(\lambda>1\) and \(\eta<\lambda\). Let
+  \(\phi:G\to\CC\) be a class function with
+  \(\langle\phi,\mathbf1\rangle=0\), and write
+  \(\psi^m\phi=\sum_{\pi\in\Irr(G)}b_{\phi,\pi}^{(m)}\chi_\pi\).
+  Then the Abel-boundary determinant series
+  \begin{equation}\label{eq:fixed-label-perron-double-majorant-series}
+    \sum_{q,m\ge1}\frac{\mu(m)}{qm}
+      \sum_{\substack{\pi\in\Irr(G)\\(q,m,\pi)\neq(1,1,\mathbf1)}}
+        b_{\phi,\pi}^{(m)}
+        \log\det(I-t^{qm}\lambda^{-qm}A_\pi)^{-1}
+  \end{equation}
+  has, for \(0\le t\le1\), a summable majorant independent of \(t\).
+  Here \(t\) is the radial Abel parameter and \(q\) is the summation index
+  of the fixed-label Euler transform. More precisely, the finitely many
+  \(qm=1\), \(\pi\neq\mathbf1\) terms are bounded on the Abel path, while
+  the \(qm\ge2\) terms are dominated by
+  \begin{equation}\label{eq:fixed-label-perron-double-majorant-bound}
+    C_\phi
+    \sum_{\substack{q,m\ge1\\qm\ge2}}\frac{\lambda^{1-qm}}{qm}<\infty .
+  \end{equation}
+  The omitted term \((q,m,\pi)=(1,1,\mathbf1)\) has coefficient
+  \(b_{\phi,\mathbf1}^{(1)}=\langle\phi,\mathbf1\rangle=0\); hence the
+  singular scalar logarithm
+  \(\log\det(I-t\lambda^{-1}A_{\mathbf1})^{-1}\) never enters the
+  non-trivial fixed-label boundary value.
+\end{lemma}
+
+\begin{proof}
+  The Adams coefficients are uniformly bounded in \(m\). Indeed,
+  \[
+    \abs{b_{\phi,\pi}^{(m)}}
+    =\abs{\langle\psi^m\phi,\chi_\pi\rangle}
+    \le \norm{\phi}_\infty\chi_\pi(1)
+    \le B_\phi,
+  \]
+  because \(G\) has only finitely many irreducible representations. Since
+  \(\psi^1\phi=\phi\), orthogonality gives
+  \(b_{\phi,\mathbf1}^{(1)}=0\). Thus the scalar Perron determinant with
+  \(qm=1\) is excluded before any logarithm is evaluated. Applying
+  \Cref{lem:perron-boundary-trace-power-majorant} to the bounded
+  coefficient family \(c_{q,m,
+  \pi}=b_{\phi,\pi}^{(m)}\) gives the bounded regular \(qm=1\) terms, the
+  summable \(qm\ge2\) majorant in
+  \eqref{eq:fixed-label-perron-double-majorant-bound}, and the stated
+  dominated-convergence branch exclusion.
+\end{proof}
+
+\begin{remark}[Relation to necklace/Witt inversion and twisted-zeta
+  precedents]
+  \label{rem:adams-mobius-literature-position}
+  The cancellation in
+  \Cref{cor:class-function-adams-mobius} is the finite-group analogue
+  of the classical ``primitive from repetitions'' mechanism in the
+  necklace and Witt-vector literature
+  \cite{MetropolisRota1983Necklaces,Wehrhahn1990AperiodicRings}. What
+  is specific here is the finite-state cocycle input:
+  repetitions replace a primitive label \(g\) by \(g^m\), so the
+  relevant correction is not scalar M\"obius inversion alone but the
+  Adams operation \(\psi^m\phi(g)=\phi(g^m)\) inside the character ring
+  of one fixed finite-group extension. Twisted periodic-point formulas
+  and determinant identities also appear in Fried's work
+  \cite{Fried1983PeriodicPointsTwistedCoefficients,Fried1983HomologicalIdentitiesClosedOrbits} and in the dynamical-zeta
+  treatment of Parry--Pollicott \cite{ParryPollicott1990Zeta}. Those
+  works provide determinant and orbit-counting frameworks, but they do
+  not carry out the finite-state Adams--M\"obius primitive inversion and
+  classwise Perron-point constant extraction developed here.
+\end{remark}

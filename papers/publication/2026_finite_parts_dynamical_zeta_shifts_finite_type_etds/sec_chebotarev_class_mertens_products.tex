@@ -1,0 +1,557 @@
+\subsubsection{Product asymptotic and constant equivalence}
+
+\begin{lemma}[Explicit product-tail bound]
+  \label{lem:class-euler-product-tail-bound}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  For every
+  conjugacy class \(C\subset G\), put
+  \[
+    T_C(N):=
+      \sum_{r\ge2}\frac1r\sum_{n\le N}p_{n,C}\lambda^{-rn}.
+  \]
+  Then
+  \begin{equation}\label{eq:class-product-tail-bound}
+    T_C(N)=
+      \sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+      +O(\lambda^{-N}/N),
+  \end{equation}
+  uniformly in \(C\). Consequently, if
+  \begin{equation}\label{eq:class-product-log-bound-input}
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \frac{|C|}{|G|}\log N+\mathcal M_C(A,\tau;G)+O(N^{-1}),
+  \end{equation}
+  then
+  \begin{equation}\label{eq:class-product-log-bound-output}
+    \log P_C(N)=
+    -\frac{|C|}{|G|}\log N
+    -\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(N^{-1}).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  The primitive counting functions satisfy \(p_{n,C}=O(\lambda^n/n)\),
+  uniformly in the finite set of conjugacy classes. Hence the full tail
+  \(T_C(\infty)-T_C(N)\) is bounded by a constant multiple of
+  \[
+    \sum_{r\ge2}\frac1r\sum_{n>N}\frac{\lambda^{(1-r)n}}{n}.
+  \]
+  Since \(n\ge N+1\) on the inner tail,
+  \[
+    \sum_{r\ge2}\frac1r\sum_{n>N}\frac{\lambda^{(1-r)n}}{n}
+    \le
+    \frac{1}{N+1}
+    \sum_{r\ge2}\frac{\lambda^{(1-r)(N+1)}}{r(1-\lambda^{1-r})}.
+  \]
+  Write \(q=\lambda^{-1}<1\).  The last sum equals
+  \[
+    \sum_{r\ge2}\frac{q^{(r-1)(N+1)}}{r(1-q^{r-1})}
+    \le
+    \frac{1}{2(1-q)}\sum_{s\ge1}q^{s(N+1)}
+    =O(q^{N+1}),
+  \]
+  with a constant independent of \(C\).  This proves
+  \eqref{eq:class-product-tail-bound}.  Taking logarithms in the finite
+  Euler product gives
+  \[
+    \log P_C(N)=
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}-T_C(N).
+  \]
+  Substituting \eqref{eq:class-product-log-bound-input} and
+  \eqref{eq:class-product-tail-bound} gives
+  \eqref{eq:class-product-log-bound-output}, because
+  \(O(\lambda^{-N}/N)\) is absorbed by \(O(N^{-1})\).
+\end{proof}
+
+\begin{lemma}[Exponentiating the class product logarithm]
+  \label{lem:class-product-log-to-product-error}
+  Let \(a\in\RR\), \(L\in\RR\), and let \(R_N=O(N^{-1})\) be a real sequence.
+  If a positive sequence \(Q_N\) satisfies
+  \[
+    \log Q_N=-a\log N+L+R_N,
+  \]
+  then
+  \[
+    Q_N=e^L N^{-a}\bigl(1+O(N^{-1})\bigr).
+  \]
+  If the implied constant in \(R_N=O(N^{-1})\) is uniform over a finite set of
+  indices, then the resulting multiplicative error is uniform over that set.
+\end{lemma}
+
+\begin{proof}
+  Choose \(B>0\) with \(|R_N|\le B/N\) for all large \(N\).  Then
+  \[
+    Q_N=e^L N^{-a}e^{R_N}.
+  \]
+  For all large \(N\), \(|R_N|\le1\), and the elementary estimate
+  \(|e^x-1|\le e|x|\) for \(|x|\le1\) gives
+  \(e^{R_N}=1+O(N^{-1})\).  The same bound with the maximum of the finitely
+  many constants gives the uniform assertion.
+\end{proof}
+
+\begin{proposition}[Isolated reduction to Main Theorem II and the product tail]
+  \label{prop:class-euler-product-main-chain-reduction}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  For a fixed
+  conjugacy class \(C\), put
+  \[
+    P_C(N):=
+    \prod_{\substack{\gamma\in\cP\,:\\ |\gamma|\le N\\
+      \tau(\gamma)\in C}}
+      \left(1-\lambda^{-|\gamma|}\right).
+  \]
+  Then the logarithmic Main Theorem~II estimate
+  \eqref{eq:class-mertens-log}, the \(r\ge2\) product-tail identity
+  \eqref{eq:class-product-tail-bound}, and
+  \Cref{lem:class-product-log-to-product-error} imply
+  \begin{equation}\label{eq:class-euler-product-reduction-asymptotic}
+    P_C(N)=
+    \exp\!\left(
+      -\mathcal M_C(A,\tau;G)
+      -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    \right)
+    N^{-|C|/|G|}\bigl(1+O(N^{-1})\bigr).
+  \end{equation}
+  Moreover the two constant formulas in Main Theorem~III are equivalent
+  exactly through the fixed-label normalisation identity
+  \begin{equation}\label{eq:class-euler-product-reduction-normalisation}
+    \mathcal M_C(A,\tau;G)
+    +\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    =
+    \frac{|C|}{|G|}
+    \left(
+      \gamma+
+      \log C(A)+
+      \sum_{\varrho\ne\mathbf1}
+        \chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
+    \right).
+  \end{equation}
+  Thus the proof of \Cref{thm:class-euler-product-mertens} has a short
+  auditable spine: Main Theorem~II controls the \(r=1\) logarithm, the
+  product-tail lemma controls all \(r\ge2\) repetitions, and the fixed-label
+  transform supplies the determinant-ready coordinates for the same constant.
+\end{proposition}
+
+\begin{proof}
+  The logarithm of the finite Euler product is
+  \[
+    \log P_C(N)
+    =
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    -
+    \sum_{r\ge2}\frac1r\sum_{n\le N}p_{n,C}\lambda^{-rn}.
+  \]
+  Substituting \eqref{eq:class-mertens-log} into the first term and
+  \eqref{eq:class-product-tail-bound} into the second term gives
+  \[
+    \log P_C(N)
+    =
+    -\frac{|C|}{|G|}\log N
+    -\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(N^{-1}).
+  \]
+  Since \(P_C(N)>0\), \Cref{lem:class-product-log-to-product-error}
+  exponentiates this estimate and proves
+  \eqref{eq:class-euler-product-reduction-asymptotic}.
+
+  The constants in \eqref{eq:class-euler-product-k-mc} and
+  \eqref{eq:class-euler-product-k-f} are both written on the positive real
+  branch.  Taking real logarithms of those two displayed expressions shows
+  that their equality is precisely
+  \eqref{eq:class-euler-product-reduction-normalisation}.  Conversely,
+  substituting \eqref{eq:class-euler-product-reduction-normalisation} into
+  the exponent of \eqref{eq:class-euler-product-k-mc} gives exactly the
+  exponent of \eqref{eq:class-euler-product-k-f}.  Hence the two formulas are
+  equivalent through the stated normalisation and no additional analytic input
+  is hidden in the comparison.
+\end{proof}
+
+\begin{proposition}[Three logarithmic interfaces at the product constant]
+  \label{prop:three-logarithm-product-interface}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, and let
+  \(\phi:G\to\CC\) be a class function orthogonal to the trivial
+  character.  The three logarithmic objects used in Main Theorem~III have
+  the following distinct roles:
+  \begin{center}
+  \begin{tabular}{@{}L{0.25\textwidth}L{0.36\textwidth}L{0.29\textwidth}@{}}
+  \toprule
+  Object & Formula & Product-constant role \\
+  \midrule
+  Periodic Artin logarithm
+  & \(\mathcal L_\phi(z)=\sum_{r\ge1}\Pi_{\psi^r\phi}(z^r)/r\)
+  & Encodes periodic determinant traces, where repetitions replace
+    \(\phi\) by \(\psi^r\phi\). \\
+  Primitive channel
+  & \(\Pi_\phi(z)=\sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}\)
+  & Is recovered from determinant logarithms by Adams--M\"obius inversion. \\
+  Fixed-label Euler transform
+  & \(F_\phi(z)=\sum_{r\ge1}\Pi_\phi(z^r)/r\)
+  & Is the quantity evaluated at \(z=\lambda^{-1}\) in the non-trivial
+    Fourier coordinates of \(K_C\). \\
+  \bottomrule
+  \end{tabular}
+  \end{center}
+  More precisely, \(F_\phi(\lambda^{-1})\) is absolutely convergent and is
+  determined by the determinant data through
+  \begin{equation}\label{eq:three-logarithm-product-interface}
+    F_\phi(\lambda^{-1})
+    =
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}\,
+      \mathcal L_{\psi^m\phi}(\lambda^{-rm}),
+  \end{equation}
+  using the Perron-boundary branches of \Cref{thm:fixed-label-euler-transform}.
+  In the determinant expansion of the right-hand side the scalar Perron
+  logarithm is not evaluated: the term \((r,m,\pi)=(1,1,\mathbf1)\) has zero
+  coefficient because \(\phi\perp\mathbf1\), and it is deleted before the
+  boundary value \(z=\lambda^{-1}\) is taken.  All remaining terms are either
+  non-trivial Abel-boundary values made regular by \(\eta<\lambda\), or
+  interior values with \(rm\ge2\).
+  Consequently the non-trivial term in the class-product constant is a
+  fixed-label Euler transform, and it may be replaced by the periodic
+  Artin logarithm only in the channels satisfying the coefficient
+  obstruction \eqref{eq:channel-separation-obstruction}.
+  The fixed-coordinate rank obstruction
+  \Cref{thm:class-product-minimal-obstruction-skeleton} below makes this
+  last sentence sharp inside the chosen branch-compatible chart: after the
+  scalar coordinate is fixed, every bad replacement of the determinant
+  boundary data is exactly a non-zero vector in the \((q-1)\)-dimensional
+  zero-mean class-function coordinate space, where \(q\) is the number of
+  conjugacy classes of \(G\), and no scalar, exponent-level, or
+  notation-level record can hide it there.
+\end{proposition}
+
+\begin{proof}
+  The displayed formulas are the definitions of the primitive channel and
+  fixed-label Euler transform together with
+  \Cref{lem:class-logarithm-primitive-expansion}, which gives the Artin
+  logarithm formula.  Since \(\phi\) is orthogonal to the trivial character
+  and \(\eta<\lambda\), \Cref{thm:fixed-label-euler-transform} gives
+  absolute convergence of \(F_\phi(\lambda^{-1})\) and the determinant
+  expression \eqref{eq:three-logarithm-product-interface}.  In the expanded
+  determinant expression the coefficient of the single scalar boundary term is
+  \(\langle\phi,\mathbf1\rangle_G=0\); hence that singular logarithm is omitted
+  before the Abel limit is formed.  The remaining boundary terms have
+  non-trivial twist and are regular by the strict twisted gap, while every
+  term with \(rm\ge2\) lies strictly inside the Perron disc.  This is exactly
+  the branch-compatible continuation used here.
+  Finally, \Cref{prop:logarithmic-channel-separation} proves that equality
+  between \(F_\phi\) and \(\mathcal L_\phi\) is equivalent to
+  \eqref{eq:channel-separation-obstruction}.  Main Theorem~III uses
+  precisely the values \(F_\varrho(\lambda^{-1})\) in its non-trivial
+  Fourier coordinates, so the stated product-constant roles follow.  The
+  final roadmap sentence is the specialisation of
+  \Cref{thm:class-product-minimal-obstruction-skeleton} to the boundary-error
+  vector
+  \(B_\varrho=\mathcal L_\varrho(\lambda^{-1})\), or more generally to any
+  branch-compatible substitute \((B_\varrho)_{\varrho\ne\mathbf1}\).
+\end{proof}
+
+\begin{theorem}[Main Theorem III: Adams-corrected Frobenius-class
+  Euler-product constants]
+  \label{thm:class-euler-product-mertens}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}. For a
+  conjugacy class \(C\subset G\), set
+  \begin{equation}\label{eq:class-euler-product-def}
+    P_C(N):=
+    \prod_{\substack{\gamma\in\cP\,:\\ |\gamma|\le N\\
+      \tau(\gamma)\in C}}
+      \left(1-\lambda^{-|\gamma|}\right).
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:class-euler-product-asymptotic}
+    P_C(N)=K_C\,N^{-|C|/|G|}\bigl(1+O(N^{-1})\bigr),
+  \end{equation}
+  The exponent \(|C|/|G|\) and the existence of a Frobenius-class product
+  asymptotic are the inherited classical layer; the local contribution of this
+  theorem is the Adams-corrected determinant expression for the constant
+  \(K_C\) in the fixed finite-state cocycle model.
+  Here the positive branch of the constant is
+  \begin{equation}\label{eq:class-euler-product-k-mc}
+    K_C=
+    \exp\!\left(
+      -\mathcal M_C(A,\tau;G)
+      -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    \right).
+  \end{equation}
+  Equivalently, the same positive constant is given by the branch-compatible
+  character formula
+  \begin{equation}\label{eq:class-euler-product-k-f}
+    K_C=
+    \exp\!\left(
+      -\frac{|C|}{|G|}
+      \left(
+        \gamma+\log C(A)
+        +\sum_{\varrho\neq\mathbf1}
+          \chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})
+      \right)
+    \right).
+  \end{equation}
+  The summation in \eqref{eq:class-euler-product-k-mc} is absolutely
+  convergent, and \(F_\varrho(\lambda^{-1})\) is the fixed-label Euler
+  transform of \eqref{eq:fixed-label-euler-transform-def}, not the Artin
+  logarithm \(\mathcal L_\varrho(\lambda^{-1})\); the local comparison,
+  classical/new separation, and obstruction are recorded in
+  \Cref{prop:three-logarithm-product-interface,prop:class-product-comparison}.
+  The individual summands
+  \(\chi_\varrho^\ast(C)F_\varrho(\lambda^{-1})\) need not be real when
+  \(\varrho\) is not self-conjugate.  The bracket is real only after the
+  conjugate irreducible pairs are combined; equivalently it is the value of a
+  real class function under the Hermitian character expansion.  The
+  exponential in \eqref{eq:class-euler-product-k-f} is therefore taken in the
+  ordinary positive real branch.  The factor \(|C|/|G|\) in
+  \eqref{eq:class-euler-product-k-f} multiplies the entire Hermitian
+  class-indicator bracket, including the non-trivial fixed-label Fourier sum.
+  The determinant version of the non-trivial values
+  \(F_\varrho(\lambda^{-1})\) is exactly the convention-audited one in
+  \Cref{prop:fixed-label-determinant-perron}: the scalar Perron determinant
+  \((r,m,\pi)=(1,1,\mathbf1)\) is deleted before evaluation, non-trivial
+  \(rm=1\) determinants are taken by the Abel branch, and the \(rm\ge2\)
+  determinant tail is absolutely convergent at \(z=\lambda^{-1}\).
+\end{theorem}
+
+\begin{proof}
+  We spell out the short proof chain isolated in
+  \Cref{prop:class-euler-product-main-chain-reduction}.  That proposition
+  reduces the product asymptotic to the logarithmic form of Main Theorem~II,
+  the explicit \(r\ge2\) product tail, and the fixed-label normalisation.
+  It remains here only to verify those inputs with the branch and positivity
+  conventions stated in the theorem.
+
+  Taking logarithms in \eqref{eq:class-euler-product-def} gives
+  \[
+    \log P_C(N)
+    =
+    \sum_{\substack{n\le N}}
+      p_{n,C}\log(1-\lambda^{-n})
+    =
+    -\sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+      -
+      \sum_{r\ge2}\frac{1}{r}
+        \sum_{n\le N}p_{n,C}\lambda^{-rn}.
+  \]
+  The full \(r\ge2\) tail, its truncation error, and the passage from the
+  additive class-Mertens estimate to the product logarithm are exactly
+  \Cref{lem:class-euler-product-tail-bound}.  Substituting the logarithmic
+  form \eqref{eq:class-mertens-log} from \Cref{cor:class-mertens-log-form}
+  into \eqref{eq:class-product-log-bound-output} gives
+  \[
+    \log P_C(N)
+    =
+    -\frac{|C|}{|G|}\log N
+    -\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+    +O(N^{-1}).
+  \]
+  Exponentiating gives \eqref{eq:class-euler-product-asymptotic} and
+  \eqref{eq:class-euler-product-k-mc} by
+  \Cref{lem:class-product-log-to-product-error}: take
+  \(a=|C|/|G|\) and
+  \[
+    L_C=-\mathcal M_C(A,\tau;G)
+    -\sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}.
+  \]
+  The product \(P_C(N)\) is positive, the logarithmic remainder in
+  \Cref{lem:class-euler-product-tail-bound} is uniform over the finite set of
+  conjugacy classes, and the cited lemma converts that additive
+  \(O(N^{-1})\) remainder into the stated multiplicative
+  \(1+O(N^{-1})\) remainder.  This also fixes the positive branch uniformly for
+  all classes.
+
+  We now record the normalization calculation that produces the single
+  global factor \(|C|/|G|\) in the character formula.  The Hermitian
+  class-indicator expansion is
+  \[
+    \mathbf1_C
+    =
+    \frac{|C|}{|G|}\mathbf1+
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)\chi_\varrho .
+  \]
+  Applying this identity first to the additive class-Mertens constant and
+  then to the absolutely convergent Euler-product tail gives
+  \[
+  \begin{aligned}
+    &\mathcal M_C(A,\tau;G)+
+      \sum_{r\ge2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r} \\
+    &\quad=
+      \frac{|C|}{|G|}
+      \left(
+        \mathcal M(A)+\sum_{r\ge2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+      \right) \\
+    &\qquad+
+      \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf1}\chi_\varrho^\ast(C)
+      \left(
+        \Pi_\varrho(\lambda^{-1})+
+        \sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r}
+      \right).
+  \end{aligned}
+  \]
+  The non-trivial parenthesis is exactly
+  \(F_\varrho(\lambda^{-1})\), while the scalar parenthesis is
+  \(\gamma+\log C(A)\) by the scalar finite-part product normalization.
+  Thus the factor \(|C|/|G|\) comes from the class-indicator Fourier
+  coefficient and multiplies the scalar term and every fixed-label Fourier
+  contribution before the outer minus sign is applied.
+
+  \Cref{lem:class-product-constant-equivalence} rewrites the exponent in
+  \eqref{eq:class-euler-product-k-mc} as the exponent in
+  \eqref{eq:class-euler-product-k-f}. This proves the equivalent
+  character formula.  The same computation is isolated in
+   \Cref{lem:class-product-hermitian-normalisation} to make the
+   \(|C|/|G|\) normalisation explicit.  Finally,
+   \Cref{prop:fixed-label-determinant-perron} supplies the determinant
+   evaluation of each non-trivial \(F_\varrho(\lambda^{-1})\) with the local
+   singular-term deletion, branch convention, and absolute tail convergence
+   stated in the theorem.
+\end{proof}
+
+\begin{proposition}[Closed fixed-label coordinate equivalence]
+  \label{prop:main-iii-fixed-label-proof-spine}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  The product
+  constants in \Cref{thm:class-euler-product-mertens} are determined by the
+  following three finite coordinate maps, and each arrow is reversible once the scalar
+  normalisation \(\gamma+\log C(A)\) is fixed:
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item the primitive-label logarithm for a non-trivial character is the
+      fixed-label Euler transform
+      \[
+        F_\varrho(\lambda^{-1})
+        =\sum_{r\ge1}\frac{\Pi_\varrho(\lambda^{-r})}{r};
+      \]
+    \item the same number is the branch-normalised determinant boundary value
+      \[
+        \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+        \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\ne(1,1,\mathbf1)}}
+          a_{\varrho,\pi}^{(m)}
+          \Log\det(I-\lambda^{-rm}A_\pi)^{-1};
+      \]
+    \item the class-product constants are the positive real exponentials
+      \[
+        K_C=
+        \exp\!\left(
+        -\frac{|C|}{|G|}
+        \left(
+          \gamma+\log C(A)+
+          \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)
+            F_\varrho(\lambda^{-1})
+        \right)
+        \right).
+      \]
+  \end{enumerate}
+  Consequently the finite twisted determinant polynomials
+  \(\det(I-zA_\pi)\), the finite character table, the Adams coefficients, and
+  the scalar determinant constant \(C(A)\) form a complete fixed-coordinate
+  record of \((K_C)_{C\subset G}\).  Conversely, the positive constants
+  \((K_C)_C\), together with \(C(A)\), recover all non-trivial values
+  \(F_\varrho(\lambda^{-1})\).  In this sense the fixed-label transform,
+  determinant Perron formula, and \(K_C\)-formula form a single closed
+  finite-dimensional coordinate system rather than three independent
+  computational layers.
+\end{proposition}
+
+\begin{proof}
+  Step \textup{(i)} is the second identity in
+  \eqref{eq:fixed-label-euler-transform-vs-artin}, evaluated at
+  \(z=\lambda^{-1}\); the value exists for non-trivial \(\varrho\) by the
+  Perron-boundary assertion of \Cref{thm:fixed-label-euler-transform}.  Step
+  \textup{(ii)} is exactly \Cref{prop:fixed-label-determinant-perron}: the
+  scalar Perron triple \((1,1,\mathbf1)\) is excluded before evaluation,
+  non-trivial \(rm=1\) terms use the Abel branch, and all \(rm\ge2\) terms are
+  ordinary determinant-germ values inside the Perron disc.  Step
+  \textup{(iii)} is formula \eqref{eq:class-euler-product-k-f} in
+  \Cref{thm:class-euler-product-mertens}.  Substituting \textup{(ii)} into
+  \textup{(iii)} gives the advertised finite determinant record, since
+  \(G\) has finitely many irreducible characters and each twisted matrix
+  \(A_\pi\) is finite dimensional.
+
+  It remains only to prove the reversibility assertion.  With
+  \(\alpha_A:=\gamma+\log C(A)\), define
+  \[
+    H_K(C):=-\frac{|G|}{|C|}\log K_C-\alpha_A .
+  \]
+  Formula \textup{(iii)} gives
+  \[
+    H_K(C)=
+    \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)
+      F_\varrho(\lambda^{-1}).
+  \]
+  Character orthogonality on class functions therefore recovers, for every
+  non-trivial \(\pi\),
+  \[
+    F_\pi(\lambda^{-1})
+    =\sum_{C\subset G}\frac{|C|}{|G|}H_K(C)\chi_\pi(C).
+  \]
+  Thus the constants and the fixed scalar normalisation determine the
+  non-trivial fixed-label vector, while the preceding substitutions determine
+  the constants from that vector.  This proves the claimed closed coordinate equivalence.
+\end{proof}
+
+The exponent \(|C|/|G|\) and the existence of a Frobenius-class product
+constant are the classical part of \Cref{thm:class-euler-product-mertens},
+parallel to the dynamical Mertens and Chebotarev product theorems of Sharp,
+Parry--Pollicott, Noorani--Parry, and especially Mesliza--Noorani's
+Frobenius-class Mertens product theorem
+\cite{Sharp1991Mertens,ParryPollicott1986Chebotarev,NooraniParry1992ChebotarevShifts,MeslizaNoorani1999FrobeniusMertens}.  The new assertion
+used in the finite-state main chain is the branch-compatible
+Adams--M\"obius determinant formula for that constant, and hence the
+obstruction to replacing the fixed-label Euler transform by an ordinary
+Artin logarithm.
+
+
+
+
+\begin{corollary}[Adjacent finite-determinant evaluation of the product constants]
+  \label{cor:class-euler-product-determinant-evaluation}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  For each
+  non-trivial \(\varrho\in\Irr(G)\), put
+  \begin{equation}\label{eq:class-euler-product-determinant-F}
+    \mathfrak F_\varrho:=
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+        a_{\varrho,\pi}^{(m)}
+        \log\det(I-\lambda^{-rm}A_\pi)^{-1},
+  \end{equation}
+  with the same Abel-path branch convention as
+  \Cref{prop:fixed-label-determinant-perron}: the only boundary
+  evaluations are the non-trivial blocks at \(z=\lambda^{-1}\), and the
+  scalar Perron logarithm \(\log\det(I-\lambda^{-1}A_{\mathbf1})^{-1}\)
+  is excluded.  Then the product constants in
+  \Cref{thm:class-euler-product-mertens} are recovered directly from the
+  finite determinant family by
+  \begin{equation}\label{eq:class-euler-product-k-det-adjacent}
+    K_C=
+    \exp\!\left(
+      -\frac{|C|}{|G|}
+      \left(
+        \gamma+\log C(A)
+        +\sum_{\varrho\neq\mathbf1}
+          \chi_\varrho^\ast(C)\mathfrak F_\varrho
+      \right)
+    \right).
+  \end{equation}
+  Thus no cocycle-level orbit enumeration beyond the finite matrices
+  \(A_\pi\), the character table, and the Adams coefficients is needed to
+  compute \((K_C)_{C\subset G}\).
+\end{corollary}
+
+\begin{proof}
+  By \Cref{prop:fixed-label-determinant-perron}, the determinant expression
+  \eqref{eq:class-euler-product-determinant-F} is exactly the Perron-point
+  fixed-label value \(F_\varrho(\lambda^{-1})\) for every non-trivial
+  irreducible \(\varrho\).  Substituting these equalities into the
+  branch-compatible character formula
+  \eqref{eq:class-euler-product-k-f} of
+  \Cref{thm:class-euler-product-mertens} gives
+  \eqref{eq:class-euler-product-k-det-adjacent}.  The branch convention and
+  the exclusion of the scalar Perron determinant are precisely those of
+  \Cref{prop:fixed-label-determinant-perron}; hence every determinant in
+  the displayed expression is either a non-trivial Abel-boundary value made
+  regular by \(\eta<\lambda\), or an ordinary interior value with
+  \(rm\ge2\).  The last assertion follows because the right-hand side uses
+  only these determinants, the finite character table, and the finite Adams
+  coefficient tensors.
+\end{proof}
+
+
