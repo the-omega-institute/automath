@@ -1,0 +1,96 @@
+  950: 
+  951: \section{Gate summary}
+  952: 
+  953: Table~\ref{tab:gates} lists the deterministic gates used by
+  954: Theorem~\ref{thm:publication-safety-interface}.  The rows are operational
+  955: interfaces: each gate has an evidence surface and a failure class it is meant
+  956: to prevent.
+  957: 
+  958: \begin{table}
+  959: \caption{Deterministic gate interfaces}
+  960: \label{tab:gates}
+  961: \small
+  962: \begin{tabular}{p{0.23\linewidth}p{0.33\linewidth}p{0.32\linewidth}}
+  963: \toprule
+  964: Gate & Evidence surface & Failure prevented \\
+  965: \midrule
+  966: Formal-source gate & Lean build, axiom checks, axiom-purity audits & broken or impure formal targets \\
+  967: Traceability gate & declaration inventory, source maps, marker audits & stale paper labels and missing source facts \\
+  968: Discovery gate & certificate ledger, demotion, lineage DAG & statement-only, code-only, or mechanical ``discoveries'' \\
+  969: Theorem-content delta gate & theorem inventory, phase-D hard lint, delta inventory & file churn or compilation reported as substantive theorem growth \\
+  970: Artifact-limitation gate & status files, limitation ledgers, rerun logs when present & drift from bounded artifact evidence to stronger dynamic claims \\
+  971: Scheduler gate & critical-path scoring and backlog windows & duplicated or random agent dispatch \\
+  972: Promotion gate & active \texttt{2026\_*} directory plus pipeline metadata & intake seeds entering the daemon prematurely \\
+  973: Overlap gate & route identity, semantic-overlap ledgers, submitted-sibling paths, board state & duplicate or racing paper routes \\
+  974: Submission-state gate & submission markers, venue state, board state, submission metadata & invalid advancement of active or submitted routes \\
+  975: Submission-pack gate & review, venue, bibliography, and metadata checks & unreviewed or under-specified submission packs \\
+  976: \bottomrule
+  977: \end{tabular}
+  978: \end{table}
+  979: 
+  980: \begin{lemma}[Gate-witness criterion]
+  981: \label{lem:gate-witness-criterion}
+  982: A case record is a path-verified witness for the safety interface when it names
+  983: the source or artifact surface, the invariant that failed, the gate decision,
+  984: and the safe manuscript lesson.  Under Theorem~\ref{thm:publication-safety-interface},
+  985: such a witness can support a case-study claim, but not a stronger command-run
+  986: claim, unless the corresponding command log is also recorded.
+  987: \end{lemma}
+  988: 
+  989: \begin{proof}
+  990: The four named fields are exactly the data required by the definition of a
+  991: path-verified evidence level: they identify where the case is checked, which
+  992: gate predicate is being evaluated, what decision was made, and which bounded
+  993: claim may be carried into the manuscript.  The definition of command-run
+  994: evidence has additional required fields: command, source commit, environment,
+  995: exit code, and log path.  Therefore a witness record with only the four
+  996: path-verified fields supports the bounded case-study claim and cannot be used
+  997: as evidence for a fresh command-run assertion.\qed
+  998: \end{proof}
+  999: 
+ 1000: \begin{proposition}[Path-complete case witnesses]
+ 1001: \label{prop:path-complete-case-witnesses}
+ 1002: Suppose a case-study row is used as load-bearing evidence for
+ 1003: Theorem~\ref{thm:publication-safety-interface}.  If the row is path-complete in
+ 1004: the sense above, then the row supplies exactly the evidence surface required for
+ 1005: a path-verified case claim.  In particular, a promotion row is sufficient only
+ 1006: for the bounded claim that an intake packet is not daemon-visible publication
+ 1007: work before human promotion; a route-overlap row is sufficient only for the
+ 1008: bounded claim that the overlap and submission-state gates blocked advancement
+ 1009: until one of the recorded next actions occurs; a theorem-content row is
+ 1010: sufficient only for the bounded claim that file churn or compilation did not
+ 1011: show substantive theorem growth; and an artifact-limitation row is sufficient
+ 1012: only for the bounded claim that the artifact limitation must be disclosed or must
+ 1013: block promotion.
+ 1014: \end{proposition}
+ 1015: 
+ 1016: \begin{proof}
+ 1017: Let $r$ be a path-complete case row.  By definition, every load-bearing
+ 1018: component of $r$ has a concrete source or artifact path.  The promotion
+ 1019: interface names the candidate surface, human-promotion evidence, active-paper
+ 1020: markers, gate decision, and the bounded manuscript claim; these fields are
+ 1021: precisely the data needed to distinguish inactive intake from publication work.
+ 1022: The route-overlap interface names the active route, the submitted sibling that
+ 1023: creates the chronology constraint, the reason for overlap, the gate decision,
+ 1024: and the finite set of permitted next actions.  These are precisely the data
+ 1025: needed to check whether advancement is allowed without appealing to generated
+ 1026: prose, and the submission-state evidence prevents a route from racing an already
+ 1027: submitted sibling.  The theorem-content interface names the changed surface,
+ 1028: the theorem inventory or hard-lint surface, the substantive-content delta, the
+ 1029: gate decision, and the allowed manuscript claim; these fields are precisely the
+ 1030: data needed to reject extension claims based only on file churn or successful
+ 1031: compilation.  The artifact-limitation interface names the status file, the
+ 1032: limitation ledger, the observed limitation, the gate decision, and the only
+ 1033: manuscript claim that may be carried forward.  These are precisely the data
+ 1034: needed to prevent a failed or bounded artifact check from being promoted into a
+ 1035: stronger dynamic-validation claim.  Lemma~\ref{lem:gate-witness-criterion} then
+ 1036: applies to each such row:
+ 1037: the named paths give the source surface, the interface fields give the failed
+ 1038: invariant and decision, and the last field gives the safe lesson.  The same
+ 1039: lemma also rules out upgrading the row to a command-run claim unless the extra
+ 1040: command-run fields are recorded.\qed
+ 1041: \end{proof}
+ 1042: 
+ 1043: \section{Case studies}
+ 1044: 
+ 1045: Each row of Table~\ref{tab:case-witnesses} is a witness in the sense of

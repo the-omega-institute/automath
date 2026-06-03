@@ -1,0 +1,146 @@
+  390: bundled snapshot, or historical boundary; (iv) $H$ is a concrete human-promotion record when
+  391: the claim crosses the intake-to-publication boundary and otherwise records that
+  392: no such boundary is crossed; (v) $D$ is present exactly when discovery lies in
+  393: $K$, and then names the pinned discovery-gate source-interface rows used by the
+  394: claim; and (vi) $B$ either records command, source commit, environment, exit code,
+  395: and log path for command-run evidence or explicitly records that no command-run
+  396: assertion is made.
+  397: 
+  398: \begin{proposition}[Finite certificate schema verifier]
+  399: \label{prop:finite-certificate-schema-verifier}
+  400: For every load-bearing manuscript claim $c$ whose component kinds lie in the
+  401: seven-kind domain, $V(c,\mathcal C)$ is a finite, prose-insensitive
+  402: record-schema verifier for the declared publication certificate.  If $V$ accepts,
+  403: then $\mathcal C(c)$ is locally checkable at exactly its declared evidence level.
+  404: This is certificate-record verification only: it checks finite record shape,
+  405: dispatch, evidence pointers, and command-boundary discipline, not end-to-end
+  406: external semantic validation of the referenced artifacts or source theory.  If
+  407: $V$ rejects, then a reviewer can extract a finite bad subrecord consisting of the
+  408: first failed schema check and the fields on which that check depends.
+  409: \end{proposition}
+  410: 
+  411: \begin{proof}
+  412: The verifier inspects only the displayed tuple $\mathcal C(c)$, the finite
+  413: seven-kind domain, the finite dispatch table $\Gamma$, and the finite list of
+  414: paths, rows, commits, or logs cited by the record.  Since $K$ is required to be a
+  415: subset of the seven-kind domain, the set
+  416: \(\bigcup_{k\in K}\Gamma(k)\) is finite.  The checks over $E$, $R$, and the
+  417: command-run fields are therefore finite lookups in named manuscript or bundle
+  418: surfaces, not semantic judgments about generated prose.
+  419: 
+  420: If all six checks pass, the tuple has exactly the fields required in the
+  421: definition of a publication certificate: a finite kind set $K$, declared evidence
+  422: level $\ell$, evidence surface $E$, route-boundary field $H$, gate-record field
+  423: $R$, optional discovery field $D$ with the required presence condition, and
+  424: evidence-strength boundary $B$.  Check~(ii) is precisely the local-checkability
+  425: condition on cited paths, manifest rows, logs, pinned commits, and historical
+  426: boundaries.  Checks~(iii)--(vi) prevent the only possible escalations of the
+  427: declared level: missing gate passage, unrecorded route promotion, unsupported
+  428: discovery routing, and command-run assertion without command-run fields.  Thus an
+  429: accepted record is locally checkable at the level $\ell$ it declares, and no
+  430: stronger level is silently inferred.
+  431: 
+  432: If a check fails, the verifier stops at a finite test.  The bad subrecord is the
+  433: finite collection of fields read by that failed test: for example, $K$ and
+  434: $\Gamma$ for a gate-domain failure, $E$ for an evidence-surface failure, $K$,
+  435: $\Gamma$, $R$, and the cited evidence item for a gate-record failure, $H$ for a
+  436: promotion failure, $K$ and $D$ for a discovery-field failure, or $\ell$ and $B$
+  437: for an evidence-level failure.  This subrecord is independent of any surrounding
+  438: paragraph that may have described the claim.\qed
+  439: \end{proof}
+  440: 
+  441: \begin{proposition}[Machine-readable certificate records]
+  442: \label{prop:machine-readable-certificate-records}
+  443: For the current presentation package, the finite verifier
+  444: $V$ of Proposition~\ref{prop:finite-certificate-schema-verifier} has an
+  445: executable record-level instance over the review bundle.  The schema file
+  446: \path{review_bundle/certificate_schema.json}, the pass-record ledger
+  447: \path{review_bundle/current_package_pass_records.json}, the primary-interface map
+  448: \path{review_bundle/submission_interface_map.json}, the primary-claim inventory
+  449: \path{review_bundle/primary_claim_inventory.json}, the verifier script
+  450: \path{review_bundle/verify_certificate_records.py}, and the recorded run
+  451: \path{review_bundle/certificate_verification_run.log} instantiate the verifier at
+  452: the path-verified level for entries $a_1,\ldots,a_6$.  Each pass record in the
+  453: ledger has the five fields \emph{gate name}, \emph{input surface},
+  454: \emph{decision}, \emph{evidence pointer}, and \emph{evidence level}.  The
+  455: machine-readable submission-interface map mirrors
+  456: Table~\ref{tab:submission-interface-map}, and the primary-claim inventory maps
+  457: each concrete assertion in \path{submission_abstract.tex} either to a certificate
+  458: row or to an explicit bounded-context status.
+  459: \end{proposition}
+  460: 
+  461: \begin{proof}
+  462: All objects in the statement are finite files in the submitted review bundle, so
+  463: the claim is a finite record check.  The manifest
+  464: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} contains top-level fields named
+  465: \path{certificate_schema}, \path{current_package_pass_records},
+  466: \path{submission_interface_map}, \path{primary_claim_inventory},
+  467: \path{verifier_script}, and \path{verifier_run_log}; these fields point to the six
+  468: bundle files named in the statement.  Thus the executable verifier is not an
+  469: implicit prose convention but a submitted artifact surface.
+  470: 
+  471: The schema file lists the seven claim kinds, the two evidence levels, the same
+  472: gate dispatch $\Gamma$ used in the supplement, and the required pass-record
+  473: fields $(g,I,d,e,\ell)$.  The pass-record ledger has exactly six entries,
+  474: $a_1,\ldots,a_6$.  For each entry it records a nonempty claim-kind set, the
+  475: path-verified evidence level, a finite evidence surface, the route-boundary or
+  476: human-promotion field, pass records, the discovery-interface field, and the
+  477: evidence boundary.  Inspecting the six entries gives the required gate coverage:
+  478: $a_1$ has inventory and marker-existence records; $a_2$ has promotion, overlap,
+  479: submission-state, and submission-pack records; $a_3$ has promotion, overlap, and
+  480: submission-state records; $a_4$ has promotion, overlap, submission-state, and
+  481: submission-pack records; $a_5$ has pinned-discovery and theorem-content-delta
+  482: records; and $a_6$ has status and limitation-ledger records.  These are exactly
+  483: the unions of the gate sets assigned by $\Gamma$ to the claim-kind sets displayed
+  484: in Table~\ref{tab:current-acceptance-ledger}.  The only row with discovery kind
+  485: is $a_5$, and it is the only row with a non-null discovery-interface field; every
+  486: row is path-verified and therefore carries a boundary saying that no command-run
+  487: assertion is made.
+  488: 
+  489: The script \path{review_bundle/verify_certificate_records.py} implements precisely
+  490: these finite checks: required manifest fields, entries $a_1$--$a_6$, kind-domain
+  491: membership, evidence-level membership, assigned-gate coverage, the five
+  492: pass-record fields, evidence-level agreement, discovery-field discipline, and
+  493: the path-verified boundary condition.  The recorded log
+  494: \path{review_bundle/certificate_verification_run.log} records a successful run of
+  495: that script over the submitted files and states the boundary that no Lean build,
+  496: publication-daemon run, or Rule110 dynamic artifact rerun is being certified.
+  497: Consequently the executable artifact proves exactly the schema-level instance of
+  498: $V$ claimed here.
+  499: 
+  500: Finally, \path{review_bundle/submission_interface_map.json} has rows
+  501: \path{sim1}--\path{sim4}, matching the four rows of
+  502: Table~\ref{tab:submission-interface-map}.  The file
+  503: \path{review_bundle/primary_claim_inventory.json} lists the concrete primary-note
+  504: assertions as rows \path{pc1}--\path{pc12}; every load-bearing row names a
+  505: certificate, row, manifest surface, or bounded-context status and declares an
+  506: evidence level.  Thus the primary note has a complete finite claim inventory, and
+  507: no additional primary load-bearing assertion is licensed by the machine-readable
+  508: interface.\qed
+  509: \end{proof}
+  510: 
+  511: \begin{proposition}[Deterministic claim-kind dispatch]
+  512: \label{prop:claim-kind-dispatch}
+  513: For every load-bearing manuscript claim whose kind lies in the seven-kind domain
+  514: above, $\Gamma$ assigns a unique finite set of deterministic gates.  In a
+  515: pipeline that is gate-sound for acceptance, a mixed load-bearing claim may be
+  516: used as accepted work only if its acceptance entry records passage through every
+  517: gate in the union assigned to its component kinds.
+  518: \end{proposition}
+  519: 
+  520: \begin{proof}
+  521: The seven atomic clauses in the definition of $\Gamma$ assign one explicitly named
+  522: finite gate set to each atomic claim kind.  Hence an atomic claim has a unique
+  523: assigned gate set.  For a mixed claim, the component-kind set is finite because
+  524: it is a subset of the seven-kind domain; taking the union of the corresponding
+  525: finite gate sets is deterministic and finite.  Gate-soundness for acceptance
+  526: requires the acceptance entry of a load-bearing claim to record passage through
+  527: every gate assigned by $\Gamma$.  If a component gate of a mixed claim were
+  528: omitted, then the projection of the claim to that component kind would lack its
+  529: assigned pass record.  Such an entry would not be gate-sound.  Therefore accepted
+  530: mixed claims in a gate-sound pipeline must pass every gate in the union.\qed
+  531: \end{proof}
+  532: 
+  533: \begin{theorem}[Finite certificate obstruction skeleton]
+  534: \label{thm:finite-certificate-obstruction-skeleton}
+  535: Let $c$ be a load-bearing manuscript claim whose component kinds lie in the

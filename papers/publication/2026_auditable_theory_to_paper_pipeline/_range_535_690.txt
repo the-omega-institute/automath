@@ -1,0 +1,156 @@
+  535: Let $c$ be a load-bearing manuscript claim whose component kinds lie in the
+  536: seven-kind domain.  The verifier of
+  537: Proposition~\ref{prop:finite-certificate-schema-verifier} gives the following
+  538: complete audit classification at the declared evidence level.  A certificate for
+  539: $c$ passes the publication-safety interface if and only if it has no bad
+  540: subrecord of the following five types:
+  541: \begin{enumerate}
+  542: \item missing evidence surface for the declared evidence level;
+  543: \item missing pass record for a gate in $\bigcup_{k\in K}\Gamma(k)$;
+  544: \item missing human-promotion record when the claim crosses from intake or
+  545: source material into active publication work;
+  546: \item discovery escalation without the pinned discovery-gate source-interface
+  547: rows for certificate, ledger, lineage, and boundary witnesses; or
+  548: \item command-run escalation without command, source commit, environment, exit
+  549: code, and log path.
+  550: \end{enumerate}
+  551: Equivalently, every unsafe accepted claim contains an inclusion-minimal finite
+  552: bad subrecord of one of these five types, and deleting all other fields preserves
+  553: the same rejection by the verifier.  This is an audit-skeleton theorem for the
+  554: software-workshop route: it classifies finite certificate failures and makes no
+  555: claim about theorem-proving complexity or about fresh execution of the
+  556: underlying workflow.
+  557: \end{theorem}
+  558: 
+  559: \begin{proof}
+  560: Let $K$ be the finite set of component kinds of $c$.  Since $K$ is a subset of
+  561: the seven-kind domain, Proposition~\ref{prop:claim-kind-dispatch} gives a unique
+  562: finite required gate set
+  563: \[
+  564: G(c)=\bigcup_{k\in K}\Gamma(k).
+  565: \]
+  566: The certificate field $R$ is indexed by exactly this finite set, so checking
+  567: gate passage is a finite lookup: each $g\in G(c)$ must have a pass record and the
+  568: record must cite an item of the finite evidence surface $E$.  The evidence-level
+  569: field $\ell$ and boundary field $B$ make the same lookup finite for evidence
+  570: strength: at path-verified level the certificate must name the source, artifact,
+  571: pinned commit, local publication path, or gate-decision surface used by the
+  572: claim; at command-run level it must additionally name command, source commit,
+  573: environment, exit code, and log path.  Neither lookup interprets artifact
+  574: semantics, reruns Lean, or predicts editorial outcomes; those are stronger claim
+  575: kinds or stronger evidence levels that require their own records.  The human-promotion field $H$ separates
+  576: the route boundary from all other gates: it is either a concrete promotion
+  577: record or a finite marker that no such boundary is crossed.  Finally, when
+  578: discovery lies in $K$, the discovery field $D$ names the pinned source-interface
+  579: rows certified by Lemma~\ref{lem:source-interface-extraction-correctness} and
+  580: Propositions~\ref{prop:reviewable-source-snapshot-interface} and
+  581: \ref{prop:source-interface-record-file-consistency}; these rows are finite and
+  582: therefore locally checkable in the same way as the other certificate fields.
+  583: Thus the certificate is sufficient for a reviewer to check safety by examining a
+  584: finite list of fields and cited artifacts, not by trusting generated prose.
+  585: 
+  586: It remains to prove that the displayed obstruction list is complete.  Suppose an
+  587: accepted claim fails the publication-safety interface.  Choose an inclusion-minimal
+  588: subrecord of its acceptance entry that still witnesses failure.  If the failure
+  589: is that the claim is not tied to evidence at the declared evidence level, then
+  590: the minimal subrecord is type~1.  If evidence exists but some required gate is
+  591: unrecorded, the omitted gate belongs to $G(c)$ by the deterministic dispatch
+  592: proposition, giving type~2.  If all required non-route evidence is present but
+  593: the claim entered active publication state from intake or source material without
+  594: human promotion, the missing field is $H$, giving type~3.  If the claim is a
+  595: discovery claim and the problem is that statement-only, code-only, mechanical,
+  596: compression-only, or classifier-scored output was accepted without the pinned
+  597: certificate, ledger, lineage, and boundary interface, the missing discovery
+  598: field is $D$, giving type~4.  The only remaining way to fail while the preceding
+  599: fields are present is to assert command-run strength without the command-run
+  600: fields required by the evidence-level definition; that is type~5.  These cases
+  601: cover the definitions of acceptance entry, gate-soundness, human promotion,
+  602: discovery routing, and evidence level.  Minimality removes irrelevant fields and
+  603: leaves exactly one of the five obstruction skeletons.  Conversely, if no bad
+  604: subrecord of type~1--5 is present, then each schema check in
+  605: Proposition~\ref{prop:finite-certificate-schema-verifier} succeeds: the evidence
+  606: surface is present at the declared level, every required gate has its recorded
+  607: pass, the route-boundary field is correct, discovery rows are present exactly
+  608: when required, and command-run strength is not asserted without command-run
+  609: fields.  Hence the verifier accepts the certificate and the publication-safety
+  610: interface holds for $c$ at the declared evidence level.
+  611: 
+  612: The final sentence follows from the construction.  The verifier reads only the
+  613: finite certificate fields and the finite dispatch table, so the theorem
+  614: classifies certificate failures for review.  It does not assert a lower bound,
+  615: complexity separation, automated theorem-proving method, or fresh run of any
+  616: external command.\qed
+  617: \end{proof}
+  618: 
+  619: \begin{proposition}[Gate-interface separation]
+  620: \label{prop:gate-interface-separation}
+  621: The promotion, overlap, submission-state, and theorem-content delta gates are
+  622: separate deterministic interfaces.  None can be replaced by passage of another
+  623: one when a load-bearing claim has the corresponding component.
+  624: \end{proposition}
+  625: 
+  626: \begin{proof}
+  627: Each named gate has a distinct invariant and evidence surface in the operational
+  628: definition.  Promotion asks whether a candidate has crossed the human
+  629: publication boundary; its evidence is the active-paper directory and pipeline
+  630: metadata.  Overlap asks whether the route duplicates or conflicts with a sibling
+  631: route; its evidence is route identity, overlap ledgers, submitted-sibling paths,
+  632: and board state.  Submission-state asks whether the proposed publication action
+  633: is compatible with submission markers, venue state, and submission-pack metadata.
+  634: The theorem-content delta gate asks whether an asserted extension contains
+  635: load-bearing theorem growth; its evidence is an inventory, hard-lint surface, or
+  636: delta record.  These predicates are logically independent at the interface
+  637: level: an active paper can still overlap a submitted sibling, a route with no
+  638: overlap can still have an impermissible submission state, and a compiling edit in
+  639: a permissible route can still lack theorem-content delta.  Therefore a
+  640: load-bearing claim with any one of these components must pass that component's
+  641: own gate, and passage through the others cannot supply the missing evidence.\qed
+  642: \end{proof}
+  643: 
+  644: \begin{proposition}[Scheduler selection is advisory before discovery gating]
+  645: \label{prop:scheduler-selection-advisory}
+  646: Let $s$ be a scheduler or critical-path score attached to a candidate claim
+  647: $c$.  If $s$ recommends selecting $c$, then the recommendation is a
+  648: work-selection claim and by itself can only pass the scheduler gate.  If $c$ is
+  649: also asserted to be a discovery or classifier-shifting contribution in a
+  650: gate-sound pipeline, then the accepted mixed claim must pass both the scheduler
+  651: gate and the discovery gate.
+  652: Consequently, critical-path scores may prioritize review order, and the imported
+  653: classifier-shift selection rule may break ties among otherwise equal discovery
+  654: potential coordinates, but neither score nor recommendation accepts a
+  655: classifier-shift discovery unless the discovery gate also supplies the required
+  656: certificate, ledger, and lineage witnesses.
+  657: \end{proposition}
+  658: 
+  659: \begin{proof}
+  660: By the definition of $\Gamma$, a scheduler recommendation has claim kind
+  661: work-selection, so its atomic gate is the scheduler gate.  The scheduler gate's
+  662: evidence surface records a score, backlog window, or analogous critical-path
+  663: priority; none of these fields is a semantic naming certificate, a ledger
+  664: witness, a DNA-complete theorem genome, a score certificate for a discovery
+  665: claim, a lineage witness, or a not-claimed boundary.  Hence scheduler passage
+  666: alone records only that $c$ is an eligible or prioritized work item.
+  667: 
+  668: Now suppose that the same recorded assertion also says that $c$ is a discovery
+  669: or classifier-shifting contribution.  Then the assertion is mixed: it has a
+  670: work-selection component and a discovery component.  Proposition~\ref{prop:claim-kind-dispatch}
+  671: therefore requires passage through every gate in the union assigned by $\Gamma$,
+  672: namely the scheduler gate for the work-selection component and the pinned
+  673: discovery gate for the discovery component.  The source-interface record in
+  674: Table~\ref{tab:source-interface-record} includes the imported classifier-change
+  675: selection theorem only in its bounded form: with positive classifier-change
+  676: weight and all other coordinates fixed, such a selection operator favors the
+  677: classifier-changing candidate.  The same source-interface record also includes
+  678: pipeline safety, which requires certificate, ledger, genome, score, lineage, and
+  679: boundary witnesses for accepted discovery.  Combining these two imported
+  680: interfaces gives the stated conclusion: scheduling and classifier-shift scoring
+  681: can advise selection order, but discovery acceptance still occurs only through
+  682: the discovery gate.\qed
+  683: \end{proof}
+  684: 
+  685: \begin{theorem}[Conditional publication safety interface]
+  686: \label{thm:publication-safety-interface}
+  687: Consider a theory-to-paper pipeline with the operational interface above.  Assume
+  688: that every load-bearing claim in an active manuscript is either rejected or has an
+  689: acceptance entry with an evidence surface; that the pipeline is gate-sound for
+  690: acceptance; that every advisory output is demoted unless the deterministic gate
