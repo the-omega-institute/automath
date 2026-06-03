@@ -1435,12 +1435,48 @@ publication-safety, and review-artifact paragraphs.  The checklist is the
 submission contract; it replaces any need to treat this supplement's metadata
 lemmas as part of the two-page presentation claim.
 
-The live venue facts used for the following gate were checked on 2026-06-04
+The live venue facts used for the following gate were rechecked on 2026-06-04
 against the official CICM 2026 call for papers at
 \url{https://cicm-conference.org/2026/cicm.php?event=&menu=cfp} and the Springer
 LNCS author-guideline page linked from that call at
 \url{https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines}.
-They are inputs to a local submission-pack readiness check only.
+The check recorded HTTP status 200 for both pages and observed the same route
+facts as the 2026-06-03 near-submission check: presentation-only papers are
+work-in-progress submissions of two pages plus bibliography, receive a
+light-weight review, do not appear in the Springer proceedings, have a
+2026-06-15 submission deadline, and use the EasyChair/LNCS submission interface
+unless the final form gives a different instruction.  These facts are inputs to
+a local submission-pack readiness check only; if upload occurs after this check
+or the form shows a conflicting instruction, the finite venue gate must be run
+again and the record in \path{VENUE_CHECK.md} updated before submission.
+
+\begin{proposition}[Fresh venue-record criterion]
+\label{prop:fresh-venue-record-criterion}
+The venue row of Proposition~\ref{prop:venue-submission-pack-gate} is accepted
+for the current package only under the following finite record condition: the
+package contains a dated check of the official call page and linked submission
+style page, the record gives the checked URLs and route rules, and the upload is
+made either on that checked rule state or after a later record with the same
+fields has replaced it.  A dated historical check by itself is not a certificate
+for a later upload-time venue state.
+\end{proposition}
+
+\begin{proof}
+The venue gate uses facts that are external to the manuscript: route class,
+length, review status, proceedings boundary, deadline, submission form, style
+interface, and software/data-access instruction.  These facts can change outside
+the submitted source, so the gate cannot be discharged by a stale table row.
+The displayed record supplies a finite certificate surface for the current
+package: two official URLs, a date, observed route facts, and the boundary that a
+later upload or conflicting form instruction triggers re-verification.  If the
+upload uses that recorded rule state, each venue-dependent row of
+Table~\ref{tab:venue-submission-pack-gate} is checked against a dated official
+surface.  If the upload occurs after a change, or without a replacement record,
+at least one external premise of Proposition~\ref{prop:venue-submission-pack-gate}
+is no longer certified by the package; the venue row is therefore not accepted.
+This proves the criterion and connects the fresh record to the local readiness
+gate.\qed
+\end{proof}
 
 \begin{table}
 \caption{Bounded venue-submission pack gate for the current route.}
@@ -1448,7 +1484,7 @@ They are inputs to a local submission-pack readiness check only.
 \scriptsize
 \begin{tabularx}{\linewidth}{p{0.19\linewidth}p{0.26\linewidth}X p{0.18\linewidth}}
 \toprule
-Gate item & Live venue rule checked on 2026-06-04 & Required local witness & Boundary \\
+Gate item & Fresh venue rule checked on 2026-06-04 & Required local witness & Boundary \\
 \midrule
 Route class & CICM 2026 presentation-only work-in-progress papers are two pages plus bibliography and are not Springer-proceedings papers & \path{submission_abstract.tex} is the primary artifact; \path{main.tex} and \path{review_bundle/} are support materials & no claim of acceptance or proceedings publication \\
 Formatting & submissions use Springer LNCS style files; the presentation route inherits the CICM submission interface & document class \path{llncs}; bibliography style \path{splncs04}; local compile artifacts \path{submission_abstract.pdf} and \path{submission_abstract.bbl} & local formatting readiness only \\
@@ -1966,6 +2002,13 @@ submission package therefore has one primary artifact and one supplemental
 artifact role: the short note states the interface, while this supplement and the
 bundle provide the bounded source, case-path, and bibliography evidence.
 
+As of the 2026-06-04 packaging pass, this manuscript does not claim that
+\path{review_bundle/} has been replaced by a DOI-bearing or institutional
+archive.  The accepted support surface is therefore the exact directory
+\path{review_bundle/} supplied with the submission.  A later archive replacement
+is permitted only if it carries a final per-file SHA-256 digest manifest for the
+certificate files below and satisfies Proposition~\ref{prop:review-bundle-archive-equivalence}.
+
 \begin{table}
 \caption{Finite archive-equivalence criterion for replacing the review bundle.}
 \label{tab:review-bundle-archive-equivalence}
@@ -2032,12 +2075,39 @@ the archive is not accepted, and the support surface must be the exact uploaded
 \path{review_bundle/} directory.\qed
 \end{proof}
 
+\begin{corollary}[Exact-bundle or final-digest dichotomy]
+\label{cor:exact-bundle-or-final-digest}
+For the current package there are exactly two accepted supplemental-support
+modes.  Either the submission supplies the exact \path{review_bundle/} directory,
+in which case no archive-replacement digest claim is made, or a replacement
+archive is supplied together with a final file list and SHA-256 digest for every
+certificate file in Table~\ref{tab:review-bundle-archive-equivalence}.  Without
+that final digest record, a replacement archive is not an accepted support
+surface for any bundle-dependent claim in this manuscript.
+\end{corollary}
+
+\begin{proof}
+Proposition~\ref{prop:review-bundle-archive-equivalence} states that any archive
+replacement must satisfy all five rows of
+Table~\ref{tab:review-bundle-archive-equivalence}.  The finite-file-list and
+content-hash rows require a complete list of certificate files and a matching
+SHA-256 digest for each listed file at final packaging time.  Therefore an
+archive without that final digest record fails the table and is rejected.  If no
+replacement archive is supplied, the same proposition says that the only accepted
+support surface is the exact uploaded \path{review_bundle/} directory.  These two
+cases are disjoint because one submits the directory as the support surface and
+the other substitutes an archival object certified by hashes; they are exhaustive
+because every support surface named here is either the directory or a
+replacement.\qed
+\end{proof}
+
 \begin{proposition}[Review-bundle availability condition]
 \label{prop:review-bundle-availability-condition}
 The support claim made by the current presentation package is conditional on the
 availability of \path{review_bundle/} as a supplemental upload or an archival
 equivalent in the sense of
-Proposition~\ref{prop:review-bundle-archive-equivalence}.  If the bundle is supplied with the
+Proposition~\ref{prop:review-bundle-archive-equivalence}, with the dichotomy made
+explicit in Corollary~\ref{cor:exact-bundle-or-final-digest}.  If the bundle is supplied with the
 submission, then the source-interface, case-snapshot, primary-claim inventory,
 submission-interface map, and verifier-record claims are reviewable at the
 path-verified evidence level stated in this supplement.  If the bundle is not
