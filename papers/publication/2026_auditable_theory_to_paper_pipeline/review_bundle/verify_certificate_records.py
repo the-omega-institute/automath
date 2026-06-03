@@ -8,6 +8,7 @@ it does not rerun Lean, publication daemons, or Rule110 dynamic artifacts.
 from __future__ import annotations
 
 import json
+import platform
 import sys
 from pathlib import Path
 
@@ -65,16 +66,11 @@ def verify_records() -> list[str]:
     required_pass_fields = set(schema["pass_record_required_fields"])
     accepted_patterns = schema["accepted_artifact_patterns"]
 
-    expected_manifest_keys = {
-        "certificate_schema",
-        "current_package_pass_records",
-        "submission_interface_map",
-        "primary_claim_inventory",
-        "verifier_script",
-        "verifier_run_log",
-    }
-    for key in sorted(expected_manifest_keys):
+    expected_manifest_files = schema["manifest_required_files"]
+    for key, expected_path in sorted(expected_manifest_files.items()):
         ensure(key in manifest, f"manifest missing key {key}", errors)
+        ensure(manifest.get(key) == expected_path, f"manifest key {key} must equal {expected_path}", errors)
+        ensure((ROOT / expected_path).exists(), f"manifest path for {key} does not exist: {expected_path}", errors)
 
     entries = ledger.get("entries", [])
     ensure(len(entries) == 6, "current package ledger must contain entries a1-a6", errors)
@@ -136,6 +132,12 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
     print("certificate verification passed")
+    print("command: python review_bundle/verify_certificate_records.py")
+    print("source_commit: local working tree for current presentation package")
+    print(f"environment: Python {platform.python_version()} on {platform.system()} {platform.release()}")
+    print("exit_code: 0")
+    print("log_path: review_bundle/certificate_verification_run.log")
+    print("checked: REVIEW_BUNDLE_MANIFEST.json manifest_required_files")
     print("checked: certificate_schema.json")
     print("checked: current_package_pass_records.json entries a1-a6")
     print("checked: submission_interface_map.json rows sim1-sim4")
