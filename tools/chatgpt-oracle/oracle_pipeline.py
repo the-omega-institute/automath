@@ -1643,6 +1643,17 @@ def is_oracle_response_valid(response: str) -> bool:
         return False
     cleaned = response.strip()
     lower = cleaned.lower()
+    prompt_echo_markers = (
+        "agent context contract",
+        "context_mode: fresh_review",
+        "semantics: clean-room review",
+        "start your reply with a single line exactly",
+    )
+    if (
+        any(marker in lower for marker in prompt_echo_markers)
+        and "overall verdict: <accept|minor revision|major revision|reject>" in lower
+    ):
+        return False
     # Structural anchors expected in a substantive review
     anchors = ("verdict", "revision", "blocker", "medium", "accept",
                "reject", "issue", "referee")
