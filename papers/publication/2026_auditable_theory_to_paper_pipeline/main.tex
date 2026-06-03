@@ -168,12 +168,14 @@ For the pinned source path
 \path{D:/omega/newmath/papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
 at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b},
 Table~\ref{tab:source-interface-record} is the complete imported interface used
-by this paper.  Its extraction certificate is: manual line-range audit against
-the pinned file, mirrored in \path{source_interface_record.json}, extraction date
-2026-06-01, and summary mode ``bounded paraphrase'' rather than replacement of
-the full source statements.  Consequently every use below of an imported
-discovery-gate label is limited to the corresponding row's label, path, commit,
-line range, and bounded paraphrase.
+by this paper at the manual path-verified level.  Its extraction certificate is:
+manual line-range audit against the pinned file, mirrored in
+\path{source_interface_record.json}, extraction date 2026-06-01, and summary
+mode ``bounded paraphrase'' rather than replacement of the full source
+statements.  Consequently every use below of an imported discovery-gate label is
+limited to the corresponding row's label, path, commit, line range, and bounded
+paraphrase unless an explicitly named executable finite record comparison is
+also invoked.
 \end{lemma}
 
 \begin{proof}
@@ -278,6 +280,53 @@ claim: the script does not interpret or prove the imported theorem statements.
 Thus the executable comparison strengthens the earlier manual audit into a
 reproducible finite-record certificate while preserving the bounded-paraphrase
 and non-semantic boundary.\qed
+\end{proof}
+
+\begin{proposition}[Source-interface evidence-level separation]
+\label{prop:source-interface-evidence-level-separation}
+Let $r$ be any accepted manuscript claim whose discovery component cites one of
+the imported labels in Table~\ref{tab:source-interface-record}.  If $r$ uses only
+Lemma~\ref{lem:source-interface-extraction-correctness}, then the imported-label
+premise of $r$ is accepted only at the manual path-verified bounded-paraphrase
+level.  If $r$ additionally cites
+Proposition~\ref{prop:source-interface-record-file-consistency}, then the same
+premise is upgraded only by the finite record comparisons listed in that
+proposition: table--JSON equality, manifest agreement, snapshot digest and line
+count agreement, and label containment in the declared ranges.  In neither case
+does the premise become a fresh Lean/BEDC rebuild, a proof of the semantic truth
+of the imported source theorem, or an unbounded restatement of the source text.
+Consequently Theorem~\ref{thm:publication-safety-interface} can use the imported
+discovery-gate spine only through these two explicitly separated evidence
+levels.
+\end{proposition}
+
+\begin{proof}
+The operational evidence level of a cited source-interface premise is determined
+by the record fields actually available for that premise.  Lemma~\ref{lem:source-interface-extraction-correctness}
+supplies a pinned path, commit, extraction date, label, line range, and bounded
+summary for each of the ten imported labels, and its proof states that no later
+use may exceed that bounded summary.  Therefore a claim using only the lemma has
+exactly the manual path-verified bounded-paraphrase evidence listed there.
+
+Proposition~\ref{prop:source-interface-record-file-consistency} adds a different
+finite record: the verifier parses the manuscript table, the JSON mirror, the
+manifest's pinned-source-snapshot record, and the bundled source snapshot, and it
+checks the six finite conditions enumerated in its proof.  Those checks upgrade
+the source-interface premise only with respect to record-file consistency and
+range containment.  The same proposition expressly excludes semantic truth of
+the imported theorems and preserves the bounded-paraphrase restriction.  No row
+in Table~\ref{tab:source-interface-record}, no field of
+\path{source_interface_record.json}, and no command-boundary row records a fresh
+Lean/BEDC rebuild or a semantic source-theorem verifier.  Hence an imported-label
+premise has exactly the two evidence levels stated in the proposition and no
+stronger one.
+
+Theorem~\ref{thm:publication-safety-interface} requires a discovery-gate source
+interface with recorded evidence surface and boundary.  Applying the preceding
+paragraphs to each of its imported discovery-gate citations gives precisely the
+manual path-verified interface, optionally strengthened by the finite executable
+record comparison, and forbids promotion of that interface into an unrecorded
+semantic or rebuild claim.\qed
 \end{proof}
 
 \section{Operational interface}
@@ -805,9 +854,11 @@ that every advisory output is demoted unless the deterministic gate set
 $\Gamma$ for its claim kind passes; that discovery claims are checked through
 the pinned discovery-gate interface certified by
 Lemma~\ref{lem:source-interface-extraction-correctness} and
-Propositions~\ref{prop:reviewable-source-snapshot-interface} and
-\ref{prop:source-interface-record-file-consistency}, in particular its executable
-record comparison for the pipeline safety and main pipeline theorem labels; and
+Propositions~\ref{prop:reviewable-source-snapshot-interface},
+\ref{prop:source-interface-record-file-consistency}, and
+\ref{prop:source-interface-evidence-level-separation}, in particular the
+separated manual/path-verified and executable finite-record levels for the
+pipeline safety and main pipeline theorem labels; and
 that no inactive intake seed is
 treated as publication work without human promotion.  Then, conditional on those
 workflow assumptions, any accepted load-bearing claim in the manuscript admits a
@@ -905,7 +956,7 @@ interface follows.\qed
 \toprule
 Entry & Accepted load-bearing claim & Claim-kind set $K$ & Acceptance surface and finite pass record \\
 \midrule
-$a_1$ & The imported discovery-gate source interface is the bounded interface used by this paper & traceability & Table~\ref{tab:source-interface-record}, \path{source_interface_record.json}, and the bundled source snapshot; pass record from Lemma~\ref{lem:source-interface-extraction-correctness} and Propositions~\ref{prop:reviewable-source-snapshot-interface}, \ref{prop:source-interface-record-file-consistency} \\
+$a_1$ & The imported discovery-gate source interface is the bounded interface used by this paper & traceability & Table~\ref{tab:source-interface-record}, \path{source_interface_record.json}, and the bundled source snapshot; pass record from Lemma~\ref{lem:source-interface-extraction-correctness} and Propositions~\ref{prop:reviewable-source-snapshot-interface}, \ref{prop:source-interface-record-file-consistency}, \ref{prop:source-interface-evidence-level-separation} \\
 $a_2$ & The current presentation-only route has a finite submission package and review bundle & route, submission & \path{submission_abstract.tex}, \path{main.tex}, \path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md}, and \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}; pass record from the package statement and the submission-interface checklist \\
 $a_3$ & Newmath intake isolation supports only the bounded lesson that intake seeds are not active papers before promotion & route & Intake-seed path and active-paper detector path in the case catalogue; promotion-gate pass record from Proposition~\ref{prop:path-complete-case-witnesses} and Table~\ref{tab:case-witnesses} \\
 $a_4$ & Upper-fibers overlap supports only the bounded lesson that overlapping submitted routes are blocked until a recorded next action & route, submission & Route identity, submitted sibling, overlap ledgers, and board state in the case catalogue; overlap and submission-state pass records from Proposition~\ref{prop:path-complete-case-witnesses} and Table~\ref{tab:case-witnesses} \\
@@ -1959,3 +2010,4 @@ promotion decisions.
 \bibliography{references}
 
 \end{document}
+
