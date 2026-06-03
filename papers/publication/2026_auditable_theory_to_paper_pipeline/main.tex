@@ -1435,6 +1435,83 @@ publication-safety, and review-artifact paragraphs.  The checklist is the
 submission contract; it replaces any need to treat this supplement's metadata
 lemmas as part of the two-page presentation claim.
 
+The live venue facts used for the following gate were checked on 2026-06-04
+against the official CICM 2026 call for papers at
+\url{https://cicm-conference.org/2026/cicm.php?event=&menu=cfp} and the Springer
+LNCS author-guideline page linked from that call at
+\url{https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines}.
+They are inputs to a local submission-pack readiness check only.
+
+\begin{table}
+\caption{Bounded venue-submission pack gate for the current route.}
+\label{tab:venue-submission-pack-gate}
+\scriptsize
+\begin{tabularx}{\linewidth}{p{0.19\linewidth}p{0.26\linewidth}X p{0.18\linewidth}}
+\toprule
+Gate item & Live venue rule checked on 2026-06-04 & Required local witness & Boundary \\
+\midrule
+Route class & CICM 2026 presentation-only work-in-progress papers are two pages plus bibliography and are not Springer-proceedings papers & \path{submission_abstract.tex} is the primary artifact; \path{main.tex} and \path{review_bundle/} are support materials & no claim of acceptance or proceedings publication \\
+Formatting & submissions use Springer LNCS style files; the presentation route inherits the CICM submission interface & document class \path{llncs}; bibliography style \path{splncs04}; local compile artifacts \path{submission_abstract.pdf} and \path{submission_abstract.bbl} & local formatting readiness only \\
+Supplement access & relevant software or data must be accessible for reproduction; support records may be supplemental rather than primary text & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, \path{review_bundle/submission_interface_map.json}, and the archive-equivalence criterion of Proposition~\ref{prop:review-bundle-archive-equivalence} & availability condition, not repository DOI or dynamic service \\
+Metadata and bibliography & author/title metadata and bibliography must travel with the submitted primary artifact & title, authors, institutes, emails, bibliography command, and \path{references.bib} are present in the source package & metadata-readiness only \\
+Deadline route & presentation-only deadline recorded by the venue is 2026-06-15 & the package can be checked before upload against this finite table and Proposition~\ref{prop:venue-submission-pack-gate} & no statement that upload occurred \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{proposition}[Venue-submission pack gate]
+\label{prop:venue-submission-pack-gate}
+Assume that, at final upload time, the CICM presentation-only call still has the
+venue rules listed in Table~\ref{tab:venue-submission-pack-gate}.  Then the
+current package is submission-pack ready for this route exactly when the finite
+gate in that table passes: the primary artifact is the two-page-plus-bibliography
+source \path{submission_abstract.tex}, the LNCS-style source and bibliography
+files are present, the review bundle is either uploaded or replaced by an archive
+equivalent in the sense of
+Proposition~\ref{prop:review-bundle-archive-equivalence}, and the title/author
+metadata remains in the primary source.  This gate is a local readiness
+certificate only; it does not assert EasyChair upload, reviewer approval,
+acceptance, camera-ready approval, or proceedings publication.
+\end{proposition}
+
+\begin{proof}
+The table has five rows, so the check is finite.  The route-class row compares
+the venue's presentation-only rule with the local role separation already fixed
+by the checklist: \path{submission_abstract.tex} is primary, while
+\path{main.tex} and \path{review_bundle/} are support artifacts.  If the primary
+artifact is not the short source, or if the support artifacts are presented as a
+second primary proceedings paper, this row fails.  If it passes, the row proves
+only compatibility with the presentation-only artifact split, because its
+boundary column expressly excludes acceptance and proceedings-publication
+claims.
+
+The formatting row is a syntactic source check.  The manuscript begins with the
+LNCS class \path{llncs}; the package uses \path{splncs04} for the bibliography;
+and the local compiled short artifact and bibliography files are present as
+\path{submission_abstract.pdf} and \path{submission_abstract.bbl}.  These are
+finite path and token checks.  They do not inspect Springer production systems,
+nor do they prove that the venue will accept the formatting; hence the row gives
+local formatting readiness only.  The supplement-access row is finite because it
+requires either the named bundle manifest and interface-map files or the finite
+archive-equivalence data of
+Proposition~\ref{prop:review-bundle-archive-equivalence}.  The metadata and
+bibliography row checks the title, author block, institute/email block,
+bibliography command, and \path{references.bib}; it does not certify external
+metadata entry.  The deadline row records only that the package can be checked
+against the venue date before upload and does not assert that an upload was made.
+
+If all rows pass, each venue-facing submission claim used by this manuscript has
+a finite witness and an explicit negative boundary, so the package is ready in
+the limited local sense stated in the proposition.  Conversely, if any row fails,
+one of the finite route-class, formatting, supplement-access, metadata,
+bibliography, or deadline witnesses required by the table is absent or stale;
+there is then no local certificate for submission-pack readiness.  The final
+sentence follows from the boundary column and from
+Definition~\ref{def:operational-acceptance-interface}: external upload,
+acceptance, camera-ready approval, and publication are editorial or venue events,
+not local finite-record consequences of this gate.\qed
+\end{proof}
+
 \begin{proposition}[Submission artifact role separation]
 \label{prop:submission-artifact-role-separation}
 For the current presentation-only route, the primary artifact, long technical
@@ -1889,11 +1966,78 @@ submission package therefore has one primary artifact and one supplemental
 artifact role: the short note states the interface, while this supplement and the
 bundle provide the bounded source, case-path, and bibliography evidence.
 
+\begin{table}
+\caption{Finite archive-equivalence criterion for replacing the review bundle.}
+\label{tab:review-bundle-archive-equivalence}
+\scriptsize
+\begin{tabularx}{\linewidth}{p{0.25\linewidth}X p{0.25\linewidth}}
+\toprule
+Criterion & Required data in the archive replacement & Failure effect \\
+\midrule
+Manifest identity & a root record byte-identical to \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, except for an added archive URL or DOI field that is not used by the verifier & replacement rejected \\
+Bundle version & the identity tuple \path{(supplemental_review_bundle, 2026-06-01, 3fb3d6a0641767388a401883062aa522ea0b397b)} from the manifest fields \path{bundle_kind}, \path{created}, and \path{public_interface.public_source_commit} & replacement rejected \\
+Finite file list & exactly the regular files named by the manifest, submission-interface map, source-snapshot record, case-snapshot rows, verifier-script fields, and verifier-log fields; generated cache files such as \path{__pycache__/} are excluded & replacement rejected \\
+Content hashes & a SHA-256 digest for each file in that finite file list, equal to the digest of the corresponding file in the submitted \path{review_bundle/} at final packaging time & replacement rejected \\
+Path semantics & every path in the archive preserves the same relative name below \path{review_bundle/} and no certificate row is retargeted to a different file & replacement rejected \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{proposition}[Review-bundle archive-equivalence criterion]
+\label{prop:review-bundle-archive-equivalence}
+An archival replacement for \path{review_bundle/} is accepted by this manuscript
+only if it satisfies all rows of
+Table~\ref{tab:review-bundle-archive-equivalence}.  Equivalently, it must have
+the same manifest identity, the same bundle-version tuple, the same finite
+certificate file list, the same SHA-256 content digests at final packaging time,
+and the same relative path semantics as the submitted \path{review_bundle/}.
+If no such hash-and-manifest archive is supplied, the only accepted support
+surface is the exact \path{review_bundle/} directory uploaded with the
+submission.
+\end{proposition}
+
+\begin{proof}
+The manifest identity criterion fixes the root record that all bundle-dependent
+claims cite: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Allowing only an
+additional archive locator field prevents the archive from silently changing the
+certificate schema, pass-record ledger, submission-interface map,
+primary-claim inventory, verifier scripts, verifier logs, pinned-source
+snapshot, case-evidence rows, or submission-artifact declaration.  The bundle
+version is finite because the current manifest carries the three displayed
+fields \path{bundle_kind}, \path{created}, and
+\path{public_interface.public_source_commit}; equality of the tuple rules out
+substituting a different support bundle or a different pinned source commit.
+
+The finite file-list criterion is obtained by following only the manifest and
+the machine-readable interface records already used in the proofs: certificate
+schema, current pass records, primary-claim inventory, submission-interface map,
+verifier scripts and logs, source snapshot, and the case snapshots named in the
+case-evidence rows.  This traversal is finite because each record is a finite
+JSON or manuscript table row and because generated interpreter caches are not
+certificate surfaces.  The content-hash criterion then gives a byte-level test
+for every file on that finite list.  If a file is omitted, added as a replacement
+for a named certificate surface, or changed bytewise, either the file-list row or
+the SHA-256 row fails.  The path-semantics row prevents a hash-correct file from
+being moved under a new relative name that would make manuscript paths point to a
+different object.
+
+When all five rows pass, every path used by a bundle-dependent theorem,
+proposition, table row, verifier record, or manifest row denotes the same bytes
+under the same relative name and under the same root manifest identity as in the
+submitted \path{review_bundle/}.  Thus the archive is equivalent for exactly the
+finite certificate checks made in this paper.  When any row fails, a reviewer has
+a finite bad subrecord: the changed manifest identity, changed version tuple,
+file-list discrepancy, hash mismatch, or path-retargeting witness.  In that case
+the archive is not accepted, and the support surface must be the exact uploaded
+\path{review_bundle/} directory.\qed
+\end{proof}
+
 \begin{proposition}[Review-bundle availability condition]
 \label{prop:review-bundle-availability-condition}
 The support claim made by the current presentation package is conditional on the
 availability of \path{review_bundle/} as a supplemental upload or an archival
-equivalent carrying the same finite records.  If the bundle is supplied with the
+equivalent in the sense of
+Proposition~\ref{prop:review-bundle-archive-equivalence}.  If the bundle is supplied with the
 submission, then the source-interface, case-snapshot, primary-claim inventory,
 submission-interface map, and verifier-record claims are reviewable at the
 path-verified evidence level stated in this supplement.  If the bundle is not
@@ -1920,10 +2064,11 @@ artifact boundary.  The definition of local checkability requires every named
 path, manifest row, or log to lie in the submitted artifact, the supplemental
 review bundle, or an explicit path-verified historical boundary.  No DOI or
 institutional archive identifier is claimed in this package, so an omitted bundle
-has no replacement surface unless an archival equivalent with the same finite
-records is provided.  In that case the affected claims fail the evidence-surface
-check of Proposition~\ref{prop:finite-certificate-schema-verifier}.  What remains
-is only the public repository citation at the pinned commit and the short note's
+has no replacement surface unless an archival equivalent satisfying
+Proposition~\ref{prop:review-bundle-archive-equivalence} is provided.  If neither
+surface is present, the affected claims fail the evidence-surface check of
+Proposition~\ref{prop:finite-certificate-schema-verifier}.  What remains is only
+the public repository citation at the pinned commit and the short note's
 architectural thesis, not the bundle-backed support certification.\qed
 \end{proof}
 
