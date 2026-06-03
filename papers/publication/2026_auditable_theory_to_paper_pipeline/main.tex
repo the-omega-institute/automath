@@ -32,7 +32,9 @@ directories, AI review loops, deterministic gates, and human promotion
 decisions.  Its central rule is that AI output is advisory: load-bearing
 mathematical and submission claims must be tied, at the appropriate evidence
 level, to source paths, command logs, deterministic checks, and human-approved
-promotion.  Four case studies
+promotion.  The safety theorem is conditional: it proves local certificate
+checkability from gate-sound records, not external gate soundness, Lean
+correctness, artifact semantic validity, or venue acceptance.  Four case studies
 illustrate the gates: intake isolation, overlap/submitted blocking,
 fake-extension rejection, and artifact-limitation disclosure.
 \end{abstract}
@@ -55,8 +57,8 @@ deterministic gates decide what may be treated as load-bearing evidence.  The
 pattern is instantiated in local BEDC and automath workspaces.
 The mathematical content of the note is the explicit safety interface for this
 workflow: definitions for gate vocabulary, a pinned imported theorem spine, a
-proved publication-safety theorem, and witness records for the four required
-cases.  The CICM presentation-only submission uses the short artifact plus
+proved conditional publication-safety theorem, an evidence-level overclaim
+obstruction theorem, and witness records for the four required cases.  The CICM presentation-only submission uses the short artifact plus
 bibliography; this supplement and \path{review_bundle/} are evidence-support
 materials rather than competing primary submissions.
 
@@ -278,7 +280,8 @@ An \emph{acceptance entry} is a manuscript or submission-ledger record that mark
 a candidate claim as usable in the publication-facing argument.  \emph{Accepted
 work} is the subset of candidate claims with such an entry.  This is a status
 notion only: the definition records that an editorial acceptance entry exists,
-but it does not by itself assert that the entry is gate-sound.  A pipeline is
+but it does not by itself assert external editorial acceptance or that the entry
+is gate-sound.  A pipeline is
 \emph{gate-sound for acceptance} when each acceptance entry records the claim
 kind, the evidence surface, the evidence level, and a pass record for every gate
 in $\Gamma$ assigned to that claim kind, and when a route-boundary entry also
@@ -395,11 +398,14 @@ assertion is made.
 \begin{proposition}[Finite certificate schema verifier]
 \label{prop:finite-certificate-schema-verifier}
 For every load-bearing manuscript claim $c$ whose component kinds lie in the
-seven-kind domain, $V(c,\mathcal C)$ is a finite, prose-insensitive verifier for
-the declared publication certificate.  If $V$ accepts, then $\mathcal C(c)$ is
-locally checkable at exactly its declared evidence level.  If $V$ rejects, then a
-reviewer can extract a finite bad subrecord consisting of the first failed schema
-check and the fields on which that check depends.
+seven-kind domain, $V(c,\mathcal C)$ is a finite, prose-insensitive
+record-schema verifier for the declared publication certificate.  If $V$ accepts,
+then $\mathcal C(c)$ is locally checkable at exactly its declared evidence level.
+This is certificate-record verification only: it checks finite record shape,
+dispatch, evidence pointers, and command-boundary discipline, not end-to-end
+external semantic validation of the referenced artifacts or source theory.  If
+$V$ rejects, then a reviewer can extract a finite bad subrecord consisting of the
+first failed schema check and the fields on which that check depends.
 \end{proposition}
 
 \begin{proof}
@@ -564,7 +570,9 @@ field $\ell$ and boundary field $B$ make the same lookup finite for evidence
 strength: at path-verified level the certificate must name the source, artifact,
 pinned commit, local publication path, or gate-decision surface used by the
 claim; at command-run level it must additionally name command, source commit,
-environment, exit code, and log path.  The human-promotion field $H$ separates
+environment, exit code, and log path.  Neither lookup interprets artifact
+semantics, reruns Lean, or predicts editorial outcomes; those are stronger claim
+kinds or stronger evidence levels that require their own records.  The human-promotion field $H$ separates
 the route boundary from all other gates: it is either a concrete promotion
 record or a finite marker that no such boundary is crossed.  Finally, when
 discovery lies in $K$, the discovery field $D$ names the pinned source-interface
@@ -850,7 +858,10 @@ rows the claim-kind set does not contain discovery, so $D_i$ is absent.  Finally
 the boundary field $B_i$ records the same limitation in every row: the package is
 using path-verified evidence, not command-run evidence, unless the command,
 source commit, environment, exit code, and log path are explicitly recorded.
-Thus each row determines a locally checkable publication certificate
+Consequently the ledger is historical and path-verified; it does not assert a
+fresh Lean build, daemon pass, full-source rerun, Rule110 or GroundCompiler
+rerun, artifact-suite validation, or external venue acceptance.  Thus each row
+determines a locally checkable publication certificate
 \(\mathcal C(a_i)\).
 
 It remains only to see that the ledger is complete for the current-package
@@ -858,11 +869,13 @@ instantiation.  Corollary~\ref{cor:current-package-path-verified-instantiation}
 uses no unlisted positive claim: its source-interface premise is $a_1$, its
 package premise is $a_2$, and its four bounded case-study premises are
 $a_3$--$a_6$.  Any proposed stronger reading, such as a fresh full-source rebuild,
-publication-daemon run, Rule110 dynamic rerun, or unledgered discovery claim,
-has no acceptance entry in Table~\ref{tab:current-acceptance-ledger} and also
-violates the boundary field in Table~\ref{tab:current-certificate-ledger}.  By
-Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, such a reading is
-therefore rejected by a finite obstruction subrecord rather than accepted by this
+publication-daemon run, Rule110 dynamic rerun, artifact-suite semantic
+validation, unledgered discovery claim, or external venue acceptance, has no
+acceptance entry in Table~\ref{tab:current-acceptance-ledger} and also violates
+the boundary field in Table~\ref{tab:current-certificate-ledger}.  By
+Theorems~\ref{thm:finite-certificate-obstruction-skeleton} and
+\ref{thm:evidence-level-overclaim-obstruction}, such a reading is therefore
+rejected by a finite obstruction subrecord rather than accepted by this
 package.\qed
 \end{proof}
 
@@ -1319,8 +1332,88 @@ therefore certifies exactly the bounded contextual Lean interface and no fresh
 Lean build or full-source axiom audit.\qed
 \end{proof}
 
+\begin{theorem}[Evidence-level overclaim obstruction]
+\label{thm:evidence-level-overclaim-obstruction}
+Fix the certificate schema, dispatch function, and evidence-level vocabulary of
+this paper.  Let $c$ be a load-bearing claim whose accepted certificate has
+level path-verified and whose boundary field $B$ records that no command-run
+assertion is made.  Then every stronger reading of $c$ that asserts any of the
+following additional conclusions is rejected by the finite schema verifier:
+\begin{enumerate}
+\item external gate soundness for an arbitrary implementation of the workflow;
+\item Lean correctness, full-source rebuild success, or axiom-purity beyond the
+recorded formal-source gate fields;
+\item end-to-end external semantic validity of artifact data beyond the finite
+manifest and evaluator surfaces named in $E$ and $R$;
+\item a fresh daemon run, full-source rerun, Rule110 or GroundCompiler rerun, or
+journal or workshop acceptance; or
+\item bundle-backed reviewability when neither \path{review_bundle/} nor an
+archival equivalent carrying the same finite records is in the submitted
+artifact boundary.
+\end{enumerate}
+More precisely, such a stronger reading has an inclusion-minimal bad subrecord of
+one of the five types in
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  Hence the accepted
+claim is rigid at its declared evidence level: path-verified certificate records
+cannot be promoted by prose into command-run evidence, semantic validation,
+formal-source correctness, or external acceptance.
+\end{theorem}
+
+\begin{proof}
+Let $c^+$ be one of the stronger readings.  It has the same displayed manuscript
+sentence as $c$ but a larger claim-kind set, a stronger evidence level, or a
+larger submitted-artifact boundary requirement.  The verifier does not inspect
+rhetorical emphasis; by Proposition~\ref{prop:finite-certificate-schema-verifier}
+it inspects only the finite tuple
+$\mathcal C=(K,\ell,E,H,R,D,B)$ and the finite dispatch table.
+
+If $c^+$ asserts external gate soundness for an arbitrary implementation, then
+it is not merely the conditional theorem-interface claim accepted by
+Theorem~\ref{thm:publication-safety-interface}.  It needs pass records showing
+that the relevant implementation ran every gate in
+$\bigcup_{k\in K}\Gamma(k)$.  Those records are not supplied by the
+path-verified certificate for $c$, so the minimal bad subrecord is a missing
+pass-record obstruction of type~2.  If $c^+$ asserts Lean correctness,
+full-source rebuild success, or axiom-purity, then it is a formal-source or
+command-run claim.  Proposition~\ref{prop:formal-source-gate-instantiation}
+identifies the required build, axiom-purity, and command-run fields; when they
+are absent, the minimal bad subrecord is type~2 for missing formal-source gates
+or type~5 for command-run escalation.
+
+If $c^+$ asserts end-to-end semantic validity of artifacts beyond the named
+manifest and evaluator surfaces, then it has an artifact component not covered
+by the finite status and limitation-ledger records in $R$.  The current
+acceptance and certificate ledgers display only the bounded artifact row $a_6$:
+its evidence surface is the Rule110 status file, limitation ledgers,
+paper-data reference, and review-bundle manifest, and its boundary field says
+that no fresh artifact rerun is asserted.  A stronger artifact claim therefore
+lacks an assigned artifact pass record, giving type~2,
+or asserts a fresh evaluator run without command-run fields, giving type~5.  The
+same argument covers a fresh daemon run, full-source rerun, and Rule110 or
+GroundCompiler rerun: each is a command-run or artifact-strength escalation and
+is rejected by the missing gate or command-run boundary fields.
+
+If $c^+$ asserts journal or workshop acceptance, then its acceptance-entry field
+would have to contain an editorial or venue acceptance record.  The operational
+notion of acceptance entry in this paper is internal and submission-local; the
+current ledger contains no external editorial acceptance row.  Thus the stronger
+reading either lacks the required route/submission pass record, giving type~2,
+or lacks the relevant external evidence surface, giving type~1.  Finally, if a
+bundle-backed claim is made while no review bundle or archival equivalent lies
+inside the submitted artifact boundary, the evidence item named by the
+certificate is absent from $E$ at the declared level, so the minimal bad
+subrecord is type~1.  These cases exhaust the displayed stronger readings.
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} then gives the stated
+classification and proves rigidity at the declared evidence level.\qed
+\end{proof}
+
 \begin{proposition}[Finite-witness manifest interface]
 \label{prop:finite-witness-manifest-interface}
+This proposition is an instance of
+Theorem~\ref{thm:evidence-level-overclaim-obstruction}: it records the finite
+artifact schema that may be checked, and it rejects the stronger readings that
+would require semantic validation or fresh rerun logs.
+
 For the current presentation package, the finite-witness assertions in rows
 \path{pc5}, \path{pc6}, and \path{pc11} of
 Table~\ref{tab:primary-claim-inventory} have the following bounded interface.
