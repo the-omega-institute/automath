@@ -347,6 +347,23 @@ also records the command, source commit, environment, exit code, and log path
 for a fresh run.  This long technical supplement uses path-verified architecture
 and case evidence unless explicitly marked command-run.
 
+A \emph{publication certificate} for a load-bearing claim $c$ is the finite
+record
+\[
+\mathcal C(c)=(K,\ell,E,H,R,D,B).
+\]
+Here $K$ is the nonempty finite set of claim kinds carried by $c$, $\ell$ is the
+evidence level, $E$ is the evidence surface, $H$ is either a human-promotion
+record or the marker that $c$ does not cross the intake-to-publication boundary,
+$R$ gives one pass record, with its cited evidence item in $E$, for each gate in
+$\bigcup_{k\in K}\Gamma(k)$, $D$ is present exactly when $K$ contains discovery
+and then names the pinned discovery-gate source-interface rows used for the
+claim, and $B$ records either the command-run fields or the explicit boundary
+that no command-run assertion is made.  A certificate is \emph{locally
+checkable} when these finite fields are present and every path, manifest row, or
+log named by a field lies in the submitted artifact, the supplemental review
+bundle, or the explicit path-verified historical boundary.
+
 \begin{proposition}[Deterministic claim-kind dispatch]
 \label{prop:claim-kind-dispatch}
 For every load-bearing manuscript claim whose kind lies in the seven-kind domain
@@ -367,6 +384,75 @@ every gate assigned by $\Gamma$.  If a component gate of a mixed claim were
 omitted, then the projection of the claim to that component kind would lack its
 assigned pass record.  Such an entry would not be gate-sound.  Therefore accepted
 mixed claims in a gate-sound pipeline must pass every gate in the union.\qed
+\end{proof}
+
+\begin{theorem}[Finite certificate obstruction skeleton]
+\label{thm:finite-certificate-obstruction-skeleton}
+Let $c$ be a load-bearing manuscript claim whose component kinds lie in the
+seven-kind domain.  The local certificate fields above are sufficient to check,
+without inspecting generated prose, whether $c$ is safe for the
+presentation-only publication route at its declared evidence level.  More
+precisely, a locally checkable certificate for $c$ has no bad subrecord of the
+following five types:
+\begin{enumerate}
+\item missing evidence surface for the declared evidence level;
+\item missing pass record for a gate in $\bigcup_{k\in K}\Gamma(k)$;
+\item missing human-promotion record when the claim crosses from intake or
+source material into active publication work;
+\item discovery escalation without the pinned discovery-gate source-interface
+rows for certificate, ledger, lineage, and boundary witnesses; or
+\item command-run escalation without command, source commit, environment, exit
+code, and log path.
+\end{enumerate}
+Conversely, if an accepted claim fails the publication-safety interface, then it
+contains a minimal bad subrecord of one of these five types.  Thus every unsafe
+accepted claim has a finite, reviewer-checkable obstruction skeleton rather than
+an open-ended dependence on prose or agent intent.
+\end{theorem}
+
+\begin{proof}
+Let $K$ be the finite set of component kinds of $c$.  Since $K$ is a subset of
+the seven-kind domain, Proposition~\ref{prop:claim-kind-dispatch} gives a unique
+finite required gate set
+\[
+G(c)=\bigcup_{k\in K}\Gamma(k).
+\]
+The certificate field $R$ is indexed by exactly this finite set, so checking
+gate passage is a finite lookup: each $g\in G(c)$ must have a pass record and the
+record must cite an item of the finite evidence surface $E$.  The evidence-level
+field $\ell$ and boundary field $B$ make the same lookup finite for evidence
+strength: at path-verified level the certificate must name the source, artifact,
+pinned commit, local publication path, or gate-decision surface used by the
+claim; at command-run level it must additionally name command, source commit,
+environment, exit code, and log path.  The human-promotion field $H$ separates
+the route boundary from all other gates: it is either a concrete promotion
+record or a finite marker that no such boundary is crossed.  Finally, when
+discovery lies in $K$, the discovery field $D$ names the pinned source-interface
+rows certified by Lemma~\ref{lem:source-interface-extraction-correctness} and
+Propositions~\ref{prop:reviewable-source-snapshot-interface} and
+\ref{prop:source-interface-record-file-consistency}; these rows are finite and
+therefore locally checkable in the same way as the other certificate fields.
+Thus the certificate is sufficient for a reviewer to check safety by examining a
+finite list of fields and cited artifacts, not by trusting generated prose.
+
+It remains to prove that the displayed obstruction list is complete.  Suppose an
+accepted claim fails the publication-safety interface.  Choose an inclusion-minimal
+subrecord of its acceptance entry that still witnesses failure.  If the failure
+is that the claim is not tied to evidence at the declared evidence level, then
+the minimal subrecord is type~1.  If evidence exists but some required gate is
+unrecorded, the omitted gate belongs to $G(c)$ by the deterministic dispatch
+proposition, giving type~2.  If all required non-route evidence is present but
+the claim entered active publication state from intake or source material without
+human promotion, the missing field is $H$, giving type~3.  If the claim is a
+discovery claim and the problem is that statement-only, code-only, mechanical,
+compression-only, or classifier-scored output was accepted without the pinned
+certificate, ledger, lineage, and boundary interface, the missing discovery
+field is $D$, giving type~4.  The only remaining way to fail while the preceding
+fields are present is to assert command-run strength without the command-run
+fields required by the evidence-level definition; that is type~5.  These cases
+cover the definitions of acceptance entry, gate-soundness, human promotion,
+discovery routing, and evidence level.  Minimality removes irrelevant fields and
+leaves exactly one of the five obstruction skeletons.\qed
 \end{proof}
 
 \begin{proposition}[Gate-interface separation]
@@ -448,28 +534,35 @@ Propositions~\ref{prop:reviewable-source-snapshot-interface} and
 \ref{prop:source-interface-record-file-consistency}, in particular its pipeline
 safety and main pipeline theorem labels; and that no inactive intake seed is
 treated as publication work without human promotion.  Then, conditional on those
-workflow assumptions, any accepted
-load-bearing claim in the manuscript has a recorded evidence surface and a prior
-pass record for every gate required for its claim kind.  Moreover, accepted
-discovery claims inherit the bounded pinned source-interface consequences that
-statement-only, code-only, mechanical-expansion, and compression-only outputs are
-not accepted as discovery without the required certificate, ledger, and lineage
-witnesses.
+workflow assumptions, any accepted load-bearing claim in the manuscript admits a
+locally checkable publication certificate $\mathcal C(c)$ and therefore has a
+recorded evidence surface, a declared evidence boundary, and a prior pass record
+for every gate required for its claim kind.  Moreover, accepted discovery claims
+inherit the bounded pinned source-interface consequences that statement-only,
+code-only, mechanical-expansion, and compression-only outputs are not accepted as
+discovery without the required certificate, ledger, and lineage witnesses.  Any
+purported accepted claim without such finite certificate data is rejected by one
+of the five obstruction skeletons in
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
 \end{theorem}
 
 \begin{proof}
 Let $c$ be an accepted load-bearing claim in the manuscript.  The conclusion has
-three parts.  The first part is definitional: by the acceptance-entry hypothesis,
-$c$ has an entry with a claim kind, evidence surface, and evidence level, so the
-decision is attached to a source path, artifact path, command log, inventory, or
-witness record rather than to generated prose alone.  The second part is the
-workflow invariant supplied by gate-soundness for acceptance: the entry must also
-record a pass for every gate assigned by $\Gamma$.  This is the non-tautological
-condition checked by the pipeline interface, not a standalone assertion about
-unrecorded or currently inconsistent pipeline state.  The third part is
-the human-promotion boundary: if accepting $c$ crosses from intake or source
-material into daemon-visible publication work, the promotion assumption requires
-the human promotion evidence before publication-facing acceptance.
+three parts.  The first part constructs the certificate.  The acceptance-entry
+hypothesis supplies the claim-kind set $K$, evidence level $\ell$, and evidence
+surface $E$, so the decision is attached to a source path, artifact path,
+command log, inventory, or witness record rather than to generated prose alone.
+Gate-soundness supplies the pass-record field $R$ for every gate assigned by
+$\Gamma$.  If accepting $c$ crosses from intake or source material into
+daemon-visible publication work, the promotion assumption supplies the human
+promotion field $H$; otherwise $H$ records that no such boundary is crossed.  The
+evidence-level definition supplies the boundary field $B$: either the command-run
+fields are present or the record explicitly remains path-verified.  If $c$ is a
+discovery claim, the discovery-routing assumption supplies $D$ from the pinned
+source-interface rows; otherwise $D$ is absent as required by the certificate
+schema.  Thus $\mathcal C(c)=(K,\ell,E,H,R,D,B)$ is locally checkable whenever its
+cited paths and manifest rows lie in the submitted artifact, review bundle, or
+explicit historical boundary.
 
 Propositions~\ref{prop:claim-kind-dispatch} and
 \ref{prop:gate-interface-separation} identify the required finite gate set:
@@ -499,7 +592,13 @@ statement-only, code-only, mechanical-expansion, and compression-only records do
 not become accepted discovery claims without the required certificate, ledger,
 and lineage witnesses, and classifier-shift selection remains bounded by the
 discovery gate as shown in Proposition~\ref{prop:scheduler-selection-advisory}.
-The stated safety interface follows.\qed
+Finally apply Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  If an
+allegedly accepted claim lacks the certificate just constructed, its failure has
+a minimal bad subrecord of type 1--5: missing evidence surface, missing gate
+record, missing promotion field, missing discovery-interface rows, or unsupported
+command-run escalation.  Each type contradicts one of the workflow assumptions
+above or demotes the claim to a weaker evidence level.  The stated safety
+interface follows.\qed
 \end{proof}
 
 \begin{corollary}[Current package path-verified instantiation]
@@ -518,9 +617,10 @@ are bounded witnesses for promotion, route-overlap/submission-state,
 theorem-content, and artifact-limitation gates; and every such case record is
 usable only for the bounded manuscript lesson named in its row.  Therefore the
 current package supports the publication-safety claim that its load-bearing
-case-study assertions are reviewable and gate-typed at the path-verified level.
-It does not instantiate any stronger claim that the full newmath source tree, a
-publication daemon, or the Rule110 dynamic artifact suite was freshly rerun.
+case-study assertions are reviewable, gate-typed, and equipped with locally
+checkable publication certificates at the path-verified level.  It does not
+instantiate any stronger claim that the full newmath source tree, a publication
+daemon, or the Rule110 dynamic artifact suite was freshly rerun.
 \end{corollary}
 
 \begin{proof}
@@ -544,12 +644,16 @@ growth, and artifact limitation.  Thus the rows later displayed in
 Table~\ref{tab:case-witnesses}, together with the manifest file named in $P$,
 provide passable path-verified evidence surfaces for exactly those bounded case
 claims.  Applying Theorem~\ref{thm:publication-safety-interface} to these
-recorded surfaces gives the stated current-package instantiation: accepted
-case-study assertions are reviewable, gate-typed, and demoted to their recorded
-evidence level.  Since $P$ records no command, environment, exit code, and log
-path for a fresh full-source rebuild, publication-daemon execution, or Rule110
-dynamic rerun, the definition of command-run evidence prevents the corollary
-from asserting any of those stronger claims.\qed
+recorded surfaces gives the stated current-package instantiation: each bounded
+case-study assertion obtains a finite certificate whose fields lie in $P$, the
+review bundle, or the explicit historical-evidence boundary.  The obstruction
+skeleton theorem then shows what a reviewer would have to find to reject any
+purported stronger reading: a missing path, missing gate row, missing promotion
+record, missing discovery-source row, or unsupported command-run escalation.
+Since $P$ records no command, environment, exit code, and log path for a fresh
+full-source rebuild, publication-daemon execution, or Rule110 dynamic rerun, the
+definition of command-run evidence prevents the corollary from asserting any of
+those stronger claims.\qed
 \end{proof}
 
 \section{Gate summary}
