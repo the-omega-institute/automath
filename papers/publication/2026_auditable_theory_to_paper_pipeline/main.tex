@@ -988,19 +988,65 @@ Thus the rows prove path completeness and reviewability only in the operational
 sense of Lemma~\ref{lem:gate-witness-criterion}; they do not certify fresh
 daemon execution, full-source rebuilds, or Rule110 reruns.
 
-\paragraph{Supplemental case-path coverage.}
-\label{prop:review-bundle-coverage-for-case-paths}
-The review-time path catalogue is finite and explicit.  The Newmath block has
-two paths, the upper-fibers block has five paths, the fake-extension block has
-two paths, and the Rule110 block has four paths, for thirteen local-path strings
-after resolving this paper's relative \path{ARTIFACT_INVENTORY.md} to its
-absolute path in the paper directory.  The supplemental manifest
-\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} contains one
-\path{case_evidence} entry for each row and records the corresponding boundary:
-no fresh daemon run for Newmath intake, historical route-state evidence for the
-upper-fibers row, no fresh full-source command run for the fake-extension row,
-and no fresh Rule110 dynamic artifact rerun for the limitation row.  This is a
-reviewability and path-coverage statement, not a command-run validation claim.
+\begin{proposition}[Review-bundle case-snapshot coverage]
+\label{prop:review-bundle-case-snapshot-coverage}
+For the four case-study rows in Table~\ref{tab:case-witnesses}, the review
+bundle contains a finite external-review surface for every local case path used
+by the paper.  The Newmath block has two local paths, the upper-fibers block has
+five local paths, the fake-extension block has two local paths, and the Rule110
+block has four local paths, for thirteen local-path strings after resolving this
+paper's relative \path{ARTIFACT_INVENTORY.md} to its absolute path in the paper
+directory.  The manifest file
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} has one
+\path{case_evidence} entry for each case row and, inside each entry, a
+\path{reviewable_snapshots} list matching those local paths.  File-valued local
+surfaces are copied into \path{review_bundle/case_snapshots/}; directory-valued
+local surfaces are represented there by directory file-manifests.  Consequently
+the case-study claim made by this paper is externally reviewable at the
+path-verified snapshot level.  It is not a command-run validation claim, a fresh
+full-source rebuild claim, a daemon-execution claim, or a fresh Rule110 dynamic
+rerun claim.
+\end{proposition}
+
+\begin{proof}
+The path catalogue displayed at the beginning of this section is finite and
+partitions the case surfaces into the four named rows: two paths for Newmath
+intake isolation, five paths for the upper-fibers overlap block, two paths for
+the fake-extension block, and four paths for the Rule110 limitation gate.  The
+manifest row for each case repeats exactly the same local-path list in its
+\path{local_paths} field and attaches a \path{reviewable_snapshots} list.  In
+that list the Newmath row names
+\path{review_bundle/case_snapshots/newmath_intake_seed_directory_manifest.json}
+and \path{review_bundle/case_snapshots/newmath_pipeline_auto.py}; the
+upper-fibers row names
+\path{review_bundle/case_snapshots/upper_fibers_route_directory_manifest.json},
+\path{review_bundle/case_snapshots/upper_fibers_SUBMITTED},
+\path{review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.json},
+\path{review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md},
+and \path{review_bundle/case_snapshots/program_board_machine.md}; the
+fake-extension row names
+\path{review_bundle/case_snapshots/fake_extension_phase_d_lint.py} and
+\path{review_bundle/case_snapshots/fake_extension_artifact_inventory.md}; and the
+Rule110 row names \path{review_bundle/case_snapshots/rule110_STATUS.md},
+\path{review_bundle/case_snapshots/rule110_collision_audit_findings.md},
+\path{review_bundle/case_snapshots/rule110_exhaustiveness_audit_findings.md},
+and \path{review_bundle/case_snapshots/rule110_papers_research_report.md}.
+These thirteen bundle paths are in bijection with the thirteen local-path
+strings.  The two directory-valued local paths are not treated as opaque private
+folders: their bundle entries are directory file-manifests, so a reviewer can
+inspect the directory boundary and file list used by the row.  The remaining
+eleven entries are file snapshots.  Thus the review surface no longer depends on
+bare absolute paths alone.
+
+The proposition's negative boundary follows from the same manifest entries and
+from Lemma~\ref{lem:gate-witness-criterion}.  The \path{boundary} field for each
+case records historical or path-verified evidence and explicitly withholds fresh
+daemon, full-source command, and Rule110 dynamic-rerun claims.  A directory
+manifest or copied file snapshot supplies reviewability of the cited surface; it
+does not supply command, commit, environment, exit-code, and log-path fields.
+Therefore the conclusion is exactly path-verified snapshot reviewability and not
+any stronger execution claim.\qed
+\end{proof}
 
 \begin{table}
 \caption{Path-verified case-study witnesses}
@@ -1045,6 +1091,126 @@ The current short source satisfies this checklist in its structured-source,
 publication-safety, and review-artifact paragraphs.  The checklist is the
 submission contract; it replaces any need to treat this supplement's metadata
 lemmas as part of the two-page presentation claim.
+
+\begin{proposition}[Submission artifact role separation]
+\label{prop:submission-artifact-role-separation}
+For the current presentation-only route, the primary artifact, long technical
+supplement, and review bundle have distinct review roles.  The primary source
+\path{submission_abstract.tex} states the presentation claim, \path{main.tex}
+proves the long-form interface theorems and records the case tables, and
+\path{review_bundle/} supplies the supplemental source snapshots, case snapshots,
+and machine-readable manifest rows.  None of these roles converts the support
+bundle into a second primary submission or converts a primary-artifact claim into
+an uncited supplement claim.
+\end{proposition}
+
+\begin{proof}
+The manifest field \path{submission_artifacts} names the short source, intended
+short PDF, long technical source, long technical PDF, and supplemental bundle as
+separate artifacts.  The checklist above fixes how the short artifact points to
+the supplement: it names the safety theorem, the case rows, the evidence-level
+boundary, and \path{review_bundle/}.  The earlier source-snapshot and
+case-snapshot propositions identify the two support functions of the bundle: a
+pinned discovery-gate source snapshot and bounded case-evidence snapshots.  Since
+the primary note states only the interface and each support claim is tied to a
+specific theorem, table, or manifest field, the artifacts remain role-separated:
+the support materials make the primary note reviewable but do not become hidden
+primary claims.\qed
+\end{proof}
+
+\begin{table}
+\caption{Primary-submission to supplement interface map}
+\label{tab:submission-interface-map}
+\scriptsize
+\begin{tabular}{p{0.25\linewidth}p{0.28\linewidth}p{0.22\linewidth}p{0.15\linewidth}}
+\toprule
+Primary-artifact load-bearing claim & Supplement certificate & Row or manifest surface & Evidence level \\
+\midrule
+Agent output is advisory; accepted load-bearing claims require typed evidence
+surfaces and deterministic gates &
+Theorem~\ref{thm:publication-safety-interface},
+Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, and
+Corollary~\ref{cor:current-package-path-verified-instantiation} &
+Table~\ref{tab:current-acceptance-ledger}, rows $a_1$--$a_5$;
+\path{public_interface} and \path{pinned_source_snapshot} manifest entries &
+conditional theorem interface plus pinned-source snapshot \\
+Pinned discovery-gate calculus is imported only through bounded source-interface
+rows at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b} &
+Lemma~\ref{lem:source-interface-extraction-correctness},
+Proposition~\ref{prop:reviewable-source-snapshot-interface}, and
+Proposition~\ref{prop:source-interface-record-file-consistency} &
+Table~\ref{tab:source-interface-record};
+\path{pinned_source_snapshot} manifest entry &
+pinned-source snapshot and bounded paraphrase \\
+Four compressed case rows certify path completeness and reviewability only at
+the path-verified level &
+Lemma~\ref{lem:gate-witness-criterion},
+Proposition~\ref{prop:path-complete-case-witnesses}, and
+Proposition~\ref{prop:review-bundle-case-snapshot-coverage} &
+Table~\ref{tab:case-witnesses};
+\path{case_evidence[*].reviewable_snapshots} manifest entries &
+bundled snapshots or directory manifests; no command-run validation \\
+The submission separates the primary note, long supplement, and review bundle &
+Proposition~\ref{prop:submission-artifact-role-separation} &
+This table; \path{submission_artifacts} and \path{submission_interface_map}
+manifest entries &
+submission-package interface record \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proposition}[Primary--supplement interface map]
+\label{prop:primary-supplement-interface-map}
+Every load-bearing claim made in the current primary artifact
+\path{submission_abstract.tex} is certified by an explicit supplement theorem,
+table row, or manifest row at a declared evidence level.  The certification map
+is Table~\ref{tab:submission-interface-map}, mirrored in the
+\path{submission_interface_map} field of
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Therefore a reviewer can check
+the short-paper publication-safety invariant against this supplement without
+inferring hidden claims from prose.
+\end{proposition}
+
+\begin{proof}
+The primary artifact has four load-bearing interfaces.  First, its
+publication-safety paragraph states the advisory-agent rule and the finite
+certificate invariant.  The first row of Table~\ref{tab:submission-interface-map}
+maps this claim to Theorem~\ref{thm:publication-safety-interface}, to the current
+acceptance ledger proposition and corollary, and to rows $a_1$--$a_5$ of
+Table~\ref{tab:current-acceptance-ledger}.  Those cited results prove only a
+conditional theorem interface and path-verified package instantiation, exactly as
+recorded in the evidence-level column.
+
+Second, the short paper says that the discovery-gate calculus is imported
+through a pinned source-interface snapshot and bounded paraphrases.  The second
+row maps that statement to
+Lemma~\ref{lem:source-interface-extraction-correctness},
+Proposition~\ref{prop:reviewable-source-snapshot-interface},
+Proposition~\ref{prop:source-interface-record-file-consistency}, and
+Table~\ref{tab:source-interface-record}.  These are the complete imported-source
+certificates used by this supplement and by the bundle manifest's
+\path{pinned_source_snapshot} entry.
+
+Third, the short paper compresses the four case rows and states that they certify
+path completeness and reviewability but not fresh execution.  The third row maps
+that statement to Lemma~\ref{lem:gate-witness-criterion},
+Proposition~\ref{prop:path-complete-case-witnesses},
+Proposition~\ref{prop:review-bundle-case-snapshot-coverage},
+Table~\ref{tab:case-witnesses}, and the manifest field
+\path{case_evidence[*].reviewable_snapshots}.  Proposition~\ref{prop:review-bundle-case-snapshot-coverage}
+proves the external-review surface for the local case paths and preserves the
+negative boundary against command-run validation.
+
+Fourth, the short paper identifies the review bundle and long technical account
+as support materials rather than primary submissions.  The fourth row maps that
+submission-package claim to
+Proposition~\ref{prop:submission-artifact-role-separation}, to this table, and
+to the manifest fields \path{submission_artifacts} and
+\path{submission_interface_map}.  Since the four rows cover exactly the short paper's structured-source,
+publication-safety, case-evidence, and review-artifact paragraphs, every
+primary-artifact load-bearing claim has a named supplement certificate, a table
+or manifest surface, and an evidence level.\qed
+\end{proof}
 
 \paragraph{Artifact roles.}
 For the current presentation-only route, \path{submission_abstract.tex} is the
