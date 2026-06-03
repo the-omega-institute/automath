@@ -32,11 +32,13 @@ directories, AI review loops, deterministic gates, and human promotion
 decisions.  Its central rule is that AI output is advisory: load-bearing
 mathematical and submission claims must be tied, at the appropriate evidence
 level, to source paths, command logs, deterministic checks, and human-approved
-promotion.  The safety theorem is conditional: it proves local certificate
-checkability from gate-sound records, not external gate soundness, Lean
-correctness, artifact semantic validity, or venue acceptance.  Four case studies
-illustrate the gates: intake isolation, overlap/submitted blocking,
-fake-extension rejection, and artifact-limitation disclosure.
+promotion.  The safety theorem is conditional: it proves finite certificate
+checkability from gate-sound acceptance entries and explicitly submitted review
+surfaces, not external gate soundness, proof-assistant correctness, artifact
+semantic validity, current execution of every gate, or venue acceptance.  Four
+case studies illustrate the gates at the path-verified historical-snapshot
+level: intake isolation, overlap/submitted blocking, fake-extension rejection,
+and artifact-limitation disclosure.
 \end{abstract}
 
 \section{Problem and contribution}
@@ -546,10 +548,14 @@ instance over the review bundle.  The schema file
 the path-verified level for entries $a_1,\ldots,a_6$.  Each pass record in the
 ledger has the five fields \emph{gate name}, \emph{input surface},
 \emph{decision}, \emph{evidence pointer}, and \emph{evidence level}.  The
-machine-readable submission-interface map mirrors
-Table~\ref{tab:submission-interface-map}, and the primary-claim inventory maps
-each concrete assertion in \path{submission_abstract.tex} either to a certificate
-row or to an explicit bounded-context status.
+machine-readable submission-interface map is locked to rows \path{sim1}--\path{sim4}
+of Table~\ref{tab:submission-interface-map} by its row identifiers, certificates,
+surfaces, and evidence levels; the primary-claim inventory is locked to rows
+\path{pc1}--\path{pc12} by its row identifiers, source locations, row classes,
+and evidence levels.  These executable locks check the finite record interface;
+full semantic equality between prose paraphrases and mathematical meaning, and
+path completeness beyond the declared surfaces, remain the manual audit boundary
+stated in the row classes.
 \end{proposition}
 
 \begin{proof}
@@ -583,8 +589,11 @@ assertion is made.
 The script \path{review_bundle/verify_certificate_records.py} implements precisely
 these finite checks: required manifest fields, entries $a_1$--$a_6$, kind-domain
 membership, evidence-level membership, assigned-gate coverage, the five
-pass-record fields, evidence-level agreement, discovery-field discipline, and
-the path-verified boundary condition.  The recorded log
+pass-record fields, evidence-level agreement, discovery-field discipline, the
+path-verified boundary condition, exact row locks for \path{sim1}--\path{sim4}
+against the submission-interface JSON fields, and row-class locks for
+\path{pc1}--\path{pc12} against the primary-claim inventory locations, statuses,
+and evidence levels.  The recorded log
 \path{review_bundle/certificate_verification_run.log} records a successful run of
 that script over the submitted files and states the boundary that no Lean build,
 publication-daemon run, or Rule110 dynamic artifact rerun is being certified.
@@ -595,14 +604,20 @@ record accepts exactly the six current-package certificates and no stronger
 evidence level or omitted gate semantics.
 
 Finally, \path{review_bundle/submission_interface_map.json} has rows
-\path{sim1}--\path{sim4}, matching the four rows of
-Table~\ref{tab:submission-interface-map}.  The file
+\path{sim1}--\path{sim4}.  The verifier now rejects a mutation of any row's
+primary claim text, certificate list, row-or-manifest surface list, or evidence
+level, so the JSON file is an executable finite mirror of the interface table at
+that declared field level.  The file
 \path{review_bundle/primary_claim_inventory.json} lists the concrete primary-note
 assertions as rows \path{pc1}--\path{pc12}; every load-bearing row names a
 certificate, row, manifest surface, or bounded-context status and declares an
-evidence level.  Thus the primary note has a complete finite claim inventory, and
-no additional primary load-bearing assertion is licensed by the machine-readable
-interface.\qed
+evidence level, and the verifier locks each row's identifier, source location,
+status class, and evidence level.  Thus the primary note has a complete finite
+claim inventory at the declared review fields, and no additional primary
+load-bearing assertion is licensed by the machine-readable interface.  The proof
+does not assert that the script decides semantic paraphrase equality or discovers
+undeclared paths; those remain the manual audit obligations represented by the
+table rows and by Proposition~\ref{prop:primary-inventory-freshness-criterion}.\qed
 \end{proof}
 
 \begin{proposition}[Deterministic claim-kind dispatch]
@@ -784,8 +799,10 @@ the discovery gate.\qed
 Consider a theory-to-paper pipeline with the operational interface above.  Assume
 that every load-bearing claim in an active manuscript is either rejected or has an
 acceptance entry with an evidence surface; that the pipeline is gate-sound for
-acceptance; that every advisory output is demoted unless the deterministic gate
-set $\Gamma$ for its claim kind passes; that discovery claims are checked through
+acceptance, meaning that a recorded acceptance entry is present only after every
+gate assigned by $\Gamma$ to the claim kind has already produced a pass record;
+that every advisory output is demoted unless the deterministic gate set
+$\Gamma$ for its claim kind passes; that discovery claims are checked through
 the pinned discovery-gate interface certified by
 Lemma~\ref{lem:source-interface-extraction-correctness} and
 Propositions~\ref{prop:reviewable-source-snapshot-interface} and
@@ -814,8 +831,10 @@ Proposition~\ref{prop:path-complete-case-witnesses}, with the case-snapshot
 non-rerun boundary isolated in
 Corollary~\ref{cor:case-snapshot-non-rerun-rigidity}.  This theorem is a
 conditional safety interface for that architecture: it does not independently
-prove that an arbitrary implementation is gate-sound, that all gates were run,
-or that path-verified rows are command-run evidence.
+prove that an arbitrary implementation is gate-sound, that every possible gate in
+the surrounding project was run for this package, that Lean-facing contextual
+rows are current formal-source certificates, or that path-verified rows are
+command-run evidence.
 \end{theorem}
 
 \begin{proof}
@@ -1114,7 +1133,9 @@ as evidence for a fresh command-run assertion.\qed
 Suppose a case-study row is used as load-bearing evidence for
 Theorem~\ref{thm:publication-safety-interface}.  If the row is path-complete in
 the sense above, then the row supplies exactly the evidence surface required for
-a path-verified case claim.  In particular, a promotion row is sufficient only
+a path-verified historical case claim and no evidence surface for a fresh daemon,
+full-source, theorem-content, artifact-suite, or semantic-substrate rerun.  In
+particular, a promotion row is sufficient only
 for the bounded claim that an intake packet is not daemon-visible publication
 work before human promotion; a route-overlap row is sufficient only for the
 bounded claim that the overlap and submission-state gates blocked advancement
@@ -1149,7 +1170,10 @@ applies to each such row:
 the named paths give the source surface, the interface fields give the failed
 invariant and decision, and the last field gives the safe lesson.  The same
 lemma also rules out upgrading the row to a command-run claim unless the extra
-command-run fields are recorded.\qed
+command-run fields are recorded.  In particular, the proof does not rerun the
+publication daemon, overlap scanner, theorem-content detector, artifact suite,
+or GroundCompiler evaluator; it proves only that the historical path surfaces are
+sufficient for the bounded lessons displayed in the table.\qed
 \end{proof}
 
 \section{Case studies}
@@ -1390,7 +1414,7 @@ Inventory rows & Concrete primary assertions & Row class & Certificate surface &
 \midrule
 \path{pc1}, \path{pc8}, \path{pc9} & deterministic gates over typed evidence surfaces; agents are advisory; finite certificate obstruction for unsupported accepted claims & accepted certificate & Table~\ref{tab:submission-interface-map} row 1; entries $a_1$, $a_2$, and $a_5$ in Table~\ref{tab:current-acceptance-ledger}; \path{review_bundle/current_package_pass_records.json} & path-verified theorem interface, not an independent workflow rerun \\
 \path{pc2}, \path{pc7} & closure, classifier, lineage, boundary, and witness-surface vocabulary is imported only through the pinned discovery-gate source interface & bounded contextual interface & Table~\ref{tab:submission-interface-map} row 2; Table~\ref{tab:source-interface-record}; \path{source_interface_record.json} & pinned-source snapshot and bounded paraphrase \\
-\path{pc3}, \path{pc4} & mathlib-free Lean formalization and local marker/axiom-audit statements & bounded contextual interface & entries $a_1$ and $a_5$; Proposition~\ref{prop:formal-source-gate-instantiation}; \path{review_bundle/primary_claim_inventory.json}; \path{review_bundle/certificate_schema.json} & source-interface and audit-boundary context only; no accepted formal-source build or axiom-purity certificate \\
+\path{pc3}, \path{pc4} & mathlib-free Lean design and local marker/axiom-audit vocabulary, cited only as source-interface context & bounded contextual interface & entries $a_1$ and $a_5$; Proposition~\ref{prop:formal-source-gate-instantiation}; \path{review_bundle/primary_claim_inventory.json}; \path{review_bundle/certificate_schema.json} & source-interface and audit-boundary context only; no accepted formal-source build or axiom-purity certificate \\
 \path{pc5} & Lean is not the only trust substrate; finite-witness interfaces bind manifest rows, evaluator outcomes, and substrate contracts & bounded contextual interface & Proposition~\ref{prop:finite-witness-manifest-interface}; Table~\ref{tab:submission-interface-map} row 3; \path{review_bundle/primary_claim_inventory.json} & interface vocabulary only unless an artifact row supplies status and limitation-ledger pass records \\
 \path{pc6}, \path{pc11} & Rule110/GroundCompiler and the four case rows are finite manifest-bounded lessons, not unbounded semantic validation & accepted certificate for bounded artifact lesson & Proposition~\ref{prop:finite-witness-manifest-interface}; entry $a_6$; Table~\ref{tab:case-witnesses}; \path{case_evidence[3].reviewable_snapshots} & path-verified historical snapshots; no daemon, artifact-suite, or dynamic Rule110 rerun \\
 \path{pc10}, \path{pc12} & the primary note, supplement, and review bundle have separate submission roles, and the review bundle is the supplemental interface & accepted certificate conditional on supplemental availability & Proposition~\ref{prop:review-bundle-availability-condition}; Table~\ref{tab:submission-interface-map} row 4; \path{submission_artifacts}; \path{submission_interface_map}; \path{review_bundle/submission_interface_map.json} & submission-package interface record; support claim requires uploaded or archived bundle \\
@@ -1409,9 +1433,10 @@ boundary row $a_5$, Table~\ref{tab:source-interface-record},
 \path{review_bundle/primary_claim_inventory.json}, and
 \path{review_bundle/certificate_schema.json}.  These records certify that the
 short note may mention the mathlib-free design, marker-audit, and axiom-purity
-audit vocabulary as source-interface context.  They do not certify a fresh Lean
-build, a current full-source marker audit, or an accepted axiom-purity pass for
-the whole newmath tree.
+audit vocabulary only as source-interface context and only with the evidence
+boundary stated in rows \path{pc3} and \path{pc4}.  They do not certify a fresh
+Lean build, a current full-source marker audit, an absence-of-axioms theorem, or
+an accepted axiom-purity pass for the whole newmath tree.
 \end{proposition}
 
 \begin{proof}
