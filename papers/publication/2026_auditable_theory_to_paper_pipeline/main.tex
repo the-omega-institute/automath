@@ -32,13 +32,15 @@ directories, AI review loops, deterministic gates, and human promotion
 decisions.  Its central rule is that AI output is advisory: load-bearing
 mathematical and submission claims must be tied, at the appropriate evidence
 level, to source paths, command logs, deterministic checks, and human-approved
-promotion.  The safety theorem is conditional: it proves finite certificate
-checkability from gate-sound acceptance entries and explicitly submitted review
-surfaces, not external gate soundness, proof-assistant correctness, artifact
-semantic validity, current execution of every gate, or venue acceptance.  Four
-case studies illustrate the gates at the path-verified historical-snapshot
-level: intake isolation, overlap/submitted blocking, fake-extension rejection,
-and artifact-limitation disclosure.
+promotion.  The main theorem constructs the finite publication certificates
+checked by the package verifier from gate-sound acceptance entries and explicitly
+submitted review surfaces.  The current package then proves exactness of its
+six-row, path-verified instantiation, while rejecting stronger readings such as
+external gate soundness, proof-assistant correctness, artifact semantic validity,
+current execution of every gate, or venue acceptance.  Four case studies
+illustrate the gates at the path-verified historical-snapshot level: intake
+isolation, overlap/submitted blocking, fake-extension rejection, and
+artifact-limitation disclosure.
 \end{abstract}
 
 \section{Problem and contribution}
@@ -59,8 +61,9 @@ deterministic gates decide what may be treated as load-bearing evidence.  The
 pattern is instantiated in local BEDC and automath workspaces.
 The mathematical content of the note is the explicit safety interface for this
 workflow: definitions for gate vocabulary, a pinned imported theorem spine, a
-proved conditional publication-safety theorem, an evidence-level overclaim
-obstruction theorem, and witness records for the four required cases.  The CICM presentation-only submission uses the short artifact plus
+constructive finite publication-certificate theorem, a current-package
+certificate-exactness theorem, evidence-level and formal-source promotion
+obstruction theorems, and witness records for the four required cases.  The CICM presentation-only submission uses the short artifact plus
 bibliography; this supplement and \path{review_bundle/} are evidence-support
 materials rather than competing primary submissions.
 
@@ -895,7 +898,7 @@ can advise selection order, but discovery acceptance still occurs only through
 the discovery gate.\qed
 \end{proof}
 
-\begin{theorem}[Conditional publication safety interface]
+\begin{theorem}[Constructive finite publication-safety interface]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above.  Assume
 that every load-bearing claim in an active manuscript is either rejected or has an
@@ -911,13 +914,17 @@ Propositions~\ref{prop:reviewable-source-snapshot-interface},
 \ref{prop:source-interface-evidence-level-separation}, in particular the
 separated manual/path-verified and executable finite-record levels for the
 pipeline safety and main pipeline theorem labels; and
-that no inactive intake seed is
-treated as publication work without human promotion.  Then, conditional on those
-workflow assumptions, any accepted load-bearing claim in the manuscript admits a
-locally checkable publication certificate $\mathcal C(c)$ accepted by the finite
-schema verifier of Proposition~\ref{prop:finite-certificate-schema-verifier};
-equivalently, by Theorem~\ref{thm:record-acceptance-exactness}, it satisfies the
-record-acceptance semantics for the dispatch table $\Gamma$.
+that no inactive intake seed is treated as publication work without human
+promotion.  Then the nontrivial output of the interface is a finite certificate
+constructor.  For every accepted load-bearing claim $c$ it constructs, from the
+acceptance entry and submitted evidence surfaces, a record
+\[
+\mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)
+\]
+accepted by the finite schema verifier of
+Proposition~\ref{prop:finite-certificate-schema-verifier}; equivalently, by
+Theorem~\ref{thm:record-acceptance-exactness}, the constructed record satisfies
+the record-acceptance semantics for the dispatch table $\Gamma$.
 Consequently the claim has a recorded evidence surface, a declared evidence
 boundary, and a prior pass record for every gate required for its claim kind.
 Moreover, accepted discovery claims inherit the bounded pinned source-interface
@@ -930,33 +937,38 @@ package, the hypotheses are witnessed by the machine-readable evidence map in
 Proposition~\ref{prop:machine-readable-certificate-records}, the acceptance
 ledger in Proposition~\ref{prop:current-package-acceptance-certificate-ledger},
 and the four path-complete case witnesses of
-Proposition~\ref{prop:path-complete-case-witnesses}, with the case-snapshot
-non-rerun boundary isolated in
-Corollary~\ref{cor:case-snapshot-non-rerun-rigidity}.  This theorem is a
-conditional safety interface for that architecture: it does not independently
-prove that an arbitrary implementation is gate-sound, that every possible gate in
-the surrounding project was run for this package, that Lean-facing contextual
-rows are current formal-source certificates, or that path-verified rows are
-command-run evidence.
+Proposition~\ref{prop:path-complete-case-witnesses}, with the current-package
+bounded instantiation isolated in
+Corollary~\ref{cor:current-package-path-verified-instantiation} and the
+case-snapshot non-rerun boundary isolated in
+Corollary~\ref{cor:case-snapshot-non-rerun-rigidity}.  Thus the package instance
+is a certificate-construction and certificate-checking theorem for the finite
+records actually supplied.  It is not an unconditional correctness theorem for an
+arbitrary implementation: it does not independently prove that such an
+implementation is gate-sound, that every possible gate in the surrounding project
+was run for this package, that Lean-facing contextual rows are current
+formal-source certificates, or that path-verified rows are command-run evidence.
 \end{theorem}
 
 \begin{proof}
 Let $c$ be an accepted load-bearing claim in the manuscript.  The conclusion has
-three parts.  The first part constructs the certificate.  The acceptance-entry
-hypothesis supplies the claim-kind set $K$, evidence level $\ell$, and evidence
-surface $E$, so the decision is attached to a source path, artifact path,
-command log, inventory, or witness record rather than to generated prose alone.
-Gate-soundness supplies the pass-record field $R$ for every gate assigned by
-$\Gamma$.  If accepting $c$ crosses from intake or source material into
-daemon-visible publication work, the promotion assumption supplies the human
-promotion field $H$; otherwise $H$ records that no such boundary is crossed.  The
-evidence-level definition supplies the boundary field $B$: either the command-run
-fields are present or the record explicitly remains path-verified.  If $c$ is a
-discovery claim, the discovery-routing assumption supplies $D$ from the pinned
+three parts.  The first part is the constructor.  The acceptance-entry hypothesis
+supplies the claim-kind set $K$, evidence level $\ell$, and evidence surface $E$,
+so the decision is attached to a source path, artifact path, command log,
+inventory, or witness record rather than to generated prose alone.  Gate-soundness
+supplies the pass-record field $R$ for every gate assigned by $\Gamma$.  If
+accepting $c$ crosses from intake or source material into daemon-visible
+publication work, the promotion assumption supplies the human-promotion field
+$H$; otherwise $H$ records that no such boundary is crossed.  The evidence-level
+definition supplies the boundary field $B$: either the command-run fields are
+present or the record explicitly remains path-verified.  If $c$ is a discovery
+claim, the discovery-routing assumption supplies $D$ from the pinned
 source-interface rows; otherwise $D$ is absent as required by the certificate
-schema.  Thus $\mathcal C(c)=(K,\ell,E,H,R,D,B)$ is locally checkable whenever its
-cited paths and manifest rows lie in the submitted artifact, review bundle, or
-explicit historical boundary.  The same construction verifies
+schema.  Thus the constructor
+\(\mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)\) is determined by
+finite submitted records and is locally checkable whenever its cited paths and
+manifest rows lie in the submitted artifact, review bundle, or explicit
+historical boundary.  The same construction verifies
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
 Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
 certificate with the paper's independently stated record-acceptance semantics,
@@ -1113,6 +1125,61 @@ rejected by a finite obstruction subrecord rather than accepted by this
 package.\qed
 \end{proof}
 
+\begin{theorem}[Current-package certificate exactness]
+\label{thm:current-package-certificate-exactness}
+For the finite current package $P^{+}$ of
+Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, the six
+ledger entries $a_1,\ldots,a_6$ are exactly the accepted finite instantiation of
+Theorem~\ref{thm:publication-safety-interface}.  More precisely, the package map
+\[
+a_i\longmapsto \mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)
+\]
+is a bijection from the accepted current-package claim rows to the locally
+checkable certificates accepted by the submitted schema verifier at the declared
+path-verified evidence level.  Every current-package reading requiring a seventh
+accepted row, a different claim kind, a stronger evidence level, an additional
+gate pass record, a fresh command-run tuple, or an external venue decision is
+outside this bijection and is rejected by the finite obstruction skeleton.
+\end{theorem}
+
+\begin{proof}
+Proposition~\ref{prop:current-package-acceptance-certificate-ledger} constructs,
+for each row $a_i$ of Tables~\ref{tab:current-acceptance-ledger}
+and~\ref{tab:current-certificate-ledger}, a certificate
+\(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\).  The row set is finite and
+has exactly six elements.  The construction is injective because the row
+identifier, accepted claim text, and evidence surface in
+Table~\ref{tab:current-acceptance-ledger} are part of the displayed record data;
+two different rows cannot have the same accepted current-package claim row.  It
+is surjective onto the accepted current-package certificates because the same
+proposition states that no load-bearing claim outside these six entries is
+accepted by the current-package instantiation.
+
+Proposition~\ref{prop:machine-readable-certificate-records} supplies the finite
+schema instance over \path{review_bundle/certificate_schema.json},
+\path{review_bundle/current_package_pass_records.json},
+\path{review_bundle/submission_interface_map.json},
+\path{review_bundle/primary_claim_inventory.json}, the verifier script, and the
+recorded verifier log.  That instance checks kind-domain membership,
+path-verified evidence-level membership, assigned-gate coverage, the five
+pass-record fields, discovery-field discipline, and the path-verified command
+boundary for entries $a_1,\ldots,a_6$.  Hence every certificate in the image of
+the displayed package map is accepted by the submitted schema verifier at exactly
+the declared path-verified level.
+
+Conversely, a stronger reading changes at least one finite component of the
+record: it adds a row, changes $K_i$, changes $\ell_i$, adds a required gate in
+$R_i$, replaces the path-verified boundary $B_i$ by a command-run tuple, or adds
+an external venue-decision surface.  Such a record is not in the six-row image
+just identified.  By Theorem~\ref{thm:finite-certificate-obstruction-skeleton},
+the first failed finite field gives a bad subrecord: a missing evidence surface,
+missing gate record, missing promotion or venue field, missing discovery-source
+row, or unsupported command-run escalation.  Thus the six certificates are not a
+sample of an unrecorded full-pipeline execution; they are exactly the finite,
+path-verified package instantiation of
+Theorem~\ref{thm:publication-safety-interface}.\qed
+\end{proof}
+
 \begin{corollary}[Current package path-verified instantiation]
 \label{cor:current-package-path-verified-instantiation}
 For the current presentation package, let $P$ be the finite package consisting
@@ -1121,8 +1188,10 @@ of \path{submission_abstract.tex}, this supplement \path{main.tex},
 \path{source_interface_record.json}, and
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, together with the executable
 certificate records named in
-Proposition~\ref{prop:machine-readable-certificate-records}.  The path catalogue in $P$
-instantiates Theorem~\ref{thm:publication-safety-interface} at the
+Proposition~\ref{prop:machine-readable-certificate-records}.  The path catalogue
+in $P$, through the exact six-row certificate map of
+Theorem~\ref{thm:current-package-certificate-exactness}, instantiates
+Theorem~\ref{thm:publication-safety-interface} at the
 path-verified evidence level as follows.  The imported discovery-gate interface
 is fixed by the pinned newmath commit
 \path{3fb3d6a0641767388a401883062aa522ea0b397b}, the source-interface table,
@@ -1136,11 +1205,11 @@ Therefore the
 current package supports exactly the path-verified publication-safety claim that
 its load-bearing case-study assertions are reviewable, gate-typed, and equipped
 with locally checkable publication certificates at the path-verified level.  The
-corollary is historical and record-level: it instantiates the conditional
-interface using the listed paths, tables, and bundle records, not by rerunning the
-whole workflow.  It does not instantiate any stronger claim that the full newmath
-source tree, a publication daemon, an artifact validator, or the Rule110 dynamic
-artifact suite was freshly rerun.
+corollary is historical and record-level: it instantiates the certificate
+constructor using the listed paths, tables, and bundle records, not by rerunning
+the whole workflow.  It does not instantiate any stronger claim that the full
+newmath source tree, a publication daemon, an artifact validator, or the Rule110
+dynamic artifact suite was freshly rerun.
 \end{corollary}
 
 \begin{proof}
@@ -1585,13 +1654,14 @@ Primary-artifact load-bearing claim & Supplement certificate & Row or manifest s
 Agent output is advisory; accepted load-bearing claims require typed evidence
 surfaces and deterministic gates &
 Theorem~\ref{thm:publication-safety-interface},
-Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, and
+Theorem~\ref{thm:current-package-certificate-exactness},
+Proposition~\ref{prop:current-package-acceptance-certificate-ledger},
 Proposition~\ref{prop:machine-readable-certificate-records}, and
 Corollary~\ref{cor:current-package-path-verified-instantiation} &
 Table~\ref{tab:current-acceptance-ledger}, rows $a_1$--$a_5$;
 \path{current_package_pass_records}, \path{public_interface}, and
 \path{pinned_source_snapshot} manifest entries &
-conditional theorem interface plus pinned-source snapshot \\
+finite certificate construction plus pinned-source snapshot \\
 Pinned discovery-gate calculus is imported only through bounded source-interface
 rows at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b} &
 Lemma~\ref{lem:source-interface-extraction-correctness},
@@ -1685,6 +1755,48 @@ therefore certifies exactly the bounded contextual Lean interface and no fresh
 Lean build or full-source axiom audit.\qed
 \end{proof}
 
+\begin{theorem}[Formal-source promotion obstruction]
+\label{thm:formal-source-promotion-obstruction}
+In the current presentation package, no manuscript sentence about the Lean/BEDC
+source interface can be promoted from bounded contextual interface evidence to an
+accepted formal-source claim unless the certificate is enlarged by an accepted
+formal-source row containing build-gate and axiom-purity-gate pass records.  If a
+fresh execution reading is also asserted, the certificate must additionally
+contain the command, source commit or local state, environment, exit code, and log
+path required for command-run evidence.  With the present six-row package ledger,
+every such promotion attempt has a finite bad subrecord and is rejected by the
+schema verifier.
+\end{theorem}
+
+\begin{proof}
+The dispatch table sends a formal-source claim to the two gates named in
+Proposition~\ref{prop:formal-source-gate-instantiation}: build and
+axiom-purity.  Therefore any accepted formal-source version of rows \path{pc3}
+or \path{pc4} would need a certificate whose kind set contains
+\emph{formal-source} and whose pass-record field $R$ contains one pass record for
+each of these two gates.  By
+Theorem~\ref{thm:current-package-certificate-exactness}, the current package has
+exactly the accepted certificates $a_1,\ldots,a_6$.  None has claim kind
+\emph{formal-source}; none contains build-gate and axiom-purity-gate pass records;
+and the only positive Lean-facing surface is the bounded traceability and
+source-interface context identified in
+Proposition~\ref{prop:formal-source-gate-instantiation}.
+
+If the promoted reading also asserts a fresh Lean build, current full-source
+marker audit, full-source axiom audit, or command-run theorem-source check, then
+Definition~\ref{def:operational-acceptance-interface} requires the command-run
+tuple: command, source commit or local state, environment, exit code, and log
+path.  The boundary fields in Tables~\ref{tab:current-certificate-ledger}
+and~\ref{tab:command-boundary-inventory} state that no such command-run tuple is
+present for the Lean/BEDC source theorem semantics.  Thus a formal-source
+promotion fails check~(iii) of the finite verifier by missing required gate pass
+records; a fresh-execution promotion fails check~(vi) by unsupported command-run
+escalation.  In either case Theorem~\ref{thm:finite-certificate-obstruction-skeleton}
+extracts the failed fields as a finite bad subrecord.  Hence the current package
+keeps the Lean/BEDC material at the declared bounded contextual level unless new
+formal-source and command-run evidence rows are actually added.\qed
+\end{proof}
+
 \begin{theorem}[Evidence-level overclaim obstruction]
 \label{thm:evidence-level-overclaim-obstruction}
 Fix the certificate schema, dispatch function, and evidence-level vocabulary of
@@ -1721,17 +1833,18 @@ it inspects only the finite tuple
 $\mathcal C=(K,\ell,E,H,R,D,B)$ and the finite dispatch table.
 
 If $c^+$ asserts external gate soundness for an arbitrary implementation, then
-it is not merely the conditional theorem-interface claim accepted by
+it is not merely the finite certificate-construction claim accepted by
 Theorem~\ref{thm:publication-safety-interface}.  It needs pass records showing
 that the relevant implementation ran every gate in
 $\bigcup_{k\in K}\Gamma(k)$.  Those records are not supplied by the
 path-verified certificate for $c$, so the minimal bad subrecord is a missing
 pass-record obstruction of type~2.  If $c^+$ asserts Lean correctness,
 full-source rebuild success, or axiom-purity, then it is a formal-source or
-command-run claim.  Proposition~\ref{prop:formal-source-gate-instantiation}
-identifies the required build, axiom-purity, and command-run fields; when they
-are absent, the minimal bad subrecord is type~2 for missing formal-source gates
-or type~5 for command-run escalation.
+command-run claim.  Proposition~\ref{prop:formal-source-gate-instantiation} and
+Theorem~\ref{thm:formal-source-promotion-obstruction} identify the required
+build, axiom-purity, and command-run fields; when they are absent, the minimal
+bad subrecord is type~2 for missing formal-source gates or type~5 for command-run
+escalation.
 
 If $c^+$ asserts end-to-end semantic validity of artifacts beyond the named
 manifest and evaluator surfaces, then it has an artifact component not covered
@@ -1839,6 +1952,7 @@ The classification is a finite inspection of Table~\ref{tab:primary-claim-invent
 and the machine-readable inventory \path{review_bundle/primary_claim_inventory.json}.
 Rows \path{pc1}, \path{pc8}, and \path{pc9} are the theorem-interface rows: their
 certificate surfaces are Theorem~\ref{thm:publication-safety-interface},
+Theorem~\ref{thm:current-package-certificate-exactness},
 Proposition~\ref{prop:finite-certificate-schema-verifier},
 Proposition~\ref{prop:machine-readable-certificate-records}, the acceptance
 entries in Table~\ref{tab:current-acceptance-ledger}, and the current pass-record
@@ -1854,8 +1968,9 @@ source-interface and are certified by Lemma~\ref{lem:source-interface-extraction
 Propositions~\ref{prop:reviewable-source-snapshot-interface} and
 \ref{prop:source-interface-record-file-consistency}, and
 Table~\ref{tab:source-interface-record}.  Rows \path{pc3} and \path{pc4} are
-classified by Proposition~\ref{prop:formal-source-gate-instantiation}: they are
-Lean-facing context, not accepted formal-source build or axiom-purity claims.
+classified by Proposition~\ref{prop:formal-source-gate-instantiation} and
+Theorem~\ref{thm:formal-source-promotion-obstruction}: they are Lean-facing
+context, not accepted formal-source build or axiom-purity claims.
 Row \path{pc5} is classified by Proposition~\ref{prop:finite-witness-manifest-interface}
 as finite-witness interface vocabulary.  Row \path{pc6} is the only concrete
 Rule110/GroundCompiler boundary row and is accepted only through $a_6$, the
@@ -1944,10 +2059,10 @@ certificate invariant.  The first row of Table~\ref{tab:submission-interface-map
 maps this claim to Theorem~\ref{thm:publication-safety-interface}, to the current
 acceptance ledger proposition, to
 Proposition~\ref{prop:machine-readable-certificate-records}, to the current
-package corollary, and to rows $a_1$--$a_5$ of
-Table~\ref{tab:current-acceptance-ledger}.  Those cited results prove only a
-conditional theorem interface and path-verified package instantiation, exactly as
-recorded in the evidence-level column.
+package exactness theorem and corollary, and to rows $a_1$--$a_5$ of
+Table~\ref{tab:current-acceptance-ledger}.  Those cited results prove finite
+certificate construction and exact path-verified package instantiation, exactly
+as recorded in the evidence-level column.
 
 Second, the short paper says that the discovery-gate calculus is imported
 through a pinned source-interface snapshot and bounded paraphrases.  The second
@@ -2236,7 +2351,7 @@ code, and no rerun log.  Their accepted surfaces are instead the bounded source
 theorem interface at the pinned commit, the route and case-witness tables, and
 the bounded artifact certificate $a_6$ with its manifest and review-bundle
 snapshots.  Those are precisely the evidence surfaces used in the cited
-propositions and in the conditional safety theorem.  By the verifier rule, a row
+propositions and in the finite certificate-construction theorem.  By the verifier rule, a row
 lacking command-run fields can only be accepted at its declared path-verified,
 historical, or bounded-artifact level.  Thus the table exhausts the
 command-boundary inventory and prevents the non-rerun Lean, daemon, Rule110, and
