@@ -924,7 +924,14 @@ acceptance entry and submitted evidence surfaces, a record
 accepted by the finite schema verifier of
 Proposition~\ref{prop:finite-certificate-schema-verifier}; equivalently, by
 Theorem~\ref{thm:record-acceptance-exactness}, the constructed record satisfies
-the record-acceptance semantics for the dispatch table $\Gamma$.
+the record-acceptance semantics for the dispatch table $\Gamma$.  This is the
+maximal conclusion determined by the submitted finite coordinates: if a stronger
+reading $c^+$ of $c$ asserts external end-to-end compiler correctness, current
+execution of unrecorded gates, proof-assistant correctness, current formal-source
+currency, dynamic artifact semantics, or venue acceptance, then $c^+$ is accepted
+only after the certificate is enlarged by the additional claim kind, evidence
+surface, gate pass records, promotion field, or command-run tuple required for
+that stronger reading.
 Consequently the claim has a recorded evidence surface, a declared evidence
 boundary, and a prior pass record for every gate required for its claim kind.
 Moreover, accepted discovery claims inherit the bounded pinned source-interface
@@ -973,6 +980,23 @@ $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
 Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
 certificate with the paper's independently stated record-acceptance semantics,
 not merely with an informal unpacking of the tuple.
+
+The maximality assertion is also finite.  The schema verifier is a function only
+of the tuple \((K,\ell,E,H,R,D,B)\), the dispatch table, and the cited submitted
+records.  Hence two surrounding implementations, formal-source trees, artifact
+runs, or venue states that agree on these submitted coordinates receive the same
+certificate decision.  A stronger reading $c^+$ therefore has only two possible
+forms.  If it keeps the same tuple, then the verifier has no coordinate from
+which to distinguish the stronger hidden assertion, so the accepted conclusion is
+still only the finite certificate conclusion just constructed.  If it enlarges
+the claim kind, evidence level, submitted boundary, discovery requirement, or
+fresh-run assertion, then the dispatch table or evidence-level definition asks
+for additional finite fields: further pass records in $R$, further evidence in
+$E$, a different boundary $B$, a human-promotion record $H$, discovery rows $D$,
+or the command-run tuple.  When those fields are absent,
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} extracts a minimal bad
+subrecord.  Thus the theorem gives a certificate-construction theorem and a
+finite-record maximality theorem, not an unlogged end-to-end correctness theorem.
 
 Propositions~\ref{prop:claim-kind-dispatch} and
 \ref{prop:gate-interface-separation} identify the required finite gate set:
@@ -1770,7 +1794,15 @@ short note may mention the mathlib-free design, marker-audit, and axiom-purity
 audit vocabulary only as source-interface context and only with the evidence
 boundary stated in rows \path{pc3} and \path{pc4}.  They do not certify a fresh
 Lean build, a current full-source marker audit, an absence-of-axioms theorem, or
-an accepted axiom-purity pass for the whole newmath tree.
+an accepted axiom-purity pass for the whole newmath tree.  Conversely, a
+Lean-facing sentence in this package can become a current accepted formal-source
+claim exactly by adding an accepted formal-source certificate row with build-gate
+and axiom-purity-gate pass records; if the sentence asserts freshness or currency
+of an execution, the row must also include the command, source commit or local
+state, environment, exit code, and log path required for command-run evidence.
+With the present records, every stronger reading of rows \path{pc3} and
+\path{pc4} has a minimal bad subrecord of missing formal-source gates or missing
+command-run fields.
 \end{proposition}
 
 \begin{proof}
@@ -1800,7 +1832,20 @@ exit code, and log path.  Since those fields are absent from the current package
 Proposition~\ref{prop:finite-certificate-schema-verifier} rejects the stronger
 reading by a finite missing-gate or evidence-level subrecord.  The proposition
 therefore certifies exactly the bounded contextual Lean interface and no fresh
-Lean build or full-source axiom audit.\qed
+Lean build or full-source axiom audit.
+
+For the converse boundary, suppose a revised package did add a formal-source
+certificate row for one of these sentences.  By the deterministic dispatch rule,
+the necessary gate set for the formal-source component is precisely
+\(\{\texttt{build},\texttt{axiom-purity}\}\), so pass records for those two gates are
+sufficient for the finite schema verifier as far as the formal-source component is
+concerned, provided the other coordinates of the record meet the same evidence,
+promotion, discovery, and boundary checks as any accepted claim.  If the revised
+sentence also says that the build or audit was freshly executed for the current
+package, Definition~\ref{def:operational-acceptance-interface} adds exactly the
+five command-run fields.  Therefore the present package is not merely silent
+about currency: it is a complete negative instantiation of the formal-source
+gate, and currency can be claimed only by supplying the missing finite rows.\qed
 \end{proof}
 
 \begin{theorem}[Formal-source promotion obstruction]
@@ -1921,7 +1966,7 @@ Theorem~\ref{thm:finite-certificate-obstruction-skeleton} then gives the stated
 classification and proves rigidity at the declared evidence level.\qed
 \end{proof}
 
-\begin{proposition}[Finite-witness manifest interface]
+\begin{proposition}[Finite-witness manifest interface and semantic-boundary rigidity]
 \label{prop:finite-witness-manifest-interface}
 This proposition is an instance of
 Theorem~\ref{thm:evidence-level-overclaim-obstruction}: it records the finite
@@ -1945,7 +1990,14 @@ the \path{status} and \path{limitation-ledger} pass records for $a_6$ in
 and \path{review_bundle/case_snapshots/rule110_papers_research_report.md}.
 Thus the Rule110/GroundCompiler statement is a finite manifest-bounded artifact
 status and limitation-ledger claim, not a claim of Rule110 universality, a fresh
-evaluator run, or an unbounded semantic validation.
+evaluator run, or an unbounded semantic validation.  Moreover this bounded
+interface is rigid under finite-record equivalence: any two external artifact
+states that agree on the named manifest entry, reviewable snapshots, pass-record
+rows, and boundary field receive the same publication certificate from this
+package.  Therefore no dynamic Rule110/GroundCompiler semantic property can be
+derived from the current certificate unless it is already expressible as one of
+those finite manifest-bounded fields or a new artifact/command-run certificate is
+added.
 \end{proposition}
 
 \begin{proof}
@@ -1980,7 +2032,24 @@ family, or that Lean supplies an unbounded semantic universe for the artifact
 boundary---would require a further artifact certificate or command-run fields.
 Those fields are absent, and the schema verifier rejects the stronger reading by
 a finite missing-record obstruction.  The accepted finite-witness conclusion is
-exactly the bounded $a_6$ artifact lesson.\qed
+exactly the bounded $a_6$ artifact lesson.
+
+It remains to prove the rigidity assertion.  Let $W$ and $W'$ be two possible
+external artifact states, for example two possible Rule110/GroundCompiler working
+trees or evaluator histories, that agree on the finite coordinates named in the
+statement: the manifest entry, the four reviewable snapshots, the two pass-record
+rows for $a_6$, and the boundary excluding fresh reruns.  The certificate
+constructor and the schema verifier never query any other coordinate of an
+artifact state.  They therefore build the same tuple
+\((K,\ell,E,H,R,D,B)\) for $W$ and for $W'$, and
+Proposition~\ref{prop:finite-certificate-schema-verifier} returns the same
+accepted bounded-artifact decision in both cases.  A dynamic semantic assertion
+that could hold in $W$ and fail in $W'$ is not a function of this finite tuple.
+It cannot be a consequence of the current publication certificate.  To make such
+an assertion load-bearing, the package would have to add a new finite coordinate:
+an artifact pass record for the asserted semantic property, or a command-run tuple
+recording the relevant evaluator execution.  This proves semantic-boundary
+rigidity for the finite-witness manifest interface.\qed
 \end{proof}
 
 \begin{proposition}[Primary-claim row classification]
