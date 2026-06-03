@@ -34,11 +34,13 @@ mathematical and submission claims must be tied, at the appropriate evidence
 level, to source paths, command logs, deterministic checks, and human-approved
 promotion.  The main theorem constructs the finite publication certificates
 checked by the package verifier from gate-sound acceptance entries and explicitly
-submitted review surfaces.  The current package then proves exactness of its
-six-row, path-verified instantiation, while rejecting stronger readings such as
-external gate soundness, proof-assistant correctness, artifact semantic validity,
-current execution of every gate, or venue acceptance.  Four case studies
-illustrate the gates at the path-verified historical-snapshot level: intake
+submitted review surfaces; its soundness claim is deliberately at this
+finite-record level.  It proves neither Lean builds, daemon behaviour, artifact
+semantics, nor venue acceptance.  The current package then proves exactness of
+its six-row, path-verified instantiation, while rejecting stronger readings such
+as external gate soundness, proof-assistant correctness, artifact semantic
+validity, current execution of every gate, or venue acceptance.  Four case
+studies illustrate the gates at the path-verified historical-snapshot level: intake
 isolation, overlap/submitted blocking, fake-extension rejection, and
 artifact-limitation disclosure.
 \end{abstract}
@@ -59,11 +61,15 @@ records a compact workflow pattern for avoiding these failures: an auditable
 theory-to-paper pipeline in which AI agents propose, review, and triage, while
 deterministic gates decide what may be treated as load-bearing evidence.  The
 pattern is instantiated in local BEDC and automath workspaces.
-The mathematical content of the note is the explicit safety interface for this
-workflow: definitions for gate vocabulary, a pinned imported theorem spine, a
-constructive finite publication-certificate theorem, a current-package
-certificate-exactness theorem, evidence-level and formal-source promotion
-obstruction theorems, and witness records for the four required cases.  The CICM presentation-only submission uses the short artifact plus
+The mathematical content of the note is the explicit finite-record safety
+interface for this workflow: definitions for gate vocabulary, a pinned imported
+theorem spine, a constructive finite publication-certificate theorem, a
+current-package certificate-exactness theorem, evidence-level and formal-source
+promotion obstruction theorems, and witness records for the four required cases.
+The result is intentionally not a proof of external implementation soundness:
+Lean builds, publication-daemon behaviour, artifact semantics, and fresh command
+runs enter the argument only when a finite certificate records the corresponding
+evidence surface and boundary.  The CICM presentation-only submission uses the short artifact plus
 bibliography; this supplement and \path{review_bundle/} are evidence-support
 materials rather than competing primary submissions.
 
@@ -584,6 +590,46 @@ licenses only the same kind set, same evidence level, same gate records, same
 route boundary, same discovery interface, and same command boundary.\qed
 \end{proof}
 
+\begin{theorem}[Finite-coordinate determination boundary]
+\label{thm:finite-coordinate-determination-boundary}
+Fix the dispatch table $\Gamma$ and the verifier $V$.  Let $F$ be the finite set of
+coordinates read by $V$ from a certificate record, namely the claim-kind set,
+declared evidence level, evidence surface, promotion field, gate-pass rows,
+discovery-source rows, and command-boundary tuple.  If two ambient pipeline or
+artifact states induce the same values of all coordinates in $F$ for a claim
+$c$, then they induce the same record-acceptance decision and the same finite
+publication certificate for $c$.  Consequently no property depending on a
+coordinate outside $F$---for example a fresh Lean build result, a daemon trace,
+an artifact semantic fact, or an external venue decision---is a consequence of
+the accepted certificate unless that property is first encoded as an additional
+finite certificate coordinate and the enlarged record is accepted.
+\end{theorem}
+
+\begin{proof}
+The verifier $V$ is defined as an ordered list of six checks, and each check reads
+only one of the coordinates listed in $F$ together with the fixed finite dispatch
+table $\Gamma$.  If two ambient states induce the same values on $F$, then the
+input tuple \((K,\ell,E,H,R,D,B)\) presented to $V$ is identical in the two
+states.  Each of the six checks therefore has the same truth value in the two
+states, so $V$ either accepts both records or rejects both records at the same
+first failed finite field.  By Theorem~\ref{thm:record-acceptance-exactness}, an
+accepted decision is equivalent to the same six-clause record-acceptance
+semantics, hence the finite certificate determined by those clauses is also the
+same.
+
+Now let $Q$ be a property whose truth can vary while all coordinates in $F$ are
+held fixed.  Then there exist two ambient states with the same certificate tuple
+and the same verifier decision but different truth values for $Q$.  A conclusion
+whose truth changes under such an $F$-preserving substitution is not determined by
+the accepted certificate.  To make $Q$ load-bearing, the operational interface
+must add a finite coordinate recording the required evidence: for a build or
+daemon trace this is a command-run tuple; for an artifact semantic fact this is
+an artifact pass record or rerun log; and for a venue decision this is an
+external evidence surface and the corresponding route/submission record.  Without
+that enlargement, Theorem~\ref{thm:record-acceptance-exactness} supplies only the
+original finite-record conclusion.\qed
+\end{proof}
+
 \begin{proposition}[Machine-readable certificate records]
 \label{prop:machine-readable-certificate-records}
 For the current presentation package, the finite verifier
@@ -1011,13 +1057,17 @@ Proposition~\ref{prop:path-complete-case-witnesses}, with the current-package
 bounded instantiation isolated in
 Corollary~\ref{cor:current-package-path-verified-instantiation} and the
 case-snapshot non-rerun boundary isolated in
-Corollary~\ref{cor:case-snapshot-non-rerun-rigidity}.  Thus the package instance
-is a certificate-construction and certificate-checking theorem for the finite
-records actually supplied.  It is not an unconditional correctness theorem for an
-arbitrary implementation: it does not independently prove that such an
-implementation is gate-sound, that every possible gate in the surrounding project
-was run for this package, that Lean-facing contextual rows are current
-formal-source certificates, or that path-verified rows are command-run evidence.
+Corollary~\ref{cor:case-snapshot-non-rerun-rigidity}.  The finite-coordinate
+boundary of Theorem~\ref{thm:finite-coordinate-determination-boundary} is part of
+the conclusion: the constructed certificate determines exactly the finite record
+coordinates it reads and cannot determine any unrecorded build, daemon, artifact,
+or venue coordinate.  Thus the package instance is a certificate-construction and
+certificate-checking theorem for the finite records actually supplied.  It is not
+an unconditional correctness theorem for an arbitrary implementation: it does not
+independently prove that such an implementation is gate-sound, that every
+possible gate in the surrounding project was run for this package, that
+Lean-facing contextual rows are current formal-source certificates, or that
+path-verified rows are command-run evidence.
 \end{theorem}
 
 \begin{proof}
@@ -1044,22 +1094,24 @@ The finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness} ide
 certificate with the paper's independently stated record-acceptance semantics,
 not merely with an informal unpacking of the tuple.
 
-The maximality assertion is also finite.  The schema verifier is a function only
-of the tuple \((K,\ell,E,H,R,D,B)\), the dispatch table, and the cited submitted
-records.  Hence two surrounding implementations, formal-source trees, artifact
-runs, or venue states that agree on these submitted coordinates receive the same
-certificate decision.  A stronger reading $c^+$ therefore has only two possible
-forms.  If it keeps the same tuple, then the verifier has no coordinate from
-which to distinguish the stronger hidden assertion, so the accepted conclusion is
-still only the finite certificate conclusion just constructed.  If it enlarges
-the claim kind, evidence level, submitted boundary, discovery requirement, or
-fresh-run assertion, then the dispatch table or evidence-level definition asks
-for additional finite fields: further pass records in $R$, further evidence in
-$E$, a different boundary $B$, a human-promotion record $H$, discovery rows $D$,
-or the command-run tuple.  When those fields are absent,
-Theorem~\ref{thm:finite-certificate-obstruction-skeleton} extracts a minimal bad
-subrecord.  Thus the theorem gives a certificate-construction theorem and a
-finite-record maximality theorem, not an unlogged end-to-end correctness theorem.
+The maximality assertion is also finite.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, the schema verifier is
+a function only of the tuple \((K,\ell,E,H,R,D,B)\), the dispatch table, and the
+cited submitted records.  Hence two surrounding implementations, formal-source
+trees, artifact runs, or venue states that agree on these submitted coordinates
+receive the same certificate decision.  A stronger reading $c^+$ therefore has
+only two possible forms.  If it keeps the same tuple, then the verifier has no
+coordinate from which to distinguish the stronger hidden assertion, so the
+accepted conclusion is still only the finite certificate conclusion just
+constructed.  If it enlarges the claim kind, evidence level, submitted boundary,
+discovery requirement, or fresh-run assertion, then the dispatch table or
+evidence-level definition asks for additional finite fields: further pass records
+in $R$, further evidence in $E$, a different boundary $B$, a human-promotion
+record $H$, discovery rows $D$, or the command-run tuple.  When those fields are
+absent, Theorem~\ref{thm:finite-certificate-obstruction-skeleton} extracts a
+minimal bad subrecord.  Thus the theorem gives a certificate-construction theorem
+and a finite-record maximality theorem, not an unlogged end-to-end correctness
+theorem.
 
 Propositions~\ref{prop:claim-kind-dispatch} and
 \ref{prop:gate-interface-separation} identify the required finite gate set:
@@ -1263,8 +1315,11 @@ package.\qed
 \begin{theorem}[Current-package certificate exactness]
 \label{thm:current-package-certificate-exactness}
 For the finite current package $P^{+}$ of
-Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, the six
-ledger entries $a_1,\ldots,a_6$ are exactly the accepted finite instantiation of
+Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, with the
+six ledger entries $a_1,\ldots,a_6$ as printed in
+Tables~\ref{tab:current-acceptance-ledger} and~\ref{tab:current-certificate-ledger}
+and as checked by \path{review_bundle/certificate_verification_run.log}, those six
+entries are exactly the accepted finite instantiation of
 Theorem~\ref{thm:publication-safety-interface}.  More precisely, the package map
 \[
 a_i\longmapsto \mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)
@@ -1274,7 +1329,11 @@ checkable certificates accepted by the submitted schema verifier at the declared
 path-verified evidence level.  Every current-package reading requiring a seventh
 accepted row, a different claim kind, a stronger evidence level, an additional
 gate pass record, a fresh command-run tuple, or an external venue decision is
-outside this bijection and is rejected by the finite obstruction skeleton.
+outside this bijection and is rejected by the finite obstruction skeleton.  The
+exactness is therefore row-frozen and verifier-log bounded: editing any of the
+six rows or any machine-readable mirror changes the finite package unless the
+certificate verifier is rerun and the displayed tables and log are updated
+together.
 \end{theorem}
 
 \begin{proof}
@@ -1295,7 +1354,11 @@ schema instance over \path{review_bundle/certificate_schema.json},
 \path{review_bundle/current_package_pass_records.json},
 \path{review_bundle/submission_interface_map.json},
 \path{review_bundle/primary_claim_inventory.json}, the verifier script, and the
-recorded verifier log.  That instance checks kind-domain membership,
+recorded verifier log.  The recorded log states command
+\path{python review_bundle/verify_certificate_records.py}, source commit
+\path{local working tree for current presentation package}, environment
+\path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
+\path{review_bundle/certificate_verification_run.log}.  That instance checks kind-domain membership,
 path-verified evidence-level membership, assigned-gate coverage, the five
 pass-record fields, discovery-field discipline, and the path-verified command
 boundary for entries $a_1,\ldots,a_6$.  Hence every certificate in the image of
@@ -1310,8 +1373,8 @@ just identified.  By Theorem~\ref{thm:finite-certificate-obstruction-skeleton},
 the first failed finite field gives a bad subrecord: a missing evidence surface,
 missing gate record, missing promotion or venue field, missing discovery-source
 row, or unsupported command-run escalation.  Thus the six certificates are not a
-sample of an unrecorded full-pipeline execution; they are exactly the finite,
-path-verified package instantiation of
+sample of an unrecorded full-pipeline execution; they are exactly the row-frozen,
+finite, path-verified package instantiation of
 Theorem~\ref{thm:publication-safety-interface}.\qed
 \end{proof}
 
@@ -1442,6 +1505,13 @@ Theorem~\ref{thm:publication-safety-interface}.  If the row is path-complete in
 the sense above, then the row supplies exactly the evidence surface required for
 a path-verified historical case claim and no evidence surface for a fresh daemon,
 full-source, theorem-content, artifact-suite, or semantic-substrate rerun.  In
+fact every accepted path-complete case row factors through one of four finite
+witness skeletons---promotion, route/submission blocking, theorem-content
+non-growth, or artifact-limitation disclosure---and its admissible manuscript
+lesson is the unique bounded lesson attached to that skeleton.  Replacing that
+lesson by a fresh experiment, dynamic validation, or semantic artifact claim
+changes the skeleton by adding a command-run or artifact-semantic coordinate, so
+the original row no longer certifies the stronger claim.  In
 particular, a promotion row is sufficient only
 for the bounded claim that an intake packet is not daemon-visible publication
 work before human promotion; a route-overlap row is sufficient only for the
@@ -1480,7 +1550,26 @@ lemma also rules out upgrading the row to a command-run claim unless the extra
 command-run fields are recorded.  In particular, the proof does not rerun the
 publication daemon, overlap scanner, theorem-content detector, artifact suite,
 or GroundCompiler evaluator; it proves only that the historical path surfaces are
-sufficient for the bounded lessons displayed in the table.\qed
+sufficient for the bounded lessons displayed in the table.
+
+It remains to justify the skeleton and uniqueness assertions.  The operational
+interface dispatches each case row by its gate family.  A row whose required gate
+is promotion has exactly the promotion skeleton; a row whose required gates are
+overlap and submission-state has the route/submission-blocking skeleton; a row
+whose required gate is theorem-content has the non-growth skeleton; and a row
+whose required gates are status and limitation-ledger has the artifact-limitation
+skeleton.  These four skeletons are disjoint because their gate sets differ, and
+the row's safe-lesson field is part of the finite record checked by
+Lemma~\ref{lem:gate-witness-criterion}.  Hence, once the skeleton is fixed, the
+only accepted lesson is the bounded lesson printed in that row.  A fresh
+experiment or dynamic validation would require the command-run boundary fields in
+Definition~\ref{def:operational-acceptance-interface}; an artifact-semantic claim
+would require an additional artifact pass record or semantic evaluator surface.
+Those coordinates are not read by the path-complete row and are not present in
+the four skeletons.  The stronger reading is therefore rejected by
+Theorem~\ref{thm:finite-coordinate-determination-boundary} together with the
+finite obstruction skeleton, while the original bounded historical lesson remains
+accepted.\qed
 \end{proof}
 
 \section{Case studies}
