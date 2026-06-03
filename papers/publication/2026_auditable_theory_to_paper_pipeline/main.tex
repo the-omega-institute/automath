@@ -441,11 +441,83 @@ for an evidence-level failure.  This subrecord is independent of any surrounding
 paragraph that may have described the claim.\qed
 \end{proof}
 
+\begin{theorem}[Record-acceptance exactness]
+\label{thm:record-acceptance-exactness}
+Fix the seven-kind dispatch table $\Gamma$, the two evidence levels, and the
+certificate tuple format of Definition~\ref{def:operational-acceptance-interface}.
+For a load-bearing claim $c$ and a finite candidate certificate
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$, define
+$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ to mean that the following six semantic
+record clauses hold:
+\begin{enumerate}
+\item $K$ is a nonempty set of declared claim kinds in the seven-kind domain and
+$\ell$ is one of the two evidence levels;
+\item every item of $E$ is a submitted path, review-bundle path, manifest row,
+log path, pinned commit, or explicit historical-evidence boundary available to
+the reviewer at level $\ell$;
+\item for every gate in $\bigcup_{k\in K}\Gamma(k)$, $R$ contains a pass record
+with gate name, input surface, decision, evidence pointer, and evidence level,
+and the pointer lies in $E$ or in a named submitted table, manifest row, bundled
+snapshot, or historical boundary;
+\item $H$ records human promotion exactly when the claim crosses the
+intake-to-publication boundary, and otherwise records that no such boundary is
+crossed;
+\item $D$ is present exactly for discovery-kind claims and then names the pinned
+discovery-gate source-interface rows used by the claim; and
+\item $B$ records the command, source commit, environment, exit code, and log path
+for command-run evidence, or records that no command-run assertion is made.
+\end{enumerate}
+Then the finite verifier $V$ accepts $\mathcal C(c)$ if and only if
+$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.  Moreover, if $V$ accepts a record
+for $c$, the same record cannot certify any stronger reading $c^{+}$ that adds a
+new claim kind, a stronger evidence level, an omitted route crossing, an omitted
+discovery interface, an omitted pass record, or a command-run assertion: such a
+reading has a finite bad subrecord of the corresponding clause.  Thus $V$ is
+sound and complete for this paper's record-acceptance semantics, while remaining
+silent about external semantic validity of the referenced theory or artifacts.
+\end{theorem}
+
+\begin{proof}
+The definition of $V$ and the six clauses above use the same finite inputs.  The
+first check of $V$ is clause~1.  The second check is clause~2.  The third check is
+clause~3, including both assigned-gate coverage and the requirement that each
+evidence pointer be tied to the declared review surface.  The fourth, fifth, and
+sixth checks are exactly clauses~4, 5, and 6.  Therefore, if
+$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds, every verifier check succeeds and
+$V$ accepts.
+
+Conversely, suppose $V$ accepts.  Reading the successful checks in order gives
+precisely clauses~1--6: the kind set and evidence level are in the permitted
+domains; the evidence surface is reviewer-available at the declared level; every
+gate assigned by $\Gamma$ has a pass record with the required five fields and an
+allowed pointer; promotion and non-promotion are separated by $H$; discovery-kind
+claims and only discovery-kind claims carry $D$; and $B$ fixes the command-run
+boundary.  Hence $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.
+
+For the final assertion, keep the accepted tuple fixed and consider a proposed
+stronger reading $c^{+}$.  If $c^{+}$ adds a claim kind, the finite set of gates
+assigned by $\Gamma$ grows unless the added kind is vacuous in this interface;
+without the corresponding pass records clause~3 fails, and if the kind lies
+outside the seven-kind domain clause~1 fails.  If $c^{+}$ raises the evidence
+level to command-run, clause~6 fails unless the command, commit, environment,
+exit code, and log path are present.  If it adds a route crossing, clause~4 fails
+unless $H$ contains the human-promotion record.  If it adds discovery content,
+clause~5 fails unless the pinned discovery rows are named.  If it asserts a new
+gate-dependent conclusion without a pass record, clause~3 fails.  In each case
+the failed clause reads only finitely many fields, so deleting irrelevant unread
+fields gives an inclusion-minimal bad subrecord.  If none of the clauses changes,
+then $c^{+}$ is not stronger in the record semantics: the certificate still
+licenses only the same kind set, same evidence level, same gate records, same
+route boundary, same discovery interface, and same command boundary.\qed
+\end{proof}
+
 \begin{proposition}[Machine-readable certificate records]
 \label{prop:machine-readable-certificate-records}
 For the current presentation package, the finite verifier
-$V$ of Proposition~\ref{prop:finite-certificate-schema-verifier} has an
-executable record-level instance over the review bundle.  The schema file
+$V$ of Proposition~\ref{prop:finite-certificate-schema-verifier}, with the
+record-acceptance semantics of
+Theorem~\ref{thm:record-acceptance-exactness}, has an executable record-level
+instance over the review bundle.  The schema file
 \path{review_bundle/certificate_schema.json}, the pass-record ledger
 \path{review_bundle/current_package_pass_records.json}, the primary-interface map
 \path{review_bundle/submission_interface_map.json}, the primary-claim inventory
@@ -498,7 +570,10 @@ the path-verified boundary condition.  The recorded log
 that script over the submitted files and states the boundary that no Lean build,
 publication-daemon run, or Rule110 dynamic artifact rerun is being certified.
 Consequently the executable artifact proves exactly the schema-level instance of
-$V$ claimed here.
+$V$ claimed here.  By Theorem~\ref{thm:record-acceptance-exactness}, this is also
+an instance of the paper's finite record-acceptance semantics: the executable
+record accepts exactly the six current-package certificates and no stronger
+evidence level or omitted gate semantics.
 
 Finally, \path{review_bundle/submission_interface_map.json} has rows
 \path{sim1}--\path{sim4}, matching the four rows of
@@ -700,7 +775,9 @@ safety and main pipeline theorem labels; and that no inactive intake seed is
 treated as publication work without human promotion.  Then, conditional on those
 workflow assumptions, any accepted load-bearing claim in the manuscript admits a
 locally checkable publication certificate $\mathcal C(c)$ accepted by the finite
-schema verifier of Proposition~\ref{prop:finite-certificate-schema-verifier}.
+schema verifier of Proposition~\ref{prop:finite-certificate-schema-verifier};
+equivalently, by Theorem~\ref{thm:record-acceptance-exactness}, it satisfies the
+record-acceptance semantics for the dispatch table $\Gamma$.
 Consequently the claim has a recorded evidence surface, a declared evidence
 boundary, and a prior pass record for every gate required for its claim kind.
 Moreover, accepted discovery claims inherit the bounded pinned source-interface
@@ -708,10 +785,15 @@ consequences that statement-only, code-only, mechanical-expansion, and
 compression-only outputs are not accepted as discovery without the required
 certificate, ledger, and lineage witnesses.  Any purported accepted claim without
 such finite certificate data is rejected by one of the five obstruction skeletons
-in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  This theorem is a
-conditional safety interface: it does not independently prove that an arbitrary
-implementation is gate-sound, that all gates were run, or that path-verified rows
-are command-run evidence.
+in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  For the current
+package, the hypotheses are witnessed by the machine-readable evidence map in
+Proposition~\ref{prop:machine-readable-certificate-records}, the acceptance
+ledger in Proposition~\ref{prop:current-package-acceptance-certificate-ledger},
+and the four path-complete case witnesses of
+Proposition~\ref{prop:path-complete-case-witnesses}.  This theorem is a
+conditional safety interface for that architecture: it does not independently
+prove that an arbitrary implementation is gate-sound, that all gates were run,
+or that path-verified rows are command-run evidence.
 \end{theorem}
 
 \begin{proof}
@@ -730,7 +812,11 @@ discovery claim, the discovery-routing assumption supplies $D$ from the pinned
 source-interface rows; otherwise $D$ is absent as required by the certificate
 schema.  Thus $\mathcal C(c)=(K,\ell,E,H,R,D,B)$ is locally checkable whenever its
 cited paths and manifest rows lie in the submitted artifact, review bundle, or
-explicit historical boundary.
+explicit historical boundary.  The same construction verifies
+$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
+Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
+certificate with the paper's independently stated record-acceptance semantics,
+not merely with an informal unpacking of the tuple.
 
 Propositions~\ref{prop:claim-kind-dispatch} and
 \ref{prop:gate-interface-separation} identify the required finite gate set:
@@ -1523,6 +1609,56 @@ contextual BEDC, Lean, finite-witness, compiler-layer, or review-bundle sentence
 remains hidden as an uncertified load-bearing claim.\qed
 \end{proof}
 
+\begin{proposition}[Primary-inventory freshness criterion]
+\label{prop:primary-inventory-freshness-criterion}
+Let $S$ be a later edited version of \path{submission_abstract.tex}, and let
+$I$ be a primary-claim inventory with rows of the same form as
+\path{review_bundle/primary_claim_inventory.json}: each row gives a location in
+$S$, a claim text or bounded paraphrase, a row status, a certificate surface, and
+an evidence level.  Suppose a manual claim audit of $S$ produces a finite list of
+load-bearing assertions and verifies the following three conditions:
+\begin{enumerate}
+\item every load-bearing assertion in $S$ appears in exactly one row of $I$;
+\item each row of $I$ points to a supplement theorem, table row, manifest row, or
+bounded-context status that exists in the submitted package; and
+\item for every row, the status and evidence level do not exceed what its cited
+certificate surface proves under the finite record semantics of
+Theorem~\ref{thm:record-acceptance-exactness}.
+\end{enumerate}
+Then the row-classification conclusion of
+Proposition~\ref{prop:primary-claim-row-classification} holds for the edited
+primary artifact $S$ with $I$ in place of the current inventory.  Conversely, if
+one of the three audit conditions fails, the edited primary artifact has a finite
+review obstruction: an unclassified load-bearing assertion, a stale certificate
+pointer, or an evidence-level overclaim.
+\end{proposition}
+
+\begin{proof}
+Assume the three audit conditions.  By condition~1, the audit list is a finite
+partition of the load-bearing assertions of $S$ by inventory row: no assertion is
+omitted and no assertion is assigned to two incompatible rows.  By condition~2,
+each row has a concrete certificate surface inside the submitted package, so the
+row is not supported by prose memory or by an absent local file.  By condition~3,
+the certificate surface licenses exactly the row's declared status and evidence
+level in the sense of Theorem~\ref{thm:record-acceptance-exactness}.  Hence each
+load-bearing assertion of $S$ is either an accepted certificate row, a bounded
+contextual interface row, or an accepted bounded artifact row, according to the
+status permitted by its cited certificate.  Since the finite audit list exhausts
+all load-bearing assertions, there is no hidden primary assertion left to
+classify.
+
+For the converse, if condition~1 fails, some load-bearing assertion is missing
+from the inventory or is assigned inconsistently, giving an unclassified-row
+obstruction.  If condition~2 fails, a row points outside the submitted theorem,
+table, manifest, or bounded-context surfaces, giving a stale-pointer obstruction.
+If condition~3 fails, the row asserts a stronger status or evidence level than
+its certificate permits; Theorem~\ref{thm:record-acceptance-exactness} supplies a
+finite bad subrecord, and Theorem~\ref{thm:evidence-level-overclaim-obstruction}
+classifies it as an evidence-level overclaim when the excess is a stronger
+verification or command-run reading.  These are finite obstructions read from the
+edited source, the inventory row, and the cited certificate surface.\qed
+\end{proof}
+
 \begin{proposition}[Primary--supplement interface map]
 \label{prop:primary-supplement-interface-map}
 Every load-bearing claim made in the current primary artifact
@@ -1576,9 +1712,12 @@ Proposition~\ref{prop:submission-artifact-role-separation}, to
 Proposition~\ref{prop:machine-readable-certificate-records}, to this table, and
 to the manifest fields \path{submission_artifacts} and
 \path{submission_interface_map}.  Table~\ref{tab:primary-claim-inventory} then
-expands these four interfaces into the concrete primary assertions, and
+expands these four interfaces into the concrete primary assertions,
 Proposition~\ref{prop:primary-claim-row-classification} classifies each
-\path{pc1}--\path{pc12} row.  The Lean mathlib-free, local marker-audit, and
+\path{pc1}--\path{pc12} row, and
+Proposition~\ref{prop:primary-inventory-freshness-criterion} states the manual
+audit condition required if the primary source is edited before final
+submission.  The Lean mathlib-free, local marker-audit, and
 axiom-audit statements are bounded contextual rows tied to
 Proposition~\ref{prop:formal-source-gate-instantiation}; the finite-witness and
 Rule110/GroundCompiler boundary statements are tied to
