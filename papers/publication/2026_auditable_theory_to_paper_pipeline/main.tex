@@ -262,7 +262,7 @@ parses the ten rows of Table~\ref{tab:source-interface-record} from this source,
 loads \path{source_interface_record.json}, loads the
 \path{pinned_source_snapshot} object of
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and computes the SHA-256 digest
-and line count of the bundled snapshot.  It then checks six finite conditions:
+line count, and byte count of the bundled snapshot.  It then checks seven finite conditions:
 the ordered manuscript rows are the ordered JSON records; the JSON source path
 and commit equal the manifest's original path and commit; the ordered JSON line
 ranges equal the manifest's \path{line_ranges_used}; the computed digest equals
@@ -272,12 +272,12 @@ that inclusive snapshot interval.
 
 The recorded run in \path{review_bundle/source_interface_verification_run.log}
 has status \path{pass}.  Its counts are ten manuscript table rows, ten JSON
-records, ten manifest ranges, snapshot line count 498, and digest
+records, ten manifest ranges, snapshot line count 498, snapshot byte count 20746, and digest
 \path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2}.  Its
 per-row label checks all report \path{label_in_range: true} for the ten labels
 listed in Table~\ref{tab:source-interface-record}.  Therefore no accepted row can
 be a table-only, JSON-only, manifest-only, or out-of-range source-interface row:
-any such defect would violate one of the six checked finite conditions and would
+any such defect would violate one of the seven checked finite conditions and would
 appear as a finite bad subrecord.  What remains unchecked is exactly outside the
 claim: the script does not interpret or prove the imported theorem statements.
 Thus the executable comparison strengthens the earlier manual audit into a
@@ -650,7 +650,7 @@ and evidence levels.  The recorded log
 that script over the submitted files and states the boundary that no Lean build,
 publication-daemon run, or Rule110 dynamic artifact rerun is being certified.
 Consequently the executable artifact proves exactly the schema-level instance of
-$V$ claimed here.  By Theorem~\ref{thm:record-acceptance-exactness}, this is also
+$V$ claimed here.  By the finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, this is also
 an instance of the paper's finite record-acceptance semantics: the executable
 record accepts exactly the six current-package certificates and no stronger
 evidence level or omitted gate semantics.
@@ -700,7 +700,7 @@ script is constant on the equivalence classes of review bundles with the same
 projection $F$.  On this quotient, the six ledger entries, their kind sets, their
 evidence levels, their assigned gates, their pass-record fields, their discovery
 boundaries, and their path-verified non-command boundaries are all fixed.  The
-record-acceptance exactness theorem then identifies precisely what this fixed
+finite-record acceptance exactness theorem then identifies precisely what this fixed
 data entails: acceptance of those six certificates in the finite relation
 $\mathsf{Acc}_{\Gamma}$ and rejection of stronger readings that add kinds, raise
 the evidence level, omit route or discovery fields, omit pass records, or assert
@@ -722,6 +722,69 @@ function of $F$ has the same value on both packages, no executable claim proved 
 this verifier can certify that stronger assertion.  The maximal executable
 record-level claim is exactly the one stated in
 Proposition~\ref{prop:machine-readable-certificate-records}.\qed
+\end{proof}
+
+\begin{theorem}[Executable certificate-construction invariant]
+\label{thm:executable-certificate-construction-invariant}
+For the submitted review bundle, let $G$ be the union of the finite fields read by
+the two executable verifiers
+\path{review_bundle/verify_source_interface_record.py} and
+\path{review_bundle/verify_certificate_records.py}.  Thus $G$ contains the ten
+source-interface table triples, the JSON source-interface records, the pinned
+source snapshot path, digest, line count, declared source commit and line ranges,
+the six current-package pass-record entries $a_1,\ldots,a_6$, the submission-map
+rows \path{sim1}--\path{sim4}, the primary-inventory row locks
+\path{pc1}--\path{pc12}, and the two recorded successful verifier logs.  On the
+equivalence class of packages with the same projection $G$, the publication-safety
+interface has a unique executable finite certificate construction: the imported
+discovery-gate interface is the ten-row checked source interface of
+Proposition~\ref{prop:source-interface-record-file-consistency}, the accepted
+current-package certificates are exactly the six records of
+Proposition~\ref{prop:machine-readable-certificate-records}, and any stronger
+reading that changes the source interface, adds an accepted row, raises the
+evidence level, adds a command-run assertion, or asserts external semantic or
+venue correctness is not determined by $G$ and is rejected at the finite-record
+boundary unless new certificate fields and verifier records are supplied.
+\end{theorem}
+
+\begin{proof}
+The first executable verifier reads only the manuscript source-interface table,
+\path{source_interface_record.json}, the \path{pinned_source_snapshot} object of
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and the bundled source snapshot.
+Proposition~\ref{prop:source-interface-record-file-consistency} proves that these
+fields agree on the ordered ten triples, the original path, the source commit, the
+ten line ranges, the snapshot digest, the snapshot line count, and the containment
+of each imported label in its declared range.  Hence every package with the same
+projection $G$ has the same executable imported discovery-gate interface, and no
+table-only, JSON-only, manifest-only, stale-digest, stale-line-count, or
+out-of-range imported row can be accepted inside that projection.
+
+The second executable verifier reads the manifest fields, the certificate schema,
+the six pass-record entries, the submission-interface map, and the primary-claim
+inventory.  Proposition~\ref{prop:machine-readable-certificate-records} proves
+that these fields instantiate the finite verifier $V$ for exactly rows
+$a_1,\ldots,a_6$ at the path-verified level, with the displayed gate coverage,
+discovery-field discipline, row locks, and non-command boundary.  Therefore every
+package with the same projection $G$ has the same six accepted current-package
+certificates and the same absence of command-run evidence in those certificates.
+The finite-record exactness theorem,
+Theorem~\ref{thm:record-acceptance-exactness}, identifies these accepted records
+with the record-acceptance relation and rejects stronger readings that require
+additional claim kinds, evidence surfaces, promotion fields, discovery fields,
+pass rows, or command-run tuples.
+
+Combining the two paragraphs gives the stated uniqueness on the $G$-projection:
+the discovery component of any accepted current-package claim is forced through
+the same checked ten-row source interface, and the publication component is forced
+through the same six checked certificate rows.  Any proposed stronger assertion
+listed in the statement either changes one of the finite fields of $G$, in which
+case it is not a package in the same equivalence class, or leaves $G$ unchanged,
+in which case the two verifiers receive identical inputs and can return only the
+same finite-record conclusions.  Such an unchanged projection contains no
+coordinate for external theorem truth, proof-assistant correctness, unlogged
+daemon execution, artifact semantic validity, or venue acceptance.  Those claims
+therefore require an enlarged certificate and additional executable records, and
+without them they are outside the accepted finite-record interface.\qed
 \end{proof}
 
 \begin{proposition}[Deterministic claim-kind dispatch]
@@ -923,7 +986,7 @@ acceptance entry and submitted evidence surfaces, a record
 \]
 accepted by the finite schema verifier of
 Proposition~\ref{prop:finite-certificate-schema-verifier}; equivalently, by
-Theorem~\ref{thm:record-acceptance-exactness}, the constructed record satisfies
+the finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, the constructed record satisfies
 the record-acceptance semantics for the dispatch table $\Gamma$.  This is the
 maximal conclusion determined by the submitted finite coordinates: if a stronger
 reading $c^+$ of $c$ asserts external end-to-end compiler correctness, current
@@ -977,7 +1040,7 @@ finite submitted records and is locally checkable whenever its cited paths and
 manifest rows lie in the submitted artifact, review bundle, or explicit
 historical boundary.  The same construction verifies
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
-Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
+The finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
 certificate with the paper's independently stated record-acceptance semantics,
 not merely with an informal unpacking of the tuple.
 
@@ -1063,7 +1126,7 @@ the evidence boundary.  If another implementation supplies the same values for
 these fields, the same finite schema verifier receives the same input record and
 therefore gives the same certificate-construction conclusion by
 Proposition~\ref{prop:finite-certificate-schema-verifier} and
-Theorem~\ref{thm:record-acceptance-exactness}.  No step of the proof inspected an
+the finite-record exactness theorem, Theorem~\ref{thm:record-acceptance-exactness}.  No step of the proof inspected an
 unsubmitted daemon trace, reran a proof assistant, reran a finite-witness
 artifact, or queried a venue form after the recorded venue check; those facts are
 not coordinates of \(\mathcal C(c)\).
@@ -2119,7 +2182,7 @@ load-bearing assertions and verifies the following three conditions:
 bounded-context status that exists in the submitted package; and
 \item for every row, the status and evidence level do not exceed what its cited
 certificate surface proves under the finite record semantics of
-Theorem~\ref{thm:record-acceptance-exactness}.
+the finite-record exactness theorem, Theorem~\ref{thm:record-acceptance-exactness}.
 \end{enumerate}
 Then the row-classification conclusion of
 Proposition~\ref{prop:primary-claim-row-classification} holds for the edited
@@ -2150,7 +2213,7 @@ omitted and no assertion is assigned to two incompatible rows.  By condition~2,
 each row has a concrete certificate surface inside the submitted package, so the
 row is not supported by prose memory or by an absent local file.  By condition~3,
 the certificate surface licenses exactly the row's declared status and evidence
-level in the sense of Theorem~\ref{thm:record-acceptance-exactness}.  Hence each
+level in the sense of the finite-record exactness theorem, Theorem~\ref{thm:record-acceptance-exactness}.  Hence each
 load-bearing assertion of $S$ is either an accepted certificate row, a bounded
 contextual interface row, or an accepted bounded artifact row, according to the
 status permitted by its cited certificate.  Since the finite audit list exhausts
@@ -2162,7 +2225,7 @@ from the inventory or is assigned inconsistently, giving an unclassified-row
 obstruction.  If condition~2 fails, a row points outside the submitted theorem,
 table, manifest, or bounded-context surfaces, giving a stale-pointer obstruction.
 If condition~3 fails, the row asserts a stronger status or evidence level than
-its certificate permits; Theorem~\ref{thm:record-acceptance-exactness} supplies a
+its certificate permits; the finite-record exactness theorem, Theorem~\ref{thm:record-acceptance-exactness}, supplies a
 finite bad subrecord, and Theorem~\ref{thm:evidence-level-overclaim-obstruction}
 classifies it as an evidence-level overclaim when the excess is a stronger
 verification or command-run reading.  These are finite obstructions read from the
@@ -2417,7 +2480,7 @@ Definition~\ref{def:operational-acceptance-interface}.  A fresh daemon,
 full-source, theorem-content, Rule110, or GroundCompiler rerun is therefore a
 strictly stronger evidence-level assertion than the accepted row supplies.  By
 Proposition~\ref{prop:finite-certificate-schema-verifier} and
-Theorem~\ref{thm:record-acceptance-exactness}, the same certificate cannot accept
+the finite-record exactness theorem, Theorem~\ref{thm:record-acceptance-exactness}, the same certificate cannot accept
 that stronger assertion: its boundary field $B$ records no command-run assertion,
 and the missing command tuple is a finite bad subrecord.  Thus the snapshots are
 rigidly limited to path-verified reviewability unless a separate rerun log is
@@ -2530,4 +2593,9 @@ promotion decisions.
 \bibliography{references}
 
 \end{document}
+
+
+
+
+
 
