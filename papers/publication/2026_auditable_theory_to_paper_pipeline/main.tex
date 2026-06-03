@@ -347,6 +347,17 @@ also records the command, source commit, environment, exit code, and log path
 for a fresh run.  This long technical supplement uses path-verified architecture
 and case evidence unless explicitly marked command-run.
 
+A uniform \emph{pass record} is the finite tuple
+\[
+\rho=(g,I,d,e,\ell),
+\]
+where $g$ is the gate name, $I$ is the input surface submitted to that gate,
+$d$ is the recorded decision, $e$ is the evidence pointer supporting the
+decision, and $\ell$ is the evidence level.  A pass record is assigned to a
+claim certificate only when its evidence pointer is contained in the claim's
+evidence surface, in a submitted manifest or table row, in a bundled snapshot, or
+in an explicit historical-evidence boundary.
+
 A \emph{publication certificate} for a load-bearing claim $c$ is the finite
 record
 \[
@@ -355,7 +366,7 @@ record
 Here $K$ is the nonempty finite set of claim kinds carried by $c$, $\ell$ is the
 evidence level, $E$ is the evidence surface, $H$ is either a human-promotion
 record or the marker that $c$ does not cross the intake-to-publication boundary,
-$R$ gives one pass record, with its cited evidence item in $E$, for each gate in
+$R$ gives one pass record, with the five fields above, for each gate in
 $\bigcup_{k\in K}\Gamma(k)$, $D$ is present exactly when $K$ contains discovery
 and then names the pinned discovery-gate source-interface rows used for the
 claim, and $B$ records either the command-run fields or the explicit boundary
@@ -371,7 +382,9 @@ domain and $\ell$ is either path-verified or command-run; (ii) every element of
 the finite evidence surface $E$ is a cited submitted path, review-bundle path,
 manifest row, log path, pinned commit, or explicit historical-evidence boundary;
 (iii) for every gate in $\bigcup_{k\in K}\Gamma(k)$, the field $R$ contains a pass
-record citing an item of $E$; (iv) $H$ is a concrete human-promotion record when
+record with gate name, input surface, decision, evidence pointer, and evidence
+level, and the evidence pointer is tied to $E$ or to a named manifest, table,
+bundled snapshot, or historical boundary; (iv) $H$ is a concrete human-promotion record when
 the claim crosses the intake-to-publication boundary and otherwise records that
 no such boundary is crossed; (v) $D$ is present exactly when discovery lies in
 $K$, and then names the pinned discovery-gate source-interface rows used by the
@@ -417,6 +430,76 @@ $\Gamma$, $R$, and the cited evidence item for a gate-record failure, $H$ for a
 promotion failure, $K$ and $D$ for a discovery-field failure, or $\ell$ and $B$
 for an evidence-level failure.  This subrecord is independent of any surrounding
 paragraph that may have described the claim.\qed
+\end{proof}
+
+\begin{proposition}[Machine-readable certificate records]
+\label{prop:machine-readable-certificate-records}
+For the current presentation package, the finite verifier
+$V$ of Proposition~\ref{prop:finite-certificate-schema-verifier} has an
+executable record-level instance over the review bundle.  The schema file
+\path{review_bundle/certificate_schema.json}, the pass-record ledger
+\path{review_bundle/current_package_pass_records.json}, the primary-interface map
+\path{review_bundle/submission_interface_map.json}, the primary-claim inventory
+\path{review_bundle/primary_claim_inventory.json}, the verifier script
+\path{review_bundle/verify_certificate_records.py}, and the recorded run
+\path{review_bundle/certificate_verification_run.log} instantiate the verifier at
+the path-verified level for entries $a_1,\ldots,a_6$.  Each pass record in the
+ledger has the five fields \emph{gate name}, \emph{input surface},
+\emph{decision}, \emph{evidence pointer}, and \emph{evidence level}.  The
+machine-readable submission-interface map mirrors
+Table~\ref{tab:submission-interface-map}, and the primary-claim inventory maps
+each concrete assertion in \path{submission_abstract.tex} either to a certificate
+row or to an explicit bounded-context status.
+\end{proposition}
+
+\begin{proof}
+All objects in the statement are finite files in the submitted review bundle, so
+the claim is a finite record check.  The manifest
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} contains top-level fields named
+\path{certificate_schema}, \path{current_package_pass_records},
+\path{submission_interface_map}, \path{primary_claim_inventory},
+\path{verifier_script}, and \path{verifier_run_log}; these fields point to the six
+bundle files named in the statement.  Thus the executable verifier is not an
+implicit prose convention but a submitted artifact surface.
+
+The schema file lists the seven claim kinds, the two evidence levels, the same
+gate dispatch $\Gamma$ used in the supplement, and the required pass-record
+fields $(g,I,d,e,\ell)$.  The pass-record ledger has exactly six entries,
+$a_1,\ldots,a_6$.  For each entry it records a nonempty claim-kind set, the
+path-verified evidence level, a finite evidence surface, the route-boundary or
+human-promotion field, pass records, the discovery-interface field, and the
+evidence boundary.  Inspecting the six entries gives the required gate coverage:
+$a_1$ has inventory and marker-existence records; $a_2$ has promotion, overlap,
+submission-state, and submission-pack records; $a_3$ has promotion, overlap, and
+submission-state records; $a_4$ has promotion, overlap, submission-state, and
+submission-pack records; $a_5$ has pinned-discovery and theorem-content-delta
+records; and $a_6$ has status and limitation-ledger records.  These are exactly
+the unions of the gate sets assigned by $\Gamma$ to the claim-kind sets displayed
+in Table~\ref{tab:current-acceptance-ledger}.  The only row with discovery kind
+is $a_5$, and it is the only row with a non-null discovery-interface field; every
+row is path-verified and therefore carries a boundary saying that no command-run
+assertion is made.
+
+The script \path{review_bundle/verify_certificate_records.py} implements precisely
+these finite checks: required manifest fields, entries $a_1$--$a_6$, kind-domain
+membership, evidence-level membership, assigned-gate coverage, the five
+pass-record fields, evidence-level agreement, discovery-field discipline, and
+the path-verified boundary condition.  The recorded log
+\path{review_bundle/certificate_verification_run.log} records a successful run of
+that script over the submitted files and states the boundary that no Lean build,
+publication-daemon run, or Rule110 dynamic artifact rerun is being certified.
+Consequently the executable artifact proves exactly the schema-level instance of
+$V$ claimed here.
+
+Finally, \path{review_bundle/submission_interface_map.json} has rows
+\path{sim1}--\path{sim4}, matching the four rows of
+Table~\ref{tab:submission-interface-map}.  The file
+\path{review_bundle/primary_claim_inventory.json} lists the concrete primary-note
+assertions as rows \path{pc1}--\path{pc12}; every load-bearing row names a
+certificate, row, manifest surface, or bounded-context status and declares an
+evidence level.  Thus the primary note has a complete finite claim inventory, and
+no additional primary load-bearing assertion is licensed by the machine-readable
+interface.\qed
 \end{proof}
 
 \begin{proposition}[Deterministic claim-kind dispatch]
@@ -717,7 +800,13 @@ Let $P^{+}$ be the finite current package consisting of
 \path{submission_abstract.tex}, this supplement \path{main.tex},
 \path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md},
 \path{source_interface_record.json}, and
-\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, together with the explicit
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, together with
+\path{review_bundle/certificate_schema.json},
+\path{review_bundle/current_package_pass_records.json},
+\path{review_bundle/submission_interface_map.json},
+\path{review_bundle/primary_claim_inventory.json},
+\path{review_bundle/verify_certificate_records.py},
+\path{review_bundle/certificate_verification_run.log}, and the explicit
 historical paths named in the case catalogue.  Tables~\ref{tab:current-acceptance-ledger}
 and~\ref{tab:current-certificate-ledger} form a finite submission-local
 acceptance-entry ledger for the load-bearing current-package claims used in
@@ -783,7 +872,9 @@ For the current presentation package, let $P$ be the finite package consisting
 of \path{submission_abstract.tex}, this supplement \path{main.tex},
 \path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md},
 \path{source_interface_record.json}, and
-\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  The path catalogue in $P$
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, together with the executable
+certificate records named in
+Proposition~\ref{prop:machine-readable-certificate-records}.  The path catalogue in $P$
 instantiates Theorem~\ref{thm:publication-safety-interface} at the
 path-verified evidence level as follows.  The imported discovery-gate interface
 is fixed by the pinned newmath commit
@@ -1130,9 +1221,11 @@ Agent output is advisory; accepted load-bearing claims require typed evidence
 surfaces and deterministic gates &
 Theorem~\ref{thm:publication-safety-interface},
 Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, and
+Proposition~\ref{prop:machine-readable-certificate-records}, and
 Corollary~\ref{cor:current-package-path-verified-instantiation} &
 Table~\ref{tab:current-acceptance-ledger}, rows $a_1$--$a_5$;
-\path{public_interface} and \path{pinned_source_snapshot} manifest entries &
+\path{current_package_pass_records}, \path{public_interface}, and
+\path{pinned_source_snapshot} manifest entries &
 conditional theorem interface plus pinned-source snapshot \\
 Pinned discovery-gate calculus is imported only through bounded source-interface
 rows at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b} &
@@ -1146,12 +1239,15 @@ Four compressed case rows certify path completeness and reviewability only at
 the path-verified level &
 Lemma~\ref{lem:gate-witness-criterion},
 Proposition~\ref{prop:path-complete-case-witnesses}, and
-Proposition~\ref{prop:review-bundle-case-snapshot-coverage} &
+Proposition~\ref{prop:review-bundle-case-snapshot-coverage};
+machine-readable rows from Proposition~\ref{prop:machine-readable-certificate-records} &
 Table~\ref{tab:case-witnesses};
-\path{case_evidence[*].reviewable_snapshots} manifest entries &
+\path{case_evidence[*].reviewable_snapshots} and
+\path{primary_claim_inventory} manifest entries &
 bundled snapshots or directory manifests; no command-run validation \\
 The submission separates the primary note, long supplement, and review bundle &
-Proposition~\ref{prop:submission-artifact-role-separation} &
+Proposition~\ref{prop:submission-artifact-role-separation} and
+Proposition~\ref{prop:machine-readable-certificate-records} &
 This table; \path{submission_artifacts} and \path{submission_interface_map}
 manifest entries &
 submission-package interface record \\
@@ -1159,14 +1255,33 @@ submission-package interface record \\
 \end{tabular}
 \end{table}
 
+\begin{table}
+\caption{Primary-claim inventory for the current presentation note}
+\label{tab:primary-claim-inventory}
+\scriptsize
+\begin{tabularx}{\linewidth}{p{0.10\linewidth}p{0.30\linewidth}p{0.23\linewidth}X}
+\toprule
+Inventory rows & Concrete primary assertions & Certificate surface & Declared boundary \\
+\midrule
+\path{pc1}, \path{pc8}, \path{pc9} & deterministic gates over typed evidence surfaces; agents are advisory; finite certificate obstruction for unsupported accepted claims & Table~\ref{tab:submission-interface-map} row 1; entries $a_1$, $a_2$, and $a_5$ in Table~\ref{tab:current-acceptance-ledger}; \path{review_bundle/current_package_pass_records.json} & path-verified theorem interface, not an independent workflow rerun \\
+\path{pc2}, \path{pc7} & closure, classifier, lineage, boundary, and witness-surface vocabulary is imported only through the pinned discovery-gate source interface & Table~\ref{tab:submission-interface-map} row 2; Table~\ref{tab:source-interface-record}; \path{source_interface_record.json} & pinned-source snapshot and bounded paraphrase \\
+\path{pc3}, \path{pc4}, \path{pc5} & mathlib-free Lean formalization, local marker and axiom-audit statements, and the beyond-Lean finite-witness role & entries $a_1$ and $a_5$; \path{review_bundle/primary_claim_inventory.json}; \path{review_bundle/certificate_schema.json} & bounded source-interface and audit-boundary context; no fresh Lean build or full-source audit asserted \\
+\path{pc6}, \path{pc11} & Rule110/GroundCompiler and the four case rows are finite manifest-bounded lessons, not unbounded semantic validation & Table~\ref{tab:submission-interface-map} row 3; entries $a_3$--$a_6$; \path{case_evidence[*].reviewable_snapshots} & path-verified historical snapshots; no daemon, artifact-suite, or dynamic Rule110 rerun \\
+\path{pc10}, \path{pc12} & the primary note, supplement, and review bundle have separate submission roles, and the review bundle is the supplemental interface & Table~\ref{tab:submission-interface-map} row 4; \path{submission_artifacts}; \path{submission_interface_map}; \path{review_bundle/submission_interface_map.json} & submission-package interface record \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \begin{proposition}[Primary--supplement interface map]
 \label{prop:primary-supplement-interface-map}
 Every load-bearing claim made in the current primary artifact
 \path{submission_abstract.tex} is certified by an explicit supplement theorem,
 table row, or manifest row at a declared evidence level.  The certification map
-is Table~\ref{tab:submission-interface-map}, mirrored in the
+is Table~\ref{tab:submission-interface-map}, refined by
+Table~\ref{tab:primary-claim-inventory}, and mirrored in the
 \path{submission_interface_map} field of
-\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Therefore a reviewer can check
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and the file
+\path{review_bundle/submission_interface_map.json}.  Therefore a reviewer can check
 the short-paper publication-safety invariant against this supplement without
 inferring hidden claims from prose.
 \end{proposition}
@@ -1176,7 +1291,9 @@ The primary artifact has four load-bearing interfaces.  First, its
 publication-safety paragraph states the advisory-agent rule and the finite
 certificate invariant.  The first row of Table~\ref{tab:submission-interface-map}
 maps this claim to Theorem~\ref{thm:publication-safety-interface}, to the current
-acceptance ledger proposition and corollary, and to rows $a_1$--$a_5$ of
+acceptance ledger proposition, to
+Proposition~\ref{prop:machine-readable-certificate-records}, to the current
+package corollary, and to rows $a_1$--$a_5$ of
 Table~\ref{tab:current-acceptance-ledger}.  Those cited results prove only a
 conditional theorem interface and path-verified package instantiation, exactly as
 recorded in the evidence-level column.
@@ -1204,12 +1321,18 @@ negative boundary against command-run validation.
 Fourth, the short paper identifies the review bundle and long technical account
 as support materials rather than primary submissions.  The fourth row maps that
 submission-package claim to
-Proposition~\ref{prop:submission-artifact-role-separation}, to this table, and
+Proposition~\ref{prop:submission-artifact-role-separation}, to
+Proposition~\ref{prop:machine-readable-certificate-records}, to this table, and
 to the manifest fields \path{submission_artifacts} and
-\path{submission_interface_map}.  Since the four rows cover exactly the short paper's structured-source,
-publication-safety, case-evidence, and review-artifact paragraphs, every
-primary-artifact load-bearing claim has a named supplement certificate, a table
-or manifest surface, and an evidence level.\qed
+\path{submission_interface_map}.  Table~\ref{tab:primary-claim-inventory} then
+expands these four interfaces into the concrete primary assertions: the Lean
+mathlib-free, local marker-audit, and axiom-audit statements are bounded-context
+rows tied to the source-interface and fake-extension gate records; the Rule110
+and GroundCompiler boundary statements are tied to the artifact-limitation rows;
+and the compiler-role table is distributed over the same four interface rows.
+Since every primary-inventory row has a named certificate surface and evidence
+level, every primary-artifact load-bearing claim has a named supplement
+certificate, a table or manifest surface, and an evidence level.\qed
 \end{proof}
 
 \paragraph{Artifact roles.}
