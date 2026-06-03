@@ -245,13 +245,22 @@ of summation and Abel limiting.
       Abel continuation along \(z=t\lambda^{-1}\), \(0\le t\uparrow1\), and
       necessarily \(\pi\neq\mathbf1\).  For \(rm\ge2\) it means the ordinary
       value of the same germ at \(z=\lambda^{-rm}\), where the determinant
-      is strictly inside its Perron radius.
+      is strictly inside its Perron radius.  Thus every non-deleted triple has
+      exactly one legal branch tag:
+      \[
+        \mathsf B(r,m,\pi)=
+        \begin{cases}
+          \mathsf{Abel},& rm=1\text{ and }\pi\ne\mathbf1,\\
+          \mathsf{Interior},& rm\ge2,
+        \end{cases}
+      \]
+      while \((1,1,\mathbf1)\) has the separate tag \(\mathsf{Deleted}\).
     \item \emph{Truncation rule.}  Choose rational numbers \(\theta<1\) and
       \(Q_\varrho\) satisfying \(\lambda^{-1}<\theta\) and
       \(C_\varrho\lambda<Q_\varrho\), and then choose \(M\) so that the rational
       tail certificate
       \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}
-        Q_\varrho\frac{\theta^{M+1}}{1-\theta}\le \epsilon/2
+        R_{M,\varrho}:=Q_\varrho\frac{\theta^{M+1}}{1-\theta}\le \epsilon/2
       \end{equation}
       holds.  Equivalently, this finite rational check implies the computable
       analytic tail bound
@@ -301,7 +310,7 @@ of summation and Abel limiting.
       the total output radius is bounded by the tail in
       \eqref{eq:fixed-label-perron-finite-algorithm-error} plus
       \begin{equation}\label{eq:fixed-label-perron-finite-algorithm-roundoff}
-        \epsilon_0
+        R_{\mathrm{num},\varrho}:=\epsilon_0
         \sum_{\substack{r,m\ge1\\rm\le M}}
           \frac{|\mu(m)|}{rm}
           \sum_{\pi\in\Irr(G)}|a_{\varrho,\pi}^{(m)}| .
@@ -384,6 +393,113 @@ of summation and Abel limiting.
   output, and error bound are all finite and explicit.
 \end{proof}
 
+\begin{proposition}[Deterministic branch--tail ledger for fixed-label
+  enclosures]
+  \label{prop:fixed-label-branch-tail-ledger}
+  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, fix
+  \(\varrho\ne\mathbf1\), and consider a finite enclosure record for
+  \(F_\varrho(\lambda^{-1})\).  The record is accepted by the determinant
+  interface if and only if the following finite ledger checks all pass.
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+    \item The deleted set is exactly \(\{(1,1,\mathbf1)\}\), and its coefficient
+      is verified to be
+      \(a_{\varrho,\mathbf1}^{(1)}=\langle\chi_\varrho,\mathbf1\rangle_G=0\).
+    \item Every non-deleted triple \((r,m,\pi)\) with \(rm\le M\) carries the
+      unique branch tag
+      \[
+        \mathsf B(r,m,\pi)=
+        \begin{cases}
+          \mathsf{Abel},& rm=1\text{ and }\pi\ne\mathbf1,\\
+          \mathsf{Interior},& rm\ge2,
+        \end{cases}
+      \]
+      and no other tag is accepted.  In particular scalar terms with
+      \(\pi=\mathbf1\) are legal precisely when \(rm\ge2\), where they are
+      interior-disc determinant logarithms.
+    \item The tail ledger records rational data
+      \((C_\varrho,Q_\varrho,\theta_\varrho,M_\varrho)\) satisfying
+      \[
+        \lambda^{-1}<\theta_\varrho<1,
+        \qquad C_\varrho\lambda<Q_\varrho,
+        \qquad
+        R_{M,\varrho}:=
+        Q_\varrho\frac{\theta_\varrho^{M_\varrho+1}}{1-\theta_\varrho},
+      \]
+      and this number dominates the whole omitted determinant tail
+      \[
+        C_\varrho
+        \sum_{k>M_\varrho}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+        \le R_{M,\varrho}.
+      \]
+    \item If each branch-tagged logarithm in the finite window is enclosed
+      with radius at most \(\epsilon_0\), the numerical ledger records
+      \[
+        R_{\mathrm{num},\varrho}:=
+        \epsilon_0
+        \sum_{\substack{r,m\ge1\\rm\le M_\varrho}}
+          \frac{|\mu(m)|}{rm}
+          \sum_{\pi\in\Irr(G)}|a_{\varrho,\pi}^{(m)}|,
+      \]
+      and the certified disc
+      \[
+        I_\varrho+
+        \{w\in\CC:|w|\le R_{M,\varrho}+R_{\mathrm{num},\varrho}\}
+      \]
+      contains the unique Abel-boundary value \(F_\varrho(\lambda^{-1})\).
+  \end{enumerate}
+  Hence branch choice, deleted scalar singularity, analytic tail, and numerical
+  propagation are audited by one finite deterministic record.  Two accepted
+  records for the same determinant data and branch ledger certify discs with a
+  common point, namely \(F_\varrho(\lambda^{-1})\).
+\end{proposition}
+
+\begin{proof}
+  Item~\textup{(i)} is the singular-triple deletion proved in
+  \Cref{lem:fixed-label-singular-triple-deletion}: for
+  \(\varrho\ne\mathbf1\), finite-character orthogonality gives
+  \(a_{\varrho,\mathbf1}^{(1)}=0\), so the scalar Perron logarithm is removed
+  before any branch or finite part is assigned.  That lemma and
+  \Cref{prop:fixed-label-determinant-perron} also prove item~\textup{(ii)}.
+  If \(rm=1\), then \(r=m=1\); after the deleted scalar triple is removed,
+  only \(\pi\ne\mathbf1\) remains, and \(\eta<\lambda\) gives the Abel-path
+  zero-free continuation.  If \(rm\ge2\), then
+  \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\) for every \(\pi\), including
+  \(\pi=\mathbf1\), so the ordinary normalized germ is the only branch used.
+
+  For item~\textup{(iii)},
+  \Cref{lem:fixed-label-perron-double-majorant} gives the omitted-tail bound
+  by
+  \[
+    C_\varrho
+    \sum_{k>M_\varrho}\frac{\mathrm d(k)}{k}\lambda^{1-k}.
+  \]
+  Since \(\mathrm d(k)\le k\) and
+  \(C_\varrho\lambda<Q_\varrho\), while
+  \(\lambda^{-1}<\theta_\varrho\), each summand satisfies
+  \[
+    C_\varrho\frac{\mathrm d(k)}{k}\lambda^{1-k}
+    \le C_\varrho\lambda(\lambda^{-1})^k
+    \le Q_\varrho\theta_\varrho^k .
+  \]
+  Summing the resulting geometric tail gives the displayed rational radius
+  \(R_{M,\varrho}\).  All comparisons are finite algebraic or rational
+  comparisons because \(C_\varrho\), \(Q_\varrho\), \(\theta_\varrho\), and
+  \(M_\varrho\) are recorded explicitly.
+
+  For item~\textup{(iv)}, replace each finitely many branch-tagged logarithms
+  by a disc of radius \(\epsilon_0\) on its prescribed branch.  The weighted
+  finite sum changes by at most the triangle-inequality radius
+  \(R_{\mathrm{num},\varrho}\).  Combining this finite numerical radius with
+  the tail radius from item~\textup{(iii)} and the determinant identity
+  \eqref{eq:fixed-label-determinant-perron} proves that the certified disc
+  contains \(F_\varrho(\lambda^{-1})\).  Conversely, any record accepted by
+  \Cref{prop:fixed-label-perron-finite-algorithm} supplies exactly the same
+  deletion rule, branch tags, rational tail radius, and finite numerical
+  propagation, so it passes the four ledger checks.  Thus accepted records are
+  precisely deterministic serializations of the same Abel-boundary determinant
+  value, and two accepted discs intersect at that value.
+\end{proof}
+
 \medskip
 \noindent\textit{Appendix-level reproducibility records.}
   The local rational reproducibility record and five-field \(S_3\) certificate format are
@@ -403,7 +519,8 @@ of summation and Abel limiting.
   determinant-logarithm enclosures for all non-deleted triples
   \((r,m,\pi)\), and rational radii \(R_{M,\varrho}\) and
   \(R_{\mathrm{num},\varrho}\) as in
-  \Cref{prop:fixed-label-perron-finite-algorithm}.  This is a finite rational
+  \Cref{prop:fixed-label-perron-finite-algorithm,prop:fixed-label-branch-tail-ledger}.
+  This is a finite rational
   enclosure
   corollary for the fixed-label determinant interface, not an additional
   hypothesis in the main product spine.  The following finite checks are
@@ -416,9 +533,13 @@ of summation and Abel limiting.
       \(rm\le M_\varrho\), delete only \((1,1,\mathbf1)\), and recompute
       \(a_{\varrho,\pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\)
       from the character table.
-    \item The branch field checks that every \(rm=1\) term is a non-trivial
-      Abel-boundary determinant allowed by \(\eta<\lambda\), and that every
-      \(rm\ge2\) term is evaluated by the ordinary germ inside the Perron disc.
+    \item The branch field verifies the deterministic ledger of
+      \Cref{prop:fixed-label-branch-tail-ledger}: the deleted triple has tag
+      \(\mathsf{Deleted}\), every \(rm=1\) non-deleted term has tag
+      \(\mathsf{Abel}\) and is a non-trivial Abel-boundary determinant allowed
+      by \(\eta<\lambda\), and every \(rm\ge2\) term, scalar or non-scalar, has
+      tag \(\mathsf{Interior}\) and is evaluated by the ordinary germ inside
+      the Perron disc.  No untagged logarithm and no alternate tag is accepted.
     \item The bound field verifies the rational comparisons
       \[
         \lambda^{-1}<\theta_\varrho<1,
@@ -429,7 +550,10 @@ of summation and Abel limiting.
       \]
       with \(R_{M,\varrho}\) below the requested tail budget, and verifies the
       finite interval-propagation radius \(R_{\mathrm{num},\varrho}\) from
-      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
+      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}; equivalently,
+      it verifies that the analytic tail and numerical propagation are exactly
+      the two radii recorded in
+      \Cref{prop:fixed-label-branch-tail-ledger}.
   \end{enumerate}
   When these checks pass, the record certifies
   \[
@@ -452,7 +576,8 @@ of summation and Abel limiting.
 \begin{proof}
   The first three finite checks are precisely the finite input, coefficient,
   deletion, and branch requirements in
-  \Cref{prop:fixed-label-perron-finite-algorithm}.  The only scalar boundary
+  \Cref{prop:fixed-label-perron-finite-algorithm,prop:fixed-label-branch-tail-ledger}.
+  The only scalar boundary
   singularity is the triple \((1,1,\mathbf1)\), and it is deleted before any
   logarithm is evaluated; for \(\varrho\ne\mathbf1\) the coefficient of this
   deleted term is zero by character orthogonality.  The strict twisted gap
@@ -460,8 +585,9 @@ of summation and Abel limiting.
   and the inequality \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\) gives the
   ordinary logarithmic germ for \(rm\ge2\).
 
-  The fourth finite check is the effective tail and roundoff estimate proved in
-  \Cref{prop:fixed-label-perron-finite-algorithm}.  Therefore the accepted
+  The fourth finite check is the effective tail and roundoff ledger proved in
+  \Cref{prop:fixed-label-perron-finite-algorithm,prop:fixed-label-branch-tail-ledger}.
+  Therefore the accepted
   finite sum \(I_\varrho\), enlarged by
   \(R_{M,\varrho}+R_{\mathrm{num},\varrho}\), contains the unique Perron value
   \(F_\varrho(\lambda^{-1})\).  Since the non-trivial irreducible set is finite,
