@@ -1012,6 +1012,54 @@ above or demotes the claim to a weaker evidence level.  The stated safety
 interface follows.\qed
 \end{proof}
 
+\begin{corollary}[Finite-record boundary for gate soundness]
+\label{cor:finite-record-gate-soundness-boundary}
+Under the hypotheses of Theorem~\ref{thm:publication-safety-interface}, the
+publication-safety conclusion is invariant under replacement of the surrounding
+implementation by any other implementation with the same submitted acceptance
+entries, evidence surfaces, promotion fields, discovery-interface rows, and
+evidence-level boundaries.  Therefore the theorem cannot be used, without an
+additional submitted gate-soundness certificate, to infer external workflow
+correctness, current execution of unrecorded gates, Lean correctness, artifact
+semantic validity, or venue acceptance.  Conversely, any manuscript assertion
+that tries to promote the finite certificate constructor to one of those stronger
+implementation claims has a finite overclaim witness: either the required field
+is absent from \(\mathcal C(c)\), or the row's declared evidence level exceeds
+the cited certificate surface.
+\end{corollary}
+
+\begin{proof}
+The constructor in Theorem~\ref{thm:publication-safety-interface} reads only the
+finite tuple \(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Here \(K\) is the claim-kind
+set assigned by the dispatch table, \(\ell\) is the declared evidence level,
+\(E\) is the submitted evidence surface, \(H\) is the human-promotion field,
+\(R\) is the finite list of recorded pass rows, \(D\) is the pinned
+discovery-interface field when the claim has a discovery component, and \(B\) is
+the evidence boundary.  If another implementation supplies the same values for
+these fields, the same finite schema verifier receives the same input record and
+therefore gives the same certificate-construction conclusion by
+Proposition~\ref{prop:finite-certificate-schema-verifier} and
+Theorem~\ref{thm:record-acceptance-exactness}.  No step of the proof inspected an
+unsubmitted daemon trace, reran a proof assistant, reran a finite-witness
+artifact, or queried a venue form after the recorded venue check; those facts are
+not coordinates of \(\mathcal C(c)\).
+
+Now suppose the manuscript asserted one of the stronger implementation claims
+without adding a new accepted record.  External workflow correctness and current
+execution of unrecorded gates require pass data not present in \(R\).  Lean
+correctness requires a formal-source certificate rather than the bounded
+contextual rows allowed by Proposition~\ref{prop:formal-source-gate-instantiation}.
+Artifact semantic validity requires a stronger artifact row than the bounded
+manifest records of Proposition~\ref{prop:finite-witness-manifest-interface}.
+Venue acceptance requires a venue decision rather than the submission-pack
+readiness row of Proposition~\ref{prop:venue-submission-pack-gate}.  In each
+case, either the needed finite field is missing or the row is read at a stronger
+evidence level than its certificate permits.  The obstruction is therefore a
+finite subrecord of the kind classified by
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} and
+Theorem~\ref{thm:evidence-level-overclaim-obstruction}.\qed
+\end{proof}
+
 \begin{table}
 \caption{Submission-local acceptance-entry ledger for the current package}
 \label{tab:current-acceptance-ledger}
@@ -2010,6 +2058,20 @@ primary artifact $S$ with $I$ in place of the current inventory.  Conversely, if
 one of the three audit conditions fails, the edited primary artifact has a finite
 review obstruction: an unclassified load-bearing assertion, a stale certificate
 pointer, or an evidence-level overclaim.
+
+For the present source state after the final short-paper edits on 2026-06-04,
+the current inventory is additionally witnessed at command-run freshness level by
+\path{review_bundle/primary_claim_inventory_freshness_2026-06-04.md}, with the
+same captured output also written locally to the ignored rerun log
+\path{review_bundle/primary_claim_inventory_freshness_2026-06-04.log}.  The
+recorded command is a Windows PowerShell inline Python comparison of
+\path{submission_abstract.tex} against
+\path{review_bundle/primary_claim_inventory.json}; the recorded environment is
+Windows PowerShell with Python 3.10.11 in this paper directory; the recorded exit
+code is 0; and the log records 143 primary-source lines, 12 inventory rows, and
+0 freshness errors.  This command-run claim is limited to row-span and
+certificate-field freshness for the primary inventory; it is not a full semantic
+proof of every primary sentence.
 \end{proposition}
 
 \begin{proof}
@@ -2035,7 +2097,14 @@ its certificate permits; Theorem~\ref{thm:record-acceptance-exactness} supplies 
 finite bad subrecord, and Theorem~\ref{thm:evidence-level-overclaim-obstruction}
 classifies it as an evidence-level overclaim when the excess is a stronger
 verification or command-run reading.  These are finite obstructions read from the
-edited source, the inventory row, and the cited certificate surface.\qed
+edited source, the inventory row, and the cited certificate surface.
+
+For the current command-run instantiation, the cited freshness log is itself a
+finite submitted record: it names the command class, environment, primary source,
+inventory source, line count, row count, error count, and exit code.  An exit code
+0 with error count 0 is exactly the success condition of the comparison command,
+so the command-run freshness statement is licensed at the limited evidence level
+declared in the proposition.\qed
 \end{proof}
 
 \begin{proposition}[Primary--supplement interface map]
