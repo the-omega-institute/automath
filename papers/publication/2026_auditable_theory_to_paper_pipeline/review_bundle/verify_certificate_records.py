@@ -83,9 +83,9 @@ def verify_records() -> list[str]:
         ensure((ROOT / expected_path).exists(), f"manifest path for {key} does not exist: {expected_path}", errors)
 
     entries = ledger.get("entries", [])
-    ensure(len(entries) == 6, "current package ledger must contain entries a1-a6", errors)
+    ensure(len(entries) == 7, "current package ledger must contain entries a1-a7", errors)
     seen_entries = {entry.get("entry") for entry in entries}
-    ensure(seen_entries == {"a1", "a2", "a3", "a4", "a5", "a6"}, f"unexpected entries: {sorted(seen_entries)}", errors)
+    ensure(seen_entries == {"a1", "a2", "a3", "a4", "a5", "a6", "a7"}, f"unexpected entries: {sorted(seen_entries)}", errors)
 
     for entry in entries:
         name = entry.get("entry", "<missing>")
@@ -150,7 +150,7 @@ def main() -> int:
     print("log_path: review_bundle/certificate_verification_run.log")
     print("checked: REVIEW_BUNDLE_MANIFEST.json manifest_required_files")
     print("checked: certificate_schema.json")
-    print("checked: current_package_pass_records.json entries a1-a6")
+    print("checked: current_package_pass_records.json entries a1-a7")
     print("checked: submission_interface_map.json rows sim1-sim4")
     print("checked: primary_claim_inventory.json")
     print("boundary: schema-level verification only; no Lean, daemon, or Rule110 rerun")
