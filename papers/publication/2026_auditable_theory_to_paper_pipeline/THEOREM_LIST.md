@@ -30,17 +30,12 @@ D:/omega/newmath/papers/bedc/parts/visions/audit_map_methodology/automated_theor
 
 ## Manuscript Use
 
-The first short draft should cite only a compact subset:
-
-- statement/code insufficiency;
-- mechanical-not-discovery;
-- compression-not-discovery;
-- certificate-ledger requirement;
-- demotion soundness;
-- lineage DAG;
-- selection favors classifier change;
-- pipeline safety;
-- main pipeline theorem.
+The technical supplement imports the full sixteen-label source interface listed
+above through bounded paraphrase rows in `main.tex`, mirrored in
+`source_interface_record.json`, and checked by
+`review_bundle/verify_source_interface_record.py`. These rows are the complete
+source-interface spine for this paper; they are not a claim to rebuild or restate
+the whole BEDC source theory.
 
 ## Verification Needed Before Submission
 
