@@ -149,38 +149,53 @@ at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}
 \cite{bedc-newmath-source}.  The imported interface labels are listed in the
 following source-binding record:
 \begin{quote}\small
+\path{thm:automated-discovery-dna-completeness-obligation};
 \path{cor:automated-discovery-statement-code-insufficient};
 \path{thm:automated-discovery-mechanical-not-discovery};
 \path{thm:automated-discovery-compression-not-discovery};
 \path{thm:automated-discovery-certificate-ledger-required};
+\path{thm:automated-discovery-positive-implies-discovery};
+\path{thm:automated-discovery-scored-claims-public-weights};
+\path{thm:automated-discovery-gate-kind-sound};
 \path{thm:automated-discovery-demotion-soundness};
 \path{thm:automated-discovery-lineage-dag};
 \path{thm:automated-discovery-lowest-score-not-best-target};
 \path{thm:automated-discovery-selection-favours-classifier-change};
+\path{thm:automated-discovery-no-unpaid-discovery};
 \path{thm:automated-discovery-pipeline-safety};
-\path{thm:automated-discovery-pipeline-theorem}.
+\path{thm:automated-discovery-pipeline-theorem};
+\path{prin:automated-discovery-principle}.
 \end{quote}
 
 The exact source interface used by the proof below was extracted from the pinned
-commit on 2026-06-01.  At lines 248--255, the source states that candidates
+commit on 2026-06-01.  At lines 238--246, the source states that a theorem
+candidate that is not DNA-complete cannot be the principal theorem genome of a
+gate-passed discovery claim.  At lines 248--255, it states that candidates
 supplying only a statement locus or only legal theorem code do not pass the
 discovery gate as theorem genomes.  At lines 258--267 and 269--278, it states
 that mechanical expansion and same-classifier genome compression do not imply
-discovery.  At lines 280--291, it states that a discovery transition supplies a
-semantic naming certificate and a ledger witness.  At lines 334--345, it states
-that gate demotion leaves a claim kind no stronger than its actual evidence.  At
-lines 366--374, it states that lineage-consistent accepted claims form an
-auditable acyclic lineage graph.  At lines 393--418, it states that the lowest
-score need not be the best target and that, when all other discovery-potential
-coordinates are fixed, a positive classifier-change coefficient makes the
-selection operator favor the classifier-changing candidate.  At lines 441--454,
-pipeline safety states that accepted discovery claims have classifier change,
-semantic naming certificate, ledger witness, DNA-complete theorem genome, score
-certificate, lineage witness, and an explicit not-claimed boundary.  At lines
-457--475, the main pipeline theorem separates record growth, score reduction,
-recombination, classifier change, and ledgered discovery.  These paraphrases are
-used only as a stable interface to the pinned source theorem spine; no stronger
-source rebuild claim is made here.
+discovery.  At lines 280--297, it states that a discovery transition supplies a
+semantic naming certificate and a ledger witness.  At lines 299--307, it states
+that a positive discovery transition is a discovery transition.  At lines
+309--318 and 320--332, it states that score assertions expose the public weight
+profile and that a gate-passed claim satisfies the obligations attached to its
+claim kind.  At lines 334--345, it states that gate demotion leaves a claim kind
+no stronger than its actual evidence.  At lines 366--374, it states that
+lineage-consistent accepted claims form an auditable acyclic lineage graph.  At
+lines 393--418, it states that the lowest score need not be the best target and
+that, when all other discovery-potential coordinates are fixed, a positive
+classifier-change coefficient makes the selection operator favor the
+classifier-changing candidate.  At lines 432--439, it states that the accepted
+pipeline has no unpaid discovery claims.  At lines 441--455, pipeline safety
+states that accepted discovery claims have classifier change, semantic naming
+certificate, ledger witness, DNA-complete theorem genome, score certificate,
+lineage witness, and an explicit not-claimed boundary.  At lines 457--475, the
+main pipeline theorem separates record growth, score reduction, recombination,
+classifier change, and ledgered discovery.  At lines 479--485, the source states
+the principle that automated mathematical discovery is certified structural
+change of theorem genomes under an auditable gate.  These paraphrases are used
+only as a stable interface to the pinned source theorem spine; no stronger source
+rebuild claim is made here.
 
 \begin{table}
 \caption{Checked source-interface record for imported discovery-gate labels}
@@ -190,16 +205,22 @@ source rebuild claim is made here.
 \toprule
 Imported label & Lines & Statement summary \\
 \midrule
+\path{thm:automated-discovery-dna-completeness-obligation} & 238--246 & non-DNA-complete candidates cannot be principal theorem genomes of gate-passed discovery claims \\
 \path{cor:automated-discovery-statement-code-insufficient} & 248--255 & statement-only and code-only candidates do not pass as theorem genomes \\
 \path{thm:automated-discovery-mechanical-not-discovery} & 258--267 & mechanical expansion has no classifier shift and therefore is not discovery \\
 \path{thm:automated-discovery-compression-not-discovery} & 269--278 & same-classifier compression is not discovery by itself \\
 \path{thm:automated-discovery-certificate-ledger-required} & 280--297 & discovery supplies a semantic naming certificate and a ledger witness \\
+\path{thm:automated-discovery-positive-implies-discovery} & 299--307 & positive discovery is discovery with an added net compression inequality \\
+\path{thm:automated-discovery-scored-claims-public-weights} & 309--318 & score and cost-comparison claims expose the public weight profile \\
+\path{thm:automated-discovery-gate-kind-sound} & 320--332 & a gate-passed claim satisfies the obligations attached to its claim kind \\
 \path{thm:automated-discovery-demotion-soundness} & 334--345 & demotion records no stronger kind than the evidence supports \\
 \path{thm:automated-discovery-lineage-dag} & 366--374 & lineage-consistent accepted claims form an auditable acyclic graph \\
 \path{thm:automated-discovery-lowest-score-not-best-target} & 393--406 & lower score alone can be a worse target than a structurally stronger genome \\
 \path{thm:automated-discovery-selection-favours-classifier-change} & 408--418 & with positive classifier-change weight and other coordinates fixed, selection favors classifier change \\
+\path{thm:automated-discovery-no-unpaid-discovery} & 432--439 & an accepted pipeline has no accepted discovery claim missing gate evidence \\
 \path{thm:automated-discovery-pipeline-safety} & 441--455 & accepted discovery has classifier change, certificate, ledger, genome, score, lineage, and boundary witnesses \\
 \path{thm:automated-discovery-pipeline-theorem} & 457--475 & the pipeline separates record growth, score reduction, recombination, classifier change, and ledgered discovery \\
+\path{prin:automated-discovery-principle} & 479--485 & automated discovery is certified structural theorem-genome change under an auditable gate \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -246,7 +267,7 @@ column deliberately records bounded paraphrases: each row states only the
 interface property needed later, such as insufficiency of statement-only records,
 certificate-and-ledger requirements, demotion soundness, lineage acyclicity,
 bounded classifier-change selection, or pipeline safety.  No later theorem cites
-an imported label outside this ten-row list, and no later proof uses a stronger
+an imported label outside this sixteen-row list, and no later proof uses a stronger
 form than the corresponding bounded summary.  Thus the table is complete for the
 imported interface of this paper and correct at the stated evidence level: exact
 as to path, commit, label, line range, method, date, and summary mode, and
@@ -269,7 +290,7 @@ public archive URL or DOI is part of the current theorem interface.
 
 \begin{proof}
 Lemma~\ref{lem:source-interface-extraction-correctness} proves that the only
-imported source labels used by the paper are the ten rows of
+imported source labels used by the paper are the sixteen rows of
 Table~\ref{tab:source-interface-record}, each with a fixed line range and bounded
 summary.  The paragraph preceding that lemma fixes the original local source
 path, source commit, extraction date, and JSON mirror.  The supplemental copy is
@@ -310,7 +331,7 @@ paraphrase discipline of Lemma~\ref{lem:source-interface-extraction-correctness}
 \begin{proof}
 The proposition is a finite equality-and-containment check over submitted
 records.  The script \path{review_bundle/verify_source_interface_record.py}
-parses the ten rows of Table~\ref{tab:source-interface-record} from this source,
+parses the sixteen rows of Table~\ref{tab:source-interface-record} from this source,
 loads \path{source_interface_record.json}, loads the
 \path{pinned_source_snapshot} object of
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and computes the SHA-256 digest
@@ -358,7 +379,7 @@ levels.
 The operational evidence level of a cited source-interface premise is determined
 by the record fields actually available for that premise.  Lemma~\ref{lem:source-interface-extraction-correctness}
 supplies a pinned path, commit, extraction date, label, line range, and bounded
-summary for each of the ten imported labels, and its proof states that no later
+summary for each of the sixteen imported labels, and its proof states that no later
 use may exceed that bounded summary.  Therefore a claim using only the lemma has
 exactly the manual path-verified bounded-paraphrase evidence listed there.
 
@@ -880,7 +901,7 @@ rows \path{sim1}--\path{sim4}, the primary-inventory row locks
 \path{pc1}--\path{pc12}, and the two recorded successful verifier logs.  On the
 equivalence class of packages with the same projection $G$, the publication-safety
 interface has a unique executable finite certificate construction: the imported
-discovery-gate interface is the ten-row checked source interface of
+discovery-gate interface is the sixteen-row checked source interface of
 Proposition~\ref{prop:source-interface-record-file-consistency}, the accepted
 current-package certificates are exactly the six records of
 Proposition~\ref{prop:machine-readable-certificate-records}, and any stronger
@@ -918,7 +939,7 @@ pass rows, or command-run tuples.
 
 Combining the two paragraphs gives the stated uniqueness on the $G$-projection:
 the discovery component of any accepted current-package claim is forced through
-the same checked ten-row source interface, and the publication component is forced
+the same checked sixteen-row source interface, and the publication component is forced
 through the same six checked certificate rows.  Any proposed stronger assertion
 listed in the statement either changes one of the finite fields of $G$, in which
 case it is not a package in the same equivalence class, or leaves $G$ unchanged,
@@ -1539,7 +1560,7 @@ $a_1$ & path-verified & pinned newmath commit, Table~\ref{tab:source-interface-r
 $a_2$ & path-verified & short source, supplement, review-bundle manifest, and submitted support-surface condition & human-promotion marker represented by the route-surface records, not by unsubmitted root diagnostics & submission-pack and route-surface records listed in the package and checklist & absent & no full-source rebuild, daemon run, root-file certification, or Rule110 rerun asserted \\
 $a_3$ & path-verified & intake seed and active-paper detector paths & marker that the intake seed does not cross into publication work before promotion & promotion-gate record showing inactive intake until active-paper markers exist & absent & no daemon-run assertion for the intake detector \\
 $a_4$ & path-verified & active route, submitted sibling, overlap ledgers, and board state & marker that the blocked sibling route receives no new promotion in this package & overlap and submission-state gate records, including the recorded \path{deferred_wait_for_prior_submission} decision & absent & historical route-state evidence only \\
-$a_5$ & path-verified & phase-D hard-lint path, theorem inventory or artifact inventory surface, and source-interface rows & marker that no separate publication route is promoted by the rejected extension & theorem-content delta record plus discovery-gate record rejecting statement-only, code-only, mechanical, or compression-only growth & present: rows for certificate/ledger, demotion, lineage, pipeline safety, and main pipeline theorem in Table~\ref{tab:source-interface-record} & no claim that compilation or file churn is theorem growth \\
+$a_5$ & path-verified & phase-D hard-lint path, theorem inventory or artifact inventory surface, and source-interface rows & marker that no separate publication route is promoted by the rejected extension & theorem-content delta record plus discovery-gate record rejecting statement-only, code-only, mechanical, or compression-only growth & present: rows for DNA completeness, certificate/ledger, positive discovery, public weights, gate-kind soundness, demotion, lineage, no-unpaid discovery, pipeline safety, main pipeline theorem, and discovery principle in Table~\ref{tab:source-interface-record} & no claim that compilation or file churn is theorem growth \\
 $a_6$ & path-verified & Rule110 status file, collision and exhaustiveness ledgers, paper-data reference, and review-bundle manifest & marker that the artifact row does not create a new route boundary & artifact status and limitation-ledger records & absent & no fresh \path{make test-collision-audit} or dynamic artifact rerun asserted \\
 \bottomrule
 \end{tabularx}
