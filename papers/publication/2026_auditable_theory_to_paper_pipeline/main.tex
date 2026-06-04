@@ -1820,10 +1820,12 @@ lemmas as part of the two-page presentation claim.
 
 The live venue facts used for the following gate were rechecked on 2026-06-04
 against the official CICM 2026 call for papers at
-\url{https://cicm-conference.org/2026/cicm.php?event=&menu=cfp} and the Springer
-LNCS author-guideline page linked from that call at
+\url{https://cicm-conference.org/2026/cicm.php?event=&menu=cfp}, the EasyChair
+submission page named by the call at
+\url{https://easychair.org/conferences/?conf=cicm2026}, and the Springer LNCS
+author-guideline page linked from that call at
 \url{https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines}.
-The check recorded HTTP status 200 for both pages and observed the same route
+The check recorded HTTP status 200 for all three pages and observed the same route
 facts as the 2026-06-03 near-submission check: presentation-only papers are
 work-in-progress submissions of two pages plus bibliography, receive a
 light-weight review, do not appear in the Springer proceedings, have a
@@ -1840,8 +1842,12 @@ for the current package only under the following finite record condition: the
 package contains a dated check of the official call page and linked submission
 style page, the record gives the checked URLs and route rules, and the upload is
 made either on that checked rule state or after a later record with the same
-fields has replaced it.  A dated historical check by itself is not a certificate
-for a later upload-time venue state.
+fields has replaced it.  In the current package this finite record is the
+``Final Upload-Time Official Venue Record'' in \path{VENUE_CHECK.md}: it records
+the official call URL, EasyChair URL, LNCS style URL, observation date, route
+rules, deadline, software/data-access rule, and the explicit condition under
+which an upload may be said to have used that rule state.  A dated historical
+check by itself is not a certificate for a later upload-time venue state.
 
 
 \medskip
@@ -1850,7 +1856,7 @@ length, review status, proceedings boundary, deadline, submission form, style
 interface, and software/data-access instruction.  These facts can change outside
 the submitted source, so the gate cannot be discharged by a stale table row.
 The displayed record supplies a finite certificate surface for the current
-package: two official URLs, a date, observed route facts, and the boundary that a
+package: three official URLs, a date, observed route facts, and the boundary that a
 later upload or conflicting form instruction triggers re-verification.  If the
 upload uses that recorded rule state, each venue-dependent row of
 Table~\ref{tab:venue-submission-pack-gate} is checked against a dated official
@@ -2590,11 +2596,14 @@ the archive is not accepted, and the support surface must be the exact uploaded
 \label{cor:exact-bundle-or-final-digest}
 For the current package there are exactly two accepted supplemental-support
 modes.  Either the submission supplies the exact \path{review_bundle/} directory,
-in which case no archive-replacement digest claim is made, or a replacement
-archive is supplied together with a final file list and SHA-256 digest for every
-certificate file in Table~\ref{tab:review-bundle-archive-equivalence}.  Without
-that final digest record, a replacement archive is not an accepted support
-surface for any bundle-dependent claim in this manuscript.
+in which case the final package record is
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} with support mode ``exact
+supplemental upload'', or a replacement archive is supplied together with a
+final file list, archive locator, and SHA-256 digest for every certificate file
+in Table~\ref{tab:review-bundle-archive-equivalence}.  Without that final
+digest record and, in the archive case, its locator, a replacement archive is
+not an accepted support surface for any bundle-dependent claim in this
+manuscript.
 
 
 \medskip
@@ -2605,11 +2614,68 @@ content-hash rows require a complete list of certificate files and a matching
 SHA-256 digest for each listed file at final packaging time.  Therefore an
 archive without that final digest record fails the table and is rejected.  If no
 replacement archive is supplied, the same proposition says that the only accepted
-support surface is the exact uploaded \path{review_bundle/} directory.  These two
-cases are disjoint because one submits the directory as the support surface and
-the other substitutes an archival object certified by hashes; they are exhaustive
-because every support surface named here is either the directory or a
-replacement.\end{auditrecord}
+support surface is the exact uploaded \path{review_bundle/} directory; the
+digest record then identifies the bytes of that directory but does not assert an
+archive replacement.  These two cases are disjoint because one submits the
+directory as the support surface and the other substitutes an archival object
+certified by hashes and a locator; they are exhaustive because every support
+surface named here is either the directory or a replacement.\end{auditrecord}
+
+\begin{theorem}[Final support-surface closure]
+\label{thm:final-support-surface-closure}
+For the current package, the bundle-backed claims in this supplement are
+admissible at the stated path-verified evidence level exactly in the following
+two finite cases: either the submitted supplemental material contains the exact
+directory \path{review_bundle/} whose final packaging record is
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, or the submitted material contains
+an archive locator together with per-file SHA-256 digests satisfying
+Table~\ref{tab:review-bundle-archive-equivalence}.  If neither finite surface is
+present, the bundle-backed claims are not part of the accepted support surface,
+although the short presentation artifact may still cite the pinned public
+\path{newmath} repository for the imported source spine.
+\end{theorem}
+
+\begin{proof}
+Let $B$ denote the set of bundle-dependent claims in this supplement.  By the
+definition of \path{review_bundle/} in the problem statement and by the bundle
+rows of Table~\ref{tab:review-bundle-archive-equivalence}, every claim in $B$
+uses at least one named certificate surface under \path{review_bundle/}: the
+manifest, certificate schema, pass-record ledger, source-interface map,
+primary-claim inventory, verifier scripts or logs, the pinned source snapshot,
+or one of the case snapshots.  Therefore a submitted support surface for $B$
+must either contain those named files with their relative path semantics or
+replace them by an archive that is finite-file-list and hash equivalent.
+
+If the exact directory \path{review_bundle/} is uploaded, then all named bundle
+paths are present in the submitted supplemental boundary.  The file
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} records the final SHA-256 digest
+surface for those certificate files, so the byte identity of the supplied
+directory is checkable without changing the role of the directory into an
+archive claim.  Hence all claims in $B$ have the path-verified support surface
+asserted for this package.
+
+If instead a replacement archive is submitted, Audit
+record~\ref{prop:review-bundle-archive-equivalence} requires equality of the
+manifest identity, bundle-version tuple, finite certificate file list,
+per-file SHA-256 digests, and relative path semantics.  These five finite tests
+give a bijective identification between the certificate surfaces used by claims
+in $B$ and the files exposed by the archive.  Thus every bundle-local reference
+made in $B$ has an archive-equivalent byte-level representative, and the same
+path-verified evidence level is preserved.
+
+Conversely, suppose neither the exact directory nor a digest-certified archive
+with locator is submitted.  Then at least one named bundle certificate surface is
+outside the submitted artifact boundary and has no finite replacement satisfying
+Table~\ref{tab:review-bundle-archive-equivalence}.  The finite certificate
+schema used in Theorem~\ref{thm:current-package-certificate-exactness}
+accepts only submitted paths, explicit historical path records, and the stated
+supplemental surfaces.  Hence the missing bundle surface cannot support the
+corresponding claim in $B$.  The public \path{newmath} repository citation is a
+separate pinned-source citation, so it remains available for the short
+architectural note but does not reconstitute the omitted bundle-backed
+certificate records.  This proves both admissible cases and the failure of all
+other cases.
+\end{proof}
 
 \begin{auditrecord}[Review-bundle availability condition]
 \label{prop:review-bundle-availability-condition}
@@ -2617,7 +2683,8 @@ The support claim made by the current presentation package is conditional on the
 availability of \path{review_bundle/} as a supplemental upload or an archival
 equivalent in the sense of
 Audit record~\ref{prop:review-bundle-archive-equivalence}, with the dichotomy made
-explicit in Audit record~\ref{cor:exact-bundle-or-final-digest}.  If the bundle is supplied with the
+explicit in Audit record~\ref{cor:exact-bundle-or-final-digest} and closed by
+Theorem~\ref{thm:final-support-surface-closure}.  If the bundle is supplied with the
 submission, then the source-interface, case-snapshot, primary-claim inventory,
 submission-interface map, and verifier-record claims are reviewable at the
 path-verified evidence level stated in this supplement.  If the bundle is not
