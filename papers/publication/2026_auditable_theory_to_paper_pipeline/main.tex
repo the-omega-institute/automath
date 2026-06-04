@@ -231,57 +231,74 @@ at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}
 \cite{bedc-newmath-source}.  The imported interface labels are listed in the
 following source-binding record:
 \begin{quote}\small
+\path{thm:automated-discovery-dna-completeness-obligation};
 \path{cor:automated-discovery-statement-code-insufficient};
 \path{thm:automated-discovery-mechanical-not-discovery};
 \path{thm:automated-discovery-compression-not-discovery};
 \path{thm:automated-discovery-certificate-ledger-required};
+\path{thm:automated-discovery-positive-implies-discovery};
+\path{thm:automated-discovery-scored-claims-public-weights};
+\path{thm:automated-discovery-gate-kind-sound};
 \path{thm:automated-discovery-demotion-soundness};
 \path{thm:automated-discovery-lineage-dag};
 \path{thm:automated-discovery-lowest-score-not-best-target};
 \path{thm:automated-discovery-selection-favours-classifier-change};
+\path{thm:automated-discovery-no-unpaid-discovery};
 \path{thm:automated-discovery-pipeline-safety};
-\path{thm:automated-discovery-pipeline-theorem}.
+\path{thm:automated-discovery-pipeline-theorem};
+\path{prin:automated-discovery-principle}.
 \end{quote}
 
 The exact source interface used by the proof below was extracted from the pinned
-commit on 2026-06-01.  At lines 248--255, the source states that candidates
-supplying only a statement locus or only legal theorem code do not pass the
-discovery gate as theorem genomes.  At lines 258--267 and 269--278, it states
-that mechanical expansion and same-classifier genome compression do not imply
-discovery.  At lines 280--291, it states that a discovery transition supplies a
-semantic naming certificate and a ledger witness.  At lines 334--345, it states
+commit on 2026-06-01.  At lines 238--246, the source states the DNA-completeness
+obligation for gate-passed discovery genomes.  At lines 248--255, it states that
+candidates supplying only a statement locus or only legal theorem code do not
+pass the discovery gate as theorem genomes.  At lines 258--267 and 269--278, it
+states that mechanical expansion and same-classifier genome compression do not
+imply discovery.  At lines 280--297, it states that a discovery transition
+supplies a semantic naming certificate and a ledger witness.  At lines 299--332,
+it records the positive-discovery, public-weight, and gate-kind-soundness
+interfaces used by the package verifier below.  At lines 334--345, it states
 that gate demotion leaves a claim kind no stronger than its actual evidence.  At
 lines 366--374, it states that lineage-consistent accepted claims form an
 auditable acyclic lineage graph.  At lines 393--418, it states that the lowest
 score need not be the best target and that, when all other discovery-potential
 coordinates are fixed, a positive classifier-change coefficient makes the
-selection operator favor the classifier-changing candidate.  At lines 441--454,
-pipeline safety states that accepted discovery claims have classifier change,
-semantic naming certificate, ledger witness, DNA-complete theorem genome, score
-certificate, lineage witness, and an explicit not-claimed boundary.  At lines
-457--475, the main pipeline theorem separates record growth, score reduction,
-recombination, classifier change, and ledgered discovery.  These paraphrases are
+selection operator favor the classifier-changing candidate.  At lines 432--439,
+it states that an accepted pipeline has no accepted discovery claim missing gate
+evidence.  At lines 441--455, pipeline safety states that accepted discovery
+claims have classifier change, semantic naming certificate, ledger witness,
+DNA-complete theorem genome, score certificate, lineage witness, and an explicit
+not-claimed boundary.  At lines 457--485, the main pipeline theorem and principle
+separate record growth, score reduction, recombination, classifier change,
+ledgered discovery, and certified structural theorem-genome change.  These paraphrases are
 used only as a stable interface to the pinned source theorem spine; no stronger
 source rebuild claim is made here.
 
 \begin{table}
 \caption{Checked source-interface record for imported discovery-gate labels}
 \label{tab:source-interface-record}
-\small
+\scriptsize
 \begin{tabularx}{\linewidth}{p{0.32\linewidth}p{0.18\linewidth}X}
 \toprule
 Imported label & Lines & Statement summary \\
 \midrule
+\path{thm:automated-discovery-dna-completeness-obligation} & 238--246 & non-DNA-complete candidates cannot be principal theorem genomes of gate-passed discovery claims \\
 \path{cor:automated-discovery-statement-code-insufficient} & 248--255 & statement-only and code-only candidates do not pass as theorem genomes \\
 \path{thm:automated-discovery-mechanical-not-discovery} & 258--267 & mechanical expansion has no classifier shift and therefore is not discovery \\
 \path{thm:automated-discovery-compression-not-discovery} & 269--278 & same-classifier compression is not discovery by itself \\
 \path{thm:automated-discovery-certificate-ledger-required} & 280--297 & discovery supplies a semantic naming certificate and a ledger witness \\
+\path{thm:automated-discovery-positive-implies-discovery} & 299--307 & positive discovery is discovery with an added net compression inequality \\
+\path{thm:automated-discovery-scored-claims-public-weights} & 309--318 & score and cost-comparison claims expose the public weight profile \\
+\path{thm:automated-discovery-gate-kind-sound} & 320--332 & a gate-passed claim satisfies the obligations attached to its claim kind \\
 \path{thm:automated-discovery-demotion-soundness} & 334--345 & demotion records no stronger kind than the evidence supports \\
 \path{thm:automated-discovery-lineage-dag} & 366--374 & lineage-consistent accepted claims form an auditable acyclic graph \\
 \path{thm:automated-discovery-lowest-score-not-best-target} & 393--406 & lower score alone can be a worse target than a structurally stronger genome \\
 \path{thm:automated-discovery-selection-favours-classifier-change} & 408--418 & with positive classifier-change weight and other coordinates fixed, selection favors classifier change \\
+\path{thm:automated-discovery-no-unpaid-discovery} & 432--439 & an accepted pipeline has no accepted discovery claim missing gate evidence \\
 \path{thm:automated-discovery-pipeline-safety} & 441--455 & accepted discovery has classifier change, certificate, ledger, genome, score, lineage, and boundary witnesses \\
 \path{thm:automated-discovery-pipeline-theorem} & 457--475 & the pipeline separates record growth, score reduction, recombination, classifier change, and ledgered discovery \\
+\path{prin:automated-discovery-principle} & 479--485 & automated discovery is certified structural theorem-genome change under an auditable gate \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -3383,8 +3400,8 @@ selected support surface: the exact included \path{review_bundle/} directory, or
 an archive equivalent under Table~\ref{tab:review-bundle-archive-equivalence},
 with certificate bytes fixed by the final digest manifest.\end{proof}
 
-\begin{corollary}[Upload-or-archive instantiation record]
-\label{cor:upload-or-archive-instantiation-record}
+\begin{theorem}[Upload-or-archive instantiation boundary]
+\label{thm:upload-or-archive-instantiation-boundary}
 Before the bundle-backed claims of this supplement are treated as part of a
 completed venue submission, the external submission record must instantiate one
 of the two support-surface branches of
@@ -3393,8 +3410,11 @@ Theorem~\ref{thm:final-support-surface-closure}: either it records that
 records an archive locator together with the file list and SHA-256 digests that
 pass Table~\ref{tab:review-bundle-archive-equivalence}.  The TeX source and the
 local digest manifest alone select the intended branch but do not constitute a
-venue upload receipt.
-\end{corollary}
+venue upload receipt.  In the present source package no such external receipt or
+archive locator is recorded; consequently all bundle-backed claims are proved
+only as conditional source-level support claims until the missing external
+record is supplied.
+\end{theorem}
 
 \begin{proof}
 Theorem~\ref{thm:final-support-surface-closure} proves that the bundle-backed
@@ -3409,7 +3429,27 @@ submission needs one additional external instantiation record: either the venue
 or packager records the exact supplemental directory upload, or a replacement
 archive supplies the locator and matching digest table.  Without such a record,
 the statements proved above remain conditional source-level support claims rather
-than a proof that the upload action has occurred.\end{proof}
+than a proof that the upload action has occurred.  The current package records
+neither kind of external coordinate: the exact-directory branch is selected only
+as the source-level support mode, and the archive branch is explicitly absent.
+Therefore treating the bundle-backed claims as externally instantiated would add
+a coordinate not present in the finite support surface, contradicting the finite
+coordinate determination boundary of
+Theorem~\ref{thm:finite-coordinate-determination-boundary}.\end{proof}
+
+\begin{corollary}[Upload-or-archive instantiation record]
+\label{cor:upload-or-archive-instantiation-record}
+The bundle-backed support claims of the current package may be used only under
+the external-record condition of
+Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  In particular,
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is a local byte-level packaging
+manifest and not, by itself, an upload receipt or an archive locator.
+\end{corollary}
+
+\begin{proof}
+This is the record-level specialization of
+Theorem~\ref{thm:upload-or-archive-instantiation-boundary} to the current digest
+manifest.\end{proof}
 
 \begin{theorem}[Theorem-obligation ledger boundary]
 \label{thm:theorem-obligation-ledger-boundary}
