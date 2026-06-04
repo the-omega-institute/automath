@@ -15,8 +15,9 @@
   \par\smallskip\noindent\textbf{Audit record \theauditrecord}%
   \ifx\relax#1\relax\else\textbf{ (#1)}\fi\textbf{.}\ }{\par\smallskip}
 
-\title{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics}
-\titlerunning{Auditable Theory-to-Paper Pipelines}
+\title{An Auditable Theory Compiler for AI-Assisted Formal Mathematics\\
+\large Technical Supplement: Auditable Theory-to-Paper Pipelines}
+\titlerunning{An Auditable Theory Compiler}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
 \institute{AELF PTE LTD. \email{auric@aelf.io} \and
@@ -37,12 +38,12 @@ directories, AI review loops, deterministic gates, and human promotion
 decisions.  Its central rule is that AI output is advisory: load-bearing
 mathematical and submission claims must be tied, at the appropriate evidence
 level, to source paths, command logs, deterministic checks, and human-approved
-promotion.  The main theorem constructs the finite publication certificates
+promotion.  The core interface theorem constructs the finite publication certificates
 checked by the package verifier from recorded gate-passage entries and explicitly
 submitted review surfaces; its certificate-level soundness claim is deliberately
 finite-record only.  It proves neither Lean builds, daemon behaviour, artifact
 semantics, nor venue acceptance.  The current package then proves finite-record
-exactness of its six-row, path-verified instantiation, while rejecting stronger
+certificate exactness for its six-row, path-verified instantiation, while rejecting stronger
 readings such as external gate soundness, proof-assistant correctness, artifact
 semantic validity, current execution of every gate, or venue acceptance.  Four case
 studies illustrate the gates at the path-verified historical-snapshot level: intake
@@ -60,10 +61,13 @@ failure modes are equally structural: a route may overlap a submitted sibling,
 an artifact status file may drift from generated counts, or an intake note may
 accidentally become a daemon-visible manuscript.
 
-This source is the technical supplement for a presentation-only route whose
+This source is the technical supplement for the presentation-only contribution
+\emph{An Auditable Theory Compiler for AI-Assisted Formal Mathematics}, whose
 primary artifact is the two-page source \path{submission_abstract.tex}.  The
-short artifact states the workshop-facing thesis and boundary; this supplement
-gives the finite-record definitions, theorem proofs, and case-evidence tables;
+``auditable theory-to-paper pipeline'' terminology below names the compiler's
+finite-record package interface, not a competing submission title.  The short
+artifact states the workshop-facing thesis and boundary; this supplement gives
+the finite-record definitions, theorem proofs, and case-evidence tables;
 and the supplemental evidence directory \path{review_bundle/}, when uploaded
 with the submission or replaced by an archival equivalent, supplies the finite
 records named in the bundle-dependent claims.  Without that supplemental surface,
@@ -72,7 +76,7 @@ file records a compact workflow pattern for avoiding these failures: an auditabl
 theory-to-paper pipeline in which AI agents propose, review, and triage, while
 deterministic gates decide what may be treated as load-bearing evidence.  The
 pattern is instantiated in local BEDC and automath workspaces.
-The mathematical content of the note is the explicit finite-record safety
+The mathematical content of the supplement is the explicit finite-record safety
 interface for this workflow: definitions for gate vocabulary, a pinned imported
 theorem spine, a constructive finite publication-certificate theorem, a
 current-package finite-record certificate-exactness theorem, evidence-level and
@@ -363,6 +367,8 @@ semantic or rebuild claim.\end{proof}
 
 \section{Operational interface}
 
+\subsection{Abstract finite-record interface}
+
 For this long technical supplement and its two-page CICM presentation artifact,
 the following finite interface is sufficient.
 
@@ -499,12 +505,12 @@ records that no such boundary is crossed; (v) $D$ is present exactly when
 discovery lies in $K$, and then names the pinned discovery-gate source-interface
 rows used by the claim; and (vi) $B$ either records command, source commit,
 environment, exit code, and log path for command-run evidence or explicitly
-records that no command-run assertion is made.  Equivalently,
-$V(c,\mathcal C)=\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ for the same six finite
-record clauses listed in Theorem~\ref{thm:record-acceptance-exactness}.
+records that no command-run assertion is made.  This paragraph defines the
+verifier only; the exactness theorem below separately defines the
+record-acceptance relation and proves that the two predicates coincide.
 \end{definition}
 
-\begin{proposition}[Finite certificate schema verifier]
+\begin{proposition}[Finite certificate schema verifier as a record check]
 \label{prop:finite-certificate-schema-verifier}
 For every load-bearing manuscript claim $c$ whose component kinds lie in the
 seven-kind domain, $V(c,\mathcal C)$ is a finite, prose-insensitive
@@ -1050,23 +1056,30 @@ the discovery gate.\end{proof}
 Consider a theory-to-paper pipeline with the operational interface above and a
 finite submitted record surface consisting only of the manuscript source, printed
 tables, submitted manifests, uploaded review-bundle records, recorded logs, and
-explicitly declared historical boundaries.  Assume that every load-bearing claim
-in an active manuscript is either rejected or has an acceptance entry with an
-evidence surface inside this finite submitted record surface; that the pipeline is
-record-gate-sound for acceptance, meaning that a recorded acceptance entry is
-present only after every gate assigned by $\Gamma$ to the claim kind has already
-produced a pass record in that finite record surface;
-that every advisory output is demoted unless the deterministic gate set
-$\Gamma$ for its claim kind passes; that discovery claims are checked through
+explicitly declared historical boundaries.  Assume the following four distinct
+finite-record hypotheses.
+\begin{enumerate}
+\item \emph{Acceptance entries}: every load-bearing claim in an active manuscript
+is either rejected or has an acceptance entry with an evidence surface inside
+this finite submitted record surface.
+\item \emph{Record-gate soundness}: a recorded acceptance entry is present only
+after every gate assigned by $\Gamma$ to the claim kind has already produced a
+pass record in that finite record surface, and every advisory output is demoted
+unless the deterministic gate set $\Gamma$ for its claim kind passes.
+\item \emph{Discovery certificate input}: discovery claims are checked through
 the pinned discovery-gate interface certified by
 Lemma~\ref{lem:source-interface-extraction-correctness} and
 Propositions~\ref{prop:reviewable-source-snapshot-interface},
 \ref{prop:source-interface-record-file-consistency}, and
 \ref{prop:source-interface-evidence-level-separation}, in particular the
 separated manual/path-verified and executable finite-record levels for the
-pipeline safety and main pipeline theorem labels; and
-that no inactive intake seed is treated as publication work without human
-promotion.  Then the theorem constructs certificates and nothing stronger.  For
+pipeline safety and main pipeline theorem labels.
+\item \emph{Promotion and verifier boundary}: no inactive intake seed is treated
+as publication work without human promotion, and the constructed tuple below is
+submitted to the finite schema verifier rather than being identified with the
+acceptance entry itself.
+\end{enumerate}
+Then the theorem constructs certificates and nothing stronger.  For
 every accepted load-bearing claim $c$ it constructs, from the acceptance entry and
 the submitted finite evidence surfaces, a record
 \[
@@ -1362,6 +1375,8 @@ Theorems~\ref{thm:finite-certificate-obstruction-skeleton} and
 rejected by a finite obstruction subrecord rather than accepted by this
 package.\end{proof}
 
+\subsection{Current-package instantiation}
+
 \begin{theorem}[Current-package finite-record certificate exactness]
 \label{thm:current-package-certificate-exactness}
 For the finite current package $P^{+}$ of
@@ -1378,7 +1393,11 @@ a_i\longmapsto \mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)
 \]
 is a bijection from the accepted current-package claim rows printed in this
 source to the locally checkable certificates accepted by the submitted schema
-verifier at the declared path-verified evidence level.  The durable TeX source
+verifier at the declared path-verified evidence level, provided the cited bundle
+records and log are included with the submission or replaced by an accepted
+archive-equivalent support surface.  Without that support surface, the theorem
+retains only the printed source-level inventory of six intended certificate rows
+and not the machine-readable current-package acceptance claim.  The durable TeX source
 fixes the six row statements and their negative boundaries; the supplemental
 record supplies the machine-readable mirror and verifier log only if it travels
 with the submission or with an archival replacement satisfying
@@ -1508,6 +1527,8 @@ definition of command-run evidence prevents the corollary from asserting any of
 those stronger claims.\end{proof}
 
 \section{Gate summary}
+
+\subsection{Case-study witness protocol}
 
 Table~\ref{tab:gates} lists the deterministic gates used by
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.  The rows are operational
