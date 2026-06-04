@@ -73,6 +73,33 @@ from the standard exchange inequality
 F_{k-2}+F_{k-4}+\cdots\).
 \end{proof}
 
+\begin{proposition}[Computable Zeckendorf arithmetic anchor]
+\label{prop:zeckendorf-computable-arithmetic-anchor}
+The stable Zeckendorf normal-form set \(X_\infty^{\mathrm{fin}}\) gives a
+computable presentation of \(\NN\): the valuation \(\Val\) and its greedy inverse
+are computable, equality is decidable, and the operations transported from
+ordinary addition and multiplication are computable on normal forms.  The only
+finite-level operation used below is the residue fold of \Cref{def:fold}.  No
+automatic-structure or Ostrowski-definability theorem is used as a hidden input
+to the protocol theorem.
+\end{proposition}
+
+\begin{proof}
+The map \(\Val\) is computed by the finite Fibonacci sum of the support, and
+\Cref{lem:greedy-zeckendorf-normalizer}, the classical Zeckendorf theorem
+\cite{Zeckendorf1972}, computes the inverse normal form.  Equality is decidable
+by comparing finite binary strings after deleting trailing zeroes, or
+equivalently by applying \(\Val\).  To compute transported addition or
+multiplication of \(c,d\in X_\infty^{\mathrm{fin}}\), compute
+\(a=\Val(c)\), \(b=\Val(d)\), form \(a+b\) or \(ab\) in ordinary integer
+arithmetic, and apply the greedy inverse.  The finite fold is computable by
+\Cref{prop:finite-zeckendorf-residue-interface}.  The broader literature gives
+stronger finite-word algorithms and automatic/Ostrowski arithmetic interfaces
+\cite{AhlbachEtAl2013,HieronymiTerry2018}; those results are cited as public
+anchors for the numeration background, but the present argument needs only the
+explicit computations just described.
+\end{proof}
+
 \begin{proposition}[Fold confluence]
 \label{prop:fold-confluence}
 Two finite words have the same stable fold if and only if they have the same
@@ -356,7 +383,8 @@ therefore computes \(\mathrm{NF}_\infty(\omega)\), and
 \Cref{prop:fold-confluence} gives decidable equality of the resulting normal
 forms.  The compiled operations on the image
 \(X_\infty^{\mathrm{fin}}\) are computable by
-\Cref{lem:value-transported-suffices}.  The readout identities are
+\Cref{prop:zeckendorf-computable-arithmetic-anchor,lem:value-transported-suffices}.
+The readout identities are
 \Cref{thm:two-level}.  The final sentence is
 \Cref{prop:value-transport-exact-interface}.
 \end{proof}
