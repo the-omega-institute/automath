@@ -9,6 +9,11 @@
 \usepackage{xurl}
 
 \setlist{nosep,leftmargin=*}
+\newcounter{auditrecord}
+\newenvironment{auditrecord}[1][]{%
+  \refstepcounter{auditrecord}%
+  \par\smallskip\noindent\textbf{Audit record \theauditrecord}%
+  \ifx\relax#1\relax\else\textbf{ (#1)}\fi\textbf{.}\ }{\par\smallskip}
 
 \title{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics}
 \titlerunning{Auditable Theory-to-Paper Pipelines}
@@ -57,13 +62,13 @@ accidentally become a daemon-visible manuscript.
 
 This source is the technical supplement for a presentation-only route whose
 primary artifact is the two-page source \path{submission_abstract.tex}.  The
-theorem environments, tables, and proofs below are a support surface for that
-primary presentation artifact; they are not a competing long presentation paper.
-The supplemental evidence directory \path{review_bundle/}, when uploaded with
-the submission or replaced by an archival equivalent, supplies the finite records
-named in the bundle-dependent claims.  Without that supplemental surface, those
-claims should be read as conditional on future record availability.  This file
-records a compact workflow pattern for avoiding these failures: an auditable
+short artifact states the workshop-facing thesis and boundary; this supplement
+gives the finite-record definitions, theorem proofs, and case-evidence tables;
+and the supplemental evidence directory \path{review_bundle/}, when uploaded
+with the submission or replaced by an archival equivalent, supplies the finite
+records named in the bundle-dependent claims.  Without that supplemental surface,
+those claims should be read as conditional on future record availability.  This
+file records a compact workflow pattern for avoiding these failures: an auditable
 theory-to-paper pipeline in which AI agents propose, review, and triage, while
 deterministic gates decide what may be treated as load-bearing evidence.  The
 pattern is instantiated in local BEDC and automath workspaces.
@@ -90,13 +95,25 @@ publication-facing evidence discipline around such sources.
 
 \section{Architecture}
 
-The workflow separates source work from publication work.  The newmath source
-workspace contains Lean files, scripts, and artifact sources.  The automath
-publication workspace contains intake packets, active paper tracks, review
-state, and submission metadata.  A candidate first enters an intake seed.  It
-becomes an active paper only after a human promotion decision creates a
-\texttt{2026\_*} directory with \texttt{main.tex} and \texttt{PIPELINE.md}.
-This prevents source organization from being mistaken for a submission route.
+The workflow separates source work from publication work, and the separation is
+the organizing contract for the rest of the supplement.  BEDC source files are
+treated as finite-kernel theory together with proof obligations and separate
+implementation contracts.  Lean and related markers are formal-verification
+records for named obligations, not object-language closure by themselves.
+Finite manifests, evaluator rows, bundled snapshots, and command logs are the
+substrate witnesses from which publication certificates are built.  AI agents
+remain advisory: they may propose, review, and triage, but they do not promote
+claims into accepted theory.  The automath layer is therefore a publication
+compiler: it packages the source-theory interface, finite witnesses, route state,
+and submission boundary without merging those evidence axes.
+
+Concretely, the newmath source workspace contains Lean files, scripts, and
+artifact sources.  The automath publication workspace contains intake packets,
+active paper tracks, review state, and submission metadata.  A candidate first
+enters an intake seed.  It becomes an active paper only after a human promotion
+decision creates a \texttt{2026\_*} directory with \texttt{main.tex} and
+\texttt{PIPELINE.md}.  This prevents source organization from being mistaken for
+a submission route.
 
 The source side supplies a discovery-gate calculus.  In this calculus,
 statement-only and code-only candidates are insufficient; mechanical expansion
@@ -105,8 +122,10 @@ semantic certificate and a ledger witness; demotion preserves source-interface
 audit soundness;
 accepted claims must form an auditable lineage DAG; and a pipeline is safe only
 when discovery claims pass the gate before being recorded as accepted work.
-The pinned source file is
-\path{D:/omega/newmath/papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+The reviewer-facing source snapshot is
+\path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
+copied from the newmath repository path
+\path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
 at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}
 \cite{bedc-newmath-source}.  The imported interface labels are listed in the
 following source-binding record:
@@ -210,8 +229,7 @@ an imported label outside this ten-row list, and no later proof uses a stronger
 form than the corresponding bounded summary.  Thus the table is complete for the
 imported interface of this paper and correct at the stated evidence level: exact
 as to path, commit, label, line range, method, date, and summary mode, and
-bounded as to mathematical restatement.\qed
-\end{proof}
+bounded as to mathematical restatement.\end{proof}
 
 \begin{proposition}[Reviewable source-snapshot interface]
 \label{prop:reviewable-source-snapshot-interface}
@@ -241,8 +259,7 @@ line ranges, the JSON record gives the machine-readable binding, and the bundle
 copy gives the text snapshot against which those ranges are checked.  The current reviewer-facing distribution mode is fixed by the proposition:
 the bundle is uploadable supplemental material, not an unrecorded private
 dependency, and no archival identifier is needed for the bounded interface
-claim.\qed
-\end{proof}
+claim.\end{proof}
 
 \begin{proposition}[Executable source-interface record comparison]
 \label{prop:source-interface-record-file-consistency}
@@ -296,8 +313,7 @@ appear as a finite bad subrecord.  What remains unchecked is exactly outside the
 claim: the script does not interpret or prove the imported theorem statements.
 Thus the executable comparison strengthens the earlier manual audit into a
 reproducible finite-record certificate while preserving the bounded-paraphrase
-and non-semantic boundary.\qed
-\end{proof}
+and non-semantic boundary.\end{proof}
 
 \begin{proposition}[Source-interface evidence-level separation]
 \label{prop:source-interface-evidence-level-separation}
@@ -343,8 +359,7 @@ interface with recorded evidence surface and boundary.  Applying the preceding
 paragraphs to each of its imported discovery-gate citations gives precisely the
 manual path-verified interface, optionally strengthened by the finite executable
 record comparison, and forbids promotion of that interface into an unrecorded
-semantic or rebuild claim.\qed
-\end{proof}
+semantic or rebuild claim.\end{proof}
 
 \section{Operational interface}
 
@@ -466,22 +481,27 @@ checkable} when these finite fields are present and every path, manifest row, or
 log named by a field lies in the submitted artifact, the supplemental review
 bundle, or the explicit path-verified historical boundary.
 
-For later use we make the local check explicit as a finite verifier.  Given a
-candidate record $\mathcal C(c)$, define $V(c,\mathcal C)$ to perform the
-following schema checks, in order: (i) $K$ is a nonempty subset of the seven-kind
-domain and $\ell$ is either path-verified or command-run; (ii) every element of
-the finite evidence surface $E$ is a cited submitted path, review-bundle path,
+For later use we make the local check explicit as a finite verifier.  The
+verifier is definitionally the following six-clause predicate; no unprinted
+semantic oracle is part of it.  Given a candidate record $\mathcal C(c)$, define
+$V(c,\mathcal C)=1$ if and only if all six checks below return yes, and
+$V(c,\mathcal C)=0$ otherwise, stopping at the first failed check and returning
+that finite bad subrecord: (i) $K$ is a nonempty subset of the seven-kind domain
+and $\ell$ is either path-verified or command-run; (ii) every element of the
+finite evidence surface $E$ is a cited submitted path, review-bundle path,
 manifest row, log path, pinned commit, or explicit historical-evidence boundary;
 (iii) for every gate in $\bigcup_{k\in K}\Gamma(k)$, the field $R$ contains a pass
 record with gate name, input surface, decision, evidence pointer, and evidence
 level, and the evidence pointer is tied to $E$ or to a named manifest, table,
-bundled snapshot, or historical boundary; (iv) $H$ is a concrete human-promotion record when
-the claim crosses the intake-to-publication boundary and otherwise records that
-no such boundary is crossed; (v) $D$ is present exactly when discovery lies in
-$K$, and then names the pinned discovery-gate source-interface rows used by the
-claim; and (vi) $B$ either records command, source commit, environment, exit code,
-and log path for command-run evidence or explicitly records that no command-run
-assertion is made.
+bundled snapshot, or historical boundary; (iv) $H$ is a concrete human-promotion
+record when the claim crosses the intake-to-publication boundary and otherwise
+records that no such boundary is crossed; (v) $D$ is present exactly when
+discovery lies in $K$, and then names the pinned discovery-gate source-interface
+rows used by the claim; and (vi) $B$ either records command, source commit,
+environment, exit code, and log path for command-run evidence or explicitly
+records that no command-run assertion is made.  Equivalently,
+$V(c,\mathcal C)=\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ for the same six finite
+record clauses listed in Theorem~\ref{thm:record-acceptance-exactness}.
 \end{definition}
 
 \begin{proposition}[Finite certificate schema verifier]
@@ -524,8 +544,7 @@ $\Gamma$ for a gate-domain failure, $E$ for an evidence-surface failure, $K$,
 $\Gamma$, $R$, and the cited evidence item for a gate-record failure, $H$ for a
 promotion failure, $K$ and $D$ for a discovery-field failure, or $\ell$ and $B$
 for an evidence-level failure.  This subrecord is independent of any surrounding
-paragraph that may have described the claim.\qed
-\end{proof}
+paragraph that may have described the claim.\end{proof}
 
 \begin{theorem}[Finite-record acceptance exactness]
 \label{thm:record-acceptance-exactness}
@@ -553,16 +572,19 @@ discovery-gate source-interface rows used by the claim; and
 \item $B$ records the command, source commit, environment, exit code, and log path
 for command-run evidence, or records that no command-run assertion is made.
 \end{enumerate}
-Then the finite verifier $V$ accepts $\mathcal C(c)$ if and only if
+Then the finite verifier $V$, definitionally the six-clause predicate just
+displayed in Definition~\ref{def:operational-acceptance-interface}, accepts
+$\mathcal C(c)$ if and only if
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.  Moreover, if $V$ accepts a record
 for $c$, the same record cannot certify any stronger reading $c^{+}$ that adds a
 new claim kind, a stronger evidence level, an omitted route crossing, an omitted
 discovery interface, an omitted pass record, or a command-run assertion: such a
 reading has a finite bad subrecord of the corresponding clause.  Thus $V$ is
-exact for this paper's finite record-acceptance relation, while remaining silent
-about external semantic validity of the referenced theory or artifacts and about
-the implementation-level soundness of any deployed gate implementation beyond the
-recorded pass rows.
+exact for this paper's finite record-acceptance relation over the submitted
+source, tables, manifests, logs, and explicitly declared historical boundaries,
+while remaining silent about external semantic validity of the referenced theory
+or artifacts and about the implementation-level soundness of any deployed gate
+implementation beyond the recorded pass rows.
 \end{theorem}
 
 \begin{proof}
@@ -596,8 +618,7 @@ the failed clause reads only finitely many fields, so deleting irrelevant unread
 fields gives an inclusion-minimal bad subrecord.  If none of the clauses changes,
 then $c^{+}$ is not stronger in the record semantics: the certificate still
 licenses only the same kind set, same evidence level, same gate records, same
-route boundary, same discovery interface, and same command boundary.\qed
-\end{proof}
+route boundary, same discovery interface, and same command boundary.\end{proof}
 
 \begin{theorem}[Finite-coordinate determination boundary]
 \label{thm:finite-coordinate-determination-boundary}
@@ -636,8 +657,7 @@ daemon trace this is a command-run tuple; for an artifact semantic fact this is
 an artifact pass record or rerun log; and for a venue decision this is an
 external evidence surface and the corresponding route/submission record.  Without
 that enlargement, Theorem~\ref{thm:record-acceptance-exactness} supplies only the
-original finite-record conclusion.\qed
-\end{proof}
+original finite-record conclusion.\end{proof}
 
 \begin{proposition}[Machine-readable certificate records]
 \label{prop:machine-readable-certificate-records}
@@ -724,8 +744,7 @@ claim inventory at the declared review fields, and no additional primary
 load-bearing assertion is licensed by the machine-readable interface.  The proof
 does not assert that the script decides semantic paraphrase equality or discovers
 undeclared paths; those remain the manual audit obligations represented by the
-table rows and by Proposition~\ref{prop:primary-inventory-freshness-criterion}.\qed
-\end{proof}
+table rows and by Proposition~\ref{prop:primary-inventory-freshness-criterion}.\end{proof}
 
 \begin{theorem}[Executable record non-escalation]
 \label{thm:executable-record-non-escalation}
@@ -776,8 +795,7 @@ packages can agree on $F$ while differing on such a stronger assertion.  Since a
 function of $F$ has the same value on both packages, no executable claim proved by
 this verifier can certify that stronger assertion.  The maximal executable
 record-level claim is exactly the one stated in
-Proposition~\ref{prop:machine-readable-certificate-records}.\qed
-\end{proof}
+Proposition~\ref{prop:machine-readable-certificate-records}.\end{proof}
 
 \begin{theorem}[Executable certificate-construction invariant]
 \label{thm:executable-certificate-construction-invariant}
@@ -839,8 +857,7 @@ same finite-record conclusions.  Such an unchanged projection contains no
 coordinate for external theorem truth, proof-assistant correctness, unlogged
 daemon execution, artifact semantic validity, or venue acceptance.  Those claims
 therefore require an enlarged certificate and additional executable records, and
-without them they are outside the accepted finite-record interface.\qed
-\end{proof}
+without them they are outside the accepted finite-record interface.\end{proof}
 
 \begin{proposition}[Deterministic claim-kind dispatch]
 \label{prop:claim-kind-dispatch}
@@ -861,8 +878,7 @@ requires the acceptance entry of a load-bearing claim to record passage through
 every gate assigned by $\Gamma$.  If a component gate of a mixed claim were
 omitted, then the projection of the claim to that component kind would lack its
 assigned pass record.  Such an entry would not be record-gate-sound.  Therefore accepted
-mixed claims in a record-gate-sound pipeline must pass every gate in the union.\qed
-\end{proof}
+mixed claims in a record-gate-sound pipeline must pass every gate in the union.\end{proof}
 
 \begin{theorem}[Finite certificate obstruction skeleton]
 \label{thm:finite-certificate-obstruction-skeleton}
@@ -963,8 +979,7 @@ The final sentence follows from the construction.  The verifier reads only the
 finite certificate fields and the finite dispatch table, so the theorem
 classifies certificate failures for review.  It does not assert a lower bound,
 complexity separation, automated theorem-proving method, or fresh run of any
-external command.\qed
-\end{proof}
+external command.\end{proof}
 
 \begin{proposition}[Gate-interface separation]
 \label{prop:gate-interface-separation}
@@ -988,8 +1003,7 @@ level: an active paper can still overlap a submitted sibling, a route with no
 overlap can still have an impermissible submission state, and a compiling edit in
 a permissible route can still lack theorem-content delta.  Therefore a
 load-bearing claim with any one of these components must pass that component's
-own gate, and passage through the others cannot supply the missing evidence.\qed
-\end{proof}
+own gate, and passage through the others cannot supply the missing evidence.\end{proof}
 
 \begin{proposition}[Scheduler selection is advisory before discovery gating]
 \label{prop:scheduler-selection-advisory}
@@ -1029,16 +1043,19 @@ pipeline safety, which requires certificate, ledger, genome, score, lineage, and
 boundary witnesses for accepted discovery.  Combining these two imported
 interfaces gives the stated conclusion: scheduling and classifier-shift scoring
 can advise selection order, but discovery acceptance still occurs only through
-the discovery gate.\qed
-\end{proof}
+the discovery gate.\end{proof}
 
-\begin{theorem}[Constructive finite-record publication-safety interface]
+\begin{theorem}[Finite-record certificate construction under record-gate soundness]
 \label{thm:publication-safety-interface}
-Consider a theory-to-paper pipeline with the operational interface above.  Assume
-that every load-bearing claim in an active manuscript is either rejected or has an
-acceptance entry with an evidence surface; that the pipeline is record-gate-sound for
-acceptance, meaning that a recorded acceptance entry is present only after every
-gate assigned by $\Gamma$ to the claim kind has already produced a pass record;
+Consider a theory-to-paper pipeline with the operational interface above and a
+finite submitted record surface consisting only of the manuscript source, printed
+tables, submitted manifests, uploaded review-bundle records, recorded logs, and
+explicitly declared historical boundaries.  Assume that every load-bearing claim
+in an active manuscript is either rejected or has an acceptance entry with an
+evidence surface inside this finite submitted record surface; that the pipeline is
+record-gate-sound for acceptance, meaning that a recorded acceptance entry is
+present only after every gate assigned by $\Gamma$ to the claim kind has already
+produced a pass record in that finite record surface;
 that every advisory output is demoted unless the deterministic gate set
 $\Gamma$ for its claim kind passes; that discovery claims are checked through
 the pinned discovery-gate interface certified by
@@ -1049,9 +1066,9 @@ Propositions~\ref{prop:reviewable-source-snapshot-interface},
 separated manual/path-verified and executable finite-record levels for the
 pipeline safety and main pipeline theorem labels; and
 that no inactive intake seed is treated as publication work without human
-promotion.  Then the nontrivial output of the interface is a finite certificate
-constructor.  For every accepted load-bearing claim $c$ it constructs, from the
-acceptance entry and submitted evidence surfaces, a record
+promotion.  Then the theorem constructs certificates and nothing stronger.  For
+every accepted load-bearing claim $c$ it constructs, from the acceptance entry and
+the submitted finite evidence surfaces, a record
 \[
 \mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)
 \]
@@ -1066,15 +1083,17 @@ currency, dynamic artifact semantics, or venue acceptance, then $c^+$ is accepte
 only after the certificate is enlarged by the additional claim kind, evidence
 surface, gate pass records, promotion field, or command-run tuple required for
 that stronger reading.
-Consequently the claim has a recorded evidence surface, a declared evidence
-boundary, and a prior pass record for every gate required for its claim kind.
-Moreover, accepted discovery claims inherit the bounded pinned source-interface
-consequences that statement-only, code-only, mechanical-expansion, and
-compression-only outputs are not accepted as discovery without the required
-certificate, ledger, and lineage witnesses.  Any purported accepted claim without
-such finite certificate data is rejected by one of the five obstruction skeletons
-in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  For the current
-package, the hypotheses are witnessed by the machine-readable evidence map in
+Consequently, within the submitted finite records and under the stated
+record-gate-soundness hypotheses, the claim has a recorded evidence surface, a
+declared evidence boundary, and a prior pass record for every gate required for
+its claim kind.  Moreover, accepted discovery claims inherit the bounded pinned
+source-interface consequences that statement-only, code-only,
+mechanical-expansion, and compression-only outputs are not accepted as discovery
+without the required certificate, ledger, and lineage witnesses.  Any purported
+accepted claim without such finite certificate data is rejected by one of the five
+obstruction skeletons in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+For the current package, the hypotheses are witnessed conditionally on the
+submitted review bundle being available by the machine-readable evidence map in
 Proposition~\ref{prop:machine-readable-certificate-records}, the acceptance
 ledger in Proposition~\ref{prop:current-package-acceptance-certificate-ledger},
 and the four path-complete case witnesses of
@@ -1082,7 +1101,7 @@ Proposition~\ref{prop:path-complete-case-witnesses}, with the current-package
 bounded instantiation isolated in
 Corollary~\ref{cor:current-package-path-verified-instantiation} and the
 case-snapshot non-rerun boundary isolated in
-Corollary~\ref{cor:case-snapshot-non-rerun-rigidity}.  The finite-coordinate
+Audit record~\ref{cor:case-snapshot-non-rerun-rigidity}.  The finite-coordinate
 boundary of Theorem~\ref{thm:finite-coordinate-determination-boundary} is part of
 the conclusion: the constructed certificate determines exactly the finite record
 coordinates it reads and cannot determine any unrecorded build, daemon, artifact,
@@ -1173,8 +1192,7 @@ a minimal bad subrecord of type 1--5: missing evidence surface, missing gate
 record, missing promotion field, missing discovery-interface rows, or unsupported
 command-run escalation.  Each type contradicts one of the workflow assumptions
 above or demotes the claim to a weaker evidence level.  The stated safety
-interface follows.\qed
-\end{proof}
+interface follows.\end{proof}
 
 \begin{corollary}[Finite-record boundary for external gate soundness]
 \label{cor:finite-record-gate-soundness-boundary}
@@ -1216,13 +1234,12 @@ contextual rows allowed by Proposition~\ref{prop:formal-source-gate-instantiatio
 Artifact semantic validity requires a stronger artifact row than the bounded
 manifest records of Theorem~\ref{thm:finite-witness-manifest-record-interface}.
 Venue acceptance requires a venue decision rather than the submission-pack
-readiness row of Proposition~\ref{prop:venue-submission-pack-gate}.  In each
+readiness row of Audit record~\ref{prop:venue-submission-pack-gate}.  In each
 case, either the needed finite field is missing or the row is read at a stronger
 evidence level than its certificate permits.  The obstruction is therefore a
 finite subrecord of the kind classified by
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} and
-Theorem~\ref{thm:evidence-level-overclaim-obstruction}.\qed
-\end{proof}
+Theorem~\ref{thm:evidence-level-overclaim-obstruction}.\end{proof}
 
 \begin{table}
 \caption{Submission-local acceptance-entry ledger for the current package}
@@ -1277,7 +1294,7 @@ historical paths named in the case catalogue.  The TeX source fixes the displaye
 six-row ledger, while the review-bundle files in this definition are
 supplemental-record components: claims that depend on them are conditional on
 those files being submitted with matching paths and records, or on an archival
-equivalent satisfying Proposition~\ref{prop:review-bundle-availability-condition}.
+equivalent satisfying Audit record~\ref{prop:review-bundle-availability-condition}.
 Tables~\ref{tab:current-acceptance-ledger}
 and~\ref{tab:current-certificate-ledger} form a finite submission-local
 acceptance-entry ledger for the load-bearing current-package claims used in
@@ -1343,8 +1360,7 @@ the boundary field in Table~\ref{tab:current-certificate-ledger}.  By
 Theorems~\ref{thm:finite-certificate-obstruction-skeleton} and
 \ref{thm:evidence-level-overclaim-obstruction}, such a reading is therefore
 rejected by a finite obstruction subrecord rather than accepted by this
-package.\qed
-\end{proof}
+package.\end{proof}
 
 \begin{theorem}[Current-package finite-record certificate exactness]
 \label{thm:current-package-certificate-exactness}
@@ -1366,7 +1382,7 @@ verifier at the declared path-verified evidence level.  The durable TeX source
 fixes the six row statements and their negative boundaries; the supplemental
 record supplies the machine-readable mirror and verifier log only if it travels
 with the submission or with an archival replacement satisfying
-Proposition~\ref{prop:review-bundle-availability-condition}.  Every
+Audit record~\ref{prop:review-bundle-availability-condition}.  Every
 current-package reading requiring a seventh accepted row, a different claim kind,
 a stronger evidence level, an additional gate pass record, a fresh command-run
 tuple, or an external venue decision is outside this bijection and is rejected by
@@ -1419,8 +1435,7 @@ missing gate record, missing promotion or venue field, missing discovery-source
 row, or unsupported command-run escalation.  Thus the six certificates are not a
 sample of an unrecorded full-pipeline execution; they are exactly the row-frozen,
 finite, path-verified package instantiation of
-the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.\qed
-\end{proof}
+the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.\end{proof}
 
 \begin{corollary}[Current package path-verified instantiation]
 \label{cor:current-package-path-verified-instantiation}
@@ -1490,8 +1505,7 @@ record, missing discovery-source row, or unsupported command-run escalation.
 Since $P$ records no command, environment, exit code, and log path for a fresh
 full-source rebuild, publication-daemon execution, or Rule110 dynamic rerun, the
 definition of command-run evidence prevents the corollary from asserting any of
-those stronger claims.\qed
-\end{proof}
+those stronger claims.\end{proof}
 
 \section{Gate summary}
 
@@ -1539,8 +1553,7 @@ claim may be carried into the manuscript.  The definition of command-run
 evidence has additional required fields: command, source commit, environment,
 exit code, and log path.  Therefore a witness record with only the four
 path-verified fields supports the bounded case-study claim and cannot be used
-as evidence for a fresh command-run assertion.\qed
-\end{proof}
+as evidence for a fresh command-run assertion.\end{proof}
 
 \begin{proposition}[Path-complete case witnesses]
 \label{prop:path-complete-case-witnesses}
@@ -1613,8 +1626,7 @@ Those coordinates are not read by the path-complete row and are not present in
 the four skeletons.  The stronger reading is therefore rejected by
 Theorem~\ref{thm:finite-coordinate-determination-boundary} together with the
 finite obstruction skeleton, while the original bounded historical lesson remains
-accepted.\qed
-\end{proof}
+accepted.\end{proof}
 
 \section{Case studies}
 
@@ -1622,23 +1634,24 @@ Each row of Table~\ref{tab:case-witnesses} is a witness in the sense of
 Lemma~\ref{lem:gate-witness-criterion} and
 Proposition~\ref{prop:path-complete-case-witnesses}: source or artifact paths,
 failed invariant, gate decision, and safe manuscript lesson are all explicit.
-The exact path catalogue is as follows.  Newmath intake isolation uses
-\path{D:/omega/automath/papers/publication/newmath_intake/seeds/bedc_automation_pipeline}
-and \path{D:/omega/automath/papers/publication/pipeline_auto.py}.  The
-upper-fibers route-overlap record uses route identity
-\path{D:/omega/automath/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq},
-submitted sibling
-\path{D:/omega/automath/papers/publication/submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj/SUBMITTED},
-overlap ledgers
-\path{D:/omega/automath/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/semantic_overlap_blockers.json}
-and \path{semantic_overlap_blockers.md}, and board state
-\path{D:/omega/automath/papers/publication/PROGRAM_BOARD_MACHINE.md}.  The
-fake-extension case uses \path{D:/omega/newmath/lean4/scripts/phase_d_lint.py}
-and this paper's \path{ARTIFACT_INVENTORY.md}.  The Rule110 limitation record
-uses \path{D:/omega/newmath/rule110/STATUS.md},
-\path{D:/omega/newmath/rule110/docs/collision_audit_findings.md},
-\path{D:/omega/newmath/rule110/docs/exhaustiveness_audit_findings.md}, and
-\path{D:/omega/newmath/rule110/docs/papers_research_report.md}.
+The reviewer-facing path catalogue is the finite manifest row
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json:case_evidence} together with the
+snapshots under \path{review_bundle/case_snapshots/}.  Newmath intake isolation
+uses the bundled intake-seed manifest and the bundled active-paper-detector
+snapshot, copied from the provenance paths
+\path{automath/papers/publication/newmath_intake/seeds/bedc_automation_pipeline}
+and \path{automath/papers/publication/pipeline_auto.py}.  The upper-fibers
+route-overlap record uses bundled snapshots for the route identity, submitted
+sibling marker, overlap ledgers \path{semantic_overlap_blockers.json} and
+\path{semantic_overlap_blockers.md}, and the program-board state.  The
+fake-extension case uses the bundled \path{phase_d_lint.py} snapshot and this
+paper's submitted \path{ARTIFACT_INVENTORY.md}.  The Rule110 limitation record
+uses bundled snapshots corresponding to \path{rule110/STATUS.md},
+\path{rule110/docs/collision_audit_findings.md},
+\path{rule110/docs/exhaustiveness_audit_findings.md}, and
+\path{rule110/docs/papers_research_report.md}.  Machine-local absolute paths, if
+present in the manifest, are provenance fields only; the load-bearing review
+surface is the submitted bundle path or the submitted-package path named here.
 
 
 \paragraph{Case-evidence protocol.}
@@ -1725,8 +1738,7 @@ daemon, full-source command, and Rule110 dynamic-rerun claims.  A directory
 manifest or copied file snapshot supplies reviewability of the cited surface; it
 does not supply command, commit, environment, exit-code, and log-path fields.
 Therefore the conclusion is exactly path-verified snapshot reviewability and not
-any stronger execution claim.\qed
-\end{proof}
+any stronger execution claim.\end{proof}
 
 \begin{table}
 \caption{Path-verified case-study witnesses}
@@ -1787,19 +1799,19 @@ a local submission-pack readiness check only; if upload occurs after this check
 or the form shows a conflicting instruction, the finite venue gate must be run
 again and the record in \path{VENUE_CHECK.md} updated before submission.
 
-\begin{proposition}[Fresh venue-record criterion]
+\begin{auditrecord}[Fresh venue-record criterion]
 \label{prop:fresh-venue-record-criterion}
-The venue row of Proposition~\ref{prop:venue-submission-pack-gate} is accepted
+The venue row of Audit record~\ref{prop:venue-submission-pack-gate} is accepted
 for the current package only under the following finite record condition: the
 package contains a dated check of the official call page and linked submission
 style page, the record gives the checked URLs and route rules, and the upload is
 made either on that checked rule state or after a later record with the same
 fields has replaced it.  A dated historical check by itself is not a certificate
 for a later upload-time venue state.
-\end{proposition}
 
-\begin{proof}
-The venue gate uses facts that are external to the manuscript: route class,
+
+\medskip
+\noindent\emph{Rationale.} The venue gate uses facts that are external to the manuscript: route class,
 length, review status, proceedings boundary, deadline, submission form, style
 interface, and software/data-access instruction.  These facts can change outside
 the submitted source, so the gate cannot be discharged by a stale table row.
@@ -1809,11 +1821,10 @@ later upload or conflicting form instruction triggers re-verification.  If the
 upload uses that recorded rule state, each venue-dependent row of
 Table~\ref{tab:venue-submission-pack-gate} is checked against a dated official
 surface.  If the upload occurs after a change, or without a replacement record,
-at least one external premise of Proposition~\ref{prop:venue-submission-pack-gate}
+at least one external premise of Audit record~\ref{prop:venue-submission-pack-gate}
 is no longer certified by the package; the venue row is therefore not accepted.
 This proves the criterion and connects the fresh record to the local readiness
-gate.\qed
-\end{proof}
+gate.\end{auditrecord}
 
 \begin{table}
 \caption{Bounded venue-submission pack gate for the current route.}
@@ -1825,14 +1836,14 @@ Gate item & Fresh venue rule checked on 2026-06-04 & Required local witness & Bo
 \midrule
 Route class & CICM 2026 presentation-only work-in-progress papers are two pages plus bibliography and are not Springer-proceedings papers & \path{submission_abstract.tex} is the primary artifact; \path{main.tex} and \path{review_bundle/} are support materials & no claim of acceptance or proceedings publication \\
 Formatting & submissions use Springer LNCS style files; the presentation route inherits the CICM submission interface & document class \path{llncs}; bibliography style \path{splncs04}; local compile artifacts \path{submission_abstract.pdf} and \path{submission_abstract.bbl} & local formatting readiness only \\
-Supplement access & relevant software or data must be accessible for reproduction; support records may be supplemental rather than primary text & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, \path{review_bundle/submission_interface_map.json}, and the archive-equivalence criterion of Proposition~\ref{prop:review-bundle-archive-equivalence} & availability condition, not repository DOI or dynamic service \\
+Supplement access & relevant software or data must be accessible for reproduction; support records may be supplemental rather than primary text & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, \path{review_bundle/submission_interface_map.json}, and the archive-equivalence criterion of Audit record~\ref{prop:review-bundle-archive-equivalence} & availability condition, not repository DOI or dynamic service \\
 Metadata and bibliography & author/title metadata and bibliography must travel with the submitted primary artifact & title, authors, institutes, emails, bibliography command, and \path{references.bib} are present in the source package & metadata-readiness only \\
-Deadline route & presentation-only deadline recorded by the venue is 2026-06-15 & the package can be checked before upload against this finite table and Proposition~\ref{prop:venue-submission-pack-gate} & no statement that upload occurred \\
+Deadline route & presentation-only deadline recorded by the venue is 2026-06-15 & the package can be checked before upload against this finite table and Audit record~\ref{prop:venue-submission-pack-gate} & no statement that upload occurred \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\begin{proposition}[Venue-submission pack gate]
+\begin{auditrecord}[Venue-submission pack gate]
 \label{prop:venue-submission-pack-gate}
 Assume that, at final upload time, the CICM presentation-only call still has the
 venue rules listed in Table~\ref{tab:venue-submission-pack-gate}.  Then the
@@ -1841,14 +1852,14 @@ gate in that table passes: the primary artifact is the two-page-plus-bibliograph
 source \path{submission_abstract.tex}, the LNCS-style source and bibliography
 files are present, the review bundle is either uploaded or replaced by an archive
 equivalent in the sense of
-Proposition~\ref{prop:review-bundle-archive-equivalence}, and the title/author
+Audit record~\ref{prop:review-bundle-archive-equivalence}, and the title/author
 metadata remains in the primary source.  This gate is a local readiness
 certificate only; it does not assert EasyChair upload, reviewer approval,
 acceptance, camera-ready approval, or proceedings publication.
-\end{proposition}
 
-\begin{proof}
-The table has five rows, so the check is finite.  The route-class row compares
+
+\medskip
+\noindent\emph{Rationale.} The table has five rows, so the check is finite.  The route-class row compares
 the venue's presentation-only rule with the local role separation already fixed
 by the checklist: \path{submission_abstract.tex} is primary, while
 \path{main.tex} and \path{review_bundle/} are support artifacts.  If the primary
@@ -1867,7 +1878,7 @@ nor do they prove that the venue will accept the formatting; hence the row gives
 local formatting readiness only.  The supplement-access row is finite because it
 requires either the named bundle manifest and interface-map files or the finite
 archive-equivalence data of
-Proposition~\ref{prop:review-bundle-archive-equivalence}.  The metadata and
+Audit record~\ref{prop:review-bundle-archive-equivalence}.  The metadata and
 bibliography row checks the title, author block, institute/email block,
 bibliography command, and \path{references.bib}; it does not certify external
 metadata entry.  The deadline row records only that the package can be checked
@@ -1882,10 +1893,9 @@ there is then no local certificate for submission-pack readiness.  The final
 sentence follows from the boundary column and from
 Definition~\ref{def:operational-acceptance-interface}: external upload,
 acceptance, camera-ready approval, and publication are editorial or venue events,
-not local finite-record consequences of this gate.\qed
-\end{proof}
+not local finite-record consequences of this gate.\end{auditrecord}
 
-\begin{proposition}[Submission artifact role separation]
+\begin{auditrecord}[Submission artifact role separation]
 \label{prop:submission-artifact-role-separation}
 For the current presentation-only route, the primary artifact, long technical
 supplement, and review bundle have distinct review roles.  The primary source
@@ -1895,10 +1905,10 @@ proves the long-form interface theorems and records the case tables, and
 and machine-readable manifest rows.  None of these roles converts the support
 bundle into a second primary submission or converts a primary-artifact claim into
 an uncited supplement claim.
-\end{proposition}
 
-\begin{proof}
-The manifest field \path{submission_artifacts} names the short source, intended
+
+\medskip
+\noindent\emph{Rationale.} The manifest field \path{submission_artifacts} names the short source, intended
 short PDF, long technical source, long technical PDF, and supplemental bundle as
 separate artifacts.  The checklist above fixes how the short artifact points to
 the supplement: it names the safety theorem, the case rows, the evidence-level
@@ -1908,8 +1918,7 @@ pinned discovery-gate source snapshot and bounded case-evidence snapshots.  Sinc
 the primary note states only the interface and each support claim is tied to a
 specific theorem, table, or manifest field, the artifacts remain role-separated:
 the support materials make the primary note reviewable but do not become hidden
-primary claims.\qed
-\end{proof}
+primary claims.\end{auditrecord}
 
 \begin{table}
 \caption{Primary-submission to supplement interface map}
@@ -1949,7 +1958,7 @@ Table~\ref{tab:case-witnesses};
 \path{primary_claim_inventory} manifest entries &
 bundled snapshots or directory manifests; no command-run validation \\
 The submission separates the primary note, long supplement, and review bundle &
-Proposition~\ref{prop:submission-artifact-role-separation} and
+Audit record~\ref{prop:submission-artifact-role-separation} and
 Proposition~\ref{prop:machine-readable-certificate-records} &
 This table; \path{submission_artifacts} and \path{submission_interface_map}
 manifest entries &
@@ -1971,7 +1980,7 @@ Inventory rows & Concrete primary assertions & Row class & Certificate surface &
 \path{pc3}, \path{pc4} & mathlib-free Lean design and local marker/axiom-audit vocabulary, cited only as source-interface context & bounded contextual interface & entries $a_1$ and $a_5$; Proposition~\ref{prop:formal-source-gate-instantiation}; \path{review_bundle/primary_claim_inventory.json}; \path{review_bundle/certificate_schema.json} & source-interface and audit-boundary context only; no accepted formal-source build or axiom-purity certificate \\
 \path{pc5} & Lean is not the only trust substrate; finite-witness interfaces bind manifest rows, evaluator outcomes, and substrate contracts & bounded contextual interface & Theorem~\ref{thm:finite-witness-manifest-record-interface}; Table~\ref{tab:submission-interface-map} row 3; \path{review_bundle/primary_claim_inventory.json} & interface vocabulary only unless an artifact row supplies status and limitation-ledger pass records \\
 \path{pc6}, \path{pc11} & Rule110/GroundCompiler and the four case rows are finite manifest-bounded lessons, not unbounded semantic validation & accepted certificate for bounded artifact lesson & Theorem~\ref{thm:finite-witness-manifest-record-interface}; entry $a_6$; Table~\ref{tab:case-witnesses}; \path{case_evidence[3].reviewable_snapshots} & path-verified historical snapshots; no daemon, artifact-suite, or dynamic Rule110 rerun \\
-\path{pc10}, \path{pc12} & the primary note, supplement, and review bundle have separate submission roles, and the review bundle is the supplemental interface & accepted certificate conditional on supplemental availability & Proposition~\ref{prop:review-bundle-availability-condition}; Table~\ref{tab:submission-interface-map} row 4; \path{submission_artifacts}; \path{submission_interface_map}; \path{review_bundle/submission_interface_map.json} & submission-package interface record; support claim requires uploaded or archived bundle \\
+\path{pc10}, \path{pc12} & the primary note, supplement, and review bundle have separate submission roles, and the review bundle is the supplemental interface & accepted certificate conditional on supplemental availability & Audit record~\ref{prop:review-bundle-availability-condition}; Table~\ref{tab:submission-interface-map} row 4; \path{submission_artifacts}; \path{submission_interface_map}; \path{review_bundle/submission_interface_map.json} & submission-package interface record; support claim requires uploaded or archived bundle \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -2041,8 +2050,7 @@ sentence also says that the build or audit was freshly executed for the current
 package, Definition~\ref{def:operational-acceptance-interface} adds exactly the
 five command-run fields.  Therefore the present package is not merely silent
 about currency: it is a complete negative instantiation of the formal-source
-gate, and currency can be claimed only by supplying the missing finite rows.\qed
-\end{proof}
+gate, and currency can be claimed only by supplying the missing finite rows.\end{proof}
 
 \begin{theorem}[Formal-source promotion obstruction]
 \label{thm:formal-source-promotion-obstruction}
@@ -2083,8 +2091,7 @@ records; a fresh-execution promotion fails check~(vi) by unsupported command-run
 escalation.  In either case Theorem~\ref{thm:finite-certificate-obstruction-skeleton}
 extracts the failed fields as a finite bad subrecord.  Hence the current package
 keeps the Lean/BEDC material at the declared bounded contextual level unless new
-formal-source and command-run evidence rows are actually added.\qed
-\end{proof}
+formal-source and command-run evidence rows are actually added.\end{proof}
 
 \begin{theorem}[Evidence-level overclaim obstruction]
 \label{thm:evidence-level-overclaim-obstruction}
@@ -2159,8 +2166,7 @@ inside the submitted artifact boundary, the evidence item named by the
 certificate is absent from $E$ at the declared level, so the minimal bad
 subrecord is type~1.  These cases exhaust the displayed stronger readings.
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} then gives the stated
-classification and proves rigidity at the declared evidence level.\qed
-\end{proof}
+classification and proves rigidity at the declared evidence level.\end{proof}
 
 \begin{theorem}[Finite-witness manifest-bounded record interface]
 \label{thm:finite-witness-manifest-record-interface}
@@ -2259,8 +2265,7 @@ an artifact pass record for the asserted semantic property, or a command-run tup
 recording the relevant evaluator execution.  This proves manifest-record
 invariance for the finite-witness manifest interface and shows that the theorem is
 only a finite-record boundary result for row $a_6$, not an artifact-validation
-theorem.\qed
-\end{proof}
+theorem.\end{proof}
 
 \begin{proposition}[Primary-claim row classification]
 \label{prop:primary-claim-row-classification}
@@ -2312,8 +2317,7 @@ need an additional acceptance entry and pass records under the dispatch function
 states that no load-bearing claim outside the six acceptance entries is accepted
 by the current package.  Hence the row classification is complete and no
 contextual BEDC, Lean, finite-witness, compiler-layer, or review-bundle sentence
-remains hidden as an uncertified load-bearing claim.\qed
-\end{proof}
+remains hidden as an uncertified load-bearing claim.\end{proof}
 
 \begin{proposition}[Primary-inventory freshness criterion]
 \label{prop:primary-inventory-freshness-criterion}
@@ -2382,8 +2386,7 @@ finite submitted record: it names the command class, environment, primary source
 inventory source, line count, row count, error count, and exit code.  An exit code
 0 with error count 0 is exactly the success condition of the comparison command,
 so the command-run freshness statement is licensed at the limited evidence level
-declared in the proposition.\qed
-\end{proof}
+declared in the proposition.\end{proof}
 
 \begin{proposition}[Primary--supplement interface map]
 \label{prop:primary-supplement-interface-map}
@@ -2434,7 +2437,7 @@ negative boundary against command-run validation.
 Fourth, the short paper identifies the review bundle and long technical account
 as support materials rather than primary submissions.  The fourth row maps that
 submission-package claim to
-Proposition~\ref{prop:submission-artifact-role-separation}, to
+Audit record~\ref{prop:submission-artifact-role-separation}, to
 Proposition~\ref{prop:machine-readable-certificate-records}, to this table, and
 to the manifest fields \path{submission_artifacts} and
 \path{submission_interface_map}.  Table~\ref{tab:primary-claim-inventory} then
@@ -2452,8 +2455,7 @@ artifact-limitation row; and the compiler-role table is distributed over the sam
 four interface rows.  Since every primary-inventory row has a named certificate
 surface, row class, and evidence level, every primary-artifact load-bearing claim
 has a named supplement certificate, a table or manifest surface, and an evidence
-level.\qed
-\end{proof}
+level.\end{proof}
 
 \paragraph{Artifact roles.}
 For the current presentation-only route, \path{submission_abstract.tex} is the
@@ -2469,7 +2471,7 @@ As of the 2026-06-04 packaging pass, this manuscript does not claim that
 archive.  The accepted support surface is therefore the exact directory
 \path{review_bundle/} supplied with the submission.  A later archive replacement
 is permitted only if it carries a final per-file SHA-256 digest manifest for the
-certificate files below and satisfies Proposition~\ref{prop:review-bundle-archive-equivalence}.
+certificate files below and satisfies Audit record~\ref{prop:review-bundle-archive-equivalence}.
 
 \begin{table}
 \caption{Finite archive-equivalence criterion for replacing the review bundle.}
@@ -2488,7 +2490,7 @@ Path semantics & every path in the archive preserves the same relative name belo
 \end{tabularx}
 \end{table}
 
-\begin{proposition}[Review-bundle archive-equivalence criterion]
+\begin{auditrecord}[Review-bundle archive-equivalence criterion]
 \label{prop:review-bundle-archive-equivalence}
 An archival replacement for \path{review_bundle/} is accepted by this manuscript
 only if it satisfies all rows of
@@ -2499,10 +2501,10 @@ and the same relative path semantics as the submitted \path{review_bundle/}.
 If no such hash-and-manifest archive is supplied, the only accepted support
 surface is the exact \path{review_bundle/} directory uploaded with the
 submission.
-\end{proposition}
 
-\begin{proof}
-The manifest identity criterion fixes the root record that all bundle-dependent
+
+\medskip
+\noindent\emph{Rationale.} The manifest identity criterion fixes the root record that all bundle-dependent
 claims cite: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Allowing only an
 additional archive locator field prevents the archive from silently changing the
 certificate schema, pass-record ledger, submission-interface map,
@@ -2534,10 +2536,9 @@ finite certificate checks made in this paper.  When any row fails, a reviewer ha
 a finite bad subrecord: the changed manifest identity, changed version tuple,
 file-list discrepancy, hash mismatch, or path-retargeting witness.  In that case
 the archive is not accepted, and the support surface must be the exact uploaded
-\path{review_bundle/} directory.\qed
-\end{proof}
+\path{review_bundle/} directory.\end{auditrecord}
 
-\begin{corollary}[Exact-bundle or final-digest dichotomy]
+\begin{auditrecord}[Exact-bundle or final-digest dichotomy]
 \label{cor:exact-bundle-or-final-digest}
 For the current package there are exactly two accepted supplemental-support
 modes.  Either the submission supplies the exact \path{review_bundle/} directory,
@@ -2546,10 +2547,10 @@ archive is supplied together with a final file list and SHA-256 digest for every
 certificate file in Table~\ref{tab:review-bundle-archive-equivalence}.  Without
 that final digest record, a replacement archive is not an accepted support
 surface for any bundle-dependent claim in this manuscript.
-\end{corollary}
 
-\begin{proof}
-Proposition~\ref{prop:review-bundle-archive-equivalence} states that any archive
+
+\medskip
+\noindent\emph{Rationale.} Audit record~\ref{prop:review-bundle-archive-equivalence} states that any archive
 replacement must satisfy all five rows of
 Table~\ref{tab:review-bundle-archive-equivalence}.  The finite-file-list and
 content-hash rows require a complete list of certificate files and a matching
@@ -2560,16 +2561,15 @@ support surface is the exact uploaded \path{review_bundle/} directory.  These tw
 cases are disjoint because one submits the directory as the support surface and
 the other substitutes an archival object certified by hashes; they are exhaustive
 because every support surface named here is either the directory or a
-replacement.\qed
-\end{proof}
+replacement.\end{auditrecord}
 
-\begin{proposition}[Review-bundle availability condition]
+\begin{auditrecord}[Review-bundle availability condition]
 \label{prop:review-bundle-availability-condition}
 The support claim made by the current presentation package is conditional on the
 availability of \path{review_bundle/} as a supplemental upload or an archival
 equivalent in the sense of
-Proposition~\ref{prop:review-bundle-archive-equivalence}, with the dichotomy made
-explicit in Corollary~\ref{cor:exact-bundle-or-final-digest}.  If the bundle is supplied with the
+Audit record~\ref{prop:review-bundle-archive-equivalence}, with the dichotomy made
+explicit in Audit record~\ref{cor:exact-bundle-or-final-digest}.  If the bundle is supplied with the
 submission, then the source-interface, case-snapshot, primary-claim inventory,
 submission-interface map, and verifier-record claims are reviewable at the
 path-verified evidence level stated in this supplement.  If the bundle is not
@@ -2577,10 +2577,10 @@ uploaded and no archival equivalent is supplied, then the primary note retains
 only the public-source citation to the pinned newmath repository and the
 architectural claim in the short text; the supplemental support claims depending
 on bundle-local files are not accepted by this package.
-\end{proposition}
 
-\begin{proof}
-The bundle-dependent support claims are exactly the claims whose certificate
+
+\medskip
+\noindent\emph{Rationale.} The bundle-dependent support claims are exactly the claims whose certificate
 surface names files under \path{review_bundle/}.  Proposition~\ref{prop:machine-readable-certificate-records}
 lists the schema, current pass-record ledger, submission-interface map,
 primary-claim inventory, verifier script, and verifier log as bundle files.
@@ -2597,14 +2597,13 @@ path, manifest row, or log to lie in the submitted artifact, the supplemental
 review bundle, or an explicit path-verified historical boundary.  No DOI or
 institutional archive identifier is claimed in this package, so an omitted bundle
 has no replacement surface unless an archival equivalent satisfying
-Proposition~\ref{prop:review-bundle-archive-equivalence} is provided.  If neither
+Audit record~\ref{prop:review-bundle-archive-equivalence} is provided.  If neither
 surface is present, the affected claims fail the evidence-surface check of
 Proposition~\ref{prop:finite-certificate-schema-verifier}.  What remains is only
 the public repository citation at the pinned commit and the short note's
-architectural thesis, not the bundle-backed support certification.\qed
-\end{proof}
+architectural thesis, not the bundle-backed support certification.\end{auditrecord}
 
-\begin{corollary}[Case-snapshot non-rerun rigidity]
+\begin{auditrecord}[Case-snapshot non-rerun boundary]
 \label{cor:case-snapshot-non-rerun-rigidity}
 Under the hypotheses of
 Propositions~\ref{prop:path-complete-case-witnesses} and
@@ -2615,10 +2614,10 @@ Rule110 dynamic rerun, or GroundCompiler semantic rerun requires command, source
 state, environment, exit-code, and log-path fields in addition to the bundled
 snapshots.  Without those fields the stronger reading is rejected by the finite
 record verifier at its evidence-strength boundary.
-\end{corollary}
 
-\begin{proof}
-The propositions identify the complete evidence surface of the case rows:
+
+\medskip
+\noindent\emph{Rationale.} The propositions identify the complete evidence surface of the case rows:
 thirteen local-path strings, thirteen reviewable bundle snapshots, and manifest
 boundaries recording historical or path-verified evidence.  None of those case
 rows contains the five command-run fields required by
@@ -2630,8 +2629,7 @@ the finite-record exactness theorem, Theorem~\ref{thm:record-acceptance-exactnes
 that stronger assertion: its boundary field $B$ records no command-run assertion,
 and the missing command tuple is a finite bad subrecord.  Thus the snapshots are
 rigidly limited to path-verified reviewability unless a separate rerun log is
-added.\qed
-\end{proof}
+added.\end{auditrecord}
 
 \begin{table}
 \caption{Command-boundary inventory for the current package.}
@@ -2663,12 +2661,12 @@ Rule110/\allowbreak GroundCompiler artifact boundary & path-verified bounded art
 \end{tabularx}
 \end{table}
 
-\begin{proposition}[Command-run boundary inventory]
+\begin{auditrecord}[Command-run boundary inventory]
 \label{prop:command-run-boundary-inventory}
 For the current presentation package, Table~\ref{tab:command-boundary-inventory}
 is complete for the command-boundary claims used by
 Proposition~\ref{prop:machine-readable-certificate-records},
-Proposition~\ref{prop:review-bundle-availability-condition}, and
+Audit record~\ref{prop:review-bundle-availability-condition}, and
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.  The accepted fresh command-run
 claims in the package are exactly the three finite record-verifier invocations
 recorded in \path{review_bundle/certificate_verification_run.log} and
@@ -2678,10 +2676,10 @@ Lean/BEDC source theorem semantics, publication-daemon or route-state surfaces,
 and Rule110/\allowbreak GroundCompiler artifact surfaces remain path-verified,
 historical, or bounded-artifact evidence and are not command-run validation
 claims.
-\end{proposition}
 
-\begin{proof}
-The evidence-level definition in
+
+\medskip
+\noindent\emph{Rationale.} The evidence-level definition in
 Definition~\ref{def:operational-acceptance-interface} requires a command-run row
 to record command, source commit or local state, environment, exit code, and log
 path; otherwise the boundary field must say that no command-run assertion is
@@ -2715,8 +2713,7 @@ lacking command-run fields can only be accepted at its declared path-verified,
 historical, or bounded-artifact level.  Thus the table exhausts the
 command-boundary inventory and prevents the non-rerun Lean, daemon, Rule110, and
 external source-theorem semantics surfaces from being promoted by prose into
-fresh execution claims.\qed
-\end{proof}
+fresh execution claims.\end{auditrecord}
 
 This long technical supplement reports path-verified source architecture and case evidence.
 It does not claim a fresh rebuild of the full newmath source tree.  A command-run
@@ -2733,7 +2730,7 @@ the newmath repository \cite{bedc-newmath-source} at pinned commit
 records, not ordinary external publications.  They provide extracted line-range
 records, case-evidence manifests, submission-local provenance, and the technical
 supplement only when uploaded with the submission or replaced by an archival
-equivalent satisfying Proposition~\ref{prop:review-bundle-availability-condition}.
+equivalent satisfying Audit record~\ref{prop:review-bundle-availability-condition}.
 No DOI, institutional archive, dynamic validation service, or fresh command-run
 evidence is claimed here; the bundle-dependent evidence claim is conditional on
 that supplemental surface being available to reviewers.
