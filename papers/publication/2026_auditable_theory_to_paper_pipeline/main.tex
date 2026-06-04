@@ -3030,6 +3030,92 @@ removes the bundle-backed claims from the accepted support surface.  These are
 exactly the failure cases stated in the proposition.
 \end{proof}
 
+\begin{theorem}[Workspace-to-final-package reconciliation]
+\label{thm:workspace-final-package-reconciliation}
+Let $H_0$ be the automath commit
+\path{feefe43edc9089cbb3c3cf61b057ae630ebde017}, and let $D_0$ be the digest
+manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The source-state claim
+made in Proposition~\ref{prop:final-immutable-package-state-certificate} is the
+finite package claim $(H_0,D_0)$, not a claim that every later reviewer checkout,
+editor workspace, or post-packaging working tree has Git \\path{HEAD} equal to $H_0$.  If a
+current workspace reports a different Git \path{HEAD}, then the verifier-log and
+bundle-backed claims of this supplement remain admissible exactly in the
+following two reconciled cases:
+\begin{enumerate}
+\item the submitted support surface is the exact \path{review_bundle/} upload, or
+an archive equivalent to it, whose finite certificate files match the SHA-256
+rows of $D_0$; or
+\item the package is deliberately advanced to the current workspace state by
+rerunning the three verifier commands and replacing the displayed source-state
+record, the verifier logs, and the digest manifest by a new common
+commit--manifest certificate.
+\end{enumerate}
+In all other cases a mismatch between a later workspace \path{HEAD} and $H_0$
+does not certify a new package state and does not invalidate the historical
+finite package claim $(H_0,D_0)$; it only shows that the later workspace is
+outside the submitted support surface.
+\end{theorem}
+
+\begin{proof}
+The accepted command-result coordinates are finite.  By
+Proposition~\ref{prop:final-immutable-package-state-certificate}, the three log
+paths, the displayed commit $H_0$, and the manifest $D_0$ form the source-state
+record for the fresh verifier runs.  By
+Theorem~\ref{thm:final-support-surface-closure}, those log claims are part of the
+accepted support surface only when the exact bundle is submitted or when an
+archive supplies the same finite file list, digests, and relative path semantics.
+Thus case (1) fixes the bytes of the certificate files directly: the reviewer's
+ambient checkout may have any Git \path{HEAD}, but the submitted certificate
+surface is still the byte-identified finite package $(H_0,D_0)$.
+
+Suppose instead that the authors want the later workspace itself to be the
+package state.  Then at least one source-state coordinate has changed, namely
+the Git \path{HEAD} coordinate.  The verification rule in the scope contract
+requires every command-result claim to record its exact command, source commit,
+environment, exit code, and log path.  Therefore a new workspace state cannot be
+accepted by merely observing the new \path{HEAD}; the three verifier runs must be
+rerun against that state, and their logs and digest manifest must be replaced by
+a single consistent commit--manifest record.  This is case (2).
+
+If neither case holds, the later workspace contributes no finite coordinate to
+the submitted certificate.  It is not named in $D_0$, it is not an
+archive-equivalent representative under Table~\ref{tab:review-bundle-archive-equivalence},
+and it is not accompanied by fresh verifier logs satisfying the command-result
+record rule.  The finite-coordinate determination boundary of
+Theorem~\ref{thm:finite-coordinate-determination-boundary} then forbids silently
+using that workspace either to certify a new package or to refute the old
+byte-identified package.  The only certified statement left is the historical
+finite package claim $(H_0,D_0)$, conditional on the support-surface alternatives
+already proved above.\end{proof}
+
+\begin{corollary}[Upload-or-archive instantiation record]
+\label{cor:upload-or-archive-instantiation-record}
+Before the bundle-backed claims of this supplement are treated as part of a
+completed venue submission, the external submission record must instantiate one
+of the two support-surface branches of
+Theorem~\ref{thm:final-support-surface-closure}: either it records that
+\path{review_bundle/} was uploaded exactly with digest manifest $D_0$, or it
+records an archive locator together with the file list and SHA-256 digests that
+pass Table~\ref{tab:review-bundle-archive-equivalence}.  The TeX source and the
+local digest manifest alone select the intended branch but do not constitute a
+venue upload receipt.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:final-support-surface-closure} proves that the bundle-backed
+claims are admissible precisely in the exact-directory branch or in the
+archive-equivalent branch.  Proposition~\ref{prop:exact-review-bundle-upload-witness}
+and Proposition~\ref{prop:final-immutable-package-state-certificate} select the
+exact-directory branch for this package and explicitly say that no archive
+locator is claimed.  Those source records determine what must be submitted, but
+they are produced before the venue's upload action and contain no venue receipt,
+DOI, institutional identifier, or external archive locator.  Hence a completed
+submission needs one additional external instantiation record: either the venue
+or packager records the exact supplemental directory upload, or a replacement
+archive supplies the locator and matching digest table.  Without such a record,
+the statements proved above remain conditional source-level support claims rather
+than a proof that the upload action has occurred.\end{proof}
+
 \begin{proposition}[Theorem-inventory files are review-only and outside the final package]
 \label{prop:theorem-inventory-review-only-boundary}
 The files \path{theorem_inventory.json} and \path{theorem_inventory.md} are not
@@ -3089,8 +3175,9 @@ the path-verified evidence level stated in this supplement only under the exact
 uploaded bundle.  An
 archival equivalent remains an allowed replacement only if it satisfies
 Audit record~\ref{prop:review-bundle-archive-equivalence}, with the dichotomy made
-explicit in Audit record~\ref{cor:exact-bundle-or-final-digest} and closed by
-Theorem~\ref{thm:final-support-surface-closure}.  If the bundle is not uploaded
+explicit in Audit record~\ref{cor:exact-bundle-or-final-digest}, closed by
+Theorem~\ref{thm:final-support-surface-closure}, and recorded at packaging time
+as required by Corollary~\ref{cor:upload-or-archive-instantiation-record}.  If the bundle is not uploaded
 and no archival equivalent is supplied, then the primary note retains only the
 public-source citation to the pinned newmath repository and the architectural
 claim in the short text; the supplemental support claims depending on
@@ -3108,7 +3195,8 @@ uses the bundled case snapshots.  Therefore, when \path{review_bundle/} is
 actually included as supplemental material or replaced by the permitted
 archive-equivalent surface, each such certificate surface lies in the submitted
 artifact boundary and is locally checkable in the sense of the finite schema
-verifier.  Until that upload record or archive locator exists, these
+verifier.  Until the external upload record or archive locator specified in
+Corollary~\ref{cor:upload-or-archive-instantiation-record} exists, these
 bundle-backed statements are conditional support claims rather than independent
 public-access claims.
 
