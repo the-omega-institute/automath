@@ -16,7 +16,7 @@
   \ifx\relax#1\relax\else\textbf{ (#1)}\fi\textbf{.}\ }{\par\smallskip}
 
 \title{An Auditable Theory Compiler for AI-Assisted Formal Mathematics\\
-\large Technical Supplement: Auditable Theory-to-Paper Pipelines}
+\large Technical Supplement: Finite-Record-Only Safety under Record-Gate Soundness}
 \titlerunning{An Auditable Theory Compiler}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
@@ -38,14 +38,15 @@ directories, AI review loops, deterministic gates, and human promotion
 decisions.  Its central rule is that AI output is advisory: load-bearing
 mathematical and submission claims must be tied, at the appropriate evidence
 level, to source paths, command logs, deterministic checks, and human-approved
-promotion.  The core interface theorem constructs the finite publication certificates
-checked by the package verifier from recorded gate-passage entries and explicitly
-submitted review surfaces; its safety claim is deliberately certificate-level and
-finite-record only.  It proves neither Lean builds, daemon behaviour, artifact
-semantics, nor venue acceptance.  The current package then proves finite-record
-certificate exactness for its six-row, path-verified instantiation, while rejecting stronger
-readings such as external gate implementation soundness, proof-assistant correctness, artifact
-semantic validity, current execution of every gate, or venue acceptance.  Four case
+promotion.  Under record-gate soundness, the core interface theorem constructs
+the finite publication certificates checked by the package verifier from recorded
+gate-passage entries and explicitly submitted review surfaces; its safety claim is
+deliberately certificate-level and finite-record only.  It proves neither Lean builds,
+daemon behaviour, artifact semantics, nor venue acceptance.  The current package
+then proves finite-record certificate exactness for its six-row, path-verified
+instantiation, while rejecting stronger readings such as external gate
+implementation soundness, proof-assistant correctness, artifact semantic validity,
+current execution of every gate, or venue acceptance.  Four case
 studies illustrate the gates at the path-verified historical-snapshot level: intake
 isolation, overlap/submitted blocking, fake-extension rejection, and
 artifact-limitation disclosure.
@@ -1450,9 +1451,14 @@ pass-record fields, discovery-field discipline, and the path-verified command
 boundary for entries $a_1,\ldots,a_6$.  Hence every certificate in the image of
 the displayed package map is accepted by the submitted schema verifier at exactly
 the declared path-verified level when that supplemental record surface is part of
-the review package.  Without that surface, the TeX proof still supplies the
-finite schema classification of the displayed rows, but not the additional claim
-that the submitted executable mirror and log were available to the reviewer.
+the review package.  The support-surface alternatives are themselves finite:
+Theorem~\ref{thm:final-support-surface-closure} later proves that the bundle-backed
+component is admissible exactly when the exact \path{review_bundle/} directory is
+submitted with its final digest manifest, or when an archive locator and per-file
+digests provide an equivalent replacement.  Without one of those finite surfaces,
+the TeX proof still supplies the finite schema classification of the displayed
+rows, but not the additional claim that the submitted executable mirror and log
+were available to the reviewer.
 
 Conversely, a stronger reading changes at least one finite component of the
 record: it adds a row, changes $K_i$, changes $\ell_i$, adds a required gate in
@@ -1865,6 +1871,46 @@ is no longer certified by the package; the venue row is therefore not accepted.
 This proves the criterion and connects the fresh record to the local readiness
 gate.\end{auditrecord}
 
+\begin{theorem}[Venue-rule freshness non-escalation]
+\label{thm:venue-rule-freshness-non-escalation}
+Let $U$ be the finite upload-time venue record consisting of the official call
+URL, the submission-form URL, the style-guideline URL, the observation date, the
+observed route class, page limit, proceedings boundary, deadline, supplement
+access rule, and the local witness rows in Table~\ref{tab:venue-submission-pack-gate}.
+The venue component of the current finite-record package is accepted exactly for
+uploads whose venue-rule state is represented by $U$ or by a later replacement
+record with the same fields.  If an upload is made after a venue-page change, or
+if no upload-time replacement record is supplied, then the package retains only a
+historical venue observation and cannot certify submission-pack readiness,
+EasyChair compliance, acceptance, or proceedings status.
+\end{theorem}
+
+\begin{proof}
+The venue rows used by the package are not internal mathematical definitions;
+they are external facts read from the official call, submission, and style
+surfaces.  Therefore the finite information available to the package about the
+venue is precisely the tuple $U$ displayed in the statement: three source URLs,
+one date, the finite route facts observed on that date, and the corresponding
+local witness rows.  On the class of uploads whose venue-rule state is represented
+by $U$, each premise of the local readiness gate is a component of that tuple, so
+Audit record~\ref{prop:fresh-venue-record-criterion} and
+Table~\ref{tab:venue-submission-pack-gate} determine the bounded readiness
+conclusion.
+
+Now suppose the venue page changes before upload or the upload is made without a
+replacement record.  At least one external premise--route class, page limit,
+deadline, submission interface, proceedings boundary, or supplement rule--is then
+not determined by $U$.  Two possible upload states can agree on the historical
+record $U$ while differing on that changed premise.  A certificate that is a
+function only of $U$ cannot distinguish those two states, so it cannot certify the
+stronger upload-time claim.  A later replacement record with the same fields is
+exactly the finite enlargement needed to restore determinacy.  The excluded
+claims of EasyChair compliance, acceptance, and proceedings status require still
+more external records and are not fields of $U$.  Hence stale venue observations
+remain historical only, while the accepted venue gate is the fresh finite-record
+one stated above.
+\end{proof}
+
 \begin{table}
 \caption{Bounded venue-submission pack gate for the current route.}
 \label{tab:venue-submission-pack-gate}
@@ -1885,7 +1931,9 @@ Deadline route & presentation-only deadline recorded by the venue is 2026-06-15 
 \begin{auditrecord}[Venue-submission pack gate]
 \label{prop:venue-submission-pack-gate}
 Assume that, at final upload time, the CICM presentation-only call still has the
-venue rules listed in Table~\ref{tab:venue-submission-pack-gate}.  Then the
+venue rules listed in Table~\ref{tab:venue-submission-pack-gate}, as certified by
+the fresh finite record required in
+Theorem~\ref{thm:venue-rule-freshness-non-escalation}.  Then the
 current package is submission-pack ready for this route exactly when the finite
 gate in that table passes: the primary artifact is the two-page-plus-bibliography
 source \path{submission_abstract.tex}, the LNCS-style source and bibliography
