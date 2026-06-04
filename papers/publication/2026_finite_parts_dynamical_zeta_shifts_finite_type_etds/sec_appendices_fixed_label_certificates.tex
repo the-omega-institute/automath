@@ -19,6 +19,18 @@ bounds, and five-field normal forms below explain how those inequalities are
 checked by exact arithmetic.  They are verification infrastructure for this
 finite example, not extra analytic input for Main Theorem~III.
 
+For the displayed \(S_3\) certificate files accompanying this source, the
+deterministic replay route is the two-command log
+\begin{quote}\small
+\texttt{python certificates/s3\_log\_certificates.py --write-cert}\\
+\texttt{\phantom{python }certificates/s3\_log\_certificates.cert}\\
+\texttt{python certificates/s3\_log\_certificates.py}\\
+\texttt{\phantom{python }> certificates/s3\_log\_certificates.out}
+\end{quote}
+recorded in \texttt{certificates/s3\_log\_certificates.run.txt}.  The proof
+below does not require trusting that script: it states the finite normal form
+whose fields are sufficient for exact-arithmetic replay.
+
 \begin{proposition}[Local rational enclosure data for fixed labels]\label{prop:fixed-label-rational-certificate-record}
 \label{prop:fixed-label-finite-io-certificate-summary}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  Fix a
@@ -189,6 +201,90 @@ finite example, not extra analytic input for Main Theorem~III.
   logarithms by the finite character-table Fourier transform
   \eqref{eq:class-product-rigidity-forward}; exponentiating the resulting real
   intervals gives the stated enclosures for the positive constants \(K_C\).
+\end{proof}
+
+\begin{proposition}[Deterministic replay of rational certificate records]
+  \label{prop:fixed-label-certificate-replay}
+  In the fixed-label certificate format of
+  \Cref{prop:fixed-label-rational-certificate-record,prop:fixed-label-certificate-normal-form},
+  the truth of a recorded enclosure for
+  \(F_\varrho(\lambda^{-1})\), and hence of the induced enclosure for every
+  Main Theorem~III product constant \(K_C\), is decidable by a finite sequence
+  of exact comparisons in \(\QQ\) and in the finite character table of \(G\).
+  More precisely, a replay verifier needs no analytic oracle beyond the five
+  recorded fields
+  \[
+    \mathcal D_{\mathrm{alg}},\quad
+    \mathcal T_\varrho(M),\quad
+    \mathcal L_\varrho(M),\quad
+    \mathcal R_\varrho(M),\quad
+    \mathcal I_\varrho(M),
+  \]
+  from \Cref{prop:fixed-label-certificate-normal-form}: if those fields pass
+  the branch, Adams-coefficient, logarithm-interval, tail, and interval-sum
+  checks listed there, then the resulting rational disc contains the unique
+  value \(F_\varrho(\lambda^{-1})\).  Conversely, every enclosure produced by
+  \Cref{prop:fixed-label-perron-finite-algorithm} can be rewritten in this
+  replay format after replacing its analytic tail inequality by a rational
+  envelope satisfying
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}.
+\end{proposition}
+
+\begin{proof}
+  The replay begins with the finite algebraic field
+  \(\mathcal D_{\mathrm{alg}}\).  From the character table and class-power
+  table it recomputes each Adams coefficient
+  \(a_{\varrho,\pi}^{(m)}\) by the finite inner product
+  \eqref{eq:fixed-label-algorithm-adams-coefficients}; this is a finite sum of
+  algebraic integers, and in the displayed finite-group applications it is an
+  exact integer comparison.  It also checks that the only deleted triple is
+  \((1,1,\mathbf1)\) and that its coefficient is
+  \(\langle\chi_\varrho,\mathbf1\rangle_G=0\), so the scalar Perron logarithm is
+  absent before any boundary value is considered.
+
+  For each triple in the finite list \(\mathcal T_\varrho(M)\), the verifier
+  checks the branch tag against the dichotomy proved in
+  \Cref{lem:fixed-label-singular-triple-deletion,prop:fixed-label-determinant-perron}:
+  non-trivial triples with \(rm=1\) use the Abel boundary branch, while all
+  triples with \(rm\ge2\) use the ordinary interior-disc logarithm.  The field
+  \(\mathcal L_\varrho(M)\) supplies rational rectangular enclosures for those
+  finitely many logarithms.  Multiplying each rectangle by the rational weight
+  \(\mu(m)a_{\varrho,
+  \pi}^{(m)}/(rm)\) and summing intervals is finite rational interval
+  arithmetic, so it gives exactly the finite-sum interval
+  \(\mathcal I_\varrho(M)\) if and only if all stated interval inclusions hold.
+
+  The only remaining issue is the omitted infinite tail.  The replay record
+  contains rationals \(Q_\varrho\) and \(\theta_\varrho\) with
+  \(\lambda^{-1}<\theta_\varrho<1\) and
+  \(C_\varrho\lambda<Q_\varrho\).  These are checked by algebraic or rational
+  comparisons from \(\mathcal D_{\mathrm{alg}}\).  Then, exactly as in the proof
+  of \Cref{prop:fixed-label-branch-tail-record},
+  \(\mathrm d(k)\le k\) gives the rational majorisation
+  \[
+    C_\varrho\sum_{k>M}\frac{\mathrm d(k)}{k}\lambda^{1-k}
+    \le
+    Q_\varrho\frac{\theta_\varrho^{M+1}}{1-\theta_\varrho}.
+  \]
+  Thus the enlargement of \(\mathcal I_\varrho(M)\) by the recorded tail radius
+  and the recorded finite-propagation radius contains the value represented by
+  the absolutely convergent determinant series
+  \eqref{eq:fixed-label-determinant-perron}.  The uniqueness of that value is
+  \Cref{prop:fixed-label-determinant-perron}; hence any replay record passing
+  the finite checks proves the claimed enclosure.
+
+  Conversely, inspect the construction in
+  \Cref{prop:fixed-label-perron-finite-algorithm}.  It chooses a finite cutoff,
+  uses the same Adams coefficients and branch convention, encloses finitely many
+  determinant logarithms, and bounds the remaining tail.  By the density of
+  \(\QQ\) and the strict inequality \(\lambda^{-1}<1\), its tail comparison can
+  be replaced by rationals satisfying
+  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice}.  Recording
+  those data in the five fields gives a replay record with the same verified
+  disc.  Finally, \Cref{prop:fixed-label-certificate-normal-form} transports the
+  fixed-label intervals to the product constants by finite Fourier inversion and
+  exponentiation on rational real intervals, so the Main Theorem~III enclosures
+  are replayed by the same finite certificate.
 \end{proof}
 
 
