@@ -1,29 +1,32 @@
-﻿# Review Bundle Final Digest Record
+# Review Bundle Final Digest Record
 
 - packaging decision date: 2026-06-04
+- digest refresh date: 2026-06-05
 - support mode selected: conditional exact supplemental inclusion of `review_bundle/`
 - archive replacement: none claimed
 - archive locator: not applicable
-- digest purpose: byte-level final-packaging record for the exact supplemental directory and the submitted root source/interface files read by the finite verifiers
+- digest purpose: byte-level final-packaging record for the exact supplemental directory and the submitted root source/interface/inventory files named by the finite verifiers
 - digest algorithm: SHA-256
 - path root: paper directory; listed paths are relative to the paper directory
-- self-digest boundary: this record is not self-hashed; it lists the certificate files supplied by the bundle and the root source/interface files read by verifier commands
+- self-digest boundary: this record is not self-hashed; it lists the certificate files supplied by the bundle and the root source/interface/inventory files named by verifier commands
 
-## Submitted Root Source and Interface Digests
+## Submitted Root Source, Interface, and Inventory Digests
 
 | SHA-256 | Relative path |
 |---|---|
-| `08a674f13fb59ae4a3a22515f07ea18c88c397271def848f8c9d56342bdd77ae` | `main.tex` |
-| `f85aba8b2ecd9053c52a2545268ce4d409234073e3e7c1e7c017fb6723a643a5` | `submission_abstract.tex` |
+| `d1924f75109056253983ca0a25d214066d2c76c31463a748fddfe98657381763` | `main.tex` |
+| `a90b4766d8a18cbc978947ca248e82b151b7a0372a7804ce13e8f9e66c35e792` | `submission_abstract.tex` |
 | `b5377700b5f65b1b2101f8f1be0b686e74ed60136310105b10560a35c8bb4895` | `references.bib` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
+| `aa72fc5f2d6ccd4f213aff392493fa0e22d7842ca9a80960128e50561c1a8641` | `theorem_inventory.json` |
+| `1406b5a98422d61b50fcd36ef86ebb255bd991bc1343b35a9e359ecc5bf2b0d0` | `theorem_inventory.md` |
 
 ## Review-Bundle File Digests
 
 | SHA-256 | Relative path |
 |---|---|
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
-| `3a863f10fc93a85097c9b799a9cdbc45ff9c91e577fdcdb688f681fd7efb9332` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
+| `728362f62bf0c42216d44cafc24b3f589dc71a1009dfab78da31f3e0f2ecff18` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
 | `d4e1e3494ec7b171e85d0c4263acbad125c211c3c4ff8bf7e4e67036cc8fcd8b` | `review_bundle/case_snapshots/fake_extension_artifact_inventory.md` |
 | `663bb1fdce29ea87495bdf1f6b03a17d5f433a50d5e069ec02a93742986a4d42` | `review_bundle/case_snapshots/fake_extension_phase_d_lint.py` |
@@ -38,15 +41,15 @@
 | `76b41cc78cc24f9824eca40fa6a432a98434195424b01df342299fee3464a204` | `review_bundle/case_snapshots/upper_fibers_route_directory_manifest.json` |
 | `31bc3166c7bbe231319995f695af1eeb7a493065e2f2a87b5c82b7f230ed81a9` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.json` |
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
-| `ddb096ad481a2f26797df8733287e8c8b3576c92415a49137566ef1314677d87` | `review_bundle/certificate_schema.json` |
-| `a8a61d57990f08c99d997b02179f059c36a3c1b06e0afeca9ae713d82869ca26` | `review_bundle/certificate_verification_run.log` |
-| `bd1521481657c6c72d125ed17292214c02df908d899fdb2b4492296fc6fc7ac9` | `review_bundle/current_package_pass_records.json` |
+| `0f242e9d4eec0f8cabc8591cdb465a4f411c5468fe4a5e71f1d7fd4c90363849` | `review_bundle/certificate_schema.json` |
+| `8a4a2c96881047ba5f9feac92f3acfb07b9df48c11596c3dc608cd80f57c8d73` | `review_bundle/certificate_verification_run.log` |
+| `b776649551263ccbe5948fcd88d347c48e071ef471a01945855a0f3c9754022d` | `review_bundle/current_package_pass_records.json` |
 | `01b791c58f24d1ef2482a6eccadf4b253573a291b30942d959ca2b343dc10e3d` | `review_bundle/primary_claim_inventory.json` |
-| `fb3143905110c5c413c4c6422c3249486bfca162ca50546c18e238bfaf9f11f4` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
-| `341e2f1fd9bf7a6987a8656e3826857f5926a615af9a4f1706670325f991a26d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
-| `99bbe2449513e6cfb17ca3b394824fad1d15f62598e7d8a457fce91de719a619` | `review_bundle/source_interface_verification_run.log` |
+| `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
+| `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
+| `42ff943fd51ada50b20e1ab44e397b03ae042adc67510c9c5876f7c2f32c26c1` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
-| `0cd36820b142b42eae885f2f11967b7366620fb6dd98a18a343063d363d527da` | `review_bundle/verify_certificate_records.py` |
+| `25a4d000abae7d32c016759cab1546dc73d1422f00ea05189c42789ac9ddca51` | `review_bundle/verify_certificate_records.py` |
 | `8b4d8bce68e0a62d5e05dcda9d5a257aceb43820db6e1f4c17c54a8dc6c4d1a7` | `review_bundle/verify_primary_claim_inventory.py` |
 | `3742be8811e5d703d8b5a78403b242bb7368858cb0443b00c3760b17121afecc` | `review_bundle/verify_source_interface_record.py` |
