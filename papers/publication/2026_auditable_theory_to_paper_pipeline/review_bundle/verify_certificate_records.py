@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import platform
+import subprocess
 import sys
 from pathlib import Path
 
@@ -23,6 +24,15 @@ def load_json(path: Path) -> dict:
         raise SystemExit(f"missing required file: {path}") from exc
     except json.JSONDecodeError as exc:
         raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def git_head() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except Exception:
+        return "unavailable"
 
 
 def ensure(condition: bool, message: str, errors: list[str]) -> None:
@@ -133,7 +143,8 @@ def main() -> int:
         return 1
     print("certificate verification passed")
     print("command: python review_bundle/verify_certificate_records.py")
-    print("source_commit: local working tree for current presentation package")
+    print(f"source_commit: {git_head()}")
+    print("source_digest_manifest: review_bundle/FINAL_DIGESTS_SHA256.md")
     print(f"environment: Python {platform.python_version()} on {platform.system()} {platform.release()}")
     print("exit_code: 0")
     print("log_path: review_bundle/certificate_verification_run.log")

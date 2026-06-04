@@ -12,6 +12,7 @@ import hashlib
 import json
 import platform
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -70,6 +71,15 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: handle.read(65536), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def git_head() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except Exception:
+        return "unavailable"
 
 
 def parse_range(line_range: str) -> tuple[int, int]:
@@ -132,7 +142,8 @@ def verify() -> tuple[dict, list[str]]:
     report = {
         "verifier": "review_bundle/verify_source_interface_record.py",
         "command": "python review_bundle/verify_source_interface_record.py",
-        "source_commit": "local working tree for current presentation package",
+        "source_commit": git_head(),
+        "source_digest_manifest": "review_bundle/FINAL_DIGESTS_SHA256.md",
         "environment": f"Python {platform.python_version()} on {platform.system()} {platform.release()}",
         "exit_code": 0 if not errors else 1,
         "log_path": "review_bundle/source_interface_verification_run.log",

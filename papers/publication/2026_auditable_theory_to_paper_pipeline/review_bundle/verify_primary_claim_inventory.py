@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import platform
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -43,6 +44,15 @@ def load_json(path: Path) -> dict:
         raise SystemExit(f"missing required file: {path}") from exc
     except json.JSONDecodeError as exc:
         raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def git_head() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except Exception:
+        return "unavailable"
 
 
 def certificate_surface_exists(pointer: str) -> bool:
@@ -93,6 +103,8 @@ def verify() -> tuple[list[str], dict[str, object]]:
 
     summary = {
         "command": "python review_bundle/verify_primary_claim_inventory.py",
+        "source_commit": git_head(),
+        "source_digest_manifest": "review_bundle/FINAL_DIGESTS_SHA256.md",
         "environment": f"Python {platform.python_version()} on {platform.system()} {platform.release()}",
         "cwd": str(ROOT).replace("\\", "/"),
         "primary_artifact": "submission_abstract.tex",
