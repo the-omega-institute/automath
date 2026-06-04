@@ -214,8 +214,10 @@ line range, extraction date, and bounded statement summary.  The same record is
 mirrored in \path{source_interface_record.json}.  For external review, the
 source-interface file is copied into the supplemental review bundle at
 \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
-and the bundle manifest is \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}
-\cite{auditable-pipeline-review-bundle}.
+and the bundle manifest is \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  This
+bundle reference is a submission-local support-surface note, not an external
+publication citation; it is load-bearing only if the exact bundle is uploaded or
+archive-equivalently replaced.
 
 \begin{lemma}[Source-interface extraction correctness]
 \label{lem:source-interface-extraction-correctness}
@@ -549,14 +551,19 @@ named record-acceptance relation coincide on that finite data structure.
 \label{def:certificate-schema-acceptance-table}
 Fix the seven-kind dispatch table $\Gamma$ of
 Definition~\ref{def:operational-acceptance-interface}.  The verifier input for a
-load-bearing claim $c$ is the finite tuple
+load-bearing claim $c$ is the following finite record type:
 \[
-\mathcal C(c)=(K,\ell,E,H,R,D,B)
+\mathcal C(c)=
+\{K,\ell,E,H,R,D,B\}.
 \]
-with the following typed fields: $K$ is a finite set of claim kinds, $\ell$ is an
-evidence level, $E$ is a finite evidence surface, $H$ is the route-boundary
-field, $R$ is a finite family of gate pass records, $D$ is the optional discovery
-source-interface field, and $B$ is the command-boundary field.  Define
+Its typed fields are these and only these: $K$ is a finite set of claim kinds;
+$\ell\in\{\mathsf{path},\mathsf{command}\}$ is the declared evidence level; $E$
+is a finite evidence-surface list; $H$ is the route-boundary field; $R$ is a
+finite family of gate pass records, each with gate name, input surface, decision,
+evidence pointer, and evidence level; $D$ is either empty or a finite list of
+pinned discovery source-interface rows; and $B$ is the command-boundary field.
+This is a data schema, not a theorem: all later exactness claims must be proved
+from this displayed record and cannot appeal to unlisted package state.  Define
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ to be the conjunction of the six finite
 table predicates A1--A6 displayed below; no clause may query generated
 prose, a live daemon, an artifact evaluator, a proof assistant, or a venue state
@@ -724,7 +731,9 @@ For the current presentation package, the finite verifier
 $V$ of Proposition~\ref{prop:finite-certificate-schema-verifier}, with the
 record-acceptance semantics of
 Theorem~\ref{thm:record-acceptance-exactness}, has an executable record-level
-instance over the review bundle.  The schema file
+instance over the review bundle, conditional on the exact supplemental upload of
+\path{review_bundle/} or on an archive-equivalent replacement satisfying
+Proposition~\ref{audit:review-bundle-availability-condition}.  The schema file
 \path{review_bundle/certificate_schema.json}, the pass-record ledger
 \path{review_bundle/current_package_pass_records.json}, the primary-interface map
 \path{review_bundle/submission_interface_map.json}, the primary-claim inventory
@@ -812,8 +821,10 @@ Let $F$ be the finite field projection read by
 entries $a_1$--$a_6$, claim-kind membership, evidence-level membership,
 assigned-gate coverage, pass-record fields, evidence-level agreement,
 discovery-field discipline, path-verified boundary status, row locks for
-\path{sim1}--\path{sim4}, and row-class locks for \path{pc1}--\path{pc12}.  Among
-all assertions about the current review bundle that are functions only of this
+\path{sim1}--\path{sim4}, and row-class locks for \path{pc1}--\path{pc12}.  Assuming
+the exact-or-archive-equivalent review-bundle support surface of
+Proposition~\ref{audit:review-bundle-availability-condition}, among all
+assertions about the current review bundle that are functions only of this
 projection, Proposition~\ref{prop:machine-readable-certificate-records} proves the
 maximal executable claim: the six current-package certificates satisfy the finite
 record-acceptance relation of Theorem~\ref{thm:record-acceptance-exactness} at the
@@ -1226,7 +1237,10 @@ Theorem~\ref{thm:current-package-certificate-exactness}.
 \end{theorem}
 
 \begin{proof}
-Let $c$ be an accepted load-bearing claim in the manuscript.  The conclusion is the certificate constructor.  The acceptance-entry hypothesis
+We verify the obligations in the order advertised in the statement.
+
+\emph{Construction.}  Let $c$ be an accepted load-bearing claim in the
+manuscript.  The acceptance-entry hypothesis
 supplies the claim-kind set $K$, evidence level $\ell$, and evidence surface $E$,
 so the decision is attached to a source path, artifact path, command log,
 inventory, or witness record rather than to generated prose alone.  Record-gate-soundness
@@ -1244,11 +1258,12 @@ finite submitted records and is locally checkable whenever its cited paths and
 manifest rows lie in the submitted artifact, review bundle, or explicit
 historical boundary.  The same construction verifies
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
-The finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
+\emph{Record exactness.}  The finite-record exactness of
+Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
 certificate with the paper's independently stated record-acceptance semantics,
 not merely with an informal unpacking of the tuple.
 
-Propositions~\ref{prop:claim-kind-dispatch} and
+\emph{Gate coverage.}  Propositions~\ref{prop:claim-kind-dispatch} and
 \ref{prop:gate-interface-separation} identify the required finite gate set:
 formal-source claims use build and axiom gates, traceability claims use inventory
 and marker gates, route claims use promotion, overlap, and submission-state
@@ -1263,7 +1278,7 @@ records it remains demoted.  The promotion assumption similarly prevents an
 inactive intake seed from becoming publication work merely because a local source
 path exists.
 
-If $c$ is a discovery claim, the discovery-routing assumption sends it through
+\emph{Discovery boundary.}  If $c$ is a discovery claim, the discovery-routing assumption sends it through
 the pinned discovery-gate interface.  Proposition~\ref{prop:reviewable-source-snapshot-interface}
 supplies the corresponding reviewer-facing snapshot interface, so this routing
 does not depend on a reviewer's access to the author's absolute source path.  The
@@ -1283,7 +1298,10 @@ Theorem~\ref{thm:record-acceptance-exactness} identifies it with
 $\mathsf{Acc}_{\Gamma}$.  The stronger non-escalation and maximality statement is
 Proposition~\ref{prop:publication-safety-maximality}.  The current theorem is
 therefore only the finite certificate-construction component of the safety
-interface.\end{proof}
+interface.  No current-package conclusion is used in this proof; the package
+instantiation appears only later, after its support-surface hypotheses have been
+stated.
+\end{proof}
 
 \begin{proposition}[Finite-record maximality]
 \label{prop:publication-safety-maximality}
@@ -1494,8 +1512,8 @@ extension record is exactly absence of finite support for the stronger reading.
 \toprule
 Entry & Accepted load-bearing claim & Claim-kind set $K$ & Acceptance surface and finite pass record \\
 \midrule
-$a_1$ & The imported discovery-gate source interface is the bounded interface used by this paper & traceability & Table~\ref{tab:source-interface-record}, \path{source_interface_record.json}, and the bundled source snapshot; pass record from Lemma~\ref{lem:source-interface-extraction-correctness} and Propositions~\ref{prop:reviewable-source-snapshot-interface}, \ref{prop:source-interface-record-file-consistency}, \ref{prop:source-interface-evidence-level-separation} \\
-$a_2$ & The current presentation-only route has a finite submission package and review bundle & route, submission & \path{submission_abstract.tex}, \path{main.tex}, \path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md}, and \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}; pass record from the package statement and the submission-interface checklist \\
+$a_1$ & The imported discovery-gate source interface is the bounded interface used by this paper & traceability & Table~\ref{tab:source-interface-record}, the in-supplement source-interface proof, and the bundled source snapshot; pass record from Lemma~\ref{lem:source-interface-extraction-correctness} and Propositions~\ref{prop:reviewable-source-snapshot-interface}, \ref{prop:source-interface-record-file-consistency}, \ref{prop:source-interface-evidence-level-separation} \\
+$a_2$ & The current presentation-only route has a finite submission package and conditional review-bundle support surface & route, submission & \path{submission_abstract.tex}, \path{main.tex}, and \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} under Proposition~\ref{audit:review-bundle-availability-condition}; local root diagnostics are context only unless represented in those surfaces \\
 $a_3$ & Newmath intake isolation supports only the bounded lesson that intake seeds are not active papers before promotion & route & Intake-seed path and active-paper detector path in the case catalogue; promotion-gate pass record from Proposition~\ref{prop:path-complete-case-witnesses} and Table~\ref{tab:case-witnesses} \\
 $a_4$ & Upper-fibers overlap supports only the bounded lesson that overlapping submitted routes are blocked until a recorded next action & route, submission & Route identity, submitted sibling, overlap ledgers, and board state in the case catalogue; overlap and submission-state pass records from Proposition~\ref{prop:path-complete-case-witnesses} and Table~\ref{tab:case-witnesses} \\
 $a_5$ & Fake-extension rejection supports only the bounded lesson that file churn or compilation alone is not theorem growth or discovery & discovery & Phase-D hard-lint path and theorem/artifact inventory surface; theorem-content and discovery-gate pass records from Proposition~\ref{prop:path-complete-case-witnesses}, Proposition~\ref{prop:scheduler-selection-advisory}, and the pinned discovery rows in Table~\ref{tab:source-interface-record} \\
@@ -1514,8 +1532,8 @@ $a_6$ & Rule110 limitation supports only the bounded lesson that artifact limita
 \toprule
 Entry & $\ell$ & $E$ & $H$ & $R$ & $D$ & $B$ \\
 \midrule
-$a_1$ & path-verified & pinned newmath commit, Table~\ref{tab:source-interface-record}, JSON mirror, bundled snapshot & current supplement is already in the promoted active-paper package; the imported source itself crosses no new route boundary & source-interface extraction, reviewer-facing snapshot, and record-file consistency records & absent; the row is traceability for the imported interface, not an accepted new discovery claim & no command-run assertion; bounded paraphrase only \\
-$a_2$ & path-verified & short source, supplement, pipeline file, source map, artifact inventory, JSON mirror, and review-bundle manifest & human-promotion marker: active \path{2026_*} directory containing \path{main.tex} and \path{PIPELINE.md} & submission-pack and route-surface records listed in the package and checklist & absent & no full-source rebuild, daemon run, or Rule110 rerun asserted \\
+$a_1$ & path-verified & pinned newmath commit, Table~\ref{tab:source-interface-record}, in-supplement mirror statement, bundled snapshot & current supplement is already in the promoted active-paper package; the imported source itself crosses no new route boundary & source-interface extraction, reviewer-facing snapshot, and record-file consistency records & absent; the row is traceability for the imported interface, not an accepted new discovery claim & no command-run assertion; bounded paraphrase only \\
+$a_2$ & path-verified & short source, supplement, review-bundle manifest, and submitted support-surface condition & human-promotion marker represented by the route-surface records, not by unsubmitted root diagnostics & submission-pack and route-surface records listed in the package and checklist & absent & no full-source rebuild, daemon run, root-file certification, or Rule110 rerun asserted \\
 $a_3$ & path-verified & intake seed and active-paper detector paths & marker that the intake seed does not cross into publication work before promotion & promotion-gate record showing inactive intake until active-paper markers exist & absent & no daemon-run assertion for the intake detector \\
 $a_4$ & path-verified & active route, submitted sibling, overlap ledgers, and board state & marker that the blocked sibling route receives no new promotion in this package & overlap and submission-state gate records, including the recorded \path{deferred_wait_for_prior_submission} decision & absent & historical route-state evidence only \\
 $a_5$ & path-verified & phase-D hard-lint path, theorem inventory or artifact inventory surface, and source-interface rows & marker that no separate publication route is promoted by the rejected extension & theorem-content delta record plus discovery-gate record rejecting statement-only, code-only, mechanical, or compression-only growth & present: rows for certificate/ledger, demotion, lineage, pipeline safety, and main pipeline theorem in Table~\ref{tab:source-interface-record} & no claim that compilation or file churn is theorem growth \\
@@ -1526,10 +1544,10 @@ $a_6$ & path-verified & Rule110 status file, collision and exhaustiveness ledger
 
 \begin{proposition}[Current-package acceptance and certificate ledger]
 \label{prop:current-package-acceptance-certificate-ledger}
-Let $P^{+}$ be the finite current package consisting of
-\path{submission_abstract.tex}, this supplement \path{main.tex},
-\path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md},
-\path{source_interface_record.json}, and
+Let $P^{+}$ be the finite current package consisting of the primary source
+\path{submission_abstract.tex}, this supplement \path{main.tex}, and, under the
+exact-or-archive-equivalent support-surface condition of
+Proposition~\ref{audit:review-bundle-availability-condition},
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, together with
 \path{review_bundle/certificate_schema.json},
 \path{review_bundle/current_package_pass_records.json},
@@ -1537,11 +1555,16 @@ Let $P^{+}$ be the finite current package consisting of
 \path{review_bundle/primary_claim_inventory.json},
 \path{review_bundle/verify_certificate_records.py},
 \path{review_bundle/certificate_verification_run.log}, and the explicit
-historical paths named in the case catalogue.  The TeX source fixes the displayed
-six-row ledger, while the review-bundle files in this definition are
+historical paths named in the case catalogue.  Root-level diagnostics such as
+\path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md}, and
+\path{source_interface_record.json} may explain local provenance or path-verified
+history, but they are not finite package coordinates for this proposition unless
+their contents are represented in \path{main.tex} or in the submitted support
+surface.  The TeX source fixes the displayed six-row ledger, while the
+review-bundle files in this definition are
 supplemental-record components: claims that depend on them are conditional on
 those files being submitted with matching paths and records, or on an archival
-equivalent satisfying Audit record~\ref{audit:review-bundle-availability-condition}.
+equivalent satisfying Proposition~\ref{audit:review-bundle-availability-condition}.
 Tables~\ref{tab:current-acceptance-ledger}
 and~\ref{tab:current-certificate-ledger} form a finite submission-local
 acceptance-entry ledger for the load-bearing current-package claims used in
@@ -1654,6 +1677,7 @@ verifier is rerun and the displayed tables and log are updated together.
 \end{theorem}
 
 \begin{proof}
+\emph{Construction from the displayed rows.}
 Proposition~\ref{prop:current-package-acceptance-certificate-ledger} constructs,
 for each row $a_i$ of Tables~\ref{tab:current-acceptance-ledger}
 and~\ref{tab:current-certificate-ledger}, a certificate
@@ -1666,6 +1690,7 @@ is surjective onto the accepted current-package certificates because the same
 proposition states that no load-bearing claim outside these six entries is
 accepted by the current-package instantiation.
 
+\emph{Support-surface instantiation.}
 Conditioned on the supplemental records being present, matching the displayed
 paths, and matching the final digest manifest
 \path{review_bundle/FINAL_DIGESTS_SHA256.md},
@@ -1701,6 +1726,7 @@ presence and local evidence surfaces of the assigned finite pass rows, and a
 fresh implementation-soundness reading would be a command-result escalation not
 present in these six certificates.
 
+\emph{Maximality and non-escalation.}
 Conversely, a stronger reading changes at least one finite component of the
 record: it adds a row, changes $K_i$, changes $\ell_i$, adds a required gate in
 $R_i$, replaces the path-verified boundary $B_i$ by a command-run tuple, or adds
@@ -1716,12 +1742,13 @@ the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interfa
 \begin{corollary}[Current package path-verified instantiation]
 \label{cor:current-package-path-verified-instantiation}
 For the current presentation package, let $P$ be the finite package consisting
-of \path{submission_abstract.tex}, this supplement \path{main.tex},
-\path{PIPELINE.md}, \path{SOURCE_MAP.md}, \path{ARTIFACT_INVENTORY.md},
-\path{source_interface_record.json}, and
-\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, together with the executable
-certificate records named in
-Proposition~\ref{prop:machine-readable-certificate-records}.  The path catalogue
+of the primary source \path{submission_abstract.tex}, this supplement
+\path{main.tex}, and the exact-or-archive-equivalent review-bundle support
+surface of Proposition~\ref{audit:review-bundle-availability-condition}, together
+with the executable certificate records named in
+Proposition~\ref{prop:machine-readable-certificate-records}.  Root-level workflow
+diagnostic files are local historical/path-verified context only unless their
+records are represented on that submitted surface.  The path catalogue
 in $P$, through the exact six-row certificate map of
 Theorem~\ref{thm:current-package-certificate-exactness}, instantiates
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}, at the
@@ -2176,7 +2203,7 @@ Gate item & Fresh venue rule checked on 2026-06-04 & Required local witness & Bo
 \midrule
 Route class & CICM 2026 presentation-only work-in-progress papers are two pages plus bibliography and are not Springer-proceedings papers & \path{submission_abstract.tex} is the primary artifact; \path{main.tex} and \path{review_bundle/} are support materials & no claim of acceptance or proceedings publication \\
 Formatting & submissions use Springer LNCS style files; the presentation route inherits the CICM submission interface & document class \path{llncs}; bibliography style \path{splncs04}; local compile artifacts \path{submission_abstract.pdf} and \path{submission_abstract.bbl} & local formatting readiness only \\
-Supplement access & relevant software or data must be accessible for reproduction; support records may be supplemental rather than primary text & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, \path{review_bundle/submission_interface_map.json}, and the archive-equivalence criterion of Audit record~\ref{audit:review-bundle-archive-equivalence} & availability condition, not repository DOI or dynamic service \\
+Supplement access & relevant software or data must be accessible for reproduction; support records may be supplemental rather than primary text & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, \path{review_bundle/submission_interface_map.json}, and the archive-equivalence criterion of Proposition~\ref{audit:review-bundle-archive-equivalence} & availability condition, not repository DOI or dynamic service \\
 Metadata and bibliography & author/title metadata and bibliography must travel with the submitted primary artifact & title, authors, institutes, emails, bibliography command, and \path{references.bib} are present in the source package & metadata-readiness only \\
 Deadline route & presentation-only deadline recorded by the venue is 2026-06-15 & the package can be checked before upload against this finite table and Proposition~\ref{audit:venue-submission-pack-gate} & no statement that upload occurred \\
 \bottomrule
@@ -2194,7 +2221,7 @@ gate in that table passes: the primary artifact is the two-page-plus-bibliograph
 source \path{submission_abstract.tex}, the LNCS-style source and bibliography
 files are present, the review bundle is either uploaded or replaced by an archive
 equivalent in the sense of
-Audit record~\ref{audit:review-bundle-archive-equivalence}, and the title/author
+Proposition~\ref{audit:review-bundle-archive-equivalence}, and the title/author
 metadata remains in the primary source.  This gate is a local readiness
 certificate only; it does not assert EasyChair upload, reviewer approval,
 acceptance, camera-ready approval, or proceedings publication.
@@ -2222,7 +2249,7 @@ nor do they prove that the venue will accept the formatting; hence the row gives
 local formatting readiness only.  The supplement-access row is finite because it
 requires either the named bundle manifest and interface-map files or the finite
 archive-equivalence data of
-Audit record~\ref{audit:review-bundle-archive-equivalence}.  The metadata and
+Proposition~\ref{audit:review-bundle-archive-equivalence}.  The metadata and
 bibliography row checks the title, author block, institute/email block,
 bibliography command, and \path{references.bib}; it does not certify external
 metadata entry.  The deadline row records only that the package can be checked
@@ -2326,7 +2353,7 @@ Inventory rows & Concrete primary assertions & Row class & Certificate surface &
 \path{pc3}, \path{pc4} & mathlib-free Lean design and local marker/axiom-audit vocabulary are verification-record context, not object-language closure & bounded contextual interface & entries $a_1$ and $a_5$; Proposition~\ref{prop:formal-source-gate-instantiation}; \path{review_bundle/primary_claim_inventory.json}; \path{review_bundle/certificate_schema.json} & source-interface and audit-boundary context only; no accepted formal-source build, axiom-purity certificate, or closure claim \\
 \path{pc5} & Lean is not the only trust substrate; finite manifests, evaluator witnesses, and substrate contracts bind finite-witness interfaces & bounded contextual interface & Theorem~\ref{thm:finite-witness-manifest-record-interface}; Table~\ref{tab:submission-interface-map} row 3; \path{review_bundle/primary_claim_inventory.json} & interface vocabulary only unless an artifact row supplies status and limitation-ledger pass records \\
 \path{pc6}, \path{pc11} & Rule110/GroundCompiler and the four case rows are finite manifest-bounded lessons, not unbounded semantic validation & accepted certificate for bounded artifact lesson & Theorem~\ref{thm:finite-witness-manifest-record-interface}; entry $a_6$; Table~\ref{tab:case-witnesses}; \path{case_evidence[3].reviewable_snapshots} & path-verified historical snapshots; no daemon, artifact-suite, or dynamic Rule110 rerun \\
-\path{pc10}, \path{pc12} & the primary note, supplement, and review bundle have separate submission roles, and the review bundle is the selected supplemental interface & accepted certificate under exact supplemental upload & Proposition~\ref{prop:final-immutable-package-state-certificate}; Audit record~\ref{audit:review-bundle-availability-condition}; Table~\ref{tab:submission-interface-map} row 4; \path{submission_artifacts}; \path{submission_interface_map}; \path{review_bundle/submission_interface_map.json} & submission-package interface record; final support mode is exact upload of \path{review_bundle/}, with archive-equivalent replacement allowed only by the stated digest criterion \\
+\path{pc10}, \path{pc12} & the primary note, supplement, and review bundle have separate submission roles, and the review bundle is the selected supplemental interface & accepted certificate under exact supplemental upload & Proposition~\ref{prop:final-immutable-package-state-certificate}; Proposition~\ref{audit:review-bundle-availability-condition}; Table~\ref{tab:submission-interface-map} row 4; \path{submission_artifacts}; \path{submission_interface_map}; \path{review_bundle/submission_interface_map.json} & submission-package interface record; final support mode is exact upload of \path{review_bundle/}, with archive-equivalent replacement allowed only by the stated digest criterion \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -2844,9 +2871,16 @@ As of the 2026-06-04 packaging pass, this manuscript does not claim that
 archive.  The accepted support surface is therefore the exact directory
 \path{review_bundle/} supplied with the submission.  A later archive replacement
 is permitted only if it carries a final per-file SHA-256 digest manifest for the
-certificate files below and satisfies Audit record~\ref{audit:review-bundle-archive-equivalence}.
+certificate files below and satisfies Proposition~\ref{audit:review-bundle-archive-equivalence}.
 
 \subsection{Review-bundle and archive-equivalence condition}
+
+The archive-equivalence material in this subsection is deliberately bounded to
+this package: it only decides when the finite review-bundle records cited above
+are available to reviewers.  A general calculus of support-surface replacement,
+archive locators, and digest-preserving mirrors is a split-candidate
+infrastructure note rather than an additional theorem package for the present
+CICM presentation route.
 
 \begin{table}
 \caption{Finite archive-equivalence criterion for replacing the review bundle.}
@@ -2876,6 +2910,7 @@ and the same relative path semantics as the submitted \path{review_bundle/}.
 If no such hash-and-manifest archive is supplied, the only accepted support
 surface is the exact \path{review_bundle/} directory uploaded with the
 submission.
+\end{proposition}
 
 
 \medskip
@@ -2927,6 +2962,7 @@ in Table~\ref{tab:review-bundle-archive-equivalence}.  Without that final
 digest record and, in the archive case, its locator, a replacement archive is
 not an accepted support surface for any bundle-dependent claim in this
 manuscript.
+\end{proposition}
 
 
 \medskip
@@ -2967,7 +3003,7 @@ The first four header fields of
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} state the packaging date, the
 selected support mode, the absence of an archive replacement, and the absence of
 an archive locator.  Hence the archive branch of
-Audit record~\ref{audit:review-bundle-archive-equivalence} is not instantiated in
+Proposition~\ref{audit:review-bundle-archive-equivalence} is not instantiated in
 the current package.  The same digest record then enumerates the finite regular
 certificate files below \path{review_bundle/} and gives one SHA-256 digest for
 each of them.  Each bundle-backed reference used later in the manuscript is to
@@ -2988,7 +3024,7 @@ verifier record in this supplement cites them as evidence.  They therefore do
 not enlarge the accepted support witness.  If the directory is not supplied,
 relative paths such as \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and
 \path{review_bundle/case_snapshots/rule110_STATUS.md} no longer denote submitted
-certificate files.  By Audit record~\ref{audit:review-bundle-archive-equivalence},
+certificate files.  By Proposition~\ref{audit:review-bundle-archive-equivalence},
 the only way to recover those denotations without the exact directory is an
 archive with a locator, the same finite file list, matching SHA-256 digests, and
 unchanged relative path semantics.  Since no such locator is claimed here, the
@@ -3022,7 +3058,7 @@ level remains path-verified because the argument checks file presence and digest
 identity rather than rerunning Lean, daemons, or external artifacts.
 
 If the exact directory is absent, the proof of
-Audit record~\ref{audit:review-bundle-archive-equivalence} shows that the only
+Proposition~\ref{audit:review-bundle-archive-equivalence} shows that the only
 finite replacement accepted by this paper is an archive with the same manifest
 identity, bundle-version tuple, finite certificate file list, per-file SHA-256
 digests, and relative path semantics.  Those are exactly the five tests in
@@ -3108,7 +3144,7 @@ for any of the three logs
 accepted only when read against that commit--manifest pair and the exact uploaded
 bundle.  If either the digest manifest is absent or the exact bundle is not
 submitted and no archive satisfies
-Audit record~\ref{audit:review-bundle-archive-equivalence}, the corresponding
+Proposition~\ref{audit:review-bundle-archive-equivalence}, the corresponding
 command-result and bundle-backed support claims are outside the accepted support
 surface of this package.
 \end{proposition}
@@ -3284,11 +3320,12 @@ named in Proposition~\ref{prop:machine-readable-certificate-records} are
 \path{review_bundle/primary_claim_inventory.json}, the verifier scripts, and the
 verifier logs.  The finite package $P$ in
 Corollary~\ref{cor:current-package-path-verified-instantiation} similarly lists
-the short source, this supplement, \path{PIPELINE.md}, \path{SOURCE_MAP.md},
-\path{ARTIFACT_INVENTORY.md}, \path{source_interface_record.json}, the review
-bundle manifest, and the executable certificate records named in
-Proposition~\ref{prop:machine-readable-certificate-records}.  Neither list names
-\path{theorem_inventory.json} or \path{theorem_inventory.md}.
+the short source, this supplement, the exact-or-archive-equivalent review-bundle
+support surface, and the executable certificate records named in
+Proposition~\ref{prop:machine-readable-certificate-records}.  Root-level workflow
+diagnostics are historical/contextual unless represented on those submitted
+surfaces.  Neither list names \path{theorem_inventory.json} or
+\path{theorem_inventory.md}.
 
 Because the finite-record verifier is coordinate-determined by
 Theorem~\ref{thm:finite-coordinate-determination-boundary}, a file outside those
@@ -3313,14 +3350,15 @@ submission-interface map, and verifier-record claims are therefore reviewable at
 the path-verified evidence level stated in this supplement only under the exact
 uploaded bundle.  An
 archival equivalent remains an allowed replacement only if it satisfies
-Audit record~\ref{audit:review-bundle-archive-equivalence}, with the dichotomy made
-explicit in Audit record~\ref{audit:exact-bundle-or-final-digest}, closed by
+Proposition~\ref{audit:review-bundle-archive-equivalence}, with the dichotomy made
+explicit in Proposition~\ref{audit:exact-bundle-or-final-digest}, closed by
 Theorem~\ref{thm:final-support-surface-closure}, and recorded at packaging time
 as required by Corollary~\ref{cor:upload-or-archive-instantiation-record}.  If the bundle is not uploaded
 and no archival equivalent is supplied, then the primary note retains only the
 public-source citation to the pinned newmath repository and the architectural
 claim in the short text; the supplemental support claims depending on
 bundle-local files are not accepted by this package.
+\end{proposition}
 
 
 \medskip
@@ -3346,7 +3384,7 @@ path, manifest row, or log to lie in the submitted artifact, the supplemental
 review bundle, or an explicit path-verified historical boundary.  No DOI or
 institutional archive identifier is claimed in this package, so an omitted bundle
 has no replacement surface unless an archival equivalent satisfying
-Audit record~\ref{audit:review-bundle-archive-equivalence} is provided.  If neither
+Proposition~\ref{audit:review-bundle-archive-equivalence} is provided.  If neither
 surface is present, the affected claims fail the evidence-surface check of
 Proposition~\ref{prop:finite-certificate-schema-verifier}.  What remains is only
 the public repository citation at the pinned commit and the short note's
@@ -3364,6 +3402,7 @@ Rule110 dynamic rerun, or GroundCompiler semantic rerun requires command, source
 state, environment, exit-code, and log-path fields in addition to the bundled
 snapshots.  Without those fields the stronger reading is rejected by the finite
 record verifier at its evidence-strength boundary.
+\end{proposition}
 
 
 \medskip
@@ -3420,7 +3459,7 @@ Rule110/\allowbreak GroundCompiler artifact boundary & path-verified bounded art
 For the current presentation package, Table~\ref{tab:command-boundary-inventory}
 is complete for the command-boundary claims used by
 Proposition~\ref{prop:machine-readable-certificate-records},
-Audit record~\ref{audit:review-bundle-availability-condition}, and
+Proposition~\ref{audit:review-bundle-availability-condition}, and
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.  The accepted fresh command-run
 claims in the package are exactly the three finite record-verifier invocations
 recorded in \path{review_bundle/certificate_verification_run.log} and
@@ -3430,6 +3469,7 @@ Lean/BEDC source theorem semantics, publication-daemon or route-state surfaces,
 and Rule110/\allowbreak GroundCompiler artifact surfaces remain path-verified,
 historical, or bounded-artifact evidence and are not command-run validation
 claims.
+\end{proposition}
 
 
 \medskip
@@ -3481,14 +3521,13 @@ visible rather than to hide them behind generated prose.
 
 For the current presentation-only submission route, the public source link is
 the newmath repository \cite{bedc-newmath-source} at pinned commit
-\path{3fb3d6a0641767388a401883062aa522ea0b397b}.  The next two bibliography
-entries are grouped as submission-local supplemental records: the automath
-workspace record \cite{automath-publication-pipeline} and the review bundle
-record \cite{auditable-pipeline-review-bundle} are not ordinary external
-publications.  They provide extracted line-range records, case-evidence
-manifests, submission-local provenance, and the technical supplement only when
-uploaded with the submission or replaced by an archival equivalent satisfying
-Audit record~\ref{audit:review-bundle-availability-condition}.
+\path{3fb3d6a0641767388a401883062aa522ea0b397b}.  The automath workspace record
+and the review-bundle record are treated as submission-local support notes, not
+ordinary external bibliography items.  They provide extracted line-range records,
+case-evidence manifests, submission-local provenance, and the technical
+supplement only when uploaded with the submission or replaced by an archival
+equivalent satisfying
+Proposition~\ref{audit:review-bundle-availability-condition}.
 No DOI, institutional archive, dynamic validation service, or fresh command-run
 evidence is claimed here; the bundle-dependent evidence claim is conditional on
 that supplemental surface being available to reviewers.
@@ -3502,7 +3541,7 @@ claim is that a theory-to-paper pipeline can preserve traceability by
 separating source evidence, deterministic gates, agent suggestions, and human
 promotion decisions.
 
-\nocite{bedc-newmath-source,automath-publication-pipeline}
+\nocite{bedc-newmath-source}
 
 \bibliographystyle{splncs04}
 \bibliography{references}
