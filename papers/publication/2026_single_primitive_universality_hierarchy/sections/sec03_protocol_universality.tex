@@ -1,916 +1,288 @@
-\section{\texorpdfstring{\(L1\)}{L1}: protocol universality via a Zeckendorf protocol}\label{sec:L1}
+\section{\texorpdfstring{\(L1\)}{L1}: a Zeckendorf protocol}\label{sec:L1}
 
-We now pass from \(L0\) expression universality to \(L1\),
-\emph{protocol universality}, by adding the normal-form data absent
-from expression universality.
-Let \(\Omega_m=\{0,1\}^m\).  The elements of \(\Omega_m\) may be
-regarded as finite itineraries of a one-generator symbolic source,
-although no dynamical property will be used.  The fold map sends a
-word to its Zeckendorf address.  This elementary construction gives
-the two pieces needed later: a computable normal form and readout
-maps from normal forms to the intended semantic objects.
+Let \(F_1=1,F_2=2,F_{k+2}=F_{k+1}+F_k\).  Let
+\(X_\infty^{\mathrm{fin}}\) be the finite-support binary sequences with no
+adjacent \(1\)'s, and set
+\(\Val(c)=\sum_{k\ge1}c_kF_k\).
 
-\subsection{The fold}
-\label{ssec:fold}
-
-Let \(F_1=F_2=1\) and \(F_{n+2}=F_{n+1}+F_n\).  For \(m\ge1\), let
-\[
-  X_m=\{c_1\cdots c_m\in\{0,1\}^m:
-        c_kc_{k+1}=0 \text{ for } 1\le k<m\}
-\]
-be the set of legal Fibonacci words, and define
-\[
-  \Val_m(c_1\cdots c_m)=\sum_{k=1}^m c_kF_{k+1}.
-\]
+\subsection{Normal forms}\label{ssec:fold}
 
 \begin{definition}[Fold map]\label{def:fold}
-For \(\omega=\omega_1\cdots\omega_m\in\Omega_m\), set
-\[
-  N(\omega)=\sum_{k=1}^m \omega_kF_{k+1}.
-\]
-The finite fold map at resolution \(m\) is the map
-\(\Fold_m\colon\Omega_m\to X_m\) sending \(\omega\) to the unique
-legal word \(c\in X_m\) satisfying
-\begin{equation}\label{eq:fold-residue}
-  \Val_m(c)\equiv N(\omega)\pmod {F_{m+2}}.
-\end{equation}
-The existence and uniqueness of this residue representative follow
-from \Cref{prop:fold-confluence}.
+For a finite binary word \(\omega\in\{0,1\}^m\), \(\Fold_m(\omega)\in X_m\) is
+the greedy Zeckendorf normal form of \(\sum_{k=1}^m\omega_kF_k\).  The stable
+normalizer \(\mathrm{NF}_\infty\) is defined analogously for finite words of
+arbitrary length.
 \end{definition}
+
+\begin{equation}\label{eq:fold-residue}
+  \Val(\Fold_m(\omega))=\sum_{k=1}^m\omega_kF_k .
+\end{equation}
 
 \begin{lemma}[Greedy Zeckendorf normalizer]
 \label{lem:greedy-zeckendorf-normalizer}
-For every \(n\in\NN\) the following greedy procedure terminates and
-returns the unique element \(c\in X_{\infty}^{\mathrm{fin}}\) with
-\(\Val(c)=n\).  If \(n=0\), return the zero word.  Otherwise choose
-the largest Fibonacci number \(F_j\le n\) with \(j\ge2\), write a
-\(1\) in position \(j-1\), replace \(n\) by \(n-F_j\), and iterate.
-No two chosen positions are adjacent.
+Every \(n\in\NN\) has a unique representative \(c_n\in
+X_\infty^{\mathrm{fin}}\), and the map \(n\mapsto c_n\) is computable.
 \end{lemma}
 
 \begin{proof}
-At each nonzero step the remainder strictly decreases, so the
-procedure terminates.  Suppose the first chosen summand is \(F_j\).
-Then the remainder \(r\) satisfies \(0\le r<n-F_j<F_{j+1}-F_j=F_{j-1}\),
-because maximality gives \(n<F_{j+1}\).  Thus the next possible
-summand is at most \(F_{j-2}\), so the adjacent Fibonacci number
-\(F_{j-1}\) is never chosen.  The same argument applies recursively
-and proves legality.
-
-For uniqueness, let \(c,d\in X_{\infty}^{\mathrm{fin}}\) have the same
-value and choose the largest index \(j\) at which their digits differ.
-Assume \(c_{j-1}=1\) and \(d_{j-1}=0\), so the value contributed by
-\(c\) at that top index is \(F_j\).  The largest value representable by
-legal digits in positions below \(j-1\) is \(F_j-1\), as follows by
-induction from the recurrence
-\[
-  M_t=\max(M_{t-1},F_{t+1}+M_{t-2}),\qquad M_0=0,\quad M_1=1.
-\]
-Hence the lower digits of \(d\) cannot compensate for the missing
-\(F_j\), a contradiction.  Thus the legal expansion is unique, and the
-terminating greedy output is the unique preimage under \(\Val\).  This
-is the usual Zeckendorf theorem in its greedy form
-\cite{Zeckendorf1972}; digit-local addition and normalization belong to
-the standard Zeckendorf--Ostrowski arithmetic literature
-\cite{AhlbachEtAl2013,HieronymiTerry2018}.  Stable digit-local
-Zeckendorf arithmetic beyond the value-transported readout used here is
-kept outside this article and is not a proof input for the protocol
-theorem below.
+This is the classical Zeckendorf theorem \cite{Zeckendorf1972}: repeatedly
+subtract the largest Fibonacci number not exceeding the remaining integer.  The
+greedy choice terminates, produces no adjacent summands, and uniqueness follows
+from the standard exchange inequality
+\(F_{k+1}>F_k+
+F_{k-2}+F_{k-4}+\cdots\).
 \end{proof}
 
-\begin{proposition}[Finite fold normal forms]
+\begin{proposition}[Fold confluence]
 \label{prop:fold-confluence}
-For every \(m\ge1\), the map
-\[
-  \Val_m\colon X_m\longrightarrow \{0,1,\ldots,F_{m+2}-1\}
-\]
-is a bijection.  Hence \(\Fold_m\) is well defined and computable.
-Moreover, if
-\[
-  X_{\infty}^{\mathrm{fin}}
-  =\{(c_1,c_2,\ldots)\in\{0,1\}^{\NN}:
-    c_kc_{k+1}=0 \text{ for all }k,\ c_k=0\text{ for }k\gg0\},
-\]
-then
-\[
-  \Val(c)=\sum_{k\ge1}c_kF_{k+1}
-\]
-is a bijection \(X_{\infty}^{\mathrm{fin}}\to\NN\).
+Two finite words have the same stable fold if and only if they have the same
+valuation.  Hence equality of normal forms is decidable.
 \end{proposition}
 
 \begin{proof}
-Let \(0\le n<F_{m+2}\).  By
-\Cref{lem:greedy-zeckendorf-normalizer}, \(n\) has a unique legal
-Zeckendorf expansion.  Since the first summand chosen by the greedy
-algorithm is strictly smaller than \(F_{m+2}\), no digit beyond
-position \(m\) occurs.  Thus \(n\) is in the image of \(\Val_m\).
-The same lemma gives injectivity, because two words in \(X_m\) are in
-particular two eventually-zero legal words.  Hence \(\Val_m\) is a
-bijection onto \(\{0,1,\ldots,F_{m+2}-1\}\).  The infinite statement is
-\Cref{lem:greedy-zeckendorf-normalizer} itself.  Computability follows
-from the terminating greedy algorithm.  The finite-automaton viewpoint
-on the same Zeckendorf--Ostrowski arithmetic is standard
-\cite{AhlbachEtAl2013,HieronymiTerry2018}, but no automaton theorem is
-used in this proof.
+Both words fold to the unique Zeckendorf representative of their valuation by
+\Cref{lem:greedy-zeckendorf-normalizer}.  Finite binary words are decidably
+comparable.
 \end{proof}
 
-The finite map \(\Fold_m\) is a residue-level normalizer.  The
-stable normalizer of a finite binary word \(\omega\) is the
-unreduced Zeckendorf address
-\[
-  \mathrm{NF}_{\infty}(\omega)=\Val^{-1}(N(\omega))
-  \in X_{\infty}^{\mathrm{fin}},
-\]
-where \(\omega\) is extended by zeros after its last digit.  Thus the
-finite maps \(\Fold_m\) provide the certificate fibers, whereas
-arithmetic is read on the countable set of eventually-zero normal
-forms.
-
-The normalization used here is the stable, eventually-zero
-normalization attached to the value \(\Val\), not a limit operation on
-the compact completion.  We use only the classical Zeckendorf uniqueness
-and effective arithmetic anchors \cite{Zeckendorf1972,AhlbachEtAl2013,
-HieronymiTerry2018}, in the value-transported form proved in
-\Cref{lem:greedy-zeckendorf-normalizer,prop:fold-confluence,prop:finite-residue-not-stable,thm:semiring}.
-Questions about stable inverse-limit arithmetic and finite-window
-thermodynamic statistics are intentionally not invoked here.
-
-The finite legal-word spaces also form an inverse system under
-coordinate truncation.  The arithmetic used below lives on its
-eventually-zero part, not on the whole compact limit.
-
-\begin{definition}[Finite and compact completions]
-\label{def:completions}
-The eventually-zero space \(X_{\infty}^{\mathrm{fin}}\) is the
-countable set in \Cref{prop:fold-confluence}, identified with
-\(\NN\) by \(\Val\).  The compact inverse limit is
+\begin{definition}[Completions]\label{def:completions}
+The arithmetic locus is
 \begin{equation}\label{eq:X-infty}
-  \widehat X
-  =\varprojlim_m X_m
-  \cong
-  \{(c_1,c_2,\ldots)\in\{0,1\}^{\NN}:
-    c_kc_{k+1}=0\text{ for all }k\}.
+  X_\infty^{\mathrm{fin}}
+  =\{c\in\{0,1\}^{\NN}: c\text{ has finite support and no adjacent }1\text{'s}\}.
 \end{equation}
-It is a compact zero-dimensional space, analogous to a profinite
-completion \cite{RibesZalesskii2010}.  The arithmetic operations
-below are carried out on \(X_{\infty}^{\mathrm{fin}}\).
+The compact inverse-limit completion \(\widehat X\) is not used as an arithmetic
+locus.
 \end{definition}
 
 \begin{remark}\label{rem:finite-vs-profinite}
-The valuation is not a bijection \(\widehat X\to\NN\), since
-\(\widehat X\) is uncountable.  Stable arithmetic is therefore an
-operation on eventually-zero addresses, not on the full compact
-inverse limit.
+The valuation is a bijection \(X_\infty^{\mathrm{fin}}\to\NN\), not a bijection
+\(\widehat X\to\NN\).
 \end{remark}
 
+\subsection{Transported arithmetic}\label{ssec:arith}
 
-\subsection{Arithmetic by readout}
-\label{ssec:arith}
-
-\begin{definition}[Stable addition and multiplication]
-\label{def:stable-arith}
-For \(c,d\in X_{\infty}^{\mathrm{fin}}\), define
+\begin{definition}[Stable arithmetic]\label{def:stable-arith}
+For \(c,d\in X_\infty^{\mathrm{fin}}\), define
 \begin{align}
-  c\oplus d
-    &=\Val^{-1}\bigl(\Val(c)+\Val(d)\bigr),\label{eq:stable-add}\\
-  c\otimes d
-    &=\Val^{-1}\bigl(\Val(c)\Val(d)\bigr).
-      \label{eq:stable-mul}
+  c\oplus d&=\Val^{-1}(\Val(c)+\Val(d)),\label{eq:stable-add}\\
+  c\otimes d&=\Val^{-1}(\Val(c)\Val(d)).\label{eq:stable-mul}
 \end{align}
-Equivalently, \(c\oplus d\) is obtained by adding the two values and
-then normalizing; this is the same as coordinatewise digit addition
-followed by Zeckendorf carrying.
 \end{definition}
 
-\begin{proposition}[Finite residue arithmetic is not stable arithmetic]
+\begin{proposition}[Finite residues are not stable arithmetic]
 \label{prop:finite-residue-not-stable}
-For each \(m\ge1\), let \(\rho_m\colon
-X_{\infty}^{\mathrm{fin}}\to X_m\) be the finite residue readout
-\[
-  \rho_m(c)=\Val_m^{-1}\bigl(\Val(c)\bmod F_{m+2}\bigr).
-\]
-Transporting addition and multiplication on \(\ZZ/F_{m+2}\ZZ\)
-through \(\Val_m\) makes \(X_m\) a finite ring, and \(\rho_m\) is the
-corresponding semiring homomorphism from
-\((X_{\infty}^{\mathrm{fin}},\oplus,\otimes)\) to this residue ring.
-However no single finite level \(X_m\) carries the stable arithmetic:
-\(\rho_m\) is not injective and therefore cannot distinguish all
-stable normal forms.
+No fixed finite level \(X_m\) carries the stable arithmetic of
+\((\NN,+,\times)\) through valuation.
 \end{proposition}
 
 \begin{proof}
-The bijection \(\Val_m\colon X_m\to\ZZ/F_{m+2}\ZZ\) is
-\Cref{prop:fold-confluence}; transporting the two ring operations along
-this bijection gives a ring on \(X_m\).  By definition of \(\rho_m\),
-\[
-  \Val_m(\rho_m(c\oplus d))
-  \equiv \Val(c)+\Val(d)
-  \equiv \Val_m(\rho_m(c))+\Val_m(\rho_m(d))
-  \pmod{F_{m+2}},
-\]
-and the identical calculation with products proves compatibility with
-\(\otimes\).  Thus \(\rho_m\) is precisely residue transport through
-\(\ZZ/F_{m+2}\ZZ\).
-
-It is not injective: if \(0_X=\Val^{-1}(0)\) and
-\(u_m=\Val^{-1}(F_{m+2})\), then \(0_X\ne u_m\) in
-\(X_{\infty}^{\mathrm{fin}}\), while
-\(\rho_m(0_X)=\rho_m(u_m)\) because their values are congruent modulo
-\(F_{m+2}\).  Therefore the finite transported ring records only a
-residue class and cannot be the stable arithmetic on the full set of
-eventually-zero normal forms.
+The finite set \(X_m\) has only \(F_{m+2}\) elements, while addition or
+multiplication on \(\NN\) leaves every finite interval.  Thus a fixed finite
+residue level cannot be closed under the transported operations.
 \end{proof}
-\begin{proposition}[Transported semiring structure]
+
+\begin{theorem}[Transported semiring]
 \label{thm:semiring}
-\((X_{\infty}^{\mathrm{fin}},\oplus,\otimes)\) is a commutative
-semiring with additive identity \(0_X=(0,0,\ldots)\) and
-multiplicative identity \(\Val^{-1}(1)\).  The valuation map
-\[
-  \Val\colon
-  (X_{\infty}^{\mathrm{fin}},\oplus,\otimes)
-  \xrightarrow{\ \sim\ }(\NN,+,\times)
-\]
-is a semiring isomorphism.  At finite resolution, the only arithmetic
-asserted is the residue-level transport through \(\ZZ/F_{m+2}\ZZ\)
-proved in \Cref{prop:finite-residue-not-stable}; the stable semiring
-operation is the one on \(X_{\infty}^{\mathrm{fin}}\).
-\end{proposition}
+The map \(\Val\colon X_\infty^{\mathrm{fin}}\to\NN\) is an isomorphism from
+\((X_\infty^{\mathrm{fin}},\oplus,\otimes)\) to \((\NN,+,\times)\).
+\end{theorem}
 
 \begin{proof}
-The operations \(\oplus\) and \(\otimes\) are the pullbacks of
-\(+\) and \(\times\) along the bijection \(\Val\).  The semiring
-axioms and the asserted isomorphism are immediate.  The finite
-statement is \Cref{prop:finite-residue-not-stable}.
+This is immediate from the definitions of \(\oplus\) and \(\otimes\) and the
+bijection in \Cref{lem:greedy-zeckendorf-normalizer}.
 \end{proof}
 
-\begin{theorem}[No finite-level intrinsic arithmetic for the protocol]
+\begin{theorem}[No finite-level arithmetic]
 \label{thm:no-finite-level-arithmetic}
-Fix any resolution \(m\ge1\) and any operations
-\(a_m,b_m\colon X_m\times X_m\to X_m\).  There do not exist operations
-\(a_m,b_m\) for which the finite readout \(\rho_m\) simultaneously
-determines stable addition and stable multiplication in the sense that
-\[
-  \rho_m(c\oplus d)=a_m(\rho_m(c),\rho_m(d)),
-  \qquad
-  \rho_m(c\otimes d)=b_m(\rho_m(c),\rho_m(d))
-\]
-and also separates stable normal forms.  In particular, the protocol
-theorem below cannot be read as a theorem that a bounded finite window
-\(X_m\) carries the arithmetic of \(X_{\infty}^{\mathrm{fin}}\).  The only
-arithmetic interface used in this article is the value-transported one:
-compute \(\Val\), perform ordinary integer arithmetic, and return the
-greedy Zeckendorf normal form.
+Stable arithmetic in \Cref{thm:semiring} cannot be replaced by arithmetic on one
+fixed finite residue set \(X_m\).
 \end{theorem}
 
 \begin{proof}
-The displayed identities alone are not the obstruction: they are supplied
-by the residue operations of \Cref{prop:finite-residue-not-stable}, namely
-ordinary addition and multiplication transported through
-\(\Val_m\colon X_m\to\ZZ/F_{m+2}\ZZ\).  The obstruction is separation of
-stable normal forms by one finite window.  By
-\Cref{prop:finite-residue-not-stable}, the map \(\rho_m\) is not
-injective: with \(0_X=\Val^{-1}(0)\) and
-\(u_m=\Val^{-1}(F_{m+2})\), one has \(0_X\ne u_m\) but
-\(\rho_m(0_X)=\rho_m(u_m)\).  Hence no data living only on this fixed
-finite set \(X_m\), regardless of how its binary operations are chosen,
-can both determine the stable operation outputs through \(\rho_m\) and
-distinguish all stable addresses.  A protocol for arithmetic on
-\(\NN\), whose decoding map is the bijection
-\(\Val\colon X_{\infty}^{\mathrm{fin}}\to\NN\), must therefore use the
-stable eventually-zero normal forms rather than a single residue level.
-The construction used below is exactly that stable value-transport
-construction.
+This is \Cref{prop:finite-residue-not-stable}.
 \end{proof}
 
-Thus arithmetic has not been added as a primitive operation on
-words.  It is read through valuation and stable Zeckendorf
-normalization; residue reduction is only the finite-resolution
-version used for certificates.  This article uses only this
-value-transported arithmetic.  Digit-local algorithms for Zeckendorf
-addition and normalization are classical in the broader literature
-\cite{AhlbachEtAl2013,HieronymiTerry2018}, but they are not needed for
-the protocol proof below.
-
-\begin{lemma}[Value-transported arithmetic is sufficient for the protocol]
+\begin{lemma}[Value transport suffices]
 \label{lem:value-transported-suffices}
-The operations \(\oplus\) and \(\otimes\) of
-\Cref{def:stable-arith} are total computable operations on
-\(X_{\infty}^{\mathrm{fin}}\).  Moreover, the proof of
-\Cref{thm:zeckendorf-protocol-univ} uses no intrinsic online
-Zeckendorf addition or multiplication theorem: it uses only the
-computable bijection \(\Val\colon X_{\infty}^{\mathrm{fin}}\to\NN\),
-ordinary integer arithmetic in \(\NN\), and re-normalization by
-\(\Val^{-1}\).
+Any computable bijection \(N\to\NN\) transports ordinary computable operations on
+\(\NN\) to computable operations on \(N\).
 \end{lemma}
 
 \begin{proof}
-An element of \(X_{\infty}^{\mathrm{fin}}\) is a finite legal
-Fibonacci word, so \(\Val(c)\) is computed by a finite sum.  Given
-\(n\in\NN\), the inverse \(\Val^{-1}(n)\) is computed by the greedy
-Zeckendorf algorithm, or equivalently by the finite normalizer of
-\Cref{prop:fold-confluence} applied at any resolution large enough to
-contain the Zeckendorf support of \(n\).  Hence
-\[
-  (c,d)\longmapsto \Val^{-1}(\Val(c)+\Val(d))
-  \quad\text{and}\quad
-  (c,d)\longmapsto \Val^{-1}(\Val(c)\Val(d))
-\]
-are total computable operations on eventually-zero legal words.  The
-realization equations used below are exactly the semiring identities
-obtained by applying \(\Val\) to these two displayed formulas and then
-reading the resulting integer through the chosen semantic maps.  No
-step requires a bounded-window carry rule, an online transducer, or an
-intrinsic digit-local multiplication algorithm.
+Decode, apply the ordinary operation on \(\NN\), and encode back by the inverse
+bijection.
 \end{proof}
 
-\begin{proposition}[Value transport is exactly the arithmetic used]
+\begin{proposition}[Value-transport exact interface]
 \label{prop:value-transport-exact-interface}
-Let \(\mathcal A\) be the smallest class of algorithms on
-\(X_{\infty}^{\mathrm{fin}}\) obtained from the following three routines:
-computing \(\Val(c)\), applying ordinary integer arithmetic to the
-computed values, and returning the greedy Zeckendorf normal form
-\(\Val^{-1}(n)\).  Then \(\oplus\), \(\otimes\), the stable normalizer
-\(\mathrm{NF}_{\infty}\), and all compiled operations used in
-\Cref{thm:zeckendorf-protocol-univ} belong to \(\mathcal A\).  Conversely,
-the proof of \Cref{thm:zeckendorf-protocol-univ} uses no operation on
-Zeckendorf strings except members of this value-transport class and the
-literal equality test on finite legal words.
-
-Thus the protocol theorem is a computable address/readout theorem.  It is
-not a bounded-window, online, finite-state, or intrinsic digit-local
-arithmetic theorem for Zeckendorf multiplication.
+The Zeckendorf protocol uses only the computable bijection
+\(\Val\colon X_\infty^{\mathrm{fin}}\to\NN\) and not any digit-local arithmetic
+algorithm.
 \end{proposition}
 
 \begin{proof}
-By definition,
-\(c\oplus d=\Val^{-1}(\Val(c)+\Val(d))\) and
-\(c\otimes d=\Val^{-1}(\Val(c)\Val(d))\), so both operations are in
-\(\mathcal A\).  For a raw finite binary word \(\omega\), the stable
-normalizer first computes the integer
-\(N(\omega)=\sum_k \omega_kF_{k+1}\) and then returns
-\(\Val^{-1}(N(\omega))\), hence it is also in \(\mathcal A\).  Literal
-equality of normal forms is decidable because a normal form is a finite
-legal word, with trailing zeroes suppressed.
-
-The remaining assertions in \Cref{thm:zeckendorf-protocol-univ} are
-readout identities.  At level zero the normal form \(c_n\) is sent to
-\(g^{\circ n}\), and the equality
-\(g^{\circ(m+n)}=g^{\circ m}\circ g^{\circ n}\) is a semantic identity in
-\(\End(A)\).  At level one the normal form \(c_n\) is sent to
-\(I_n\), and \(I_{mn}=I_m\circ I_n\) is a semantic identity in
-\(\End(\End(A))\).  Neither step manipulates Zeckendorf digits by a local
-carry rule; it only reads the value already computed by the
-value-transport routines and applies \Cref{thm:two-level}.  Inspecting
-the proof of \Cref{thm:zeckendorf-protocol-univ} shows that these are all
-the compiled operations and tests used there.  Therefore the theorem has
-exactly the advertised value-transport interface and no stronger
-digit-local arithmetic content.
+The operations are exactly those in \Cref{def:stable-arith}; both are obtained by
+decode--compute--encode.
 \end{proof}
 
-\subsection{Composition as the primitive}
-\label{ssec:sole}
+\subsection{One primitive at two levels}\label{ssec:sole}
 
-\begin{proposition}[Two-level readout of composition]
-\label{thm:two-level}
-Let \(A\) be a nonempty set and let \(g\colon A\to A\) be an
-endomorphism of infinite order.  Define
-\begin{align}
-  S_0&=\langle g\rangle
-      =\{g^{\circ n}:n\in\NN\}\subseteq\End(A),\label{eq:level0}\\
-  S_1&=\{I_n:n\in\NN\}\subseteq\End(\End(A)),
-      \qquad I_n(f)=f^{\circ n}.\label{eq:level1}
-\end{align}
-With \(\iota_0(n)=g^{\circ n}\) and \(\iota_1(n)=I_n\), the maps
-\(\iota_0\) and \(\iota_1\) are injective and
-\begin{align}
-  \iota_0(m+n)&=\iota_0(m)\circ\iota_0(n),
-    \label{eq:add-from-comp}\\
-  \iota_1(mn)&=\iota_1(m)\circ\iota_1(n).
-    \label{eq:mul-from-comp}
-\end{align}
-\end{proposition}
-
-\begin{proof}
-The first identity is
-\(g^{\circ m}\circ g^{\circ n}=g^{\circ(m+n)}\), and infinite order
-gives injectivity of \(\iota_0\).  The same hypothesis gives
-injectivity of \(\iota_1\), since \(I_m(g)=g^{\circ m}\) and
-\(I_n(g)=g^{\circ n}\).  Finally,
+Let \(A\) be a nonempty set and let \(g\colon A\to A\) have infinite order.  Put
 \[
-  (I_m\circ I_n)(f)=I_m(f^{\circ n})
-    =(f^{\circ n})^{\circ m}=f^{\circ mn}=I_{mn}(f).
+  I_n(f)=f^{\circ n}\qquad(f\in\End(A)).
 \]
+
+\begin{theorem}[Two-level readout]
+\label{thm:two-level}
+With composition as the single semantic operation,
+\begin{align}
+  \Phi_0(c_n)&=g^{\circ n},\label{eq:level0}\\
+  \Phi_1(c_n)&=I_n\label{eq:level1}
+\end{align}
+read addition and multiplication:
+\begin{align}
+  \Phi_0(c_{a+b})&=\Phi_0(c_a)\circ\Phi_0(c_b),\label{eq:add-from-comp}\\
+  \Phi_1(c_{ab})&=\Phi_1(c_a)\circ\Phi_1(c_b).\label{eq:mul-from-comp}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+The first identity is \(g^{a+b}=g^a\circ g^b\).  The second is
+\(I_a\circ I_b(f)=(f^b)^a=f^{ab}=I_{ab}(f)\).
 \end{proof}
 
-\begin{corollary}[Zeckendorf readout of Church iteration]
-\label{cor:minimal}
-Under the identification \(X_{\infty}^{\mathrm{fin}}\cong\NN\),
-the address \(c_n=\Val^{-1}(n)\) represents the \(n\)-fold iterate.
-Addition of addresses is the level-zero composition law, and
-multiplication is the level-one composition law.  This is the usual
-Church-numeral iteration identity \cite{Church1936}, expressed in
-Zeckendorf normal form.
+\begin{corollary}[Minimal two-level split]\label{cor:minimal}
+Addition is read at the orbit level and multiplication at the power-operator
+level; both readouts use composition as the only semantic operation.
 \end{corollary}
 
 \begin{proof}
-Apply \Cref{thm:two-level} after replacing \(n\) by its address
-\(c_n\).  The semiring identification in \Cref{thm:semiring}
-transports the addition and multiplication laws to stable
-addresses.
+This is \Cref{thm:two-level}.
 \end{proof}
 
-No new identity about Church iteration is involved.  The point is
-that the usual iteration laws remain decidable after the indices are
-placed in Zeckendorf normal form.
-
-\begin{lemma}[Exponent skeleton for a level-zero multiplicative readout]
+\begin{lemma}[Level-zero exponent skeleton]
 \label{lem:level-zero-exponent-skeleton}
-Let \(M\) be a monoid, let \(g\in M\) have infinite order, and put
-\(C=\{g^n:n\in\NN\}\).  If a map
-\(\eta\colon\NN_{\ge1}\to C\) satisfies
-\(\eta(ab)=\eta(a)\eta(b)\), then there is a unique function
-\(e\colon\NN_{\ge1}\to\NN\) such that
+Let \(C=\{g^n:n\in\NN\}\) be a free monogenic orbit.  Every multiplicative
+readout \(\eta\colon\NN_{\ge1}\to C\) has the form
 \[
-  \eta(n)=g^{e(n)}
-  \qquad\text{and}\qquad
-  e(ab)=e(a)+e(b).
+  \eta(n)=g^{e(n)},
+  \qquad e(ab)=e(a)+e(b),
 \]
-Moreover \(e(1)=0\), and \(e\) is determined by its values on
-primes:
+and hence
 \[
-  e(n)=\sum_p v_p(n)e(p)
-  \qquad(n\ge1).
+  e(n)=\sum_{p}v_p(n)w(p)
 \]
-Consequently \(\eta\) is injective if and only if the additive weight
-map \(n\mapsto\sum_p v_p(n)e(p)\) separates all positive integers.
+for uniquely determined weights \(w(p)=e(p)\in\NN\).
 \end{lemma}
 
 \begin{proof}
-The infinite order of \(g\) makes \(n\mapsto g^n\) injective, so each
-element of \(C\) has a unique exponent.  This gives the unique
-function \(e\) with \(\eta(n)=g^{e(n)}\).  The multiplicativity of
-\(\eta\) is equivalent, by uniqueness of exponents, to
-\[
-  g^{e(ab)}=g^{e(a)+e(b)},
-\]
-hence to \(e(ab)=e(a)+e(b)\).  Taking \(a=b=1\) gives
-\(e(1)=2e(1)\), so \(e(1)=0\).  If
-\(n=\prod_p p^{v_p(n)}\), repeated use of additivity gives
-\[
-  e(n)=\sum_p v_p(n)e(p).
-\]
-The final assertion follows because \(\eta(a)=\eta(b)\) is equivalent
-to \(e(a)=e(b)\).
+Since \(g
+\) has infinite order, each element of \(C\) has a unique exponent.  The
+homomorphism law for \(\eta\) becomes additivity of \(e\) on multiplication.
+Unique prime factorization gives the displayed formula.
 \end{proof}
 
-\begin{theorem}[Level-zero obstruction for multiplicative readout]
+\begin{theorem}[One-orbit multiplication obstruction]
 \label{thm:level-zero-obstruction}
-Let \(M\) be a monoid and let \(g\in M\) have infinite order.  Put
-\[
-  C=\{g^n:n\in\NN\}\subset M .
-\]
-There is no injective map
-\(\eta\colon\NN_{\ge1}\to C\) satisfying
-\[
-  \eta(ab)=\eta(a)\eta(b)
-  \qquad(a,b\ge1).
-\]
-Consequently multiplication on the positive integers cannot be
-represented by the ambient monoid product on a single free
-monogenic orbit, even after arbitrary recoding of the numerals into
-that orbit.  In the composition model of \Cref{thm:two-level},
-therefore, multiplicative readout requires a change of level from
-the orbit \(\{g^{\circ n}\}\) to the power operators
-\(f\mapsto f^{\circ n}\), under this level-zero monogenic-orbit
-restriction.
+There is no injective multiplicative readout
+\(\eta\colon\NN_{\ge1}\to\{g^n:n\in\NN\}\) whose multiplication is represented by
+the ambient product on one free monogenic orbit.
 \end{theorem}
 
 \begin{proof}
-The sharper classification in \Cref{thm:one-orbit-readout-classification}
-applies to every map satisfying the displayed ambient-product law.  It says
-that such a map is a prime-weight skeleton and is never injective: either a
-zero-weight prime collides with \(1\), or two positive-weight primes give the
-explicit prime-power collision displayed there.  This contradicts the assumed
-injectivity of \(\eta\), proving the obstruction.  The final sentence follows
-because the multiplication readout in \Cref{thm:two-level} is not an ambient
-product on the same orbit \(\{g^{\circ n}\}\), but the level-one composition law
-on the power operators \(I_n\).
+By \Cref{lem:level-zero-exponent-skeleton}, \(\eta(n)=g^{e(n)}\) with
+\(e(n)=\sum_pv_p(n)w(p)\).  Choose distinct primes \(p,r\).  If either weight is
+zero, then that prime collides with \(1\).  Otherwise
+\(e(p^{w(r)})=w(p)w(r)=e(r^{w(p)})\), giving a collision between distinct prime
+powers.  Thus \(\eta\) is never injective.
 \end{proof}
 
-\begin{theorem}[Classification of one-orbit multiplicative readouts]
+\begin{theorem}[Classification of one-orbit readouts]
 \label{thm:one-orbit-readout-classification}
-Let \(M\) be a monoid, let \(g\in M\) have infinite order, and put
-\(C=\{g^n:n\in\NN\}\).  The multiplicative readouts
-\(\eta\colon\NN_{\ge1}\to C\) satisfying
-\[
-  \eta(ab)=\eta(a)\eta(b)\qquad(a,b\ge1)
-\]
-are in bijection with functions \(w\colon\mathcal P\to\NN\) on the set
-\(\mathcal P\) of primes, via
-\[
-  \eta_w(n)=g^{\sum_{p\in\mathcal P}v_p(n)w(p)} .
-\]
-No such readout is injective.  More sharply, if \(p\ne r\) are primes,
-then either \(\eta_w(p)=\eta_w(1)\), or \(\eta_w(r)=\eta_w(1)\), or there
-is a collision between two distinct prime powers:
-\[
-  \eta_w\bigl(p^{w(r)}\bigr)=\eta_w\bigl(r^{w(p)}\bigr).
-\]
-Equivalently, for any nonempty set of primes \(Q\), the restriction of
-\(\eta_w\) to the free commutative submonoid generated by \(Q\) is
-injective if and only if \(Q\) consists of exactly one prime and that prime
-has positive weight.  Thus the only nontrivial injective pieces of a
-level-zero ambient-product readout are one-prime-power rays.
-Consequently the obstruction in \Cref{thm:level-zero-obstruction} is not
-an artifact of a chosen coding of numerals: the entire classifiable
-skeleton of one-orbit ambient-product readouts collapses either a prime
-against \(1\) or two distinct prime powers against each other.
-This is the full rigidity statement used in this article.  It does not
-classify arbitrary single-primitive protocols for \(\{+,\times\}\) once the
-readout law, semantic level, or orbit hypothesis is changed.
+Multiplicative readouts \(\eta\colon\NN_{\ge1}\to\{g^n:n\in\NN\}\) are classified
+by prime-weight functions \(w\colon\mathcal P\to\NN\) via
+\(\eta(n)=g^{\sum_pv_p(n)w(p)}\).  None is injective.
 \end{theorem}
 
 \begin{proof}
-Let \(\eta\) be a multiplicative readout.  By
-\Cref{lem:level-zero-exponent-skeleton} there is a unique exponent
-function \(e\colon\NN_{\ge1}\to\NN\) such that
-\(\eta(n)=g^{e(n)}\) and
-\[
-  e(n)=\sum_p v_p(n)e(p).
-\]
-Thus \(w(p)=e(p)\) determines \(\eta\), and the displayed formula for
-\(\eta_w\) follows.  Conversely, for any function
-\(w\colon\mathcal P\to\NN\), the sum
-\(e_w(n)=\sum_p v_p(n)w(p)\) is finite and satisfies
-\[
-  e_w(ab)=e_w(a)+e_w(b),
-\]
-because \(v_p(ab)=v_p(a)+v_p(b)\) for every prime \(p\).  Hence
-\[
-  \eta_w(ab)=g^{e_w(ab)}=g^{e_w(a)+e_w(b)}=
-  g^{e_w(a)}g^{e_w(b)}=\eta_w(a)\eta_w(b),
-\]
-so the correspondence is onto; uniqueness of exponents in the free orbit
-gives one-to-one correspondence.
-
-It remains to prove the asserted collapse.  Choose two distinct primes
-\(p\ne r\).  If \(w(p)=0\), then
-\(\eta_w(p)=g^0=\eta_w(1)\).  If \(w(r)=0\), then
-\(\eta_w(r)=\eta_w(1)\).  Otherwise both weights are positive, and
-\[
-  e_w\bigl(p^{w(r)}\bigr)=w(r)w(p)=w(p)w(r)
-  =e_w\bigl(r^{w(p)}\bigr).
-\]
-The infinite order of \(g\) converts equality of exponents into equality
-of readouts, while unique factorization gives
-\(p^{w(r)}\ne r^{w(p)}\).  Therefore \(\eta_w\) is not injective in every
-case.
-
-Now fix a set of primes \(Q\), and write \(\NN(Q)\) for the free
-commutative submonoid it generates.  If \(Q\) contains a prime \(p\) with
-\(w(p)=0\), then \(\eta_w(p)=\eta_w(1)\), so the restriction is not
-injective.  If \(Q\) contains two distinct primes of positive weight, the
-prime-power collision just proved lies inside \(\NN(Q)\), so again the
-restriction is not injective.  Hence injectivity on \(\NN(Q)\) forces
-\(Q\) to contain no zero-weight prime and at most one positive-weight
-prime.  Conversely, if \(Q=\{p\}\) and \(w(p)>0\), then
-\(\eta_w(p^a)=g^{a w(p)}\); infinite order of \(g\) makes the exponents
-\(a w(p)\) distinct, so the restriction to the one-prime ray is injective.
-The empty case is the one-point submonoid and is harmless; the nontrivial
-injective pieces are exactly the one-prime-power rays.  Since every
-one-orbit multiplicative readout is some \(\eta_w\), this proves the final
-assertion.
+This is \Cref{lem:level-zero-exponent-skeleton} and the collision argument in
+\Cref{thm:level-zero-obstruction}.
 \end{proof}
 
-\begin{corollary}[Boundary of the one-orbit obstruction]
+\begin{corollary}[One-orbit obstruction boundary]
 \label{cor:one-orbit-obstruction-boundary}
-The obstruction in \Cref{thm:one-orbit-readout-classification} is exactly a
-same-level ambient-product obstruction for one free monogenic orbit.  More
-precisely, it applies to a multiplication readout only when the values lie in
-\(C=\{g^n:n\in\NN\}\) for an infinite-order element \(g\), the readout is
-injective on \(\NN_{\ge1}\), and multiplication is required to be represented
-by the ambient product in that same orbit:
-\[
-  \eta(ab)=\eta(a)\eta(b)\qquad(a,b\ge1).
-\]
-Under exactly these hypotheses the prime-weight classification forces a
-collision.  Removing any of the structural hypotheses is outside the theorem:
-in particular the corollary gives no global impossibility theorem for
-single-primitive protocols that represent multiplication at another semantic
-level, or by a readout operation other than the ambient product on the same
-free monogenic orbit.
+The obstruction applies only to same-level ambient-product readouts on one free
+monogenic orbit.  It does not apply to the two-level readout of
+\Cref{thm:two-level}.
 \end{corollary}
 
 \begin{proof}
-The positive assertion is just the final part of
-\Cref{thm:one-orbit-readout-classification}.  Under the displayed
-same-level ambient-product law every readout is some prime-weight skeleton
-\(\eta_w\).  If two positive-weight primes occur, the theorem gives the
-explicit collision
-\(\eta_w(p^{w(r)})=\eta_w(r^{w(p)})\); if a zero-weight prime occurs, that
-prime collides with \(1\).  Hence no injective readout satisfies all the
-listed hypotheses.
-
-The boundary statement follows by inspection of the proof.  The proof uses
-only uniqueness of exponents in the free orbit, additivity of exponents under
-the ambient product, and unique factorization in \(\NN_{\ge1}\).  It never
-analyzes readouts whose target is not a single free monogenic orbit, never
-analyzes multiplication read at another semantic level, and never analyzes a
-non-ambient readout operation.  Those cases therefore are not conclusions of
-the theorem.  The Zeckendorf protocol of \Cref{thm:zeckendorf-protocol-univ}
-is compatible with this boundary because its multiplication readout is the
-level-one power-operator readout cited in \Cref{cor:level-zero-protocol-dichotomy},
-not the same level-zero ambient product on the one orbit.
+\Cref{thm:two-level} reads multiplication by composition of power operators in
+\(\End(\End(A))\), not by the ambient product on \(\{g^n\}\).
 \end{proof}
 
 \begin{definition}[Protocol universality]\label{def:prot-univ}
-Let \(\mathcal O\) be a class of operations on a set \(D\).  A
-\emph{single-primitive protocol} for \(\mathcal O\) consists of
-\begin{enumerate}
-\item a decidable set \(C\) of raw codes and a computable
-  normalization map \(\mathrm{NF}\colon C\to N\) onto a set \(N\) of
-  unique normal forms, with decidable equality on \(N\);
-\item a decoding map \(\nu\colon N\to D\);
-\item a finite family of semantic sorts \(Y_\ell\), each equipped
-  with an interpretation \(\sigma_\ell\) of one binary operation
-  symbol \(\sigma\);
-\item semantic readout maps \(\Phi_\ell\colon N\to Y_\ell\).
-\end{enumerate}
-An operation \(\theta\in\mathcal O\) of arity \(r\) is realized if
-there are a computable operation
-\(\widehat\theta\colon N^r\to N\), a level \(\ell\), and a
-\(\sigma\)-term \(R_\theta\) in \(r\) variables such that
-\[
-  \nu(\widehat\theta(n_1,\ldots,n_r))
-  =\theta(\nu(n_1),\ldots,\nu(n_r))
-\]
-and
-\[
-  \Phi_\ell(\widehat\theta(n_1,\ldots,n_r))
-  =
-  R_\theta(\Phi_\ell(n_1),\ldots,\Phi_\ell(n_r))
-\]
-for all \(n_i\in N\).  The protocol is
-\emph{protocol-universal for \(\mathcal O\)} if every operation in
-\(\mathcal O\) is realized in this sense.  The computability
-requirements in this definition are exactly the normal-form and
-compiled-operation requirements on \(C\) and \(N\).  The equations in
-the semantic sorts are readout identities; unless an additional
-effective presentation of a semantic sort is specified, they are not
-claims that the elements of \(Y_\ell\), the operation \(\sigma_\ell\),
-or the maps \(\Phi_\ell\) are algorithmically presented.  Thus the
-normalizer is algorithmic presentation data, while the only algebraic
-operation used in the readout terms is \(\sigma\), as in a canonical
-rewriting system with a decidable word problem \cite{BaaderNipkow1998}.
+An \(L1\) protocol consists of computable normal forms with decidable equality,
+compiled operations on those normal forms, and semantic readout identities for
+the operations being represented.
 \end{definition}
 
-\begin{proposition}[Semantic readouts do not add hidden algorithms]
+\begin{proposition}[Semantic readout separation]
 \label{prop:semantic-readout-separation}
-In \Cref{def:prot-univ}, equality of compiled normal forms is decided
-entirely in \(N\), and realization of an operation
-\(\theta\in\mathcal O\) gives a computable normal-form operation
-\(\widehat\theta\colon N^r\to N\).  The readout clause adds only the
-semantic identity
-\[
-  \Phi_\ell(\widehat\theta(n_1,\ldots,n_r))
-  =R_\theta(\Phi_\ell(n_1),\ldots,\Phi_\ell(n_r))
-\]
-inside the specified sort \(Y_\ell\).  Consequently a protocol over an
-arbitrary semantic set is a genuine algorithmic normal-form system on
-\(N\), but it asserts computability of semantic readouts only after
-one separately supplies effective presentations of the relevant
-semantic sorts, their binary operation, and the maps \(\Phi_\ell\).
+In the Zeckendorf protocol, the compiled arithmetic operations on normal forms
+and the semantic readouts \(\Phi_0,\Phi_1\) are separate pieces of data.
 \end{proposition}
 
 \begin{proof}
-The first item of \Cref{def:prot-univ} supplies the decidable raw-code
-set, the computable normalizer, and decidable equality on normal
-forms.  In the realization clause, \(\widehat\theta\) is explicitly
-required to be computable as a map on normal forms, so the compiled
-operation can be executed without performing any computation in the
-semantic sorts.  The two displayed identities in the definition then
-have different roles: the first is an equality in the represented
-domain \(D\), and the second is an equality in the chosen semantic
-sort \(Y_\ell\) after interpreting the single binary symbol there.
-No enumeration, equality algorithm, or composition algorithm for
-\(Y_\ell\) occurs among the data of the definition.  Hence no such
-algorithm is implied.  If these additional effective presentations are
-provided, then computability of the readout maps is an extra property
-of that enriched presentation, not a hidden hypothesis of protocol
-universality itself.
+The compiled operations are \(\oplus,\otimes\) from \Cref{def:stable-arith}; the
+readouts are the maps in \Cref{thm:two-level}.
 \end{proof}
 
-\begin{corollary}[Computability locus of the Zeckendorf protocol]
-\label{cor:zeckendorf-computability-locus}
-In \Cref{thm:zeckendorf-protocol-univ}, the computable data are exactly
-the raw finite-word set, the greedy Zeckendorf normalizer
-\(\mathrm{NF}_{\infty}\), decidable equality of legal finite words, and
-the compiled operations \(\oplus\) and \(\otimes\) obtained by valuation
-transport.  The maps
-\[
-  c_n\longmapsto g^{\circ n}\in\End(A),
-  \qquad
-  c_n\longmapsto I_n\in\End(\End(A))
-\]
-are semantic readout identities in the supplied sorts
-\(\End(A)\) and \(\End(\End(A))\).  Unless \(A\) and these endomorphism
-sorts are separately given effective presentations with computable
-composition and computable evaluation of the displayed maps, the theorem
-does not assert an algorithm for computing inside those semantic sorts.
+\begin{corollary}[Computability locus]\label{cor:zeckendorf-computability-locus}
+All computability in the \(L1\) construction occurs on the finite-support normal
+forms \(X_\infty^{\mathrm{fin}}\).
 \end{corollary}
 
 \begin{proof}
-The raw codes are finite binary words, so they are decidable.  The
-normalizer \(\mathrm{NF}_{\infty}\) is computable by first evaluating the
-finite weighted sum \(\sum_k\omega_kF_{k+1}\) and then applying the greedy
-Zeckendorf normalizer of \Cref{lem:greedy-zeckendorf-normalizer}.  Equality
-on normal forms is literal equality of finite legal words, hence is
-decidable.  The operations \(\oplus\) and \(\otimes\) are computed by
-valuating the two inputs in \(\NN\), applying ordinary integer addition or
-multiplication, and returning the greedy Zeckendorf normal form, exactly
-as in \Cref{lem:value-transported-suffices}.
-
-The two displayed maps take values in the semantic sorts chosen in
-\Cref{thm:zeckendorf-protocol-univ}.  By
-\Cref{prop:semantic-readout-separation}, protocol universality supplies no
-enumeration, equality algorithm, composition algorithm, or evaluation
-algorithm for an arbitrary supplied semantic sort; it supplies only the
-readout identities after the sort and its interpretation of the single
-binary operation have been specified.  Therefore the Zeckendorf protocol's
-algorithmic content is precisely the finite-word normal-form calculus and
-the valuation-transported compiled operations, and any additional
-computability of the endomorphism readouts belongs to an enriched effective
-presentation not assumed in the theorem.
+This follows from \Cref{lem:greedy-zeckendorf-normalizer,prop:value-transport-exact-interface}.
 \end{proof}
 
-\begin{corollary}[Protocol dichotomy on one level-zero orbit]
+\begin{corollary}[Level-zero protocol dichotomy]
 \label{cor:level-zero-protocol-dichotomy}
-Let a protocol in the sense of \Cref{def:prot-univ} contain a
-positive-integer locus represented by a section
-\(\rho\colon\NN_{\ge1}\to N\) with
-\(\nu(\rho(a))=a\).  Suppose that, at one semantic level, the
-single operation symbol is interpreted as the ambient product on a
-free monogenic orbit
-\[
-  C=\{g^n:n\in\NN\}
-\]
-for an infinite-order element \(g\), and write
-\(\eta(a)=\Phi_\ell(\rho(a))\in C\).  If multiplication is read at
-that same level by the ambient product in the strict form
-\[
-  \Phi_\ell(\rho(ab))
-  =
-  \Phi_\ell(\rho(a))\,\Phi_\ell(\rho(b))
-  \qquad(a,b\ge1),
-\]
-then \(\eta\) is not injective.  Equivalently, under this
-level-zero monogenic-orbit restriction, a protocol has the following
-dichotomy: either the orbit readout fails to separate positive
-integers, or multiplication is not realized by the ambient product on
-that single orbit.  Thus any protocol readout which separates
-positive integers must move multiplication away from this one
-level-zero orbit, as in the level-one power-operator readout of
-\Cref{thm:two-level}.  This conclusion is only the same-level
-ambient-product dichotomy isolated in
-\Cref{cor:one-orbit-obstruction-boundary}; it is not a universal
-impossibility theorem for all single-primitive multiplication protocols.
+A multiplication readout on positive integers either leaves the one free
+monogenic orbit or fails injectivity.
 \end{corollary}
 
 \begin{proof}
-The displayed compatibility condition says exactly that
-\(\eta(ab)=\eta(a)\eta(b)\) for all \(a,b\ge1\).  Since \(C\) is one
-free monogenic orbit generated by an infinite-order element, this is
-the situation of \Cref{thm:level-zero-obstruction}.  That theorem
-rules out injectivity of such an \(\eta\).  Therefore the two desired
-requirements, injective separation of positive integers and
-level-zero ambient-product realization of multiplication on the
-same orbit, cannot hold simultaneously.  The last sentence is the
-contrapositive applied to a readout that does separate the positive
-integer locus.
+If it stays in one free monogenic orbit and uses the ambient product, apply
+\Cref{thm:level-zero-obstruction}.  The readout of \Cref{thm:two-level} avoids
+the obstruction by moving to the power-operator level.
 \end{proof}
 
 \begin{theorem}[Value-transported Zeckendorf protocol universality]
 \label{thm:zeckendorf-protocol-univ}
-Let \(A\) be a nonempty set and let \(g\colon A\to A\) be an
-endomorphism of infinite order.  The Zeckendorf address system with
-raw codes the finite binary words, normal forms
-\(N=X_{\infty}^{\mathrm{fin}}\), normalizer
-\(\mathrm{NF}_{\infty}\), decoding map \(\nu=\Val\), and the two
-composition readouts
-\[
-  \Phi_0(c_n)=g^{\circ n},\qquad
-  \Phi_1(c_n)=I_n,\qquad c_n=\Val^{-1}(n),
-\]
-is a single-primitive protocol universal for
-\(\mathcal O=\{+,\times\}\) on \(\NN\).  This is a value-transported
-protocol: addition is realized by
-\(\widehat{+}=\oplus\) at level \(0\), and multiplication is
-realized by \(\widehat{\times}=\otimes\) at level \(1\).  In both
-cases the readout term is the one binary operation symbol,
-  interpreted as composition on the relevant semantic sort.  No bounded-window,
-  online, or intrinsic digit-local Zeckendorf arithmetic theorem is asserted;
-  \Cref{thm:no-finite-level-arithmetic} records the corresponding obstruction
-  to reading the stable arithmetic from any one finite residue level.
-The computable part of the theorem is the Zeckendorf normal-form
-calculus on \(X_{\infty}^{\mathrm{fin}}\), together with the valuation
-transport of \Cref{lem:value-transported-suffices}; the displayed maps into
-\(\End(A)\) and \(\End(\End(A))\) are semantic readout identities in
-the sense of \Cref{prop:semantic-readout-separation}.
+The Zeckendorf normal forms, transported operations \(\oplus,\otimes\), and
+readouts \(\Phi_0,\Phi_1\) form an \(L1\) protocol universal for
+\(\{+,\times\}\) on \(\NN\).  It is a value-transported protocol and asserts no
+bounded-window or digit-local arithmetic theorem.
 \end{theorem}
 
 \begin{proof}
-Let \(C\) be the decidable set of finite binary words and let
-\(N=X_{\infty}^{\mathrm{fin}}\).  The normal form of a raw word is
-\(\mathrm{NF}_{\infty}\), obtained by computing the integer
-\(\sum_k\omega_kF_{k+1}\) and applying the greedy Zeckendorf
-normalizer of \Cref{lem:greedy-zeckendorf-normalizer}, the classical
-Zeckendorf theorem in effective form \cite{Zeckendorf1972}.  Equality
-of normal forms is literal equality of finite legal words, hence is
-decidable by \Cref{prop:fold-confluence}.  The
-decoding map is \(\nu=\Val\).
-
-Interpret the single operation symbol as composition on both
-semantic sorts
-\[
-  Y_0=\End(A),\qquad Y_1=\End(\End(A)).
-\]
-The readout maps are the displayed maps
-\(\Phi_0(c_n)=g^{\circ n}\) and \(\Phi_1(c_n)=I_n\).  They are
-well defined because \(\Val\) is a bijection
-\(X_{\infty}^{\mathrm{fin}}\to\NN\).
-
-For addition take \(\widehat{+}=\oplus\).  This operation is
-computable: compute the two values, add them in \(\NN\), and return
-the Zeckendorf normal form.  The semantic clause is
-\[
-  \nu(c_m\oplus c_n)=m+n,
-\]
-by \Cref{thm:semiring}, whose computability input is exactly
-\Cref{lem:value-transported-suffices}.  The readout clause at level \(0\) is
-\[
-  \Phi_0(c_m\oplus c_n)
-  =g^{\circ(m+n)}
-  =g^{\circ m}\circ g^{\circ n}
-  =\Phi_0(c_m)\circ\Phi_0(c_n),
-\]
-which is \Cref{thm:two-level}.
-
-For multiplication take \(\widehat{\times}=\otimes\).  It is
-computable by the same valuation-normalization procedure, using
-integer multiplication.  Again \Cref{thm:semiring} gives
-\[
-  \nu(c_m\otimes c_n)=mn.
-\]
-At level \(1\), \Cref{thm:two-level} gives
-\[
-  \Phi_1(c_m\otimes c_n)
-  =I_{mn}
-  =I_m\circ I_n
-  =\Phi_1(c_m)\circ\Phi_1(c_n).
-\]
-Thus both operations in \(\{+,\times\}\) are realized using only the
-single binary operation symbol in the readout.  The finite maps
-\(\Fold_m\) are the resolution quotients whose fibers are studied in
-\Cref{sec:L2}; by \Cref{prop:finite-residue-not-stable} they are
-only residue quotients and do not alter the stable readout just
-verified.
-Finally, because \(A\) is arbitrary, no effective presentation of
-\(\End(A)\), of composition in \(\End(A)\), or of the map
-\(n\mapsto g^{\circ n}\) is being asserted.  The algorithmic
-assertions are precisely those on the normal forms and compiled
-operations, as isolated in \Cref{prop:semantic-readout-separation}.
+Normal forms and decidable equality are supplied by
+\Cref{lem:greedy-zeckendorf-normalizer,prop:fold-confluence}.  The compiled
+operations are computable by \Cref{lem:value-transported-suffices}.  The readout
+identities are \Cref{thm:two-level}.  The final sentence is
+\Cref{prop:value-transport-exact-interface}.
 \end{proof}
 
-\begin{corollary}[Minimal escape supplied by the protocol]
+\begin{corollary}[Minimal value-transport witness]
 \label{cor:value-transported-minimal-witness}
-Within the level-zero monogenic-orbit restriction of
-\Cref{cor:level-zero-protocol-dichotomy}, the protocol of
-\Cref{thm:zeckendorf-protocol-univ} is a minimal witness to what must be
-added to the L0 expression picture: it keeps the injective valuation
-readout \(c_n\mapsto n\), realizes addition at the ambient composition
-level, and realizes multiplication only after passing to the one higher
-power-operator readout.  Consequently its positive content is the
-existence of this two-level semantic readout package, not a new
-bounded-window or digit-local Zeckendorf multiplication algorithm.
+The positive \(L1\) result uses no operation on \(\NN\) beyond ordinary addition
+and multiplication transported through the Zeckendorf valuation.
 \end{corollary}
 
 \begin{proof}
-By \Cref{prop:fold-confluence}, \(\Val\colon
-X_{\infty}^{\mathrm{fin}}\to\NN\) is a bijection, so the normal forms
-separate integers.  The theorem realizes addition by
-\(c_a\oplus c_b=c_{a+b}\) and the level-zero readout
-\(\Phi_0(c_n)=g^{\circ n}\), hence no extra level is needed for
-addition.  The same theorem realizes multiplication by
-\(c_a\otimes c_b=c_{ab}\) only through the level-one readout
-\(\Phi_1(c_n)=I_n\), where composition of the endomorphisms
-\(I_a,I_b\) gives \(I_{ab}\).  On the other hand,
-\Cref{cor:level-zero-protocol-dichotomy} says that an injective readout
-of positive integers cannot also realize multiplication by the ambient
-product on that same single free monogenic orbit.  Thus the theorem
-does exactly the forced escape under that restriction: it moves
-multiplication off the level-zero orbit while leaving the normal-form
-valuation and the addition readout unchanged.  All displayed
-operation equations are transported through \(\Val\) and ordinary
-integer arithmetic, so the corollary asserts a minimal protocol
-witness rather than an intrinsic digit-local arithmetic algorithm.
+This is exactly \Cref{def:stable-arith} and \Cref{thm:zeckendorf-protocol-univ}.
 \end{proof}
+

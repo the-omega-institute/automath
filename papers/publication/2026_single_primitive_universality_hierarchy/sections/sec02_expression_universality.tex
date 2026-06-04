@@ -1,746 +1,114 @@
 \section{\texorpdfstring{\(L0\)}{L0}: expression universality}\label{sec:L0}
 
-We begin with \(L0\), \emph{expression universality}: the
-existential assertion that the desired operations have some terms
-over one binary primitive, before any computable normal forms or
-fiber certificates are required.  Throughout this section
-\(\operatorname{Log}\) denotes the principal branch of the complex
+This section fixes the single primitive and the precise boundary of the imported
+expression theorem.  Throughout, \(\operatorname{Log}\) is the principal complex
 logarithm.
 
 \begin{definition}[EML operator]\label{def:eml}
-The \emph{Exp-Minus-Log} operation is the partial binary operation
-on \(\CC\) with domain \(\CC\times\CC^*\) given by
+The Exp-Minus-Log operation is the partial binary operation
 \[
-  \eml \colon \CC\times\CC^*\longrightarrow \CC,
-  \qquad
-  \eml(x,y)=e^x-\operatorname{Log}y .
+  \eml\colon\CC\times\CC^*\to\CC,
+  \qquad \eml(x,y)=e^x-\operatorname{Log}y .
 \]
+An EML term is interpreted only where every second argument is nonzero and the
+principal-branch expressions used in the term are defined.
 \end{definition}
 
-The complex domain is part of the convention.  Constants such as
-\(i\), and hence the trigonometric functions, are obtained from the
-usual exponential identities.  All branch choices below are made in
-this principal-branch sense.  Thus an EML term is interpreted only at
-points where every second argument of \(\eml\) is nonzero and the
-principal-branch identities used in its construction are valid.  We
-do not assert a branch-independent calculus of arbitrary elementary
-expressions.
-
-\begin{proposition}[Imported EML representation theorem, Odrzywo{\l}ek]
+\begin{proposition}[Imported EML representation theorem]
 \label{thm:eml-universality}
-Let \(\mathcal B_{36}\) be Odrzywo{\l}ek's scientific-calculator
-basis.  In the notation of the cited Table~1 this is the following
-concrete list:
-\[
-\begin{aligned}
-\mathcal C&=\{\pi,e,i,-1,1,2,x,y\},\\
-\mathcal U&=\{\exp,\ln,\operatorname{inv},\operatorname{half},
-  \operatorname{minus},\sqrt{\phantom{x}},\operatorname{sqr},\sigma,\\
-&\hspace{2.7em}
-  \sin,\cos,\tan,\arcsin,\arccos,\arctan,
-  \sinh,\cosh,\tanh,\\
-&\hspace{2.7em}
-  \operatorname{arsinh},\operatorname{arcosh},
-  \operatorname{artanh}\},\\
-\mathcal O&=\{+,-,\times,\div,\log_x y,x^y,
-  \operatorname{avg},\operatorname{hypot}\}.
-\end{aligned}
-\]
-Here \(\operatorname{inv}(x)=1/x\),
-\(\operatorname{half}(x)=x/2\),
-\(\operatorname{minus}(x)=-x\),
-\(\operatorname{sqr}(x)=x^2\),
-\(\sigma(x)=1/(1+e^{-x})\),
-\(\operatorname{avg}(x,y)=(x+y)/2\), and
-\(\operatorname{hypot}(x,y)=\sqrt{x^2+y^2}\).
-For each primitive symbol in this displayed signature, the imported
-theorem asserts the existence of a finite expression over the single
-partial operation \(\eml\) and the constant \(1\) which represents that
-primitive on its corresponding principal-branch domain; at every point
-of that domain the intermediate second arguments of \(\eml\) appearing
-in the representative are nonzero.  The hypotheses of the imported
-statement are exactly the principal-branch convention for
-\(\operatorname{Log}\), the ordinary real domains of the listed real
-calculator functions where real restrictions are intended, and the
-specific versioned table and supplementary verification cited below.
-This version lock is part of the hypothesis: no unversioned compiler run,
-private table, or later source snapshot is used as a proof input.
-It is an existence theorem for representatives only: it does not supply
-a normal form for EML expressions, a decidable equality test for their
-real meanings, or any Richardson witness identity beyond the particular
-representatives and domains contained in the cited external theorem.
-In particular the external \(\mathcal B_{36}\) compiler is never used below
-as a semantic oracle for normalizer, equality, or Richardson-obstruction
-claims.
-This is an imported background theorem, not an internal theorem of this
-article, and it is not reproved here.  The source used
-here is the stable public record arXiv:2603.21852v2, with DOI
-\texttt{10.48550/arXiv.2603.21852}; at preparation time the public arXiv
-abstract page \url{https://arxiv.org/abs/2603.21852v2} and the public source
-archive \url{https://arxiv.org/src/2603.21852v2} were reachable.  In that
-record main-text Table~1 supplies exactly the displayed \(36\)-item basis,
-main-text Table~2 records the reduction to the EML line, and main-text Fig.~1
-points to the complete bootstrapping chain.
-The ancillary file \texttt{SupplementaryInformation.pdf} attached to that
-same arXiv version supplies the exact table-level verification interface:
-Part~I, Section~1.3, Table~S2 prints the complete EML bootstrapping chain
-from \(\{1,\eml\}\), and Part~II, Sections~2.1--2.5 supply the compiler
-macros, symbolic checks, printed representatives, and constructive
-completeness proof sketch for the Table~1 class.  The accompanying code and
-data are archived separately on Zenodo as version \texttt{v1.1}, DOI
-\texttt{10.5281/zenodo.19762318}, as public provenance and version audit,
-not as a proof dependency in this article
-\cite[Table~1, Table~2, Fig.~1, and Supplementary Information,
-Part~I, Sec.~1.3, Table~S2 and Part~II,
-Secs.~2.1--2.5]{Odrzywolek2026SingleBinaryOperator, Odrzywolek2026ZenodoCode}.
-In particular, this proposition is used below only as the L0
-expression-universality anchor; the hierarchy and separation theorems below
-are the new contribution of this article.  The later Richardson obstruction does
-not appeal to the full \(\mathcal B_{36}\) compiler, does not import a
-compiler-normal form, and does not use compiler equality as a decision
-procedure; its separate finite proof interface is isolated in
-\Cref{prop:printed-root-no-hidden-oracle}.
-The domains imported here are exactly the ordinary domains of these
-real calculator functions on the real axis where appropriate
-\((\ln,\operatorname{inv},\div,\log_x y,x^y,\sqrt{\phantom{x}},
-\arcsin,\arccos,\operatorname{arcosh},\operatorname{artanh})\),
-together with the principal complex branches used internally by
-\(\operatorname{Log}\); no branch-independent identity is asserted
-outside those domains.
-In particular, for \(x\) in the right half-plane,
-\begin{align}
-  e^x &= \eml(x,1), \label{eq:eml-exp}\\
-  \operatorname{Log}x
-      &= \eml\!\bigl(1,\eml(\eml(1,x),1)\bigr),
-         \label{eq:eml-ln}\\
-  e   &= \eml(1,1). \label{eq:eml-e}
-\end{align}
-Away from the principal domain the same formulas have the expected
-branch dependence.  For instance, the right side of
-\eqref{eq:eml-ln} gives \(-i\pi\) at \(x=-1\), while
-\(\operatorname{Log}(-1)=i\pi\).
+Odrzywo{\l}ek's public arXiv v2 record
+\cite{Odrzywolek2026SingleBinaryOperator} asserts that every primitive in the
+scientific-calculator basis \(\mathcal B_{36}\) displayed there has a finite
+representative over \((\eml,1)\) on its stated principal-branch domain.  This is
+used here only as an \(L0\) representative-existence theorem: it supplies no
+normal form, no equality algorithm for EML terms, and no Richardson witness
+identity except through the separate interface of \Cref{thm:separation}.
 \end{proposition}
 
 \begin{proof}
-The full \(\mathcal B_{36}\) representative-existence assertion is the
-external theorem cited in the statement: Odrzywo{\l}ek's Table~1 fixes the
-listed basis and the accompanying Supplementary Information supplies the
-principal-branch symbolic verification for its EML representatives.  This
-article uses that cited theorem only as an imported \(L0\) support result;
-it does not derive the thirty-six representatives from the definition of
-\(\eml\).
-
-The displayed elementary consequences follow directly from
-\Cref{def:eml}.  Since \(\operatorname{Log}1=0\),
-\(\eml(x,1)=e^x\) and \(\eml(1,1)=e\).  If \(x\) lies in the right
-half-plane, then the principal logarithm satisfies
-\(\operatorname{Log}(e^{e-\operatorname{Log}x})=e-\operatorname{Log}x\):
-indeed \(e-\operatorname{Log}x\) has imaginary part in
-\((-\pi/2,\pi/2)\), hence lies in the principal logarithm strip.  Therefore
-\[
-  \eml\!\bigl(1,\eml(\eml(1,x),1)\bigr)
-  = e-\operatorname{Log}\bigl(e^{e-\operatorname{Log}x}\bigr)
-  = e-(e-\operatorname{Log}x)=\operatorname{Log}x.
-\]
-The example at \(x=-1\) is the same calculation with
-\(e-\operatorname{Log}(-1)=e-i\pi\).  Since
-\(\exp(e-i\pi)=-e^e\) and the principal logarithm of this negative real
-number is \(e+i\pi\), the formula returns
-\(e-(e+i\pi)=-i\pi\).  This proves the internal formulas and records that
-all remaining \(\mathcal B_{36}\) representatives are being used by citation
-only.
+The result is imported from the versioned public record
+arXiv:2603.21852v2, DOI \texttt{10.48550/arXiv.2603.21852}.  The ancillary file
+named in \Cref{ass:HW} is used only for the optional printed-root hypothesis;
+the main theorem chain treats the full \(\mathcal B_{36}\) result as the single
+existence assertion stated here.
 \end{proof}
 
 \begin{corollary}[External compiler isolation]
 \label{cor:external-compiler-isolation}
-In the proof of the hierarchy theorem, the imported
-\(\mathcal B_{36}\) theorem supplies only the positive \(L0\)
-existence statement that the listed calculator primitives have pure EML
-representatives on their stated principal-branch domains.  It supplies no
-hidden proof step for any \(L1\) protocol normalizer, any \(L2\)
-finite-fiber certificate, or any Richardson normal-form obstruction.  The
-later Richardson argument may use only the internally displayed core EML
-witnesses and, for \(\pi\), \(\sin\), and the nonnegative square root,
-the separate locked interface or replacement-triple interface stated in
-\Cref{thm:richardson-obstruction-interface,thm:printed-richardson-witnesses-interface,thm:no-hidden-L0-semantic-normalizer,thm:separation}.
+The imported \(L0\) theorem cannot be used as a hidden proof of an \(L1\)
+normalizer, an \(L2\) certificate theorem, or the Richardson normalizer
+obstruction.
 \end{corollary}
 
 \begin{proof}
-The imported result in \Cref{thm:eml-universality} is a representation
-statement: it asserts the existence of finite EML expressions for the
-members of \(\mathcal B_{36}\) on specified principal-branch domains.  The
-definition of protocol universality in \Cref{def:prot-univ} requires
-additional data, namely computable normal forms, decidable equality of
-normal forms, compiled operations on those forms, and readout identities.
-None of these data is part of the imported \(\mathcal B_{36}\) statement.
-The \(L1\) proof is instead the Zeckendorf construction of
-\Cref{thm:zeckendorf-protocol-univ}, and the \(L2\) proof is the finite
-fiber construction in \Cref{sec:L2}.
-
-For the Richardson obstruction, the proof in \Cref{sec:strictness} first
-locks the finite strings actually used in the translation and then audits
-the three non-core semantic witnesses.  The short arithmetic EML macros
-are proved internally in \Cref{prop:internal-core-eml-witnesses} and
-\Cref{lem:eml-printed-core}.  The three remaining meanings are not taken
-from the full compiler as an oracle; for the printed roots they are exactly
-the hypothesis \((H_{\mathcal W})\) organized by
-\Cref{thm:printed-richardson-witnesses-interface}, and for a replacement triple
-they are exactly the three real-domain identities in
-\Cref{prop:three-witness-stability}.  Therefore the external compiler is isolated to the advertised positive \(L0\)
-clause; \Cref{thm:no-hidden-L0-semantic-normalizer} records the corresponding
-undecidability obstruction to upgrading this import into a semantic normalizer.
+\Cref{thm:eml-universality} asserts existence of representatives only.  The
+\(L1\) normalizer is constructed in \Cref{thm:zeckendorf-protocol-univ}; the
+\(L2\) certificates are finite-fibre data from \Cref{prop:zeckendorf-cert-univ};
+and the Richardson obstruction is \Cref{thm:separation}.
 \end{proof}
 
-\begin{theorem}[Dependency boundary for the imported L0 clause]
+\begin{theorem}[Public-record audit]
 \label{thm:eml-public-record-audit}
-Let \(\mathcal E_{36}\) denote the following finite external assertion:
-arXiv:2603.21852v2, with its ancillary
-\texttt{SupplementaryInformation.pdf}, contains a principal-branch EML
-representative over \(\{1,\eml\}\) for each of the thirty-six symbols in
-the displayed basis \(\mathcal B_{36}=\mathcal C\cup\mathcal U\cup\mathcal O\)
-of \Cref{thm:eml-universality}, on the ordinary real domains listed there
-when a real restriction is intended and on the principal complex logarithm
-branch for the internal complex evaluations.  Then every use of the imported
-Odrzywo{\l}ek theorem in this article factors through \(\mathcal E_{36}\),
-and no later theorem uses any stronger statement from the external compiler.
-More precisely:
-\begin{enumerate}
-\item the positive \(L0\) sentence in \Cref{thm:main-hierarchy} is exactly the
-  assertion \(\mathcal E_{36}\);
-\item the Richardson normal-form obstruction in
-  \Cref{thm:separation,thm:richardson-interface-boundary} uses only the
-  internally proved EML core together with the three-witness interface for
-  \(\pi\), \(\sin\), and \(\sqrt{\phantom{x}}\), and therefore does not use the
-  full \(\mathcal B_{36}\) compiler as a hidden proof oracle, and
-  \Cref{thm:no-hidden-L0-semantic-normalizer} rules out treating the import as a
-  semantic normalizer on the translated Richardson subfragment;
-\item if a submission audit replaces \(\mathcal E_{36}\) by the corresponding
-  assertion \(\mathcal E_{B'}\) for a subbasis \(B'\subseteq\mathcal B_{36}\),
-  the theorem chain remains valid after replacing only the full-basis positive
-  \(L0\) sentence by the restricted sentence for \(B'\).  The Zeckendorf
-  protocol theorem, the one-orbit multiplication obstruction, the finite-fiber
-  certificate clauses, the finite-state growth obstruction, and the
-  three-witness Richardson interface are unchanged.
-\end{enumerate}
-Consequently the full-basis \(L0\) claim is submission-ready exactly to the
-extent that the finite public record \(\mathcal E_{36}\) is accepted; all other
-main strictness and protocol conclusions have the dependency cut described in
-the three clauses above.
-\end{theorem}
-
-\begin{proof}
-By \Cref{thm:eml-universality}, the imported statement is used as a
-representative-existence theorem for the concrete finite signature
-\(\mathcal B_{36}\), with the principal-branch and real-domain conventions
-spelled out in the proposition.  The same proposition explicitly separates
-that import from the elementary identities in \eqref{eq:eml-exp}--\eqref{eq:eml-e},
-which are proved directly from \Cref{def:eml}.  This proves that the first
-main-theorem use of Odrzywo{\l}ek's result is precisely the finite assertion
-\(\mathcal E_{36}\), and gives item (1).
-
-For item (2), inspect the dependency firewall already proved in
-\Cref{cor:external-compiler-isolation}.  The Richardson translation is not
-allowed to call the full calculator compiler: all arithmetic, exponential,
-positive-logarithm, multiplication, division, and rational-constant steps are
-the internal witnesses of \Cref{prop:internal-core-eml-witnesses}; the only
-non-core analytic inputs are the three real-domain identities for \(\pi\),
-\(\sin\), and the nonnegative square root, isolated later in
-\Cref{thm:richardson-obstruction-interface,thm:printed-richardson-witnesses-interface,thm:no-hidden-L0-semantic-normalizer,thm:separation}.
-Thus replacing or removing the full \(\mathcal B_{36}\) import cannot create or
-destroy the Richardson contradiction, except through those separately stated
-three-witness hypotheses.
-
-Item (3) is the restriction statement of \Cref{prop:eml-import-dependency-cut}
-together with the quarantine theorem \Cref{prop:expression-import-isolation}.
-The former says that substituting any representative-existence theorem for a
-subbasis changes exactly the positive \(L0\) clause for the named basis.  The
-latter lists the remaining parts of the hierarchy theorem that survive after
-the full import is removed: the Zeckendorf protocol and one-orbit obstruction,
-the finite-fiber and finite-state certificate results, and the three-witness
-Richardson interface.  These are exactly the claims named in item (3).
-Combining the three items proves the advertised dependency cut for the main theorem chain.
-\end{proof}
-
-\begin{theorem}[Pinned external hypothesis for the imported \(L0\) clause]
 \label{thm:pinned-L0-external-hypothesis}
-All uses in this article of Odrzywo{\l}ek's expression-universality theorem
-are equivalent to the following single pinned external hypothesis
-\(\mathcal E_{36}^{\mathrm{pin}}\).  The versioned arXiv record
-arXiv:2603.21852v2, DOI \texttt{10.48550/arXiv.2603.21852}, updated
-4 Apr. 2026, together with its ancillary
-\texttt{SupplementaryInformation.pdf}, asserts principal-branch EML
-representatives over \(\{1,\eml\}\) for the thirty-six displayed symbols in
-\(\mathcal B_{36}\) on the domains stated in \Cref{thm:eml-universality}.  The
-publicly checkable record attached to this hypothesis consists of the arXiv
-abstract page \url{https://arxiv.org/abs/2603.21852v2}, the arXiv source
-archive \url{https://arxiv.org/src/2603.21852v2}, and the accompanying Zenodo
-record \url{https://zenodo.org/records/19762318}; these URLs are cited only to
-pin the external theorem and are not used as executable proof oracles.  For
-provenance auditability, the accompanying public source snapshot is the Zenodo
-v1.1 archive, DOI \texttt{10.5281/zenodo.19762318}, published 25 Apr. 2026,
-archived as
-\texttt{VA00/SymbolicRegressionPackage-v1.1.zip} with MD5 checksum
-\texttt{00eb335a6895a3c4b6ec5248d6b04b85}.
-
-If the arXiv ancillary file or the Zenodo snapshot is replaced by any later
-version, moved URL, private compiler run, or checksum-distinct archive, the
-theorem chain in this article does not silently update.  Instead the positive
-\(L0\) clause must be read as conditional on a replacement hypothesis stating
-the same finite representation assertion for the new pinned record.  The
-Richardson obstruction for the printed roots remains governed separately by
-\((H_{\mathcal W})\) and by
-\Cref{thm:printed-richardson-witnesses-interface,thm:richardson-obstruction-interface}; no conclusion below depends on an unpinned mutable table or
-on executing the Zenodo code as a proof oracle.
+\label{prop:external-record-metadata-nonloadbearing}
+The \(L0\) import is pinned to arXiv:2603.21852v2 and the bibliographic metadata
+in \cite{Odrzywolek2026SingleBinaryOperator}; the Zenodo record
+\cite{Odrzywolek2026ZenodoCode} is cited only as provenance.  No proof in this
+paper depends on executing archived code or on an unversioned mutable table.
 \end{theorem}
 
 \begin{proof}
-By \Cref{thm:eml-universality}, the imported positive \(L0\) assertion is
-precisely the existence of principal-branch EML representatives for the
-finite basis \(\mathcal B_{36}\) on the displayed domains, and the statement
-of that proposition identifies the arXiv version, DOI, ancillary file, and
-Zenodo provenance record.  By \Cref{thm:eml-public-record-audit}, every later
-use of the imported result factors through that finite assertion and no
-later theorem uses a stronger statement from the compiler.  Thus replacing
-the cited public files by another record changes only the external
-hypothesis, not an internal proof step: the positive \(L0\) sentence is then
-available exactly when the new pinned record supplies the same finite
-representation assertion.
-
-The second paragraph follows from the same dependency audit.  The Zenodo
-record is used only to make the public source snapshot identifiable by
-version, DOI, filename, and checksum; no proof below invokes execution of
-that code.  The printed-root Richardson add-on is not a consequence of the
-full \(\mathcal B_{36}\) import: by
-\Cref{thm:printed-richardson-witnesses-interface,thm:richardson-obstruction-interface} it uses only the three real-domain identities named
-\((H_{\mathcal W})\), after the finite strings have been locked internally.
-Hence the article has exactly the pinned external dependency stated here and
-no hidden mutable ancillary dependency.
+The theorem statement records the exact citation used in
+\Cref{thm:eml-universality}.  All later proofs cite either that proposition as
+an existence import or the independent theorem interfaces in
+\Cref{sec:L1,sec:L2,sec:strictness}.
 \end{proof}
 
-\begin{corollary}[Narrow internal EML basis for the obstruction]
-\label{cor:narrow-internal-eml-basis}
-The Richardson and finite-state strictness arguments below do not require the
-full imported \(\mathcal B_{36}\) representative theorem.  If the positive
-\(L0\) full-basis clause is deleted, the following internally displayed pure
-EML macros remain available for the proof chain:
-\[
-  E(u)=\eml(u,1),
-  \qquad
-  L(u)=\eml\!\bigl(1,E(\eml(1,u))\bigr),
-\]
-\[
-  D(a,b)=\eml\!\bigl(L(a),E(b)\bigr),
-  \qquad
-  P(u)=\eml\!\bigl(u,E(u)\bigr),
-\]
-\begin{align*}
-  N(u)&=D(P(u),E(u)),\\
-  A(u,v)&=D\bigl(E(u),D(P(u),v)\bigr),\\
-  S(u,v)&=A(u,N(v)).
-\end{align*}
-On the real domains used later these represent, respectively,
-\(e^u\), \(\log u\) for \(u>0\), subtraction on the displayed positive first
-argument domain, a positive guard \(e^u-u\), negation, addition, and
-subtraction.  Consequently every later Richardson translation factors through
-this internal core together with exactly one three-witness interface for
-\(\pi\), \(\sin\), and the nonnegative square root; every finite-state
-strictness theorem is independent of the imported EML basis altogether.
-\end{corollary}
-
-\begin{proof}
-The displayed strings are pure EML terms because they are obtained by finitely
-many substitutions from \(\eml\) and the terminal \(1\).  Their real-domain
-meanings are proved directly in \Cref{lem:eml-printed-core}: the only branch
-condition used there is the positivity of the first argument of \(L\) in the
-subtraction macro, supplied by the guard \(P(u)=e^u-u>0\).  Thus these macros
-are internal consequences of \Cref{def:eml}, not imported consequences of
-\Cref{thm:eml-universality}.
-
-By \Cref{cor:external-compiler-isolation,thm:eml-public-record-audit}, the full
-\(\mathcal B_{36}\) import contributes only the positive representative
-existence clause for the scientific-calculator basis and supplies no normal
-form, no equality test, and no Richardson witness identity.  The Richardson
-translation theorem \Cref{thm:minimal-eml-witness-interface} then identifies
-the exact remaining non-core inputs as the three real-domain identities for
-\(\pi\), \(\sin\), and \(\sqrt{\phantom{x}}\), supplied either by a verified
-replacement triple or conditionally by \((H_{\mathcal W})\).  Finally,
-\Cref{prop:main-dependency-splitting} records that the finite-state strictness
-part uses only the Zeckendorf finite-fiber covers and the finite-matrix budget.
-This proves the asserted narrow dependency cut.
-\end{proof}
-
-
-\begin{proposition}[External-record metadata is non-load-bearing]
-\label{prop:external-record-metadata-nonloadbearing}
-The article does not use an independently audited public-record fact as a
-mathematical premise.  Its only external L0 premise is the finite
-representative-existence assertion \(\mathcal E_{36}\) stated in
-\Cref{thm:eml-public-record-audit}; its only printed-root premise is the
-three-identity interface \((H_{\mathcal W})\) stated in \Cref{ass:HW}.  The
-arXiv version, supplementary-section numbers, Zenodo snapshot, and DOI strings
-identify the cited records and make the import reproducible, but they are not
-additional theorems used in any proof.  If any such bibliographic or version
-metadata is not accepted before submission, the corresponding result is read
-with \(\mathcal E_{36}\) or \((H_{\mathcal W})\) as an explicit external
-hypothesis, while all internally proved protocol, certificate, and finite-state
-strictness results are unchanged.
-\end{proposition}
-
-\begin{proof}
-Inspect the dependency cut in \Cref{thm:eml-public-record-audit}.  The positive
-expression-universality clause calls only the assertion that finite EML
-representatives exist for the named \(36\)-symbol basis on the stated domains;
-that assertion is exactly \(\mathcal E_{36}\).  The proof never derives a
-mathematical statement from DOI metadata, from the existence of a Zenodo record,
-or from code execution.  Those data serve only to identify the cited external
-source.
-
-For the Richardson branch, \Cref{cor:external-compiler-isolation} separates the
-full \(\mathcal B_{36}\) import from the three-witness interface, and
-\Cref{prop:printed-witness-certificate-boundary,prop:printed-table-needs-analytic-interface}
-show that the printed table, expanded strings, hashes, and provenance records
-lock finite syntax but do not prove the three real-domain meanings.  Therefore
-all uses of the printed roots pass through the explicit hypothesis
-\((H_{\mathcal W})\).  Removing or downgrading unaudited public-record metadata
-can therefore only change whether \(\mathcal E_{36}\) or
-\((H_{\mathcal W})\) is cited or assumed; it cannot affect any proof whose
-inputs are internal or explicitly conditional on those two finite external
-assertions.
-\end{proof}
-
-\begin{proposition}[Exact dependency cut for the imported EML theorem]
+\begin{proposition}[EML import dependency cut]
 \label{prop:eml-import-dependency-cut}
-In the theorem chain of this article, the imported theorem
-\Cref{thm:eml-universality} is logically equivalent to exactly the following
-use: there is a finite EML representative, in the principal-branch semantics,
-for each primitive of Odrzywo{\l}ek's basis \(\mathcal B_{36}\).  If that
-single assertion is replaced by an arbitrary external theorem with the same
-representative-existence conclusion on the same domains, every subsequent
-result cited in \Cref{thm:main-hierarchy} remains valid with the same proof.
-Equivalently, if a referee accepts only a smaller version-locked subbasis
-\(\mathcal B'\subseteq\mathcal B_{36}\), then the same proof gives the
-corresponding restricted positive \(L0\) clause for \(\mathcal B'\), while all
-non-\(L0\) clauses of \Cref{thm:main-hierarchy} are unchanged.
-Conversely, deleting that representative-existence conclusion deletes only
-the positive \(L0\) clause for the full basis \(\mathcal B_{36}\); it does not
-delete the internally proved EML core, the Zeckendorf protocol theorem, the
-finite-fiber certificate theorem, the finite-state strictness theorem, or the
-Richardson obstruction using its explicit three-witness interface.
-\end{proposition}
-
-\begin{proof}
-Inspect the proof dependencies.  The statement of
-\Cref{thm:eml-universality} has two parts relevant here: it identifies the
-external source and it records the representative-existence conclusion for
-the named basis on principal-branch domains.  All references to the full
-\(\mathcal B_{36}\) basis in the hierarchy theorem occur in the first clause
-of \Cref{thm:main-hierarchy} and in the first sentence of
-\Cref{thm:separation}; both cite the imported result only to obtain that
-existence conclusion.  Replacing the source theorem by another theorem with
-the same conclusion therefore leaves those citations unchanged at the level
-of logical content.
-
-The same inspection proves the restricted-subbasis assertion.  If the accepted
-external input supplies representatives only for a subset \(\mathcal B'\), then
-the first hierarchy clause is read with \(\mathcal B'\) in place of
-\(\mathcal B_{36}\).  No proof in the Zeckendorf protocol, the finite-fiber
-certificate chain, the finite-state growth obstruction, or the Richardson
-three-witness interface quantifies over the unused members of
-\(\mathcal B_{36}\).  Therefore restricting the citation changes exactly the
-advertised positive \(L0\) basis statement and nothing else.
-
-No later structural proof uses a normal form, equality algorithm, or hidden
-semantic decision procedure from the external compiler.  The protocol clause
-is \Cref{thm:zeckendorf-protocol-univ} and its value-transport refinements.
-The finite-fiber clause is \Cref{prop:zeckendorf-cert-univ} together with the
-finite-atomic Hankel and Prony arguments.  The finite-state strictness clause
-is \Cref{thm:finite-state-strictness}.  The Richardson obstruction uses the
-internally proved core witnesses and exactly the three non-core real-domain
-identities isolated in
-\Cref{thm:printed-richardson-witnesses-interface,prop:three-witness-stability,thm:minimal-eml-witness-interface,thm:no-hidden-L0-semantic-normalizer}.
-These cited proofs do not appeal to the remaining representatives in
-\(\mathcal B_{36}\).  Thus removing the imported representative-existence
-assertion removes precisely the positive full-basis \(L0\) conclusion and no
-other item listed above, proving the claimed dependency cut.
-\end{proof}
-
-\begin{proposition}[Expression import isolation]
 \label{prop:expression-import-isolation}
-Remove \Cref{thm:eml-universality} from the available inputs, but keep
-all definitions and the internally proved EML core and Richardson-interface
-results of Sections~\ref{sec:L0}--\ref{sec:strictness}.  Then the following
-parts of the main theorem chain remain provable exactly as stated:
-\begin{enumerate}
-\item the Zeckendorf \(L1\) protocol realization and the monogenic-orbit
-  obstruction in \Cref{thm:zeckendorf-protocol-univ,thm:level-zero-obstruction,cor:level-zero-protocol-dichotomy};
-\item the finite-fiber \(L2\) certificate realization, its finite-state
-  strictness separation, and the two budget corollaries in
-  \Cref{prop:zeckendorf-cert-univ,thm:finite-state-strictness,cor:finite-state-growth-budget,cor:hankel-psd-independent};
-\item the Richardson normal-form obstruction for any finite replacement
-  triple with internally proved real-domain meanings \(\pi\), \(\sin\), and
-  the nonnegative square root, and the printed-root version using
-  \((H_{\mathcal W})\) as supplied by the cited symbolic verification.
-\end{enumerate}
-The only assertion lost is the positive imported sentence that
-\((\eml,1)\) represents the full calculator basis \(\mathcal B_{36}\).
-The finite-fiber clauses in item (2) remain subordinate finite-atomic
-facts: they supply Hankel positivity and finite Prony reconstruction
-after an L1 normalizer has been chosen, while strictness from
-finite-state transfer is carried by \Cref{thm:finite-state-strictness}.
-Thus Odrzywo{\l}ek's theorem is a cited L0 anchor, not a hidden input to
-the L1 separation, the L2 finite-fiber certificate statements, the
-finite-state growth obstruction, or the Richardson obstruction
-interface.
-\end{proposition}
-
-\begin{proof}
-The first item is purely Zeckendorf-theoretic.  The proof of
-\Cref{thm:zeckendorf-protocol-univ} uses the valuation bijection, greedy
-normalization, and ordinary integer arithmetic transported back to stable
-Zeckendorf addresses.  The obstruction
-\Cref{thm:level-zero-obstruction} and its dichotomy corollary use only the
-exponent skeleton of a free monogenic orbit.  No EML representative for any
-operation in \(\mathcal B_{36}\) is cited in those proofs.
-
-The second item is finite-fiber combinatorics over the effective
-resolution data.  The certificate realization uses explicit finite fibers,
-Hankel positivity of the finite atomic moment sequence, and finite Prony
-reconstruction.  Its genericity and dependence only on fiber multisets are
-proved in \Cref{thm:L2-fiber-multiset-factorization,cor:L2-subordinate-role}.
-The finite-state strictness construction changes only the computable
-finite covers over the same normal forms and then estimates the second
-collision moments.  Hence the L2 positive theorem is not being used as the
-strictness engine; the strictness load is exactly the growth-budget
-contradiction in \Cref{thm:finite-state-strictness}.  Again no step invokes
-the external \(\mathcal B_{36}\) representation theorem.
-
-For the third item, the Richardson translation used in
-\Cref{thm:separation} is not the full external compiler.  Its core
-arithmetic and exponential witnesses are proved internally in
-\Cref{prop:internal-core-eml-witnesses,lem:eml-printed-core,lem:eml-real-witness-library}.
-The only non-core real-domain inputs are the three witnesses isolated in
-\Cref{prop:locked-three-witness-interface,thm:minimal-eml-witness-interface}:
-\(\pi\), \(\sin\), and the nonnegative square root.  If those witnesses are
-provided by an internally proved replacement triple, the obstruction follows
-unconditionally from \Cref{prop:three-witness-stability} and
-\Cref{lem:transported-partial-normalizer-obstruction}.  If they are the
-printed roots, \Cref{thm:printed-richardson-witnesses-interface} supplies
-the cited interface \((H_{\mathcal W})\), and
-\Cref{prop:printed-table-needs-analytic-interface,prop:printed-root-no-hidden-oracle}
-prevents replacing that interface by the imported full compiler or by the
-finite string locks.  Therefore removing \Cref{thm:eml-universality}
-removes only the advertised full-basis L0 representation clause and leaves
-the listed separation and obstruction results intact.
-\end{proof}
-
-This proposition is used here exactly as Odrzywo{\l}ek's external
-representation theorem for the stated calculator basis and as the
-background L0 example motivating the hierarchy.  The Richardson
-strictness proof below does not call the full \(\mathcal B_{36}\)
-compiler as an oracle: it uses only the finite witness package isolated
-in \Cref{lem:eml-printed-core,lem:eml-ancillary-certificate,cor:eml-witness-locking}.
-The present article does not reprove the whole representation theorem, and
-none of the theorem-style labels in this section should be read as claiming an
-internal proof of that imported \(36\)-primitive compiler;
-it studies what additional data are needed to pass from such
-existential expression representatives to protocol and certificate
-structures.
-Thus the positive L0 clause and the later obstruction have different
-inputs: full \(\mathcal B_{36}\) universality is imported only as the
-external expression-universality example, whereas the Richardson interface argument is confined to the locked subpackage
-and, for the printed roots, to the three principal-branch identities for
-the printed \(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\) entries stated as
-\((H_{\mathcal W})\) and isolated in
-\Cref{cor:conditional-three-witness-obstruction};
-\Cref{prop:printed-table-needs-analytic-interface} explains why this
-three-witness interface remains an explicit analytic hypothesis rather
-than an internally verified consequence of the printed table alone.
-In the cited arXiv version \(2603.21852\mathrm{v}2\), posted with its
-ancillary Supplementary Information, Table~1 is the
-\(36\)-primitive calculator basis: named constants and variables,
-standard unary elementary functions, and the standard binary
-operations.  Supplementary Information, Part~II, Sections~2.1--2.5,
-is the verification interface used here.  Section~2.1 gives the
-compiler macros into pure EML trees, Section~2.3 records symbolic
-verification under the stated real-domain assumptions, Section~2.4
-prints representative compiled witnesses, and Section~2.5 gives the
-constructive completeness proof sketch for the Table~1 class.  Thus the
-version, public location, and statement imported in
-\Cref{thm:eml-universality} are fixed at the principal-branch
-\(\mathcal B_{36}\) theorem just cited; a different arXiv version or a
-different branch convention is not used silently.  The displayed
-identities above are principal-branch core identities; on the positive
-real axis they reduce to the ordinary real exponential and logarithm.
-The later Richardson obstruction uses a different locked three-witness
-interface, namely \(\pi\), \(\sin\), and the nonnegative real square
-root.
-
-\begin{proposition}[L0 dependency localization]
 \label{prop:L0-dependency-localization}
-The positive L0 assertion and the later Richardson obstruction have the
-following disjoint dependency profiles.
-\begin{enumerate}
-\item The statement that \((\eml,1)\) is expression-universal for the
-  whole basis \(\mathcal B_{36}\) is precisely the imported, versioned
-  result of \Cref{thm:eml-universality}; if that external theorem is
-  not used, the unconditional L0 content retained in this article is
-  only the internal core of \Cref{prop:internal-core-eml-witnesses}.
-\item The proof of the Richardson normalizer obstruction never uses a
-  representative for any member of \(\mathcal B_{36}\) outside the
-  Richardson witness library.  Its unconditional syntactic input is the
-  internally printed core and the finite source-level locks cited in
-  \Cref{prop:external-versus-locked-package}; its only non-core
-  analytic input is either a replacement triple satisfying the three
-  displayed identities of \Cref{thm:separation}, or, for the three
-  printed roots, the hypothesis \((H_{\mathcal W})\).
-\item Consequently, replacing the external \(\mathcal B_{36}\) theorem
-  by the smaller internal core weakens only the positive full-library
-  L0 example.  It does not change the Zeckendorf L1 construction, the
-  finite-fiber L2 construction, the level-zero multiplication
-  obstruction, or the Richardson obstruction under the stated
-  three-witness interface.
-\end{enumerate}
+If the full external \(\mathcal B_{36}\) import is removed, the internal core
+EML identities, the Zeckendorf \(L1\) protocol, the one-orbit obstruction, the
+finite-fibre \(L2\) certificates, and the verified-triple Richardson obstruction
+remain unchanged.
 \end{proposition}
 
 \begin{proof}
-The first item is a restatement of the logical source of
-\Cref{thm:eml-universality}: the proof in this article does not derive
-the Table~1 representatives for all of \(\mathcal B_{36}\), whereas
-\Cref{prop:internal-core-eml-witnesses} gives an explicit internal list
-of the core operations proved from \(\eml\) and \(1\).  The second item is
-checked from the construction used in \Cref{sec:strictness}.  The
-Richardson translation is assembled from the core EML identities, the
-locked finite strings for the three long witnesses, and Richardson's
-undecidability theorem; \Cref{prop:external-versus-locked-package}
-records this inspection after the witness lemmas have been stated.  The
-normal-form contradiction itself is the abstract transported-normalizer
-argument of \Cref{lem:transported-partial-normalizer-obstruction}, so no
-operation such as \(\tan\), \(\arccos\), \(\operatorname{hypot}\), or
-\(\log_x y\) from the remainder of \(\mathcal B_{36}\) can enter the
-proof.  The third item follows formally: the Zeckendorf protocol and the
-finite-fiber certificates are proved in \Cref{thm:zeckendorf-protocol-univ}
-and \Cref{prop:zeckendorf-cert-univ}, and the free-monogenic obstruction
-is proved in \Cref{thm:level-zero-obstruction}; none of
-those statements has \Cref{thm:eml-universality} as a hypothesis.  The
-Richardson add-on keeps exactly the replacement-triple or
-\((H_{\mathcal W})\) interface stated in \Cref{thm:separation}.
+The internal core EML identities are \Cref{prop:internal-core-eml-witnesses} and
+\Cref{lem:eml-printed-core}.  The other four claims are proved in
+\Cref{sec:L1,sec:L2,sec:strictness}; none has \Cref{thm:eml-universality} as a
+hypothesis.
 \end{proof}
-
-The part of the EML calculus needed as an internal fallback is much
-smaller than the imported \(36\)-primitive theorem.  The following
-proposition records the self-contained principal-branch witnesses that
-are proved in this article and used later in the finite Richardson
-subpackage.
 
 \begin{proposition}[Internal core EML witnesses]
 \label{prop:internal-core-eml-witnesses}
-In the principal-branch EML semantics of \Cref{def:eml}, the pure EML
-grammar generated by \(1\), variables, and \(\eml\) represents the
-following functions on the indicated real domains:
-\[
-  e^x,
-  \qquad \log x\ (x>0),
-  \qquad 0,
-  \qquad -x,
-  \qquad x+y,
-  \qquad x-y,
-  \qquad xy,
-  \qquad \log 2 .
-\]
-Consequently, even if the external \(\mathcal B_{36}\) assertion is
-viewed only as background, the manuscript contains a nonempty internal
-L0 core sufficient for the algebraic constructors used in the later
-Richardson witness library, except for the three explicitly isolated
-non-core witnesses \(\pi\), \(\sin\), and the nonnegative square root.
+In the principal-branch EML semantics, pure EML terms over \((\eml,1)\) represent
+the constant \(1\), the identity input, \(\exp\), positive logarithm, negation,
+addition, subtraction, multiplication, division by a nonzero real, rational
+constants, \(\log2\), and positive square root.
 \end{proposition}
 
 \begin{proof}
-The exponential and logarithm are the displayed identities
-\eqref{eq:eml-exp} and \eqref{eq:eml-ln}; on the positive real axis the
-principal logarithm is the ordinary real logarithm.  The constant
-\(e=\eml(1,1)\) is \eqref{eq:eml-e}.  Hence
-\[
-  0=\eml(1,\eml(1,1))=e-\operatorname{Log}e.
-\]
-The explicit unconditional macros \(E,L,D,P,N,A,S\) are printed and
-proved in \Cref{lem:eml-printed-core}.  That lemma expands them to pure
-EML trees and verifies, from the defining principal-branch semantics,
-the all-real identities for negation, addition, and subtraction.  Applying
-the addition witness to \(1\) and \(1\) gives the represented constant
-\(2\), and then applying the positive-real logarithm witness gives
-\(\log 2\).
-
-It remains only to record multiplication without importing any non-core
-root.  Put
-\[
-  T(a,b)=E(A(L(a),L(b)))\qquad(a>0,b>0),
-\]
-so \(T(a,b)=ab\) for positive real inputs by the already proved
-exponential, logarithm, and addition witnesses.  Also put
-\(Q(u)=E(u)>0\) and \(P(u)=S(E(u),u)>0\).  Since
-\(u=Q(u)-P(u)\), the pure EML macro
-\[
-  M(u,v)=A\Bigl(S\bigl(T(Q(u),Q(v)),
-        A(T(Q(u),P(v)),T(P(u),Q(v)))\bigr),
-        T(P(u),P(v))\Bigr)
-\]
-has value
-\((Q(u)-P(u))(Q(v)-P(v))=uv\) for all real \(u,v\).  All inputs to
-\(T\) in this formula are positive by construction, so the principal
-logarithm is used only on its stated real domain.  Thus the listed core
-functions are proved internally and do not use the three non-core roots
-\(W_{\pi}\), \(W_{\sin}\), and \(W_{\sqrt{}}\).  The full
-\(\mathcal B_{36}\) clause remains the imported background anchor of
-\Cref{thm:eml-universality}.
+The explicit macros and real-domain calculations are printed in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}.  Those proofs use only
+the definition of \(\eml\), positivity of the relevant inputs, and elementary
+real algebra.
 \end{proof}
 
-The induced syntax has the form
-\begin{equation}\label{eq:eml-grammar}
-  S\longrightarrow 1 \mid x_i \mid \eml(S,S),
-\end{equation}
-where the \(x_i\) are input variables.
-
 \begin{definition}[Expression universality]\label{def:expr-univ}
-Let \(\mathcal F\) be a family of functions.  Let
-\(\sigma\colon\dom(\sigma)\subseteq D^2\to D\) be a partial binary
-operation on a set \(D\), and let \(c_0\in D\).  Terms in the
-grammar
-\[
-  S\longrightarrow c_0 \mid x_i \mid \sigma(S,S).
-\]
-are interpreted on their admissible domains.  We say that the pair
-\((\sigma,c_0)\) is \emph{expression-universal for
-\(\mathcal F\)} if, for every \(f\in\mathcal F\), some such term
-agrees with \(f\) on the specified domain of \(f\).
+A system is \(L0\)-expression-universal for a signature if every primitive
+operation in the signature has at least one term representative over the chosen
+primitive operations on its stated domain.  No normal form, equality procedure,
+or fibre certificate is part of the definition.
 \end{definition}
 
-The definition is deliberately existential.  It asserts that a term
-exists, but does not select one.  The grammar
-\eqref{eq:eml-grammar} therefore gives no word problem, no canonical
-representative, and no internal operation on semantic equivalence
-classes.  For example, the identity function can be written as
-\[
-  x=\eml(\operatorname{Log}x,\eml(1,x))
-\]
-on the corresponding principal domain.  Substituting the EML term
-for \(\operatorname{Log}x\) from \eqref{eq:eml-ln} gives a tree in
-the grammar.  Further representatives are obtained by inserting
-cancelling subexpressions.
-
 \begin{remark}\label{rem:eml-variants}
-Odrzywo{\l}ek also gives closely related one-operation
-representations, for instance
-\(\mathrm{edl}(x,y)=e^x/\ln y\) paired with \(e\), and the negated
-form \(-\eml(y,x)=\ln x-e^y\) paired with \(-\infty\)
-\cite{Odrzywolek2026SingleBinaryOperator}.  The phenomenon is a feature of the
-\(\exp\)--\(\log\) pair rather than of one isolated formula.
+All EML claims in this article use the principal-branch convention of
+\Cref{def:eml}; no branch-free complex calculus is asserted.
 \end{remark}
 
 \begin{remark}\label{rem:no-canon}
-Expression universality supplies no analytic normalization.  This is
-not merely a missing step in the construction: by
-\Cref{thm:separation}, with \((H_{\mathcal W})\) supplied by
-\Cref{thm:printed-richardson-witnesses-interface}, the EML
-representatives obtained from Richardson's elementary fragment cannot
-carry a computable canonical form for their transported real semantics.
+Expression universality alone does not choose canonical representatives.  This
+is the gap separated by the Richardson obstruction in \Cref{thm:separation}.
 \end{remark}

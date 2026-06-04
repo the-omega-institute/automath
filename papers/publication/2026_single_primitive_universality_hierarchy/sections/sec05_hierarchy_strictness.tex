@@ -1,0 +1,597 @@
+\section{Strictness of the hierarchy}\label{sec:strictness}
+
+This section proves the two strictness mechanisms used by
+\Cref{thm:main-hierarchy}.  The Richardson part is stated with a verified
+finite EML triple as its load-bearing hypothesis.  The printed roots
+\(U_{47},U_{111},U_{126}\) appear only as the conditional cited specialization
+\((H_{\mathcal W})\) from \Cref{ass:HW}.
+
+\subsection{The Richardson obstruction}
+
+Let \(\mathcal R\) be Richardson's real elementary language from
+\cite[pp.~514, 520, Theorem~2]{Richardson1968}: one real variable, rational
+constants, \(\log2\), \(\pi\), \(+,-,\times\), composition, \(\exp\), \(\sin\),
+and a unary symbol \(\mu\) satisfying \(\mu(x)=|x|\) for \(x\ne0\).  We use the
+concrete representative \(\mu_0(x)=\sqrt{x^2}\).
+
+\begin{lemma}[Richardson absolute-value interface]
+\label{lem:richardson-punctured-mu-reduction}
+Richardson's theorem applies to the concrete total completion
+\(\mu_0(x)=\sqrt{x^2}\).  Hence any exact EML translation of rational constants,
+\(\log2\), \(\pi\), \(+,-,\times\), \(\exp\), \(\sin\), and
+\(x\mapsto\sqrt{x^2}\) carries Richardson's identity-to-zero problem into the
+translated EML fragment.
+\end{lemma}
+
+\begin{proof}
+Richardson assumes only that \(\mu(x)=|x|\) for \(x\ne0\)
+\cite[pp.~514, 520]{Richardson1968}.  The function \(\mu_0(x)=\sqrt{x^2}\)
+satisfies this condition.  Therefore his undecidability theorem applies to the
+language with this concrete completion.  Replacing each \(\mu(F)\) by the EML
+translation of \(\sqrt{F^2}\) is an effective syntactic reduction once the
+listed primitive translations are exact on their stated real domains.
+\end{proof}
+
+\begin{lemma}[Richardson identity-to-zero theorem]
+\label{lem:richardson-fragment}
+The identity-to-zero problem for \(\mathcal R\) with \(\mu=
+\mu_0\) is undecidable.
+\end{lemma}
+
+\begin{proof}
+This is Richardson's Theorem~2, instantiated by
+\Cref{lem:richardson-punctured-mu-reduction}; see
+\cite[Theorem~2, p.~520]{Richardson1968}.
+\end{proof}
+
+\begin{theorem}[Abstract normalizer obstruction]
+\label{thm:abstract-normalizer-obstruction}
+Let \(\tau\colon\mathcal R\to\mathcal T\) be an effective translation into a
+computable term class whose real semantics preserve domains and values:
+\(\dom\llbracket\tau(E)\rrbracket=\dom(E)\) and
+\(\llbracket\tau(E)\rrbracket(x)=E(x)
+\) on that domain.  Then \(\tau(\mathcal R)\) admits no total computable
+normalizer into finite objects with decidable equality that identifies exactly
+equal transported real functions.
+\end{theorem}
+
+\begin{proof}
+If such a normalizer existed, compute \(\tau(E)\) and compare its normal form
+with that of \(\tau(0)\).  The comparison would decide whether \(E\) is zero on
+its Richardson domain, contradicting \Cref{lem:richardson-fragment}.
+\end{proof}
+
+\begin{lemma}[Transported zero-test obstruction]
+\label{lem:transported-partial-normalizer-obstruction}
+The conclusion of \Cref{thm:abstract-normalizer-obstruction} holds for every
+domain-preserving, value-preserving EML translation of \(\mathcal R\).
+\end{lemma}
+
+\begin{proof}
+Apply \Cref{thm:abstract-normalizer-obstruction} with \(\mathcal T\) equal to the
+translated EML fragment.
+\end{proof}
+
+\begin{lemma}[Printed EML core witnesses]
+\label{lem:eml-printed-core}
+In the principal-branch EML semantics of \Cref{def:eml}, the following pure EML
+macros represent the indicated real functions:
+\[
+  E(u)=\eml(u,1)=e^u,
+  \qquad
+  L(u)=\eml\bigl(1,E(\eml(1,u))\bigr)=\log u\quad(u>0),
+\]
+\[
+  D(a,b)=\eml(L(a),E(b))=a-b\quad(a>0,
+b\in\RR),
+\]
+\[
+  P(u)=\eml(u,E(u))=e^u-u>0,
+  \quad
+  N(u)=D(P(u),E(u))=-u,
+\]
+\[
+  A(u,v)=D(E(u),D(P(u),v))=u+v,
+  \qquad S(u,v)=A(u,N(v))=u-v .
+\]
+\end{lemma}
+
+\begin{proof}
+The EML semantics are \(\eml(x,y)=e^x-\operatorname{Log}y\) when the principal
+logarithm is defined.  Since the second input of \(E(u)\) is \(1\),
+\(E(u)=e^u\).  If \(u>0\), then \(\eml(1,u)=e-\log u\) and \(E(\eml(1,u))=e^e/u>0\), so
+\(L(u)=e-\log(e^e/u)=\log u\).  Thus
+\(D(a,b)=\exp(\log a)-\log(e^b)=a-b\) for \(a>0\).  The function
+\(P(u)=e^u-u\) has minimum \(1\) at \(u=0\), hence is positive.  Substituting in
+\(D\) gives \(N(u)=-u\), then \(A(u,v)=u+v\), and finally \(S(u,v)=u-v\).
+\end{proof}
+
+\begin{theorem}[Self-contained core EML witness package]
+\label{lem:eml-real-witness-library}
+The macros of \Cref{lem:eml-printed-core} extend internally to finite pure EML
+terms representing multiplication, division by a nonzero real, rational
+constants, \(\log2\), and the positive square root:
+\[
+  T(u,v)=E(A(L(u),L(v)))=uv\quad(u,v>0),
+  \qquad R_+(u)=E(N(L(u)))=1/u\quad(u>0),
+\]
+\[
+  Q(u)=E(u)>0,
+  \qquad P(u)=E(u)-u>0,
+\]
+\[
+  M(u,v)=(Q(u)-P(u))(Q(v)-P(v))=uv,
+  \quad
+  J(u,v)=M\bigl(u,M(v,R_+(M(v,v)))\bigr)=u/v\ (v\ne0),
+\]
+and
+\[
+  G(u)=E(J(L(u),A(1,1)))=\sqrt u\quad(u>0).
+\]
+The value at \(0\) for the nonnegative square root, the constant \(\pi\), and
+\(\sin\) on \(\RR\) are not supplied by this core package.
+\end{theorem}
+
+\begin{proof}
+For positive inputs, \(T(u,v)=\exp(\log u+\log v)=uv\) and
+\(R_+(u)=\exp(-\log u)=1/u\).  Since \(Q(u)-P(u)=u\), expanding the four
+positive products gives \(M(u,v)=uv\).  If \(v\ne0\), then \(M(v,v)=v^2>0\), so
+\(J(u,v)=u\,v/v^2=u/v\).  Finally
+\(G(u)=\exp((\log u)/2)=\sqrt u\) for \(u>0\).  Rational constants are obtained
+from \(1\) by repeated addition, negation, and division by nonzero integers;
+\(\log2=L(A(1,1))\).
+\end{proof}
+
+\begin{lemma}[Source-locked printed strings]
+\label{lem:eml-ancillary-certificate}
+\label{lem:eml-source-level-check}
+\label{lem:eml-expanded-witness-strings}
+The symbols \(U_{47},U_{111},U_{126}\) denote fixed finite pure EML strings from
+the cited arXiv v2 ancillary record in \Cref{ass:HW}.  This syntactic lock does
+not prove their real-domain identities.
+\end{lemma}
+
+\begin{proof}
+The strings are specified by their public versioned table locations in
+\Cref{ass:HW}.  A finite string specification proves only syntactic identity of
+the strings so named.  Its semantic content is exactly the separate analytic
+assertion \((H_{\mathcal W})\).
+\end{proof}
+
+\begin{proposition}[Printed witness certificate boundary]
+\label{prop:printed-witness-certificate-boundary}
+\label{prop:printed-table-needs-analytic-interface}
+\label{prop:printed-root-conditional-only}
+\label{prop:printed-root-no-hidden-oracle}
+The finite table positions and string locks for \(U_{47},U_{111},U_{126}\) are
+not a proof that these strings denote \(\pi\), sine, and nonnegative square root.
+The named-root Richardson route is valid exactly under \((H_{\mathcal W})\).
+\end{proposition}
+
+\begin{proof}
+A finite EML string is syntax.  The Richardson translation requires the three
+real-domain semantic identities displayed in \Cref{ass:HW}.  Therefore table
+membership can identify the strings but cannot replace the analytic identities.
+With \((H_{\mathcal W})\), those identities are hypotheses; without it, the
+named-root branch lacks the required witness interface.
+\end{proof}
+
+\begin{theorem}[Conditional cited Richardson witness interface]
+\label{thm:printed-richardson-witnesses-interface}
+Assume \((H_{\mathcal W})\).  Then the source-locked printed roots
+\((W_{\pi},W_{\sin},W_{\sqrt{}})=(U_{47},U_{111},U_{126})\) form a finite EML
+witness triple for \(\pi\), sine on \(\RR\), and nonnegative square root on
+\(\RR_{\ge0}\).
+\end{theorem}
+
+\begin{proof}
+This is precisely the content of \((H_{\mathcal W})\), with the strings locked
+by \Cref{lem:eml-ancillary-certificate}.
+\end{proof}
+
+\begin{proposition}[Locked three-witness interface]
+\label{prop:locked-three-witness-interface}
+\label{prop:three-witness-stability}
+\label{prop:eml-certificate-reproducibility}
+The Richardson translation uses only the internal core witnesses and one finite
+triple \((\mathsf P,\mathsf S,\mathsf R)\) satisfying the three real-domain
+identities for \(\pi\), sine, and nonnegative square root.
+\end{proposition}
+
+\begin{proof}
+The construction in \Cref{lem:richardson-translation} translates each source
+constructor by the corresponding core witness, except for \(\pi\), \(\sin\), and
+\(\sqrt{\,}\), where it uses \((\mathsf P,\mathsf S,\mathsf R)\).  No other EML
+identity is referenced.
+\end{proof}
+
+\begin{theorem}[Minimal analytic witness interface]
+\label{thm:minimal-eml-witness-interface}
+\label{thm:richardson-interface-boundary}
+\label{thm:no-unverified-richardson-instance}
+\label{prop:richardson-witness-dependency-cut}
+\label{prop:no-third-richardson-interface}
+A finite pure EML triple with proved identities for \(\pi\), sine on \(\RR\), and
+nonnegative square root on \(\RR_{\ge0}\) is sufficient for the Richardson
+normalizer obstruction, and some such proved interface is necessary for the EML
+translation used in this paper.  In particular, neither the imported \(L0\)
+compiler nor the printed table alone supplies a third route.
+\end{theorem}
+
+\begin{proof}
+Sufficiency is \Cref{thm:replacement-triple-richardson-unconditional}.  For
+necessity relative to this translation scheme, inspect the source constructors:
+Richardson's language contains the constant \(\pi\), the unary operation
+\(\sin\), and the punctured absolute-value symbol, here represented by
+\(x\mapsto\sqrt{x^2}\).  The core package supplies all other constructors but
+not these three identities.  Thus any proof of correctness for this translation
+must supply exactly these three semantic facts, either by an internally proved
+replacement triple or by the conditional hypothesis \((H_{\mathcal W})\).
+\end{proof}
+
+\begin{lemma}[Zero-domain EML absolute-value witness]
+\label{lem:eml-zero-absolute-witness}
+If \(\mathsf R(t)=\sqrt t\) for \(t\ge0\), then
+\(\Abs(u)=\mathsf R(M(u,u))\) is defined for every real \(u\) and equals
+\(|u|\).
+\end{lemma}
+
+\begin{proof}
+By \Cref{lem:eml-real-witness-library}, \(M(u,u)=u^2\ge0\).  Hence
+\(\Abs(u)=\sqrt{u^2}=|u|\).
+\end{proof}
+
+\begin{corollary}[Finite Richardson witness library]
+\label{cor:eml-witness-locking}
+Given a finite triple \((\mathsf P,\mathsf S,\mathsf R)\) satisfying the three
+real-domain identities, the core witnesses of \Cref{lem:eml-printed-core,lem:eml-real-witness-library}
+and the absolute-value composite of \Cref{lem:eml-zero-absolute-witness} form a
+finite witness library for every primitive of \(\mathcal R\).
+\end{corollary}
+
+\begin{proof}
+The core witnesses give rational constants, \(\log2\), arithmetic,
+composition, and \(\exp\).  The triple gives \(\pi\), \(\sin\), and
+\(\sqrt{\,}\); \Cref{lem:eml-zero-absolute-witness} gives \(\mu_0\).
+\end{proof}
+
+\begin{theorem}[Verified finite Richardson fragment]
+\label{thm:verified-finite-richardson-fragment}
+For every finite triple \((\mathsf P,\mathsf S,\mathsf R)\) satisfying the three
+real-domain identities, the language \(\mathcal R\) has an effective,
+domain-preserving, value-preserving translation into pure EML terms.
+\end{theorem}
+
+\begin{proof}
+This is \Cref{lem:richardson-translation} without the quantitative bounds.
+\end{proof}
+
+\begin{lemma}[Effective Richardson translation]
+\label{lem:richardson-translation}
+Let \((\mathsf P,\mathsf S,
+\mathsf R)\) be a finite pure EML triple satisfying the three real-domain
+identities.  There is an effective translation \(\tau_{\mathsf P,\mathsf S,
+\mathsf R}\colon\mathcal R\to\) pure EML terms such that, for every
+\(E\in\mathcal R\),
+\[
+  \dom\llbracket\tau_{\mathsf P,\mathsf S,
+  \mathsf R}(E)\rrbracket_{\RR}=\dom(E),
+  \qquad
+  \llbracket\tau_{\mathsf P,\mathsf S,
+  \mathsf R}(E)\rrbracket_{\RR}(x)=E(x)
+\]
+for all \(x\in\dom(E)\).  Moreover \(|\tau(E)|\le K^{2|E|}\) and
+\(\operatorname{depth}\tau(E)\le K|E|\) for a constant \(K\) depending only on
+the finite witness library and the rational-constant expansion convention.
+\end{lemma}
+
+\begin{proof}
+Define \(
+\tau\) by structural recursion.  Variables map to variables.  Rational
+constants and \(\log2\) use \Cref{lem:eml-real-witness-library}; \(\pi\) uses
+\(\mathsf P\).  The constructors \(+,-,\times,\exp\) use the corresponding core
+witnesses, \(\sin\) uses \(\mathsf S\), composition is syntactic substitution,
+and \(\mu(F)\) is translated as \(\mathsf R(M(\tau(F),\tau(F)))\).  The
+translation is effective because all witnesses are finite.
+
+The domain and value assertion is proved by induction on the expression tree.
+The primitive cases are exactly the proved real-domain identities in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library} and in the supplied
+triple.  The composition step is the definition of partial-function
+composition.  The \(\mu\)-step is \Cref{lem:eml-zero-absolute-witness}.  This
+proves exact agreement on real domains.
+
+For the size bound, choose \(K\) larger than the size, depth, and input-leaf
+multiplicity of every witness in the finite library and large enough for the
+chosen rational-constant expansions.  Substituting translated children into a
+fixed witness multiplies size by at most a factor bounded by \(K\) and adds at most \(K\) to depth;
+composition multiplies sizes and adds depths.  Induction on \(|E|\) gives the
+displayed bounds after increasing \(K\) once.
+\end{proof}
+
+\begin{proposition}[Quantitative Richardson interface]
+\label{prop:richardson-translation-bookkeeping}
+The translation of \Cref{lem:richardson-translation} has exponential tree-size
+growth and linear substitution-depth growth in the source expression size, with
+constants depending only on the finite witness library.
+\end{proposition}
+
+\begin{proof}
+This is the final paragraph of the proof of \Cref{lem:richardson-translation}.
+\end{proof}
+
+\begin{theorem}[Unconditional replacement-triple Richardson obstruction]
+\label{thm:replacement-triple-richardson-unconditional}
+Let \((\mathsf P,\mathsf S,\mathsf R)\) be any specified finite pure EML triple
+for which the real-domain identities
+\[
+  \mathsf P=\pi,
+  \qquad
+  \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad
+  \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0})
+\]
+have been proved.  Then the translated Richardson fragment admits no computable
+semantic normalizer into finite objects with decidable equality.  This theorem
+does not use \((H_{\mathcal W})\), \(U_{47}\), \(U_{111}\), or \(U_{126}\).
+\end{theorem}
+
+\begin{proof}
+By \Cref{lem:richardson-translation}, the verified triple gives an effective,
+domain-preserving, value-preserving translation of \(\mathcal R\) into pure EML
+terms.  Applying \Cref{lem:transported-partial-normalizer-obstruction} to this
+translation gives the normalizer contradiction.  The only non-core analytic
+inputs used are the three displayed identities for the specified triple.
+\end{proof}
+
+\begin{theorem}[Verified-triple branch and conditional printed-root specialization]
+\label{thm:printed-root-richardson-conditional-clause}
+\label{thm:conditional-richardson-witness-package}
+\label{thm:exact-richardson-witness-conditionality}
+\label{thm:exact-source-boundary-richardson-branch}
+For every verified finite triple \((\mathsf P,\mathsf S,\mathsf R)\),
+\Cref{thm:replacement-triple-richardson-unconditional} gives the Richardson
+normalizer obstruction unconditionally.  For the named printed roots
+\((U_{47},U_{111},U_{126})\), the same conclusion is only the conditional
+specialization obtained by assuming \((H_{\mathcal W})\).  Without
+\((H_{\mathcal W})\), the manuscript asserts only that these are fixed finite
+strings.
+\end{theorem}
+
+\begin{proof}
+The verified-triple sentence is exactly
+\Cref{thm:replacement-triple-richardson-unconditional}.  Under
+\((H_{\mathcal W})\), \Cref{thm:printed-richardson-witnesses-interface} makes the
+printed roots a verified triple, so the same theorem applies.  Without
+\((H_{\mathcal W})\), \Cref{prop:printed-witness-certificate-boundary} says the
+printed roots have only syntactic status.
+\end{proof}
+
+\begin{corollary}[Richardson witness alternatives]
+\label{cor:richardson-witness-alternative}
+\label{cor:conditional-three-witness-obstruction}
+\label{cor:no-unconditional-named-root-consequence}
+There are exactly two Richardson routes in this paper: an unconditional route
+through any verified replacement triple, and a conditional named-root route
+through \((H_{\mathcal W})\).  There is no unconditional named-root consequence
+proved here.
+\end{corollary}
+
+\begin{proof}
+This is \Cref{thm:printed-root-richardson-conditional-clause} restated as
+alternatives.
+\end{proof}
+
+\begin{theorem}[Final two-branch Richardson obstruction]
+\label{thm:separation}
+The Richardson obstruction used in the hierarchy is the following two-branch
+statement.
+\begin{enumerate}
+\item If a finite pure EML triple \((\mathsf P,\mathsf S,\mathsf R)\) is supplied
+  with proved identities for \(\pi\), sine on \(\RR\), and nonnegative square
+  root on \(\RR_{\ge0}\), then the pure EML translation of \(\mathcal R\) has no
+  computable semantic normalizer into finite objects with decidable equality.
+\item If \((H_{\mathcal W})\) is assumed, the same conclusion holds for the
+  named printed roots \((U_{47},U_{111},U_{126})\).  Without that assumption, the
+  named-root clause is not an unconditional theorem of this paper.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The first branch is \Cref{thm:replacement-triple-richardson-unconditional}.  The
+second branch follows by combining \Cref{ass:HW,thm:printed-richardson-witnesses-interface}
+with the first branch.  The final sentence is
+\Cref{prop:printed-witness-certificate-boundary}.
+\end{proof}
+
+\begin{corollary}[Strict expression/protocol separation]
+\label{cor:strict-L0-L1}
+The imported \(L0\) expression-universality result for \((\eml,1)\) does not
+provide a computable semantic normalizer for the translated Richardson fragment.
+\end{corollary}
+
+\begin{proof}
+If it did, it would contradict \Cref{thm:separation} on any verified-triple
+Richardson instance.  For the named printed roots this conclusion is conditional
+on \((H_{\mathcal W})\), exactly as stated in \Cref{thm:separation}.
+\end{proof}
+
+\begin{theorem}[Transported Richardson boundary]
+\label{thm:transported-richardson-boundary}
+The Richardson obstruction concerns transported real semantics on the verified
+Richardson fragment only.  It is not a decidability statement for arbitrary raw
+EML terms on complex principal-branch domains.
+\end{theorem}
+
+\begin{proof}
+Every equality used in \Cref{lem:richardson-translation} is an equality of
+partial real functions on the domains of the source Richardson expressions.
+The proof never constructs or compares arbitrary EML terms outside that
+translated fragment.
+\end{proof}
+
+\begin{proposition}[External universality versus verified obstruction]
+\label{prop:external-versus-locked-package}
+\label{thm:no-hidden-L0-semantic-normalizer}
+The Odrzywo{\l}ek \(L0\) import and the Richardson obstruction have different
+logical roles: the former supplies expression representatives for a calculator
+basis, while the latter requires the explicit three-witness interface of
+\Cref{thm:minimal-eml-witness-interface}.
+\end{proposition}
+
+\begin{proof}
+The \(L0\) import is \Cref{thm:eml-universality}; the obstruction is
+\Cref{thm:separation}.  The proof of \Cref{thm:separation} cites only the core
+EML witnesses, the three-witness interface, and Richardson's theorem.
+\end{proof}
+
+\subsection{Finite-fibre transfer strictness}
+
+\begin{proposition}[Finite-fibre certificates and transfer obstruction]
+\label{prop:L2-generic-vs-structural}
+Finite-fibre certificates are fixed-resolution finite-atomic data.  A
+finite-state transfer formula in the resolution variable is extra structure.
+\end{proposition}
+
+\begin{proof}
+This is \Cref{prop:L2-novelty-finite-state-separation}.
+\end{proof}
+
+\begin{theorem}[Finite-state transfer is the \texorpdfstring{\(L2\)}{L2} novelty]
+\label{thm:L2-finite-state-novelty-spine}
+The non-generic \(L2\) strictness claim is the separation between finite-fibre
+certificates and finite-state transfer, not Hankel positivity or Prony
+reconstruction.
+\end{theorem}
+
+\begin{proof}
+Hankel positivity and Prony reconstruction hold for all finite fibres by
+\Cref{thm:hankel-psd,thm:prony}.  Finite-state transfer can fail by
+\Cref{thm:finite-state-strictness}.
+\end{proof}
+
+\begin{definition}[Computable finite-fibre cover]
+\label{def:computable-cover}
+A computable finite-fibre cover of the Zeckendorf resolution data is obtained by
+replacing each finite fibre of \(\Fold_m\) by a computably specified nonempty
+finite set, without changing the normal-form set \(X_m\) or any readout on
+normal forms.
+\end{definition}
+
+\begin{lemma}[Covers preserve readouts]
+\label{lem:cover-preserves-protocol}
+Computable finite-fibre covers preserve the Zeckendorf normal forms and the
+compiled \(L1\) readouts.
+\end{lemma}
+
+\begin{proof}
+The cover changes only the number of certificate points over a fixed normal
+form.  Projection to the normal form is unchanged, so every operation and
+readout defined on normal forms is unchanged.
+\end{proof}
+
+\begin{theorem}[Computable covers are computable fibre-size data]
+\label{thm:finite-fiber-cover-realization}
+Specifying a computable finite-fibre cover is equivalent to specifying a
+computable positive integer fibre size over each normal form at each resolution.
+\end{theorem}
+
+\begin{proof}
+Given a cover, count the finite fibres effectively.  Given computable positive
+sizes, replace the fibre over each normal form by \(\{1,
+\ldots,d\}\).  These
+constructions are inverse up to relabelling of certificate points.
+\end{proof}
+
+\begin{theorem}[Main-article boundary for finite-fibre refinements]
+\label{thm:L2-main-article-boundary}
+Only cover data that leave normal forms fixed are used in this article.  Any
+intrinsic asymptotic theory of Zeckendorf fibre multiplicities is outside the
+main theorem chain.
+\end{theorem}
+
+\begin{proof}
+All results here use \Cref{def:computable-cover}, whose projection to
+\(X_m\) is fixed.  No proof changes the stable normal-form system or uses an
+asymptotic formula for intrinsic Zeckendorf fibres.
+\end{proof}
+
+\begin{theorem}[Cover-only boundary of finite-state obstruction]
+\label{prop:cover-only-strictness-boundary}
+\label{thm:one-spike-finite-state-boundary}
+The one-spike construction is sharp for the cover model: it preserves all
+normal-form readouts and changes only one finite certificate fibre at each
+resolution, yet it can realize any computable second-moment spike of the form
+\((a_m+1)^2+F_{m+2}-1\).
+\end{theorem}
+
+\begin{proof}
+This is the construction in \Cref{thm:L2-finite-fiber-no-transfer-content}.
+Only one fibre is enlarged, and \Cref{lem:cover-preserves-protocol} proves that
+readouts are preserved.
+\end{proof}
+
+\begin{theorem}[Intrinsic fold asymptotics are split]
+\label{thm:intrinsic-fold-asymptotics-split}
+The factorial one-spike obstruction does not assert an intrinsic asymptotic law
+for the original Zeckendorf fibres.  It is a statement about computable
+finite-fibre covers.
+\end{theorem}
+
+\begin{proof}
+The proof of \Cref{thm:L2-finite-fiber-no-transfer-content} deliberately alters
+cover multiplicities.  It leaves the original fold map untouched.
+\end{proof}
+
+\begin{theorem}[Cover finite-fibre certificates do not force finite-state transfer]
+\label{thm:finite-state-strictness}
+There is a computable finite-fibre cover of the Zeckendorf \(L1\) protocol whose
+finite-fibre certificates exist at every resolution but whose second collision
+moment has no fixed finite-state transfer formula.
+\end{theorem}
+
+\begin{proof}
+Apply \Cref{thm:L2-finite-fiber-no-transfer-content} with \(a_m=m!\).  The cover
+is computable and preserves readouts by \Cref{lem:cover-preserves-protocol}.  Its
+second moment grows faster than every exponential, whereas every finite-state
+transfer sequence is exponentially bounded by
+\Cref{prop:finite-state-coefficient-budget}.
+\end{proof}
+
+\begin{proposition}[Finite prefixes do not certify transfer]
+\label{prop:finite-prefix-no-transfer-certification}
+No bounded initial window of finite-fibre certificate data can certify
+finite-state transfer for all later resolutions.
+\end{proposition}
+
+\begin{proof}
+Given any bound \(M\), choose a one-spike cover with \(a_m=1\) for
+\(m\le M\) and \(a_m=m!\) for \(m>M\).  It agrees with the unspiked data on the
+initial window but violates the finite-state exponential budget later.
+\end{proof}
+
+\begin{theorem}[Budget spine for \texorpdfstring{\(L2\)}{L2} strictness]
+\label{thm:L2-budget-spine}
+The \(L2\) strictness obstruction is exactly a growth-budget obstruction:
+finite-state transfer sequences obey the exponential bound of
+\Cref{prop:finite-state-coefficient-budget}, while computable finite-fibre
+covers can violate it.
+\end{theorem}
+
+\begin{proof}
+The budget is \Cref{prop:finite-state-coefficient-budget}; the violating cover
+is \Cref{thm:finite-state-strictness}.
+\end{proof}
+
+\begin{corollary}[Finite-state growth budget]
+\label{cor:finite-state-growth-budget}
+Every finite-state transfer formula gives at most exponential growth in the
+resolution parameter.
+\end{corollary}
+
+\begin{proof}
+This is the exponential-bound clause of \Cref{prop:finite-state-coefficient-budget}.
+\end{proof}
+
+
+
