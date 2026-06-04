@@ -118,6 +118,91 @@ claims into accepted theory.  The automath layer is therefore a publication
 compiler: it packages the source-theory interface, finite witnesses, route state,
 and submission boundary without merging those evidence axes.
 
+\begin{definition}[Architecture-axis map]
+\label{def:architecture-axis-map}
+The compiler architecture uses five disjoint evidence axes.  An accepted claim may
+read evidence from an axis only at the admissible evidence level shown in
+Table~\ref{tab:architecture-axis-map}; the negative boundary in the last column
+is part of the claim certificate and cannot be discharged by prose from another
+axis.
+\begin{table}[h]
+\centering
+\caption{Architecture axes, admissible evidence, and negative boundaries.}
+\label{tab:architecture-axis-map}
+\small
+\begin{tabularx}{\textwidth}{p{.16\textwidth}p{.27\textwidth}p{.27\textwidth}X}
+\toprule
+Axis & Role in this paper & Admissible evidence & Negative boundary \\
+\midrule
+BEDC source theory & finite-kernel theory, proof obligations, and implementation
+contracts & pinned source paths, commits, imported labels, bounded summaries, and
+source-interface records & not a publication acceptance record, not a fresh rebuild,
+and not a complete BEDC exposition \\
+Lean markers & formal-verification records for named obligations & recorded build,
+axiom-purity, marker-existence, or source-interface rows when named by the package &
+not object-language closure, not discovery by itself, and not proof of unrelated
+claims \\
+Finite witnesses & manifest/evaluator substrate evidence for artifacts and package
+certificates & manifest rows, evaluator outcomes, bundled snapshots, verifier logs,
+file digests, and limitation ledgers & not semantic universality, not whole-tree
+dynamic validation, and not an unbounded artifact rerun \\
+Agents & proposal, search, review, ranking, and repair assistance & advisory drafts,
+review reports, scheduler scores, and gate-input suggestions after being recorded
+as such & not proof evidence, not human promotion, not novelty certification, and
+not gate passage \\
+Automath publication compiler & intake, route, overlap, submission-pack, and support
+surface governance & promotion records, active-paper markers, overlap ledgers,
+submission-interface maps, digest manifests, command logs, and upload-or-archive
+records when present & not the whole mathematical contribution, not venue
+acceptance, and not authority to merge evidence axes \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\end{definition}
+
+\begin{proposition}[Axis non-escalation]
+\label{prop:architecture-axis-non-escalation}
+In any record-gate-sound package using Definition~\ref{def:architecture-axis-map},
+passage or evidence on one architecture axis cannot certify a load-bearing claim
+whose claim kind requires another axis.  More precisely, if a claim certificate
+uses an axis $A$ but its stronger reading needs an evidence item or negative-boundary
+discharge listed only on a different axis $A'$, then the stronger reading is not
+accepted unless the package contains a separate submitted coordinate for $A'$ and
+the gates assigned to that coordinate pass.  Consequently
+Theorem~\ref{thm:publication-safety-interface} constructs only finite publication
+certificates whose axis coordinates are explicitly present in the submitted support
+surface; it does not infer BEDC closure from Lean markers, artifact semantics from
+manifest rows, proof evidence from agents, venue upload from automath route state,
+or support-surface availability from local bundle paths.
+\end{proposition}
+
+\begin{proof}
+The operational interface records a claim by finite coordinates: claim kind,
+evidence surface, evidence level, pass records assigned by $\Gamma$, and the
+boundary field.  Definition~\ref{def:architecture-axis-map} makes the axis of each
+such coordinate explicit and declares the corresponding negative boundary.  If a
+stronger reading needs an item on a different axis $A'$, then either the claim-kind
+coordinate does not name the kind requiring $A'$, the evidence surface does not
+contain an admissible $A'$ item, a required $A'$ pass record is missing, or the
+boundary field still excludes the stronger reading.  In all four cases the finite
+record verifier of Proposition~\ref{prop:finite-certificate-schema-verifier}
+rejects the stronger reading: the dispatch table cannot assign an unmentioned gate,
+the surface check cannot read an unsubmitted path or log, the pass-record check
+cannot be satisfied without the row, and the boundary check preserves the declared
+negative boundary.
+
+Conversely, when a separate coordinate for $A'$ is submitted, it is just another
+finite component of the package.  It can be accepted only by the same schema:
+its claim kind must dispatch to the appropriate gates, its evidence surface must
+list the admissible $A'$ evidence, and its boundary must state exactly what is and
+is not certified.  Therefore evidence never moves between axes by paraphrase or by
+agent-generated text; it moves only by adding an explicit finite coordinate and
+passing the assigned gates.  Applying this to the five rows of
+Table~\ref{tab:architecture-axis-map} gives the listed consequences.  They are
+also the axis-level instance of the coordinate-determination result later isolated
+in Theorem~\ref{thm:finite-coordinate-determination-boundary}: facts outside the
+finite coordinates of the accepted package are not conclusions of the certificate.
+\end{proof}
 The reader path is therefore architectural before it is logistical.  The rest of
 the supplement first fixes the source-interface spine, then defines the finite
 record verifier, then proves the certificate construction and non-escalation
@@ -3065,21 +3150,18 @@ current source-level branch is exact inclusion of \path{review_bundle/} with the
 final digest record.  Whether that branch has actually been instantiated in a
 completed venue submission is not proved by this proposition; it is the external
 record required by Corollary~\ref{cor:upload-or-archive-instantiation-record}.\end{proof}
-\begin{theorem}[Exact-upload support-surface realization]
-\label{thm:exact-upload-support-surface-realization}
-For the current package the selected support mode is the exact supplemental
-upload of \path{review_bundle/}.  If the submission contains that directory with
-the certificate-file digests listed in
+\begin{theorem}[Exact-inclusion support-surface realization]
+\label{thm:exact-inclusion-support-surface-realization}
+For the current package the selected support branch is exact supplemental inclusion of \path{review_bundle/}, but this branch remains conditional until an external upload-or-archive instantiation record exists.  If the completed submission contains that directory with the certificate-file digests listed in
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}, then every bundle-backed claim in
 this supplement has a submitted finite support surface at its stated
 path-verified evidence level.  If the exact directory is not submitted, then the
 same support conclusion holds only after replacing it by an archive satisfying
-the five tests of Table~\ref{tab:review-bundle-archive-equivalence}; no public DOI
-or archive locator is claimed for the present package.
+the five tests of Table~\ref{tab:review-bundle-archive-equivalence}; no venue upload receipt, public DOI, or archive locator is claimed for the present package.
 \end{theorem}
 
 \begin{proof}
-The exact-upload hypothesis supplies the directory named in every bundle-local
+The exact-inclusion hypothesis supplies the directory named in every bundle-local
 path and the final digest manifest named in
 Proposition~\ref{prop:exact-review-bundle-upload-witness}.  By that proposition,
 the manifest traverses the finite certificate surfaces used by the supplement:
@@ -3109,7 +3191,7 @@ package takes the first admissible case, not the archive-equivalent case.
 \label{thm:final-support-surface-closure}
 For the current package, using
 Proposition~\ref{prop:exact-review-bundle-upload-witness} and
-Theorem~\ref{thm:exact-upload-support-surface-realization}, the bundle-backed
+Theorem~\ref{thm:exact-inclusion-support-surface-realization}, the bundle-backed
 claims in this supplement are admissible at the stated path-verified evidence level exactly in the following
 two finite cases: either the submitted supplemental material contains the exact
 directory \path{review_bundle/} whose final packaging record is
