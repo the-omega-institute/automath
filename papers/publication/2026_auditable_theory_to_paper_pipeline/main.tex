@@ -515,8 +515,47 @@ discovery lies in $K$, and then names the pinned discovery-gate source-interface
 rows used by the claim; and (vi) $B$ either records command, source commit,
 environment, exit code, and log path for command-run evidence or explicitly
 records that no command-run assertion is made.  This paragraph defines the
-verifier only; the exactness theorem below separately defines the
-record-acceptance relation and proves that the two predicates coincide.
+verifier only.  The next definition packages the same finite fields as an
+explicit input type and a finite acceptance table; the exactness theorem below
+then proves that the verifier and the independently named record-acceptance
+relation coincide on that finite data structure.
+\end{definition}
+
+\begin{definition}[Certificate-schema acceptance table]
+\label{def:certificate-schema-acceptance-table}
+Fix the seven-kind dispatch table $\Gamma$ of
+Definition~\ref{def:operational-acceptance-interface}.  The verifier input for a
+load-bearing claim $c$ is the finite tuple
+\[
+\mathcal C(c)=(K,\ell,E,H,R,D,B)
+\]
+with the following typed fields: $K$ is a finite set of claim kinds, $\ell$ is an
+evidence level, $E$ is a finite evidence surface, $H$ is the route-boundary
+field, $R$ is a finite family of gate pass records, $D$ is the optional discovery
+source-interface field, and $B$ is the command-boundary field.  Define
+$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ by the six finite clauses in
+Table~\ref{tab:certificate-acceptance-clauses}; no clause may query generated
+prose, a live daemon, an artifact evaluator, a proof assistant, or a venue state
+outside these fields and their cited submitted surfaces.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{0.08\linewidth}p{0.22\linewidth}X}
+\toprule
+Clause & Field read & Acceptance condition \\
+\midrule
+A1 & $K,\ell$ & $K$ is a nonempty subset of the seven-kind domain and $\ell$ is one of the two evidence levels. \\
+A2 & $E$ & Every evidence item is a submitted path, review-bundle path, manifest row, log path, pinned commit, or explicit historical-evidence boundary available at level $\ell$. \\
+A3 & $K,R,E$ & For every gate in $\bigcup_{k\in K}\Gamma(k)$, $R$ has a pass record with gate name, input surface, decision, evidence pointer, and evidence level; the pointer lies in $E$ or in a named submitted table, manifest row, bundled snapshot, or historical boundary. \\
+A4 & $H$ & $H$ records human promotion exactly when $c$ crosses the intake-to-publication boundary, and otherwise records that no such crossing occurs. \\
+A5 & $K,D$ & $D$ is present exactly when discovery lies in $K$, and then names the pinned discovery-gate source-interface rows used by $c$. \\
+A6 & $\ell,B$ & $B$ records command, source commit, environment, exit code, and log path for command-run evidence, or records that no command-run assertion is made. \\
+\bottomrule
+\end{tabularx}
+\caption{Finite clauses defining $\mathsf{Acc}_{\Gamma}$ for the certificate tuple.}
+\label{tab:certificate-acceptance-clauses}
+\end{table}
 \end{definition}
 
 \begin{proposition}[Finite certificate schema verifier as a record check]
@@ -564,32 +603,13 @@ paragraph that may have described the claim.\end{proof}
 \begin{theorem}[Finite-record acceptance exactness]
 \label{thm:record-acceptance-exactness}
 Fix the seven-kind dispatch table $\Gamma$, the two evidence levels, and the
-certificate tuple format of Definition~\ref{def:operational-acceptance-interface}.
-For a load-bearing claim $c$ and a finite candidate certificate
-$\mathcal C(c)=(K,\ell,E,H,R,D,B)$, define
-$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ to mean that the following six finite
-record clauses hold:
-\begin{enumerate}
-\item $K$ is a nonempty set of declared claim kinds in the seven-kind domain and
-$\ell$ is one of the two evidence levels;
-\item every item of $E$ is a submitted path, review-bundle path, manifest row,
-log path, pinned commit, or explicit historical-evidence boundary available to
-the reviewer at level $\ell$;
-\item for every gate in $\bigcup_{k\in K}\Gamma(k)$, $R$ contains a pass record
-with gate name, input surface, decision, evidence pointer, and evidence level,
-and the pointer lies in $E$ or in a named submitted table, manifest row, bundled
-snapshot, or historical boundary;
-\item $H$ records human promotion exactly when the claim crosses the
-intake-to-publication boundary, and otherwise records that no such boundary is
-crossed;
-\item $D$ is present exactly for discovery-kind claims and then names the pinned
-discovery-gate source-interface rows used by the claim; and
-\item $B$ records the command, source commit, environment, exit code, and log path
-for command-run evidence, or records that no command-run assertion is made.
-\end{enumerate}
-Then the finite verifier $V$, definitionally the six-clause predicate just
-displayed in Definition~\ref{def:operational-acceptance-interface}, accepts
-$\mathcal C(c)$ if and only if
+typed certificate tuple
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$ of
+Definition~\ref{def:certificate-schema-acceptance-table}.  For every
+load-bearing claim $c$ and every finite candidate certificate $\mathcal C(c)$,
+the finite verifier $V$ of
+Definition~\ref{def:operational-acceptance-interface} accepts $\mathcal C(c)$ if
+and only if the six-clause table predicate
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.  Moreover, if $V$ accepts a record
 for $c$, the same record cannot certify any stronger reading $c^{+}$ that adds a
 new claim kind, a stronger evidence level, an omitted route crossing, an omitted
@@ -1163,48 +1183,22 @@ the submitted finite evidence surfaces, a record
 \mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)
 \]
 accepted by the finite schema verifier of
-Proposition~\ref{prop:finite-certificate-schema-verifier}; equivalently, by
-the finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, the constructed record satisfies
-the record-acceptance semantics for the dispatch table $\Gamma$.  This is the
-maximal conclusion determined by the submitted finite coordinates: if a stronger
-reading $c^+$ of $c$ asserts external end-to-end compiler correctness, current
-execution of unrecorded gates, proof-assistant correctness, current formal-source
-currency, dynamic artifact semantics, or venue acceptance, then $c^+$ is accepted
-only after the certificate is enlarged by the additional claim kind, evidence
-surface, gate pass records, promotion field, or command-run tuple required for
-that stronger reading.
-Consequently, within the submitted finite records and under the stated explicit
-record-gate-soundness hypothesis, the claim has a recorded evidence surface, a
-declared evidence boundary, and a prior pass record for every gate required for
-its claim kind.  Moreover, accepted discovery claims inherit the bounded pinned
-source-interface consequences that statement-only, code-only,
+Proposition~\ref{prop:finite-certificate-schema-verifier}; equivalently, by the
+finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, the
+constructed record satisfies the record-acceptance semantics for the dispatch
+table $\Gamma$.  Consequently, within the submitted finite records and under the
+stated explicit record-gate-soundness hypothesis, $c$ has a recorded evidence
+surface, a declared evidence boundary, and a prior pass record for every gate
+required for its claim kind.  Accepted discovery claims additionally inherit the
+bounded pinned source-interface consequences that statement-only, code-only,
 mechanical-expansion, and compression-only outputs are not accepted as discovery
-without the required certificate, ledger, and lineage witnesses.  Any purported
-accepted claim without such finite certificate data is rejected by one of the five
-obstruction skeletons in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
-For the current package, the finite pass-row components of these hypotheses are
-witnessed conditionally on the submitted review bundle being available by the
-machine-readable evidence map in
-Proposition~\ref{prop:machine-readable-certificate-records}, the acceptance
-ledger in Proposition~\ref{prop:current-package-acceptance-certificate-ledger},
-the assigned-gate boundary of
-Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}, and the four
-path-complete case witnesses of
-Proposition~\ref{prop:path-complete-case-witnesses}, with the current-package
-bounded instantiation isolated in
-Corollary~\ref{cor:current-package-path-verified-instantiation} and the
-case-snapshot non-rerun boundary isolated in
-Audit record~\ref{cor:case-snapshot-non-rerun-rigidity}.  The finite-coordinate
-boundary of Theorem~\ref{thm:finite-coordinate-determination-boundary} is part of
-the conclusion: the constructed certificate determines exactly the finite record
-coordinates it reads and cannot determine any unrecorded build, daemon, artifact,
-or venue coordinate.  Thus the package instance is a certificate-construction and
-certificate-checking theorem for the finite records actually supplied.  It is not
-an unconditional correctness theorem for an arbitrary implementation: it does not
-independently prove that such an implementation is record-gate-sound, that every
-possible gate in the surrounding project was run for this package, that
-Lean-facing contextual rows are current formal-source certificates, or that
-path-verified rows are command-run evidence.
+without the required certificate, ledger, and lineage witnesses.
+
+The maximality of this constructed certificate is stated separately in
+Proposition~\ref{prop:publication-safety-maximality}; the current-package
+instantiation is stated separately in
+Corollary~\ref{cor:publication-safety-current-package-instance} and refined by
+Theorem~\ref{thm:current-package-certificate-exactness}.
 \end{theorem}
 
 \begin{proof}
