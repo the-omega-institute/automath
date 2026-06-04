@@ -1134,10 +1134,15 @@ finite-record hypotheses.
 \item \emph{Acceptance entries}: every load-bearing claim in an active manuscript
 is either rejected or has an acceptance entry with an evidence surface inside
 this finite submitted record surface.
-\item \emph{Record-gate soundness}: a recorded acceptance entry is present only
-after every gate assigned by $\Gamma$ to the claim kind has already produced a
-pass record in that finite record surface, and every advisory output is demoted
-unless the deterministic gate set $\Gamma$ for its claim kind passes.
+\item \emph{Record-gate soundness}: in the sense of
+Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}, a recorded acceptance
+entry is present only after every gate assigned by $\Gamma$ to the claim kind has
+already produced a pass record in that finite record surface, every advisory
+output is demoted unless the deterministic gate set $\Gamma$ for its claim kind
+passes, and no independent implementation-soundness, fresh-execution, or
+semantic-correctness claim about the gates is inferred unless the package also
+contains the corresponding source path, command, source state, environment, exit
+code, and log path.
 \item \emph{Discovery certificate input}: discovery claims are checked through
 the pinned discovery-gate interface certified by
 Lemma~\ref{lem:source-interface-extraction-correctness} and
@@ -1168,8 +1173,8 @@ currency, dynamic artifact semantics, or venue acceptance, then $c^+$ is accepte
 only after the certificate is enlarged by the additional claim kind, evidence
 surface, gate pass records, promotion field, or command-run tuple required for
 that stronger reading.
-Consequently, within the submitted finite records and under the stated
-record-gate-soundness hypotheses, the claim has a recorded evidence surface, a
+Consequently, within the submitted finite records and under the stated explicit
+record-gate-soundness hypothesis, the claim has a recorded evidence surface, a
 declared evidence boundary, and a prior pass record for every gate required for
 its claim kind.  Moreover, accepted discovery claims inherit the bounded pinned
 source-interface consequences that statement-only, code-only,
@@ -1177,11 +1182,14 @@ mechanical-expansion, and compression-only outputs are not accepted as discovery
 without the required certificate, ledger, and lineage witnesses.  Any purported
 accepted claim without such finite certificate data is rejected by one of the five
 obstruction skeletons in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
-For the current package, the hypotheses are witnessed conditionally on the
-submitted review bundle being available by the machine-readable evidence map in
+For the current package, the finite pass-row components of these hypotheses are
+witnessed conditionally on the submitted review bundle being available by the
+machine-readable evidence map in
 Proposition~\ref{prop:machine-readable-certificate-records}, the acceptance
 ledger in Proposition~\ref{prop:current-package-acceptance-certificate-ledger},
-and the four path-complete case witnesses of
+the assigned-gate boundary of
+Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}, and the four
+path-complete case witnesses of
 Proposition~\ref{prop:path-complete-case-witnesses}, with the current-package
 bounded instantiation isolated in
 Corollary~\ref{cor:current-package-path-verified-instantiation} and the
@@ -1545,8 +1553,14 @@ is a bijection from the accepted current-package claim rows printed in this
 source to the locally checkable certificates accepted by the submitted schema
 verifier at the declared path-verified evidence level, provided the cited bundle
 records and log are included with the submission or replaced by an accepted
-archive-equivalent support surface.  Without that support surface, the theorem
-retains only the printed source-level inventory of six intended certificate rows
+archive-equivalent support surface.  The assigned-gate rows are sound only in the
+finite-record sense of
+Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}: they certify assigned
+gate coverage and declared evidence pointers, while any stronger assertion of
+independent gate implementation soundness would require source paths, commands,
+source states, environments, exit codes, and log paths for those gates.  Without
+that support surface, the theorem retains only the printed source-level inventory
+of six intended certificate rows
 and not the machine-readable current-package acceptance claim.  The durable TeX source
 fixes the six row statements and their negative boundaries; the supplemental
 record supplies the machine-readable mirror and verifier log only if it travels
@@ -1602,7 +1616,12 @@ submitted with its final digest manifest, or when an archive locator and per-fil
 digests provide an equivalent replacement.  Without one of those finite surfaces,
 the TeX proof still supplies the finite schema classification of the displayed
 rows, but not the additional claim that the submitted executable mirror and log
-were available to the reviewer.
+were available to the reviewer.  By
+Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}, the same verification
+does not audit the implementation internals of the named gates: it verifies the
+presence and local evidence surfaces of the assigned finite pass rows, and a
+fresh implementation-soundness reading would be a command-result escalation not
+present in these six certificates.
 
 Conversely, a stronger reading changes at least one finite component of the
 record: it adds a row, changes $K_i$, changes $\ell_i$, adds a required gate in
@@ -3000,9 +3019,10 @@ working tree; it is determined by the finite commit--manifest certificate.
 By Theorem~\ref{thm:final-support-surface-closure}, bundle-backed claims are
 admissible only in the exact-bundle case or in the archive-equivalent case of
 Table~\ref{tab:review-bundle-archive-equivalence}.  The final digest manifest
-selects the first case and states that no archive replacement is claimed.  Hence
-the accepted support surface for this submission is precisely the exact
-\path{review_bundle/} upload, with the digest manifest serving as its byte-level
+selects the first case and states that no archive replacement is claimed; it is
+not itself a venue-upload receipt.  Hence the accepted support surface for this
+submission is precisely the exact \path{review_bundle/} upload when that upload
+is actually supplied, with the digest manifest serving as its byte-level
 final-packaging record.  If that manifest is absent, the finite source-state
 component attached to the logs is missing.  If the bundle is absent and no
 archive-equivalent replacement is supplied, Theorem~\ref{thm:final-support-surface-closure}
@@ -3010,15 +3030,63 @@ removes the bundle-backed claims from the accepted support surface.  These are
 exactly the failure cases stated in the proposition.
 \end{proof}
 
+\begin{proposition}[Theorem-inventory files are review-only and outside the final package]
+\label{prop:theorem-inventory-review-only-boundary}
+The files \path{theorem_inventory.json} and \path{theorem_inventory.md} are not
+part of the submitted package state certified by
+Proposition~\ref{prop:final-immutable-package-state-certificate}.  They are
+review-only Stage-A inventory artifacts used to audit this source before final
+packaging.  Therefore they are deliberately absent from
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, absent from the supplemental bundle
+manifest, and absent from the finite package $P$ of
+Corollary~\ref{cor:current-package-path-verified-instantiation}.  A submission
+claim may depend on them only after the package is enlarged by adding them to the
+submission-interface map, digest manifest, and relevant certificate records and
+rerunning the verifier logs against that enlarged finite surface.
+\end{proposition}
+
+\begin{proof}
+Proposition~\ref{prop:final-immutable-package-state-certificate} identifies the
+final source-state record for fresh command-result claims as the displayed commit
+together with \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  That digest manifest
+lists the certificate files supplied by the review bundle and states a
+self-digest boundary: the record lists the bundle's certificate surfaces but is
+not a hash of every auxiliary file in the working directory.  The manifest rows
+named in Proposition~\ref{prop:machine-readable-certificate-records} are
+\path{review_bundle/certificate_schema.json},
+\path{review_bundle/current_package_pass_records.json},
+\path{review_bundle/submission_interface_map.json},
+\path{review_bundle/primary_claim_inventory.json}, the verifier scripts, and the
+verifier logs.  The finite package $P$ in
+Corollary~\ref{cor:current-package-path-verified-instantiation} similarly lists
+the short source, this supplement, \path{PIPELINE.md}, \path{SOURCE_MAP.md},
+\path{ARTIFACT_INVENTORY.md}, \path{source_interface_record.json}, the review
+bundle manifest, and the executable certificate records named in
+Proposition~\ref{prop:machine-readable-certificate-records}.  Neither list names
+\path{theorem_inventory.json} or \path{theorem_inventory.md}.
+
+Because the finite-record verifier is coordinate-determined by
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, a file outside those
+listed coordinates cannot be silently used as a certificate surface.  If an
+inventory file were added as submitted evidence, the finite coordinates would
+change: the submission-interface map would have a new path, the digest manifest
+would require a new per-file hash, and any command-result claim depending on it
+would require a fresh command tuple and log path.  No such enlarged records are
+claimed here.  Thus the two theorem-inventory files are review-only artifacts and
+do not invalidate the immutable package-state certificate for the submitted
+finite package.\end{proof}
+
 \begin{auditrecord}[Review-bundle availability condition]
 \label{prop:review-bundle-availability-condition}
 The final support mode selected for the current presentation package is exact
 supplemental upload of \path{review_bundle/}, as recorded in
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} and in
-Proposition~\ref{prop:final-immutable-package-state-certificate}.  The
-source-interface, case-snapshot, primary-claim inventory, submission-interface
-map, and verifier-record claims are therefore reviewable at the path-verified
-evidence level stated in this supplement under the exact uploaded bundle.  An
+Proposition~\ref{prop:final-immutable-package-state-certificate}.  This is a
+conditional support-mode selection, not a completed venue-upload record or public
+archive locator.  The source-interface, case-snapshot, primary-claim inventory,
+submission-interface map, and verifier-record claims are therefore reviewable at
+the path-verified evidence level stated in this supplement only under the exact
+uploaded bundle.  An
 archival equivalent remains an allowed replacement only if it satisfies
 Audit record~\ref{prop:review-bundle-archive-equivalence}, with the dichotomy made
 explicit in Audit record~\ref{cor:exact-bundle-or-final-digest} and closed by
@@ -3037,9 +3105,12 @@ primary-claim inventory, verifier script, and verifier log as bundle files.
 Proposition~\ref{prop:reviewable-source-snapshot-interface} uses the bundled
 source snapshot, and Proposition~\ref{prop:review-bundle-case-snapshot-coverage}
 uses the bundled case snapshots.  Therefore, when \path{review_bundle/} is
-included as supplemental material, each such certificate surface lies in the
-submitted artifact boundary and is locally checkable in the sense of the finite
-schema verifier.
+actually included as supplemental material or replaced by the permitted
+archive-equivalent surface, each such certificate surface lies in the submitted
+artifact boundary and is locally checkable in the sense of the finite schema
+verifier.  Until that upload record or archive locator exists, these
+bundle-backed statements are conditional support claims rather than independent
+public-access claims.
 
 If the bundle is absent, those bundle-local paths are no longer in the submitted
 artifact boundary.  The definition of local checkability requires every named
