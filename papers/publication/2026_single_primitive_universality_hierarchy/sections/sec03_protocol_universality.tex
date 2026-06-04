@@ -7,16 +7,56 @@ adjacent \(1\)'s, and set
 
 \subsection{Normal forms}\label{ssec:fold}
 
-\begin{definition}[Fold map]\label{def:fold}
-For a finite binary word \(\omega\in\{0,1\}^m\), \(\Fold_m(\omega)\in X_m\) is
-the greedy Zeckendorf normal form of \(\sum_{k=1}^m\omega_kF_k\).  The stable
-normalizer \(\mathrm{NF}_\infty\) is defined analogously for finite words of
-arbitrary length.
+\begin{definition}[Finite Zeckendorf interface]\label{def:fold}
+For \(m\ge1\), put
+\[
+  \Omega_m=\{0,1\}^{m+1},
+  \qquad
+  X_m=\{c\in X_\infty^{\mathrm{fin}}:0\le \Val(c)<F_{m+2}\}.
+\]
+The finite valuation is
+\[
+  \Val_m\colon X_m\to \{0,1,\ldots,F_{m+2}-1\},
+  \qquad \Val_m(c)=\Val(c).
+\]
+For a finite binary word \(\omega\in\Omega_m\), \(\Fold_m(\omega)\in X_m\) is
+the greedy Zeckendorf normal form of the residue
+\(\sum_{k=1}^{m+1}\omega_kF_k\pmod {F_{m+2}}\).  The stable normalizer
+\(\mathrm{NF}_\infty\) is defined analogously for finite words of arbitrary
+length, without reducing modulo a finite level.
 \end{definition}
 
 \begin{equation}\label{eq:fold-residue}
-  \Val(\Fold_m(\omega))=\sum_{k=1}^m\omega_kF_k .
+  \Val_m(\Fold_m(\omega))\equiv\sum_{k=1}^{m+1}\omega_kF_k\pmod {F_{m+2}} .
 \end{equation}
+
+\begin{proposition}[Finite Zeckendorf residue interface]
+\label{prop:finite-zeckendorf-residue-interface}
+The map \(\Val_m\) is a computable bijection
+\[
+  X_m\longrightarrow \ZZ/F_{m+2}\ZZ
+\]
+after identifying \(\ZZ/F_{m+2}\ZZ\) with its representatives
+\(0,\ldots,F_{m+2}-1\).  Hence \(|X_m|=F_{m+2}\), and
+\(\Fold_m\colon\Omega_m\to X_m\) is a computable surjection.
+\end{proposition}
+
+\begin{proof}
+For each \(0\le n<F_{m+2}\), \Cref{lem:greedy-zeckendorf-normalizer} gives a
+unique Zeckendorf representative \(c_n\in X_\infty^{\mathrm{fin}}\) with
+\(\Val(c_n)=n\).  By definition this representative belongs to \(X_m\), so
+\(\Val_m\) is surjective onto the displayed representative set.  If
+\(c,d\in X_m\) and \(\Val_m(c)=\Val_m(d)\), then \(\Val(c)=\Val(d)\) as ordinary
+integers in the interval \([0,F_{m+2})\), and Zeckendorf uniqueness gives
+\(c=d\).  The greedy algorithm computes the inverse representative
+\(n\mapsto c_n\), and reduction of \(\sum_{k=1}^{m+1}\omega_kF_k\) modulo
+\(F_{m+2}\), followed by that inverse representative, computes \(\Fold_m\).  To
+see surjectivity of \(\Fold_m\), let \(c\in X_m\) and let
+\(\Val(c)=n<F_{m+2}\).  The Zeckendorf representative of such an \(n\) uses no
+summand larger than \(F_{m+1}\); otherwise its value would be at least
+\(F_{m+2}\).  Thus the first \(m+1\) digits of \(c\), viewed as an element of
+\(\Omega_m\), fold back to \(c\).
+\end{proof}
 
 \begin{lemma}[Greedy Zeckendorf normalizer]
 \label{lem:greedy-zeckendorf-normalizer}
@@ -36,13 +76,17 @@ F_{k-2}+F_{k-4}+\cdots\).
 \begin{proposition}[Fold confluence]
 \label{prop:fold-confluence}
 Two finite words have the same stable fold if and only if they have the same
-valuation.  Hence equality of normal forms is decidable.
+ordinary valuation.  At finite level \(m\), two words of \(\Omega_m\) have the
+same finite fold if and only if their valuations have the same residue modulo
+\(F_{m+2}\).  Hence equality of both stable and finite normal forms is decidable.
 \end{proposition}
 
 \begin{proof}
-Both words fold to the unique Zeckendorf representative of their valuation by
-\Cref{lem:greedy-zeckendorf-normalizer}.  Finite binary words are decidably
-comparable.
+The stable assertion follows because both words fold to the unique Zeckendorf
+representative of their ordinary valuation by
+\Cref{lem:greedy-zeckendorf-normalizer}.  The finite assertion follows from the
+bijection in \Cref{prop:finite-zeckendorf-residue-interface}.  Finite binary
+words and residues are decidably comparable.
 \end{proof}
 
 \begin{definition}[Completions]\label{def:completions}
@@ -82,15 +126,44 @@ multiplication on \(\NN\) leaves every finite interval.  Thus a fixed finite
 residue level cannot be closed under the transported operations.
 \end{proof}
 
+\begin{proposition}[Finite residue-level transport]
+\label{prop:finite-residue-level-transport}
+For each \(m\), the bijection \(\Val_m\) transports the ring structure of
+\(\ZZ/F_{m+2}\ZZ\) to \(X_m\).  Explicitly,
+\[
+\begin{aligned}
+  c\oplus_m d&=\Val_m^{-1}(\Val_m(c)+\Val_m(d)\bmod F_{m+2}),\\
+  c\otimes_m d&=\Val_m^{-1}(\Val_m(c)\Val_m(d)\bmod F_{m+2}).
+\end{aligned}
+\]
+Then \(\Val_m\) is a finite ring isomorphism from
+\((X_m,\oplus_m,\otimes_m)\) to \(\ZZ/F_{m+2}\ZZ\).  This is residue arithmetic
+only and is not the stable arithmetic of \Cref{def:stable-arith}.
+\end{proposition}
+
+\begin{proof}
+The displayed operations are the pullback of addition and multiplication in the
+finite quotient ring through the bijection
+\(\Val_m\colon X_m\to\ZZ/F_{m+2}\ZZ\) of
+\Cref{prop:finite-zeckendorf-residue-interface}.  Therefore the ring axioms and
+the isomorphism statement are immediate from the corresponding quotient-ring
+facts.  The final sentence is \Cref{prop:finite-residue-not-stable}: a fixed
+finite quotient records only residues modulo \(F_{m+2}\), while stable
+arithmetic records ordinary natural-number values without quotienting.
+\end{proof}
+
 \begin{theorem}[Transported semiring]
 \label{thm:semiring}
 The map \(\Val\colon X_\infty^{\mathrm{fin}}\to\NN\) is an isomorphism from
-\((X_\infty^{\mathrm{fin}},\oplus,\otimes)\) to \((\NN,+,\times)\).
+\((X_\infty^{\mathrm{fin}},\oplus,\otimes)\) to \((\NN,+,\times)\).  At each
+finite level, the only transported arithmetic asserted in this paper is the
+residue ring interface of \Cref{prop:finite-residue-level-transport}.
 \end{theorem}
 
 \begin{proof}
 This is immediate from the definitions of \(\oplus\) and \(\otimes\) and the
-bijection in \Cref{lem:greedy-zeckendorf-normalizer}.
+bijection in \Cref{lem:greedy-zeckendorf-normalizer}.  The finite-level clause
+is \Cref{prop:finite-residue-level-transport}.
 \end{proof}
 
 \begin{theorem}[No finite-level arithmetic]
