@@ -1824,13 +1824,14 @@ submission contract; it replaces any need to treat this supplement's metadata
 lemmas as part of the two-page presentation claim.
 
 The live venue facts used for the following gate were rechecked on 2026-06-04
-against the official CICM 2026 call for papers at
+immediately before this packaging pass against the official CICM 2026 call for papers at
 \url{https://cicm-conference.org/2026/cicm.php?event=&menu=cfp}, the EasyChair
 submission page named by the call at
 \url{https://easychair.org/conferences/?conf=cicm2026}, and the Springer LNCS
 author-guideline page linked from that call at
 \url{https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines}.
-The check recorded HTTP status 200 for all three pages and observed the same route
+The check recorded HTTP status 200 for all three pages in the run witness
+\path{VENUE_CHECK_RUN_2026-06-04.log} with exit code 0 and observed the same route
 facts as the 2026-06-03 near-submission check: presentation-only papers are
 work-in-progress submissions of two pages plus bibliography, receive a
 light-weight review, do not appear in the Springer proceedings, have a
@@ -1849,8 +1850,9 @@ style page, the record gives the checked URLs and route rules, and the upload is
 made either on that checked rule state or after a later record with the same
 fields has replaced it.  In the current package this finite record is the
 ``Final Upload-Time Official Venue Record'' in \path{VENUE_CHECK.md}: it records
-the official call URL, EasyChair URL, LNCS style URL, observation date, route
-rules, deadline, software/data-access rule, and the explicit condition under
+the official call URL, EasyChair URL, LNCS style URL, observation date and
+time, HTTP-status witness \path{VENUE_CHECK_RUN_2026-06-04.log}, route rules,
+deadline, software/data-access rule, and the explicit condition under
 which an upload may be said to have used that rule state.  A dated historical
 check by itself is not a certificate for a later upload-time venue state.
 
@@ -1861,8 +1863,9 @@ length, review status, proceedings boundary, deadline, submission form, style
 interface, and software/data-access instruction.  These facts can change outside
 the submitted source, so the gate cannot be discharged by a stale table row.
 The displayed record supplies a finite certificate surface for the current
-package: three official URLs, a date, observed route facts, and the boundary that a
-later upload or conflicting form instruction triggers re-verification.  If the
+package: three official URLs, a date and time, an HTTP-status run log, observed
+route facts, and the boundary that a later upload or conflicting form instruction
+triggers re-verification.  If the
 upload uses that recorded rule state, each venue-dependent row of
 Table~\ref{tab:venue-submission-pack-gate} is checked against a dated official
 surface.  If the upload occurs after a change, or without a replacement record,
@@ -1874,7 +1877,8 @@ gate.\end{auditrecord}
 \begin{theorem}[Venue-rule freshness non-escalation]
 \label{thm:venue-rule-freshness-non-escalation}
 Let $U$ be the finite upload-time venue record consisting of the official call
-URL, the submission-form URL, the style-guideline URL, the observation date, the
+URL, the submission-form URL, the style-guideline URL, the observation date and
+time, the HTTP-status run witness \path{VENUE_CHECK_RUN_2026-06-04.log}, the
 observed route class, page limit, proceedings boundary, deadline, supplement
 access rule, and the local witness rows in Table~\ref{tab:venue-submission-pack-gate}.
 The venue component of the current finite-record package is accepted exactly for
@@ -1890,9 +1894,9 @@ The venue rows used by the package are not internal mathematical definitions;
 they are external facts read from the official call, submission, and style
 surfaces.  Therefore the finite information available to the package about the
 venue is precisely the tuple $U$ displayed in the statement: three source URLs,
-one date, the finite route facts observed on that date, and the corresponding
-local witness rows.  On the class of uploads whose venue-rule state is represented
-by $U$, each premise of the local readiness gate is a component of that tuple, so
+one date and time, the HTTP-status run log, the finite route facts observed at
+that check, and the corresponding local witness rows.  On the class of uploads
+whose venue-rule state is represented by $U$, each premise of the local readiness gate is a component of that tuple, so
 Audit record~\ref{prop:fresh-venue-record-criterion} and
 Table~\ref{tab:venue-submission-pack-gate} determine the bounded readiness
 conclusion.
@@ -2669,10 +2673,59 @@ directory as the support surface and the other substitutes an archival object
 certified by hashes and a locator; they are exhaustive because every support
 surface named here is either the directory or a replacement.\end{auditrecord}
 
+\begin{proposition}[Exact review-bundle upload witness]
+\label{prop:exact-review-bundle-upload-witness}
+For the current package no archive locator is claimed.  The accepted
+bundle-backed support witness is therefore the exact supplemental upload of
+\path{review_bundle/}.  Its finite identity record consists of
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} together with the regular files
+listed there: thirteen case-snapshot files, the certificate schema, the
+certificate verifier log, current package pass records, primary-claim inventory,
+primary-inventory freshness log and note, bundle README, bundle manifest,
+source-interface verifier log, pinned source snapshot, submission-interface map,
+and the three verifier scripts.  The generated \path{__pycache__/} file is not a
+certificate surface.  If \path{review_bundle/} is not uploaded exactly, these
+bundle-backed claims are accepted only after a replacement archive supplies a
+locator and proves the same file-list and digest equivalence.
+\end{proposition}
+
+\begin{proof}
+The first four header fields of
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} state the packaging date, the
+selected support mode, the absence of an archive replacement, and the absence of
+an archive locator.  Hence the archive branch of
+Audit record~\ref{prop:review-bundle-archive-equivalence} is not instantiated in
+the current package.  The same digest record then enumerates the finite regular
+certificate files below \path{review_bundle/} and gives one SHA-256 digest for
+each of them.  Each bundle-backed reference used later in the manuscript is to
+one of those regular certificate files or to a finite record that names them:
+the case-snapshot rows use the thirteen case snapshots; the schema and pass
+claims use \path{certificate_schema.json},
+\path{current_package_pass_records.json}, the verifier scripts, and their logs;
+the primary-claim rows use \path{primary_claim_inventory.json} and its freshness
+records; the source-interface rows use the pinned source snapshot,
+\path{submission_interface_map.json}, and the source-interface verifier log; and
+the bundle role itself uses \path{README.md} and
+\path{REVIEW_BUNDLE_MANIFEST.json}.  Thus uploading that directory supplies every
+regular certificate surface on which the bundle-backed claims depend.
+
+The directory listing may contain generated interpreter caches, but the table
+criterion excludes such cache files and no theorem, proposition, table row, or
+verifier record in this supplement cites them as evidence.  They therefore do
+not enlarge the accepted support witness.  If the directory is not supplied,
+relative paths such as \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and
+\path{review_bundle/case_snapshots/rule110_STATUS.md} no longer denote submitted
+certificate files.  By Audit record~\ref{prop:review-bundle-archive-equivalence},
+the only way to recover those denotations without the exact directory is an
+archive with a locator, the same finite file list, matching SHA-256 digests, and
+unchanged relative path semantics.  Since no such locator is claimed here, the
+current witness is exactly the uploaded \path{review_bundle/} directory with the
+final digest record.\end{proof}
 \begin{theorem}[Final support-surface closure]
 \label{thm:final-support-surface-closure}
-For the current package, the bundle-backed claims in this supplement are
-admissible at the stated path-verified evidence level exactly in the following
+For the current package, using
+Proposition~\ref{prop:exact-review-bundle-upload-witness}, the bundle-backed
+claims in this supplement are admissible at the stated path-verified evidence level exactly in the following
 two finite cases: either the submitted supplemental material contains the exact
 directory \path{review_bundle/} whose final packaging record is
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}, or the submitted material contains
@@ -2694,8 +2747,9 @@ or one of the case snapshots.  Therefore a submitted support surface for $B$
 must either contain those named files with their relative path semantics or
 replace them by an archive that is finite-file-list and hash equivalent.
 
-If the exact directory \path{review_bundle/} is uploaded, then all named bundle
-paths are present in the submitted supplemental boundary.  The file
+If the exact directory \path{review_bundle/} is uploaded, then
+Proposition~\ref{prop:exact-review-bundle-upload-witness} identifies it as the
+current concrete support witness and all named bundle paths are present in the submitted supplemental boundary.  The file
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} records the final SHA-256 digest
 surface for those certificate files, so the byte identity of the supplied
 directory is checkable without changing the role of the directory into an
@@ -2965,13 +3019,3 @@ promotion decisions.
 \bibliography{references}
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
