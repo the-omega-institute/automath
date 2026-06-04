@@ -1178,6 +1178,9 @@ interfaces gives the stated conclusion: scheduling and classifier-shift scoring
 can advise selection order, but discovery acceptance still occurs only through
 the discovery gate.\end{proof}
 
+The next result is a finite-record certificate theorem: it constructs and bounds
+records visible in the submitted package, but it is not an implementation-soundness
+or semantic-correctness theorem for the underlying tools.
 \begin{theorem}[Finite-record certificate construction under record-gate soundness]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above and a
@@ -1701,7 +1704,7 @@ schema instance over \path{review_bundle/certificate_schema.json},
 \path{review_bundle/primary_claim_inventory.json}, the verifier script, and the
 recorded verifier log.  The recorded log states command
 \path{python review_bundle/verify_certificate_records.py}, source commit
-\path{automath repository commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus final package digest manifest review_bundle/FINAL_DIGESTS_SHA256.md}, final package digest manifest
+\path{automath repository commit 62721a780322d351b349f9782e191b160517ddfa plus final package digest manifest review_bundle/FINAL_DIGESTS_SHA256.md}, final package digest manifest
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}, environment \path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
 \path{review_bundle/certificate_verification_run.log}.  The companion logs
 \path{review_bundle/source_interface_verification_run.log} and
@@ -2154,7 +2157,7 @@ historical observation.
 
 \begin{theorem}[Venue-rule freshness non-escalation]
 \label{thm:venue-rule-freshness-non-escalation}
-Let $U$ be the finite upload-time venue record consisting of the official call
+Let $U$ be the finite dated venue record consisting of the official call
 URL, the submission-form URL, the style-guideline URL, the observation date and
 time, the HTTP-status run witness \path{VENUE_CHECK_RUN_2026-06-04.log}, the
 observed route class, page limit, proceedings boundary, deadline, supplement
@@ -2191,6 +2194,33 @@ claims of EasyChair compliance, acceptance, and proceedings status require still
 more external records and are not fields of $U$.  Hence stale venue observations
 remain historical only, while the accepted venue gate is the fresh finite-record
 one stated above.
+\end{proof}
+
+\begin{corollary}[Historical venue record non-escalation]
+\label{cor:historical-venue-record-non-escalation}
+The venue check recorded at \path{VENUE_CHECK_RUN_2026-06-04.log}, with local
+observation time \path{2026-06-04 10:15 Asia/Singapore}, is historical venue
+evidence unless the final submitted support surface also contains either an
+upload-time record with the same fields or an explicit statement that the upload
+used the unchanged venue-rule state represented by that dated record.  In the
+absence of such an upload-time support surface, every venue-dependent claim in
+this package is limited to local readiness as of that observation time and does
+not certify actual upload-time EasyChair compliance, acceptance, or proceedings
+status.
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:venue-rule-freshness-non-escalation} to the dated tuple
+$U$ whose HTTP-status witness is \path{VENUE_CHECK_RUN_2026-06-04.log}.  The
+theorem says that $U$ determines the venue component only for uploads whose
+venue-rule state is represented by $U$, or for uploads supported by a later
+replacement record with the same command-result fields.  If the final support
+surface contains neither an upload-time replacement nor a statement tying the
+upload to the unchanged rule state represented by $U$, then the upload-time
+venue-rule state is not a finite coordinate of the package.  The non-escalation
+part of the theorem therefore applies: the dated file remains a historical
+observation, while EasyChair compliance, acceptance, and proceedings status all
+require external records not present in $U$.
 \end{proof}
 
 \begin{table}
@@ -3133,7 +3163,7 @@ other cases.
 \label{prop:final-immutable-package-state-certificate}
 For the current presentation package, the final source-state record for the three
 fresh verifier runs is the pair consisting of the automath repository commit
-\path{feefe43edc9089cbb3c3cf61b057ae630ebde017} and the digest manifest
+\path{62721a780322d351b349f9782e191b160517ddfa} and the digest manifest
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The selected supplemental support
 mode is the exact upload of \path{review_bundle/}; no DOI-bearing, institutional,
 or other archival replacement is claimed.  Consequently a command-result claim
@@ -3179,7 +3209,7 @@ exactly the failure cases stated in the proposition.
 \begin{theorem}[Workspace-to-final-package reconciliation]
 \label{thm:workspace-final-package-reconciliation}
 Let $H_0$ be the automath commit
-\path{feefe43edc9089cbb3c3cf61b057ae630ebde017}, and let $D_0$ be the digest
+\path{62721a780322d351b349f9782e191b160517ddfa}, and let $D_0$ be the digest
 manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The source-state claim
 made in Proposition~\ref{prop:final-immutable-package-state-certificate} is the
 finite package claim $(H_0,D_0)$, not a claim that every later reviewer checkout,
@@ -3432,17 +3462,17 @@ Surface & Evidence level & Recorded command fields & Boundary carried by this pa
 \midrule
 Certificate-record verifier & command-run for the schema-verifier invocation & command
 \path{python review_bundle/verify_certificate_records.py}; source state:
-\path{automath commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
+\path{automath commit 62721a780322d351b349f9782e191b160517ddfa plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
 \path{Python 3.10.11 on Windows 10}; exit code: \path{0}; log path:
 \path{review_bundle/certificate_verification_run.log} & schema-level verification of the review-bundle records only; the log itself excludes Lean, daemon, and Rule110 reruns \\
 Source-interface record verifier & command-run for finite source-record comparison & command
 \path{python review_bundle/verify_source_interface_record.py}; source state:
-\path{automath commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
+\path{automath commit 62721a780322d351b349f9782e191b160517ddfa plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
 \path{Python 3.10.11 on Windows 10}; exit code: \path{0}; log path:
 \path{review_bundle/source_interface_verification_run.log} & compares table rows, JSON records, manifest ranges, snapshot labels, digest, and line count only; it excludes Lean rebuilds and semantic validation of imported source theorems \\
 Primary-claim inventory verifier & command-run for finite inventory freshness & command
 \path{python review_bundle/verify_primary_claim_inventory.py}; source state:
-\path{automath commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
+\path{automath commit 62721a780322d351b349f9782e191b160517ddfa plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
 \path{Python 3.10.11 on Windows 10}; exit code: \path{0}; log path:
 \path{review_bundle/primary_claim_inventory_freshness_2026-06-04.log} & checks primary-source line spans, row shape, row id set, and certificate-like pointers only; it excludes semantic proof of primary prose \\
 Lean/BEDC source theorem semantics & path-verified imported-source interface & none; the source surface is the pinned repository commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}, the bounded paraphrase interface in Table~\ref{tab:source-interface-record}, and the bundled snapshot records & no fresh Lean build, axiom-purity check, full BEDC rebuild, or semantic proof of imported source theorems is asserted \\
@@ -3481,7 +3511,7 @@ path; otherwise the boundary field must say that no command-run assertion is
 made.  The first three rows of Table~\ref{tab:command-boundary-inventory} contain
 all five required command-run fields.  The first log records command
 \path{python review_bundle/verify_certificate_records.py}, source state
-\path{automath repository commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus review_bundle/FINAL_DIGESTS_SHA256.md},
+\path{automath repository commit 62721a780322d351b349f9782e191b160517ddfa plus review_bundle/FINAL_DIGESTS_SHA256.md},
 \path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
 \path{review_bundle/certificate_verification_run.log}.  Its negative boundary is
 schema-level certificate-record verification only, with no Lean, daemon, or

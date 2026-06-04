@@ -14,7 +14,7 @@
 
 ```text
 command=python review_bundle/verify_primary_claim_inventory.py
-source_commit=bae95b1de5fdbdd4ecf88b294e93fac99a3670d7
+source_commit=62721a780322d351b349f9782e191b160517ddfa
 source_digest_manifest=review_bundle/FINAL_DIGESTS_SHA256.md
 environment=Python 3.10.11 on Windows 10
 cwd=D:/omega/automath/papers/publication/2026_auditable_theory_to_paper_pipeline
