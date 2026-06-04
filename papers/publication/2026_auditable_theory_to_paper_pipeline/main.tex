@@ -1263,6 +1263,82 @@ finite subrecord of the kind classified by
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} and
 Theorem~\ref{thm:evidence-level-overclaim-obstruction}.\end{proof}
 
+\begin{theorem}[Exact extension criterion for implementation-soundness readings]
+\label{thm:implementation-soundness-extension-criterion}
+Fix the dispatch table $\Gamma$ and the finite certificate schema of
+Proposition~\ref{prop:finite-certificate-schema-verifier}.  A reading of a
+load-bearing package claim as an implementation-soundness claim is accepted by
+the same publication-safety interface if and only if the submitted finite record
+surface is enlarged by an implementation-soundness extension record
+\[
+\mathsf{Impl}(c)=(K^{\mathrm{impl}},E^{\mathrm{impl}},R^{\mathrm{impl}},B^{\mathrm{impl}})
+\]
+with the following properties.
+\begin{enumerate}
+\item $K^{\mathrm{impl}}$ contains the additional implementation claim kind or
+claim-kind component being asserted, rather than merely reusing the original
+finite-record claim kind of $c$.
+\item $E^{\mathrm{impl}}$ is a submitted finite evidence surface naming the
+implementation object being certified: for example the relevant source path,
+version or commit, configuration, executable verifier, and implementation-log
+surface.
+\item $R^{\mathrm{impl}}$ contains a pass record, with evidence pointer inside
+$E^{\mathrm{impl}}$, for every gate assigned by $\Gamma$ to the enlarged claim
+kind $K\cup K^{\mathrm{impl}}$.
+\item $B^{\mathrm{impl}}$ declares the evidence level of the implementation
+claim and contains the command-run tuple whenever the implementation claim is
+asserted at command-run strength.
+\end{enumerate}
+When such an extension record is present, the finite certificate constructor of
+Theorem~\ref{thm:publication-safety-interface} accepts the enlarged claim exactly
+at the evidence level declared by $B^{\mathrm{impl}}$.  When it is absent, every
+implementation-soundness reading of the same row has a finite obstruction of one
+of the five kinds in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+Thus the central theorem is sharp: it is not an external implementation-soundness
+theorem for the current package, but it gives a complete finite-record criterion
+for what would have to be submitted to make such a stronger reading part of a
+future package.
+\end{theorem}
+
+\begin{proof}
+First suppose the extension record is present.  Replace the original row for
+$c$ by the enlarged row whose claim-kind coordinate is $K\cup K^{\mathrm{impl}}$,
+whose evidence surface is $E\cup E^{\mathrm{impl}}$, whose pass-record field is
+$R\cup R^{\mathrm{impl}}$, and whose boundary field is the original boundary
+together with $B^{\mathrm{impl}}$.  The first condition makes the stronger
+reading visible to the dispatch table rather than hiding it in prose.  The second
+condition supplies a finite submitted surface for the implementation object.  The
+third condition supplies every gate record required by $\Gamma$ for the enlarged
+claim-kind set, and the fourth condition prevents a path-verified implementation
+record from being read as a command-run implementation certificate without the
+command, source-state, environment, exit-code, and log-path fields.  Therefore
+the tuple has exactly the fields checked by
+Proposition~\ref{prop:finite-certificate-schema-verifier}.  Applying
+Theorem~\ref{thm:publication-safety-interface} to the enlarged row constructs an
+accepted finite certificate for the implementation-soundness reading, and the
+accepted strength is precisely the declared evidence level because the schema
+reads no unsubmitted evidence-level coordinate.
+
+Conversely, suppose a manuscript row is read as an implementation-soundness claim
+but no extension record with the four displayed properties is submitted.  If the
+additional implementation claim kind is not present in the claim-kind coordinate,
+then the stronger reading has no assigned implementation gate and is an
+unsupported escalation of the original row.  If the kind is present but
+$E^{\mathrm{impl}}$ is absent, the claim lacks a submitted evidence surface for
+the implementation object, giving obstruction type~1 of
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  If the evidence
+surface is present but some gate assigned by $\Gamma$ has no corresponding pass
+record in $R^{\mathrm{impl}}$, the bad subrecord is type~2.  If the
+implementation reading crosses an intake, source, route, or venue boundary with
+no required promotion or decision field, the bad subrecord is type~3.  If the
+implementation reading is also a discovery or classifier-shift reading without
+the pinned discovery-interface rows, the bad subrecord is type~4.  Finally, if
+the row asserts command-run implementation strength without the command-run tuple
+inside $B^{\mathrm{impl}}$, the bad subrecord is type~5.  These cases exhaust the
+finite schema fields by the obstruction-skeleton theorem, so absence of the
+extension record is exactly absence of finite support for the stronger reading.
+\end{proof}
+
 \begin{table}
 \caption{Submission-local acceptance-entry ledger for the current package}
 \label{tab:current-acceptance-ledger}
@@ -1435,17 +1511,22 @@ is surjective onto the accepted current-package certificates because the same
 proposition states that no load-bearing claim outside these six entries is
 accepted by the current-package instantiation.
 
-Conditioned on the supplemental records being present and matching the displayed
-paths, Proposition~\ref{prop:machine-readable-certificate-records} supplies the finite
+Conditioned on the supplemental records being present, matching the displayed
+paths, and matching the final digest manifest
+\path{review_bundle/FINAL_DIGESTS_SHA256.md},
+Proposition~\ref{prop:machine-readable-certificate-records} supplies the finite
 schema instance over \path{review_bundle/certificate_schema.json},
 \path{review_bundle/current_package_pass_records.json},
 \path{review_bundle/submission_interface_map.json},
 \path{review_bundle/primary_claim_inventory.json}, the verifier script, and the
 recorded verifier log.  The recorded log states command
 \path{python review_bundle/verify_certificate_records.py}, source commit
-\path{automath repository commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus review_bundle/FINAL_DIGESTS_SHA256.md}, environment
-\path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
-\path{review_bundle/certificate_verification_run.log}.  That instance checks kind-domain membership,
+\path{automath repository commit feefe43edc9089cbb3c3cf61b057ae630ebde017 plus final package digest manifest review_bundle/FINAL_DIGESTS_SHA256.md}, final package digest manifest
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, environment \path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
+\path{review_bundle/certificate_verification_run.log}.  The companion logs
+\path{review_bundle/source_interface_verification_run.log} and
+\path{review_bundle/primary_claim_inventory_freshness_2026-06-04.log} likewise
+record exit code \path{0} against the same final digest manifest.  That instance checks kind-domain membership,
 path-verified evidence-level membership, assigned-gate coverage, the five
 pass-record fields, discovery-field discipline, and the path-verified command
 boundary for entries $a_1,\ldots,a_6$.  Hence every certificate in the image of
@@ -2721,10 +2802,51 @@ archive with a locator, the same finite file list, matching SHA-256 digests, and
 unchanged relative path semantics.  Since no such locator is claimed here, the
 current witness is exactly the uploaded \path{review_bundle/} directory with the
 final digest record.\end{proof}
+\begin{theorem}[Exact-upload support-surface realization]
+\label{thm:exact-upload-support-surface-realization}
+For the current package the selected support mode is the exact supplemental
+upload of \path{review_bundle/}.  If the submission contains that directory with
+the certificate-file digests listed in
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, then every bundle-backed claim in
+this supplement has a submitted finite support surface at its stated
+path-verified evidence level.  If the exact directory is not submitted, then the
+same support conclusion holds only after replacing it by an archive satisfying
+the five tests of Table~\ref{tab:review-bundle-archive-equivalence}; no public DOI
+or archive locator is claimed for the present package.
+\end{theorem}
+
+\begin{proof}
+The exact-upload hypothesis supplies the directory named in every bundle-local
+path and the final digest manifest named in
+Proposition~\ref{prop:exact-review-bundle-upload-witness}.  By that proposition,
+the manifest traverses the finite certificate surfaces used by the supplement:
+the bundle manifest, schema, current pass-record ledger, source-interface map,
+primary-claim inventory, verifier scripts, verifier logs, source snapshot, and
+case snapshots.  Matching the listed SHA-256 digests fixes the bytes of each of
+those certificate files at final packaging time, while preserving the relative
+path names by which the manuscript refers to them.  Thus every bundle-backed
+claim has the submitted finite evidence surface asserted for it, and the evidence
+level remains path-verified because the argument checks file presence and digest
+identity rather than rerunning Lean, daemons, or external artifacts.
+
+If the exact directory is absent, the proof of
+Audit record~\ref{prop:review-bundle-archive-equivalence} shows that the only
+finite replacement accepted by this paper is an archive with the same manifest
+identity, bundle-version tuple, finite certificate file list, per-file SHA-256
+digests, and relative path semantics.  Those are exactly the five tests in
+Table~\ref{tab:review-bundle-archive-equivalence}.  Without such an archive, at
+least one bundle-local path or digest row has no submitted representative, so the
+corresponding bundle-backed claim lacks its evidence surface.  The statement that
+no public DOI or archive locator is claimed is the support-mode selection in
+Proposition~\ref{prop:exact-review-bundle-upload-witness}; it records that this
+package takes the first admissible case, not the archive-equivalent case.
+\end{proof}
+
 \begin{theorem}[Final support-surface closure]
 \label{thm:final-support-surface-closure}
 For the current package, using
-Proposition~\ref{prop:exact-review-bundle-upload-witness}, the bundle-backed
+Proposition~\ref{prop:exact-review-bundle-upload-witness} and
+Theorem~\ref{thm:exact-upload-support-surface-realization}, the bundle-backed
 claims in this supplement are admissible at the stated path-verified evidence level exactly in the following
 two finite cases: either the submitted supplemental material contains the exact
 directory \path{review_bundle/} whose final packaging record is
