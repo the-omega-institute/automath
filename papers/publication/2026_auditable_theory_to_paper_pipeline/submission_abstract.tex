@@ -20,26 +20,31 @@ National University of Singapore \email{e1327962@u.nus.edu}}
 \maketitle
 
 \begin{abstract}
-AI-assisted mathematics workflows need a publication boundary that separates
-agent fluency from evidence.  We present an auditable theory-to-paper compiler
-around two workspaces: \emph{newmath}, a structured BEDC source repository, and
-\emph{automath}, a publication workspace that packages source maps, review
-records, finite manifests, and route decisions.  Under record-gate soundness, the
-primary claim is a finite-record one: accepted publication claims are reportable
-only when their source, gate, promotion, evidence-level, and limitation records
-are present in the submitted package.  This presentation does not claim fresh
-Lean rebuilds, dynamic artifact validation, end-to-end gate correctness, or venue
-acceptance.
+AI-assisted mathematics projects need software infrastructure that keeps fluent
+drafts from becoming evidence by accident.  We present an auditable
+theory-to-paper compiler around two workspaces: \emph{newmath}, which holds
+structured BEDC source theory and verification interfaces, and \emph{automath},
+which assembles publication packages from source maps, review records, finite
+manifests, route decisions, and human-promotion records.  The contribution is an
+architecture and a finite certificate boundary: a publication claim is reportable
+only when the submitted package contains the source, gate, promotion, evidence
+level, and limitation records assigned to that claim.  The presentation does not
+claim fresh Lean rebuilds, dynamic artifact validation, end-to-end gate
+correctness, or venue acceptance.
 \end{abstract}
 
 This two-page source is the primary presentation article.  The phrase
-``auditable theory-to-paper pipeline'' names the compiler's record interface and
-the optional technical supplement, not a second submission identity.
+``auditable theory-to-paper pipeline'' names the compiler's record interface;
+\path{main.tex} and, if uploaded or archive-equivalently replaced,
+\path{review_bundle/} are supplemental support surfaces rather than a second
+submission identity.
 
 \paragraph{System thesis.}
-The compiler is not an AI writing assistant.  It treats source theory, Lean
-implementation, finite witnesses, and publication state as distinct evidence
-axes.  BEDC contributes a finite-kernel theory together with proof obligations
+The system problem is not how to generate more mathematical prose; it is how to
+keep a publication package auditable after agents, proof assistants, manifests,
+and route automation have all contributed records.  The compiler treats source
+theory, Lean implementation, finite witnesses, and publication state as distinct
+evidence axes.  BEDC contributes a finite-kernel theory together with proof obligations
 and separate implementation contracts; Lean markers are verification records for
 those contracts, not a source of object-language closure; finite manifests and
 evaluator witnesses bound what is checked; agents remain advisory; and
@@ -49,15 +54,15 @@ source path, gate record, manifest row, log, or human-promotion record appropria
 to the claim.
 
 \paragraph{Architecture summary.}
-The package has three roles.  First, \path{submission_abstract.tex} is the
-primary two-page presentation artifact.  Second, \path{main.tex} is a technical
-supplement: its theorem environments define and prove the finite-record
-interfaces used to audit the package, but they are not part of the short
-presentation paper.  Third, \path{review_bundle/} is supplemental evidence when
-uploaded with the submission or replaced by an archival equivalent.  Bundle-backed
-claims are conditional on that evidence surface being available to reviewers.
+The architecture has three visible layers.  First, \path{submission_abstract.tex}
+is the primary two-page presentation artifact.  Second, \path{main.tex} is a technical supplement: it defines the finite-record
+interfaces and proves the certificate boundary used to audit the package.  Third,
+\path{review_bundle/} is supplemental evidence only when uploaded with the
+submission or replaced by an archival equivalent with matching digests.
+Bundle-backed claims are conditional on one of those support surfaces being
+available to reviewers.
 
-The architecture is deliberately typed.  Structured theory contributes pinned
+The trust boundary is deliberately typed.  Structured theory contributes pinned
 source-interface rows; Lean contributes only the build and axiom-purity claims
 actually recorded; finite witnesses contribute manifest-bounded rows; automation
 contributes proposals, reviews, and scheduling suggestions; and the publication
@@ -76,11 +81,12 @@ mathematics: long sequences of plausible edits that increase manuscript volume
 or compile locally while adding no load-bearing theorem content.
 
 \paragraph{Finite-record safety claim.}
-The technical supplement proves a certificate-level invariant for the submitted
-finite records under an explicit record-gate-soundness hypothesis: assigned gate
-passage is used only when the submitted ledger gives the gate name, input
-surface, decision, evidence pointer, and evidence level.  If the supplement and
-bundle are present, a load-bearing claim is accepted only with its claim kind,
+The technical supplement proves a certificate-level invariant for finite records
+under an explicit record-gate-soundness hypothesis: assigned gate passage is used
+only when the submitted ledger gives the gate name, input surface, decision,
+evidence pointer, and evidence level.  If the supplement is supplied and the
+bundle is uploaded with matching final digests or archive-equivalently replaced,
+a load-bearing claim is accepted only with its claim kind,
 evidence surface, gate-pass rows, promotion boundary, discovery rows when needed,
 and command-run boundary.  The result is path-complete for those records:
 stronger readings such as independent gate implementation soundness,
