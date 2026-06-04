@@ -1,7 +1,7 @@
-# Review Bundle Final Digest Record
+﻿# Review Bundle Final Digest Record
 
 - packaging decision date: 2026-06-04
-- support mode selected: conditional exact supplemental upload of `review_bundle/`
+- support mode selected: conditional exact supplemental inclusion of `review_bundle/`
 - archive replacement: none claimed
 - archive locator: not applicable
 - digest purpose: byte-level final-packaging record for the exact supplemental directory and the submitted root source/interface files read by the finite verifiers
@@ -13,7 +13,7 @@
 
 | SHA-256 | Relative path |
 |---|---|
-| `3a3c5b89efffd58529b8a5160bb3c9814b2ee3af1bc2982a30b95b78b3ed2634` | `main.tex` |
+| `769ce57449b867c595721f78758399b42470f5eb33a88035ff6771bc0beeb3eb` | `main.tex` |
 | `f85aba8b2ecd9053c52a2545268ce4d409234073e3e7c1e7c017fb6723a643a5` | `submission_abstract.tex` |
 | `b5377700b5f65b1b2101f8f1be0b686e74ed60136310105b10560a35c8bb4895` | `references.bib` |
 | `3f680a40cdc964298f220e0e7e3def2eb5d6616988c7b6e67b50b66b91138f76` | `source_interface_record.json` |
@@ -23,7 +23,8 @@
 | SHA-256 | Relative path |
 |---|---|
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
-| `8f58e4fbe52c235baa6f34258ef90105da658705d161821787db9611191d5a7f` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
+| `adb7d63698c4242fd91d72644031f63c73cc7d6a0a257b67190df747f194e3f6` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
+| `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
 | `d4e1e3494ec7b171e85d0c4263acbad125c211c3c4ff8bf7e4e67036cc8fcd8b` | `review_bundle/case_snapshots/fake_extension_artifact_inventory.md` |
 | `663bb1fdce29ea87495bdf1f6b03a17d5f433a50d5e069ec02a93742986a4d42` | `review_bundle/case_snapshots/fake_extension_phase_d_lint.py` |
 | `121a1e55a13cda7e2193c1fcd849b4950a8f3edd61be739a1de193a0e753222b` | `review_bundle/case_snapshots/newmath_intake_seed_directory_manifest.json` |
