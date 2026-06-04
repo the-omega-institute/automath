@@ -3037,7 +3037,7 @@ Let $H_0$ be the automath commit
 manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The source-state claim
 made in Proposition~\ref{prop:final-immutable-package-state-certificate} is the
 finite package claim $(H_0,D_0)$, not a claim that every later reviewer checkout,
-editor workspace, or post-packaging working tree has Git \\path{HEAD} equal to $H_0$.  If a
+editor workspace, or post-packaging working tree has Git \path{HEAD} equal to $H_0$.  If a
 current workspace reports a different Git \path{HEAD}, then the verifier-log and
 bundle-backed claims of this supplement remain admissible exactly in the
 following two reconciled cases:
@@ -3087,6 +3087,35 @@ using that workspace either to certify a new package or to refute the old
 byte-identified package.  The only certified statement left is the historical
 finite package claim $(H_0,D_0)$, conditional on the support-surface alternatives
 already proved above.\end{proof}
+
+\begin{proposition}[Mutable-checkout observations are non-certifying]
+\label{prop:mutable-checkout-observation-boundary}
+Let $W$ be a review-time working tree whose Git \path{HEAD} is not the commit
+$H_0$ named in Theorem~\ref{thm:workspace-final-package-reconciliation}.  The
+observation of $W$ is not a certificate coordinate for any verifier-log claim in
+this package unless $W$ is promoted by the second branch of that theorem, namely
+by rerunning the three verifier commands and replacing the commit, log, and digest
+records by a new common finite package certificate.  Consequently, a reviewer who
+sees $W$ with a different \path{HEAD} has exactly one source-level reconciliation
+test for the existing package: inspect the exact-bundle or archive-equivalent
+surface whose certificate-file bytes match \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+\end{proposition}
+
+\begin{proof}
+The finite package certificate records three kinds of coordinates relevant here:
+the displayed commit, the verifier logs, and the per-file digest manifest.  A
+bare working-tree observation supplies none of the last two coordinates and, when
+its \path{HEAD} differs from $H_0$, supplies a different first coordinate.  By the
+command-result rule used in
+Proposition~\ref{prop:final-immutable-package-state-certificate}, changing a
+source-state coordinate requires fresh logs with their command, environment, exit
+code, and log path; this is precisely the promotion branch in
+Theorem~\ref{thm:workspace-final-package-reconciliation}.  If that branch is not
+performed, the observation of $W$ remains outside the finite package.  The only
+remaining reconciliation route is therefore the branch that checks the already
+selected support surface: the exact uploaded \path{review_bundle/} directory, or
+an archive equivalent under Table~\ref{tab:review-bundle-archive-equivalence},
+with certificate bytes fixed by the final digest manifest.\end{proof}
 
 \begin{corollary}[Upload-or-archive instantiation record]
 \label{cor:upload-or-archive-instantiation-record}
