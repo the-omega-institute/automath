@@ -491,8 +491,12 @@ bounded summary} in Table~\ref{tab:source-interface-record} are the sixteen JSON
 records.  Hence, at the finite record-comparison level, the manuscript table,
 JSON record, review-bundle manifest, digest, line count, and bundled snapshot
 define one consistent imported-source interface.  The comparison does not assert
-semantic truth of the imported source theorems and does not replace the bounded
-paraphrase discipline of Lemma~\ref{lem:source-interface-extraction-correctness}.
+semantic truth of the imported source theorems, does not reproduce the exact
+source theorem statements as manuscript theorems, and does not replace the
+bounded paraphrase discipline of
+Lemma~\ref{lem:source-interface-extraction-correctness}.  Exact source statement
+inspection, if desired by a reviewer, is supported only by the bundled snapshot
+and line ranges; it is not an imported theorem obligation of this paper.
 \end{proposition}
 
 \begin{proof}
@@ -520,9 +524,11 @@ listed in Table~\ref{tab:source-interface-record}.  Therefore no accepted row ca
 be a table-only, JSON-only, manifest-only, or out-of-range source-interface row:
 any such defect would violate one of the seven checked finite conditions and would
 appear as a finite bad subrecord.  What remains unchecked is exactly outside the
-claim: the script does not interpret or prove the imported theorem statements.
-Thus the executable comparison strengthens the earlier manual audit into a
-reproducible finite-record certificate while preserving the bounded-paraphrase
+claim: the script does not interpret or prove the imported theorem statements,
+and the manuscript does not quote them as exact source theorem text.  The exact
+source text remains available only as the bundled snapshot at the displayed line
+ranges.  Thus the executable comparison strengthens the earlier manual audit into
+a reproducible finite-record certificate while preserving the bounded-paraphrase
 and non-semantic boundary.\end{proof}
 
 \begin{proposition}[Source-interface evidence-level separation]
@@ -702,8 +708,25 @@ checkable} when these finite fields are present and every path, manifest row, or
 log named by a field lies in the submitted artifact, the supplemental review
 bundle, or the explicit path-verified historical boundary.
 
-For later use we make the local check explicit as a finite verifier.  Let
-\(\mathsf{Dom}(\Gamma)\) be the seven-kind domain and let
+For later use we make the local check explicit as a finite verifier.  The
+concrete package checker supplied with the review bundle is
+\path{review_bundle/verify_certificate_records.py}.  Its positive invocation is
+\path{python review_bundle/verify_certificate_records.py}; it reads exactly
+\path{review_bundle/certificate_schema.json},
+\path{review_bundle/current_package_pass_records.json},
+\path{review_bundle/submission_interface_map.json},
+\path{review_bundle/primary_claim_inventory.json}, and
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and writes the recorded pass log
+\path{review_bundle/certificate_verification_run.log}.  Its negative-example
+invocation is
+\path{python review_bundle/verify_certificate_records.py --negative-example review_bundle/negative_certificate_record_example.json},
+with recorded log \path{review_bundle/negative_certificate_record_example_run.md};
+that fixture upgrades a route row to command-run strength while omitting the
+command-run tuple and is rejected with the finite bad subrecord
+\path{neg1: command-run fields incomplete}.  The mathematical verifier below is
+the schema abstraction of this package checker.
+
+Let \(\mathsf{Dom}(\Gamma)\) be the seven-kind domain and let
 \(\mathsf{Lev}=\{\mathsf{path},\mathsf{command}\}\).  For a candidate record
 \(\mathcal C(c)=(K,\ell,E,H,R,D,B)\), define six finite predicates:
 \begin{enumerate}
@@ -819,23 +842,41 @@ A6 & $\ell,B$ & $B$ records command, source commit, environment, exit code, and 
 \label{prop:finite-certificate-schema-verifier}
 For every load-bearing manuscript claim $c$ whose component kinds lie in the
 seven-kind domain, $V(c,\mathcal C)$ is a finite, prose-insensitive
-record-schema verifier for the declared publication certificate.  If $V$ accepts,
-then $\mathcal C(c)$ is locally checkable at exactly its declared evidence level.
-This is certificate-record verification only: it checks finite record shape,
-dispatch, evidence pointers, and command-boundary discipline, not end-to-end
-external semantic validation of the referenced artifacts or source theory.  If
-$V$ rejects, then a reviewer can extract a finite bad subrecord consisting of the
-first failed schema check and the fields on which that check depends.
+record-schema verifier for the declared publication certificate.  The submitted
+package instantiates $V$ by the script
+\path{review_bundle/verify_certificate_records.py}.  On the positive package
+input it reads the schema file, pass-record ledger, submission-interface map,
+primary-claim inventory, and review-bundle manifest named above, and outputs
+acceptance in \path{review_bundle/certificate_verification_run.log}.  On the
+negative fixture \path{review_bundle/negative_certificate_record_example.json} it
+outputs rejection in \path{review_bundle/negative_certificate_record_example_run.md}
+with the bad subrecord \path{neg1: command-run fields incomplete}.  If $V$
+accepts, then $\mathcal C(c)$ is locally checkable at exactly its declared
+evidence level.  This is certificate-record verification only: it checks finite
+record shape, dispatch, evidence pointers, and command-boundary discipline, not
+end-to-end external semantic validation of the referenced artifacts or source
+theory.  If $V$ rejects, then a reviewer can extract a finite bad subrecord
+consisting of the first failed schema check and the fields on which that check
+depends.
 \end{proposition}
 
 \begin{proof}
 The verifier inspects only the displayed tuple $\mathcal C(c)$, the finite
 seven-kind domain, the finite dispatch table $\Gamma$, and the finite list of
-paths, rows, commits, or logs cited by the record.  Since $K$ is required to be a
-subset of the seven-kind domain, the set
-\(\bigcup_{k\in K}\Gamma(k)\) is finite.  The checks over $E$, $R$, and the
-command-run fields are therefore finite lookups in named manuscript or bundle
-surfaces, not semantic judgments about generated prose.
+paths, rows, commits, or logs cited by the record.  The package script realizes
+these inputs as five finite JSON files: the schema supplies the seven-kind
+domain, evidence levels, gate dispatch table, required record fields, required
+pass-record fields, accepted decisions, manifest-required files, and accepted
+artifact-prefix patterns; the ledger supplies the seven current records $a_1,
+\ldots,a_7$; the submission-interface map and primary-claim inventory supply the
+finite manuscript-facing row sets; and the manifest supplies the submitted bundle
+paths.  The script output is either the pass transcript in
+\path{certificate_verification_run.log} or a list of \path{ERROR: ...} lines,
+each naming the failed finite condition.  Since $K$ is required to be a subset of
+the seven-kind domain, the set \(\bigcup_{k\in K}\Gamma(k)\) is finite.  The
+checks over $E$, $R$, and the command-run fields are therefore finite lookups in
+named manuscript or bundle surfaces, not semantic judgments about generated
+prose.
 
 If all six checks pass, the tuple has exactly the fields required in the
 definition of a publication certificate: a finite kind set $K$, declared evidence
@@ -856,8 +897,12 @@ finite collection of fields read by that failed test: for example, $K$ and
 $\Gamma$ for a gate-domain failure, $E$ for an evidence-surface failure, $K$,
 $\Gamma$, $R$, and the cited evidence item for a gate-record failure, $H$ for a
 promotion failure, $K$ and $D$ for a discovery-field failure, or $\ell$ and $B$
-for an evidence-level failure.  This subrecord is independent of any surrounding
-paragraph that may have described the claim.\end{proof}
+for an evidence-level failure.  The supplied negative fixture is exactly the last
+case: it declares $\ell=\mathsf{command}$ but provides no
+\path{boundary.command_run_fields} containing command, source commit,
+environment, exit code, and log path, so the bad subrecord is the pair consisting
+of the evidence-level field and the boundary field.  This subrecord is
+independent of any surrounding paragraph that may have described the claim.\end{proof}
 
 \begin{theorem}[Schema-relative finite-record acceptance exactness]
 \label{thm:record-acceptance-exactness}
@@ -995,7 +1040,10 @@ Proposition~\ref{audit:review-bundle-availability-condition}.  The schema file
 \path{review_bundle/primary_claim_inventory.json}, the verifier script
 \path{review_bundle/verify_certificate_records.py}, and the recorded run
 \path{review_bundle/certificate_verification_run.log} instantiate the verifier at
-the path-verified level for entries $a_1,\ldots,a_6$.  Each pass record in the
+the declared evidence levels for entries $a_1,\ldots,a_7$.  The negative fixture
+\path{review_bundle/negative_certificate_record_example.json} and recorded run
+\path{review_bundle/negative_certificate_record_example_run.md} instantiate the first
+failure mode for a forbidden command-run escalation.  Each pass record in the
 ledger has the five fields \emph{gate name}, \emph{input surface},
 \emph{decision}, \emph{evidence pointer}, and \emph{evidence level}.  The
 machine-readable submission-interface map is locked to rows \path{sim1}--\path{sim4}
@@ -1015,17 +1063,17 @@ the claim is a finite record check.  The manifest
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} contains top-level fields named
 \path{certificate_schema}, \path{current_package_pass_records},
 \path{submission_interface_map}, \path{primary_claim_inventory},
-\path{verifier_script}, and \path{verifier_run_log}; these fields point to the six
+\path{verifier_script}, and \path{verifier_run_log}; these fields point to the verifier
 bundle files named in the statement.  Thus the executable verifier is not an
 implicit prose convention but a submitted artifact surface.
 
 The schema file lists the seven claim kinds, the two evidence levels, the same
 gate dispatch $\Gamma$ used in the supplement, and the required pass-record
-fields $(g,I,d,e,\ell)$.  The pass-record ledger has exactly six entries,
-$a_1,\ldots,a_6$.  For each entry it records a nonempty claim-kind set, the
+fields $(g,I,d,e,\ell)$.  The pass-record ledger has exactly seven entries,
+$a_1,\ldots,a_7$.  For each entry it records a nonempty claim-kind set, the
 path-verified evidence level, a finite evidence surface, the route-boundary or
 human-promotion field, pass records, the discovery-interface field, and the
-evidence boundary.  Inspecting the six entries gives the required gate coverage:
+evidence boundary.  Inspecting the seven entries gives the required gate coverage:
 $a_1$ has inventory and marker-existence records; $a_2$ has promotion, overlap,
 submission-state, and submission-pack records; $a_3$ has promotion, overlap, and
 submission-state records; $a_4$ has promotion, overlap, submission-state, and
@@ -1034,11 +1082,14 @@ records; and $a_6$ has status and limitation-ledger records.  These are exactly
 the unions of the gate sets assigned by $\Gamma$ to the claim-kind sets displayed
 in Table~\ref{tab:current-acceptance-ledger}.  The only row with discovery kind
 is $a_5$, and it is the only row with a non-null discovery-interface field; every
-row is path-verified and therefore carries a boundary saying that no command-run
-assertion is made.
+path-verified row carries a boundary saying that no command-run assertion is
+made.  The seventh row $a_7$ is the bibliography/venue-freshness traceability and
+submission-pack record; it is path-verified in the acceptance ledger, while the
+separate command-boundary inventory below records the live-check command log used
+for the bounded venue and bibliography freshness assertion.
 
 The script \path{review_bundle/verify_certificate_records.py} implements precisely
-these finite checks: required manifest fields, entries $a_1$--$a_6$, kind-domain
+these finite checks: required manifest fields, entries $a_1$--$a_7$, kind-domain
 membership, evidence-level membership, assigned-gate coverage, the five
 pass-record fields, evidence-level agreement, discovery-field discipline, the
 path-verified boundary condition, exact row locks for \path{sim1}--\path{sim4}
@@ -1048,11 +1099,17 @@ and evidence levels.  The recorded log
 \path{review_bundle/certificate_verification_run.log} records a successful run of
 that script over the submitted files and states the boundary that no Lean build,
 publication-daemon run, or Rule110 dynamic artifact rerun is being certified.
+The negative fixture log
+\path{review_bundle/negative_certificate_record_example_run.md} records the command
+\path{python review_bundle/verify_certificate_records.py --negative-example review_bundle/negative_certificate_record_example.json}
+and the expected rejection of a route row whose evidence level is raised to
+command-run without the required command-run tuple.
 Consequently the executable artifact proves exactly the schema-level instance of
 $V$ claimed here.  By the finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, this is also
 an instance of the paper's finite record-acceptance semantics: the executable
-record accepts exactly the six current-package certificates and no stronger
-evidence level or omitted gate semantics.
+record accepts exactly the current-package certificates and rejects the
+recorded command-run escalation example; hence it supplies no stronger evidence
+level or omitted gate semantics.
 
 Finally, \path{review_bundle/submission_interface_map.json} has rows
 \path{sim1}--\path{sim4}.  The verifier now rejects a mutation of any row's
@@ -1576,10 +1633,18 @@ as publication work without human promotion, and the constructed tuple below is
 submitted to the finite schema verifier rather than being identified with the
 acceptance entry itself.
 \end{enumerate}
-Then, and only under these finite-record hypotheses, the theorem constructs
-certificates and nothing stronger.  For
-every accepted load-bearing claim $c$ it constructs, from the acceptance entry and
-the submitted finite evidence surfaces, a record
+Then, and only under these finite-record hypotheses, the package checker has the
+following finite-record invariant.  The checker input is the submitted surface
+$S$, the ledger $L$, the dispatch table $\Gamma$, and the schema files and bundle
+records named in Proposition~\ref{prop:finite-certificate-schema-verifier}.  Its
+output is the finite accepted set
+\[
+\mathsf{Out}_{\Gamma,S}(L)=
+\{(c,\mathsf{Cert}_{\Gamma}(c)):\ V(c,\mathsf{Cert}_{\Gamma}(c))=1\}
+\]
+together with the finite list of rejected bad subrecords.  For every accepted
+load-bearing claim $c$ it constructs, from the acceptance entry and the submitted
+finite evidence surfaces, a record
 \[
 \mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)
 \]
@@ -1618,11 +1683,17 @@ Theorem~\ref{thm:current-package-certificate-exactness}.
 \begin{proof}
 We verify the obligations in the order advertised in the statement.
 
-\emph{Construction.}  Let $c$ be an accepted load-bearing claim in the
-manuscript.  The acceptance-entry hypothesis
-supplies the claim-kind set $K$, evidence level $\ell$, and evidence surface $E$,
-so the decision is attached to a source path, artifact path, command log,
-inventory, or witness record rather than to generated prose alone.  Record-gate-soundness
+\emph{Package-checker construction.}  The checker first reads the finite record
+surface $S$ and ledger $L$; no prose paragraph or live daemon state is queried.
+For each ledger row it forms the candidate tuple
+$(K,\ell,E,H,R,D,B)$, runs the six predicates $P_1,\ldots,P_6$, appends
+$(c,\mathsf{Cert}_{\Gamma}(c))$ to $\mathsf{Out}_{\Gamma,S}(L)$ on acceptance,
+and otherwise appends the least failed predicate together with the fields read by
+that predicate to the rejected-subrecord list.  Let $c$ be an accepted
+load-bearing claim in the manuscript.  The acceptance-entry hypothesis supplies
+the claim-kind set $K$, evidence level $\ell$, and evidence surface $E$, so the
+decision is attached to a source path, artifact path, command log, inventory, or
+witness record rather than to generated prose alone.  Record-gate-soundness
 supplies the pass-record field $R$ for every gate assigned by $\Gamma$.  If
 accepting $c$ crosses from intake or source material into daemon-visible
 publication work, the promotion assumption supplies the human-promotion field
@@ -1635,8 +1706,10 @@ schema.  Thus the constructor
 \(\mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)\) is determined by
 finite submitted records and is locally checkable whenever its cited paths and
 manifest rows lie in the submitted artifact, review bundle, or explicit
-historical boundary.  The same construction verifies
-$\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
+historical boundary.  The output invariant follows from the same case split:
+accepted rows are exactly those for which all six predicates hold, and rejected
+rows carry the finite bad subrecord defined by the first failed predicate.  The
+same construction verifies $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
 \emph{Record exactness.}  The finite-record exactness of
 Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
 certificate with the paper's independently stated record-acceptance semantics,
@@ -1775,8 +1848,14 @@ lists the accepted rows and their evidence surfaces.  The assigned-gate boundary
 theorem gives the finite-record form of record-gate soundness and blocks an
 unrecorded implementation-soundness reading.  The machine-readable certificate
 records supply the schema mirror, pass-record rows, interface map, inventory,
-verifier script, and verifier log when the exact review-bundle support surface is
-submitted with matching final digests.  The case-witness proposition supplies
+verifier script, positive verifier log, negative fixture, and negative verifier
+log when the exact review-bundle support surface is submitted with matching final
+digests.  The positive log records the invocation
+\path{python review_bundle/verify_certificate_records.py} and exit code
+\path{0}; the negative log records the invocation
+\path{python review_bundle/verify_certificate_records.py --negative-example review_bundle/negative_certificate_record_example.json}
+and the expected finite rejection \path{neg1: command-run fields incomplete}.
+The case-witness proposition supplies
 the finite case-study paths used by the accepted lesson rows.  Applying
 Theorem~\ref{thm:publication-safety-interface} to these records gives the stated
 construction; Theorem~\ref{thm:current-package-certificate-exactness} is the
@@ -2260,37 +2339,44 @@ Submission-pack gate & review, venue, bibliography, and metadata checks & unrevi
 
 \begin{lemma}[Gate-witness criterion]
 \label{lem:gate-witness-criterion}
-A case record is a path-verified witness for the safety interface when it names
-the source or artifact surface, the invariant that failed, the gate decision,
-and the safe manuscript lesson.  Under the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface},
-such a witness can support a case-study claim, but not a stronger command-run
-claim, unless the corresponding command log is also recorded.
+A case record is a historical path-verified witness for the safety interface
+when it names the source or artifact snapshot surface, the invariant that failed,
+the gate decision recorded for that snapshot, and the safe manuscript lesson.
+Under the finite-record interface theorem,
+Theorem~\ref{thm:publication-safety-interface}, such a witness can support a
+case-study claim about the recorded historical gate surface, but not a stronger
+command-run, benchmark, live-daemon, rebuild, dynamic-artifact, or semantic
+validation claim, unless the corresponding command, source state, environment,
+exit code, and log path are also recorded.
 \end{lemma}
 
 \begin{proof}
 The four named fields are exactly the data required by the definition of a
-path-verified evidence level: they identify where the case is checked, which
-gate predicate is being evaluated, what decision was made, and which bounded
-claim may be carried into the manuscript.  The definition of command-run
-evidence has additional required fields: command, source commit, environment,
-exit code, and log path.  Therefore a witness record with only the four
-path-verified fields supports the bounded case-study claim and cannot be used
-as evidence for a fresh command-run assertion.\end{proof}
+path-verified historical evidence level: they identify the snapshot surface on
+which the case is checked, which gate predicate was evaluated, what decision was
+recorded, and which bounded claim may be carried into the manuscript.  A live
+benchmark, daemon execution, full-source rebuild, dynamic artifact run, or
+semantic validator would add an event time, command, source state, environment,
+exit code, log path, and usually a new artifact-output surface.  Those fields are
+not read by a historical witness.  Therefore a witness record with only the four
+path-verified fields supports the bounded case-study claim and cannot be used as
+evidence for a fresh command-run assertion.\end{proof}
 
 \begin{proposition}[Path-complete case witnesses]
 \label{prop:path-complete-case-witnesses}
 Suppose a case-study row is used as load-bearing evidence for
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.  If the row is path-complete in
 the sense above, then the row supplies exactly the evidence surface required for
-a path-verified historical case claim and no evidence surface for a fresh daemon,
-full-source, theorem-content, artifact-suite, or semantic-substrate rerun.  In
-fact every accepted path-complete case row factors through one of four finite
-witness skeletons---promotion, route/submission blocking, theorem-content
-non-growth, or artifact-limitation disclosure---and its admissible manuscript
-lesson is the unique bounded lesson attached to that skeleton.  Replacing that
-lesson by a fresh experiment, dynamic validation, or semantic artifact claim
-changes the skeleton by adding a command-run or artifact-semantic coordinate, so
-the original row no longer certifies the stronger claim.  In
+a path-verified historical snapshot case claim and no evidence surface for a
+fresh daemon, full-source, theorem-content, artifact-suite, benchmark, or
+semantic-substrate rerun.  In fact every accepted path-complete case row factors
+through one of four finite witness skeletons---promotion, route/submission
+blocking, theorem-content non-growth, or artifact-limitation disclosure---and its
+admissible manuscript lesson is the unique bounded lesson attached to that
+skeleton.  Replacing that lesson by a fresh experiment, dynamic validation, live
+benchmark, or semantic artifact claim changes the skeleton by adding a
+command-run or artifact-semantic coordinate, so the original row no longer
+certifies the stronger claim.  In
 particular, a promotion row is sufficient only
 for the bounded claim that an intake packet is not daemon-visible publication
 work before human promotion; a route-overlap row is sufficient only for the
@@ -2304,8 +2390,9 @@ block promotion.
 
 \begin{proof}
 Let $r$ be a path-complete case row.  By definition, every load-bearing
-component of $r$ has a concrete source or artifact path.  The promotion
-interface names the candidate surface, human-promotion evidence, active-paper
+component of $r$ has a concrete source or artifact snapshot path, directory
+manifest, or explicit historical boundary.  The promotion interface names the
+candidate surface, human-promotion evidence, active-paper
 markers, gate decision, and the bounded manuscript claim; these fields are
 precisely the data needed to distinguish inactive intake from publication work.
 The route-overlap interface names the active route, the submitted sibling that
