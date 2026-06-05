@@ -7358,8 +7358,12 @@ def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
         return True, "minor revision", "Overall verdict: Minor revision\n(dry run)"
 
     pdf_path = Path(state.pdf_path) if state.pdf_path else None
-    fresh_prompt = build_oracle_review_prompt(
-        state.target_journal, framing_mode="fresh_eval")
+    fresh_prompt = (
+        build_oracle_review_prompt(state.target_journal, framing_mode="fresh_eval")
+        + "\n\nEXTRACTION SAFEGUARD: Your first visible characters must be `Overall verdict:`. "
+        + "Do not include any preamble, UI text, thinking summary, salutation, "
+        + "markdown fence, or quoted prompt text before the verdict line."
+    )
     logger.info(f"{tag} fresh-eval submit task={fresh_task_id}")
     if not oracle_submit(
         fresh_task_id, fresh_prompt, pdf_path,
