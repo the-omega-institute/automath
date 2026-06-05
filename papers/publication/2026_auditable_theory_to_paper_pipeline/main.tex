@@ -137,6 +137,49 @@ archive replacement can be inferred from the source.  This proves both the
 single package convention and its conditional external boundary.
 \end{proof}
 
+\begin{theorem}[Nested six-row and seven-row package states]
+\label{thm:nested-package-states}
+Let $P^{+}_{6}$ denote the current row-frozen certificate state whose accepted
+rows are exactly $a_1,\ldots,a_6$ in
+Table~\ref{tab:current-acceptance-ledger}.  Let $P^{+}_{7}$ denote the enlarged
+submitted support state obtained by adjoining the single manual theorem-ledger
+row $a_7$ whose submitted coordinate is \path{theorem_inventory.json}.  Then
+$P^{+}_{6}\subset P^{+}_{7}$ as finite record surfaces, and the inclusion is
+conservative for the first six certificates: every acceptance decision, evidence
+level, assigned-gate family, discovery-interface field, and command-boundary
+field of rows $a_1,\ldots,a_6$ is the same in $P^{+}_{6}$ and $P^{+}_{7}$.  The
+only new accepted claim of $P^{+}_{7}$ is the bounded manual theorem-obligation
+ledger claim for $a_7$.  In particular the two states are nested package states,
+not competing final ledgers: $P^{+}_{6}$ is the exact six-row current-package
+certificate state used by Theorem~\ref{thm:current-package-certificate-exactness},
+while $P^{+}_{7}$ is the submitted theorem-ledger extension used by
+Theorem~\ref{thm:theorem-obligation-ledger-boundary}.
+\end{theorem}
+
+\begin{proof}
+The tables and support records are finite, so the assertion is checked by
+coordinates.  By definition, $P^{+}_{6}$ contains the primary article, this
+supplement, the six accepted rows $a_1,\ldots,a_6$, their certificate fields, and
+the conditional review-bundle support surface named in
+Proposition~\ref{prop:current-package-acceptance-certificate-ledger}.  The state
+$P^{+}_{7}$ is formed by adding one additional row, $a_7$, together with the
+manifest exposure of \path{theorem_inventory.json}.  No row $a_i$ with
+$1\leq i\leq 6$ is edited in this construction, and no field of its certificate
+is replaced: the same finite tuple $(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)$ is read by
+Definition~\ref{def:certificate-schema-acceptance-table} in both states.  Hence
+Theorem~\ref{thm:record-acceptance-exactness} gives the same acceptance decision
+for each of the six rows in both states.
+
+The added coordinate has a different declared role.  Its accepted claim is not a
+new mathematical proof, a proof-assistant rebuild, or an extractor-completeness
+claim; it is the manual obligation-ledger traceability claim later classified in
+Proposition~\ref{prop:manual-theorem-inventory-boundary}.  Since the finite
+record added to pass from $P^{+}_{6}$ to $P^{+}_{7}$ is exactly this new row and
+its manifest exposure, every accepted claim outside $a_7$ is inherited unchanged
+from $P^{+}_{6}$, while $a_7$ supplies only the bounded theorem-ledger coordinate.
+This proves both the nesting and the non-competition statement.
+\end{proof}
+
 The setting is adjacent to proof-assistant systems such as Lean
 \cite{deMouraKADR2015Lean}, machine-learning interfaces to formal proving such
 as LeanDojo \cite{YangEtAl2023LeanDojo}, informal-to-formal guidance methods
@@ -691,6 +734,30 @@ only; no unprinted semantic oracle is part of it.  The next definition packages
 the same finite fields as an explicit input type and a finite acceptance table;
 the exactness theorem below then proves that the verifier and the independently
 named record-acceptance relation coincide on that finite data structure.
+\end{definition}
+
+\begin{definition}[Stronger-reading preorder]
+\label{def:stronger-reading-preorder}
+Fix the dispatch table $\Gamma$ and certificate tuple
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$ of
+Definition~\ref{def:operational-acceptance-interface}.  A proposed reading
+$c^{+}$ of the same prose claim is \emph{record-stronger} than $c$, written
+$c\preceq_{\Gamma} c^{+}$, if at least one of the following finite coordinates is
+strictly enlarged while the others are unchanged or enlarged: the claim-kind set
+$K$; the evidence level, from $\mathsf{path}$ to $\mathsf{command}$; the evidence
+surface $E$; the promotion field $H$; the assigned gate-pass family $R$; the
+discovery-interface field $D$; or the boundary field $B$.  It is
+\emph{properly stronger} if the enlargement is strict in at least one coordinate.
+It is \emph{accepted as a stronger reading} only when the enlarged tuple still
+satisfies $\mathsf{Acc}_{\Gamma}$: every newly added kind has its assigned gates,
+every newly raised evidence level has the command tuple required by A6, and every
+new evidence item is on the submitted support surface or in an explicit
+historical boundary.
+
+The preorder is intentionally syntactic and finite-record based.  It is not a
+semantic entailment relation between mathematical propositions, and it does not
+turn an inventory entry, digest row, or path reference into proof evidence for a
+theorem-like environment.
 \end{definition}
 
 \begin{definition}[Certificate-schema acceptance table]
@@ -1412,9 +1479,12 @@ interfaces gives the stated conclusion: scheduling and classifier-shift scoring
 can advise selection order, but discovery acceptance still occurs only through
 the discovery gate.\end{proof}
 
-The next result is a finite-record certificate theorem for the workshop route: it
-constructs and bounds records visible in the submitted package.  Its sharpness is
-the finite extension-budget normal form of
+The next result is the concrete verifier/interface contribution for the workshop
+route.  It constructs a finite certificate from submitted rows, proves that the
+certificate is exact for the acceptance relation above, and classifies all
+properly stronger readings by the preorder of
+Definition~\ref{def:stronger-reading-preorder}.  Its sharpness is the finite
+extension-budget normal form of
 Theorem~\ref{thm:finite-extension-budget-normal-form}, not an
 implementation-soundness or semantic-correctness theorem for the underlying tools.
 \begin{theorem}[Axis-and-level certificate invariant under record-gate soundness]
@@ -1467,12 +1537,17 @@ required for its claim kind.  Accepted discovery claims additionally inherit the
 bounded pinned source-interface consequences that statement-only, code-only,
 mechanical-expansion, and compression-only outputs are not accepted as discovery
 without the required certificate, ledger, and lineage witnesses.  Moreover, the
-constructed record is axis-and-level invariant: no load-bearing consequence of
-$c$ can move from one architecture axis of
-Definition~\ref{def:architecture-axis-map} to another, or from the path-verified
-level to command-run strength, unless the submitted record surface contains the
-corresponding finite extension coordinates and those records pass the assigned
-gates.
+constructed record is axis-and-level invariant and sharp for the stronger-reading
+preorder: if $c\preceq_{\Gamma}c^{+}$ is a properly stronger reading that moves
+a load-bearing consequence from one architecture axis of
+Definition~\ref{def:architecture-axis-map} to another, raises the evidence level
+from path-verified to command-run strength, adds an implementation, artifact,
+venue, or semantic-correctness assertion, or adds a theorem-obligation
+completeness assertion, then $c^{+}$ is accepted by the same interface if and only
+if the submitted record surface contains the corresponding finite extension
+coordinates and those records pass the assigned gates.  If those coordinates are
+absent, the accepted certificate is maximal below $c^{+}$: it still accepts $c$
+and rejects the stronger reading by a finite bad subrecord.
 
 The maximality of this constructed certificate is stated separately in
 Proposition~\ref{prop:publication-safety-maximality}, and the exact finite price
@@ -1521,9 +1596,14 @@ Definition~\ref{def:certificate-schema-acceptance-table} forces the command,
 source state, environment, exit code, and log path into $B$.  In both cases,
 Theorem~\ref{thm:finite-extension-budget-normal-form} identifies the added
 finite coordinates as the positive extension budget for the stronger reading.
-If those coordinates are absent, Theorem~\ref{thm:record-acceptance-exactness}
-returns the same original certificate and no cross-axis or cross-level
-consequence is certified.
+If those coordinates are absent, Definition~\ref{def:stronger-reading-preorder}
+identifies the proposed assertion as a properly stronger reading without the
+extension coordinates required for acceptance.  Theorem~\ref{thm:record-acceptance-exactness}
+then returns the same original certificate and no cross-axis, cross-level,
+implementation, artifact-semantic, venue, or theorem-completeness consequence is
+certified.  The failed coordinate is a finite bad subrecord because it is either a
+missing kind in $K$, a missing gate record in $R$, a missing command tuple in $B$,
+or an evidence item outside the submitted surface $E$.
 
 \emph{Gate coverage.}  Propositions~\ref{prop:claim-kind-dispatch} and
 \ref{prop:gate-interface-separation} identify the required finite gate set:
@@ -1824,8 +1904,10 @@ historical paths named in the case catalogue.  Root-level diagnostics such as
 \path{source_interface_record.json} may explain local provenance or path-verified
 history, but they are not finite package coordinates for this proposition unless
 their contents are represented in \path{main.tex} or in the submitted support
-surface.  The TeX source fixes the displayed six-row ledger, while the
-review-bundle files in this definition are
+surface.  The TeX source fixes the displayed six-row ledger.  This state is denoted
+$P^{+}_{6}$ in Theorem~\ref{thm:nested-package-states}: it is the row-frozen
+certificate state for $a_1,\ldots,a_6$, before the submitted manual theorem-ledger
+coordinate $a_7$ is adjoined.  The review-bundle files in this definition are
 supplemental-record components: claims that depend on them are conditional on
 those files being submitted with matching paths and records, or on an archival
 equivalent satisfying Proposition~\ref{audit:review-bundle-availability-condition}.
@@ -3896,12 +3978,15 @@ extraction certificate.
 \begin{theorem}[Seven-row submitted theorem-obligation ledger integration]
 \label{thm:theorem-obligation-ledger-boundary}
 Let $P^{+}_{7}$ be the seven-row support state obtained from $P^{+}_{6}$
-by adding exactly the manual submitted theorem-ledger coordinate \path{a7}.  In
+by the conservative finite-record extension of
+Theorem~\ref{thm:nested-package-states}, namely by adding exactly the manual
+submitted theorem-ledger coordinate \path{a7}.  In
 $P^{+}_{7}$, the theorem-obligation ledger is no longer a detached review-only
 artifact: the submitted finite support surface contains
 \path{theorem_inventory.json} through the manifest field \path{theorem_inventory}
 and through acceptance-ledger entry \path{a7}.  The earlier six-row state
-$P^{+}_{6}$ of Theorem~\ref{thm:current-package-certificate-exactness} remains
+$P^{+}_{6}$ of Theorems~\ref{thm:nested-package-states}
+and~\ref{thm:current-package-certificate-exactness} remains
 the row-frozen certificate state for \path{a1}--\path{a6}; the present theorem
 adds exactly the manual theorem-ledger coordinate \path{a7}.  Consequently the
 package may make
