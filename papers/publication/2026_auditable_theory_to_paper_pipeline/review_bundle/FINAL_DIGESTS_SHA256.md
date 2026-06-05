@@ -1,4 +1,4 @@
-﻿# Review Bundle Final Digest Record
+# Review Bundle Final Digest Record
 
 - packaging decision date: 2026-06-04
 - digest refresh date: 2026-06-05
@@ -14,12 +14,12 @@
 
 | SHA-256 | Relative path |
 |---|---|
-| `af4fff37a9124b513f080f0b2e6643072884702d38fa008591fa9cb0ff9e0584` | `main.tex` |
-| `0b8aaabc3394698e17160614846078ce645d5772e3ec10c350e514fb7f682620` | `submission_abstract.tex` |
+| `38c3af90f5e7cdbaee367914b0a19ffac84739d987c893f3d15a3b62e8147d5c` | `main.tex` |
+| `7c42f59bd44294b9f04b9aae3adeed7aed9868ed222bcc874c913860dc1bca96` | `submission_abstract.tex` |
 | `b5377700b5f65b1b2101f8f1be0b686e74ed60136310105b10560a35c8bb4895` | `references.bib` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
-| `39640989a4bcc0f25de1498262454f5b6c89bcd70cbd7a79e04fc54546b03bba` | `theorem_inventory.json` |
-| `4c0bd0a974b9500c09fc9b02306b31dcbacbd87bb935c508a2aa80b904f3e701` | `theorem_inventory.md` |
+| `14a75af5c297976f341b3ce2f5fe96480e391111785a62fabf3b9b38655aa2a7` | `theorem_inventory.json` |
+| `a10436a670a4579ca05b30af14885fe5fb2a1cec3425ade7f5f3735d42a19b07` | `theorem_inventory.md` |
 
 ## Review-Bundle File Digests
 
@@ -39,19 +39,19 @@
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` |
 | `0f242e9d4eec0f8cabc8591cdb465a4f411c5468fe4a5e71f1d7fd4c90363849` | `review_bundle/certificate_schema.json` |
-| `c6e63318c182465009a740f8def2f4978bb43121829fce0433351612853a2d2b` | `review_bundle/certificate_verification_run.log` |
+| `546f7d147bbce2cf76ae9bc0ab5fe9e849997894261e5de0cf321ff79e5cd19a` | `review_bundle/certificate_verification_run.log` |
 | `5517bf4aae70800748e714ce877b051bc5a00e4a8d0ee664fac86a821a35fe50` | `review_bundle/current_package_pass_records.json` |
 | `01b791c58f24d1ef2482a6eccadf4b253573a291b30942d959ca2b343dc10e3d` | `review_bundle/primary_claim_inventory.json` |
 | `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
-| `6746e09a682f222fd51864493d6ed1079c0866ff2513719f2b236d61d007a557` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
+| `84f80ca6ebe1ff40a36cb2669d2974a86a7803067c948c67963af76e4f030721` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
 | `2306757f80b553b0dda6dc86ea99eaa9deb4e3515a887417e9b461cfaa60d73d` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
-| `3704c46461992544712826233350c6d5093b35c2b2fe938d227b31b1c96ffd6c` | `review_bundle/source_interface_verification_run.log` |
+| `a4c132f267c5e5e3fc15fc47df0fff935f0992267cf9128dd56c1cd9c8ff5e00` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
-| `6e5922711d8eece5b82ea98406561b21175c5b2c836493a8e533f585e676d912` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` |
+| `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` |
 | `25a4d000abae7d32c016759cab1546dc73d1422f00ea05189c42789ac9ddca51` | `review_bundle/verify_certificate_records.py` |
 | `8b4d8bce68e0a62d5e05dcda9d5a257aceb43820db6e1f4c17c54a8dc6c4d1a7` | `review_bundle/verify_primary_claim_inventory.py` |
 | `3742be8811e5d703d8b5a78403b242bb7368858cb0443b00c3760b17121afecc` | `review_bundle/verify_source_interface_record.py` |

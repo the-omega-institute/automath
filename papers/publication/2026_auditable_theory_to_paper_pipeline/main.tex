@@ -734,6 +734,21 @@ only; no unprinted semantic oracle is part of it.  The next definition packages
 the same finite fields as an explicit input type and a finite acceptance table;
 the exactness theorem below then proves that the verifier and the independently
 named record-acceptance relation coincide on that finite data structure.
+
+For a package $P$ with ledger $L$, dispatch table $\Gamma$, and submitted
+support surface $S$, write
+\[
+\mathsf{RGS}_{S}(P,L,\Gamma)
+\]
+for the following finite predicate.  For every acceptance entry of a
+load-bearing claim $c$ in $L$, there is a publication certificate
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$ such that $E\subseteq S$, $V(c,\mathcal C)=1$,
+each pass record in $R$ is a submitted row of $L$, the row decision is passing,
+and the row's evidence pointer denotes an element of $S$ at the evidence level
+recorded in the row.  If $B$ does not contain command, source state,
+environment, exit code, and log path, then $\mathsf{RGS}_{S}$ asserts only this
+finite row-and-pointer property and asserts no implementation-level correctness
+of the gate that produced the row.
 \end{definition}
 
 \begin{definition}[Stronger-reading preorder]
@@ -1166,11 +1181,13 @@ mixed claims in a record-gate-sound pipeline must pass every gate in the union.\
 
 \begin{theorem}[Assigned-gate soundness audit boundary]
 \label{thm:assigned-gate-soundness-audit-boundary}
-Let $P$ be a finite submitted package with pass-record ledger $L$ and dispatch
-table $\Gamma$.  For a load-bearing claim $c$, write
-$G(c)=\bigcup_{k\in K(c)}\Gamma(k)$ for the finite set of gates assigned to its
-claim-kind set.  The package may use a ledger row for $c$ as a sound
-record-gate witness exactly at the following finite-record strength:
+Let $P$ be a finite submitted package with pass-record ledger $L$, dispatch
+table $\Gamma$, and submitted support surface $S$.  For a load-bearing claim
+$c$, write $G(c)=\bigcup_{k\in K(c)}\Gamma(k)$ for the finite set of gates
+assigned to its claim-kind set.  The package may use a ledger row for $c$ as a
+sound record-gate witness only through the finite predicate
+$\mathsf{RGS}_{S}(P,L,\Gamma)$ of Definition~\ref{def:operational-acceptance-interface}.
+Equivalently, the available finite-record strength is exactly the following:
 \begin{enumerate}
 \item for every $g\in G(c)$ the submitted ledger contains a pass row for $g$,
 including the gate name, input surface, decision, evidence pointer, and evidence
@@ -1187,21 +1204,22 @@ source state, environment, exit code, and log path for the assigned gate.
 Consequently, in the absence of the audit tuple in (3), record-gate soundness is
 an explicit hypothesis of the publication-safety theorem, not a theorem proved by
 the current package.  The finite pass rows prove only the package-level statement
-that no accepted ledger claim omits an assigned gate row or its declared evidence
-surface.
+that no accepted ledger claim omits an assigned gate row or its declared
+submitted evidence surface.
 \end{theorem}
 
 \begin{proof}
 The dispatch table has finite values by Proposition~\ref{prop:claim-kind-dispatch};
-hence $G(c)$ is finite.  A submitted pass-record ledger is also finite.  The
-schema verifier of Proposition~\ref{prop:finite-certificate-schema-verifier}
-therefore checks the first condition by a finite membership test: for each gate
-name in $G(c)$ it searches the rows attached to $c$ and compares the finite
-fields gate name, input surface, decision, evidence pointer, and evidence level.
-If one of these rows is missing, the certificate contains the second bad
-subrecord of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, namely a
-missing pass record for an assigned gate.  If a row is present, the verifier has
-only the finite string and path fields carried by that row.
+hence $G(c)$ is finite.  A submitted pass-record ledger and support surface are
+also finite.  The predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ therefore expands to a
+finite conjunction of row and pointer tests: for each accepted load-bearing claim
+it supplies a certificate satisfying $V(c,\mathcal C)=1$, and for each gate name
+in $G(c)$ it searches the rows attached to $c$ and compares the finite fields
+gate name, input surface, decision, evidence pointer, and evidence level.  If
+one of these rows is missing, the certificate contains the second bad subrecord
+of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, namely a missing
+pass record for an assigned gate.  If a row is present, the verifier has only the
+finite string and path fields carried by that row.
 
 The second condition is exactly the local-checkability condition for the row's
 evidence pointer.  A pointer to a path, manifest row, theorem/proposition/table
@@ -1209,8 +1227,9 @@ label, uploaded bundle file, or explicit historical boundary is a coordinate of
 the submitted finite record surface.  If the pointer does not denote one of
 those finite surfaces at the stated evidence level, the certificate has the first
 bad subrecord of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, a
-missing evidence surface.  Thus conditions (1) and (2) are precisely what the
-package can verify from $L$ and the submitted surfaces.
+missing evidence surface.  Thus conditions (1) and (2) are precisely the
+submitted-row and submitted-pointer clauses of $\mathsf{RGS}_{S}$, and they are
+precisely what the package can verify from $L$ and the submitted surfaces.
 
 The third condition concerns a different claim kind.  External implementation
 soundness, fresh execution, and semantic correctness assert facts about the
@@ -1223,9 +1242,9 @@ identical submitted pass rows but different unsubmitted gate implementations are
 indistinguishable to the finite verifier.  Hence no proof from (1) and (2) can
 establish the stronger external-gate proposition.  The stronger proposition is
 accepted only after the package is enlarged by the audit tuple in (3).  Without
-that enlargement, record-gate soundness remains a named hypothesis, while the
-proved package fact is exactly the absence of missing assigned-gate rows and
-missing declared evidence surfaces.\end{proof}
+that enlargement, record-gate soundness remains the explicit finite predicate
+$\mathsf{RGS}_{S}$, while the proved package fact is exactly the absence of
+missing assigned-gate rows and missing declared evidence surfaces.\end{proof}
 
 \begin{theorem}[Finite certificate obstruction skeleton]
 \label{thm:finite-certificate-obstruction-skeleton}
@@ -1498,15 +1517,17 @@ finite-record hypotheses.
 \item \emph{Acceptance entries}: every load-bearing claim in an active manuscript
 is either rejected or has an acceptance entry with an evidence surface inside
 this finite submitted record surface.
-\item \emph{Record-gate soundness}: in the sense of
-Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}, a recorded acceptance
-entry is present only after every gate assigned by $\Gamma$ to the claim kind has
-already produced a pass record in that finite record surface, every advisory
-output is demoted unless the deterministic gate set $\Gamma$ for its claim kind
-passes, and no independent implementation-soundness, fresh-execution, or
-semantic-correctness claim about the gates is inferred unless the package also
-contains the corresponding source path, command, source state, environment, exit
-code, and log path.
+\item \emph{Record-gate soundness}: writing $S$ for this finite submitted record
+surface and $L$ for the acceptance ledger, the package satisfies the finite
+predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ of
+Definition~\ref{def:operational-acceptance-interface} as delimited by
+Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}: every recorded
+acceptance entry has the assigned passing rows and submitted evidence pointers,
+every advisory output is demoted unless the deterministic gate set $\Gamma$ for
+its claim kind passes, and no independent implementation-soundness,
+fresh-execution, or semantic-correctness claim about the gates is inferred unless
+the package also contains the corresponding source path, command, source state,
+environment, exit code, and log path.
 \item \emph{Discovery certificate input}: discovery claims are checked through
 the pinned discovery-gate interface certified by
 Lemma~\ref{lem:source-interface-extraction-correctness} and
@@ -3701,8 +3722,9 @@ with certificate bytes fixed by the final digest manifest.
 For the current presentation package, every accepted use of a bundle-backed
 certificate coordinate is in exactly one of the following normal forms.
 \begin{enumerate}
-\item \emph{Exact inclusion}: the submitted support surface contains the exact
-\path{review_bundle/} directory whose certificate-file bytes match
+\item \emph{Exact inclusion}: an external upload or submission receipt records
+that the submitted support surface contains the exact \path{review_bundle/}
+directory whose certificate-file bytes match
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
 \item \emph{Archive-equivalent inclusion}: a replacement archive satisfies every
 row of Table~\ref{tab:review-bundle-archive-equivalence}, including manifest
@@ -3714,23 +3736,25 @@ verifier logs, and digest manifest by one common finite commit--manifest
 certificate.
 \end{enumerate}
 If none of these three normal forms is present, the attempted bundle-backed
-reading has a finite obstruction subrecord: either the exact directory is absent,
-the archive-equivalence table has a failed row, or the rerun branch lacks the
-command, source-state, environment, exit-code, log-path, and digest coordinates
-required by the command-boundary rule.  Thus the late support-surface chain is a
-finite audit-interface classification for this package, not a theorem about
-general archive infrastructure or about semantic correctness of the bundled
-artifacts.
+reading has a finite obstruction subrecord: either the external exact-inclusion
+receipt is absent, the archive-equivalence table has a failed row, or the rerun
+branch lacks the command, source-state, environment, exit-code, log-path, and
+digest coordinates required by the command-boundary rule.  Thus the late
+support-surface chain is a finite audit-interface classification for this
+package, not a theorem about general archive infrastructure, venue upload, or
+semantic correctness of the bundled artifacts.
 \end{theorem}
 
 \begin{proof}
 The candidate support surface for a bundle-backed coordinate can differ from the
-source-level package in only three record-visible ways.  First, it can supply the
-same directory selected by Proposition~\ref{prop:final-package-shape-convention}.
+source-level package in only three record-visible ways.  First, it can supply an
+external receipt for the same directory selected by
+Proposition~\ref{prop:final-package-shape-convention}.
 Theorem~\ref{thm:exact-inclusion-support-surface-realization} and
 Theorem~\ref{thm:final-support-surface-closure} prove that this exact directory,
-with the final digest manifest, realizes the bundle-backed surface; this is
-normal form~(1).
+with the final digest manifest, is the local byte surface that must be supplied;
+the additional receipt is what turns that local selection into submitted support.
+This is normal form~(1).
 
 Second, the candidate can replace the directory by an archive.  The manuscript
 does not accept arbitrary archive availability as a certificate coordinate:
@@ -3879,20 +3903,24 @@ Manifest exposure & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and \path{r
 \end{tabularx}
 \end{table}
 
-\begin{proposition}[Manual theorem-inventory boundary]
+\begin{theorem}[Manual theorem-inventory boundary]
 \label{prop:manual-theorem-inventory-boundary}
 The file \path{theorem_inventory.json} is a manual Stage-A inventory record
 rather than a deterministic theorem-environment extractor output.  Its accepted
 role in the current theorem chain is finite obligation traceability: it
-enumerates the theorem-like obligations selected by the Stage-A review and
+enumerates the theorem-like obligations selected by the Stage-A review,
+including the reported count of sixty-one displayed theorem-like entries, and
 connects that finite list to the manifest and acceptance ledger.  The inventory
 indexes obligations; the evidence for those obligations is supplied by the
 corresponding TeX statements and proofs in this source, together with external
 records only where a statement explicitly cites them.  It is not an executable
 completeness certificate for all \LaTeX{} theorem environments in
 \path{main.tex}; no extractor command, extractor log, or theorem-environment
-coverage claim is part of the current submitted support surface.
-\end{proposition}
+coverage claim is part of the current submitted support surface.  Consequently
+any claim that the inventory is complete because a deterministic extractor found
+all theorem-like environments is rejected by the current finite-record interface,
+while the weaker claim that it is a manual non-semantic ledger is accepted.
+\end{theorem}
 
 \begin{proof}
 The support records named in Table~\ref{tab:submitted-theorem-obligation-ledger}
@@ -3920,7 +3948,13 @@ command-boundary, manifest, and support-surface claims that cite them.  The
 inventory therefore performs only the indexing step: it lists the obligations and
 connects that list to the acceptance ledger, while proof and evidence remain on
 separate coordinates.  Thus \path{theorem_inventory.json} supplies only the
-bounded manual traceability coordinate stated in the proposition.
+bounded manual traceability coordinate stated in the theorem.  The stronger
+deterministic extraction reading has an inclusion-minimal bad subrecord, namely
+the absent extractor command and log tuple.  The weaker manual-ledger reading has
+no such bad subrecord because its only asserted coordinates are the finite list,
+the manifest path, and the acceptance-ledger pointer.  Hence the finite interface
+accepts exactly the non-semantic manual boundary and rejects extractor
+completeness.
 \end{proof}
 
 \begin{proposition}[Regenerated theorem-inventory digest closure]
