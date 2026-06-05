@@ -4635,6 +4635,41 @@ Stage-A obligation ledger rather than an executable theorem-environment
 extraction certificate.
 \end{proof}
 
+\begin{corollary}[Current theorem-inventory digest instance]
+\label{cor:current-theorem-inventory-digest-instance}
+For the present Stage-A package, after \path{theorem_inventory.json} and
+\path{theorem_inventory.md} have been regenerated, the submitted
+theorem-obligation ledger may be cited in
+Theorem~\ref{thm:theorem-obligation-ledger-boundary} only through the refreshed
+digest rows for those two files in \path{review_bundle/FINAL_DIGESTS_SHA256.md}
+and through fresh finite-record verifier logs produced after the regenerated
+inventory files are present.  If either the two digest rows or the
+post-regeneration verifier logs are absent, the
+inventory remains a local manual index but is not closed as an exact-inclusion
+support coordinate for the bundle-backed theorem-ledger claim.
+\end{corollary}
+
+\begin{proof}
+Apply Proposition~\ref{prop:regenerated-theorem-inventory-digest-closure} to the
+two regenerated inventory files in this package.  The support branch selected by
+Proposition~\ref{prop:final-package-shape-convention} is exact inclusion, so the
+identity of each submitted support file is read from the corresponding
+relative-path and SHA-256 row in \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+Theorem~\ref{thm:theorem-obligation-ledger-boundary} uses
+\path{theorem_inventory.json} only as the manual theorem-ledger coordinate, and
+Proposition~\ref{prop:manual-theorem-inventory-boundary} excludes any stronger
+extractor or semantic-proof reading.  Therefore the only new fact needed after
+regeneration is byte-coordinate closure: the digest rows must name the new bytes,
+and the finite verifiers whose records mention the digest or inventory coordinate
+must be rerun against the package state in which the regenerated inventory files
+exist.  Without those rows and logs,
+the ledger is still a local manual file, but the exact-inclusion support relation
+points either to stale bytes or to an unverifiable command-boundary state.  With
+them, no additional mathematical, extractor, Lean, daemon, or artifact claim is
+introduced; the refreshed package supplies exactly the finite support coordinate
+used by the submitted theorem-obligation ledger.
+\end{proof}
+
 \begin{theorem}[Seven-row submitted theorem-obligation ledger integration]
 \label{thm:theorem-obligation-ledger-boundary}
 Let $P^{+}_{7}$ be the seven-row support state obtained from $P^{+}_{6}$
