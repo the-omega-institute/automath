@@ -401,7 +401,7 @@ and the bundle manifest is \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Th
 bundle reference is a submission-local support-surface note, not an external
 publication citation; it is load-bearing only if the exact bundle is uploaded with matching final digests.
 
-\begin{lemma}[Source-interface extraction correctness]
+\begin{lemma}[Manual source-interface extraction correctness]
 \label{lem:source-interface-extraction-correctness}
 For the pinned newmath repository path
 \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
@@ -439,6 +439,49 @@ none is among the fields read in this lemma.  Thus the table is complete for the
 imported interface of this paper and correct at the stated evidence level: exact
 as to path, commit, label, line range, method, date, and summary mode, and
 bounded as to mathematical restatement.\end{proof}
+
+\begin{proposition}[Manual source-interface non-escalation]
+\label{prop:manual-source-interface-non-escalation}
+Let $I$ be the imported discovery-gate interface certified by
+Lemma~\ref{lem:source-interface-extraction-correctness}.  Any later use of an
+imported source label in this paper is a consequence of $I$ only if it is a
+function of the finite fields recorded in Table~\ref{tab:source-interface-record}:
+the source path, pinned commit, label, line range, extraction date, bounded
+summary, and evidence-level qualifier.  A proposed stronger use---for example an
+exact import of the original source theorem statement, a fresh BEDC or Lean
+rebuild, an axiom-purity statement, or a semantic validation of the imported
+source theorem---is accepted by the finite-record safety interface only after the
+submitted record surface is enlarged by the corresponding source-statement,
+formal-build, or command-run coordinate and by the assigned pass records for that
+coordinate.  Without that enlargement the stronger use is rejected as a finite
+bad subrecord and the accepted consequence remains the manual path-verified
+bounded interface.
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:source-interface-extraction-correctness} identifies exactly the
+finite fields in $I$ and states that the summaries are bounded paraphrases rather
+than replacements of the original source statements.  Therefore two possible
+review states that agree on those fields but differ in an unsubmitted source
+checkout, proof-assistant state, axiom audit, or executable extraction log give
+the same values to every coordinate read by $I$.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, no claim depending on
+one of the differing unsubmitted coordinates is a consequence of the finite
+interface record.
+
+If a stronger use is made load-bearing, then it strictly enlarges the original
+source-interface reading in the stronger-reading preorder of
+Definition~\ref{def:stronger-reading-preorder}: exact source-statement import
+adds an evidence-surface coordinate, a BEDC or Lean rebuild adds formal-source or
+command-run coordinates, axiom-purity adds an assigned gate and pass record, and
+semantic validation adds a new claim-kind or boundary coordinate.  The normal
+form of Theorem~\ref{thm:finite-extension-budget-normal-form} says that such a
+genuine strengthening is accepted exactly when the added finite coordinates and
+their gate records are supplied.  If they are absent,
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns the missing
+coordinate as a finite bad subrecord.  Thus the source import used downstream,
+including in Theorem~\ref{thm:publication-safety-interface}, remains the manual
+path-verified bounded interface and nothing stronger.\end{proof}
 
 \begin{proposition}[Reviewable source-snapshot interface]
 \label{prop:reviewable-source-snapshot-interface}
@@ -1851,7 +1894,7 @@ Proposition~\ref{prop:publication-safety-maximality}, and
 Theorem~\ref{thm:finite-extension-budget-normal-form} when a path-verified route
 or submission row is silently upgraded to command-run strength.
 \end{proof}
-\begin{theorem}[Axis-and-level certificate invariant under record-gate soundness]
+\begin{theorem}[Finite-record safety interface under record-gate soundness]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above and a
 finite submitted record surface consisting only of the manuscript source, printed
@@ -2500,6 +2543,72 @@ row, or unsupported command-run escalation.  Thus the six certificates are not a
 sample of an unrecorded full-pipeline execution; they are exactly the row-frozen,
 finite, path-verified package instantiation of
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.\end{proof}
+
+\begin{theorem}[Current-package semantic non-escalation]
+\label{thm:current-package-semantic-non-escalation}
+Let $P^{+}_{6}$ be the six-row current-package state of
+Theorem~\ref{thm:current-package-certificate-exactness}, and assume the same
+support-surface availability condition.  For each accepted row $a_i$ with
+certificate
+\(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\), the following are
+equivalent for any proposed stronger reading $a_i^{+}$ of the same manuscript
+row.
+\begin{enumerate}
+\item $a_i^{+}$ is accepted by the finite-record safety interface for the current
+package.
+\item The package supplies a positive extension record
+\(\Delta(a_i,a_i^{+})\) of the normal form in
+Theorem~\ref{thm:finite-extension-budget-normal-form}, and every nonempty
+coordinate of that record lies on the submitted support surface and passes its
+assigned gates.
+\end{enumerate}
+Consequently no row of $P^{+}_{6}$ entails, by itself, semantic correctness of
+BEDC source theory, Lean, Rule110/GroundCompiler, the certificate-verifier
+implementation, upload surfaces, or venue decisions.  In the current submission
+those stronger readings are certifiable only as extension claims; when the
+extension coordinates are absent they are rejected by a finite bad subrecord, and
+the accepted content remains exactly the six row-frozen finite-record certificates
+of Theorem~\ref{thm:current-package-certificate-exactness}.
+\end{theorem}
+
+\begin{proof}
+Fix $i$.  By Theorem~\ref{thm:current-package-certificate-exactness}, the row
+$a_i$ is accepted exactly through the finite tuple
+\(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\) at the declared
+path-verified level, and the theorem identifies no additional accepted
+current-package row outside the six-row image.  If $a_i^{+}$ is accepted as a
+properly stronger reading, then it is not record-equivalent to $a_i$ in the
+preorder of Definition~\ref{def:stronger-reading-preorder}.  Hence
+Theorem~\ref{thm:finite-extension-budget-normal-form} collects the finite
+differences into a positive extension record
+\(\Delta(a_i,a_i^{+})\) consisting of added claim kinds, evidence surfaces,
+gate-pass rows, boundary fields, discovery rows, or command-run data.  Acceptance
+forces each added coordinate to satisfy the corresponding schema clause A1--A6,
+so the extension coordinates must be submitted and gate-passing.  This proves
+(1)$\Rightarrow$(2).
+
+Conversely, suppose the positive extension record is supplied on the submitted
+surface and every added coordinate passes its assigned gates.  Enlarging
+\(\mathcal C(a_i)\) by those coordinates gives the certificate tuple displayed in
+Theorem~\ref{thm:finite-extension-budget-normal-form}.  The six schema clauses of
+Definition~\ref{def:certificate-schema-acceptance-table} then hold for the
+enlarged reading, and Theorem~\ref{thm:record-acceptance-exactness} accepts
+$a_i^{+}$ exactly at the declared evidence level.  This proves (2)$\Rightarrow$(1).
+
+The listed semantic readings are all proper strengthenings of a six-row finite
+certificate: BEDC and Lean semantic correctness add formal-source or
+implementation-soundness coordinates; Rule110/GroundCompiler semantic validity
+adds artifact-semantic or evaluator-run coordinates; verifier implementation
+soundness adds implementation source, command, and pass records; upload and venue
+readings add external support-surface or decision fields.  None of those
+coordinates is one of the six row-frozen certificates identified by
+Theorem~\ref{thm:current-package-certificate-exactness}.  If the corresponding
+extension record is absent,
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns the first
+missing evidence surface, gate record, external boundary, discovery row, or
+command-run tuple as a finite bad subrecord.  Therefore the current-package
+exactness theorem is a finite-record certificate theorem and not a semantic
+correctness theorem for the named systems or surfaces.\end{proof}
 
 \begin{corollary}[Current package path-verified instantiation]
 \label{cor:current-package-path-verified-instantiation}
