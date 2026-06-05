@@ -1709,6 +1709,69 @@ and finite-coordinate classifier of
 Theorems~\ref{thm:record-acceptance-exactness} and
 \ref{thm:finite-coordinate-determination-boundary} then ensure that the resulting
 certificate proves only the finite-record claim it records.
+
+\begin{table}
+\caption{Dependency map for the finite publication-safety interface}
+\label{tab:publication-safety-dependency-map}
+\scriptsize
+\begin{tabularx}{\linewidth}{p{0.22\linewidth}p{0.33\linewidth}X}
+\toprule
+Interface component & Positive dependency & Negative boundary exposed by the dependency \\
+\midrule
+Acceptance-entry constructor & Definition~\ref{def:operational-acceptance-interface} and the ledger rows in Tables~\ref{tab:current-acceptance-ledger}--\ref{tab:current-certificate-ledger} & generated prose, advisory output, and inactive intake paths are not certificate fields \\
+Assigned gate coverage & The finite predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ and Theorem~\ref{thm:assigned-gate-soundness-audit-boundary} & gate implementation soundness is not inferred from a pass-row pointer \\
+Source-interface import & Lemma~\ref{lem:source-interface-extraction-correctness} and Propositions~\ref{prop:reviewable-source-snapshot-interface}, \ref{prop:source-interface-record-file-consistency}, and~\ref{prop:source-interface-evidence-level-separation} & bounded line-range paraphrases do not import exact BEDC/Lean theorem statements or fresh rebuilds \\
+Schema decision & Proposition~\ref{prop:finite-certificate-schema-verifier} and Theorem~\ref{thm:record-acceptance-exactness} & rejected rows return finite bad subrecords rather than implicit semantic countermodels \\
+Stronger readings & Theorems~\ref{thm:finite-certificate-obstruction-skeleton} and~\ref{thm:finite-extension-budget-normal-form} & implementation, artifact-semantic, theorem-completeness, command-run, and venue claims require positive finite extension coordinates \\
+Current instantiation & Theorem~\ref{thm:current-package-certificate-exactness} and the six-row state $P^{+}_{6}$ & the current package validates only rows $a_1$--$a_6$ and their declared finite boundaries \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{proposition}[Minimal bad-record witness for command-run escalation]
+\label{prop:publication-safety-minimal-bad-record-witness}
+In the operational interface of
+Definition~\ref{def:operational-acceptance-interface}, let $r$ be a submitted
+claim record whose claim-kind set is \{route\}, whose evidence level is declared
+to be command-run, and whose boundary field contains no command-run tuple
+$(\text{command},\text{source state},\text{environment},\text{exit code},
+\text{log path})$.  Suppose all other route coordinates of $r$ are filled:
+there is an evidence pointer, a human-promotion marker at the declared boundary,
+and pass rows for the promotion, overlap, and submission-state gates.  Then the
+schema verifier rejects $r$, and the inclusion-minimal bad subrecord is exactly
+the pair consisting of the evidence-level declaration ``command-run'' and the
+boundary field missing the five command-run coordinates.  In particular, adding
+more prose, advisory scores, route history, or path-verified evidence surfaces
+cannot repair the rejected stronger reading unless the missing command-run tuple
+is added as a finite coordinate.
+\end{proposition}
+
+\begin{proof}
+For a route claim, the dispatch table in
+Definition~\ref{def:operational-acceptance-interface} requires the promotion,
+overlap, and submission-state gates.  By hypothesis those pass rows and the
+route-boundary marker are already present, so clauses A1--A4 and A6 of
+Definition~\ref{def:certificate-schema-acceptance-table} have no missing route,
+evidence-surface, gate-coverage, or promotion coordinate to report.  The only
+remaining clause that reads the declared evidence level is the command-run part
+of the boundary condition: at command-run strength the boundary field must
+contain the command, immutable source state, environment, exit code, and log
+path.  These five fields are absent by hypothesis, so the verifier rejects.
+
+The bad subrecord is inclusion-minimal.  If the evidence-level declaration is
+removed, the command-run boundary obligation is no longer triggered by the
+record.  If the boundary field is replaced by one containing the five command-run
+coordinates, the displayed obstruction disappears and the record must be tested
+against the remaining clauses, which were assumed filled.  Deleting any unrelated
+prose, advisory score, route-history note, or path-verified surface does not add
+the missing five fields and therefore cannot change the failed command-run
+clause.  Thus the rejected stronger reading is witnessed by a finite bad record,
+not by a semantic judgment about the surrounding pipeline.  This is the concrete
+negative instance used by Theorem~\ref{thm:publication-safety-interface},
+Proposition~\ref{prop:publication-safety-maximality}, and
+Theorem~\ref{thm:finite-extension-budget-normal-form} when a path-verified route
+or submission row is silently upgraded to command-run strength.
+\end{proof}
 \begin{theorem}[Axis-and-level certificate invariant under record-gate soundness]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above and a
@@ -4271,7 +4334,7 @@ The file \path{theorem_inventory.json} is a manual Stage-A inventory record
 rather than a deterministic theorem-environment extractor output.  Its accepted
 role in the current theorem chain is finite obligation traceability: it
 enumerates the theorem-like obligations selected by the Stage-A review,
-including the reported count of sixty-one displayed theorem-like entries, and
+including the reported count of sixty-two displayed theorem-like entries after adding the finite bad-record witness, and
 connects that finite list to the manifest and acceptance ledger.  The inventory
 indexes obligations; the evidence for those obligations is supplied by the
 corresponding TeX statements and proofs in this source, together with external
@@ -4690,6 +4753,7 @@ promotion decisions.
 \bibliography{references}
 
 \end{document}
+
 
 
 
