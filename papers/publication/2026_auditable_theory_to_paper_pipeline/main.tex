@@ -904,6 +904,73 @@ environment, exit code, and log path, so the bad subrecord is the pair consistin
 of the evidence-level field and the boundary field.  This subrecord is
 independent of any surrounding paragraph that may have described the claim.\end{proof}
 
+\begin{theorem}[Verifier input--predicate--output contract]
+\label{thm:verifier-input-output-contract}
+The verifier interface used by the publication-safety theorem is exactly the
+following finite mathematical-software contract.  Its input is a pair
+$(c,\mathcal C(c))$, where $c$ is a load-bearing manuscript claim and
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\) is the certificate record of
+Definition~\ref{def:certificate-schema-acceptance-table}, together with the fixed
+dispatch table $\Gamma$ and the submitted support surface $S$.  Its checked
+predicates and outputs are:
+\begin{center}
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{0.12\linewidth}p{0.30\linewidth}X}
+\toprule
+Check & Predicate actually checked & Possible output \\
+\midrule
+$Q_1$ & $K$ is nonempty, $K\subseteq\mathsf{Dom}(\Gamma)$, and $\ell\in\{\mathsf{path},\mathsf{command}\}$ & accept this coordinate, or reject with bad fields $K,\ell$ \\
+$Q_2$ & each item of $E$ is on $S$ or in an explicitly declared pinned, logged, or historical boundary & accept this coordinate, or reject with bad field $E$ and the offending pointer \\
+$Q_3$ & every gate assigned by $\Gamma$ to a kind in $K$ has a passing five-field record in $R$ whose pointer is reviewable through $E$, a submitted table, a manifest row, a bundled snapshot, or an historical boundary & accept this coordinate, or reject with bad fields $K,R,E$ and the missing or non-reviewable gate \\
+$Q_4$ & $H$ records exactly the human-promotion crossing asserted by $c$, or records that no such crossing is asserted & accept this coordinate, or reject with bad field $H$ \\
+$Q_5$ & $D$ is present exactly for discovery-kind claims and then names only pinned source-interface rows used by $c$ & accept this coordinate, or reject with bad fields $K,D$ \\
+$Q_6$ & $B$ either contains command, source state, environment, exit code, and log path, or explicitly marks that no command-run assertion is made & accept this coordinate, or reject with bad fields $\ell,B$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+The positive output is only the finite acceptance bit
+$\mathsf{accept}(c,\mathcal C)$ for these six predicates.  The negative output is
+only the finite bad subrecord belonging to the first failed predicate.  In
+particular, the contract has no output channel for proof-assistant validity,
+daemon correctness, artifact semantics, fresh case-study reruns, venue upload, or
+venue acceptance.  Therefore any theorem in this paper that invokes the verifier
+can certify exactly finite record acceptance for the submitted schema and cannot
+certify end-to-end workflow correctness unless an enlarged input schema and an
+additional proved verifier contract are supplied.
+\end{theorem}
+
+\begin{proof}
+The input type is displayed in
+Definition~\ref{def:certificate-schema-acceptance-table}: after the fixed table
+$\Gamma$ is chosen, the only variable fields are $K,\ell,E,H,R,D,B$.  The
+submitted support surface $S$ is used only to decide whether the finite pointers
+named in those fields are reviewer-visible at the declared level.  Thus every
+listed predicate is a finite Boolean predicate on the displayed input fields and
+on the fixed submitted support surface.
+
+For each row, the predicate is identical to one of the six predicates used in the
+definition of $V$: $Q_i=P_i$ for $1\leq i\leq 6$, with the same fields read and
+with the same failure subrecord, namely the fields read by the least-indexed
+failed predicate.  Proposition~\ref{prop:finite-certificate-schema-verifier}
+proves that the bundled Python checker is an implementation witness for this
+finite schema: it reads the schema, pass-record ledger, submission-interface map,
+primary-claim inventory, and manifest, and returns either the pass transcript or
+finite error records.  The theorem here is the abstract verifier contract behind
+that implementation witness, so its output alphabet is precisely
+\(\{\mathsf{accept}\}\) together with the finite bad-subrecord reports.
+
+The final boundary follows by inspection of the input and output alphabets.  No
+field in $\mathcal C(c)$ contains an object-language proof derivation, a theorem
+prover kernel trace, a daemon transition semantics, an artifact evaluator
+semantics, a fresh rerun transcript for the historical case studies, or a venue
+receipt.  No output of the contract returns such an object either.  A conclusion
+depending on one of those objects is therefore not a function of the declared
+input record.  It can become checkable only after the schema is enlarged to add
+that object as an input coordinate and after a new verifier contract for the
+enlarged coordinate is proved.  Hence the present verifier certifies only finite
+record acceptance and its finite rejection witnesses.\end{proof}
+
 \begin{theorem}[Schema-relative finite-record acceptance exactness]
 \label{thm:record-acceptance-exactness}
 Fix the seven-kind dispatch table $\Gamma$, the two evidence levels, and the
@@ -912,7 +979,8 @@ $\mathcal C(c)=(K,\ell,E,H,R,D,B)$ of
 Definition~\ref{def:certificate-schema-acceptance-table}.  For every
 load-bearing claim $c$ and every finite candidate certificate $\mathcal C(c)$,
 the finite verifier $V$ of
-Definition~\ref{def:operational-acceptance-interface} accepts $\mathcal C(c)$ if
+Definition~\ref{def:operational-acceptance-interface} and
+Theorem~\ref{thm:verifier-input-output-contract} accepts $\mathcal C(c)$ if
 and only if the six-clause table predicate
 $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.  This is a schema-relative and
 finite-record-relative assertion: both sides read exactly the fields named in the
@@ -1141,12 +1209,15 @@ assertions about the current review bundle that are functions only of this
 projection, Proposition~\ref{prop:machine-readable-certificate-records} proves the
 maximal executable claim: the six current-package certificates satisfy the finite
 record-acceptance relation of Theorem~\ref{thm:record-acceptance-exactness} at the
-declared path-verified fields, and no accepted row carries a command-run
-boundary.  In particular, the executable verifier cannot certify any strictly
+declared path-verified fields under the input--predicate--output contract of
+Theorem~\ref{thm:verifier-input-output-contract}, and no accepted row carries a
+command-run boundary.  Thus the bundled Python script is an implementation
+witness for the finite schema, not a separately formalized verifier-language
+semantics.  In particular, the executable verifier cannot certify any strictly
 stronger assertion whose truth depends on prose-to-semantics equality,
 independent extraction of claims from the manuscript, completeness of paths not
 declared in the records, or the external semantics of a Lean development,
-publication daemon, artifact suite, or evaluator.
+publication daemon, artifact suite, evaluator, or venue state.
 \end{theorem}
 
 \begin{proof}
@@ -1156,9 +1227,11 @@ mutations of the locked fields.  Hence every executable assertion made by that
 script is constant on the equivalence classes of review bundles with the same
 projection $F$.  On this quotient, the six ledger entries, their kind sets, their
 evidence levels, their assigned gates, their pass-record fields, their discovery
-boundaries, and their path-verified non-command boundaries are all fixed.  The
-finite-record acceptance exactness theorem then identifies precisely what this fixed
-data entails: acceptance of those six certificates in the finite relation
+boundaries, and their path-verified non-command boundaries are all fixed.  By
+Theorem~\ref{thm:verifier-input-output-contract}, the executable checker has no
+other mathematical output channel.  The finite-record acceptance exactness
+theorem then identifies precisely what this fixed data entails: acceptance of
+those six certificates in the finite relation
 $\mathsf{Acc}_{\Gamma}$ and rejection of stronger readings that add kinds, raise
 the evidence level, omit route or discovery fields, omit pass records, or assert
 command-run evidence without the required command tuple.
@@ -1823,7 +1896,8 @@ finite evidence surfaces, a record
 \mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)
 \]
 accepted by the finite schema verifier of
-Proposition~\ref{prop:finite-certificate-schema-verifier}; equivalently, by the
+Proposition~\ref{prop:finite-certificate-schema-verifier} with the input--predicate--output
+boundary of Theorem~\ref{thm:verifier-input-output-contract}; equivalently, by the
 finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, the
 constructed record satisfies the schema-relative record-acceptance semantics for
 the dispatch table $\Gamma$.  Consequently, within the submitted finite records
@@ -1880,9 +1954,11 @@ schema.  Thus the constructor
 \(\mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)\) is determined by
 finite submitted records and is locally checkable whenever its cited paths and
 manifest rows lie in the submitted artifact, review bundle, or explicit
-historical boundary.  The output invariant follows from the same case split:
-accepted rows are exactly those for which all six predicates hold, and rejected
-rows carry the finite bad subrecord defined by the first failed predicate.  The
+historical boundary.  The output invariant follows from the same case split and
+from Theorem~\ref{thm:verifier-input-output-contract}: accepted rows are exactly
+those for which all six predicates hold, and rejected rows carry the finite bad
+subrecord defined by the first failed predicate, with no output channel for
+end-to-end semantic correctness, fresh case reruns, or venue acceptance.  The
 same construction verifies $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$, so
 \emph{Record exactness.}  The finite-record exactness of
 Theorem~\ref{thm:record-acceptance-exactness} identifies the constructed
@@ -2113,10 +2189,11 @@ Theorem~\ref{thm:publication-safety-interface} accepts the enlarged claim exactl
 at the evidence level declared by $B^{\mathrm{impl}}$.  When it is absent, every
 implementation-soundness reading of the same row has a finite obstruction of one
 of the five kinds in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
-Thus the central theorem is sharp: it is not an external implementation-soundness
-theorem for the current package, but it gives a complete finite-record criterion
-for what would have to be submitted to make such a stronger reading part of a
-future package.
+The current package supplies no record of the displayed form
+$\mathsf{Impl}(c)$ for the package verifiers or gates.  Thus the theorem is a
+future-facing exact criterion rather than an implementation-soundness result for
+this submission: it says precisely what finite record must be added before a
+later package may make that stronger claim.
 \end{theorem}
 
 \begin{proof}
@@ -2156,6 +2233,15 @@ the row asserts command-run implementation strength without the command-run tupl
 inside $B^{\mathrm{impl}}$, the bad subrecord is type~5.  These cases exhaust the
 finite schema fields by the obstruction-skeleton theorem, so absence of the
 extension record is exactly absence of finite support for the stronger reading.
+Inspecting Table~\ref{tab:current-certificate-ledger} and
+Proposition~\ref{prop:machine-readable-certificate-records}, the current package
+records path-verified certificate rows $a_1,\ldots,a_7$ and command-boundary
+inventory rows for bounded verifier invocations, but it does not add a new
+implementation claim kind, implementation evidence surface, implementation gate
+pass family, and implementation boundary tuple as a single
+$\mathsf{Impl}(c)$ extension record.  Therefore this theorem is not instantiated
+as an implementation-soundness theorem here; it remains an exact finite-record
+extension test for a later package.
 \end{proof}
 
 \begin{table}
