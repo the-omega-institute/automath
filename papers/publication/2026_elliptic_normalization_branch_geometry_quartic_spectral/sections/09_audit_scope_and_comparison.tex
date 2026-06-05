@@ -1,10 +1,10 @@
-\section{Proof audit, hypotheses, and recent comparison}\label{sec:audit-scope-comparison}
+\section{Proof details, hypotheses, and recent comparison}\label{sec:audit-scope-comparison}
 
-This section records the verification boundary for the fixed-object theorem chain.  The statements below are part of the mathematical specification of the paper: they identify the nonformal hypotheses that enter the main results, the exact identities on which the two deepest proofs depend, and the closest recent \emph{Indagationes Mathematicae} comparisons.
+This appendix collects supplementary details for the fixed-object theorem chain: the nonformal hypotheses that enter the main results, the exact identities on which the two deepest proofs depend, and the closest recent \emph{Indagationes Mathematicae} comparisons.
 
-\subsection{Proof audit of the two deepest arguments}\label{subsec:proof-audit}
+\subsection{Two detailed proof checks}\label{subsec:proof-audit}
 
-The two deepest arguments are Theorem~\ref{thm:canonical-branch-dominance}, because it turns the elliptic branch geometry into a global maximal-modulus statement, and Theorem~\ref{thm:endpoint-zero-quantization}, because it turns a local algebraic collision into a fixed-window zero count.  Line numbers in this subsection refer to the corresponding source files in this revision.
+The two deepest arguments are Theorem~\ref{thm:canonical-branch-dominance}, because it turns the elliptic branch geometry into a global maximal-modulus statement, and Theorem~\ref{thm:endpoint-zero-quantization}, because it turns a local algebraic collision into a fixed-window zero count.
 
 \paragraph{Audit of Theorem~\ref{thm:canonical-branch-dominance}.}
 The proof invokes the positive branch parametrization, the Sturm count, and a Vieta comparison for the nonreal pair.  The key algebra is the following.
@@ -25,7 +25,7 @@ are positive for \(\lambda>1\), the squaring step is reversible, and
 4\lambda^2(4\lambda^3-4\lambda+1)-(3\lambda^2-1)^2
 =(\lambda-1)(\lambda+1)(16\lambda^3-9\lambda^2+1)>0.
 \]
-Here the last factor is positive because it equals \(8\) at \(1\) and has derivative \(3\lambda(16\lambda-6)>0\) for \(\lambda>1\).  This verifies the monotone bijection used in source lines \(35\)--\(52\) of \texttt{sections/06\_positive\_real\_dominant\_branch.tex}.
+Here the last factor is positive because it equals \(8\) at \(1\) and has derivative \(3\lambda(16\lambda-6)>0\) for \(\lambda>1\).  This verifies the monotone bijection stated in Proposition~\ref{prop:positive-maximal-modulus-branch}.
 
 For \(y>1\), the proof produces two positive roots \(1<p<q\), where \(q\) is on the minus sheet.  The Sturm table gives exactly two real roots, so no negative real roots remain.  If the other two roots are \(z,\overline z\), then direct Vieta comparison gives, with \(r=|z|^2\),
 \[
@@ -45,13 +45,13 @@ q^2-r
 =\frac{q^2(p+q)-pq(p+q-1)+1}{p+q}
 =\frac{q(q-p)(p+q)+pq+1}{p+q}>0.
 \]
-Thus \(|z|<q\).  This is the only product-of-roots identity in the comparison; no identity of the form \(\operatorname{Tr}(AB)=\operatorname{Tr}(A)\operatorname{Tr}(B)\), \(\det(A+B)=\det A+\det B\), or cancellation of a possibly singular operator is used.  The audited source steps are lines \(147\)--\(177\) of \texttt{sections/06\_positive\_real\_dominant\_branch.tex}.  The only nonlocal input is the Sturm count displayed in \eqref{eq:positive-axis-sturm-sign-table-main}; its denominator wall \(y_0=(17+\sqrt{297})/2\) is crossed only by continuity at a non-discriminant value, so no limit/sum or root-count exchange is hidden.
+Thus \(|z|<q\).  This is the only product-of-roots identity in the comparison; no identity of the form \(\operatorname{Tr}(AB)=\operatorname{Tr}(A)\operatorname{Tr}(B)\), \(\det(A+B)=\det A+\det B\), or cancellation of a possibly singular operator is used.  The supporting steps are Lemma~\ref{lem:ygt1-no-negative-roots}, Lemma~\ref{lem:positive-axis-dominance-criterion}, and the Sturm count displayed in \eqref{eq:positive-axis-sturm-sign-table-main}.  The denominator wall \(y_0=(17+\sqrt{297})/2\), the positive root of \(y^2-17y-2\), is crossed only by continuity at a non-discriminant value.
 
 For \(0<y<1\), the proof uses the resultant
 \[
 \Res_x(\Pi(x,y),\Pi(-x,y)-\Pi(x,y))=16y^3(y-1)^2(y+1)
 \]
-only to exclude opposite real roots of equal modulus.  The strict orientation is then set by evaluating near \(y=1\): \(\Pi(-3/2,1)>0\), \(\Pi(3/2,1)<0\), and \(\Pi(\pm1,y)<0\) for \(y<1\) close to \(1\).  Hence \(r_1\in(-3/2,-1)\) and \(r_4>3/2\) near \(1\), and the excluded equality propagates \(r_4>|r_1|\) through the whole interval.  The audited source steps are lines \(134\)--\(145\) of \texttt{sections/06\_positive\_real\_dominant\_branch.tex}.
+only to exclude opposite real roots of equal modulus.  The strict orientation is then set by evaluating near \(y=1\): \(\Pi(-3/2,1)>0\), \(\Pi(3/2,1)<0\), and \(\Pi(\pm1,y)<0\) for \(y<1\) close to \(1\).  Hence \(r_1\in(-3/2,-1)\) and \(r_4>3/2\) near \(1\), and the excluded equality propagates \(r_4>|r_1|\) through the whole interval, as used in Lemma~\ref{lem:positive-axis-dominance-criterion}.
 
 \paragraph{Audit of Theorem~\ref{thm:endpoint-zero-quantization}.}
 The proof depends on the two colliding branches at \((\lambda,y)=(1,0)\).  Write \(y=s^2\) and
@@ -71,7 +71,7 @@ For the plus branch, the cubic coefficient is
 =-\frac{129+120-32}{192\sqrt2}
 =-\frac{217}{192\sqrt2},
 \]
-and the minus branch is obtained by changing the odd signs.  Thus the cubic logarithmic coefficient in Proposition~\ref{prop:endpoint-puiseux} and Appendix~\ref{app:endpoint-branching} is \(\mp217/(192\sqrt2)\), not \(\mp3/(4\sqrt2)\).  The audited source steps are lines \(193\)--\(211\) of \texttt{sections/06\_positive\_real\_dominant\_branch.tex} and the detailed coefficient check in Appendix~\ref{app:endpoint-branching}.
+and the minus branch is obtained by changing the odd signs.  Thus the cubic logarithmic coefficient in Proposition~\ref{prop:endpoint-puiseux} and Appendix~\ref{app:endpoint-branching} is \(\mp217/(192\sqrt2)\), not \(\mp3/(4\sqrt2)\).
 
 After the endpoint substitution \(s=iu/m\), the cubic logarithmic term contributes
 \[
@@ -101,9 +101,9 @@ e^{-3u^2/(8m)}
 \left[
 \cos\left(\frac{u}{\sqrt2}-\frac{3u}{4\sqrt2\,m}\right)+O_K(m^{-2})\right]
 \]
-uses only the Taylor expansion of \(\cos(\theta-\delta)\) for \(u\) in a fixed compact set.  The audited source steps are lines \(254\)--\(301\) of \texttt{sections/06\_positive\_real\_dominant\_branch.tex}.  The uniform remainder is a finite local Puiseux/partial-fraction remainder on fixed compact endpoint scales, so the Rouch\'e application is an ordinary compact-uniform perturbation argument; no unproved interchange of a limit with an infinite sum is used.
+uses only the Taylor expansion of \(\cos(\theta-\delta)\) for \(u\) in a fixed compact set.  The uniform remainder in Proposition~\ref{prop:fixed-window-endpoint-isolation} is a finite local Puiseux/partial-fraction remainder on fixed compact endpoint scales, so the Rouch\'e application is an ordinary compact-uniform perturbation argument; no unproved interchange of a limit with an infinite sum is used.
 
-\subsection{Conditional hypothesis map}\label{subsec:hypothesis-map}
+\subsection{Hypotheses used in the main results}\label{subsec:hypothesis-map}
 
 \begingroup\footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -131,7 +131,7 @@ There are no open hypotheses inside the proved fixed-object theorem chain.  The 
 
 \subsection{Comparison with recent \texorpdfstring{\emph{Indagationes Mathematicae}}{Indagationes Mathematicae} papers}\label{subsec:indag-comparison}
 
-The following table compares each main result with the closest \emph{Indagationes Mathematicae} work from 2021--2026 among the papers cited here.  The comparison is theorem-by-theorem; it is not a priority claim over the broader recurrence-zero literature.
+The following table compares each main result with the closest cited recent \emph{Indagationes Mathematicae} work from 2021--2026.  The comparison is theorem-by-theorem; it is not an exhaustive last-five-years survey or a priority claim over the broader recurrence-zero literature.
 
 \begingroup\footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -157,7 +157,7 @@ Degree law and forced boundary double zero, Propositions~\ref{prop:degree-law} a
 
 Several adjacent sources are important context even though their results are not proof inputs for the fixed-object arguments.  The limiting spectra of banded Toeplitz matrices go back to Schmidt--Spitzer \cite{SchmidtSpitzer1960} and are developed further in the modern Toeplitz/equilibrium literature \cite{DuitsKuijlaars2012}.  Analytic combinatorics in several variables gives a general framework for asymptotics of rational functions \cite{PemantleWilson2013}, while the present paper instead uses a one-parameter spectral decomposition and a local two-branch endpoint calculation.  Stability-preserver and Lee--Yang technology, represented for example by Borcea--Br\"and\'en \cite{BorceaBranden2009}, is also adjacent to zero-location questions but is not invoked in the proofs here.
 
-\subsection{Internal consistency safeguards}\label{subsec:internal-consistency-safeguards}
+\subsection{Auxiliary consistency checks}\label{subsec:internal-consistency-safeguards}
 
-The theorem chain uses the following safeguards against the standard algebraic pitfalls in recurrence-spectrum arguments.
+The theorem chain uses the following checks against standard algebraic pitfalls in recurrence-spectrum arguments.
 First, the companion-family cyclic vector is \(e_1\), not \(e_4\): the Krylov determinant in Lemma~\ref{lem:cyclic-companion} is identically \(1\), so the minimal polynomial equals the characteristic polynomial for every \(y\).  Second, the canonical real projection theorem is supported by the finite oval computation before Theorem~\ref{thm:theorem-b-real-projection-criterion}: the zeros \(\beta_i\), the ramification abscissae \(-1,1,\alpha\), and the values \(1,0,\ySub\) are computed before the theorem is used.  Third, for \(y>1\), negative real roots are excluded by producing the two positive roots and then applying the Sturm table, rather than by a false monotonicity claim in \(y\).  Fourth, for \(0<y<1\), the comparison between the roots in \((-\infty,-1)\) and \((1,\infty)\) is oriented near \(y=1\) and then propagated by the opposite-modulus resultant.  Fifth, the logarithmic cubic coefficient at the endpoint is \(\mp217/(192\sqrt2)\), and its contribution after \(s=iu/m\) is only \(O_K(m^{-2})\).  Sixth, dominance transfer under normalization is restricted to the weighted dilation \(\lambda=\alpha\Lambda\), \(y=\alpha^2Y_0+\delta\); arbitrary horizontal spectral translations are not used.
