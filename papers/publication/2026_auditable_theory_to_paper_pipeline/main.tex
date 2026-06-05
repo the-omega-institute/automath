@@ -1074,6 +1074,45 @@ then $c^{+}$ is not stronger in the record semantics: the certificate still
 licenses only the same kind set, same evidence level, same gate records, same
 route boundary, same discovery interface, and same command boundary.\end{proof}
 
+\begin{corollary}[Executable schema exactness and negative fixture]
+\label{cor:executable-schema-exactness-negative-fixture}
+Under the hypotheses and fixed schema of
+Theorem~\ref{thm:record-acceptance-exactness}, the executable verifier instance
+\path{review_bundle/verify_certificate_records.py} is a finite witness of the
+same schema-relative relation, not an additional semantic oracle.  On the positive
+submitted package it can witness exactly the records satisfying
+\(\mathsf{Acc}_{\Gamma}\) at their declared evidence levels.  On the negative
+fixture
+\path{review_bundle/negative_certificate_record_example.json}, which upgrades a
+route record to command-run strength while omitting the command, source state,
+environment, exit code, and log path, the extracted bad subrecord is exactly the
+evidence-level declaration together with the incomplete boundary field.  Hence
+the executable example separates the verifier contract from any stronger reading:
+changing prose or ambient pipeline state while keeping the finite schema fields
+fixed cannot change either the acceptance bit or the first failed finite
+subrecord.
+\end{corollary}
+
+\begin{proof}
+Proposition~\ref{prop:finite-certificate-schema-verifier} identifies the script
+\path{review_bundle/verify_certificate_records.py}, the schema files it reads,
+and the two recorded runs.  Its positive run returns the finite acceptance
+transcript for the submitted records, and its negative run returns the reported
+finite error \path{neg1: command-run fields incomplete}.  By
+Theorem~\ref{thm:verifier-input-output-contract}, those are the only two output
+kinds of the verifier contract: acceptance of the six predicates or a bad
+subrecord for the first failed predicate.  By
+Theorem~\ref{thm:record-acceptance-exactness}, positive acceptance is equivalent
+to \(\mathsf{Acc}_{\Gamma}\) for the same tuple
+\((K,\ell,E,H,R,D,B)\).  In the negative fixture, clauses A1--A4 and the
+non-discovery discipline are supplied for the route row, while the declared
+command-run level triggers clause A6 and the required five command-run fields are
+absent.  The first failed predicate therefore reads exactly \(\ell\) and \(B\),
+so deleting any unrelated prose, score, route history, or ambient implementation
+state leaves the same failure.  The script is thus an executable finite-record
+witness for the schema-relative theorem and for its negative certificate example,
+not evidence of an unrecorded semantic rerun or gate-implementation proof.\end{proof}
+
 \begin{theorem}[Finite-coordinate determination and trust-boundary classifier]
 \label{thm:finite-coordinate-determination-boundary}
 Fix the dispatch table $\Gamma$ and the verifier $V$.  Let $F_{\Gamma}$ be the
@@ -2076,6 +2115,83 @@ No current-package conclusion is used in this proof; the package instantiation
 appears only later, after its support-surface hypotheses have been stated.
 \end{proof}
 
+For reviewer reproducibility, the constructor and extractor used in
+Theorem~\ref{thm:publication-safety-interface} can be written as the following
+finite algorithms.  The constructor \(\mathsf{Cert}_{\Gamma}\) reads, in order,
+the claim-kind coordinates from the acceptance entry, the declared evidence level,
+the cited submitted surfaces, the pass rows assigned by \(\Gamma\), the route
+promotion field, the pinned discovery rows when the kind set contains discovery,
+and the command-boundary field.  The bad-record extractor \(\mathsf{Bad}_{\Gamma}\)
+applies the six schema predicates in the order of
+Theorem~\ref{thm:verifier-input-output-contract} and returns the fields read by
+the first false predicate.  Thus positive certificates and negative certificates
+are built from the same finite coordinates; neither construction consults live
+daemon state, proof-assistant semantics, artifact semantics, or venue state.
+
+\begin{proposition}[Certificate constructor and bad-subrecord extractor]
+\label{prop:certificate-constructor-bad-subrecord-extractor}
+Assume the four finite-record hypotheses of
+Theorem~\ref{thm:publication-safety-interface}.  For every ledger row \(c\) there
+is a deterministic partial constructor
+\[
+\mathsf{Cert}_{\Gamma}(c)=(K,\ell,E,H,R,D,B)
+\]
+and a deterministic extractor \(\mathsf{Bad}_{\Gamma}(c)\) with the following
+properties.
+\begin{enumerate}
+\item \(\mathsf{Cert}_{\Gamma}(c)\) is defined and accepted if and only if the
+six-clause predicate \(\mathsf{Acc}_{\Gamma}(c,\mathsf{Cert}_{\Gamma}(c))\) holds.
+\item If \(\mathsf{Cert}_{\Gamma}(c)\) is rejected, then
+\(\mathsf{Bad}_{\Gamma}(c)\) is an inclusion-minimal finite bad subrecord of one
+of the five obstruction skeletons in
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}: missing submitted
+evidence, missing assigned gate record, missing route or external decision field,
+missing pinned discovery row, or unsupported command-run boundary.
+\item For every properly stronger reading \(c^{+}\) of an accepted row, the same
+extractor rejects \(c^{+}\) exactly at the first unpaid positive extension
+coordinate of Theorem~\ref{thm:finite-extension-budget-normal-form}; if no such
+coordinate is added, \(c^{+}\) is not distinct from \(c\) in the finite-record
+preorder.
+\end{enumerate}
+Consequently the publication-safety theorem has both a positive certificate
+construction algorithm and a negative bad-subrecord extraction algorithm, each
+bounded by the submitted schema fields.
+\end{proposition}
+
+\begin{proof}
+The constructor is obtained by the ``Package-checker construction'' paragraph of
+Theorem~\ref{thm:publication-safety-interface}: from the acceptance entry it reads
+\(K\), \(\ell\), and \(E\); from record-gate soundness it reads the gate-pass rows
+\(R\) assigned by \(\Gamma\); from the promotion hypothesis it reads \(H\) or the
+no-crossing marker; from discovery routing it reads \(D\) exactly for discovery
+claims; and from the evidence-level definition it reads \(B\), either the
+path-verified boundary or the five command-run fields.  These are finite fields
+on the submitted surface, so the constructor is deterministic and partial only
+when a required field is absent.  By
+Theorem~\ref{thm:record-acceptance-exactness}, acceptance of the constructed tuple
+is equivalent to \(\mathsf{Acc}_{\Gamma}\), proving the first item.
+
+For rejection, run the predicates \(P_1,\ldots,P_6\) of
+Theorem~\ref{thm:verifier-input-output-contract} in order and return the finite
+fields read by the first false predicate.  If the failure is not merely an
+out-of-domain kind or level, it is one of the five substantive coordinates
+\(E,R,H,D,B\).  The exhaustion argument of
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} proves that these are
+exactly the five listed obstruction skeletons, and deleting unread coordinates
+gives inclusion-minimality.  If the failure is an out-of-domain kind or level,
+the same theorem reduces it to the corresponding assigned-gate or evidence-level
+boundary obstruction, since \(K\) determines the finite gate set and \(\ell\)
+determines the boundary obligation.
+
+Finally let \(c^{+}\) be a proper stronger reading of an accepted row.  By
+Theorem~\ref{thm:finite-extension-budget-normal-form}, such a reading changes at
+least one finite coordinate unless it is record-equivalent to \(c\).  The first
+changed coordinate not supplied on the submitted support surface is read by one
+of the six predicates and is therefore returned by the extractor.  If all changed
+coordinates are supplied and pass their assigned gates, the enlarged tuple is a
+new accepted certificate for the enlarged claim; if none are changed, the finite
+preorder has not distinguished \(c^{+}\) from \(c\).\end{proof}
+
 \begin{proposition}[Finite-record maximality]
 \label{prop:publication-safety-maximality}
 Under the hypotheses of Theorem~\ref{thm:publication-safety-interface}, the
@@ -2543,6 +2659,48 @@ row, or unsupported command-run escalation.  Thus the six certificates are not a
 sample of an unrecorded full-pipeline execution; they are exactly the row-frozen,
 finite, path-verified package instantiation of
 the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.\end{proof}
+
+\begin{corollary}[Row-frozen current-package invariance]
+\label{cor:row-frozen-current-package-invariance}
+Under the support-surface hypotheses of
+Theorem~\ref{thm:current-package-certificate-exactness}, the current-package
+acceptance decision factors through the six displayed rows
+\(a_1,\ldots,a_6\) and their certificate fields only.  Any two ambient repository,
+daemon, artifact, or venue states that induce the same six tuples
+\(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\), the same submitted support
+surface, and the same verifier log path induce the same accepted current-package
+certificate set.  Conversely, a reading that depends on a seventh row, a modified
+row, a fresh command execution, semantic validity of BEDC/Lean/Rule110 artifacts,
+implementation soundness of the verifier or gates, upload status, or venue
+decision is not invariant under this six-row projection and is accepted only
+after it is added as a finite extension coordinate and rechecked.  Thus the
+current-package theorem is exactly a row-frozen finite-record theorem, not a
+current-execution reproducibility theorem and not a semantic-validity theorem.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:current-package-certificate-exactness} identifies the accepted
+current-package certificates with the bijective image of the six rows
+\(a_1,\ldots,a_6\) under the map
+\(a_i\mapsto \mathcal C(a_i)\), conditioned on the submitted support surface and
+the recorded verifier log.  The verifier then reads only the finite fields of
+these tuples, the fixed dispatch table, and the cited submitted surfaces.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, two ambient states
+with identical values on those finite coordinates have the same verifier
+decision and the same finite certificate set.  This proves the stated invariance.
+
+For the converse boundary, each listed stronger reading changes a coordinate not
+contained in the six-row projection: a seventh accepted row changes the row set;
+a modified row changes one of \(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i\); a fresh command
+execution changes the boundary field to command-run evidence; semantic validity
+or implementation soundness adds claim kinds, evidence surfaces, and gate rows;
+upload or venue status adds external route/submission fields.  By
+Theorem~\ref{thm:finite-extension-budget-normal-form}, such a genuine
+strengthening has a positive finite extension budget, and by
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} an unpaid coordinate is
+reported as a finite bad subrecord.  Hence the six-row exactness result cannot be
+read as a claim about fresh reproducibility or semantic validity; those readings
+require an enlarged record and a new acceptance check.\end{proof}
 
 \begin{theorem}[Current-package semantic non-escalation]
 \label{thm:current-package-semantic-non-escalation}
