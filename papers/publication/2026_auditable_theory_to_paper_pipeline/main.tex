@@ -2479,7 +2479,7 @@ observation time \path{2026-06-04 10:15 Asia/Singapore}, is a historical venue
 record.  For the present post-2026-06-04 source state it is superseded, for local
 readiness only, by the rerun log
 \path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log}, whose local
-observation time is \path{2026-06-05 01:51 Asia/Singapore} and whose exit code is
+observation time is \path{2026-06-05 12:19 Asia/Singapore} and whose exit code is
 \path{0}.  Neither dated record certifies actual upload-time EasyChair
 compliance, acceptance, or proceedings status unless the final submitted support
 surface also contains either an upload-time record with the same fields or an
@@ -2499,6 +2499,49 @@ the upload to the unchanged rule state represented by the latest tuple, then the
 upload-time venue-rule state is not a finite coordinate of the package.
 EasyChair compliance, acceptance, and proceedings status still require external
 records not present in either dated tuple.
+\end{proof}
+
+\begin{corollary}[Upload-time venue-compliance record requirement]
+\label{cor:upload-time-venue-compliance-record-requirement}
+The logs \path{VENUE_CHECK_RUN_2026-06-04.log} and
+\path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log} are dated
+local-readiness records.  For the current package they certify only the venue
+rule state observed at their recorded observation times.  They do not certify
+upload-time EasyChair compliance unless the final submitted support surface also
+contains either
+\begin{enumerate}
+\item a later upload-time venue/bibliography record with the same URL,
+observation-time, command-result, source-state, environment, exit-code, and
+log-path fields; or
+\item a finite statement that the completed upload used the unchanged venue-rule
+state represented by the latest included dated record.
+\end{enumerate}
+If neither record is present, all venue-dependent conclusions in
+Proposition~\ref{audit:venue-submission-pack-gate} and
+Table~\ref{tab:venue-submission-pack-gate} remain historical local-readiness
+claims and cannot be escalated to upload-time compliance, acceptance, or
+proceedings-status claims.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:venue-rule-freshness-non-escalation} identifies the finite venue
+record $U$ by its official URLs, observation time, run witness, observed route
+facts, and witness rows.  The two named logs instantiate such records at their
+own dated observation times.  A final upload-time compliance claim, however,
+depends on an external state not contained in those dated logs unless the upload
+is explicitly tied to the same unchanged rule state or a later replacement record
+is supplied.
+
+If one of the two listed records is included, the final-upload premise in
+Proposition~\ref{audit:venue-submission-pack-gate} is again a finite coordinate
+of the package: either the later record directly supplies the upload-time tuple,
+or the unchanged-state statement identifies the upload with the latest included
+tuple.  If neither record is included, two upload states can agree with all bytes
+of the dated logs while differing on the live venue rule, submission form,
+deadline, or supplement-access instruction.  A certificate depending only on the
+dated logs cannot distinguish those states.  By the finite-coordinate boundary,
+the stronger upload-time, acceptance, and proceedings conclusions therefore do
+not follow from the current logs.
 \end{proof}
 
 \begin{table}
@@ -3699,17 +3742,69 @@ This is the record-level specialization of
 Theorem~\ref{thm:upload-or-archive-instantiation-boundary} to the current digest
 manifest.\end{proof}
 
+\begin{corollary}[Current no-receipt support-surface non-escalation]
+\label{cor:current-no-receipt-support-surface-non-escalation}
+In the current source package the records
+\path{review_bundle/FINAL_DIGESTS_SHA256.md},
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json},
+\path{review_bundle/current_package_pass_records.json}, and
+\path{theorem_inventory.json} do not contain a venue upload receipt, public DOI,
+institutional archive identifier, or archive-equivalent locator for
+\path{review_bundle/}.  Hence every claim whose evidence surface is a
+bundle-local path is accepted only as a conditional exact-supplemental-inclusion
+claim.  Such a claim becomes an externally instantiated submitted-support claim
+only after one of the two finite records below is added to the submitted support
+surface:
+\begin{enumerate}
+\item an upload receipt naming the exact \path{review_bundle/} directory and the
+final digest manifest; or
+\item an archive-equivalent locator satisfying the file-list, digest, manifest,
+and path-semantics tests of
+Proposition~\ref{audit:review-bundle-archive-equivalence}.
+\end{enumerate}
+Until then, the theorem inventory, verifier logs, case snapshots, source
+snapshot, and primary-claim inventory remain local/path-verified review-bundle
+coordinates rather than unconditional public or venue-submitted coordinates.
+\end{corollary}
+
+\begin{proof}
+The four named files are the only finite records in the present source package
+that select the support branch for \path{review_bundle/}: the digest manifest
+gives the byte-level package identity, the review-bundle manifest gives the
+submission strategy, the pass-record ledger exposes the accepted finite gates,
+and \path{theorem_inventory.json} is the manual theorem-ledger coordinate.  Their
+recorded branch is exact supplemental inclusion and their archive fields state
+that no archive replacement or locator is claimed.  Therefore they determine the
+bytes and paths that must be supplied, but they do not determine that a venue
+upload, DOI minting event, institutional archiving event, or archive-equivalent
+publication event has occurred.
+
+By Theorem~\ref{thm:upload-or-archive-instantiation-boundary}, an externally
+instantiated bundle-backed claim needs exactly the missing external coordinate:
+either an upload record for the exact directory and final digest manifest, or a
+replacement archive record passing
+Proposition~\ref{audit:review-bundle-archive-equivalence}.  By
+Corollary~\ref{cor:upload-or-archive-instantiation-record}, the digest manifest
+alone is not such a coordinate.  If neither finite record is present, promoting a
+bundle-local path to an unconditional submitted-support coordinate would add an
+evidence coordinate not contained in the support surface, contrary to
+Theorem~\ref{thm:finite-coordinate-determination-boundary}.  The stated
+conditional boundary follows for every bundle-backed surface named in the
+corollary.
+\end{proof}
+
+
 \begin{table}
 \caption{Submitted theorem-obligation ledger integration.}
 \label{tab:submitted-theorem-obligation-ledger}
 \scriptsize
 \begin{tabularx}{\linewidth}{p{0.22\linewidth}X p{0.28\linewidth}}
 \toprule
-Coordinate & Submitted support record & Boundary \\
+Coordinate & Conditional submitted support record & Boundary \\
 \midrule
-Theorem-obligation inventory & \path{theorem_inventory.json}, named by the root manifest field \path{theorem_inventory} and by acceptance-ledger entry \path{a7} in \path{review_bundle/current_package_pass_records.json} & finite theorem-like obligation ledger only; not a semantic proof checker \\
-Primary-claim inventory & \path{review_bundle/primary_claim_inventory.json}, rows \path{pc1}--\path{pc12}, checked by the primary-inventory verifier & primary-note support map only; not theorem-environment exhaustiveness \\
-Certificate ledger & \path{review_bundle/current_package_pass_records.json}, entries \path{a1}--\path{a7}, checked by the certificate-record verifier & finite gate coverage and pointer discipline only; no Lean, daemon, or artifact rerun \\
+Theorem-obligation inventory & \path{theorem_inventory.json}, named by the root manifest field \path{theorem_inventory} and by acceptance-ledger entry \path{a7} in \path{review_bundle/current_package_pass_records.json} & finite theorem-like obligation ledger only; not a semantic proof checker; externally submitted only under Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} \\
+Primary-claim inventory & \path{review_bundle/primary_claim_inventory.json}, rows \path{pc1}--\path{pc12}, checked by the primary-inventory verifier & primary-note support map only; not theorem-environment exhaustiveness; externally submitted only under Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} \\
+Certificate ledger & \path{review_bundle/current_package_pass_records.json}, entries \path{a1}--\path{a7}, checked by the certificate-record verifier & finite gate coverage and pointer discipline only; no Lean, daemon, or artifact rerun; externally submitted only under Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} \\
 Manifest exposure & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and \path{review_bundle/certificate_schema.json} name \path{theorem_inventory.json} as a required finite support surface & submitted-path availability only; upload remains conditional on Corollary~\ref{cor:upload-or-archive-instantiation-record} \\
 \bottomrule
 \end{tabularx}
