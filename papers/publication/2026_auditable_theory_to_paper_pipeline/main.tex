@@ -1263,6 +1263,69 @@ omitted, then the projection of the claim to that component kind would lack its
 assigned pass record.  Such an entry would not be record-gate-sound.  Therefore accepted
 mixed claims in a record-gate-sound pipeline must pass every gate in the union.\end{proof}
 
+\begin{theorem}[Mixed-claim projection obstruction]
+\label{thm:mixed-claim-projection-obstruction}
+Let $c$ be a load-bearing mixed claim with nonempty component-kind set
+$K\subseteq\mathsf{Dom}(\Gamma)$ and submitted candidate certificate
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$.  For a nonempty subset $J\subseteq K$, write
+\[
+G_J=\bigcup_{k\in J}\Gamma(k)
+\]
+and let $c_J$ denote the projected reading of $c$ that keeps exactly the
+claim-kind components in $J$ and keeps the same declared evidence level,
+evidence surface, promotion boundary, and command boundary, except that the
+discovery field is required precisely when discovery lies in $J$.  Then the
+following are equivalent for the projected reading $c_J$:
+\begin{enumerate}
+\item the finite verifier accepts the projected certificate
+$\mathcal C_J=(J,\ell,E,H,R|_{G_J},D_J,B)$, where $R|_{G_J}$ is the restriction of
+$R$ to rows whose gate name lies in $G_J$ and $D_J$ is $D$ exactly when discovery
+lies in $J$ and is absent otherwise;
+\item every gate $g\in G_J$ has in $R$ a pass record with the five required
+fields and with an allowed evidence pointer, the retained boundary fields $E$,
+$H$, $D_J$, and $B$ satisfy the corresponding schema clauses at level $\ell$, and
+$J\subseteq\mathsf{Dom}(\Gamma)$.
+\end{enumerate}
+Consequently, if an acceptance entry for $c$ records passage only through a
+proper gate subset $Q\subset\bigcup_{k\in K}\Gamma(k)$, then every component
+subset $J$ with $\neg(G_J\subseteq Q)$ has an inclusion-minimal finite bad subrecord,
+namely a missing pass record for some gate in $G_J\setminus Q$.  In particular,
+no passage through route, submission, scheduler, artifact, traceability,
+formal-source, or discovery gates can certify a mixed claim's remaining component
+unless the pass rows assigned to that remaining component are also present.
+\end{theorem}
+
+\begin{proof}
+The projected certificate $\mathcal C_J$ is a certificate of the same schema as
+Definition~\ref{def:certificate-schema-acceptance-table}, with claim-kind set
+$J$ in place of $K$ and with gate field restricted to the finite set $G_J$.
+Because $J\subseteq K\subseteq\mathsf{Dom}(\Gamma)$, Proposition~\ref{prop:claim-kind-dispatch}
+assigns exactly the finite gate set $G_J$ to the projected reading.  Applying the
+schema-relative exactness theorem, Theorem~\ref{thm:record-acceptance-exactness},
+to $\mathcal C_J$ gives the equivalence: acceptance is exactly satisfaction of
+the six finite schema clauses for the retained fields.  Clause A1 is the domain
+condition $J\subseteq\mathsf{Dom}(\Gamma)$ and $\ell\in\mathsf{Lev}$; clause A2
+checks the evidence surface $E$; clause A3 checks that each gate in $G_J$ has a
+pass record in $R|_{G_J}$ with an allowed pointer; clause A4 checks the retained
+promotion boundary $H$; clause A5 checks precisely the retained discovery field
+$D_J$; and clause A6 checks the retained command boundary $B$.  These are exactly
+the conditions in item~2, so items~1 and~2 are equivalent.
+
+Now suppose the row for the mixed claim records only pass rows with gate names in
+a proper subset $Q$ of the full assigned gate set.  Choose a nonempty
+$J\subseteq K$ with $\neg(G_J\subseteq Q)$ and choose $g\in G_J\setminus Q$.  The
+projected verifier for $c_J$ must check $g$ by clause A3, because $g$ is assigned
+to the retained component-kind set $J$.  No row for $g$ is present among the
+recorded gate names in $Q$, so clause A3 fails.  The verifier reads only the
+finite fields consisting of $J$, $\Gamma$, the absent gate name $g$, and the gate
+row field $R$; deleting fields not read by this failed check leaves an
+inclusion-minimal bad subrecord of the second obstruction type in
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  Since the argument
+uses only membership in the assigned gate set, it applies uniformly to each of
+the seven atomic gate interfaces.  Thus one component's gate passage cannot be
+substituted for another component's missing assigned pass rows in a mixed
+load-bearing claim.\end{proof}
+
 \begin{theorem}[Assigned-gate soundness audit boundary]
 \label{thm:assigned-gate-soundness-audit-boundary}
 Let $P$ be a finite submitted package with pass-record ledger $L$, dispatch
