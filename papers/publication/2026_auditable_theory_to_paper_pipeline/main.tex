@@ -5444,6 +5444,60 @@ Audit record~\ref{prop:exact-review-bundle-upload-witness}; it records that this
 package takes the first admissible case, not the archive-equivalent case.
 \end{proof}
 
+\begin{corollary}[Submission-time support instantiation test]
+\label{cor:submission-time-support-instantiation-test}
+For a completed presentation-only submission, the bundle-backed and
+venue/bibliography-backed claims in this package instantiate external support if
+and only if the submitted support surface contains one of the following finite
+normal forms:
+\begin{enumerate}
+\item exact inclusion of \path{theorem_inventory.json},
+  \path{theorem_inventory.md}, and \path{review_bundle/}, with
+  \path{review_bundle/FINAL_DIGESTS_SHA256.md} regenerated after the inventory,
+  extractor, verifier, primary-claim-freshness, and venue/bibliography records
+  used by the submission are final;
+\item an archive-equivalent replacement carrying the same relative file list,
+  path semantics, manifest rows, SHA--256 digests, and upload-or-archive locator;
+  or
+\item a later replacement support surface with the same fields and a later
+  venue/bibliography verification record run immediately before submission.
+\end{enumerate}
+Without one of these finite records, the same claims remain only local or dated
+path-verified observations and do not certify external bundle availability,
+upload-time venue compliance, bibliography freshness, DOI availability, archive
+availability, Lean/BEDC rebuilds, or dynamic artifact validation.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:exact-inclusion-support-surface-realization} proves the exact
+inclusion branch: submitted byte identity for the selected support directory and
+its digest manifest gives the finite evidence surface for bundle-backed claims.
+The same theorem, through Table~\ref{tab:review-bundle-archive-equivalence},
+proves the archive branch, because the archive tests preserve the finite file
+list, relative paths, manifest identity, and per-file SHA--256 rows used by the
+bundle-local references.  The replacement branch is
+Theorem~\ref{thm:workspace-final-package-reconciliation} applied with a new
+commit--manifest certificate, together with the freshness condition of
+Proposition~\ref{audit:fresh-venue-record-criterion} for venue and bibliography
+claims.
+
+It remains only to justify the ``only if'' direction.  By
+Theorem~\ref{thm:support-surface-normal-form}, every accepted external support
+reading is either the selected directory, an archive-equivalent representative,
+or a deliberately promoted replacement state.  The post-inventory ordering is
+the fixed-point requirement in
+Theorem~\ref{thm:post-inventory-package-fixed-point}: if the digest precedes the
+inventory bytes or the post-inventory logs, at least one submitted digest row is
+not a digest of the byte string used by the claim.  Venue and bibliography pages
+are time-sensitive, so Proposition~\ref{audit:fresh-venue-record-criterion}
+allows a current compliance reading only on the checked rule state or after a
+later record with the same fields.  If none of the three displayed normal forms
+is present, Theorem~\ref{thm:finite-coordinate-determination-boundary} forbids
+inserting the missing locator, digest, freshness, or command fields by prose.
+The final sentence is exactly the non-escalation boundary established in
+Theorem~\ref{thm:submission-support-fixed-point-normal-form}.
+\end{proof}
+
 \begin{theorem}[Final support-surface closure]
 \label{thm:final-support-surface-closure}
 For the current package, using
