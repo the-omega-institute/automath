@@ -4665,6 +4665,74 @@ conditional boundary follows for every bundle-backed surface named in the
 corollary.
 \end{proof}
 
+\begin{theorem}[Digest-closure refresh criterion for final package claims]
+\label{thm:digest-closure-refresh-criterion}
+For the current presentation package, any claim that a submitted support surface
+has exact final digests is accepted only for a closed finite state $D$ satisfying
+all of the following conditions.
+\begin{enumerate}
+\item The digest manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md} contains
+SHA-256 rows for \path{main.tex}, \path{submission_abstract.tex},
+\path{references.bib}, \path{source_interface_record.json},
+\path{theorem_inventory.json}, \path{theorem_inventory.md}, and every file in
+the selected \path{review_bundle/} support directory.
+\item The digest rows are computed after the accepted versions of
+\path{theorem_inventory.json}, \path{theorem_inventory.md},
+\path{review_bundle/primary_claim_inventory.json}, and every verifier log named
+by a command-run claim have been written.
+\item If \path{submission_abstract.tex} is edited after the primary-claim
+inventory was checked, then
+\path{review_bundle/verify_primary_claim_inventory.py} is rerun and its fresh
+log replaces the old primary-inventory freshness coordinate before the final
+digest rows are recomputed.
+\item If an upload-time venue-compliance claim, rather than a dated local
+readiness observation, is made, the venue and bibliography check is rerun at the
+upload rule state and the fresh venue record is included before the final digest
+rows are recomputed.
+\end{enumerate}
+If any one of these conditions fails, the package still has the local
+path-verified records printed in the manuscript, but it does not have an exact
+final-digest certificate for the regenerated inventory, primary-claim, or
+upload-time venue component that failed the condition.
+\end{theorem}
+
+\begin{proof}
+The support-surface certificate is byte-level: by
+Theorem~\ref{thm:support-surface-normal-form}, exact inclusion and
+archive-equivalent inclusion both read the finite file list, relative paths, and
+SHA-256 content rows rather than prose descriptions of those files.  Therefore a
+file written after the digest manifest was computed cannot be covered by that
+manifest; its byte string was not one of the inputs to the listed hash values.
+This proves the necessity of recomputing the digest rows after regenerating the
+theorem inventory, primary-claim inventory, and command logs named by the final
+package.
+
+The primary-claim inventory is line-span dependent.  Its verifier reads the
+current \path{submission_abstract.tex}, checks the row-id set and line ranges,
+and prints a finite freshness log.  If the primary source is changed after that
+run, at least the source line-span premise of the old log is no longer the
+current primary source checked by the verifier.  A fresh verifier run before the
+digest pass restores a finite coordinate for the new primary state; omitting it
+leaves only the old path-verified inventory observation.
+
+Venue compliance is external-state dependent by
+Proposition~\ref{audit:fresh-venue-record-criterion} and
+Theorem~\ref{thm:venue-rule-freshness-non-escalation}.  A dated venue log can
+witness local readiness at its observation time, but upload-time compliance
+requires a record of the rule state at upload or an included replacement record.
+Thus a package that claims upload-time venue compliance must write that fresh
+record before the digest closure step; otherwise the digest manifest can cover
+only the dated local-readiness file, not the missing upload-time premise.
+
+Combining these observations gives a finite fixed-point condition: first write
+the accepted inventory files and freshness logs, then compute the manifest over
+those bytes, and finally submit either the exact directory or an
+archive-equivalent replacement.  If a later edit or upload-time claim changes one
+of the inputs, the fixed point is broken precisely at that finite subrecord.  The
+remaining local rows remain available at their declared evidence levels, but the
+stronger exact final-digest claim is not accepted for the changed component.
+\end{proof}
+
 
 \begin{proposition}[Primary architectural fallback without external support]
 \label{prop:primary-architectural-fallback-without-external-support}
@@ -4798,13 +4866,15 @@ support branch.  Then the final support-surface claims of
 Theorem~\ref{thm:final-support-surface-closure}, the submitted theorem-ledger
 claim of Theorem~\ref{thm:theorem-obligation-ledger-boundary}, and the command
 boundary of Proposition~\ref{audit:command-run-boundary-inventory} remain closed
-only after the package refreshes the corresponding SHA-256 rows in
-\path{review_bundle/FINAL_DIGESTS_SHA256.md} and reruns the finite record
-verifiers whose records name that digest manifest or inventory coordinate.  Once
-those rows and verifier logs are refreshed, the regeneration creates no new
-mathematical or executable extractor claim: it only changes the byte-coordinate
-of the manual theorem-obligation ledger inside the already selected finite
-support surface.
+only under the fixed-point conditions of
+Theorem~\ref{thm:digest-closure-refresh-criterion}: the package refreshes the
+corresponding SHA-256 rows in \path{review_bundle/FINAL_DIGESTS_SHA256.md},
+reruns the finite record verifiers whose records name that digest manifest or
+inventory coordinate, and does not promote primary-claim or venue-compliance
+rows beyond the fresh records actually included.  Once those rows and verifier
+logs are refreshed, the regeneration creates no new mathematical or executable
+extractor claim: it only changes the byte-coordinate of the manual
+theorem-obligation ledger inside the already selected finite support surface.
 \end{proposition}
 
 \begin{proof}

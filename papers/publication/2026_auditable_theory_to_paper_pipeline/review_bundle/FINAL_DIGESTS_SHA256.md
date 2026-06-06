@@ -1,25 +1,17 @@
-# Review Bundle Final Digest Record
+# Final Support Surface SHA-256 Digests
 
-- packaging decision date: 2026-06-04
-- digest refresh date: 2026-06-05
-- support mode selected: conditional exact supplemental inclusion of `review_bundle/`
-- archive replacement: none claimed
-- archive locator: not applicable
-- digest purpose: byte-level final-packaging record for the exact supplemental directory and the submitted root source/interface/inventory files named by the finite verifiers
-- digest algorithm: SHA-256
-- path root: paper directory; listed paths are relative to the paper directory
-- self-digest boundary: this record is not self-hashed; it lists the certificate files supplied by the bundle and the root source/interface/inventory files named by verifier commands
+Generated for the current local exact-inclusion support surface. These rows are a byte-level packaging record only; they are not an upload receipt, public archive locator, venue acceptance record, Lean rebuild, or semantic artifact validation.
 
 ## Submitted Root Source, Interface, and Inventory Digests
 
 | SHA-256 | Relative path |
 |---|---|
-| `38c3af90f5e7cdbaee367914b0a19ffac84739d987c893f3d15a3b62e8147d5c` | `main.tex` |
-| `7c42f59bd44294b9f04b9aae3adeed7aed9868ed222bcc874c913860dc1bca96` | `submission_abstract.tex` |
-| `b5377700b5f65b1b2101f8f1be0b686e74ed60136310105b10560a35c8bb4895` | `references.bib` |
+| `20391f48391c1fb62adf8aee6f62632812bd49fb11a4bef339c3ebd74c6acdf2` | `main.tex` |
+| `dbb95ebd911f094df48f8eb0c512b1c46b38946c4cdeb61856fba06430dc8cf5` | `submission_abstract.tex` |
+| `41115836a0f607de15d01ac28f890b0a0e101e66aa0533cf916e4a0f4af86f98` | `references.bib` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
-| `14a75af5c297976f341b3ce2f5fe96480e391111785a62fabf3b9b38655aa2a7` | `theorem_inventory.json` |
-| `a10436a670a4579ca05b30af14885fe5fb2a1cec3425ade7f5f3735d42a19b07` | `theorem_inventory.md` |
+| `f8f944d3619fd127df3f8a0e5c4cbc5e95e59f931be9acf2185ed427ef07d992` | `theorem_inventory.json` |
+| `bd7be79c0a6582fb11ad14b27b3c80fd4e232252dd3ad2a7a91664baacb38bc0` | `theorem_inventory.md` |
 
 ## Review-Bundle File Digests
 
@@ -38,20 +30,22 @@
 | `31bc3166c7bbe231319995f695af1eeb7a493065e2f2a87b5c82b7f230ed81a9` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.json` |
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` |
-| `0f242e9d4eec0f8cabc8591cdb465a4f411c5468fe4a5e71f1d7fd4c90363849` | `review_bundle/certificate_schema.json` |
-| `546f7d147bbce2cf76ae9bc0ab5fe9e849997894261e5de0cf321ff79e5cd19a` | `review_bundle/certificate_verification_run.log` |
+| `b6c7614e0416c472a672be3eedc166482162af965146a6de023666ed5040a681` | `review_bundle/certificate_schema.json` |
+| `1ab51cff4df2cc256a740c651cfadb12af44566d5192ef5de2b7aa58927487cb` | `review_bundle/certificate_verification_run.log` |
 | `5517bf4aae70800748e714ce877b051bc5a00e4a8d0ee664fac86a821a35fe50` | `review_bundle/current_package_pass_records.json` |
+| `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` | `review_bundle/negative_certificate_record_example.json` |
+| `74dbf7a0db63491bb3d177ca9787cce30f64de45f8db1bb59bf25a9a3b0b315c` | `review_bundle/negative_certificate_record_example_run.md` |
 | `01b791c58f24d1ef2482a6eccadf4b253573a291b30942d959ca2b343dc10e3d` | `review_bundle/primary_claim_inventory.json` |
 | `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
-| `84f80ca6ebe1ff40a36cb2669d2974a86a7803067c948c67963af76e4f030721` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
+| `b5e601e98b875778561e79bdeb750c53af422415186956ce699a3dc5206cb25a` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
 | `2306757f80b553b0dda6dc86ea99eaa9deb4e3515a887417e9b461cfaa60d73d` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
-| `a4c132f267c5e5e3fc15fc47df0fff935f0992267cf9128dd56c1cd9c8ff5e00` | `review_bundle/source_interface_verification_run.log` |
+| `f1e9aac25a89b96f9be7377da5c2e1bc0cb501ff8b50e99721e864a89eaa710d` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
 | `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` |
-| `25a4d000abae7d32c016759cab1546dc73d1422f00ea05189c42789ac9ddca51` | `review_bundle/verify_certificate_records.py` |
+| `a46deed5e7eabf949e4d9b3e968ab9b81f56e4a43230f25fc31ebd1cf73f66ce` | `review_bundle/verify_certificate_records.py` |
 | `8b4d8bce68e0a62d5e05dcda9d5a257aceb43820db6e1f4c17c54a8dc6c4d1a7` | `review_bundle/verify_primary_claim_inventory.py` |
 | `3742be8811e5d703d8b5a78403b242bb7368858cb0443b00c3760b17121afecc` | `review_bundle/verify_source_interface_record.py` |
