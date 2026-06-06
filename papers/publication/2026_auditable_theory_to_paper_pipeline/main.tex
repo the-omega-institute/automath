@@ -107,6 +107,8 @@ of the source-interface, implementation-soundness, artifact-semantic, and
 theorem-ledger boundaries), and
 Theorem~\ref{thm:presentation-scoped-boundary-normal-form} (the five-component
 presentation-route boundary normal form),
+Theorem~\ref{thm:mixed-interface-overclaim-skeleton} (the mixed-interface
+overclaim skeleton and finite-budget lower bound),
 Theorem~\ref{thm:current-package-certificate-exactness} (the current package's
 schema-relative finite-record instance), and
 Theorem~\ref{thm:current-package-extension-coordinate-rigidity} (the exact
@@ -2556,6 +2558,112 @@ rigidity of the five boundary axes.  The same argument also shows that the
 theorem-extractor coordinate is only a syntactic coverage coordinate: it cannot
 be reinterpreted as a proof checker because the proof-checking fields are not
 read by, or present in, the extractor tuple.
+\end{proof}
+
+\begin{theorem}[Mixed-interface overclaim skeleton]
+\label{thm:mixed-interface-overclaim-skeleton}
+Assume the hypotheses of
+Theorem~\ref{thm:publication-safety-interface}.  Let $c$ be an accepted
+load-bearing claim whose proof uses one or more of the following interface
+families: record-gate passage, bounded source-interface import, current-package
+ledger rows, manifest-bounded finite-witness rows, or theorem-obligation
+inventory rows.  Let $c^{+}$ be a proposed reading obtained from $c$ by adding
+any finite nonempty set $J$ of stronger demands from the following five axes:
+\begin{enumerate}
+\item \emph{gate implementation soundness}: soundness of an actual automath or
+newmath gate implementation beyond the external predicate
+$\mathsf{RGS}_{S}(P,L,\Gamma)$;
+\item \emph{exact or semantic source import}: exact source theorem statements,
+fresh BEDC/Lean rebuilds, axiom-purity, or semantic truth of the imported source
+theorems beyond the bounded source-interface rows;
+\item \emph{row-frozen package completeness}: extractor completeness for every
+possible prose claim in the supplement, or any extension beyond the explicitly
+enumerated current-package ledger rows, without adding corresponding rows and
+rerunning the finite checks;
+\item \emph{artifact semantics}: dynamic Rule110/GroundCompiler validity,
+evaluator semantics, or fresh artifact-suite outcomes beyond the submitted
+manifest, snapshot, status, and limitation rows; and
+\item \emph{semantic theorem-inventory completeness}: proof correctness,
+theorem adequacy, semantic proof checking, Lean/BEDC rebuild, or theorem-like
+material outside the declared syntactic extractor domain $\mathcal E$.
+\end{enumerate}
+For each axis $a\in J$, let $B_{a}$ be the finite extension budget required for
+that stronger demand by Theorems~\ref{thm:finite-extension-budget-normal-form}
+and~\ref{thm:boundary-axis-non-escalation-exactness}, with the row-frozen package
+axis using the same normal form applied to the current-package rows of
+Theorem~\ref{thm:current-package-certificate-exactness} and the ledger boundary
+of Theorem~\ref{thm:manual-ledger-dependence-boundary}.  Then $c^{+}$ is accepted
+by the same finite-record publication interface if and only if every coordinate
+in the union $\bigcup_{a\in J}B_a$ is present in the submitted support surface and
+passes its assigned gate.  If the unpaid set
+\[
+M=\{a\in J: B_a\text{ is not fully present with passing assigned gates}\}
+\]
+is nonempty, then $c^{+}$ has an inclusion-minimal finite bad subrecord whose
+projection lies in one of the unpaid axes in $M$, and adding records only on axes
+outside $M$ cannot make $c^{+}$ accepted.  Consequently no support coordinate in
+one of the five families can be used as a substitute for a missing coordinate in
+another family: the record-gate, source-interface, row-frozen ledger,
+manifest-witness, and theorem-inventory boundaries are jointly confined by a
+finite extension-budget lower bound.
+\end{theorem}
+
+\begin{proof}
+The proof is the bad-record skeleton argument applied simultaneously to the five
+listed axes.  Start with the accepted finite certificate
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$ supplied by
+Theorem~\ref{thm:publication-safety-interface}.  Since $c^{+}$ is obtained by
+adding stronger demands, each added demand is a stronger reading in the preorder
+of Definition~\ref{def:stronger-reading-preorder} unless its content is already
+record-equivalent to $c$.  Record-equivalent additions have empty budget and may
+be deleted from $J$ without changing the claim.  Thus every remaining axis in
+$J$ is a genuine strengthening.
+
+For each genuine strengthening, Theorem~\ref{thm:finite-extension-budget-normal-form}
+identifies the necessary and sufficient finite extension tuple
+$(\Delta K,\Delta E,\Delta H,\Delta R,\Delta D,\Delta B)$.  Specialising that
+normal form gives the five budgets in the statement.  Gate implementation
+soundness requires implementation identity, specification, source-state or
+version, and a matching implementation-soundness pass row or command-run tuple.
+Exact or semantic source import requires exact source text, a formal-rebuild or
+equivalent command-run coordinate, or a semantic source-validation coordinate.
+Row-frozen package completeness requires new explicit ledger rows and the finite
+verifier records that read those rows, because
+Theorems~\ref{thm:current-package-certificate-exactness} and
+\ref{thm:manual-ledger-dependence-boundary} identify only the enumerated ledger
+surface.  Artifact semantics requires an evaluator contract, artifact-semantic
+pass row, or fresh evaluator command-run tuple tied to the manifest row.  Semantic
+theorem-inventory completeness requires a proof-checking, theorem-adequacy,
+formal-rebuild, or out-of-domain extractor coordinate; the syntactic extractor of
+Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary} pays only
+for label coverage inside $\mathcal E$.
+
+If every coordinate in $\bigcup_{a\in J}B_a$ is present and each assigned gate
+passes, enlarge $\mathcal C(c)$ by adjoining exactly those finite coordinates.
+Each clause of Definition~\ref{def:certificate-schema-acceptance-table} then reads
+a present coordinate: claim kinds and evidence levels are in the enlarged $K$ and
+$\ell$, evidence surfaces in $E$, assigned gate rows in $R$, route or external
+boundaries in $H$, discovery/source rows in $D$, and command or limitation data in
+$B$.  Theorem~\ref{thm:record-acceptance-exactness} therefore accepts the enlarged
+certificate, so $c^{+}$ is accepted at precisely the paid evidence level.
+
+Conversely suppose that some axis in $J$ is unpaid.  By the same normal-form
+theorem, acceptance of $c^{+}$ would force the missing coordinate of $B_a$ to be
+present with its assigned pass row.  Since it is absent or nonpassing, the first
+schema clause that reads it fails.  Theorem~\ref{thm:finite-certificate-obstruction-skeleton}
+then produces an inclusion-minimal bad subrecord: a missing evidence surface,
+missing assigned-gate row, missing promotion or external boundary, missing
+source/discovery row, or unsupported command-run escalation.  That subrecord is
+contained in the finite budget of an unpaid axis, so its projection lies in $M$.
+
+Finally, adding records only on axes outside $M$ leaves at least one unpaid
+budget $B_a$ with $a\in M$ unchanged.  The same failed schema clause and the same
+minimal bad-subrecord classification remain.  Hence cross-axis substitution is
+impossible: a source snapshot cannot prove gate implementation soundness, a
+manifest row cannot prove artifact semantics without evaluator coordinates, a
+theorem-inventory label check cannot prove proof correctness, and a row-frozen
+package ledger cannot become semantically complete without fresh rows and checks.
+This proves the stated joint confinement and lower bound.
 \end{proof}
 
 \begin{theorem}[Scoped boundary normal form for the presentation package]
