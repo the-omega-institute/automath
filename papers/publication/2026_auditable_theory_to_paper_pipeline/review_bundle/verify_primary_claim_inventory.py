@@ -23,6 +23,20 @@ INVENTORY = BUNDLE / "primary_claim_inventory.json"
 
 
 LOCATION_RE = re.compile(r"^submission_abstract\.tex:(\d+)-(\d+)$")
+EXPECTED_LOCATIONS = {
+    "pc1": "submission_abstract.tex:30-47",
+    "pc2": "submission_abstract.tex:53-64",
+    "pc3": "submission_abstract.tex:66-69",
+    "pc4": "submission_abstract.tex:68-69",
+    "pc5": "submission_abstract.tex:70-72",
+    "pc6": "submission_abstract.tex:72-74",
+    "pc7": "submission_abstract.tex:82-96",
+    "pc8": "submission_abstract.tex:98-106",
+    "pc9": "submission_abstract.tex:108-117",
+    "pc10": "submission_abstract.tex:119-132",
+    "pc11": "submission_abstract.tex:134-154",
+    "pc12": "submission_abstract.tex:143-154",
+}
 CERTIFICATE_PREFIXES = (
     "sim",
     "a",
@@ -86,6 +100,10 @@ def verify() -> tuple[list[str], dict[str, object]]:
             start, end = map(int, match.groups())
             if start < 1 or end < start or end > len(primary_lines):
                 errors.append(f"{row_id}: location outside primary source")
+
+        expected_location = EXPECTED_LOCATIONS.get(str(row_id))
+        if expected_location is not None and row.get("location") != expected_location:
+            errors.append(f"{row_id}: location must be {expected_location}")
 
         for field in ("claim", "status", "evidence_level"):
             if not str(row.get(field, "")).strip():
