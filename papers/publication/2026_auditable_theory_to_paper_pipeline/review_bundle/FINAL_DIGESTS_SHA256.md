@@ -6,12 +6,12 @@ Generated for the current local exact-inclusion support surface. These rows are 
 
 | SHA-256 | Relative path |
 |---|---|
-| `20391f48391c1fb62adf8aee6f62632812bd49fb11a4bef339c3ebd74c6acdf2` | `main.tex` |
-| `dbb95ebd911f094df48f8eb0c512b1c46b38946c4cdeb61856fba06430dc8cf5` | `submission_abstract.tex` |
-| `41115836a0f607de15d01ac28f890b0a0e101e66aa0533cf916e4a0f4af86f98` | `references.bib` |
+| `a7bdf77819dd7c2e59078318783b30459393ae116e16305fda09dd831c1b91ba` | `main.tex` |
+| `5989aa657c501d0441f927cebf83b240193369daaa6ae43f838c8491ff9770f6` | `submission_abstract.tex` |
+| `aacb381ac6b7b0220e99dd4a1fefb4502d7481411a4c3c07a6ce50203d0168f2` | `references.bib` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
-| `f8f944d3619fd127df3f8a0e5c4cbc5e95e59f931be9acf2185ed427ef07d992` | `theorem_inventory.json` |
-| `bd7be79c0a6582fb11ad14b27b3c80fd4e232252dd3ad2a7a91664baacb38bc0` | `theorem_inventory.md` |
+| `72e9f4d2db0e68bf1d92138cc86ab40c9b1784076a915c75954b31b6a59e2eed` | `theorem_inventory.json` |
+| `99d9e9a531c40e19e3ae835b9e11d90e8ade2693929159e8876b43b9f6f83de2` | `theorem_inventory.md` |
 
 ## Review-Bundle File Digests
 
@@ -31,17 +31,17 @@ Generated for the current local exact-inclusion support surface. These rows are 
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` |
 | `b6c7614e0416c472a672be3eedc166482162af965146a6de023666ed5040a681` | `review_bundle/certificate_schema.json` |
-| `1ab51cff4df2cc256a740c651cfadb12af44566d5192ef5de2b7aa58927487cb` | `review_bundle/certificate_verification_run.log` |
+| `5df7fa4c05f0dacc2b6b7ea45f25be4bc6da99a38b5fe13d46a2b997a37827c3` | `review_bundle/certificate_verification_run.log` |
 | `5517bf4aae70800748e714ce877b051bc5a00e4a8d0ee664fac86a821a35fe50` | `review_bundle/current_package_pass_records.json` |
 | `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` | `review_bundle/negative_certificate_record_example.json` |
 | `74dbf7a0db63491bb3d177ca9787cce30f64de45f8db1bb59bf25a9a3b0b315c` | `review_bundle/negative_certificate_record_example_run.md` |
 | `01b791c58f24d1ef2482a6eccadf4b253573a291b30942d959ca2b343dc10e3d` | `review_bundle/primary_claim_inventory.json` |
 | `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
-| `b5e601e98b875778561e79bdeb750c53af422415186956ce699a3dc5206cb25a` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
+| `32350a326d84f18d583a04ea9ca9bcbfc970e41ffa3b1c3eea3ac8c440699834` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
 | `2306757f80b553b0dda6dc86ea99eaa9deb4e3515a887417e9b461cfaa60d73d` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
-| `f1e9aac25a89b96f9be7377da5c2e1bc0cb501ff8b50e99721e864a89eaa710d` | `review_bundle/source_interface_verification_run.log` |
+| `2103da446bab5484ce32b338da49a9273c5ddc44634fc5aa2a7332f92f017a96` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
