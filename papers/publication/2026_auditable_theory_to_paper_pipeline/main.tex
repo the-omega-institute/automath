@@ -95,7 +95,10 @@ acceptance predicates), Theorems~\ref{thm:verifier-input-output-contract},
 non-escalation), Theorem~\ref{thm:publication-safety-interface} (finite
 publication-certificate invariants from record-gate soundness),
 Theorem~\ref{thm:finite-record-certificate-rigidity} (the sharp bad-subrecord
-normal form for every stronger reading), and
+normal form for every stronger reading),
+Theorem~\ref{thm:boundary-axis-non-escalation-exactness} (simultaneous exactness
+of the source-interface, implementation-soundness, artifact-semantic, and
+theorem-ledger boundaries), and
 Theorem~\ref{thm:current-package-certificate-exactness} (the current package's
 schema-relative finite-record instance).  Later theoremized statements about bundle shape,
 digests, upload conditions, command boundaries, inventories, venue records, and
@@ -2325,6 +2328,115 @@ accepted exactly at its declared finite-record level, while $c^{+}$ is rejected.
 The final invariance statement follows because two surrounding states that agree
 on \((K,\ell,E,H,R,D,B),S,L,\Gamma)\) give the same verifier input and hence the
 same accepted and rejected finite records.
+\end{proof}
+
+\begin{theorem}[Boundary-axis exact non-escalation]
+\label{thm:boundary-axis-non-escalation-exactness}
+Assume the hypotheses of
+Theorem~\ref{thm:publication-safety-interface}, and let
+\(c\) be any load-bearing claim accepted by the finite certificate constructed
+there.  The following five stronger readings of \(c\), when they are not already
+record-equivalent to \(c\), are accepted by the same publication-safety interface
+if and only if the submitted finite support surface contains the indicated
+positive extension coordinates and the added coordinates pass the gates assigned
+by \(\Gamma\):
+\begin{enumerate}
+\item An \emph{external implementation-soundness reading} is accepted exactly when
+the package adds implementation-soundness records for the relevant external gate:
+the implemented gate or checker identity, its source state or version, the
+specification it is asserted to implement, and either a pass row for the
+implementation-soundness gate or a command-run tuple with command, source state,
+environment, exit code, and log path.
+\item An \emph{exact source-theorem import reading} is accepted exactly when the
+package adds an exact source-statement or formal-rebuild coordinate: the pinned
+source path and commit, the exact statement text or formal object being imported,
+and a checked exact-statement appendix, Lean/BEDC rebuild record, or equivalent
+command-run record whose pass rows are part of the submitted surface.
+\item A \emph{semantic source-validation reading of the source-interface record
+comparison} is accepted exactly when, in addition to table/JSON/snapshot
+consistency, the package adds the semantic source-validation coordinate from the
+previous item for the source theorem whose truth is being used.
+\item An \emph{artifact-semantic reading of a finite-witness row} is accepted
+exactly when the package adds the evaluator contract or artifact-semantic pass row
+for the asserted Rule110/GroundCompiler property, or a fresh evaluator command-run
+tuple tied by manifest row to the submitted artifact.
+\item A \emph{theorem-environment completeness reading of a theorem-obligation
+ledger} is accepted exactly when the package adds a deterministic theorem
+extractor coordinate: extractor identity and source state, the source files it
+scans, the extraction command, environment, exit code, log path, and the equality
+or inclusion certificate relating the extractor output to the submitted theorem
+inventory.
+\end{enumerate}
+If the corresponding positive coordinates are absent, the original claim \(c\)
+may still be accepted at its declared finite-record level, but the stronger
+reading is rejected by an inclusion-minimal finite bad subrecord.  Hence the main
+safety interface, the manual source-interface extraction lemma, the executable
+source-interface comparison, the finite-witness manifest theorem, and the
+submitted theorem-obligation ledger theorem are jointly rigid: none can be used to
+derive implementation soundness, exact source-theorem truth, semantic source
+validation, dynamic artifact semantics, or theorem-environment completeness
+without paying the matching finite extension budget.
+\end{theorem}
+
+\begin{proof}
+Fix the accepted certificate
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Each of the five displayed readings is a
+properly stronger reading in the sense of
+Definition~\ref{def:stronger-reading-preorder} unless its asserted extra content
+is already one of the finite fields of \(\mathcal C(c)\).  Indeed, an
+implementation-soundness reading adds either a new claim-kind component or a new
+gate-pass family and command boundary; an exact source import adds source text,
+formal-build, or discovery-source coordinates; semantic source validation adds
+the semantic coordinate not read by the finite table/JSON/snapshot comparison;
+artifact semantics adds an artifact-semantic surface, evaluator pass row, or
+command-run boundary; and theorem-environment completeness adds an extractor
+surface and command-boundary record.  Thus every non-equivalent case changes at
+least one finite coordinate read by the schema.
+
+Theorem~\ref{thm:finite-extension-budget-normal-form} gives the exact normal form
+for accepting any such changed reading: collect the additional kind components in
+\(\Delta K\), the submitted surfaces in \(\Delta E\), the added pass rows in
+\(\Delta R\), any new external or route boundary in \(\Delta H\), any exact or
+semantic discovery-source rows in \(\Delta D\), and any command-run or limitation
+boundary in \(\Delta B\).  Specialising that normal form to the five cases gives
+precisely the five positive coordinate lists in the statement.  If those
+coordinates are present and their assigned gate rows pass, the enlarged
+certificate
+\[
+(K\cup\Delta K,\ell,E\cup\Delta E,H\cup\Delta H,
+R\cup\Delta R,D\cup\Delta D,B\cup\Delta B)
+\]
+satisfies the six clauses of
+Definition~\ref{def:certificate-schema-acceptance-table}.  By
+Theorem~\ref{thm:record-acceptance-exactness}, the publication-safety interface
+therefore accepts the stronger reading.
+
+Conversely, suppose one of the five stronger readings is accepted.  Since it is
+not record-equivalent to \(c\),
+Theorem~\ref{thm:finite-coordinate-determination-boundary} says that some finite
+coordinate read by the verifier differs from the coordinate of
+\(\mathcal C(c)\).  Acceptance forces the changed coordinate to satisfy its
+corresponding schema clause, so the changed coordinate must be present in the
+submitted support surface and must have the assigned pass rows or command-boundary
+tuple required by \(\Gamma\).  Reading the changed coordinate by cases recovers
+exactly the implementation-soundness, exact-source, semantic-source,
+artifact-semantic, or theorem-extractor coordinate listed above.  Thus the listed
+coordinates are necessary as well as sufficient.
+
+If a listed coordinate is absent, the first schema clause that tries to read it
+fails.  The failure is one of the obstruction skeletons of
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}: a missing submitted
+evidence surface, a missing assigned gate row, a missing discovery-source row, or
+a missing command-run boundary tuple.  That theorem also gives
+inclusion-minimality after deleting fields not read by the failed clause.  The
+original certificate for \(c\) is unaffected, because its accepted finite fields
+are unchanged; only the unpaid stronger reading is rejected.  Applying this case
+analysis to Theorem~\ref{thm:publication-safety-interface},
+Lemma~\ref{lem:source-interface-extraction-correctness},
+Proposition~\ref{prop:source-interface-record-file-consistency},
+Theorem~\ref{thm:finite-witness-manifest-record-interface}, and
+Theorem~\ref{thm:theorem-obligation-ledger-boundary} gives the stated joint
+rigidity of the five boundary axes.
 \end{proof}
 
 For reviewer reproducibility, the constructor and extractor used in
