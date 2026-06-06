@@ -1,4 +1,4 @@
-\documentclass[runningheads]{llncs}
+﻿\documentclass[runningheads]{llncs}
 
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -561,7 +561,10 @@ the recorded snapshot length is 498 lines; for each of the sixteen line ranges i
 \path{source_interface_record.json}, the corresponding imported label is recorded
 inside the stated snapshot range; and the sixteen triples \emph{label, line range,
 bounded summary} in Table~\ref{tab:source-interface-record} are the sixteen JSON
-records.  Hence, at the finite record-comparison level, the manuscript table,
+records.  The verifier log uses two distinct commit fields: the imported external
+newmath source commit is the pinned commit displayed above, while the local
+publication-package commit is the Git \path{HEAD} of this paper workspace at the
+time the comparison command is run.  Hence, at the finite record-comparison level, the manuscript table,
 JSON record, review-bundle manifest, digest, line count, and bundled snapshot
 define one consistent imported-source interface.  The comparison does not assert
 semantic truth of the imported source theorems, does not reproduce the exact
@@ -592,6 +595,10 @@ The recorded run in \path{review_bundle/source_interface_verification_run.log}
 has status \path{pass}.  Its counts are sixteen manuscript table rows, sixteen JSON
 records, sixteen manifest ranges, snapshot line count 498, snapshot byte count 20746, and digest
 \path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2}.  Its
+\path{imported_newmath_source_commit} field is the external source commit
+\path{3fb3d6a0641767388a401883062aa522ea0b397b}; its
+\path{local_publication_package_commit} field is only provenance for the local
+paper checkout used to run the verifier and is not a second imported-source pin.  Its
 per-row label checks all report \path{label_in_range: true} for the sixteen labels
 listed in Table~\ref{tab:source-interface-record}.  Therefore no accepted row can
 be a table-only, JSON-only, manifest-only, or out-of-range source-interface row:
@@ -2064,7 +2071,7 @@ Proposition~\ref{prop:publication-safety-maximality}, and
 Theorem~\ref{thm:finite-extension-budget-normal-form} when a path-verified route
 or submission row is silently upgraded to command-run strength.
 \end{proof}
-\begin{theorem}[Finite-record safety interface under record-gate soundness]
+\begin{theorem}[Conditional finite-record safety interface under record-gate soundness]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above and a
 finite submitted record surface consisting only of the manuscript source, printed
@@ -2944,7 +2951,7 @@ schema instance over \path{review_bundle/certificate_schema.json},
 \path{review_bundle/primary_claim_inventory.json}, the verifier script, and the
 recorded verifier log.  The recorded log states command
 \path{python review_bundle/verify_certificate_records.py}, source commit
-\path{automath repository commit 305ee93353b16babc461bfad1a7aee9c808ee268 plus final package digest manifest review_bundle/FINAL_DIGESTS_SHA256.md}, final package digest manifest
+\path{automath repository commit 43845cafd1ff8b2eacffa9db816636d348a31bde plus final package digest manifest review_bundle/FINAL_DIGESTS_SHA256.md}, final package digest manifest
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}, environment \path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
 \path{review_bundle/certificate_verification_run.log}.  The companion logs
 \path{review_bundle/source_interface_verification_run.log} and
@@ -4518,6 +4525,10 @@ final digest record.
 
 \begin{auditrecord}[Exact review-bundle support-mode witness]
 \label{prop:exact-review-bundle-upload-witness}
+This audit record retains the legacy cross-reference label
+\path{prop:exact-review-bundle-upload-witness} for compatibility with earlier
+acceptance-ledger entries; its environment category is \path{auditrecord}, not
+\path{proposition}.
 For the current package no archive locator is claimed.  The selected
 bundle-backed support branch is therefore exact supplemental inclusion of
 \path{review_bundle/}, conditional on the venue upload or archive-instantiation
@@ -4675,9 +4686,13 @@ other cases.
 
 \begin{auditrecord}[Final immutable package-state certificate]
 \label{prop:final-immutable-package-state-certificate}
+This audit record retains the legacy cross-reference label
+\path{prop:final-immutable-package-state-certificate} for compatibility with
+earlier acceptance-ledger entries; its environment category is \path{auditrecord},
+not \path{proposition}.
 For the current presentation package, the final source-state record for the three
 fresh verifier runs is the pair consisting of the automath repository commit
-\path{305ee93353b16babc461bfad1a7aee9c808ee268} and the digest manifest
+\path{43845cafd1ff8b2eacffa9db816636d348a31bde} and the digest manifest
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}; the fresh venue/bibliography
 live-check run carries the same digest manifest as its package-state boundary and
 records the absolute local query date 2026-06-05.  The selected supplemental support
@@ -4727,7 +4742,7 @@ exactly the failure cases stated in the audit record.
 \begin{theorem}[Workspace-to-final-package reconciliation]
 \label{thm:workspace-final-package-reconciliation}
 Let $H_0$ be the automath commit
-\path{305ee93353b16babc461bfad1a7aee9c808ee268}, and let $D_0$ be the digest
+\path{43845cafd1ff8b2eacffa9db816636d348a31bde}, and let $D_0$ be the digest
 manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The source-state claim
 made in Audit record~\ref{prop:final-immutable-package-state-certificate} is the
 finite package claim $(H_0,D_0)$, not a claim that every later reviewer checkout,
@@ -4784,6 +4799,10 @@ already proved above.\end{proof}
 
 \begin{auditrecord}[Mutable-checkout observations are non-certifying]
 \label{prop:mutable-checkout-observation-boundary}
+This audit record retains the legacy cross-reference label
+\path{prop:mutable-checkout-observation-boundary} for compatibility with earlier
+acceptance-ledger entries; its environment category is \path{auditrecord}, not
+\path{proposition}.
 Let $W$ be a review-time working tree whose Git \path{HEAD} is not the commit
 $H_0$ named in Theorem~\ref{thm:workspace-final-package-reconciliation}.  The
 observation of $W$ is not a certificate coordinate for any verifier-log claim in
@@ -5238,6 +5257,10 @@ Manifest exposure & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and \path{r
 
 \begin{theorem}[Manual theorem-inventory boundary]
 \label{prop:manual-theorem-inventory-boundary}
+This theorem retains the legacy cross-reference label
+\path{prop:manual-theorem-inventory-boundary} for compatibility with earlier
+acceptance-ledger entries; its environment category is \path{theorem}, not
+\path{proposition}.
 The file \path{theorem_inventory.json} is a manual Stage-A inventory record
 rather than a deterministic theorem-environment extractor output.  Its accepted
 role in the current theorem chain is finite obligation traceability: it
@@ -5673,17 +5696,17 @@ Surface & Evidence level & Recorded command fields & Boundary carried by this pa
 \midrule
 Certificate-record verifier & command-run for the schema-verifier invocation & command
 \path{python review_bundle/verify_certificate_records.py}; source state:
-\path{automath commit 8fc11a7209854450a7d4672a79770b5acea306b0 plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
+\path{automath commit 43845cafd1ff8b2eacffa9db816636d348a31bde plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
 \path{Python 3.10.11 on Windows 10}; exit code: \path{0}; log path:
 \path{review_bundle/certificate_verification_run.log} & schema-level verification of the review-bundle records only; the log itself excludes Lean, daemon, and Rule110 reruns \\
 Source-interface record verifier & command-run for finite source-record comparison & command
 \path{python review_bundle/verify_source_interface_record.py}; source state:
-\path{automath commit 8fc11a7209854450a7d4672a79770b5acea306b0 plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
+\path{automath commit 43845cafd1ff8b2eacffa9db816636d348a31bde plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
 \path{Python 3.10.11 on Windows 10}; exit code: \path{0}; log path:
 \path{review_bundle/source_interface_verification_run.log} & compares table rows, JSON records, manifest ranges, snapshot labels, digest, and line count only; it excludes Lean rebuilds and semantic validation of imported source theorems \\
 Primary-claim inventory verifier & command-run for finite inventory freshness & command
 \path{python review_bundle/verify_primary_claim_inventory.py}; source state:
-\path{automath commit 8fc11a7209854450a7d4672a79770b5acea306b0 plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
+\path{automath commit 43845cafd1ff8b2eacffa9db816636d348a31bde plus review_bundle/FINAL_DIGESTS_SHA256.md}; environment:
 \path{Python 3.10.11 on Windows 10}; exit code: \path{0}; log path:
 \path{review_bundle/primary_claim_inventory_freshness_2026-06-05.log} & checks primary-source line spans, row shape, row id set, and certificate-like pointers only; it excludes semantic proof of primary prose \\
 Venue and bibliography freshness check & command-run for live route and bibliography locator freshness & command
@@ -5729,7 +5752,7 @@ path; otherwise the boundary field must say that no command-run assertion is
 made.  The first four rows of Table~\ref{tab:command-boundary-inventory} contain
 all five required command-run fields.  The first log records command
 \path{python review_bundle/verify_certificate_records.py}, source state
-\path{automath repository commit 305ee93353b16babc461bfad1a7aee9c808ee268 plus review_bundle/FINAL_DIGESTS_SHA256.md},
+\path{automath repository commit 43845cafd1ff8b2eacffa9db816636d348a31bde plus review_bundle/FINAL_DIGESTS_SHA256.md},
 \path{Python 3.10.11 on Windows 10}, exit code \path{0}, and log path
 \path{review_bundle/certificate_verification_run.log}.  Its negative boundary is
 schema-level certificate-record verification only, with no Lean, daemon, or
@@ -5818,6 +5841,7 @@ mathematical obligations of the finite-record safety theorem chain.
 \bibliography{references}
 
 \end{document}
+
 
 
 
