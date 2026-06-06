@@ -7503,6 +7503,45 @@ Theorem~\ref{thm:post-inventory-package-fixed-point} and
 Theorem~\ref{thm:submission-support-fixed-point-normal-form}.
 \end{proof}
 
+\begin{corollary}[Stable replay criterion for the post-inventory tuple]
+\label{cor:stable-replay-post-inventory-tuple}
+Let $S$ be a source state of the present presentation package in which
+\path{theorem_inventory.json} and \path{theorem_inventory.md} exist.  Suppose
+that the theorem-environment extractor, certificate-record verifier,
+source-interface verifier, and retained primary-claim verifier are run from $S$,
+that their logs have exit code zero, and that
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated after those logs are
+written.  Then every later support claim for the first coordinate of
+Theorem~\ref{thm:submission-support-fixed-point-normal-form} factors through the
+finite tuple of Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}:
+the claim is valid for $S$ exactly as a byte-level replay of that tuple, and any
+stronger claim must add a new command-result coordinate of the kind listed in
+Proposition~\ref{audit:command-run-boundary-inventory}.
+\end{corollary}
+
+\begin{proof}
+The hypotheses reproduce the ordered construction required by
+Theorem~\ref{thm:post-inventory-package-fixed-point}.  Since the inventory files
+exist before the four retained commands are run, the resulting logs are
+post-inventory command records.  Since the digest table is regenerated after the
+logs are written, the same finite byte strings are also selected by the final
+SHA--256 surface.  Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}
+therefore identifies exactly the support coordinate available in $S$.
+
+Now consider any later claim that cites the first coordinate of
+Theorem~\ref{thm:submission-support-fixed-point-normal-form} without adding new
+records.  By Theorem~\ref{thm:finite-coordinate-determination-boundary}, a local
+support claim is determined only by its displayed finite coordinates.  The only
+displayed coordinates under the hypotheses are the two inventory files, the four
+post-inventory logs, and the regenerated digest table.  Hence the later claim
+can use no support surface beyond the tuple just identified.  To assert theorem
+semantics, upload, archive replacement, fresh Lean/BEDC rebuilding, daemon
+execution, or dynamic artifact validation would require additional command,
+source, environment, exit-code, and log data; those are precisely the missing
+coordinates isolated in Proposition~\ref{audit:command-run-boundary-inventory}.
+Thus the replay criterion is stable and non-escalating.
+\end{proof}
+
 This long technical supplement reports path-verified source architecture and case evidence.
 It does not claim a fresh rebuild of the full newmath source tree.  A command-run
 claim is outside the present evidence level unless the source commit,
