@@ -1,4 +1,4 @@
-﻿\documentclass[runningheads]{llncs}
+\documentclass[runningheads]{llncs}
 
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -109,6 +109,9 @@ Theorem~\ref{thm:presentation-scoped-boundary-normal-form} (the five-component
 presentation-route boundary normal form),
 Theorem~\ref{thm:current-package-certificate-exactness} (the current package's
 schema-relative finite-record instance), and
+Theorem~\ref{thm:current-package-extension-coordinate-rigidity} (the exact
+absence of current implementation-soundness, fresh-rerun, artifact-semantic, and
+venue coordinates), and
 Theorem~\ref{thm:manual-ledger-dependence-boundary} (the current package's
 manual-ledger dependence and non-completeness boundary).  Later theoremized statements about bundle shape,
 digests, upload conditions, command boundaries, inventories, venue records, and
@@ -3259,6 +3262,98 @@ reported as a finite bad subrecord.  Hence the six-row exactness result cannot b
 read as a claim about fresh reproducibility or semantic validity; those readings
 require an enlarged record and a new acceptance check.\end{proof}
 
+\begin{theorem}[Current-package extension-coordinate rigidity]
+\label{thm:current-package-extension-coordinate-rigidity}
+Assume the support-surface hypotheses of
+Theorem~\ref{thm:current-package-certificate-exactness}.  Let
+\(P^{+}_{6}\) be the accepted six-row current-package state and let
+\(F_{6}\) be its finite schema projection: the row identifiers
+\(a_1,\ldots,a_6\), their tuples
+\(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\), the submitted support
+surface, the fixed dispatch table, and the recorded verifier log.  Then
+\(F_{6}\) is the largest current-package invariant certified by this submission
+before adding a new finite coordinate.  More precisely:
+\begin{enumerate}
+\item any two ambient repository, daemon, implementation, artifact, upload, or
+venue states with the same \(F_{6}\) have the same accepted current-package
+certificate set;
+\item no current-package reading that asserts gate-implementation soundness,
+fresh full-source or artifact rerun success, artifact-semantic validity,
+semantic theorem-inventory completeness, upload status, or venue acceptance is a
+consequence of \(F_{6}\);
+\item each such stronger reading is accepted by the publication-safety interface
+if and only if the submitted package adds the corresponding positive extension
+coordinate from Theorem~\ref{thm:finite-extension-budget-normal-form} and the
+enlarged row passes the assigned gates; and
+\item in the present package those extension coordinates are absent, so every
+listed stronger reading has an inclusion-minimal bad subrecord of the kind
+classified by Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+\end{enumerate}
+Consequently Theorems~\ref{thm:publication-safety-interface},
+\ref{thm:record-acceptance-exactness}, and
+\ref{thm:current-package-certificate-exactness} form a current theorem chain only
+for row-frozen, schema-relative, finite-record acceptance under the stated
+record-gate hypothesis.  The implementation-soundness statement of
+Theorem~\ref{thm:implementation-soundness-extension-criterion} is not
+instantiated by this package; it is exactly the extension test a later package
+must pass after adding implementation-gate and command records.
+\end{theorem}
+
+\begin{proof}
+The first assertion is precisely the finite-coordinate determination theorem
+applied to the current package.  By
+Theorem~\ref{thm:current-package-certificate-exactness}, the accepted certificates
+are the image of the six displayed rows under
+\(a_i\mapsto\mathcal C(a_i)\), conditioned on the submitted support surface and
+the recorded verifier log.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, a verifier decision is
+a function only of the finite projection it reads.  Hence two ambient states with
+the same \(F_{6}\) produce the same current-package certificate set, regardless
+of unsubmitted implementation states, live daemon states, artifact worktrees,
+upload histories, or venue decisions.
+
+Now let \(q\) be one of the stronger readings listed in the statement.  It is
+not a function of \(F_{6}\).  Gate-implementation soundness adds an
+implementation object, an implementation specification, source or version data,
+and implementation-gate or command-run evidence.  A fresh full-source or artifact
+rerun adds a command-run boundary tuple and usually an output surface.  Artifact
+semantic validity adds an artifact-semantic evidence surface and the pass row or
+evaluator command that checks the asserted property.  Semantic theorem-inventory
+completeness adds a semantic extractor or checker coordinate, source-to-output
+binding data, and its pass record.  Upload status and venue acceptance add
+external route, submission, or decision records.  None of these data is among the
+six row tuples and support-surface fields constituting \(F_{6}\).
+
+Since \(q\) is not record-equivalent to the accepted finite-record reading,
+Theorem~\ref{thm:finite-extension-budget-normal-form} supplies a nonempty normal
+form
+\(\Delta(a_i,q)=(\Delta K,\Delta E,\Delta H,\Delta R,\Delta D,\Delta B)\)
+for the row or rows affected by \(q\).  If the submitted package contains that
+extension and the added coordinates pass the gates assigned by \(\Gamma\), the
+enlarged tuple satisfies the six schema clauses; by
+Theorem~\ref{thm:record-acceptance-exactness} it is accepted exactly as an
+enlarged finite-record claim.  Conversely, if the interface accepts \(q\), the
+same theorem forces the enlarged tuple to satisfy every clause, so the relevant
+positive extension coordinates and pass rows must be present.  This proves the
+if-and-only-if criterion.
+
+It remains only to identify the present package.  Inspecting the six-row ledger
+used by Theorem~\ref{thm:current-package-certificate-exactness}, each row is
+declared at the path-verified finite-record level, with command-boundary fields
+only for the bounded verifier logs explicitly named in the support surface.  The
+proof of Theorem~\ref{thm:implementation-soundness-extension-criterion} observes
+that the current package does not contain a single
+\(\mathsf{Impl}(c)=(K^{\mathrm{impl}},E^{\mathrm{impl}},
+R^{\mathrm{impl}},B^{\mathrm{impl}})\) extension record for the package gates.
+The current package likewise supplies no fresh artifact-semantic evaluator log,
+no semantic theorem-inventory completeness coordinate, and no external venue
+decision row.  Therefore each listed stronger reading misses at least one of the
+normal-form coordinates.  The finite certificate obstruction skeleton classifies
+the first missing coordinate as a minimal bad subrecord: missing evidence surface,
+missing pass row, missing route or venue boundary, missing discovery/interface
+row, or missing command-run tuple.  Removing that stronger reading leaves the
+six-row finite certificate set unchanged.\end{proof}
+
 \begin{theorem}[Current-package semantic non-escalation]
 \label{thm:current-package-semantic-non-escalation}
 Let $P^{+}_{6}$ be the six-row current-package state of
@@ -3639,6 +3734,77 @@ manifest or copied file snapshot supplies reviewability of the cited surface; it
 does not supply command, commit, environment, exit-code, and log-path fields.
 Therefore the conclusion is exactly path-verified snapshot reviewability and not
 any stronger execution claim.\end{proof}
+
+\begin{theorem}[Case-witness skeleton rigidity]
+\label{thm:case-witness-skeleton-rigidity}
+Let \(r\) be one of the four case-study rows in
+Table~\ref{tab:case-witnesses}, and assume the path-completeness and
+review-bundle coverage conclusions of
+Propositions~\ref{prop:path-complete-case-witnesses} and
+\ref{prop:review-bundle-case-snapshot-coverage}.  Then the accepted information
+carried by \(r\) is exactly one of the following four skeleton lessons:
+\begin{enumerate}
+\item a promotion skeleton: an intake packet is not daemon-visible publication
+work before human promotion;
+\item a route/submission skeleton: an overlap or submission-state gate blocks
+advancement until one of the recorded next actions occurs;
+\item a theorem-content skeleton: file churn or compilation does not by itself
+show substantive theorem growth or accepted discovery; or
+\item an artifact-limitation skeleton: a bounded artifact limitation must be
+disclosed or must block the corresponding artifact claim.
+\end{enumerate}
+Moreover this skeleton classification is rigid.  Any stronger reading of the
+same case row as a fresh daemon run, full-source rebuild, theorem-content
+rerun, artifact-suite rerun, benchmark, semantic artifact validation, or
+Rule110/GroundCompiler dynamic-validation result is accepted by the
+publication-safety interface if and only if the submitted package adds the
+positive extension coordinates required for that stronger reading: a new claim
+kind when needed, a submitted evidence surface for the run or semantic property,
+assigned pass rows for the enlarged gate set, and the command-run tuple
+containing command, source state, environment, exit code, and log path whenever
+fresh execution is asserted.  Without those coordinates, the case row remains
+accepted only at the path-verified historical-snapshot level and the stronger
+reading has an inclusion-minimal finite bad subrecord.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:path-complete-case-witnesses}, a path-complete case row
+factors through exactly one of the four displayed finite witness skeletons:
+promotion, route/submission blocking, theorem-content non-growth, or
+artifact-limitation disclosure.  That proposition also identifies the unique
+admissible manuscript lesson attached to the skeleton.  By
+Proposition~\ref{prop:review-bundle-case-snapshot-coverage}, the local paths used
+by the row have a finite review-bundle surface: thirteen total local-path strings
+across the four rows, represented by copied snapshots or directory
+file-manifests.  Thus the evidence coordinate for \(r\) is a path-verified
+historical snapshot surface, not an executable event.
+
+Let \(r^{+}\) be a stronger reading of the same row.  If \(r^{+}\) asserts a
+fresh daemon run, full-source rebuild, theorem-content rerun, artifact-suite
+rerun, benchmark, or dynamic Rule110/GroundCompiler validation, it raises the
+evidence level from path-verified snapshot evidence to command-run evidence and
+therefore changes the boundary coordinate \(B\).  Clause~A6 of the finite
+certificate schema requires the command, source state, environment, exit code,
+and log path.  If \(r^{+}\) asserts a semantic artifact property rather than only
+a historical limitation lesson, it also adds an artifact-semantic evidence
+surface and the assigned pass record for the enlarged artifact claim kind.  If
+\(r^{+}\) asserts new theorem-content discovery, it adds the theorem-content or
+discovery component and the pinned discovery/interface pass rows.  These are
+precisely the positive extension coordinates listed by
+Theorem~\ref{thm:finite-extension-budget-normal-form}.
+
+If those coordinates are submitted and pass the gates assigned by \(\Gamma\), the
+enlarged tuple satisfies the schema clauses, and
+Theorem~\ref{thm:record-acceptance-exactness} accepts the stronger finite-record
+reading at the declared level.  Conversely, if the stronger reading is accepted,
+the same exactness theorem forces every changed coordinate to be present and to
+pass the assigned gate checks.  When a required coordinate is absent, the failed
+schema clause supplies the minimal bad subrecord: missing submitted evidence,
+missing pass row, missing discovery-interface row, or missing command-run tuple.
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} gives
+inclusion-minimality.  Hence the original row is rigid at its skeleton lesson and
+path-verified snapshot level, while fresh reproducibility or semantic-validation
+claims require a separately paid finite extension budget.\end{proof}
 
 \begin{table}
 \caption{Path-verified case-study witnesses}
@@ -4465,7 +4631,9 @@ by Table~\ref{tab:submission-interface-map}, the primary--supplement interface m
 Proposition~\ref{prop:primary-supplement-interface-map},
 and the submission-artifact manifest fields.  Row \path{pc11} is the case-row
 summary and is certified by Proposition~\ref{prop:review-bundle-case-snapshot-coverage}
-and Table~\ref{tab:case-witnesses} at the path-verified snapshot level.
+and Table~\ref{tab:case-witnesses} at the path-verified snapshot level; its
+fresh-rerun and semantic-validation boundaries are classified by
+Theorem~\ref{thm:case-witness-skeleton-rigidity}.
 
 Rows \path{pc2} and \path{pc7} do not reprove BEDC closure, the proof-obligation
 system, implementation contracts, or the whole layer table as independent
