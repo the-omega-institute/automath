@@ -1,0 +1,432 @@
+221: \section{Architecture}
+222: 
+223: The workflow separates source work from publication work, and the separation is
+224: the organizing contract for the rest of the supplement.  BEDC source files are
+225: treated as finite-kernel theory together with proof obligations and separate
+226: implementation contracts.  Lean and related markers are formal-verification
+227: records for named obligations, not object-language closure by themselves.
+228: Finite manifests, evaluator rows, bundled snapshots, and command logs are the
+229: substrate witnesses from which publication certificates are built.  AI agents
+230: remain advisory: they may propose, review, and triage, but they do not promote
+231: claims into accepted theory.  The automath layer is therefore a publication
+232: compiler: it packages the source-theory interface, finite witnesses, route state,
+233: and submission boundary without merging those evidence axes.
+234: 
+235: \begin{definition}[Architecture-axis map]
+236: \label{def:architecture-axis-map}
+237: The compiler architecture uses five disjoint evidence axes.  An accepted claim may
+238: read evidence from an axis only at the admissible evidence level shown in
+239: the displayed axis map; the negative boundary in the last column
+240: is part of the claim certificate and cannot be discharged by prose from another
+241: axis.
+242: \begin{center}
+243: \small
+244: \begin{tabularx}{\textwidth}{p{.16\textwidth}p{.27\textwidth}p{.27\textwidth}X}
+245: \toprule
+246: Axis & Role in this paper & Admissible evidence & Negative boundary \\
+247: \midrule
+248: BEDC source theory & finite-kernel theory, proof obligations, and implementation
+249: contracts & pinned source paths, commits, imported labels, bounded summaries, and
+250: source-interface records & not a publication acceptance record, not a fresh rebuild,
+251: and not a complete BEDC exposition \\
+252: Lean markers & formal-verification records for named obligations & recorded build,
+253: axiom-purity, marker-existence, or source-interface rows when named by the package &
+254: not object-language closure, not discovery by itself, and not proof of unrelated
+255: claims \\
+256: Finite witnesses & manifest/evaluator substrate evidence for artifacts and package
+257: certificates & manifest rows, evaluator outcomes, bundled snapshots, verifier logs,
+258: file digests, and limitation ledgers & not semantic universality, not whole-tree
+259: dynamic validation, and not an unbounded artifact rerun \\
+260: Agents & proposal, search, review, ranking, and repair assistance & advisory drafts,
+261: review reports, scheduler scores, and gate-input suggestions after being recorded
+262: as such & not proof evidence, not human promotion, not novelty certification, and
+263: not gate passage \\
+264: Automath publication compiler & intake, route, overlap, submission-pack, and support
+265: surface governance & promotion records, active-paper markers, overlap ledgers,
+266: submission-interface maps, digest manifests, command logs, and upload-or-archive
+267: records when present & not the whole mathematical contribution, not venue
+268: acceptance, and not authority to merge evidence axes \\
+269: \bottomrule
+270: \end{tabularx}
+271: \end{center}
+272: \end{definition}
+273: 
+274: \begin{proposition}[Axis non-escalation]
+275: \label{prop:architecture-axis-non-escalation}
+276: In any record-gate-sound package using Definition~\ref{def:architecture-axis-map},
+277: passage or evidence on one architecture axis cannot certify a load-bearing claim
+278: whose claim kind requires another axis.  More precisely, if a claim certificate
+279: uses an axis $A$ but its stronger reading needs an evidence item or negative-boundary
+280: discharge listed only on a different axis $A'$, then the stronger reading is not
+281: accepted unless the package contains a separate submitted coordinate for $A'$ and
+282: the gates assigned to that coordinate pass.  Consequently
+283: Theorem~\ref{thm:publication-safety-interface} constructs only finite publication
+284: certificates whose axis coordinates are explicitly present in the submitted support
+285: surface; it does not infer BEDC closure from Lean markers, artifact semantics from
+286: manifest rows, proof evidence from agents, venue upload from automath route state,
+287: or support-surface availability from local bundle paths.
+288: \end{proposition}
+289: 
+290: \begin{proof}
+291: The operational interface records a claim by finite coordinates: claim kind,
+292: evidence surface, evidence level, pass records assigned by $\Gamma$, and the
+293: boundary field.  Definition~\ref{def:architecture-axis-map} makes the axis of each
+294: such coordinate explicit and declares the corresponding negative boundary.  If a
+295: stronger reading needs an item on a different axis $A'$, then either the claim-kind
+296: coordinate does not name the kind requiring $A'$, the evidence surface does not
+297: contain an admissible $A'$ item, a required $A'$ pass record is missing, or the
+298: boundary field still excludes the stronger reading.  In all four cases the finite
+299: record verifier of Proposition~\ref{prop:finite-certificate-schema-verifier}
+300: rejects the stronger reading: the dispatch table cannot assign an unmentioned gate,
+301: the surface check cannot read an unsubmitted path or log, the pass-record check
+302: cannot be satisfied without the row, and the boundary check preserves the declared
+303: negative boundary.
+304: 
+305: Conversely, when a separate coordinate for $A'$ is submitted, it is just another
+306: finite component of the package.  It can be accepted only by the same schema:
+307: its claim kind must dispatch to the appropriate gates, its evidence surface must
+308: list the admissible $A'$ evidence, and its boundary must state exactly what is and
+309: is not certified.  Therefore evidence never moves between axes by paraphrase or by
+310: agent-generated text; it moves only by adding an explicit finite coordinate and
+311: passing the assigned gates.  Applying this to the five rows of
+312: Definition~\ref{def:architecture-axis-map} gives the listed consequences.  They are
+313: also the axis-level instance of the coordinate-determination result later isolated
+314: in Theorem~\ref{thm:finite-coordinate-determination-boundary}: facts outside the
+315: finite coordinates of the accepted package are not conclusions of the certificate.
+316: \end{proof}
+317: The reader path is therefore architectural before it is logistical.  The rest of
+318: the supplement first fixes the source-interface spine, then defines the finite
+319: record verifier, then proves the certificate construction and non-escalation
+320: boundary, then instantiates that boundary on the current six-row package, and
+321: only then lists the local case snapshots and command-run inventory.  File tables
+322: are included as finite witnesses for this interface, not as a substitute for the
+323: compiler architecture.
+324: 
+325: Concretely, the newmath source workspace contains Lean files, scripts, and
+326: artifact sources.  The automath publication workspace contains intake packets,
+327: active paper tracks, review state, and submission metadata.  A candidate first
+328: enters an intake seed.  It becomes an active paper only after a human promotion
+329: decision creates a \texttt{2026\_*} directory with \texttt{main.tex} and
+330: \texttt{PIPELINE.md}.  This prevents source organization from being mistaken for
+331: a submission route.
+332: 
+333: The source side supplies a discovery-gate calculus.  In this calculus,
+334: statement-only and code-only candidates are insufficient; mechanical expansion
+335: and compression are not discovery by themselves; discovery claims require a
+336: semantic certificate and a ledger witness; demotion preserves source-interface
+337: audit soundness;
+338: accepted claims must form an auditable lineage DAG; and a pipeline is safe only
+339: when discovery claims pass the gate before being recorded as accepted work.
+340: The reviewer-facing source snapshot is
+341: \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
+342: copied from the newmath repository path
+343: \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+344: at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}
+345: \cite{bedc-newmath-source}.  The imported interface labels are listed in the
+346: following source-binding record:
+347: \begin{quote}\small
+348: \path{thm:automated-discovery-dna-completeness-obligation};
+349: \path{cor:automated-discovery-statement-code-insufficient};
+350: \path{thm:automated-discovery-mechanical-not-discovery};
+351: \path{thm:automated-discovery-compression-not-discovery};
+352: \path{thm:automated-discovery-certificate-ledger-required};
+353: \path{thm:automated-discovery-positive-implies-discovery};
+354: \path{thm:automated-discovery-scored-claims-public-weights};
+355: \path{thm:automated-discovery-gate-kind-sound};
+356: \path{thm:automated-discovery-demotion-soundness};
+357: \path{thm:automated-discovery-lineage-dag};
+358: \path{thm:automated-discovery-lowest-score-not-best-target};
+359: \path{thm:automated-discovery-selection-favours-classifier-change};
+360: \path{thm:automated-discovery-no-unpaid-discovery};
+361: \path{thm:automated-discovery-pipeline-safety};
+362: \path{thm:automated-discovery-pipeline-theorem};
+363: \path{prin:automated-discovery-principle}.
+364: \end{quote}
+365: 
+366: The exact source interface used by the proof below was extracted from the pinned
+367: commit on 2026-06-01.  At lines 238--246, the source states the DNA-completeness
+368: obligation for gate-passed discovery genomes.  At lines 248--255, it states that
+369: candidates supplying only a statement locus or only legal theorem code do not
+370: pass the discovery gate as theorem genomes.  At lines 258--267 and 269--278, it
+371: states that mechanical expansion and same-classifier genome compression do not
+372: imply discovery.  At lines 280--297, it states that a discovery transition
+373: supplies a semantic naming certificate and a ledger witness.  At lines 299--332,
+374: it records the positive-discovery, public-weight, and gate-kind-soundness
+375: interfaces used by the package verifier below.  At lines 334--345, it states
+376: that gate demotion leaves a claim kind no stronger than its actual evidence.  At
+377: lines 366--374, it states that lineage-consistent accepted claims form an
+378: auditable acyclic lineage graph.  At lines 393--418, it states that the lowest
+379: score need not be the best target and that, when all other discovery-potential
+380: coordinates are fixed, a positive classifier-change coefficient makes the
+381: selection operator favor the classifier-changing candidate.  At lines 432--439,
+382: it states that an accepted pipeline has no accepted discovery claim missing gate
+383: evidence.  At lines 441--455, pipeline safety states that accepted discovery
+384: claims have classifier change, semantic naming certificate, ledger witness,
+385: DNA-complete theorem genome, score certificate, lineage witness, and an explicit
+386: not-claimed boundary.  At lines 457--485, the main pipeline theorem and principle
+387: separate record growth, score reduction, recombination, classifier change,
+388: ledgered discovery, and certified structural theorem-genome change.  These paraphrases are
+389: used only as a stable interface to the pinned source theorem spine; no stronger
+390: source rebuild claim is made here.
+391: 
+392: \begin{table}
+393: \caption{Checked source-interface record for imported discovery-gate labels}
+394: \label{tab:source-interface-record}
+395: \scriptsize
+396: \begin{tabularx}{\linewidth}{p{0.32\linewidth}p{0.18\linewidth}X}
+397: \toprule
+398: Imported label & Lines & Statement summary \\
+399: \midrule
+400: \path{thm:automated-discovery-dna-completeness-obligation} & 238--246 & non-DNA-complete candidates cannot be principal theorem genomes of gate-passed discovery claims \\
+401: \path{cor:automated-discovery-statement-code-insufficient} & 248--255 & statement-only and code-only candidates do not pass as theorem genomes \\
+402: \path{thm:automated-discovery-mechanical-not-discovery} & 258--267 & mechanical expansion has no classifier shift and therefore is not discovery \\
+403: \path{thm:automated-discovery-compression-not-discovery} & 269--278 & same-classifier compression is not discovery by itself \\
+404: \path{thm:automated-discovery-certificate-ledger-required} & 280--297 & discovery supplies a semantic naming certificate and a ledger witness \\
+405: \path{thm:automated-discovery-positive-implies-discovery} & 299--307 & positive discovery is discovery with an added net compression inequality \\
+406: \path{thm:automated-discovery-scored-claims-public-weights} & 309--318 & score and cost-comparison claims expose the public weight profile \\
+407: \path{thm:automated-discovery-gate-kind-sound} & 320--332 & a gate-passed claim satisfies the obligations attached to its claim kind \\
+408: \path{thm:automated-discovery-demotion-soundness} & 334--345 & demotion records no stronger kind than the evidence supports \\
+409: \path{thm:automated-discovery-lineage-dag} & 366--374 & lineage-consistent accepted claims form an auditable acyclic graph \\
+410: \path{thm:automated-discovery-lowest-score-not-best-target} & 393--406 & lower score alone can be a worse target than a structurally stronger genome \\
+411: \path{thm:automated-discovery-selection-favours-classifier-change} & 408--418 & with positive classifier-change weight and other coordinates fixed, selection favors classifier change \\
+412: \path{thm:automated-discovery-no-unpaid-discovery} & 432--439 & an accepted pipeline has no accepted discovery claim missing gate evidence \\
+413: \path{thm:automated-discovery-pipeline-safety} & 441--455 & accepted discovery has classifier change, certificate, ledger, genome, score, lineage, and boundary witnesses \\
+414: \path{thm:automated-discovery-pipeline-theorem} & 457--475 & the pipeline separates record growth, score reduction, recombination, classifier change, and ledgered discovery \\
+415: \path{prin:automated-discovery-principle} & 479--485 & automated discovery is certified structural theorem-genome change under an auditable gate \\
+416: \bottomrule
+417: \end{tabularx}
+418: \end{table}
+419: 
+420: All rows in Table~\ref{tab:source-interface-record} are extracted from the
+421: newmath repository path
+422: \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+423: at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}; the extraction
+424: date is 2026-06-01.  The table is the path-verified source-interface record used
+425: by this paper: it binds each imported label to a repository path, pinned commit,
+426: line range, extraction date, and bounded statement summary.  The same record is
+427: mirrored in \path{source_interface_record.json}.  For external review, the
+428: source-interface file is copied into the supplemental review bundle at
+429: \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
+430: and the bundle manifest is \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  This
+431: bundle reference is a submission-local support-surface note, not an external
+432: publication citation; it is load-bearing only if the exact bundle is uploaded with matching final digests.
+433: 
+434: \begin{lemma}[Manual bounded source-interface extraction correctness]
+435: \label{lem:source-interface-extraction-correctness}
+436: For the pinned newmath repository path
+437: \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+438: at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b},
+439: Table~\ref{tab:source-interface-record} is the complete imported interface used
+440: by this paper at the manual path-verified level and only at that level.  Its extraction certificate is:
+441: manual line-range audit against the pinned file, mirrored in
+442: \path{source_interface_record.json}, extraction date 2026-06-01, and summary
+443: mode ``bounded paraphrase'' rather than replacement of the full source
+444: statements.  Consequently every use below of an imported discovery-gate label is
+445: limited to the corresponding row's path, commit, label, line range, and bounded
+446: summary.  Even when an explicitly named executable finite record comparison is
+447: also invoked, the upgraded content is only equality and containment of those
+448: finite fields; exact source statements are not imported.  In particular, the
+449: lemma is not a fresh Lean/BEDC rebuild, not an axiom-purity certificate, and not
+450: a semantic proof of the imported source theorem statements.
+451: \end{lemma}
+452: 
+453: \begin{proof}
+454: The first two columns of Table~\ref{tab:source-interface-record} give, for every
+455: imported label named in the source-binding record, the source label and the line
+456: range from which the interface is extracted.  The paragraph immediately before
+457: the table fixes the only source file and commit used for those labels; the
+458: paragraph immediately after the table fixes the extraction date and identifies
+459: \path{source_interface_record.json} as the mirrored check record.  The third
+460: column deliberately records bounded summaries: each row states only the
+461: interface property needed later, such as insufficiency of statement-only records,
+462: certificate-and-ledger requirements, demotion soundness, lineage acyclicity,
+463: bounded classifier-change selection, or pipeline safety.  No later theorem cites
+464: an imported label outside this sixteen-row list, and no later proof uses a
+465: stronger form than the corresponding bounded summary.  A Lean rebuild,
+466: axiom-purity check, exact source-statement import, or semantic source-theorem
+467: validation would require additional command-result or formal-source coordinates;
+468: none is among the fields read in this lemma.  Thus the table is complete for the
+469: imported interface of this paper and correct at the stated evidence level: exact
+470: as to path, commit, label, line range, method, date, and summary mode, and
+471: bounded as to mathematical restatement.\end{proof}
+472: 
+473: \begin{proposition}[Manual source-interface non-escalation]
+474: \label{prop:manual-source-interface-non-escalation}
+475: Let $I$ be the imported discovery-gate interface certified by
+476: Lemma~\ref{lem:source-interface-extraction-correctness}.  Any later use of an
+477: imported source label in this paper is a consequence of $I$ only if it is a
+478: function of the finite fields recorded in Table~\ref{tab:source-interface-record}:
+479: the source path, pinned commit, label, line range, extraction date, bounded
+480: summary, and evidence-level qualifier.  A proposed stronger use---for example an
+481: exact import of the original source theorem statement, a fresh BEDC or Lean
+482: rebuild, an axiom-purity statement, or a semantic validation of the imported
+483: source theorem---is accepted by the finite-record safety interface only after the
+484: submitted record surface is enlarged by the corresponding source-statement,
+485: formal-build, or command-run coordinate and by the assigned pass records for that
+486: coordinate.  Without that enlargement the stronger use is rejected as a finite
+487: bad subrecord and the accepted consequence remains the manual path-verified
+488: bounded interface.
+489: \end{proposition}
+490: 
+491: \begin{proof}
+492: Lemma~\ref{lem:source-interface-extraction-correctness} identifies exactly the
+493: finite fields in $I$ and states that the summaries are bounded paraphrases rather
+494: than replacements of the original source statements.  Therefore two possible
+495: review states that agree on those fields but differ in an unsubmitted source
+496: checkout, proof-assistant state, axiom audit, or executable extraction log give
+497: the same values to every coordinate read by $I$.  By
+498: Theorem~\ref{thm:finite-coordinate-determination-boundary}, no claim depending on
+499: one of the differing unsubmitted coordinates is a consequence of the finite
+500: interface record.
+501: 
+502: If a stronger use is made load-bearing, then it strictly enlarges the original
+503: source-interface reading in the stronger-reading preorder of
+504: Definition~\ref{def:stronger-reading-preorder}: exact source-statement import
+505: adds an evidence-surface coordinate, a BEDC or Lean rebuild adds formal-source or
+506: command-run coordinates, axiom-purity adds an assigned gate and pass record, and
+507: semantic validation adds a new claim-kind or boundary coordinate.  The normal
+508: form of Theorem~\ref{thm:finite-extension-budget-normal-form} says that such a
+509: genuine strengthening is accepted exactly when the added finite coordinates and
+510: their gate records are supplied.  If they are absent,
+511: Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns the missing
+512: coordinate as a finite bad subrecord.  Thus the source import used downstream,
+513: including in Theorem~\ref{thm:publication-safety-interface}, remains the manual
+514: path-verified bounded interface and nothing stronger.\end{proof}
+515: 
+516: \begin{proposition}[Reviewable source-snapshot interface]
+517: \label{prop:reviewable-source-snapshot-interface}
+518: The imported discovery-gate spine used in
+519: the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}, has a reviewer-facing source
+520: interface.  Namely, the tuple consisting of the pinned local source path, commit
+521: \path{3fb3d6a0641767388a401883062aa522ea0b397b},
+522: Table~\ref{tab:source-interface-record}, \path{source_interface_record.json},
+523: and the supplemental copy
+524: \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex}
+525: is sufficient to inspect every imported source label used by this paper at the
+526: path-verified evidence level.  The distribution mode for review is supplemental
+527: upload of \path{review_bundle/} with the presentation-only submission.  No
+528: public archive URL or DOI is part of the current theorem interface.
+529: \end{proposition}
+530: 
+531: \begin{proof}
+532: Lemma~\ref{lem:source-interface-extraction-correctness} proves that the only
+533: imported source labels used by the paper are the sixteen rows of
+534: Table~\ref{tab:source-interface-record}, each with a fixed line range and bounded
+535: summary.  The paragraph preceding that lemma fixes the original local source
+536: path, source commit, extraction date, and JSON mirror.  The supplemental copy is
+537: a file-level snapshot of the same source-interface document, named by the same
+538: commit hash.  Therefore a reviewer does not need access to the author's absolute
+539: path in order to inspect the imported interface: the table gives the labels and
+540: line ranges, the JSON record gives the machine-readable binding, and the bundle
+541: copy gives the text snapshot against which those ranges are checked.  The current reviewer-facing distribution mode is fixed by the proposition:
+542: the bundle is uploadable supplemental material, not an unrecorded private
+543: dependency, and no archival identifier is needed for the bounded interface
+544: claim.\end{proof}
+545: 
+546: \begin{proposition}[Executable source-interface record comparison]
+547: \label{prop:source-interface-record-file-consistency}
+548: The source-interface table, its JSON mirror, and the bundled source snapshot give
+549: one record-level imported discovery-gate interface for
+550: the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}.  The record fields are as
+551: follows: the source commit is
+552: \path{3fb3d6a0641767388a401883062aa522ea0b397b}; the bundled snapshot is
+553: \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex};
+554: the finite comparison script is
+555: \path{review_bundle/verify_source_interface_record.py}; the recorded successful
+556: comparison log is \path{review_bundle/source_interface_verification_run.log};
+557: the byte count recorded for the source and snapshot is 20746; the recorded
+558: SHA-256 digest checked by the script is
+559: \path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2};
+560: the recorded snapshot length is 498 lines; for each of the sixteen line ranges in
+561: \path{source_interface_record.json}, the corresponding imported label is recorded
+562: inside the stated snapshot range; and the sixteen triples \emph{label, line range,
+563: bounded summary} in Table~\ref{tab:source-interface-record} are the sixteen JSON
+564: records.  Hence, at the finite record-comparison level, the manuscript table,
+565: JSON record, review-bundle manifest, digest, line count, and bundled snapshot
+566: define one consistent imported-source interface.  The comparison does not assert
+567: semantic truth of the imported source theorems, does not reproduce the exact
+568: source theorem statements as manuscript theorems, and does not replace the
+569: bounded paraphrase discipline of
+570: Lemma~\ref{lem:source-interface-extraction-correctness}.  Exact source statement
+571: inspection, if desired by a reviewer, is supported only by the bundled snapshot
+572: and line ranges; it is not an imported theorem obligation of this paper.
+573: \end{proposition}
+574: 
+575: \begin{proof}
+576: The proposition is a finite equality-and-containment check over submitted
+577: records.  The script \path{review_bundle/verify_source_interface_record.py}
+578: parses the sixteen rows of Table~\ref{tab:source-interface-record} from this source,
+579: loads \path{source_interface_record.json}, loads the
+580: \path{pinned_source_snapshot} object of
+581: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and computes the SHA-256 digest
+582: line count, and byte count of the bundled snapshot.  It then checks seven finite conditions:
+583: the ordered manuscript rows are the ordered JSON records; the JSON source path
+584: and commit equal the manifest's original path and commit; the ordered JSON line
+585: ranges equal the manifest's \path{line_ranges_used}; the computed digest equals
+586: the manifest digest; the computed line count equals the manifest line count; the
+587: computed byte count equals the manifest byte count; and for each declared range,
+588: the corresponding \path{\label{...}} token occurs inside that inclusive snapshot
+589: interval.
+590: 
+591: The recorded run in \path{review_bundle/source_interface_verification_run.log}
+592: has status \path{pass}.  Its counts are sixteen manuscript table rows, sixteen JSON
+593: records, sixteen manifest ranges, snapshot line count 498, snapshot byte count 20746, and digest
+594: \path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2}.  Its
+595: per-row label checks all report \path{label_in_range: true} for the sixteen labels
+596: listed in Table~\ref{tab:source-interface-record}.  Therefore no accepted row can
+597: be a table-only, JSON-only, manifest-only, or out-of-range source-interface row:
+598: any such defect would violate one of the seven checked finite conditions and would
+599: appear as a finite bad subrecord.  What remains unchecked is exactly outside the
+600: claim: the script does not interpret or prove the imported theorem statements,
+601: and the manuscript does not quote them as exact source theorem text.  The exact
+602: source text remains available only as the bundled snapshot at the displayed line
+603: ranges.  Thus the executable comparison strengthens the earlier manual audit into
+604: a reproducible finite-record certificate while preserving the bounded-paraphrase
+605: and non-semantic boundary.\end{proof}
+606: 
+607: \begin{proposition}[Source-interface evidence-level separation]
+608: \label{prop:source-interface-evidence-level-separation}
+609: Let $r$ be any accepted manuscript claim whose discovery component cites one of
+610: the imported labels in Table~\ref{tab:source-interface-record}.  If $r$ uses only
+611: Lemma~\ref{lem:source-interface-extraction-correctness}, then the imported-label
+612: premise of $r$ is accepted only at the manual path-verified bounded-paraphrase
+613: level.  If $r$ additionally cites
+614: Proposition~\ref{prop:source-interface-record-file-consistency}, then the same
+615: premise is upgraded only by the finite record comparisons listed in that
+616: proposition: table--JSON equality, manifest agreement, snapshot digest and line
+617: count agreement, and label containment in the declared ranges.  In neither case
+618: does the premise become a fresh Lean/BEDC rebuild, a proof of the semantic truth
+619: of the imported source theorem, or an unbounded restatement of the source text.
+620: Consequently the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}, can use the imported
+621: discovery-gate spine only through these two explicitly separated evidence
+622: levels.
+623: \end{proposition}
+624: 
+625: \begin{proof}
+626: The operational evidence level of a cited source-interface premise is determined
+627: by the record fields actually available for that premise.  Lemma~\ref{lem:source-interface-extraction-correctness}
+628: supplies a pinned path, commit, extraction date, label, line range, and bounded
+629: summary for each of the ten imported labels, and its proof states that no later
+630: use may exceed that bounded summary.  Therefore a claim using only the lemma has
+631: exactly the manual path-verified bounded-paraphrase evidence listed there.
+632: 
+633: Proposition~\ref{prop:source-interface-record-file-consistency} adds a different
+634: finite record: the verifier parses the manuscript table, the JSON mirror, the
+635: manifest's pinned-source-snapshot record, and the bundled source snapshot, and it
+636: checks the six finite conditions enumerated in its proof.  Those checks upgrade
+637: the source-interface premise only with respect to record-file consistency and
+638: range containment.  The same proposition expressly excludes semantic truth of
+639: the imported theorems and preserves the bounded-paraphrase restriction.  No row
+640: in Table~\ref{tab:source-interface-record}, no field of
+641: \path{source_interface_record.json}, and no command-boundary row records a fresh
+642: Lean/BEDC rebuild or a semantic source-theorem verifier.  Hence an imported-label
+643: premise has exactly the two evidence levels stated in the proposition and no
+644: stronger one.
+645: 
+646: The finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}, requires a discovery-gate source
+647: interface with recorded evidence surface and boundary.  Applying the preceding
+648: paragraphs to each of its imported discovery-gate citations gives precisely the
+649: manual path-verified interface, optionally strengthened by the finite executable
+650: record comparison, and forbids promotion of that interface into an unrecorded
+651: semantic or rebuild claim.\end{proof}
+652: 
