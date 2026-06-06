@@ -1639,6 +1639,80 @@ the seven atomic gate interfaces.  Thus one component's gate passage cannot be
 substituted for another component's missing assigned pass rows in a mixed
 load-bearing claim.\end{proof}
 
+\begin{theorem}[Concrete finite-script implementation soundness]
+\label{thm:concrete-finite-script-implementation-soundness}
+Let $S$ be the submitted support surface containing
+\path{review_bundle/certificate_schema.json},
+\path{review_bundle/current_package_pass_records.json},
+\path{review_bundle/submission_interface_map.json},
+\path{review_bundle/primary_claim_inventory.json},
+\path{source_interface_record.json},
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, the bundled pinned source
+snapshot, and \path{theorem_inventory.json}.  Let $\mathcal V$ be the four-script
+family consisting of \path{review_bundle/verify_certificate_records.py},
+\path{review_bundle/verify_source_interface_record.py},
+\path{review_bundle/verify_primary_claim_inventory.py}, and
+\path{review_bundle/extract_theorem_environments.py}.
+\]
+Assume that the submitted package contains, for each script in $\mathcal V$ used
+as command-run evidence, its source path, invocation command, source state,
+environment, exit code, and log path.  Then the following implementation-level
+statement is proved for these named scripts and no others: on the finite input
+projection explicitly parsed by the corresponding script, exit code $0$ is a
+sound certificate of the script's printed finite predicate.  Namely,
+\path{verify_certificate_records.py} certifies schema-relative certificate-row
+coverage and pointer discipline for the current pass-record ledger;
+\path{verify_source_interface_record.py} certifies equality of the manuscript
+source-interface table with the JSON and pinned-snapshot manifest records;
+\path{verify_primary_claim_inventory.py} certifies the primary-claim row shape,
+line-span bounds, row-id set, and certificate-surface existence checks; and
+\path{extract_theorem_environments.py} certifies syntactic theorem-like
+environment extraction and label coverage by \path{theorem_inventory.json}.  This
+finite-script implementation soundness does not certify mathematical theorem
+truth, Lean/BEDC correctness, artifact semantic validity, venue upload,
+acceptance, archive availability, or the operational semantics of Python itself.
+\end{theorem}
+
+\begin{proof}
+Each member of $\mathcal V$ is a finite text file included in the submitted
+support surface, and the command-run tuple fixes the invoked script, source
+state, environment, exit code, and log path.  Inspect the deterministic input
+projection named in the statement.
+\path{verify_certificate_records.py} reads the certificate schema, the current
+pass-record ledger, the submission-interface map, the primary-claim inventory,
+the review-bundle manifest, and the selected source surfaces; its accepted output
+is obtained only after checking the finite fields used by the schema-relative
+certificate predicates: row identifiers, claim-kind sets, evidence levels,
+evidence surfaces, human-promotion fields, assigned pass records, discovery
+fields, boundary fields, and evidence-pointer existence.  Therefore exit code
+$0$ for this script is exactly sound for the finite row-and-pointer predicate it
+prints, because every accepted clause is one of those finite comparisons and an
+error is appended when such a comparison fails.
+
+The same argument applies to the other three scripts after replacing the finite
+projection.  The source-interface verifier reads the manuscript table, the JSON
+source-interface record, and the pinned snapshot manifest; every accepted clause
+is an equality, digest, line-count, or line-range comparison among those finite
+records.  The primary-claim verifier reads \path{submission_abstract.tex} and
+\path{review_bundle/primary_claim_inventory.json}; every accepted clause is a
+finite row-shape, row-id, line-span, nonempty-field, or certificate-pointer test.
+The theorem-environment extractor reads \path{main.tex} and
+\path{theorem_inventory.json}; every accepted clause is a regular-expression
+extraction of labelled theorem-like environments followed by membership of those
+labels in the finite inventory.  Thus, in each case, the implementation has no
+output channel beyond the finite predicate displayed by its source and log: if
+the script exits with code $0$, the printed predicate holds on the parsed finite
+projection.
+
+No stronger conclusion is used.  The proof never interprets theorem bodies,
+checks Lean, evaluates artifacts, contacts an upload system, resolves a public
+archive, or gives Python a formal semantics.  Those would require additional
+certificate coordinates beyond the source path, command, source state,
+environment, exit code, log path, and finite input projection specified here.
+Consequently this theorem supplies concrete implementation soundness only for
+the named finite-record scripts and only at the finite predicates just proved.
+\end{proof}
+
 \begin{theorem}[Assigned-gate soundness audit boundary]
 \label{thm:assigned-gate-soundness-audit-boundary}
 Let $P$ be a finite submitted package with pass-record ledger $L$, dispatch
@@ -1659,7 +1733,9 @@ declared historical boundary at the evidence level stated in the row; and
 implementation was independently sound, freshly executed, or semantically correct
 beyond the recorded finite schema check, the submitted package also contains a
 gate-soundness audit tuple for that stronger proposition: source path, command,
-source state, environment, exit code, and log path for the assigned gate.
+source state, environment, exit code, and log path for the assigned gate; for the
+four named finite-record scripts this tuple has exactly the scope proved in
+Theorem~\ref{thm:concrete-finite-script-implementation-soundness}.
 \end{enumerate}
 Consequently, in the absence of the audit tuple in (3), record-gate soundness is
 an explicit hypothesis of the publication-safety theorem, not a theorem proved by

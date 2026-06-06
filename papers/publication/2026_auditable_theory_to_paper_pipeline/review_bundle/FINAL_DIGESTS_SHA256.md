@@ -1,17 +1,17 @@
 # Final Package SHA-256 Digests
 
-Regenerated for the Stage A2 theoremization round 7 source state after theorem-inventory extraction, finite-record verifier refresh, dated venue/bibliography refresh, and submission-support fixed-point repair. These rows are byte-level local support coordinates, not an upload receipt, DOI, public archive identifier, venue acceptance record, upload-time compliance record, or semantic proof-checking certificate.
+Regenerated for the Stage A2 theoremization round 1 source state after theorem-inventory extraction, finite-record verifier refresh, dated venue/bibliography refresh, and submission-support fixed-point repair. These rows are byte-level local support coordinates, not an upload receipt, DOI, public archive identifier, venue acceptance record, upload-time compliance record, or semantic proof-checking certificate.
 
 ## Source, Interface, and Inventory Digests
 
 | SHA-256 | Relative path |
 |---|---|
-| `8b5cc3ebc6bf0cb64f84a104f7632b545f9dd4a4487f8573c69d9d480a80c27e` | `main.tex` |
+| `a6423406911a8e24e10c128d2cf4a74f8e033bff40244c4181e204792c03a389` | `main.tex` |
 | `6e8bfea5f713221eea4618af62c1c1bc85c09ff8ea55765bfe84b5928c924920` | `submission_abstract.tex` |
 | `aacb381ac6b7b0220e99dd4a1fefb4502d7481411a4c3c07a6ce50203d0168f2` | `references.bib` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
-| `13ea022d46f1ede58b9438877751b032a0626230d7de3cd2cf5bdfa00402d76f` | `theorem_inventory.json` |
-| `19fb2d3bb8f1a3c050bf6cdc94803af2c6c809f8c0229e58853e652e866211d5` | `theorem_inventory.md` |
+| `03d9c2f3b8ba6b0c8fea54baa61cb1040b35e8dbe0774597cc88f2da3008bfbc` | `theorem_inventory.json` |
+| `9e7fb77cc5d4454b52d24ac666f348b6f483675d52fe089a4b111fa63967d62e` | `theorem_inventory.md` |
 
 ## Review-Bundle File Digests
 
@@ -37,7 +37,7 @@ Regenerated for the Stage A2 theoremization round 7 source state after theorem-i
 | `31bc3166c7bbe231319995f695af1eeb7a493065e2f2a87b5c82b7f230ed81a9` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.json` |
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `c3c3d78631a192564863eb5b4b3778dbc98651fd597a475063db94e099ec0441` | `review_bundle/certificate_schema.json` |
-| `c68577c88dc65fbab7be9d7e02297a6c9c37dc51386434464b14d197733150ba` | `review_bundle/certificate_verification_run.log` |
+| `51896a1f26f37df0abcbe0224358a22e9073b7e6bae47a7a66f3b16b802a44de` | `review_bundle/certificate_verification_run.log` |
 | `2ffeee544750876cb7a935d9f4c86591e5827f2e064c882530ad525a48f9abe2` | `review_bundle/current_package_pass_records.json` |
 | `6fba12d5ef8249e06b01332a9076a9316dde5327700215d5a9e2e9c92fbe0eab` | `review_bundle/extract_theorem_environments.py` |
 | `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` | `review_bundle/negative_certificate_record_example.json` |
@@ -46,11 +46,11 @@ Regenerated for the Stage A2 theoremization round 7 source state after theorem-i
 | `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
 | `c491420049e422046e3fc16d652d522be3f206905c490f868c856569dcae744a` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
-| `842a6b5949728cdfb2c482f4aeed2965c910ba74b11f6f61c05c0b88f1aa363c` | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` |
-| `e9fc772f458dd7d1351b1f239789585089e7f0a6b40acea3a0cdb7608fbae138` | `review_bundle/source_interface_verification_run.log` |
+| `72664dceba8205f2963a2b650af0967b8ceea5d5041c72215005c45d66d60eb2` | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` |
+| `4aca1072049c5d39dea3c40bde8a2fb09644dab7813145e42df2c79dee94834f` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
-| `5b9fee70555d5eaa51f970ea6943c75d18e977c55c1b792c337ce8e5f7a71e1b` | `review_bundle/theorem_environment_extraction_run.log` |
+| `a3232ea272568c199b00b4acb2516104e80bf55d38c848e72247e75595b1346a` | `review_bundle/theorem_environment_extraction_run.log` |
 | `a46deed5e7eabf949e4d9b3e968ab9b81f56e4a43230f25fc31ebd1cf73f66ce` | `review_bundle/verify_certificate_records.py` |
 | `8b4d8bce68e0a62d5e05dcda9d5a257aceb43820db6e1f4c17c54a8dc6c4d1a7` | `review_bundle/verify_primary_claim_inventory.py` |
 | `ff3b1017e42b74ddad382205fa55f7436ac64c02f77d23f76f370fd95de5eb8a` | `review_bundle/verify_source_interface_record.py` |
