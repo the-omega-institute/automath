@@ -688,6 +688,7 @@ that it has no hidden semantic or venue-acceptance content;
 Definition~\ref{def:certificate-schema-acceptance-table} restates the finite
 acceptance predicates as the table relation \(\mathsf{Acc}_{\Gamma}\);
 Theorems~\ref{thm:verifier-input-output-contract},
+\ref{thm:finite-verifier-normal-form},
 \ref{thm:record-acceptance-exactness}, and
 \ref{thm:finite-coordinate-determination-boundary} prove verifier exactness and
 non-escalation from those predicates;
@@ -1167,6 +1168,73 @@ input record.  It can become checkable only after the schema is enlarged to add
 that object as an input coordinate and after a new verifier contract for the
 enlarged coordinate is proved.  Hence the present verifier certifies only finite
 record acceptance and its finite rejection witnesses.\end{proof}
+
+\begin{theorem}[Finite verifier normal form]
+\label{thm:finite-verifier-normal-form}
+Fix the dispatch table $\Gamma$, the submitted support surface $S$, and the
+finite certificate schema of Definition~\ref{def:certificate-schema-acceptance-table}.
+There is a deterministic verifier
+\[
+\mathsf{Check}_{\Gamma,S}(c,K,\ell,E,H,R,D,B)
+\]
+with the following presentation-layer input/output normal form.
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{p{0.18\linewidth}p{0.36\linewidth}X}
+\toprule
+Step & Input fields read & Returned value \\
+\midrule
+1 & $K,\ell$ & reject with $(Q_1,K,\ell)$, or continue \\
+2 & $E$ and $S$ & reject with $(Q_2,E,e_0)$ for the first non-reviewable pointer $e_0$, or continue \\
+3 & $K,\Gamma,R,E,S$ & reject with $(Q_3,g,K,R,E)$ for the first missing or non-reviewable assigned gate $g$, or continue \\
+4 & $H$ and the route-crossing status of $c$ & reject with $(Q_4,H)$, or continue \\
+5 & $K,D$ & reject with $(Q_5,K,D)$, or continue \\
+6 & $\ell,B$ & reject with $(Q_6,\ell,B)$, or return $\mathsf{accept}(c,\mathcal C)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+The verifier is extensionally equal to the predicate $V$ and to the table
+relation $\mathsf{Acc}_{\Gamma}$: it returns acceptance if and only if all six
+schema predicates A1--A6 hold, and otherwise returns exactly the first finite
+bad subrecord.  In particular, every positive output used by
+Theorem~\ref{thm:publication-safety-interface} is produced by this finite loop
+over submitted coordinates; the loop has no branch that can accept a stronger
+semantic, implementation, venue, archive, or proof-assistant reading.
+\end{theorem}
+
+\begin{proof}
+Define \(\mathsf{Check}_{\Gamma,S}\) by the six displayed steps.  The first step
+is predicate $Q_1$, hence predicate $P_1$ and clause A1.  If it fails, the only
+fields inspected are $K$ and $\ell$, so the returned subrecord is finite and is
+the first possible failed predicate.  If it succeeds, the verifier proceeds to
+step~2.  The second step is exactly the evidence-surface predicate $Q_2=P_2$ and
+clause A2; since $E$ is a finite list in an accepted certificate candidate and
+$S$ is a finite submitted support surface for this package, membership and
+boundary tests are finite lookups, and the first offending pointer $e_0$ is a
+finite subrecord.  The third step computes the finite assigned-gate set
+\(\bigcup_{k\in K}\Gamma(k)\) and applies $Q_3=P_3$, clause A3, to the finite
+pass-record list $R$ and the finite reviewable surfaces.  A missing assigned
+gate or non-reviewable pass-record pointer therefore yields the displayed finite
+subrecord and no semantic countermodel.
+
+The remaining steps are the same identification for the remaining coordinates:
+step~4 is $Q_4=P_4$ and A4, step~5 is $Q_5=P_5$ and A5, and step~6 is
+$Q_6=P_6$ and A6.  Thus a run reaches the accepting branch exactly when none of
+the six schema predicates fails.  This proves extensional equality with
+\(V=\bigwedge_{i=1}^{6}P_i\), and Definition~\ref{def:certificate-schema-acceptance-table}
+identifies the same conjunction with \(\mathsf{Acc}_{\Gamma}\).  The bad
+subrecord is first-failure exact by construction, because the verifier stops at
+the least numbered failed step and has inspected only the fields listed in that
+row.
+
+Finally, the normal form lists every input coordinate and every output token of
+the algorithm.  None is a proof-assistant derivation, a theorem-body semantic
+judgment, an artifact evaluator trace, a live upload receipt, an archive locator,
+or a venue decision.  Therefore the positive branch cannot be read as any of
+those stronger assertions.  Such an assertion can be accepted only by enlarging
+the schema with the missing coordinate and proving a new input/output contract,
+as required later by
+Theorem~\ref{thm:implementation-soundness-extension-criterion}.\end{proof}
 
 \begin{theorem}[Schema-relative finite-record acceptance exactness]
 \label{thm:record-acceptance-exactness}
@@ -3639,6 +3707,7 @@ listed stronger reading has an inclusion-minimal bad subrecord of the kind
 classified by Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
 \end{enumerate}
 Consequently Theorems~\ref{thm:publication-safety-interface},
+\ref{thm:finite-verifier-normal-form},
 \ref{thm:record-acceptance-exactness}, and
 \ref{thm:current-package-certificate-exactness} form a current theorem chain only
 for row-frozen, schema-relative, finite-record acceptance under the stated
