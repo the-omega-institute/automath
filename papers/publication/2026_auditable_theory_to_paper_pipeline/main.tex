@@ -3074,6 +3074,55 @@ as an implementation-soundness theorem here; it remains an exact finite-record
 extension test for a later package.
 \end{proof}
 
+\begin{corollary}[Submitted gate-implementation contract dichotomy]
+\label{cor:submitted-gate-implementation-contract-dichotomy}
+Fix the package ledger $L$, support surface $S$, and dispatch table $\Gamma$ of
+the publication-safety interface.  A claim that the actual gate-producing
+daemons or human workflow of the package satisfy record-gate soundness is
+accepted by the theorem chain of this paper only in the following submitted-form
+case: the package includes a finite implementation contract
+\[
+\mathsf{GateImpl}(P)=(I,E_I,R_I,B_I)
+\]
+where $I$ names the gate-producing implementations and human boundary
+procedures, $E_I\subseteq S$ names their source, configuration, replay inputs,
+and produced-row surfaces, $R_I$ contains a submitted pass record for every
+implementation or human-boundary gate assigned by $\Gamma$ to that stronger
+claim, and $B_I$ contains the command-run tuple whenever the contract is read at
+command-run strength.  If no such finite tuple is submitted, then every system
+soundness reading of Theorem~\ref{thm:publication-safety-interface} is rejected:
+the theorem remains strictly conditional on the submitted gate-passage records
+in $L$ and asserts no independent soundness of the daemons, scripts, or human
+workflow that produced those rows.
+\end{corollary}
+
+\begin{proof}
+The claim that the actual daemons, scripts, or human workflow satisfy
+record-gate soundness is an implementation-soundness reading of the finite
+record row.  Apply Theorem~\ref{thm:implementation-soundness-extension-criterion}
+with $K^{\mathrm{impl}}$ equal to the additional implementation component,
+$E^{\mathrm{impl}}=E_I$, $R^{\mathrm{impl}}=R_I$, and
+$B^{\mathrm{impl}}=B_I$.  If the displayed contract is present, the enlarged row
+has an explicit implementation kind, a submitted evidence surface for the
+implementation objects and human boundary procedures, all assigned pass rows,
+and the declared evidence-level boundary.  The finite certificate constructor
+therefore accepts exactly that enlarged finite-record claim and no stronger one.
+
+Conversely, suppose the manuscript is read as asserting such implementation
+soundness while no tuple $\mathsf{GateImpl}(P)$ is submitted.  If $I$ or the
+corresponding implementation claim kind is missing, the stronger reading is
+invisible to $\Gamma$; if $E_I$ is missing, there is no submitted implementation
+surface; if $R_I$ is missing, some assigned implementation or human-boundary gate
+has no submitted pass row; and if $B_I$ is missing at command-run strength, the
+evidence-level boundary is incomplete.  These are exactly the finite obstruction
+cases classified by Theorem~\ref{thm:finite-certificate-obstruction-skeleton}
+and by Theorem~\ref{thm:implementation-soundness-extension-criterion}.  Hence,
+without the displayed tuple, the only remaining hypothesis available to
+Theorem~\ref{thm:publication-safety-interface} is the conditional finite
+predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ over the submitted gate-passage records;
+no independent implementation-level soundness follows.
+\end{proof}
+
 \begin{table}
 \caption{Submission-local acceptance-entry ledger for the current package}
 \label{tab:current-acceptance-ledger}
