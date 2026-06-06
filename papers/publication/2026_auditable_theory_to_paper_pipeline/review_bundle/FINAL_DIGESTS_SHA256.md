@@ -1,17 +1,17 @@
-# Final Support Surface SHA-256 Digests
+# Final Package SHA-256 Digests
 
-Generated for the current local exact-inclusion support surface. These rows are a byte-level packaging record only; they are not an upload receipt, public archive locator, venue acceptance record, Lean rebuild, or semantic artifact validation.
+Regenerated for the Stage A2 theoremization round 6 source state after theorem-inventory extraction and finite-record verifier refresh. These rows are byte-level local support coordinates, not an upload receipt, DOI, public archive identifier, or semantic proof-checking certificate.
 
-## Submitted Root Source, Interface, and Inventory Digests
+## Source, Interface, and Inventory Digests
 
 | SHA-256 | Relative path |
 |---|---|
-| `a7bdf77819dd7c2e59078318783b30459393ae116e16305fda09dd831c1b91ba` | `main.tex` |
-| `5989aa657c501d0441f927cebf83b240193369daaa6ae43f838c8491ff9770f6` | `submission_abstract.tex` |
+| `ad6ea1ff8d44ae8a0b08e788ae7d4fdc1eeaef1c13bf74d11b472723c553f2fb` | `main.tex` |
+| `6e8bfea5f713221eea4618af62c1c1bc85c09ff8ea55765bfe84b5928c924920` | `submission_abstract.tex` |
 | `aacb381ac6b7b0220e99dd4a1fefb4502d7481411a4c3c07a6ce50203d0168f2` | `references.bib` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
-| `72e9f4d2db0e68bf1d92138cc86ab40c9b1784076a915c75954b31b6a59e2eed` | `theorem_inventory.json` |
-| `99d9e9a531c40e19e3ae835b9e11d90e8ade2693929159e8876b43b9f6f83de2` | `theorem_inventory.md` |
+| `2e8a543a2124a627f3ffaac6385af08e63a968db314b46f63cb62bf5cea2abc5` | `theorem_inventory.json` |
+| `2836786f09f241b783a0dbab9fb89052c7857f8697b80ec25add849058184bb0` | `theorem_inventory.md` |
 
 ## Review-Bundle File Digests
 
@@ -30,22 +30,27 @@ Generated for the current local exact-inclusion support surface. These rows are 
 | `31bc3166c7bbe231319995f695af1eeb7a493065e2f2a87b5c82b7f230ed81a9` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.json` |
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` |
-| `b6c7614e0416c472a672be3eedc166482162af965146a6de023666ed5040a681` | `review_bundle/certificate_schema.json` |
-| `5df7fa4c05f0dacc2b6b7ea45f25be4bc6da99a38b5fe13d46a2b997a37827c3` | `review_bundle/certificate_verification_run.log` |
-| `5517bf4aae70800748e714ce877b051bc5a00e4a8d0ee664fac86a821a35fe50` | `review_bundle/current_package_pass_records.json` |
+| `c3c3d78631a192564863eb5b4b3778dbc98651fd597a475063db94e099ec0441` | `review_bundle/certificate_schema.json` |
+| `f2867f6119b851ad74737b3aa806b4b56f874e7fdb8eed7a82ed27628d4999cf` | `review_bundle/certificate_verification_run.log` |
+| `2ffeee544750876cb7a935d9f4c86591e5827f2e064c882530ad525a48f9abe2` | `review_bundle/current_package_pass_records.json` |
+| `6fba12d5ef8249e06b01332a9076a9316dde5327700215d5a9e2e9c92fbe0eab` | `review_bundle/extract_theorem_environments.py` |
 | `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` | `review_bundle/negative_certificate_record_example.json` |
 | `74dbf7a0db63491bb3d177ca9787cce30f64de45f8db1bb59bf25a9a3b0b315c` | `review_bundle/negative_certificate_record_example_run.md` |
 | `01b791c58f24d1ef2482a6eccadf4b253573a291b30942d959ca2b343dc10e3d` | `review_bundle/primary_claim_inventory.json` |
 | `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` |
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
-| `32350a326d84f18d583a04ea9ca9bcbfc970e41ffa3b1c3eea3ac8c440699834` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
+| `c491420049e422046e3fc16d652d522be3f206905c490f868c856569dcae744a` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
+| `2d21cd432756117bb31171e095d7663c273910858d1786ba09ac5ecca99a028f` | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
-| `2306757f80b553b0dda6dc86ea99eaa9deb4e3515a887417e9b461cfaa60d73d` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
-| `2103da446bab5484ce32b338da49a9273c5ddc44634fc5aa2a7332f92f017a96` | `review_bundle/source_interface_verification_run.log` |
+| `18b2e1225354b2ab429a04ca5c1c0090e8cd691a149508fba659e1b8cebb25ec` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
+| `5eed29a241a608d385b175bce70de5a85e4295f91baa28abd28b1e84d753e7d2` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
+| `bf5f1ca94ed98c6b8a4c5ed27d1913dc2ffc93660ab9210ae5f1543e603d0609` | `review_bundle/theorem_environment_extraction_run.log` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
 | `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` |
+| `439535fec8186cbe0134f7beb4cca790d288ca06159302fe2dc82b4ec6e93124` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06.log` |
+| `1e386677d0fb7684e960ee27decf6ba86492596d867f1b1c66de4646cacfae27` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06_ROUND5.log` |
 | `a46deed5e7eabf949e4d9b3e968ab9b81f56e4a43230f25fc31ebd1cf73f66ce` | `review_bundle/verify_certificate_records.py` |
 | `8b4d8bce68e0a62d5e05dcda9d5a257aceb43820db6e1f4c17c54a8dc6c4d1a7` | `review_bundle/verify_primary_claim_inventory.py` |
-| `3742be8811e5d703d8b5a78403b242bb7368858cb0443b00c3760b17121afecc` | `review_bundle/verify_source_interface_record.py` |
+| `ff3b1017e42b74ddad382205fa55f7436ac64c02f77d23f76f370fd95de5eb8a` | `review_bundle/verify_source_interface_record.py` |
