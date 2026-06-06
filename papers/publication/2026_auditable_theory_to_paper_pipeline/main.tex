@@ -85,6 +85,9 @@ The central mathematical/software conclusion of the supplement is a typed
 finite-record certificate calculus for publication claims under record-gate
 soundness.  Its core chain is Definition~\ref{def:operational-acceptance-interface}
 (the finite certificate tuple and gate dispatch),
+Definition~\ref{def:record-gate-soundness-external-interface} and
+Proposition~\ref{prop:record-gate-soundness-external-interface-exactness} (the
+standalone record-gate input/output and non-claim boundary),
 Definition~\ref{def:certificate-schema-acceptance-table} (the six finite
 acceptance predicates), Theorems~\ref{thm:verifier-input-output-contract},
 \ref{thm:record-acceptance-exactness}, and
@@ -650,6 +653,10 @@ records.  The core finite-record safety argument is:
 Definition~\ref{def:operational-acceptance-interface} fixes the certificate tuple,
 claim kinds, gate dispatch, verifier predicate, evidence levels, and
 record-gate-soundness hypothesis;
+Definition~\ref{def:record-gate-soundness-external-interface} isolates that
+hypothesis as an external finite input/output interface, and
+Proposition~\ref{prop:record-gate-soundness-external-interface-exactness} proves
+that it has no hidden semantic or venue-acceptance content;
 Definition~\ref{def:certificate-schema-acceptance-table} restates the finite
 acceptance predicates as the table relation \(\mathsf{Acc}_{\Gamma}\);
 Theorems~\ref{thm:verifier-input-output-contract},
@@ -859,6 +866,82 @@ environment, exit code, and log path, then $\mathsf{RGS}_{S}$ asserts only this
 finite row-and-pointer property and asserts no implementation-level correctness
 of the gate that produced the row.
 \end{definition}
+
+\begin{definition}[Record-gate soundness external interface]
+\label{def:record-gate-soundness-external-interface}
+The external record-gate interface for a package is the finite predicate
+\[
+\mathsf{RGS}_{S}(P,L,\Gamma)
+\]
+with the following inputs and outputs.  Its inputs are exactly a package $P$, a
+submitted support surface $S$, a finite acceptance ledger $L$, and the deterministic
+claim-kind dispatch table $\Gamma$ of
+Definition~\ref{def:operational-acceptance-interface}.  Its positive output is the
+finite family of certificates
+\[
+\{\mathcal C(c)=(K,\ell,E,H,R,D,B): c\in L
+\text{ is an accepted load-bearing claim}\}
+\]
+such that $E\subseteq S$, $V(c,\mathcal C(c))=1$, every assigned gate in
+$\bigcup_{k\in K}\Gamma(k)$ has a submitted passing row in $R$, each evidence
+pointer in such a row denotes an element of $S$ at the recorded evidence level,
+the human-promotion coordinate $H$ is present exactly at an intake-to-publication
+crossing, and the discovery and command-boundary coordinates $D$ and $B$ have the
+presence conditions required by the verifier predicates $P_5$ and $P_6$.  Its
+negative output, when the predicate fails for a ledger row, is only the finite bad
+subrecord read by the first failed verifier predicate among $P_1,\ldots,P_6$.
+
+This interface makes no further claim.  In particular it does not assert that an
+external venue accepted the work, that a command was freshly rerun, that a Lean
+development builds, that an artifact has the semantic property named in prose, or
+that an advisory agent output is proof evidence, unless the corresponding source
+path, command, source state, environment, exit code, log path, or gate row is one
+of the finite coordinates read above.
+\end{definition}
+
+\begin{proposition}[Record-gate interface equivalence and non-claim boundary]
+\label{prop:record-gate-soundness-external-interface-exactness}
+For the operational acceptance interface of
+Definition~\ref{def:operational-acceptance-interface}, the standalone interface in
+Definition~\ref{def:record-gate-soundness-external-interface} is equivalent to the
+predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ used in the publication-safety theorem.
+Moreover, under this interface every consequence used by
+Theorem~\ref{thm:publication-safety-interface} is determined by the finite
+coordinates $(P,S,L,\Gamma)$ and by the displayed certificates
+$\mathcal C(c)$; no implementation-level, semantic, venue-acceptance,
+fresh-execution, or advisory-evidence claim follows from record-gate soundness
+unless it appears as one of those finite coordinates.
+\end{proposition}
+
+\begin{proof}
+The predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ in
+Definition~\ref{def:operational-acceptance-interface} quantifies over exactly the
+accepted load-bearing ledger entries $c\in L$ and requires exactly the following
+data: a certificate $\mathcal C(c)=(K,\ell,E,H,R,D,B)$, containment $E\subseteq S$,
+acceptance by the finite verifier $V$, submitted passing rows for the pass records
+in $R$, and evidence pointers denoting elements of $S$ at the recorded evidence
+levels.  The verifier definition expands $V(c,\mathcal C(c))=1$ into the six
+predicates $P_1,\ldots,P_6$, which are precisely the kind, evidence-surface,
+assigned-gate, human-promotion, discovery, and command-boundary presence
+conditions listed in
+Definition~\ref{def:record-gate-soundness-external-interface}.  Hence a positive
+instance of one definition supplies a positive instance of the other, with the
+same certificates and the same submitted rows; conversely the standalone
+interface supplies every finite field required by the original predicate, so the
+original predicate holds.
+
+For the boundary statement, inspect the fields read by $P_1,\ldots,P_6$.  They
+contain claim kinds, evidence levels, finite evidence pointers, human-promotion
+markers, assigned gate rows, discovery rows, and the command-run or no-command-run
+boundary.  None of these fields is a venue decision, a proof-assistant semantic
+judgment, an artifact semantic evaluator, a live daemon state, or an advisory
+agent proof object unless an additional row explicitly records that fact as an
+evidence coordinate satisfying the same verifier predicates.  Therefore the
+interface can be used in Theorem~\ref{thm:publication-safety-interface} only to
+construct finite publication certificates and finite bad subrecords.  Any stronger
+reading would require an added coordinate and is outside the predicate just proved
+equivalent.
+\end{proof}
 
 \begin{definition}[Stronger-reading preorder]
 \label{def:stronger-reading-preorder}
@@ -1923,7 +2006,7 @@ certificate proves only the finite-record claim it records.
 Interface component & Positive dependency & Negative boundary exposed by the dependency \\
 \midrule
 Acceptance-entry constructor & Definition~\ref{def:operational-acceptance-interface} and the ledger rows in Tables~\ref{tab:current-acceptance-ledger}--\ref{tab:current-certificate-ledger} & generated prose, advisory output, and inactive intake paths are not certificate fields \\
-Assigned gate coverage & The finite predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ and Theorem~\ref{thm:assigned-gate-soundness-audit-boundary} & gate implementation soundness is not inferred from a pass-row pointer \\
+Assigned gate coverage & Definition~\ref{def:record-gate-soundness-external-interface}, Proposition~\ref{prop:record-gate-soundness-external-interface-exactness}, and Theorem~\ref{thm:assigned-gate-soundness-audit-boundary} & gate implementation soundness is not inferred from a pass-row pointer \\
 Source-interface import & Lemma~\ref{lem:source-interface-extraction-correctness} and Propositions~\ref{prop:reviewable-source-snapshot-interface}, \ref{prop:source-interface-record-file-consistency}, and~\ref{prop:source-interface-evidence-level-separation} & bounded line-range paraphrases do not import exact BEDC/Lean theorem statements or fresh rebuilds \\
 Schema decision & Proposition~\ref{prop:finite-certificate-schema-verifier} and Theorem~\ref{thm:record-acceptance-exactness} & rejected rows return finite bad subrecords rather than implicit semantic countermodels \\
 Stronger readings & Theorems~\ref{thm:finite-certificate-obstruction-skeleton} and~\ref{thm:finite-extension-budget-normal-form} & implementation, artifact-semantic, theorem-completeness, command-run, and venue claims require positive finite extension coordinates \\
@@ -1990,8 +2073,10 @@ this finite submitted record surface.
 \item \emph{Record-gate soundness}: writing $S$ for this finite submitted record
 surface and $L$ for the acceptance ledger, the package satisfies the finite
 predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ of
-Definition~\ref{def:operational-acceptance-interface} as delimited by
-Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}: every recorded
+Definitions~\ref{def:operational-acceptance-interface} and
+\ref{def:record-gate-soundness-external-interface} as proved equivalent in
+Proposition~\ref{prop:record-gate-soundness-external-interface-exactness} and as
+delimited by Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}: every recorded
 acceptance entry has the assigned passing rows and submitted evidence pointers,
 every advisory output is demoted unless the deterministic gate set $\Gamma$ for
 its claim kind passes, and no independent implementation-soundness,
@@ -4614,6 +4699,97 @@ This is the record-level specialization of
 Theorem~\ref{thm:upload-or-archive-instantiation-boundary} to the current digest
 manifest.\end{proof}
 
+\begin{proposition}[Upload-or-archive instantiation update protocol]
+\label{prop:upload-or-archive-instantiation-update-protocol}
+Suppose a later venue upload receipt or archive-equivalent locator is to be used
+to replace the current no-receipt boundary of
+Corollary~\ref{cor:upload-or-archive-instantiation-record} by an externally
+instantiated submitted-support claim.  Then the replacement is accepted by the
+finite-record interface if and only if one of the two following finite update
+protocols is performed.  The manuscript surfaces in the statement are precisely
+\path{submission_abstract.tex} and \path{main.tex}; the manifest surface is
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}; the bibliography surface is
+\path{references.bib}; and the digest surface is
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} or a replacing digest manifest named
+by both manuscript sources and by the manifest.
+\begin{enumerate}
+\item \emph{Exact-upload update.}  \path{submission_abstract.tex} and
+\path{main.tex} record the receipt or venue
+submission identifier for the exact support surface selected in
+Proposition~\ref{prop:final-package-shape-convention}; the manifest field
+\path{public_interface.distribution_mode} is changed from conditional exact
+supplemental upload to completed exact supplemental upload; the manifest field
+\path{public_interface.preferred_submission_form} or an adjacent receipt field
+names the uploaded \path{submission_abstract.pdf}, \path{main.pdf} or
+\path{main.tex}, root \path{theorem_inventory.json}, and \path{review_bundle/};
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} still contains matching digest rows
+for the submitted bundle files; and the \path{references.bib} note for
+\path{auditable-pipeline-review-bundle} is changed from no completed upload to the
+same receipt-bound support statement.
+\item \emph{Archive-equivalent update.}  \path{submission_abstract.tex} and
+\path{main.tex} record the archive
+locator; the manifest field \path{public_interface.current_public_archive} and the
+\path{references.bib} note for \path{auditable-pipeline-review-bundle} name that same
+locator; the manifest keeps or replaces \path{public_interface.archival_update_rule}
+with the byte-equivalence rule actually satisfied; and
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, or a replacing digest manifest named
+by both the manuscript and the manifest, records the file list and SHA--256 rows
+against which the archive is checked, including the coordinates for
+\path{review_bundle/}, \path{theorem_inventory.json}, and the manifest itself.
+\end{enumerate}
+In either protocol, if any digest row, manifest public-interface field,
+manuscript support statement, bibliography note, or receipt/locator coordinate is
+changed, all four surfaces must name the same support mode and the same finite
+receipt-or-locator record.  Without this finite common update, the current
+no-receipt normal form of
+Proposition~\ref{prop:submission-support-instantiation-field-normal-form} remains
+the only accepted submitted-support status.
+\end{proposition}
+
+\begin{proof}
+The current package has only the source-level exact-inclusion branch by
+Proposition~\ref{prop:final-package-shape-convention} and
+Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  Thus an external
+instantiation can add exactly one new positive coordinate: either a receipt for
+that exact upload or a locator for an archive-equivalent representative.  The
+finite-coordinate determination boundary,
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, forbids the verifier
+from reading any coordinate not present on the submitted support surface.  Hence
+the new coordinate must be visible wherever the package declares public support
+status: in the manuscript statement that changes the boundary, in the manifest
+public-interface fields that describe distribution mode and archive status, in
+the digest manifest that identifies the bytes being supplied, and in the
+bibliography entry that tells a reviewer whether the bundle is an external
+support surface or merely a local note.
+
+For the exact-upload branch, the receipt is meaningful for this package only if
+it refers to the support surface selected by
+Proposition~\ref{prop:final-package-shape-convention}: the primary presentation
+artifact, the technical supplement, the root theorem inventory, and the exact
+\path{review_bundle/} directory with matching final digests.  Updating the
+manuscript, the manifest distribution fields, the digest record, and the
+bibliography note with the same receipt is therefore sufficient for the finite
+record checker to read the external-upload coordinate; if one of those records is
+missing or names a different support mode, the checker sees a bad subrecord of
+the kind classified by Theorem~\ref{thm:support-surface-normal-form}.
+
+For the archive-equivalent branch, Table~\ref{tab:review-bundle-archive-equivalence}
+and Theorem~\ref{thm:support-surface-normal-form} require the archive to preserve
+the same file list, digest rows, manifest semantics, and relative-path meanings.
+The stated archive update records exactly those finite data: the common locator,
+the byte-equivalence rule, and the digest manifest identifying the archive bytes.
+Again, if the manuscript, manifest, bibliography, and digest surface do not name a
+single common locator and byte-equivalence certificate, the proposed archive is
+not a finite coordinate accepted by the verifier.
+
+The two branches are exhaustive because
+Corollary~\ref{cor:upload-or-archive-instantiation-record} allows only an exact
+upload receipt or an archive-equivalent replacement to instantiate the support
+surface.  Therefore a future support claim is accepted exactly after one of the
+two finite common updates above, and otherwise the no-receipt normal form remains
+the accepted status.
+\end{proof}
+
 \begin{corollary}[Current no-receipt support-surface non-escalation]
 \label{cor:current-no-receipt-support-surface-non-escalation}
 In the current source package the records
@@ -5089,7 +5265,9 @@ Corollary~\ref{cor:upload-or-archive-instantiation-record} are instantiated in
 this package only as a no-receipt, no-archive boundary record.  This normal form
 does not satisfy the external submitted-support branch; it proves instead that
 bundle-backed claims may be read only as conditional local package-support
-claims until a later upload receipt or archive-equivalent locator is added.
+claims until a later upload receipt or archive-equivalent locator is added by the
+finite update protocol of
+Proposition~\ref{prop:upload-or-archive-instantiation-update-protocol}.
 \end{proposition}
 
 \begin{proof}
@@ -5102,7 +5280,10 @@ then identifies the extra coordinate needed to turn that local support surface
 into an externally submitted one, namely either an exact upload receipt or an
 archive-equivalent locator.  Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation}
 records that neither coordinate is present in the current source package.  These
-three finite statements determine all four fields in the displayed table.
+three finite statements determine all four fields in the displayed table, while
+Proposition~\ref{prop:upload-or-archive-instantiation-update-protocol} specifies
+the finite manuscript, manifest, bibliography, and digest updates needed to leave
+this normal form in a later package.
 
 If the last field were instead marked externally instantiated, the record would
 contain neither of the two coordinates that Theorem~\ref{thm:upload-or-archive-instantiation-boundary}
@@ -5126,8 +5307,10 @@ submission-interface map, theorem-inventory, and verifier-record claims are
 therefore reviewable at the path-verified evidence level stated in this
 supplement only under the exact included bundle once the external instantiation
 record exists.  A future archival equivalent would have to satisfy
-Audit record~\ref{audit:review-bundle-archive-equivalence}, but it is not the
-current package branch.  If the bundle is not uploaded exactly with matching
+Audit record~\ref{audit:review-bundle-archive-equivalence} and the common-field
+update protocol of
+Proposition~\ref{prop:upload-or-archive-instantiation-update-protocol}, but it is
+not the current package branch.  If the bundle is not uploaded exactly with matching
 final digests, then the primary note retains only the public-source citation to
 the pinned newmath repository and the architectural claim in the short text; the
 supplemental support claims depending on bundle-local files are not accepted by
