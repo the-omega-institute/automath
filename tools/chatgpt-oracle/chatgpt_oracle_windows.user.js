@@ -2002,7 +2002,12 @@
         retries++;
       }
       if (!findPromptInput()) {
-        throw new Error(`Prompt input not found after 120s wait; ${promptDomDebug()}`);
+        const debug = promptDomDebug();
+        if (window.location.pathname.startsWith("/c/")) {
+          await releaseTask(task_id, `prompt_input_missing_on_existing_chat (${debug})`);
+          return;
+        }
+        throw new Error(`Prompt input not found after 120s wait; ${debug}`);
       }
       log("Page ready");
       if (!isForegroundReady()) {
