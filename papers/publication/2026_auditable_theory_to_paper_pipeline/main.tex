@@ -6157,6 +6157,51 @@ theorem-like claims are enumerated; it indexes the obligations and does not prov
 them.  This is exactly the bounded claim stated in the theorem.
 \end{proof}
 
+\begin{proposition}[Post-inventory support-tuple extraction certificate]
+\label{prop:post-inventory-support-tuple-extraction-certificate}
+For the current source package, the theorem-ledger support tuple is accepted only
+in the post-inventory form
+\[
+  (\path{theorem_inventory.json},\path{theorem_inventory.md},
+  \path{review_bundle/theorem_environment_extraction_run.log},
+  \path{review_bundle/current_package_pass_records.json},
+  \path{review_bundle/FINAL_DIGESTS_SHA256.md}).
+\]
+In that form the extraction log must be generated after the two inventory files
+exist, the pass-record ledger must contain the theorem-ledger certificate entry,
+and the digest manifest must be regenerated after those three records are in
+place.  A digest manifest whose inventory rows predate any member of this tuple
+does not certify the current theorem-ledger support coordinate; it certifies only
+the earlier local byte state named by its rows.
+\end{proposition}
+
+\begin{proof}
+The tuple has five finite coordinates.  The first two are the regenerated manual
+inventory files.  The third is the syntactic extractor output: by
+Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}, the
+extractor reads \path{main.tex} and \path{theorem_inventory.json} and records
+only labelled theorem-like environment coverage.  The fourth is the finite
+certificate ledger entry for the theorem-obligation surface described in
+Theorem~\ref{thm:theorem-obligation-ledger-boundary}.  The fifth is the digest
+manifest used by Theorem~\ref{thm:final-support-surface-closure} to identify the
+bytes available under exact supplemental inclusion.
+
+If the five coordinates are produced in the stated order, every support claim
+about the regenerated theorem ledger is a function of byte strings already fixed
+before the digest pass: the inventory bytes are read by the extractor, the
+theorem-ledger certificate entry records the finite support route, and the digest
+manifest hashes the resulting files and log.  The support tuple is therefore a
+finite coordinate of the package.  If, however, the digest rows for
+\path{theorem_inventory.json} or \path{theorem_inventory.md} are older than the
+accepted inventory, or if the extractor or pass-record ledger is written after
+the digest manifest, then one of the bytes used by the theorem-ledger claim is
+not among the bytes hashed by the manifest.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, the stronger current
+support claim cannot be inferred from a finite record that omits that coordinate.
+Thus the old digest remains evidence only for the earlier local byte state and
+not for the post-inventory support tuple stated here.
+\end{proof}
+
 \begin{proposition}[Submitted theorem-inventory availability]
 \label{prop:submitted-theorem-inventory-availability}
 If the external support-surface condition of
