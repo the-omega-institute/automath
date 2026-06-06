@@ -1,0 +1,235 @@
+1: ﻿\documentclass[runningheads]{llncs}
+2: 
+3: \usepackage{booktabs}
+4: \usepackage{hyperref}
+5: \usepackage{enumitem}
+6: \usepackage{amsmath}
+7: \usepackage{array}
+8: \usepackage{tabularx}
+9: \usepackage{xurl}
+10: 
+11: \setlist{nosep,leftmargin=*}
+12: \newcounter{auditrecord}
+13: \newenvironment{auditrecord}[1][]{%
+14:   \refstepcounter{auditrecord}%
+15:   \par\smallskip\noindent\textbf{Audit record \theauditrecord}%
+16:   \ifx\relax#1\relax\else\textbf{ (#1)}\fi\textbf{.}\ }{\par\smallskip}
+17: 
+18: \title{An Auditable Theory Compiler for AI-Assisted Formal Mathematics\\
+19: \large Technical Supplement: Finite-Record-Only Safety under Record-Gate Soundness}
+20: \titlerunning{An Auditable Theory Compiler}
+21: \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
+22: \authorrunning{H. Ma and W. Zhang}
+23: \institute{AELF PTE LTD. \email{auric@aelf.io} \and
+24: National University of Singapore \email{e1327962@u.nus.edu}}
+25: 
+26: \begin{document}
+27: \maketitle
+28: 
+29: \begin{abstract}
+30: Formal mathematics projects increasingly use AI agents for drafting,
+31: review, theorem search, and manuscript preparation.  Ungated agent output,
+32: however, can create theorem-looking but content-poor edits, stale source
+33: references, duplicated submission routes, and premature paper promotion.  We
+34: report an auditable theory-to-paper pipeline used around a Lean-backed
+35: BEDC source workspace and an automath publication workspace.  The
+36: pipeline separates source development, intake packets, active paper
+37: directories, AI review loops, deterministic gates, and human promotion
+38: decisions.  Its central rule is that AI output is advisory: load-bearing
+39: mathematical and submission claims must be tied, at the appropriate evidence
+40: level, to source paths, command logs, deterministic checks, and human-approved
+41: promotion.  Under record-gate soundness, the core interface theorem constructs
+42: the finite publication certificates checked by the package verifier from recorded
+43: gate-passage entries and explicitly submitted review surfaces; its safety claim is
+44: deliberately certificate-level and finite-record only.  It proves neither Lean builds,
+45: daemon behaviour, artifact semantics, nor venue acceptance.  The current package
+46: then proves schema-relative finite-record certificate exactness for its six-row, path-verified
+47: instantiation, while rejecting stronger readings such as external gate
+48: implementation soundness, proof-assistant correctness, artifact semantic validity,
+49: current execution of every gate, or venue acceptance.  Four case
+50: studies illustrate the gates at the path-verified historical-snapshot level: intake
+51: isolation, overlap/submitted blocking, fake-extension rejection, and
+52: artifact-limitation disclosure.
+53: The scoped boundary normal form isolates the five presentation-package weak
+54: points---record-gate soundness, imported source-interface evidence, finite
+55: witness rows, primary-claim inventories, and theorem inventories---and proves that
+56: each supports only its bounded finite-record reading unless a fresh finite upgrade
+57: coordinate is supplied.
+58: \end{abstract}
+59: 
+60: \section{Problem and contribution}
+61: 
+62: AI assistance is useful in a formal-mathematics project only if the project can
+63: distinguish proposal from evidence.  A generated theorem statement, a legal
+64: piece of code, a mechanical expansion, or a lower score in a review rubric does
+65: not by itself constitute mathematical discovery.  The practical publication
+66: failure modes are equally structural: a route may overlap a submitted sibling,
+67: an artifact status file may drift from generated counts, or an intake note may
+68: accidentally become a daemon-visible manuscript.
+69: 
+70: This source is the technical supplement for the presentation-only contribution
+71: \emph{An Auditable Theory Compiler for AI-Assisted Formal Mathematics}, whose
+72: single primary artifact is the two-page source \path{submission_abstract.tex}.
+73: This file is subordinate technical support, not a competing submission title.
+74: The final source-level packaging convention used throughout both sources is the
+75: following: the primary CICM presentation-only article is
+76: \path{submission_abstract.tex}; this file, \path{main.tex}, is the selected
+77: technical supplement; \path{theorem_inventory.json} is the selected bounded
+78: theorem-obligation inventory; and \path{review_bundle/} is the selected exact
+79: supplemental support directory.  No archival replacement is claimed in this
+80: source package.  The short artifact states the workshop-facing thesis and
+81: boundary; this supplement gives the finite-record definitions, theorem proofs,
+82: and case-evidence tables; and the supplemental evidence directory supplies only
+83: the finite records named in the bundle-dependent claims when that exact support
+84: surface is uploaded with matching final digests.  This
+85: file records a compact workflow pattern for avoiding these failures: an auditable
+86: theory-to-paper pipeline in which AI agents propose, review, and triage, while
+87: deterministic gates decide what may be treated as load-bearing evidence.  The
+88: pattern is instantiated in local BEDC and automath workspaces.
+89: The central mathematical/software conclusion of the supplement is a typed
+90: finite-record certificate calculus for publication claims under record-gate
+91: soundness.  Its core chain is Definition~\ref{def:operational-acceptance-interface}
+92: (the finite certificate tuple and gate dispatch),
+93: Definition~\ref{def:record-gate-soundness-external-interface} and
+94: Proposition~\ref{prop:record-gate-soundness-external-interface-exactness} (the
+95: standalone record-gate input/output and non-claim boundary),
+96: Definition~\ref{def:certificate-schema-acceptance-table} (the six finite
+97: acceptance predicates), Theorems~\ref{thm:verifier-input-output-contract},
+98: \ref{thm:record-acceptance-exactness}, and
+99: \ref{thm:finite-coordinate-determination-boundary} (schema-projection exactness
+100: and non-escalation), Theorem~\ref{thm:publication-safety-interface} (finite
+101: publication-certificate invariants from explicitly supplied record-gate
+102: soundness),
+103: Theorem~\ref{thm:finite-record-certificate-rigidity} (the sharp bad-subrecord
+104: normal form for every stronger reading),
+105: Theorem~\ref{thm:boundary-axis-non-escalation-exactness} (simultaneous exactness
+106: of the source-interface, implementation-soundness, artifact-semantic, and
+107: theorem-ledger boundaries), and
+108: Theorem~\ref{thm:presentation-scoped-boundary-normal-form} (the five-component
+109: presentation-route boundary normal form),
+110: Theorem~\ref{thm:current-package-certificate-exactness} (the current package's
+111: schema-relative finite-record instance), and
+112: Theorem~\ref{thm:current-package-extension-coordinate-rigidity} (the exact
+113: absence of current implementation-soundness, fresh-rerun, artifact-semantic, and
+114: venue coordinates), and
+115: Theorem~\ref{thm:manual-ledger-dependence-boundary} (the current package's
+116: manual-ledger dependence and non-completeness boundary).  Later theoremized statements about bundle shape,
+117: digests, upload conditions, command boundaries, inventories, venue records, and
+118: case snapshots are support-boundary audit claims: they are useful finite-record
+119: consequences, but they are not mathematical invariants of independent interest
+120: and do not replace the printed TeX proofs in the core chain.  The result is
+121: intentionally not a proof of external implementation-level soundness:
+122: Lean builds, publication-daemon behaviour, artifact semantics, and fresh command
+123: runs enter the argument only when a finite certificate records the corresponding
+124: evidence surface and boundary.  Root-level diagnostic files outside the submitted
+125: primary article, this supplement, and the uploaded-or-equivalent review bundle
+126: are treated below only as local historical or path-verified context unless a
+127: displayed certificate explicitly places the corresponding record on the submitted
+128: support surface.  The CICM presentation-only submission uses the short artifact
+129: plus bibliography; this supplement and \path{review_bundle/} are
+130: evidence-support materials rather than competing primary submissions.
+131: 
+132: \paragraph{Scope and theoremization boundary.}
+133: The supplement is deliberately limited to auditable theory-to-paper workflow
+134: claims for formal mathematics.  It does not propose a theorem prover, a Lean
+135: hammer, a complete BEDC theory, an automated journal-acceptance method, or a
+136: claim that AI output is proof evidence.  Some logistical facts are stated in
+137: proposition or theorem environments because they are finite-record consequences
+138: used by the certificate calculus; those statements should be read as conditional
+139: audit-record claims over printed paths, tables, manifests, and logs.  The
+140: mathematical obligations are discharged by the displayed TeX definitions,
+141: theorems, and proofs in the core chain, not by the theorem inventory, upload
+142: bookkeeping, digest records, or venue-boundary records.
+143: 
+144: \begin{proposition}[Final package-shape convention]
+145: \label{prop:final-package-shape-convention}
+146: For the current presentation package there is a single source-level package
+147: shape.  The primary article is \path{submission_abstract.tex}; the selected
+148: technical supplement is \path{main.tex}; the selected bounded theorem-obligation
+149: ledger is \path{theorem_inventory.json}; and the selected supplemental support
+150: surface is exact inclusion of \path{review_bundle/} with the final digest record
+151: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  No archive locator, DOI-bearing
+152: replacement, or alternate supplemental directory is part of the current package
+153: convention.  Consequently every bundle-backed support claim in this source is
+154: accepted only under exact inclusion of that directory with matching final digests;
+155: without that external inclusion record it remains a local package-support claim.
+156: \end{proposition}
+157: 
+158: \begin{proof}
+159: The assertion is a finite record comparison.  The primary source names
+160: \path{submission_abstract.tex} as the primary presentation article and states
+161: that \path{main.tex}, \path{theorem_inventory.json}, and \path{review_bundle/}
+162: are supplemental support surfaces.  The opening package paragraph of this
+163: supplement names the same four coordinates and explicitly selects exact
+164: supplemental inclusion rather than an archive replacement.  The digest manifest
+165: \path{review_bundle/FINAL_DIGESTS_SHA256.md} records the same branch: its support
+166: mode is conditional exact supplemental inclusion of \path{review_bundle/}, and
+167: its archive-replacement fields state that no archive replacement or locator is
+168: claimed.  These three finite source records therefore agree on one package
+169: shape.
+170: 
+171: It remains only to identify the boundary of the convention.  A source-level
+172: package-shape record fixes which files the manuscript treats as primary,
+173: supplemental, and support material; it does not by itself prove that a venue
+174: upload has occurred.  Hence bundle-backed claims are admissible externally only
+175: after the selected exact support directory is actually supplied with the digests
+176: listed in the final manifest.  If that external inclusion record is absent, the
+177: finite coordinates still exist locally, but the submitted-support conclusion is
+178: not instantiated.  Since the same finite records contain no archive locator, no
+179: archive replacement can be inferred from the source.  This proves both the
+180: single package convention and its conditional external boundary.
+181: \end{proof}
+182: 
+183: \begin{theorem}[Nested six-row and seven-row package states]
+184: \label{thm:nested-package-states}
+185: Let $P^{+}_{6}$ denote the current row-frozen certificate state whose accepted
+186: rows are exactly $a_1,\ldots,a_6$ in
+187: Table~\ref{tab:current-acceptance-ledger}.  Let $P^{+}_{7}$ denote the enlarged
+188: submitted support state obtained by adjoining the single theorem-ledger
+189: row $a_7$ whose submitted coordinate is \path{theorem_inventory.json}.  Then
+190: $P^{+}_{6}\subset P^{+}_{7}$ as finite record surfaces, and the inclusion is
+191: conservative for the first six certificates: every acceptance decision, evidence
+192: level, assigned-gate family, discovery-interface field, and command-boundary
+193: field of rows $a_1,\ldots,a_6$ is the same in $P^{+}_{6}$ and $P^{+}_{7}$.  The
+194: only new accepted claim of $P^{+}_{7}$ is the bounded theorem-obligation
+195: ledger claim with syntactic label coverage for $a_7$.  In particular the two states are nested package states,
+196: not competing final ledgers: $P^{+}_{6}$ is the exact six-row current-package
+197: certificate state used by Theorem~\ref{thm:current-package-certificate-exactness},
+198: while $P^{+}_{7}$ is the submitted theorem-ledger extension used by
+199: Theorem~\ref{thm:theorem-obligation-ledger-boundary}.
+200: \end{theorem}
+201: 
+202: \begin{proof}
+203: The tables and support records are finite, so the assertion is checked by
+204: coordinates.  By definition, $P^{+}_{6}$ contains the primary article, this
+205: supplement, the six accepted rows $a_1,\ldots,a_6$, their certificate fields, and
+206: the conditional review-bundle support surface named in
+207: Proposition~\ref{prop:current-package-acceptance-certificate-ledger}.  The state
+208: $P^{+}_{7}$ is formed by adding one additional row, $a_7$, together with the
+209: manifest exposure of \path{theorem_inventory.json}.  No row $a_i$ with
+210: $1\leq i\leq 6$ is edited in this construction, and no field of its certificate
+211: is replaced: the same finite tuple $(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)$ is read by
+212: Definition~\ref{def:certificate-schema-acceptance-table} in both states.  Hence
+213: Theorem~\ref{thm:record-acceptance-exactness} gives the same acceptance decision
+214: for each of the six rows in both states.
+215: 
+216: The added coordinate has a different declared role.  Its accepted claim is not a
+217: new mathematical proof, a proof-assistant rebuild, or an extractor-completeness
+218: claim; it is the obligation-ledger traceability claim with syntactic label coverage
+219: later classified in Proposition~\ref{prop:manual-theorem-inventory-boundary}.  Since the finite
+220: record added to pass from $P^{+}_{6}$ to $P^{+}_{7}$ is exactly this new row and
+221: its manifest exposure, every accepted claim outside $a_7$ is inherited unchanged
+222: from $P^{+}_{6}$, while $a_7$ supplies only the bounded theorem-ledger coordinate.
+223: This proves both the nesting and the non-competition statement.
+224: \end{proof}
+225: 
+226: The setting is adjacent to proof-assistant systems such as Lean
+227: \cite{deMouraKADR2015Lean}, machine-learning interfaces to formal proving such
+228: as LeanDojo \cite{YangEtAl2023LeanDojo}, informal-to-formal guidance methods
+229: such as Draft--Sketch--Prove \cite{JiangEtAl2023DraftSketchProve}, and
+230: large-scale formal-proof archives such as the Archive of Formal Proofs
+231: \cite{BlanchetteHMN2015AFP}.  Our focus is different: we study the
+232: publication-facing evidence discipline around such sources.
+233: 
+234: \section{Architecture}
+235: 

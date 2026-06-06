@@ -1,0 +1,719 @@
+4902: 
+4903: \subsection{Review-bundle and archive-equivalence condition}
+4904: 
+4905: The archive-equivalence material in this subsection is deliberately bounded to
+4906: this package: it only decides when the finite review-bundle records cited above
+4907: are available to reviewers.  A general calculus of support-surface replacement,
+4908: archive locators, and digest-preserving mirrors is a split-candidate
+4909: infrastructure note rather than an additional theorem package for the present
+4910: CICM presentation route.
+4911: 
+4912: \begin{table}
+4913: \caption{Finite archive-equivalence criterion for replacing the review bundle.}
+4914: \label{tab:review-bundle-archive-equivalence}
+4915: \scriptsize
+4916: \begin{tabularx}{\linewidth}{p{0.25\linewidth}X p{0.25\linewidth}}
+4917: \toprule
+4918: Criterion & Required data in the archive replacement & Failure effect \\
+4919: \midrule
+4920: Manifest identity & a root record byte-identical to \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, except for an added archive URL or DOI field that is not used by the verifier & replacement rejected \\
+4921: Bundle version & the identity tuple \path{(supplemental_review_bundle, 2026-06-01, 3fb3d6a0641767388a401883062aa522ea0b397b)} from the manifest fields \path{bundle_kind}, \path{created}, and \path{public_interface.public_source_commit} & replacement rejected \\
+4922: Finite file list & exactly the regular files named by the manifest, submission-interface map, source-snapshot record, case-snapshot rows, verifier-script fields, and verifier-log fields; generated cache files such as \path{__pycache__/} are excluded & replacement rejected \\
+4923: Content hashes & a SHA-256 digest for each file in that finite file list, equal to the digest of the corresponding file in the submitted \path{review_bundle/} at final packaging time & replacement rejected \\
+4924: Path semantics & every path in the archive preserves the same relative name below \path{review_bundle/} and no certificate row is retargeted to a different file & replacement rejected \\
+4925: \bottomrule
+4926: \end{tabularx}
+4927: \end{table}
+4928: 
+4929: \begin{auditrecord}[Review-bundle archive-equivalence criterion]
+4930: \label{audit:review-bundle-archive-equivalence}
+4931: An archival replacement for \path{review_bundle/} is accepted by this manuscript
+4932: only if it satisfies all rows of
+4933: Table~\ref{tab:review-bundle-archive-equivalence}.  Equivalently, it must have
+4934: the same manifest identity, the same bundle-version tuple, the same finite
+4935: certificate file list, the same SHA-256 content digests at final packaging time,
+4936: and the same relative path semantics as the submitted \path{review_bundle/}.
+4937: If no such hash-and-manifest archive is supplied, the only accepted support
+4938: surface is the exact \path{review_bundle/} directory uploaded with the
+4939: submission.
+4940: \medskip
+4941: \noindent\emph{Verification.} The manifest identity criterion fixes the root record that all bundle-dependent
+4942: claims cite: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Allowing only an
+4943: additional archive locator field prevents the archive from silently changing the
+4944: certificate schema, pass-record ledger, submission-interface map,
+4945: primary-claim inventory, verifier scripts, verifier logs, pinned-source
+4946: snapshot, case-evidence rows, or submission-artifact declaration.  The bundle
+4947: version is finite because the current manifest carries the three displayed
+4948: fields \path{bundle_kind}, \path{created}, and
+4949: \path{public_interface.public_source_commit}; equality of the tuple rules out
+4950: substituting a different support bundle or a different pinned source commit.
+4951: 
+4952: The finite file-list criterion is obtained by following only the manifest and
+4953: the machine-readable interface records already used in the proofs: certificate
+4954: schema, current pass records, primary-claim inventory, submission-interface map,
+4955: verifier scripts and logs, source snapshot, and the case snapshots named in the
+4956: case-evidence rows.  This traversal is finite because each record is a finite
+4957: JSON or manuscript table row and because generated interpreter caches are not
+4958: certificate surfaces.  The content-hash criterion then gives a byte-level test
+4959: for every file on that finite list.  If a file is omitted, added as a replacement
+4960: for a named certificate surface, or changed bytewise, either the file-list row or
+4961: the SHA-256 row fails.  The path-semantics row prevents a hash-correct file from
+4962: being moved under a new relative name that would make manuscript paths point to a
+4963: different object.
+4964: 
+4965: When all five rows pass, every path used by a bundle-dependent theorem,
+4966: proposition, table row, verifier record, or manifest row denotes the same bytes
+4967: under the same relative name and under the same root manifest identity as in the
+4968: submitted \path{review_bundle/}.  Thus the archive is equivalent for exactly the
+4969: finite certificate checks made in this paper.  When any row fails, a reviewer has
+4970: a finite bad subrecord: the changed manifest identity, changed version tuple,
+4971: file-list discrepancy, hash mismatch, or path-retargeting witness.  In that case
+4972: the archive is not accepted, and the support surface must be exact inclusion of
+4973: \path{review_bundle/} in the completed submission.
+4974: \end{auditrecord}
+4975: 
+4976: \begin{auditrecord}[Exact-bundle final-digest convention]
+4977: \label{audit:exact-bundle-or-final-digest}
+4978: For the current package the accepted source-level supplemental-support mode is
+4979: the exact \path{review_bundle/} directory named in
+4980: Proposition~\ref{prop:final-package-shape-convention}.  Its final package record
+4981: is \path{review_bundle/FINAL_DIGESTS_SHA256.md} with support mode ``conditional
+4982: exact supplemental inclusion''.  Table~\ref{tab:review-bundle-archive-equivalence}
+4983: specifies the finite test that a future archive replacement would have to pass,
+4984: but no replacement archive, final archive file list, archive locator, or archive
+4985: digest table is claimed for this package.  Without exact inclusion of
+4986: \path{review_bundle/} and the final digest record, the bundle-dependent claims in
+4987: this manuscript are not externally instantiated.
+4988: \medskip
+4989: \noindent\emph{Verification.} Proposition~\ref{prop:final-package-shape-convention} selects exact inclusion of
+4990: \path{review_bundle/} and records that no archive locator or alternate support
+4991: directory is part of the current package.  The header of
+4992: \path{review_bundle/FINAL_DIGESTS_SHA256.md} records the same selected mode and
+4993: states that archive replacement and archive locator are not applicable.  Thus the
+4994: finite source records identify one current support mode, not an unresolved
+4995: choice between two modes.  Audit record~\ref{audit:review-bundle-archive-equivalence}
+4996: is still meaningful as a rejection test for hypothetical replacements: any such
+4997: replacement would need the same manifest identity, version tuple, finite file
+4998: list, per-file digests, and path semantics.  Because this package supplies no
+4999: archive locator or archive digest table, that hypothetical branch is not
+5000: instantiated.  The only externally instantiable support branch left by the
+5001: current records is therefore exact inclusion of \path{review_bundle/} with the
+5002: final digest record.
+5003: \end{auditrecord}
+5004: 
+5005: \begin{auditrecord}[Exact review-bundle support-mode witness]
+5006: \label{prop:exact-review-bundle-upload-witness}
+5007: This audit record retains the legacy cross-reference label
+5008: \path{prop:exact-review-bundle-upload-witness} for compatibility with earlier
+5009: acceptance-ledger entries; its environment category is \path{auditrecord}, not
+5010: \path{proposition}.
+5011: For the current package no archive locator is claimed.  The selected
+5012: bundle-backed support branch is therefore exact supplemental inclusion of
+5013: \path{review_bundle/}, conditional on the venue upload or archive-instantiation
+5014: record required by Corollary~\ref{cor:upload-or-archive-instantiation-record}.
+5015: Its finite identity record consists of
+5016: \path{review_bundle/FINAL_DIGESTS_SHA256.md} together with the regular files
+5017: listed there: thirteen case-snapshot files, the certificate schema, the
+5018: certificate verifier log, current package pass records, primary-claim inventory,
+5019: primary-inventory freshness log and note, bundle README, bundle manifest,
+5020: source-interface verifier log, pinned source snapshot, submission-interface map,
+5021: and the three verifier scripts.  The generated \path{__pycache__/} file is not a
+5022: certificate surface.  If \path{review_bundle/} is not included exactly, the
+5023: current package records no alternate submitted support surface for these
+5024: bundle-backed claims.
+5025: \medskip
+5026: \noindent\emph{Verification.} The first four header fields of
+5027: \path{review_bundle/FINAL_DIGESTS_SHA256.md} state the packaging date, the
+5028: selected support mode, the absence of an archive replacement, and the absence of
+5029: an archive locator.  Hence the archive branch of
+5030: Audit record~\ref{audit:review-bundle-archive-equivalence} is not instantiated in
+5031: the current package.  The same digest record then enumerates the finite regular
+5032: certificate files below \path{review_bundle/} and gives one SHA-256 digest for
+5033: each of them.  Each bundle-backed reference used later in the manuscript is to
+5034: one of those regular certificate files or to a finite record that names them:
+5035: the case-snapshot rows use the thirteen case snapshots; the schema and pass
+5036: claims use \path{certificate_schema.json},
+5037: \path{current_package_pass_records.json}, the verifier scripts, and their logs;
+5038: the primary-claim rows use \path{primary_claim_inventory.json} and its freshness
+5039: records; the source-interface rows use the pinned source snapshot,
+5040: \path{submission_interface_map.json}, and the source-interface verifier log; and
+5041: the bundle role itself uses \path{README.md} and
+5042: \path{REVIEW_BUNDLE_MANIFEST.json}.  Thus including that directory as the final
+5043: supplemental surface supplies every regular certificate surface on which the
+5044: bundle-backed claims depend.
+5045: 
+5046: The directory listing may contain generated interpreter caches, but the table
+5047: criterion excludes such cache files and no theorem, proposition, table row, or
+5048: verifier record in this supplement cites them as evidence.  They therefore do
+5049: not enlarge the accepted support witness.  If the directory is not supplied,
+5050: relative paths such as \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and
+5051: \path{review_bundle/case_snapshots/rule110_STATUS.md} no longer denote submitted
+5052: certificate files.  By Audit record~\ref{audit:review-bundle-archive-equivalence},
+5053: the only way to recover those denotations without the exact directory is an
+5054: archive with a locator, the same finite file list, matching SHA-256 digests, and
+5055: unchanged relative path semantics.  Since no such locator is claimed here, the
+5056: current source-level branch is exact inclusion of \path{review_bundle/} with the
+5057: final digest record.  Whether that branch has actually been instantiated in a
+5058: completed venue submission is not proved by this proposition; it is the external
+5059: record required by Corollary~\ref{cor:upload-or-archive-instantiation-record}.
+5060: \end{auditrecord}
+5061: 
+5062: \begin{theorem}[Exact-inclusion support-surface realization]
+5063: \label{thm:exact-inclusion-support-surface-realization}
+5064: For the current package the selected support branch is exact supplemental inclusion of \path{review_bundle/}, but this branch remains conditional until an external upload-or-archive instantiation record exists.  If the completed submission contains that directory with the certificate-file digests listed in
+5065: \path{review_bundle/FINAL_DIGESTS_SHA256.md}, then every bundle-backed claim in
+5066: this supplement has a submitted finite support surface at its stated
+5067: path-verified evidence level.  If the exact directory is not submitted, then the
+5068: same support conclusion holds only after replacing it by an archive satisfying
+5069: the five tests of Table~\ref{tab:review-bundle-archive-equivalence}; no venue upload receipt, public DOI, or archive locator is claimed for the present package.
+5070: \end{theorem}
+5071: 
+5072: \begin{proof}
+5073: The exact-inclusion hypothesis supplies the directory named in every bundle-local
+5074: path and the final digest manifest named in
+5075: Audit record~\ref{prop:exact-review-bundle-upload-witness}.  By that proposition,
+5076: the manifest traverses the finite certificate surfaces used by the supplement:
+5077: the bundle manifest, schema, current pass-record ledger, source-interface map,
+5078: primary-claim inventory, verifier scripts, verifier logs, source snapshot, and
+5079: case snapshots.  Matching the listed SHA-256 digests fixes the bytes of each of
+5080: those certificate files at final packaging time, while preserving the relative
+5081: path names by which the manuscript refers to them.  Thus every bundle-backed
+5082: claim has the submitted finite evidence surface asserted for it, and the evidence
+5083: level remains path-verified because the argument checks file presence and digest
+5084: identity rather than rerunning Lean, daemons, or external artifacts.
+5085: 
+5086: If the exact directory is absent, the proof of
+5087: Audit record~\ref{audit:review-bundle-archive-equivalence} shows that the only
+5088: finite replacement accepted by this paper is an archive with the same manifest
+5089: identity, bundle-version tuple, finite certificate file list, per-file SHA-256
+5090: digests, and relative path semantics.  Those are exactly the five tests in
+5091: Table~\ref{tab:review-bundle-archive-equivalence}.  Without such an archive, at
+5092: least one bundle-local path or digest row has no submitted representative, so the
+5093: corresponding bundle-backed claim lacks its evidence surface.  The statement that
+5094: no public DOI or archive locator is claimed is the support-mode selection in
+5095: Audit record~\ref{prop:exact-review-bundle-upload-witness}; it records that this
+5096: package takes the first admissible case, not the archive-equivalent case.
+5097: \end{proof}
+5098: 
+5099: \begin{theorem}[Final support-surface closure]
+5100: \label{thm:final-support-surface-closure}
+5101: For the current package, using
+5102: Proposition~\ref{prop:final-package-shape-convention},
+5103: Audit record~\ref{prop:exact-review-bundle-upload-witness}, and
+5104: Theorem~\ref{thm:exact-inclusion-support-surface-realization}, the bundle-backed
+5105: claims in this supplement are admissible at the stated path-verified evidence
+5106: level exactly when the submitted supplemental material contains the exact
+5107: directory \path{review_bundle/} whose final packaging record is
+5108: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The exact directory branch also
+5109: requires that any post-generation change to a named bundle file be followed by
+5110: refreshed SHA-256 rows in that final digest record and by rerunning the finite
+5111: verifiers whose records cite the changed coordinate.  A replacement archive is not a
+5112: current package branch; it would have to satisfy
+5113: Table~\ref{tab:review-bundle-archive-equivalence} and provide a locator before a
+5114: future package could select it.  If the exact directory is not present in the
+5115: current package submission, the bundle-backed claims are not part of the accepted
+5116: support surface, although the short presentation artifact may still cite the
+5117: pinned public \path{newmath} repository for the imported source spine.
+5118: \end{theorem}
+5119: 
+5120: \begin{proof}
+5121: Let $B$ denote the set of bundle-dependent claims in this supplement.  By the
+5122: definition of \path{review_bundle/} in the problem statement and by the bundle
+5123: rows of Table~\ref{tab:review-bundle-archive-equivalence}, every claim in $B$
+5124: uses at least one named certificate surface under \path{review_bundle/}: the
+5125: manifest, certificate schema, pass-record ledger, source-interface map,
+5126: primary-claim inventory, verifier scripts or logs, the pinned source snapshot,
+5127: or one of the case snapshots.  Therefore a submitted support surface for $B$
+5128: must either contain those named files with their relative path semantics or
+5129: replace them by an archive that is finite-file-list and hash equivalent.
+5130: 
+5131: If the exact directory \path{review_bundle/} is uploaded, then
+5132: Audit record~\ref{prop:exact-review-bundle-upload-witness} identifies it as the
+5133: current concrete support witness and all named bundle paths are present in the submitted supplemental boundary.  The file
+5134: \path{review_bundle/FINAL_DIGESTS_SHA256.md} records the final SHA-256 digest
+5135: surface for those certificate files, so the byte identity of the supplied
+5136: directory is checkable without changing the role of the directory into an
+5137: archive claim.  If a named bundle file is regenerated after that digest surface
+5138: is written, the byte-coordinate selected by the support relation changes; by
+5139: Proposition~\ref{prop:regenerated-theorem-inventory-digest-closure} and the same
+5140: finite-coordinate argument, the corresponding digest row and verifier logs must
+5141: be refreshed before the regenerated file can be the submitted support witness.
+5142: Hence all claims in $B$ have the path-verified support surface asserted for this
+5143: package exactly in the exact-upload-with-current-digests branch.
+5144: 
+5145: The archive criterion remains a finite non-current rejection test.  If a later
+5146: package attempted to replace the directory by an archive, Audit
+5147: record~\ref{audit:review-bundle-archive-equivalence} would require equality of
+5148: the manifest identity, bundle-version tuple, finite certificate file list,
+5149: per-file SHA-256 digests, and relative path semantics.  The current package does
+5150: not contain the locator or archive digest table needed to enter that branch, so
+5151: the theorem cannot treat an archive as an accepted present support surface.
+5152: 
+5153: Conversely, suppose the exact directory is not submitted for the current package.
+5154: Then at least one named bundle certificate surface is outside the submitted
+5155: artifact boundary and has no selected finite replacement.  The finite certificate
+5156: schema used in Theorem~\ref{thm:current-package-certificate-exactness}
+5157: accepts only submitted paths, explicit historical path records, and the stated
+5158: supplemental surfaces.  Hence the missing bundle surface cannot support the
+5159: corresponding claim in $B$.  The public \path{newmath} repository citation is a
+5160: separate pinned-source citation, so it remains available for the short
+5161: architectural note but does not reconstitute the omitted bundle-backed
+5162: certificate records.  This proves both admissible cases and the failure of all
+5163: other cases.
+5164: \end{proof}
+5165: 
+5166: \begin{auditrecord}[Final immutable package-state certificate]
+5167: \label{prop:final-immutable-package-state-certificate}
+5168: This audit record retains the legacy cross-reference label
+5169: \path{prop:final-immutable-package-state-certificate} for compatibility with
+5170: earlier acceptance-ledger entries; its environment category is \path{auditrecord},
+5171: not \path{proposition}.
+5172: For the current presentation package, the final source-state record for the three
+5173: finite verifier runs is the pair consisting of the source state printed in each
+5174: refreshed log and the digest manifest
+5175: \path{review_bundle/FINAL_DIGESTS_SHA256.md}; the venue/bibliography
+5176: live-check run is a historical 2026-06-06 route-readiness record carrying the same
+5177: digest manifest as its package-state boundary.  The selected supplemental support
+5178: mode is conditional exact inclusion of \path{review_bundle/}; no DOI-bearing,
+5179: institutional, or other archival replacement is claimed.  Consequently a
+5180: command-result claim for any of the four logs
+5181: \path{review_bundle/certificate_verification_run.log},
+5182: \path{review_bundle/source_interface_verification_run.log}, or
+5183: \path{review_bundle/primary_claim_inventory_freshness_2026-06-06.log}, and
+5184: \path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06.log} is accepted
+5185: only when read against the declared package-state boundary and the exact included
+5186: bundle once the external instantiation record exists.  If either the digest
+5187: manifest is absent or the exact bundle is not submitted and no archive satisfies
+5188: Audit record~\ref{audit:review-bundle-archive-equivalence}, the corresponding
+5189: command-result and bundle-backed support claims are outside the accepted support
+5190: surface of this package.
+5191: \medskip
+5192: \noindent\emph{Verification.} The three verifier logs and the venue/bibliography live-check log are finite
+5193: files in the supplemental bundle, and their commands are the only fresh
+5194: command-run surfaces listed in
+5195: Table~\ref{tab:command-boundary-inventory}.  Each log records its command,
+5196: environment, exit code, and log path.  After the final packaging pass the
+5197: verifier logs record the source state as the displayed automath commit together
+5198: with \path{review_bundle/FINAL_DIGESTS_SHA256.md}; the live-check log records the
+5199: dated 2026-06-06 local-date route and bibliography query tuple.  That digest manifest
+5200: records the selected support mode, namely conditional exact supplemental
+5201: inclusion of \path{review_bundle/}, and gives SHA-256 digests for the finite
+5202: certificate surfaces of the package, including all four command-run logs.  Thus
+5203: the byte identity of the files carrying
+5204: the command-result claims is not determined by a mutable phrase such as a local
+5205: working tree; it is determined by the finite commit--manifest certificate.
+5206: 
+5207: By Theorem~\ref{thm:final-support-surface-closure}, bundle-backed claims are
+5208: admissible only in the exact-bundle case or in the archive-equivalent case of
+5209: Table~\ref{tab:review-bundle-archive-equivalence}.  The final digest manifest
+5210: selects the first case and states that no archive replacement is claimed; it is
+5211: not itself a venue-upload receipt.  Hence the accepted support surface for this
+5212: submission is precisely the exact \path{review_bundle/} inclusion when that inclusion
+5213: is actually supplied, with the digest manifest serving as its byte-level
+5214: final-packaging record.  If that manifest is absent, the finite source-state
+5215: component attached to the logs is missing.  If the bundle is absent and no
+5216: archive-equivalent replacement is supplied, Theorem~\ref{thm:final-support-surface-closure}
+5217: removes the bundle-backed claims from the accepted support surface.  These are
+5218: exactly the failure cases stated in the audit record.
+5219: \end{auditrecord}
+5220: 
+5221: \begin{theorem}[Workspace-to-final-package reconciliation]
+5222: \label{thm:workspace-final-package-reconciliation}
+5223: Let $D_0$ be the digest manifest
+5224: \path{review_bundle/FINAL_DIGESTS_SHA256.md}, and let $H_i$ denote the source
+5225: state printed in verifier log $i$.  The source-state claim made in Audit
+5226: record~\ref{prop:final-immutable-package-state-certificate} is the finite package
+5227: claim consisting of these recorded pairs $(H_i,D_0)$, not a claim that every
+5228: later reviewer checkout, editor workspace, or post-packaging working tree has Git
+5229: \path{HEAD} equal to a single historical commit.  If a current workspace reports
+5230: a different Git \path{HEAD} from one of the historical rows, then the verifier-log and
+5231: bundle-backed claims of this supplement remain admissible exactly in the
+5232: following two reconciled cases:
+5233: \begin{enumerate}
+5234: \item the submitted support surface is exact inclusion of \path{review_bundle/}, or
+5235: an archive equivalent to it, whose finite certificate files match the SHA-256
+5236: rows of $D_0$; or
+5237: \item the package is deliberately advanced to the current workspace state by
+5238: rerunning the three verifier commands and replacing the displayed source-state
+5239: record, the verifier logs, and the digest manifest by new matching
+5240: source-state--manifest certificates.
+5241: \end{enumerate}
+5242: In all other cases a mismatch between a later workspace \path{HEAD} and a
+5243: recorded historical row does not certify a new package state and does not
+5244: invalidate the historical finite package claim $(H_i,D_0)$; it only shows that
+5245: the later workspace is
+5246: outside the submitted support surface.
+5247: \end{theorem}
+5248: 
+5249: \begin{proof}
+5250: The accepted command-result coordinates are finite.  By
+5251: Audit record~\ref{prop:final-immutable-package-state-certificate}, the three log
+5252: paths, the recorded source-state fields $H_i$, and the manifest $D_0$ form the
+5253: source-state record for the verifier runs.  By
+5254: Theorem~\ref{thm:final-support-surface-closure}, those log claims are part of the
+5255: accepted support surface only when the exact bundle is submitted or when an
+5256: archive supplies the same finite file list, digests, and relative path semantics.
+5257: Thus case (1) fixes the bytes of the certificate files directly: the reviewer's
+5258: ambient checkout may have any Git \path{HEAD}, but the submitted certificate
+5259: surface is still the byte-identified finite package $(H_i,D_0)$.
+5260: 
+5261: Suppose instead that the authors want the later workspace itself to be the
+5262: package state.  Then at least one source-state coordinate has changed, namely
+5263: the Git \path{HEAD} coordinate.  The verification rule in the scope contract
+5264: requires every command-result claim to record its exact command, source commit,
+5265: environment, exit code, and log path.  Therefore a new workspace state cannot be
+5266: accepted by merely observing the new \path{HEAD}; the three verifier runs must be
+5267: rerun against that state, and their logs and digest manifest must be replaced by
+5268: consistent source-state--manifest records.  This is case (2).
+5269: 
+5270: If neither case holds, the later workspace contributes no finite coordinate to
+5271: the submitted certificate.  It is not named in $D_0$, it is not an
+5272: archive-equivalent representative under Table~\ref{tab:review-bundle-archive-equivalence},
+5273: and it is not accompanied by fresh verifier logs satisfying the command-result
+5274: record rule.  The finite-coordinate determination boundary of
+5275: Theorem~\ref{thm:finite-coordinate-determination-boundary} then forbids silently
+5276: using that workspace either to certify a new package or to refute the old
+5277: byte-identified package.  The only certified statement left is the historical
+5278: finite package claim $(H_i,D_0)$, conditional on the exact support-surface branch
+5279: already proved above.\end{proof}
+5280: 
+5281: \begin{auditrecord}[Mutable-checkout observations are non-certifying]
+5282: \label{prop:mutable-checkout-observation-boundary}
+5283: This audit record retains the legacy cross-reference label
+5284: \path{prop:mutable-checkout-observation-boundary} for compatibility with earlier
+5285: acceptance-ledger entries; its environment category is \path{auditrecord}, not
+5286: \path{proposition}.
+5287: Let $W$ be a review-time working tree whose Git \path{HEAD} is not one of the
+5288: source-state rows recorded in the verifier logs named in
+5289: Theorem~\ref{thm:workspace-final-package-reconciliation}.  The observation of $W$
+5290: is not a certificate coordinate for any verifier-log claim in this package unless
+5291: $W$ is promoted by the second branch of that theorem, namely by rerunning the
+5292: three verifier commands and replacing the source-state, log, and digest records
+5293: by new matching finite package certificates.  Consequently, a reviewer who sees
+5294: $W$ with a different \path{HEAD} has exactly one source-level reconciliation
+5295: test for the existing package: inspect the exact-bundle or archive-equivalent
+5296: surface whose certificate-file bytes match \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+5297: \medskip
+5298: \noindent\emph{Verification.} The finite package certificate records three kinds of coordinates relevant here:
+5299: the logged source-state rows, the verifier logs, and the per-file digest manifest.  A
+5300: bare working-tree observation supplies none of the last two coordinates and, when
+5301: its \path{HEAD} differs from a recorded row, supplies a different first coordinate.  By the
+5302: command-result rule used in
+5303: Audit record~\ref{prop:final-immutable-package-state-certificate}, changing a
+5304: source-state coordinate requires fresh logs with their command, environment, exit
+5305: code, and log path; this is precisely the promotion branch in
+5306: Theorem~\ref{thm:workspace-final-package-reconciliation}.  If that branch is not
+5307: performed, the observation of $W$ remains outside the finite package.  The only
+5308: remaining reconciliation route is therefore the branch that checks the already
+5309: selected support surface: the exact included \path{review_bundle/} directory, or
+5310: an archive equivalent under Table~\ref{tab:review-bundle-archive-equivalence},
+5311: with certificate bytes fixed by the final digest manifest.
+5312: \end{auditrecord}
+5313: 
+5314: \begin{theorem}[Support-surface normal form for bundle-backed claims]
+5315: \label{thm:support-surface-normal-form}
+5316: For the current presentation package, every accepted use of a bundle-backed
+5317: certificate coordinate is in exactly one of the following normal forms.
+5318: \begin{enumerate}
+5319: \item \emph{Exact inclusion}: an external upload or submission receipt records
+5320: that the submitted support surface contains the exact \path{review_bundle/}
+5321: directory whose certificate-file bytes match
+5322: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+5323: \item \emph{Archive-equivalent inclusion}: a replacement archive satisfies every
+5324: row of Table~\ref{tab:review-bundle-archive-equivalence}, including manifest
+5325: identity, bundle-version identity, finite file-list identity, SHA-256 content
+5326: identity, and relative path semantics.
+5327: \item \emph{Promoted rerun}: the package is advanced to a new source state by
+5328: rerunning the verifier commands and replacing the displayed source-state record,
+5329: verifier logs, and digest manifest by one common finite commit--manifest
+5330: certificate.
+5331: \end{enumerate}
+5332: If none of these three normal forms is present, the attempted bundle-backed
+5333: reading has a finite obstruction subrecord: either the external exact-inclusion
+5334: receipt is absent, the archive-equivalence table has a failed row, or the rerun
+5335: branch lacks the command, source-state, environment, exit-code, log-path, and
+5336: digest coordinates required by the command-boundary rule.  Thus the late
+5337: support-surface chain is a finite audit-interface classification for this
+5338: package, not a theorem about general archive infrastructure, venue upload, or
+5339: semantic correctness of the bundled artifacts.
+5340: \end{theorem}
+5341: 
+5342: \begin{proof}
+5343: The candidate support surface for a bundle-backed coordinate can differ from the
+5344: source-level package in only three record-visible ways.  First, it can supply an
+5345: external receipt for the same directory selected by
+5346: Proposition~\ref{prop:final-package-shape-convention}.
+5347: Theorem~\ref{thm:exact-inclusion-support-surface-realization} and
+5348: Theorem~\ref{thm:final-support-surface-closure} prove that this exact directory,
+5349: with the final digest manifest, is the local byte surface that must be supplied;
+5350: the additional receipt is what turns that local selection into submitted support.
+5351: This is normal form~(1).
+5352: 
+5353: Second, the candidate can replace the directory by an archive.  The manuscript
+5354: does not accept arbitrary archive availability as a certificate coordinate:
+5355: Audit record~\ref{audit:review-bundle-archive-equivalence} gives the finite
+5356: hash-and-manifest test, and every failed row of
+5357: Table~\ref{tab:review-bundle-archive-equivalence} is a finite bad subrecord.  If
+5358: all rows pass, the replacement denotes the same certificate bytes under the same
+5359: relative paths and is normal form~(2); if any row fails, the archive cannot carry
+5360: the bundle-backed claim.
+5361: 
+5362: Third, the candidate can point to a later or different workspace state.
+5363: Theorem~\ref{thm:workspace-final-package-reconciliation} proves that such a state
+5364: is not the old finite package unless it is deliberately promoted by fresh verifier
+5365: runs and by a replacement commit--manifest certificate.
+5366: Audit record~\ref{prop:mutable-checkout-observation-boundary} then shows that a
+5367: bare mutable-checkout observation is non-certifying.  Therefore a different
+5368: workspace is accepted only in normal form~(3), and otherwise has the finite
+5369: command-boundary obstruction stated in the theorem.
+5370: 
+5371: The three cases are mutually exclusive as record modes for a fixed submitted
+5372: claim: the first uses the selected directory, the second uses a byte-identical
+5373: archive representative, and the third replaces the package state and digest
+5374: record by a new common certificate.  If a proposed support reading is in none of
+5375: the modes, it contributes no coordinate read by the verifier.  By
+5376: Theorem~\ref{thm:finite-coordinate-determination-boundary} and the obstruction
+5377: skeleton of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, the missing
+5378: coordinate is an inclusion-minimal finite bad subrecord rather than a semantic
+5379: fact about the underlying artifacts.\end{proof}
+5380: 
+5381: \begin{theorem}[Upload instantiation boundary]
+5382: \label{thm:upload-or-archive-instantiation-boundary}
+5383: Before the bundle-backed claims of this supplement are treated as part of a
+5384: completed venue submission, the external submission record must instantiate the
+5385: support-surface branch selected by
+5386: Proposition~\ref{prop:final-package-shape-convention} and
+5387: Theorems~\ref{thm:final-support-surface-closure} and
+5388: \ref{thm:support-surface-normal-form}: it must record that
+5389: \path{review_bundle/} was uploaded exactly with digest manifest $D_0$ and with
+5390: the root \path{theorem_inventory.json} coordinate named by the manifest and
+5391: ledger.  The TeX source and the local digest manifest select that exact-inclusion
+5392: branch but do not constitute a venue upload receipt.  In the present source
+5393: package no such external receipt is recorded; consequently all bundle-backed
+5394: claims are proved only as conditional source-level support claims until the
+5395: missing external exact-inclusion record is supplied.
+5396: \end{theorem}
+5397: 
+5398: \begin{proof}
+5399: Proposition~\ref{prop:final-package-shape-convention} and
+5400: Theorem~\ref{thm:final-support-surface-closure} prove that the bundle-backed
+5401: claims for this package are admissible in the exact-directory branch only.
+5402: Audit record~\ref{prop:exact-review-bundle-upload-witness} and
+5403: Audit record~\ref{prop:final-immutable-package-state-certificate} give the same
+5404: selection and explicitly say that no archive locator is claimed.  Those source
+5405: records determine what must be submitted, but they are produced before the
+5406: venue's upload action and contain no venue receipt, DOI, institutional
+5407: identifier, or external archive locator.  Hence a completed submission needs one
+5408: additional external instantiation record: the venue or packager must record the
+5409: exact supplemental directory upload with the final digest manifest.  Without that
+5410: record, the statements proved above remain conditional source-level support
+5411: claims rather than a proof that the upload action has occurred.  Therefore
+5412: treating the bundle-backed claims as externally instantiated would add a
+5413: coordinate not present in the finite support surface, contradicting the finite
+5414: coordinate determination boundary of
+5415: Theorem~\ref{thm:finite-coordinate-determination-boundary}.\end{proof}
+5416: 
+5417: \begin{corollary}[Upload-or-archive instantiation record]
+5418: \label{cor:upload-or-archive-instantiation-record}
+5419: The bundle-backed support claims of the current package may be used only under
+5420: the external-record condition of
+5421: Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  In particular,
+5422: \path{review_bundle/FINAL_DIGESTS_SHA256.md} is a local byte-level packaging
+5423: manifest and not, by itself, an upload receipt or an archive locator; no archive
+5424: replacement branch is selected for this source package.
+5425: \end{corollary}
+5426: 
+5427: \begin{proof}
+5428: This is the record-level specialization of
+5429: Theorem~\ref{thm:upload-or-archive-instantiation-boundary} to the current digest
+5430: manifest.\end{proof}
+5431: 
+5432: \begin{proposition}[No external instantiation from local bundle records]
+5433: \label{prop:no-external-instantiation-from-local-bundle-records}
+5434: In the current source package, the rows of
+5435: \path{review_bundle/FINAL_DIGESTS_SHA256.md}, the manifest fields of
+5436: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, the bibliography entries
+5437: \cite{automath-publication-pipeline,auditable-pipeline-review-bundle}, and the
+5438: support notes in this supplement instantiate only a local exact-inclusion
+5439: support mode.  They do not instantiate either admissible external-support branch
+5440: of Corollary~\ref{cor:upload-or-archive-instantiation-record}.  Consequently any
+5441: claim depending on a file under \path{review_bundle/} or on the root theorem
+5442: ledger \path{theorem_inventory.json} remains a conditional local package-support
+5443: claim unless a later finite update supplies an exact venue-upload receipt or an
+5444: archive-equivalent locator and records it in the manuscript, manifest,
+5445: bibliography, and digest surfaces.
+5446: \end{proposition}
+5447: 
+5448: \begin{proof}
+5449: The admissible external-support branches are exactly the two branches isolated by
+5450: Theorem~\ref{thm:upload-or-archive-instantiation-boundary} and
+5451: Corollary~\ref{cor:upload-or-archive-instantiation-record}: an exact uploaded
+5452: \path{review_bundle/} directory with matching final digests, or an
+5453: archive-equivalent replacement satisfying the same manifest, file-list, digest,
+5454: and relative-path tests.  The present package supplies the local byte manifest
+5455: \path{review_bundle/FINAL_DIGESTS_SHA256.md} and manifest text selecting exact
+5456: supplemental inclusion, but these are source-package coordinates.  By the same
+5457: corollary, a local byte manifest is not an upload receipt, DOI, public archive
+5458: identifier, or archive locator.  The bibliography entries cited in the statement
+5459: are submission-local support notes and explicitly do not assert such a receipt or
+5460: locator.  Hence neither external branch is instantiated.
+5461: 
+5462: If a bundle-backed claim were nevertheless read as externally supported, its
+5463: finite support tuple would contain an upload-or-archive coordinate absent from
+5464: the local package.  This is exactly the obstruction excluded by
+5465: Theorem~\ref{thm:finite-coordinate-determination-boundary}.  Therefore the only
+5466: current reading is conditional local package support.  The final sentence is the
+5467: contrapositive update condition: leaving this normal form requires adding one of
+5468: the missing external coordinates to the common manuscript, manifest,
+5469: bibliography, and digest surfaces so that all finite records name the same
+5470: submitted support surface.
+5471: \end{proof}
+5472: 
+5473: \begin{proposition}[Upload-or-archive instantiation update protocol]
+5474: \label{prop:upload-or-archive-instantiation-update-protocol}
+5475: Suppose a later venue upload receipt or archive-equivalent locator is to be used
+5476: to replace the current no-receipt boundary of
+5477: Corollary~\ref{cor:upload-or-archive-instantiation-record} by an externally
+5478: instantiated submitted-support claim.  Then the replacement is accepted by the
+5479: finite-record interface if and only if one of the two following finite update
+5480: protocols is performed.  The manuscript surfaces in the statement are precisely
+5481: \path{submission_abstract.tex} and \path{main.tex}; the manifest surface is
+5482: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}; the bibliography surface is
+5483: \path{references.bib}; and the digest surface is
+5484: \path{review_bundle/FINAL_DIGESTS_SHA256.md} or a replacing digest manifest named
+5485: by both manuscript sources and by the manifest.
+5486: \begin{enumerate}
+5487: \item \emph{Exact-upload update.}  \path{submission_abstract.tex} and
+5488: \path{main.tex} record the receipt or venue
+5489: submission identifier for the exact support surface selected in
+5490: Proposition~\ref{prop:final-package-shape-convention}; the manifest field
+5491: \path{public_interface.distribution_mode} is changed from conditional exact
+5492: supplemental upload to completed exact supplemental upload; the manifest field
+5493: \path{public_interface.preferred_submission_form} or an adjacent receipt field
+5494: names the uploaded \path{submission_abstract.pdf}, \path{main.pdf} or
+5495: \path{main.tex}, root \path{theorem_inventory.json}, and \path{review_bundle/};
+5496: \path{review_bundle/FINAL_DIGESTS_SHA256.md} still contains matching digest rows
+5497: for the submitted bundle files; and the \path{references.bib} note for
+5498: \path{auditable-pipeline-review-bundle} is changed from no completed upload to the
+5499: same receipt-bound support statement.
+5500: \item \emph{Archive-equivalent update.}  \path{submission_abstract.tex} and
+5501: \path{main.tex} record the archive
+5502: locator; the manifest field \path{public_interface.current_public_archive} and the
+5503: \path{references.bib} note for \path{auditable-pipeline-review-bundle} name that same
+5504: locator; the manifest keeps or replaces \path{public_interface.archival_update_rule}
+5505: with the byte-equivalence rule actually satisfied; and
+5506: \path{review_bundle/FINAL_DIGESTS_SHA256.md}, or a replacing digest manifest named
+5507: by both the manuscript and the manifest, records the file list and SHA--256 rows
+5508: against which the archive is checked, including the coordinates for
+5509: \path{review_bundle/}, \path{theorem_inventory.json}, and the manifest itself.
+5510: \end{enumerate}
+5511: In either protocol, if any digest row, manifest public-interface field,
+5512: manuscript support statement, bibliography note, or receipt/locator coordinate is
+5513: changed, all four surfaces must name the same support mode and the same finite
+5514: receipt-or-locator record.  Without this finite common update, the current
+5515: no-receipt normal form of
+5516: Proposition~\ref{prop:submission-support-instantiation-field-normal-form} remains
+5517: the only accepted submitted-support status.
+5518: \end{proposition}
+5519: 
+5520: \begin{proof}
+5521: The current package has only the source-level exact-inclusion branch by
+5522: Proposition~\ref{prop:final-package-shape-convention} and
+5523: Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  Thus an external
+5524: instantiation can add exactly one new positive coordinate: either a receipt for
+5525: that exact upload or a locator for an archive-equivalent representative.  The
+5526: finite-coordinate determination boundary,
+5527: Theorem~\ref{thm:finite-coordinate-determination-boundary}, forbids the verifier
+5528: from reading any coordinate not present on the submitted support surface.  Hence
+5529: the new coordinate must be visible wherever the package declares public support
+5530: status: in the manuscript statement that changes the boundary, in the manifest
+5531: public-interface fields that describe distribution mode and archive status, in
+5532: the digest manifest that identifies the bytes being supplied, and in the
+5533: bibliography entry that tells a reviewer whether the bundle is an external
+5534: support surface or merely a local note.
+5535: 
+5536: For the exact-upload branch, the receipt is meaningful for this package only if
+5537: it refers to the support surface selected by
+5538: Proposition~\ref{prop:final-package-shape-convention}: the primary presentation
+5539: artifact, the technical supplement, the root theorem inventory, and the exact
+5540: \path{review_bundle/} directory with matching final digests.  Updating the
+5541: manuscript, the manifest distribution fields, the digest record, and the
+5542: bibliography note with the same receipt is therefore sufficient for the finite
+5543: record checker to read the external-upload coordinate; if one of those records is
+5544: missing or names a different support mode, the checker sees a bad subrecord of
+5545: the kind classified by Theorem~\ref{thm:support-surface-normal-form}.
+5546: 
+5547: For the archive-equivalent branch, Table~\ref{tab:review-bundle-archive-equivalence}
+5548: and Theorem~\ref{thm:support-surface-normal-form} require the archive to preserve
+5549: the same file list, digest rows, manifest semantics, and relative-path meanings.
+5550: The stated archive update records exactly those finite data: the common locator,
+5551: the byte-equivalence rule, and the digest manifest identifying the archive bytes.
+5552: Again, if the manuscript, manifest, bibliography, and digest surface do not name a
+5553: single common locator and byte-equivalence certificate, the proposed archive is
+5554: not a finite coordinate accepted by the verifier.
+5555: 
+5556: The two branches are exhaustive because
+5557: Corollary~\ref{cor:upload-or-archive-instantiation-record} allows only an exact
+5558: upload receipt or an archive-equivalent replacement to instantiate the support
+5559: surface.  Therefore a future support claim is accepted exactly after one of the
+5560: two finite common updates above, and otherwise the no-receipt normal form remains
+5561: the accepted status.
+5562: \end{proof}
+5563: 
+5564: \begin{corollary}[Current no-receipt support-surface non-escalation]
+5565: \label{cor:current-no-receipt-support-surface-non-escalation}
+5566: In the current source package the records
+5567: \path{review_bundle/FINAL_DIGESTS_SHA256.md},
+5568: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json},
+5569: \path{review_bundle/current_package_pass_records.json}, and
+5570: \path{theorem_inventory.json} do not contain a venue upload receipt, public DOI,
+5571: institutional archive identifier, or archive-equivalent locator for
+5572: \path{review_bundle/}.  Hence every claim whose evidence surface is a
+5573: bundle-local path is accepted only as a conditional exact-supplemental-inclusion
+5574: claim.  Such a claim becomes an externally instantiated submitted-support claim
+5575: only after one of the two finite records below is added to the submitted support
+5576: surface:
+5577: \begin{enumerate}
+5578: \item an upload receipt naming the exact \path{review_bundle/} directory and the
+5579: final digest manifest; or
+5580: \item an archive-equivalent locator satisfying the file-list, digest, manifest,
+5581: and path-semantics tests of
+5582: Audit record~\ref{audit:review-bundle-archive-equivalence}.
+5583: \end{enumerate}
+5584: Until then, the theorem inventory, verifier logs, case snapshots, source
+5585: snapshot, and primary-claim inventory remain local/path-verified review-bundle
+5586: coordinates rather than unconditional public or venue-submitted coordinates.
+5587: \end{corollary}
+5588: 
+5589: \begin{proof}
+5590: The four named files are the only finite records in the present source package
+5591: that select the support branch for \path{review_bundle/}: the digest manifest
+5592: gives the byte-level package identity, the review-bundle manifest gives the
+5593: submission strategy, the pass-record ledger exposes the accepted finite gates,
+5594: and \path{theorem_inventory.json} is the theorem-ledger coordinate.  Their
+5595: recorded branch is exact supplemental inclusion and their archive fields state
+5596: that no archive replacement or locator is claimed.  Therefore they determine the
+5597: bytes and paths that must be supplied, but they do not determine that a venue
+5598: upload, DOI minting event, institutional archiving event, or archive-equivalent
+5599: publication event has occurred.
+5600: 
+5601: By Theorem~\ref{thm:upload-or-archive-instantiation-boundary}, an externally
+5602: instantiated bundle-backed claim needs exactly the missing external coordinate:
+5603: either an upload record for the exact directory and final digest manifest, or a
+5604: replacement archive record passing
+5605: Audit record~\ref{audit:review-bundle-archive-equivalence}.  By
+5606: Corollary~\ref{cor:upload-or-archive-instantiation-record}, the digest manifest
+5607: alone is not such a coordinate.  If neither finite record is present, promoting a
+5608: bundle-local path to an unconditional submitted-support coordinate would add an
+5609: evidence coordinate not contained in the support surface, contrary to
+5610: Theorem~\ref{thm:finite-coordinate-determination-boundary}.  The stated
+5611: conditional boundary follows for every bundle-backed surface named in the
+5612: corollary.
+5613: \end{proof}
+5614: 
+5615: \begin{corollary}[Fresh inventory digest instance for this source state]
+5616: \label{cor:fresh-inventory-digest-instance-this-source-state}
+5617: In the present source state, the regenerated files
+5618: \path{theorem_inventory.json} and \path{theorem_inventory.md} are closed as local
+5619: exact-inclusion coordinates only after their SHA-256 rows in
+5620: \path{review_bundle/FINAL_DIGESTS_SHA256.md} are recomputed from the bytes of
