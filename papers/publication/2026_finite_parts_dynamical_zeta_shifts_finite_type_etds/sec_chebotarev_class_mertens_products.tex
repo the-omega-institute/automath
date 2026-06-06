@@ -39,24 +39,10 @@ fixed-label vector.
 \end{lemma}
 
 \begin{proof}
-  The explicit class bound \eqref{eq:class-primitive-explicit-bound} gives a
-  uniform constant
-  \[
-    B_{\mathrm{prod}}:=
-    1+C_{\mathrm{cls}}(A,\tau;G)
-  \]
-  such that
-  \[
-    0\le p_{n,C}
-    \le
-    B_{\mathrm{prod}}\frac{\lambda^n}{n}
-    \qquad(n\ge1,
-    \ C\subset G),
-  \]
-  after increasing the constant harmlessly over the finite set of classes.  In
-  fact the displayed choice follows directly from
-  \(|C|/|G|\le1\), \(\Lambda_*\le\lambda\), and non-negativity of
-  \(p_{n,C}\).  Hence \(\sum_np_{n,C}\lambda^{-rn}\) converges absolutely for
+  By \Cref{lem:global-primitive-class-bound}, choose
+  \(B_{\mathrm{prod}}\) such that
+  \(0\le p_{n,C}\le B_{\mathrm{prod}}\lambda^n/n\) for all \(n\ge1\) and all
+  conjugacy classes \(C\).  Hence \(\sum_np_{n,C}\lambda^{-rn}\) converges absolutely for
   every \(r\ge2\), uniformly in \(C\), and the full tail
   \(T_C(\infty)-T_C(N)\) is bounded by
   \(B_{\mathrm{prod}}\) times
@@ -88,6 +74,42 @@ fixed-label vector.
   \eqref{eq:class-product-tail-bound} gives
   \eqref{eq:class-product-log-bound-output}, because
   \(O(\lambda^{-N}/N)\) is absorbed by \(O(N^{-1})\).
+\end{proof}
+
+\begin{lemma}[Global primitive class bound]
+  \label{lem:global-primitive-class-bound}
+  Under the hypotheses of \Cref{thm:class-mertens-explicit}, there is a
+  constant \(B>0\), depending only on the finite determinant model, such that
+  for every conjugacy class \(C\subset G\) and every \(n\ge1\),
+  \begin{equation}\label{eq:global-primitive-class-bound}
+    0\le p_{n,C}\le B\frac{\lambda^n}{n}.
+  \end{equation}
+  One may take \(B=1+C_{\mathrm{cls}}(A,\tau;G)\) after increasing
+  \(C_{\mathrm{cls}}(A,\tau;G)\), if necessary, over a finite initial set of
+  small values of \(n\).
+\end{lemma}
+
+\begin{proof}
+  The explicit estimate
+  \eqref{eq:class-primitive-explicit-bound} gives
+  \[
+    \left|p_{n,C}-\frac{|C|}{|G|}\frac{\lambda^n}{n}\right|
+    \le
+    \frac{|C|}{|G|}C_{\mathrm{cls}}(A,\tau;G)
+    \frac{\Lambda_*^n}{n}.
+  \]
+  Since \(|C|/|G|\le1\) and \(\Lambda_*=\max\{\theta\lambda,1\}\le\lambda\),
+  this implies
+  \[
+    p_{n,C}\le
+    \left(1+C_{\mathrm{cls}}(A,\tau;G)\right)\frac{\lambda^n}{n}.
+  \]
+  The lower bound is the definition of \(p_{n,C}\) as a primitive-orbit count.
+  If the displayed explicit estimate was obtained only after choosing a
+  threshold in the proof of Main Theorem~II, enlarge
+  \(C_{\mathrm{cls}}(A,\tau;G)\) to dominate the finitely many omitted ratios
+  \(n p_{n,C}/\lambda^n\), over all conjugacy classes.  This finite adjustment
+  preserves the same formula with \(B=1+C_{\mathrm{cls}}(A,\tau;G)\).
 \end{proof}
 
 \begin{proposition}[Uniform remainders for the class Mertens and product formulae]
@@ -480,7 +502,7 @@ determinant formula evaluates those coordinates.
   Consequently the product asymptotic and the determinant value of \(K_C\) are
   determined by
   \eqref{eq:main-iii-factorisation-mc-constant}--\eqref{eq:main-iii-factorisation-inverse-profile};
-  the later rigidity and comparison statements concern this already determined
+  the later coordinate-inversion and comparison statements concern this already determined
   coordinate vector.
 \end{proposition}
 
@@ -531,7 +553,7 @@ determinant formula evaluates those coordinates.
   evaluation and all lower spectral-radius tails convergent.  Thus the product
   theorem depends only on the additive Mertens estimate, the product-tail
   reduction, character orthogonality, and the determinant evaluation.  The
-  rigidity and obstruction results cited later compare alternative coordinate
+  coordinate-inversion and obstruction results cited later compare alternative coordinate
   vectors with the already determined vector, so they are consequences rather
   than inputs.
 \end{proof}
@@ -554,11 +576,36 @@ branches and the displayed value of \(K_C\) are therefore fixed by the
 Adams-corrected determinant calculation rather than by the periodic Artin
 logarithms.
 
+\begin{definition}[Perron-boundary logarithm convention]
+  \label{def:perron-boundary-logarithm-convention}
+  Assume \(\lambda>1\) and \(\eta<\lambda\).  For \(k\ge1\) and
+  \(\pi\in\Irr(G)\), define
+  \begin{equation}\label{eq:perron-boundary-logarithm-convention}
+    \mathcal L_{k,\pi}^{\partial}:=
+    \begin{cases}
+      \displaystyle
+      \operatorname*{Abel\,lim}_{t\uparrow1}
+        \Log\det(I-t\lambda^{-1}A_\pi)^{-1},
+      & k=1,\ \pi\ne\mathbf1,\\[6pt]
+      \displaystyle
+      \Log\det(I-\lambda^{-k}A_\pi)^{-1},
+      & k\ge2.
+    \end{cases}
+  \end{equation}
+  The term \((k,\pi)=(1,\mathbf1)\) is undefined and excluded.  Each
+  logarithm is the normalized germ equal to \(0\) at the origin.  Thus no
+  finite part is ever assigned to
+  \(\Log\det(I-\lambda^{-1}A_{\mathbf1})^{-1}\); the scalar Perron boundary
+  term is absent before any endpoint limit is taken.
+\end{definition}
+
 \begin{theorem}[Main Theorem III: Adams-corrected Frobenius-class
   Euler-product constants]
   \label{thm:class-euler-product-mertens}
-  Assume the hypotheses of \Cref{thm:class-mertens-explicit}, namely
-  \(\lambda>1\) and the strict twisted spectral gap \(\eta<\lambda\). For a
+  Assume \(A\) is primitive with Perron root \(\lambda>1\) and that the
+  strict twisted spectral gap \(\eta<\lambda\) holds for the fixed cocycle
+  \(\tau:E_A\to G\).  This is a conditional finite-state theorem under that
+  spectral exclusion; mixing of \(A\) alone does not imply the gap.  For a
   conjugacy class \(C\subset G\), set
   \begin{equation}\label{eq:class-euler-product-def}
     P_C(N):=
@@ -570,18 +617,10 @@ logarithms.
   \begin{equation}\label{eq:class-euler-product-asymptotic}
     P_C(N)=K_C\,N^{-|C|/|G|}\bigl(1+O(N^{-1})\bigr),
   \end{equation}
-  The exponent \(|C|/|G|\) and the existence of a Frobenius-class product
-  asymptotic are the classical layer: Mesliza--Noorani prove this product
-  statement for Frobenius classes of closed subshift orbits, Sharp supplies the
-  Mertens normalisation for closed orbits, and the surrounding Chebotarev
-  density belongs to the Parry--Pollicott and Noorani--Parry finite-covering and
-  finite homogeneous-extension setting
-  \cite{MeslizaNoorani1999FrobeniusMertens,Sharp1991Mertens,ParryPollicott1986Chebotarev,NooraniParry1992ChebotarevShifts}.
-  Those references are used only for this leading-density/product-existence
-  comparison.  The displayed value of \(K_C\), including the branch convention,
-  the scalar finite-part factor, and the non-trivial fixed-label vector, is the
-  local finite-state determinant identification proved below from
-  \Cref{thm:class-mertens-explicit,lem:class-euler-product-tail-bound,prop:fixed-label-determinant-perron}.
+  The positive constant \(K_C\), its exponent, and its \(O(N^{-1})\)
+  remainder are obtained below from Main Theorem~II, the explicit product-tail
+  bound, and the fixed-label determinant evaluation; no external product
+  theorem is assumed in the proof of this displayed asymptotic.
   Here the positive branch of the constant is
   \begin{equation}\label{eq:class-euler-product-k-mc}
     K_C=
@@ -621,8 +660,8 @@ logarithms.
   class-indicator bracket, including the non-trivial fixed-label Fourier sum.
   The determinant version of the non-trivial values
   \(F_\varrho(\lambda^{-1})\) is exactly the branch-compatible one in
-  \Cref{prop:fixed-label-determinant-perron}: the scalar Perron determinant
-  \((r,m,\pi)=(1,1,\mathbf1)\) is deleted before evaluation, non-trivial
+  \Cref{def:perron-boundary-logarithm-convention,prop:fixed-label-determinant-perron}:
+  the scalar Perron determinant is undefined and excluded, non-trivial
   \(rm=1\) determinants are taken by the Abel branch, and the \(rm\ge2\)
   determinant tail is absolutely convergent at \(z=\lambda^{-1}\).
 \end{theorem}
@@ -735,7 +774,24 @@ logarithms.
    stated in the theorem.
 \end{proof}
 
-\begin{proposition}[Dependency map for Main Theorem~III]
+\begin{remark}[Comparison with the classical Frobenius-class product layer]
+  \label{rem:main-iii-classical-product-layer}
+  \Cref{thm:class-euler-product-mertens} is self-contained for a finite
+  extension satisfying \(\lambda>1\) and \(\eta<\lambda\).  The classical
+  Chebotarev--Mertens product theorems for closed orbits and finite coverings
+  \cite{MeslizaNoorani1999FrobeniusMertens,Sharp1991Mertens,ParryPollicott1986Chebotarev,NooraniParry1992ChebotarevShifts}
+  give the same leading exponent \(|C|/|G|\) and product-existence layer in
+  their settings.  The refinement here is the local determinant identification
+  of the remaining constant through the Adams-corrected fixed-label vector
+  \((F_\varrho(\lambda^{-1}))_{\varrho\ne\mathbf1}\), with the
+  Perron-boundary convention of
+  \Cref{def:perron-boundary-logarithm-convention}.  Thus the classical layer is
+  a comparison and consistency check, not a hidden hypothesis in the finite
+  proof above.
+\end{remark}
+
+
+\begin{remark}[Dependency map for Main Theorem~III]
   \label{prop:main-iii-dependency-map}
   \label{rem:main-iii-dependency-map}
   Under the hypotheses of \Cref{thm:class-euler-product-mertens}, the
@@ -767,9 +823,6 @@ logarithms.
   \(\det(I-zA_\pi)\); replacing the fixed-label vector by any other
   branch-compatible vector changes the class constants exactly by the
   Peter--Weyl error measured in \Cref{prop:class-product-comparison}.
-\end{proposition}
-
-\begin{proof}
   Item~\textup{(i)} is precisely the inherited Frobenius-class product
   comparison layer in \eqref{eq:class-euler-product-asymptotic}: it accounts for
   the classical existence of \(K_C\) and the density exponent \(|C|/|G|\) before
@@ -797,7 +850,7 @@ logarithms.
   proposition shows exactly how a different branch-compatible fixed-label
   vector would change them.  This proves both the successive recovery statement and
   the final determination statement.
-\end{proof}
+\end{remark}
 
 \begin{proposition}[Closed fixed-label coordinate equivalence]
   \label{prop:main-iii-fixed-label-coordinate-factorisation}
