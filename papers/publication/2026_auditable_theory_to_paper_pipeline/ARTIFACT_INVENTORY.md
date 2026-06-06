@@ -1,6 +1,8 @@
-# Artifact Inventory
+﻿# Artifact Inventory
 
 ## Gate Inventory
+
+This table is a path catalogue for gates used by the workflow. It is not a command-run record: the current package does not include fresh Lean build, zero-axiom, BEDC audit, marker-existence audit, axiom-purity audit, daemon-run, or dynamic artifact-validation logs unless a separate row supplies command, source state, environment, exit code, and log path.
 
 | Gate | Source path | Failure prevented | Manuscript use |
 |---|---|---|---|
