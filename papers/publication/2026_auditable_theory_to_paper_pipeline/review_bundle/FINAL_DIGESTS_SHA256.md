@@ -1,15 +1,15 @@
-﻿# Final SHA-256 Digests
+# Final SHA-256 Digests
 
 Support mode: conditional exact supplemental inclusion of `theorem_inventory.json`, `theorem_inventory.md`, and the selected `review_bundle/` file table below, or the automath public branch/path locator when the referenced bytes match this table; no venue-upload receipt, DOI, Lean/BEDC rebuild, marker-existence audit, axiom-purity audit, daemon execution, artifact semantic-validation claim, completed submission pack, or venue acceptance is made by this digest table.
 
-Regenerated after theorem-inventory and verifier-log refresh: 2026-06-07T15:12:00+08:00.
+Regenerated after theorem-inventory and verifier-log refresh: 2026-06-07T15:36:21+08:00.
 
 Digest-generation run record: `review_bundle/final_digest_generation_run.log`.
 
 | SHA-256 | Path |
 |---|---|
 | `009bb173509bbc2146eb59d8936acd1a09a84580f90de5512bf3d274eca5b669` | `ARTIFACT_INVENTORY.md` |
-| `2f888c963948031136cdaa0541bdb6354a5e7b2c380fc45ac5cb38b65dbb1ca5` | `main.tex` |
+| `7e30949354b7b2204b0996e30e8417fe5eb768ba8096300f9033b7fc489589c2` | `main.tex` |
 | `45dab2f0a52a5c9fb9617843660a21b1749268cb432ff320f0bf315682210541` | `references.bib` |
 | `14c6d9880a85b8069ce2cb93cb91750f2ea4acabd3aff1a3c2a4d9e6af84d32d` | `research_directive.md` |
 | `d4e1e3494ec7b171e85d0c4263acbad125c211c3c4ff8bf7e4e67036cc8fcd8b` | `review_bundle/case_snapshots/fake_extension_artifact_inventory.md` |
@@ -53,6 +53,6 @@ Digest-generation run record: `review_bundle/final_digest_generation_run.log`.
 | `ff3b1017e42b74ddad382205fa55f7436ac64c02f77d23f76f370fd95de5eb8a` | `review_bundle/verify_source_interface_record.py` |
 | `9897b3e89b1256e7c2d0454b14ca953f0d4a0886d522edff8549dce66554617a` | `scope_contract.json` |
 | `dde111ed8a82a87f1d49851d4095971f9e267be86f12013c998f9f151bbd9198` | `scope_contract.md` |
-| `ef8c5fe56594ca2a11bcfcd32acf8878529f70693f77be934792100ffb47413e` | `submission_abstract.tex` |
-| `eedd382d886298a574fc6834a6383fa84b90f7484b0650b91f289e207e391811` | `theorem_inventory.json` |
-| `b721e2e027d7ada7fbc4d3b7e7a8f57bf088f9afe2483ea05fcf62634ae9ed2e` | `theorem_inventory.md` |
+| `a02139ecb5b87b86702a2ef516c4759f22a57e2f0e54fe35422875b5e11d1f3f` | `submission_abstract.tex` |
+| `94cad1f44494060e50bf5f2719150a924df2ffba92aa124c9e6af7a248017b06` | `theorem_inventory.json` |
+| `231e55fa9d275b04e2257270403fcaceb691b9f507b61a126ba998799c45a7e3` | `theorem_inventory.md` |
