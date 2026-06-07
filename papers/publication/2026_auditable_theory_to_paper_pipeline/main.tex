@@ -6981,6 +6981,77 @@ semantic, auditrecord, implementation, artifact, daemon, or venue certificate by
 prose alone.
 \end{proof}
 
+
+\begin{theorem}[Final-byte extractor inventory inclusion]
+\label{thm:final-byte-extractor-inventory-inclusion}
+Fix a manuscript source byte string $M$, an inventory byte string $J$, and the
+extractor byte string
+\path{review_bundle/extract_theorem_environments.py}.  Let $T(M)$ be the finite
+set of labels obtained by running that extractor on the five-environment domain
+$\mathcal E$ of Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary},
+and let $I(J)$ be the finite set of inventory labels read from $J$ with the
+accepted theorem-label prefixes.  For the final bytes of this package, a
+zero-exit extractor run is equivalent to the following three finite conditions:
+\[
+  T(M)\subseteq I(J),
+  \qquad \text{no element of }\mathcal E\text{ in }M\text{ is unlabelled},
+  \qquad \text{and }T(M)\text{ has no duplicate source label}.
+\]
+Consequently, after any edit to \path{main.tex} or \path{theorem_inventory.json},
+the exact theorem-obligation ledger coordinate used by
+Theorems~\ref{thm:theorem-obligation-ledger-boundary} and
+\ref{thm:post-inventory-package-fixed-point} is available only from a fresh
+zero-exit run on those final bytes.  This inclusion criterion is the complete
+bad-example obstruction for missing in-domain labels: an omitted labelled
+environment, an unlabelled in-domain environment, or a duplicate in-domain label
+is witnessed by a finite failing row printed by the extractor, and no prose
+inventory statement can remove that row without changing $M$, $J$, or the
+extractor coordinate.
+\end{theorem}
+
+\begin{proof}
+The first two input byte strings determine the two finite sets.  The extractor
+constructs $T(M)$ by a line scan for begins of the five names in $\mathcal E$,
+searches each matched environment body for its first label token, and records the
+label together with its line and title fields.  It constructs $I(J)$ by reading
+the inventory JSON and collecting the finite label fields with the accepted
+prefixes.  Since these operations use only fixed regular expressions and JSON
+parsing on finite byte strings, $T(M)$, the unlabelled-environment list, the
+duplicate-label list, and $I(J)$ are deterministic functions of the final bytes.
+
+The extractor's acceptance test is exactly the conjunction of the three displayed
+conditions.  If an in-domain environment has no label, the unlabelled list is
+nonempty and the command exits nonzero.  If two in-domain environments have the
+same label, the duplicate list is nonempty and the command exits nonzero.  If a
+recorded source label is absent from the inventory, then the set difference
+$T(M)\setminus I(J)$ is nonempty and the command exits nonzero.  Conversely, when
+all three lists are empty and $T(M)\subseteq I(J)$, the extractor has no failing
+row for its declared predicate and exits with code zero.  This proves the stated
+equivalence.
+
+It remains to connect the equivalence to the paper's support-coordinate chain.
+Theorem~\ref{thm:theorem-obligation-ledger-boundary} uses the inventory only as a
+finite theorem-obligation ledger plus the syntactic extractor coordinate, and
+Theorem~\ref{thm:post-inventory-package-fixed-point} requires that the inventory,
+extractor run, verifier logs, and final digest be ordered after the final source
+bytes are selected.  Editing either $M$ or $J$ changes one of the deterministic
+inputs just described.  The exact ledger coordinate for the edited package
+therefore requires the fresh zero-exit run on those edited bytes; otherwise the
+package has at most the weaker path-verified or stale-coordinate reading already
+classified in Theorem~\ref{thm:post-inventory-support-coordinate-dichotomy}.
+
+The bad-example statement follows from the same finite disjunction.  Each failure
+mode is represented by an explicit finite row: an unlabelled environment, a
+duplicate label, or a member of $T(M)\setminus I(J)$.  Because
+Theorem~\ref{thm:finite-coordinate-determination-boundary} allows the submitted
+claim to depend only on recorded finite coordinates, prose cannot erase such a
+row.  Only changing the source bytes, the inventory bytes, or the extractor
+coordinate can change the computed obstruction.  Thus the theorem gives the
+final-byte inclusion gate required for the post-inventory theorem chain and no
+semantic proof-checking, Lean/BEDC rebuild, artifact, daemon, upload, or venue
+claim beyond that syntactic gate.
+\end{proof}
+
 \begin{theorem}[Theorem-inventory boundary]
 \label{prop:manual-theorem-inventory-boundary}
 This theorem retains the legacy cross-reference label
