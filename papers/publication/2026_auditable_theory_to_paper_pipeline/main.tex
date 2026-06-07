@@ -99,7 +99,9 @@ acceptance predicates), Theorems~\ref{thm:verifier-input-output-contract},
 \ref{thm:finite-coordinate-determination-boundary} (schema-projection exactness
 and non-escalation), Theorem~\ref{thm:publication-safety-interface} (finite
 publication-certificate invariants from explicitly supplied record-gate
-soundness),
+soundness), Theorem~\ref{thm:external-interface-projection-no-free-upgrade} (the
+projection theorem showing that implementation soundness is a separate stronger
+reading requiring additional command/source/environment records),
 Theorem~\ref{thm:finite-record-certificate-rigidity} (the sharp bad-subrecord
 normal form for every stronger reading),
 Theorem~\ref{thm:boundary-axis-non-escalation-exactness} (simultaneous exactness
@@ -124,7 +126,12 @@ manual-ledger dependence and non-completeness boundary).  Later theoremized stat
 digests, upload conditions, command boundaries, inventories, venue records, and
 case snapshots are support-boundary audit claims: they are useful finite-record
 consequences, but they are not mathematical invariants of independent interest
-and do not replace the printed TeX proofs in the core chain.  The result is
+and do not replace the printed TeX proofs in the core chain.  For the
+presentation version these labels compress to the finite support tuple of
+Theorem~\ref{thm:support-surface-invariant-compression}; full label coverage is
+carried by \path{theorem_inventory.json}, the theorem-environment extractor log,
+the finite record-verifier logs, and the final digest table rather than by
+repeating every support-projection theorem in the two-page artifact.  The result is
 intentionally not a proof of external implementation-level soundness:
 Lean builds, publication-daemon behaviour, artifact semantics, and fresh command
 runs enter the argument only when a finite certificate records the corresponding
@@ -3427,6 +3434,68 @@ predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ over the submitted gate-passage records
 no independent implementation-level soundness follows.
 \end{proof}
 
+\begin{theorem}[External-interface projection and no-free-implementation upgrade]
+\label{thm:external-interface-projection-no-free-upgrade}
+Fix a package $P$, submitted surface $S$, acceptance ledger $L$, and dispatch
+table $\Gamma$.  Let $\pi(P,S,L,\Gamma)$ be the finite record projection that
+retains only the fields read by the certificate schema: claim kinds, evidence
+levels, submitted evidence pointers, human-promotion fields, assigned passing
+gate rows, discovery-interface rows, and command-boundary tuples.  Then the
+following are equivalent for the publication-safety conclusion of
+Theorem~\ref{thm:publication-safety-interface}.
+\begin{enumerate}
+\item The theorem constructs the accepted publication certificates for the
+load-bearing rows of $L$.
+\item The projected finite record $\pi(P,S,L,\Gamma)$ satisfies
+$\mathsf{RGS}_{S}(P,L,\Gamma)$ and the remaining finite hypotheses of
+Theorem~\ref{thm:publication-safety-interface}.
+\end{enumerate}
+Consequently any two gate-producing implementations, daemon histories, or human
+workflows with the same projection $\pi(P,S,L,\Gamma)$ are indistinguishable by
+the theorem: they yield the same accepted certificates and the same finite bad
+subrecords.  A stronger reading asserting independent soundness of the gates,
+scripts, daemons, or human workflow is accepted if and only if the projection is
+strictly enlarged by an implementation-soundness extension record of the form
+specified in Theorem~\ref{thm:implementation-soundness-extension-criterion}; in
+particular, when a command-run implementation reading is asserted, that extension
+must include command, source state, environment, exit code, and log path.  Without
+that enlargement the stronger implementation reading is rejected while the
+finite-record interface certificate, if otherwise valid, remains accepted at its
+declared finite evidence level.
+\end{theorem}
+
+\begin{proof}
+The verifier predicates $P_1,\ldots,P_6$ in the certificate schema read exactly
+the fields retained by $\pi$: the claim-kind coordinate, the evidence-level and
+evidence-surface coordinates, the assigned gate rows, the human-promotion field,
+the discovery-interface field, and the command-boundary field.  Therefore
+replacing $(P,S,L,\Gamma)$ by another package with the same projection gives the
+same input to Proposition~\ref{prop:finite-certificate-schema-verifier}.  The
+schema-relative exactness theorem, Theorem~\ref{thm:record-acceptance-exactness},
+then gives the same acceptance value and the same rejected bad subrecord for each
+load-bearing row.  Proposition~\ref{prop:record-gate-soundness-external-interface-exactness}
+identifies this projected record condition with the finite predicate
+$\mathsf{RGS}_{S}(P,L,\Gamma)$ used by
+Theorem~\ref{thm:publication-safety-interface}.  Thus the theorem's certificate
+construction depends on the package only through $\pi$ and the explicitly stated
+finite hypotheses, proving the equivalence and the indistinguishability claim.
+
+It remains to characterize stronger implementation readings.  Such a reading
+adds an implementation claim-kind component or raises the evidence level of an
+existing gate row beyond the submitted row-and-pointer record.  By
+Theorem~\ref{thm:implementation-soundness-extension-criterion}, acceptance of
+that stronger reading is equivalent to adding the four implementation extension
+coordinates $K^{\mathrm{impl}}$, $E^{\mathrm{impl}}$, $R^{\mathrm{impl}}$, and
+$B^{\mathrm{impl}}$; at command-run strength the fourth coordinate contains the
+command, source state, environment, exit code, and log path.  If the extension is
+present, the enlarged projection is checked by the same schema and the stronger
+finite-record claim is accepted at its declared evidence level.  If the extension
+is absent, one of the finite coordinates required by the schema is missing, so
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} supplies the finite bad
+subrecord.  The original finite-record certificate is unaffected because its
+projection has not changed.
+\end{proof}
+
 \begin{table}
 \caption{Submission-local acceptance-entry ledger for the current package}
 \label{tab:current-acceptance-ledger}
@@ -6075,6 +6144,71 @@ skeleton of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, the missi
 coordinate is an inclusion-minimal finite bad subrecord rather than a semantic
 fact about the underlying artifacts.\end{proof}
 
+\begin{theorem}[Support-surface invariant compression]
+\label{thm:support-surface-invariant-compression}
+Let $\mathcal S$ be the family of support-surface and post-inventory claims in
+Theorems~\ref{thm:final-support-surface-closure},
+\ref{thm:workspace-final-package-reconciliation},
+\ref{thm:support-surface-normal-form}, and
+\ref{thm:post-inventory-package-fixed-point}, together with
+Corollary~\ref{cor:stable-replay-post-inventory-tuple}.  For the current package,
+every member of $\mathcal S$ is a projection of the same finite support tuple
+\[
+\Sigma=(F,M,D,R,Q),
+\]
+where $F$ is the selected relative file list, $M$ is the review-bundle manifest,
+$D$ is the final digest table, $R$ is the retained extractor and verifier log
+family, and $Q$ is the post-inventory ordering relation saying that the inventory
+bytes precede the retained log bytes and that the digest table is regenerated
+after them.  More precisely, each theorem in $\mathcal S$ is obtained from
+$\Sigma$ by forgetting all but one of the following projections:
+\begin{enumerate}
+\item byte closure of the selected support surface $(F,M,D)$;
+\item reconciliation of a later workspace through replacement logs $(R,D)$;
+\item the three accepted external-support modes of
+Theorem~\ref{thm:support-surface-normal-form}; or
+\item the post-inventory replay order $(Q,R,D)$.
+\end{enumerate}
+Hence a presentation version may state this family as one finite-record support
+invariant and cite the inventory file, theorem-environment extractor log, finite
+record-verifier logs, and final digest table for full label coverage.  Such a
+compression loses no mathematical content for the CICM presentation route,
+because none of the separated labels in $\mathcal S$ carries an independent
+semantic claim beyond these finite projections.
+\end{theorem}
+
+\begin{proof}
+Each cited result reads only the named finite files, manifests, logs, digests, and
+their ordering.  The final support-surface closure theorem reads the selected
+file list, manifest rows, and digest rows, so it is the projection $(F,M,D)$.
+The workspace reconciliation theorem compares later workspace observations with
+the retained source-state and verifier-log records; it therefore reads only the
+log family and digest certificate, namely $(R,D)$, together with the rule that a
+replacement workspace must supply fresh records of the same form.  The support
+surface normal-form theorem classifies the same selected bytes into exact
+inclusion, archive-equivalent inclusion, or promoted rerun; this is a case split
+on the external-support projection of $(F,M,D,R)$.  The post-inventory fixed
+point and its stable replay corollary add no new support object; they add the
+ordering projection $Q$ saying which inventory, extractor, verifier, and digest
+bytes were produced after which earlier bytes.
+
+Because these projections are all functions of the one tuple $\Sigma$, a reader
+who is given $\Sigma$ can reconstruct the truth value and bad-subrecord witness
+of every label in $\mathcal S$ by applying the corresponding projection and then
+the already proved finite-coordinate determination theorem,
+Theorem~\ref{thm:finite-coordinate-determination-boundary}.  Conversely, any
+accepted support claim among the cited labels must pass one of the displayed
+projection checks: otherwise the normal-form theorem or the post-inventory fixed
+point supplies the missing finite coordinate as a bad subrecord.  Thus the labels
+are useful audit bookkeeping but not independent semantic theorems about Lean,
+artifact behavior, archive infrastructure, venue upload, or journal acceptance.
+For a presentation article, replacing the separated labels by the single tuple
+statement and pointing to \path{theorem_inventory.json},
+\path{review_bundle/theorem_environment_extraction_run.log}, the retained finite
+record-verifier logs, and \path{review_bundle/FINAL_DIGESTS_SHA256.md} preserves
+exactly the same finite-record content.
+\end{proof}
+
 \begin{theorem}[Upload instantiation boundary]
 \label{thm:upload-or-archive-instantiation-boundary}
 Before the bundle-backed claims of this supplement are treated as part of a
@@ -7119,6 +7253,59 @@ that stronger assertion: its boundary field $B$ records no command-run assertion
 and the missing command tuple is a finite bad subrecord.  Thus the snapshots are
 rigidly limited to path-verified reviewability unless a separate rerun log is
 added.
+\end{proof}
+
+\begin{theorem}[Finite-row closure of case evidence]
+\label{thm:finite-row-case-evidence-closure}
+Let $C$ be the finite set of four case-study rows in
+Table~\ref{tab:case-witnesses}.  Under
+Propositions~\ref{prop:path-complete-case-witnesses} and
+\ref{prop:review-bundle-case-snapshot-coverage}, the publication-safety interface
+accepts the case-study contribution exactly as the image of $C$ under the
+skeleton map of Theorem~\ref{thm:case-witness-skeleton-rigidity}.  The image has
+four possible values only: promotion, route/submission blocking, theorem-content
+non-growth, and artifact-limitation disclosure.  For each row, the accepted
+claim is finite-record evidence for the corresponding software-workflow lesson;
+it is not evidence that the historical daemon, overlap checker, fake-extension
+pipeline, Rule110 artifact system, or GroundCompiler evaluator has been rerun or
+semantically validated.  A proposed upgrade of any row to such a rerun or
+semantic-validation claim is accepted if and only if it adds the positive
+extension coordinates required by
+Theorem~\ref{thm:finite-extension-budget-normal-form}, including command, source
+state, environment, exit code, and log path whenever fresh execution is asserted.
+\end{theorem}
+
+\begin{proof}
+Proposition~\ref{prop:path-complete-case-witnesses} gives, for every row in $C$,
+the gate name, observed issue, safe lesson, and cited path surface.  Proposition~\ref{prop:review-bundle-case-snapshot-coverage}
+places those cited path surfaces inside the reviewable snapshot boundary and
+records that the boundary is historical or path-verified.  Applying
+Theorem~\ref{thm:case-witness-skeleton-rigidity} therefore maps each row to one
+of the four skeleton values listed in the statement, and no fifth skeleton is
+available because the table contains only those four gate/lesson forms.
+
+The finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface},
+then accepts only the certificate tuple carried by the row: its claim kind, path
+surface, assigned pass rows, and boundary field.  By
+Proposition~\ref{audit:case-snapshot-non-rerun-boundary}, that boundary field has
+no command-run tuple for a fresh daemon execution, full-source rebuild,
+theorem-content rerun, Rule110 rerun, or GroundCompiler semantic rerun.  Hence the
+accepted image of $C$ is exactly finite-row evidence for the four safe workflow
+lessons and not an empirical rerun or full artifact-validation claim.
+
+Conversely, suppose a stronger reading of a case row is accepted.  It changes at
+least one finite coordinate: the claim-kind coordinate for a semantic or artifact
+validation assertion, the evidence-surface coordinate for a new run or semantic
+property, the assigned-gate coordinate for the enlarged gate set, or the boundary
+coordinate for command-run strength.  The finite extension-budget normal form,
+Theorem~\ref{thm:finite-extension-budget-normal-form}, says that exactly these
+positive coordinates must be added, and clause A6 of
+Definition~\ref{def:certificate-schema-acceptance-table} supplies the command,
+source-state, environment, exit-code, and log-path requirement for fresh
+execution.  If any required coordinate is absent, the schema exactness theorem,
+Theorem~\ref{thm:record-acceptance-exactness}, returns a finite bad subrecord
+instead of accepting the upgrade.  This proves both finite-row closure and the
+upgrade criterion.
 \end{proof}
 
 \begin{table}
