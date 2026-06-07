@@ -1,15 +1,15 @@
-# Final SHA-256 Digests
+﻿# Final SHA-256 Digests
 
 Support mode: conditional exact supplemental inclusion of `theorem_inventory.json`, `theorem_inventory.md`, and the selected `review_bundle/` file table below, or the automath public branch/path locator when the referenced bytes match this table; no venue-upload receipt, DOI, Lean/BEDC rebuild, marker-existence audit, axiom-purity audit, daemon execution, artifact semantic-validation claim, completed submission pack, or venue acceptance is made by this digest table.
 
-Regenerated after theorem-inventory and verifier-log refresh: 2026-06-07T15:36:21+08:00.
+Regenerated after theorem-inventory and verifier-log refresh: 2026-06-07T17:45:43+08:00.
 
 Digest-generation run record: `review_bundle/final_digest_generation_run.log`.
 
 | SHA-256 | Path |
 |---|---|
 | `009bb173509bbc2146eb59d8936acd1a09a84580f90de5512bf3d274eca5b669` | `ARTIFACT_INVENTORY.md` |
-| `7e30949354b7b2204b0996e30e8417fe5eb768ba8096300f9033b7fc489589c2` | `main.tex` |
+| `9271d43b3b85943ffff2f77eb0fb9a5e4c6141e9d34d5c2c00e841736fb57aa1` | `main.tex` |
 | `45dab2f0a52a5c9fb9617843660a21b1749268cb432ff320f0bf315682210541` | `references.bib` |
 | `14c6d9880a85b8069ce2cb93cb91750f2ea4acabd3aff1a3c2a4d9e6af84d32d` | `research_directive.md` |
 | `d4e1e3494ec7b171e85d0c4263acbad125c211c3c4ff8bf7e4e67036cc8fcd8b` | `review_bundle/case_snapshots/fake_extension_artifact_inventory.md` |
@@ -26,7 +26,7 @@ Digest-generation run record: `review_bundle/final_digest_generation_run.log`.
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` |
 | `c3c3d78631a192564863eb5b4b3778dbc98651fd597a475063db94e099ec0441` | `review_bundle/certificate_schema.json` |
-| `f8bdeba6d6d449a11033b6977d4d7074038cfdb041682443bdaf02bd0ab74b26` | `review_bundle/certificate_verification_run.log` |
+| `2466659617233f9b7985172856d7d512aff7863b49bb5799c2f16292161c12f3` | `review_bundle/certificate_verification_run.log` |
 | `2ffeee544750876cb7a935d9f4c86591e5827f2e064c882530ad525a48f9abe2` | `review_bundle/current_package_pass_records.json` |
 | `866dd40afb12a8a3ee4b73bceedc7d6d3b0e9e57a7a4a8033293275e2421d653` | `review_bundle/extract_theorem_environments.py` |
 | `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` | `review_bundle/negative_certificate_record_example.json` |
@@ -36,23 +36,23 @@ Digest-generation run record: `review_bundle/final_digest_generation_run.log`.
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
 | `c491420049e422046e3fc16d652d522be3f206905c490f868c856569dcae744a` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
 | `8b80ca39c582ae82dd26cc73cefcb040d2db569d03a47b9afb917384e05673f2` | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` |
-| `7eb981cdb66350364194b2a627d32c9e53841d9c8785ce18704f6fba903ce2dc` | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` |
+| `c0354b3a6a56b1a7b6b5d996da8ecabff21a593cd5ddc1e3d5491989cd196ef8` | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
 | `89b2a8141f7cd5daf1972810b6dfc3afe32f661d426cfe9a94500af8623db2c7` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
-| `ae3e73aadb27ecb9b1cf8e6dad8ecbb15b59f32d9e83f4e8fcfe62f372eb7521` | `review_bundle/source_interface_verification_run.log` |
+| `db9dbd484c7710ed59b9887cdbdf90b30a4b52874a427ece0d5914b7194789a1` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
-| `34626cca4cca3cb0207dd837dcb0f0ffd1bb941ce3999f7016b1bf1bc5d89df6` | `review_bundle/theorem_environment_extraction_run.log` |
+| `f35f8b5bb4c350410ea094d6b5677aee37c31dd9aceac30547c5f5fd993e2f70` | `review_bundle/theorem_environment_extraction_run.log` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
 | `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` |
 | `30c09435296824baece3936fc4e27893058debe4b1a4828bddda18ed8d35ea7d` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06.log` |
 | `56af6c395be72589f3aea41bfcbf5a0c7f8013d0d64d794196139758d47a3055` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06_ROUND5.log` |
-| `a328e7be951e06fb6deb4d9d4b22c0667ca44d303979e15f3a7f5aad90848279` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log` |
+| `992ccb959c2796d49936c97ff2eb1f10a877b80abb38afa75f5821e0b59cc427` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log` |
 | `a46deed5e7eabf949e4d9b3e968ab9b81f56e4a43230f25fc31ebd1cf73f66ce` | `review_bundle/verify_certificate_records.py` |
 | `788cf45e03b03f1c1c94efa3db36cd8f141ff0b057c901751917bcf0233030d9` | `review_bundle/verify_primary_claim_inventory.py` |
 | `ff3b1017e42b74ddad382205fa55f7436ac64c02f77d23f76f370fd95de5eb8a` | `review_bundle/verify_source_interface_record.py` |
 | `9897b3e89b1256e7c2d0454b14ca953f0d4a0886d522edff8549dce66554617a` | `scope_contract.json` |
 | `dde111ed8a82a87f1d49851d4095971f9e267be86f12013c998f9f151bbd9198` | `scope_contract.md` |
 | `a02139ecb5b87b86702a2ef516c4759f22a57e2f0e54fe35422875b5e11d1f3f` | `submission_abstract.tex` |
-| `94cad1f44494060e50bf5f2719150a924df2ffba92aa124c9e6af7a248017b06` | `theorem_inventory.json` |
-| `231e55fa9d275b04e2257270403fcaceb691b9f507b61a126ba998799c45a7e3` | `theorem_inventory.md` |
+| `4ea4048bb53b8356159621db6f7c94f010b7e18ff3dc4d3c6eea16c1a2ba6faf` | `theorem_inventory.json` |
+| `35f2536bab902b10e3c769d69dc3b1fd38f35f6544ac6fd2c021de228f0c9418` | `theorem_inventory.md` |
