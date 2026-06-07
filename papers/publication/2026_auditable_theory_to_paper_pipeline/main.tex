@@ -5023,7 +5023,7 @@ author-guideline page linked from that call at
 \url{https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines}.
 The local checks recorded HTTP status 200 for all three pages in the run witness
 \path{VENUE_CHECK_RUN_2026-06-04.log} and in the later live-check witness
-\path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log}, both with exit code 0, and observed the same route
+\path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log}, with exit code 0, and observed the same route
 facts as the 2026-06-03 near-submission check: presentation-only papers are
 work-in-progress submissions of two pages plus bibliography, receive a
 light-weight review, do not appear in the Springer proceedings, have a
@@ -5037,8 +5037,10 @@ surface.  Otherwise these file names record historical local readiness only.
 
 \begin{proposition}[Fresh venue-record criterion]
 \label{audit:fresh-venue-record-criterion}
-Assume that the final submitted support surface contains either the venue-check
-record \path{VENUE_CHECK.md} and log \path{VENUE_CHECK_RUN_2026-06-04.log}, the later local-date rerun log
+Assume that, immediately before the actual upload action or at a time explicitly
+recorded as unchanged for that action, the final submitted support surface
+contains either the venue-check record \path{VENUE_CHECK.md} and log
+\path{VENUE_CHECK_RUN_2026-06-04.log}, the later local-date rerun log
 \path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log}, or an
 archive-equivalent replacement naming the same checked URLs, observation time,
 route rules, command result, source state, environment, exit code, and log path.
@@ -5086,8 +5088,10 @@ observed route class, page limit, proceedings boundary, deadline, supplement
 access rule, and the local witness rows in Table~\ref{tab:venue-submission-pack-gate}.
 The venue component of the current finite-record package is accepted exactly for
 uploads whose venue-rule state is represented by $U$ or by a later replacement
-record with the same fields.  If an upload is made after a venue-page change, or
-if no upload-time replacement record is supplied, then the package retains only a
+record with the same fields and with observation time immediately before upload,
+or with a finite unchanged-rule bridge from the recorded check to the upload
+action.  If an upload is made after a venue-page change, or if no upload-time or
+unchanged-rule replacement record is supplied, then the package retains only a
 historical venue observation and cannot certify submission-pack readiness,
 EasyChair compliance, acceptance, or proceedings status.
 \end{theorem}
@@ -6208,10 +6212,13 @@ Let $L$ be the public automath branch/path coordinate recorded in
 \cite{auditable-pipeline-review-bundle}.  If $L$ contains
 \path{theorem_inventory.json}, \path{theorem_inventory.md}, and the regular files
 under \path{review_bundle/} with the same relative paths and the SHA--256 rows
-printed in \path{review_bundle/FINAL_DIGESTS_SHA256.md}, then $L$ is an
+printed in \path{review_bundle/FINAL_DIGESTS_SHA256.md}, and if $L$ is pinned by
+commit or immutable release identifier, or else the branch head and
+byte-equality record are refreshed together at the final support state, then $L$ is an
 archive-equivalent support surface for every bundle-backed and theorem-inventory
 claim in this supplement.  If any named file is absent at $L$, has a different
-relative path, or has a digest different from the final digest row, then $L$ does
+relative path, has a digest different from the final digest row, or lacks the
+required immutability or same-state branch-head record, then $L$ does
 not instantiate those claims, and the package falls back to exact supplemental
 inclusion or to the local/path-verified reading.  The present source package
 does not assert that the displayed public coordinate already satisfies these
@@ -6229,20 +6236,22 @@ reviewer can compare a candidate public surface against the finite table in
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
 
 Assume first that all listed files are present at $L$ with the displayed relative
-paths and digests.  Then every manuscript reference to a theorem-inventory or
+paths and digests, and that $L$ is pinned by an immutable identifier or by a
+same-state branch-head byte-equality record.  Then every manuscript reference to a theorem-inventory or
 bundle-local certificate file denotes the same byte string at $L$ as in the exact
-support tuple.  The manifest identity, file-list, content-hash, and path-semantics
+support tuple, with no later branch movement hidden inside the locator.  The manifest identity, file-list, content-hash, and path-semantics
 requirements of Audit record~\ref{audit:review-bundle-archive-equivalence} are
 therefore satisfied, while Theorem~\ref{thm:exact-inclusion-support-surface-realization}
 proves that those same bytes are sufficient for the stated path-verified evidence
 level.  Thus $L$ realizes the archive-equivalent branch of
 Corollary~\ref{cor:upload-or-archive-instantiation-record}.
 
-Conversely, suppose a named file is missing, moved, or digest-mismatched at $L$.
-Then at least one of the finite tests in
+Conversely, suppose a named file is missing, moved, digest-mismatched, or not tied
+to the same final support state by an immutable identifier or refreshed
+branch-head record.  Then at least one of the finite tests in
 Audit record~\ref{audit:review-bundle-archive-equivalence} fails: the file-list
 row fails for absence, the path-semantics row fails for a move, or the hash row
-fails for byte mismatch.  The failed row is a finite bad subrecord, so
+fails for byte mismatch or mutable-state ambiguity.  The failed row is a finite bad subrecord, so
 Theorem~\ref{thm:support-surface-normal-form} rejects the archive-equivalent
 reading.  No DOI, venue-upload receipt, Lean rebuild, daemon execution, or
 artifact-validation fact follows from the locator comparison, so the only
@@ -6250,7 +6259,8 @@ remaining readings are exact supplemental inclusion when supplied, or the local
 path-verified reading already classified above.
 
 Finally, the current package contains no finite byte-equality record witnessing
-that the public coordinate has passed the displayed comparison.  By
+that the public coordinate has passed the displayed comparison at a pinned commit
+or refreshed branch head.  By
 Theorem~\ref{thm:finite-coordinate-determination-boundary}, such a witness cannot
 be inferred from the local manifest, bibliography entry, or branch/path name
 alone.  Hence this theorem is an archive-equivalence criterion rather than a
@@ -6661,18 +6671,21 @@ exactly the same finite-record content.
 \begin{theorem}[Upload instantiation boundary]
 \label{thm:upload-or-archive-instantiation-boundary}
 Before the bundle-backed claims of this supplement are treated as part of a
-completed venue submission, the external submission record must instantiate the
+completed venue submission, the external submission record must instantiate one
 support-surface branch selected by
 Proposition~\ref{prop:final-package-shape-convention} and
 Theorems~\ref{thm:final-support-surface-closure} and
-\ref{thm:support-surface-normal-form}: it must record that
+\ref{thm:support-surface-normal-form}.  Either it must record that
 \path{review_bundle/} was uploaded exactly with digest manifest $D_0$ and with
 the root \path{theorem_inventory.json} coordinate named by the manifest and
-ledger.  The TeX source and the local digest manifest select that exact-inclusion
-branch but do not constitute a venue upload receipt.  In the present source
-package no such external receipt is recorded; consequently all bundle-backed
-claims are proved only as conditional source-level support claims until the
-missing external exact-inclusion record is supplied.
+ledger, or it must record an archive-equivalent locator satisfying
+Theorem~\ref{thm:public-branch-archive-equivalent-realization}.  The TeX source
+and the local digest manifest select those admissible branches but do not
+constitute a venue upload receipt or a public byte-equality locator.  In the
+present source package no exact-upload receipt and no final-state public
+byte-equality locator is recorded; consequently all bundle-backed claims are
+proved only as conditional source-level support claims until one of the two
+external instantiation records is supplied.
 \end{theorem}
 
 \begin{proof}
@@ -6682,12 +6695,14 @@ claims for this package are admissible in either the exact-directory branch or
 the public branch/path archive-equivalent branch, subject in both cases to the
 same final digest rows.  Audit record~\ref{prop:exact-review-bundle-upload-witness}
 and Audit record~\ref{prop:final-immutable-package-state-certificate} give the
-same support tuple and explicitly exclude a DOI or venue-upload receipt.  Those
-source records determine what must be submitted or publicly located, but they are
-produced before the venue's upload action.  Hence a completed submission needs
-one additional external instantiation record: either the venue or packager records
-the exact supplemental directory upload with the final digest manifest, or the
-public branch/path coordinate contains the matching digest-identified tuple.
+same support tuple and explicitly exclude a DOI, venue-upload receipt, and
+final-state public byte-equality record.  Those source records determine what
+must be submitted or publicly located, but they are produced before the venue's
+upload action.  Hence a completed submission needs one additional external
+instantiation record: either the venue or packager records the exact supplemental
+directory upload with the final digest manifest, or the public branch/path
+coordinate is checked at a pinned commit or refreshed branch head and contains
+the matching digest-identified tuple.
 Without one of those records, the statements proved above remain conditional
 source-level support claims rather than a proof that an external support action
 has occurred.  Therefore
