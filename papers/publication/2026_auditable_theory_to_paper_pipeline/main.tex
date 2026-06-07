@@ -594,8 +594,7 @@ follows: the source commit is
 the finite comparison script is
 \path{review_bundle/verify_source_interface_record.py}; the recorded successful
 comparison log is \path{review_bundle/source_interface_verification_run.log};
-the byte count recorded for the source and snapshot is 20746; the recorded
-SHA-256 digest checked by the script is
+the recorded SHA-256 digest checked by the script is
 \path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2};
 the recorded snapshot length is 498 lines; for each of the sixteen line ranges in
 \path{source_interface_record.json}, the corresponding imported label is recorded
@@ -622,18 +621,17 @@ parses the sixteen rows of Table~\ref{tab:source-interface-record} from this sou
 loads \path{source_interface_record.json}, loads the
 \path{pinned_source_snapshot} object of
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and computes the SHA-256 digest
-line count, and byte count of the bundled snapshot.  It then checks seven finite conditions:
+and line count of the bundled snapshot.  It then checks seven finite conditions:
 the ordered manuscript rows are the ordered JSON records; the JSON source path
 and commit equal the manifest's original path and commit; the ordered JSON line
 ranges equal the manifest's \path{line_ranges_used}; the computed digest equals
-the manifest digest; the computed line count equals the manifest line count; the
-computed byte count equals the manifest byte count; and for each declared range,
+the manifest digest; the computed line count equals the manifest line count; and for each declared range,
 the corresponding \path{\label{...}} token occurs inside that inclusive snapshot
 interval.
 
 The recorded run in \path{review_bundle/source_interface_verification_run.log}
 has status \path{pass}.  Its counts are sixteen manuscript table rows, sixteen JSON
-records, sixteen manifest ranges, snapshot line count 498, snapshot byte count 20746, and digest
+records, sixteen manifest ranges, snapshot line count 498, and digest
 \path{a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2}.  Its
 \path{imported_newmath_source_commit} field is the external source commit
 \path{3fb3d6a0641767388a401883062aa522ea0b397b}; its
@@ -651,6 +649,71 @@ source theorem text.  The exact source text remains available only as the bundle
 snapshot at the displayed line ranges.  Thus the executable comparison strengthens
 the earlier manual audit into a reproducible equality-and-containment certificate
 while preserving the bounded-paraphrase and non-semantic boundary.\end{proof}
+
+\begin{theorem}[Bounded source-interface maximality]
+\label{thm:bounded-source-interface-maximality}
+Let $I_{\rm man}$ be the manual imported-source interface of
+Lemma~\ref{lem:source-interface-extraction-correctness}, and let $I_{\rm exe}$
+be the executable finite comparison of
+Proposition~\ref{prop:source-interface-record-file-consistency}.  In the
+finite-record safety interface of Theorem~\ref{thm:publication-safety-interface},
+the strongest imported discovery-gate premise available from
+$I_{\rm man}$ together with $I_{\rm exe}$ is exactly the following finite
+certificate:
+\begin{enumerate}
+\item the imported source path and pinned source commit;
+\item the sixteen ordered labels, line ranges, extraction date, and bounded
+statement summaries in Table~\ref{tab:source-interface-record};
+\item equality of those ordered triples with \path{source_interface_record.json};
+\item agreement with the review-bundle manifest on source path, source commit,
+line ranges, snapshot digest, and snapshot line count; and
+\item containment of each imported label token in its declared bundled-snapshot
+line interval.
+\end{enumerate}
+Consequently every accepted use of an imported discovery-gate label in the main
+theorem chain, in particular in Theorem~\ref{thm:publication-safety-interface},
+factors through this finite certificate.  Any reading that imports the exact
+source theorem statements, asserts semantic truth of the imported theorems,
+performs a BEDC or Lean rebuild, proves axiom purity, or certifies source-theory
+completeness is a properly stronger reading and is rejected unless the submitted
+surface is enlarged by the corresponding finite source-statement, command-run,
+formal-build, axiom-audit, or semantic-check coordinate and by its assigned pass
+records.
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:source-interface-extraction-correctness} supplies exactly the
+manual finite fields in (1) and (2), and it states that the row summaries are
+bounded paraphrases rather than replacements for the full source statements.
+Proposition~\ref{prop:source-interface-record-file-consistency} supplies exactly
+the executable finite fields in (3)--(5): the script compares the manuscript
+table, JSON mirror, bundle manifest, digest, line count, and labelled intervals
+and reports a finite bad subrecord on any failed comparison.  These two records
+therefore have the displayed union as their complete positive content.
+
+The verifier used in Theorem~\ref{thm:publication-safety-interface} can read only
+submitted finite coordinates.  By Proposition~\ref{prop:manual-source-interface-non-escalation},
+Proposition~\ref{prop:source-interface-evidence-level-separation}, and
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, two review states
+that agree on the displayed finite certificate but differ in an unsubmitted
+source checkout, proof-assistant state, axiom audit, semantic extractor, or build
+log are indistinguishable to the imported-source component of the certificate
+constructor.  Hence every accepted imported-label premise in the theorem chain
+factors through the displayed certificate.
+
+Each excluded reading strictly adds a finite coordinate in the preorder of
+Definition~\ref{def:stronger-reading-preorder}: exact source-statement import
+adds a source-text evidence coordinate; BEDC or Lean rebuilding adds a formal
+source or command-run coordinate; axiom purity adds an audit coordinate and pass
+row; and semantic source-theorem validation adds a semantic-check coordinate.
+The finite extension-budget normal form,
+Theorem~\ref{thm:finite-extension-budget-normal-form}, accepts such a stronger
+reading exactly when those added coordinates and pass records are present.
+When they are absent, Theorem~\ref{thm:finite-certificate-obstruction-skeleton}
+classifies the missing coordinate as a finite bad subrecord.  Thus the displayed
+certificate is maximal for the submitted source-interface surface while remaining
+strictly bounded to record equality and label containment.
+\end{proof}
 
 \begin{proposition}[Source-interface evidence-level separation]
 \label{prop:source-interface-evidence-level-separation}
@@ -6856,6 +6919,66 @@ point needed by the scope contract---deterministic environment-label coverage---
 and no stronger than that.  The semantic and implementation boundaries remain
 those of Theorem~\ref{thm:publication-safety-interface} and
 Corollary~\ref{cor:finite-record-gate-soundness-boundary}.
+\end{proof}
+
+\begin{theorem}[Extractor-domain exactness and non-gluing]
+\label{thm:extractor-domain-exactness-non-gluing}
+For the submitted theorem-inventory surface, the command
+\path{python review_bundle/extract_theorem_environments.py} is exact for one
+domain and impossible to glue beyond that domain without an added finite
+coordinate.  Its exact domain is the syntactic label-coverage predicate on
+\[
+\mathcal E=\{\texttt{definition},\texttt{lemma},\texttt{proposition},
+\texttt{theorem},\texttt{corollary}\}.
+\]
+An exit-code-zero run proves precisely that the source has no unlabelled
+environment in $\mathcal E$, no duplicate label among those environments, and no
+labelled environment in $\mathcal E$ omitted from \path{theorem_inventory.json}.
+It proves no audit-record coverage, statement-semantics coverage,
+proof-correctness coverage, Lean/BEDC rebuild, artifact validation, daemon run,
+or venue-state fact.  Any manuscript reading that adds one of those conclusions
+is a properly stronger reading of the theorem-inventory coordinate and is
+accepted only after the submitted surface adds the corresponding parser domain,
+semantic checker, proof checker, build log, artifact log, daemon log, or venue
+record with assigned pass rows.
+\end{theorem}
+
+\begin{proof}
+The script definition fixes the domain: its \path{THEOREM_ENVS} tuple contains
+exactly the five displayed names, and its begin-pattern is built from that tuple.
+The extraction loop records only occurrences of those begins in \path{main.tex},
+then searches within the matched environment for the first \path{\label{...}}
+token.  The inventory side reads only label strings from
+\path{theorem_inventory.json}.  Thus the finite predicate computed by the script
+has exactly three positive clauses: every detected environment in $\mathcal E$
+has a label, the detected labels are not duplicated, and the detected label set
+is contained in the inventory label set.  Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}
+therefore gives exactness on this syntactic domain.
+
+Each proposed extension reads a coordinate absent from that computation.  Audit
+records use a different LaTeX environment counter and are not in $\mathcal E$;
+statement semantics would require a parser and meaning relation for theorem
+bodies; proof correctness would require a proof checker or a formal build;
+Lean/BEDC rebuilding, artifact validation, daemon execution, and venue state each
+require their own command, source state, environment, exit code, and log or
+external record.  Two package states can agree on \path{main.tex} labels in
+$\mathcal E$ and on \path{theorem_inventory.json} while differing in any of
+those absent coordinates.  By Theorem~\ref{thm:finite-coordinate-determination-boundary},
+the extractor's accepted finite record cannot determine such a stronger fact.
+
+Finally, in the stronger-reading preorder of
+Definition~\ref{def:stronger-reading-preorder}, adding any of the excluded
+conclusions enlarges the claim-kind, evidence-surface, command-boundary, or
+assigned-gate coordinate.  Theorem~\ref{thm:finite-extension-budget-normal-form}
+then supplies the positive direction: once the enlarged parser domain, semantic
+checker, proof checker, build log, artifact log, daemon log, or venue record and
+its pass rows are included, that stronger coordinate may be checked by the
+finite interface.  Without those additions,
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns the missing
+coordinate as a finite bad subrecord.  Hence the extractor is exact and maximal
+for syntactic label coverage over $\mathcal E$, and it cannot be glued into any
+semantic, auditrecord, implementation, artifact, daemon, or venue certificate by
+prose alone.
 \end{proof}
 
 \begin{theorem}[Theorem-inventory boundary]
