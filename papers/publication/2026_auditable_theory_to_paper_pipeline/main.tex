@@ -43,8 +43,8 @@ the finite publication certificates checked by the package verifier from recorde
 gate-passage entries and explicitly submitted review surfaces; its safety claim is
 deliberately certificate-level and finite-record only.  It proves neither Lean builds,
 daemon behaviour, artifact semantics, nor venue acceptance.  The current package
-then proves schema-relative finite-record certificate exactness for its six-row, path-verified
-instantiation, while rejecting stronger readings such as external gate
+then proves schema-relative finite-record certificate exactness for its six-row,
+path-verified instantiation only, while rejecting stronger readings such as external gate
 implementation soundness, proof-assistant correctness, artifact semantic validity,
 current execution of every gate, or venue acceptance.  Four case
 studies illustrate the gates at the path-verified historical-snapshot level: intake
@@ -119,7 +119,8 @@ overclaim skeleton and finite-budget lower bound),
 Theorem~\ref{thm:current-boundary-skeleton-non-gluing} (the current package's
 non-gluing lower bound for the five over-readings),
 Theorem~\ref{thm:current-package-certificate-exactness} (the current package's
-schema-relative finite-record instance), and
+schema-relative finite-record instance, not semantic validation of all package
+prose or artifacts), and
 Theorem~\ref{thm:current-package-extension-coordinate-rigidity} (the exact
 absence of current implementation-soundness, fresh-rerun, artifact-semantic, and
 venue coordinates), and
@@ -1909,7 +1910,7 @@ the seven atomic gate interfaces.  Thus one component's gate passage cannot be
 substituted for another component's missing assigned pass rows in a mixed
 load-bearing claim.\end{proof}
 
-\begin{theorem}[Concrete finite-script projection-contract exactness]
+\begin{theorem}[Concrete finite-script projection-contract boundary]
 \label{thm:concrete-finite-script-implementation-soundness}
 Let $S$ be the submitted support surface containing
 \path{review_bundle/certificate_schema.json},
@@ -2274,6 +2275,73 @@ unread fields leaves an inclusion-minimal bad subrecord.  Hence a stronger
 reading is accepted exactly when its finite extension budget is paid in submitted
 coordinates, and otherwise remains outside the original certificate.\end{proof}
 
+\begin{proposition}[Dependency normal form for the publication-safety chain]
+\label{prop:publication-safety-dependency-normal-form}
+Let $c$ be a load-bearing claim whose certificate
+\(\mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)\) is constructed by
+the finite schema verifier from the submitted surface $S$, ledger $L$, and
+dispatch table $\Gamma$.  Then every use of the publication-safety interface in
+the main theorem chain factors through the following ordered dependency graph:
+\begin{enumerate}
+\item \emph{construction and schema-relative exactness}: the tuple
+\((K,\ell,E,H,R,D,B)\) is formed from submitted finite records and is accepted
+exactly when clauses A1--A6 of
+Definition~\ref{def:certificate-schema-acceptance-table} hold, as proved by
+Theorems~\ref{thm:verifier-input-output-contract} and
+\ref{thm:record-acceptance-exactness};
+\item \emph{extension-budget necessity and sufficiency}: for any genuinely
+stronger reading $c^{+}$ that is not record-equivalent to $c$, acceptance of
+$c^{+}$ is equivalent to the presence of the finite extension record
+\(\Delta(c,c^{+})=(\Delta K,\Delta E,\Delta H,\Delta R,\Delta D,\Delta B)\) of
+Theorem~\ref{thm:finite-extension-budget-normal-form}; and
+\item \emph{maximality}: if the required nonempty extension coordinates are
+absent, the original certificate remains accepted for $c$ and is maximal below
+$c^{+}$ on the submitted finite surface, while $c^{+}$ is rejected by a finite
+bad subrecord as in Proposition~\ref{prop:publication-safety-maximality}.
+\end{enumerate}
+Consequently the sharp ``if and only if'' and maximality language in
+Theorem~\ref{thm:publication-safety-interface} is only the composite of these
+three finite-record statements.  It is not a separate semantic assertion about
+gate implementations, Lean/BEDC source truth, artifact behaviour, daemon runs, or
+venue acceptance.
+\end{proposition}
+
+\begin{proof}
+The first dependency is the construction part.  By
+Theorem~\ref{thm:verifier-input-output-contract}, the verifier input consists
+only of the submitted finite certificate fields, and its predicates are exactly
+the six checks A1--A6.  The schema-relative exactness theorem,
+Theorem~\ref{thm:record-acceptance-exactness}, proves the biconditional between
+passing those checks and satisfying the record-acceptance semantics for the
+dispatch table $\Gamma$.  Thus the publication-safety theorem can construct no
+certificate other than the tuple read from the finite surface, and acceptance of
+that tuple is exact only relative to the printed schema.
+
+For the second dependency, let $c^{+}$ be a genuinely stronger reading.  If it is
+accepted, then it cannot be record-equivalent to $c$, so
+Theorem~\ref{thm:finite-coordinate-determination-boundary} supplies at least one
+changed finite verifier coordinate.  Collecting the changed kind, evidence,
+human-boundary, gate, discovery, and command-boundary coordinates gives exactly
+the six-component extension record of
+Theorem~\ref{thm:finite-extension-budget-normal-form}.  Conversely, if that
+extension record is present and its assigned gates pass, the enlarged tuple
+satisfies the corresponding clauses A1--A6, so schema-relative exactness accepts
+the stronger reading.  This proves both necessity and sufficiency of the
+extension budget.
+
+The maximality dependency is then immediate.  If a genuine stronger reading has
+no paid extension coordinate, the construction and exactness dependency still
+accepts the original tuple for $c$, while the extension-budget theorem says that
+some required finite coordinate for $c^{+}$ is missing.  The obstruction skeleton
+therefore returns the first failed finite field as a bad subrecord.  This is
+precisely the maximality assertion: the accepted record is largest among the
+finite consequences supported by the submitted tuple, but it does not cross into
+any stronger reading whose extension budget is unpaid.  Since all three steps
+quantify only over the verifier's finite coordinates, their composite cannot
+certify external semantic or implementation facts that are not among those
+coordinates.
+\end{proof}
+
 \begin{proposition}[Gate-interface separation]
 \label{prop:gate-interface-separation}
 The promotion, overlap, submission-state, and theorem-content delta gates are
@@ -2543,9 +2611,12 @@ coordinates and those records pass the assigned gates.  If those coordinates are
 absent, the accepted certificate is maximal below $c^{+}$: it still accepts $c$
 and rejects the stronger reading by a finite bad subrecord.
 
-The maximality of this constructed certificate is stated separately in
-Proposition~\ref{prop:publication-safety-maximality}, and the exact finite price
-of any genuine strengthening is classified by
+The dependency order for this sharpness assertion is made explicit in
+Proposition~\ref{prop:publication-safety-dependency-normal-form}: construction
+and schema-relative exactness first, extension-budget necessity and sufficiency
+second, and maximality third.  The maximality of this constructed certificate is
+stated separately in Proposition~\ref{prop:publication-safety-maximality}, and
+the exact finite price of any genuine strengthening is classified by
 Theorem~\ref{thm:finite-extension-budget-normal-form}; the current-package
 instantiation is stated separately in
 Corollary~\ref{cor:publication-safety-current-package-instance} and refined by
@@ -3404,7 +3475,9 @@ preorder has not distinguished \(c^{+}\) from \(c\).\end{proof}
 \label{prop:publication-safety-maximality}
 Under the hypotheses of Theorem~\ref{thm:publication-safety-interface}, the
 constructed certificate is maximal with respect to the finite submitted record
-surface.  More precisely, let $c$ be an accepted load-bearing claim and let
+surface, in the dependency order isolated in
+Proposition~\ref{prop:publication-safety-dependency-normal-form}.  More
+precisely, let $c$ be an accepted load-bearing claim and let
 $\mathsf{Cert}_{\Gamma}(c)=(K,\ell,E,H,R,D,B)$ be the certificate constructed in
 that theorem.  If a stronger reading $c^{+}$ asserts any external end-to-end
 compiler correctness, current execution of unrecorded gates, proof-assistant
