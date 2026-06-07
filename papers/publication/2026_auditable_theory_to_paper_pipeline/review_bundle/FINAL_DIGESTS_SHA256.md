@@ -4,15 +4,15 @@ Support mode: conditional exact supplemental inclusion of `source_interface_reco
 
 | SHA-256 | Relative path |
 |---|---|
-| `36d4456a1068275965d96ad8d86a8e5524551ab0400cfeb3ab3968f8a3a43549` | `main.tex` |
+| `80f79aa36a58237d85452d606e25e46eef979ec715140c1aa86f47259c95b6b4` | `main.tex` |
 | `14c6d9880a85b8069ce2cb93cb91750f2ea4acabd3aff1a3c2a4d9e6af84d32d` | `research_directive.md` |
 | `dde111ed8a82a87f1d49851d4095971f9e267be86f12013c998f9f151bbd9198` | `scope_contract.md` |
 | `9897b3e89b1256e7c2d0454b14ca953f0d4a0886d522edff8549dce66554617a` | `scope_contract.json` |
 | `dfe23f1c25e8b66bd3fe53e7df06990a540dd8f82af3926a040ef43be4237342` | `VENUE_CHECK.md` |
 | `7914f9490d4073a11b0d11c0ea47dd353ce07d90eefbc580a0d98c3b3e32f1f3` | `submission_abstract.tex` |
 | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` | `source_interface_record.json` |
-| `c1cebe881547e082daee454f2f1129ed5e3da875f23d888f28d41ab776930457` | `theorem_inventory.json` |
-| `fd5c3de34173064c313fb381952d4b054fc2169f150d0ee2645cece7410251be` | `theorem_inventory.md` |
+| `7901a604401ccae85a96ee48c697d472da6923cc7d92eb4c95e81970d1ec379f` | `theorem_inventory.json` |
+| `af41972af8766ac1b8da0b5e76c23478b8bbc34b3e5a7cb1ef4b84ad006cdff4` | `theorem_inventory.md` |
 | `d4e1e3494ec7b171e85d0c4263acbad125c211c3c4ff8bf7e4e67036cc8fcd8b` | `review_bundle/case_snapshots/fake_extension_artifact_inventory.md` |
 | `663bb1fdce29ea87495bdf1f6b03a17d5f433a50d5e069ec02a93742986a4d42` | `review_bundle/case_snapshots/fake_extension_phase_d_lint.py` |
 | `121a1e55a13cda7e2193c1fcd849b4950a8f3edd61be739a1de193a0e753222b` | `review_bundle/case_snapshots/newmath_intake_seed_directory_manifest.json` |
@@ -27,11 +27,9 @@ Support mode: conditional exact supplemental inclusion of `source_interface_reco
 | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` |
 | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` |
 | `c3c3d78631a192564863eb5b4b3778dbc98651fd597a475063db94e099ec0441` | `review_bundle/certificate_schema.json` |
-| `2db4a6481117ede119c96cbe56c119eac71a581d1850fff71fd929680aff374c` | `review_bundle/certificate_verification_run.log` |
+| `cccc793706d27f49bdeacc796b3e3109dfb321132b08c4a294d639ca287ac5d7` | `review_bundle/certificate_verification_run.log` |
 | `2ffeee544750876cb7a935d9f4c86591e5827f2e064c882530ad525a48f9abe2` | `review_bundle/current_package_pass_records.json` |
 | `866dd40afb12a8a3ee4b73bceedc7d6d3b0e9e57a7a4a8033293275e2421d653` | `review_bundle/extract_theorem_environments.py` |
-| `6cf8009b36e20200930e186b5efa6200b85351bb6663e08210c471241f1cd5b5` | `review_bundle/final_digest_generation_run.log` |
-| `cbf069251239ae7aa7f4975434c7267f091879c02f80b2dec5b35d379a6e3589` | `review_bundle/FINAL_DIGESTS_SHA256.md` |
 | `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` | `review_bundle/negative_certificate_record_example.json` |
 | `74dbf7a0db63491bb3d177ca9787cce30f64de45f8db1bb59bf25a9a3b0b315c` | `review_bundle/negative_certificate_record_example_run.md` |
 | `8c6c08b9d587bcdc7a22c2ebea6b931944cb1def9ded6ee209efcafd264909bd` | `review_bundle/primary_claim_inventory.json` |
@@ -39,13 +37,13 @@ Support mode: conditional exact supplemental inclusion of `source_interface_reco
 | `5f5e69e8ba5c6ee4dbfaf651ab7e22776478bc84406aae435e3c62acd6271790` | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` |
 | `c491420049e422046e3fc16d652d522be3f206905c490f868c856569dcae744a` | `review_bundle/primary_claim_inventory_freshness_2026-06-05.log` |
 | `8b80ca39c582ae82dd26cc73cefcb040d2db569d03a47b9afb917384e05673f2` | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` |
-| `455896abf1fa16c738e75b7acda987849db165b67c0d4ca7f35b4ac5fa8d3b41` | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` |
+| `b8ccd63f92b729a6758b073d53deb1425762cf561646a000d9e2ecff371a5313` | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
 | `07380ed97454b98d78d85e7812fd70f0e22ecc7e93c2fb159396e706a1ce49e8` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
-| `054ba06624bc8c57b15bcfc67298c15a3fa05efcc7b8347839ee48143b40cbdf` | `review_bundle/source_interface_verification_run.log` |
+| `18cb668557bbdae698dadd7e883bd54484d4cb31274e4b26b8c5aac973f5d850` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
-| `db6152614e7aea46b680cd42632cd4db60c7905add518c9384ade73333c7072a` | `review_bundle/theorem_environment_extraction_run.log` |
+| `32d0a97fa40ed90100521f9a7361b3b8a46fafdcb63a78797b0ad57b908f714a` | `review_bundle/theorem_environment_extraction_run.log` |
 | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` |
 | `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` |
 | `30c09435296824baece3936fc4e27893058debe4b1a4828bddda18ed8d35ea7d` | `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06.log` |
