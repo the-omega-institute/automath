@@ -97,7 +97,9 @@ Definition~\ref{def:certificate-schema-acceptance-table} (the six finite
 acceptance predicates), Theorems~\ref{thm:verifier-input-output-contract},
 \ref{thm:record-acceptance-exactness}, and
 \ref{thm:finite-coordinate-determination-boundary} (schema-projection exactness
-and non-escalation), Theorem~\ref{thm:publication-safety-interface} (finite
+and non-escalation), Theorem~\ref{thm:record-interface-rigidity} (the typed
+record-interface rigidity and refresh fixed-point criterion),
+Theorem~\ref{thm:publication-safety-interface} (finite
 publication-certificate invariants from explicitly supplied record-gate
 soundness), Theorem~\ref{thm:external-interface-projection-no-free-upgrade} (the
 projection theorem showing that implementation soundness is a separate stronger
@@ -715,6 +717,9 @@ Theorems~\ref{thm:verifier-input-output-contract},
 \ref{thm:record-acceptance-exactness}, and
 \ref{thm:finite-coordinate-determination-boundary} prove verifier exactness and
 non-escalation from those predicates;
+Theorem~\ref{thm:record-interface-rigidity} gives the record-interface rigidity
+and fixed-point refresh criterion that turns these finite projections into a
+typed interface specification rather than a count of unpacking lemmas;
 Theorem~\ref{thm:publication-safety-interface} constructs finite publication
 certificates under record-gate soundness; and
 Theorem~\ref{thm:current-package-certificate-exactness} specializes the calculus
@@ -1418,6 +1423,106 @@ make those rows available, truthfully produced, or semantically adequate.
 Theorem~\ref{thm:publication-safety-interface} therefore states record-gate
 soundness as an explicit hypothesis, and the trust boundary is exactly the finite
 projection $F_{\Gamma}$ plus that hypothesis.
+\end{proof}
+
+\begin{theorem}[Record-interface rigidity and refresh fixed point]
+\label{thm:record-interface-rigidity}
+Fix a package $P$, submitted support surface $S$, finite ledger $L$, dispatch
+table $\Gamma$, and certificate tuple
+$\mathcal C(c)=(K,\ell,E,H,R,D,B)$ for each accepted load-bearing claim
+$c\in L$.  Let $\pi_{\Gamma,S}(P,L)$ be the finite projection consisting of the
+tuple fields $(K,\ell,E,H,R,D,B)$, the gate-pass rows in $R$, the submitted
+support-surface membership relation for $S$, and the fixed dispatch table
+$\Gamma$.  Then the following are equivalent.
+\begin{enumerate}
+\item The ledger satisfies the external record-gate interface
+\(\mathsf{RGS}_{S}(P,L,\Gamma)\) and the verifier accepts every displayed
+certificate.
+\item The finite projection $\pi_{\Gamma,S}(P,L)$ is a fixed point of the six
+schema checks: re-reading the projected rows, evidence pointers, gate assignments,
+promotion field, discovery field, and command-boundary field reconstructs the
+same family of certificates and produces no new accepted coordinate.
+\end{enumerate}
+Moreover this fixed point is rigid.  Any proper stronger reading of an accepted
+claim---including gate-implementation soundness, fresh command rerun success,
+artifact-semantic validity, semantic theorem-inventory completeness, upload
+status, or venue acceptance---is accepted by the same interface if and only if it
+adds a nonempty finite extension coordinate to
+$(K,\ell,E,H,R,D,B)$ or to $R$ and the enlarged projection again satisfies the
+fixed-point condition.  In particular, after a submitted support file used by the
+projection is regenerated, the current-package finite-record claim is restored
+only by the finite refresh sequence that regenerates the dependent theorem
+environment inventory, certificate-verifier log, source-interface-verifier log,
+primary-claim verifier log, and final digest surface so that all paths and digest
+rows are again read from one common projection.  Without that common projection,
+the TeX theorem chain retains only its source-level statements and not a
+machine-readable current-package exactness claim.
+\end{theorem}
+
+\begin{proof}
+Assume first that \(\mathsf{RGS}_{S}(P,L,\Gamma)\) holds and that every displayed
+certificate is accepted.  By
+Proposition~\ref{prop:record-gate-soundness-external-interface-exactness}, the
+interface supplies exactly the certificates whose evidence surfaces lie in $S$,
+whose assigned gate rows are present and passing, whose evidence pointers denote
+submitted elements at the recorded evidence level, and whose promotion,
+discovery, and command-boundary fields satisfy the verifier predicates.  Applying
+Theorem~\ref{thm:record-acceptance-exactness} to each row identifies this with
+the six-clause relation $\mathsf{Acc}_{\Gamma}$.  Hence re-reading precisely the
+fields in $\pi_{\Gamma,S}(P,L)$ repeats the same six checks and returns the same
+certificate family; no seventh field or stronger coordinate is read by any check.
+This is the stated fixed point.
+
+Conversely suppose the finite projection is such a fixed point.  The fixed-point
+condition states, field by field, that the kind and evidence-level fields pass
+the domain check, that every evidence pointer lies on $S$, that every assigned
+gate in $\bigcup_{k\in K}\Gamma(k)$ has a passing row in $R$, that the promotion
+coordinate is present exactly when required, and that the discovery and
+command-boundary coordinates satisfy the presence conditions of $P_5$ and $P_6$.
+These are exactly the positive-output clauses of
+Definition~\ref{def:record-gate-soundness-external-interface}.  Therefore
+\(\mathsf{RGS}_{S}(P,L,\Gamma)\) holds, and
+Theorem~\ref{thm:record-acceptance-exactness} gives verifier acceptance for the
+same displayed certificates.
+
+It remains to prove rigidity.  Let $c^{+}$ be a proper stronger reading of an
+accepted claim.  By Definition~\ref{def:stronger-reading-preorder}, being proper
+means that at least one of the finite coordinates $K$, $\ell$, $E$, $H$, $R$,
+$D$, or $B$ is strictly enlarged.  If the enlarged tuple and any added pass rows
+again satisfy the six schema checks, the preceding equivalence applied to the
+enlarged projection accepts $c^{+}$.  Conversely, if $c^{+}$ is accepted by the
+same finite interface, Theorem~\ref{thm:finite-coordinate-determination-boundary}
+forces the acceptance decision to be determined by a finite coordinate read by
+the verifier.  Since $c^{+}$ is not record-equivalent to $c$, at least one such
+coordinate is new or strictly enlarged; otherwise the two readings would have the
+same projection and hence the same bounded certificate meaning.  Thus every
+proper stronger reading has positive finite extension budget and no stronger
+reading is obtained for free from the original fixed point.
+
+The listed examples are exactly instances of this coordinate test.  Gate
+implementation soundness requires implementation source, specification,
+environment, command or implementation-gate records, and logs.  Fresh rerun
+success requires command, source state, environment, exit code, and log path.
+Artifact-semantic validity requires an artifact-semantic evidence surface or
+evaluator pass row.  Semantic theorem-inventory completeness requires an
+extractor command, source-to-inventory binding, produced inventory, and pass row.
+Upload and venue readings require external route, submission, or decision
+records.  None is among the old projection unless it is explicitly added.
+
+Finally suppose a file on the submitted support surface is regenerated.  The
+membership and digest facts read by $P_2$, the pass-row facts read by $P_3$, and
+the command-boundary facts read by $P_6$ then refer to a changed byte coordinate.
+The fixed-point implication can be applied again only after the finite surfaces
+that mirror that coordinate have been recomputed from the same bytes: the theorem
+environment extractor supplies the theorem-inventory coordinate, the certificate
+verifier supplies the schema-acceptance coordinate, the source-interface verifier
+supplies the imported-source coordinate, the primary-claim verifier supplies the
+retained-claim coordinate, and the final digest surface supplies the byte identity
+shared by the submitted support relation.  If one of these surfaces is stale, two
+ambient states can agree on the printed TeX prose while disagreeing on a byte
+coordinate read by the projection, so the machine-readable current-package
+exactness conclusion is not determined.  What remains is only the TeX-level
+statement already proved independently of that regenerated support surface.
 \end{proof}
 
 \begin{proposition}[Machine-readable certificate records]
@@ -2219,9 +2324,11 @@ soundness: without the finite predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ tying
 ledger entries to assigned passing rows and submitted evidence pointers, the
 theorem has no certificate constructor to apply.  The schema-relative exactness
 and finite-coordinate classifier of
-Theorems~\ref{thm:record-acceptance-exactness} and
-\ref{thm:finite-coordinate-determination-boundary} then ensure that the resulting
-certificate proves only the finite-record claim it records.
+Theorems~\ref{thm:record-acceptance-exactness},
+\ref{thm:finite-coordinate-determination-boundary}, and
+\ref{thm:record-interface-rigidity} then ensure that the resulting certificate
+proves only the finite-record claim it records and remains machine-readable only
+at a common refreshed support-surface fixed point.
 
 \begin{table}
 \caption{Dependency map for the finite publication-safety interface}
@@ -3677,7 +3784,11 @@ Theorem~\ref{thm:final-support-surface-closure}: the submitted supplemental
 material contains the exact \path{review_bundle/} directory with
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}, with refreshed digest rows and
 rerun finite-verifier logs for every named bundle coordinate regenerated after
-the digest surface was written.  With that support
+the digest surface was written.  Equivalently, in the sense of
+Theorem~\ref{thm:record-interface-rigidity}, the theorem-environment extractor,
+certificate verifier, source-interface verifier, primary-claim verifier, and
+final digest surface must be a common finite support-surface fixed point after
+any regenerated inventory, log, or digest coordinate.  With that support
 surface present, the six ledger entries $a_1,\ldots,a_6$ as printed in
 Tables~\ref{tab:current-acceptance-ledger} and~\ref{tab:current-certificate-ledger}
 and as checked by \path{review_bundle/certificate_verification_run.log} are
@@ -3711,8 +3822,10 @@ the finite obstruction skeleton and, more sharply, by the positive extension-bud
 criterion of Theorem~\ref{thm:finite-extension-budget-normal-form}.  The exactness
 is therefore row-frozen, finite-record, and verifier-log bounded: editing any of
 the six rows or any machine-readable mirror changes the finite package unless the
-certificate verifier is rerun and the displayed tables and log are updated
-together.
+dependent extractor, verifier logs, and digest surface are rerun or regenerated
+into the common fixed point required by
+Theorem~\ref{thm:record-interface-rigidity}, and the displayed tables and logs
+are updated together.
 \end{theorem}
 
 \begin{proof}
