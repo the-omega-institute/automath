@@ -1,6 +1,6 @@
 ﻿# Venue/Bibliography Live Check Record (2026-06-07)
 
-This record summarizes `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log` for the finite venue/bibliography support surface of `main.tex`.
+This record summarizes `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log` for the finite venue/bibliography support surface of `main.tex`.  It is a dated local-readiness record only.  For any submission after 2026-06-07 Asia/Singapore, upload-time compliance requires either a fresh upload-time check or an explicit unchanged-rule statement tying the completed upload to the rule state observed in this record.
 
 ## Command Record
 
@@ -27,4 +27,4 @@ This record summarizes `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.l
 
 - Venue conclusion: CICM 2026 presentation-only route, EasyChair locator, and LNCS guideline page were checked as a dated local-readiness observation on 2026-06-07 Asia/Singapore; upload-time compliance still requires an actual upload-time or unchanged-rule record.
 - Bibliography conclusion: cited public literature, public source locator, and candidate automath support path were checked as reachable when available; local review-bundle entries remain conditional support notes until exact upload or final-state byte equality is recorded.
-- Boundary: this is a dated live route, locator, and bibliography check only; it is not venue acceptance, upload receipt, archive minting, Lean rebuild, daemon run, artifact rerun evidence, or public byte-equality certification.
+- Boundary: this is a dated live route, locator, and bibliography check only; it is not upload-time compliance by itself, venue acceptance, upload receipt, archive minting, Lean rebuild, daemon run, artifact rerun evidence, or public byte-equality certification.

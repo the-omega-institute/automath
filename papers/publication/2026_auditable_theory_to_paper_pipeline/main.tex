@@ -8023,7 +8023,10 @@ upgrade criterion.
 \textbf{Table \thetable. Command-boundary inventory for the current package.}
 \end{center}
 
-\noindent The command-run rows used below are the following finite records.
+\noindent The command-run rows used below are the following finite records.  A row
+whose source state says \path{current local automath checkout at the recorded
+package state} is read as the checkout and byte state written in the named log,
+not as an automatic assertion about later manuscript edits.
 \begin{enumerate}
 \item \textbf{Certificate-record verifier.} Command: \path{python review_bundle/verify_certificate_records.py}; source state: current local automath checkout at the recorded package state; environment: Python 3.10.11 on Windows 10 except for the PowerShell web check and digest wrapper where stated in the log; exit code: \path{0}; log path: \path{review_bundle/certificate_verification_run.log}; boundary: schema-level verification of the review-bundle records only; no Lean, daemon, or Rule110 rerun.
 \item \textbf{Source-interface record verifier.} Command: \path{python review_bundle/verify_source_interface_record.py}; source state: current local automath checkout at the recorded package state; environment: Python 3.10.11 on Windows 10 except for the PowerShell web check and digest wrapper where stated in the log; exit code: \path{0}; log path: \path{review_bundle/source_interface_verification_run.log}; boundary: finite table, JSON, manifest-range, label, digest, and line-count comparison only; no Lean rebuild or imported-source semantic validation.
@@ -8129,20 +8132,63 @@ external source-theorem semantics surfaces from being promoted by prose into
 fresh execution claims.
 \end{proof}
 
+\begin{theorem}[Post-edit rerun metadata gate]
+\label{thm:post-edit-rerun-metadata-gate}
+Let $I$ be the pair consisting of \path{theorem_inventory.json} and
+\path{theorem_inventory.md}, let $L$ be the tuple of retained extractor and
+finite-record verifier logs named in Table~\ref{tab:command-boundary-inventory},
+and let $D$ be \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  After any edit to
+\path{main.tex}, $I$, or a retained support record, a claim that the package has
+a post-inventory fixed point for the new bytes is accepted only if the submitted
+surface also contains, for each newly claimed rerun, its command, source commit
+or source-state description, environment, exit code, and log path, and if $D$ is
+regenerated after those logs exist.  If those metadata rows are absent, the same
+source text has only the conditional reading of
+Theorem~\ref{thm:post-inventory-package-fixed-point}: the fixed point is the
+finite coordinate that would be obtained by the ordered rerun, not a current-byte
+execution certificate for the edited package.
+\end{theorem}
+
+\begin{proof}
+The operational evidence interface,
+Definition~\ref{def:operational-acceptance-interface}, makes command-run status
+a finite coordinate: the command, source state, environment, exit code, and log
+path are part of the accepted record.  The digest-closure refresh criterion,
+Theorem~\ref{thm:digest-closure-refresh-criterion}, makes the byte digest another
+finite coordinate: after an inventory or support-record byte changes, the old
+digest row names the old byte string and cannot identify the edited state.
+
+The tuple $(I,L,D)$ is therefore ordered data, not a self-updating invariant.  If
+the edited package includes fresh rows for the extractor, the retained
+finite-record verifiers, any retained dated venue check, and the final digest
+generator, then Theorem~\ref{thm:post-inventory-package-fixed-point} applies to
+those rows and supplies the fixed point.  If one of the metadata fields or the
+post-log digest regeneration is missing, two packages can agree on the manuscript
+prose while differing on the command actually run, the source state used, the
+environment, the exit status, the log bytes, or the final digest bytes.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, the stronger
+current-byte rerun claim is then not determined by the submitted surface; the
+missing command or digest field is the finite bad subrecord.  What remains is
+only the conditional finite-record statement, namely that such a fixed point is
+available once the ordered rerun metadata and final digest coordinate are
+supplied.
+\end{proof}
+
 \begin{proposition}[Final four-interface maximality and support-state reconciliation]
 \label{prop:final-local-support-state-reconciliation}
-For the current source package, the finite support state used by the
-publication-safety theorem chain is the following reconciled local state and no
-stronger one.  First, the regenerated files \path{theorem_inventory.json} and
-\path{theorem_inventory.md} are accepted only through the refreshed SHA-256 rows
-in \path{review_bundle/FINAL_DIGESTS_SHA256.md} and through the finite verifier
-logs named in Proposition~\ref{prop:post-inventory-fixed-point-support-certificate}.
-Second, each command-run source state is the state recorded in the corresponding
-log row of Table~\ref{tab:command-boundary-inventory}; historical rows are not
-claims that every later editor checkout has the same Git \path{HEAD}.  Third,
-because the current source package records neither an upload receipt nor an
-archive-equivalent locator, bundle-backed support remains conditional on the
-external instantiation record of
+For the source package after the present manuscript edits, the finite support
+state used by the publication-safety theorem chain is the following reconciled
+local state and no stronger one.  First, the files
+\path{theorem_inventory.json} and \path{theorem_inventory.md} are accepted as a
+post-inventory fixed point only under the ordered metadata condition of
+Theorem~\ref{thm:post-edit-rerun-metadata-gate}; absent such post-edit rows, the
+fixed-point statements are conditional rerun criteria rather than current-byte
+execution certificates.  Second, each command-run source state is the state
+recorded in the corresponding log row of Table~\ref{tab:command-boundary-inventory};
+historical rows are not claims that every later editor checkout has the same Git
+\path{HEAD} or digest bytes.  Third, because the source package records neither
+an upload receipt nor an archive-equivalent locator, bundle-backed support
+remains conditional on the external instantiation record of
 Corollary~\ref{cor:upload-or-archive-instantiation-record}.
 
 Moreover the same finite state is maximal simultaneously for the four boundary

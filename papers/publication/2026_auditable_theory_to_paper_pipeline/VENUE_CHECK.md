@@ -1,7 +1,7 @@
 # Venue Check
 
 - historical check date: 2026-06-01
-- final near-submission verification date: 2026-06-04
+- latest local-readiness verification date: 2026-06-07 Asia/Singapore
 - venue: CICM 2026, 19th Conference on Intelligent Computer Mathematics
 - official page:
   `https://cicm-conference.org/2026/cicm.php?event=&menu=cfp`
@@ -35,14 +35,21 @@ submission form gives separate instructions.
 ## Final Verification Record
 
 The 2026-06-04 near-submission check verified the live CICM 2026 call page and
-the bibliography records used by `references.bib`.  The command-run record is
-`VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log`, mirrored in
-`review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log`.  The route remains suitable
-for the current paper as a CICM presentation-only / mathematical software
-workshop submission: the manuscript is framed as ongoing workflow and evidence
-architecture, not as a proceedings-length theorem-proving system paper.
+the bibliography records used by `references.bib`.  The later dated
+local-readiness check is
+`review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log`, summarized by
+`review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.md`.  These records state
+only dated local readiness.  They do not certify compliance at a later
+submission time unless the submitted surface adds either a fresh upload-time
+venue/bibliography check or an explicit unchanged-rule statement tying the
+completed upload to the 2026-06-07 observed rule state.  Under that dated
+readiness reading, the route is suitable for the paper as a CICM
+presentation-only / mathematical software workshop submission: the manuscript is
+framed as ongoing workflow and evidence architecture, not as a
+proceedings-length theorem-proving system paper.
 
-Bibliography verification status on 2026-06-04:
+Bibliography verification status, last locally checked on 2026-06-07
+Asia/Singapore:
 
 - `deMouraKADR2015Lean`: DOI `10.1007/978-3-319-21401-6_26` verified.
 - `YangEtAl2023LeanDojo`: NeurIPS/OpenReview and arXiv `2306.15626` record
@@ -67,14 +74,14 @@ CICM topics explicitly include:
 - mathematical knowledge management;
 - case studies, evaluations, benchmarks, and experience reports.
 
-## Current Compliance
+## Dated Local Readiness
 
 | Requirement | Current status | Next action |
 |---|---|---|
-| 2 pages plus bibliography | current `main.pdf` compiles as 2 content pages plus bibliography | keep bibliography outside the two-page body budget |
-| narrow work-in-progress claim | satisfied by current abstract and scope section | do not broaden to full source rebuild or Rule110 validation |
+| 2 pages plus bibliography | local `main.pdf` build records indicate the intended 2-page body plus bibliography | refresh the compile and submission form check before upload |
+| narrow work-in-progress claim | satisfied by the abstract and scope section at this source state | do not broaden to full source rebuild or Rule110 validation |
 | source/artifact access | source paths are recorded in `SOURCE_MAP.md` and `ARTIFACT_INVENTORY.md` | decide whether to expose a public artifact link before submission |
-| bibliography | compact related-work entries verified on 2026-06-04 for Lean, LeanDojo, Draft--Sketch--Prove, AFP, public source, and supplemental bundle records | add only a later archive DOI/URL if one is minted |
+| bibliography | compact related-work entries were reachable in the 2026-06-07 dated check | refresh at submission time or add an unchanged-rule statement |
 | style | converted to LNCS class and `splncs04` bibliography style | keep final check against EasyChair form |
 
 ## Blockers Remaining
