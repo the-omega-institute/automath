@@ -24,18 +24,18 @@ INVENTORY = BUNDLE / "primary_claim_inventory.json"
 
 LOCATION_RE = re.compile(r"^submission_abstract\.tex:(\d+)-(\d+)$")
 EXPECTED_LOCATIONS = {
-    "pc1": "submission_abstract.tex:30-47",
-    "pc2": "submission_abstract.tex:53-64",
-    "pc3": "submission_abstract.tex:66-69",
-    "pc4": "submission_abstract.tex:68-69",
-    "pc5": "submission_abstract.tex:70-72",
-    "pc6": "submission_abstract.tex:72-74",
-    "pc7": "submission_abstract.tex:82-96",
-    "pc8": "submission_abstract.tex:98-106",
-    "pc9": "submission_abstract.tex:108-117",
-    "pc10": "submission_abstract.tex:119-132",
-    "pc11": "submission_abstract.tex:134-154",
-    "pc12": "submission_abstract.tex:143-154",
+    "pc1": "submission_abstract.tex:30-51",
+    "pc2": "submission_abstract.tex:57-68",
+    "pc3": "submission_abstract.tex:70-72",
+    "pc4": "submission_abstract.tex:71-72",
+    "pc5": "submission_abstract.tex:74-77",
+    "pc6": "submission_abstract.tex:76-79",
+    "pc7": "submission_abstract.tex:86-102",
+    "pc8": "submission_abstract.tex:104-112",
+    "pc9": "submission_abstract.tex:114-123",
+    "pc10": "submission_abstract.tex:125-142",
+    "pc11": "submission_abstract.tex:144-164",
+    "pc12": "submission_abstract.tex:153-164",
 }
 CERTIFICATE_PREFIXES = (
     "sim",
