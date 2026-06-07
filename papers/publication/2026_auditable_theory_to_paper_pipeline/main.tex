@@ -8501,19 +8501,21 @@ finite sequence is executed in the displayed order:
 Table~\ref{tab:command-boundary-inventory};
 \item rerun the dated venue/bibliography locator check, if a dated route-readiness
 claim is retained; and
-\item regenerate \path{review_bundle/FINAL_DIGESTS_SHA256.md} from the resulting
-bytes of the inventory files, verifier logs, dated venue log, and review-bundle
-files, and write \path{review_bundle/final_digest_generation_run.log}.
+\item write \path{review_bundle/final_digest_generation_run.log} as the command
+metadata for the hash pass and regenerate
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} from the resulting bytes of the
+inventory files, verifier logs, dated venue log, and selected review-bundle files
+other than the digest manifest and this generation log.
 \end{enumerate}
 Then, at the same bookkeeping level as
 Theorem~\ref{thm:submission-support-fixed-point-normal-form}, the support coordinate selected by
 Proposition~\ref{prop:final-refreshed-coordinate-instantiation} is a fixed point
 of the finite post-inventory verifier/digest pass: every file used to justify the
 theorem-ledger, finite-verifier, and dated-readiness claims is an input to the
-final digest manifest, the digest-generation command has its own command,
+final digest manifest, the digest-generation command has its own acyclic command,
 source-state, environment, exit-code, and log-path row in
 Table~\ref{tab:command-boundary-inventory}, and the manifest is produced after
-those inputs exist.
+those support inputs exist.
 Conversely, if any one of the five ordered steps is omitted or performed after the
 digest regeneration, the stronger exact-inclusion theorem-ledger claim is not
 available; the manuscript retains only the local path-verified or dated-readiness
@@ -8535,20 +8537,25 @@ snapshot records named in Table~\ref{tab:command-boundary-inventory}.  The dated
 venue/bibliography check, when retained, reads external route and locator pages
 and writes a dated log with the explicit boundary that it is not acceptance,
 upload, archive minting, Lean rebuild, daemon execution, or artifact rerun
-evidence.  The final digest pass reads the bytes produced or selected by the
-previous steps, writes the SHA--256 table, and records the command, source state,
-environment, exit code, generated manifest, and log path in
-\path{review_bundle/final_digest_generation_run.log}.
+evidence.  The final digest pass records the command, source state, environment,
+exit code, generated manifest, and log path in
+\path{review_bundle/final_digest_generation_run.log}, and computes the SHA--256
+table from the already-existing support inputs.  The table deliberately excludes
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} and
+\path{review_bundle/final_digest_generation_run.log} as hashed inputs, avoiding a
+self-digest recursion; those two files are instead the manifest and the command
+metadata for producing it.
 
 For the forward implication, the ordering makes every load-bearing finite record
 that supports the theorem-ledger coordinate an already-existing byte string before
 the digest table is computed.  Hence the digest rows name the same inventory,
-extractor-log, verifier-log, dated-venue-log, and bundle bytes that are cited in
+extractor-log, verifier-log, dated-venue-log, and selected bundle bytes that are cited in
 Proposition~\ref{prop:final-refreshed-coordinate-instantiation}.  By
 Theorem~\ref{thm:final-support-surface-closure}, exact finite support is precisely
 equality of the selected paths and their final digest rows.  The digest-generator
 row in Table~\ref{tab:command-boundary-inventory} supplies the command-result
-ledger required for the final hash pass itself, so the first coordinate of
+ledger required for the final hash pass itself without requiring the log to be a
+hashed input to its own output, so the first coordinate of
 Theorem~\ref{thm:submission-support-fixed-point-normal-form} is closed under the
 post-inventory verifier/digest pass without borrowing a pre-inventory or
 unlogged command result.
