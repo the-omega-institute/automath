@@ -6096,7 +6096,7 @@ coordinate is an archive-equivalent locator only under the same byte, digest, an
 path-semantics tests.
 \end{proof}
 
-\begin{theorem}[Public branch archive-equivalent locator realization]
+\begin{theorem}[Public branch archive-equivalent locator criterion]
 \label{thm:public-branch-archive-equivalent-realization}
 Let $L$ be the public automath branch/path coordinate recorded in
 \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and in
@@ -6108,7 +6108,10 @@ archive-equivalent support surface for every bundle-backed and theorem-inventory
 claim in this supplement.  If any named file is absent at $L$, has a different
 relative path, or has a digest different from the final digest row, then $L$ does
 not instantiate those claims, and the package falls back to exact supplemental
-inclusion or to the local/path-verified reading.
+inclusion or to the local/path-verified reading.  The present source package
+does not assert that the displayed public coordinate already satisfies these
+byte-equality tests; it asserts only this finite criterion and the corresponding
+conditional archive-equivalence branch.
 \end{theorem}
 
 \begin{proof}
@@ -6140,6 +6143,13 @@ reading.  No DOI, venue-upload receipt, Lean rebuild, daemon execution, or
 artifact-validation fact follows from the locator comparison, so the only
 remaining readings are exact supplemental inclusion when supplied, or the local
 path-verified reading already classified above.
+
+Finally, the current package contains no finite byte-equality record witnessing
+that the public coordinate has passed the displayed comparison.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, such a witness cannot
+be inferred from the local manifest, bibliography entry, or branch/path name
+alone.  Hence this theorem is an archive-equivalence criterion rather than a
+claim that an external archive has already been instantiated.
 \end{proof}
 
 \begin{corollary}[Submission-time support instantiation test]
@@ -6588,13 +6598,21 @@ the external-record condition of
 Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  In particular,
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} is a local byte-level packaging
 manifest and not, by itself, an upload receipt, DOI, or proof that the public
-branch/path locator already contains the matching bytes.
+branch/path locator already contains the matching bytes.  Thus the current
+package has a conditional local-support reading unless a later exact-upload
+receipt or archive-equivalent byte-equality locator is added to the finite
+support surface.
 \end{corollary}
 
 \begin{proof}
 This is the record-level specialization of
 Theorem~\ref{thm:upload-or-archive-instantiation-boundary} to the current digest
-manifest.\end{proof}
+manifest.  The added sentence is the contrapositive of the same boundary: when
+neither admissible external record is present, the finite support tuple lacks the
+coordinate that would certify completed upload or archive-equivalent byte
+equality, and Theorem~\ref{thm:finite-coordinate-determination-boundary} forbids
+supplying that coordinate by prose.
+\end{proof}
 
 \begin{proposition}[No external instantiation from local bundle records]
 \label{prop:no-external-instantiation-from-local-bundle-records}
@@ -8361,7 +8379,8 @@ inventory row is realized, but only at the stated finite support level.
 
 \begin{theorem}[Current inventory support-coordinate realization]
 \label{thm:current-inventory-artifact-realization}
-For the present Stage--A source state, suppose that the files
+For the present Stage--A source state, after the final theorem-inventory bytes
+for this manuscript have been accepted, suppose that the files
 \path{theorem_inventory.json} and \path{theorem_inventory.md} are present as
 finite package coordinates and that, after those bytes exist, the following
 records are freshly regenerated from the same source state: the syntactic
@@ -8383,6 +8402,9 @@ post-inventory command records, and the digest table names the resulting bytes.
 This realization is only a finite byte/log/digest realization and does not assert extractor semantic completeness, theorem-proof
 correctness, venue acceptance, upload, archive replacement, fresh Lean/BEDC
 rebuilds, daemon execution, or dynamic artifact validation.
+If the inventory files are changed after the extractor or digest pass, the same
+statement is no longer current; it reverts to the conditional/historical reading
+until the displayed rerun sequence is repeated against the changed bytes.
 \end{theorem}
 
 \begin{proof}
@@ -8411,6 +8433,10 @@ negative part follows from the same fixed-point theorem and from
 Theorem~\ref{thm:finite-coordinate-determination-boundary}: none of the listed
 finite rows contains the fields required for semantic proof checking, external
 publication, source-theory rebuilds, daemon runs, or artifact-semantic reruns.
+If an inventory byte changes later, the extractor log and final digest table no
+longer name the changed byte string.  The fixed-point theorem then applies only
+to the earlier byte tuple, so the current claim is recovered only by rerunning
+the sequence and regenerating the digest rows.
 \end{proof}
 
 \begin{corollary}[Current post-inventory support tuple instantiation]
@@ -8463,7 +8489,8 @@ Theorem~\ref{thm:submission-support-fixed-point-normal-form}.
 \begin{corollary}[Byte-level stable replay criterion for the post-inventory tuple]
 \label{cor:stable-replay-post-inventory-tuple}
 Let $S$ be a source state of the present presentation package in which
-\path{theorem_inventory.json} and \path{theorem_inventory.md} exist.  Suppose
+the final accepted \path{theorem_inventory.json} and \path{theorem_inventory.md}
+exist.  Suppose
 that the theorem-environment extractor, certificate-record verifier,
 source-interface verifier, and retained primary-claim verifier are run from $S$,
 that their logs have exit code zero, and that
@@ -8473,7 +8500,10 @@ Theorem~\ref{thm:submission-support-fixed-point-normal-form} factors through the
 finite tuple of Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}:
 the claim is valid for $S$ exactly as a byte-level replay of that tuple, and any
 stronger claim must add a new command-result coordinate of the kind listed in
-Proposition~\ref{audit:command-run-boundary-inventory}.
+Proposition~\ref{audit:command-run-boundary-inventory}.  If either inventory file
+is later rewritten, this replay criterion applies only historically to the old
+tuple until the extractor/verifier/digest sequence is run again from the new
+source state.
 \end{corollary}
 
 \begin{proof}
@@ -8497,6 +8527,11 @@ execution, or dynamic artifact validation would require additional command,
 source, environment, exit-code, and log data; those are precisely the missing
 coordinates isolated in Proposition~\ref{audit:command-run-boundary-inventory}.
 Thus the replay criterion is stable and non-escalating.
+A later inventory rewrite changes one of the byte strings in the tuple.  Since
+the regenerated digest table is part of the tuple and records hashes of the old
+bytes, the later state has a different finite coordinate.  The criterion is
+therefore stable under byte-level replay of the recorded tuple, but it is not an
+automatic certificate for a changed inventory state.
 \end{proof}
 
 This long technical supplement reports path-verified source architecture and case evidence.
