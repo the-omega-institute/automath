@@ -2461,6 +2461,83 @@ that enlargement, record-gate soundness remains the explicit finite predicate
 $\mathsf{RGS}_{S}$, while the proved package fact is exactly the absence of
 missing assigned-gate rows and missing declared evidence surfaces.\end{proof}
 
+\begin{theorem}[Six-coordinate gate-implementation soundness skeleton]
+\label{thm:six-coordinate-gate-implementation-soundness-skeleton}
+Let $g$ be a concrete gate whose row is used by the publication-safety theorem
+chain for a load-bearing claim $c$.  A submitted support surface $S$ upgrades
+the row-level record-gate reading for $g$ to gate-implementation soundness only
+if $S$ contains a finite implementation-soundness tuple
+\[
+\mathcal I(g)=(Q_g,U_g,M_g,X_g,N_g,\Pi_g)
+\]
+with the following six coordinates:
+\begin{enumerate}
+\item $Q_g$, the submitted gate source identity, including source path and digest
+or commit for the implementation being audited;
+\item $U_g$, the exact command or implementation invocation together with the
+runtime environment in which the invocation was evaluated;
+\item $M_g$, the finite input projection read by that invocation and the finite
+output, decision, exit code, and log path it produced;
+\item $X_g$, the digest or manifest binding that places the source, input,
+output, and log bytes on the same submitted support surface $S$;
+\item $N_g$, the named implementation predicate that the row is asserted to
+establish, such as schema-level row checking, source-interface equality,
+theorem-label coverage, or primary-inventory shape; and
+\item $\Pi_g$, a proof-obligation link showing that the concrete predicate $N_g$
+implies exactly the abstract gate predicate used by the dispatch table
+$\Gamma$ for $c$, and no stronger predicate.
+\end{enumerate}
+If any one of these six coordinates is absent, then the finite bad subrecord for
+the implementation-soundness reading is the missing coordinate.  The original
+row may still serve as a record-gate witness under
+$\mathsf{RGS}_{S}(P,L,\Gamma)$, but it cannot certify implementation
+soundness.  Conversely, when all six coordinates are present and the link
+$\Pi_g$ proves predicate equality or implication in the stated direction, the
+implementation-soundness reading is an ordinary positive extension coordinate of
+the finite-record calculus, restricted to $N_g$.
+\end{theorem}
+
+\begin{proof}
+The row-level record-gate predicate reads only the certificate tuple
+$\mathcal C(c)$, the pass row for $g$, the submitted evidence pointer, and the
+dispatch table.  By Theorem~\ref{thm:assigned-gate-soundness-audit-boundary},
+those finite fields are sufficient to establish absence of a missing assigned
+gate row and absence of a missing declared evidence surface, but they are not a
+claim about how the underlying program, script, or manual implementation
+operated.  The six displayed coordinates are exactly the extra finite fields
+needed to make that operation visible to the same calculus.
+
+Necessity is coordinate separation.  If $Q_g$ is absent, two packages can have
+the same pass row while using different or unsubmitted gate implementations.  If
+$U_g$ is absent, they can agree on the submitted source while differing on the
+command or environment actually evaluated.  If $M_g$ is absent, they can agree
+on source and command while differing on the finite inputs, outputs, exit code,
+or log bytes.  If $X_g$ is absent, the submitted support surface need not bind
+those bytes to the package state being reviewed.  If $N_g$ is absent, the row has
+no finite predicate whose implementation soundness is being asserted.  If
+$\Pi_g$ is absent, even a correct run of $N_g$ need not be the predicate required
+by the abstract gate assigned to $c$.  In each case the current projection cannot
+distinguish two states that agree on all submitted record-gate fields but differ
+on the asserted implementation-soundness fact.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, a conclusion that
+distinguishes such states is not determined by the submitted projection; the
+missing coordinate is therefore the finite bad subrecord.
+
+For sufficiency, suppose the six coordinates are present.  The tuple
+$\mathcal I(g)$ is finite and lies on $S$ by $X_g$.  Coordinates $Q_g$, $U_g$,
+and $M_g$ supply the source, command, environment, exit-code, and log-path data
+required by the command-result clause of
+Definition~\ref{def:operational-acceptance-interface}.  Coordinate $N_g$ states
+the finite predicate checked by that run, and $\Pi_g$ identifies the exact
+predicate-link to the gate predicate used in $\Gamma$.  Hence the stronger
+reading adds a visible finite coordinate to the preorder of
+Definition~\ref{def:stronger-reading-preorder}; it is accepted precisely as an
+extension whose scope is the named predicate $N_g$ and the implication proved by
+$\Pi_g$.  This is the same positive-extension mechanism used in
+Theorem~\ref{thm:record-gate-implementation-overclaim-obstruction}, now with the
+proof-obligation link made explicit.
+\end{proof}
+
 \begin{theorem}[Finite certificate obstruction skeleton]
 \label{thm:finite-certificate-obstruction-skeleton}
 Let $c$ be a load-bearing manuscript claim whose component kinds lie in the
