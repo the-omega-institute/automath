@@ -832,10 +832,14 @@ imported source theory, correctness of the bounded summaries as exact source
 statements, Lean/BEDC rebuild success, marker correctness, or axiom purity from
 that surface.  A package claim with any one of those stronger meanings is
 accepted by the same finite-record calculus if and only if the support surface is
-extended by a nonempty machine-readable source-interface coordinate recording at
-least the relevant source file, source commit, extractor or checker command,
-runtime environment, exit code, log path, produced record, digest binding, and an
-assigned pass row for the strengthened claim kind.
+extended by a nonempty machine-readable source-interface coordinate appropriate
+to the stronger meaning: exact source-text import requires the exact source text
+and a byte-equality or digest-binding comparison against the pinned snapshot;
+public-source readings require a public fetch-and-compare record with byte
+equality; formal-source readings require a Lean/BEDC rebuild record with command,
+source state, environment, exit code, log path, and assigned pass row; and semantic
+source-theory readings require a semantic-validation record naming the checker or
+evaluator contract, produced record, digest binding, and assigned pass row.
 \end{theorem}
 
 \begin{proof}
@@ -858,15 +862,20 @@ $F(I)$.  By Theorem~\ref{thm:finite-coordinate-determination-boundary} and
 Proposition~\ref{prop:manual-source-interface-non-escalation}, the stronger
 semantic conclusion is therefore not a consequence of the current interface.
 
-Conversely, if the support surface is enlarged by the displayed finite
-machine-readable semantic coordinate and by its assigned pass row, the enlarged
-coordinate is no longer invisible to the certificate calculus: it becomes an
-ordinary finite extension of the tuple read by the verifier.  The acceptance of
-the strengthened source-interface reading is then exactly the fixed-point case
-of Theorem~\ref{thm:record-interface-rigidity}, applied to the enlarged support
-surface.  Because at least one new command-result, digest-binding, or pass-row
-field is added, the extension is nonempty.  This proves both the obstruction and
-the stated if-and-only-if upgrade criterion.
+Conversely, if the support surface is enlarged by the relevant finite coordinate
+listed in the statement and by its assigned pass row, the enlarged coordinate is
+no longer invisible to the certificate calculus: it becomes an ordinary finite
+extension of the tuple read by the verifier.  Exact source text is then read only
+through the submitted text and byte-comparison row; public reachability only
+through the public fetch-and-compare row; rebuild success only through the
+formal-build command row; and semantic validity only through the submitted
+semantic-validation contract and produced record.  The acceptance of the
+strengthened source-interface reading is therefore exactly the extension case of
+Theorem~\ref{thm:finite-extension-budget-normal-form}, applied to the enlarged
+support surface.  Because at least one source-text, byte-equality,
+formal-rebuild, semantic-validation, digest-binding, or pass-row field is added,
+the extension is nonempty.  This proves both the obstruction and the stated
+if-and-only-if upgrade criterion.
 \end{proof}
 
 \begin{proposition}[Source-interface evidence-level separation]
@@ -2523,6 +2532,83 @@ unread fields leaves an inclusion-minimal bad subrecord.  Hence a stronger
 reading is accepted exactly when its finite extension budget is paid in submitted
 coordinates, and otherwise remains outside the original certificate.\end{proof}
 
+\begin{theorem}[Finite-record certificate calculus spine]
+\label{thm:finite-record-certificate-calculus-spine}
+Fix a submitted surface $S$, acceptance ledger $L$, dispatch table $\Gamma$, and
+schema verifier $V$ as in Theorem~\ref{thm:publication-safety-interface}.  For
+the presentation-only route, every load-bearing support assertion used by the
+publication-safety theorem chain is classified by the following three-step
+finite calculus.
+\begin{enumerate}
+\item \emph{Projection}: the assertion is first projected to the seven-coordinate
+certificate tuple \((K,\ell,E,H,R,D,B)\) of
+Definition~\ref{def:certificate-schema-acceptance-table}.
+\item \emph{Obstruction}: failure is witnessed by one of the five inclusion-minimal
+bad-record types of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+\item \emph{Extension}: any properly stronger reading is accepted if and only if
+it pays the positive finite extension budget
+\(\Delta(c,c^{+})=(\Delta K,\Delta E,\Delta R,\Delta H,\Delta D,\Delta B)\) of
+Theorem~\ref{thm:finite-extension-budget-normal-form} and the added records pass
+their assigned gates.
+\end{enumerate}
+Consequently the central result of this article is a certificate-calculus theorem:
+Theorem~\ref{thm:publication-safety-interface} supplies the constructor and
+schema-relative exactness; the downstream current-package, theorem-inventory,
+source-interface, artifact, upload/archive, and command-run support statements are
+instances or boundary projections of this same calculus.  None of those instances
+may be glued into a proof-checking, source-theory semantic-completeness,
+implementation-soundness, dynamic artifact-validity, public-byte-equality,
+upload, archive-replacement, or venue-acceptance theorem unless the corresponding
+coordinate appears as a nonempty component of the finite extension budget and has
+its assigned pass records.
+\end{theorem}
+
+\begin{proof}
+The projection step is exactly the certificate schema.  By
+Definition~\ref{def:certificate-schema-acceptance-table} and
+Proposition~\ref{prop:finite-certificate-schema-verifier}, a submitted
+load-bearing assertion is read only through its finite kind set, evidence level,
+evidence surface, promotion or boundary marker, pass-record field,
+discovery-interface field, and evidence-boundary field.  The input--output
+contract of Theorem~\ref{thm:verifier-input-output-contract} and the exactness
+theorem, Theorem~\ref{thm:record-acceptance-exactness}, identify verifier
+acceptance with the schema-relative predicate on precisely those coordinates.
+
+For obstruction, Theorem~\ref{thm:finite-certificate-obstruction-skeleton} proves
+that every failed finite certificate has an inclusion-minimal bad subrecord of one
+of the five displayed forms: missing evidence surface, missing assigned gate row,
+missing promotion or external-boundary record, discovery escalation without the
+pinned discovery rows, or command-run escalation without the command tuple.  Since
+these five cases exhaust the certificate fields that can fail after the kind set
+has been fixed, there is no sixth hidden obstruction supplied by prose, route
+history, advisory output, or an unstated semantic model.
+
+For extension, let $c\preceq_{\Gamma}c^{+}$ be a properly stronger reading.  The
+finite extension-budget normal form collects exactly the verifier-coordinate
+differences between the original certificate and a certificate for $c^{+}$.  If
+the difference tuple is present and satisfies the assigned gates, the enlarged
+certificate is accepted by Theorem~\ref{thm:record-acceptance-exactness}.  If it
+is absent in any required component, the obstruction skeleton supplies the finite
+bad subrecord rejecting $c^{+}$.  Positivity of the budget follows from properness:
+if all six difference components were empty, finite-coordinate determination would
+make $c$ and $c^{+}$ record-equivalent.
+
+The named support statements later in the manuscript specialize these three
+steps to particular coordinates: source-interface records specialize the
+discovery/source projection, artifact rows specialize the evidence-surface and
+artifact-boundary projection, theorem-inventory rows specialize syntactic label
+coverage, upload/archive statements specialize the external-support boundary, and
+current-package fixed points specialize byte/log/digest freshness.  Each such
+specialization reads a subset of the same finite tuple or an explicitly submitted
+extension coordinate.  Therefore no semantic, implementation, public-byte,
+artifact-validation, or venue conclusion can be obtained by gluing the instances
+together; by Theorem~\ref{thm:finite-coordinate-determination-boundary}, a claim
+depending on a coordinate not read by the finite tuple is not determined by that
+tuple.  This proves the promised spine and connects the later support statements
+to the constructor theorem rather than making them independent fixed-point
+theorems.
+\end{proof}
+
 \begin{proposition}[Dependency normal form for the publication-safety chain]
 \label{prop:publication-safety-dependency-normal-form}
 Let $c$ be a load-bearing claim whose certificate
@@ -2859,12 +2945,15 @@ coordinates and those records pass the assigned gates.  If those coordinates are
 absent, the accepted certificate is maximal below $c^{+}$: it still accepts $c$
 and rejects the stronger reading by a finite bad subrecord.
 
-The dependency order for this sharpness assertion is made explicit in
+The dependency order for this sharpness assertion is made explicit in the
+finite-record certificate calculus spine,
+Theorem~\ref{thm:finite-record-certificate-calculus-spine}, and in
 Proposition~\ref{prop:publication-safety-dependency-normal-form}: construction
-and schema-relative exactness first, extension-budget necessity and sufficiency
-second, and maximality third.  The maximality of this constructed certificate is
-stated separately in Proposition~\ref{prop:publication-safety-maximality}, and
-the exact finite price of any genuine strengthening is classified by
+and schema-relative exactness first, obstruction classification second,
+extension-budget necessity and sufficiency third, and maximality last.  The
+maximality of this constructed certificate is stated separately in
+Proposition~\ref{prop:publication-safety-maximality}, and the exact finite price
+of any genuine strengthening is classified by
 Theorem~\ref{thm:finite-extension-budget-normal-form}; the current-package
 instantiation is stated separately in
 Corollary~\ref{cor:publication-safety-current-package-instance} and refined by
