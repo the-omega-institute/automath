@@ -6411,7 +6411,12 @@ Corollary~\ref{cor:upload-or-archive-instantiation-record}.
 
 \begin{theorem}[Exact-inclusion support-surface realization]
 \label{thm:exact-inclusion-support-surface-realization}
-For the current package the selected support branch is exact supplemental inclusion of \path{review_bundle/}, but this branch remains conditional until an external upload-or-archive instantiation record exists.  If the completed submission contains that directory with the certificate-file digests listed in
+For the current package the selected support branch is exact supplemental
+inclusion of \path{review_bundle/}, but this branch remains conditional until an
+external upload-or-archive instantiation record exists.  If the completed
+submission contains that directory, together with \path{theorem_inventory.json}
+and \path{theorem_inventory.md}, and those three support surfaces match the
+post-inventory digest rows listed in
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}, then every bundle-backed claim in
 this supplement has a submitted finite support surface at its stated
 path-verified evidence level.  If the exact directory is not submitted, then the
@@ -6420,18 +6425,19 @@ the five tests of Table~\ref{tab:review-bundle-archive-equivalence}; no venue up
 \end{theorem}
 
 \begin{proof}
-The exact-inclusion hypothesis supplies the directory named in every bundle-local
-path and the final digest manifest named in
-Audit record~\ref{prop:exact-review-bundle-upload-witness}.  By that proposition,
-the manifest traverses the finite certificate surfaces used by the supplement:
-the bundle manifest, schema, current pass-record ledger, source-interface map,
-primary-claim inventory, verifier scripts, verifier logs, source snapshot, and
-case snapshots.  Matching the listed SHA-256 digests fixes the bytes of each of
-those certificate files at final packaging time, while preserving the relative
-path names by which the manuscript refers to them.  Thus every bundle-backed
-claim has the submitted finite evidence surface asserted for it, and the evidence
-level remains path-verified because the argument checks file presence and digest
-identity rather than rerunning Lean, daemons, or external artifacts.
+The exact-inclusion hypothesis supplies the two root inventory files, the
+directory named in every bundle-local path, and the final digest manifest named
+in Audit record~\ref{prop:exact-review-bundle-upload-witness}.  By that
+proposition, the manifest traverses the finite certificate surfaces used by the
+supplement: the theorem-obligation inventories, the bundle manifest, schema,
+current pass-record ledger, source-interface map, primary-claim inventory,
+verifier scripts, verifier logs, source snapshot, and case snapshots.  Matching
+the listed SHA-256 digests fixes the bytes of each of those certificate files at
+final packaging time, while preserving the relative path names by which the
+manuscript refers to them.  Thus every bundle-backed claim has the submitted
+finite evidence surface asserted for it, and the evidence level remains
+path-verified because the argument checks file presence and digest identity
+rather than rerunning Lean, daemons, or external artifacts.
 
 If the exact directory is absent, the proof of
 Audit record~\ref{audit:review-bundle-archive-equivalence} shows that the only
@@ -7262,6 +7268,78 @@ archive-equivalent replacement.  If a later edit or upload-time claim changes on
 of the inputs, the fixed point is broken precisely at that finite subrecord.  The
 remaining local rows remain available at their declared evidence levels, but the
 stronger exact final-digest claim is not accepted for the changed component.
+\end{proof}
+
+
+\begin{theorem}[Submission support refresh rigidity]
+\label{thm:submission-support-refresh-rigidity}
+Let $S$ be a source package for this presentation route, and suppose $S$ changes
+one of the following four support coordinates after the last accepted digest
+manifest was written:
+\begin{enumerate}
+\item the theorem-obligation inventory bytes in \path{theorem_inventory.json} or
+\path{theorem_inventory.md};
+\item a verifier or extractor log used to support a command-result claim;
+\item the primary-source line-span coordinate checked by
+\path{review_bundle/verify_primary_claim_inventory.py}; or
+\item the asserted venue-status coordinate, upgraded from dated local readiness to
+upload-time venue compliance.
+\end{enumerate}
+Then the strongest certificate available from the old manifest is obtained by
+deleting the changed coordinate from the claimed support tuple.  The changed
+coordinate re-enters the publication-safety chain only after the corresponding
+post-change extractor, verifier, or venue-rule record is written and the digest
+manifest is regenerated over those new bytes.  In particular, a post-inventory
+edit cannot be certified by a pre-inventory digest row, a dated local-readiness
+venue log cannot certify upload-time compliance, and a local bundle manifest
+cannot certify external upload or archive equivalence without the separate
+external coordinate of Corollary~\ref{cor:upload-or-archive-instantiation-record}.
+\end{theorem}
+
+\begin{proof}
+All four listed coordinates are finite byte or rule-state fields in the support
+surface.  For item~1, the theorem-obligation ledger is exactly the ordered pair
+\path{theorem_inventory.json}, \path{theorem_inventory.md}, together with the
+extractor coverage row that reads those files.  If either inventory file is
+edited after the digest manifest was computed, the old SHA--256 row is a hash of
+a different byte string.  Since SHA--256 rows in this paper are used only as
+content-addressed finite records, not as semantic proof obligations, the old row
+cannot denote the new inventory bytes.  The coordinate is therefore absent until
+the extractor is rerun on the new inventory and the digest table is recomputed
+after that new log exists.
+
+For item~2, Definition~\ref{def:operational-acceptance-interface} and
+Theorem~\ref{thm:current-command-result-closure} make every command-result claim
+depend on the finite tuple consisting of command, source state, environment,
+exit code, and log path.  A changed extractor or verifier log changes the log
+byte string selected by that tuple.  The old manifest can still witness the old
+run as historical local evidence, but it cannot be a digest certificate for the
+new run because the new log was not an input to the old hash table.
+
+For item~3, the primary-claim verifier reads the current
+\path{submission_abstract.tex} and records row and line-span facts.  If the
+primary source changes after that verifier run, the line-span coordinate checked
+by the old log is no longer the current primary-source coordinate.  The only
+finite repair is to rerun the primary-claim verifier and then include the fresh
+log in the regenerated digest manifest.
+
+For item~4, venue compliance is a time- and rule-state-dependent coordinate by
+Proposition~\ref{audit:fresh-venue-record-criterion} and
+Theorem~\ref{thm:venue-rule-freshness-non-escalation}.  A dated local-readiness
+record states what was observed at its logged date.  Upload-time compliance is a
+different finite field: it requires the rule state and submission state at the
+upload event.  Therefore an old local-readiness log cannot be reinterpreted as
+that upload-time field; a fresh venue-rule record must be written before digest
+closure if the stronger claim is made.
+
+Finally, external upload or archive equivalence is independent of the local
+inventory and digest coordinates.  Theorems~\ref{thm:upload-or-archive-instantiation-boundary}
+and Corollary~\ref{cor:upload-or-archive-instantiation-record} require either an
+exact supplemental-upload record or a byte-equality archive locator.  None of the
+four local refresh steps supplies such an external coordinate.  Thus the old
+manifest proves the package only after projecting away the changed or missing
+field, and the full support tuple is restored exactly by writing the required
+post-change finite records and regenerating the manifest over them.
 \end{proof}
 
 
