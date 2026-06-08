@@ -4069,6 +4069,14 @@ def build_oracle_followup_prompt(fix_summary: str, target_journal: str) -> str:
         so the verdict can be parsed unambiguously. Then briefly explain
         what now meets the bar for "{target_journal}" and what (if anything)
         still does not.
+
+        Verdict stability rule: if your previous verdict in this same review
+        conversation was Minor revision, do not escalate back to Major revision
+        for broad restructuring, label-compression, venue-positioning, or
+        presentation preferences unless the current draft introduced a concrete
+        new mathematical defect or failed to implement an explicitly named prior
+        blocker. Treat residual editorial compression after a Minor revision
+        as Minor revision, not a renewed major blocker.
     """)
 
 
