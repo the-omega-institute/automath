@@ -2981,10 +2981,11 @@ or submission row is silently upgraded to command-run strength.
 \end{proof}
 \begin{theorem}[Bounded software-audit interface under record-gate soundness]
 \label{thm:publication-safety-interface}
-Consider a theory-to-paper pipeline with the operational interface above and a
-finite submitted record surface consisting only of the manuscript source, printed
-tables, submitted manifests, uploaded review-bundle records, recorded logs, and
-explicitly declared historical boundaries.  Assume the following four distinct
+Consider a theory-to-paper pipeline with the operational interface above and let
+$S$ be the finite submitted record surface consisting only of the manuscript
+source, printed tables, submitted manifests, uploaded review-bundle records,
+recorded logs, and explicitly declared historical boundaries.  Let $L$ be the
+acceptance ledger and $\Gamma$ the dispatch table.  Assume the following four
 finite-record hypotheses.
 \begin{enumerate}
 \item \emph{Acceptance entries}: every load-bearing claim in an active manuscript
@@ -3016,75 +3017,94 @@ as publication work without human promotion, and the constructed tuple below is
 submitted to the finite schema verifier rather than being identified with the
 acceptance entry itself.
 \end{enumerate}
-Then, and only under these finite-record hypotheses, the package checker has the
-following bounded software-audit invariant.  The checker input is the submitted surface
-$S$, the ledger $L$, the dispatch table $\Gamma$, and the schema files and bundle
-records named in Proposition~\ref{prop:finite-certificate-schema-verifier}.  Its
-output is the finite accepted set
+Then the package checker has the following bounded software-audit invariant.  Its
+input is exactly $S$, $L$, $\Gamma$, and the schema files and bundle records named
+in Proposition~\ref{prop:finite-certificate-schema-verifier}.  Its output is the
+finite accepted set
 \[
 \mathsf{Out}_{\Gamma,S}(L)=
 \{(c,\mathsf{Cert}_{\Gamma}(c)):\ V(c,\mathsf{Cert}_{\Gamma}(c))=1\}
 \]
 together with the finite list of rejected bad subrecords.  For every accepted
-load-bearing claim $c$ it constructs, from the acceptance entry and the submitted
-finite evidence surfaces, a record
+load-bearing claim $c$, the checker constructs from the acceptance entry and the
+submitted finite evidence surfaces a certificate
 \[
 \mathsf{Cert}_{\Gamma}(c)=\mathcal C(c)=(K,\ell,E,H,R,D,B)
 \]
-accepted by the finite schema verifier of
-Proposition~\ref{prop:finite-certificate-schema-verifier} with the input--predicate--output
-boundary of Theorem~\ref{thm:verifier-input-output-contract}; equivalently, by the
-schema-relative finite-record exactness of Theorem~\ref{thm:record-acceptance-exactness}, the
-constructed record satisfies the schema-relative record-acceptance semantics for
-the dispatch table $\Gamma$.  Consequently, within the submitted finite records
-and under the stated explicit record-gate-soundness hypothesis, $c$ has a recorded evidence
-surface, a declared evidence boundary, and a prior pass record for every gate
-required for its claim kind.  Accepted discovery claims additionally inherit the
-bounded pinned source-interface consequences that statement-only, code-only,
+accepted by the finite schema verifier, hence satisfying the schema-relative
+record-acceptance semantics for $\Gamma$.  Consequently, within the submitted
+finite records and under the stated record-gate-soundness hypothesis, $c$ has a
+recorded evidence surface, a declared evidence boundary, and a prior pass record
+for every gate required for its claim kind.  Accepted discovery claims additionally
+inherit the bounded pinned source-interface boundary: statement-only, code-only,
 mechanical-expansion, and compression-only outputs are not accepted as discovery
-without the required certificate, ledger, and lineage witnesses.  Moreover, the
-constructed record is axis-and-level invariant and sharp for the stronger-reading
-preorder: if $c\preceq_{\Gamma}c^{+}$ is a properly stronger reading that moves
-a load-bearing consequence from one architecture axis of
-Definition~\ref{def:architecture-axis-map} to another, raises the evidence level
-from path-verified to command-run strength, adds an implementation, artifact,
-venue, or semantic-correctness assertion, or adds a theorem-obligation
-completeness assertion, then $c^{+}$ is accepted by the same interface if and only
-if the submitted record surface contains the corresponding finite extension
-coordinates and those records pass the assigned gates.  If those coordinates are
-absent, the accepted certificate is maximal below $c^{+}$: it still accepts $c$
-and rejects the stronger reading by a finite bad subrecord.
+without the required certificate, ledger, and lineage witnesses.
 
-The dependency order for this sharpness assertion is made explicit in the
-finite-record certificate calculus spine,
-Theorem~\ref{thm:finite-record-certificate-calculus-spine}, and in
-Proposition~\ref{prop:publication-safety-dependency-normal-form}: construction
-and schema-relative exactness first, obstruction classification second,
-extension-budget necessity and sufficiency third, and maximality last.  The
-maximality of this constructed certificate is stated separately in
-Proposition~\ref{prop:publication-safety-maximality}, and the exact finite price
-of any genuine strengthening is classified by
-Theorem~\ref{thm:finite-extension-budget-normal-form}; the current-package
-instantiation is stated separately in
-Corollary~\ref{cor:publication-safety-current-package-instance} and refined by
-Theorem~\ref{thm:current-package-certificate-exactness}.  The concrete boundary
-readings most likely to be mistaken for stronger workflow, script, source,
-artifact, inventory, or support claims are classified uniformly in
+Moreover the constructed certificate is sharp for the stronger-reading preorder.
+If $c\preceq_{\Gamma}c^{+}$ is a properly stronger reading that changes an
+architecture axis, raises the evidence level from path-verified to command-run
+strength, adds an implementation, artifact, venue, semantic-correctness, or
+theorem-obligation completeness assertion, then $c^{+}$ is accepted by this
+interface if and only if $S$ contains the corresponding finite extension
+coordinates and those records pass the assigned gates.  If those coordinates are
+absent, the certificate for $c$ is maximal below $c^{+}$ on $S$, and $c^{+}$ is
+rejected by a finite bad subrecord.
+\end{theorem}
+
+\begin{proof}
+The first two hypotheses put every load-bearing accepted claim into the finite
+record-gate predicate.  By
+Proposition~\ref{prop:record-gate-soundness-external-interface-exactness}, the
+standalone predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ supplies exactly the same
+finite fields as the operational interface: claim kinds, evidence level, evidence
+surface, human-promotion or boundary marker, assigned gate-pass rows,
+discovery-interface rows when applicable, and command-boundary fields.  The third
+hypothesis fixes the special discovery input channel, and the fourth prevents the
+constructed tuple from being confused with the human acceptance entry itself.
+
+Apply the verifier input--predicate--output contract of
+Theorem~\ref{thm:verifier-input-output-contract} to those submitted rows.  The
+finite schema verifier of Proposition~\ref{prop:finite-certificate-schema-verifier}
+reads only the displayed schema coordinates and therefore outputs exactly the
+accepted tuples and rejected bad subrecords shown in the statement.  The
+schema-relative exactness theorem,
+Theorem~\ref{thm:record-acceptance-exactness}, identifies verifier acceptance with
+the record-acceptance predicate $\mathsf{Acc}_{\Gamma}$ on
+$(K,\ell,E,H,R,D,B)$.  Thus every accepted claim has the submitted evidence
+surface, boundary declaration, and assigned pass rows required by its claim kind;
+for discovery claims, the pinned source-interface lemmas cited in the third
+hypothesis give the listed non-acceptance consequences for statement-only,
+code-only, mechanical-expansion, and compression-only outputs.
+
+It remains to prove sharpness.  The finite-record certificate calculus spine,
+Theorem~\ref{thm:finite-record-certificate-calculus-spine}, factors every use of
+this interface into construction, schema-relative exactness, obstruction
+classification, extension-budget necessity and sufficiency, and maximality.  In
+the notation of Proposition~\ref{prop:publication-safety-dependency-normal-form},
+a properly stronger reading $c^{+}$ differs from $c$ by a finite extension record
+\(\Delta(c,c^{+})\).  If the extension coordinates are present on $S$ and pass the
+assigned gates, Theorem~\ref{thm:finite-extension-budget-normal-form} constructs
+the enlarged accepted certificate for $c^{+}$.  If one required coordinate is
+absent, Proposition~\ref{prop:publication-safety-maximality} leaves the original
+certificate for $c$ accepted and rejects the stronger reading by the corresponding
+finite bad subrecord.  The named boundary classifiers later in the chain are
+specializations of this same argument: the current-package instance is refined by
+Theorem~\ref{thm:current-package-certificate-exactness}, the uniform positive
+coordinates are classified by
 Theorem~\ref{thm:named-boundary-positive-coordinate-classification}, and the
-current five-coordinate skeleton is proved not to glue into implementation,
-semantic, artifact, proof-assistant, daemon, or venue soundness by
+current skeleton is shown not to glue into implementation, semantic, artifact,
+proof-assistant, daemon, or venue soundness by
 Theorem~\ref{thm:current-boundary-skeleton-non-gluing}.
 
-The conclusion is therefore an audit-interface theorem rather than an end-to-end
-pipeline-correctness theorem.  It proves only that the finite submitted records
-determine the accepted certificate tuples and the finite bad-subrecord reports
-under the declared record-gate predicate.  It does not prove, unless separately
-added as extension coordinates, gate implementation soundness, Lean/BEDC rebuild
-correctness, artifact semantics, daemon behavior, upload, archive availability,
-venue compliance at upload time, or venue acceptance.  The separate
-implementation-soundness upgrade, if desired, is exactly the extension problem
-classified in Theorem~\ref{thm:gate-implementation-soundness-upgrade-obstruction}.
-\end{theorem}
+No verifier clause queried in the preceding paragraph is a gate implementation
+proof, a Lean/BEDC rebuild, an artifact semantic evaluator, a daemon run, an
+upload receipt, an archive-availability record, or a venue decision.  Such a claim
+would be a proper stronger reading and is accepted only by adding the corresponding
+extension coordinates.  This proves the theorem as an audit-interface theorem, not
+as an end-to-end pipeline-correctness theorem; the implementation-soundness
+upgrade is precisely the separate extension problem classified in
+Theorem~\ref{thm:gate-implementation-soundness-upgrade-obstruction}.
+\end{proof}
 
 \begin{theorem}[Gate implementation-soundness upgrade obstruction]
 \label{thm:gate-implementation-soundness-upgrade-obstruction}
@@ -4494,9 +4514,9 @@ $P^{+}_{7}$, obtained from $P^{+}_{6}$ by adding exactly the manual submitted
 theorem-ledger coordinate \path{a7}.  Thus the two theorems describe nested support states,
 not competing current-package mirrors.
 
-\begin{theorem}[Current-package bounded schema-relative certificate exactness]
+\begin{theorem}[Current-row schema-relative certificate exactness]
 \label{thm:current-package-certificate-exactness}
-For the six-row finite current-package state $P^{+}_{6}$ of
+For the six-row row-frozen current-package state $P^{+}_{6}$ of
 Proposition~\ref{prop:current-package-acceptance-certificate-ledger}, assume the
 support-surface availability condition of
 Theorem~\ref{thm:final-support-surface-closure}: the submitted supplemental
@@ -4508,7 +4528,7 @@ Theorem~\ref{thm:record-interface-rigidity}, the theorem-environment extractor,
 certificate verifier, source-interface verifier, primary-claim verifier, and
 final digest surface must be a common finite support-surface fixed point after
 any regenerated inventory, log, or digest coordinate.  With that support
-surface present, the six ledger entries $a_1,\ldots,a_6$ as printed in
+ surface present, the six ledger entries $a_1,\ldots,a_6$ as printed in
 Tables~\ref{tab:current-acceptance-ledger} and~\ref{tab:current-certificate-ledger}
 and as checked by \path{review_bundle/certificate_verification_run.log} are
 exactly the accepted schema-relative finite-record instantiation of the finite-record interface theorem,
@@ -4519,10 +4539,10 @@ a_i\longmapsto \mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)
 is a bijection from the accepted current-package claim rows printed in this
 source to the locally checkable certificates accepted by the submitted schema
 verifier at the declared path-verified evidence level, relative only to the
-finite fields read by that schema and to the manually declared six-row ledger
+current row bytes, the finite fields read by that schema, and the manually declared six-row ledger
 classified in Theorem~\ref{thm:manual-ledger-dependence-boundary}.  Thus the
-exactness is a schema-relative and row-frozen audit relation between six printed
-rows and six finite certificates.  It proves agreement with the declared verifier
+exactness is a schema-relative, current-row, and row-frozen audit relation between
+six printed rows and six finite certificates.  It proves agreement with the declared verifier
 schema, not semantic truth of package claims, and not correctness of the
 surrounding workflow, gate implementations, source tree, artifact evaluators,
 daemons, upload mechanisms, archives, or venues.  The assigned-gate rows are
@@ -4541,11 +4561,12 @@ the final-support closure condition just stated.  Every
 current-package reading requiring a seventh accepted row, a different claim kind,
 a stronger evidence level, an additional gate pass record, a fresh command-run
 tuple, an extractor-completeness assertion for the theorem inventory, or an
-external venue decision is outside this bijection and is rejected by
+external venue decision, or an interpretation of future edited rows is outside this
+bijection and is rejected by
 the finite obstruction skeleton and, more sharply, by the positive extension-budget
 criterion of Theorem~\ref{thm:finite-extension-budget-normal-form}.  The exactness
-is therefore row-frozen, finite-record, and verifier-log bounded: editing any of
-the six rows or any machine-readable mirror changes the finite package unless the
+is therefore current-row-frozen, finite-record, and verifier-log bounded: editing any of
+the six rows, any cited schema field, or any machine-readable mirror changes the finite package unless the
 dependent extractor, verifier logs, and digest surface are rerun or regenerated
 into the common fixed point required by
 Theorem~\ref{thm:record-interface-rigidity}, and the displayed tables and logs
@@ -6035,14 +6056,19 @@ This theorem is a manifest-bounded finite-record interface instance of
 Theorem~\ref{thm:evidence-level-overclaim-obstruction}: it records only the
 bounded manifest/evaluator coordinates that may be checked, and it rejects
 stronger artifact readings unless the package supplies the additional finite
-records required for them, such as semantic-validation pass records or fresh
-rerun logs.  The interface domain is the finite set
+records required for them through the separate artifact-validation gate of
+Proposition~\ref{prop:artifact-validation-gate-unique-semantic-upgrade}, such as
+semantic-validation pass records or fresh rerun logs.  The interface domain is the finite set
 \[
 \mathcal M_{a_6}=\{\text{manifest entry},\text{local paths},
 \text{reviewable snapshots},\text{boundary field},
 \text{status pass row},\text{limitation-ledger pass row}\}.
 \]
-No Rule110 or GroundCompiler property outside $\mathcal M_{a_6}$ is asserted or certified; semantic validation outside this finite set requires a new artifact or evaluator-command certificate.
+No Rule110 or GroundCompiler property outside $\mathcal M_{a_6}$ is asserted or
+certified.  Semantic validation outside this finite set requires the separate
+artifact-validation gate: an artifact/evaluator-command certificate identifying
+the evaluator contract, artifact bytes or manifest row, semantic predicate,
+source state, environment, command, exit code, and log path as applicable.
 
 For the current presentation package, assuming the named review-bundle records
 are supplied as supplemental material or by an accepted archive-equivalent
@@ -6085,7 +6111,8 @@ manifest rows and historical snapshots alone do not supply such a claim.  The
 theorem is exactly a finite-record boundary theorem for the artifact
 row $a_6$ in the finite-record interface theorem, Theorem~\ref{thm:publication-safety-interface}: it preserves the
 bounded artifact-limitation lesson and classifies all readings requiring further
-artifact evidence as outside the current finite certificate.
+artifact evidence as outside the current finite certificate until the
+artifact-validation gate is supplied.
 \end{theorem}
 
 \begin{proof}
@@ -8138,7 +8165,14 @@ reading and leaves only whatever local historical index was actually recorded.
 \label{thm:theorem-obligation-ledger-boundary}
 Let $P^{+}_{7}$ be the seven-row support state obtained from $P^{+}_{6}$
 by the conservative finite-record extension of
-Theorem~\ref{thm:nested-package-states}, namely by adding exactly the submitted theorem-ledger coordinate \path{a7}.  In
+Theorem~\ref{thm:nested-package-states}, namely by adding exactly the submitted theorem-ledger coordinate \path{a7}.
+Assume the post-inventory support tuple of
+Proposition~\ref{prop:post-inventory-support-tuple-extraction-certificate}: the
+final bytes of \path{theorem_inventory.json} and \path{theorem_inventory.md} exist
+before the theorem-environment extractor and retained finite-record verifiers are
+rerun, and \path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated after those
+inventory files, extractor logs, and pass-record rows exist.  Conditional on that
+ordered byte tuple, in
 $P^{+}_{7}$, the theorem-obligation ledger is no longer a detached review-only
 artifact: the submitted finite support surface contains
 \path{theorem_inventory.json} through the manifest field \path{theorem_inventory}
@@ -8147,7 +8181,7 @@ $P^{+}_{6}$ of Theorems~\ref{thm:nested-package-states}
 and~\ref{thm:current-package-certificate-exactness} remains
 the row-frozen certificate state for \path{a1}--\path{a6}; the present theorem
 adds exactly the theorem-ledger coordinate \path{a7}.  Consequently the
-package may make
+package may make, at that post-inventory finite-record state and not before,
 the following bounded theorem-ledger claim: every theorem-obligation assertion
 made by the submission is supported only through the finite coordinates in
 Table~\ref{tab:submitted-theorem-obligation-ledger}, namely the integrated
@@ -8160,11 +8194,20 @@ implementation-soundness claim.  The claim does not assert that
 \path{theorem_inventory.json} proves the mathematical semantics of each theorem,
 does not replace the proofs printed in this source, and does not certify a Lean
 rebuild, publication-daemon run, Rule110 artifact rerun, semantic extractor
-completeness beyond $\mathcal E$, or external upload.
+completeness beyond $\mathcal E$, or external upload.  If the post-inventory
+ordering hypothesis fails, the theorem supplies only a conditional target support
+state and not a current accepted theorem-ledger coordinate.
 \end{theorem}
 
 \begin{proof}
-The support surface is finite and can be inspected coordinate by coordinate.
+The support surface is finite and can be inspected coordinate by coordinate, but
+only after the ordered byte tuple in the hypothesis has been produced.  By
+Proposition~\ref{prop:post-inventory-support-tuple-extraction-certificate}, a
+manifest or extractor log whose bytes predate the final inventory files certifies
+only the earlier local state and cannot instantiate the current theorem-ledger
+coordinate.  Hence all subsequent uses of $P^{+}_{7}$ in this theorem are
+conditional on that post-inventory state.
+
 The root manifest now contains the key \path{theorem_inventory} with value
 \path{theorem_inventory.json}.  The certificate schema includes the same key in
 its required manifest-file map.  Therefore a certificate-record verification of
@@ -9940,11 +9983,16 @@ or archive-equivalent byte-equality locator.
 
 \begin{theorem}[Four-coordinate submission-support skeleton]
 \label{thm:four-coordinate-submission-support-skeleton}
-For the current presentation-only package, every support reading used by the
-publication-safety theorem chain factors through the certificate-calculus spine of
-Theorem~\ref{thm:finite-record-certificate-calculus-spine} and then through
-exactly the following four finite coordinates, with no gluing between them unless
-the missing coordinate is explicitly supplied.
+For the current presentation-only package, the primary two-page artifact uses only
+the support-contract summary in \path{submission_abstract.tex}: the local
+theorem-obligation tuple, external supplement or archive surface, pinned
+source-interface record, and implementation-soundness boundary are checked
+independently.  This supplement proves the full finite-record skeleton behind that
+summary.  Every support reading used by the publication-safety theorem chain
+factors through the certificate-calculus spine of
+Theorem~\ref{thm:finite-record-certificate-calculus-spine} and then through exactly
+the following four finite coordinates, with no gluing between them unless the
+missing coordinate is explicitly supplied.
 \begin{enumerate}
 \item The theorem-obligation coordinate is the post-inventory byte tuple of
 Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}, obtained
