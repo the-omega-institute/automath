@@ -10283,6 +10283,59 @@ local record can be read as an upload receipt, DOI, completed supplemental uploa
 or archive-equivalent byte-equality locator.
 \end{proof}
 
+\begin{proposition}[Final support-coordinate refresh closure]
+\label{prop:final-support-coordinate-refresh-closure}
+Fix the selected 2026--06--09 venue/bibliography coordinate
+\path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log}.
+Suppose that, after the accepted bytes of \path{theorem_inventory.json} and
+\path{theorem_inventory.md} exist, the theorem-environment extractor,
+certificate-record verifier, source-interface verifier, and primary-claim
+inventory verifier are rerun with zero-exit logs, and that
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} names the same 2026--06--09
+venue/bibliography log while
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated after those logs and
+manifest bytes exist.  Then the current support state has exactly the following
+closed local coordinates: the post-inventory theorem-obligation tuple, the
+source-interface verifier tuple, the primary-claim verifier tuple, the selected
+2026--06--09 venue/bibliography tuple, and the final digest tuple.  These
+coordinates close the local support surface used by
+Theorem~\ref{thm:four-coordinate-submission-support-skeleton}; they do not add
+the external-support coordinate unless an exact supplemental-upload receipt or an
+archive-equivalent public byte-equality locator is also supplied.
+\end{proposition}
+
+\begin{proof}
+The first hypothesis places the two inventory files before every command-log
+coordinate that reads them.  The theorem-environment extractor therefore reads
+the accepted inventory bytes rather than a pre-inventory ledger, and the three
+finite-record verifiers produce command-result rows tied to the same source
+state.  By Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}
+and Corollary~\ref{cor:stable-replay-post-inventory-tuple}, those ordered rows
+are precisely the local post-inventory theorem-obligation coordinate.
+
+The selected venue/bibliography coordinate is independent of that theorem-ledger
+coordinate: its finite content is the dated 2026--06--09 check log and its
+manifest pointer, not theorem semantics or external availability.  Requiring
+\path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} to name
+\path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log} prevents the
+current support surface from mixing an old manifest date with a new log date.
+Regenerating \path{review_bundle/FINAL_DIGESTS_SHA256.md} after the verifier
+logs and manifest bytes exist then selects the same finite byte strings in one
+digest tuple.  Hence the listed local coordinates are mutually current at the
+byte-record level and close the local support surface used in the
+four-coordinate skeleton.
+
+The final assertion follows from
+Corollary~\ref{cor:local-fixed-point-external-boundary} and
+Proposition~\ref{prop:current-absence-external-support-surface-instantiation}.
+The ordered reruns, manifest pointer, dated venue check, and final digest rows
+record local bytes and local command results only.  They contain neither a venue
+upload receipt nor the file-list, path-semantics, manifest-identity, digest-row,
+and pinned or same-state branch-head byte-equality fields required for an
+archive-equivalent public locator.  Thus the refresh closes the local coordinate
+and supplies no external-support instantiation.
+\end{proof}
+
 \begin{theorem}[Finite-record four-coordinate submission-support skeleton]
 \label{thm:four-coordinate-submission-support-skeleton}
 For the current presentation-only package, every support reading used by the
@@ -10311,12 +10364,14 @@ publication-daemon behaviour, and dynamic artifact validators is absent unless a
 row records the command, source state, environment, exit code, and log path for
 that actual gate program.
 \end{enumerate}
-Consequently, after the post-inventory refresh is run, the present manuscript may
-use the refreshed theorem-inventory tuple as local finite-record support for the
-main theorem chain, but it still proves no upload, archive replacement, public
-repository reachability, public byte equality, Lean/BEDC rebuild, daemon rerun,
-or dynamic artifact-validation claim beyond rows explicitly carrying those
-fields.  For any attempted stronger reading, the bad subrecord is the
+Consequently, after the post-inventory refresh is run and the selected
+2026--06--09 venue/bibliography pointer is synchronized as in
+Proposition~\ref{prop:final-support-coordinate-refresh-closure}, the present
+manuscript may use the refreshed theorem-inventory tuple as local finite-record
+support for the main theorem chain, but it still proves no upload, archive
+replacement, public repository reachability, public byte equality, Lean/BEDC
+rebuild, daemon rerun, or dynamic artifact-validation claim beyond rows
+explicitly carrying those fields.  For any attempted stronger reading, the bad subrecord is the
 inclusion-minimal finite subset containing the proposed stronger claim together
 with the first missing coordinate among the four items just listed.
 \end{theorem}
