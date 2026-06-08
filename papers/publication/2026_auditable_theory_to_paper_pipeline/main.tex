@@ -10445,6 +10445,54 @@ archive-equivalent public locator.  Thus the refresh closes the local coordinate
 and supplies no external-support instantiation.
 \end{proof}
 
+\begin{corollary}[Manifest-required theorem-inventory fixed point]
+\label{cor:manifest-required-theorem-inventory-fixed-point}
+Assume that \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} names
+\path{theorem_inventory.json} as the theorem-inventory coordinate and that the
+accepted package contains both \path{theorem_inventory.json} and
+\path{theorem_inventory.md}.  Suppose further that, after those two files are
+written, the command
+\path{python review_bundle/extract_theorem_environments.py} is run on the same
+\path{main.tex} and exits with a log whose omitted-label count is zero, and that
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is then regenerated over the
+accepted source, inventory, and review-bundle bytes.  Then the local support
+surface has a closed theorem-inventory coordinate: every labelled
+theorem-like environment in the extractor domain is represented in the accepted
+JSON inventory, the Markdown inventory is a human-readable companion to the
+same support coordinate, and the digest manifest is a post-inventory digest
+rather than a pre-inventory placeholder.  No semantic proof-checking,
+external upload, archive-equivalent public locator, or venue-acceptance
+coordinate follows from this fixed point alone.
+\end{corollary}
+
+\begin{proof}
+The manifest hypothesis first makes the JSON inventory a required finite file
+coordinate rather than an optional reviewer note.  Because both inventory files
+are present before the extractor is run, the extractor compares the current
+label set from \path{main.tex} with the accepted JSON inventory bytes, not with
+a missing or anticipated inventory.  The zero omitted-label count is therefore
+exactly the syntactic coverage assertion isolated in
+Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}: it
+covers the listed definition, lemma, proposition, theorem, and corollary
+environments by label and asserts no truth of their statements.
+
+Regenerating \path{review_bundle/FINAL_DIGESTS_SHA256.md} after the source,
+inventory files, and refreshed log are present applies
+Theorem~\ref{thm:digest-closure-refresh-criterion} to the same finite byte
+strings.  Hence the digest rows for the JSON inventory, Markdown inventory,
+and theorem-environment extraction log are post-inventory rows.  The Markdown
+file contributes only a readable mirror of the inventory coordinate; the
+coverage property used by the extractor remains the JSON-label comparison.
+
+Finally, the conclusion is local because every premise is a local path, local
+command result, or local hash row.  The external-support alternatives remain
+exactly those classified in Corollary~\ref{cor:local-fixed-point-external-boundary}:
+an exact supplemental-upload receipt or an archive-equivalent byte-equality
+locator must be supplied separately.  The same reasoning excludes semantic
+proof-checking and venue acceptance, neither of which is one of the finite
+coordinates supplied in the hypotheses.
+\end{proof}
+
 \begin{theorem}[Finite-record four-coordinate submission-support skeleton]
 \label{thm:four-coordinate-submission-support-skeleton}
 For the current presentation-only package, every support reading used by the
