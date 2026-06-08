@@ -1678,12 +1678,12 @@ def is_oracle_final_response_valid(response: str) -> bool:
     if not response:
         return False
     cleaned = response.strip()
-    if len(cleaned) < 300:
-        return False
     lower = cleaned.lower()
     verdict = extract_verdict(cleaned)
     if verdict in {"accept", "minor revision", "major revision", "reject"}:
         return True
+    if len(cleaned) < 300:
+        return False
     if "overall verdict" not in lower and "verdict" not in lower:
         return False
     return any(v in lower for v in (
