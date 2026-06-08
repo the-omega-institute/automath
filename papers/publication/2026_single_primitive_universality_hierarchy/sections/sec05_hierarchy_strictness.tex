@@ -1185,6 +1185,40 @@ sizes, replace the fibre over each normal form by \(\{1,
 constructions are inverse up to relabelling of certificate points.
 \end{proof}
 
+\begin{theorem}[Cover skeleton for \texorpdfstring{\(L2\)}{L2} strictness]
+\label{thm:L2-cover-skeleton-strictness}
+Fix the Zeckendorf normal-form system \((X_m,\Fold_m)\).  In the class of
+computable finite-fibre covers of \Cref{def:computable-cover}, every obstruction
+to a finite-state transfer formula for the second collision moment is witnessed
+entirely by the computable fibre-size function over the fixed sets \(X_m\).  More
+precisely, the cover-relative strictness theorem follows from the following
+two-part skeleton:
+\begin{enumerate}
+\item finite-state transfer sequences are exponentially bounded in the
+  resolution parameter; and
+\item a computable cover may enlarge a single certificate fibre over a fixed
+  normal form at resolution \(m\) to any prescribed computable size \(a_m\).
+\end{enumerate}
+No assertion about the intrinsic fibre multiplicities of the original maps
+\(\Fold_m\) is used or implied by this skeleton.
+\end{theorem}
+
+\begin{proof}
+The first part is \Cref{prop:finite-state-coefficient-budget}: any fixed
+finite-state transfer formula gives a sequence bounded by \(C\lambda^m\) for
+some constants \(C,\lambda\).  For the second part, use
+\Cref{thm:finite-fiber-cover-realization}.  Choose one normal form in each
+nonempty \(X_m\) and assign its cover fibre the computable size \(a_m\), assigning
+size \(1\) to all other cover fibres.  This is a computable finite-fibre cover,
+and by \Cref{lem:cover-preserves-protocol} the projection to \(X_m\), the normal
+forms, and all \(L1\) readouts are unchanged.  Its second collision moment is
+therefore altered only by the chosen fibre-size data; taking a superexponential
+computable sequence such as \(a_m=m!\) violates the exponential budget and gives
+\Cref{thm:finite-state-strictness}.  Since the construction changes only cover
+certificate multiplicities above already fixed normal forms, it makes no claim
+about the unmodified fibres of \(\Fold_m\).
+\end{proof}
+
 \begin{theorem}[Main-article boundary for finite-fibre refinements]
 \label{thm:L2-main-article-boundary}
 Only cover data that leave normal forms fixed are used in this article.  Any
@@ -1229,15 +1263,20 @@ cover multiplicities.  It leaves the original fold map untouched.
 \label{thm:finite-state-strictness}
 There is a computable finite-fibre cover of the Zeckendorf \(L1\) protocol whose
 finite-fibre certificates exist at every resolution but whose second collision
-moment has no fixed finite-state transfer formula.
+moment over the fixed normal-form sets \(X_m\) has no fixed finite-state transfer
+formula.
 \end{theorem}
 
 \begin{proof}
-Apply \Cref{thm:L2-finite-fiber-no-transfer-content} with \(a_m=m!\).  The cover
-is computable and preserves readouts by \Cref{lem:cover-preserves-protocol}.  Its
-second moment grows faster than every exponential, whereas every finite-state
-transfer sequence is exponentially bounded by
-\Cref{prop:finite-state-coefficient-budget}.
+Apply the cover skeleton \Cref{thm:L2-cover-skeleton-strictness} with
+\(a_m=m!\), equivalently apply \Cref{thm:L2-finite-fiber-no-transfer-content} to
+that one-spike sequence.  The cover is computable and preserves readouts by
+\Cref{lem:cover-preserves-protocol}.  Its second moment grows faster than every
+exponential, whereas every finite-state transfer sequence is exponentially
+bounded by \Cref{prop:finite-state-coefficient-budget}.  The obstruction is
+therefore cover-relative: it concerns the added finite certificate fibres over
+the unchanged normal-form sets, not intrinsic multiplicities of the original
+\(\Fold_m\) fibres.
 \end{proof}
 
 \begin{proposition}[Finite prefixes do not certify transfer]
@@ -1258,7 +1297,8 @@ The cover-relative \(L2\) strictness obstruction is exactly a growth-budget
 obstruction: finite-state transfer sequences obey the exponential bound of
 \Cref{prop:finite-state-coefficient-budget}, while computable finite-fibre
 covers can violate it, and every superexponential cover obstruction has the
-one-spike skeleton of \Cref{thm:L2-one-spike-skeleton}.
+one-spike skeleton of
+\Cref{thm:L2-cover-skeleton-strictness,thm:L2-one-spike-skeleton}.
 \end{theorem}
 
 \begin{proof}
