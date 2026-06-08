@@ -1,0 +1,300 @@
+221: not competing final ledgers: $P^{+}_{6}$ is the exact six-row current-package
+222: certificate state used by Theorem~\ref{thm:current-package-certificate-exactness},
+223: while $P^{+}_{7}$ is the submitted theorem-ledger extension used by
+224: Theorem~\ref{thm:theorem-obligation-ledger-boundary}.
+225: \end{theorem}
+226: 
+227: \begin{proof}
+228: The tables and support records are finite, so the assertion is checked by
+229: coordinates.  By definition, $P^{+}_{6}$ contains the primary article, this
+230: supplement, the six accepted rows $a_1,\ldots,a_6$, their certificate fields, and
+231: the conditional review-bundle support surface named in
+232: Proposition~\ref{prop:current-package-acceptance-certificate-ledger}.  The state
+233: $P^{+}_{7}$ is formed by adding one additional row, $a_7$, together with the
+234: manifest exposure of \path{theorem_inventory.json}.  No row $a_i$ with
+235: $1\leq i\leq 6$ is edited in this construction, and no field of its certificate
+236: is replaced: the same finite tuple $(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)$ is read by
+237: Definition~\ref{def:certificate-schema-acceptance-table} in both states.  Hence
+238: Theorem~\ref{thm:record-acceptance-exactness} gives the same acceptance decision
+239: for each of the six rows in both states.
+240: 
+241: The added coordinate has a different declared role.  Its accepted claim is not a
+242: new mathematical proof, a proof-assistant rebuild, or an extractor-completeness
+243: claim; it is the obligation-ledger traceability claim with syntactic label coverage
+244: later classified in Proposition~\ref{prop:manual-theorem-inventory-boundary}.  Since the finite
+245: record added to pass from $P^{+}_{6}$ to $P^{+}_{7}$ is exactly this new row and
+246: its manifest exposure, every accepted claim outside $a_7$ is inherited unchanged
+247: from $P^{+}_{6}$, while $a_7$ supplies only the bounded theorem-ledger coordinate.
+248: This proves both the nesting and the non-competition statement.
+249: \end{proof}
+250: 
+251: The setting is adjacent to proof-assistant systems such as Lean
+252: \cite{deMouraKADR2015Lean}, machine-learning interfaces to formal proving such
+253: as LeanDojo \cite{YangEtAl2023LeanDojo}, informal-to-formal guidance methods
+254: such as Draft--Sketch--Prove \cite{JiangEtAl2023DraftSketchProve}, and
+255: large-scale formal-proof archives such as the Archive of Formal Proofs
+256: \cite{BlanchetteHMN2015AFP}.  Our focus is different: we study the
+257: publication-facing evidence discipline around such sources.
+258: 
+259: \section{Architecture}
+260: 
+261: The workflow separates source work from publication work, and the separation is
+262: the organizing contract for the rest of the supplement.  BEDC source files are
+263: treated as finite-kernel theory together with proof obligations and separate
+264: implementation contracts.  Lean and related markers are formal-verification
+265: records for named obligations, not object-language closure by themselves.
+266: Finite manifests, evaluator rows, bundled snapshots, and command logs are the
+267: substrate witnesses from which publication certificates are built.  AI agents
+268: remain advisory: they may propose, review, and triage, but they do not promote
+269: claims into accepted theory.  The automath layer is therefore a publication
+270: compiler: it packages the source-theory interface, finite witnesses, route state,
+271: and submission boundary without merging those evidence axes.
+272: 
+273: \begin{definition}[Architecture-axis map]
+274: \label{def:architecture-axis-map}
+275: The compiler architecture uses five disjoint evidence axes.  An accepted claim may
+276: read evidence from an axis only at the admissible evidence level shown in
+277: the displayed axis map; the negative boundary in the last column
+278: is part of the claim certificate and cannot be discharged by prose from another
+279: axis.
+280: \begin{center}
+281: \small
+282: \begin{tabularx}{\textwidth}{p{.16\textwidth}p{.27\textwidth}p{.27\textwidth}X}
+283: \toprule
+284: Axis & Role in this paper & Admissible evidence & Negative boundary \\
+285: \midrule
+286: BEDC source theory & finite-kernel theory, proof obligations, and implementation
+287: contracts & pinned source paths, commits, imported labels, bounded summaries, and
+288: source-interface records & not a publication acceptance record, not a fresh rebuild,
+289: and not a complete BEDC exposition \\
+290: Lean markers & formal-verification records for named obligations & recorded build,
+291: axiom-purity, marker-existence, or source-interface rows when named by the package &
+292: not object-language closure, not discovery by itself, and not proof of unrelated
+293: claims \\
+294: Finite witnesses & manifest/evaluator substrate evidence for artifacts and package
+295: certificates & manifest rows, evaluator outcomes, bundled snapshots, verifier logs,
+296: file digests, and limitation ledgers & not semantic universality, not whole-tree
+297: dynamic validation, and not an unbounded artifact rerun \\
+298: Agents & proposal, search, review, ranking, and repair assistance & advisory drafts,
+299: review reports, scheduler scores, and gate-input suggestions after being recorded
+300: as such & not proof evidence, not human promotion, not novelty certification, and
+301: not gate passage \\
+302: Automath publication compiler & intake, route, overlap, submission-pack, and support
+303: surface governance & promotion records, active-paper markers, overlap ledgers,
+304: submission-interface maps, digest manifests, command logs, and upload-or-archive
+305: records when present & not the whole mathematical contribution, not venue
+306: acceptance, and not authority to merge evidence axes \\
+307: \bottomrule
+308: \end{tabularx}
+309: \end{center}
+310: \end{definition}
+311: 
+312: \begin{proposition}[Axis non-escalation]
+313: \label{prop:architecture-axis-non-escalation}
+314: In any record-gate-sound package using Definition~\ref{def:architecture-axis-map},
+315: passage or evidence on one architecture axis cannot certify a load-bearing claim
+316: whose claim kind requires another axis.  More precisely, if a claim certificate
+317: uses an axis $A$ but its stronger reading needs an evidence item or negative-boundary
+318: discharge listed only on a different axis $A'$, then the stronger reading is not
+319: accepted unless the package contains a separate submitted coordinate for $A'$ and
+320: the gates assigned to that coordinate pass.  Consequently
+321: Theorem~\ref{thm:publication-safety-interface} constructs only finite publication
+322: certificates whose axis coordinates are explicitly present in the submitted support
+323: surface; it does not infer BEDC closure from Lean markers, artifact semantics from
+324: manifest rows, proof evidence from agents, venue upload from automath route state,
+325: or support-surface availability from local bundle paths.
+326: \end{proposition}
+327: 
+328: \begin{proof}
+329: The operational interface records a claim by finite coordinates: claim kind,
+330: evidence surface, evidence level, pass records assigned by $\Gamma$, and the
+331: boundary field.  Definition~\ref{def:architecture-axis-map} makes the axis of each
+332: such coordinate explicit and declares the corresponding negative boundary.  If a
+333: stronger reading needs an item on a different axis $A'$, then either the claim-kind
+334: coordinate does not name the kind requiring $A'$, the evidence surface does not
+335: contain an admissible $A'$ item, a required $A'$ pass record is missing, or the
+336: boundary field still excludes the stronger reading.  In all four cases the finite
+337: record verifier of Proposition~\ref{prop:finite-certificate-schema-verifier}
+338: rejects the stronger reading: the dispatch table cannot assign an unmentioned gate,
+339: the surface check cannot read an unsubmitted path or log, the pass-record check
+340: cannot be satisfied without the row, and the boundary check preserves the declared
+341: negative boundary.
+342: 
+343: Conversely, when a separate coordinate for $A'$ is submitted, it is just another
+344: finite component of the package.  It can be accepted only by the same schema:
+345: its claim kind must dispatch to the appropriate gates, its evidence surface must
+346: list the admissible $A'$ evidence, and its boundary must state exactly what is and
+347: is not certified.  Therefore evidence never moves between axes by paraphrase or by
+348: agent-generated text; it moves only by adding an explicit finite coordinate and
+349: passing the assigned gates.  Applying this to the five rows of
+350: Definition~\ref{def:architecture-axis-map} gives the listed consequences.  They are
+351: also the axis-level instance of the coordinate-determination result later isolated
+352: in Theorem~\ref{thm:finite-coordinate-determination-boundary}: facts outside the
+353: finite coordinates of the accepted package are not conclusions of the certificate.
+354: \end{proof}
+355: The reader path is therefore architectural before it is logistical.  The rest of
+356: the supplement first fixes the source-interface spine, then defines the finite
+357: record verifier, then proves the certificate construction and non-escalation
+358: boundary, then instantiates that boundary on the current six-row package, and
+359: only then lists the local case snapshots and command-run inventory.  File tables
+360: are included as finite witnesses for this interface, not as a substitute for the
+361: compiler architecture.
+362: 
+363: \begin{center}
+364: \small
+365: \begin{tabularx}{\linewidth}{p{0.22\linewidth}p{0.08\linewidth}p{0.22\linewidth}p{0.08\linewidth}X}
+366: \toprule
+367: Input layer & & Compiler boundary & & Output layer \\
+368: \midrule
+369: Pinned source paths, bounded source-interface rows, finite manifests, case
+370: snapshots, command logs when present, gate-pass rows, and human-promotion records
+371: & $\longrightarrow$ & finite certificate constructor plus schema verifier
+372: $(K,\ell,E,H,R,D,B;S,L,\Gamma)$ & $\longrightarrow$ & accepted finite
+373: publication certificates and finite bad subrecords, each with an explicit
+374: negative boundary \\
+375: \bottomrule
+376: \end{tabularx}
+377: \end{center}
+378: 
+379: Concretely, the newmath source workspace contains Lean files, scripts, and
+380: artifact sources.  The automath publication workspace contains intake packets,
+381: active paper tracks, review state, and submission metadata.  A candidate first
+382: enters an intake seed.  It becomes an active paper only after a human promotion
+383: decision creates a \texttt{2026\_*} directory with \texttt{main.tex} and
+384: \texttt{PIPELINE.md}.  This prevents source organization from being mistaken for
+385: a submission route.
+386: 
+387: The source side supplies a discovery-gate calculus.  In this calculus,
+388: statement-only and code-only candidates are insufficient; mechanical expansion
+389: and compression are not discovery by themselves; discovery claims require a
+390: semantic certificate and a ledger witness; demotion preserves source-interface
+391: audit soundness;
+392: accepted claims must form an auditable lineage DAG; and a pipeline is safe only
+393: when discovery claims pass the gate before being recorded as accepted work.
+394: The reviewer-facing source snapshot is
+395: \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
+396: copied from the newmath repository path
+397: \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+398: at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}
+399: \cite{bedc-newmath-source}.  The imported interface labels are listed in the
+400: following source-binding record:
+401: \begin{quote}\small
+402: \path{thm:automated-discovery-dna-completeness-obligation};
+403: \path{cor:automated-discovery-statement-code-insufficient};
+404: \path{thm:automated-discovery-mechanical-not-discovery};
+405: \path{thm:automated-discovery-compression-not-discovery};
+406: \path{thm:automated-discovery-certificate-ledger-required};
+407: \path{thm:automated-discovery-positive-implies-discovery};
+408: \path{thm:automated-discovery-scored-claims-public-weights};
+409: \path{thm:automated-discovery-gate-kind-sound};
+410: \path{thm:automated-discovery-demotion-soundness};
+411: \path{thm:automated-discovery-lineage-dag};
+412: \path{thm:automated-discovery-lowest-score-not-best-target};
+413: \path{thm:automated-discovery-selection-favours-classifier-change};
+414: \path{thm:automated-discovery-no-unpaid-discovery};
+415: \path{thm:automated-discovery-pipeline-safety};
+416: \path{thm:automated-discovery-pipeline-theorem};
+417: \path{prin:automated-discovery-principle}.
+418: \end{quote}
+419: 
+420: The exact source interface used by the proof below was extracted from the pinned
+421: commit on 2026-06-01.  At lines 238--246, the source states the DNA-completeness
+422: obligation for gate-passed discovery genomes.  At lines 248--255, it states that
+423: candidates supplying only a statement locus or only legal theorem code do not
+424: pass the discovery gate as theorem genomes.  At lines 258--267 and 269--278, it
+425: states that mechanical expansion and same-classifier genome compression do not
+426: imply discovery.  At lines 280--297, it states that a discovery transition
+427: supplies a semantic naming certificate and a ledger witness.  At lines 299--332,
+428: it records the positive-discovery, public-weight, and gate-kind-soundness
+429: interfaces used by the package verifier below.  At lines 334--345, it states
+430: that gate demotion leaves a claim kind no stronger than its actual evidence.  At
+431: lines 366--374, it states that lineage-consistent accepted claims form an
+432: auditable acyclic lineage graph.  At lines 393--418, it states that the lowest
+433: score need not be the best target and that, when all other discovery-potential
+434: coordinates are fixed, a positive classifier-change coefficient makes the
+435: selection operator favor the classifier-changing candidate.  At lines 432--439,
+436: it states that an accepted pipeline has no accepted discovery claim missing gate
+437: evidence.  At lines 441--455, pipeline safety states that accepted discovery
+438: claims have classifier change, semantic naming certificate, ledger witness,
+439: DNA-complete theorem genome, score certificate, lineage witness, and an explicit
+440: not-claimed boundary.  At lines 457--485, the main pipeline theorem and principle
+441: separate record growth, score reduction, recombination, classifier change,
+442: ledgered discovery, and certified structural theorem-genome change.  These paraphrases are
+443: used only as a stable interface to the pinned source theorem spine; no stronger
+444: source rebuild claim is made here.
+445: 
+446: \begin{table}
+447: \caption{Checked source-interface record for imported discovery-gate labels}
+448: \label{tab:source-interface-record}
+449: \scriptsize
+450: \begin{tabularx}{\linewidth}{p{0.32\linewidth}p{0.18\linewidth}X}
+451: \toprule
+452: Imported label & Lines & Statement summary \\
+453: \midrule
+454: \path{thm:automated-discovery-dna-completeness-obligation} & 238--246 & non-DNA-complete candidates cannot be principal theorem genomes of gate-passed discovery claims \\
+455: \path{cor:automated-discovery-statement-code-insufficient} & 248--255 & statement-only and code-only candidates do not pass as theorem genomes \\
+456: \path{thm:automated-discovery-mechanical-not-discovery} & 258--267 & mechanical expansion has no classifier shift and therefore is not discovery \\
+457: \path{thm:automated-discovery-compression-not-discovery} & 269--278 & same-classifier compression is not discovery by itself \\
+458: \path{thm:automated-discovery-certificate-ledger-required} & 280--297 & discovery supplies a semantic naming certificate and a ledger witness \\
+459: \path{thm:automated-discovery-positive-implies-discovery} & 299--307 & positive discovery is discovery with an added net compression inequality \\
+460: \path{thm:automated-discovery-scored-claims-public-weights} & 309--318 & score and cost-comparison claims expose the public weight profile \\
+461: \path{thm:automated-discovery-gate-kind-sound} & 320--332 & a gate-passed claim satisfies the obligations attached to its claim kind \\
+462: \path{thm:automated-discovery-demotion-soundness} & 334--345 & demotion records no stronger kind than the evidence supports \\
+463: \path{thm:automated-discovery-lineage-dag} & 366--374 & lineage-consistent accepted claims form an auditable acyclic graph \\
+464: \path{thm:automated-discovery-lowest-score-not-best-target} & 393--406 & lower score alone can be a worse target than a structurally stronger genome \\
+465: \path{thm:automated-discovery-selection-favours-classifier-change} & 408--418 & with positive classifier-change weight and other coordinates fixed, selection favors classifier change \\
+466: \path{thm:automated-discovery-no-unpaid-discovery} & 432--439 & an accepted pipeline has no accepted discovery claim missing gate evidence \\
+467: \path{thm:automated-discovery-pipeline-safety} & 441--455 & accepted discovery has classifier change, certificate, ledger, genome, score, lineage, and boundary witnesses \\
+468: \path{thm:automated-discovery-pipeline-theorem} & 457--475 & the pipeline separates record growth, score reduction, recombination, classifier change, and ledgered discovery \\
+469: \path{prin:automated-discovery-principle} & 479--485 & automated discovery is certified structural theorem-genome change under an auditable gate \\
+470: \bottomrule
+471: \end{tabularx}
+472: \end{table}
+473: 
+474: All rows in Table~\ref{tab:source-interface-record} are extracted from the
+475: newmath repository path
+476: \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+477: at source commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}; the extraction
+478: date is 2026-06-01.  The table is the path-verified source-interface record used
+479: by this paper: it binds each imported label to a repository path, pinned commit,
+480: line range, extraction date, and bounded statement summary.  The same record is
+481: mirrored in \path{source_interface_record.json}.  For external review, the
+482: source-interface file is copied into the supplemental review bundle at
+483: \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex},
+484: and the bundle manifest is \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  This
+485: bundle reference is a submission-local support-surface note, not an external
+486: publication citation; it is load-bearing only if the exact bundle is uploaded with matching final digests.
+487: 
+488: \begin{lemma}[Manual bounded source-interface extraction correctness]
+489: \label{lem:source-interface-extraction-correctness}
+490: For the pinned newmath repository path
+491: \path{papers/bedc/parts/visions/audit_map_methodology/automated_theory_discovery_pipeline_calculus.tex}
+492: at commit \path{3fb3d6a0641767388a401883062aa522ea0b397b},
+493: Table~\ref{tab:source-interface-record} is the complete imported interface used
+494: by this paper at the manual path-verified level and only at that level.  Its extraction certificate is:
+495: manual line-range audit against the pinned file, mirrored in
+496: \path{source_interface_record.json}, extraction date 2026-06-01, and summary
+497: mode ``bounded paraphrase'' rather than replacement of the full source
+498: statements.  Consequently every use below of an imported discovery-gate label is
+499: limited to the corresponding row's path, commit, label, line range, and bounded
+500: summary.  Even when an explicitly named executable finite record comparison is
+501: also invoked, the upgraded content is only equality and containment of those
+502: finite fields; exact source statements are not imported.  In particular, the
+503: lemma is not a fresh Lean/BEDC rebuild, not an axiom-purity certificate, and not
+504: a semantic proof of the imported source theorem statements.
+505: \end{lemma}
+506: 
+507: \begin{proof}
+508: The first two columns of Table~\ref{tab:source-interface-record} give, for every
+509: imported label named in the source-binding record, the source label and the line
+510: range from which the interface is extracted.  The paragraph immediately before
+511: the table fixes the only source file and commit used for those labels; the
+512: paragraph immediately after the table fixes the extraction date and identifies
+513: \path{source_interface_record.json} as the mirrored check record.  The third
+514: column deliberately records bounded summaries: each row states only the
+515: interface property needed later, such as insufficiency of statement-only records,
+516: certificate-and-ledger requirements, demotion soundness, lineage acyclicity,
+517: bounded classifier-change selection, or pipeline safety.  No later theorem cites
+518: an imported label outside this sixteen-row list, and no later proof uses a
+519: stronger form than the corresponding bounded summary.  A Lean rebuild,
+520: axiom-purity check, exact source-statement import, or semantic source-theorem

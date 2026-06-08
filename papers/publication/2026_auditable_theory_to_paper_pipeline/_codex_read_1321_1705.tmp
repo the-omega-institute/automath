@@ -1,0 +1,385 @@
+1321: \[
+1322: \mathcal C(c)=
+1323: \{K,\ell,E,H,R,D,B\}.
+1324: \]
+1325: Its typed fields are these and only these: $K$ is a finite set of claim kinds;
+1326: $\ell\in\{\mathsf{path},\mathsf{command}\}$ is the declared evidence level; $E$
+1327: is a finite evidence-surface list; $H$ is the route-boundary field; $R$ is a
+1328: finite family of gate pass records, each with gate name, input surface, decision,
+1329: evidence pointer, and evidence level; $D$ is either empty or a finite list of
+1330: pinned discovery source-interface rows; and $B$ is the command-boundary field.
+1331: This is a data schema, not a theorem: all later exactness claims must be proved
+1332: from this displayed record and cannot appeal to unlisted package state.  Define
+1333: $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ to be the conjunction of the six finite
+1334: table predicates A1--A6 displayed below; no clause may query generated
+1335: prose, a live daemon, an artifact evaluator, a proof assistant, or a venue state
+1336: outside these fields and their cited submitted surfaces.
+1337: 
+1338: \begin{center}
+1339: \centering
+1340: \small
+1341: \begin{tabularx}{\linewidth}{p{0.08\linewidth}p{0.22\linewidth}X}
+1342: \toprule
+1343: Clause & Field read & Acceptance condition \\
+1344: \midrule
+1345: A1 & $K,\ell$ & $K$ is a nonempty subset of the seven-kind domain and $\ell$ is one of the two evidence levels. \\
+1346: A2 & $E$ & Every evidence item is a submitted path, review-bundle path, manifest row, log path, pinned commit, or explicit historical-evidence boundary available at level $\ell$. \\
+1347: A3 & $K,R,E$ & For every gate in $\bigcup_{k\in K}\Gamma(k)$, $R$ has a pass record with gate name, input surface, decision, evidence pointer, and evidence level; the pointer lies in $E$ or in a named submitted table, manifest row, bundled snapshot, or historical boundary. \\
+1348: A4 & $H$ & $H$ records human promotion exactly when $c$ crosses the intake-to-publication boundary, and otherwise records that no such crossing occurs. \\
+1349: A5 & $K,D$ & $D$ is present exactly when discovery lies in $K$, and then names the pinned discovery-gate source-interface rows used by $c$. \\
+1350: A6 & $\ell,B$ & $B$ records command, source commit, environment, exit code, and log path for command-run evidence, or records that no command-run assertion is made. \\
+1351: \bottomrule
+1352: \end{tabularx}
+1353: \end{center}
+1354: \end{definition}
+1355: 
+1356: \begin{proposition}[Finite certificate schema verifier as a record check]
+1357: \label{prop:finite-certificate-schema-verifier}
+1358: For every load-bearing manuscript claim $c$ whose component kinds lie in the
+1359: seven-kind domain, $V(c,\mathcal C)$ is a finite, prose-insensitive
+1360: record-schema verifier for the declared publication certificate.  The submitted
+1361: package instantiates $V$ by the script
+1362: \path{review_bundle/verify_certificate_records.py}.  On the positive package
+1363: input it reads the schema file, pass-record ledger, submission-interface map,
+1364: primary-claim inventory, and review-bundle manifest named above, and outputs
+1365: acceptance in \path{review_bundle/certificate_verification_run.log}.  On the
+1366: negative fixture \path{review_bundle/negative_certificate_record_example.json} it
+1367: outputs rejection in \path{review_bundle/negative_certificate_record_example_run.md}
+1368: with the bad subrecord \path{neg1: command-run fields incomplete}.  If $V$
+1369: accepts, then $\mathcal C(c)$ is locally checkable at exactly its declared
+1370: evidence level.  This is certificate-record verification only: it checks finite
+1371: record shape, dispatch, evidence pointers, and command-boundary discipline, not
+1372: end-to-end external semantic validation of the referenced artifacts or source
+1373: theory.  If $V$ rejects, then a reviewer can extract a finite bad subrecord
+1374: consisting of the first failed schema check and the fields on which that check
+1375: depends.
+1376: \end{proposition}
+1377: 
+1378: \begin{proof}
+1379: The verifier inspects only the displayed tuple $\mathcal C(c)$, the finite
+1380: seven-kind domain, the finite dispatch table $\Gamma$, and the finite list of
+1381: paths, rows, commits, or logs cited by the record.  The package script realizes
+1382: these inputs as five finite JSON files: the schema supplies the seven-kind
+1383: domain, evidence levels, gate dispatch table, required record fields, required
+1384: pass-record fields, accepted decisions, manifest-required files, and accepted
+1385: artifact-prefix patterns; the ledger supplies the seven current records $a_1,
+1386: \ldots,a_7$; the submission-interface map and primary-claim inventory supply the
+1387: finite manuscript-facing row sets; and the manifest supplies the submitted bundle
+1388: paths.  The script output is either the pass transcript in
+1389: \path{certificate_verification_run.log} or a list of \path{ERROR: ...} lines,
+1390: each naming the failed finite condition.  Since $K$ is required to be a subset of
+1391: the seven-kind domain, the set \(\bigcup_{k\in K}\Gamma(k)\) is finite.  The
+1392: checks over $E$, $R$, and the command-run fields are therefore finite lookups in
+1393: named manuscript or bundle surfaces, not semantic judgments about generated
+1394: prose.
+1395: 
+1396: If all six checks pass, the tuple has exactly the fields required in the
+1397: definition of a publication certificate: a finite kind set $K$, declared evidence
+1398: level $\ell$, evidence surface $E$, route-boundary field $H$, gate-record field
+1399: $R$, optional discovery field $D$ with the required presence condition, and
+1400: evidence-strength boundary $B$.  Since $V$ is the conjunction of the explicit
+1401: predicates $P_1,\ldots,P_6$, the six table clauses A1--A6 hold for exactly the
+1402: same finite inputs.  Check~(ii) is precisely the local-checkability condition on
+1403: cited paths, manifest rows, logs, pinned commits, and historical boundaries.
+1404: Checks~(iii)--(vi) prevent record-level escalations of the declared level:
+1405: missing gate-passage records, unrecorded route promotion, unsupported discovery
+1406: routing, and command-run assertion without command-run fields.  Thus an accepted
+1407: record is locally checkable at the level $\ell$ it declares, and no stronger
+1408: level is silently inferred by the record checker.
+1409: 
+1410: If a check fails, the verifier stops at a finite test.  The bad subrecord is the
+1411: finite collection of fields read by that failed test: for example, $K$ and
+1412: $\Gamma$ for a gate-domain failure, $E$ for an evidence-surface failure, $K$,
+1413: $\Gamma$, $R$, and the cited evidence item for a gate-record failure, $H$ for a
+1414: promotion failure, $K$ and $D$ for a discovery-field failure, or $\ell$ and $B$
+1415: for an evidence-level failure.  The supplied negative fixture is exactly the last
+1416: case: it declares $\ell=\mathsf{command}$ but provides no
+1417: \path{boundary.command_run_fields} containing command, source commit,
+1418: environment, exit code, and log path, so the bad subrecord is the pair consisting
+1419: of the evidence-level field and the boundary field.  This subrecord is
+1420: independent of any surrounding paragraph that may have described the claim.\end{proof}
+1421: 
+1422: \begin{theorem}[Verifier input--predicate--output contract]
+1423: \label{thm:verifier-input-output-contract}
+1424: The verifier interface used by the publication-safety theorem is exactly the
+1425: following finite mathematical-software contract.  Its input is a pair
+1426: $(c,\mathcal C(c))$, where $c$ is a load-bearing manuscript claim and
+1427: \(\mathcal C(c)=(K,\ell,E,H,R,D,B)\) is the certificate record of
+1428: Definition~\ref{def:certificate-schema-acceptance-table}, together with the fixed
+1429: dispatch table $\Gamma$ and the submitted support surface $S$.  Its checked
+1430: predicates and outputs are:
+1431: \begin{center}
+1432: \centering
+1433: \small
+1434: \begin{tabularx}{\linewidth}{p{0.12\linewidth}p{0.30\linewidth}X}
+1435: \toprule
+1436: Check & Predicate actually checked & Possible output \\
+1437: \midrule
+1438: $Q_1$ & $K$ is nonempty, $K\subseteq\mathsf{Dom}(\Gamma)$, and $\ell\in\{\mathsf{path},\mathsf{command}\}$ & accept this coordinate, or reject with bad fields $K,\ell$ \\
+1439: $Q_2$ & each item of $E$ is on $S$ or in an explicitly declared pinned, logged, or historical boundary & accept this coordinate, or reject with bad field $E$ and the offending pointer \\
+1440: $Q_3$ & every gate assigned by $\Gamma$ to a kind in $K$ has a passing five-field record in $R$ whose pointer is reviewable through $E$, a submitted table, a manifest row, a bundled snapshot, or an historical boundary & accept this coordinate, or reject with bad fields $K,R,E$ and the missing or non-reviewable gate \\
+1441: $Q_4$ & $H$ records exactly the human-promotion crossing asserted by $c$, or records that no such crossing is asserted & accept this coordinate, or reject with bad field $H$ \\
+1442: $Q_5$ & $D$ is present exactly for discovery-kind claims and then names only pinned source-interface rows used by $c$ & accept this coordinate, or reject with bad fields $K,D$ \\
+1443: $Q_6$ & $B$ either contains command, source state, environment, exit code, and log path, or explicitly marks that no command-run assertion is made & accept this coordinate, or reject with bad fields $\ell,B$ \\
+1444: \bottomrule
+1445: \end{tabularx}
+1446: \end{center}
+1447: The positive output is only the finite acceptance bit
+1448: $\mathsf{accept}(c,\mathcal C)$ for these six predicates.  The negative output is
+1449: only the finite bad subrecord belonging to the first failed predicate.  In
+1450: particular, the contract has no output channel for proof-assistant validity,
+1451: daemon correctness, artifact semantics, fresh case-study reruns, venue upload, or
+1452: venue acceptance.  Therefore any theorem in this paper that invokes the verifier
+1453: can certify exactly finite record acceptance for the submitted schema and cannot
+1454: certify end-to-end workflow correctness unless an enlarged input schema and an
+1455: additional proved verifier contract are supplied.
+1456: \end{theorem}
+1457: 
+1458: \begin{proof}
+1459: The input type is displayed in
+1460: Definition~\ref{def:certificate-schema-acceptance-table}: after the fixed table
+1461: $\Gamma$ is chosen, the only variable fields are $K,\ell,E,H,R,D,B$.  The
+1462: submitted support surface $S$ is used only to decide whether the finite pointers
+1463: named in those fields are reviewer-visible at the declared level.  Thus every
+1464: listed predicate is a finite Boolean predicate on the displayed input fields and
+1465: on the fixed submitted support surface.
+1466: 
+1467: For each row, the predicate is identical to one of the six predicates used in the
+1468: definition of $V$: $Q_i=P_i$ for $1\leq i\leq 6$, with the same fields read and
+1469: with the same failure subrecord, namely the fields read by the least-indexed
+1470: failed predicate.  Proposition~\ref{prop:finite-certificate-schema-verifier}
+1471: proves that the bundled Python checker is an implementation witness for this
+1472: finite schema: it reads the schema, pass-record ledger, submission-interface map,
+1473: primary-claim inventory, and manifest, and returns either the pass transcript or
+1474: finite error records.  The theorem here is the abstract verifier contract behind
+1475: that implementation witness, so its output alphabet is precisely
+1476: \(\{\mathsf{accept}\}\) together with the finite bad-subrecord reports.
+1477: 
+1478: The final boundary follows by inspection of the input and output alphabets.  No
+1479: field in $\mathcal C(c)$ contains an object-language proof derivation, a theorem
+1480: prover kernel trace, a daemon transition semantics, an artifact evaluator
+1481: semantics, a fresh rerun transcript for the historical case studies, or a venue
+1482: receipt.  No output of the contract returns such an object either.  A conclusion
+1483: depending on one of those objects is therefore not a function of the declared
+1484: input record.  It can become checkable only after the schema is enlarged to add
+1485: that object as an input coordinate and after a new verifier contract for the
+1486: enlarged coordinate is proved.  Hence the present verifier certifies only finite
+1487: record acceptance and its finite rejection witnesses.\end{proof}
+1488: 
+1489: \begin{theorem}[Auditable compiler-boundary completeness]
+1490: \label{thm:auditable-compiler-boundary-completeness}
+1491: For the architecture of Definition~\ref{def:architecture-axis-map} and the
+1492: finite verifier of Theorem~\ref{thm:verifier-input-output-contract}, the software
+1493: contribution certified by Theorem~\ref{thm:publication-safety-interface} is
+1494: exactly the following compiler-boundary property.  Every accepted load-bearing
+1495: claim in the publication package is the image of a finite input tuple
+1496: \[
+1497:   (K,\ell,E,H,R,D,B;S,L,\Gamma)
+1498: \]
+1499: whose evidence fields are on the submitted support surface or in an explicitly
+1500: pinned historical boundary, and every rejected stronger reading has a finite bad
+1501: subrecord in one of those fields.  Conversely, no fact that is not a function of
+1502: this tuple is a compiler-boundary output.  In particular, correctness of gate
+1503: implementations, Lean/BEDC rebuild success, daemon behaviour, artifact semantic
+1504: validity, live case-study reruns, venue upload, archive availability, and venue
+1505: acceptance are certified only after the corresponding finite coordinate and
+1506: assigned pass record are added to the input tuple.
+1507: \end{theorem}
+1508: 
+1509: \begin{proof}
+1510: The displayed architecture table identifies the only compiler input channels
+1511: used in this paper: source-interface rows, manifest or witness rows, command-log
+1512: rows when present, gate-pass rows, route-promotion rows, and declared limitation
+1513: boundaries.  Definition~\ref{def:operational-acceptance-interface} packages those
+1514: channels as \((K,\ell,E,H,R,D,B)\) over a submitted support surface \(S\), a
+1515: ledger \(L\), and dispatch table \(\Gamma\).  Theorem~\ref{thm:verifier-input-output-contract}
+1516: then proves that the verifier reads exactly these fields through the six checks
+1517: \(Q_1,\ldots,Q_6\) and has exactly two output types: a finite acceptance bit for
+1518: the certificate tuple, or the finite bad subrecord read by the first failed
+1519: check.  Therefore every positive publication-safety conclusion later obtained
+1520: from the verifier is an image of the displayed finite tuple, and every negative
+1521: conclusion is localized to a finite bad subrecord of that tuple.
+1522: 
+1523: It remains to prove exactness of the boundary.  Suppose two surrounding workflow
+1524: states agree on \((K,\ell,E,H,R,D,B;S,L,\Gamma)\) but differ in an unread object,
+1525: such as the source code of a gate implementation, a proof-assistant checkout, a
+1526: daemon trace, an artifact rerun, a venue-upload state, an archive locator, or an
+1527: unsubmitted public-source comparison.  The six verifier checks have the same
+1528: truth values in the two states, because none of their inputs changed.  Hence a
+1529: claim that distinguishes the two states is not determined by the compiler
+1530: boundary.  This is precisely the finite-coordinate obstruction of
+1531: Theorem~\ref{thm:finite-coordinate-determination-boundary} and the axis
+1532: non-escalation of Proposition~\ref{prop:architecture-axis-non-escalation}.
+1533: 
+1534: Conversely, if one of the listed stronger facts is submitted as a finite
+1535: coordinate---for example by adding gate source identity, command, source state,
+1536: environment, exit code, log path, digest binding, public byte-equality row,
+1537: upload-or-archive row, or assigned implementation-gate pass row---then it is no
+1538: longer an unread ambient fact.  It is an ordinary extension in the preorder of
+1539: Definition~\ref{def:stronger-reading-preorder}.  The finite extension-budget
+1540: normal form, Theorem~\ref{thm:finite-extension-budget-normal-form}, says exactly
+1541: that the enlarged reading is accepted iff those added coordinates are present and
+1542: their assigned gates pass.  Thus the theorem is a completeness statement for the
+1543: auditable compiler boundary and deliberately not a proof of gate implementation
+1544: correctness or semantic validity outside that boundary.
+1545: \end{proof}
+1546: 
+1547: \begin{theorem}[Executable-record verifier normal form]
+1548: \label{thm:finite-verifier-normal-form}
+1549: Fix the dispatch table $\Gamma$, the submitted support surface $S$, and the
+1550: finite certificate schema of Definition~\ref{def:certificate-schema-acceptance-table}.
+1551: There is a deterministic verifier
+1552: \[
+1553: \mathsf{Check}_{\Gamma,S}(c,K,\ell,E,H,R,D,B)
+1554: \]
+1555: with the following presentation-layer input/output normal form.
+1556: \begin{center}
+1557: \small
+1558: \begin{tabularx}{\linewidth}{p{0.18\linewidth}p{0.36\linewidth}X}
+1559: \toprule
+1560: Step & Input fields read & Returned value \\
+1561: \midrule
+1562: 1 & $K,\ell$ & reject with $(Q_1,K,\ell)$, or continue \\
+1563: 2 & $E$ and $S$ & reject with $(Q_2,E,e_0)$ for the first non-reviewable pointer $e_0$, or continue \\
+1564: 3 & $K,\Gamma,R,E,S$ & reject with $(Q_3,g,K,R,E)$ for the first missing or non-reviewable assigned gate $g$, or continue \\
+1565: 4 & $H$ and the route-crossing status of $c$ & reject with $(Q_4,H)$, or continue \\
+1566: 5 & $K,D$ & reject with $(Q_5,K,D)$, or continue \\
+1567: 6 & $\ell,B$ & reject with $(Q_6,\ell,B)$, or return $\mathsf{accept}(c,\mathcal C)$ \\
+1568: \bottomrule
+1569: \end{tabularx}
+1570: \end{center}
+1571: The verifier is an implementation-contract normal form for this finite schema:
+1572: as a map from the displayed finite input record to the displayed finite output
+1573: alphabet, it is extensionally equal to the predicate $V$ and to the table
+1574: relation $\mathsf{Acc}_{\Gamma}$.  It returns acceptance if and only if all six
+1575: schema predicates A1--A6 hold, and otherwise returns exactly the first finite
+1576: bad subrecord.  This contract is exhausted by the finite record projection: any
+1577: script or implementation that claims to witness this theorem witnesses only the
+1578: same input--predicate--output relation on the submitted fields.  In particular,
+1579: every positive output used by Theorem~\ref{thm:publication-safety-interface} is
+1580: produced by this finite loop over submitted coordinates; the loop has no branch
+1581: that can accept a stronger semantic, implementation, venue, archive, or
+1582: proof-assistant reading.
+1583: \end{theorem}
+1584: 
+1585: \begin{proof}
+1586: Define \(\mathsf{Check}_{\Gamma,S}\) by the six displayed steps.  The first step
+1587: is predicate $Q_1$, hence predicate $P_1$ and clause A1.  If it fails, the only
+1588: fields inspected are $K$ and $\ell$, so the returned subrecord is finite and is
+1589: the first possible failed predicate.  If it succeeds, the verifier proceeds to
+1590: step~2.  The second step is exactly the evidence-surface predicate $Q_2=P_2$ and
+1591: clause A2; since $E$ is a finite list in an accepted certificate candidate and
+1592: $S$ is a finite submitted support surface for this package, membership and
+1593: boundary tests are finite lookups, and the first offending pointer $e_0$ is a
+1594: finite subrecord.  The third step computes the finite assigned-gate set
+1595: \(\bigcup_{k\in K}\Gamma(k)\) and applies $Q_3=P_3$, clause A3, to the finite
+1596: pass-record list $R$ and the finite reviewable surfaces.  A missing assigned
+1597: gate or non-reviewable pass-record pointer therefore yields the displayed finite
+1598: subrecord and no semantic countermodel.
+1599: 
+1600: The remaining steps are the same identification for the remaining coordinates:
+1601: step~4 is $Q_4=P_4$ and A4, step~5 is $Q_5=P_5$ and A5, and step~6 is
+1602: $Q_6=P_6$ and A6.  Thus a run reaches the accepting branch exactly when none of
+1603: the six schema predicates fails.  This proves extensional equality with
+1604: \(V=\bigwedge_{i=1}^{6}P_i\), and Definition~\ref{def:certificate-schema-acceptance-table}
+1605: identifies the same conjunction with \(\mathsf{Acc}_{\Gamma}\).  The bad
+1606: subrecord is first-failure exact by construction, because the verifier stops at
+1607: the least numbered failed step and has inspected only the fields listed in that
+1608: row.
+1609: 
+1610: Finally, the normal form lists every input coordinate and every output token of
+1611: the algorithm.  This is the promised implementation contract: changing an
+1612: implementation while preserving the same finite input projection and the same
+1613: six comparisons preserves the accepted and rejected output records, and changing
+1614: any accepted output requires changing one of the displayed finite predicates or
+1615: one of the displayed input fields.  None of those fields is a proof-assistant
+1616: derivation, a theorem-body semantic judgment, an artifact evaluator trace, a
+1617: live upload receipt, an archive locator, or a venue decision.  Therefore the
+1618: positive branch cannot be read as any of those stronger assertions.  Such an
+1619: assertion can be accepted only by enlarging the schema with the missing
+1620: coordinate and proving a new input/output contract, as required later by
+1621: Theorem~\ref{thm:implementation-soundness-extension-criterion}.\end{proof}
+1622: 
+1623: \begin{theorem}[Schema-relative executable-record acceptance exactness]
+1624: \label{thm:record-acceptance-exactness}
+1625: Fix the seven-kind dispatch table $\Gamma$, the two evidence levels, and the
+1626: typed certificate tuple
+1627: $\mathcal C(c)=(K,\ell,E,H,R,D,B)$ of
+1628: Definition~\ref{def:certificate-schema-acceptance-table}.  For every
+1629: load-bearing claim $c$ and every finite candidate certificate $\mathcal C(c)$,
+1630: the finite verifier $V$ of
+1631: Definition~\ref{def:operational-acceptance-interface} and
+1632: Theorem~\ref{thm:verifier-input-output-contract} accepts $\mathcal C(c)$ if
+1633: and only if the six-clause table predicate
+1634: $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.  This is a schema-relative and
+1635: finite-record-relative assertion: both sides read exactly the fields named in the
+1636: fixed schema and in the finite submitted record surface, and neither side ranges
+1637: over unrecorded semantic facts about the referenced mathematics, artifacts, or
+1638: gate implementations.  Moreover, if $V$ accepts a record for $c$, the same record
+1639: cannot certify any stronger reading $c^{+}$ that adds a new claim kind, a stronger
+1640: evidence level, an omitted route crossing, an omitted discovery interface, an
+1641: omitted pass record, or a command-run assertion: such a reading has a finite bad
+1642: subrecord of the corresponding clause.  Thus $V$ is exact for this paper's finite
+1643: record-acceptance relation over the submitted source, tables, manifests, logs,
+1644: and explicitly declared historical boundaries, while remaining silent about
+1645: external semantic validity of the referenced theory or artifacts and about the
+1646: implementation-level soundness of any deployed gate implementation beyond the
+1647: recorded pass rows.
+1648: \end{theorem}
+1649: 
+1650: \begin{proof}
+1651: The definition of $V$ and the six clauses above use the same finite inputs.
+1652: Predicate $P_1$ is clause~A1, $P_2$ is clause~A2, and $P_3$ is clause~A3,
+1653: including both assigned-gate coverage and the requirement that each evidence
+1654: pointer be tied to the declared review surface.  Predicates $P_4$, $P_5$, and
+1655: $P_6$ are exactly clauses~A4, A5, and A6.  Therefore, if
+1656: $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds, every verifier predicate is true
+1657: and $V$ accepts.
+1658: 
+1659: Conversely, suppose $V$ accepts.  Reading the successful checks in order gives
+1660: precisely clauses~1--6: the kind set and evidence level are in the permitted
+1661: domains; the evidence surface is reviewer-available at the declared level; every
+1662: gate assigned by $\Gamma$ has a pass record with the required five fields and an
+1663: allowed pointer; promotion and non-promotion are separated by $H$; discovery-kind
+1664: claims and only discovery-kind claims carry $D$; and $B$ fixes the command-run
+1665: boundary.  Hence $\mathsf{Acc}_{\Gamma}(c,\mathcal C)$ holds.
+1666: 
+1667: For the final assertion, keep the accepted tuple fixed and consider a proposed
+1668: stronger reading $c^{+}$.  If $c^{+}$ adds a claim kind, the finite set of gates
+1669: assigned by $\Gamma$ grows unless the added kind is vacuous in this interface;
+1670: without the corresponding pass records clause~3 fails, and if the kind lies
+1671: outside the seven-kind domain clause~1 fails.  If $c^{+}$ raises the evidence
+1672: level to command-run, clause~6 fails unless the command, commit, environment,
+1673: exit code, and log path are present.  If it adds a route crossing, clause~4 fails
+1674: unless $H$ contains the human-promotion record.  If it adds discovery content,
+1675: clause~5 fails unless the pinned discovery rows are named.  If it asserts a new
+1676: gate-dependent conclusion without a pass record, clause~3 fails.  In each case
+1677: the failed clause reads only finitely many fields, so deleting irrelevant unread
+1678: fields gives an inclusion-minimal bad subrecord.  If none of the clauses changes,
+1679: then $c^{+}$ is not stronger in the record semantics: the certificate still
+1680: licenses only the same kind set, same evidence level, same gate records, same
+1681: route boundary, same discovery interface, and same command boundary.\end{proof}
+1682: 
+1683: \begin{corollary}[Executable schema exactness and negative fixture]
+1684: \label{cor:executable-schema-exactness-negative-fixture}
+1685: Under the hypotheses and fixed schema of
+1686: Theorem~\ref{thm:record-acceptance-exactness}, the executable verifier instance
+1687: \path{review_bundle/verify_certificate_records.py} is a finite witness of the
+1688: same schema-relative relation, not an additional semantic oracle.  On the positive
+1689: submitted package it can witness exactly the records satisfying
+1690: \(\mathsf{Acc}_{\Gamma}\) at their declared evidence levels.  On the negative
+1691: fixture
+1692: \path{review_bundle/negative_certificate_record_example.json}, which upgrades a
+1693: route record to command-run strength while omitting the command, source state,
+1694: environment, exit code, and log path, the extracted bad subrecord is exactly the
+1695: evidence-level declaration together with the incomplete boundary field.  Hence
+1696: the executable example separates the verifier contract from any stronger reading:
+1697: changing prose or ambient pipeline state while keeping the finite schema fields
+1698: fixed cannot change either the acceptance bit or the first failed finite
+1699: subrecord.
+1700: \end{corollary}
+1701: 
+1702: \begin{proof}
+1703: Proposition~\ref{prop:finite-certificate-schema-verifier} identifies the script
+1704: \path{review_bundle/verify_certificate_records.py}, the schema files it reads,
+1705: and the two recorded runs.  Its positive run returns the finite acceptance

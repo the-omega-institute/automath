@@ -1,0 +1,650 @@
+7901: that external Lean or BEDC semantics were rebuilt, or that theorem-like material
+7902: outside $\mathcal E$ is covered.
+7903: \end{theorem}
+7904: 
+7905: \begin{proof}
+7906: The extractor is a finite program whose inputs are exactly the two byte strings
+7907: at \path{main.tex} and \path{theorem_inventory.json}.  It scans the source lines
+7908: for beginnings of the five displayed environment names, records the first
+7909: \path{\textbackslash label\{...\}} before the matching end of the same
+7910: environment, and forms the finite set $T$ of recorded labels together with line
+7911: numbers, titles, and environment names.  It also reads the inventory JSON and
+7912: forms the finite set $I$ of labels appearing in inventory label fields with one
+7913: of the package theorem-label prefixes.  These operations are deterministic
+7914: functions of the two input byte strings.
+7915: 
+7916: The script exits with code \path{0} exactly when three finite tests pass: there
+7917: is no element of $\mathcal E$ without a label, no duplicate label in $T$, and
+7918: $T\subseteq I$.  Therefore a refreshed exit-code-zero log proves precisely the
+7919: syntactic coverage assertion: every labelled theorem-like environment in the
+7920: chosen domain has a corresponding inventory label and the source labels are
+7921: well-formed for this comparison.  If any test fails, the printed missing-label,
+7922: duplicate-label, or omitted-from-inventory list is the finite bad subrecord.
+7923: 
+7924: No step of this computation parses mathematical statements, checks proofs,
+7925: invokes Lean, consults the publication daemon, or validates external artifacts.
+7926: Thus the certificate is stronger than the earlier manual ledger at the single
+7927: point needed by the scope contract---deterministic environment-label coverage---
+7928: and no stronger than that.  The semantic and implementation boundaries remain
+7929: those of Theorem~\ref{thm:publication-safety-interface} and
+7930: Corollary~\ref{cor:finite-record-gate-soundness-boundary}.
+7931: \end{proof}
+7932: 
+7933: \begin{theorem}[Extractor-domain exactness and non-gluing]
+7934: \label{thm:extractor-domain-exactness-non-gluing}
+7935: For the submitted theorem-inventory surface, the command
+7936: \path{python review_bundle/extract_theorem_environments.py} is exact for one
+7937: domain and impossible to glue beyond that domain without an added finite
+7938: coordinate.  Its exact domain is the syntactic label-coverage predicate on
+7939: \[
+7940: \mathcal E=\{\texttt{definition},\texttt{lemma},\texttt{proposition},
+7941: \texttt{theorem},\texttt{corollary}\}.
+7942: \]
+7943: An exit-code-zero run proves precisely that the source has no unlabelled
+7944: environment in $\mathcal E$, no duplicate label among those environments, and no
+7945: labelled environment in $\mathcal E$ omitted from \path{theorem_inventory.json}.
+7946: It proves no audit-record coverage, statement-semantics coverage,
+7947: proof-correctness coverage, Lean/BEDC rebuild, artifact validation, daemon run,
+7948: or venue-state fact.  Any manuscript reading that adds one of those conclusions
+7949: is a properly stronger reading of the theorem-inventory coordinate and is
+7950: accepted only after the submitted surface adds the corresponding parser domain,
+7951: semantic checker, proof checker, build log, artifact log, daemon log, or venue
+7952: record with assigned pass rows.
+7953: \end{theorem}
+7954: 
+7955: \begin{proof}
+7956: The script definition fixes the domain: its \path{THEOREM_ENVS} tuple contains
+7957: exactly the five displayed names, and its begin-pattern is built from that tuple.
+7958: The extraction loop records only occurrences of those begins in \path{main.tex},
+7959: then searches within the matched environment for the first \path{\label{...}}
+7960: token.  The inventory side reads only label strings from
+7961: \path{theorem_inventory.json}.  Thus the finite predicate computed by the script
+7962: has exactly three positive clauses: every detected environment in $\mathcal E$
+7963: has a label, the detected labels are not duplicated, and the detected label set
+7964: is contained in the inventory label set.  Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}
+7965: therefore gives exactness on this syntactic domain.
+7966: 
+7967: Each proposed extension reads a coordinate absent from that computation.  Audit
+7968: records use a different LaTeX environment counter and are not in $\mathcal E$;
+7969: statement semantics would require a parser and meaning relation for theorem
+7970: bodies; proof correctness would require a proof checker or a formal build;
+7971: Lean/BEDC rebuilding, artifact validation, daemon execution, and venue state each
+7972: require their own command, source state, environment, exit code, and log or
+7973: external record.  Two package states can agree on \path{main.tex} labels in
+7974: $\mathcal E$ and on \path{theorem_inventory.json} while differing in any of
+7975: those absent coordinates.  By Theorem~\ref{thm:finite-coordinate-determination-boundary},
+7976: the extractor's accepted finite record cannot determine such a stronger fact.
+7977: 
+7978: Finally, in the stronger-reading preorder of
+7979: Definition~\ref{def:stronger-reading-preorder}, adding any of the excluded
+7980: conclusions enlarges the claim-kind, evidence-surface, command-boundary, or
+7981: assigned-gate coordinate.  Theorem~\ref{thm:finite-extension-budget-normal-form}
+7982: then supplies the positive direction: once the enlarged parser domain, semantic
+7983: checker, proof checker, build log, artifact log, daemon log, or venue record and
+7984: its pass rows are included, that stronger coordinate may be checked by the
+7985: finite interface.  Without those additions,
+7986: Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns the missing
+7987: coordinate as a finite bad subrecord.  Hence the extractor is exact and maximal
+7988: for syntactic label coverage over $\mathcal E$, and it cannot be glued into any
+7989: semantic, auditrecord, implementation, artifact, daemon, or venue certificate by
+7990: prose alone.
+7991: \end{proof}
+7992: 
+7993: 
+7994: \begin{theorem}[Final-byte extractor inventory inclusion]
+7995: \label{thm:final-byte-extractor-inventory-inclusion}
+7996: Fix a manuscript source byte string $M$, an inventory byte string $J$, and the
+7997: extractor byte string
+7998: \path{review_bundle/extract_theorem_environments.py}.  Let $T(M)$ be the finite
+7999: set of labels obtained by running that extractor on the five-environment domain
+8000: $\mathcal E$ of Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary},
+8001: and let $I(J)$ be the finite set of inventory labels read from $J$ with the
+8002: accepted theorem-label prefixes.  For the final bytes of this package, a
+8003: zero-exit extractor run is equivalent to the following three finite conditions:
+8004: \[
+8005:   T(M)\subseteq I(J),
+8006:   \qquad \text{no element of }\mathcal E\text{ in }M\text{ is unlabelled},
+8007:   \qquad \text{and }T(M)\text{ has no duplicate source label}.
+8008: \]
+8009: Consequently, after any edit to \path{main.tex} or \path{theorem_inventory.json},
+8010: the exact theorem-obligation ledger coordinate used by
+8011: Theorems~\ref{thm:theorem-obligation-ledger-boundary} and
+8012: \ref{thm:post-inventory-package-fixed-point} is available only from a fresh
+8013: zero-exit run on those final bytes.  This inclusion criterion is the complete
+8014: bad-example obstruction for missing in-domain labels: an omitted labelled
+8015: environment, an unlabelled in-domain environment, or a duplicate in-domain label
+8016: is witnessed by a finite failing row printed by the extractor, and no prose
+8017: inventory statement can remove that row without changing $M$, $J$, or the
+8018: extractor coordinate.
+8019: \end{theorem}
+8020: 
+8021: \begin{proof}
+8022: The first two input byte strings determine the two finite sets.  The extractor
+8023: constructs $T(M)$ by a line scan for begins of the five names in $\mathcal E$,
+8024: searches each matched environment body for its first label token, and records the
+8025: label together with its line and title fields.  It constructs $I(J)$ by reading
+8026: the inventory JSON and collecting the finite label fields with the accepted
+8027: prefixes.  Since these operations use only fixed regular expressions and JSON
+8028: parsing on finite byte strings, $T(M)$, the unlabelled-environment list, the
+8029: duplicate-label list, and $I(J)$ are deterministic functions of the final bytes.
+8030: 
+8031: The extractor's acceptance test is exactly the conjunction of the three displayed
+8032: conditions.  If an in-domain environment has no label, the unlabelled list is
+8033: nonempty and the command exits nonzero.  If two in-domain environments have the
+8034: same label, the duplicate list is nonempty and the command exits nonzero.  If a
+8035: recorded source label is absent from the inventory, then the set difference
+8036: $T(M)\setminus I(J)$ is nonempty and the command exits nonzero.  Conversely, when
+8037: all three lists are empty and $T(M)\subseteq I(J)$, the extractor has no failing
+8038: row for its declared predicate and exits with code zero.  This proves the stated
+8039: equivalence.
+8040: 
+8041: It remains to connect the equivalence to the paper's support-coordinate chain.
+8042: Theorem~\ref{thm:theorem-obligation-ledger-boundary} uses the inventory only as a
+8043: finite theorem-obligation ledger plus the syntactic extractor coordinate, and
+8044: Theorem~\ref{thm:post-inventory-package-fixed-point} requires that the inventory,
+8045: extractor run, verifier logs, and final digest be ordered after the final source
+8046: bytes are selected.  Editing either $M$ or $J$ changes one of the deterministic
+8047: inputs just described.  The exact ledger coordinate for the edited package
+8048: therefore requires the fresh zero-exit run on those edited bytes; otherwise the
+8049: package has at most the weaker path-verified or stale-coordinate reading already
+8050: classified in Theorem~\ref{thm:post-inventory-support-coordinate-dichotomy}.
+8051: 
+8052: The bad-example statement follows from the same finite disjunction.  Each failure
+8053: mode is represented by an explicit finite row: an unlabelled environment, a
+8054: duplicate label, or a member of $T(M)\setminus I(J)$.  Because
+8055: Theorem~\ref{thm:finite-coordinate-determination-boundary} allows the submitted
+8056: claim to depend only on recorded finite coordinates, prose cannot erase such a
+8057: row.  Only changing the source bytes, the inventory bytes, or the extractor
+8058: coordinate can change the computed obstruction.  Thus the theorem gives the
+8059: final-byte inclusion gate required for the post-inventory theorem chain and no
+8060: semantic proof-checking, Lean/BEDC rebuild, artifact, daemon, upload, or venue
+8061: claim beyond that syntactic gate.
+8062: \end{proof}
+8063: 
+8064: \begin{theorem}[Theorem-inventory proof-checker obstruction]
+8065: \label{thm:theorem-inventory-proofchecker-obstruction}
+8066: Let $\mathcal E$ be the five-environment domain
+8067: \{\path{definition}, \path{lemma}, \path{proposition}, \path{theorem},
+8068: \path{corollary}\} in \path{main.tex}.  The finite theorem-inventory support
+8069: surface consisting of \path{theorem_inventory.json}, \path{theorem_inventory.md},
+8070: and the output of \path{python review_bundle/extract_theorem_environments.py}
+8071: classifies exactly labelled-environment coverage in $\mathcal E$: every labelled
+8072: environment in $\mathcal E$ is present in the inventory, no such label is missing
+8073: or duplicated, and no inventory conclusion glues to material outside that domain.
+8074: It is not a proof checker.  Any stronger reading that validates proof semantics,
+8075: checks theorem statements against Lean or BEDC, covers other TeX environments,
+8076: covers \path{submission_abstract.tex}, validates remarks or audit records, or
+8077: certifies artifact or venue facts is accepted by this calculus if and only if the
+8078: support surface is extended by a nonempty finite checker coordinate for that
+8079: additional domain and by an assigned pass row.
+8080: \end{theorem}
+8081: 
+8082: \begin{proof}
+8083: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary} identifies
+8084: the extractor domain as the five classes in $\mathcal E$ and records that the
+8085: script reads \path{main.tex} and \path{theorem_inventory.json}.  Theorem~\ref{thm:extractor-domain-exactness-non-gluing}
+8086: then proves non-gluing: the successful extractor run eliminates exactly the bad
+8087: example of a labelled environment in $\mathcal E$ missing from the inventory or a
+8088: duplicate label in that same syntactic domain, and it says nothing about other
+8089: files, environments, proof semantics, or external artifacts.
+8090: 
+8091: To see that no proof-checking conclusion follows, fix two TeX states with the
+8092: same sequence of labelled $\mathcal E$ environments and the same inventory rows,
+8093: but with different proof bodies for one theorem.  For example, replace a proof
+8094: body by another body while leaving the surrounding \path{\textbackslash begin}
+8095: line, label, environment kind, and inventory row unchanged.  The extractor reads
+8096: only the syntactic environment record and the inventory labels, so it returns the
+8097: same coverage result on both states.  A semantic proof checker could distinguish
+8098: the states, but that checker output is not part of the finite projection.  By
+8099: Theorem~\ref{thm:finite-coordinate-determination-boundary}, a semantic theorem
+8100: validation claim is therefore not determined by the inventory support surface.
+8101: 
+8102: The same argument applies to every listed stronger domain: each requires reading
+8103: at least one new file, environment class, proof-assistant state, artifact log, or
+8104: venue record that is absent from the extractor projection.  Hence each stronger
+8105: reading has a finite bad subrecord unless a new checker coordinate and assigned
+8106: pass row are submitted.  Conversely, once that coordinate is submitted, the claim
+8107: is no longer a gluing inference from the old inventory; it is a separate finite
+8108: extension governed by Theorem~\ref{thm:record-interface-rigidity}.  This proves
+8109: both exact syntactic coverage and the proof-checker obstruction.
+8110: \end{proof}
+8111: 
+8112: \begin{theorem}[Theorem-inventory boundary]
+8113: \label{prop:manual-theorem-inventory-boundary}
+8114: This theorem retains the legacy cross-reference label
+8115: \path{prop:manual-theorem-inventory-boundary} for compatibility with earlier
+8116: acceptance-ledger entries; its environment category is \path{theorem}, not
+8117: \path{proposition}.
+8118: The file \path{theorem_inventory.json} is a theorem-obligation inventory record whose
+8119: current support has two finite parts.  First, it is an obligation ledger selected
+8120: by finite-record review and connected to the manifest and acceptance ledger.  Second,
+8121: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary} supplies a
+8122: deterministic syntactic comparison between the labelled theorem-like environments
+8123: in the five-environment domain $\mathcal E$ and the labels appearing in the
+8124: inventory.  The inventory indexes obligations; the evidence for those obligations
+8125: is supplied by the corresponding TeX statements and proofs in this source,
+8126: together with external records only where a statement explicitly cites them.  It
+8127: is not a semantic proof checker and it is not an executable completeness
+8128: certificate for theorem-like material outside $\mathcal E$.  Consequently any
+8129: claim that the ledger itself semantically checks the printed proofs, reruns Lean
+8130: or BEDC, validates artifacts, or certifies an external venue state is rejected by
+8131: the current finite-record interface, while the bounded obligation-ledger and
+8132: syntactic environment-label coverage claims are accepted.
+8133: \end{theorem}
+8134: 
+8135: \begin{proof}
+8136: The support records named in Table~\ref{tab:submitted-theorem-obligation-ledger}
+8137: are finite manifest and ledger records.  The root manifest exposes the path
+8138: \path{theorem_inventory.json}; acceptance-ledger entry \path{a7} records the
+8139: inventory, marker-existence, theorem-environment extraction, and submission-pack
+8140: gates for the bounded theorem-ledger claim; and the certificate verifier checks
+8141: only record shape, gate coverage, evidence pointers, and file availability.  The
+8142: new extractor coordinates add a command, source state, environment, exit code,
+8143: and log path for syntactic label coverage in the domain $\mathcal E$.  By
+8144: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}, those
+8145: coordinates prove only that all labelled environments in the chosen domain are
+8146: represented by labels in the inventory and that no source label is missing or
+8147: duplicated.
+8148: 
+8149: The remaining boundary is semantic, not syntactic.  A finite inventory can still
+8150: be useful because it fixes the Stage-A obligation surface that the submission
+8151: chooses to expose and lets the certificate ledger prevent hidden prose-only
+8152: references to that surface.  The extractor strengthens this by eliminating one
+8153: bad example: an environment in $\mathcal E$ whose label exists in \path{main.tex}
+8154: but is absent from the inventory.  Once the extractor log has exit code
+8155: \path{0}, that bad example cannot occur.  Finite-coordinate determination is
+8156: still exact, however.  The accepted records are manifest, ledger, table, and
+8157: syntactic extractor coordinates; they cannot imply a nonrecorded semantic
+8158: theorem checker, nonrecorded Lean rebuild, nonrecorded daemon run, or nonrecorded
+8159: artifact validation.  Hence the finite interface accepts the obligation ledger
+8160: together with deterministic syntactic environment-label coverage and rejects
+8161: every stronger proof-checking or implementation-soundness reading.
+8162: \end{proof}
+8163: 
+8164: \begin{proposition}[Regenerated theorem-inventory digest closure]
+8165: \label{prop:regenerated-theorem-inventory-digest-closure}
+8166: Suppose a theorem-inventory pass regenerates either \path{theorem_inventory.json} or
+8167: \path{theorem_inventory.md} after the package has selected the exact-inclusion
+8168: support branch.  Then the final support-surface claims of
+8169: Theorem~\ref{thm:final-support-surface-closure}, the submitted theorem-ledger
+8170: claim of Theorem~\ref{thm:theorem-obligation-ledger-boundary}, and the command
+8171: boundary of Proposition~\ref{audit:command-run-boundary-inventory} remain closed
+8172: only under the fixed-point conditions of
+8173: Theorem~\ref{thm:digest-closure-refresh-criterion}: the package refreshes the
+8174: corresponding SHA-256 rows in \path{review_bundle/FINAL_DIGESTS_SHA256.md},
+8175: reruns the finite record verifiers and the theorem-environment extractor whose
+8176: records name that digest manifest or inventory coordinate, and does not promote
+8177: primary-claim or venue-compliance rows beyond the fresh records actually
+8178: included.  Once those rows and logs are refreshed, the regeneration creates no
+8179: new mathematical, Lean, daemon, or artifact claim: it only changes the
+8180: byte-coordinate of the theorem-obligation ledger and its syntactic label-coverage
+8181: certificate inside the already selected finite support surface.
+8182: \end{proposition}
+8183: 
+8184: \begin{proof}
+8185: The selected support branch is byte-level exact inclusion.  In that branch,
+8186: Theorem~\ref{thm:final-support-surface-closure} identifies the submitted support
+8187: surface by relative paths together with the digest rows in
+8188: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The theorem inventory is one of
+8189: those paths: Table~\ref{tab:submitted-theorem-obligation-ledger} exposes
+8190: \path{theorem_inventory.json} through the root manifest and acceptance-ledger
+8191: entry \path{a7}, while the final digest record also lists the human-readable
+8192: companion \path{theorem_inventory.md}.  Therefore regenerating either file after
+8193: the digest record was written changes a finite coordinate used by the exact
+8194: support-surface relation.  Until the SHA-256 rows are recomputed, the digest
+8195: record denotes the old bytes, and the regenerated inventory is not the same
+8196: finite certificate file as the one named by the final packaging record.
+8197: 
+8198: The required reruns are exactly the finite record verifiers and extractor at the
+8199: package boundary.  The certificate-record verifier checks that the
+8200: manifest-required paths, including the theorem-inventory coordinate, are present
+8201: and covered by the accepted gate records; the source-interface and primary-claim
+8202: verifiers record their command boundary against the same final digest manifest;
+8203: and the theorem-environment extractor compares labelled environments in
+8204: $\mathcal E$ with the inventory labels.  Rerunning those commands after the
+8205: digest refresh supplies fresh source state, environment, exit code, and log-path
+8206: coordinates for the command-boundary table.  No verifier in this list proves
+8207: theorem semantics.  Hence the refreshed state is closed precisely as a finite
+8208: record-and-digest package with deterministic syntactic label coverage, and by
+8209: Proposition~\ref{prop:manual-theorem-inventory-boundary} it remains a
+8210: non-semantic theorem-obligation ledger rather than a proof-checking certificate.
+8211: \end{proof}
+8212: 
+8213: \begin{corollary}[Current theorem-inventory digest instance]
+8214: \label{cor:current-theorem-inventory-digest-instance}
+8215: For the present local support package, after \path{theorem_inventory.json} and
+8216: \path{theorem_inventory.md} have been regenerated, the submitted
+8217: theorem-obligation ledger may be cited in
+8218: Theorem~\ref{thm:theorem-obligation-ledger-boundary} only through the refreshed
+8219: digest rows for those two files in \path{review_bundle/FINAL_DIGESTS_SHA256.md}
+8220: and through fresh finite-record verifier logs produced after the regenerated
+8221: inventory files are present.  If either the two digest rows or the
+8222: post-regeneration verifier logs are absent, the
+8223: inventory remains a local index but is not closed as an exact-inclusion
+8224: support coordinate for the bundle-backed theorem-ledger claim.
+8225: \end{corollary}
+8226: 
+8227: \begin{proof}
+8228: Apply Proposition~\ref{prop:regenerated-theorem-inventory-digest-closure} to the
+8229: two regenerated inventory files in this package.  The support branch selected by
+8230: Proposition~\ref{prop:final-package-shape-convention} is exact inclusion, so the
+8231: identity of each submitted support file is read from the corresponding
+8232: relative-path and SHA-256 row in \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+8233: Theorem~\ref{thm:theorem-obligation-ledger-boundary} uses
+8234: \path{theorem_inventory.json} as the theorem-ledger coordinate and uses
+8235: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary} only for
+8236: syntactic label coverage.  Proposition~\ref{prop:manual-theorem-inventory-boundary}
+8237: excludes every stronger semantic-proof reading.  Therefore the only new fact
+8238: needed after regeneration is byte-coordinate and command-coordinate closure: the
+8239: digest rows must name the new bytes, and the finite verifiers and extractor whose
+8240: records mention the digest or inventory coordinate must be rerun against the
+8241: package state in which the regenerated inventory files exist.  Without those rows
+8242: and logs, the ledger is still a local file, but the exact-inclusion support
+8243: relation points either to stale bytes or to an unverifiable command-boundary
+8244: state.  With them, no additional mathematical, Lean, daemon, or artifact claim is
+8245: introduced; the refreshed package supplies exactly the finite support coordinate
+8246: used by the submitted theorem-obligation ledger.
+8247: \end{proof}
+8248: 
+8249: \begin{proposition}[Post-inventory fixed-point support certificate]
+8250: \label{prop:post-inventory-fixed-point-support-certificate}
+8251: In the present package state, the two regenerated theorem-inventory files are
+8252: accepted by the exact-inclusion theorem-ledger chain only at the following
+8253: finite fixed point: the rows of
+8254: \path{review_bundle/FINAL_DIGESTS_SHA256.md} name
+8255: \path{theorem_inventory.json} and \path{theorem_inventory.md}; the same digest
+8256: manifest names the refreshed logs
+8257: \path{review_bundle/certificate_verification_run.log},
+8258: \path{review_bundle/source_interface_verification_run.log},
+8259: \path{review_bundle/primary_claim_inventory_freshness_2026-06-09.log}, and
+8260: \path{review_bundle/theorem_environment_extraction_run.log}; and
+8261: Table~\ref{tab:command-boundary-inventory} records those four invocations as
+8262: finite checks with exit code \path{0}.  Under these hypotheses,
+8263: Corollary~\ref{cor:current-theorem-inventory-digest-instance} applies to the
+8264: theorem-ledger coordinate used by
+8265: Theorem~\ref{thm:theorem-obligation-ledger-boundary}.  If any one of the two
+8266: inventory digest rows or four refreshed command-log rows is replaced by a
+8267: pre-regeneration row, the exact-inclusion support claim fails and only the local
+8268: historical index remains.
+8269: \end{proposition}
+8270: 
+8271: \begin{proof}
+8272: The statement is a finite-coordinate instance of
+8273: Theorem~\ref{thm:digest-closure-refresh-criterion}.  The first named coordinate
+8274: is \path{theorem_inventory.json}, and the second is
+8275: \path{theorem_inventory.md}; after regeneration, each coordinate is identified
+8276: inside the exact-inclusion surface only by the SHA-256 row attached to its
+8277: current byte string in \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  The four
+8278: command-run coordinates are exactly the finite verifier and extractor logs listed
+8279: in Table~\ref{tab:command-boundary-inventory}: the certificate-record verifier,
+8280: the source-interface record verifier, the primary-claim inventory verifier, and
+8281: the theorem-environment extractor.  The same table records command, source state,
+8282: environment, exit code, and log path, and its boundary column states that these
+8283: are record or syntactic label-coverage checks rather than Lean, daemon, Rule110,
+8284: upload, or semantic validation runs.
+8285: 
+8286: If the five rows are current, the hypotheses of
+8287: Proposition~\ref{prop:regenerated-theorem-inventory-digest-closure} are met for
+8288: the regenerated inventory files and for the verifier and extractor records whose
+8289: logs name the digest or inventory boundary.
+8290: Corollary~\ref{cor:current-theorem-inventory-digest-instance} then supplies
+8291: exactly the local fixed-point instance needed by the theorem-obligation ledger in
+8292: Theorem~\ref{thm:theorem-obligation-ledger-boundary}.  Conversely, suppose that
+8293: one of the two inventory digest rows is stale.  Then the digest manifest denotes
+8294: old bytes at one of the two inventory paths, so the regenerated file is not the
+8295: file certified by the exact-inclusion row.  Suppose instead that one of the
+8296: four command-log rows is stale.  Then the command-boundary table promotes a
+8297: fresh verifier invocation while the digest surface still names an earlier log
+8298: file, so the command-run coordinate is not closed in the selected byte surface.
+8299: In either case the bad subrecord is finite: it is the stale row together with
+8300: its relative path.  The exact-inclusion claim therefore fails by
+8301: Theorem~\ref{thm:finite-coordinate-determination-boundary}, while
+8302: Proposition~\ref{prop:manual-theorem-inventory-boundary} still permits the
+8303: weaker reading of the inventory as a local historical manual index.
+8304: \end{proof}
+8305: 
+8306: \begin{theorem}[Finite-record post-inventory realization invariant]
+8307: \label{thm:post-inventory-finite-record-realization}
+8308: Suppose the following finite records are present in the current source package:
+8309: \begin{enumerate}
+8310: \item \path{theorem_inventory.json} and \path{theorem_inventory.md};
+8311: \item a zero-exit log for
+8312: \path{python review_bundle/extract_theorem_environments.py} computed after those
+8313: two files were written;
+8314: \item zero-exit logs for
+8315: \path{python review_bundle/verify_certificate_records.py},
+8316: \path{python review_bundle/verify_source_interface_record.py}, and
+8317: \path{python review_bundle/verify_primary_claim_inventory.py} computed against the
+8318: same post-inventory package state; and
+8319: \item a regenerated \path{review_bundle/FINAL_DIGESTS_SHA256.md} whose rows name
+8320: the two inventory files and the four log files just listed.
+8321: \end{enumerate}
+8322: Then the first coordinate in
+8323: Theorem~\ref{thm:submission-support-fixed-point-normal-form} is instantiated as
+8324: a local exact-inclusion theorem-ledger support coordinate.  The instantiated
+8325: coordinate is exactly syntactic inventory coverage plus finite-record verifier
+8326: closure: it is not a semantic proof check, a Lean rebuild, a daemon run, an
+8327: artifact rerun, a venue upload receipt, or an archive-equivalent locator.  If one
+8328: of the four listed conditions is absent, the theorem-inventory files remain at
+8329: most local historical indices and cannot support the exact-inclusion
+8330: theorem-ledger claim.
+8331: \end{theorem}
+8332: 
+8333: \begin{proof}
+8334: The proof is by finite-coordinate determination.  The first condition supplies
+8335: the two byte strings that are to be accepted as the theorem-ledger inventory.
+8336: The second condition supplies the only syntactic coverage test used by
+8337: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}: the
+8338: extractor reads \path{main.tex}, extracts theorem-like labels, and compares them
+8339: with labels present in \path{theorem_inventory.json}.  The third condition
+8340: supplies the companion finite-record checks for the certificate ledger, the
+8341: source-interface record, and the primary-claim inventory.  The fourth condition
+8342: places the resulting bytes and logs into the selected exact-inclusion digest
+8343: surface.
+8344: 
+8345: Under all four conditions, every finite coordinate named in
+8346: Proposition~\ref{prop:post-inventory-fixed-point-support-certificate} is present:
+8347: the inventory-file coordinates are identified by SHA-256 rows, and the extractor
+8348: and verifier coordinates are identified by their zero-exit command logs and
+8349: digest rows.  Therefore
+8350: Corollary~\ref{cor:current-theorem-inventory-digest-instance} applies, giving the
+8351: local exact-inclusion support coordinate used in the first clause of
+8352: Theorem~\ref{thm:submission-support-fixed-point-normal-form}.  The boundary of
+8353: the coordinate is the intersection of the boundaries of its inputs: the
+8354: extractor is syntactic label coverage only, the three verifiers are finite-record
+8355: checks only, and the digest manifest is a byte-coordinate manifest only.  None of
+8356: these records contains a proof-assistant rebuild, publication-daemon run,
+8357: artifact validation rerun, external upload receipt, or archive locator, so no
+8358: such stronger coordinate can be inferred.
+8359: 
+8360: Conversely, omit any one condition.  If the inventory files are absent, there is
+8361: no byte string for the theorem-ledger row.  If the extractor log is absent or
+8362: pre-inventory, syntactic coverage is not recorded for the current inventory
+8363: bytes.  If any finite-record verifier log is absent or pre-inventory, the
+8364: corresponding support record is not closed against the same package state.  If
+8365: the digest manifest is not regenerated over the inventory files and logs, the
+8366: exact-inclusion surface names stale or missing byte coordinates.  In each case
+8367: Theorem~\ref{thm:finite-coordinate-determination-boundary} rejects the stronger
+8368: reading and leaves only whatever local historical index was actually recorded.
+8369: \end{proof}
+8370: 
+8371: \begin{theorem}[Seven-row submitted theorem-obligation ledger integration]
+8372: \label{thm:theorem-obligation-ledger-boundary}
+8373: Let $P^{+}_{7}$ be the seven-row support state obtained from $P^{+}_{6}$
+8374: by the conservative finite-record extension of
+8375: Theorem~\ref{thm:nested-package-states}, namely by adding exactly the submitted theorem-ledger coordinate \path{a7}.  In
+8376: $P^{+}_{7}$, the theorem-obligation ledger is no longer a detached review-only
+8377: artifact: the submitted finite support surface contains
+8378: \path{theorem_inventory.json} through the manifest field \path{theorem_inventory}
+8379: and through acceptance-ledger entry \path{a7}.  The earlier six-row state
+8380: $P^{+}_{6}$ of Theorems~\ref{thm:nested-package-states}
+8381: and~\ref{thm:current-package-certificate-exactness} remains
+8382: the row-frozen certificate state for \path{a1}--\path{a6}; the present theorem
+8383: adds exactly the theorem-ledger coordinate \path{a7}.  Consequently the
+8384: package may make
+8385: the following bounded theorem-ledger claim: every theorem-obligation assertion
+8386: made by the submission is supported only through the finite coordinates in
+8387: Table~\ref{tab:submitted-theorem-obligation-ledger}, namely the integrated
+8388: theorem inventory, the primary-claim inventory, the certificate ledger, and the
+8389: manifest exposure records.  By
+8390: Proposition~\ref{prop:manual-theorem-inventory-boundary} and
+8391: Theorem~\ref{thm:manual-ledger-dependence-boundary}, this is a theorem-obligation ledger claim with deterministic syntactic
+8392: theorem-environment label coverage, not a semantic proof-checking or
+8393: implementation-soundness claim.  The claim does not assert that
+8394: \path{theorem_inventory.json} proves the mathematical semantics of each theorem,
+8395: does not replace the proofs printed in this source, and does not certify a Lean
+8396: rebuild, publication-daemon run, Rule110 artifact rerun, semantic extractor
+8397: completeness beyond $\mathcal E$, or external upload.
+8398: \end{theorem}
+8399: 
+8400: \begin{proof}
+8401: The support surface is finite and can be inspected coordinate by coordinate.
+8402: The root manifest now contains the key \path{theorem_inventory} with value
+8403: \path{theorem_inventory.json}.  The certificate schema includes the same key in
+8404: its required manifest-file map.  Therefore a certificate-record verification of
+8405: the enlarged package must check that the manifest exposes this root-level
+8406: inventory path and that the file is present.  This removes the previous
+8407: possibility of silently citing a root-level theorem-inventory artifact outside the support
+8408: surface.
+8409: 
+8410: The acceptance ledger contains the additional entry \path{a7}.  Its accepted
+8411: claim is exactly the bounded submitted theorem-obligation ledger claim; its
+8412: claim kinds are \path{traceability} and \path{submission}.  Under the schema's
+8413: gate dispatch, those kinds require the inventory, marker-existence, and
+8414: submission-pack gates; the theorem-extractor check is an additional command
+8415: boundary attached to the marker-existence gate.  Entry \path{a7} supplies the
+8416: required pass records: the inventory gate points to \path{theorem_inventory.json},
+8417: the marker-existence gate points to
+8418: Table~\ref{tab:submitted-theorem-obligation-ledger} and the extractor log, and
+8419: the submission-pack gate points to \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Thus the
+8420: ledger supplies a finite route from the theorem-inventory file to the submitted
+8421: certificate records rather than a prose-only reference.
+8422: 
+8423: It remains to identify the boundary.  The schema-level verifier checks finite
+8424: record shape, required manifest paths, gate coverage, evidence pointers, and
+8425: evidence levels.  None of those checks is a semantic proof of the theorem-like
+8426: environments in this source, and none reruns Lean, the publication daemon, or the
+8427: Rule110/GroundCompiler artifacts.  The independent theorem-environment extractor
+8428: only supplies the syntactic coverage certificate of
+8429: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}.
+8430: Proposition~\ref{prop:manual-theorem-inventory-boundary} and
+8431: Theorem~\ref{thm:manual-ledger-dependence-boundary} supply the remaining
+8432: classification: the inventory is an accepted Stage-A ledger with syntactic label
+8433: coverage and not an executable semantic completeness certificate.  The theorem-ledger claim is
+8434: therefore admissible only at the path-verified evidence level stated in
+8435: \path{a7}.  The mathematical content of the article remains carried by the
+8436: printed definitions, propositions, lemmas, theorems, and proofs, and external
+8437: records carry only the finite evidence claims that cite them.  The integrated
+8438: inventory gives the submitted finite obligation surface against which those
+8439: theorem-like claims are enumerated; it indexes the obligations and does not prove
+8440: them.  This is exactly the bounded claim stated in the theorem.
+8441: \end{proof}
+8442: 
+8443: \begin{proposition}[Post-inventory support-tuple extraction certificate]
+8444: \label{prop:post-inventory-support-tuple-extraction-certificate}
+8445: For the current source package, the theorem-ledger support tuple is accepted only
+8446: in the post-inventory form consisting of
+8447: \path{theorem_inventory.json}, \path{theorem_inventory.md},
+8448: \path{review_bundle/theorem_environment_extraction_run.log},
+8449: \path{review_bundle/current_package_pass_records.json}, and
+8450: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  In that form the extraction log must be generated after the two inventory files
+8451: exist, the pass-record ledger must contain the theorem-ledger certificate entry,
+8452: and the digest manifest must be regenerated after those three records are in
+8453: place.  A digest manifest whose inventory rows predate any member of this tuple
+8454: does not certify the current theorem-ledger support coordinate; it certifies only
+8455: the earlier local byte state named by its rows.
+8456: \end{proposition}
+8457: 
+8458: \begin{proof}
+8459: The tuple has five finite coordinates.  The first two are the regenerated manual
+8460: inventory files.  The third is the syntactic extractor output: by
+8461: Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}, the
+8462: extractor reads \path{main.tex} and \path{theorem_inventory.json} and records
+8463: only labelled theorem-like environment coverage.  The fourth is the finite
+8464: certificate ledger entry for the theorem-obligation surface described in
+8465: Theorem~\ref{thm:theorem-obligation-ledger-boundary}.  The fifth is the digest
+8466: manifest used by Theorem~\ref{thm:final-support-surface-closure} to identify the
+8467: bytes available under exact supplemental inclusion.
+8468: 
+8469: If the five coordinates are produced in the stated order, every support claim
+8470: about the regenerated theorem ledger is a function of byte strings already fixed
+8471: before the digest pass: the inventory bytes are read by the extractor, the
+8472: theorem-ledger certificate entry records the finite support route, and the digest
+8473: manifest hashes the resulting files and log.  The support tuple is therefore a
+8474: finite coordinate of the package.  If, however, the digest rows for
+8475: \path{theorem_inventory.json} or \path{theorem_inventory.md} are older than the
+8476: accepted inventory, or if the extractor or pass-record ledger is written after
+8477: the digest manifest, then one of the bytes used by the theorem-ledger claim is
+8478: not among the bytes hashed by the manifest.  By
+8479: Theorem~\ref{thm:finite-coordinate-determination-boundary}, the stronger current
+8480: support claim cannot be inferred from a finite record that omits that coordinate.
+8481: Thus the old digest remains evidence only for the earlier local byte state and
+8482: not for the post-inventory support tuple stated here.
+8483: \end{proof}
+8484: 
+8485: \begin{proposition}[Submitted theorem-inventory availability]
+8486: \label{prop:submitted-theorem-inventory-availability}
+8487: If the external support-surface condition of
+8488: Corollary~\ref{cor:upload-or-archive-instantiation-record} is satisfied, then
+8489: \path{theorem_inventory.json} is an available submitted certificate coordinate
+8490: for the bounded theorem-obligation ledger claim of
+8491: Theorem~\ref{thm:theorem-obligation-ledger-boundary}.  If the exact bundle is not
+8492: uploaded with matching final digests, the theorem inventory has only local
+8493: diagnostic force and cannot support a submitted theorem-ledger claim in the
+8494: current package.
+8495: \end{proposition}
+8496: 
+8497: \begin{proof}
+8498: The first sentence is the exact-bundle branch of
+8499: Theorem~\ref{thm:final-support-surface-closure} applied to the manifest-exposed
+8500: coordinate \path{theorem_inventory.json} and the ledger-exposed coordinate
+8501: \path{a7}.  In that branch, the file named by the manifest is available to the
+8502: reviewer as part of the submitted finite support surface, so it may be used for
+8503: the bounded theorem-ledger claim.  If the exact bundle is not supplied with
+8504: matching final digests, Corollary~\ref{cor:upload-or-archive-instantiation-record}
+8505: prevents all bundle-backed support claims from being externally instantiated for
+8506: this package.  The theorem inventory then remains a local file rather than a
+8507: submitted support coordinate, so it cannot carry the submitted theorem-ledger
+8508: claim.
+8509: \end{proof}
+8510: 
+8511: \begin{proposition}[Submission-support instantiation field normal form]
+8512: \label{prop:submission-support-instantiation-field-normal-form}
+8513: For the current source package, the upload-or-archive support coordinate has the
+8514: following complete finite field normal form:
+8515: \begin{center}
+8516: \small
+8517: \begin{tabularx}{\textwidth}{p{0.29\textwidth}X}
+8518: \toprule
+8519: field & current value\\
+8520: \midrule
+8521: support branch & conditional exact supplemental inclusion of \path{theorem_inventory.json}, \path{theorem_inventory.md}, and \path{review_bundle/}\\
+8522: upload receipt & absent\\
+8523: archive-equivalent locator & absent; public automath branch/path coordinate is candidate-only until byte equality is recorded\\
+8524: accepted external support status & instantiated only after exact upload or later archive-equivalent byte-equality record\\
+8525: \bottomrule
+8526: \end{tabularx}
+8527: \end{center}
+8528: Consequently the support-surface fields required by
+8529: Corollary~\ref{cor:upload-or-archive-instantiation-record} are not externally
+8530: instantiated in this package.  The public branch/path coordinate remains a
+8531: candidate-only locator; it satisfies the archive-equivalent branch only after a
+8532: finite byte-equality record shows that the public coordinate contains bytes
+8533: matching the final digest rows.  Until an exact upload receipt or such an archive
+8534: record is supplied under
+8535: Proposition~\ref{prop:upload-or-archive-instantiation-update-protocol},
+8536: bundle-backed claims may be read only as conditional local package-support
+8537: claims.
+8538: \end{proposition}
+8539: 
+8540: \begin{proof}
+8541: The support branch is fixed by
+8542: Proposition~\ref{prop:final-package-shape-convention}: the selected supplement is
+8543: \path{main.tex}, the selected theorem ledger is \path{theorem_inventory.json},
+8544: and the selected review surface is exact inclusion of \path{review_bundle/} with
+8545: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.  Theorem~\ref{thm:upload-or-archive-instantiation-boundary}
+8546: then identifies the extra coordinate needed to turn that local support surface
+8547: into an externally submitted one, namely either an exact upload receipt or an
+8548: archive-equivalent locator with byte equality.  Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation}
+8549: and Proposition~\ref{prop:no-external-instantiation-from-local-bundle-records}
+8550: record that neither coordinate is present in the current source package.  The

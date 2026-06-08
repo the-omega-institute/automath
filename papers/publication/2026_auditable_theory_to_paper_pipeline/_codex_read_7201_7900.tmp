@@ -1,0 +1,700 @@
+7201: The accepted command-result coordinates are finite.  By
+7202: Audit record~\ref{prop:final-immutable-package-state-certificate}, the three log
+7203: paths, the recorded source-state fields $H_i$, and the manifest $D_0$ form the
+7204: source-state record for the verifier runs.  By
+7205: Theorem~\ref{thm:final-support-surface-closure}, those log claims are part of the
+7206: accepted support surface only when the exact bundle is submitted or when an
+7207: archive supplies the same finite file list, digests, and relative path semantics.
+7208: Thus case (1) fixes the bytes of the certificate files directly: the reviewer's
+7209: ambient checkout may have any Git \path{HEAD}, but the submitted certificate
+7210: surface is still the byte-identified finite package $(H_i,D_0)$.
+7211: 
+7212: Suppose instead that the authors want the later workspace itself to be the
+7213: package state.  Then at least one source-state coordinate has changed, namely
+7214: the Git \path{HEAD} coordinate.  The verification rule in the scope contract
+7215: requires every command-result claim to record its exact command, source commit,
+7216: environment, exit code, and log path.  Therefore a new workspace state cannot be
+7217: accepted by merely observing the new \path{HEAD}; the three verifier runs must be
+7218: rerun against that state, and their logs and digest manifest must be replaced by
+7219: consistent source-state--manifest records.  This is case (2).
+7220: 
+7221: If neither case holds, the later workspace contributes no finite coordinate to
+7222: the submitted certificate.  It is not named in $D_0$, it is not an
+7223: archive-equivalent representative under Table~\ref{tab:review-bundle-archive-equivalence},
+7224: and it is not accompanied by fresh verifier logs satisfying the command-result
+7225: record rule.  The finite-coordinate determination boundary of
+7226: Theorem~\ref{thm:finite-coordinate-determination-boundary} then forbids silently
+7227: using that workspace either to certify a new package or to refute the old
+7228: byte-identified package.  The only certified statement left is the historical
+7229: finite package claim $(H_i,D_0)$, conditional on the exact support-surface branch
+7230: already proved above.\end{proof}
+7231: 
+7232: \begin{auditrecord}[Mutable-checkout observations are non-certifying]
+7233: \label{prop:mutable-checkout-observation-boundary}
+7234: This audit record retains the legacy cross-reference label
+7235: \path{prop:mutable-checkout-observation-boundary} for compatibility with earlier
+7236: acceptance-ledger entries; its environment category is \path{auditrecord}, not
+7237: \path{proposition}.
+7238: Let $W$ be a review-time working tree whose Git \path{HEAD} is not one of the
+7239: source-state rows recorded in the verifier logs named in
+7240: Theorem~\ref{thm:workspace-final-package-reconciliation}.  The observation of $W$
+7241: is not a certificate coordinate for any verifier-log claim in this package unless
+7242: $W$ is promoted by the second branch of that theorem, namely by rerunning the
+7243: three verifier commands and replacing the source-state, log, and digest records
+7244: by new matching finite package certificates.  Consequently, a reviewer who sees
+7245: $W$ with a different \path{HEAD} has exactly one source-level reconciliation
+7246: test for the existing package: inspect the exact-bundle or archive-equivalent
+7247: surface whose certificate-file bytes match \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+7248: \medskip
+7249: \noindent\emph{Verification.} The finite package certificate records three kinds of coordinates relevant here:
+7250: the logged source-state rows, the verifier logs, and the per-file digest manifest.  A
+7251: bare working-tree observation supplies none of the last two coordinates and, when
+7252: its \path{HEAD} differs from a recorded row, supplies a different first coordinate.  By the
+7253: command-result rule used in
+7254: Audit record~\ref{prop:final-immutable-package-state-certificate}, changing a
+7255: source-state coordinate requires fresh logs with their command, environment, exit
+7256: code, and log path; this is precisely the promotion branch in
+7257: Theorem~\ref{thm:workspace-final-package-reconciliation}.  If that branch is not
+7258: performed, the observation of $W$ remains outside the finite package.  The only
+7259: remaining reconciliation route is therefore the branch that checks the already
+7260: selected support surface: the exact included \path{review_bundle/} directory, or
+7261: an archive equivalent under Table~\ref{tab:review-bundle-archive-equivalence},
+7262: with certificate bytes fixed by the final digest manifest.
+7263: \end{auditrecord}
+7264: 
+7265: \begin{theorem}[Finite-record support invariant: bundle-backed normal form]
+7266: \label{thm:support-surface-normal-form}
+7267: For the current presentation package, every accepted use of a bundle-backed
+7268: certificate coordinate is in exactly one of the following normal forms.
+7269: \begin{enumerate}
+7270: \item \emph{Exact inclusion}: an external upload or submission receipt records
+7271: that the submitted support surface contains the exact \path{review_bundle/}
+7272: directory whose certificate-file bytes match
+7273: \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
+7274: \item \emph{Archive-equivalent inclusion}: a replacement archive satisfies every
+7275: row of Table~\ref{tab:review-bundle-archive-equivalence}, including manifest
+7276: identity, bundle-version identity, finite file-list identity, SHA-256 content
+7277: identity, and relative path semantics.
+7278: \item \emph{Promoted rerun}: the package is advanced to a new source state by
+7279: rerunning the verifier commands and replacing the displayed source-state record,
+7280: verifier logs, and digest manifest by one common finite commit--manifest
+7281: certificate.
+7282: \end{enumerate}
+7283: If none of these three normal forms is present, the attempted bundle-backed
+7284: reading has a finite obstruction subrecord: either the external exact-inclusion
+7285: receipt is absent, the archive-equivalence table has a failed row, or the rerun
+7286: branch lacks the command, source-state, environment, exit-code, log-path, and
+7287: digest coordinates required by the command-boundary rule.  Thus the late
+7288: support-surface chain is a finite audit-interface classification for this
+7289: package, not a theorem about general archive infrastructure, venue upload, or
+7290: semantic correctness of the bundled artifacts.
+7291: \end{theorem}
+7292: 
+7293: \begin{proof}
+7294: The candidate support surface for a bundle-backed coordinate can differ from the
+7295: source-level package in only three record-visible ways.  First, it can supply an
+7296: external receipt for the same directory selected by
+7297: Proposition~\ref{prop:final-package-shape-convention}.
+7298: Theorem~\ref{thm:exact-inclusion-support-surface-realization} and
+7299: Theorem~\ref{thm:final-support-surface-closure} prove that this exact directory,
+7300: with the final digest manifest, is the local byte surface that must be supplied;
+7301: the additional receipt is what turns that local selection into submitted support.
+7302: This is normal form~(1).
+7303: 
+7304: Second, the candidate can replace the directory by an archive.  The manuscript
+7305: does not accept arbitrary archive availability as a certificate coordinate:
+7306: Audit record~\ref{audit:review-bundle-archive-equivalence} gives the finite
+7307: hash-and-manifest test, and every failed row of
+7308: Table~\ref{tab:review-bundle-archive-equivalence} is a finite bad subrecord.  If
+7309: all rows pass, the replacement denotes the same certificate bytes under the same
+7310: relative paths and is normal form~(2); if any row fails, the archive cannot carry
+7311: the bundle-backed claim.
+7312: 
+7313: Third, the candidate can point to a later or different workspace state.
+7314: Theorem~\ref{thm:workspace-final-package-reconciliation} proves that such a state
+7315: is not the old finite package unless it is deliberately promoted by fresh verifier
+7316: runs and by a replacement commit--manifest certificate.
+7317: Audit record~\ref{prop:mutable-checkout-observation-boundary} then shows that a
+7318: bare mutable-checkout observation is non-certifying.  Therefore a different
+7319: workspace is accepted only in normal form~(3), and otherwise has the finite
+7320: command-boundary obstruction stated in the theorem.
+7321: 
+7322: The three cases are mutually exclusive as record modes for a fixed submitted
+7323: claim: the first uses the selected directory, the second uses a byte-identical
+7324: archive representative, and the third replaces the package state and digest
+7325: record by a new common certificate.  If a proposed support reading is in none of
+7326: the modes, it contributes no coordinate read by the verifier.  By
+7327: Theorem~\ref{thm:finite-coordinate-determination-boundary} and the obstruction
+7328: skeleton of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, the missing
+7329: coordinate is an inclusion-minimal finite bad subrecord rather than a semantic
+7330: fact about the underlying artifacts.\end{proof}
+7331: 
+7332: \begin{theorem}[Finite-record support invariant compression]
+7333: \label{thm:support-surface-invariant-compression}
+7334: Let $\mathcal S$ be the family of support-surface and post-inventory claims in
+7335: Theorems~\ref{thm:final-support-surface-closure},
+7336: \ref{thm:workspace-final-package-reconciliation},
+7337: \ref{thm:support-surface-normal-form}, and
+7338: \ref{thm:post-inventory-package-fixed-point}, together with
+7339: Corollary~\ref{cor:stable-replay-post-inventory-tuple}.  For the current package,
+7340: every member of $\mathcal S$ is a projection of the same finite support tuple
+7341: \[
+7342: \Sigma=(F,M,D,R,Q),
+7343: \]
+7344: where $F$ is the selected relative file list, $M$ is the review-bundle manifest,
+7345: $D$ is the final digest table, $R$ is the retained extractor and verifier log
+7346: family, and $Q$ is the post-inventory ordering relation saying that the inventory
+7347: bytes precede the retained log bytes and that the digest table is regenerated
+7348: after them.  More precisely, each theorem in $\mathcal S$ is obtained from
+7349: $\Sigma$ by forgetting all but one of the following projections:
+7350: \begin{enumerate}
+7351: \item byte closure of the selected support surface $(F,M,D)$;
+7352: \item reconciliation of a later workspace through replacement logs $(R,D)$;
+7353: \item the three accepted external-support modes of
+7354: Theorem~\ref{thm:support-surface-normal-form}; or
+7355: \item the post-inventory replay order $(Q,R,D)$.
+7356: \end{enumerate}
+7357: Hence a presentation version may state this family as one finite-record support
+7358: invariant and cite the inventory file, theorem-environment extractor log, finite
+7359: record-verifier logs, and final digest table for full label coverage.  Such a
+7360: compression loses no mathematical content for the CICM presentation route,
+7361: because none of the separated labels in $\mathcal S$ carries an independent
+7362: semantic claim beyond these finite projections.
+7363: \end{theorem}
+7364: 
+7365: \begin{proof}
+7366: Each cited result reads only the named finite files, manifests, logs, digests, and
+7367: their ordering.  The final support-surface closure theorem reads the selected
+7368: file list, manifest rows, and digest rows, so it is the projection $(F,M,D)$.
+7369: The workspace reconciliation theorem compares later workspace observations with
+7370: the retained source-state and verifier-log records; it therefore reads only the
+7371: log family and digest certificate, namely $(R,D)$, together with the rule that a
+7372: replacement workspace must supply fresh records of the same form.  The support
+7373: surface normal-form theorem classifies the same selected bytes into exact
+7374: inclusion, archive-equivalent inclusion, or promoted rerun; this is a case split
+7375: on the external-support projection of $(F,M,D,R)$.  The post-inventory fixed
+7376: point and its stable replay corollary add no new support object; they add the
+7377: ordering projection $Q$ saying which inventory, extractor, verifier, and digest
+7378: bytes were produced after which earlier bytes.
+7379: 
+7380: Because these projections are all functions of the one tuple $\Sigma$, a reader
+7381: who is given $\Sigma$ can reconstruct the truth value and bad-subrecord witness
+7382: of every label in $\mathcal S$ by applying the corresponding projection and then
+7383: the already proved finite-coordinate determination theorem,
+7384: Theorem~\ref{thm:finite-coordinate-determination-boundary}.  Conversely, any
+7385: accepted support claim among the cited labels must pass one of the displayed
+7386: projection checks: otherwise the normal-form theorem or the post-inventory fixed
+7387: point supplies the missing finite coordinate as a bad subrecord.  Thus the labels
+7388: are useful audit bookkeeping but not independent semantic theorems about Lean,
+7389: artifact behavior, archive infrastructure, venue upload, or journal acceptance.
+7390: For a presentation article, replacing the separated labels by the single tuple
+7391: statement and pointing to \path{theorem_inventory.json},
+7392: \path{review_bundle/theorem_environment_extraction_run.log}, the retained finite
+7393: record-verifier logs, and \path{review_bundle/FINAL_DIGESTS_SHA256.md} preserves
+7394: exactly the same finite-record content.
+7395: \end{proof}
+7396: 
+7397: \begin{theorem}[Finite-record upload-boundary invariant]
+7398: \label{thm:upload-or-archive-instantiation-boundary}
+7399: Before the bundle-backed claims of this supplement are treated as part of a
+7400: completed venue submission, the external submission record must instantiate one
+7401: support-surface branch selected by
+7402: Proposition~\ref{prop:final-package-shape-convention} and
+7403: Theorems~\ref{thm:final-support-surface-closure} and
+7404: \ref{thm:support-surface-normal-form}.  Either it must record that
+7405: \path{review_bundle/} was uploaded exactly with digest manifest $D_0$ and with
+7406: the root \path{theorem_inventory.json} coordinate named by the manifest and
+7407: ledger, or it must record an archive-equivalent locator satisfying
+7408: Theorem~\ref{thm:public-branch-archive-equivalent-realization}.  The TeX source
+7409: and the local digest manifest select those admissible branches but do not
+7410: constitute a venue upload receipt or a public byte-equality locator.  In the
+7411: present source package no exact-upload receipt and no final-state public
+7412: byte-equality locator is recorded; consequently all bundle-backed claims are
+7413: proved only as local/path-verified support claims until one of the two external
+7414: instantiation records is supplied.
+7415: \end{theorem}
+7416: 
+7417: \begin{proof}
+7418: Proposition~\ref{prop:final-package-shape-convention} and
+7419: Theorem~\ref{thm:final-support-surface-closure} prove that the bundle-backed
+7420: claims for this package are admissible in either the exact-directory branch or
+7421: the public branch/path archive-equivalent branch, subject in both cases to the
+7422: same final digest rows.  Audit record~\ref{prop:exact-review-bundle-upload-witness}
+7423: and Audit record~\ref{prop:final-immutable-package-state-certificate} give the
+7424: same support tuple and explicitly exclude a DOI, venue-upload receipt, and
+7425: final-state public byte-equality record.  Those source records determine what
+7426: must be submitted or publicly located, but they are produced before the venue's
+7427: upload action.  Hence a completed submission needs one additional external
+7428: instantiation record: either the venue or packager records the exact supplemental
+7429: directory upload with the final digest manifest, or the public branch/path
+7430: coordinate is checked at a pinned commit or refreshed branch head and contains
+7431: the matching digest-identified tuple.
+7432: Without one of those records, the statements proved above remain conditional
+7433: source-level support claims rather than a proof that an external support action
+7434: has occurred.  Therefore
+7435: treating the bundle-backed claims as externally instantiated would add a
+7436: coordinate not present in the finite support surface, contradicting the finite
+7437: coordinate determination boundary of
+7438: Theorem~\ref{thm:finite-coordinate-determination-boundary}.\end{proof}
+7439: 
+7440: \begin{corollary}[Upload-or-archive instantiation record]
+7441: \label{cor:upload-or-archive-instantiation-record}
+7442: The bundle-backed support claims of the current package may be used only under
+7443: the external-record condition of
+7444: Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  In particular,
+7445: \path{review_bundle/FINAL_DIGESTS_SHA256.md} is a local byte-level packaging
+7446: manifest and not, by itself, an upload receipt, DOI, or proof that the public
+7447: branch/path locator already contains the matching bytes.  Thus the current
+7448: package has a conditional local-support reading unless a later exact-upload
+7449: receipt or archive-equivalent byte-equality locator is added to the finite
+7450: support surface.
+7451: \end{corollary}
+7452: 
+7453: \begin{proof}
+7454: This is the record-level specialization of
+7455: Theorem~\ref{thm:upload-or-archive-instantiation-boundary} to the current digest
+7456: manifest.  The added sentence is the contrapositive of the same boundary: when
+7457: neither admissible external record is present, the finite support tuple lacks the
+7458: coordinate that would certify completed upload or archive-equivalent byte
+7459: equality, and Theorem~\ref{thm:finite-coordinate-determination-boundary} forbids
+7460: supplying that coordinate by prose.
+7461: \end{proof}
+7462: 
+7463: \begin{proposition}[No external instantiation from local bundle records]
+7464: \label{prop:no-external-instantiation-from-local-bundle-records}
+7465: In the current source package, the rows of
+7466: \path{review_bundle/FINAL_DIGESTS_SHA256.md}, the manifest fields of
+7467: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}, and the support-boundary notes
+7468: in this supplement instantiate only a local exact-inclusion
+7469: support mode and name the public branch/path archive-equivalent coordinate.
+7470: They do not by themselves instantiate either admissible external-support branch
+7471: of Corollary~\ref{cor:upload-or-archive-instantiation-record}.  Consequently any
+7472: claim depending on a file under \path{review_bundle/} or on the root theorem
+7473: ledger \path{theorem_inventory.json} remains a conditional local package-support
+7474: claim unless a finite update supplies an exact venue-upload receipt or the public
+7475: automath branch/path archive-equivalent locator with matching bytes recorded in
+7476: the manuscript, manifest, bibliography, and digest surfaces.
+7477: \end{proposition}
+7478: 
+7479: \begin{proof}
+7480: The admissible external-support branches are exactly the two branches isolated by
+7481: Theorem~\ref{thm:upload-or-archive-instantiation-boundary} and
+7482: Corollary~\ref{cor:upload-or-archive-instantiation-record}: an exact uploaded
+7483: \path{review_bundle/} directory with matching final digests, or an
+7484: archive-equivalent replacement satisfying the same manifest, file-list, digest,
+7485: and relative-path tests.  The present package supplies the local byte manifest
+7486: \path{review_bundle/FINAL_DIGESTS_SHA256.md} and manifest text selecting exact
+7487: supplemental inclusion, but these are source-package coordinates.  By the same
+7488: corollary, a local byte manifest is not an upload receipt, DOI, public archive
+7489: identifier, or archive locator.  The source-level support-boundary records assert no such upload receipt or DOI.  The archive-equivalent branch is
+7490: instantiated only when the public automath branch/path coordinate contains bytes
+7491: matching the final digest rows.  Hence the local source package alone does not
+7492: instantiate either external branch.
+7493: 
+7494: If a bundle-backed claim were nevertheless read as externally supported, its
+7495: finite support tuple would contain an upload-or-archive coordinate absent from
+7496: the local package.  This is exactly the obstruction excluded by
+7497: Theorem~\ref{thm:finite-coordinate-determination-boundary}.  Therefore the only
+7498: current reading is conditional local package support.  The final sentence is the
+7499: contrapositive update condition: leaving this normal form requires adding one of
+7500: the missing external coordinates to the common manuscript, manifest,
+7501: bibliography, and digest surfaces so that all finite records name the same
+7502: submitted support surface.
+7503: \end{proof}
+7504: 
+7505: \begin{proposition}[Upload-or-archive instantiation update protocol]
+7506: \label{prop:upload-or-archive-instantiation-update-protocol}
+7507: Suppose a later venue upload receipt or archive-equivalent locator is to be used
+7508: to replace the current no-receipt boundary of
+7509: Corollary~\ref{cor:upload-or-archive-instantiation-record} by an externally
+7510: instantiated submitted-support claim.  Then the replacement is accepted by the
+7511: finite-record interface if and only if one of the two following finite update
+7512: protocols is performed.  The manuscript surfaces in the statement are precisely
+7513: \path{submission_abstract.tex} and \path{main.tex}; the manifest surface is
+7514: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}; the bibliography surface is
+7515: \path{references.bib}; and the digest surface is
+7516: \path{review_bundle/FINAL_DIGESTS_SHA256.md} or a replacing digest manifest named
+7517: by both manuscript sources and by the manifest.
+7518: \begin{enumerate}
+7519: \item \emph{Exact-upload update.}  \path{submission_abstract.tex} and
+7520: \path{main.tex} record the receipt or venue
+7521: submission identifier for the exact support surface selected in
+7522: Proposition~\ref{prop:final-package-shape-convention}; the manifest field
+7523: \path{public_interface.distribution_mode} is changed from conditional exact
+7524: supplemental upload to completed exact supplemental upload; the manifest field
+7525: \path{public_interface.preferred_submission_form} or an adjacent receipt field
+7526: names the uploaded \path{submission_abstract.pdf}, \path{main.pdf} or
+7527: \path{main.tex}, root \path{theorem_inventory.json}, and \path{review_bundle/};
+7528: \path{review_bundle/FINAL_DIGESTS_SHA256.md} still contains matching digest rows
+7529: for the submitted bundle files; and a support-boundary sentence in the source is changed from no completed upload
+7530: to the same receipt-bound support statement.
+7531: \item \emph{Archive-equivalent update.}  \path{submission_abstract.tex} and
+7532: \path{main.tex} record the archive
+7533: locator; the manifest field \path{public_interface.current_public_archive} and the
+7534: support-boundary sentence in the source names that same locator; the manifest keeps or replaces \path{public_interface.archival_update_rule}
+7535: with the byte-equivalence rule actually satisfied; and
+7536: \path{review_bundle/FINAL_DIGESTS_SHA256.md}, or a replacing digest manifest named
+7537: by both the manuscript and the manifest, records the file list and SHA--256 rows
+7538: against which the archive is checked, including the coordinates for
+7539: \path{review_bundle/}, \path{theorem_inventory.json}, and the manifest itself.
+7540: \end{enumerate}
+7541: In either protocol, if any digest row, manifest public-interface field,
+7542: manuscript support statement, bibliography note, or receipt/locator coordinate is
+7543: changed, all four surfaces must name the same support mode and the same finite
+7544: receipt-or-locator record.  Without this finite common update, the current
+7545: no-receipt normal form of
+7546: Proposition~\ref{prop:submission-support-instantiation-field-normal-form} remains
+7547: the only accepted submitted-support status.
+7548: \end{proposition}
+7549: 
+7550: \begin{proof}
+7551: The current package has only the source-level exact-inclusion branch by
+7552: Proposition~\ref{prop:final-package-shape-convention} and
+7553: Theorem~\ref{thm:upload-or-archive-instantiation-boundary}.  Thus an external
+7554: instantiation can add exactly one new positive coordinate: either a receipt for
+7555: that exact upload or a locator for an archive-equivalent representative.  The
+7556: finite-coordinate determination boundary,
+7557: Theorem~\ref{thm:finite-coordinate-determination-boundary}, forbids the verifier
+7558: from reading any coordinate not present on the submitted support surface.  Hence
+7559: the new coordinate must be visible wherever the package declares public support
+7560: status: in the manuscript statement that changes the boundary, in the manifest
+7561: public-interface fields that describe distribution mode and archive status, in
+7562: the digest manifest that identifies the bytes being supplied, and in the
+7563: source-level support-boundary sentence that tells a reviewer whether the bundle
+7564: is an external support surface or merely a local note.
+7565: 
+7566: For the exact-upload branch, the receipt is meaningful for this package only if
+7567: it refers to the support surface selected by
+7568: Proposition~\ref{prop:final-package-shape-convention}: the primary presentation
+7569: artifact, the technical supplement, the root theorem inventory, and the exact
+7570: \path{review_bundle/} directory with matching final digests.  Updating the
+7571: manuscript, the manifest distribution fields, the digest record, and the
+7572: bibliography note with the same receipt is therefore sufficient for the finite
+7573: record checker to read the external-upload coordinate; if one of those records is
+7574: missing or names a different support mode, the checker sees a bad subrecord of
+7575: the kind classified by Theorem~\ref{thm:support-surface-normal-form}.
+7576: 
+7577: For the archive-equivalent branch, Table~\ref{tab:review-bundle-archive-equivalence}
+7578: and Theorem~\ref{thm:support-surface-normal-form} require the archive to preserve
+7579: the same file list, digest rows, manifest semantics, and relative-path meanings.
+7580: The stated archive update records exactly those finite data: the common locator,
+7581: the byte-equivalence rule, and the digest manifest identifying the archive bytes.
+7582: Again, if the manuscript, manifest, bibliography, and digest surface do not name a
+7583: single common locator and byte-equivalence certificate, the proposed archive is
+7584: not a finite coordinate accepted by the verifier.
+7585: 
+7586: The two branches are exhaustive because
+7587: Corollary~\ref{cor:upload-or-archive-instantiation-record} allows only an exact
+7588: upload receipt or an archive-equivalent replacement to instantiate the support
+7589: surface.  Therefore a future support claim is accepted exactly after one of the
+7590: two finite common updates above, and otherwise the no-receipt normal form remains
+7591: the accepted status.
+7592: \end{proof}
+7593: 
+7594: \begin{corollary}[Current no-receipt support-surface non-escalation]
+7595: \label{cor:current-no-receipt-support-surface-non-escalation}
+7596: In the current source package the records
+7597: \path{review_bundle/FINAL_DIGESTS_SHA256.md},
+7598: \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json},
+7599: \path{review_bundle/current_package_pass_records.json}, and
+7600: \path{theorem_inventory.json} contain no venue upload receipt, public DOI, or
+7601: institutional archive identifier for \path{review_bundle/}.  They do record the
+7602: public automath branch/path coordinate as an archive-equivalent locator, but only
+7603: under matching file-list, digest, manifest, and path-semantics tests.  Hence every
+7604: claim whose evidence surface is a bundle-local path is accepted only as a
+7605: conditional exact-supplemental-inclusion or matching archive-equivalent claim.
+7606: Such a claim becomes an externally instantiated submitted-support claim only
+7607: after one of the two finite records below is present on the submitted support
+7608: surface:
+7609: \begin{enumerate}
+7610: \item an upload receipt naming the exact \path{review_bundle/} directory and the
+7611: final digest manifest; or
+7612: \item an archive-equivalent locator satisfying the file-list, digest, manifest,
+7613: and path-semantics tests of
+7614: Audit record~\ref{audit:review-bundle-archive-equivalence}.
+7615: \end{enumerate}
+7616: Until then, the theorem inventory, verifier logs, case snapshots, source
+7617: snapshot, and primary-claim inventory remain local/path-verified review-bundle
+7618: coordinates rather than unconditional public or venue-submitted coordinates.
+7619: \end{corollary}
+7620: 
+7621: \begin{proof}
+7622: The four named files are the only finite records in the present source package
+7623: that select the support branch for \path{review_bundle/}: the digest manifest
+7624: gives the byte-level package identity, the review-bundle manifest gives the
+7625: submission strategy, the pass-record ledger exposes the accepted finite gates,
+7626: and \path{theorem_inventory.json} is the theorem-ledger coordinate.  Their
+7627: recorded branch is exact supplemental inclusion and their archive fields state
+7628: that no archive replacement or locator is claimed.  Therefore they determine the
+7629: bytes and paths that must be supplied, but they do not determine that a venue
+7630: upload, DOI minting event, institutional archiving event, or archive-equivalent
+7631: publication event has occurred.
+7632: 
+7633: By Theorem~\ref{thm:upload-or-archive-instantiation-boundary}, an externally
+7634: instantiated bundle-backed claim needs exactly the missing external coordinate:
+7635: either an upload record for the exact directory and final digest manifest, or a
+7636: replacement archive record passing
+7637: Audit record~\ref{audit:review-bundle-archive-equivalence}.  By
+7638: Corollary~\ref{cor:upload-or-archive-instantiation-record}, the digest manifest
+7639: alone is not such a coordinate.  If neither finite record is present, promoting a
+7640: bundle-local path to an unconditional submitted-support coordinate would add an
+7641: evidence coordinate not contained in the support surface, contrary to
+7642: Theorem~\ref{thm:finite-coordinate-determination-boundary}.  The stated
+7643: conditional boundary follows for every bundle-backed surface named in the
+7644: corollary.
+7645: \end{proof}
+7646: 
+7647: \begin{corollary}[Fresh inventory digest instance for this source state]
+7648: \label{cor:fresh-inventory-digest-instance-this-source-state}
+7649: In the present source state, the regenerated files
+7650: \path{theorem_inventory.json} and \path{theorem_inventory.md} are closed as local
+7651: exact-inclusion coordinates only after their SHA-256 rows in
+7652: \path{review_bundle/FINAL_DIGESTS_SHA256.md} are recomputed from the bytes of
+7653: those two files and the finite command-boundary table names that refreshed
+7654: manifest state.  This corollary supplies no upload receipt, archive locator,
+7655: extractor-completeness certificate, or semantic proof check; it supplies only the
+7656: local byte-coordinate instance required by
+7657: Corollary~\ref{cor:current-theorem-inventory-digest-instance}.
+7658: \end{corollary}
+7659: 
+7660: \begin{proof}
+7661: There are two relevant file coordinates, namely
+7662: \path{theorem_inventory.json} and \path{theorem_inventory.md}.  For each
+7663: coordinate the SHA-256 computation is a deterministic function of the finite byte
+7664: string stored at that relative path.  Replacing the rows in
+7665: \path{review_bundle/FINAL_DIGESTS_SHA256.md} by the values computed after the
+7666: inventory regeneration therefore makes the digest manifest name the regenerated
+7667: bytes rather than a prior or anticipated inventory state.  The command-boundary
+7668: table is the only place in the manuscript where command-run and freshness claims
+7669: are promoted beyond path names, so updating that table to the same refreshed
+7670: state prevents a stale 2026-06-05 package description from being read as the
+7671: current digest instance.  The argument uses only byte equality at the two named
+7672: paths and the finite-record boundary of
+7673: Theorem~\ref{thm:digest-closure-refresh-criterion}; it does not add an extractor
+7674: run, external support-surface instantiation, upload event, archive event, or
+7675: semantic validation.  Hence exactly the local digest-closure claim stated above
+7676: is obtained.
+7677: \end{proof}
+7678: 
+7679: \begin{theorem}[Finite-record digest-refresh invariant for final package claims]
+7680: \label{thm:digest-closure-refresh-criterion}
+7681: For the current presentation package, any claim that a submitted support surface
+7682: has exact final digests is accepted only for a closed finite state $D$ satisfying
+7683: all of the following conditions.
+7684: \begin{enumerate}
+7685: \item The digest manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md} contains
+7686: SHA-256 rows for \path{main.tex}, \path{submission_abstract.tex},
+7687: \path{references.bib}, \path{source_interface_record.json},
+7688: \path{theorem_inventory.json}, \path{theorem_inventory.md}, and every file in
+7689: the selected \path{review_bundle/} support directory.
+7690: \item The digest rows are computed after the accepted versions of
+7691: \path{theorem_inventory.json}, \path{theorem_inventory.md},
+7692: \path{review_bundle/primary_claim_inventory.json}, and every verifier log named
+7693: by a command-run claim have been written.
+7694: \item If \path{submission_abstract.tex} is edited after the primary-claim
+7695: inventory was checked, then
+7696: \path{review_bundle/verify_primary_claim_inventory.py} is rerun and its fresh
+7697: log replaces the old primary-inventory freshness coordinate before the final
+7698: digest rows are recomputed.
+7699: \item If an upload-time venue-compliance claim, rather than a dated local
+7700: readiness observation, is made, the venue and bibliography check is rerun at the
+7701: upload rule state and the fresh venue record is included before the final digest
+7702: rows are recomputed.
+7703: \end{enumerate}
+7704: If any one of these conditions fails, the package still has the local
+7705: path-verified records printed in the manuscript, but it does not have an exact
+7706: final-digest certificate for the regenerated inventory, primary-claim, or
+7707: upload-time venue component that failed the condition.
+7708: \end{theorem}
+7709: 
+7710: \begin{proof}
+7711: The support-surface certificate is byte-level: by
+7712: Theorem~\ref{thm:support-surface-normal-form}, exact inclusion and
+7713: archive-equivalent inclusion both read the finite file list, relative paths, and
+7714: SHA-256 content rows rather than prose descriptions of those files.  Therefore a
+7715: file written after the digest manifest was computed cannot be covered by that
+7716: manifest; its byte string was not one of the inputs to the listed hash values.
+7717: This proves the necessity of recomputing the digest rows after regenerating the
+7718: theorem inventory, primary-claim inventory, and command logs named by the final
+7719: package.
+7720: 
+7721: The primary-claim inventory is line-span dependent.  Its verifier reads the
+7722: current \path{submission_abstract.tex}, checks the row-id set and line ranges,
+7723: and prints a finite freshness log.  If the primary source is changed after that
+7724: run, at least the source line-span premise of the old log is no longer the
+7725: current primary source checked by the verifier.  A fresh verifier run before the
+7726: digest pass restores a finite coordinate for the new primary state; omitting it
+7727: leaves only the old path-verified inventory observation.
+7728: 
+7729: Venue compliance is external-state dependent by
+7730: Proposition~\ref{audit:fresh-venue-record-criterion} and
+7731: Theorem~\ref{thm:venue-rule-freshness-non-escalation}.  A dated venue log can
+7732: witness local readiness at its observation time, but upload-time compliance
+7733: requires a record of the rule state at upload or an included replacement record.
+7734: Thus a package that claims upload-time venue compliance must write that fresh
+7735: record before the digest closure step; otherwise the digest manifest can cover
+7736: only the dated local-readiness file, not the missing upload-time premise.
+7737: 
+7738: Combining these observations gives a finite fixed-point condition: first write
+7739: the accepted inventory files and freshness logs, then compute the manifest over
+7740: those bytes, and finally submit either the exact directory or an
+7741: archive-equivalent replacement.  If a later edit or upload-time claim changes one
+7742: of the inputs, the fixed point is broken precisely at that finite subrecord.  The
+7743: remaining local rows remain available at their declared evidence levels, but the
+7744: stronger exact final-digest claim is not accepted for the changed component.
+7745: \end{proof}
+7746: 
+7747: 
+7748: \begin{theorem}[Finite-record submission-support refresh invariant]
+7749: \label{thm:submission-support-refresh-rigidity}
+7750: Let $S$ be a source package for this presentation route, and suppose $S$ changes
+7751: one of the following four support coordinates after the last accepted digest
+7752: manifest was written:
+7753: \begin{enumerate}
+7754: \item the theorem-obligation inventory bytes in \path{theorem_inventory.json} or
+7755: \path{theorem_inventory.md};
+7756: \item a verifier or extractor log used to support a command-result claim;
+7757: \item the primary-source line-span coordinate checked by
+7758: \path{review_bundle/verify_primary_claim_inventory.py}; or
+7759: \item the asserted venue-status coordinate, upgraded from dated local readiness to
+7760: upload-time venue compliance.
+7761: \end{enumerate}
+7762: Then the strongest certificate available from the old manifest is obtained by
+7763: deleting the changed coordinate from the claimed support tuple.  The changed
+7764: coordinate re-enters the publication-safety chain only after the corresponding
+7765: post-change extractor, verifier, or venue-rule record is written and the digest
+7766: manifest is regenerated over those new bytes.  In particular, a post-inventory
+7767: edit cannot be certified by a pre-inventory digest row, a dated local-readiness
+7768: venue log cannot certify upload-time compliance, and a local bundle manifest
+7769: cannot certify external upload or archive equivalence without the separate
+7770: external coordinate of Corollary~\ref{cor:upload-or-archive-instantiation-record}.
+7771: \end{theorem}
+7772: 
+7773: \begin{proof}
+7774: All four listed coordinates are finite byte or rule-state fields in the support
+7775: surface.  For item~1, the theorem-obligation ledger is exactly the ordered pair
+7776: \path{theorem_inventory.json}, \path{theorem_inventory.md}, together with the
+7777: extractor coverage row that reads those files.  If either inventory file is
+7778: edited after the digest manifest was computed, the old SHA--256 row is a hash of
+7779: a different byte string.  Since SHA--256 rows in this paper are used only as
+7780: content-addressed finite records, not as semantic proof obligations, the old row
+7781: cannot denote the new inventory bytes.  The coordinate is therefore absent until
+7782: the extractor is rerun on the new inventory and the digest table is recomputed
+7783: after that new log exists.
+7784: 
+7785: For item~2, Definition~\ref{def:operational-acceptance-interface} and
+7786: Theorem~\ref{thm:current-command-result-closure} make every command-result claim
+7787: depend on the finite tuple consisting of command, source state, environment,
+7788: exit code, and log path.  A changed extractor or verifier log changes the log
+7789: byte string selected by that tuple.  The old manifest can still witness the old
+7790: run as historical local evidence, but it cannot be a digest certificate for the
+7791: new run because the new log was not an input to the old hash table.
+7792: 
+7793: For item~3, the primary-claim verifier reads the current
+7794: \path{submission_abstract.tex} and records row and line-span facts.  If the
+7795: primary source changes after that verifier run, the line-span coordinate checked
+7796: by the old log is no longer the current primary-source coordinate.  The only
+7797: finite repair is to rerun the primary-claim verifier and then include the fresh
+7798: log in the regenerated digest manifest.
+7799: 
+7800: For item~4, venue compliance is a time- and rule-state-dependent coordinate by
+7801: Proposition~\ref{audit:fresh-venue-record-criterion} and
+7802: Theorem~\ref{thm:venue-rule-freshness-non-escalation}.  A dated local-readiness
+7803: record states what was observed at its logged date.  Upload-time compliance is a
+7804: different finite field: it requires the rule state and submission state at the
+7805: upload event.  Therefore an old local-readiness log cannot be reinterpreted as
+7806: that upload-time field; a fresh venue-rule record must be written before digest
+7807: closure if the stronger claim is made.
+7808: 
+7809: Finally, external upload or archive equivalence is independent of the local
+7810: inventory and digest coordinates.  Theorems~\ref{thm:upload-or-archive-instantiation-boundary}
+7811: and Corollary~\ref{cor:upload-or-archive-instantiation-record} require either an
+7812: exact supplemental-upload record or a byte-equality archive locator.  None of the
+7813: four local refresh steps supplies such an external coordinate.  Thus the old
+7814: manifest proves the package only after projecting away the changed or missing
+7815: field, and the full support tuple is restored exactly by writing the required
+7816: post-change finite records and regenerating the manifest over them.
+7817: \end{proof}
+7818: 
+7819: 
+7820: \begin{proposition}[Primary architectural fallback without external support]
+7821: \label{prop:primary-architectural-fallback-without-external-support}
+7822: Assume the current source package is used without an upload receipt for the exact
+7823: \path{review_bundle/} directory and without an archive-equivalent replacement
+7824: satisfying Audit record~\ref{audit:review-bundle-archive-equivalence}.  Then the
+7825: primary presentation article may assert only the source-level architecture and
+7826: path-verified local-package claims whose evidence surfaces are visible outside the
+7827: missing bundle.  In particular, the theorem-ledger claim of
+7828: Theorem~\ref{thm:theorem-obligation-ledger-boundary}, the case-snapshot claims,
+7829: the verifier-log claims, and any claim whose certificate coordinate is
+7830: \path{theorem_inventory.json} or a file under \path{review_bundle/} cannot be
+7831: read as externally submitted evidence.  If either accepted external instantiation
+7832: record is later supplied, the same claims re-enter exactly at the finite evidence
+7833: level stated in their certificate rows and not at any stronger semantic or venue
+7834: acceptance level.
+7835: \end{proposition}
+7836: 
+7837: \begin{proof}
+7838: Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} identifies
+7839: the only two records that can externally instantiate a bundle-backed support
+7840: claim: an exact upload receipt for \path{review_bundle/} with the final digest
+7841: manifest, or an archive-equivalent locator passing the finite file-list, digest,
+7842: manifest, and path-semantics tests.  Under the present hypothesis neither record
+7843: is available.  Hence every bundle-local path is absent from the externally
+7844: submitted finite support surface.
+7845: 
+7846: The affected claims are precisely those whose certificate coordinate names such a
+7847: path.  Table~\ref{tab:submitted-theorem-obligation-ledger} places the manual
+7848: theorem inventory at \path{theorem_inventory.json} and exposes it through
+7849: \path{review_bundle/current_package_pass_records.json}; the case-snapshot and
+7850: verifier-log statements similarly name files under \path{review_bundle/}.  By
+7851: Theorem~\ref{thm:finite-coordinate-determination-boundary}, a claim cannot acquire
+7852: an evidence coordinate that is absent from the finite support surface.  Therefore
+7853: those claims cannot be read as externally submitted evidence while both accepted
+7854: instantiation records are missing.
+7855: 
+7856: Removing that external reading does not remove the primary article's independent
+7857: architectural assertion.  The primary text describes the compiler's typed record
+7858: interface and cites the pinned public source surface; those claims do not require
+7859: the missing bundle-local coordinate.  If a valid exact-upload or
+7860: archive-equivalent record is later supplied, Theorem~\ref{thm:support-surface-normal-form}
+7861: and Corollary~\ref{cor:upload-or-archive-instantiation-record} put the
+7862: bundle-backed claims back into the finite support surface.  The reinstatement is
+7863: only at the recorded evidence levels, because the same corollaries and
+7864: Theorem~\ref{thm:upload-or-archive-instantiation-boundary} exclude stronger
+7865: readings such as semantic proof checking, fresh dynamic validation, venue
+7866: compliance, or acceptance.\end{proof}
+7867: 
+7868: 
+7869: \begin{table}
+7870: \caption{Submitted theorem-obligation ledger integration.}
+7871: \label{tab:submitted-theorem-obligation-ledger}
+7872: \scriptsize
+7873: \begin{tabularx}{\linewidth}{p{0.22\linewidth}X p{0.28\linewidth}}
+7874: \toprule
+7875: Coordinate & Conditional submitted support record & Boundary \\
+7876: \midrule
+7877: Theorem-obligation inventory & \path{theorem_inventory.json}, named by the root manifest field \path{theorem_inventory} and by acceptance-ledger entry \path{a7} in \path{review_bundle/current_package_pass_records.json} & finite theorem-like obligation ledger plus the syntactic extractor certificate of Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}; not a semantic proof checker; externally submitted only under Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} \\
+7878: Primary-claim inventory & \path{review_bundle/primary_claim_inventory.json}, rows \path{pc1}--\path{pc12}, checked by the primary-inventory verifier & primary-note support map only; not theorem-environment exhaustiveness; externally submitted only under Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} \\
+7879: Certificate ledger & \path{review_bundle/current_package_pass_records.json}, entries \path{a1}--\path{a7}, checked by the certificate-record verifier & finite gate coverage and pointer discipline only; no Lean, daemon, or artifact rerun; externally submitted only under Corollary~\ref{cor:current-no-receipt-support-surface-non-escalation} \\
+7880: Manifest exposure & \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} and \path{review_bundle/certificate_schema.json} name \path{theorem_inventory.json} as a required finite support surface & submitted-path availability only; upload remains conditional on Corollary~\ref{cor:upload-or-archive-instantiation-record} \\
+7881: \bottomrule
+7882: \end{tabularx}
+7883: \end{table}
+7884: 
+7885: 
+7886: \begin{theorem}[Deterministic theorem-environment extractor boundary]
+7887: \label{thm:deterministic-theorem-environment-extractor-boundary}
+7888: Let the theorem-like environment domain $\mathcal E$ for this package consist
+7889: of the five environment names \path{definition}, \path{lemma},
+7890: \path{proposition}, \path{theorem}, and \path{corollary}.  The command
+7891: \path{python review_bundle/extract_theorem_environments.py} run on
+7892: \path{main.tex} and \path{theorem_inventory.json} is a deterministic
+7893: syntactic extractor for the following finite claim only: every labelled
+7894: environment in \path{main.tex} whose environment name belongs to $\mathcal E$ is
+7895: listed by label in \path{theorem_inventory.json}; every such environment is
+7896: labelled; and no such label is duplicated.  When the refreshed run log
+7897: \path{review_bundle/theorem_environment_extraction_run.log} records exit code
+7898: \path{0}, the package has a deterministic theorem-environment coverage
+7899: certificate at this syntactic label level.  The certificate does not assert that
+7900: the inventory is a semantic proof checker, that the printed proofs are correct,

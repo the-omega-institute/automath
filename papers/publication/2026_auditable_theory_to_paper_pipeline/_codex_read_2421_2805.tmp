@@ -1,0 +1,385 @@
+2421: Theorem~\ref{thm:concrete-finite-script-implementation-soundness}.
+2422: \end{enumerate}
+2423: Consequently, in the absence of the audit tuple in (3), record-gate soundness is
+2424: an explicit hypothesis of the publication-safety theorem, not a theorem proved by
+2425: the current package.  The finite pass rows prove only the package-level statement
+2426: that no accepted ledger claim omits an assigned gate row or its declared
+2427: submitted evidence surface.
+2428: \end{theorem}
+2429: 
+2430: \begin{proof}
+2431: The dispatch table has finite values by Proposition~\ref{prop:claim-kind-dispatch};
+2432: hence $G(c)$ is finite.  A submitted pass-record ledger and support surface are
+2433: also finite.  The predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ therefore expands to a
+2434: finite conjunction of row and pointer tests: for each accepted load-bearing claim
+2435: it supplies a certificate satisfying $V(c,\mathcal C)=1$, and for each gate name
+2436: in $G(c)$ it searches the rows attached to $c$ and compares the finite fields
+2437: gate name, input surface, decision, evidence pointer, and evidence level.  If
+2438: one of these rows is missing, the certificate contains the second bad subrecord
+2439: of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, namely a missing
+2440: pass record for an assigned gate.  If a row is present, the verifier has only the
+2441: finite string and path fields carried by that row.
+2442: 
+2443: The second condition is exactly the local-checkability condition for the row's
+2444: evidence pointer.  A pointer to a path, manifest row, theorem/proposition/table
+2445: label, uploaded bundle file, or explicit historical boundary is a coordinate of
+2446: the submitted finite record surface.  If the pointer does not denote one of
+2447: those finite surfaces at the stated evidence level, the certificate has the first
+2448: bad subrecord of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}, a
+2449: missing evidence surface.  Thus conditions (1) and (2) are precisely the
+2450: submitted-row and submitted-pointer clauses of $\mathsf{RGS}_{S}$, and they are
+2451: precisely what the package can verify from $L$ and the submitted surfaces.
+2452: 
+2453: The third condition concerns a different claim kind.  External implementation
+2454: soundness, fresh execution, and semantic correctness assert facts about the
+2455: operation of a gate outside the row's finite fields.  By the evidence-level
+2456: definitions and by Theorem~\ref{thm:executable-record-non-escalation}, a
+2457: command-result claim is not supplied by a path-verified pass row; it requires a
+2458: command tuple with source state, environment, exit code, and log path.  By
+2459: Theorem~\ref{thm:finite-coordinate-determination-boundary}, two worlds that have
+2460: identical submitted pass rows but different unsubmitted gate implementations are
+2461: indistinguishable to the finite verifier.  Hence no proof from (1) and (2) can
+2462: establish the stronger external-gate proposition.  The stronger proposition is
+2463: accepted only after the package is enlarged by the audit tuple in (3).  Without
+2464: that enlargement, record-gate soundness remains the explicit finite predicate
+2465: $\mathsf{RGS}_{S}$, while the proved package fact is exactly the absence of
+2466: missing assigned-gate rows and missing declared evidence surfaces.\end{proof}
+2467: 
+2468: \begin{theorem}[Six-coordinate gate-implementation soundness skeleton]
+2469: \label{thm:six-coordinate-gate-implementation-soundness-skeleton}
+2470: Let $g$ be a concrete gate whose row is used by the publication-safety theorem
+2471: chain for a load-bearing claim $c$.  A submitted support surface $S$ upgrades
+2472: the row-level record-gate reading for $g$ to gate-implementation soundness only
+2473: if $S$ contains a finite implementation-soundness tuple
+2474: \[
+2475: \mathcal I(g)=(Q_g,U_g,M_g,X_g,N_g,\Pi_g)
+2476: \]
+2477: with the following six coordinates:
+2478: \begin{enumerate}
+2479: \item $Q_g$, the submitted gate source identity, including source path and digest
+2480: or commit for the implementation being audited;
+2481: \item $U_g$, the exact command or implementation invocation together with the
+2482: runtime environment in which the invocation was evaluated;
+2483: \item $M_g$, the finite input projection read by that invocation and the finite
+2484: output, decision, exit code, and log path it produced;
+2485: \item $X_g$, the digest or manifest binding that places the source, input,
+2486: output, and log bytes on the same submitted support surface $S$;
+2487: \item $N_g$, the named implementation predicate that the row is asserted to
+2488: establish, such as schema-level row checking, source-interface equality,
+2489: theorem-label coverage, or primary-inventory shape; and
+2490: \item $\Pi_g$, a proof-obligation link showing that the concrete predicate $N_g$
+2491: implies exactly the abstract gate predicate used by the dispatch table
+2492: $\Gamma$ for $c$, and no stronger predicate.
+2493: \end{enumerate}
+2494: If any one of these six coordinates is absent, then the finite bad subrecord for
+2495: the implementation-soundness reading is the missing coordinate.  The original
+2496: row may still serve as a record-gate witness under
+2497: $\mathsf{RGS}_{S}(P,L,\Gamma)$, but it cannot certify implementation
+2498: soundness.  Conversely, when all six coordinates are present and the link
+2499: $\Pi_g$ proves predicate equality or implication in the stated direction, the
+2500: implementation-soundness reading is an ordinary positive extension coordinate of
+2501: the finite-record calculus, restricted to $N_g$.
+2502: \end{theorem}
+2503: 
+2504: \begin{proof}
+2505: The row-level record-gate predicate reads only the certificate tuple
+2506: $\mathcal C(c)$, the pass row for $g$, the submitted evidence pointer, and the
+2507: dispatch table.  By Theorem~\ref{thm:assigned-gate-soundness-audit-boundary},
+2508: those finite fields are sufficient to establish absence of a missing assigned
+2509: gate row and absence of a missing declared evidence surface, but they are not a
+2510: claim about how the underlying program, script, or manual implementation
+2511: operated.  The six displayed coordinates are exactly the extra finite fields
+2512: needed to make that operation visible to the same calculus.
+2513: 
+2514: Necessity is coordinate separation.  If $Q_g$ is absent, two packages can have
+2515: the same pass row while using different or unsubmitted gate implementations.  If
+2516: $U_g$ is absent, they can agree on the submitted source while differing on the
+2517: command or environment actually evaluated.  If $M_g$ is absent, they can agree
+2518: on source and command while differing on the finite inputs, outputs, exit code,
+2519: or log bytes.  If $X_g$ is absent, the submitted support surface need not bind
+2520: those bytes to the package state being reviewed.  If $N_g$ is absent, the row has
+2521: no finite predicate whose implementation soundness is being asserted.  If
+2522: $\Pi_g$ is absent, even a correct run of $N_g$ need not be the predicate required
+2523: by the abstract gate assigned to $c$.  In each case the current projection cannot
+2524: distinguish two states that agree on all submitted record-gate fields but differ
+2525: on the asserted implementation-soundness fact.  By
+2526: Theorem~\ref{thm:finite-coordinate-determination-boundary}, a conclusion that
+2527: distinguishes such states is not determined by the submitted projection; the
+2528: missing coordinate is therefore the finite bad subrecord.
+2529: 
+2530: For sufficiency, suppose the six coordinates are present.  The tuple
+2531: $\mathcal I(g)$ is finite and lies on $S$ by $X_g$.  Coordinates $Q_g$, $U_g$,
+2532: and $M_g$ supply the source, command, environment, exit-code, and log-path data
+2533: required by the command-result clause of
+2534: Definition~\ref{def:operational-acceptance-interface}.  Coordinate $N_g$ states
+2535: the finite predicate checked by that run, and $\Pi_g$ identifies the exact
+2536: predicate-link to the gate predicate used in $\Gamma$.  Hence the stronger
+2537: reading adds a visible finite coordinate to the preorder of
+2538: Definition~\ref{def:stronger-reading-preorder}; it is accepted precisely as an
+2539: extension whose scope is the named predicate $N_g$ and the implication proved by
+2540: $\Pi_g$.  This is the same positive-extension mechanism used in
+2541: Theorem~\ref{thm:record-gate-implementation-overclaim-obstruction}, now with the
+2542: proof-obligation link made explicit.
+2543: \end{proof}
+2544: 
+2545: \begin{theorem}[Finite certificate obstruction skeleton]
+2546: \label{thm:finite-certificate-obstruction-skeleton}
+2547: Let $c$ be a load-bearing manuscript claim whose component kinds lie in the
+2548: seven-kind domain.  The verifier of
+2549: Proposition~\ref{prop:finite-certificate-schema-verifier} gives the following
+2550: complete audit classification at the declared evidence level.  A certificate for
+2551: $c$ passes the publication-safety interface if and only if it has no bad
+2552: subrecord of the following five types:
+2553: \begin{enumerate}
+2554: \item missing evidence surface for the declared evidence level;
+2555: \item missing pass record for a gate in $\bigcup_{k\in K}\Gamma(k)$;
+2556: \item missing human-promotion record when the claim crosses from intake or
+2557: source material into active publication work;
+2558: \item discovery escalation without the pinned discovery-gate source-interface
+2559: rows for certificate, ledger, lineage, and boundary witnesses; or
+2560: \item command-run escalation without command, source commit, environment, exit
+2561: code, and log path.
+2562: \end{enumerate}
+2563: Equivalently, every unsafe accepted claim contains an inclusion-minimal finite
+2564: bad subrecord of one of these five types, and deleting all other fields preserves
+2565: the same rejection by the verifier.  This is an audit-skeleton theorem for the
+2566: software-workshop route: it classifies finite certificate failures and makes no
+2567: claim about theorem-proving complexity or about fresh execution of the
+2568: underlying workflow.
+2569: \end{theorem}
+2570: 
+2571: \begin{proof}
+2572: Let $K$ be the finite set of component kinds of $c$.  Since $K$ is a subset of
+2573: the seven-kind domain, Proposition~\ref{prop:claim-kind-dispatch} gives a unique
+2574: finite required gate set
+2575: \[
+2576: G(c)=\bigcup_{k\in K}\Gamma(k).
+2577: \]
+2578: The certificate field $R$ is indexed by exactly this finite set, so checking
+2579: gate passage is a finite lookup: each $g\in G(c)$ must have a pass record and the
+2580: record must cite an item of the finite evidence surface $E$.  The evidence-level
+2581: field $\ell$ and boundary field $B$ make the same lookup finite for evidence
+2582: strength: at path-verified level the certificate must name the source, artifact,
+2583: pinned commit, local publication path, or gate-decision surface used by the
+2584: claim; at command-run level it must additionally name command, source commit,
+2585: environment, exit code, and log path.  Neither lookup interprets artifact
+2586: semantics, reruns Lean, or predicts editorial outcomes; those are stronger claim
+2587: kinds or stronger evidence levels that require their own records.  The human-promotion field $H$ separates
+2588: the route boundary from all other gates: it is either a concrete promotion
+2589: record or a finite marker that no such boundary is crossed.  Finally, when
+2590: discovery lies in $K$, the discovery field $D$ names the pinned source-interface
+2591: rows certified by Lemma~\ref{lem:source-interface-extraction-correctness} and
+2592: Propositions~\ref{prop:reviewable-source-snapshot-interface} and
+2593: \ref{prop:source-interface-record-file-consistency}; these rows are finite and
+2594: therefore locally checkable in the same way as the other certificate fields.
+2595: Thus the certificate is sufficient for a reviewer to check safety by examining a
+2596: finite list of fields and cited artifacts, not by trusting generated prose.
+2597: 
+2598: It remains to prove that the displayed obstruction list is complete.  Suppose an
+2599: accepted claim fails the publication-safety interface.  Choose an inclusion-minimal
+2600: subrecord of its acceptance entry that still witnesses failure.  The certificate
+2601: schema has exactly seven coordinates, and the first two of them are not extra
+2602: obstruction families.  The claim-kind coordinate $K$ only determines the finite
+2603: gate set $G(c)$ through $\Gamma$; once $K$ lies in the seven-kind domain, any
+2604: failure caused by that determination is a missing assigned gate and hence type~2.
+2605: The evidence-level coordinate $\ell$ only chooses between the path-verified and
+2606: command-run interpretations of the boundary field; its failures therefore appear
+2607: either as absent evidence at the declared level, type~1, or as absent command-run
+2608: coordinates, type~5.  Thus every possible failure must be witnessed in one of
+2609: the five substantive schema fields $E,R,H,D,B$.
+2610: 
+2611: If the failing field is the evidence surface $E$, the claim is not tied to a
+2612: submitted path, bundle path, manifest row, log path, pinned commit, or explicit
+2613: historical boundary at the declared level.  The minimal subrecord is therefore
+2614: type~1.  If the failing field is the gate-record field $R$, some gate in the
+2615: deterministic finite set $G(c)$ has no pass record, no decision, or no evidence
+2616: pointer lying in the submitted surface; this is type~2.  If the failing field is
+2617: the human-promotion field $H$, then all non-route evidence may be present but the
+2618: claim has crossed from intake or source material into active publication work
+2619: without the required human promotion marker; this is type~3.  If the failing
+2620: field is the discovery field $D$, then a discovery or classifier-shift reading is
+2621: being inferred from statement-only, code-only, mechanical, compression-only, or
+2622: classifier-scored material without the pinned certificate, ledger, lineage, and
+2623: boundary rows; this is type~4.  Finally, if the failing field is the boundary
+2624: field $B$, the record either raises path-verified evidence to command-run
+2625: strength without command, source commit, environment, exit code, and log path, or
+2626: omits the explicit no-command-run boundary; this is type~5.
+2627: 
+2628: The preceding paragraph exhausts the schema fields: $K$ and $\ell$ reduce to the
+2629: same five substantive checks, and $E,R,H,D,B$ are precisely the five displayed
+2630: obstruction types.  Minimality removes all unread fields and leaves exactly one
+2631: of the five obstruction skeletons.  Conversely, if no bad subrecord of type~1--5
+2632: is present, then each schema check in
+2633: Proposition~\ref{prop:finite-certificate-schema-verifier} succeeds: the evidence
+2634: surface is present at the declared level, every required gate has its recorded
+2635: pass, the route-boundary field is correct, discovery rows are present exactly
+2636: when required, and command-run strength is not asserted without command-run
+2637: fields.  Hence the verifier accepts the certificate and the publication-safety
+2638: interface holds for $c$ at the declared evidence level.
+2639: 
+2640: The final sentence follows from the construction.  The verifier reads only the
+2641: finite certificate fields and the finite dispatch table, so the theorem
+2642: classifies certificate failures for review.  It does not assert a lower bound,
+2643: complexity separation, automated theorem-proving method, or fresh run of any
+2644: external command.\end{proof}
+2645: 
+2646: \begin{theorem}[Finite extension-budget normal form]
+2647: \label{thm:finite-extension-budget-normal-form}
+2648: Fix the dispatch table $\Gamma$, the finite certificate schema, and an accepted
+2649: finite certificate
+2650: \(\mathcal C(c)=(K,\ell,E,H,R,D,B)\) for a load-bearing package claim $c$.
+2651: Let $c^{+}$ be a proposed stronger reading of the same row which is not
+2652: record-equivalent to $c$ in the sense of
+2653: Theorem~\ref{thm:finite-coordinate-determination-boundary}.  Then $c^{+}$ is
+2654: accepted by the publication-safety interface if and only if the submitted finite
+2655: record surface contains an extension record in the following normal form:
+2656: \[
+2657: \Delta(c,c^{+})=(\Delta K,\Delta E,\Delta H,\Delta R,\Delta D,\Delta B),
+2658: \]
+2659: where the nonempty coordinates are exactly the coordinates needed by the stronger
+2660: reading:
+2661: \begin{enumerate}
+2662: \item $\Delta K$ names every additional claim-kind component asserted by
+2663: $c^{+}$;
+2664: \item $\Delta E$ supplies the submitted evidence surfaces for those added
+2665: components at the declared evidence level;
+2666: \item $\Delta R$ supplies pass records for every gate in
+2667: \(\bigcup_{k\in K\cup\Delta K}\Gamma(k)\) not already supplied by $R$;
+2668: \item $\Delta H$ supplies any newly asserted promotion, route, venue, or external
+2669: instantiation boundary;
+2670: \item $\Delta D$ supplies the pinned discovery-source rows whenever the stronger
+2671: reading adds discovery, classifier-shift, or theorem-content-delta content; and
+2672: \item $\Delta B$ supplies the command, source-state, environment, exit-code, and
+2673: log-path tuple whenever the stronger reading raises a path-verified row to
+2674: command-run strength.
+2675: \end{enumerate}
+2676: Equivalently, every genuine strengthening has positive finite extension budget:
+2677: at least one coordinate of \(\Delta(c,c^{+})\) must be nonempty, and every
+2678: nonempty obstruction class from
+2679: Theorem~\ref{thm:finite-certificate-obstruction-skeleton} must be paid by the
+2680: corresponding coordinate of \(\Delta(c,c^{+})\).  Without this extension record,
+2681: the stronger reading has an inclusion-minimal bad subrecord and remains outside
+2682: the certificate constructed in
+2683: Theorem~\ref{thm:publication-safety-interface}.
+2684: \end{theorem}
+2685: 
+2686: \begin{proof}
+2687: First suppose that the extension record is present.  Enlarge the certificate by
+2688: replacing its fields with
+2689: \[
+2690: (K\cup\Delta K,\ell,E\cup\Delta E,H\cup\Delta H,
+2691: R\cup\Delta R,D\cup\Delta D,B\cup\Delta B),
+2692: \]
+2693: where the unions mean finite row union with the original row identifiers retained.
+2694: The six clauses of Definition~\ref{def:certificate-schema-acceptance-table} are
+2695: then exactly the six requirements displayed in the statement.  Clause~A1 reads
+2696: the enlarged kind set and evidence level.  Clause~A2 reads the enlarged evidence
+2697: surface.  Clause~A3 reads the enlarged gate-pass field and checks every gate
+2698: assigned by $\Gamma$ to the enlarged kind set.  Clause~A4 reads the enlarged
+2699: promotion and boundary field.  Clause~A5 reads the enlarged discovery-interface
+2700: field exactly when discovery is present in the enlarged kind set.  Clause~A6
+2701: reads the enlarged evidence-boundary field and accepts command-run strength only
+2702: when the command tuple is present.  Therefore
+2703: Theorem~\ref{thm:record-acceptance-exactness} gives
+2704: \(\mathsf{Acc}_{\Gamma}(c^{+},\mathcal C\cup\Delta)\), and the finite interface
+2705: accepts the stronger reading at precisely the declared evidence level.
+2706: 
+2707: Conversely, suppose $c^{+}$ is accepted.  Since $c^{+}$ is not
+2708: record-equivalent to $c$, Theorem~\ref{thm:finite-coordinate-determination-boundary}
+2709: implies that some finite coordinate read by the verifier differs from the
+2710: coordinate of \(\mathcal C(c)\).  Collect the differences in the six displayed
+2711: components: additional kinds in $\Delta K$, additional submitted surfaces in
+2712: $\Delta E$, additional gate rows in $\Delta R$, additional promotion or external
+2713: boundary fields in $\Delta H$, additional discovery rows in $\Delta D$, and
+2714: additional evidence-boundary or command-run data in $\Delta B$.  These are finite
+2715: because the verifier reads only finite records and the dispatch table has finite
+2716: domain.  Acceptance of $c^{+}$ forces each changed coordinate to satisfy the
+2717: corresponding clause A1--A6, so the collected difference record has the normal
+2718: form stated above.
+2719: 
+2720: It remains only to prove positivity and obstruction completeness.  If every
+2721: coordinate of \(\Delta(c,c^{+})\) were empty, then $c$ and $c^{+}$ would induce the
+2722: same values on all verifier coordinates and would be record-equivalent, contrary
+2723: to hypothesis.  Thus any genuine strengthening has positive finite extension
+2724: budget.  If some nonempty obstruction class is not supplied by its corresponding
+2725: coordinate, Theorem~\ref{thm:finite-certificate-obstruction-skeleton} identifies
+2726: the first failed finite field as one of the five bad-subrecord types: missing
+2727: evidence surface, missing gate record, missing promotion or external boundary,
+2728: missing discovery rows, or unsupported command-run escalation.  Removing all
+2729: unread fields leaves an inclusion-minimal bad subrecord.  Hence a stronger
+2730: reading is accepted exactly when its finite extension budget is paid in submitted
+2731: coordinates, and otherwise remains outside the original certificate.\end{proof}
+2732: 
+2733: \begin{theorem}[Finite-record certificate calculus spine]
+2734: \label{thm:finite-record-certificate-calculus-spine}
+2735: Fix a submitted surface $S$, acceptance ledger $L$, dispatch table $\Gamma$, and
+2736: schema verifier $V$ as in Theorem~\ref{thm:publication-safety-interface}.  For
+2737: the presentation-only route, every load-bearing support assertion used by the
+2738: publication-safety theorem chain is classified by the following three-step
+2739: finite calculus.
+2740: \begin{enumerate}
+2741: \item \emph{Projection}: the assertion is first projected to the seven-coordinate
+2742: certificate tuple \((K,\ell,E,H,R,D,B)\) of
+2743: Definition~\ref{def:certificate-schema-acceptance-table}.
+2744: \item \emph{Obstruction}: failure is witnessed by one of the five inclusion-minimal
+2745: bad-record types of Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+2746: \item \emph{Extension}: any properly stronger reading is accepted if and only if
+2747: it pays the positive finite extension budget
+2748: \(\Delta(c,c^{+})=(\Delta K,\Delta E,\Delta R,\Delta H,\Delta D,\Delta B)\) of
+2749: Theorem~\ref{thm:finite-extension-budget-normal-form} and the added records pass
+2750: their assigned gates.
+2751: \end{enumerate}
+2752: Consequently the central result of this article is a certificate-calculus theorem:
+2753: Theorem~\ref{thm:publication-safety-interface} supplies the constructor and
+2754: schema-relative exactness; the downstream current-package, theorem-inventory,
+2755: source-interface, artifact, upload/archive, and command-run support statements are
+2756: instances or boundary projections of this same calculus.  None of those instances
+2757: may be glued into a proof-checking, source-theory semantic-completeness,
+2758: implementation-soundness, dynamic artifact-validity, public-byte-equality,
+2759: upload, archive-replacement, or venue-acceptance theorem unless the corresponding
+2760: coordinate appears as a nonempty component of the finite extension budget and has
+2761: its assigned pass records.
+2762: \end{theorem}
+2763: 
+2764: \begin{proof}
+2765: The projection step is exactly the certificate schema.  By
+2766: Definition~\ref{def:certificate-schema-acceptance-table} and
+2767: Proposition~\ref{prop:finite-certificate-schema-verifier}, a submitted
+2768: load-bearing assertion is read only through its finite kind set, evidence level,
+2769: evidence surface, promotion or boundary marker, pass-record field,
+2770: discovery-interface field, and evidence-boundary field.  The input--output
+2771: contract of Theorem~\ref{thm:verifier-input-output-contract} and the exactness
+2772: theorem, Theorem~\ref{thm:record-acceptance-exactness}, identify verifier
+2773: acceptance with the schema-relative predicate on precisely those coordinates.
+2774: 
+2775: For obstruction, Theorem~\ref{thm:finite-certificate-obstruction-skeleton} proves
+2776: that every failed finite certificate has an inclusion-minimal bad subrecord of one
+2777: of the five displayed forms: missing evidence surface, missing assigned gate row,
+2778: missing promotion or external-boundary record, discovery escalation without the
+2779: pinned discovery rows, or command-run escalation without the command tuple.  Since
+2780: these five cases exhaust the certificate fields that can fail after the kind set
+2781: has been fixed, there is no sixth hidden obstruction supplied by prose, route
+2782: history, advisory output, or an unstated semantic model.
+2783: 
+2784: For extension, let $c\preceq_{\Gamma}c^{+}$ be a properly stronger reading.  The
+2785: finite extension-budget normal form collects exactly the verifier-coordinate
+2786: differences between the original certificate and a certificate for $c^{+}$.  If
+2787: the difference tuple is present and satisfies the assigned gates, the enlarged
+2788: certificate is accepted by Theorem~\ref{thm:record-acceptance-exactness}.  If it
+2789: is absent in any required component, the obstruction skeleton supplies the finite
+2790: bad subrecord rejecting $c^{+}$.  Positivity of the budget follows from properness:
+2791: if all six difference components were empty, finite-coordinate determination would
+2792: make $c$ and $c^{+}$ record-equivalent.
+2793: 
+2794: The named support statements later in the manuscript specialize these three
+2795: steps to particular coordinates: source-interface records specialize the
+2796: discovery/source projection, artifact rows specialize the evidence-surface and
+2797: artifact-boundary projection, theorem-inventory rows specialize syntactic label
+2798: coverage, upload/archive statements specialize the external-support boundary, and
+2799: current-package fixed points specialize byte/log/digest freshness.  Each such
+2800: specialization reads a subset of the same finite tuple or an explicitly submitted
+2801: extension coordinate.  Therefore no semantic, implementation, public-byte,
+2802: artifact-validation, or venue conclusion can be obtained by gluing the instances
+2803: together; by Theorem~\ref{thm:finite-coordinate-determination-boundary}, a claim
+2804: depending on a coordinate not read by the finite tuple is not determined by that
+2805: tuple.  This proves the promised spine and connects the later support statements
