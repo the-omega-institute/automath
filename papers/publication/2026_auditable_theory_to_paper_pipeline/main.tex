@@ -1889,15 +1889,21 @@ point of Theorem~\ref{thm:record-interface-rigidity} determine finite certificat
 construction under the external record-gate interface
 \(\mathsf{RGS}_{S}(P,L,\Gamma)\), but they do not determine correctness of any
 gate implementation that produced, stored, or displayed the pass rows.  More
-precisely, for any accepted claim row $c$, the following are equivalent.
+precisely, for any accepted claim row $c$, a finite-record
+implementation-soundness reading for the gates assigned to $c$ is accepted by the
+same calculus if and only if both of the following positive coordinates are added
+to the support surface.
 \begin{enumerate}
-\item The same finite-record calculus accepts an implementation-soundness reading
-for the gates assigned to $c$.
 \item The package support surface contains a nonempty implementation coordinate
 for those gates: gate source identity, source digest or commit, command line,
 runtime environment, input records, output records, exit code, log path, digest
-binding to the submitted support surface, and an assigned implementation-gate
-pass row.
+binding to the submitted support surface, negative-fixture or regression rows
+where the gate contract uses them, and an assigned implementation-gate pass row.
+\item The package states an independent implementation-soundness contract for
+that coordinate: the contract names the intended specification, the checked source
+state, the test or proof obligation family, the produced logs, and the finite
+criterion by which those logs imply the implementation-soundness predicate being
+claimed.
 \end{enumerate}
 Without this coordinate, every implementation-soundness reading has a finite bad
 subrecord, while the bounded certificate-construction reading remains valid under
@@ -1925,17 +1931,24 @@ Theorem~\ref{thm:finite-coordinate-determination-boundary}, a conclusion that
 distinguishes them cannot be determined by the current projection.  Hence the
 accepted implementation-soundness reading must add a nonempty implementation
 coordinate, and omission of that coordinate is the finite bad subrecord named by
-Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  The same argument
+applies if the coordinate contains source and log names but no independent
+contract connecting those finite records to the intended implementation predicate:
+two states can agree on the named files while differing on whether the tests,
+negative fixtures, or proof obligations are adequate for that predicate.  Thus
+the contract itself is a second positive coordinate, not a consequence of the
+record-gate rows.
 
-Conversely, if the displayed implementation coordinate and its assigned pass row
-are present, then the implementation reading is no longer a free strengthening.
-It is an ordinary extension coordinate in the preorder of
-Definition~\ref{def:stronger-reading-preorder}.  The enlarged tuple is accepted
-exactly when the six schema checks and the additional assigned implementation
-gate row form the fixed point of Theorem~\ref{thm:record-interface-rigidity}.
-Thus the theorem proves a sharp dichotomy: the current package gives bounded
-finite certificate construction under record-gate soundness, and implementation
-soundness appears only after the stated finite support extension.
+Conversely, if the displayed implementation coordinate, the independent contract,
+and the assigned implementation-gate pass row are present, then the
+implementation reading is no longer a free strengthening.  It is an ordinary
+extension coordinate in the preorder of Definition~\ref{def:stronger-reading-preorder}.
+The enlarged tuple is accepted exactly when the six schema checks, the additional
+assigned implementation-gate row, and the contract fields form the fixed point of
+Theorem~\ref{thm:record-interface-rigidity}.  Thus the theorem proves a sharp
+dichotomy: the current package gives bounded finite certificate construction
+under record-gate soundness, and implementation soundness appears only after the
+stated finite support and contract extension.
 \end{proof}
 
 \begin{corollary}[Finite-record acceptance is not implementation soundness]
@@ -5628,12 +5641,15 @@ contains either the venue-check record \path{VENUE_CHECK.md} and log
 \path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log}, or an
 archive-equivalent replacement naming the same checked URLs, observation time,
 route rules, command result, source state, environment, exit code, and log path.
-Then the venue row of Proposition~\ref{audit:venue-submission-pack-gate} is
-accepted for the current package only when the upload is made on that checked
-rule state or after a later record with the same fields has replaced it.  If
-that support surface is not submitted, or if an upload occurs after a venue-page
-change without a replacement record, the package retains only a dated local
-readiness observation and cannot certify upload-time venue compliance.
+Then the venue row of Proposition~\ref{audit:venue-submission-pack-gate} becomes
+an upload-time venue-compliance coordinate only after the support surface also
+contains the upload timestamp, the upload receipt or form-state record, and a
+finite unchanged-rule bridge from the checked rule state to that upload action
+or a replacement check made immediately before upload.  If those upload-time
+fields are absent, if that support surface is not submitted, or if an upload
+occurs after a venue-page change without a replacement record, the package
+retains only a dated local readiness observation and cannot certify upload-time
+venue compliance.
 
 If the local venue-check files are not part of the submitted support surface,
 mentions of \path{VENUE_CHECK.md}, \path{VENUE_CHECK_RUN_2026-06-04.log}, and
@@ -5647,17 +5663,22 @@ The venue gate uses facts that are external to the manuscript: route class,
 length, review status, proceedings boundary, deadline, submission form, style
 interface, and software/data-access instruction.  These facts can change outside
 the submitted source, so the gate cannot be discharged by a stale table row.
-The stated support-surface hypothesis supplies the finite certificate surface:
+The stated support-surface hypothesis supplies only the venue-rule portion of a
+possible finite certificate surface:
 three official URLs, a date and time, command-result fields, an HTTP-status run
 log, observed route facts, and the boundary that a later upload or conflicting
-form instruction triggers re-verification.  If the
-upload uses that recorded rule state, each venue-dependent row of
-Table~\ref{tab:venue-submission-pack-gate} is checked against a dated official
-surface.  If the upload occurs after a change, or without a replacement record,
-at least one external premise of Proposition~\ref{audit:venue-submission-pack-gate}
-is no longer certified by the package; the venue row is therefore not accepted.
-This proves the criterion and connects the fresh record to the local readiness
-gate.  Without the support-surface hypothesis, the named local files are not
+form instruction triggers re-verification.  Upload-time compliance reads further
+external facts: that an upload action occurred, its timestamp, the form state or
+receipt for that action, and the bridge saying that the observed rules were still
+the rules governing the upload.  If these fields are supplied, each
+venue-dependent row of Table~\ref{tab:venue-submission-pack-gate} is checked
+against a dated official surface and an upload action tied to that surface.  If
+the upload occurs after a change, or without the timestamp/receipt/unchanged-rule
+bridge or replacement record, at least one external premise of
+Proposition~\ref{audit:venue-submission-pack-gate} is no longer certified by the
+package; the venue row is therefore not accepted as upload-time compliance.  This
+proves the criterion and connects the fresh record to the local readiness gate.
+Without the support-surface hypothesis, the named local files are not
 reviewer-available finite coordinates, so the same text can witness only a dated
 historical observation.
 \end{proof}
@@ -5670,40 +5691,42 @@ time, the HTTP-status run witness \path{VENUE_CHECK_RUN_2026-06-04.log} or the l
 \path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log}, the
 observed route class, page limit, proceedings boundary, deadline, supplement
 access rule, and the local witness rows in Table~\ref{tab:venue-submission-pack-gate}.
-The venue component of the current finite-record package is accepted exactly for
-uploads whose venue-rule state is represented by $U$ or by a later replacement
-record with the same fields and with observation time immediately before upload,
-or with a finite unchanged-rule bridge from the recorded check to the upload
-action.  If an upload is made after a venue-page change, or if no upload-time or
-unchanged-rule replacement record is supplied, then the package retains only a
-historical venue observation and cannot certify submission-pack readiness,
-EasyChair compliance, acceptance, or proceedings status.
+The record $U$ is a dated local-readiness coordinate only.  It becomes an
+upload-time venue-compliance coordinate only after a further finite record adds
+an upload timestamp, upload receipt or form-state record, and either a check made
+immediately before upload or an unchanged-rule bridge from $U$ to that upload
+action.  If no such upload-time or unchanged-rule replacement record is supplied,
+then the package retains only a historical venue observation and cannot certify
+completed submission-pack compliance, EasyChair compliance, acceptance, or
+proceedings status.
 \end{theorem}
 
 \begin{proof}
 The venue rows used by the package are not internal mathematical definitions;
 they are external facts read from the official call, submission, and style
 surfaces.  Therefore the finite information available to the package about the
-venue is precisely the tuple $U$ displayed in the statement: three source URLs,
-one date and time, the HTTP-status run log, the finite route facts observed at
-that check, and the corresponding local witness rows.  On the class of uploads
-whose venue-rule state is represented by $U$, each premise of the local readiness gate is a component of that tuple, so
+venue before any upload action is precisely the tuple $U$ displayed in the
+statement: three source URLs, one date and time, the HTTP-status run log, the
+finite route facts observed at that check, and the corresponding local witness
+rows.  Each premise of the local readiness gate is a component of that tuple, so
 Proposition~\ref{audit:fresh-venue-record-criterion} and
-Table~\ref{tab:venue-submission-pack-gate} determine the bounded readiness
-conclusion.
+Table~\ref{tab:venue-submission-pack-gate} determine the bounded historical
+readiness conclusion, not completed upload-time compliance.
 
-Now suppose the venue page changes before upload or the upload is made without a
-replacement record.  At least one external premise--route class, page limit,
-deadline, submission interface, proceedings boundary, or supplement rule--is then
-not determined by $U$.  Two possible upload states can agree on the historical
-record $U$ while differing on that changed premise.  A certificate that is a
-function only of $U$ cannot distinguish those two states, so it cannot certify the
-stronger upload-time claim.  A later replacement record with the same fields is
-exactly the finite enlargement needed to restore determinacy.  The excluded
-claims of EasyChair compliance, acceptance, and proceedings status require still
-more external records and are not fields of $U$.  Hence stale venue observations
-remain historical only, while the accepted venue gate is the fresh finite-record
-one stated above.
+Now compare two possible upload states that agree on $U$.  In one state no
+upload has occurred; in a second state an EasyChair upload occurred at a later
+time; in a third state the venue page or form instruction changed before that
+later upload.  These states have the same historical tuple $U$ but differ on
+upload timestamp, receipt/form state, and unchanged-rule status.  A certificate
+that is a function only of $U$ cannot distinguish them, so by
+Theorem~\ref{thm:finite-coordinate-determination-boundary} it cannot certify the
+stronger upload-time claim.  The upload timestamp, receipt or form-state record,
+and unchanged-rule bridge or immediate replacement check are exactly the finite
+enlargement needed to restore determinacy.  The excluded claims of EasyChair
+compliance, acceptance, and proceedings status require still more external
+records and are not fields of $U$.  Hence the present venue observations remain
+historical/local-readiness records only, while any upload-time venue-compliance
+claim must be supported by the additional finite record stated above.
 \end{proof}
 
 \begin{corollary}[Historical venue record non-escalation]
@@ -9625,7 +9648,8 @@ local/path-verified or dated-readiness readings already classified above.
 
 \begin{proposition}[Final refreshed-coordinate instantiation]
 \label{prop:final-refreshed-coordinate-instantiation}
-For the current dated local-readiness package, the first coordinate of
+For the current dated local-readiness package, the local theorem-ledger
+coordinate of
 Theorem~\ref{thm:submission-support-fixed-point-normal-form} is instantiated by
 the finite tuple consisting of \path{theorem_inventory.json},
 \path{theorem_inventory.md}, \path{review_bundle/theorem_environment_extraction_run.log},
@@ -9633,11 +9657,13 @@ the finite tuple consisting of \path{theorem_inventory.json},
 \path{review_bundle/source_interface_verification_run.log},
 \path{review_bundle/primary_claim_inventory_freshness_2026-06-09.log},
 \path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log}, and
-\path{review_bundle/FINAL_DIGESTS_SHA256.md}, provided these files are submitted
-with the exact SHA-256 rows printed in the digest manifest.  This instantiation
-does not add an upload receipt, DOI, venue acceptance record, fresh Lean rebuild,
-daemon run, or artifact rerun; the archive-equivalent locator remains the public
-branch/path coordinate and is effective only with matching digest rows.
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, provided these files exist on the
+local package support surface with the exact SHA-256 rows printed in the digest
+manifest.  This instantiation is local/path-verified only.  It does not add an
+upload receipt, DOI, venue acceptance record, upload-time venue-compliance record,
+fresh Lean rebuild, daemon run, or artifact rerun; any archive-equivalent locator
+requires the separate public byte-equality coordinate of
+Corollary~\ref{cor:upload-or-archive-instantiation-record}.
 \end{proposition}
 
 \begin{proof}
@@ -9654,8 +9680,8 @@ venue/bibliography log is the dated external-route locator coordinate.  The
 digest manifest is the finite hash table selecting the bytes of the preceding
 coordinates.
 
-If the submitted files have the printed hashes, then equality of SHA-256 rows is
-exactly the package-state equality relation used by
+If the local package files have the printed hashes, then equality of SHA-256 rows
+is exactly the package-state equality relation used by
 Theorem~\ref{thm:workspace-final-package-reconciliation}; hence the first normal
 form coordinate is present.  If any named file is omitted, changed after the
 digest pass, or replaced by a file with a different row, then the finite tuple no
