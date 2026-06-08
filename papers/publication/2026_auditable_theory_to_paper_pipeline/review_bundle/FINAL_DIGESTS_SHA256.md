@@ -39,7 +39,7 @@ Support mode: conditional exact supplemental inclusion of `source_interface_reco
 | `8b80ca39c582ae82dd26cc73cefcb040d2db569d03a47b9afb917384e05673f2` | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` |
 | `01b568953ca7a4bced3a1251c38dffdd42a88c7b4e934fb955f661bc365653d5` | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` |
 | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` | `review_bundle/README.md` |
-| `533b85484547047e54562e9af6a2cfda90ef8e07422c0ee64471271e45a61767` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
+| `cf567495ba594d9a21c42d1de717663ef82288eee7287b6f74c2cad891d451be` | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` |
 | `2357cb6b7ad547b9fd7c4ef9077279af6c0a06d2c3119112f12ee1bc460389eb` | `review_bundle/source_interface_verification_run.log` |
 | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` |
 | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` | `review_bundle/submission_interface_map.json` |
