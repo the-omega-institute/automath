@@ -9311,11 +9311,15 @@ In the current source package, after \path{theorem_inventory.json} and
 \path{review_bundle/certificate_verification_run.log},
 \path{review_bundle/source_interface_verification_run.log},
 \path{review_bundle/primary_claim_inventory_freshness_2026-06-08.log}, and
+\path{review_bundle/final_digest_generation_run.log}, and
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} instantiates the first coordinate of
 Theorem~\ref{thm:submission-support-fixed-point-normal-form} exactly when the
 extractor and finite-record verifiers are rerun after the inventory files exist
-and the final digest table is regenerated after those logs exist.  The resulting
-coordinate is a finite local support tuple only; it is not theorem semantics,
+and the final digest table and its generation log are regenerated after those
+logs exist.  The generation log is part of the accepted finite coordinate but is
+excluded, together with the digest manifest itself, from the hashed-input table
+to avoid self-digest recursion.  The resulting coordinate is a finite local
+support tuple only; it is not theorem semantics,
 venue submission, archive replacement, Lean/BEDC rebuild evidence, daemon
 evidence, or dynamic artifact-validation evidence.
 \end{corollary}
@@ -9330,10 +9334,14 @@ Running these commands after the inventory write therefore produces command-log
 bytes whose input side includes the inventory state rather than a pre-inventory
 state.
 
-If \path{review_bundle/FINAL_DIGESTS_SHA256.md} is then regenerated after those
+If \path{review_bundle/final_digest_generation_run.log} and
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} are then regenerated after those
 logs exist, each support input displayed before the digest manifest is selected
-by a post-inventory byte row, and the digest manifest itself is the generated
-finite selector for those rows.  Theorem~\ref{thm:post-inventory-package-fixed-point} says precisely
+by a post-inventory byte row, the generation log records the digest-refresh
+command boundary, and the digest manifest itself is the generated finite
+selector for those rows.  The manifest does not hash either itself or the
+generation log, so the construction is acyclic rather than a self-referential
+fixed point.  Theorem~\ref{thm:post-inventory-package-fixed-point} says precisely
 that this ordered acyclic construction closes the first coordinate of the normal form in
 Theorem~\ref{thm:submission-support-fixed-point-normal-form}, and
 Proposition~\ref{prop:final-refreshed-coordinate-instantiation} identifies the
@@ -9341,9 +9349,11 @@ same paths as the refreshed finite support tuple.  Hence the tuple instantiates
 the current theorem-ledger support coordinate.
 
 Conversely, if the inventory write, either verifier rerun, or digest
-regeneration is missing or out of order, at least one tuple component is not a
-post-inventory byte selected by the final digest manifest.  The exact-inclusion
-coordinate would then require an unstated finite row, which is excluded by
+regeneration with its generation-log coordinate is missing or out of order, at
+least one tuple component is not a post-inventory byte selected by the final
+digest manifest or recorded by the digest-generation command boundary.  The
+exact-inclusion coordinate would then require an unstated finite row, which is
+excluded by
 Theorem~\ref{thm:finite-coordinate-determination-boundary}.  The final sentence
 is the non-escalation boundary already proved in
 Theorem~\ref{thm:post-inventory-package-fixed-point} and
