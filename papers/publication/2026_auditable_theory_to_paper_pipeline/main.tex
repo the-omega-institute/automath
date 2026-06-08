@@ -9276,6 +9276,46 @@ therefore stable under byte-level replay of the recorded tuple, but it is not an
 automatic certificate for a changed inventory state.
 \end{proof}
 
+\begin{proposition}[Post-inventory freshness obstruction]
+\label{prop:post-inventory-freshness-obstruction}
+Let $S$ and $S'$ be two source states of the present package which differ in at
+least one byte of \path{theorem_inventory.json} or \path{theorem_inventory.md}.
+Suppose the theorem-environment extractor, certificate-record verifier,
+source-interface verifier, retained primary-claim verifier, and final digest
+generator were run from $S$ in the order required by
+Theorem~\ref{thm:post-inventory-package-fixed-point}.  Then those logs and digest
+rows do not instantiate the theorem-inventory coordinate of $S'$.  The coordinate
+for $S'$ is available exactly after the same extractor/verifier/digest sequence is
+rerun from $S'$ and the digest manifest is regenerated after the new log bytes
+exist.  Consequently the two Stage--A issue obligations consisting of the root
+theorem-obligation ledger and the fresh verifier/digest support tuple cannot be
+closed by a pre-inventory or stale-inventory command record.
+\end{proposition}
+
+\begin{proof}
+The first coordinate of
+Theorem~\ref{thm:submission-support-fixed-point-normal-form} is a finite byte
+tuple, not an isomorphism class of prose descriptions.  By
+Corollary~\ref{cor:stable-replay-post-inventory-tuple}, a support claim based on
+the post-inventory pass factors through the exact byte strings of the two
+inventory files, the four retained command logs, and the digest table that was
+generated after those logs.  If $S$ and $S'$ differ in either inventory file, then
+the input byte tuple for $S'$ is not the input tuple selected by the digest rows
+computed from $S$.  Equality of the finite support coordinate therefore fails.
+
+The ordered construction in
+Theorem~\ref{thm:post-inventory-package-fixed-point} is also sufficient.  Rerunning
+the extractor and the three finite-record verifiers from $S'$ makes their command
+records post-inventory records for the $S'$ byte strings; regenerating
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} after those logs exist selects the
+new inventory and log bytes in the same finite tuple.  Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}
+then identifies that tuple as the current theorem-inventory coordinate, while
+Theorem~\ref{thm:finite-coordinate-determination-boundary} rejects any stronger
+reading that omits one of these finite coordinates.  Thus stale logs prove only a
+historical coordinate for $S$, and the current issue obligations close only by the
+fresh sequence just described.
+\end{proof}
+
 \begin{corollary}[Local fixed point and external-support boundary]
 \label{cor:local-fixed-point-external-boundary}
 Assume that the current source state contains
