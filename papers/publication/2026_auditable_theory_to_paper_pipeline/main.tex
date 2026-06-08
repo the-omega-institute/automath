@@ -6993,7 +6993,7 @@ one of those regular certificate files or to a finite record that names them:
 the case-snapshot rows use the thirteen case snapshots; the schema and pass
 claims use \path{certificate_schema.json},
 \path{current_package_pass_records.json}, the verifier scripts, and their logs;
-the primary-claim rows use \path{primary_claim_inventory.json} and its freshness
+the primary-claim rows use \path{review_bundle/primary_claim_inventory.json} and its freshness
 records; the source-interface rows use the pinned source snapshot,
 \path{submission_interface_map.json}, and the source-interface verifier log; and
 the bundle role itself uses \path{README.md} and
@@ -10128,6 +10128,63 @@ Theorem~\ref{thm:finite-coordinate-determination-boundary}.  The final sentence
 is the non-escalation boundary already proved in
 Theorem~\ref{thm:post-inventory-package-fixed-point} and
 Theorem~\ref{thm:submission-support-fixed-point-normal-form}.
+\end{proof}
+
+\begin{proposition}[Current round-six verifier and support-coordinate realization]
+\label{prop:current-round-six-verifier-support-realization}
+For the current Stage--A round-six source state, the local theorem-ledger
+coordinate is instantiated by the finite tuple consisting of
+\path{theorem_inventory.json}, \path{theorem_inventory.md},
+\path{review_bundle/theorem_environment_extraction_run.log},
+\path{review_bundle/certificate_verification_run.log},
+\path{review_bundle/source_interface_verification_run.log},
+\path{review_bundle/primary_claim_inventory_freshness_2026-06-09.log}, and
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, provided these files are included
+with the exact bytes selected by the final digest manifest.  In this source
+state the root file \path{primary_claim_inventory.json} is only a byte-for-byte
+alias for \path{review_bundle/primary_claim_inventory.json}; the canonical
+support path remains the prefixed review-bundle path.  The same finite tuple does
+not instantiate the external support coordinate: an external-review reading of a
+bundle-backed claim additionally requires either an exact supplemental-upload
+receipt for the selected support surface or an archive-equivalent public locator
+with matching file list, relative-path semantics, manifest identity, digest rows,
+and byte-equality evidence.
+\end{proposition}
+
+\begin{proof}
+The first assertion is precisely the ordered construction of
+Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}.  The two
+inventory files are present before the retained extractor and verifier logs are
+read as current command records.  The extractor log names
+\path{python review_bundle/extract_theorem_environments.py}, reads
+\path{main.tex} and \path{theorem_inventory.json}, records zero omitted theorem
+labels, and has exit code zero.  The retained certificate, source-interface, and
+primary-claim verifier logs likewise have exit code zero and name their finite
+input records.  Regenerating \path{review_bundle/FINAL_DIGESTS_SHA256.md} after
+those log bytes exist selects the inventory files and logs as byte-level inputs
+to the final local support surface.  Hence the tuple is the current local
+theorem-ledger coordinate under
+Theorem~\ref{thm:post-inventory-package-fixed-point}.
+
+For the alias claim, the root alias file adds no new evidence coordinate: it is
+accepted only as a duplicate of the canonical bundle file.  Every load-bearing
+primary-claim row in the manuscript is stated against
+\path{review_bundle/primary_claim_inventory.json} and its freshness log.  If the
+two files ever differ, byte equality fails and the alias sentence is no longer an
+accepted support row; the canonical prefixed path remains the verifier input.
+
+For the external-boundary claim, apply
+Corollary~\ref{cor:upload-or-archive-instantiation-record}.  That corollary
+lists the positive coordinates needed for external support: either the exact
+supplemental-upload receipt or the archive-equivalent locator together with the
+matching byte-equality fields.  The local tuple displayed above contains file
+paths, command logs, exit codes, and digest rows, but it contains neither an
+upload receipt nor the public byte-equality record required for an archive
+replacement.  Proposition~\ref{prop:current-absence-external-support-surface-instantiation}
+therefore blocks any escalation from local/path-verified support to external
+review support.  The current package may be supplied to reviewers by adding one
+of those external coordinates, but until such a coordinate is present, no
+bundle-backed claim in the theorem chain relies on external availability.
 \end{proof}
 
 \begin{corollary}[Byte-level stable replay criterion for the post-inventory tuple]
