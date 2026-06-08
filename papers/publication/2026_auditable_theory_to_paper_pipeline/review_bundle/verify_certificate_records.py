@@ -7,6 +7,7 @@ it does not rerun Lean, publication daemons, or Rule110 dynamic artifacts.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import platform
 import subprocess
@@ -33,6 +34,14 @@ def git_head() -> str:
         ).strip()
     except Exception:
         return "unavailable"
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(65536), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def ensure(condition: bool, message: str, errors: list[str]) -> None:
@@ -144,6 +153,15 @@ def main() -> int:
     print("certificate verification passed")
     print("command: python review_bundle/verify_certificate_records.py")
     print(f"source_commit: {git_head()}")
+    print("source_hashes:")
+    for relative in (
+        "review_bundle/certificate_schema.json",
+        "review_bundle/current_package_pass_records.json",
+        "review_bundle/submission_interface_map.json",
+        "review_bundle/primary_claim_inventory.json",
+        "review_bundle/REVIEW_BUNDLE_MANIFEST.json",
+    ):
+        print(f"  {relative}: {sha256(ROOT / relative)}")
     print("source_digest_manifest: review_bundle/FINAL_DIGESTS_SHA256.md")
     print(f"environment: Python {platform.python_version()} on {platform.system()} {platform.release()}")
     print("exit_code: 0")

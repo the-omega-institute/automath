@@ -8,6 +8,7 @@ surface.  It does not prove the semantics of the primary prose.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import platform
 import re
@@ -69,6 +70,14 @@ def git_head() -> str:
         return "unavailable"
 
 
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(65536), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
 def certificate_surface_exists(pointer: str) -> bool:
     if pointer.startswith(CERTIFICATE_PREFIXES):
         return True
@@ -122,6 +131,10 @@ def verify() -> tuple[list[str], dict[str, object]]:
     summary = {
         "command": "python review_bundle/verify_primary_claim_inventory.py",
         "source_commit": git_head(),
+        "source_hashes": {
+            "submission_abstract.tex": sha256(PRIMARY),
+            "review_bundle/primary_claim_inventory.json": sha256(INVENTORY),
+        },
         "source_digest_manifest": "review_bundle/FINAL_DIGESTS_SHA256.md",
         "environment": f"Python {platform.python_version()} on {platform.system()} {platform.release()}",
         "cwd": str(ROOT).replace("\\", "/"),

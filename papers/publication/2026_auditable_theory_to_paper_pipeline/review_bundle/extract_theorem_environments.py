@@ -12,6 +12,7 @@ import platform
 import re
 import subprocess
 import sys
+import hashlib
 from collections import Counter
 from pathlib import Path
 
@@ -33,6 +34,14 @@ def git_head() -> str:
         ).strip()
     except Exception:
         return "unavailable"
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def extract_tex_environments(tex_path: Path) -> list[dict[str, object]]:
@@ -104,6 +113,10 @@ def verify() -> tuple[list[str], dict[str, object]]:
     summary: dict[str, object] = {
         "command": "python review_bundle/extract_theorem_environments.py",
         "source_commit": git_head(),
+        "source_hashes": {
+            "main.tex": sha256_file(tex_path),
+            "theorem_inventory.json": sha256_file(inventory_path),
+        },
         "source_digest_manifest": "review_bundle/FINAL_DIGESTS_SHA256.md",
         "environment": f"Python {platform.python_version()} on {platform.system()} {platform.release()}",
         "cwd": str(ROOT).replace("\\", "/"),

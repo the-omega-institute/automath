@@ -143,6 +143,11 @@ def verify() -> tuple[dict, list[str]]:
         "verifier": "review_bundle/verify_source_interface_record.py",
         "command": "python review_bundle/verify_source_interface_record.py",
         "source_commit": git_head(),
+        "source_hashes": {
+            "main.tex": sha256(MAIN),
+            "source_interface_record.json": sha256(RECORD),
+            "review_bundle/REVIEW_BUNDLE_MANIFEST.json": sha256(MANIFEST),
+        },
         "source_digest_manifest": "review_bundle/FINAL_DIGESTS_SHA256.md",
         "environment": f"Python {platform.python_version()} on {platform.system()} {platform.release()}",
         "exit_code": 0 if not errors else 1,
