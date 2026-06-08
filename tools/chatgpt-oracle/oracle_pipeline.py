@@ -4144,8 +4144,10 @@ def build_oracle_re_review_prompt(target_journal: str) -> str:
         instead infer the likely revision targets from the current manuscript and
         audit acceptance readiness directly.
 
-        Do not begin with process narration such as "I will review" or UI text.
-        The first visible output must be exactly the Overall verdict line.
+        Do not begin with process narration such as "I will review", "I'll review",
+        "Thought for", or UI text. Do not describe your review process before
+        the verdict. The first visible output must be exactly the Overall
+        verdict line, and no hidden-thinking summary may precede it.
 
         Report:
         1. Remaining acceptance blockers, if any.
