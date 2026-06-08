@@ -100,7 +100,9 @@ Definition~\ref{def:certificate-schema-acceptance-table} (the six finite
 acceptance predicates), Theorems~\ref{thm:verifier-input-output-contract},
 \ref{thm:record-acceptance-exactness}, and
 \ref{thm:finite-coordinate-determination-boundary} (schema-projection exactness
-and non-escalation), Theorem~\ref{thm:record-interface-rigidity} (the typed
+and non-escalation), Theorem~\ref{thm:auditable-compiler-boundary-completeness}
+(the auditable compiler-boundary completeness theorem identifying the precise
+input and output channels of the contribution), Theorem~\ref{thm:record-interface-rigidity} (the typed
 record-interface rigidity and refresh fixed-point criterion),
 Theorem~\ref{thm:publication-safety-interface} (finite
 publication-certificate invariants from explicitly supplied record-gate
@@ -374,6 +376,22 @@ boundary, then instantiates that boundary on the current six-row package, and
 only then lists the local case snapshots and command-run inventory.  File tables
 are included as finite witnesses for this interface, not as a substitute for the
 compiler architecture.
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{p{0.22\linewidth}p{0.08\linewidth}p{0.22\linewidth}p{0.08\linewidth}X}
+\toprule
+Input layer & & Compiler boundary & & Output layer \\
+\midrule
+Pinned source paths, bounded source-interface rows, finite manifests, case
+snapshots, command logs when present, gate-pass rows, and human-promotion records
+& $\longrightarrow$ & finite certificate constructor plus schema verifier
+$(K,\ell,E,H,R,D,B;S,L,\Gamma)$ & $\longrightarrow$ & accepted finite
+publication certificates and finite bad subrecords, each with an explicit
+negative boundary \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
 Concretely, the newmath source workspace contains Lean files, scripts, and
 artifact sources.  The automath publication workspace contains intake packets,
@@ -1422,6 +1440,64 @@ input record.  It can become checkable only after the schema is enlarged to add
 that object as an input coordinate and after a new verifier contract for the
 enlarged coordinate is proved.  Hence the present verifier certifies only finite
 record acceptance and its finite rejection witnesses.\end{proof}
+
+\begin{theorem}[Auditable compiler-boundary completeness]
+\label{thm:auditable-compiler-boundary-completeness}
+For the architecture of Definition~\ref{def:architecture-axis-map} and the
+finite verifier of Theorem~\ref{thm:verifier-input-output-contract}, the software
+contribution certified by Theorem~\ref{thm:publication-safety-interface} is
+exactly the following compiler-boundary property.  Every accepted load-bearing
+claim in the publication package is the image of a finite input tuple
+\[
+  (K,\ell,E,H,R,D,B;S,L,\Gamma)
+\]
+whose evidence fields are on the submitted support surface or in an explicitly
+pinned historical boundary, and every rejected stronger reading has a finite bad
+subrecord in one of those fields.  Conversely, no fact that is not a function of
+this tuple is a compiler-boundary output.  In particular, correctness of gate
+implementations, Lean/BEDC rebuild success, daemon behaviour, artifact semantic
+validity, live case-study reruns, venue upload, archive availability, and venue
+acceptance are certified only after the corresponding finite coordinate and
+assigned pass record are added to the input tuple.
+\end{theorem}
+
+\begin{proof}
+The displayed architecture table identifies the only compiler input channels
+used in this paper: source-interface rows, manifest or witness rows, command-log
+rows when present, gate-pass rows, route-promotion rows, and declared limitation
+boundaries.  Definition~\ref{def:operational-acceptance-interface} packages those
+channels as \((K,\ell,E,H,R,D,B)\) over a submitted support surface \(S\), a
+ledger \(L\), and dispatch table \(\Gamma\).  Theorem~\ref{thm:verifier-input-output-contract}
+then proves that the verifier reads exactly these fields through the six checks
+\(Q_1,\ldots,Q_6\) and has exactly two output types: a finite acceptance bit for
+the certificate tuple, or the finite bad subrecord read by the first failed
+check.  Therefore every positive publication-safety conclusion later obtained
+from the verifier is an image of the displayed finite tuple, and every negative
+conclusion is localized to a finite bad subrecord of that tuple.
+
+It remains to prove exactness of the boundary.  Suppose two surrounding workflow
+states agree on \((K,\ell,E,H,R,D,B;S,L,\Gamma)\) but differ in an unread object,
+such as the source code of a gate implementation, a proof-assistant checkout, a
+daemon trace, an artifact rerun, a venue-upload state, an archive locator, or an
+unsubmitted public-source comparison.  The six verifier checks have the same
+truth values in the two states, because none of their inputs changed.  Hence a
+claim that distinguishes the two states is not determined by the compiler
+boundary.  This is precisely the finite-coordinate obstruction of
+Theorem~\ref{thm:finite-coordinate-determination-boundary} and the axis
+non-escalation of Proposition~\ref{prop:architecture-axis-non-escalation}.
+
+Conversely, if one of the listed stronger facts is submitted as a finite
+coordinate---for example by adding gate source identity, command, source state,
+environment, exit code, log path, digest binding, public byte-equality row,
+upload-or-archive row, or assigned implementation-gate pass row---then it is no
+longer an unread ambient fact.  It is an ordinary extension in the preorder of
+Definition~\ref{def:stronger-reading-preorder}.  The finite extension-budget
+normal form, Theorem~\ref{thm:finite-extension-budget-normal-form}, says exactly
+that the enlarged reading is accepted iff those added coordinates are present and
+their assigned gates pass.  Thus the theorem is a completeness statement for the
+auditable compiler boundary and deliberately not a proof of gate implementation
+correctness or semantic validity outside that boundary.
+\end{proof}
 
 \begin{theorem}[Executable-record verifier normal form]
 \label{thm:finite-verifier-normal-form}
