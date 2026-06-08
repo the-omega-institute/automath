@@ -307,6 +307,70 @@ constructor by the corresponding core witness, except for \(\pi\), \(\sin\), and
 identity is referenced.
 \end{proof}
 
+\begin{theorem}[Richardson proof graph has no hidden witness]
+\label{thm:richardson-proof-graph-no-hidden-witness}
+\label{thm:verified-triple-is-necessary-interface}
+Fix the internal core EML library of \Cref{prop:internal-core-eml-witnesses} and
+the imported \(L0\) representative theorem \Cref{thm:eml-universality}.  In this
+article these data alone do not instantiate Richardson's EML normalizer
+obstruction.  Any proof of such an instantiated obstruction in the manuscript
+must additionally contain one of the following two inputs:
+\begin{enumerate}
+\item a specified finite pure EML triple
+  \((\mathsf P,\mathsf S,\mathsf R)\) together with proved real-domain
+  identities
+  \[
+    \mathsf P=\pi,
+    \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+    \qquad \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0});
+  \]
+\item for the particular printed strings
+  \((U_{47},U_{111},U_{126})\), the external hypothesis
+  \((H_{\mathcal W})\) of \Cref{ass:HW}.
+\end{enumerate}
+Equivalently, after deleting these two inputs from the proof graph, the
+remaining unconditional Richardson assertion is exactly the abstract interface
+\Cref{thm:replacement-triple-richardson-interface}; no concrete finite pure-EML
+triple for \(\pi\), sine on \(\RR\), and nonnegative square root on
+\(\RR_{\ge0}\) is produced or used.
+\end{theorem}
+
+\begin{proof}
+The only place where Richardson's source language is converted to pure EML is
+\Cref{lem:richardson-translation}.  Its structural recursion sends the internal
+constructors--rational constants, \(\log2\), \(+\), \(-\), \(\times\), and
+\(\exp\)--to the core witnesses of
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}.  Those core witnesses
+are summarized in \Cref{prop:internal-core-eml-witnesses}.  That proposition
+does not include \(\pi\), does not include sine on \(\RR\), and gives square root
+only on the positive domain \((0,\infty)\), with no value asserted at \(0\).
+
+Richardson's undecidable fragment, as fixed in
+\Cref{lem:richardson-punctured-mu-reduction,lem:richardson-fragment}, also uses
+the constructors \(\pi\), \(\sin\), and the absolute-value representative
+\(x\mapsto\sqrt{x^2}\).  A domain-preserving translation of the last constructor
+requires a square-root witness at the input \(0\), because the subterm
+\(F(x)^2\) can vanish on its real domain.  This is precisely the boundary proved
+in \Cref{thm:positive-core-nonnegative-root-boundary}: the positive-domain core
+root cannot by itself serve as Richardson's nonnegative square-root witness.
+Thus the core library and the \(L0\) import leave exactly three missing semantic
+interfaces, namely \(\pi\), sine on all real inputs, and square root on
+\(\RR_{\ge0}\).
+
+The first listed input supplies those three interfaces directly, and then
+\Cref{thm:replacement-triple-richardson-interface} gives the normalizer
+obstruction.  The second listed input is the special case for the printed names:
+by \Cref{thm:printed-richardson-witnesses-interface}, \((H_{\mathcal W})\) turns
+\((U_{47},U_{111},U_{126})\) into such a verified triple, after which the same
+interface theorem applies.  Conversely, without either input, the translation
+has no manuscript-proved witnesses for the three Richardson constructors just
+identified.  The external \(\mathcal B_{36}\) theorem cannot fill the gap,
+because \Cref{thm:B36-import-exact-scope,prop:eml-import-dependency-cut} restrict
+it here to representative existence and explicitly exclude its use as a hidden
+verified Richardson package.  Hence deleting the two listed inputs leaves only
+the abstract interface theorem and no instantiated concrete triple.
+\end{proof}
+
 \begin{theorem}[Finite EML Richardson trichotomy]
 \label{thm:minimal-eml-witness-interface}
 \label{thm:richardson-interface-boundary}
@@ -337,7 +401,8 @@ Consequently, the Proc. AMS Richardson clause in \Cref{thm:main-hierarchy} is
 only relative to a verified triple: the unconditional paper proves the
 interface theorem, while any concrete named-root instance requires either the
 external hypothesis \((H_{\mathcal W})\) or a separately proved replacement
-triple.
+triple.  The proof graph has no hidden third source of witnesses, by
+\Cref{thm:richardson-proof-graph-no-hidden-witness}.
 \end{theorem}
 
 \begin{proof}
@@ -355,11 +420,15 @@ absolute-value symbol, represented here as \(x\mapsto\sqrt{x^2}\).  The internal
 core package \Cref{lem:eml-printed-core,lem:eml-real-witness-library} supplies
 the other constructors but explicitly does not supply \(\pi\), sine on all of
   \(\RR\), or the square-root value at \(0\); this is the domain boundary of
-  \Cref{thm:positive-core-nonnegative-root-boundary}.  Therefore correctness of
-  the transported Richardson fragment requires exactly the displayed semantic
-  interface for those three source constructors.  This identifies the
-  Richardson clause of \Cref{thm:main-hierarchy} with the verified-triple
-  interface and proves the stated Proc. AMS scope restriction.  The printed table contributes
+  \Cref{thm:positive-core-nonnegative-root-boundary}.  The sharper dependency
+  statement is \Cref{thm:richardson-proof-graph-no-hidden-witness}: after the
+  verified replacement-triple input and the conditional printed-root hypothesis
+  are removed, no other manuscript result supplies these three identities.
+  Therefore correctness of the transported Richardson fragment requires exactly
+  the displayed semantic interface for those three source constructors.  This
+  identifies the Richardson clause of \Cref{thm:main-hierarchy} with the
+  verified-triple interface and proves the stated Proc. AMS scope restriction.
+  The printed table contributes
 only fixed syntax by \Cref{lem:eml-ancillary-certificate}, and the imported
 \(L0\) representation theorem is only representative existence by
 \Cref{thm:eml-universality,prop:eml-import-dependency-cut}.  Hence, absent a
