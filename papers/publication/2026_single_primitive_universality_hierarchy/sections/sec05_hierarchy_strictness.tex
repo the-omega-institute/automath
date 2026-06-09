@@ -188,6 +188,55 @@ positive core and the nonnegative Richardson triple member have the stated
 separate roles.
 \end{proof}
 
+\begin{lemma}[Quantitative core witness table]
+\label{lem:eml-core-witness-table}
+The self-contained EML part of the Richardson translation uses the following
+finite printed witness table.  Each entry is a pure EML macro from
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; the domain column is
+the exact real domain on which the identity is proved.
+\[
+\begin{array}{@{}c@{\quad}c@{\quad}c@{}}
+\hbox{constructor} & \hbox{witness} & \hbox{domain}\\ \hline
+0,1,\mathbb Q,\log2 &
+\hbox{finite arithmetic from }1,\ L(A(1,1)) & \RR\hbox{ for constants}\\
+u+v & A(u,v) & \RR^2\\
+u-v & S(u,v) & \RR^2\\
+uv & M(u,v) & \RR^2\\
+u/v & J(u,v) & \{(u,v):v\ne0\}\\
+e^u & E(u) & \RR\\
+\sqrt u & G(u) & (0,\infty)
+\end{array}
+\]
+For any verified Richardson triple \((\mathsf P,\mathsf S,\mathsf R)\), adjoining
+the three rows
+\[
+\begin{array}{@{}c@{\quad}c@{\quad}c@{}}
+\pi&\mathsf P&\RR^0\\
+\sin u&\mathsf S(u)&\RR\\
+\sqrt u&\mathsf R(u)&[0,\infty)
+\end{array}
+\]
+gives the complete finite witness table used by
+\Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}.  The
+only overlap between the two tables is the square-root row: the core row is
+proved only on \((0,\infty)\), while the Richardson row must include \(0\).
+\end{lemma}
+
+\begin{proof}
+The first table is exactly the list proved in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}.  Rational constants are
+finite because each fixed rational is obtained by a finite arithmetic expansion
+from \(1\), and \(\log2=L(A(1,1))\).  The domains are the domains checked in the
+proofs of those two results: the auxiliary logarithm and reciprocal calls occur
+only on positive or nonzero inputs, and the multiplication witness is all-real
+because its four internal products use \(Q(u)>0\) and \(P(u)>0\).  The second
+table is not constructed by the core package; it is precisely the three
+verified-triple hypotheses.  The distinction between \(G\) and \(\mathsf R\) is
+\Cref{thm:positive-core-nonnegative-root-boundary}.  Therefore these finitely
+many displayed rows are exactly the witness library and domain data used in the
+structural recursion.
+\end{proof}
+
 \begin{theorem}[No core-only Richardson translation]
 \label{thm:no-core-only-richardson-translation}
 \label{thm:core-root-domain-obstruction}
@@ -264,6 +313,34 @@ real-domain semantic identities displayed in \Cref{ass:HW}.  Therefore table
 membership can identify the strings but cannot replace the analytic identities.
 With \((H_{\mathcal W})\), those identities are hypotheses; without it, the
 printed-string branch lacks the required witness interface.
+\end{proof}
+
+\begin{theorem}[No unconditional concrete Richardson triple]
+\label{thm:no-unconditional-concrete-richardson-triple}
+The manuscript does not exhibit an unconditional concrete finite pure EML triple
+for \(\pi\), sine on \(\RR\), and nonnegative square root on \(\RR_{\ge0}\).
+Consequently no named-string Richardson instance, including
+\((U_{47},U_{111},U_{126})\), is a load-bearing unconditional theorem of this
+article.  The Richardson branch of \Cref{thm:main-hierarchy} is unconditional
+only in the following relative sense: for each separately specified finite pure
+EML triple whose three real-domain identities have already been proved,
+\Cref{thm:replacement-triple-richardson-interface} applies.
+\end{theorem}
+
+\begin{proof}
+The complete self-contained witness table available in the manuscript is
+\Cref{lem:eml-core-witness-table}.  Its core rows explicitly omit \(\pi\), sine
+on \(\RR\), and square root at \(0\); the only rows providing those three
+constructors are the three verified-triple rows, which are hypotheses rather
+than internally proved strings.  By
+\Cref{prop:printed-witness-certificate-boundary}, the source lock for
+\((U_{47},U_{111},U_{126})\) proves only that the finite strings have been named,
+not that they satisfy the required real-domain identities.  Hence a concrete
+printed-string instance follows only after adding those identities, for these
+names through \((H_{\mathcal W})\) and
+\Cref{thm:printed-richardson-witnesses-interface}.  Without such an added
+verification, the only proved Richardson statement is the relative interface
+theorem for arbitrary already verified triples.
 \end{proof}
 
 \begin{theorem}[Conditional printed-string witness interface]
@@ -1036,8 +1113,7 @@ displayed bounds after increasing \(K\) once.
 \begin{lemma}[Quantitative Richardson translation]
 \label{lem:richardson-translation-bookkeeping}
 \label{prop:richardson-translation-bookkeeping}
-Fix the printed core EML witnesses of
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library} and a verified triple
+Fix the printed core EML witness table of \Cref{lem:eml-core-witness-table} and a verified triple
 \((\mathsf P,\mathsf S,\mathsf R)\) satisfying
 \[
   \mathsf P=\pi,
@@ -1047,8 +1123,8 @@ Fix the printed core EML witnesses of
   \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0}).
 \]
 Measure the size of a Richardson expression by its expression-tree size after
-expanding rational constants according to the fixed convention used in
-\Cref{lem:eml-real-witness-library}.  Then the translation
+expanding rational constants according to the fixed convention recorded in that
+table.  Then the translation
 \(\tau_{\mathsf P,\mathsf S,\mathsf R}\) of
 \Cref{lem:richardson-translation} can be chosen with the following uniform
 bounds and admissibility properties.  There is a constant \(C\), depending only
@@ -1072,8 +1148,8 @@ values of the form \(F(x)^2\ge0\), including the possible value \(0\).
 \begin{proof}
 Let \(\mathcal L\) be the finite list of core witnesses for
 \(0,1\), \(\log2\), addition, subtraction, multiplication, reciprocal on nonzero
-denominators, division, \(\exp\), and positive square root recorded in
-\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; rational constants are
+denominators, division, \(\exp\), and positive square root displayed in
+\Cref{lem:eml-core-witness-table}; rational constants are
 first expanded from \(0,1\) using this same fixed arithmetic library.  Adjoin the
 three verified strings \(\mathsf P,\mathsf S,\mathsf R\).  Let \(C\) be larger
 than twice the maximum, over this finite list of primitive witnesses, of the tree
