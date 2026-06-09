@@ -29,8 +29,13 @@ def read_json(path: Path) -> dict[str, Any] | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+PASS = "PASS"
+FAIL = "FAIL"
+BLOCKED = "BLOCKED_AT_SUBSTEP"
+
+
 def status(pass_value: bool) -> str:
-    return "pass" if pass_value else "fail"
+    return PASS if pass_value else FAIL
 
 
 def field_arithmetic_test() -> tuple[str, dict[str, Any]]:
@@ -74,68 +79,138 @@ def curve_smoothness_test() -> tuple[str, dict[str, Any]]:
 
 def divisor_group_law_test() -> tuple[str, dict[str, Any], list[str]]:
     blockers: list[str] = []
-    zero = jy.ReducedDivisor.zero()
-    zero_law_ok = zero.add(zero) == zero and zero.double() == zero
+    base_points = jy.base_divisor_points()
+    zero = jy.K1Divisor.zero()
+    zero_constructed = (
+        len(base_points) == 8
+        and zero.W.ambient_dim == jy.h0_dimension(4) == 14
+        and zero.W.dimension == 6
+        and zero == jy.K1Divisor.from_effective_divisor(base_points)
+    )
+
+    random_rows: list[dict[str, Any]] = []
+    add_blocker: dict[str, str] | None = None
+    constructed = 0
+    attempted_associativity = 0
+    for seed in range(1, 6):
+        a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(1000 + 3 * seed))
+        b = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(1001 + 3 * seed))
+        c = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(1002 + 3 * seed))
+        constructed += 3
+        row: dict[str, Any] = {
+            "seed": seed,
+            "W_dimensions": [a.W.dimension, b.W.dimension, c.W.dimension],
+            "ambient_dimensions": [a.W.ambient_dim, b.W.ambient_dim, c.W.ambient_dim],
+            "pair_intersection_dimensions": [
+                a.W.intersection(b.W).dimension,
+                b.W.intersection(c.W).dimension,
+                a.W.intersection(c.W).dimension,
+            ],
+        }
+        try:
+            attempted_associativity += 1
+            left = a.add(b).add(c)
+            right = a.add(b.add(c))
+            row["associative"] = left == right
+        except jy.ArithmeticBlocker as exc:
+            add_blocker = {"substep": exc.substep, "reason": exc.reason}
+            row["status"] = BLOCKED
+            row["blocker"] = add_blocker
+            blockers.append(f"{exc.substep}: {exc.reason}")
+            random_rows.append(row)
+            break
+        random_rows.append(row)
+
+    if add_blocker is None:
+        return status(all(row.get("associative") is True for row in random_rows)), {
+            "zero_K1_constructed": zero_constructed,
+            "random_effective_divisors_constructed": constructed,
+            "random_triples_requested": 5,
+            "random_triples_attempted": attempted_associativity,
+            "rows": random_rows,
+        }, blockers
+
+    return BLOCKED, {
+        "zero_K1_constructed": zero_constructed,
+        "base_divisor_degree": len(base_points),
+        "H0_O4_dimension": jy.h0_dimension(4),
+        "zero_W_dimension": zero.W.dimension,
+        "random_effective_divisors_constructed": constructed,
+        "random_triples_requested": 5,
+        "random_triples_attempted_before_block": attempted_associativity,
+        "rows": random_rows,
+        "blocker": add_blocker,
+    }, blockers
+
+
+def legacy_reduced_divisor_blocker_test() -> dict[str, Any]:
     hpts = jy.hyperflex_points()
-    nontrivial_blocker: dict[str, str] | None = None
     try:
         jy.ReducedDivisor(divisor={hpts[0]: 1, hpts[1]: -1})
     except jy.ArithmeticBlocker as exc:
-        nontrivial_blocker = {"substep": exc.substep, "reason": exc.reason}
-        blockers.append(f"{exc.substep}: {exc.reason}")
-    return status(False), {
-        "zero_class_commutative_associative_smoke": zero_law_ok,
-        "random_pairs_checked": 0,
-        "nontrivial_add_associativity": "blocked",
-        "blocker": nontrivial_blocker,
-    }, blockers
+        return {"status": BLOCKED, "substep": exc.substep, "reason": exc.reason}
+    return {"status": FAIL, "reason": "legacy ReducedDivisor unexpectedly accepted a nontrivial class"}
 
 
 def jy4_order_check(nonhyper: dict[str, Any] | None) -> dict[str, Any]:
     if nonhyper is None:
-        return {"computed": None, "expected": jy.EXPECTED_JY4_ORDER, "pass": False, "source": None}
+        return {
+            "status": BLOCKED,
+            "computed": None,
+            "expected": jy.EXPECTED_JY4_ORDER,
+            "source": None,
+            "blocker": "full K1 add/double/reduce is needed before exact 4096-class enumeration",
+        }
     computed = int(nonhyper.get("full_JY4_order", -1))
     return {
+        "status": BLOCKED,
         "computed": computed,
         "expected": jy.EXPECTED_JY4_ORDER,
-        "pass": computed == jy.EXPECTED_JY4_ORDER,
+        "prior_replay_matches_expected": computed == jy.EXPECTED_JY4_ORDER,
         "source": NONHYPER.name,
-        "note": "replayed from prior finite-group certificate; not recomputed by this blocked reducer",
+        "blocker": "not recomputed by this K1 partial engine; requires completed add/double/reduce and equality enumeration",
     }
 
 
 def hyperflex_order_check(nonhyper: dict[str, Any] | None) -> dict[str, Any]:
     if nonhyper is None:
-        return {"computed": None, "expected": jy.EXPECTED_HYPERFLEX_ORDER, "pass": False, "source": None}
+        return {
+            "status": BLOCKED,
+            "computed": None,
+            "expected": jy.EXPECTED_HYPERFLEX_ORDER,
+            "source": None,
+            "blocker": "hyperflex subgroup generation needs completed group law",
+        }
     computed = int(nonhyper.get("hyperflex_group_order", -1))
     return {
+        "status": BLOCKED,
         "computed": computed,
         "expected": jy.EXPECTED_HYPERFLEX_ORDER,
-        "pass": computed == jy.EXPECTED_HYPERFLEX_ORDER,
+        "prior_replay_matches_expected": computed == jy.EXPECTED_HYPERFLEX_ORDER,
         "source": NONHYPER.name,
-        "note": "replayed from prior hyperflex subgroup certificate; not recomputed by this blocked reducer",
+        "blocker": "not recomputed by this K1 partial engine; requires completed group law on hyperflex classes",
     }
 
 
 def halving_test() -> tuple[dict[str, Any], list[str]]:
     blockers: list[str] = []
-    zero = jy.ReducedDivisor.zero()
+    zero = jy.K1Divisor.zero()
     try:
-        jy.ReducedDivisor.halve(zero)
+        jy.K1Divisor.halve(zero)
     except jy.ArithmeticBlocker as exc:
         blockers.append(f"{exc.substep}: {exc.reason}")
         return {
             "T_repr": "not materialized; requested outside-2H two-torsion needs full JY[4] basis",
             "D_L_repr": None,
             "outside_2H": False,
-            "status": "blocked",
+            "status": BLOCKED,
             "blocker": {"substep": exc.substep, "reason": exc.reason},
         }, blockers
     return {
         "T_repr": "unexpected",
         "D_L_repr": "unexpected",
         "outside_2H": False,
-        "status": "fail",
+        "status": FAIL,
     }, ["halve unexpectedly returned without an outside-2H certificate"]
 
 
@@ -148,17 +223,23 @@ def main() -> int:
     curve_status, curve_detail = curve_smoothness_test()
     add_status, add_detail, add_blockers = divisor_group_law_test()
     blockers.extend(add_blockers)
+    legacy_blocker = legacy_reduced_divisor_blocker_test()
     halve_payload, halve_blockers = halving_test()
     blockers.extend(halve_blockers)
 
     order_payload = jy4_order_check(nonhyper)
     hyper_payload = hyperflex_order_check(nonhyper)
-    if not order_payload["pass"]:
-        blockers.append("JY[4] order was not computed by the new reducer")
-    if not hyper_payload["pass"]:
-        blockers.append("hyperflex subgroup order was not computed by the new reducer")
+    blockers.append("JY[4] order was not recomputed by the partial K1 engine")
+    blockers.append("hyperflex subgroup order was not recomputed by the partial K1 engine")
 
-    div_fL = False
+    div_fL = {
+        "status": BLOCKED,
+        "verified": False,
+        "blocker": {
+            "substep": "k1/materialize_function_principal_relation",
+            "reason": "no D_L or rational f_L exists because halving outside 2H is blocked",
+        },
+    }
     blockers.append(
         "div_fL_eq_4DL: no D_L or rational f_L exists because halving outside 2H is blocked"
     )
@@ -182,6 +263,7 @@ def main() -> int:
             "curve_smooth_detail": curve_detail,
             "add_associative": add_status,
             "add_associative_detail": add_detail,
+            "legacy_ReducedDivisor_nontrivial_class": legacy_blocker,
             "JY4_order_check": order_payload,
             "hyperflex_order_check": hyper_payload,
             "halve_outside_2H": halve_payload,

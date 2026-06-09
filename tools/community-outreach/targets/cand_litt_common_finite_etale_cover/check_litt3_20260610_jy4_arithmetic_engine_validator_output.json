@@ -19,31 +19,63 @@
   "base_field": "F_{11^4}",
   "base_field_model": "F_11[t]/(t^4 + 4*t^3 + 1)",
   "blockers": [
-    "reduce/nonhyperelliptic_plane_quartic: nontrivial Pic^0 reduction needs Khuri-Makdisi/Volcheck flex-secant arithmetic",
-    "halve/outside_2H: no full JY[4] group law is available to solve 2D=T outside 2H",
+    "k1/add_divide_reduce: computed W_E1 intersection W_E2 of dimension 0, but KM multiplication/division saturation and reduction back to a degree-8 representative is not implemented",
+    "k1/halve_requires_4096_enumeration: halving requires a completed JY[4] group law or an exact 4096-class K1 enumeration",
+    "JY[4] order was not recomputed by the partial K1 engine",
+    "hyperflex subgroup order was not recomputed by the partial K1 engine",
     "div_fL_eq_4DL: no D_L or rational f_L exists because halving outside 2H is blocked"
   ],
-  "certificate_sha256": "8a31a6316e824c131d9c33d421d385ff545ad0e886f7eb77768097b4e0f09e40",
+  "certificate_sha256": "8d3bd7d6b8657929f2e3b87eb2833edc122d96c3ef6628ac43035c989e951de5",
   "next_subtarget": "Implement a real non-hyperelliptic genus-3 plane-quartic reducer (Khuri-Makdisi K1/K2 or Volcheck/flex-secant) over F_11^4, then use it to solve 2D=T outside 2H and construct f_L with div(f_L)=4D.",
   "tests": {
     "JY4_order_check": {
+      "blocker": "not recomputed by this K1 partial engine; requires completed add/double/reduce and equality enumeration",
       "computed": 4096,
       "expected": 4096,
-      "note": "replayed from prior finite-group certificate; not recomputed by this blocked reducer",
-      "pass": true,
-      "source": "check_litt3_nonhyperflex_certificate_gap.output.json"
+      "prior_replay_matches_expected": true,
+      "source": "check_litt3_nonhyperflex_certificate_gap.output.json",
+      "status": "BLOCKED_AT_SUBSTEP"
     },
-    "add_associative": "fail",
+    "add_associative": "BLOCKED_AT_SUBSTEP",
     "add_associative_detail": {
+      "H0_O4_dimension": 14,
+      "base_divisor_degree": 8,
       "blocker": {
-        "reason": "nontrivial Pic^0 reduction needs Khuri-Makdisi/Volcheck flex-secant arithmetic",
-        "substep": "reduce/nonhyperelliptic_plane_quartic"
+        "reason": "computed W_E1 intersection W_E2 of dimension 0, but KM multiplication/division saturation and reduction back to a degree-8 representative is not implemented",
+        "substep": "k1/add_divide_reduce"
       },
-      "nontrivial_add_associativity": "blocked",
-      "random_pairs_checked": 0,
-      "zero_class_commutative_associative_smoke": true
+      "random_effective_divisors_constructed": 3,
+      "random_triples_attempted_before_block": 1,
+      "random_triples_requested": 5,
+      "rows": [
+        {
+          "W_dimensions": [
+            6,
+            6,
+            6
+          ],
+          "ambient_dimensions": [
+            14,
+            14,
+            14
+          ],
+          "blocker": {
+            "reason": "computed W_E1 intersection W_E2 of dimension 0, but KM multiplication/division saturation and reduction back to a degree-8 representative is not implemented",
+            "substep": "k1/add_divide_reduce"
+          },
+          "pair_intersection_dimensions": [
+            0,
+            0,
+            0
+          ],
+          "seed": 1,
+          "status": "BLOCKED_AT_SUBSTEP"
+        }
+      ],
+      "zero_K1_constructed": true,
+      "zero_W_dimension": 6
     },
-    "curve_smooth": "pass",
+    "curve_smooth": "PASS",
     "curve_smooth_detail": {
       "algebraic_closure_reason": "partials are 4X^3,4Y^3,4Z^3; char 11 makes 4 invertible",
       "enumerated_points": 13916,
@@ -52,8 +84,15 @@
       "smooth_on_F11_4_points": true,
       "smooth_over_algebraic_closure": true
     },
-    "div_fL_eq_4DL": false,
-    "field_arith": "pass",
+    "div_fL_eq_4DL": {
+      "blocker": {
+        "reason": "no D_L or rational f_L exists because halving outside 2H is blocked",
+        "substep": "k1/materialize_function_principal_relation"
+      },
+      "status": "BLOCKED_AT_SUBSTEP",
+      "verified": false
+    },
+    "field_arith": "PASS",
     "field_arith_detail": {
       "frobenius_nontrivial": true,
       "frobenius_order_divides_4": true,
@@ -64,18 +103,24 @@
       "D_L_repr": null,
       "T_repr": "not materialized; requested outside-2H two-torsion needs full JY[4] basis",
       "blocker": {
-        "reason": "no full JY[4] group law is available to solve 2D=T outside 2H",
-        "substep": "halve/outside_2H"
+        "reason": "halving requires a completed JY[4] group law or an exact 4096-class K1 enumeration",
+        "substep": "k1/halve_requires_4096_enumeration"
       },
       "outside_2H": false,
-      "status": "blocked"
+      "status": "BLOCKED_AT_SUBSTEP"
     },
     "hyperflex_order_check": {
+      "blocker": "not recomputed by this K1 partial engine; requires completed group law on hyperflex classes",
       "computed": 2048,
       "expected": 2048,
-      "note": "replayed from prior hyperflex subgroup certificate; not recomputed by this blocked reducer",
-      "pass": true,
-      "source": "check_litt3_nonhyperflex_certificate_gap.output.json"
+      "prior_replay_matches_expected": true,
+      "source": "check_litt3_nonhyperflex_certificate_gap.output.json",
+      "status": "BLOCKED_AT_SUBSTEP"
+    },
+    "legacy_ReducedDivisor_nontrivial_class": {
+      "reason": "nontrivial Pic^0 reduction needs Khuri-Makdisi/Volcheck flex-secant arithmetic",
+      "status": "BLOCKED_AT_SUBSTEP",
+      "substep": "reduce/nonhyperelliptic_plane_quartic"
     }
   }
 }
