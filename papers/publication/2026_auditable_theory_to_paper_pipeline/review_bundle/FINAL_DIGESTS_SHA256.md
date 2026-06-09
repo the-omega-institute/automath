@@ -1,9 +1,17 @@
-# Final SHA-256 digest manifest
+# Final SHA-256 Digest Manifest
 
-Generated after theorem-inventory and finite-record verifier reruns for the current Stage A source state.
+Generated at local time `2026-06-09T11:09:20+08:00` (`2026-06-09T03:09:20+00:00` UTC).
+
+Command: `python inline digest generator over selected support surface`
+Environment: `Python 3.10.11 on Windows 10`
+Working directory: `D:\omega\automath\papers\publication\2026_auditable_theory_to_paper_pipeline`
+Source commit: `4cc46983e0d1095e4284ea639145d50c34bbc24c`
+Generation log: `review_bundle/final_digest_generation_run.log`
+Excluded self-digest inputs: `review_bundle/FINAL_DIGESTS_SHA256.md, review_bundle/final_digest_generation_run.log`
+Path count: `459`
 
 | Path | SHA-256 |
-|---|---|
+| --- | --- |
 | `.agent_env_index.json` | `d8378556ed9ff32aa72b91c169f2fad7c344a558949833109f983665e88e96c8` |
 | `.agent_env_index.tsv` | `59c5ac51fc9da5460540cc5674c552decebaad7ec3a1228bf6658929f32549dd` |
 | `.agent_env_index_compact.txt` | `89e2bfeaa545d08996475d2e4451ec4fd46ee087a931ef875a45a08a1f102776` |
@@ -53,10 +61,12 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `.stage_a_env_index_current.json` | `6df9a39d3c6efbc0a0852721fb0c660bdbef0131a626875258d34ebcf5a586e8` |
 | `.stage_a_env_index_current.tsv` | `f17581a07a8944c112017b2c982908d72a2b32d9836bf3a9a370d692eff58c31` |
 | `.stage_a_env_index_full.txt` | `74b7f3f7090908daa4f4c93f82d3f96050edf42e5300b5bc41359006e8855ba0` |
+| `.stage_a_env_labels_by_section.txt` | `3d00820c0480fb459cc09cc92800011c55e1bc2f7dd9fdb4bba25d1bc8b74df7` |
 | `.stage_a_env_table_for_review.tsv` | `27566d84e7c1feb70fa45803da386b7e94da62e79f84d541ff1a046ed9a1c6e4` |
 | `.stage_a_envs_current.json` | `3ec423f055cd1366b2d58f6f97e18404a245f7037f56f2379b5bf834b3edb16d` |
 | `.stage_a_envs_current_full.json` | `7a726dcfdf1a57664aacf58b0bca6f6b9b6c35d66c093971421b99646fd4e279` |
 | `.stage_a_envs_current_full.tsv` | `adef07a07f89b57e71e7989d8acb08be5308aebb7489368c26df81625b629ef4` |
+| `.stage_a_envs_fresh.json` | `6abed933337fba9b8f8235180f0f8e1c0847ee11c63e6ab1d15cb0eb672ac7bc` |
 | `.stage_a_envs_full.json` | `2534a2fb8e54353fd8877fc608b8bc07645f21bafb321a002b57fb53cab892c7` |
 | `.stage_a_envs_full.tsv` | `aadf761e8c4cc2f37e2071d8cb10c017148befd1538c4914513201fde7f5e959` |
 | `.stage_a_extract_after_inventory_write.log` | `dd05323cd45081c3ad49cdabd4dd400420e4e21c8da4631010c91c27c12749c2` |
@@ -88,6 +98,17 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `.write_inventory_current.py` | `c57421152ddc1731933369205e154be9a0dd7eb59c076cea9317ab1bfc861a00` |
 | `.write_inventory_current_run.log` | `1f6ff6326fd729989d826e1e755ba1b91e24d5e73099c71b1c2e06387fb22c15` |
 | `.write_stage_a_inventory_current.py` | `7d1e3813a8f3457793de866929060ea38746c6916b482842eec64019404c8668` |
+| `ARTIFACT_INVENTORY.md` | `009bb173509bbc2146eb59d8936acd1a09a84580f90de5512bf3d274eca5b669` |
+| `BIB_SCOPE.md` | `e94c76b22c20c0dfd9e0f2fc6c02b7d5d01621c96a1f139c4ae7f29364f51697` |
+| `P4_REVIEW.md` | `3098ebc07c70ed684c9a0e44396e3045126eeaee920c63e54aa192b5e8737438` |
+| `PIPELINE.md` | `5a2e81069f2a5394451d6acadfa151ae6c92153c892b870c3cb70c330c6e9693` |
+| `README.md` | `3865f7bd8d20cc8a40ddb17a33b4a893ea84f888eb97996f765f10ffb8ac6f73` |
+| `SOURCE_MAP.md` | `23a481384a72083c3152b6c01ad150b4440bd35db224274ad081fe88d2629e60` |
+| `THEOREM_LIST.md` | `cf5b64dbce2376fb2333c26fe6056ba4f6d096f54dbdfeaf1fbc98a92ece61e1` |
+| `VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` |
+| `VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` | `6e5922711d8eece5b82ea98406561b21175c5b2c836493a8e533f585e676d912` |
+| `VENUE_CHECK.md` | `dfe23f1c25e8b66bd3fe53e7df06990a540dd8f82af3926a040ef43be4237342` |
+| `VENUE_CHECK_RUN_2026-06-04.log` | `557dd3b1eed3ccff4b77e266ea8ef13d1abe449026ac6910103b1a55efa98447` |
 | `_agent_env_extract_current.json` | `23def461fe61f6b4d22f505e20b454f2a732779fd79705a7c846e400de2f439a` |
 | `_agent_env_extract_current.tsv` | `d135f43bdeee0c1c868e5df3664f9df2efcc413f93365a58dd2f27fc8702f298` |
 | `_agent_env_statement_digest_current.txt` | `12bc5c53c6286e399fe9bec45e3ae8c372cac9aeeb509fdf56489a1df78c5340` |
@@ -253,9 +274,7 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `_write_inventory_run.log` | `16d0cbbfe137abc56743c81cdc742e06b8b73f6220d154d7368abf6c908d7d80` |
 | `_write_inventory_short.py` | `911302d168dc5dfc47d21872315f136deaf119adf5fc8b227ae9d0e70152691d` |
 | `_write_stage_a_inventory.py` | `701751de798bbeb4bd8099630e7a6048dcf2e30c9ef40e10a40b5a394781795f` |
-| `ARTIFACT_INVENTORY.md` | `009bb173509bbc2146eb59d8936acd1a09a84580f90de5512bf3d274eca5b669` |
 | `automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex.env_index.json` | `032f887041eda8cb80dc033eac19a490fd491b7400438b8ae9ddac4618379b3f` |
-| `BIB_SCOPE.md` | `e94c76b22c20c0dfd9e0f2fc6c02b7d5d01621c96a1f139c4ae7f29364f51697` |
 | `compile_round8_xelatex_second.log` | `33f9ad736d370785689a531fb4b63ac672331b861034fc9ab2cb21601cfaa515` |
 | `compile_stage_a2_round1_current_xelatex_run1.log` | `288ce2f79f96ecf65fb8dbefe63db7c9fe8e287024084be77971d89fe53fd204` |
 | `compile_stage_a2_round1_current_xelatex_run2.log` | `8d6b66f299be2f1c94498933eae6555298eb625d3d08022b92a1f8f88c8ff0e4` |
@@ -299,6 +318,8 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `compile_stage_a2_theoremization_round1_xelatex.log` | `9d227a886603c5368cccf8955261bc9b7b9d8872bb367482c49e3324d90f78be` |
 | `compile_stage_a2_theoremization_round1_xelatex_final.log` | `bc4e565d4774f45cfdc3382e02c913ea77adc89b40c34a8840daded4b8e06ea7` |
 | `compile_stage_a2_theoremization_round1_xelatex_second.log` | `7f65050d2b8808510011157d27baf9dbf2368a33381b3036c99a19372e8d35e3` |
+| `compile_stage_a2_theoremization_round2_2026-06-09_xelatex.log` | `c08933747fffa87e3ca2fa4122e2e44ebd84fb506a327b11fb668ab37325219a` |
+| `compile_stage_a2_theoremization_round2_2026-06-09_xelatex_second.log` | `18a6939e6013868d716397916ff73a8639257d01b46c6546f0ff7fe318681192` |
 | `compile_stage_a2_theoremization_round2_agent_xelatex.log` | `c9bc537848261d4a34158bafe7ecd411857f51ac51f0485938f91183f993e17c` |
 | `compile_stage_a2_theoremization_round2_agent_xelatex_second.log` | `efba0599622269fe87a0c200f340ab0f0d2f915f2637840cf55a20515a724099` |
 | `compile_stage_a2_theoremization_round2_codex_xelatex.log` | `fea0661d155d2cef6d78969b4e61a163a60417049a5987de4b2ce755587c2677` |
@@ -357,40 +378,49 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `fresh_env_records.jsonl` | `e7f0fe76a1a502a63938e2ad59b6bf31b2346a75f4a8b8bfab1212beaf389e25` |
 | `label_lines.tmp.txt` | `6f0586c7d834b62fbe0853764db05a6e6a6adfc95a84c8416dfde05a3ed38436` |
 | `label_map.tsv` | `ad440a5065545a7841fddbbdd5fb533fe5d217170397804d8c65cd0899782bbe` |
-| `main.aux` | `6aa7e529d3206158a14c2cb4ff9fa4b5276dc7b2268d9779acb96d2751e52349` |
+| `main.aux` | `e1cd8091e3b379f845372ab1d1b1df0e439272d6ef30524b0572f0299e77d471` |
 | `main.bbl` | `32ad7324668440a7d179a94e0946eda8630b7e6c46dfb07fd4ededf786bb2558` |
 | `main.blg` | `e5ae621067a12f8540c4237b85a713ca5286f1b0da64c1113280923c6f0d835c` |
-| `main.log` | `7edfa12844f3690119f400d6c434337c0e171ff86dfe0949880227dccdaee196` |
+| `main.log` | `9f8638cec51bee973ea20b6db7f6f3d4f3900cbbfcf5c4d39b0089ae36c86739` |
 | `main.out` | `c47f9a9c0e31a4ee13701894c62d52efd196c6b3e82c04ce0663dffb54887e65` |
-| `main.pdf` | `9e40fa44729bc37a9424c4ea61ac0fe4dbfc3f5d4f3578a32474f6637cc1dec9` |
-| `main.tex` | `89302b5b68a98b0776a410114509e66d8d53e36d626de5a8810ddc6a316d80f5` |
+| `main.pdf` | `a591b546a51f8fc0cdd99d7dc1b5961b3ce97aff47e36514105525b23ac8a4ef` |
+| `main.tex` | `3a3c38e38f69aee07441252bd7751d1223c293c15031aa1d18d18ba8c7eff82c` |
 | `main.tex.env_index.json` | `23585eae53322a4158ea8a87f63d6d59d5deab7490aed8855719cec4a1bfde27` |
 | `main.tex.envs.json` | `dd0a9c55ecc8539161495e3806c1a4f28bdf4fddb0a0647649d763c5f2cbba83` |
 | `main_theorem_items.tmp.json` | `b920151c2bded8784b1947cab22dd2417009a72e83af4d48d59d4f5a07a4a8ba` |
 | `oracle_stage_a_escalation.json` | `b61e86c3d4633bf17ba37e089e70960e1e0a3f259c98c48127e2d64a79d8afff` |
-| `P4_REVIEW.md` | `3098ebc07c70ed684c9a0e44396e3045126eeaee920c63e54aa192b5e8737438` |
 | `path_check.txt` | `f9e886f36e195cbcb57c8047e37cdb91f9897e046b12e341046363f48c0050f4` |
-| `PIPELINE.md` | `5a2e81069f2a5394451d6acadfa151ae6c92153c892b870c3cb70c330c6e9693` |
 | `primary_claim_inventory.json` | `f030127dd7b00cf01ba918676a0f73a9aac7936f2403d5b5047bfbe614215597` |
-| `README.md` | `3865f7bd8d20cc8a40ddb17a33b4a893ea84f888eb97996f765f10ffb8ac6f73` |
 | `references.bib` | `5cc9c3d0a703b29fe8bc85e3d59a7dde9ddd32c1fcdf84d02332bdc4adae3db3` |
 | `research_directive.md` | `14c6d9880a85b8069ce2cb93cb91750f2ea4acabd3aff1a3c2a4d9e6af84d32d` |
+| `review_bundle/README.md` | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` |
+| `review_bundle/REVIEW_BUNDLE_MANIFEST.json` | `e8d8ce4a162567b99c3d982e91825c269a91ce9a5fa7b27ff5e1162b4546de73` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` | `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06.log` | `30c09435296824baece3936fc4e27893058debe4b1a4828bddda18ed8d35ea7d` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06_ROUND5.log` | `56af6c395be72589f3aea41bfcbf5a0c7f8013d0d64d794196139758d47a3055` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log` | `18a6227f2cdaf3b74a7e2f4ba37339c58e2394f9d81425a1861ab77d5a80e8ed` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.md` | `71199c153f2464f8cc64ff6f85802329d83c4baf3d6d6f20eba80ebad2fc8090` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-08.log` | `d99d3e66727be43c3a4508db84738608c6c108c66c08664b78ea8237d65bf6f0` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-08.md` | `66ce403c8f8594956e193a24a654f092ae258b90e7895e7f3c119b356a04b286` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log` | `04abe1e5f941bcedac62b1d46f993feec8cb30d751a56c96ba2dc55432bfca1d` |
+| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.md` | `f5bfa6e840a9b052b3a1b917d05effb20f86c7d88935b8e72bccb758b798f641` |
 | `review_bundle/__pycache__/extract_theorem_environments.cpython-310.pyc` | `f2f88ec5c20d1d04e97018acac1658bcf9914d2b95a723d6b0997c27c935a6be` |
 | `review_bundle/case_snapshots/fake_extension_artifact_inventory.md` | `d4e1e3494ec7b171e85d0c4263acbad125c211c3c4ff8bf7e4e67036cc8fcd8b` |
 | `review_bundle/case_snapshots/fake_extension_phase_d_lint.py` | `663bb1fdce29ea87495bdf1f6b03a17d5f433a50d5e069ec02a93742986a4d42` |
 | `review_bundle/case_snapshots/newmath_intake_seed_directory_manifest.json` | `121a1e55a13cda7e2193c1fcd849b4950a8f3edd61be739a1de193a0e753222b` |
 | `review_bundle/case_snapshots/newmath_pipeline_auto.py` | `be9f5ec1da28ec61aefdf457697856a8c7837f97bb7eafd35d8728c09caf899d` |
 | `review_bundle/case_snapshots/program_board_machine.md` | `f4879f49a0d94f27d4a383e90a0479898d1bc46bd1e10d5673ca53cc2c2b34fd` |
+| `review_bundle/case_snapshots/rule110_STATUS.md` | `959be1dfc204fccc9df72a2ba08f0b716b996b1984c2d4c1b8dbcd95a298f8b9` |
 | `review_bundle/case_snapshots/rule110_collision_audit_findings.md` | `700d601107cbbe0fbbca05d79bbb37bbe7af6d6d4573598bdfb45988417a930f` |
 | `review_bundle/case_snapshots/rule110_exhaustiveness_audit_findings.md` | `4edb0ebe373e9889affa9bcf685b695c03832a80376309e3cafd5a8bd19cbc1b` |
 | `review_bundle/case_snapshots/rule110_papers_research_report.md` | `acc9bb720fcdcda35c400859f959a1bf4fabdc5d0e4855c91ecb9c377ebc61c6` |
-| `review_bundle/case_snapshots/rule110_STATUS.md` | `959be1dfc204fccc9df72a2ba08f0b716b996b1984c2d4c1b8dbcd95a298f8b9` |
+| `review_bundle/case_snapshots/upper_fibers_SUBMITTED` | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` |
 | `review_bundle/case_snapshots/upper_fibers_route_directory_manifest.json` | `76b41cc78cc24f9824eca40fa6a432a98434195424b01df342299fee3464a204` |
 | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.json` | `31bc3166c7bbe231319995f695af1eeb7a493065e2f2a87b5c82b7f230ed81a9` |
 | `review_bundle/case_snapshots/upper_fibers_semantic_overlap_blockers.md` | `a1e98ca9f8c0423ca90f69843d15ecdcbd6b85f8fb2eade5fa9b159ae2cdca98` |
-| `review_bundle/case_snapshots/upper_fibers_SUBMITTED` | `ae4016693c15b153ad8e8faee3e0920c16bc4c3a2698e86d99647edcf77037c9` |
 | `review_bundle/certificate_schema.json` | `c3c3d78631a192564863eb5b4b3778dbc98651fd597a475063db94e099ec0441` |
-| `review_bundle/certificate_verification_run.log` | `78cb3e210c0237e18960a7e521f881f8692090f76f21cae59a064533e58e4608` |
+| `review_bundle/certificate_verification_run.log` | `51bb503a2e0babd54285506e9c13d06f7843acf82bc4e3a3ab66561969a015ed` |
 | `review_bundle/current_package_pass_records.json` | `2ffeee544750876cb7a935d9f4c86591e5827f2e064c882530ad525a48f9abe2` |
 | `review_bundle/extract_theorem_environments.py` | `d2022310b0c6cccdd829591d7610cbfde233131e7c7808ce894667219d44fa8e` |
 | `review_bundle/negative_certificate_record_example.json` | `8f7556c891f994cf3ed1acf3deafbcf5f5fdebe20865a5a098f3204c8ddd727f` |
@@ -402,30 +432,17 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `review_bundle/primary_claim_inventory_freshness_2026-06-06.log` | `8b80ca39c582ae82dd26cc73cefcb040d2db569d03a47b9afb917384e05673f2` |
 | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` | `01b568953ca7a4bced3a1251c38dffdd42a88c7b4e934fb955f661bc365653d5` |
 | `review_bundle/primary_claim_inventory_freshness_2026-06-08.log` | `4dfbca582a06ab6a27547f5ea8f465728fd6a7b07a7408bb61e33631d3dead0c` |
-| `review_bundle/primary_claim_inventory_freshness_2026-06-09.log` | `b8736b1fc53e5d6d401fe14e476c6d500e4c0e53ceb6c50c59d741a72b0097cb` |
-| `review_bundle/README.md` | `0b62978b793f5e75e06fa18005049d9659cf99bcac379b3f0d5167822517a1c6` |
-| `review_bundle/REVIEW_BUNDLE_MANIFEST.json` | `e8d8ce4a162567b99c3d982e91825c269a91ce9a5fa7b27ff5e1162b4546de73` |
-| `review_bundle/source_interface_verification_run.log` | `9a447ad373f5b7ce09af3c997c907422177a2add46e31f8895fa028cf2281ed2` |
+| `review_bundle/primary_claim_inventory_freshness_2026-06-09.log` | `e3f339a7ce12dcb53806bc971eea72b27e00a2847798c23943b16ed606f3757e` |
+| `review_bundle/source_interface_verification_run.log` | `2f4bbf57ee97282160c6379b47eee03ec5d46d0a4c103cab769f9d0889e1fd40` |
 | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` |
 | `review_bundle/submission_interface_map.json` | `a71d83bcd107d058184d30366a585e1b1d729c35d66de8954e77ed38baec188b` |
-| `review_bundle/theorem_environment_extraction_run.log` | `ddf77d407e48ac3a5aa3c30c4593e54f13876b5cb2c60ec5c15f672641e89005` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` | `d1a6b4149245878986f94eba27f184bf9ba320e1d3f568c37cd62cf6ee632f95` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06.log` | `30c09435296824baece3936fc4e27893058debe4b1a4828bddda18ed8d35ea7d` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-06_ROUND5.log` | `56af6c395be72589f3aea41bfcbf5a0c7f8013d0d64d794196139758d47a3055` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.log` | `18a6227f2cdaf3b74a7e2f4ba37339c58e2394f9d81425a1861ab77d5a80e8ed` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-07.md` | `71199c153f2464f8cc64ff6f85802329d83c4baf3d6d6f20eba80ebad2fc8090` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-08.log` | `d99d3e66727be43c3a4508db84738608c6c108c66c08664b78ea8237d65bf6f0` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-08.md` | `66ce403c8f8594956e193a24a654f092ae258b90e7895e7f3c119b356a04b286` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log` | `04abe1e5f941bcedac62b1d46f993feec8cb30d751a56c96ba2dc55432bfca1d` |
-| `review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.md` | `f5bfa6e840a9b052b3a1b917d05effb20f86c7d88935b8e72bccb758b798f641` |
+| `review_bundle/theorem_environment_extraction_run.log` | `cd98f4bbf5eaabb3e25c8f615b1751c9bb7e478226620d0ea01dd5357d978467` |
 | `review_bundle/verify_certificate_records.py` | `fc8a263c74afa7e23b503eddceda91ca37c48e025eeaf52d8d64c665c01bcfc7` |
 | `review_bundle/verify_primary_claim_inventory.py` | `320ae827c81846abe0706eab831f2deef2359eda5469a396af83ca7a47acdaed` |
 | `review_bundle/verify_source_interface_record.py` | `8ac6f4b75317b2cec2b53f23f908fa2fef42170af5fdd0a8ba479f563f6dc817` |
 | `scope_contract.json` | `9897b3e89b1256e7c2d0454b14ca953f0d4a0886d522edff8549dce66554617a` |
 | `scope_contract.md` | `dde111ed8a82a87f1d49851d4095971f9e267be86f12013c998f9f151bbd9198` |
 | `source_interface_record.json` | `faf150d5a97f686dcbbdb2642ccd4be5671b45f15f72126bee186a3f83244878` |
-| `SOURCE_MAP.md` | `23a481384a72083c3152b6c01ad150b4440bd35db224274ad081fe88d2629e60` |
 | `stage_a_audit.json` | `a816650183de5847e6dd774334919e523ca5d9b3b28a9e151d8516f9a7ce59a3` |
 | `submission_abstract.aux` | `d7496b491be5105f533f85cf55c3c4fdf816d54d51be3e7b1c626a1074966bc1` |
 | `submission_abstract.bbl` | `32ad7324668440a7d179a94e0946eda8630b7e6c46dfb07fd4ededf786bb2558` |
@@ -450,12 +467,7 @@ Generated after theorem-inventory and finite-record verifier reruns for the curr
 | `theorem_inventory_validation_run.tmp.log` | `5c6867d650316d4538b2d4263b3033d773bed77eb38c5aee1d2608bb1e06d67d` |
 | `theorem_items.tsv` | `8ae301b8e87df38ff8211df30815047b6718d5a72a97bdff0ab6951bd03a2177` |
 | `theorem_items_extracted.json` | `249373bfae0bcc3277172fb52c5cf9a2a13362d2ebf81d429f0a2d6d09d8464e` |
-| `THEOREM_LIST.md` | `cf5b64dbce2376fb2333c26fe6056ba4f6d096f54dbdfeaf1fbc98a92ece61e1` |
 | `theorem_records.tmp.csv` | `a907be30bfd3b660f47677b2afcde84930f2a71d54b5158c25b5dca3d7888083` |
 | `theorem_statement_summaries.json` | `416d41c26d41168d8e65992904e322ce299df7596507a7e66f67ed6f10c81132` |
 | `theorem_summaries.tsv` | `40ac9c4acb3c044904afa8246e03e83abaa821d27b5bf8626689b7c9f24ddec0` |
 | `theorem_table.tsv` | `3d11bc29285da05058a62c5b648453e7c279a7bc14220d72036fd144e36f2d1e` |
-| `VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-04.log` | `0f3cf12533d380e5012ac1cf6de1f9a2179c4c0461e1d07f88b5f543e90d6cea` |
-| `VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-05.log` | `6e5922711d8eece5b82ea98406561b21175c5b2c836493a8e533f585e676d912` |
-| `VENUE_CHECK.md` | `dfe23f1c25e8b66bd3fe53e7df06990a540dd8f82af3926a040ef43be4237342` |
-| `VENUE_CHECK_RUN_2026-06-04.log` | `557dd3b1eed3ccff4b77e266ea8ef13d1abe449026ac6910103b1a55efa98447` |
