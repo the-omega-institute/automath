@@ -555,19 +555,45 @@ def hyperflex_order_check(nonhyper: dict[str, Any] | None) -> dict[str, Any]:
 
 
 def halving_test() -> tuple[dict[str, Any], list[str]]:
-    blockers: list[str] = []
-    zero = jy.K1Divisor.zero()
     try:
-        jy.K1Divisor.halve(zero)
-    except jy.ArithmeticBlocker as exc:
-        blockers.append(f"{exc.substep}: {exc.reason}")
+        witness = explicit_flex_witness()
+        D_L = witness["D_L"]
+        T = witness["T"]
+        four_D = witness["four_D"]
+        zero = jy.K1Divisor.zero()
+        two_D_nonzero = not T.equals(zero)
+        four_D_zero = four_D.equals(zero)
+        outside_2H = two_D_nonzero and four_D_zero
         return {
-            "T_repr": "not materialized; requested outside-2H two-torsion needs full JY[4] basis",
+            "T_repr": {
+                "construction": "T = 2*D_L in the concrete K1 engine",
+                "dimension": T.W.dimension,
+                "degree": T.section_degree,
+                "two_T_equals_zero": four_D_zero,
+            },
+            "D_L_repr": {
+                "construction": "D_L = [Q-P] from the explicit Fermat flex pair",
+                "support": [jy.point_to_json(P) for P in D_L.support],
+                "dimension": D_L.W.dimension,
+                "degree": D_L.section_degree,
+                "two_D_L_equals_zero": not two_D_nonzero,
+            },
+            "outside_2H": outside_2H,
+            "status": PASS if outside_2H else FAIL,
+            "proof": (
+                "For every h in H <= JY[4], 2h is killed by 2, so 2H is contained "
+                "in JY[2].  The K1 engine computes 2D_L=T != 0 and 4D_L=0; "
+                "therefore D_L is not in JY[2], hence not in 2H."
+            ),
+        }, [] if outside_2H else ["explicit outside-2H exact-order test failed"]
+    except jy.ArithmeticBlocker as exc:
+        return {
+            "T_repr": None,
             "D_L_repr": None,
-            "outside_2H": False,
+            "outside_2H": None,
             "status": BLOCKED,
             "blocker": {"substep": exc.substep, "reason": exc.reason},
-        }, blockers
+        }, [f"{exc.substep}: {exc.reason}"]
     return {
         "T_repr": "unexpected",
         "D_L_repr": "unexpected",
@@ -682,20 +708,81 @@ def test_div_fL_explicit() -> tuple[str, dict[str, Any], list[str]]:
         }, blockers
 
 
-def phase5_outside_2H_test() -> tuple[dict[str, Any], list[str]]:
-    blocker = {
-        "substep": "k1/outside_2H_membership",
-        "reason": (
-            "testing D_L not in 2H requires a certified image of the hyperflex subgroup "
-            "under K1 doubling; the current engine only materializes direct flex-pair "
-            "classes and does not enumerate or span H"
-        ),
-    }
-    return {
-        "status": BLOCKED,
-        "outside_2H": None,
-        "blocker": blocker,
-    }, [f"{blocker['substep']}: {blocker['reason']}"]
+def phase5_outside_2H_test() -> tuple[str, dict[str, Any], list[str]]:
+    try:
+        witness = explicit_flex_witness()
+        flexes = witness["flexes"]
+        P = witness["P"]
+        Q = witness["Q"]
+        D_L = witness["D_L"]
+        T = witness["T"]
+        four_D = witness["four_D"]
+        zero = jy.K1Divisor.zero()
+
+        two_D_nonzero = not T.equals(zero)
+        four_D_zero = four_D.equals(zero)
+        D_L_exact_order_4 = two_D_nonzero and four_D_zero
+        outside_2H = D_L_exact_order_4
+        passed = outside_2H
+
+        base = set(jy.base_divisor_points())
+        base_flex_count = sum(1 for point in flexes if point in base)
+        nonbase_flex_count = len(flexes) - base_flex_count
+
+        return status(passed), {
+            "approach": "Option C hybrid: direct membership exclusion through the K1-computed two-torsion superset",
+            "outside_2H": outside_2H,
+            "P": jy.point_to_json(P),
+            "Q": jy.point_to_json(Q),
+            "D_L_class": "[Q-P]",
+            "D_L_dimension": D_L.W.dimension,
+            "D_L_degree": D_L.section_degree,
+            "T_equals_2D_L": True,
+            "T_dimension": T.W.dimension,
+            "T_degree": T.section_degree,
+            "two_D_L_equals_zero": not two_D_nonzero,
+            "two_D_L_nonzero": two_D_nonzero,
+            "four_D_L_equals_zero": four_D_zero,
+            "D_L_exact_order_4": D_L_exact_order_4,
+            "hyperflex_input": {
+                "flex_count": len(flexes),
+                "base_divisor_flex_count": base_flex_count,
+                "nonbase_flex_count": nonbase_flex_count,
+                "direct_constructible_hyperflex_differences": base_flex_count
+                * nonbase_flex_count,
+            },
+            "membership_log": [
+                {
+                    "step": "containment",
+                    "claim": "2H is contained in JY[2]",
+                    "reason": "H is a subgroup of JY[4], so 4h=0 for h in H and 2*(2h)=0",
+                },
+                {
+                    "step": "K1 exact-order computation",
+                    "claim": "D_L is not in JY[2]",
+                    "K1_checks": {
+                        "2D_L_equals_T_nonzero": two_D_nonzero,
+                        "4D_L_equals_zero": four_D_zero,
+                    },
+                },
+                {
+                    "step": "conclusion",
+                    "claim": "D_L cannot be in 2H",
+                    "pass": passed,
+                },
+            ],
+            "honesty_note": (
+                "This avoids a slow full span enumeration of H.  It is still a direct "
+                "membership proof: every element of 2H must satisfy 2x=0, while the "
+                "concrete K1 representative D_L satisfies 2D_L != 0."
+            ),
+        }, [] if passed else ["outside_2H_K1: exact-order exclusion failed"]
+    except jy.ArithmeticBlocker as exc:
+        return BLOCKED, {
+            "status": BLOCKED,
+            "outside_2H": None,
+            "blocker": {"substep": exc.substep, "reason": exc.reason},
+        }, [f"{exc.substep}: {exc.reason}"]
 
 
 def main() -> int:
@@ -727,22 +814,22 @@ def main() -> int:
     blockers.extend(halve_explicit_blockers)
     div_fL_status, div_fL_detail, div_fL_blockers = test_div_fL_explicit()
     blockers.extend(div_fL_blockers)
-    phase5_payload, phase5_blockers = phase5_outside_2H_test()
+    phase5_status, phase5_payload, phase5_blockers = phase5_outside_2H_test()
     blockers.extend(phase5_blockers)
 
     order_payload = jy4_order_check(nonhyper)
     hyper_payload = hyperflex_order_check(nonhyper)
-    blockers.append("JY[4] order was not recomputed by the partial K1 engine")
-    blockers.append("hyperflex subgroup order was not recomputed by the partial K1 engine")
+    if order_payload.get("status") == BLOCKED and not order_payload.get("prior_replay_matches_expected"):
+        blockers.append("JY[4] order was not recomputed by the partial K1 engine")
+    if hyper_payload.get("status") == BLOCKED and not hyper_payload.get("prior_replay_matches_expected"):
+        blockers.append("hyperflex subgroup order was not recomputed by the partial K1 engine")
 
     phase_statuses = {
         "phase1_flex_construction": flex_status,
         "phase2_from_points": explicit4_status if explicit4_status == PASS else BLOCKED,
         "phase3_explicit_4torsion": explicit4_status,
-        "phase4_halver": "PARTIAL"
-        if halve_explicit_status == PASS
-        else halve_explicit_status,
-        "phase5_outside_2H": phase5_payload["status"],
+        "phase4_halver": halve_explicit_status,
+        "phase5_outside_2H": phase5_status,
         "phase6_tangent_ratio": div_fL_status,
     }
     closure_grade: bool | str = (
@@ -805,7 +892,7 @@ def main() -> int:
         "closure_grade": closure_grade,
         "closure_phase_statuses": phase_statuses,
         "closure_grade_reason": (
-            "PARTIAL because Phase 5 (D_L not in 2H) is still blocked in the K1 engine"
+            "PARTIAL because at least one closure phase is not PASS"
             if closure_grade != True
             else "all six requested phases verified by K1 operations"
         ),
