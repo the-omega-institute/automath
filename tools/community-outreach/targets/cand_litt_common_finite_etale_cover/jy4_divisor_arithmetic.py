@@ -759,6 +759,47 @@ def _multiply_subspace_by_base_conic_power(
     )
 
 
+def _multiply_subspace_by_poly(W: Subspace, source_degree: int, poly: HomogPoly) -> Subspace:
+    if W.ambient_dim != h0_dimension(source_degree):
+        raise ValueError("subspace ambient does not match source_degree")
+    return Subspace(
+        [
+            (HomogPoly.from_vector(source_degree, row) * poly)
+            .reduce_fermat()
+            .to_vector()
+            for row in W.rows
+        ],
+        h0_dimension(source_degree + poly.degree),
+    )
+
+
+def _principal_zero_factor(W: Subspace, source_degree: int) -> HomogPoly | None:
+    """Return f when W = f * H^0(O_Y(2)), else None.
+
+    In this K1 degree convention a representative of the zero Picard class in
+    degree n is not unique: the fixed base representative is Q0^(...) times
+    H^0(O_Y(2)), but a principal relation may naturally produce f*H^0(O_Y(2))
+    for another nonzero section f.  Detecting that common factor is the
+    canonical-reduction check needed by negation.
+    """
+
+    if source_degree < 2 or W.ambient_dim != h0_dimension(source_degree):
+        return None
+    if W.dimension != h0_dimension(2):
+        return None
+
+    full_h2 = Subspace.full(h0_dimension(2))
+    try:
+        factors = divide_subspaces(W, full_h2, source_degree, 2)
+    except ValueError:
+        return None
+    for row in factors.rows:
+        factor = HomogPoly.from_vector(source_degree - 2, row)
+        if _multiply_subspace_by_poly(full_h2, 2, factor) == W:
+            return factor
+    return None
+
+
 KM_STEP_2_BLOCKER = (
     "KM step 2 blocker: ideal quotient (W_prod : H⁰(O_Y((n₁+n₂)·D₀))) — "
     "division step to extract effective divisor support"
@@ -819,7 +860,12 @@ class K1Divisor:
         if not isinstance(other, K1Divisor):
             return False
         if self.section_degree == other.section_degree:
-            return self.W == other.W
+            if self.W == other.W:
+                return True
+            return (
+                _principal_zero_factor(self.W, self.section_degree) is not None
+                and _principal_zero_factor(other.W, other.section_degree) is not None
+            )
         if (self.section_degree - other.section_degree) % 2:
             return False
         if self.section_degree < other.section_degree:
@@ -828,13 +874,23 @@ class K1Divisor:
                 self.section_degree,
                 (other.section_degree - self.section_degree) // 2,
             )
-            return lifted == other.W
+            if lifted == other.W:
+                return True
+            return (
+                _principal_zero_factor(lifted, other.section_degree) is not None
+                and _principal_zero_factor(other.W, other.section_degree) is not None
+            )
         lifted = _multiply_subspace_by_base_conic_power(
             other.W,
             other.section_degree,
             (self.section_degree - other.section_degree) // 2,
         )
-        return self.W == lifted
+        if self.W == lifted:
+            return True
+        return (
+            _principal_zero_factor(self.W, self.section_degree) is not None
+            and _principal_zero_factor(other.W, other.section_degree) is not None
+        )
 
     def _expected_k1_dimension(self) -> int:
         return self.d0 + 1 - GENUS
@@ -890,15 +946,40 @@ class K1Divisor:
         )
 
     def neg(self) -> "K1Divisor":
-        raise ArithmeticBlocker(
-            "k1/neg_canonical_reduction",
-            (
-                "a quotient-based flip is available as a degree-4 involution, "
-                "but A + flip(A) does not reduce to the base class under the "
-                "current lifted-degree saturation.  The missing mathematical "
-                "substep is canonical reduction from the saturated lifted "
-                "representative back to the fixed degree-4 K1 model."
-            ),
+        self._check_k1_shape()
+        if not self.W.rows:
+            raise ArithmeticBlocker(
+                "k1/neg_empty_subspace",
+                "cannot form residual complement from an empty K1 subspace",
+            )
+
+        section = HomogPoly.from_vector(self.degree, self.W.rows[0])
+        full_same_degree = Subspace.full(h0_dimension(self.degree))
+        principal_product = _multiply_subspace_by_poly(
+            full_same_degree,
+            self.degree,
+            section,
+        )
+        W_neg = divide_subspaces(
+            principal_product,
+            self.W_E,
+            source_degree_a=2 * self.degree,
+            source_degree_c=self.degree,
+        )
+        if W_neg.dimension != self._expected_k1_dimension():
+            raise ArithmeticBlocker(
+                "k1/neg_residual_bad_dimension",
+                (
+                    "residual ideal quotient produced dimension "
+                    f"{W_neg.dimension} in H^0(O_Y({self.degree})); expected "
+                    f"{self._expected_k1_dimension()}"
+                ),
+            )
+        return K1Divisor(
+            W=W_neg,
+            support=(),
+            d0=self.d0,
+            section_degree=self.degree,
         )
 
     def double(self) -> "K1Divisor":

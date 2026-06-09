@@ -387,6 +387,31 @@ def test_km_inverse() -> tuple[str, dict[str, Any], list[str]]:
     }, blockers
 
 
+def test_neg_canonical_reduction() -> tuple[str, dict[str, Any]]:
+    a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(7001))
+    if a.equals(jy.K1Divisor.zero()):
+        a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(7002))
+    a_neg = a.neg()
+    summed = a.add(a_neg)
+    zero = jy.K1Divisor.zero()
+    inverse_ok = summed.equals(zero)
+    return status(inverse_ok), {
+        "A_dimension": a.W.dimension,
+        "A_degree": a.section_degree,
+        "neg_dimension": a_neg.W.dimension,
+        "neg_degree": a_neg.section_degree,
+        "sum_dimension": summed.W.dimension,
+        "sum_degree": summed.section_degree,
+        "sum_principal_zero_factor_detected": jy._principal_zero_factor(
+            summed.W, summed.section_degree
+        )
+        is not None,
+        "zero_dimension": zero.W.dimension,
+        "zero_degree": zero.section_degree,
+        "inverse_ok": inverse_ok,
+    }
+
+
 def divisor_group_law_test() -> tuple[str, dict[str, Any], list[str]]:
     blockers: list[str] = []
     base_points = jy.base_divisor_points()
