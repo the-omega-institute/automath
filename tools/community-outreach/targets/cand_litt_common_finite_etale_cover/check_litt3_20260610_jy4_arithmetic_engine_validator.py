@@ -77,6 +77,70 @@ def curve_smoothness_test() -> tuple[str, dict[str, Any]]:
     }
 
 
+def raw_homog_poly(degree: int, terms: dict[tuple[int, int, int], jy.Fq]) -> jy.HomogPoly:
+    """Construct a noncanonical HomogPoly solely to test reduce_fermat itself."""
+
+    poly = object.__new__(jy.HomogPoly)
+    object.__setattr__(poly, "degree", degree)
+    object.__setattr__(poly, "terms", tuple(sorted(terms.items())))
+    return poly
+
+
+def test_reduce_fermat_direct() -> tuple[str, dict[str, Any]]:
+    one = jy.ONE
+    neg_one = -one
+
+    # X^4 Y^3 Z reduces to -Y^7 Z - Y^3 Z^5.
+    p = raw_homog_poly(8, {(4, 3, 1): one})
+    q = p.reduce_fermat()
+    q_terms = dict(q.terms)
+    first_ok = (
+        q_terms.get((0, 7, 1)) == neg_one
+        and q_terms.get((0, 3, 5)) == neg_one
+        and all(a < 4 for (a, b, c) in q_terms)
+    )
+
+    # X^8 reduces to Y^8 + 2 Y^4 Z^4 + Z^8.
+    p2 = raw_homog_poly(8, {(8, 0, 0): one})
+    q2 = p2.reduce_fermat()
+    q2_terms = dict(q2.terms)
+    two = one + one
+    second_ok = (
+        q2_terms.get((0, 8, 0)) == one
+        and q2_terms.get((0, 4, 4)) == two
+        and q2_terms.get((0, 0, 8)) == one
+        and all(a < 4 for (a, b, c) in q2_terms)
+    )
+
+    q3 = q2.reduce_fermat()
+    idempotent = q3.terms == q2.terms
+    passed = first_ok and second_ok and idempotent
+    return status(passed), {
+        "first_reduction_terms": q.to_json(),
+        "first_reduction_canonical": all(a < 4 for (a, b, c) in q_terms),
+        "x8_reduction_terms": q2.to_json(),
+        "x8_reduction_canonical": all(a < 4 for (a, b, c) in q2_terms),
+        "first_reduction_ok": first_ok,
+        "x8_reduction_ok": second_ok,
+        "idempotent": idempotent,
+    }
+
+
+def test_h0_dimension_canonical() -> tuple[str, dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    passed = True
+    for n in range(0, 9):
+        expected = 1 if n == 0 else (3 if n == 1 else 4 * n - 2)
+        actual = jy.count_canonical_reps_at_degree(n)
+        ok = actual == expected
+        rows.append({"degree": n, "expected": expected, "actual": actual, "pass": ok})
+        passed = passed and ok
+    return status(passed), {
+        "formula": "1 for n=0; 3 for n=1; 4n-2 for n>=2",
+        "rows": rows,
+    }
+
+
 def k1_subspace_multiplication() -> tuple[str, dict[str, Any]]:
     ambient4 = jy.h0_dimension(4)
     ambient8 = jy.h0_dimension(8)
@@ -269,6 +333,8 @@ def main() -> int:
 
     field_status, field_detail = field_arithmetic_test()
     curve_status, curve_detail = curve_smoothness_test()
+    reduce_status, reduce_detail = test_reduce_fermat_direct()
+    h0_status, h0_detail = test_h0_dimension_canonical()
     k1_mult_status, k1_mult_detail = k1_subspace_multiplication()
     add_status, add_detail, add_blockers = divisor_group_law_test()
     blockers.extend(add_blockers)
@@ -310,6 +376,10 @@ def main() -> int:
             "field_arith_detail": field_detail,
             "curve_smooth": curve_status,
             "curve_smooth_detail": curve_detail,
+            "reduce_fermat_direct": reduce_status,
+            "reduce_fermat_direct_detail": reduce_detail,
+            "h0_dimension_canonical": h0_status,
+            "h0_dimension_canonical_detail": h0_detail,
             "k1_subspace_multiplication": k1_mult_status,
             "k1_subspace_multiplication_detail": k1_mult_detail,
             "add_associative": add_status,

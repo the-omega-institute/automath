@@ -302,7 +302,9 @@ def degree_monomials(degree: int) -> list[tuple[int, int, int]]:
         X^4 = -Y^4 - Z^4.
 
     Thus the quotient basis consists of degree-n monomials X^aY^bZ^c with
-    a < 4.  For n=4 this has dimension 14, as expected for a plane quartic.
+    a < 4.  The count is 1 for n=0, then
+    sum_{a=0..min(3,n)} (n-a+1): 3 for n=1 and 4n-2 for n>=2,
+    as expected for a plane quartic.
     """
 
     if degree < 0:
@@ -315,6 +317,10 @@ def degree_monomials(degree: int) -> list[tuple[int, int, int]]:
 
 
 def h0_dimension(degree: int) -> int:
+    return len(degree_monomials(degree))
+
+
+def count_canonical_reps_at_degree(degree: int) -> int:
     return len(degree_monomials(degree))
 
 
@@ -380,7 +386,24 @@ class HomogPoly:
     def reduce_fermat(self) -> "HomogPoly":
         """Return the canonical representative modulo X^4 + Y^4 + Z^4."""
 
-        return HomogPoly(self.degree, dict(self.terms))
+        if self.degree < 4:
+            return HomogPoly(self.degree, dict(self.terms))
+        out_terms: dict[tuple[int, int, int], Fq] = {}
+        pending = dict(self.terms)
+        while pending:
+            next_pending: dict[tuple[int, int, int], Fq] = {}
+            for (a, b, c), coeff in pending.items():
+                if a < 4:
+                    out_terms[(a, b, c)] = out_terms.get((a, b, c), ZERO) + coeff
+                    continue
+                neg = -coeff
+                for exp in ((a - 4, b + 4, c), (a - 4, b, c + 4)):
+                    next_pending[exp] = next_pending.get(exp, ZERO) + neg
+            pending = next_pending
+        return HomogPoly(
+            self.degree,
+            {exp: coeff for exp, coeff in out_terms.items() if coeff},
+        )
 
     def __add__(self, other: object) -> "HomogPoly":
         rhs = other if isinstance(other, HomogPoly) else HomogPoly(self.degree, {})
