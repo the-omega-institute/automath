@@ -1,8 +1,8 @@
-# Auditable Theory Compiler
+# Auditable Auto-Formalization Method
 
 ## Snapshot
 
-- Working title: `An Auditable Theory Compiler for AI-Assisted Formal Mathematics`
+- Working title: `An Auditable Method for AI-Assisted Auto-Formalization`
 - Primary route: `CICM presentation-only / mathematical software workshop route`
 - Source seed: `papers/publication/newmath_intake/seeds/bedc_automation_pipeline`
 - Source repo: `D:/omega/newmath`
@@ -12,26 +12,28 @@
 
 ## Positioning
 
-This is a systems and mathematical-software note about an auditable theory
-compiler for AI-assisted formal mathematics.  The paper studies how a structured
-mathematical source theory, Lean verification, finite substrate witnesses,
-agent-driven discovery automation, and a publication compiler can be kept as
-separate audit axes.
+This is a systems and mathematical-software note about a rigorous
+auto-formalization research method developed across `automath` and
+`newmath/BEDC`.  The paper studies how structured mathematical source, formal
+interfaces, finite evidence records, agent proposals, and publication-facing
+claims can be kept as separate audit axes.
 
 The contribution is not a new theorem prover, not a claim that Lean alone is the
 full trust boundary, and not a claim that AI output is proof evidence.  The
-load-bearing claim is typed evidence separation: BEDC theoretical closure, Lean
-checking, finite manifest witnesses, theorem-content growth, and
-publication-facing claims have different evidence surfaces and must not be
-collapsed into one another.
+load-bearing claim is a portable research discipline: AI-assisted
+formalization targets should be decomposed into typed records, with agents
+restricted to proposal and repair roles and deterministic gates deciding what
+counts as accepted source theory, checked code, finite evidence, or exposition.
 
 ## Scope Kept
 
-- BEDC as structured source theory with finite-kernel proof obligations;
-- Lean as a crucial but non-exclusive verification axis;
-- finite-witness substrate evidence through manifests and evaluator contracts;
-- agent proposal/search/review under deterministic theorem-content gates;
-- automath as the publication compiler and route-governance layer.
+- `newmath/BEDC` as a structured-theory and mathlib-free formalization instance;
+- `automath` as an automated-research, review, and publication instance;
+- typed records for source theory, formalization, finite evidence, agent work,
+  and reader-facing claims;
+- deterministic gates for theorem content, assumptions, markers, artifacts,
+  overlap, route state, and submission packets;
+- blocked or failed routes as structured research data rather than silent churn.
 
 ## Scope Cut
 
@@ -44,5 +46,5 @@ collapsed into one another.
 ## Immediate Pipeline Goal
 
 Keep the promoted intake packet framed as a compact two-page system note about
-the theory compiler architecture, with the longer supplement carrying exact
-source interfaces, case evidence, and command-run boundaries.
+the auditable auto-formalization method, with the longer supplement carrying
+exact source interfaces, case evidence, and command-run boundaries.

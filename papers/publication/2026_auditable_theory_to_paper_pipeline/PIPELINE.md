@@ -1,4 +1,4 @@
-# Pipeline: Auditable Theory Compiler
+# Pipeline: Auditable Auto-Formalization Method
 
 ## Metadata
 
@@ -15,13 +15,14 @@
 
 ## Current Stage
 
-P4 revision in progress: the promoted draft has been reframed from a narrow
-theory-to-paper workflow note into a system note on an auditable theory compiler.
-The CICM presentation-only route has been checked, initial related-work
-citations have been added, the manuscript compiles under LNCS style, and the
-short paper now centers typed evidence separation across BEDC theory, Lean
-verification, finite witnesses, agent discovery, and publication compilation.
-The next step is final human review of the new framing.
+P4 revision in progress: the promoted draft is being reframed from a narrow
+publication-package safety note into a system note on a rigorous
+auto-formalization method.  The CICM presentation-only route has been checked,
+initial related-work citations have been added, and the short paper now centers
+the shared method behind `newmath/BEDC` and `automath`: structured source theory,
+typed formalization targets, finite evidence records, agent proposal/repair
+roles, deterministic gates, and human promotion boundaries.  The next step is a
+fresh Stage A review against this methodology framing.
 
 ## P0 Promotion Checklist
 
@@ -48,7 +49,7 @@ P1 complete on 2026-06-01.
   architecture, gate summary, case studies, evidence boundary, and scope.
 - The draft compiles as 2 content pages plus bibliography under the current
   article format.
-- The central contribution is the auditable theory-compiler architecture, not a
+- The central contribution is the auditable auto-formalization method, not a
   generic project report and not merely a publication workflow.
 
 ## P2 Venue Check
@@ -88,9 +89,9 @@ Submission-blocking decisions remaining:
 - source-command rerun decision or explicit no-rerun statement;
 - final author/affiliation confirmation in the CICM form;
 - AI disclosure if the form asks for one.
-- final human approval that the two-page text correctly presents automath,
-  newmath/BEDC, Lean, finite-witness evidence, and publication compilation as
-  separate audit axes.
+- final human approval that the two-page text correctly presents `automath` and
+  `newmath/BEDC` as related instances of one rigorous auto-formalization
+  discipline.
 
 Resolved artifact/source link decision:
 
@@ -107,7 +108,7 @@ Resolved artifact/source link decision:
 
 Use a narrow workshop/presentation claim first.  The short draft should not
 wait for a full rebuild of the entire newmath source tree, provided the paper
-states that it is reporting the theory-compiler architecture and its evidence
+states that it is reporting the auto-formalization method and its evidence
 boundaries rather than fresh command-run validation.  If the manuscript claims
 current command results, the relevant commands in `SOURCE_MAP.md` must be rerun
 and logged first.
@@ -121,6 +122,9 @@ and logged first.
 - This paper does not claim successful dynamic rerun of the Rule110 suite.
 - This paper does not claim automatic journal acceptance or automatic novelty
   judgment.
+- This paper does not claim that publication automation is the whole method;
+  publication packaging is one output layer of the broader auto-formalization
+  discipline.
 
 ## Submission Blockers
 
