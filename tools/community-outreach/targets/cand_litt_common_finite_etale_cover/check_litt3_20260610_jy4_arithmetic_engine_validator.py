@@ -189,6 +189,72 @@ def k1_subspace_multiplication() -> tuple[str, dict[str, Any]]:
     }
 
 
+def monomial_vector(degree: int, exponent: tuple[int, int, int]) -> jy.Vector:
+    return jy.HomogPoly.monomial(exponent).to_vector()
+
+
+def test_km_division_full_by_linear() -> tuple[str, dict[str, Any]]:
+    ambient4 = jy.h0_dimension(4)
+    W_A = jy.Subspace.full(ambient4)
+    W_C = jy.Subspace(
+        [
+            monomial_vector(1, (1, 0, 0)),
+            monomial_vector(1, (0, 1, 0)),
+            monomial_vector(1, (0, 0, 1)),
+        ],
+        jy.h0_dimension(1),
+    )
+    W_AC = jy.divide_subspaces(W_A, W_C, 4, 1)
+    expected_rank = jy.h0_dimension(3)
+    passed = (
+        W_AC.rank == expected_rank
+        and W_AC.ambient_dim == expected_rank
+        and W_AC.rank == W_AC.ambient_dim
+    )
+    return status(passed), {
+        "source_degree_a": 4,
+        "source_degree_c": 1,
+        "W_A_rank": W_A.rank,
+        "W_C_rank": W_C.rank,
+        "W_AC_rank": W_AC.rank,
+        "W_AC_ambient_dim": W_AC.ambient_dim,
+        "expected_full_H0_O3_dimension": expected_rank,
+    }
+
+
+def test_km_division_singleton_target() -> tuple[str, dict[str, Any]]:
+    ambient4 = jy.h0_dimension(4)
+    W_A = jy.Subspace(
+        [
+            monomial_vector(4, (0, 4, 0)),
+            monomial_vector(4, (0, 0, 4)),
+        ],
+        ambient4,
+    )
+    W_C = jy.Subspace([monomial_vector(1, (0, 1, 0))], jy.h0_dimension(1))
+    W_AC = jy.divide_subspaces(W_A, W_C, 4, 1)
+    y3 = monomial_vector(3, (0, 3, 0))
+    y3_only = W_AC.rank == 1 and W_AC.contains(y3)
+    basis_products = []
+    for row in W_AC.rows:
+        product = (
+            jy.HomogPoly.from_vector(3, row)
+            * jy.HomogPoly.monomial((0, 1, 0))
+        ).reduce_fermat()
+        basis_products.append(product.to_json())
+    passed = y3_only
+    return status(passed), {
+        "source_degree_a": 4,
+        "source_degree_c": 1,
+        "W_A_rank": W_A.rank,
+        "W_C_rank": W_C.rank,
+        "W_AC_rank": W_AC.rank,
+        "W_AC_ambient_dim": W_AC.ambient_dim,
+        "contains_Y3": W_AC.contains(y3),
+        "basis_products_after_multiply_by_Y": basis_products,
+    }
+
+
 def divisor_group_law_test() -> tuple[str, dict[str, Any], list[str]]:
     blockers: list[str] = []
     base_points = jy.base_divisor_points()
@@ -336,6 +402,8 @@ def main() -> int:
     reduce_status, reduce_detail = test_reduce_fermat_direct()
     h0_status, h0_detail = test_h0_dimension_canonical()
     k1_mult_status, k1_mult_detail = k1_subspace_multiplication()
+    km_div_full_status, km_div_full_detail = test_km_division_full_by_linear()
+    km_div_single_status, km_div_single_detail = test_km_division_singleton_target()
     add_status, add_detail, add_blockers = divisor_group_law_test()
     blockers.extend(add_blockers)
     legacy_blocker = legacy_reduced_divisor_blocker_test()
@@ -382,6 +450,10 @@ def main() -> int:
             "h0_dimension_canonical_detail": h0_detail,
             "k1_subspace_multiplication": k1_mult_status,
             "k1_subspace_multiplication_detail": k1_mult_detail,
+            "km_division_full_by_linear": km_div_full_status,
+            "km_division_full_by_linear_detail": km_div_full_detail,
+            "km_division_singleton_target": km_div_single_status,
+            "km_division_singleton_target_detail": km_div_single_detail,
             "add_associative": add_status,
             "add_associative_detail": add_detail,
             "legacy_ReducedDivisor_nontrivial_class": legacy_blocker,

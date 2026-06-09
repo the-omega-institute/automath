@@ -529,6 +529,10 @@ class Subspace:
     def dimension(self) -> int:
         return len(self.rows)
 
+    @property
+    def rank(self) -> int:
+        return self.dimension
+
     @classmethod
     def zero(cls, ambient_dim: int) -> "Subspace":
         return cls([], ambient_dim)
@@ -613,6 +617,65 @@ def multiply_subspaces(W_A: Subspace, W_B: Subspace, target_degree: int) -> Subs
     return Subspace(product_rows, target_ambient)
 
 
+def _quotient_coordinates_mod_subspace(vector: Sequence[object], subspace: Subspace) -> Vector:
+    if len(vector) != subspace.ambient_dim:
+        raise ValueError("vector length does not match quotient ambient dimension")
+    reduced = [Fq(x) for x in vector]
+    pivot_set = set(subspace.pivots)
+    nonpivots = [col for col in range(subspace.ambient_dim) if col not in pivot_set]
+    for row, pivot in zip(subspace.rows, subspace.pivots):
+        factor = reduced[pivot]
+        if not factor:
+            continue
+        reduced = [value - factor * row_value for value, row_value in zip(reduced, row)]
+    return tuple(reduced[col] for col in nonpivots)
+
+
+def divide_subspaces(
+    W_A: Subspace,
+    W_C: Subspace,
+    source_degree_a: int,
+    source_degree_c: int,
+) -> Subspace:
+    """Khuri-Makdisi ideal quotient: return W_{A/C} in H^0(O_Y((a-c)D_0)).
+
+    The quotient is the subspace of sections t such that t * W_C is contained
+    in W_A.  Coordinates are taken in the canonical Fermat basis at each
+    homogeneous degree.
+    """
+
+    if source_degree_a <= source_degree_c:
+        raise ValueError("source_degree_a must be greater than source_degree_c")
+    if W_A.ambient_dim != h0_dimension(source_degree_a):
+        raise ValueError("W_A ambient dimension does not match source_degree_a")
+    if W_C.ambient_dim != h0_dimension(source_degree_c):
+        raise ValueError("W_C ambient dimension does not match source_degree_c")
+
+    target_degree = source_degree_a - source_degree_c
+    target_ambient = h0_dimension(target_degree)
+    quotient_dim = W_A.ambient_dim - W_A.dimension
+    if quotient_dim == 0 or W_C.dimension == 0:
+        return Subspace.full(target_ambient)
+
+    target_basis = [HomogPoly.monomial(exp) for exp in degree_monomials(target_degree)]
+    constraint_rows: list[Vector] = []
+    for row_c in W_C.rows:
+        poly_c = HomogPoly.from_vector(source_degree_c, row_c)
+        quotient_columns = [
+            _quotient_coordinates_mod_subspace(
+                (poly_t * poly_c).reduce_fermat().to_vector(),
+                W_A,
+            )
+            for poly_t in target_basis
+        ]
+        for quotient_coord in range(quotient_dim):
+            constraint_rows.append(
+                tuple(column[quotient_coord] for column in quotient_columns)
+            )
+
+    return Subspace(nullspace(constraint_rows, target_ambient), target_ambient)
+
+
 KM_STEP_2_BLOCKER = (
     "KM step 2 blocker: ideal quotient (W_prod : H⁰(O_Y((n₁+n₂)·D₀))) — "
     "division step to extract effective divisor support"
@@ -677,12 +740,25 @@ class K1Divisor:
             other.W_E,
             target_degree=self.degree + other.degree,
         )
+        # In this typed-D0 scaffold the unambiguous reference descent is by
+        # the full degree-4 section space, producing a degree-4 subspace.  The
+        # remaining KM saturation/reduction back to a canonical K1 divisor is
+        # the next implementation step.
+        W_aux_C = Subspace.full(h0_dimension(self.section_degree))
+        W_quot = divide_subspaces(
+            W_prod,
+            W_aux_C,
+            self.degree + other.degree,
+            self.section_degree,
+        )
         raise ArithmeticBlocker(
-            "k1/add_km_steps_2_3_blocked",
+            "k1/add_km_step_3_saturate_blocked",
             (
                 "computed W_prod = W_E1 * W_E2 in "
                 f"H^0(O_Y({self.degree + other.degree})) with dimension "
-                f"{W_prod.dimension}; {KM_STEP_2_BLOCKER}; {KM_STEP_3_BLOCKER}"
+                f"{W_prod.dimension}; computed W_quot = W_prod / H^0(O_Y({self.section_degree})) "
+                f"in H^0(O_Y({self.section_degree})) with dimension {W_quot.dimension}; "
+                f"{KM_STEP_3_BLOCKER}"
             ),
         )
 
