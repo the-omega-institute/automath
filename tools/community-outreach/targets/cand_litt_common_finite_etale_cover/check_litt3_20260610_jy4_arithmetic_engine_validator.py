@@ -255,6 +255,138 @@ def test_km_division_singleton_target() -> tuple[str, dict[str, Any]]:
     }
 
 
+def test_km_step3_saturation_dim() -> tuple[str, dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    passed = True
+    for seed in range(1, 6):
+        a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(2000 + seed))
+        b = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(3000 + seed))
+        W_prod = jy.multiply_subspaces(a.W, b.W, target_degree=8)
+        U = jy.saturate_to_smaller_ambient(W_prod, search_degree=6, multiplier_degree=2)
+        expected_dim = a.d0 + 1 - jy.GENUS
+        ok = U.dimension == expected_dim and U.ambient_dim == jy.h0_dimension(6)
+        passed = passed and ok
+        rows.append(
+            {
+                "seed": seed,
+                "dim_H0_O4": jy.h0_dimension(4),
+                "dim_H0_O8": jy.h0_dimension(8),
+                "dim_W_E": [a.W.dimension, b.W.dimension],
+                "dim_W_prod": W_prod.dimension,
+                "saturation_search_degree": 6,
+                "saturation_multiplier_degree": 2,
+                "dim_U": U.dimension,
+                "expected_dim_U": expected_dim,
+                "pass": ok,
+            }
+        )
+    return status(passed), {
+        "convention": (
+            "K1 W_E is a six-dimensional subspace of the degree-4 ambient "
+            "H^0(O_Y(4)); KM step 3 lifts products from degree 8 to a "
+            "six-dimensional saturated subspace in degree 6 by testing "
+            "against H^0(O_Y(2))."
+        ),
+        "rows": rows,
+    }
+
+
+def test_km_zero_identity() -> tuple[str, dict[str, Any]]:
+    zero = jy.K1Divisor.zero()
+    rows: list[dict[str, Any]] = []
+    passed = True
+    for seed in range(1, 6):
+        a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(4000 + seed))
+        left = a.add(zero)
+        right = zero.add(a)
+        ok = left == a and right == a
+        passed = passed and ok
+        rows.append(
+            {
+                "seed": seed,
+                "dim_A": a.W.dimension,
+                "degree_A": a.section_degree,
+                "dim_zero": zero.W.dimension,
+                "degree_zero": zero.section_degree,
+                "dim_A_plus_zero": left.W.dimension,
+                "degree_A_plus_zero": left.section_degree,
+                "dim_zero_plus_A": right.W.dimension,
+                "degree_zero_plus_A": right.section_degree,
+                "left_equals_A_after_base_conic_lift": left == a,
+                "right_equals_A_after_base_conic_lift": right == a,
+                "pass": ok,
+            }
+        )
+    return status(passed), {
+        "zero_W_dimension": zero.W.dimension,
+        "zero_W_ambient_dim": zero.W.ambient_dim,
+        "zero_is_full_ambient": zero.W.dimension == zero.W.ambient_dim,
+        "rows": rows,
+    }
+
+
+def test_km_add_associativity() -> tuple[str, dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    passed = True
+    for seed in range(1, 6):
+        a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(5000 + 3 * seed))
+        b = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(5001 + 3 * seed))
+        c = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(5002 + 3 * seed))
+        left = a.add(b).add(c)
+        right = a.add(b.add(c))
+        ok = left == right
+        passed = passed and ok
+        rows.append(
+            {
+                "seed": seed,
+                "left_degree": left.section_degree,
+                "right_degree": right.section_degree,
+                "left_dimension": left.W.dimension,
+                "right_dimension": right.W.dimension,
+                "associative": ok,
+            }
+        )
+    return status(passed), {
+        "random_triples_requested": 5,
+        "random_triples_attempted": len(rows),
+        "rows": rows,
+    }
+
+
+def test_km_inverse() -> tuple[str, dict[str, Any], list[str]]:
+    rows: list[dict[str, Any]] = []
+    blockers: list[str] = []
+    for seed in range(1, 6):
+        a = jy.K1Divisor.from_effective_divisor(jy.random_effective_divisor(6000 + seed))
+        try:
+            neg_a = a.neg()
+            sum_a = a.add(neg_a)
+            ok = sum_a == jy.K1Divisor.zero()
+            rows.append(
+                {
+                    "seed": seed,
+                    "neg_dimension": neg_a.W.dimension,
+                    "sum_dimension": sum_a.W.dimension,
+                    "inverse_ok": ok,
+                }
+            )
+        except jy.ArithmeticBlocker as exc:
+            blocker = {"substep": exc.substep, "reason": exc.reason}
+            rows.append({"seed": seed, "status": BLOCKED, "blocker": blocker})
+            blockers.append(f"{exc.substep}: {exc.reason}")
+            return BLOCKED, {
+                "random_inverse_checks_requested": 5,
+                "random_inverse_checks_attempted_before_block": seed,
+                "rows": rows,
+                "blocker": blocker,
+            }, blockers
+    return status(all(row.get("inverse_ok") is True for row in rows)), {
+        "random_inverse_checks_requested": 5,
+        "random_inverse_checks_attempted": len(rows),
+        "rows": rows,
+    }, blockers
+
+
 def divisor_group_law_test() -> tuple[str, dict[str, Any], list[str]]:
     blockers: list[str] = []
     base_points = jy.base_divisor_points()
@@ -404,6 +536,11 @@ def main() -> int:
     k1_mult_status, k1_mult_detail = k1_subspace_multiplication()
     km_div_full_status, km_div_full_detail = test_km_division_full_by_linear()
     km_div_single_status, km_div_single_detail = test_km_division_singleton_target()
+    km_step3_status, km_step3_detail = test_km_step3_saturation_dim()
+    km_zero_status, km_zero_detail = test_km_zero_identity()
+    km_assoc_status, km_assoc_detail = test_km_add_associativity()
+    km_inverse_status, km_inverse_detail, km_inverse_blockers = test_km_inverse()
+    blockers.extend(km_inverse_blockers)
     add_status, add_detail, add_blockers = divisor_group_law_test()
     blockers.extend(add_blockers)
     legacy_blocker = legacy_reduced_divisor_blocker_test()
@@ -454,6 +591,14 @@ def main() -> int:
             "km_division_full_by_linear_detail": km_div_full_detail,
             "km_division_singleton_target": km_div_single_status,
             "km_division_singleton_target_detail": km_div_single_detail,
+            "km_step3_saturation_dim": km_step3_status,
+            "km_step3_saturation_dim_detail": km_step3_detail,
+            "km_zero_identity": km_zero_status,
+            "km_zero_identity_detail": km_zero_detail,
+            "km_add_associativity": km_assoc_status,
+            "km_add_associativity_detail": km_assoc_detail,
+            "km_inverse": km_inverse_status,
+            "km_inverse_detail": km_inverse_detail,
             "add_associative": add_status,
             "add_associative_detail": add_detail,
             "legacy_ReducedDivisor_nontrivial_class": legacy_blocker,

@@ -676,6 +676,89 @@ def divide_subspaces(
     return Subspace(nullspace(constraint_rows, target_ambient), target_ambient)
 
 
+def saturate_to_smaller_ambient(
+    W_prod: Subspace,
+    search_degree: int,
+    multiplier_degree: int = 2,
+) -> Subspace:
+    """Khuri-Makdisi step 3 saturation/lift-to-lower-degree.
+
+    Return the subspace
+
+        U = {s in H^0(O_Y(search_degree)) :
+             s * H^0(O_Y(multiplier_degree)) is contained in W_prod}.
+
+    In the present Fermat-quartic K1 scaffold, a degree-4 K1 representative
+    multiplied by another degree-4 representative lands in degree 8.  The
+    divisor-support component is recovered in degree 6 by testing products
+    against the full degree-2 ambient, i.e. search_degree=6 and
+    multiplier_degree=2.  Coordinates use the canonical Fermat quotient basis.
+    """
+
+    product_degree = _degree_from_ambient_dim(W_prod.ambient_dim)
+    if search_degree < 0 or multiplier_degree < 0:
+        raise ValueError("search_degree and multiplier_degree must be nonnegative")
+    if search_degree + multiplier_degree != product_degree:
+        raise ValueError(
+            "search_degree + multiplier_degree must equal W_prod's homogeneous degree "
+            f"({search_degree} + {multiplier_degree} != {product_degree})"
+        )
+
+    search_ambient = h0_dimension(search_degree)
+    quotient_dim = W_prod.ambient_dim - W_prod.dimension
+    if quotient_dim == 0:
+        return Subspace.full(search_ambient)
+
+    search_basis = [HomogPoly.monomial(exp) for exp in degree_monomials(search_degree)]
+    multiplier_basis = [
+        HomogPoly.monomial(exp) for exp in degree_monomials(multiplier_degree)
+    ]
+    constraint_rows: list[Vector] = []
+
+    for poly_t in multiplier_basis:
+        quotient_columns = [
+            _quotient_coordinates_mod_subspace(
+                (poly_s * poly_t).reduce_fermat().to_vector(),
+                W_prod,
+            )
+            for poly_s in search_basis
+        ]
+        for quotient_coord in range(quotient_dim):
+            constraint_rows.append(
+                tuple(column[quotient_coord] for column in quotient_columns)
+            )
+
+    return Subspace(nullspace(constraint_rows, search_ambient), search_ambient)
+
+
+def _multiply_subspace_by_base_conic_power(
+    W: Subspace,
+    source_degree: int,
+    power: int,
+) -> Subspace:
+    if power < 0:
+        raise ValueError("power must be nonnegative")
+    if W.ambient_dim != h0_dimension(source_degree):
+        raise ValueError("subspace ambient does not match source_degree")
+    if power == 0:
+        return W
+
+    base_conic_poly = HomogPoly.monomial((1, 0, 1))
+    multiplier = base_conic_poly
+    for _ in range(power - 1):
+        multiplier = multiplier * base_conic_poly
+    target_degree = source_degree + 2 * power
+    return Subspace(
+        [
+            (HomogPoly.from_vector(source_degree, row) * multiplier)
+            .reduce_fermat()
+            .to_vector()
+            for row in W.rows
+        ],
+        h0_dimension(target_degree),
+    )
+
+
 KM_STEP_2_BLOCKER = (
     "KM step 2 blocker: ideal quotient (W_prod : H⁰(O_Y((n₁+n₂)·D₀))) — "
     "division step to extract effective divisor support"
@@ -730,42 +813,92 @@ class K1Divisor:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, K1Divisor):
             return NotImplemented
-        return self.W == other.W
+        return self.equals(other)
+
+    def equals(self, other: "K1Divisor") -> bool:
+        if not isinstance(other, K1Divisor):
+            return False
+        if self.section_degree == other.section_degree:
+            return self.W == other.W
+        if (self.section_degree - other.section_degree) % 2:
+            return False
+        if self.section_degree < other.section_degree:
+            lifted = _multiply_subspace_by_base_conic_power(
+                self.W,
+                self.section_degree,
+                (other.section_degree - self.section_degree) // 2,
+            )
+            return lifted == other.W
+        lifted = _multiply_subspace_by_base_conic_power(
+            other.W,
+            other.section_degree,
+            (self.section_degree - other.section_degree) // 2,
+        )
+        return self.W == lifted
+
+    def _expected_k1_dimension(self) -> int:
+        return self.d0 + 1 - GENUS
+
+    def _check_k1_shape(self) -> None:
+        if self.W.ambient_dim != h0_dimension(self.section_degree):
+            raise ValueError("K1 divisor W ambient does not match section_degree")
+        if self.W.dimension != self._expected_k1_dimension():
+            raise ArithmeticBlocker(
+                "k1/subspace_shape",
+                (
+                    f"expected K1 subspace dimension {self._expected_k1_dimension()}, "
+                    f"got {self.W.dimension} in H^0(O_Y({self.section_degree}))"
+                ),
+            )
 
     def add(self, other: "K1Divisor") -> "K1Divisor":
         if not isinstance(other, K1Divisor):
             return NotImplemented  # type: ignore[return-value]
+        self._check_k1_shape()
+        other._check_k1_shape()
         W_prod = multiply_subspaces(
             self.W_E,
             other.W_E,
             target_degree=self.degree + other.degree,
         )
-        # In this typed-D0 scaffold the unambiguous reference descent is by
-        # the full degree-4 section space, producing a degree-4 subspace.  The
-        # remaining KM saturation/reduction back to a canonical K1 divisor is
-        # the next implementation step.
-        W_aux_C = Subspace.full(h0_dimension(self.section_degree))
-        W_quot = divide_subspaces(
+        # KM step 3 in the actual degree convention of this scaffold:
+        # degree-m and degree-n representatives multiply to degree m+n; the
+        # saturated representative is searched in degree m+n-2 and tested by
+        # multiplication with H^0(O_Y(2)), the base-conic degree.
+        saturated_degree = self.degree + other.degree - 2
+        W_sat = saturate_to_smaller_ambient(
             W_prod,
-            W_aux_C,
-            self.degree + other.degree,
-            self.section_degree,
+            search_degree=saturated_degree,
+            multiplier_degree=2,
         )
-        raise ArithmeticBlocker(
-            "k1/add_km_step_3_saturate_blocked",
-            (
-                "computed W_prod = W_E1 * W_E2 in "
-                f"H^0(O_Y({self.degree + other.degree})) with dimension "
-                f"{W_prod.dimension}; computed W_quot = W_prod / H^0(O_Y({self.section_degree})) "
-                f"in H^0(O_Y({self.section_degree})) with dimension {W_quot.dimension}; "
-                f"{KM_STEP_3_BLOCKER}"
-            ),
+        if W_sat.dimension != self._expected_k1_dimension():
+            raise ArithmeticBlocker(
+                "k1/add_km_step_3_saturation_bad_dimension",
+                (
+                    "computed W_prod = W_E1 * W_E2 in "
+                    f"H^0(O_Y({self.degree + other.degree})) with dimension "
+                    f"{W_prod.dimension}; saturated in H^0(O_Y({saturated_degree})) "
+                    f"with dimension {W_sat.dimension}, expected "
+                    f"{self._expected_k1_dimension()}"
+                ),
+            )
+        return K1Divisor(
+            W=W_sat,
+            support=(),
+            d0=self.d0,
+            section_degree=saturated_degree,
         )
 
     def neg(self) -> "K1Divisor":
         raise ArithmeticBlocker(
-            "k1/neg_dual_reduce",
-            "KM inverse needs ideal quotient/dual plus reduction back to W_E",
+            "k1/neg_canonical_reduction",
+            (
+                "a quotient-based flip is available as a degree-4 involution, "
+                "but A + flip(A) does not reduce to the base class under the "
+                "current lifted-degree saturation.  The missing mathematical "
+                "substep is canonical reduction from the saturated lifted "
+                "representative back to the fixed degree-4 K1 model."
+            ),
         )
 
     def double(self) -> "K1Divisor":
