@@ -1031,13 +1031,93 @@ composition multiplies sizes and adds depths.  Induction on \(|E|\) gives the
 displayed bounds after increasing \(K\) once.
 \end{proof}
 
-\begin{remark}[Quantitative bookkeeping for the Richardson recursion]
+\begin{lemma}[Quantitative Richardson translation]
+\label{lem:richardson-translation-bookkeeping}
 \label{prop:richardson-translation-bookkeeping}
-The translation of \Cref{lem:richardson-translation} has exponential tree-size
-growth and linear substitution-depth growth in the source expression size, with
-constants depending only on the finite witness library.
-This is the final paragraph of the proof of \Cref{lem:richardson-translation}.
-\end{remark}
+Fix the printed core EML witnesses of
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library} and a verified triple
+\((\mathsf P,\mathsf S,\mathsf R)\) satisfying
+\[
+  \mathsf P=\pi,
+  \qquad
+  \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad
+  \mathsf R(t)=\sqrt t\quad(t\in\RR_{\ge0}).
+\]
+Measure the size of a Richardson expression by its expression-tree size after
+expanding rational constants according to the fixed convention used in
+\Cref{lem:eml-real-witness-library}.  Then the translation
+\(\tau_{\mathsf P,\mathsf S,\mathsf R}\) of
+\Cref{lem:richardson-translation} can be chosen with the following uniform
+bounds and admissibility properties.  There is a constant \(C\), depending only
+on the fixed finite witness list and on the rational-expansion convention, such
+that for every Richardson expression \(E\),
+\[
+  |\tau_{\mathsf P,\mathsf S,\mathsf R}(E)|\le C^{|E|},
+  \qquad
+  \operatorname{depth}\tau_{\mathsf P,\mathsf S,\mathsf R}(E)
+  \le C|E|,
+\]
+and the number of nested source-substitution steps used on any root-to-leaf path
+in constructing \(\tau_{\mathsf P,\mathsf S,\mathsf R}(E)\) is at most \(|E|\).
+Moreover every principal-branch call introduced by the core library is made on
+its stated real domain on \(\dom(E)\), and the only non-core admissibility inputs
+are exactly the three displayed identities for \(\mathsf P\), \(\mathsf S\), and
+\(\mathsf R\).  In particular the \(\mu_0\)-clause calls \(\mathsf R\) only on
+values of the form \(F(x)^2\ge0\), including the possible value \(0\).
+\end{lemma}
+
+\begin{proof}
+Let \(\mathcal L\) be the finite list of core witnesses for
+\(0,1\), \(\log2\), addition, subtraction, multiplication, reciprocal on nonzero
+denominators, division, \(\exp\), and positive square root recorded in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; rational constants are
+first expanded from \(0,1\) using this same fixed arithmetic library.  Adjoin the
+three verified strings \(\mathsf P,\mathsf S,\mathsf R\).  Let \(C\) be larger
+than twice the maximum, over this finite list of primitive witnesses, of the tree
+size, syntactic depth, and number of input leaves of any witness; enlarge \(C\)
+once more so that each fixed rational-leaf expansion contributes at most \(C\)
+times its counted expanded size.
+
+The translation is the structural recursion of
+\Cref{lem:richardson-translation}.  A variable, \(\pi\), \(\log2\), a rational
+constant, or the zero constant is replaced by the corresponding fixed witness.
+The constructors \(+,-,\times,\exp,\sin\) are translated by substituting the
+already translated children into the fixed witness for that constructor, with
+\(\sin\) using \(\mathsf S\).  Composition is syntactic substitution of the
+translated inner expression into the translated outer expression.  Finally
+\(\mu(F)\) is translated as \(\mathsf R(M(\tau(F),\tau(F)))\), where \(M\) is the
+all-real multiplication witness of \Cref{lem:eml-real-witness-library}.
+
+We prove the two bounds by induction on the expanded expression tree.  In a
+primitive leaf case the assertion follows from the choice of \(C\).  At a fixed
+constructor with translated children \(T_1,\ldots,T_r\), substituting the
+children into a witness from \(\mathcal L\cup\{\mathsf P,\mathsf S,\mathsf R\}\)
+adds at most a constant amount to depth and increases size by at most a constant
+multiple of \(1+|T_1|+\cdots+|T_r|\).  Increasing \(C\) if necessary, the
+induction hypotheses therefore give
+\(|T|\le C^{1+|E_1|+\cdots+|E_r|}\) and
+\(\operatorname{depth}T\le C(1+|E_1|+\cdots+|E_r|)\).  A composition node is the
+same estimate with one additional source-substitution step: its tree size is
+bounded by the product of the outer translated size and the largest substituted
+inner size, hence by \(C^{|E|}\) after increasing \(C\), while depths add and so
+remain bounded by \(C|E|\).  Along a root-to-leaf path the recursion passes
+through at most one source node at each step, so the nested source-substitution
+count is at most the number of nodes of \(E\).
+
+It remains to record admissibility.  The primitive and arithmetic core clauses
+are admissible on precisely the domains proved in
+\Cref{lem:eml-printed-core,lem:eml-real-witness-library}; the induction
+hypothesis supplies those domains for the translated children.  The supplied
+identity \(\mathsf S(x)=\sin x\) is total on \(\RR\), and \(\mathsf P\) is a
+constant.  For the \(\mu_0\)-clause, the multiplication witness gives
+\(M(\tau(F)(x),\tau(F)(x))=F(x)^2\) for every \(x\in\dom(F)\), and this value is
+nonnegative.  The hypothesis on \(\mathsf R\) therefore applies also when
+\(F(x)=0\).  Thus no hidden principal-branch or square-root-at-zero assumption is
+introduced beyond the three displayed verified-triple identities, and the
+domain and value conclusions of \Cref{lem:richardson-translation} hold with the
+quantitative bounds just proved.
+\end{proof}
 
 \begin{theorem}[Verified-triple Richardson obstruction interface]
 \label{thm:replacement-triple-richardson-interface}
@@ -1078,7 +1158,8 @@ and its proved identities.  It does not construct \(\mathsf P\),
 \end{theorem}
 
 \begin{proof}
-By \Cref{lem:richardson-translation}, the verified triple gives an effective,
+By \Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}, the
+verified triple gives an effective, quantitatively bounded,
 domain-preserving, value-preserving translation of \(\mathcal R\) into pure EML
 terms.  Hence for every source expression \(E\),
 \[
