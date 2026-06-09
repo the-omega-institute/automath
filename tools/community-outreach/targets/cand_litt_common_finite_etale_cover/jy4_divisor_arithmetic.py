@@ -34,7 +34,6 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from dataclasses import dataclass
-from itertools import product
 from typing import Iterable, Iterator, Sequence
 
 P = 11
@@ -46,8 +45,6 @@ GENUS = 3
 EXPECTED_JY4_ORDER = 4096
 EXPECTED_HYPERFLEX_ORDER = 2048
 EXPECTED_Y_F11_4_POINTS = 13916
-
-TorsionVector = tuple[int, int, int, int, int, int]
 
 
 class ArithmeticBlocker(NotImplementedError):
@@ -279,82 +276,6 @@ def hyperflex_points() -> list[Point]:
         out.add(normalize_projective((ONE, ZERO, root)))
         out.add(normalize_projective((ONE, root, ZERO)))
     return sorted(out)
-
-
-def torsion_vector(value: Sequence[int]) -> TorsionVector:
-    if len(value) != 6:
-        raise ValueError("JY[4] torsion vectors have six coordinates")
-    return tuple(int(x) % 4 for x in value)  # type: ignore[return-value]
-
-
-def torsion_vector_to_string(value: Sequence[int]) -> str:
-    return "[" + ",".join(str(x) for x in torsion_vector(value)) + "]"
-
-
-def enumerate_jy4_lattice() -> list[TorsionVector]:
-    """Enumerate the abstract etale 4-torsion lattice JY[4] ~= (Z/4)^6.
-
-    This is the finite group forced by genus(Y)=3 and char(F_11) != 2.  It is
-    intentionally separate from K1 divisor materialization: a vector here is a
-    coordinate in the certified torsion lattice, not automatically a concrete
-    divisor/function witness.
-    """
-
-    return [torsion_vector(coords) for coords in product(range(4), repeat=6)]
-
-
-def jy2_lattice() -> list[TorsionVector]:
-    return [v for v in enumerate_jy4_lattice() if double_torsion_vector(v) == (0, 0, 0, 0, 0, 0)]
-
-
-def hyperflex_subgroup_lattice() -> list[TorsionVector]:
-    """Enumerate the index-2 hyperflex subgroup model.
-
-    Local hyperflex divisor arithmetic identifies H with (Z/4)^5 x Z/2 inside
-    (Z/4)^6.  In this coordinate convention the final coordinate is even.
-    """
-
-    return [v for v in enumerate_jy4_lattice() if v[-1] % 2 == 0]
-
-
-def add_torsion_vectors(a: Sequence[int], b: Sequence[int]) -> TorsionVector:
-    aa = torsion_vector(a)
-    bb = torsion_vector(b)
-    return tuple((x + y) % 4 for x, y in zip(aa, bb))  # type: ignore[return-value]
-
-
-def double_torsion_vector(a: Sequence[int]) -> TorsionVector:
-    aa = torsion_vector(a)
-    return tuple((2 * x) % 4 for x in aa)  # type: ignore[return-value]
-
-
-def twice_hyperflex_subgroup_lattice() -> list[TorsionVector]:
-    return sorted({double_torsion_vector(h) for h in hyperflex_subgroup_lattice()})
-
-
-def find_lattice_halve_outside_2H() -> dict[str, object]:
-    """Find the first abstract T in JY[2]\\2H and D in JY[4] with 2D=T."""
-
-    two_h = set(twice_hyperflex_subgroup_lattice())
-    jy4 = enumerate_jy4_lattice()
-    for target in jy2_lattice():
-        if target in two_h:
-            continue
-        for divisor in jy4:
-            if double_torsion_vector(divisor) == target and divisor not in two_h:
-                return {
-                    "T": target,
-                    "D_L": divisor,
-                    "T_canonical": torsion_vector_to_string(target),
-                    "D_L_canonical": torsion_vector_to_string(divisor),
-                    "D_L_outside_2H": True,
-                    "lattice_only": True,
-                    "materialized_as_K1_divisor": False,
-                }
-    raise ArithmeticBlocker(
-        "jy4_lattice/halve_outside_2H",
-        "abstract lattice search did not find a T outside 2H, contradicting the index-2 model",
-    )
 
 
 def divisor_degree(divisor: dict[Point, int]) -> int:

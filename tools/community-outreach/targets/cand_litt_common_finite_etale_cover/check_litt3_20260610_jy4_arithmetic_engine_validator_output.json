@@ -19,34 +19,22 @@
   "base_field": "F_{11^4}",
   "base_field_model": "F_11[t]/(t^4 + 4*t^3 + 1)",
   "blockers": [
-    "div_fL_eq_4DL: abstract D_L was found, but no K1 divisor/function materialization is available for f_L"
+    "k1/neg_canonical_reduction: a quotient-based flip is available as a degree-4 involution, but A + flip(A) does not reduce to the base class under the current lifted-degree saturation.  The missing mathematical substep is canonical reduction from the saturated lifted representative back to the fixed degree-4 K1 model.",
+    "k1/halve_requires_4096_enumeration: halving requires a completed JY[4] group law or an exact 4096-class K1 enumeration",
+    "JY[4] order was not recomputed by the partial K1 engine",
+    "hyperflex subgroup order was not recomputed by the partial K1 engine",
+    "div_fL_eq_4DL: no D_L or rational f_L exists because halving outside 2H is blocked"
   ],
-  "certificate_sha256": "db494d5662ecb862a8ecbf8f86fde4930e99a894bebad5931fb072da86ed1c42",
-  "closure_grade": false,
-  "closure_grade_reason": "not closure-grade: f_L materialization/divisor verification remains unavailable",
-  "next_subtarget": "Materialize the abstract outside-2H D_L lattice coordinate as a concrete K1Divisor, then extract a numerator/denominator rational function f_L and verify div(f_L)=4D_L.",
-  "phase_summary": {
-    "Phase_B_JY4_count": 4096,
-    "Phase_C_hyperflex_count": 2048,
-    "Phase_D_D_L_canonical": "[0,0,0,0,0,1]",
-    "Phase_D_T_canonical": "[0,0,0,0,0,2]",
-    "Phase_E_div_check_verdict": "not run",
-    "Phase_E_f_L_description": null
-  },
+  "certificate_sha256": "ca4f3a2b6602684395707cc84c8f3a329e0f1b95a5430a284a4dd9ced87ba9fe",
+  "next_subtarget": "Implement a real non-hyperelliptic genus-3 plane-quartic reducer (Khuri-Makdisi K1/K2 or Volcheck/flex-secant) over F_11^4, then use it to solve 2D=T outside 2H and construct f_L with div(f_L)=4D.",
   "tests": {
     "JY4_order_check": {
-      "basis_dimension": 6,
+      "blocker": "not recomputed by this K1 partial engine; requires completed add/double/reduce and equality enumeration",
       "computed": 4096,
       "expected": 4096,
-      "honesty_note": "This enumerates the certified abstract JY[4] lattice.  It does not materialize all 4096 classes as K1 divisors.",
-      "materialized_in_K1": false,
-      "model": "(Z/4)^6",
-      "prior_replay_count": 4096,
       "prior_replay_matches_expected": true,
-      "prior_replay_source": "check_litt3_nonhyperflex_certificate_gap.output.json",
-      "source": "local abstract etale torsion lattice, genus=3 and char 11 prime to 4",
-      "status": "PASS",
-      "unique_count": 4096
+      "source": "check_litt3_nonhyperflex_certificate_gap.output.json",
+      "status": "BLOCKED_AT_SUBSTEP"
     },
     "add_associative": "PASS",
     "add_associative_detail": {
@@ -162,11 +150,11 @@
       "smooth_over_algebraic_closure": true
     },
     "div_fL_eq_4DL": {
-      "div_check_verdict": "not run",
-      "f_L_description": null,
-      "reason": "D_L exists only as an abstract torsion-lattice coordinate [0,0,0,0,0,1]; no K1 divisor/principal relation is available to materialize f_L.",
-      "required_next_substep": "materialize the abstract D_L coordinate as a K1Divisor, then extract a numerator/denominator witness for 4*D_L",
-      "status": "FAIL",
+      "blocker": {
+        "reason": "no D_L or rational f_L exists because halving outside 2H is blocked",
+        "substep": "k1/materialize_function_principal_relation"
+      },
+      "status": "BLOCKED_AT_SUBSTEP",
       "verified": false
     },
     "field_arith": "PASS",
@@ -237,30 +225,22 @@
       ]
     },
     "halve_outside_2H": {
-      "D_L_repr": "[0,0,0,0,0,1]",
-      "JY2_count": 64,
-      "T_repr": "[0,0,0,0,0,2]",
-      "double_D_L_equals_T": true,
-      "honesty_note": "This is an abstract lattice half outside 2H.  The current K1 engine does not materialize this coordinate as a concrete divisor class.",
-      "materialized_as_K1_divisor": false,
-      "outside_2H": true,
-      "status": "PASS",
-      "twoH_count": 32
+      "D_L_repr": null,
+      "T_repr": "not materialized; requested outside-2H two-torsion needs full JY[4] basis",
+      "blocker": {
+        "reason": "halving requires a completed JY[4] group law or an exact 4096-class K1 enumeration",
+        "substep": "k1/halve_requires_4096_enumeration"
+      },
+      "outside_2H": false,
+      "status": "BLOCKED_AT_SUBSTEP"
     },
     "hyperflex_order_check": {
+      "blocker": "not recomputed by this K1 partial engine; requires completed group law on hyperflex classes",
       "computed": 2048,
       "expected": 2048,
-      "honesty_note": "The subgroup order is replayed in the certified hyperflex lattice model and cross-checked against the local prior artifact.  K1 does not yet expose canonical coordinates for each hyperflex generator.",
-      "hyperflex_point_count": 12,
-      "index_in_JY4": 2,
-      "materialized_generators_in_K1": false,
-      "model": "(Z/4)^5 x Z/2, embedded as final coordinate even",
-      "prior_replay_count": 2048,
       "prior_replay_matches_expected": true,
-      "prior_replay_source": "check_litt3_nonhyperflex_certificate_gap.output.json",
-      "status": "PASS",
-      "tangent_witness_count": 12,
-      "tangent_witnesses_all_single_hyperflex_on_axis_pool": true
+      "source": "check_litt3_nonhyperflex_certificate_gap.output.json",
+      "status": "BLOCKED_AT_SUBSTEP"
     },
     "k1_subspace_multiplication": "PASS",
     "k1_subspace_multiplication_detail": {
@@ -360,40 +340,22 @@
       "source_degree_a": 4,
       "source_degree_c": 1
     },
-    "km_inverse": "PASS",
+    "km_inverse": "BLOCKED_AT_SUBSTEP",
     "km_inverse_detail": {
-      "random_inverse_checks_attempted": 5,
+      "blocker": {
+        "reason": "a quotient-based flip is available as a degree-4 involution, but A + flip(A) does not reduce to the base class under the current lifted-degree saturation.  The missing mathematical substep is canonical reduction from the saturated lifted representative back to the fixed degree-4 K1 model.",
+        "substep": "k1/neg_canonical_reduction"
+      },
+      "random_inverse_checks_attempted_before_block": 1,
       "random_inverse_checks_requested": 5,
       "rows": [
         {
-          "inverse_ok": true,
-          "neg_dimension": 6,
+          "blocker": {
+            "reason": "a quotient-based flip is available as a degree-4 involution, but A + flip(A) does not reduce to the base class under the current lifted-degree saturation.  The missing mathematical substep is canonical reduction from the saturated lifted representative back to the fixed degree-4 K1 model.",
+            "substep": "k1/neg_canonical_reduction"
+          },
           "seed": 1,
-          "sum_dimension": 6
-        },
-        {
-          "inverse_ok": true,
-          "neg_dimension": 6,
-          "seed": 2,
-          "sum_dimension": 6
-        },
-        {
-          "inverse_ok": true,
-          "neg_dimension": 6,
-          "seed": 3,
-          "sum_dimension": 6
-        },
-        {
-          "inverse_ok": true,
-          "neg_dimension": 6,
-          "seed": 4,
-          "sum_dimension": 6
-        },
-        {
-          "inverse_ok": true,
-          "neg_dimension": 6,
-          "seed": 5,
-          "sum_dimension": 6
+          "status": "BLOCKED_AT_SUBSTEP"
         }
       ]
     },

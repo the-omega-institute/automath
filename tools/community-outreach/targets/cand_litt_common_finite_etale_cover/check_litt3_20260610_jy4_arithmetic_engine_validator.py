@@ -488,119 +488,65 @@ def legacy_reduced_divisor_blocker_test() -> dict[str, Any]:
 
 
 def jy4_order_check(nonhyper: dict[str, Any] | None) -> dict[str, Any]:
-    elements = jy.enumerate_jy4_lattice()
-    unique_count = len(set(elements))
-    computed = unique_count
-    prior = None if nonhyper is None else int(nonhyper.get("full_JY4_order", -1))
-    passed = computed == jy.EXPECTED_JY4_ORDER and unique_count == len(elements)
+    if nonhyper is None:
+        return {
+            "status": BLOCKED,
+            "computed": None,
+            "expected": jy.EXPECTED_JY4_ORDER,
+            "source": None,
+            "blocker": "full K1 add/double/reduce is needed before exact 4096-class enumeration",
+        }
+    computed = int(nonhyper.get("full_JY4_order", -1))
     return {
-        "status": status(passed),
+        "status": BLOCKED,
         "computed": computed,
         "expected": jy.EXPECTED_JY4_ORDER,
-        "unique_count": unique_count,
-        "model": "(Z/4)^6",
-        "basis_dimension": 6,
-        "source": "local abstract etale torsion lattice, genus=3 and char 11 prime to 4",
-        "prior_replay_source": None if nonhyper is None else NONHYPER.name,
-        "prior_replay_count": prior,
-        "prior_replay_matches_expected": prior == jy.EXPECTED_JY4_ORDER,
-        "materialized_in_K1": False,
-        "honesty_note": (
-            "This enumerates the certified abstract JY[4] lattice.  It does not "
-            "materialize all 4096 classes as K1 divisors."
-        ),
+        "prior_replay_matches_expected": computed == jy.EXPECTED_JY4_ORDER,
+        "source": NONHYPER.name,
+        "blocker": "not recomputed by this K1 partial engine; requires completed add/double/reduce and equality enumeration",
     }
 
 
 def hyperflex_order_check(nonhyper: dict[str, Any] | None) -> dict[str, Any]:
-    hpts = jy.hyperflex_points()
-    subgroup = jy.hyperflex_subgroup_lattice()
-    unique_count = len(set(subgroup))
-    computed = unique_count
-    prior = None if nonhyper is None else int(nonhyper.get("hyperflex_group_order", -1))
-    tangent_checks = []
-    for point in hpts:
-        line = jy.tangent_line(point)
-        zeros = jy.line_divisor(line, hpts)
-        tangent_checks.append(
-            {
-                "point": jy.point_to_json(point),
-                "line": [coord.to_json() for coord in line],
-                "zeros_among_hyperflexes": jy.divisor_to_json(zeros),
-                "multiplicity_four_witness": zeros == {point: 1},
-            }
-        )
-    passed = computed == jy.EXPECTED_HYPERFLEX_ORDER and len(hpts) == 12
+    if nonhyper is None:
+        return {
+            "status": BLOCKED,
+            "computed": None,
+            "expected": jy.EXPECTED_HYPERFLEX_ORDER,
+            "source": None,
+            "blocker": "hyperflex subgroup generation needs completed group law",
+        }
+    computed = int(nonhyper.get("hyperflex_group_order", -1))
     return {
-        "status": status(passed),
+        "status": BLOCKED,
         "computed": computed,
         "expected": jy.EXPECTED_HYPERFLEX_ORDER,
-        "model": "(Z/4)^5 x Z/2, embedded as final coordinate even",
-        "index_in_JY4": jy.EXPECTED_JY4_ORDER // computed if computed else None,
-        "hyperflex_point_count": len(hpts),
-        "tangent_witness_count": sum(1 for row in tangent_checks if row["multiplicity_four_witness"]),
-        "tangent_witnesses_all_single_hyperflex_on_axis_pool": all(
-            row["multiplicity_four_witness"] for row in tangent_checks
-        ),
-        "prior_replay_source": None if nonhyper is None else NONHYPER.name,
-        "prior_replay_count": prior,
-        "prior_replay_matches_expected": prior == jy.EXPECTED_HYPERFLEX_ORDER,
-        "materialized_generators_in_K1": False,
-        "honesty_note": (
-            "The subgroup order is replayed in the certified hyperflex lattice "
-            "model and cross-checked against the local prior artifact.  K1 does "
-            "not yet expose canonical coordinates for each hyperflex generator."
-        ),
+        "prior_replay_matches_expected": computed == jy.EXPECTED_HYPERFLEX_ORDER,
+        "source": NONHYPER.name,
+        "blocker": "not recomputed by this K1 partial engine; requires completed group law on hyperflex classes",
     }
 
 
-def halving_test() -> dict[str, Any]:
-    witness = jy.find_lattice_halve_outside_2H()
-    two_h = jy.twice_hyperflex_subgroup_lattice()
-    jy2 = jy.jy2_lattice()
-    passed = (
-        witness["D_L_outside_2H"] is True
-        and len(jy2) == 64
-        and witness["T"] not in set(two_h)
-        and jy.double_torsion_vector(witness["D_L"]) == witness["T"]
-    )
-    return {
-        "status": status(passed),
-        "JY2_count": len(jy2),
-        "twoH_count": len(two_h),
-        "T_repr": witness["T_canonical"],
-        "D_L_repr": witness["D_L_canonical"],
-        "outside_2H": witness["D_L_outside_2H"],
-        "double_D_L_equals_T": jy.double_torsion_vector(witness["D_L"]) == witness["T"],
-        "materialized_as_K1_divisor": witness["materialized_as_K1_divisor"],
-        "honesty_note": (
-            "This is an abstract lattice half outside 2H.  The current K1 engine "
-            "does not materialize this coordinate as a concrete divisor class."
-        ),
-    }
-
-
-def div_fL_eq_4DL_test(halve_payload: dict[str, Any]) -> dict[str, Any]:
-    if not halve_payload.get("materialized_as_K1_divisor"):
+def halving_test() -> tuple[dict[str, Any], list[str]]:
+    blockers: list[str] = []
+    zero = jy.K1Divisor.zero()
+    try:
+        jy.K1Divisor.halve(zero)
+    except jy.ArithmeticBlocker as exc:
+        blockers.append(f"{exc.substep}: {exc.reason}")
         return {
-            "status": FAIL,
-            "verified": False,
-            "f_L_description": None,
-            "div_check_verdict": "not run",
-            "reason": (
-                "D_L exists only as an abstract torsion-lattice coordinate "
-                f"{halve_payload.get('D_L_repr')}; no K1 divisor/principal "
-                "relation is available to materialize f_L."
-            ),
-            "required_next_substep": "materialize the abstract D_L coordinate as a K1Divisor, then extract a numerator/denominator witness for 4*D_L",
-        }
+            "T_repr": "not materialized; requested outside-2H two-torsion needs full JY[4] basis",
+            "D_L_repr": None,
+            "outside_2H": False,
+            "status": BLOCKED,
+            "blocker": {"substep": exc.substep, "reason": exc.reason},
+        }, blockers
     return {
+        "T_repr": "unexpected",
+        "D_L_repr": "unexpected",
+        "outside_2H": False,
         "status": FAIL,
-        "verified": False,
-        "f_L_description": None,
-        "div_check_verdict": "not implemented",
-        "reason": "K1 materialized D_L path is not implemented in this checkout",
-    }
+    }, ["halve unexpectedly returned without an outside-2H certificate"]
 
 
 def main() -> int:
@@ -623,47 +569,24 @@ def main() -> int:
     add_status, add_detail, add_blockers = divisor_group_law_test()
     blockers.extend(add_blockers)
     legacy_blocker = legacy_reduced_divisor_blocker_test()
+    halve_payload, halve_blockers = halving_test()
+    blockers.extend(halve_blockers)
 
     order_payload = jy4_order_check(nonhyper)
     hyper_payload = hyperflex_order_check(nonhyper)
-    halve_payload = halving_test()
-    div_fL = div_fL_eq_4DL_test(halve_payload)
+    blockers.append("JY[4] order was not recomputed by the partial K1 engine")
+    blockers.append("hyperflex subgroup order was not recomputed by the partial K1 engine")
 
-    if not order_payload["status"] == PASS:
-        blockers.append("JY[4] abstract lattice enumeration did not produce 4096 classes")
-    if not hyper_payload["status"] == PASS:
-        blockers.append("hyperflex subgroup replay did not produce order 2048")
-    if not halve_payload["status"] == PASS:
-        blockers.append("halve_outside_2H abstract lattice search failed")
-    if not div_fL["status"] == PASS:
-        blockers.append(
-            "div_fL_eq_4DL: abstract D_L was found, but no K1 divisor/function "
-            "materialization is available for f_L"
-        )
-
-    pass_statuses = [
-        field_status,
-        curve_status,
-        reduce_status,
-        h0_status,
-        k1_mult_status,
-        km_div_full_status,
-        km_div_single_status,
-        km_step3_status,
-        km_zero_status,
-        km_assoc_status,
-        km_inverse_status,
-        add_status,
-        order_payload["status"],
-        hyper_payload["status"],
-        halve_payload["status"],
-        div_fL["status"],
-    ]
-    closure_grade = all(item == PASS for item in pass_statuses)
-    closure_reason = (
-        "all K1 closure-grade assertions passed"
-        if closure_grade
-        else "not closure-grade: f_L materialization/divisor verification remains unavailable"
+    div_fL = {
+        "status": BLOCKED,
+        "verified": False,
+        "blocker": {
+            "substep": "k1/materialize_function_principal_relation",
+            "reason": "no D_L or rational f_L exists because halving outside 2H is blocked",
+        },
+    }
+    blockers.append(
+        "div_fL_eq_4DL: no D_L or rational f_L exists because halving outside 2H is blocked"
     )
 
     payload: dict[str, Any] = {
@@ -709,16 +632,6 @@ def main() -> int:
             "halve_outside_2H": halve_payload,
             "div_fL_eq_4DL": div_fL,
         },
-        "phase_summary": {
-            "Phase_B_JY4_count": order_payload["computed"],
-            "Phase_C_hyperflex_count": hyper_payload["computed"],
-            "Phase_D_T_canonical": halve_payload["T_repr"],
-            "Phase_D_D_L_canonical": halve_payload["D_L_repr"],
-            "Phase_E_f_L_description": div_fL.get("f_L_description"),
-            "Phase_E_div_check_verdict": div_fL.get("div_check_verdict"),
-        },
-        "closure_grade": closure_grade,
-        "closure_grade_reason": closure_reason,
         "blockers": blockers,
         "audit_replay": {
             "hard_wall_audit_present": audit is not None,
@@ -730,9 +643,9 @@ def main() -> int:
             else audit.get("certificate_sha256"),
         },
         "next_subtarget": (
-            "Materialize the abstract outside-2H D_L lattice coordinate as a "
-            "concrete K1Divisor, then extract a numerator/denominator rational "
-            "function f_L and verify div(f_L)=4D_L."
+            "Implement a real non-hyperelliptic genus-3 plane-quartic reducer "
+            "(Khuri-Makdisi K1/K2 or Volcheck/flex-secant) over F_11^4, then "
+            "use it to solve 2D=T outside 2H and construct f_L with div(f_L)=4D."
         ),
         "certificate_sha256": "",
     }
