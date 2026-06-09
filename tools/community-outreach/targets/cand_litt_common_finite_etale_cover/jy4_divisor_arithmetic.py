@@ -377,6 +377,11 @@ class HomogPoly:
             vec[index[exp]] = coeff
         return tuple(vec)
 
+    def reduce_fermat(self) -> "HomogPoly":
+        """Return the canonical representative modulo X^4 + Y^4 + Z^4."""
+
+        return HomogPoly(self.degree, dict(self.terms))
+
     def __add__(self, other: object) -> "HomogPoly":
         rhs = other if isinstance(other, HomogPoly) else HomogPoly(self.degree, {})
         if not isinstance(rhs, HomogPoly):
@@ -559,6 +564,41 @@ def vanishing_subspace(points: Sequence[Point], degree: int) -> Subspace:
     return Subspace(nullspace(equations, ambient), ambient)
 
 
+def _degree_from_ambient_dim(ambient_dim: int) -> int:
+    for degree in range(max(0, ambient_dim + 1)):
+        if h0_dimension(degree) == ambient_dim:
+            return degree
+    raise ValueError(f"ambient dimension {ambient_dim} is not a Fermat-quartic H0 dimension")
+
+
+def multiply_subspaces(W_A: Subspace, W_B: Subspace, target_degree: int) -> Subspace:
+    degree_a = _degree_from_ambient_dim(W_A.ambient_dim)
+    degree_b = _degree_from_ambient_dim(W_B.ambient_dim)
+    if degree_a + degree_b != target_degree:
+        raise ValueError(
+            "target_degree must equal the sum of the source homogeneous degrees "
+            f"({degree_a} + {degree_b} != {target_degree})"
+        )
+
+    target_ambient = h0_dimension(target_degree)
+    product_rows: list[Vector] = []
+    for row_a in W_A.rows:
+        poly_a = HomogPoly.from_vector(degree_a, row_a)
+        for row_b in W_B.rows:
+            poly_b = HomogPoly.from_vector(degree_b, row_b)
+            product_rows.append((poly_a * poly_b).reduce_fermat().to_vector())
+    return Subspace(product_rows, target_ambient)
+
+
+KM_STEP_2_BLOCKER = (
+    "KM step 2 blocker: ideal quotient (W_prod : H⁰(O_Y((n₁+n₂)·D₀))) — "
+    "division step to extract effective divisor support"
+)
+KM_STEP_3_BLOCKER = (
+    "KM step 3 blocker: saturation + reduction back to canonical degree-4 representative"
+)
+
+
 @dataclass(frozen=True)
 class K1Divisor:
     """Partial Khuri-Makdisi K1 divisor-class representation.
@@ -577,6 +617,14 @@ class K1Divisor:
     support: tuple[Point, ...] = ()
     d0: int = 8
     section_degree: int = 4
+
+    @property
+    def W_E(self) -> Subspace:
+        return self.W
+
+    @property
+    def degree(self) -> int:
+        return self.section_degree
 
     @classmethod
     def zero(cls) -> "K1Divisor":
@@ -601,13 +649,17 @@ class K1Divisor:
     def add(self, other: "K1Divisor") -> "K1Divisor":
         if not isinstance(other, K1Divisor):
             return NotImplemented  # type: ignore[return-value]
-        common = self.W.intersection(other.W)
+        W_prod = multiply_subspaces(
+            self.W_E,
+            other.W_E,
+            target_degree=self.degree + other.degree,
+        )
         raise ArithmeticBlocker(
-            "k1/add_divide_reduce",
+            "k1/add_km_steps_2_3_blocked",
             (
-                "computed W_E1 intersection W_E2 of dimension "
-                f"{common.dimension}, but KM multiplication/division saturation "
-                "and reduction back to a degree-8 representative is not implemented"
+                "computed W_prod = W_E1 * W_E2 in "
+                f"H^0(O_Y({self.degree + other.degree})) with dimension "
+                f"{W_prod.dimension}; {KM_STEP_2_BLOCKER}; {KM_STEP_3_BLOCKER}"
             ),
         )
 

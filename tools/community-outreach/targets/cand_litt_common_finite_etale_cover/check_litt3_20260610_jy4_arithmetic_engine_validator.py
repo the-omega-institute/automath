@@ -77,6 +77,54 @@ def curve_smoothness_test() -> tuple[str, dict[str, Any]]:
     }
 
 
+def k1_subspace_multiplication() -> tuple[str, dict[str, Any]]:
+    ambient4 = jy.h0_dimension(4)
+    ambient8 = jy.h0_dimension(8)
+    basis4 = [
+        tuple(jy.ONE if i == j else jy.ZERO for j in range(ambient4))
+        for i in range(ambient4)
+    ]
+    W_A = jy.Subspace(basis4[:3], ambient4)
+    W_B = jy.Subspace(basis4[-3:], ambient4)
+
+    W_prod = jy.multiply_subspaces(W_A, W_B, target_degree=8)
+    valid_subspace = isinstance(W_prod, jy.Subspace) and W_prod.ambient_dim == ambient8
+    dimension_bounded = W_prod.dimension <= ambient8
+    nontrivial_product = W_prod.dimension >= 1
+
+    zero_product = jy.multiply_subspaces(jy.Subspace.zero(ambient4), W_B, target_degree=8)
+    zero_bilinear = zero_product.dimension == 0 and zero_product.ambient_dim == ambient8
+
+    poly_a0 = jy.HomogPoly.from_vector(4, W_A.rows[0])
+    poly_b0 = jy.HomogPoly.from_vector(4, W_B.rows[0])
+    witness_vector = (poly_a0 * poly_b0).reduce_fermat().to_vector()
+    witness_contained = W_prod.contains(witness_vector)
+
+    passed = (
+        valid_subspace
+        and dimension_bounded
+        and nontrivial_product
+        and zero_bilinear
+        and witness_contained
+    )
+    return status(passed), {
+        "summary": (
+            f"{status(passed)}: dim W_A={W_A.dimension}, dim W_B={W_B.dimension}, "
+            f"dim W_prod={W_prod.dimension}, ambient_degree_8={ambient8}"
+        ),
+        "ambient_degree_4": ambient4,
+        "ambient_degree_8": ambient8,
+        "dim_W_A": W_A.dimension,
+        "dim_W_B": W_B.dimension,
+        "dim_W_prod": W_prod.dimension,
+        "valid_subspace": valid_subspace,
+        "dimension_bounded": dimension_bounded,
+        "nontrivial_product": nontrivial_product,
+        "zero_bilinear": zero_bilinear,
+        "witness_contained": witness_contained,
+    }
+
+
 def divisor_group_law_test() -> tuple[str, dict[str, Any], list[str]]:
     blockers: list[str] = []
     base_points = jy.base_divisor_points()
@@ -221,6 +269,7 @@ def main() -> int:
 
     field_status, field_detail = field_arithmetic_test()
     curve_status, curve_detail = curve_smoothness_test()
+    k1_mult_status, k1_mult_detail = k1_subspace_multiplication()
     add_status, add_detail, add_blockers = divisor_group_law_test()
     blockers.extend(add_blockers)
     legacy_blocker = legacy_reduced_divisor_blocker_test()
@@ -261,6 +310,8 @@ def main() -> int:
             "field_arith_detail": field_detail,
             "curve_smooth": curve_status,
             "curve_smooth_detail": curve_detail,
+            "k1_subspace_multiplication": k1_mult_status,
+            "k1_subspace_multiplication_detail": k1_mult_detail,
             "add_associative": add_status,
             "add_associative_detail": add_detail,
             "legacy_ReducedDivisor_nontrivial_class": legacy_blocker,
