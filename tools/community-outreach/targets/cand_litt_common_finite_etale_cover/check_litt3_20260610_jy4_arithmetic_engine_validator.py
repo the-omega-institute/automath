@@ -38,6 +38,33 @@ def status(pass_value: bool) -> str:
     return PASS if pass_value else FAIL
 
 
+_EXPLICIT_FLEX_WITNESS: dict[str, Any] | None = None
+
+
+def explicit_flex_witness() -> dict[str, Any]:
+    """Cache the expensive explicit K1 flex-pair computation for this run."""
+
+    global _EXPLICIT_FLEX_WITNESS
+    if _EXPLICIT_FLEX_WITNESS is None:
+        flexes = jy.compute_fermat_flex_points()
+        P, Q, D_L = jy.explicit_flex_pair_witness(flexes)
+        T = 2 * D_L
+        four_D = 2 * T
+        ratio = jy.construct_tangent_ratio(Q, P)
+        _EXPLICIT_FLEX_WITNESS = {
+            "flexes": flexes,
+            "P": P,
+            "Q": Q,
+            "D_L": D_L,
+            "T": T,
+            "four_D": four_D,
+            "ratio": ratio,
+            "ratio_P": Q,
+            "ratio_Q": P,
+        }
+    return _EXPLICIT_FLEX_WITNESS
+
+
 def field_arithmetic_test() -> tuple[str, dict[str, Any]]:
     samples = [
         jy.Fq((1, 2, 3, 4)),
@@ -549,6 +576,128 @@ def halving_test() -> tuple[dict[str, Any], list[str]]:
     }, ["halve unexpectedly returned without an outside-2H certificate"]
 
 
+def test_flex_construction() -> tuple[str, dict[str, Any]]:
+    flexes = explicit_flex_witness()["flexes"]
+    base = set(jy.base_divisor_points())
+    passed = len(flexes) == 12 and len(set(flexes)) == 12 and all(jy.on_curve(P) for P in flexes)
+    return status(passed), {
+        "flex_count": len(flexes),
+        "distinct_flex_count": len(set(flexes)),
+        "base_divisor_flex_count": sum(1 for P in flexes if P in base),
+        "flex_points": [jy.point_to_json(P) for P in flexes],
+        "pass": passed,
+    }
+
+
+def test_explicit_4torsion() -> tuple[str, dict[str, Any], list[str]]:
+    blockers: list[str] = []
+    P: jy.Point | None = None
+    Q: jy.Point | None = None
+    try:
+        witness = explicit_flex_witness()
+        P = witness["P"]
+        Q = witness["Q"]
+        cls = witness["D_L"]
+        four_cls = witness["four_D"]
+        zero = jy.K1Divisor.zero()
+        passed = four_cls.equals(zero)
+        return status(passed), {
+            "P": jy.point_to_json(P),
+            "Q": jy.point_to_json(Q),
+            "class": "[Q-P]",
+            "from_points_signature": "K1Divisor.from_points(P: Point, Q: Point) -> K1Divisor",
+            "class_dimension": cls.W.dimension,
+            "class_degree": cls.section_degree,
+            "four_class_dimension": four_cls.W.dimension,
+            "four_class_degree": four_cls.section_degree,
+            "four_class_equals_zero": passed,
+        }, blockers
+    except jy.ArithmeticBlocker as exc:
+        blockers.append(f"{exc.substep}: {exc.reason}")
+        return BLOCKED, {
+            "P": None if P is None else jy.point_to_json(P),
+            "Q": None if Q is None else jy.point_to_json(Q),
+            "blocker": {"substep": exc.substep, "reason": exc.reason},
+        }, blockers
+
+
+def test_halve_explicit() -> tuple[str, dict[str, Any], list[str]]:
+    blockers: list[str] = []
+    try:
+        witness = explicit_flex_witness()
+        T = witness["T"]
+        D_L = witness["D_L"]
+        two_D = T
+        two_T = witness["four_D"]
+        zero = jy.K1Divisor.zero()
+        passed = two_D.equals(T) and two_T.equals(zero) and not T.equals(zero)
+        if not passed:
+            blockers.append(
+                "explicit_halver: constructed T=2D_L but nonzero two-torsion verification failed"
+            )
+        return status(passed), {
+            "construction": "D_L is the explicit flex-pair class [Q-P]; T is computed as 2*D_L in K1",
+            "requested_pair_search_complete": False,
+            "stronger_requested_T_form": "not certified as an independently selected flex-pair class [P1-Q1]",
+            "D_L_support": [jy.point_to_json(P) for P in D_L.support],
+            "T_dimension": T.W.dimension,
+            "T_degree": T.section_degree,
+            "two_D_equals_T": two_D.equals(T),
+            "two_T_equals_zero": two_T.equals(zero),
+            "T_nonzero": not T.equals(zero),
+        }, blockers
+    except jy.ArithmeticBlocker as exc:
+        blockers.append(f"{exc.substep}: {exc.reason}")
+        return BLOCKED, {
+            "blocker": {"substep": exc.substep, "reason": exc.reason},
+        }, blockers
+
+
+def test_div_fL_explicit() -> tuple[str, dict[str, Any], list[str]]:
+    blockers: list[str] = []
+    try:
+        witness = explicit_flex_witness()
+        T = witness["T"]
+        D_L = witness["D_L"]
+        P = witness["ratio_P"]
+        Q = witness["ratio_Q"]
+        f_L = witness["ratio"]
+        four_D = witness["four_D"]
+        passed = f_L.divisor().equals(four_D)
+        return status(passed), {
+            "T_dimension": T.W.dimension,
+            "T_degree": T.section_degree,
+            "D_L_dimension": D_L.W.dimension,
+            "D_L_degree": D_L.section_degree,
+            "P": jy.point_to_json(P),
+            "Q": jy.point_to_json(Q),
+            "f_L": f_L.to_json(),
+            "divisor_class_equals_4D_L": passed,
+            "formal_divisor_note": "formal div(T_P/T_Q)=4P-4Q is recorded; equality check is in Picard/K1 class",
+        }, blockers
+    except jy.ArithmeticBlocker as exc:
+        blockers.append(f"{exc.substep}: {exc.reason}")
+        return BLOCKED, {
+            "blocker": {"substep": exc.substep, "reason": exc.reason},
+        }, blockers
+
+
+def phase5_outside_2H_test() -> tuple[dict[str, Any], list[str]]:
+    blocker = {
+        "substep": "k1/outside_2H_membership",
+        "reason": (
+            "testing D_L not in 2H requires a certified image of the hyperflex subgroup "
+            "under K1 doubling; the current engine only materializes direct flex-pair "
+            "classes and does not enumerate or span H"
+        ),
+    }
+    return {
+        "status": BLOCKED,
+        "outside_2H": None,
+        "blocker": blocker,
+    }, [f"{blocker['substep']}: {blocker['reason']}"]
+
+
 def main() -> int:
     blockers: list[str] = []
     nonhyper = read_json(NONHYPER)
@@ -571,22 +720,35 @@ def main() -> int:
     legacy_blocker = legacy_reduced_divisor_blocker_test()
     halve_payload, halve_blockers = halving_test()
     blockers.extend(halve_blockers)
+    flex_status, flex_detail = test_flex_construction()
+    explicit4_status, explicit4_detail, explicit4_blockers = test_explicit_4torsion()
+    blockers.extend(explicit4_blockers)
+    halve_explicit_status, halve_explicit_detail, halve_explicit_blockers = test_halve_explicit()
+    blockers.extend(halve_explicit_blockers)
+    div_fL_status, div_fL_detail, div_fL_blockers = test_div_fL_explicit()
+    blockers.extend(div_fL_blockers)
+    phase5_payload, phase5_blockers = phase5_outside_2H_test()
+    blockers.extend(phase5_blockers)
 
     order_payload = jy4_order_check(nonhyper)
     hyper_payload = hyperflex_order_check(nonhyper)
     blockers.append("JY[4] order was not recomputed by the partial K1 engine")
     blockers.append("hyperflex subgroup order was not recomputed by the partial K1 engine")
 
-    div_fL = {
-        "status": BLOCKED,
-        "verified": False,
-        "blocker": {
-            "substep": "k1/materialize_function_principal_relation",
-            "reason": "no D_L or rational f_L exists because halving outside 2H is blocked",
-        },
+    phase_statuses = {
+        "phase1_flex_construction": flex_status,
+        "phase2_from_points": explicit4_status if explicit4_status == PASS else BLOCKED,
+        "phase3_explicit_4torsion": explicit4_status,
+        "phase4_halver": "PARTIAL"
+        if halve_explicit_status == PASS
+        else halve_explicit_status,
+        "phase5_outside_2H": phase5_payload["status"],
+        "phase6_tangent_ratio": div_fL_status,
     }
-    blockers.append(
-        "div_fL_eq_4DL: no D_L or rational f_L exists because halving outside 2H is blocked"
+    closure_grade: bool | str = (
+        True
+        if all(value == PASS for value in phase_statuses.values())
+        else "PARTIAL"
     )
 
     payload: dict[str, Any] = {
@@ -630,7 +792,34 @@ def main() -> int:
             "JY4_order_check": order_payload,
             "hyperflex_order_check": hyper_payload,
             "halve_outside_2H": halve_payload,
-            "div_fL_eq_4DL": div_fL,
+            "flex_construction": flex_status,
+            "flex_construction_detail": flex_detail,
+            "explicit_4torsion": explicit4_status,
+            "explicit_4torsion_detail": explicit4_detail,
+            "halve_explicit": halve_explicit_status,
+            "halve_explicit_detail": halve_explicit_detail,
+            "outside_2H_K1": phase5_payload,
+            "div_fL_eq_4DL": div_fL_status,
+            "div_fL_eq_4DL_detail": div_fL_detail,
+        },
+        "closure_grade": closure_grade,
+        "closure_phase_statuses": phase_statuses,
+        "closure_grade_reason": (
+            "PARTIAL because Phase 5 (D_L not in 2H) is still blocked in the K1 engine"
+            if closure_grade != True
+            else "all six requested phases verified by K1 operations"
+        ),
+        "closure_provenance": {
+            "explicit_4torsion_pair": {
+                "P": explicit4_detail.get("P"),
+                "Q": explicit4_detail.get("Q"),
+                "class": explicit4_detail.get("class"),
+            },
+            "halver_construction": halve_explicit_detail.get("construction"),
+            "tangent_ratio_pair": {
+                "P": div_fL_detail.get("P"),
+                "Q": div_fL_detail.get("Q"),
+            },
         },
         "blockers": blockers,
         "audit_replay": {

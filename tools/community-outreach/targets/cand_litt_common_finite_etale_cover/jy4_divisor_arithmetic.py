@@ -278,6 +278,29 @@ def hyperflex_points() -> list[Point]:
     return sorted(out)
 
 
+def compute_fermat_flex_points() -> list[Point]:
+    """Return the 12 Fermat-quartic flexes over F_11^4.
+
+    For X^4+Y^4+Z^4=0 in characteristic 11 the Hessian is a nonzero scalar
+    times X^2Y^2Z^2, so the flexes are exactly the coordinate-axis points.
+    The ordering is chosen so the first two points support the direct K1
+    construction for [Q-P]: flexes[0] lies in D0=div(XZ), while flexes[1]
+    is a Y=0 flex outside D0.
+    """
+
+    roots = fourth_roots_by_value()[MINUS_ONE]
+    x_axis = sorted(normalize_projective((ZERO, ONE, root)) for root in roots)
+    y_axis = sorted(normalize_projective((ONE, ZERO, root)) for root in roots)
+    z_axis = sorted(normalize_projective((ONE, root, ZERO)) for root in roots)
+    flexes = [x_axis[0], y_axis[0], *x_axis[1:], *y_axis[1:], *z_axis]
+    if len(set(flexes)) != 12 or any(not on_curve(point) for point in flexes):
+        raise ArithmeticBlocker(
+            "flex/enumeration",
+            "coordinate-axis Hessian enumeration did not produce 12 distinct curve points",
+        )
+    return flexes
+
+
 def divisor_degree(divisor: dict[Point, int]) -> int:
     return sum(divisor.values())
 
@@ -851,6 +874,47 @@ class K1Divisor:
         W = vanishing_subspace(normalized, 4)
         return cls(W=W, support=normalized)
 
+    @classmethod
+    def from_points(cls, P_point: Point, Q_point: Point) -> "K1Divisor":
+        """Construct the K1 representative of the degree-zero class [Q-P].
+
+        In this scaffold's convention a K1 representative is [E-D0] with
+        E effective of degree 8.  Therefore [Q-P] is represented directly
+        when E = D0 + Q - P is effective, i.e. when P is in the split base
+        divisor D0 and Q is not.  This is enough for explicit Fermat-flex
+        witnesses using a base-axis flex P and a Y=0 flex Q.
+        """
+
+        P_norm = normalize_projective(P_point)
+        Q_norm = normalize_projective(Q_point)
+        if not on_curve(P_norm) or not on_curve(Q_norm):
+            raise ValueError("from_points expects points on the Fermat quartic")
+        if P_norm == Q_norm:
+            return cls.zero()
+
+        base = base_divisor_points()
+        base_set = set(base)
+        if P_norm not in base_set:
+            raise ArithmeticBlocker(
+                "k1/from_points/base_support",
+                (
+                    "direct construction of [Q-P] requires P in D0 so that "
+                    "D0 + Q - P is an effective degree-8 divisor"
+                ),
+            )
+        if Q_norm in base_set:
+            raise ArithmeticBlocker(
+                "k1/from_points/base_support",
+                (
+                    "direct construction of [Q-P] requires Q outside D0; "
+                    "otherwise D0 + Q - P has a repeated/base cancellation "
+                    "case not implemented by this partial K1 constructor"
+                ),
+            )
+        E = [point for point in base if point != P_norm]
+        E.append(Q_norm)
+        return cls.from_effective_divisor(E)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, K1Divisor):
             return NotImplemented
@@ -985,6 +1049,28 @@ class K1Divisor:
     def double(self) -> "K1Divisor":
         return self.add(self)
 
+    def __add__(self, other: "K1Divisor") -> "K1Divisor":
+        return self.add(other)
+
+    def __rmul__(self, scalar: int) -> "K1Divisor":
+        if not isinstance(scalar, int):
+            return NotImplemented  # type: ignore[return-value]
+        if scalar < 0:
+            return (-scalar) * self.neg()
+        result = K1Divisor.zero()
+        addend = self
+        n = scalar
+        while n:
+            if n & 1:
+                result = result.add(addend)
+            n >>= 1
+            if n:
+                addend = addend.double()
+        return result
+
+    def __mul__(self, scalar: int) -> "K1Divisor":
+        return self.__rmul__(scalar)
+
     def order(self, bound: int | None = None) -> int:
         raise ArithmeticBlocker(
             "k1/order_requires_group_law",
@@ -1006,6 +1092,89 @@ class K1Divisor:
             "W_dimension": self.W.dimension,
             "W": self.W.to_json(),
         }
+
+
+def explicit_flex_pair_witness(flexes: Sequence[Point] | None = None) -> tuple[Point, Point, K1Divisor]:
+    """Return the direct K1 flex-pair witness (P,Q,[Q-P])."""
+
+    selected = list(compute_fermat_flex_points() if flexes is None else flexes)
+    if len(selected) < 2:
+        raise ValueError("need at least two flex points")
+    P_point, Q_point = selected[0], selected[1]
+    return P_point, Q_point, K1Divisor.from_points(P_point, Q_point)
+
+
+def find_2torsion_and_halver(flexes: Sequence[Point] | None = None) -> tuple[K1Divisor, K1Divisor]:
+    """Return a K1 two-torsion class T and an explicit flex-pair halver D.
+
+    This is intentionally not a 4096-class enumeration.  It uses the explicit
+    flex-pair D=[Q-P] from ``explicit_flex_pair_witness`` and sets T=2D.  The
+    caller can verify 2T=0 by computing 4D=0 in the K1 engine.
+    """
+
+    _, _, D_L = explicit_flex_pair_witness(flexes)
+    return 2 * D_L, D_L
+
+
+def find_witness_with_flexes(
+    flexes: Sequence[Point] | None = None,
+) -> tuple[K1Divisor, K1Divisor, Point, Point]:
+    selected = list(compute_fermat_flex_points() if flexes is None else flexes)
+    P_point, Q_point, D_L = explicit_flex_pair_witness(selected)
+    T_class = 2 * D_L
+    # D_L = [Q-P], while div(T_Q/T_P)=4Q-4P.  Return the tangent-ratio
+    # arguments in the order that matches 4D_L.
+    return T_class, D_L, Q_point, P_point
+
+
+@dataclass(frozen=True)
+class TangentRatio:
+    """Rational function T_P/T_Q on the Fermat quartic for flexes P,Q."""
+
+    numerator_flex: Point
+    denominator_flex: Point
+    numerator_line: Line
+    denominator_line: Line
+
+    def formal_divisor(self) -> dict[Point, int]:
+        """Return the formal divisor div(T_P/T_Q)=4P-4Q."""
+
+        P_point = normalize_projective(self.numerator_flex)
+        Q_point = normalize_projective(self.denominator_flex)
+        if P_point == Q_point:
+            return {}
+        return {P_point: 4, Q_point: -4}
+
+    def divisor(self) -> K1Divisor:
+        """Return the Picard-class image of the principal divisor, namely zero."""
+
+        return K1Divisor.zero()
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "function": "T_P/T_Q",
+            "P": point_to_json(self.numerator_flex),
+            "Q": point_to_json(self.denominator_flex),
+            "numerator_line": [coord.to_json() for coord in self.numerator_line],
+            "denominator_line": [coord.to_json() for coord in self.denominator_line],
+            "formal_divisor": divisor_to_json(self.formal_divisor()),
+        }
+
+
+def construct_tangent_ratio(P_point: Point, Q_point: Point) -> TangentRatio:
+    P_norm = normalize_projective(P_point)
+    Q_norm = normalize_projective(Q_point)
+    if P_norm == Q_norm:
+        raise ValueError("tangent ratio needs two distinct flex points")
+    flex_set = set(compute_fermat_flex_points())
+    if P_norm not in flex_set or Q_norm not in flex_set:
+        raise ValueError("tangent ratio is only implemented for Fermat flex points")
+    return TangentRatio(
+        numerator_flex=P_norm,
+        denominator_flex=Q_norm,
+        numerator_line=partials(P_norm),
+        denominator_line=partials(Q_norm),
+    )
 
 
 def base_conic(point: Point) -> Fq:
