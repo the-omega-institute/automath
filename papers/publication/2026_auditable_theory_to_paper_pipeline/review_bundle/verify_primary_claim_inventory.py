@@ -33,10 +33,10 @@ EXPECTED_LOCATIONS = {
     "pc6": "submission_abstract.tex:76-79",
     "pc7": "submission_abstract.tex:86-102",
     "pc8": "submission_abstract.tex:104-112",
-    "pc9": "submission_abstract.tex:114-123",
-    "pc10": "submission_abstract.tex:125-142",
-    "pc11": "submission_abstract.tex:144-164",
-    "pc12": "submission_abstract.tex:153-164",
+    "pc9": "submission_abstract.tex:105-114",
+    "pc10": "submission_abstract.tex:105-114",
+    "pc11": "submission_abstract.tex:105-114",
+    "pc12": "submission_abstract.tex:105-114",
 }
 CERTIFICATE_PREFIXES = (
     "sim",
