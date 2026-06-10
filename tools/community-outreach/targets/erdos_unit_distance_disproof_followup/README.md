@@ -36,3 +36,30 @@ Future verification stages should tackle the parts outside this standard-library
 - complex embedding choices and numerical stability;
 - n-point unit-distance counting for the resulting configurations.
 
+## Stage-2 SymPy CM-extension slice
+
+The checker `check_2605_20695_LT_CM_extension_stage2_sympy.py` extends the
+finite-computation artifact with SymPy 1.14.0:
+
+- It constructs the generators of `L_T` in SymPy and certifies `[L_T:Q] = 32`
+  by the same exact square-class rank computation used in Stage-1.  Direct
+  full minimal-polynomial computation for the 32-degree primitive element is
+  avoided because it is unnecessarily slow in bare SymPy; the script records
+  smaller prefix minimal-polynomial checks as a sanity check.
+- For each `d in {3, 5, 7, 11, 13, 17}`, it treats
+  `K_d = L_T(sqrt(-d))` as a multiquadratic CM extension and certifies
+  `[K_d:Q] = 64`.  The script records the elementary reason that
+  `Q(sqrt(-d)) cap L_T = Q`: every subfield of the totally real field `L_T`
+  is totally real, while `Q(sqrt(-d))` is imaginary quadratic.
+- For the canonical choice `d = 3`, it builds an explicit finite set `S` on
+  the unit circle under `sqrt(-3) -> +i*sqrt(3)`: the six sixth roots of unity
+  plus small exact norm-one elements `(a+b*sqrt(-3))/(a-b*sqrt(-3))` in the
+  CM subfield `Q(sqrt(-3))`.
+- The generated JSON
+  `check_2605_20695_LT_CM_extension_stage2_sympy_output.json` records
+  `S_size = 40` and `unit_distance_pairs = 15` for this first slice.
+
+This Stage-2 output is still deliberately modest.  It is a constructive
+finite sanity check for the CM layer and exact unit-distance counting, not an
+asymptotic verification of the paper's exponent or a construction of
+genuinely `L_T`-dependent ring-of-integers norm-one elements.
