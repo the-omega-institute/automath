@@ -10931,15 +10931,13 @@ Let $S$ be a source-package state in which the accepted bytes of
 \path{review_bundle/current_package_pass_records.json}, and
 \path{review_bundle/certificate_schema.json} are fixed.  Suppose that, after
 those inventory bytes are fixed, the following command-result records are
-written with exit code \path{0} against the same source state:
-\[
-\begin{gathered}
-\path{python review_bundle/extract_theorem_environments.py},\quad
-\path{python review_bundle/verify_certificate_records.py},\\
-\path{python review_bundle/verify_source_interface_record.py},\quad
+written with exit code \path{0} against the same source state: the theorem
+extractor \path{python review_bundle/extract_theorem_environments.py}, the
+certificate verifier \path{python review_bundle/verify_certificate_records.py},
+the source-interface verifier
+\path{python review_bundle/verify_source_interface_record.py}, and the
+primary-claim verifier
 \path{python review_bundle/verify_primary_claim_inventory.py}.
-\end{gathered}
-\]
 Assume further that \path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated
 only after those command logs and \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json}
 are in their selected final bytes.  Then $S$ contains a single closed local
@@ -10953,6 +10951,10 @@ concrete gate-implementation soundness claim, fresh Lean/BEDC rebuild or
 axiom-purity claim, daemon-execution claim, or dynamic artifact-semantic
 validation claim unless the corresponding separate upgrade coordinate named in
 Theorem~\ref{thm:current-package-no-free-upgrade-closure} is also supplied.
+Moreover this local coordinate is inclusion-minimal for post-inventory freshness:
+deleting the accepted inventory byte pair, any one of the four zero-exit logs,
+the selected manifest bytes, or the final digest rows leaves a proper subrecord
+from which the current local fixed-point conclusion is not determined.
 \end{proposition}
 
 \begin{proof}
@@ -10992,6 +10994,21 @@ fields.  By Theorem~\ref{thm:finite-coordinate-determination-boundary}, no local
 digest or finite-record verifier row determines such a stronger field.  Hence the
 closed coordinate is exactly local and post-inventory, and every stronger reading
 requires its separate finite upgrade coordinate.
+
+It remains to check minimality.  If the inventory byte pair is deleted, two
+states may have the same logs and digest table format while one log was produced
+against a different inventory; the theorem-obligation coverage predicate for the
+accepted inventory is then not determined.  If the extractor log is deleted, the
+remaining rows do not determine that every in-domain theorem-like source label is
+present in the inventory.  If the certificate, source-interface, or primary-claim
+verifier log is deleted, the remaining rows do not determine the corresponding
+finite row-shape, bounded source-interface, or primary-support predicate.  If the
+manifest bytes are deleted, the support surface named by the digest rows is not
+fixed.  If the final digest rows are deleted, the selected files are no longer
+byte-bound as a single final support surface.  In each case one can change only
+the deleted field and keep all remaining fields equal while changing the
+post-inventory freshness predicate.  Therefore no proper subrecord determines the
+local fixed point, proving inclusion-minimality.
 \end{proof}
 
 \begin{theorem}[Finite-record current-package no-free-upgrade closure]
