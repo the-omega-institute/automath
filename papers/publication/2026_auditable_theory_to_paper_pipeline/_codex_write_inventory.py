@@ -1,0 +1,132 @@
+﻿import json, pathlib, hashlib
+records=json.loads(pathlib.Path('_codex_current_envs.json').read_text(encoding='utf-8'))
+
+def row(label, location, reason, required_action, **extra):
+    out={"label":label,"location":location,"reason":reason,"required_action":required_action}
+    out.update(extra)
+    return out
+
+def splitrow(label, location, reason, action, title, contrib, mismatch, rationale, needed):
+    return row(label, location, reason, action, candidate_title=title, source_contribution=contrib, scope_mismatch=mismatch, independent_paper_rationale=rationale, needed_to_split=needed)
+
+# current observed hashes used for freshness findings
+main_hash=hashlib.sha256(pathlib.Path('main.tex').read_bytes()).hexdigest()
+
+obj={
+"valid": True,
+"in_scope_present": [
+row("prop:final-package-shape-convention; thm:nested-package-states","main.tex:177; main.tex:220","Fix package shape and six-row/seven-row acceptance states for the presentation-route certificate calculus.","Keep as front-of-supplement scope anchors and match final bundle bytes."),
+row("def:architecture-axis-map; prop:architecture-axis-non-escalation; thm:presentation-compressed-interface","main.tex:285; main.tex:324; main.tex:368","Defines the five separated evidence axes and the compressed presentation-route interface.","Keep as the primary conceptual contribution and cite from the short article."),
+row("lem:source-interface-extraction-correctness; prop:manual-source-interface-non-escalation; prop:reviewable-source-snapshot-interface; prop:source-interface-record-file-consistency","main.tex:598; main.tex:637; main.tex:680; main.tex:710","Provides bounded BEDC/newmath source-interface rows with path, snapshot, JSON, and executable comparison support.","Keep with non-escalation wording: not semantic BEDC truth or a fresh rebuild."),
+row("thm:bounded-source-interface-maximality; cor:downstream-imported-label-bounded-factorization; thm:public-source-reachability-non-escalation; cor:public-source-coordinate-exactness; thm:source-interface-semantic-completeness-obstruction; prop:source-interface-evidence-level-separation","main.tex:777-1042","Closes the imported-source boundary and prevents public reachability or labels from becoming proof semantics.","Keep as core safeguards for the Lean/BEDC boundary."),
+row("def:operational-acceptance-interface; def:record-gate-soundness-external-interface; prop:record-gate-soundness-external-interface-exactness; def:stronger-reading-preorder; def:certificate-schema-acceptance-table","main.tex:1145-1464","Defines finite operational acceptance, external record-gate soundness, stronger readings, and the certificate schema.","Keep as load-bearing definitions; distinguish assumptions from checked records."),
+row("prop:finite-certificate-schema-verifier through cor:executable-schema-exactness-negative-fixture","main.tex:1466-1886","Builds the finite schema-verifier interface and negative-fixture boundary for executable record checks.","Keep as verifier spine; do not claim proof checking or implementation soundness."),
+row("thm:finite-coordinate-determination-boundary through thm:executable-certificate-construction-invariant","main.tex:1908-2362","Establishes finite-coordinate rigidity and the warning that executable record acceptance is not implementation correctness.","Keep as core safety machinery."),
+row("prop:claim-kind-dispatch through thm:six-coordinate-gate-implementation-soundness-skeleton","main.tex:2406-2701","Classifies claim kinds, mixed-claim failures, and the finite-script projection boundary for gate claims.","Keep, but qualify concrete finite-script support as projection-contract support."),
+row("thm:finite-certificate-obstruction-skeleton through prop:publication-safety-minimal-bad-record-witness","main.tex:2744-3245","Supplies bad-subrecord obstructions, extension-budget normal form, and human-promotion versus daemon-track separation.","Keep as the negative-control layer required by scope."),
+row("thm:publication-safety-interface","main.tex:3273","Central conditional finite-record publication audit theorem under acceptance-entry, record-gate-soundness, discovery-certificate, and promotion/verifier-boundary hypotheses.","Keep as the main theorem and state it as conditional finite-record safety only."),
+row("thm:gate-implementation-soundness-upgrade-obstruction through cor:current-package-path-verified-instantiation","main.tex:3408-5400","Instantiates the publication-safety chain for current-package acceptance, ledger exactness, coordinate rigidity, and named positive coordinates.","Keep as supplement support; cite selectively in the presentation article."),
+row("lem:gate-witness-criterion; prop:path-complete-case-witnesses; prop:review-bundle-case-snapshot-coverage; thm:case-row-skeleton-normal-form; table:case-witnesses","main.tex:5443-5773","Provides four case-study rows with gate, witness surface, observed issue/decision, and safe lesson.","Keep; these satisfy the scope-contract case-study discipline."),
+row("audit:fresh-venue-record-criterion; audit:venue-submission-pack-gate; audit:submission-artifact-role-separation; cor:fresh-venue-coordinate-boundary; prop:no-automatic-venue-acceptance","main.tex:5828; main.tex:6055; main.tex:6126; main.tex:5782-6200","Controls venue and submission-pack claims without asserting acceptance or upload receipts.","Keep as route-governance boundary and refresh only when a real coordinate exists."),
+row("audit:review-bundle-archive-equivalence; audit:exact-bundle-or-final-digest; audit:exact-review-bundle-support-mode; thm:final-support-surface-closure; prop:final-immutable-package-state-certificate; thm:workspace-final-package-reconciliation; prop:mutable-checkout-observation-boundary","main.tex:7075-7580","Defines exact bundle/archive equivalence, immutable package-state certificates, and mutable-checkout non-certification.","Keep as bridge between local records and reviewer-facing support."),
+row("primary/supplement and support-boundary chain","main.tex:5778-9108","Covers primary/supplement interface, theorem-obligation ledger integration, case non-rerun boundaries, and finite-row case evidence closure.","Keep as technical support; compress in the presentation article."),
+row("audit:command-run-boundary-inventory through cor:presentation-summary-non-escalation","main.tex:9158-9789","Classifies command-run claims and five presentation-package weak points without upgrading to end-to-end correctness.","Keep as no-free-upgrade support."),
+row("thm:submission-support-fixed-point-normal-form through cor:presentation-route-support-coordinate-normal-form","main.tex:9827-11377","States post-inventory fixed point, current inventory realization, command-result closure, four-coordinate skeleton, terminal closure, and Stage-A2 normal form.","Keep only after rerunning post-inventory logs and digests for the accepted inventory bytes."),
+row("submission_abstract methodological spine","submission_abstract.tex:29","Primary article states generated material is not evidence until it has a typed record and gate, with five separated axes.","Keep as the presentation artifact and cite supplement/review bundle consistently.")
+],
+"missing_in_scope_results": [
+row("missing:post-inventory-rerun-after-current-inventory-bytes","theorem_inventory.json; theorem_inventory.md; review_bundle/theorem_environment_extraction_run.log","Terminal fixed-point results require inventory bytes before extractor/verifier reruns and final digest regeneration; the files were absent at review start and existing logs are tied to older source hashes.","After accepting this inventory, rerun extractor and retained verifiers, then regenerate FINAL_DIGESTS_SHA256.md and manifest/log source-state rows."),
+row("missing:external-support-coordinate","main.tex:10588; main.tex:11359","No exact supplemental upload, DOI, venue receipt, archive replacement, or byte-equality public locator is instantiated.","Keep support claims local/path-verified or add exact external byte-equality support."),
+row("missing:fresh-formal-source-rebuild-and-axiom-audit","main.tex:968; main.tex:1026; main.tex:11166; main.tex:11367","The article imports BEDC/newmath only as bounded source-interface rows and lacks fresh Lean/BEDC rebuild, marker-resolution, or axiom-purity audit records.","Keep as a negative boundary; do not phrase imported labels as semantic theorem truth."),
+row("missing:gate-implementation-soundness-instantiation","main.tex:1326; main.tex:2070; main.tex:3408; main.tex:11363","Record-gate soundness is an explicit external/interface hypothesis, not a proved full correctness theorem for actual gate programs.","Keep the main theorem conditional or add per-gate implementation coordinates."),
+row("missing:dynamic-artifact-validation-rerun","main.tex:5572-5771; main.tex:11367","Rule110/GroundCompiler and artifact rows are historical/path-verified limitation evidence, not fresh dynamic validation.","Keep limitation-gate wording; dynamic artifact claims need full command/evaluator records.")
+],
+"weak_in_scope_core_results": [
+row("thm:publication-safety-interface","main.tex:3273","Appropriate only as a conditional finite-record interface theorem; too weak for end-to-end workflow correctness or proof-assistant/artifact semantics.","Title and state it as conditional finite-record audit under record-gate soundness."),
+row("thm:concrete-finite-script-implementation-soundness; cor:finite-script-rgs-instantiation-boundary","main.tex:2490; main.tex:2588","Verifies a finite projection-contract boundary, not all named gates' semantic implementations.","Use the projection-contract qualifier."),
+row("lem:source-interface-extraction-correctness","main.tex:598","Manual bounded extraction with line ranges and snapshot comparison, not exact semantic import of source theorems.","Retain as bounded source-interface evidence."),
+row("thm:current-package-certificate-exactness","main.tex:4816","Path-verified and ledger-relative; depends on support-file freshness, not mathematical proof semantics.","Keep as ledger-relative exactness and refresh logs."),
+row("thm:terminal-five-coordinate-closure; cor:presentation-route-support-coordinate-normal-form","main.tex:11074; main.tex:11348","Terminal closure needs the positive theorem-inventory coordinate regenerated after these inventory bytes.","Rerun post-inventory support sequence before treating it as current.")
+],
+"proof_gaps": [
+row("gap:stale-source-hashes-in-verifier-logs","review_bundle/theorem_environment_extraction_run.log; review_bundle/source_interface_verification_run.log",f"Logs record an older main.tex hash (8a29d2e...) while current main.tex hash is {main_hash}.","Rerun extractor/source-interface verifier after accepted inventory and update logs/digests."),
+row("gap:theorem-inventory-digest-self-reference","review_bundle/FINAL_DIGESTS_SHA256.md","The digest manifest lists theorem_inventory hashes from a prior/intended state although the inventory files were absent at review start.","Regenerate FINAL_DIGESTS_SHA256.md after writing this inventory and record the generation log."),
+row("gap:record-gate-soundness-is-assumed-not-proved","main.tex:1326; main.tex:3273","The main theorem assumes record-gate soundness; obstruction results do not prove concrete gate correctness.","Keep the assumption explicit and avoid unconditional workflow-soundness claims."),
+row("gap:manual-source-interface-extraction-trust","main.tex:598; source_interface_record.json","Record comparison checks the bounded snapshot interface but not semantic adequacy of the imported discovery-gate theorem spine.","State imported labels are finite source-interface rows only."),
+row("gap:external-support-not-instantiated","review_bundle/REVIEW_BUNDLE_MANIFEST.json:public_interface; main.tex:10588","A public automath branch/path is only a candidate archive-equivalent locator; no DOI/upload/public byte-equality fetch log is present.","Keep external support conditional or add a public byte-equality verification log."),
+row("gap:journal-live-verification-aging","review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log","Venue/bibliography check is dated 2026-06-09 and may age before submission.","Refresh immediately before submission."),
+row("gap:nonstandard-auditrecord-label-prefixes","main.tex:7075; main.tex:7439; main.tex:7555","Auditrecord environments carry audit/prop labels for compatibility and can confuse theorem inventories or readers.","Inventory them explicitly as audit records and avoid citing them as propositions unless boundary is stated."),
+row("gap:scope_contract_json_truncation","scope_contract.json:research_question","The research_question string appears truncated at the word artifact.","Repair in a separate scope-maintenance step if archival precision is needed.")
+],
+"supporting_appendix_or_background": [
+row("references:Lean, LeanDojo, Draft-Sketch-Prove, AFP mining","references.bib","Classical/background software and literature references for formal proving and AI-assisted proving context.","Cite as background and verify metadata before submission."),
+row("bedc-newmath-source","references.bib; review_bundle/source_snapshots/...tex","Pinned BEDC/newmath source supports imported source-interface rows but is not a complete BEDC exposition here.","Use as source-path evidence, not self-contained BEDC proof."),
+row("source snapshot definitions def:automated-discovery-*","review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:19-224","Imported definitions provide background source-interface vocabulary for certified states, records, transitions, claims, and gates.","Cite through source_interface_record.json and verification log."),
+row("source snapshot theorems thm:automated-discovery-* and prin:automated-discovery-principle","review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:238-485","Imported discovery-gate claims are earlier pipeline contributions used as bounded rows.","Do not present as newly proved in this paper."),
+row("review_bundle verifier scripts","review_bundle/verify_certificate_records.py; review_bundle/verify_primary_claim_inventory.py; review_bundle/verify_source_interface_record.py; review_bundle/extract_theorem_environments.py","Scripts support finite-record checks and inventory coverage only for source states named in logs.","Keep in bundle and rerun after final source edits."),
+row("case-snapshot bundle","review_bundle/case_snapshots/; review_bundle/REVIEW_BUNDLE_MANIFEST.json:case_evidence","Snapshots support path-verified historical lessons for the four case studies, not live reruns.","Keep with path-verified boundary.")
+],
+"out_of_scope_strong_results": [
+splitrow("out-of-scope:full-gate-implementation-soundness","main.tex:2070; main.tex:3408; main.tex:4471","Full concrete gate correctness is a stronger coordinate not supplied here.","Leave as explicit missing coordinate.","Verified Gate-Implementation Soundness for Auditable Theory-to-Paper Pipelines","Stage A isolated gate source, specification, input-output contract, execution log, digest binding, and pass-row evidence.","Current paper is a conditional finite-record interface theorem, not semantic gate-code verification.","A separate software-verification paper could connect gate code to the record-gate predicate.",["Formal gate specifications","Executable proof/test harness","Versioned corpora","Soundness theorem"]),
+splitrow("out-of-scope:fresh-BEDC-Lean-semantic-completeness","main.tex:968; main.tex:1026; main.tex:11166","Fresh Lean/BEDC rebuild, axiom-purity, marker resolution, and semantic completeness are excluded.","Keep excluded and cite only bounded source rows.","Semantic and Formal Completeness Audit for the BEDC/newmath Source Interface","Stage A identified the boundary between imported source-interface labels and formal/source truth.","Complete BEDC theory and fresh rebuild are out of scope for this workflow paper.","A dedicated paper could prove rebuild, axiom-purity, and semantic adequacy for BEDC imports.",["Pinned toolchain","Full rebuild logs","Axiom audit","Source parser","Adequacy proof"]),
+splitrow("out-of-scope:dynamic-Rule110-and-artifact-validation","main.tex:5572-5771; main.tex:9463-9492","Rule110/GroundCompiler material is historical limitation evidence, not full dynamic artifact validation.","Keep limitation disclosure only.","Dynamic Artifact Validation for Rule110/GroundCompiler Evidence Bundles","Stage A identified evaluator, manifest, command, environment, exit-code, and log fields needed for artifact semantics.","Current article is methodology, not Rule110 universality or artifact semantics.","A separate artifact paper could rerun and validate the suite.",["Evaluator contract","Fresh commands","Reproducible environment","Collision/exhaustiveness logs","Artifact theorem"]),
+splitrow("out-of-scope:automatic-venue-acceptance-and-upload-protocol","main.tex:5828-6200; main.tex:10588","Venue acceptance, upload receipts, DOI/archive replacement, and external support instantiation are not claimed.","Leave as route-governance boundary.","Auditable Venue-Submission and Archive-Equivalence Protocols","Stage A separated local bundles, exact upload, archive byte equality, venue checks, and acceptance decisions.","Automated journal acceptance and archive infrastructure are out of current scope.","A later infrastructure paper could formalize upload receipts and byte-equality public locators.",["Venue/upload model","Archive verification","Persistent records","Submission-state proofs"])
+],
+"split_candidates": [
+splitrow("split:finite-record-certificate-calculus","main.tex:2744-3038; main.tex:3575-3712","The bad-subrecord, extension-budget, certificate-calculus, and rigidity results are reusable beyond this paper.","Keep only needed portions here; consider an abstract calculus paper.","A Finite-Record Certificate Calculus for Auditable Research Workflows","Stage A found a general schema of finite coordinates, stronger-reading preorder, extension budgets, bad subrecords, and rigidity.","The current article should remain compact for CICM/workshop routing.","The calculus can apply independently to other research workflows and artifacts.",["Abstract model","External examples","Local-path-free proofs","Reference implementation"]),
+splitrow("split:presentation-route-five-interface-sharpness","main.tex:9441-9789; main.tex:10925-11377","Five-interface sharpness and stronger-reading classifiers are richer than needed for the short route.","Keep as supplement support, not main-article expansion.","Sharp No-Free-Upgrade Theorems for Publication-Support Interfaces","Stage A isolated five weak points and missing-coordinate decompositions.","Detailed sharpness theory may overwhelm a presentation-only paper.","A focused paper could study support-coordinate lattices and minimality.",["Clean abstract model","Multiple examples","Less local manifest dependence","Classifier completeness proof"]),
+splitrow("split:case-study-gate-taxonomy","main.tex:5443-5773; review_bundle/case_snapshots","The four cases instantiate a broader taxonomy: intake, overlap, fake-extension, and limitation gates.","Keep as compact evidence table here.","A Gate Taxonomy for AI-Assisted Formal-Mathematics Publication Pipelines","Stage A classified bad examples by structural mechanism rather than incident narrative.","Current paper needs four witnesses, not a full empirical taxonomy.","A separate empirical paper could analyze many routes and quantify gate outcomes.",["Larger corpus","Public/anonymized records","Metrics","Taxonomy validation"]),
+splitrow("split:prior-single-primitive-hierarchy-ledger","Prior Research Ledger Context","The L0/L1/L2 universality hierarchy, EML, Zeckendorf, Richardson, Hankel-Prony, finite-fiber covers, and strictness results are substantive but absent from this manuscript.","Do not import into this paper.","Single-Primitive Universality Hierarchy and Certificate Universality","Prior Stage A work identified a separate hierarchy paper with strict separations and conditional Richardson interface.","This article is an auditable workflow paper, not a universality-hierarchy mathematics paper.","The hierarchy has its own standalone theorem chain.",["Separate manuscript","Independent scope contract","Analytic witness verification","No reliance on publication-gate methodology"])
+],
+"irrelevant_or_remove": [
+row("legacy/local absolute provenance paths","main.tex:5578-5595; review_bundle/REVIEW_BUNDLE_MANIFEST.json","Machine-local absolute paths are provenance fields only, not portable reviewer evidence.","Keep only as non-load-bearing provenance or replace with bundle-relative paths."),
+row("generated cache/build artifacts in digest surfaces","review_bundle/FINAL_DIGESTS_SHA256.md","Auxiliary build/cache files can clutter the support story if treated as certificate surfaces.","Ensure certificate claims cite manifest-required files, not incidental caches."),
+row("overlong supplement-level theoremization","main.tex:1-11494; submission_abstract.tex:1-119","The supplement has 158 theorem-like environments, useful for audit but excessive for a CICM presentation-only article.","Keep in supplement; do not copy full inventory into short article."),
+row("scope_contract.json truncated research_question tail","scope_contract.json:research_question","Cosmetic scope-file defect, not a mathematical result.","Repair separately if archival precision is needed.")
+],
+"naive_truncation_risks": [
+row("risk:row-frozen-versus-current-worktree","main.tex:5054; main.tex:7496; main.tex:7555","A later checkout or changed hash is not the same package state without exact-bundle equality or fresh reruns.","Use row-frozen package states and digest records; never infer validity from ambient HEAD."),
+row("risk:bounded-source-interface-versus-semantic-source-truth","main.tex:777-1042","Imported labels can be mistaken for theorem truth, but only bounded source-interface reachability is proved.","Require fresh formal-source coordinates for semantic truth."),
+row("risk:path-verified-case-snapshots-versus-command-runs","main.tex:5572-5771; main.tex:9014","Case snapshots show historical rows, not reruns of daemons, checkers, lints, or artifact suites.","Treat as path-verified evidence unless full command-result fields are supplied."),
+row("risk:local-review-bundle-versus-external-support-surface","main.tex:7075-7150; main.tex:10588","Local digest rows do not automatically become an external submitted/archived support surface.","Require exact upload or archive-equivalent byte equality."),
+row("risk:finite-schema-acceptance-versus-implementation-soundness","main.tex:1466-1886; main.tex:2070-2152","Schema-verifier acceptance can be mistaken for correctness of gates or proof assistants.","Keep the verifier boundary explicit."),
+row("risk:post-inventory-fixed-point-self-reference","main.tex:10000-10180; main.tex:10704","The theorem-inventory coordinate is valid only after inventory bytes exist and logs/digests are rerun on those bytes.","Close the fixed point operationally after inventory acceptance.")
+],
+"journal_style_gaps": [
+row("style:too-many-theorem-like-statements","main.tex:177-11377","158 theorem-like environments plus audit records are heavy for CICM presentation/workshop style.","Foreground one theorem, one interface definition, one evidence table, and four case rows in the short paper."),
+row("style:conditional-main-theorem-title","main.tex:3273","Readers may miss the record-gate-soundness hypothesis.","Use a consistent title like Conditional finite-record audit theorem and list the hypotheses."),
+row("style:bibliography-live-verification-needed","references.bib; review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-09.log","Live venue/bibliography verification is dated and may not match final submission date.","Refresh before submission and update logs/manifest."),
+row("style:source-path-heavy-prose","main.tex throughout","Long paths and digest details aid audit but impede workshop readability.","Move dense path/hash material to tables or review-bundle references."),
+row("style:abstract-supplement-role-clarity","main.tex:75-143; submission_abstract.tex:109","Primary short article and long supplement roles must remain clear.","Preserve package-shape convention and concise supplement note."),
+row("style:terminology-record-gate-soundness","main.tex:1326; main.tex:3273","Local terms need a compact glossary for workshop readers.","Add or preserve a short glossary/table in the primary article or opening supplement.")
+]
+}
+
+# exact key order and no extras at root
+keys=["valid","in_scope_present","missing_in_scope_results","weak_in_scope_core_results","proof_gaps","supporting_appendix_or_background","out_of_scope_strong_results","split_candidates","irrelevant_or_remove","naive_truncation_risks","journal_style_gaps"]
+obj={k:obj[k] for k in keys}
+pathlib.Path('theorem_inventory.json').write_text(json.dumps(obj, indent=2, ensure_ascii=False)+"\n", encoding='utf-8')
+
+md=['# Stage A Theorem Inventory','',f'Current `main.tex` hash observed during inventory: `{main_hash}`.','']
+for key in keys:
+    if key=='valid':
+        md.append(f'- `valid`: `{str(obj[key]).lower()}`')
+        md.append('')
+        continue
+    md.append(f'## {key}')
+    md.append('')
+    for r in obj[key]:
+        md.append(f"- **{r['label']}** (`{r['location']}`): {r['reason']} Required action: {r['required_action']}")
+        if 'candidate_title' in r:
+            md.append(f"  - Candidate title: {r['candidate_title']}")
+            md.append(f"  - Source contribution: {r['source_contribution']}")
+            md.append(f"  - Scope mismatch: {r['scope_mismatch']}")
+            md.append(f"  - Independent paper rationale: {r['independent_paper_rationale']}")
+            md.append(f"  - Needed to split: {', '.join(r['needed_to_split'])}")
+    if not obj[key]: md.append('- None.')
+    md.append('')
+md += ['## Parsed theorem-like environments','', 'The scan found 158 labelled theorem-like environments in `main.tex` (`definition`, `lemma`, `proposition`, `theorem`, `corollary`).','']
+for r in records:
+    md.append(f"- `{r['label']}` — {r['env']}, {r['title']}, `main.tex:{r['line']}`")
+pathlib.Path('theorem_inventory.md').write_text('\n'.join(md)+'\n', encoding='utf-8')
+print('wrote theorem_inventory.json theorem_inventory.md')
