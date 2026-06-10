@@ -11395,6 +11395,86 @@ of the attempted stronger-reading row and the first absent coordinate it needs,
 and the original claim set factors through the accepted finite-record projection.
 \end{proof}
 
+\begin{proposition}[Round-seven support-coordinate closure]
+\label{prop:round-seven-support-coordinate-closure}
+Let \(C\) be the current presentation-package claim set and let \(S\) be the
+submitted finite support surface after \path{theorem_inventory.json} and
+\path{theorem_inventory.md} have been written.  Suppose that the theorem
+environment extractor, the certificate-record verifier, the source-interface
+verifier, and the primary-claim verifier are rerun from this post-inventory
+state with recorded zero-exit logs, and that
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated only after those log
+bytes and the selected \path{review_bundle/REVIEW_BUNDLE_MANIFEST.json} bytes are
+fixed.  Suppose also that \(S\) contains no supplemental-upload receipt and no
+archive-equivalent public locator accompanied by file-list, digest-row,
+manifest-identity, path-semantics, and public byte-equality records.  Then the
+accepted projection of \(C\) is exactly the following bounded interface:
+\begin{enumerate}
+\item the post-inventory theorem-ledger and verifier freshness coordinate is
+present as a local byte/log/digest coordinate;
+\item every bundle-dependent support assertion is local/path-verified rather
+than externally supported; and
+\item every publication-safety assertion remains conditional on the explicit
+record-gate-soundness predicate \(\mathsf{RGS}_{S}(P,L,\Gamma)\), with no
+unconditional gate-implementation or end-to-end workflow-correctness conclusion.
+\end{enumerate}
+Conversely, any strengthening of this projection that asserts external bundle
+support, concrete gate-implementation soundness, or unconditional end-to-end
+correctness is accepted by the finite-record theorem chain only after adding the
+corresponding missing coordinate named above; without it, the strengthening is
+rejected by the inclusion-minimal bad subrecord consisting of the strengthening
+tag and that absent coordinate.
+\end{proposition}
+
+\begin{proof}
+The first clause is the positive branch of
+Theorem~\ref{thm:five-issue-coordinate-normal-form}.  Its hypotheses are ordered:
+the two inventory files exist before the extractor and verifier commands are
+rerun, and the final digest manifest is generated only after the resulting logs
+and selected manifest bytes exist.  Therefore the extractor and verifier rows
+read the accepted inventory bytes rather than a pre-inventory placeholder, and
+the digest rows bind the inventory files, the post-inventory logs, and the
+selected manifest bytes.  This proves exactly a local byte/log/digest freshness
+coordinate, not theorem semantics or external availability.
+
+For the second clause, apply
+Corollary~\ref{cor:upload-or-archive-instantiation-record} and
+Proposition~\ref{prop:current-absence-external-support-surface-instantiation}.
+Those results classify the two ways a bundle-dependent assertion can become an
+external-support assertion: either by an exact supplemental-upload receipt or by
+an archive-equivalent public locator together with the file-list, digest-row,
+manifest-identity, path-semantics, and public byte-equality records.  By
+hypothesis neither positive coordinate is present in \(S\).  Local paths, a local
+manifest, and local digest rows therefore determine only the local/path-verified
+support projection.
+
+For the third clause, the core publication-safety theorem,
+Theorem~\ref{thm:publication-safety-interface}, has record-gate soundness as an
+explicit hypothesis.  Definition~\ref{def:record-gate-soundness-external-interface}
+and Proposition~\ref{prop:record-gate-soundness-external-interface-exactness}
+identify this hypothesis with a finite row-and-pointer predicate and state that
+it imports no implementation-level, semantic, fresh-execution, or venue claim not
+present as a finite coordinate.  Theorems~\ref{thm:record-gate-implementation-overclaim-obstruction}
+and~\ref{thm:six-coordinate-gate-implementation-soundness-skeleton} then give the
+matching positive coordinates needed to upgrade a record-gate assertion to a
+concrete implementation-soundness assertion.  Since those coordinates are not
+part of the stated support surface, the theorem chain remains conditional at the
+record-gate interface and cannot be read as an unconditional end-to-end
+correctness theorem.
+
+It remains to prove the converse rejection statement.  Each of the three
+forbidden strengthenings changes a coordinate read by the stronger-reading
+preorder: an external-support tag, a gate-implementation-soundness tag, or an
+unconditional end-to-end-correctness tag.  The finite-coordinate determination
+boundary, Theorem~\ref{thm:finite-coordinate-determination-boundary}, says that a
+finite verifier cannot distinguish the stronger state from the accepted bounded
+projection without reading the added coordinate.  Hence, when the matching
+coordinate is absent, deleting every unrelated field leaves the same failure; the
+strengthening tag together with the first absent required coordinate is an
+inclusion-minimal bad subrecord.  Adding that coordinate is exactly the positive
+extension case already listed in Theorem~\ref{thm:five-issue-coordinate-normal-form}.
+\end{proof}
+
 \begin{theorem}[Presentation weak-interface maximality]
 \label{thm:presentation-weak-interface-maximality}
 For the CICM presentation-only package, let \(Q\) be any load-bearing reading
