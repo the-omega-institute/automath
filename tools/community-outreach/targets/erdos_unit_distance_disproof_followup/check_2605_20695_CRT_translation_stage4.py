@@ -21,6 +21,7 @@ from __future__ import annotations
 import itertools
 import json
 import math
+import os
 import signal
 import sys
 import time
@@ -605,12 +606,24 @@ def main() -> int:
                 f"guaranteed cube edges={result['guaranteed_cube_edges']}."
             )
 
-        notes.append(
-            f"Skipped m={M_BONUS} by tick-36 patch: prior 10-min runs got 56% through "
-            "the 29524-pattern m=10 pair-check loop and timed out before write_output, "
-            "losing the completed m=8 result. Restricting to m=6 and m=8 lets the script "
-            "write JSON cleanly in ~3 minutes."
-        )
+        if os.environ.get("OUTREACH_STAGE4_ALLOW_M10", "0") == "1":
+            remaining_after_m8 = TIME_BUDGET_SECONDS - elapsed_seconds()
+            attempted.append(M_BONUS)
+            notes.append(
+                f"OUTREACH_STAGE4_ALLOW_M10=1 set; running m={M_BONUS} bonus attempt "
+                f"with {remaining_after_m8:.1f}s remaining of the internal 24-min budget."
+            )
+            result = evaluate_m(M_BONUS, u_records)
+            completed_results.append(result)
+            notes.append(
+                f"m={M_BONUS}: bonus attempt completed with n={result['n_points']} and "
+                f"exact pairs={result['exact_unit_distance_pairs']}."
+            )
+        else:
+            notes.append(
+                f"Skipped m={M_BONUS} by default; set OUTREACH_STAGE4_ALLOW_M10=1 to "
+                "enable. Prior 10-min runs got 56% through the 29524-pattern pair-check."
+            )
 
     except Stage4Timeout as exc:
         notes.append(f"Stopped early by budget guard: {exc}")
