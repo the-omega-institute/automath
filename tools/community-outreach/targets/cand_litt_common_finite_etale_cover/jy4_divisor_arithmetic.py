@@ -301,6 +301,12 @@ def compute_fermat_flex_points() -> list[Point]:
     return flexes
 
 
+def enumerate_fermat_flex_points() -> list[Point]:
+    """Compatibility alias for the canonical Fermat-flex enumeration."""
+
+    return compute_fermat_flex_points()
+
+
 def divisor_degree(divisor: dict[Point, int]) -> int:
     return sum(divisor.values())
 
@@ -614,6 +620,180 @@ def vanishing_subspace(points: Sequence[Point], degree: int) -> Subspace:
     return Subspace(nullspace(equations, ambient), ambient)
 
 
+_COMMON_ZERO_LOCUS_CACHE: dict[tuple[int, tuple[Vector, ...]], tuple[Point, ...]] = {}
+
+
+def common_zero_locus(
+    W: Subspace,
+    degree: int,
+    points: Iterable[Point] | None = None,
+) -> tuple[Point, ...]:
+    """Return the split F_11^4 common zero locus of a section subspace.
+
+    This is the explicit zero-locus bridge used between the local degree-4
+    base-conic K1 model and the task-level cubic ``V_3K`` medium.  It is a
+    finite-field routine: when no search set is supplied, it checks all
+    F_11^4-rational points of the Fermat quartic.
+    """
+
+    if W.ambient_dim != h0_dimension(degree):
+        raise ValueError("subspace ambient does not match degree")
+    cache_key = (degree, W.rows)
+    if points is None and cache_key in _COMMON_ZERO_LOCUS_CACHE:
+        return _COMMON_ZERO_LOCUS_CACHE[cache_key]
+
+    polys = [HomogPoly.from_vector(degree, row) for row in W.rows]
+    search_points = enumerate_curve_points() if points is None else list(points)
+    zeros = tuple(
+        point
+        for point in search_points
+        if all(poly.evaluate(point) == ZERO for poly in polys)
+    )
+    if points is None:
+        _COMMON_ZERO_LOCUS_CACHE[cache_key] = zeros
+    return zeros
+
+
+def extract_support(W: Subspace) -> tuple[Point, ...]:
+    """Recover the split support encoded by a degree-4 base-conic subspace.
+
+    This is the concrete inverse of the local ``K1Divisor.from_points`` /
+    ``from_effective_divisor`` construction for reduced, split degree-8
+    witnesses.  It intentionally works at the degree-4 base-conic level, where
+    the common zero locus is the actual effective divisor support; higher KM
+    representatives need a separate canonical reduction before their support
+    can be read off this way.
+    """
+
+    if W.ambient_dim != h0_dimension(4):
+        raise ArithmeticBlocker(
+            "k1/extract_support_degree",
+            (
+                "extract_support expects the degree-4 base-conic medium "
+                f"H^0(O_Y(4)); got ambient dimension {W.ambient_dim}"
+            ),
+        )
+    expected = W.ambient_dim - W.dimension
+    support = common_zero_locus(W, 4)
+    if len(support) != expected:
+        raise ArithmeticBlocker(
+            "k1/extract_support_zero_locus",
+            (
+                "degree-4 support extraction found "
+                f"{len(support)} split points for codimension {expected}"
+            ),
+        )
+    if len(support) != 8:
+        raise ArithmeticBlocker(
+            "k1/extract_support_degree_8",
+            (
+                "this K1 base-conic model expects an effective divisor of "
+                f"degree 8; extracted degree {len(support)}"
+            ),
+        )
+
+    candidate = K1Divisor.from_effective_divisor(support)
+    original = K1Divisor(W=W, support=support, section_degree=4)
+    if not candidate.equals(original):
+        raise ArithmeticBlocker(
+            "k1/extract_support_roundtrip",
+            "degree-4 support does not round-trip through K1Divisor.from_effective_divisor",
+        )
+    return support
+
+
+def _base_conic_from_support(support: Sequence[Point]) -> "K1Divisor":
+    normalized = tuple(normalize_projective(point) for point in support)
+    if len(normalized) != len(set(normalized)):
+        raise ArithmeticBlocker(
+            "k1/base_conic_bridge_nonreduced_support",
+            "support extraction produced repeated points; multiplicity handling is not implemented",
+        )
+    if len(normalized) != 8:
+        raise ArithmeticBlocker(
+            "k1/base_conic_bridge_support_degree",
+            (
+                "base-conic bridge expects an effective degree-8 support; "
+                f"got {len(normalized)} points"
+            ),
+        )
+
+    base = set(base_divisor_points())
+    support_set = set(normalized)
+    missing_base = sorted(base - support_set)
+    extra_support = sorted(support_set - base)
+    if len(missing_base) == 1 and len(extra_support) == 1:
+        return K1Divisor.from_points(missing_base[0], extra_support[0])
+    return K1Divisor.from_effective_divisor(normalized)
+
+
+def cubic_v3k_to_base_conic(cubic: Subspace | "K1Divisor") -> "K1Divisor":
+    """Convert a cubic ``V_3K`` representative to the base-conic K1 medium."""
+
+    if isinstance(cubic, K1Divisor):
+        if cubic.section_degree != 3:
+            raise ValueError("cubic_v3k_to_base_conic expects a cubic K1Divisor")
+        W = cubic.W
+        exact_support = cubic.support
+    else:
+        W = cubic
+        exact_support = ()
+
+    if W.ambient_dim != h0_dimension(3):
+        raise ValueError("cubic_v3k_to_base_conic expects ambient H^0(O_Y(3))")
+    if W.dimension == W.ambient_dim:
+        return K1Divisor.zero()
+
+    if exact_support:
+        support = exact_support
+    else:
+        support = common_zero_locus(W, 3)
+        base = set(base_divisor_points())
+        support_set = set(support)
+        if len(support) == 9 and base.issubset(support_set):
+            raise ArithmeticBlocker(
+                "k1/cubic_v3k_to_base_conic_ambiguous_base_point",
+                (
+                    "bare cubic V_3K zero locus is D0 plus one extra point; "
+                    "the removed base point from D0 is not recoverable without "
+                    "the exact support metadata"
+                ),
+            )
+
+    base_conic = _base_conic_from_support(support)
+    cubic_roundtrip = base_conic.to_cubic_v3k()
+    if cubic_roundtrip.W != W:
+        raise ArithmeticBlocker(
+            "k1/cubic_v3k_to_base_conic_roundtrip",
+            "base-conic conversion does not reproduce the input cubic subspace",
+        )
+    return base_conic
+
+
+def base_conic_to_cubic_v3k(base_conic: Subspace | "K1Divisor") -> "K1Divisor":
+    """Convert a degree-4 base-conic representative to cubic ``V_3K`` form."""
+
+    if isinstance(base_conic, K1Divisor):
+        if base_conic.section_degree == 3:
+            return base_conic
+        if base_conic.equals(K1Divisor.zero()):
+            return K1Divisor.zero(Fq, h0_dimension(3))
+        if base_conic.section_degree != 4:
+            raise ArithmeticBlocker(
+                "k1/base_conic_to_cubic_degree",
+                (
+                    "base_conic_to_cubic_v3k expects a degree-4 base-conic "
+                    f"representative; got degree {base_conic.section_degree}"
+                ),
+            )
+        support = base_conic.support or extract_support(base_conic.W)
+    else:
+        support = extract_support(base_conic)
+
+    W = vanishing_subspace(support, 3)
+    return K1Divisor(W=W, support=tuple(support), d0=GENUS - 1, section_degree=3)
+
+
 def _degree_from_ambient_dim(ambient_dim: int) -> int:
     for degree in range(max(0, ambient_dim + 1)):
         if h0_dimension(degree) == ambient_dim:
@@ -860,8 +1040,28 @@ class K1Divisor:
         return self.section_degree
 
     @classmethod
-    def zero(cls) -> "K1Divisor":
-        return cls.from_effective_divisor(base_divisor_points())
+    def zero(cls, field: object | None = None, ambient_dim: int | None = None) -> "K1Divisor":
+        """Return the zero class in the requested K1 convention.
+
+        With no arguments this preserves the local degree-4 base-conic model:
+        zero is the divisor D0=div(XZ), represented by the six-dimensional
+        vanishing space in H^0(O_Y(4)).
+
+        The task-level KM medium-model signature is also accepted:
+        ``zero(field, h0_dimension(3))`` returns the full cubic ambient
+        V_{3K}.  The ``field`` argument is intentionally unused because this
+        module has a single fixed field F_11^4.
+        """
+
+        if ambient_dim is None:
+            return cls.from_effective_divisor(base_divisor_points())
+        section_degree = _degree_from_ambient_dim(ambient_dim)
+        if section_degree != 3:
+            raise ValueError(
+                "K1Divisor.zero(field, ambient_dim) currently supports the "
+                f"full cubic ambient V_3K only; got H^0(O_Y({section_degree}))"
+            )
+        return cls(W=Subspace.full(ambient_dim), support=(), d0=GENUS - 1, section_degree=3)
 
     @classmethod
     def from_effective_divisor(cls, points: Sequence[Point]) -> "K1Divisor":
@@ -915,6 +1115,67 @@ class K1Divisor:
         E.append(Q_norm)
         return cls.from_effective_divisor(E)
 
+    def _support_points(self) -> tuple[Point, ...]:
+        """Return the split effective support encoded by this representative."""
+
+        if self.support:
+            return self.support
+        if self.section_degree == 4:
+            return extract_support(self.W)
+        zeros = common_zero_locus(self.W, self.section_degree)
+        expected = max(0, self.W.ambient_dim - self.W.dimension)
+        if len(zeros) != expected:
+            raise ArithmeticBlocker(
+                "k1/zero_locus_extraction",
+                (
+                    "effective divisor support extraction over F_11^4 found "
+                    f"{len(zeros)} split points for codimension {expected} in "
+                    f"H^0(O_Y({self.section_degree}))"
+                ),
+            )
+        return zeros
+
+    def to_cubic_v3k(self) -> "K1Divisor":
+        """Bridge this representative to the cubic ``V_3K`` medium.
+
+        A degree-d effective divisor support maps to the subspace of cubics
+        vanishing on that support.  The canonical zero class in this medium is
+        represented by the full cubic ambient space.
+        """
+
+        if self.section_degree == 3:
+            if self.W.ambient_dim != h0_dimension(3):
+                raise ValueError("cubic representative has wrong ambient dimension")
+            return self
+        if self.equals(K1Divisor.zero()):
+            return K1Divisor.zero(Fq, h0_dimension(3))
+        return base_conic_to_cubic_v3k(self)
+
+    @classmethod
+    def from_cubic_v3k(
+        cls,
+        W: Subspace,
+        field: object | None = None,
+        ambient_dim: int | None = None,
+    ) -> "K1Divisor":
+        """Construct a K1 divisor from a cubic ``V_3K`` subspace.
+
+        The ``field`` argument is accepted for the task-level API; this module
+        has a single fixed field.  Nonzero cubic representatives are kept in
+        cubic form and can be converted back to the degree-4 base-conic model
+        by extracting their split zero locus.
+        """
+
+        expected_ambient = h0_dimension(3) if ambient_dim is None else ambient_dim
+        if expected_ambient != h0_dimension(3):
+            raise ValueError("from_cubic_v3k expects ambient H^0(O_Y(3))")
+        if W.ambient_dim != expected_ambient:
+            raise ValueError("cubic subspace ambient dimension mismatch")
+        if W.dimension == expected_ambient:
+            return cls(W=W, support=(), d0=GENUS - 1, section_degree=3)
+        support = common_zero_locus(W, 3)
+        return cls(W=W, support=support, d0=GENUS - 1, section_degree=3)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, K1Divisor):
             return NotImplemented
@@ -923,6 +1184,14 @@ class K1Divisor:
     def equals(self, other: "K1Divisor") -> bool:
         if not isinstance(other, K1Divisor):
             return False
+        if self.section_degree == 3 or other.section_degree == 3:
+            if self.section_degree == other.section_degree:
+                return self.W == other.W
+            cubic = self if self.section_degree == 3 else other
+            local = other if self.section_degree == 3 else self
+            if cubic.W.dimension == cubic.W.ambient_dim:
+                return local.equals(K1Divisor.zero())
+            return local.to_cubic_v3k().W == cubic.W
         if self.section_degree == other.section_degree:
             if self.W == other.W:
                 return True
@@ -957,11 +1226,23 @@ class K1Divisor:
         )
 
     def _expected_k1_dimension(self) -> int:
+        if self.section_degree == 3 and self.W.dimension == self.W.ambient_dim:
+            return self.W.ambient_dim
         return self.d0 + 1 - GENUS
 
     def _check_k1_shape(self) -> None:
         if self.W.ambient_dim != h0_dimension(self.section_degree):
             raise ValueError("K1 divisor W ambient does not match section_degree")
+        if self.section_degree == 3:
+            if not 0 <= self.W.dimension <= self.W.ambient_dim:
+                raise ArithmeticBlocker(
+                    "k1/cubic_medium_model_bad_dimension",
+                    (
+                        f"cubic V_3K representative has impossible dimension "
+                        f"{self.W.dimension} in ambient {self.W.ambient_dim}"
+                    ),
+                )
+            return
         if self.W.dimension != self._expected_k1_dimension():
             raise ArithmeticBlocker(
                 "k1/subspace_shape",
@@ -974,6 +1255,8 @@ class K1Divisor:
     def add(self, other: "K1Divisor") -> "K1Divisor":
         if not isinstance(other, K1Divisor):
             return NotImplemented  # type: ignore[return-value]
+        if self.section_degree == 3 or other.section_degree == 3:
+            return self._add_cubic_medium_model(other)
         self._check_k1_shape()
         other._check_k1_shape()
         W_prod = multiply_subspaces(
@@ -1002,14 +1285,66 @@ class K1Divisor:
                     f"{self._expected_k1_dimension()}"
                 ),
             )
-        return K1Divisor(
+        result = K1Divisor(
             W=W_sat,
             support=(),
             d0=self.d0,
             section_degree=saturated_degree,
         )
+        if _principal_zero_factor(result.W, result.section_degree) is not None:
+            return K1Divisor.zero(Fq, h0_dimension(3))
+        return result
+
+    def _add_cubic_medium_model(self, other: "K1Divisor") -> "K1Divisor":
+        """Attempt the task-level cubic KM add and report honest blockers."""
+
+        if self.section_degree != 3 or other.section_degree != 3:
+            cubic = self if self.section_degree == 3 else other
+            local = other if self.section_degree == 3 else self
+            if cubic.W.dimension == cubic.W.ambient_dim:
+                return local
+            if local.equals(K1Divisor.zero()):
+                return cubic
+            cubic_base_conic = cubic_v3k_to_base_conic(cubic)
+            return cubic_base_conic.add(local)
+        self._check_k1_shape()
+        other._check_k1_shape()
+        if self.W.dimension == self.W.ambient_dim:
+            return other
+        if other.W.dimension == other.W.ambient_dim:
+            return self
+        full_cubic = Subspace.full(h0_dimension(3))
+        W_prod = multiply_subspaces(self.W_E, other.W_E, target_degree=6)
+        W_quot = divide_subspaces(W_prod, full_cubic, 6, 3)
+        if W_quot.dimension != full_cubic.dimension:
+            message = (
+                "KM cubic add computed W_prod=W_D1*W_D2 in H^0(O_Y(6)) "
+                f"with dim {W_prod.dimension}/{W_prod.ambient_dim}; quotient "
+                f"(W_prod:V_3K) returned dim {W_quot.dimension}/{W_quot.ambient_dim}, "
+                f"expected full-cubic zero dim {full_cubic.dimension}.  A "
+                "completed KM reduction/canonicalization step is required "
+                "before this can represent nonzero classes in V_3K."
+            )
+            print(message)
+            raise ArithmeticBlocker("k1/cubic_add_quotient_bad_dimension", message)
+        return K1Divisor(W=W_quot, support=(), d0=self.d0, section_degree=3)
 
     def neg(self) -> "K1Divisor":
+        if self.section_degree == 3:
+            self._check_k1_shape()
+            full_cubic = Subspace.full(h0_dimension(3))
+            full_product = multiply_subspaces(full_cubic, full_cubic, target_degree=6)
+            W_neg = divide_subspaces(full_product, self.W_E, 6, 3)
+            if W_neg.dimension != full_cubic.dimension:
+                message = (
+                    "KM cubic neg computed (V_3K*V_3K):W_D with "
+                    f"product dim {full_product.dimension}/{full_product.ambient_dim}; "
+                    f"quotient returned dim {W_neg.dimension}/{W_neg.ambient_dim}, "
+                    f"expected {full_cubic.dimension}."
+                )
+                print(message)
+                raise ArithmeticBlocker("k1/cubic_neg_quotient_bad_dimension", message)
+            return K1Divisor(W=W_neg, support=(), d0=self.d0, section_degree=3)
         self._check_k1_shape()
         if not self.W.rows:
             raise ArithmeticBlocker(
