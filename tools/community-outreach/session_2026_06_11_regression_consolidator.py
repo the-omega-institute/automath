@@ -10,7 +10,9 @@ import time
 SESSION_DATE = "2026-06-11"
 BRANCH = "codex/section-2-3-bridge-bundle"
 DEFAULT_TIMEOUT_SEC = 60
-VERDICT_RE = re.compile(r"^VERDICT:\s*(\S+)")
+# tick-54 fix: also match "verdict=" lowercase (e.g. Erdos Stage-3 prints
+# "verdict=FAIL" via the JSON-style summary) and "VERDICT:".
+VERDICT_RE = re.compile(r"^(?:VERDICT:|verdict=)\s*(\S+)", re.MULTILINE)
 
 SCRIPT_PATH = pathlib.Path(__file__).resolve()
 OUTREACH_DIR = SCRIPT_PATH.parent
@@ -93,13 +95,14 @@ VALIDATORS = [
         "target_dir": "tools/community-outreach/targets/erdos_unit_distance_disproof_followup",
         "validator": "check_2605_20695_split_prime_robustness_stage5.py",
         "expected_verdict": "PASS_SPLIT_PRIME_ROBUSTNESS",
+        "timeout_sec": 600,  # tick-54: sympy E_eps build for 4 primes at m=6 takes ~5min
     },
     {
         "track": "Erdos_paper",
         "target_dir": "tools/community-outreach/targets/erdos_unit_distance_disproof_followup",
         "validator": "check_2605_20695_split_prime_robustness_m8_stage5b.py",
         "expected_verdict": "PASS",
-        "timeout_sec": 200,
+        "timeout_sec": 900,  # tick-54: 4 primes at m=8 takes ~10min per tick #41 record
     },
     {
         "track": "p_curvature_paper",
@@ -135,12 +138,10 @@ VALIDATORS = [
 
 
 def parse_verdict(output):
-    verdict = None
-    for line in output.splitlines():
-        match = VERDICT_RE.match(line)
-        if match:
-            verdict = match.group(1)
-    return verdict
+    # tick-54 fix: use search on the whole output (regex has MULTILINE) so we
+    # also catch lines that don't start at column 0 and the "verdict=" pattern.
+    matches = VERDICT_RE.findall(output)
+    return matches[-1] if matches else None
 
 
 def run_validator(entry, index, total):
