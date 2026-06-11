@@ -1306,6 +1306,89 @@ claim}.  A theorem-content witness has the fields \emph{changed surface},
 for this paper and give the compact path catalogue used by
 Table~\ref{tab:case-witnesses}.
 
+The same interface can be read without the local route vocabulary.  A
+\emph{portable workflow schema} is the seven-sorted finite record
+\[
+\mathcal{S}=(\mathsf{Claim},\mathsf{Kind},\mathsf{Surface},\mathsf{Gate},
+\mathsf{Pass},\mathsf{Prom},\mathsf{Level})
+\]
+together with predicates
+\[
+\operatorname{typed}(c,k),\quad
+\operatorname{surface}(c,E),\quad
+\operatorname{assigned}(k,g),\quad
+\operatorname{passes}(p,g,E,\ell),\quad
+\operatorname{promoted}(c,h),
+\]
+and a boundary predicate \(\operatorname{bounded}(c,\ell,B)\).  The local names in
+this paper instantiate these sorts as follows: manuscript assertions are in
+\(\mathsf{Claim}\); the domain of \(\Gamma\) is \(\mathsf{Kind}\); paths,
+commits, manifests, inventories, snapshots, and logs are elements of
+\(\mathsf{Surface}\); the rows of Table~\ref{tab:gates} are elements of
+\(\mathsf{Gate}\); tuples \(\rho=(g,I,d,e,\ell)\) are elements of
+\(\mathsf{Pass}\); intake-to-active-paper moves are elements of
+\(\mathsf{Prom}\); and \(\{\text{path-verified},\text{command-run}\}\subset
+\mathsf{Level}\).  A local path, route state, or daemon marker is portable only
+through the corresponding element of \(\mathsf{Surface}\), \(\mathsf{Gate}\),
+\(\mathsf{Pass}\), or \(\mathsf{Prom}\); the concrete spelling of the path or
+route name is not part of the portable claim.
+
+\begin{proposition}[Portable workflow-schema factorisation]
+\label{prop:portable-workflow-schema-factorisation}
+Let \(P\) be any package satisfying
+Definition~\ref{def:operational-acceptance-interface}, and let
+\(c\) be a load-bearing claim accepted by \(P\) with certificate
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Under the map from the local automath and
+newmath artifacts to the seven sorts of \(\mathcal{S}\) just defined, acceptance
+of \(c\) factors through the following venue-independent predicate:
+\[
+\operatorname{Accept}_{\mathcal{S}}(c) \Longleftrightarrow
+\Bigl[\forall k\in K\,\operatorname{typed}(c,k)\Bigr]
+\wedge \operatorname{surface}(c,E)
+\wedge \Bigl[\forall k\in K\,\forall g\,(
+\operatorname{assigned}(k,g)\Rightarrow
+\exists p\in R\,\operatorname{passes}(p,g,E,\ell))\Bigr]
+\wedge \operatorname{bounded}(c,\ell,B)
+\]
+with the additional conjunct \(\operatorname{promoted}(c,H)\) exactly when the
+claim crosses an intake-to-publication boundary.  Consequently replacing local
+paths, route directories, or tool names by another venue's surfaces and gates
+preserves the accepted finite-record reading whenever the seven sorted fields and
+the displayed predicate are preserved.  It does not preserve, and therefore does
+not assert, implementation soundness, proof-assistant soundness, fresh dynamic
+artifact validity, external upload, or venue acceptance unless those stronger
+coordinates are supplied as additional sorted fields and pass records.
+\end{proposition}
+
+\begin{proof}
+By Definition~\ref{def:operational-acceptance-interface}, an accepted
+load-bearing claim has a nonempty finite set \(K\) of claim kinds, an evidence
+surface \(E\), a level \(\ell\), one pass record in \(R\) for each gate assigned
+by \(\Gamma\) to a kind in \(K\), a human-promotion field \(H\) when the route
+boundary is crossed, and a boundary field \(B\) distinguishing path-verified from
+command-run support.  The displayed schema map sends exactly those components to
+\(\mathsf{Kind}\), \(\mathsf{Surface}\), \(\mathsf{Level}\), \(\mathsf{Gate}\),
+\(\mathsf{Pass}\), \(\mathsf{Prom}\), and the boundary predicate.  Thus every
+local acceptance entry satisfies the displayed predicate: \(\operatorname{typed}\)
+records membership in \(K\), \(\operatorname{surface}\) records \(E\),
+\(\operatorname{assigned}\) is the graph of \(\Gamma\),
+\(\operatorname{passes}\) is witnessed by the required pass rows in \(R\),
+\(\operatorname{promoted}\) is witnessed by \(H\) in the route-boundary cases,
+and \(\operatorname{bounded}\) is witnessed by \(B\).
+
+Conversely, suppose the seven sorted fields and the displayed predicate are
+preserved after replacing the concrete local artifacts by another venue's
+surfaces and gates.  For each accepted kind the predicate supplies every assigned
+gate and a pass record at the declared level, and it supplies the promotion
+record exactly in the boundary-crossing cases.  Reassembling those witnesses as
+\((K,\ell,E,H,R,D,B)\) gives the finite certificate required by the operational
+acceptance interface.  The reassembly uses only typed fields and finite pass
+records, not the names of local directories or daemons.  Finally, the last
+sentence follows from the boundary field \(B\) and the no-free-upgrade part of
+the interface: stronger readings require extra coordinates and assigned pass
+records, so they cannot be reconstructed from preservation of the seven fields
+alone.\end{proof}
+
 We distinguish two evidence levels.  A claim is \emph{path-verified} when this
 paper records the relevant source path, artifact path, pinned commit or local
 publication path, and gate decision, but does not assert that a command was
@@ -5843,6 +5926,61 @@ Theorem~\ref{thm:finite-certificate-obstruction-skeleton} gives
 inclusion-minimality.  Hence the original row is rigid at its skeleton lesson and
 path-verified snapshot level, while fresh reproducibility or semantic-validation
 claims require a separately paid finite extension budget.\end{proof}
+
+\begin{proposition}[Presentation case-matrix sufficiency]
+\label{prop:presentation-case-matrix-sufficiency}
+For a CICM-style presentation artifact, the four case studies used in this
+paper are completely represented, at the declared path-verified level, by the
+quadruple of finite coordinates
+\[
+ (\text{gate},\text{observed issue},\text{accepted coordinate},
+ \text{safe lesson}).
+\]
+For the current package the matrix is exactly:
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{p{0.17\linewidth}p{0.17\linewidth}p{0.23\linewidth}p{0.18\linewidth}X}
+\toprule
+Case & Gate & Observed issue & Accepted coordinate & Safe lesson \\
+\midrule
+Newmath intake isolation & promotion & inactive intake seed lacks active-paper markers & path-verified promotion boundary & human promotion is a separate boundary \\
+Upper-fibers overlap block & overlap/submission-state & submitted sibling and overlap ledger block route-disjoint advancement & path-verified route-blocking coordinate & venue routing is stateful and cannot be raced \\
+Fake-extension block & theorem-content delta & file churn or compilation lacks substantive theorem growth & path-verified non-growth coordinate & generated edits are not discovery without content delta \\
+Rule110 limitation gate & artifact-limitation & artifact-status and audit ledgers bound the dynamic claim & path-verified limitation-disclosure coordinate & bounded artifacts must disclose or block stronger claims \\
+\bottomrule
+\end{tabularx}
+\end{center}
+This matrix is sufficient for the short presentation claim that the method
+converts agent churn and failed routes into structured research data.  It is not
+sufficient for a command-run rerun claim, a fresh full-source rebuild claim, a
+fresh artifact-validation claim, or a venue-acceptance claim.
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:gate-witness-criterion} says that a presentation case row is a
+path-verified witness once it names a gate, the failed invariant or observed
+issue, the recorded gate decision surface, and the safe manuscript lesson.
+Proposition~\ref{prop:path-complete-case-witnesses} classifies every accepted
+case row in this package into exactly one of the four finite skeletons:
+promotion, route/submission blocking, theorem-content non-growth, or
+artifact-limitation disclosure.  The displayed matrix has one row for each of
+these four skeletons and records the four coordinates required by the lemma.
+Therefore no additional case-study coordinate is needed for the bounded
+presentation claim: each row can be checked by matching its gate to
+Table~\ref{tab:gates}, its review surface to the coverage result of
+Proposition~\ref{prop:review-bundle-case-snapshot-coverage}, and its lesson to
+the unique bounded lesson classified in
+Proposition~\ref{prop:path-complete-case-witnesses}.
+
+The negative clause follows from the same classification.  A command-run rerun,
+fresh full-source rebuild, dynamic artifact validation, or venue-acceptance
+claim would add a command, source state, environment, exit code, log path,
+semantic-output surface, upload receipt, or venue-state coordinate.  None of
+these coordinates appears in the four-coordinate matrix.  By
+Theorem~\ref{thm:finite-coordinate-determination-boundary} and the no-free-upgrade
+clause of the operational interface, absent finite coordinates cannot be inferred
+from the bounded case matrix.  Hence the matrix is sufficient exactly for the
+presentation-level path-verified lesson and for no stronger reading.\end{proof}
 
 \begin{table}
 \caption{Workshop-facing case-study witnesses, all at path-verified evidence level}
