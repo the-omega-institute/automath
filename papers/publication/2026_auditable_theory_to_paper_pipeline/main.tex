@@ -1333,13 +1333,106 @@ through the corresponding element of \(\mathsf{Surface}\), \(\mathsf{Gate}\),
 \(\mathsf{Pass}\), or \(\mathsf{Prom}\); the concrete spelling of the path or
 route name is not part of the portable claim.
 
+The six venue-independent roles carried by this schema are the following.  The
+\emph{source object} is the structured mathematical object, artifact family, or
+publication route state affected by a claim.  The \emph{formal interface} is the
+typed boundary through which selected source-object assertions are represented
+for Lean, a script verifier, a manifest checker, or another mechanical checker.
+The \emph{finite evidence row} is a bounded path, manifest, command, marker,
+log, digest, or limitation row submitted for that interface.  The
+\emph{advisory agent action} is a proposal, repair, ranking, or review item before
+it is accepted by a gate.  The \emph{deterministic gate} is the finite predicate
+assigned to the claim kind.  The \emph{human promotion boundary} is the editorial
+act that moves accepted material from intake or source work into the public
+manuscript state.  Local artifacts such as \path{main.tex}, Lean markers,
+review-bundle JSON files, route labels, and stage logs are examples of these
+roles, not primitives of the method.
+
+\begin{theorem}[Portable six-role interface theorem]
+\label{thm:portable-six-role-interface}
+Let \(P\) be a package satisfying
+Definition~\ref{def:operational-acceptance-interface}.  For each load-bearing
+claim \(c\) accepted by \(P\), there is a finite six-role record
+\[
+\Pi(c)=(S_c,F_c,W_c,A_c,G_c,M_c)
+\]
+with the following interpretation: \(S_c\) is the source object, \(F_c\) is the
+formal interface, \(W_c\) is the finite evidence row surface, \(A_c\) is the set
+of advisory agent actions associated with the candidate, \(G_c\) is the finite
+set of deterministic gate pass records assigned to the claim kind, and \(M_c\)
+is either the human-promotion record or the marker that no promotion boundary is
+crossed.  Acceptance of \(c\) depends on the local artifact names only through
+\(\Pi(c)\) and the evidence level \(\ell\).  More precisely, if another workflow
+\(P'\) preserves the six roles by maps
+\[
+S_c\mapsto S'_c,
+\quad F_c\mapsto F'_c,
+\quad W_c\mapsto W'_c,
+\quad A_c\mapsto A'_c,
+\quad G_c\mapsto G'_c,
+\quad M_c\mapsto M'_c
+\]
+so that claim kinds, assigned gates, pass/fail decisions, evidence levels, and
+promotion-boundary status are preserved, then \(P'\) has the same finite-record
+accepted reading for \(c\).  Conversely, any accepted reading of \(c\) in this
+paper determines such a six-role record.  No implementation-soundness,
+proof-assistant-soundness, dynamic artifact-validity, external-upload, or
+venue-acceptance claim is invariant under this transfer unless it is represented
+as an additional source object or formal interface together with its own finite
+evidence row, deterministic gate, and promotion boundary.
+\end{theorem}
+
+\begin{proof}
+Start with an accepted load-bearing claim \(c\) and its publication certificate
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  The source object \(S_c\) is the finite
+component of the evidence surface named by the claim: for example a structured
+definition/theorem surface, a manifest-bounded artifact family, or a route-state
+surface.  The formal interface \(F_c\) is the finite typed boundary selected by
+the claim kinds in \(K\): the build or marker interface for formal-source and
+traceability claims, the manifest/evaluator interface for artifact claims, the
+route-state interface for route and submission claims, and the theorem-content or
+discovery interface for discovery and work-selection claims.  The finite
+evidence row surface \(W_c\) is the corresponding finite subset of \(E\) together
+with the boundary field \(B\).  The advisory-action component \(A_c\) is the
+finite set of submitted proposal, review, repair, ranking, or discovery rows
+associated with the candidate; if no such rows are submitted, it is empty.  The
+deterministic-gate component \(G_c\) is exactly the finite set \(R\) of pass
+records for \(\bigcup_{k\in K}\Gamma(k)\).  The promotion component \(M_c\) is
+\(H\).  Hence \(\Pi(c)\) is finite and is constructed entirely from the certificate
+fields required by Definition~\ref{def:operational-acceptance-interface}.
+
+The certificate verifier and the acceptance predicate inspect only claim kind,
+evidence level, evidence surface membership, assigned gates, pass records,
+discovery rows when present, and the promotion/boundary fields.  They do not
+inspect the semantic spelling of a directory name, route label, script filename,
+or local stage number except as an element of those finite fields.  Therefore a
+workflow \(P'\) that preserves the six roles, the claim kinds, the gate
+assignment relation, the pass/fail decisions, the evidence level, and the
+promotion-boundary status can reconstruct a certificate
+\(\mathcal C'(c)=(K,\ell,E',H',R',D',B')\) satisfying the same acceptance clauses:
+\(E'\) is supplied by \(W'_c\), \(R'\) by \(G'_c\), \(H'\) by \(M'_c\), and the
+interface/discovery/boundary fields by \(F'_c\), \(A'_c\), and \(W'_c\).  Thus the
+finite-record accepted reading is preserved.
+
+Conversely, any accepted reading in this paper already has the certificate
+\(\mathcal C(c)\).  Applying the construction in the first paragraph gives the
+six-role record, so no accepted local reading can depend on a path name, route
+label, or package-byte state without first passing through one of the six roles.
+The final sentence follows from the same finite-coordinate argument used by the
+operational interface: each stronger reading names an additional axis not read by
+\(\Pi(c)\).  Without adding that axis as a new role component with its evidence
+row and assigned gate, two workflows can agree on \(\Pi(c)\) while disagreeing on
+the stronger fact.  Hence such a stronger fact is not invariant under the
+portable transfer.\end{proof}
+
 \begin{proposition}[Portable workflow-schema factorisation]
 \label{prop:portable-workflow-schema-factorisation}
 Let \(P\) be any package satisfying
 Definition~\ref{def:operational-acceptance-interface}, and let
 \(c\) be a load-bearing claim accepted by \(P\) with certificate
-\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Under the map from the local automath and
-newmath artifacts to the seven sorts of \(\mathcal{S}\) just defined, acceptance
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Under the six-role interface of
+Theorem~\ref{thm:portable-six-role-interface} and the map from the local automath
+and newmath artifacts to the seven sorts of \(\mathcal{S}\) just defined, acceptance
 of \(c\) factors through the following venue-independent predicate:
 \[
 \operatorname{Accept}_{\mathcal{S}}(c) \Longleftrightarrow
