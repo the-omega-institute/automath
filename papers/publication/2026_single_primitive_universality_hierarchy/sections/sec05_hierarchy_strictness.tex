@@ -12,68 +12,70 @@ proves the punctured absolute-value row internally; the printed strings
 Let \(\mathcal R\) be Richardson's real elementary language from
 \cite[pp.~514, 520, Theorem~2]{Richardson1968}: one real variable, rational
 constants, \(\log2\), \(\pi\), \(+,-,\times\), composition, \(\exp\), \(\sin\),
-and a unary symbol \(\mu\) satisfying \(\mu(x)=|x|\) for \(x\ne0\).  We use the
-concrete representative \(\mu_0(x)=\sqrt{x^2}\).  Richardson's hypothesis on
-\(\mu\) is punctured: no independent value at zero is part of the condition, and
-Theorem~2 is the identity-to-zero theorem for every language satisfying that
-condition.  Thus choosing the total completion \(\mu_0\), whose value at zero is
-also \(0\), neither changes the permitted primitives nor weakens the cited
-undecidability theorem.
+and a unary symbol \(\mu\) satisfying \(\mu(x)=|x|\) for \(x\ne0\).  We use this
+absolute-value primitive exactly in that punctured sense.  For an expression
+\(E\), let \(D_E\) denote the recursively defined real domain on which all
+ordinary elementary subterms are defined and, whenever a subterm \(\mu(F)\) is
+evaluated, the value \(F(x)\) is nonzero.
 
-\begin{lemma}[Richardson absolute-value interface]
+\begin{theorem}[Richardson's punctured identity-to-zero theorem]
+\label{thm:richardson-punctured-source-problem}
 \label{lem:richardson-punctured-mu-reduction}
-Richardson's theorem applies to the concrete total completion
-\(\mu_0(x)=\sqrt{x^2}\).  Hence any exact EML translation of rational constants,
-\(\log2\), \(\pi\), \(+,-,\times\), \(\exp\), \(\sin\), and
-\(x\mapsto\sqrt{x^2}\) carries Richardson's identity-to-zero problem into the
-translated EML fragment.
-\end{lemma}
-
-\begin{proof}
-Richardson assumes only that \(\mu(x)=|x|\) for \(x\ne0\)
-\cite[pp.~514, 520, Theorem~2]{Richardson1968}; the cited theorem does not use a
-separate parameter for \(\mu(0)\).  The function \(\mu_0(x)=\sqrt{x^2}\) is a
-total real function satisfying the required punctured identity and so is an
-admissible completion of Richardson's symbol.  Therefore the identity-to-zero
-problem in the language with this concrete \(\mu_0\) is one of the cases covered
-by the theorem.  Replacing each \(\mu(F)\) by the EML translation of
-\(\sqrt{F^2}\) is an effective syntactic reduction once the listed primitive
-translations are exact on their stated real domains.
-\end{proof}
-
-\begin{lemma}[Richardson identity-to-zero theorem]
 \label{lem:richardson-fragment}
-The identity-to-zero problem for \(\mathcal R\) with \(\mu=
-\mu_0\) is undecidable.
-\end{lemma}
+The following decision problem is undecidable: given a Richardson expression
+\(E\), determine whether
+\[
+  E(x)=0\qquad\hbox{for every }x\in D_E .
+\]
+Equivalently, Richardson's Theorem~2 supplies the source problem needed here as a
+punctured partial-function identity problem, with no separate value of \(\mu\) at
+zeros of its argument.
+\end{theorem}
 
 \begin{proof}
-This is Richardson's Theorem~2, instantiated by
-\Cref{lem:richardson-punctured-mu-reduction}; see
-\cite[Theorem~2, p.~520]{Richardson1968}.
+Richardson's stated hypothesis on the auxiliary unary function is the punctured
+condition \(\mu(x)=|x|\) for \(x\ne0\)
+\cite[pp.~514, 520, Theorem~2]{Richardson1968}.  The theorem is therefore read on
+the common real domain where all displayed operations are legitimate and where
+the \(\mu\)-clause is invoked only at nonzero arguments.  That common domain is
+exactly the recursive set \(D_E\) above.  The cited theorem asserts that identity
+to zero for this language is not decidable; with the domain convention made
+explicit, this is precisely the displayed decision problem.  No completion of
+\(\mu\) at zero and no endpoint value of a square-root term is used in the cited
+source problem.
 \end{proof}
 
-\begin{theorem}[Abstract normalizer obstruction]
+\begin{theorem}[Abstract punctured normalizer obstruction]
 \label{thm:abstract-normalizer-obstruction}
 Let \(\tau\colon\mathcal R\to\mathcal T\) be an effective translation into a
-computable term class whose real semantics preserve domains and values:
-\(\dom\llbracket\tau(E)\rrbracket=\dom(E)\) and
-\(\llbracket\tau(E)\rrbracket(x)=E(x)
-\) on that domain.  Then \(\tau(\mathcal R)\) admits no total computable
-normalizer into finite objects with decidable equality that identifies exactly
-equal transported real functions.
+computable partial real term class such that, for every Richardson expression
+\(E\), the translated term \(\tau(E)\) is defined on \(D_E\) and satisfies
+\(\llbracket\tau(E)\rrbracket(x)=E(x)\) for all \(x\in D_E\).  Then the translated
+source-indexed fragment
+\[
+  E\longmapsto (\tau(E),D_E,\tau(0))
+\]
+admits no total computable normalizer into finite objects with decidable equality
+that identifies exactly equality of the two partial functions after restriction
+to the source domain \(D_E\).
 \end{theorem}
 
 \begin{proof}
 If such a normalizer existed, compute \(\tau(E)\) and compare its normal form
-with that of \(\tau(0)\).  The comparison would decide whether \(E\) is zero on
-its Richardson domain, contradicting \Cref{lem:richardson-fragment}.
+with that of \(\tau(0)\) inside the same source-indexed object carrying the domain
+\(D_E\).  By the hypothesis on the normalizer, equality of these finite normal
+forms is equivalent to
+\(\llbracket\tau(E)\rrbracket(x)=\llbracket\tau(0)\rrbracket(x)\) for every
+\(x\in D_E\).  By value preservation on \(D_E\), this is equivalent to
+\(E(x)=0\) for every \(x\in D_E\), contradicting
+\Cref{thm:richardson-punctured-source-problem}.
 \end{proof}
 
 \begin{lemma}[Transported zero-test obstruction]
 \label{lem:transported-partial-normalizer-obstruction}
-The conclusion of \Cref{thm:abstract-normalizer-obstruction} holds for every
-domain-preserving, value-preserving EML translation of \(\mathcal R\).
+The conclusion of \Cref{thm:abstract-normalizer-obstruction} holds for every EML
+translation that is defined and value-preserving on each punctured Richardson
+domain \(D_E\).
 \end{lemma}
 
 \begin{proof}
@@ -384,7 +386,13 @@ Then the principal-branch EML core gives an effective translation of
 \((\mathsf P,\mathsf S,\mathsf A)\) for \((\pi,\sin,\mu)\), that preserves the
 Richardson real-function identities on the punctured domains required by the
 theorem.  The identity-to-zero problem for the source fragment is undecidable,
-and therefore the translated EML fragment has undecidable zero identity.
+and therefore the transported source-indexed EML equality problem
+\[
+  E\longmapsto
+  \bigl(\tau_{\mathsf P,\mathsf S,\mathsf A}(E),D_E,
+  \tau_{\mathsf P,\mathsf S,\mathsf A}(0)\bigr)
+\]
+is undecidable.
 \end{theorem}
 
 \begin{proof}
@@ -397,8 +405,8 @@ use the three displayed witnesses for \(\pi\), \(\sin\), and \(\mu\).  An induct
 on Richardson expressions proves value preservation wherever the source
 expression is defined and every encountered \(\mu\)-argument is nonzero.  This is
 exactly the punctured absolute-value convention in Richardson's theorem.  Thus a
-zero-identity algorithm for the translated EML fragment would decide the
-undecidable source identity-to-zero problem.
+zero-identity algorithm for the transported source-indexed translated EML
+fragment would decide the undecidable source identity-to-zero problem.
 \end{proof}
 
 \begin{theorem}[Relative finite Richardson fragment]
@@ -469,8 +477,9 @@ For each Richardson expression \(E\), define its punctured Richardson domain
 \(D_E\subseteq\RR\) recursively as the set of real inputs for which every
 ordinary elementary subterm is defined and, whenever a subterm \(\mu(F)\) is
 evaluated, the value of \(F\) is nonzero.  Then
-\(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) is defined on \(D_E\) and equals
-\(E\) there.  In particular,
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) and
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(0)\) are defined on \(D_E\), the first term
+equals \(E\) there, and the second term equals \(0\) there.  In particular,
 \[
   E=0\hbox{ on }D_E
   \quad\Longleftrightarrow\quad
@@ -478,8 +487,9 @@ evaluated, the value of \(F\) is nonzero.  Then
   \tau_{\mathsf P,\mathsf S,\mathsf A}(0)
   \hbox{ on }D_E .
 \]
-Zeros of absolute-value arguments therefore delete the same input points from
-both sides and do not invalidate the many-one reduction.
+Zeros of absolute-value arguments therefore delete the same input points from the
+source-indexed transported equality problem on both sides and do not invalidate
+the many-one reduction.
 \end{theorem}
 
 \begin{proof}
@@ -523,7 +533,7 @@ before expansion.  Since every macro is finite, recursive expansion gives a
 finite pure EML tree effectively.
 \end{proof}
 
-\begin{theorem}[Triple-relative Richardson obstruction interface]
+\begin{theorem}[Verified-triple Richardson obstruction interface]
 \label{thm:proc-ams-relative-richardson-theorem}
 \label{thm:relative-richardson-main-spine-closure}
 \label{thm:interface-only-richardson-spine}
@@ -538,11 +548,12 @@ terms \((\mathsf P,\mathsf S,\mathsf A)\) satisfying
   \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
   \qquad \mathsf A(x)=|x|\quad(x\ne0).
 \]
-Richardson's identity-to-zero problem many-one reduces to zero-identity on the
-pure EML fragment translated using this triple.  Consequently that translated
-fragment admits no zero-identity algorithm, no computable semantic normalizer
-into finite objects with decidable equality, and no equality-reflecting semantic
-compiler into finite decidable protocol objects.
+Richardson's punctured identity-to-zero problem many-one reduces to the
+source-indexed partial equality problem for the pure EML fragment translated
+using this verified triple.  Consequently that transported fragment admits no
+zero-identity algorithm, no computable semantic normalizer into finite objects
+with decidable equality, and no equality-reflecting semantic compiler into finite
+decidable protocol objects.
 
 Moreover, no finite pure EML term defined on a right-neighbourhood of \(0\) can
 represent \(t\mapsto\sqrt t\) on \(\RR_{\ge0}\).  This endpoint obstruction does
@@ -562,11 +573,13 @@ translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) is effective.  By
   \tau_{\mathsf P,\mathsf S,\mathsf A}(0)
   \hbox{ on }D_E .
 \]
-Since Richardson's identity-to-zero problem for \(\mathcal R_{\mathrm{core}}\) is
-undecidable by \Cref{lem:richardson-fragment}, this is a many-one reduction.  A
-zero-identity algorithm on the translated fragment would decide the Richardson
-problem.  A computable semantic normalizer into finite objects with decidable
-equality would decide the same problem by normalizing
+Since Richardson's punctured identity-to-zero problem for
+\(\mathcal R_{\mathrm{core}}\) is undecidable by
+\Cref{thm:richardson-punctured-source-problem}, this is a many-one reduction.  A
+zero-identity algorithm on the source-indexed translated fragment would decide
+the Richardson problem.  A computable semantic normalizer into finite objects
+with decidable equality would decide the same problem by normalizing the
+source-indexed restrictions of
 \(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) and
 \(\tau_{\mathsf P,\mathsf S,\mathsf A}(0)\) and comparing the results; this is the
 transported-normalizer obstruction of
@@ -630,15 +643,17 @@ where Richardson requires agreement with \(|x|\) only for nonzero arguments.
 Thus, for every expression \(E\) in \(\mathcal R_{\mathrm{core}}\),
 \Cref{thm:punctured-domain-richardson-reduction} gives the equivalence of
 identity to zero on the punctured Richardson domain and identity to the
-translated zero term on the same domain.  Since the identity-to-zero problem for
-\(\mathcal R_{\mathrm{core}}\) is undecidable by \Cref{lem:richardson-fragment},
-this is a many-one reduction to the replacement EML fragment.  A zero-identity algorithm
-for that fragment would decide Richardson identity-to-zero; a computable
-semantic normalizer into finite objects with decidable equality would decide it
-by normalizing the two translated terms and comparing the normal forms; and an
-equality-reflecting semantic compiler into finite decidable protocol objects
-would decide it by compiling the two translated terms and comparing the target
-objects.  These are precisely the obstruction consequences used downstream in
+translated zero term on the same domain.  Since the punctured identity-to-zero
+problem for \(\mathcal R_{\mathrm{core}}\) is undecidable by
+\Cref{thm:richardson-punctured-source-problem}, this is a many-one reduction to
+the source-indexed replacement EML fragment.  A zero-identity algorithm for that
+fragment would decide Richardson identity-to-zero; a computable semantic
+normalizer into finite objects with decidable equality would decide it by
+normalizing the two source-restricted translated terms and comparing the normal
+forms; and an equality-reflecting semantic compiler into finite decidable
+protocol objects would decide it by compiling the two source-restricted
+translated terms and comparing the target objects.  These are precisely the
+obstruction consequences used downstream in
 \Cref{cor:strict-L0-L1,thm:obstruction-spine,thm:main-hierarchy}.  Finally, the
 argument has used only the three displayed semantic identities.  Therefore a
 specific printed triple, including \((U_{47},U_{111},U_{126})\), is a valid
