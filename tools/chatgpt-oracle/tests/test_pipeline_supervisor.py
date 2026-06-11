@@ -151,6 +151,24 @@ class SupervisorHelpersTests(unittest.TestCase):
             "A-BLOCKED (FQ deepening audit real block score=6)"
         ))
 
+    def test_board_entry_allows_manual_stage_c_extra_round_override(self):
+        entry = {
+            "journal": "JDDE",
+            "status": (
+                "C-NEAR-PASS (manual C+1 approved 2026-06-11; run exactly "
+                "one explicit Stage C final-confirmation override)"
+            ),
+            "reroute": (
+                "invoke oracle_pipeline.py --skip-to C --stop-after C "
+                "--extra-stage-c-rounds 1"
+            ),
+        }
+
+        self.assertFalse(oracle_pipeline._board_entry_skip(
+            "2026_coefficient_sup_radial_homotopy_monomial_forms_jdde",
+            entry,
+        ))
+
     def test_watchdog_requests_inner_restart_for_recoverable_stage_a_blocks(self):
         summary = {
             "skipped_status": [
@@ -184,6 +202,85 @@ class SupervisorHelpersTests(unittest.TestCase):
             pipeline_supervisor.recoverable_stage_a_blocked_papers(summary),
             [],
         )
+
+    def test_stage_c_round_cap_requires_explicit_extra_round_override(self):
+        state = oracle_pipeline.PaperState(
+            paper_dir="papers/publication/example",
+            paper_name="example",
+        )
+        state.stage_c_rounds = oracle_pipeline.MAX_STAGE_C_ROUNDS
+
+        self.assertEqual(
+            oracle_pipeline.stage_c_round_cap(state, extra_stage_c_rounds=0),
+            oracle_pipeline.MAX_STAGE_C_ROUNDS,
+        )
+        self.assertEqual(
+            oracle_pipeline.stage_c_round_cap(state, extra_stage_c_rounds=1),
+            oracle_pipeline.MAX_STAGE_C_ROUNDS + 1,
+        )
+
+    def test_stage_c_round_cap_clamps_negative_extra_rounds(self):
+        state = oracle_pipeline.PaperState(
+            paper_dir="papers/publication/example",
+            paper_name="example",
+        )
+        state.stage_c_rounds = oracle_pipeline.MAX_STAGE_C_ROUNDS
+
+        self.assertEqual(
+            oracle_pipeline.stage_c_round_cap(state, extra_stage_c_rounds=-3),
+            oracle_pipeline.MAX_STAGE_C_ROUNDS,
+        )
+
+    def test_stage_c_extra_round_retries_interrupted_counter_only_round(self):
+        state = oracle_pipeline.PaperState(
+            paper_dir="papers/publication/example",
+            paper_name="example",
+        )
+        state.stage_c_rounds = oracle_pipeline.MAX_STAGE_C_ROUNDS + 1
+        cap = oracle_pipeline.stage_c_round_cap(
+            state, extra_stage_c_rounds=1)
+
+        self.assertEqual(
+            oracle_pipeline.stage_c_next_round_start(
+                state, round_cap=cap, extra_stage_c_rounds=1),
+            oracle_pipeline.MAX_STAGE_C_ROUNDS + 1,
+        )
+
+        state.history.append({
+            "stage": "C",
+            "round_num": oracle_pipeline.MAX_STAGE_C_ROUNDS + 1,
+            "action": "oracle_final_review",
+        })
+        self.assertEqual(
+            oracle_pipeline.stage_c_next_round_start(
+                state, round_cap=cap, extra_stage_c_rounds=1),
+            oracle_pipeline.MAX_STAGE_C_ROUNDS + 2,
+        )
+
+    def test_latex_toolchain_missing_is_infra_not_compile_repair(self):
+        with mock.patch.object(oracle_pipeline.shutil, "which",
+                               return_value=None), \
+             mock.patch.object(oracle_pipeline, "WINDOWS_LATEX_BIN_DIRS", ()), \
+             mock.patch.object(oracle_pipeline, "WINDOWS_LATEX_TOOL_HINTS", {}):
+            self.assertFalse(oracle_pipeline.latex_toolchain_available(
+                requires_xelatex=False))
+            self.assertFalse(oracle_pipeline.latex_toolchain_available(
+                requires_xelatex=True))
+
+    def test_find_latex_tool_uses_windows_fallback_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bin_dir = Path(tmp)
+            exe = bin_dir / "pdflatex.exe"
+            exe.write_text("", encoding="utf-8")
+            with mock.patch.object(oracle_pipeline.shutil, "which",
+                                   return_value=None), \
+                 mock.patch.object(oracle_pipeline, "WINDOWS_LATEX_BIN_DIRS",
+                                   (bin_dir,)), \
+                 mock.patch.object(oracle_pipeline.sys, "platform", "win32"):
+                self.assertEqual(
+                    oracle_pipeline.find_latex_tool("pdflatex"),
+                    str(exe),
+                )
 
     def test_inner_restart_defers_while_oracle_work_in_flight(self):
         self.assertTrue(pipeline_supervisor.oracle_work_in_flight({

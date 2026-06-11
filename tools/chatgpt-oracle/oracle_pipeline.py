@@ -452,6 +452,15 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
     if not entry:
         return False
     status = str(entry.get("status", ""))
+    route_text = " ".join(
+        str(entry.get(key, "")) for key in ("status", "reroute", "notes")
+    ).lower()
+    if (
+        "c-near-pass" in status.lower()
+        and "manual c+1 approved" in route_text
+        and "extra-stage-c-rounds" in route_text
+    ):
+        return False
     if _board_skip(status):
         return True
     status_lower = status.lower()
@@ -467,6 +476,21 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
         "\u5f52\u6863",
         "parked",
     ))
+
+
+def _board_entry_stage_c_extra_rounds(entry: Optional[dict]) -> int:
+    if not entry:
+        return 0
+    route_text = " ".join(
+        str(entry.get(key, "")) for key in ("status", "reroute", "notes")
+    ).lower()
+    if (
+        "c-near-pass" in route_text
+        and "manual c+1 approved" in route_text
+        and "extra-stage-c-rounds" in route_text
+    ):
+        return 1
+    return 0
 
 
 def is_recoverable_stage_a_block_status(status: str) -> bool:
@@ -953,6 +977,53 @@ def structured_terminal_status_from_error(error: str) -> str:
     if err.startswith(PAUSED_ERROR_PREFIX):
         return "PAUSED"
     return ""
+
+
+def stage_c_round_cap(state: PaperState, *, extra_stage_c_rounds: int = 0) -> int:
+    """Return the Stage C round cap for this run.
+
+    The normal cap remains fixed.  Extra rounds are an explicit operator
+    override for near-pass final confirmation, not a global retry policy.
+    """
+    try:
+        extra = int(extra_stage_c_rounds)
+    except (TypeError, ValueError):
+        extra = 0
+    return MAX_STAGE_C_ROUNDS + max(0, extra)
+
+
+def _stage_c_has_final_review_for_round(state: PaperState, round_num: int) -> bool:
+    """Return whether Stage C has recorded an Oracle final review for round_num."""
+    for entry in state.history:
+        if not isinstance(entry, dict):
+            continue
+        if (
+            str(entry.get("stage", "")).upper() == "C"
+            and entry.get("round_num") == round_num
+            and entry.get("action") == "oracle_final_review"
+        ):
+            return True
+    return False
+
+
+def stage_c_next_round_start(state: PaperState, *, round_cap: int,
+                             extra_stage_c_rounds: int = 0) -> int:
+    """Return the first Stage C round to run for this invocation.
+
+    Stage C writes the round counter before C0 compilation. If a manual C+1
+    attempt is interrupted by missing LaTeX, server downtime, or process exit,
+    the state may say round 16 while no Oracle final review for round 16 exists.
+    In that case an explicit extra-round override should retry C16 exactly once,
+    not skip directly to terminal classification.
+    """
+    current = int(state.stage_c_rounds or 0)
+    if (
+        extra_stage_c_rounds
+        and MAX_STAGE_C_ROUNDS < current <= round_cap
+        and not _stage_c_has_final_review_for_round(state, current)
+    ):
+        return current
+    return current + 1
 
 
 def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
@@ -2398,6 +2469,60 @@ def _codex_fallback_for_claude(prompt: str, *, work_dir: Optional[Path],
 # Compile PDF
 # ---------------------------------------------------------------------------
 
+WINDOWS_LATEX_BIN_DIRS = (
+    Path.home() / "AppData" / "Local" / "Programs" / "MiKTeX" / "miktex" / "bin" / "x64",
+    Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "MiKTeX" / "miktex" / "bin" / "x64",
+    Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / "MiKTeX" / "miktex" / "bin" / "x64",
+    Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / "TeX Live" / "2026" / "bin" / "windows",
+    Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / "TeX Live" / "2025" / "bin" / "windows",
+)
+
+WINDOWS_LATEX_TOOL_HINTS = {
+    "pdflatex": (
+        r"C:\Users\zwl62\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe",
+    ),
+    "xelatex": (
+        r"C:\Users\zwl62\AppData\Local\Programs\MiKTeX\miktex\bin\x64\xelatex.exe",
+    ),
+    "bibtex": (
+        r"C:\Users\zwl62\AppData\Local\Programs\MiKTeX\miktex\bin\x64\bibtex.exe",
+    ),
+}
+
+
+def find_latex_tool(tool_name: str) -> Optional[str]:
+    """Find a LaTeX executable, including common Windows GUI-install paths."""
+    found = shutil.which(tool_name)
+    if found:
+        return found
+    if sys.platform == "win32":
+        exe_name = tool_name if tool_name.lower().endswith(".exe") else f"{tool_name}.exe"
+        for directory in WINDOWS_LATEX_BIN_DIRS:
+            if not directory:
+                continue
+            candidate = directory / exe_name
+            try:
+                if candidate.exists():
+                    return str(candidate)
+            except OSError:
+                continue
+        for hinted in WINDOWS_LATEX_TOOL_HINTS.get(tool_name.lower(), ()):
+            candidate = Path(hinted)
+            try:
+                if candidate.exists():
+                    return str(candidate)
+            except OSError:
+                # AppData may be unreadable to the sandbox user even though the
+                # real Windows account can execute the MiKTeX binary. Return the
+                # operator-verified path and let the subprocess call be the
+                # authoritative check.
+                return str(candidate)
+            # In restricted Codex sessions Path.exists can return False for
+            # user-profile binaries that are executable by the owner account.
+            # This path is an explicit local-machine hint, not a generic guess.
+            return str(candidate)
+    return None
+
 def read_compile_errors(paper_path: Path, max_chars: int = 4000) -> str:
     """Tail of main.log focused on LaTeX error lines.
 
@@ -2477,7 +2602,7 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
         return None
 
     # Prefer tectonic (self-contained, auto-downloads packages, no bibtex loop)
-    tectonic = shutil.which("tectonic")
+    tectonic = find_latex_tool("tectonic")
     if tectonic:
         run_cmd([tectonic, "--keep-logs", "-Z", "continue-on-errors",
                  "main.tex"], cwd=paper_path, timeout=300)
@@ -2489,7 +2614,7 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
     content = main_tex.read_text(encoding="utf-8", errors="replace")
     compiler_name = ("xelatex" if any(k in content for k in ("xeCJK", "ctex", "fontspec"))
                      else "pdflatex")
-    compiler = shutil.which(compiler_name)
+    compiler = find_latex_tool(compiler_name)
     if not compiler:
         logger.warning(f"No LaTeX compiler found ({compiler_name} missing, "
                        f"tectonic missing) — skip PDF")
@@ -2500,13 +2625,23 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
                  "main.tex"], cwd=paper_path, timeout=120)
     has_bib = ((paper_path / "references.bib").exists()
                or (paper_path / "references_local.bib").exists())
-    if has_bib and shutil.which("bibtex"):
-        run_cmd(["bibtex", "main"], cwd=paper_path, timeout=60)
+    bibtex = find_latex_tool("bibtex")
+    if has_bib and bibtex:
+        run_cmd([bibtex, "main"], cwd=paper_path, timeout=60)
         for _ in range(2):
             run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
                      "main.tex"], cwd=paper_path, timeout=120)
     pdf = paper_path / "main.pdf"
     return pdf if pdf.exists() else None
+
+
+def latex_toolchain_available(*, requires_xelatex: bool = False) -> bool:
+    """Return True if the local environment can compile a LaTeX manuscript."""
+    if find_latex_tool("tectonic"):
+        return True
+    if requires_xelatex:
+        return bool(find_latex_tool("xelatex"))
+    return bool(find_latex_tool("pdflatex"))
 
 
 # ---------------------------------------------------------------------------
@@ -8192,17 +8327,56 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 
 def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None,
-                oracle_timeout: int = 7200) -> bool:
+                oracle_timeout: int = 7200,
+                extra_stage_c_rounds: int = 0) -> bool:
     tag = f"[{state.paper_name}|C]"
     paper_path = Path(state.paper_dir)
+    round_cap = stage_c_round_cap(
+        state, extra_stage_c_rounds=extra_stage_c_rounds)
+    if round_cap > MAX_STAGE_C_ROUNDS:
+        logger.info(
+            f"{tag} explicit Stage C extra-round override: "
+            f"cap {MAX_STAGE_C_ROUNDS} -> {round_cap}"
+        )
 
-    for rnd in range(state.stage_c_rounds + 1, MAX_STAGE_C_ROUNDS + 1):
+    start_round = stage_c_next_round_start(
+        state, round_cap=round_cap,
+        extra_stage_c_rounds=extra_stage_c_rounds,
+    )
+    if start_round <= state.stage_c_rounds:
+        logger.info(
+            f"{tag} retrying interrupted Stage C round {start_round} "
+            "for explicit extra-round override"
+        )
+
+    for rnd in range(start_round, round_cap + 1):
         state.stage_c_rounds = rnd
         state.current_round = rnd
         save_state(state)
 
         # ── C0: Compile current final candidate ──────────────────
         logger.info(f"{tag} Round {rnd}: C0 — Compile final candidate")
+        main_tex = paper_path / "main.tex"
+        content = main_tex.read_text(encoding="utf-8", errors="replace") if main_tex.exists() else ""
+        requires_xelatex = any(k in content for k in ("xeCJK", "ctex", "fontspec"))
+        if not dry_run and not latex_toolchain_available(
+            requires_xelatex=requires_xelatex
+        ):
+            state.error = (
+                "C-INFRA-STUCK: Stage C cannot compile because no LaTeX "
+                "toolchain is visible in this process environment; do not "
+                "invoke Codex compile repair until pdflatex/xelatex/tectonic "
+                "is available"
+            )
+            logger.warning(f"{tag} {state.error}")
+            update_program_board(
+                state.paper_name,
+                "C-INFRA-STUCK",
+                "Stage C cannot compile because no LaTeX toolchain is visible; "
+                "fix process PATH/toolchain before retry",
+            )
+            save_state(state)
+            return False
         pdf = compile_pdf(paper_path, dry_run=dry_run)
         if not pdf:
             if not compile_gate(paper_path, model=model, dry_run=dry_run,
@@ -8418,7 +8592,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                         detail=f"compiled={compiled_c3}")
         save_state(state)
 
-        logger.info(f"{tag} Round {rnd}/{MAX_STAGE_C_ROUNDS} complete, "
+        logger.info(f"{tag} Round {rnd}/{round_cap} complete, "
                     f"looping for re-review")
 
     stage_c_status, stage_c_detail = classify_stage_c_terminal(state)
@@ -9239,6 +9413,7 @@ def run_paper_pipeline(
     dry_run: bool = False,
     model: Optional[str] = None,
     oracle_timeout: int = 7200,
+    extra_stage_c_rounds: int = 0,
 ) -> tuple[bool, PaperState]:
     paper_path = Path(paper_dir)
     if not paper_path.is_absolute():
@@ -9253,15 +9428,23 @@ def run_paper_pipeline(
             started_at=datetime.now().isoformat(),
         )
     else:
-        if normalize_stage_c_terminal_state(state, persist=True):
+        if (
+            not extra_stage_c_rounds
+            and normalize_stage_c_terminal_state(state, persist=True)
+        ):
             logger.info(f"[{paper_name}] Preserving structured Stage C "
                         f"terminal state: {state.error[:200]}")
             return False, state
         terminal_status = structured_terminal_status_from_error(state.error)
-        if terminal_status.startswith("C-"):
+        if terminal_status.startswith("C-") and not extra_stage_c_rounds:
             logger.info(f"[{paper_name}] Preserving structured Stage C "
                         f"terminal error: {state.error[:200]}")
             return False, state
+        if terminal_status.startswith("C-") and extra_stage_c_rounds:
+            logger.info(f"[{paper_name}] Clearing structured Stage C terminal "
+                        "error for explicit extra-round override")
+            state.error = ""
+            save_state(state)
         if state.error:
             if (
                 str(state.current_stage).upper() == "A"
@@ -9350,12 +9533,20 @@ def run_paper_pipeline(
         logger.info(f"[{paper_name}] Journal selection changed routing; "
                     "restarting at Stage F")
 
-    if normalize_stage_c_terminal_state(state, persist=True):
+    if (
+        not extra_stage_c_rounds
+        and normalize_stage_c_terminal_state(state, persist=True)
+    ):
         logger.info(f"[{paper_name}] Stage C terminal state restored after "
                     "round-counter recovery")
         return False, state
 
-    if state.current_stage in ("B", "C", "D") and not stage_a_ready_for_b(state):
+    if (
+        state.current_stage in ("B", "C", "D")
+        and not stage_a_ready_for_b(state)
+        and not (extra_stage_c_rounds and state.current_stage == "C"
+                 and state.stage_c_rounds >= MAX_STAGE_C_ROUNDS)
+    ):
         logger.warning(f"[{paper_name}] Later-stage state lacks strict "
                        f"Stage A audit pass; routing back to Stage A")
         state.current_stage = "A"
@@ -9402,6 +9593,8 @@ def run_paper_pipeline(
             kwargs = dict(dry_run=dry_run, model=model)
             if stage in ("A", "B", "C"):
                 kwargs["oracle_timeout"] = oracle_timeout
+            if stage == "C":
+                kwargs["extra_stage_c_rounds"] = extra_stage_c_rounds
             ok = runner(state, **kwargs)
         except Exception as exc:
             state.error = f"Stage {stage}: {exc}"
@@ -9639,7 +9832,18 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
             if not queue:
                 return
             d = queue.pop(0)
-            fut = pool.submit(run_paper_pipeline, d, **kwargs)
+            per_paper_kwargs = dict(kwargs)
+            entry = _load_board_entries().get(Path(d).name)
+            extra_c = _board_entry_stage_c_extra_rounds(entry)
+            if extra_c and not per_paper_kwargs.get("extra_stage_c_rounds"):
+                per_paper_kwargs["extra_stage_c_rounds"] = extra_c
+                per_paper_kwargs["skip_to"] = "C"
+                per_paper_kwargs["stop_after"] = "C"
+                logger.info(
+                    f"[{Path(d).name}] board-approved Stage C extra-round "
+                    f"override: +{extra_c}"
+                )
+            fut = pool.submit(run_paper_pipeline, d, **per_paper_kwargs)
             futures[fut] = d
             logger.info(f"Dispatched: {Path(d).name} "
                         f"(active={len(futures)}, oracle_wait={get_oracle_wait_count()}, "
@@ -10043,6 +10247,11 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
                               "`--stop-after A` to keep work before Stage B."))
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
+    parser.add_argument("--extra-stage-c-rounds", type=int, default=0,
+                        help=("Explicit operator override for near-pass "
+                              "Stage C final-confirmation rounds. Default 0; "
+                              "use only for a named paper such as a "
+                              "C-NEAR-PASS manual C+1."))
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--dashboard", action="store_true",
                         help="Compact per-paper progress table")
@@ -10148,6 +10357,7 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
         dry_run=args.dry_run,
         model=args.model,
         oracle_timeout=args.oracle_timeout,
+        extra_stage_c_rounds=args.extra_stage_c_rounds,
     )
 
     if len(paper_dirs) == 1 and args.parallel <= 1:

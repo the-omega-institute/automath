@@ -1,89 +1,92 @@
 # Publication Board
 
-更新日期：2026-05-21
+Updated: 2026-06-11
 
-这张表只给人看：一篇论文或一条投稿路线一行。机器调度状态放在本地 `PROGRAM_BOARD_MACHINE.md`；这里不放内部 hard marker。
+This board is for human tracking only: one paper or route per row. Machine
+state, hard gates, temporary failures, and daemon scheduling details live in
+`PROGRAM_BOARD_MACHINE.md`.
 
-处理原则：拒稿路线优先处理。若拒稿稿件和其他稿件重叠很大，就合并成一个 canonical 重写稿再投；若它和仍在审的稿件高度重叠，就先等在审稿件反馈。
+Current pipeline health: Oracle server is online and five ChatGPT Oracle tabs
+are registered. The approved JDDE C+1 gate completed on 2026-06-11 with Oracle
+`accept` and Codex `submit`. The remaining infrastructure task is to restart
+the long-running supervisor under the Windows user environment that can execute
+MiKTeX.
 
-## Newmath intake candidates
+Operating rule: rejected routes have priority. If a rejected manuscript overlaps
+strongly with a submitted or under-review manuscript, wait for the active
+submission unless the board explicitly records a merge, supersession, or closure.
 
-Current P0 gate snapshot: `newmath_intake/CURRENT_STATUS.md`.
+## Today
 
-`newmath` 来源的候选投稿单元先进入
-`papers/publication/newmath_intake/`。这些目录不是 active paper track，
-不进入 Stage A/P0-P7，只有 promotion checklist 通过后才创建正式
-`2026_*` 论文目录。
+| Paper or route | Venue | Status | Next step |
+|---|---|---|---|
+| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | Closest to submit. PDF exists and previous checklist was 11/12 pass. The old blocker was missing author metadata; current `main.tex` now has Haobo Ma and Wenlin Zhang metadata. | Do final submission-pack polish: recompile, update checklist, revise cover letter signature, add AI disclosure if APAL asks, then human final review/upload. |
+| Pipeline daemon / Oracle | local automation | Oracle server online with 5 registered tabs. JDDE C+1 proved the Windows MiKTeX path works when the pipeline is launched under the real user environment. | Restart the long-running supervisor with `--parallel 5 --no-claude --no-auto-commit --no-server-spawn --no-pi-review`, then verify health snapshot and advancing logs. |
+| `2026_auditable_theory_to_paper_pipeline` | CICM presentation-only / mathematical software workshop | Not submit-ready. Reframed as an auditable auto-formalization method paper, but Stage A still blocks it with low audit score. | Keep developing the method paper; do not submit today. Needs stronger source-method framing and likely new Stage A/Oracle escalation after daemon recovery. |
 
-| seed | 优先级 | 当前状态 | 下一步 |
-|------|------|------|------|
-| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | promoted to active track `2026_auditable_theory_to_paper_pipeline`; seed is archive/source packet | Continue in active paper directory; do not process seed independently |
-| `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | exact statements 已读；blocker ledger、related-work scaffold、short-note memo 已准备；当前 theorem spine 偏局部构造/等式/确定性，不宜直接 journal promotion | 先在 upstream 增加或识别一个 packaging theorem；若你明确选择 modest workshop/short-note route，则按 `short_note_route_memo.md` 降级推进 |
-| `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | static recheck 发现 count drift；本机 Windows/WSL 都缺 `make` 和 C compiler；trust-chain template 和 diagnostic route memo 已准备；仍非 active paper track | 安装/使用 build toolchain 后重跑 full suite，填写 trust-chain，并解决或公开 collision-audit 33 行中 `26/33 PASS, 7 FAIL` 与全通过说法的矛盾 |
-| `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | intake-ready；MetaCIC 类型论 note 候选 | 做 related-work audit 和 exact theorem boundary |
-| `newmath_intake/seeds/observer_state_semantics` | P1 | intake-ready；observer-state semantics 候选 | 降调成 workshop/position framing，避免 AI-consciousness 强主张 |
+## Submitted: Wait For Feedback
 
-## 已投稿：等待反馈
+| Paper or route | Venue | Status | Next step |
+|---|---|---|---|
+| `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | Journal of Theoretical Probability | Submitted; peer review in progress; 7 reviewers invited. Current title: "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type". | Wait for editorial/reviewer feedback. Do not process overlapping zero-jitter route. |
+| `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-Theor. Inf. Appl. | Submitted; no feedback recorded. | Wait for result. |
+| `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | Journal of Number Theory | Submitted 2026-03-14; under review since 2026-03-25. Title: "A quartic cover of 37a1 and its regular S4-closure". | Wait for result. |
+| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | Submitted 2026-05-11; under review; Paper ID `260511-Zhang-2`. | Wait for result. Related Fibonacci/Zeckendorf finite-window manuscripts remain paused. |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | Submitted; submission date and ID still need to be recorded. | Add submission ID/date when available. Old `prefix_scan_error...` route is legacy only. |
 
-| 论文或路线 | 期刊 | 当前状态 | 下一步 |
-|------|------|------|------|
-| `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | Journal of Theoretical Probability | 路线：QTDS → JTP；已投稿 JTP，peer review 中；7 reviewers invited；题名已改为 “Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type” | 等编辑/审稿反馈；不要处理重叠的 zero-jitter route |
-| `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-Theor. Inf. Appl. | 路线：RAIRO-ITA；已投稿；无反馈，等待结果 | 等反馈 |
-| `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | Journal of Number Theory | 路线：JNT；2026-03-14 submitted，2026-03-25 under review；题名：A quartic cover of 37a1 and its regular S4-closure | 等反馈 |
-| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | 路线：Nonlinearity → DCDS-A；已投稿 2026-05-11，审稿中；Paper ID `260511-Zhang-2` | 等反馈；相关 Fibonacci/Zeckendorf finite-window 稿件先暂停 |
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | 路线：canonical ETDS；已投稿；提交日期和编号待补；旧 `prefix_scan_error...` 目录是 legacy route | 补 submission ID；旧 `prefix_scan_error...` 目录只作历史记录 |
+## Ready Or Near-Ready After Human Review
 
-## 正在发展或可继续推进
+| Paper or route | Venue | Status | Next step |
+|---|---|---|---|
+| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | Submission-pack stage. Prior pipeline says Stage A passed, PDF compiles, and only low-risk metadata/prose consistency remained. | Treat as today's highest-value submission candidate. Do not restart theoremization. |
+| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | C-DONE after controlled C+1 on 2026-06-11. Round 16 returned Oracle `accept` and Codex `submit`, with 0 remaining work packages; no paper changes were needed. | Ready for human final submission review: confirm JDDE/Springer source-package requirements, author metadata, declarations, and upload files. |
+| `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory; backups: Operators and Matrices / Complex Analysis and Operator Theory | C-DONE after JST rejection. JST/EditFlow rejected as not suitable, with no technical referee report. Current retarget is IEOT, but research directive still calls for checking the Weyl-Horn singular-value body theorem package. | Not direct upload today. Verify the new Weyl-Horn package is actually in the manuscript, then final venue/package review. |
+| `2026_elliptic_normalization_branch_geometry_quartic_spectral` | Indagationes Mathematicae | C-DONE, complete multi-file manuscript, split-overlap gate clean. No theorem-deepening blocker is recorded on the human board. | Do final theorem/venue review and Stage F journal confirmation; if no new blocker appears, prepare submission package. |
 
-| 论文或路线 | 期刊 | 当前状态 | 下一步 |
-|------|------|------|------|
-| `2026_auditable_theory_to_paper_pipeline` | CICM presentation-only / mathematical software workshop route | Newmath BEDC automation pipeline promoted 2026-05-31；P0 complete；initial 2-page PDF compiles；claim remains narrow until live venue/bibliography/source-command checks finish | Continue P1 two-page draft strengthening, then P2 venue and bibliography verification |
-| `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory；备选：Operators and Matrices / Complex Analysis and Operator Theory | JST 已拒 2026-05-21；David Damanik/EditFlow：editors concluded it was not suitable for Journal of Spectral Theory；无技术审稿意见。Codex-only retarget：IEOT fit=8/10；R11 final repair 后 A3 audit 仍为 revise，但已复用 Oracle escalation 并重新进入 Stage A；当前问题集中在 zero-inclusive Weyl-Horn/Fan-dominance 修复、finite-support polynomial bridge、主定理层级和 journal-register polish | 在原文件夹中改，不新建文件夹；让当前 Stage A theorem-deepening 继续跑；若再次 fake-extension 或 final-audit 不过，再进入人工 theorem-deepening/降刊判断 |
-| `upperfiber` | Fibonacci Quarterly | RJ 已拒；RJ 反馈：贡献偏形式包装、算术深度不足，且 n=30 数据不支持“八类型”说法；RINT 是重复历史路线 | 在原 upper-fibers/FQ 文件夹中改，不新建文件夹；目标 FQ；从 Stage A 重新深改，修正 n=30/八类型并加入新实质结果 |
-| `2026_detector_shells_click_record_kms_jphyscomm` | 待重新选物理/数学物理期刊 | canonical merged rewrite route；GRG 和 JPhysComm 都已拒；JPhysComm 版本是 GRG route 后续版本；overlap resolved；需要带着两次拒稿背景重新处理 | 在现有文件夹中改；从 Stage A 重新走，prompt 需附 GRG/JPhysComm 拒稿背景和应用/期刊适配问题；不拆成两篇 |
-| `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | 待重新选 dynamical systems / symbolic dynamics 期刊 | ETDS 已拒 2026-05-26；Submission ID `ETDS-2026-0139`；题名 “Adams-Mobius primitive inversion for finite-group extensions of shifts of finite type”；Ian Melbourne/quick expert opinion: not appropriate for ETDS, needs true advance/new phenomenon/surprising result/notable contribution and closer ETDS fit | 在现有文件夹中改；从 Stage A 重新走，带上 ETDS 拒稿原因；优先做 novelty escalation 和 venue retarget，不要只做润色 |
-| `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS / symbolic dynamics venue | SIADS 已拒；理由是缺少应用影响，不是技术审稿；建议转投。当前 ETDS 版本与 Zeckendorf-fold/Sturmian-Parry 稿高度重叠 | 合并 `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` 素材，从 Stage A 进入深改；不要拆成两篇同时投 |
-| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | Journal of Functional Analysis | Oracle 审稿门已过；还不是投稿包 | 进入最终投稿确认 |
-| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | Oracle 审稿门已过；还不是投稿包 | 进入最终投稿确认 |
-| `2026_single_primitive_universality_hierarchy` | Proceedings of the AMS | 已复用 Oracle escalation 重新进入 Stage A；当前路线是压缩成 Proc. AMS 风格的 hierarchy strictness note，补强 Richardson normal-form obstruction 与 one-free-monogenic-orbit multiplication obstruction，并避免与 Zeckendorf/folded family 重叠 | 让 Stage A 继续补强；重点保持 printed-root interface 条件性、external record pin、非重叠 scope，不要扩展到 Zeckendorf fiber thermodynamics |
-| `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | 待选 | split-overlap gate 未发现硬重复，但之前路径较旧 | 需要人工 theorem review 后再跑 |
-| `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | 待选 | 需要实质 theorem-deepening | 让管线补强数学内容 |
-| `2026_elliptic_normalization_branch_geometry_quartic_spectral` | 待选 | split-overlap gate clean；需要 theorem-deepening | 让 Stage F 选期刊并推进 |
+## Active Rewrite / Retarget
 
-## 手动分诊后可恢复
+| Paper or route | Venue | Status | Next step |
+|---|---|---|---|
+| `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | retarget dynamical systems / symbolic dynamics venue | ETDS rejected 2026-05-26, Submission ID `ETDS-2026-0139`. Ian Melbourne: needs a true advance/new phenomenon/surprising result/notable contribution and closer ETDS fit. Current machine state says B-STUCK after major-revision Oracle loops. | Do novelty escalation and material theorem strengthening. Do not just polish or restart from zero Stage A. |
+| `2026_detector_shells_click_record_kms_jphyscomm` | retarget physics-math venue | Canonical merged detector-shells route. GRG and JPhysComm both rejected; overlap resolved; current Stage A blocked with venue-fit/application issues. | Rerun after daemon recovery with both rejection reasons in prompt. Keep as one merged route, not two papers. |
+| `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS / symbolic dynamics venue | SIADS rejected for application-fit, not technical review. Canonical merged route for folded-histograms plus Zeckendorf/Sturmian-Parry material. Machine state currently blocked/infra-stuck. | Merge the Zeckendorf/Sturmian-Parry sibling material and retarget; do not process sibling separately. |
+| `2026_single_primitive_universality_hierarchy` | Proc. AMS | Stage A blocked. Intended as compact strictness note around Richardson normal-form obstruction and one-free-monogenic-orbit multiplication obstruction. | Needs real theorem strengthening or scope tightening; avoid expanding into Zeckendorf/folded-family material. |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | C-STUCK after Oracle/Claude exhaustion. Previous remaining items were bibliography wording, source-artifact scan, overfull boxes, and journal-register cleanup. | Rerun Stage C final gate after daemon recovery; do not rewrite from scratch. |
+| `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | J. Algebraic Combinatorics / Experimental Mathematics / ETDS | B-STUCK; Oracle rejected after 20 rounds. | Human retarget/polish: add kernel motivation, displayed S6/smoothness certificates, traceable computations, and bibliography. |
+| `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | venue pending | C-DONE review history exists, but this is not yet a direct-upload route: the board lacks a concrete strengthened theorem package and venue decision. | Generate a theorem-deepening work order first, implement or explicitly reject it, then rerun Stage F/C after the strengthened package is present. |
 
-| 论文或路线 | 期刊 | 当前状态 | 下一步 |
-|------|------|------|------|
-| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | 可恢复；PDF 可编译。旧 pipeline 记录主要 blocker 是 APAL 作者信息缺失；Stage A audit 已通过，仅剩 label/prose 小一致性和 ledger/backflow 项 | 不应重做数学深改；从 submission-pack / Stage C-final polish 进入，补作者元数据和低风险编辑一致性后准备投稿 |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | 已手动处理 Stage C polish；Oracle 已 accept，独立终审之前要求 revise 的问题主要是 bibliography wording、source artifact scan、overfull boxes、journal register | 放回 Stage C final gate，从 C12 继续；不从头重写 |
-| `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | 改投候选：J. Algebraic Combinatorics / Experimental Mathematics / ETDS | 可恢复但不宜继续按 IMRN 强投；PDF 可编译。旧 P4 blocker 是 kernel 动机不足、S6/光滑性证书未展示、bibliography 太薄；Stage A audit 显示数学主体已通过但有证书可追溯性和小证明措辞项 | 从 Stage A retarget/polish 进入，先降目标或重选 venue，补动机、证书展示和参考文献，再进审稿门 |
+## Newmath Intake
 
-## 重叠、归档或暂停
+These are not active papers until manually promoted into a `2026_*` directory.
 
-| 论文或路线 | 期刊 | 当前状态 | 下一步 |
-|------|------|------|------|
-| `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Quarterly | FQ 于 2026-05-01 拒稿；本地 decision 指出它与 DCDS-A 在审稿件 `260511-Zhang-2` 高度重叠；已决定暂不改 | 不单独改投；等 DCDS-A 反馈后决定是否吸收、删减成不同短文，或彻底关闭 |
-| `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | 与 folded-histograms SIADS/ETDS route 重叠；已并入 folded-histograms 合并处理 | 暂停独立处理；作为 canonical ETDS 合并深改素材 |
-| `submitted_2026_folded_histograms_sampling_certificates_parry_mismatch_siads` | SIADS | SIADS 已拒；已并入 folded-histograms canonical route | 不独立处理 |
-| `submitted_2026_folded_rotation_histogram_etds` | ETDS | 这条就是 folded-histograms/SIADS 拒稿路线的历史记录；已并入 canonical folded-histograms route | 不独立处理 |
-| `submitted_2026_resolution_folding_core_symbolic_dynamics_jnt` | Journal of Number Theory | 已拒；后续由 DCDS-A `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` 转投承接 | DCDS-A 在审期间不独立处理 |
-| `submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp` | Journal of Theoretical Probability | 已拒；后续由 `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` 转投承接 | tilt-dynamics JTP 在审期间不独立处理 |
-| `submitted_2026_shell_geometry_detector_thermality_kms_grg` | GRG | rejected history route；parked；superseded by canonical active route `2026_detector_shells_click_record_kms_jphyscomm` | GRG/JPhysComm both rejected；do not process independently；background feeds the canonical detector-shells rewrite |
-| `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | 待选 | 与 DCDS-A / folded-histograms / Zeckendorf-fold routes 重叠 | 暂停 |
-| `2026_deterministic_telescoping_fold_truncation_defects_dynamical_systems` | Dynamical Systems | 与 folded symbolic dynamics family 重叠 | 暂停 |
-| `2026_golden_mean_folding_stable_types_auditable_addressing` | 待选 | 与 DCDS-A three-window route 重叠 | 等 DCDS-A 反馈 |
-| `2026_prefix_scan_error_boundary_rates_dynamical_systems` | legacy | 旧目录；canonical route 是 `2026_scan_error_prefix_partitions_convergence_rates_etds` | 不独立处理 |
-| `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` / `2026_projection_ontological_mathematics_core_tams` | Transactions AMS | 两条 TAMS route 重叠 | 需要先定 canonical route |
-| `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` / `2026_scan_projection_address_semantics_sigma_nonexpansion_etds` | ETDS | 两条 observation/escape-rate route 重叠 | 需要先定 canonical route |
-| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` / `2026_recursive_addressing_prefix_sites_tac` | APAL / TAC | 与 homological-visibility route 重叠 | 需要先定 canonical route |
-| `2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online` | 待选 | 会复现 Fibonacci modulus-chain quotient 或转入 online-normalization/transducer manuscript | 暂停 |
-| `2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge` | 待选 | semantic overlap 需人工解决 | 暂停 |
-| `2026_cubical_stokes_inverse_boundary_readout_jdsgt` | legacy | 与 canonical JDDE route 重复 | 不独立处理 |
-| `2026_golden_ratio_driven_scan_projection_generation_recursive_emergence` | missing source | board 中有记录但本地缺源目录 | 源目录恢复前不处理 |
+| Seed | Priority | Status | Next step |
+|---|---:|---|---|
+| `newmath_intake/seeds/bedc_automation_pipeline` | P0 | Promoted to active track `2026_auditable_theory_to_paper_pipeline`; seed is archive/source packet only. | Continue in active paper directory; do not process seed independently. |
+| `newmath_intake/seeds/bedc_finite_kernel_calculus` | P0 | Exact statements read; blocker ledger, related-work scaffold, and short-note memo prepared. Current theorem spine is too local for direct journal promotion. | Add or identify an upstream packaging theorem, or explicitly choose a modest workshop/short-note route. |
+| `newmath_intake/seeds/bedc_rule110_finite_witness` | P0 | Static recheck found count drift; local machine lacks required build toolchain for full rerun. Trust-chain template and diagnostic route memo prepared. | Install/use build toolchain, rerun full suite, then resolve count/collision-audit contradictions before promotion. |
+| `newmath_intake/seeds/metacic_closed_normal_consistency` | P1 | Intake-ready MetaCIC type-theory note candidate. | Related-work audit and exact theorem boundary. |
+| `newmath_intake/seeds/observer_state_semantics` | P1 | Intake-ready observer-state semantics candidate. | Reframe as workshop/position paper; avoid strong AI-consciousness claims. |
 
-## 骨架
+## Parked / Overlap / Do Not Process Independently
 
-| 论文或路线 | 期刊 | 当前状态 | 下一步 |
-|------|------|------|------|
-| `2026_group_unification_fibonacci_prime_window_entropy_time` | 待选 | 骨架 | 暂不处理 |
-| `2026_zeta_completion_xi_zero_audit` | 待选 | 骨架 | 暂不处理 |
+| Paper or route | Venue | Status | Next step |
+|---|---|---|---|
+| `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Quarterly | Rejected 2026-05-01. Local decision: highly overlaps DCDS-A paper `260511-Zhang-2`. | Do not retarget independently. Wait for DCDS-A feedback. |
+| `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` / `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` | Ramanujan J. / Fibonacci Quarterly | RJ rejected for insufficient novelty/repackaging and an `n=30`/eight-types data issue. FQ route remains blocked by overlap with submitted/current sibling routes. | Only revive if we add substantive arithmetic content and fix the data issue; otherwise wait/merge. |
+| `submitted_2026_folded_histograms_sampling_certificates_parry_mismatch_siads` | SIADS | Rejected; merged into canonical folded-histograms ETDS route. | Do not process independently. |
+| `submitted_2026_folded_rotation_histogram_etds` | ETDS | Same rejected folded-histograms/SIADS route family. | Do not process independently. |
+| `submitted_2026_resolution_folding_core_symbolic_dynamics_jnt` | Journal of Number Theory | Rejected; superseded by DCDS-A `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds`. | Do not process while DCDS-A is under review. |
+| `submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp` | Journal of Theoretical Probability | Rejected; superseded by tilt-dynamics JTP route. | Do not process while JTP route is under review. |
+| `submitted_2026_shell_geometry_detector_thermality_kms_grg` | GRG | Rejected history route; superseded by canonical detector-shells rewrite. | Do not process independently; use as background for detector-shells. |
+| `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | Parked; merged into folded-histograms route. | Use as material only. |
+| `2026_prefix_scan_error_boundary_rates_dynamical_systems` | legacy | Parked; canonical route is `2026_scan_error_prefix_partitions_convergence_rates_etds`. | Do not process independently. |
+| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` / `2026_recursive_addressing_prefix_sites_tac` | APAL / TAC | Overlaps homological-visibility APAL route. | Decide canonical route before any work; currently APAL homological-visibility is canonical. |
+| `2026_cubical_stokes_inverse_boundary_readout_jdsgt` | legacy | Duplicate of canonical JDDE route `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde`. | Do not process independently. |
+| `2026_golden_ratio_driven_scan_projection_generation_recursive_emergence` | missing source | Board entry exists but local source directory is missing. | Do not process until source is restored or explicitly renamed. |
+
+## Skeletons
+
+| Paper or route | Venue | Status | Next step |
+|---|---|---|---|
+| `2026_group_unification_fibonacci_prime_window_entropy_time` | pending | Skeleton only. | Do not process now. |
+| `2026_zeta_completion_xi_zero_audit` | pending | Skeleton only. | Do not process now. |
