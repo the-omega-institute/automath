@@ -1,8 +1,9 @@
-﻿\section{Strictness of the hierarchy}\label{sec:strictness}
+\section{Strictness of the hierarchy}\label{sec:strictness}
 
 This section proves the two strictness mechanisms used by
-\Cref{thm:main-hierarchy}.  The Richardson part is stated with a verified
-finite EML triple as its load-bearing hypothesis.  The printed strings
+\Cref{thm:main-hierarchy}.  The Richardson part is stated relative to any finite
+pure EML triple whose three real-domain identities have been proved.  The paper
+proves the punctured absolute-value row internally; the printed strings
 \(U_{47},U_{111},U_{126}\) appear only as the conditional cited specialization
 \((H_{\mathcal W})\) from \Cref{ass:HW}.
 
@@ -198,42 +199,38 @@ Richardson's identity theorem and avoids the impossible endpoint-square-root
 requirement.
 \end{proof}
 
-\begin{lemma}[Printed EML witnesses for \texorpdfstring{\(\pi\)}{pi} and sine]
+\begin{lemma}[Conditional printed EML witnesses for \texorpdfstring{\(\pi\)}{pi} and sine]
 \label{lem:eml-pi-sine-witnesses}
 Let \(W_{\pi}=U_{47}\) and \(W_{\sin}=U_{111}\) be the finite pure EML strings
-printed in \texttt{ancillary/eml\_witness\_catalogue.txt}.  The manuscript uses
-these two strings with the following verified real-domain identities:
+printed in \texttt{ancillary/eml\_witness\_catalogue.txt}.  Under the external
+hypothesis \((H_{\mathcal W})\) of \Cref{ass:HW}, these two strings have the
+real-domain identities
 \[
   W_{\pi}=\pi,
   \qquad
   W_{\sin}(x)=\sin x\quad(x\in\RR).
 \]
-The identities are exactly the symbolic verification entries labelled ``Step 18:
-Constant Pi'' and ``Step 25: Sin[x]'' in the finite verification chain
-\texttt{tmp/SymbolicRegressionPackage/EML\_toolkit/EmL\_verification/verify\_eml\_symbolic\_chain.wl};
-the chain expands each named witness into the pure grammar
-\(T::=1\mid x\mid\eml(T,T)\) and checks the displayed principal-branch identities
-under the stated real hypotheses.
+Without \((H_{\mathcal W})\), the catalogue and its checker certify only finite
+pure-EML syntax and do not prove these two semantic identities.
 \end{lemma}
 
 \begin{proof}
 The catalogue gives finite strings in the pure EML grammar, and the companion
 checker \texttt{ancillary/check\_eml\_witnesses.py} verifies, by a bounded parse,
-that the two roots are finite expressions over the single binary operation
-\(\eml\), the constant \(1\), and the input leaf for the unary sine witness.  The
-symbolic verification chain then proves their semantics by a finite sequence of
-previously verified identities.  At Step 18 it verifies the constant witness as
-\(\pi\); at Step 25 it verifies the unary witness as \(\sin x\) under the
-assumption \(x\in\RR\).  These are finite algebraic checks of the printed strings,
-not consequences of the external \(\mathcal B_{36}\) expression-universality
-citation and not uses of the endpoint square-root string \(U_{126}\).
+that the two displayed right-hand sides are finite expressions over the single
+binary operation \(\eml\), the constant \(1\), and the input leaf for the unary
+sine witness.  The checker explicitly records that it proves no real-domain
+semantic identities.  The displayed equalities are therefore exactly the first
+two clauses of \((H_{\mathcal W})\), restricted to \(U_{47}\) and \(U_{111}\).
+No conclusion about \(\pi\) or sine is drawn from finite syntax alone.
 \end{proof}
 \begin{lemma}[Quantitative core witness table]
 \label{lem:eml-core-witness-table}
-The self-contained EML part of the Richardson translation uses the following
-finite printed witness table.  Each entry is a pure EML macro from
+The EML part of the Richardson translation uses the following finite witness
+table.  Each entry is a pure EML macro from
 \Cref{lem:eml-printed-core,lem:eml-real-witness-library,lem:eml-pi-sine-witnesses};
-the domain column is the exact real domain on which the identity is proved.
+the domain column is the exact real domain on which the identity is proved or,
+for \(W_{\pi}\) and \(W_{\sin}\), externally assumed by \((H_{\mathcal W})\).
 \[
 \begin{array}{@{}c@{\quad}c@{\quad}c@{}}
 \hbox{constructor} & \hbox{witness} & \hbox{domain}\\ \hline
@@ -249,22 +246,24 @@ e^u & E(u) & \RR\\
 |u|\hbox{ off }0 & \Abs(u)=G(M(u,u)) & \RR\setminus\{0\}
 \end{array}
 \]
-This is the complete finite witness table used by
-\Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}.  The
-full nonnegative-square-root row \(\sqrt u\) on \([0,\infty)\) is not part of the
-Richardson input in this paper.
+This is the complete finite witness table used by the conditional printed-string
+translation in \Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}.
+The full nonnegative-square-root row \(\sqrt u\) on \([0,\infty)\) is not part of
+the Richardson input in this paper.
 \end{lemma}
 
 \begin{proof}
 The arithmetic, exponential, division, rational-constant, and \(\log2\) rows are
 proved in \Cref{lem:eml-printed-core,lem:eml-real-witness-library}.  The \(\pi\)
-and sine rows are \Cref{lem:eml-pi-sine-witnesses}.  The punctured absolute-value
-row is \Cref{thm:eml-punctured-richardson-core}.  These are exactly Richardson's
-condition (1) and condition (2) as used in \Cref{lem:richardson-fragment}: the
-absolute-value symbol is required to agree with \(|x|\) only away from zero.
+and sine rows are exactly the conditional rows of
+\Cref{lem:eml-pi-sine-witnesses}.  The punctured absolute-value row is proved in
+\Cref{thm:eml-punctured-richardson-core}.  These are Richardson's condition (1)
+and condition (2) as used in \Cref{lem:richardson-fragment} once the two
+conditional rows have been supplied: the absolute-value symbol is required to
+agree with \(|x|\) only away from zero.
 \end{proof}
 
-\begin{theorem}[Self-contained EML-Richardson witness package]
+\begin{theorem}[Conditional EML-Richardson witness package]
 \label{thm:no-core-only-richardson-translation}
 \label{prop:printed-witness-certificate-boundary}
 \label{thm:printed-richardson-witnesses-interface}
@@ -274,25 +273,26 @@ absolute-value symbol is required to agree with \(|x|\) only away from zero.
 \label{thm:no-unconditional-printed-root-richardson-instance}
 \label{thm:separation-is-interface-only}
 The principal-branch EML terms displayed in
-\Cref{lem:eml-core-witness-table} form a non-vacuous Richardson witness package:
-rational constants, \(\log2\), arithmetic, \(\exp\), \(\pi\), sine on \(\RR\), and
-a punctured absolute-value witness are all proved inside the article.  The
-source-locked strings \((U_{47},U_{111},U_{126})\) and the hypothesis
-\((H_{\mathcal W})\) are not used in this unconditional Richardson package.  They
-remain only optional provenance data for a different endpoint-square-root
-specialization.
+\Cref{lem:eml-core-witness-table} form a Richardson witness package conditional
+on the two printed-string identities
+\(W_{\pi}=\pi\) and \(W_{\sin}(x)=\sin x\) for \(x\in\RR\).  All other rows needed
+for rational constants, \(\log2\), arithmetic, \(\exp\), and the punctured
+absolute-value witness are proved inside the article.  The endpoint-root string
+\(U_{126}\) and the endpoint identity for \(\sqrt t\) are not used in this
+punctured Richardson package.
 \end{theorem}
 
 \begin{proof}
-Every row in \Cref{lem:eml-core-witness-table} has already been proved on its
-stated real domain.  Richardson's Theorem~2, as recorded in
-\Cref{lem:richardson-fragment}, requires exactly those rows: condition (1) gives
-\(\log2\), \(\pi\), \(e^x\), and \(\sin x\), and condition (2) gives a unary
-function agreeing with \(|x|\) for \(x\ne0\).  It does not require a separate
-principal-branch EML value for \(\sqrt0\).  Therefore the displayed package is a
-self-contained finite EML instantiation of the Richardson hypotheses.  Since no
-step cites the strings \((U_{47},U_{111},U_{126})\), their external semantic
-status is irrelevant to the unconditional theorem chain.
+Every nontrigonometric, non-\(\pi\) row in \Cref{lem:eml-core-witness-table} has
+already been proved on its stated real domain.  The two remaining rows are
+precisely the two semantic identities named in the statement.  Richardson's
+Theorem~2, as recorded in \Cref{lem:richardson-fragment}, requires rational
+constants, \(\log2\), \(\pi\), arithmetic, \(\exp\), sine, and a unary symbol
+agreeing with absolute value off zero.  Under the two printed-string identities,
+the table supplies the \(\pi\) and sine rows, while
+\Cref{thm:eml-punctured-richardson-core} supplies the absolute-value row without
+asserting a square-root value at zero.  No step invokes \(U_{126}\) or an
+endpoint-square-root identity.
 \end{proof}
 
 \begin{lemma}[Zero-domain-free EML absolute-value witness]
@@ -325,83 +325,151 @@ Richardson expression is a terminating structural recursion, so the translation
 is computable.
 \end{proof}
 
-\begin{theorem}[Largest verified Richardson fragment]
+\begin{theorem}[Conditional Richardson fragment]
 \label{thm:largest-verified-richardson-fragment}
 \label{thm:replacement-triple-richardson-interface}
 Let \(\mathcal R_{\mathrm{core}}\) be Richardson's language with rational
 constants, \(\log2\), \(\pi\), \(+,-,\times\), composition, \(\exp\), \(\sin\), and
-a unary symbol \(\mu\) satisfying \(\mu(x)=|x|\) for \(x\ne0\).  The
-principal-branch EML witness table of \Cref{lem:eml-core-witness-table} gives a
-self-contained effective translation of \(\mathcal R_{\mathrm{core}}\) into pure
-EML terms, preserving Richardson's real-function identities on the punctured
-absolute-value domain required by the theorem.  Richardson's identity-to-zero
-problem for this fragment is undecidable.
-\end{theorem}
-
-\begin{proof}
-The language is precisely the class covered by Richardson's conditions (1) and
-(2), so undecidability is \Cref{lem:richardson-fragment}.  The finite EML
-translation exists by \Cref{cor:finite-richardson-witness-library}.  Its clauses
-for the algebraic operations, \(\log2\), \(\pi\), \(\exp\), and \(\sin\) preserve
-values on the stated real domains by \Cref{lem:eml-core-witness-table}.  Its
-clause for \(\mu\) preserves the only value condition Richardson imposes, namely
-\(|x|\) away from zero, by \Cref{lem:eml-zero-absolute-witness}.  Thus the
-translated fragment is a non-vacuous explicitly verified Richardson fragment.
-\end{proof}
-
-\begin{theorem}[Relative finite Richardson fragment]
-\label{thm:relative-finite-richardson-fragment}
-The preceding self-contained fragment is stable under replacement of the three
-special witnesses by any finite pure EML terms \((\mathsf P,\mathsf S,\mathsf A)\)
-with proved identities
+a unary symbol \(\mu\) satisfying \(\mu(x)=|x|\) for \(x\ne0\).  Let
+\((\mathsf P,\mathsf S,\mathsf A)\) be finite pure EML terms satisfying
 \[
   \mathsf P=\pi,
   \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
   \qquad \mathsf A(x)=|x|\quad(x\ne0).
 \]
-Such a replacement gives the same Richardson normalizer obstruction.  The
-printed triple \((U_{47},U_{111},U_{126})\) is not used unless these punctured
-identities are independently proved for it.
+Then the principal-branch EML core gives an effective translation of
+\(\mathcal R_{\mathrm{core}}\) into pure EML terms, using
+\((\mathsf P,\mathsf S,\mathsf A)\) for \((\pi,\sin,\mu)\), that preserves the
+Richardson real-function identities on the punctured domains required by the
+theorem.  The identity-to-zero problem for the source fragment is undecidable,
+and therefore the translated EML fragment has undecidable zero identity.
 \end{theorem}
 
 \begin{proof}
-The proof of \Cref{thm:largest-verified-richardson-fragment} uses only the three
-listed identities in the clauses for \(\pi\), sine, and the punctured absolute
-value.  Replacing those clauses by any other finite terms satisfying the same
-identities leaves the structural recursion and Richardson reduction unchanged.
-If the printed strings are proposed as such a replacement, the same identities
-must be proved for them; provenance alone supplies no semantic equality.
+The source language is precisely the class covered by Richardson's conditions
+(1) and (2), so undecidability of identity to zero in the source is
+\Cref{lem:richardson-fragment}.  The finite EML translation exists by the same
+structural recursion as \Cref{cor:finite-richardson-witness-library}: use the
+proved core rows for rational constants, \(\log2\), arithmetic, and \(\exp\), and
+use the three displayed witnesses for \(\pi\), \(\sin\), and \(\mu\).  An induction
+on Richardson expressions proves value preservation wherever the source
+expression is defined and every encountered \(\mu\)-argument is nonzero.  This is
+exactly the punctured absolute-value convention in Richardson's theorem.  Thus a
+zero-identity algorithm for the translated EML fragment would decide the
+undecidable source identity-to-zero problem.
+\end{proof}
+
+\begin{theorem}[Relative finite Richardson fragment]
+\label{thm:relative-finite-richardson-fragment}
+The Richardson normalizer obstruction is uniform over finite pure EML triples
+\((\mathsf P,\mathsf S,\mathsf A)\) with proved identities
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \mathsf A(x)=|x|\quad(x\ne0).
+\]
+The internally proved term \(\Abs(u)=G(M(u,u))\) supplies the third row for every
+such pair \((\mathsf P,\mathsf S)\).  The printed triple
+\((U_{47},U_{111},U_{126})\) is not used unless the same punctured identities are
+independently proved for those exact strings.
+\end{theorem}
+
+\begin{proof}
+Apply \Cref{thm:largest-verified-richardson-fragment}.  Its proof uses only the
+three listed identities in the clauses for \(\pi\), sine, and the punctured
+absolute value; the remaining clauses are the internally proved EML core.  The
+specific internal absolute-value term satisfies the third identity by
+\Cref{thm:eml-punctured-richardson-core}.  If the printed strings are proposed as
+a replacement, the same identities must be proved for them; provenance alone
+supplies no semantic equality.
 \end{proof}
 
 \begin{lemma}[Structural-recursion Richardson translation with domain clauses]
 \label{lem:richardson-translation}
-There is a computable translation \(\tau\) from \(\mathcal R_{\mathrm{core}}\) to
-pure EML terms such that every translated primitive has the real-domain identity
-listed in \Cref{lem:eml-core-witness-table}.  Consequently, for each Richardson
-expression \(E\), \(\tau(E)\) represents the same real partial function as \(E\)
-on the domain relevant to Richardson's identity problem.
+Fix finite pure EML terms \((\mathsf P,\mathsf S,\mathsf A)\) satisfying
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \mathsf A(x)=|x|\quad(x\ne0).
+\]
+There is a computable translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) from
+\(\mathcal R_{\mathrm{core}}\) to pure EML terms such that every translated
+primitive has the stated real-domain identity.  Consequently, for each
+Richardson expression \(E\), the translated term represents the same real partial
+function as \(E\) on the punctured Richardson domain relevant to the identity
+problem.
 \end{lemma}
 
 \begin{proof}
-Define \(\tau\) recursively.  Rational constants and \(\log2\) are sent to their
-finite arithmetic terms; the variable is sent to the EML input; \(+,-,\times\),
-composition, and \(\exp\) are sent to the corresponding rows of
-\Cref{lem:eml-core-witness-table}; \(\pi\) is sent to \(W_{\pi}\); \(\sin\) is sent
-to \(W_{\sin}\); and \(\mu(F)\) is sent to \(\Abs(\tau(F))\).  The recursion is
-computable because the source expression tree is finite and all macros are
-finite.  The value-preservation assertion follows by induction on the source
-expression.  The only non-total clause is \(\mu\), where the induction uses the
-punctured identity \(\Abs(u)=|u|\) for \(u\ne0\), exactly matching Richardson's
-hypothesis on \(\mu\).
+Define \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) recursively.  Rational constants
+and \(\log2\) are sent to their finite arithmetic terms; the variable is sent to
+the EML input; \(+,-,\times\), composition, and \(\exp\) are sent to the
+corresponding internally proved rows of \Cref{lem:eml-core-witness-table};
+\(\pi\) is sent to \(\mathsf P\); \(\sin\) is sent to \(\mathsf S\); and
+\(\mu(F)\) is sent to \(\mathsf A(\tau_{\mathsf P,\mathsf S,\mathsf A}(F))\).  The
+recursion is computable because the source expression tree and the three
+replacement terms are finite.  The value-preservation assertion follows by
+induction on the source expression.  The only non-total clause is \(\mu\), where
+the induction uses the punctured identity \(\mathsf A(u)=|u|\) for \(u\ne0\),
+exactly matching Richardson's hypothesis on \(\mu\).
 \end{proof}
 
+\begin{theorem}[Punctured-domain many-one reduction]
+\label{thm:punctured-domain-richardson-reduction}
+\label{thm:richardson-punctured-domain-convention}
+Fix finite pure EML terms \((\mathsf P,\mathsf S,\mathsf A)\) satisfying
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \mathsf A(x)=|x|\quad(x\ne0).
+\]
+For each Richardson expression \(E\), define its punctured Richardson domain
+\(D_E\subseteq\RR\) recursively as the set of real inputs for which every
+ordinary elementary subterm is defined and, whenever a subterm \(\mu(F)\) is
+evaluated, the value of \(F\) is nonzero.  Then
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) is defined on \(D_E\) and equals
+\(E\) there.  In particular,
+\[
+  E=0\hbox{ on }D_E
+  \quad\Longleftrightarrow\quad
+  \tau_{\mathsf P,\mathsf S,\mathsf A}(E)=
+  \tau_{\mathsf P,\mathsf S,\mathsf A}(0)
+  \hbox{ on }D_E .
+\]
+Zeros of absolute-value arguments therefore delete the same input points from
+both sides and do not invalidate the many-one reduction.
+\end{theorem}
+
+\begin{proof}
+Proceed by structural induction on \(E\).  Constants, the variable, arithmetic,
+composition, and \(\exp\) use the internally proved core identities and their
+ordinary real domains.  The \(\pi\) and \(\sin\) clauses use the first two
+displayed hypotheses.  For a subterm \(\mu(F)\), the recursive definition of
+\(D_{\mu(F)}\) requires \(x\in D_F\) and \(F(x)\ne0\).  By the induction
+hypothesis,
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(F)(x)=F(x)\), so the translated argument to
+\(\mathsf A\) is nonzero exactly on the same points.  The third displayed
+hypothesis gives
+\[
+  \mathsf A(\tau_{\mathsf P,\mathsf S,\mathsf A}(F)(x))
+  =|F(x)|=
+  \mu(F)(x)
+\]
+for every \(x\in D_{\mu(F)}\).  If \(F(x)=0\), the recursive convention removes
+\(x\) from the punctured domain before either the Richardson \(\mu\)-clause or the
+EML \(\mathsf A\)-clause is used; no value at that point is needed.  Thus each
+constructor preserves both the relevant domain and the value on that domain.
+Taking \(E=0\) gives the displayed equivalence, which is an effective many-one
+reduction because the translation is computable.
+\end{proof}
 \begin{lemma}[Quantitative Richardson translation]
 \label{lem:richardson-translation-bookkeeping}
-There is a constant \(C\), depending only on the finite witness table of
-\Cref{lem:eml-core-witness-table}, such that every Richardson expression \(E\)
-with \(|E|\) source nodes translates to a pure EML term \(\tau(E)\) with at most
-\(C|E|\) macro nodes before expansion and effectively computable finite expanded
-EML syntax.
+For each fixed finite replacement triple \((\mathsf P,\mathsf S,\mathsf A)\),
+there is a constant \(C\), depending only on the internally proved core macros
+and on that triple, such that every Richardson expression \(E\) with \(|E|\)
+source nodes translates to a pure EML term
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) with at most \(C|E|\) macro nodes
+before expansion and effectively computable finite expanded EML syntax.
 \end{lemma}
 
 \begin{proof}
@@ -413,7 +481,7 @@ before expansion.  Since every macro is finite, recursive expansion gives a
 finite pure EML tree effectively.
 \end{proof}
 
-\begin{theorem}[Self-contained Richardson obstruction interface]
+\begin{theorem}[Triple-relative Richardson obstruction interface]
 \label{thm:proc-ams-relative-richardson-theorem}
 \label{thm:relative-richardson-main-spine-closure}
 \label{thm:interface-only-richardson-spine}
@@ -421,41 +489,48 @@ finite pure EML tree effectively.
 \label{thm:no-unconditional-printed-richardson-edge}
 \label{thm:separation}
 \label{thm:no-principal-branch-eml-nonnegative-root}
-Fix the principal-branch pure EML semantics of \Cref{def:eml}.  Richardson's
-identity-to-zero problem many-one reduces to zero-identity on the pure EML
-fragment obtained from the self-contained witness table of
-\Cref{lem:eml-core-witness-table}.  Consequently that EML fragment admits no
-zero-identity algorithm, no computable semantic normalizer into finite objects
-with decidable equality, and no equality-reflecting semantic compiler into finite
-decidable protocol objects.
+Fix the principal-branch pure EML semantics of \Cref{def:eml} and finite pure EML
+terms \((\mathsf P,\mathsf S,\mathsf A)\) satisfying
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \mathsf A(x)=|x|\quad(x\ne0).
+\]
+Richardson's identity-to-zero problem many-one reduces to zero-identity on the
+pure EML fragment translated using this triple.  Consequently that translated
+fragment admits no zero-identity algorithm, no computable semantic normalizer
+into finite objects with decidable equality, and no equality-reflecting semantic
+compiler into finite decidable protocol objects.
 
 Moreover, no finite pure EML term defined on a right-neighbourhood of \(0\) can
 represent \(t\mapsto\sqrt t\) on \(\RR_{\ge0}\).  This endpoint obstruction does
-not affect the preceding Richardson reduction, because that reduction uses the
-punctured absolute-value witness \(G(M(u,u))\) and Richardson's theorem requires
-agreement with \(|u|\) only for \(u\ne0\).
+not affect the preceding Richardson reduction, because that reduction uses only
+the punctured absolute-value identity \(\mathsf A(u)=|u|\) for \(u\ne0\).
 \end{theorem}
 
 \begin{proof}
 By \Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}, the
-translation \(\tau\) is effective and preserves the real functions needed by
-Richardson's identity problem.  Thus, for every Richardson expression \(E\),
+translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) is effective.  By
+\Cref{thm:punctured-domain-richardson-reduction}, for every Richardson expression
+\(E\),
 \[
-  E\equiv0
+  E=0\hbox{ on }D_E
   \quad\Longleftrightarrow\quad
-  \tau(E)\equiv\tau(0)
+  \tau_{\mathsf P,\mathsf S,\mathsf A}(E)=
+  \tau_{\mathsf P,\mathsf S,\mathsf A}(0)
+  \hbox{ on }D_E .
 \]
-on the corresponding real domains.  Since Richardson's identity-to-zero problem
-for \(\mathcal R_{\mathrm{core}}\) is undecidable by
-\Cref{lem:richardson-fragment,thm:largest-verified-richardson-fragment}, this is
-a many-one reduction.  A zero-identity algorithm on the translated fragment would
-decide the Richardson problem.  A computable semantic normalizer into finite
-objects with decidable equality would decide the same problem by normalizing
-\(\tau(E)\) and \(\tau(0)\) and comparing the results; this is the
+Since Richardson's identity-to-zero problem for \(\mathcal R_{\mathrm{core}}\) is
+undecidable by \Cref{lem:richardson-fragment}, this is a many-one reduction.  A
+zero-identity algorithm on the translated fragment would decide the Richardson
+problem.  A computable semantic normalizer into finite objects with decidable
+equality would decide the same problem by normalizing
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) and
+\(\tau_{\mathsf P,\mathsf S,\mathsf A}(0)\) and comparing the results; this is the
 transported-normalizer obstruction of
 \Cref{lem:transported-partial-normalizer-obstruction}.  Likewise, an
 equality-reflecting semantic compiler into any finite decidable protocol object
-would decide the problem by compiling \(\tau(E)\) and \(\tau(0)\) and checking
+would decide the problem by compiling the two translated terms and checking
 target equality.
 
 It remains only to record why this does not smuggle in an endpoint square-root
@@ -497,8 +572,8 @@ same punctured identities have been proved for those exact strings.
 \end{proposition}
 
 \begin{proof}
-Define a replacement translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) by the
-same structural recursion as \(\tau\) in \Cref{lem:richardson-translation}, using
+Use the translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) of
+\Cref{lem:richardson-translation}, using
 the unchanged clauses for rational constants, \(\log2\), the variable,
 \(+,-,\times\), composition, and \(\exp\), and using \(\mathsf P\),
 \(\mathsf S\), and \(\mathsf A\) in the clauses for \(\pi\), \(\sin\), and the
@@ -511,16 +586,11 @@ three displayed hypotheses; and the only partial clause is the \(\mu\)-clause,
 where Richardson requires agreement with \(|x|\) only for nonzero arguments.
 
 Thus, for every expression \(E\) in \(\mathcal R_{\mathrm{core}}\),
-\[
-  E\equiv0
-  \quad\Longleftrightarrow\quad
-  \tau_{\mathsf P,\mathsf S,\mathsf A}(E)
-  \equiv \tau_{\mathsf P,\mathsf S,\mathsf A}(0)
-\]
-on the corresponding Richardson real domain.  Since the identity-to-zero problem
-for \(\mathcal R_{\mathrm{core}}\) is undecidable by
-\Cref{lem:richardson-fragment,thm:largest-verified-richardson-fragment}, this is
-a many-one reduction to the replacement EML fragment.  A zero-identity algorithm
+\Cref{thm:punctured-domain-richardson-reduction} gives the equivalence of
+identity to zero on the punctured Richardson domain and identity to the
+translated zero term on the same domain.  Since the identity-to-zero problem for
+\(\mathcal R_{\mathrm{core}}\) is undecidable by \Cref{lem:richardson-fragment},
+this is a many-one reduction to the replacement EML fragment.  A zero-identity algorithm
 for that fragment would decide Richardson identity-to-zero; a computable
 semantic normalizer into finite objects with decidable equality would decide it
 by normalizing the two translated terms and comparing the normal forms; and an
@@ -539,42 +609,43 @@ name or provenance supplies no additional semantic content.
 \label{thm:richardson-triple-submission-alternative}
 \label{thm:closed-main-interface}
 \label{thm:richardson-interface-instantiation-criterion}
-The unconditional Proc. AMS theorem stream contains a concrete punctured
-Richardson instance: the finite witnesses \((W_{\pi},W_{\sin},\Abs)\) of
-\Cref{lem:eml-core-witness-table}.  It contains no unconditional endpoint-root
-instance for \(U_{126}\); any such endpoint specialization is separate from the
-punctured Richardson obstruction used in \Cref{thm:separation}.
+The Proc. AMS Richardson theorem stream is conditional on a finite punctured
+triple \((\mathsf P,\mathsf S,\mathsf A)\) with proved identities for \(\pi\),
+sine, and \(|x|\) off zero.  The paper proves the internal absolute-value option
+\(\mathsf A=\Abs\); the printed pair \((W_{\pi},W_{\sin})\) instantiates the other
+two rows only under \((H_{\mathcal W})\).  It contains no unconditional
+endpoint-root instance for \(U_{126}\).
 \end{corollary}
 
 \begin{proof}
-This is an immediate extraction from \Cref{thm:separation}.  The proof there
-uses the finite \(\pi\), sine, and punctured absolute-value witnesses displayed in
-\Cref{lem:eml-core-witness-table}.  The endpoint obstruction in the same theorem
-shows why no pure EML term defined at \(0\) can be substituted for the positive
-root term.  Thus the unconditional Richardson input to
-\Cref{thm:obstruction-spine,thm:main-hierarchy} is the punctured package, while
-the endpoint-root string \(U_{126}\) remains outside that input.
+This is an immediate extraction from \Cref{thm:separation} and
+\Cref{prop:three-witness-stability}.  The endpoint obstruction in
+\Cref{thm:separation} shows why no pure EML term defined at \(0\) can be
+substituted for the positive root term.  Thus the Richardson input to
+\Cref{thm:obstruction-spine,thm:main-hierarchy} is the punctured triple interface,
+while the endpoint-root string \(U_{126}\) remains outside that input.
 \end{proof}
 
 \begin{remark}[Dependency cut]
-The source-locking and \(\mathcal B_{36}\)-noninstantiation clauses are now
-separate from the Richardson obstruction: \Cref{thm:submission-richardson-dichotomy}
-uses a proved punctured package and does not import the endpoint-root string.
+The source-locking and \(\mathcal B_{36}\)-noninstantiation clauses are separate
+from the Richardson obstruction: \Cref{thm:submission-richardson-dichotomy} uses
+a punctured triple interface and does not import the endpoint-root string.
 \end{remark}
 
-\begin{corollary}[Verified-triple expression/protocol separation]
+\begin{corollary}[Triple-relative expression/protocol separation]
 \label{cor:strict-L0-L1}
-For the explicitly verified punctured EML Richardson package
-\((W_{\pi},W_{\sin},\Abs)\), the imported \(L0\) expression-universality result
-for \((\eml,1)\) does not provide a computable semantic normalizer for the
-translated Richardson fragment.
+For every finite punctured EML Richardson triple
+\((\mathsf P,\mathsf S,\mathsf A)\) satisfying the three identities of
+\Cref{thm:separation}, the imported \(L0\) expression-universality result for
+\((\eml,1)\) does not provide a computable semantic normalizer for the translated
+Richardson fragment.
 \end{corollary}
 
 \begin{proof}
 A computable semantic normalizer for the translated punctured fragment would
-contradict the normalizer obstruction in \Cref{thm:separation}.  The verified
-identities are the rows for \(\pi\), sine, and \(|x|\) off zero in
-\Cref{lem:eml-core-witness-table}; no endpoint square-root identity is used.
+contradict the normalizer obstruction in \Cref{thm:separation}.  The only
+absolute-value identity needed is the punctured row \(|x|\) off zero; no endpoint
+square-root identity is used.
 \end{proof}
 
 \begin{proposition}[Protocol compilation boundary]
