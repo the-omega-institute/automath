@@ -13245,6 +13245,73 @@ closes exactly the local post-write inventory support coordinate and no stronger
 external, venue, source-rebuild, or artifact-semantic coordinate.
 \end{proof}
 
+\begin{theorem}[Current-byte support fixed point and non-upgrade boundary]
+\label{thm:current-byte-support-fixed-point-nonupgrade-boundary}
+Assume that the accepted local inventory pair \(I\), consisting of
+\path{theorem_inventory.json} and \path{theorem_inventory.md}, exists on disk,
+that the theorem-environment extractor and the three retained finite-record
+verifiers are rerun after those inventory bytes and the current manuscript bytes
+are fixed, and that \path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated
+after the resulting log bytes exist.  Then the current accepted support state is
+the local fixed point consisting exactly of
+\begin{enumerate}
+\item the two inventory files;
+\item the four post-inventory command logs for theorem-environment extraction,
+certificate-record verification, source-interface verification, and
+primary-claim verification; and
+\item the final digest manifest computed after those inputs and logs exist.
+\end{enumerate}
+This fixed point proves only syntactic theorem-inventory coverage and the stated
+finite-record verifier predicates at local/path-verified or command-run evidence
+level.  It does not instantiate a venue-upload receipt, DOI-bearing replacement,
+archive-equivalent byte-equality locator, fresh Lean/BEDC rebuild,
+axiom-purity audit, marker-existence audit, dynamic Rule~110/GroundCompiler
+semantic rerun, artifact evaluator contract, or venue-acceptance coordinate.
+\end{theorem}
+
+\begin{proof}
+The positive part is the support-coordinate fixed-point rule applied in the
+order displayed in the statement.  The inventory bytes are the first coordinate.
+The extractor is then run against \path{main.tex} and
+\path{theorem_inventory.json}; by
+Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary} and
+Corollary~\ref{cor:manifest-required-theorem-inventory-fixed-point}, a passing
+run contributes exactly the finite predicate that every labelled theorem-like
+environment extracted from the manuscript has a corresponding inventory label,
+with no semantic proof-checking consequence.  The three retained verifier logs
+are the command-result coordinates classified by
+Theorem~\ref{thm:current-command-result-closure}: they contribute their printed
+commands, source hashes or source state, environments, exit codes, log paths, and
+finite schema predicates, and nothing outside those predicates.  Regenerating
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} after those log bytes exist is
+precisely the digest-closure condition of
+Theorem~\ref{thm:post-inventory-package-fixed-point},
+Proposition~\ref{prop:post-inventory-fixed-point-support-certificate}, and
+Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}.  Hence the accepted
+positive coordinate is exactly the displayed local tuple.
+
+It remains to identify the boundary.
+Corollary~\ref{cor:upload-or-archive-instantiation-record} and
+Proposition~\ref{prop:current-absence-external-support-surface-instantiation}
+show that external support needs a separate upload receipt or public
+byte-equality locator; these fields are not among the three displayed
+coordinates.  Theorem~\ref{thm:source-interface-semantic-completeness-obstruction}
+and Proposition~\ref{prop:source-interface-evidence-level-separation} show that
+fresh Lean/BEDC rebuild, marker-existence, and axiom-purity claims require their
+own command and audit predicates; the fixed point supplies only the bounded
+source-interface verifier.  Proposition~\ref{prop:artifact-validation-gate-unique-semantic-upgrade}
+and Corollary~\ref{cor:artifact-semantic-validity-boundary} show that dynamic
+Rule~110/GroundCompiler or other artifact semantics require a fresh evaluator
+contract, command, environment, exit code, log path, and digest binding; the
+fixed point contains no such evaluator row.  Finally,
+Corollary~\ref{cor:upload-time-venue-compliance-record-requirement} and
+Theorem~\ref{thm:venue-rule-freshness-non-escalation} show that venue acceptance
+or upload-time venue compliance requires its own submission-time coordinate.
+By the finite-coordinate determination boundary, none of these absent stronger
+coordinates can be reconstructed from the accepted local tuple.  The stated
+non-upgrade boundary follows.
+\end{proof}
+
 \begin{corollary}[Accepted-inventory final verifier--digest tuple]
 \label{cor:accepted-inventory-final-verifier-digest-tuple}
 For the round-five package state, once \path{theorem_inventory.json} and
@@ -13253,7 +13320,7 @@ post-inventory support coordinate available from the local support surface is th
 finite tuple consisting of \path{theorem_inventory.json},
 \path{theorem_inventory.md},
 \path{review_bundle/theorem_environment_extraction_run.log},
-\path{review_bundle/certificate_record_verification_run.log},
+\path{review_bundle/certificate_verification_run.log},
 \path{review_bundle/source_interface_verification_run.log},
 \path{review_bundle/primary_claim_inventory_verification_run.log}, and
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
