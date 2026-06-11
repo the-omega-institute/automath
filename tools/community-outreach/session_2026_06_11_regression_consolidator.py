@@ -141,6 +141,12 @@ VALIDATORS = [
         "validator": "check_2601_07933_genus3_deg7_serre_residue_certificate_stage4.py",
         "expected_verdict": "PASS_GENUINE_SERRE_RESIDUE_CERTIFICATE_G3_DEG7",
     },
+    {
+        "track": "algebraicity_paper",
+        "target_dir": "tools/community-outreach/targets/litt_algebraicity_integrality_followup",
+        "validator": "check_2501_13175_stage1.py",
+        "expected_verdict": "PASS_PROP_4_0_1_RECURRENCE",
+    },
 ]
 
 
