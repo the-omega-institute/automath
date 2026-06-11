@@ -6545,6 +6545,38 @@ def _stage_a_block(state: PaperState, reason: str, *,
     return False
 
 
+def _stage_a_block_or_oracle_escalate(state: PaperState, reason: str, *,
+                                      dry_run: bool = False,
+                                      oracle_timeout: int = 7200,
+                                      tag: str = "",
+                                      model: Optional[str] = None,
+                                      reuse_existing_directive: bool = True) -> bool:
+    """Route recoverable Stage A blocks through Oracle before stopping.
+
+    Submitted/overlap/archive gates remain hard because
+    ``_maybe_stage_a_oracle_escalate`` rejects those reasons.  This helper is
+    only for Codex-ceiling/content-quality blocks where a higher reasoning
+    layer should choose rerun, revise, proceed, park, or human_decision.
+    """
+    if _maybe_stage_a_oracle_escalate(
+        state,
+        reason,
+        dry_run=dry_run,
+        oracle_timeout=oracle_timeout,
+        tag=tag,
+        reuse_existing_directive=reuse_existing_directive,
+    ):
+        return run_stage_a(
+            state,
+            dry_run=dry_run,
+            model=model,
+            oracle_timeout=oracle_timeout,
+        )
+    if _stage_a_oracle_terminal_active(state):
+        return False
+    return _stage_a_block(state, reason, dry_run=dry_run, tag=tag)
+
+
 def _stage_a_pause(state: PaperState, reason: str, *,
                    tag: str = "") -> bool:
     """Pause for infrastructure/tooling issues without blaming the paper."""
@@ -6989,23 +7021,34 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                             tag=tag)
                     if (_state_has_later_stage_history(state)
                         and _stage_a_rework_directive_active(state)):
+                        reason = (
+                            "Oracle-directed Stage A rework did not add "
+                            f"substantive theorem content: {reason}. "
+                            "Preserving prior B/C evidence; rerun requires "
+                            "fresh Oracle directive or manual theorem patch."
+                        )
                         state.log_event(
                             "A",
                             "oracle_directed_rework_not_implemented",
                             round_num=rnd,
                             detail=reason,
                         )
-                        return _stage_a_block(
+                        return _stage_a_block_or_oracle_escalate(
                             state,
-                            "Oracle-directed Stage A rework did not add "
-                            f"substantive theorem content: {reason}. "
-                            "Preserving prior B/C evidence; rerun requires "
-                            "fresh Oracle directive or manual theorem patch.",
-                            dry_run=dry_run, tag=tag)
-                    return _stage_a_block(
+                            reason,
+                            dry_run=dry_run,
+                            oracle_timeout=oracle_timeout,
+                            tag=tag,
+                            model=model,
+                            reuse_existing_directive=False)
+                    return _stage_a_block_or_oracle_escalate(
                         state,
                         f"A2 produced no substantive theorem change: {reason}",
-                        dry_run=dry_run, tag=tag)
+                        dry_run=dry_run,
+                        oracle_timeout=oracle_timeout,
+                        tag=tag,
+                        model=model,
+                        reuse_existing_directive=False)
 
             h = git_commit(paper_path, f"stage-A R{rnd}: {action}",
                            tag=tag)
@@ -7146,9 +7189,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 return _stage_a_pause(
                     state, "stage_a_audit_infra_fail_after_retry", tag=tag)
             if failure_class == "real_block":
-                return _stage_a_block(
+                return _stage_a_block_or_oracle_escalate(
                     state, "stage_a_audit_real_block",
-                    dry_run=dry_run, tag=tag)
+                    dry_run=dry_run,
+                    oracle_timeout=oracle_timeout,
+                    tag=tag,
+                    model=model,
+                    reuse_existing_directive=False)
             if failure_class == "work_pending" and not _stage_a_audit_has_actionable_issues(audit):
                 state.log_event("A", "audit_work_pending",
                                 round_num=audit_round,
@@ -7156,9 +7203,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 break
             if failure_class == "unclear":
-                return _stage_a_block(
+                return _stage_a_block_or_oracle_escalate(
                     state, "stage_a_audit_unclear_failure",
-                    dry_run=dry_run, tag=tag)
+                    dry_run=dry_run,
+                    oracle_timeout=oracle_timeout,
+                    tag=tag,
+                    model=model,
+                    reuse_existing_directive=False)
 
             actionable = _stage_a_audit_has_actionable_issues(audit)
             if audit.get("audit_unparseable") and not actionable:
@@ -7209,12 +7260,22 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 break
 
-            return _stage_a_block(state, "stage_a_audit_failed_without_plan",
-                                  dry_run=dry_run, tag=tag)
+            return _stage_a_block_or_oracle_escalate(
+                state, "stage_a_audit_failed_without_plan",
+                dry_run=dry_run,
+                oracle_timeout=oracle_timeout,
+                tag=tag,
+                model=model,
+                reuse_existing_directive=False)
 
         else:
-            return _stage_a_block(state, "stage_a_audit_failed_max_rounds",
-                                  dry_run=dry_run, tag=tag)
+            return _stage_a_block_or_oracle_escalate(
+                state, "stage_a_audit_failed_max_rounds",
+                dry_run=dry_run,
+                oracle_timeout=oracle_timeout,
+                tag=tag,
+                model=model,
+                reuse_existing_directive=False)
 
     if state.stage_a_rounds >= MAX_STAGE_A_ROUNDS:
         logger.info(f"{tag} A3-FINAL — max theoremization rounds reached; "
@@ -9449,15 +9510,21 @@ def run_paper_pipeline(
             if (
                 str(state.current_stage).upper() == "A"
                 and state.error.startswith("Stage A blocked:")
-                and not is_recoverable_stage_a_block_status(state.error)
             ):
-                logger.info(f"[{paper_name}] Preserving hard Stage A block: "
+                if not is_recoverable_stage_a_block_status(state.error):
+                    logger.info(f"[{paper_name}] Preserving hard Stage A block: "
+                                f"{state.error[:200]}")
+                    return False, state
+                logger.info(
+                    f"[{paper_name}] Preserving recoverable Stage A block "
+                    "for Oracle escalation: "
+                    f"{state.error[:200]}"
+                )
+            else:
+                logger.info(f"[{paper_name}] Clearing previous pipeline error: "
                             f"{state.error[:200]}")
-                return False, state
-            logger.info(f"[{paper_name}] Clearing previous pipeline error: "
-                        f"{state.error[:200]}")
-            state.error = ""
-            save_state(state)
+                state.error = ""
+                save_state(state)
 
     # Recover round counters from git log if state was reset or started fresh.
     # Prevents redoing Codex/Oracle work already committed in prior sessions.

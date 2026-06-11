@@ -337,6 +337,8 @@ class SupervisorHelpersTests(unittest.TestCase):
                                    return_value=True) as submit, \
                  mock.patch.object(oracle_pipeline, "oracle_poll",
                                    return_value=response), \
+                 mock.patch.object(oracle_pipeline, "compile_pdf",
+                                   return_value=None), \
                  mock.patch.object(oracle_pipeline, "save_state"), \
                  mock.patch.object(oracle_pipeline, "git_commit",
                                    return_value="abc123"):
@@ -1503,6 +1505,151 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
             oracle_pipeline.MAX_STAGE_A_ROUNDS = old_max_rounds
 
         self.assertEqual(dedup_calls, [(paper.name, 1)])
+
+    def test_stage_a_fake_extension_routes_to_oracle_escalation_before_blocking(self):
+        paper = self._write_paper(
+            "2026_fake_extension_escalates",
+            "\\documentclass{article}\n"
+            "\\begin{document}\n"
+            "\\begin{theorem}\\label{thm:base}Base theorem.\\end{theorem}\n"
+            "\\end{document}\n",
+        )
+        (paper / "scope_contract.md").write_text(
+            "Scope contract.\n" + ("The manuscript scope is fixed. " * 30),
+            encoding="utf-8",
+        )
+        (paper / "scope_contract.json").write_text(json.dumps({
+            "valid": True,
+            "research_question": "Test question",
+            "target_journal_bar": "Test Journal",
+            "main_project_bindings": [],
+            "in_scope": [{"id": "scope"}],
+            "must_prove_in_this_paper": [{"id": "proof"}],
+            "supporting_only": [],
+            "out_of_scope": [],
+            "split_policy": "no split",
+            "failure_modes_to_control": [],
+        }), encoding="utf-8")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="Test Journal",
+            stage_a_scope_done=True,
+        )
+        inventory = {
+            "in_scope_present": [],
+            "missing_in_scope_results": [{"id": "missing-core"}],
+            "weak_in_scope_core_results": [],
+            "proof_gaps": [],
+            "supporting_appendix_or_background": [],
+            "out_of_scope_strong_results": [],
+            "split_candidates": [],
+            "irrelevant_or_remove": [],
+            "naive_truncation_risks": [],
+            "journal_style_gaps": [],
+        }
+        oracle_response = json.dumps({
+            "verdict": "human_decision",
+            "publishable_route": False,
+            "human_decision_needed": "Choose a new theorem package.",
+            "codex_instructions": [],
+        })
+
+        with mock.patch.object(
+            oracle_pipeline,
+            "_run_stage_a_inventory",
+            return_value=inventory,
+        ), mock.patch.object(
+            oracle_pipeline,
+            "codex_exec",
+            return_value="local prose rewrite only",
+        ), mock.patch.object(
+            oracle_pipeline,
+            "compile_gate",
+            return_value=True,
+        ), mock.patch.object(
+            oracle_pipeline,
+            "verify_substantive_change",
+            return_value=(
+                False,
+                "FAKE EXTENSION: no new theorems added, content delta "
+                "only +0 chars (threshold: 500).",
+            ),
+        ), mock.patch.object(
+            oracle_pipeline,
+            "oracle_submit",
+            return_value=True,
+        ) as submit, mock.patch.object(
+            oracle_pipeline,
+            "oracle_poll",
+            return_value=oracle_response,
+        ), mock.patch.object(
+            oracle_pipeline,
+            "compile_pdf",
+            return_value=None,
+        ), mock.patch.object(
+            oracle_pipeline,
+            "save_state",
+        ):
+            ok = oracle_pipeline.run_stage_a(
+                state, dry_run=False, oracle_timeout=1)
+
+        self.assertFalse(ok)
+        submit.assert_called_once()
+        self.assertIn("Oracle escalation human_decision", state.error)
+
+    def test_run_paper_pipeline_preserves_recoverable_stage_a_block_for_escalation(self):
+        paper = self._write_paper(
+            "2026_recoverable_block_reenters_oracle",
+            "\\documentclass{article}\n"
+            "\\begin{document}\n"
+            "\\begin{theorem}\\label{thm:base}Base theorem.\\end{theorem}\n"
+            "\\end{document}\n",
+        )
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="Test Journal",
+            current_stage="A",
+            stage_a_scope_done=True,
+            error=(
+                "Stage A blocked: A2 produced no substantive theorem "
+                "change: FAKE EXTENSION: no new theorems added, content "
+                "delta only +276 chars (threshold: 500)."
+            ),
+        )
+        oracle_pipeline.save_state(state)
+        response = json.dumps({
+            "verdict": "human_decision",
+            "publishable_route": False,
+            "human_decision_needed": "Choose a new theorem package.",
+            "codex_instructions": [],
+        })
+
+        with mock.patch.object(
+            oracle_pipeline,
+            "rebuild_rounds_from_git",
+        ), mock.patch.object(
+            oracle_pipeline,
+            "oracle_submit",
+            return_value=True,
+        ) as submit, mock.patch.object(
+            oracle_pipeline,
+            "oracle_poll",
+            return_value=response,
+        ), mock.patch.object(
+            oracle_pipeline,
+            "compile_pdf",
+            return_value=None,
+        ):
+            ok, updated = oracle_pipeline.run_paper_pipeline(
+                str(paper), oracle_timeout=1)
+
+        self.assertFalse(ok)
+        submit.assert_called_once()
+        self.assertIn("Oracle escalation human_decision", updated.error)
 
     def test_stage_a_oracle_escalation_can_skip_old_rerun_directive(self):
         paper = self._write_paper(
