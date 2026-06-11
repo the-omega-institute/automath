@@ -20,7 +20,6 @@ submission unless the board explicitly records a merge, supersession, or closure
 
 | Paper or route | Venue | Status | Next step |
 |---|---|---|---|
-| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | Closest to submit. PDF exists and previous checklist was 11/12 pass. The old blocker was missing author metadata; current `main.tex` now has Haobo Ma and Wenlin Zhang metadata. | Do final submission-pack polish: recompile, update checklist, revise cover letter signature, add AI disclosure if APAL asks, then human final review/upload. |
 | Pipeline daemon / Oracle | local automation | Oracle server online with 5 registered tabs. JDDE C+1 proved the Windows MiKTeX path works when the pipeline is launched under the real user environment. | Restart the long-running supervisor with `--parallel 5 --no-claude --no-auto-commit --no-server-spawn --no-pi-review`, then verify health snapshot and advancing logs. |
 | `2026_auditable_theory_to_paper_pipeline` | CICM presentation-only / mathematical software workshop | Not submit-ready. Reframed as an auditable auto-formalization method paper, but Stage A still blocks it with low audit score. | Keep developing the method paper; do not submit today. Needs stronger source-method framing and likely new Stage A/Oracle escalation after daemon recovery. |
 
@@ -33,12 +32,12 @@ submission unless the board explicitly records a merge, supersession, or closure
 | `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | Journal of Number Theory | Submitted 2026-03-14; under review since 2026-03-25. Title: "A quartic cover of 37a1 and its regular S4-closure". | Wait for result. |
 | `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | Submitted 2026-05-11; under review; Paper ID `260511-Zhang-2`. | Wait for result. Related Fibonacci/Zeckendorf finite-window manuscripts remain paused. |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | Submitted; submission date and ID still need to be recorded. | Add submission ID/date when available. Old `prefix_scan_error...` route is legacy only. |
+| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | Submitted manually by user on 2026-06-11; submission ID/date details still need to be recorded if available. | Wait for APAL editorial feedback. Do not process overlapping gluing-failure or recursive-addressing routes independently. |
 
 ## Ready Or Near-Ready After Human Review
 
 | Paper or route | Venue | Status | Next step |
 |---|---|---|---|
-| `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | Submission-pack stage. Prior pipeline says Stage A passed, PDF compiles, and only low-risk metadata/prose consistency remained. | Treat as today's highest-value submission candidate. Do not restart theoremization. |
 | `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | C-DONE after controlled C+1 on 2026-06-11. Round 16 returned Oracle `accept` and Codex `submit`, with 0 remaining work packages; no paper changes were needed. | Ready for human final submission review: confirm JDDE/Springer source-package requirements, author metadata, declarations, and upload files. |
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory; backups: Operators and Matrices / Complex Analysis and Operator Theory | C-DONE after JST rejection. JST/EditFlow rejected as not suitable, with no technical referee report. Current retarget is IEOT, but research directive still calls for checking the Weyl-Horn singular-value body theorem package. | Not direct upload today. Verify the new Weyl-Horn package is actually in the manuscript, then final venue/package review. |
 | `2026_elliptic_normalization_branch_geometry_quartic_spectral` | Indagationes Mathematicae | C-DONE, complete multi-file manuscript, split-overlap gate clean. No theorem-deepening blocker is recorded on the human board. | Do final theorem/venue review and Stage F journal confirmation; if no new blocker appears, prepare submission package. |

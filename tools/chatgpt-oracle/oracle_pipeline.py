@@ -7601,6 +7601,170 @@ def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
     return False, "timeout", ""
 
 
+def build_stage_c_followup_prompt(fix_summary: str,
+                                  target_journal: str) -> str:
+    """Follow up inside the same Stage C final-gate conversation."""
+    summary = (fix_summary or "").strip()
+    if not summary:
+        summary = (
+            "revised the manuscript to close every blocker and material "
+            "journal-fit concern raised in your previous final-gate review"
+        )
+    return textwrap.dedent(f"""\
+        Per your previous final-gate review, I {summary}.
+
+        Continue the same referee evaluation. Do not reset the review. First
+        check whether each previously raised blocker is now closed, then look
+        for regressions or newly introduced submission blockers.
+
+        Your first visible characters must be the verdict line, with no
+        preamble, UI text, thinking summary, salutation, or markdown fence:
+          Overall verdict: <Accept|Minor revision|Major revision|Reject>
+
+        Use Accept only if the manuscript is ready for "{target_journal}" with
+        no remaining mathematical, novelty, scope, example, positioning, or
+        submission-readiness blockers. If any prior blocker is merely softened
+        but not closed, keep it as Minor/Major revision and name the exact
+        remaining closure condition.
+
+        After the verdict, include:
+        1. A closed/open checklist for the previously raised blockers.
+        2. Any new blockers introduced by the revision.
+        3. Journal-fit and novelty risks that would still concern an editor.
+        4. Copyediting-only issues separately from blockers.
+    """)
+
+
+def build_stage_c_fresh_confirmation_prompt(target_journal: str) -> str:
+    return (
+        build_oracle_re_review_prompt(target_journal)
+        + "\n\nFRESH CLEAN-ROOM CONFIRMATION: You are a new final-gate "
+        + "referee with no access to the prior Stage C conversation. Treat "
+        + "the attached PDF as the only operative manuscript. The earlier "
+        + "internal reviewer and Codex may believe all issues are closed; do "
+        + "not defer to them. Accept only if you independently judge the paper "
+        + "submit-ready for the stated venue with no remaining blockers. If "
+        + "there is a residual novelty, scope, framing, example, theorem-depth, "
+        + "bibliography, or submission-package concern, return Minor/Major "
+        + "revision and state the exact issue."
+        + "\n\nEXTRACTION SAFEGUARD: Your first visible characters must be "
+        + "`Overall verdict:`. Do not include any preamble, UI text, thinking "
+        + "summary, salutation, markdown fence, or quoted prompt text before "
+        + "the verdict line."
+    )
+
+
+def _stage_c_fresh_confirmation(
+    state: PaperState, *, rnd: int, oracle_timeout: int,
+    dry_run: bool, tag: str, safe_name: str,
+) -> tuple[bool, str, str, list[dict]]:
+    """Open a new Stage C clean-room final gate.
+
+    Stage C needs two independent acceptance signals: the memory-bearing
+    reviewer must close its own blockers, then a fresh reviewer must accept
+    without seeing that conversation. Unlike Stage B, Minor revision is not a
+    pass here.
+    """
+    state.stage_c_fresh_attempts += 1
+    fresh_task_id = (
+        f"final_{safe_name}_C{rnd}_fresh{state.stage_c_fresh_attempts}_"
+        f"{time.time_ns()}"
+    )
+    save_state(state)
+
+    if dry_run:
+        response = "Overall verdict: Accept\nNo remaining blockers."
+        return True, "accept", response, []
+
+    pdf_path = Path(state.pdf_path) if state.pdf_path else None
+    prompt = build_stage_c_fresh_confirmation_prompt(state.target_journal)
+    logger.info(f"{tag} Round {rnd}: C2.5 - fresh confirmation task={fresh_task_id}")
+    if not oracle_submit(
+        fresh_task_id, prompt, pdf_path,
+        context_mode="fresh_review",
+        agent_role="stage_c_fresh_confirmation",
+        conversation_id="",
+        is_followup=False,
+    ):
+        logger.warning(f"{tag} fresh confirmation submit failed")
+        return False, "infra_fail", "", []
+
+    raw = oracle_poll(fresh_task_id, timeout=oracle_timeout)
+    if raw == ORACLE_CANCELLED_RESPONSE:
+        logger.info(f"{tag} fresh confirmation task cancelled")
+        return False, "cancelled", "", []
+    if not is_oracle_final_response_valid(raw):
+        logger.warning(
+            f"{tag} fresh confirmation returned invalid response; "
+            "retrying once with extraction-safe prompt"
+        )
+        retry_task_id = f"{fresh_task_id}_retry"
+        retry_prompt = (
+            prompt
+            + "\n\nYour reply is currently being machine-extracted. Start "
+            + "again. The first visible characters must be exactly "
+            + "`Overall verdict:`."
+        )
+        if oracle_submit(
+            retry_task_id, retry_prompt, pdf_path,
+            context_mode="fresh_review",
+            agent_role="stage_c_fresh_confirmation",
+            conversation_id="",
+            is_followup=False,
+        ):
+            raw = oracle_poll(retry_task_id, timeout=oracle_timeout)
+        if (raw == ORACLE_CANCELLED_RESPONSE
+                or not is_oracle_final_response_valid(raw)):
+            return False, "infra_fail", "", []
+
+    verdict = extract_verdict(raw)
+    issues = parse_oracle_issues_strict(raw)
+    passed = verdict == "accept" and not issues
+    state.log_event("C", "oracle_fresh_confirmation", round_num=rnd,
+                    verdict=verdict, detail=raw[:12000])
+    save_state(state)
+    return passed, verdict or "unknown", raw, issues
+
+
+def _stage_c_clean_final_gate_passes(
+    state: PaperState, *, rnd: int, oracle_timeout: int,
+    dry_run: bool, tag: str, safe_name: str,
+    oracle_verdict: str, claude_verdict: str,
+) -> bool:
+    fresh_pass, fresh_verdict, _fresh_response, fresh_issues = (
+        _stage_c_fresh_confirmation(
+            state, rnd=rnd, oracle_timeout=oracle_timeout,
+            dry_run=dry_run, tag=tag, safe_name=safe_name)
+    )
+    if state.stage_c_verdicts:
+        state.stage_c_verdicts[-1] = (
+            f"oracle:{oracle_verdict};fresh:{fresh_verdict};"
+            f"claude:{claude_verdict}"
+        )
+    save_state(state)
+    if not fresh_pass:
+        logger.info(
+            f"{tag} Round {rnd}: fresh confirmation blocked C-DONE "
+            f"(verdict={fresh_verdict}, {len(fresh_issues)} issue(s))")
+    return fresh_pass
+
+
+def _latest_stage_c_fresh_blocker_text(state: PaperState) -> str:
+    for event in reversed(state.history):
+        if event.get("stage") != "C":
+            continue
+        if event.get("action") != "oracle_fresh_confirmation":
+            continue
+        verdict = str(event.get("verdict", "")).lower()
+        if verdict == "accept":
+            return ""
+        detail = str(event.get("detail", "")).strip()
+        if detail:
+            return detail[:6000]
+        return f"Fresh Stage C confirmation returned verdict: {verdict}"
+    return ""
+
+
 def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None,
                 oracle_timeout: int = 7200) -> bool:
@@ -8463,6 +8627,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
 
         # ── C1: Oracle final confirmation ────────────────────────
         logger.info(f"{tag} Round {rnd}: C1 — Oracle final confirmation")
+        safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
         if dry_run:
             oracle_response = (
                 "Overall verdict: Major revision\n"
@@ -8470,14 +8635,34 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 if rnd < 2 else "Overall verdict: Accept\nNo blockers."
             )
         else:
-            safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
             task_id = f"final_{safe_name}_C{rnd}_{time.time_ns()}_a1"
             pdf_path = Path(state.pdf_path) if state.pdf_path else None
-            prompt = build_oracle_re_review_prompt(state.target_journal)
+            deepen_conv_id = state.stage_c_deepen_conv_id
+            if deepen_conv_id:
+                submit_conv_id = deepen_conv_id
+                is_followup_turn = True
+                prompt = build_stage_c_followup_prompt(
+                    "", state.target_journal)
+                context_mode = "multi_turn_deepen"
+                agent_role = "stage_c_oracle_final_followup"
+                logger.info(
+                    f"{tag} Round {rnd}: C1 â€” Oracle final follow-up "
+                    f"(conv={deepen_conv_id[:12]})")
+            else:
+                submit_conv_id = ""
+                is_followup_turn = False
+                prompt = build_oracle_re_review_prompt(state.target_journal)
+                context_mode = "multi_turn_deepen"
+                agent_role = "stage_c_oracle_final"
+                logger.info(
+                    f"{tag} Round {rnd}: C1 â€” Oracle final review "
+                    "(start deepen conv)")
             if not oracle_submit(
                 task_id, prompt, pdf_path,
-                context_mode="fresh_review",
-                agent_role="stage_c_oracle_final",
+                context_mode=context_mode,
+                agent_role=agent_role,
+                conversation_id=submit_conv_id,
+                is_followup=is_followup_turn,
             ):
                 state.error = f"Stage C round {rnd}: Oracle submit failed"
                 save_state(state)
@@ -8507,8 +8692,10 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 )
                 if oracle_submit(
                     retry_task_id, retry_prompt, pdf_path,
-                    context_mode="fresh_review",
-                    agent_role="stage_c_oracle_final",
+                    context_mode=context_mode,
+                    agent_role=agent_role,
+                    conversation_id=submit_conv_id,
+                    is_followup=is_followup_turn,
                 ):
                     retry_raw = oracle_poll(retry_task_id, timeout=oracle_timeout)
                     if (retry_raw != ORACLE_CANCELLED_RESPONSE
@@ -8538,6 +8725,19 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                     save_state(state)
                     return False
             oracle_response = raw
+            if not deepen_conv_id:
+                try:
+                    rec = oracle_poll_record(task_id, timeout=2)
+                except Exception:
+                    rec = {}
+                new_conv = ""
+                if isinstance(rec, dict):
+                    new_conv = str(rec.get("conversation_id") or "")
+                if new_conv:
+                    state.stage_c_deepen_conv_id = new_conv
+                    save_state(state)
+                    logger.info(
+                        f"{tag} captured Stage C deepen conv={new_conv[:12]}")
             done_dir = SCRIPT_DIR / "oracle" / "done"
             done_dir.mkdir(parents=True, exist_ok=True)
             (done_dir / f"{task_id}.md").write_text(
@@ -8599,18 +8799,24 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                     f"{len(issues)} Claude issue(s)")
 
         # ── Gate: submit → Stage D ───────────────────────────────
-        if oracle_pass and claude_pass and not oracle_issues and not issues:
+        if (oracle_pass and claude_pass and not oracle_issues and not issues
+                and _stage_c_clean_final_gate_passes(
+                    state, rnd=rnd, oracle_timeout=oracle_timeout,
+                    dry_run=dry_run, tag=tag, safe_name=safe_name,
+                    oracle_verdict=oracle_verdict,
+                    claude_verdict=claude_verdict)):
             logger.info(f"{tag} STAGE C PASSED at round {rnd}: "
-                        "Oracle + Codex approved")
+                        "deepen Oracle + fresh Oracle + Codex approved")
             git_commit(paper_path,
                        f"Stage C (joint pass, {rnd}R): "
-                       f"Oracle and Codex approved for submission", tag=tag)
+                       "deepen Oracle, fresh Oracle, and Codex approved", tag=tag)
             update_program_board(state.paper_name, "C-DONE",
-                                 f"Oracle+Codex: pass, {rnd} rounds")
+                                 "Oracle deepen+fresh accept and Codex "
+                                 f"submit, {rnd} rounds")
             _add_to_submission_queue(
                 state.paper_name, state.target_journal,
-                f"C-DONE round {rnd}: Oracle accept + Codex submit; "
-                "需准备 cover letter + metadata")
+                f"C-DONE round {rnd}: Oracle deepen accept + fresh accept + Codex submit; "
+                "prepare cover letter + metadata")
             state.stage_c_passed = True
             save_state(state)
             return True
@@ -8626,6 +8832,11 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             combined_issues.append(
                 "Oracle final-review verdict was not pass:\n"
                 + oracle_response[:6000])
+        fresh_blocker_text = _latest_stage_c_fresh_blocker_text(state)
+        if fresh_blocker_text:
+            combined_issues.append(
+                "Fresh clean-room Stage C confirmation blocked C-DONE:\n"
+                + fresh_blocker_text)
         for issue in issues:
             combined_issues.append(str(issue))
         if not combined_issues:

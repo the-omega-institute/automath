@@ -1212,6 +1212,162 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         self.assertIn("final review", detail)
         self.assertIn("report to the user", detail)
 
+    def test_stage_c_requires_fresh_accept_after_deepen_accept(self):
+        paper = self._write_paper("2026_stage_c_gate", "\\title{Gate}\n")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="APAL",
+        )
+
+        submit_calls = []
+
+        def fake_submit(task_id, prompt, pdf_path=None, **kwargs):
+            submit_calls.append({
+                "task_id": task_id,
+                "conversation_id": kwargs.get("conversation_id"),
+                "is_followup": kwargs.get("is_followup", False),
+                "context_mode": kwargs.get("context_mode", ""),
+                "agent_role": kwargs.get("agent_role", ""),
+                "prompt": prompt,
+            })
+            return True
+
+        def fake_poll(task_id, timeout=7200, poll_interval=30):
+            if "_fresh" in task_id:
+                return (
+                    "Overall verdict: Major revision\n"
+                    "| C1 | Intro | BLOCKER | Logic framing is not closed | "
+                    "rewrite abstract and example |"
+                )
+            return "Overall verdict: Accept\nNo remaining blockers."
+
+        codex_json = json.dumps({"verdict": "submit", "issues": []})
+
+        with mock.patch.object(oracle_pipeline, "latex_toolchain_available",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "compile_pdf",
+                               return_value=paper / "main.pdf"), \
+             mock.patch.object(oracle_pipeline, "compile_gate",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "git_commit",
+                               return_value=""), \
+             mock.patch.object(oracle_pipeline, "oracle_submit",
+                               side_effect=fake_submit), \
+             mock.patch.object(oracle_pipeline, "oracle_poll",
+                               side_effect=fake_poll), \
+             mock.patch.object(oracle_pipeline, "oracle_poll_record",
+                               return_value={"conversation_id": "conv-stage-c"}), \
+             mock.patch.object(oracle_pipeline, "codex_exec",
+                               return_value=codex_json), \
+             mock.patch.object(oracle_pipeline, "_add_to_submission_queue") as add_queue:
+            ok = oracle_pipeline.run_stage_c(
+                state, oracle_timeout=1, extra_stage_c_rounds=0)
+
+        self.assertFalse(ok)
+        self.assertFalse(state.stage_c_passed)
+        add_queue.assert_not_called()
+        self.assertEqual(state.stage_c_deepen_conv_id, "conv-stage-c")
+        self.assertGreaterEqual(state.stage_c_fresh_attempts, 1)
+        self.assertTrue(any(
+            c["context_mode"] == "multi_turn_deepen"
+            and c["conversation_id"] == ""
+            for c in submit_calls
+        ))
+        self.assertTrue(any(
+            c["context_mode"] == "fresh_review"
+            and c["agent_role"] == "stage_c_fresh_confirmation"
+            and c["conversation_id"] == ""
+            for c in submit_calls
+        ))
+        self.assertTrue(any("fresh:major revision" in v
+                            for v in state.stage_c_verdicts))
+
+    def test_stage_c_uses_followup_deepen_conversation_when_available(self):
+        paper = self._write_paper("2026_stage_c_followup", "\\title{Gate}\n")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="APAL",
+            stage_c_deepen_conv_id="conv-existing",
+        )
+
+        submit_calls = []
+
+        def fake_submit(task_id, prompt, pdf_path=None, **kwargs):
+            submit_calls.append({
+                "conversation_id": kwargs.get("conversation_id"),
+                "is_followup": kwargs.get("is_followup", False),
+                "context_mode": kwargs.get("context_mode", ""),
+                "agent_role": kwargs.get("agent_role", ""),
+            })
+            return True
+
+        codex_json = json.dumps({"verdict": "submit", "issues": []})
+
+        with mock.patch.object(oracle_pipeline, "latex_toolchain_available",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "compile_pdf",
+                               return_value=paper / "main.pdf"), \
+             mock.patch.object(oracle_pipeline, "git_commit",
+                               return_value="abc123"), \
+             mock.patch.object(oracle_pipeline, "oracle_submit",
+                               side_effect=fake_submit), \
+             mock.patch.object(oracle_pipeline, "oracle_poll",
+                               return_value="Overall verdict: Accept\nNo remaining blockers."), \
+             mock.patch.object(oracle_pipeline, "codex_exec",
+                               return_value=codex_json), \
+             mock.patch.object(oracle_pipeline, "_add_to_submission_queue"):
+            ok = oracle_pipeline.run_stage_c(
+                state, oracle_timeout=1, extra_stage_c_rounds=0)
+
+        self.assertTrue(ok)
+        self.assertTrue(state.stage_c_passed)
+        self.assertTrue(any(
+            c["context_mode"] == "multi_turn_deepen"
+            and c["conversation_id"] == "conv-existing"
+            and c["is_followup"]
+            for c in submit_calls
+        ))
+
+    def test_stage_c_passes_after_deepen_fresh_and_codex_accept(self):
+        paper = self._write_paper("2026_stage_c_pass", "\\title{Gate}\n")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="APAL",
+        )
+
+        codex_json = json.dumps({"verdict": "submit", "issues": []})
+
+        with mock.patch.object(oracle_pipeline, "latex_toolchain_available",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "compile_pdf",
+                               return_value=paper / "main.pdf"), \
+             mock.patch.object(oracle_pipeline, "git_commit",
+                               return_value="abc123"), \
+             mock.patch.object(oracle_pipeline, "oracle_submit",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "oracle_poll",
+                               return_value="Overall verdict: Accept\nNo remaining blockers."), \
+             mock.patch.object(oracle_pipeline, "oracle_poll_record",
+                               return_value={"conversation_id": "conv-stage-c"}), \
+             mock.patch.object(oracle_pipeline, "codex_exec",
+                               return_value=codex_json), \
+             mock.patch.object(oracle_pipeline, "_add_to_submission_queue") as add_queue:
+            ok = oracle_pipeline.run_stage_c(
+                state, oracle_timeout=1, extra_stage_c_rounds=0)
+
+        self.assertTrue(ok)
+        self.assertTrue(state.stage_c_passed)
+        self.assertEqual(state.stage_c_deepen_conv_id, "conv-stage-c")
+        self.assertEqual(state.stage_c_fresh_attempts, 1)
+        self.assertTrue(any("fresh:accept" in v for v in state.stage_c_verdicts))
+        add_queue.assert_called_once()
+
     def test_stage_c_terminal_classifies_repeated_revisions_as_hard_stuck(self):
         state = oracle_pipeline.PaperState(
             paper_dir=str(self.root / "2026_hard_stuck"),
