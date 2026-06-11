@@ -120,6 +120,8 @@ Theorem~\ref{thm:publication-safety-interface} (conditional finite-record
 publication-audit invariants under record-gate soundness),
 Theorem~\ref{thm:external-interface-projection-no-free-upgrade} (no free
 implementation-soundness upgrade),
+Theorem~\ref{thm:rgs-conditional-compact-spine} (record-gate conditionality is
+the forced compact-spine normal form),
 Theorem~\ref{thm:three-boundary-upgrade-sharpness} (the three advertised weak
 interfaces are sharp compiler-boundary interfaces), and
 Theorem~\ref{thm:finite-record-certificate-rigidity} (bad-subrecord normal form),
@@ -127,8 +129,9 @@ with the terminal weak-interface maximality classifier in
 Theorem~\ref{thm:presentation-weak-interface-maximality} identifying the exact
 upgrade coordinates excluded from the presentation-only claim.
 These are the theorem chain supporting the CICM software-architecture claim; the
-compact article should cite the compressed interface theorem and the verifier
-schema of Figure~\ref{fig:verifier-schema} rather than trying to reproduce the
+compact article should cite the compressed interface theorem, the publication
+safety interface, the weak-interface maximality theorem, and the verifier schema
+of Figure~\ref{fig:verifier-schema} rather than trying to reproduce the
 surrounding support-ledger calculus.
 
 The second layer is \emph{support-boundary instantiation}: package shape,
@@ -1658,6 +1661,85 @@ interface can be used in Theorem~\ref{thm:publication-safety-interface} only to
 construct finite publication certificates and finite bad subrecords.  Any stronger
 reading would require an added coordinate and is outside the predicate just proved
 equivalent.
+\end{proof}
+
+\begin{theorem}[Record-gate conditional compact-spine normal form]
+\label{thm:rgs-conditional-compact-spine}
+Fix a presentation-only package with submitted surface $S$, acceptance ledger
+$L$, dispatch table $\Gamma$, and finite verifier $V$ as in
+Definition~\ref{def:operational-acceptance-interface}.  Suppose the compact
+article cites the reviewer-facing spine
+\[
+\text{Theorems~\ref{thm:presentation-compressed-interface},
+\ref{thm:publication-safety-interface}, and
+\ref{thm:presentation-weak-interface-maximality}.}
+\]
+Then every load-bearing publication-safety sentence supported by that spine has
+a unique finite-record normal form:
+\[
+\mathsf{RGS}_{S}(P,L,\Gamma)
+\quad\Longrightarrow\quad
+\bigl(\mathsf{Out}_{\Gamma,S}(L),\mathsf{Bad}_{\Gamma,S}(L),
+\Pi_{\mathrm{pres}}(S,L,\Gamma)\bigr).
+\]
+Thus the compact paper may state conditional finite-record certificate safety,
+schema-relative verifier exactness, and finite bad-subrecord maximality, but it
+may not state end-to-end gate implementation soundness for the concrete gate
+programs unless the support surface is enlarged by the gate-implementation
+coordinates required by
+Theorem~\ref{thm:gate-implementation-soundness-upgrade-obstruction} or by an
+equivalent implementation-soundness extension coordinate accepted under the same
+schema.  If a compact-paper sentence omits the record-gate-soundness premise but
+keeps the publication-safety conclusion, or if it replaces the finite-record
+conclusion by concrete gate implementation soundness, then its first missing
+field is respectively the $\mathsf{RGS}$ premise or the gate-implementation
+extension coordinate, and that missing field together with the stronger-reading
+tag is an inclusion-minimal bad subrecord.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:record-gate-soundness-external-interface-exactness},
+the predicate $\mathsf{RGS}_{S}(P,L,\Gamma)$ is exactly the external finite
+row-and-pointer interface available to the publication-safety theorem.  Its
+positive data are the certificates $\mathcal C(c)=(K,\ell,E,H,R,D,B)$ satisfying
+the six verifier predicates, and its negative data are only the finite bad
+subrecords read by the first failed predicate.  Therefore any safety conclusion
+that uses this interface and no additional support field is a function only of
+the finite submitted surface, ledger, dispatch table, verifier predicates, and
+certificates.
+
+Theorem~\ref{thm:publication-safety-interface} identifies that function: from
+the same inputs and under $\mathsf{RGS}_{S}(P,L,\Gamma)$ it constructs
+$\mathsf{Out}_{\Gamma,S}(L)$ and the rejected bad-subrecord list, and it proves
+schema-relative exactness for the accepted certificate records.  Theorem
+\ref{thm:presentation-compressed-interface} then projects exactly these data,
+together with the axis map and boundary list, to
+$\Pi_{\mathrm{pres}}(S,L,\Gamma)$.  Hence a compact citation of the spine has the
+displayed normal form: the premise is the record-gate-soundness predicate, and
+the conclusion is the finite accepted-certificate/bad-subrecord/presentation
+projection.  No smaller formula can carry the same safety assertion, because
+removing the premise leaves no hypothesis that supplies the passing gate rows
+and evidence pointers, while removing the conclusion removes one of the finite
+outputs actually constructed by the theorem chain.
+
+It remains to classify the two overclaims named in the statement.  If the compact
+sentence drops $\mathsf{RGS}_{S}(P,L,\Gamma)$ while retaining the
+publication-safety conclusion, two package states can agree on all printed
+presentation prose and differ only in whether the required ledger rows and
+evidence pointers pass the predicate.  The verifier cannot accept the safety
+conclusion in the failing state; the missing premise is therefore the first bad
+subrecord.  If the sentence instead asserts concrete implementation soundness of
+the gate programs, it changes the stronger-reading tag from finite row-and-pointer
+soundness to implementation soundness.  The finite certificate fields do not read
+gate source code, executable specifications, negative tests, reproducibility data,
+or proof links tying program behavior to the record predicate.  Theorem
+\ref{thm:gate-implementation-soundness-upgrade-obstruction} lists exactly the
+finite coordinate families that must be added for that upgrade.  Without them,
+Theorem~\ref{thm:presentation-weak-interface-maximality} classifies the stronger
+tag together with the absent upgrade coordinate as an inclusion-minimal bad
+subrecord; with them, the same schema accepts the enlarged claim.  Thus the
+conditional finite-record wording is not a stylistic hedge but the unique compact
+normal form of the reviewer-facing spine.
 \end{proof}
 
 \begin{definition}[Stronger-reading preorder]
