@@ -10,9 +10,16 @@ import time
 SESSION_DATE = "2026-06-11"
 BRANCH = "codex/section-2-3-bridge-bundle"
 DEFAULT_TIMEOUT_SEC = 60
-# tick-54 fix: also match "verdict=" lowercase (e.g. Erdos Stage-3 prints
-# "verdict=FAIL" via the JSON-style summary) and "VERDICT:".
-VERDICT_RE = re.compile(r"^(?:VERDICT:|verdict=)\s*(\S+)", re.MULTILINE)
+# tick-54 fix: regex accepts both "VERDICT:", "verdict:", "verdict=" forms.
+# tick-54+1 fix: also probe known verdict-token tail across whole output
+# for scripts whose final-summary line embeds the verdict mid-sentence
+# (Erdos Stage-5 prints "wrote output to ...: PASS_SPLIT_PRIME_ROBUSTNESS").
+VERDICT_RE = re.compile(r"^(?:VERDICT:|verdict[:=])\s*(\S+)", re.MULTILINE)
+VERDICT_TOKEN_RE = re.compile(
+    # tick-54+2: accept both PASS_<SUFFIX> and bare PASS (Stage-5b prints
+    # "Stage-5b wrote output to ...: PASS" with no suffix).
+    r"\b((?:PASS|FAIL|PARTIAL|INCONCLUSIVE)(?:_[A-Z0-9_]+)?)\b"
+)
 
 SCRIPT_PATH = pathlib.Path(__file__).resolve()
 OUTREACH_DIR = SCRIPT_PATH.parent
@@ -141,7 +148,13 @@ def parse_verdict(output):
     # tick-54 fix: use search on the whole output (regex has MULTILINE) so we
     # also catch lines that don't start at column 0 and the "verdict=" pattern.
     matches = VERDICT_RE.findall(output)
-    return matches[-1] if matches else None
+    if matches:
+        return matches[-1]
+    # tick-54+1 fix: fall back to token regex over the last 10 non-empty lines.
+    tail_lines = [l for l in output.splitlines() if l.strip()][-10:]
+    tail_text = "\n".join(tail_lines)
+    token_matches = VERDICT_TOKEN_RE.findall(tail_text)
+    return token_matches[-1] if token_matches else None
 
 
 def run_validator(entry, index, total):
