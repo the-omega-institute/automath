@@ -147,6 +147,20 @@ VALIDATORS = [
         "validator": "check_2501_13175_stage1.py",
         "expected_verdict": "PASS_PROP_4_0_1_RECURRENCE",
     },
+    {
+        "track": "algebraicity_paper",
+        "target_dir": "tools/community-outreach/targets/litt_algebraicity_integrality_followup",
+        "validator": "check_2501_13175_deeper_stage2.py",
+        "expected_verdict": "PASS_DEEPER_TAYLOR_INTEGRALITY",
+        "timeout_sec": 180,  # b_0..b_50 + denominator scan + algebraicity probe
+    },
+    {
+        "track": "algebraicity_paper",
+        "target_dir": "tools/community-outreach/targets/litt_algebraicity_integrality_followup",
+        "validator": "check_2501_13175_integrality_density_stage3.py",
+        "expected_verdict": "PASS_INTEGRALITY_DENSITY_CAPSTONE",
+        "timeout_sec": 600,  # b_0..b_200 via sympy
+    },
 ]
 
 
