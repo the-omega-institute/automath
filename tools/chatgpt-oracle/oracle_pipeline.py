@@ -722,6 +722,8 @@ class PaperState:
     stage_a_inventory: dict = field(default_factory=dict)
     stage_a_split_candidates: list[dict] = field(default_factory=list)
     stage_a_failure_classes: list = field(default_factory=list)
+    stage_a_escalation_conv_id: str = ""
+    stage_a_escalation_attempts: int = 0
 
     # Stage B tracking
     stage_b_rounds: int = 0
@@ -746,6 +748,8 @@ class PaperState:
     stage_c_passed: bool = False
     stage_c_deepen_conv_id: str = ""
     stage_c_fresh_attempts: int = 0
+    stage_c_issue_ledger: list[dict] = field(default_factory=list)
+    stage_c_last_fix_summary: str = ""
 
     # Stage D tracking
     stage_d_backflow_items: list[str] = field(default_factory=list)
@@ -799,6 +803,8 @@ class PaperState:
             "stage_a_inventory": self.stage_a_inventory,
             "stage_a_split_candidates": self.stage_a_split_candidates[-50:],
             "stage_a_failure_classes": self.stage_a_failure_classes[-100:],
+            "stage_a_escalation_conv_id": self.stage_a_escalation_conv_id,
+            "stage_a_escalation_attempts": self.stage_a_escalation_attempts,
             "stage_b_rounds": self.stage_b_rounds,
             "stage_b_verdicts": self.stage_b_verdicts,
             "stage_b_passed": self.stage_b_passed,
@@ -816,6 +822,8 @@ class PaperState:
             "stage_c_passed": self.stage_c_passed,
             "stage_c_deepen_conv_id": self.stage_c_deepen_conv_id,
             "stage_c_fresh_attempts": self.stage_c_fresh_attempts,
+            "stage_c_issue_ledger": self.stage_c_issue_ledger[-200:],
+            "stage_c_last_fix_summary": self.stage_c_last_fix_summary[-2000:],
             "stage_d_backflow_items": self.stage_d_backflow_items,
             "stage_d_passed": self.stage_d_passed,
             "history": self.history[-50:],  # keep last 50 entries
@@ -889,6 +897,9 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                      "stage_b_last_fix_summary",
                      "stage_b_fresh_eval_pending",
                      "stage_c_deepen_conv_id", "stage_c_fresh_attempts",
+                     "stage_c_last_fix_summary",
+                     "stage_a_escalation_conv_id",
+                     "stage_a_escalation_attempts",
                      "started_at", "completed_at", "error",
                      "block_reason"):
             if key in data:
@@ -904,6 +915,7 @@ def load_state(paper_name: str) -> Optional[PaperState]:
         s.stage_b_reject_classes = _state_list_value(data, "stage_b_reject_classes")
         s.stage_b_diff_scope_misses = _state_list_value(data, "stage_b_diff_scope_misses")
         s.stage_c_verdicts = _state_list_value(data, "stage_c_verdicts")
+        s.stage_c_issue_ledger = _state_list_value(data, "stage_c_issue_ledger")
         s.stage_d_backflow_items = _state_list_value(data, "stage_d_backflow_items")
         s.history = _state_list_value(data, "history")
         s.events = _state_list_value(data, "events")
@@ -3561,6 +3573,48 @@ def build_stage_a_oracle_escalation_prompt(state: PaperState,
     """)
 
 
+def build_stage_a_oracle_escalation_followup_prompt(state: PaperState,
+                                                    reason: str) -> str:
+    return textwrap.dedent(f"""\
+        Continue the same Stage A escalation conversation for this manuscript.
+
+        Paper directory: {state.paper_dir}
+        Target journal: {state.target_journal}
+        New deterministic Stage A ceiling reason: {reason}
+
+        Do not restart from a shallow accept/reject judgment. Reconcile this
+        new gate failure with your previous theorem-package direction. Your
+        task is to close the Stage A novelty/theorem adequacy gap, or to
+        explicitly park the route if no publishable theorem package remains.
+
+        Required reasoning standard:
+        - If your prior package was too weak, strengthen it into a concrete
+          theorem package with source-level instructions.
+        - If Codex failed to implement the package, specify the exact missing
+          theorem/proof spine and closure criterion.
+        - If the route cannot clear Stage A without overlap or fake extension,
+          return park or human_decision.
+        - Do not return prose polish as a theorem package.
+
+        Return only JSON:
+        {{
+          "verdict": "rerun_stage_a|park|human_decision",
+          "publishable_route": true,
+          "core_theorem_direction": "...",
+          "required_theorem_package": ["..."],
+          "novelty_claim": "...",
+          "known_results_to_cite": ["..."],
+          "journal_route": "keep|retarget|undecided",
+          "target_journal": "...",
+          "park_reason": "",
+          "human_decision_needed": "",
+          "codex_instructions": [
+            "Specific source-level instruction for Stage A2."
+          ]
+        }}
+    """)
+
+
 def _append_oracle_stage_a_directive(paper_path: Path, data: dict,
                                      reason: str) -> None:
     directive = paper_path / "research_directive.md"
@@ -3680,7 +3734,16 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
     else:
         safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
         task_id = f"stage_a_escalate_{safe_name}_{time.time_ns()}"
-        prompt = build_stage_a_oracle_escalation_prompt(state, reason)
+        escalation_conv_id = str(getattr(state, "stage_a_escalation_conv_id", "") or "")
+        if escalation_conv_id:
+            prompt = build_stage_a_oracle_escalation_followup_prompt(
+                state, reason)
+            submit_conv_id = escalation_conv_id
+            is_followup_turn = True
+        else:
+            prompt = build_stage_a_oracle_escalation_prompt(state, reason)
+            submit_conv_id = ""
+            is_followup_turn = False
         pdf_path = Path(state.pdf_path) if state.pdf_path else None
         if not pdf_path or not pdf_path.exists():
             compiled_pdf = compile_pdf(paper_path, dry_run=False)
@@ -3688,10 +3751,13 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
                 pdf_path = compiled_pdf
                 state.pdf_path = str(compiled_pdf)
                 save_state(state)
+        state.stage_a_escalation_attempts += 1
         if not oracle_submit(
             task_id, prompt, pdf_path,
             context_mode="deep_reasoning",
             agent_role="stage_a_oracle_escalation",
+            conversation_id=submit_conv_id,
+            is_followup=is_followup_turn,
         ):
             return _stage_a_pause(
                 state, "stage_a_oracle_escalation_submit_failed", tag=tag)
@@ -3704,6 +3770,16 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
             return _stage_a_pause(
                 state, "stage_a_oracle_escalation_unparseable", tag=tag)
         data["_raw_response"] = raw[:12000]
+        if not escalation_conv_id:
+            try:
+                rec = oracle_poll_record(task_id, timeout=2)
+            except Exception:
+                rec = {}
+            new_conv = ""
+            if isinstance(rec, dict):
+                new_conv = str(rec.get("conversation_id") or "")
+            if new_conv:
+                state.stage_a_escalation_conv_id = new_conv
 
     artifact.write_text(json.dumps(data, indent=2, ensure_ascii=False),
                         encoding="utf-8")
@@ -7602,7 +7678,8 @@ def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
 
 
 def build_stage_c_followup_prompt(fix_summary: str,
-                                  target_journal: str) -> str:
+                                  target_journal: str,
+                                  open_ledger: str = "") -> str:
     """Follow up inside the same Stage C final-gate conversation."""
     summary = (fix_summary or "").strip()
     if not summary:
@@ -7610,6 +7687,26 @@ def build_stage_c_followup_prompt(fix_summary: str,
             "revised the manuscript to close every blocker and material "
             "journal-fit concern raised in your previous final-gate review"
         )
+    ledger_block = ""
+    if open_ledger.strip():
+        ledger_block = textwrap.dedent(f"""\
+
+            ## Open Stage C Issue Ledger
+
+            The pipeline will not mark this manuscript C-DONE until every
+            required ledger item below is explicitly closed.
+
+            {open_ledger.strip()}
+
+            You must include this closure table after the verdict:
+
+            | ID | Closed? | Evidence in manuscript | Remaining condition |
+            | ... | yes/no | concrete section/theorem/example evidence | none or exact condition |
+
+            Only use `yes` when the revised manuscript itself contains enough
+            evidence to close that ledger item. If a ledger item is not listed
+            in the closure table, the deterministic gate keeps it open.
+        """)
     return textwrap.dedent(f"""\
         Per your previous final-gate review, I {summary}.
 
@@ -7632,7 +7729,155 @@ def build_stage_c_followup_prompt(fix_summary: str,
         2. Any new blockers introduced by the revision.
         3. Journal-fit and novelty risks that would still concern an editor.
         4. Copyediting-only issues separately from blockers.
+        {ledger_block}
     """)
+
+
+def _stage_c_open_ledger_items(state: PaperState) -> list[dict]:
+    return [
+        item for item in getattr(state, "stage_c_issue_ledger", [])
+        if isinstance(item, dict)
+        and str(item.get("status", "open")).lower()
+        in {"", "open", "fixed_by_codex"}
+    ]
+
+
+def _stage_c_issue_fingerprint(source: str, description: str) -> str:
+    text = re.sub(r"\s+", " ", description or "").strip().lower()
+    text = re.sub(r"[^a-z0-9 ]+", "", text)
+    return f"{source}:{text[:180]}"
+
+
+def _stage_c_next_issue_id(state: PaperState, source: str) -> str:
+    prefix_map = {
+        "oracle_final": "C-ORACLE",
+        "fresh_confirmation": "C-FRESH",
+        "codex_final": "C-CODEX",
+        "gate": "C-GATE",
+    }
+    prefix = prefix_map.get(source, "C-ISSUE")
+    existing = {
+        str(item.get("id", ""))
+        for item in getattr(state, "stage_c_issue_ledger", [])
+        if isinstance(item, dict)
+    }
+    idx = 1
+    while f"{prefix}-{idx}" in existing:
+        idx += 1
+    return f"{prefix}-{idx}"
+
+
+def _stage_c_issue_text(raw) -> tuple[str, str, str]:
+    if isinstance(raw, dict):
+        desc = (
+            raw.get("description")
+            or raw.get("reason")
+            or raw.get("task")
+            or raw.get("issue")
+            or raw.get("detail")
+            or ""
+        )
+        fix = (
+            raw.get("suggested_fix")
+            or raw.get("acceptance_criterion")
+            or raw.get("closure_criterion")
+            or raw.get("remaining_condition")
+            or ""
+        )
+        sev = str(raw.get("severity") or raw.get("priority") or "BLOCKER")
+        if raw.get("section"):
+            desc = f"{raw.get('section')}: {desc}"
+        return str(desc).strip(), str(fix).strip(), sev.upper()
+    return str(raw).strip(), "", "BLOCKER"
+
+
+def _stage_c_add_ledger_items(
+    state: PaperState, source: str, rnd: int, issues: list,
+    *, fallback_text: str = "",
+) -> None:
+    raw_items = list(issues or [])
+    if not raw_items and fallback_text.strip():
+        raw_items = [fallback_text.strip()]
+    if not raw_items:
+        return
+    if not hasattr(state, "stage_c_issue_ledger"):
+        state.stage_c_issue_ledger = []
+    existing = {
+        _stage_c_issue_fingerprint(
+            str(item.get("source", "")), str(item.get("description", "")))
+        for item in state.stage_c_issue_ledger
+        if isinstance(item, dict)
+    }
+    for raw in raw_items:
+        desc, criterion, severity = _stage_c_issue_text(raw)
+        desc = re.sub(r"\s+", " ", desc).strip()
+        if not desc:
+            continue
+        fingerprint = _stage_c_issue_fingerprint(source, desc)
+        if fingerprint in existing:
+            continue
+        state.stage_c_issue_ledger.append({
+            "id": _stage_c_next_issue_id(state, source),
+            "source": source,
+            "severity": severity or "BLOCKER",
+            "type": "unknown",
+            "description": desc[:2000],
+            "closure_criterion": (
+                criterion
+                or "The revised manuscript explicitly resolves this blocker."
+            )[:2000],
+            "status": "open",
+            "round_opened": rnd,
+            "round_closed": None,
+            "evidence": "",
+        })
+        existing.add(fingerprint)
+
+
+def _format_stage_c_open_ledger_for_prompt(state: PaperState) -> str:
+    lines = []
+    for item in _stage_c_open_ledger_items(state):
+        lines.append(
+            f"- {item.get('id')}: [{item.get('severity', 'BLOCKER')}] "
+            f"{item.get('description', '')} "
+            f"Closure criterion: {item.get('closure_criterion', '')}"
+        )
+    return "\n".join(lines)
+
+
+def _stage_c_apply_closure_table(state: PaperState, response: str,
+                                 rnd: int) -> None:
+    open_by_id = {
+        str(item.get("id", "")).strip(): item
+        for item in _stage_c_open_ledger_items(state)
+    }
+    if not open_by_id:
+        return
+    for line in (response or "").splitlines():
+        stripped = line.strip()
+        if not (stripped.startswith("|") and stripped.endswith("|")):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if len(cells) < 4:
+            continue
+        issue_id = cells[0]
+        if issue_id.lower() in {"id", "---", "..."}:
+            continue
+        item = open_by_id.get(issue_id)
+        if not item:
+            continue
+        closed = cells[1].lower()
+        remaining = cells[3].lower()
+        if closed in {"yes", "y", "closed", "true"} and (
+            not remaining or remaining in {"none", "n/a", "na", "-"}
+        ):
+            item["status"] = "oracle_confirmed_closed"
+            item["round_closed"] = rnd
+            item["evidence"] = cells[2][:2000]
+
+
+def _stage_c_has_open_blockers(state: PaperState) -> bool:
+    return bool(_stage_c_open_ledger_items(state))
 
 
 def build_stage_c_fresh_confirmation_prompt(target_journal: str) -> str:
@@ -7720,6 +7965,13 @@ def _stage_c_fresh_confirmation(
     verdict = extract_verdict(raw)
     issues = parse_oracle_issues_strict(raw)
     passed = verdict == "accept" and not issues
+    if not passed:
+        fallback = ""
+        if verdict and verdict != "accept":
+            fallback = raw[:6000]
+        _stage_c_add_ledger_items(
+            state, "fresh_confirmation", rnd, issues,
+            fallback_text=fallback)
     state.log_event("C", "oracle_fresh_confirmation", round_num=rnd,
                     verdict=verdict, detail=raw[:12000])
     save_state(state)
@@ -8641,8 +8893,11 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             if deepen_conv_id:
                 submit_conv_id = deepen_conv_id
                 is_followup_turn = True
+                open_ledger_text = _format_stage_c_open_ledger_for_prompt(state)
                 prompt = build_stage_c_followup_prompt(
-                    "", state.target_journal)
+                    state.stage_c_last_fix_summary,
+                    state.target_journal,
+                    open_ledger_text)
                 context_mode = "multi_turn_deepen"
                 agent_role = "stage_c_oracle_final_followup"
                 logger.info(
@@ -8746,6 +9001,14 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         oracle_verdict = extract_verdict(oracle_response)
         oracle_issues = parse_oracle_issues_strict(oracle_response)
         oracle_pass = oracle_verdict == "accept"
+        _stage_c_apply_closure_table(state, oracle_response, rnd)
+        if oracle_issues:
+            _stage_c_add_ledger_items(
+                state, "oracle_final", rnd, oracle_issues)
+        elif not oracle_pass:
+            _stage_c_add_ledger_items(
+                state, "oracle_final", rnd, [],
+                fallback_text=oracle_response[:6000])
         state.log_event("C", "oracle_final_review", round_num=rnd,
                         verdict=oracle_verdict,
                         detail=oracle_response[:12000])
@@ -8785,6 +9048,12 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 for wp in work_packages
             ]
         claude_pass = claude_verdict == "submit"
+        if issues:
+            _stage_c_add_ledger_items(state, "codex_final", rnd, issues)
+        elif not claude_pass:
+            _stage_c_add_ledger_items(
+                state, "codex_final", rnd, [],
+                fallback_text=json.dumps(review_data, ensure_ascii=False)[:6000])
         state.stage_c_verdicts.append(
             f"oracle:{oracle_verdict};claude:{claude_verdict}")
         state.log_event("C", "codex_independent_review", round_num=rnd,
@@ -8800,6 +9069,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
 
         # ── Gate: submit → Stage D ───────────────────────────────
         if (oracle_pass and claude_pass and not oracle_issues and not issues
+                and not _stage_c_has_open_blockers(state)
                 and _stage_c_clean_final_gate_passes(
                     state, rnd=rnd, oracle_timeout=oracle_timeout,
                     dry_run=dry_run, tag=tag, safe_name=safe_name,
@@ -8839,6 +9109,12 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 + fresh_blocker_text)
         for issue in issues:
             combined_issues.append(str(issue))
+        open_ledger_text = _format_stage_c_open_ledger_for_prompt(state)
+        if open_ledger_text.strip():
+            combined_issues.append(
+                "Open Stage C issue ledger. Every item must be fixed in the "
+                "manuscript and then explicitly closed by the same Oracle "
+                "reviewer in the next follow-up:\n" + open_ledger_text)
         if not combined_issues:
             combined_issues.append(
                 "Final gate did not pass. Reconcile Oracle and Claude "
@@ -8859,6 +9135,10 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         h_c3 = git_commit(paper_path,
                           f"stage-C R{rnd}: codex joint final-review fixes",
                           tag=tag)
+        state.stage_c_last_fix_summary = (
+            "revised the manuscript to address the open Stage C issue "
+            f"ledger and round {rnd} final-gate blockers"
+        )
         state.log_event("C", "codex_fix_joint_final_review", round_num=rnd,
                         committed=bool(h_c3), commit_hash=h_c3,
                         detail=f"compiled={compiled_c3}")
