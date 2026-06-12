@@ -341,6 +341,219 @@ while every finite-state transfer sequence is exponentially bounded by
 \Cref{prop:finite-state-coefficient-budget}.  Hence arbitrary covers can destroy
 transfer although the intrinsic fold moments remain finite-state.
 \end{proof}
+
+\subsection{Intrinsic fibre height and the zero-temperature endpoint}
+\label{ssec:intrinsic-height-zero-temperature}
+
+For \(n\ge0\) and \(N\in\ZZ\), let
+\[
+  R_n(N)=\#\left\{A\subseteq\{1,\ldots,n\}:
+  \sum_{i\in A}F_i=N\right\},
+\]
+with \(R_n(N)=0\) when no such subset exists.  Separating subsets according as
+they contain \(n\) gives
+\begin{equation}\label{eq:R-recursion}
+  R_n(N)=R_{n-1}(N)+R_{n-1}(N-F_n)
+  \qquad(n\ge1).
+\end{equation}
+
+\begin{lemma}[Fold fibre--representation pairing]
+\label{lem:fold-fibre-representation-pairing}
+For \(x\in X_m\), put \(r=\Val_m(x)\in\{0,\ldots,F_{m+2}-1\}\).  Then
+\[
+  d_m(x)=|\Fold_m^{-1}(x)|
+  =R_{m+1}(r)+R_{m+1}(r+F_{m+2})
+  =R_{m+2}(r+F_{m+2}).
+\]
+Thus intrinsic \(\Fold_m\)-fibres are exactly a shifted half-interval slice of
+the truncated Fibonacci representation function.
+\end{lemma}
+
+\begin{proof}
+By \eqref{eq:fold-residue}, a word \(\omega\in\Omega_m\) lies over \(x\) exactly
+when
+\[
+  \sum_{k=1}^{m+1}\omega_kF_k\equiv r\pmod {F_{m+2}} .
+\]
+The possible sums lie in
+\([0,\sum_{k=1}^{m+1}F_k]=[0,F_{m+3}-2]\), and
+\(F_{m+3}-2<2F_{m+2}\).  Hence the only possible sums in this congruence class
+are \(r\) and \(r+F_{m+2}\).  Counting by the subset
+\(A=\{k:\omega_k=1\}\subseteq\{1,\ldots,m+1\}\) gives the first equality.
+For the second equality, apply \eqref{eq:R-recursion} with
+\(n=m+2\) and \(N=r+F_{m+2}\): representations using the top part
+\(F_{m+2}\) are counted by \(R_{m+1}(r)\), and those omitting it are counted by
+\(R_{m+1}(r+F_{m+2})\).
+\end{proof}
+
+\begin{theorem}[Half-interval Fibonacci representation maximum]
+\label{thm:half-interval-fibonacci-representation-max}
+For \(n\ge1\), set
+\[
+  H_n=\max_{0\le r<F_{n+1}} R_{n+1}(F_{n+1}+r).
+\]
+Then \(H_1=1\) and, for \(s\ge1\),
+\[
+  H_{2s}=F_{s+1},\qquad H_{2s+1}=2F_s .
+\]
+Equivalently,
+\[
+  H_n=H_{n-2}+H_{n-4}\qquad(n\ge6),
+\]
+with initial values \(H_1=1,H_2=2,H_3=2,H_4=3,H_5=4\).
+\end{theorem}
+
+\begin{proof}
+The case \(H_1=1\) is immediate from \(R_2(2)=R_2(3)=1\).  For
+\(n\ge2\), we use the ordinary maximum theorem of
+Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a \cite{KocabovaMasakovaPelantova2005}:
+for the Fibonacci representation function, the maximum on the interval
+\([F_k,F_{k+1})\) is \(C_2=1\) and, for \(t\ge1\),
+\[
+  C_{2t+1}=F_{t+1},\qquad C_{2t+2}=2F_t .
+\]
+On \([F_{n+1},F_{n+2})\), the truncated count \(R_{n+1}\) is the ordinary count,
+because no part above \(F_{n+1}\) can occur.  Therefore the maximum of
+\(R_{n+1}\) on this subinterval is \(C_{n+1}\).
+
+It remains only to check the extra half-interval tail.  Write
+\(N=F_{n+2}+u\), where
+\(0\le u<2F_{n+1}-F_{n+2}=F_{n-1}\).  By \eqref{eq:R-recursion},
+\[
+  R_{n+1}(N)=R_n(F_{n+2}+u)+R_n(F_n+u)=R_n(F_n+u),
+\]
+because the largest sum using \(F_1,\ldots,F_n\) is \(F_{n+2}-2\).  The latter
+quantity is bounded by the ordinary interval maximum \(C_n\), and
+\(C_n\le C_{n+1}\) from the displayed formula.  Hence the enlarged interval
+\([F_{n+1},2F_{n+1})\) has the same maximum as \([F_{n+1},F_{n+2})\), namely
+\(H_n=C_{n+1}\).  Substituting \(k=n+1\) in the formula for \(C_k\) gives the two
+parity formulas for \(H_n\).  The recurrence and initial values follow directly
+from those formulas and \(F_{j+1}=F_j+F_{j-1}\).
+\end{proof}
+
+\begin{theorem}[Exact intrinsic \texorpdfstring{\(\Fold_m\)}{Fold_m} fibre height]
+\label{thm:intrinsic-fold-fibre-height}
+Let
+\[
+  M_m=\max_{x\in X_m}|\Fold_m^{-1}(x)|.
+\]
+Then \(M_m=H_{m+1}\).  Consequently, for \(s\ge1\),
+\[
+  M_{2s-1}=F_{s+1},\qquad M_{2s}=2F_s .
+\]
+The first ten values are
+\[
+  M_1,\ldots,M_{10}=2,2,3,4,5,6,8,10,13,16.
+\]
+On each parity class the heights satisfy
+\[
+  M_m=M_{m-2}+M_{m-4}\qquad(m\ge5),
+\]
+with initial values \(M_1=2,M_2=2,M_3=3,M_4=4\).
+\end{theorem}
+
+\begin{proof}
+By \Cref{lem:fold-fibre-representation-pairing}, for \(r=\Val_m(x)\),
+\[
+  |\Fold_m^{-1}(x)|=R_{m+2}(F_{m+2}+r),
+  \qquad 0\le r<F_{m+2}.
+\]
+Since \(\Val_m\) is a bijection from \(X_m\) to these residues, taking the maximum
+over \(x\in X_m\) gives \(M_m=H_{m+1}\).  Substituting \(n=m+1\) in
+\Cref{thm:half-interval-fibonacci-representation-max} gives
+\(M_{2s-1}=H_{2s}=F_{s+1}\) and \(M_{2s}=H_{2s+1}=2F_s\).  The ten displayed
+values and the parity recurrence are the same substitution applied to the listed
+initial values and recurrence for \(H_n\).
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{\(L^\infty\)}{L-infinity} fold entropy]
+\label{cor:linfty-fold-entropy}
+Let \(\varphi=(1+\sqrt5)/2\).  Then
+\[
+  \lim_{m\to\infty}\frac1m\log M_m=\frac12\log\varphi,
+  \qquad
+  M_m=\Theta(\varphi^{m/2}).
+\]
+This is an intrinsic \(q=\infty\) endpoint for the unmodified fold, not a
+consequence of any single fixed-\(q\) recurrence in
+\Cref{thm:intrinsic-fold-moment-transfer}.
+\end{corollary}
+
+\begin{proof}
+The exact height law gives \(M_{2s-1}=F_{s+1}\) and \(M_{2s}=2F_s\).  Since
+\(F_s=\Theta(\varphi^s)\), both parity subsequences are
+\(\Theta(\varphi^{m/2})\), and division of logarithms by \(m\) gives the stated
+limit.  The fixed-\(q\) transfer theorem concerns each finite moment degree
+separately; the maximum fibre size is the \(q=\infty\) norm and is supplied here
+by the separate representation-pairing and half-interval maximum argument.
+\end{proof}
+
+\begin{theorem}[Zero-temperature intrinsic fold pressure envelope]
+\label{thm:zero-temperature-fold-pressure}
+For \(q\ge1\), define
+\[
+  p_q^- =\liminf_{m\to\infty}\frac1m\log S_q^{\mathrm{int}}(m),
+  \qquad
+  p_q^+ =\limsup_{m\to\infty}\frac1m\log S_q^{\mathrm{int}}(m).
+\]
+Then
+\[
+  M_m^q\le S_q^{\mathrm{int}}(m)\le F_{m+2}M_m^q
+\]
+for every \(m\), and hence
+\[
+  q\frac12\log\varphi\le p_q^-\le p_q^+
+  \le q\frac12\log\varphi+\log\varphi .
+\]
+Consequently
+\[
+  \lim_{q\to\infty}\frac{p_q^-}{q}
+  =\lim_{q\to\infty}\frac{p_q^+}{q}
+  =\frac12\log\varphi .
+\]
+\end{theorem}
+
+\begin{proof}
+The lower bound is the contribution of a point of maximal fibre size.  The upper
+bound uses \(d_m(x)\le M_m\) for all \(x\in X_m\) and
+\(|X_m|=F_{m+2}\).  Taking \(m^{-1}\log\), then liminf or limsup, and using
+\Cref{cor:linfty-fold-entropy} together with
+\(\lim_{m\to\infty}m^{-1}\log F_{m+2}=\log\varphi\), gives the displayed pressure
+envelope.  Dividing by \(q\) and letting \(q\to\infty\) squeezes both normalized
+endpoints to \((1/2)\log\varphi\).
+\end{proof}
+
+\begin{theorem}[Moment--height--cover trichotomy]
+\label{thm:moment-height-cover-trichotomy}
+The \(L2\) finite-fibre interface for the Zeckendorf fold has three distinct
+layers.
+\begin{enumerate}
+\item For every fixed finite \(q\), the intrinsic moment sequence
+  \((S_q^{\mathrm{int}}(m))_{m\ge1}\) has fixed finite-state transfer.
+\item At \(q=\infty\), the intrinsic fibre height has the exact law
+  \(M_{2s-1}=F_{s+1}\), \(M_{2s}=2F_s\), and entropy
+  \((1/2)\log\varphi\), with the zero-temperature pressure envelope of
+  \Cref{thm:zero-temperature-fold-pressure}.
+\item In the arbitrary computable finite-fibre cover category over the same
+  normal-form sets, fixed finite-state transfer can fail by the one-spike
+  construction.
+\end{enumerate}
+Thus the paper proves fixed-\(q\) intrinsic transfer and the intrinsic
+\(L^\infty\) height endpoint, while the negative strictness statement remains
+cover-relative and does not assert a full intrinsic fibre-histogram or
+large-deviation classification.
+\end{theorem}
+
+\begin{proof}
+Item (1) is \Cref{thm:intrinsic-fold-moment-transfer}.  Item (2) is
+\Cref{thm:intrinsic-fold-fibre-height,cor:linfty-fold-entropy,thm:zero-temperature-fold-pressure}.
+Item (3) is \Cref{thm:L2-finite-fiber-no-transfer-content}.  The final sentence
+is the nonimplication boundary of
+\Cref{thm:intrinsic-cover-transfer-dichotomy,thm:L2-cover-intrinsic-nonimplication}:
+cover multiplicities are auxiliary data over fixed normal forms, whereas the
+height law above concerns the original maps \(\Fold_m\).
+\end{proof}
+
 \begin{proposition}[Classical finite-atomic certificate skeleton]
 \label{prop:classical-finite-atomic-skeleton}
 Let \(D\) be a finite multiset of positive integers and set
