@@ -122,8 +122,10 @@ rigidity (Theorems~\ref{thm:verifier-input-output-contract},
 (Theorems~\ref{thm:publication-safety-interface},
 \ref{thm:external-interface-projection-no-free-upgrade}, and
 \ref{thm:rgs-conditional-compact-spine});
-\item the finite-record maximality/classification result
-(Theorems~\ref{thm:finite-record-certificate-rigidity},
+\item the reviewer-facing six-role master theorem and its finite-record
+maximality/classification consequences
+(Theorems~\ref{thm:six-role-publication-master-interface},
+\ref{thm:finite-record-certificate-rigidity},
 \ref{thm:presentation-weak-interface-maximality}, and
 \ref{thm:compact-article-finite-record-spine-classification});
 \item the presentation-route projection theorem separating the compressed
@@ -3046,12 +3048,12 @@ that enlargement, record-gate soundness remains the explicit finite predicate
 $\mathsf{RGS}_{S}$, while the proved package fact is exactly the absence of
 missing assigned-gate rows and missing declared evidence surfaces.\end{proof}
 
-\begin{theorem}[Six-coordinate gate-implementation soundness skeleton]
+\begin{theorem}[Six-coordinate projection contract for gate implementations]
 \label{thm:six-coordinate-gate-implementation-soundness-skeleton}
 Let $g$ be a concrete gate whose row is used by the publication-safety theorem
 chain for a load-bearing claim $c$.  A submitted support surface $S$ upgrades
-the row-level record-gate reading for $g$ to gate-implementation soundness only
-if $S$ contains a finite implementation-soundness tuple
+the row-level record-gate reading for $g$ to a finite-input implementation
+projection contract only if $S$ contains a finite implementation tuple
 \[
 \mathcal I(g)=(Q_g,U_g,M_g,X_g,N_g,\Pi_g)
 \]
@@ -3065,21 +3067,21 @@ runtime environment in which the invocation was evaluated;
 output, decision, exit code, and log path it produced;
 \item $X_g$, the digest or manifest binding that places the source, input,
 output, and log bytes on the same submitted support surface $S$;
-\item $N_g$, the named implementation predicate that the row is asserted to
-establish, such as schema-level row checking, source-interface equality,
-theorem-label coverage, or primary-inventory shape; and
-\item $\Pi_g$, a proof-obligation link showing that the concrete predicate $N_g$
-implies exactly the abstract gate predicate used by the dispatch table
-$\Gamma$ for $c$, and no stronger predicate.
+\item $N_g$, the named finite-input implementation predicate that the row is
+asserted to establish, such as schema-level row checking, source-interface
+equality, theorem-label coverage, or primary-inventory shape; and
+\item $\Pi_g$, a proof-obligation link showing that the concrete finite-input
+predicate $N_g$ implies exactly the abstract gate predicate used by the dispatch
+table $\Gamma$ for $c$, and no stronger predicate.
 \end{enumerate}
 If any one of these six coordinates is absent, then the finite bad subrecord for
-the implementation-soundness reading is the missing coordinate.  The original
-row may still serve as a record-gate witness under
+the finite-input implementation-projection reading is the missing coordinate.
+The original row may still serve as a record-gate witness under
 $\mathsf{RGS}_{S}(P,L,\Gamma)$, but it cannot certify implementation
-soundness.  Conversely, when all six coordinates are present and the link
-$\Pi_g$ proves predicate equality or implication in the stated direction, the
-implementation-soundness reading is an ordinary positive extension coordinate of
-the finite-record calculus, restricted to $N_g$.
+soundness beyond the displayed projection.  Conversely, when all six coordinates
+are present and the link $\Pi_g$ proves predicate equality or implication in the
+stated direction, the finite-input projection reading is an ordinary positive
+extension coordinate of the finite-record calculus, restricted to $N_g$.
 \end{theorem}
 
 \begin{proof}
@@ -3099,14 +3101,17 @@ command or environment actually evaluated.  If $M_g$ is absent, they can agree
 on source and command while differing on the finite inputs, outputs, exit code,
 or log bytes.  If $X_g$ is absent, the submitted support surface need not bind
 those bytes to the package state being reviewed.  If $N_g$ is absent, the row has
-no finite predicate whose implementation soundness is being asserted.  If
+no finite predicate whose implementation projection is being asserted.  If
 $\Pi_g$ is absent, even a correct run of $N_g$ need not be the predicate required
 by the abstract gate assigned to $c$.  In each case the current projection cannot
 distinguish two states that agree on all submitted record-gate fields but differ
-on the asserted implementation-soundness fact.  By
+on the asserted finite-input implementation-projection fact.  By
 Theorem~\ref{thm:finite-coordinate-determination-boundary}, a conclusion that
 distinguishes such states is not determined by the submitted projection; the
-missing coordinate is therefore the finite bad subrecord.
+missing coordinate is therefore the finite bad subrecord.  A still stronger
+whole-program implementation-soundness reading would distinguish states that
+agree on this projection but differ outside $N_g$, so it requires a separate
+semantic or program-verification coordinate and is not supplied by this theorem.
 
 For sufficiency, suppose the six coordinates are present.  The tuple
 $\mathcal I(g)$ is finite and lies on $S$ by $X_g$.  Coordinates $Q_g$, $U_g$,
@@ -4965,42 +4970,46 @@ finite subrecord of the kind classified by
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} and
 Theorem~\ref{thm:evidence-level-overclaim-obstruction}.\end{proof}
 
-\begin{theorem}[Boundary extension criterion for finite-input implementation readings]
+\begin{theorem}[Finite-input implementation-projection extension criterion]
 \label{thm:implementation-soundness-extension-criterion}
 Fix the dispatch table $\Gamma$ and the finite certificate schema of
 Proposition~\ref{prop:finite-certificate-schema-verifier}.  A reading of a
-load-bearing package claim as an implementation-soundness claim is accepted by
-the same publication-safety interface if and only if the submitted finite record
-surface is enlarged by an implementation-soundness extension record
+load-bearing package claim as a finite-input implementation-projection claim is
+accepted by the same publication-safety interface if and only if the submitted
+finite record surface is enlarged by an implementation-projection extension
+record
 \[
-\mathsf{Impl}(c)=(K^{\mathrm{impl}},E^{\mathrm{impl}},R^{\mathrm{impl}},B^{\mathrm{impl}})
+\mathsf{ImplProj}(c)=(K^{\mathrm{impl}},E^{\mathrm{impl}},R^{\mathrm{impl}},B^{\mathrm{impl}})
 \]
 with the following properties.
 \begin{enumerate}
-\item $K^{\mathrm{impl}}$ contains the additional implementation claim kind or
-claim-kind component being asserted, rather than merely reusing the original
-finite-record claim kind of $c$.
+\item $K^{\mathrm{impl}}$ contains the additional finite-input implementation
+projection claim kind or claim-kind component being asserted, rather than merely
+reusing the original finite-record claim kind of $c$.
 \item $E^{\mathrm{impl}}$ is a submitted finite evidence surface naming the
-implementation object being certified: for example the relevant source path,
-version or commit, configuration, executable verifier, and implementation-log
-surface.
+implementation object and projection being certified: for example the relevant
+source path, version or commit, configuration, executable verifier, parsed-input
+surface, declared finite predicate, and implementation-log surface.
 \item $R^{\mathrm{impl}}$ contains a pass record, with evidence pointer inside
 $E^{\mathrm{impl}}$, for every gate assigned by $\Gamma$ to the enlarged claim
 kind $K\cup K^{\mathrm{impl}}$.
 \item $B^{\mathrm{impl}}$ declares the evidence level of the implementation
-claim and contains the command-run tuple whenever the implementation claim is
-asserted at command-run strength.
+projection claim and contains the command-run tuple whenever that finite-input
+projection is asserted at command-run strength.
 \end{enumerate}
 When such an extension record is present, the finite certificate constructor of
 Theorem~\ref{thm:publication-safety-interface} accepts the enlarged claim exactly
 at the evidence level declared by $B^{\mathrm{impl}}$.  When it is absent, every
-implementation-soundness reading of the same row has a finite obstruction of one
-of the five kinds in Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
+finite-input implementation-projection reading of the same row has a finite
+obstruction of one of the five kinds in
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  No conclusion of
+whole-program implementation soundness, semantic adequacy, or runtime soundness
+outside the submitted projection follows from this criterion.
 The current package supplies no record of the displayed form
-$\mathsf{Impl}(c)$ for the package verifiers or gates.  Thus the theorem is a
-future-facing exact criterion rather than an implementation-soundness result for
-this submission: it says precisely what finite record must be added before a
-later package may make that stronger claim.
+$\mathsf{ImplProj}(c)$ for the package verifiers or gates.  Thus the theorem is
+a future-facing exact criterion rather than an implementation-soundness result
+for this submission: it says precisely what finite projection record must be
+added before a later package may make that stronger claim.
 \end{theorem}
 
 \begin{proof}
@@ -5010,7 +5019,8 @@ whose evidence surface is $E\cup E^{\mathrm{impl}}$, whose pass-record field is
 $R\cup R^{\mathrm{impl}}$, and whose boundary field is the original boundary
 together with $B^{\mathrm{impl}}$.  The first condition makes the stronger
 reading visible to the dispatch table rather than hiding it in prose.  The second
-condition supplies a finite submitted surface for the implementation object.  The
+condition supplies a finite submitted surface for the implementation object and
+the finite projection being asserted.  The
 third condition supplies every gate record required by $\Gamma$ for the enlarged
 claim-kind set, and the fourth condition prevents a path-verified implementation
 record from being read as a command-run implementation certificate without the
@@ -5018,25 +5028,27 @@ command, source-state, environment, exit-code, and log-path fields.  Therefore
 the tuple has exactly the fields checked by
 Proposition~\ref{prop:finite-certificate-schema-verifier}.  Applying
 Theorem~\ref{thm:publication-safety-interface} to the enlarged row constructs an
-accepted finite certificate for the implementation-soundness reading, and the
+accepted finite certificate for the finite-input implementation-projection
+reading, and the
 accepted strength is precisely the declared evidence level because the schema
 reads no unsubmitted evidence-level coordinate.
 
-Conversely, suppose a manuscript row is read as an implementation-soundness claim
+Conversely, suppose a manuscript row is read as a finite-input
+implementation-projection claim
 but no extension record with the four displayed properties is submitted.  If the
-additional implementation claim kind is not present in the claim-kind coordinate,
+additional implementation-projection claim kind is not present in the claim-kind coordinate,
 then the stronger reading has no assigned implementation gate and is an
 unsupported escalation of the original row.  If the kind is present but
 $E^{\mathrm{impl}}$ is absent, the claim lacks a submitted evidence surface for
-the implementation object, giving obstruction type~1 of
+the implementation object and finite projection, giving obstruction type~1 of
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.  If the evidence
 surface is present but some gate assigned by $\Gamma$ has no corresponding pass
 record in $R^{\mathrm{impl}}$, the bad subrecord is type~2.  If the
-implementation reading crosses an intake, source, route, or venue boundary with
+implementation-projection reading crosses an intake, source, route, or venue boundary with
 no required promotion or decision field, the bad subrecord is type~3.  If the
-implementation reading is also a discovery or classifier-shift reading without
+implementation-projection reading is also a discovery or classifier-shift reading without
 the pinned discovery-interface rows, the bad subrecord is type~4.  Finally, if
-the row asserts command-run implementation strength without the command-run tuple
+the row asserts command-run implementation-projection strength without the command-run tuple
 inside $B^{\mathrm{impl}}$, the bad subrecord is type~5.  These cases exhaust the
 finite schema fields by the obstruction-skeleton theorem, so absence of the
 extension record is exactly absence of finite support for the stronger reading.
@@ -5044,9 +5056,9 @@ Inspecting Table~\ref{tab:current-certificate-ledger} and
 Proposition~\ref{prop:machine-readable-certificate-records}, the current package
 records path-verified certificate rows $a_1,\ldots,a_7$ and command-boundary
 inventory rows for bounded verifier invocations, but it does not add a new
-implementation claim kind, implementation evidence surface, implementation gate
+implementation-projection claim kind, implementation-projection evidence surface, implementation gate
 pass family, and implementation boundary tuple as a single
-$\mathsf{Impl}(c)$ extension record.  Therefore this theorem is not instantiated
+$\mathsf{ImplProj}(c)$ extension record.  Therefore this theorem is not instantiated
 as an implementation-soundness theorem here; it remains an exact finite-record
 extension test for a later package.
 \end{proof}
@@ -9687,10 +9699,12 @@ skeleton map of Theorem~\ref{thm:case-witness-skeleton-rigidity}.  The image has
 four possible values only: promotion, route/submission blocking, theorem-content
 non-growth, and artifact-limitation disclosure.  For each row, the accepted
 claim is finite-record evidence for the corresponding software-workflow lesson;
-it is not evidence that the historical daemon, overlap checker, fake-extension
-pipeline, Rule110 artifact system, or GroundCompiler evaluator has been rerun or
-semantically validated.  A proposed upgrade of any row to such a rerun or
-semantic-validation claim is accepted if and only if it adds the positive
+it is illustrative historical/path-snapshot evidence, not empirical validation
+of current system behaviour and not evidence that the historical daemon, overlap
+checker, fake-extension pipeline, Rule110 artifact system, or GroundCompiler
+evaluator has been rerun or semantically validated.  A proposed upgrade of any
+row to such a rerun, empirical current-behaviour, or semantic-validation claim is
+accepted if and only if it adds the positive
 extension coordinates required by
 Theorem~\ref{thm:finite-extension-budget-normal-form}, including command, source
 state, environment, exit code, and log path whenever fresh execution is asserted.
@@ -9712,7 +9726,8 @@ Proposition~\ref{audit:case-snapshot-non-rerun-boundary}, that boundary field ha
 no command-run tuple for a fresh daemon execution, full-source rebuild,
 theorem-content rerun, Rule110 rerun, or GroundCompiler semantic rerun.  Hence the
 accepted image of $C$ is exactly finite-row evidence for the four safe workflow
-lessons and not an empirical rerun or full artifact-validation claim.
+lessons and not a live-system measurement, empirical rerun, benchmark, or full
+artifact-validation claim.
 
 Conversely, suppose a stronger reading of a case row is accepted.  It changes at
 least one finite coordinate: the claim-kind coordinate for a semantic or artifact
@@ -12245,6 +12260,99 @@ Theorem~\ref{thm:finite-certificate-obstruction-skeleton} and the final clause o
 Theorem~\ref{thm:presentation-weak-interface-maximality} classify the stronger tag
 together with the missing coordinate as an inclusion-minimal bad subrecord.  Thus
 bounded interfaces cannot be glued into a stronger claim for free.
+\end{proof}
+
+\begin{theorem}[Reviewer-facing six-role publication interface]
+\label{thm:six-role-publication-master-interface}
+Assume the finite submitted surface, ledger, dispatch table, record-gate
+soundness, discovery-input, promotion-boundary, verifier-boundary, and
+case-snapshot hypotheses used in
+Theorems~\ref{thm:portable-six-role-interface},
+\ref{thm:publication-safety-interface}, and
+\ref{thm:case-witness-skeleton-rigidity}.  Then the CICM presentation package
+has the following single six-role method theorem.
+\begin{enumerate}
+\item Every accepted load-bearing claim factors through a finite six-role record
+\(\Pi(c)=(S_c,F_c,W_c,A_c,G_c,M_c)\) consisting of source object, formal
+interface, finite evidence row, advisory agent action, deterministic gate, and
+human promotion boundary.
+\item The publication checker constructs exactly the finite certificate
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\) for that six-role record and a finite list
+of bad subrecords for rejected stronger readings.
+\item The only implementation-positive content currently supplied by the named
+four-script verifier surface is finite-script projection-contract soundness: on
+the parsed finite projection, exit code \(0\) is exact for the printed finite
+predicate of the named script and no predicate outside that projection is
+certified.
+\item The four case studies are accepted only as historical/path-complete
+illustrations with the finite matrix coordinates gate, observed issue, accepted
+coordinate, and safe lesson; they are not live daemon reruns, benchmarks,
+artifact-semantic validations, or empirical system-validation claims.
+\end{enumerate}
+Moreover this interface is maximal.  Any reading which strengthens one of these
+four conclusions to whole-program implementation soundness, fresh formal-source
+or Lean/BEDC rebuilding, dynamic artifact validation, live case-study rerun,
+clean-machine reproducibility, public archive/upload status, venue acceptance,
+theorem-truth checking, or an empirical claim about current system behaviour is
+accepted by the finite-record calculus if and only if the submitted surface adds
+the matching upgrade coordinate with its assigned passing gate rows.  If that
+coordinate is absent, the stronger tag together with the first absent coordinate
+is an inclusion-minimal bad subrecord, while the bounded six-role conclusion
+above remains accepted.
+\end{theorem}
+
+\begin{proof}
+For an accepted claim \(c\),
+Theorem~\ref{thm:portable-six-role-interface} constructs the six-role record
+\(\Pi(c)\) and proves invariance under replacement of local path and route names
+by role-preserving records.  Theorem~\ref{thm:publication-safety-interface}
+then constructs from the same submitted fields the certificate
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\), and
+Theorem~\ref{thm:record-acceptance-exactness} identifies verifier acceptance
+with the six finite schema predicates for that tuple.  This proves the first two
+items and shows that rejected stronger readings are represented by finite bad
+subrecords rather than by informal reviewer judgment.
+
+For the implementation clause,
+Theorem~\ref{thm:concrete-finite-script-implementation-soundness} applies to the
+submitted four-script family and states exactly the parsed-projection contract:
+the accepted exit-code row is exact for the script's printed finite predicate on
+the fields read by that script.  Theorem~\ref{thm:six-coordinate-gate-implementation-soundness-skeleton}
+and Theorem~\ref{thm:implementation-soundness-extension-criterion} prove the
+necessity and sufficiency of the additional finite-input implementation
+projection coordinates before any gate row is upgraded even to that bounded
+implementation-projection reading.  Hence no whole-program implementation,
+runtime, or semantic claim is supplied by the current script rows.
+
+For the case-study clause,
+Theorem~\ref{thm:case-witness-skeleton-rigidity} factors each case row through
+one of the four historical skeleton lessons, and
+Proposition~\ref{prop:presentation-case-matrix-sufficiency} displays the exact
+presentation matrix.  The finite-row closure theorem,
+Theorem~\ref{thm:finite-row-case-evidence-closure}, says that these rows close
+under the finite path-verified evidence level only; a live rerun, benchmark,
+artifact-semantic validation, or empirical current-system conclusion changes the
+boundary or artifact coordinate and therefore is outside the submitted row.
+
+It remains only to prove maximality across the four clauses.  A stronger reading
+changes either a six-role component, an evidence level, an implementation
+projection, a formal-source or proof-checking coordinate, an artifact or case
+rerun coordinate, a reproducibility coordinate, or an external support/venue
+coordinate.  If the corresponding coordinate and pass rows are added, the
+positive-extension direction of
+Theorem~\ref{thm:publication-safety-interface} and
+Theorem~\ref{thm:implementation-soundness-extension-criterion} accepts the
+enlarged finite record at its declared evidence level.  If it is absent,
+Theorem~\ref{thm:presentation-weak-interface-maximality} identifies the missing
+upgrade coordinate for each channel, and
+Corollary~\ref{cor:no-finite-record-gluing-upgrade} rules out obtaining it by
+conjoining bounded accepted projections.  The finite-coordinate determination
+theorem supplies two submitted states agreeing on the bounded record but
+differing on the absent stronger fact, so the stronger claim is not determined
+by the old projection.  The obstruction-skeleton theorem then gives the
+stronger tag and the first absent coordinate as an inclusion-minimal bad
+subrecord.  Therefore the theorem is both positive for the submitted six-role
+finite-record method and sharp against all listed upgrades.
 \end{proof}
 
 \begin{theorem}[Finite-record interface and support-boundary classification]
