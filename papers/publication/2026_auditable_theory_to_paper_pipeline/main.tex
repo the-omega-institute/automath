@@ -11836,6 +11836,66 @@ historical coordinate for $S$, and the current issue obligations close only by t
 fresh sequence just described.
 \end{proof}
 
+\begin{proposition}[Stage A2 accepted-inventory rerun realization]
+\label{prop:stage-a2-accepted-inventory-rerun-realization}
+For the Stage A2 package state, the root inventory pair
+\path{theorem_inventory.json} and \path{theorem_inventory.md} is accepted as a
+newly produced local theorem-obligation ledger only in the finite state in which
+the following ordered tuple is present:
+\begin{enumerate}
+\item the accepted inventory bytes and the corresponding \path{main.tex} bytes;
+\item a post-inventory run of
+\path{python review_bundle/extract_theorem_environments.py};
+\item post-inventory retained runs of
+\path{python review_bundle/verify_certificate_records.py},
+\path{python review_bundle/verify_source_interface_record.py}, and
+\path{python review_bundle/verify_primary_claim_inventory.py}; and
+\item a regenerated \path{review_bundle/FINAL_DIGESTS_SHA256.md} computed only
+after the inventory, manuscript, and log bytes above exist.
+\end{enumerate}
+If this tuple is produced after the inventory files are written, then the two
+issue coordinates named ``accepted-current \path{theorem_inventory.json}/\path{theorem_inventory.md}
+pair'' and ``post-inventory rerun-and-digest tuple for newly accepted inventory
+bytes'' are discharged exactly at local finite-record support level.  If any
+member of the tuple is absent or predates the accepted inventory bytes, the same
+issue coordinates remain open for current-byte support claims.  In neither case
+does the tuple assert proof truth, fresh Lean/BEDC rebuild, artifact-semantic
+validity, upload/archive support, venue compliance, or acceptance.
+\end{proposition}
+
+\begin{proof}
+The first item fixes the byte state to which the inventory ledger belongs.
+By Theorem~\ref{thm:accepted-inventory-coverage-criterion}, an extractor log is
+an exact syntactic coverage coordinate only for the manuscript and inventory
+bytes on which it was run; a pre-inventory log is therefore a historical row for
+an earlier state and not a current-byte row for the newly accepted pair.  The
+second item supplies this unique coverage coordinate for the newly written
+inventory bytes.
+
+The third item supplies the retained command-result coordinates classified by
+Theorem~\ref{thm:current-command-result-closure}.  Each verifier contributes only
+its finite input/output predicate, command, source state or hashes, environment,
+exit code, and log path.  These rows do not depend on the semantic truth of the
+manuscript's proofs and do not create any coordinate outside their printed
+finite-record predicates.  The fourth item is then exactly the digest-ordering
+requirement of Theorem~\ref{thm:post-inventory-package-fixed-point} and
+Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}: the
+digest surface must be generated after the bytes it selects, otherwise it is not
+a digest for the accepted post-inventory state.
+
+Combining the four items gives precisely the ordered tuple of
+Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}, hence a
+current local theorem-inventory support coordinate for the Stage A2 state.  If
+one item is missing or stale, Proposition~\ref{prop:post-inventory-freshness-obstruction}
+identifies the first absent or stale byte/log/digest field as the obstruction to
+current-byte closure.  Finally, the non-upgrade clause follows from
+Theorem~\ref{thm:finite-coordinate-determination-boundary}: the tuple contains
+only inventory paths, command logs, source-state/hash fields, exit codes, and
+digest rows, while proof truth, fresh source rebuild, artifact semantics,
+upload/archive support, venue compliance, and acceptance require independent
+coordinates not present in the tuple.
+\end{proof}
+
 \begin{proposition}[Three-coordinate submission-support closure]
 \label{prop:three-coordinate-submission-support-closure}
 In the present presentation-only package, the three source-support obligations
