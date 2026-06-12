@@ -122,6 +122,9 @@ Theorem~\ref{thm:external-interface-projection-no-free-upgrade} (no free
 implementation-soundness upgrade),
 Theorem~\ref{thm:rgs-conditional-compact-spine} (record-gate conditionality is
 the forced compact-spine normal form),
+Theorem~\ref{thm:three-upgrade-coordinate-exactness} (exact positive-coordinate
+criterion for fresh rebuild, external support, and gate-implementation
+upgrades),
 Theorem~\ref{thm:three-boundary-upgrade-sharpness} (the three advertised weak
 interfaces are sharp finite-record boundary interfaces), and
 Theorem~\ref{thm:finite-record-certificate-rigidity} (bad-subrecord normal form),
@@ -3119,6 +3122,109 @@ extension whose scope is the named predicate $N_g$ and the implication proved by
 $\Pi_g$.  This is the same positive-extension mechanism used in
 Theorem~\ref{thm:record-gate-implementation-overclaim-obstruction}, now with the
 proof-obligation link made explicit.
+\end{proof}
+
+\begin{theorem}[Three upgrade-coordinate exactness criterion]
+\label{thm:three-upgrade-coordinate-exactness}
+Let $P$ be the presentation package, $S$ its submitted support surface, $L$ its
+finite ledger, and $\Gamma$ its dispatch table.  Assume the finite-record
+publication-safety hypotheses of Theorem~\ref{thm:publication-safety-interface},
+including the explicit record-gate-soundness predicate
+$\mathsf{RGS}_{S}(P,L,\Gamma)$.  For any stronger reading which adds one of the
+following three claims to the finite-record package claim,
+\begin{enumerate}
+\item a fresh formal-source, BEDC, Lean, or clean-machine rebuild assertion;
+\item external support status for the review bundle, supplement, or support
+ledger beyond local/path-verified availability; or
+\item implementation soundness for a concrete gate program, daemon, script, or
+checker whose row is used by the publication-safety theorem chain,
+\end{enumerate}
+the same finite-record calculus accepts the stronger reading if and only if the
+corresponding positive upgrade coordinate is present on $S$ and passes its
+assigned finite row check:
+\begin{enumerate}
+\item the fresh-source coordinate is a tuple containing the checked source
+commit and, where applicable, source digest, exact command, toolchain or clean-machine environment, input
+surface, exit code, log path, digest binding, and a contract naming the formal
+source predicate asserted by that run;
+\item the external-support coordinate is either an exact supplemental-upload
+receipt for the relevant support surface with matching final digest rows, or an
+archive-equivalent public locator together with byte-equality or digest evidence
+binding the located bytes to the submitted support surface; and
+\item for each concrete gate $g$ being upgraded, the implementation coordinate
+is the six-coordinate tuple $\mathcal I(g)=(Q_g,U_g,M_g,X_g,N_g,\Pi_g)$ of
+Theorem~\ref{thm:six-coordinate-gate-implementation-soundness-skeleton}, with
+the negative-fixture, regression, or proof-obligation rows required by the named
+predicate $N_g$ included in $M_g$ or in the proof-obligation link $\Pi_g$.
+\end{enumerate}
+If the relevant coordinate is absent, the omitted coordinate is an
+inclusion-minimal bad subrecord for the stronger reading.  Its absence does not
+weaken Theorem~\ref{thm:publication-safety-interface}: the original theorem
+still proves exactly the bounded finite-record certificate construction under
+$\mathsf{RGS}_{S}(P,L,\Gamma)$.
+\end{theorem}
+
+\begin{proof}
+The three stronger readings are not additional consequences of the
+publication-safety theorem; they are new coordinates in the stronger-reading
+preorder of Definition~\ref{def:stronger-reading-preorder}.  Theorem~\ref{thm:publication-safety-interface}
+uses $\mathsf{RGS}_{S}(P,L,\Gamma)$ only to construct certificates from submitted
+claim kinds, support-surface pointers, assigned pass rows, human-promotion
+fields, discovery rows, and command-boundary fields.  Proposition~\ref{prop:record-gate-soundness-external-interface-exactness}
+and Theorem~\ref{thm:finite-coordinate-determination-boundary} say that a
+conclusion depending on a field outside that finite projection can be accepted
+only after that field is added to the submitted projection and checked by an
+assigned finite row.  Hence it remains to identify the three relevant fields.
+
+For a fresh formal-source, BEDC, Lean, or clean-machine rebuild assertion, the
+claim is a command-result assertion about a specified source state and execution
+environment.  The command-boundary predicate $P_6$ in
+Definition~\ref{def:operational-acceptance-interface}, together with
+Theorem~\ref{thm:current-command-result-closure}, reads exactly command, source
+state, environment, exit code, and log path for command-result evidence.  A
+formal-source or clean-machine version also needs the input surface, digest
+binding, and named predicate, because otherwise two packages can agree on the
+same command string and log name while differing on the source bytes, toolchain
+image, or formal-source property being claimed.  Thus the tuple listed in item~1
+is necessary.  When that tuple lies on $S$ and its assigned row passes, it is a
+finite positive extension coordinate; by the finite extension-budget normal form
+it is sufficient for exactly the named rebuild predicate and no stronger
+proof-assistant-correctness or source-semantics claim.
+
+For external support, Theorem~\ref{thm:upload-or-archive-instantiation-boundary}
+and Corollary~\ref{cor:upload-or-archive-instantiation-record} give the complete
+normal form: bundle-backed support becomes external support only through an
+exact upload receipt for the submitted support surface or through an
+archive-equivalent locator whose bytes are bound to that surface by digest or
+byte-equality evidence.  Proposition~\ref{audit:review-bundle-availability-condition}
+states the current local/path-verified support mode and explicitly withholds the
+external instantiation record.  Therefore local paths, local digest rows, and
+review-bundle manifests are sufficient for local/path-verified support but are
+not the external-support coordinate.  Adding one of the two listed records is
+both necessary and sufficient for the external-support reading accepted by that
+normal form.
+
+For concrete gate programs, Theorem~\ref{thm:record-gate-implementation-overclaim-obstruction}
+shows that row-level record-gate soundness is an explicit schema hypothesis and
+not a proof that the program which produced a row is correct.  Theorem~\ref{thm:assigned-gate-soundness-audit-boundary}
+requires a gate-soundness audit tuple before a ledger row can be reread as
+external implementation soundness.  Theorem~\ref{thm:six-coordinate-gate-implementation-soundness-skeleton}
+then classifies that tuple into the six coordinates $Q_g,U_g,M_g,X_g,N_g,\Pi_g$
+and proves coordinate-wise necessity and sufficiency, restricted to the named
+predicate $N_g$ and the implication proved by $\Pi_g$.  Negative fixtures,
+regression rows, or proof obligations are part of the coordinate exactly when
+the predicate $N_g$ uses them; omitting them leaves two submitted states
+indistinguishable to the record-gate projection while differing on the asserted
+implementation property.
+
+In each of the three cases, if the coordinate is missing, the finite-certificate
+obstruction skeleton identifies the missing coordinate as the first failed
+positive field and hence as an inclusion-minimal bad subrecord for the stronger
+reading.  If it is present and passes its assigned row check, the strengthened
+claim is accepted only as that finite extension coordinate.  Since the original
+publication-safety theorem did not require any of these three added coordinates,
+their absence cannot invalidate or demote its finite-record conclusion; it only
+prevents the corresponding stronger reading.
 \end{proof}
 
 \begin{theorem}[Finite certificate obstruction skeleton]
@@ -13591,7 +13697,15 @@ compiler and implementation-boundary rows, source imports, finite case witnesses
 and theorem inventories are accepted only at their bounded finite-record level
 unless the matching upgrade coordinate is added.  Its no-gluing corollary,
 Corollary~\ref{cor:no-finite-record-gluing-upgrade}, rules out obtaining those
-stronger coordinates by conjoining bounded rows from different channels.
+stronger coordinates by conjoining bounded rows from different channels.  The
+upgrade-coordinate criterion,
+Theorem~\ref{thm:three-upgrade-coordinate-exactness}, records the positive form of
+the three upgrade paths most likely to be confused with the finite-record claim:
+fresh formal/source rebuilds require source commit, environment, command, exit
+code, and log path; external support requires an upload receipt or
+archive-equivalent byte-equality locator; and implementation soundness of
+concrete gate programs requires the six-coordinate audit tuple with the relevant
+fixture or proof-obligation rows.
 
 The closing support records identify the selected route mode: the primary compact
 article is the external submission claim, while this technical supplement, the
