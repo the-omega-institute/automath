@@ -3,11 +3,12 @@
 An \(L1\) protocol supplies normal forms.  Level \(L2\) records computable
 finite invariants of the normalizing fibres.  For the unmodified Zeckendorf
 system these fibres are the fibres of \(\Fold_m\colon\Omega_m\to X_m\).  The
-strictness theorem below is deliberately narrower: in the computable
-finite-fibre cover category over the same normal forms, fixed-resolution finite
-fibres give the usual finite-atomic moment certificates, but they do not imply a
-uniform finite-state transfer formula in the resolution variable.  No intrinsic
-asymptotic failure theorem for the original \(\Fold_m\) fibres is asserted here.
+intrinsic fibre moments of this particular fold have finite-state transfer
+degree by degree.  The strictness theorem below is a complementary cover
+statement: in the computable finite-fibre cover category over the same normal
+forms, fixed-resolution finite fibres give the usual finite-atomic moment
+certificates, but arbitrary auxiliary cover fibres need not preserve the
+intrinsic transfer structure in the resolution variable.
 
 For \(x\in X_m\), put
 \[
@@ -16,6 +17,14 @@ For \(x\in X_m\), put
   S_q(m)=\sum_{x\in X_m} d_m(x)^q\quad(q\ge0).
 \]
 Thus \(S_0(m)=|X_m|=F_{m+2}\) and \(S_1(m)=|\Omega_m|=2^{m+1}\).
+
+To keep the intrinsic tower visibly distinct from auxiliary covers, we also
+write
+\[
+  S_q^{\mathrm{int}}(m)=\sum_{x\in X_m}|\Fold_m^{-1}(x)|^q .
+\]
+Thus \(S_q^{\mathrm{int}}(m)=S_q(m)\) for the unmodified fold, while the
+superscript \(\sharp\) below is reserved for cover moments.
 
 \begin{definition}[Collision moment]\label{def:collision-moment}
 For any finite normal-form set \(N_m\) with finite fibres, the \(q\)-th
@@ -43,6 +52,226 @@ vectors may depend on \(q\), but for each fixed \(q\) they are fixed once and fo
 all and do not vary with the resolution \(m\).
 \end{definition}
 
+\begin{lemma}[Bounded signed-Fibonacci carry automaton]
+\label{lem:bounded-signed-fibonacci-carry-automaton}
+Fix \(q\ge1\).  For a column
+\(\alpha=(\alpha_1,\ldots,\alpha_q)\in\{0,1\}^q\), put
+\[
+  \Delta(\alpha)=(\alpha_2-
+  \alpha_1,\ldots,\alpha_q-\alpha_1)
+  \in\{-1,0,1\}^{q-1}.
+\]
+For \(a\in\{-1,0,1\}^{q-1}\), let
+\[
+  w_q(a)=\#\{\alpha\in\{0,1\}^q:\Delta(\alpha)=a\}.
+\]
+Then \(S_q^{\mathrm{int}}(m)\) is the weighted number of words
+\(a_1,\ldots,a_{m+1}\in\{-1,0,1\}^{q-1}\), with weight
+\(\prod_k w_q(a_k)\), for which there is a target marker
+\(\sigma\in\{-1,0,1\}^{q-1}\) satisfying
+\begin{equation}\label{eq:q-column-fib-target}
+  \sum_{k=1}^{m+1} a_{k,j}F_k=\sigma_jF_{m+2}
+  \qquad(1\le j\le q-1).
+\end{equation}
+These weighted words are recognized by a finite automaton whose carry states are
+\[
+  \mathcal C_q=\{-1,0,1\}^{q-1}\times\{-1,0,1\}^{q-1}.
+\]
+The initial state is \((0,0)\).  Reading a column
+\(a\in\{-1,0,1\}^{q-1}\) sends \((p,r)\) to
+\[
+  \tau_a(p,r)=(r,p+a-r)
+\]
+when the second coordinate again lies in \(\{-1,0,1\}^{q-1}\), and has no
+transition otherwise; the transition weight is \(w_q(a)\).  After
+\(m+1\) columns, the accepting states are
+\(\{(\sigma,0):\sigma\in\{-1,0,1\}^{q-1}\}\).  The weighted path count is
+exactly \(S_q^{\mathrm{int}}(m)\).
+\end{lemma}
+
+\begin{proof}
+A \(q\)-tuple \((\omega^{(1)},\ldots,\omega^{(q)})\in\Omega_m^q\) contributes
+exactly when all \(q\) words fold to the same normal form.  By
+\eqref{eq:fold-residue} and the bijection \(\Val_m\colon X_m\to
+\mathbb Z/F_{m+2}\mathbb Z\), this is equivalent to the \(q-1\) congruences
+\[
+  \sum_{k=1}^{m+1}(\omega^{(j+1)}_k-
+  \omega^{(1)}_k)F_k\equiv0\pmod {F_{m+2}}
+  \qquad(1\le j\le q-1).
+\]
+For one coordinate the absolute value of the left side is at most
+\(\sum_{k=1}^{m+1}F_k=F_{m+3}-2<2F_{m+2}\).  Hence the congruence is equivalent
+to equality with \(\sigma_jF_{m+2}\) for a unique
+\(\sigma_j\in\{-1,0,1\}\).  Grouping digit differences by columns gives
+\eqref{eq:q-column-fib-target}.  For a fixed difference column \(a_k\), the
+number of binary \(q\)-columns producing it is exactly \(w_q(a_k)\), which gives
+the stated product weight.
+
+For the carry automaton it suffices to prove the scalar case, since the
+\((q-1)\)-coordinate automaton is the direct product.  Put
+\((p_0,r_0)=(0,0)\) and
+\((p_k,r_k)=(r_{k-1},p_{k-1}+a_k-r_{k-1})\).  A direct induction using
+\(F_{k+1}=F_k+F_{k-1}\) gives
+\[
+  \sum_{i=1}^k a_iF_i=p_kF_{k+1}+r_kF_k .
+\]
+Thus a scalar word with target \(\sigma F_{n+1}\) is accepted exactly when its
+final carry is \((\sigma,0)\), provided no accepting path has been lost by
+restricting to \(\{-1,0,1\}^2\).  The only exits from this square in one step are
+\[
+  (0,-2),(1,-2),(1,-3),(-1,2),(-1,3),(0,2).
+\]
+A finite check of these six forms under the three maps
+\((p,r)\mapsto(r,p+a-r)\), \(a=-1,0,1\), shows that their forward orbit is
+contained in the two disjoint cones
+\(r\ge p+2\ge2\) and \(r\le p-2\le -2\), together with their one-step images;
+in particular it never meets \(\{-1,0,1\}^2\).  Hence an accepting path from
+\((0,0)\) to \((\sigma,0)\) cannot leave the square and later return.  This
+proves that the displayed finite state set counts all and only the target
+solutions.  Multiplying the scalar construction over the \(q-1\) difference
+coordinates proves the lemma.
+\end{proof}
+
+\begin{theorem}[Intrinsic finite-state transfer for Zeckendorf fold moments]
+\label{thm:intrinsic-fold-moment-transfer}
+For every fixed \(q\ge0\), there are an effectively constructible integer matrix
+\(T_q\) and integer vectors \(u_q,v_q\), independent of \(m\), such that
+\[
+  S_q^{\mathrm{int}}(m)=u_q^{\mathsf T}T_q^m v_q
+  \qquad(m\ge1).
+\]
+Consequently \(\sum_{m\ge1}S_q^{\mathrm{int}}(m)z^m\) is a rational function and
+\((S_q^{\mathrm{int}}(m))_{m\ge1}\) satisfies a constant-coefficient linear
+recurrence with integer coefficients.
+\end{theorem}
+
+\begin{proof}
+For \(q=0\), \(S_0^{\mathrm{int}}(m)=|X_m|=F_{m+2}\), so the Fibonacci matrix
+supplies the transfer formula.  For \(q\ge1\), enumerate the finite carry state
+set \(\mathcal C_q\) of \Cref{lem:bounded-signed-fibonacci-carry-automaton}.  Let
+\(M_q\) be the integer matrix indexed by \(\mathcal C_q\) whose \((c,c')\)-entry
+is the sum of the weights \(w_q(a)\) over all columns \(a\) with
+\(\tau_a(c)=c'\).  Let \(e_0\) be the basis vector at \((0,0)\), and let \(b_q\)
+be the characteristic vector of the accepting set.  Since an intrinsic
+\(m\)-fold moment uses \(m+1\) columns,
+\[
+  S_q^{\mathrm{int}}(m)=e_0^{\mathsf T}M_q^{m+1}b_q
+  =(M_q^{\mathsf T}e_0)^{\mathsf T}M_q^m b_q .
+\]
+Thus take \(T_q=M_q\), \(u_q=M_q^{\mathsf T}e_0\), and \(v_q=b_q\).  The
+construction is effective because \(q\) fixes finite lists of states and columns.
+Finally,
+\[
+  \sum_{m\ge1}S_q^{\mathrm{int}}(m)z^m
+  =z\,u_q^{\mathsf T}(I-zT_q)^{-1}v_q,
+\]
+which is rational, and Cayley--Hamilton gives the stated recurrence.
+\end{proof}
+
+\begin{theorem}[Sharp intrinsic second-moment recurrence]
+\label{thm:intrinsic-second-moment-recurrence}
+Let \(C_2(n)\) be the number of ordered pairs of binary words of length \(n\)
+whose signed Fibonacci difference is congruent to zero modulo \(F_{n+1}\).  Then
+\[
+  C_2(1)=2,
+  \qquad C_2(2)=6,
+  \qquad C_2(3)=14,
+\]
+and, for \(n\ge4\),
+\[
+  C_2(n)=2C_2(n-1)+2C_2(n-2)-2C_2(n-3).
+\]
+Equivalently, since \(S_2^{\mathrm{int}}(m)=C_2(m+1)\),
+\[
+  S_2^{\mathrm{int}}(1)=6,
+  \quad S_2^{\mathrm{int}}(2)=14,
+  \quad S_2^{\mathrm{int}}(3)=36,
+\]
+and the same recurrence holds for \(S_2^{\mathrm{int}}(m)\) for \(m\ge4\).  The
+ordinary generating functions are
+\[
+  \sum_{n\ge1}C_2(n)z^n
+  ={2z+2z^2-2z^3\over 1-2z-2z^2+2z^3}
+\]
+and
+\[
+  \sum_{m\ge1}S_2^{\mathrm{int}}(m)z^m
+  ={6z+2z^2-4z^3\over 1-2z-2z^2+2z^3}.
+\]
+\end{theorem}
+
+\begin{proof}
+For \(q=2\), the signed column alphabet is \(\{-1,0,1\}\) with weights
+\(w(-1)=1,w(0)=2,w(1)=1\).  In the bounded carry automaton, let
+\[
+  A_n=W_n(0,0),\qquad B_n=W_n(1,0)=W_n(-1,0),
+\]
+where \(W_n(p,r)\) is the total weight of length-\(n\) paths from \((0,0)\) to
+\((p,r)\), and put \(D_n=W_n(0,1)=W_n(0,-1)\).  The accepting targets are
+\((-1,0),(0,0),(1,0)\), so \(C_2(n)=A_n+2B_n\).  The transition rule gives
+\[
+  A_{n+1}=2A_n+2B_n,
+  \qquad B_{n+1}=D_n,
+  \qquad D_{n+1}=A_n+2B_n=C_2(n).
+\]
+Hence \(B_{n+1}=C_2(n-1)\) for \(n\ge2\), and
+\[
+\begin{aligned}
+  C_2(n+1)
+    &=A_{n+1}+2B_{n+1} \\
+    &=2A_n+2B_n+2C_2(n-1) \\
+    &=2C_2(n)+2C_2(n-1)-2C_2(n-2).
+\end{aligned}
+\]
+The initial values are obtained by the same automaton for lengths \(1,2,3\).
+The generating functions are the standard translations of the recurrence and of
+\(S_2^{\mathrm{int}}(m)=C_2(m+1)\).
+\end{proof}
+
+\begin{corollary}[Polynomial intrinsic fibre statistics are C-finite]
+\label{cor:polynomial-intrinsic-fiber-statistics}
+Let \(P(t)\in\mathbb Z[t]\) be fixed.  Then
+\[
+  m\longmapsto \sum_{x\in X_m}P(|\Fold_m^{-1}(x)|)
+\]
+has a rational ordinary generating function and satisfies a constant-coefficient
+linear recurrence.
+\end{corollary}
+
+\begin{proof}
+Write \(P(t)=\sum_{q=0}^Q c_qt^q\).  The displayed statistic is
+\(\sum_{q=0}^Q c_qS_q^{\mathrm{int}}(m)\).  By
+\Cref{thm:intrinsic-fold-moment-transfer}, each fixed moment sequence is
+C-finite, and finite linear combinations of C-finite sequences are C-finite.
+\end{proof}
+
+\begin{theorem}[Intrinsic-versus-cover transfer dichotomy]
+\label{thm:intrinsic-cover-transfer-dichotomy}
+The unmodified Zeckendorf fold has fixed finite-state transfer in every fixed
+moment degree.  In contrast, fixed finite-fibre certificates over the same
+normal-form sets do not force such transfer for arbitrary computable covers:
+for every computable sequence \(a_m\ge1\) there is a computable finite-fibre cover
+preserving \(X_m\) and all normal-form readouts whose second covered moment is
+\[
+  S_2^\sharp(m)=(a_m+1)^2+F_{m+2}-1 .
+\]
+Thus intrinsic Fold\(_m\) moments are finite-state degree by degree, whereas
+finite-state transfer is not invariant under arbitrary computable finite-fibre
+covers.
+\end{theorem}
+
+\begin{proof}
+The positive intrinsic assertion is \Cref{thm:intrinsic-fold-moment-transfer}.
+For the cover assertion, choose the zero normal form in each \(X_m\), attach a
+cover fibre of size \(a_m+1\) over it, and attach singleton cover fibres over
+every other element of \(X_m\).  This changes only auxiliary certificate
+multiplicities over already fixed normal forms, so it preserves all readouts
+defined on those sets.  Since \(|X_m|=F_{m+2}\), the second covered moment is the
+displayed quantity.  Taking \(a_m=m!\) gives a superexponential covered moment,
+while every finite-state transfer sequence is exponentially bounded by
+\Cref{prop:finite-state-coefficient-budget}.  Hence arbitrary covers can destroy
+transfer although the intrinsic fold moments remain finite-state.
+\end{proof}
 \begin{proposition}[Classical finite-atomic certificate skeleton]
 \label{prop:classical-finite-atomic-skeleton}
 Let \(D\) be a finite multiset of positive integers and set
