@@ -362,6 +362,99 @@ class SupervisorHelpersTests(unittest.TestCase):
             self.assertIn("Oracle Stage A Escalation", directive)
             self.assertIn("Add one substantive theorem", directive)
 
+    def test_stage_a_oracle_escalation_captures_and_reuses_conversation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "2026_soft_followup"
+            paper.mkdir()
+            (paper / "main.tex").write_text(
+                "\\section{Intro}\nA paper.\n", encoding="utf-8")
+            state = oracle_pipeline.PaperState(
+                paper_dir=str(paper),
+                paper_name="2026_soft_followup",
+                target_journal="Example Journal",
+                current_stage="A",
+                stage_a_rounds=oracle_pipeline.MAX_STAGE_A_ROUNDS,
+                current_round=oracle_pipeline.MAX_STAGE_A_ROUNDS,
+                error="Stage A blocked: A2 fake extension: no new theorems",
+            )
+            response = json.dumps({
+                "verdict": "rerun_stage_a",
+                "publishable_route": True,
+                "core_theorem_direction": "Prove a rigidity theorem.",
+                "required_theorem_package": [
+                    "Add a labelled rigidity theorem with proof."
+                ],
+                "journal_route": "keep",
+                "park_reason": "",
+                "codex_instructions": [
+                    "Add one substantive theorem, not prose."
+                ],
+            })
+            submit_calls = []
+
+            def fake_submit(task_id, prompt, pdf_path=None, **kwargs):
+                submit_calls.append({
+                    "conversation_id": kwargs.get("conversation_id"),
+                    "is_followup": kwargs.get("is_followup", False),
+                    "context_mode": kwargs.get("context_mode", ""),
+                    "agent_role": kwargs.get("agent_role", ""),
+                    "prompt": prompt,
+                })
+                return True
+
+            with mock.patch.object(oracle_pipeline, "oracle_submit",
+                                   side_effect=fake_submit), \
+                 mock.patch.object(oracle_pipeline, "oracle_poll",
+                                   return_value=response), \
+                 mock.patch.object(oracle_pipeline, "oracle_poll_record",
+                                   return_value={"conversation_id": "conv-stage-a"}), \
+                 mock.patch.object(oracle_pipeline, "compile_pdf",
+                                   return_value=None), \
+                 mock.patch.object(oracle_pipeline, "save_state"), \
+                 mock.patch.object(oracle_pipeline, "git_commit",
+                                   return_value="abc123"):
+                ok = oracle_pipeline._maybe_stage_a_oracle_escalate(
+                    state,
+                    reason="A2 fake extension: no new theorems",
+                    dry_run=False,
+                    oracle_timeout=1,
+                    tag="[2026_soft_followup|A]",
+                )
+
+            self.assertTrue(ok)
+            self.assertEqual(state.stage_a_escalation_conv_id, "conv-stage-a")
+            self.assertEqual(submit_calls[0]["conversation_id"], "")
+            self.assertFalse(submit_calls[0]["is_followup"])
+
+            (paper / "oracle_stage_a_escalation.json").unlink()
+            state.stage_a_rounds = oracle_pipeline.MAX_STAGE_A_ROUNDS
+            state.current_round = oracle_pipeline.MAX_STAGE_A_ROUNDS
+            state.error = "Stage A blocked: A2 fake extension: still shallow"
+            submit_calls.clear()
+
+            with mock.patch.object(oracle_pipeline, "oracle_submit",
+                                   side_effect=fake_submit), \
+                 mock.patch.object(oracle_pipeline, "oracle_poll",
+                                   return_value=response), \
+                 mock.patch.object(oracle_pipeline, "compile_pdf",
+                                   return_value=None), \
+                 mock.patch.object(oracle_pipeline, "save_state"), \
+                 mock.patch.object(oracle_pipeline, "git_commit",
+                                   return_value="def456"):
+                ok = oracle_pipeline._maybe_stage_a_oracle_escalate(
+                    state,
+                    reason="A2 fake extension: still shallow",
+                    dry_run=False,
+                    oracle_timeout=1,
+                    tag="[2026_soft_followup|A]",
+                )
+
+            self.assertTrue(ok)
+            self.assertEqual(submit_calls[0]["conversation_id"], "conv-stage-a")
+            self.assertTrue(submit_calls[0]["is_followup"])
+            self.assertIn("same Stage A escalation conversation",
+                          submit_calls[0]["prompt"])
+
     def test_oracle_directed_rework_failure_preserves_later_stage_context(self):
         state = oracle_pipeline.PaperState(
             paper_dir=".",
@@ -1283,6 +1376,11 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         ))
         self.assertTrue(any("fresh:major revision" in v
                             for v in state.stage_c_verdicts))
+        open_items = oracle_pipeline._stage_c_open_ledger_items(state)
+        self.assertTrue(open_items)
+        self.assertEqual(open_items[0]["source"], "fresh_confirmation")
+        self.assertIn("Logic framing is not closed",
+                      open_items[0]["description"])
 
     def test_stage_c_uses_followup_deepen_conversation_when_available(self):
         paper = self._write_paper("2026_stage_c_followup", "\\title{Gate}\n")
@@ -1293,6 +1391,18 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
             target_journal="APAL",
             stage_c_deepen_conv_id="conv-existing",
         )
+        state.stage_c_issue_ledger = [{
+            "id": "C-FRESH-1",
+            "source": "fresh_confirmation",
+            "severity": "BLOCKER",
+            "type": "unknown",
+            "description": "Logic framing is not closed",
+            "closure_criterion": "Abstract and worked example are rewritten.",
+            "status": "open",
+            "round_opened": 1,
+            "round_closed": None,
+            "evidence": "",
+        }]
 
         submit_calls = []
 
@@ -1302,10 +1412,19 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
                 "is_followup": kwargs.get("is_followup", False),
                 "context_mode": kwargs.get("context_mode", ""),
                 "agent_role": kwargs.get("agent_role", ""),
+                "prompt": prompt,
             })
             return True
 
         codex_json = json.dumps({"verdict": "submit", "issues": []})
+        oracle_response = (
+            "Overall verdict: Accept\n"
+            "\n"
+            "| ID | Closed? | Evidence in manuscript | Remaining condition |\n"
+            "| C-FRESH-1 | yes | Abstract and worked example rewritten. | none |\n"
+            "\n"
+            "No remaining blockers."
+        )
 
         with mock.patch.object(oracle_pipeline, "latex_toolchain_available",
                                return_value=True), \
@@ -1316,7 +1435,7 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
              mock.patch.object(oracle_pipeline, "oracle_submit",
                                side_effect=fake_submit), \
              mock.patch.object(oracle_pipeline, "oracle_poll",
-                               return_value="Overall verdict: Accept\nNo remaining blockers."), \
+                               return_value=oracle_response), \
              mock.patch.object(oracle_pipeline, "codex_exec",
                                return_value=codex_json), \
              mock.patch.object(oracle_pipeline, "_add_to_submission_queue"):
@@ -1331,6 +1450,62 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
             and c["is_followup"]
             for c in submit_calls
         ))
+        followup_prompt = next(
+            c["prompt"] for c in submit_calls
+            if c["agent_role"] == "stage_c_oracle_final_followup"
+        )
+        self.assertIn("C-FRESH-1", followup_prompt)
+        self.assertIn("Evidence in manuscript", followup_prompt)
+        self.assertFalse(oracle_pipeline._stage_c_open_ledger_items(state))
+
+    def test_stage_c_open_ledger_blocks_clean_accept_until_closed(self):
+        paper = self._write_paper("2026_stage_c_open_ledger", "\\title{Gate}\n")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="APAL",
+            stage_c_deepen_conv_id="conv-existing",
+        )
+        state.stage_c_issue_ledger = [{
+            "id": "C-CODEX-1",
+            "source": "codex_final",
+            "severity": "BLOCKER",
+            "type": "proof",
+            "description": "Theorem 2 proof gap remains.",
+            "closure_criterion": "The proof gap is closed in the manuscript.",
+            "status": "open",
+            "round_opened": 1,
+            "round_closed": None,
+            "evidence": "",
+        }]
+
+        codex_json = json.dumps({"verdict": "submit", "issues": []})
+
+        with mock.patch.object(oracle_pipeline, "latex_toolchain_available",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "compile_pdf",
+                               return_value=paper / "main.pdf"), \
+             mock.patch.object(oracle_pipeline, "compile_gate",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "git_commit",
+                               return_value="abc123"), \
+             mock.patch.object(oracle_pipeline, "oracle_submit",
+                               return_value=True), \
+             mock.patch.object(oracle_pipeline, "oracle_poll",
+                               return_value="Overall verdict: Accept\nNo remaining blockers."), \
+             mock.patch.object(oracle_pipeline, "codex_exec",
+                               return_value=codex_json), \
+             mock.patch.object(oracle_pipeline, "_add_to_submission_queue") as add_queue:
+            ok = oracle_pipeline.run_stage_c(
+                state, oracle_timeout=1, extra_stage_c_rounds=0)
+
+        self.assertFalse(ok)
+        self.assertFalse(state.stage_c_passed)
+        add_queue.assert_not_called()
+        open_items = oracle_pipeline._stage_c_open_ledger_items(state)
+        self.assertTrue(open_items)
+        self.assertEqual(open_items[0]["id"], "C-CODEX-1")
 
     def test_stage_c_passes_after_deepen_fresh_and_codex_accept(self):
         paper = self._write_paper("2026_stage_c_pass", "\\title{Gate}\n")
@@ -1807,7 +1982,7 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         submit.assert_called_once()
         self.assertIn("Oracle escalation human_decision", updated.error)
 
-    def test_stage_a_oracle_escalation_can_skip_old_rerun_directive(self):
+    def test_stage_a_oracle_escalation_skips_old_directive_but_still_escalates(self):
         paper = self._write_paper(
             "2026_stage_a_final_repair_exhausted",
             "Initial paper.",
@@ -1831,23 +2006,48 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
             stage_a_rounds=exhausted_rounds,
             current_round=exhausted_rounds,
             stage_a_scope_done=True,
+            stage_a_escalation_conv_id="conv-stage-a",
         )
+        response = json.dumps({
+            "verdict": "human_decision",
+            "publishable_route": False,
+            "human_decision_needed": "Choose a new theorem package.",
+        })
+        submit_calls = []
 
-        with mock.patch.object(
-            oracle_pipeline,
-            "ORACLE_ENABLED",
-            True,
-        ):
-            reused = oracle_pipeline._maybe_stage_a_oracle_escalate(
+        def fake_submit(task_id, prompt, pdf_path=None, **kwargs):
+            submit_calls.append({
+                "conversation_id": kwargs.get("conversation_id"),
+                "is_followup": kwargs.get("is_followup", False),
+                "prompt": prompt,
+            })
+            return True
+
+        with mock.patch.object(oracle_pipeline, "ORACLE_ENABLED", True), \
+             mock.patch.object(oracle_pipeline, "oracle_submit",
+                               side_effect=fake_submit), \
+             mock.patch.object(oracle_pipeline, "oracle_poll",
+                               return_value=response), \
+             mock.patch.object(oracle_pipeline, "compile_pdf",
+                               return_value=None), \
+             mock.patch.object(oracle_pipeline, "save_state"), \
+             mock.patch.object(oracle_pipeline, "update_program_board"):
+            escalated = oracle_pipeline._maybe_stage_a_oracle_escalate(
                 state,
                 "max Stage A rounds exhausted; final audit failed (score=7)",
                 reuse_existing_directive=False,
+                oracle_timeout=1,
             )
 
-        self.assertFalse(reused)
+        self.assertFalse(escalated)
         self.assertEqual(state.stage_a_rounds, exhausted_rounds)
         self.assertEqual(state.stage_a_scores, [])
-        self.assertEqual(state.error, "")
+        self.assertTrue(submit_calls)
+        self.assertEqual(submit_calls[0]["conversation_id"], "conv-stage-a")
+        self.assertTrue(submit_calls[0]["is_followup"])
+        self.assertIn("same Stage A escalation conversation",
+                      submit_calls[0]["prompt"])
+        self.assertIn("human_decision", state.error)
 
     def test_discover_skips_done_state_even_if_board_status_is_stale(self):
         paper = self._write_paper("2026_done_but_stale_board", "Done paper.")
