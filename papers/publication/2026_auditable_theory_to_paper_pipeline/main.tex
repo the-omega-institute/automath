@@ -1533,6 +1533,76 @@ the interface: stronger readings require extra coordinates and assigned pass
 records, so they cannot be reconstructed from preservation of the seven fields
 alone.\end{proof}
 
+\begin{proposition}[Portable method normal form and local-support pullback]
+\label{prop:portable-method-normal-form-local-pullback}
+Let \(P\) be a package satisfying
+Definition~\ref{def:operational-acceptance-interface}.  Every load-bearing
+accepted claim \(c\) in \(P\) admits a unique weakest portable method normal form,
+up to renaming of finite records,
+\[
+\mathsf{NF}(c)=(S_c,F_c,W_c,A_c,G_c,M_c,\ell_c,B_c),
+\]
+where \((S_c,F_c,W_c,A_c,G_c,M_c)\) is the six-role record of
+Theorem~\ref{thm:portable-six-role-interface}, \(\ell_c\) is the declared evidence
+level, and \(B_c\) is the boundary field distinguishing local path-verified,
+historical, command-run, external-support, formal-source, and artifact-semantic
+coordinates.  A local support statement using paths, route labels, round names,
+package bytes, inventory files, digest rows, or case-snapshot files is accepted by
+the portable method exactly when it is the pullback of such a normal form along
+the evident map from local names to the eight displayed fields.  Consequently a
+local path, digest, stage label, or package fixed point can never be a primitive
+certificate of the method: it contributes only through \(W_c\), \(G_c\), \(B_c\),
+or \(M_c\).  In particular, absence of the upload/archive, fresh formal-source
+rebuild, or dynamic artifact-evaluator coordinate in \(B_c\) forces the accepted
+reading to remain respectively local/path-verified, source-interface bounded, or
+manifest/historical.
+\end{proposition}
+
+\begin{proof}
+Theorem~\ref{thm:portable-six-role-interface} constructs the finite six-role
+record \(\Pi(c)=(S_c,F_c,W_c,A_c,G_c,M_c)\) from the certificate
+\(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Adjoin to \(\Pi(c)\) the two certificate
+fields that determine the strength of the reading, namely the evidence level
+\(\ell\) and the boundary field \(B\).  This gives the displayed tuple
+\(\mathsf{NF}(c)\).  It is weakest because deleting any one of its components
+identifies two certificate states that the operational interface is allowed to
+distinguish: deleting \(S_c\) forgets the source object; deleting \(F_c\) forgets
+which formal interface is being checked; deleting \(W_c\) forgets the submitted
+finite evidence; deleting \(A_c\) forgets whether an agent action is merely
+advisory or has been submitted for gate treatment; deleting \(G_c\) forgets the
+deterministic pass records; deleting \(M_c\) forgets whether a human promotion
+boundary was crossed; deleting \(\ell\) collapses path-verified and command-run
+readings; and deleting \(B\) collapses local, external, formal-source, and
+artifact-semantic coordinates.  Each collapse changes at least one acceptance or
+non-escalation clause in Definition~\ref{def:operational-acceptance-interface},
+so no smaller tuple is sufficient for all load-bearing claims.
+
+Now consider a local support statement.  Its concrete names---for example
+\path{main.tex}, \path{theorem_inventory.json}, a route directory, a stage label,
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}, or a case-snapshot file---enter the
+operational interface only as source objects, finite evidence rows, pass records,
+boundary fields, or promotion records.  Mapping each such local name to the
+corresponding component of \(\mathsf{NF}(c)\) is therefore a pullback of the
+portable predicate of Proposition~\ref{prop:portable-workflow-schema-factorisation}.
+If the pullback supplies the assigned gates and declared level, the claim is
+accepted at that finite-record level; if it omits a required coordinate, the
+missing component is an inclusion-minimal bad subrecord by
+Proposition~\ref{prop:publication-safety-minimal-bad-record-witness}.  Thus local
+names have no independent certifying force outside the normal form.
+
+The final sentence is an immediate application of the boundary component.  The
+positive external-support reading requires the upload or archive-equivalence
+fields classified in Corollary~\ref{cor:upload-or-archive-instantiation-record};
+the fresh formal-source reading requires the rebuild and axiom-audit fields
+separated in Theorem~\ref{thm:source-interface-semantic-completeness-obstruction};
+and the artifact-semantic reading requires the evaluator and rerun fields isolated
+by Corollary~\ref{cor:artifact-semantic-validity-boundary}.  When \(B_c\) lacks one
+of those coordinates, Theorem~\ref{thm:finite-coordinate-determination-boundary}
+prevents reconstruction of that stronger coordinate from paths, digest rows,
+round labels, or package bytes.  The accepted reading is therefore exactly the
+weaker local/path-verified, bounded source-interface, or manifest/historical
+reading stated in the proposition.\end{proof}
+
 We distinguish two evidence levels.  A claim is \emph{path-verified} when this
 paper records the relevant source path, artifact path, pinned commit or local
 publication path, and gate decision, but does not assert that a command was
@@ -13815,7 +13885,7 @@ accepted readings.
 \begin{theorem}[Terminal local rerun tuple]
 \label{thm:stage-a2-round-five-terminal-rerun-tuple}
 Let \(Q_{\mathrm{A2}}\) be the package state obtained after the present
-Stage--A2 round-eight manuscript and theorem-inventory bytes have been accepted.
+Stage--A2 manuscript and theorem-inventory bytes have been accepted.
 Let \(I_{\mathrm{A2}}\) be the byte pair consisting of
 \path{theorem_inventory.json} and \path{theorem_inventory.md}.  Let
 \(R_{\mathrm{A2}}\) be the ordered command-result tuple consisting of
@@ -13950,7 +14020,7 @@ non-upgrade boundary follows.
 
 \begin{corollary}[Post-inventory rerun closure]
 \label{cor:round-eight-post-inventory-rerun-closure}
-Let the present Stage--A2 round-eight source state be the state in which the
+Let the present Stage--A2 source state be the state in which the
 accepted manuscript bytes, \path{theorem_inventory.json}, and
 \path{theorem_inventory.md} have first been written.  The assertion that this
 state is a current-byte inventory fixed point is accepted by the manuscript if
@@ -14079,7 +14149,7 @@ exhaustive for the proposed readings and the theorem follows.
 
 \begin{corollary}[Accepted-inventory final verifier--digest tuple]
 \label{cor:accepted-inventory-final-verifier-digest-tuple}
-For the round-five package state, once \path{theorem_inventory.json} and
+For the current package state, once \path{theorem_inventory.json} and
 \path{theorem_inventory.md} are the accepted inventory bytes, the only positive
 post-inventory support coordinate available from the local support surface is the
 finite tuple consisting of \path{theorem_inventory.json},
@@ -14267,7 +14337,7 @@ positive upgrade criterion applies.
 
 \begin{theorem}[Round-four support-coordinate discharge]
 \label{thm:round-four-support-coordinate-discharge}
-For the current Stage--A2 round-four package state, the three challenged support
+For the current Stage--A2 package state, the three challenged support
 coordinates have the following exact status.
 \begin{enumerate}
 \item The submitted theorem-obligation support coordinate is instantiated exactly
@@ -14318,7 +14388,7 @@ command boundary is explicit in
 Proposition~\ref{prop:source-interface-evidence-level-separation} and
 Theorem~\ref{thm:source-interface-semantic-completeness-obstruction}: a fresh
 formal-source rebuild, marker-existence audit, or axiom-purity audit requires a
-separate command-result row and checked predicate.  The current round adds no
+separate command-result row and checked predicate.  The current package adds no
 such row, and Theorem~\ref{thm:four-live-noninstantiation-coordinates} lists that
 absence as one of the live noninstantiation coordinates.  Thus the bounded
 source-interface theorem remains positive at its stated level and is not
@@ -14330,7 +14400,7 @@ archive-equivalent byte-equality locator.  Proposition~\ref{prop:current-absence
 and Theorem~\ref{thm:four-live-noninstantiation-coordinates} show that the local
 bundle paths, local digest table, and dated venue-readiness observation do not
 imply DOI assignment, venue upload, venue acceptance, public byte equality, or a
-later upload-time compliance bridge.  Since the round-four package supplies no
+later upload-time compliance bridge.  Since the current package supplies no
 additional external receipt or byte-equality record, the external coordinate
 remains a missing stronger coordinate.
 
@@ -14342,9 +14412,9 @@ absent.  Therefore no conjunction of the current bounded rows can glue either
 stronger coordinate into the theorem chain.
 \end{proof}
 
-\begin{proposition}[Round-eight issue normal form]
+\begin{proposition}[Current issue-coordinate normal form]
 \label{prop:stage-a2-round-eight-issue-normal-form}
-For the Stage--A2 round-eight presentation route, the four live issue
+For the current Stage--A2 presentation route, the four live issue
 coordinates named by the current review have the following complete normal form.
 \begin{enumerate}
 \item The canonical post-inventory support coordinate is positive exactly for
