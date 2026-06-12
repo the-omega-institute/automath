@@ -15,8 +15,8 @@
   \par\smallskip\noindent\textbf{Audit record \theauditrecord}%
   \ifx\relax#1\relax\else\textbf{ (#1)}\fi\textbf{.}\ }{\par\smallskip}
 
-\title{Conditional Finite-Record Auditing for AI-Assisted Auto-Formalization\\\large Technical Supplement}
-\titlerunning{Conditional Finite-Record Auditing: Supplement}
+\title{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics\\\large Technical Supplement}
+\titlerunning{Auditable Theory-to-Paper Pipelines: Supplement}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
 \institute{AELF PTE LTD. \email{auric@aelf.io} \and
@@ -83,8 +83,9 @@ an artifact status file may drift from generated counts, or an intake note may
 accidentally become a daemon-visible manuscript.
 
 This source is the technical supplement for the presentation-only contribution
-\emph{An Auditable Theory Compiler for AI-Assisted Formal Mathematics}, whose
-single primary article source is the compact file \path{submission_abstract.tex}.
+\emph{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics},
+whose single primary article source is the compact file
+\path{submission_abstract.tex}.
 This file is subordinate technical support, not a competing submission title.
 The final source-level packaging convention used throughout both sources is the
 following.  The primary CICM presentation-only article is
@@ -830,9 +831,11 @@ Table~\ref{tab:source-interface-record}, \path{source_interface_record.json},
 and the supplemental copy
 \path{review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex}
 is sufficient to inspect every imported source label used by this paper at the
-path-verified evidence level.  The distribution mode for review is supplemental
-upload of \path{review_bundle/} with the presentation-only submission.  No
-public archive URL or DOI is part of the current theorem interface.
+path-verified evidence level.  The review bundle is uploadable supplemental material for the presentation-only
+package, but the current theorem interface uses it only as a local/path-verified
+support surface.  No venue-upload receipt, public archive URL, DOI, or
+archive-equivalent byte-equality locator is part of the current theorem
+interface.
 \end{proposition}
 
 \begin{proof}
@@ -845,10 +848,10 @@ a file-level snapshot of the same source-interface document, named by the same
 commit hash.  Therefore a reviewer does not need access to the author's absolute
 path in order to inspect the imported interface: the table gives the labels and
 line ranges, the JSON record gives the machine-readable binding, and the bundle
-copy gives the text snapshot against which those ranges are checked.  The current reviewer-facing distribution mode is fixed by the proposition:
-the bundle is uploadable supplemental material, not an unrecorded private
-dependency, and no archival identifier is needed for the bounded interface
-claim.\end{proof}
+copy gives the text snapshot against which those ranges are checked.  The reviewer-facing distribution boundary is fixed by the proposition:
+the bundle is a local/path-verified, uploadable support surface rather than an
+unrecorded private dependency; it becomes external support only if the separate
+venue-upload or archive-equivalent coordinate is later supplied.\end{proof}
 
 \begin{proposition}[Executable source-interface record comparison]
 \label{prop:source-interface-record-file-consistency}
@@ -2757,7 +2760,7 @@ discovery-field discipline, path-verified boundary status, row locks for
 \path{sim1}--\path{sim4}, and row-class locks for \path{pc1}--\path{pc12}.  Assuming
 the exact-or-archive-equivalent review-bundle support surface of
 Proposition~\ref{audit:review-bundle-availability-condition}, among all
-assertions about the current review bundle that are functions only of this
+assertions about the selected review bundle that are functions only of this
 projection, Proposition~\ref{prop:machine-readable-certificate-records} proves the
 maximal executable claim: the six current-package certificates satisfy the finite
 record-acceptance relation of Theorem~\ref{thm:record-acceptance-exactness} at the
@@ -3962,6 +3965,42 @@ Proposition~\ref{prop:publication-safety-maximality}, and
 Theorem~\ref{thm:finite-extension-budget-normal-form} when a path-verified route
 or submission row is silently upgraded to command-run strength.
 \end{proof}
+\begin{lemma}[Schema-partition minimality]
+\label{lem:schema-partition-minimality}
+Fix a dispatch table $\Gamma$ and the six predicate order
+$(P_1,\ldots,P_6)$ of Theorem~\ref{thm:verifier-input-output-contract}.  Suppose
+that the record schema partitions the certificate tuple
+$(K,\ell,E,H,R,D,B)$ into the claim-kind field, evidence-level field, submitted
+evidence pointers, human-promotion field, assigned gate rows, pinned source rows,
+and boundary field, with each predicate reading only the fields assigned to its
+schema clause.  If a record $r$ is rejected and $j$ is the first index for which
+$P_j$ is false, then the set $M_j$ of fields read by $P_j$ and missing or
+ill-typed in $r$ is an inclusion-minimal bad subrecord relative to that schema:
+removing fields not read by $P_j$ preserves the rejection, while supplying the
+fields in $M_j$ is exactly the finite repair needed to pass the first failed
+clause and expose only later clauses.  If two failed clauses are possible, the
+chosen predicate order gives a unique reported bad subrecord; the underlying
+classification is independent of prose order because each reported class is one
+of the disjoint schema blocks $K,\ell,E,H,R,D,B$ or the corresponding boundary
+upgrade block.
+\end{lemma}
+
+\begin{proof}
+By hypothesis $P_i$ for $i<j$ reads only its assigned finite schema block and is
+true on $r$.  Hence no field outside the block read by $P_j$ can be needed to
+witness the first failure: deleting such an unread field leaves the truth values
+of $P_1,\ldots,P_j$ unchanged, so the record is still rejected first at $P_j$.
+Conversely, the only way to make $P_j$ true without changing the schema or the
+predicate order is to supply or correct the missing or ill-typed fields that
+$P_j$ reads.  Any proper subset of $M_j$ leaves at least one required field for
+$P_j$ absent or ill-typed, so the same first failure remains.  This proves
+inclusion-minimality relative to the finite schema.  The disjointness of the
+schema blocks gives the classification by block.  The fixed order is used only to
+select a unique representative when several blocks fail at once; it does not add
+an extra semantic assumption, because each selected representative is still a
+minimal failed finite block of the stated schema.
+\end{proof}
+
 \begin{theorem}[Conditional finite-record publication audit interface]
 \label{thm:publication-safety-interface}
 Consider a theory-to-paper pipeline with the operational interface above and a
@@ -5015,8 +5054,9 @@ fields read by the first false predicate.  If the failure is not merely an
 out-of-domain kind or level, it is one of the five substantive coordinates
 \(E,R,H,D,B\).  The exhaustion argument of
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} proves that these are
-exactly the five listed obstruction skeletons, and deleting unread coordinates
-gives inclusion-minimality.  If the failure is an out-of-domain kind or level,
+exactly the five listed obstruction skeletons, and
+Lemma~\ref{lem:schema-partition-minimality} proves the required
+inclusion-minimality relative to the schema partition and predicate order.  If the failure is an out-of-domain kind or level,
 the same theorem reduces it to the corresponding assigned-gate or evidence-level
 boundary obstruction, since \(K\) determines the finite gate set and \(\ell\)
 determines the boundary obligation.
@@ -5078,7 +5118,7 @@ row, or command-run escalation.\end{proof}
 \label{cor:publication-safety-current-package-instance}
 For the current package, assume the support-surface condition delimited by
 Theorem~\ref{thm:final-support-surface-closure} and
-Proposition~\ref{prop:stage-a2-round-four-external-coordinate-trichotomy}: the
+Proposition~\ref{prop:external-coordinate-admissibility-trichotomy}: the
 exact supplemental \path{review_bundle/} directory is made reviewer-visible with
 matching final digest records, or an archive-equivalent replacement with matching
 final digest records is supplied.
@@ -10064,7 +10104,7 @@ claim is accepted exactly at the evidence level of that fresh row.
 \end{center}
 
 \noindent The command-run rows used below are the following finite records.  For
-the post-inventory round-three source state, the theorem-inventory bytes were
+the post-inventory local source state, the theorem-inventory bytes were
 accepted before these rows were rerun, the four verifier rows below have exit
 code \path{0}, and the final digest row was generated afterward.  A row whose
 source state says \path{current local automath checkout at the recorded package
@@ -10367,7 +10407,7 @@ finite certificate.  This proves the advertised simultaneous maximality and the
 
 
 \begin{corollary}[Support-coordinate discharge for the local evidence surface]
-\label{cor:stage-a2-round-three-support-coordinate-discharge}
+\label{cor:local-support-coordinate-discharge}
 In the current presentation-route package the three support-coordinate repairs
 are exhausted by the finite-record state of
 Theorem~\ref{thm:final-local-support-state-reconciliation}.  Namely:
@@ -11391,8 +11431,8 @@ Theorem~\ref{thm:submission-support-fixed-point-normal-form}.
 \end{proof}
 
 \begin{proposition}[Verifier and support-coordinate realization for the local evidence surface]
-\label{prop:current-round-six-verifier-support-realization}
-For the current Stage--A round-six source state, the local theorem-ledger
+\label{prop:current-verifier-support-realization}
+For the current local source state, the local theorem-ledger
 coordinate is instantiated by the finite tuple consisting of
 \path{theorem_inventory.json}, \path{theorem_inventory.md},
 \path{review_bundle/theorem_environment_extraction_run.log},
@@ -12309,8 +12349,8 @@ the retained certificate-record verifier, source-interface verifier, and
 primary-claim inventory verifier are rerun on those accepted bytes with recorded
 commands, environments, exit codes, and log paths, and suppose the final digest
 manifest is regenerated only after those logs exist.  Then the five issue
-coordinates named in the Stage--A2 review have the following complete normal
-form.
+coordinates named by the finite support-boundary schema have the following complete
+normal form.
 \begin{enumerate}
 \item The post-inventory current-byte coordinate is present exactly as a local
 syntactic and finite-record coordinate: it asserts equality of the accepted
@@ -12376,7 +12416,7 @@ and the original claim set factors through the accepted finite-record projection
 \end{proof}
 
 \begin{proposition}[Support-coordinate closure for bounded theorem evidence]
-\label{prop:round-seven-support-coordinate-closure}
+\label{prop:bounded-theorem-support-coordinate-closure}
 Let \(C\) be the current presentation-package claim set and let \(S\) be the
 submitted finite support surface after \path{theorem_inventory.json} and
 \path{theorem_inventory.md} have been written.  Suppose that the theorem
@@ -12954,9 +12994,9 @@ venue claims.
 \end{proof}
 
 \begin{theorem}[Finite-record interface and support-boundary classification]
-\label{thm:round-five-interface-classification}
+\label{thm:finite-record-interface-support-boundary-classification}
 In the CICM presentation-only package, the three families of labels isolated in
-the round-five scope audit have the following exact normal form.
+the local support-scope audit have the following exact normal form.
 \begin{enumerate}
 \item The interface labels
 \[
@@ -13406,7 +13446,7 @@ theorem surface.
 
 Moreover, this normal form is maximal for the stated presentation route.  If a
 sentence of \(A\) assigns any support-only theorem, local digest row, ledger fact,
-round-state fact, or case row a stronger role---object-language theorem,
+source-state fact, or case row a stronger role---object-language theorem,
 gate-implementation soundness, proof-assistant correctness, artifact semantics,
 external archive availability, dynamic rerun, venue acceptance, or end-to-end
 workflow correctness---then the sentence has an inclusion-minimal bad subrecord
@@ -13465,10 +13505,10 @@ support-boundary classification.
 
 
 
-\begin{theorem}[Issue-coordinate discharge for the submitted support surface]
-\label{thm:stage-a2-round-one-issue-coordinate-discharge}
-For this round-one theoremization state, the five Stage--A2 issue labels have
-the following sharp finite-record normal form.  The label
+\begin{theorem}[Issue-coordinate discharge for the local support surface]
+\label{thm:submitted-support-issue-coordinate-discharge}
+For this presentation-package source state, the five support-boundary issue
+coordinates have the following sharp finite-record normal form.  The coordinate
 \path{missing:post-inventory-rerun-after-current-bytes} is discharged
 positively exactly by the ordered post-inventory tuple consisting of the accepted
 bytes of \path{theorem_inventory.json} and \path{theorem_inventory.md}, the
@@ -13500,7 +13540,7 @@ be generated only after the resulting logs exist.  In the present source state t
 four verifier logs named above record Python 3.10.11 on Windows 10 and exit code
 \path{0}, while \path{review_bundle/final_digest_generation_run.log} records the
 subsequent digest-generation command, environment, exit code, and output
-manifest.  Therefore the first round-one label is discharged by an ordered
+manifest.  Therefore the first support-boundary coordinate is discharged by an ordered
 byte-refresh coordinate.  By the extractor-boundary theorems cited in
 Corollary~\ref{cor:presentation-route-support-coordinate-normal-form}, this is a
 syntactic theorem-environment and finite-record replay claim, not a fresh proof of
@@ -13522,20 +13562,20 @@ Corollary~\ref{cor:upload-time-venue-compliance-record-requirement}: the
 compliance requires an upload-time replacement check or an explicit unchanged-rule
 bridge.  Therefore deleting any stronger-reading tag returns to the accepted
 bounded finite-record claim, while adding the named coordinate is the unique
-positive upgrade route.  This proves the stated round-one discharge of all five
-issue labels and connects the theorem to the terminal theorem chain rather than
+positive upgrade route.  This proves the stated discharge of all five support-boundary
+coordinates and connects the theorem to the terminal theorem chain rather than
 to a separate audit convention.
 \end{proof}
 
 \begin{proposition}[Exact submitted issue-coordinate skeleton]
-\label{prop:exact-stage-a2-round-one-issue-skeleton}
+\label{prop:exact-submitted-issue-coordinate-skeleton}
 Let \(I\) be the accepted theorem-inventory byte pair consisting of
 \path{theorem_inventory.json} and \path{theorem_inventory.md} for the
 current source state, let \(R\) be the ordered post-inventory command tuple
 consisting of the theorem-environment extraction run, certificate-record
 verification run, source-interface verification run, and primary-claim inventory
 freshness run, and let \(D\) be the final SHA--256 digest manifest generated
-after \(I\) and \(R\).  For the exact Stage--A2 round-one issue set, write
+after \(I\) and \(R\).  For the exact finite issue-coordinate set, write
 \(e_1\) for
 \path{missing:post-inventory-rerun-after-current-bytes}, \(e_2\) for
 \path{missing:external-upload-or-archive-coordinate}, \(e_3\) for
@@ -13551,8 +13591,7 @@ locator; \(e_3\) requires a fresh Lean/BEDC rebuild or axiom-purity audit
 coordinate; \(e_4\) requires an evaluator contract and fresh artifact-validation
 rerun logs; and \(e_5\) requires either a venue/bibliography live check at actual
 submission time or an explicit finite bridge tying the upload to the unchanged
-2026-06-12 venue-rule state.  Hence any accepted theorem using the Stage--A2
-support surface factors through the single positive coordinate \((I,R,D)\), the
+2026-06-12 venue-rule state.  Hence any accepted theorem using the local support surface factors through the single positive coordinate \((I,R,D)\), the
 dated local-readiness venue record, and the three absent-support boundaries
 above.
 \end{proposition}
@@ -13596,7 +13635,7 @@ The terminal classification in Theorem~\ref{thm:terminal-five-coordinate-closure
 and Theorem~\ref{thm:end-to-end-upgrade-decomposition-obstruction} applies this
 boundary to the external, formal-source, and artifact axes, while the venue
 freshness theorem supplies the same minimal-coordinate argument for \(e_5\).
-Therefore every Stage--A2 stronger reading has an inclusion-minimal bad subrecord
+Therefore every stronger reading has an inclusion-minimal bad subrecord
 consisting of the stronger-reading row and the first missing coordinate among
 \(e_2,e_3,e_4\), or the upload-time venue coordinate for \(e_5\), while deleting
 that row returns to the accepted local/path-verified finite-record projection
@@ -13605,7 +13644,7 @@ skeleton and its uniqueness for the stated issue set.
 \end{proof}
 
 \begin{proposition}[External-coordinate admissibility trichotomy]
-\label{prop:stage-a2-round-four-external-coordinate-trichotomy}
+\label{prop:external-coordinate-admissibility-trichotomy}
 For the present CICM presentation-route submission state, consider the three
 stronger support readings: \(u\), that the review bundle is externally uploaded
 or archived; \(f\), that the pinned newmath source has a fresh rebuild or axiom
@@ -13689,10 +13728,10 @@ bad subrecord is inclusion-minimal and axis-specific.
 \end{proof}
 
 \begin{corollary}[Bounded manuscript reading]
-\label{cor:stage-a2-round-four-manuscript-reading}
+\label{cor:manuscript-reading-boundary}
 In the present manuscript, every bundle-backed, public-source, or artifact-row
 claim is read through
-Proposition~\ref{prop:stage-a2-round-four-external-coordinate-trichotomy}.  Thus
+Proposition~\ref{prop:external-coordinate-admissibility-trichotomy}.  Thus
 the paper makes no unconditional external-support claim without the coordinate
 \(u\), no fresh formal-source rebuild or axiom-purity claim without the coordinate
 \(f\), and no dynamic artifact-semantic-validation claim without the coordinate
@@ -13716,12 +13755,12 @@ is added.
 \end{proof}
 
 \begin{corollary}[Local artifact-support closure]
-\label{cor:current-round-local-only-artifact-support-closure}
+\label{cor:local-only-artifact-support-closure}
 For the current CICM presentation-route package, after the accepted
 \path{theorem_inventory.json} and \path{theorem_inventory.md} bytes have been
 written and after the four commands in \(R_{\mathrm{A2}}\) and the final digest
 manifest have been regenerated in the order required by
-Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}, the manuscript has
+Theorem~\ref{thm:canonical-local-rerun-tuple}, the manuscript has
 exactly one positive support interpretation.  It may use the root inventories,
 the four refreshed command logs, and
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} as a local/path-verified finite
@@ -13735,13 +13774,13 @@ Corollary~\ref{cor:upload-or-archive-instantiation-record} is added.
 
 \begin{proof}
 The ordered post-write hypothesis is precisely the positive local fixed point of
-Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}.  That theorem binds
+Theorem~\ref{thm:canonical-local-rerun-tuple}.  That theorem binds
 the accepted inventory bytes to the refreshed theorem-environment extractor,
 certificate-record verifier, source-interface verifier, primary-claim verifier,
 and final SHA--256 digest manifest, and it also states that these records do not
 instantiate external upload, archive-equivalence, upload-time venue compliance,
 fresh formal-source rebuild, or dynamic artifact-validation coordinates.
-Proposition~\ref{prop:stage-a2-round-four-external-coordinate-trichotomy} then
+Proposition~\ref{prop:external-coordinate-admissibility-trichotomy} then
 classifies the support axis: a positive external-support reading is admissible
 only when the separate upload receipt or archive-equivalent public byte locator
 is present.  Proposition~\ref{prop:current-absence-external-support-surface-instantiation}
@@ -13843,9 +13882,9 @@ coordinate before it can enter the theorem chain.
 \end{proof}
 
 \begin{corollary}[Support-chain closure]
-\label{cor:stage-a2-round-one-support-chain-closure}
+\label{cor:support-chain-closure}
 After the ordered post-inventory tuple \((I,R,D)\) of
-Proposition~\ref{prop:exact-stage-a2-round-one-issue-skeleton} has been produced, the
+Proposition~\ref{prop:exact-submitted-issue-coordinate-skeleton} has been produced, the
 current presentation-route theorem chain has no additional positive support
 coordinate beyond the local/path-verified finite-record projection.  In
 particular, any use of Theorem~\ref{thm:publication-safety-interface} in the
@@ -13853,14 +13892,14 @@ current package is conditional on record-gate soundness and factors through the
 positive post-inventory byte coordinate, the dated 2026-06-12 local-readiness
 venue record, and the three negative boundaries for external support, fresh
 formal-source rebuilding or axiom audit, and dynamic artifact validation.  Hence
-the round-one issue set is discharged inside the main theorem chain exactly as a
+the support-boundary issue set is discharged inside the main theorem chain exactly as a
 finite-record support theorem, not as an upload theorem, formal-source theorem,
 artifact-semantic theorem, or actual-submission-date venue-compliance theorem.
 \end{corollary}
 
 \begin{proof}
-Theorem~\ref{thm:stage-a2-round-one-issue-coordinate-discharge} gives the five
-round-one coordinates.  Proposition~\ref{prop:exact-stage-a2-round-one-issue-skeleton}
+Theorem~\ref{thm:submitted-support-issue-coordinate-discharge} gives the five
+support-boundary coordinates.  Proposition~\ref{prop:exact-submitted-issue-coordinate-skeleton}
 identifies the post-inventory coordinate as \((I,R,D)\), identifies the venue
 coordinate as dated local-readiness evidence only, and proves that the external,
 formal-source, artifact-semantic, and upload-time venue-compliance upgrades are
@@ -13877,8 +13916,8 @@ compliance requires its upload-time check or unchanged-rule bridge.
 \end{proof}
 
 \begin{corollary}[Inventory-synchronized byte closure]
-\label{cor:stage-a2-round-two-current-byte-closure}
-In the current Stage--A2 round-two package, suppose the four finite checks
+\label{cor:current-byte-closure}
+In the current presentation-package state, suppose the four finite checks
 \path{python review_bundle/extract_theorem_environments.py},
 \path{python review_bundle/verify_certificate_records.py},
 \path{python review_bundle/verify_source_interface_record.py}, and
@@ -13915,8 +13954,8 @@ files and the four log files exist makes the digest row \(D\) a digest of the
 post-inventory support surface rather than a digest of an earlier placeholder.
 Hence \((I,R,D)\) is ordered exactly as required in
 Theorem~\ref{thm:post-inventory-package-fixed-point},
-Proposition~\ref{prop:exact-stage-a2-round-one-issue-skeleton}, and
-Corollary~\ref{cor:stage-a2-round-one-support-chain-closure}.  Those results
+Proposition~\ref{prop:exact-submitted-issue-coordinate-skeleton}, and
+Corollary~\ref{cor:support-chain-closure}.  Those results
 identify this tuple as a local finite-record coordinate only: it is syntactic
 inventory coverage plus verifier-log and digest binding, not semantic
 proof-checking, external upload, dynamic artifact validation, or venue outcome.
@@ -13966,8 +14005,8 @@ of the stronger-reading row and the first missing coordinate named in items~1--5
 Item~1 is precisely the positive local coordinate constructed by
 Theorem~\ref{thm:post-inventory-package-fixed-point}, instantiated by
 Corollary~\ref{cor:current-post-inventory-support-tuple-instantiation}, and
-closed for the round-two package by
-Corollary~\ref{cor:stage-a2-round-two-current-byte-closure}: the inventory bytes
+closed for the local package by
+Corollary~\ref{cor:current-byte-closure}: the inventory bytes
 precede the extractor and verifier logs, and the digest manifest is computed
 only after those logs exist.  The extractor boundary results,
 Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary},
@@ -14012,9 +14051,8 @@ with the record-gate premise left explicit and the venue record kept dated.
 \end{proof}
 
 \begin{theorem}[Inventory and venue-coordinate closure]
-\label{thm:stage-a2-round-four-inventory-venue-closure}
-Let \(Q\) be the current presentation-route package state after a Stage--A2
-round-four theorem-inventory acceptance.  Suppose the accepted root inventory
+\label{thm:inventory-venue-coordinate-closure}
+Let \(Q\) be the current presentation-route package state after local theorem-inventory acceptance.  Suppose the accepted root inventory
 pair is the byte pair
 \(I\), consisting of \path{theorem_inventory.json} and
 \path{theorem_inventory.md}.  Then the
@@ -14041,7 +14079,7 @@ upload receipt, DOI-bearing supplement, archive-equivalent public byte locator,
 fresh upload-time venue-compliance check, or explicit unchanged-rule bridge for
 the completed upload state.
 \end{enumerate}
-Consequently the round-four package may close the missing inventory and
+Consequently the local package may close the missing inventory and
 extraction issues only as a local, syntactic, finite-record fixed point; it may
 not use those same rows to assert completed external support or
 actual-submission-time venue compliance.
@@ -14096,15 +14134,14 @@ the classification and the final consequence.
 \end{proof}
 
 \begin{theorem}[Local-support classifier]
-\label{thm:stage-a2-round-five-local-support-classifier}
-Let \(Q_5\) be the presentation-route package state after the Stage--A2
-round-five inventory write.  Let \(I_5\) be the byte pair consisting of
+\label{thm:local-support-surface-classifier}
+Let \(Q_5\) be the presentation-route package state after the local theorem-inventory write.  Let \(I_5\) be the byte pair consisting of
 \path{theorem_inventory.json} and \path{theorem_inventory.md}, let
 \(R_5\) be the ordered command tuple consisting of the theorem-environment
 extractor, certificate-record verifier, source-interface verifier, and
 primary-claim verifier rerun after the bytes of \(I_5\) are fixed, and let
 \(D_5\) be the SHA--256 digest manifest regenerated after those command-log
-bytes exist.  In \(Q_5\), the five round-five missing-support coordinates have
+bytes exist.  In \(Q_5\), the five local missing-support coordinates have
 the following exact normal form.
 \begin{enumerate}
 \item The theorem-inventory coordinate is positive exactly when the ordered
@@ -14125,7 +14162,7 @@ with source commit, environment, command, exit code, and log path.
 surface contains a fresh artifact-evaluator tuple with manifest rows, semantic
 contract, command, environment, exit code, log path, and digest binding.
 \end{enumerate}
-Consequently the round-five package can close the theorem-inventory issue only
+Consequently the local package can close the theorem-inventory issue only
 as a local, syntactic, post-inventory finite-record fixed point.  It does not
 thereby acquire upload/archive support, actual-submission-date venue compliance,
 fresh newmath/BEDC rebuild evidence, or fresh dynamic artifact semantics.
@@ -14133,8 +14170,8 @@ fresh newmath/BEDC rebuild evidence, or fresh dynamic artifact semantics.
 
 \begin{proof}
 The first coordinate is the same fixed-point pattern as
-Theorem~\ref{thm:stage-a2-round-four-inventory-venue-closure}, with the accepted
-inventory pair replaced by the round-five bytes \(I_5\).  The extractor and the
+Theorem~\ref{thm:inventory-venue-coordinate-closure}, with the accepted
+inventory pair replaced by the local inventory bytes \(I_5\).  The extractor and the
 three retained finite-record verifiers are command-result claims, so
 Theorem~\ref{thm:current-command-result-closure} requires their post-inventory
 command rows rather than earlier logs.  The digest manifest is a byte claim about
@@ -14195,9 +14232,8 @@ absent values, proving the final consequence.
 \end{proof}
 
 \begin{theorem}[Support-coordinate closure]
-\label{thm:stage-a2-round-three-support-coordinate-closure}
-Let \(Q_{3}\) be the package state obtained after the Stage--A2 round-three
-manuscript and inventory edits are fixed.  Let \(I_{3}\) denote the inventory
+\label{thm:local-support-coordinate-closure}
+Let \(Q_{3}\) be the package state obtained after the manuscript and inventory records are fixed.  Let \(I_{3}\) denote the inventory
 byte pair consisting of \path{theorem_inventory.json} and
 \path{theorem_inventory.md}.  Let \(R_{3}\) be the ordered tuple of command rows
 \begin{enumerate}
@@ -14211,7 +14247,7 @@ Suppose that
 each row of \(R_{3}\) is executed after the bytes of \(Q_{3}\) and \(I_{3}\)
 are fixed, exits with status \(0\), writes the log path named by its verifier,
 and that \(D_{3}\) is regenerated only after those four log bytes exist.  Then
-the round-three support surface closes exactly the local theorem-inventory,
+the local support surface closes exactly the local theorem-inventory,
 certificate-record, source-interface-record, primary-claim-inventory, and digest
 coordinates.  It does not close, imply, or upgrade any external supplemental
 upload/archive coordinate, actual-submission-date venue-compliance coordinate,
@@ -14284,7 +14320,7 @@ evidence; the missing coordinate is an inclusion-minimal bad subrecord.
 \end{theorem}
 
 \begin{proof}
-For item~1, Corollary~\ref{cor:stage-a2-round-two-current-byte-closure} and
+For item~1, Corollary~\ref{cor:current-byte-closure} and
 Corollary~\ref{cor:presentation-route-support-coordinate-normal-form} identify
 the theorem-inventory coordinate as an ordered byte fixed point.  The inventory
 pair must be present before the extractor and retained finite-record verifiers
@@ -14331,9 +14367,9 @@ accepted readings.
 \end{proof}
 
 \begin{theorem}[Terminal local rerun tuple]
-\label{thm:stage-a2-round-five-terminal-rerun-tuple}
+\label{thm:canonical-local-rerun-tuple}
 Let \(Q_{\mathrm{A2}}\) be the package state obtained after the present
-Stage--A2 manuscript and theorem-inventory bytes have been accepted.
+the local manuscript and theorem-inventory bytes have been accepted.
 Let \(I_{\mathrm{A2}}\) be the byte pair consisting of
 \path{theorem_inventory.json} and \path{theorem_inventory.md}.  Let
 \(R_{\mathrm{A2}}\) be the ordered command-result tuple consisting of
@@ -14441,7 +14477,7 @@ finite schema predicates, and nothing outside those predicates.  Regenerating
 precisely the digest-closure condition of
 Theorem~\ref{thm:post-inventory-package-fixed-point},
 Proposition~\ref{prop:post-inventory-fixed-point-support-certificate}, and
-Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}.  Hence the accepted
+Theorem~\ref{thm:canonical-local-rerun-tuple}.  Hence the accepted
 positive coordinate is exactly the displayed local tuple.
 
 It remains to identify the boundary.
@@ -14467,8 +14503,8 @@ non-upgrade boundary follows.
 \end{proof}
 
 \begin{corollary}[Post-inventory rerun closure]
-\label{cor:round-eight-post-inventory-rerun-closure}
-Let the present Stage--A2 source state be the state in which the
+\label{cor:post-inventory-rerun-closure}
+Let the present local source state be the state in which the
 accepted manuscript bytes, \path{theorem_inventory.json}, and
 \path{theorem_inventory.md} have first been written.  The assertion that this
 state is a current-byte inventory fixed point is accepted by the manuscript if
@@ -14501,7 +14537,7 @@ Theorem~\ref{thm:current-byte-support-fixed-point-nonupgrade-boundary}, the
 positive local fixed point requires the inventory pair first, the extractor and
 three retained finite-record verifier logs second, and the digest manifest last.
 The four listed logs are exactly the command-result coordinates named in that
-theorem and in Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}; after
+theorem and in Theorem~\ref{thm:canonical-local-rerun-tuple}; after
 they are rerun on the accepted bytes, regenerating the digest manifest binds the
 resulting byte surface.  Thus the ordered five-part record is sufficient.
 
@@ -14619,7 +14655,7 @@ axiom-purity audit, or a dynamic artifact-semantic validation row.
 \end{corollary}
 
 \begin{proof}
-Apply Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple} with the
+Apply Theorem~\ref{thm:canonical-local-rerun-tuple} with the
 displayed concrete file names for \(I_{\mathrm{A2}}\),
 \(R_{\mathrm{A2}}\), and \(D_{\mathrm{A2}}\).  The theorem gives sufficiency of the
 ordered tuple: accepted inventory bytes first, post-inventory extractor and
@@ -14630,7 +14666,7 @@ subrecord.  The zero-omission extractor condition is the syntactic exactness
 condition of Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}
 and the three verifier acceptances are precisely the retained finite-record
 schemas classified by Theorem~\ref{thm:current-command-result-closure}.  Finally,
-Theorem~\ref{thm:stage-a2-round-five-local-support-classifier} proves that the
+Theorem~\ref{thm:local-support-surface-classifier} proves that the
 other four coordinates named in the statement are independent stronger readings;
 since the displayed tuple contains none of their required upgrade fields, they
 remain absent.
@@ -14783,16 +14819,16 @@ and the accepted bounded projection remains; add the missing coordinate and the
 positive upgrade criterion applies.
 \end{proof}
 
-\begin{theorem}[Round-four support-coordinate discharge]
-\label{thm:round-four-support-coordinate-discharge}
-For the current Stage--A2 package state, the three challenged support
+\begin{theorem}[Support-coordinate status discharge]
+\label{thm:support-coordinate-status-discharge}
+For the current presentation-package state, the three support-boundary
 coordinates have the following exact status.
 \begin{enumerate}
 \item The submitted theorem-obligation support coordinate is instantiated exactly
 by the two accepted inventory files \path{theorem_inventory.json} and
 \path{theorem_inventory.md}, together with the post-inventory extractor,
 verifier, and final digest records required by
-Corollary~\ref{cor:round-eight-post-inventory-rerun-closure} and
+Corollary~\ref{cor:post-inventory-rerun-closure} and
 Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}.
 \item The bounded source-interface theorem chain is not demoted.  Its positive
 claim remains the pinned path/commit/line-range source-interface extraction
@@ -14821,7 +14857,7 @@ Proposition~\ref{prop:submitted-support-locator-freshness-realization}.  The
 inventory itself is bounded by
 Theorem~\ref{prop:manual-theorem-inventory-boundary}: it is an obligation ledger
 and syntactic environment-label coverage coordinate, not a proof checker.
-Corollary~\ref{cor:round-eight-post-inventory-rerun-closure} gives the ordered
+Corollary~\ref{cor:post-inventory-rerun-closure} gives the ordered
 fixed-point criterion after the inventory bytes are written: rerun the theorem
 environment extractor, rerun the three retained finite-record verifiers, and
 regenerate \path{review_bundle/FINAL_DIGESTS_SHA256.md} after those logs exist.
@@ -14860,14 +14896,14 @@ absent.  Therefore no conjunction of the current bounded rows can glue either
 stronger coordinate into the theorem chain.
 \end{proof}
 
-\begin{proposition}[Current issue-coordinate normal form]
-\label{prop:stage-a2-round-eight-issue-normal-form}
-For the current Stage--A2 presentation route, the four live issue
-coordinates named by the current review have the following complete normal form.
+\begin{proposition}[Local issue-coordinate normal form]
+\label{prop:local-issue-coordinate-normal-form}
+For the current presentation route, the four live support-boundary
+coordinates have the following complete normal form.
 \begin{enumerate}
 \item The canonical post-inventory support coordinate is positive exactly for
 the local current-byte tuple of
-Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}: the accepted
+Theorem~\ref{thm:canonical-local-rerun-tuple}: the accepted
 \path{theorem_inventory.json} and \path{theorem_inventory.md} bytes, the
 post-inventory theorem-environment extraction log, the three retained
 finite-record verifier logs, and the final digest manifest regenerated after
@@ -14894,7 +14930,7 @@ article.
 \begin{proof}
 Item~1 is exactly the accepted-inventory fixed point of
 Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple} and
-Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple}.  Those results
+Theorem~\ref{thm:canonical-local-rerun-tuple}.  Those results
 separate the inventory bytes from the command logs and require the digest
 manifest to be regenerated last; hence a stale extractor log or stale digest row
 is not the canonical coordinate, while the ordered rerun tuple is sufficient at
@@ -14955,9 +14991,9 @@ is supplied.
 
 \begin{proof}
 For the first item, the accepted-inventory coordinate is the local current-byte
-tuple isolated in Theorem~\ref{thm:stage-a2-round-five-terminal-rerun-tuple},
+tuple isolated in Theorem~\ref{thm:canonical-local-rerun-tuple},
 Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}, and
-Proposition~\ref{prop:stage-a2-round-eight-issue-normal-form}.  Those results
+Proposition~\ref{prop:local-issue-coordinate-normal-form}.  Those results
 identify the two inventory files, the post-inventory extractor run, the retained
 finite-record verifier logs, and the final digest refresh as the finite records
 that close the inventory coordinate.  None of those statements promotes the
@@ -14972,7 +15008,7 @@ gives the only two positive instantiations of the external support coordinate:
 an exact upload receipt or an archive-equivalent public byte-equality locator.
 Proposition~\ref{prop:current-absence-external-support-surface-instantiation},
 Theorem~\ref{thm:four-live-noninstantiation-coordinates}, and
-Proposition~\ref{prop:stage-a2-round-eight-issue-normal-form} prove the negative
+Proposition~\ref{prop:local-issue-coordinate-normal-form} prove the negative
 direction for the current package: local paths, local manifests, local digest
 rows, and venue-readiness observations do not imply venue upload, DOI-bearing
 supplement, public byte equality, or acceptance.  By
