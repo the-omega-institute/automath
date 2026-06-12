@@ -14656,6 +14656,62 @@ Corollary~\ref{cor:artifact-semantic-validity-boundary}.  Thus the tuple closes
 only the local theorem-inventory coordinate and none of the stronger coordinates.
 \end{proof}
 
+\begin{proposition}[Fresh post-inventory byte-closure rerun discharge]
+\label{prop:fresh-post-inventory-byte-closure-rerun-discharge}
+Fix a presentation-package state in which the accepted root theorem inventory is
+the pair \path{theorem_inventory.json} and \path{theorem_inventory.md}.  The
+issue labelled \path{fresh post-inventory byte-closure rerun} is discharged for
+that state exactly when the following ordered byte operation has occurred after
+those two inventory files exist: first the theorem-environment extractor and the
+three retained finite-record verifiers are rerun, producing the four logs named
+in Theorem~\ref{thm:accepted-inventory-coordinate-realization} with exit code
+\path{0}; then \path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated over
+the resulting source, inventory, log, and review-bundle bytes.  In that case the
+discharged coordinate is the local finite-record coordinate
+\((I,E,C,S,P,D)\) of
+Theorem~\ref{thm:accepted-inventory-coordinate-realization}.  If any manuscript,
+inventory, verifier-log, manifest, or digest byte named by that coordinate is
+changed later without repeating the same ordered operation, the issue reopens as
+a stale-byte coordinate until the operation is repeated.
+\end{proposition}
+
+\begin{proof}
+The forward direction is only an unfolding of the issue.  The issue exists
+because a digest or support row that names \path{theorem_inventory.json} and
+\path{theorem_inventory.md} cannot be current before those root files have final
+bytes.  Once the files exist, Corollary~\ref{cor:current-byte-closure} requires
+the extractor and finite-record verifier tuple to be rerun against that accepted
+inventory state and requires the final digest surface to be regenerated last.
+Theorem~\ref{thm:accepted-inventory-coordinate-realization} identifies the
+resulting ordered data with the local coordinate \((I,E,C,S,P,D)\), where
+\(E\) records zero omitted theorem labels and \(C,S,P\) record the three retained
+finite checks.  Therefore the ordered operation is sufficient to discharge the
+fresh-rerun issue at the local finite-record level.
+
+Conversely, suppose the issue is discharged for a package state.  By
+Corollary~\ref{cor:post-inventory-rerun-closure}, a positive current-byte
+theorem-inventory reading cannot be inferred from an old extractor log, an old
+verifier log, or a digest manifest that predates the accepted inventory or the
+logs it is supposed to bind.  By
+Theorem~\ref{thm:current-byte-support-fixed-point-nonupgrade-boundary}, the
+digest row contributes only the byte state it actually hashes; it does not make
+later inventory or log bytes retroactively present.  Hence any discharge must
+contain the accepted inventory pair, the post-inventory extractor run, the three
+post-inventory finite-verifier runs, and the last regenerated digest manifest.
+This is exactly the ordered operation stated above, and its coordinate is exactly
+\((I,E,C,S,P,D)\).
+
+For the final sentence, changing any byte named by the coordinate changes one of
+the finite predicates whose value is determined by that byte: inventory coverage,
+one of the finite verifier outcomes, or the final digest binding.  The finite
+coordinate determination boundary,
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, then separates the
+new package state from the old one.  Without repeating the ordered operation,
+the package has only an earlier-byte record and so falls back to the stale-byte
+case of Corollary~\ref{cor:post-inventory-rerun-closure}.  Repeating the
+operation restores the same local coordinate and discharges the issue again.
+\end{proof}
+
 \begin{corollary}[Presentation-route support-coordinate normal form]
 \label{cor:presentation-route-support-coordinate-normal-form}
 For the presentation-only route of this source package, the five issue
