@@ -2,17 +2,57 @@
 
 This section fixes the single primitive and the precise boundary of the imported
 expression theorem.  Throughout, \(\operatorname{Log}\) is the principal complex
-logarithm.
+logarithm on
+\[
+  \Omega_{\mathrm{Log}}:=\CC\setminus(-\infty,0],
+  \qquad -\pi<\operatorname{Im}\operatorname{Log}z<\pi,
+  \qquad e^{\operatorname{Log}z}=z .
+\]
 
 \begin{definition}[EML operator]\label{def:eml}
 The Exp-Minus-Log operation is the partial binary operation
 \[
-  \eml\colon\CC\times\CC^*\to\CC,
+  \eml\colon\CC\times\Omega_{\mathrm{Log}}\to\CC,
   \qquad \eml(x,y)=e^x-\operatorname{Log}y .
 \]
-An EML term is interpreted only where every second argument is nonzero and the
-principal-branch expressions used in the term are defined.
+An EML term is interpreted only at those inputs for which every second argument
+of every occurrence of \(\eml\) lies in \(\Omega_{\mathrm{Log}}\).  In particular,
+nonzero points on the chosen branch cut are outside the complex domain unless a
+real-domain calculation separately keeps the relevant second arguments in the
+positive real axis.
 \end{definition}
+
+\begin{lemma}[Real-domain safety for the internal EML core]
+\label{lem:internal-core-branch-domain-safety}
+Every occurrence of \(\operatorname{Log}\) in the internally proved real EML core
+of \Cref{lem:eml-printed-core,lem:eml-real-witness-library} is evaluated at a
+positive real number on the stated real domain of that macro.  Consequently the
+internal core identities are identities in the exact partial semantics of
+\Cref{def:eml}; they do not use any value of the principal logarithm on the
+negative real branch cut.
+\end{lemma}
+
+\begin{proof}
+For \(E(u)=\eml(u,1)\), the only logarithm input is \(1>0\).  For
+\(L(u)=\eml(1,E(\eml(1,u)))\), the domain condition is \(u>0\), so the inner
+second input \(u\) is positive and the outer second input
+\(E(\eml(1,u))=e^{e-\log u}=e^e/u\) is positive.  In
+\(D(a,b)=\eml(L(a),E(b))\), the displayed domain has \(a>0\), and the second
+input of the outer \(\eml\) is \(E(b)=e^b>0\).  The macros
+\(P,N,A,S\) in \Cref{lem:eml-printed-core} are compositions of these three
+forms; their stated domains include exactly the positivity hypotheses just
+listed, and \(P(u)=e^u-u\ge1>0\) supplies the additional positive input used by
+\(N\) and \(A\).
+
+The witnesses in \Cref{lem:eml-real-witness-library} are then built from
+\(E,L,D,P,N,A,S\) together with the auxiliary positive inputs explicitly stated
+there: \(E(v)=e^v>0\), positive rational constants, products of positive terms in
+the positive-domain multiplier, nonzero denominators only through positive
+squares, and the final square-root argument restricted to \((0,\infty)\).  Hence
+every logarithm input appearing in those calculations is a positive real number,
+which lies in \(\Omega_{\mathrm{Log}}\).  The internal core therefore respects the branch
+domain of \Cref{def:eml} at every step.
+\end{proof}
 
 \begin{proposition}[External public EML representation anchor]
 \label{thm:eml-universality}
