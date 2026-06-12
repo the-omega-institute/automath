@@ -3,9 +3,10 @@
 This section proves the two strictness mechanisms used by
 \Cref{thm:main-hierarchy}.  The Richardson part is stated relative to any finite
 pure EML triple whose three real-domain identities have been proved.  The paper
-proves the punctured absolute-value row internally; the printed strings
-\(U_{47},U_{111},U_{126}\) appear only as the conditional cited specialization
-\((H_{\mathcal W})\) from \Cref{ass:HW}.
+proves the punctured absolute-value row internally; the printed pair
+\((U_{47},U_{111})\) appears only as the conditional cited specialization
+\((H_{\mathcal W})\) from \Cref{ass:HW}, and the endpoint-root string \(U_{126}\)
+is not a row of the Richardson package.
 
 \subsection{The Richardson obstruction}
 
@@ -308,6 +309,10 @@ table.  Each entry is a pure EML macro from
 \Cref{lem:eml-printed-core,lem:eml-real-witness-library,lem:eml-pi-sine-witnesses};
 the domain column is the exact real domain on which the identity is proved or,
 for \(W_{\pi}\) and \(W_{\sin}\), externally assumed by \((H_{\mathcal W})\).
+Equivalently, in the unconditional replacement-triple version one replaces only
+the two conditional rows by finite pure EML terms \(\mathsf P\) and \(\mathsf S\)
+whose identities \(\mathsf P=\pi\) and \(\mathsf S(x)=\sin x\) on \(\RR\) have
+already been proved.
 \[
 \begin{array}{@{}c@{\quad}c@{\quad}c@{}}
 \hbox{constructor} & \hbox{witness} & \hbox{domain}\\ \hline
@@ -324,7 +329,9 @@ e^u & E(u) & \RR\\
 \end{array}
 \]
 This is the complete finite witness table used by the conditional printed-string
-translation in \Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}.
+translation and, after replacing the two conditional rows by any verified pair
+\((\mathsf P,\mathsf S)\), by the unconditional replacement-triple translation in
+\Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}.
 The full nonnegative-square-root row \(\sqrt u\) on \([0,\infty)\) is not part of
 the Richardson input in this paper.
 \end{lemma}
@@ -337,7 +344,64 @@ and sine rows are exactly the conditional rows of
 \Cref{thm:eml-punctured-richardson-core}.  These are Richardson's condition (1)
 and condition (2) as used in \Cref{lem:richardson-fragment} once the two
 conditional rows have been supplied: the absolute-value symbol is required to
-agree with \(|x|\) only away from zero.
+agree with \(|x|\) only away from zero.  If \(W_{\pi}\) and \(W_{\sin}\) are
+replaced by any verified \((\mathsf P,\mathsf S)\), the same proof reads word for
+word with those two proved identities in place of \((H_{\mathcal W})\).
+\end{proof}
+
+\begin{theorem}[Verified-pair Richardson instantiation]
+\label{thm:verified-pair-richardson-instantiation}
+Let \((\mathsf P,\mathsf S)\) be finite pure EML terms satisfying
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR)
+\]
+in the principal-branch real semantics.  With the internally proved punctured
+absolute-value term
+\[
+  \mathsf A(u)=\Abs(u)=G(M(u,u)),
+\]
+the triple \((\mathsf P,\mathsf S,\mathsf A)\) gives a Richardson-undecidable pure
+EML fragment.  More precisely, there is an effective translation
+\(\tau_{\mathsf P,\mathsf S,\Abs}\) from Richardson's punctured language to pure
+EML terms such that, for every Richardson expression \(E\),
+\[
+  E=0\hbox{ on }D_E
+  \quad\Longleftrightarrow\quad
+  \tau_{\mathsf P,\mathsf S,\Abs}(E)=
+  \tau_{\mathsf P,\mathsf S,\Abs}(0)
+  \hbox{ on }D_E .
+\]
+Consequently this translated source-indexed fragment has no zero-identity
+algorithm, no computable semantic normalizer into finite objects with decidable
+equality, and no equality-reflecting semantic compiler into finite decidable
+protocol objects.  The exact printed pair \((U_{47},U_{111})\) is one such pair
+only under \((H_{\mathcal W})\); without that hypothesis this theorem remains the
+replacement-pair statement and has no printed-string specialization.
+\end{theorem}
+
+\begin{proof}
+By \Cref{thm:eml-punctured-richardson-core},
+\(\Abs(u)=|u|\) for every nonzero real \(u\).  Thus the three finite terms
+\((\mathsf P,\mathsf S,\Abs)\) satisfy exactly the three semantic rows
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \Abs(x)=|x|\quad(x\ne0)
+\]
+required in \Cref{thm:replacement-triple-richardson-interface}.  Applying that
+theorem gives the effective translation and the displayed equivalence on the
+recursive punctured domains \(D_E\).  Richardson's punctured identity-to-zero
+problem is undecidable by \Cref{thm:richardson-punctured-source-problem}; hence a
+zero-identity algorithm for the translated source-indexed fragment would decide
+that source problem.  A computable finite semantic normalizer, or an
+equality-reflecting compiler into finite decidable protocol objects, would decide
+the same source problem by normalizing or compiling the two translated
+source-restricted terms in the displayed equivalence and comparing the resulting
+finite objects.  The final printed-pair sentence is exactly
+\Cref{prop:printed-pi-sine-instantiation-criterion}: the two printed rows supply
+\(\mathsf P\) and \(\mathsf S\) only when their real-domain identities are proved,
+which in this manuscript is the optional hypothesis \((H_{\mathcal W})\).
 \end{proof}
 
 \begin{theorem}[Conditional EML-Richardson witness package]
@@ -402,7 +466,7 @@ Richardson expression is a terminating structural recursion, so the translation
 is computable.
 \end{proof}
 
-\begin{theorem}[Conditional Richardson fragment]
+\begin{theorem}[Replacement-triple Richardson fragment]
 \label{thm:largest-verified-richardson-fragment}
 \label{thm:replacement-triple-richardson-interface}
 Let \(\mathcal R_{\mathrm{core}}\) be Richardson's language with rational
@@ -452,9 +516,10 @@ The Richardson normalizer obstruction is uniform over finite pure EML triples
   \qquad \mathsf A(x)=|x|\quad(x\ne0).
 \]
 The internally proved term \(\Abs(u)=G(M(u,u))\) supplies the third row for every
-such pair \((\mathsf P,\mathsf S)\).  The printed triple
-\((U_{47},U_{111},U_{126})\) is not used unless the same punctured identities are
-independently proved for those exact strings.
+such pair \((\mathsf P,\mathsf S)\).  The printed pair \((U_{47},U_{111})\) is not
+used unless the same \(\pi\) and sine identities are independently proved for
+those exact strings, and \(U_{126}\) is not a witness row in the punctured
+Richardson interface.
 \end{theorem}
 
 \begin{proof}
@@ -462,9 +527,11 @@ Apply \Cref{thm:largest-verified-richardson-fragment}.  Its proof uses only the
 three listed identities in the clauses for \(\pi\), sine, and the punctured
 absolute value; the remaining clauses are the internally proved EML core.  The
 specific internal absolute-value term satisfies the third identity by
-\Cref{thm:eml-punctured-richardson-core}.  If the printed strings are proposed as
-a replacement, the same identities must be proved for them; provenance alone
-supplies no semantic equality.
+\Cref{thm:eml-punctured-richardson-core}.  If the printed pair is proposed as a
+replacement for \((\mathsf P,\mathsf S)\), the same \(\pi\) and sine identities
+must be proved for those two exact strings; provenance alone supplies no
+semantic equality.  The absolute-value row is the internally proved punctured
+term \(\Abs\), not an endpoint-root row.
 \end{proof}
 
 \begin{lemma}[Structural-recursion Richardson translation with domain clauses]
@@ -655,8 +722,9 @@ objects, and no equality-reflecting semantic compiler into finite decidable
 protocol objects.  Hence the connection from \Cref{thm:separation} to
 \Cref{cor:strict-L0-L1,thm:obstruction-spine,thm:main-hierarchy} depends only on
 these three identities, not on the printed syntax of the chosen witnesses.  The
-strings \((U_{47},U_{111},U_{126})\) instantiate this interface only after these
-same punctured identities have been proved for those exact strings.
+printed pair \((U_{47},U_{111})\) instantiates the first two rows only after those
+two identities have been proved for the exact strings; the third row in the
+submission theorem is the punctured term \(\Abs\), not \(U_{126}\).
 \end{proposition}
 
 \begin{proof}
@@ -689,9 +757,11 @@ translated terms and comparing the target objects.  These are precisely the
 obstruction consequences used downstream in
 \Cref{cor:strict-L0-L1,thm:obstruction-spine,thm:main-hierarchy}.  Finally, the
 argument has used only the three displayed semantic identities.  Therefore a
-specific printed triple, including \((U_{47},U_{111},U_{126})\), is a valid
-replacement exactly when those identities have been proved for that triple; its
-name or provenance supplies no additional semantic content.
+specific printed pair, including \((U_{47},U_{111})\), supplies the first two rows
+exactly when those identities have been proved for that pair; its name or
+provenance supplies no additional semantic content.  The third row in the
+submission theorem is supplied by the punctured term \(\Abs\), unless a different
+finite punctured absolute-value witness is separately proved.
 \end{proof}
 \begin{corollary}[Submission Richardson scope]
 \label{thm:submission-richardson-dichotomy}
