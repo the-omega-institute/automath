@@ -9052,6 +9052,92 @@ historical manifest-bounded artifact evidence rather than dynamic semantic
 validation.
 \end{proof}
 
+\begin{theorem}[Four-coordinate local support closure]
+\label{thm:four-coordinate-local-support-closure}
+Let \(\Sigma\) be the current finite support surface of the presentation package,
+consisting of the submitted source paths, the two theorem-inventory files,
+\path{source_interface_record.json}, the manifest rows in \path{review_bundle/},
+the retained verifier logs, and the final SHA--256 digest manifest.  Then the
+four coordinates below are independent finite coordinates of \(\Sigma\):
+\begin{enumerate}
+\item the post-inventory local byte-closure coordinate;
+\item the external submitted-support coordinate, instantiated only by an exact
+supplemental-upload receipt or an archive-equivalent byte-equality locator;
+\item the fresh formal-source coordinate, instantiated only by accepted build and
+axiom-purity rows with the command-result fields of the formal-source gate; and
+\item the dynamic artifact-semantic coordinate, instantiated only by an accepted
+artifact-validation row with evaluator contract, artifact digests, semantic
+predicate, command result, exit code, and log path.
+\end{enumerate}
+After the two inventory files are accepted, rerunning the theorem-environment
+extractor, the certificate-record verifier, the source-interface verifier, the
+primary-claim verifier, and then regenerating
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} supplies exactly the first
+coordinate for the current local bytes.  It supplies none of the last three
+coordinates.  Consequently the accepted reading of the current package is:
+local/path-verified support for the current inventory bytes; no externally
+instantiated support surface absent an upload receipt or archive-equivalence
+byte-equality record; bounded source-interface evidence rather than a fresh
+Lean/BEDC rebuild or complete source audit; and finite-witness or historical
+artifact evidence rather than dynamic artifact-semantic validation.
+\end{theorem}
+
+\begin{proof}
+The four listed coordinates are fields in different projections of the finite
+record interface.  The first projection reads only local source bytes,
+inventory bytes, command-log bytes, and digest rows.  By
+Theorem~\ref{thm:canonical-local-rerun-tuple}, when the inventory bytes are fixed
+before the extractor and verifier runs and the final digest is generated after
+the logs, the ordered tuple consisting of \path{theorem_inventory.json},
+\path{theorem_inventory.md}, \(R_{\mathrm{A2}}\), and
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is a positive local fixed point
+for current-byte theorem-inventory support.  By
+Theorem~\ref{thm:current-package-missing-coordinate-classifier}, if any member of
+that ordered tuple is absent or stale, the first absent or stale member is the
+finite bad subrecord for a current-byte closure claim.  Thus the specified rerun
+sequence is necessary and sufficient for the first coordinate.
+
+The remaining coordinates are not read by the same projection.  The external
+support projection is classified by
+Theorem~\ref{thm:upload-or-archive-instantiation-boundary},
+Corollary~\ref{cor:upload-or-archive-instantiation-record}, and
+Proposition~\ref{prop:current-absence-external-support-surface-instantiation}:
+it requires either an exact supplemental-upload receipt or a byte-equality record
+for an archive-equivalent locator.  Local path names, local manifests, verifier
+logs, and digest rows can identify the bytes to be submitted, but none of them is
+the external receipt or public byte-equality event.  Therefore the post-inventory
+rerun tuple cannot instantiate the submitted-support coordinate.
+
+The formal-source projection is classified by
+Proposition~\ref{prop:formal-source-gate-instantiation},
+Theorem~\ref{thm:formal-source-promotion-obstruction}, and
+Theorem~\ref{thm:source-interface-semantic-completeness-obstruction}.  Those
+results require build-gate and axiom-purity-gate rows, with command, source
+commit or digest state, environment, exit code, and log path for any fresh-run
+reading.  The current source-interface files and logs verify bounded extraction,
+range, label, manifest, and non-escalation data; they do not contain a Lean or
+BEDC rebuild command row and do not audit all source axioms.  Hence they cannot
+be reinterpreted as the third coordinate.
+
+The artifact projection is classified by
+Theorem~\ref{thm:finite-witness-manifest-record-interface},
+Proposition~\ref{prop:artifact-validation-gate-unique-semantic-upgrade}, and
+Corollary~\ref{cor:artifact-semantic-validity-boundary}.  A dynamic semantic
+artifact claim adds evaluator-source, artifact-byte, semantic-predicate,
+environment, command-result, exit-code, and log-path fields.  The case-study and
+manifest rows available in \(\Sigma\) are finite-witness or historical
+path-verified records; they contain no accepted row of that artifact-validation
+form.  Hence the fourth coordinate is absent unless such a row is later added.
+
+Finally, finite-coordinate determination,
+Theorem~\ref{thm:finite-coordinate-determination-boundary}, forbids recovering a
+missing coordinate from another projection.  Since the post-inventory rerun and
+digest sequence changes only the first projection, it closes exactly the local
+current-byte support claim and leaves the external-support, fresh formal-source,
+and dynamic artifact-semantic upgrades uninstantiated.  This proves the stated
+normal form for the current package.
+\end{proof}
+
 \begin{corollary}[Current no-receipt support-surface non-escalation]
 \label{cor:current-no-receipt-support-surface-non-escalation}
 In the current source package the records
