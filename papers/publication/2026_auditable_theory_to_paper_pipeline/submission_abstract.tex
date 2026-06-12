@@ -6,8 +6,8 @@
 \usepackage{array}
 \usepackage{tabularx}
 
-\title{An Auditable Theory Compiler for AI-Assisted Formal Mathematics}
-\titlerunning{An Auditable Theory Compiler}
+\title{Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics}
+\titlerunning{Auditable Theory-to-Paper Pipelines}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
 \institute{AELF PTE LTD. \email{auric@aelf.io} \and
@@ -17,65 +17,46 @@ National University of Singapore \email{e1327962@u.nus.edu}}
 \maketitle
 
 \begin{abstract}
-AI-assisted formal mathematics is often described as a loop in which a
-language model proposes Lean code and a proof assistant accepts or rejects it.
-That loop is useful, but it is too small to describe sustained research.  In a
-live project, the hard question is not only whether a file compiles.  It is
-whether a generated object is a proposal, a source-theory claim, a checked
-formal interface, a finite artifact witness, a publication claim, or a human
-decision boundary.
-
-We report an auditable theory-to-paper method developed across two related
-workspaces, \emph{newmath} and \emph{automath}.  The method treats
-AI-assisted formalization as a typed compilation problem: generated material is
-not allowed to become load-bearing evidence until it is routed through six
-records--source object, formal interface, finite evidence row, advisory agent
-action, deterministic gate, and human promotion boundary.  The model proposes,
-repairs, and reviews; deterministic gates classify; humans promote claims into
-reader-facing research output.
-
-The contribution is a portable audit boundary for formal-mathematics
-automation, not a new theorem prover or an automatic venue-acceptance system.
-The accompanying supplement proves a conditional finite-record interface
-theorem for the submitted support rows.  It does not assert proof-assistant
-correctness, full source-tree semantic completeness, dynamic artifact
-soundness, implementation soundness of every gate, public-byte equality, or
-venue acceptance unless those stronger readings are supplied as separate
-accepted records.
+AI-assisted formalization is often described as a loop in which a model
+proposes Lean code and a proof assistant accepts or rejects it.  That loop is
+necessary, but it is too small for sustained research.  A live project must
+also decide whether a generated object is a proposal, a source-theory claim, a
+checked formal interface, a finite artifact witness, a publication claim, or a
+human decision boundary.  We describe a theory-to-paper pipeline, developed
+across the \emph{newmath} and \emph{automath} workspaces, that makes those
+claim types explicit.  Generated material is routed through six records:
+source object, formal interface, finite evidence row, advisory agent action,
+deterministic gate, and human promotion boundary.  The system lets agents
+search, repair, and criticize, while certification remains in typed records,
+mechanical gates, and human promotion decisions.  The contribution is a
+portable audit boundary for AI-assisted formal mathematics, not a new theorem
+prover or an automatic venue-acceptance system.
 \end{abstract}
 
-\section{The ceiling outside the proof assistant}
-Proof assistants are excellent at checking the obligations they are given.
-They do not, by themselves, decide whether an AI-generated theorem statement is
-mathematically substantive, whether it duplicates a submitted sibling, whether
-an artifact row is being overread, or whether a draft has crossed the boundary
-from intake note to active manuscript.  These failures are common in
-AI-assisted formalization because models can produce coherent local objects
-without preserving the global status of the research claim.
+\section{Problem}
+Proof assistants are excellent at checking obligations they are given.  They do
+not decide whether an AI-generated theorem statement is mathematically
+substantive, whether it duplicates a submitted sibling, whether an artifact row
+is being overread, or whether an intake note has become an active manuscript.
+Those are routing failures: the local object may be coherent, but the global
+claim status is wrong.
 
-Our answer is to make claim status explicit.  A generated increment is compiled
-into records before it is treated as progress.  Each accepted increment must
-name: (1) the source object being changed, (2) the formal interface on which it
-is checked, (3) the finite evidence row supporting the claim, (4) the advisory
-agent action that proposed or repaired it, (5) the deterministic gate that
-accepted it, and (6) the human promotion boundary that says what may be claimed
-to readers.  If one of these roles is missing, the increment remains a
-proposal, not evidence.
+\emph{Newmath} is our structured-source instance.  It separates mathematical
+source, Lean-facing interfaces, and finite substrate witnesses.  Lean markers
+record one verification axis, but Lean acceptance is not treated as semantic
+closure for every BEDC claim.  \emph{Automath} is the research-publication
+instance.  It coordinates theoremization, review, overlap checks, novelty
+checks, manuscript assembly, and submission packets.  Both workspaces use the
+same principle: a generated increment is evidence only after its allowed claim
+type has been recorded and gated.
 
-\section{Two instances}
-\emph{Newmath} is the structured-source instance.  Its BEDC workspace separates
-theory source, Lean-facing interfaces, and finite substrate witnesses.  Lean
-markers record one verification axis, but Lean acceptance is not treated as
-BEDC semantic closure.  Source paths, proof obligations, compiler contracts,
-and limitation rows remain separate evidence coordinates.
-
-\emph{Automath} is the research-publication instance.  It coordinates
-theoremization, formalization, review, and manuscript assembly through source
-maps, theorem inventories, overlap/submitted gates, novelty checks, stage
-reviews, and submission packets.  Its purpose is not merely to write papers.  It
-records which generated objects are source claims, which are checked
-interfaces, which are artifact witnesses, which are still proposals, and which
-are blocked by overlap, novelty, venue, or human-promotion constraints.
+\section{Audit interface}
+The pipeline compiles each accepted increment into six roles: the source object
+being changed, the formal interface on which it is checked, the finite evidence
+row supporting the claim, the advisory agent action that proposed or repaired
+it, the deterministic gate that accepted it, and the human promotion boundary
+that says what may be claimed to readers.  If one role is missing, the
+increment remains a proposal.
 
 \begin{center}
 \small
@@ -83,40 +64,37 @@ are blocked by overlap, novelty, venue, or human-promotion constraints.
 \toprule
 Gate & Failure caught & Safe reading after the gate \\
 \midrule
-Promotion & intake seed accidentally treated as active paper & human promotion is a separate claim boundary \\
-Overlap/submission & route races a submitted or current sibling & publication routing is stateful and cannot bypass the board \\
-Theorem delta & file churn or compilation without new theorem content & generated edits are not discovery without substantive content growth \\
-Artifact limit & manifest or status row is overread as semantic validity & finite artifacts support only their declared witness row \\
+Promotion & intake seed treated as active paper & active-paper status needs human promotion \\
+Overlap/submission & route races a submitted sibling & publication routing cannot bypass state \\
+Theorem delta & file churn without content growth & compilation is not discovery by itself \\
+Artifact limit & manifest row overread as validity & artifacts support only declared witnesses \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-\section{Relation to formalization tools}
+\section{Positioning}
 The method is complementary to proof-assistant and LLM-proving infrastructure
 such as Lean~\cite{deMouraKADR2015Lean}, LeanDojo~\cite{YangEtAl2023LeanDojo},
 draft--sketch--prove workflows~\cite{JiangEtAl2023DraftSketchProve}, and
 formal-library artifact practice such as AFP mining~\cite{BlanchetteHMN2015AFP}.
-Those systems improve the production and checking of formal objects.  The
-interface here addresses a different layer: how a research pipeline decides
-what kind of claim a generated object is allowed to become.
+Those systems improve the production and checking of formal objects.  Our
+interface addresses the surrounding research layer: how a pipeline decides what
+kind of claim a generated object is allowed to become.
 
 The public source surface for the BEDC instance is the newmath repository
 \cite{bedc-newmath-source}, pinned for this submission to commit
 \path{3fb3d6a0641767388a401883062aa522ea0b397b}.  The submitted support surface
-may include the local technical supplement, source-interface record, theorem
-inventory, digest manifest, and review bundle.  These files are audit support
-for finite-record predicates, not a claim of fresh clean-machine rebuild,
+may include a technical supplement, source-interface record, theorem inventory,
+digest manifest, and review bundle.  These files support finite-record audit
+predicates; they are not, by themselves, claims of clean-machine rebuild,
 complete source import, dynamic rerun of every artifact, or venue acceptance.
 
 \section{Conclusion}
 The useful abstraction is not ``the model proves the theorem.''  It is
 ``the system routes each generated object to the strongest claim it is entitled
-to support.''  An auditable theory compiler makes that routing explicit.  It
-lets AI agents search, repair, and criticize while keeping certification in
-typed records, deterministic gates, and human promotion decisions.  The result
-is a practical method for scaling AI-assisted formalization without letting
-polished local output masquerade as accepted mathematical or publication
-evidence.
+to support.''  Making that routing explicit gives AI agents room to search and
+repair without letting polished local output masquerade as accepted
+mathematical or publication evidence.
 
 \bibliographystyle{splncs04}
 \bibliography{references}
