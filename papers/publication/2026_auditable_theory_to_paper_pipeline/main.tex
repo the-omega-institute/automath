@@ -10992,16 +10992,24 @@ classified separately by the support-surface normal form.
 Let $E$ be the finite set of labelled theorem-like environments in the current
 \path{main.tex}, where theorem-like means one of definition, lemma,
 proposition, theorem, or corollary, and let $I$ be the finite label set recorded
-in \path{theorem_inventory.json}.  If the post-inventory extractor run
-\path{python review_bundle/extract_theorem_environments.py} has exit code zero
-and reports no unlabelled theorem-like environments, no duplicate labels, and no
-labels omitted from \path{theorem_inventory.json}, then the accepted inventory
-pair \path{theorem_inventory.json} and \path{theorem_inventory.md} is an exact
-syntactic coverage coordinate for the manuscript's theorem-like environment
-surface.  Conversely, if a theorem-like environment in \path{main.tex} has no
-label, has a duplicate label, or has a label outside $I$, then the exact
-coverage coordinate is absent until the source or inventory is updated and the
-extractor is rerun.
+in \path{theorem_inventory.json}.  Let $s$ be a source state of \path{main.tex}
+and the accepted inventory files.  If the post-inventory extractor run
+\path{python review_bundle/extract_theorem_environments.py} is run on $s$, has
+exit code zero, and reports no unlabelled theorem-like environments, no duplicate
+labels, and no labels omitted from \path{theorem_inventory.json}, then the
+accepted inventory pair \path{theorem_inventory.json} and
+\path{theorem_inventory.md} is an exact syntactic coverage coordinate for the
+manuscript's theorem-like environment surface at $s$.  Moreover this condition is
+the unique inventory-coverage input to the fixed point of
+Theorem~\ref{thm:post-inventory-package-fixed-point}: any later edit to
+\path{main.tex} or to either inventory file changes the source state from $s$ and
+removes the exact current-byte inventory coordinate until the extractor is rerun
+on the new state and its log is included in the final digest pass.  Conversely,
+if a theorem-like environment in \path{main.tex} has no label, has a duplicate
+label, has a label outside $I$, or is introduced after the last extractor log
+named by the digest surface, then the exact coverage coordinate is absent until
+the source or inventory is updated and the extractor is rerun on the same state
+that is later digested.
 \end{theorem}
 
 \begin{proof}
@@ -11017,15 +11025,40 @@ therefore equality on the extracted manuscript surface, namely every member of
 $E$ is represented by an inventory label.  The pair
 \path{theorem_inventory.json} and \path{theorem_inventory.md} then selects the
 same finite labelled surface named by the extractor log, so it is an exact
-finite coverage coordinate for the manuscript.
+finite coverage coordinate for the manuscript at $s$.
+
+It remains to prove the fixed-point clause.  The support-coordinate fixed point
+uses current bytes, not path names in isolation.  Thus the relevant object is the
+triple consisting of the manuscript bytes, the accepted inventory bytes, and the
+extractor log produced from those same bytes.  On this triple the extractor
+predicate is deterministic: changing none of the three bytes preserves the
+reported finite set $E$ and the comparison with $I$, while changing
+\path{main.tex} can add, delete, relabel, or move a theorem-like environment, and
+changing \path{theorem_inventory.json} can add or remove an inventory label.  In
+either changed case the old log is no longer a log for the new triple.  The exact
+inventory coordinate therefore descends to the fixed point of
+Theorem~\ref{thm:post-inventory-package-fixed-point} only when the log was
+computed after the accepted source and inventory bytes were fixed and before the
+final digest manifest was regenerated.  This is precisely the inventory-coverage
+input used later by Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}:
+the digest surface records the accepted inventory files and the extractor log as
+one finite current-byte tuple rather than as independent historical artifacts.
+No second inventory-coverage coordinate is available, because any purported
+coverage claim over the same surface must be a claim about the same finite set of
+displayed theorem-like environments and the same finite inventory label set; by
+determinism it is identical to the extractor predicate above when the bytes
+agree, and stale when the bytes do not agree.
 
 For the converse, an unlabelled environment supplies no element by which the
 inventory can select that environment, a duplicate label makes the selection
 non-injective on the manuscript surface, and a label outside $I$ is a member of
-$E$ not represented by the accepted inventory.  Each case removes one of the
-finite coordinates required in the first paragraph.  Updating the source or the
-inventory and rerunning the extractor is therefore necessary before exact
-coverage can again be asserted.
+$E$ not represented by the accepted inventory.  A theorem-like environment added
+after the last extractor run is the same obstruction at the level of source
+states: it belongs to the new extracted set but cannot belong to the old logged
+set, since the old log was computed from earlier bytes.  Each case removes one
+of the finite coordinates required in the first paragraph.  Updating the source
+or the inventory and rerunning the extractor on the same state that will be
+digested is therefore necessary before exact coverage can again be asserted.
 \end{proof}
 
 \begin{theorem}[Finite-record post-inventory support-coordinate fixed point]
