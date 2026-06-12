@@ -117,19 +117,50 @@ For the carry automaton it suffices to prove the scalar case, since the
 \]
 Thus a scalar word with target \(\sigma F_{n+1}\) is accepted exactly when its
 final carry is \((\sigma,0)\), provided no accepting path has been lost by
-restricting to \(\{-1,0,1\}^2\).  The only exits from this square in one step are
+restricting to \(\{-1,0,1\}^2\).  We verify this explicitly.  From a state
+\((p,r)\in\{-1,0,1\}^2\), the first coordinate of the next state is \(r\), and
+the second is \(p+a-r\), with \(a\in\{-1,0,1\}\).  Hence the only one-step exits
+from the square are
 \[
   (0,-2),(1,-2),(1,-3),(-1,2),(-1,3),(0,2).
 \]
-A finite check of these six forms under the three maps
-\((p,r)\mapsto(r,p+a-r)\), \(a=-1,0,1\), shows that their forward orbit is
-contained in the two disjoint cones
-\(r\ge p+2\ge2\) and \(r\le p-2\le -2\), together with their one-step images;
-in particular it never meets \(\{-1,0,1\}^2\).  Hence an accepting path from
-\((0,0)\) to \((\sigma,0)\) cannot leave the square and later return.  This
-proves that the displayed finite state set counts all and only the target
-solutions.  Multiplying the scalar construction over the \(q-1\) difference
-coordinates proves the lemma.
+Separate the positive and negative exits.  The positive exits
+\((-1,2),(-1,3),(0,2)\) lie in
+\[
+  U_+=\{(p,r):p\le0,\ r\ge2\}.
+\]
+For every \((p,r)\in U_+\) and every \(a\in\{-1,0,1\}\),
+\[
+  \tau_a(p,r)=(r,p+a-r)
+\]
+has first coordinate at least \(2\) and second coordinate at most \(-1\), so it
+lies in
+\[
+  V_+=\{(p,r):p\ge2,\ r\le -1\}.
+\]
+Conversely, if \((p,r)\in V_+\), then \(\tau_a(p,r)\) has first coordinate at
+most \(-1\) and second coordinate at least \(2\), and therefore lies in
+\(U_+\).  Thus \(U_+\cup V_+\) is forward invariant and is disjoint from
+\(\{-1,0,1\}^2\).
+
+The negative exits are symmetric.  They lie in
+\[
+  U_-=
+  \{(p,r):p\ge0,\ r\le -2\}.
+\]
+For \((p,r)\in U_-\), every image \(\tau_a(p,r)\) has first coordinate at most
+\(-2\) and second coordinate at least \(1\), hence lies in
+\[
+  V_-=
+  \{(p,r):p\le -2,\ r\ge 1\}.
+\]
+For \((p,r)\in V_-\), every image lies back in \(U_-\).  Hence
+\(U_-\cup V_-\) is also forward invariant and disjoint from the square.  Once a
+path leaves \(\{-1,0,1\}^2\), it is trapped in one of these two invariant
+regions and can never return to an accepting state \((\sigma,0)\).  This proves
+that the displayed finite state set counts all and only the target solutions.
+Multiplying the scalar construction over the \(q-1\) difference coordinates
+proves the lemma.
 \end{proof}
 
 \begin{theorem}[Intrinsic finite-state transfer for Zeckendorf fold moments]
@@ -445,16 +476,22 @@ is a stronger extra condition: for each fixed \(q\), the sequence
 If a sequence \((b_m)_{m\ge1}\) has a fixed finite-state transfer formula in the
 sense of \Cref{def:fixed-finite-state-transfer}, equivalently
 \(b_m=u^{\mathsf T}A^m v\), then \((b_m)\) satisfies a linear recurrence with
-constant coefficients.  Consequently its generating series is rational, and
-there are constants \(C,\rho\) such that \(|b_m|\le C\rho^m\).
+constant coefficients over the same field, and consequently its generating
+series is rational over that field.  If, in addition, the coefficient field is
+equipped with a fixed embedding in \(\mathbb C\), then there are constants
+\(C,\rho\) such that \(|b_m|\le C\rho^m\) for the induced complex absolute value.
+In particular this exponential budget applies to all integer-valued and
+real-valued collision-moment sequences used below.
 \end{proposition}
 
 \begin{proof}
 The Cayley--Hamilton theorem gives a linear recurrence of order at most the
 size of \(A\) for the powers \(A^m\), hence for \(u^{\mathsf T}A^m v\).  A
 sequence satisfying a constant-coefficient recurrence has rational generating
-series.  The exponential bound follows from any matrix norm: choose
-\(\rho>\|A\|\) and absorb the finitely many initial terms into \(C\).
+series over the coefficient field.  After fixing an embedding in \(\mathbb C\),
+choose any complex matrix norm.  The exponential bound follows from
+submultiplicativity: choose \(\rho>\|A\|\) and absorb the scalar factors
+\(\|u\|\|v\|\), together with the finitely many initial terms, into \(C\).
 \end{proof}
 
 \begin{proposition}[Fixed-transfer interface for the budget obstruction]
@@ -462,22 +499,25 @@ series.  The exponential bound follows from any matrix norm: choose
 Every use of the finite-state transfer budget in this article refers to
 \Cref{def:fixed-finite-state-transfer}.  In particular, a degree-\(q\)
 collision-moment sequence with fixed finite-state transfer is subject to the
-recurrence, rational-generating-series, and exponential-growth constraints of
-\Cref{prop:finite-state-coefficient-budget}; therefore any computable cover
-whose degree-\(q\) moment violates every exponential bound has no fixed
-finite-state transfer formula in that degree.
+recurrence and rational-generating-series constraints of
+\Cref{prop:finite-state-coefficient-budget}.  For the integer-valued and
+real-valued collision moments considered below, it is also subject to the
+exponential-growth constraint there; therefore any computable cover whose
+degree-\(q\) moment violates every exponential bound has no fixed finite-state
+transfer formula in that degree.
 \end{proposition}
 
 \begin{proof}
 The definition gives exactly one finite matrix model
 \(S_q^{(m)}=u_q^{\mathsf T}A_q^m v_q\) for all resolutions in the tail under
 consideration.  Applying \Cref{prop:finite-state-coefficient-budget} to the
-sequence \(b_m=S_q^{(m)}\) gives a constant-coefficient recurrence, a rational
-generating series, and constants \(C,\rho\) with
-\(|S_q^{(m)}|\le C\rho^m\).  Hence a sequence which eventually exceeds
-\(C\rho^m\) for every pair of constants \(C,\rho\) cannot admit the fixed matrix
-representation in \Cref{def:fixed-finite-state-transfer}.  This is precisely
-the budget obstruction used later for the one-spike covers.
+sequence \(b_m=S_q^{(m)}\) gives a constant-coefficient recurrence and a rational
+generating series.  In the collision-moment applications below the sequence is
+integer-valued, hence viewed inside \(\mathbb C\), so the same proposition gives
+constants \(C,\rho\) with \(|S_q^{(m)}|\le C\rho^m\).  Hence a sequence which
+eventually exceeds \(C\rho^m\) for every pair of constants \(C,\rho\) cannot
+admit the fixed matrix representation in \Cref{def:fixed-finite-state-transfer}.
+This is precisely the budget obstruction used later for the one-spike covers.
 \end{proof}
 
 \begin{proposition}[Finite-fibre certificate taxonomy]
@@ -549,14 +589,14 @@ Zeckendorf normal-form sets, there are two cover systems which have identical
 collision moments
 \[
   S_q^\sharp(m)
-  \qquad(0\le m\le M,\;0\le q\le Q)
+  \qquad(1\le m\le M,\;0\le q\le Q)
 \]
 and identical fixed-resolution finite-fibre certificate output on that window,
 but only one of them has second collision moment compatible with a fixed
 finite-state transfer formula.  More strongly, every predicate depending only on
 the fibre-size multisets
 \[
-  \{d_m^\sharp(x):x\in X_m\}\qquad(0\le m\le M)
+  \{d_m^\sharp(x):x\in X_m\}\qquad(1\le m\le M)
 \]
 assigns the same truth value to the two systems, while the second system has no
 finite-state transfer formula for \(S_2^\sharp(m)\).  Hence no finite window of
@@ -575,14 +615,14 @@ therefore satisfies the finite-state condition for \(q=2\).
 
 For the second cover, use the one-spike construction over the same normal-form
 sets.  Choose the all-zero normal form at each resolution.  Put spike size
-\(1\) for every \(m\le M\), and put spike size \(m!+1\) for every \(m>M\); all
-other fibres have size \(1\).  This is a computable finite-fibre cover and it
-preserves the normal forms and \(L1\) readouts, as in
-\Cref{lem:cover-preserves-protocol}.  For every \(m\le M\) its fibre-size multiset
-is exactly the singleton multiset of the first cover.  Therefore every predicate
-or numerical invariant depending only on those multisets in the window has the
-same value for the two covers.  In particular, all displayed moments agree for
-\(0\le q\le Q\) and \(0\le m\le M\).
+\(1\) for every \(1\le m\le M\), and put spike size \(m!+1\) for every
+\(m>M\); all other fibres have size \(1\).  This is a computable finite-fibre
+cover and it preserves the normal forms and \(L1\) readouts, as in
+\Cref{lem:cover-preserves-protocol}.  For every \(1\le m\le M\) its fibre-size
+multiset is exactly the singleton multiset of the first cover.  Therefore every
+predicate or numerical invariant depending only on those multisets in the window
+has the same value for the two covers.  In particular, all displayed moments
+agree for \(0\le q\le Q\) and \(1\le m\le M\).
 
 For \(m>M\), the second collision moment of the spiked cover is
 \[
