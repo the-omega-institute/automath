@@ -10872,6 +10872,47 @@ daemon execution, or artifact-rerun record; the branch/path locator is already
 classified separately by the support-surface normal form.
 \end{proof}
 
+\begin{theorem}[Accepted inventory coverage criterion]
+\label{thm:accepted-inventory-coverage-criterion}
+Let $E$ be the finite set of labelled theorem-like environments in the current
+\path{main.tex}, where theorem-like means one of definition, lemma,
+proposition, theorem, or corollary, and let $I$ be the finite label set recorded
+in \path{theorem_inventory.json}.  If the post-inventory extractor run
+\path{python review_bundle/extract_theorem_environments.py} has exit code zero
+and reports no unlabelled theorem-like environments, no duplicate labels, and no
+labels omitted from \path{theorem_inventory.json}, then the accepted inventory
+pair \path{theorem_inventory.json} and \path{theorem_inventory.md} is an exact
+syntactic coverage coordinate for the manuscript's theorem-like environment
+surface.  Conversely, if a theorem-like environment in \path{main.tex} has no
+label, has a duplicate label, or has a label outside $I$, then the exact
+coverage coordinate is absent until the source or inventory is updated and the
+extractor is rerun.
+\end{theorem}
+
+\begin{proof}
+The extractor's domain is the finite list of lines of \path{main.tex}.  It scans
+that list for the five displayed environment names, assigns to each occurrence
+its first label, and compares the resulting finite label set $E$ with the finite
+set $I$ parsed from \path{theorem_inventory.json}.  Exit code zero with the three
+stated zero counters says precisely that every extracted environment has a
+label, no two extracted environments share a label, and $E\subseteq I$.  Since
+the coordinate is only a syntactic coverage coordinate, extra explanatory rows
+in the inventory do not add theorem-like environments; the needed equality is
+therefore equality on the extracted manuscript surface, namely every member of
+$E$ is represented by an inventory label.  The pair
+\path{theorem_inventory.json} and \path{theorem_inventory.md} then selects the
+same finite labelled surface named by the extractor log, so it is an exact
+finite coverage coordinate for the manuscript.
+
+For the converse, an unlabelled environment supplies no element by which the
+inventory can select that environment, a duplicate label makes the selection
+non-injective on the manuscript surface, and a label outside $I$ is a member of
+$E$ not represented by the accepted inventory.  Each case removes one of the
+finite coordinates required in the first paragraph.  Updating the source or the
+inventory and rerunning the extractor is therefore necessary before exact
+coverage can again be asserted.
+\end{proof}
+
 \begin{theorem}[Finite-record post-inventory support-coordinate fixed point]
 \label{thm:post-inventory-package-fixed-point}
 Let $P$ be the current local package state consisting of the manuscript source,
@@ -10930,10 +10971,13 @@ table from the already-existing support inputs.  The table deliberately excludes
 self-digest recursion; those two files are instead the manifest and the command
 metadata for producing it.
 
-For the forward implication, the ordering makes every load-bearing finite record
-that supports the theorem-ledger coordinate an already-existing byte string before
-the digest table is computed.  Hence the digest rows name the same inventory,
-extractor-log, verifier-log, dated-venue-log, and selected bundle bytes that are cited in
+For the forward implication, Theorem~\ref{thm:accepted-inventory-coverage-criterion}
+converts the post-inventory extractor counters into the exact syntactic coverage
+coordinate for the accepted inventory pair.  The ordering then makes every
+load-bearing finite record that supports the theorem-ledger coordinate an
+already-existing byte string before the digest table is computed.  Hence the
+digest rows name the same inventory, extractor-log, verifier-log,
+dated-venue-log, and selected bundle bytes that are cited in
 Proposition~\ref{prop:final-refreshed-coordinate-instantiation}.  By
 Theorem~\ref{thm:final-support-surface-closure}, exact finite support is precisely
 equality of the selected paths and their final digest rows.  The digest-generator
