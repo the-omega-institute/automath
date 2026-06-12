@@ -4,13 +4,10 @@
 \usepackage{hyperref}
 \usepackage{xurl}
 \usepackage{array}
-\usepackage{enumitem}
 \usepackage{tabularx}
 
-\setlist{nosep,leftmargin=*}
-
-\title{Conditional Finite-Record Auditing for AI-Assisted Auto-Formalization}
-\titlerunning{Conditional Finite-Record Auditing}
+\title{An Auditable Theory Compiler for AI-Assisted Formal Mathematics}
+\titlerunning{An Auditable Theory Compiler}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
 \institute{AELF PTE LTD. \email{auric@aelf.io} \and
@@ -20,204 +17,106 @@ National University of Singapore \email{e1327962@u.nus.edu}}
 \maketitle
 
 \begin{abstract}
-AI-assisted formal mathematics is often presented as a loop in which a model
-proposes theorem statements or proof scripts and a proof assistant accepts or
-rejects them.  That view is too narrow for sustained research.  We describe an
-auditable auto-formalization method developed across two related projects,
-\emph{automath} and \emph{newmath}.  Both projects treat formalization as a
-research pipeline with structured mathematical source, explicit claim types,
-machine-checkable interfaces, finite evidence records, agent proposals, and
-human promotion decisions.  The central principle is that generated material is
-never evidence by itself: every accepted increment must name six portable roles,
-in plain terms.  It must name the source object being changed, the formal
-interface on which the change is checked, the finite evidence row supporting the
-claim, the advisory agent action that proposed or repaired it, the deterministic
-gate that accepted it, and the human promotion boundary for what may be claimed.
-In the supplement these six roles are encoded as a conditional finite-record
-interface and as a portable normal form: local paths, stage labels, inventories,
-digests, and case snapshots are accepted only as pullbacks to a source object,
-formal interface, finite evidence row, advisory action, deterministic gate, human
-promotion boundary, evidence level, and boundary coordinate.  Retained scripts
-check named rows, paths, manifests, inventories, and logs under explicit
-record-gate-soundness assumptions.  The resulting theorem is a
-certificate-reading theorem for declared finite rows, not an independent truth
-theorem for object-language mathematics, all gate implementations, source-tree
-increments, dynamic artifact semantics, clean-machine reproducibility, or venue
-acceptance.
+AI-assisted formal mathematics is often described as a loop in which a
+language model proposes Lean code and a proof assistant accepts or rejects it.
+That loop is useful, but it is too small to describe sustained research.  In a
+live project, the hard question is not only whether a file compiles.  It is
+whether a generated object is a proposal, a source-theory claim, a checked
+formal interface, a finite artifact witness, a publication claim, or a human
+decision boundary.
 
-In \emph{newmath}, this discipline is instantiated by BEDC, a mathlib-free
-structured theory whose paper source separates theoretical closure from Lean
-verification and from finite substrate witnesses.  In \emph{automath}, the same
-discipline appears as an automated theory-development and publication layer:
-source maps, theorem inventories, axiom and marker audits, anti-hollow theorem
-checks, route-state gates, and review packets prevent agent output from becoming
-unsupported mathematical or submission-facing claims.  The contribution is not a
-new theorem prover and not an assertion that AI replaces mathematicians.  It is a
-finite-record research methodology for scaling AI-assisted formalization while
-preserving auditability: formalization targets are decomposed into typed
-records, agents operate only on proposal and repair layers, and deterministic
-gates decide whether an increment is source theory, checked formal code, finite
-artifact evidence, or publication-ready exposition.
+We report an auditable theory-to-paper method developed across two related
+workspaces, \emph{newmath} and \emph{automath}.  The method treats
+AI-assisted formalization as a typed compilation problem: generated material is
+not allowed to become load-bearing evidence until it is routed through six
+records--source object, formal interface, finite evidence row, advisory agent
+action, deterministic gate, and human promotion boundary.  The model proposes,
+repairs, and reviews; deterministic gates classify; humans promote claims into
+reader-facing research output.
+
+The contribution is a portable audit boundary for formal-mathematics
+automation, not a new theorem prover or an automatic venue-acceptance system.
+The accompanying supplement proves a conditional finite-record interface
+theorem for the submitted support rows.  It does not assert proof-assistant
+correctness, full source-tree semantic completeness, dynamic artifact
+soundness, implementation soundness of every gate, public-byte equality, or
+venue acceptance unless those stronger readings are supplied as separate
+accepted records.
 \end{abstract}
 
-\section{Problem and Method}
-The method is designed for projects where the research object is still being
-formed while its formalization is being attempted.  In such a setting, a Lean
-file that compiles, a generated theorem statement, and a polished paragraph are
-not equivalent forms of progress.  The workflow therefore separates six
-portable roles: source object, formal interface, finite evidence row, advisory
-agent action, deterministic gate, and human promotion boundary, together with the
-declared evidence level and boundary coordinate.  Local path names, route labels,
-stage numbers, package-byte fixed points, and digest rows are examples inside
-these roles, not primitives of the method.  This role separation is the part we
-aim to make portable.
+\section{The ceiling outside the proof assistant}
+Proof assistants are excellent at checking the obligations they are given.
+They do not, by themselves, decide whether an AI-generated theorem statement is
+mathematically substantive, whether it duplicates a submitted sibling, whether
+an artifact row is being overread, or whether a draft has crossed the boundary
+from intake note to active manuscript.  These failures are common in
+AI-assisted formalization because models can produce coherent local objects
+without preserving the global status of the research claim.
 
-\section{Finite-Record Vocabulary}
-The terms used in the technical supplement are names for these six roles, not
-additional claims.  A ``finite-record interface theorem'' says only that a claim
-is read through the submitted rows for the six roles.  ``Record-gate soundness''
-is a premise saying that the listed rows have the declared evidence pointers,
-pass records, and boundary fields.  An ``accepted coordinate'' is one row that
-passed its assigned gate.  ``Weak-interface maximality'' says that a stronger
-reading, such as implementation soundness, source semantic completeness,
-external-support availability, dynamic artifact validation, or venue acceptance,
-needs a new finite row of its own.
+Our answer is to make claim status explicit.  A generated increment is compiled
+into records before it is treated as progress.  Each accepted increment must
+name: (1) the source object being changed, (2) the formal interface on which it
+is checked, (3) the finite evidence row supporting the claim, (4) the advisory
+agent action that proposed or repaired it, (5) the deterministic gate that
+accepted it, and (6) the human promotion boundary that says what may be claimed
+to readers.  If one of these roles is missing, the increment remains a
+proposal, not evidence.
 
-\section{Trust Boundary}
-All safety statements in this presentation use the terminology map above.  The
-result is an interface theorem about finite records and rejected bad subrecords:
-it checks whether the six roles have been filled by accepted rows, and it reports
-which row is missing when a stronger claim is attempted.  The supplement
-classifies its support labels into primary finite-record interfaces,
-projection-contract script support, ledger-relative package support, syntactic
-inventory support, and audit conditions; none of these classes is cited here as
-object-language verification of the mathematics.  It is not an end-to-end
-soundness theorem for the concrete gate programs, proof-assistant source tree,
-artifact evaluators, or venue workflow unless a separate implementation or
-execution audit coordinate is added and accepted by the same schema.
+\section{Two instances}
+\emph{Newmath} is the structured-source instance.  Its BEDC workspace separates
+theory source, Lean-facing interfaces, and finite substrate witnesses.  Lean
+markers record one verification axis, but Lean acceptance is not treated as
+BEDC semantic closure.  Source paths, proof obligations, compiler contracts,
+and limitation rows remain separate evidence coordinates.
 
-\section{Instances and Cases}
-\emph{Newmath} is the structured-theory instance.  Its BEDC source is organized
-around finite-kernel theory, proof obligations, and implementation contracts.
-The source-interface evidence used here is path-verified and line-bounded at the
-public newmath commit \path{3fb3d6a0641767388a401883062aa522ea0b397b}; it is not
-a fresh rebuild, axiom-purity audit, or complete BEDC theory proof.  Lean markers
-record an independent verification status, but Lean does not create BEDC
-object-language closure.  The bounded source interface is not presented as
-current source-tree reproducibility or semantic completeness.  Finite substrate
-witnesses, such as manifests, evaluator reports, and compiler contracts, provide
-a separate evidence axis.
-
-\emph{Automath} is the automated-research instance.  It coordinates derivation,
-formalization, review, and paper assembly through source maps, theorem lists,
-stage audits, and route gates.  Its role is not simply to write papers; it
-records which generated objects have become accepted source claims, which are
-checked implementation claims, which remain proposals, and which are blocked by
-overlap, artifact, novelty, or submission-state constraints.
-
-The following four rows are not an empirical benchmark of AI-assisted
-mathematics.  They are local historical/path-complete witnesses illustrating the
-portable six-role audit schema and gate behaviour: each row names a gate, an
-observed issue, an accepted finite coordinate, and the safe lesson that may be
-stated from that coordinate.  The case matrix illustrates the audit discipline;
-it does not prove end-to-end automation reliability or dynamically validate every
-underlying artifact.
+\emph{Automath} is the research-publication instance.  It coordinates
+theoremization, formalization, review, and manuscript assembly through source
+maps, theorem inventories, overlap/submitted gates, novelty checks, stage
+reviews, and submission packets.  Its purpose is not merely to write papers.  It
+records which generated objects are source claims, which are checked
+interfaces, which are artifact witnesses, which are still proposals, and which
+are blocked by overlap, novelty, venue, or human-promotion constraints.
 
 \begin{center}
 \small
-\begin{tabularx}{\linewidth}{p{0.22\linewidth}X X}
+\begin{tabularx}{\linewidth}{p{0.24\linewidth}X X}
 \toprule
-Axis & Research role & Required record before acceptance \\
+Gate & Failure caught & Safe reading after the gate \\
 \midrule
-Source theory & structured definitions, closure claims, theorem spine &
-source path, claim kind, dependency and boundary record \\
-Formalization & Lean or other proof-assistant representation of selected
-interfaces & build or marker status, axiom/assumption audit, drift check when recorded; the present route uses bounded marker/source-interface records, not a fresh full rebuild \\
-Finite evidence & manifest-bounded witnesses and executable artifacts &
-manifest row, evaluator contract, log or limitation record; historical rows are not dynamic semantic reruns \\
-Agent work & theorem search, repair, review, ranking, exposition &
-proposal record, reviewer/audit score, deterministic gate result \\
-Publication & reader-facing statement of the accepted increment &
-source map, theorem inventory, dated venue packet, overlap/submission state; not upload, archive, actual-submission-date compliance, or venue acceptance \\
+Promotion & intake seed accidentally treated as active paper & human promotion is a separate claim boundary \\
+Overlap/submission & route races a submitted or current sibling & publication routing is stateful and cannot bypass the board \\
+Theorem delta & file churn or compilation without new theorem content & generated edits are not discovery without substantive content growth \\
+Artifact limit & manifest or status row is overread as semantic validity & finite artifacts support only their declared witness row \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-\begin{center}
-\small
-\begin{tabularx}{\linewidth}{p{0.20\linewidth}p{0.18\linewidth}X X}
-\toprule
-Case gate & Observed issue & Accepted coordinate & Safe lesson \\
-\midrule
-Promotion & inactive intake seed lacks active-paper markers & path-verified promotion boundary & human promotion is a separate boundary \\
-Overlap/submission & submitted sibling and overlap ledger block advancement & path-verified route-blocking coordinate & venue routing is stateful and cannot be raced \\
-Theorem-content delta & file churn or compilation lacks substantive theorem growth & path-verified non-growth coordinate & generated edits are not discovery without content delta \\
-Artifact-limitation & status and audit ledgers bound the dynamic claim & path-verified limitation-disclosure coordinate & bounded artifacts must disclose or block stronger claims \\
-\bottomrule
-\end{tabularx}
-\end{center}
+\section{Relation to formalization tools}
+The method is complementary to proof-assistant and LLM-proving infrastructure
+such as Lean~\cite{deMouraKADR2015Lean}, LeanDojo~\cite{YangEtAl2023LeanDojo},
+draft--sketch--prove workflows~\cite{JiangEtAl2023DraftSketchProve}, and
+formal-library artifact practice such as AFP mining~\cite{BlanchetteHMN2015AFP}.
+Those systems improve the production and checking of formal objects.  The
+interface here addresses a different layer: how a research pipeline decides
+what kind of claim a generated object is allowed to become.
 
-\section{Positioning}
-The method does not ask a model to directly certify mathematics.  Instead, it
-uses models where they are strongest: locating promising formalization targets,
-suggesting repairs, comparing exposition against source records, and finding
-missing assumptions or hollow theorem growth.  Certification is deliberately
-moved out of the model and into records that can be checked at their declared
-level by scripts, proof assistants, finite witnesses, and human promotion
-decisions.  This places the work next to proof-assistant infrastructure such as
-Lean~\cite{deMouraKADR2015Lean}, LLM-assisted proving environments such as
-LeanDojo~\cite{YangEtAl2023LeanDojo}, draft--sketch--prove workflows for
-language-model-assisted theorem proving~\cite{JiangEtAl2023DraftSketchProve},
-and formal-library artifact practice such as AFP
-mining~\cite{BlanchetteHMN2015AFP}; the different contribution here is the
-finite-record audit boundary around a theory-to-paper workflow.  Script success
-in this article means success of the printed finite row predicate only.  The
-presentation may be accompanied in the submitted source package by the local
-technical supplement and finite support files used to check those predicates, but
-this article does not claim an external archive locator, DOI, public artifact
-availability, upload-time venue compliance, or venue acceptance.  A failed or
-blocked route is therefore not only a negative outcome; it becomes structured
-data about overlap, missing theorem content, inadequate novelty, or insufficient
-evidence.
-
-\section{Artifact Model and Conclusion}
-This presentation reports the method, not a completed universal automation
-system.  The primary theorem surface is intentionally compressed to a
-certificate-reading theorem under record-gate soundness for the submitted finite
-rows: the presentation-route finite-record interface, the conditional
-finite-record publication audit interface, the weak-interface maximality
-boundary, and the compact-article finite-record spine classification in the
-local supplement.  It is not implementation, artifact, Lean-build,
-clean-machine reproducibility, venue-compliance, venue-acceptance, or end-to-end
-workflow-correctness soundness; local round, digest, inventory, script, and case
-labels are support pullbacks rather than additional primary claims.
 The public source surface for the BEDC instance is the newmath repository
-\cite{bedc-newmath-source} at pinned commit
-\path{3fb3d6a0641767388a401883062aa522ea0b397b}; the support surface for this
-presentation route is conditional on exact inclusion of the local supplement,
-\path{source_interface_record.json}, \path{theorem_inventory.json},
-\path{theorem_inventory.md}, and \path{review_bundle/} with
-\path{review_bundle/FINAL_DIGESTS_SHA256.md}.  If a venue cannot carry that
-directory literally, the manifest's automath branch/path fallback is not yet a
-support claim; it becomes support-equivalent only after a finite archive-equivalent
-record checks the file list, relative-path semantics, manifest identity, final
-digest rows, and pinned-state byte equality.
-The dated local route-readiness record is
-\path{review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-12.log}.  These materials
-are reader-audit support for the finite-record predicates, not DOI, upload
-receipt, venue-acceptance, venue-compliance, or public-byte-equality claims.  We do not claim a fresh rebuild
-of every declaration, an axiom-purity audit, exact import of every BEDC source
-theorem statement, a fresh dynamic rerun of every Rule~110/GroundCompiler or other
-artifact, concrete soundness of every gate implementation, or automatic venue
-acceptance.
-The compact article exposes only the compressed conditional certificate-reading
-spine under record-gate soundness; the exhaustive labelled theorem ledger in the
-supplement is local audit-support evidence and not a second primary theorem
-surface.
-The claim is methodological: AI-assisted auto-formalization can be made rigorous by
-forcing every generated increment through typed source, formal-interface,
-finite-evidence, advisory-agent, deterministic-gate, and human-promotion records
-before it is treated as accepted research output.
+\cite{bedc-newmath-source}, pinned for this submission to commit
+\path{3fb3d6a0641767388a401883062aa522ea0b397b}.  The submitted support surface
+may include the local technical supplement, source-interface record, theorem
+inventory, digest manifest, and review bundle.  These files are audit support
+for finite-record predicates, not a claim of fresh clean-machine rebuild,
+complete source import, dynamic rerun of every artifact, or venue acceptance.
+
+\section{Conclusion}
+The useful abstraction is not ``the model proves the theorem.''  It is
+``the system routes each generated object to the strongest claim it is entitled
+to support.''  An auditable theory compiler makes that routing explicit.  It
+lets AI agents search, repair, and criticize while keeping certification in
+typed records, deterministic gates, and human promotion decisions.  The result
+is a practical method for scaling AI-assisted formalization without letting
+polished local output masquerade as accepted mathematical or publication
+evidence.
 
 \bibliographystyle{splncs04}
 \bibliography{references}
