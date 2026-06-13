@@ -3551,8 +3551,12 @@ def build_stage_a_oracle_escalation_prompt(state: PaperState,
 
         Decide whether this manuscript has a publishable mathematical route
         beyond Codex's local theoremization ceiling.  If yes, give Codex a
-        concrete theorem package to add or strengthen.  If no, say park and
-        explain why.
+        concrete theorem package to add or strengthen.  If the required package
+        is already present and the observed failure is only a stale baseline,
+        provenance, inventory, or fake-extension artifact, return proceed with
+        exact theorem labels and recognition instructions; do not use
+        human_decision for an already-present publishable theorem package.  If
+        no route exists, say park and explain why.
 
         Return only JSON:
         {{
