@@ -3596,6 +3596,11 @@ def build_stage_a_oracle_escalation_followup_prompt(state: PaperState,
           theorem package with source-level instructions.
         - If Codex failed to implement the package, specify the exact missing
           theorem/proof spine and closure criterion.
+        - If the package is already present and the remaining failure is a
+          stale baseline, provenance, inventory, or fake-extension artifact,
+          return proceed with exact theorem labels and recognition instructions;
+          do not return human_decision for an already-present publishable
+          theorem package.
         - If the route cannot clear Stage A without overlap or fake extension,
           return park or human_decision.
         - Do not return prose polish as a theorem package.
