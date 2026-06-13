@@ -16509,6 +16509,73 @@ coordinate is a rerunnable local fixed point, whereas the second is an
 independent external receipt-or-locator extension.
 \end{proof}
 
+\begin{theorem}[Current-inventory rerun exactness]
+\label{thm:current-inventory-rerun-exactness}
+Let $B$ be a source state obtained after editing either \path{main.tex},
+\path{theorem_inventory.json}, or \path{theorem_inventory.md}.  A terminal claim
+that the inventory bytes, verifier logs, and final digest rows form the current
+local fixed point for $B$ is accepted by the finite-record interface if and only
+if the following ordered finite tuple is present for the bytes of $B$:
+\begin{enumerate}
+\item the accepted inventory pair \path{theorem_inventory.json} and
+\path{theorem_inventory.md} as byte strings of $B$;
+\item a zero-exit syntactic theorem-environment extraction record whose input
+hashes name the \path{main.tex} and \path{theorem_inventory.json} bytes of $B$;
+\item zero-exit retained finite-record verifier logs for the certificate,
+source-interface, and primary-claim records, produced after the accepted
+inventory pair exists; and
+\item a regenerated \path{review_bundle/FINAL_DIGESTS_SHA256.md} produced after
+the logs in the preceding two items exist, with rows for the accepted inventory
+files and those logs.
+\end{enumerate}
+If any member of this tuple was computed before the edited bytes of $B$ existed,
+or if the digest manifest was not regenerated after the last retained log, the
+same prose is only historical or conditional and does not discharge the current
+post-inventory support coordinate.  Adding the tuple discharges only the local
+syntactic inventory/verifier/digest coordinate; it does not add an external
+upload receipt, archive-equivalent public locator, fresh formal-source rebuild,
+record-gate implementation proof, upload-time venue-compliance record, or dynamic
+artifact-semantic validation.
+\end{theorem}
+
+\begin{proof}
+The forward direction is the ordered fixed-point construction of
+Theorem~\ref{thm:canonical-local-rerun-tuple} applied to the edited byte state
+$B$.  Item~1 supplies the inventory byte coordinate.  Item~2 is exactly the
+syntactic coverage coordinate of Corollary~\ref{cor:current-byte-closure}: the
+extractor is deterministic on \path{main.tex} and \path{theorem_inventory.json},
+so its zero-exit log names the current labelled theorem-like environments and the
+current inventory-label set, not an earlier pair of byte strings.  Item~3 supplies
+the retained finite verifier command-result coordinates singled out in
+Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}.  Item~4 is the
+digest-closure condition of Theorem~\ref{thm:digest-closure-refresh-criterion};
+because the digest is produced last, the rows in the final manifest bind the same
+inventory and log bytes used by the support claim.  Hence the local support row is
+current for $B$.
+
+Conversely, suppose the terminal claim is asserted without one member of the
+ordered tuple.  If the inventory pair is absent, the claim lacks the byte surface
+whose coverage is being asserted.  If the extractor log predates $B$, then the
+deterministic extractor has been applied to a different finite input; changing
+the inventory or manuscript can change the extracted label set or the inventory
+label set, so the old log is not a coordinate of $B$.  If a retained verifier log
+predates the accepted inventory pair, it is a command-result record for an older
+support surface.  If the final digest manifest predates a retained log or the
+accepted inventory bytes, it cannot contain the SHA--256 rows binding those byte
+strings.  In each case two finite package states can agree on all earlier rows
+while differing on the missing current-byte field, so
+Theorem~\ref{thm:finite-coordinate-determination-boundary} rejects the current
+fixed-point reading and leaves only the historical or conditional reading.
+
+The last sentence follows from the separation theorems already used in
+Theorem~\ref{thm:terminal-support-coordinate-discharge}: the rerun tuple contains
+only local files, command results, and digest rows.  The independent external,
+fresh-source, implementation-soundness, upload-time venue, and dynamic artifact
+coordinates require their own finite fields, and
+Corollary~\ref{cor:no-finite-record-gluing-upgrade} forbids manufacturing those
+fields by conjoining bounded local rows.
+\end{proof}
+
 \begin{theorem}[Current-package five-coordinate closure criterion]
 \label{thm:current-package-five-coordinate-closure-criterion}
 For the current CICM presentation-only package, the five support readings most
@@ -16549,14 +16616,15 @@ positive upgrade accepted by the same finite-record calculus.
 \begin{proof}
 Clause~1 is the positive and negative direction of
 Corollary~\ref{cor:post-inventory-rerun-closure},
-Corollary~\ref{cor:current-byte-closure}, and
-Theorem~\ref{thm:terminal-local-support-acceptance-normal-form}: inventory bytes
-alter the package state, so current-byte inventory support descends only through
-the ordered post-inventory extractor, verifier, and digest tuple.  The listed
-certificate, primary-claim, and source-interface verifier records are precisely
-the retained finite verifiers named by that tuple; without them the state may
-agree on the printed inventory files while disagreeing on the post-inventory log
-and digest coordinates.
+Corollary~\ref{cor:current-byte-closure},
+Theorem~\ref{thm:terminal-local-support-acceptance-normal-form}, and the explicit
+stale-byte criterion of Theorem~\ref{thm:current-inventory-rerun-exactness}:
+inventory bytes alter the package state, so current-byte inventory support
+descends only through the ordered post-inventory extractor, verifier, and digest
+tuple computed from those edited bytes.  The listed certificate, primary-claim,
+and source-interface verifier records are precisely the retained finite verifiers
+named by that tuple; without them the state may agree on the printed inventory
+files while disagreeing on the post-inventory log and digest coordinates.
 
 Clause~2 is Theorem~\ref{thm:current-package-rgs-instantiation-boundary}.  The
 publication-safety spine constructs finite certificates from the external
