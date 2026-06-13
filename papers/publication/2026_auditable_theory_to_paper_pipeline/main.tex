@@ -1649,12 +1649,72 @@ the interface: stronger readings require extra coordinates and assigned pass
 records, so they cannot be reconstructed from preservation of the seven fields
 alone.\end{proof}
 
+\begin{definition}[Finite-record projection preorder]
+\label{def:finite-record-projection-preorder}
+Fix a finite coordinate universe \(U\) consisting of the fields named by the
+portable schema, the dispatch table \(\Gamma\), and any explicitly declared
+extension coordinates.  A \emph{finite record} is a pair \(r=(D_r,v_r)\), where
+\(D_r\subseteq U\) is finite and \(v_r\) assigns one value to every coordinate in
+\(D_r\).  For two finite records write \(r\leq_U r'\) when
+\(D_r\subseteq D_{r'}\) and \(v_{r'}|_{D_r}=v_r\).  A claim reading \(c^{+}\) is a
+\emph{proper stronger reading} of \(c\), written
+\(c\prec_{\Gamma,U}c^{+}\), when the accepted certificate record of \(c\) is
+\(\leq_U\) the certificate record required by \(c^{+}\), and the latter has at
+least one extra coordinate assigned by \(\Gamma\) or by a declared extension gate.
+The older notation \(c\preceq_{\Gamma}c^{+}\) is used below only for this
+schema-relative preorder.
+\end{definition}
+
+\begin{lemma}[Finite-record normal-form and missing-coordinate uniqueness]
+\label{lem:finite-record-preorder-normal-form}
+In the finite-record projection preorder of
+Definition~\ref{def:finite-record-projection-preorder}:
+\begin{enumerate}
+\item \(\leq_U\) is a partial order on finite records.
+\item If \(r\leq_U r'\), then the projection of \(r'\) to \(D_r\) is uniquely
+\(r\).
+\item If a stronger reading requires a coordinate set \(D^{+}\) and the available
+record has coordinate set \(D\subset D^{+}\) with strict inclusion, then the first missing coordinate
+in any fixed printed order of \(U\), together with the stronger-reading tag, is an
+inclusion-minimal finite bad subrecord for the attempted upgrade.
+\item If finite records \(r_1,\ldots,r_n\) have domains contained in
+\(D\subseteq U\), then their finite conjunction has domain contained in \(D\).  In
+particular, no conjunction of bounded support rows determines a coordinate in
+\(U\setminus D\).
+\end{enumerate}
+All four assertions are schema-relative: changing \(U\), the printed coordinate
+order, or the dispatch table is a new finite-record problem, not a consequence of
+this lemma.
+\end{lemma}
+
+\begin{proof}
+Reflexivity of \(\leq_U\) is immediate.  Transitivity follows because if
+\(D_r\subseteq D_{r'}\subseteq D_{r''}\) and the two restriction equalities hold,
+then \(v_{r''}|_{D_r}=v_r\).  Antisymmetry follows because \(D_r=D_{r'}\) and the
+two value functions agree on that common domain.  Thus \(\leq_U\) is a partial
+order.  The second assertion is the definition of restriction: a function on
+\(D_{r'}\) has only one restriction to the subset \(D_r\).
+
+For the third assertion, choose the least coordinate
+\(u\in D^{+}\setminus D\) in the fixed printed order.  The available record has no
+value for \(u\), so any verifier whose schema requires \(u\) for the stronger
+reading must reject before accepting that reading.  The pair consisting of the
+stronger-reading tag and \(u\) is finite.  Removing the tag leaves no request for
+the stronger reading; removing \(u\) leaves the available record unchanged on all
+coordinates it contains and therefore cannot exhibit the first absent required
+coordinate.  Hence the bad subrecord is inclusion-minimal for this schema and
+order.  Finally, the conjunction of finitely many records is obtained by taking
+the union of their finite domains and requiring agreement on overlaps.  If every
+domain is contained in \(D\), so is the union.  Therefore a coordinate outside
+\(D\) cannot be recovered from such a conjunction.\end{proof}
+
 \begin{proposition}[Portable method normal form and local-support pullback]
 \label{prop:portable-method-normal-form-local-pullback}
 Let \(P\) be a package satisfying
 Definition~\ref{def:operational-acceptance-interface}.  Every load-bearing
 accepted claim \(c\) in \(P\) admits a unique weakest portable method normal form,
-up to renaming of finite records,
+up to isomorphism of finite records in the schema-relative preorder of
+Definition~\ref{def:finite-record-projection-preorder},
 \[
 \mathsf{NF}(c)=(S_c,F_c,W_c,A_c,G_c,M_c,\ell_c,B_c),
 \]
@@ -1680,9 +1740,14 @@ record \(\Pi(c)=(S_c,F_c,W_c,A_c,G_c,M_c)\) from the certificate
 \(\mathcal C(c)=(K,\ell,E,H,R,D,B)\).  Adjoin to \(\Pi(c)\) the two certificate
 fields that determine the strength of the reading, namely the evidence level
 \(\ell\) and the boundary field \(B\).  This gives the displayed tuple
-\(\mathsf{NF}(c)\).  It is weakest because deleting any one of its components
-identifies two certificate states that the operational interface is allowed to
-distinguish: deleting \(S_c\) forgets the source object; deleting \(F_c\) forgets
+\(\mathsf{NF}(c)\).  Regard it as a finite record whose coordinate domain is the
+eight displayed fields inside the universe of
+Definition~\ref{def:finite-record-projection-preorder}.  By
+Lemma~\ref{lem:finite-record-preorder-normal-form}, projection to this domain is
+unique; hence the normal form is unique up to coordinate-preserving renaming.
+It is weakest because deleting any one of its components identifies two
+certificate states that the operational interface is allowed to distinguish:
+deleting \(S_c\) forgets the source object; deleting \(F_c\) forgets
 which formal interface is being checked; deleting \(W_c\) forgets the submitted
 finite evidence; deleting \(A_c\) forgets whether an agent action is merely
 advisory or has been submitted for gate treatment; deleting \(G_c\) forgets the
@@ -2095,9 +2160,13 @@ every newly raised evidence level has the command tuple required by A6, and ever
 new evidence item is on the submitted support surface or in an explicit
 historical boundary.
 
-The preorder is intentionally syntactic and finite-record based.  It is not a
-semantic entailment relation between mathematical propositions, and it does not
-turn an inventory entry, digest row, or path reference into proof evidence for a
+This is the certificate-tuple specialization of the finite-record projection
+preorder of Definition~\ref{def:finite-record-projection-preorder}, with
+coordinate universe
+\(U=\{K,\ell,E,H,R,D,B\}\) enlarged by any declared extension gates.  The preorder
+is intentionally syntactic and finite-record based.  It is not a semantic
+entailment relation between mathematical propositions, and it does not turn an
+inventory entry, digest row, or path reference into proof evidence for a
 theorem-like environment.
 \end{definition}
 
@@ -2156,9 +2225,11 @@ outputs rejection in \path{review_bundle/negative_certificate_record_example_run
 with the bad subrecord \path{neg1: command-run fields incomplete}.  If $V$
 accepts, then $\mathcal C(c)$ is locally checkable at exactly its declared
 evidence level.  This is certificate-record verification only: it checks finite
-record shape, dispatch, evidence pointers, and command-boundary discipline, not
-end-to-end external semantic validation of the referenced artifacts or source
-theory.  If $V$ rejects, then a reviewer can extract a finite bad subrecord
+record shape, dispatch, evidence pointers, and command-boundary discipline under
+the audited input/output contract of this paper.  It is not proof-assistant
+verification of Python semantics, operating-system behaviour, filesystem
+freshness outside the submitted surface, or end-to-end external semantic
+validation of the referenced artifacts or source theory.  If $V$ rejects, then a reviewer can extract a finite bad subrecord
 consisting of the first failed schema check and the fields on which that check
 depends.
 \end{proposition}
@@ -2179,7 +2250,8 @@ each naming the failed finite condition.  Since $K$ is required to be a subset o
 the seven-kind domain, the set \(\bigcup_{k\in K}\Gamma(k)\) is finite.  The
 checks over $E$, $R$, and the command-run fields are therefore finite lookups in
 named manuscript or bundle surfaces, not semantic judgments about generated
-prose.
+prose, Python runtime semantics, host-environment correctness, or the truth of
+the referenced mathematical or artifact claims.
 
 If all six checks pass, the tuple has exactly the fields required in the
 definition of a publication certificate: a finite kind set $K$, declared evidence
@@ -2236,8 +2308,8 @@ The positive output is only the finite acceptance bit
 $\mathsf{accept}(c,\mathcal C)$ for these six predicates.  The negative output is
 only the finite bad subrecord belonging to the first failed predicate.  In
 particular, the contract has no output channel for proof-assistant validity,
-daemon correctness, artifact semantics, fresh case-study reruns, venue upload, or
-venue acceptance.  Therefore any theorem in this paper that invokes the verifier
+Python or host-environment semantics, daemon correctness, artifact semantics,
+fresh case-study reruns, venue upload, or venue acceptance.  Therefore any theorem in this paper that invokes the verifier
 can certify exactly finite record acceptance for the submitted schema and cannot
 certify end-to-end workflow correctness unless an enlarged input schema and an
 additional proved verifier contract are supplied.
@@ -2265,9 +2337,10 @@ that implementation witness, so its output alphabet is precisely
 
 The final boundary follows by inspection of the input and output alphabets.  No
 field in $\mathcal C(c)$ contains an object-language proof derivation, a theorem
-prover kernel trace, a daemon transition semantics, an artifact evaluator
-semantics, a fresh rerun transcript for the historical case studies, or a venue
-receipt.  No output of the contract returns such an object either.  A conclusion
+prover kernel trace, Python operational semantics, host-environment semantics, a
+daemon transition semantics, an artifact evaluator semantics, a fresh rerun
+transcript for the historical case studies, or a venue receipt.  No output of the
+contract returns such an object either.  A conclusion
 depending on one of those objects is therefore not a function of the declared
 input record.  It can become checkable only after the schema is enlarged to add
 that object as an input coordinate and after a new verifier contract for the
@@ -2364,7 +2437,9 @@ relation $\mathsf{Acc}_{\Gamma}$.  It returns acceptance if and only if all six
 schema predicates A1--A6 hold, and otherwise returns exactly the first finite
 bad subrecord.  This contract is exhausted by the finite record projection: any
 script or implementation that claims to witness this theorem witnesses only the
-same input--predicate--output relation on the submitted fields.  In particular,
+same audited input--predicate--output relation on the submitted fields, not the
+correctness of Python semantics, process scheduling, filesystem state outside
+\(S\), or the host environment.  In particular,
 every positive output used by Theorem~\ref{thm:publication-safety-interface} is
 produced by this finite loop over submitted coordinates; the loop has no branch
 that can accept a stronger semantic, implementation, venue, archive, or
@@ -5297,8 +5372,9 @@ preorder has not distinguished \(c^{+}\) from \(c\).\end{proof}
 \label{prop:publication-safety-maximality}
 Under the hypotheses of Theorem~\ref{thm:publication-safety-interface}, the
 constructed certificate is maximal with respect to the finite submitted record
-surface, in the dependency order isolated in
-Proposition~\ref{prop:publication-safety-dependency-normal-form}.  More
+surface, in the schema-relative finite-record preorder of
+Definition~\ref{def:finite-record-projection-preorder} and in the dependency
+order isolated in Proposition~\ref{prop:publication-safety-dependency-normal-form}.  More
 precisely, let $c$ be an accepted load-bearing claim and let
 $\mathsf{Cert}_{\Gamma}(c)=(K,\ell,E,H,R,D,B)$ be the certificate constructed in
 that theorem.  If a stronger reading $c^{+}$ asserts any external end-to-end
@@ -5308,7 +5384,9 @@ acceptance, then either $c^{+}$ is not a distinct finite-record consequence of
 $\mathsf{Cert}_{\Gamma}(c)$, or its certificate must strictly enlarge one of
 $K,\ell,E,H,R,D,B$ by adding the corresponding claim kind, evidence surface,
 gate pass record, promotion or venue field, discovery-interface row, or
-command-run tuple.  In the latter case, if the enlargement is absent, a finite
+command-run tuple.  In the latter case, if the enlargement is absent,
+Lemma~\ref{lem:finite-record-preorder-normal-form} identifies the first missing
+coordinate and a finite
 bad subrecord is returned by Theorem~\ref{thm:record-acceptance-exactness} or by
 one of the obstruction types of
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton}.
@@ -5324,14 +5402,16 @@ that agree on those coordinates obtain the same verifier decision.  A purported
 stronger reading which changes none of the coordinates is therefore invisible to
 the certificate and cannot become a new accepted finite-record conclusion.
 
-If the stronger reading is made load-bearing, it changes a coordinate.  External
+If the stronger reading is made load-bearing, it changes a coordinate in the
+finite-record preorder.  External
 compiler, proof-assistant, formal-source-currency, or artifact-semantics claims
 add claim kinds and assigned gate records; fresh executions raise the evidence
 boundary to command-run data; route or venue assertions add promotion or venue
 surfaces; discovery-strengthening adds source-interface rows.  These are exactly
 the finite fields tested by the clauses of
 Definition~\ref{def:certificate-schema-acceptance-table}.  When the required
-field is missing, Theorem~\ref{thm:record-acceptance-exactness} supplies the
+field is missing, Lemma~\ref{lem:finite-record-preorder-normal-form} supplies the
+first missing coordinate, Theorem~\ref{thm:record-acceptance-exactness} supplies the
 failed acceptance clause, and
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} classifies the failure
 as a missing evidence surface, gate record, promotion field, discovery-interface
@@ -5886,7 +5966,12 @@ the digest surface was written.  Equivalently, in the sense of
 Theorem~\ref{thm:record-interface-rigidity}, the theorem-environment extractor,
 certificate verifier, source-interface verifier, primary-claim verifier, and
 final digest surface must be a common finite support-surface fixed point after
-any regenerated inventory, log, or digest coordinate.  With that support
+any regenerated inventory, log, or digest coordinate; after any edit to
+\path{main.tex}, \path{submission_abstract.tex}, \path{theorem_inventory.json},
+\path{theorem_inventory.md}, \path{source_interface_record.json}, or
+\path{review_bundle/}, current-byte claims require rerunning the affected
+extractor/verifier commands and regenerating the final digest surface before the
+claim is read as current for the edited bytes.  With that support
 surface present, the six ledger entries $a_1,\ldots,a_6$ as printed in
 Tables~\ref{tab:current-acceptance-ledger} and~\ref{tab:current-certificate-ledger}
 and as checked by \path{review_bundle/certificate_verification_run.log} are
@@ -5902,7 +5987,8 @@ verifier at the declared path-verified evidence level, relative only to the
 finite fields read by that schema and to the manually declared six-row ledger
 classified in Theorem~\ref{thm:manual-ledger-dependence-boundary}.  Thus the
 exactness is a schema-relative, path-verified, ledger-relative, and row-frozen
-audit relation between six printed rows and six finite certificates.  It proves agreement with the declared verifier
+audit relation between six printed rows and six finite certificates at the fixed
+post-rerun support-surface state just described.  It proves agreement with the declared verifier
 schema, not semantic truth of package claims, and not correctness of the
 surrounding workflow, gate implementations, source tree, artifact evaluators,
 daemons, upload mechanisms, archives, or venues.  The assigned-gate rows are
@@ -6124,8 +6210,11 @@ acceptance decision factors through the six displayed rows
 daemon, artifact, or venue states that induce the same six tuples
 \(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\), the same submitted support
 surface, and the same verifier log path induce the same accepted current-package
-certificate set.  Conversely, a reading that depends on a seventh row, a modified
-row, a fresh command execution, semantic validity of BEDC/Lean/Rule110 artifacts,
+certificate set.  If any support file named in that projection is edited, the
+projection is no longer a current-byte projection until the affected extractor,
+verifier, and digest coordinates have been rerun and rebound to the edited bytes.
+Conversely, a reading that depends on a seventh row, a modified row, a fresh
+command execution, semantic validity of BEDC/Lean/Rule110 artifacts,
 implementation soundness of the verifier or gates, upload status, or venue
 decision is not invariant under this six-row projection and is accepted only
 after it is added as a finite extension coordinate and rechecked.  Thus the
@@ -6146,8 +6235,10 @@ decision and the same finite certificate set.  This proves the stated invariance
 
 For the converse boundary, each listed stronger reading changes a coordinate not
 contained in the six-row projection: a seventh accepted row changes the row set;
-a modified row changes one of \(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i\); a fresh command
-execution changes the boundary field to command-run evidence; semantic validity
+a modified row or edited support file changes one of
+\(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i\) or the submitted support surface until the
+extractor/verifier/digest fixed point is rerun; a fresh command execution changes
+the boundary field to command-run evidence; semantic validity
 or implementation soundness adds claim kinds, evidence surfaces, and gate rows;
 upload or venue status adds external route/submission fields.  By
 Theorem~\ref{thm:finite-extension-budget-normal-form}, such a genuine
@@ -6167,15 +6258,20 @@ Theorem~\ref{thm:current-package-certificate-exactness}.  Let
 \(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\), the submitted support
 surface, the fixed dispatch table, and the recorded verifier log.  Then
 \(F_{6}\) is the largest current-package invariant certified by this submission
-before adding a new finite coordinate.  More precisely:
+before adding a new finite coordinate, and it is current-byte valid only for the
+post-rerun support-surface state named in
+Theorem~\ref{thm:current-package-certificate-exactness}.  More precisely:
 \begin{enumerate}
 \item any two ambient repository, daemon, implementation, artifact, upload, or
-venue states with the same \(F_{6}\) have the same accepted current-package
-certificate set;
+venue states with the same post-rerun \(F_{6}\) have the same accepted
+current-package certificate set;
 \item no current-package reading that asserts gate-implementation soundness,
 fresh full-source or artifact rerun success, artifact-semantic validity,
 semantic theorem-inventory completeness, upload status, or venue acceptance is a
 consequence of \(F_{6}\);
+\item a current-byte reading after support-file edits is accepted only after the
+affected extractor, verifier, and final-digest coordinates are rerun and included
+in the submitted surface;
 \item each such stronger reading is accepted by the publication-safety interface
 if and only if the submitted package adds the corresponding positive extension
 coordinate from Theorem~\ref{thm:finite-extension-budget-normal-form} and the
@@ -6271,10 +6367,13 @@ assigned gates.
 Consequently no row of $P^{+}_{6}$ entails, by itself, semantic correctness of
 BEDC source theory, Lean, Rule110/GroundCompiler, the certificate-verifier
 implementation, upload surfaces, or venue decisions.  In the current submission
-those stronger readings are certifiable only as extension claims; when the
-extension coordinates are absent they are rejected by a finite bad subrecord, and
-the accepted content remains exactly the six row-frozen finite-record certificates
-of Theorem~\ref{thm:current-package-certificate-exactness}.
+those stronger readings are certifiable only as extension claims; after any edit
+to a support file, a current-byte reading is likewise certifiable only after the
+affected extractor, verifier, and digest rows are rerun and recorded.  When the
+extension or post-edit rerun coordinates are absent they are rejected by a finite
+bad subrecord, and the accepted content remains exactly the six row-frozen
+finite-record certificates of
+Theorem~\ref{thm:current-package-certificate-exactness}.
 \end{theorem}
 
 \begin{proof}
@@ -6282,7 +6381,10 @@ Fix $i$.  By Theorem~\ref{thm:current-package-certificate-exactness}, the row
 $a_i$ is accepted exactly through the finite tuple
 \(\mathcal C(a_i)=(K_i,\ell_i,E_i,H_i,R_i,D_i,B_i)\) at the declared
 path-verified level, and the theorem identifies no additional accepted
-current-package row outside the six-row image.  If $a_i^{+}$ is accepted as a
+current-package row outside the six-row image.  A support-file edit changes the
+source bytes or submitted surface read by that tuple, so a current-byte claim
+after the edit is a stronger claim until the affected extractor/verifier/digest
+rows are rerun and rebound.  If $a_i^{+}$ is accepted as a
 properly stronger reading, then it is not record-equivalent to $a_i$ in the
 preorder of Definition~\ref{def:stronger-reading-preorder}.  Hence
 Theorem~\ref{thm:finite-extension-budget-normal-form} collects the finite
@@ -7754,12 +7856,14 @@ coordinate set $\mathcal M_{a_6}$ of
 Theorem~\ref{thm:finite-witness-manifest-record-interface}, any strengthening to
 dynamic artifact semantics, unbounded evaluator correctness, or semantic
 Rule110/GroundCompiler validity factors through a separate artifact-validation
-gate.  Such a gate must add, at minimum, the evaluator contract, the artifact
+gate as a proper extension in the finite-record projection preorder of
+Definition~\ref{def:finite-record-projection-preorder}.  Such a gate must add, at minimum, the evaluator contract, the artifact
 bytes or manifest row being validated, the semantic predicate checked, and either
 an artifact pass record or a command-run tuple with source state, environment,
 command, exit code, and log path.  Without those added coordinates, the
-manifest/evaluator-record certificate is maximal among finite-record readings and
-the semantic strengthening is rejected as a finite bad subrecord.
+manifest/evaluator-record certificate is maximal among finite-record readings,
+historical/path-bounded rather than dynamically validated, and the semantic
+strengthening is rejected as a finite bad subrecord.
 \end{proposition}
 
 \begin{proof}
@@ -7777,8 +7881,9 @@ The displayed artifact-validation coordinates are exactly the finite data needed
 to make the semantic assertion a record claim: they identify the evaluator
 contract, the artifact input, the predicate being checked, and the pass or
 command-result evidence for that check.  If any coordinate is missing,
-Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns it as the bad
-subrecord.  If all are present with the assigned pass records, the strengthening
+Lemma~\ref{lem:finite-record-preorder-normal-form} identifies the first absent
+coordinate, and Theorem~\ref{thm:finite-certificate-obstruction-skeleton} returns
+it as the bad subrecord.  If all are present with the assigned pass records, the strengthening
 is an accepted finite extension by
 Theorem~\ref{thm:finite-extension-budget-normal-form}.  Thus the only route from
 the present finite-witness certificate to dynamic artifact semantics is a
@@ -7812,9 +7917,10 @@ semantic predicate, and the pass record or command-result record that witnesses
 that exact validation.
 Consequently, the assertions in primary rows \path{pc5}, \path{pc6}, and
 \path{pc11} that finite substrates are bounded by manifest rows, evaluator
-outcomes, and substrate contracts are valid only as finite-record interface
-assertions.  For the Rule110/GroundCompiler case they do not assert unbounded
-semantic validity unless the exact evaluator contract and its assigned pass or
+outcomes, and substrate contracts are valid only as historical/path-bounded
+finite-record interface assertions.  For the Rule110/GroundCompiler case they do
+not assert unbounded semantic validity, fresh dynamic validation, or current
+evaluator success unless the exact evaluator contract and its assigned pass or
 command-run record are present on the submitted support surface.
 \end{corollary}
 
@@ -7830,8 +7936,8 @@ unless the semantic evaluator contract itself appears as one of the submitted
 finite coordinates.
 
 Equivalently, compare the accepted artifact reading $c$ with the stronger reading
-$c^{\mathrm{sem}}$ in the preorder of
-Definition~\ref{def:stronger-reading-preorder}.  The stronger reading enlarges at
+$c^{\mathrm{sem}}$ in the finite-record projection preorder of
+Definition~\ref{def:finite-record-projection-preorder}.  The stronger reading enlarges at
 least one of the typed fields: it adds an artifact-semantic evidence surface, a
 new pass record for the evaluator contract, or a command-run evidence level for a
 fresh evaluator execution.  By Theorem~\ref{thm:record-acceptance-exactness}, an
@@ -13082,8 +13188,10 @@ For the technical supplement to the CICM presentation-only package, the finite
 schema is the five-channel
 normal form obtained from \(\mathsf{Acc}_{\Gamma}\),
 Theorem~\ref{thm:terminal-five-coordinate-closure}, and
-Theorem~\ref{thm:five-issue-coordinate-normal-form}.  The preorder is again the
-stronger-reading preorder \(\preceq_{\Gamma}\); the only positive upgrade steps
+Theorem~\ref{thm:five-issue-coordinate-normal-form}.  The preorder is the
+schema-relative finite-record preorder of
+Definitions~\ref{def:finite-record-projection-preorder} and
+\ref{def:stronger-reading-preorder}; the only positive upgrade steps
 available are the displayed finite coordinates for record-gate safety,
 implementation/script soundness, formal-source rebuilding, dynamic artifact
 validation, external support, theorem truth, and venue state.  Minimal bad
@@ -13181,7 +13289,9 @@ or formal-source coordinate; without it, the stronger tag and absent coordinate
 are the minimal bad subrecord.
 
 The inclusion-minimality and the absence of any smaller gluing route are exactly
-the finite-coordinate determination argument of
+the finite-record normal-form argument of
+Lemma~\ref{lem:finite-record-preorder-normal-form}, together with the
+finite-coordinate determination argument of
 Theorem~\ref{thm:finite-coordinate-determination-boundary}, instantiated through
 Theorem~\ref{thm:terminal-five-coordinate-closure} and
 Theorem~\ref{thm:five-issue-coordinate-normal-form}.  In each of the five cases,
@@ -13416,14 +13526,16 @@ soundness, source-theory truth, clean-machine reproducibility, external archive
 availability, upload-time venue compliance, venue acceptance, or end-to-end
 workflow correctness.
 
-Moreover this boundary is sharp.  Any sentence whose conclusion is not a
+Moreover this boundary is sharp in the schema-relative finite-record preorder of
+Definition~\ref{def:finite-record-projection-preorder}.  Any sentence whose conclusion is not a
 function of $\mathsf{Read}_{\Gamma,S}(L)$ has an inclusion-minimal bad subrecord:
 the stronger tag together with the first missing coordinate among, respectively,
 an implementation-projection tuple, a semantic artifact-validation tuple, a
 formal-source command or axiom-audit tuple, a source-theorem truth/import tuple, a
 clean-machine replay tuple, an external upload or archive-equivalence tuple, a
 venue-status tuple, or an end-to-end workflow-correctness budget.  Adding exactly
-that coordinate and its assigned passing gate rows is the unique finite-record
+that coordinate and its assigned passing gate rows is, by
+Lemma~\ref{lem:finite-record-preorder-normal-form}, the unique finite-record
 way to upgrade the corresponding conclusion inside this calculus; without it, no
 finite conjunction of the cited spine and portable-support projections yields the
 stronger reading.
@@ -13464,13 +13576,16 @@ projection.
 
 For sharpness, take any proposed stronger sentence not determined by
 $\mathsf{Read}_{\Gamma,S}(L)$.  By
+Lemma~\ref{lem:finite-record-preorder-normal-form}, the stronger sentence has a
+least missing coordinate in the finite-record preorder whenever its required
+domain properly contains the domain of \(\mathsf{Read}_{\Gamma,S}(L)\).  By
 Theorem~\ref{thm:finite-coordinate-determination-boundary}, two ambient workflow
 states can agree on all coordinates read by the finite verifier while disagreeing
 on the first unsubmitted coordinate queried by the stronger sentence.  Therefore
 the old verifier cannot accept that stronger conclusion without also accepting it
 in an ambient state where the queried fact fails.  The obstruction skeleton of
 Theorem~\ref{thm:finite-certificate-obstruction-skeleton} identifies the stronger
-tag and the first missing evidence, pass, boundary, command-run, promotion, or
+tag and this first missing evidence, pass, boundary, command-run, promotion, or
 extension field as an inclusion-minimal bad subrecord.  If the missing coordinate
 and its assigned passing gate rows are added, the extension criterion of
 Theorem~\ref{thm:current-package-no-free-upgrade-closure} gives the corresponding
@@ -13678,7 +13793,9 @@ Theorem~\ref{thm:presentation-compressed-interface}.
 
 \begin{proof}
 The construction is finite and unique because every component is read from a
-fixed finite coordinate already present in the submitted interface.  The six-role
+fixed finite coordinate already present in the submitted interface, and
+Lemma~\ref{lem:finite-record-preorder-normal-form} gives unique projection to any
+displayed coordinate domain.  The six-role
 component \(\Pi(c)\) is constructed from the source, formal-interface,
 finite-evidence, advisory-agent, deterministic-gate, and promotion fields by
 Theorem~\ref{thm:portable-six-role-interface}; role-preserving renamings of local
@@ -13725,7 +13842,8 @@ same bytes.  In their absence, the support reading remains local/path-verified
 and cannot be read as public archive, DOI, venue upload, or venue acceptance.
 
 It remains to prove sharpness.  A proper strengthening
-\(c\preceq_{\Gamma}c^{+}\) changes at least one finite coordinate: an axis,
+\(c\preceq_{\Gamma}c^{+}\) changes at least one finite coordinate in the
+preorder of Definition~\ref{def:finite-record-projection-preorder}: an axis,
 evidence level, implementation field, formal-source field, artifact or rerun
 field, support/upload field, venue field, or boundary field.  If the matching
 positive extension coordinate is present and its assigned gate rows pass, the
@@ -13737,8 +13855,10 @@ the coordinate is absent, Theorem~\ref{thm:finite-coordinate-determination-bound
 gives two submitted states agreeing on every coordinate read by
 \(\mathsf{M}_{\Gamma,S}(P,L)\) and differing on the first stronger fact.  No
 finite verifier reading only the old projection can determine that stronger
-fact.  Theorem~\ref{thm:finite-certificate-obstruction-skeleton} then identifies
-the stronger tag together with the first absent evidence, pass, boundary,
+fact.  Lemma~\ref{lem:finite-record-preorder-normal-form} identifies the first
+absent coordinate in the printed finite order, and
+Theorem~\ref{thm:finite-certificate-obstruction-skeleton} then identifies
+the stronger tag together with that first absent evidence, pass, boundary,
 command-run, promotion, source, support, or implementation field as an
 inclusion-minimal bad subrecord, and
 Corollary~\ref{cor:no-finite-record-gluing-upgrade} rules out manufacturing the
