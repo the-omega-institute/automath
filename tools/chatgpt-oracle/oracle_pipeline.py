@@ -4784,8 +4784,15 @@ def parse_json_from_output(text: str) -> dict:
         idx = text.find(marker)
         if idx < 0:
             continue
-        fragment = "{" + text[idx:].strip()
-        for candidate in (fragment, fragment + "}"):
+        tail = text[idx:].strip()
+        for stop in ("\n```", "\n<!-- oracle metadata:"):
+            stop_idx = tail.find(stop)
+            if stop_idx >= 0:
+                tail = tail[:stop_idx].strip()
+        fragment = "{" + tail
+        candidates = [fragment]
+        candidates.extend(fragment + ("}" * missing) for missing in range(1, 4))
+        for candidate in candidates:
             try:
                 d, _ = decoder.raw_decode(candidate)
                 if isinstance(d, dict) and any(k in d for k in accepted_keys):
