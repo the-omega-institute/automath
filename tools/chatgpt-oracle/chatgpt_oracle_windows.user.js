@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (Windows)
 // @namespace    omega-automath
-// @version      5.24
+// @version      5.25
 // @description  Multi-agent + multi-turn oracle bridge with bedc-style tab labelling. Open chatgpt URLs with ?oracle=1|2|3|4|5 for parallel review tabs; the panel shows a prominent "Tab #N" badge. Unlabeled tabs offer one-click shortcuts to label themselves. Paused panel collapses to a small badge. Follow-up tasks navigate to conversation_url for /continue threading. User tabs (no ?oracle=) stay dormant.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -20,7 +20,7 @@
   if (window.self !== window.top) return;
 
   const SERVER = "http://127.0.0.1:8765";
-  const SCRIPT_VERSION = "5.24";
+  const SCRIPT_VERSION = "5.25";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -1248,6 +1248,8 @@
       .replace(/^ChatGPT\s*(?:said|说)[：:]?\s*/i, "")
       .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
       .replace(/^(?:Show moreShow less\s*)+/i, "")
+      .replace(/^(?:ore)?Show less\s*/i, "")
+      .replace(/^I(?=Thought for \d)/i, "")
       .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
       .trim();
   }
@@ -1278,6 +1280,36 @@
     out = extractJsonEnvelopeIfObvious(out);
     out = stripChromeSuffix(out);
     return out.trim();
+  }
+
+  function isReasoningChromeOnly(t) {
+    const raw = (t || "").trim();
+    if (!raw) return true;
+    const normalized = normalizeAssistantText(raw);
+    const compact = raw.replace(/\s+/g, " ").trim();
+    const compactNorm = normalized.replace(/\s+/g, " ").trim();
+    const chromeOnly = [
+      /^I?Thought for \d+[sm](?:\s*\d+[sm])?\s*:?\s*Pro(?:\s+Extended)?$/i,
+      /^(?:ore)?Show less\s*Thought for \d+[sm](?:\s*\d+[sm])?\s*:?\s*Pro(?:\s+Extended)?$/i,
+      /^Pro(?:\s+Extended)?$/i,
+      /^Show less$/i,
+      /^Show more$/i,
+    ];
+    if (chromeOnly.some(re => re.test(compact))) return true;
+    if (chromeOnly.some(re => re.test(compactNorm))) return true;
+    if (compactNorm.length < 80 && /^(?:I)?(?:ore)?(?:Show less)?\s*(?:Thought for \d|Pro)/i.test(compact)) {
+      return true;
+    }
+    return false;
+  }
+
+  function isMeaningfulExtractedResponse(response, minResponseLength) {
+    if (!response) return false;
+    if (isReasoningChromeOnly(response)) return false;
+    if (looksLikePromptEcho(response)) return false;
+    if (SSR_GARBAGE_RE.test(response) && isSSROnly(response)) return false;
+    if (response.length < Math.min(Number(minResponseLength) || DEFAULT_MIN_RESPONSE_LENGTH, 300)) return false;
+    return true;
   }
 
   function commonPrefixLength(a, b) {
@@ -1803,6 +1835,14 @@
       if (responseText.length >= 5) {
         // HARD GATE: ignore UI chrome, thinking preambles, footers, and
         // transition fragments before stability counting.
+        if (isReasoningChromeOnly(responseText)) {
+          if (stableCount === 0) {
+            log(`Reasoning chrome only (${responseText.length} chars) - waiting for real response`);
+          }
+          stableCount = 0;
+          lastText = "";
+          continue;
+        }
         if (responseText.length < minResponseLength) {
           if (stableCount === 0) {
             log(`Too short (${responseText.length} < ${minResponseLength} chars) - waiting for complete response`);
@@ -2097,7 +2137,7 @@
       log(`ERROR: ${err.message}`);
       if (getTaskPhase() === "waiting_response") {
         const recovered = extractResponseText();
-        if (recovered && recovered.length >= 5 && !looksLikePromptEcho(recovered)) {
+        if (isMeaningfulExtractedResponse(recovered, minResponseLength)) {
           log(`Recovered response after error: ${recovered.length} chars`);
           try {
             await serverPost("/result", {

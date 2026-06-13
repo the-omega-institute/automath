@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+import unittest
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "chatgpt_oracle_windows.user.js"
@@ -54,3 +55,31 @@ def test_windows_userscript_nudges_virtualized_completed_responses() -> None:
     assert 'key: "End"' in source
     assert "mainLen > Math.max(minResponseLength * 4, 4000)" in source
     assert "responseText = extractResponseText();" in source
+
+
+def test_windows_userscript_never_posts_reasoning_chrome_as_recovered_response() -> None:
+    source = _source()
+
+    assert "function isReasoningChromeOnly(t)" in source
+    assert "function isMeaningfulExtractedResponse(response, minResponseLength)" in source
+    assert "I(?=Thought for" in source
+    assert "(?:ore)?Show less" in source
+    assert "isMeaningfulExtractedResponse(recovered, minResponseLength)" in source
+    assert "recovered && recovered.length >= 5 && !looksLikePromptEcho(recovered)" not in source
+
+
+class WindowsUserscriptStaticTests(unittest.TestCase):
+    def test_version_literals_match(self) -> None:
+        test_windows_userscript_version_literals_match()
+
+    def test_exposes_five_oracle_tab_labels(self) -> None:
+        test_windows_userscript_exposes_five_oracle_tab_labels()
+
+    def test_panel_exposes_poll_state(self) -> None:
+        test_windows_userscript_panel_exposes_poll_state()
+
+    def test_nudges_virtualized_completed_responses(self) -> None:
+        test_windows_userscript_nudges_virtualized_completed_responses()
+
+    def test_never_posts_reasoning_chrome_as_recovered_response(self) -> None:
+        test_windows_userscript_never_posts_reasoning_chrome_as_recovered_response()

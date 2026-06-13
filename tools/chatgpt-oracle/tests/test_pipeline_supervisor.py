@@ -29,6 +29,14 @@ import pipeline_supervisor  # noqa: E402
 
 
 class SupervisorHelpersTests(unittest.TestCase):
+    def test_oracle_server_rejects_reasoning_chrome_fragments(self):
+        self.assertTrue(oracle_server._is_extraction_failure_response(
+            "IThought for 5m 37s:Pro Extended"
+        ))
+        self.assertTrue(oracle_server._is_extraction_failure_response(
+            "oreShow lessThought for 7m 6s:Pro Extended"
+        ))
+
     def test_python_resolves_to_executable(self):
         py = pipeline_supervisor._python()
         self.assertTrue(py)
