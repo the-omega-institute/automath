@@ -90,6 +90,52 @@ transition otherwise; the transition weight is \(w_q(a)\).  After
 exactly \(S_q^{\mathrm{int}}(m)\).
 \end{lemma}
 
+\begin{lemma}[Scalar exit classification for signed Fibonacci carries]
+\label{lem:scalar-signed-fibonacci-exit-classification}
+For the scalar transition
+\[
+  \tau_a(p,r)=(r,p+a-r),\qquad a\in\{-1,0,1\},
+\]
+every path starting in \((0,0)\) which ever leaves the square
+\(Q=\{-1,0,1\}^2\) is trapped forever outside \(Q\) and can never reach a state
+\((\sigma,0)\), \(\sigma\in\{-1,0,1\}\).  More precisely, the only one-step exits
+from \(Q\) are
+\[
+  (0,-2),(1,-2),(1,-3),(-1,2),(-1,3),(0,2),
+\]
+and they fall into the following two forward-invariant classes:
+\[
+\begin{array}{c|c|c}
+\text{exit class} & \text{first region} & \text{alternate region}\\ \hline
+\text{positive} & U_+=\{p\le0,\ r\ge2\} & V_+=\{p\ge2,\ r\le-1\}\\
+\text{negative} & U_-=\{p\ge0,\ r\le-2\} & V_-=\{p\le-2,\ r\ge1\}
+\end{array}
+\]
+with \(\tau_a(U_+)\subseteq V_+\), \(\tau_a(V_+)\subseteq U_+\),
+\(\tau_a(U_-)\subseteq V_-\), and \(\tau_a(V_-)\subseteq U_-\) for every
+\(a\in\{-1,0,1\}\).
+\end{lemma}
+
+\begin{proof}
+If \((p,r)\in Q\), then the first coordinate of \(\tau_a(p,r)\) is again in
+\(\{-1,0,1\}\).  Hence a one-step exit occurs exactly when
+\(p+a-r\notin\{-1,0,1\}\).  Checking the twenty-seven triples
+\((p,r,a)\in\{-1,0,1\}^3\) gives precisely the six displayed exit states.  The
+three exits with second coordinate positive lie in \(U_+\), and the three exits
+with second coordinate negative lie in \(U_-\).
+
+For \((p,r)\in U_+\), the image has first coordinate \(r\ge2\) and second
+coordinate \(p+a-r\le 0+1-2=-1\), so it lies in \(V_+\).  For
+\((p,r)\in V_+\), the image has first coordinate \(r\le-1\) and second coordinate
+\(p+a-r\ge2-1-(-1)=2\), so it lies in \(U_+\).  Thus the positive class is
+forward invariant and disjoint from \(Q\).  Similarly, if \((p,r)\in U_-\), then
+\(r\le-2\) and \(p+a-r\ge0-1-(-2)=1\), so \(\tau_a(p,r)\in V_-\); if
+\((p,r)\in V_-\), then \(r\ge1\) and \(p+a-r\le-2+1-1=-2\), so
+\(\tau_a(p,r)\in U_-\).  The negative class is also forward invariant and
+disjoint from \(Q\).  Since every accepting state \((\sigma,0)\) lies in \(Q\), a
+path that has exited cannot later accept.
+\end{proof}
+
 \begin{proof}
 A \(q\)-tuple \((\omega^{(1)},\ldots,\omega^{(q)})\in\Omega_m^q\) contributes
 exactly when all \(q\) words fold to the same normal form.  By
@@ -118,48 +164,11 @@ For the carry automaton it suffices to prove the scalar case, since the
 \]
 Thus a scalar word with target \(\sigma F_{n+1}\) is accepted exactly when its
 final carry is \((\sigma,0)\), provided no accepting path has been lost by
-restricting to \(\{-1,0,1\}^2\).  We verify this explicitly.  From a state
-\((p,r)\in\{-1,0,1\}^2\), the first coordinate of the next state is \(r\), and
-the second is \(p+a-r\), with \(a\in\{-1,0,1\}\).  Hence the only one-step exits
-from the square are
-\[
-  (0,-2),(1,-2),(1,-3),(-1,2),(-1,3),(0,2).
-\]
-Separate the positive and negative exits.  The positive exits
-\((-1,2),(-1,3),(0,2)\) lie in
-\[
-  U_+=\{(p,r):p\le0,\ r\ge2\}.
-\]
-For every \((p,r)\in U_+\) and every \(a\in\{-1,0,1\}\),
-\[
-  \tau_a(p,r)=(r,p+a-r)
-\]
-has first coordinate at least \(2\) and second coordinate at most \(-1\), so it
-lies in
-\[
-  V_+=\{(p,r):p\ge2,\ r\le -1\}.
-\]
-Conversely, if \((p,r)\in V_+\), then \(\tau_a(p,r)\) has first coordinate at
-most \(-1\) and second coordinate at least \(2\), and therefore lies in
-\(U_+\).  Thus \(U_+\cup V_+\) is forward invariant and is disjoint from
-\(\{-1,0,1\}^2\).
-
-The negative exits are symmetric.  They lie in
-\[
-  U_-=
-  \{(p,r):p\ge0,\ r\le -2\}.
-\]
-For \((p,r)\in U_-\), every image \(\tau_a(p,r)\) has first coordinate at most
-\(-2\) and second coordinate at least \(1\), hence lies in
-\[
-  V_-=
-  \{(p,r):p\le -2,\ r\ge 1\}.
-\]
-For \((p,r)\in V_-\), every image lies back in \(U_-\).  Hence
-\(U_-\cup V_-\) is also forward invariant and disjoint from the square.  Once a
-path leaves \(\{-1,0,1\}^2\), it is trapped in one of these two invariant
-regions and can never return to an accepting state \((\sigma,0)\).  This proves
-that the displayed finite state set counts all and only the target solutions.
+restricting to \(\{-1,0,1\}^2\).  This is exactly
+\Cref{lem:scalar-signed-fibonacci-exit-classification}: every scalar path that
+leaves the square is trapped outside the square and cannot later reach an
+accepting state.  Thus the displayed finite state set counts all and only the
+target solutions.
 Multiplying the scalar construction over the \(q-1\) difference coordinates
 proves the lemma.
 \end{proof}
@@ -386,6 +395,35 @@ For the second equality, apply \eqref{eq:R-recursion} with
 \(R_{m+1}(r+F_{m+2})\).
 \end{proof}
 
+\begin{lemma}[Positive-index conversion for the ordinary maximum theorem]
+\label{lem:fibonacci-maximum-normalization-conversion}
+Let \((\mathcal F_k)_{k\ge0}\) denote the Fibonacci sequence used in
+Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a, normalized by
+\(\mathcal F_0=\mathcal F_1=1\) and
+\(\mathcal F_{k+1}=\mathcal F_k+\mathcal F_{k-1}\).  Then
+\(\mathcal F_k=F_k\) for every \(k\ge1\), where this paper uses
+\(F_1=1,F_2=2,F_{k+2}=F_{k+1}+F_k\).  Consequently their interval maximum
+\[
+  \operatorname{Max}(k)=\max\{R(N):\mathcal F_k\,\le N<\mathcal F_{k+1}\}
+\]
+is exactly the quantity
+\[
+  C_k=\max\{R(N):F_k\le N<F_{k+1}\}
+\]
+used below, with no index shift for \(k\ge1\).
+\end{lemma}
+
+\begin{proof}
+The two normalizations agree at indices \(1\) and \(2\):
+\(\mathcal F_1=1=F_1\) and
+\(\mathcal F_2=\mathcal F_1+\mathcal F_0=2=F_2\).  The same second-order
+recurrence then gives \(\mathcal F_k=F_k\) for all positive indices by induction.
+The representation function in the cited theorem uses distinct positive-index
+parts \(\mathcal F_1,\ldots,\mathcal F_k\), hence the admissible parts and the
+half-open intervals \([\mathcal F_k,\mathcal F_{k+1})\) coincide term-by-term
+with \([F_k,F_{k+1})\).  Thus \(\operatorname{Max}(k)=C_k\).
+\end{proof}
+
 \begin{theorem}[Half-interval Fibonacci representation maximum]
 \label{thm:half-interval-fibonacci-representation-max}
 For \(n\ge1\), set
@@ -406,8 +444,10 @@ with initial values \(H_1=1,H_2=2,H_3=2,H_4=3,H_5=4\).
 \begin{proof}
 The case \(H_1=1\) is immediate from \(R_2(2)=R_2(3)=1\).  For
 \(n\ge2\), we use Theorem~4.7 of
-Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a \cite{KocabovaMasakovaPelantova2005},
-with the same normalization \(F_0=F_1=1\) used in this paper.  In the notation
+Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a \cite{KocabovaMasakovaPelantova2005};
+\Cref{lem:fibonacci-maximum-normalization-conversion} identifies their
+\(F_0=F_1=1\) convention with the positive-index convention of this paper.  In
+the notation
 \[
   C_k=\max\{R(N):F_k\le N<F_{k+1}\},
 \]
