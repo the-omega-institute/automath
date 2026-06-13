@@ -517,6 +517,7 @@ presentation article has the forced exposed theorem surface
   \bigl\{
   \ref{thm:presentation-compressed-interface},
   \ref{thm:portable-six-role-interface},
+  \ref{thm:portable-projection-dominates-local-support},
   \ref{thm:publication-safety-interface},
   \ref{thm:compact-article-finite-record-spine-classification},
   \ref{thm:finite-script-projection-contract-support},
@@ -524,7 +525,9 @@ presentation article has the forced exposed theorem surface
   \bigr\},
 \]
 where the last entry is read as the four case-row skeletons named in
-Section~\ref{sec:gate-summary}.  Every other theorem, proposition, lemma, or
+Section~\ref{sec:gate-summary}.  The third entry is the portability theorem that
+demotes local stage, path, byte-state, and digest names to supplemental witnesses
+inside the six-role record.  Every other theorem, proposition, lemma, or
 corollary in this technical supplement is admissible in the public article only
 as a cited proof-support coordinate for one of these six roles and not as a
 separate reviewer-facing theorem surface.
@@ -1664,6 +1667,76 @@ sentence follows from the boundary field \(B\) and the no-free-upgrade part of
 the interface: stronger readings require extra coordinates and assigned pass
 records, so they cannot be reconstructed from preservation of the seven fields
 alone.\end{proof}
+
+\begin{theorem}[Portable projection dominates local support coordinates]
+\label{thm:portable-projection-dominates-local-support}
+Let \(P\) be a presentation-only package satisfying
+Definition~\ref{def:operational-acceptance-interface}, and let \(C\) be any
+finite set of load-bearing accepted claims of \(P\).  Form the multiset
+\(\Pi(C)=\{\Pi(c):c\in C\}\) of six-role records from
+Theorem~\ref{thm:portable-six-role-interface}.  Then there is a finite
+venue-independent presentation record
+\[
+\mathsf{Pres}(C)=\bigl(\Pi(C),\operatorname{Accept}_{\mathcal S}|_C,
+\mathsf{Bad}|_C,\mathsf{Boundary}|_C\bigr)
+\]
+with the following universal property.  For every workflow \(P'\) over another
+venue or artifact layout, any role-preserving map from the six components of
+\(\Pi(C)\) to the corresponding six components of \(P'\) that preserves claim
+kinds, assigned gates, evidence levels, pass/fail decisions, promotion-boundary
+status, and declared missing-coordinate reports induces exactly the same
+finite-record public reading of every claim in \(C\).  Consequently local round
+names, stage identifiers, path spellings, byte-state labels, digest filenames,
+and review-bundle support-surface names are not primitives of the public method:
+they are admissible only as witnesses inside \(S_c,F_c,W_c,A_c,G_c\), or \(M_c\),
+or as explicit extension coordinates in \(\mathsf{Boundary}|_C\).  In particular,
+the compressed public theorem spine of
+Theorem~\ref{thm:presentation-compressed-interface} may be stated entirely in the
+six-role language, while the detailed package bytes remain supplemental audit
+evidence.
+\end{theorem}
+
+\begin{proof}
+For each \(c\in C\), Theorem~\ref{thm:portable-six-role-interface} constructs the
+finite six-role record \(\Pi(c)=(S_c,F_c,W_c,A_c,G_c,M_c)\).  Since \(C\) is
+finite, the multiset \(\Pi(C)\) is finite.  The predicate
+\(\operatorname{Accept}_{\mathcal S}|_C\) is the restriction to these claims of
+the finite conjunction displayed in
+Proposition~\ref{prop:portable-workflow-schema-factorisation}; it records only
+typed claim membership, surface membership, gate assignment, pass rows, bounded
+evidence level, and the promotion conjunct when a promotion boundary is crossed.
+The bad-subrecord and boundary components are finite because the operational
+certificate of each claim has finite fields \((K,\ell,E,H,R,D,B)\), and because
+the no-free-upgrade reports used in
+Theorem~\ref{thm:presentation-compressed-interface} name missing coordinates from
+the finite extension list declared for the package.
+
+Now let \(P'\) and a role-preserving map be given.  For each \(c\in C\), the map
+preserves exactly the data inspected by \(\operatorname{Accept}_{\mathcal S}\):
+the kind field, the evidence surface, the evidence level, the assigned gates, the
+pass/fail rows, and the promotion status.
+Proposition~\ref{prop:portable-workflow-schema-factorisation} therefore
+reassembles in \(P'\) a certificate satisfying the same finite acceptance
+predicate, and Theorem~\ref{thm:portable-six-role-interface} gives the same
+finite-record accepted reading for \(c\).  The preservation of the declared
+missing-coordinate reports gives the same rejected stronger readings, because a
+stronger reading differs from the accepted one only by one of those explicitly
+listed extension coordinates.
+
+It remains to justify the non-primitivity of local support names.  Suppose two
+packages agree on \(\mathsf{Pres}(C)\) but spell a stage, route directory, digest
+manifest, support path, or byte-state marker differently.  Such a spelling is not
+read by the acceptance predicate unless it appears as one of the six role
+components or as an explicit extension coordinate in the boundary record.  If it
+does appear there, it is already accounted for as a witness coordinate; if it
+does not, changing the spelling leaves every conjunct of
+\(\operatorname{Accept}_{\mathcal S}|_C\), every bad-subrecord report, and every
+boundary report unchanged.  Thus those local names cannot be public-method
+primitives.  Applying this conclusion to the five-coordinate projection of
+Theorem~\ref{thm:presentation-compressed-interface} proves that the public spine
+can be expressed in the six-role interface, with package-byte details serving
+only as supplemental audit witnesses.
+\end{proof}
 
 \begin{definition}[Finite-record projection preorder]
 \label{def:finite-record-projection-preorder}
