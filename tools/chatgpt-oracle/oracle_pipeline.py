@@ -4776,19 +4776,22 @@ def parse_json_from_output(text: str) -> dict:
 
     # ChatGPT UI extraction can occasionally drop the opening brace while
     # preserving a valid top-level JSON member list, e.g. '"verdict": ...}'.
-    # Recover only when the fragment starts at an accepted schema key.
+    # Recover only when the fragment starts at an accepted schema key.  Some
+    # ChatGPT exports also omit the final top-level closing brace, so try both
+    # the raw wrapped fragment and a single appended brace.
     for key in accepted_keys:
         marker = f'"{key}"'
         idx = text.find(marker)
         if idx < 0:
             continue
         fragment = "{" + text[idx:].strip()
-        try:
-            d, _ = decoder.raw_decode(fragment)
-            if isinstance(d, dict) and any(k in d for k in accepted_keys):
-                return d
-        except (json.JSONDecodeError, TypeError):
-            continue
+        for candidate in (fragment, fragment + "}"):
+            try:
+                d, _ = decoder.raw_decode(candidate)
+                if isinstance(d, dict) and any(k in d for k in accepted_keys):
+                    return d
+            except (json.JSONDecodeError, TypeError):
+                continue
     return {}
 
 
