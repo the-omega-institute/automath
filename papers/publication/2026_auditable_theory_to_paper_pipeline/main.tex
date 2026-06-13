@@ -15005,6 +15005,61 @@ case of Corollary~\ref{cor:post-inventory-rerun-closure}.  Repeating the
 operation restores the same local coordinate and discharges the issue again.
 \end{proof}
 
+\begin{proposition}[Realized post-inventory verifier--digest coordinate]
+\label{prop:realized-post-inventory-verifier-digest-coordinate}
+In the current package state, the post-inventory coordinate of
+Theorem~\ref{thm:accepted-inventory-coordinate-realization} is realized by the
+root inventory pair \path{theorem_inventory.json}, \path{theorem_inventory.md},
+the four logs
+\path{review_bundle/theorem_environment_extraction_run.log},
+\path{review_bundle/certificate_verification_run.log},
+\path{review_bundle/source_interface_verification_run.log}, and
+\path{review_bundle/primary_claim_inventory_verification_run.log}, and the final
+manifest \path{review_bundle/FINAL_DIGESTS_SHA256.md}, provided these are read
+with the following finite fields: the extractor log has
+\path{exit_code: 0}, \path{errors: 0}, \path{missing_label_count: 0}, and
+\path{omitted_from_inventory_count: 0}; each of the three verifier logs has
+\path{exit_code: 0}; and the final digest manifest contains rows for the two
+inventory files and all four post-inventory logs.  This realization closes the
+local theorem-inventory issue and still leaves the external upload/archive
+coordinate absent unless a separate uploaded supplement receipt, DOI, or
+archive-equivalent public byte locator is supplied.
+\end{proposition}
+
+\begin{proof}
+The accepted inventory coordinate has six components.  The first component is
+the root inventory pair, which is present by hypothesis as the two named root
+files.  The extractor component is a syntactic predicate on the current
+\path{main.tex} and \path{theorem_inventory.json}; the four displayed extractor
+fields say exactly that the command terminated successfully, found no extractor
+errors, found no labelled theorem-like environments missing from the current
+inventory, and omitted no current labels from the inventory comparison.  Thus it
+supplies the \(E\)-component of
+Theorem~\ref{thm:accepted-inventory-coordinate-realization}.  The three retained
+verifier logs, each with exit code \path{0}, supply the certificate,
+source-interface, and primary-claim components \(C,S,P\) of that theorem, and
+their role is finite-record verification only by the verifier boundary stated in
+Theorem~\ref{thm:verifier-input-output-contract}.
+
+It remains to check the last coordinate.  A digest manifest that contains rows
+for the two inventory files and all four just-named post-inventory logs binds
+the byte surface after those records exist; by
+Theorem~\ref{thm:digest-closure-refresh-criterion} and
+Proposition~\ref{prop:fresh-post-inventory-byte-closure-rerun-discharge}, this
+is precisely the \(D\)-component required after inventory acceptance and verifier
+rerun.  Combining the six components gives the tuple \((I,E,C,S,P,D)\), so
+Theorem~\ref{thm:accepted-inventory-coordinate-realization} identifies it as the
+realized local theorem-inventory support coordinate.
+
+The final sentence is not an additional computation but the non-upgrade clause
+of the same theorem together with
+Theorem~\ref{thm:upload-or-archive-instantiation-boundary}: all files just named
+are local inventory, verifier-log, or digest records.  None is an uploaded
+supplement receipt, DOI, or public byte-equality locator.  Therefore the local
+coordinate is closed, while the external upload/archive coordinate remains
+uninstantiated until one of those separate byte locators is added.
+\end{proof}
+
 \begin{corollary}[Presentation-route support-coordinate normal form]
 \label{cor:presentation-route-support-coordinate-normal-form}
 For the presentation-only route of this source package, the five issue
