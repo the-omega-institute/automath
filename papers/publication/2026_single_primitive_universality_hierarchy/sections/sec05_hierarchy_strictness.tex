@@ -415,7 +415,7 @@ e^u & E(u) & \RR\\
 This is the complete finite witness table used by the conditional printed-string
 translation and, after replacing the two conditional rows by any verified pair
 \((\mathsf P,\mathsf S)\), by the unconditional replacement-triple translation in
-\Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}.
+\Cref{lem:richardson-translation,thm:richardson-translation-budget}.
 The full nonnegative-square-root row \(\sqrt u\) on \([0,\infty)\) is not part of
 the Richardson input in this paper.
 \end{lemma}
@@ -743,23 +743,66 @@ constructor preserves both the relevant domain and the value on that domain.
 Taking \(E=0\) gives the displayed equivalence, which is an effective many-one
 reduction because the translation is computable.
 \end{proof}
-\begin{lemma}[Quantitative Richardson translation]
+\begin{theorem}[Finite-budget Richardson translation]
+\label{thm:richardson-translation-budget}
 \label{lem:richardson-translation-bookkeeping}
-For each fixed finite replacement triple \((\mathsf P,\mathsf S,\mathsf A)\),
-there is a constant \(C\), depending only on the internally proved core macros
-and on that triple, such that every Richardson expression \(E\) with \(|E|\)
-source nodes translates to a pure EML term
-\(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) with at most \(C|E|\) macro nodes
-before expansion and effectively computable finite expanded EML syntax.
-\end{lemma}
+Fix finite pure EML replacement terms \((\mathsf P,\mathsf S,\mathsf A)\) and a
+finite EML witness table for the arithmetic, exponential, rational-constant,
+\(\log2\), \(\pi\), sine, and punctured absolute-value rows used in
+\Cref{lem:richardson-translation}.  Let \(m_R\) be the number of pure EML nodes
+in the replacement macro for a Richardson constructor \(R\), counted after
+expanding all internal arithmetic macros and counting each argument placeholder
+once.  Let \(d_R\) be the number of argument-placeholder occurrences in that
+macro, and set \(B=\max_R m_R\) and \(d=\max_R d_R\).
+Then \(B\) and \(d\) are finite and effectively computable from the printed
+witness table.  If a Richardson expression \(E\) has \(n\) source-constructor
+nodes and no source subexpression is shared, then the fully expanded pure EML
+syntax of \(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) has at most
+\[
+  B(1+d+d^2+\cdots+d^n)\le B(n+1)\max(1,d)^n
+\]
+pure EML nodes.  Consequently the translation is a uniform finite-substitution
+procedure: every output term is obtained by at most this many explicit node
+insertions, the bound depends only on the fixed witness table and \(n\), and the
+punctured-domain equality reduction of
+\Cref{thm:punctured-domain-richardson-reduction} is a genuine finite many-one
+reduction rather than an appeal to an unexpanded compiler.
+\end{theorem}
 
 \begin{proof}
-Each source primitive is replaced by one of finitely many fixed macros, and
-composition only substitutes already translated subterms into the next fixed
-macro.  Let \(C\) be larger than the maximum number of macro occurrences in any
-replacement clause.  Induction on the source tree gives the stated linear bound
-before expansion.  Since every macro is finite, recursive expansion gives a
-finite pure EML tree effectively.
+There are only finitely many source constructors and, by hypothesis, each row in
+the witness table is a printed finite pure EML macro after expanding the internal
+arithmetic abbreviations.  Hence the two maxima defining \(B\) and \(d\) are
+finite; they are computable by parsing the finite strings and counting pure EML
+nodes and placeholder occurrences.
+
+We prove the node bound by induction on the source tree.  Let \(N(F)\) be the
+number of pure EML nodes in the fully expanded translation of a source
+subexpression \(F\), and let \(h(F)\) be the number of source-constructor nodes in
+\(F\).  If \(F\) is obtained by applying a constructor \(R\) to immediate
+subexpressions \(F_1,\ldots,F_r\), then full expansion substitutes a separate
+copy of \(\tau(F_i)\) into each placeholder occurrence assigned to the \(i\)-th
+argument.  If \(q_{R,i}\) denotes the number of such occurrences, then
+\(\sum_i q_{R,i}\le d\), and therefore
+\[
+  N(F)\le B+\sum_i q_{R,i}N(F_i)
+       \le B+d\max_i N(F_i)
+\]
+with the evident convention for nullary constructors.  Since each proper
+subexpression has height at most \(h(F)-1\), iteration along any root-to-leaf path
+gives
+\[
+  N(F)\le B(1+d+d^2+\cdots+d^{h(F)}) .
+\]
+Because the height of a tree with \(n\) constructor nodes is at most \(n\), this
+implies the displayed estimate for \(E\).  The recursive construction also gives
+an explicit finite substitution algorithm: visit the source tree from the
+leaves upward, replace the constructor at each node by its fixed macro, and copy
+the already constructed child strings into the finitely many placeholders.  The
+algorithm performs no semantic search and uses no external catalogue beyond the
+fixed finite witness table.  Combining this finite construction with the
+domain-preservation theorem \Cref{thm:punctured-domain-richardson-reduction}
+therefore yields the stated finite many-one reduction.
 \end{proof}
 
 \begin{theorem}[Witness-row rigidity and defect classification]
@@ -888,7 +931,7 @@ triple interface and its printed-string boundary.
 \end{theorem}
 
 \begin{proof}
-By \Cref{lem:richardson-translation,lem:richardson-translation-bookkeeping}, the
+By \Cref{lem:richardson-translation,thm:richardson-translation-budget}, the
 translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) is effective.  By
 \Cref{thm:punctured-domain-richardson-reduction}, for every Richardson expression
 \(E\),
