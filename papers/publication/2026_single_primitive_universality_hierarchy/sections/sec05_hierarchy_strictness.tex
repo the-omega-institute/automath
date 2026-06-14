@@ -293,7 +293,8 @@ No conclusion about \(\pi\) or sine is drawn from finite syntax alone.
 \label{prop:printed-pi-sine-instantiation-criterion}
 \label{prop:no-unconditional-printed-pi-sine-instance}
 For the exact printed strings \(U_{47}\) and \(U_{111}\), the Richardson
-obstruction in \Cref{thm:separation,thm:proc-ams-relative-richardson-theorem}
+obstruction in
+\Cref{thm:richardson-witness-row-rigidity,thm:separation,thm:proc-ams-relative-richardson-theorem}
 has the concrete printed-string specialization if and only if the two semantic
 identities
 \[
@@ -317,10 +318,11 @@ Richardson interface
 \Cref{thm:replacement-triple-richardson-interface,thm:relative-finite-richardson-fragment},
 and hence gives the printed-string specialization of the obstruction.
 
-Conversely, the concrete printed-string specialization of that interface uses
-\(U_{47}\) in the \(\pi\)-clause and \(U_{111}\) in the sine clause of the
-structural translation.  Those clauses are exactly the first two displayed
-semantic hypotheses in
+Conversely, \Cref{thm:richardson-witness-row-rigidity} proves that the concrete
+printed-string specialization of that structural translation is value-preserving
+only if the \(\pi\)-row and sine row hold for the substituted witnesses.  Thus
+the use of \(U_{47}\) in the \(\pi\)-clause and \(U_{111}\) in the sine clause
+requires exactly the first two displayed semantic hypotheses in
 \Cref{lem:richardson-translation,thm:punctured-domain-richardson-reduction};
 without them the induction proving value preservation has no base case for
 \(\pi\) and no unary-function step for sine.  The ancillary catalogue records
@@ -724,6 +726,58 @@ before expansion.  Since every macro is finite, recursive expansion gives a
 finite pure EML tree effectively.
 \end{proof}
 
+\begin{theorem}[Witness-row rigidity of the Richardson reduction]
+\label{thm:richardson-witness-row-rigidity}
+\label{thm:richardson-row-necessity-and-sufficiency}
+Let \((\mathsf P,\mathsf S,\mathsf A)\) be finite pure EML terms.  The structural
+translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\), with \(\mathsf P\),
+\(\mathsf S\), and \(\mathsf A\) substituted respectively for Richardson's
+\(\pi\), \(\sin\), and punctured absolute-value primitive, gives a
+value-preserving many-one reduction from Richardson's punctured
+identity-to-zero problem to a source-indexed pure EML equality problem if and
+only if the three witness rows
+\[
+  \mathsf P=\pi,
+  \qquad \mathsf S(x)=\sin x\quad(x\in\RR),
+  \qquad \mathsf A(x)=|x|\quad(x\ne0)
+\]
+hold in the principal-branch EML semantics.  Consequently the exact printed
+pair \((U_{47},U_{111})\) is not merely missing a parser certificate: the two
+real-domain identities for those exact strings are logically necessary and
+sufficient for the printed-pair specialization of the Richardson obstruction,
+once the internally proved punctured row \(\mathsf A=\Abs\) is used.
+\end{theorem}
+
+\begin{proof}
+If the three displayed rows hold, \Cref{thm:punctured-domain-richardson-reduction}
+gives value preservation on every punctured Richardson domain and hence the
+many-one reduction to the transported EML equality problem.
+
+Conversely suppose the indicated structural translation is value-preserving for
+Richardson expressions on their punctured domains.  Apply it first to the
+constant expression \(\pi\).  Its domain is all of \(\RR\), and the translated
+term is \(\mathsf P\); value preservation gives \(\mathsf P=\pi\).  Apply it next
+to the expression \(\sin(x)\).  Its domain is again all of \(\RR\), and the
+translated term is \(\mathsf S(x)\); value preservation gives
+\(\mathsf S(x)=\sin x\) for every real \(x\).  Finally fix an arbitrary nonzero
+real number \(a\) and apply the translation to the Richardson expression
+\(\mu(a)\), where \(a\) is represented by its rational constant when
+\(a\in\mathbb Q\), and otherwise argue pointwise with the expression \(\mu(x)\) at
+the input value \(x=a\).  The punctured domain excludes only the zero of the
+argument, so \(a\) is an allowed input, the translated value is
+\(\mathsf A(a)\), and Richardson's primitive has value \(|a|\).  Thus
+\(\mathsf A(a)=|a|\) for every \(a\ne0\).  These three test expressions are
+primitive clauses of the same structural recursion used in every larger
+Richardson expression, so no weaker row data can supply the stated
+value-preserving reduction.
+
+Taking \(\mathsf A=\Abs\), the third row is supplied by
+\Cref{thm:eml-punctured-richardson-core}.  Therefore the printed-pair
+specialization with \((U_{47},U_{111})\) exists exactly when the first two tests
+above hold for those printed terms; finite syntax alone does not enter the
+argument except to make the translated EML terms finite.
+\end{proof}
+
 \begin{theorem}[Verified-triple Richardson obstruction interface]
 \label{thm:proc-ams-relative-richardson-theorem}
 \label{thm:relative-richardson-main-spine-closure}
@@ -791,10 +845,11 @@ equality-reflecting semantic compiler into any finite decidable protocol object
 would decide the problem by compiling the two translated terms and checking
 target equality.
 
-The specialization statement is formal bookkeeping.  The preceding argument used
-only the three displayed identities for the chosen triple
-\((\mathsf P,\mathsf S,\mathsf A)\), so any triple for which those identities have
-been proved is an unconditional instance of the interface.  The term
+The specialization statement is the rigidity assertion of
+\Cref{thm:richardson-witness-row-rigidity} applied to the printed pair.  The
+preceding argument used only the three displayed identities for the chosen
+triple \((\mathsf P,\mathsf S,\mathsf A)\), so any triple for which those
+identities have been proved is an unconditional instance of the interface.  The term
 \(\Abs=G(M(-,-))\) satisfies the third identity by
 \Cref{thm:eml-punctured-richardson-core}.  For the printed names
 \(U_{47}\) and \(U_{111}\), however,
