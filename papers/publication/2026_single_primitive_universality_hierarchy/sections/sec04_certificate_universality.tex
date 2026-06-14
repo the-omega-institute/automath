@@ -681,20 +681,116 @@ Vandermonde system
 finite multiset \(D\), so they do not relate different resolutions.
 \end{proof}
 
-\begin{remark}[Subordinate fixed-fibre consequences]
+\begin{corollary}[Fixed-fibre Hankel positivity]
 \label{thm:hankel-psd}
+Let \(\mathrm{NF}_m\colon\Omega_m\to N_m\) be a finite surjection, and let
+\(D_m=\{|\mathrm{NF}_m^{-1}(x)|:x\in N_m\}\) be its fibre-size
+multiset.  For every fixed \(m\), if
+\[
+  S_q^{(m)}=\sum_{d\in D_m}d^q \qquad(q\ge0),
+\]
+then each finite Hankel matrix
+\([S_{i+j}^{(m)}]_{0\le i,j\le r}\) is positive semidefinite, and
+\[
+  (S_q^{(m)})^2\le S_{q-1}^{(m)}S_{q+1}^{(m)}\qquad(q\ge1).
+\]
+In particular, for the intrinsic Zeckendorf fold over \(X_m\), the same assertions
+hold for the collision moments \(S_q^{\mathrm{int}}(m)\).
+\end{corollary}
+
+\begin{proof}
+Apply \Cref{prop:classical-finite-atomic-skeleton} to the finite positive-integer
+multiset \(D_m\).  In the intrinsic Zeckendorf case, \(D_m\) is the multiset of
+cardinalities of the fibres of \(\Fold_m\), and
+\(S_q^{\mathrm{int}}(m)=\sum_{d\in D_m}d^q\) by definition.  The argument is
+entirely internal to the chosen resolution \(m\).
+\end{proof}
+
+\begin{corollary}[Finite Prony reconstruction of fibre-size data]
 \label{thm:prony}
+With the notation of \Cref{thm:hankel-psd}, suppose that \(D_m\) has \(s_m\)
+distinct fibre sizes.  Then the finite moment segment
+\[
+  S_0^{(m)},S_1^{(m)},\ldots,S_{2s_m-1}^{(m)}
+\]
+determines the fibre-size multiset \(D_m\) uniquely.  Consequently the finite
+segment of length at most \(2|N_m|-1\) always reconstructs \(D_m\).  For the
+Zeckendorf fold this gives the explicit reconstruction bound
+\(2|X_m|-1=2F_{m+2}-1\).
+\end{corollary}
+
+\begin{proof}
+The first assertion is exactly the Prony part of
+\Cref{prop:classical-finite-atomic-skeleton}, applied to \(D_m\): the first
+\(2s_m\) moments determine the distinct support values and their multiplicities.
+Since \(s_m\le |D_m|=|N_m|\), the initial segment through index \(2|N_m|-1\)
+contains the required segment.  In the Zeckendorf fold, \(N_m=X_m\), and the
+standard count of Zeckendorf words of length at most \(m\) gives
+\(|X_m|=F_{m+2}\).
+\end{proof}
+
+\begin{proposition}[Hankel--Prony data do not force transfer]
 \label{thm:hankel-prony-transfer-independence}
-\label{rem:hankel-psd-generic}
+The fixed-resolution certificates in \Cref{thm:hankel-psd,thm:prony} impose no
+finite-state transfer law in the resolution variable.  More precisely, for every
+computable sequence \((a_m)_{m\ge1}\) of positive integers there is a computable
+sequence of finite surjections with one normal form at each resolution whose first
+collision moment is \(S_1^{(m)}=a_m\).  Hence choosing \(a_m=m!\) gives effective
+finite-fibre Hankel--Prony certificates at every resolution but no fixed
+finite-state transfer formula for \((S_1^{(m)})_m\).
+\end{proposition}
+
+\begin{proof}
+For a prescribed computable sequence \((a_m)\), take
+\(N_m=\{*_m\}\), take \(\Omega_m=\{1,\ldots,a_m\}\), and let
+\(\mathrm{NF}_m\) be the unique map to \(N_m\).  The fibre-size multiset is
+\(D_m=\{a_m\}\), so the fixed-resolution conclusions of
+\Cref{thm:hankel-psd,thm:prony} hold for every \(m\), and
+\(S_1^{(m)}=a_m\).  If \((m!)_m\) had a fixed finite-state transfer formula, then
+\Cref{prop:finite-state-coefficient-budget} would make it exponentially bounded:
+\(m!\le C\rho^m\) for some constants \(C,\rho>0\).  This is impossible, since
+\(m!/\rho^m\to\infty\).  Thus the finite Hankel positivity and finite Prony
+reconstruction interfaces are resolutionwise certificates only; they do not
+produce transfer in \(m\).
+\end{proof}
+
+\begin{proposition}[Finite Hankel star kernel]
 \label{thm:star-kernel}
-For each fixed resolution, \Cref{prop:classical-finite-atomic-skeleton} gives the
-standard Hankel positivity, log-convexity, and finite Prony reconstruction facts
-for the finite fibre-size multiset.  Applied to the Zeckendorf fold, one may use
-the computable bound \(2|X_m|-1=2F_{m+2}-1\) for reconstruction.  The same finite
-atomic data also give the elementary Gram-kernel description
-\(K_m(i,j)=S_{i+j}(m)\) and its finite diagonal nonnegative compression.  These are
-recorded only as fixed-resolution support: they impose no recurrence in the
-resolution variable and are not the \(L2\) novelty claim of this article.
+For a finite fibre-size multiset \(D\), define
+\(M_q(D)=\sum_{d\in D}d^q\) and \(K_D(i,j)=M_{i+j}(D)\) for \(i,j\ge0\).  If the
+distinct values of \(D\) are \(a_1,\ldots,a_s\) with multiplicities
+\(n_1,\ldots,n_s\), then every finite principal compression of \(K_D\) is the
+Gram matrix of the vectors
+\[
+  i\longmapsto (\sqrt{n_1}a_1^i,\ldots,\sqrt{n_s}a_s^i).
+\]
+Equivalently,
+\[
+  K_D(i,j)=\sum_{\alpha=1}^s n_\alpha a_\alpha^i a_\alpha^j .
+\]
+Thus the Hankel kernel is a finite diagonal nonnegative compression of the
+Vandermonde star feature map attached to the fixed fibre-size atoms.
+\end{proposition}
+
+\begin{proof}
+The displayed identity follows immediately from
+\(M_{i+j}(D)=\sum_\alpha n_\alpha a_\alpha^{i+j}
+=\sum_\alpha n_\alpha a_\alpha^i a_\alpha^j\).  Therefore, for any finite index
+set \(I\subset\NN\) and coefficients \((c_i)_{i\in I}\),
+\[
+  \sum_{i,j\in I}c_i c_jK_D(i,j)
+  =\sum_{\alpha=1}^s n_\alpha\left(\sum_{i\in I}c_i a_\alpha^i\right)^2\ge0.
+\]
+This is exactly the Gram matrix of the stated feature vectors, with the positive
+diagonal weights \(n_\alpha\) on the finite atom set.
+\end{proof}
+
+\begin{remark}[Subordinate fixed-fibre consequences]
+\label{rem:hankel-psd-generic}
+The preceding Hankel, Prony, and star-kernel statements are fixed-resolution
+support for \(L2\).  They are not the \(L2\) novelty claim of this article and,
+by \Cref{thm:hankel-prony-transfer-independence}, they impose no recurrence in
+the resolution variable.
 \end{remark}
 
 \begin{definition}[Effective resolution data]\label{def:effective-resolution-data}
@@ -706,7 +802,7 @@ computable fibre-size lists.
 \begin{definition}[Certificate universality]\label{def:cert-univ}
 An \(L1\) protocol is \(L2\)-certificate-universal if it is equipped with
 effective finite-resolution data whose fibre-size multisets provide the fixed
-finite certificates of \Cref{prop:classical-finite-atomic-skeleton}.  Fixed
+finite certificates of \Cref{thm:hankel-psd,thm:prony}.  Fixed
 finite-state transfer, in the sense of \Cref{def:fixed-finite-state-transfer},
 is a stronger extra condition: for each fixed \(q\), the sequence
 \((S_q^{(m)})_m\) must have one finite matrix model independent of the resolution
@@ -1207,3 +1303,5 @@ They hold for every finite-fibre system by
 \Cref{prop:classical-finite-atomic-skeleton}; finite-state transfer fails for the
 factorial one-spike cover in \Cref{thm:L2-finite-fiber-no-transfer-content}.
 \end{proof}
+
+
