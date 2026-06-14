@@ -151,11 +151,61 @@ disjoint from \(Q\).  Since every accepting state \((\sigma,0)\) lies in \(Q\), 
 path that has exited cannot later accept.
 \end{proof}
 
+\begin{lemma}[Coordinatewise exit deletion for signed Fibonacci carries]
+\label{lem:coordinatewise-signed-fibonacci-exit-deletion}
+Fix \(q\ge1\) and a length \(n\ge1\).  For columns
+\(a_1,\ldots,a_n\in\{-1,0,1\}^{q-1}\), let the unrestricted vector carry states be
+defined by
+\[
+  (p_0,r_0)=(0,0),
+  \qquad (p_k,r_k)=(r_{k-1},p_{k-1}+a_k-r_{k-1})
+  \quad(1\le k\le n),
+\]
+coordinate by coordinate.  If some coordinate of some state \((p_k,r_k)\) leaves
+the scalar square \(Q=\{-1,0,1\}^2\), then the vector path can never end in an
+accepting state \((\sigma,0)\), \(\sigma\in\{-1,0,1\}^{q-1}\).  Consequently the
+bounded automaton obtained by deleting all transitions leaving
+\(\mathcal C_q=\{-1,0,1\}^{q-1}\times\{-1,0,1\}^{q-1}\) deletes no solution of the
+target equations
+\[
+  \sum_{k=1}^n a_{k,j}F_k=\sigma_jF_{n+1}
+  \qquad(1\le j\le q-1).
+\]
+\end{lemma}
+
+\begin{proof}
+For \(q=1\) there are no scalar coordinates and the assertion is vacuous.  Assume
+\(q\ge2\).  Fix a coordinate \(j\).  Its scalar states satisfy exactly the scalar
+recursion of \Cref{lem:scalar-signed-fibonacci-exit-classification}.  Hence, if
+this coordinate is the first coordinate to leave \(Q\), or if it leaves after
+some other coordinate has already left, the scalar classification applies from
+that exit time onward: the coordinate is trapped in one of the two invariant exit
+classes and never reaches any scalar accepting state \((\sigma_j,0)\).  A vector
+accepting state requires every coordinate to be scalar accepting, so any vector
+path with any coordinate exit is nonaccepting.
+
+It remains to connect nonacceptance with the displayed target equations.  The
+coordinatewise induction
+\[
+  \sum_{i=1}^k a_{i,j}F_i=p_{k,j}F_{k+1}+r_{k,j}F_k
+\]
+is the scalar carry identity applied to coordinate \(j\).  If the \(j\)-th target
+equation holds at length \(n\), then
+\(p_{n,j}F_{n+1}+r_{n,j}F_n=\sigma_jF_{n+1}\).  The elementary bounds
+\(|p_{n,j}|\le F_n-1\) and \(|r_{n,j}|\le F_{n+1}-1\), obtained from the same
+recursion by induction, force \(r_{n,j}=0\) because \(F_{n+1}\mid r_{n,j}\), and
+then force \(p_{n,j}=\sigma_j\).  Thus a simultaneous target solution must end in
+the vector accepting state \((\sigma,0)\).  Since every path that ever leaves
+\(\mathcal C_q\) is nonaccepting, deleting the leaving transitions cannot delete
+any target solution.
+\end{proof}
+
 \begin{proof}[Proof of \Cref{lem:bounded-signed-fibonacci-carry}]
 This is the delayed proof announced above, and it closes exactly the lemma
 statement displayed before \Cref{lem:scalar-signed-fibonacci-exit-classification}.
 The only extra input used between the statement and this proof is the scalar exit
-classification just proved in \Cref{lem:scalar-signed-fibonacci-exit-classification}.
+classification of \Cref{lem:scalar-signed-fibonacci-exit-classification}, packaged
+coordinate by coordinate in \Cref{lem:coordinatewise-signed-fibonacci-exit-deletion}.
 A \(q\)-tuple \((\omega^{(1)},\ldots,\omega^{(q)})\in\Omega_m^q\) contributes
 exactly when all \(q\) words fold to the same normal form.  By
 \eqref{eq:fold-residue} and the bijection \(\Val_m\colon X_m\to
@@ -199,19 +249,13 @@ proved by induction from \(p_k=r_{k-1}\) and
 equation.  Thus the unrestricted scalar recursion satisfies the target condition
 exactly when its final state is \((\sigma,0)\).
 
-It remains to justify the bounded state restriction.  Suppose an unrestricted
-scalar path leaves \(Q=\{-1,0,1\}^2\) for the first time.  The state immediately
-after the exit is one of the six states listed in
-\Cref{lem:scalar-signed-fibonacci-exit-classification}.  That lemma proves that,
-from then on, all later unrestricted states stay in one of the two invariant exit
-classes and never return to \(Q\).  In particular such a path can never finish at
-an accepting state \((\sigma,0)\in Q\).  By the preceding paragraph, this means
-that an exited path cannot satisfy any target equation.
-Deleting transitions whose image is outside \(Q\) therefore deletes only
-nonaccepting paths and no target solution.  Conversely every bounded accepting
-path satisfies the target equation by the displayed carry identity.
+It remains to justify the bounded state restriction.  This is exactly
+\Cref{lem:coordinatewise-signed-fibonacci-exit-deletion}: any path with a
+coordinate exit is nonaccepting, while any simultaneous target solution must end
+at the vector accepting state.  Hence deleting transitions whose image is outside
+\(\mathcal C_q\) deletes no target solution.  Conversely every bounded accepting
+path satisfies the target equations by the displayed carry identity.
 
-Apply this scalar equivalence independently in each of the \(q-1\) coordinates.
 The vector transition is the direct product of the scalar transitions, its
 accepting state records the unique vector
 \(\sigma\in\{-1,0,1\}^{q-1}\), and the column weight \(w_q(a_k)\) counts exactly
@@ -717,9 +761,19 @@ The ordinary interval maximum formula itself is not a new theorem of this
 article: it is the positive-index formula \((E)\) isolated and cited in
 \Cref{thm:source-audited-ordinary-maximum-import}, namely Theorem~4.7 of
 Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a
-\cite[Thm.~4.7]{KocabovaMasakovaPelantova2005}.  The new in-paper step here is
-the normalization, truncation check, and shifted half-interval conversion from
-that ordinary interval theorem to the quantities \(H_n\); no maximizing-integer
+\cite[Thm.~4.7]{KocabovaMasakovaPelantova2005}.  The imported interval convention
+is exactly
+\[
+  F_k\le N<F_{k+1}
+\]
+for ordinary distinct positive-index Fibonacci representations.  The theorem
+proved here converts that imported ordinary interval maximum to the shifted
+truncated half-interval
+\[
+  F_{n+1}\le N<2F_{n+1},
+  \qquad N=F_{n+1}+r,\qquad 0\le r<F_{n+1},
+\]
+with parts restricted to \(F_1,\ldots,F_{n+1}\).  No maximizing-integer
 classification or folded-fibre theorem is imported from the citation.
 \end{theorem}
 
@@ -778,6 +832,11 @@ On each parity class the heights satisfy
   M_m=M_{m-2}+M_{m-4}\qquad(m\ge5),
 \]
 with initial values \(M_1=2,M_2=2,M_3=3,M_4=4\).
+The only imported enumerative input is the ordinary interval maximum
+\([F_k,F_{k+1})\) of \Cref{thm:source-audited-ordinary-maximum-import}; the shifted
+half-interval conversion to \(H_{m+1}\) and the fibre identification
+\(M_m=H_{m+1}\) are the in-paper steps of
+\Cref{thm:half-interval-fibonacci-representation-max,lem:fold-fibre-representation-pairing}.
 \end{theorem}
 
 \begin{proof}
@@ -787,7 +846,9 @@ By \Cref{lem:fold-fibre-representation-pairing}, for \(r=\Val_m(x)\),
   \qquad 0\le r<F_{m+2}.
 \]
 Since \(\Val_m\) is a bijection from \(X_m\) to these residues, taking the maximum
-over \(x\in X_m\) gives \(M_m=H_{m+1}\).  Substituting \(n=m+1\) in
+over \(x\in X_m\) gives \(M_m=H_{m+1}\).  This step uses no ordinary representation
+maximum theorem; it is only the residue-fibre pairing over the shifted interval
+\([F_{m+2},2F_{m+2})\).  Substituting \(n=m+1\) in
 \Cref{thm:half-interval-fibonacci-representation-max} gives
 \(M_{2s-1}=H_{2s}=F_{s+1}\) and \(M_{2s}=H_{2s+1}=2F_s\).  The ten displayed
 values and the parity recurrence are the same substitution applied to the listed
