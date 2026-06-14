@@ -242,7 +242,7 @@ satisfy the elementary bounds
   \qquad(k\ge1),
 \]
 proved by induction from \(p_k=r_{k-1}\) and
-\(|r_k|\le |p_{k-1}|+1+|r_{k-1}|\).  Since
+\(|r_k|\le |p_{k-1}|+1+|r_{k-1}|\le (F_{k-1}-1)+1+(F_k-1)=F_{k+1}-1\).  Since
 \(\gcd(F_n,F_{n+1})=1\), the target identity implies
 \(F_{n+1}\mid r_n\); the displayed bound forces \(r_n=0\), and then
 \(p_n=\sigma\).  Conversely \((p_n,r_n)=(\sigma,0)\) plainly gives the target
@@ -263,6 +263,70 @@ the binary \(q\)-columns with difference column \(a_k\).  Therefore the bounded
 weighted automaton counts all and only the \(q\)-tuples in the same fibre of
 \(\Fold_m\), with the product weight stated above.  This is
 \(S_q^{\mathrm{int}}(m)\).
+\end{proof}
+
+\begin{theorem}[Audited fixed-degree transfer interface]
+\label{thm:audited-fixed-degree-transfer-interface}
+Fix \(q\ge1\).  The finite-state transfer formula of
+\Cref{thm:intrinsic-fold-moment-transfer} is obtained from the unmodified maps
+\(\Fold_m\colon\Omega_m\to X_m\) by the following lossless finite construction:
+\begin{enumerate}
+\item the only deletion made in passing from unrestricted signed-Fibonacci
+  carries to the finite state set
+  \(\mathcal C_q=\{-1,0,1\}^{q-1}\times\{-1,0,1\}^{q-1}\) is the deletion of
+  coordinatewise scalar exits classified in
+  \Cref{lem:scalar-signed-fibonacci-exit-classification};
+\item every deleted path is nonaccepting for every target marker
+  \(\sigma\in\{-1,0,1\}^{q-1}\), and every solution of the fold congruences ends
+  in the unique accepting state \((\sigma,0)\);
+\item the matrix \(T_q\) is exactly the weighted adjacency matrix of this bounded
+  automaton, with entry from a state \(c\) to a state \(c'\) equal to
+  \(\sum_{	au_a(c)=c'}w_q(a)\), and the vectors \(\lambda_q,\rho_q\) are the
+  initial-state indicator and accepting-state indicator.
+\end{enumerate}
+Consequently no cover multiplicity, truncated histogram, or resolution-dependent
+state set is used in the intrinsic transfer theorem.  For each fixed \(q\), the
+same finite matrix computes all moments \(S_q^{\mathrm{int}}(m)\) as \(m\)
+varies, and this positive intrinsic assertion is independent of the
+cover-relative obstruction in \Cref{thm:finite-state-strictness}.
+\end{theorem}
+
+\begin{proof}
+The word counted in \(S_q^{\mathrm{int}}(m)\) is a \(q\)-tuple of words in
+\(\Omega_m\) having the same value under the original fold map.  By
+\eqref{eq:fold-residue} and the bijection \(\Val_m\colon X_m\to
+\mathbb Z/F_{m+2}\mathbb Z\), this is equivalent to the signed Fibonacci
+congruences displayed in the proof of \Cref{lem:bounded-signed-fibonacci-carry};
+because the absolute signed sum is less than \(2F_{m+2}\), each congruence has the
+unique target marker \(\sigma_j\in\{-1,0,1\}\).  Thus the target equations
+\eqref{eq:q-column-fib-target} are exactly the fold-collision equations, not an
+auxiliary cover condition.
+
+For a scalar coordinate, the unrestricted carry recursion satisfies
+\[
+  \sum_{i=1}^k a_iF_i=p_kF_{k+1}+r_kF_k .
+\]
+If a path exits \(\{-1,0,1\}^2\),
+\Cref{lem:scalar-signed-fibonacci-exit-classification} places it forever in one
+of the two invariant exit classes, both disjoint from every scalar accepting
+state \((\sigma,0)\).  Applying this coordinate by coordinate gives
+\Cref{lem:coordinatewise-signed-fibonacci-exit-deletion}: a vector path with any
+coordinate exit is nonaccepting.  Conversely, if the target equations hold, the
+final carry identity and \(\gcd(F_n,F_{n+1})=1\) force the final state to be
+\((\sigma,0)\); hence deleting the exits removes no target solution and adds none.
+
+After the lossless deletion, the state set is finite and independent of the
+resolution.  Reading a column \(a\in\{-1,0,1\}^{q-1}\) changes state by the fixed
+rule \(\tau_a\) and contributes exactly the number \(w_q(a)\) of binary
+\(q\)-columns with that difference column.  Therefore the weighted adjacency
+matrix described in the statement has
+\(\lambda_q^{\mathsf T}T_q^{m+1}\rho_q\) equal to the weighted number of bounded
+accepting paths of length \(m+1\), which is exactly
+\(S_q^{\mathrm{int}}(m)\) by \Cref{lem:bounded-signed-fibonacci-carry}.  The
+construction uses only the fixed fold data \((\Omega_m,X_m,\Fold_m)\); the
+finite-fibre cover construction of \Cref{thm:finite-state-strictness} changes
+auxiliary certificate fibres over these fixed normal forms and is therefore a
+separate strictness mechanism, not a premise of the transfer formula.
 \end{proof}
 
 \begin{theorem}[Intrinsic finite-state transfer for Zeckendorf fold moments]
@@ -755,6 +819,62 @@ and the diagonal variant uses the same elementary inequality with the chosen
 moment degree.  These steps neither select maximizing integers nor count the
 whole fibre-size multiset.  Therefore the dependency factorization displayed in
 the statement is exact for the height package used later in the \(L2\) interface.
+\end{proof}
+
+\begin{theorem}[Audited shifted-half-interval height conversion]
+\label{thm:audited-shifted-half-interval-height-conversion}
+Grant only the ordinary positive-index maximum formula \((E)\) of
+\Cref{thm:intrinsic-height-source-dependency-cut}.  Then the conversion to the
+intrinsic height theorem is completely determined by the following internal
+chain:
+\[
+  C_{n+1}\ge C_n,
+  \qquad
+  H_n=C_{n+1},
+  \qquad
+  M_m=H_{m+1}.
+\]
+In particular the parity formulas
+\[
+  H_{2s}=F_{s+1},\quad H_{2s+1}=2F_s,
+  \qquad
+  M_{2s-1}=F_{s+1},\quad M_{2s}=2F_s
+\]
+follow without importing any theorem about folded fibres, maximizing residues,
+fibre histograms, or pressure.  The only Fibonacci-index conversion used is
+\(\mathcal F_k=F_k\) for \(k\ge1\), as proved in
+\Cref{lem:positive-index-conversion-ordinary-maximum}.
+\end{theorem}
+
+\begin{proof}
+The formula \((E)\) gives the ordinary maxima
+\(C_k=\max\{R(N):F_k\le N<F_{k+1}\}\) in this paper's positive-index convention.
+The displayed parity values immediately give \(C_n\le C_{n+1}\) for every
+\(n\ge2\), and the initial value \(H_1=1\) is checked directly from
+\(R_2(2)=R_2(3)=1\).  Thus it remains to treat \(n\ge2\).
+
+On the subinterval \([F_{n+1},F_{n+2})\), no part larger than \(F_{n+1}\) can occur
+in a representation of \(N\).  Hence the truncated count \(R_{n+1}(N)\) is the
+ordinary count there, and the maximum on that subinterval is \(C_{n+1}\).  On the
+remaining part of the shifted half-interval, write
+\(N=F_{n+2}+u\) with \(0\le u<F_{n-1}\).  The recursion
+\eqref{eq:R-recursion} gives
+\[
+  R_{n+1}(N)=R_n(F_{n+2}+u)+R_n(F_n+u)=R_n(F_n+u),
+\]
+because the largest sum using only \(F_1,\ldots,F_n\) is \(F_{n+2}-2\).  Since
+\(F_n\le F_n+u<F_{n+1}\), the tail maximum is at most \(C_n\le C_{n+1}\).  Therefore
+\(H_n=C_{n+1}\).  Substituting the two parity clauses of \((E)\), with index
+\(k=n+1\), gives \(H_{2s}=F_{s+1}\) and \(H_{2s+1}=2F_s\).
+
+Finally, \Cref{lem:fold-fibre-representation-pairing} identifies each intrinsic
+fibre size with \(R_{m+2}(F_{m+2}+r)\) for a unique
+\(0\le r<F_{m+2}\), because \(\Val_m\colon X_m\to
+\mathbb Z/F_{m+2}\mathbb Z\) is bijective.  Taking maxima over residues gives
+\(M_m=H_{m+1}\), and the stated formulas for \(M_{2s-1}\) and \(M_{2s}\) are the
+substitution \(n=m+1\).  Every step after \((E)\) is the displayed recursion or
+the fold-fibre pairing, so no additional external enumerative or thermodynamic
+assertion is used.
 \end{proof}
 
 \begin{theorem}[Half-interval Fibonacci representation maximum]
@@ -1405,9 +1525,11 @@ For the Zeckendorf \(L1\) protocol, the \(L2\) layer used in
   Hankel positivity, log-convexity, and Prony reconstruction certificates of
   \Cref{prop:classical-finite-atomic-skeleton,thm:hankel-psd,rem:hankel-psd-generic,thm:prony}.
 \item For the unmodified maps \(\Fold_m\), every fixed finite intrinsic moment
-  degree has fixed finite-state transfer; in particular the intrinsic second
+  degree has fixed finite-state transfer through the audited bounded-carry
+  interface of \Cref{thm:audited-fixed-degree-transfer-interface}; in particular the intrinsic second
   moment satisfies the recurrence of \Cref{thm:intrinsic-second-moment-recurrence},
-  polynomial intrinsic fibre statistics are C-finite, and the intrinsic height is
+  polynomial intrinsic fibre statistics are C-finite, and the audited shifted
+  half-interval conversion of \Cref{thm:audited-shifted-half-interval-height-conversion} gives the intrinsic height
   \(M_{2s-1}=F_{s+1}\), \(M_{2s}=2F_s\).
 \item In the computable finite-fibre cover category over the same normal-form
   sets \(X_m\), the certificates in the first item do not force fixed finite-state
