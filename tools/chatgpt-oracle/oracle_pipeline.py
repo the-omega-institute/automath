@@ -3560,7 +3560,7 @@ def build_stage_a_oracle_escalation_prompt(state: PaperState,
 
         Return only JSON:
         {{
-          "verdict": "rerun_stage_a|park|human_decision",
+          "verdict": "rerun_stage_a|proceed|park|human_decision",
           "publishable_route": true,
           "core_theorem_direction": "...",
           "required_theorem_package": ["..."],
