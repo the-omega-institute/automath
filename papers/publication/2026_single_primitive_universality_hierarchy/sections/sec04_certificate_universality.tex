@@ -74,7 +74,7 @@ Then \(S_q^{\mathrm{int}}(m)\) is the weighted number of words
   \sum_{k=1}^{m+1} a_{k,j}F_k=\sigma_jF_{m+2}
   \qquad(1\le j\le q-1).
 \end{equation}
-These weighted words are recognized by a finite automaton whose carry states are
+These weighted words are recognized completely by a finite automaton whose carry states are
 \[
   \mathcal C_q=\{-1,0,1\}^{q-1}\times\{-1,0,1\}^{q-1}.
 \]
@@ -87,7 +87,10 @@ when the second coordinate again lies in \(\{-1,0,1\}^{q-1}\), and has no
 transition otherwise; the transition weight is \(w_q(a)\).  After
 \(m+1\) columns, the accepting states are
 \(\{(\sigma,0):\sigma\in\{-1,0,1\}^{q-1}\}\).  The weighted path count is
-exactly \(S_q^{\mathrm{int}}(m)\).
+exactly \(S_q^{\mathrm{int}}(m)\).  Equivalently, no solution of
+\eqref{eq:q-column-fib-target} is discarded by the bounded state restriction,
+and every accepting bounded path satisfies \eqref{eq:q-column-fib-target} for a
+unique target marker \(\sigma\).
 \end{lemma}
 
 \begin{lemma}[Scalar exit classification for signed Fibonacci carries]
@@ -162,15 +165,43 @@ For the carry automaton it suffices to prove the scalar case, since the
 \[
   \sum_{i=1}^k a_iF_i=p_kF_{k+1}+r_kF_k .
 \]
-Thus a scalar word with target \(\sigma F_{n+1}\) is accepted exactly when its
-final carry is \((\sigma,0)\), provided no accepting path has been lost by
-restricting to \(\{-1,0,1\}^2\).  This is exactly
-\Cref{lem:scalar-signed-fibonacci-exit-classification}: every scalar path that
-leaves the square is trapped outside the square and cannot later reach an
-accepting state.  Thus the displayed finite state set counts all and only the
-target solutions.
-Multiplying the scalar construction over the \(q-1\) difference coordinates
-proves the lemma.
+For a word of length \(n\), the target equation
+\(\sum_{i=1}^n a_iF_i=\sigma F_{n+1}\) is therefore equivalent to the final
+identity \(p_nF_{n+1}+r_nF_n=\sigma F_{n+1}\).  The unrestricted carries also
+satisfy the elementary bounds
+\[
+  |p_k|\le F_k-1,
+  \qquad |r_k|\le F_{k+1}-1
+  \qquad(k\ge1),
+\]
+proved by induction from \(p_k=r_{k-1}\) and
+\(|r_k|\le |p_{k-1}|+1+|r_{k-1}|\).  Since
+\(\gcd(F_n,F_{n+1})=1\), the target identity implies
+\(F_{n+1}\mid r_n\); the displayed bound forces \(r_n=0\), and then
+\(p_n=\sigma\).  Conversely \((p_n,r_n)=(\sigma,0)\) plainly gives the target
+equation.  Thus the unrestricted scalar recursion satisfies the target condition
+exactly when its final state is \((\sigma,0)\).
+
+It remains to justify the bounded state restriction.  Suppose an unrestricted
+scalar path leaves \(Q=\{-1,0,1\}^2\) for the first time.  The state immediately
+after the exit is one of the six states listed in
+\Cref{lem:scalar-signed-fibonacci-exit-classification}.  That lemma proves that,
+from then on, all later unrestricted states stay in one of the two invariant exit
+classes and never return to \(Q\).  In particular such a path can never finish at
+an accepting state \((\sigma,0)\in Q\).  By the preceding paragraph, this means
+that an exited path cannot satisfy any target equation.
+Deleting transitions whose image is outside \(Q\) therefore deletes only
+nonaccepting paths and no target solution.  Conversely every bounded accepting
+path satisfies the target equation by the displayed carry identity.
+
+Apply this scalar equivalence independently in each of the \(q-1\) coordinates.
+The vector transition is the direct product of the scalar transitions, its
+accepting state records the unique vector
+\(\sigma\in\{-1,0,1\}^{q-1}\), and the column weight \(w_q(a_k)\) counts exactly
+the binary \(q\)-columns with difference column \(a_k\).  Therefore the bounded
+weighted automaton counts all and only the \(q\)-tuples in the same fibre of
+\(\Fold_m\), with the product weight stated above.  This is
+\(S_q^{\mathrm{int}}(m)\).
 \end{proof}
 
 \begin{theorem}[Intrinsic finite-state transfer for Zeckendorf fold moments]
@@ -448,7 +479,9 @@ with initial values \(H_1=1,H_2=2,H_3=2,H_4=3,H_5=4\).
 The case \(H_1=1\) is immediate from \(R_2(2)=R_2(3)=1\).  For
 \(n\ge2\), we use Theorem~4.7 of
 Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a \cite{KocabovaMasakovaPelantova2005}.
-That theorem is stated for Fibonacci numbers indexed by
+This is the only external input in the height theorem: the remainder of the proof
+is the local conversion of that theorem's maximum to the half-interval notation
+used here.  That theorem is stated for Fibonacci numbers indexed by
 \(\mathcal F_0=\mathcal F_1=1\) and for maxima over the half-open intervals
 \([\mathcal F_k,\mathcal F_{k+1})\).  By
 \Cref{lem:fibonacci-maximum-normalization-conversion}, this is the same
