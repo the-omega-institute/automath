@@ -387,18 +387,84 @@ composition.
 
 
 \begin{definition}[Protocol universality]\label{def:prot-univ}
-An \(L1\) protocol consists of computable normal forms with decidable equality,
-compiled operations on those normal forms, and semantic readout identities for
-the operations being represented.
+An \(L1\) protocol for operations on a countable set \(S\) consists of the
+following data.
+\begin{enumerate}
+\item A decidable raw-code language \(C\subseteq\{0,1\}^{<\infty}\) and a
+  decidable set \(N\) of normal forms.
+\item A computable normalizer \(\mathrm{NF}\colon C\to N\) and a computable
+  decoding map \(\mathrm{Dec}\colon N\to S\).  Equality of normal forms in \(N\)
+  is decidable, and \(\mathrm{Dec}\) is injective on the represented normal
+  forms.
+\item For each target operation \(\star\) of arity \(r\), a computable compiled
+  operation \(\widehat\star\colon N^r\to N\) satisfying
+  \[
+    \mathrm{Dec}\bigl(\widehat\star(n_1,\ldots,n_r)\bigr)
+      =\mathrm{Dec}(n_1)\star\cdots\star\mathrm{Dec}(n_r).
+  \]
+\item Semantic readouts from the represented normal forms to objects built from
+  the permitted primitive, with identities that read the target operations by
+  that primitive after compilation.
+\end{enumerate}
+The protocol is universal for a class of operations when these data are supplied
+for every operation in the class.
 \end{definition}
 
 In the Zeckendorf protocol, the compiled arithmetic operations on normal forms
 and the semantic readouts \(\Phi_0,\Phi_1\) are separate pieces of data.  The
-compiled operations are \(\oplus,\otimes\) from \Cref{def:stable-arith}; the
-readouts are the maps in \Cref{thm:two-level}.  All computability in the \(L1\)
-construction occurs on the finite-support normal forms
+raw codes are finite binary words, the normal forms are the finite-support
+Zeckendorf words \(X_\infty^{\mathrm{fin}}\), the normalizer is the greedy
+Zeckendorf map, the decoding is \(\Val\), the compiled operations are
+\(\oplus,\otimes\) from \Cref{def:stable-arith}, and the readouts are the maps
+in \Cref{thm:two-level}.  Thus the code layer, normalizer, decidable normal
+forms, decoding map, compiled operations, and semantic readouts are distinct
+pieces of data.  All computability in the \(L1\) construction occurs on
 \(X_\infty^{\mathrm{fin}}\), by
-\Cref{lem:greedy-zeckendorf-normalizer,prop:value-transport-exact-interface}.
+\Cref{lem:greedy-zeckendorf-normalizer,prop:value-transport-exact-interface}; no
+bounded-window or digit-local arithmetic algorithm is part of the protocol.
+
+\begin{proposition}[Zeckendorf protocol data]
+\label{prop:zeckendorf-protocol-data}
+The Zeckendorf construction supplies all data required by
+\Cref{def:prot-univ} for \(S=\NN\) and target operations \(\{+,\times\}\):
+\[
+  C=\{0,1\}^{<\infty},\qquad
+  N=X_\infty^{\mathrm{fin}},\qquad
+  \mathrm{Dec}=\Val.
+\]
+Here \(\mathrm{NF}\) is the greedy Zeckendorf normalizer, the compiled operations
+are \(\oplus,\otimes\), and the semantic readouts are \(\Phi_0,\Phi_1\).  These
+data make the addition and multiplication diagrams of \Cref{def:prot-univ}
+commute and read addition and multiplication using composition as the only
+semantic primitive.
+\end{proposition}
+
+\begin{proof}
+The language \(\{0,1\}^{<\infty}\) is decidable.  The set
+\(X_\infty^{\mathrm{fin}}\) is decidable because a finite word can be checked for
+finite support and for the absence of adjacent ones, and equality of such words
+is literal equality after trailing zeros are ignored.  For a raw word
+\(\omega=(\omega_1,\ldots,\omega_\ell)\), the integer
+\(\sum_{k=1}^{\ell}\omega_kF_k\) is computable; applying
+\Cref{lem:greedy-zeckendorf-normalizer} to that integer gives a computable
+normalizer \(\mathrm{NF}\colon C\to X_\infty^{\mathrm{fin}}\).  The same lemma
+also says that \(\Val\colon X_\infty^{\mathrm{fin}}\to\NN\) is a bijection, hence
+an injective computable decoding map.
+
+By \Cref{def:stable-arith,thm:semiring}, the operations \(\oplus\) and
+\(\otimes\) are computable and satisfy
+\[
+  \Val(u\oplus v)=\Val(u)+\Val(v),
+  \qquad
+  \Val(u\otimes v)=\Val(u)\Val(v).
+\]
+Thus the compiled-operation diagrams in \Cref{def:prot-univ} commute for
+addition and multiplication.  Finally, \Cref{thm:two-level} gives
+\(\Phi_0(c_{a+b})=\Phi_0(c_a)\circ\Phi_0(c_b)\) and
+\(\Phi_1(c_{ab})=\Phi_1(c_a)\circ\Phi_1(c_b)\).  These are exactly the two
+semantic readout identities, both using composition and no second semantic
+primitive.
+\end{proof}
 
 \begin{theorem}[Restricted level-zero protocol dichotomy]
 \label{thm:restricted-level-zero-protocol-dichotomy}
@@ -470,25 +536,21 @@ binary words.  The stable normalizer
   \mathrm{NF}_\infty\colon \{0,1\}^{<\infty}\to X_\infty^{\mathrm{fin}}
 \]
 sends a word \(\omega=(\omega_1,\ldots,\omega_\ell)\) to the greedy Zeckendorf
-normal form of \(\sum_{k=1}^\ell \omega_kF_k\).  With this raw-word normalizer,
-the Zeckendorf normal forms, transported operations \(\oplus,\otimes\), and
-readouts \(\Phi_0,\Phi_1\) form an \(L1\) protocol universal for
-\(\{+,\times\}\) on \(\NN\).  It is a value-transported protocol and asserts no
-bounded-window or digit-local arithmetic theorem.
+normal form of \(\sum_{k=1}^\ell \omega_kF_k\).  Together with decoding by
+\(\Val\), compiled operations \(\oplus,\otimes\), and readouts
+\(\Phi_0,\Phi_1\), these data satisfy \Cref{def:prot-univ} and form an \(L1\)
+protocol universal for \(\{+,\times\}\) on \(\NN\).  It is a value-transported
+protocol and asserts no bounded-window or digit-local arithmetic theorem.
 \end{theorem}
 
 \begin{proof}
-The set \(\{0,1\}^{<\infty}\) is decidable, and the value
-\(\sum_{k=1}^\ell\omega_kF_k\) of a raw word is computable.  Applying the greedy
-Zeckendorf algorithm of \Cref{lem:greedy-zeckendorf-normalizer} to that integer
-therefore computes \(\mathrm{NF}_\infty(\omega)\), and
-\Cref{prop:fold-confluence} gives decidable equality of the resulting normal
-forms.  The compiled operations on the image
-\(X_\infty^{\mathrm{fin}}\) are computable by
-\Cref{prop:zeckendorf-computable-arithmetic-anchor,lem:value-transported-suffices}.
-The readout identities are
-\Cref{thm:two-level}.  The final sentence is
-\Cref{prop:value-transport-exact-interface}.
+The code language, normal forms, normalizer, decoding, compiled operations, and
+readouts are exactly the verified protocol data of
+\Cref{prop:zeckendorf-protocol-data}.  The compiled operations are computable by
+\Cref{prop:zeckendorf-computable-arithmetic-anchor,lem:value-transported-suffices},
+and the semantic readout identities are \Cref{thm:two-level}.  Therefore the
+data are an \(L1\) protocol universal for \(\{+,\times\}\) on \(\NN\).  The final
+sentence is \Cref{prop:value-transport-exact-interface}.
 \end{proof}
 
 The positive \(L1\) result uses no operation on \(\NN\) beyond ordinary addition
