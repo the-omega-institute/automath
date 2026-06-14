@@ -721,7 +721,9 @@ There is a computable translation \(\tau_{\mathsf P,\mathsf S,\mathsf A}\) from
 primitive has the stated real-domain identity.  Consequently, for each
 Richardson expression \(E\), the translated term represents the same real partial
 function as \(E\) on the punctured Richardson domain relevant to the identity
-problem.
+problem.  The unary \(\mu\)-clause is transported only through the punctured row
+\(\mathsf A(u)=|u|\) for \(u\ne0\); no endpoint square-root term, including the
+printed row \(U_{126}\), is a generator in this translation.
 \end{lemma}
 
 \begin{proof}
@@ -735,7 +737,10 @@ recursion is computable because the source expression tree and the three
 replacement terms are finite.  The value-preservation assertion follows by
 induction on the source expression.  The only non-total clause is \(\mu\), where
 the induction uses the punctured identity \(\mathsf A(u)=|u|\) for \(u\ne0\),
-exactly matching Richardson's hypothesis on \(\mu\).
+exactly matching Richardson's hypothesis on \(\mu\).  Since the source language
+has no endpoint square-root primitive and the target image of \(\mu\) is the
+chosen punctured row \(\mathsf A\), no value of any root term at \(0\) is read by
+the recursion.
 \end{proof}
 
 \begin{theorem}[Punctured-domain many-one reduction]
@@ -750,7 +755,11 @@ Fix finite pure EML terms \((\mathsf P,\mathsf S,\mathsf A)\) satisfying
 For each Richardson expression \(E\), define its punctured Richardson domain
 \(D_E\subseteq\RR\) recursively as the set of real inputs for which every
 ordinary elementary subterm is defined and, whenever a subterm \(\mu(F)\) is
-evaluated, the value of \(F\) is nonzero.  Then
+evaluated, the value of \(F\) is nonzero.  Equivalently, the transported EML
+instance is the source-indexed partial function obtained by restricting the
+translated term to this same recursively defined set \(D_E\), not by enlarging it
+to any principal-branch domain on which the translated syntax happens to have a
+value.  Then
 \(\tau_{\mathsf P,\mathsf S,\mathsf A}(E)\) and
 \(\tau_{\mathsf P,\mathsf S,\mathsf A}(0)\) are defined on \(D_E\), the first term
 equals \(E\) there, and the second term equals \(0\) there.  In particular,
@@ -763,15 +772,21 @@ equals \(E\) there, and the second term equals \(0\) there.  In particular,
 \]
 Zeros of absolute-value arguments therefore delete the same input points from the
 source-indexed transported equality problem on both sides and do not invalidate
-the many-one reduction.
+the many-one reduction.  The endpoint row \(U_{126}\) is not used in this
+punctured obstruction: replacing \(\mathsf A\) by the internally proved
+absolute-value row \(\Abs\), or by any separately verified punctured
+absolute-value row, is the whole root interface required here.
 \end{theorem}
 
 \begin{proof}
-Proceed by structural induction on \(E\).  Constants, the variable, arithmetic,
-composition, and \(\exp\) use the internally proved core identities and their
-ordinary real domains.  The \(\pi\) and \(\sin\) clauses use the first two
-displayed hypotheses.  For a subterm \(\mu(F)\), the recursive definition of
-\(D_{\mu(F)}\) requires \(x\in D_F\) and \(F(x)\ne0\).  By the induction
+Proceed by structural induction on \(E\), proving simultaneously that the source
+subterm and its translated EML term agree on the recursively transported domain
+and that the transported domain is the one assigned by the same recursion.
+Constants, the variable, arithmetic, composition, and \(\exp\) use the internally
+proved core identities and their ordinary real domains.  The \(\pi\) and \(\sin\)
+clauses use the first two displayed hypotheses.  For a subterm \(\mu(F)\), the
+recursive definition of \(D_{\mu(F)}\) requires \(x\in D_F\) and \(F(x)\ne0\).  By
+the induction
 hypothesis,
 \(\tau_{\mathsf P,\mathsf S,\mathsf A}(F)(x)=F(x)\), so the translated argument to
 \(\mathsf A\) is nonzero exactly on the same points.  The third displayed
@@ -783,7 +798,8 @@ hypothesis gives
 \]
 for every \(x\in D_{\mu(F)}\).  If \(F(x)=0\), the recursive convention removes
 \(x\) from the punctured domain before either the Richardson \(\mu\)-clause or the
-EML \(\mathsf A\)-clause is used; no value at that point is needed.  Thus each
+EML \(\mathsf A\)-clause is used; no value at that point is needed, and no
+endpoint-root semantics can repair or change the deleted point.  Thus each
 constructor preserves both the relevant domain and the value on that domain.
 Taking \(E=0\) gives the displayed equivalence, which is an effective many-one
 reduction because the translation is computable.
