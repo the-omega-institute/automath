@@ -4767,7 +4767,7 @@ def parse_json_from_output(text: str) -> dict:
         "fit_score", "fit_verdict", "suggested_journals",
         "recommended_journal", "adjusted_fit_score",
     )
-    m = re.search(r"```json\s*(\{.*?\})\s*```", text, re.DOTALL)
+    m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL | re.IGNORECASE)
     if m:
         try:
             return json.loads(m.group(1))
