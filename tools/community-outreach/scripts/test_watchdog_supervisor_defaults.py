@@ -27,12 +27,13 @@ def main() -> int:
     except (ValueError, IndexError) as exc:
         raise AssertionError(f"DEFAULT_SUPERVISOR_ARGS must include --parallel N: {args}") from exc
 
-    # The research loop reserves one slot for Oracle refill, so --parallel 4 is
-    # the minimum default that leaves three real math workers for three tabs.
-    if parallel < 4:
+    # Three Outreach Oracle tabs should map to three research workers. Board
+    # refill reserve is disabled separately, so the watchdog must not expand
+    # the active math pool beyond the browser bridge capacity.
+    if parallel != 3:
         raise AssertionError(
-            "watchdog-spawned supervisor must leave at least three research workers "
-            f"(expected --parallel >= 4, got {parallel})"
+            "watchdog-spawned supervisor must run exactly three research workers "
+            f"for three browser tabs (expected --parallel 3, got {parallel})"
         )
     return 0
 

@@ -31,7 +31,7 @@ def main() -> int:
         def fake_get(url: str, timeout: int = 5) -> dict:
             return {
                 "queue_length": 0,
-                "required_script_version": "outreach-1.24",
+                "required_script_version": "outreach-1.28",
                 "active_poll_agents": [],
                 "compatible_active_poll_agents": [],
                 "project_active_poll_agents": [],
@@ -40,7 +40,7 @@ def main() -> int:
                         "event": "heartbeat",
                         "recent": True,
                         "metrics": {
-                            "script_version": "outreach-1.24",
+                            "script_version": "outreach-1.28",
                             "page_url": (
                                 "https://chatgpt.com/g/"
                                 "g-p-69fdba181e648191a0eb330852658373-openproblem/"

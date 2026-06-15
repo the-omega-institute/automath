@@ -850,7 +850,18 @@ class OracleConsultant:
                 "error": f"oracle server unreachable at {self.server_url}",
             }
         pre_oracle_workup: dict = {"mode": "oracle_first", "ok": True, "skipped": "pre_oracle_codex_workup_not_required"}
-        if REQUIRE_PRE_ORACLE_CODEX_WORKUP and _is_board_research_todo(todo):
+        # OUTREACH FIX: same operator escape hatch as dispatch_worktree.py.
+        # When the Codex side is stuck (no command_execution for target dir),
+        # OUTREACH_PRE_ORACLE_WORKUP_BYPASS=T-44 (comma-separated todo_ids) lets
+        # the run skip this gate.  Without this, oracle_consultant returns
+        # turns=0 elapsed=0s immediately and the dispatcher reports
+        # verdict=FAILED conv= empty even after the outer-gate bypass.
+        import os as _os_for_bypass
+        _bypass_consult = {
+            c.strip() for c in _os_for_bypass.environ.get("OUTREACH_PRE_ORACLE_WORKUP_BYPASS", "").split(",")
+            if c.strip()
+        }
+        if REQUIRE_PRE_ORACLE_CODEX_WORKUP and _is_board_research_todo(todo) and todo.todo_id not in _bypass_consult:
             pre_oracle_workup = _run_pre_oracle_codex_workup_for_todo(
                 todo,
                 per_turn_timeout=per_turn_timeout,

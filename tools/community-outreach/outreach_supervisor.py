@@ -16,8 +16,8 @@ Responsibilities:
        - arxiv_watch (NyxID-routed paper sweep)
        - outreach_inbox_watcher (Apple Mail Inbox sweep for replies)
        - lit_staleness (per-target staleness re-check)
-       - outreach_board_refill (ChatGPT Project oracle → new T-NN candidates;
-         currently a stub until the Project URL is wired in)
+       - outreach_board_refill only when the RUN research pool falls below
+         the configured low-water mark
   5. Tab health alert: macOS notify when outreach_oracle_server reports
      `queue_waiting_for_browser_agent` longer than 5 minutes.
   6. Git uploads are opt-in only: --auto-commit detects changes in
@@ -78,7 +78,8 @@ FRESHNESS_JUDGE = SCRIPT_DIR / "outreach_freshness_judge.py"
 ORACLE_RECONCILE = SCRIPT_DIR / "outreach_oracle_reconcile.py"
 REVIEW_QUEUE = SCRIPT_DIR / "outreach_review_queue.py"
 
-DEFAULT_PARALLEL = 4
+DEFAULT_PARALLEL = 3
+MAX_RESEARCH_PARALLEL = int(os.environ.get("OUTREACH_MAX_RESEARCH_PARALLEL", "3") or "3")
 DEFAULT_POLL_INTERVAL = 300
 DEFAULT_PI_REVIEW_HOURS = 6
 DEFAULT_INBOX_WATCH_HOURS = 1
@@ -485,7 +486,7 @@ def spawn_research_loop(parallel: int) -> subprocess.Popen:
         RESEARCH_LOOP_SCRIPT,
         log_name="inner_research.log",
         label="research_loop",
-        extra_args=["--parallel", str(parallel), "--oracle-refill-reserve", "1"],
+        extra_args=["--parallel", str(parallel), "--oracle-refill-reserve", "0"],
     )
 
 
@@ -1165,7 +1166,7 @@ def main() -> int:
     parser.add_argument("--arxiv-watch-hours", type=float, default=DEFAULT_ARXIV_WATCH_HOURS)
     parser.add_argument("--lit-staleness-hours", type=float, default=DEFAULT_LIT_STALENESS_HOURS)
     parser.add_argument("--board-refill-hours", type=float, default=DEFAULT_BOARD_REFILL_HOURS,
-                        help="cooldown for outreach_board_refill (currently a stub)")
+                        help="cooldown for outreach_board_refill when RUN pool is below low-water")
     parser.add_argument("--context-refresh-hours", type=float, default=DEFAULT_CONTEXT_REFRESH_HOURS,
                         help="cooldown for targeted issue/mail context refresh")
     parser.add_argument("--x-openproblem-watch-hours", type=float, default=DEFAULT_X_OPENPROBLEM_WATCH_HOURS,
@@ -1199,6 +1200,8 @@ def main() -> int:
     parser.add_argument("--once", action="store_true",
                         help="run a single tick (PI + all short tasks forced) then exit")
     args = parser.parse_args()
+    if args.parallel > MAX_RESEARCH_PARALLEL:
+        args.parallel = MAX_RESEARCH_PARALLEL
 
     supervisor_lock_fd = _acquire_supervisor_lock()
     if supervisor_lock_fd is None:
@@ -1358,7 +1361,15 @@ def main() -> int:
 
             since_x_h = (_now() - last_x_watch_ts) / 3600.0
             if args.once or since_x_h >= supervisor_state["x_openproblem_watch_hours"]:
-                trigger_x_openproblem_watch()
+                run_targets = _run_target_count()
+                low_water = max(0, int(args.frontier_low_water))
+                if _generic_board_refill_allowed(run_targets, low_water):
+                    trigger_x_openproblem_watch()
+                else:
+                    supervisor_log(
+                        "x_openproblem_watch: deferred because active RUN target pool is above low-water "
+                        f"({run_targets}>={low_water}); focus Oracle/Codex budget on active targets"
+                    )
                 last_x_watch_ts = _now()
 
             since_profile_h = (_now() - last_profile_judge_ts) / 3600.0

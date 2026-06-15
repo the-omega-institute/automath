@@ -23,12 +23,14 @@ TASK_QUEUE_DIR = STATE_DIR / "task_queue"
 TASK_CLAIMS_DIR = STATE_DIR / "task_claims"
 RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 SUPERVISOR_LOG = STATE_DIR / "supervisor_logs" / "supervisor.log"
+SUPERVISOR_RUNTIME = STATE_DIR / "supervisor.runtime.json"
 PI_JOURNAL = STATE_DIR / "pi_journal.jsonl"
 BOARD_REFILL_STATUS = STATE_DIR / "board_refill.status.json"
 RESEARCH_LOOP_STATUS = STATE_DIR / "research_loop.status.json"
 CONTEXT_REFRESH_STATUS = STATE_DIR / "context_refresh.json"
 X_OPENPROBLEM_STATUS = STATE_DIR / "x_openproblem_watch.status.json"
 X_OPENPROBLEM_RECENT = STATE_DIR / "x_openproblem_recent.json"
+ORACLE_BRIDGE_STATUS = STATE_DIR / "oracle_bridge.json"
 
 sys.path.insert(0, str(SCRIPT_DIR))
 from outreach_preflight import ACTIONABLE_VERDICTS, judge_board  # noqa: E402
@@ -369,7 +371,126 @@ def _server_status() -> dict:
             curl_error = (proc.stderr or "").strip() or f"curl exited {proc.returncode}"
         except Exception as curl_exc:  # noqa: BLE001
             curl_error = str(curl_exc)
+        listeners = _port_listeners(8766)
+        if listeners:
+            return {
+                "alive": True,
+                "probe_limited": True,
+                "port": 8766,
+                "kind": "outreach-oracle",
+                "listeners": listeners,
+                "error": f"status probe blocked/failed: urllib={urllib_exc}; curl={curl_error}",
+            }
         return {"alive": False, "error": f"urllib={urllib_exc}; curl={curl_error}"}
+
+
+def _oracle_bridge_health(oracle: dict) -> dict:
+    alive = oracle.get("port") == 8766 or oracle.get("alive") is True
+    bridge = _read_json(ORACLE_BRIDGE_STATUS)
+    if not alive:
+        return {
+            "ok": False,
+            "status": "server_down",
+            "reason": oracle.get("error") or "outreach oracle server is down",
+            "bridge_backoff": bridge,
+        }
+    if oracle.get("probe_limited"):
+        return {
+            "ok": None,
+            "status": "unknown_probe_limited",
+            "reason": oracle.get("error") or "server is listening but /status probe was limited",
+            "required_script_version": "",
+            "required_project_url": "",
+            "active_poll_agents": None,
+            "compatible_active_poll_agents": None,
+            "project_active_poll_agents": None,
+            "seen_script_versions": [],
+            "last_agent_idle_seconds": None,
+            "bridge_backoff": bridge,
+        }
+
+    compatible = oracle.get("compatible_active_poll_agents") or []
+    project_active = oracle.get("project_active_poll_agents") or []
+    active = oracle.get("active_poll_agents") or []
+    recent_agents = oracle.get("recent_agents") or {}
+    required = str(oracle.get("required_script_version") or "")
+    required_url = str(oracle.get("required_project_url") or "")
+    idle_seconds: list[float] = []
+    seen_versions: list[str] = []
+    if isinstance(recent_agents, dict):
+        for rec in recent_agents.values():
+            if not isinstance(rec, dict):
+                continue
+            try:
+                idle_seconds.append(float(rec.get("idle_seconds")))
+            except (TypeError, ValueError):
+                pass
+            metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
+            version = str(metrics.get("script_version") or "")
+            if version and version not in seen_versions:
+                seen_versions.append(version)
+
+    base = {
+        "required_script_version": required,
+        "required_project_url": required_url,
+        "active_poll_agents": len(active),
+        "compatible_active_poll_agents": len(compatible),
+        "project_active_poll_agents": len(project_active),
+        "seen_script_versions": seen_versions,
+        "last_agent_idle_seconds": min(idle_seconds) if idle_seconds else None,
+        "bridge_backoff": bridge,
+    }
+    if compatible:
+        return {**base, "ok": True, "status": "ready", "reason": ""}
+    if active:
+        return {
+            **base,
+            "ok": False,
+            "status": "incompatible_tab",
+            "reason": f"active Oracle tabs are not compatible with required script {required or '-'}",
+        }
+    if project_active:
+        return {
+            **base,
+            "ok": False,
+            "status": "project_tab_incompatible",
+            "reason": f"project tabs are active but not compatible with required script {required or '-'}",
+        }
+    return {
+        **base,
+        "ok": False,
+        "status": "no_active_tab",
+        "reason": f"no active Outreach Oracle tab; required script {required or '-'}",
+    }
+
+
+def _port_listeners(port: int) -> list[dict]:
+    try:
+        proc = subprocess.run(
+            ["lsof", "-nP", f"-iTCP:{port}", "-sTCP:LISTEN"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+    except Exception:
+        return []
+    rows: list[dict] = []
+    for line in (proc.stdout or "").splitlines()[1:]:
+        parts = line.split()
+        if len(parts) < 9:
+            continue
+        try:
+            pid = int(parts[1])
+        except ValueError:
+            continue
+        rows.append({
+            "command": parts[0],
+            "pid": pid,
+            "user": parts[2],
+            "name": parts[-1],
+        })
+    return rows
 
 
 def _matching_processes(pattern: str) -> list[dict]:
@@ -382,7 +503,43 @@ def _matching_processes(pattern: str) -> list[dict]:
             check=False,
         )
     except Exception:
-        return []
+        proc = subprocess.CompletedProcess(args=[], returncode=1, stdout="", stderr="")
+    if proc.returncode != 0 or not (proc.stdout or "").strip():
+        try:
+            fallback = subprocess.run(
+                ["ps", "aux"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False,
+            )
+        except Exception:
+            fallback = subprocess.CompletedProcess(args=[], returncode=1, stdout="", stderr="")
+        rows: list[dict] = []
+        for line in (fallback.stdout or "").splitlines()[1:]:
+            if pattern not in line:
+                continue
+            if "/bin/zsh -c" in line or "python3 -c" in line or "outreach_status.py" in line:
+                continue
+            parts = line.split(None, 10)
+            if len(parts) < 11:
+                continue
+            try:
+                pid = int(parts[1])
+                cpu = float(parts[2])
+                mem = float(parts[3])
+                rss_kb = int(parts[5])
+            except ValueError:
+                continue
+            rows.append({
+                "pid": pid,
+                "ppid": 0,
+                "cpu": cpu,
+                "mem": mem,
+                "rss_mb": round(rss_kb / 1024, 1),
+                "args": parts[10],
+            })
+        return rows
     rows: list[dict] = []
     for line in (proc.stdout or "").splitlines():
         if pattern not in line:
@@ -415,13 +572,39 @@ def _process_health() -> dict:
     supervisor = _matching_processes("outreach_supervisor.py")
     research = _matching_processes("outreach_research_loop.py")
     oracle = _matching_processes("outreach_oracle_server.py")
+    oracle_listeners = _port_listeners(8766)
+    runtime = _read_json(SUPERVISOR_RUNTIME)
+    research_status = _read_json(RESEARCH_LOOP_STATUS)
+    supervisor_runtime_alive = False
+    if runtime.get("status") == "running" and runtime.get("pid"):
+        try:
+            os.kill(int(runtime["pid"]), 0)
+            supervisor_runtime_alive = True
+        except PermissionError:
+            supervisor_runtime_alive = True
+        except Exception:
+            supervisor_runtime_alive = False
+    research_status_recent = False
+    last_poll = str(research_status.get("last_poll") or "")
+    if last_poll:
+        try:
+            dt = datetime.fromisoformat(last_poll.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            research_status_recent = (datetime.now(timezone.utc) - dt).total_seconds() < 600
+        except ValueError:
+            research_status_recent = False
     return {
         "supervisor": supervisor,
         "research_loop": research,
         "oracle_server": oracle,
-        "supervisor_alive": bool(supervisor),
-        "research_loop_count": len(research),
-        "oracle_server_count": len(oracle),
+        "supervisor_alive": bool(supervisor) or supervisor_runtime_alive,
+        "supervisor_runtime_alive": supervisor_runtime_alive,
+        "supervisor_runtime": runtime,
+        "research_loop_count": len(research) or (1 if research_status_recent else 0),
+        "research_status_recent": research_status_recent,
+        "oracle_server_count": len(oracle) or len(oracle_listeners),
+        "oracle_port_listeners": oracle_listeners,
     }
 
 
@@ -523,8 +706,10 @@ def build_report() -> dict:
     science_audit_rc, science_audit_diagnostics, _ = science_gate_audit(SCRIPT_DIR / "RESEARCH_BOARD.md")
     ledgers_present = [row.slug for row in science_rows if ledger_path(row.slug).exists()]
 
+    oracle_server = _server_status()
     report = {
-        "oracle_server": _server_status(),
+        "oracle_server": oracle_server,
+        "oracle_bridge_health": _oracle_bridge_health(oracle_server),
         "process_health": _process_health(),
         "pi_status": _pi_status(),
         "task_queue": {
@@ -633,6 +818,34 @@ def _print_text(report: dict) -> None:
     print(f"Oracle server: {'alive' if alive else 'down'}")
     if not alive:
         print(f"  {oracle.get('error', 'no status')}")
+    bridge = report.get("oracle_bridge_health") or {}
+    if bridge:
+        if bridge.get("ok") is True:
+            print(
+                "Oracle bridge: ready "
+                f"(compatible_tabs={bridge.get('compatible_active_poll_agents', 0)})"
+            )
+        elif bridge.get("ok") is None:
+            backoff = bridge.get("bridge_backoff") or {}
+            backoff_text = ""
+            if backoff.get("bridge_backoff"):
+                backoff_text = f", last_backoff_until={backoff.get('backoff_until', '-')}"
+            print(
+                "Oracle bridge: unknown "
+                f"({bridge.get('status')}: {bridge.get('reason')}{backoff_text})"
+            )
+        else:
+            idle = bridge.get("last_agent_idle_seconds")
+            idle_text = f", last_agent_idle={int(idle)}s" if isinstance(idle, (int, float)) else ""
+            backoff = bridge.get("bridge_backoff") or {}
+            backoff_text = ""
+            if backoff.get("bridge_backoff"):
+                backoff_text = f", backoff_until={backoff.get('backoff_until', '-')}"
+            print(
+                "Oracle bridge: blocked "
+                f"({bridge.get('status')}: {bridge.get('reason')}"
+                f"{idle_text}{backoff_text})"
+            )
     proc = report.get("process_health") or {}
     print(
         "Processes: "

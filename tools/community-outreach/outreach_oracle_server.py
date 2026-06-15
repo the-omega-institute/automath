@@ -25,7 +25,7 @@ Protective layer (ported from bedc-deep 2026-05-08):
     before persisting.
   - Contamination detection: reject responses containing canonical BEDC paper /
     paper-trade markers (we are openproblem outreach, not BEDC).
-  - Minimum userscript version (`outreach-1.24`): older scripts can't push
+  - Minimum userscript version (`outreach-1.28`): older scripts can't push
     results, prevents bad data from a half-upgraded environment.
 
 Usage:
@@ -67,8 +67,8 @@ TASK_TIMEOUT = 14400  # 4 hours; ChatGPT Pro thinking can be 60+ min/turn
 AGENT_RECENT_SECONDS = 120
 STALE_REQUEUE_SECONDS = 900
 SESSION_IDLE_RETENTION = 14 * 24 * 3600  # keep sessions on disk for 14 days
-MIN_SCRIPT_VERSION = "outreach-1.24"
-RECOMMENDED_SCRIPT_VERSION = "outreach-1.24"
+MIN_SCRIPT_VERSION = "outreach-1.28"
+RECOMMENDED_SCRIPT_VERSION = "outreach-1.31"
 OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem"
 OPENPROBLEM_PROJECT_URL = f"https://chatgpt.com{OPENPROBLEM_PROJECT_PREFIX}/project"
 
@@ -456,7 +456,7 @@ def _queue_task(task: dict) -> None:
 
 
 def _agent_id_ok(agent_id: str) -> bool:
-    # outreach-1.24 requires a per-tab random suffix so refreshed browser tabs
+    # outreach-1.25+ requires a per-tab random suffix so refreshed browser tabs
     # do not collide with stale agents that used the same numeric tab id.
     return bool(re.fullmatch(r"outreach_[0-9]+_[a-z0-9]+", agent_id or ""))
 
@@ -527,10 +527,13 @@ def _oracle_diagnosis_from_recent(recent: dict, pending: dict[str, dict], stale_
         generating = bool(metrics.get("generating"))
         assistant = metrics.get("assistant") if isinstance(metrics.get("assistant"), dict) else {}
         generation = metrics.get("generation") if isinstance(metrics.get("generation"), dict) else {}
+        limit_alert = metrics.get("limit_alert") if isinstance(metrics.get("limit_alert"), dict) else {}
         assistant_count = int(assistant.get("assistant_count") or 0)
         pre_count = int(assistant.get("pre_submit_assistant_count") or 0)
         last_clean = int(assistant.get("last_assistant_clean_chars") or 0)
         assistant_only = int(assistant.get("assistant_only_chars") or 0)
+        if limit_alert.get("present"):
+            return "agent_busy_rate_limited"
         if phase.startswith("waiting_for_prompt_input"):
             return "agent_busy_waiting_for_prompt_input"
         if phase.startswith("waiting_for_send_button"):
@@ -1105,6 +1108,7 @@ class OutreachOracleHandler(BaseHTTPRequestHandler):
                 "page_chars": metrics.get("page_chars"),
                 "stable_count": metrics.get("stable_count"),
                 "generating": metrics.get("generating"),
+                "limit_alert": metrics.get("limit_alert"),
                 "generation": metrics.get("generation"),
                 "assistant": metrics.get("assistant"),
                 "prompt_input_present": metrics.get("prompt_input_present"),

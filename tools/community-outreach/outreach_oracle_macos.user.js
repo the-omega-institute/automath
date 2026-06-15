@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      outreach-1.24
+// @version      outreach-1.31
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -47,7 +47,7 @@
   const REFILL_NO_OUTPUT_IDLE_TIMEOUT = 1800000;
   const POST_THINK_NO_OUTPUT_TIMEOUT = 300000;
   const REFILL_POST_THINK_NO_OUTPUT_TIMEOUT = 1800000;
-  const SCRIPT_VERSION = "outreach-1.24";
+  const SCRIPT_VERSION = "outreach-1.31";
   const OPENPROBLEM_PROJECT_PREFIX = "/g/g-p-69fdba181e648191a0eb330852658373-openproblem";
   const OPENPROBLEM_PROJECT_URL = `https://chatgpt.com${OPENPROBLEM_PROJECT_PREFIX}/project`;
 
@@ -210,6 +210,187 @@
     return new Promise((r) => setTimeout(r, ms));
   }
 
+  let lastBottomScrollAt = 0;
+  let lastBottomScrollLogAt = 0;
+  function scrollConversationToBottom(reason = "", force = false) {
+    const now = Date.now();
+    if (!force && now - lastBottomScrollAt < 5000) return false;
+    lastBottomScrollAt = now;
+    try {
+      const main = document.querySelector("main");
+      const messageNodes = main
+        ? main.querySelectorAll("[data-message-author-role]")
+        : [];
+      const lastMessage = messageNodes.length ? messageNodes[messageNodes.length - 1] : null;
+      const scrollables = [
+        document.scrollingElement,
+        document.documentElement,
+        document.body,
+        main,
+      ];
+      if (main) {
+        for (const el of Array.from(main.querySelectorAll("div, section, article")).slice(-140)) {
+          try {
+            const style = window.getComputedStyle(el);
+            if (
+              /(auto|scroll)/.test(style.overflowY || "") &&
+              el.scrollHeight > el.clientHeight + 40
+            ) {
+              scrollables.push(el);
+            }
+          } catch {}
+        }
+      }
+      const seen = new Set();
+      for (const el of scrollables) {
+        if (!el || seen.has(el)) continue;
+        seen.add(el);
+        try { el.scrollTop = el.scrollHeight; } catch {}
+      }
+      try {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "auto" });
+      } catch {
+        try { window.scrollTo(0, document.body.scrollHeight); } catch {}
+      }
+      try {
+        if (lastMessage) {
+          lastMessage.scrollIntoView({ block: "end", inline: "nearest", behavior: "auto" });
+        }
+      } catch {}
+      for (const el of seen) {
+        try { el.scrollTop = el.scrollHeight; } catch {}
+      }
+      if (now - lastBottomScrollLogAt >= 300000) {
+        lastBottomScrollLogAt = now;
+        log(`Viewport pinned to latest response${reason ? ` (${reason})` : ""}`);
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function limitAlertSnapshot() {
+    const out = {
+      present: false,
+      source: "",
+      text_head: "",
+    };
+    try {
+      const selectors = [
+        "[role='alert']",
+        "[role='dialog']",
+        "[data-testid*='toast']",
+        "[class*='toast']",
+        "[class*='snackbar']",
+        "[class*='modal']",
+      ];
+      const candidates = [];
+      for (const sel of selectors) {
+        for (const el of document.querySelectorAll(sel)) {
+          const txt = (el.innerText || el.textContent || "").trim();
+          if (txt) candidates.push({ source: sel, text: txt });
+        }
+      }
+      const mainText = (document.querySelector("main")?.innerText || "").trim();
+      if (mainText) candidates.push({ source: "main", text: mainText.slice(0, 4000) });
+      for (const row of candidates) {
+        const text = row.text.replace(/\s+/g, " ").trim();
+        if (
+          /too many requests|rate limit|usage limit|try again later|you'?ve reached|message limit|request limit/i.test(text)
+          || /请求过多|速率限制|达到.*限制|稍后再试/i.test(text)
+        ) {
+          out.present = true;
+          out.source = row.source;
+          out.text_head = text.slice(0, 260);
+          break;
+        }
+      }
+    } catch {}
+    return out;
+  }
+
+  function encodeErrorDiagnostics(message, extra = {}) {
+    const gen = generationDebugSnapshot();
+    const asst = assistantDebugSnapshot();
+    const fields = Object.assign({
+      msg: message,
+      assistant_count: asst.assistant_count,
+      pre_count: asst.pre_submit_assistant_count,
+      last_clean: asst.last_assistant_clean_chars,
+      assistant_only: asst.assistant_only_chars,
+      limit_alert: !!limitAlertSnapshot().present,
+      post_think: !!gen.post_think,
+      generating: !!gen.generating,
+      dom_signal: !!gen.dom_signal,
+      text_signal: !!gen.text_signal,
+      page: (document.querySelector("main")?.innerText || "").length,
+      url: window.location.href.slice(-60),
+    }, extra || {});
+    return Object.entries(fields)
+      .map(([k, v]) => `${k}=${String(v).replace(/[\n\r|]/g, " ").slice(0, 220)}`)
+      .join(" | ");
+  }
+
+  async function rescueExtractAfterNoOutput(task_id, attempts = 3) {
+    for (let i = 0; i < attempts; i++) {
+      scrollConversationToBottom("no-output-rescue", true);
+      await sleep(5000);
+      // OUTREACH FIX (duplicate-response): both extractAssistantOnly() and
+      // extractResponseText() will happily return the PREVIOUS turn's text
+      // when ChatGPT silently failed to generate a new assistant turn
+      // (rate-limit / Pro hiccup / soft-failed send).  Gate every rescue
+      // path on `newAssistantCount() > preSubmitAssistantCount` so we only
+      // ever rescue content that lives in an assistant turn created AFTER
+      // the snapshot.  Without this, the multi-conv burn caused by
+      // re-launching dispatches to escape the duplicate would never end:
+      // the new conv produces one good turn, every follow-up rescue
+      // returns the same string because no new turn rendered.
+      const curCount = newAssistantCount();
+      if (curCount <= preSubmitAssistantCount) {
+        log(`No-output rescue attempt ${i + 1}: assistant count not increased (${curCount} <= preSubmit ${preSubmitAssistantCount}); skip all extractors`);
+      } else {
+        const assistantOnly = extractAssistantOnly();
+        if (assistantOnly && assistantOnly.length >= 100 && !looksLikePromptEcho(assistantOnly)) {
+          log(`No-output rescue: assistant-only recovered ${assistantOnly.length} chars on attempt ${i + 1}`);
+          return assistantOnly;
+        }
+        const newest = extractNewestResponseText();
+        if (newest && newest.length >= 100 && !looksLikePromptEcho(newest)) {
+          log(`No-output rescue: newest-response recovered ${newest.length} chars on attempt ${i + 1}`);
+          return newest;
+        }
+        const fallback = extractResponseText();
+        if (fallback && fallback.length >= 100 && !looksLikePromptEcho(fallback)) {
+          log(`No-output rescue: fallback recovered ${fallback.length} chars on attempt ${i + 1}`);
+          return fallback;
+        }
+      }
+      try {
+        await serverPost("/ack", {
+          task_id,
+          agent_id: agentId(),
+          heartbeat: true,
+          metrics: {
+            phase: "no_output_rescue",
+            rescue_attempt: i + 1,
+            elapsed_seconds: null,
+            extracted_chars: 0,
+            page_chars: (document.querySelector("main")?.innerText || "").length,
+            stable_count: 0,
+            generating: isStillGenerating(),
+            limit_alert: limitAlertSnapshot(),
+            generation: generationDebugSnapshot(),
+            assistant: assistantDebugSnapshot(),
+            url_tail: window.location.href.slice(-60),
+          },
+        });
+      } catch {}
+      log(`No-output rescue attempt ${i + 1}: still no extractable assistant text`);
+    }
+    return "";
+  }
+
   // ── Persistent task state (survives page navigation) ─────────────────
   // OUTREACH CHANGE: keys namespaced under outreach_*
   // OUTREACH ADD: in_flight_task_id tracks the currently-being-processed
@@ -349,7 +530,7 @@
     if (!injected) {
       const attachBtn = document.querySelector(
         "button[aria-label='Attach files'], button[aria-label='Upload file'], " +
-        "button[data-testid='composer-attach-button'], button[aria-haspopup='menu']"
+        "button[data-testid='composer-attach-button']"
       );
       if (attachBtn) {
         log("PDF: clicking attach button...");
@@ -705,6 +886,109 @@
     }
     log("ERROR: cannot send after retries");
     return false;
+  }
+
+  // ── Model pin (force Pro extended before each send) ─────────────────
+  // ChatGPT 5.5 Project conversations sometimes revert to a non-Pro model
+  // ("GPT-5 extended" without Pro) between turns, even after the operator
+  // manually selects Pro.  Auto-downgrade can happen on Pro quota limit,
+  // on long-running convs whose per-conv model was created on extended,
+  // or on Project default = extended.  Manual selection does not persist
+  // across turns.  This guard re-pins Pro at the start of every turn.
+  //
+  // Tries a set of fallback selectors; logs which one matched so the next
+  // iteration can tighten them.  If no picker is found OR no Pro option
+  // is visible, the guard logs a clear warning and returns gracefully so
+  // the task still proceeds (per operator: don't stop the pipeline).
+
+  function getModelPickerButton() {
+    const candidates = [
+      ['testid-model-switcher-dropdown', () => document.querySelector('button[data-testid="model-switcher-dropdown-button"]')],
+      ['testid-model-switcher-any',      () => document.querySelector('[data-testid*="model-switcher"] button')],
+      ['aria-label-Model',               () => document.querySelector('button[aria-label*="Model" i][aria-haspopup]')],
+      ['aria-label-cn-model',            () => document.querySelector('button[aria-label*="选择模型" i]')],
+      ['aria-label-cn-model-2',          () => document.querySelector('button[aria-label*="模型" i][aria-haspopup]')],
+      ['haspopup-text-gpt5pro',          () => Array.from(document.querySelectorAll('button[aria-haspopup="menu"]'))
+                                                 .find(b => /GPT-?5\s*Pro|Pro\s*extended|extended\s*Pro/i.test(b.innerText || ""))],
+      ['haspopup-text-gpt5',             () => Array.from(document.querySelectorAll('button[aria-haspopup="menu"]'))
+                                                 .find(b => /GPT-?5|extended|Pro/i.test(b.innerText || ""))],
+    ];
+    for (const [name, fn] of candidates) {
+      try {
+        const b = fn();
+        if (b) {
+          const txt = (b.innerText || "").slice(0, 60).replace(/\s+/g, " ").trim();
+          const aria = (b.getAttribute("aria-label") || "").slice(0, 60);
+          log(`model picker matched [${name}] text="${txt}" aria="${aria}"`);
+          return b;
+        }
+      } catch (e) { /* selector unsupported by older browser, ignore */ }
+    }
+    return null;
+  }
+
+  function modelTextIsPro(text) {
+    if (!text) return false;
+    // Accept: "Pro extended thinking", "GPT-5 Pro", "GPT-5.5 Pro", "Pro thinking"
+    // Reject: bare "extended", "GPT-5 extended" without Pro
+    return /\bPro\b/i.test(text);
+  }
+
+  async function ensureProModel() {
+    const btn = getModelPickerButton();
+    if (!btn) {
+      log("ensureProModel: NO model picker found in DOM — selectors stale, please share button outerHTML to refine");
+      return { ok: false, reason: "picker_not_found", current: "unknown" };
+    }
+    const cur = ((btn.innerText || "") + " " + (btn.getAttribute("aria-label") || "")).trim();
+    if (modelTextIsPro(cur)) {
+      log(`ensureProModel: already Pro (text="${cur.slice(0, 60)}")`);
+      return { ok: true, reason: "already_pro", current: cur };
+    }
+    log(`ensureProModel: current is NOT Pro (text="${cur.slice(0, 60)}"); opening picker...`);
+    try { btn.click(); } catch (e) { log(`ensureProModel: click picker failed: ${e.message}`); }
+    await sleep(900);
+    const menuItems = Array.from(document.querySelectorAll(
+      '[role="menuitem"], [role="option"], [role="menuitemradio"], [role="menuitemcheckbox"]'
+    ));
+    log(`ensureProModel: ${menuItems.length} menu items visible`);
+    if (menuItems.length === 0) {
+      log("ensureProModel: menu did NOT open — try clicking elsewhere to dismiss any modal then retry next turn");
+      return { ok: false, reason: "menu_did_not_open", current: cur };
+    }
+    const tries = [
+      ['exact_pro_extended_thinking', el => /Pro extended thinking/i.test(el.innerText || "")],
+      ['gpt55_pro',                   el => /GPT-?5\.?5\s*Pro/i.test(el.innerText || "")],
+      ['gpt5_pro',                    el => /GPT-?5\s*Pro/i.test(el.innerText || "")],
+      ['bare_pro',                    el => /\bPro\b/i.test(el.innerText || "")],
+    ];
+    let target = null, hitBy = "";
+    for (const [name, pred] of tries) {
+      target = menuItems.find(pred);
+      if (target) { hitBy = name; break; }
+    }
+    if (!target) {
+      const sample = menuItems.slice(0, 10).map(e => (e.innerText || "").slice(0, 40).replace(/\s+/g, " ")).join(" | ");
+      log(`ensureProModel: no Pro option in menu. sample=${sample}`);
+      try { document.body.click(); } catch (e) {}
+      return { ok: false, reason: "no_pro_option_quota_exhausted_or_locked", current: cur, menu_sample: sample };
+    }
+    const tgtText = (target.innerText || "").slice(0, 60).replace(/\s+/g, " ");
+    // Some menu items have grayed-out (disabled) Pro when quota exhausted
+    const ariaDisabled = target.getAttribute("aria-disabled");
+    if (ariaDisabled === "true" || target.hasAttribute("disabled")) {
+      log(`ensureProModel: Pro option exists but is disabled (quota?) text="${tgtText}"`);
+      try { document.body.click(); } catch (e) {}
+      return { ok: false, reason: "pro_option_disabled_quota_likely", current: cur, target_text: tgtText };
+    }
+    log(`ensureProModel: clicking Pro option [${hitBy}] text="${tgtText}"`);
+    try { target.click(); } catch (e) { log(`ensureProModel: click Pro option failed: ${e.message}`); }
+    await sleep(900);
+    const btn2 = getModelPickerButton();
+    const post = ((btn2 && btn2.innerText) || "").trim();
+    const pickedPro = modelTextIsPro(post);
+    log(`ensureProModel: post-pick text="${post.slice(0, 60)}", picked_pro=${pickedPro}`);
+    return { ok: pickedPro, reason: pickedPro ? "switched" : "switch_did_not_persist", before: cur, after: post };
   }
 
   // ── Response extraction (verbatim from paper oracle v4.10) ───────────
@@ -1224,14 +1508,21 @@
     let countIncreasedLogged = false;
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
+      scrollConversationToBottom("wait");
+      await sleep(500);
       // OUTREACH FIX: require strict count increase before trusting any
       // extractResponseText output. Without this, the multi-strategy
       // fallback can return prior-turn text that happens to be "stable"
       // because no new generation has rendered yet.
       const curCount = newAssistantCount();
-      const responseText = (curCount > preSubmitAssistantCount)
+      let responseText = (curCount > preSubmitAssistantCount)
         ? extractNewestResponseText()
         : "";                       // count not yet increased: don't even consider stability
+      if (curCount > preSubmitAssistantCount && responseText.length < 5) {
+        scrollConversationToBottom("empty-after-count-increase", true);
+        await sleep(1000);
+        responseText = extractNewestResponseText();
+      }
       if (curCount > preSubmitAssistantCount && !countIncreasedLogged) {
         log(`new assistant message detected (count ${preSubmitAssistantCount} → ${curCount})`);
         countIncreasedLogged = true;
@@ -1255,6 +1546,7 @@
               page_chars: mainLen,
               stable_count: stableCount,
               generating,
+              limit_alert: limitAlertSnapshot(),
               generation: genDebug,
               assistant: assistantDebugSnapshot(),
               url_tail: window.location.href.slice(-60),
@@ -1283,9 +1575,18 @@
         const waitLimit = postThinkNoOutput
           ? Math.floor(postThinkNoOutputTimeout / 1000)
           : Math.floor(noOutputIdleTimeout / 1000);
+        const rescued = await rescueExtractAfterNoOutput(task_id, 3);
+        if (rescued && rescued.length >= 100) {
+          log(`Response complete after no-output rescue: ${rescued.length} chars`);
+          return rescued;
+        }
         throw new Error(
           `No assistant output after ${waitLimit}s ` +
-          `(page=${mainLen}, url=${window.location.href.slice(-60)})`
+          `(${encodeErrorDiagnostics("no-output-timeout", {
+            wait_limit: waitLimit,
+            extracted: responseText.length,
+            stable: stableCount,
+          })})`
         );
       }
       if (responseText.length >= 5) {
@@ -1364,6 +1665,7 @@
             is_on_new_chat_page: isOnNewChatPage(),
             in_project: isInsideBedcProject(),
             current_url_tail: window.location.href.slice(-80),
+            limit_alert: limitAlertSnapshot(),
             generation: generationDebugSnapshot(),
             assistant: assistantDebugSnapshot(),
           }, extra || {}),
@@ -1403,6 +1705,8 @@
         }
         try { await serverPost("/ack", { task_id, agent_id: agentId() }); } catch {}
         await sleep(3000); // settle DOM
+        scrollConversationToBottom("re-extract", true);
+        await sleep(1000);
         if (prompt) setSentPrompt(prompt);
         // OUTREACH ADD: try dedicated assistant-only extraction first (bypasses
         // heuristics that can fall to prompt echo when sentPromptText isn't
@@ -1417,11 +1721,38 @@
         if (!response || response.length < 100) {
           throw new Error(`re-extract: nothing meaningful (${response?.length || 0} chars)`);
         }
+        // OUTREACH FIX v1.31: page-reload re_extract path loses
+        // preSubmitAssistantCount and was happily extracting the prior
+        // turn's text. Compare against the last-submitted signature for
+        // this conv; if equal, the new turn has not rendered yet — wait
+        // and retry rather than POSTing a stale duplicate.
+        let staleRetries = 0;
+        while (
+          isResponseStaleAgainstLastSubmit(conversation_id, response)
+          && staleRetries < 3
+        ) {
+          staleRetries++;
+          log(`re-extract: extracted matches previously-submitted signature `
+            + `(stale DOM, retry ${staleRetries}/3); waiting 15s`);
+          await sleep(15000);
+          scrollConversationToBottom("re-extract-stale-retry", true);
+          await sleep(500);
+          let next = extractAssistantOnly();
+          if (!next || next.length < 100) next = extractResponseText();
+          if (next && next.length >= 100) response = next;
+        }
+        if (isResponseStaleAgainstLastSubmit(conversation_id, response)) {
+          throw new Error(
+            `re-extract: still returning prior-turn signature after `
+            + `${staleRetries} retries (stale DOM)`
+          );
+        }
         const chatUrl = currentChatUrl();
         await serverPost("/result", {
           task_id, response, chatgpt_url: chatUrl,
           agent_id: agentId(), model: task.model || "unknown",
         });
+        markResponseSubmitted(conversation_id, response);
         log(`DONE (re-extract): ${task_id} (${response.length} chars)`);
         clearTaskState();
         setInFlightTaskId("");
@@ -1460,6 +1791,8 @@
       try { await serverPost("/ack", { task_id, agent_id: agentId() }); } catch {}
       setTaskPhase("processing");
       setSentPrompt(prompt);
+      scrollConversationToBottom("resume", true);
+      await sleep(500);
       capturePostSendState();
       try {
         const response = await waitForResponse(task_id, noOutputIdleTimeout, postThinkNoOutputTimeout);
@@ -1472,6 +1805,7 @@
           task_id, response, chatgpt_url: chatUrl,
           agent_id: agentId(), model: task.model || "unknown",
         });
+        markResponseSubmitted(conversation_id, response);
         log(`DONE (resumed): ${task_id} (${response.length} chars)`);
         clearTaskState();
         setInFlightTaskId("");
@@ -1615,6 +1949,26 @@
         }
       }
 
+      // Pin Pro model BEFORE entering the prompt.  ChatGPT 5.5 Project
+      // convs can silently revert to non-Pro extended; manual selection
+      // does not persist across turns.  Best-effort: try to switch; if
+      // we can't (quota exhausted or DOM changed), log loudly and still
+      // proceed so the pipeline doesn't stall.
+      try {
+        const pin = await ensureProModel();
+        await phaseHeartbeat("model_pin", {
+          model_pin_ok: !!pin.ok,
+          model_pin_reason: pin.reason || "unknown",
+          model_pin_before: (pin.before || pin.current || "").slice(0, 60),
+          model_pin_after: (pin.after || pin.current || "").slice(0, 60),
+        }, true);
+        if (!pin.ok) {
+          log(`MODEL PIN FAILED: ${pin.reason}; proceeding on whatever model is selected (operator may need to intervene)`);
+        }
+      } catch (e) {
+        log(`ensureProModel threw: ${e.message} — continuing without model pin`);
+      }
+
       // Enter prompt
       const entered = await enterPrompt(prompt);
       if (!entered) throw new Error("Failed to enter prompt text");
@@ -1681,6 +2035,8 @@
       }
 
       await sleep(5000); // settle DOM
+      scrollConversationToBottom("post-send", true);
+      await sleep(500);
       capturePostSendState();
       const response = await waitForResponse(task_id, noOutputIdleTimeout, postThinkNoOutputTimeout);
 
@@ -1699,6 +2055,7 @@
         agent_id: agentId(),
         model: task.model || "unknown",
       });
+      markResponseSubmitted(conversation_id, response);
       log(`DONE: ${task_id} (${response.length} chars)`);
       clearTaskState();
       setInFlightTaskId("");  // OUTREACH ADD
@@ -1765,6 +2122,35 @@
   // gives each tab its own private namespace.
   function tabSet(k, v) { return GM_setValue(`${agentId()}_${k}`, v); }
   function tabGet(k, d) { return GM_getValue(`${agentId()}_${k}`, d); }
+
+  // OUTREACH FIX v1.31 (sha-identical extraction bug):
+  // conv-scoped (cross-tab) signature of the LAST response we successfully
+  // submitted for each conversation. Used in the re-extract path to detect
+  // when extractAssistantOnly() / extractResponseText() returned the same
+  // turn we already submitted (i.e. the new turn has not yet rendered into
+  // the DOM after the page-reload navigation that re_extract performs).
+  // ChatGPT 5.4 Pro never regenerates byte-identical output, so seeing the
+  // same (length, head300) tuple twice in a row for the same conv means
+  // the extractor is grabbing a prior turn from the DOM.
+  function _convDedupKey(conv_id) {
+    return `outreach_last_resp_sig_${conv_id || "_none_"}`;
+  }
+  function _respSig(response) {
+    if (!response) return "";
+    return `${response.length}:${response.slice(0, 300)}`;
+  }
+  function markResponseSubmitted(conv_id, response) {
+    if (!conv_id || !response) return;
+    try { GM_setValue(_convDedupKey(conv_id), _respSig(response)); } catch {}
+  }
+  function isResponseStaleAgainstLastSubmit(conv_id, response) {
+    if (!conv_id || !response) return false;
+    try {
+      const prev = GM_getValue(_convDedupKey(conv_id), "");
+      if (!prev) return false;
+      return _respSig(response) === prev;
+    } catch { return false; }
+  }
 
   function outreachFlagForAgent() {
     const flagMatch = agentId().match(/^outreach_(\d+)(?:_|$)/);

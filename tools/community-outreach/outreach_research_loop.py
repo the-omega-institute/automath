@@ -52,6 +52,7 @@ RESEARCH_CLAIMS_DIR = STATE_DIR / "research_claims"
 RESEARCH_LOOP_LOG_DIR = STATE_DIR / "research_loop_logs"
 RESEARCH_LOOP_STATUS = STATE_DIR / "research_loop.status.json"
 RESEARCH_LOOP_LOCK = STATE_DIR / "research_loop.lock"
+RESEARCH_LOOP_ALLOWLIST = STATE_DIR / "research_loop_allowlist.txt"
 CODEX_TRANSPORT_STATE = STATE_DIR / "codex_transport.json"
 ORACLE_BRIDGE_STATE = STATE_DIR / "oracle_bridge.json"
 RESEARCH_BOARD_PATH = SCRIPT_DIR / "RESEARCH_BOARD.md"
@@ -59,14 +60,17 @@ DRAFTS_DIR = SCRIPT_DIR / "drafts"
 TARGETS_DIR = SCRIPT_DIR / "targets"
 DISPATCH_WORKTREE = SCRIPT_DIR / "dispatch_worktree.py"
 ORACLE_RECONCILE = SCRIPT_DIR / "outreach_oracle_reconcile.py"
+CODEX_CONSENSUS_RUNNER = SCRIPT_DIR / "codex_consensus_runner.py"
 LOCAL_REPAIR = SCRIPT_DIR / "outreach_local_repair.py"
 ORACLE_SERVER_URL = os.environ.get("OUTREACH_ORACLE_SERVER_URL", "http://127.0.0.1:8766/status")
 
-DEFAULT_PARALLEL = 4
+DEFAULT_PARALLEL = 3
+MAX_RESEARCH_PARALLEL = int(os.environ.get("OUTREACH_MAX_RESEARCH_PARALLEL", "3") or "3")
+TARGET_ALLOWLIST_RAW = os.environ.get("OUTREACH_TARGET_ALLOWLIST", "")
 DEFAULT_POLL_INTERVAL = 120
 DEFAULT_CLAIM_STALE_HOURS = 4
 DEFAULT_TARGET_TIMEOUT_S = 7200  # 2h hard cap per target
-DEFAULT_ORACLE_REFILL_RESERVE = int(os.environ.get("OUTREACH_ORACLE_REFILL_RESERVE", "1") or "1")
+DEFAULT_ORACLE_REFILL_RESERVE = int(os.environ.get("OUTREACH_ORACLE_REFILL_RESERVE", "0") or "0")
 SUMMARY_COOLDOWN_HOURS = 2
 TRANSPORT_FAILURE_BACKOFF_MINUTES = int(os.environ.get("OUTREACH_TRANSPORT_BACKOFF_MINUTES", "5") or "5")
 DEFAULT_ORACLE_TURN_TIMEOUT_S = 7200
@@ -83,6 +87,25 @@ SKIP_STATUS_PATTERNS = [
     "HANDOFF",
     "not outreach",
 ]
+
+
+def _target_allowlist() -> set[str]:
+    raw = TARGET_ALLOWLIST_RAW
+    if not raw:
+        try:
+            raw = RESEARCH_LOOP_ALLOWLIST.read_text(encoding="utf-8")
+        except OSError:
+            raw = ""
+    return {
+        item.strip()
+        for item in raw.replace(";", ",").replace("\n", ",").split(",")
+        if item.strip()
+    }
+
+
+def _target_allowed(todo_id: str) -> bool:
+    allowed = _target_allowlist()
+    return not allowed or todo_id in allowed
 
 sys.path.insert(0, str(SCRIPT_DIR))
 from outreach_preflight import ACTIONABLE_VERDICTS, judge  # noqa: E402
@@ -349,6 +372,55 @@ def _oracle_task_active_for_target(todo_id: str, slug: str) -> bool:
     return False
 
 
+def _oracle_bridge_readiness() -> tuple[bool, str, dict]:
+    """Return whether a compatible browser userscript tab can accept work."""
+    try:
+        import urllib.request
+
+        with urllib.request.urlopen(ORACLE_SERVER_URL, timeout=3) as resp:  # noqa: S310 - localhost status endpoint.
+            payload = json.loads(resp.read().decode("utf-8", errors="replace"))
+    except Exception as exc:  # noqa: BLE001
+        return False, f"server unreachable: {exc}", {}
+    if int(payload.get("port") or 0) != 8766:
+        return False, "server status did not report outreach port 8766", payload
+    compatible = payload.get("compatible_active_poll_agents") or []
+    if compatible:
+        return True, "", payload
+    required = str(payload.get("required_script_version") or "-")
+    active = payload.get("active_poll_agents") or []
+    project_active = payload.get("project_active_poll_agents") or []
+    recent_agents = payload.get("recent_agents") or {}
+    seen_versions: list[str] = []
+    idle_seconds: list[float] = []
+    if isinstance(recent_agents, dict):
+        for rec in recent_agents.values():
+            if not isinstance(rec, dict):
+                continue
+            try:
+                idle_seconds.append(float(rec.get("idle_seconds")))
+            except (TypeError, ValueError):
+                pass
+            metrics = rec.get("metrics") if isinstance(rec.get("metrics"), dict) else {}
+            version = str(metrics.get("script_version") or "")
+            if version and version not in seen_versions:
+                seen_versions.append(version)
+    idle_hint = f"; last_agent_idle={int(min(idle_seconds))}s" if idle_seconds else ""
+    seen_hint = f"; seen={','.join(seen_versions)}" if seen_versions else ""
+    if active:
+        return False, f"no compatible Outreach Oracle tab; required={required}{seen_hint}", payload
+    if project_active:
+        return False, f"project tab active but incompatible; required={required}{seen_hint}", payload
+    return False, f"no active Outreach Oracle tab; required={required}{idle_hint}{seen_hint}", payload
+
+
+def _oracle_bridge_available_for_deep() -> bool:
+    ok, reason, _payload = _oracle_bridge_readiness()
+    if ok:
+        return True
+    _note_global_oracle_bridge_backoff(reason=reason)
+    return False
+
+
 def _live_dispatch_for_slug(slug: str) -> bool:
     """Backward-compatible stale-claim helper for older marker files."""
     try:
@@ -586,6 +658,12 @@ def _spawn_local_repair(todo_id: str, timeout_s: int) -> tuple[int, str]:
     Oracle→Codex loop: Oracle proposes or proves; Codex tries to replay the
     locally testable part and writes the next exact handoff.
     """
+    if os.environ.get("OUTREACH_PRESERVE_NEXT_PROMPT", "0") in ("1", "true", "True"):
+        loop_log(
+            f"{todo_id}: OUTREACH_PRESERVE_NEXT_PROMPT set; skipping local_repair "
+            "to keep user-written next_oracle_question.md intact"
+        )
+        return 0, ""
     if not LOCAL_REPAIR.exists():
         return 127, ""
     RESEARCH_LOOP_LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -594,6 +672,11 @@ def _spawn_local_repair(todo_id: str, timeout_s: int) -> tuple[int, str]:
         default_repair_timeout = int(os.environ.get("OUTREACH_LOCAL_WORKUP_TIMEOUT", "900") or "900")
     except ValueError:
         default_repair_timeout = 900
+    try:
+        heartbeat_seconds = int(os.environ.get("OUTREACH_LOCAL_REPAIR_HEARTBEAT_SECONDS", "30") or "30")
+    except ValueError:
+        heartbeat_seconds = 30
+    heartbeat_seconds = max(10, heartbeat_seconds)
     repair_timeout = max(600, min(timeout_s, default_repair_timeout))
     cmd = [
         "python3",
@@ -605,36 +688,70 @@ def _spawn_local_repair(todo_id: str, timeout_s: int) -> tuple[int, str]:
         "--json",
     ]
     with open(log_path, "ab") as logf:
+        def write_probe(message: str) -> None:
+            logf.write(f"[{_now_iso()}] {message}\n".encode("utf-8", errors="replace"))
+            logf.flush()
+
+        write_probe(
+            f"starting outreach_local_repair todo_id={todo_id} "
+            f"timeout={repair_timeout}s cwd={REPO_ROOT}"
+        )
+        env = dict(os.environ)
+        env["OUTREACH_LOCAL_REPAIR_PROGRESS_LOG"] = str(log_path)
         proc = subprocess.Popen(
             cmd,
             cwd=str(REPO_ROOT),
             stdout=logf,
             stderr=subprocess.STDOUT,
+            env=env,
             start_new_session=True,
         )
+        write_probe(f"spawned outreach_local_repair pid={proc.pid}")
+        deadline = time.monotonic() + repair_timeout + 300
+        next_heartbeat = time.monotonic() + heartbeat_seconds
         try:
-            rc = proc.wait(timeout=repair_timeout + 300)
+            while True:
+                rc_poll = proc.poll()
+                if rc_poll is not None:
+                    rc = rc_poll
+                    write_probe(f"outreach_local_repair exited rc={rc}")
+                    break
+                now = time.monotonic()
+                if now >= deadline:
+                    raise subprocess.TimeoutExpired(cmd, repair_timeout + 300)
+                if now >= next_heartbeat:
+                    elapsed = int((repair_timeout + 300) - (deadline - now))
+                    write_probe(
+                        f"heartbeat outreach_local_repair pid={proc.pid} "
+                        f"elapsed={elapsed}s still_running=true"
+                    )
+                    next_heartbeat = now + heartbeat_seconds
+                time.sleep(2)
         except subprocess.TimeoutExpired:
+            write_probe(
+                f"timeout outreach_local_repair pid={proc.pid}; "
+                "terminating process group"
+            )
             try:
                 os.killpg(proc.pid, signal.SIGTERM)
-            except (ProcessLookupError, OSError):
-                pass
+            except (ProcessLookupError, OSError) as exc:
+                write_probe(f"SIGTERM process group failed: {exc}")
             time.sleep(5)
             try:
                 os.killpg(proc.pid, signal.SIGKILL)
-            except (ProcessLookupError, OSError):
-                pass
+            except (ProcessLookupError, OSError) as exc:
+                write_probe(f"SIGKILL process group failed: {exc}")
+            write_probe("outreach_local_repair timeout rc=124")
             return 124, str(log_path)
     return rc, str(log_path)
 
 
 def _run_codex_workup_before_oracle(todo_id: str, slug: str, timeout_s: int) -> tuple[int, str]:
-    """Always let Codex inspect/process the target before an Oracle batch.
+    """Optional legacy gate: let Codex inspect/process before an Oracle batch.
 
-    The Oracle prompt should be built from a local workup, not just from board
-    metadata.  This pass may create verifier scripts, replay simple checks, or
-    simply write codex_workup.md with the exact proof obligation Oracle should
-    attack next.
+    The default pipeline is Oracle-first: send the problem/evidence packet to
+    Oracle and let it drive proof search. This helper remains for explicit
+    opt-in runs that need Codex to prepare a local handoff first.
     """
     loop_log(f"{todo_id}: refreshing Codex local workup before Oracle")
     started = _now()
@@ -1317,6 +1434,26 @@ def _global_oracle_bridge_backoff_applies() -> bool:
     return _now() < until
 
 
+def _oracle_bridge_backoff_snapshot() -> dict:
+    try:
+        state = json.loads(ORACLE_BRIDGE_STATE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    try:
+        until = float(state.get("backoff_until_epoch") or 0.0)
+    except (TypeError, ValueError):
+        until = 0.0
+    active = _now() < until
+    return {
+        "active": active,
+        "reason": state.get("reason") or "",
+        "backoff_until": state.get("backoff_until") or "",
+        "stderr_log": state.get("stderr_log") or "",
+        "recorded_at": state.get("recorded_at") or "",
+        "remaining_seconds": max(0, round(until - _now(), 1)) if until else 0,
+    }
+
+
 def _read_local_repair_report(slug: str) -> dict:
     path = TARGETS_DIR / slug / "local_repair_last.json"
     try:
@@ -1436,12 +1573,77 @@ def _reconcile_oracle_deep(todo_id: str) -> dict:
             f"{todo_id}: oracle deep reconcile wrote "
             + ", ".join(str(r.get("claim_packet") or r.get("source") or "?") for r in written)
         )
+        todos = _parse_board_safe()
+        todo = todos.get(todo_id) if isinstance(todos, dict) else None
+        slug = todo.slug() if todo is not None else ""
+        if slug:
+            _run_codex_consensus(slug)
+        else:
+            loop_log(f"{todo_id}: codex consensus skipped; could not resolve target slug")
     return payload
 
 
 def _reconcile_wrote_payload(payload: dict) -> bool:
     written = payload.get("written") if isinstance(payload, dict) else None
     return isinstance(written, list) and bool(written)
+
+
+def _run_codex_consensus(slug: str) -> None:
+    """Run Codex consensus verification after an Oracle response lands."""
+    mode = os.environ.get("OUTREACH_CONSENSUS_MODE", "sync").strip().lower()
+    if mode == "off":
+        loop_log(f"{slug}: codex consensus skipped by OUTREACH_CONSENSUS_MODE=off")
+        return
+    if mode not in {"sync", "async"}:
+        loop_log(f"{slug}: unknown OUTREACH_CONSENSUS_MODE={mode!r}; using sync")
+        mode = "sync"
+    if not CODEX_CONSENSUS_RUNNER.exists():
+        loop_log(f"{slug}: codex consensus runner missing: {CODEX_CONSENSUS_RUNNER}")
+        return
+    try:
+        timeout_s = int(os.environ.get("OUTREACH_CONSENSUS_TIMEOUT_SEC", "3900") or "3900")
+    except ValueError:
+        timeout_s = 3900
+    RESEARCH_LOOP_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = RESEARCH_LOOP_LOG_DIR / f"codex_consensus_{slug}_{_now_tag_safe()}.log"
+    cmd = [
+        "python3",
+        str(CODEX_CONSENSUS_RUNNER),
+        "--target",
+        slug,
+    ]
+    try:
+        logf = open(log_path, "ab")
+    except OSError as exc:
+        loop_log(f"{slug}: codex consensus could not open log: {exc}")
+        return
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(REPO_ROOT),
+            stdout=logf,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+        if mode == "async":
+            loop_log(f"{slug}: codex consensus async pid={proc.pid} ({log_path})")
+            logf.close()
+            return
+        try:
+            rc = proc.wait(timeout=timeout_s)
+            loop_log(f"{slug}: codex consensus rc={rc} ({log_path})")
+        except subprocess.TimeoutExpired:
+            loop_log(
+                f"{slug}: codex consensus timed out after {timeout_s}s; "
+                f"leaving worker pid={proc.pid} running ({log_path})"
+            )
+    except Exception as exc:  # noqa: BLE001
+        loop_log(f"{slug}: codex consensus failed to start/run: {exc}")
+    finally:
+        try:
+            logf.close()
+        except OSError:
+            pass
 
 
 def _log_contains_transport_skip(log_path: str) -> bool:
@@ -1785,6 +1987,10 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
     """Claim → dispatch → write summary → mark board (only if real work
     happened) → release."""
     started = _now()
+    if not _target_allowed(todo_id):
+        allowed = ",".join(sorted(_target_allowlist())) or "-"
+        loop_log(f"{todo_id}: skipped by OUTREACH_TARGET_ALLOWLIST={allowed}")
+        return {"todo_id": todo_id, "slug": slug, "skipped": "target_not_allowlisted"}
     if _live_worker_for_target(todo_id, slug):
         loop_log(f"{todo_id}: live worker already active for {slug}; skipping duplicate claim")
         return {"todo_id": todo_id, "slug": slug, "skipped": "live_worker_active"}
@@ -1925,83 +2131,8 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                 ):
                     loop_log(
                         f"{todo_id}: local repair cleared replay/verifier blockers; "
-                        "checking Codex-selected next Oracle task before proof/closure"
+                        "returning control to Oracle-first proof search"
                     )
-                    workup_ok, workup_reason = _pre_oracle_workup_fresh_after(slug, repair_started)
-                    if not workup_ok:
-                        rc, log_path = 2, log_path
-                        _note_local_repair_backoff(
-                            slug,
-                            reason=(
-                                "local repair cleared replay/verifier blockers but did not produce "
-                                f"a usable pre-Oracle Codex workup: {workup_reason}"
-                            ),
-                            log_path=log_path,
-                        )
-                        loop_log(
-                            f"{todo_id}: local repair did not leave a usable pre-Oracle Codex workup "
-                            f"({workup_reason}); not asking Oracle from a generic prompt"
-                        )
-                    else:
-                        rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
-                        loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
-                        reconcile_payload = _reconcile_oracle_deep(todo_id)
-                        if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
-                            rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
-                        else:
-                            if _path_contains_oracle_bridge_not_ready(log_path):
-                                _note_global_oracle_bridge_backoff(
-                                    reason=f"oracle bridge not ready for {todo_id}",
-                                    log_path=log_path,
-                                )
-                            _note_transport_backoff(
-                                slug,
-                                reason=f"oracle-deep transport/no-payload rc={rc}",
-                                log_path=log_path,
-                            )
-                            loop_log(
-                                f"{todo_id}: oracle-deep produced no usable payload; "
-                                f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
-                            )
-            else:
-                reuse_ok, reuse_reason = _pre_oracle_workup_recent(
-                    slug,
-                    max_age_seconds=max(900, int(timeout_s)),
-                )
-                if reuse_ok:
-                    loop_log(
-                        f"{todo_id}: reusing fresh Codex local workup for oracle-deep; "
-                        "not rerunning local repair"
-                    )
-                    workup_rc, workup_log = 0, log_path
-                    workup_ok, workup_reason = True, ""
-                else:
-                    loop_log(
-                        f"{todo_id}: science_gate.next_action=deep_reason"
-                        f"{' after local supervisor produced no artifact' if not _has_real_artifacts(slug) else ''}; "
-                        f"running Codex workup before oracle-deep ({reuse_reason})"
-                    )
-                    workup_rc, workup_log = _run_codex_workup_before_oracle(todo_id, slug, timeout_s)
-                    if workup_rc != 0:
-                        rc, log_path = workup_rc, workup_log
-                        loop_log(
-                            f"{todo_id}: pre-Oracle Codex workup failed; "
-                            "not asking Oracle from an unprocessed board card"
-                        )
-                    else:
-                        workup_ok, workup_reason = _pre_oracle_workup_status(slug)
-                if workup_rc == 0 and not workup_ok:
-                    rc, log_path = 2, workup_log
-                    _note_local_repair_backoff(
-                        slug,
-                        reason=f"pre-oracle codex workup unusable: {workup_reason}",
-                        log_path=workup_log,
-                    )
-                    loop_log(
-                        f"{todo_id}: pre-Oracle Codex workup unusable ({workup_reason}); "
-                        "not asking Oracle from a generic/unprocessed prompt"
-                    )
-                elif workup_rc == 0:
                     rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
                     loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
                     reconcile_payload = _reconcile_oracle_deep(todo_id)
@@ -2022,6 +2153,31 @@ def process_one(todo_id: str, slug: str, *, timeout_s: int) -> dict:
                             f"{todo_id}: oracle-deep produced no usable payload; "
                             f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
                         )
+            else:
+                loop_log(
+                    f"{todo_id}: science_gate.next_action=deep_reason; "
+                    "dispatching Oracle-first proof search without pre-Oracle Codex workup"
+                )
+                rc, log_path = _spawn_oracle_deep(todo_id, timeout_s)
+                loop_log(f"{todo_id}: dispatch_worktree --oracle-deep rc={rc} ({log_path})")
+                reconcile_payload = _reconcile_oracle_deep(todo_id)
+                if _oracle_deep_produced_payload(rc, log_path, reconcile_payload):
+                    rc, log_path = _run_local_followup_after_oracle(todo_id, rc, log_path, timeout_s)
+                else:
+                    if _path_contains_oracle_bridge_not_ready(log_path):
+                        _note_global_oracle_bridge_backoff(
+                            reason=f"oracle bridge not ready for {todo_id}",
+                            log_path=log_path,
+                        )
+                    _note_transport_backoff(
+                        slug,
+                        reason=f"oracle-deep transport/no-payload rc={rc}",
+                        log_path=log_path,
+                    )
+                    loop_log(
+                        f"{todo_id}: oracle-deep produced no usable payload; "
+                        f"backing off {TRANSPORT_FAILURE_BACKOFF_MINUTES}min instead of local repair"
+                    )
             todos = _parse_board_safe()
             if todo_id in todos:
                 science_gate = science_gate_evaluate(todos[todo_id])
@@ -2151,6 +2307,8 @@ def select_next_target(skip_slugs: set[str] | None = None) -> Optional[tuple[str
     if not todos:
         return None
     for tid, todo in sorted(todos.items(), key=_selection_priority):
+        if not _target_allowed(tid):
+            continue
         status = getattr(todo, "status", "") or ""
         if _is_skipped(status):
             continue
@@ -2401,12 +2559,18 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
             started_any = False
             codex_transport_paused = False
             oracle_bridge_paused = False
+            oracle_bridge_backoff = {}
             while not stop_flag["stop"] and len(active) < research_workers:
                 if _global_codex_transport_backoff_applies():
                     codex_transport_paused = True
                     break
                 if _global_oracle_bridge_backoff_applies():
                     oracle_bridge_paused = True
+                    oracle_bridge_backoff = _oracle_bridge_backoff_snapshot()
+                    break
+                if not _oracle_bridge_available_for_deep():
+                    oracle_bridge_paused = True
+                    oracle_bridge_backoff = _oracle_bridge_backoff_snapshot()
                     break
                 skip_slugs = {slug for _, slug in active.values()}
                 if args.todo_id:
@@ -2416,6 +2580,10 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                     todo = todos.get(args.todo_id)
                     if todo is None:
                         loop_log(f"--todo-id {args.todo_id} not found on board, exiting")
+                        return 1
+                    if not _target_allowed(args.todo_id):
+                        allowed = ",".join(sorted(_target_allowlist())) or "-"
+                        loop_log(f"--todo-id {args.todo_id} blocked by OUTREACH_TARGET_ALLOWLIST={allowed}")
                         return 1
                     slug = todo.slug()
                     if _is_skipped(getattr(todo, "status", "") or ""):
@@ -2458,6 +2626,7 @@ def _run_parallel_loop(args: argparse.Namespace, stop_flag: dict) -> int:
                 "oracle_refill_reserve": oracle_refill_reserve,
                 "codex_transport_paused": codex_transport_paused,
                 "oracle_bridge_paused": oracle_bridge_paused,
+                "oracle_bridge_backoff": oracle_bridge_backoff,
             })
 
             if args.once:
@@ -2518,6 +2687,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.loop and not args.once:
         p.error("specify --loop or --once")
+    if args.parallel > MAX_RESEARCH_PARALLEL:
+        args.parallel = MAX_RESEARCH_PARALLEL
 
     loop_lock_fd = None
     if args.loop and not args.todo_id:
@@ -2533,7 +2704,8 @@ def main(argv: list[str] | None = None) -> int:
         f"research_loop starting "
         f"(loop={args.loop} once={args.once} todo_id={args.todo_id or 'auto'} "
         f"parallel={args.parallel} oracle_refill_reserve={args.oracle_refill_reserve} "
-        f"timeout={args.target_timeout_s}s)"
+        f"timeout={args.target_timeout_s}s "
+        f"allowlist={','.join(sorted(_target_allowlist())) or '-'})"
     )
 
     if args.parallel > 1:
@@ -2566,6 +2738,10 @@ def main(argv: list[str] | None = None) -> int:
             todo = todos.get(args.todo_id)
             if todo is None:
                 loop_log(f"--todo-id {args.todo_id} not found on board, exiting")
+                return 1
+            if not _target_allowed(args.todo_id):
+                allowed = ",".join(sorted(_target_allowlist())) or "-"
+                loop_log(f"--todo-id {args.todo_id} blocked by OUTREACH_TARGET_ALLOWLIST={allowed}")
                 return 1
             slug = todo.slug()
             if _is_skipped(getattr(todo, "status", "") or ""):

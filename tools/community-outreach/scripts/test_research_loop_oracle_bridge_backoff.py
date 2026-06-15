@@ -33,7 +33,7 @@ def main() -> int:
         log_path = state_dir / "oracle_deep.log"
         log_path.write_text(
             "[oracle-deep] bridge not ready for T-36: "
-            "no compatible Outreach Oracle tab; required=outreach-1.24 seen=outreach-1.23 active=2\n",
+            "no compatible Outreach Oracle tab; required=outreach-1.27 seen=outreach-1.26 active=2\n",
             encoding="utf-8",
         )
 

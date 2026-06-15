@@ -54,7 +54,7 @@ def main() -> int:
 
     agent_id = "outreach_1_m3s9kabcd"
     old_poll = {
-        "script_version": "outreach-1.24",
+        "script_version": "outreach-1.28",
         "page_url": server.OPENPROBLEM_PROJECT_URL,
         "chatgpt_url": "",
     }
@@ -67,15 +67,15 @@ def main() -> int:
     server._record_agent_seen(agent_id, event="poll", metrics=old_poll)
     server._record_agent_seen(agent_id, event="poll", metrics=stale_poll)
     metrics = server.recent_agents[agent_id]["metrics"]
-    if metrics["script_version"] != "outreach-1.24":
+    if metrics["script_version"] != "outreach-1.28":
         raise AssertionError("stale/incompatible poll overwrote compatible active agent")
 
     # The compatibility predicate itself is the first line of defense used
     # before returning pending tasks or cancelling same-id pending tasks.
-    if server._script_version_ok("outreach-1.23"):
-        raise AssertionError("outreach-1.23 should not satisfy the 1.24 guard")
-    if not server._script_version_ok("outreach-1.24"):
-        raise AssertionError("outreach-1.24 should satisfy the 1.24 guard")
+    if server._script_version_ok("outreach-1.27"):
+        raise AssertionError("outreach-1.27 should not satisfy the 1.28 guard")
+    if not server._script_version_ok("outreach-1.28"):
+        raise AssertionError("outreach-1.28 should satisfy the 1.28 guard")
     return 0
 
 

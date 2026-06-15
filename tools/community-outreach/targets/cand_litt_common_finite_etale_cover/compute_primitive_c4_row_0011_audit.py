@@ -54,6 +54,12 @@ EXCLUDE_SELF_NAMES = {
     "compute_primitive_c4_row_0011_audit.py",
     "primitive_c4_fixed_0011_single_row_audit.json",
     "primitive_c4_deliverable_b_gate_output.json",
+    "c4_route_c_blocker_decomposition_output.json",
+    "codex_workup.md",
+    "local_repair_report.md",
+    "next_oracle_question.md",
+    "results.json",
+    "stable_points.md",
 }
 
 

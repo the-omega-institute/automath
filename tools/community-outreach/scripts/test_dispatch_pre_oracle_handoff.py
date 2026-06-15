@@ -234,13 +234,22 @@ def main() -> int:
 
         class FakeConsultant:
             server_url = "http://127.0.0.1:8766"
+            last_kwargs = {}
+            last_initial_prompt = ""
+            expect_verified_handoff = False
 
             def is_alive(self) -> bool:
                 return True
 
-            def deep_reasoning(self, *_args, **_kwargs):
-                if os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV) != "1":
-                    raise AssertionError("dispatch did not mark handoff as verified before Oracle deep reasoning")
+            def deep_reasoning(self, _todo, initial_prompt, **_kwargs):
+                verified = os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV) == "1"
+                if verified != self.expect_verified_handoff:
+                    raise AssertionError(
+                        "dispatch pre-Oracle handoff env mismatch: "
+                        f"expected={self.expect_verified_handoff} actual={verified}"
+                    )
+                FakeConsultant.last_initial_prompt = initial_prompt
+                FakeConsultant.last_kwargs = dict(_kwargs)
                 return {
                     "final_verdict": "EXHAUSTED",
                     "turns": [],
@@ -252,6 +261,7 @@ def main() -> int:
         old_build_initial = dispatch._build_deep_initial_prompt
         old_resume_conv = dispatch._resume_conversation_id
         old_env = os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV)
+        old_require_pre = dispatch.REQUIRE_PRE_ORACLE_CODEX_WORKUP
         dispatch._run_pre_oracle_codex_workup = lambda *_args, **_kwargs: (True, "", "test handoff")
         dispatch._build_deep_initial_prompt = lambda *_args, **_kwargs: "initial"
         dispatch._resume_conversation_id = lambda *_args, **_kwargs: ""
@@ -269,7 +279,40 @@ def main() -> int:
             )
             sys.modules["oracle_consultant"] = fake_oracle_module
             fake_profile = types.SimpleNamespace(slug="demo")
+            dispatch.REQUIRE_PRE_ORACLE_CODEX_WORKUP = False
+            FakeConsultant.expect_verified_handoff = False
             result = dispatch._run_oracle_deep(
+                dispatch.TodoSpec(
+                    todo_id="T-DEMO",
+                    title="Demo certificate",
+                    status="active",
+                    source="local",
+                    type_="open_problem",
+                    untouched="",
+                    fit_score=10,
+                    topic_score=10,
+                    effort="small",
+                    risk="low",
+                    final_display="short note",
+                    success_gate="verifier passes",
+                    statement="demo",
+                    prior="",
+                    omega_fit_detail="",
+                    attack_plan=[],
+                    worktree_inputs=[],
+                    deliverables=[],
+                    raw_block="",
+                ),
+                fake_profile,
+                repo_root=repo_root,
+                state_dir=repo_root / "tools/community-outreach/outreach_state",
+                oracle_timeout=60,
+                max_turns=1,
+                write_latex=False,
+            )
+            dispatch.REQUIRE_PRE_ORACLE_CODEX_WORKUP = True
+            FakeConsultant.expect_verified_handoff = True
+            legacy_result = dispatch._run_oracle_deep(
                 dispatch.TodoSpec(
                     todo_id="T-DEMO",
                     title="Demo certificate",
@@ -302,6 +345,7 @@ def main() -> int:
             dispatch._run_pre_oracle_codex_workup = old_run_pre
             dispatch._build_deep_initial_prompt = old_build_initial
             dispatch._resume_conversation_id = old_resume_conv
+            dispatch.REQUIRE_PRE_ORACLE_CODEX_WORKUP = old_require_pre
             sys.modules.pop("oracle_consultant", None)
             if old_env is None:
                 os.environ.pop(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV, None)
@@ -309,8 +353,23 @@ def main() -> int:
                 os.environ[dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV] = old_env
         if not result or result.get("conversation_id") != "conv_demo":
             raise AssertionError(f"fake oracle-deep did not return expected run: {result}")
+        if not legacy_result or legacy_result.get("conversation_id") != "conv_demo":
+            raise AssertionError(f"legacy oracle-deep did not return expected run: {legacy_result}")
         if os.environ.get(dispatch.DISPATCH_VERIFIED_PRE_ORACLE_HANDOFF_ENV) != old_env:
             raise AssertionError("dispatch leaked the verified-handoff env var after oracle deep reasoning")
+        initial_prompt = FakeConsultant.last_initial_prompt
+        if "Read the attached evidence packet" not in initial_prompt:
+            raise AssertionError(f"oracle-deep did not use attachment prompt: {initial_prompt!r}")
+        forbidden = ("FILE:", "tools/community-outreach/targets/", "exact file content")
+        for phrase in forbidden:
+            if phrase in initial_prompt:
+                raise AssertionError(f"attachment prompt leaked repo/file instruction {phrase!r}")
+        pdf_path = FakeConsultant.last_kwargs.get("initial_pdf_path")
+        if not pdf_path or not Path(pdf_path).exists():
+            raise AssertionError(f"oracle-deep did not pass an existing PDF attachment: {pdf_path}")
+        packet_meta = FakeConsultant.last_kwargs.get("evidence_packet") or {}
+        if packet_meta.get("boundary") != "attachment_math_note_no_repo_inference":
+            raise AssertionError(f"oracle-deep did not record evidence-packet boundary: {packet_meta}")
 
         weak_payload = json.loads(_local_repair_last(rel_stdout, finished_at=now - 2))
         weak_payload["postcheck"]["substantive_local_work"].pop("report_declares_pre_oracle_processing")

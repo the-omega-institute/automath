@@ -49,7 +49,7 @@ DEFAULT_SUPERVISOR_ARGS = [
     "--frontier-low-water",
     "3",
     "--parallel",
-    "4",
+    "3",
     "--no-freshness-judge",
     "--auto-commit",
 ]

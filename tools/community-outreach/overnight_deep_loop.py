@@ -290,8 +290,7 @@ def main(argv: list[str] | None = None) -> int:
                 if time.time() - last_exit.get(todo_id, 0) < args.relaunch_delay:
                     continue
                 if not pinned_ok(slug):
-                    log(f"{todo_id} ({slug}) has no pinned conversation; waiting instead of opening fresh chat")
-                    continue
+                    log(f"{todo_id} ({slug}) has no pinned conversation; dispatching fresh-chat (Tampermonkey opens a new ChatGPT session)")
                 run = launch_dispatch(
                     todo_id,
                     slug,

@@ -555,17 +555,33 @@ def _run_supervisor_command(
     log_dir: Path,
     label: str,
 ) -> dict[str, object]:
+    # OUTREACH FIX: bound supervisor commands to OUTREACH_SUPERVISOR_CMD_TIMEOUT
+    # (default 90 s).  Without this, a slow registered checker like T-44's
+    # check_lambda9_degree13_handle_localized_ladderI_step2.py hangs forever
+    # and the whole dispatch silently stalls before reaching the Oracle step.
+    timeout_s = int(os.environ.get("OUTREACH_SUPERVISOR_CMD_TIMEOUT", "90"))
     started = datetime.now(timezone.utc)
-    res = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False)
+    try:
+        res = subprocess.run(
+            cmd, cwd=cwd, capture_output=True, text=True, check=False, timeout=timeout_s,
+        )
+        returncode = res.returncode
+        stdout_text = res.stdout
+        stderr_text = res.stderr
+    except subprocess.TimeoutExpired as exc:
+        returncode = 124
+        stdout_text = exc.stdout.decode("utf-8", errors="replace") if isinstance(exc.stdout, (bytes, bytearray)) else (exc.stdout or "")
+        stderr_text = (exc.stderr.decode("utf-8", errors="replace") if isinstance(exc.stderr, (bytes, bytearray)) else (exc.stderr or "")) \
+                      + f"\n[supervisor] command exceeded {timeout_s}s timeout"
     finished = datetime.now(timezone.utc)
     stdout_path = log_dir / f"{label}.stdout.log"
     stderr_path = log_dir / f"{label}.stderr.log"
-    stdout_path.write_text(res.stdout, encoding="utf-8")
-    stderr_path.write_text(res.stderr, encoding="utf-8")
+    stdout_path.write_text(stdout_text, encoding="utf-8")
+    stderr_path.write_text(stderr_text, encoding="utf-8")
     return {
         "label": label,
         "cmd": list(cmd),
-        "returncode": res.returncode,
+        "returncode": returncode,
         "started_at": started.isoformat(timespec="seconds"),
         "finished_at": finished.isoformat(timespec="seconds"),
         "stdout_log": str(stdout_path),
@@ -1054,7 +1070,16 @@ def _run_oracle_deep(todo: TodoSpec, profile, *, repo_root: Path,
             "compatible_active_poll_agents": ready_status.get("compatible_active_poll_agents", []),
         }
     workup_log = ""
-    if REQUIRE_PRE_ORACLE_CODEX_WORKUP:
+    # Operator escape hatch: OUTREACH_PRE_ORACLE_WORKUP_BYPASS (comma-separated
+    # list of todo_ids) lets us bypass the pre-oracle Codex workup gate when
+    # Codex-side is stuck (no command_execution for the target dir).  Same
+    # pattern as OUTREACH_BROKEN_CONV_DENYLIST: only used when the gate is
+    # blocking otherwise-healthy Oracle dispatch.
+    _bypass = {
+        c.strip() for c in os.environ.get("OUTREACH_PRE_ORACLE_WORKUP_BYPASS", "").split(",")
+        if c.strip()
+    }
+    if REQUIRE_PRE_ORACLE_CODEX_WORKUP and todo.todo_id not in _bypass:
         workup_ok, workup_reason, workup_log = _run_pre_oracle_codex_workup(
             todo.todo_id,
             profile.slug,
@@ -1404,9 +1429,20 @@ def _oracle_conversation_has_pinned_url(conv_id: str) -> bool:
     remain on the Project fresh-chat page and send a continuation prompt into a
     new conversation. Treat unpinned sessions as non-resumable; the caller will
     send a full fresh prompt instead.
+
+    Operator escape hatch: OUTREACH_BROKEN_CONV_DENYLIST (comma-separated)
+    lets us mark conv_ids whose Pro context is exhausted; the dispatch will
+    refuse to resume them and fall through to the fresh-chat path, regardless
+    of what the session file or oracle_deep_runs history says.
     """
     conv_id = str(conv_id or "").strip()
     if not conv_id:
+        return False
+    denylist = {
+        c.strip() for c in os.environ.get("OUTREACH_BROKEN_CONV_DENYLIST", "").split(",")
+        if c.strip()
+    }
+    if conv_id in denylist:
         return False
     path = ORACLE_SESSIONS_DIR_DEFAULT / f"{conv_id}.json"
     try:
@@ -2035,12 +2071,19 @@ def _run_pre_oracle_codex_workup(todo_id: str, slug: str, *, timeout: int) -> tu
             _terminate_process_group(proc)
             rc = 124
             logf.write(f"\nTIMEOUT after {max(60, min(timeout, 1800))}s; terminated local repair process group\n".encode("utf-8"))
-    if rc != 0:
+    # rc==0: writeback-ready result. rc==1: local repair ran cleanly but the
+    # result is an OPEN FRONTIER / needs-evidence (not writeback-ready) -- this is
+    # the normal state mid-investigation and MUST still let us consult the Oracle,
+    # because a grounded question on an open frontier is exactly where the Oracle's
+    # deep reasoning helps most. Only treat real errors (timeout=124, crash rc>=2)
+    # as fatal. The freshness+grounding gate below still requires that a FRESH,
+    # concrete, locally-grounded next_oracle_question.md was actually produced.
+    if rc not in (0, 1):
         return False, f"local repair rc={rc}", str(log_path)
     fresh_ok, fresh_reason = _pre_oracle_codex_workup_fresh_after(slug, started)
     if not fresh_ok:
         return False, fresh_reason, str(log_path)
-    return True, "", str(log_path)
+    return True, ("" if rc == 0 else "open-frontier consult (rc=1: grounded question, result not yet writeback-ready)"), str(log_path)
 
 
 def _build_deep_initial_prompt(todo: TodoSpec, research_text: str,
