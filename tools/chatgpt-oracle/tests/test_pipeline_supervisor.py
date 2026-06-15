@@ -29,6 +29,60 @@ import pipeline_supervisor  # noqa: E402
 
 
 class SupervisorHelpersTests(unittest.TestCase):
+    def test_health_report_distinguishes_active_local_worker_from_backlog(self):
+        import pipeline_health
+
+        report = pipeline_health.build_health_report(
+            oracle_status={"diagnosis": "idle", "queue_length": 0, "agents_busy": 0},
+            discovery_summary={
+                "diagnosis": "runnable_backlog",
+                "candidate_count": 3,
+                "runnable_count": 3,
+            },
+            supervisor_tail=[],
+            now_ts=1_000.0,
+            supervisor_log_mtime=100.0,
+            refill_queue_exists=False,
+            refill_project_url="",
+            manual_submission_queue=[],
+            ready_submission_entries=[],
+            supervisor_code_mtime=0.0,
+            supervisor_started_ts=0.0,
+            supervisor_exited_ts=0.0,
+            supervisor_last_log_ts=0.0,
+            supervisor_poll_s=None,
+            supervisor_pid=123,
+            supervisor_pid_started_ts=0.0,
+            supervisor_pid_script="pipeline_supervisor.py",
+            supervisor_pid_alive=True,
+            inner_log_mtime=995.0,
+            inner_worker_alive=True,
+        )
+
+        self.assertEqual(report["health"], "running_or_ready")
+        self.assertEqual(report["reason"], "local_worker_active")
+
+    def test_codex_exec_reads_output_after_threaded_communicate(self):
+        class FakePopen:
+            def __init__(self, cmd, **kwargs):
+                self.cmd = cmd
+                self.kwargs = kwargs
+                self.pid = 4242
+                self.returncode = 0
+
+            def communicate(self, input=None, timeout=None):
+                del input, timeout
+                out_file = Path(self.cmd[self.cmd.index("-o") + 1])
+                out_file.write_text("threaded codex output", encoding="utf-8")
+                return "", ""
+
+        with mock.patch.object(oracle_pipeline, "wait_for_memory"), \
+             mock.patch.object(oracle_pipeline.Path, "exists", return_value=True), \
+             mock.patch.object(oracle_pipeline.subprocess, "Popen", FakePopen):
+            output = oracle_pipeline.codex_exec("short prompt", timeout_seconds=5)
+
+        self.assertEqual(output, "threaded codex output")
+
     def test_oracle_server_rejects_reasoning_chrome_fragments(self):
         self.assertTrue(oracle_server._is_extraction_failure_response(
             "IThought for 5m 37s:Pro Extended"

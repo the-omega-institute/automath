@@ -421,6 +421,9 @@ def build_health_report(
     elif discovery_summary.get("diagnosis") == "gate_exhausted":
         health = "healthy_idle"
         reason = "gate_exhausted"
+    elif int(discovery_summary.get("runnable_count") or 0) > 0 and inner_activity_fresh:
+        health = "running_or_ready"
+        reason = "local_worker_active"
     elif int(discovery_summary.get("runnable_count") or 0) > 0:
         health = "running_or_ready"
         reason = "runnable_backlog"

@@ -2101,10 +2101,37 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     try:
         proc = subprocess.Popen(cmd, **popen_kwargs)
         try:
-            stdout, stderr = proc.communicate(
-                input=prompt_input,
-                timeout=timeout_seconds + 30,
-            )
+            communicate_result: dict[str, object] = {}
+
+            def _communicate_worker() -> None:
+                try:
+                    out, err = proc.communicate(input=prompt_input)
+                    communicate_result["stdout"] = out
+                    communicate_result["stderr"] = err
+                except Exception as exc:  # pragma: no cover - defensive thread handoff
+                    communicate_result["error"] = exc
+
+            worker = threading.Thread(target=_communicate_worker, daemon=True)
+            worker.start()
+            deadline = time.monotonic() + timeout_seconds + 30
+            next_heartbeat = time.monotonic() + 60
+            while worker.is_alive():
+                now = time.monotonic()
+                if now >= deadline:
+                    raise subprocess.TimeoutExpired(cmd, timeout_seconds + 30)
+                if now >= next_heartbeat:
+                    logger.info(
+                        "Codex still running: %.0fs/%ss (pid=%s)",
+                        now - start,
+                        timeout_seconds,
+                        proc.pid,
+                    )
+                    next_heartbeat = now + 60
+                worker.join(timeout=5)
+            if communicate_result.get("error"):
+                raise communicate_result["error"]
+            stdout = str(communicate_result.get("stdout") or "")
+            stderr = str(communicate_result.get("stderr") or "")
             result = _Result(stdout, stderr, proc.returncode)
         except subprocess.TimeoutExpired:
             logger.warning(f"Codex timed out after {timeout_seconds}s, "
@@ -2112,8 +2139,8 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
             _kill_process_tree(proc.pid)
             try:
                 stdout, stderr = proc.communicate(timeout=10)
-            except subprocess.TimeoutExpired:
-                stdout, stderr = "", ""
+            except (subprocess.TimeoutExpired, ValueError):
+                stdout = stderr = ""
             result = _Result(stdout, stderr, -9)
     except OSError as exc:
         logger.error(f"Codex failed to start: {exc}")
