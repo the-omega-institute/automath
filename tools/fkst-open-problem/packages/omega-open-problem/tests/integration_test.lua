@@ -18,6 +18,13 @@ local function run_artifact(payload)
   })
 end
 
+local function run_writer(payload)
+  return t.run_department("departments/artifact_writer/main.lua", {
+    queue = "omega_artifact_task",
+    payload = payload,
+  })
+end
+
 return {
   test_seed_t43_raises_open_problem_proposal = function()
     local result = t.run_department("departments/seed_t43/main.lua", {
@@ -101,5 +108,21 @@ return {
     t.eq(result.raises[1].payload.source_ref.kind, "github")
     t.is_true(result.raises[1].payload.body:find("Consensus is not a proof", 1, true) == nil)
     t.is_true(result.raises[1].payload.body:find("Do not record mathematical", 1, true) ~= nil)
+  end,
+
+  test_artifact_writer_raises_repo_artifact_payload = function()
+    local result = run_writer({
+      schema = "omega.artifact_task.v1",
+      proposal_id = "omega-open-problem/SAIR-EQT2/prepare-sair-equational-theories-stage-2-solver-v4",
+      dedup_key = "consensus:omega-open-problem/SAIR-EQT2/prepare-sair-equational-theories-stage-2-solver-v4/v1",
+      body = "Approved because it creates a SAIR claim-state surface.",
+    })
+
+    t.eq(result.exit_code, 0)
+    t.eq(#result.raises, 1)
+    t.eq(result.raises[1].queue, "omega_repo_artifact")
+    t.eq(result.raises[1].payload.schema, "omega.repo_artifact.v1")
+    t.eq(result.raises[1].payload.path, "tools/fkst-open-problem/artifacts/sair-eqt2/claim_state.jsonl")
+    t.is_true(result.raises[1].payload.content:find("submission-prep", 1, true) ~= nil)
   end,
 }

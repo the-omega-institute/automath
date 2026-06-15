@@ -94,6 +94,7 @@ packages/omega-open-problem/
   departments/
     proposal_intake/main.lua
     artifact_task/main.lua
+    artifact_writer/main.lua
   raisers/
     seed.lua
     sair_stage2.lua
@@ -109,10 +110,16 @@ seed raiser -> omega_seed_tick -> seed_t43 -> omega_proposal
 SAIR raiser -> omega_sair_stage2_tick -> seed_sair_stage2 -> omega_proposal
 proposal_intake -> consensus.proposal
 consensus.consensus_reached approve -> artifact_task -> omega_artifact_task
+omega_artifact_task -> artifact_writer -> omega_repo_artifact
 ```
 
 Rejected consensus is ignored by `artifact_task`; it does not become a math
 fact or durable task.
+
+`artifact_writer` does not silently mutate the repository. It emits a
+machine-readable `omega_repo_artifact` payload containing the intended path and
+content. The durable fact is created only when that payload is committed or
+opened as a PR.
 
 The package is a composed FKST package because it consumes and produces
 `consensus.*` queues. `composed.deps` declares the dependency on the upstream
@@ -201,3 +208,16 @@ one of the following durable artifacts:
 - a PR containing one of the above plus a reviewable summary.
 
 Agent consensus alone is never an accepted mathematical fact.
+
+## Current Durable Dogfood Artifact
+
+The first committed dogfood output is:
+
+```text
+tools/fkst-open-problem/artifacts/sair-eqt2/claim_state.jsonl
+```
+
+It records a SAIR-EQT2 public-impact boundary tied to existing Omega/Automath
+Lean anchors and checker scripts. It says exactly what is available now:
+a deterministic certificate layer around the window-`6` finite-magma facts and
+spectrum counts, not a solved-conjecture claim.

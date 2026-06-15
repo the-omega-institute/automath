@@ -82,7 +82,13 @@ The first dry-run should only validate event shape:
 5. department `proposal_intake` validates either proposal;
 6. department raises an upstream-compatible `consensus.proposal.v1`;
 7. approved consensus raises `omega_artifact_task`;
-8. no GitHub writes occur.
+8. department `artifact_writer` raises an `omega_repo_artifact` path/content
+   payload;
+9. no GitHub writes occur until that payload is committed or opened as a PR.
+
+The current committed dogfood artifact is
+`tools/fkst-open-problem/artifacts/sair-eqt2/claim_state.jsonl`, which records
+the SAIR-EQT2 certificate-layer boundary backed by existing Lean anchors.
 
 ## Real-Write Gate
 

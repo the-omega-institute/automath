@@ -115,4 +115,18 @@ return {
     t.is_true(body:find("Do not record mathematical", 1, true) ~= nil)
     t.is_true(body:find("route-refutation", 1, true) ~= nil)
   end,
+
+  test_render_repo_artifact_for_sair_claim_state = function()
+    local artifact = core.render_repo_artifact({
+      proposal_id = "omega-open-problem/SAIR-EQT2/prepare-sair-equational-theories-stage-2-solver-v4",
+      dedup_key = "consensus:omega-open-problem/SAIR-EQT2/prepare-sair-equational-theories-stage-2-solver-v4/v1",
+      body = "Approved.",
+    })
+
+    t.eq(artifact.schema, "omega.repo_artifact.v1")
+    t.eq(artifact.path, "tools/fkst-open-problem/artifacts/sair-eqt2/claim_state.jsonl")
+    t.is_true(artifact.content:find("sair-eqt2-window6-fin21-certificate", 1, true) ~= nil)
+    t.is_true(artifact.content:find("paper_window6_fin21_facts_certificate", 1, true) ~= nil)
+    t.is_true(artifact.content:find("FKST consensus as mathematical proof", 1, true) ~= nil)
+  end,
 }

@@ -29,6 +29,16 @@ local function bounded_string(value, limit)
   return type(value) == "string" and value ~= "" and #value <= limit
 end
 
+local function json_string(value)
+  local text = tostring(value or "")
+  text = text:gsub("\\", "\\\\")
+  text = text:gsub("\"", "\\\"")
+  text = text:gsub("\n", "\\n")
+  text = text:gsub("\r", "\\r")
+  text = text:gsub("\t", "\\t")
+  return "\"" .. text .. "\""
+end
+
 function M.validate_proposal(payload)
   if type(payload) ~= "table" then
     return nil, "payload must be a table"
@@ -178,6 +188,91 @@ function M.render_artifact_task(consensus)
     "truth as agent consensus. If evidence is incomplete, produce a blocked or",
     "route-refutation record rather than a theorem claim.",
   }, "\n")
+end
+
+function M.validate_artifact_task(payload)
+  if type(payload) ~= "table" then
+    return nil, "payload must be a table"
+  end
+  if payload.schema ~= "omega.artifact_task.v1" then
+    return nil, "unsupported artifact task schema"
+  end
+  local proposal_id = trim(payload.proposal_id)
+  if not bounded_string(proposal_id, 200) then
+    return nil, "proposal_id is required and must be <= 200 bytes"
+  end
+  local body = trim(payload.body)
+  if not bounded_string(body, max_text) then
+    return nil, "body is required and must be <= 6000 bytes"
+  end
+  return {
+    proposal_id = proposal_id,
+    dedup_key = trim(payload.dedup_key),
+    body = body,
+    source_ref = payload.source_ref,
+  }, nil
+end
+
+local function task_target(task)
+  if task.proposal_id:find("/SAIR-EQT2/", 1, true) ~= nil then
+    return "SAIR-EQT2"
+  end
+  if task.proposal_id:find("/T-43/", 1, true) ~= nil then
+    return "T-43"
+  end
+  return "generic"
+end
+
+function M.repo_artifact_path(task)
+  local target = task_target(task)
+  if target == "SAIR-EQT2" then
+    return "tools/fkst-open-problem/artifacts/sair-eqt2/claim_state.jsonl"
+  end
+  if target == "T-43" then
+    return "tools/fkst-open-problem/artifacts/t43/source_replay_claim_state.jsonl"
+  end
+  return "tools/fkst-open-problem/artifacts/pending/omega_artifact_task.md"
+end
+
+function M.render_repo_artifact_content(task)
+  local target = task_target(task)
+  if target == "SAIR-EQT2" then
+    local proposal = json_string(task.proposal_id)
+    local dedup = json_string(task.dedup_key)
+    return table.concat({
+      '{"schema":"omega.claim_state.v1","target":"SAIR-EQT2","claim_id":"sair-eqt2-window6-fin21-certificate","state":"lean-anchor-present","public_impact":true,'
+        .. '"summary":"Window-6 Fin 21 rectangular-band certificate gives deterministic satisfied/refuted ETP facts and spectrum counts; this is a certificate-layer contribution, not a solved-conjecture claim.",'
+        .. '"lean_refs":["lean4/Omega/EA/Window6CountermodelCertificate.lean#paper_window6_fin21_facts_certificate","lean4/Omega/EA/Window6CountermodelCertificate.lean#paper_window6_equational_spectrum","lean4/Omega/Folding/Window6EquationalSpectrum.lean#paper_window6_equational_spectrum"],'
+        .. '"script_refs":["theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/audit_window6_current.py","theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/coefficient_analysis.py"],'
+        .. '"fkst_proposal_id":' .. proposal .. ',"fkst_dedup_key":' .. dedup .. '}',
+      '{"schema":"omega.claim_state.v1","target":"SAIR-EQT2","claim_id":"sair-eqt2-submission-boundary","state":"submission-prep","public_impact":true,'
+        .. '"summary":"Use Omega/Automath finite-magma and Lean certificate artifacts as a deterministic checker layer before LLM escalation for SAIR Stage 2 participation.",'
+        .. '"must_not_claim":["general Equational Theories solved","new theorem beyond cited Lean anchors","FKST consensus as mathematical proof"],'
+        .. '"next_artifact":"solver submission shard plus public Contributor Network description",'
+        .. '"fkst_proposal_id":' .. proposal .. ',"fkst_dedup_key":' .. dedup .. '}',
+      "",
+    }, "\n")
+  end
+  return table.concat({
+    "# Omega FKST Artifact Task",
+    "",
+    "Proposal: " .. task.proposal_id,
+    "Dedup: " .. task.dedup_key,
+    "",
+    task.body,
+    "",
+  }, "\n")
+end
+
+function M.render_repo_artifact(task)
+  return {
+    schema = "omega.repo_artifact.v1",
+    proposal_id = task.proposal_id,
+    dedup_key = task.dedup_key,
+    path = M.repo_artifact_path(task),
+    content = M.render_repo_artifact_content(task),
+    source_ref = task.source_ref,
+  }
 end
 
 return M
