@@ -653,6 +653,91 @@ class SupervisorHelpersTests(unittest.TestCase):
             oracle_pipeline.is_recoverable_stage_a_block_status(status)
         )
 
+    def test_stage_a_oracle_human_decision_with_route_requests_followup(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "2026_needs_followup"
+            paper.mkdir()
+            (paper / "main.tex").write_text(
+                "\\section{Intro}\nA paper.\n", encoding="utf-8")
+            state = oracle_pipeline.PaperState(
+                paper_dir=str(paper),
+                paper_name="2026_needs_followup",
+                target_journal="Example Journal",
+                current_stage="A",
+                stage_a_rounds=oracle_pipeline.MAX_STAGE_A_ROUNDS,
+                current_round=oracle_pipeline.MAX_STAGE_A_ROUNDS,
+                error="Stage A blocked: max Stage A rounds exhausted",
+            )
+            responses = [
+                json.dumps({
+                    "verdict": "human_decision",
+                    "publishable_route": True,
+                    "human_decision_needed": (
+                        "Codex should strengthen the theorem package."
+                    ),
+                    "required_theorem_package": [
+                        "Add a labelled universality theorem."
+                    ],
+                    "codex_instructions": [
+                        "Implement the labelled theorem and rerun Stage A."
+                    ],
+                }),
+                json.dumps({
+                    "verdict": "rerun_stage_a",
+                    "publishable_route": True,
+                    "core_theorem_direction": "Universality hierarchy.",
+                    "required_theorem_package": [
+                        "Add a labelled universality theorem."
+                    ],
+                    "journal_route": "keep",
+                    "codex_instructions": [
+                        "Implement the labelled theorem and rerun Stage A."
+                    ],
+                }),
+            ]
+            submit_calls = []
+
+            def fake_submit(task_id, prompt, pdf_path=None, **kwargs):
+                submit_calls.append({
+                    "conversation_id": kwargs.get("conversation_id"),
+                    "is_followup": kwargs.get("is_followup", False),
+                    "prompt": prompt,
+                })
+                return True
+
+            with mock.patch.object(oracle_pipeline, "ORACLE_ENABLED", True), \
+                 mock.patch.object(oracle_pipeline, "oracle_submit",
+                                   side_effect=fake_submit), \
+                 mock.patch.object(oracle_pipeline, "oracle_poll",
+                                   side_effect=responses), \
+                 mock.patch.object(oracle_pipeline, "oracle_poll_record",
+                                   return_value={"conversation_id": "conv-a"}), \
+                 mock.patch.object(oracle_pipeline, "compile_pdf",
+                                   return_value=None), \
+                 mock.patch.object(oracle_pipeline, "save_state"), \
+                 mock.patch.object(oracle_pipeline, "git_commit",
+                                   return_value="abc123"):
+                ok = oracle_pipeline._maybe_stage_a_oracle_escalate(
+                    state,
+                    reason="max Stage A rounds exhausted",
+                    dry_run=False,
+                    oracle_timeout=1,
+                    tag="[2026_needs_followup|A]",
+                )
+
+            self.assertTrue(ok)
+            self.assertEqual(len(submit_calls), 2)
+            self.assertEqual(submit_calls[0]["conversation_id"], "")
+            self.assertFalse(submit_calls[0]["is_followup"])
+            self.assertEqual(submit_calls[1]["conversation_id"], "conv-a")
+            self.assertTrue(submit_calls[1]["is_followup"])
+            self.assertEqual(state.stage_a_rounds, 0)
+            artifact = json.loads(
+                (paper / "oracle_stage_a_escalation.json").read_text(
+                    encoding="utf-8")
+            )
+            self.assertEqual(artifact["verdict"], "rerun_stage_a")
+
     def test_stage_a_terminal_artifact_blocks_even_if_board_was_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:
             paper = Path(tmp) / "2026_old_overwrite"
@@ -2363,6 +2448,39 @@ class OraclePipelineStageAAuditClassificationTests(unittest.TestCase):
 
         self.assertEqual(parsed["metrics"]["scope_coverage"], 8)
         self.assertEqual(parsed["work_packages"][0]["owner"], "codex_math")
+
+    def test_parse_json_from_output_tolerates_windows_paths_in_json_strings(self):
+        text = (
+            "Thought for 5m 38s{"
+            "\"verdict\": \"proceed\","
+            "\"publishable_route\": true,"
+            "\"codex_instructions\": ["
+            "\"Verify D:\\omega\\automath\\papers\\publication\\paper_x.\""
+            "]"
+            "}Sources"
+        )
+
+        parsed = oracle_pipeline.parse_json_from_output(text)
+
+        self.assertEqual(parsed["verdict"], "proceed")
+        self.assertIn(
+            r"D:\omega\automath",
+            parsed["codex_instructions"][0],
+        )
+
+    def test_parse_json_from_output_tolerates_missing_open_brace_and_windows_path(self):
+        text = (
+            "Oracle response:\n"
+            "\"verdict\": \"rerun_stage_a\","
+            "\"publishable_route\": true,"
+            "\"core_theorem_direction\": \"Use D:\\omega\\automath source.\""
+            "}"
+        )
+
+        parsed = oracle_pipeline.parse_json_from_output(text)
+
+        self.assertEqual(parsed["verdict"], "rerun_stage_a")
+        self.assertIn(r"D:\omega\automath", parsed["core_theorem_direction"])
 
     def test_stage_a_audit_codex_calls_have_log_tags(self):
         import tempfile

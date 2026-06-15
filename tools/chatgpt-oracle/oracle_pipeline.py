@@ -3669,6 +3669,22 @@ def _stage_a_oracle_terminal_reason(verdict: str, detail: str) -> str:
     return f"Oracle escalation {verdict}: {detail}"
 
 
+def _stage_a_oracle_needs_followup(data: dict) -> bool:
+    """Return True when Oracle gave a route but not an executable verdict."""
+    verdict = str(data.get("verdict", "")).lower()
+    if verdict != "human_decision":
+        return False
+    if not data.get("publishable_route"):
+        return False
+    route_fields = (
+        "codex_instructions",
+        "required_theorem_package",
+        "core_theorem_direction",
+        "novelty_claim",
+    )
+    return any(data.get(field) for field in route_fields)
+
+
 def _stage_a_oracle_terminal_artifact_reason(paper_path: Path) -> str:
     artifact = paper_path / "oracle_stage_a_escalation.json"
     if not artifact.exists():
@@ -3679,6 +3695,8 @@ def _stage_a_oracle_terminal_artifact_reason(paper_path: Path) -> str:
         return ""
     verdict = str(data.get("verdict", "")).lower()
     if verdict not in {"park", "human_decision"}:
+        return ""
+    if _stage_a_oracle_needs_followup(data):
         return ""
     detail = (
         data.get("park_reason")
@@ -3723,6 +3741,118 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
             save_state(state)
             return True
         elif verdict in {"park", "human_decision"}:
+            if _stage_a_oracle_needs_followup(data):
+                logger.info(
+                    f"{tag} Existing Stage A Oracle human_decision has a "
+                    "publishable route; requesting follow-up closure")
+            else:
+                detail = data.get("park_reason") or data.get("human_decision_needed") or reason
+                _stage_a_block(
+                    state,
+                    _stage_a_oracle_terminal_reason(verdict, detail),
+                    dry_run=dry_run,
+                    tag=tag,
+                )
+                return False
+
+    followup_limit = 2
+    followup_count = 0
+
+    while True:
+        if dry_run:
+            data = {
+                "verdict": "rerun_stage_a",
+                "publishable_route": True,
+                "core_theorem_direction": "dry-run",
+                "required_theorem_package": ["dry-run theorem package"],
+                "journal_route": "keep",
+                "codex_instructions": ["dry-run Stage A rerun"],
+            }
+        else:
+            safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
+            task_id = f"stage_a_escalate_{safe_name}_{time.time_ns()}"
+            escalation_conv_id = str(getattr(state, "stage_a_escalation_conv_id", "") or "")
+            if escalation_conv_id:
+                prompt = build_stage_a_oracle_escalation_followup_prompt(
+                    state, reason)
+                submit_conv_id = escalation_conv_id
+                is_followup_turn = True
+            else:
+                prompt = build_stage_a_oracle_escalation_prompt(state, reason)
+                submit_conv_id = ""
+                is_followup_turn = False
+            pdf_path = Path(state.pdf_path) if state.pdf_path else None
+            if not pdf_path or not pdf_path.exists():
+                compiled_pdf = compile_pdf(paper_path, dry_run=False)
+                if compiled_pdf:
+                    pdf_path = compiled_pdf
+                    state.pdf_path = str(compiled_pdf)
+                    save_state(state)
+            state.stage_a_escalation_attempts += 1
+            if not oracle_submit(
+                task_id, prompt, pdf_path,
+                context_mode="deep_reasoning",
+                agent_role="stage_a_oracle_escalation",
+                conversation_id=submit_conv_id,
+                is_followup=is_followup_turn,
+            ):
+                return _stage_a_pause(
+                    state, "stage_a_oracle_escalation_submit_failed", tag=tag)
+            raw = oracle_poll(task_id, timeout=oracle_timeout)
+            if raw == ORACLE_CANCELLED_RESPONSE:
+                return _stage_a_pause(
+                    state, "stage_a_oracle_escalation_cancelled", tag=tag)
+            data = parse_json_from_output(raw)
+            if not data:
+                return _stage_a_pause(
+                    state, "stage_a_oracle_escalation_unparseable", tag=tag)
+            data["_raw_response"] = raw[:12000]
+            if not escalation_conv_id:
+                try:
+                    rec = oracle_poll_record(task_id, timeout=2)
+                except Exception:
+                    rec = {}
+                new_conv = ""
+                if isinstance(rec, dict):
+                    new_conv = str(rec.get("conversation_id") or "")
+                if new_conv:
+                    state.stage_a_escalation_conv_id = new_conv
+
+        artifact.write_text(json.dumps(data, indent=2, ensure_ascii=False),
+                            encoding="utf-8")
+        state.log_event("A", "oracle_escalation",
+                        verdict=str(data.get("verdict", "")),
+                        detail=json.dumps(data, ensure_ascii=False)[:12000])
+        verdict = str(data.get("verdict", "")).lower()
+        if verdict in {"rerun_stage_a", "proceed", "revise"}:
+            _append_oracle_stage_a_directive(paper_path, data, reason)
+            if data.get("target_journal") and data.get("journal_route") == "retarget":
+                state.retarget_history.append({
+                    "from": state.target_journal,
+                    "to": data.get("target_journal"),
+                    "reason": "stage_a_oracle_escalation",
+                    "timestamp": datetime.now().isoformat(),
+                })
+                state.target_journal = str(data.get("target_journal"))
+            _reset_stage_a_for_oracle_escalation(state)
+            git_commit(paper_path, "stage-A: oracle escalation directive", tag=tag)
+            save_state(state)
+            return True
+        if verdict in {"park", "human_decision"}:
+            if _stage_a_oracle_needs_followup(data) and followup_count < followup_limit:
+                followup_count += 1
+                reason = (
+                    "Oracle returned human_decision while also declaring "
+                    "publishable_route=true and giving route instructions; "
+                    "continue the same conversation and return an executable "
+                    "rerun_stage_a/proceed/park verdict"
+                )
+                state.log_event(
+                    "A", "oracle_escalation_followup_requested",
+                    verdict=verdict,
+                    detail=json.dumps(data, ensure_ascii=False)[:8000])
+                save_state(state)
+                continue
             detail = data.get("park_reason") or data.get("human_decision_needed") or reason
             _stage_a_block(
                 state,
@@ -3731,97 +3861,8 @@ def _maybe_stage_a_oracle_escalate(state: PaperState, reason: str, *,
                 tag=tag,
             )
             return False
-
-    if dry_run:
-        data = {
-            "verdict": "rerun_stage_a",
-            "publishable_route": True,
-            "core_theorem_direction": "dry-run",
-            "required_theorem_package": ["dry-run theorem package"],
-            "journal_route": "keep",
-            "codex_instructions": ["dry-run Stage A rerun"],
-        }
-    else:
-        safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
-        task_id = f"stage_a_escalate_{safe_name}_{time.time_ns()}"
-        escalation_conv_id = str(getattr(state, "stage_a_escalation_conv_id", "") or "")
-        if escalation_conv_id:
-            prompt = build_stage_a_oracle_escalation_followup_prompt(
-                state, reason)
-            submit_conv_id = escalation_conv_id
-            is_followup_turn = True
-        else:
-            prompt = build_stage_a_oracle_escalation_prompt(state, reason)
-            submit_conv_id = ""
-            is_followup_turn = False
-        pdf_path = Path(state.pdf_path) if state.pdf_path else None
-        if not pdf_path or not pdf_path.exists():
-            compiled_pdf = compile_pdf(paper_path, dry_run=False)
-            if compiled_pdf:
-                pdf_path = compiled_pdf
-                state.pdf_path = str(compiled_pdf)
-                save_state(state)
-        state.stage_a_escalation_attempts += 1
-        if not oracle_submit(
-            task_id, prompt, pdf_path,
-            context_mode="deep_reasoning",
-            agent_role="stage_a_oracle_escalation",
-            conversation_id=submit_conv_id,
-            is_followup=is_followup_turn,
-        ):
-            return _stage_a_pause(
-                state, "stage_a_oracle_escalation_submit_failed", tag=tag)
-        raw = oracle_poll(task_id, timeout=oracle_timeout)
-        if raw == ORACLE_CANCELLED_RESPONSE:
-            return _stage_a_pause(
-                state, "stage_a_oracle_escalation_cancelled", tag=tag)
-        data = parse_json_from_output(raw)
-        if not data:
-            return _stage_a_pause(
-                state, "stage_a_oracle_escalation_unparseable", tag=tag)
-        data["_raw_response"] = raw[:12000]
-        if not escalation_conv_id:
-            try:
-                rec = oracle_poll_record(task_id, timeout=2)
-            except Exception:
-                rec = {}
-            new_conv = ""
-            if isinstance(rec, dict):
-                new_conv = str(rec.get("conversation_id") or "")
-            if new_conv:
-                state.stage_a_escalation_conv_id = new_conv
-
-    artifact.write_text(json.dumps(data, indent=2, ensure_ascii=False),
-                        encoding="utf-8")
-    state.log_event("A", "oracle_escalation",
-                    verdict=str(data.get("verdict", "")),
-                    detail=json.dumps(data, ensure_ascii=False)[:12000])
-    verdict = str(data.get("verdict", "")).lower()
-    if verdict in {"rerun_stage_a", "proceed", "revise"}:
-        _append_oracle_stage_a_directive(paper_path, data, reason)
-        if data.get("target_journal") and data.get("journal_route") == "retarget":
-            state.retarget_history.append({
-                "from": state.target_journal,
-                "to": data.get("target_journal"),
-                "reason": "stage_a_oracle_escalation",
-                "timestamp": datetime.now().isoformat(),
-            })
-            state.target_journal = str(data.get("target_journal"))
-        _reset_stage_a_for_oracle_escalation(state)
-        git_commit(paper_path, "stage-A: oracle escalation directive", tag=tag)
-        save_state(state)
-        return True
-    if verdict in {"park", "human_decision"}:
-        detail = data.get("park_reason") or data.get("human_decision_needed") or reason
-        _stage_a_block(
-            state,
-            _stage_a_oracle_terminal_reason(verdict, detail),
-            dry_run=dry_run,
-            tag=tag,
-        )
-        return False
-    return _stage_a_pause(state, "stage_a_oracle_escalation_unknown_verdict",
-                          tag=tag)
+        return _stage_a_pause(state, "stage_a_oracle_escalation_unknown_verdict",
+                              tag=tag)
 
 
 def build_split_hygiene_prompt(paper_dir: str, target_journal: str,
@@ -4767,21 +4808,40 @@ def parse_json_from_output(text: str) -> dict:
         "fit_score", "fit_verdict", "suggested_journals",
         "recommended_journal", "adjusted_fit_score",
     )
+    decoder = json.JSONDecoder()
+
+    def _loads_lenient_json(candidate: str) -> Optional[dict]:
+        """Parse JSON, tolerating raw Windows paths in model text.
+
+        Oracle answers sometimes include strings such as
+        ``D:\\omega\\automath``.  That is semantically just prose inside a JSON
+        string, but strict JSON treats raw path backslashes as invalid escapes and rejects
+        the whole verdict.  Keep strict parsing first, then retry after escaping
+        only backslashes that are not valid JSON escapes.
+        """
+        variants = [candidate]
+        escaped = re.sub(r'\\(?!["\\/bfnrtu])', r"\\\\", candidate)
+        if escaped != candidate:
+            variants.append(escaped)
+        for variant in variants:
+            try:
+                d, _ = decoder.raw_decode(variant)
+                if isinstance(d, dict) and any(k in d for k in accepted_keys):
+                    return d
+            except (json.JSONDecodeError, TypeError):
+                continue
+        return None
+
     m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL | re.IGNORECASE)
     if m:
-        try:
-            return json.loads(m.group(1))
-        except json.JSONDecodeError:
-            pass
+        parsed = _loads_lenient_json(m.group(1))
+        if parsed:
+            return parsed
     # Try bare JSON
-    decoder = json.JSONDecoder()
     for m2 in re.finditer(r"\{", text):
-        try:
-            d, _ = decoder.raw_decode(text[m2.start():])
-            if isinstance(d, dict) and any(k in d for k in accepted_keys):
-                return d
-        except (json.JSONDecodeError, TypeError):
-            continue
+        parsed = _loads_lenient_json(text[m2.start():])
+        if parsed:
+            return parsed
 
     # ChatGPT UI extraction can occasionally drop the opening brace while
     # preserving a valid top-level JSON member list, e.g. '"verdict": ...}'.
@@ -4802,12 +4862,9 @@ def parse_json_from_output(text: str) -> dict:
         candidates = [fragment]
         candidates.extend(fragment + ("}" * missing) for missing in range(1, 4))
         for candidate in candidates:
-            try:
-                d, _ = decoder.raw_decode(candidate)
-                if isinstance(d, dict) and any(k in d for k in accepted_keys):
-                    return d
-            except (json.JSONDecodeError, TypeError):
-                continue
+            parsed = _loads_lenient_json(candidate)
+            if parsed:
+                return parsed
     return {}
 
 
