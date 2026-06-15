@@ -1,5 +1,5 @@
 return {
   type = "cron",
   interval = "24h",
-  produces = "omega_seed_tick",
+  produces = "omega_sair_stage2_tick",
 }

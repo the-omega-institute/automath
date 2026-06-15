@@ -68,6 +68,56 @@ artifact surface:
 The pilot should not attempt to solve all three at once. Use one issue per
 proposal and one proposal per small certificate objective.
 
+## Public-Impact Dogfood Track
+
+The package also includes a public-impact seed for SAIR Equational Theories
+Stage 2:
+
+- target: `SAIR-EQT2`;
+- raiser: `packages/omega-open-problem/raisers/sair_stage2.lua`;
+- durable output: a solver submission shard, public Contributor Network
+  description, and claim-state metadata;
+- hard boundary: do not submit a solved-conjecture claim. The solver should be
+  presented as a deterministic Lean/countermodel certificate layer for SAIR
+  Stage 2.
+
+This gives the FKST loop a concrete external venue while preserving the same
+artifact discipline used for internal open-problem work.
+
+## Lua Package Shape
+
+The initial package is `omega-open-problem`:
+
+```text
+packages/omega-open-problem/
+  core.lua
+  departments/
+    proposal_intake/main.lua
+    artifact_task/main.lua
+  raisers/
+    seed.lua
+    sair_stage2.lua
+  tests/
+    core_test.lua
+    integration_test.lua
+```
+
+Flow:
+
+```text
+seed raiser -> omega_seed_tick -> seed_t43 -> omega_proposal
+SAIR raiser -> omega_sair_stage2_tick -> seed_sair_stage2 -> omega_proposal
+proposal_intake -> consensus.proposal
+consensus.consensus_reached approve -> artifact_task -> omega_artifact_task
+```
+
+Rejected consensus is ignored by `artifact_task`; it does not become a math
+fact or durable task.
+
+The package is a composed FKST package because it consumes and produces
+`consensus.*` queues. `composed.deps` declares the dependency on the upstream
+`consensus` package.
+
 ## Branch Policy
 
 This branch is for FKST integration assets only:
@@ -101,6 +151,42 @@ export FKST_RATE_POOL_ROOT=/tmp/fkst-omega-rate-pools
 ```
 
 These roots must remain untracked.
+
+## Local Static Check
+
+This repository does not vendor the FKST engine. The local check verifies the
+package skeleton and FKST line-count guard without requiring Lua:
+
+```sh
+python3 tools/fkst-open-problem/scripts/check_seed.py
+```
+
+When a local `fkst-framework` binary is available, run the package tests through
+the FKST package test harness instead of relying only on the static check.
+
+Example dogfood commands with external FKST checkouts under `/tmp`:
+
+```sh
+python3 tools/fkst-open-problem/scripts/check_seed.py
+
+FKST_RUNTIME_ROOT=/tmp/fkst-omega-runtime \
+  /tmp/fkst-substrate/target/debug/fkst-framework test \
+  --project-root tools/fkst-open-problem/packages/omega-open-problem \
+  --package-root tools/fkst-open-problem/packages/omega-open-problem \
+  --report-json /tmp/omega-open-problem-fkst-test.json
+
+mkdir -p /tmp/fkst-omega-composed/packages
+ln -sfn /tmp/fkst-packages/packages/consensus \
+  /tmp/fkst-omega-composed/packages/consensus
+ln -sfn "$PWD/tools/fkst-open-problem/packages/omega-open-problem" \
+  /tmp/fkst-omega-composed/packages/omega-open-problem
+
+FKST_RUNTIME_ROOT=/tmp/fkst-omega-runtime \
+  /tmp/fkst-substrate/target/debug/fkst-framework conformance \
+  --project-root /tmp/fkst-omega-composed \
+  --package-root /tmp/fkst-omega-composed/packages/consensus \
+  --package-root /tmp/fkst-omega-composed/packages/omega-open-problem
+```
 
 ## Acceptance Bar
 

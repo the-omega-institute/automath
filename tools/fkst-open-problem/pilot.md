@@ -33,7 +33,8 @@ mathematics, the merge gate must be stricter:
 
 ## First Pilot
 
-Start with T-43 rather than T-32 or T-44.
+Start with T-43 for internal open-problem progress, and run SAIR-EQT2 in
+parallel as the public-impact dogfood track.
 
 T-43 has a concrete candidate artifact: the A5 Godeaux-Serre rank-4 standard
 same-W certificate candidate. The FKST task can be narrow:
@@ -45,6 +46,10 @@ same-W certificate candidate. The FKST task can be narrow:
 
 T-44 is a good second task because FKST can preserve a route refutation. T-32 is
 third because it has heavier computation prerequisites.
+
+SAIR-EQT2 is the fastest external visibility path: it asks for a Lean-judged
+solver, and our contribution can be framed as an Omega/Automath deterministic
+certificate layer for finite magma counterexamples and selected Lean anchors.
 
 ## Proposed Runtime Shape
 
@@ -70,10 +75,14 @@ instead of the simple seed raiser.
 
 The first dry-run should only validate event shape:
 
-1. raiser `seed` emits `omega_proposal`;
-2. department `proposal_intake` validates it;
-3. department raises `consensus.proposal`;
-4. no GitHub writes occur.
+1. cron raiser `seed` emits `omega_seed_tick`;
+2. department `seed_t43` emits an internal T-43 `omega_proposal`;
+3. cron raiser `sair_stage2` emits `omega_sair_stage2_tick`;
+4. department `seed_sair_stage2` emits a public-impact SAIR-EQT2 `omega_proposal`;
+5. department `proposal_intake` validates either proposal;
+6. department raises an upstream-compatible `consensus.proposal.v1`;
+7. approved consensus raises `omega_artifact_task`;
+8. no GitHub writes occur.
 
 ## Real-Write Gate
 
