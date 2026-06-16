@@ -1,375 +1,358 @@
 # Theorem Inventory
 
-Stage A inventory for the CICM presentation-only route.
-
-## Summary
-
-- Valid: `true`
-- Labelled theorem-like environments covered: `327`
-- Mandatory five-label Stage-A theorem package: present in `main.tex` with proofs.
-- TeX source edits in this inventory pass: none.
+Compact Stage A inventory. JSON covers every labelled theorem-like source environment; five Oracle labels are primary-route material with proof environments in main.tex.
 
 ## in_scope_present
-
-- `thm:finite-audit-antichain-basis` (main.tex:18710): Primary: finite antichain reconstruction for monotone Stage-A predicates. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:canonical-stage-a-obstruction-basis` (main.tex:18773): Primary: exact seven-class Stage-A obstruction basis. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:no-theorem-delta-nondischarge` (main.tex:18866): Primary: no +0/subthreshold theorem delta discharge. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:stage-a-real-block-discharge-completeness` (main.tex:18921): Primary: exact discharge rule for stage_a_audit_real_block. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `cor:current-stage-a-closure-exactness` (main.tex:18975): Primary: ordered Stage-A closure criterion. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:current-byte-two-coordinate-audit` (main.tex:19735): Primary replay-kernel qinv/qrgs coordinate theorem. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:fixed-replay-rgs-coordinate-exactness` (main.tex:19775): Primary boundary for bounded fixed-replay qrgs. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:replay-kernel-foreground-closure` (main.tex:20030): Primary CICM replay-kernel foreground theorem. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:canonical-finite-basis-replay-foreground-exactness` (main.tex:20135): Primary finite-basis replay foreground exactness. Required action: Keep primary and sync with audit, verifiers, and final digest.
-- `thm:cicm-public-surface-maximality` (main.tex:20222): Primary/support boundary for single CICM public surface. Required action: Keep primary and sync with audit, verifiers, and final digest.
+- `thm:finite-audit-antichain-basis` (main:18710): primary; sync.
+- `thm:canonical-stage-a-obstruction-basis` (main:18773): primary; sync.
+- `thm:no-theorem-delta-nondischarge` (main:18866): primary; sync.
+- `thm:stage-a-real-block-discharge-completeness` (main:18921): primary; sync.
+- `cor:current-stage-a-closure-exactness` (main:18975): primary; sync.
+- `def:typed-audit-atom` (main:19271): primary; sync.
+- `def:stage-a-horn-audit-schema` (main:19286): primary; sync.
+- `def:certified-closure-rejection-certificate` (main:19314): primary; sync.
+- `thm:horn-compilation-adequacy` (main:19337): primary; sync.
+- `thm:deterministic-certificate-soundness` (main:19366): primary; sync.
+- `thm:complete-obstruction` (main:19390): primary; sync.
+- `thm:coordinate-independence-by-horn-models` (main:19415): primary; sync.
+- `thm:verifier-adequacy-complexity` (main:19444): primary; sync.
+- `thm:current-byte-certified-audit` (main:19469): primary; sync.
+- `cor:referee-facing-novelty-horn` (main:19500): primary; sync.
+- `prop:non-duplication-route-quotient` (main:19519): primary; sync.
+- `def:canonical-stage-a-byte-manifest` (main:19551): primary; sync.
+- `def:byte-to-atom-compiler` (main:19569): primary; sync.
+- `def:replayable-stage-a-certificate` (main:19589): primary; sync.
+- `thm:replay-kernel-soundness` (main:19642): primary; sync.
+- `thm:replay-kernel-completeness` (main:19690): primary; sync.
+- `thm:replayable-obstruction-adequacy` (main:19710): primary; sync.
+- `thm:current-byte-two-coordinate-audit` (main:19735): primary; sync.
+- `thm:fixed-replay-rgs-coordinate-exactness` (main:19775): primary; sync.
+- `thm:accepted-fixed-replay-rgs-pass-row-current-package` (main:19850): primary; sync.
+- `thm:replay-kernel-foreground-closure` (main:20030): primary; sync.
+- `thm:canonical-finite-basis-replay-foreground-exactness` (main:20135): primary; sync.
+- `thm:cicm-public-surface-maximality` (main:20222): primary; sync.
+- `thm:two-coordinate-foreground-maximality` (main:20398): primary; sync.
+- `thm:current-round-local-only-fixed-point-classifier` (main:20638): primary; sync.
+- `prop:six-challenged-coordinate-discharge-normal-form` (main:20696): primary; sync.
+- `thm:round-eight-ordered-support-tuple-closure` (main:20783): primary; sync.
 
 ## missing_in_scope_results
-
-- None.
+- `missing:fresh-newmath-lean-rebuild-and-axiom-audit` (scope): qsrc negative; keep missing.
+- `missing:fresh-artifact-semantic-validation-rerun` (scope): qart negative; keep missing.
+- `missing:external-upload-or-archive-coordinate` (scope): qext negative; do not claim.
+- `missing:upload-time-venue-compliance-or-acceptance` (scope): qven negative; do not claim.
 
 ## weak_in_scope_core_results
-
-- `thm:accepted-fixed-replay-rgs-pass-row-current-package` (main.tex:19850): Bounded qrgs pass row; too weak for general implementation soundness. Required action: Do not claim implementation soundness without the implementation-audit coordinate.
-- `thm:current-byte-two-coordinate-audit` (main.tex:19735): Only qinv and bounded qrgs are positive; qsrc/qart/qext/qven remain negative. Required action: Preserve this boundary in abstract and claims.
+- `thm:presentation-compressed-interface` (main:478): support/conditional; demote.
+- `cor:compact-presentation-boundary-routing` (main:648): support/conditional; demote.
+- `thm:public-result-support-surface-rigidity` (main:727): support/conditional; demote.
+- `thm:rgs-conditional-compact-spine` (main:2216): support/conditional; demote.
+- `thm:current-package-rgs-instantiation-boundary` (main:2295): support/conditional; demote.
+- `cor:current-package-no-implicit-rgs-discharge` (main:2358): support/conditional; demote.
+- `thm:finite-script-projection-contract-support` (main:3506): support/conditional; demote.
+- `cor:finite-script-rgs-instantiation-boundary` (main:3614): support/conditional; demote.
+- `thm:finite-script-record-support-maximality` (main:3625): support/conditional; demote.
+- `thm:assigned-gate-soundness-audit-boundary` (main:3699): support/conditional; demote.
+- `thm:six-coordinate-gate-implementation-soundness-skeleton` (main:3768): support/conditional; demote.
+- `thm:finite-certificate-obstruction-skeleton` (main:3961): support/conditional; demote.
+- `thm:finite-record-certificate-calculus-spine` (main:4149): support/conditional; demote.
+- `thm:presentation-scoped-boundary-normal-form` (main:5289): support/conditional; demote.
+- `thm:five-axis-upgrade-obstruction` (main:5408): support/conditional; demote.
+- `thm:current-package-certificate-exactness` (main:6309): support/conditional; demote.
+- `thm:manual-ledger-dependence-boundary` (main:6478): support/conditional; demote.
+- `cor:row-frozen-current-package-invariance` (main:6557): support/conditional; demote.
+- `thm:current-package-extension-coordinate-rigidity` (main:6605): support/conditional; demote.
+- `thm:current-package-semantic-non-escalation` (main:6703): support/conditional; demote.
+- `thm:named-boundary-positive-coordinate-classification` (main:6775): support/conditional; demote.
+- `thm:stage-a-two-boundary-resolution-acceptance` (main:6885): support/conditional; demote.
+- `cor:current-package-path-verified-instantiation` (main:6977): support/conditional; demote.
+- `thm:case-witness-skeleton-rigidity` (main:7307): support/conditional; demote.
+- `thm:four-row-case-matrix-maximality` (main:7438): support/conditional; demote.
+- `thm:finite-witness-manifest-record-interface` (main:8146): support/conditional; demote.
+- `thm:primary-to-support-dependency-completeness` (main:8567): support/conditional; demote.
+- `thm:exact-inclusion-support-surface-realization` (main:9021): support/conditional; demote.
+- `thm:public-branch-archive-equivalent-realization` (main:9065): support/conditional; demote.
+- `thm:final-support-surface-closure` (main:9181): support/conditional; demote.
+- `thm:workspace-final-package-reconciliation` (main:9305): support/conditional; demote.
+- `thm:support-surface-normal-form` (main:9398): support/conditional; demote.
+- `thm:support-surface-invariant-compression` (main:9465): support/conditional; demote.
+- `thm:current-package-missing-coordinate-classifier` (main:9727): support/conditional; demote.
+- `thm:four-coordinate-local-support-closure` (main:9841): support/conditional; demote.
+- `thm:digest-closure-refresh-criterion` (main:10032): support/conditional; demote.
+- `thm:submission-support-refresh-rigidity` (main:10101): support/conditional; demote.
+- `thm:deterministic-theorem-environment-extractor-boundary` (main:10239): support/conditional; demote.
+- `thm:extractor-domain-exactness-non-gluing` (main:10286): support/conditional; demote.
+- `thm:final-byte-extractor-inventory-inclusion` (main:10347): support/conditional; demote.
+- `thm:theorem-inventory-proofchecker-obstruction` (main:10417): support/conditional; demote.
+- `prop:manual-theorem-inventory-boundary` (main:10465): support/conditional; demote.
+- `thm:post-inventory-finite-record-realization` (main:10659): support/conditional; demote.
+- `thm:theorem-obligation-ledger-boundary` (main:10739): support/conditional; demote.
+- `thm:finite-row-case-evidence-closure` (main:11075): support/conditional; demote.
+- `thm:post-edit-rerun-metadata-gate` (main:11284): support/conditional; demote.
+- `thm:final-local-support-state-reconciliation` (main:11326): support/conditional; demote.
+- `thm:presentation-route-five-interface-sharpness` (main:11537): support/conditional; demote.
+- `thm:presentation-route-stronger-reading-classifier` (main:11685): support/conditional; demote.
+- `thm:end-to-end-upgrade-decomposition-obstruction` (main:11819): support/conditional; demote.
+- `thm:submission-support-fixed-point-normal-form` (main:11944): support/conditional; demote.
+- `thm:post-inventory-support-coordinate-dichotomy` (main:12012): support/conditional; demote.
+- `thm:accepted-inventory-coverage-criterion` (main:12117): support/conditional; demote.
+- `thm:post-inventory-package-fixed-point` (main:12191): support/conditional; demote.
+- `thm:current-inventory-artifact-realization` (main:12330): support/conditional; demote.
+- `thm:current-command-result-closure` (main:12422): support/conditional; demote.
+- `thm:four-coordinate-submission-support-skeleton` (main:13006): support/conditional; demote.
+- `thm:current-package-no-free-upgrade-closure` (main:13268): support/conditional; demote.
+- `thm:terminal-five-coordinate-closure` (main:13417): support/conditional; demote.
+- `thm:five-issue-coordinate-normal-form` (main:13491): support/conditional; demote.
+- `thm:presentation-weak-interface-maximality` (main:13645): support/conditional; demote.
+- `thm:five-obstruction-finite-coordinate-normal-form` (main:15687): support/conditional; demote.
+- `thm:accepted-inventory-coordinate-realization` (main:15869): support/conditional; demote.
+- `thm:current-accepted-inventory-tuple-instantiation` (main:16050): support/conditional; demote.
+- `thm:inventory-venue-coordinate-closure` (main:16186): support/conditional; demote.
+- `thm:four-coordinate-local-support-discharge` (main:16269): support/conditional; demote.
+- `thm:local-support-surface-classifier` (main:16365): support/conditional; demote.
+- `thm:local-support-coordinate-closure` (main:16463): support/conditional; demote.
+- `thm:four-blocker-coordinate-budget` (main:16520): support/conditional; demote.
+- `thm:canonical-local-rerun-tuple` (main:16598): support/conditional; demote.
+- `thm:current-byte-support-fixed-point-nonupgrade-boundary` (main:16666): support/conditional; demote.
+- `thm:submission-support-obstruction-skeleton` (main:16792): support/conditional; demote.
+- `thm:support-coordinate-status-discharge` (main:17222): support/conditional; demote.
+- `thm:post-regeneration-support-coordinate-closure` (main:17333): support/conditional; demote.
+- `thm:five-interface-finite-skeleton-classification` (main:17425): support/conditional; demote.
+- `thm:final-support-surface-dichotomy-inventory-exactness` (main:17608): support/conditional; demote.
+- `thm:terminal-local-support-acceptance-normal-form` (main:17671): support/conditional; demote.
+- `thm:terminal-support-coordinate-discharge` (main:17746): support/conditional; demote.
+- `thm:current-inventory-rerun-exactness` (main:17804): support/conditional; demote.
+- `thm:current-package-five-coordinate-closure-criterion` (main:17882): support/conditional; demote.
+- `thm:five-interface-current-package-discharge-criterion` (main:17973): support/conditional; demote.
+- `cor:stage-a-issue-discharge-normal-form` (main:18112): support/conditional; demote.
+- `thm:six-coordinate-submission-boundary-normal-form` (main:18144): support/conditional; demote.
+- `thm:current-stage-a2-support-coordinate-realization` (main:18247): support/conditional; demote.
+- `cor:stage-a2-challenged-coordinate-classifier` (main:18310): support/conditional; demote.
+- `cor:presentation-package-five-coordinate-support-closure` (main:18378): support/conditional; demote.
+- `thm:finite-antichain-basis` (main:18476): support/conditional; demote.
+- `thm:canonical-bad-subrecord-classifier` (main:18531): support/conditional; demote.
+- `thm:stage-a-real-block-discharge` (main:18594): support/conditional; demote.
+- `cor:current-stage-a-closure-criterion` (main:18667): support/conditional; demote.
+- `def:role-respecting-finite-audit-interpretation` (main:19024): support/conditional; demote.
+- `def:six-coordinate-safe-projection` (main:19052): support/conditional; demote.
+- `thm:universal-safe-projection` (main:19077): support/conditional; demote.
+- `thm:coordinate-separation` (main:19118): support/conditional; demote.
+- `thm:canonical-obstruction-basis` (main:19162): support/conditional; demote.
+- `thm:current-byte-obstruction-certificate` (main:19189): support/conditional; demote.
+- `cor:referee-novelty-separation` (main:19224): support/conditional; demote.
+- `prop:single-route-surface` (main:19241): support/conditional; demote.
+- `thm:byte-to-atom-determinacy` (main:19620): support/conditional; demote.
+- `thm:post-qrgs-coordinate-independence` (main:19936): support/conditional; demote.
+- `cor:stage-a-replay-kernel-software-surface` (main:19965): support/conditional; demote.
+- `lem:maximal-qinv-qrgs-replay-closure` (main:19983): support/conditional; demote.
+- `cor:five-challenged-interfaces-replay-foreground` (main:20334): support/conditional; demote.
+- `cor:no-implementation-upgrade-from-fixed-replay` (main:20494): support/conditional; demote.
+- `prop:stage-a-replay-route-quotient-preservation` (main:20551): support/conditional; demote.
 
 ## proof_gaps
-
-- `thm:publication-safety-interface` (main.tex:4636): Conditional on record-gate soundness, not unconditional safety. Required action: Keep hypothesis visible or discharge exact RGS row.
-- `thm:six-coordinate-submission-boundary-normal-form` (main.tex:18144): Records absent qsrc/qart/qext/qven upgrade coordinates. Required action: Do not convert absent coordinates into positive claims.
-- `cor:current-stage-a-closure-exactness` (main.tex:18975): Requires post-inventory verifier sync and final digest generation. Required action: Run ordered Stage-A verifier sequence before proceed.
+- `prop:finite-certificate-schema-verifier` (main:2469): needs verifier/log; rerun/cite log.
+- `thm:verifier-input-output-contract` (main:2538): needs verifier/log; rerun/cite log.
+- `thm:auditable-compiler-boundary-completeness` (main:2606): needs verifier/log; rerun/cite log.
+- `thm:finite-verifier-normal-form` (main:2665): needs verifier/log; rerun/cite log.
+- `thm:record-acceptance-exactness` (main:2749): needs verifier/log; rerun/cite log.
+- `thm:finite-record-method-schema-compression` (main:2828): needs verifier/log; rerun/cite log.
+- `cor:executable-schema-exactness-negative-fixture` (main:2885): needs verifier/log; rerun/cite log.
+- `thm:publication-safety-interface` (main:4636): needs verifier/log; rerun/cite log.
+- `prop:post-inventory-fixed-point-support-certificate` (main:10602): needs verifier/log; rerun/cite log.
+- `prop:stage-a2-accepted-inventory-rerun-realization` (main:12666): needs verifier/log; rerun/cite log.
+- `prop:realized-post-inventory-verifier-digest-coordinate` (main:15995): needs verifier/log; rerun/cite log.
 
 ## supporting_appendix_or_background
-
-- `def:architecture-axis-map` (main.tex:395): Required finite-record background definition. Required action: Use as bounded background/support only.
-- `def:operational-acceptance-interface` (main.tex:1567): Required finite-record background definition. Required action: Use as bounded background/support only.
-- `def:record-gate-soundness-external-interface` (main.tex:2136): Record-gate interface background. Required action: Use as bounded background/support only.
-- `def:finite-record-projection-preorder` (main.tex:1899): Projection-preorder background. Required action: Use as bounded background/support only.
-- `thm:presentation-compressed-interface` (main.tex:478): Master presentation-interface dependency. Required action: Use as bounded background/support only.
-- `thm:six-role-publication-master-interface` (main.tex:14058): Six-role master-interface dependency. Required action: Use as bounded background/support only.
-- `thm:external-interface-projection-no-free-upgrade` (main.tex:6083): No-free-upgrade dependency. Required action: Use as bounded background/support only.
-- `thm:four-case-foreground-support-boundary` (main.tex:15053): Four-case foreground normal-form dependency. Required action: Use as bounded background/support only.
-- `cor:stage-a-issue-discharge-normal-form` (main.tex:18112): Stage-A issue-discharge dependency. Required action: Use as bounded background/support only.
-- `thm:current-round-local-only-fixed-point-classifier` (main.tex:20638): Current-round local fixed-point dependency. Required action: Use as bounded background/support only.
-- `prop:final-package-shape-convention` (main.tex:268): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:nested-package-states` (main.tex:312): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:architecture-axis-non-escalation` (main.tex:434): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:compact-presentation-boundary-routing` (main.tex:648): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:public-result-support-surface-rigidity` (main.tex:727): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `lem:source-interface-extraction-correctness` (main.tex:1014): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:manual-source-interface-non-escalation` (main.tex:1053): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:reviewable-source-snapshot-interface` (main.tex:1096): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:source-interface-record-file-consistency` (main.tex:1128): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:bounded-source-interface-maximality` (main.tex:1195): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:downstream-imported-label-bounded-factorization` (main.tex:1264): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:public-source-reachability-non-escalation` (main.tex:1298): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:public-source-coordinate-exactness` (main.tex:1352): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:source-interface-semantic-completeness-obstruction` (main.tex:1390): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:source-interface-evidence-level-separation` (main.tex:1448): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:portable-six-role-interface` (main.tex:1695): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:portable-workflow-schema-factorisation` (main.tex:1772): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:portable-projection-dominates-local-support` (main.tex:1829): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `lem:finite-record-preorder-normal-form` (main.tex:1915): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:portable-method-normal-form-local-pullback` (main.tex:1958): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:record-gate-soundness-external-interface-exactness` (main.tex:2172): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:rgs-conditional-compact-spine` (main.tex:2216): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-rgs-instantiation-boundary` (main.tex:2295): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-package-no-implicit-rgs-discharge` (main.tex:2358): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `def:stronger-reading-preorder` (main.tex:2401): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `def:certificate-schema-acceptance-table` (main.tex:2429): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `prop:finite-certificate-schema-verifier` (main.tex:2469): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:verifier-input-output-contract` (main.tex:2538): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:auditable-compiler-boundary-completeness` (main.tex:2606): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-verifier-normal-form` (main.tex:2665): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:record-acceptance-exactness` (main.tex:2749): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-record-method-schema-compression` (main.tex:2828): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:executable-schema-exactness-negative-fixture` (main.tex:2885): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:record-interface-rigidity` (main.tex:2986): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:record-gate-implementation-overclaim-obstruction` (main.tex:3086): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:finite-record-acceptance-not-implementation-soundness` (main.tex:3155): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:machine-readable-certificate-records` (main.tex:3194): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:executable-record-non-escalation` (main.tex:3296): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:executable-certificate-construction-invariant` (main.tex:3354): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:claim-kind-dispatch` (main.tex:3422): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:mixed-claim-projection-obstruction` (main.tex:3443): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-script-projection-contract-support` (main.tex:3506): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:finite-script-rgs-instantiation-boundary` (main.tex:3614): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-script-record-support-maximality` (main.tex:3625): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:assigned-gate-soundness-audit-boundary` (main.tex:3699): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:six-coordinate-gate-implementation-soundness-skeleton` (main.tex:3768): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:three-upgrade-coordinate-exactness` (main.tex:3853): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-certificate-obstruction-skeleton` (main.tex:3961): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-extension-budget-normal-form` (main.tex:4062): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-record-certificate-calculus-spine` (main.tex:4149): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:publication-safety-dependency-normal-form` (main.tex:4226): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-coordinate-no-overclaim-rigidity` (main.tex:4293): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:gate-interface-separation` (main.tex:4403): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:human-promotion-daemon-active-track-separation` (main.tex:4427): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:scheduler-selection-advisory` (main.tex:4475): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:publication-safety-minimal-bad-record-witness` (main.tex:4556): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `lem:schema-partition-minimality` (main.tex:4600): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:gate-implementation-soundness-upgrade-obstruction` (main.tex:4793): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-record-certificate-rigidity` (main.tex:4960): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:boundary-axis-non-escalation-exactness` (main.tex:5047): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:mixed-interface-overclaim-skeleton` (main.tex:5183): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-scoped-boundary-normal-form` (main.tex:5289): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:five-axis-upgrade-obstruction` (main.tex:5408): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-boundary-skeleton-non-gluing` (main.tex:5518): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:certificate-constructor-bad-subrecord-extractor` (main.tex:5657): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:publication-safety-maximality` (main.tex:5722): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:publication-safety-current-package-instance` (main.tex:5773): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:finite-record-gate-soundness-boundary` (main.tex:5824): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:implementation-soundness-extension-criterion` (main.tex:5871): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-implementation-upgrade-absence` (main.tex:5965): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:submitted-gate-implementation-contract-dichotomy` (main.tex:6034): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:current-package-acceptance-certificate-ledger` (main.tex:6192): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-certificate-exactness` (main.tex:6309): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:manual-ledger-dependence-boundary` (main.tex:6478): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:row-frozen-current-package-invariance` (main.tex:6557): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-extension-coordinate-rigidity` (main.tex:6605): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-semantic-non-escalation` (main.tex:6703): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:named-boundary-positive-coordinate-classification` (main.tex:6775): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:stage-a-two-boundary-resolution-acceptance` (main.tex:6885): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-package-path-verified-instantiation` (main.tex:6977): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `lem:gate-witness-criterion` (main.tex:7095): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:path-complete-case-witnesses` (main.tex:7120): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:review-bundle-case-snapshot-coverage` (main.tex:7248): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:case-witness-skeleton-rigidity` (main.tex:7307): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:presentation-case-matrix-sufficiency` (main.tex:7383): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-row-case-matrix-maximality` (main.tex:7438): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `audit:fresh-venue-record-criterion` (main.tex:7573): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:venue-rule-freshness-non-escalation` (main.tex:7624): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:historical-venue-record-non-escalation` (main.tex:7670): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:upload-time-venue-compliance-record-requirement` (main.tex:7700): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:dated-venue-record-instantiation` (main.tex:7749): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `audit:venue-submission-pack-gate` (main.tex:7800): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `audit:submission-artifact-role-separation` (main.tex:7871): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:formal-source-gate-instantiation` (main.tex:7963): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:formal-source-promotion-obstruction` (main.tex:8030): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:evidence-level-overclaim-obstruction` (main.tex:8071): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-witness-manifest-record-interface` (main.tex:8146): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:artifact-validation-gate-unique-semantic-upgrade` (main.tex:8270): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:artifact-semantic-validity-boundary` (main.tex:8312): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:three-boundary-upgrade-sharpness` (main.tex:8388): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:primary-to-support-dependency-completeness` (main.tex:8567): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:primary-claim-row-classification` (main.tex:8635): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:primary-inventory-freshness-criterion` (main.tex:8700): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:primary-supplement-interface-map` (main.tex:8773): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:exact-inclusion-support-surface-realization` (main.tex:9021): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:public-branch-archive-equivalent-realization` (main.tex:9065): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:submission-time-support-instantiation-test` (main.tex:9127): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:final-support-surface-closure` (main.tex:9181): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:workspace-final-package-reconciliation` (main.tex:9305): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:support-surface-normal-form` (main.tex:9398): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:support-surface-invariant-compression` (main.tex:9465): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:upload-or-archive-instantiation-boundary` (main.tex:9530): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:upload-or-archive-instantiation-record` (main.tex:9573): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:no-external-instantiation-from-local-bundle-records` (main.tex:9596): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:upload-or-archive-instantiation-update-protocol` (main.tex:9638): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-missing-coordinate-classifier` (main.tex:9727): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-coordinate-local-support-closure` (main.tex:9841): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-no-receipt-support-surface-non-escalation` (main.tex:9947): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:fresh-inventory-digest-instance-this-source-state` (main.tex:10000): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:digest-closure-refresh-criterion` (main.tex:10032): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:submission-support-refresh-rigidity` (main.tex:10101): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:primary-architectural-fallback-without-external-support` (main.tex:10173): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:deterministic-theorem-environment-extractor-boundary` (main.tex:10239): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:extractor-domain-exactness-non-gluing` (main.tex:10286): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:final-byte-extractor-inventory-inclusion` (main.tex:10347): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:theorem-inventory-proofchecker-obstruction` (main.tex:10417): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:manual-theorem-inventory-boundary` (main.tex:10465): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:regenerated-theorem-inventory-digest-closure` (main.tex:10517): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-theorem-inventory-digest-instance` (main.tex:10566): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:post-inventory-fixed-point-support-certificate` (main.tex:10602): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:post-inventory-finite-record-realization` (main.tex:10659): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:theorem-obligation-ledger-boundary` (main.tex:10739): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:post-inventory-support-tuple-extraction-certificate` (main.tex:10811): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:submitted-theorem-inventory-availability` (main.tex:10853): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:submission-support-instantiation-field-normal-form` (main.tex:10879): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-local-support-normal-form` (main.tex:10935): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `audit:review-bundle-availability-condition` (main.tex:10990): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `audit:case-snapshot-non-rerun-boundary` (main.tex:11044): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-row-case-evidence-closure` (main.tex:11075): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-case-behaviour-evidence-criterion` (main.tex:11131): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `audit:command-run-boundary-inventory` (main.tex:11191): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:post-edit-rerun-metadata-gate` (main.tex:11284): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:final-local-support-state-reconciliation` (main.tex:11326): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:local-support-coordinate-discharge` (main.tex:11475): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-route-five-interface-sharpness` (main.tex:11537): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-route-stronger-reading-classifier` (main.tex:11685): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:end-to-end-upgrade-decomposition-obstruction` (main.tex:11819): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:presentation-summary-non-escalation` (main.tex:11884): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:submission-support-fixed-point-normal-form` (main.tex:11944): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:post-inventory-support-coordinate-dichotomy` (main.tex:12012): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:final-refreshed-coordinate-instantiation` (main.tex:12068): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:accepted-inventory-coverage-criterion` (main.tex:12117): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-post-inventory-realization` (main.tex:12293): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-inventory-artifact-realization` (main.tex:12330): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-command-result-closure` (main.tex:12422): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-post-inventory-support-tuple-instantiation` (main.tex:12468): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:current-verifier-support-realization` (main.tex:12520): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:stable-replay-post-inventory-tuple` (main.tex:12577): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:post-inventory-freshness-obstruction` (main.tex:12626): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:stage-a2-accepted-inventory-rerun-realization` (main.tex:12666): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:three-coordinate-submission-support-closure` (main.tex:12726): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:local-fixed-point-external-boundary` (main.tex:12791): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:current-absence-external-support-surface-instantiation` (main.tex:12842): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:final-support-coordinate-refresh-closure` (main.tex:12899): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:manifest-required-theorem-inventory-fixed-point` (main.tex:12958): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-coordinate-submission-support-skeleton` (main.tex:13006): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:final-local-fixed-point-external-normal-form` (main.tex:13117): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:accepted-byte-post-inventory-support-coordinate` (main.tex:13179): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-no-free-upgrade-closure` (main.tex:13268): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:terminal-five-coordinate-closure` (main.tex:13417): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:five-issue-coordinate-normal-form` (main.tex:13491): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:bounded-theorem-support-coordinate-closure` (main.tex:13565): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-weak-interface-maximality` (main.tex:13645): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:primary-presentation-weak-interface-compression` (main.tex:13765): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-family-upgrade-obstruction-classification` (main.tex:13842): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:certificate-reading-spine-maximality` (main.tex:13951): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:compressed-master-boundary-classifier` (main.tex:14207): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-route-dichotomy` (main.tex:14331): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:five-node-dependency-spine-exactness` (main.tex:14467): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:master-spine-support-coordinate-compression` (main.tex:14535): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-record-interface-support-boundary-classification` (main.tex:14622): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-only-bounded-support-normal-form` (main.tex:14729): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:compact-article-finite-record-spine-classification` (main.tex:14827): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:presentation-route-spine-projection-overload-obstruction` (main.tex:14965): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:compact-dependency-map-irredundancy` (main.tex:15138): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:compact-five-node-presentation-consequence` (main.tex:15254): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:submitted-support-issue-coordinate-discharge` (main.tex:15277): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:exact-submitted-issue-coordinate-skeleton` (main.tex:15339): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:external-coordinate-admissibility-trichotomy` (main.tex:15415): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:manuscript-reading-boundary` (main.tex:15499): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:local-only-artifact-support-closure` (main.tex:15526): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:local-support-normal-form-four-live-coordinates` (main.tex:15564): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:support-chain-closure` (main.tex:15653): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:five-obstruction-finite-coordinate-normal-form` (main.tex:15687): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-byte-closure` (main.tex:15818): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:accepted-inventory-coordinate-realization` (main.tex:15869): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:fresh-post-inventory-byte-closure-rerun-discharge` (main.tex:15939): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:realized-post-inventory-verifier-digest-coordinate` (main.tex:15995): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-accepted-inventory-tuple-instantiation` (main.tex:16050): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:presentation-route-support-coordinate-normal-form` (main.tex:16102): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:inventory-venue-coordinate-closure` (main.tex:16186): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-coordinate-local-support-discharge` (main.tex:16269): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:local-support-surface-classifier` (main.tex:16365): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:local-support-coordinate-closure` (main.tex:16463): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-blocker-coordinate-budget` (main.tex:16520): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:canonical-local-rerun-tuple` (main.tex:16598): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:post-inventory-rerun-closure` (main.tex:16738): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:submission-support-obstruction-skeleton` (main.tex:16792): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:accepted-inventory-final-verifier-digest-tuple` (main.tex:16867): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:submitted-support-locator-freshness-realization` (main.tex:16918): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:four-live-noninstantiation-coordinates` (main.tex:16986): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:scope-contract-three-coordinate-boundary` (main.tex:17065): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:support-coordinate-status-discharge` (main.tex:17222): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:post-regeneration-support-coordinate-closure` (main.tex:17333): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:five-interface-finite-skeleton-classification` (main.tex:17425): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:local-issue-coordinate-normal-form` (main.tex:17523): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:final-support-surface-dichotomy-inventory-exactness` (main.tex:17608): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:terminal-local-support-acceptance-normal-form` (main.tex:17671): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:terminal-support-coordinate-discharge` (main.tex:17746): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-inventory-rerun-exactness` (main.tex:17804): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-package-five-coordinate-closure-criterion` (main.tex:17882): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:five-interface-current-package-discharge-criterion` (main.tex:17973): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-stage-a2-support-coordinate-realization` (main.tex:18247): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:stage-a2-challenged-coordinate-classifier` (main.tex:18310): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:presentation-package-five-coordinate-support-closure` (main.tex:18378): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:finite-antichain-basis` (main.tex:18476): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:canonical-bad-subrecord-classifier` (main.tex:18531): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:stage-a-real-block-discharge` (main.tex:18594): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:current-stage-a-closure-criterion` (main.tex:18667): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `def:role-respecting-finite-audit-interpretation` (main.tex:19024): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `def:six-coordinate-safe-projection` (main.tex:19052): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `thm:universal-safe-projection` (main.tex:19077): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:coordinate-separation` (main.tex:19118): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:canonical-obstruction-basis` (main.tex:19162): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-byte-obstruction-certificate` (main.tex:19189): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:referee-novelty-separation` (main.tex:19224): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:single-route-surface` (main.tex:19241): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `def:typed-audit-atom` (main.tex:19271): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `def:stage-a-horn-audit-schema` (main.tex:19286): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `def:certified-closure-rejection-certificate` (main.tex:19314): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `thm:horn-compilation-adequacy` (main.tex:19337): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:deterministic-certificate-soundness` (main.tex:19366): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:coordinate-independence-by-horn-models` (main.tex:19415): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:current-byte-certified-audit` (main.tex:19469): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:referee-facing-novelty-horn` (main.tex:19500): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:non-duplication-route-quotient` (main.tex:19519): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `def:canonical-stage-a-byte-manifest` (main.tex:19551): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `def:byte-to-atom-compiler` (main.tex:19569): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `def:replayable-stage-a-certificate` (main.tex:19589): Definition/interface label covered for verifier completeness. Required action: Keep as notation/background if cited.
-- `thm:byte-to-atom-determinacy` (main.tex:19620): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:replay-kernel-soundness` (main.tex:19642): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:replay-kernel-completeness` (main.tex:19690): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:replayable-obstruction-adequacy` (main.tex:19710): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:stage-a-replay-kernel-software-surface` (main.tex:19965): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `lem:maximal-qinv-qrgs-replay-closure` (main.tex:19983): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:five-challenged-interfaces-replay-foreground` (main.tex:20334): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:two-coordinate-foreground-maximality` (main.tex:20398): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `cor:no-implementation-upgrade-from-fixed-replay` (main.tex:20494): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:stage-a-replay-route-quotient-preservation` (main.tex:20551): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `prop:six-challenged-coordinate-discharge-normal-form` (main.tex:20696): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `thm:round-eight-ordered-support-tuple-closure` (main.tex:20783): Proved supplement support label covered for verifier completeness. Required action: Keep as bounded appendix/support material.
-- `def:automated-discovery-certified-theory-state` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:18): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-automation-record` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:41): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-pipeline-state` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:49): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-genome-extractor` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:61): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-score-certificate` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:72): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-pipeline-transition` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:86): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-mechanical-expansion` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:102): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-genome-compression` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:110): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-genome-recombination` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:121): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-classifier-shift` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:129): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-discovery-transition` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:139): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-positive-discovery-transition` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:154): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-claim` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:170): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-claim-kinds` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:185): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-well-formed-claim` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:201): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-gate` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:212): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-gate-demotion` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:223): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-dna-completeness-obligation` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:237): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `cor:automated-discovery-statement-code-insufficient` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:248): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-mechanical-not-discovery` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:258): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-compression-not-discovery` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:269): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-certificate-ledger-required` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:280): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-positive-implies-discovery` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:299): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-scored-claims-public-weights` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:309): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-gate-kind-sound` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:320): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-demotion-soundness` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:334): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-lineage-ledger` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:351): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-lineage-consistent-claim` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:359): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-potential` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:377): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-lowest-score-not-best-target` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:395): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-selection-favours-classifier-change` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:408): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `def:automated-discovery-unpaid-discovery-claim` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:423): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-no-unpaid-discovery` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:431): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
-- `thm:automated-discovery-pipeline-safety` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:441): Source-snapshot support label; not primary route material. Required action: Keep path-bounded or split separately.
+- `prop:final-package-shape-convention` (main:268): support/background; retain support.
+- `thm:nested-package-states` (main:312): support/background; retain support.
+- `def:architecture-axis-map` (main:395): support/background; retain support.
+- `prop:architecture-axis-non-escalation` (main:434): support/background; retain support.
+- `lem:source-interface-extraction-correctness` (main:1014): support/background; retain support.
+- `prop:manual-source-interface-non-escalation` (main:1053): support/background; retain support.
+- `prop:reviewable-source-snapshot-interface` (main:1096): support/background; retain support.
+- `prop:source-interface-record-file-consistency` (main:1128): support/background; retain support.
+- `thm:bounded-source-interface-maximality` (main:1195): support/background; retain support.
+- `cor:downstream-imported-label-bounded-factorization` (main:1264): support/background; retain support.
+- `thm:public-source-reachability-non-escalation` (main:1298): support/background; retain support.
+- `cor:public-source-coordinate-exactness` (main:1352): support/background; retain support.
+- `prop:source-interface-evidence-level-separation` (main:1448): support/background; retain support.
+- `def:operational-acceptance-interface` (main:1567): support/background; retain support.
+- `thm:portable-six-role-interface` (main:1695): support/background; retain support.
+- `prop:portable-workflow-schema-factorisation` (main:1772): support/background; retain support.
+- `def:finite-record-projection-preorder` (main:1899): support/background; retain support.
+- `lem:finite-record-preorder-normal-form` (main:1915): support/background; retain support.
+- `def:record-gate-soundness-external-interface` (main:2136): support/background; retain support.
+- `prop:record-gate-soundness-external-interface-exactness` (main:2172): support/background; retain support.
+- `def:stronger-reading-preorder` (main:2401): support/background; retain support.
+- `def:certificate-schema-acceptance-table` (main:2429): support/background; retain support.
+- `thm:finite-coordinate-determination-boundary` (main:2924): support/background; retain support.
+- `thm:record-interface-rigidity` (main:2986): support/background; retain support.
+- `prop:machine-readable-certificate-records` (main:3194): support/background; retain support.
+- `thm:executable-record-non-escalation` (main:3296): support/background; retain support.
+- `thm:executable-certificate-construction-invariant` (main:3354): support/background; retain support.
+- `prop:claim-kind-dispatch` (main:3422): support/background; retain support.
+- `thm:mixed-claim-projection-obstruction` (main:3443): support/background; retain support.
+- `thm:three-upgrade-coordinate-exactness` (main:3853): support/background; retain support.
+- `thm:finite-extension-budget-normal-form` (main:4062): support/background; retain support.
+- `prop:publication-safety-dependency-normal-form` (main:4226): support/background; retain support.
+- `thm:finite-coordinate-no-overclaim-rigidity` (main:4293): support/background; retain support.
+- `prop:gate-interface-separation` (main:4403): support/background; retain support.
+- `cor:human-promotion-daemon-active-track-separation` (main:4427): support/background; retain support.
+- `prop:scheduler-selection-advisory` (main:4475): support/background; retain support.
+- `prop:publication-safety-minimal-bad-record-witness` (main:4556): support/background; retain support.
+- `lem:schema-partition-minimality` (main:4600): support/background; retain support.
+- `thm:finite-record-certificate-rigidity` (main:4960): support/background; retain support.
+- `thm:boundary-axis-non-escalation-exactness` (main:5047): support/background; retain support.
+- `thm:mixed-interface-overclaim-skeleton` (main:5183): support/background; retain support.
+- `prop:certificate-constructor-bad-subrecord-extractor` (main:5657): support/background; retain support.
+- `prop:publication-safety-maximality` (main:5722): support/background; retain support.
+- `cor:publication-safety-current-package-instance` (main:5773): support/background; retain support.
+- `cor:finite-record-gate-soundness-boundary` (main:5824): support/background; retain support.
+- `prop:current-package-acceptance-certificate-ledger` (main:6192): support/background; retain support.
+- `lem:gate-witness-criterion` (main:7095): support/background; retain support.
+- `prop:path-complete-case-witnesses` (main:7120): support/background; retain support.
+- `prop:review-bundle-case-snapshot-coverage` (main:7248): support/background; retain support.
+- `prop:presentation-case-matrix-sufficiency` (main:7383): support/background; retain support.
+- `thm:three-boundary-upgrade-sharpness` (main:8388): support/background; retain support.
+- `prop:primary-claim-row-classification` (main:8635): support/background; retain support.
+- `prop:primary-inventory-freshness-criterion` (main:8700): support/background; retain support.
+- `prop:primary-supplement-interface-map` (main:8773): support/background; retain support.
+- `cor:submission-time-support-instantiation-test` (main:9127): support/background; retain support.
+- `cor:current-no-receipt-support-surface-non-escalation` (main:9947): support/background; retain support.
+- `cor:fresh-inventory-digest-instance-this-source-state` (main:10000): support/background; retain support.
+- `prop:primary-architectural-fallback-without-external-support` (main:10173): support/background; retain support.
+- `prop:regenerated-theorem-inventory-digest-closure` (main:10517): support/background; retain support.
+- `cor:current-theorem-inventory-digest-instance` (main:10566): support/background; retain support.
+- `prop:post-inventory-support-tuple-extraction-certificate` (main:10811): support/background; retain support.
+- `prop:submitted-theorem-inventory-availability` (main:10853): support/background; retain support.
+- `prop:submission-support-instantiation-field-normal-form` (main:10879): support/background; retain support.
+- `cor:current-local-support-normal-form` (main:10935): support/background; retain support.
+- `audit:review-bundle-availability-condition` (main:10990): support/background; retain support.
+- `audit:case-snapshot-non-rerun-boundary` (main:11044): support/background; retain support.
+- `cor:current-case-behaviour-evidence-criterion` (main:11131): support/background; retain support.
+- `audit:command-run-boundary-inventory` (main:11191): support/background; retain support.
+- `cor:local-support-coordinate-discharge` (main:11475): support/background; retain support.
+- `cor:presentation-summary-non-escalation` (main:11884): support/background; retain support.
+- `prop:final-refreshed-coordinate-instantiation` (main:12068): support/background; retain support.
+- `cor:current-post-inventory-realization` (main:12293): support/background; retain support.
+- `cor:current-post-inventory-support-tuple-instantiation` (main:12468): support/background; retain support.
+- `prop:current-verifier-support-realization` (main:12520): support/background; retain support.
+- `cor:stable-replay-post-inventory-tuple` (main:12577): support/background; retain support.
+- `prop:post-inventory-freshness-obstruction` (main:12626): support/background; retain support.
+- `prop:three-coordinate-submission-support-closure` (main:12726): support/background; retain support.
+- `cor:local-fixed-point-external-boundary` (main:12791): support/background; retain support.
+- `prop:current-absence-external-support-surface-instantiation` (main:12842): support/background; retain support.
+- `prop:final-support-coordinate-refresh-closure` (main:12899): support/background; retain support.
+- `cor:manifest-required-theorem-inventory-fixed-point` (main:12958): support/background; retain support.
+- `cor:final-local-fixed-point-external-normal-form` (main:13117): support/background; retain support.
+- `prop:accepted-byte-post-inventory-support-coordinate` (main:13179): support/background; retain support.
+- `prop:bounded-theorem-support-coordinate-closure` (main:13565): support/background; retain support.
+- `cor:primary-presentation-weak-interface-compression` (main:13765): support/background; retain support.
+- `thm:submitted-support-issue-coordinate-discharge` (main:15277): support/background; retain support.
+- `prop:exact-submitted-issue-coordinate-skeleton` (main:15339): support/background; retain support.
+- `prop:external-coordinate-admissibility-trichotomy` (main:15415): support/background; retain support.
+- `cor:manuscript-reading-boundary` (main:15499): support/background; retain support.
+- `cor:local-only-artifact-support-closure` (main:15526): support/background; retain support.
+- `thm:local-support-normal-form-four-live-coordinates` (main:15564): support/background; retain support.
+- `cor:support-chain-closure` (main:15653): support/background; retain support.
+- `cor:current-byte-closure` (main:15818): support/background; retain support.
+- `prop:fresh-post-inventory-byte-closure-rerun-discharge` (main:15939): support/background; retain support.
+- `cor:presentation-route-support-coordinate-normal-form` (main:16102): support/background; retain support.
+- `cor:post-inventory-rerun-closure` (main:16738): support/background; retain support.
+- `cor:accepted-inventory-final-verifier-digest-tuple` (main:16867): support/background; retain support.
+- `prop:submitted-support-locator-freshness-realization` (main:16918): support/background; retain support.
+- `thm:scope-contract-three-coordinate-boundary` (main:17065): support/background; retain support.
+- `prop:local-issue-coordinate-normal-form` (main:17523): support/background; retain support.
+- `def:automated-discovery-certified-theory-state` (snap:18): support/background; retain support.
+- `def:automated-discovery-automation-record` (snap:41): support/background; retain support.
+- `def:automated-discovery-pipeline-state` (snap:49): support/background; retain support.
+- `def:automated-discovery-genome-extractor` (snap:61): support/background; retain support.
+- `def:automated-discovery-score-certificate` (snap:72): support/background; retain support.
+- `def:automated-discovery-pipeline-transition` (snap:86): support/background; retain support.
+- `def:automated-discovery-mechanical-expansion` (snap:102): support/background; retain support.
+- `def:automated-discovery-genome-compression` (snap:110): support/background; retain support.
+- `def:automated-discovery-genome-recombination` (snap:121): support/background; retain support.
+- `def:automated-discovery-classifier-shift` (snap:129): support/background; retain support.
+- `def:automated-discovery-discovery-transition` (snap:139): support/background; retain support.
+- `def:automated-discovery-positive-discovery-transition` (snap:154): support/background; retain support.
+- `def:automated-discovery-claim` (snap:170): support/background; retain support.
+- `def:automated-discovery-claim-kinds` (snap:185): support/background; retain support.
+- `def:automated-discovery-well-formed-claim` (snap:201): support/background; retain support.
+- `def:automated-discovery-gate` (snap:212): support/background; retain support.
+- `def:automated-discovery-gate-demotion` (snap:223): support/background; retain support.
+- `thm:automated-discovery-dna-completeness-obligation` (snap:237): support/background; retain support.
+- `cor:automated-discovery-statement-code-insufficient` (snap:248): support/background; retain support.
+- `thm:automated-discovery-mechanical-not-discovery` (snap:258): support/background; retain support.
+- `thm:automated-discovery-compression-not-discovery` (snap:269): support/background; retain support.
+- `thm:automated-discovery-certificate-ledger-required` (snap:280): support/background; retain support.
+- `thm:automated-discovery-positive-implies-discovery` (snap:299): support/background; retain support.
+- `thm:automated-discovery-scored-claims-public-weights` (snap:309): support/background; retain support.
+- `thm:automated-discovery-gate-kind-sound` (snap:320): support/background; retain support.
+- `thm:automated-discovery-demotion-soundness` (snap:334): support/background; retain support.
+- `def:automated-discovery-lineage-ledger` (snap:351): support/background; retain support.
+- `def:automated-discovery-lineage-consistent-claim` (snap:359): support/background; retain support.
+- `thm:automated-discovery-lineage-dag` (snap:366): support/background; retain support.
+- `def:automated-discovery-potential` (snap:377): support/background; retain support.
+- `thm:automated-discovery-lowest-score-not-best-target` (snap:395): support/background; retain support.
+- `thm:automated-discovery-selection-favours-classifier-change` (snap:408): support/background; retain support.
+- `def:automated-discovery-unpaid-discovery-claim` (snap:423): support/background; retain support.
+- `thm:automated-discovery-no-unpaid-discovery` (snap:431): support/background; retain support.
+- `thm:automated-discovery-pipeline-safety` (snap:441): support/background; retain support.
+- `thm:automated-discovery-pipeline-theorem` (snap:457): support/background; retain support.
 
 ## out_of_scope_strong_results
-
-- `thm:automated-discovery-pipeline-theorem` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:457): Strong result outside the compact CICM theorem surface. Required action: Do not foreground here; keep as support or split.
-- `thm:verifier-adequacy-complexity` (main.tex:19444): Strong result outside the compact CICM theorem surface. Required action: Do not foreground here; keep as support or split.
-- `thm:cicm-public-surface-maximality` (main.tex:20222): Strong result outside the compact CICM theorem surface. Required action: Do not foreground here; keep as support or split.
+- `thm:source-interface-semantic-completeness-obstruction` (main:1390): out of positive scope; negative boundary.
+- `thm:record-gate-implementation-overclaim-obstruction` (main:3086): out of positive scope; negative boundary.
+- `cor:finite-record-acceptance-not-implementation-soundness` (main:3155): out of positive scope; negative boundary.
+- `thm:gate-implementation-soundness-upgrade-obstruction` (main:4793): out of positive scope; negative boundary.
+- `thm:implementation-soundness-extension-criterion` (main:5871): out of positive scope; negative boundary.
+- `thm:current-package-implementation-upgrade-absence` (main:5965): out of positive scope; negative boundary.
+- `cor:submitted-gate-implementation-contract-dichotomy` (main:6034): out of positive scope; negative boundary.
+- `thm:external-interface-projection-no-free-upgrade` (main:6083): out of positive scope; negative boundary.
+- `audit:fresh-venue-record-criterion` (main:7573): out of positive scope; negative boundary.
+- `thm:venue-rule-freshness-non-escalation` (main:7624): out of positive scope; negative boundary.
+- `cor:historical-venue-record-non-escalation` (main:7670): out of positive scope; negative boundary.
+- `cor:upload-time-venue-compliance-record-requirement` (main:7700): out of positive scope; negative boundary.
+- `prop:dated-venue-record-instantiation` (main:7749): out of positive scope; negative boundary.
+- `audit:venue-submission-pack-gate` (main:7800): out of positive scope; negative boundary.
+- `audit:submission-artifact-role-separation` (main:7871): out of positive scope; negative boundary.
+- `prop:formal-source-gate-instantiation` (main:7963): out of positive scope; negative boundary.
+- `thm:formal-source-promotion-obstruction` (main:8030): out of positive scope; negative boundary.
+- `thm:evidence-level-overclaim-obstruction` (main:8071): out of positive scope; negative boundary.
+- `prop:artifact-validation-gate-unique-semantic-upgrade` (main:8270): out of positive scope; negative boundary.
+- `cor:artifact-semantic-validity-boundary` (main:8312): out of positive scope; negative boundary.
+- `thm:upload-or-archive-instantiation-boundary` (main:9530): out of positive scope; negative boundary.
+- `cor:upload-or-archive-instantiation-record` (main:9573): out of positive scope; negative boundary.
+- `prop:no-external-instantiation-from-local-bundle-records` (main:9596): out of positive scope; negative boundary.
+- `prop:upload-or-archive-instantiation-update-protocol` (main:9638): out of positive scope; negative boundary.
 
 ## split_candidates
-
-- `thm:complete-obstruction` (main.tex:19390): Plausible independent-paper seed. Required action: Keep out of the primary chain; evaluate separately.
-- `thm:automated-discovery-lineage-dag` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:366): Plausible independent-paper seed. Required action: Keep out of the primary chain; evaluate separately.
+- `thm:four-family-upgrade-obstruction-classification` (main:13842): broader result; split candidate.
+- `thm:certificate-reading-spine-maximality` (main:13951): broader result; split candidate.
+- `thm:six-role-publication-master-interface` (main:14058): broader result; split candidate.
+- `thm:compressed-master-boundary-classifier` (main:14207): broader result; split candidate.
+- `thm:presentation-route-dichotomy` (main:14331): broader result; split candidate.
+- `thm:five-node-dependency-spine-exactness` (main:14467): broader result; split candidate.
+- `thm:master-spine-support-coordinate-compression` (main:14535): broader result; split candidate.
+- `thm:finite-record-interface-support-boundary-classification` (main:14622): broader result; split candidate.
+- `thm:presentation-only-bounded-support-normal-form` (main:14729): broader result; split candidate.
+- `thm:compact-article-finite-record-spine-classification` (main:14827): broader result; split candidate.
+- `thm:presentation-route-spine-projection-overload-obstruction` (main:14965): broader result; split candidate.
+- `thm:four-case-foreground-support-boundary` (main:15053): broader result; split candidate.
+- `thm:compact-dependency-map-irredundancy` (main:15138): broader result; split candidate.
+- `cor:compact-five-node-presentation-consequence` (main:15254): broader result; split candidate.
 
 ## irrelevant_or_remove
-
 - None.
 
 ## naive_truncation_risks
-
-- `thm:finite-coordinate-determination-boundary` (main.tex:2924): Prevents finite projection from being read as cross-coordinate invariance. Required action: Retain coordinate-separation language when truncating.
-- `cor:no-finite-record-gluing-upgrade` (main.tex:13795): Prevents gluing local finite records into stronger support. Required action: Retain coordinate-separation language when truncating.
-- `thm:post-inventory-package-fixed-point` (main.tex:12191): Requires ordered post-inventory rerun/digest synchronization. Required action: Retain coordinate-separation language when truncating.
-- `thm:current-byte-support-fixed-point-nonupgrade-boundary` (main.tex:16666): Prevents current-byte closure from implying external/source/artifact/venue invariance. Required action: Retain coordinate-separation language when truncating.
-- `thm:post-qrgs-coordinate-independence` (main.tex:19936): Separates accepted qinv/qrgs from absent qsrc/qart/qext/qven. Required action: Retain coordinate-separation language when truncating.
+- `thm:portable-projection-dominates-local-support` (main:1829): projection risk; keep separation.
+- `prop:portable-method-normal-form-local-pullback` (main:1958): projection risk; keep separation.
+- `thm:current-boundary-skeleton-non-gluing` (main:5518): projection risk; keep separation.
+- `cor:no-finite-record-gluing-upgrade` (main:13795): projection risk; keep separation.
+- `thm:four-live-noninstantiation-coordinates` (main:16986): projection risk; keep separation.
 
 ## journal_style_gaps
-
-- `thm:cicm-public-surface-maximality` (main.tex:20222): The supplement has more theorem material than a compact talk can foreground. Required action: Foreground only finite audit basis plus replay kernel.
-- `thm:automated-discovery-pipeline-theorem` (review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:457): The source snapshot reads like a separate calculus. Required action: Cite as support or split.
-- `cor:current-stage-a-closure-exactness` (main.tex:18975): Operational closure needs command/log/digest exposition. Required action: Add a short verifier-status table for readers.
+- `style:cicm-presentation-compression` (main): too many foreground candidates; foreground five labels.
+- `style:citation-boundary-for-classical-background` (bib): background citations; cite background.
+- `style:negative-coordinate-language` (abstract): negative coordinates; avoid overclaim.
