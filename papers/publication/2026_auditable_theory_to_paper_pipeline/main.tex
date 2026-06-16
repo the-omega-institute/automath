@@ -2264,7 +2264,12 @@ interface in Theorems~\ref{thm:rgs-conditional-compact-spine},
 \ref{thm:publication-safety-interface} remains conditional on
 $\mathsf{RGS}_{S_{0}}(P_{0},L_{0},\Gamma_{0})$ unless the submitted finite record
 contains an accepted record-gate-soundness row whose package, support surface,
-ledger, and dispatch table are exactly $(P_{0},S_{0},L_{0},\Gamma_{0})$.
+ledger, and dispatch table are exactly $(P_{0},S_{0},L_{0},\Gamma_{0})$.  This
+does not preclude a separate bounded replay coordinate: if the support surface
+also contains a machine-readable Stage--A Horn replay row, that row may discharge
+only the fixed-replay coordinate \(q_{\mathrm{rgs}}\) defined in
+Section~\ref{sec:stage-a-replay-kernel}; it still does not discharge the broader
+predicate \(\mathsf{RGS}_{S_{0}}(P_{0},L_{0},\Gamma_{0})\).
 \end{corollary}
 
 \begin{proof}
@@ -2282,7 +2287,11 @@ Theorem~\ref{thm:current-package-rgs-instantiation-boundary}, that exact accepte
 row is the necessary and sufficient finite coordinate for turning the conditional
 current-package safety interface into an unconditional instance.  Its absence
 therefore leaves precisely the displayed RGS hypothesis, and its presence is the
-single finite-record discharge of that hypothesis.
+single finite-record discharge of that hypothesis.  A later fixed-replay
+Stage--A row has a different domain: it is a Horn-replay coordinate over the
+manifest, schema, certificate, report, and digest tuple, not a quantified row for
+every accepted load-bearing claim in \(L_0\).  Thus the two statements are
+compatible and are separated by their finite input alphabets.
 \end{proof}
 
 \begin{definition}[Stronger-reading preorder]
@@ -19097,6 +19106,92 @@ the matching finite upgrade row and assigned pass records are added; otherwise
 the first missing row is the finite bad subrecord.  This proves the exactness of
 the fixed-replay RGS coordinate and connects it to the replay-kernel theorem
 chain without promoting it to general implementation or source soundness.
+\end{proof}
+
+\begin{theorem}[Accepted fixed-replay RGS pass row for the current package]
+\label{thm:accepted-fixed-replay-rgs-pass-row-current-package}
+For the current presentation package, the finite files
+\begin{center}
+\path{stage_a_manifest.json}, \path{stage_a_horn_schema.json},\\
+\path{stage_a_horn_audit_certificate.json}, \path{stage_a_replay_report.json},\\
+\path{review_bundle/FINAL_DIGESTS_SHA256.md}
+\end{center}
+contain a machine-readable accepted pass row for the bounded fixed-replay
+record-gate-soundness coordinate and for no stronger coordinate.  More precisely,
+the accepted row has package/surface/ledger tuple equal to the fixed Stage--A
+replay tuple consisting of \path{stage_a_horn_schema.json},
+\path{stage_a_manifest.json}, \path{stage_a_horn_audit_certificate.json},
+\path{stage_a_replay_report.json}, and
+\path{review_bundle/FINAL_DIGESTS_SHA256.md};
+its coordinate value is
+\[
+q_{\mathrm{rgs}}=\mathsf{true}
+\quad\text{bounded to fixed Stage--A Horn replay,}
+\]
+and the same row records
+\[
+q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
+\mathsf{false}.
+\]
+Consequently the current package has an unconditional positive \(q_{\mathrm{rgs}}\)
+row only at this fixed-replay level.  It still has no unconditional pass row for
+the broader publication-safety predicate
+\(\mathsf{RGS}_{S_0}(P_0,L_0,\Gamma_0)\), no concrete gate-implementation
+soundness row, no fresh Lean/BEDC rebuild or axiom-purity row, no dynamic
+artifact-semantic validation row, no external upload/archive row, and no
+upload-time venue-compliance or venue-acceptance row.
+\end{theorem}
+
+\begin{proof}
+The machine-readable row is the upgrade atom
+\(\mathsf{qrgsReplayUpgrade}\) in
+\path{stage_a_horn_audit_certificate.json}.  Its declared coordinate is
+\(q_{\mathrm{rgs}}\), and its declared bound is the fixed Stage--A Horn schema,
+canonical manifest, replay certificate, replay report, and final digest tuple.
+The certificate's derivation DAG for \(q_{\mathrm{rgs}}\) uses exactly rule
+\(\mathsf{R3\_replay\_tuple\_to\_qrgs}\) with premises
+\[
+\mathsf{stageAHornSchema},\ \mathsf{stageAManifest},
+\mathsf{stageAHornCertificate},\ \mathsf{stageAReplayReport},
+\mathsf{finalDigest},\ \mathsf{qrgsReplayUpgrade}.
+\]
+These premises are precisely the files displayed in the statement, with
+\path{stage_a_manifest.json} supplying the canonical manifest and
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} supplying the digest-bound support
+surface.
+
+The deterministic replay report
+\path{stage_a_replay_report.json} records the accepted-coordinate vector with
+\(q_{\mathrm{rgs}}=\mathsf{true}\) and with
+\(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\) rejected.
+By Theorem~\ref{thm:current-byte-two-coordinate-audit}, this vector is exactly
+the current-byte replay vector for the package, and by
+Theorem~\ref{thm:replay-kernel-soundness} any accepted \(q_{\mathrm{rgs}}\)
+coordinate derived from these files is sound only for the fixed Stage--A replay
+projection.  Thus the finite files contain the claimed accepted pass row and
+also contain the negative boundary for the four stronger coordinates.
+
+It remains only to separate this row from the older publication-safety RGS
+predicate.  Corollary~\ref{cor:current-package-no-implicit-rgs-discharge} and
+Theorem~\ref{thm:fixed-replay-rgs-coordinate-exactness} prove that the quantified
+predicate \(\mathsf{RGS}_{S_0}(P_0,L_0,\Gamma_0)\) reads a different finite input
+alphabet: it requires an accepted row for every load-bearing claim in \(L_0\)
+with evidence-pointer membership in \(S_0\) and dispatch-table soundness for
+\(\Gamma_0\).  The fixed-replay row just identified reads instead the Horn
+schema, manifest, replay certificate, replay report, digest pointer, and bounded
+upgrade atom.  Since the finite input alphabets are disjoint except for ordinary
+support-surface paths and digest rows, the accepted fixed-replay row cannot be a
+hidden discharge of the broader predicate.
+
+The final negative clauses follow from the same finite-domain calculation and
+from Theorem~\ref{thm:post-qrgs-coordinate-independence}.  The accepted replay row
+contains no gate-implementation proof, no source rebuild command and axiom-purity
+audit, no artifact evaluator contract with input/output bytes and semantic
+predicate, no upload receipt or archive-equivalent byte-equality locator, and no
+upload-time venue record.  Adding any one of those readings therefore requires
+the corresponding finite upgrade row.  Hence the current package has exactly the
+unconditional bounded fixed-replay \(q_{\mathrm{rgs}}\) pass row stated here and
+no stronger RGS or upgrade-coordinate pass row.
 \end{proof}
 
 \begin{theorem}[Post-qrgs coordinate independence]
