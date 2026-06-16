@@ -16683,14 +16683,17 @@ surface is the finite tuple consisting of \path{theorem_inventory.json},
 \path{review_bundle/certificate_verification_run.log},
 \path{review_bundle/source_interface_verification_run.log},
 \path{review_bundle/primary_claim_inventory_verification_run.log}, and
+\path{review_bundle/stage_a_replay_regeneration_run.log}, and
 \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
-It is instantiated exactly when the four command logs are regenerated after the two
+It is instantiated exactly when the five command logs are regenerated after the two
 accepted inventory files and \path{main.tex} are fixed, each command exits with
 status \(0\), the extractor omits no labelled theorem-like environment, the
-three retained finite-record verifiers accept their bounded schemas, and the
-final digest manifest is regenerated last with rows for the accepted inventory
-files and the resulting command logs.  This tuple is a local finite-record
-certificate only: it does not add an external upload/archive locator, an
+three retained finite-record verifiers accept their bounded schemas, the
+Stage--A replay artifacts are regenerated for the same inventory and verifier
+surface, and the final digest manifest is regenerated last with rows for the
+accepted inventory files, the resulting command logs, and the regenerated replay
+artifacts.  This tuple is a local finite-record certificate only: it does not
+add an external upload/archive locator, an
 actual-submission-date venue-compliance record, a fresh formal-source rebuild or
 axiom-purity audit, or a dynamic artifact-semantic validation row.
 \end{corollary}
@@ -16706,7 +16709,14 @@ claim whose first absent member is one of these files is an inclusion-minimal ba
 subrecord.  The zero-omission extractor condition is the syntactic exactness
 condition of Theorem~\ref{thm:deterministic-theorem-environment-extractor-boundary}
 and the three verifier acceptances are precisely the retained finite-record
-schemas classified by Theorem~\ref{thm:current-command-result-closure}.  Finally,
+schemas classified by Theorem~\ref{thm:current-command-result-closure}.
+the replay-regeneration log is the current-byte realization of the foregrounded
+Stage--A replay surface: it records the deterministic regeneration of
+\path{stage_a_manifest.json}, \path{stage_a_horn_audit_certificate.json}, and
+\path{stage_a_replay_report.json} after the accepted inventory and verifier logs
+exist.  Since that command is run before the digest refresh, the replay artifacts
+and the replay-regeneration log are byte inputs to the same final manifest.
+Finally,
 Theorem~\ref{thm:local-support-surface-classifier} proves that the
 other four coordinates named in the statement are independent stronger readings;
 since the displayed tuple contains none of their required upgrade fields, they
@@ -17614,9 +17624,14 @@ hashes name the \path{main.tex} and \path{theorem_inventory.json} bytes of $B$;
 \item zero-exit retained finite-record verifier logs for the certificate,
 source-interface, and primary-claim records, produced after the accepted
 inventory pair exists; and
+\item a zero-exit \path{review_bundle/stage_a_replay_regeneration_run.log}
+produced after the accepted inventory pair and retained verifier logs exist,
+regenerating \path{stage_a_manifest.json},
+\path{stage_a_horn_audit_certificate.json}, and
+\path{stage_a_replay_report.json}; and
 \item a regenerated \path{review_bundle/FINAL_DIGESTS_SHA256.md} produced after
-the logs in the preceding two items exist, with rows for the accepted inventory
-files and those logs.
+the logs in the preceding three items exist, with rows for the accepted
+inventory files, those logs, and the regenerated Stage--A replay artifacts.
 \end{enumerate}
 If any member of this tuple was computed before the edited bytes of $B$ existed,
 or if the digest manifest was not regenerated after the last retained log, the
@@ -17638,10 +17653,14 @@ so its zero-exit log names the current labelled theorem-like environments and th
 current inventory-label set, not an earlier pair of byte strings.  Item~3 supplies
 the retained finite verifier command-result coordinates singled out in
 Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}.  Item~4 is the
+replay-surface freshness coordinate for the foregrounded Stage--A kernel: after
+the accepted inventory and verifier logs exist, the regeneration command writes
+the manifest, Horn audit certificate, and replay report for those current bytes.
+Item~5 is the
 digest-closure condition of Theorem~\ref{thm:digest-closure-refresh-criterion};
 because the digest is produced last, the rows in the final manifest bind the same
-inventory and log bytes used by the support claim.  Hence the local support row is
-current for $B$.
+inventory, verifier-log, replay-artifact, and replay-regeneration-log bytes used
+by the support claim.  Hence the local support row is current for $B$.
 
 Conversely, suppose the terminal claim is asserted without one member of the
 ordered tuple.  If the inventory pair is absent, the claim lacks the byte surface
@@ -17651,8 +17670,10 @@ the inventory or manuscript can change the extracted label set or the inventory
 label set, so the old log is not a coordinate of $B$.  If a retained verifier log
 predates the accepted inventory pair, it is a command-result record for an older
 support surface.  If the final digest manifest predates a retained log or the
-accepted inventory bytes, it cannot contain the SHA--256 rows binding those byte
-strings.  In each case two finite package states can agree on all earlier rows
+accepted inventory bytes, or if the replay-regeneration log predates the accepted
+inventory/verifier surface while a foregrounded Stage--A replay claim is being
+made, the finite record lacks a current-byte replay row.  In each case two finite
+package states can agree on all earlier rows
 while differing on the missing current-byte field, so
 Theorem~\ref{thm:finite-coordinate-determination-boundary} rejects the current
 fixed-point reading and leaves only the historical or conditional reading.
@@ -18040,7 +18061,9 @@ realization steps have been executed on the same source bytes: the accepted file
 syntactic theorem-environment extractor is rerun with exit code zero and log path
 \path{review_bundle/theorem_environment_extraction_run.log}; the retained finite
 record verifiers for certificate records, source-interface records, and the
-primary-claim inventory are rerun with zero-exit logs; and
+primary-claim inventory are rerun with zero-exit logs; the Stage--A replay
+artifacts are regenerated with zero-exit log path
+\path{review_bundle/stage_a_replay_regeneration_run.log}; and
 \path{review_bundle/FINAL_DIGESTS_SHA256.md} is regenerated after those files and
 logs exist, with its command, source state, environment, exit code, and generation
 log recorded.  Then the current package instantiates exactly the local
@@ -18055,7 +18078,8 @@ implementation-soundness audit, or venue acceptance coordinate.
 The first sentence supplies precisely the ordered tuple required by
 Theorem~\ref{thm:post-inventory-package-fixed-point}: inventory bytes are fixed
 before the extractor run, the finite-record verifier logs are computed from that
-state, and the final digest surface is written only after those inputs exist.
+state, the Stage--A replay artifacts are regenerated from the same support
+surface, and the final digest surface is written only after those inputs exist.
 Hence that theorem makes the theorem-ledger, verifier-log, and final-digest rows a
 single local finite-record fixed point.  Corollary~\ref{cor:current-byte-closure}
 and Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple} identify the
@@ -19414,9 +19438,12 @@ bytes of \path{submission_abstract.tex}, \path{main.tex},
 \path{theorem_inventory.json} and \path{theorem_inventory.md} are fixed, the
 theorem-environment extractor, source-interface verifier, certificate-record
 verifier, and primary-claim verifier are rerun on that same source state with
-recorded zero-exit logs, and that \path{review_bundle/FINAL_DIGESTS_SHA256.md} is
+recorded zero-exit logs, the foregrounded Stage--A replay artifacts are
+regenerated with recorded zero-exit log
+\path{review_bundle/stage_a_replay_regeneration_run.log}, and that
+\path{review_bundle/FINAL_DIGESTS_SHA256.md} is
 then regenerated from the resulting source, inventory, verifier-log, manifest,
-and review-bundle bytes.  Then the current-round support coordinate is exactly a
+replay-artifact, and review-bundle bytes.  Then the current-round support coordinate is exactly a
 local fixed point for syntactic theorem-ledger coverage, bounded source-interface
 rows, certificate-file presence, primary-claim inventory fields, and byte-digest
 binding.  It does not instantiate any of the following independent coordinates:
@@ -19432,10 +19459,12 @@ Theorem~\ref{thm:current-stage-a2-support-coordinate-realization}, strengthened
 to the current accepted byte state by Theorem~\ref{thm:current-inventory-rerun-exactness}
 and Corollary~\ref{cor:accepted-inventory-final-verifier-digest-tuple}.  The
 hypothesis fixes the two inventory files first, reruns the extractor and retained
-finite-record verifiers second, and regenerates the final digest table last.
+finite-record verifiers second, regenerates the Stage--A replay artifacts third,
+and regenerates the final digest table last.
 Therefore the extractor sees the accepted TeX and inventory bytes, the retained
-verifiers see the same package state, and the digest table names the bytes of the
-inputs and logs produced by that ordered pass.  This is precisely the local
+verifiers see the same package state, the replay artifacts are generated from the
+same current support surface, and the digest table names the bytes of the inputs,
+logs, and replay artifacts produced by that ordered pass.  This is precisely the local
 post-inventory fixed point of Corollary~\ref{cor:current-byte-closure} and
 Theorem~\ref{thm:terminal-local-support-acceptance-normal-form}.
 
@@ -19557,11 +19586,13 @@ on the same current bytes:
 \item \path{review_bundle/certificate_verification_run.log};
 \item \path{review_bundle/source_interface_verification_run.log};
 \item \path{review_bundle/primary_claim_inventory_verification_run.log};
+\item \path{review_bundle/stage_a_replay_regeneration_run.log};
 \item \path{review_bundle/FINAL_DIGESTS_SHA256.md}.
 \end{enumerate}
 where the theorem extractor is rerun after the two inventory files are fixed, the
 three retained finite-record verifiers are rerun after that extractor log exists,
-and the final digest manifest is regenerated last, with a generation log, and
+the Stage--A replay artifacts are regenerated after the retained verifier logs
+exist, and the final digest manifest is regenerated last, with a generation log, and
 names each preceding file in the displayed tuple.  Then this ordered tuple closes
 the post-inventory current-byte theorem-coverage and finite-record digest
 alignment coordinates.  When combined with the separate replay tuple of
@@ -19579,7 +19610,8 @@ zero-exit theorem-environment log reads the accepted inventory bytes rather than
 pre-inventory state.  Since the retained finite-record verifiers are rerun after
 that point, their logs are finite support rows for the same accepted source and
 inventory surface.  Since the final digest manifest is regenerated after those
-logs exist and contains rows for the preceding displayed files, the digest surface is a
+logs and the replay-regeneration log exist and contains rows for the preceding
+displayed files, the digest surface is a
 single closed byte record for the same state.  This is precisely the fixed-point
 condition of Theorem~\ref{thm:post-inventory-package-fixed-point},
 Corollary~\ref{cor:current-byte-closure}, and
