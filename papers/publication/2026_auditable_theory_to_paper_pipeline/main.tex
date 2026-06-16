@@ -20429,6 +20429,63 @@ implementation, formal-source, artifact-semantic, external-support, or venue
 correctness theorem.
 \end{proof}
 
+\begin{corollary}[No implementation upgrade from fixed replay]
+\label{cor:no-implementation-upgrade-from-fixed-replay}
+For any public reading supported only by
+Theorems~\ref{thm:publication-safety-interface},
+\ref{thm:presentation-compressed-interface},
+\ref{thm:finite-script-projection-contract-support},
+\ref{thm:replay-kernel-soundness},
+\ref{thm:current-byte-two-coordinate-audit}, and
+\ref{thm:replay-kernel-foreground-closure}, the maximal accepted conclusion is
+the bounded two-coordinate foreground vector of
+Theorem~\ref{thm:two-coordinate-foreground-maximality}.  In particular, the
+finite-script projection-contract row and the fixed Stage--A replay row do not
+certify concrete gate-program correctness, verifier implementation soundness,
+operating-system reproducibility, fresh formal-source rebuild, dynamic artifact
+semantics, external support, venue compliance, or venue acceptance.  A stronger
+implementation reading is accepted if and only if the corresponding
+implementation or \(\mathsf{ImplProj}\) audit coordinate is added to the
+submitted support surface and passes its assigned gate; if that coordinate is
+absent, the stronger reading has an inclusion-minimal bad subrecord while the
+bounded replay conclusion is unchanged.
+\end{corollary}
+
+\begin{proof}
+The positive content of the named chain is exactly the vector
+\[
+q_{\mathrm{inv}}=q_{\mathrm{rgs}}=\mathsf{true},\qquad
+q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
+\mathsf{false},
+\]
+by Theorem~\ref{thm:current-byte-two-coordinate-audit}, and
+Theorem~\ref{thm:replay-kernel-foreground-closure} routes the older
+publication-safety, presentation-compression, finite-script, and bounded
+source-interface statements through that foreground vector.  The meaning of the
+second positive coordinate is restricted by
+Theorem~\ref{thm:replay-kernel-soundness}: it is support in the least Horn
+closure of the fixed Stage--A replay schema, not truth of the concrete programs
+that produced the finite records.  Independently,
+Theorem~\ref{thm:finite-script-projection-contract-support} restricts each named
+script row to the finite input/output projection that the script parses and
+prints, and explicitly leaves implementation correctness and runtime semantics
+outside that projection.
+
+Therefore a concrete implementation reading differs from the accepted bounded
+foreground vector at an additional finite coordinate.  Theorem
+\ref{thm:two-coordinate-foreground-maximality} identifies that first missing
+coordinate as the implementation or \(\mathsf{ImplProj}\) audit row for the
+relevant gate.  If the row is supplied and passes its assigned gate, the positive
+extension direction of the finite-record interface accepts the enlarged record
+at its declared evidence level.  If it is absent, the finite-certificate
+obstruction skeleton supplies an inclusion-minimal bad subrecord containing the
+missing implementation coordinate, and
+Corollary~\ref{cor:no-finite-record-gluing-upgrade} prevents that coordinate
+from being synthesized by conjoining the fixed replay row with finite-script
+projection-contract support.  The bounded replay conclusion is a function of the
+original finite record, so it is preserved unchanged in either case.
+\end{proof}
+
 \begin{proposition}[Route-quotient preservation]
 \label{prop:stage-a-replay-route-quotient-preservation}
 Replacing older qinv-only terminal wording by the two-coordinate fixed-replay
