@@ -18506,6 +18506,264 @@ exactly the records listed in the statement.  Hence the criterion is necessary
 and sufficient.
 \end{proof}
 
+\begin{theorem}[Finite Audit Antichain Basis]
+\label{thm:finite-audit-antichain-basis}
+Let \(C\) be the finite set of declared certificate coordinates for a
+Stage--A audit schema.  A certificate record is an element \(R\in 2^C\), ordered
+by inclusion of coordinates.  Let
+\[
+  A:2^C\longrightarrow \{\mathsf{false},\mathsf{true}\}
+\]
+be any monotone Stage--A acceptance predicate: if \(R\subseteq S\) and \(A(R)\),
+then \(A(S)\).  Define
+\[
+  \operatorname{Min}(A)=
+  \{\,R\subseteq C:A(R)\text{ and no proper subrecord }R'\subseteq R,\ R'\ne R
+  \text{ satisfies }A(R')\,\}.
+\]
+Then \(\operatorname{Min}(A)\) is a finite antichain, is uniquely determined by
+the predicate \(A\), and exactly reconstructs \(A\): for every record
+\(R\subseteq C\),
+\[
+  A(R)\quad\Longleftrightarrow\quad
+  \exists M\in\operatorname{Min}(A)\ \text{such that}\ M\subseteq R .
+\]
+Consequently every monotone Stage--A acceptance rule over the declared finite
+certificate schema is equivalent to its unique finite antichain of
+inclusion-minimal accepting records.
+\end{theorem}
+
+\begin{proof}
+The set \(C\) is finite, so \(2^C\) is finite.  Therefore every subset of
+\(2^C\), in particular \(\operatorname{Min}(A)\), is finite.  If
+\(M,N\in\operatorname{Min}(A)\) and \(M\subseteq N,\ M\ne N\), then \(N\) has a proper
+subrecord \(M\) satisfying \(A\), contradicting the defining minimality of
+\(N\).  Hence \(\operatorname{Min}(A)\) is an antichain.
+
+Uniqueness is intrinsic: the displayed formula defines \(\operatorname{Min}(A)\)
+using only \(A\) and the inclusion order on \(2^C\).  Any finite antichain that
+claims to be the minimal accepting basis for \(A\) must contain exactly those
+accepting records with no proper accepting subrecord, so it must be the displayed
+set.
+
+For reconstruction, suppose first that \(M\in\operatorname{Min}(A)\) and
+\(M\subseteq R\).  Since \(A(M)\) and \(A\) is monotone, \(A(R)\) holds.  For the
+converse, assume \(A(R)\).  The collection of accepting subrecords of \(R\) is a
+nonempty finite subset of \(2^C\), so it has an inclusion-minimal member \(M\).
+No proper subrecord of \(M\) accepts, by minimality inside the accepting
+subrecords of \(R\).  Thus \(M\in\operatorname{Min}(A)\) and \(M\subseteq R\).
+The equivalence follows.  This proves that the finite audit predicate is exactly
+its inclusion-minimal accepting antichain.
+\end{proof}
+
+\begin{theorem}[Canonical Stage-A Obstruction Basis]
+\label{thm:canonical-stage-a-obstruction-basis}
+Instantiate the coordinate set \(C\) of
+Theorem~\ref{thm:finite-audit-antichain-basis} with the current manuscript's
+Stage--A certificate coordinates.  For the concrete Stage--A schema of this
+presentation package, every rejected public upgrade or unsupported public claim
+has an inclusion-minimal obstruction in exactly one of the following seven
+classes:
+\begin{enumerate}
+\item missing record-gate soundness;
+\item missing fresh formal-source rebuild or axiom-purity coordinate;
+\item missing dynamic artifact-validation coordinate;
+\item missing external-support coordinate;
+\item missing venue-acceptance coordinate;
+\item fake-extension or no-substantive-theorem-change coordinate;
+\item deterministic overlap or submission-order coordinate.
+\end{enumerate}
+There are no additional Stage--A obstruction classes for this manuscript: every
+accepted public claim factors through the declared finite schema, and every
+rejected upgrade fails by omitting at least one of the seven displayed coordinate
+classes.
+\end{theorem}
+
+\begin{proof}
+The declared Stage--A schema for this package separates public claim acceptance
+into the finite coordinates already isolated by the master presentation
+interface, the finite-record publication-safety certificate, the no-free-upgrade
+theorem, the four-case foreground normal form, the Stage--A issue-discharge
+normal form, the six-coordinate submission-boundary normal form, and the
+current-round local-only fixed-point classifier.  These results jointly specify
+which finite rows may support a public reading and which stronger readings are
+blocked unless an independent coordinate is supplied.  Under that schema the
+only coordinate classes relevant to a rejected Stage--A upgrade are exactly the
+seven listed in the statement.
+
+Let \(U\) be a rejected public upgrade at record \(R\subseteq C\), and let
+\(A_U\) be the monotone predicate saying that the upgrade is accepted after
+additional coordinates are supplied.  The finite basis theorem gives the
+inclusion-minimal missing-coordinate family
+\[
+  \min_{\subseteq}\{\,E\subseteq C\setminus R:A_U(R\cup E)\,\}.
+\]
+Take any member \(E\) of this family.  If \(E\) contains a record-gate
+soundness row, then its obstruction class is (1).  If it contains the fresh
+formal-source rebuild or axiom-purity row, its obstruction class is (2).  If it
+contains a dynamic artifact evaluator or semantic-validation row, its obstruction
+class is (3).  If it contains an upload receipt, archive-equivalent
+byte-equality locator, DOI-backed supplement row, or comparable external-support
+row, its obstruction class is (4).  If it contains an upload-time venue
+compliance or venue-acceptance row, its obstruction class is (5).  If it contains
+the coordinate excluding fake extensions or no substantive theorem/proof change,
+its obstruction class is (6).  If it contains the deterministic
+overlap/submission-order clearance coordinate, its obstruction class is (7).
+Thus every minimal obstruction is assigned to one of the seven classes.
+
+Conversely, each displayed class is a declared coordinate class of the current
+schema.  Whenever a public upgrade requires that coordinate and the current
+record omits it, the singleton missing coordinate, or its inclusion-minimal
+combination with other required missing coordinates, occurs in the displayed
+minimal family.  No eighth class can occur because the family is a subset of
+\(C\setminus R\), and \(C\) has no coordinate outside the seven declared
+classes for the rejected-upgrade side of the Stage--A schema.  Since every
+accepted public claim factors through this finite schema by the cited
+publication-safety and boundary normal forms, the classification is exact.
+\end{proof}
+
+\begin{theorem}[No-Theorem-Delta Non-Discharge Theorem]
+\label{thm:no-theorem-delta-nondischarge}
+For the Stage--A theorem-adequacy predicate, let
+\(d_{\mathrm{thm}}\) be the theorem-source digest coordinate and let
+\(r_{\mathrm{label}}\) be the verified pre-existing theorem-label recognition
+coordinate.  If an A2 pass leaves \(d_{\mathrm{thm}}\) unchanged and does not
+add or verify \(r_{\mathrm{label}}\), then the Stage--A theorem-adequacy
+predicate has the same value before and after that pass.  In particular, a
+\(+0\)-character pass cannot move a rejected theorem-adequacy record into the
+accepting antichain and cannot discharge a real theorem-adequacy block.
+\end{theorem}
+
+\begin{proof}
+The Stage--A theorem-adequacy predicate is a monotone finite-coordinate
+predicate on the declared certificate record.  Its theorem-sensitive coordinates
+are precisely the source digest coordinate \(d_{\mathrm{thm}}\), which records
+whether the theorem/proof source bytes have changed, and the recognition
+coordinate \(r_{\mathrm{label}}\), which records whether the extractor and
+support files verify that the required labelled theorem/proof environments were
+already present in the source.  All remaining coordinates concern independent
+support rows such as source-interface, certificate-record, primary-claim,
+overlap/submission-order, audit, and digest agreement.
+
+Consider two A2 records \(R\) and \(R'\) that agree on every coordinate except
+possibly theorem-source change and theorem-label recognition.  If
+\(d_{\mathrm{thm}}\) is unchanged and \(r_{\mathrm{label}}\) is not added or
+verified, then \(R\) and \(R'\) agree on the two theorem-sensitive coordinates
+as well.  Hence their projections to the finite coordinate set used by the
+theorem-adequacy predicate are identical.  By finite-coordinate determination,
+identical coordinate records have identical acceptance values; therefore the
+predicate has the same value before and after the pass.
+
+If the prior record was rejected for theorem adequacy, the finite audit
+antichain reconstruction in
+Theorem~\ref{thm:finite-audit-antichain-basis} says that acceptance requires the
+post-pass record to contain an inclusion-minimal accepting record.  A
+\(+0\)-character pass with no verified pre-existing label recognition adds no
+theorem-sensitive coordinate, so it cannot create containment of a new accepting
+antichain member.  It also cannot erase the corresponding obstruction in
+Theorem~\ref{thm:canonical-stage-a-obstruction-basis}.  Thus the real
+theorem-adequacy block remains undisclosed by such a pass.
+\end{proof}
+
+\begin{theorem}[Stage-A Real-Block Discharge Completeness]
+\label{thm:stage-a-real-block-discharge-completeness}
+The audit block named \(\mathsf{stage\_a\_audit\_real\_block}\) is cleared if
+and only if one of the following two alternatives holds:
+\begin{enumerate}
+\item the block is stale relative to synchronized theorem inventory and final
+digest recognition, meaning that the theorem extractor, theorem inventory, audit
+record, retained verifiers, overlap/submission-order verifier, and final digest
+all recognize the same required theorem package in the same current source
+state; or
+\item the current source contains the canonical accepting antichain record for
+the Stage--A acceptance predicate supplied by
+Theorems~\ref{thm:finite-audit-antichain-basis},
+\ref{thm:canonical-stage-a-obstruction-basis}, and
+\ref{thm:no-theorem-delta-nondischarge}, together with the corresponding
+corollary-level closure record.
+\end{enumerate}
+If neither alternative holds, \(\mathsf{stage\_a\_audit\_real\_block}\) remains
+a genuine blocker.  Prose edits, abstract edits, and theorem-inventory edits
+without source theorem/proof recognition do not discharge the block.
+\end{theorem}
+
+\begin{proof}
+Let \(A\) be the Stage--A acceptance predicate on the finite coordinate set of
+Theorem~\ref{thm:canonical-stage-a-obstruction-basis}.  By
+Theorem~\ref{thm:finite-audit-antichain-basis}, \(A\) is equivalent to
+containment of one member of its unique finite accepting antichain
+\(\operatorname{Min}(A)\).  Therefore a current non-stale audit record clears
+\(\mathsf{stage\_a\_audit\_real\_block}\) exactly when it contains the canonical
+accepting antichain record required by the theorem package; this proves
+alternative (2) and its necessity for genuine, non-stale discharge.
+
+The remaining way a previously reported block can disappear is staleness of the
+report itself.  The block is a statement about absence or non-recognition of
+source-level theorem/proof environments.  If the theorem extractor, the
+synchronized theorem inventory, the audit record, the source-interface verifier,
+the certificate-record verifier, the primary-claim verifier, the deterministic
+overlap/submission-order verifier, the Stage--A audit verifier, and the final
+digest all recognize the same theorem package in the same current source state,
+then an older assertion that the package is absent is false of the synchronized
+record.  This is alternative (1).
+
+Conversely, suppose neither alternative holds.  If synchronized recognition is
+absent, the stale-block escape is unavailable.  If the current record does not
+contain an accepting antichain member, the antichain basis leaves \(A\) false
+and the obstruction basis classifies the failure among the seven displayed
+classes.  The no-theorem-delta theorem further rules out treating a
+source-unchanged pass with no verified pre-existing label recognition as a
+theorem-adequacy discharge.  Prose edits, abstract edits, and inventory-only
+edits change no source theorem/proof coordinate and supply no verified
+pre-existing recognition coordinate, so they cannot realize either alternative.
+The block therefore remains a genuine blocker.
+\end{proof}
+
+\begin{corollary}[Current Stage-A Closure Exactness]
+\label{cor:current-stage-a-closure-exactness}
+The current manuscript clears Stage--A precisely when all of the following
+finite records recognize the same finite audit antichain route and no real
+obstruction remains: the theorem extractor sees the five labels
+\[
+\text{\ref{thm:finite-audit-antichain-basis},\quad
+\ref{thm:canonical-stage-a-obstruction-basis},\quad
+\ref{thm:no-theorem-delta-nondischarge},\quad
+\ref{thm:stage-a-real-block-discharge-completeness},\quad
+\ref{cor:current-stage-a-closure-exactness}},
+\]
+\path{theorem_inventory.md} and \path{theorem_inventory.json} mark those five
+labels as primary-route material, \path{stage_a_audit.json} names them as
+resolving \(\mathsf{stage\_a\_audit\_real\_block}\), the source-interface and
+certificate-record verifiers accept the same finite coordinate schema, the
+primary-claim verifier recognizes the antichain-basis route, the deterministic
+overlap/submission-order verifier remains nonduplicative, the Stage--A audit
+verifier accepts the block resolution, and the final digest is regenerated from
+those same files.
+\end{corollary}
+
+\begin{proof}
+If all listed records recognize the same finite audit antichain route, then the
+current record contains the source theorem package, the synchronized inventory
+and audit rows, the source-interface and certificate-schema agreement rows, the
+primary-claim row for the antichain-basis route, the nonduplicative route-order
+row, the Stage--A audit-verifier row, and the digest binding for those bytes.
+This is exactly the accepting antichain record described in
+Theorem~\ref{thm:stage-a-real-block-discharge-completeness}, so the real block
+is cleared and Stage--A closes.
+
+For necessity, assume the manuscript clears Stage--A.  By
+Theorem~\ref{thm:stage-a-real-block-discharge-completeness}, closure either
+comes from synchronized stale-block recognition or from the canonical accepting
+antichain record.  Both alternatives require source-level recognition of the
+five labelled theorem/corollary environments and agreement of the inventory,
+audit, verifier, overlap/submission-order, and final digest records on the same
+finite coordinate schema.  By
+Theorem~\ref{thm:no-theorem-delta-nondischarge}, neither a \(+0\)-character pass
+nor an inventory-only or prose-only edit can replace those records.  Hence the
+listed finite records are necessary as well as sufficient, and the closure
+criterion is exact.
+\end{proof}
+
 \begin{definition}[Role-respecting finite audit interpretation]
 \label{def:role-respecting-finite-audit-interpretation}
 Let \(R\) be a finite set of typed support rows.  Its role sorts are public
