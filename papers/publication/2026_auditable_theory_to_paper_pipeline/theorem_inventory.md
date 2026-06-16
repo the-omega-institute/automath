@@ -1,358 +1,85 @@
-# Theorem Inventory
+# Stage A Theorem Inventory
 
-Compact Stage A inventory. JSON covers every labelled theorem-like source environment; five Oracle labels are primary-route material with proof environments in main.tex.
+Scope: CICM presentation-only / mathematical software workshop route.
 
-## in_scope_present
-- `thm:finite-audit-antichain-basis` (main:18710): primary; sync.
-- `thm:canonical-stage-a-obstruction-basis` (main:18773): primary; sync.
-- `thm:no-theorem-delta-nondischarge` (main:18866): primary; sync.
-- `thm:stage-a-real-block-discharge-completeness` (main:18921): primary; sync.
-- `cor:current-stage-a-closure-exactness` (main:18975): primary; sync.
-- `def:typed-audit-atom` (main:19271): primary; sync.
-- `def:stage-a-horn-audit-schema` (main:19286): primary; sync.
-- `def:certified-closure-rejection-certificate` (main:19314): primary; sync.
-- `thm:horn-compilation-adequacy` (main:19337): primary; sync.
-- `thm:deterministic-certificate-soundness` (main:19366): primary; sync.
-- `thm:complete-obstruction` (main:19390): primary; sync.
-- `thm:coordinate-independence-by-horn-models` (main:19415): primary; sync.
-- `thm:verifier-adequacy-complexity` (main:19444): primary; sync.
-- `thm:current-byte-certified-audit` (main:19469): primary; sync.
-- `cor:referee-facing-novelty-horn` (main:19500): primary; sync.
-- `prop:non-duplication-route-quotient` (main:19519): primary; sync.
-- `def:canonical-stage-a-byte-manifest` (main:19551): primary; sync.
-- `def:byte-to-atom-compiler` (main:19569): primary; sync.
-- `def:replayable-stage-a-certificate` (main:19589): primary; sync.
-- `thm:replay-kernel-soundness` (main:19642): primary; sync.
-- `thm:replay-kernel-completeness` (main:19690): primary; sync.
-- `thm:replayable-obstruction-adequacy` (main:19710): primary; sync.
-- `thm:current-byte-two-coordinate-audit` (main:19735): primary; sync.
-- `thm:fixed-replay-rgs-coordinate-exactness` (main:19775): primary; sync.
-- `thm:accepted-fixed-replay-rgs-pass-row-current-package` (main:19850): primary; sync.
-- `thm:replay-kernel-foreground-closure` (main:20030): primary; sync.
-- `thm:canonical-finite-basis-replay-foreground-exactness` (main:20135): primary; sync.
-- `thm:cicm-public-surface-maximality` (main:20222): primary; sync.
-- `thm:two-coordinate-foreground-maximality` (main:20398): primary; sync.
-- `thm:current-round-local-only-fixed-point-classifier` (main:20638): primary; sync.
-- `prop:six-challenged-coordinate-discharge-normal-form` (main:20696): primary; sync.
-- `thm:round-eight-ordered-support-tuple-closure` (main:20783): primary; sync.
+Fresh current-source extraction: `291` labelled theorem-like environments in `main.tex`.
 
-## missing_in_scope_results
-- `missing:fresh-newmath-lean-rebuild-and-axiom-audit` (scope): qsrc negative; keep missing.
-- `missing:fresh-artifact-semantic-validation-rerun` (scope): qart negative; keep missing.
-- `missing:external-upload-or-archive-coordinate` (scope): qext negative; do not claim.
-- `missing:upload-time-venue-compliance-or-acceptance` (scope): qven negative; do not claim.
+## Valid
 
-## weak_in_scope_core_results
-- `thm:presentation-compressed-interface` (main:478): support/conditional; demote.
-- `cor:compact-presentation-boundary-routing` (main:648): support/conditional; demote.
-- `thm:public-result-support-surface-rigidity` (main:727): support/conditional; demote.
-- `thm:rgs-conditional-compact-spine` (main:2216): support/conditional; demote.
-- `thm:current-package-rgs-instantiation-boundary` (main:2295): support/conditional; demote.
-- `cor:current-package-no-implicit-rgs-discharge` (main:2358): support/conditional; demote.
-- `thm:finite-script-projection-contract-support` (main:3506): support/conditional; demote.
-- `cor:finite-script-rgs-instantiation-boundary` (main:3614): support/conditional; demote.
-- `thm:finite-script-record-support-maximality` (main:3625): support/conditional; demote.
-- `thm:assigned-gate-soundness-audit-boundary` (main:3699): support/conditional; demote.
-- `thm:six-coordinate-gate-implementation-soundness-skeleton` (main:3768): support/conditional; demote.
-- `thm:finite-certificate-obstruction-skeleton` (main:3961): support/conditional; demote.
-- `thm:finite-record-certificate-calculus-spine` (main:4149): support/conditional; demote.
-- `thm:presentation-scoped-boundary-normal-form` (main:5289): support/conditional; demote.
-- `thm:five-axis-upgrade-obstruction` (main:5408): support/conditional; demote.
-- `thm:current-package-certificate-exactness` (main:6309): support/conditional; demote.
-- `thm:manual-ledger-dependence-boundary` (main:6478): support/conditional; demote.
-- `cor:row-frozen-current-package-invariance` (main:6557): support/conditional; demote.
-- `thm:current-package-extension-coordinate-rigidity` (main:6605): support/conditional; demote.
-- `thm:current-package-semantic-non-escalation` (main:6703): support/conditional; demote.
-- `thm:named-boundary-positive-coordinate-classification` (main:6775): support/conditional; demote.
-- `thm:stage-a-two-boundary-resolution-acceptance` (main:6885): support/conditional; demote.
-- `cor:current-package-path-verified-instantiation` (main:6977): support/conditional; demote.
-- `thm:case-witness-skeleton-rigidity` (main:7307): support/conditional; demote.
-- `thm:four-row-case-matrix-maximality` (main:7438): support/conditional; demote.
-- `thm:finite-witness-manifest-record-interface` (main:8146): support/conditional; demote.
-- `thm:primary-to-support-dependency-completeness` (main:8567): support/conditional; demote.
-- `thm:exact-inclusion-support-surface-realization` (main:9021): support/conditional; demote.
-- `thm:public-branch-archive-equivalent-realization` (main:9065): support/conditional; demote.
-- `thm:final-support-surface-closure` (main:9181): support/conditional; demote.
-- `thm:workspace-final-package-reconciliation` (main:9305): support/conditional; demote.
-- `thm:support-surface-normal-form` (main:9398): support/conditional; demote.
-- `thm:support-surface-invariant-compression` (main:9465): support/conditional; demote.
-- `thm:current-package-missing-coordinate-classifier` (main:9727): support/conditional; demote.
-- `thm:four-coordinate-local-support-closure` (main:9841): support/conditional; demote.
-- `thm:digest-closure-refresh-criterion` (main:10032): support/conditional; demote.
-- `thm:submission-support-refresh-rigidity` (main:10101): support/conditional; demote.
-- `thm:deterministic-theorem-environment-extractor-boundary` (main:10239): support/conditional; demote.
-- `thm:extractor-domain-exactness-non-gluing` (main:10286): support/conditional; demote.
-- `thm:final-byte-extractor-inventory-inclusion` (main:10347): support/conditional; demote.
-- `thm:theorem-inventory-proofchecker-obstruction` (main:10417): support/conditional; demote.
-- `prop:manual-theorem-inventory-boundary` (main:10465): support/conditional; demote.
-- `thm:post-inventory-finite-record-realization` (main:10659): support/conditional; demote.
-- `thm:theorem-obligation-ledger-boundary` (main:10739): support/conditional; demote.
-- `thm:finite-row-case-evidence-closure` (main:11075): support/conditional; demote.
-- `thm:post-edit-rerun-metadata-gate` (main:11284): support/conditional; demote.
-- `thm:final-local-support-state-reconciliation` (main:11326): support/conditional; demote.
-- `thm:presentation-route-five-interface-sharpness` (main:11537): support/conditional; demote.
-- `thm:presentation-route-stronger-reading-classifier` (main:11685): support/conditional; demote.
-- `thm:end-to-end-upgrade-decomposition-obstruction` (main:11819): support/conditional; demote.
-- `thm:submission-support-fixed-point-normal-form` (main:11944): support/conditional; demote.
-- `thm:post-inventory-support-coordinate-dichotomy` (main:12012): support/conditional; demote.
-- `thm:accepted-inventory-coverage-criterion` (main:12117): support/conditional; demote.
-- `thm:post-inventory-package-fixed-point` (main:12191): support/conditional; demote.
-- `thm:current-inventory-artifact-realization` (main:12330): support/conditional; demote.
-- `thm:current-command-result-closure` (main:12422): support/conditional; demote.
-- `thm:four-coordinate-submission-support-skeleton` (main:13006): support/conditional; demote.
-- `thm:current-package-no-free-upgrade-closure` (main:13268): support/conditional; demote.
-- `thm:terminal-five-coordinate-closure` (main:13417): support/conditional; demote.
-- `thm:five-issue-coordinate-normal-form` (main:13491): support/conditional; demote.
-- `thm:presentation-weak-interface-maximality` (main:13645): support/conditional; demote.
-- `thm:five-obstruction-finite-coordinate-normal-form` (main:15687): support/conditional; demote.
-- `thm:accepted-inventory-coordinate-realization` (main:15869): support/conditional; demote.
-- `thm:current-accepted-inventory-tuple-instantiation` (main:16050): support/conditional; demote.
-- `thm:inventory-venue-coordinate-closure` (main:16186): support/conditional; demote.
-- `thm:four-coordinate-local-support-discharge` (main:16269): support/conditional; demote.
-- `thm:local-support-surface-classifier` (main:16365): support/conditional; demote.
-- `thm:local-support-coordinate-closure` (main:16463): support/conditional; demote.
-- `thm:four-blocker-coordinate-budget` (main:16520): support/conditional; demote.
-- `thm:canonical-local-rerun-tuple` (main:16598): support/conditional; demote.
-- `thm:current-byte-support-fixed-point-nonupgrade-boundary` (main:16666): support/conditional; demote.
-- `thm:submission-support-obstruction-skeleton` (main:16792): support/conditional; demote.
-- `thm:support-coordinate-status-discharge` (main:17222): support/conditional; demote.
-- `thm:post-regeneration-support-coordinate-closure` (main:17333): support/conditional; demote.
-- `thm:five-interface-finite-skeleton-classification` (main:17425): support/conditional; demote.
-- `thm:final-support-surface-dichotomy-inventory-exactness` (main:17608): support/conditional; demote.
-- `thm:terminal-local-support-acceptance-normal-form` (main:17671): support/conditional; demote.
-- `thm:terminal-support-coordinate-discharge` (main:17746): support/conditional; demote.
-- `thm:current-inventory-rerun-exactness` (main:17804): support/conditional; demote.
-- `thm:current-package-five-coordinate-closure-criterion` (main:17882): support/conditional; demote.
-- `thm:five-interface-current-package-discharge-criterion` (main:17973): support/conditional; demote.
-- `cor:stage-a-issue-discharge-normal-form` (main:18112): support/conditional; demote.
-- `thm:six-coordinate-submission-boundary-normal-form` (main:18144): support/conditional; demote.
-- `thm:current-stage-a2-support-coordinate-realization` (main:18247): support/conditional; demote.
-- `cor:stage-a2-challenged-coordinate-classifier` (main:18310): support/conditional; demote.
-- `cor:presentation-package-five-coordinate-support-closure` (main:18378): support/conditional; demote.
-- `thm:finite-antichain-basis` (main:18476): support/conditional; demote.
-- `thm:canonical-bad-subrecord-classifier` (main:18531): support/conditional; demote.
-- `thm:stage-a-real-block-discharge` (main:18594): support/conditional; demote.
-- `cor:current-stage-a-closure-criterion` (main:18667): support/conditional; demote.
-- `def:role-respecting-finite-audit-interpretation` (main:19024): support/conditional; demote.
-- `def:six-coordinate-safe-projection` (main:19052): support/conditional; demote.
-- `thm:universal-safe-projection` (main:19077): support/conditional; demote.
-- `thm:coordinate-separation` (main:19118): support/conditional; demote.
-- `thm:canonical-obstruction-basis` (main:19162): support/conditional; demote.
-- `thm:current-byte-obstruction-certificate` (main:19189): support/conditional; demote.
-- `cor:referee-novelty-separation` (main:19224): support/conditional; demote.
-- `prop:single-route-surface` (main:19241): support/conditional; demote.
-- `thm:byte-to-atom-determinacy` (main:19620): support/conditional; demote.
-- `thm:post-qrgs-coordinate-independence` (main:19936): support/conditional; demote.
-- `cor:stage-a-replay-kernel-software-surface` (main:19965): support/conditional; demote.
-- `lem:maximal-qinv-qrgs-replay-closure` (main:19983): support/conditional; demote.
-- `cor:five-challenged-interfaces-replay-foreground` (main:20334): support/conditional; demote.
-- `cor:no-implementation-upgrade-from-fixed-replay` (main:20494): support/conditional; demote.
-- `prop:stage-a-replay-route-quotient-preservation` (main:20551): support/conditional; demote.
+- `True`
 
-## proof_gaps
-- `prop:finite-certificate-schema-verifier` (main:2469): needs verifier/log; rerun/cite log.
-- `thm:verifier-input-output-contract` (main:2538): needs verifier/log; rerun/cite log.
-- `thm:auditable-compiler-boundary-completeness` (main:2606): needs verifier/log; rerun/cite log.
-- `thm:finite-verifier-normal-form` (main:2665): needs verifier/log; rerun/cite log.
-- `thm:record-acceptance-exactness` (main:2749): needs verifier/log; rerun/cite log.
-- `thm:finite-record-method-schema-compression` (main:2828): needs verifier/log; rerun/cite log.
-- `cor:executable-schema-exactness-negative-fixture` (main:2885): needs verifier/log; rerun/cite log.
-- `thm:publication-safety-interface` (main:4636): needs verifier/log; rerun/cite log.
-- `prop:post-inventory-fixed-point-support-certificate` (main:10602): needs verifier/log; rerun/cite log.
-- `prop:stage-a2-accepted-inventory-rerun-realization` (main:12666): needs verifier/log; rerun/cite log.
-- `prop:realized-post-inventory-verifier-digest-coordinate` (main:15995): needs verifier/log; rerun/cite log.
+## In Scope Present
 
-## supporting_appendix_or_background
-- `prop:final-package-shape-convention` (main:268): support/background; retain support.
-- `thm:nested-package-states` (main:312): support/background; retain support.
-- `def:architecture-axis-map` (main:395): support/background; retain support.
-- `prop:architecture-axis-non-escalation` (main:434): support/background; retain support.
-- `lem:source-interface-extraction-correctness` (main:1014): support/background; retain support.
-- `prop:manual-source-interface-non-escalation` (main:1053): support/background; retain support.
-- `prop:reviewable-source-snapshot-interface` (main:1096): support/background; retain support.
-- `prop:source-interface-record-file-consistency` (main:1128): support/background; retain support.
-- `thm:bounded-source-interface-maximality` (main:1195): support/background; retain support.
-- `cor:downstream-imported-label-bounded-factorization` (main:1264): support/background; retain support.
-- `thm:public-source-reachability-non-escalation` (main:1298): support/background; retain support.
-- `cor:public-source-coordinate-exactness` (main:1352): support/background; retain support.
-- `prop:source-interface-evidence-level-separation` (main:1448): support/background; retain support.
-- `def:operational-acceptance-interface` (main:1567): support/background; retain support.
-- `thm:portable-six-role-interface` (main:1695): support/background; retain support.
-- `prop:portable-workflow-schema-factorisation` (main:1772): support/background; retain support.
-- `def:finite-record-projection-preorder` (main:1899): support/background; retain support.
-- `lem:finite-record-preorder-normal-form` (main:1915): support/background; retain support.
-- `def:record-gate-soundness-external-interface` (main:2136): support/background; retain support.
-- `prop:record-gate-soundness-external-interface-exactness` (main:2172): support/background; retain support.
-- `def:stronger-reading-preorder` (main:2401): support/background; retain support.
-- `def:certificate-schema-acceptance-table` (main:2429): support/background; retain support.
-- `thm:finite-coordinate-determination-boundary` (main:2924): support/background; retain support.
-- `thm:record-interface-rigidity` (main:2986): support/background; retain support.
-- `prop:machine-readable-certificate-records` (main:3194): support/background; retain support.
-- `thm:executable-record-non-escalation` (main:3296): support/background; retain support.
-- `thm:executable-certificate-construction-invariant` (main:3354): support/background; retain support.
-- `prop:claim-kind-dispatch` (main:3422): support/background; retain support.
-- `thm:mixed-claim-projection-obstruction` (main:3443): support/background; retain support.
-- `thm:three-upgrade-coordinate-exactness` (main:3853): support/background; retain support.
-- `thm:finite-extension-budget-normal-form` (main:4062): support/background; retain support.
-- `prop:publication-safety-dependency-normal-form` (main:4226): support/background; retain support.
-- `thm:finite-coordinate-no-overclaim-rigidity` (main:4293): support/background; retain support.
-- `prop:gate-interface-separation` (main:4403): support/background; retain support.
-- `cor:human-promotion-daemon-active-track-separation` (main:4427): support/background; retain support.
-- `prop:scheduler-selection-advisory` (main:4475): support/background; retain support.
-- `prop:publication-safety-minimal-bad-record-witness` (main:4556): support/background; retain support.
-- `lem:schema-partition-minimality` (main:4600): support/background; retain support.
-- `thm:finite-record-certificate-rigidity` (main:4960): support/background; retain support.
-- `thm:boundary-axis-non-escalation-exactness` (main:5047): support/background; retain support.
-- `thm:mixed-interface-overclaim-skeleton` (main:5183): support/background; retain support.
-- `prop:certificate-constructor-bad-subrecord-extractor` (main:5657): support/background; retain support.
-- `prop:publication-safety-maximality` (main:5722): support/background; retain support.
-- `cor:publication-safety-current-package-instance` (main:5773): support/background; retain support.
-- `cor:finite-record-gate-soundness-boundary` (main:5824): support/background; retain support.
-- `prop:current-package-acceptance-certificate-ledger` (main:6192): support/background; retain support.
-- `lem:gate-witness-criterion` (main:7095): support/background; retain support.
-- `prop:path-complete-case-witnesses` (main:7120): support/background; retain support.
-- `prop:review-bundle-case-snapshot-coverage` (main:7248): support/background; retain support.
-- `prop:presentation-case-matrix-sufficiency` (main:7383): support/background; retain support.
-- `thm:three-boundary-upgrade-sharpness` (main:8388): support/background; retain support.
-- `prop:primary-claim-row-classification` (main:8635): support/background; retain support.
-- `prop:primary-inventory-freshness-criterion` (main:8700): support/background; retain support.
-- `prop:primary-supplement-interface-map` (main:8773): support/background; retain support.
-- `cor:submission-time-support-instantiation-test` (main:9127): support/background; retain support.
-- `cor:current-no-receipt-support-surface-non-escalation` (main:9947): support/background; retain support.
-- `cor:fresh-inventory-digest-instance-this-source-state` (main:10000): support/background; retain support.
-- `prop:primary-architectural-fallback-without-external-support` (main:10173): support/background; retain support.
-- `prop:regenerated-theorem-inventory-digest-closure` (main:10517): support/background; retain support.
-- `cor:current-theorem-inventory-digest-instance` (main:10566): support/background; retain support.
-- `prop:post-inventory-support-tuple-extraction-certificate` (main:10811): support/background; retain support.
-- `prop:submitted-theorem-inventory-availability` (main:10853): support/background; retain support.
-- `prop:submission-support-instantiation-field-normal-form` (main:10879): support/background; retain support.
-- `cor:current-local-support-normal-form` (main:10935): support/background; retain support.
-- `audit:review-bundle-availability-condition` (main:10990): support/background; retain support.
-- `audit:case-snapshot-non-rerun-boundary` (main:11044): support/background; retain support.
-- `cor:current-case-behaviour-evidence-criterion` (main:11131): support/background; retain support.
-- `audit:command-run-boundary-inventory` (main:11191): support/background; retain support.
-- `cor:local-support-coordinate-discharge` (main:11475): support/background; retain support.
-- `cor:presentation-summary-non-escalation` (main:11884): support/background; retain support.
-- `prop:final-refreshed-coordinate-instantiation` (main:12068): support/background; retain support.
-- `cor:current-post-inventory-realization` (main:12293): support/background; retain support.
-- `cor:current-post-inventory-support-tuple-instantiation` (main:12468): support/background; retain support.
-- `prop:current-verifier-support-realization` (main:12520): support/background; retain support.
-- `cor:stable-replay-post-inventory-tuple` (main:12577): support/background; retain support.
-- `prop:post-inventory-freshness-obstruction` (main:12626): support/background; retain support.
-- `prop:three-coordinate-submission-support-closure` (main:12726): support/background; retain support.
-- `cor:local-fixed-point-external-boundary` (main:12791): support/background; retain support.
-- `prop:current-absence-external-support-surface-instantiation` (main:12842): support/background; retain support.
-- `prop:final-support-coordinate-refresh-closure` (main:12899): support/background; retain support.
-- `cor:manifest-required-theorem-inventory-fixed-point` (main:12958): support/background; retain support.
-- `cor:final-local-fixed-point-external-normal-form` (main:13117): support/background; retain support.
-- `prop:accepted-byte-post-inventory-support-coordinate` (main:13179): support/background; retain support.
-- `prop:bounded-theorem-support-coordinate-closure` (main:13565): support/background; retain support.
-- `cor:primary-presentation-weak-interface-compression` (main:13765): support/background; retain support.
-- `thm:submitted-support-issue-coordinate-discharge` (main:15277): support/background; retain support.
-- `prop:exact-submitted-issue-coordinate-skeleton` (main:15339): support/background; retain support.
-- `prop:external-coordinate-admissibility-trichotomy` (main:15415): support/background; retain support.
-- `cor:manuscript-reading-boundary` (main:15499): support/background; retain support.
-- `cor:local-only-artifact-support-closure` (main:15526): support/background; retain support.
-- `thm:local-support-normal-form-four-live-coordinates` (main:15564): support/background; retain support.
-- `cor:support-chain-closure` (main:15653): support/background; retain support.
-- `cor:current-byte-closure` (main:15818): support/background; retain support.
-- `prop:fresh-post-inventory-byte-closure-rerun-discharge` (main:15939): support/background; retain support.
-- `cor:presentation-route-support-coordinate-normal-form` (main:16102): support/background; retain support.
-- `cor:post-inventory-rerun-closure` (main:16738): support/background; retain support.
-- `cor:accepted-inventory-final-verifier-digest-tuple` (main:16867): support/background; retain support.
-- `prop:submitted-support-locator-freshness-realization` (main:16918): support/background; retain support.
-- `thm:scope-contract-three-coordinate-boundary` (main:17065): support/background; retain support.
-- `prop:local-issue-coordinate-normal-form` (main:17523): support/background; retain support.
-- `def:automated-discovery-certified-theory-state` (snap:18): support/background; retain support.
-- `def:automated-discovery-automation-record` (snap:41): support/background; retain support.
-- `def:automated-discovery-pipeline-state` (snap:49): support/background; retain support.
-- `def:automated-discovery-genome-extractor` (snap:61): support/background; retain support.
-- `def:automated-discovery-score-certificate` (snap:72): support/background; retain support.
-- `def:automated-discovery-pipeline-transition` (snap:86): support/background; retain support.
-- `def:automated-discovery-mechanical-expansion` (snap:102): support/background; retain support.
-- `def:automated-discovery-genome-compression` (snap:110): support/background; retain support.
-- `def:automated-discovery-genome-recombination` (snap:121): support/background; retain support.
-- `def:automated-discovery-classifier-shift` (snap:129): support/background; retain support.
-- `def:automated-discovery-discovery-transition` (snap:139): support/background; retain support.
-- `def:automated-discovery-positive-discovery-transition` (snap:154): support/background; retain support.
-- `def:automated-discovery-claim` (snap:170): support/background; retain support.
-- `def:automated-discovery-claim-kinds` (snap:185): support/background; retain support.
-- `def:automated-discovery-well-formed-claim` (snap:201): support/background; retain support.
-- `def:automated-discovery-gate` (snap:212): support/background; retain support.
-- `def:automated-discovery-gate-demotion` (snap:223): support/background; retain support.
-- `thm:automated-discovery-dna-completeness-obligation` (snap:237): support/background; retain support.
-- `cor:automated-discovery-statement-code-insufficient` (snap:248): support/background; retain support.
-- `thm:automated-discovery-mechanical-not-discovery` (snap:258): support/background; retain support.
-- `thm:automated-discovery-compression-not-discovery` (snap:269): support/background; retain support.
-- `thm:automated-discovery-certificate-ledger-required` (snap:280): support/background; retain support.
-- `thm:automated-discovery-positive-implies-discovery` (snap:299): support/background; retain support.
-- `thm:automated-discovery-scored-claims-public-weights` (snap:309): support/background; retain support.
-- `thm:automated-discovery-gate-kind-sound` (snap:320): support/background; retain support.
-- `thm:automated-discovery-demotion-soundness` (snap:334): support/background; retain support.
-- `def:automated-discovery-lineage-ledger` (snap:351): support/background; retain support.
-- `def:automated-discovery-lineage-consistent-claim` (snap:359): support/background; retain support.
-- `thm:automated-discovery-lineage-dag` (snap:366): support/background; retain support.
-- `def:automated-discovery-potential` (snap:377): support/background; retain support.
-- `thm:automated-discovery-lowest-score-not-best-target` (snap:395): support/background; retain support.
-- `thm:automated-discovery-selection-favours-classifier-change` (snap:408): support/background; retain support.
-- `def:automated-discovery-unpaid-discovery-claim` (snap:423): support/background; retain support.
-- `thm:automated-discovery-no-unpaid-discovery` (snap:431): support/background; retain support.
-- `thm:automated-discovery-pipeline-safety` (snap:441): support/background; retain support.
-- `thm:automated-discovery-pipeline-theorem` (snap:457): support/background; retain support.
+- **thm:finite-audit-antichain-basis, thm:canonical-stage-a-obstruction-basis, thm:no-theorem-delta-nondischarge, thm:stage-a-real-block-discharge-completeness, cor:current-stage-a-closure-exactness** (`main.tex:Canonical finite audit basis`): Primary-route Stage-A theorem package recognized in included source: finite audit antichain reconstruction, seven-class canonical obstruction basis, no-theorem-delta non-discharge, real-block discharge completeness, and current closure exactness. Required action: Preserve exact labels and titles; treat as primary-route material for the CICM presentation-only finite-audit route.
+  - Titles: Finite Audit Antichain Basis, Canonical Stage-A Obstruction Basis, No-Theorem-Delta Non-Discharge Theorem, Stage-A Real-Block Discharge Completeness, Current Stage-A Closure Exactness
+  - Dependencies: thm:six-role-publication-master-interface, thm:publication-safety-interface, thm:current-package-no-free-upgrade-closure, thm:four-case-foreground-support-boundary, cor:stage-a-issue-discharge-normal-form, thm:six-coordinate-submission-boundary-normal-form, thm:current-round-local-only-fixed-point-classifier
+  - Primary route status: primary-route
+  - Stage-A block: stage_a_audit_real_block
+- **prop:final-package-shape-convention, thm:nested-package-states** (`main.tex:268-329`): Current-source labelled theorem-like environments in section 'Problem and contribution' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **def:architecture-axis-map, prop:architecture-axis-non-escalation, thm:presentation-compressed-interface, cor:compact-presentation-boundary-routing, thm:public-result-support-surface-rigidity, lem:source-interface-extraction-correctness, prop:manual-source-interface-non-escalation, prop:reviewable-source-snapshot-interface, prop:source-interface-record-file-consistency, thm:bounded-source-interface-maximality, cor:downstream-imported-label-bounded-factorization, thm:public-source-reachability-non-escalation, cor:public-source-coordinate-exactness, thm:source-interface-semantic-completeness-obstruction, prop:source-interface-evidence-level-separation** (`main.tex:395-1464`): Current-source labelled theorem-like environments in section 'Architecture' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **def:operational-acceptance-interface, thm:portable-six-role-interface, prop:portable-workflow-schema-factorisation, thm:portable-projection-dominates-local-support, def:finite-record-projection-preorder, lem:finite-record-preorder-normal-form, prop:portable-method-normal-form-local-pullback, def:record-gate-soundness-external-interface, prop:record-gate-soundness-external-interface-exactness, thm:rgs-conditional-compact-spine, thm:current-package-rgs-instantiation-boundary, cor:current-package-no-implicit-rgs-discharge, def:stronger-reading-preorder, def:certificate-schema-acceptance-table, prop:finite-certificate-schema-verifier, thm:verifier-input-output-contract, thm:auditable-compiler-boundary-completeness, thm:finite-verifier-normal-form, thm:record-acceptance-exactness, thm:finite-record-method-schema-compression, cor:executable-schema-exactness-negative-fixture, thm:finite-coordinate-determination-boundary, thm:record-interface-rigidity, thm:record-gate-implementation-overclaim-obstruction, cor:finite-record-acceptance-not-implementation-soundness, prop:machine-readable-certificate-records, thm:executable-record-non-escalation, thm:executable-certificate-construction-invariant, prop:claim-kind-dispatch, thm:mixed-claim-projection-obstruction, thm:finite-script-projection-contract-support, cor:finite-script-rgs-instantiation-boundary, thm:finite-script-record-support-maximality, thm:assigned-gate-soundness-audit-boundary, thm:six-coordinate-gate-implementation-soundness-skeleton, thm:three-upgrade-coordinate-exactness, thm:finite-certificate-obstruction-skeleton, thm:finite-extension-budget-normal-form, thm:finite-record-certificate-calculus-spine, prop:publication-safety-dependency-normal-form, thm:finite-coordinate-no-overclaim-rigidity, prop:gate-interface-separation, cor:human-promotion-daemon-active-track-separation, prop:scheduler-selection-advisory, prop:publication-safety-minimal-bad-record-witness, lem:schema-partition-minimality, thm:publication-safety-interface, thm:gate-implementation-soundness-upgrade-obstruction, thm:finite-record-certificate-rigidity, thm:boundary-axis-non-escalation-exactness, thm:mixed-interface-overclaim-skeleton, thm:presentation-scoped-boundary-normal-form, thm:five-axis-upgrade-obstruction, thm:current-boundary-skeleton-non-gluing, prop:certificate-constructor-bad-subrecord-extractor, prop:publication-safety-maximality, cor:publication-safety-current-package-instance, cor:finite-record-gate-soundness-boundary, thm:implementation-soundness-extension-criterion, thm:current-package-implementation-upgrade-absence, cor:submitted-gate-implementation-contract-dichotomy, thm:external-interface-projection-no-free-upgrade** (`main.tex:1567-6120`): Current-source labelled theorem-like environments in section 'Abstract finite-record interface' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **prop:current-package-acceptance-certificate-ledger** (`main.tex:6192-6231`): Current-source labelled theorem-like environments in section 'Primary-claim inventory audit' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **thm:current-package-certificate-exactness, thm:manual-ledger-dependence-boundary, cor:row-frozen-current-package-invariance, thm:current-package-extension-coordinate-rigidity, thm:current-package-semantic-non-escalation, thm:named-boundary-positive-coordinate-classification, thm:stage-a-two-boundary-resolution-acceptance, cor:current-package-path-verified-instantiation** (`main.tex:6309-7012`): Current-source labelled theorem-like environments in section 'Current-package instantiation' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **lem:gate-witness-criterion, prop:path-complete-case-witnesses** (`main.tex:7095-7144`): Current-source labelled theorem-like environments in section 'Case-study witness protocol' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **prop:review-bundle-case-snapshot-coverage, thm:case-witness-skeleton-rigidity, prop:presentation-case-matrix-sufficiency, thm:four-row-case-matrix-maximality** (`main.tex:7248-7458`): Current-source labelled theorem-like environments in section 'Case studies' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **audit:fresh-venue-record-criterion, thm:venue-rule-freshness-non-escalation, cor:historical-venue-record-non-escalation, cor:upload-time-venue-compliance-record-requirement, prop:dated-venue-record-instantiation, audit:venue-submission-pack-gate, audit:submission-artifact-role-separation, prop:formal-source-gate-instantiation, thm:formal-source-promotion-obstruction, thm:evidence-level-overclaim-obstruction, thm:finite-witness-manifest-record-interface, prop:artifact-validation-gate-unique-semantic-upgrade, cor:artifact-semantic-validity-boundary, thm:three-boundary-upgrade-sharpness, thm:primary-to-support-dependency-completeness, prop:primary-claim-row-classification, prop:primary-inventory-freshness-criterion, prop:primary-supplement-interface-map** (`main.tex:7573-8785`): Current-source labelled theorem-like environments in section 'Primary--supplement interface' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **thm:exact-inclusion-support-surface-realization, thm:public-branch-archive-equivalent-realization, cor:submission-time-support-instantiation-test, thm:final-support-surface-closure, thm:workspace-final-package-reconciliation, thm:support-surface-normal-form, thm:support-surface-invariant-compression, thm:upload-or-archive-instantiation-boundary, cor:upload-or-archive-instantiation-record, prop:no-external-instantiation-from-local-bundle-records, prop:upload-or-archive-instantiation-update-protocol, thm:current-package-missing-coordinate-classifier, thm:four-coordinate-local-support-closure, cor:current-no-receipt-support-surface-non-escalation, cor:fresh-inventory-digest-instance-this-source-state, thm:digest-closure-refresh-criterion, thm:submission-support-refresh-rigidity, prop:primary-architectural-fallback-without-external-support, thm:deterministic-theorem-environment-extractor-boundary, thm:extractor-domain-exactness-non-gluing, thm:final-byte-extractor-inventory-inclusion, thm:theorem-inventory-proofchecker-obstruction, prop:manual-theorem-inventory-boundary, prop:regenerated-theorem-inventory-digest-closure, cor:current-theorem-inventory-digest-instance, prop:post-inventory-fixed-point-support-certificate, thm:post-inventory-finite-record-realization, thm:theorem-obligation-ledger-boundary, prop:post-inventory-support-tuple-extraction-certificate, prop:submitted-theorem-inventory-availability, prop:submission-support-instantiation-field-normal-form, cor:current-local-support-normal-form, audit:review-bundle-availability-condition, audit:case-snapshot-non-rerun-boundary, thm:finite-row-case-evidence-closure, cor:current-case-behaviour-evidence-criterion** (`main.tex:9021-11141`): Current-source labelled theorem-like environments in section 'Subordinate support-boundary ledger' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **audit:command-run-boundary-inventory, thm:post-edit-rerun-metadata-gate, thm:final-local-support-state-reconciliation, cor:local-support-coordinate-discharge, thm:presentation-route-five-interface-sharpness, thm:presentation-route-stronger-reading-classifier, thm:end-to-end-upgrade-decomposition-obstruction, cor:presentation-summary-non-escalation, thm:submission-support-fixed-point-normal-form, thm:post-inventory-support-coordinate-dichotomy, prop:final-refreshed-coordinate-instantiation, thm:accepted-inventory-coverage-criterion, thm:post-inventory-package-fixed-point, cor:current-post-inventory-realization, thm:current-inventory-artifact-realization, thm:current-command-result-closure, cor:current-post-inventory-support-tuple-instantiation, prop:current-verifier-support-realization, cor:stable-replay-post-inventory-tuple, prop:post-inventory-freshness-obstruction, prop:stage-a2-accepted-inventory-rerun-realization, prop:three-coordinate-submission-support-closure, cor:local-fixed-point-external-boundary, prop:current-absence-external-support-surface-instantiation, prop:final-support-coordinate-refresh-closure, cor:manifest-required-theorem-inventory-fixed-point, thm:four-coordinate-submission-support-skeleton, cor:final-local-fixed-point-external-normal-form, prop:accepted-byte-post-inventory-support-coordinate, thm:current-package-no-free-upgrade-closure, thm:terminal-five-coordinate-closure, thm:five-issue-coordinate-normal-form, prop:bounded-theorem-support-coordinate-closure, thm:presentation-weak-interface-maximality, cor:primary-presentation-weak-interface-compression, cor:no-finite-record-gluing-upgrade, thm:four-family-upgrade-obstruction-classification, thm:certificate-reading-spine-maximality, thm:six-role-publication-master-interface, thm:compressed-master-boundary-classifier, thm:presentation-route-dichotomy, thm:five-node-dependency-spine-exactness, thm:master-spine-support-coordinate-compression, thm:finite-record-interface-support-boundary-classification, thm:presentation-only-bounded-support-normal-form, thm:compact-article-finite-record-spine-classification, thm:presentation-route-spine-projection-overload-obstruction, thm:four-case-foreground-support-boundary, thm:compact-dependency-map-irredundancy, cor:compact-five-node-presentation-consequence, thm:submitted-support-issue-coordinate-discharge, prop:exact-submitted-issue-coordinate-skeleton, prop:external-coordinate-admissibility-trichotomy, cor:manuscript-reading-boundary, cor:local-only-artifact-support-closure, thm:local-support-normal-form-four-live-coordinates, cor:support-chain-closure, thm:five-obstruction-finite-coordinate-normal-form, cor:current-byte-closure, thm:accepted-inventory-coordinate-realization, prop:fresh-post-inventory-byte-closure-rerun-discharge, prop:realized-post-inventory-verifier-digest-coordinate, thm:current-accepted-inventory-tuple-instantiation, cor:presentation-route-support-coordinate-normal-form, thm:inventory-venue-coordinate-closure, thm:four-coordinate-local-support-discharge, thm:local-support-surface-classifier, thm:local-support-coordinate-closure, thm:four-blocker-coordinate-budget, thm:canonical-local-rerun-tuple, thm:current-byte-support-fixed-point-nonupgrade-boundary, cor:post-inventory-rerun-closure, thm:submission-support-obstruction-skeleton, cor:accepted-inventory-final-verifier-digest-tuple, prop:submitted-support-locator-freshness-realization, thm:four-live-noninstantiation-coordinates, thm:scope-contract-three-coordinate-boundary, thm:support-coordinate-status-discharge, thm:post-regeneration-support-coordinate-closure, thm:five-interface-finite-skeleton-classification, prop:local-issue-coordinate-normal-form, thm:final-support-surface-dichotomy-inventory-exactness, thm:terminal-local-support-acceptance-normal-form, thm:terminal-support-coordinate-discharge, thm:current-inventory-rerun-exactness, thm:current-package-five-coordinate-closure-criterion, thm:five-interface-current-package-discharge-criterion, cor:stage-a-issue-discharge-normal-form, thm:six-coordinate-submission-boundary-normal-form, thm:current-stage-a2-support-coordinate-realization, cor:stage-a2-challenged-coordinate-classifier, cor:presentation-package-five-coordinate-support-closure** (`main.tex:11191-18413`): Current-source labelled theorem-like environments in section 'Command-run boundary' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **thm:finite-antichain-basis, thm:canonical-bad-subrecord-classifier, thm:stage-a-real-block-discharge, cor:current-stage-a-closure-criterion, thm:finite-audit-antichain-basis, thm:canonical-stage-a-obstruction-basis, thm:no-theorem-delta-nondischarge, thm:stage-a-real-block-discharge-completeness, cor:current-stage-a-closure-exactness, def:role-respecting-finite-audit-interpretation, def:six-coordinate-safe-projection, thm:universal-safe-projection, thm:coordinate-separation, thm:canonical-obstruction-basis, thm:current-byte-obstruction-certificate, cor:referee-novelty-separation, prop:single-route-surface** (`main.tex:18476-19250`): Current-source labelled theorem-like environments in section 'Canonical finite audit basis' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **def:typed-audit-atom, def:stage-a-horn-audit-schema, def:certified-closure-rejection-certificate, thm:horn-compilation-adequacy, thm:deterministic-certificate-soundness, thm:complete-obstruction, thm:coordinate-independence-by-horn-models, thm:verifier-adequacy-complexity, thm:current-byte-certified-audit, cor:referee-facing-novelty-horn, prop:non-duplication-route-quotient** (`main.tex:19271-19526`): Current-source labelled theorem-like environments in section 'Certified Horn audit calculus' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **def:canonical-stage-a-byte-manifest, def:byte-to-atom-compiler, def:replayable-stage-a-certificate, thm:byte-to-atom-determinacy, thm:replay-kernel-soundness, thm:replay-kernel-completeness, thm:replayable-obstruction-adequacy, thm:current-byte-two-coordinate-audit, thm:fixed-replay-rgs-coordinate-exactness, thm:accepted-fixed-replay-rgs-pass-row-current-package, thm:post-qrgs-coordinate-independence, cor:stage-a-replay-kernel-software-surface, lem:maximal-qinv-qrgs-replay-closure, thm:replay-kernel-foreground-closure, thm:canonical-finite-basis-replay-foreground-exactness, thm:cicm-public-surface-maximality, cor:five-challenged-interfaces-replay-foreground, thm:two-coordinate-foreground-maximality, cor:no-implementation-upgrade-from-fixed-replay, prop:stage-a-replay-route-quotient-preservation** (`main.tex:19551-20559`): Current-source labelled theorem-like environments in section 'Proof-carrying Stage-A replay kernel' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
+- **thm:current-round-local-only-fixed-point-classifier, prop:six-challenged-coordinate-discharge-normal-form, thm:round-eight-ordered-support-tuple-closure** (`main.tex:20638-20811`): Current-source labelled theorem-like environments in section 'Conclusion and support-boundary summary' are present in the finite-record supplement. Required action: Keep within the finite-record and presentation-only evidence boundary; regenerate this inventory after any labelled environment edit.
 
-## out_of_scope_strong_results
-- `thm:source-interface-semantic-completeness-obstruction` (main:1390): out of positive scope; negative boundary.
-- `thm:record-gate-implementation-overclaim-obstruction` (main:3086): out of positive scope; negative boundary.
-- `cor:finite-record-acceptance-not-implementation-soundness` (main:3155): out of positive scope; negative boundary.
-- `thm:gate-implementation-soundness-upgrade-obstruction` (main:4793): out of positive scope; negative boundary.
-- `thm:implementation-soundness-extension-criterion` (main:5871): out of positive scope; negative boundary.
-- `thm:current-package-implementation-upgrade-absence` (main:5965): out of positive scope; negative boundary.
-- `cor:submitted-gate-implementation-contract-dichotomy` (main:6034): out of positive scope; negative boundary.
-- `thm:external-interface-projection-no-free-upgrade` (main:6083): out of positive scope; negative boundary.
-- `audit:fresh-venue-record-criterion` (main:7573): out of positive scope; negative boundary.
-- `thm:venue-rule-freshness-non-escalation` (main:7624): out of positive scope; negative boundary.
-- `cor:historical-venue-record-non-escalation` (main:7670): out of positive scope; negative boundary.
-- `cor:upload-time-venue-compliance-record-requirement` (main:7700): out of positive scope; negative boundary.
-- `prop:dated-venue-record-instantiation` (main:7749): out of positive scope; negative boundary.
-- `audit:venue-submission-pack-gate` (main:7800): out of positive scope; negative boundary.
-- `audit:submission-artifact-role-separation` (main:7871): out of positive scope; negative boundary.
-- `prop:formal-source-gate-instantiation` (main:7963): out of positive scope; negative boundary.
-- `thm:formal-source-promotion-obstruction` (main:8030): out of positive scope; negative boundary.
-- `thm:evidence-level-overclaim-obstruction` (main:8071): out of positive scope; negative boundary.
-- `prop:artifact-validation-gate-unique-semantic-upgrade` (main:8270): out of positive scope; negative boundary.
-- `cor:artifact-semantic-validity-boundary` (main:8312): out of positive scope; negative boundary.
-- `thm:upload-or-archive-instantiation-boundary` (main:9530): out of positive scope; negative boundary.
-- `cor:upload-or-archive-instantiation-record` (main:9573): out of positive scope; negative boundary.
-- `prop:no-external-instantiation-from-local-bundle-records` (main:9596): out of positive scope; negative boundary.
-- `prop:upload-or-archive-instantiation-update-protocol` (main:9638): out of positive scope; negative boundary.
+## Missing In Scope Results
 
-## split_candidates
-- `thm:four-family-upgrade-obstruction-classification` (main:13842): broader result; split candidate.
-- `thm:certificate-reading-spine-maximality` (main:13951): broader result; split candidate.
-- `thm:six-role-publication-master-interface` (main:14058): broader result; split candidate.
-- `thm:compressed-master-boundary-classifier` (main:14207): broader result; split candidate.
-- `thm:presentation-route-dichotomy` (main:14331): broader result; split candidate.
-- `thm:five-node-dependency-spine-exactness` (main:14467): broader result; split candidate.
-- `thm:master-spine-support-coordinate-compression` (main:14535): broader result; split candidate.
-- `thm:finite-record-interface-support-boundary-classification` (main:14622): broader result; split candidate.
-- `thm:presentation-only-bounded-support-normal-form` (main:14729): broader result; split candidate.
-- `thm:compact-article-finite-record-spine-classification` (main:14827): broader result; split candidate.
-- `thm:presentation-route-spine-projection-overload-obstruction` (main:14965): broader result; split candidate.
-- `thm:four-case-foreground-support-boundary` (main:15053): broader result; split candidate.
-- `thm:compact-dependency-map-irredundancy` (main:15138): broader result; split candidate.
-- `cor:compact-five-node-presentation-consequence` (main:15254): broader result; split candidate.
-
-## irrelevant_or_remove
 - None.
 
-## naive_truncation_risks
-- `thm:portable-projection-dominates-local-support` (main:1829): projection risk; keep separation.
-- `prop:portable-method-normal-form-local-pullback` (main:1958): projection risk; keep separation.
-- `thm:current-boundary-skeleton-non-gluing` (main:5518): projection risk; keep separation.
-- `cor:no-finite-record-gluing-upgrade` (main:13795): projection risk; keep separation.
-- `thm:four-live-noninstantiation-coordinates` (main:16986): projection risk; keep separation.
+## Weak In Scope Core Results
 
-## journal_style_gaps
-- `style:cicm-presentation-compression` (main): too many foreground candidates; foreground five labels.
-- `style:citation-boundary-for-classical-background` (bib): background citations; cite background.
-- `style:negative-coordinate-language` (abstract): negative coordinates; avoid overclaim.
+- **thm:publication-safety-interface, thm:presentation-compressed-interface, thm:current-byte-two-coordinate-audit, thm:replay-kernel-foreground-closure** (`main.tex`): The central chain is a conditional finite-record and fixed-replay theorem chain, not end-to-end implementation, formal-source, artifact-semantic, external-support, or venue correctness. Required action: Foreground the bounded hypotheses and route all stronger readings through their own upgrade coordinates.
+- **thm:finite-script-projection-contract-support, thm:replay-kernel-soundness** (`main.tex`): Implementation-soundness language is bounded to finite script projection contracts and a fixed Stage-A replay schema. Required action: Do not advertise concrete gate-program correctness unless separate implementation-audit rows are added.
+
+## Proof Gaps
+
+- **bounded-source-interface-not-fresh-formal-source-rebuild** (`source_interface_record.json; main.tex`): The source interface supplies pinned snapshot and line-range support only, not a fresh Lean/BEDC rebuild or axiom-purity audit. Required action: Keep formal-source correctness claims conditional unless a fresh rebuild and axiom audit row is added.
+
+## Supporting Appendix Or Background
+
+- **review_bundle/*, source_interface_record.json, primary_claim_inventory.json** (`review_bundle/`): Support files provide finite local/path-verified evidence and command records for the presentation route. Required action: Use as reviewer-local support surfaces unless an upload/archive coordinate is supplied.
+
+## Out Of Scope Strong Results
+
+- **complete-BEDC-theory-or-fresh-Lean-rebuild** (`scope_contract.json coordinate qsrc`): A fresh formal-source rebuild and axiom-purity audit are explicitly absent from the current coordinate vector. Required action: Do not claim fresh formal-source correctness in this paper.
+  - Candidate Title: Fresh BEDC/newmath formal-source audit
+  - Source Contribution: The current paper identifies bounded source-interface rows and the missing formal-source upgrade coordinate.
+  - Scope Mismatch: The CICM presentation route is a finite-record methodology paper, not a complete BEDC formalization report.
+  - Independent Paper Rationale: A separate formal-source audit could center build logs, axiom footprints, and theorem dependencies.
+  - Needed to split: pinned checkout, fresh Lean/BEDC build log, axiom-purity audit, source-interface reconciliation
+- **dynamic-Rule110-GroundCompiler-artifact-validation** (`scope_contract.json coordinate qart`): Finite artifact rows do not supply dynamic artifact-semantic validation. Required action: Keep artifact claims finite-record only unless a fresh evaluator command and semantic-validation row are added.
+  - Candidate Title: Dynamic semantic validation of finite artifact witnesses
+  - Source Contribution: The current paper isolates the evaluator-contract coordinate needed for artifact semantic upgrades.
+  - Scope Mismatch: The present scope excludes fresh dynamic artifact validation.
+  - Independent Paper Rationale: A separate artifact paper could define evaluator semantics and reproducible validation runs.
+  - Needed to split: semantic evaluator, input/output manifests, fresh command logs, digest-bound artifacts
+
+## Split Candidates
+
+- **finite-record audit calculus** (`main.tex`): The no-free-upgrade, bad-subrecord, and fixed-point machinery is reusable beyond the automath/newmath case study. Required action: Keep only the pieces needed for this paper and split an abstract calculus later if desired.
+  - Candidate Title: A finite-record calculus for auditable research claims
+  - Source Contribution: Stage A produced a reusable typed-record and upgrade-coordinate calculus.
+  - Scope Mismatch: The current paper's contribution is the applied theory-to-paper workflow.
+  - Independent Paper Rationale: A general calculus paper could abstract local paths and compare multiple research-package examples.
+  - Needed to split: abstract syntax, semantics, independent examples, minimality theorems
+
+## Irrelevant Or Remove
+
+- **single-primitive-universality hierarchy material** (`prior research ledger only`): The prior EML/Zeckendorf/Richardson/Hankel-Prony hierarchy belongs to a different mathematics paper. Required action: Do not import into this methodology manuscript.
+
+## Naive Truncation Risks
+
+- **local paths mistaken for external support** (`scope_contract.json coordinate qext`): Digest rows and local bundle paths are not upload receipts or archive-equivalent byte-equality locators. Required action: Keep external-support language conditional/local-only until the independent coordinate is added.
+- **dated venue readiness mistaken for venue acceptance** (`scope_contract.json coordinate qven`): Dated local-readiness records are not upload-time compliance and not venue acceptance. Required action: Phrase the route as CICM presentation-only/workshop local readiness, not completed submission or acceptance.
+
+## Journal Style Gaps
+
+- **theorem-density** (`main.tex:268-20811`): The supplement contains 291 labelled theorem-like environments, which is dense for a presentation-only route. Required action: Use the reader map and inventory to foreground the compact fixed-replay spine.
