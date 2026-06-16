@@ -1,0 +1,332 @@
+# Theorem Inventory
+
+## in_scope_present
+- `prop:final-package-shape-convention` `main.tex:268` support / support
+- `thm:nested-package-states` `main.tex:312` support / support
+- `def:architecture-axis-map` `main.tex:395` primary/dependency / sync
+- `prop:architecture-axis-non-escalation` `main.tex:434` support / support
+- `thm:presentation-compressed-interface` `main.tex:478` primary/dependency / sync
+- `cor:compact-presentation-boundary-routing` `main.tex:632` support / support
+- `thm:public-result-support-surface-rigidity` `main.tex:711` support / support
+- `lem:source-interface-extraction-correctness` `main.tex:954` support / support
+- `prop:manual-source-interface-non-escalation` `main.tex:993` support / support
+- `prop:reviewable-source-snapshot-interface` `main.tex:1036` support / support
+- `prop:source-interface-record-file-consistency` `main.tex:1068` support / support
+- `thm:bounded-source-interface-maximality` `main.tex:1135` support / support
+- `cor:downstream-imported-label-bounded-factorization` `main.tex:1204` support / support
+- `thm:public-source-reachability-non-escalation` `main.tex:1238` support / support
+- `cor:public-source-coordinate-exactness` `main.tex:1292` support / support
+- `thm:source-interface-semantic-completeness-obstruction` `main.tex:1330` support / support
+- `prop:source-interface-evidence-level-separation` `main.tex:1388` support / support
+- `def:operational-acceptance-interface` `main.tex:1507` primary/dependency / sync
+- `thm:portable-six-role-interface` `main.tex:1635` primary/dependency / sync
+- `prop:portable-workflow-schema-factorisation` `main.tex:1712` support / support
+- `thm:portable-projection-dominates-local-support` `main.tex:1769` support / support
+- `def:finite-record-projection-preorder` `main.tex:1839` support / support
+- `lem:finite-record-preorder-normal-form` `main.tex:1855` support / support
+- `prop:portable-method-normal-form-local-pullback` `main.tex:1898` support / support
+- `def:record-gate-soundness-external-interface` `main.tex:2076` primary/dependency / sync
+- `prop:record-gate-soundness-external-interface-exactness` `main.tex:2112` support / support
+- `thm:rgs-conditional-compact-spine` `main.tex:2156` primary/dependency / sync
+- `thm:current-package-rgs-instantiation-boundary` `main.tex:2235` support / support
+- `cor:current-package-no-implicit-rgs-discharge` `main.tex:2298` support / support
+- `def:stronger-reading-preorder` `main.tex:2341` support / support
+- `def:certificate-schema-acceptance-table` `main.tex:2369` primary/dependency / sync
+- `prop:finite-certificate-schema-verifier` `main.tex:2409` support / support
+- `thm:verifier-input-output-contract` `main.tex:2478` support / support
+- `thm:auditable-compiler-boundary-completeness` `main.tex:2546` support / support
+- `thm:finite-verifier-normal-form` `main.tex:2605` support / support
+- `thm:record-acceptance-exactness` `main.tex:2689` support / support
+- `thm:finite-record-method-schema-compression` `main.tex:2768` support / support
+- `cor:executable-schema-exactness-negative-fixture` `main.tex:2825` support / support
+- `thm:finite-coordinate-determination-boundary` `main.tex:2864` support / support
+- `thm:record-interface-rigidity` `main.tex:2926` support / support
+- `thm:record-gate-implementation-overclaim-obstruction` `main.tex:3026` support / support
+- `cor:finite-record-acceptance-not-implementation-soundness` `main.tex:3095` support / support
+- `prop:machine-readable-certificate-records` `main.tex:3134` support / support
+- `thm:executable-record-non-escalation` `main.tex:3236` support / support
+- `thm:executable-certificate-construction-invariant` `main.tex:3294` support / support
+- `prop:claim-kind-dispatch` `main.tex:3362` support / support
+- `thm:mixed-claim-projection-obstruction` `main.tex:3383` support / support
+- `thm:finite-script-projection-contract-support` `main.tex:3446` support / support
+- `cor:finite-script-rgs-instantiation-boundary` `main.tex:3554` support / support
+- `thm:finite-script-record-support-maximality` `main.tex:3565` support / support
+- `thm:assigned-gate-soundness-audit-boundary` `main.tex:3639` support / support
+- `thm:six-coordinate-gate-implementation-soundness-skeleton` `main.tex:3708` support / support
+- `thm:three-upgrade-coordinate-exactness` `main.tex:3793` support / support
+- `thm:finite-certificate-obstruction-skeleton` `main.tex:3901` support / support
+- `thm:finite-extension-budget-normal-form` `main.tex:4002` support / support
+- `thm:finite-record-certificate-calculus-spine` `main.tex:4089` support / support
+- `prop:publication-safety-dependency-normal-form` `main.tex:4166` support / support
+- `thm:finite-coordinate-no-overclaim-rigidity` `main.tex:4233` support / support
+- `prop:gate-interface-separation` `main.tex:4343` support / support
+- `cor:human-promotion-daemon-active-track-separation` `main.tex:4367` support / support
+- `prop:scheduler-selection-advisory` `main.tex:4415` support / support
+- `prop:publication-safety-minimal-bad-record-witness` `main.tex:4496` support / support
+- `lem:schema-partition-minimality` `main.tex:4540` support / support
+- `thm:publication-safety-interface` `main.tex:4576` primary/dependency / sync
+- `thm:gate-implementation-soundness-upgrade-obstruction` `main.tex:4733` support / support
+- `thm:finite-record-certificate-rigidity` `main.tex:4900` support / support
+- `thm:boundary-axis-non-escalation-exactness` `main.tex:4987` support / support
+- `thm:mixed-interface-overclaim-skeleton` `main.tex:5123` support / support
+- `thm:presentation-scoped-boundary-normal-form` `main.tex:5229` support / support
+- `thm:five-axis-upgrade-obstruction` `main.tex:5348` support / support
+- `thm:current-boundary-skeleton-non-gluing` `main.tex:5458` support / support
+- `prop:certificate-constructor-bad-subrecord-extractor` `main.tex:5597` support / support
+- `prop:publication-safety-maximality` `main.tex:5662` support / support
+- `cor:publication-safety-current-package-instance` `main.tex:5713` support / support
+- `cor:finite-record-gate-soundness-boundary` `main.tex:5764` support / support
+- `thm:implementation-soundness-extension-criterion` `main.tex:5811` support / support
+- `thm:current-package-implementation-upgrade-absence` `main.tex:5905` support / support
+- `cor:submitted-gate-implementation-contract-dichotomy` `main.tex:5974` support / support
+- `thm:external-interface-projection-no-free-upgrade` `main.tex:6023` primary/dependency / sync
+- `prop:current-package-acceptance-certificate-ledger` `main.tex:6132` support / support
+- `thm:current-package-certificate-exactness` `main.tex:6249` support / support
+- `thm:manual-ledger-dependence-boundary` `main.tex:6418` support / support
+- `cor:row-frozen-current-package-invariance` `main.tex:6497` support / support
+- `thm:current-package-extension-coordinate-rigidity` `main.tex:6545` support / support
+- `thm:current-package-semantic-non-escalation` `main.tex:6643` support / support
+- `thm:named-boundary-positive-coordinate-classification` `main.tex:6715` support / support
+- `thm:stage-a-two-boundary-resolution-acceptance` `main.tex:6825` support / support
+- `cor:current-package-path-verified-instantiation` `main.tex:6917` support / support
+- `lem:gate-witness-criterion` `main.tex:7035` support / support
+- `prop:path-complete-case-witnesses` `main.tex:7060` support / support
+- `prop:review-bundle-case-snapshot-coverage` `main.tex:7188` support / support
+- `thm:case-witness-skeleton-rigidity` `main.tex:7247` support / support
+- `prop:presentation-case-matrix-sufficiency` `main.tex:7323` support / support
+- `thm:four-row-case-matrix-maximality` `main.tex:7378` support / support
+- `audit:fresh-venue-record-criterion` `main.tex:7513` support / support
+- `thm:venue-rule-freshness-non-escalation` `main.tex:7564` support / support
+- `cor:historical-venue-record-non-escalation` `main.tex:7610` support / support
+- `cor:upload-time-venue-compliance-record-requirement` `main.tex:7640` support / support
+- `prop:dated-venue-record-instantiation` `main.tex:7689` support / support
+- `audit:venue-submission-pack-gate` `main.tex:7740` support / support
+- `audit:submission-artifact-role-separation` `main.tex:7811` support / support
+- `prop:formal-source-gate-instantiation` `main.tex:7903` support / support
+- `thm:formal-source-promotion-obstruction` `main.tex:7970` support / support
+- `thm:evidence-level-overclaim-obstruction` `main.tex:8011` support / support
+- `thm:finite-witness-manifest-record-interface` `main.tex:8086` support / support
+- `prop:artifact-validation-gate-unique-semantic-upgrade` `main.tex:8210` support / support
+- `cor:artifact-semantic-validity-boundary` `main.tex:8252` support / support
+- `thm:three-boundary-upgrade-sharpness` `main.tex:8328` support / support
+- `thm:primary-to-support-dependency-completeness` `main.tex:8507` support / support
+- `prop:primary-claim-row-classification` `main.tex:8575` support / support
+- `prop:primary-inventory-freshness-criterion` `main.tex:8640` support / support
+- `prop:primary-supplement-interface-map` `main.tex:8713` support / support
+- `thm:exact-inclusion-support-surface-realization` `main.tex:8961` support / support
+- `thm:public-branch-archive-equivalent-realization` `main.tex:9005` support / support
+- `cor:submission-time-support-instantiation-test` `main.tex:9067` support / support
+- `thm:final-support-surface-closure` `main.tex:9121` support / support
+- `thm:workspace-final-package-reconciliation` `main.tex:9245` support / support
+- `thm:support-surface-normal-form` `main.tex:9338` support / support
+- `thm:support-surface-invariant-compression` `main.tex:9405` support / support
+- `thm:upload-or-archive-instantiation-boundary` `main.tex:9470` support / support
+- `cor:upload-or-archive-instantiation-record` `main.tex:9513` support / support
+- `prop:no-external-instantiation-from-local-bundle-records` `main.tex:9536` support / support
+- `prop:upload-or-archive-instantiation-update-protocol` `main.tex:9578` support / support
+- `thm:current-package-missing-coordinate-classifier` `main.tex:9667` support / support
+- `thm:four-coordinate-local-support-closure` `main.tex:9781` support / support
+- `cor:current-no-receipt-support-surface-non-escalation` `main.tex:9887` support / support
+- `cor:fresh-inventory-digest-instance-this-source-state` `main.tex:9940` support / support
+- `thm:digest-closure-refresh-criterion` `main.tex:9972` support / support
+- `thm:submission-support-refresh-rigidity` `main.tex:10041` support / support
+- `prop:primary-architectural-fallback-without-external-support` `main.tex:10113` support / support
+- `thm:deterministic-theorem-environment-extractor-boundary` `main.tex:10179` support / support
+- `thm:extractor-domain-exactness-non-gluing` `main.tex:10226` support / support
+- `thm:final-byte-extractor-inventory-inclusion` `main.tex:10287` support / support
+- `thm:theorem-inventory-proofchecker-obstruction` `main.tex:10357` support / support
+- `prop:manual-theorem-inventory-boundary` `main.tex:10405` support / support
+- `prop:regenerated-theorem-inventory-digest-closure` `main.tex:10457` support / support
+- `cor:current-theorem-inventory-digest-instance` `main.tex:10506` support / support
+- `prop:post-inventory-fixed-point-support-certificate` `main.tex:10542` support / support
+- `thm:post-inventory-finite-record-realization` `main.tex:10599` support / support
+- `thm:theorem-obligation-ledger-boundary` `main.tex:10679` support / support
+- `prop:post-inventory-support-tuple-extraction-certificate` `main.tex:10751` support / support
+- `prop:submitted-theorem-inventory-availability` `main.tex:10793` support / support
+- `prop:submission-support-instantiation-field-normal-form` `main.tex:10819` support / support
+- `cor:current-local-support-normal-form` `main.tex:10875` support / support
+- `audit:review-bundle-availability-condition` `main.tex:10930` support / support
+- `audit:case-snapshot-non-rerun-boundary` `main.tex:10984` support / support
+- `thm:finite-row-case-evidence-closure` `main.tex:11015` support / support
+- `cor:current-case-behaviour-evidence-criterion` `main.tex:11071` support / support
+- `audit:command-run-boundary-inventory` `main.tex:11131` support / support
+- `thm:post-edit-rerun-metadata-gate` `main.tex:11224` support / support
+- `thm:final-local-support-state-reconciliation` `main.tex:11266` support / support
+- `cor:local-support-coordinate-discharge` `main.tex:11415` support / support
+- `thm:presentation-route-five-interface-sharpness` `main.tex:11477` support / support
+- `thm:presentation-route-stronger-reading-classifier` `main.tex:11625` support / support
+- `thm:end-to-end-upgrade-decomposition-obstruction` `main.tex:11759` support / support
+- `cor:presentation-summary-non-escalation` `main.tex:11824` support / support
+- `thm:submission-support-fixed-point-normal-form` `main.tex:11884` support / support
+- `thm:post-inventory-support-coordinate-dichotomy` `main.tex:11952` support / support
+- `prop:final-refreshed-coordinate-instantiation` `main.tex:12008` support / support
+- `thm:accepted-inventory-coverage-criterion` `main.tex:12057` support / support
+- `thm:post-inventory-package-fixed-point` `main.tex:12131` support / support
+- `cor:current-post-inventory-realization` `main.tex:12233` support / support
+- `thm:current-inventory-artifact-realization` `main.tex:12270` support / support
+- `thm:current-command-result-closure` `main.tex:12362` support / support
+- `cor:current-post-inventory-support-tuple-instantiation` `main.tex:12408` support / support
+- `prop:current-verifier-support-realization` `main.tex:12460` support / support
+- `cor:stable-replay-post-inventory-tuple` `main.tex:12517` support / support
+- `prop:post-inventory-freshness-obstruction` `main.tex:12566` support / support
+- `prop:stage-a2-accepted-inventory-rerun-realization` `main.tex:12606` support / support
+- `prop:three-coordinate-submission-support-closure` `main.tex:12666` support / support
+- `cor:local-fixed-point-external-boundary` `main.tex:12731` support / support
+- `prop:current-absence-external-support-surface-instantiation` `main.tex:12782` support / support
+- `prop:final-support-coordinate-refresh-closure` `main.tex:12839` support / support
+- `cor:manifest-required-theorem-inventory-fixed-point` `main.tex:12898` support / support
+- `thm:four-coordinate-submission-support-skeleton` `main.tex:12946` support / support
+- `cor:final-local-fixed-point-external-normal-form` `main.tex:13057` support / support
+- `prop:accepted-byte-post-inventory-support-coordinate` `main.tex:13119` support / support
+- `thm:current-package-no-free-upgrade-closure` `main.tex:13208` support / support
+- `thm:terminal-five-coordinate-closure` `main.tex:13357` support / support
+- `thm:five-issue-coordinate-normal-form` `main.tex:13431` support / support
+- `prop:bounded-theorem-support-coordinate-closure` `main.tex:13505` support / support
+- `thm:presentation-weak-interface-maximality` `main.tex:13585` support / support
+- `cor:primary-presentation-weak-interface-compression` `main.tex:13705` support / support
+- `cor:no-finite-record-gluing-upgrade` `main.tex:13735` support / support
+- `thm:four-family-upgrade-obstruction-classification` `main.tex:13782` support / support
+- `thm:certificate-reading-spine-maximality` `main.tex:13891` support / support
+- `thm:six-role-publication-master-interface` `main.tex:13998` support / support
+- `thm:compressed-master-boundary-classifier` `main.tex:14147` support / support
+- `thm:presentation-route-dichotomy` `main.tex:14271` support / support
+- `thm:five-node-dependency-spine-exactness` `main.tex:14407` support / support
+- `thm:master-spine-support-coordinate-compression` `main.tex:14475` support / support
+- `thm:finite-record-interface-support-boundary-classification` `main.tex:14562` support / support
+- `thm:presentation-only-bounded-support-normal-form` `main.tex:14669` support / support
+- `thm:compact-article-finite-record-spine-classification` `main.tex:14767` primary/dependency / sync
+- `thm:presentation-route-spine-projection-overload-obstruction` `main.tex:14905` support / support
+- `thm:four-case-foreground-support-boundary` `main.tex:14993` primary/dependency / sync
+- `thm:compact-dependency-map-irredundancy` `main.tex:15078` support / support
+- `cor:compact-five-node-presentation-consequence` `main.tex:15194` primary/dependency / sync
+- `thm:submitted-support-issue-coordinate-discharge` `main.tex:15217` support / support
+- `prop:exact-submitted-issue-coordinate-skeleton` `main.tex:15279` support / support
+- `prop:external-coordinate-admissibility-trichotomy` `main.tex:15355` support / support
+- `cor:manuscript-reading-boundary` `main.tex:15439` support / support
+- `cor:local-only-artifact-support-closure` `main.tex:15466` support / support
+- `thm:local-support-normal-form-four-live-coordinates` `main.tex:15504` support / support
+- `cor:support-chain-closure` `main.tex:15593` support / support
+- `thm:five-obstruction-finite-coordinate-normal-form` `main.tex:15627` support / support
+- `cor:current-byte-closure` `main.tex:15758` support / support
+- `thm:accepted-inventory-coordinate-realization` `main.tex:15809` support / support
+- `prop:fresh-post-inventory-byte-closure-rerun-discharge` `main.tex:15879` support / support
+- `prop:realized-post-inventory-verifier-digest-coordinate` `main.tex:15935` support / support
+- `thm:current-accepted-inventory-tuple-instantiation` `main.tex:15990` support / support
+- `cor:presentation-route-support-coordinate-normal-form` `main.tex:16042` support / support
+- `thm:inventory-venue-coordinate-closure` `main.tex:16126` support / support
+- `thm:four-coordinate-local-support-discharge` `main.tex:16209` support / support
+- `thm:local-support-surface-classifier` `main.tex:16305` support / support
+- `thm:local-support-coordinate-closure` `main.tex:16403` support / support
+- `thm:four-blocker-coordinate-budget` `main.tex:16460` support / support
+- `thm:canonical-local-rerun-tuple` `main.tex:16538` support / support
+- `thm:current-byte-support-fixed-point-nonupgrade-boundary` `main.tex:16606` support / support
+- `cor:post-inventory-rerun-closure` `main.tex:16678` support / support
+- `thm:submission-support-obstruction-skeleton` `main.tex:16732` support / support
+- `cor:accepted-inventory-final-verifier-digest-tuple` `main.tex:16807` support / support
+- `prop:submitted-support-locator-freshness-realization` `main.tex:16858` support / support
+- `thm:four-live-noninstantiation-coordinates` `main.tex:16926` support / support
+- `thm:scope-contract-three-coordinate-boundary` `main.tex:17005` support / support
+- `thm:support-coordinate-status-discharge` `main.tex:17162` support / support
+- `thm:post-regeneration-support-coordinate-closure` `main.tex:17273` support / support
+- `thm:five-interface-finite-skeleton-classification` `main.tex:17365` support / support
+- `prop:local-issue-coordinate-normal-form` `main.tex:17463` support / support
+- `thm:final-support-surface-dichotomy-inventory-exactness` `main.tex:17548` support / support
+- `thm:terminal-local-support-acceptance-normal-form` `main.tex:17611` support / support
+- `thm:terminal-support-coordinate-discharge` `main.tex:17686` support / support
+- `thm:current-inventory-rerun-exactness` `main.tex:17744` support / support
+- `thm:current-package-five-coordinate-closure-criterion` `main.tex:17822` support / support
+- `thm:five-interface-current-package-discharge-criterion` `main.tex:17913` support / support
+- `cor:stage-a-issue-discharge-normal-form` `main.tex:18052` primary/dependency / sync
+- `thm:six-coordinate-submission-boundary-normal-form` `main.tex:18084` primary/dependency / sync
+- `thm:current-stage-a2-support-coordinate-realization` `main.tex:18187` primary/dependency / sync
+- `cor:stage-a2-challenged-coordinate-classifier` `main.tex:18250` primary/dependency / sync
+- `cor:presentation-package-five-coordinate-support-closure` `main.tex:18318` primary/dependency / sync
+- `thm:finite-audit-antichain-basis` `main.tex:18650` required primary theorem / sync
+- `thm:canonical-stage-a-obstruction-basis` `main.tex:18713` required primary theorem / sync
+- `thm:no-theorem-delta-nondischarge` `main.tex:18788` required primary theorem / sync
+- `thm:stage-a-real-block-discharge-completeness` `main.tex:18843` required primary theorem / sync
+- `cor:current-stage-a-closure-exactness` `main.tex:18897` required primary theorem / sync
+- `def:typed-audit-atom` `main.tex:19193` primary/dependency / sync
+- `def:stage-a-horn-audit-schema` `main.tex:19208` primary/dependency / sync
+- `def:certified-closure-rejection-certificate` `main.tex:19236` primary/dependency / sync
+- `thm:horn-compilation-adequacy` `main.tex:19259` support / support
+- `thm:deterministic-certificate-soundness` `main.tex:19288` support / support
+- `thm:complete-obstruction` `main.tex:19312` support / support
+- `thm:coordinate-independence-by-horn-models` `main.tex:19337` support / support
+- `thm:verifier-adequacy-complexity` `main.tex:19366` support / support
+- `thm:current-byte-certified-audit` `main.tex:19391` support / support
+- `cor:referee-facing-novelty-horn` `main.tex:19422` support / support
+- `prop:non-duplication-route-quotient` `main.tex:19441` support / support
+- `def:canonical-stage-a-byte-manifest` `main.tex:19473` primary/dependency / sync
+- `def:byte-to-atom-compiler` `main.tex:19491` primary/dependency / sync
+- `def:replayable-stage-a-certificate` `main.tex:19511` primary/dependency / sync
+- `thm:byte-to-atom-determinacy` `main.tex:19542` primary/dependency / sync
+- `thm:replay-kernel-soundness` `main.tex:19564` primary/dependency / sync
+- `thm:replay-kernel-completeness` `main.tex:19612` primary/dependency / sync
+- `thm:replayable-obstruction-adequacy` `main.tex:19632` primary/dependency / sync
+- `thm:current-byte-two-coordinate-audit` `main.tex:19657` primary/dependency / sync
+- `thm:fixed-replay-rgs-coordinate-exactness` `main.tex:19697` primary/dependency / sync
+- `thm:accepted-fixed-replay-rgs-pass-row-current-package` `main.tex:19770` primary/dependency / sync
+- `thm:post-qrgs-coordinate-independence` `main.tex:19856` primary/dependency / sync
+- `cor:stage-a-replay-kernel-software-surface` `main.tex:19885` primary/dependency / sync
+- `lem:maximal-qinv-qrgs-replay-closure` `main.tex:19903` primary/dependency / sync
+- `thm:replay-kernel-foreground-closure` `main.tex:19950` primary/dependency / sync
+- `thm:canonical-finite-basis-replay-foreground-exactness` `main.tex:20055` primary/dependency / sync
+- `cor:five-challenged-interfaces-replay-foreground` `main.tex:20142` primary/dependency / sync
+- `thm:two-coordinate-foreground-maximality` `main.tex:20206` primary/dependency / sync
+- `prop:stage-a-replay-route-quotient-preservation` `main.tex:20302` support / support
+- `thm:current-round-local-only-fixed-point-classifier` `main.tex:20389` primary/dependency / sync
+- `prop:six-challenged-coordinate-discharge-normal-form` `main.tex:20447` primary/dependency / sync
+- `thm:round-eight-ordered-support-tuple-closure` `main.tex:20534` primary/dependency / sync
+
+## missing_in_scope_results
+- `none` `main.tex:18650-18923` none absent / no TeX edit
+
+## weak_in_scope_core_results
+- `none` `main.tex and submission_abstract.tex` resolved / preserve negatives
+
+## proof_gaps
+- `none` `live theorem-like environment scan` no proof gaps / track future gaps
+
+## supporting_appendix_or_background
+- `thm:finite-antichain-basis` `main.tex:18416` legacy support / do not substitute
+- `thm:canonical-bad-subrecord-classifier` `main.tex:18471` legacy support / do not substitute
+- `thm:stage-a-real-block-discharge` `main.tex:18534` legacy support / do not substitute
+- `cor:current-stage-a-closure-criterion` `main.tex:18607` legacy support / do not substitute
+- `def:role-respecting-finite-audit-interpretation` `main.tex:18946` legacy support / do not substitute
+- `def:six-coordinate-safe-projection` `main.tex:18974` legacy support / do not substitute
+- `thm:universal-safe-projection` `main.tex:18999` legacy support / do not substitute
+- `thm:coordinate-separation` `main.tex:19040` legacy support / do not substitute
+- `thm:canonical-obstruction-basis` `main.tex:19084` legacy support / do not substitute
+- `thm:current-byte-obstruction-certificate` `main.tex:19111` legacy support / do not substitute
+- `cor:referee-novelty-separation` `main.tex:19146` legacy support / do not substitute
+- `prop:single-route-surface` `main.tex:19163` legacy support / do not substitute
+- `bib:deMouraKADR2015Lean` `references.bib` background / cite as background
+- `bib:YangEtAl2023LeanDojo` `references.bib` background / cite as background
+- `bib:JiangEtAl2023DraftSketchProve` `references.bib` background / cite as background
+- `bib:BlanchetteHMN2015AFP` `references.bib` background / cite as background
+- `bib:Wenzel2019IsabelleAFP` `references.bib` background / cite as background
+- `bib:ACM2020ArtifactBadging` `references.bib` background / cite as background
+- `bib:CollbergProebsting2016Repeatability` `references.bib` background / cite as background
+- `bib:XinEtAl2024DeepSeekProver` `references.bib` background / cite as background
+- `bib:AzerbayevEtAl2023Llemma` `references.bib` background / cite as background
+- `bib:bedc-newmath-source` `references.bib` background / cite as background
+
+## out_of_scope_strong_results
+- `prior:single-primitive-universality-hierarchy` `prior research ledger background` The L0/L1/L2 universality, Zeckendorf fold, Hankel-Prony, and intrinsic moment-transfer package is stronger mathematics outside this workflow paper. / Keep out of this manuscript except as split-paper memory.
+- `prior:rule110-full-dynamic-validation` `scope_contract.md and review_bundle/case_snapshots/rule110_*` Full Rule110 universality or dynamic artifact semantic validation is explicitly out of scope. / Do not upgrade bounded artifact rows to semantic validation claims.
+
+## split_candidates
+- `thm:finite-audit-antichain-basis` `main.tex:18650` Core here, but reusable as a general finite-record audit calculus. / Keep in this manuscript; split only after current route closes.
+- `thm:replay-kernel-foreground-closure` `main.tex:19950 and main.tex:20055` Core here, but a fuller software paper could study executable replay semantics and implementation verification. / Keep bounded to fixed schema, manifest, certificate, replay report, and digest bundle.
+
+## irrelevant_or_remove
+- `none` `main.tex` none / do not delete labels
+
+## naive_truncation_risks
+- `cor:current-byte-closure` `main.tex:15758` staleness risk / rerun after edits
+- `thm:scope-contract-three-coordinate-boundary` `main.tex:17005` staleness risk / rerun after edits
+
+## journal_style_gaps
+- `global:supplement-length` `main.tex and submission_abstract.tex` large supplement / use compact route
+- `references:bibliography-live-check` `references.bib and review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-13.md` dated venue check / fresh check at submission
