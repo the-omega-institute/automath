@@ -4184,48 +4184,6 @@ def build_stage_a_oracle_escalation_followup_prompt(state: PaperState,
     """)
 
 
-def build_stage_a_oracle_escalation_followup_prompt(state: PaperState,
-                                                    reason: str) -> str:
-    return textwrap.dedent(f"""\
-        Continue the same Stage A escalation conversation for this manuscript.
-
-        Paper directory: {state.paper_dir}
-        Target journal: {state.target_journal}
-        New deterministic Stage A ceiling reason: {reason}
-
-        Do not restart from a shallow accept/reject judgment. Reconcile this
-        new gate failure with your previous theorem-package direction. Your
-        task is to close the Stage A novelty/theorem adequacy gap, or to
-        explicitly park the route if no publishable theorem package remains.
-
-        Required reasoning standard:
-        - If your prior package was too weak, strengthen it into a concrete
-          theorem package with source-level instructions.
-        - If Codex failed to implement the package, specify the exact missing
-          theorem/proof spine and closure criterion.
-        - If the route cannot clear Stage A without overlap or fake extension,
-          return park or human_decision.
-        - Do not return prose polish as a theorem package.
-
-        Return only JSON:
-        {{
-          "verdict": "rerun_stage_a|park|human_decision",
-          "publishable_route": true,
-          "core_theorem_direction": "...",
-          "required_theorem_package": ["..."],
-          "novelty_claim": "...",
-          "known_results_to_cite": ["..."],
-          "journal_route": "keep|retarget|undecided",
-          "target_journal": "...",
-          "park_reason": "",
-          "human_decision_needed": "",
-          "codex_instructions": [
-            "Specific source-level instruction for Stage A2."
-          ]
-        }}
-    """)
-
-
 def _append_oracle_stage_a_directive(paper_path: Path, data: dict,
                                      reason: str) -> None:
     directive = paper_path / "research_directive.md"
