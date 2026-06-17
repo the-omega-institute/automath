@@ -1,8 +1,9 @@
-\documentclass[11pt,a4paper]{amsart}
+\documentclass[10pt,a4paper]{amsart}
 
 \usepackage{amsmath,amssymb,amsthm,mathrsfs}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[margin=0.9in]{geometry}
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{enumitem}
@@ -36,9 +37,11 @@
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\abs}[1]{\lvert #1 \rvert}
 \newcommand{\st}[1]{\mathtt{#1}}
+\newif\ifshortcicm
+\shortcicmtrue
 
-\title[A ten-state self-dual synchronisation kernel]{A ten-state self-dual synchronisation kernel\\
-and its completed determinant}
+\title[Verified-triple-relative hierarchy]{A verified-triple-relative hierarchy\\
+for a ten-state self-dual synchronisation kernel}
 
 \author{Haobo Ma}
 \address[Haobo Ma]{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981}
@@ -53,50 +56,41 @@ and its completed determinant}
 \begin{document}
 
 \begin{abstract}
-This paper is a rigorous computational case study of one explicit
-finite-state object: a weighted ten-state synchronisation kernel with a
-binary output labelling and a self-duality exchanging the two outputs.
-The purpose is not to classify self-dual kernels in general, but to make
-this kernel completely reproducible and to show how much information its
-completed determinant carries.  Its weighted adjacency matrix is
-\(B(u)=B_0+uB_1\), and we write
-\(\Delta(z,u)=\det(I-zB(u))\).  The kernel satisfies
-\(\Delta(z,u)=\Delta(uz,u^{-1})\), and after the completion
-\(u=r^2\), \(s=r+r^{-1}\), \(w=zr\), this yields a polynomial
-\(\widehat\Delta(w,s)\in\ZZ[s][w]\) of degree \(6\) in \(w\).  We
-determine this polynomial explicitly, prove that the normalization
-\(\overline{X}\) of the projective closure of
-\(\widehat\Delta(w,s)=0\) has genus \(6\), prove that its quotient by
-the involution
-\((w,s)\mapsto(-w,-s)\) is a smooth plane quartic of genus \(3\), and
-prove that the generic Galois group over \(\QQ(s)\) is \(S_6\).
+We give a short, auditable route through one explicit finite-state
+example: a weighted ten-state synchronisation kernel
+\(B(u)=B_0+uB_1\) whose binary outputs are exchanged by a self-duality.
+The claims are relative only to three paper-local inputs: the printed
+transition table, the completed determinant certificate, and the
+cyclotomic endpoint-separation certificate.  No classification of
+self-dual kernels and no unconditional statement about external
+printed elementary-function names is asserted.
 
-The computational contributions are explicit and auditable.  The paper
-displays the determinant, the self-duality and sign-symmetry
-certificates, the quotient quartic, the affine and projective smoothness
-checks, the finite-field data certifying the \(S_6\) Galois group, the
-root-separation certificates, and the endpoint Taylor jet.  The
-calculations are reproduced by the Sage runner
-\(\texttt{certificates/verify\_certificates.py}\), whose printed keys
-are referenced in the proofs and appendix.
+Writing \(\Delta(z,u)=\det(I-zB(u))\), the self-duality gives
+\(\Delta(z,u)=\Delta(uz,u^{-1})\).  With \(u=r^2\), \(w=zr\), and
+\(s=r+r^{-1}\), this compresses to an explicit polynomial
+\(\widehat\Delta(w,s)\in\ZZ[s][w]\) of degree \(6\).  We record the
+main theorem surface: the quotient by
+\((w,s)\mapsto(-w,-s)\) is a smooth plane quartic of genus \(3\), the
+normalisation of \(\widehat\Delta(w,s)=0\) has genus \(6\), and the
+generic Galois group over \(\QQ(s)\) is \(S_6\).
 
-We also identify the cyclic skew-product lifts
-\(\widetilde B_q=B_0\otimes I_q+B_1\otimes P_q\), whose Fourier
-decomposition produces the unit-circle twists and their real
-cyclotomic factors.  For the normalized cyclotomic factors
+For the cyclic lifts
+\(\widetilde B_q=B_0\otimes I_q+B_1\otimes P_q\), Fourier
+decomposition gives the primitive real cyclotomic factors
 \[
-  R_m(w):=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
+  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
+       =\Res_s(\Phi_m^+(s),\widehat\Delta(w,s)),
 \]
-and their ordered-resultant representation
+with the cyclotomic polynomial in the first resultant slot.  The
+associated roots satisfy
 \[
-  R_m(w)=\Res_s(\Phi_m^+(s),\widehat\Delta(w,s)),
+  \rho_m
+  =3-\frac{11\pi^2}{17m^2}+O(m^{-4}),
 \]
-with \(\Phi_m^+\) in the first slot, we prove a degree law and obtain
-an asymptotic expansion through order \(m^{-12}\) for the associated
-twisted Perron roots \(\rho_m\).  The endpoint-selection argument is
-formulated as a reusable lemma for primitive self-dual kernels, but in
-this paper it is used only after the stated spectral-gap and separation
-hypotheses have been verified for the ten-state kernel above.
+and the certificate-backed expansion is given through \(m^{-12}\).
+The body contains two proof audits, one software-facing protocol
+example, and a dependency ledger for the reproducibility runner
+\(\texttt{certificates/verify\_certificates.py}\).
 \end{abstract}
 
 \subjclass[2020]{37B10, 37D35, 14H45}

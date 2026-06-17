@@ -14,6 +14,350 @@ for the smooth projective curve whose function field is
 relevant involution). All genus and Hurwitz statements are made for
 these complete nonsingular models.
 
+\subsection{\texorpdfstring{The \(L1\) Zeckendorf normalisation interface}
+  {The L1 Zeckendorf normalisation interface}}
+\label{subsec:l1-zeckendorf-normalizer}
+
+\ifshortcicm
+This subsection is the software-facing protocol example.  It is included
+only to specify the exact integer interface used when the kernel is
+embedded in a larger audit pipeline; no determinant proof below depends
+on this protocol.
+
+Let \(F_0=1\), \(F_1=2\), and \(F_{i+2}=F_{i+1}+F_i\).  A raw word is a
+finite integer vector \(a=(a_0,\ldots,a_n)\), printed as
+\([a_n,\ldots,a_0]\), with value
+\[
+  \operatorname{Val}(a)=\sum_{i=0}^n a_iF_i .
+\]
+A normal word is \(0\), \(+b_N\cdots b_0\), or \(-b_N\cdots b_0\),
+where \(b_i\in\{0,1\}\), \(b_N=1\), and no two adjacent \(b_i\)'s are
+both \(1\).  The operation \(\operatorname{NF}_\infty\) maps a raw word
+to the signed Zeckendorf expansion of its value, using the greedy
+algorithm.  Addition, multiplication, and the two digit-shift maps
+\(\Phi_0,\Phi_1\) are defined by exact integer evaluation followed by
+\(\operatorname{NF}_\infty\).
+
+\begin{proposition}[Totality and size bounds for the \(L1\) normaliser]
+\label{prop:l1-zeckendorf-normalizer-total}
+The operations
+\(\operatorname{NF}_\infty,\operatorname{Val},\operatorname{Add},
+\operatorname{Mul},\Phi_0,\Phi_1\) are total on the grammars above.
+If a raw input has \(n+1\) coefficients of absolute value at most
+\(A\ge1\), its normal output has length \(O(n+\log A+1)\).  For normal
+inputs of lengths \(p,q\), addition and \(\Phi_\epsilon\) have output
+length \(O(\max\{p,q\}+1)\), while multiplication has output length
+\(O(p+q)\).
+\end{proposition}
+
+\begin{proof}
+Zeckendorf's theorem gives the unique non-adjacent binary expansion for
+each non-negative integer \cite{Zeckendorf1972}; the external sign gives
+the signed form.  Since \(F_i\asymp\varphi^i\), a raw value bounded by
+\((n+1)AF_n\) needs only \(O(n+\log A+1)\) places.  The same exponential
+growth estimate gives the stated bounds for addition, digit shifts, and
+multiplication.  All operations use finite exact integer arithmetic, so
+they are total.
+\end{proof}
+
+\else
+The finite-state kernel below is the only object used in the determinant
+proofs.  When the surrounding \(L1\) protocol is mentioned, however, we
+use the following explicit Zeckendorf normalisation interface.  It is a
+software-grade exact-integer protocol: every input and output has a
+grammar, every operation is total, and the size bounds are polynomial in
+the printed input.  It is not an assertion that the implementation uses
+the best online or finite-automaton Zeckendorf arithmetic.  Such
+efficient arithmetic is a separate subject; see
+\cite{AhlbachUsatineFrougnyPippenger2013} for linear-time addition and
+related circuit bounds.
+
+Let \(\mathcal F_1=1\), \(\mathcal F_2=2\), and
+\(\mathcal F_{s+2}=\mathcal F_{s+1}+\mathcal F_s\).  Thus
+\(\mathcal F_1,\mathcal F_2,\mathcal F_3,\ldots=1,2,3,\ldots\).
+For the printed digit strings it is convenient to use zero-based
+places, so throughout this subsection
+\[
+  F_i:=\mathcal F_{i+1}\qquad(i\ge0);
+\]
+equivalently \(F_0=1\), \(F_1=2\), and
+\(F_{i+2}=F_{i+1}+F_i\).  A raw \(L1\) word is a finite integer vector
+\[
+  a=(a_0,\ldots,a_n)\in\ZZ^{n+1},
+\]
+printed as a bracketed decimal list
+\([a_n,\ldots,a_0]\); trailing zero coefficients may be suppressed, but
+the empty list is not used.  Its value is
+\[
+  \operatorname{Val}(a):=\sum_{i=0}^n a_iF_i\in\ZZ .
+\]
+A normal \(L1\) word is one of the following strings:
+\[
+  0,\qquad +\,b_N\cdots b_0,\qquad -\,b_N\cdots b_0,
+\]
+where \(N\ge0\), \(b_i\in\{0,1\}\), \(b_N=1\), and
+\(b_ib_{i+1}=0\) for every \(i\).  Its value is \(0\) in the first
+case and
+\[
+  \pm\sum_{i=0}^N b_iF_i
+\]
+in the signed cases.  This is the usual Zeckendorf grammar
+\cite{Zeckendorf1972}, with an explicit external sign.
+
+\begin{lemma}[Fibonacci reindexing for imported interval maxima]
+\label{lem:fibonacci-reindexing}
+Let \((E_t)_{t\ge0}\) denote the Fibonacci convention
+\[
+  E_0=E_1=1,\qquad E_{t+2}=E_{t+1}+E_t,
+\]
+and let \((C_t)_{t\ge0}\) denote the conventional convention
+\[
+  C_0=0,\qquad C_1=1,\qquad C_{t+2}=C_{t+1}+C_t.
+\]
+Then, for every \(s\ge1\),
+\[
+  \mathcal F_s=E_s=C_{s+1}.
+\]
+Consequently an imported interval-maximum statement on
+\([E_s,E_{s+1})\), or equivalently on \([C_{s+1},C_{s+2})\), is the
+same statement on
+\([\mathcal F_s,\mathcal F_{s+1})\).  In zero-based digit positions this
+interval is
+\[
+  [\mathcal F_s,\mathcal F_{s+1})=[F_{s-1},F_s).
+\]
+\end{lemma}
+
+\begin{proof}
+The boundary cases are the only possible source of ambiguity.  For
+\(s=1\),
+\[
+  \mathcal F_1=1=E_1=C_2,
+\]
+while for \(s=2\),
+\[
+  \mathcal F_2=2=E_2=C_3.
+\]
+For \(s\ge1\), the sequences
+\((\mathcal F_s)_{s\ge1}\), \((E_s)_{s\ge1}\), and
+\((C_{s+1})_{s\ge1}\) have the same first two terms and satisfy the same
+recursion, so induction gives
+\(\mathcal F_s=E_s=C_{s+1}\) for all \(s\ge1\).  Replacing the two
+endpoints in any half-open interval by these equal quantities gives the
+interval conversion.  Finally \(F_i=\mathcal F_{i+1}\), so
+\(\mathcal F_s=F_{s-1}\) and \(\mathcal F_{s+1}=F_s\), giving the
+zero-based digit-position form.
+\end{proof}
+
+\begin{center}
+\fbox{\begin{minipage}{0.94\textwidth}
+\textbf{\(L1\) normalisation algorithms.}
+
+\begin{enumerate}[leftmargin=2.2em]
+  \item \(\operatorname{Val}(x)\).  If \(x\) is raw, return
+  \(\sum_i a_iF_i\).  If \(x\) is normal, return the signed
+  Zeckendorf sum above.
+
+  \item \(\operatorname{NF}_\infty(x)\).  Compute
+  \(N=\operatorname{Val}(x)\).  If \(N=0\), return \(0\).  Otherwise
+  record the sign of \(N\), replace \(N\) by \(|N|\), compute
+  \(F_0,\ldots,F_K\) up to the largest \(F_K\le N\), and run the greedy
+  loop:
+  choose the largest unused \(F_j\le N\), set \(b_j=1\), replace
+  \(N\leftarrow N-F_j\), and continue with indices at most \(j-2\).
+  Return the recorded sign together with \(b_K\cdots b_0\), deleting
+  leading zeroes.
+
+  \item \(\operatorname{Add}(x,y)\).  Return
+  \(\operatorname{NF}_\infty(\operatorname{Val}(x)+\operatorname{Val}(y))\).
+  Equivalently, after padding raw coefficient vectors, add them
+  coefficientwise and normalise.
+
+  \item \(\operatorname{Mul}(x,y)\).  Return
+  \(\operatorname{NF}_\infty(\operatorname{Val}(x)\operatorname{Val}(y))\).
+
+  \item \(\Phi_0(x)\) and \(\Phi_1(x)\).  Let
+  \(\operatorname{digits}(\operatorname{NF}_\infty(x))=b_N\cdots b_0\)
+  be the unsigned magnitude digits, with all \(b_i=0\) for \(x=0\).
+  For \(\epsilon\in\{0,1\}\), form the raw shifted word
+  \[
+    c_0=\epsilon,\qquad c_{i+1}=b_i\quad(0\le i\le N),
+  \]
+  and return \(\operatorname{NF}_\infty(c)\), with the original sign
+  reapplied when \(x\ne0\).  Thus \(\Phi_\epsilon\) is the total
+  normalised operation of appending the Fibonacci digit \(\epsilon\) on
+  the least-significant side after shifting the old magnitude one
+  Fibonacci place.
+\end{enumerate}
+\end{minipage}}
+\end{center}
+
+\begin{proposition}[Executable Zeckendorf protocol]
+\label{prop:executable-zeckendorf-protocol}
+Let a finite binary word \(c=(c_0,\ldots,c_N)\) be admissible when
+\(c_k\in\{0,1\}\) and \(c_kc_{k+1}=0\) for all \(k\).  Put
+\[
+  \operatorname{Val}(c):=\sum_{k=0}^N c_kF_k .
+\]
+For \(n\in\NN\), define \(\operatorname{NF}_\infty(n)\), and for
+admissible words \(c,d\), define
+\(\operatorname{Add}(c,d)\), \(\operatorname{Mul}(c,d)\),
+\(\Phi_0\), and \(\Phi_1\), by the following executable protocol.
+\[
+\begin{array}{ll}
+\textsc{NF}_\infty(n):&
+  r\leftarrow n,\quad c_k\leftarrow0\text{ for all computed }k;\\
+& \textbf{while } r>0 \textbf{ do}\\
+& \quad \text{choose the largest }F_k\le r;\\
+& \quad c_k\leftarrow1,\quad r\leftarrow r-F_k;\\
+& \textbf{return }c;\\[2mm]
+\operatorname{Add}(c,d):&
+  \textbf{return }\operatorname{NF}_\infty
+  \bigl(\operatorname{Val}(c)+\operatorname{Val}(d)\bigr);\\[1mm]
+\operatorname{Mul}(c,d):&
+  \textbf{return }\operatorname{NF}_\infty
+  \bigl(\operatorname{Val}(c)\operatorname{Val}(d)\bigr);\\[1mm]
+\Phi_0(c_n)(f):& \textbf{return } f^{\circ n};\\
+\Phi_1(c_n)(T):& \textbf{return } T^{\circ n},
+\end{array}
+\]
+where \(c_n=\operatorname{NF}_\infty(n)\), \(f\) is an endomorphism,
+\(T\) is an endomorphism operator, and \(h^{\circ0}\) denotes the
+identity.  Then
+\[
+  \operatorname{Val}(\operatorname{NF}_\infty(n))=n,
+\]
+\[
+  \operatorname{Val}(\operatorname{Add}(c,d))
+    =\operatorname{Val}(c)+\operatorname{Val}(d),\qquad
+  \operatorname{Val}(\operatorname{Mul}(c,d))
+    =\operatorname{Val}(c)\operatorname{Val}(d),
+\]
+and, for \(c_a=\operatorname{NF}_\infty(a)\) and
+\(c_b=\operatorname{NF}_\infty(b)\),
+\[
+  \Phi_0(c_{a+b})(f)=\Phi_0(c_a)(f)\circ\Phi_0(c_b)(f),\qquad
+  \Phi_1(c_{ab})=\Phi_1(c_a)\circ\Phi_1(c_b).
+\]
+The first composition is taken in the endomorphism monoid containing
+\(f\); the second is composition of the maps \(T\mapsto T^{\circ n}\)
+on endomorphism operators.  Equivalently, after fixing \(f\), the first
+identity reads
+\[
+  \Phi_0(c_{a+b})=\Phi_0(c_a)\circ\Phi_0(c_b)
+\]
+inside that endomorphism monoid.
+This is a computable protocol, not an efficient online Zeckendorf
+arithmetic algorithm.
+\end{proposition}
+
+\begin{proof}
+The greedy loop terminates because each iteration subtracts a positive
+Fibonacci weight from the remaining integer \(r\).  The usual
+Zeckendorf uniqueness theorem \cite{Zeckendorf1972} says that each
+non-negative integer has a unique admissible binary expansion in the
+weights \(F_k\).  The greedy construction is precisely that expansion;
+hence
+\[
+  \operatorname{Val}(\operatorname{NF}_\infty(n))=n.
+\]
+Applying this value identity to the definitions of addition and
+multiplication gives
+\[
+  \operatorname{Val}(\operatorname{Add}(c,d))
+    =\operatorname{Val}\!\left(
+      \operatorname{NF}_\infty(\operatorname{Val}(c)+\operatorname{Val}(d))
+      \right)
+    =\operatorname{Val}(c)+\operatorname{Val}(d),
+\]
+and the same calculation gives
+\[
+  \operatorname{Val}(\operatorname{Mul}(c,d))
+    =\operatorname{Val}(c)\operatorname{Val}(d).
+\]
+Finally, \(c_a\), \(c_b\), \(c_{a+b}\), and \(c_{ab}\) are only normal
+names for the integers \(a\), \(b\), \(a+b\), and \(ab\).  Therefore,
+for any fixed endomorphism \(f\),
+\[
+  \Phi_0(c_{a+b})(f)=f^{\circ(a+b)}
+    =f^{\circ a}\circ f^{\circ b}
+    =\Phi_0(c_a)(f)\circ\Phi_0(c_b)(f).
+\]
+Likewise, for any endomorphism operator \(T\),
+\[
+  ((\Phi_1(c_a)\circ\Phi_1(c_b))(T))
+    =\Phi_1(c_a)(T^{\circ b})
+    =\bigl(T^{\circ b}\bigr)^{\circ a}
+    =T^{\circ ab}
+    =\Phi_1(c_{ab})(T),
+\]
+with the convention that the zeroth iterate is the identity.  The
+protocol uses exact integer evaluation followed by greedy normalisation;
+it is therefore computable.  The claim is not that it achieves the
+specialised online or linear-time bounds available for Zeckendorf
+arithmetic, for which see
+\cite{AhlbachUsatineFrougnyPippenger2013}.
+\end{proof}
+
+\begin{proposition}[Totality and size bounds for the \(L1\) normaliser]
+\label{prop:l1-zeckendorf-normalizer-total}
+The operations
+\(\operatorname{NF}_\infty,\operatorname{Val},\operatorname{Add},
+\operatorname{Mul},\Phi_0,\Phi_1\) defined above are total on their
+stated input grammars.  If the printed raw inputs have at most \(n+1\)
+coefficients and each coefficient has absolute value at most \(A\ge1\),
+then every normal output has length
+\[
+  O(n+\log A+1).
+\]
+For two normal inputs of lengths \(p\) and \(q\), the outputs of
+\(\operatorname{Add}\), \(\Phi_0\), and \(\Phi_1\) have length
+\(O(\max\{p,q\}+1)\), and the output of \(\operatorname{Mul}\) has
+length \(O(p+q)\).  The algorithms run in time polynomial in the bit
+length of the printed inputs using ordinary exact integer arithmetic.
+\end{proposition}
+
+\begin{proof}
+The value map is a finite sum of integers, hence is total.  The greedy
+part of \(\operatorname{NF}_\infty\) terminates because each selected
+Fibonacci weight is positive and strictly decreases the remaining
+non-negative integer.  It never selects adjacent weights: after choosing
+\(F_j\), the algorithm restricts subsequent choices to indices at most
+\(j-2\).  The standard Zeckendorf theorem gives existence and uniqueness
+of the resulting non-adjacent binary expansion for every non-negative
+integer \cite{Zeckendorf1972}; the external sign then gives a unique
+normal form for every integer.  Thus \(\operatorname{NF}_\infty\) is
+total and value preserving.  Since
+\(\operatorname{Add}\), \(\operatorname{Mul}\), \(\Phi_0\), and
+\(\Phi_1\) are finite compositions of \(\operatorname{Val}\), integer
+arithmetic, finite coefficient shifts, and \(\operatorname{NF}_\infty\),
+they are total as well.
+
+It remains to record the size estimates.  The Fibonacci numbers satisfy
+\(F_i\asymp\varphi^i\), where
+\(\varphi=(1+\sqrt5)/2\).  For a raw vector with \(n+1\) coefficients
+bounded by \(A\),
+\[
+  |\operatorname{Val}(a)|
+  \le (n+1)A F_n
+  \le C(n+1)A\varphi^n
+\]
+for an absolute constant \(C\).  Therefore the largest Fibonacci index
+needed in the normal form is \(O(n+\log A+1)\).  For normal inputs of
+lengths \(p\) and \(q\), their absolute values are
+\(O(\varphi^p)\) and \(O(\varphi^q)\).  Addition and the two
+\(\Phi_\epsilon\) operations therefore need only
+\(O(\max\{p,q\}+1)\) Fibonacci positions, while multiplication has
+absolute value \(O(\varphi^{p+q})\) and hence needs \(O(p+q)\)
+positions.  The displayed algorithms compute finitely many Fibonacci
+weights and perform exact integer additions, multiplications,
+comparisons, and divisions by subtraction/search over these lists; with
+standard binary integer routines this is polynomial in the printed input
+length.  These are auditability bounds, not the sharper streaming bounds
+available for specialised Zeckendorf adders.
+\end{proof}
+\fi
+
 \subsection{The unweighted spectrum}
 
 \begin{proposition}[Explicit determinant]\label{prop:kernel-delta-explicit}
@@ -138,11 +482,13 @@ This proves part~\textup{(i)} of
 \Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
+\ifshortcicm\else
 Together with \Cref{lem:primitive-orbit-asymptotic}, this yields
 \[
   p_n(B)=\frac{3^n}{n}
   +O\!\left(\frac{\max\{\Lambda(B)^n,3^{n/2}\}}{n}\right).
 \]
+\fi
 
 \subsection{Completion and algebraic geometry}
 
@@ -195,6 +541,28 @@ in the self-dual invariants \(w\) and \(s=r+r^{-1}\).
 \end{proposition}
 
 \begin{proof}
+\ifshortcicm
+Let \(G\le S_6\) be the generic Galois group over \(\QQ(s)\).  The
+certificate runner computes the discriminant \(D(s)=\disc_w
+\widehat\Delta(w,s)\) and prints
+\((\deg D,\operatorname{lc}D)=(20,-256)\).  Hence \(D\) is not a square
+in \(\QQ(s)\), so \(G\not\subset A_6\).
+
+The same runner gives three separable specialisations and finite-field
+factorisations.  At \(s=3\) modulo \(7\), the degree-six polynomial is
+irreducible, giving a \(6\)-cycle in \(G\).  At \(s=2\) modulo \(7\),
+the factorisation type is \((1)(1)(1)(1)(2)\), giving a transposition.
+At \(s=3\) modulo \(19\), the factorisation type is \((1)(5)\), giving
+a \(5\)-cycle.  Dedekind's theorem and the standard specialisation
+theorem justify lifting these cycle types to the generic group
+\cite{Serre1979,Serre2008Topics}.
+
+A transitive subgroup of \(S_6\) containing a \(5\)-cycle is primitive:
+any block system with \(2\) or \(3\) blocks would be fixed by the
+5-cycle, forcing a block to contain its whole five-point support.
+A primitive subgroup of \(S_6\) containing a transposition is \(S_6\)
+\cite[Ch.~3, Theorem~3.3A]{Dixon1996}.  Thus \(G=S_6\).
+\else
 Let \(G\le S_6\) be the generic Galois group of
 \(\widehat\Delta(w,s)\) over \(\QQ(s)\). We identify \(G\) in four
 steps.
@@ -318,6 +686,7 @@ block system exists, so \(G\) is primitive
 A primitive subgroup of \(S_6\) containing a transposition is the full
 symmetric group \cite[Ch.~3, Theorem~3.3A]{Dixon1996}. Hence \(G=S_6\),
 completing part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
+\fi
 \end{proof}
 
 \begin{corollary}\label{lem:hatdelta-irreducible}
@@ -355,6 +724,18 @@ projective curve.
 \end{proposition}
 
 \begin{proof}
+\ifshortcicm
+\Cref{thm:sign-quotient-plane-genus} applies because
+\Cref{lem:self-dual-compression} gives the required parity bounds and
+\(\widehat\Delta(0,s)=1\).  Substituting \(x=w^2\), \(y=sw\) gives the
+displayed quartic \(F\).  The affine smoothness certificate is the
+Groebner basis
+\(\langle F,\partial_xF,\partial_yF\rangle=\langle1\rangle\), printed
+by the runner.  At infinity, the homogenised leading form is
+\(XY^2(X+Y)\), giving \([0:1:0]\), \([1:0:0]\), and \([1:-1:0]\), with
+nonzero partials \(1\), \(-1\), and \(4\).  Thus the projective quartic
+is smooth and has genus \((4-1)(4-2)/2=3\).
+\else
 By \Cref{lem:self-dual-compression}, the coefficient of \(w^j\) in
 \(\widehat\Delta(w,s)\) has degree at most \(j\) in \(s\) and the
 parity of \(j\). Hence
@@ -425,6 +806,7 @@ quartic is the smooth projective quotient model and
 \[
   g(\overline{Y})=(4-1)(4-2)/2=3.
 \]
+\fi
 \end{proof}
 
 \begin{lemma}[Integrality and function-field setup]
@@ -442,6 +824,15 @@ quartic is the smooth projective quotient model and
 \end{lemma}
 
 \begin{proof}
+\ifshortcicm
+Irreducibility follows from the generic \(S_6\) group, hence the affine
+curve is integral.  On the quotient quartic, \(F(0,y)=1-y\), so
+\(x=0\) meets at \(P=(0,1)\), and
+\(\partial_yF(0,1)=-1\) gives \(\operatorname{ord}_P(x)=1\).  Thus
+\(x\) is not a square in \(k(\overline{Y})\).  Adjoining
+\(\sqrt{x}=w\), with \(s=y/w\), recovers the completed curve function
+field.
+\else
 Part~(i): \(\widehat\Delta(w,s)\) is irreducible in \(\QQ[w,s]\) by
 \Cref{lem:hatdelta-irreducible}, so its zero locus is an irreducible
 variety. Since \(\widehat\Delta\) is prime in the UFD \(\QQ[w,s]\), the
@@ -459,6 +850,7 @@ Part~(iii): Since \(x\notin k(\overline{Y})^2\), the extension
 \(k(\overline{Y})(\sqrt{x})/k(\overline{Y})\) has degree two. The
 identifications \(w=\sqrt{x}\) and \(s=y/\sqrt{x}\) show that this
 extension is the function field of \(C_{\mathrm{aff}}\).
+\fi
 \end{proof}
 
 \begin{proposition}[Two-sheeted cover of genus six]
@@ -471,6 +863,20 @@ extension is the function field of \(C_{\mathrm{aff}}\).
 \end{proposition}
 
 \begin{proof}
+\ifshortcicm
+The cover is the quadratic extension
+\(k(\overline{Y})(\sqrt{x})/k(\overline{Y})\).  The divisor calculation
+on the quartic gives
+\[
+  \operatorname{div}(x)=P+2Q_1-2Q_0-Q_\infty,
+\]
+so the odd valuations, hence the ramification points, are exactly
+\(P\) and \(Q_\infty\).  Riemann--Hurwitz then gives
+\[
+  2g(\overline{X})-2=2(2\cdot3-2)+2,
+\]
+and \(g(\overline{X})=6\).
+\else
 By \Cref{lem:integral-function-field}, the extension of function fields
 \[
   k(\overline{X})/k(\overline{Y})
@@ -544,6 +950,7 @@ simple branch point. The Riemann--Hurwitz genus formula
   2g(\overline{X})-2=2(2g(\overline{Y})-2)+2=2(2\cdot 3-2)+2,
 \]
 hence \(g(\overline{X})=6\).
+\fi
 \end{proof}
 
 
@@ -564,6 +971,56 @@ Its state set is \(\mathcal S\times\ZZ/q\ZZ\), and an edge
 \((x,t)\to(y,t+e)\) in the lift. This is the standard cyclic extension
 attached to the output cocycle
 \cite{AdlerKitchensMarcus1985,Fiebig1993,BoyleSchmieding2017}.
+
+\begin{definition}[Admissible cyclic covers]
+  \label{def:admissible-cyclic-cover}
+  Fix a finite non-negative binary-output kernel
+  \(B(u)=B_0+uB_1\).  An admissible cyclic cover of level \(q\) is the
+  \(\ZZ/q\ZZ\)-skew product obtained from the displayed output cocycle:
+  its adjacency operator is
+  \[
+    B_0\otimes I_q+B_1\otimes P_q,
+  \]
+  so an output-\(e\) edge advances the fibre coordinate by \(e\) and no
+  additional vertices, edges, weights, or cocycles are inserted.  The
+  admissible cover category for \(B\) has these covers as objects and
+  the evident fibre translations and level maps induced by quotients
+  \(\ZZ/q'\ZZ\to\ZZ/q\ZZ\) as morphisms.
+
+  For the ten-state kernel of \Cref{def:sync-kernel}, the admissible
+  objects are exactly the lifts represented by the matrices
+  \[
+    \widetilde B_q=B_0\otimes I_q+B_1\otimes P_q.
+  \]
+  The paper-local certificate data determine this category: the
+  matrices \(B_0\) and \(B_1\) are read from the printed transition
+  table and from the displayed matrix \(B(u)\) in
+  \Cref{sec:appendix-computation}, and the determinant, self-duality,
+  endpoint-separation, and finite-\(m\) branch-selection checks are
+  the named outputs of
+  \(\texttt{certificates/verify\_certificates.py}\).  Concrete
+  certificate examples are the primitive real factors for
+  \(m=4,6,8,10\) displayed in
+  \Cref{sec:appendix-computation}\,\textup{(e)} and the exact
+  finite-\(m\) branch-selection check for \(4\le m<32\); each is
+  obtained from an admissible cyclic lift at level \(m\).  Thus the
+  covers used below are not arbitrary auxiliary covers; they are the
+  canonical cyclic covers forced by the certified binary output
+  labelling.
+\end{definition}
+
+\begin{remark}[Scope of the cover-relative statements]
+  \label{rem:cover-scope}
+  The obstruction and branch-selection statements below are relative to
+  the admissible cyclic-cover category of
+  \Cref{def:admissible-cyclic-cover}.  One may attach unrelated
+  auxiliary covers to the same underlying graph, for example by adding
+  a one-spike voltage feature or by changing the cocycle on a selected
+  edge.  Such constructions can be useful stress tests for how
+  determinant certificates behave under perturbation, but they are not
+  intrinsic behaviour of the displayed self-dual kernel and they are
+  not part of the software-certificate claim made in this paper.
+\end{remark}
 
 \begin{proposition}[Fourier decomposition of the cyclic lift]
   \label{prop:sync-cyclic-lift-factorisation}
@@ -672,6 +1129,39 @@ which is the displayed reversed-order sign formula.
 
 \begin{theorem}[Endpoint selection and asymptotic transfer]
   \label{thm:self-dual-endpoint-selection}
+\ifshortcicm
+Let \(H(w,s)\in\ZZ[s][w]\) be the completed determinant of a primitive
+self-dual labelled kernel with row-sum Perron root \(q\).  For
+\[
+  R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha),
+  \qquad
+  A_m=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
+      a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+\]
+assume:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item \(H(w,-s)=H(-w,s)\), and \(H(w,2)\) has a simple
+        minimal-modulus root \(w_0=1/q\);
+  \item the unitary twists have strict spectral gap away from \(s=\pm2\);
+  \item on \(2-\eta\le s\le2\) the branch \(w(s)\) through \(w_0\) is
+        the unique root of modulus \(<q^{-1}+\varepsilon\) and is
+        strictly decreasing;
+  \item on \(|s|\le2-\eta\), every root has modulus at least
+        \(q^{-1}+\varepsilon\).
+\end{enumerate}
+Then for every \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\), the
+minimal-modulus roots of \(R_m\) are supplied by
+\(H(w,s_m)\) and, when \(m\) is even, by \(H(w,-s_m)\).  Hence
+\[
+  \rho_m:=\frac{1}{\min\{\abs{w}:R_m(w)=0\}}=\rho(s_m),
+  \qquad \rho(s)=1/w(s).
+\]
+If \(\rho(2-\delta)=\sum_{j=0}^N a_j\delta^j+O(\delta^{N+1})\), then
+\[
+  \rho_m=\sum_{j=0}^N a_j
+    \left(2-2\cos\frac{\pi}{m}\right)^j+O(m^{-2N-2}).
+\]
+\else
   Let \(B(u)=B_0+uB_1\) be a finite non-negative output-labelled kernel
   with integer entries. Assume that \(B(1)\) is primitive and that
   \(B(1)\mathbf 1=q\mathbf 1\). Suppose there is a permutation matrix
@@ -685,6 +1175,13 @@ which is the displayed reversed-order sign formula.
     \Delta(z,u)=\det(I-zB(u)),\qquad
     H(w,s)=\Delta(w/r,r^2),\qquad s=r+r^{-1}.
   \]
+  All fixed matrix-transfer statements in this theorem are made over the
+  coefficient field \(\QQ\) determined by the displayed integer matrices,
+  with the standard embedding \(\QQ\hookrightarrow\CC\).  Thus any
+  comparison with a scalar transfer sequence \(u^{\mathsf T}A^m v\) is a
+  comparison inside one fixed coefficient field and one fixed complex
+  embedding; by \Cref{lem:fixed-field-transfer-exponential-bound}, every
+  such fixed transfer sequence is exponentially bounded.
   Then \(H(w,s)\in\ZZ[s][w]\) and \(H(w,-s)=H(-w,s)\). More precisely,
   if \(H(w,s)=\sum_j c_j(s)w^j\), then \(\deg_s c_j\le j\) and
   \(c_j(-s)=(-1)^jc_j(s)\).
@@ -704,6 +1201,11 @@ which is the displayed reversed-order sign formula.
   \[
     R_m(w):=\prod_{\alpha\in A_m}H(w,\alpha).
   \]
+  This definition is made inside the admissible cyclic-cover category of
+  \Cref{def:admissible-cyclic-cover}: the characters being grouped are
+  the Fourier characters of the canonical covers
+  \(B_0\otimes I_q+B_1\otimes P_q\), not characters of an arbitrary
+  auxiliary cover.
   This product, not an unordered resultant expression, is the definition
   of \(R_m\). Under the standard Sylvester convention the same
   polynomial is represented by the ordered resultant fixed in
@@ -777,11 +1279,39 @@ which is the displayed reversed-order sign formula.
         \frac{2(-1)^{\ell+1}\pi^{2\ell}}{(2\ell)!}\,T^\ell
     \right)^j .
   \]
+\fi
 \end{theorem}
 
 \begin{proof}
+\ifshortcicm
+For \(\alpha=2\cos\theta\), choose \(r=e^{i\theta}\).  The completed
+coordinate change gives
+\[
+  H(w,\alpha)=\Delta(w/r,r^2),
+\]
+and \(|r|=1\), so root moduli in \(w\) are the same as root moduli in
+the original twisted variable.  The symmetry \(H(w,-s)=H(-w,s)\) gives
+\(\lambda(-s)=\lambda(s)\), where
+\(\lambda(s)=\min\{|w|:H(w,s)=0\}\).
+
+Among primitive conjugates, \(|2\cos(\pi a/m)|\) is maximal at
+\(a=1\), and also at \(a=m-1\) when \(m\) is even.  The monotone
+endpoint branch and the central separation therefore make
+\(\lambda(s_m)\) strictly smaller than all non-endpoint
+\(\lambda(\alpha)\).  Since \(R_m\) is the product of the slices
+\(H(w,\alpha)\), its minimal roots come exactly from the endpoint
+slice(s).  Substituting
+\(\delta_m=2-2\cos(\pi/m)=O(m^{-2})\) into the Taylor expansion of
+\(\rho(2-\delta)\) gives the stated asymptotic transfer.
+\else
 The inclusion \(H\in\ZZ[s][w]\), together with the parity
 \(H(w,-s)=H(-w,s)\), is exactly \Cref{lem:self-dual-compression}. The
+admissibility clause fixes the cover category before any spectral
+selection is made: for each \(q\), the only cover under consideration is
+the output-cocycle skew product \(B_0\otimes I_q+B_1\otimes P_q\).
+Consequently its character blocks are precisely \(B(\omega_q^j)\), as
+in \Cref{prop:sync-cyclic-lift-factorisation}; no other cover data can
+create or remove factors in \(R_m\). The
 displayed product formula for \(R_m\) is exactly
 \Cref{lem:ordered-cyclotomic-resultant} with \(A=A_m\): the monic
 polynomial \(\Phi_m^+\) is deliberately placed in the first resultant
@@ -818,9 +1348,14 @@ minimal-modulus roots of \(R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha)\)
 come exactly from the endpoint factor(s), and
 \(\rho_m=\rho(s_m)\).
 
-It remains only to record the coefficient transfer, since this is the
-part used later without reference to the original graph. Put
-\(\delta_m=2-s_m=2-2\cos(\pi/m)\). The identity just proved gives
+  It remains only to record the coefficient transfer, since this is the
+  part used later without reference to the original graph. The only
+  fixed-matrix growth fact available in this coefficient-field regime is
+  the exponential bound of
+  \Cref{lem:fixed-field-transfer-exponential-bound}; in particular, no
+  hidden fixed transfer sequence over the stated field and embedding can
+  supply factorial growth. Put
+  \(\delta_m=2-s_m=2-2\cos(\pi/m)\). The identity just proved gives
 \[
   \rho_m=\rho(2-\delta_m).
 \]
@@ -842,11 +1377,25 @@ Substituting this into
 Expanding the finite polynomial in powers of \(T=m^{-2}\) gives the
 displayed coefficient formula. No matrix-theoretic information beyond
 the hypotheses of the theorem enters this transfer step.
+\fi
 \end{proof}
 
 The theorem is the general endpoint-asymptotic result used in the rest
 of the paper. For a new self-dual kernel the required inputs are
 exactly:
+\ifshortcicm
+\[
+\begin{array}{c|l}
+\text{input} & \text{role}\\
+\hline
+\text{row-sum Perron root and primitivity} & \text{normalises }w_0=1/q\\
+\text{self-duality} & \text{gives }H(w,-s)=H(-w,s)\\
+\text{unitary spectral gap} & \text{excludes interior endpoint ties}\\
+\text{rational interval separation} & \text{makes the endpoint selection effective}\\
+\text{endpoint jet} & \text{transfers to the }m^{-2}\text{ expansion}
+\end{array}
+\]
+\else
 \begin{enumerate}[label=\textup{(\alph*)}]
   \item a row-sum Perron root \(q\) and primitivity of \(B(1)\);
   \item an involution exchanging the two labelled edge matrices;
@@ -861,9 +1410,31 @@ Once these verifications are available, no further information about
 the original graph is used: the cyclotomic endpoint selection and the
 large-\(m\) asymptotic expansion follow from the completed determinant
 \(H(w,s)\) alone.
+\fi
 
 \subsection{Cyclotomic root products and twisted Perron roots}
 
+\ifshortcicm
+For \(m\ge2\), put \(s_m=2\cos(\pi/m)\),
+\[
+  A_m=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
+    a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+  \qquad
+  \Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha),
+\]
+and define
+\[
+  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
+       =\Res_s(\Phi_m^+(s),\widehat\Delta(w,s)).
+\]
+The resultant order is part of the notation; reversing it multiplies by
+\((-1)^{3\deg\Phi_m^+}\).  The twisted Perron root is
+\[
+  \rho_m=\frac{1}{\min\{\abs{w}:R_m(w)=0\}}.
+\]
+The case \(m=3\) is exceptional because the leading coefficient
+\(s^2-1\) vanishes at \(s=1\), so the degree law starts at \(m=4\).
+\else
 For \(m\ge 2\), let
 \[
   s_m:=2\cos(\pi/m),
@@ -953,6 +1524,7 @@ The corresponding twisted Perron root is
 \[
   \rho_m:=\frac{1}{\min\{\abs{w}:R_m(w)=0\}}.
 \]
+\fi
 
 \begin{theorem}[Cyclotomic resultant degree law]
   \label{thm:sync-cyclotomic-degree-law}
@@ -964,6 +1536,15 @@ The corresponding twisted Perron root is
 \end{theorem}
 
 \begin{proof}
+\ifshortcicm
+Here \(\deg\Phi_m^+=|A_m|=\varphi(2m)/2\).  For \(m\ge4\), no
+\(\alpha\in A_m\) equals \(\pm1\), so each factor
+\(\widehat\Delta(w,\alpha)\) has \(w\)-degree \(6\).  Hence
+\(\deg_wR_m=6|A_m|=3\varphi(2m)\).  If \(m\) is even, \(A_m\) is stable
+under \(\alpha\mapsto-\alpha\); the sign symmetry
+\(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\) then gives
+\(R_m(-w)=R_m(w)\).
+\else
 Let \(d_m:=\deg\Phi_m^+=\varphi(2m)/2\), and let \(A_m\) be the
 conjugate set
 \[
@@ -1018,6 +1599,7 @@ The symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\) then gives
     =R_m(w).
 \end{aligned}
 \]
+\fi
 \end{proof}
 
 \begin{corollary}[The twist \(m=2\)]
@@ -1189,6 +1771,44 @@ for this endpoint jet.
 \end{lemma}
 
 \begin{proof}
+\ifshortcicm
+Let
+\[
+  \lambda(s)=\min\{|w|:\widehat\Delta(w,s)=0\}.
+\]
+The product definition of \(R_m\) gives
+\(\rho_m^{-1}=\min_{\alpha\in A_m}\lambda(\alpha)\), and the
+sign-symmetry gives \(\lambda(-s)=\lambda(s)\).
+
+At \(s=2\),
+\[
+  \widehat\Delta(w,2)=(w-1)(w+1)(3w-1)(w^3-w^2+w+1),
+\]
+so \(w=1/3\) is the unique minimal root.  The implicit-function
+calculation of \Cref{prop:sync-endpoint-jet} gives the real branch
+\(w^*(s)\) through this point.  The interval certificate printed as
+\(\texttt{endpoint\_interval\_certificate: true}\) verifies, on
+\(199/100\le s\le2\), that this branch is the unique root of modulus
+\(<1/2\), satisfies \(w^*(s)<101/300\), and is strictly decreasing.
+
+For \(|s|\le199/100\), the central interval certificate verifies
+\[
+  \lambda(s)\ge 101/300.
+\]
+The strict unitary spectral gap used by the certificate is the standard
+triangle-equality argument for the displayed primitive row-stochastic
+support: equality in \(\rho(B(e^{it}))\le3\) would force all edge phases
+to align along the listed paths, and the rows
+\(\st{000},\st{001},\st{010},\st{0-12}\) then force \(e^{it}=1\).
+
+For \(m\ge32\), \(s_m=2\cos(\pi/m)>199/100\).  Among the conjugates in
+\(A_m\), the maximum absolute value is attained only by \(s_m\), and
+also by \(-s_m\) when \(m\) is even.  The endpoint monotonicity and the
+central lower bound therefore make the minimal roots of \(R_m\) exactly
+the endpoint slice roots.  The runner separately prints
+\(\texttt{finite\_m\_branch\_selection\_4\_to\_31: true}\) for the
+remaining finite range.
+\else
 Define
 \[
   \lambda(s):=\min\bigl\{|w|:\widehat\Delta(w,s)=0\bigr\}.
@@ -1390,9 +2010,10 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \[
   \rho_m=\frac{1}{\lambda(s_m)}=\rho(s_m). \qedhere
 \]
+\fi
 \end{proof}
 
-\begin{corollary}[Endpoint theorem applied to the ten-state kernel]
+\begin{corollary}[Verified-triple-relative endpoint selection]
   \label{cor:sync-endpoint-selection-application}
   The ten-state kernel satisfies the hypotheses of
   \Cref{thm:self-dual-endpoint-selection} with
@@ -1435,7 +2056,7 @@ proved in \Cref{lem:root-separation}. Applying
 conclusions.
 \end{proof}
 
-\begin{theorem}[Asymptotic expansion of the twisted Perron roots]
+\begin{theorem}[Verified-triple-relative twisted Perron-root hierarchy]
   \label{thm:rho-gap-m12}
   As \(m\to\infty\),
   \begin{align*}
@@ -1485,6 +2106,12 @@ of \(\delta\). This proves part~\textup{(iii)} of
 \end{proof}
 
 \begin{remark}
+\ifshortcicm
+The displayed small cases \(m=4,6,8,10\) are checked directly by the
+finite certificate key
+\(\texttt{finite\_m\_branch\_selection\_4\_to\_31: true}\); the
+large-\(m\) asymptotic branch is used only from \(m\ge32\).
+\else
 The asymptotic expansion is already numerically accurate for moderate
 values of \(m\). For the displayed values \(m=4,6,8,10\), the quantity
 \(\rho_m\) is verified directly from the definition
@@ -1521,6 +2148,7 @@ truncation of
   \end{array}
 \]
 for \(m=4,6,8,10\).
+\fi
 \end{remark}
 
 
