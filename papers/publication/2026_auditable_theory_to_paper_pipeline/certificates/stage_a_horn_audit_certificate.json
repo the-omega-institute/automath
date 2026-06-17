@@ -1,0 +1,165 @@
+{
+  "schema_version": "stage-a-replay-certificate-v1-submitted",
+  "input_atoms": [
+    "pubAbs",
+    "suppMain",
+    "invJson",
+    "invMd",
+    "finalDigest",
+    "stageAHornSchema",
+    "stageAManifest",
+    "stageAHornCertificate",
+    "stageAReplayReport",
+    "srcInterface",
+    "caseArtifacts",
+    "venueReadiness",
+    "qrgsReplayUpgrade"
+  ],
+  "derivation_dags": {
+    "qinv": {
+      "node_id": "dag_qinv",
+      "rule": "R1_inventory_closure_to_qinv",
+      "premises": [
+        "invJson",
+        "invMd",
+        "finalDigest"
+      ],
+      "conclusion": "qinv"
+    },
+    "qrgs": {
+      "node_id": "dag_qrgs",
+      "rule": "R3_replay_tuple_to_qrgs",
+      "premises": [
+        "stageAHornSchema",
+        "stageAManifest",
+        "stageAHornCertificate",
+        "stageAReplayReport",
+        "finalDigest",
+        "qrgsReplayUpgrade"
+      ],
+      "conclusion": "qrgs"
+    },
+    "routeSurfaceQuotient": {
+      "node_id": "dag_route",
+      "rule": "R12_route_surface_quotient",
+      "premises": [
+        "pubAbs",
+        "suppMain",
+        "stageAHornSchema",
+        "stageAHornCertificate",
+        "stageAReplayReport",
+        "invJson",
+        "invMd",
+        "finalDigest"
+      ],
+      "conclusion": "routeSurfaceQuotient"
+    }
+  },
+  "accepted_coordinates": {
+    "qinv": true,
+    "qrgs": true,
+    "qsrc": false,
+    "qart": false,
+    "qext": false,
+    "qven": false
+  },
+  "rejected_coordinates": [
+    "qsrc",
+    "qart",
+    "qext",
+    "qven"
+  ],
+  "obstruction_basis": [
+    {
+      "coordinate": "qsrc",
+      "minimal_missing_premises": [
+        "freshFormalSourceUpgrade"
+      ],
+      "certificate": "No fresh formal-source rebuild or axiom-purity audit upgrade atom is present."
+    },
+    {
+      "coordinate": "qart",
+      "minimal_missing_premises": [
+        "dynamicArtifactSemanticUpgrade"
+      ],
+      "certificate": "No dynamic artifact-semantic validation upgrade atom is present."
+    },
+    {
+      "coordinate": "qext",
+      "minimal_missing_premises": [
+        "externalUploadArchiveUpgrade"
+      ],
+      "certificate": "No external upload receipt or archive-equivalent byte-equality upgrade atom is present."
+    },
+    {
+      "coordinate": "qven",
+      "minimal_missing_premises": [
+        "uploadTimeVenueAcceptanceUpgrade"
+      ],
+      "certificate": "No upload-time venue-compliance or venue-acceptance upgrade atom is present."
+    }
+  ],
+  "separating_models": {
+    "qsrc_false_model": {
+      "preserves": [
+        "qinv",
+        "qrgs",
+        "routeSurfaceQuotient",
+        "admitted_support_atoms"
+      ],
+      "falsifies": "qsrc",
+      "false_atoms": [
+        "freshFormalSourceUpgrade",
+        "qsrc"
+      ]
+    },
+    "qart_false_model": {
+      "preserves": [
+        "qinv",
+        "qrgs",
+        "routeSurfaceQuotient",
+        "admitted_support_atoms"
+      ],
+      "falsifies": "qart",
+      "false_atoms": [
+        "dynamicArtifactSemanticUpgrade",
+        "qart"
+      ]
+    },
+    "qext_false_model": {
+      "preserves": [
+        "qinv",
+        "qrgs",
+        "routeSurfaceQuotient",
+        "admitted_support_atoms"
+      ],
+      "falsifies": "qext",
+      "false_atoms": [
+        "externalUploadArchiveUpgrade",
+        "qext"
+      ]
+    },
+    "qven_false_model": {
+      "preserves": [
+        "qinv",
+        "qrgs",
+        "routeSurfaceQuotient",
+        "admitted_support_atoms"
+      ],
+      "falsifies": "qven",
+      "false_atoms": [
+        "uploadTimeVenueAcceptanceUpgrade",
+        "qven"
+      ]
+    }
+  },
+  "negative_boundaries_preserved": [
+    "no fresh Lean/BEDC rebuild",
+    "no axiom-purity audit",
+    "no dynamic artifact-semantic validation",
+    "no external upload or archive-equivalent byte equality",
+    "no upload-time venue compliance",
+    "no venue acceptance",
+    "no general pipeline implementation soundness"
+  ]
+}

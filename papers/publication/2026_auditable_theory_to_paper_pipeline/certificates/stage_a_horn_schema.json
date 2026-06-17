@@ -1,0 +1,143 @@
+{
+  "schema_version": "stage-a-horn-audit-calculus-v1-submitted",
+  "coordinate_set": [
+    "qinv",
+    "qrgs",
+    "qsrc",
+    "qart",
+    "qext",
+    "qven"
+  ],
+  "atom_sorts": [
+    "public_surface",
+    "supplement_surface",
+    "support_surface",
+    "schema_file",
+    "inventory_row",
+    "certificate_file",
+    "report_file",
+    "digest_row",
+    "source_interface_row",
+    "artifact_row",
+    "venue_row",
+    "upgrade_coordinate",
+    "claim"
+  ],
+  "rules": [
+    {
+      "rule_id": "R0_single_route_surface",
+      "premises": [
+        "pubAbs",
+        "suppMain"
+      ],
+      "conclusion": "singleRouteSurface"
+    },
+    {
+      "rule_id": "R1_inventory_closure_to_qinv",
+      "premises": [
+        "invJson",
+        "invMd",
+        "finalDigest"
+      ],
+      "conclusion": "qinv"
+    },
+    {
+      "rule_id": "R2_qinv_to_local_inventory_closed",
+      "premises": [
+        "qinv"
+      ],
+      "conclusion": "localInventoryClosed"
+    },
+    {
+      "rule_id": "R3_replay_tuple_to_qrgs",
+      "premises": [
+        "stageAHornSchema",
+        "stageAManifest",
+        "stageAHornCertificate",
+        "stageAReplayReport",
+        "finalDigest",
+        "qrgsReplayUpgrade"
+      ],
+      "conclusion": "qrgs"
+    },
+    {
+      "rule_id": "R4_qrgs_to_bounded_record_gate_soundness",
+      "premises": [
+        "qrgs"
+      ],
+      "conclusion": "boundedReplayRecordGateSoundness"
+    },
+    {
+      "rule_id": "R5_qsrc_upgrade_to_qsrc",
+      "premises": [
+        "freshFormalSourceUpgrade"
+      ],
+      "conclusion": "qsrc"
+    },
+    {
+      "rule_id": "R6_qart_upgrade_to_qart",
+      "premises": [
+        "dynamicArtifactSemanticUpgrade"
+      ],
+      "conclusion": "qart"
+    },
+    {
+      "rule_id": "R7_qext_upgrade_to_qext",
+      "premises": [
+        "externalUploadArchiveUpgrade"
+      ],
+      "conclusion": "qext"
+    },
+    {
+      "rule_id": "R8_qven_upgrade_to_qven",
+      "premises": [
+        "uploadTimeVenueAcceptanceUpgrade"
+      ],
+      "conclusion": "qven"
+    },
+    {
+      "rule_id": "R9_source_interface_to_bounded_source_interface",
+      "premises": [
+        "srcInterface"
+      ],
+      "conclusion": "boundedSourceInterface"
+    },
+    {
+      "rule_id": "R10_case_artifacts_to_bounded_artifact_rows",
+      "premises": [
+        "caseArtifacts"
+      ],
+      "conclusion": "boundedArtifactRows"
+    },
+    {
+      "rule_id": "R11_venue_readiness_to_dated_venue_readiness",
+      "premises": [
+        "venueReadiness"
+      ],
+      "conclusion": "datedVenueReadiness"
+    },
+    {
+      "rule_id": "R12_route_surface_quotient",
+      "premises": [
+        "pubAbs",
+        "suppMain",
+        "stageAHornSchema",
+        "stageAHornCertificate",
+        "stageAReplayReport",
+        "invJson",
+        "invMd",
+        "finalDigest"
+      ],
+      "conclusion": "routeSurfaceQuotient"
+    }
+  ],
+  "non_rules": [
+    "theorem inventories do not imply qsrc qart qext qven or general implementation soundness",
+    "digest rows do not imply external upload archive-equivalent byte equality venue acceptance qsrc qart qext qven or general implementation soundness",
+    "local paths and historical snapshots do not imply any upgrade coordinate",
+    "bounded source-interface rows do not imply fresh Lean rebuild source-theory completeness or axiom-purity audit",
+    "artifact rows do not imply dynamic artifact semantic validation",
+    "dated venue-readiness rows do not imply upload-time venue compliance or venue acceptance",
+    "qrgs is derivable only for the fixed Stage-A Horn schema manifest certificate replay report and digest-bound source bundle"
+  ]
+}
