@@ -1954,12 +1954,20 @@ def oracle_submit(task_id: str, prompt: str,
                       in the same chat. Use a SHORT prompt here (e.g.
                       "按审稿人意见改了xxx, 这版你愿意接收吗?").
     """
-    prompt = with_agent_context_contract(
-        prompt, context_mode=context_mode, agent_role=agent_role)
+    # The Oracle (ChatGPT referee) receives the review prompt verbatim. The
+    # internal agent-context contract (context_mode/agent_role/semantics) is
+    # Codex-only memory metadata, meaningless and distracting to ChatGPT, so it
+    # is NOT prepended here — we keep context_mode only for our own logging.
     if context_mode:
         logger.info(f"Oracle context: {context_mode}"
                     f"{'/' + agent_role if agent_role else ''}"
                     f"{' conv=' + conversation_id[:12] if conversation_id else ''}")
+    has_pdf = bool(pdf_path and pdf_path.exists())
+    if not has_pdf:
+        logger.warning(
+            f"Oracle submit {task_id}: NO PDF attached "
+            f"({'missing ' + str(pdf_path) if pdf_path else 'none provided'}); "
+            "review will be text-only — compile main.pdf before submitting")
     payload: dict = {"task_id": task_id, "prompt": prompt, "model": model}
     if conversation_id is not None:
         payload["conversation_id"] = conversation_id
