@@ -376,6 +376,25 @@ The submitted input atoms include
 \(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\) are not
 in the least fixed point.
 
+The source-level label and endpoint-boundary audit is a separate static scan,
+not a PDF inference.  The command
+\artifactcmd{python}{certificates/scan_tex_source_labels.py --write certificates/static_source_label_scan.json}
+lexically scans the raw bytes of \artifactpath{main.tex},
+\artifactpath{submission_abstract.tex}, and
+\artifactpath{appendix_full_technical_ledger.tex}.  It does not evaluate TeX
+conditionals, comments, includes, or macros; consequently any label in an
+inactive branch would still be counted.  The current scan records \(13\), \(3\),
+and \(351\) labels in those three sources, respectively, with zero duplicate
+labels in each source and zero duplicate labels across the three-source package.
+The same scan records zero occurrences of the stale endpoint-certificate tokens
+listed in \artifactpath{certificates/static_source_label_scan.json}: the three
+legacy rational constants, the legacy boundary equation using the larger
+endpoint, and the two obsolete root-inequality phrases.  Thus the current source
+package contains no printed central lower-bound certificate at the former shared
+endpoint, no overlapping closed endpoint/central convention, and no hidden
+inactive duplicate label.  The claim remains syntactic source hygiene only; it
+is not proof checking.
+
 \begin{table}
 \caption{Inventory-name manifest for \(q_{\mathrm{inv}}\).}
 \label{tab:inventory-name-manifest}
@@ -425,6 +444,14 @@ Historical case-row reconstruction and negative-control script. \\
 \addlinespace
 \artifactpath{certificates/case_rows_expected.json}\\
 Expected accepted case rows for the reconstruction script. \\
+\addlinespace
+\artifactpath{certificates/scan_tex_source_labels.py}\\
+Raw-source label uniqueness and stale endpoint-certificate-token scanner. \\
+\addlinespace
+\artifactpath{certificates/static_source_label_scan.json}\\
+Recorded zero-duplicate-label and zero-stale-token scan result for the selected
+TeX sources, including inactive conditional branches because the scan is
+lexical. \\
 \bottomrule
 \end{tabularx}
 \end{table}
