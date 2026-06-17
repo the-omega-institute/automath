@@ -1748,6 +1748,17 @@ def _add_paper_only(paper_path: Path) -> None:
         else:
             regular_files.append(raw)
     if regular_files:
+        # Drop paths git would refuse as ignored (Codex Stage-A scratch like
+        # .tmp_bibtest, _inventory_tmp) so one stray artifact can't fail the
+        # whole stage.
+        chk = run_cmd(["git", "check-ignore", "--"] + regular_files)
+        ignored = {s.strip() for s in chk.stdout.splitlines() if s.strip()}
+        if ignored:
+            logger.info(
+                f"Staging: skipping {len(ignored)} gitignored path(s) "
+                f"(e.g. {sorted(ignored)[0]})")
+            regular_files = [f for f in regular_files if f not in ignored]
+    if regular_files:
         result = run_cmd(["git", "add", "--"] + regular_files)
         if result.returncode != 0:
             raise RuntimeError(
