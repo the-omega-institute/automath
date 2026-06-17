@@ -19,10 +19,10 @@ set -u
 # ── Config ────────────────────────────────────────────────────────────
 REPO="/mnt/d/omega/automath"
 # Arguments the supervisor is (re)started with. Keep in sync with the
-# command you want kept alive. To advance the whole queue instead of a
-# single paper, replace the --paper line with: --all
+# command you want kept alive. --all advances the whole queue with
+# --parallel worker slots (vs pinning to a single --paper).
 SUPERVISOR_ARGS=(
-  --paper papers/publication/2026_auditable_theory_to_paper_pipeline
+  --all
   --parallel 3
   --poll-interval 120
   --no-auto-commit
