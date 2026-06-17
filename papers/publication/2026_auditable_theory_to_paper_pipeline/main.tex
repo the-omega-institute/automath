@@ -606,8 +606,8 @@ lexically scans the raw bytes of \artifactpath{main.tex},
 \artifactpath{submission_abstract.tex}, and
 \artifactpath{appendix_full_technical_ledger.tex}.  It does not evaluate TeX
 conditionals, comments, includes, or macros; consequently any label in an
-inactive branch would still be counted.  The current scan records \(13\), \(3\),
-and \(351\) labels in those three sources, respectively, with zero duplicate
+inactive branch would still be counted.  The current scan records \(21\), \(3\),
+and \(354\) labels in those three sources, respectively, with zero duplicate
 labels in each source and zero duplicate labels across the three-source package.
 The same scan records zero occurrences of the stale endpoint-certificate tokens
 listed in \artifactpath{certificates/static_source_label_scan.json}: the three
@@ -691,6 +691,58 @@ lexical. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\begin{table}
+\caption{Submission completeness checklist for the replay archive.}
+\label{tab:artifact-submission-checklist}
+\small
+\begin{tabularx}{\linewidth}{L{0.30\linewidth}Y}
+\toprule
+Required submitted bytes & Completeness condition \\ \midrule
+Replay JSON/Python files &
+All paths in Table~\ref{tab:replay-artifact-manifest} are included as ordinary
+files with the same relative paths under the submitted paper root.\\
+\addlinespace
+Digest table &
+\artifactpath{certificates/stage_a_digest_table.json} is included and its
+listed SHA--256 rows match the submitted replay manifest, Horn schema, Horn
+certificate, replay report, and replay script bytes.\\
+\addlinespace
+Reviewer replay commands &
+\artifactcmd{python}{certificates/replay_stage_a_audit.py} and
+\artifactcmd{python}{certificates/replay_case_rows.py} are runnable from the
+paper root under the TCB in Tables~\ref{tab:replay-tcb} and
+\ref{tab:replay-byte-binding}; the claim attached to those commands is only
+finite-record replay.\\
+\addlinespace
+Expected case rows and negative control &
+\artifactpath{certificates/case_rows_expected.json} and
+\artifactpath{certificates/replay_case_rows.py} are submitted together, so the
+four accepted rows and the false Rule110 dynamic-semantic row are checked by the
+same verifier.\\
+\addlinespace
+Source-label scan output &
+\artifactpath{certificates/static_source_label_scan.json} is submitted together
+with \artifactpath{certificates/scan_tex_source_labels.py}; the scan remains a
+raw-source lexical check over the three named \TeX{} files, including inactive
+conditional branches.\\
+\addlinespace
+Review-bundle records &
+\artifactpath{review_bundle/certificate_schema.json},
+\artifactpath{review_bundle/current_package_pass_records.json},
+\artifactpath{review_bundle/submission_interface_map.json},
+\artifactpath{review_bundle/primary_claim_inventory.json}, and
+\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json} are included when the
+JSON certificate-record theorem is offered as executable artifact support.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Table~\ref{tab:artifact-submission-checklist} is an archive-packaging condition,
+not an additional mathematical theorem.  If any listed file is omitted or its
+digest-bound bytes differ from the submitted rows, the reviewer-executable
+artifact support is incomplete, but the paper still makes no stronger source,
+artifact-semantic, archive-equivalence, or venue-status claim by default.
 
 \begin{table}
 \caption{Complete case-row eligibility matrix and negative control}
