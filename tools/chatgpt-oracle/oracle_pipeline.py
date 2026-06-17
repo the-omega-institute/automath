@@ -11438,10 +11438,30 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                     failed += 1
                     logger.error(f"[{name}] EXCEPTION: {exc}")
 
-                # Push after each paper completes
+                # Push after each paper completes; self-heal on divergence
                 with git_repo_lock():
                     push = run_cmd(["git", "push", "origin",
                                     "dev-automation-integration"], timeout=60)
+                    if push.returncode != 0:
+                        # Remote advanced (another machine pushed): rebase, retry
+                        logger.warning(
+                            f"Git push rejected after {name}; "
+                            f"pulling --rebase to reconcile remote"
+                        )
+                        sync = run_cmd(["git", "pull", "--rebase", "--autostash",
+                                        "origin", "dev-automation-integration"],
+                                       timeout=120)
+                        if sync.returncode != 0:
+                            run_cmd(["git", "rebase", "--abort"], timeout=30)
+                            logger.warning(
+                                f"Auto-rebase failed after {name} "
+                                f"({command_failure_summary(sync)}); "
+                                f"keeping commits local for next pre-flight sync"
+                            )
+                        else:
+                            push = run_cmd(["git", "push", "origin",
+                                            "dev-automation-integration"],
+                                           timeout=60)
                     if push.returncode == 0:
                         logger.info(f"Git push OK after {name}")
                     else:
