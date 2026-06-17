@@ -45,14 +45,13 @@ finite parts.
   \label{lem:finite-cover-peripheral-expansion}
   Let \(\widetilde A\) be the finite skew-product adjacency matrix attached
   to \(\tau\).  Assume the following finite Perron-boundary certificate:
-  after decomposing \(\widetilde A\) into its finite irreducible components,
-  every component with spectral radius \(\lambda\) is an irreducible
-  non-negative matrix and its cyclic Perron--Frobenius peripheral spectrum is
-  semisimple.  Equivalently, one may check directly that, for every
-  \(\pi\in\Irr(G)\) and every \(\zeta\in\Gamma_\pi\), the spectral projection
-  of \(A_\pi\) at \(\lambda\zeta\) has rank \(m_{\pi,\zeta}\), or that the
-  minimal polynomial of \(A_\pi\) has no repeated factor at
-  \(x-\lambda\zeta\).
+  for every \(\pi\in\Irr(G)\) and every \(\zeta\in\Gamma_\pi\), the spectral
+  projection of \(A_\pi\) at \(\lambda\zeta\) has rank \(m_{\pi,\zeta}\), or
+  equivalently the minimal polynomial of \(A_\pi\) has no repeated factor at
+  \(x-\lambda\zeta\).  This direct twisted-block certificate may be checked
+  from the finite skew-product matrix \(\widetilde A\) after its Frobenius
+  normal form has no nilpotent coupling between same-radius peripheral
+  components; the proof below uses only the stated blockwise certificate.
 
   Under this certificate, for every \(\pi\in\Irr(G)\),
   \begin{equation}\label{eq:finite-cover-peripheral-trace-expansion}
@@ -76,10 +75,11 @@ finite parts.
   \(\widetilde A\), counted with multiplicity.  On each irreducible
   component of \(\widetilde A\) with spectral radius \(\lambda\), the
   Perron--Frobenius cyclic theorem gives a finite cyclic peripheral set
-  \(\lambda\zeta\), with \(\zeta\) a root of unity, and all those peripheral
-  eigenvalues are semisimple.  Components with smaller spectral radius
-  contribute only eigenvalues of modulus \(<\lambda\).  The equivalent
-  direct certificate says the same thing block by block.
+  \(\lambda\zeta\), with \(\zeta\) a root of unity.  Components with smaller
+  spectral radius contribute only eigenvalues of modulus \(<\lambda\).  The
+  direct certificate in the statement rules out higher Jordan blocks for the
+  twisted Peter--Weyl pieces at these peripheral values, which is the only
+  semisimplicity input used below.
 
   Fix \(\pi\).  Put \(A_\pi\) in Jordan normal form.  The certified
   semisimplicity makes every Jordan block at an eigenvalue
@@ -366,10 +366,25 @@ finite parts.
   Adding this term converts the whole \(rm=1\) boundary contribution into
   \(\mathcal B_\varrho^{\mathrm{ren}}\).  Every \(rm\ge2\) term is inside
   the Perron disc because
-  \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\).  The same trace-power
-  majorant as in \Cref{lem:perron-boundary-trace-power-majorant} dominates
-  the \(rm\ge2\) tail by
-  \(C\sum_{rm\ge2}\lambda^{1-rm}/(rm)<\infty\), independently of \(t\).
+  \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\).  The \(rm\ge2\) tail is
+  dominated directly from the finite-dimensional spectral-radius bound
+  \(\rho(A_\pi)\le\lambda\).  Since there are only finitely many
+  \(\pi\), there is a constant \(C\) such that
+  \[
+    \abs{\Tr(A_\pi^\ell)}\le C\lambda^\ell
+    \qquad(\pi\in\Irr(G),\ \ell\ge1).
+  \]
+  Hence, uniformly for \(0\le t\le1\),
+  \[
+    \abs{\Log\det(I-t^{rm}\lambda^{-rm}A_\pi)^{-1}}
+    \le
+    C'\sum_{\ell\ge1}\frac{\lambda^\ell}{\ell}\lambda^{-rm\ell}
+    \le C''\lambda^{1-rm}
+    \qquad(rm\ge2).
+  \]
+  Therefore
+  \(\sum_{rm\ge2}\lambda^{1-rm}/(rm)<\infty\) gives an \(L^1\) majorant
+  independent of \(t\).
   Dominated convergence gives
   \eqref{eq:renormalized-fixed-label-determinant}.
 \end{proof}
@@ -439,8 +454,91 @@ finite parts.
         (s_\varrho\gamma+F_\varrho^{\mathrm{ren}})
     +O(N^{-1}).
   \]
-  Exponentiating with \Cref{lem:class-product-log-to-product-error} proves
-  \eqref{eq:renormalized-frobenius-product}.
+  The left-hand side is the logarithm of a positive real Euler product for
+  each finite \(N\).  The class indicator is real, and the Peter--Weyl terms
+  in the finite sums occur in contragredient conjugate pairs; hence
+  \(\delta_C\) and the constant term are real.  Exponentiating with
+  \Cref{lem:class-product-log-to-product-error} proves
+  \eqref{eq:renormalized-frobenius-product} and gives
+  \(K_C^{\mathrm{ren}}>0\).
+\end{proof}
+
+\begin{theorem}[Renormalized coordinate readout for Frobenius products]
+  \label{thm:renormalized-coordinate-readout}
+  Under the hypotheses of
+  \Cref{thm:renormalized-frobenius-product}, define the positive-branch
+  logarithmic class profile
+  \begin{equation}\label{eq:renormalized-coordinate-profile}
+    H_C^{\mathrm{ren}}
+    :=
+    -\frac{|G|}{|C|}\log K_C^{\mathrm{ren}}
+    \qquad(C\subset G).
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:renormalized-coordinate-forward}
+    H_C^{\mathrm{ren}}
+    =
+    \sum_{\pi\in\Irr(G)}
+      \chi_\pi^\ast(C)\bigl(s_\pi\gamma+F_\pi^{\mathrm{ren}}\bigr)
+    \qquad(C\subset G).
+  \end{equation}
+  Conversely, for every \(\pi\in\Irr(G)\),
+  \begin{equation}\label{eq:renormalized-coordinate-inverse}
+    F_\pi^{\mathrm{ren}}
+    =
+    \sum_{C\subset G}\frac{|C|}{|G|}
+      H_C^{\mathrm{ren}}\chi_\pi(C)
+    -s_\pi\gamma .
+  \end{equation}
+  The coordinate \(F_\pi^{\mathrm{ren}}\) appearing here is exactly the
+  reduced Adams--M\"obius determinant finite part of
+  \Cref{thm:renormalized-fixed-label-determinant}, namely
+  \[
+    F_\pi^{\mathrm{ren}}
+    =
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\sigma\in\Irr(G)}
+        a_{\pi,\sigma}^{(m)}\,
+        \mathcal B_{rm,\sigma}^{\mathrm{ren}}.
+  \]
+  Thus the renormalized Frobenius-product constants, after the positive
+  logarithm is fixed, are equivalent to the full renormalized Peter--Weyl
+  fixed-label determinant vector.
+\end{theorem}
+
+\begin{proof}
+  Formula \eqref{eq:renormalized-frobenius-product-constant} gives
+  \[
+    \log K_C^{\mathrm{ren}}
+    =
+    -\frac{|C|}{|G|}
+      \sum_{\pi\in\Irr(G)}
+        \chi_\pi^\ast(C)
+        \bigl(s_\pi\gamma+F_\pi^{\mathrm{ren}}\bigr).
+  \]
+  Multiplying by \(-|G|/|C|\) proves
+  \eqref{eq:renormalized-coordinate-forward}.  The irreducible characters are
+  an orthonormal basis of the class functions for
+  \[
+    \langle U,V\rangle_G
+    =
+    \sum_{C\subset G}\frac{|C|}{|G|}U(C)\overline{V(C)}.
+  \]
+  Taking the \(\pi\)-Fourier coefficient of the class function
+  \(C\mapsto H_C^{\mathrm{ren}}\) in
+  \eqref{eq:renormalized-coordinate-forward} gives
+  \[
+    \sum_C\frac{|C|}{|G|}
+      H_C^{\mathrm{ren}}\chi_\pi(C)
+    =
+    s_\pi\gamma+F_\pi^{\mathrm{ren}},
+  \]
+  which is \eqref{eq:renormalized-coordinate-inverse}.  Finally,
+  \Cref{thm:renormalized-fixed-label-determinant} is precisely the reduced
+  boundary determinant evaluation of \(F_\pi^{\mathrm{ren}}\); substituting
+  \eqref{eq:renormalized-fixed-label-determinant} gives the displayed
+  Adams--M\"obius reduced determinant expression.  No input beyond finite
+  character orthogonality and the already proved determinant formula is used.
 \end{proof}
 
 \begin{corollary}[Strict-gap specialization]
