@@ -185,6 +185,7 @@ def main():
         + (s**2 - 1) * w**6
     )
     record("completed_determinant", H)
+    record("completed_sign_symmetry", H(w=w, s=-s) - H(w=-w, s=s))
     record("resultant_m2_chosen_order_difference", s.resultant(H, s) - H(s=0))
     record("resultant_sign_m2_difference", H.resultant(s, s) + H(s=0))
 

@@ -1,22 +1,16 @@
 \section{Further remarks}\label{sec:conclusion}
 
-The paper proves two theorem-level tools for self-dual finite kernels.
-The first is the sign-quotient plane-model theorem: the completed
-determinant parity conditions force the quotient by
-\((w,s)\mapsto(-w,-s)\) to be expressed through \(x=w^2\) and \(y=sw\),
-and a smooth plane model obtained in these coordinates gives the
-quotient genus immediately. The second is the endpoint-selection theorem
-for primitive self-dual kernels with strict unitary spectral gap and
-explicit root separation. Once a completed determinant \(H(w,s)\) is
-obtained from a self-dual kernel, this theorem reduces the large-\(m\)
-cyclotomic problem to checking separation of one endpoint branch and
-then substitutes the endpoint Taylor jet through an explicit
-coefficient-transfer formula to produce the asymptotic expansion of the
-twisted Perron roots. Its statement applies to any primitive self-dual
-finite kernel satisfying the same spectral-gap and separation
-hypotheses. The ten-state kernel is the effective application verifying
-these hypotheses and recording the associated exact invariants. The
-primary cyclotomic object is the conjugate product
+The paper isolates one explicit ten-state self-dual synchronisation
+kernel and records a complete determinant-level audit for it.  The
+outputs are concrete: the determinant \(\Delta(z,u)\), the completed
+determinant \(\widehat\Delta(w,s)\), the quotient quartic, the genus
+\(6\) double cover, the generic \(S_6\) Galois group, the cyclic-lift
+factorisation, and the large-\(m\) cyclotomic Perron-root asymptotics
+through order \(m^{-12}\).  The structural lemmas on sign quotients and
+endpoint selection are used as proof devices in this audit, with their
+hypotheses verified explicitly for the displayed kernel.
+
+The primary cyclotomic object is the conjugate product
 \[
   R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha).
 \]
@@ -28,31 +22,21 @@ because \(\Phi_m^+\) is placed in the first slot. The reversed order
 contributes the sign \((-1)^{(\deg_s H)\deg\Phi_m^+}\) and is not the
 definition of \(R_m\).
 
-The explicit weighted ten-state kernel is the fully effective
-application developed here. The structural statements above remain
-available for other primitive self-dual finite kernels satisfying the
-same hypotheses.
-Its self-duality collapses all unit-circle twists to a single completed
-determinant, and in this application the same degree-\(6\) polynomial
-controls the quotient geometry, the generic Galois group, the cyclic-lift
-factors, and the cyclotomic asymptotics. The cyclotomic resultants
-therefore reduce the unit-circle twists to a one-parameter elimination
-problem and yield twisted Perron roots with an effective large-\(m\)
-expansion.
+The self-duality collapses all unit-circle twists to a single completed
+determinant, and in this example the same degree-\(6\) polynomial
+controls the quotient geometry, the generic Galois group, the
+cyclic-lift factors, and the cyclotomic asymptotics.  The cyclotomic
+resultants therefore reduce the unit-circle twists to a one-parameter
+elimination problem and yield twisted Perron roots with an effective
+large-\(m\) expansion.
 
-Two separate directions extend the theorem-level part of the paper. One
-is a classification problem: identify structural conditions on
-self-dual weighted kernels that force a low-degree completed determinant
-or a low-genus quotient curve. The other is to make the effective
-root-separation constants uniform in families. These would strengthen
-the endpoint-selection theorem, but they are not needed for its present
-form: \Cref{thm:self-dual-endpoint-selection} already gives a
-kernel-independent endpoint-asymptotic result for cyclotomic factors of
-completed self-dual determinants, and
-\Cref{thm:sign-quotient-plane-genus} gives the corresponding reusable
-quotient normal form. The displayed ten-state kernel supplies a complete
-effective application, including spectral-gap, separation, and
-endpoint-jet certificates.
+Natural follow-up questions are classification and uniformity questions:
+which finite labelled kernels have a comparably small self-dual
+completion, and when can the root-separation constants be made uniform
+in a family?  Those questions are outside the scope of this case study.
+Here the claims are limited to the displayed ten-state kernel and to the
+auxiliary criteria whose hypotheses are verified by the certificates
+below.
 
 \appendix
 
@@ -164,10 +148,18 @@ fitted parameters are used anywhere in the paper.
       \end{aligned}
     \]
     The same expansion satisfies
-    \(\Delta(uz,u^{-1})=\Delta(z,u)\) coefficientwise, which is the
-    explicit consistency check used in
-    \Cref{prop:kernel-delta-explicit}.
-    The exact Sage output for the two requested checks is therefore
+    \(\Delta(uz,u^{-1})=\Delta(z,u)\) coefficientwise.  This is the
+    displayed self-duality certificate:
+    \[
+      \Pi^{-1}B(u)\Pi=uB(1/u),
+      \qquad
+      \Delta(uz,u^{-1})-\Delta(z,u)=0.
+    \]
+    In the executable runner this appears as
+    \[
+      \texttt{self\_duality\_difference: 0}.
+    \]
+    The exact Sage output for the determinant checks is therefore
     \[
     \begin{aligned}
       \Delta
@@ -225,7 +217,27 @@ DeltaDual = 1-(1+1/u)*(u*z)-5*(1/u)*(u*z)^2 \
     \]
     These two displayed polynomials are the exact certificates used in
     \Cref{prop:sync-hatdelta-completion,prop:sync-hatdelta-quotient};
-    the command block below records how they are produced. The same
+    the command block below records how they are produced.  The
+    sign-symmetry certificate used throughout the paper is
+    \[
+      \widehat\Delta(w,-s)-\widehat\Delta(-w,s)=0,
+      \qquad
+      F(w^2,sw)-\widehat\Delta(w,s)=0.
+    \]
+    In the runner these are printed as
+    \begin{verbatim}
+completed_determinant:
+1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4
+  + (s^3 - 6*s)*w^5 + (s^2 - 1)*w^6
+    \end{verbatim}
+    \[
+      \texttt{completed\_sign\_symmetry: 0}
+    \]
+    and
+    \[
+      \texttt{quotient\_identity: 0}.
+    \]
+    The same
     item also fixes the resultant convention used later: with the
     standard Sylvester convention,
     \[
@@ -277,7 +289,30 @@ H.resultant(s, s) + H(s=0)
     \(\langle F,\,\partial_xF,\,\partial_yF\rangle\subset\QQ[x,y]\)
     with respect to graded reverse lexicographic order is \(\{1\}\).
     This is the exact affine smoothness certificate used in
-    \Cref{prop:sync-hatdelta-quotient}.
+    \Cref{prop:sync-hatdelta-quotient}; the executable runner prints it
+    as
+    \[
+      \texttt{affine\_smoothness\_groebner: [1]}.
+    \]
+    The projective smoothness check at infinity is also explicit.  The
+    homogenisation is
+    \[
+    \begin{aligned}
+      F_h(X,Y,Z)
+      &=Z^4-YZ^3-5XZ^3+3XYZ^2+5X^2Z^2-XY^2Z\\
+      &\quad+XY^3-6X^2YZ+X^2Y^2-X^3Z,
+    \end{aligned}
+    \]
+    and its leading form on \(Z=0\) is \(XY^2(X+Y)\).  The three points
+    at infinity and their nonzero partial-derivative witnesses are
+    \[
+      [0:1:0]:\ \partial_XF_h=1,
+      \qquad
+      [1:0:0]:\ \partial_ZF_h=-1,
+    \]
+    \[
+      [1:-1:0]:\ \partial_ZF_h=4.
+    \]
 
     \medskip
     \noindent\textit{Sage commands.}

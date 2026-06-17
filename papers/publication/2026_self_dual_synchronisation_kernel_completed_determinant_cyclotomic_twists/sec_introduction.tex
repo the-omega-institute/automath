@@ -1,106 +1,68 @@
 \section{Introduction}\label{sec:introduction}
 
-Let \(B(u)=B_0+uB_1\) be a finite output-labelled weighted adjacency
-matrix, and write \(\Delta(z,u)=\det(I-zB(u))\). The structural part of
-the paper applies to primitive kernels whose output-zero and output-one
-edges are exchanged by an involution. For such kernels
-\Cref{lem:self-dual-compression} gives the functional equation
-\(\Delta(z,u)=\Delta(uz,u^{-1})\) and a completed determinant
-\(H(w,s)\in\ZZ[s][w]\) after the change of variables
-\[
-  u=r^2,\qquad s=r+r^{-1},\qquad w=zr.
-\]
-The main result, \Cref{thm:self-dual-endpoint-selection}, is a reusable
-endpoint-asymptotic theorem for this class. It is stated for an
-arbitrary primitive finite kernel satisfying the self-duality above,
-with hypotheses expressed only in terms of the unitary spectral gap,
-the completed determinant \(H(w,s)\), and an explicit root-separation
-constant. Under those hypotheses the theorem proves that the
-large-\(m\) real cyclotomic factors
-\[
-  R_m(w):=\prod_{\alpha\in A_m}H(w,\alpha)
-\]
-select the endpoint conjugates \(\pm 2\cos(\pi/m)\), where \(R_m\) is
-defined by the root product and \(A_m\) is the set of real primitive
-\(2m\)-th cyclotomic conjugates. It turns any
-Taylor jet of the endpoint branch at \(s=2\) into the corresponding
-asymptotic expansion of the twisted Perron roots. The ordered resultant
-representation is part of the statement:
-\[
-  R_m(w)=\Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr).
-\]
-With the standard Sylvester convention, placing \(\Phi_m^+\) in the
-first slot gives the conjugate product without an additional sign, while
-the reversed order introduces the sign
-\((-1)^{(\deg_s H)\deg\Phi_m^+}\).
+This article is a rigorous computational case study of the explicit
+ten-state weighted synchronisation kernel displayed in
+\Cref{def:sync-kernel} and Figure~\ref{fig:sync-kernel}.  The kernel has
+uniform outdegree \(3\), a strongly connected aperiodic underlying
+digraph, and a binary output labelling.  Its ten states split into five
+dual pairs, and the duality exchanges the output-zero and output-one
+edges.  These features make it a small but nontrivial test case for the
+interaction between labelled finite-state dynamics, self-dual determinant
+identities, plane-curve geometry, finite-field Galois certificates, and
+cyclotomic twists.
 
-The paper has two contributions. The first is kernel-independent
-structural theory for self-dual finite kernels, stated before the
-example and used as theorem-level input throughout the application. It
-has two reusable parts. \Cref{thm:sign-quotient-plane-genus} gives a
-normal-form quotient theorem: whenever a completed determinant satisfies
-the self-dual parity conditions, the sign quotient is obtained by the
-invariants \(x=w^2\) and \(y=sw\), and a smooth plane model immediately
-gives the quotient genus. \Cref{thm:self-dual-endpoint-selection} gives
-an endpoint-selection and asymptotic-transfer theorem for primitive
-self-dual kernels: once the spectral gap, endpoint isolation, and
-root-separation hypotheses are verified for a completed determinant
-\(H(w,s)\), the large-\(m\) cyclotomic asymptotics follow formally from
-the endpoint Taylor jet. The input data for these two theorems are a
-self-dual finite kernel and its completed determinant; the ten-state
-kernel is not part of either statement.
+The scope is intentionally concrete.  We do not classify self-dual
+kernels, and we do not claim that the ten-state example represents a
+generic family.  Instead, every assertion below is made for the displayed
+kernel or for an explicitly stated auxiliary criterion that is then
+verified for this kernel.  The point of the paper is that this one
+kernel admits a complete audit trail: the transition table gives the
+matrix, the matrix gives the determinant, the determinant gives the
+completed curve and the cyclotomic factors, and the Sage runner
+\[
+  \texttt{certificates/verify\_certificates.py}
+\]
+reproduces the exact symbolic certificates cited in the proofs.
 
-The second contribution is a fully effective application of this general
-theory to the explicit ten-state digraph displayed in
-\Cref{def:sync-kernel} and
-Figure~\ref{fig:sync-kernel}. The symbol ``synchronisation kernel'' is
-purely terminological: the state names \(\st{000},\ldots,\st{11-1}\)
-are labels for the ten vertices of that digraph, and all combinatorial
-data appear verbatim in the transition table. The labels come from a
-two-track comparison automaton, but that automaton is only provenance
-here: every object used below is recovered from the displayed digraph,
-transition table, involution, and matrix. In this application the
-general endpoint-selection hypotheses are verified from a completed
-determinant, whose smooth projective spectral curve has genus \(6\),
-whose quotient by the sign involution is a smooth quartic of genus \(3\),
-and whose generic Galois group is the full symmetric group~\(S_6\).
-The quartic quotient is an application of the general sign-quotient
-plane-model theorem, not a separate ad hoc construction.
-
-For the displayed ten-state kernel the permutation implementing the
-self-duality exchanges output-zero and output-one edges, so its
-completed determinant is denoted by
-\(\widehat\Delta(w,s)\). The subsequent kernel-specific statements
-verify the hypotheses of the general endpoint-selection theorem and
-compute the accompanying geometric and Galois invariants for this
-application.
-For each fixed \(u\), the matrix \(B(u)\) defines a finite-state
-dynamical \(\zeta\)-function through the determinant
+Let \(B(u)=B_0+uB_1\) be the weighted adjacency matrix of this kernel and
+write
 \[
   \Delta(z,u):=\det(I-zB(u)).
 \]
-The same weighted matrix also controls the natural cyclic
-skew-product lifts
+The self-duality permutation satisfies
+\[
+  \Pi^{-1}B_0\Pi=B_1,\qquad \Pi^{-1}B_1\Pi=B_0,
+\]
+and therefore
+\[
+  \Delta(z,u)=\Delta(uz,u^{-1}).
+\]
+After the change of variables
+\[
+  r=e^{i\theta},\qquad u=r^2,\qquad
+  s=r+r^{-1}=2\cos\theta,\qquad w=zr,
+\]
+the determinant becomes the completed determinant
+\(\widehat\Delta(w,s)\in\ZZ[s][w]\).  The completion compresses the
+unit-circle twists \(u=e^{2i\theta}\) to the single real parameter
+\(s=2\cos\theta\), and in this example the resulting polynomial has
+degree \(6\) in \(w\) although \(B(u)\) is a \(10\times10\) matrix.
+This low-degree completion is the phenomenon isolated in the paper: the
+same polynomial controls the quotient curve, the generic Galois group,
+the primitive real cyclotomic factors, and the large-\(m\) twisted
+Perron-root asymptotics.
+
+The same weighted matrix also controls the natural cyclic skew-product
+lifts
 \[
   \widetilde B_q:=B_0\otimes I_q+B_1\otimes P_q,
 \]
 where \(P_q\) is the cyclic permutation matrix on \(\ZZ/q\ZZ\). Their
 Fourier blocks are \(B(\omega_q^j)\), so the unit-circle twists are the
-natural character factors of the labelled cyclic lifts. The mechanism
-used below is the additional structure coming from the explicit
-self-duality
-\[
-  \Delta(z,u)=\Delta(uz,u^{-1}),
-\]
-which compresses the unit-circle twists \(u=e^{2i\theta}\) to a single
-real parameter after the standard change of variables
-\[
-  r=e^{i\theta},\qquad u=r^2,\qquad s=r+r^{-1}=2\cos\theta,\qquad w=zr.
-\]
-The resulting completed determinant \(\widehat\Delta(w,s)\) provides a
-convenient algebraic model for the twisted spectrum, and the
-cyclotomic resultants considered below are precisely the primitive real
-factors extracted from the Fourier decomposition of the cyclic lifts.
+natural character factors of the labelled cyclic lifts. The cyclotomic
+root products considered below are precisely the primitive real factors
+extracted from this Fourier decomposition after the completed
+coordinate change.
 Throughout, such a factor is the conjugate product itself, or
 equivalently the ordered resultant with the real cyclotomic polynomial
 in the first argument. The opposite resultant order differs by the
@@ -118,128 +80,44 @@ so \(\Phi_m^+\) is the standard real Chebyshev factor attached to the primitive 
 
 
 
-The application has two strands, both serving the theorem. The first is
-geometric: the affine curve \(\widehat\Delta(w,s)=0\) admits a natural
-involution, and its normalisation and quotient can be described
-explicitly. The second is arithmetic: eliminating the parameter \(s\)
-along cyclotomic slices produces one-variable root products, equivalently
-ordered resultants, whose minimal-modulus roots are selected by the
-endpoint theorem. This yields explicit asymptotics for the cyclotomic
-twists of the kernel.
+The case study has two strands. The first is geometric: the affine curve
+\(\widehat\Delta(w,s)=0\) admits the sign involution
+\((w,s)\mapsto(-w,-s)\), and its normalisation and quotient can be
+described explicitly. The second is arithmetic: eliminating the
+parameter \(s\) along cyclotomic slices produces one-variable root
+products, equivalently ordered resultants. For this kernel, explicit
+root-separation certificates show that the endpoint conjugates select
+the minimal-modulus roots for large \(m\), giving a high-order
+asymptotic expansion for the cyclotomic twists.
 
 \paragraph{Computer-assisted verification.}
-The exact determinant, discriminant, finite-field factorisations, and
-endpoint jet coefficients were computed in SageMath~10.2 and
-cross-checked in Mathematica~14.0. These certificates support the
-determinant, quotient, Galois, endpoint-jet, and asymptotic results in
-\Cref{sec:completion-twists}. The appendix gives both a
-theorem-to-command map and a single Sage
-certificate runner, \texttt{certificates/verify\_certificates.py}. The
-runner prints exact outputs, Sage and Python versions, and SHA-256
-checksums for the paper sources and the certificate script. Items
-\textup{(a)}--\textup{(f)} give the corresponding determinant,
-completion, smoothness, Galois-theoretic, root-separation, and
-endpoint-jet certificates inline. Each item states the exact output
-used in the corresponding proof, and no fitted parameters are used.
-
-The general theorem is useful precisely because the cyclotomic
-resultants involve all primitive conjugates at once: after completion,
-the problem becomes to prove that no interior conjugate of
-\(2\cos(\pi/m)\) contributes a smaller root than the endpoint conjugate.
-\Cref{thm:self-dual-endpoint-selection} isolates this as a reusable
-criterion: a strict unitary spectral gap gives a global lower bound away
-from the untwisted endpoint, an effective separation interval isolates
-the endpoint branch, and the Taylor jet of that branch then determines
-the large-\(m\) expansion by an explicit universal coefficient formula.
-The ten-state kernel gives a certificate-level application of the
-criterion. Its self-duality
-compresses the circle of
-unitary twists \(u=e^{2i\theta}\) to \(s=2\cos\theta\), the completed
-determinant has degree six, and \Cref{lem:root-separation} verifies the
-required constants \(\eta=1/100\), \(\varepsilon=1/200\), and
-\(m_0=32\). Once these hypotheses are certified, the quotient geometry,
-generic Galois group, normalized cyclotomic resultants, and large-\(m\)
-asymptotics can be audited term by term from the same polynomial
-\(\widehat\Delta(w,s)\).
+The exact determinant, discriminant, finite-field factorisations,
+smoothness ideals, interval separation checks, and endpoint jet
+coefficients were computed in SageMath~10.2 and cross-checked in
+Mathematica~14.0 where indicated.  The appendix gives a
+theorem-to-command map and the single Sage certificate runner
+\(\texttt{certificates/verify\_certificates.py}\).  The runner prints
+the Sage and Python versions, SHA-256 checksums for the paper sources
+and the certificate script, and named outputs such as
+\(\texttt{determinant\_difference: 0}\),
+\(\texttt{self\_duality\_difference: 0}\),
+\(\texttt{affine\_smoothness\_groebner: [1]}\),
+\(\texttt{mod7\_s3\_gcd\_factor}\),
+\(\texttt{mod19\_s3\_gcd\_factor}\),
+\(\texttt{endpoint\_interval\_certificate: true}\), and
+\(\texttt{finite\_m\_branch\_selection\_4\_to\_31: true}\).
+Items \textup{(a)}--\textup{(f)} in
+\Cref{sec:appendix-computation} display the exact outputs used in the
+corresponding proofs; no fitted parameters are used.
 
 
 \subsection{Main results}
 
-The first main result is the reusable endpoint-selection theorem. It is
-stated and proved in \Cref{thm:self-dual-endpoint-selection}; for ease of
-reference we record here the form in which it is applied later. Let
-\(B(u)=B_0+uB_1\) be any finite non-negative labelled kernel for which
-\(B(1)\) is primitive, \(B(1)\mathbf1=q\mathbf1\), and an involution
-exchanges \(B_0\) and \(B_1\). Let \(H(w,s)\) be its self-dual
-completion. If the unitary twists satisfy the strict spectral-gap
-condition \(\rho(B(e^{it}))<q\) for \(t\not\equiv0\), if the endpoint
-root \(w_0=1/q\) of \(H(w,2)\) is simple and isolated in modulus, and if
-an effective separation interval isolates the corresponding branch
-\(w(s)\) from all interior conjugates, then the real cyclotomic root
-products
-\[
-  R_m(w):=\prod_{\alpha\in A_m}H(w,\alpha)
-\]
-have their smallest zeros in the endpoint slices
-\(\pm2\cos(\pi/m)\), for all sufficiently large \(m\). Consequently
-the twisted Perron roots satisfy
-\[
-  \rho_m=\frac1{w(2\cos(\pi/m))},
-\]
-and any Taylor jet of \(w(s)\) at \(s=2\) gives the corresponding
-large-\(m\) asymptotic expansion by the coefficient-transfer formula
-in \Cref{thm:self-dual-endpoint-selection}. Equivalently,
-\[
-  R_m(w)=\Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr)
-\]
-with \(\Phi_m^+\) in the first slot. This order is part of the
-statement: reversing the arguments inserts the Sylvester sign and is not
-the polynomial \(R_m\) unless that sign happens to be \(+1\).
+The main results are kernel-specific certificates for the ten-state
+matrix.  We first record the determinant, spectral radius, completion,
+quotient, and generic Galois group.
 
-\begin{theorem}[Endpoint selection for self-dual kernels]
-  \label{thm:intro-general-endpoint-selection}
-  Under the hypotheses just stated, for every sufficiently large \(m\)
-  the polynomial
-  \[
-    R_m(w):=\prod_{\alpha\in A_m}H(w,\alpha)
-  \]
-  has its minimal-modulus zeros exactly in the endpoint slice
-  \(H(w,2\cos(\pi/m))\), together with the symmetric slice
-  \(H(w,-2\cos(\pi/m))\) when that conjugate occurs. Consequently
-  \[
-    \rho_m=\frac1{w(2\cos(\pi/m))}.
-  \]
-  If \(w(s)\), or equivalently \(\rho(s)=1/w(s)\), is expanded at
-  \(s=2\) to order \(N\), the universal substitution formula in
-  \Cref{thm:self-dual-endpoint-selection} gives the asymptotic
-  expansion of \(\rho_m\) through order \(m^{-2N}\).
-  With the standard Sylvester convention the same root product is
-  represented as
-  \[
-    R_m(w)=\Res_s\bigl(\Phi_m^+(s),H(w,s)\bigr),
-  \]
-  not as the reversed-order resultant.
-\end{theorem}
-
-This introductory theorem is a restatement of
-\Cref{thm:self-dual-endpoint-selection}. Its hypotheses are stated
-entirely in terms of \(B(u)\), the self-duality involution, the completed
-determinant \(H(w,s)\), and the separation constants. The example below
-supplies an effective verification of those hypotheses for one concrete
-kernel, but the theorem itself applies to any primitive self-dual kernel
-satisfying the same explicit hypotheses.
-
-The next structural result is the reusable quotient normal form from
-\Cref{thm:sign-quotient-plane-genus}. In the present self-dual setting,
-it says that the parity constraints on a completed determinant force
-the sign quotient to be the plane curve obtained from the invariants
-\(x=w^2\) and \(y=sw\). Thus smoothness of that plane model is enough
-to identify the smooth projective quotient and its genus.
-
-The remaining main results are applications of these two theorems. Their
-role is to verify the hypotheses and compute the associated invariants
-for the explicit ten-state kernel. All curves in
-the main results are considered over \(\overline{\QQ}\), and
+All curves in the main results are considered over \(\overline{\QQ}\), and
 \(\overline{X}\) denotes the normalisation of the projective closure of
 the irreducible affine curve \(\widehat\Delta(w,s)=0\).
 
@@ -286,7 +164,7 @@ Let \(B(u)\) be the weighted synchronisation kernel of
 \end{enumerate}
 \end{theorem}
 
-Our second theorem concerns cyclotomic twists.
+The second kernel-specific theorem concerns cyclotomic twists.
 
 \begin{theorem}\label{thm:intro-kernel-cyclotomic}
 For \(m\ge 2\), let \(s_m=2\cos(\pi/m)\), let \(\Phi_m^+\) be the
@@ -336,6 +214,27 @@ then:
 \end{enumerate}
 \end{theorem}
 
+The endpoint-selection criterion used to prove the large-\(m\) branch
+selection is stated and proved in \Cref{thm:self-dual-endpoint-selection}.
+For context, let \(B(u)=B_0+uB_1\) be a finite non-negative labelled
+kernel for which \(B(1)\) is primitive, \(B(1)\mathbf1=q\mathbf1\), and
+an involution exchanges \(B_0\) and \(B_1\).  If the associated completed
+determinant \(H(w,s)\) satisfies the stated spectral-gap, endpoint
+isolation, and effective root-separation hypotheses, then the real
+cyclotomic root products
+\[
+  R_m(w):=\prod_{\alpha\in A_m}H(w,\alpha)
+\]
+select the endpoint slices \(\pm2\cos(\pi/m)\) for all sufficiently large
+\(m\).  Any Taylor jet of the selected branch then gives the
+corresponding large-\(m\) expansion.  In this paper this criterion is
+used only through \Cref{cor:sync-endpoint-selection-application}, where
+\Cref{lem:root-separation} verifies its hypotheses for the displayed
+ten-state kernel with
+\[
+  \eta=\frac1{100},\qquad \varepsilon=\frac1{200},\qquad m_0=32.
+\]
+
 We also record the primitive-orbit asymptotics of the unweighted kernel.
 
 \subsection{Previous work}
@@ -356,6 +255,17 @@ where they enter the proof: the smooth plane quartic genus formula,
 quadratic ramification, and Riemann--Hurwitz.
 
 The closest literature falls into three layers.
+
+The word ``synchronisation'' is used here in the finite-automaton sense:
+the motivating comparison construction has recurrent states organized by
+how labelled paths re-align.  This places the example near the classical
+literature on synchronizing automata and road colouring, including
+\v{C}ern\'y's original work, Trahtman's solution of the road-colouring
+problem, and Volkov's survey of the \v{C}ern\'y conjecture
+\cite{Cerny1964,Trahtman2009,Volkov2008}.  The present paper does not
+use any global synchronizing-automata theorem; the cited literature
+explains the terminology and the finite-state motivation for isolating a
+small recurrent kernel.
 
 Classical background on graph zeta functions, coverings, and
 Artin-style \(L\)-factorisations goes through Hashimoto
@@ -379,27 +289,20 @@ Morita and collaborators
 closest antecedents to the cyclic-lift/resultant discussion in the
 present note.
 
-The reusable increment here is the endpoint-selection mechanism for
-completed self-dual determinants. Classical graph-zeta determinant
-formulas explain why finite labelled kernels produce rational
-determinants; graph-covering and Artin \(L\)-factorisation formulas
-explain why cyclic lifts split into character factors; and real
-cyclotomic parametrisations are standard. What is not contained in
-those inputs is a criterion deciding which conjugate among all primitive
-real cyclotomic slices controls the minimal zero of the resultant, nor
-a procedure that turns this decision into a high-order Perron-root
-asymptotic from a local endpoint jet. \Cref{thm:self-dual-endpoint-selection}
-supplies that criterion for primitive self-dual kernels: it combines
-the self-dual completion, a strict unitary spectral gap, and an
-effective separation of the endpoint branch to force endpoint selection
-and to convert an endpoint Taylor jet into the twisted Perron
-asymptotic expansion. This statement is independent of the ten-state
-example. Once a self-dual kernel supplies \(H(w,s)\), the spectral-gap
-and separation hypotheses are exactly the verifications needed to
-obtain large-\(m\) twisted Perron asymptotics from the endpoint jet. The
-explicit ten-state kernel then supplies a complete application in which
-the same completed determinant also carries the genus, quotient,
-generic Galois group, and endpoint asymptotic calculations.
+For the cyclotomic part, classical graph-zeta determinant formulas
+explain why finite labelled kernels produce rational determinants;
+graph-covering and Artin \(L\)-factorisation formulas explain why cyclic
+lifts split into character factors; and real cyclotomic parametrisations
+and cyclotomic-resultant conventions are standard
+\cite{Apostol1970,CoxLittleOShea2005}.  The additional step needed in this case study is
+effective endpoint selection: among all primitive real cyclotomic
+slices, one must prove that no interior conjugate contributes a smaller
+zero than the endpoint conjugate.  \Cref{thm:self-dual-endpoint-selection}
+packages the elementary ingredients used here--self-dual completion,
+strict unitary spectral gap, rational separation intervals, and the
+endpoint Taylor jet--so that the ten-state verification can be audited
+without repeating the selection argument at every \(m\).  The
+substantive data remain the explicit certificates for this kernel.
 
 Finite-group extensions of shifts of finite type provide the standard
 language for tracking output labels in skew products. We use the
@@ -412,13 +315,10 @@ the cyclic Fourier factorisation of
 \Cref{prop:sync-cyclic-lift-factorisation}. The underlying two-track
 comparison can be viewed as a fibre product of labelled graphs, in the
 sense of Nasu's textile systems \cite{Nasu1995}, but the parent
-construction is not needed for the theorem. The role of the ten-state
-kernel is to give a fully effective application of the general
-endpoint-selection theorem: it verifies the hypotheses and the
-algebro-geometric invariants for a self-dual kernel whose completed
-determinant remains degree \(6\) while carrying nontrivial quotient
-geometry, generic \(S_6\) Galois group, and explicit large-\(m\)
-cyclotomic asymptotics.
+construction is not used in the proofs.  This article isolates the
+ten-state recurrent kernel because its completed determinant remains
+degree \(6\) while carrying nontrivial quotient geometry, generic
+\(S_6\) Galois group, and explicit large-\(m\) cyclotomic asymptotics.
 
 \subsection{Organisation}
 
