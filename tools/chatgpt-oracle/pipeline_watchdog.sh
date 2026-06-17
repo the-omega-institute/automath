@@ -19,10 +19,10 @@ set -u
 # ── Config ────────────────────────────────────────────────────────────
 REPO="/mnt/d/omega/automath"
 # Arguments the supervisor is (re)started with. Keep in sync with the
-# command you want kept alive. --all advances the whole queue with
-# --parallel worker slots (vs pinning to a single --paper).
+# command you want kept alive. Omitting --paper makes the supervisor run
+# the whole runnable queue (its inner pool gets --all automatically) with
+# --parallel worker slots; add `--paper <dir>` to pin to one paper.
 SUPERVISOR_ARGS=(
-  --all
   --parallel 3
   --poll-interval 120
   --no-auto-commit
