@@ -35,9 +35,11 @@
 \newcommand{\Sem}{\mathsf{Sem}}
 \newcommand{\Eq}{\mathsf{Eq}}
 \newcommand{\Norm}{\mathsf{Norm}}
+\newcommand{\PointerOK}{\mathsf{PointerOK}}
+\newcommand{\qlex}{q_{\mathrm{lex}}}
 
-\title{Finite Publication-Coordinate Audits for Generated Formal-Mathematics Artifacts}
-\titlerunning{Finite Publication-Coordinate Audits}
+\title{Publication-Coordinate Design Patterns and Finite Checkers for Generated Formal-Mathematics Artifacts}
+\titlerunning{Publication-Coordinate Finite Checkers}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
 \institute{AELF PTE LTD. \email{auric@aelf.io} \and
@@ -48,24 +50,27 @@ National University of Singapore \email{e1327962@u.nus.edu}}
 
 \begin{abstract}
 Generated formal-mathematics artifacts need a publication interface that states
-which finite records support which public claims.  We present such a
-publication-coordinate audit route for a concrete \emph{newmath}/\emph{automath}
-theory-to-paper package.  The article is not an evaluation of tool performance
-or formalization success rates; it is a finite replay and audit-boundary paper.  The
-public claim is intentionally narrow: a submitted finite replay package certifies
-exactly two artifact-level coordinates.  The first is the legacy atom
-\(\texttt{qinv}\), read here only as lexical environment-token coverage for the
-artifact appendix's declared five raw \LaTeX{} environment-token names; it is not
-theorem-inventory coverage, theorem-dependency analysis, proof checking, scope
-adequacy, audit-record completeness, or semantic theorem completeness.  The
+which finite records support which public claims.  We present a
+publication-coordinate design pattern and finite checker specification for a
+concrete \emph{newmath}/\emph{automath} theory-to-paper package.  The article is
+not an evaluation of tool performance, a formalization-success report, or a
+broad mathematical result; it is a finite replay and checker-boundary
+specification.  The public claim is intentionally narrow: a submitted finite
+checker/replay package accepts exactly two artifact-level coordinates.  The
+first is the public coordinate \(\qlex\), whose legacy artifact spelling is
+\(\texttt{qinv}\); it is read here only as lexical environment-token coverage
+for the artifact appendix's declared five raw \LaTeX{} environment-token names,
+not as theorem-inventory coverage, theorem-dependency analysis, proof checking,
+scope adequacy, audit-record completeness, or semantic theorem completeness.  The
 second coordinate is bounded fixed-replay record-gate soundness.  The package
 does not certify a fresh Lean/BEDC rebuild, artifact semantics, public archive
 equivalence, venue status, or whole-program implementation soundness.  The
 technical ledger, generated theorem wrappers, and digest tables are supplied as
-artifact support, not as the public article body.
+artifact support, not as the public article body or as additional public
+mathematical theorem content.
 \end{abstract}
 
-\section{Finite-audit route}
+\section{Finite checker route}
 The object studied here is the publication routing of generated and
 machine-maintained formal-mathematics artifacts, not the success rate or
 mathematical creativity of the tools that produced them.  Proof assistants check
@@ -94,19 +99,23 @@ two-coordinate replay statement.  \emph{Foreground} means membership in that
 public surface; material outside it is ledger or artifact support, even when it
 is mathematically useful.  A \emph{support coordinate} is one component of the
 finite six-coordinate product
-\((q_{\mathrm{inv}},q_{\mathrm{rgs}},q_{\mathrm{src}},q_{\mathrm{art}},
+\((\qlex,q_{\mathrm{rgs}},q_{\mathrm{src}},q_{\mathrm{art}},
 q_{\mathrm{ext}},q_{\mathrm{ven}})\), together with its required finite input
 rows.  \emph{Current-byte} means the exact bytes listed in the manifest and
 digest table at the moment the replay script is run; later edits require a new
 digest/replay tuple before the term applies again.  These terms do not add
 evidence.  They are abbreviations for the displayed finite records, closure
-rules, and coordinate projections.
+rules, and coordinate projections.  Throughout the public paper, \(\qlex\)
+denotes the lexical environment-token coordinate; the submitted JSON and Horn
+files retain the byte-level legacy atom name \texttt{qinv}.  Thus exact artifact
+tables may print \texttt{qinv}, but the coordinate's public mathematical name and
+meaning are lexical, not inventory-theoretic.
 
 \begin{theorem}[Self-contained finite Horn replay]
 \label{thm:typed-verified-core-hierarchy}
 Let
 \[
-Q=\{q_{\mathrm{inv}},q_{\mathrm{rgs}},q_{\mathrm{src}},q_{\mathrm{art}},
+Q=\{\qlex,q_{\mathrm{rgs}},q_{\mathrm{src}},q_{\mathrm{art}},
 q_{\mathrm{ext}},q_{\mathrm{ven}}\}
 \]
 be the six-coordinate support alphabet.  The submitted Stage--A manifest rows
@@ -133,9 +142,9 @@ finite Horn system:
 \begin{tabularx}{0.94\linewidth}{@{}L{0.10\linewidth}Y@{}}
 R0 & \(\texttt{singleRouteSurface}\leftarrow
 \texttt{pubAbs},\texttt{suppMain}\).\\
-R1 & \(\texttt{qinv}\leftarrow
+R1 & \(\qlex\leftarrow
 \texttt{invJson},\texttt{invMd},\texttt{finalDigest}\).\\
-R2 & \(\texttt{localInventoryClosed}\leftarrow\texttt{qinv}\).\\
+R2 & \(\texttt{localInventoryClosed}\leftarrow\qlex\).\\
 R3 & \(\begin{array}[t]{@{}l@{}}
 \texttt{qrgs}\leftarrow
 \texttt{stageAHornSchema},\texttt{stageAManifest},\\
@@ -162,16 +171,17 @@ R12 & \(\begin{array}[t]{@{}l@{}}
 No other Horn rule has a conclusion in \(Q\).  Then forward chaining gives
 \[
 \operatorname{Cl}_{H}(A)\cap Q
-=\{q_{\mathrm{inv}},q_{\mathrm{rgs}}\}.
+=\{\qlex,q_{\mathrm{rgs}}\}.
 \]
-Equivalently, the finite Stage--A replay surface certifies exactly
+Equivalently, the finite Stage--A replay surface accepts exactly
 \[
-q_{\mathrm{inv}}=q_{\mathrm{rgs}}=\mathsf{true},\qquad
+\qlex=q_{\mathrm{rgs}}=\mathsf{true},\qquad
 q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
 \mathsf{false}.
 \]
-Here \(q_{\mathrm{inv}}\) is a legacy coordinate name for the artifact appendix's
-lexical environment-token check over the five raw token names listed in
+Here \(\qlex\) is the public coordinate corresponding to the legacy artifact atom
+\(\texttt{qinv}\).  It is only the artifact appendix's lexical
+environment-token check over the five raw token names listed in
 Table~\ref{tab:inventory-name-manifest}.  The checker scans source bytes and
 tokens matching those names; it does not evaluate \TeX{} conditionals, comments,
 includes, or macros, and it counts tokens in inactive conditional branches.  Thus
@@ -183,10 +193,13 @@ normalizers, orbit readouts, or cover obstructions.
 \end{theorem}
 
 \begin{proof}
-Forward chaining is monotone, so it is enough to inspect the displayed rules
-whose conclusions lie in \(Q\).  Rule \(R1\) applies because
+This theorem is the displayed mathematical layer: \(A\) and \(H\) are the finite
+set and finite Horn system printed in the statement.  Forward chaining is
+monotone, so it is enough to inspect the displayed rules whose conclusions lie
+in \(Q\).  Rule \(R1\) applies because
 \(\textsf{invJson}\), \(\textsf{invMd}\), and \(\textsf{finalDigest}\) are in
-\(A\); hence \(q_{\mathrm{inv}}\in\operatorname{Cl}_{H}(A)\).  Rule \(R3\)
+\(A\); hence \(\qlex\in\operatorname{Cl}_{H}(A)\), with artifact spelling
+\(\texttt{qinv}\).  Rule \(R3\)
 applies because all six of its premises,
 \(\textsf{stageAHornSchema}\), \(\textsf{stageAManifest}\),
 \(\textsf{stageAHornCertificate}\), \(\textsf{stageAReplayReport}\),
@@ -205,7 +218,7 @@ and no displayed rule derives any of them.  Therefore those four premises are
 absent from \(\operatorname{Cl}_{H}(A)\), so the corresponding four support
 coordinates are absent as well.  The other rules derive only auxiliary atoms,
 not elements of \(Q\).  Thus
-\(\operatorname{Cl}_{H}(A)\cap Q=\{q_{\mathrm{inv}},q_{\mathrm{rgs}}\}\).
+\(\operatorname{Cl}_{H}(A)\cap Q=\{\qlex,q_{\mathrm{rgs}}\}\).
 
 This is the whole public theorem proved here.  In particular the theorem does
 not import any \(\EML\), Zeckendorf, orbit-readout, cover, proof-checking,
@@ -321,24 +334,26 @@ parsed.\\
 \addlinespace
 Command transcript & A command-run row is trusted only as the finite transcript
 fields named by the row: \texttt{command}, \texttt{working\_directory},
-\texttt{source\_state}, \texttt{environment}, \texttt{stdout}, \texttt{stderr},
-\texttt{exit\_code}, and \texttt{log\_path}, or the corresponding subset
-actually present in the schema.  Exit code \(0\) means the operating system
-reported successful process termination for that command; nonzero exit, timeout,
-missing transcript field, or missing log rejects the command-run coordinate.
-The transcript is evidence only for the printed finite predicate of that
-script.\\
+\texttt{source\_commit}, \texttt{environment}, \texttt{stdout},
+\texttt{stderr}, \texttt{exit\_code}, and \texttt{log\_path}, or the
+corresponding subset actually present in the schema.  The key
+\texttt{source\_commit} is the schema's canonical immutable source field.  Exit code
+\(0\) means the operating system reported successful process termination for
+that command; nonzero exit, timeout, missing transcript field, or missing log
+rejects the command-run coordinate.  The transcript is evidence only for the
+printed finite predicate of that script.\\
 \addlinespace
 PDF binding & The PDF is not used as an executable byte oracle.  The theorem
 statements bind to artifact bytes by naming the manifest rows in
 Table~\ref{tab:replay-artifact-manifest}, the TCB convention in this table, and
 the SHA--256 rows in
 \artifactpath{certificates/stage_a_digest_table.json}.  A current-byte theorem
-claim is accepted only when the replay script first hashes the manifest, Horn
-schema, audit certificate, replay report, digest table, and replay script bytes,
-compares them with the digest table, and then compiles atoms from those same
-digest-checked manifest records.  Recompiling the PDF after any artifact-byte
-change does not preserve the claim unless a new digest/replay tuple is supplied.
+claim is accepted only when the replay script first hashes every required
+replay-support file named by that digest table, compares those hashes with the
+printed rows other than the non-self-binding digest-table row, and then compiles
+atoms from those same digest-checked manifest records.  Recompiling the PDF after
+any artifact-byte change does not preserve the claim unless a new digest/replay
+tuple is supplied.
 \\
 \bottomrule
 \end{tabularx}
@@ -375,16 +390,43 @@ finite predicates:
 \(K\subseteq\Kind,\ K\ne\varnothing\).
 \item \(\ell\) is an allowed evidence level and \(E\) is a nonempty finite
 submitted evidence surface.
-\item For every \(g\in\bigcup_{k\in K}\Gamma(k)\), \(R\) contains a pass row for
-\(g\).
+\item Let \(G_C=\bigcup_{k\in K}\Gamma(k)\).  The pass rows form an exact
+finite gate graph over \(G_C\): \(R\) is a finite list; every row has a
+\texttt{gate\_name} field; the map \(r\mapsto r[\texttt{gate\_name}]\) is a
+bijection from the rows of \(R\) onto \(G_C\).  Thus every required gate has one
+and only one pass row, and no duplicate, stale, irrelevant, or contradictory
+extra pass row is accepted.
 \item Each row of \(R\) has the required pass fields, the same level \(\ell\), an
-allowed decision, and an evidence pointer denoting an element of \(E\) or an
-allowed manifest/table/snapshot boundary.
+allowed decision, and an evidence pointer in the finite admissible-pointer set
+declared for the row.  Prefix matches, wildcard expansion, and bare filesystem
+existence are not admissible evidence.
 \item \(D\) is present exactly when \(\textsf{discovery}\in K\).
-\item \(B\) contains command, source state, environment, exit code, and log path
-at command-run level, and contains an explicit no-command-run assertion at
-path-verified level.
+\item \(\mathsf{CommandBoundaryOK}(\ell,B)\) holds in the following typed
+sense.  In this schema the canonical command-run source field is
+\texttt{source\_commit}; there is no separate \texttt{source\_state} key in
+\(\mathsf{CommandBoundaryOK}\).
 \end{enumerate}
+Write \(F_{\mathrm{cmd}}\) for the five required command-run field names
+\[
+\{\texttt{command},\texttt{source\_commit},\texttt{environment},
+\texttt{exit\_code},\texttt{log\_path}\}.
+\]
+The predicate \(\mathsf{CommandBoundaryOK}(\ell,B)\) is the conjunction of the
+following three typed boundary clauses:
+\begin{enumerate}[label={\(\mathrm{B}_{\arabic*}\):}]
+\item The evidence level \(\ell\) is one of the schema levels that may carry a
+command boundary: \(\textsf{path\mbox{-}verified}\) or
+\(\textsf{command\mbox{-}run}\).
+\item If \(\ell=\textsf{path\mbox{-}verified}\), then \(B\) contains
+\texttt{boundary.no\_command\_run\_assertion}.
+\item If \(\ell=\textsf{command\mbox{-}run}\), then
+\texttt{boundary.command\_run\_fields} is a finite dictionary and its key set
+contains \(F_{\mathrm{cmd}}\).
+\end{enumerate}
+For branch labels matching the executable checker, let
+\(\operatorname{NoE9}(e)\) mean that entry \(e\) does not trigger branch E9 and
+let \(\operatorname{NoE10}(e)\) mean that entry \(e\) does not trigger branch
+E10.
 Thus
 \[
 \Acc_{\Gamma}(c,C)\quad\Longleftrightarrow\quad
@@ -413,30 +455,173 @@ certificate whenever the set is nonempty.  No implementation soundness of a gate
 program is inferred.
 \end{proof}
 
-\begin{theorem}[Implementation theorem for the JSON certificate records]
-\label{thm:json-certificate-implementation}
+\begin{lemma}[Exact pass-row graph has no conflict resolution]
+\label{lem:exact-pass-row-graph-no-conflicts}
+Fix a certificate \(C=(K,\ell,E,H,R,D,B)\) and let
+\(G_C=\bigcup_{k\in K}\Gamma(k)\).  Predicate \(P_3\) in
+\(\Acc_{\Gamma}(c,C)\) is equivalent to the conjunction
+\[
+\begin{aligned}
+\{r[\texttt{gate\_name}]:r\in R\}&=G_C,\\
+\forall g\in G_C,\quad
+|\{r\in R:r[\texttt{gate\_name}]=g\}|&=1,
+\end{aligned}
+\]
+with every row of \(R\) carrying a \texttt{gate\_name} field.  Therefore
+acceptance uses no first-row, last-row, priority, or majority conflict
+resolution.  Adding any extra row to an already accepted certificate destroys
+\(P_3\): if its gate name is in \(G_C\) it creates multiplicity \(2\) for that
+required gate, and if its gate name is outside \(G_C\) it creates a row outside
+the required gate set.
+\end{lemma}
+
+\begin{proof}
+The displayed definition of \(P_3\) says that the projection
+\(r\mapsto r[\texttt{gate\_name}]\) is a bijection from the finite row list
+\(R\) onto \(G_C\).  A finite-map bijection is exactly surjectivity onto
+\(G_C\), injectivity on rows, and absence of undefined gate-name values.
+Surjectivity gives at least one row for each required gate; injectivity gives at
+most one row for each required gate; and the codomain condition excludes every
+row whose gate name is not required.  The displayed cardinality condition is
+the same statement written gate-by-gate.  If a new row is appended, the new
+projection cannot remain bijective: its name either duplicates an existing
+required image or lies outside \(G_C\).  Thus irrelevant, stale, duplicate, or
+contradictory rows cannot be ignored while preserving acceptance.
+\end{proof}
+
+\begin{lemma}[E10 is exactly the command-run boundary clause]
+\label{lem:e10-command-boundary-b3}
+Let \(e\) be a parsed ledger entry whose evidence level is
+\(\ell=\textsf{command\mbox{-}run}\), and let \(B=e[\texttt{boundary}]\).
+Then
+\[
+\operatorname{NoE10}(e)
+\quad\Longleftrightarrow\quad
+\mathrm{B}_3\text{ of }\mathsf{CommandBoundaryOK}(\ell,B).
+\]
+Equivalently, branch E10 appends an error exactly when the command-run boundary
+clause fails:
+\[
+\mathrm{E10}(e)
+\quad\Longleftrightarrow\quad
+\neg \mathrm{B}_3.
+\]
+\end{lemma}
+
+\begin{proof}
+For a command-run entry the displayed checker branch E10 tests only the
+dictionary path \texttt{boundary.command\_run\_fields}.  It appends an error
+precisely when at least one member of
+\[
+F_{\mathrm{cmd}}=
+\{\texttt{command},\texttt{source\_commit},\texttt{environment},
+\texttt{exit\_code},\texttt{log\_path}\}
+\]
+is absent from that dictionary.  Clause \(\mathrm{B}_2\) of
+\(\mathsf{CommandBoundaryOK}\) handles the different path-verified case and is
+not evaluated for a command-run entry.  Clause \(\mathrm{B}_3\) says precisely
+that the same dictionary exists as
+a finite dictionary and that its key set contains this same finite set
+\(F_{\mathrm{cmd}}\).  Therefore the no-error condition for E10 is equivalent
+to \(\mathrm{B}_3\), and the error condition for E10 is its negation.  No other
+branch inspects these five command-run keys.
+\end{proof}
+
+\begin{theorem}[Specification theorem for the displayed certificate-record checker]
+\label{thm:certificate-record-checker-spec}
+This is a specification theorem for the displayed checker relation, not an
+implementation-conformance theorem for the Python script.
 Use the TCB convention of Tables~\ref{tab:replay-tcb} and
 \ref{tab:replay-byte-binding}.  Thus the JSON inputs are raw byte files decoded
 as \texttt{utf-8-sig} and parsed by \texttt{json.loads}; missing files,
 inadmissible relative paths, symlinked inputs, and JSON parse failures are
 rejecting preconditions rather than accepted certificates.  Let
-\(\operatorname{exists}(p)\) mean existence under that relative-root policy.  For
-a pass-row pointer \(u\) and evidence surface \(E\), define
+\(\operatorname{BoundPath}(p)\) mean that \(p\) is an admissible ordinary
+relative path under the submitted paper root, is not a symlink, is a regular
+file, and is bound by an exact SHA--256 row in the submitted digest ledger.  This
+is a byte-binding predicate, not a membership predicate.  Membership is supplied
+only by the finite rows below.
+
+For a parsed ledger entry with evidence surface \(E\), schema row \(\Sigma\),
+review-bundle manifest dictionary \(M\), and submitted case-row manifest \(C\),
+write \(S=C.\texttt{case\_evidence}\) for the submitted snapshot list.  Define
+the digest-bound boundary predicates used by evidence pointers as follows.
 \[
-\operatorname{Allowed}(u,E)
+\begin{aligned}
+\operatorname{ManifestBoundary}(M)=
+\{\,p :\;& p \text{ is a relative path named in }M,\\
+& \operatorname{sha256}(\operatorname{readBytes}(p))
+=M[p].\operatorname{sha256}\,\}.
+\end{aligned}
 \]
-to hold exactly when \(u\in E\), or \(u\) has a prefix obtained from a schema
-pattern ending in \(\texttt{*}\), or \(u\) starts with one of
+Here ``relative'' and \(\operatorname{readBytes}\) are interpreted by the TCB
+above: absolute paths, \texttt{..}, symlinks, directories, and files without an
+exact SHA--256 ledger row reject before membership is considered.  Let
+\(\operatorname{TableBoundary}\) be the finite set of whole-string table and
+formal-label atoms already printed in the submitted paper surface, namely atoms
+of the forms \(\texttt{table:}x\), \(\texttt{proposition:}x\),
+\(\texttt{lemma:}x\), \(\texttt{theorem:}x\), and \(\texttt{corollary:}x\).  Let
+\[
+\begin{aligned}
+\operatorname{SnapshotBoundary}(S)=
+\{\,p :\;& p \text{ occurs in an eligible submitted snapshot list}\\
+& \text{and passes the digest checks}\,\}.
+\end{aligned}
+\]
+A submitted snapshot list is eligible only through
+Table~\ref{tab:case-row-eligibility}: its case name is in the fixed case set, its
+local-path list and reviewable-snapshot list have the same length, every
+snapshot path is relative under the submitted root, every snapshot is an ordinary
+non-symlink file, its digest equals the submitted digest row, and the row
+boundary declares historical or path-verified scope.
+
+The admissible pointer predicate is exactly the digest-bound finite promotion
+predicate
+\[
+\begin{aligned}
+\PointerOK(u,E,M,S)\Longleftrightarrow{}&
+u\in E \vee u\in \operatorname{ManifestBoundary}(M)\\
+&{}\vee u\in \operatorname{TableBoundary}
+\vee u\in \operatorname{SnapshotBoundary}(S).
+\end{aligned}
+\]
+The evidence-surface membership \(u\in E\) is literal membership in the finite
+certificate evidence list, not a filesystem query; when \(u\) is intended as a
+local support path, the row that places it in \(E\) must also carry the
+corresponding digest-bound path record.  A file's existence under the submitted
+root never promotes it into evidence by itself.
+
+For implementation bookkeeping, the displayed checker realizes these four
+sets by closed, digest-bound finite enumerations:
 \begin{center}
 \scriptsize
-\begin{tabular}{@{}lll@{}}
-\texttt{manifest:} & \texttt{table:} & \texttt{proposition:}\\
-\texttt{lemma:} & \texttt{theorem:} & \texttt{corollary:}\\
-\multicolumn{3}{@{}l@{}}{\texttt{explicit-historical-}}\\
-\multicolumn{3}{@{}l@{}}{\texttt{boundary:}}
-\end{tabular}
+\begin{tabularx}{0.96\linewidth}{@{}L{0.27\linewidth}Y@{}}
+\toprule
+Boundary & Finite realization \\ \midrule
+\(E\) &
+The literal evidence-surface list after schema parsing; path-looking strings in
+this list are admissible only when the same row also supplies
+\(\operatorname{BoundPath}\) evidence.\\
+\(\operatorname{ManifestBoundary}(M)\) &
+The relative paths \(p\) named by manifest rows whose recorded
+\texttt{sha256} field equals the SHA--256 of \(\operatorname{readBytes}(p)\).\\
+\(\operatorname{TableBoundary}\) &
+Whole-string atoms of the forms \texttt{table:}\(x\),
+\texttt{proposition:}\(x\), \texttt{lemma:}\(x\), \texttt{theorem:}\(x\), and
+\texttt{corollary:}\(x\) that are printed in the submitted table/label surface.\\
+\(\operatorname{SnapshotBoundary}(S)\) &
+Relative snapshot paths occurring in eligible submitted case rows and passing
+the same root, ordinary-file, symlink-rejection, and SHA--256 checks.\\
+\bottomrule
+\end{tabularx}
 \end{center}
-or \(\operatorname{exists}(u)\).
+This is a finite membership test.  The grammar admits only digest-bound manifest
+entries, table or formal-label atoms already listed in the submitted table
+surface, explicit evidence-surface atoms whose row carries the required
+digest-bound support, and submitted snapshot paths that pass the case-row
+boundary checks.  A schema value ending in \(\texttt{*}\), a tag prefix, a
+nonlisted table label, arbitrary root-relative file existence, or a path that
+merely exists on disk does not satisfy \(\PointerOK\).
 
 The following machine-checkable formal pseudocode checker is the operative
 finite semantics for the current certificate-record inputs
@@ -446,10 +631,42 @@ finite semantics for the current certificate-record inputs
 \artifactpath{review_bundle/primary_claim_inventory.json}, and
 \artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  It initializes an
 empty error list and appends the displayed error branch exactly when the
-displayed predicate is false.  The Python file
-\artifactpath{review_bundle/verify_certificate_records.py} is an artifact
-implementation of this displayed checker, not an extra unprinted premise for the
-iff claim.
+displayed predicate is false.  For E7 it computes, for each parsed entry,
+\[
+G_C=\bigcup_{k\in K}\Gamma(k),\qquad
+n_R(g)=|\{r\in R:r[\texttt{gate\_name}]=g\}|,
+\]
+after R1 has rejected rows for which this field is absent.  E7 appends an error
+exactly when some \(g\in G_C\) has \(n_R(g)\ne1\), or when some parsed row has
+\(r[\texttt{gate\_name}]\notin G_C\).  The Python file
+\artifactpath{review_bundle/verify_certificate_records.py} is a package replay
+artifact for the current rows, not an extra unprinted premise for the iff claim;
+replacing the displayed relation by a Python-implementation theorem would
+require a separate script digest and branch-by-branch conformance proof.
+\begin{center}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}L{0.38\linewidth}L{0.14\linewidth}Y@{}}
+\toprule
+Displayed block & Branch predicate & Proof obligation discharged here \\
+\midrule
+\texttt{check\_manifest\_required\_files} & M1--M3 &
+Same required keys, same schema-prescribed relative path equality, and same
+digest-bound existence predicate \(\operatorname{BoundPath}\).\\
+\texttt{check\_ledger\_entries} & L1--E10 &
+Same seven-row cardinality lock, same entry-name set, same required fields, same
+claim-kind/evidence-level/list predicates, same exact gate-graph cardinalities,
+same discovery-interface parity, and same command-boundary clauses.\\
+\texttt{check\_pass\_records} & R1--R4 &
+Same pass-row required fields, same evidence-level equality, same allowed
+decision set, and same finite pointer predicate \(\PointerOK(u,E,M,S)\).\\
+\texttt{check\_submission\_interface} & S1--S2 &
+Same four-row cardinality and same fixed submission-interface id set.\\
+\texttt{check\_primary\_claim\_inventory} & P1--P5 &
+Same minimum-row bound, same nonempty claim/status fields, and same certificate
+and evidence-level requirements for rows not marked non-load-bearing.\\
+\bottomrule
+\end{tabularx}
+\end{center}
 \begin{center}
 \scriptsize
 \begin{tabularx}{\linewidth}{L{0.14\linewidth}Y}
@@ -458,7 +675,8 @@ Branch & Rejecting condition appended to the error list \\ \midrule
 M1 & A key \(k\) of \(\texttt{schema.manifest\_required\_files}\) is absent
 from the manifest.\\
 M2 & The manifest value at \(k\) is not the schema-prescribed relative path.\\
-M3 & The schema-prescribed manifest path does not exist under the paper root.\\
+M3 & The schema-prescribed manifest path is not a digest-bound admissible
+relative path under the paper root.\\
 L1 & \(\texttt{ledger.entries}\) does not have length \(7\).\\
 L2 & The set of entry names is not exactly
 \(\{\texttt{a1},\ldots,\texttt{a7}\}\).\\
@@ -471,21 +689,28 @@ E4 & Its \(\texttt{evidence\_level}\) is not in
 \(\texttt{schema.evidence\_levels}\).\\
 E5 & Its \(\texttt{evidence\_surface}\) is not a nonempty list.\\
 E6 & Its \(\texttt{pass\_records}\) field is not a nonempty list.\\
-E7 & The pass rows do not contain every gate in
-\(\bigcup_{k\in K}\Gamma(k)\).\\
+E7 & The pass rows are not an exact finite gate graph over
+\(\bigcup_{k\in K}\Gamma(k)\): after rows lacking \texttt{gate\_name} are
+rejected by R1, some required gate has zero rows, some required gate has more
+than one row, or some row names a gate outside the assigned set.\\
 E8 & The discovery-interface field is present for exactly one side of the
 condition \(\textsf{discovery}\in K\).\\
 E9 & A path-verified entry lacks
-\(\texttt{boundary.no\_command\_run\_assertion}\).\\
+\(\texttt{boundary.no\_command\_run\_assertion}\), equivalently
+\(\mathsf{CommandBoundaryOK}.\mathrm{B}_2\) fails for that entry.\\
 E10 & A command-run entry lacks one of
 \(\texttt{command}\), \(\texttt{source\_commit}\),
 \(\texttt{environment}\), \(\texttt{exit\_code}\), or
-\(\texttt{log\_path}\) under \(\texttt{boundary.command\_run\_fields}\).\\
+\(\texttt{log\_path}\) under \(\texttt{boundary.command\_run\_fields}\),
+equivalently \(\mathsf{CommandBoundaryOK}.\mathrm{B}_3\) fails for that entry
+by Lemma~\ref{lem:e10-command-boundary-b3}.\\
 R1 & A pass row lacks one of
 \(\texttt{schema.pass\_record\_required\_fields}\).\\
 R2 & A pass row's evidence level is not the parent entry's level.\\
 R3 & A pass row's decision is not in \(\texttt{schema.pass\_decisions}\).\\
-R4 & A pass row's evidence pointer is not \(\operatorname{Allowed}(u,E)\).\\
+R4 & A pass row's evidence pointer \(u\) fails
+\(\PointerOK(u,E,M,S)\) for the parsed entry evidence surface, review-bundle
+manifest, table boundary, and submitted snapshot list.\\
 S1 & The submission-interface map does not contain exactly four rows.\\
 S2 & The submission-interface ids are not exactly
 \(\{\texttt{sim1},\texttt{sim2},\texttt{sim3},\texttt{sim4}\}\).\\
@@ -498,11 +723,11 @@ P5 & Such a load-bearing row lacks a nonempty \(\texttt{evidence\_level}\).\\
 \bottomrule
 \end{tabularx}
 \end{center}
-The checker accepts exactly when the final error list is empty.  Consequently,
-on the parsed current records, it exits with code \(0\) iff all rows satisfy
-\(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings M1--M3 hold,
-the submission-interface locks S1--S2 hold, and the primary-claim locks P1--P5
-hold.  It exits with code \(1\) iff at least one displayed branch is violated.
+The displayed checker accepts exactly when the final error list is empty.
+Consequently, on the parsed current records, the displayed checker accepts iff
+all rows satisfy \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings
+M1--M3 hold, the submission-interface locks S1--S2 hold, and the primary-claim
+locks P1--P5 hold.  It rejects iff at least one displayed branch is violated.
 \end{theorem}
 
 \begin{proof}
@@ -515,37 +740,76 @@ branch is appended exactly on violation of \(B\).
 The ledger-entry branches are precisely the acceptance predicates.  E1 together
 with E2 and E3 is \(P_1\): the row has all required fields and a nonempty
 \(K\subseteq\Kind\).  E4 and E5 are \(P_2\): allowed evidence level and
-nonempty finite evidence surface.  E6 and E7 are \(P_3\): there is a finite
-pass-row list and it covers every gate assigned by \(\Gamma\).  R1--R4 are
-\(P_4\): every pass row has the required fields, agrees with the parent evidence
-level, has an allowed decision, and has a permitted evidence pointer according
-to the displayed definition of \(\operatorname{Allowed}\).  E8 is \(P_5\), the
-exact discovery-interface discipline.  E9 and E10 are \(P_6\), the two cases of
-the command-boundary discipline.  L1 and L2 are the current-package row lock
-selecting the seven submitted entries; they do not strengthen \(\Acc_{\Gamma}\)
-for an individual row, but they fix the finite ledger to which the theorem is
-applied.  M1--M3, S1--S2, and P1--P5 are likewise the manifest,
+nonempty finite evidence surface.  E6, R1 restricted to the
+\texttt{gate\_name} field, and E7 are \(P_3\): there is a finite pass-row list,
+every row has a gate name, and the gate-name projection is a bijection onto the
+assigned gate set \(\bigcup_{k\in K}\Gamma(k)\).  Consequently a missing row,
+duplicate row for the same assigned gate, contradictory pair of rows for the
+same gate, stale row for an unassigned gate, or irrelevant extra row all
+produce a displayed error and cannot be hidden behind mere coverage.  R1--R4
+are \(P_4\): every pass row has the remaining required fields, agrees with the
+parent evidence level, has an allowed decision, and has a permitted evidence
+pointer according to the displayed finite relation
+\(\PointerOK(u,E,M,S)\).  The R4 branch is therefore an exact membership
+test in the finite union
+\[
+E\cup \operatorname{ManifestBoundary}(M)\cup
+\operatorname{TableBoundary}\cup \operatorname{SnapshotBoundary}(S).
+\]
+R4 appends an error iff the pointer is outside that union.  If \(u\) is a local
+support path, membership requires exact listing in \(E\) plus the digest-bound
+path record demanded by the row.  Manifest membership requires a named relative
+manifest path and equality between the printed SHA--256 field and the hash of
+the bytes read at that path.  Snapshot membership requires occurrence in an
+eligible submitted snapshot list and the same relative-root and digest checks.
+If \(u\) is a table or formal-label atom, the whole string must be in the
+submitted \(\operatorname{TableBoundary}\).  Thus the proof uses no rule of the form
+``pointer denotes an existing file under the root'': branch R4 appends an error
+exactly when
+\[
+\neg\PointerOK(u,E,M,S).
+\]
+Prefix matching, filesystem existence, schema wildcards, and nonlisted table or
+snapshot names all fail R4.
+E8 is \(P_5\), the
+exact discovery-interface discipline.  E4 already verifies the admissible
+evidence level part \(\mathsf{CommandBoundaryOK}.\mathrm{B}_1\).  For \(P_6\),
+branch E9 is exactly the path-verified implication
+\(\mathsf{CommandBoundaryOK}.\mathrm{B}_2\): on a path-verified row it appends
+an error precisely when the no-command-run assertion is absent, and on any other
+level it is inactive.  Branch E10 is exactly the command-run implication
+\(\mathsf{CommandBoundaryOK}.\mathrm{B}_3\) by
+Lemma~\ref{lem:e10-command-boundary-b3}: on a command-run row it appends an
+error precisely when the five required command-run fields are not all present
+under \texttt{boundary.command\_run\_fields}, and on any other level it is
+inactive.  Thus E9 and E10 together are not an additional predicate; they are
+the two level-specific branches of \(P_6\).  L1 and L2 are the current-package
+row lock selecting the seven submitted entries; they do not strengthen
+\(\Acc_{\Gamma}\) for an individual row, but they fix the finite ledger to which
+the theorem is applied.  M1--M3, S1--S2, and P1--P5 are likewise the manifest,
 submission-interface, and primary-claim row locks explicitly named in the
 statement.
 
-If the checker accepts, the error list is empty, so none of the displayed
+If the displayed checker accepts, the error list is empty, so none of the displayed
 violations occurred; therefore each selected ledger entry satisfies all six
 predicates defining \(\Acc_{\Gamma}\), and the three families of row locks also
 hold.  Conversely, if all six acceptance predicates and all row locks hold, then
 every displayed branch condition is false, no append occurs, the final error
-list is empty, and the checker accepts.  The program's final return convention
-is exactly empty-list \(\mapsto0\), nonempty-list \(\mapsto1\), so the same
-equivalence holds for the exit code.  This proves exact computation of the
-printed finite predicate.  It still does not rerun Lean, validate artifact
-semantics, check venue status, certify upload or archive equivalence, or prove
-\(\RGSS(P,L,\Gamma)\).
+list is empty, and the displayed checker accepts.  This proves exact
+computation of the printed finite predicate by the displayed checker.  The
+artifact Python script is only a replay implementation of that displayed
+pseudocode, so this theorem by itself still does not assert line-by-line Python
+conformance, rerun Lean, validate artifact semantics, check venue status,
+certify upload or archive equivalence, or prove \(\RGSS(P,L,\Gamma)\).
 \end{proof}
 
 \subsection{Executable Horn replay kernel}
 The Stage--A replay kernel is the finite Horn system in
 \artifactpath{certificates/stage_a_horn_schema.json}.  The rules are reproduced
 in Table~\ref{tab:horn-kernel-rules} so that the replay claim is executable
-without appealing to prose.
+without appealing to prose.  The table applies the public renaming
+\(\rho(\texttt{qinv})=\qlex\); the submitted JSON still contains the legacy atom
+string \texttt{qinv}.
 
 \begin{table}
 \caption{Complete finite Horn replay kernel.}
@@ -556,9 +820,9 @@ without appealing to prose.
 Rule & Horn clause \\ \midrule
 R0 & \(\texttt{singleRouteSurface}\leftarrow
 \texttt{pubAbs},\texttt{suppMain}\).\\
-R1 & \(\texttt{qinv}\leftarrow
+R1 & \(\qlex\leftarrow
 \texttt{invJson},\texttt{invMd},\texttt{finalDigest}\).\\
-R2 & \(\texttt{localInventoryClosed}\leftarrow\texttt{qinv}\).\\
+R2 & \(\texttt{localInventoryClosed}\leftarrow\qlex\).\\
 R3 & \(\begin{array}[t]{@{}l@{}}
 \texttt{qrgs}\leftarrow
 \texttt{stageAHornSchema},\texttt{stageAManifest},\\
@@ -583,6 +847,84 @@ R12 & \(\begin{array}[t]{@{}l@{}}
 \end{tabularx}
 \end{table}
 
+\begin{lemma}[Digest-bound parser and manifest compilation]
+\label{lem:stage-a-parser-compilation}
+Under the TCB of Tables~\ref{tab:replay-tcb}--\ref{tab:replay-byte-binding} and
+the digest table in
+\artifactpath{certificates/stage_a_digest_table.json}, the parser of
+\artifactpath{certificates/stage_a_horn_schema.json} returns exactly the clauses
+\(R0\)--\(R12\) displayed in Table~\ref{tab:horn-kernel-rules}, and the manifest
+compiler returns exactly
+\begin{center}
+\small
+\begin{tabularx}{0.94\linewidth}{@{}L{0.12\linewidth}Y@{}}
+\(A=\) &
+\texttt{pubAbs}, \texttt{suppMain}, \texttt{invJson}, \texttt{invMd},
+\texttt{finalDigest}, \texttt{stageAHornSchema},
+\texttt{stageAManifest}, \texttt{stageAHornCertificate},
+\texttt{stageAReplayReport}, \texttt{srcInterface},
+\texttt{caseArtifacts}, \texttt{venueReadiness},
+\texttt{qrgsReplayUpgrade}.
+\end{tabularx}
+\end{center}
+\end{lemma}
+
+\begin{proof}
+The digest hypotheses bind the two parser inputs to the submitted raw bytes at
+the two named relative paths; no absolute path, symlink, archive expansion, or
+\TeX{} interpretation is used.  Under the JSON convention in
+Table~\ref{tab:replay-tcb}, \(\mathsf{parseHorn}\) is the finite projection that
+requires a top-level \texttt{rules} array and maps each object
+\((\texttt{premises},\texttt{conclusion})\), in file order, to the Horn clause
+\(\rho(\texttt{conclusion})\leftarrow\rho[\texttt{premises}]\), where
+\(\rho(\texttt{qinv})=\qlex\) and \(\rho\) fixes every other displayed atom.  The
+renaming is only a public notation convention for the legacy artifact byte
+string; it does not add a premise or change the replay file.  The digest-bound
+schema bytes contain exactly the thirteen rule objects with identifiers
+\texttt{R0\_single\_route\_surface} through
+\texttt{R12\_route\_surface\_quotient}; their premise lists and conclusions are
+the clauses printed as \(R0\)--\(R12\) in Table~\ref{tab:horn-kernel-rules}, and
+the parser reads no other field as a rule.  Thus the parsed Horn system is the
+displayed table.
+
+Similarly, \(\mathsf{compileManifest}\) is the finite projection that requires
+the manifest's \texttt{compiler\_rows} array and emits exactly the value of each
+row's \texttt{atom} key, in file order, after the same digest-bound relative-path
+checks.  The digest-bound manifest bytes contain exactly the thirteen emitted
+atoms displayed above, including \texttt{qrgsReplayUpgrade}.  The four upgrade
+names \texttt{freshFormalSourceUpgrade},
+\texttt{dynamicArtifactSemanticUpgrade},
+\texttt{externalUploadArchiveUpgrade}, and
+\texttt{uploadTimeVenueAcceptanceUpgrade} do not occur as \texttt{atom} values
+in \texttt{compiler\_rows}; appearances in negative-boundary prose or coordinate
+metadata are not compiler rows.  Hence the compiled atom set is exactly the
+displayed set \(A\).
+\end{proof}
+
+\begin{corollary}[Byte-bound executable Horn replay]
+\label{cor:byte-bound-stage-a-horn-replay}
+Use the same TCB and digest table as
+Lemma~\ref{lem:stage-a-parser-compilation}.  The byte-bound replay of
+\artifactpath{certificates/stage_a_horn_schema.json} against
+\artifactpath{certificates/stage_a_manifest.json} computes the same closure as
+Theorem~\ref{thm:typed-verified-core-hierarchy}.  Consequently the executable
+Stage--A replay accepts exactly
+\[
+\qlex=q_{\mathrm{rgs}}=\mathsf{true},\qquad
+q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
+\mathsf{false}.
+\]
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:stage-a-parser-compilation} identifies the digest-bound parsed
+schema with the displayed Horn table and the digest-bound compiled manifest with
+the displayed atom set \(A\).  Theorem~\ref{thm:typed-verified-core-hierarchy}
+computes the closure of exactly those two finite objects.  The executable replay
+therefore has the displayed accepted-coordinate vector and no additional source,
+artifact-semantic, archive, venue, or implementation-conformance consequence.
+\end{proof}
+
 The replay script computes the least fixed point of these clauses over the atoms
 compiled from \artifactpath{certificates/stage_a_manifest.json} and verifies the
 certificate DAGs in \artifactpath{certificates/stage_a_horn_audit_certificate.json}.
@@ -590,7 +932,8 @@ The submitted input atoms include
 \(\texttt{invJson}\), \(\texttt{invMd}\), \(\texttt{finalDigest}\),
 \(\texttt{stageAHornSchema}\), \(\texttt{stageAManifest}\),
 \(\texttt{stageAHornCertificate}\), \(\texttt{stageAReplayReport}\), and
-\(\texttt{qrgsReplayUpgrade}\), so \(q_{\mathrm{inv}}\) and
+\(\texttt{qrgsReplayUpgrade}\), so \(\qlex\) (legacy artifact atom
+\(\texttt{qinv}\)) and
 \(q_{\mathrm{rgs}}\) are derived.  They do not include
 \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
@@ -619,7 +962,8 @@ inactive duplicate label.  The claim remains syntactic source hygiene only; it
 is not proof checking.
 
 \begin{table}
-\caption{Lexical environment-token manifest for legacy atom \(q_{\mathrm{inv}}\).}
+\caption{Lexical environment-token manifest for public coordinate \(\qlex\)
+(legacy artifact atom \texttt{qinv}).}
 \label{tab:inventory-name-manifest}
 \small
 \begin{tabularx}{\linewidth}{L{0.34\linewidth}Y}
@@ -669,7 +1013,8 @@ Replayable certificate DAGs for the accepted coordinates. \\
 Expected six-coordinate vector and replay result record. \\
 \addlinespace
 \artifactpath{certificates/stage_a_digest_table.json}\\
-Digest binding for the manifest, schema, certificate, report, and replay script.
+Digest binding for the manifest, schema, certificate, report, replay scripts,
+case-row records, source-label scan records, and review-bundle JSON inputs.
 \\
 \addlinespace
 \artifactpath{certificates/replay_stage_a_audit.py}\\
@@ -706,7 +1051,8 @@ files with the same relative paths under the submitted paper root.\\
 Digest table &
 \artifactpath{certificates/stage_a_digest_table.json} is included and its
 listed SHA--256 rows match the submitted replay manifest, Horn schema, Horn
-certificate, replay report, and replay script bytes.\\
+certificate, replay reports, replay scripts, expected case rows, source-label
+scan records, and review-bundle JSON inputs.\\
 \addlinespace
 Reviewer replay commands &
 \artifactcmd{python}{certificates/replay_stage_a_audit.py} and
@@ -738,11 +1084,188 @@ JSON certificate-record theorem is offered as executable artifact support.\\
 \end{tabularx}
 \end{table}
 
+\begin{table}
+\caption{Printed SHA--256 ledger for the submitted replay-support bytes.}
+\label{tab:printed-sha-ledger}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}Y@{}}
+\toprule
+\textbf{Relative path and SHA--256 digest} \\
+\midrule
+\artifactpath{certificates/stage_a_manifest.json}\\
+\texttt{8722b16ce7da8a777078ab5a5fd90f71850deb3375e7b3d570d70380fe75cb9e}\\
+\addlinespace
+\artifactpath{certificates/stage_a_horn_schema.json}\\
+\texttt{06af91fabf6f89e616e0f61e561d22d492a8621a68cfefdd5d0dc2b7a0a3fe29}\\
+\addlinespace
+\artifactpath{certificates/stage_a_horn_audit_certificate.json}\\
+\texttt{426e0587824b21d2a4b62c2bbf660eb1786a735c75c0dc7c3e60778eed7365e6}\\
+\addlinespace
+\artifactpath{certificates/stage_a_replay_report.json}\\
+\texttt{42cc1ebf9f83f6dbbc6ef4d21ba98935c476c073dfefab3cd9bb1fd3bc3287f9}\\
+\addlinespace
+\artifactpath{certificates/stage_a_digest_table.json}\\
+\texttt{537eefef82ed4684c24bd1a29e76d6a178f4733b77015475d976d8d0c28fbeb5}\\
+\addlinespace
+\artifactpath{certificates/replay_stage_a_audit.py}\\
+\texttt{aef16451aff767015e140199ebc9e35c4ef48d6893f28e08abf515254fc65ab5}\\
+\addlinespace
+\artifactpath{certificates/replay_case_rows.py}\\
+\texttt{88b7176dc0e63cbe3f8403b65e8b722be19c43489abdc1f29971c76834b826ad}\\
+\addlinespace
+\artifactpath{certificates/case_rows_expected.json}\\
+\texttt{7f39310a9106496c10c7be1139806a1ce6dfcf55be6865f4fe2c14b0abb92c97}\\
+\addlinespace
+\artifactpath{certificates/scan_tex_source_labels.py}\\
+\texttt{585de7f0b0354db051806a7fed2dd9ac56bd75f8d18537dae4841f5e4c67ab88}\\
+\addlinespace
+\artifactpath{certificates/static_source_label_scan.json}\\
+\texttt{d88e6f333bb3ee0274550335d5704d4ca2940a1948d31283f117c47a5ae32c38}\\
+\addlinespace
+\artifactpath{review_bundle/certificate_schema.json}\\
+\texttt{47e3f2751b0177dc48e1607bac1d8c55b46cbc668dd081c71a20360e09069684}\\
+\addlinespace
+\artifactpath{review_bundle/current_package_pass_records.json}\\
+\texttt{65193d0eb722914e2573abf5f04858a8c2033f92d484ab11a5707d3b8b3fa066}\\
+\addlinespace
+\artifactpath{review_bundle/submission_interface_map.json}\\
+\texttt{bcf46b25076ea6abafc88fd55768b1590e5b5305e6cea247be20219d833f3d1a}\\
+\addlinespace
+\artifactpath{review_bundle/primary_claim_inventory.json}\\
+\texttt{e5c31cc92b92b50e3c736b717340d0808aa8eb16f4e23a913654a66fec0bf591}\\
+\addlinespace
+\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}\\
+\texttt{4feadd22e96bd29b2af2c6da1e3533b48ecd14ec044efaf6193bb5809d11bec4}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 Table~\ref{tab:artifact-submission-checklist} is an archive-packaging condition,
-not an additional mathematical theorem.  If any listed file is omitted or its
-digest-bound bytes differ from the submitted rows, the reviewer-executable
-artifact support is incomplete, but the paper still makes no stronger source,
-artifact-semantic, archive-equivalence, or venue-status claim by default.
+not an additional mathematical theorem.  The complete archive condition is that
+the submitted archive contains exactly the ordinary files named in
+Tables~\ref{tab:replay-artifact-manifest} and
+\ref{tab:artifact-submission-checklist}, at those relative paths, together with
+the review-bundle directory entries reached by
+\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Table~\ref{tab:printed-sha-ledger}
+prints the corresponding SHA--256 ledger.  The row for
+\artifactpath{certificates/stage_a_digest_table.json} is a printed digest of the
+digest table itself; the executable digest table intentionally does not
+self-bind.  If any listed file is omitted or its digest-bound bytes differ from
+the submitted rows, the reviewer-executable artifact support is incomplete, but
+the paper still makes no stronger source, artifact-semantic,
+archive-equivalence, or venue-status claim by default.
+
+\begin{lemma}[Byte binding for the submitted replay records]
+\label{lem:byte-binding-submitted-records}
+Use the TCB in Tables~\ref{tab:replay-tcb} and
+\ref{tab:replay-byte-binding}.  Suppose the submitted archive contains the
+relative paths in Tables~\ref{tab:replay-artifact-manifest} and
+\ref{tab:artifact-submission-checklist} as ordinary non-symlink files, and
+suppose their raw bytes have the SHA--256 values printed in
+Table~\ref{tab:printed-sha-ledger}.  Then the submitted bytes parse to the
+following finite objects used by Theorems~\ref{thm:typed-verified-core-hierarchy}
+and~\ref{thm:certificate-record-checker-spec}.
+\begin{enumerate}[label={\(\mathrm{B}_{\arabic*}\):}]
+\item The bytes of \artifactpath{certificates/stage_a_manifest.json} parse to a
+manifest whose \texttt{compiler\_rows} have exactly the displayed input atoms
+\[
+\begin{array}{@{}lll@{}}
+\texttt{pubAbs} & \texttt{suppMain} & \texttt{invJson}\\
+\texttt{invMd} & \texttt{finalDigest} & \texttt{stageAHornSchema}\\
+\texttt{stageAManifest} & \texttt{stageAHornCertificate} &
+\texttt{stageAReplayReport}\\
+\texttt{srcInterface} & \texttt{caseArtifacts} & \texttt{venueReadiness}\\
+\texttt{qrgsReplayUpgrade} & &
+\end{array}
+\]
+\item The bytes of \artifactpath{certificates/stage_a_horn_schema.json} parse to
+the Horn clauses \(R0\)--\(R12\) printed in
+Table~\ref{tab:horn-kernel-rules}, with coordinate set
+\(\{\qlex,q_{\mathrm{rgs}},q_{\mathrm{src}},q_{\mathrm{art}},
+q_{\mathrm{ext}},q_{\mathrm{ven}}\}\).
+\item The bytes of
+\artifactpath{certificates/stage_a_horn_audit_certificate.json} parse to
+derivation DAGs for exactly \(\qlex\), represented in the JSON as
+\texttt{qinv}, by \(R1\) and
+\(q_{\mathrm{rgs}}\) by \(R3\), plus minimal missing-premise obstructions
+\(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalUploadArchiveUpgrade}\), and
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) for
+\(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\),
+respectively.
+\item The bytes of \artifactpath{certificates/stage_a_replay_report.json} parse
+to the displayed accepted-coordinate vector
+\[
+\qlex=q_{\mathrm{rgs}}=\mathsf{true},\qquad
+q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
+\mathsf{false}.
+\]
+\item The bytes of \artifactpath{certificates/replay_stage_a_audit.py} implement
+exactly this finite checker predicate: validate all digest rows other than the
+self-digest row, compile atoms from the manifest rows, forward-chain the parsed
+Horn rules to a least fixed point, compare the parsed certificate DAGs and
+negative obstructions with that fixed point, and compare the recomputed
+six-coordinate vector with both the parsed certificate and parsed replay report.
+\item The bytes of \artifactpath{certificates/replay_case_rows.py} implement the
+case-row predicate printed in Table~\ref{tab:case-row-eligibility}: the case set
+is exactly the four displayed cases, every submitted snapshot path is relative
+and exists under the paper root, the reconstructed rows must equal
+\artifactpath{certificates/case_rows_expected.json}, and the false fifth Rule110
+dynamic-semantic row must be rejected.
+\item The bytes of \artifactpath{certificates/scan_tex_source_labels.py} and
+\artifactpath{certificates/static_source_label_scan.json} bind the
+\(\qlex\) scanner, whose legacy artifact atom is \texttt{qinv}, to the five
+lexical environment-token names in
+Table~\ref{tab:inventory-name-manifest} and to the stated raw-source,
+no-duplicate-label, no-stale-token predicate.
+\item The five \artifactpath{review_bundle/} JSON records in
+Table~\ref{tab:artifact-submission-checklist} are byte-bound review-bundle inputs
+for Theorem~\ref{thm:certificate-record-checker-spec}; they are not used as
+implicit evidence for source rebuild, artifact semantics, upload, venue, or
+whole-pipeline implementation soundness.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Each hypothesis is a finite byte-equality assertion: by
+Table~\ref{tab:replay-byte-binding}, a row in
+Table~\ref{tab:printed-sha-ledger} means SHA--256 of exactly the bytes returned
+by \texttt{Path.read\_bytes()} at the named relative path.  Collision resistance
+is not needed for the conditional statement: the lemma speaks about the
+submitted bytes whose digests are printed, not about adversarially finding other
+bytes with the same digest.
+
+Under the JSON-decoding convention in Table~\ref{tab:replay-tcb}, the four
+Stage--A JSON files parse as finite dictionaries.  Inspecting their displayed
+fields gives \(\mathrm{B}_1\)--\(\mathrm{B}_4\): the manifest's
+\texttt{compiler\_rows} fields are the atoms in \(\mathrm{B}_1\); the schema's
+\texttt{rules} array is exactly the rule table \(R0\)--\(R12\); the certificate's
+\texttt{derivation\_dags}, \texttt{accepted\_coordinates}, and
+\texttt{obstruction\_basis} fields are the DAG and obstruction objects in
+\(\mathrm{B}_3\); and the report's \texttt{accepted\_coordinates} field is the
+vector in \(\mathrm{B}_4\).
+
+For the Python files, the checker predicate is the control flow printed in the
+submitted source bytes.  In
+\artifactpath{certificates/replay_stage_a_audit.py}, \texttt{check\_digest\_table}
+rejects malformed rows, absolute paths, backslash paths, dot-dot paths,
+self-binding rows, mismatched SHA--256 values, and missing required rows;
+\texttt{compile\_atoms} adds exactly the manifest atoms and rejects disagreement
+with the certificate input set; \texttt{forward\_chain} iterates the parsed rule
+list until no new conclusion is added; \texttt{validate\_certificate} checks the
+two positive DAG roots and the four negative missing-premise roots; and
+\texttt{main} rejects unless the recomputed vector equals both parsed records.
+That is precisely \(\mathrm{B}_5\).  The functions
+\texttt{reconstruct\_rows} and \texttt{verify\_negative\_control} in
+\artifactpath{certificates/replay_case_rows.py} perform exactly the finite checks
+listed in \(\mathrm{B}_6\).  The scanner script and scan-output JSON are likewise
+ordinary submitted bytes whose named token list, scan domain, and stale-token
+result are the predicate in \(\mathrm{B}_7\).  Finally, the review-bundle records
+are listed and digest-bound but no Horn rule or checker branch promotes them to
+the excluded coordinates; hence \(\mathrm{B}_8\) follows from the rule table and
+the negative-coordinate argument in Theorem~\ref{thm:typed-verified-core-hierarchy}.
+\end{proof}
 
 \begin{table}
 \caption{Complete case-row eligibility matrix and negative control}
@@ -869,7 +1392,11 @@ case snapshots, and recorded verification support. \\
 The audit route is adjacent to several literatures but imports only bounded
 interfaces from them.  Table~\ref{tab:cicm-theorem-comparison} gives the
 theorem-by-theorem comparison with the closest recent CICM or CICM-workshop
-items; the paragraphs after the table give the older background streams.
+items.  Table~\ref{tab:execution-identity-comparison} separately records
+independent execution and software-identity infrastructure, because those works
+are central to the byte and replay boundary even though they are not CICM
+theorem papers.  The paragraphs after the tables give the older background
+streams.
 
 The proof-carrying-code line is the closest conceptual ancestor of the replay
 surface: an artifact carries a finite object that a smaller checker can inspect
@@ -878,7 +1405,8 @@ Foundational proof certificates refine this separation between certificate
 syntax and checking kernel~\cite{ChihaniMillerRenaud2013FPC}.  The Stage--A
 theorem uses that lineage only at publication-coordinate level: its submitted
 certificate is a finite Horn certificate for
-\(\{q_{\mathrm{inv}},q_{\mathrm{rgs}}\}\), not a proof of source-theory
+\(\{\qlex,q_{\mathrm{rgs}}\}\), with \(\qlex\) stored under the legacy artifact
+atom \texttt{qinv}, not a proof of source-theory
 correctness, proof-assistant reconstruction, or artifact semantics.
 Reproducibility packaging systems such as ReproZip
 \cite{ChirigatiRampinShashaFreire2016ReproZip} motivate the replay-command
@@ -910,11 +1438,11 @@ certificate traditions
 \cite{Necula1997PCC,Appel2001FoundationalPCC,ChihaniMillerRenaud2013FPC}. &
 Formal-library maintenance and web hosting for large mathematical corpora. &
 Adds a finite publication-coordinate projection to the proof-carrying pattern:
-the submitted Horn certificate certifies exactly \(q_{\mathrm{inv}}\) and
+the submitted Horn checker accepts exactly \(\qlex\) and
 \(q_{\mathrm{rgs}}\); source rebuild, artifact semantics, external archive, and
 venue coordinates remain false without upgrade atoms. \\
 Lemma~\ref{lem:rgs-schema-consequence} and
-Theorem~\ref{thm:json-certificate-implementation}: finite certificate schema
+Theorem~\ref{thm:certificate-record-checker-spec}: finite certificate schema
 and JSON record checker &
 Bauer--Ber{\v c}i{\v c}--Devillez--Taslak, ``Incorporating a Database of
 Graphs into a Proof Assistant'' (CICM 2024) \cite{BauerEtAl2024LeanHoG}. &
@@ -922,7 +1450,7 @@ Import of curated graph data, generated certificates, and external solving into
 a proof-assistant workflow.  Artifact-badging, ReproZip, and repeatability
 work give the adjacent replay-packaging norms
 \cite{ACM2020ArtifactBadging,ChirigatiRampinShashaFreire2016ReproZip,CollbergProebsting2016Repeatability}. &
-Turns certificates into a publication-boundary theorem: the checker computes
+Turns certificates into a publication-boundary checker specification: the checker computes
 \(\Acc_{\Gamma}\) for local records and does not infer graph-data correctness,
 solver soundness, Lean rebuild success, clean-machine reproducibility, or
 artifact semantics. \\
@@ -964,6 +1492,75 @@ Foldm classification. \\
 \end{tabularx}
 \end{table}
 
+\subsection{Independent execution and software identity}
+The replay boundary in this paper is deliberately narrower than the major
+infrastructure used for computational reproducibility and software citation.
+CODECHECK asks an independent executor to run submitted code and issue a
+certificate for the observed computation~\cite{EglenEtAl2021CODECHECK}.  Nix and
+NixOS make software deployment and system configuration more reproducible by
+describing dependencies functionally and isolating build products
+\cite{DolstraDeJongeVisser2004Nix,DolstraLohPierron2010NixOS}.  Software
+Heritage provides long-term archival source identifiers, including SWHIDs, for
+referring to exact source-code objects~\cite{DiCosmoGruenpeterZacchiroli2020SWHID}.
+FAIR4RS states findability, accessibility, interoperability, and reusability
+principles for research software~\cite{BarkerEtAl2022FAIR4RS}.
+
+This article uses a different evidence unit: a finite row is accepted only for
+the predicate printed in the row and only after the raw bytes named by the row
+match the submitted digest convention.  That choice is not a replacement for the
+systems above.  It is a smaller publication-coordinate design pattern and finite
+checker specification for a generated formal-mathematics package; its public
+calculation is only the displayed Horn-coordinate projection.
+The row semantics deliberately avoids three stronger claims.
+First, it does not assert clean-machine reproducibility: no theorem depends on a
+fresh rebuild of Lean, Python packages, operating-system images, solver
+binaries, or the original discovery pipeline.  Second, it does not assert
+archival identity: a future SWHID, DOI, or repository snapshot would be an
+external-archive coordinate and would require its own row before it became
+load-bearing.  Third, it does not assert full research-software FAIRness: the
+manifest records the local finite evidence needed for the two public coordinates,
+not the complete metadata, licensing, dependency, citation, and reuse surface of
+the software project.
+
+\begin{table}
+\caption{Independent execution and software-identity interfaces versus the finite row semantics used here.}
+\label{tab:execution-identity-comparison}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.95}
+\begin{tabularx}{\linewidth}{@{}L{0.18\linewidth}L{0.26\linewidth}L{0.24\linewidth}Y@{}}
+\toprule
+Infrastructure & Primary evidence unit & Strong claim it can support & Boundary in this paper \\
+\midrule
+CODECHECK~\cite{EglenEtAl2021CODECHECK} &
+Independent execution certificate for supplied code and data. &
+A third party observed a stated computation run and reported the result under
+the CODECHECK process. &
+No independent executor is part of the theorem.  The paper only checks
+digest-bound local rows and command transcripts under Tables~\ref{tab:replay-tcb}
+and~\ref{tab:replay-byte-binding}. \\
+ReproZip and Nix/NixOS
+\cite{ChirigatiRampinShashaFreire2016ReproZip,DolstraDeJongeVisser2004Nix,DolstraLohPierron2010NixOS} &
+Captured execution environment or functional package/system description. &
+Repeatable or reproducible execution in a controlled environment. &
+No environment rebuild is certified.  Python and filesystem behavior are named
+as TCB assumptions; finite row acceptance is not a derivation-build result. \\
+Software Heritage and SWHIDs~\cite{DiCosmoGruenpeterZacchiroli2020SWHID} &
+Persistent identifier for archived source-code objects. &
+Stable citation of an exact archived source object. &
+The digest table binds submitted local bytes.  Archive upload, SWHID resolution,
+and repository equivalence are negative/external coordinates unless separately
+rowed and replayed. \\
+FAIR4RS~\cite{BarkerEtAl2022FAIR4RS} &
+Research-software metadata and practice principles. &
+Software is findable, accessible, interoperable, and reusable to a specified
+degree. &
+The manifest is not a FAIR4RS audit.  It records only the finite evidence
+needed for \(\qlex\) and \(q_{\mathrm{rgs}}\). \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \begin{itemize}
 \item Richardson undecidability and symbolic simplification
 \cite{Richardson1968,Caviness1970,Wang1974}: used only through the reduction
@@ -994,10 +1591,13 @@ context
 LeanDojo, Lean Copilot, Draft-Sketch-Prove, DeepSeek-Prover, and Llemma give
 LLM-proof-tool context
 \cite{YangEtAl2023LeanDojo,SongYangAnandkumar2024LeanCopilot,JiangEtAl2023DraftSketchProve,XinEtAl2024DeepSeekProver,AzerbayevEtAl2023Llemma};
-artifact badging, ReproZip, and repeatability work give artifact-replay context
-\cite{ACM2020ArtifactBadging,ChirigatiRampinShashaFreire2016ReproZip,CollbergProebsting2016Repeatability}.
-The contribution here is a publication-coordinate audit boundary around such
-tools: finite certificates are checked only for their stated coordinates,
+artifact badging, CODECHECK, ReproZip, Nix/NixOS, Software Heritage/SWHIDs,
+FAIR4RS, and repeatability work give artifact-replay and software-identity
+context
+\cite{ACM2020ArtifactBadging,EglenEtAl2021CODECHECK,ChirigatiRampinShashaFreire2016ReproZip,DolstraDeJongeVisser2004Nix,DolstraLohPierron2010NixOS,DiCosmoGruenpeterZacchiroli2020SWHID,BarkerEtAl2022FAIR4RS,CollbergProebsting2016Repeatability}.
+The contribution here is a publication-coordinate design pattern around such
+tools, together with the finite checker predicates that implement it for this
+package: finite certificates are checked only for their stated coordinates,
 replay commands establish only their digest-bound predicates, and advisory
 agents do not become proof or artifact evidence without deterministic promotion
 rows.
@@ -1068,8 +1668,16 @@ Input finite normal words \(c,d\), and optionally a requested output window
 \begin{array}{ll}
 \textsc{FibTable}(m): & \text{return }F_1,\ldots,F_{m+1}.\\
 \Val(c): & s:=0;\ \text{for each nonzero digit }c_k\text{ set }s:=s+F_k;\ \text{return }s.\\
-\NF(n): & r:=n;\ e:=0;\ \text{while }r>0\text{: choose largest }F_k\le r,\\
-        & e_k:=1;\ r:=r-F_k;\ \text{return }e.\\
+\NF(n): &
+\begin{array}[t]{@{}l@{}}
+r:=n;\quad e_j:=0\text{ for all }j;\\
+\textbf{while }r>0\textbf{ do}\\
+\quad k:=\max\{i:F_i\le r\};\\
+\quad e_k:=1;\\
+\quad r:=r-F_k;\\
+\textbf{end while};\\
+\textbf{return }e.
+\end{array}\\
 \Val_m^{-1}(t): & \text{if }t\ge F_{m+1}\text{ return }\bot_m;\ \text{else return }\NF(t)\in X_m.\\
 \Add(c,d): & \text{return }\NF(\Val(c)+\Val(d)).\\
 \Mul(c,d): & \text{return }\NF(\Val(c)\Val(d)).\\
@@ -1123,18 +1731,30 @@ normalization cost plus the ordinary integer-arithmetic cost of computing
 \end{lemma}
 
 \begin{proof}
-The loop for \(\NF(n)\) strictly decreases the nonnegative integer \(r\), so it
-terminates.  After choosing the largest \(F_k\le r\), a later choice of
-\(F_{k-1}\) would require the old remainder to be at least \(F_{k-1}\), whence
-the old \(r\) was at least \(F_k+F_{k-1}=F_{k+1}\), contradicting maximality of
-\(F_k\).  Hence the next chosen index is at most \(k-2\), and the returned word
-has no adjacent \(1\)'s.  The invariant
+For \(\NF(n)\), the loop invariant after every completed iteration is
 \[
-n=r+\sum_j e_jF_j
+\begin{aligned}
+\mathrm{I}(r,e):\quad
+n&=r+\sum_j e_jF_j,\\
+r&\ge0,\\
+e&\text{ is a finite }0\text{-}1\text{ word with no adjacent }1\text{'s},
+\end{aligned}
 \]
-is preserved at each subtraction and gives \(\Val(\NF(n))=n\) at termination.
-Zeckendorf uniqueness gives that this returned word is the unique element of
-\(X_{\mathrm{fin}}\) with value \(n\).
+and every future selected index is at most two below the last selected index.
+The invariant is true initially, with \(r=n\) and all \(e_j=0\).  In one
+iteration the algorithm chooses the largest \(F_k\le r\), sets \(e_k:=1\), and
+replaces \(r\) by \(r-F_k\).  This preserves
+\(n=r+\sum_j e_jF_j\) and keeps \(r\ge0\).  After choosing \(F_k\), a later
+choice of \(F_{k-1}\) would require the old remainder to be at least
+\(F_{k-1}\), whence the old \(r\) was at least
+\(F_k+F_{k-1}=F_{k+1}\), contradicting maximality of \(F_k\).  Hence the next
+chosen index is at most \(k-2\), so no adjacent \(1\)'s are introduced.  The
+strict decrease of the nonnegative integer \(r\) proves termination.  At
+termination \(r=0\), so the invariant gives \(\Val(\NF(n))=n\).  Zeckendorf
+uniqueness gives that the returned word is the unique element of
+\(X_{\mathrm{fin}}\) with value \(n\).  The explicit \textbf{return} statement
+is outside the \textbf{while} block; no partial word is returned after the first
+subtraction.
 
 For the finite window, the maximum-value calculation satisfies
 \(M_m=\max(M_{m-1},F_m+M_{m-2})=F_{m+1}-1\), with \(M_0=0\) and \(M_1=1\).

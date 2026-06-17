@@ -25,6 +25,22 @@ REPORT = CERT / "stage_a_replay_report.json"
 DIGEST_TABLE = CERT / "stage_a_digest_table.json"
 
 COORDINATES = ["qinv", "qrgs", "qsrc", "qart", "qext", "qven"]
+REQUIRED_DIGEST_PATHS = {
+    "certificates/stage_a_manifest.json",
+    "certificates/stage_a_horn_schema.json",
+    "certificates/stage_a_horn_audit_certificate.json",
+    "certificates/stage_a_replay_report.json",
+    "certificates/replay_stage_a_audit.py",
+    "certificates/replay_case_rows.py",
+    "certificates/case_rows_expected.json",
+    "certificates/scan_tex_source_labels.py",
+    "certificates/static_source_label_scan.json",
+    "review_bundle/certificate_schema.json",
+    "review_bundle/current_package_pass_records.json",
+    "review_bundle/submission_interface_map.json",
+    "review_bundle/primary_claim_inventory.json",
+    "review_bundle/REVIEW_BUNDLE_MANIFEST.json",
+}
 EXPECTED_NEGATIVE_UPGRADES = {
     "qsrc": "freshFormalSourceUpgrade",
     "qart": "dynamicArtifactSemanticUpgrade",
@@ -83,14 +99,7 @@ def check_digest_table(table: dict) -> dict[str, str]:
                 f"digest mismatch for {path_text}: expected {expected}, got {actual}"
             )
         seen[path_text] = expected
-    required = {
-        rel(MANIFEST),
-        rel(SCHEMA),
-        rel(CERTIFICATE),
-        rel(REPORT),
-        rel(Path(__file__).resolve()),
-    }
-    missing = sorted(required - set(seen))
+    missing = sorted(REQUIRED_DIGEST_PATHS - set(seen))
     if missing:
         raise SystemExit(f"digest table missing rows: {missing}")
     return seen
