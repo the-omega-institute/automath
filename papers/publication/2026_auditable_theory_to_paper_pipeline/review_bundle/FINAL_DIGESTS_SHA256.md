@@ -1,11 +1,11 @@
 # Final SHA-256 Digest Manifest
 
-Generated at local time `2026-06-17T09:32:09+08:00` (`2026-06-17T01:32:09+00:00` UTC).
+Generated at local time `2026-06-17T09:52:25+08:00` (`2026-06-17T01:52:25+00:00` UTC).
 
 Command: `python review_bundle/generate_final_digests.py`
 Environment: `Python 3.10.11 on Windows 10`
 Working directory: `D:\omega\automath\papers\publication\2026_auditable_theory_to_paper_pipeline`
-Source commit: `c94202c6de857b63dfd50977f83951356023db0a`
+Source commit: `ead4f75fcf76d534cdb6e55b68b340efbe75f216`
 Generation log: `review_bundle/final_digest_generation_run.log`
 Excluded self-digest inputs: `review_bundle/FINAL_DIGESTS_SHA256.md, review_bundle/final_digest_generation_run.log`
 Path count: `828`
@@ -708,14 +708,14 @@ Path count: `828`
 | `fresh_env_records.jsonl` | `e7f0fe76a1a502a63938e2ad59b6bf31b2346a75f4a8b8bfab1212beaf389e25` |
 | `label_lines.tmp.txt` | `6f0586c7d834b62fbe0853764db05a6e6a6adfc95a84c8416dfde05a3ed38436` |
 | `label_map.tsv` | `6af3eddfef2ae16b0cff165d6296fccb464ceda303317bf97ead020d72f4e2e9` |
-| `main.aux` | `03f6d7686928e14c8667dc52e6a5c413d66f73643d667f69b6bc5f5b5de86367` |
+| `main.aux` | `88e77ee5e77816e9360ec214cf8b4babb4cd14687f090682d9690ecfe3de18b1` |
 | `main.bbl` | `ebd2bc1f3ad127832e193f9b9c4afd28cfd99993196c8ca922a513a10a419821` |
 | `main.blg` | `515bd2970e2f798aa82cc9045ca852f2b9b7b699c5d32136bd0bd5afd89e0823` |
 | `main.envdigest.json` | `ce01c57052e6cf6091e6ee2b53439db2f70e96dffc01efd9d3ec96bbadf513c0` |
-| `main.log` | `f53c3da449f049f56fdb0a45a9421cac51cd6702d9302847db7d4c09d4281a24` |
+| `main.log` | `acee109f45c55333ca6ccbd6b85fbfd9b074a6814aa5aa24a8db62f3b0a7093f` |
 | `main.out` | `a5a9a81edcd2e5efc4ed7df5564d0215aefe065b1a2ade7b04ec8d20009bcadd` |
-| `main.pdf` | `a5f6499c12e4cff664aa336f03a70971ba2e435a291f54d574806f236974134b` |
-| `main.tex` | `50195503383af1f4287fc7c2fc9a4469dec0eec7e356bd2f912803705c1914f9` |
+| `main.pdf` | `da2b28ab762bffab21950baab7779902c3fcafdf0f2290344df2982cb37f40e3` |
+| `main.tex` | `e5ba2ef1162ccdd941b07430285e207781f5323c6e6e99c31cee56b98d20e79c` |
 | `main.tex.env_index.json` | `73afd61caa6f46908eb7338998c0339e6aebe449200f2c8f94afe570d11e6ac4` |
 | `main.tex.envs.json` | `000d2075760f6c290ac32f3a8451e7f497cbdf534ec044ed8f5d90ebe264694b` |
 | `main_theorem_items.tmp.json` | `b920151c2bded8784b1947cab22dd2417009a72e83af4d48d59d4f5a07a4a8ba` |
@@ -801,7 +801,7 @@ Path count: `828`
 | `source_interface_record.json` | `55bfde1bc04a6201d81073ea45d8d67f6fca9108ffc89012511f8e1f986aab9e` |
 | `SOURCE_MAP.md` | `9aadbc6f47b870b0749c35fdb9bb230c4753042974468481d06136f87ff5c19f` |
 | `split_candidates.json` | `a87bf05c5d54c4e07f1f5c4d1c455fb8d734b7cdea1f24e5710d9b0c1fe3b314` |
-| `stage_a_audit.json` | `5c207eeda8204e9799540fcf7400bac791722bdb18c0016c734a7adce355da1a` |
+| `stage_a_audit.json` | `cd9db5d57d222fba6893407d37863b4f11af5e7174d712eadfe07f007fb94a34` |
 | `stage_a_horn_audit_certificate.json` | `39770823781b0e0c03c1a17c0c04bd64e734cfcdeb077edd556107d32246a640` |
 | `stage_a_horn_schema.json` | `a0d9507d64193491f9b11a77d1a683440bff90fa697c66a280de9df1c2be7f9d` |
 | `stage_a_manifest.json` | `34109034e0913b4691171919c0c69e4a259447429bd05a7074afedd521467696` |
@@ -825,8 +825,8 @@ Path count: `828`
 | `theorem_envs_main.tsv` | `827652613965497a2d513e0ffc359f3fde439586a25106ca1dfd717844fbb98e` |
 | `theorem_envs_main.txt` | `f9d0ade6ce5808c924c65846fa2347f6ffd41489b7e7a521baf04c2ee2ca8b74` |
 | `theorem_extract.txt` | `ae790c7ee43cb10afa27c96e9e5ab97c5b7b542bd9065a5d92c4b52e6480a94d` |
-| `theorem_inventory.json` | `7a0805a1ae862c3d0c1b84449349c1984665b86fe1f1f8673b67ee075270bd60` |
-| `theorem_inventory.md` | `1421891625e53b7d14be59690c265748356324a9679bffcca65c950946a0fda5` |
+| `theorem_inventory.json` | `d17e8f5df92e6e5e1d741ab558e5f66aa47d103ef6c2b173111dd2f3b41e5356` |
+| `theorem_inventory.md` | `27218185c4ff0b0d46c2f90aef2a452bd674ca421b46ff0f832dc75f7ed95ac7` |
 | `theorem_inventory.min.tmp.json` | `7018edfa3849d4db18953634d62d07dce889591b8b9e1945a608ba8a4065624b` |
 | `theorem_inventory_extract.tmp.json` | `1954fa3fb4dac259946ee09da002048213b64bf1e1d6119df978b60e9337711c` |
 | `theorem_items.tsv` | `8ae301b8e87df38ff8211df30815047b6718d5a72a97bdff0ab6951bd03a2177` |
