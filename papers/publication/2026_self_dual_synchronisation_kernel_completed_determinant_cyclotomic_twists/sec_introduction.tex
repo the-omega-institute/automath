@@ -1,8 +1,7 @@
 \section{Introduction}\label{sec:introduction}
 
-This article proves a verified-triple-relative hierarchy for the
-explicit ten-state weighted synchronisation kernel displayed in
-\Cref{def:sync-kernel}.  The kernel has
+This article studies the explicit ten-state weighted synchronisation
+kernel displayed in \Cref{def:sync-kernel}.  The kernel has
 uniform outdegree \(3\), a strongly connected aperiodic underlying
 digraph, and a binary output labelling.  Its ten states split into five
 dual pairs, and the duality exchanges the output-zero and output-one
@@ -11,19 +10,16 @@ interaction between labelled finite-state dynamics, self-dual determinant
 identities, plane-curve geometry, finite-field Galois certificates, and
 cyclotomic twists.
 
-The scope is intentionally concrete but relative.  We do not classify
+The scope is intentionally concrete.  We do not classify
 self-dual kernels, we do not claim that the ten-state example represents
 a generic family, and we do not assert that any printed external
-catalogue name yields an elementary-function obstruction.  The main
-hierarchy is relative only to a verified triple internal to the paper:
-the printed transition table, the completed-determinant identity, and
-the effective cyclotomic endpoint-separation witnesses.  Every assertion
-below is made for the displayed kernel, for this verified triple, or for
-an explicitly stated auxiliary criterion that is then verified for this
+catalogue name yields an elementary-function obstruction.  Every
+assertion below is made for the displayed kernel or for an explicitly
+stated auxiliary criterion whose hypotheses are then verified for this
 kernel.  The point of the paper is that this one kernel admits a
-complete audit trail: the transition table gives the matrix, the matrix
-gives the determinant, the determinant gives the completed curve and the
-cyclotomic factors, and the Sage runner
+complete reproducibility trail: the transition table gives the matrix,
+the matrix gives the determinant, the determinant gives the completed
+curve and the cyclotomic factors, and the Sage runner
 \[
   \texttt{certificates/verify\_certificates.py}
 \]
@@ -72,13 +68,13 @@ Throughout, such a factor is the conjugate product itself, or
 equivalently the ordered resultant with the real cyclotomic polynomial
 in the first argument. The opposite resultant order differs by the
 usual Sylvester sign and is never used as the definition of \(R_m\).
-These are the admissible covers used in the certificate claim: they are
+These are the admissible covers used in the proofs: they are
 the canonical cyclic covers obtained from the printed binary output
 cocycle.  Arbitrary auxiliary covers of the same underlying digraph,
 including one-spike voltage modifications, are outside this category.
 They may be useful as perturbative stress tests, but they are not
 intrinsic Fold\(_m\)-type behaviour of the displayed kernel and are not
-part of the paper-local obstruction claim.
+part of the determinant and cyclotomic theorem proved here.
 
 
 \paragraph{Terminology.}
@@ -108,97 +104,43 @@ smoothness ideals, interval separation checks, and endpoint jet
 coefficients were computed in SageMath~10.2 and cross-checked in
 Mathematica~14.0 where indicated.  The appendix gives a
 theorem-to-command map and the single Sage certificate runner
-\(\texttt{certificates/verify\_certificates.py}\).  The runner prints
-the Sage and Python versions, SHA-256 checksums for the paper sources
-and the certificate script, and named outputs such as
-\(\texttt{determinant\_difference: 0}\),
-\(\texttt{self\_duality\_difference: 0}\),
-\(\texttt{affine\_smoothness\_groebner: [1]}\),
-\(\texttt{mod7\_s3\_gcd\_factor}\),
-\(\texttt{mod19\_s3\_gcd\_factor}\),
-\(\texttt{endpoint\_interval\_certificate: true}\), and
-\(\texttt{finite\_m\_branch\_selection\_4\_to\_31: true}\).
-Items \textup{(a)}--\textup{(f)} in
-\Cref{sec:appendix-computation} display the exact outputs used in the
-corresponding proofs; no fitted parameters are used.
+\[
+  \texttt{certificates/verify\_certificates.py}.
+\]
+The runner prints the Sage and Python versions, SHA-256 checksums for
+the paper sources and certificate script, and the named keys used in the
+proofs, including
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\texttt{determinant\_difference: 0} &
+\texttt{self\_duality\_difference: 0}\\
+\texttt{affine\_smoothness\_groebner: [1]} &
+\texttt{endpoint\_interval\_certificate: true}\\
+\texttt{central\_interval\_certificate: true} &
+\texttt{finite\_m\_branch\_selection\_4\_to\_31: true}
+\end{tabularx}
+\end{center}
+The runner is the authoritative transcript for the computer-assisted
+steps.  Items \textup{(a)}--\textup{(f)} in
+\Cref{sec:appendix-computation} record the command map, key exact
+polynomials, named certificate keys, and displayed coefficients used in
+the corresponding proofs; no fitted parameters are used.
 
 
 \subsection{Main results}
 
-The headline hierarchy is a typed four-interface statement.  Its
-assumptions and conclusions live separately in the partial
-principal-branch \(\mathsf{EML}\) term algebra, the Zeckendorf
-normal-form protocol, one-orbit ambient-product readouts, and computable
-finite-fibre covers before the paper-local determinant surface is
-attached to the displayed ten-state matrix.
-
-\begin{theorem}[Typed verified-triple-relative four-interface hierarchy]
-\label{thm:typed-verified-core-hierarchy}
-Let \(\mathsf{EML}\) be the partial principal-branch term algebra used in
-the external \(L0\) ledger recorded in
-\Cref{rem:kernel-import-ledger}.  Let \(\mathsf{B36Ext}\) be an
-external expression-layer statement asserting that each primitive in
-the ambient source calculus has at least one \(\mathsf{EML}\)
-representative on its stated source domain.  Let
-\(\operatorname{Trip}(P,S,A)\) mean finite pure \(\mathsf{EML}\) terms
-satisfying
-\[
-  P=\pi,\qquad S(x)=\sin x\quad(x\in\RR),\qquad
-  A(x)=\abs{x}\quad(x\in\RR\setminus\{0\}).
-\]
-Let \(Z\) be the Zeckendorf normal-form protocol with
-\[
-  \operatorname{Val}:X_{\mathrm{fin}}\to\NN,\qquad
-  \operatorname{NF}_{\infty},
-\]
-and transported operations
-\[
-  \operatorname{Add}(c,d)
-    =\operatorname{NF}_{\infty}(\operatorname{Val}(c)+\operatorname{Val}(d)),
-  \qquad
-  \operatorname{Mul}(c,d)
-    =\operatorname{NF}_{\infty}(\operatorname{Val}(c)\operatorname{Val}(d)).
-\]
-Let \(\operatorname{Orbit}(g)\) be the category of
-one-free-monogenic-orbit ambient-product readouts.  Let
-\(\operatorname{Cover}(Z)\) be the category of computable finite-fibre
-covers over the fixed normal-form sets \(X_m\); in the determinant
-application this means the admissible cyclic covers of
-\Cref{def:admissible-cyclic-cover}, not arbitrary auxiliary covers.
-Then:
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item \(\mathsf{B36Ext}\) gives \(L0\) expression universality and no
-  equality, normal-form, or compiler data.
-  \item \(Z\) gives an \(L1\) computable protocol for
-  \((\NN,+,\times)\).
-  \item For every verified \(\operatorname{Trip}(P,S,A)\), and for every
-  effective Richardson-to-\(\mathsf{EML}\) translation preserving the
-  stated real branch-domain semantics, no computable semantic normalizer
-  into finite decidable objects reflects equality on the translated
-  Richardson fragment.
-  \item No faithful same-level ambient-product readout of multiplication
-  on all of \(\NN_{\ge1}\) exists inside \(\operatorname{Orbit}(g)\).
-  \item In the admissible finite-fibre cover category there exists a
-  computable object with fixed-resolution certificates but no fixed
-  finite-state transfer formula; arbitrary one-spike or otherwise
-  auxiliary covers are only stress tests and are not intrinsic
-  \(\operatorname{Fold}_m\) behaviour.
-\end{enumerate}
-The paper-local ten-state kernel below supplies the finite-state
-completed-determinant instance of this typed separation; it does not by
-itself instantiate any external expression-layer or Richardson object.
-\end{theorem}
-
-We next record the determinant, spectral radius, completion, quotient,
-and generic Galois group for the ten-state matrix, all as paper-local
-consequences of the verified transition-table, determinant, and
-certificate data.
+The main results are the determinant, quotient-curve, Galois,
+cyclic-factor, endpoint-selection, and asymptotic statements for the
+displayed ten-state matrix.  External expression-layer and Richardson
+questions are not part of these theorems; a conditional boundary
+statement is recorded after the determinant results.
 
 All curves in the main results are considered over \(\overline{\QQ}\), and
 \(\overline{X}\) denotes the normalisation of the projective closure of
 the irreducible affine curve \(\widehat\Delta(w,s)=0\).
 
-\begin{theorem}[Verified-triple-relative hierarchy: geometry]
+\begin{theorem}[Completed determinant, quotient curve, and Galois group]
 \label{thm:intro-kernel-geometry}
 Let \(B(u)\) be the weighted synchronisation kernel of
 \Cref{def:sync-kernel}. Then:
@@ -242,10 +184,10 @@ Let \(B(u)\) be the weighted synchronisation kernel of
 \end{enumerate}
 \end{theorem}
 
-The second part of the verified-triple-relative hierarchy concerns
-cyclotomic twists.
+The second main result concerns the cyclotomic twists attached to the
+canonical cyclic covers of the binary output cocycle.
 
-\begin{theorem}[Verified-triple-relative hierarchy: cyclotomic twists]
+\begin{theorem}[Cyclotomic root products and Perron-root asymptotics]
 \label{thm:intro-kernel-cyclotomic}
 For \(m\ge 2\), let \(s_m=2\cos(\pi/m)\), let \(\Phi_m^+\) be the
 minimal polynomial of \(s_m\), let \(A_m\) be its real cyclotomic
@@ -315,35 +257,13 @@ used only through \Cref{cor:sync-endpoint-selection-application}, where
 \Cref{lem:root-separation} verifies its hypotheses for the displayed
 ten-state kernel with
 \[
-  \eta=\frac1{100},\qquad \varepsilon=\frac1{200},\qquad m_0=32.
+  \eta=\frac1{100},\qquad \beta=\frac{101}{300},\qquad m_0=32.
 \]
 
 \begin{corollary}[Conditional printed Richardson branch]
 \label{cor:conditional-printed-name-richardson}
-\ifshortcicm
 Assume that finite principal-branch EML terms denoted \(U47\) and
 \(U111\) have been supplied, and that the following real-domain
-identities have been proved independently:
-\[
-  U47=\pi,\qquad U111(x)=\sin x\quad(x\in\RR).
-\]
-Let \(\operatorname{Abs}(u)=G(M(u,u))\), where the supplied EML terms
-\(G\) and \(M\) satisfy
-\[
-  \operatorname{Abs}(u)=\abs{u}\qquad(u\ne0)
-\]
-on their principal-branch real domains.  Assume also that the relevant
-Richardson expressions are translated effectively to partial
-\(\mathsf{EML}\) terms with the same values on their stated real
-branch domains.  Then \((U47,U111,\operatorname{Abs})\) satisfies
-\(\operatorname{Trip}(P,S,A)\), so the verified Richardson-fragment
-part of \Cref{thm:typed-verified-core-hierarchy} applies.  Without
-these two displayed real-domain identities for \(U47\) and \(U111\) and
-the effective branch-domain translation, this manuscript proves no
-printed \(U47/U111\) Richardson instance.
-\else
-Assume that finite principal-branch EML terms denoted \(U47\) and
-\(U111\) have been supplied, and that the following two real-domain
 identities have been proved independently:
 \[
   U47=\pi,\qquad U111(x)=\sin x\quad(x\in\RR).
@@ -363,41 +283,19 @@ on their principal-branch real domains.  Suppose also that:
   \(\lbrack\!\lbrack\tau(E)\rbrack\!\rbrack(x)=E(x)\) for every
   \(x\in D_E\), where \(D_E\) is the stated real branch domain.
 \end{enumerate}
-Then \((U47,U111,\operatorname{Abs})\) satisfies
-\(\operatorname{Trip}(P,S,A)\), so the verified
-Richardson-fragment part of \Cref{thm:typed-verified-core-hierarchy}
-applies.  Without the two displayed real-domain identities for \(U47\)
-and \(U111\), this manuscript proves no printed \(U47/U111\)
-Richardson instance.
-\fi
+Then the supplied terms provide a conditional EML realisation of the
+Richardson fragment used by that external reduction.  Without the two
+displayed real-domain identities for \(U47\) and \(U111\), and without
+the effective branch-domain translation, this manuscript proves no
+printed \(U47/U111\) Richardson instance.
 \end{corollary}
 
 \begin{proof}
-\ifshortcicm
-The definition of \(\operatorname{Trip}(P,S,A)\) in
-\Cref{thm:typed-verified-core-hierarchy} requires exactly a
-\(\pi\)-term, a sine term on all real inputs, and an absolute-value term
-away from \(0\).  The displayed hypotheses give those three terms with
-\(P=U47\), \(S=U111\), and \(A=\operatorname{Abs}\).  Thus the triple
-satisfies \(\operatorname{Trip}(P,S,A)\), and item~\textup{(iii)} of
-\Cref{thm:typed-verified-core-hierarchy} applies to the translated
-Richardson fragment because the corollary assumes the required
-effective branch-domain translation.  The last sentence is just the
-contrapositive scope audit: this paper does not prove the two displayed
-identities or the translation hypothesis, so without them it has
-supplied no printed \(U47/U111\) instance.
-\else
 The displayed hypotheses give \(P=U47\), \(S=U111\), and
-\(A=\operatorname{Abs}\) with the three real-domain identities required
-in the definition of \(\operatorname{Trip}(P,S,A)\) in
-\Cref{thm:typed-verified-core-hierarchy}.  Hence
-\((U47,U111,\operatorname{Abs})\) satisfies
-\(\operatorname{Trip}(P,S,A)\), and item~\textup{(iii)} of
-\Cref{thm:typed-verified-core-hierarchy} applies to the effective
-Richardson translation.  The remaining arithmetic primitives used
-inside such a translation have the following domain audit.  In the
-real-safe
-principal-branch EML system
+\(A=\operatorname{Abs}\) with the three real-domain identities needed
+for the conditional translation.  The remaining arithmetic primitives
+used inside such a translation have the following domain check.  In the
+real-safe principal-branch EML system
 \[
   \operatorname{eml}(x,y)=\exp(x)-\Log(y),
 \]
@@ -437,7 +335,6 @@ translation has been supplied externally.  They do not themselves prove
 the displayed \(U47=\pi\) or \(U111=\sin\) identities.  If either
 displayed identity or the effective translation is absent, this
 corollary supplies no printed \(U47/U111\) Richardson instance.
-\fi
 \end{proof}
 
 We also record the primitive-orbit asymptotics of the unweighted kernel.
@@ -546,10 +443,10 @@ The bibliography separates the cited support used in the proofs from
 neighbouring interface literature.  Richardson's undecidability theorem
 is the relevant external obstruction background for elementary real
 functions with trigonometric constants \cite{Richardson1968}; the
-present paper uses it only through the conditional translation boundary
-in \Cref{cor:conditional-printed-name-richardson}.  The EML
-representation language used in that boundary is treated here as a
-paper-external interface: the manuscript records the elementary
+present paper uses it only through the conditional statement in
+\Cref{cor:conditional-printed-name-richardson}.  The EML
+representation language used there is external to the determinant
+proof: the manuscript records the elementary
 principal-branch arithmetic identities above, but it does not import a
 catalogue-wide EML representation theorem or a semantic equality
 procedure.  The \(L1\) numeration protocol is likewise separated from
@@ -562,8 +459,8 @@ context, the closest standard interfaces are weighted automata and
 rational series \cite{Schutzenberger1961,BerstelReutenauer2011} and
 symbolic-dynamics determinant formulas
 \cite{BowenLanford1970Zeta,Manning1971Axiom,LindMarcus2021}.  Finally,
-the certificate runner belongs to the CICM-style ecosystem of
-formalization and software artifacts \cite{CICM2024}; it is a
+the certificate runner follows standard practice for reproducible
+computer algebra in mathematical writing \cite{CICM2024}; it is a
 reproducibility artifact for the printed determinant, smoothness,
 Galois, and endpoint checks, not an imported theorem database.
 

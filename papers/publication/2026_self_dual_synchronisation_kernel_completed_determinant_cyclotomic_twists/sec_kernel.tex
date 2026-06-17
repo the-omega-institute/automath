@@ -19,9 +19,8 @@ these complete nonsingular models.
 \label{subsec:l1-zeckendorf-normalizer}
 
 \ifshortcicm
-This subsection is the software-facing protocol example.  It is included
-only to specify the exact integer interface used when the kernel is
-embedded in a larger audit pipeline; no determinant proof below depends
+This subsection records the integer normalisation protocol used in the
+background comparison construction; no determinant proof below depends
 on this protocol.
 
 Let \(F_0=1\), \(F_1=2\), and \(F_{i+2}=F_{i+1}+F_i\).  A raw word is a
@@ -302,9 +301,11 @@ arithmetic, for which see
 \begin{proposition}[Totality and size bounds for the \(L1\) normaliser]
 \label{prop:l1-zeckendorf-normalizer-total}
 The operations
-\(\operatorname{NF}_\infty,\operatorname{Val},\operatorname{Add},
-\operatorname{Mul},\Phi_0,\Phi_1\) defined above are total on their
-stated input grammars.  If the printed raw inputs have at most \(n+1\)
+\[
+  \operatorname{NF}_\infty,\quad \operatorname{Val},\quad
+  \operatorname{Add},\quad \operatorname{Mul},\quad \Phi_0,\quad \Phi_1
+\]
+defined above are total on their stated input grammars.  If the printed raw inputs have at most \(n+1\)
 coefficients and each coefficient has absolute value at most \(A\ge1\),
 then every normal output has length
 \[
@@ -992,13 +993,12 @@ attached to the output cocycle
   \[
     \widetilde B_q=B_0\otimes I_q+B_1\otimes P_q.
   \]
-  The paper-local certificate data determine this category: the
-  matrices \(B_0\) and \(B_1\) are read from the printed transition
-  table and from the displayed matrix \(B(u)\) in
-  \Cref{sec:appendix-computation}, and the determinant, self-duality,
+  The printed matrix and certificate data determine this category.  The
+  matrices \(B_0\) and \(B_1\) are read from the transition table and
+  from the displayed matrix \(B(u)\) in
+  \Cref{sec:appendix-computation}.  The determinant, self-duality,
   endpoint-separation, and finite-\(m\) branch-selection checks are
-  the named outputs of
-  \(\texttt{certificates/verify\_certificates.py}\).  Concrete
+  named outputs of the Sage runner.  Concrete
   certificate examples are the primitive real factors for
   \(m=4,6,8,10\) displayed in
   \Cref{sec:appendix-computation}\,\textup{(e)} and the exact
@@ -1148,10 +1148,10 @@ assume:
         minimal-modulus root \(w_0=1/q\);
   \item the unitary twists have strict spectral gap away from \(s=\pm2\);
   \item on \(2-\eta\le s\le2\) the branch \(w(s)\) through \(w_0\) is
-        the unique root of modulus \(<q^{-1}+\varepsilon\) and is
-        strictly decreasing;
+        the unique root of modulus \(<\beta\), where
+        \(\beta>q^{-1}\), and is strictly decreasing;
   \item on \(|s|\le2-\eta\), every root has modulus at least
-        \(q^{-1}+\varepsilon\).
+        \(\beta\).
 \end{enumerate}
 Then for every \(m\) with \(s_m=2\cos(\pi/m)>2-\eta\), the
 minimal-modulus roots of \(R_m\) are supplied by
@@ -1236,16 +1236,16 @@ inside a fixed transfer model.
   strictly smaller than the moduli of all other roots. Let
   \(w(s)\) be the corresponding analytic branch near \(s=2\), and put
   \(\rho(s)=1/w(s)\). If there are rational constants
-  \(\eta,\varepsilon>0\) such that
+  \(\eta>0\) and \(\beta>q^{-1}\) such that
   \[
     \lambda(s):=\min\{\abs{w}:H(w,s)=0\}
   \]
   satisfies
   \[
-    \lambda(s)=w(s)<q^{-1}+\varepsilon
+    \lambda(s)=w(s)<\beta
        \quad (2-\eta\le s\le2),
     \qquad
-    \lambda(s)\ge q^{-1}+\varepsilon
+    \lambda(s)\ge \beta
        \quad (0\le s\le 2-\eta),
   \]
   and \(w(s)\) is strictly decreasing on \([2-\eta,2]\), then for every
@@ -1352,7 +1352,7 @@ the maximum of \(\abs{\alpha}\) is \(s_m\), attained only by
 conjugates with \(\abs{\alpha}>2-\eta\), strict monotonicity of the
 endpoint branch gives \(\lambda(\alpha)=\lambda(\abs{\alpha})
 >\lambda(s_m)\). If \(\abs{\alpha}\le2-\eta\), the assumed separation
-gives \(\lambda(\alpha)\ge q^{-1}+\varepsilon>\lambda(s_m)\). Hence the
+gives \(\lambda(\alpha)\ge\beta>\lambda(s_m)\). Hence the
 minimal-modulus roots of \(R_m(w)=\prod_{\alpha\in A_m}H(w,\alpha)\)
 come exactly from the endpoint factor(s), and
 \(\rho_m=\rho(s_m)\).
@@ -1766,7 +1766,7 @@ for this endpoint jet.
   \label{lem:root-separation}
   Put
   \[
-    \eta=\frac1{100},\qquad \varepsilon=\frac1{200},\qquad m_0=32.
+    \eta=\frac1{100},\qquad \beta=\frac{101}{300},\qquad m_0=32.
   \]
   For every \(m\ge m_0\), the minimal-modulus roots of
   \(R_m(w)\) are precisely the roots contributed by
@@ -1888,7 +1888,7 @@ root of modulus \(<1/2\), it satisfies
   w^*(s)<\frac{101}{300},
 \]
 and \(w^{*\prime}(s)<0\). Thus the constants in the statement may be
-taken to be \(\eta=1/100\) and \(\varepsilon=1/200\).
+taken to be \(\eta=1/100\) and \(\beta=101/300\).
 
 \medskip
 \noindent\textit{Step 2 (Strict spectral gap away from the untwisted
@@ -2022,7 +2022,7 @@ factor \(\widehat\Delta(w,s_m)\), together with
 \fi
 \end{proof}
 
-\begin{corollary}[Verified-triple-relative endpoint selection]
+\begin{corollary}[Endpoint selection for the ten-state kernel]
   \label{cor:sync-endpoint-selection-application}
   The ten-state kernel satisfies the hypotheses of
   \Cref{thm:self-dual-endpoint-selection} with
@@ -2030,7 +2030,7 @@ factor \(\widehat\Delta(w,s_m)\), together with
     q=3,\qquad
     H(w,s)=\widehat\Delta(w,s),\qquad
     \eta=\frac1{100},\qquad
-    \varepsilon=\frac1{200}.
+    \beta=\frac{101}{300}.
   \]
   Consequently, for every \(m\ge32\),
   \[
@@ -2059,13 +2059,13 @@ determinant \(H\) with \(\widehat\Delta\). The endpoint root
 \Cref{prop:sync-endpoint-jet} and the endpoint factorisation in the
 proof of \Cref{lem:root-separation}. The strict unitary spectral gap and
 the effective separation and monotonicity hypotheses with
-\(\eta=1/100\) and \(\varepsilon=1/200\) are exactly the assertions
+\(\eta=1/100\) and \(\beta=101/300\) are exactly the assertions
 proved in \Cref{lem:root-separation}. Applying
 \Cref{thm:self-dual-endpoint-selection} gives both displayed
 conclusions.
 \end{proof}
 
-\begin{theorem}[Verified-triple-relative twisted Perron-root hierarchy]
+\begin{theorem}[Twisted Perron-root asymptotics]
   \label{thm:rho-gap-m12}
   As \(m\to\infty\),
   \begin{align*}
