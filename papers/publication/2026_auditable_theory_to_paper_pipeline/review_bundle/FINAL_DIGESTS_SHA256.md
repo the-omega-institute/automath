@@ -1,11 +1,11 @@
 # Final SHA-256 Digest Manifest
 
-Generated at local time `2026-06-17T09:12:33+08:00` (`2026-06-17T01:12:33+00:00` UTC).
+Generated at local time `2026-06-17T09:32:09+08:00` (`2026-06-17T01:32:09+00:00` UTC).
 
 Command: `python review_bundle/generate_final_digests.py`
 Environment: `Python 3.10.11 on Windows 10`
 Working directory: `D:\omega\automath\papers\publication\2026_auditable_theory_to_paper_pipeline`
-Source commit: `79cabfc620bac6bec97bbfea0275405fc4c9bccc`
+Source commit: `c94202c6de857b63dfd50977f83951356023db0a`
 Generation log: `review_bundle/final_digest_generation_run.log`
 Excluded self-digest inputs: `review_bundle/FINAL_DIGESTS_SHA256.md, review_bundle/final_digest_generation_run.log`
 Path count: `828`
@@ -712,9 +712,9 @@ Path count: `828`
 | `main.bbl` | `ebd2bc1f3ad127832e193f9b9c4afd28cfd99993196c8ca922a513a10a419821` |
 | `main.blg` | `515bd2970e2f798aa82cc9045ca852f2b9b7b699c5d32136bd0bd5afd89e0823` |
 | `main.envdigest.json` | `ce01c57052e6cf6091e6ee2b53439db2f70e96dffc01efd9d3ec96bbadf513c0` |
-| `main.log` | `676cfbfca6ee10a2a960e26c9a2d53ce6f9fc1ab9f2c3f6554fc3efca9f2e1e5` |
+| `main.log` | `f53c3da449f049f56fdb0a45a9421cac51cd6702d9302847db7d4c09d4281a24` |
 | `main.out` | `a5a9a81edcd2e5efc4ed7df5564d0215aefe065b1a2ade7b04ec8d20009bcadd` |
-| `main.pdf` | `3b6135fa2cf7448e06fee5226a207425d1addf6214b495529aea6cac4cfb879f` |
+| `main.pdf` | `a5f6499c12e4cff664aa336f03a70971ba2e435a291f54d574806f236974134b` |
 | `main.tex` | `50195503383af1f4287fc7c2fc9a4469dec0eec7e356bd2f912803705c1914f9` |
 | `main.tex.env_index.json` | `73afd61caa6f46908eb7338998c0339e6aebe449200f2c8f94afe570d11e6ac4` |
 | `main.tex.envs.json` | `000d2075760f6c290ac32f3a8451e7f497cbdf534ec044ed8f5d90ebe264694b` |
@@ -825,8 +825,8 @@ Path count: `828`
 | `theorem_envs_main.tsv` | `827652613965497a2d513e0ffc359f3fde439586a25106ca1dfd717844fbb98e` |
 | `theorem_envs_main.txt` | `f9d0ade6ce5808c924c65846fa2347f6ffd41489b7e7a521baf04c2ee2ca8b74` |
 | `theorem_extract.txt` | `ae790c7ee43cb10afa27c96e9e5ab97c5b7b542bd9065a5d92c4b52e6480a94d` |
-| `theorem_inventory.json` | `f6e390384df4fb702777dac95ab280f3eac7c83c4a3313be05456a9e5b39c293` |
-| `theorem_inventory.md` | `64cb45297f841ff96afd70248178215bbb26fdfe2912efab7b87a36b9ec85fb4` |
+| `theorem_inventory.json` | `7a0805a1ae862c3d0c1b84449349c1984665b86fe1f1f8673b67ee075270bd60` |
+| `theorem_inventory.md` | `1421891625e53b7d14be59690c265748356324a9679bffcca65c950946a0fda5` |
 | `theorem_inventory.min.tmp.json` | `7018edfa3849d4db18953634d62d07dce889591b8b9e1945a608ba8a4065624b` |
 | `theorem_inventory_extract.tmp.json` | `1954fa3fb4dac259946ee09da002048213b64bf1e1d6119df978b60e9337711c` |
 | `theorem_items.tsv` | `8ae301b8e87df38ff8211df30815047b6718d5a72a97bdff0ab6951bd03a2177` |
