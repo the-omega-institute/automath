@@ -80,6 +80,16 @@ ORACLE_SERVER_URL = "http://localhost:8765"
 ORACLE_SERVER_SCRIPT = SCRIPT_DIR / "oracle_server.py"
 ORACLE_PIPELINE_SCRIPT = SCRIPT_DIR / "oracle_pipeline.py"
 PIPELINE_STATE_DIR = SCRIPT_DIR / "pipeline_state"
+NYXID_ORACLE_POOL = os.environ.get("NYXID_ORACLE_POOL", "chatgpt-pro")
+NYXID_ORACLE_WRAPPER = Path(os.environ.get(
+    "NYXID_ORACLE_WRAPPER",
+    str(REPO_ROOT / ".nyxid-oracle" / "nyxid-via-warp.ps1"),
+))
+NYXID_ORACLE_START_ALL = REPO_ROOT / ".nyxid-oracle" / "start-all.ps1"
+ORACLE_BACKEND = os.environ.get(
+    "ORACLE_BACKEND",
+    "nyxid" if NYXID_ORACLE_WRAPPER.exists() else "server",
+)
 
 PUBLICATION_DIR = REPO_ROOT / "papers" / "publication"
 SUPERVISOR_LOG_DIR = SCRIPT_DIR / "supervisor_logs"
@@ -277,6 +287,12 @@ def _subprocess_env() -> dict[str, str]:
     env.setdefault("PYTHONIOENCODING", "utf-8")
     env.setdefault("PYTHONUTF8", "1")
     env.setdefault("ORACLE_MAX_AGENTS", "5")
+    env.setdefault("ORACLE_BACKEND", "nyxid" if NYXID_ORACLE_WRAPPER.exists() else "server")
+    env.setdefault("NYXID_ORACLE_POOL", NYXID_ORACLE_POOL)
+    env.setdefault("NYXID_ORACLE_WRAPPER", str(NYXID_ORACLE_WRAPPER))
+    local_bin = REPO_ROOT / ".nyxid-oracle" / "bin"
+    if local_bin.exists():
+        env["PATH"] = f"{local_bin}{os.pathsep}{env.get('PATH', '')}"
     return env
 
 
@@ -394,7 +410,102 @@ def cleanup_supervisor_pid() -> None:
 # ---------------------------------------------------------------------------
 
 
+def oracle_backend() -> str:
+    return os.environ.get("ORACLE_BACKEND", ORACLE_BACKEND)
+
+
+def _powershell_file_path(path: Path) -> str:
+    raw = str(path)
+    match = re.match(r"^/mnt/([A-Za-z])/(.*)$", raw)
+    if match:
+        return f"{match.group(1).upper()}:\\" + match.group(2).replace("/", "\\")
+    return raw
+
+
+def parse_nyxid_oracle_status(stdout: str) -> dict[str, Any]:
+    queued = 0
+    dispatched = 0
+    max_agents = 0
+    diagnosis = ""
+    agents: dict[str, dict[str, Any]] = {}
+    active_recent_agents: list[str] = []
+
+    for raw_line in stdout.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        match = re.search(r"Queued:\s*(\d+)", line, re.IGNORECASE)
+        if match:
+            queued = int(match.group(1))
+            continue
+        match = re.search(r"Dispatched:\s*(\d+)\s*/\s*(\d+)", line, re.IGNORECASE)
+        if match:
+            dispatched = int(match.group(1))
+            max_agents = int(match.group(2))
+            continue
+        match = re.search(r"Diagnosis:\s*([A-Za-z0-9_.-]+)", line, re.IGNORECASE)
+        if match:
+            diagnosis = match.group(1)
+            continue
+        if "│" in line and "┆" in line and "Worker" not in line:
+            parts = [part.strip() for part in line.strip("│").split("┆")]
+            if len(parts) >= 4:
+                worker, seen_s, task_id, script = parts[:4]
+                if worker and worker not in {"-", "Worker"}:
+                    active_recent_agents.append(worker)
+                    try:
+                        elapsed = int(seen_s)
+                    except ValueError:
+                        elapsed = 0
+                    if task_id and task_id != "-":
+                        agents[worker] = {
+                            "task_id": task_id,
+                            "elapsed": elapsed,
+                            "script_version": script,
+                        }
+    queued_tasks = [{"task_id": "nyxid_queue", "age_seconds": 0}] if queued > 0 else []
+    return {
+        "backend": "nyxid",
+        "diagnosis": diagnosis or ("running" if dispatched else "idle"),
+        "queue_length": queued,
+        "agents_busy": dispatched,
+        "max_agents": max_agents,
+        "queued": queued_tasks,
+        "queued_tasks": queued_tasks,
+        "agents": agents,
+        "registered_agents": len(active_recent_agents),
+        "active_recent_agents": active_recent_agents,
+    }
+
+
+def nyxid_cli(args: list[str], *, timeout: int = 15) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            "powershell.exe", "-NoProfile", "-NonInteractive",
+            "-ExecutionPolicy", "Bypass",
+            "-File", _powershell_file_path(NYXID_ORACLE_WRAPPER),
+            *args,
+        ],
+        cwd=str(REPO_ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=timeout,
+        check=False,
+    )
+
+
 def server_status(timeout: int = 3) -> dict:
+    if oracle_backend() == "nyxid":
+        try:
+            proc = nyxid_cli(["oracle", "status", NYXID_ORACLE_POOL], timeout=max(timeout, 10))
+        except Exception:
+            return {}
+        if proc.returncode != 0:
+            return {}
+        return parse_nyxid_oracle_status((proc.stdout or "") + "\n" + (proc.stderr or ""))
     try:
         with urllib.request.urlopen(f"{ORACLE_SERVER_URL}/status", timeout=timeout) as r:
             return json.loads(r.read().decode("utf-8"), strict=False)
@@ -403,6 +514,8 @@ def server_status(timeout: int = 3) -> dict:
 
 
 def server_alive(timeout: int = 3) -> bool:
+    if oracle_backend() == "nyxid":
+        return bool(server_status(timeout).get("diagnosis"))
     return server_status(timeout).get("port") == 8765
 
 
@@ -432,6 +545,19 @@ def ensure_server() -> subprocess.Popen | None:
     they should kill that process first, then drop the .server.restart
     flag (or just let supervisor.ensure_server respawn).
     """
+    if oracle_backend() == "nyxid":
+        if server_alive():
+            return None
+        if NYXID_ORACLE_START_ALL.exists():
+            supervisor_log(
+                "NyxID oracle stack is not responding; run "
+                f"{NYXID_ORACLE_START_ALL}"
+            )
+        else:
+            supervisor_log(
+                "NyxID oracle stack is not responding and start-all.ps1 is missing"
+            )
+        return None
     if server_alive():
         return None
     if not ORACLE_SERVER_SCRIPT.exists():
@@ -535,6 +661,16 @@ def aged_queued_tasks(threshold_seconds: int) -> list[dict]:
 
 def cancel_task(task_id: str, reason: str = "supervisor_auto") -> bool:
     """POST /cancel for a task_id. Used by supervisor self-heal + PI callbacks."""
+    if oracle_backend() == "nyxid":
+        try:
+            proc = nyxid_cli(["oracle", "cancel", task_id], timeout=30)
+            if proc.returncode == 0:
+                return True
+            supervisor_log(f"cancel_task({task_id}) failed: {command_failure_summary(proc)}")
+            return False
+        except Exception as exc:
+            supervisor_log(f"cancel_task({task_id}) failed: {exc}")
+            return False
     try:
         req = urllib.request.Request(
             f"{ORACLE_SERVER_URL}/cancel",
@@ -894,6 +1030,7 @@ def spawn_inner_pool(parallel: int, *, target_journal: str = "",
         str(ORACLE_PIPELINE_SCRIPT),
         "--parallel", str(parallel),
         "--continuous",
+        "--no-git-sync",
     ]
     if paper_filter:
         for p in paper_filter:
@@ -1322,7 +1459,7 @@ def main() -> int:
                     server_proc = spawned
 
             # P2: source-version drift between disk and running server.
-            if server_alive():
+            if oracle_backend() != "nyxid" and server_alive():
                 running_sha = server_source_sha()
                 disk_sha = disk_source_sha(ORACLE_SERVER_SCRIPT)
                 if running_sha and disk_sha and running_sha != disk_sha:
@@ -1441,10 +1578,16 @@ def main() -> int:
             user_attention_msg = ""
             if queue_stuck_too_long(TAB_STUCK_THRESHOLD_S):
                 user_attention_needed = True
-                user_attention_msg = (
-                    "ALERT: queue waiting >5min for any browser agent. "
-                    "Open https://chatgpt.com/?oracle=1 and click ACTIVATE."
-                )
+                if oracle_backend() == "nyxid":
+                    user_attention_msg = (
+                        "ALERT: NyxID queue waiting >5min for a CDP worker. "
+                        "Run .nyxid-oracle/start-all.ps1 or inspect worker logs."
+                    )
+                else:
+                    user_attention_msg = (
+                        "ALERT: queue waiting >5min for any browser agent. "
+                        "Open https://chatgpt.com/?oracle=1 and click ACTIVATE."
+                    )
             else:
                 aged = aged_queued_tasks(QUEUE_AGED_THRESHOLD_S)
                 if aged:
@@ -1453,11 +1596,18 @@ def main() -> int:
                         for q in aged[:3]
                     )
                     user_attention_needed = True
-                    user_attention_msg = (
-                        f"ALERT: {len(aged)} real task(s) queued "
-                        f">{QUEUE_AGED_THRESHOLD_S//60}min: {joined}. "
-                        "Browser tabs likely insufficient or stuck."
-                    )
+                    if oracle_backend() == "nyxid":
+                        user_attention_msg = (
+                            f"ALERT: {len(aged)} real task(s) queued "
+                            f">{QUEUE_AGED_THRESHOLD_S//60}min: {joined}. "
+                            "NyxID CDP workers likely insufficient or stuck."
+                        )
+                    else:
+                        user_attention_msg = (
+                            f"ALERT: {len(aged)} real task(s) queued "
+                            f">{QUEUE_AGED_THRESHOLD_S//60}min: {joined}. "
+                            "Browser tabs likely insufficient or stuck."
+                        )
 
             if user_attention_needed and _now() - last_tab_alert_ts > TAB_ALERT_DEBOUNCE_S:
                 desktop_notify("pipeline supervisor: operator action needed",

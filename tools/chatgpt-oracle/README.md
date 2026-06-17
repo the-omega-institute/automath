@@ -1,13 +1,66 @@
 # ChatGPT Oracle Bridge
 
-Use a ChatGPT browser tab as a local reasoning oracle for automation tasks.
+Use a ChatGPT browser tab as a reasoning oracle for automation tasks.
+
+Default on this Windows machine is the NyxID PR914 Oracle Relay with the CDP
+worker. The old local `oracle_server.py` + Tampermonkey bridge remains available
+only as an explicit fallback (`ORACLE_BACKEND=server`).
+
+```text
+client script --nyxid oracle ask--> NyxID Oracle Relay <--poll-- CDP worker
+                                                        chatgpt.com
+```
+
+## NyxID CDP Mode
+
+The active setup uses:
+
+```text
+ORACLE_BACKEND=nyxid
+NYXID_ORACLE_POOL=chatgpt-pro
+NYXID_ORACLE_WRAPPER=D:\omega\automath\.nyxid-oracle\nyxid-via-warp.ps1
+```
+
+The wrapper routes NyxID traffic through the local Cloudflare WARP proxy and
+the CDP worker drives the persistent Chrome profile at:
+
+```text
+D:\omega\automath\.nyxid-chatgpt-cdp-profile
+```
+
+Start or repair the stack with:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File D:\omega\automath\.nyxid-oracle\start-all.ps1
+```
+
+Run a direct Oracle smoke test:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File D:\omega\automath\.nyxid-oracle\nyxid-via-warp.ps1 oracle ask chatgpt-pro "Return exactly: pong"
+```
+
+Run through the pipeline dispatch layer:
+
+```bash
+ORACLE_BACKEND=nyxid python3 tools/chatgpt-oracle/oracle_dispatch.py \
+  --prompt tools/chatgpt-oracle/oracle/nyxid/smoke_prompt.txt \
+  --name nyxid_pipeline_smoke --wait --timeout 180
+```
+
+PDF and multi-turn follow-up are supported by the NyxID CLI via `--pdf`,
+`--new-conversation`, and `--conversation`.
+
+## Legacy Userscript Mode
 
 ```text
 client script --POST--> oracle_server.py <--poll-- Tampermonkey userscript
                          GET /result              chatgpt.com
 ```
 
-## Quick Start
+Use this only when explicitly setting `ORACLE_BACKEND=server`.
+
+## Legacy Quick Start
 
 1. Install Tampermonkey.
 2. Install the platform script:

@@ -53,7 +53,7 @@
 ### 角色分工（铁律）
 
 - **Codex 做, Claude 审**: Claude 不直接写论文内容或回流内容, Codex 出初版, Claude 审阅和打磨
-- **Oracle 是 ChatGPT Pro**: 通过 `oracle_dispatch.py` + Tampermonkey 浏览器桥接调用
+- **Oracle 是 ChatGPT Pro**: 默认通过 NyxID PR914 Oracle Relay + CDP worker 调用；Tampermonkey/userscript 仅作为旧 fallback
 - 三者不可混淆: Codex 编辑, Claude 验证(独立), ChatGPT 是外部 Oracle
 
 ### 状态持久化

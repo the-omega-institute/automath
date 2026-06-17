@@ -83,6 +83,63 @@ class SupervisorHelpersTests(unittest.TestCase):
 
         self.assertEqual(output, "threaded codex output")
 
+    def test_nyxid_submit_retries_stale_conversation_as_fresh(self):
+        calls = []
+        response = "Overall verdict: Major revision\n" + ("Substantive referee reasoning. " * 80)
+
+        def fake_run(cmd, **kwargs):
+            calls.append(cmd)
+            if "--conversation" in cmd:
+                return subprocess.CompletedProcess(
+                    cmd,
+                    1,
+                    stdout="",
+                    stderr=json.dumps({
+                        "error": "http_error",
+                        "status": 404,
+                        "body": {
+                            "error": "oracle_session_not_found",
+                            "message": "Oracle session not found: conv_stale",
+                        },
+                    }),
+                )
+            return subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout=json.dumps({
+                    "response": response,
+                    "conversation_id": "conv_fresh",
+                    "chatgpt_url": "https://chatgpt.com/c/conv_fresh",
+                }),
+                stderr="",
+            )
+
+        with tempfile.TemporaryDirectory(prefix="nyxid_stale_conv_") as tmp:
+            old_runtime = oracle_pipeline._nyxid_runtime_dir
+            old_done = oracle_pipeline._save_oracle_done
+            try:
+                oracle_pipeline._nyxid_runtime_dir = lambda: Path(tmp)
+                oracle_pipeline._save_oracle_done = lambda *args, **kwargs: None
+                with mock.patch.object(oracle_pipeline.subprocess, "run", fake_run):
+                    record = oracle_pipeline._nyxid_submit_and_wait(
+                        "stale_followup_task",
+                        "review this paper",
+                        conversation_id="conv_stale",
+                        is_followup=True,
+                        timeout=30,
+                    )
+            finally:
+                oracle_pipeline._nyxid_runtime_dir = old_runtime
+                oracle_pipeline._save_oracle_done = old_done
+
+        self.assertEqual(record["status"], "completed")
+        self.assertEqual(record["response"], response)
+        self.assertEqual(record["conversation_id"], "conv_fresh")
+        self.assertEqual(len(calls), 2)
+        self.assertIn("--conversation", calls[0])
+        self.assertNotIn("--conversation", calls[1])
+        self.assertIn("--new-conversation", calls[1])
+
     def test_oracle_server_rejects_reasoning_chrome_fragments(self):
         self.assertTrue(oracle_server._is_extraction_failure_response(
             "IThought for 5m 37s:Pro Extended"
@@ -111,6 +168,89 @@ class SupervisorHelpersTests(unittest.TestCase):
 
         self.assertEqual(env["ORACLE_MAX_AGENTS"], "5")
         self.assertEqual(env["PYTHONUTF8"], "1")
+
+    def test_subprocess_env_defaults_to_nyxid_backend_when_wrapper_exists(self):
+        self.assertTrue(pipeline_supervisor.NYXID_ORACLE_WRAPPER.exists())
+        with mock.patch.dict(pipeline_supervisor.os.environ, {}, clear=True):
+            env = pipeline_supervisor._subprocess_env()
+
+        self.assertEqual(env["ORACLE_BACKEND"], "nyxid")
+        self.assertEqual(env["NYXID_ORACLE_POOL"], "chatgpt-pro")
+        self.assertEqual(env["NYXID_ORACLE_WRAPPER"], str(pipeline_supervisor.NYXID_ORACLE_WRAPPER))
+
+    def test_subprocess_env_prefers_local_oracle_bin(self):
+        local_bin = pipeline_supervisor.REPO_ROOT / ".nyxid-oracle" / "bin"
+        self.assertTrue(local_bin.exists())
+        with mock.patch.dict(pipeline_supervisor.os.environ, {"PATH": "base"}, clear=True):
+            env = pipeline_supervisor._subprocess_env()
+
+        self.assertTrue(env["PATH"].startswith(str(local_bin)))
+        self.assertIn("base", env["PATH"])
+
+    def test_nyxid_server_status_uses_cli_parser(self):
+        proc = subprocess.CompletedProcess(
+            args=["powershell.exe"],
+            returncode=0,
+            stdout="│ tab_1  ┆ 0            ┆ -    ┆ cdp-1.0 │\n",
+            stderr=(
+                "Pool 'chatgpt-pro':\n"
+                "  Queued:     1\n"
+                "  Dispatched: 2 / 3\n"
+                "  Diagnosis:  running\n"
+            ),
+        )
+        with mock.patch.dict(pipeline_supervisor.os.environ, {"ORACLE_BACKEND": "nyxid"}), \
+             mock.patch.object(pipeline_supervisor.subprocess, "run", return_value=proc) as run:
+            status = pipeline_supervisor.server_status()
+
+        self.assertEqual(status["diagnosis"], "running")
+        self.assertEqual(status["queue_length"], 1)
+        self.assertEqual(status["agents_busy"], 2)
+        self.assertEqual(status["max_agents"], 3)
+        self.assertEqual(status["backend"], "nyxid")
+        self.assertIn("status", run.call_args.args[0])
+
+    def test_nyxid_mode_does_not_spawn_local_oracle_server(self):
+        with mock.patch.dict(pipeline_supervisor.os.environ, {"ORACLE_BACKEND": "nyxid"}), \
+             mock.patch.object(pipeline_supervisor, "server_alive", return_value=False), \
+             mock.patch.object(pipeline_supervisor.subprocess, "Popen") as popen:
+            proc = pipeline_supervisor.ensure_server()
+
+        self.assertIsNone(proc)
+        popen.assert_not_called()
+
+    def test_nyxid_cancel_task_uses_cli(self):
+        proc = subprocess.CompletedProcess(
+            args=["powershell.exe"],
+            returncode=0,
+            stdout="cancelled\n",
+            stderr="",
+        )
+        with mock.patch.dict(pipeline_supervisor.os.environ, {"ORACLE_BACKEND": "nyxid"}), \
+             mock.patch.object(pipeline_supervisor.subprocess, "run", return_value=proc) as run:
+            ok = pipeline_supervisor.cancel_task("task-123", reason="test")
+
+        self.assertTrue(ok)
+        cmd = run.call_args.args[0]
+        self.assertIn("cancel", cmd)
+        self.assertIn("task-123", cmd)
+
+    def test_spawn_inner_pool_skips_preflight_git_sync(self):
+        class FakePopen:
+            def __init__(self, cmd, **kwargs):
+                self.cmd = cmd
+                self.kwargs = kwargs
+                self.pid = 4242
+
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(pipeline_supervisor, "SUPERVISOR_LOG_DIR", Path(tmp)), \
+             mock.patch.object(pipeline_supervisor.subprocess, "Popen", FakePopen):
+            proc = pipeline_supervisor.spawn_inner_pool(5)
+
+        self.assertIsNotNone(proc)
+        self.assertIn("--no-git-sync", proc.cmd)
+        self.assertIn("--continuous", proc.cmd)
+        self.assertIn("--all", proc.cmd)
 
     def test_install_signal_handlers_does_not_raise(self):
         pipeline_supervisor._install_signal_handlers()  # idempotent
@@ -1035,6 +1175,7 @@ class SupervisorHelpersTests(unittest.TestCase):
             "--dry-run",
         ]
         with mock.patch.object(sys, "argv", argv), \
+             mock.patch.object(oracle_pipeline, "acquire_pipeline_lock"), \
              mock.patch.object(oracle_pipeline, "discover_papers",
                                return_value=[]), \
              mock.patch.object(oracle_pipeline, "discover_paper_summary",
@@ -1043,6 +1184,56 @@ class SupervisorHelpersTests(unittest.TestCase):
                                side_effect=KeyboardInterrupt):
             with self.assertRaises(KeyboardInterrupt):
                 oracle_pipeline.main(continuous_sleep_seconds=0)
+
+    def test_pipeline_continuous_explicit_papers_preserves_filter_order(self):
+        argv = [
+            "oracle_pipeline.py",
+            "--paper", "papers/publication/cicm",
+            "--paper", "papers/publication/general",
+            "--continuous",
+            "--dry-run",
+            "--parallel", "5",
+        ]
+        calls = []
+
+        def fake_run_rolling(papers, **kwargs):
+            calls.append((list(papers), kwargs))
+            raise KeyboardInterrupt()
+
+        def fake_discovery(papers=None, **kwargs):
+            del kwargs
+            return {
+                "diagnosis": "explicit_filter",
+                "candidate_count": len(papers or []),
+                "runnable_count": len(papers or []),
+                "papers": list(papers or []),
+                "skipped_status_count": 0,
+                "skipped_done_count": 0,
+                "skipped_unregistered_count": 0,
+                "skipped_assignment_count": 0,
+            }
+
+        with mock.patch.object(sys, "argv", argv), \
+             mock.patch.object(oracle_pipeline, "acquire_pipeline_lock"), \
+             mock.patch.object(oracle_pipeline, "oracle_server_alive", return_value=True), \
+             mock.patch.object(
+                 oracle_pipeline,
+                 "discover_paper_summary",
+                 side_effect=fake_discovery,
+             ) as discovery, \
+             mock.patch.object(oracle_pipeline, "run_rolling", fake_run_rolling):
+            with self.assertRaises(KeyboardInterrupt):
+                oracle_pipeline.main(continuous_sleep_seconds=0)
+
+        discovery.assert_called_once_with([
+            "papers/publication/cicm",
+            "papers/publication/general",
+        ], respect_assignment=True, log=True)
+        self.assertEqual(calls[0][0], [
+            "papers/publication/cicm",
+            "papers/publication/general",
+        ])
+        self.assertEqual(calls[0][1]["parallel"], 5)
 
     def test_command_failure_summary_includes_stderr_without_newline_noise(self):
         proc = subprocess.CompletedProcess(
@@ -1082,6 +1273,7 @@ class SupervisorHelpersTests(unittest.TestCase):
 
         with mock.patch.object(oracle_pipeline, "http_get", side_effect=fake_http_get), \
              mock.patch.object(oracle_pipeline, "oracle_task_status", side_effect=fake_task_status), \
+             mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "local"), \
              mock.patch.object(oracle_pipeline.time, "sleep", side_effect=fake_sleep):
             with self.assertRaises(KeyboardInterrupt):
                 oracle_pipeline.oracle_poll("task_phase", timeout=7200, poll_interval=1)
@@ -1110,6 +1302,7 @@ class SupervisorHelpersTests(unittest.TestCase):
 
         with mock.patch.object(oracle_pipeline, "http_get", side_effect=fake_http_get), \
              mock.patch.object(oracle_pipeline, "oracle_task_status", side_effect=fake_task_status), \
+             mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "local"), \
              mock.patch.object(oracle_pipeline.time, "time", side_effect=fake_time), \
              mock.patch.object(oracle_pipeline.time, "sleep", side_effect=fake_sleep):
             self.assertEqual(
@@ -1140,6 +1333,7 @@ class SupervisorHelpersTests(unittest.TestCase):
 
         with mock.patch.object(oracle_pipeline, "http_get", side_effect=fake_http_get), \
              mock.patch.object(oracle_pipeline, "oracle_task_status", side_effect=fake_task_status), \
+             mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "local"), \
              mock.patch.object(oracle_pipeline.time, "time", side_effect=fake_time), \
              mock.patch.object(oracle_pipeline.time, "sleep", side_effect=fake_sleep):
             self.assertEqual(
@@ -1170,6 +1364,7 @@ class SupervisorHelpersTests(unittest.TestCase):
 
         with mock.patch.object(oracle_pipeline, "http_get", side_effect=fake_http_get), \
              mock.patch.object(oracle_pipeline, "oracle_task_status", side_effect=fake_task_status), \
+             mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "local"), \
              mock.patch.object(oracle_pipeline.time, "time", side_effect=fake_time), \
              mock.patch.object(oracle_pipeline.time, "sleep", side_effect=fake_sleep):
             self.assertEqual(
@@ -2077,6 +2272,238 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         submit.assert_called_once()
         self.assertIn("Oracle escalation human_decision", state.error)
 
+    def test_stage_a_oracle_proceed_routes_existing_package_to_audit(self):
+        paper = self._write_paper(
+            "2026_oracle_proceed_existing_package",
+            "\\documentclass{article}\n"
+            "\\begin{document}\n"
+            "\\begin{theorem}\\label{thm:base}Base theorem.\\end{theorem}\n"
+            "\\end{document}\n",
+        )
+        (paper / "scope_contract.md").write_text(
+            "Scope contract.\n" + ("The manuscript scope is fixed. " * 30),
+            encoding="utf-8",
+        )
+        (paper / "scope_contract.json").write_text(json.dumps({
+            "valid": True,
+            "research_question": "Test question",
+            "target_journal_bar": "Test Journal",
+            "main_project_bindings": [],
+            "in_scope": [{"id": "scope"}],
+            "must_prove_in_this_paper": [{"id": "proof"}],
+            "supporting_only": [],
+            "out_of_scope": [],
+            "split_policy": "no split",
+            "failure_modes_to_control": [],
+        }), encoding="utf-8")
+        (paper / "oracle_stage_a_escalation.json").write_text(json.dumps({
+            "verdict": "proceed",
+            "publishable_route": True,
+            "target_journal": "CICM presentation-only",
+            "codex_instructions": [
+                "Treat the +0-character result as an already-present "
+                "package recognition failure.",
+                "The closure criterion is recognition/consistency, not a "
+                "positive content delta.",
+            ],
+        }), encoding="utf-8")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="Test Journal",
+            stage_a_scope_done=True,
+            stage_a_rounds=3,
+            current_round=3,
+            error="Stage A blocked: A2 produced no substantive theorem change",
+        )
+        state.history.append({
+            "stage": "A",
+            "action": "theorem_inventory",
+            "detail": "prior inventory evidence",
+        })
+        inventory = {
+            "in_scope_present": [{"id": "base", "label": "thm:base"}],
+            "missing_in_scope_results": [],
+            "weak_in_scope_core_results": [],
+            "proof_gaps": [],
+            "supporting_appendix_or_background": [],
+            "out_of_scope_strong_results": [],
+            "split_candidates": [],
+            "irrelevant_or_remove": [],
+            "naive_truncation_risks": [],
+            "journal_style_gaps": [],
+        }
+        audit = {
+            "metrics": {k: 8 for k in oracle_pipeline.STAGE_A_METRIC_THRESHOLDS},
+            "verdict": "pass",
+            "blockers": [],
+            "required_revisions": [],
+            "work_packages": [],
+            "split_required": False,
+            "split_reasons": [],
+            "ready_for_oracle_review": True,
+        }
+
+        old_min = oracle_pipeline.MIN_STAGE_A_AUDIT_ROUNDS
+        try:
+            oracle_pipeline.MIN_STAGE_A_AUDIT_ROUNDS = 1
+            with mock.patch.object(
+                oracle_pipeline,
+                "_run_stage_a_inventory",
+                return_value=inventory,
+            ), mock.patch.object(
+                oracle_pipeline,
+                "codex_exec",
+                side_effect=AssertionError("Oracle proceed should skip A2"),
+            ) as codex_exec, mock.patch.object(
+                oracle_pipeline,
+                "_run_stage_a_audit_once",
+                return_value=audit,
+            ) as audit_once, mock.patch.object(
+                oracle_pipeline,
+                "compile_gate",
+                return_value=True,
+            ), mock.patch.object(
+                oracle_pipeline,
+                "git_commit",
+                return_value="stage-a-pass",
+            ), mock.patch.object(
+                oracle_pipeline,
+                "save_state",
+            ), mock.patch.object(
+                oracle_pipeline,
+                "update_program_board",
+            ):
+                ok = oracle_pipeline._stage_a_block_or_oracle_escalate(
+                    state,
+                    "A2 produced no substantive theorem change",
+                    dry_run=False,
+                    oracle_timeout=1,
+                    tag=f"[{paper.name}|A]",
+                )
+        finally:
+            oracle_pipeline.MIN_STAGE_A_AUDIT_ROUNDS = old_min
+
+        self.assertTrue(ok)
+        self.assertTrue(state.stage_a_passed)
+        self.assertEqual(state.stage_a_rounds, 4)
+        self.assertEqual(state.error, "")
+        audit_once.assert_called_once()
+        codex_exec.assert_not_called()
+
+    def test_stage_a_oracle_proceed_artifact_overrides_inventory_a2(self):
+        paper = self._write_paper(
+            "2026_oracle_proceed_inventory_override",
+            "\\documentclass{article}\n"
+            "\\begin{document}\n"
+            "\\begin{theorem}\\label{thm:base}Base theorem.\\end{theorem}\n"
+            "\\end{document}\n",
+        )
+        (paper / "scope_contract.md").write_text(
+            "Scope contract.\n" + ("The manuscript scope is fixed. " * 30),
+            encoding="utf-8",
+        )
+        (paper / "scope_contract.json").write_text(json.dumps({
+            "valid": True,
+            "research_question": "Test question",
+            "target_journal_bar": "Test Journal",
+            "main_project_bindings": [],
+            "in_scope": [{"id": "scope"}],
+            "must_prove_in_this_paper": [{"id": "proof"}],
+            "supporting_only": [],
+            "out_of_scope": [],
+            "split_policy": "no split",
+            "failure_modes_to_control": [],
+        }), encoding="utf-8")
+        (paper / "oracle_stage_a_escalation.json").write_text(json.dumps({
+            "verdict": "proceed",
+            "publishable_route": True,
+            "codex_instructions": [
+                "Classify the +0-character A2 result as an already-present "
+                "package recognition failure.",
+                "Do not add filler theorem environments.",
+            ],
+        }), encoding="utf-8")
+        self._write_board("P0")
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            target_journal="Test Journal",
+            stage_a_scope_done=True,
+            stage_a_rounds=2,
+            current_round=2,
+        )
+        state.history.append({
+            "stage": "A",
+            "action": "theoremization",
+            "detail": "prior theorem package evidence",
+        })
+        inventory = {
+            "in_scope_present": [{"id": "base", "label": "thm:base"}],
+            "missing_in_scope_results": [],
+            "weak_in_scope_core_results": [{"id": "weak-core"}],
+            "proof_gaps": [],
+            "supporting_appendix_or_background": [],
+            "out_of_scope_strong_results": [],
+            "split_candidates": [],
+            "irrelevant_or_remove": [],
+            "naive_truncation_risks": [],
+            "journal_style_gaps": [],
+        }
+        audit = {
+            "metrics": {k: 8 for k in oracle_pipeline.STAGE_A_METRIC_THRESHOLDS},
+            "verdict": "pass",
+            "blockers": [],
+            "required_revisions": [],
+            "work_packages": [],
+            "split_required": False,
+            "split_reasons": [],
+            "ready_for_oracle_review": True,
+        }
+
+        old_min = oracle_pipeline.MIN_STAGE_A_AUDIT_ROUNDS
+        try:
+            oracle_pipeline.MIN_STAGE_A_AUDIT_ROUNDS = 1
+            with mock.patch.object(
+                oracle_pipeline,
+                "_run_stage_a_inventory",
+                return_value=inventory,
+            ), mock.patch.object(
+                oracle_pipeline,
+                "codex_exec",
+                side_effect=AssertionError("Oracle proceed should skip A2"),
+            ) as codex_exec, mock.patch.object(
+                oracle_pipeline,
+                "_run_stage_a_audit_once",
+                return_value=audit,
+            ) as audit_once, mock.patch.object(
+                oracle_pipeline,
+                "compile_gate",
+                return_value=True,
+            ), mock.patch.object(
+                oracle_pipeline,
+                "git_commit",
+                return_value="stage-a-pass",
+            ), mock.patch.object(
+                oracle_pipeline,
+                "save_state",
+            ), mock.patch.object(
+                oracle_pipeline,
+                "run_stage_a_dedup",
+            ), mock.patch.object(
+                oracle_pipeline,
+                "update_program_board",
+            ):
+                ok = oracle_pipeline.run_stage_a(state, dry_run=False)
+        finally:
+            oracle_pipeline.MIN_STAGE_A_AUDIT_ROUNDS = old_min
+
+        self.assertTrue(ok)
+        self.assertTrue(state.stage_a_passed)
+        audit_once.assert_called_once()
+        codex_exec.assert_not_called()
+
     def test_run_paper_pipeline_preserves_recoverable_stage_a_block_for_escalation(self):
         paper = self._write_paper(
             "2026_recoverable_block_reenters_oracle",
@@ -2128,6 +2555,34 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         self.assertFalse(ok)
         submit.assert_called_once()
         self.assertIn("Oracle escalation human_decision", updated.error)
+
+    def test_run_paper_pipeline_refreshes_stale_state_paper_dir(self):
+        paper = self._write_paper(
+            "2026_refresh_state_path",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        state = oracle_pipeline.PaperState(
+            paper_dir="D:\\omega\\automath\\papers\\publication\\2026_refresh_state_path",
+            paper_name=paper.name,
+            target_journal="Test Journal",
+            current_stage="F",
+        )
+        oracle_pipeline.save_state(state)
+
+        def fake_stage_f(updated_state, **kwargs):
+            del kwargs
+            self.assertEqual(updated_state.paper_dir, str(paper))
+            return False
+
+        old_stage_f = oracle_pipeline.STAGE_RUNNERS["F"]
+        try:
+            oracle_pipeline.STAGE_RUNNERS["F"] = fake_stage_f
+            ok, updated = oracle_pipeline.run_paper_pipeline(str(paper))
+        finally:
+            oracle_pipeline.STAGE_RUNNERS["F"] = old_stage_f
+
+        self.assertFalse(ok)
+        self.assertEqual(updated.paper_dir, str(paper))
 
     def test_stage_a_oracle_escalation_skips_old_directive_but_still_escalates(self):
         paper = self._write_paper(

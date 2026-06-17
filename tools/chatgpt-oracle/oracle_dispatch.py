@@ -24,6 +24,8 @@ Workflow (direct API):
 from __future__ import annotations
 
 import argparse
+import json as _json
+import os
 import shutil
 import subprocess
 import sys
@@ -131,6 +133,144 @@ def compile_paper(paper_dir: Path) -> Path | None:
 
 
 SERVER_URL = "http://127.0.0.1:8765"
+NYXID_POOL = os.environ.get("NYXID_ORACLE_POOL", "chatgpt-pro")
+NYXID_WRAPPER = Path(os.environ.get(
+    "NYXID_ORACLE_WRAPPER",
+    r"D:\omega\automath\.nyxid-oracle\nyxid-via-warp.ps1",
+))
+NYXID_BACKEND = os.environ.get("ORACLE_BACKEND", "nyxid" if NYXID_WRAPPER.exists() else "server")
+
+
+def command_failure_summary(proc: subprocess.CompletedProcess,
+                            *, max_chars: int = 500) -> str:
+    output = " ".join(((proc.stderr or "") + " " + (proc.stdout or "")).split())
+    if len(output) > max_chars:
+        output = output[: max_chars - 3].rstrip() + "..."
+    return f"rc={proc.returncode}" + (f"; {output}" if output else "")
+
+
+def _write_oracle_done(task_name: str, response: str, metadata: dict) -> None:
+    done = ORACLE_DIR / "done"
+    done.mkdir(parents=True, exist_ok=True)
+    out_file = done / f"{task_name}.md"
+    out_file.write_text(
+        f"<!-- oracle metadata: {_json.dumps(metadata)} -->\n\n{response}",
+        encoding="utf-8",
+    )
+    print(f"[dispatch] Response saved: {out_file} ({len(response)} chars)")
+
+
+def _extract_nyxid_json(stdout: str) -> dict:
+    text = stdout.strip()
+    if not text:
+        return {}
+    try:
+        return _json.loads(text)
+    except Exception:
+        pass
+    start = text.find("{")
+    end = text.rfind("}")
+    if start >= 0 and end > start:
+        try:
+            return _json.loads(text[start:end + 1])
+        except Exception:
+            return {}
+    return {}
+
+
+def _nyxid_cli_path(path: Path) -> str:
+    resolved_path = path.resolve()
+    raw = str(resolved_path)
+    if os.name == "nt":
+        if len(raw) >= 3 and raw[1:3] == ":\\":
+            drive = raw[0].lower()
+            rest = raw[3:].replace("\\", "/")
+            return f"/mnt/{drive}/{rest}"
+    return raw
+
+
+def _powershell_file_path(path: Path) -> str:
+    raw = str(path)
+    m = re.match(r"^/mnt/([A-Za-z])/(.*)$", raw)
+    if m:
+        return f"{m.group(1).upper()}:\\" + m.group(2).replace("/", "\\")
+    return raw
+
+
+def dispatch_nyxid_record(task_name: str, prompt_text: str, pdf_path: Path | None = None,
+                          model: str = "chatgpt-5.4-pro",
+                          conversation_id: str | None = None,
+                          project_url: str = "",
+                          tag: str = "",
+                          timeout: int = 7200) -> dict:
+    """Submit through NyxID PR914 Oracle Relay + CDP worker."""
+    prompt_file = ORACLE_DIR / "pending" / f"{task_name}.prompt.txt"
+    prompt_file.parent.mkdir(parents=True, exist_ok=True)
+    prompt_file.write_text(prompt_text, encoding="utf-8")
+
+    cmd = [
+        "powershell.exe", "-NoProfile", "-NonInteractive",
+        "-ExecutionPolicy", "Bypass", "-File", _powershell_file_path(NYXID_WRAPPER),
+        "oracle", "ask", NYXID_POOL,
+        "--file", _nyxid_cli_path(prompt_file),
+        "--model", model,
+        "--tag", tag or task_name,
+        "--client-ref", task_name,
+        "--wait", str(timeout),
+        "--output", "json",
+    ]
+    if pdf_path and pdf_path.exists():
+        cmd.extend(["--pdf", _nyxid_cli_path(pdf_path)])
+        print(f"[dispatch-nyxid] PDF: {pdf_path.name} ({pdf_path.stat().st_size // 1024} KB)")
+    if project_url:
+        cmd.extend(["--project-url", project_url])
+    if conversation_id == "":
+        cmd.append("--new-conversation")
+    elif conversation_id:
+        cmd.extend(["--conversation", conversation_id])
+
+    print(f"[dispatch-nyxid] Submitting task to pool {NYXID_POOL} ...")
+    proc = subprocess.run(
+        cmd,
+        cwd=str(Path(__file__).resolve().parents[2]),
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=timeout + 120,
+    )
+    if proc.returncode != 0:
+        print(f"[dispatch-nyxid] ERROR: {command_failure_summary(proc)}", file=sys.stderr)
+        return {"status": "failed", "task_id": task_name, "response": ""}
+
+    data = _extract_nyxid_json(proc.stdout)
+    response = (
+        data.get("response")
+        or data.get("answer")
+        or data.get("result")
+    )
+    record = {
+        "status": "completed" if response else "failed",
+        "task_id": task_name,
+        "response": response,
+        "conversation_id": data.get("conversation_id") or data.get("conversation") or "",
+        "chatgpt_url": data.get("chatgpt_url") or data.get("url") or "",
+        "nyxid": data,
+    }
+    if response:
+        metadata = {
+            "timestamp": datetime.now().isoformat(),
+            "model": model,
+            "prompt_length": len(prompt_text),
+            "response_length": len(response),
+            "conversation_id": record["conversation_id"],
+            "chatgpt_url": record["chatgpt_url"],
+            "mode": "nyxid_cdp",
+        }
+        if pdf_path:
+            metadata["pdf"] = str(pdf_path)
+        _write_oracle_done(task_name, response, metadata)
+    return record
 
 
 def dispatch_direct(task_name: str, prompt_text: str, pdf_path: Path | None = None,
@@ -166,6 +306,12 @@ def dispatch_direct_record(task_name: str, prompt_text: str, pdf_path: Path | No
 
     Useful when callers need conversation_id / chatgpt_url for follow-ups.
     """
+    if NYXID_BACKEND == "nyxid":
+        return dispatch_nyxid_record(
+            task_name, prompt_text, pdf_path,
+            model=model, conversation_id=conversation_id,
+            project_url=project_url, tag=tag, timeout=timeout,
+        )
     import json as _json
     import base64
     import urllib.request
@@ -250,6 +396,17 @@ def dispatch_continue(task_name: str, prompt_text: str, conversation_id: str,
                       model: str = "chatgpt-5.4-pro", tag: str = "",
                       timeout: int = 7200) -> dict:
     """Follow up in an existing conversation (multi-turn deepen)."""
+    if NYXID_BACKEND == "nyxid":
+        return dispatch_nyxid_record(
+            task_name=task_name,
+            prompt_text=prompt_text,
+            pdf_path=None,
+            model=model,
+            conversation_id=conversation_id,
+            project_url="",
+            tag=tag,
+            timeout=timeout,
+        )
     return dispatch_direct_record(
         task_name=task_name,
         prompt_text=prompt_text,

@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 import json
+import subprocess
 from pathlib import Path
 
 SCRIPT_ROOT = Path(__file__).resolve().parents[1]
@@ -471,6 +472,56 @@ class PipelineHealthTests(unittest.TestCase):
 
         self.assertEqual(report["oracle"]["registered_agents"], 2)
         self.assertEqual(report["oracle"]["active_recent_agents"], 1)
+
+    def test_parse_nyxid_oracle_status_normalizes_cli_table(self):
+        raw = """
+┌────────┬──────────────┬──────┬─────────┐
+│ Worker ┆ Seen (s ago) ┆ Task ┆ Script  │
+╞════════╪══════════════╪══════╪═════════╡
+│ tab_1  ┆ 4            ┆ -    ┆ cdp-1.0 │
+│ tab_2  ┆ 9            ┆ job1 ┆ cdp-1.0 │
+└────────┴──────────────┴──────┴─────────┘
+Pool 'chatgpt-pro':
+  Queued:     2
+  Dispatched: 1 / 3
+  Diagnosis:  running
+"""
+
+        status = pipeline_health.parse_nyxid_oracle_status(raw)
+
+        self.assertEqual(status["diagnosis"], "running")
+        self.assertEqual(status["queue_length"], 2)
+        self.assertEqual(status["agents_busy"], 1)
+        self.assertEqual(status["max_agents"], 3)
+        self.assertEqual(status["registered_agents"], 2)
+        self.assertEqual(status["active_recent_agents"], ["tab_1", "tab_2"])
+        self.assertEqual(status["queued_tasks"], [{"task_id": "nyxid_queue", "age_seconds": 0}])
+        self.assertEqual(status["agents"]["tab_2"]["task_id"], "job1")
+
+    def test_read_oracle_status_uses_nyxid_cli_when_backend_is_nyxid(self):
+        calls = []
+
+        def fake_run(cmd, **kwargs):
+            calls.append((cmd, kwargs))
+            return subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout="┌──┐\n│ tab_1 ┆ 0 ┆ - ┆ cdp-1.0 │\n",
+                stderr="Pool 'chatgpt-pro':\n  Queued:     0\n  Dispatched: 0 / 3\n  Diagnosis:  idle\n",
+            )
+
+        status = pipeline_health.read_oracle_status(
+            backend="nyxid",
+            run=fake_run,
+            wrapper=Path(r"D:\omega\automath\.nyxid-oracle\nyxid-via-warp.ps1"),
+            pool="chatgpt-pro",
+        )
+
+        self.assertEqual(status["diagnosis"], "idle")
+        self.assertEqual(status["max_agents"], 3)
+        self.assertIn("oracle", calls[0][0])
+        self.assertIn("status", calls[0][0])
+        self.assertIn("chatgpt-pro", calls[0][0])
 
     def test_classifies_stale_supervisor_log(self):
         report = pipeline_health.build_health_report(

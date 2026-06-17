@@ -25,13 +25,116 @@ SUPERVISOR_PID_FILE = SCRIPT_DIR / ".pipeline_supervisor.pid"
 REFILL_QUEUE = REPO_ROOT / "papers" / "publication" / "_refill_queue.json"
 PROGRAM_BOARD = REPO_ROOT / "papers" / "publication" / "PROGRAM_BOARD.md"
 ORACLE_STATUS_URL = "http://127.0.0.1:8765/status"
+NYXID_ORACLE_POOL = os.environ.get("NYXID_ORACLE_POOL", "chatgpt-pro")
+NYXID_ORACLE_WRAPPER = Path(os.environ.get(
+    "NYXID_ORACLE_WRAPPER",
+    str(REPO_ROOT / ".nyxid-oracle" / "nyxid-via-warp.ps1"),
+))
+ORACLE_BACKEND = os.environ.get(
+    "ORACLE_BACKEND",
+    "nyxid" if NYXID_ORACLE_WRAPPER.exists() else "server",
+)
 
 
 def _python() -> str:
     return sys.executable or "python"
 
 
-def read_oracle_status(timeout: int = 8) -> dict[str, Any]:
+def _powershell_file_path(path: Path) -> str:
+    raw = str(path)
+    match = re.match(r"^/mnt/([A-Za-z])/(.*)$", raw)
+    if match:
+        return f"{match.group(1).upper()}:\\" + match.group(2).replace("/", "\\")
+    return raw
+
+
+def parse_nyxid_oracle_status(stdout: str) -> dict[str, Any]:
+    queued = 0
+    dispatched = 0
+    max_agents = 0
+    diagnosis = ""
+    agents: dict[str, dict[str, Any]] = {}
+    active_recent_agents: list[str] = []
+
+    for raw_line in stdout.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        match = re.search(r"Queued:\s*(\d+)", line, re.IGNORECASE)
+        if match:
+            queued = int(match.group(1))
+            continue
+        match = re.search(r"Dispatched:\s*(\d+)\s*/\s*(\d+)", line, re.IGNORECASE)
+        if match:
+            dispatched = int(match.group(1))
+            max_agents = int(match.group(2))
+            continue
+        match = re.search(r"Diagnosis:\s*([A-Za-z0-9_.-]+)", line, re.IGNORECASE)
+        if match:
+            diagnosis = match.group(1)
+            continue
+        if "│" in line and "┆" in line and "Worker" not in line:
+            parts = [part.strip() for part in line.strip("│").split("┆")]
+            if len(parts) >= 4:
+                worker, seen_s, task_id, script = parts[:4]
+                if worker and worker not in {"-", "Worker"}:
+                    active_recent_agents.append(worker)
+                    try:
+                        elapsed = int(seen_s)
+                    except ValueError:
+                        elapsed = 0
+                    if task_id and task_id != "-":
+                        agents[worker] = {
+                            "task_id": task_id,
+                            "elapsed": elapsed,
+                            "script_version": script,
+                        }
+
+    queued_tasks = [{"task_id": "nyxid_queue", "age_seconds": 0}] if queued > 0 else []
+    return {
+        "backend": "nyxid",
+        "diagnosis": diagnosis or ("running" if dispatched else "idle"),
+        "queue_length": queued,
+        "agents_busy": dispatched,
+        "max_agents": max_agents,
+        "queued": queued_tasks,
+        "queued_tasks": queued_tasks,
+        "agents": agents,
+        "registered_agents": len(active_recent_agents),
+        "active_recent_agents": active_recent_agents,
+        "completed": None,
+        "active_sessions": None,
+    }
+
+
+def read_oracle_status(timeout: int = 8, *, backend: str | None = None,
+                       run=subprocess.run,
+                       wrapper: Path = NYXID_ORACLE_WRAPPER,
+                       pool: str = NYXID_ORACLE_POOL) -> dict[str, Any]:
+    backend = backend or ORACLE_BACKEND
+    if backend == "nyxid":
+        try:
+            proc = run(
+                [
+                    "powershell.exe", "-NoProfile", "-NonInteractive",
+                    "-ExecutionPolicy", "Bypass",
+                    "-File", _powershell_file_path(wrapper),
+                    "oracle", "status", pool,
+                ],
+                cwd=str(REPO_ROOT),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=timeout,
+                check=False,
+            )
+        except Exception:
+            return {}
+        if proc.returncode != 0:
+            return {}
+        return parse_nyxid_oracle_status((proc.stdout or "") + "\n" + (proc.stderr or ""))
     try:
         with urllib.request.urlopen(ORACLE_STATUS_URL, timeout=timeout) as resp:
             return json.loads(resp.read().decode("utf-8"))
@@ -468,7 +571,10 @@ def build_health_report(
     if reason == "supervisor_code_changed":
         actions.append("restart supervisor at a safe boundary to load updated code")
     if reason == "oracle_down":
-        actions.append("start or restart oracle_server.py")
+        if ORACLE_BACKEND == "nyxid":
+            actions.append("start or restart .nyxid-oracle/start-all.ps1")
+        else:
+            actions.append("start or restart oracle_server.py")
 
     return {
         "health": health,
