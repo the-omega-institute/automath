@@ -1,14 +1,14 @@
 # Final SHA-256 Digest Manifest
 
-Generated at local time `2026-06-17T12:36:38+08:00` (`2026-06-17T04:36:38+00:00` UTC).
+Generated at local time `2026-06-17T12:58:29+08:00` (`2026-06-17T04:58:29+00:00` UTC).
 
 Command: `python review_bundle/generate_final_digests.py`
 Environment: `Python 3.10.11 on Windows 10`
 Working directory: `D:\omega\automath\papers\publication\2026_auditable_theory_to_paper_pipeline`
-Source commit: `b8d59aef3bc828ba47a135476d628fc1c26604f2`
+Source commit: `b343f939def5ab5444cde34deb5d63da9ece40a8`
 Generation log: `review_bundle/final_digest_generation_run.log`
 Excluded self-digest inputs: `review_bundle/FINAL_DIGESTS_SHA256.md, review_bundle/final_digest_generation_run.log`
-Path count: `840`
+Path count: `842`
 
 | Path | SHA-256 |
 | --- | --- |
@@ -502,7 +502,7 @@ Path count: `840`
 | `_fresh_formal_env_index.json` | `dc8ebc8b90d7c2ab42cbbc0b669ab1c20df9b08e48c282ef81ec67bf6d369ca0` |
 | `_fresh_formal_env_index.md` | `e7e8fe7a4fb1339f36c50c8657d6fb89144231faa7656b8a258473b1c69a55fc` |
 | `_fresh_grouped_env_map.txt` | `a74743d3063ef745bbcf49134c24c7a3f5260343917f60fbb631683d25f59c65` |
-| `_fresh_inventory_parse_current.json` | `759a272f2df89158aa8d174b27c64eeb92667ac955fa8461d3dcaadf7fec158d` |
+| `_fresh_inventory_parse_current.json` | `b8bb80570745ec784ad3c5fccc1dd9859380c71c67c7873939db6d76b0a3b49c` |
 | `_fresh_labels_by_section.txt` | `6b60c947903ad32ba122ad4bd6ad15bdb5325f432cec8097b7ca75644c84ec30` |
 | `_fresh_parse_now.json` | `a8cdabe79d45c59be1f73a07a73e278df8e5686929e6ba1ce4b188cbfd0fe529` |
 | `_fresh_stage_a_formal_items.json` | `b222d4351a49e571b44d5c1f44a3c106fcd6741715417f8095197bcf9fd3e923` |
@@ -689,6 +689,8 @@ Path count: `840`
 | `compile_stage_a2_round2_xelatex.log` | `742f188ccc9eca031bf079511323074fe70e0eed2621d2d6a90c84154ba537e7` |
 | `compile_stage_a2_round4_current_xelatex.log` | `77628cbd304275e588b4c4751726ab84b7534abecb9f481fe4e4b6a539825d74` |
 | `compile_stage_a2_round4_current_xelatex_second.log` | `29a2182b98bc2f1b253d779a677f610ecf97dabf379e529a75e910d03540be98` |
+| `compile_stage_a2_round6_xelatex.log` | `aad6f52505a4b098854e4fb222099fe9ef039e2c406d9bdd48c7178c145837da` |
+| `compile_stage_a2_round6_xelatex_second.log` | `dfb4845ead8b2a1fb3acd36d63e254ceb501fb0e8d8288baddceb0efc22d9fce` |
 | `compile_stage_a2_theoremization_round1_current_xelatex.log` | `8033f5735147ecc6c1db477f22a238b6118d7b998932efef0e0f6fca9c75aa20` |
 | `compile_stage_a2_theoremization_round1_current_xelatex_second.log` | `e46ab8812e968c4ff0e31cedda88517b9ea9e4a5e493cc5a1cefebc8161b92b1` |
 | `compile_stage_a2_theoremization_round2_current_xelatex.log` | `8d316f7166b08f70cb9f800a187bf39ba275bbf5c9800df2aae2a0301b29cd16` |
@@ -719,14 +721,14 @@ Path count: `840`
 | `fresh_env_records.jsonl` | `e7f0fe76a1a502a63938e2ad59b6bf31b2346a75f4a8b8bfab1212beaf389e25` |
 | `label_lines.tmp.txt` | `6f0586c7d834b62fbe0853764db05a6e6a6adfc95a84c8416dfde05a3ed38436` |
 | `label_map.tsv` | `6af3eddfef2ae16b0cff165d6296fccb464ceda303317bf97ead020d72f4e2e9` |
-| `main.aux` | `679dd306ccab7bb81d4750fc436926043fdb8773c3f69194c091d8516615fd74` |
+| `main.aux` | `c93cec0c02c756e491b7aa4b50728e495ab92b25f1ec7db829456dccf05dbd0a` |
 | `main.bbl` | `ebd2bc1f3ad127832e193f9b9c4afd28cfd99993196c8ca922a513a10a419821` |
 | `main.blg` | `515bd2970e2f798aa82cc9045ca852f2b9b7b699c5d32136bd0bd5afd89e0823` |
 | `main.envdigest.json` | `ce01c57052e6cf6091e6ee2b53439db2f70e96dffc01efd9d3ec96bbadf513c0` |
-| `main.log` | `b0d53950e85c33d73030c5d93adff70b4a80ff0216245b382804b213695b3e7e` |
+| `main.log` | `c10478be71ac49500365bc63dcde548e86f9013ae7ac375c1708c3e07273e0f5` |
 | `main.out` | `a5a9a81edcd2e5efc4ed7df5564d0215aefe065b1a2ade7b04ec8d20009bcadd` |
-| `main.pdf` | `30bdd8240cbcb261f1b3a300ca2cbaea96e48a60f8bbd10dfe2cd54b14b24e1a` |
-| `main.tex` | `5921bea14436a6485a8c74f1ad158646138326b348a22bf3f3e3464f32565639` |
+| `main.pdf` | `6f2d0cd2651ecb9be02052ae082f4554b6aa90de3180decaa5daaeb475e72b58` |
+| `main.tex` | `0bcd3de339bbb94156070e2faa39a66a0eeb9e72770d7175a36293494d88e0c9` |
 | `main.tex.env_index.json` | `73afd61caa6f46908eb7338998c0339e6aebe449200f2c8f94afe570d11e6ac4` |
 | `main.tex.envs.json` | `000d2075760f6c290ac32f3a8451e7f497cbdf534ec044ed8f5d90ebe264694b` |
 | `main_theorem_items.tmp.json` | `b920151c2bded8784b1947cab22dd2417009a72e83af4d48d59d4f5a07a4a8ba` |
@@ -755,15 +757,15 @@ Path count: `840`
 | `review_bundle/case_snapshots/upper_fibers_SUBMITTED` | `3c2f9b3f7a67b58d167f7bd0e5c8faa7ba48a88175f5e9a1aa236348d5c0ff18` |
 | `review_bundle/certificate_records_verification_run.log` | `ae9b9565b884f6cdd4347723cec0981a37e127c1927064fa94ee3423773652b0` |
 | `review_bundle/certificate_schema.json` | `47e3f2751b0177dc48e1607bac1d8c55b46cbc668dd081c71a20360e09069684` |
-| `review_bundle/certificate_verification_run.log` | `af6276e2bdc7350cede2a8ba7d7032528d784c0f44543e22e88fa4f3c33b40a4` |
+| `review_bundle/certificate_verification_run.log` | `0f40b45d8a133341be17e857a49d628989a855b40bf4e2baa92027dc25102f00` |
 | `review_bundle/current_package_pass_records.json` | `65193d0eb722914e2573abf5f04858a8c2033f92d484ab11a5707d3b8b3fa066` |
 | `review_bundle/extract_theorem_environments.py` | `08b4f2de8562011cfa3af41ac89e3d040081cc73584092455e0f68a4521f6534` |
-| `review_bundle/final_digest_generation_stdout.log` | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `review_bundle/final_digest_generation_stdout.log` | `a11e4186bffc3e630dde02eea84b7f84a30e6535a97974b3b44292cb4335a476` |
 | `review_bundle/generate_final_digests.py` | `64619f18614845feb62dc0092ccc1c1cf080575d31ce7e3a58c1f2b5aa4811d0` |
 | `review_bundle/inventory_synchronization_run.log` | `8a7789edf32091ffdb64eddb731d5936f643540ac6241dc9f1e66c970d95a2f0` |
 | `review_bundle/negative_certificate_record_example.json` | `8e2ecbdbbf1b5671f20ee89af0e7b4403a41384cea9ad70d137d60f2ac553364` |
 | `review_bundle/negative_certificate_record_example_run.md` | `74dbf7a0db63491bb3d177ca9787cce30f64de45f8db1bb59bf25a9a3b0b315c` |
-| `review_bundle/overlap_submission_order_verification_run.log` | `251962d2e6bd7e0414c732c32788727b067a933b8a78f66742c60eebb7f777e3` |
+| `review_bundle/overlap_submission_order_verification_run.log` | `c0146e21e53868746de16f7c05908b2e941ed32a1a0b3054ef1efaeddd82904b` |
 | `review_bundle/primary_claim_inventory.json` | `e5c31cc92b92b50e3c736b717340d0808aa8eb16f4e23a913654a66fec0bf591` |
 | `review_bundle/primary_claim_inventory_freshness_2026-06-04.log` | `b86ba4200fc9a5165bd2de81d8f86f3f096577448c08f0853fe98fed348cbd3d` |
 | `review_bundle/primary_claim_inventory_freshness_2026-06-04.md` | `0777fb5d382a50c8697b91232f6a1155fe1e73429ba21c28747b11c2e70d2ef4` |
@@ -772,18 +774,18 @@ Path count: `840`
 | `review_bundle/primary_claim_inventory_freshness_2026-06-07.log` | `01b568953ca7a4bced3a1251c38dffdd42a88c7b4e934fb955f661bc365653d5` |
 | `review_bundle/primary_claim_inventory_freshness_2026-06-08.log` | `d33b94cfbabe4611b7c54a089353bd2dc2cd49ff2729364ca3128b5a6164a336` |
 | `review_bundle/primary_claim_inventory_freshness_2026-06-09.log` | `968ec326c088c2619ad654b5cfa4d46cfe8635ad3bab9a9425eab91824d276b5` |
-| `review_bundle/primary_claim_inventory_verification_run.log` | `cc32f0fc63c77d2629a4d906cd5752f25276fb55f3b6613f25ca0ac24598d9cb` |
+| `review_bundle/primary_claim_inventory_verification_run.log` | `7a075fec163f12e22ec3222b941b10673b4c615984cc45989cb7b3881139542c` |
 | `review_bundle/primary_claim_verification_run.log` | `9172ee2132beeb7fe40904dbdb8c4a8e4524989486c602805e7534338de709a2` |
 | `review_bundle/README.md` | `80afc9d4a157433ab01ffdd09e1b14b492f4e645a729e78fa27184fd62e58a4f` |
 | `review_bundle/regenerate_stage_a_replay_artifacts.py` | `3282ebe683b363fa0b035352332253e637bb015ec8b011d1681c6ab8f283c7bc` |
 | `review_bundle/REVIEW_BUNDLE_MANIFEST.json` | `4feadd22e96bd29b2af2c6da1e3533b48ecd14ec044efaf6193bb5809d11bec4` |
-| `review_bundle/source_interface_verification_run.log` | `38639c2dd6fcb42a4f6a65214fa493a14489ce83cdf8056f2dbbcc3b6357aec4` |
+| `review_bundle/source_interface_verification_run.log` | `cc38567e9d48f0aa0e4b65cd6415b91bea9070ff3e1e57ec3345795d5000b6be` |
 | `review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` | `a492900222dd66d154cdd5a79d2b2ed0b856ad1ec59e5dfce55dbc21875ed1b2` |
-| `review_bundle/stage_a_audit_verification_run.log` | `3b82175f117d7e4aafcab12667777f4503312ced1469b6e443eceb13e5e74f72` |
+| `review_bundle/stage_a_audit_verification_run.log` | `713d4060ee30de77c43f88a802de8b02bfc163f5803d963a78c60e82e8203334` |
 | `review_bundle/stage_a_replay_regeneration_run.log` | `942e8b2e9fbbe9e2344a194f0efcf056448875ff78ef7e5fc95634e026961de3` |
 | `review_bundle/stage_a_replay_regeneration_stdout.log` | `657c93e5114faffb72574365b16fa18b439cad0ec5450f06fc84587ae9662ed8` |
 | `review_bundle/submission_interface_map.json` | `bcf46b25076ea6abafc88fd55768b1590e5b5305e6cea247be20219d833f3d1a` |
-| `review_bundle/theorem_environment_extraction_run.log` | `d240431a4fb26fbc08ab9ef51ce6cec5feb8dfe26bdcc45ee321ca452379d5ed` |
+| `review_bundle/theorem_environment_extraction_run.log` | `0a7ec2ccfb2dfbc7af243dc65f7cfd4db5b5996e70e1ece9c9083b592f2f94f7` |
 | `review_bundle/theorem_environment_extraction_run.stage_a_inventory_current.log` | `3773d8dab5e2434867c9ddf57d26deee5c4533b561d05753371679252013926a` |
 | `review_bundle/theorem_inventory_sync_run.log` | `8a7789edf32091ffdb64eddb731d5936f643540ac6241dc9f1e66c970d95a2f0` |
 | `review_bundle/theorem_inventory_sync_verification_run.log` | `8a7789edf32091ffdb64eddb731d5936f643540ac6241dc9f1e66c970d95a2f0` |
@@ -837,8 +839,8 @@ Path count: `840`
 | `theorem_envs_main.tsv` | `827652613965497a2d513e0ffc359f3fde439586a25106ca1dfd717844fbb98e` |
 | `theorem_envs_main.txt` | `f9d0ade6ce5808c924c65846fa2347f6ffd41489b7e7a521baf04c2ee2ca8b74` |
 | `theorem_extract.txt` | `ae790c7ee43cb10afa27c96e9e5ab97c5b7b542bd9065a5d92c4b52e6480a94d` |
-| `theorem_inventory.json` | `f7e15234a06f5aca216f0135e01b2979357dcb0ac0169d86eb667e4dfec820aa` |
-| `theorem_inventory.md` | `c9cf965509c1ef68ed9af363c6731232580366bc4dc5c44c8d7f0dbfb2112997` |
+| `theorem_inventory.json` | `a1ff76f93c0e796f9a0816796ded41a764d669b2b5f2f52bfdf2c7fcdbad00e1` |
+| `theorem_inventory.md` | `b48cfa8b4c1e4725dc4b6e962db6704e2f089478669ec778c3a1c631890b7242` |
 | `theorem_inventory.min.tmp.json` | `7018edfa3849d4db18953634d62d07dce889591b8b9e1945a608ba8a4065624b` |
 | `theorem_inventory_extract.tmp.json` | `1954fa3fb4dac259946ee09da002048213b64bf1e1d6119df978b60e9337711c` |
 | `theorem_items.tsv` | `8ae301b8e87df38ff8211df30815047b6718d5a72a97bdff0ab6951bd03a2177` |
